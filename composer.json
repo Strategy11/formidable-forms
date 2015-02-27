@@ -24,7 +24,7 @@
 			"classes/controllers/",
             "classes/helpers/",
 			"classes/models/",
-			"views/"
+			"views/",
             "widgets/"
 		]
 	},
