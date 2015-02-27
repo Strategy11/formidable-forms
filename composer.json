@@ -1,0 +1,40 @@
+{
+	"name": "strategy11/formidable-forms",
+	"description": "Quickly and easily create professional WordPress forms",
+	"keywords": [
+		"wordpress",
+		"forms"
+	],
+	"homepage": "https://formidablepro.com",
+	"license": "GPL-2.0+",
+	"authors": [
+		{
+			"name": "Strategy11",
+			"email": "support@strategy11.com",
+			"homepage": "http://strategy11.com"
+		}
+	],
+	"type": "wordpress-plugin",
+	"require": {
+		"composer/installers": "~1.0",
+		"xrstf/composer-php52": "^1.0.17"
+	},
+	"autoload": {
+		"classmap": [
+			"admin/",
+			"frontend/",
+			"inc/"
+		]
+	},
+	"scripts": {
+		"post-install-cmd": [
+			"xrstf\\Composer52\\Generator::onPostInstallCmd"
+		],
+		"post-update-cmd": [
+			"xrstf\\Composer52\\Generator::onPostInstallCmd"
+		],
+		"post-autoload-dump": [
+			"xrstf\\Composer52\\Generator::onPostInstallCmd"
+		]
+	}
+}
