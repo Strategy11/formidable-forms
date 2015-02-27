@@ -21,9 +21,11 @@
 	},
 	"autoload": {
 		"classmap": [
-			"admin/",
-			"frontend/",
-			"inc/"
+			"classes/controllers/",
+            "classes/helpers/",
+			"classes/models/",
+			"views/"
+            "widgets/"
 		]
 	},
 	"scripts": {
