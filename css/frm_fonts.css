@@ -31,4 +31,25 @@
 
 /* Admin Bar */
 #wpadminbar #wp-admin-bar-frm-forms > .ab-item:before{font-family:'s11-fp' !important;content:'\e601';top:2px;}
-	
+
+/* Popup shortcode builder */
+#frm_insert_form_content{margin:20px;}
+#frm_popup_content .spinner{
+	float: left;
+	position: absolute;
+	top: 16px;
+	left: 300px;
+}
+#frm_popup_content .media-frame .attachments-browser{overflow:scroll;}
+#frm_popup_content .howto{display:block;}
+#frm_popup_content .media-menu .active .howto, .media-menu .active:hover .howto{font-weight:normal;}
+#frm_shortcode_options{padding:16px;}
+#frm_shortcode_options .frm_left_label{
+	float:left;
+	width:200px;
+}
+#frm_shortcode_options.media-embed .setting span{float:left;}
+#frm_shortcode_options h4{margin:3px 0 0;}
+#frm_popup_content .media-toolbar-secondary{width:60%;}
+#frm_complete_shortcode{margin-top:15px;width:100%;}
+.frm_box_line{border-bottom:1px solid #ddd;display:block;margin:15px 0 0;}

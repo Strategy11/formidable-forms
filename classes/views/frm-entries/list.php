@@ -1,31 +1,34 @@
 <div id="form_entries_page" class="wrap">
     <div class="frmicon icon32"><br/></div>
-    <h2>
-		<?php _e('Entries', 'formidable'); ?>
-		<a href="#" class="add-new-h2" style="visibility:hidden;"><?php _e('Add New', 'formidable'); ?></a>
-	</h2>
+    <h2><?php _e('Entries', 'formidable'); ?>
+        <?php do_action('frm_entry_inside_h2', $form); ?>
+    </h2>
 
-    <?php if($form) FrmAppController::get_form_nav($form->id, true); ?>
-	
-	<?php require(FrmAppHelper::plugin_path() .'/classes/views/shared/errors.php'); ?>
-    <?php FrmAppController::update_message('view, search, export, and bulk delete your saved entries'); ?>
+    <?php require(FrmAppHelper::plugin_path() .'/classes/views/shared/errors.php'); ?>
 
-    <?php if(!$form or $entry_count){ ?>
-    <img src="<?php echo FrmAppHelper::plugin_url() ?>/screenshot-5.png" alt="Entries List" style="max-width:100%"/>
-    <?php }else{ ?>
-    <table class="wp-list-table widefat post fixed" cellspacing="0">
-        <thead>
-            <tr><th class="manage-column" scope="col"> </th></tr>
-        </thead>
-        <tbody>
-            <tr><td>
-            <?php include(FrmAppHelper::plugin_path() .'/classes/views/frm-entries/no_entries.php'); ?>
-            </td></tr>
-        </tbody>
-        <tfoot>
-            <tr><th class="manage-column" scope="col"> </th></tr>
-        </tfoot>
-    </table>
-    <?php } ?>
+    <form id="posts-filter" method="get">
+        <div id="poststuff">
+            <div id="post-body" class="metabox-holder columns-2">
+            <div id="post-body-content">
+                <?php FrmAppController::get_form_nav($form, true, 'hide'); ?>
+            </div>
+            <div id="postbox-container-1" class="postbox-container">
+                <input type="hidden" name="page" value="formidable-entries" />
+                <input type="hidden" name="form" value="<?php echo ($form) ? $form->id : ''; ?>" />
+                <input type="hidden" name="frm_action" value="list" />
+                <?php $wp_list_table->search_box( __( 'Search', 'formidable' ), 'entry' ); ?>
+            </div>
+            <div class="clear"></div>
+            </div>
+            <?php if ( $form ) { ?>
+            <div id="titlediv">
+            <input id="title" type="text" value="<?php echo esc_attr($form->name == '' ? __('(no title)') : $form->name) ?>" readonly="readonly" disabled="disabled" />
+            </div>
+            <?php } ?>
+
+            <?php $wp_list_table->display(); ?>
+
+        </div>
+    </form>
+
 </div>
-

@@ -18,7 +18,7 @@
             <p><label><?php echo apply_filters('frm_upload_instructions2', __('Choose a Formidable XML file', 'formidable')) ?> (<?php printf(__('Maximum size: %s', 'formidable'), ini_get('upload_max_filesize')) ?>)</label>
             <input type="file" name="frm_import_file" size="25" />
             </p>
-            
+
             <?php do_action('frm_csv_opts', $forms) ?>
 
             <p class="submit">
@@ -27,20 +27,16 @@
         </form>
     </div>
     </div>
-    
-    
+
+
     <div class="postbox">
     <h3 class="hndle"><span><?php _e('Export', 'formidable') ?></span></h3>
     <div class="inside with_frm_style">
         <form method="post" action="<?php echo admin_url('admin-ajax.php'); ?>" id="frm_export_xml">
             <input type="hidden" name="action" value="frm_export_xml" />
             <?php wp_nonce_field('export-xml-nonce', 'export-xml'); ?>
-            
+
             <table class="form-table">
-                <?php if (count($export_format) == 1) { 
-                    reset($export_format); ?>
-                <tr><td colspan="2"><input type="hidden" name="format" value="<?php echo key($export_format) ?>" /></td></tr>
-                <?php } else { ?>
                 <tr class="form-field">
                     <th scope="row"><label for="format"><?php _e('Export Format', 'formidable'); ?></label></th>
                     <td>
@@ -48,8 +44,11 @@
                         <?php foreach ( $export_format as $t => $type ){ ?>
                             <option value="<?php echo $t ?>" data-support="<?php echo esc_attr($type['support']) ?>" <?php echo isset($type['count']) ? 'data-count="'. esc_attr($type['count']) .'"' : ''; ?>><?php echo isset($type['name']) ? $type['name'] : $t ?></option>
                         <?php } ?>
+                        <?php if ( ! isset($export_format['csv']) ) { ?>
+                            <option value="csv" disabled="disabled">CSV <?php _e('(Pro feature)', 'formidable'); ?></option>
+                        <?php } ?>
                         </select>
-                        
+
                         <ul class="frm_hidden csv_opts export-filters">
                             <li>
                             <label for="csv_format"><?php _e('Format', 'formidable') ?>:</label>
@@ -62,15 +61,14 @@
                             <option value="macintosh" <?php selected($csv_format, 'macintosh'); ?>><?php _e('Macintosh', 'formidable') ?></option>
                             </select>
                             </li>
-                        
+
                             <li><label for="csv_col_sep"><?php _e('Column separation', 'formidable') ?>:</label>
                             <input name="csv_col_sep" value="," type="text" style="width:45px;" /></li>
                         </ul>
                     </td>
                 </tr>
-                <?php } ?>
-                
-                <?php if (count($export_types) == 1) { 
+
+                <?php if (count($export_types) == 1) {
                     reset($export_types); ?>
                 <tr><td colspan="2"><input type="hidden" name="type[]" value="<?php echo key($export_types) ?>" /></td></tr>
                 <?php } else { ?>
@@ -90,12 +88,12 @@
                     <td>
                         <select name="frm_export_forms[]" multiple="multiple" class="frm_chzn">
                         <?php foreach($forms as $form){ ?>
-                            <option value="<?php echo $form->id ?>"><?php 
+                            <option value="<?php echo $form->id ?>"><?php
                         echo ($form->name == '') ? '(no title)' : $form->name;
                         echo ' &mdash; '. $form->form_key;
                         if ( $form->is_template && $form->default_template ) {
                             echo ' '. __('(default template)', 'formidable');
-                        } else if ( $form->is_template ) { 
+                        } else if ( $form->is_template ) {
                             echo ' '. __('(template)', 'formidable');
                         }
                         ?></option>

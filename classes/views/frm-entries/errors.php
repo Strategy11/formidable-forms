@@ -1,35 +1,39 @@
-<?php global $frm_settings; 
-if (isset($message) && $message != ''){ 
-    if(is_admin() and !defined('DOING_AJAX')){ 
-        ?><div id="message" class="frm_message updated" style="padding:5px;"><?php echo $message ?></div><?php 
-    }else{ 
-        ?><script type="text/javascript">jQuery(document).ready(function($){frmScrollMsg(<?php echo $form->id ?>);})</script><?php
-        echo $message; 
+<?php
+if ( isset($include_extra_container) ) { ?>
+<div class="<?php echo $include_extra_container ?>" id="frm_form_<?php echo $form->id ?>_container">
+<?php
+}
+if (isset($message) && $message != ''){
+    if ( FrmAppHelper::is_admin() ) {
+        ?><div id="message" class="frm_message updated" style="padding:5px;"><?php echo $message ?></div><?php
+    }else{
+        FrmFormsHelper::get_scroll_js($form->id);
+        echo $message;
     }
-} 
+}
 
 if( isset($errors) && is_array($errors) && !empty($errors) ){
-    global $frm_settings;
 
-if ( isset($form) && is_object($form) ) { ?>
-<script type="text/javascript">jQuery(document).ready(function($){frmScrollMsg(<?php echo $form->id ?>);})</script>
-<?php } ?>
-<div class="frm_error_style"> 
+if ( isset($form) && is_object($form) ) {
+    FrmFormsHelper::get_scroll_js($form->id);
+} ?>
+<div class="frm_error_style">
 <?php
 $img = '';
-if(!is_admin() or defined('DOING_AJAX')){ 
+if ( ! FrmAppHelper::is_admin() ) {
     $img = apply_filters('frm_error_icon', $img);
-    if($img and !empty($img)){
+    if ( $img && ! empty($img) ) {
     ?><img src="<?php echo $img ?>" alt="" />
-<?php 
+<?php
     }
-} 
-    
+}
+
+$frm_settings = FrmAppHelper::get_settings();
 if(empty($frm_settings->invalid_msg)){
     $show_img = false;
     foreach( $errors as $error ){
-        if($show_img and !empty($img)){ 
-            ?><img src="<?php echo $img ?>" alt="" /><?php 
+        if ( $show_img && ! empty($img) ) {
+            ?><img src="<?php echo $img ?>" alt="" /><?php
         }else{
             $show_img = true;
         }
@@ -40,12 +44,13 @@ if(empty($frm_settings->invalid_msg)){
 
     $show_img = true;
     foreach( $errors as $err_key => $error ){
-        if(!is_numeric($err_key) and ($err_key == 'cptch_number' or strpos($err_key, 'field') === 0 or strpos($err_key, 'captcha') === 0 ))
+        if ( ! is_numeric($err_key) && ( $err_key == 'cptch_number' || strpos($err_key, 'field') === 0 ) ) {
             continue;
-          
-        echo '<br/>'; 
-        if($show_img and !empty($img)){ 
-            ?><img src="<?php echo $img ?>" alt="" /><?php 
+        }
+
+        echo '<br/>';
+        if ( $show_img && ! empty($img) ) {
+            ?><img src="<?php echo $img ?>" alt="" /><?php
         }else{
             $show_img = true;
         }
@@ -53,4 +58,10 @@ if(empty($frm_settings->invalid_msg)){
     }
 } ?>
 </div>
-<?php } ?>
+<?php
+}
+
+if ( isset($include_extra_container) ) { ?>
+</div>
+<?php
+}

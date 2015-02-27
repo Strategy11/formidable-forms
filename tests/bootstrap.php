@@ -17,3 +17,10 @@ if( false !== getenv( 'WP_DEVELOP_DIR' ) ) {
 } else {
 	require '../../../../tests/phpunit/includes/bootstrap.php';
 }
+/*
+update_option('frmpro-authorized', 1);
+global $frm_vars;
+$frm_vars['pro_is_authorized'] = true;
+
+activate_plugin( WP_CONTENT_DIR . '/plugins/formidable/formidable.php', '', true, true);
+*/

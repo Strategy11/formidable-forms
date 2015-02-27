@@ -2,73 +2,6 @@
 var openGroups = [];
 var focusedEl = null;
 
-//backbutton and hash bookmarks support
-var hash = {
-	storedHash: '',
-	currentTabHash: '', //The hash that's only stored on a tab switch
-	cache: '',
-	interval: null,
-	listen: true, // listen to hash changes?
-	
-	 // start listening again
-	startListening: function() {
-		setTimeout(function(){hash.listen = true;}, 600);
-	},
-	 // stop listening to hash changes
-	stopListening:function(){hash.listen = false;},
-	//check if hash has changed
-	checkHashChange:function(){
-		var locStr = hash.currHash();
-		if(hash.storedHash != locStr) {
-			if(hash.listen == true) hash.refreshToHash(); ////update was made by back button
-			hash.storedHash = locStr;
-		}
-		if(!hash.interval) hash.interval = setInterval(hash.checkHashChange, 500);
-	},
-	
-	//refresh to a certain hash
-	refreshToHash: function(locStr) {
-		if(locStr) var newHash = true;
-		locStr = locStr || hash.currHash();
-		frmUpdateCSS(locStr);
-		// remember which groups are open
-		openGroups = [];
-		jQuery('div.theme-group-content').each(function(i){
-			if(jQuery(this).is(':visible')){openGroups.push(i);}
-		});
-		
-		// remember any focused element
-		focusedEl = null;
-		jQuery('form input, form select, form .texturePicker').each(function(i){
-			if(jQuery(this).is('.focus')){focusedEl = i;}
-		});
-		
-		// if the hash is passed
-		if(newHash){ hash.updateHash(locStr, true); }
-	},
-	
-	updateHash: function(locStr, ignore) {
-		if(ignore == true){ hash.stopListening(); }
-		window.location.hash = locStr;
-		if(ignore == true){ 
-			hash.storedHash = locStr; 
-			hash.startListening();
-		}
-		
-	},
-	
-	clean: function(locStr){return locStr.replace(/%23/g, "").replace(/[\?#]+/g, "");},
-	
-	currHash: function(){return hash.clean(window.location.hash);},
-	
-	currSearch: function(){return hash.clean(window.location.search);},
-	
-	init: function(){
-		hash.storedHash = '';
-		hash.checkHashChange();
-	}	
-};
-
 jQuery.fn.spinDown = function() {
 	return this.click(function() {
 		var $this = jQuery(this);
@@ -105,15 +38,6 @@ jQuery.fn.applyFarbtastic = function() {
 	});
 };
 
-
-//function called after a change event in the form
-function formChange(){
-	var locStr = jQuery('.frm_settings_page input, .frm_settings_page select, .frm_settings_page textarea').serialize();
-	locStr = hash.clean(locStr);
-	frmUpdateCSS(locStr);
-	hash.updateHash(locStr, true);
-};
-
 jQuery(document).ready(function($){
     // hover class toggles in app panel
     jQuery('.state-default').hover(
@@ -128,12 +52,6 @@ jQuery(document).ready(function($){
 		$('input.focus, select.focus').removeClass('focus');
 		$(this).addClass('focus');
 	}).blur(function(){ $(this).removeClass('focus');});
-	
-	// change event in form
-	$('form[name="frm_settings_form"] .styling_settings').bind('change', function() {
-		formChange();
-		return false;
-	});
 	
 	// hex inputs
 	$('input.hex').validHex().keyup(function() {$(this).validHex();})
@@ -155,48 +73,6 @@ jQuery(document).ready(function($){
 		$('input.focus, select.focus').removeClass('focus');
 		$('div.texturePicker ul:visible').hide().parent().css('position', 'static');
 	});
-	
-	// texture pickers from select menus
-		$('select.texture').each(function() {
-
-			$(this).after('<div class="texturePicker"><a href="#"></a><ul></ul></div>');
-			var texturePicker = $(this).next();
-			var a = texturePicker.find('a');
-			var ul = texturePicker.find('ul');
-			var sIndex = texturePicker.prev().get(0).selectedIndex;
-
-			// scrape options
-			$(this).find('option').each(function(){
-				ul.append('<li class="'+ $(this).attr('value') +'" data-texturewidth="16" data-textureheight="16" style="background: #FFF url('+$(this).attr('value')+') 50% 50% no-repeat"><a href="#" title="'+ $(this).text() +'">'+ $(this).text() +'</a></li>');
-				if($(this).get(0).index == sIndex){texturePicker.attr('title',$(this).text()).css('background', '#FFF url('+$(this).attr('value')+') 50% 50% no-repeat');}
-			});
-
-			ul.find('li').click(function() {
-				texturePicker.prev().get(0).selectedIndex = texturePicker.prev().find('option[value="'+ $(this).attr('class') +'"]').get(0).index;
-				texturePicker.attr('title',$(this).text()).css('background', '#FFF url('+$(this).attr('class')+')  50% 50% no-repeat');
-				$('.frm_error_style img').attr('src',$(this).attr('class'));
-				//ul.fadeOut(100);
-				formChange();
-				return false;
-			});
-
-			// hide the menu and select el
-			ul.hide();
-
-			// show/hide of menus
-			texturePicker.click(function() {
-				$(this).addClass('focus');
-				$('#picker').remove();
-				var showIt;
-				if(ul.is(':hidden')){showIt = true;}
-				$('div.texturePicker ul:visible').hide().parent().css('position', 'static');
-				if(showIt == true){
-					texturePicker.css('position', 'relative');
-					ul.show();
-				}
-				return false;
-			});
-		});
 });
 
 
@@ -393,7 +269,7 @@ fb.mouseup = function () {
 jQuery(document).unbind('mousemove', fb.mousemove);
 jQuery(document).unbind('mouseup', fb.mouseup);
 document.dragging = false;
-formChange();
+//formChange();
 };
 
 /**
@@ -425,7 +301,7 @@ color: fb.hsl[2] > 0.5 ? '#000' : '#fff'
 
 // Change linked value
 jQuery(fb.callback).each(function() {
-if (this.value && this.value != fb.color){this.value = fb.color;}
+if (this.value && this.value != fb.color){this.value = fb.color; jQuery(this).change();}
 });
 }else if (typeof fb.callback == 'function'){fb.callback.call(fb, fb.color);}
 };

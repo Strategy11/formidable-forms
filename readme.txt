@@ -2,36 +2,70 @@
 Contributors: sswells, srwells, jamie.wahlin
 Donate link: http://formidablepro.com/donate
 Tags: admin, AJAX, captcha, contact, contact form, database, email, feedback, form, forms, javascript, jquery, page, plugin, poll, Post, spam, survey, template, widget, wpmu, form builder
-Requires at least: 3.3
-Tested up to: 4.0
+Requires at least: 3.3.3
+Tested up to: 4.1
 Stable tag: 1.07.11
 
-Quickly and easily build WordPress forms with a simple drag-and-drop interface and in-place editing. 
+Beautiful forms in 60 seconds. The WordPress form builder that enables you to create forms with a simple drag-and-drop interface and in-place editing.
 
 == Description ==
-Quickly and easily build WordPress forms with a simple drag-and-drop interface and in-place editing.
-There are dozens of form-building plugins out there to create forms, but most are confusing and overly complicated. With Formidable, it is easy to create forms within a simple drag-and-drop interface. You can construct custom forms or generate them from a template. Shortcodes can be used as well as spam catching services.
+Build WordPress forms the fast and simple way with a simple drag-and-drop interface (and a visual form styler in version 2.0). Create custom Formidable forms or generate them from a template.
 
 [View Documentation](http://formidablepro.com/knowledgebase/ "View Documentation")
 
+= New Beta Features =
+Check out the [2.0 beta version](https://downloads.wordpress.org/plugin/formidable.2.0b7.zip "2.0 beta version") now that allows you to style your forms and view your collected submissions. Let us know if you run into any bugs!
+
 = Features =
-* Save all responses to your WordPress database (even in the free version) for future retrieval, reports, and display in [Formidable Pro](http://formidablepro.com/ "Formidable Pro") Learn more at: http://formidablepro.com
-* Integrate with reCAPTCHA and Akismet for Spam control (and a math captcha plugin in Pro)
-* Shortcode [formidable id=x] for use in pages, posts, or text widgets
-* Most of the form HTML is customizable on the form settings pages
+* Create forms with 5 field types: text, paragraph text, radio, checkbox, and dropdown
 * Create forms from existing templates or add your own. A contact form template is included.
-* Direct links available for previews and emailing surveys with and without integration with your current theme.
-* Select an email address to send form responses on the form settings page under the "Emails" tab. This defaults to send to the admin email in your WordPress settings.
+* Send an email notification to one or more email addresses, defaulting to the admin email in your WordPress settings
+* Customize the HTML in your form for any layout you would like, or use our CSS classes to arrange your fields
+* Save all responses to your WordPress database (but without a UI to view them)
+* Integrate with reCAPTCHA and Akismet for Spam control
 * Use placeholder default values in form fields that clear when clicked
-* Alternatively use `<?php echo FrmFormsController::show_form(2, $key = '', $title=true, $description=true); ?>` in your template
-* PHP ninjas can display data in templates using PHP functions found in the files in formidable/classes/models. However, there is currently no documentation for these functions.
-* Pro users can view, add, edit, and delete entries from the back- or front-end
+* Direct links available for previews and emailing surveys with and without integration with your theme
+* Track the pages visited and include them in your email notifications
+* Change the name on the Formidable menu to anything you would like
+* Insert your forms on a page, post, or widget using a shortcode [formidable id=x]
+* Support for bugs. We want it to be perfect!
+
+= Version 2.0 Features =
+* Insert Email and URL fields in your forms
+* Integrate with the one-click reCaptcha
+* Send multiple emails, including an autoresponder to the form submitter
+* Create a single styling template using our visual form styler
+* View form submissions from the back-end
+* Import and export forms with XML
+* Send forms to the trash
+* Generate shortcodes with an advanced shortcode UI
+
+= [Pro Features](http://formidablepro.com/ "Pro Features") =
+* Access even more field types: Section headings (repeatable in 2.0), page breaks, file upload, rich text, number, phone number, date, time, scale, dynamic fields populated from other forms, hidden field, user ID field, password, HTML, and tags
+* Conditionally send your email notifications based on values in your form
+* Create multiple styling templates and assign them to any of your forms, and add instant Bootstrap styling
+* Flexibly and powerfully view, edit, and delete entries from anywhere on your site, and specify who has permission to do so
+* Generate graphs and stats based on your submitted data
+* Create and edit WordPress posts from the front-end
+* Use our add-ons for user registration, payment, and integration with other services like MailChimp, Aweber, Highrise, Twilio for SMS, WPML, and Zapier
+* Logged-in users can save drafts and return later
+* Integrate the Math Captcha plugin for alternative spam protection
+* Generate custom calculations
+* Hide and show fields conditionally based on other fields or the user's role
+* Export and import entries with CSV
+* Import our pre-built form/view demo templates as a starting point or a final product
+* Support for all Formidable features. If you have questions or need guidance on how to set up your application, we are happy to help. We want to make you look fabulous for your clients, and allow you to take on big jobs.
+
+Learn more at: http://formidablepro.com
 
 == Installation ==
-1. Upload `formidable` folder to the `/wp-content/plugins/` directory
-2. Activate the plugin through the 'Plugins' menu
-3. Go to the Formidable menu and create a new custom form or use the existing Contact Form template.
-4. Use shortcode [formidable id=x] in pages, posts, or text widgets.
+1. Go to your Plugins -> Add New page in your WordPress admin
+2. Search for 'Formidable'
+3. Click the 'Install Now' button
+4. Activate the plugin through the 'Plugins' menu
+5. Go to the Formidable menu
+6. Click the 'Add New' button to create a new form
+7. Insert your form with the shortcode [formidable id=x] in pages, posts, or text widgets. Alternatively use `<?php echo FrmFormsController::show_form(2, $key = '', $title=true, $description=true); ?>` in your template
 
 == Screenshots ==
 1. Create beautiful WordPress forms without any code.
@@ -61,9 +95,31 @@ A. The field and form names and descriptions are all changed with in-place edit.
 
 A. Try clearing your browser cache. As plugin modifications are made, frequent javascript and stylesheet changes are also made. However, the previous versions may be cached so you aren't using the modified files. After clearing your cache and you're still having issues, please let us know.
 
-[See more FAQs](http://formidablepro.com/formidable-faqs/ "Formidable Pro FAQs")
+[See more FAQs](http://formidablepro.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 2.0 =
+* Move visual form styler to free version
+* Added multiple emails to free version
+* Added BCC, CC, and reply to options to emails
+* Allow multiple roles to be selected for the permissions on the global settings page
+* Updated the UI
+* Added a trash can for forms as well as draft forms
+* Change the field width option from characters to pixels
+* Pro: Added multiple form styling templates, more styling options, and updated the default styling
+* Pro: Added repeatable fields and embedded forms
+* Pro: Created form actions and consolidated notifications and add-ons
+* Pro: All form actions can use conditional logic
+* Pro: Added confirmation fields
+* Pro: Added read-only radio and check box fields
+* Pro: View pagination will automatically take on Genesis theme styling
+* Pro: Entire sections can be moved and duplicated
+* Lots of other small features and bug fixes. Too many little features to list!
+
+= 1.07.12 =
+* Add a bunch more caching
+* Scroll to field on click in form builder
+
 = 1.07.11 =
 * Added hook: frm_check_blacklist for disabling the comment blacklist spam check
 * Make nonce id unique per form
