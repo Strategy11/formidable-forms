@@ -223,7 +223,7 @@ class FrmNotification{
     private static function format_single_field( &$atts, $f, $val, $key = false ) {
         $val = trim($val);
 
-        // If just a plan email is used
+        // If just a plain email is used
         if ( is_email($val) ) {
             // add sender's name if not included in $from
             if ( $f == 'from' ) {

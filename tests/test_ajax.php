@@ -38,6 +38,7 @@ class Tests_Frm_Ajax extends WP_Ajax_UnitTestCase {
 
     public function test_create_field() {
         wp_set_current_user( $this->user_id );
+        $this->assertTrue(is_numeric($this->form_id));
 
 		// Set up the $_POST request
 		$_POST = array(
@@ -60,6 +61,10 @@ class Tests_Frm_Ajax extends WP_Ajax_UnitTestCase {
         $this->assertTrue(is_numeric($this->field_id));
         $this->assertTrue($this->field_id > 0);
 
+        // make sure the field exists
+		$field = FrmField::getOne( $this->field_id );
+        $this->assertTrue(is_object($field));
+
         $this->edit_field_name();
     }
 
@@ -67,6 +72,8 @@ class Tests_Frm_Ajax extends WP_Ajax_UnitTestCase {
 	public function edit_field_name() {
 		wp_set_current_user( $this->user_id );
         $new_name = 'New Field Name';
+
+        $this->assertTrue(is_numeric($this->field_id));
 
 		// Set up the $_POST request
 		$_POST = array(
@@ -84,6 +91,8 @@ class Tests_Frm_Ajax extends WP_Ajax_UnitTestCase {
 
 		// Check that the edit happened
 		$field = FrmField::getOne( $this->field_id );
+
+        $this->assertTrue(is_object($field));
 		$this->assertEquals( $field->name, $new_name );
 	}
 
@@ -98,6 +107,9 @@ class Tests_Frm_Ajax extends WP_Ajax_UnitTestCase {
         } catch ( WPAjaxDieStopException $e ) {
             $this->assertTrue( $e->getMessage() ? true : false );
         }
+
+        $exists = $wpdb->query('DESCRIBE '. $wpdb->prefix . 'frm_fields');
+        $this->assertTrue($exists ? true : false);
 	}
 
     /* Helper Functions */

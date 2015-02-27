@@ -25,6 +25,13 @@ class WP_Test_WordPress_Plugin_Tests extends WP_UnitTestCase {
     function setUp() {
 		parent::setUp();
 
+        if ( is_callable('FrmUpdatesController::pro_is_authorized') ) {
+            // set pro flag
+            update_option('frmpro-credentials', array('license' => '87fu-uit7-896u-ihy8'));
+            update_option('pro_auth_store', true);
+            add_filter('frm_pro_installed', '__return_true');
+        }
+
         global $wpdb;
         FrmAppController::install();
 
@@ -41,20 +48,9 @@ class WP_Test_WordPress_Plugin_Tests extends WP_UnitTestCase {
         $this->assertTrue($exists ? true : false);
 	}
 
-	/**
-	 * Run a simple test to ensure that the tests are running
-	*/
-	function test_tests() {
-		$this->assertTrue( true );
-	}
-
 	function test_plugin_activated() {
 		$this->assertTrue( is_plugin_active( 'formidable/formidable.php' ) );
 	}
-
-    function test_pro_activated() {
-        $this->assertTrue( FrmAppHelper::pro_is_installed() );
-    }
 
 	function test_wpml_install(){
 	    $copy = new FrmProCopy();
@@ -89,10 +85,12 @@ class WP_Test_WordPress_Plugin_Tests extends WP_UnitTestCase {
                 $this->assertArrayHasKey('id', $field);
             }
         }
+
+        $this->create_entry();
 	}
 
     // create an entry
-    function test_create_entry() {
+    function create_entry() {
         $values = array(
             'form_id'   => $this->form_id,
             'item_key'  => rand_str(),
@@ -102,6 +100,41 @@ class WP_Test_WordPress_Plugin_Tests extends WP_UnitTestCase {
 
 	    $this->assertTrue(is_numeric($entry_id));
         $this->assertTrue($entry_id > 0);
+
+        $this->search_all_entries();
+    }
+
+    /*
+    * Search for a value in an entry
+    */
+    function search_all_entries() {
+	    $this->assertTrue(is_numeric($this->form_id));
+
+        global $wpdb;
+	    $s_query = $wpdb->prepare('it.form_id=%d', $this->form_id);
+
+        $items = FrmEntry::getAll($s_query, '', '', true, false);
+        $this->assertFalse(empty($items));
+
+        $this->search_by_field();
+    }
+
+    function search_by_field() {
+	    $this->assertTrue(is_numeric($this->form_id));
+
+        $s = reset($this->field_ids);
+        $fid = key($this->field_ids);
+        $this->assertTrue(is_numeric($fid));
+
+        global $wpdb;
+	    $s_query = $wpdb->prepare('it.form_id=%d', $this->form_id);
+
+        if ( is_callable('FrmProEntriesHelper::get_search_str') ) {
+	        $s_query = FrmProEntriesHelper::get_search_str($s_query, $s, $this->form_id, $fid);
+        }
+
+        $items = FrmEntry::getAll($s_query, '', '', true, false);
+        $this->assertFalse(empty($items));
     }
 
     function test_import_xml() {
@@ -117,13 +150,6 @@ class WP_Test_WordPress_Plugin_Tests extends WP_UnitTestCase {
         $id = FrmForm::duplicate( $form->id );
         $this->assertTrue( is_numeric($id) );
         $this->assertTrue( $id > 0 );
-    }
-
-    function test_prevent_delete_template(){
-        $form = $this->get_one_form( 'contact' );
-
-        $id = FrmForm::destroy( $form->id );
-        $this->assertFalse( $id );
     }
 
     function test_delete_form(){
