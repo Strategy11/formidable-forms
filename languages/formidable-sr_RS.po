@@ -1,0 +1,6978 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Formidable v1.07.10\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-12-20\n"
+"PO-Revision-Date: 2014-08-13 16:26:15+0000\n"
+"Last-Translator: Borisa Djuraskovic <borisad@webhostinghub.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Poedit 1.5.7\n"
+"X-Poedit-Language: \n"
+"X-Poedit-Country: \n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;\n"
+"X-Poedit-Basepath: \n"
+"X-Poedit-Bookmarks: \n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Textdomain-Support: yes"
+
+#: classes/controllers/FrmFormsController.php:44
+#: classes/controllers/FrmFormsController.php:392
+#: classes/controllers/FrmXMLController.php:65
+#: classes/views/frm-forms/list.php:3
+#@ formidable
+msgid "Forms"
+msgstr "Forme"
+
+#: classes/controllers/FrmFormsController.php:58
+#: classes/controllers/FrmFormsController.php:387
+#: classes/views/frm-forms/edit.php:3
+#: classes/views/frm-forms/list.php:3
+#@ formidable
+msgid "Templates"
+msgstr "Templates"
+
+#: classes/controllers/FrmAppController.php:84
+#: classes/helpers/FrmListHelper.php:128
+#: classes/views/frm-forms/settings.php:3
+#: classes/views/frm-forms/settings.php:36
+#: classes/views/shared/form-nav.php:4
+#@ formidable
+msgid "Settings"
+msgstr "Postavke"
+
+#: classes/controllers/FrmAppController.php:134
+#@ formidable
+msgid "Update Now"
+msgstr "Update sada"
+
+#: classes/controllers/FrmAppController.php:403
+#@ formidable
+msgid "Type-in or bookmark"
+msgstr "Ukucati ili bookmark-ovati"
+
+#: classes/controllers/FrmEntriesController.php:25
+#: classes/controllers/FrmFormsController.php:389
+#: classes/views/frm-entries/list.php:4
+#: classes/views/shared/form-nav.php:5
+#: pro/classes/controllers/FrmProEntriesController.php:99
+#: pro/classes/controllers/FrmProEntriesController.php:1192
+#: pro/classes/controllers/FrmProXMLController.php:79
+#: pro/classes/views/frmpro-entries/list.php:3
+#: pro/classes/views/frmpro-fields/dynamic-options.php:31
+#@ formidable
+msgid "Entries"
+msgstr "Unošenja"
+
+#: classes/controllers/FrmFormsController.php:745
+#: classes/controllers/FrmFormsController.php:750
+#: classes/controllers/FrmFormsController.php:756
+#@ formidable
+msgid "Please select a valid form"
+msgstr "Izaberite validnu formu"
+
+#: classes/controllers/FrmFieldsController.php:294
+#@ formidable
+msgid "Countries"
+msgstr "Zemlje"
+
+#: classes/controllers/FrmFieldsController.php:302
+#@ formidable
+msgid "U.S. States"
+msgstr "US države"
+
+#: classes/controllers/FrmFieldsController.php:299
+#@ formidable
+msgid "U.S. State Abbreviations"
+msgstr "Skraćenice US država"
+
+#: classes/controllers/FrmFieldsController.php:306
+#@ formidable
+msgid "Age"
+msgstr "Godine"
+
+#: classes/controllers/FrmFieldsController.php:307
+#@ formidable
+msgid "Under 18"
+msgstr "Ispod 18"
+
+#: classes/controllers/FrmFieldsController.php:307
+#@ formidable
+msgid "18-24"
+msgstr "18-24"
+
+#: classes/controllers/FrmFieldsController.php:307
+#@ formidable
+msgid "25-34"
+msgstr "25-34"
+
+#: classes/controllers/FrmFieldsController.php:308
+#@ formidable
+msgid "35-44"
+msgstr "35-44"
+
+#: classes/controllers/FrmFieldsController.php:308
+#@ formidable
+msgid "45-54"
+msgstr "45-54"
+
+#: classes/controllers/FrmFieldsController.php:308
+#@ formidable
+msgid "55-64"
+msgstr "55-64"
+
+#: classes/controllers/FrmFieldsController.php:309
+#@ formidable
+msgid "65 or Above"
+msgstr "65 ili više"
+
+#: classes/controllers/FrmFieldsController.php:309
+#@ formidable
+msgid "Prefer Not to Answer"
+msgstr "Pre ne bih da odgovorim"
+
+#: classes/controllers/FrmFieldsController.php:312
+#@ formidable
+msgid "Satisfaction"
+msgstr "Zadovoljstvo"
+
+#: classes/controllers/FrmFieldsController.php:313
+#@ formidable
+msgid "Very Satisfied"
+msgstr "Veoma zadovoljan"
+
+#: classes/controllers/FrmFieldsController.php:313
+#@ formidable
+msgid "Satisfied"
+msgstr "Zadovoljan"
+
+#: classes/controllers/FrmFieldsController.php:313
+#: classes/controllers/FrmFieldsController.php:318
+#: classes/controllers/FrmFieldsController.php:323
+#@ formidable
+msgid "Neutral"
+msgstr "Neutralno"
+
+#: classes/controllers/FrmFieldsController.php:314
+#@ formidable
+msgid "Unsatisfied"
+msgstr "Nisam zadovoljan"
+
+#: classes/controllers/FrmFieldsController.php:314
+#@ formidable
+msgid "Very Unsatisfied"
+msgstr "Veoma nezadovoljan"
+
+#: classes/controllers/FrmFieldsController.php:314
+#: classes/controllers/FrmFieldsController.php:319
+#: classes/controllers/FrmFieldsController.php:324
+#: pro/classes/controllers/FrmProDisplaysController.php:238
+#@ formidable
+msgid "N/A"
+msgstr "N/A"
+
+#: classes/controllers/FrmFieldsController.php:317
+#@ formidable
+msgid "Importance"
+msgstr "Važnost"
+
+#: classes/controllers/FrmFieldsController.php:318
+#@ formidable
+msgid "Very Important"
+msgstr "Jako važno"
+
+#: classes/controllers/FrmFieldsController.php:318
+#@ formidable
+msgid "Important"
+msgstr "Važno"
+
+#: classes/controllers/FrmFieldsController.php:319
+#@ formidable
+msgid "Somewhat Important"
+msgstr "Donekle važno"
+
+#: classes/controllers/FrmFieldsController.php:319
+#@ formidable
+msgid "Not at all Important"
+msgstr "Uopšte nije važno"
+
+#: classes/controllers/FrmFieldsController.php:322
+#@ formidable
+msgid "Agreement"
+msgstr "Sporazum"
+
+#: classes/controllers/FrmFieldsController.php:323
+#@ formidable
+msgid "Strongly Agree"
+msgstr "Veoma se slažem"
+
+#: classes/controllers/FrmFieldsController.php:323
+#@ formidable
+msgid "Agree"
+msgstr "Slažem se"
+
+#: classes/controllers/FrmFieldsController.php:324
+#@ formidable
+msgid "Disagree"
+msgstr "Ne slažem se"
+
+#: classes/controllers/FrmFieldsController.php:324
+#@ formidable
+msgid "Strongly Disagree"
+msgstr "Veoma se ne slažem"
+
+#: classes/controllers/FrmFormsController.php:163
+#@ formidable
+msgid "Settings Successfully Updated"
+msgstr "Postavke uspešno update-ovane"
+
+#: classes/controllers/FrmFormsController.php:215
+#: classes/controllers/FrmFormsController.php:449
+#@ formidable
+msgid "Form was Successfully Updated"
+msgstr "Forme su uspešno update-ovane"
+
+#: classes/controllers/FrmFormsController.php:233
+#@ formidable
+msgid "Form template was Successfully Created"
+msgstr "Template forme su uspešno kreirane"
+
+#: classes/controllers/FrmFormsController.php:233
+#@ formidable
+msgid "Form was Successfully Copied"
+msgstr "Forme su uspešno kopirane"
+
+#: classes/controllers/FrmFormsController.php:237
+#@ formidable
+msgid "There was a problem creating new template."
+msgstr "Pojaavio se problem prilikom kreiranja novog template."
+
+#: classes/controllers/FrmFormsController.php:297
+#@ formidable
+msgid "Form was Successfully Deleted"
+msgstr "Forme su uspešno obrisane"
+
+#: classes/controllers/FrmFormsController.php:321
+#: classes/controllers/FrmFormsController.php:328
+#@ formidable
+msgid "Add Formidable Form"
+msgstr "Dodati Formidable Formu"
+
+#: classes/controllers/FrmFormsController.php:382
+#: classes/views/frm-forms/default-templates.php:7
+#: classes/views/frm-forms/default-templates.php:41
+#: classes/views/frm-forms/notification.php:16
+#: classes/views/frm-forms/notification.php:65
+#: classes/views/frm-forms/notification.php:66
+#: pro/classes/controllers/FrmProDisplaysController.php:184
+#: pro/classes/views/frmpro-forms/_custom_field_row.php:3
+#@ default
+msgid "Name"
+msgstr "Ime"
+
+#: classes/controllers/FrmFormsController.php:383
+#: classes/views/frm-forms/default-templates.php:8
+#: classes/views/frm-forms/default-templates.php:42
+#: pro/classes/controllers/FrmProDisplaysController.php:185
+#: pro/classes/controllers/FrmProDisplaysController.php:338
+#@ default
+msgid "Description"
+msgstr "Opis"
+
+#: classes/controllers/FrmFormsController.php:384
+#: pro/classes/controllers/FrmProDisplaysController.php:192
+#: pro/classes/helpers/FrmProFieldsHelper.php:1865
+#: pro/classes/helpers/FrmProFieldsHelper.php:1879
+#: pro/classes/views/displays/mb_form_disp_type.php:29
+#: pro/classes/views/displays/mb_form_disp_type.php:39
+#@ formidable
+msgid "Key"
+msgstr "Ključ"
+
+#: classes/views/frm-forms/sidebar-settings.php:15
+#@ formidable
+msgid "Direct Link"
+msgstr "Direktan link"
+
+#: classes/controllers/FrmFormsController.php:391
+#: pro/classes/views/displays/submitbox_actions.php:2
+#@ formidable
+msgid "Shortcodes"
+msgstr "Skraćenice"
+
+#: classes/controllers/FrmFormsController.php:395
+#: classes/helpers/FrmFieldsHelper.php:33
+#: pro/classes/controllers/FrmProDisplaysController.php:191
+#@ formidable
+msgid "Date"
+msgstr "Datum"
+
+#: classes/controllers/FrmFormsController.php:451
+#@ formidable
+msgid "Template was Successfully Updated"
+msgstr "Template uspešno updateovana"
+
+#: classes/controllers/FrmFormsController.php:455
+#: classes/controllers/FrmFormsController.php:474
+#@ formidable
+msgid "That template cannot be edited"
+msgstr "Ova template ne može da se edituje"
+
+#: classes/controllers/FrmSettingsController.php:63
+#: classes/controllers/FrmSettingsController.php:66
+#@ formidable
+msgid "Settings Saved"
+msgstr "Postavke sačuvane"
+
+#: classes/controllers/FrmStatisticsController.php:19
+#: classes/views/frm-statistics/list.php:4
+#: classes/views/shared/form-nav.php:7
+#: pro/classes/controllers/FrmProStatisticsController.php:12
+#: pro/classes/views/frmpro-statistics/show.php:3
+#@ formidable
+msgid "Reports"
+msgstr "Izveštaji"
+
+#: classes/helpers/FrmAppHelper.php:135
+#@ formidable
+msgid "View Forms and Templates"
+msgstr "Pregledajte forme i templates"
+
+#: classes/helpers/FrmAppHelper.php:136
+#@ formidable
+msgid "Add/Edit Forms and Templates"
+msgstr "Dodaj/Edituj forme i templates"
+
+#: classes/helpers/FrmAppHelper.php:137
+#@ formidable
+msgid "Delete Forms and Templates"
+msgstr "Obrisati forme i templates"
+
+#: classes/helpers/FrmAppHelper.php:138
+#@ formidable
+msgid "Access this Settings Page"
+msgstr "Pristup ovoj stranici sa postavkama"
+
+#: classes/helpers/FrmAppHelper.php:141
+#@ formidable
+msgid "View Entries from Admin Area"
+msgstr "Pregledajte unošenje u admin području"
+
+#: classes/helpers/FrmAppHelper.php:142
+#@ formidable
+msgid "Add Entries from Admin Area"
+msgstr "Dodajte unose iz admin područja"
+
+#: classes/helpers/FrmAppHelper.php:143
+#@ formidable
+msgid "Edit Entries from Admin Area"
+msgstr "Edituj unošenje iz admin područja"
+
+#: classes/helpers/FrmAppHelper.php:144
+#@ formidable
+msgid "Delete Entries from Admin Area"
+msgstr "Obrišite unose iz admin područja"
+
+#: classes/helpers/FrmAppHelper.php:145
+#@ formidable
+msgid "View Reports"
+msgstr "Pregledati izveštaje"
+
+#: pro/classes/helpers/FrmProFieldsHelper.php:907
+#: pro/classes/models/FrmProEntryMeta.php:195
+#@ formidable
+msgid "is invalid"
+msgstr "nepostojeći"
+
+#: classes/helpers/FrmAppHelper.php:489
+#@ formidable
+msgid "Afghanistan"
+msgstr "Avganistan"
+
+#: classes/helpers/FrmAppHelper.php:489
+#@ formidable
+msgid "Albania"
+msgstr "Albanija"
+
+#: classes/helpers/FrmAppHelper.php:489
+#@ formidable
+msgid "Algeria"
+msgstr "Alžir"
+
+#: classes/helpers/FrmAppHelper.php:490
+#@ formidable
+msgid "American Samoa"
+msgstr "Američka Samoa"
+
+#: classes/helpers/FrmAppHelper.php:490
+#@ formidable
+msgid "Andorra"
+msgstr "Andora"
+
+#: classes/helpers/FrmAppHelper.php:490
+#@ formidable
+msgid "Angola"
+msgstr "Angola"
+
+#: classes/helpers/FrmAppHelper.php:491
+#@ formidable
+msgid "Anguilla"
+msgstr "Anguila"
+
+#: classes/helpers/FrmAppHelper.php:491
+#@ formidable
+msgid "Antarctica"
+msgstr "Antarktika"
+
+#: classes/helpers/FrmAppHelper.php:491
+#@ formidable
+msgid "Antigua and Barbuda"
+msgstr "Antiga i Barbuda"
+
+#: classes/helpers/FrmAppHelper.php:492
+#@ formidable
+msgid "Argentina"
+msgstr "Argentina"
+
+#: classes/helpers/FrmAppHelper.php:492
+#@ formidable
+msgid "Armenia"
+msgstr "Jermenija"
+
+#: classes/helpers/FrmAppHelper.php:492
+#@ formidable
+msgid "Aruba"
+msgstr "Aruba"
+
+#: classes/helpers/FrmAppHelper.php:493
+#@ formidable
+msgid "Australia"
+msgstr "Australia"
+
+#: classes/helpers/FrmAppHelper.php:493
+#@ formidable
+msgid "Austria"
+msgstr "Austria"
+
+#: classes/helpers/FrmAppHelper.php:493
+#@ formidable
+msgid "Azerbaijan"
+msgstr "Azerbejdžan"
+
+#: classes/helpers/FrmAppHelper.php:494
+#@ formidable
+msgid "Bahamas"
+msgstr "Bahame"
+
+#: classes/helpers/FrmAppHelper.php:494
+#@ formidable
+msgid "Bahrain"
+msgstr "Bahrein"
+
+#: classes/helpers/FrmAppHelper.php:494
+#@ formidable
+msgid "Bangladesh"
+msgstr "Bangladeš"
+
+#: classes/helpers/FrmAppHelper.php:495
+#@ formidable
+msgid "Barbados"
+msgstr "Barbados"
+
+#: classes/helpers/FrmAppHelper.php:495
+#@ formidable
+msgid "Belarus"
+msgstr "Belorusija"
+
+#: classes/helpers/FrmAppHelper.php:495
+#@ formidable
+msgid "Belgium"
+msgstr "Belgija"
+
+#: classes/helpers/FrmAppHelper.php:496
+#@ formidable
+msgid "Belize"
+msgstr "Beliz"
+
+#: classes/helpers/FrmAppHelper.php:496
+#@ formidable
+msgid "Benin"
+msgstr "Benin"
+
+#: classes/helpers/FrmAppHelper.php:496
+#@ formidable
+msgid "Bermuda"
+msgstr "Bermude"
+
+#: classes/helpers/FrmAppHelper.php:497
+#@ formidable
+msgid "Bhutan"
+msgstr "Butan"
+
+#: classes/helpers/FrmAppHelper.php:497
+#@ formidable
+msgid "Bolivia"
+msgstr "Bolivia"
+
+#: classes/helpers/FrmAppHelper.php:497
+#@ formidable
+msgid "Bosnia and Herzegovina"
+msgstr "Bosna i Hercegovina"
+
+#: classes/helpers/FrmAppHelper.php:498
+#@ formidable
+msgid "Botswana"
+msgstr "Bocvana"
+
+#: classes/helpers/FrmAppHelper.php:498
+#@ formidable
+msgid "Brazil"
+msgstr "Brazil"
+
+#: classes/helpers/FrmAppHelper.php:498
+#@ formidable
+msgid "Brunei"
+msgstr "Brunei"
+
+#: classes/helpers/FrmAppHelper.php:499
+#@ formidable
+msgid "Bulgaria"
+msgstr "Bugarska"
+
+#: classes/helpers/FrmAppHelper.php:499
+#@ formidable
+msgid "Burkina Faso"
+msgstr "Burkina Faso"
+
+#: classes/helpers/FrmAppHelper.php:499
+#@ formidable
+msgid "Burundi"
+msgstr "Burundi"
+
+#: classes/helpers/FrmAppHelper.php:500
+#@ formidable
+msgid "Cambodia"
+msgstr "Kambodža"
+
+#: classes/helpers/FrmAppHelper.php:500
+#@ formidable
+msgid "Cameroon"
+msgstr "Kamerun"
+
+#: classes/helpers/FrmAppHelper.php:500
+#@ formidable
+msgid "Canada"
+msgstr "Kanada"
+
+#: classes/helpers/FrmAppHelper.php:501
+#@ formidable
+msgid "Cape Verde"
+msgstr "Kape Verde"
+
+#: classes/helpers/FrmAppHelper.php:501
+#@ formidable
+msgid "Cayman Islands"
+msgstr "Kajmanska ostrva"
+
+#: classes/helpers/FrmAppHelper.php:501
+#@ formidable
+msgid "Central African Republic"
+msgstr "Republika Centralne Afrike"
+
+#: classes/helpers/FrmAppHelper.php:502
+#@ formidable
+msgid "Chad"
+msgstr "Čad"
+
+#: classes/helpers/FrmAppHelper.php:502
+#@ formidable
+msgid "Chile"
+msgstr "Čile"
+
+#: classes/helpers/FrmAppHelper.php:502
+#@ formidable
+msgid "China"
+msgstr "Kina"
+
+#: classes/helpers/FrmAppHelper.php:503
+#@ formidable
+msgid "Colombia"
+msgstr "Kolumbija"
+
+#: classes/helpers/FrmAppHelper.php:503
+#@ formidable
+msgid "Comoros"
+msgstr "Komoros"
+
+#: classes/helpers/FrmAppHelper.php:503
+#@ formidable
+msgid "Congo"
+msgstr "Kongo"
+
+#: classes/helpers/FrmAppHelper.php:504
+#@ formidable
+msgid "Costa Rica"
+msgstr "Kosta Rika"
+
+#: classes/helpers/FrmAppHelper.php:504
+#@ formidable
+msgid "C&ocirc;te d'Ivoire"
+msgstr "Obala Slonovace"
+
+#: classes/helpers/FrmAppHelper.php:504
+#@ formidable
+msgid "Croatia"
+msgstr "Hrvatska"
+
+#: classes/helpers/FrmAppHelper.php:505
+#@ formidable
+msgid "Cuba"
+msgstr "Kuba"
+
+#: classes/helpers/FrmAppHelper.php:505
+#@ formidable
+msgid "Cyprus"
+msgstr "Kipar"
+
+#: classes/helpers/FrmAppHelper.php:505
+#@ formidable
+msgid "Czech Republic"
+msgstr "Češka republika"
+
+#: classes/helpers/FrmAppHelper.php:506
+#@ formidable
+msgid "Denmark"
+msgstr "Danska"
+
+#: classes/helpers/FrmAppHelper.php:506
+#@ formidable
+msgid "Djibouti"
+msgstr " Džubuti"
+
+#: classes/helpers/FrmAppHelper.php:506
+#@ formidable
+msgid "Dominica"
+msgstr "Dominika"
+
+#: classes/helpers/FrmAppHelper.php:507
+#@ formidable
+msgid "Dominican Republic"
+msgstr "Dominikanska Republika"
+
+#: classes/helpers/FrmAppHelper.php:507
+#@ formidable
+msgid "East Timor"
+msgstr "Južni Timor"
+
+#: classes/helpers/FrmAppHelper.php:507
+#@ formidable
+msgid "Ecuador"
+msgstr "Ekvador"
+
+#: classes/helpers/FrmAppHelper.php:508
+#@ formidable
+msgid "Egypt"
+msgstr "Egipat"
+
+#: classes/helpers/FrmAppHelper.php:508
+#@ formidable
+msgid "El Salvador"
+msgstr "El Salvador"
+
+#: classes/helpers/FrmAppHelper.php:508
+#@ formidable
+msgid "Equatorial Guinea"
+msgstr "Ekvatorijalna Gvineja"
+
+#: classes/helpers/FrmAppHelper.php:509
+#@ formidable
+msgid "Eritrea"
+msgstr "Eritreja"
+
+#: classes/helpers/FrmAppHelper.php:509
+#@ formidable
+msgid "Estonia"
+msgstr "Estonija"
+
+#: classes/helpers/FrmAppHelper.php:509
+#@ formidable
+msgid "Ethiopia"
+msgstr "Etiopija"
+
+#: classes/helpers/FrmAppHelper.php:510
+#@ formidable
+msgid "Fiji"
+msgstr "Fidži"
+
+#: classes/helpers/FrmAppHelper.php:510
+#@ formidable
+msgid "Finland"
+msgstr "Finska"
+
+#: classes/helpers/FrmAppHelper.php:510
+#@ formidable
+msgid "France"
+msgstr "Francuska"
+
+#: classes/helpers/FrmAppHelper.php:511
+#@ formidable
+msgid "French Guiana"
+msgstr "Francuska Gvineja"
+
+#: classes/helpers/FrmAppHelper.php:511
+#@ formidable
+msgid "French Polynesia"
+msgstr "Francuska Polinezija"
+
+#: classes/helpers/FrmAppHelper.php:511
+#@ formidable
+msgid "Gabon"
+msgstr "Gabon"
+
+#: classes/helpers/FrmAppHelper.php:512
+#@ formidable
+msgid "Gambia"
+msgstr "Gambia"
+
+#: classes/helpers/FrmAppHelper.php:512
+#@ formidable
+msgid "Georgia"
+msgstr "Džordžija"
+
+#: classes/helpers/FrmAppHelper.php:512
+#@ formidable
+msgid "Germany"
+msgstr "Nemačka"
+
+#: classes/helpers/FrmAppHelper.php:513
+#@ formidable
+msgid "Ghana"
+msgstr "Gana"
+
+#: classes/helpers/FrmAppHelper.php:513
+#@ formidable
+msgid "Gibraltar"
+msgstr "Gibraltar"
+
+#: classes/helpers/FrmAppHelper.php:513
+#@ formidable
+msgid "Greece"
+msgstr "Grčka"
+
+#: classes/helpers/FrmAppHelper.php:514
+#@ formidable
+msgid "Greenland"
+msgstr "Grenland"
+
+#: classes/helpers/FrmAppHelper.php:514
+#@ formidable
+msgid "Grenada"
+msgstr "Grenada"
+
+#: classes/helpers/FrmAppHelper.php:514
+#@ formidable
+msgid "Guam"
+msgstr "Guam"
+
+#: classes/helpers/FrmAppHelper.php:515
+#@ formidable
+msgid "Guatemala"
+msgstr "Gvatamala"
+
+#: classes/helpers/FrmAppHelper.php:515
+#@ formidable
+msgid "Guinea"
+msgstr "Gvineja"
+
+#: classes/helpers/FrmAppHelper.php:515
+#@ formidable
+msgid "Guinea-Bissau"
+msgstr "Gvinej-Biso"
+
+#: classes/helpers/FrmAppHelper.php:516
+#@ formidable
+msgid "Guyana"
+msgstr "Gvajana"
+
+#: classes/helpers/FrmAppHelper.php:516
+#@ formidable
+msgid "Haiti"
+msgstr "Haiti"
+
+#: classes/helpers/FrmAppHelper.php:516
+#@ formidable
+msgid "Honduras"
+msgstr "Honduras"
+
+#: classes/helpers/FrmAppHelper.php:517
+#@ formidable
+msgid "Hong Kong"
+msgstr "Hong Kong"
+
+#: classes/helpers/FrmAppHelper.php:517
+#@ formidable
+msgid "Hungary"
+msgstr "Madjarska"
+
+#: classes/helpers/FrmAppHelper.php:517
+#@ formidable
+msgid "Iceland"
+msgstr "Island"
+
+#: classes/helpers/FrmAppHelper.php:518
+#@ formidable
+msgid "India"
+msgstr "Indija"
+
+#: classes/helpers/FrmAppHelper.php:518
+#@ formidable
+msgid "Indonesia"
+msgstr "Indonesija"
+
+#: classes/helpers/FrmAppHelper.php:518
+#@ formidable
+msgid "Iran"
+msgstr "Iran"
+
+#: classes/helpers/FrmAppHelper.php:519
+#@ formidable
+msgid "Iraq"
+msgstr "Irak"
+
+#: classes/helpers/FrmAppHelper.php:519
+#@ formidable
+msgid "Ireland"
+msgstr "Irska"
+
+#: classes/helpers/FrmAppHelper.php:519
+#@ formidable
+msgid "Israel"
+msgstr "Izrael"
+
+#: classes/helpers/FrmAppHelper.php:520
+#@ formidable
+msgid "Italy"
+msgstr "Italija"
+
+#: classes/helpers/FrmAppHelper.php:520
+#@ formidable
+msgid "Jamaica"
+msgstr "Jamajka"
+
+#: classes/helpers/FrmAppHelper.php:520
+#@ formidable
+msgid "Japan"
+msgstr "Japan"
+
+#: classes/helpers/FrmAppHelper.php:521
+#@ formidable
+msgid "Jordan"
+msgstr "Jordan"
+
+#: classes/helpers/FrmAppHelper.php:521
+#@ formidable
+msgid "Kazakhstan"
+msgstr "Kazakhstan"
+
+#: classes/helpers/FrmAppHelper.php:521
+#@ formidable
+msgid "Kenya"
+msgstr "Kenija"
+
+#: classes/helpers/FrmAppHelper.php:522
+#@ formidable
+msgid "Kiribati"
+msgstr "Kiribati"
+
+#: classes/helpers/FrmAppHelper.php:522
+#@ formidable
+msgid "North Korea"
+msgstr "Severna Koreja"
+
+#: classes/helpers/FrmAppHelper.php:522
+#@ formidable
+msgid "South Korea"
+msgstr "Južna Koreja"
+
+#: classes/helpers/FrmAppHelper.php:523
+#@ formidable
+msgid "Kuwait"
+msgstr "Kuvajt"
+
+#: classes/helpers/FrmAppHelper.php:523
+#@ formidable
+msgid "Kyrgyzstan"
+msgstr "Kirgistan"
+
+#: classes/helpers/FrmAppHelper.php:523
+#@ formidable
+msgid "Laos"
+msgstr "Laos"
+
+#: classes/helpers/FrmAppHelper.php:524
+#@ formidable
+msgid "Latvia"
+msgstr "Latvia"
+
+#: classes/helpers/FrmAppHelper.php:524
+#@ formidable
+msgid "Lebanon"
+msgstr "Liban"
+
+#: classes/helpers/FrmAppHelper.php:524
+#@ formidable
+msgid "Lesotho"
+msgstr "Lesoto"
+
+#: classes/helpers/FrmAppHelper.php:525
+#@ formidable
+msgid "Liberia"
+msgstr "Liberija"
+
+#: classes/helpers/FrmAppHelper.php:525
+#@ formidable
+msgid "Libya"
+msgstr "Libija"
+
+#: classes/helpers/FrmAppHelper.php:525
+#@ formidable
+msgid "Liechtenstein"
+msgstr "Lihtenštajn"
+
+#: classes/helpers/FrmAppHelper.php:526
+#@ formidable
+msgid "Lithuania"
+msgstr "Litvanija"
+
+#: classes/helpers/FrmAppHelper.php:526
+#@ formidable
+msgid "Luxembourg"
+msgstr "Luksemburg"
+
+#: classes/helpers/FrmAppHelper.php:526
+#@ formidable
+msgid "Macedonia"
+msgstr "Makedonija"
+
+#: classes/helpers/FrmAppHelper.php:527
+#@ formidable
+msgid "Madagascar"
+msgstr "Madagaskar"
+
+#: classes/helpers/FrmAppHelper.php:527
+#@ formidable
+msgid "Malawi"
+msgstr "Malavi"
+
+#: classes/helpers/FrmAppHelper.php:527
+#@ formidable
+msgid "Malaysia"
+msgstr "Malasija"
+
+#: classes/helpers/FrmAppHelper.php:528
+#@ formidable
+msgid "Maldives"
+msgstr "Maldivi"
+
+#: classes/helpers/FrmAppHelper.php:528
+#@ formidable
+msgid "Mali"
+msgstr "Mali"
+
+#: classes/helpers/FrmAppHelper.php:528
+#@ formidable
+msgid "Malta"
+msgstr "Malta"
+
+#: classes/helpers/FrmAppHelper.php:529
+#@ formidable
+msgid "Marshall Islands"
+msgstr "Maršalska ostrva"
+
+#: classes/helpers/FrmAppHelper.php:529
+#@ formidable
+msgid "Mauritania"
+msgstr "Mauritanija"
+
+#: classes/helpers/FrmAppHelper.php:529
+#@ formidable
+msgid "Mauritius"
+msgstr "Mauricijus"
+
+#: classes/helpers/FrmAppHelper.php:530
+#@ formidable
+msgid "Mexico"
+msgstr "Meksiko"
+
+#: classes/helpers/FrmAppHelper.php:530
+#@ formidable
+msgid "Micronesia"
+msgstr "Mikronesija"
+
+#: classes/helpers/FrmAppHelper.php:530
+#@ formidable
+msgid "Moldova"
+msgstr "Moldavija"
+
+#: classes/helpers/FrmAppHelper.php:531
+#@ formidable
+msgid "Monaco"
+msgstr "Monako"
+
+#: classes/helpers/FrmAppHelper.php:531
+#@ formidable
+msgid "Mongolia"
+msgstr "Mongolija"
+
+#: classes/helpers/FrmAppHelper.php:531
+#@ formidable
+msgid "Montenegro"
+msgstr "Crna Gora"
+
+#: classes/helpers/FrmAppHelper.php:532
+#@ formidable
+msgid "Montserrat"
+msgstr "Monserat"
+
+#: classes/helpers/FrmAppHelper.php:532
+#@ formidable
+msgid "Morocco"
+msgstr "Maroko"
+
+#: classes/helpers/FrmAppHelper.php:532
+#@ formidable
+msgid "Mozambique"
+msgstr "Mozambik"
+
+#: classes/helpers/FrmAppHelper.php:533
+#@ formidable
+msgid "Myanmar"
+msgstr "Mijanmar"
+
+#: classes/helpers/FrmAppHelper.php:533
+#@ formidable
+msgid "Namibia"
+msgstr "Namibia"
+
+#: classes/helpers/FrmAppHelper.php:533
+#@ formidable
+msgid "Nauru"
+msgstr "Nauru"
+
+#: classes/helpers/FrmAppHelper.php:534
+#@ formidable
+msgid "Nepal"
+msgstr "Nepal"
+
+#: classes/helpers/FrmAppHelper.php:534
+#@ formidable
+msgid "Netherlands"
+msgstr "Holandija"
+
+#: classes/helpers/FrmAppHelper.php:534
+#@ formidable
+msgid "New Zealand"
+msgstr "Novi Zeland"
+
+#: classes/helpers/FrmAppHelper.php:535
+#@ formidable
+msgid "Nicaragua"
+msgstr "Nikaragva"
+
+#: classes/helpers/FrmAppHelper.php:535
+#@ formidable
+msgid "Niger"
+msgstr "Niger"
+
+#: classes/helpers/FrmAppHelper.php:535
+#@ formidable
+msgid "Nigeria"
+msgstr "Nigerija"
+
+#: classes/helpers/FrmAppHelper.php:536
+#@ formidable
+msgid "Norway"
+msgstr "Norveška"
+
+#: classes/helpers/FrmAppHelper.php:536
+#@ formidable
+msgid "Northern Mariana Islands"
+msgstr "Severno Mariajnska ostrva"
+
+#: classes/helpers/FrmAppHelper.php:536
+#@ formidable
+msgid "Oman"
+msgstr "Oman"
+
+#: classes/helpers/FrmAppHelper.php:537
+#@ formidable
+msgid "Pakistan"
+msgstr "Pakistan"
+
+#: classes/helpers/FrmAppHelper.php:537
+#@ formidable
+msgid "Palau"
+msgstr "Palau"
+
+#: classes/helpers/FrmAppHelper.php:537
+#@ formidable
+msgid "Palestine"
+msgstr "Palestina"
+
+#: classes/helpers/FrmAppHelper.php:538
+#@ formidable
+msgid "Panama"
+msgstr "Panama"
+
+#: classes/helpers/FrmAppHelper.php:538
+#@ formidable
+msgid "Papua New Guinea"
+msgstr "Papua Nova Gvineja"
+
+#: classes/helpers/FrmAppHelper.php:538
+#@ formidable
+msgid "Paraguay"
+msgstr "Paragvaj"
+
+#: classes/helpers/FrmAppHelper.php:539
+#@ formidable
+msgid "Peru"
+msgstr "Peru"
+
+#: classes/helpers/FrmAppHelper.php:539
+#@ formidable
+msgid "Philippines"
+msgstr "Filipini"
+
+#: classes/helpers/FrmAppHelper.php:539
+#@ formidable
+msgid "Poland"
+msgstr "Poljska"
+
+#: classes/helpers/FrmAppHelper.php:540
+#@ formidable
+msgid "Portugal"
+msgstr "Portugal"
+
+#: classes/helpers/FrmAppHelper.php:540
+#@ formidable
+msgid "Puerto Rico"
+msgstr "Puerto Riko"
+
+#: classes/helpers/FrmAppHelper.php:540
+#@ formidable
+msgid "Qatar"
+msgstr "Katar"
+
+#: classes/helpers/FrmAppHelper.php:541
+#@ formidable
+msgid "Romania"
+msgstr "Rumunija"
+
+#: classes/helpers/FrmAppHelper.php:541
+#@ formidable
+msgid "Russia"
+msgstr "Rusija"
+
+#: classes/helpers/FrmAppHelper.php:541
+#@ formidable
+msgid "Rwanda"
+msgstr "Ruanda"
+
+#: classes/helpers/FrmAppHelper.php:542
+#@ formidable
+msgid "Saint Kitts and Nevis"
+msgstr "Saint Kitts and Nevis"
+
+#: classes/helpers/FrmAppHelper.php:542
+#@ formidable
+msgid "Saint Lucia"
+msgstr "Sveta Lucija"
+
+#: classes/helpers/FrmAppHelper.php:543
+#@ formidable
+msgid "Saint Vincent and the Grenadines"
+msgstr "Sveti Vinsent i Grenadines"
+
+#: classes/helpers/FrmAppHelper.php:543
+#@ formidable
+msgid "Samoa"
+msgstr "Samoa"
+
+#: classes/helpers/FrmAppHelper.php:544
+#@ formidable
+msgid "San Marino"
+msgstr "San Marino"
+
+#: classes/helpers/FrmAppHelper.php:544
+#@ formidable
+msgid "Sao Tome and Principe"
+msgstr "Sao Tome i Principe"
+
+#: classes/helpers/FrmAppHelper.php:544
+#@ formidable
+msgid "Saudi Arabia"
+msgstr "Saudijska Arabija"
+
+#: classes/helpers/FrmAppHelper.php:545
+#@ formidable
+msgid "Senegal"
+msgstr "Senegal"
+
+#: classes/helpers/FrmAppHelper.php:545
+#@ formidable
+msgid "Serbia and Montenegro"
+msgstr "Srbija i Crna Gora"
+
+#: classes/helpers/FrmAppHelper.php:545
+#@ formidable
+msgid "Seychelles"
+msgstr "Sejšeli"
+
+#: classes/helpers/FrmAppHelper.php:546
+#@ formidable
+msgid "Sierra Leone"
+msgstr "Siera Lion"
+
+#: classes/helpers/FrmAppHelper.php:546
+#@ formidable
+msgid "Singapore"
+msgstr "Singapur"
+
+#: classes/helpers/FrmAppHelper.php:546
+#@ formidable
+msgid "Slovakia"
+msgstr "Slovačka"
+
+#: classes/helpers/FrmAppHelper.php:547
+#@ formidable
+msgid "Slovenia"
+msgstr "Slovenia"
+
+#: classes/helpers/FrmAppHelper.php:547
+#@ formidable
+msgid "Solomon Islands"
+msgstr "Solomonska ostrva"
+
+#: classes/helpers/FrmAppHelper.php:547
+#@ formidable
+msgid "Somalia"
+msgstr "Somalia"
+
+#: classes/helpers/FrmAppHelper.php:548
+#@ formidable
+msgid "South Africa"
+msgstr "Južna Afrika"
+
+#: classes/helpers/FrmAppHelper.php:548
+#@ formidable
+msgid "Spain"
+msgstr "Španija"
+
+#: classes/helpers/FrmAppHelper.php:548
+#@ formidable
+msgid "Sri Lanka"
+msgstr "Šri Lanka"
+
+#: classes/helpers/FrmAppHelper.php:549
+#@ formidable
+msgid "Sudan"
+msgstr "Sudan"
+
+#: classes/helpers/FrmAppHelper.php:549
+#@ formidable
+msgid "Suriname"
+msgstr "Surinam"
+
+#: classes/helpers/FrmAppHelper.php:549
+#@ formidable
+msgid "Swaziland"
+msgstr "Svaziland"
+
+#: classes/helpers/FrmAppHelper.php:550
+#@ formidable
+msgid "Sweden"
+msgstr "Švedska"
+
+#: classes/helpers/FrmAppHelper.php:550
+#@ formidable
+msgid "Switzerland"
+msgstr "Švajcarska"
+
+#: classes/helpers/FrmAppHelper.php:550
+#@ formidable
+msgid "Syria"
+msgstr "Sirija"
+
+#: classes/helpers/FrmAppHelper.php:551
+#@ formidable
+msgid "Taiwan"
+msgstr "Tajvan"
+
+#: classes/helpers/FrmAppHelper.php:551
+#@ formidable
+msgid "Tajikistan"
+msgstr "Tadžikistan"
+
+#: classes/helpers/FrmAppHelper.php:551
+#@ formidable
+msgid "Tanzania"
+msgstr "Tanzanija"
+
+#: classes/helpers/FrmAppHelper.php:552
+#@ formidable
+msgid "Thailand"
+msgstr "Tajland"
+
+#: classes/helpers/FrmAppHelper.php:552
+#@ formidable
+msgid "Togo"
+msgstr "Togo"
+
+#: classes/helpers/FrmAppHelper.php:552
+#@ formidable
+msgid "Tonga"
+msgstr "Tonga"
+
+#: classes/helpers/FrmAppHelper.php:553
+#@ formidable
+msgid "Trinidad and Tobago"
+msgstr "Trinidad i Tobago"
+
+#: classes/helpers/FrmAppHelper.php:553
+#@ formidable
+msgid "Tunisia"
+msgstr "Tunis"
+
+#: classes/helpers/FrmAppHelper.php:553
+#@ formidable
+msgid "Turkey"
+msgstr "Turska"
+
+#: classes/helpers/FrmAppHelper.php:554
+#@ formidable
+msgid "Turkmenistan"
+msgstr "Turkmenistan"
+
+#: classes/helpers/FrmAppHelper.php:554
+#@ formidable
+msgid "Tuvalu"
+msgstr "Tuvalu"
+
+#: classes/helpers/FrmAppHelper.php:554
+#@ formidable
+msgid "Uganda"
+msgstr "Uganda"
+
+#: classes/helpers/FrmAppHelper.php:555
+#@ formidable
+msgid "Ukraine"
+msgstr "Ukrajna"
+
+#: classes/helpers/FrmAppHelper.php:555
+#@ formidable
+msgid "United Arab Emirates"
+msgstr "Ujedinjeni Arapski Emirati"
+
+#: classes/helpers/FrmAppHelper.php:555
+#@ formidable
+msgid "United Kingdom"
+msgstr "Velika Britanija"
+
+#: classes/helpers/FrmAppHelper.php:556
+#@ formidable
+msgid "United States"
+msgstr "Ujedinjene Drave"
+
+#: classes/helpers/FrmAppHelper.php:556
+#@ formidable
+msgid "Uruguay"
+msgstr "Urugvaj"
+
+#: classes/helpers/FrmAppHelper.php:556
+#@ formidable
+msgid "Uzbekistan"
+msgstr "Uzbekistan"
+
+#: classes/helpers/FrmAppHelper.php:557
+#@ formidable
+msgid "Vanuatu"
+msgstr "Vanuatu"
+
+#: classes/helpers/FrmAppHelper.php:557
+#@ formidable
+msgid "Vatican City"
+msgstr "Vatikan"
+
+#: classes/helpers/FrmAppHelper.php:557
+#@ formidable
+msgid "Venezuela"
+msgstr "Venecuela"
+
+#: classes/helpers/FrmAppHelper.php:558
+#@ formidable
+msgid "Vietnam"
+msgstr "Vijetnam"
+
+#: classes/helpers/FrmAppHelper.php:558
+#@ formidable
+msgid "Virgin Islands, British"
+msgstr "Devičanska ostrva, Britanska"
+
+#: classes/helpers/FrmAppHelper.php:559
+#@ formidable
+msgid "Virgin Islands, U.S."
+msgstr "Devičanska ostrva, U.S."
+
+#: classes/helpers/FrmAppHelper.php:559
+#@ formidable
+msgid "Yemen"
+msgstr "Jemen"
+
+#: classes/helpers/FrmAppHelper.php:559
+#@ formidable
+msgid "Zambia"
+msgstr "Zambia"
+
+#: classes/helpers/FrmAppHelper.php:560
+#@ formidable
+msgid "Zimbabwe"
+msgstr "Zimbabve"
+
+#: classes/helpers/FrmFieldsHelper.php:12
+#@ formidable
+msgid "Single Line Text"
+msgstr "Teks od jedne rečenice"
+
+#: classes/helpers/FrmFieldsHelper.php:13
+#@ formidable
+msgid "Paragraph Text"
+msgstr "Paragraf teksta"
+
+#: classes/helpers/FrmFieldsHelper.php:14
+#@ formidable
+msgid "Checkboxes"
+msgstr "Kvadrati za čekiranje"
+
+#: classes/helpers/FrmFieldsHelper.php:15
+#: pro/classes/views/settings/styling_tab.php:48
+#@ formidable
+msgid "Radio Buttons"
+msgstr "Radio dugmad"
+
+#: classes/helpers/FrmFieldsHelper.php:16
+#@ formidable
+msgid "Dropdown"
+msgstr "Dropdown"
+
+#: classes/helpers/FrmFieldsHelper.php:17
+#: classes/views/frm-settings/form.php:64
+#@ formidable
+msgid "reCAPTCHA"
+msgstr "reCAPTCHA"
+
+#: classes/helpers/FrmFieldsHelper.php:25
+#: classes/views/frm-forms/notification.php:68
+#@ formidable
+msgid "Email Address"
+msgstr "Email Adresa"
+
+#: classes/helpers/FrmFieldsHelper.php:26
+#@ formidable
+msgid "Website/URL"
+msgstr "Website/URL"
+
+#: classes/helpers/FrmFieldsHelper.php:27
+#@ formidable
+msgid "Section Heading"
+msgstr "Naslov dela"
+
+#: classes/helpers/FrmFieldsHelper.php:28
+#@ formidable
+msgid "Page Break"
+msgstr "Stranica sa pauzom"
+
+#: classes/helpers/FrmFieldsHelper.php:29
+#: pro/classes/views/settings/styling_tab.php:35
+#@ formidable
+msgid "File Upload"
+msgstr "Upload fajla"
+
+#: classes/helpers/FrmFieldsHelper.php:30
+#@ formidable
+msgid "Rich Text"
+msgstr "Bogati tekst"
+
+#: classes/helpers/FrmFieldsHelper.php:31
+#@ formidable
+msgid "Number"
+msgstr "broj"
+
+#: classes/helpers/FrmFieldsHelper.php:32
+#@ formidable
+msgid "Phone Number"
+msgstr "Telefonski broj"
+
+#: classes/helpers/FrmFieldsHelper.php:34
+#@ formidable
+msgid "Time"
+msgstr "Vreme"
+
+#: classes/helpers/FrmFieldsHelper.php:35
+#@ formidable
+msgid "Image URL"
+msgstr "URL slike"
+
+#: classes/helpers/FrmFieldsHelper.php:36
+#@ formidable
+msgid "Scale"
+msgstr "Skala"
+
+#: classes/helpers/FrmFieldsHelper.php:38
+#@ formidable
+msgid "Data from Entries"
+msgstr "Podaci od unošenja"
+
+#: classes/helpers/FrmFieldsHelper.php:40
+#@ formidable
+msgid "Hidden Field"
+msgstr "Skrivena polja"
+
+#: classes/helpers/FrmFieldsHelper.php:42
+#@ formidable
+msgid "Password"
+msgstr "Čifra"
+
+#: classes/helpers/FrmFieldsHelper.php:43
+#@ formidable
+msgid "HTML"
+msgstr "HTML"
+
+#: classes/helpers/FrmFieldsHelper.php:44
+#@ formidable
+msgid "Tags"
+msgstr "Tagovi"
+
+#: classes/helpers/FrmFieldsHelper.php:76
+#: classes/helpers/FrmFieldsHelper.php:78
+#: pro/classes/views/settings/styling_tab.php:49
+#: pro/classes/views/settings/styling_tab.php:55
+#@ formidable
+msgid "Option 1"
+msgstr "Opcija 1"
+
+#: classes/helpers/FrmFieldsHelper.php:76
+#: pro/classes/views/settings/styling_tab.php:50
+#: pro/classes/views/settings/styling_tab.php:56
+#@ formidable
+msgid "Option 2"
+msgstr "Opcija 2"
+
+#: classes/helpers/FrmFieldsHelper.php:170
+#@ formidable
+msgid "Untitled"
+msgstr "Bez naslova"
+
+#: classes/helpers/FrmFieldsHelper.php:174
+#: pro/classes/helpers/FrmProFieldsHelper.php:907
+#: pro/classes/models/FrmProEntryMeta.php:195
+#@ formidable
+msgid "This field is invalid"
+msgstr "Ovo polje ne postoji"
+
+#: classes/helpers/FrmFormsHelper.php:21
+#: classes/helpers/FrmListHelper.php:126
+#: classes/views/frm-forms/default-templates.php:24
+#@ formidable
+msgid "Create Form from Template"
+msgstr "Stvori formu od Template"
+
+#: classes/helpers/FrmListHelper.php:82
+#: classes/views/frm-forms/default-templates.php:12
+#@ formidable
+msgid "No Templates Found"
+msgstr "Nijedna Templat nije pronadjena"
+
+#: classes/helpers/FrmListHelper.php:83
+#@ formidable
+msgid "To add a new template"
+msgstr "Za dodavanje nove  template"
+
+#: classes/helpers/FrmListHelper.php:86
+#@ formidable
+msgid "Place your mouse over the name of the form you just created, and click the \"Create Template\" link."
+msgstr "Predjite mišem preko imena forme koju ste stvorili i kliknite na \"Stvoriti Template\" link."
+
+#: classes/helpers/FrmListHelper.php:89
+#@ formidable
+msgid "No Forms Found"
+msgstr "Nijedna forma nie pronadjena"
+
+#: classes/helpers/FrmListHelper.php:90
+#: classes/views/frm-entries/list.php:5
+#: classes/views/frm-forms/edit.php:4
+#: classes/views/frm-forms/list.php:5
+#: classes/views/frm-forms/new.php:4
+#: classes/views/frm-statistics/list.php:5
+#: classes/views/frm-statistics/list_displays.php:5
+#: pro/classes/views/frmpro-entries/edit.php:5
+#: pro/classes/views/frmpro-entries/list.php:5
+#: pro/classes/views/frmpro-entries/show.php:5
+#@ formidable
+msgid "Add New"
+msgstr "Dodati novo"
+
+#: classes/helpers/FrmListHelper.php:97
+#: classes/helpers/FrmListHelper.php:138
+#: pro/classes/controllers/FrmProEntriesController.php:1687
+#: pro/classes/controllers/FrmProEntriesController.php:1758
+#: pro/classes/controllers/FrmProEntriesController.php:2040
+#: pro/classes/helpers/FrmProAppHelper.php:249
+#: pro/classes/helpers/FrmProListHelper.php:138
+#: pro/classes/helpers/FrmProListHelper.php:186
+#: pro/classes/views/frmpro-entries/sidebar-edit.php:29
+#: pro/classes/views/frmpro-entries/sidebar-show.php:20
+#@ default
+#@ formidable
+msgid "Delete"
+msgstr "Obrisati"
+
+#: classes/helpers/FrmListHelper.php:123
+#: pro/classes/controllers/FrmProDisplaysController.php:63
+#: pro/classes/controllers/FrmProEntriesController.php:1680
+#: pro/classes/controllers/FrmProEntriesController.php:1932
+#: pro/classes/helpers/FrmProAppHelper.php:204
+#: pro/classes/helpers/FrmProFieldsHelper.php:2068
+#: pro/classes/helpers/FrmProListHelper.php:172
+#: pro/classes/views/frmpro-entries/sidebar-show.php:29
+#@ default
+#@ formidable
+msgid "Edit"
+msgstr "Editoveti"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:187
+#: pro/classes/views/frmpro-entries/show.php:25
+#@ formidable
+msgid "Entry"
+msgstr "Uneti"
+
+#: pro/classes/views/displays/mb_advanced.php:98
+#@ formidable
+msgid "Copy"
+msgstr "Kopirati"
+
+#: classes/helpers/FrmListHelper.php:131
+#: pro/classes/controllers/FrmProDisplaysController.php:126
+#: pro/classes/helpers/FrmProListHelper.php:185
+#: pro/classes/views/frmpro-entries/sidebar-edit.php:16
+#: pro/classes/views/frmpro-entries/sidebar-show.php:9
+#@ formidable
+msgid "Duplicate"
+msgstr "Duplikovati"
+
+#: classes/helpers/FrmListHelper.php:138
+#: pro/classes/helpers/FrmProListHelper.php:186
+#@ formidable
+msgid "Are you sure you want to delete that?"
+msgstr "Da li ste sigurni da želite da obrišete ovo?"
+
+#: classes/models/FrmEntry.php:349
+#@ formidable
+msgid "There was a problem with your submission. Please try again."
+msgstr "Iskrsnuo je problem sa vašim unošenjem. Pokušajte opet."
+
+#: classes/models/FrmEntry.php:417
+#: classes/models/FrmEntry.php:423
+#@ formidable
+msgid "Your entry appears to be spam!"
+msgstr "Vaši unosi su spam!"
+
+#: classes/controllers/FrmEntriesController.php:288
+#: pro/classes/models/FrmProNotification.php:261
+#: pro/classes/views/frmpro-entries/show.php:94
+#@ formidable
+msgid "User Information"
+msgstr "Informacije o korisniku"
+
+#: classes/controllers/FrmEntriesController.php:290
+#: classes/controllers/FrmEntriesController.php:294
+#: classes/controllers/FrmEntriesController.php:301
+#: classes/controllers/FrmEntriesController.php:303
+#: pro/classes/controllers/FrmProFormsController.php:178
+#: pro/classes/models/FrmProNotification.php:262
+#: pro/classes/views/frmpro-entries/show.php:99
+#: pro/classes/views/frmpro-forms/add_form_options.php:39
+#: pro/classes/views/xml/map_csv_fields.php:51
+#@ formidable
+msgid "IP Address"
+msgstr "IP Address"
+
+#: classes/controllers/FrmEntriesController.php:291
+#: classes/controllers/FrmEntriesController.php:295
+#: classes/controllers/FrmEntriesController.php:311
+#: classes/controllers/FrmEntriesController.php:313
+#: pro/classes/models/FrmProNotification.php:263
+#: pro/classes/views/frmpro-entries/show.php:104
+#@ formidable
+msgid "User-Agent (Browser/OS)"
+msgstr "Korisnik-Agent (Pretraživačr/OS)"
+
+#: classes/controllers/FrmEntriesController.php:292
+#: classes/controllers/FrmEntriesController.php:296
+#: classes/controllers/FrmEntriesController.php:322
+#: classes/controllers/FrmEntriesController.php:324
+#: pro/classes/models/FrmProNotification.php:264
+#: pro/classes/views/frmpro-entries/show.php:110
+#@ formidable
+msgid "Referrer"
+msgstr "Odnosi se na "
+
+#: classes/models/FrmNotification.php:68
+#: pro/classes/models/FrmProNotification.php:278
+#: pro/classes/models/FrmProNotification.php:427
+#, php-format
+#@ formidable
+msgid "%1$s Form submitted on %2$s"
+msgstr "%1$s Forma podneta na %2$s"
+
+#: classes/models/FrmSettings.php:54
+#@ formidable
+msgid "The reCAPTCHA was not entered correctly"
+msgstr "reCAPTCHA nije uneta ispravno"
+
+#: classes/models/FrmSettings.php:24
+#@ formidable
+msgid "Your responses were successfully submitted. Thank you!"
+msgstr "Vaši odgovori su uspešno podneti. Hvala!"
+
+#: classes/models/FrmSettings.php:27
+#@ formidable
+msgid "There was a problem with your submission. Errors are marked below."
+msgstr "Iskrsnuo je problem prilikom vaših unošenja. Greške su označene ispod."
+
+#: classes/models/FrmSettings.php:28
+#@ formidable
+msgid "We're sorry. It looks like you've  already submitted that."
+msgstr "Žao nam je, izgleda da ste ovov već uneli jednom."
+
+#: classes/models/FrmSettings.php:29
+#: pro/classes/views/frmpro-entries/show.php:176
+#: pro/classes/views/settings/styling_tab.php:71
+#@ formidable
+msgid "Submit"
+msgstr "Unesi"
+
+#: classes/models/FrmSettings.php:30
+#@ formidable
+msgid "You do not have permission to view this form."
+msgstr "Nemate dozvolu da pregledate ovu formu."
+
+#: classes/models/FrmEntry.php:345
+#: classes/models/FrmSettings.php:31
+#@ formidable
+msgid "You do not have permission to do that"
+msgstr "Nemate dozvolu da uradito to."
+
+#: pro/classes/controllers/FrmUpdatesController.php:120
+#@ formidable
+msgid "Your Pro installation is now active. Enjoy!"
+msgstr "Vaša Pro instalacija je sada aktivna. Uživajte!"
+
+#: pro/classes/controllers/FrmUpdatesController.php:123
+#@ formidable
+msgid "ERROR"
+msgstr "GREŠKA"
+
+#: classes/controllers/FrmAppController.php:315
+#@ formidable
+msgid "Are you sure you want to deactivate Formidable Pro on this site?"
+msgstr "Da li ste sigurni da želite da deaktivirate Formidable Pro na ovom sajtu?"
+
+#: pro/classes/controllers/FrmUpdatesController.php:141
+#@ formidable
+msgid "Deauthorize this site"
+msgstr "Deautorizovati ovaj sajt"
+
+#: pro/classes/controllers/FrmUpdatesController.php:146
+#@ formidable
+msgid "Account"
+msgstr "Nalog"
+
+#: classes/views/frm-settings/license_box.php:6
+#@ formidable
+msgid "Ready to take your forms to the next level?<br/>Formidable Pro will help you style forms, manage data, and get reports."
+msgstr "Da li ste spremni da podignete vaše forme na sledeći nivo?<br/>Formidable Pro će vam pomoći da stilizujete vaše forme, rukovodite podacima i dobijate izveštaje."
+
+#: classes/views/frm-forms/add_field.php:80
+#: classes/views/frm-forms/add_field.php:130
+#: classes/views/frm-forms/add_field_links.php:12
+#: classes/views/frm-forms/edit.php:26
+#: classes/views/frm-forms/edit.php:40
+#: classes/views/frm-forms/new.php:26
+#: classes/views/frm-forms/new.php:40
+#: classes/views/frm-forms/settings.php:23
+#: classes/views/frm-forms/settings.php:181
+#: classes/views/frm-forms/sidebar-settings.php:25
+#: pro/classes/controllers/FrmUpdatesController.php:174
+#: pro/classes/views/frmpro-entries/edit.php:32
+#: pro/classes/views/frmpro-entries/new.php:45
+#@ formidable
+msgid "or"
+msgstr "ili"
+
+#: classes/controllers/FrmAppController.php:310
+#: classes/views/frm-forms/edit.php:27
+#: classes/views/frm-forms/edit.php:41
+#: classes/views/frm-forms/new.php:27
+#: classes/views/frm-forms/new.php:41
+#: classes/views/frm-forms/settings.php:24
+#: classes/views/frm-forms/settings.php:182
+#: pro/classes/controllers/FrmProEntriesController.php:1932
+#: pro/classes/controllers/FrmUpdatesController.php:176
+#: pro/classes/views/frmpro-entries/edit.php:33
+#: pro/classes/views/frmpro-entries/new.php:46
+#: pro/classes/views/frmpro-entries/sidebar-new.php:11
+#: pro/classes/views/frmpro-forms/_custom_field_row.php:51
+#@ formidable
+msgid "Cancel"
+msgstr "Ukinuti"
+
+#: classes/views/frm-forms/notification.php:41
+#: classes/views/frm-forms/notification.php:67
+#: pro/classes/controllers/FrmProDisplaysController.php:490
+#: pro/classes/controllers/FrmProFormsController.php:167
+#@ formidable
+msgid "Email"
+msgstr "Email"
+
+#: pro/classes/models/FrmProField.php:42
+#@ formidable
+msgid "Website"
+msgstr "Website"
+
+#: classes/views/frm-forms/notification.php:77
+#@ formidable
+msgid "Subject"
+msgstr "Naslov"
+
+#: classes/views/frm-forms/notification.php:80
+#@ formidable
+msgid "Message"
+msgstr "Poruka"
+
+#: classes/views/frm-entries/form.php:40
+#: pro/classes/controllers/FrmProEntriesController.php:1170
+#: pro/classes/helpers/FrmProFieldsHelper.php:1849
+#: pro/classes/views/displays/where_row.php:7
+#: pro/classes/views/frmpro-entries/show.php:87
+#: pro/classes/views/shared/mb_adv_info.php:64
+#: pro/classes/views/xml/map_csv_fields.php:54
+#@ formidable
+msgid "Entry Key"
+msgstr "Unesite ključ"
+
+#: classes/views/frm-entries/no_entries.php:8
+#@ formidable
+msgid "This form is not set to save any entries."
+msgstr "Ova forma nije podešena za sačuvavanje bilo kog unosa."
+
+#: classes/views/frm-entries/no_entries.php:13
+#@ formidable
+msgid "You don't have any entries in this form."
+msgstr "Nemate unosa u ovoj formi"
+
+#: classes/views/frm-entries/no_entries.php:13
+#@ formidable
+msgid "How to publish"
+msgstr "Kako objaviti"
+
+#: classes/views/frm-entries/no_entries.php:16
+#@ formidable
+msgid "Option 1: Generate your shortcode"
+msgstr "Opcija 1: Generisite skraćenicu"
+
+#: classes/views/frm-entries/no_entries.php:18
+#@ formidable
+msgid "Go to your WordPress page or post."
+msgstr "Idite na vašu WordPress stranicu ili post"
+
+#: classes/views/frm-entries/no_entries.php:23
+#@ formidable
+msgid "Select your form from the dropdown and check the boxes to show the title and description if desired."
+msgstr "Selektujte vašu formu sa dropdown-a i čekirajte kvadrat da biste prikazali željeni naslov i opis."
+
+#: classes/views/frm-entries/no_entries.php:24
+#@ formidable
+msgid "Click the \"Insert Form\" button."
+msgstr "Klik na \"Unesite Formu\"dugme."
+
+#: classes/views/frm-entries/no_entries.php:28
+#@ formidable
+msgid "Option 2: Add a Widget"
+msgstr "Opcija 2 :Dodati widget"
+
+#: classes/views/frm-entries/no_entries.php:30
+#@ formidable
+msgid "Drag a \"Formidable Form\" widget into your sidebar."
+msgstr "Prevući  \"Formidable Form\" widget na vaš sidebar."
+
+#: classes/views/frm-entries/no_entries.php:31
+#@ formidable
+msgid "Select a form from the \"Form\" drop-down."
+msgstr "Selektovati formu iz \"Form\" drop-down."
+
+#: classes/views/frm-entries/no_entries.php:32
+#@ formidable
+msgid "Click the \"Save\" button"
+msgstr "Klik na  \"Save\"  dugme"
+
+#: classes/views/frm-entries/no_entries.php:34
+#@ formidable
+msgid "Formidable Form Widget"
+msgstr "Formidable Form Widget"
+
+#: classes/views/frm-entries/no_entries.php:37
+#@ formidable
+msgid "Option 3: Insert the shortcode or PHP"
+msgstr "Opcija 3: Unti skraćenicu ili PHP"
+
+#: classes/views/frm-entries/no_entries.php:38
+#@ formidable
+msgid "Insert the following shortcode in your page, post, or text widget. This will be replaced with your form:"
+msgstr "Uneti sledeće kodove na vašu stranu, post ili iekst widget. Ovo će biti zamenjeno u vašoj formi:"
+
+#: classes/views/frm-entries/no_entries.php:41
+#@ formidable
+msgid "Show the form with the title and description:"
+msgstr "Prikazati formu sa naslovom i opisom:"
+
+#: classes/views/frm-entries/no_entries.php:45
+#@ formidable
+msgid "Insert into a theme template file:"
+msgstr "Uneti u temu template fajl:"
+
+#: classes/views/frm-fields/import_choices.php:51
+#@ formidable
+msgid "Edit or add field options (one per line)"
+msgstr "Edituj il dodaj polje opcije (jedna po rečenici)"
+
+#: classes/views/frm-fields/import_choices.php:73
+#@ formidable
+msgid "Update Field Choices"
+msgstr "Izbori update polja "
+
+#: classes/views/frm-forms/add_field.php:39
+#@ formidable
+msgid "Duplicate Field"
+msgstr "Dupliranje polja"
+
+#: classes/views/frm-forms/add_field.php:78
+#: classes/views/frm-forms/add_field.php:127
+#@ formidable
+msgid "Add an Option"
+msgstr "Dodati opciju"
+
+#: classes/views/frm-forms/add_field.php:81
+#: classes/views/frm-forms/add_field.php:131
+#@ formidable
+msgid "Field Choices"
+msgstr "Izbori polja"
+
+#: classes/views/frm-forms/add_field.php:81
+#: classes/views/frm-forms/add_field.php:131
+#@ formidable
+msgid "Bulk Edit Field Choices"
+msgstr "Bulk Edit izbori polja"
+
+#: classes/views/frm-forms/add_field.php:141
+#, php-format
+#@ formidable
+msgid "Hint: Change colors in the %1$sFormidable settings"
+msgstr "Nagoveštaj: Promena boja u %1$sFormidable postavkama"
+
+#: classes/views/frm-forms/add_field.php:178
+#@ formidable
+msgid "Field Options"
+msgstr "Opcija polja"
+
+#: classes/views/frm-forms/add_field.php:208
+#: classes/views/frm-forms/add_field.php:275
+#@ formidable
+msgid "Required"
+msgstr "Zahteva se"
+
+#: classes/views/frm-forms/add_field.php:225
+#@ formidable
+msgid "Indicate required field with"
+msgstr "Ukazuje na potrebna polja sa"
+
+#: classes/views/frm-forms/add_field.php:255
+#: classes/widgets/FrmShowForm.php:56
+#@ formidable
+msgid "Field Size"
+msgstr "Veličina polja"
+
+#: classes/views/frm-forms/add_field.php:259
+#@ formidable
+msgid "automatic width"
+msgstr "automatska širina"
+
+#: classes/views/frm-forms/add_field.php:262
+#@ formidable
+msgid "columns wide"
+msgstr "širina kolona"
+
+#: classes/views/frm-forms/add_field.php:262
+#: classes/widgets/FrmShowForm.php:58
+#@ formidable
+msgid "characters wide"
+msgstr "širina karaktera"
+
+#: classes/views/frm-forms/add_field.php:264
+#@ formidable
+msgid "rows high"
+msgstr "visina redova"
+
+#: classes/views/frm-forms/add_field.php:264
+#@ formidable
+msgid "characters maximum"
+msgstr "maksimum karaktera"
+
+#: classes/views/frm-forms/add_field.php:241
+#: classes/views/frm-forms/mb_html_tab.php:10
+#@ formidable
+msgid "Label Position"
+msgstr "Pozicija oznake"
+
+#: classes/views/frm-forms/add_field.php:243
+#@ formidable
+msgid "Default"
+msgstr "Default"
+
+#: classes/views/frm-forms/add_field.php:244
+#@ formidable
+msgid "Top"
+msgstr "Vrh"
+
+#: classes/views/frm-forms/add_field.php:245
+#@ formidable
+msgid "Left"
+msgstr "Levo"
+
+#: classes/views/frm-forms/add_field.php:246
+#@ formidable
+msgid "Right"
+msgstr "Desno"
+
+#: classes/views/frm-forms/add_field.php:247
+#@ formidable
+msgid "Inline (left without a set width)"
+msgstr "Poravnati (levo bez podešavanja širine)"
+
+#: classes/views/frm-forms/add_field.php:248
+#: pro/classes/views/frmpro-forms/post_options.php:81
+#: pro/classes/views/frmpro-forms/post_options.php:90
+#: pro/classes/views/settings/formroller.php:360
+#@ formidable
+msgid "None"
+msgstr "Nijedan"
+
+#: classes/views/frm-forms/add_field.php:249
+#@ formidable
+msgid "Hidden (but leave the space)"
+msgstr "Skriveno (ali ostaviti prostor)"
+
+#: classes/views/frm-forms/add_field.php:233
+#@ formidable
+msgid "CSS layout classes"
+msgstr "CSS layout classes"
+
+#: classes/views/frm-forms/add_field.php:234
+#@ formidable
+msgid "Add a CSS class to the field container. Use our predefined classes to align multiple fields in single row."
+msgstr "Dodati CSS klasu u sadržaj polja. Koristite naše unapred definisane klase za poravnavanje više polja u jednom redu."
+
+#: classes/views/frm-forms/add_field_links.php:9
+#: classes/views/frm-forms/sidebar-settings.php:22
+#@ formidable
+msgid "Preview Form"
+msgstr "Pregled forme"
+
+#: classes/views/frm-forms/add_field_links.php:13
+#: classes/views/frm-forms/sidebar-settings.php:26
+#@ formidable
+msgid "Preview in Current Theme"
+msgstr "Pregled u trenutnoj temi"
+
+#: classes/views/frm-forms/add_field_links.php:24
+#: classes/views/frm-forms/notification.php:23
+#: classes/views/frm-forms/notification.php:47
+#@ formidable
+msgid "Fields"
+msgstr "Polja"
+
+#: classes/views/frm-forms/add_field_links.php:41
+#@ formidable
+msgid "Pro Fields"
+msgstr "Pro Polja"
+
+#: classes/views/frm-forms/default-templates.php:3
+#@ formidable
+msgid "Default Templates"
+msgstr "Default Template"
+
+#: classes/helpers/FrmListHelper.php:140
+#@ default
+msgid "Preview"
+msgstr "Pregledati"
+
+#: classes/views/frm-forms/default-templates.php:21
+#: classes/views/frm-forms/default-templates.php:30
+#: pro/classes/controllers/FrmProDisplaysController.php:61
+#: pro/classes/controllers/FrmProDisplaysController.php:62
+#: pro/classes/helpers/FrmProListHelper.php:182
+#: pro/classes/views/displays/submitbox_actions.php:2
+#: pro/classes/views/frmpro-entries/sidebar-edit.php:15
+#@ formidable
+msgid "View"
+msgstr "Pogledati"
+
+#: classes/views/frm-forms/default-templates.php:47
+#@ formidable
+msgid "Custom Templates"
+msgstr "Custom Templates"
+
+#: classes/widgets/FrmShowForm.php:46
+#: pro/classes/controllers/FrmProDisplaysController.php:186
+#@ formidable
+msgid "Form"
+msgstr "Forma"
+
+#: classes/views/frm-forms/add_field_links.php:114
+#: classes/views/frm-forms/edit.php:25
+#: classes/views/frm-forms/edit.php:39
+#: classes/views/frm-forms/settings.php:22
+#: classes/views/frm-forms/settings.php:180
+#: pro/classes/helpers/FrmProEntriesHelper.php:182
+#: pro/classes/models/FrmProSettings.php:11
+#@ formidable
+msgid "Update"
+msgstr "Update"
+
+#: classes/helpers/FrmFormsHelper.php:73
+#@ formidable
+msgid "Switch Form"
+msgstr "Zameniti Formu"
+
+#: classes/views/frm-forms/insert_form_popup.php:4
+#: pro/classes/controllers/FrmProXMLController.php:95
+#@ formidable
+msgid "Please select a form"
+msgstr "Molim vas izaberite formu"
+
+#: classes/views/frm-forms/insert_form_popup.php:36
+#@ formidable
+msgid "Select a form to insert"
+msgstr "Izaberite formu za unos"
+
+#: classes/views/frm-forms/insert_form_popup.php:40
+#@ formidable
+msgid "Display form title"
+msgstr "Prikažite naslov forme"
+
+#: classes/views/frm-forms/insert_form_popup.php:41
+#@ formidable
+msgid "Display form description"
+msgstr "Prikažite opis forme"
+
+#: classes/views/frm-forms/insert_form_popup.php:60
+#@ formidable
+msgid "Note: In some cases, this option can create an infinite loop"
+msgstr "Beleška: U nekim slučajevima, ova opcija može da napravi beskonačne praznine"
+
+#: classes/views/frm-forms/insert_form_popup.php:66
+#@ formidable
+msgid "Insert a search box"
+msgstr "Unesite pravougaonik za pretragu"
+
+#: classes/views/frm-forms/list.php:14
+#: pro/classes/controllers/FrmProDisplaysController.php:64
+#: pro/classes/controllers/FrmProEntriesController.php:1726
+#: pro/classes/views/frmpro-entries/list.php:17
+#@ formidable
+msgid "Search"
+msgstr "Pretraga"
+
+#: pro/classes/helpers/FrmProFieldsHelper.php:1864
+#: pro/classes/helpers/FrmProFieldsHelper.php:1878
+#: pro/classes/views/displays/mb_form_disp_type.php:28
+#: pro/classes/views/displays/mb_form_disp_type.php:38
+#: pro/classes/views/frmpro-entries/google_table.php:8
+#: pro/classes/views/frmpro-entries/table.php:5
+#@ formidable
+msgid "ID"
+msgstr "ID"
+
+#: classes/views/frm-forms/add_field_links.php:114
+#: classes/views/frm-forms/new-selection.php:24
+#: classes/views/frm-forms/new-selection.php:45
+#: classes/views/frm-forms/new.php:25
+#: classes/views/frm-forms/new.php:39
+#@ formidable
+msgid "Create"
+msgstr "Napravite"
+
+#: classes/views/xml/import_form.php:32
+#@ formidable
+msgid "Export"
+msgstr "Eksportovati"
+
+#: classes/controllers/FrmAppController.php:306
+#: classes/controllers/FrmFieldsController.php:248
+#: classes/views/frm-fields/single-option.php:6
+#: classes/views/frm-fields/single-option.php:8
+#@ formidable
+msgid "(Blank)"
+msgstr "(Prazno)"
+
+#: classes/views/frm-forms/new-selection.php:9
+#@ formidable
+msgid "Pre-Built Form"
+msgstr "Unapred napravljena forma"
+
+#: classes/views/frm-forms/new-selection.php:14
+#@ formidable
+msgid "Select a template to generate your form."
+msgstr "Izaberite template da biste generisali vašu formu."
+
+#: classes/views/frm-forms/new-selection.php:35
+#@ formidable
+msgid "Blank Form"
+msgstr "Prazna forma"
+
+#: classes/views/frm-forms/new-selection.php:40
+#@ formidable
+msgid "Start with a blank form and build anything."
+msgstr "Počnite sa praznom formom i izgradite bilo šta."
+
+#: classes/views/frm-forms/settings.php:43
+#: classes/views/frm-settings/form.php:18
+#: pro/classes/views/settings/formroller.php:8
+#@ formidable
+msgid "General"
+msgstr "Opšte"
+
+#: classes/views/frm-forms/settings.php:44
+#@ formidable
+msgid "Emails"
+msgstr "Emails"
+
+#: classes/views/frm-forms/settings.php:45
+#@ formidable
+msgid "Customize HTML"
+msgstr "Customize HTML"
+
+#: classes/views/frm-forms/settings.php:46
+#@ formidable
+msgid "Create Posts"
+msgstr "Napravite postove"
+
+#: classes/views/frm-forms/sidebar-settings.php:5
+#@ formidable
+msgid "Key and id are generally synonymous. For more information on using this shortcode, click now."
+msgstr "Ključ i idsu generalno slični. Za više info kako da koristite ovu skraćnicu, kliknite sada."
+
+#: classes/views/frm-forms/mb_html_tab.php:37
+#@ formidable
+msgid "Form Key"
+msgstr "Ključ forme"
+
+#: classes/views/frm-forms/settings.php:55
+#@ formidable
+msgid "Use Formidable styling for this form"
+msgstr "Koristite Formidable stajling za ovu formu"
+
+#: classes/views/frm-forms/settings.php:58
+#@ formidable
+msgid "Submit Button Text"
+msgstr "Podnesi tekst dugme"
+
+#: classes/views/frm-forms/settings.php:62
+#@ formidable
+msgid "Action After Form Submission"
+msgstr "Akcija nakon podnošenja forme"
+
+#: classes/views/frm-forms/settings.php:64
+#@ formidable
+msgid "You must upgrade to Formidable Pro to get access to the second two options."
+msgstr "Morate da upgrade-ujete na Formidable Pro da biste pristupili drugim mišljenjima."
+
+#: classes/views/frm-forms/settings.php:67
+#: pro/classes/views/frmpro-forms/add_form_options.php:86
+#@ formidable
+msgid "Display a Message"
+msgstr "Prikažite poruku"
+
+#: classes/views/frm-forms/settings.php:68
+#: pro/classes/views/frmpro-forms/add_form_options.php:88
+#@ formidable
+msgid "Display content from another page"
+msgstr "Prikažite sadržaj sa druge stranice"
+
+#: classes/views/frm-forms/settings.php:69
+#: pro/classes/views/frmpro-forms/add_form_options.php:90
+#@ formidable
+msgid "Redirect to URL"
+msgstr "Usmeriti na URL"
+
+#: classes/views/frm-forms/settings.php:96
+#@ formidable
+msgid "Do not store any entries submitted from this form."
+msgstr "Nemojte da skladištate bilo koji unos podnešen iz ove forme."
+
+#: classes/views/frm-forms/settings.php:99
+#@ formidable
+msgid "Use Akismet to check entries for spam for"
+msgstr "Koristite Akismetda biste proverili unose za spam za"
+
+#: classes/views/frm-forms/settings.php:101
+#@ formidable
+msgid "no one"
+msgstr "nijedan"
+
+#: classes/views/frm-forms/settings.php:102
+#@ formidable
+msgid "everyone"
+msgstr "svi"
+
+#: classes/views/frm-forms/settings.php:103
+#@ formidable
+msgid "visitors who are not logged in"
+msgstr "posetioci koji nisu ulogovani"
+
+#: classes/views/frm-forms/notification.php:5
+#@ formidable
+msgid "From/Reply to"
+msgstr "Od/Odgovori na"
+
+#: classes/views/frm-forms/notification.php:5
+#@ formidable
+msgid "Usually the name and email of the person filling out the form. Select from Text, Email, User ID, or hidden fields for the name. &lt;br/&gt;Defaults to your site name and admin email found on the WordPress General Settings page."
+msgstr "Uglavnom ime i e-mail osobe koja popunjava formular. Izaberite iz teksta , Emaila , ID korisnika ili skrivenih poljima za ime . <br/> &lt;br/&gt;Default za vaše ime sajta i admin email nadjeno na WordPress General stranici sa postavkama."
+
+#: classes/views/frm-forms/notification.php:74
+#@ formidable
+msgid "Email Recipients"
+msgstr "Primalac emaila"
+
+#: classes/views/frm-forms/notification.php:74
+#@ formidable
+msgid "To send to multiple addresses, separate each address with a comma. You can use [admin_email] to dynamically use the address on your WordPress General Settings page. &lt;br/&gt;PRO only: Leave blank if you do not want email notifications for this form."
+msgstr "Da biste poslali na više adresa , odvojite svaku adresu sa zarezom . Možete koristiti [admin_email]  da dinamički koristite adresu na vašoj WordPress stranici sa postavkama. &lt;br/&gt;PRO samo : Ostavite prazno ako ne želite obaveštenja mailom za ovaj obrazac ."
+
+#: classes/views/frm-forms/mb_html_tab.php:36
+#@ formidable
+msgid "Form Name"
+msgstr "Ime forme"
+
+#: classes/views/frm-forms/mb_html_tab.php:36
+#@ formidable
+msgid "Form Description"
+msgstr "Opis forme"
+
+#: classes/views/frm-forms/mb_html_tab.php:37
+#@ formidable
+msgid "Delete Entry Link"
+msgstr "Obrisati link za unošenje"
+
+#: classes/views/frm-forms/mb_html_tab.php:7
+#@ formidable
+msgid "Field Key"
+msgstr "Ključ polja"
+
+#: classes/views/frm-forms/mb_html_tab.php:8
+#@ formidable
+msgid "Field Name"
+msgstr "Ime polja"
+
+#: classes/views/frm-forms/mb_html_tab.php:9
+#: pro/classes/views/settings/formroller.php:115
+#@ formidable
+msgid "Field Description"
+msgstr "Opis polja"
+
+#: classes/views/frm-forms/mb_html_tab.php:12
+#@ formidable
+msgid "Input Field"
+msgstr "Unos polja"
+
+#: classes/views/frm-forms/mb_html_tab.php:13
+#@ formidable
+msgid "Show a single radio or checkbox option by replacing \"1\" with the order of the option"
+msgstr "Prikaži jedan radio ili checkbo opciju zamenom\"1\" sa redosledom opcije"
+
+#: classes/views/frm-forms/mb_html_tab.php:15
+#@ formidable
+msgid "Add class name if field is required"
+msgstr "Dodaj ime klase ako je potrebno"
+
+#: classes/views/frm-forms/mb_html_tab.php:16
+#@ formidable
+msgid "Add class name if field has an error on form submit"
+msgstr "Doadti ime klase ako polje ima grešku na podnešenoj formi"
+
+#: classes/views/frm-forms/settings.php:128
+#@ formidable
+msgid "Before Fields"
+msgstr "Pre polja"
+
+#: classes/views/frm-forms/settings.php:144
+#@ formidable
+msgid "After Fields"
+msgstr "Posle polja"
+
+#: classes/controllers/FrmSettingsController.php:34
+#: pro/classes/controllers/FrmProSettingsController.php:27
+#@ formidable
+msgid "Form Styling"
+msgstr "Stajling forme"
+
+#: classes/views/frm-settings/form.php:34
+#: classes/views/frm-settings/form.php:161
+#: pro/classes/views/settings/formroller.php:2
+#@ formidable
+msgid "Update Options"
+msgstr "Update opcije"
+
+#: classes/views/frm-settings/form.php:128
+#@ formidable
+msgid "Admin menu label"
+msgstr "Admin meni oznaka"
+
+#: classes/views/frm-settings/form.php:131
+#@ formidable
+msgid "Use this menu name site-wide"
+msgstr "Koristite ovo ime širom sajta"
+
+#: classes/views/frm-settings/form.php:135
+#@ formidable
+msgid "Preview Page"
+msgstr "Pregled stranice"
+
+#: classes/views/frm-settings/form.php:139
+#@ formidable
+msgid "Tracking"
+msgstr "Praćenje"
+
+#: classes/views/frm-settings/form.php:140
+#@ formidable
+msgid "Track referrer information and pages visited"
+msgstr "Praćenje odredjene informacije i posećenih stranica"
+
+#: classes/views/frm-settings/form.php:41
+#@ formidable
+msgid "Load Formidable styling"
+msgstr "Učitaj Formidable stajling"
+
+#: classes/views/frm-settings/form.php:43
+#@ formidable
+msgid "on every page of your site"
+msgstr "na svakoj stranici vašeg sajta"
+
+#: classes/views/frm-settings/form.php:44
+#@ formidable
+msgid "only on applicable pages"
+msgstr "samo na prihvatljivim mestima"
+
+#: classes/views/frm-settings/form.php:45
+#@ formidable
+msgid "Don't use Formidable styling on any page"
+msgstr "Nemojte da koristite Formidable stajling ona bilo kojoj stranici"
+
+#: classes/views/frm-settings/form.php:49
+#@ formidable
+msgid "Use HTML5 in forms"
+msgstr "Koristite HTML5 u formama"
+
+#: pro/classes/views/settings/general_style.php:2
+#@ formidable
+msgid "Include the jQuery CSS on ALL pages"
+msgstr "Ulljučite jQuery CSS na svim stranicama"
+
+#: pro/classes/views/settings/general_style.php:2
+#@ formidable
+msgid "The styling for the date field calendar. Some users may be using this css on pages other than just the ones that include a date field."
+msgstr "Stajling za polje datuma kalendara. Neki korisnici možda koriste ovaj CSS na stranicama drugim nego one koji uključuju polje datuma.  "
+
+#: classes/views/frm-settings/form.php:56
+#@ formidable
+msgid "User Permissions"
+msgstr "Korisnik dozvole"
+
+#: classes/views/frm-settings/form.php:56
+#@ formidable
+msgid "Select users that are allowed access to Formidable. Without access to View Forms, users will be unable to see the Formidable menu."
+msgstr "Izaberite korisnike kojima je dozvoljeno da pristupe Formidable. Bez pristupa da koriste forme, korisnici neće biti u mogućnosti da vide Formidable meni."
+
+#: classes/views/frm-settings/form.php:64
+#@ formidable
+msgid "reCAPTCHA is a free, accessible CAPTCHA service that helps to digitize books while blocking spam on your blog. reCAPTCHA asks commenters to retype two words scanned from a book to prove that they are a human. This verifies that they are not a spambot."
+msgstr "reCAPTCHA je besplatna, pristupačna CAPTCHA usluga koja pomaže da digitalizujete knjige dok blokirate spamna vašem blogu. reCAPTCHA traži od komentatora da ponovo iskucaju dve reči skenirane iz knjige da bi dokazali da su ljudi. To znači da nisu spambot."
+
+#: classes/views/frm-settings/form.php:69
+#@ formidable
+msgid "Public Key"
+msgstr "Javni ključ"
+
+#: classes/views/frm-settings/form.php:73
+#@ formidable
+msgid "Private Key"
+msgstr "Privatni ključ"
+
+#: classes/views/frm-settings/form.php:76
+#@ formidable
+msgid "reCAPTCHA Theme"
+msgstr "reCAPTCHA Tema"
+
+#: classes/controllers/FrmSettingsController.php:38
+#@ formidable
+msgid "Red"
+msgstr "Crveno"
+
+#: classes/controllers/FrmSettingsController.php:39
+#@ formidable
+msgid "White"
+msgstr "Belo"
+
+#: classes/controllers/FrmSettingsController.php:40
+#@ formidable
+msgid "Black Glass"
+msgstr "Crno staklo"
+
+#: classes/controllers/FrmSettingsController.php:41
+#@ formidable
+msgid "Clean"
+msgstr "Čisto"
+
+#: classes/views/frm-settings/form.php:85
+#@ formidable
+msgid "reCAPTCHA Language"
+msgstr "reCAPTCHA jezik"
+
+#: classes/views/frm-settings/form.php:87
+#@ formidable
+msgid "English"
+msgstr "Engleski"
+
+#: classes/views/frm-settings/form.php:87
+#: pro/classes/controllers/FrmProFieldsController.php:328
+#@ formidable
+msgid "Dutch"
+msgstr "Holandski"
+
+#: classes/views/frm-settings/form.php:87
+#: pro/classes/controllers/FrmProFieldsController.php:331
+#@ formidable
+msgid "French"
+msgstr "Francuski"
+
+#: classes/views/frm-settings/form.php:87
+#: pro/classes/controllers/FrmProFieldsController.php:332
+#@ formidable
+msgid "German"
+msgstr "Nemački"
+
+#: classes/views/frm-settings/form.php:87
+#@ formidable
+msgid "Portuguese"
+msgstr "Portugalski"
+
+#: classes/views/frm-settings/form.php:87
+#: pro/classes/controllers/FrmProFieldsController.php:340
+#@ formidable
+msgid "Russian"
+msgstr "Ruski"
+
+#: classes/views/frm-settings/form.php:87
+#: pro/classes/controllers/FrmProFieldsController.php:342
+#@ formidable
+msgid "Spanish"
+msgstr "Španski"
+
+#: classes/views/frm-settings/form.php:87
+#: pro/classes/controllers/FrmProFieldsController.php:344
+#@ formidable
+msgid "Turkish"
+msgstr "Turski"
+
+#: classes/views/frm-settings/form.php:94
+#@ formidable
+msgid "Default Messages"
+msgstr "Default poruke"
+
+#: classes/views/frm-settings/form.php:94
+#@ formidable
+msgid "You can override the success message and submit button settings on individual forms."
+msgstr "Možete da prepišete uspeh poruke ili podnesete dugme sa postavkama na individualne forme."
+
+#: classes/views/frm-settings/form.php:102
+#@ formidable
+msgid "Incorrect Field"
+msgstr "Neispravno polje"
+
+#: classes/views/frm-settings/form.php:102
+#@ formidable
+msgid "The message seen when a field response is either incorrect or missing."
+msgstr "Poruka koja se vidi kada odgovar polja pogrešan ili nedostaje."
+
+#: classes/views/frm-settings/form.php:113
+#@ formidable
+msgid "Success Message"
+msgstr "Uspeh poruke"
+
+#: classes/views/frm-settings/form.php:113
+#@ formidable
+msgid "The default message seen after a form is submitted."
+msgstr "Default poruka vidjena posle podnošenja forme."
+
+#: classes/views/frm-settings/form.php:96
+#@ formidable
+msgid "The message seen when a form is submitted and passes validation, but something goes wrong."
+msgstr "Poruka koja se prikazuje kada je forma podnešena i prošla je validaciju, ali nešto nije kako treba."
+
+#: pro/classes/views/settings/form.php:10
+#@ formidable
+msgid "Login Message"
+msgstr "Login poruka"
+
+#: pro/classes/views/settings/form.php:10
+#@ formidable
+msgid "The message seen when a user who is not logged-in views a form only logged-in users can submit."
+msgstr "Poruka koja se prikazuje kada who is not logged-in views a form only logged-in users can submit."
+
+#: classes/views/frm-settings/form.php:116
+#@ formidable
+msgid "Default Submit Button"
+msgstr "Default dugme za podnošenje"
+
+#: classes/views/frm-settings/form.php:157
+#@ formidable
+msgid "Uninstall Formidable"
+msgstr "Uninstall-irati Formidable"
+
+#: classes/controllers/FrmAppController.php:303
+#@ formidable
+msgid "Are you sure you want to do this? Clicking OK will delete all forms, form data, and all other Formidable data. There is no Undo."
+msgstr "da li ste sigurni da ]elite ovo? Klik na OK ‘e obrisati sve forme, podatke formi i ostale Formidable podatke. Nema Undo."
+
+#: classes/views/frm-forms/edit.php:3
+#: classes/views/shared/form-nav.php:3
+#@ formidable
+msgid "Build"
+msgstr "Napraviti"
+
+#: classes/widgets/FrmShowForm.php:6
+#@ formidable
+msgid "Display a Formidable Form"
+msgstr "Prikayati Formidable Formu"
+
+#: classes/widgets/FrmShowForm.php:7
+#@ formidable
+msgid "Formidable Form"
+msgstr "Formidable Forma"
+
+#: classes/widgets/FrmShowForm.php:43
+#: pro/classes/widgets/FrmListEntries.php:175
+#@ formidable
+msgid "Title"
+msgstr "Naslov"
+
+#: classes/widgets/FrmShowForm.php:51
+#@ formidable
+msgid "Show Description"
+msgstr "Prikazati prikaz"
+
+#: classes/widgets/FrmShowForm.php:54
+#@ formidable
+msgid "Fit Select Boxes into SideBar"
+msgstr "staviti izabrane kvadrate u SideBar"
+
+#: classes/widgets/FrmShowForm.php:59
+#@ formidable
+msgid "If your text fields are too big for your sidebar insert a size here."
+msgstr "Ako su vam polja za tekstova prevelika za vaš sidebar unesite viličinu ovde.."
+
+#: pro/classes/controllers/FrmProAppController.php:28
+#@ formidable
+msgid "Formidable Tags"
+msgstr "Formidable Tagovi"
+
+#: pro/classes/controllers/FrmProAppController.php:29
+#@ formidable
+msgid "Formidable Tag"
+msgstr "Formidable Tag"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:188
+#@ formidable
+msgid "Page"
+msgstr "Stranica"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:189
+#: pro/classes/controllers/FrmProDisplaysController.php:337
+#: pro/classes/views/displays/mb_dyncontent.php:10
+#: pro/classes/views/frmpro-fields/options-form.php:186
+#@ formidable
+msgid "Content"
+msgstr "Sadržaj"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:190
+#: pro/classes/views/displays/mb_dyncontent.php:27
+#@ formidable
+msgid "Dynamic Content"
+msgstr "Dinamički sadržaj"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:194
+#@ formidable
+msgid "Shortcode"
+msgstr "Skraćenica"
+
+#: pro/classes/controllers/FrmProEntriesController.php:395
+#@ formidable
+msgid "Entry was Successfully Created"
+msgstr "Unos je uspešno napravljen"
+
+#: pro/classes/controllers/FrmProEntriesController.php:434
+#@ formidable
+msgid "Entry was Successfully Updated"
+msgstr "Unos je uspešno updateovan."
+
+#: pro/classes/controllers/FrmProEntriesController.php:436
+#@ formidable
+msgid "Back to Entries"
+msgstr "Nazad na Unose"
+
+#: pro/classes/controllers/FrmProXMLController.php:116
+#@ formidable
+msgid "All Fields are required"
+msgstr "Sva polja su potrebna"
+
+#: classes/views/xml/import_form.php:11
+#: pro/classes/views/xml/map_csv_fields.php:61
+#@ formidable
+msgid "Import"
+msgstr "Uneti"
+
+#: pro/classes/controllers/FrmProEntriesController.php:461
+#@ formidable
+msgid "Entry was Successfully Duplicated"
+msgstr "Unos je "
+
+#: pro/classes/controllers/FrmProEntriesController.php:463
+#@ formidable
+msgid "There was a problem duplicating that entry"
+msgstr "Nastao je problem prilikom dupliranja tog unosa"
+
+#: pro/classes/controllers/FrmProEntriesController.php:492
+#@ formidable
+msgid "Entry was Successfully Destroyed"
+msgstr "Unos je uspešno uništen"
+
+#: pro/classes/controllers/FrmProEntriesController.php:522
+#@ formidable
+msgid "Entries were Successfully Destroyed"
+msgstr "Unosi su uspešno uništeni "
+
+#: pro/classes/controllers/FrmProEntriesController.php:524
+#: pro/classes/controllers/FrmProEntriesController.php:546
+#@ formidable
+msgid "No entries were specified"
+msgstr "Nijedan unos nije odredjen"
+
+#: pro/classes/controllers/FrmProEntriesController.php:578
+#@ formidable
+msgid "No form was found"
+msgstr "Nijedna forma nije nadjena"
+
+#: pro/classes/controllers/FrmProEntriesController.php:932
+#@ formidable
+msgid "Please wait while you are redirected."
+msgstr "Sačekajte dok vas ne preusmerimo."
+
+#: pro/classes/controllers/FrmProEntriesController.php:935
+#, php-format
+#@ formidable
+msgid "%1$sClick here%2$s if you are not automatically redirected."
+msgstr "%1$sKlik ovde%2$s ako niste automatski preusmereni.."
+
+#: pro/classes/controllers/FrmProEntriesController.php:1018
+#@ formidable
+msgid "Create Entry in Form"
+msgstr "Napravite unos u formi"
+
+#: pro/classes/controllers/FrmProEntriesController.php:1061
+#@ formidable
+msgid "Copied from Post"
+msgstr "Kopirano iz posta"
+
+#: pro/classes/controllers/FrmProEntriesController.php:1181
+#: pro/classes/views/frmpro-entries/show.php:64
+#@ formidable
+msgid "Post"
+msgstr "Post"
+
+#: pro/classes/controllers/FrmProEntriesController.php:1182
+#: pro/classes/helpers/FrmProFieldsHelper.php:1852
+#: pro/classes/helpers/FrmProListHelper.php:121
+#: pro/classes/views/displays/_calendar_options.php:4
+#: pro/classes/views/displays/_calendar_options.php:16
+#: pro/classes/views/displays/order_row.php:3
+#: pro/classes/views/displays/where_row.php:4
+#@ formidable
+msgid "Entry creation date"
+msgstr "Uneti datum nastajanja"
+
+#: pro/classes/controllers/FrmProEntriesController.php:1183
+#: pro/classes/helpers/FrmProFieldsHelper.php:1853
+#: pro/classes/views/displays/_calendar_options.php:5
+#: pro/classes/views/displays/_calendar_options.php:17
+#: pro/classes/views/displays/order_row.php:4
+#@ formidable
+msgid "Entry update date"
+msgstr "Uneti datum updateovanja"
+
+#: pro/classes/controllers/FrmProEntriesController.php:1618
+#: pro/classes/helpers/FrmProDisplaysHelper.php:58
+#: pro/classes/helpers/FrmProListHelper.php:76
+#@ formidable
+msgid "No Entries Found"
+msgstr "Nijedan unos nije nadjen"
+
+#: pro/classes/controllers/FrmProEntriesController.php:1619
+#: pro/classes/controllers/FrmProEntriesController.php:1752
+#: pro/classes/controllers/FrmProEntriesController.php:2041
+#: pro/classes/views/frmpro-entries/sidebar-show.php:20
+#@ formidable
+msgid "Are you sure you want to delete that entry?"
+msgstr "Da li ste sigurni da želite da obrišete ovaj unos?"
+
+#: pro/classes/controllers/FrmProEntriesController.php:2078
+#: pro/classes/controllers/FrmProEntriesController.php:2360
+#@ formidable
+msgid "Your entry was successfully deleted"
+msgstr "Vaš unos je uspešno obrisan"
+
+#: pro/classes/controllers/FrmProEntriesController.php:2341
+#@ formidable
+msgid "There was an error deleting that entry"
+msgstr "Nastala je greška prilikom brisanja tog unosa"
+
+#: pro/classes/controllers/FrmProFieldsController.php:304
+#@ formidable
+msgid "Option Label"
+msgstr "Oznaka opcije"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:479
+#: pro/classes/controllers/FrmProFieldsController.php:305
+#@ formidable
+msgid "Saved Value"
+msgstr "Sačuvana vrednost"
+
+#: pro/classes/controllers/FrmProFieldsController.php:320
+#@ formidable
+msgid "English/Western"
+msgstr "Engleski/Western"
+
+#: pro/classes/controllers/FrmProFieldsController.php:320
+#@ formidable
+msgid "Afrikaans"
+msgstr "Afrikanski"
+
+#: pro/classes/controllers/FrmProFieldsController.php:321
+#@ formidable
+msgid "Albanian"
+msgstr "Albanski"
+
+#: pro/classes/controllers/FrmProFieldsController.php:321
+#@ formidable
+msgid "Arabic"
+msgstr "Arapski"
+
+#: pro/classes/controllers/FrmProFieldsController.php:322
+#@ formidable
+msgid "Armenian"
+msgstr "Jermejski"
+
+#: pro/classes/controllers/FrmProFieldsController.php:322
+#@ formidable
+msgid "Azerbaijani"
+msgstr "Azerbejdžanski"
+
+#: pro/classes/controllers/FrmProFieldsController.php:323
+#@ formidable
+msgid "Basque"
+msgstr "Baski"
+
+#: pro/classes/controllers/FrmProFieldsController.php:323
+#@ formidable
+msgid "Bosnian"
+msgstr "Bosanski"
+
+#: pro/classes/controllers/FrmProFieldsController.php:324
+#@ formidable
+msgid "Bulgarian"
+msgstr "Bugarski"
+
+#: pro/classes/controllers/FrmProFieldsController.php:324
+#@ formidable
+msgid "Catalan"
+msgstr "Katalonski"
+
+#: pro/classes/controllers/FrmProFieldsController.php:325
+#@ formidable
+msgid "Chinese Hong Kong"
+msgstr "Kineski Hong Kong"
+
+#: pro/classes/controllers/FrmProFieldsController.php:325
+#@ formidable
+msgid "Chinese Simplified"
+msgstr "Kineski Jednostavan"
+
+#: pro/classes/controllers/FrmProFieldsController.php:326
+#@ formidable
+msgid "Chinese Traditional"
+msgstr "Kineski Tradicionalan"
+
+#: pro/classes/controllers/FrmProFieldsController.php:326
+#@ formidable
+msgid "Croatian"
+msgstr "Hrvatski"
+
+#: pro/classes/controllers/FrmProFieldsController.php:327
+#@ formidable
+msgid "Czech"
+msgstr "Češki"
+
+#: pro/classes/controllers/FrmProFieldsController.php:327
+#@ formidable
+msgid "Danish"
+msgstr "Danski"
+
+#: pro/classes/controllers/FrmProFieldsController.php:328
+#@ formidable
+msgid "English/UK"
+msgstr "EngleskiUK"
+
+#: pro/classes/controllers/FrmProFieldsController.php:329
+#@ formidable
+msgid "Esperanto"
+msgstr "Esperanto"
+
+#: pro/classes/controllers/FrmProFieldsController.php:329
+#@ formidable
+msgid "Estonian"
+msgstr "Estonijski"
+
+#: pro/classes/controllers/FrmProFieldsController.php:330
+#@ formidable
+msgid "Faroese"
+msgstr "Faroes"
+
+#: pro/classes/controllers/FrmProFieldsController.php:330
+#@ formidable
+msgid "Farsi/Persian"
+msgstr "Farsi/Persijski"
+
+#: pro/classes/controllers/FrmProFieldsController.php:331
+#@ formidable
+msgid "Finnish"
+msgstr "Finski"
+
+#: pro/classes/controllers/FrmProFieldsController.php:332
+#@ formidable
+msgid "French/Swiss"
+msgstr "Francuski/Švajcarski"
+
+#: pro/classes/controllers/FrmProFieldsController.php:333
+#@ formidable
+msgid "Greek"
+msgstr "Grčki"
+
+#: pro/classes/controllers/FrmProFieldsController.php:333
+#@ formidable
+msgid "Hebrew"
+msgstr "Jidiš"
+
+#: pro/classes/controllers/FrmProFieldsController.php:334
+#@ formidable
+msgid "Hungarian"
+msgstr "Madjarski"
+
+#: pro/classes/controllers/FrmProFieldsController.php:334
+#@ formidable
+msgid "Icelandic"
+msgstr "Islandski"
+
+#: pro/classes/controllers/FrmProFieldsController.php:335
+#@ formidable
+msgid "Italian"
+msgstr "Italijanski"
+
+#: pro/classes/controllers/FrmProFieldsController.php:335
+#@ formidable
+msgid "Japanese"
+msgstr "Japanski"
+
+#: pro/classes/controllers/FrmProFieldsController.php:336
+#@ formidable
+msgid "Korean"
+msgstr "Koreanski"
+
+#: pro/classes/controllers/FrmProFieldsController.php:336
+#@ formidable
+msgid "Latvian"
+msgstr "Latviski"
+
+#: pro/classes/controllers/FrmProFieldsController.php:337
+#@ formidable
+msgid "Lithuanian"
+msgstr "Litvanski"
+
+#: pro/classes/controllers/FrmProFieldsController.php:337
+#@ formidable
+msgid "Malaysian"
+msgstr "Malazijski"
+
+#: pro/classes/controllers/FrmProFieldsController.php:338
+#@ formidable
+msgid "Norwegian"
+msgstr "Norveški"
+
+#: pro/classes/controllers/FrmProFieldsController.php:338
+#@ formidable
+msgid "Polish"
+msgstr "Poljski"
+
+#: pro/classes/controllers/FrmProFieldsController.php:339
+#@ formidable
+msgid "Portuguese/Brazilian"
+msgstr "Portugalski/Brazilski"
+
+#: pro/classes/controllers/FrmProFieldsController.php:339
+#@ formidable
+msgid "Romanian"
+msgstr "Rumunski"
+
+#: pro/classes/controllers/FrmProFieldsController.php:340
+#: pro/classes/controllers/FrmProFieldsController.php:341
+#@ formidable
+msgid "Serbian"
+msgstr "Srpski"
+
+#: pro/classes/controllers/FrmProFieldsController.php:341
+#@ formidable
+msgid "Slovak"
+msgstr "Slovački"
+
+#: pro/classes/controllers/FrmProFieldsController.php:342
+#@ formidable
+msgid "Slovenian"
+msgstr "Slovenski"
+
+#: pro/classes/controllers/FrmProFieldsController.php:343
+#@ formidable
+msgid "Swedish"
+msgstr "Švedski"
+
+#: pro/classes/controllers/FrmProFieldsController.php:343
+#@ formidable
+msgid "Tamil"
+msgstr "Tamil"
+
+#: pro/classes/controllers/FrmProFieldsController.php:344
+#@ formidable
+msgid "Thai"
+msgstr "Thai"
+
+#: pro/classes/controllers/FrmProFieldsController.php:345
+#@ formidable
+msgid "Ukranian"
+msgstr "Ukrajinski"
+
+#: pro/classes/controllers/FrmProFieldsController.php:345
+#@ formidable
+msgid "Vietnamese"
+msgstr "Vijetnamski"
+
+#: classes/controllers/FrmFormsController.php:515
+#@ formidable
+msgid "No forms were specified"
+msgstr "Nijedna forma nije odredjena"
+
+#: pro/classes/controllers/FrmProFormsController.php:165
+#@ formidable
+msgid "Current Date"
+msgstr "Trenutni datum"
+
+#: pro/classes/controllers/FrmProFormsController.php:166
+#@ formidable
+msgid "Current Time"
+msgstr "Trenutno vreme"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:490
+#@ formidable
+msgid "User Login"
+msgstr " Login korisnika"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:488
+#: pro/classes/controllers/FrmProFormsController.php:172
+#: pro/classes/models/FrmProField.php:38
+#: pro/classes/models/FrmProForm.php:220
+#@ formidable
+msgid "User ID"
+msgstr " ID korisnika"
+
+#: pro/classes/controllers/FrmProFormsController.php:173
+#@ formidable
+msgid "User Meta"
+msgstr "User Meta"
+
+#: pro/classes/controllers/FrmProFormsController.php:174
+#: pro/classes/helpers/FrmProFieldsHelper.php:1850
+#: pro/classes/views/displays/where_row.php:8
+#: pro/classes/views/shared/mb_adv_info.php:65
+#: pro/classes/views/xml/map_csv_fields.php:46
+#@ formidable
+msgid "Post ID"
+msgstr "Post ID"
+
+#: pro/classes/controllers/FrmProFormsController.php:175
+#: pro/classes/views/frmpro-forms/comment_options.php:15
+#: pro/classes/views/frmpro-forms/post_options.php:46
+#@ formidable
+msgid "Post Title"
+msgstr "Naslov Posta "
+
+#: pro/classes/controllers/FrmProFormsController.php:176
+#: pro/classes/views/frmpro-forms/comment_options.php:18
+#@ formidable
+msgid "Author Email"
+msgstr "Autor emaila"
+
+#: pro/classes/controllers/FrmProFormsController.php:177
+#@ formidable
+msgid "Post Meta"
+msgstr "Post Meta"
+
+#: pro/classes/controllers/FrmProStatisticsController.php:685
+#@ formidable
+msgid "Completed"
+msgstr "Završeno"
+
+#: pro/classes/controllers/FrmProStatisticsController.php:685
+#@ formidable
+msgid "Not Completed"
+msgstr "Nije završeno"
+
+#: pro/classes/controllers/FrmProStatisticsController.php:692
+#@ formidable
+msgid "Deleted User"
+msgstr "Obrisani korisnik"
+
+#: pro/classes/controllers/FrmProStatisticsController.php:1074
+#@ formidable
+msgid "Monthly Entries"
+msgstr "Mesečni unosi"
+
+#: pro/classes/controllers/FrmProStatisticsController.php:1077
+#@ formidable
+msgid "Yearly Entries"
+msgstr "Godišnji unosi"
+
+#: pro/classes/controllers/FrmProStatisticsController.php:1071
+#@ formidable
+msgid "Hourly Entries"
+msgstr "Unosi po satu"
+
+#: pro/classes/controllers/FrmProStatisticsController.php:1080
+#@ formidable
+msgid "Daily Entries"
+msgstr "Dnevni unosi"
+
+#: pro/classes/helpers/FrmProAppHelper.php:123
+#@ formidable
+msgid "at"
+msgstr "na"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:764
+#: pro/classes/helpers/FrmProAppHelper.php:135
+#@ formidable
+msgid "year"
+msgstr "godina"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:764
+#: pro/classes/helpers/FrmProAppHelper.php:135
+#@ formidable
+msgid "years"
+msgstr "godine"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:764
+#: pro/classes/helpers/FrmProAppHelper.php:136
+#@ formidable
+msgid "month"
+msgstr "mesec"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:764
+#: pro/classes/helpers/FrmProAppHelper.php:136
+#@ formidable
+msgid "months"
+msgstr "meseci"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:764
+#: pro/classes/helpers/FrmProAppHelper.php:137
+#@ formidable
+msgid "week"
+msgstr "nedelja"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:764
+#: pro/classes/helpers/FrmProAppHelper.php:137
+#@ formidable
+msgid "weeks"
+msgstr "nedelje"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:764
+#: pro/classes/helpers/FrmProAppHelper.php:138
+#@ formidable
+msgid "day"
+msgstr "dan"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:764
+#: pro/classes/helpers/FrmProAppHelper.php:138
+#@ formidable
+msgid "days"
+msgstr "dani"
+
+#: pro/classes/helpers/FrmProAppHelper.php:139
+#@ formidable
+msgid "hour"
+msgstr "sat"
+
+#: pro/classes/helpers/FrmProAppHelper.php:139
+#: pro/classes/views/frmpro-forms/add_form_options.php:45
+#@ formidable
+msgid "hours"
+msgstr "sati"
+
+#: pro/classes/helpers/FrmProAppHelper.php:140
+#@ formidable
+msgid "minute"
+msgstr "minut"
+
+#: pro/classes/helpers/FrmProAppHelper.php:140
+#@ formidable
+msgid "minutes"
+msgstr "minute"
+
+#: pro/classes/helpers/FrmProAppHelper.php:141
+#@ formidable
+msgid "second"
+msgstr "sekund"
+
+#: pro/classes/helpers/FrmProAppHelper.php:141
+#: pro/classes/helpers/FrmProAppHelper.php:149
+#: pro/classes/helpers/FrmProAppHelper.php:172
+#@ formidable
+msgid "seconds"
+msgstr "sekunde"
+
+#: pro/classes/helpers/FrmProAppHelper.php:248
+#@ formidable
+msgid "Bulk Actions"
+msgstr "Bulk Actions"
+
+#: pro/classes/helpers/FrmProAppHelper.php:251
+#: pro/classes/helpers/FrmProListHelper.php:146
+#@ formidable
+msgid "Export to CSV"
+msgstr "Eksportovati u CSV"
+
+#: pro/classes/helpers/FrmProAppHelper.php:254
+#@ formidable
+msgid "Apply"
+msgstr "Primeniti"
+
+#: pro/classes/helpers/FrmProListHelper.php:120
+#@ formidable
+msgid "All Fields"
+msgstr "Sva polja"
+
+#: pro/classes/helpers/FrmProListHelper.php:131
+#@ formidable
+msgid "Reset"
+msgstr "Resetovati"
+
+#: pro/classes/helpers/FrmProEntryMetaHelper.php:278
+#: pro/classes/helpers/FrmProEntryMetaHelper.php:307
+#, php-format
+#@ formidable
+msgid "View all posts filed under %s"
+msgstr "Pregledati sva polja postova pod %s"
+
+#: pro/classes/helpers/FrmProFieldsHelper.php:662
+#@ formidable
+msgid "No Categories"
+msgstr "Nema kategorija"
+
+#: pro/classes/helpers/FrmProFieldsHelper.php:1297
+#@ formidable
+msgid "Edit Uploaded File"
+msgstr "Edituj uploadovano polje"
+
+#: pro/classes/helpers/FrmProFieldsHelper.php:1846
+#: pro/classes/views/frmpro-fields/options-form.php:248
+#@ formidable
+msgid "Select a value to insert into the box below"
+msgstr "Selektuj vrednost za unošenje u kvadrat ispod"
+
+#: pro/classes/helpers/FrmProFieldsHelper.php:1848
+#: pro/classes/helpers/FrmProListHelper.php:122
+#: pro/classes/views/displays/where_row.php:6
+#: pro/classes/views/frmpro-entries/show.php:86
+#: pro/classes/views/shared/mb_adv_info.php:63
+#: pro/classes/views/xml/map_csv_fields.php:53
+#@ formidable
+msgid "Entry ID"
+msgstr "Uneti ID"
+
+#: pro/classes/helpers/FrmProFieldsHelper.php:1851
+#: pro/classes/views/shared/mb_adv_info.php:66
+#@ formidable
+msgid "User IP"
+msgstr "IP korisnika"
+
+#: pro/classes/helpers/FrmProFieldsHelper.php:1855
+#@ formidable
+msgid "Form Fields"
+msgstr "Polja forme"
+
+#: pro/classes/helpers/FrmProFieldsHelper.php:1867
+#@ formidable
+msgid "Thumbnail"
+msgstr "Thumbnail"
+
+#: pro/classes/helpers/FrmProFieldsHelper.php:1868
+#@ formidable
+msgid "Medium"
+msgstr "Srednji"
+
+#: pro/classes/helpers/FrmProFieldsHelper.php:1869
+#@ formidable
+msgid "Large"
+msgstr "Veliki"
+
+#: pro/classes/helpers/FrmProFieldsHelper.php:1870
+#@ formidable
+msgid "Full Size"
+msgstr "Cela veličina"
+
+#: pro/classes/helpers/FrmProFieldsHelper.php:1890
+#: pro/classes/views/shared/mb_adv_info.php:59
+#@ formidable
+msgid "Helpers"
+msgstr "Pomoćnici"
+
+#: pro/classes/helpers/FrmProFieldsHelper.php:1891
+#@ formidable
+msgid "Admin link to edit the entry"
+msgstr "Admin link za editovanje unosa"
+
+#: pro/classes/helpers/FrmProFieldsHelper.php:1893
+#@ formidable
+msgid "Link to view single page if showing dynamic entries"
+msgstr "Link za pregled jedne stranice ako se prikazuju dinamični unosi"
+
+#: pro/classes/helpers/FrmProFieldsHelper.php:1897
+#@ formidable
+msgid "Add a rotating 'even' or 'odd' class"
+msgstr "Dodati rotiranje 'jednako' ili 'čudno' c klasu"
+
+#: pro/classes/helpers/FrmProFieldsHelper.php:1899
+#@ formidable
+msgid "Default Email Message"
+msgstr "Default Email poruka"
+
+#: pro/classes/helpers/FrmProFieldsHelper.php:1901
+#: pro/classes/views/shared/mb_adv_info.php:70
+#@ formidable
+msgid "Site URL"
+msgstr "URL sajta"
+
+#: pro/classes/helpers/FrmProFieldsHelper.php:1902
+#: pro/classes/views/shared/mb_adv_info.php:71
+#@ formidable
+msgid "Site Name"
+msgstr "Ime sajta"
+
+#: pro/classes/models/FrmProDisplay.php:241
+#@ formidable
+msgid "Name cannot be blank"
+msgstr "Ime ne može da bude prazno"
+
+#: pro/classes/models/FrmProDisplay.php:243
+#: pro/classes/views/displays/mb_excerpt.php:2
+#@ formidable
+msgid "This is not displayed anywhere, but is just for your reference. (optional)"
+msgstr "Ovo nije prikazano nigde već je samo za vas. (opcionalno)"
+
+#: pro/classes/models/FrmProDisplay.php:247
+#@ formidable
+msgid "Content cannot be blank"
+msgstr "Sadržaj ne moše da bude prazan"
+
+#: pro/classes/models/FrmProDisplay.php:250
+#@ formidable
+msgid "Page cannot be blank if you want the content inserted automatically"
+msgstr "Stranica ne može da bude prazna ako želite da sadržaj unesete automatski"
+
+#: pro/classes/models/FrmProDisplay.php:253
+#@ formidable
+msgid "Limit must be a number"
+msgstr "Limit mora biti broj"
+
+#: pro/classes/models/FrmProDisplay.php:257
+#@ formidable
+msgid "Dynamic Content cannot be blank"
+msgstr "Dinamiči sadržaj ne može da bude prazan"
+
+#: pro/classes/models/FrmProDisplay.php:261
+#@ formidable
+msgid "Parameter Name cannot be blank if content is dynamic"
+msgstr "Ime parametra ne može da bude prazno ako je saržaj dinamičan "
+
+#: pro/classes/models/FrmProDisplay.php:264
+#@ formidable
+msgid "Parameter Value cannot be blank if content is dynamic"
+msgstr "Vrednost parametra ne može da bude prazna ako je sadržaj dinamičan  "
+
+#: pro/classes/models/FrmProDisplay.php:267
+#@ formidable
+msgid "Detail Link cannot be blank if content is dynamic"
+msgstr "Link sa detaljima ne može da bude prazna ako je sadržaj dinamičan"
+
+#: pro/classes/helpers/FrmProFieldsHelper.php:906
+#@ formidable
+msgid "must be unique"
+msgstr "muora biti jedinstven"
+
+#: pro/classes/models/FrmProEntryMeta.php:195
+#@ formidable
+msgid "Sorry, this file type is not permitted for security reasons."
+msgstr "Ovaj tip polja nije dozvoljen iz bezbednosnih razloga."
+
+#: pro/classes/models/FrmProForm.php:127
+#@ formidable
+msgid "Status"
+msgstr "Status"
+
+#: pro/classes/models/FrmProForm.php:145
+#@ formidable
+msgid "Single"
+msgstr "Single"
+
+#: pro/classes/models/FrmProForm.php:146
+#@ formidable
+msgid "Used for the single post page"
+msgstr "Korišćeno za jedan post stranicu"
+
+#: pro/classes/models/FrmProForm.php:147
+#@ formidable
+msgid "Add content here if you would like to use this as a listing page."
+msgstr "Dodajte sadržaj ovde ako bist hteli da koristite ovo kao stranicu za listing."
+
+#: pro/classes/models/FrmProForm.php:227
+#@ formidable
+msgid "Please insert a message for your auto responder."
+msgstr "Unesite poruku za vaše automatske odgovore."
+
+#: pro/classes/models/FrmProForm.php:229
+#@ formidable
+msgid "That is not a valid reply-to email address for your auto responder."
+msgstr "Ovo nije validan odgovor na email adreas za vae automatsko odgovaranje."
+
+#: pro/classes/models/FrmProSettings.php:12
+#@ formidable
+msgid "You have already submitted that form"
+msgstr "Već ste podneli tu formu"
+
+#: pro/classes/models/FrmProSettings.php:10
+#@ formidable
+msgid "Your submission was successfully saved."
+msgstr "Vaše podnošenje je uspešno sačuvano."
+
+#: pro/classes/views/displays/mb_advanced.php:75
+#@ formidable
+msgid "After page content"
+msgstr "Nakon sadržaja stranice"
+
+#: pro/classes/views/displays/mb_advanced.php:76
+#@ formidable
+msgid "Before page content"
+msgstr "Pre sadržaja stranice"
+
+#: pro/classes/views/displays/mb_advanced.php:77
+#@ formidable
+msgid "Replace page content"
+msgstr "Zamena sadržaja stranice"
+
+#: pro/classes/views/displays/mb_advanced.php:74
+#@ formidable
+msgid "Don't insert automatically"
+msgstr "Ne unositi automatski"
+
+#: pro/classes/views/displays/mb_advanced.php:81
+#@ formidable
+msgid "on page"
+msgstr "na stranicu"
+
+#: pro/classes/views/displays/mb_advanced.php:83
+#@ formidable
+msgid "If you would like the content to be inserted automatically, you must then select the page in which to insert it."
+msgstr "Ako želite da sadržaj bude automatski umetnut , onda morate izabrati stranu u kojoj bi ga ubacite ."
+
+#: pro/classes/views/displays/mb_advanced.php:86
+#: pro/classes/views/frmpro-entries/show.php:65
+#: pro/classes/views/frmpro-entries/sidebar-edit.php:13
+#@ formidable
+msgid "View Post"
+msgstr "Pregledati post"
+
+#: pro/classes/views/displays/mb_advanced.php:90
+#@ formidable
+msgid "Insert position"
+msgstr "Uneti poziciju"
+
+#: pro/classes/views/displays/submitbox_actions.php:5
+#@ formidable
+msgid "Insert on a page, post, or text widget"
+msgstr "Uneti na stranicu, post ili widget teksta"
+
+#: pro/classes/views/displays/submitbox_actions.php:6
+#@ formidable
+msgid "Save to get ID"
+msgstr "Sačuvati da bi se dobio ID"
+
+#: classes/views/frm-forms/sidebar-settings.php:12
+#: pro/classes/views/displays/submitbox_actions.php:12
+#@ formidable
+msgid "Insert in a template"
+msgstr "Uneti template"
+
+#: pro/classes/views/displays/mb_form_disp_type.php:3
+#@ formidable
+msgid "Use Entries from Form"
+msgstr "Koristiti unose iz forme"
+
+#: pro/classes/views/displays/mb_form_disp_type.php:11
+#@ formidable
+msgid "All Entries &mdash; list all entries in the specified form"
+msgstr "Svi unosi  &mdash; lista svih unosa u odredjenoj formi"
+
+#: pro/classes/views/displays/mb_form_disp_type.php:12
+#@ formidable
+msgid "Single Entry &mdash; display one entry"
+msgstr "Jedan unos  &mdash;  prikazati jedan unos"
+
+#: pro/classes/views/displays/mb_form_disp_type.php:14
+#@ formidable
+msgid "Both (Dynamic) &mdash; list the entries that will link to a single entry page"
+msgstr "Oba ( dinamički )  &mdash;  - nabrojati stavke koje će povezati na jedan ulazak stranice"
+
+#: pro/classes/views/displays/mb_form_disp_type.php:15
+#@ formidable
+msgid "Calendar &mdash; insert entries into a calendar"
+msgstr "Kalendar &mdash; uneti u kalendar"
+
+#: pro/classes/views/displays/_calendar_options.php:15
+#@ formidable
+msgid "No multi-day events"
+msgstr "Nema dogadjaja od više dana"
+
+#: pro/classes/views/displays/mb_form_disp_type.php:24
+#@ formidable
+msgid "Detail Link"
+msgstr "Detaljni Link"
+
+#: pro/classes/views/displays/mb_form_disp_type.php:24
+#, php-format
+#@ formidable
+msgid "Example: If parameter name is 'contact', the url would be like %1$s/selected-page?contact=2. If this entry is linked to a post, the post permalink will be used instead."
+msgstr "Primer : Ako je ime parametra ' kontakt ' ,url bi bilo kao %1$s/ izabran - stranica kontakt = 2 ? . Ako se ovaj unos je povezana sa post , post permalink će se koristiti umesto toga ."
+
+#: pro/classes/views/displays/mb_form_disp_type.php:31
+#, php-format
+#@ formidable
+msgid "Select the value that will be added onto the page URL. This will create a pretty URL like %1$s/selected-page/entry-key"
+msgstr "Izaberite vrednost koja će biti dodata na URL adrese stranice . Ovo će stvoriti lep URL%1$s/ izabran - stranica / unos - ključ"
+
+#: pro/classes/views/displays/mb_form_disp_type.php:33
+#@ formidable
+msgid "Parameter Name"
+msgstr "Ime parametra"
+
+#: pro/classes/views/displays/mb_form_disp_type.php:36
+#@ formidable
+msgid "Parameter Value"
+msgstr "Vrednost parametra"
+
+#: pro/classes/views/displays/mb_dyncontent.php:3
+#@ formidable
+msgid "Before Content"
+msgstr "Pre sadržaja"
+
+#: pro/classes/views/displays/mb_dyncontent.php:3
+#@ formidable
+msgid "This content will not be repeated. This would be a good place to put any HTML table tags."
+msgstr "Ovaj sadržaj se neće ponoviti . To bi bilo dobro mesto da se stavite bilo koji HTML tag tabele ."
+
+#: pro/classes/views/displays/mb_dyncontent.php:3
+#: pro/classes/views/displays/mb_dyncontent.php:20
+#: pro/classes/views/frmpro-forms/comment_options.php:23
+#@ formidable
+msgid "optional"
+msgstr "opcionalno"
+
+#: pro/classes/views/displays/mb_dyncontent.php:20
+#@ formidable
+msgid "After Content"
+msgstr "Posle sadržaja"
+
+#: pro/classes/views/displays/mb_dyncontent.php:20
+#@ formidable
+msgid "This content will not be repeated. This would be a good place to close any HTML tags from the Before Content field."
+msgstr "Ovaj sadržaj se neće ponoviti . To bi bilo dobro mesto da zatvorite sve HTML tagove iz Pre sadržaja Polja."
+
+#: pro/classes/views/displays/mb_dyncontent.php:27
+#, php-format
+#@ formidable
+msgid "The HTML for the entry on the dynamic page. This content will NOT be repeated, and will only show when the %1$s is clicked."
+msgstr "HTML za unos na dinamičnom stranici . Ovaj sadržaj se neće ponoviti , i samo će biti prikazan tek kada %1$s se klikne ."
+
+#: pro/classes/views/shared/mb_adv_info.php:5
+#@ formidable
+msgid "Advanced"
+msgstr "Unapredjeno"
+
+#: pro/classes/views/displays/mb_advanced.php:6
+#@ formidable
+msgid "Order"
+msgstr "Redom"
+
+#: pro/classes/views/displays/order_row.php:5
+#@ formidable
+msgid "Random"
+msgstr "Nasumično"
+
+#: pro/classes/views/displays/order_row.php:10
+#@ formidable
+msgid "Ascending"
+msgstr "Uzlazni"
+
+#: pro/classes/views/displays/order_row.php:11
+#@ formidable
+msgid "Descending"
+msgstr "Silazni"
+
+#: pro/classes/views/displays/mb_advanced.php:25
+#@ formidable
+msgid "Narrow down which entries will be used."
+msgstr "Suziti"
+
+#: pro/classes/views/displays/mb_advanced.php:44
+#@ formidable
+msgid "Limit"
+msgstr "Limit"
+
+#: pro/classes/views/displays/mb_advanced.php:45
+#@ formidable
+msgid "If you don’t want all your entries displayed, you can insert the number limit here. Leave blank if you’d like all entries shown."
+msgstr "Ako ne želite da sve stavke budu prikazane , možete da ubacite ograničenje broja ovde . Ostavite prazno ako želite sve unose prikazane ."
+
+#: pro/classes/views/displays/mb_advanced.php:54
+#@ formidable
+msgid "Page Size"
+msgstr "Veličina stranice"
+
+#: pro/classes/views/displays/mb_advanced.php:55
+#@ formidable
+msgid "The number of entries to show per page. Leave blank to not use pagination."
+msgstr "Broj ulazaka za prikaz po stranici. Ostavite prazno da ne koristite numerisanje ."
+
+#: pro/classes/views/displays/mb_advanced.php:63
+#@ formidable
+msgid "Message if nothing to display"
+msgstr "Poruka ako nema ništa da prikažete"
+
+#: pro/classes/views/displays/mb_advanced.php:101
+#@ formidable
+msgid "Copy these display settings to other blogs when Formidable Pro is activated. <br/>Note: Use only field keys in the content box(es) above."
+msgstr "Kopirajte ove postavke ekrana na drugim blogovima kada je aktiviran Formidable Pro . <br/> Napomena : Koristite samo ključeve polja u kutiji sadržaja gore ."
+
+#: pro/classes/controllers/FrmProDisplaysController.php:468
+#@ formidable
+msgid "Use a different separator for checkbox fields"
+msgstr "Koristite drugačiji separatora za potvrdu polja"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:471
+#@ formidable
+msgid "Replaces spaces with dashes and lowercases all. Use if adding an HTML class or ID"
+msgstr "Zamenjuje prostor sa crticama i sve smanjuje.   Koristite ako dodajete HTML klasu ili ID"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:472
+#@ formidable
+msgid "Replaces all HTML entities with a URL safe string."
+msgstr "Zamenjuje sve HTML entitete sa URLom sigurnog stringa."
+
+#: pro/classes/controllers/FrmProDisplaysController.php:473
+#@ formidable
+msgid "Truncate text with a link to view more. If using Both (dynamic), the link goes to the detail page. Otherwise, it will show in-place."
+msgstr "Truncate tekst sa linkom da vidite više . Ako koristite Oba ( dinamički ) , link ide na stranicu sa detaljima . U suprotnom , to će se pokazati na licu mesta ."
+
+#: pro/classes/controllers/FrmProDisplaysController.php:475
+#@ formidable
+msgid "How long ago a date was in minutes, hours, days, months, or years."
+msgstr "Pre koliko je datum bio u minutama, satima, danima, mesecima ili godinama"
+
+#: pro/classes/views/shared/mb_adv_info.php:4
+#@ formidable
+msgid "Conditionals"
+msgstr "Uslovi"
+
+#: classes/views/frm-forms/mb_html_tab.php:6
+#@ formidable
+msgid "Field ID"
+msgstr "ID polja"
+
+#: pro/classes/views/displays/where_options.php:21
+#@ formidable
+msgid "Date options: 'NOW' or a date in yyyy-mm-dd format."
+msgstr "Opcije datuma: SADA'  ili datum u gggg-mm-dd formatu."
+
+#: pro/classes/views/displays/where_row.php:3
+#: pro/classes/views/frmpro-fields/_logic_row.php:3
+#: pro/classes/views/frmpro-fields/field-selection.php:2
+#: pro/classes/views/frmpro-forms/_comment_meta_row.php:6
+#: pro/classes/views/frmpro-forms/_custom_field_row.php:27
+#: pro/classes/views/frmpro-forms/_logic_row.php:3
+#: pro/classes/views/frmpro-forms/_post_taxonomy_row.php:10
+#: pro/classes/views/frmpro-forms/comment_options.php:25
+#: pro/classes/views/frmpro-forms/post_options.php:48
+#: pro/classes/views/frmpro-forms/post_options.php:60
+#@ formidable
+msgid "Select Field"
+msgstr "Izaberi polje"
+
+#: pro/classes/views/displays/where_row.php:11
+#: pro/classes/views/frmpro-fields/_logic_row.php:23
+#: pro/classes/views/frmpro-forms/_logic_row.php:20
+#@ formidable
+msgid "is"
+msgstr "je"
+
+#: pro/classes/views/displays/where_row.php:13
+#: pro/classes/views/frmpro-fields/_logic_row.php:27
+#: pro/classes/views/frmpro-forms/_logic_row.php:23
+#@ formidable
+msgid "equal to"
+msgstr "jednako"
+
+#: pro/classes/views/displays/where_row.php:14
+#: pro/classes/views/frmpro-fields/_logic_row.php:28
+#: pro/classes/views/frmpro-forms/_logic_row.php:24
+#@ formidable
+msgid "NOT equal to"
+msgstr "NIJE jednako"
+
+#: pro/classes/views/displays/where_row.php:15
+#: pro/classes/views/frmpro-fields/_logic_row.php:29
+#: pro/classes/views/frmpro-forms/_logic_row.php:25
+#@ formidable
+msgid "greater than"
+msgstr "veće od"
+
+#: pro/classes/views/displays/where_row.php:16
+#: pro/classes/views/frmpro-fields/_logic_row.php:30
+#: pro/classes/views/frmpro-forms/_logic_row.php:26
+#@ formidable
+msgid "less than"
+msgstr "manje od"
+
+#: pro/classes/views/displays/where_row.php:17
+#@ formidable
+msgid "greater than or equal to"
+msgstr "veće od ili njednako"
+
+#: pro/classes/views/displays/where_row.php:18
+#@ formidable
+msgid "less than or equal to"
+msgstr "manje od ili jednako"
+
+#: pro/classes/views/displays/where_row.php:19
+#: pro/classes/views/frmpro-fields/_logic_row.php:31
+#: pro/classes/views/frmpro-forms/_logic_row.php:27
+#@ formidable
+msgid "like"
+msgstr "dopada mi se"
+
+#: pro/classes/views/displays/where_row.php:20
+#@ formidable
+msgid "NOT like"
+msgstr "NE dopada mi se"
+
+#: pro/classes/views/frmpro-entries/csv.php:31
+#: pro/classes/views/xml/map_csv_fields.php:47
+#@ formidable
+msgid "Timestamp"
+msgstr "Timestamp"
+
+#: pro/classes/views/frmpro-entries/edit.php:3
+#@ formidable
+msgid "Edit Entry"
+msgstr "Edituj unos"
+
+#: pro/classes/views/frmpro-entries/sidebar-edit.php:3
+#: pro/classes/views/frmpro-entries/sidebar-new.php:3
+#@ formidable
+msgid "Publish"
+msgstr "Objaviti"
+
+#: pro/classes/views/frmpro-entries/sidebar-edit.php:29
+#: pro/classes/views/frmpro-entries/sidebar-edit.php:31
+#: pro/classes/views/frmpro-entries/sidebar-show.php:22
+#@ formidable
+msgid "Are you sure you want to delete this entry?"
+msgstr "Da li ste sigurni da želite da obrišete ovaj unos?"
+
+#: pro/classes/views/xml/csv_opts.php:2
+#@ formidable
+msgid "CSV Delimiter"
+msgstr "CSV Delimiter"
+
+#: pro/classes/views/xml/csv_opts.php:6
+#@ formidable
+msgid "Import Into Form"
+msgstr "Importovai u formu"
+
+#: pro/classes/views/xml/map_csv_fields.php:23
+#@ formidable
+msgid "CSV header"
+msgstr "CSV header"
+
+#: pro/classes/views/xml/map_csv_fields.php:24
+#@ formidable
+msgid "Sample data"
+msgstr "Podaci"
+
+#: pro/classes/views/xml/map_csv_fields.php:25
+#@ formidable
+msgid "Corresponding Field"
+msgstr "Odgovarajuće polje"
+
+#: pro/classes/views/frmpro-entries/show.php:71
+#: pro/classes/views/xml/map_csv_fields.php:47
+#@ formidable
+msgid "Created at"
+msgstr "Stvoreno od strane"
+
+#: pro/classes/views/xml/map_csv_fields.php:48
+#@ formidable
+msgid "Created by"
+msgstr "Kreirano od strane"
+
+#: pro/classes/views/xml/map_csv_fields.php:49
+#@ formidable
+msgid "Updated at"
+msgstr "Update-ovano "
+
+#: pro/classes/views/xml/map_csv_fields.php:50
+#@ formidable
+msgid "Updated by"
+msgstr "Update-ovano od"
+
+#: pro/classes/helpers/FrmProEntriesHelper.php:201
+#@ formidable
+msgid "Are you sure you want to permanently delete ALL the entries in this form?"
+msgstr "Da li ste sigurni da želite da obrišete trajno SVE unose iz ove forme?"
+
+#: pro/classes/helpers/FrmProEntriesHelper.php:201
+#@ formidable
+msgid "Delete ALL Entries"
+msgstr "Obrisati sve unose"
+
+#: pro/classes/views/frmpro-entries/loading.php:4
+#@ formidable
+msgid "Uploading Files. Please Wait."
+msgstr "Upload-ovanje fajlova. Sačekajte."
+
+#: pro/classes/views/frmpro-entries/new-selection.php:3
+#: pro/classes/views/frmpro-entries/new-selection.php:8
+#: pro/classes/views/frmpro-entries/new.php:3
+#@ formidable
+msgid "Add New Entry"
+msgstr "Dodati novi unos"
+
+#: pro/classes/views/frmpro-entries/new-selection.php:13
+#@ formidable
+msgid "Select a form for your new entry."
+msgstr "Selektovati formu za novi unos."
+
+#: pro/classes/views/frmpro-entries/new-selection.php:19
+#: pro/classes/views/frmpro-statistics/show.php:20
+#@ formidable
+msgid "Go"
+msgstr "Samo napred"
+
+#: pro/classes/views/frmpro-entries/show.php:3
+#@ formidable
+msgid "View Entry"
+msgstr "Pregledati unos"
+
+#: pro/classes/views/frmpro-entries/sidebar-show.php:3
+#@ formidable
+msgid "Entry Actions"
+msgstr "Uneti akcije"
+
+#: pro/classes/views/frmpro-entries/show.php:74
+#: pro/classes/views/frmpro-entries/show.php:82
+#@ formidable
+msgid "by"
+msgstr "od strane"
+
+#: pro/classes/views/frmpro-entries/csv.php:31
+#: pro/classes/views/frmpro-entries/show.php:80
+#@ formidable
+msgid "Last Updated"
+msgstr "Pslednji put updateovano"
+
+#: pro/classes/views/frmpro-entries/show.php:134
+#@ formidable
+msgid "Comments/Notes"
+msgstr "Komentari/Beleške"
+
+#: pro/classes/views/frmpro-entries/show.php:150
+#@ formidable
+msgid "Add Note/Comment"
+msgstr "Dodati belešku/Komentar"
+
+#: pro/classes/views/frmpro-entries/show.php:161
+#@ formidable
+msgid "Comment/Note"
+msgstr "Komentar/Beleška"
+
+#: pro/classes/views/frmpro-entries/show.php:168
+#@ formidable
+msgid "Send Emails to"
+msgstr "Poslati mailove"
+
+#: pro/classes/views/frmpro-fields/data_cat_selected.php:2
+#@ formidable
+msgid "Select a taxonomy on the Post tab of the Form Settings page"
+msgstr "Izabrati taksonomiju na Post tabu stranice postavke forme "
+
+#: pro/classes/views/frmpro-fields/dynamic-options.php:2
+#@ formidable
+msgid "Import Data from"
+msgstr "Importuj podatke iz"
+
+#: pro/classes/views/frmpro-fields/dynamic-options.php:4
+#@ formidable
+msgid "Select Form"
+msgstr "Selektuj iz"
+
+#: pro/classes/views/frmpro-fields/dynamic-options.php:5
+#@ formidable
+msgid "Use a Category/Taxonomy"
+msgstr "Koristi kategoriju/taksonomiju"
+
+#: pro/classes/views/frmpro-fields/dynamic-options.php:32
+#@ formidable
+msgid "Limit selection choices to those created by the user filling out this form"
+msgstr "Limit  izabranih izbora onima koji su izabrani od strane korisnika koji popunjava ovu formu"
+
+#: pro/classes/views/frmpro-fields/options-form.php:2
+#@ formidable
+msgid "Alignment"
+msgstr "Poravnavanje"
+
+#: pro/classes/views/frmpro-fields/options-form.php:5
+#@ formidable
+msgid "Multiple Rows"
+msgstr "Više redova"
+
+#: pro/classes/views/frmpro-fields/options-form.php:6
+#@ formidable
+msgid "Single Row"
+msgstr "Jedan red"
+
+#: pro/classes/views/frmpro-fields/options-form.php:14
+#@ formidable
+msgid "Use separate values"
+msgstr "Koristite odvojene vrednosti"
+
+#: pro/classes/views/frmpro-fields/options-form.php:13
+#@ formidable
+msgid "Add a separate value to use for calculations, email routing, saving to the database, and many other uses. The option values are saved while the option labels are shown in the form."
+msgstr "Dodajte posebnu vrednost za korišćenje proračuna, email rutiranja , čuvanje u bazi podataka , kao i u mnoge druge svrhe . Vrednosti opcija se čuvaju dok su oznake opcija  prikazane u formi ."
+
+#: pro/classes/views/frmpro-fields/options-form.php:20
+#@ formidable
+msgid "If your radio, checkbox, dropdown, or user ID field needs a dynamic default value like [get param=whatever], insert it in the field options. If using a GET or POST value, it must match one of the options in the field in order for that option to be selected. Data from entries fields require the ID of the linked entry."
+msgstr "Ako vaše radio , checkbox, dropdown ili korisnički ID polje treba dinamičnu default vrednost kao [ Get Param = whatever ] , ubacite ga u polje sa opcijama . Ako koristite GET ili POST vrednost , ona mora da odgovara jednoj od opcija u polju da bi se ta opcija izabrala.  Podaci iz polja unosa zahtevaju ID linkovanog ulaska ."
+
+#: pro/classes/views/frmpro-fields/options-form.php:59
+#@ formidable
+msgid "Make this section collapsible"
+msgstr "Kolaps ovog dela"
+
+#: pro/classes/views/frmpro-fields/dynamic-options.php:20
+#@ formidable
+msgid "Display as"
+msgstr "Prikazati kao"
+
+#: pro/classes/views/frmpro-fields/dynamic-options.php:22
+#@ formidable
+msgid "Just show it"
+msgstr "Samo prikazati"
+
+#: pro/classes/views/frmpro-fields/options-form.php:63
+#@ formidable
+msgid "Calendar Localization"
+msgstr "Lokalizacija kalendara"
+
+#: pro/classes/views/frmpro-fields/options-form.php:73
+#@ formidable
+msgid "Year Range"
+msgstr "Raspon godine"
+
+#: pro/classes/views/frmpro-fields/options-form.php:76
+#@ formidable
+msgid "Start Year"
+msgstr "Početna godina"
+
+#: pro/classes/views/frmpro-fields/options-form.php:79
+#@ formidable
+msgid "End Year"
+msgstr "Završna godina"
+
+#: pro/classes/views/frmpro-fields/options-form.php:84
+#@ formidable
+msgid "Clock Settings"
+msgstr "Postake sata"
+
+#: pro/classes/views/frmpro-fields/options-form.php:89
+#@ formidable
+msgid "hour clock"
+msgstr "časovi"
+
+#: pro/classes/views/frmpro-fields/options-form.php:92
+#@ formidable
+msgid "minute step"
+msgstr "minuti"
+
+#: pro/classes/views/frmpro-fields/options-form.php:95
+#@ formidable
+msgid "start time"
+msgstr "početno vreme"
+
+#: pro/classes/views/frmpro-fields/options-form.php:98
+#@ formidable
+msgid "end time"
+msgstr "krajnje vreme"
+
+#: pro/classes/views/frmpro-fields/options-form.php:106
+#@ formidable
+msgid "Email Attachment"
+msgstr "Email dodatak"
+
+#: pro/classes/views/frmpro-fields/options-form.php:107
+#@ formidable
+msgid "attach this file to the email notification"
+msgstr "dodati ovaj fajl email notifikaciji"
+
+#: pro/classes/views/frmpro-fields/options-form.php:110
+#@ formidable
+msgid "Allowed file types"
+msgstr "Dozvoljeni tipovi fajla"
+
+#: pro/classes/views/frmpro-fields/options-form.php:112
+#@ formidable
+msgid "All types"
+msgstr "Svi tipovi"
+
+#: pro/classes/views/frmpro-fields/options-form.php:113
+#@ formidable
+msgid "Specify allowed types"
+msgstr "Odrediti dozvoljene tipove"
+
+#: pro/classes/views/frmpro-fields/options-form.php:114
+#: pro/classes/views/frmpro-forms/_post_taxonomy_row.php:61
+#@ formidable
+msgid "Check All"
+msgstr "Čekirati sve"
+
+#: pro/classes/views/frmpro-fields/options-form.php:149
+#@ formidable
+msgid "Number Range"
+msgstr "Raspon brojeva"
+
+#: pro/classes/views/frmpro-fields/options-form.php:149
+#@ formidable
+msgid "Browsers that support the HTML5 number field require a number range to determine the numbers seen when clicking the arrows next to the field."
+msgstr "Pretraživači koji podržavaju HTML5 polje sa brojem zahtevaju numerički opseg da bi odredilii brojeve i kada kliknete na strelice pored polja ."
+
+#: pro/classes/views/frmpro-fields/options-form.php:150
+#@ formidable
+msgid "minimum"
+msgstr "minimum"
+
+#: pro/classes/views/frmpro-fields/options-form.php:151
+#@ formidable
+msgid "maximum"
+msgstr "maximum"
+
+#: pro/classes/views/frmpro-fields/options-form.php:152
+#@ formidable
+msgid "step"
+msgstr "korak"
+
+#: pro/classes/views/frmpro-fields/options-form.php:155
+#@ formidable
+msgid "Range"
+msgstr "Raspon"
+
+#: pro/classes/views/frmpro-fields/options-form.php:162
+#@ formidable
+msgid "to"
+msgstr "za"
+
+#: pro/classes/views/frmpro-fields/options-form.php:171
+#@ formidable
+msgid "Stars"
+msgstr "Zvezdice"
+
+#: pro/classes/views/frmpro-fields/options-form.php:173
+#@ formidable
+msgid "Show options as stars"
+msgstr "Prikazati opcije kao zvezdice"
+
+#: pro/classes/views/frmpro-fields/options-form.php:177
+#@ formidable
+msgid "Rich Text Editor"
+msgstr "Bogati tekst editor"
+
+#: pro/classes/views/frmpro-fields/options-form.php:196
+#@ formidable
+msgid "Insert Form"
+msgstr "Uneti formu "
+
+#: pro/classes/views/frmpro-fields/options-form.php:199
+#@ formidable
+msgid "Maximum Duplication"
+msgstr "Maksimum dupliranje"
+
+#: pro/classes/views/frmpro-fields/options-form.php:200
+#@ formidable
+msgid "The number of times the end user is allowed to duplicate this section of fields in one entry"
+msgstr "Broj puta kojima je  krajnjem korisniku dozvoljeno da duplira ovaj deo polje u unosu"
+
+#: classes/views/frm-forms/add_field.php:183
+#@ formidable
+msgid "Field Type"
+msgstr "Tip polja"
+
+#: classes/views/frm-forms/add_field.php:214
+#: classes/views/frm-forms/add_field.php:286
+#@ formidable
+msgid "Unique"
+msgstr "Jedinstveno"
+
+#: classes/views/frm-forms/add_field.php:214
+#@ formidable
+msgid "Unique: Do not allow the same response multiple times. For example, if one user enters 'Joe' then no one else will be allowed to enter the same name."
+msgstr "Jedinstveno: Nemojte da dozvolite iste odgovore mnogo puta. Npr. 'Joe' onda nikome neće biti dozvoljeno da unese isto ime."
+
+#: classes/views/frm-forms/add_field.php:220
+#@ formidable
+msgid "Read Only"
+msgstr "Samo čitanje"
+
+#: classes/views/frm-forms/add_field.php:220
+#@ formidable
+msgid "Read Only: Show this field but do not allow the field value to be edited from the front-end."
+msgstr "Samo čitanje: Prikazati ovo polje ali ne dozvoliti da vrednost polja bude editovana iz prednjeg reda."
+
+#: pro/classes/views/frmpro-fields/options-form.php:243
+#@ formidable
+msgid "Calculations"
+msgstr "Kalkulacije"
+
+#: pro/classes/views/frmpro-fields/options-form.php:245
+#@ formidable
+msgid "Calculate the default value for this field"
+msgstr "Izbrojati default vrednost ovog polja"
+
+#: pro/classes/views/frmpro-fields/options-form.php:258
+#: pro/classes/views/frmpro-forms/notifications.php:20
+#@ formidable
+msgid "Conditional Logic"
+msgstr "Kondicionalna logika"
+
+#: pro/classes/views/frmpro-fields/options-form.php:260
+#: pro/classes/views/frmpro-forms/notifications.php:17
+#@ formidable
+msgid "Use Conditional Logic"
+msgstr "Korititi kondicionalnu logiku"
+
+#: pro/classes/views/displays/submitbox_actions.php:3
+#: pro/classes/views/frmpro-fields/options-form.php:264
+#@ formidable
+msgid "Show"
+msgstr "Prikazati"
+
+#: pro/classes/views/displays/submitbox_actions.php:15
+#: pro/classes/views/frmpro-fields/options-form.php:265
+#@ formidable
+msgid "Hide"
+msgstr "Sakriti"
+
+#: pro/classes/views/frmpro-fields/options-form.php:270
+#: pro/classes/views/frmpro-forms/notifications.php:28
+#@ formidable
+msgid "any"
+msgstr "bilo šta"
+
+#: pro/classes/views/frmpro-fields/options-form.php:271
+#: pro/classes/views/frmpro-forms/notifications.php:29
+#@ formidable
+msgid "all"
+msgstr "sve"
+
+#: pro/classes/views/frmpro-forms/notifications.php:31
+#@ formidable
+msgid "of the following match"
+msgstr "sledećeg podudaranja"
+
+#: classes/views/frm-forms/add_field.php:185
+#@ formidable
+msgid "The field key can be used as an alternative to the field ID in many cases."
+msgstr "Ključ polja može da se koristi kao alternativa u ID polju u raznim slučajevima.  "
+
+#: pro/classes/views/frmpro-fields/show.php:5
+#@ formidable
+msgid "Note: This field will not show in the form. Enter the value to be hidden."
+msgstr "Beleška: Ovo polje se neće pokazati u formi. Uneti vrednost koja treba da se sakrije."
+
+#: pro/classes/views/frmpro-fields/show.php:13
+#@ formidable
+msgid "Note: This field will not show in the form, but will link the user id to it as long as the user is logged in at the time of form submission."
+msgstr "Beleška: Ovo polje se neće pokazati u formi ali će povezati id korisnika za njega dokle god je korisnik ulogovan u bio koe vreme podnošenja forme."
+
+#: pro/classes/views/frmpro-fields/show.php:28
+#@ formidable
+msgid "These buttons are for illustrative purposes only. They will be functional in your form."
+msgstr "Ova dugmad su samo za ilustrativnu namenu. Biće funkcionalni u vašoj formi."
+
+#: pro/classes/views/frmpro-fields/show.php:34
+#@ formidable
+msgid "This is a placeholder for your custom HTML."
+msgstr "Ovo je metso za vaš  custom HTML."
+
+#: pro/classes/views/frmpro-fields/show.php:34
+#@ formidable
+msgid "You can edit this content in the field options."
+msgstr "Možete da editujete ovaj sadržaj u polju opcija."
+
+#: pro/classes/views/frmpro-fields/show.php:39
+#: pro/classes/views/frmpro-fields/show.php:49
+#: pro/classes/views/frmpro-fields/show.php:78
+#@ formidable
+msgid "This data is dynamic on change"
+msgstr "Ovaj podatak je dinamičan na promenu"
+
+#: classes/views/frm-forms/settings.php:84
+#: pro/classes/views/frmpro-forms/add_form_options.php:101
+#@ formidable
+msgid "Use Content from Page"
+msgstr "Koristiti sadržaj iz stranice"
+
+#: pro/classes/views/frmpro-fields/options-form.php:234
+#: pro/classes/views/frmpro-forms/add_form_options.php:13
+#: pro/classes/views/frmpro-forms/add_form_options.php:24
+#: pro/classes/views/frmpro-forms/add_form_options.php:55
+#: pro/classes/views/frmpro-forms/add_form_options.php:71
+#@ formidable
+msgid "Logged-in Users"
+msgstr "Ulogovani korisnici"
+
+#: pro/classes/views/frmpro-forms/add_form_options.php:38
+#@ formidable
+msgid "Logged-in User"
+msgstr "Ulogovani korisnik"
+
+#: pro/classes/views/frmpro-forms/add_form_options.php:40
+#@ formidable
+msgid "Saved Cookie"
+msgstr "Sačuvani Cookie"
+
+#: pro/classes/views/frmpro-forms/add_form_options.php:111
+#@ formidable
+msgid "Copy this form to other blogs when Formidable Pro is activated"
+msgstr "Kopirati ovu formu u drugim blogovima kada je Formidable Pro aktiviran"
+
+#: pro/classes/controllers/FrmProFormsController.php:180
+#@ formidable
+msgid "A variable from the URL or value posted from previous page."
+msgstr "Varijabla iz URL ili vrednost postovana iz prethodne slike."
+
+#: pro/classes/controllers/FrmProFormsController.php:180
+#@ formidable
+msgid "Replace 'whatever' with the parameter name. In url.com?product=form, the variable is 'product'. You would use [get param=product] in your field."
+msgstr "Zamenite ' štagod ' sa imenom parametra . U url.com ? proizvod = forma,promenljiva je \" proizvod \" . Vi bi koristiti [get ] param = proizvod u vašoj oblasti ."
+
+#: classes/views/frm-forms/notification.php:84
+#@ formidable
+msgid "Append IP Address, Browser, and Referring URL to message"
+msgstr "Append IP Adresa, pretraživač i p odnošenje URL-a poruci"
+
+#: classes/views/frm-forms/notification.php:86
+#@ formidable
+msgid "Send Emails in Plain Text"
+msgstr "Send Emails in Plain Text"
+
+#: pro/classes/views/frmpro-forms/post_options.php:3
+#@ formidable
+msgid "Create a WordPress post, page, or custom post type with this form"
+msgstr "Create a WordPress post, page, or custom post type with this form"
+
+#: pro/classes/views/frmpro-forms/post_options.php:7
+#@ formidable
+msgid "Post Type"
+msgstr "Tip posta"
+
+#: pro/classes/views/frmpro-forms/post_options.php:8
+#@ formidable
+msgid "To setup a new custom post type, install and setup a plugin like 'Custom Post Type UI', then return to this page to select your new custom post type."
+msgstr "Za podešavanje novog tipa posta, instalirati i podesiti plugin kao \" Custom UI Tip Posta \" , a zatim se vratite na ovu stranicu da biste odabrali svoj novi custom tip posta."
+
+#: pro/classes/views/frmpro-forms/comment_options.php:16
+#: pro/classes/views/frmpro-forms/post_options.php:58
+#@ formidable
+msgid "Post Content"
+msgstr "Sadržaj posta "
+
+#: pro/classes/views/frmpro-forms/post_options.php:66
+#@ formidable
+msgid "Customize Content"
+msgstr "Customize sadržaj"
+
+#: pro/classes/views/frmpro-forms/post_options.php:67
+#@ formidable
+msgid "The content shown on your single post page. If nothing is entered here, the regular post content will be used."
+msgstr "Sadržaj prikazan na jednoj stranici posta. Ako  ništa nije ovde uneto, sadržaj redovnih postova će se koristiti ."
+
+#: pro/classes/views/frmpro-forms/comment_options.php:17
+#: pro/classes/views/frmpro-forms/post_options.php:79
+#@ formidable
+msgid "Excerpt"
+msgstr "Izvod"
+
+#: pro/classes/views/frmpro-forms/post_options.php:88
+#@ formidable
+msgid "Post Password"
+msgstr "Šifra posta"
+
+#: pro/classes/views/frmpro-forms/post_options.php:97
+#@ formidable
+msgid "Slug"
+msgstr "Slug"
+
+#: pro/classes/views/frmpro-forms/post_options.php:99
+#@ formidable
+msgid "Automatically Generate from Post Title"
+msgstr "Automatski generisano iz naslova post"
+
+#: pro/classes/views/frmpro-forms/comment_options.php:19
+#: pro/classes/views/frmpro-forms/post_options.php:106
+#@ formidable
+msgid "Post Date"
+msgstr "Datum posta"
+
+#: pro/classes/views/frmpro-forms/post_options.php:108
+#@ formidable
+msgid "Use the Date Published"
+msgstr "Koristite Datum objavljivanja"
+
+#: pro/classes/views/frmpro-forms/comment_options.php:20
+#: pro/classes/views/frmpro-forms/post_options.php:116
+#@ formidable
+msgid "Post Status"
+msgstr "Status posta"
+
+#: pro/classes/views/frmpro-forms/post_options.php:118
+#@ formidable
+msgid "Create Draft"
+msgstr "Napraviti Draft"
+
+#: pro/classes/views/frmpro-forms/post_options.php:119
+#@ formidable
+msgid "Automatically Publish"
+msgstr "Automatski objavljeno"
+
+#: pro/classes/views/frmpro-forms/post_options.php:120
+#@ formidable
+msgid "Create New Dropdown Field"
+msgstr "Napraviti novo Dropdown polje"
+
+#: pro/classes/views/frmpro-forms/post_options.php:135
+#@ formidable
+msgid "Taxonomies/Categories"
+msgstr "Taxonomije/Kategorije"
+
+#: pro/classes/views/frmpro-forms/post_options.php:150
+#@ formidable
+msgid "Custom Fields"
+msgstr "Custom polja"
+
+#: pro/classes/views/frmpro-forms/post_options.php:150
+#@ formidable
+msgid "To set the featured image, use '_thumbnail_id' as the custom field name."
+msgstr "Da biste podesili sliku, koristite '_thumbnail_id' akao cutom ime polja."
+
+#: pro/classes/views/frmpro-forms/_comment_meta_row.php:4
+#@ formidable
+msgid "from"
+msgstr "od"
+
+#: pro/classes/views/frmpro-forms/_post_taxonomy_row.php:11
+#@ formidable
+msgid "A New Checkbox Field"
+msgstr "Novo Checkbox polje"
+
+#: pro/classes/views/frmpro-forms/_post_taxonomy_row.php:50
+#@ formidable
+msgid "Exclude options"
+msgstr "Isključi opcije"
+
+#: pro/classes/views/frmpro-forms/_post_taxonomy_row.php:59
+#@ formidable
+msgid "NOTE: if the parent is excluded, child categories will be automatically excluded."
+msgstr "BELEŠKA: ako je roditelj isključen, kategorija deteta će automatski biti isključena."
+
+#: pro/classes/views/frmpro-statistics/show.php:9
+#@ formidable
+msgid "Go to Report"
+msgstr "Idi na izveštaj"
+
+#: pro/classes/views/frmpro-statistics/show.php:14
+#@ formidable
+msgid "Select a report to view."
+msgstr "Izabrati izveštaj za pregled."
+
+#: pro/classes/views/frmpro-statistics/show.php:47
+#@ formidable
+msgid "Response Count"
+msgstr "Broj odgovora"
+
+#: classes/views/frm-forms/add_field_links.php:82
+#: pro/classes/views/frmpro-statistics/show.php:49
+#@ formidable
+msgid "Total"
+msgstr "Ukupno"
+
+#: pro/classes/views/frmpro-statistics/show.php:50
+#@ formidable
+msgid "Average"
+msgstr "Prosečno"
+
+#: pro/classes/views/frmpro-statistics/show.php:51
+#@ formidable
+msgid "Median"
+msgstr "Srednje"
+
+#: pro/classes/views/frmpro-statistics/show.php:56
+#@ formidable
+msgid "Percent of users submitted"
+msgstr "Procenata podnetih korisnika"
+
+#: pro/classes/views/frmpro-statistics/show.php:58
+#@ formidable
+msgid "Users with no entry"
+msgstr "Korisnici bez unosa"
+
+#: pro/classes/views/frmpro-statistics/show.php:59
+#@ formidable
+msgid "View Profile"
+msgstr "Pregledati profil"
+
+#: pro/classes/views/settings/form.php:13
+#@ formidable
+msgid "Previously Submitted Message"
+msgstr "Prethodno podnete poruke"
+
+#: pro/classes/views/settings/form.php:13
+#@ formidable
+msgid "The message seen when a user attempts to submit a form for a second time if submissions are limited."
+msgstr "Poruka koja se vidi kada korisnik pokuša da podnese formu za drugi put ako su spodnete  ograničene ."
+
+#: pro/classes/views/settings/general_style.php:5
+#@ formidable
+msgid "Include accordion javascript"
+msgstr "Uključiti prema javascript"
+
+#: pro/classes/views/settings/general_style.php:5
+#@ formidable
+msgid "If you have manually created an accordion form, be sure to include the javascript for it."
+msgstr "Ako ste ručno kreirali formu , budite sigurni da uključite JavaScript za njega ."
+
+#: pro/classes/views/settings/form.php:21
+#: pro/classes/views/shared/mb_adv_info.php:14
+#: pro/classes/views/shared/mb_adv_info.php:111
+#@ formidable
+msgid "Keys"
+msgstr "Ključevi"
+
+#: pro/classes/views/settings/form.php:23
+#@ formidable
+msgid "Hide field and entry keys to prevent them from being edited. Uncheck this box to edit the saved keys for use in your template."
+msgstr "Sakriti polje i ulazne ključeve da ih spreči od izmene. Nemojte da čekirate ovo polje za uređivanje memorisanih ključeve za korišćenje u vašem template."
+
+#: pro/classes/views/settings/form.php:27
+#@ formidable
+msgid "Visual Text Editor"
+msgstr "Vizualni tekst editor"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:476
+#: pro/classes/views/settings/form.php:34
+#@ formidable
+msgid "Date Format"
+msgstr " Format datuma"
+
+#: pro/classes/views/settings/form.php:34
+#@ formidable
+msgid "Change the format of the date used in the date field."
+msgstr "Promenite format datuma koji se koristi u polju za datum.  "
+
+#: pro/classes/views/settings/form.php:43
+#@ formidable
+msgid "CSV Export Format"
+msgstr "CSV Export Format"
+
+#: classes/views/xml/import_form.php:54
+#: pro/classes/views/settings/form.php:43
+#@ formidable
+msgid "If your CSV special characters are not working correctly, try a different formatting option."
+msgstr "Ako vaši CSV specijalni karakteri ne rade ispravno, pokušajte drugačiju opciju formatiranja."
+
+#: classes/views/xml/import_form.php:60
+#: pro/classes/views/settings/form.php:49
+#@ formidable
+msgid "Macintosh"
+msgstr "Macintosh"
+
+#: pro/classes/views/settings/form.php:54
+#@ formidable
+msgid "Pretty Permalinks"
+msgstr "Permalinks"
+
+#: pro/classes/views/settings/form.php:57
+#@ formidable
+msgid "Use pretty permalinks for entry detail links"
+msgstr "Koristite  permalinks za unos detaljnih linkova"
+
+#: pro/classes/views/settings/styling_tab.php:12
+#: pro/classes/views/settings/styling_tab.php:15
+#@ formidable
+msgid "SAMPLE:"
+msgstr "SAMPLE:"
+
+#: pro/classes/views/settings/styling_tab.php:18
+#@ formidable
+msgid "Text field"
+msgstr "Polje  teksta"
+
+#: pro/classes/views/settings/styling_tab.php:19
+#: pro/classes/views/settings/styling_tab.php:30
+#@ formidable
+msgid "This is sample text"
+msgstr "Ovo je primer teksta"
+
+#: pro/classes/views/settings/styling_tab.php:20
+#@ formidable
+msgid "A field with a description"
+msgstr "Polje sa opisom"
+
+#: pro/classes/views/settings/styling_tab.php:24
+#@ formidable
+msgid "Text field in active state"
+msgstr "Tekst polje u aktivnoj državi"
+
+#: pro/classes/views/settings/styling_tab.php:29
+#@ formidable
+msgid "Text field with error"
+msgstr "Tekst polje sa greškom"
+
+#: pro/classes/views/settings/styling_tab.php:40
+#@ formidable
+msgid "Drop-down Select"
+msgstr "Drop-downizabrati"
+
+#: pro/classes/views/settings/styling_tab.php:43
+#@ formidable
+msgid "An Option"
+msgstr "opcija"
+
+#: pro/classes/views/settings/styling_tab.php:54
+#@ formidable
+msgid "Check Boxes"
+msgstr "Check Boxes"
+
+#: pro/classes/views/settings/styling_tab.php:60
+#@ formidable
+msgid "Text Area"
+msgstr "Područje teksta"
+
+#: pro/classes/views/settings/styling_tab.php:62
+#@ formidable
+msgid "Another field with a description"
+msgstr "Drugo polje sa opisom"
+
+#: pro/classes/views/settings/formroller.php:17
+#: pro/classes/views/settings/formroller.php:84
+#: pro/classes/views/settings/formroller.php:146
+#@ formidable
+msgid "Align"
+msgstr "Poranati"
+
+#: pro/classes/views/settings/formroller.php:19
+#: pro/classes/views/settings/formroller.php:86
+#: pro/classes/views/settings/formroller.php:148
+#@ formidable
+msgid "left"
+msgstr "levo"
+
+#: pro/classes/views/settings/formroller.php:20
+#: pro/classes/views/settings/formroller.php:87
+#: pro/classes/views/settings/formroller.php:149
+#@ formidable
+msgid "right"
+msgstr "desno"
+
+#: pro/classes/views/settings/formroller.php:21
+#@ formidable
+msgid "center"
+msgstr "centar"
+
+#: pro/classes/views/settings/formroller.php:26
+#@ formidable
+msgid "Max Width"
+msgstr "Mksimalna širina"
+
+#: pro/classes/views/settings/formroller.php:31
+#: pro/classes/views/settings/formroller.php:225
+#: pro/classes/views/settings/formroller.php:257
+#: pro/classes/views/settings/formroller.php:427
+#: pro/classes/views/settings/formroller.php:464
+#: pro/classes/views/settings/formroller.php:494
+#@ formidable
+msgid "Border"
+msgstr "Granica"
+
+#: pro/classes/views/settings/formroller.php:36
+#: pro/classes/views/settings/formroller.php:59
+#: pro/classes/views/settings/formroller.php:98
+#: pro/classes/views/settings/formroller.php:123
+#: pro/classes/views/settings/formroller.php:329
+#@ formidable
+msgid "Color"
+msgstr "Boja"
+
+#: pro/classes/views/settings/formroller.php:41
+#: pro/classes/views/settings/formroller.php:197
+#: pro/classes/views/settings/formroller.php:444
+#@ formidable
+msgid "Padding"
+msgstr "Padding"
+
+#: pro/classes/views/settings/formroller.php:51
+#@ formidable
+msgid "Label Settings"
+msgstr "Oznaka postavki"
+
+#: pro/classes/views/settings/formroller.php:55
+#: pro/classes/views/settings/formroller.php:119
+#: pro/classes/views/settings/formroller.php:325
+#@ formidable
+msgid "Family"
+msgstr "Porodica"
+
+#: pro/classes/views/settings/formroller.php:63
+#: pro/classes/views/settings/formroller.php:102
+#: pro/classes/views/settings/formroller.php:127
+#: pro/classes/views/settings/formroller.php:333
+#: pro/classes/views/settings/formroller.php:381
+#@ formidable
+msgid "Weight"
+msgstr "Težina"
+
+#: pro/classes/views/settings/formroller.php:70
+#: pro/classes/views/settings/formroller.php:141
+#: pro/classes/views/settings/formroller.php:176
+#: pro/classes/views/settings/formroller.php:340
+#: pro/classes/views/settings/formroller.php:394
+#: pro/classes/views/settings/formroller.php:474
+#: pro/classes/views/settings/formroller.php:502
+#@ formidable
+msgid "Size"
+msgstr "Veličina"
+
+#: pro/classes/views/settings/formroller.php:75
+#@ formidable
+msgid "Position"
+msgstr "Pozicija"
+
+#: pro/classes/views/settings/formroller.php:92
+#: pro/classes/views/settings/formroller.php:186
+#: pro/classes/views/settings/formroller.php:399
+#@ formidable
+msgid "Width"
+msgstr "Širina"
+
+#: pro/classes/views/settings/formroller.php:96
+#@ formidable
+msgid "Required Indicator"
+msgstr "Zahtevani indikator"
+
+#: pro/classes/views/settings/formroller.php:104
+#: pro/classes/views/settings/formroller.php:129
+#: pro/classes/views/settings/formroller.php:136
+#: pro/classes/views/settings/formroller.php:335
+#: pro/classes/views/settings/formroller.php:383
+#@ formidable
+msgid "normal"
+msgstr "normalno"
+
+#: pro/classes/views/settings/formroller.php:105
+#: pro/classes/views/settings/formroller.php:130
+#: pro/classes/views/settings/formroller.php:336
+#: pro/classes/views/settings/formroller.php:384
+#@ formidable
+msgid "bold"
+msgstr "bold"
+
+#: pro/classes/views/settings/formroller.php:134
+#: pro/classes/views/settings/formroller.php:233
+#: pro/classes/views/settings/formroller.php:288
+#@ formidable
+msgid "Style"
+msgstr "Stil"
+
+#: pro/classes/views/settings/formroller.php:137
+#@ formidable
+msgid "italic"
+msgstr "italic"
+
+#: pro/classes/views/settings/formroller.php:159
+#@ formidable
+msgid "Corner Radius"
+msgstr "Radius uglova"
+
+#: pro/classes/views/settings/formroller.php:163
+#: pro/classes/views/settings/formroller.php:389
+#@ formidable
+msgid "Corners"
+msgstr "Uglovi"
+
+#: pro/classes/views/settings/formroller.php:159
+#@ formidable
+msgid "Formidable uses CSS3 border-radius for corner rounding, which is not currently supported by Internet Explorer."
+msgstr "Formidable koristi CSS3 granicu-radius za zokruživanje a to trenutno Internet Explorer ne podržava."
+
+#: pro/classes/views/settings/formroller.php:172
+#@ formidable
+msgid "Field Settings"
+msgstr "Postavke polja"
+
+#: pro/classes/views/settings/formroller.php:192
+#@ formidable
+msgid "Automatic Width for drop-down fields"
+msgstr "Automatska širina za drop-down polja"
+
+#: pro/classes/views/settings/formroller.php:202
+#@ formidable
+msgid "Bottom Margin"
+msgstr "Donja margina"
+
+#: pro/classes/views/settings/formroller.php:212
+#@ formidable
+msgid "Field Colors"
+msgstr "Boje polja"
+
+#: pro/classes/views/settings/formroller.php:216
+#: pro/classes/views/settings/formroller.php:253
+#: pro/classes/views/settings/formroller.php:271
+#@ formidable
+msgid "BG color"
+msgstr "BG boja"
+
+#: pro/classes/views/settings/formroller.php:220
+#: pro/classes/views/settings/formroller.php:275
+#: pro/classes/views/settings/formroller.php:417
+#: pro/classes/views/settings/formroller.php:469
+#: pro/classes/views/settings/formroller.php:498
+#@ formidable
+msgid "Text"
+msgstr "Tekst"
+
+#: pro/classes/views/settings/formroller.php:229
+#: pro/classes/views/settings/formroller.php:284
+#: pro/classes/views/settings/formroller.php:431
+#@ formidable
+msgid "Thickness"
+msgstr "Debljina"
+
+#: pro/classes/views/settings/formroller.php:235
+#: pro/classes/views/settings/formroller.php:290
+#@ formidable
+msgid "solid"
+msgstr "solidno"
+
+#: pro/classes/views/settings/formroller.php:236
+#: pro/classes/views/settings/formroller.php:291
+#@ formidable
+msgid "dotted"
+msgstr "tačkasto"
+
+#: pro/classes/views/settings/formroller.php:237
+#: pro/classes/views/settings/formroller.php:292
+#@ formidable
+msgid "dashed"
+msgstr "isprekidano"
+
+#: pro/classes/views/settings/formroller.php:238
+#: pro/classes/views/settings/formroller.php:293
+#@ formidable
+msgid "double"
+msgstr "duplo"
+
+#: pro/classes/views/settings/formroller.php:249
+#@ formidable
+msgid "Field Colors: active state"
+msgstr "Boje polja: aktivna država"
+
+#: pro/classes/views/settings/formroller.php:267
+#@ formidable
+msgid "Field Colors: error state"
+msgstr "Boje polja: greška sa državom"
+
+#: pro/classes/views/settings/formroller.php:280
+#@ formidable
+msgid "Border/Label"
+msgstr "Granica/Oznaka"
+
+#: pro/classes/views/settings/formroller.php:307
+#@ formidable
+msgid "Radio"
+msgstr "Radio"
+
+#: pro/classes/views/settings/formroller.php:316
+#@ formidable
+msgid "Check Box"
+msgstr "Check Box"
+
+#: pro/classes/views/settings/formroller.php:350
+#@ formidable
+msgid "Calendar"
+msgstr "Kalendar"
+
+#: pro/classes/views/settings/formroller.php:354
+#@ formidable
+msgid "Theme"
+msgstr "Temea"
+
+#: classes/views/frm-forms/settings.php:147
+#: pro/classes/views/settings/formroller.php:373
+#@ formidable
+msgid "Submit Button"
+msgstr "Podneti dugme"
+
+#: pro/classes/views/settings/formroller.php:377
+#@ formidable
+msgid "Disable submit button styling"
+msgstr "Onemogućiti stilizovanje podnošenja dugmeta"
+
+#: pro/classes/views/settings/formroller.php:377
+#@ formidable
+msgid "Note: If disabled, you may not see the change take effect until you make 2 more styling changes or click \"Update Options\"."
+msgstr "Beleška: Ako su onemogućene , možda nećete videti promene  dok ne napravite još 2 stilske izmene ili kliknite na \"Update Options\"."
+
+#: pro/classes/views/settings/formroller.php:181
+#: pro/classes/views/settings/formroller.php:404
+#@ formidable
+msgid "Height"
+msgstr "Visina"
+
+#: pro/classes/views/settings/formroller.php:409
+#: pro/classes/views/settings/formroller.php:413
+#: pro/classes/views/settings/formroller.php:459
+#: pro/classes/views/settings/formroller.php:489
+#@ formidable
+msgid "BG Color"
+msgstr "BG boja"
+
+#: pro/classes/views/settings/formroller.php:422
+#@ formidable
+msgid "BG Image"
+msgstr "BG slika"
+
+#: pro/classes/views/settings/formroller.php:435
+#@ formidable
+msgid "Shadow"
+msgstr "Senka"
+
+#: pro/classes/views/settings/formroller.php:440
+#@ formidable
+msgid "Margin"
+msgstr "Margina"
+
+#: pro/classes/views/settings/formroller.php:454
+#@ formidable
+msgid "Error"
+msgstr "Greška"
+
+#: pro/classes/views/settings/formroller.php:484
+#@ formidable
+msgid "Success"
+msgstr "Uspeh"
+
+#: pro/classes/widgets/FrmListEntries.php:6
+#@ formidable
+msgid "Display a list of Formidable entries"
+msgstr "Prikazati listu Formidable unosa"
+
+#: pro/classes/widgets/FrmListEntries.php:7
+#@ formidable
+msgid "Formidable Entries List"
+msgstr "Formidable lista unosa"
+
+#: pro/classes/widgets/FrmListEntries.php:197
+#@ formidable
+msgid "Title Field"
+msgstr "Polje naslova"
+
+#: pro/classes/widgets/FrmListEntries.php:211
+#@ formidable
+msgid "List Entries by Category"
+msgstr "Lista unosa po kategorijama"
+
+#: pro/classes/widgets/FrmListEntries.php:214
+#@ formidable
+msgid "Category Field"
+msgstr "Polje kategorija"
+
+#: pro/classes/widgets/FrmListEntries.php:229
+#@ formidable
+msgid "Show Entry Counts"
+msgstr "Prikazati brojanje unosa"
+
+#: pro/classes/widgets/FrmListEntries.php:232
+#@ formidable
+msgid "Show Only Category Name"
+msgstr "Prikazati samo ime kategorije"
+
+#: pro/classes/widgets/FrmListEntries.php:235
+#@ formidable
+msgid "Show Entries Beneath Categories"
+msgstr "Prikazati unose ispod kategorija"
+
+#: pro/classes/widgets/FrmListEntries.php:238
+#@ formidable
+msgid "Entry Limit (leave blank to list all)"
+msgstr "Limit unosa (ostaviti prazno)"
+
+#: pro/classes/views/frmpro-forms/add_form_options.php:44
+#@ formidable
+msgid "Cookie Expiration"
+msgstr "Cookie rok isteka"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:479
+#@ formidable
+msgid "Show the saved value for fields with separate values."
+msgstr "Prikazati sačuvanu vrednost za polja sa odvojenim vrednostima."
+
+#: classes/controllers/FrmSettingsController.php:18
+#: classes/views/frm-settings/form.php:3
+#: classes/views/frm-settings/form.php:11
+#@ formidable
+msgid "Global Settings"
+msgstr "Opšte postavke"
+
+#: classes/models/FrmSettings.php:25
+#@ formidable
+msgid "This field cannot be blank."
+msgstr "Ovo polje ne može da bude prazno."
+
+#: classes/views/frm-forms/add_field.php:144
+#, php-format
+#@ formidable
+msgid "Your captcha will not appear on your form until you %1$sset up%2$s the Public and Private Keys"
+msgstr "Vaša captcha se neće pojaviti na vašoj formi dok ne %1$spodeite%2$sjavne i privatne ključeve"
+
+#: classes/views/frm-forms/mb_insert_fields.php:2
+#: pro/classes/controllers/FrmProDisplaysController.php:342
+#@ formidable
+msgid "Customization"
+msgstr "Customizacija"
+
+#: classes/views/frm-forms/mb_insert_fields.php:9
+#: pro/classes/views/shared/mb_adv_info.php:3
+#@ formidable
+msgid "Insert Fields"
+msgstr "Uneti polja"
+
+#: classes/views/frm-forms/mb_insert_fields.php:10
+#: pro/classes/views/shared/mb_adv_info.php:7
+#@ formidable
+msgid "HTML Tags"
+msgstr "HTML Tagovi"
+
+#: classes/views/frm-forms/mb_html_tab.php:11
+#@ formidable
+msgid "Required Label"
+msgstr "Zahtevane oznake"
+
+#: classes/views/frm-forms/mb_html_tab.php:13
+#@ formidable
+msgid "Single Option"
+msgstr "Jedna opcija"
+
+#: classes/views/frm-forms/mb_html_tab.php:14
+#@ formidable
+msgid "Hide Option Label"
+msgstr "Sakriti oznaku opcije"
+
+#: classes/views/frm-forms/mb_html_tab.php:15
+#@ formidable
+msgid "Required Class"
+msgstr "Zahtevana klasa"
+
+#: classes/views/frm-forms/mb_html_tab.php:16
+#@ formidable
+msgid "Error Class"
+msgstr "Greška klase"
+
+#: classes/views/frm-forms/notification.php:20
+#@ formidable
+msgid "Custom Name"
+msgstr "Custom ime"
+
+#: classes/views/frm-forms/notification.php:44
+#@ formidable
+msgid "Custom Address"
+msgstr "Custom adresa"
+
+#: classes/views/frm-forms/settings.php:121
+#@ formidable
+msgid "Add Notification"
+msgstr "Dodati  notifikacije"
+
+#: classes/views/frm-settings/form.php:99
+#@ formidable
+msgid "Blank Field"
+msgstr "Prazno polje"
+
+#: classes/views/frm-settings/form.php:99
+#@ formidable
+msgid "The message seen when a required field is left blank."
+msgstr "Poruka koja se vidi kada je zahtevano polje prazno."
+
+#: pro/classes/views/shared/mb_adv_info.php:13
+#: pro/classes/views/shared/mb_adv_info.php:110
+#@ formidable
+msgid "IDs"
+msgstr "IDs"
+
+#: pro/classes/views/shared/mb_adv_info.php:16
+#: pro/classes/views/shared/mb_adv_info.php:113
+#@ formidable
+msgid "Fields from your form"
+msgstr "Polja sa tvoje forme"
+
+#: pro/classes/views/shared/mb_adv_info.php:80
+#@ formidable
+msgid "Edit Entry Link"
+msgstr "Edituj link unosa"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:478
+#@ formidable
+msgid "Field Label"
+msgstr "Oznaka polja"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:193
+#@ formidable
+msgid "Former ID"
+msgstr "prethodni ID"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:457
+#@ formidable
+msgid "Equals"
+msgstr "jednako je"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:458
+#@ formidable
+msgid "Does Not Equal"
+msgstr "nije jednako"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:459
+#@ formidable
+msgid "Is Blank"
+msgstr "je prazno"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:460
+#@ formidable
+msgid "Is Not Blank"
+msgstr "nije prazno"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:461
+#@ formidable
+msgid "Is Like"
+msgstr "je kao"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:462
+#@ formidable
+msgid "Is Not Like"
+msgstr "Nije kao"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:463
+#@ formidable
+msgid "Greater Than"
+msgstr "Veće od"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:464
+#@ formidable
+msgid "Less Than"
+msgstr "Manje od"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:468
+#@ formidable
+msgid "Separator"
+msgstr "Separator"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:469
+#@ formidable
+msgid "Clickable Links"
+msgstr "Linkovi koji mogu da se kliknu"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:471
+#@ formidable
+msgid "Sanitize"
+msgstr "Sanitize"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:472
+#@ formidable
+msgid "Sanitize URL"
+msgstr "Sanitize URL"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:473
+#@ formidable
+msgid "Truncate"
+msgstr "Skratiti"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:474
+#@ formidable
+msgid "More Text"
+msgstr "još teksta"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:475
+#@ formidable
+msgid "Time Ago"
+msgstr "pre"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:480
+#@ formidable
+msgid "No Auto P"
+msgstr "Nema auto p"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:488
+#: pro/classes/controllers/FrmProFormsController.php:170
+#@ formidable
+msgid "First Name"
+msgstr "Ime"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:489
+#: pro/classes/controllers/FrmProFormsController.php:171
+#@ formidable
+msgid "Last Name"
+msgstr "Prezime"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:489
+#: pro/classes/controllers/FrmProFormsController.php:169
+#@ formidable
+msgid "Display Name"
+msgstr "Prikaži ime"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:491
+#@ formidable
+msgid "Avatar"
+msgstr "Avatar"
+
+#: pro/classes/helpers/FrmProEntriesHelper.php:190
+#@ formidable
+msgid "Resend Email Notifications"
+msgstr "Ponovo poslati email notifikacije"
+
+#: pro/classes/views/shared/mb_adv_info.php:121
+#@ formidable
+msgid "Conditional text here"
+msgstr "Uslovni tekst ovde"
+
+#: pro/classes/views/shared/mb_adv_info.php:173
+#@ formidable
+msgid "Image Size"
+msgstr "Veličina slike"
+
+#: pro/classes/views/shared/mb_adv_info.php:176
+#@ formidable
+msgid "Image ID"
+msgstr "ID slike"
+
+#: pro/classes/views/shared/mb_adv_info.php:179
+#@ formidable
+msgid "Image Name"
+msgstr "Ime slike"
+
+#: pro/classes/views/shared/mb_adv_info.php:187
+#@ formidable
+msgid "Insert user information"
+msgstr "Uneti informacije korisnika"
+
+#: pro/classes/views/shared/mb_adv_info.php:205
+#@ formidable
+msgid "Data From Entries options"
+msgstr "Podaci iz opcije unosa"
+
+#: pro/classes/views/shared/mb_adv_info.php:208
+#@ formidable
+msgid "Creation Date"
+msgstr "Datum stvaranja"
+
+#: pro/classes/views/shared/mb_adv_info.php:212
+#@ formidable
+msgid "Field From Entry"
+msgstr "Polja od unosa"
+
+#: pro/classes/views/displays/mb_advanced.php:24
+#@ formidable
+msgid "Filter Entries"
+msgstr "Filter unosa"
+
+#: pro/classes/views/displays/where_row.php:5
+#@ formidable
+msgid "Entry updated date"
+msgstr "Uneti datum update"
+
+#: pro/classes/controllers/FrmProFieldsController.php:377
+#: pro/classes/views/frmpro-fields/field-values.php:10
+#@ formidable
+msgid "Anything"
+msgstr "Bilo šta"
+
+#: classes/controllers/FrmAppController.php:296
+#: pro/classes/views/frmpro-fields/form-fields.php:150
+#@ formidable
+msgid "Remove"
+msgstr "Ukloniti"
+
+#: pro/classes/views/frmpro-fields/options-form.php:102
+#@ formidable
+msgid "Multiple files"
+msgstr "Više fajlova"
+
+#: pro/classes/views/frmpro-fields/options-form.php:104
+#@ formidable
+msgid "allow multiple files to be uploaded to this field"
+msgstr "dozvoliti da se  više fajlova učita u ovo polje"
+
+#: classes/views/frm-forms/notification.php:83
+#@ formidable
+msgid "Options"
+msgstr "Opcije"
+
+#: pro/classes/views/frmpro-forms/notifications.php:3
+#@ formidable
+msgid "Send this notification when entries are"
+msgstr "Pošalji ovu notifikaciju kada su unosi"
+
+#: pro/classes/views/frmpro-forms/notifications.php:5
+#@ formidable
+msgid "created"
+msgstr "stvoreno "
+
+#: pro/classes/views/frmpro-forms/notifications.php:6
+#@ formidable
+msgid "updated"
+msgstr "updateovano"
+
+#: pro/classes/views/frmpro-forms/notifications.php:7
+#@ formidable
+msgid "created or updated"
+msgstr "stvoreno ili updateovano"
+
+#: pro/classes/views/frmpro-forms/notifications.php:23
+#@ formidable
+msgid "Send"
+msgstr "Pošalji"
+
+#: pro/classes/views/frmpro-forms/notifications.php:24
+#@ formidable
+msgid "Stop"
+msgstr "Stani"
+
+#: pro/classes/views/frmpro-forms/notifications.php:26
+#@ formidable
+msgid "this notification if"
+msgstr "ovu notifikaciju ako"
+
+#: pro/classes/views/shared/mb_adv_info.php:76
+#@ formidable
+msgid "Default HTML"
+msgstr "Default HTML"
+
+#: pro/classes/views/shared/mb_adv_info.php:77
+#@ formidable
+msgid "Default Plain"
+msgstr "Default Plain"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:470
+#@ formidable
+msgid "Remove Links"
+msgstr "Uklonite linkove"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:470
+#@ formidable
+msgid "Removes the automatic links to category pages"
+msgstr "Ukonite automatske linkove na kategoriju stranica"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:480
+#@ formidable
+msgid "Do not automatically add any paragraphs or line breaks"
+msgstr "Nemojte da automatski dodajete paragrafe ili zagrade"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:481
+#@ formidable
+msgid "Remove HTML"
+msgstr "Ukloniti HTML"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:481
+#@ formidable
+msgid "Remove all HTML added into your form before display"
+msgstr "Ukloniti sve HTML dodate u vašu formu pre prikaza"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:482
+#@ formidable
+msgid "Keep JS"
+msgstr "Zadržati JS"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:482
+#@ formidable
+msgid "Javascript from your form entries are automatically removed. Add this option only if you trust those submitting entries."
+msgstr "Javascript iz vaše forme je automatski uklonjen. Dodati ovu opciju samo ako verujete unosima koje podnosute."
+
+#: pro/classes/controllers/FrmProStatisticsController.php:1159
+#@ formidable
+msgid "Count"
+msgstr "Izbrojati"
+
+#: pro/classes/views/frmpro-entries/sidebar-edit.php:31
+#: pro/classes/views/frmpro-entries/sidebar-show.php:22
+#@ formidable
+msgid "Delete entry but leave the post"
+msgstr "Obrisati unos ali ostaviti post"
+
+#: pro/classes/views/frmpro-entries/sidebar-edit.php:31
+#: pro/classes/views/frmpro-entries/sidebar-show.php:22
+#@ formidable
+msgid "Delete without Post"
+msgstr "Obrisati bez posta"
+
+#: pro/classes/views/frmpro-fields/options-form.php:48
+#@ formidable
+msgid "Multiple select"
+msgstr "Razni izbor"
+
+#: pro/classes/views/frmpro-fields/show.php:65
+#: pro/classes/views/frmpro-fields/show.php:75
+#@ formidable
+msgid "There are no options"
+msgstr "Nema opcija"
+
+#: pro/classes/views/frmpro-forms/_comment_meta_row.php:2
+#@ formidable
+msgid "Add Comment Meta"
+msgstr "Dodati Meta komentar"
+
+#: pro/classes/views/frmpro-forms/comment_options.php:4
+#@ formidable
+msgid "Comment Creation Options"
+msgstr "Opcije stvaranja komentara"
+
+#: pro/classes/views/frmpro-forms/comment_options.php:10
+#@ formidable
+msgid "Create a Comment"
+msgstr "Stvorite komentar"
+
+#: pro/classes/views/frmpro-forms/comment_options.php:11
+#@ formidable
+msgid "Create WordPress comments with this form"
+msgstr "Stvorite WordPresskomentare sa ovom formom"
+
+#: pro/classes/views/frmpro-forms/comment_options.php:61
+#@ formidable
+msgid "Comment Meta"
+msgstr " Meta komentar"
+
+#: pro/classes/views/settings/formroller.php:512
+#@ formidable
+msgid "Custom CSS"
+msgstr "Custom CSS"
+
+#: pro/classes/views/settings/formroller.php:516
+#@ formidable
+msgid "You can add custom css here or in your theme style.css"
+msgstr "Mošete da dodate custom css ovde u vašu temu style.css"
+
+#: classes/views/xml/import_form.php:3
+#: classes/views/xml/importing_xml.php:3
+#: pro/classes/views/xml/import_csv.php:3
+#: pro/classes/views/xml/map_csv_fields.php:3
+#@ formidable
+msgid "Import/Export"
+msgstr "Import/Eksport"
+
+#: classes/views/xml/import_form.php:24
+#@ formidable
+msgid "Upload file and import"
+msgstr "Uploadij fajl i import"
+
+#: classes/views/xml/import_form.php:107
+#@ formidable
+msgid "Export Selection"
+msgstr "Eksportuj izabrano"
+
+#: classes/models/FrmSettings.php:26
+#@ formidable
+msgid "This value must be unique."
+msgstr "Ova vrednost mora da bude jedinstvena."
+
+#: classes/views/frm-forms/sidebar-settings.php:6
+#@ formidable
+msgid "Show more"
+msgstr "Prikaži još"
+
+#: classes/views/frm-settings/form.php:106
+#@ formidable
+msgid "Unique Value"
+msgstr "JEDINSTVENA VREDNOST"
+
+#: classes/views/frm-settings/form.php:106
+#@ formidable
+msgid "The message seen when a user selects a value in a unique field that has already been used."
+msgstr "Poruka koja se vidi kada korinik izabere vrednost u jedinstvenom polju koje je vež iskorišteno"
+
+#: pro/classes/views/frmpro-fields/_logic_row.php:32
+#: pro/classes/views/frmpro-forms/_logic_row.php:28
+#@ formidable
+msgid "not like"
+msgstr "ne dopada se"
+
+#: pro/classes/views/frmpro-forms/add_form_options.php:1
+#@ formidable
+msgid "Submit this form with AJAX"
+msgstr "Podnesi ovu formu sa  AJAX"
+
+#: classes/controllers/FrmFieldsController.php:193
+#@ formidable
+msgid "Option"
+msgstr "Opcije"
+
+#: classes/helpers/FrmFieldsHelper.php:41
+#@ formidable
+msgid "User ID (hidden)"
+msgstr "ID korisnika (skriveno)"
+
+#: classes/views/frm-forms/add_field.php:38
+#@ formidable
+msgid "Delete Field"
+msgstr "Obrisati polje"
+
+#: classes/views/frm-forms/mb_insert_fields.php:2
+#@ formidable
+msgid "Click to toggle"
+msgstr "Klik za toggle"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:336
+#@ formidable
+msgid "Basic Settings"
+msgstr "Opšte postavke"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:339
+#@ formidable
+msgid "Advanced Settings"
+msgstr "Unapredjene postavke"
+
+#: pro/classes/views/frmpro-fields/options-form.php:20
+#@ formidable
+msgid "Dynamic Default Value"
+msgstr "Dinamička Default vrednost"
+
+#: pro/classes/views/frmpro-fields/options-form.php:50
+#@ formidable
+msgid "enable multiselect"
+msgstr "omogućiti više izbora"
+
+#: pro/classes/views/frmpro-fields/options-form.php:53
+#@ formidable
+msgid "enable autocomplete"
+msgstr "omogućiti autoyavršavanje"
+
+#: pro/classes/views/frmpro-fields/options-form.php:227
+#@ formidable
+msgid "Everyone"
+msgstr "Svi"
+
+#: pro/classes/views/frmpro-fields/options-form.php:235
+#@ formidable
+msgid "Logged-out Users"
+msgstr "Izlogovani korisnici"
+
+#: pro/classes/views/settings/license_box.php:4
+#@ formidable
+msgid "Formidable Pro License"
+msgstr "Formidable Pro Licenca"
+
+#: pro/classes/controllers/FrmUpdatesController.php:25
+#@ formidable
+msgid "Your Formidable Pro License was Invalid"
+msgstr "Vaša Formidable Pro Licenca ne važi"
+
+#: classes/views/frm-settings/license_box.php:8
+#: pro/classes/controllers/FrmUpdatesController.php:133
+#@ formidable
+msgid "Click here"
+msgstr "Klik ovde"
+
+#: pro/classes/controllers/FrmUpdatesController.php:139
+#@ formidable
+msgid "Formidable Pro is Installed"
+msgstr "Formidable Pro je instaliran"
+
+#: pro/classes/controllers/FrmUpdatesController.php:140
+#@ formidable
+msgid "Enter new license"
+msgstr "Uneti novu licencu"
+
+#: pro/classes/controllers/FrmUpdatesController.php:169
+#@ formidable
+msgid "Use this license to enable Formidable Pro site-wide"
+msgstr "Koistite ovu licencu da biste omogućili Formidable Pro  širom sajta"
+
+#: pro/classes/controllers/FrmUpdatesController.php:172
+#@ formidable
+msgid "Save License"
+msgstr "Sačuvati licencu"
+
+#: pro/classes/controllers/FrmUpdatesController.php:227
+#: pro/classes/controllers/FrmUpdatesController.php:263
+#: pro/classes/controllers/FrmUpdatesController.php:299
+#@ formidable
+msgid "Please enter a license number"
+msgstr "Unesite broj licence"
+
+#: pro/classes/controllers/FrmUpdatesController.php:392
+#@ formidable
+msgid "expired"
+msgstr "istekla"
+
+#: pro/classes/controllers/FrmUpdatesController.php:392
+#@ formidable
+msgid "invalid"
+msgstr "invalid"
+
+#: pro/classes/controllers/FrmUpdatesController.php:393
+#, php-format
+#@ formidable
+msgid "An update is available, but your license is %s."
+msgstr "AUpdate je dostupan, ali vaša licenca je %s."
+
+#: pro/classes/controllers/FrmUpdatesController.php:470
+#@ formidable
+msgid "Check for Update"
+msgstr "Proveri Update"
+
+#: pro/classes/controllers/FrmUpdatesController.php:504
+#@ formidable
+msgid "Your License Key was invalid"
+msgstr "Vaš ključ licence ne postoji"
+
+#: classes/helpers/FrmFormsHelper.php:198
+#: classes/models/FrmDb.php:170
+#@ formidable
+msgid "Sending"
+msgstr "Šalje"
+
+#: classes/views/frm-forms/add_field.php:4
+#@ formidable
+msgid "Loading"
+msgstr "Učitava"
+
+#: classes/views/frm-forms/add_field_links.php:4
+#@ formidable
+msgid "Insert into a post, page, display or text widget"
+msgstr "Uneti u post, stranicu, prikaz ili tekst widget"
+
+#: classes/views/frm-forms/add_field_links.php:25
+#@ formidable
+msgid "Layout"
+msgstr "Layout"
+
+#: classes/views/frm-forms/add_field_links.php:55
+#@ formidable
+msgid "Add classes in the \"CSS layout classes\" field option"
+msgstr "Dodati klase u \"CSS layout classes\" opciju pola"
+
+#: classes/views/frm-forms/add_field_links.php:58
+#@ formidable
+msgid "First 1/2"
+msgstr "Prva 1/2"
+
+#: classes/views/frm-forms/add_field_links.php:59
+#@ formidable
+msgid "Last 1/2"
+msgstr "Poslednja 1/2"
+
+#: classes/views/frm-forms/add_field_links.php:60
+#@ formidable
+msgid "First 1/3"
+msgstr "Prva 1/3"
+
+#: classes/views/frm-forms/add_field_links.php:61
+#@ formidable
+msgid "Last 1/3"
+msgstr "Poslednja 1/3"
+
+#: classes/views/frm-forms/add_field_links.php:62
+#@ formidable
+msgid "First 2/3"
+msgstr "Prva 2/3"
+
+#: classes/views/frm-forms/add_field_links.php:63
+#@ formidable
+msgid "Last 2/3"
+msgstr "Poslednja 2/3"
+
+#: classes/views/frm-forms/add_field_links.php:64
+#@ formidable
+msgid "1/3"
+msgstr "1/3"
+
+#: classes/views/frm-forms/add_field_links.php:65
+#@ formidable
+msgid "1/4"
+msgstr "1/4"
+
+#: classes/views/frm-forms/add_field_links.php:66
+#@ formidable
+msgid "First 1/4"
+msgstr "Prva 1/4"
+
+#: classes/views/frm-forms/add_field_links.php:67
+#@ formidable
+msgid "Last 1/4"
+msgstr "Poslednja 1/4"
+
+#: classes/views/frm-forms/add_field_links.php:68
+#@ formidable
+msgid "First 1/5"
+msgstr "Prva 1/5"
+
+#: classes/views/frm-forms/add_field_links.php:69
+#@ formidable
+msgid "Last 1/5"
+msgstr "Poslednja 1/5"
+
+#: classes/views/frm-forms/add_field_links.php:70
+#@ formidable
+msgid "1/5"
+msgstr "1/5"
+
+#: classes/views/frm-forms/add_field_links.php:71
+#@ formidable
+msgid "Inline"
+msgstr "Inline"
+
+#: classes/views/frm-forms/add_field_links.php:71
+#@ formidable
+msgid "Align fields in a row without a specific width."
+msgstr "Poravnati polja u redu bez odredjne širine."
+
+#: classes/views/frm-forms/add_field_links.php:72
+#@ formidable
+msgid "First Inline"
+msgstr "Prvo Inline"
+
+#: classes/views/frm-forms/add_field_links.php:72
+#@ formidable
+msgid "Align fields at the beginning of a row without a specific width."
+msgstr "Poravnati polja na početku reda bez odredjene širine."
+
+#: classes/views/frm-forms/add_field_links.php:73
+#@ formidable
+msgid "Last Inline"
+msgstr "Poslednje Inline"
+
+#: classes/views/frm-forms/add_field_links.php:73
+#@ formidable
+msgid "Align fields at the end of a row without a specific width."
+msgstr "Poravnati polja na kraju reda bez odredjene širine."
+
+#: classes/views/frm-forms/add_field_links.php:75
+#@ formidable
+msgid "100% width"
+msgstr "100% širina"
+
+#: classes/views/frm-forms/add_field_links.php:75
+#@ formidable
+msgid "Force the field to fill the full space with 100% width."
+msgstr "Pinud polje da popuni ceo prostor sa 100% širinom."
+
+#: classes/views/frm-forms/add_field_links.php:76
+#@ formidable
+msgid "First Grid Row"
+msgstr "Prvi red mreže"
+
+#: classes/views/frm-forms/add_field_links.php:77
+#@ formidable
+msgid "Even Grid Row"
+msgstr "Jednak red mreže"
+
+#: classes/views/frm-forms/add_field_links.php:78
+#@ formidable
+msgid "Odd Grid Row"
+msgstr "Čudan red mreže"
+
+#: classes/views/frm-forms/add_field_links.php:79
+#@ formidable
+msgid "2 Col Options"
+msgstr "Opcije sa 2 boje"
+
+#: classes/views/frm-forms/add_field_links.php:79
+#@ formidable
+msgid "Put your radio button or checkbox options into two columns."
+msgstr "Stavite vaša radio dugmad ili checkbox opcije u dve kolone."
+
+#: classes/views/frm-forms/add_field_links.php:80
+#@ formidable
+msgid "3 Col Options"
+msgstr "Opcije sa 3 boje"
+
+#: classes/views/frm-forms/add_field_links.php:80
+#@ formidable
+msgid "Put your radio button or checkbox options into three columns."
+msgstr "Stavite vaša radio dugmad ili checkbox opcije u tri kolone."
+
+#: classes/views/frm-forms/add_field_links.php:81
+#@ formidable
+msgid "4 Col Options"
+msgstr "Opcije sa 4 boje"
+
+#: classes/views/frm-forms/add_field_links.php:81
+#@ formidable
+msgid "Put your radio button or checkbox options into four columns."
+msgstr "Stavite vaša radio dugmad ili checkbox opcije u četiri kolone."
+
+#: classes/views/frm-forms/add_field_links.php:82
+#@ formidable
+msgid "Add this to a read-only field to display the text in bold without a border or background."
+msgstr "Dodati ovo u read only polja za prikaz bold teksta bez granice ili pozadine."
+
+#: classes/views/frm-forms/add_field_links.php:83
+#@ formidable
+msgid "Scroll Box"
+msgstr "Scroll Box"
+
+#: classes/views/frm-forms/add_field_links.php:83
+#@ formidable
+msgid "If you have many checkbox or radio button options, you may add this class to allow your user to easily scroll through the options."
+msgstr "Ako imate dosta checkbox ili opcija radio dugmadi možete da dodate ovu klasu da biste dozvolili vašem korisniku da lako skroluje kroz opcije."
+
+#: classes/controllers/FrmAppController.php:307
+#@ formidable
+msgid "Saving"
+msgstr "Sačuvati"
+
+#: classes/controllers/FrmAppController.php:308
+#@ formidable
+msgid "Saved"
+msgstr "Sačuvano"
+
+#: classes/views/frm-forms/mb_html_tab.php:46
+#@ formidable
+msgid "Button Label"
+msgstr "Dugme sa oznakom"
+
+#: classes/views/frm-forms/mb_html_tab.php:46
+#@ formidable
+msgid "Button Hook"
+msgstr "Dugme sa zakačkom"
+
+#: classes/views/frm-forms/settings.php:91
+#@ formidable
+msgid "Load and save form builder page with AJAX"
+msgstr "Učitati i sačuvati stranicu sa AJAX"
+
+#: classes/views/frm-forms/settings.php:91
+#@ formidable
+msgid "Recommended for long forms."
+msgstr "Preporučuje se na duže staze."
+
+#: classes/views/frm-forms/settings.php:96
+#@ formidable
+msgid "Warning: There is no way to retrieve unsaved entries."
+msgstr "Upozorenje: Ne možete da povratite nesačuvane postavke"
+
+#: pro/classes/controllers/FrmProEntriesController.php:120
+#@ formidable
+msgid "Overview"
+msgstr "Pregled"
+
+#: pro/classes/controllers/FrmProEntriesController.php:121
+#@ formidable
+msgid "This screen provides access to all of your posts. You can customize the display of this screen to suit your workflow."
+msgstr "Ovaj ekran omogućava pristup svim vašim porukama . Možete da prilagodite prikaz ovog ekrana tako da odgovara vašem radu ."
+
+#: pro/classes/controllers/FrmProEntriesController.php:126
+#@ formidable
+msgid "For more information:"
+msgstr "Za još informacija"
+
+#: pro/classes/controllers/FrmProEntriesController.php:127
+#@ formidable
+msgid "Documentation on Entries"
+msgstr "Dokumentacija o unosima"
+
+#: pro/classes/controllers/FrmProEntriesController.php:128
+#@ formidable
+msgid "Support"
+msgstr "Podrška"
+
+#: pro/classes/controllers/FrmProFormsController.php:168
+#@ formidable
+msgid "Login"
+msgstr "Login"
+
+#: pro/classes/controllers/FrmProFormsController.php:180
+#@ formidable
+msgid "GET/POST"
+msgstr "UZMI/POST"
+
+#: pro/classes/views/frmpro-entries/csv.php:16
+#@ formidable
+msgid "(label)"
+msgstr "(oznaka)"
+
+#: pro/classes/views/frmpro-entries/csv.php:24
+#@ formidable
+msgid "Comment"
+msgstr "Komentar"
+
+#: pro/classes/views/frmpro-entries/csv.php:25
+#@ formidable
+msgid "Comment User"
+msgstr "Korisnik komenara"
+
+#: pro/classes/views/frmpro-entries/csv.php:26
+#@ formidable
+msgid "Comment Date"
+msgstr "Datum komentara"
+
+#: pro/classes/views/frmpro-entries/sidebar-show.php:13
+#@ formidable
+msgid "Print"
+msgstr "Odštampati"
+
+#: pro/classes/views/frmpro-fields/options-form.php:264
+#@ formidable
+msgid "Do not skip"
+msgstr "Ne preskočiti"
+
+#: pro/classes/views/frmpro-fields/options-form.php:265
+#@ formidable
+msgid "Skip"
+msgstr "Preskočiti"
+
+#: pro/classes/views/frmpro-forms/add_form_options.php:2
+#@ formidable
+msgid "If your form includes a file upload field, ajax submission will not be used."
+msgstr "Ako vaša forma uključuje polje uploada fajla, ajax podnošenje neće bitik korišćeno"
+
+#: pro/classes/views/frmpro-forms/instruction_tabs.php:1
+#@ formidable
+msgid "Default Values"
+msgstr "Default vrednosti"
+
+#: pro/classes/views/frmpro-forms/instructions.php:2
+#@ formidable
+msgid "Add dynamic default values as default text to fields in your form"
+msgstr "Dodati dinamičke default vrednosti kao deafult tekst u poljima vaše forme"
+
+#: pro/classes/controllers/FrmUpdatesController.php:489
+#, php-format
+#@ formidable
+msgid "You had an error communicating with Strategy11's API. %1$sClick here%2$s for more information."
+msgstr "Imali ste grešku u komunikaciji sa Strategy11's API. %1$sKlik ovde%2$sza još informacija"
+
+#: pro/classes/controllers/FrmUpdatesController.php:494
+#@ formidable
+msgid "You had an HTTP error connecting to Strategy11's API"
+msgstr "Imali ste HTTP grešku prilikom konektovanja na Strategy11's API"
+
+#: pro/classes/controllers/FrmProEntriesController.php:2480
+#, php-format
+#@ formidable
+msgid "Email Resent to %s"
+msgstr "Ponovo pošalji email  %s"
+
+#: pro/classes/controllers/FrmProEntriesController.php:2482
+#@ formidable
+msgid "Email Resent to No one! You do not have permission"
+msgstr "Ne možete ponovo da pošaljete mail! Nemate dozvolu "
+
+#: classes/controllers/FrmAppController.php:295
+#: pro/classes/controllers/FrmProEntriesController.php:1040
+#@ default
+msgid "Loading&hellip;"
+msgstr "Loading&hellip;"
+
+#: pro/classes/controllers/FrmProFormsController.php:320
+#@ formidable
+msgid "Previous"
+msgstr "Prethodna"
+
+#: pro/classes/models/FrmProField.php:52
+#@ formidable
+msgid "Next"
+msgstr "Sledeća"
+
+#: pro/classes/views/displays/mb_advanced.php:9
+#: pro/classes/views/displays/mb_advanced.php:29
+#: pro/classes/views/frmpro-forms/post_options.php:147
+#: pro/classes/views/frmpro-forms/post_options.php:161
+#@ formidable
+#@ default
+msgid "Add"
+msgstr "Dodati"
+
+#: pro/classes/views/frmpro-forms/comment_options.php:3
+#@ default
+msgid "Collapse"
+msgstr "Kolaps"
+
+#: classes/models/FrmDb.php:2
+#: classes/models/FrmEntry.php:2
+#: classes/models/FrmEntryMeta.php:2
+#: classes/models/FrmField.php:2
+#: classes/models/FrmForm.php:2
+#: classes/models/FrmSettings.php:2
+#: pro/classes/controllers/FrmUpdatesController.php:2
+#@ formidable
+msgid "You are not allowed to call this page directly."
+msgstr "Nije vam dozvoljeno da direktno pozovete ovu stranicu."
+
+#: classes/controllers/FrmAppController.php:309
+#@ default
+msgid "OK"
+msgstr "OK"
+
+#: classes/controllers/FrmFormsController.php:321
+#@ formidable
+msgid "Add Form"
+msgstr "Dodaj formu"
+
+#: classes/views/frm-forms/add_field.php:37
+#@ formidable
+msgid "Move Field"
+msgstr "Pomeri polje"
+
+#: classes/views/frm-forms/form.php:8
+#@ formidable
+msgid "Form Key:"
+msgstr "Ključ forme :"
+
+#: classes/views/frm-forms/add_field.php:187
+#: classes/views/frm-forms/form.php:9
+#@ formidable
+msgid "Click to edit."
+msgstr "Klik za editovanje."
+
+#: pro/classes/controllers/FrmProEntriesController.php:1185
+#: pro/classes/views/frmpro-entries/csv.php:31
+#@ formidable
+msgid "Draft"
+msgstr "Draft"
+
+#: pro/classes/controllers/FrmProFormsController.php:339
+#@ formidable
+msgid "Save Draft"
+msgstr "Sačuvati Draft"
+
+#: pro/classes/helpers/FrmProFormsHelper.php:107
+#@ formidable
+msgid "Your draft has been saved."
+msgstr "vAŠ draft je sačuvan."
+
+#: pro/classes/helpers/FrmProListHelper.php:243
+#@ default
+msgid "No"
+msgstr "Ne"
+
+#: pro/classes/helpers/FrmProListHelper.php:243
+#@ default
+msgid "Yes"
+msgstr "Da"
+
+#: classes/views/xml/import_form.php:53
+#: pro/classes/views/frmpro-fields/options-form.php:204
+#@ formidable
+msgid "Format"
+msgstr "Format"
+
+#: pro/classes/views/frmpro-fields/options-form.php:205
+#@ formidable
+msgid "Insert the format you would like to accept. Use a regular expression starting with ^ or an exact format like (999)999-9999."
+msgstr "Uneti format koji želite da prihvatite.  Koristite regularne izraze pčevši od ^ ili tačana format kao ovaj (999)999-9999."
+
+#: pro/classes/views/frmpro-forms/add_form_options.php:6
+#@ formidable
+msgid "Allow logged-in users to save drafts"
+msgstr "Dozvolite ulogovanim korisnicima da sačuvaju draftove"
+
+#: pro/classes/views/frmpro-forms/add_form_options.php:8
+#@ formidable
+msgid "Saved Draft Message"
+msgstr "Sačuvana draft poruka"
+
+#: pro/classes/views/frmpro-forms/add_form_options.php:12
+#: pro/classes/views/frmpro-forms/add_form_options.php:70
+#@ formidable
+msgid "No one"
+msgstr "Nijedan"
+
+#: pro/classes/views/frmpro-forms/add_form_options.php:21
+#, php-format
+#@ formidable
+msgid "Limit form visibility and submission %1$sto:%2$s"
+msgstr "Limit forme vidljiva i podneta%1$sto:%2$s"
+
+#: pro/classes/views/frmpro-forms/add_form_options.php:36
+#, php-format
+#@ formidable
+msgid "Limit number of form submissions %1$sto one for each:%2$s"
+msgstr "Limit broj podnetih formi %1$sto ojedna za svaki:%2$s"
+
+#: pro/classes/views/frmpro-forms/add_form_options.php:51
+#@ formidable
+msgid "Allow front-end editing of form submissions"
+msgstr "Dozvoli editovanje prednjeg reda forme postavki"
+
+#: pro/classes/views/frmpro-forms/add_form_options.php:63
+#@ formidable
+msgid "can edit their own submission(s)"
+msgstr "može editovati spostvena podnošenja"
+
+#: pro/classes/views/frmpro-forms/add_form_options.php:79
+#@ formidable
+msgid "can edit responses submitted by other users"
+msgstr "može editovati odgovore ostalih korisnika"
+
+#: pro/classes/views/frmpro-forms/add_form_options.php:81
+#@ formidable
+msgid "Update Button Text"
+msgstr "Update dugme sa tekstom"
+
+#: classes/controllers/FrmAppController.php:314
+#: classes/helpers/FrmFieldsHelper.php:472
+#@ formidable
+msgid "Default value will NOT pass form validation"
+msgstr "Default vrednost neće proći formu validaciju"
+
+#: classes/controllers/FrmAppController.php:313
+#: classes/helpers/FrmFieldsHelper.php:472
+#@ formidable
+msgid "Default value will pass form validation"
+msgstr "Default vrednost će proći formu validaciju"
+
+#: classes/controllers/FrmAppController.php:305
+#: classes/views/frm-forms/add_field.php:170
+#: classes/views/frm-forms/form.php:11
+#@ formidable
+msgid "(Click here to add a description or instructions)"
+msgstr "(Klik ovde da biste dodali opis ili uputstva)"
+
+#: classes/controllers/FrmAppController.php:311
+#: classes/helpers/FrmFieldsHelper.php:467
+#@ formidable
+msgid "Clear default value when typing"
+msgstr "Clear default value when typing"
+
+#: classes/controllers/FrmAppController.php:312
+#: classes/helpers/FrmFieldsHelper.php:467
+#@ formidable
+msgid "Do not clear default value when typing"
+msgstr "Nemojte da brišete default vrednost kada kucate"
+
+#: classes/controllers/FrmFormsController.php:390
+#@ formidable
+msgid "Actions"
+msgstr "Akcije"
+
+#: classes/controllers/FrmStatisticsController.php:17
+#: classes/views/frm-statistics/list_displays.php:4
+#: classes/views/shared/form-nav.php:6
+#: pro/classes/controllers/FrmProDisplaysController.php:46
+#: pro/classes/controllers/FrmProDisplaysController.php:60
+#: pro/classes/controllers/FrmProDisplaysController.php:75
+#: pro/classes/controllers/FrmProXMLController.php:80
+#@ formidable
+msgid "Views"
+msgstr "Pregledi"
+
+#: pro/classes/controllers/FrmUpdatesController.php:502
+#, php-format
+#@ formidable
+msgid "There was a %1$s error: %2$s"
+msgstr "Nastala je  %1$s greška: %2$s"
+
+#: pro/classes/controllers/FrmUpdatesController.php:519
+#@ formidable
+msgid "A Formidable Pro update is available, but your license is invalid."
+msgstr "Formidable Pro update  je dostupan, ali je vaša dozvola nepostojeća."
+
+#: classes/helpers/FrmAppHelper.php:146
+#@ formidable
+msgid "Add/Edit Views"
+msgstr "Dodaj/Edituj preglede"
+
+#: classes/controllers/FrmFormsController.php:699
+#: classes/helpers/FrmFormsHelper.php:81
+#: classes/helpers/FrmListHelper.php:173
+#: classes/views/shared/form-nav.php:1
+#@ default
+msgid "(no title)"
+msgstr "(nema naslova)"
+
+#: classes/helpers/FrmListHelper.php:84
+#, php-format
+#@ formidable
+msgid "Create a new %1$sform%2$s."
+msgstr "Napravite novu  %1$sformu%2$s."
+
+#: classes/helpers/FrmListHelper.php:85
+#, php-format
+#@ formidable
+msgid "After your form is created, go to Formidable -> %1$sForms%2$s."
+msgstr "Nakon što su forme stvorene, idite na Formidable -> %1$sForms%2$s."
+
+#: classes/helpers/FrmListHelper.php:198
+#@ formidable
+msgid "Add Entry"
+msgstr "Dodati unos"
+
+#: classes/helpers/FrmListHelper.php:201
+#@ formidable
+msgid "Create template from form"
+msgstr "Napraviti template iz forme"
+
+#: classes/views/frm-entries/new.php:4
+#: pro/classes/views/frmpro-entries/new.php:11
+#@ formidable
+msgid "Oops!"
+msgstr "Ups!"
+
+#: classes/views/frm-entries/new.php:4
+#: pro/classes/views/frmpro-entries/new.php:11
+#, php-format
+#@ formidable
+msgid "You did not add any fields to your form. %1$sGo back%2$s and add some."
+msgstr "Niste dodali nijedno polje u vašu formu. %1$sidite nazad%2$s i dodajte neke."
+
+#: classes/views/frm-forms/add_field.php:186
+#@ formidable
+msgid "Field Key:"
+msgstr "Ključ polja:"
+
+#: classes/views/frm-forms/add_field.php:272
+#@ formidable
+msgid "Validation"
+msgstr "Validacija"
+
+#: classes/views/frm-forms/add_field.php:280
+#@ formidable
+msgid "Invalid Format"
+msgstr "Nepostojeći format"
+
+#: classes/views/frm-forms/form.php:5
+#@ default
+msgid "Enter title here"
+msgstr "Uneti naslov ovde"
+
+#: classes/views/frm-forms/insert_form_popup.php:13
+#@ formidable
+msgid "Please select a view"
+msgstr "Izabeite pregled"
+
+#: classes/views/frm-forms/insert_form_popup.php:48
+#@ formidable
+msgid "Select a view to insert"
+msgstr "Selektujte pregled za unos"
+
+#: classes/views/frm-forms/insert_form_popup.php:59
+#@ formidable
+msgid "Filter shortcodes within the view content"
+msgstr "Filterujte skraćenice unutar pregledanog sadržaja"
+
+#: classes/views/frm-forms/new-selection.php:3
+#: classes/views/frm-forms/new.php:3
+#@ formidable
+msgid "Build New Form"
+msgstr "Napravite novu formu"
+
+#: classes/views/frm-forms/sidebar-settings.php:4
+#@ formidable
+msgid "Add to a post, page or text widget"
+msgstr "Dodati postu, stranici ili teksst widgetu"
+
+#: classes/views/frm-forms/new-field-js.php:1
+#@ default
+msgid "This file no longer needs to be included."
+msgstr "Ovaj fajl više ne treba da bude uključen."
+
+#: pro/classes/controllers/FrmProDisplaysController.php:65
+#@ formidable
+msgid "No Views Found."
+msgstr "Nijedan pregled nije pronadjen"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:66
+#@ formidable
+msgid "Add New View"
+msgstr "Dodati novi pregled"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:67
+#@ formidable
+msgid "Edit View"
+msgstr "Edituj pregled"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:92
+#@ formidable
+msgid "View all forms"
+msgstr "Pregledati sve forme"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:917
+#@ formidable
+msgid "There are no views with that ID"
+msgstr "Nema pregleda sa ovim IDem"
+
+#: pro/classes/controllers/FrmProEntriesController.php:122
+#@ formidable
+msgid "Hovering over a row in the posts list will display action links that allow you to manage your entry."
+msgstr "Lebdi nad redom u listi postova će prikazati akcione linkove koje vam omogućavaju da upravljate svojim unosima"
+
+#: pro/classes/controllers/FrmProEntriesController.php:393
+#@ formidable
+msgid "Draft was Successfully Created"
+msgstr "Draft je uspešno stvoren"
+
+#: pro/classes/controllers/FrmProEntriesController.php:432
+#@ formidable
+msgid "Draft was Successfully Updated"
+msgstr "Draft je uspešno updateovan"
+
+#: pro/classes/controllers/FrmProXMLController.php:153
+#@ formidable
+msgid "CSV cannot be opened."
+msgstr "CSV ne može da se otvori."
+
+#: pro/classes/helpers/FrmProEntriesHelper.php:219
+#@ formidable
+msgid "Download CSV"
+msgstr "Download-ovati CSV"
+
+#: pro/classes/views/displays/mb_advanced.php:90
+#@ formidable
+msgid "If the view doesn't show automatically when it should, insert a higher number here."
+msgstr "Ako se pregled ne pokaže automatski kada bi trebao, unesite ovde veći broj."
+
+#: pro/classes/views/displays/mb_dyncontent.php:10
+#@ formidable
+msgid "The HTML for your page. If 'All Entries' is selected above, this content will be repeated for each entry. The field ID and Key work synonymously, although there are times one choice may be better. If you are panning to copy your view settings to other blogs, use the Key since they will be copied and the ids may differ from blog to blog."
+msgstr "HTML za vašu stranicu . Ako je iznad izabrano \" Svi unosi \" , ovaj sadržaj će se ponoviti za svaki unos . ID polje i ključ rade zajedno , mada postoje situacije kada jedan izbor može biti bolji . Ako panirate da kopirate postavke prikaza na drugim blogovma , koristite taster jer će biti kopirani i IDS se mogu razlikovati od bloga do bloga ."
+
+#: pro/classes/views/displays/mb_form_disp_type.php:8
+#@ formidable
+msgid "View Format"
+msgstr "Pregledati format"
+
+#: pro/classes/views/frmpro-fields/options-form.php:13
+#@ formidable
+msgid "Separate values"
+msgstr "Odvojiti vrednsti"
+
+#: pro/classes/views/frmpro-fields/options-form.php:274
+#, php-format
+#@ formidable
+msgid "next page if %s of the following match:"
+msgstr "sledeća stranica %s sledćeg poklapanja:"
+
+#: pro/classes/views/frmpro-fields/options-form.php:274
+#, php-format
+#@ formidable
+msgid "this field if %s of the following match:"
+msgstr "ovo polje ako %s se sledeće poklapa:"
+
+#: pro/classes/views/frmpro-forms/_post_taxonomy_row.php:64
+#, php-format
+#@ formidable
+msgid "Check All Level %d"
+msgstr "Čekirati sve nivoe %d"
+
+#: pro/classes/views/frmpro-forms/post_options.php:74
+#@ formidable
+msgid "Editing this box will update your existing view or create a new one."
+msgstr "Editovanje ovog kvadrata će update-ovati vaš postojeći pregled ili stvoriti novi."
+
+#: pro/classes/views/settings/form.php:30
+#@ formidable
+msgid "Turn off the visual editor when building views."
+msgstr "Ugasite vizualni editor kada gradite preglede."
+
+#: pro/classes/views/settings/styling_tab.php:25
+#@ formidable
+msgid "Active state will be seen when the field is clicked"
+msgstr "Aktivna država će se videti kada se klikne na polje"
+
+#: pro/classes/views/settings/formroller.php:3
+#@ formidable
+msgid "Reset to Default"
+msgstr "Resetujte na Default"
+
+#: pro/classes/views/shared/mb_adv_info.php:82
+#@ formidable
+msgid "Entry Count"
+msgstr "Unesite brojanje"
+
+#: pro/classes/views/shared/mb_adv_info.php:137
+#@ formidable
+msgid "Click a button below to insert sample logic into your view"
+msgstr "Klik na dugme ispod da biste uneli primer u vaš pregled"
+
+#: classes/controllers/FrmAppController.php:316
+#@ formidable
+msgid "Are you sure?"
+msgstr "Da li ste sigurni?"
+
+#: pro/classes/controllers/FrmUpdatesController.php:165
+#@ formidable
+msgid "Enter your license number here"
+msgstr "Unesite vaš broj licence ovde"
+
+#: classes/views/frm-settings/form.php:39
+#@ formidable
+msgid "Styling & Scripts"
+msgstr "Stilovi & Skripte"
+
+#: classes/views/frm-settings/form.php:125
+#: pro/classes/views/settings/form.php:19
+#@ formidable
+msgid "Miscellaneous"
+msgstr "Razno"
+
+#: pro/classes/controllers/FrmProDisplaysController.php:477
+#@ formidable
+msgid "# Format"
+msgstr "# Format"
+
+#: pro/classes/controllers/FrmProFormsController.php:179
+#@ formidable
+msgid "Increment"
+msgstr "Povećanje"
+
+#: classes/controllers/FrmXMLController.php:114
+#@ formidable
+msgid "XML import is not enabled on your server."
+msgstr "XML import nije omogućen na vašem serveru."
+
+#: classes/controllers/FrmXMLController.php:91
+#@ formidable
+msgid "The file does not exist, please try again."
+msgstr "Fajl ne postoji, pokušajte opet."
+
+#: classes/controllers/FrmXMLController.php:82
+#@ formidable
+msgid "Oops, you didn't select a file."
+msgstr "Ups, niste izabrali fajl."
+
+#: classes/helpers/FrmXMLHelper.php:45
+#: classes/helpers/FrmXMLHelper.php:53
+#@ formidable
+msgid "There was an error when reading this XML file"
+msgstr "Pojavila se greška prilikom ušitavanja ovog XML fajla."
+
+#: pro/classes/views/frmpro-entries/csv.php:31
+#@ formidable
+msgid "Created By"
+msgstr "Kreirano od strane"
+
+#: pro/classes/views/frmpro-entries/csv.php:31
+#@ formidable
+msgid "Updated By"
+msgstr "Update-ovano od strane"
+
+#: pro/classes/views/xml/map_csv_fields.php:50
+#@ formidable
+msgid "updated by"
+msgstr "update-ovano od strane"
+
+#: pro/classes/views/settings/formroller.php:303
+#@ formidable
+msgid "Radios & Check Boxes"
+msgstr "Radio & kvadrati za čekiranje"
+
+#: pro/classes/views/shared/mb_adv_info.php:67
+#@ formidable
+msgid "Entry created"
+msgstr "Unos stvoren"
+
+#: pro/classes/views/shared/mb_adv_info.php:68
+#@ formidable
+msgid "Entry updated"
+msgstr "Unos updateovan"
+
+#: pro/classes/views/shared/mb_adv_info.php:75
+#@ formidable
+msgid "Default Msg"
+msgstr "Default poruk"
+
+#: pro/classes/views/shared/mb_adv_info.php:79
+#@ formidable
+msgid "One Entry Link"
+msgstr "Link sa jednim unosom"
+
+#: pro/classes/views/shared/mb_adv_info.php:81
+#@ formidable
+msgid "Even/Odd"
+msgstr "Jednako/Šanse"
+
+#: pro/classes/views/xml/import_csv.php:11
+#@ formidable
+msgid "Importing CSV"
+msgstr "Importovanje CSV"
+
+#: classes/views/xml/import_form.php:17
+#, php-format
+#@ formidable
+msgid "Maximum size: %s"
+msgstr "Maksimalna veličina: %s"
+
+#: pro/classes/views/xml/csv_opts.php:17
+#@ formidable
+msgid "Note: Only entries can by imported via CSV."
+msgstr "Beleška: Samo unos može biti importovan via CSV."
+
+#: pro/classes/views/xml/map_csv_fields.php:11
+#@ formidable
+msgid "Map Fields"
+msgstr "Mapa polja"
+
+#: pro/classes/views/xml/map_csv_fields.php:49
+#@ formidable
+msgid "last updated"
+msgstr "poslednji update"
+
+#: classes/helpers/FrmAppHelper.php:354
+#, php-format
+#@ formidable
+msgid "%s is invalid"
+msgstr "%s ne postoji"
+
+#: classes/views/frm-settings/form.php:96
+#@ formidable
+msgid "Failed/Duplicate Entry"
+msgstr "Nije uspelo/Dupli unos"
+
+#: pro/classes/views/xml/map_csv_fields.php:49
+#@ formidable
+msgid "updated at"
+msgstr "updateovano na"
+
+#: pro/classes/views/frmpro-fields/options-form.php:214
+#@ formidable
+msgid "Visibility"
+msgstr "Vidljivost"
+
+#: pro/classes/views/frmpro-fields/options-form.php:215
+#@ formidable
+msgid "Determines who can see this field. The selected user role and higher user roles will be able to see this field. The only exception is logged-out users. Only logged-out users will be able to see the field if that option is selected."
+msgstr "Određuje koji može da vidiovo polje . Izabrani korisnik uloge i veći korisnci uloge će moći da vide ovu oblast . Jedini izuzetak su odjavljeni korisnici . Samo odjavljeni korisnici će moći da vide teren ako je izabrana ta opcija ."
+
+#: classes/views/xml/import_form.php:95
+#@ formidable
+msgid "(default template)"
+msgstr "(default template)"
+
+#: classes/views/xml/import_form.php:97
+#@ formidable
+msgid "(template)"
+msgstr "(template)"
+
+#: classes/controllers/FrmAppController.php:156
+#@ formidable
+msgid "Are you sure you want to deauthorize Formidable Pro on this site?"
+msgstr "Da li ste sigurni da želite da deautorizujete Formidable Pro na ovom sajtu?"
+
+#: classes/views/frm-settings/license_box.php:5
+#, php-format
+#@ formidable
+msgid "%1$sClick here%2$s to get it now"
+msgstr "%1$sKlik ovde%2$s da biste dobilisada"
+
+#: pro/classes/views/frmpro-forms/_custom_field_row.php:13
+#@ default
+msgid "&mdash; Select &mdash;"
+msgstr "&mdash; Selektuj &mdash;"
+
+#: pro/classes/views/frmpro-forms/_custom_field_row.php:25
+#@ formidable
+msgid "Form Field"
+msgstr "Polje forme"
+
+#: pro/classes/views/frmpro-forms/_custom_field_row.php:50
+#@ default
+msgid "Enter new"
+msgstr "Unesite novo"
+
+#: pro/classes/views/frmpro-forms/_post_taxonomy_row.php:8
+#@ formidable
+msgid "Field"
+msgstr "Polje"
+
+#: pro/classes/views/frmpro-forms/_post_taxonomy_row.php:34
+#@ formidable
+msgid "Taxonomy"
+msgstr "Taxonomy"
+
+#: pro/classes/views/frmpro-forms/post_options.php:135
+#@ formidable
+msgid "Select the field(s) from your form that you would like to populate with your categories, tags, or other taxonomies."
+msgstr "Selektujte polja iz vaše forme koju želite da nasadite sa vašim kategorijama, tagovima ili drugim taxonomijama."
+
+#: classes/controllers/FrmAppController.php:153
+#, php-format
+#@ formidable
+msgid "This site has been previously authorized to run Formidable Pro.<br/>%1$sInstall the pro version%2$s or %3$sdeauthorize%4$s this site to continue running the free version and remove this message."
+msgstr "Ovaj sajt je prethodno autorizovan da pokrene Formidable Pro.<br/>%1$sInstalirajte pro verziju%2$s ili %3$sdeautorizujte%4$s ovaj sajt da biste nastavili pokretanje besplatne verzije i uklonili ovu poruku."
+
+#: classes/views/frm-entries/no_entries.php:20
+#@ formidable
+msgid "Click on the \"Add Form\" button above the content box."
+msgstr "Klik na \"Dodaj Formu\"dugme iznad kvadrata sa sadržajem."
+
+#: classes/views/frm-forms/form.php:20
+#@ formidable
+msgid "Add fields here"
+msgstr "Dodati polja ovde"
+
+#: classes/views/frm-forms/form.php:21
+#@ formidable
+msgid "(Just click or drag)"
+msgstr "(Samo klikni ili prevuci)"
+
+#: classes/controllers/FrmAppController.php:103
+#@ formidable
+msgid "Click here to complete the upgrade"
+msgstr "Klik ovde da bi se završio upgrade"
+
+#: classes/controllers/FrmAppController.php:114
+#@ formidable
+msgid "Congratulations! Formidable is ready to roll."
+msgstr "Čestitamo! Formidable je spreman za pokret."
+
+#: classes/controllers/FrmAppController.php:318
+#@ formidable
+msgid "Import Complete"
+msgstr "Importovanje završeno"
+
+#: classes/controllers/FrmFormsController.php:442
+#@ formidable
+msgid "You are trying to edit a form that does not exist."
+msgstr "Pokušvate da editujete formu koja ne postoji"
+
+#: classes/controllers/FrmFormsController.php:687
+#: classes/controllers/FrmFormsController.php:690
+#@ formidable
+msgid "Edit Forms"
+msgstr "Edituj Forme"
+
+#: classes/controllers/FrmXMLController.php:130
+#@ formidable
+msgid "Imported"
+msgstr "Importovano"
+
+#: classes/controllers/FrmXMLController.php:131
+#@ formidable
+msgid "Updated"
+msgstr "Updateovano"
+
+#: classes/controllers/FrmXMLController.php:145
+#, php-format
+#@ formidable
+msgid "%1$s Form"
+msgid_plural "%1$s Forms"
+msgstr[0] "%1$s Forma"
+msgstr[1] "%1$s Forma"
+
+#: classes/controllers/FrmXMLController.php:146
+#, php-format
+#@ formidable
+msgid "%1$s Field"
+msgid_plural "%1$s Fields"
+msgstr[0] "%1$s Polje"
+msgstr[1] "%1$s Polje"
+
+#: classes/controllers/FrmXMLController.php:147
+#, php-format
+#@ formidable
+msgid "%1$s Entry"
+msgid_plural "%1$s Entries"
+msgstr[0] "%1$s Unos"
+msgstr[1] "%1$s Unos"
+
+#: classes/controllers/FrmXMLController.php:148
+#, php-format
+#@ formidable
+msgid "%1$s View"
+msgid_plural "%1$s Views"
+msgstr[0] "%1$s Pregled"
+msgstr[1] "%1$s Pregled"
+
+#: classes/controllers/FrmXMLController.php:149
+#, php-format
+#@ formidable
+msgid "%1$s Post"
+msgid_plural "%1$s Posts"
+msgstr[0] "%1$s Post"
+msgstr[1] "%1$s Post"
+
+#: classes/controllers/FrmXMLController.php:150
+#, php-format
+#@ formidable
+msgid "%1$s Term"
+msgid_plural "%1$s Terms"
+msgstr[0] "%1$s Termin"
+msgstr[1] "%1$s Termin"
+
+#: classes/controllers/FrmXMLController.php:169
+#@ formidable
+msgid "Nothing was imported or updated"
+msgstr "Ništa nije importovano ili update-ovano"
+
+#: classes/views/frm-forms/notification.php:77
+#, php-format
+#@ formidable
+msgid "If you leave the subject blank, the default will be used: %1$s Form submitted on %2$s"
+msgstr "Ako ostavite naslov prazan default će biti iskoroišćen:%1$s Forma podneta na %2$s"
+
+#: classes/views/frm-forms/settings.php:78
+#@ formidable
+msgid "Show the form with the confirmation message"
+msgstr "Prikađi formu sa porukom za potvrdjivanje"
+
+#: classes/views/xml/import_form.php:43
+#@ formidable
+msgid "Export Format"
+msgstr "Eksportuj format"
+
+#: classes/views/xml/import_form.php:76
+#@ formidable
+msgid "Data to Export"
+msgstr "Podaci za eksportovanje"
+
+#: classes/views/xml/import_form.php:78
+#@ formidable
+msgid "Include the following in the export file"
+msgstr "Uključiti sledeće u eksport fajla"
+
+#: classes/views/xml/import_form.php:87
+#@ formidable
+msgid "Select Form(s)"
+msgstr "Selektovati forme"
+
+#: classes/views/xml/import_form.php:102
+#@ formidable
+msgid "Hold down the CTRL/Command button to select multiple forms"
+msgstr "Držite CTRL/Command dugme da biste selektovali brojne forme"
+
+#: classes/views/xml/importing_xml.php:11
+#@ formidable
+msgid "Importing XML"
+msgstr "Importovati XML"
+
+#: pro/classes/controllers/FrmProEntriesController.php:1384
+#@ formidable
+msgid "Your import is complete"
+msgstr "Vaš unos je završen"
+
+#: pro/classes/views/displays/mb_advanced.php:70
+#@ formidable
+msgid "Insert View"
+msgstr "Uneti pregled"
+
+#: pro/classes/views/frmpro-fields/options-form.php:73
+#@ formidable
+msgid "Use four digit years or +/- years to make it dynamic. For example, use -5 for the start year and +5 for the end year."
+msgstr "Koristite četvorocifrene godine ili + / - godina da bi bilo dinamično . Na primer, koristite -5 za polazne godine i +5 za krajnjeg godinu ."
+
+#: pro/classes/views/frmpro-forms/add_form_options.php:84
+#@ formidable
+msgid "Action After Edit"
+msgstr "Akcija nakon editovanja"
+
+#: pro/classes/views/settings/form.php:1
+#@ formidable
+msgid "Edit Message"
+msgstr "Edituj poruku"
+
+#: pro/classes/views/settings/form.php:1
+#@ formidable
+msgid "The default message seen when after an entry is updated."
+msgstr "Default poruke koje se vide kada se unos update-uje."
+
+#: pro/classes/views/settings/form.php:5
+#@ formidable
+msgid "Update Button"
+msgstr "Dugme za upadte."
+
+#: pro/classes/views/settings/form.php:5
+#@ formidable
+msgid "The label on the submit button when editing and entry."
+msgstr "Oznaka na dugmetu za podnošenje kada editujete i unosite."
+
+#: classes/views/xml/importing_xml.php:13
+#: pro/classes/views/xml/import_csv.php:13
+#, php-format
+#@ formidable
+msgid "%1$s entries are importing"
+msgstr "%1$s unosi se importuju"
+
+#: pro/classes/views/xml/map_csv_fields.php:63
+#@ formidable
+msgid "Note: If you select a field for the Entry ID, the matching entry with that ID will be updated."
+msgstr "Beleška: Ako selekujete polje za Unos IDa, unos koji se poklapa sa ID će biti updateovan."
+
+#: pro/classes/widgets/FrmListEntries.php:178
+#@ formidable
+msgid "Use Settings from View"
+msgstr "Koristite postavke sa Pregleda"
+
+#: pro/classes/widgets/FrmListEntries.php:186
+#@ formidable
+msgid "Views with a \"Both (Dynamic)\" format will show here."
+msgstr "Pregledi sa  \"Oba (Dinamično)\"  formatom će biti prikazani ovde"
+
+#: pro/classes/widgets/FrmListEntries.php:188
+#@ formidable
+msgid "Page if not specified in View settings"
+msgstr "Stranica nije odredjena na Pregled postavkama"
+
+#: pro/classes/views/xml/map_csv_fields.php:52
+#@ formidable
+msgid "Is Draft"
+msgstr "je Draft"
+
+#: classes/views/xml/import_form.php:13
+#@ formidable
+msgid "Upload your Formidable XML file to import forms into this site. If your imported form key and creation date match a form on your site, that form will be updated."
+msgstr "Uploadujte vaš Formidable XML fajl da biste uneli forme na ovaj sajt. Ako se vaš unosni ključ forme i datim stvaranja  poklapaju na vašem sajtu, ta forme će biti upload-ovana."
+
+#: classes/views/xml/import_form.php:17
+#@ formidable
+msgid "Choose a Formidable XML file"
+msgstr "Izaberite Formidable XML fajl"
+
+#: pro/classes/controllers/FrmProXMLController.php:64
+#@ formidable
+msgid "Upload your Formidable XML or CSV file to import forms, entries, and views into this site. <br/><strong>Note: If your imported form/entry/view key and creation date match an item on your site, that item will be updated. You cannot undo this action.</strong>"
+msgstr "Uploadujte svoj Formidable XML  ili CSV fajl za unos forme, unose i preglede u ovom sajtu . <br/> <strong> Napomena : Ako vaš unosna forma / unos / pregled ključ i datum stvaranja podudara sa stavkom na vašem sajtu , koje će  biti ažurirano . Vi ne možete da opozovete ovu radnju . < / Strong >"
+
+#: pro/classes/controllers/FrmProXMLController.php:68
+#@ formidable
+msgid "Choose a Formidable XML or any CSV file"
+msgstr "Izaberite Formidable XML ili bilo koji CSV fajl"
+
+#: pro/classes/views/displays/mb_dyncontent.php:1
+#@ formidable
+msgid "Disable visual editor for this view"
+msgstr "Onemogućite vizuelni editor za ovaj prikaz"
+
+#: pro/classes/views/displays/mb_dyncontent.php:1
+#@ formidable
+msgid "It is recommended to check this box if you include a &lt;table&gt; tag in the Before Content box."
+msgstr "Preporučuje se da proverite ovo polje ako uključiti  &lt;table&gt; tag u Pre sadržaja kvadrat ."
+
+#: classes/helpers/FrmXMLHelper.php:39
+#@ formidable
+msgid "Your server does not have XML enabled"
+msgstr ""
+
+#: pro/classes/controllers/FrmProEntriesController.php:2104
+#@ formidable
+msgid "You are missing options in your shortcode. field_id is required."
+msgstr ""
+
+#: pro/classes/controllers/FrmProDisplaysController.php:764
+#@ formidable
+msgid "daily"
+msgstr ""
+
+#: pro/classes/controllers/FrmProDisplaysController.php:764
+#@ formidable
+msgid "weekly"
+msgstr ""
+
+#: pro/classes/controllers/FrmProDisplaysController.php:764
+#@ formidable
+msgid "monthly"
+msgstr ""
+
+#: pro/classes/controllers/FrmProDisplaysController.php:764
+#@ formidable
+msgid "yearly"
+msgstr ""
+
+#: pro/classes/controllers/FrmProFormsController.php:181
+#@ formidable
+msgid "SERVER"
+msgstr ""
+
+#: pro/classes/controllers/FrmProFormsController.php:181
+#@ formidable
+msgid "A variable from the PHP SERVER array."
+msgstr ""
+
+#: pro/classes/controllers/FrmProFormsController.php:181
+#@ formidable
+msgid "Replace 'whatever' with the parameter name. To get the url of the current page, use [server param=\"REQUEST_URI\"] in your field."
+msgstr ""
+
+#: pro/classes/views/displays/_calendar_options.php:2
+#@ formidable
+msgid "Event Date"
+msgstr ""
+
+#: pro/classes/views/displays/_calendar_options.php:13
+#@ formidable
+msgid "End Date or Day Count"
+msgstr ""
+
+#: pro/classes/views/displays/_calendar_options.php:25
+#@ formidable
+msgid "Repeat"
+msgstr ""
+
+#: pro/classes/views/displays/_calendar_options.php:25
+#@ formidable
+msgid "Select a field from your form that contains values like 1 week, 2 weeks, 1 year, etc. This will set the repeat period for each event."
+msgstr ""
+
+#: pro/classes/views/displays/_calendar_options.php:27
+#@ formidable
+msgid "No repeating events"
+msgstr ""
+
+#: pro/classes/views/displays/_calendar_options.php:35
+#@ formidable
+msgid "End Repeat"
+msgstr ""
+
+#: pro/classes/views/displays/_calendar_options.php:37
+#@ formidable
+msgid "Never"
+msgstr ""
+
+#: pro/classes/views/displays/where_options.php:3
+#: pro/classes/views/frmpro-fields/field-values.php:76
+#@ formidable
+msgid "Current User"
+msgstr ""
+
+#: pro/classes/views/settings/formroller.php:13
+#@ formidable
+msgid "Override theme styling"
+msgstr ""
+
+#: pro/classes/views/settings/formroller.php:13
+#@ formidable
+msgid "This will add !important to many of the lines in the Formidable styling to make sure it will be used."
+msgstr ""
+
+#: classes/controllers/FrmAppController.php:134
+#@ formidable
+msgid "Your update is not complete yet.<br/>Please deactivate and reactivate the plugin to complete the update or"
+msgstr ""
+
+#: classes/controllers/FrmAppController.php:138
+#: classes/controllers/FrmAppController.php:319
+#@ formidable
+msgid "Please wait while your site updates."
+msgstr ""
+
+#: classes/controllers/FrmFormsController.php:642
+#@ formidable
+msgid "Abnormal HTML characters prevented your form from saving correctly"
+msgstr ""
+
+#: classes/helpers/FrmAppHelper.php:820
+#@ formidable
+msgid "You are running an outdated version of Formidable. This plugin may not work correctly if you do not update Formidable."
+msgstr ""
+
+#: classes/helpers/FrmFieldsHelper.php:420
+#, php-format
+#@ formidable
+msgid "Please add options from the WordPress \"%1$s\" page"
+msgstr ""
+
+#: classes/helpers/FrmFieldsHelper.php:421
+#@ default
+msgid "Categories"
+msgstr ""
+
+#: classes/views/xml/import_form.php:64
+#@ formidable
+msgid "Column separation"
+msgstr ""
+
+#: pro/classes/controllers/FrmProXMLController.php:128
+#@ formidable
+msgid "That CSV was not uploaded. Are CSV files allowed on your site?"
+msgstr ""
+
