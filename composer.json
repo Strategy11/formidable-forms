@@ -24,7 +24,8 @@
 			"classes/controllers/",
             "classes/helpers/",
 			"classes/models/",
-            "widgets/"
+            "classes/widgets/",
+            "classes/views/"
 		]
 	},
 	"scripts": {
