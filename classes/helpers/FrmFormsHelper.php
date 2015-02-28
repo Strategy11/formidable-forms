@@ -46,7 +46,7 @@ class FrmFormsHelper{
             if ( $args['onchange'] ) {
                 echo ' onchange="'. $args['onchange'] .'"';
             }
-            if ( ! empty($class) ) {
+            if ( ! empty($args['class']) ) {
                 echo ' class="'. $args['class'] .'"';
             } ?>>
             <?php if ( $args['blank'] ) { ?>
