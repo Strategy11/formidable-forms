@@ -16,6 +16,7 @@
 		<exclude name="WordPress.VIP.RestrictedFunctions.switch_to_blog"/>
 		<exclude name="WordPress.VIP.RestrictedFunctions.get_term_by"/>
 		<exclude name="WordPress.VIP.RestrictedFunctions.get_term_link"/>
+		<exclude name="WordPress.VIP.SessionVariableUsage"/>
 
 		<!-- We should probably want to turn the below rules on, but these give issues with the current code base. -->
 		<exclude name="Generic.WhiteSpace.DisallowSpaceIndent.SpacesUsed" />
