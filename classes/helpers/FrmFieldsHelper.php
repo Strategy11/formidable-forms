@@ -302,8 +302,9 @@ class FrmFieldsHelper{
         if (apply_filters('frm_normal_field_type_html', true, $type)){
             $input = (in_array($type, array('radio', 'checkbox', 'data'))) ? '<div class="frm_opt_container">[input]</div>' : '[input]';
             $for = '';
-            if(!in_array($type, array('radio', 'checkbox', 'data', 'scale')))
+            if ( ! in_array( $type, array('radio', 'checkbox', 'data', 'scale') ) ) {
                 $for = 'for="field_[key]"';
+            }
 
             $default_html = <<<DEFAULT_HTML
 <div id="frm_field_[id]_container" class="frm_form_field form-field [required_class][error_class]">
@@ -355,8 +356,9 @@ DEFAULT_HTML;
 
         //replace [description] and [required_label] and [error]
         $required = ($field['required'] == '0') ? '' : $field['required_indicator'];
-        if(!is_array($errors))
+        if ( ! is_array( $errors ) ) {
             $errors = array();
+        }
         $error = isset($errors['field'. $field_id]) ? $errors['field'. $field_id] : false;
 
         //If field type is section heading, add class so a bottom margin can be added to either the h3 or description
@@ -400,7 +402,7 @@ DEFAULT_HTML;
         }
 
         //Add classes to inline confirmation field (if it doesn't already have classes set)
-        if ( isset($field['conf_field']) && $field['conf_field'] == 'inline' && !$field['classes'] ) {
+        if ( isset($field['conf_field']) && $field['conf_field'] == 'inline' && ! $field['classes'] ) {
             $error_class .= ' frm_first_half';
         }
 
@@ -528,7 +530,7 @@ DEFAULT_HTML;
         wp_enqueue_script('recaptcha-api');
 
 ?>
-<div id="field_<?php echo $field['field_key'] ?>" class="g-recaptcha" data-sitekey="<?php echo $frm_settings->pubkey ?>"></div>
+<div id="field_<?php echo esc_attr( $field['field_key'] ) ?>" class="g-recaptcha" data-sitekey="<?php echo esc_attr( $frm_settings->pubkey ) ?>"></div>
 <?php
     }
 
@@ -626,13 +628,13 @@ DEFAULT_HTML;
 
     public static function get_term_link($tax_id) {
         $tax = get_taxonomy($tax_id);
-        if ( !$tax ) {
+        if ( ! $tax ) {
             return;
         }
 
         $link = sprintf(
-            __('Please add options from the WordPress "%1$s" page', 'formidable'),
-            '<a href="'. esc_url(admin_url('edit-tags.php?taxonomy='. $tax->name)) .'" target="_blank">'. ( empty($tax->labels->name) ? __('Categories') : $tax->labels->name ) .'</a>'
+            __( 'Please add options from the WordPress "%1$s" page', 'formidable' ),
+            '<a href="'. esc_url( admin_url( 'edit-tags.php?taxonomy='. $tax->name ) ) .'" target="_blank">'. ( empty($tax->labels->name) ? __( 'Categories' ) : $tax->labels->name ) .'</a>'
         );
         unset($tax);
 
@@ -980,7 +982,7 @@ DEFAULT_HTML;
     }
 
     public static function show_default_blank_js($default_blank){ ?>
-    <a href="javascript:void(0)" class="frm_bstooltip <?php echo ($default_blank) ? '' :'frm_inactive_icon '; ?>frm_default_val_icons frm_action_icon frm_error_icon frm_icon_font" title="<?php echo $default_blank ? __('Default value will NOT pass form validation', 'formidable') : __('Default value will pass form validation', 'formidable'); ?>"></a>
+    <a href="javascript:void(0)" class="frm_bstooltip <?php echo $default_blank ? '' : 'frm_inactive_icon '; ?>frm_default_val_icons frm_action_icon frm_error_icon frm_icon_font" title="<?php $default_blank ? esc_attr_e( 'Default value will NOT pass form validation', 'formidable' ) : esc_attr_e( 'Default value will pass form validation', 'formidable' ); ?>"></a>
     <?php
     }
 

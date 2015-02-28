@@ -17,6 +17,10 @@ $default_style = $frm_style->get_default_style($styles);
 $defaults = $default_style->post_content;
 ?>
 
+.frm_hidden{
+    display:none;
+}
+
 .with_frm_style .form-field.frm_col_field{
     clear:none;
     float:left;

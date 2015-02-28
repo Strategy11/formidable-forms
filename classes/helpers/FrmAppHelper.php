@@ -411,12 +411,12 @@ class FrmAppHelper{
     public static function wp_pages_dropdown($field_name, $page_id, $truncate=false){
         $pages = self::get_pages();
     ?>
-        <select name="<?php echo $field_name; ?>" id="<?php echo $field_name; ?>" class="frm-pages-dropdown">
+        <select name="<?php echo esc_attr($field_name); ?>" id="<?php echo esc_attr($field_name); ?>" class="frm-pages-dropdown">
             <option value=""> </option>
             <?php foreach($pages as $page){ ?>
-                <option value="<?php echo $page->ID; ?>" <?php
+                <option value="<?php echo esc_attr($page->ID); ?>" <?php
                 echo ( ( ( isset($_POST[$field_name]) && $_POST[$field_name] == $page->ID ) || ( ! isset($_POST[$field_name]) && $page_id == $page->ID ) ) ? ' selected="selected"' : '' );
-                ?>><?php echo $truncate ? self::truncate($page->post_title, $truncate) : $page->post_title; ?> </option>
+                ?>><?php echo $truncate ? esc_attr( self::truncate($page->post_title, $truncate) ) : esc_attr($page->post_title); ?> </option>
             <?php } ?>
         </select>
     <?php
@@ -434,7 +434,7 @@ class FrmAppHelper{
         $capability = (array) self::get_param($field_name, $capability, 'post');
 
     ?>
-        <select name="<?php echo $field_name; ?>" id="<?php echo $field_name; ?>" <?php
+        <select name="<?php echo esc_attr($field_name); ?>" id="<?php echo esc_attr($field_name); ?>" <?php
             echo ( 'multiple' == $multiple ) ? 'multiple="multiple"' : '';
             ?> class="frm_multiselect">
             <?php self::roles_options($capability); ?>
@@ -453,7 +453,7 @@ class FrmAppHelper{
 
         foreach ( $editable_roles as $role => $details ) {
             $name = translate_user_role($details['name'] ); ?>
-        <option value="<?php echo esc_attr($role) ?>" <?php echo in_array($role, (array) $capability) ? ' selected="selected"' : ''; ?>><?php echo $name ?> </option>
+        <option value="<?php echo esc_attr($role) ?>" <?php echo in_array($role, (array) $capability) ? ' selected="selected"' : ''; ?>><?php echo esc_attr($name) ?> </option>
 <?php
             unset($role, $details);
         }
@@ -610,7 +610,7 @@ class FrmAppHelper{
         $other_val = '';
 
         //If option is an "other" option and there is a value set for this field, check if the value belongs in the current "Other" option text field
-        if ( !self::is_other_opt( $opt_key ) || !isset( $field['value'] ) || !$field['value'] ) {
+        if ( ! self::is_other_opt( $opt_key ) || ! isset( $field['value'] ) || ! $field['value'] ) {
             return $other_val;
         }
 
@@ -794,7 +794,7 @@ class FrmAppHelper{
     }
 
     public static function get_user_id_param($user_id){
-        if ( !$user_id || empty($user_id) || is_numeric($user_id) ) {
+        if ( ! $user_id || empty($user_id) || is_numeric($user_id) ) {
             return $user_id;
         }
 
@@ -1097,9 +1097,9 @@ class FrmAppHelper{
         }
     ?>
 <li>
-    <a href="javascript:void(0)" class="frmids frm_insert_code alignright <?php echo $class ?>" data-code="<?php echo esc_attr($args['id']) ?>" >[<?php echo $args['id'] ?>]</a>
-    <a href="javascript:void(0)" class="frmkeys frm_insert_code alignright <?php echo $class ?>" data-code="<?php echo esc_attr($args['key']) ?>" >[<?php echo self::truncate($args['key'], 10) ?>]</a>
-    <a href="javascript:void(0)" class="frm_insert_code <?php echo $class ?>" data-code="<?php echo esc_attr($args['id']) ?>" ><?php echo self::truncate($args['name'], 60) ?></a>
+    <a href="javascript:void(0)" class="frmids frm_insert_code alignright <?php echo esc_attr($class) ?>" data-code="<?php echo esc_attr($args['id']) ?>" >[<?php echo esc_attr( $args['id'] ) ?>]</a>
+    <a href="javascript:void(0)" class="frmkeys frm_insert_code alignright <?php echo esc_attr($class) ?>" data-code="<?php echo esc_attr($args['key']) ?>" >[<?php echo esc_attr( self::truncate($args['key'], 10) ) ?>]</a>
+    <a href="javascript:void(0)" class="frm_insert_code <?php echo esc_attr( $class ) ?>" data-code="<?php echo esc_attr($args['id']) ?>" ><?php echo esc_attr( self::truncate($args['name'], 60) ) ?></a>
 </li>
     <?php
     }
@@ -1610,7 +1610,7 @@ class FrmAppHelper{
             'email_subject' => esc_attr( sprintf( __('If you leave the subject blank, the default will be used: %1$s Form submitted on %2$s', 'formidable'), $form_name, self::site_name() ) ),
         );
 
-        if ( !isset($tooltips[$name]) ) {
+        if ( ! isset( $tooltips[ $name ] ) ) {
             return;
         }
 
@@ -1638,7 +1638,7 @@ class FrmAppHelper{
 
         //Loop through array to strip slashes and add only the needed ones
         foreach( $post_content as $key => $val ) {
-            if ( isset( $post_content[$key] ) && !is_array( $val ) ) {
+            if ( isset( $post_content[ $key ] ) && ! is_array( $val ) ) {
                 // Strip all slashes so everything is the same, no matter where the value is coming from
                 $val = stripslashes( $val );
 

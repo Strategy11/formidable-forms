@@ -16,7 +16,7 @@
             <input type="hidden" name="page" value="formidable" />
             <select name="id">
                 <?php foreach ($all_templates as $temp){ ?>
-                <option value="<?php echo $temp->id ?>"><?php echo FrmAppHelper::truncate($temp->name, 40) ?></option>
+                <option value="<?php echo esc_attr( $temp->id ) ?>"><?php echo FrmAppHelper::truncate($temp->name, 40) ?></option>
                 <?php } ?>
             </select><br/>
             </div>

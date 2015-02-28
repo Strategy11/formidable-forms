@@ -30,10 +30,10 @@
 				<tr id="menu-locations-row">
 					<td class="menu-location-title"><strong><?php echo empty($form->name) ? __('(no title)') : $form->name ?></strong></td>
 					<td class="menu-location-menus">
-					    <input type="hidden" name="prev_style[<?php echo $form->id ?>]" value="<?php echo esc_attr($this_style) ?>" />
-					    <select name="style[<?php echo $form->id ?>]">
+					    <input type="hidden" name="prev_style[<?php echo esc_attr( $form->id ) ?>]" value="<?php echo esc_attr( $this_style ) ?>" />
+					    <select name="style[<?php echo esc_attr( $form->id ) ?>]">
          		            <?php foreach ( $styles as $s ) { ?>
-         		            <option value="<?php echo $s->ID ?>" <?php selected($s->ID, $this_style) ?>><?php echo $s->post_title . ( empty($s->menu_order) ? '' : ' ('. __('default', 'formidable') .')' ) ?></option>
+         		            <option value="<?php echo esc_attr( $s->ID ) ?>" <?php selected($s->ID, $this_style) ?>><?php echo $s->post_title . ( empty($s->menu_order) ? '' : ' ('. __( 'default', 'formidable' ) .')' ) ?></option>
          		            <?php } ?>
          		            <option value="" <?php selected(0, $this_style) ?>><?php _e('Styling disabled', 'formidable') ?></option>
          		        </select>

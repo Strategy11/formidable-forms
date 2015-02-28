@@ -1,8 +1,9 @@
 
 <?php
 
-if ( !$item_ids )
+if ( ! $item_ids ) {
     return;
+}
 
 global $wp_query;
 $wp_query->in_the_loop = true; // Fake being in the loop.

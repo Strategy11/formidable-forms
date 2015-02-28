@@ -6,7 +6,7 @@ class FrmEntryMeta{
     public static function add_entry_meta($entry_id, $field_id, $meta_key = null, $meta_value) {
         global $wpdb;
 
-        if ( (is_array($meta_value) && empty($meta_value) ) || ( !is_array($meta_value) && trim($meta_value) == '' ) ) {
+        if ( ( is_array( $meta_value ) && empty( $meta_value ) ) || ( ! is_array( $meta_value ) && trim( $meta_value ) == '' ) ) {
             // don't save blank fields
             return;
         }
@@ -57,7 +57,7 @@ class FrmEntryMeta{
             $values = apply_filters( 'frm_prepare_data_before_db', $values, $field_id, $entry_id );
 
             if ( $prev_values && in_array($field_id, $prev_values) ) {
-                if ( (is_array($meta_value) && empty($meta_value) ) || ( !is_array($meta_value) && trim($meta_value) == '' ) ) {
+                if ( ( is_array( $meta_value ) && empty( $meta_value ) ) || ( ! is_array( $meta_value ) && trim( $meta_value ) == '' ) ) {
                     // remove blank fields
                     unset($values[$field_id]);
                 } else {
@@ -121,7 +121,7 @@ class FrmEntryMeta{
         $result = maybe_unserialize($result);
 
         if ( $cached ) {
-            if ( !isset($cached->metas) ) {
+            if ( ! isset( $cached->metas ) ) {
                 $cached->metas = array();
             }
             $cached->metas[$field_id] = $result;

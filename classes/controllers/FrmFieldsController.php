@@ -26,7 +26,7 @@ class FrmFieldsController{
 
             $field_id = $field['id'];
 
-            if ( !isset($field['value']) ) {
+            if ( ! isset( $field['value'] ) ) {
                 $field['value'] = '';
             }
 
@@ -81,7 +81,7 @@ class FrmFieldsController{
 
         $field_id = (int) $_POST['field'];
         $form_id = (int) $_POST['form_id'];
-        if ( !$field_id || !$form_id ) {
+        if ( ! $field_id || ! $form_id ) {
             return;
         }
 
@@ -267,7 +267,7 @@ class FrmFieldsController{
         $label = isset($this_opt['label']) ? $this_opt['label'] : reset($this_opt);
         $value =  isset($this_opt['value']) ? $this_opt['value'] : '';
 
-        if ( !isset($new_label) ) {
+        if ( ! isset( $new_label ) ) {
             $new_label = $label;
         }
 

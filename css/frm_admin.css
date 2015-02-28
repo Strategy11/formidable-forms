@@ -1000,6 +1000,11 @@ a.frm_action_icon:hover {text-decoration:none;}
 
 span.howto{display:inline;}
 
+.frm_import_message{
+    margin:15px 0;
+    line-height:2.5em;
+}
+
 .frm_sorting .form-field .widget input[type="text"],
 .frm_sorting .form-field .widget select,
 #wpcontent .frm_sorting .form-field .widget select,

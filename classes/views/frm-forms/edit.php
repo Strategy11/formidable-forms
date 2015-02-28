@@ -9,7 +9,7 @@
     <div id="post-body" class="metabox-holder columns-2">
     <div id="post-body-content">
     <?php
-        if ( !$values['is_template'] ) {
+        if ( ! $values['is_template'] ) {
             FrmAppController::get_form_nav($id, true, 'hide');
         }
         require(FrmAppHelper::plugin_path() .'/classes/views/shared/errors.php');
@@ -25,7 +25,7 @@
     <form method="post" id="frm_build_form">
         <input type="hidden" name="frm_action" value="update" />
         <input type="hidden" name="action" value="update" />
-        <input type="hidden" name="id" id="form_id" value="<?php echo $id; ?>" />
+        <input type="hidden" name="id" id="form_id" value="<?php echo (int) $id; ?>" />
 
         <?php require(FrmAppHelper::plugin_path() .'/classes/views/frm-forms/form.php'); ?>
 

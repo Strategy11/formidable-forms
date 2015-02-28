@@ -129,7 +129,7 @@ class FrmField{
 
       wp_cache_delete( $id, 'frm_field' );
       $field = self::getOne($id);
-      if ( !$field ) {
+      if ( ! $field ) {
           return false;
       }
 

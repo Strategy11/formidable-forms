@@ -56,12 +56,12 @@ class FrmFormActionsHelper{
         $stop = false;
         $met = array();
 
-        if ( !isset($notification['conditions']) || empty($notification['conditions']) ) {
+        if ( ! isset( $notification['conditions'] ) || empty( $notification['conditions'] ) ) {
             return $stop;
         }
 
         foreach ( $notification['conditions'] as $k => $condition ) {
-            if ( !is_numeric($k) ) {
+            if ( ! is_numeric( $k ) ) {
                 continue;
             }
 

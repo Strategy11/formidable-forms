@@ -1,6 +1,6 @@
 <?php
 if ( isset($include_extra_container) ) { ?>
-<div class="<?php echo $include_extra_container ?>" id="frm_form_<?php echo $form->id ?>_container">
+<div class="<?php echo esc_attr( $include_extra_container ) ?>" id="frm_form_<?php echo esc_attr( $form->id ) ?>_container">
 <?php
 }
 if (isset($message) && $message != ''){
@@ -23,7 +23,7 @@ $img = '';
 if ( ! FrmAppHelper::is_admin() ) {
     $img = apply_filters('frm_error_icon', $img);
     if ( $img && ! empty($img) ) {
-    ?><img src="<?php echo $img ?>" alt="" />
+    ?><img src="<?php echo esc_attr( $img ) ?>" alt="" />
 <?php
     }
 }
@@ -33,7 +33,7 @@ if(empty($frm_settings->invalid_msg)){
     $show_img = false;
     foreach( $errors as $error ){
         if ( $show_img && ! empty($img) ) {
-            ?><img src="<?php echo $img ?>" alt="" /><?php
+            ?><img src="<?php echo esc_attr( $img ) ?>" alt="" /><?php
         }else{
             $show_img = true;
         }
@@ -50,7 +50,7 @@ if(empty($frm_settings->invalid_msg)){
 
         echo '<br/>';
         if ( $show_img && ! empty($img) ) {
-            ?><img src="<?php echo $img ?>" alt="" /><?php
+            ?><img src="<?php echo esc_attr( $img ) ?>" alt="" /><?php
         }else{
             $show_img = true;
         }

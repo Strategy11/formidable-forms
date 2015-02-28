@@ -7,14 +7,15 @@
 <?php
 foreach($type as $tb_type){
 
-    if(!isset($tables[$tb_type])){
+    if ( ! isset( $tables[ $tb_type ] ) ) {
         do_action('frm_xml_import_'. $tb_type, $args);
         continue;
     }
 
     //no records
-    if(!isset($records[$tb_type]))
+    if ( ! isset( $records[ $tb_type ] ) ) {
         continue;
+    }
 
     $item_ids = $records[$tb_type];
     if ( in_array($tb_type, array('styles', 'actions') ) ) {

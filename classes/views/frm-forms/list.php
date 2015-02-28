@@ -11,7 +11,7 @@
 <?php $wp_list_table->views(); ?>
 
 <form id="posts-filter" method="get">
-    <input type="hidden" name="page" value="<?php echo $_GET['page'] ?>" />
+    <input type="hidden" name="page" value="<?php echo esc_attr( $_GET['page'] ) ?>" />
     <input type="hidden" name="frm_action" value="list" />
 <?php
 

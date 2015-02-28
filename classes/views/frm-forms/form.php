@@ -1,5 +1,5 @@
 <?php wp_nonce_field('frm_save_form_nonce', 'frm_save_form'); ?>
-<input type="hidden" name="status" value="<?php echo $values['status']; ?>" />
+<input type="hidden" name="status" value="<?php echo esc_attr( $values['status'] ); ?>" />
 <input type="hidden" name="new_status" value="" />
 
 <div id="frm_form_editor_container">

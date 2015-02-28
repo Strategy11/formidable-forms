@@ -88,7 +88,7 @@ class FrmXMLController{
 
         $file = $_FILES['frm_import_file']['tmp_name'];
 
-        if ( !is_uploaded_file($file) ) {
+        if ( ! is_uploaded_file( $file ) ) {
             unset($file);
             $errors[] = __( 'The file does not exist, please try again.', 'formidable' );
             self::form($errors);
@@ -276,12 +276,12 @@ class FrmXMLController{
     }
 
     public static function allow_mime($mimes) {
-        if ( !isset($mimes['csv']) ) {
+        if ( ! isset( $mimes['csv'] ) ) {
             // allow csv files
             $mimes['csv'] = 'text/csv';
         }
 
-        if ( !isset($mimes['xml']) ) {
+        if ( ! isset( $mimes['xml'] ) ) {
             // allow xml
             $mimes['xml'] = 'text/xml';
         }

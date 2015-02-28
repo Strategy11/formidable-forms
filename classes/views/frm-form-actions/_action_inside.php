@@ -1,12 +1,12 @@
-<input type="hidden" name="<?php echo $action_control->get_field_name('post_excerpt', '') ?>" class="frm_action_name" value="<?php echo esc_attr($form_action->post_excerpt); ?>" />
-<input type="hidden" name="<?php echo $action_control->get_field_name('ID', '') ?>" value="<?php echo esc_attr($form_action->ID); ?>" />
+<input type="hidden" name="<?php echo esc_attr( $action_control->get_field_name('post_excerpt', '') ) ?>" class="frm_action_name" value="<?php echo esc_attr( $form_action->post_excerpt ); ?>" />
+<input type="hidden" name="<?php echo esc_attr( $action_control->get_field_name('ID', '') ) ?>" value="<?php echo esc_attr( $form_action->ID ); ?>" />
 
 <table class="form-table">
     <tr>
         <th>
-            <label <?php FrmAppHelper::maybe_add_tooltip('action_title') ?>><?php _e('Label', 'formidable') ?></label>
+            <label <?php FrmAppHelper::maybe_add_tooltip('action_title') ?>><?php _e( 'Label', 'formidable' ) ?></label>
         </th>
-        <td><input type="text" name="<?php echo $action_control->get_field_name('post_title', '') ?>" value="<?php echo esc_attr($form_action->post_title); ?>" class="large-text <?php FrmAppHelper::maybe_add_tooltip('action_title', 'open') ?>" id="<?php echo $action_control->get_field_id('action_post_title') ?>" />
+        <td><input type="text" name="<?php echo esc_attr( $action_control->get_field_name('post_title', '') ) ?>" value="<?php echo esc_attr($form_action->post_title); ?>" class="large-text <?php FrmAppHelper::maybe_add_tooltip('action_title', 'open') ?>" id="<?php echo esc_attr( $action_control->get_field_id('action_post_title') ) ?>" />
         </td>
     </tr>
 </table>
@@ -25,7 +25,7 @@
 
     if ( count($action_control->action_options['event']) == 1 || $action_control->action_options['force_event'] ) {
         foreach ( $action_control->action_options['event'] as $e) { ?>
-        <input type="hidden" name="<?php echo $action_control->get_field_name('event') ?>[]" value="<?php echo esc_attr($e) ?>" />
+        <input type="hidden" name="<?php echo esc_attr( $action_control->get_field_name('event') ) ?>[]" value="<?php echo esc_attr( $e ) ?>" />
 <?php   }
     } else {
 ?>
@@ -38,7 +38,7 @@
         );
 
         foreach ( $action_control->action_options['event'] as $event ) { ?>
-            <label for="frm_action_event_<?php echo $event ?>" class="frm_action_events"><input type="checkbox" name="<?php echo $action_control->get_field_name('event') ?>[]" value="<?php echo $event ?>" id="<?php echo $action_control->get_field_id('frm_action_event_'. $event) ?>" <?php FrmAppHelper::checked($form_action->post_content['event'], $event) ?> />
+            <label for="frm_action_event_<?php echo esc_attr( $event ) ?>" class="frm_action_events"><input type="checkbox" name="<?php echo esc_attr( $action_control->get_field_name('event') ) ?>[]" value="<?php echo esc_attr( $event ) ?>" id="<?php echo esc_attr( $action_control->get_field_id('frm_action_event_'. $event) ) ?>" <?php FrmAppHelper::checked($form_action->post_content['event'], $event) ?> />
             <?php echo isset($event_labels[$event]) ? $event_labels[$event] : $event; ?>
             </label>
 <?php

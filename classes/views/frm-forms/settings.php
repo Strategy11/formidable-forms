@@ -13,7 +13,7 @@
         ?>
 
 <form method="post" class="frm_form_settings">
-    <input type="hidden" name="id" id="form_id" value="<?php echo $id; ?>" />
+    <input type="hidden" name="id" id="form_id" value="<?php echo (int) $id; ?>" />
     <input type="hidden" name="frm_action" value="update_settings" />
 
         <div class="meta-box-sortables">
@@ -29,7 +29,7 @@
         	<li <?php echo ($a == 'email_settings') ? 'class="tabs active"' : '' ?>><a href="#email_settings"><?php _e('Form Actions', 'formidable'); ?></a></li>
             <li <?php echo ($a == 'html_settings') ? 'class="tabs active"' : '' ?>><a href="#html_settings"><?php _e('Customize HTML', 'formidable') ?></a></li>
             <?php foreach($sections as $sec_name => $section){ ?>
-                <li <?php echo ($a == $sec_name .'_settings') ? 'class="tabs active"' : '' ?>><a href="#<?php echo $sec_name ?>_settings"><?php echo ucfirst($sec_name) ?></a></li>
+                <li <?php echo ($a == $sec_name .'_settings') ? 'class="tabs active"' : '' ?>><a href="#<?php echo esc_attr( $sec_name ) ?>_settings"><?php echo ucfirst($sec_name) ?></a></li>
             <?php } ?>
         </ul>
         </div>
@@ -116,7 +116,7 @@
                     <td><select name="options[custom_style]" id="custom_style">
                         <option value="1" <?php selected($values['custom_style'], 1) ?>><?php _e('Always use default', 'formidable')?></option>
                         <?php foreach ( $styles as $s ) { ?>
-                        <option value="<?php echo $s->ID ?>" <?php selected($s->ID, $values['custom_style']) ?>><?php echo $s->post_title . ( empty($s->menu_order) ? '' : ' ('. __('default', 'formidable') .')' ) ?></option>
+                        <option value="<?php echo esc_attr( $s->ID ) ?>" <?php selected( $s->ID, $values['custom_style'] ) ?>><?php echo $s->post_title . ( empty( $s->menu_order ) ? '' : ' ('. __( 'default', 'formidable' ) .')' ) ?></option>
                         <?php } ?>
                         <option value="0" <?php selected($values['custom_style'], 0); selected($values['custom_style'], '') ?>><?php _e('Do not use Formidable styling', 'formidable')?></option>
                     </select></td>
@@ -151,10 +151,10 @@
                 //For each add-on, add an li, class, and javascript function. If active, add an additional class.
                 foreach ( $action_controls as $action_control ) {
                     ?>
-                    <li><a href="javascript:void(0)" class="frm_<?php echo $action_control->id_base ?>_action frm_bstooltip <?php
+                    <li><a href="javascript:void(0)" class="frm_<?php echo esc_attr( $action_control->id_base ) ?>_action frm_bstooltip <?php
                     echo ( isset($action_control->action_options['active']) && $action_control->action_options['active']) ? 'frm_active_action ' : 'frm_inactive_action ';
-                    echo $action_control->action_options['classes'];
-                    ?>" title="<?php echo esc_attr($action_control->action_options['tooltip']) ?>" data-limit="<?php echo isset($action_control->action_options['limit']) ? $action_control->action_options['limit'] : '99' ?>" data-actiontype="<?php echo esc_attr($action_control->id_base) ?>"></a></li>
+                    echo esc_attr( $action_control->action_options['classes'] );
+                    ?>" title="<?php echo esc_attr($action_control->action_options['tooltip']) ?>" data-limit="<?php echo isset($action_control->action_options['limit']) ? esc_attr( $action_control->action_options['limit'] ) : '99' ?>" data-actiontype="<?php echo esc_attr($action_control->id_base) ?>"></a></li>
 <?php
                     unset($actions_icon);
                 }
@@ -188,7 +188,7 @@
                         foreach($values['fields'] as $field){
                             if (apply_filters('frm_show_custom_html', true, $field['type'])){ ?>
                                 <p><label><?php echo $field['name'] ?></label>
-                                <textarea name="field_options[custom_html_<?php echo $field['id'] ?>]" rows="7" id="custom_html_<?php echo $field['id'] ?>" class="field_custom_html frm_long_input"><?php echo FrmAppHelper::esc_textarea($field['custom_html']) ?></textarea></p>
+                                <textarea name="field_options[custom_html_<?php echo esc_attr( $field['id'] ) ?>]" rows="7" id="custom_html_<?php echo esc_attr( $field['id'] ) ?>" class="field_custom_html frm_long_input"><?php echo FrmAppHelper::esc_textarea($field['custom_html']) ?></textarea></p>
                             <?php }
                             unset($field);
                         }
@@ -204,7 +204,7 @@
         </div>
 
         <?php foreach($sections as $sec_name => $section){ ?>
-            <div id="<?php echo $sec_name ?>_settings" class="tabs-panel" style="display:<?php echo ($a == $sec_name .'_settings') ? 'block' : 'none'; ?>;"><?php
+            <div id="<?php echo esc_attr( $sec_name ) ?>_settings" class="tabs-panel" style="display:<?php echo ($a == $sec_name .'_settings') ? 'block' : 'none'; ?>;"><?php
             if(isset($section['class'])){
                 call_user_func(array($section['class'], $section['function']), $values);
             }else{

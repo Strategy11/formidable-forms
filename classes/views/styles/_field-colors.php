@@ -19,24 +19,24 @@
 		?>">
 			<div class="field-group field-group-border clearfix">
             	<label class="background"><?php _e('BG color', 'formidable') ?></label>
-            	<input type="text" name="<?php echo $frm_style->get_field_name('bg_color') ?>" id="frm_bg_color" class="hex" value="<?php echo esc_attr($style->post_content['bg_color']) ?>" />
+            	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name('bg_color') ) ?>" id="frm_bg_color" class="hex" value="<?php echo esc_attr( $style->post_content['bg_color'] ) ?>" />
             </div>
             <div class="field-group clearfix">
             	<label><?php _e('Text', 'formidable') ?></label>
-            	<input type="text" name="<?php echo $frm_style->get_field_name('text_color') ?>" id="frm_text_color" class="hex" value="<?php echo esc_attr($style->post_content['text_color']) ?>" />
+            	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name('text_color') ) ?>" id="frm_text_color" class="hex" value="<?php echo esc_attr( $style->post_content['text_color'] ) ?>" />
             </div>
 
             <div class="field-group field-group-border clearfix">
             	<label><?php _e('Border', 'formidable') ?></label>
-            	<input type="text" name="<?php echo $frm_style->get_field_name('border_color') ?>" id="frm_border_color" class="hex" value="<?php echo esc_attr($style->post_content['border_color']) ?>" />
+            	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name('border_color') ) ?>" id="frm_border_color" class="hex" value="<?php echo esc_attr( $style->post_content['border_color'] ) ?>" />
             </div>
             <div class="field-group clearfix">
             	<label><?php _e('Thickness', 'formidable') ?></label>
-            	<input type="text" name="<?php echo $frm_style->get_field_name('field_border_width') ?>" id="frm_field_border_width" value="<?php echo esc_attr($style->post_content['field_border_width']) ?>" size="4" />
+            	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name('field_border_width') ) ?>" id="frm_field_border_width" value="<?php echo esc_attr( $style->post_content['field_border_width'] ) ?>" size="4" />
             </div>
             <div class="field-group clearfix">
             	<label><?php _e('Style', 'formidable')?></label>
-            	<select name="<?php echo $frm_style->get_field_name('field_border_style') ?>" id="frm_field_border_style">
+            	<select name="<?php echo esc_attr( $frm_style->get_field_name('field_border_style') ) ?>" id="frm_field_border_style">
             	    <option value="solid" <?php selected($style->post_content['field_border_style'], 'solid') ?>><?php _e('solid', 'formidable') ?></option>
             		<option value="dotted" <?php selected($style->post_content['field_border_style'], 'dotted') ?>><?php _e('dotted', 'formidable') ?></option>
             		<option value="dashed" <?php selected($style->post_content['field_border_style'], 'dashed') ?>><?php _e('dashed', 'formidable') ?></option>
@@ -51,11 +51,11 @@
 		?>">
             <div class="field-group field-group-border clearfix">
             	<label class="background"><?php _e('BG color', 'formidable') ?></label>
-            	<input type="text" name="<?php echo $frm_style->get_field_name('bg_color_active') ?>" id="frm_bg_color_active" class="hex" value="<?php echo esc_attr($style->post_content['bg_color_active']) ?>" />
+            	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name('bg_color_active') ) ?>" id="frm_bg_color_active" class="hex" value="<?php echo esc_attr( $style->post_content['bg_color_active'] ) ?>" />
             </div>
             <div class="field-group clearfix">
             	<label><?php _e('Border', 'formidable') ?></label>
-            	<input type="text" name="<?php echo $frm_style->get_field_name('border_color_active') ?>" id="frm_border_color_active" class="hex" value="<?php echo esc_attr($style->post_content['border_color_active']) ?>" />
+            	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name('border_color_active') ) ?>" id="frm_border_color_active" class="hex" value="<?php echo esc_attr( $style->post_content['border_color_active'] ) ?>" />
             </div>
             <div class="clear"></div>
 		</div><!-- /.tabs-panel -->
@@ -65,24 +65,24 @@
 		?>">
 		    <div class="field-group field-group-border clearfix">
         	    <label class="background"><?php _e('BG color', 'formidable') ?></label>
-        	    <input type="text" name="<?php echo $frm_style->get_field_name('bg_color_error') ?>" id="frm_bg_color_error" class="hex" value="<?php echo esc_attr($style->post_content['bg_color_error']) ?>" />
+        	    <input type="text" name="<?php echo esc_attr( $frm_style->get_field_name('bg_color_error') ) ?>" id="frm_bg_color_error" class="hex" value="<?php echo esc_attr( $style->post_content['bg_color_error'] ) ?>" />
             </div>
             <div class="field-group clearfix">
         	    <label><?php _e('Text', 'formidable') ?></label>
-        	    <input type="text" name="<?php echo $frm_style->get_field_name('text_color_error') ?>" id="frm_text_color_error" class="hex" value="<?php echo esc_attr($style->post_content['text_color_error']) ?>" />
+        	    <input type="text" name="<?php echo esc_attr( $frm_style->get_field_name('text_color_error') ) ?>" id="frm_text_color_error" class="hex" value="<?php echo esc_attr( $style->post_content['text_color_error'] ) ?>" />
             </div>
 
             <div class="field-group field-group-border clearfix">
                 <label><?php _e('Border', 'formidable') ?></label>
-            	<input type="text" name="<?php echo $frm_style->get_field_name('border_color_error') ?>" id="frm_border_color_error" class="hex" value="<?php echo esc_attr($style->post_content['border_color_error']) ?>" />
+            	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name('border_color_error') ) ?>" id="frm_border_color_error" class="hex" value="<?php echo esc_attr( $style->post_content['border_color_error'] ) ?>" />
             </div>
             <div class="field-group clearfix">
             	<label><?php _e('Thickness', 'formidable') ?></label>
-            	<input type="text" name="<?php echo $frm_style->get_field_name('border_width_error') ?>" id="frm_border_width_error" value="<?php echo esc_attr($style->post_content['border_width_error']) ?>" size="4" />
+            	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name('border_width_error') ) ?>" id="frm_border_width_error" value="<?php echo esc_attr( $style->post_content['border_width_error'] ) ?>" size="4" />
             </div>
             <div class="field-group clearfix">
             	<label><?php _e('Style', 'formidable') ?></label>
-            	<select name="<?php echo $frm_style->get_field_name('border_style_error') ?>" id="frm_border_style_error">
+            	<select name="<?php echo esc_attr( $frm_style->get_field_name('border_style_error') ) ?>" id="frm_border_style_error">
             	    <option value="solid" <?php selected($style->post_content['border_style_error'], 'solid') ?>><?php _e('solid', 'formidable') ?></option>
             		<option value="dotted" <?php selected($style->post_content['border_style_error'], 'dotted') ?>><?php _e('dotted', 'formidable') ?></option>
             		<option value="dashed" <?php selected($style->post_content['border_style_error'], 'dashed') ?>><?php _e('dashed', 'formidable') ?></option>
@@ -98,16 +98,16 @@
 		?>">
 		    <div class="field-group field-group-border clearfix">
         	    <label class="background"><?php _e('BG color', 'formidable') ?></label>
-        	    <input type="text" name="<?php echo $frm_style->get_field_name('bg_color_disabled') ?>" id="frm_bg_color_disabled" class="hex" value="<?php echo esc_attr($style->post_content['bg_color_disabled']) ?>" />
+        	    <input type="text" name="<?php echo esc_attr( $frm_style->get_field_name('bg_color_disabled') ) ?>" id="frm_bg_color_disabled" class="hex" value="<?php echo esc_attr( $style->post_content['bg_color_disabled'] ) ?>" />
             </div>
             <div class="field-group clearfix">
         	    <label><?php _e('Text', 'formidable') ?></label>
-        	    <input type="text" name="<?php echo $frm_style->get_field_name('text_color_disabled') ?>" id="frm_text_color_disabled" class="hex" value="<?php echo esc_attr($style->post_content['text_color_disabled']) ?>" />
+        	    <input type="text" name="<?php echo esc_attr( $frm_style->get_field_name('text_color_disabled') ) ?>" id="frm_text_color_disabled" class="hex" value="<?php echo esc_attr( $style->post_content['text_color_disabled'] ) ?>" />
             </div>
 
             <div class="field-group clearfix">
                 <label><?php _e('Border', 'formidable') ?></label>
-            	<input type="text" name="<?php echo $frm_style->get_field_name('border_color_disabled') ?>" id="frm_border_color_disabled" class="hex" value="<?php echo esc_attr($style->post_content['border_color_disabled']) ?>" />
+            	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name('border_color_disabled') ) ?>" id="frm_border_color_disabled" class="hex" value="<?php echo esc_attr( $style->post_content['border_color_disabled'] ) ?>" />
             </div>
             <div class="clear"></div>
 		</div><!-- /.tabs-panel -->

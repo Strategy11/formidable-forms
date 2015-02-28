@@ -165,7 +165,7 @@ class FrmFormsListHelper extends FrmListHelper {
 
 	    foreach ( $statuses as $status => $name ) {
 
-	        if ( (isset($_REQUEST['form_type']) && $status == $_REQUEST['form_type']) || ( !isset($_REQUEST['form_type']) && 'published' == $status ) ) {
+	        if ( ( isset( $_REQUEST['form_type'] ) && $status == $_REQUEST['form_type']) || ( ! isset( $_REQUEST['form_type'] ) && 'published' == $status ) ) {
     			$class = ' class="current"';
     		} else {
     		    $class = '';
@@ -191,7 +191,7 @@ class FrmFormsListHelper extends FrmListHelper {
 		}
 	}
 
-	function single_row( $item, $style='') {
+	function single_row( $item, $style = '' ) {
 	    global $frm_vars, $mode;
 
 		// Set up the hover actions for this user

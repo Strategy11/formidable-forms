@@ -99,12 +99,12 @@ class FrmAppController {
             if ( ( (int) $db_version < (int) FrmAppHelper::$db_version ) ||
                 ( FrmAppHelper::pro_is_installed() && (int) $pro_db_version < (int) FrmAppHelper::$pro_db_version ) ) {
             ?>
-<div class="error" id="frm_install_message" style="padding:7px;"><?php _e( 'Your update is not complete yet.<br/>Please deactivate and reactivate the plugin to complete the update or', 'formidable' ); ?> <a href="javascript:void(0)" id="frm_install_link"><?php _e( 'Update Now', 'formidable' ) ?></a></div>
+<div class="error" id="frm_install_message"><?php _e( 'Your update is not complete yet.<br/>Please deactivate and reactivate the plugin to complete the update or', 'formidable' ); ?> <a href="javascript:void(0)" id="frm_install_link"><?php _e( 'Update Now', 'formidable' ) ?></a></div>
 <script type="text/javascript">
 jQuery(document).ready(function($){ $(document.getElementById('frm_install_link')).click(frm_install_now); });
 function frm_install_now(){
     var $msg = jQuery(document.getElementById('frm_install_message'));
-	$msg.html('<div style="line-height:24px;"><?php _e( 'Please wait while your site updates.', 'formidable' ) ?><div class="spinner frm_spinner" style="float:left;display:block;"></div></div>');
+	$msg.html('<div class="frm_plugin_updating"><?php _e( 'Please wait while your site updates.', 'formidable' ) ?><div class="spinner frm_spinner"></div></div>');
 	jQuery.ajax({
 		type:"POST",url:ajaxurl,data:"action=frm_install",
 		success:function(){$msg.fadeOut('slow');}
@@ -120,12 +120,12 @@ function frm_install_now(){
             // user is authorized, but running free version
             $inst_install_url = 'http://formidablepro.com/knowledgebase/manually-install-formidable-pro/';
         ?>
-    <div class="error" style="padding:7px;"><?php echo apply_filters( 'frm_pro_update_msg', sprintf( __( 'This site has been previously authorized to run Formidable Forms.<br/>%1$sInstall the pro version%2$s or %3$sdeauthorize%4$s this site to continue running the free version and remove this message.', 'formidable' ), '<a href="'. $inst_install_url .'" target="_blank">', '</a>', '<a href="javascript:void(0)" onclick="frm_deauthorize_now()" class="frm_deauthorize_link">', '</a>' ), $inst_install_url ); ?></div>
+    <div class="error" class="frm_previous_install"><?php echo apply_filters( 'frm_pro_update_msg', sprintf( __( 'This site has been previously authorized to run Formidable Forms.<br/>%1$sInstall the pro version%2$s or %3$sdeauthorize%4$s this site to continue running the free version and remove this message.', 'formidable' ), '<a href="'. $inst_install_url .'" target="_blank">', '</a>', '<a href="javascript:void(0)" onclick="frm_deauthorize_now()" class="frm_deauthorize_link">', '</a>' ), $inst_install_url ); ?></div>
 <script type="text/javascript">
 function frm_deauthorize_now(){
 if(!confirm("<?php esc_attr_e( 'Are you sure you want to deauthorize Formidable Forms on this site?', 'formidable' ) ?>"))
 	return false;
-jQuery('.frm_deauthorize_link').html('<span class="spinner" style="display:inline-block;margin-top:0;float:none;"></span>');
+jQuery('.frm_deauthorize_link').html('<span class="spinner"></span>');
 jQuery.ajax({type:'POST',url:ajaxurl,data:'action=frm_deauthorize&nonce='+wp_create_nonce('frm_ajax'),
 success:function(msg){jQuery('.error').fadeOut('slow');}
 });

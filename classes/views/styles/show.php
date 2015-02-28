@@ -11,13 +11,13 @@
 
  		    } else { ?>
  		        <form method="get">
- 		            <input type="hidden" name="page" value="<?php echo $_GET['page'] ?>"/>
+ 		            <input type="hidden" name="page" value="<?php echo esc_attr( $_GET['page'] ) ?>"/>
  		            <input type="hidden" name="frm_action" value="edit" />
      		        <label class="selected-menu"><?php _e('Select a style to edit:', 'formidable'); ?></label>
      		        <select name="id">
      		            <option value=""><?php _e('&mdash; Select &mdash;') ?></option>
      		            <?php foreach ( $styles as $s ) { ?>
-     		            <option value="<?php echo $s->ID ?>" <?php selected($s->ID, $style->ID) ?>><?php echo $s->post_title . (empty($s->menu_order) ? '' : ' ('. __('default', 'formidable') .')') ?></option>
+     		            <option value="<?php echo esc_attr( $s->ID ) ?>" <?php selected($s->ID, $style->ID) ?>><?php echo $s->post_title . (empty($s->menu_order) ? '' : ' ('. __( 'default', 'formidable' ) .')') ?></option>
      		            <?php } ?>
      		        </select>
      		        <span class="submit-btn">
@@ -32,9 +32,9 @@
     </div><!-- /manage-menus -->
 
 	<form id="frm_styling_form" action="" name="frm_styling_form" method="post">
-	    <input type="hidden" name="ID" value="<?php echo $style->ID ?>" />
+	    <input type="hidden" name="ID" value="<?php echo esc_attr( $style->ID ) ?>" />
 		<input type="hidden" name="frm_action" value="save" />
-        <textarea name="<?php echo $frm_style->get_field_name('custom_css') ?>" class="frm_hidden"><?php echo FrmAppHelper::esc_textarea($style->post_content['custom_css']) ?></textarea>
+        <textarea name="<?php echo esc_attr( $frm_style->get_field_name('custom_css') ) ?>" class="frm_hidden"><?php echo FrmAppHelper::esc_textarea( $style->post_content['custom_css'] ) ?></textarea>
 		<?php wp_nonce_field( 'frm_style_nonce', 'frm_style' ); ?>
 
 	<div id="nav-menus-frame">
@@ -42,7 +42,7 @@
 		<div class="clear"></div>
 
 		<div class="styling_settings">
-		    <input type="hidden" name="style_name" value="frm_style_<?php echo $style->post_name ?>" />
+		    <input type="hidden" name="style_name" value="frm_style_<?php echo esc_attr( $style->post_name ) ?>" />
 			<?php FrmStylesController::do_accordion_sections( FrmStylesController::$screen, 'side', compact('style', 'frm_style') ); ?>
 		</div>
 
@@ -56,17 +56,17 @@
 						<div class="major-publishing-actions">
 							<label class="menu-name-label howto open-label" for="menu-name">
 								<span><?php _e('Style Name', 'formidable') ?></span>
-								<input id="menu-name" name="<?php echo $frm_style->get_field_name('post_title', ''); ?>" type="text" class="menu-name regular-text menu-item-textbox" title="<?php esc_attr_e('Enter style name here', 'formidable') ?>" value="<?php echo esc_attr($style->post_title) ?>" />
+								<input id="menu-name" name="<?php echo esc_attr( $frm_style->get_field_name('post_title', '') ); ?>" type="text" class="menu-name regular-text menu-item-textbox" title="<?php esc_attr_e( 'Enter style name here', 'formidable' ) ?>" value="<?php echo esc_attr( $style->post_title ) ?>" />
 							</label>
 
 							<input name="prev_menu_order" type="hidden" value="<?php echo esc_attr($style->menu_order) ?>" />
 							<label class="menu-name-label howto open-label default-style-box" for="menu_order">
 							<span>
 							<?php if ( $style->menu_order ) { ?>
-							    <input name="<?php echo $frm_style->get_field_name('menu_order', ''); ?>" type="hidden" value="1" />
+							    <input name="<?php echo esc_attr( $frm_style->get_field_name('menu_order', '') ); ?>" type="hidden" value="1" />
 							    <input id="menu_order" disabled="disabled" type="checkbox" value="1" <?php checked($style->menu_order, 1) ?> />
 							<?php } else { ?>
-								<input id="menu_order" name="<?php echo $frm_style->get_field_name('menu_order', ''); ?>" type="checkbox" value="1" <?php checked($style->menu_order, 1) ?> />
+								<input id="menu_order" name="<?php echo esc_attr( $frm_style->get_field_name('menu_order', '') ); ?>" type="checkbox" value="1" <?php checked($style->menu_order, 1) ?> />
 							<?php } ?>
 							    <?php _e('Make default style', 'formidable') ?></span>
 							</label>

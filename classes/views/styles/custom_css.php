@@ -7,14 +7,14 @@
     <?php include(FrmAppHelper::plugin_path() .'/classes/views/shared/errors.php'); ?>
 
 	<form method="post">
-	    <input type="hidden" name="ID" value="<?php echo $style->ID ?>" />
-        <input type="hidden" name="<?php echo $frm_style->get_field_name('post_title', ''); ?>" value="<?php echo esc_attr($style->post_title) ?>" />
-        <input type="hidden" name="<?php echo $frm_style->get_field_name('menu_order', ''); ?>" value="<?php echo esc_attr($style->menu_order) ?>" />
-        <input type="hidden" name="style_name" value="frm_style_<?php echo $style->post_name ?>" />
+	    <input type="hidden" name="ID" value="<?php echo esc_attr( $style->ID ) ?>" />
+        <input type="hidden" name="<?php echo esc_attr( $frm_style->get_field_name('post_title', '') ); ?>" value="<?php echo esc_attr( $style->post_title ) ?>" />
+        <input type="hidden" name="<?php echo esc_attr( $frm_style->get_field_name('menu_order', '') ); ?>" value="<?php echo esc_attr( $style->menu_order ) ?>" />
+        <input type="hidden" name="style_name" value="frm_style_<?php echo esc_attr( $style->post_name ) ?>" />
 		<input type="hidden" name="frm_action" value="save_css" />
         <?php wp_nonce_field( 'frm_custom_css_nonce', 'frm_custom_css' ); ?>
 
-        <textarea name="<?php echo $frm_style->get_field_name('custom_css') ?>" id="custom_css" class="hide-if-js" style="width:100%;"><?php echo FrmAppHelper::esc_textarea($style->post_content['custom_css']) ?></textarea>
+        <textarea name="<?php echo esc_attr( $frm_style->get_field_name('custom_css') ) ?>" id="custom_css" class="hide-if-js" style="width:100%;"><?php echo FrmAppHelper::esc_textarea($style->post_content['custom_css']) ?></textarea>
 
         <?php
         foreach ( $style->post_content as $k => $v ) {
@@ -22,7 +22,7 @@
                 continue;
             }
         ?>
-        <input type="hidden" value="<?php echo esc_attr($v) ?>" name="<?php echo $frm_style->get_field_name($k) ?>" />    
+        <input type="hidden" value="<?php echo esc_attr($v) ?>" name="<?php echo esc_attr( $frm_style->get_field_name( $k ) ) ?>" />    
         <?php
         } ?>
 		<p class="button-controls"><input type="submit" name="nav-menu-locations" id="nav-menu-locations" class="button button-primary left" value="<?php _e('Save Changes', 'formidable') ?>"  /></p>

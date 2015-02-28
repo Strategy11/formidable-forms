@@ -1,4 +1,4 @@
-<div class="frm_forms with_frm_style frm_style_<?php echo $style->post_name ?>">
+<div class="frm_forms with_frm_style frm_style_<?php echo esc_attr( $style->post_name ) ?>">
 <div class="frm-show-form">
 <div class="frm_error_style">
     <strong><?php echo __('SAMPLE:', 'formidable') .'</strong> '. $frm_settings->invalid_msg ?>
@@ -12,24 +12,24 @@
 
 <div class="frm_form_fields frm_sample_form">
 <fieldset>
-<div class="frm_form_field frm_first_half form-field <?php echo $pos_class ?>">
+<div class="frm_form_field frm_first_half form-field <?php echo esc_attr( $pos_class ) ?>">
 <label class="frm_primary_label"><?php _e('Text field', 'formidable') ?> <span class="frm_required">*</span></label>
 <input type="text" value="<?php echo esc_attr( __('This is sample text', 'formidable')) ?>"/>
 <div class="frm_description"><?php _e('A field with a description', 'formidable') ?></div>
 </div>
 
-<div class="frm_form_field form-field frm_last_half frm_blank_field <?php echo $pos_class ?>">
+<div class="frm_form_field form-field frm_last_half frm_blank_field <?php echo esc_attr( $pos_class ) ?>">
 <label class="frm_primary_label"><?php _e('Text field with error', 'formidable') ?> <span class="frm_required">*</span></label>
 <input type="text" value="<?php echo esc_attr( __('This is sample text', 'formidable')) ?>"/>
 <div class="frm_error"><?php echo $frm_settings->blank_msg ?></div>
 </div>
 
-<div class="frm_form_field frm_first_half form-field frm_focus_field <?php echo $pos_class ?>">
+<div class="frm_form_field frm_first_half form-field frm_focus_field <?php echo esc_attr( $pos_class ) ?>">
 <label class="frm_primary_label"><?php _e('Text field in active state', 'formidable') ?> <span class="frm_required">*</span></label>
 <input type="text" value="<?php echo esc_attr( __('Active state will be seen when the field is clicked', 'formidable')) ?>" />
 </div>
 
-<div class="frm_form_field frm_last_half form-field <?php echo $pos_class ?>">
+<div class="frm_form_field frm_last_half form-field <?php echo esc_attr( $pos_class ) ?>">
 <label class="frm_primary_label"><?php _e('Read-only field', 'formidable') ?></label>
 <input type="text" value="<?php echo esc_attr( __('This field is not editable', 'formidable')) ?>" disabled="disabled" />
 </div>
@@ -39,7 +39,7 @@
     <div class="frm_toggle_container">
 
 
-    <div id="frm_field_1028_container" class="frm_form_field form-field  <?php echo $pos_class ?>">
+    <div id="frm_field_1028_container" class="frm_form_field form-field  <?php echo esc_attr( $pos_class ) ?>">
         <label for="field_wq7w5e" class="frm_primary_label"><?php _e('Drop-down Select', 'formidable') ?></label>
 
         <select name="item_meta[1028]" id="field_wq7w5e" >

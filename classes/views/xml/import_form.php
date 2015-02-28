@@ -42,10 +42,10 @@
                     <td>
                         <select name="format">
                         <?php foreach ( $export_format as $t => $type ){ ?>
-                            <option value="<?php echo $t ?>" data-support="<?php echo esc_attr($type['support']) ?>" <?php echo isset($type['count']) ? 'data-count="'. esc_attr($type['count']) .'"' : ''; ?>><?php echo isset($type['name']) ? $type['name'] : $t ?></option>
+                            <option value="<?php echo esc_attr( $t ) ?>" data-support="<?php echo esc_attr( $type['support'] ) ?>" <?php echo isset( $type['count'] ) ? 'data-count="'. esc_attr( $type['count'] ) .'"' : ''; ?>><?php echo isset( $type['name'] ) ? $type['name'] : $t ?></option>
                         <?php } ?>
                         <?php if ( ! isset($export_format['csv']) ) { ?>
-                            <option value="csv" disabled="disabled">CSV <?php _e('(Pro feature)', 'formidable'); ?></option>
+                            <option value="csv" disabled="disabled">CSV <?php _e('(Premium feature)', 'formidable'); ?></option>
                         <?php } ?>
                         </select>
 
@@ -77,7 +77,7 @@
                     <td>
                         <?php _e('Include the following in the export file', 'formidable'); ?>:<br/>
                         <?php foreach ( $export_types as $t => $type ){ ?>
-                        <label><input type="checkbox" name="type[]" value="<?php echo $t ?>"/> <?php echo $type ?></label> &nbsp;
+                        <label><input type="checkbox" name="type[]" value="<?php echo esc_attr( $t ) ?>"/> <?php echo $type ?></label> &nbsp;
                         <?php } ?>
                     </td>
                 </tr>
@@ -88,8 +88,8 @@
                     <td>
                         <select name="frm_export_forms[]" multiple="multiple" class="frm_chzn">
                         <?php foreach($forms as $form){ ?>
-                            <option value="<?php echo $form->id ?>"><?php
-                        echo ($form->name == '') ? '(no title)' : $form->name;
+                            <option value="<?php echo esc_attr( $form->id ) ?>"><?php
+                        echo ( $form->name == '' ) ? __( '(no title)' ) : $form->name;
                         echo ' &mdash; '. $form->form_key;
                         if ( $form->is_template && $form->default_template ) {
                             echo ' '. __('(default template)', 'formidable');

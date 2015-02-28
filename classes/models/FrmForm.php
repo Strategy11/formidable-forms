@@ -56,7 +56,7 @@ class FrmForm{
         global $wpdb;
 
         $values = self::getOne( $id, $blog_id );
-        if ( !$values ) {
+        if ( ! $values ) {
             return false;
         }
 
@@ -284,7 +284,7 @@ class FrmForm{
         }
 
         $statuses  = array('published', 'draft', 'trash');
-        if ( !in_array($status, $statuses) ) {
+        if ( ! in_array( $status, $statuses ) ) {
             return false;
         }
 
@@ -309,12 +309,12 @@ class FrmForm{
     * @return int|boolean
     */
     public static function trash($id) {
-        if ( !EMPTY_TRASH_DAYS ) {
+        if ( ! EMPTY_TRASH_DAYS ) {
             return self::destroy( $id );
         }
 
         $form = self::getOne($id);
-        if ( !$form ) {
+        if ( ! $form ) {
             return false;
         }
 
@@ -342,7 +342,7 @@ class FrmForm{
         global $wpdb;
 
         $form = self::getOne($id);
-        if ( !$form ) {
+        if ( ! $form ) {
             return false;
         }
 

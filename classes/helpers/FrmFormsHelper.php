@@ -42,18 +42,18 @@ class FrmFormsHelper{
         $where = apply_filters('frm_forms_dropdown', $query, $field_name);
         $forms = FrmForm::getAll($where, 'name');
         ?>
-        <select name="<?php echo $field_name; ?>" id="<?php echo $args['field_id'] ?>" <?php
+        <select name="<?php echo esc_attr( $field_name ); ?>" id="<?php echo esc_attr( $args['field_id'] ) ?>" <?php
             if ( $args['onchange'] ) {
-                echo ' onchange="'. $args['onchange'] .'"';
+                echo ' onchange="'. esc_attr( $args['onchange'] ) .'"';
             }
             if ( ! empty($args['class']) ) {
-                echo ' class="'. $args['class'] .'"';
+                echo ' class="'. esc_attr( $args['class'] ) .'"';
             } ?>>
             <?php if ( $args['blank'] ) { ?>
-            <option value=""><?php echo ( $args['blank'] == 1 ) ? ' ' : '- '. $args['blank'] .' -'; ?></option>
+            <option value=""><?php echo ( $args['blank'] == 1 ) ? ' ' : '- '. esc_attr( $args['blank'] ) .' -'; ?></option>
             <?php } ?>
             <?php foreach($forms as $form){ ?>
-                <option value="<?php echo $form->id; ?>" <?php selected($field_value, $form->id); ?>><?php echo '' == $form->name ? __('(no title)', 'formidable') : FrmAppHelper::truncate($form->name, 33); ?></option>
+                <option value="<?php echo esc_attr( $form->id ); ?>" <?php selected($field_value, $form->id); ?>><?php echo '' == $form->name ? __('(no title)', 'formidable') : esc_attr( FrmAppHelper::truncate($form->name, 33) ); ?></option>
             <?php } ?>
         </select>
         <?php
@@ -119,19 +119,22 @@ class FrmFormsHelper{
         }
 
         foreach (array('name' => '', 'description' => '') as $var => $default){
-            if(!isset($values[$var]))
+            if ( ! isset($values[$var]) ) {
                 $values[$var] = FrmAppHelper::get_param($var, $default);
+            }
         }
 
         $values['description'] = FrmAppHelper::use_wpautop($values['description']);
 
         foreach (array('form_id' => '', 'logged_in' => '', 'editable' => '', 'default_template' => 0, 'is_template' => 0, 'status' => 'draft', 'parent_form_id' => 0) as $var => $default){
-            if(!isset($values[$var]))
+            if ( ! isset( $values[ $var ] ) ) {
                 $values[$var] = FrmAppHelper::get_param($var, $default);
+            }
         }
 
-        if(!isset($values['form_key']))
+        if ( ! isset( $values['form_key'] ) ) {
             $values['form_key'] = ($post_values && isset($post_values['form_key'])) ? $post_values['form_key'] : FrmAppHelper::get_unique_key('', $wpdb->prefix .'frm_forms', 'form_key');
+        }
 
         $values = self::fill_default_opts($values, false, $post_values);
 
@@ -167,8 +170,9 @@ class FrmFormsHelper{
         $defaults = self::get_default_opts();
         foreach ($defaults as $var => $default){
             if ( is_array($default) ) {
-                if(!isset($values[$var]))
+                if ( ! isset( $values[ $var ] ) ) {
                     $values[$var] = ($record && isset($record->options[$var])) ? $record->options[$var] : array();
+                }
 
                 foreach($default as $k => $v){
                     $values[$var][$k] = ($post_values && isset($post_values[$var][$k])) ? $post_values[$var][$k] : (($record && isset($record->options[$var]) && isset($record->options[$var][$k])) ? $record->options[$var][$k] : $v);
@@ -444,7 +448,7 @@ BEFORE_HTML;
     }
 
     public static function get_scroll_js($form_id) {
-        ?><script type="text/javascript">jQuery(document).ready(function($){frmFrontForm.scrollMsg(<?php echo $form_id ?>);})</script><?php
+        ?><script type="text/javascript">jQuery(document).ready(function($){frmFrontForm.scrollMsg(<?php echo (int) $form_id ?>);})</script><?php
     }
 
     public static function edit_form_link($form_id) {

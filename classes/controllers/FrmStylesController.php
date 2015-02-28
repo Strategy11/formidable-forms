@@ -150,7 +150,7 @@ class FrmStylesController{
         return self::manage($message, $forms);
     }
 
-    public static function custom_css($message = '', $style=null) {
+    public static function custom_css( $message = '', $style = null ) {
         wp_enqueue_style('codemirror', FrmAppHelper::plugin_url() . '/css/codemirror.css');
         wp_enqueue_script('codemirror', FrmAppHelper::plugin_url() . '/js/codemirror/codemirror.js', array(), '4.7');
         wp_enqueue_script('codemirror-css', FrmAppHelper::plugin_url() . '/js/codemirror/css.js', array('codemirror'), '4.7');

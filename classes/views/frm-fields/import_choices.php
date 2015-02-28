@@ -77,7 +77,7 @@ foreach($field->options as $fkey => $fopt){
 </textarea>
 
 <p class="submit clear">
-<input type="button" onclick="window.top.frmAdminBuild.updateOpts(<?php echo $field->id ?>,document.getElementById('frm_bulk_options').value); window.top.tb_remove();" class="button-primary" value="<?php _e('Update Field Choices', 'formidable') ?>" />
+<input type="button" onclick="window.top.frmAdminBuild.updateOpts(<?php echo (int) $field->id ?>,document.getElementById('frm_bulk_options').value); window.top.tb_remove();" class="button-primary" value="<?php esc_attr_e( 'Update Field Choices', 'formidable' ) ?>" />
 </p>
 </div>
 

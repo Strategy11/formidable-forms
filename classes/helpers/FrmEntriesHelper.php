@@ -34,10 +34,10 @@ class FrmEntriesHelper{
 
             $field->default_value = apply_filters('frm_get_default_value', $field->default_value, $field, true, $return_array);
 
-            if ( !is_array($new_value) ) {
+            if ( ! is_array( $new_value ) ) {
                 if ( $is_default ) {
                     $new_value = $field->default_value;
-                } else if ( !$posted_val ) {
+                } else if ( ! $posted_val ) {
                     $new_value = apply_filters('frm_filter_default_value', $new_value, $field);
                 }
 
@@ -200,7 +200,7 @@ class FrmEntriesHelper{
             return;
         }
 
-        if ( $atts['entry'] && !isset($atts['entry']->metas[$f->id]) ) {
+        if ( $atts['entry'] && ! isset( $atts['entry']->metas[ $f->id ] ) ) {
             // In case include_blank is set
             $atts['entry']->metas[$f->id] = '';
 
@@ -555,7 +555,7 @@ class FrmEntriesHelper{
     */
     public static function maybe_set_other_validation( $field, &$value, &$args ) {
         $args['other'] = false;
-        if ( !$value || empty( $value ) || !FrmAppHelper::pro_is_installed() ) {
+        if ( ! $value || empty( $value ) || ! FrmAppHelper::pro_is_installed() ) {
             return;
         }
 
@@ -585,7 +585,7 @@ class FrmEntriesHelper{
     * @param $args array
     */
     public static function set_other_repeating_vals( $field, &$value, &$args ){
-        if ( !$args['parent_field_id'] ) {
+        if ( ! $args['parent_field_id'] ) {
             return;
         }
 

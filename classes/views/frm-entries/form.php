@@ -5,7 +5,7 @@ FrmFormsHelper::form_loaded($form, $values['custom_style'], $frm_vars['load_css'
 echo FrmFormsHelper::replace_shortcodes($values['before_html'], $form, $title, $description); ?>
 <div class="frm_form_fields <?php echo apply_filters('frm_form_fields_class', '', $values); ?>">
 <fieldset>
-<legend style="display:none;"><?php echo wp_kses($form->name, array()); ?></legend>
+<legend class="frm_hidden"><?php echo wp_kses($form->name, array()); ?></legend>
 <input type="hidden" name="frm_action" value="<?php echo esc_attr($form_action) ?>" />
 <input type="hidden" name="form_id" value="<?php echo esc_attr($form->id) ?>" />
 <input type="hidden" name="form_key" value="<?php echo esc_attr($form->form_key) ?>" />

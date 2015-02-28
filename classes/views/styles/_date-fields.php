@@ -24,17 +24,17 @@ unset($theme_names);
 
 <div class="field-group clearfix frm-half frm-first-row">
 	<label><?php _e('Theme', 'formidable') ?></label>
-	<select name="<?php echo $frm_style->get_field_name('theme_selector') ?>">
+	<select name="<?php echo esc_attr( $frm_style->get_field_name('theme_selector') ) ?>">
 	    <?php foreach ( $jquery_themes as $theme_name => $theme_title ) { ?>
-        <option value="<?php echo $theme_name ?>" id="90_<?php echo $alt_img_name[$theme_name]; ?>" <?php selected($theme_title, $style->post_content['theme_name']) ?>><?php echo $theme_title ?></option>
+        <option value="<?php echo esc_attr( $theme_name ) ?>" id="90_<?php echo esc_attr( $alt_img_name[ $theme_name ] ); ?>" <?php selected($theme_title, $style->post_content['theme_name']) ?>><?php echo $theme_title ?></option>
         <?php } ?>
         <option value="-1" <?php selected('-1', $style->post_content['theme_name']) ?>>&mdash; <?php _e('None', 'formidable') ?> &mdash;</option>
 	</select>
 </div>
 
 <div class="field-group clearfix frm-half frm-first-row" style="text-align:right;">
-    <img id="frm_show_cal" src="//jqueryui.com/resources/images/themeGallery/theme_90_<?php echo $alt_img_name[$style->post_content['theme_css']] ?>.png" alt="" style="width:90px;height:80px;margin-right:6px;" />
-	<input type="hidden" value="<?php echo esc_attr($style->post_content['theme_css']) ?>" id="frm_theme_css" name="<?php echo $frm_style->get_field_name('theme_css') ?>" />
-    <input type="hidden" value="<?php echo esc_attr($style->post_content['theme_name']) ?>" id="frm_theme_name" name="<?php echo $frm_style->get_field_name('theme_name') ?>" />
+    <img id="frm_show_cal" src="//jqueryui.com/resources/images/themeGallery/theme_90_<?php echo esc_attr( $alt_img_name[ $style->post_content['theme_css'] ] ) ?>.png" alt="" style="width:90px;height:80px;margin-right:6px;" />
+	<input type="hidden" value="<?php echo esc_attr($style->post_content['theme_css']) ?>" id="frm_theme_css" name="<?php echo esc_attr( $frm_style->get_field_name('theme_css') ) ?>" />
+    <input type="hidden" value="<?php echo esc_attr($style->post_content['theme_name']) ?>" id="frm_theme_name" name="<?php echo esc_attr( $frm_style->get_field_name('theme_name') ) ?>" />
 </div>
 <div class="clear"></div>

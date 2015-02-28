@@ -29,7 +29,7 @@
                         continue;
                     }
 
-                    if ( $f->type == 'data' && (!isset($f->field_options['data_type']) || $f->field_options['data_type'] == 'data' || $f->field_options['data_type'] == '') ) {
+                    if ( $f->type == 'data' && ( ! isset( $f->field_options['data_type'] ) || $f->field_options['data_type'] == 'data' || $f->field_options['data_type'] == '' ) ) {
                         continue;
                     }
 
@@ -40,7 +40,7 @@
         	    if ($f->type == 'data'){ //get all fields from linked form
                     if ( isset($f->field_options['form_select']) && is_numeric($f->field_options['form_select']) ){
                         $linked_form = $wpdb->get_var($wpdb->prepare("SELECT form_id FROM {$wpdb->prefix}frm_fields WHERE id=%d", $f->field_options['form_select']));
-                        if(!in_array($linked_form, $linked_forms)){
+                        if ( ! in_array( $linked_form, $linked_forms ) ) {
                             $linked_forms[] = $linked_form;
                             $linked_fields = FrmField::getAll("fi.type not in ('". implode("','", FrmFieldsHelper::no_save_fields() ) ."') and fi.form_id =". (int) $linked_form);
                             $ldfe = '';
@@ -100,11 +100,11 @@
                  continue;
             }
         ?>
-        <li class="frm_col_<?php echo $col ?>">
+        <li class="frm_col_<?php echo esc_attr( $col ) ?>">
             <a href="javascript:void(0)" class="frmbutton button <?php
-            echo (in_array($skey, array('siteurl', 'sitename', 'entry_count'))) ? 'show_before_content show_after_content' : '';
-            echo (strpos($skey, 'default-') === 0) ? 'hide_frm_not_email_subject' : '';
-            ?> frm_insert_code" data-code="<?php echo esc_attr($skey) ?>"><?php echo $sname ?></a>
+            echo ( in_array( $skey, array('siteurl', 'sitename', 'entry_count') ) ) ? 'show_before_content show_after_content' : '';
+            echo ( strpos( $skey, 'default-' ) === 0 ) ? 'hide_frm_not_email_subject' : '';
+            ?> frm_insert_code" data-code="<?php echo esc_attr( $skey ) ?>"><?php echo $sname ?></a>
         </li>
         <?php
             $col = ( $col == 'one' ) ? 'two' : 'one';
@@ -129,8 +129,8 @@
                 }
             ?>
                 <li>
-                    <a href="javascript:void(0)" class="frmids alignright frm_insert_code" data-code="if <?php echo $f->id ?>]<?php esc_attr_e('Conditional text here', 'formidable') ?>[/if <?php echo $f->id ?>">[if <?php echo $f->id ?>]</a>
-                	<a href="javascript:void(0)" class="frmkeys alignright frm_insert_code" data-code="if <?php echo esc_attr($f->field_key) ?>]something[/if <?php echo esc_attr($f->field_key) ?>">[if <?php echo FrmAppHelper::truncate($f->field_key, 10) ?>]</a>
+                    <a href="javascript:void(0)" class="frmids alignright frm_insert_code" data-code="if <?php echo esc_attr( $f->id ) ?>]<?php esc_attr_e( 'Conditional text here', 'formidable' ) ?>[/if <?php echo esc_attr( $f->id ) ?>">[if <?php echo (int) $f->id ?>]</a>
+                	<a href="javascript:void(0)" class="frmkeys alignright frm_insert_code" data-code="if <?php echo esc_attr( $f->field_key ) ?>]something[/if <?php echo esc_attr( $f->field_key ) ?>">[if <?php echo FrmAppHelper::truncate($f->field_key, 10) ?>]</a>
                 	<a href="javascript:void(0)" class="frm_insert_code" data-code="<?php echo esc_attr($f->id) ?>"><?php echo FrmAppHelper::truncate($f->name, 60) ?></a>
                 </li>
                 <?php
@@ -151,7 +151,7 @@
         $col = 'one';
         foreach ($cond_shortcodes as $skey => $sname){
 	    ?>
-	    <li class="frm_col_<?php echo $col ?>">
+	    <li class="frm_col_<?php echo esc_attr( $col ) ?>">
 	        <a href="javascript:void(0)" class="frmbutton button frm_insert_code" data-code="if 125 <?php echo esc_attr($skey) ?>][/if 125"><?php echo $sname ?></a>
 	    </li>
 	    <?php
@@ -171,8 +171,8 @@
         $col = 'one';
         foreach ($adv_shortcodes as $skey => $sname){
 	    ?>
-	    <li class="frm_col_<?php echo $col ?>">
-	        <a href="javascript:void(0)" class="frmbutton button frm_insert_code <?php echo is_array($sname) ? 'frm_help' : ''; ?>" data-code="125 <?php echo esc_attr($skey) ?>" <?php echo is_array($sname) ? 'title="'. $sname['title'] .'"' : ''; ?>><?php echo is_array($sname) ? $sname['label'] : $sname; ?></a>
+	    <li class="frm_col_<?php echo esc_attr( $col ) ?>">
+	        <a href="javascript:void(0)" class="frmbutton button frm_insert_code <?php echo is_array( $sname ) ? 'frm_help' : ''; ?>" data-code="125 <?php echo esc_attr( $skey ) ?>" <?php echo is_array( $sname ) ? 'title="'. esc_attr( $sname['title'] ) .'"' : ''; ?>><?php echo is_array( $sname ) ? $sname['label'] : $sname; ?></a>
 	    </li>
 	    <?php
 	        $col = ($col == 'one') ? 'two' : 'one';
@@ -180,7 +180,7 @@
 	    }
         ?>
         <?php if ( isset($file) ) { ?>
-        <li class="frm_col_<?php echo $col ?>">
+        <li class="frm_col_<?php echo esc_attr( $col ) ?>">
 	        <a href="javascript:void(0)" class="frmbutton button frm_insert_code" data-code="<?php echo esc_attr($file->id) ?> size=thumbnail html=1"><?php _e('Image Size', 'formidable') ?></a>
 	    </li>
 	    <li class="frm_col_<?php echo $col = (($col == 'one') ? 'two' : 'one') ?>">
@@ -201,7 +201,7 @@
         <p class="howto"><?php _e('Insert user information', 'formidable') ?></p>
         <ul class="frm_code_list">
         <?php foreach($user_fields as $uk => $uf){ ?>
-            <li class="frm_col_<?php echo $col ?>">
+            <li class="frm_col_<?php echo esc_attr( $col ) ?>">
                 <a href="javascript:void(0)" class="frmbutton button frm_insert_code" data-code="<?php echo esc_attr($uid->id .' show="'. $uk .'"') ?>"><?php echo $uf ?></a>
     	    </li>
         <?php

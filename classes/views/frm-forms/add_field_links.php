@@ -25,7 +25,7 @@
             <?php
             $col_class = 'frm_col_one';
             foreach ( $frm_field_selection as $field_key => $field_type ) { ?>
-                <li class="frmbutton button <?php echo $col_class ?> frm_t<?php echo $field_key ?>" id="<?php echo $field_key ?>"><a href="#" class="frm_add_field"><?php echo $field_type ?></a></li>
+                <li class="frmbutton button <?php echo esc_attr( $col_class .' frm_t'. $field_key ) ?>" id="<?php echo esc_attr( $field_key ) ?>"><a href="#" class="frm_add_field"><?php echo $field_type ?></a></li>
             <?php
                 $col_class = (empty($col_class)) ? 'frm_col_one' : '';
                 unset($field_key, $field_type);
@@ -42,19 +42,19 @@
                     $field_label = $field_type['name'];
 
                     if ( isset($field_type['switch_from']) ) { ?>
-                <li class="frmbutton button <?php echo $col_class .' '. $no_allow_class ?> frm_t<?php echo $field_key ?>" id="<?php echo $field_key ?>" data-switchto="<?php echo $field_type['switch_from'] ?>" style="display:none !important;"><?php echo apply_filters('frmpro_field_links', $field_label, $id, $field_key) ?></li>
+                <li class="frmbutton button <?php echo esc_attr( $col_class .' '. $no_allow_class .' frm_t'. $field_key ) ?>" id="<?php echo esc_attr( $field_key ) ?>" data-switchto="<?php echo esc_attr( $field_type['switch_from'] ) ?>" style="display:none !important;"><?php echo apply_filters( 'frmpro_field_links', $field_label, $id, $field_key ) ?></li>
 <?php
                         continue;
                     }
 
 ?>
-                <li class="frmbutton button <?php echo $col_class .' '. $no_allow_class ?> frm_t<?php echo $field_key ?> dropdown" id="<?php echo $field_key ?>" <?php echo (isset($field_type['switch_to'])) ? 'data-switchto="'. $field_type['switch_to'] .'"' : ''; ?>>
-	                <a href="#" id="frm-<?php echo $field_key ?>Drop" class="frm-dropdown-toggle" data-toggle="dropdown"><?php echo $field_label ?> <b class="caret"></b></a>
+                <li class="frmbutton button <?php echo esc_attr( $col_class .' '. $no_allow_class .' frm_t'. $field_key ) ?> dropdown" id="<?php echo esc_attr( $field_key ) ?>" <?php echo ( isset( $field_type['switch_to'] ) ) ? 'data-switchto="'. esc_attr( $field_type['switch_to'] ) .'"' : ''; ?>>
+	                <a href="#" id="frm-<?php echo esc_attr( $field_key ) ?>Drop" class="frm-dropdown-toggle" data-toggle="dropdown"><?php echo $field_label ?> <b class="caret"></b></a>
 
-                    <ul class="frm-dropdown-menu" role="menu" aria-labelledby="frm-<?php echo $field_key ?>Drop">
+                    <ul class="frm-dropdown-menu" role="menu" aria-labelledby="frm-<?php echo esc_attr( $field_key ) ?>Drop">
                 	<?php foreach ( $field_type['types'] as $k => $type ) {
                         ?>
-                        <li class="frm_t<?php echo $field_key ?>" id="<?php echo $field_key ?>|<?php echo $k ?>"><?php echo apply_filters('frmpro_field_links', $type, $id, $field_key .'|'. $k) ?></li>
+                        <li class="frm_t<?php echo esc_attr( $field_key ) ?>" id="<?php echo esc_attr( $field_key ) ?>|<?php echo esc_attr( $k ) ?>"><?php echo apply_filters( 'frmpro_field_links', $type, $id, $field_key .'|'. $k ) ?></li>
                 	<?php
                 	        unset($k, $type);
                 	    } ?>
@@ -64,7 +64,7 @@
                 } else {
                     $field_label = $field_type;
                     ?>
-                    <li class="frmbutton button <?php echo $col_class .' '. $no_allow_class ?> frm_t<?php echo $field_key ?>" id="<?php echo $field_key ?>"><?php echo apply_filters('frmpro_field_links', $field_label, $id, $field_key) ?></li>
+                    <li class="frmbutton button <?php echo esc_attr( $col_class .' '. $no_allow_class .' frm_t'. $field_key ) ?>" id="<?php echo esc_attr( $field_key ) ?>"><?php echo apply_filters( 'frmpro_field_links', $field_label, $id, $field_key ) ?></li>
                     <?php
                 }
 
@@ -119,7 +119,7 @@
     	        foreach($classes as $c => $d){
     	            $title = ( ! empty($d) && is_array($d) && isset($d['title']) ) ? $d['title'] : '';
     	        ?>
-    	        <li class="frm_col_<?php echo $col ?>">
+    	        <li class="frm_col_<?php echo esc_attr( $col ) ?>">
                     <a href="javascript:void(0);" class="frmbutton frm_insert_code button show_frm_classes<?php
                     if ( ! empty($title) ) {
                         echo ' frm_help';
@@ -130,7 +130,7 @@
                 <?php
                         if ( empty($d) ) {
                             echo $c;
-                        } else if ( !is_array($d) ) {
+                        } else if ( ! is_array( $d ) ) {
                             echo $d;
                         } else if ( isset($d['label']) ) {
                             echo $d['label'];

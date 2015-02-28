@@ -7,8 +7,8 @@
             <span class="dashicons dashicons-admin-post wp-media-buttons-icon"></span>
             <?php _e('Post', 'formidable') ?>:
             <b><?php echo get_the_title($entry->post_id) ?></b>
-            <span><a href="<?php echo admin_url('post.php') ?>?post=<?php echo $entry->post_id ?>&amp;action=edit"><?php _e('Edit', 'formidable') ?></a>
-            <a href="<?php echo get_permalink($entry->post_id) ?>"><?php _e('View', 'formidable') ?></a></span>
+            <span><a href="<?php echo esc_url( admin_url('post.php?post='. $entry->post_id .'&action=edit') ) ?>"><?php _e( 'Edit', 'formidable' ) ?></a>
+            <a href="<?php echo esc_url( get_permalink( $entry->post_id ) ) ?>"><?php _e( 'View', 'formidable' ) ?></a></span>
         </div>
         <?php } ?>
 

@@ -34,7 +34,7 @@
                             if ( in_array($field->type, array('break', 'divider') ) ) {
                             ?>
                         </tbody></table>
-                        <br/><h3 class="<?php echo $first_h3 ?>"><?php echo $field->name ?></h3>
+                        <br/><h3 class="<?php echo esc_attr( $first_h3 ) ?>"><?php echo $field->name ?></h3>
                         <table class="form-table"><tbody>
                         <?php
                                 $first_h3 = '';

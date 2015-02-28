@@ -118,7 +118,7 @@ jQuery(document).ready(function($){
         <div class="media-frame-menu">
         <div class="media-menu">
             <?php foreach ( $shortcodes as $shortcode => $labels ) { ?>
-            <a href="#" class="media-menu-item frm_switch_sc" id="sc-link-<?php echo $shortcode ?>">
+            <a href="#" class="media-menu-item frm_switch_sc" id="sc-link-<?php echo esc_attr( $shortcode ) ?>">
                 <?php echo $labels['name'] ?>
                 <span class="howto"><?php echo $labels['label'] ?></span>
             </a>

@@ -209,7 +209,7 @@ class FrmFormAction {
         foreach ( $action->post_content as $key => $val ) {
             if ( is_numeric($val) && isset($frm_duplicate_ids[$val]) ) {
                 $action->post_content[$key] = $frm_duplicate_ids[$val];
-            } else if ( !is_array($val) ) {
+            } else if ( ! is_array( $val ) ) {
                 $action->post_content[$key] = FrmFieldsHelper::switch_field_ids($val);
             } else if ( isset($switch[$key]) && is_array($switch[$key]) ) {
                 // loop through each value if empty

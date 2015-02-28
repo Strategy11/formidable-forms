@@ -43,7 +43,7 @@ class FrmXMLHelper{
 
         $dom = new DOMDocument;
 		$success = $dom->loadXML( file_get_contents( $file ) );
-		if ( !$success ) {
+		if ( ! $success ) {
 			return new WP_Error( 'SimpleXML_parse_error', __( 'There was an error when reading this XML file', 'formidable' ), libxml_get_errors() );
 		}
 
@@ -51,7 +51,7 @@ class FrmXMLHelper{
 		unset( $dom );
 
 		// halt if loading produces an error
-		if ( !$xml ) {
+		if ( ! $xml ) {
 			return new WP_Error( 'SimpleXML_parse_error', __( 'There was an error when reading this XML file', 'formidable' ), libxml_get_errors() );
 		}
 
@@ -114,7 +114,7 @@ class FrmXMLHelper{
 
             // if template, allow to edit if form keys match, otherwise, creation date must also match
             $edit_query = array('form_key' => $form['form_key'], 'is_template' => $form['is_template']);
-            if ( !$form['is_template'] ) {
+            if ( ! $form['is_template'] ) {
                 $edit_query['created_at'] = $form['created_at'];
             }
 

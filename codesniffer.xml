@@ -16,7 +16,6 @@
 		<exclude name="WordPress.VIP.RestrictedFunctions.switch_to_blog"/>
 		<exclude name="WordPress.VIP.RestrictedFunctions.get_term_by"/>
 		<exclude name="WordPress.VIP.RestrictedFunctions.get_term_link"/>
-		<exclude name="WordPress.VIP.SessionVariableUsage"/>
 
 		<!-- Temporary exclusions. Enable these when we have time to address them -->
 		<exclude name="WordPress.Classes.ValidClassName.NotCamelCaps" />

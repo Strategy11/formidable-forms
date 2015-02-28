@@ -64,7 +64,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	}
 
 	function search_box( $text, $input_id ) {
-    	if ( !$this->has_items() && !isset( $_REQUEST['s'] ) ) {
+    	if ( ! $this->has_items() && ! isset( $_REQUEST['s'] ) ) {
     		return;
     	}
 
@@ -91,8 +91,8 @@ class FrmEntriesListHelper extends FrmListHelper {
     	}
 ?>
 <div class="search-box frm_sidebar">
-    <label class="screen-reader-text" for="<?php echo $input_id ?>"><?php echo $text; ?>:</label>
-    <input type="text" id="<?php echo $input_id ?>" name="s" value="<?php echo $search_str; ?>" />
+    <label class="screen-reader-text" for="<?php echo esc_attr( $input_id ) ?>"><?php echo esc_attr( $text ); ?>:</label>
+    <input type="text" id="<?php echo esc_attr( $input_id ) ?>" name="s" value="<?php echo esc_attr( $search_str ); ?>" />
     <?php if ( isset($field_list) && !empty($field_list) ) { ?>
     <select name="fid" class="hide-if-js">
         <option value="">&mdash; <?php _e('All Fields', 'formidable') ?> &mdash;</option>
@@ -128,7 +128,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 <?php
 	}
 
-	function single_row( $item, $style='') {
+	function single_row( $item, $style = '' ) {
 		// Set up the hover actions for this user
 		$actions = array();
 		$view_link = '?page=formidable-entries&frm_action=show&id='. $item->id;
@@ -146,16 +146,16 @@ class FrmEntriesListHelper extends FrmListHelper {
         $action_col = false;
 
 		foreach ( $columns as $column_name => $column_display_name ) {
-			$class = 'class="'. $column_name .' column-'. $column_name .'"';
+			$class = $column_name .' column-'. $column_name;
 
-			$style = '';
 			if ( in_array( $column_name, $hidden ) ) {
-				$style = ' style="display:none;"';
+				$class .= ' frm_hidden';
 			} else if ( ! $action_col && ! in_array($column_name, array('cb', 'id', 'form_id', 'post_id')) ) {
 			    $action_col = $column_name;
             }
 
-			$attributes = $class . $style;
+			$attributes = 'class="'. $class .'"';
+            unset($class);
 
             $col_name = preg_replace('/^('. $this->params['form'] .'_)/', '', $column_name);
 

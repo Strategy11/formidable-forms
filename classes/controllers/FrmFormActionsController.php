@@ -115,7 +115,7 @@ class FrmFormActionsController{
         }
 
     	foreach ( $form_actions as $action ) {
-    	    if ( !isset($action_map[$action->post_excerpt]) ) {
+    	    if ( ! isset( $action_map[ $action->post_excerpt ] ) ) {
     	        // don't try and show settings if action no longer exists
     	        continue;
     	    }
@@ -177,7 +177,7 @@ class FrmFormActionsController{
             $f = (array) $f;
             $opts = (array) $f['field_options'];
             $f = array_merge($opts, $f);
-            if ( !isset($f['post_field']) ) {
+            if ( ! isset( $f['post_field'] ) ) {
                 $f['post_field'] = '';
             }
             $values['fields'][] = $f;
@@ -308,7 +308,7 @@ class FrmFormActionsController{
     public static function limit_by_type( $where ) {
         global $frm_vars, $wpdb;
 
-        if ( !isset($frm_vars['action_type']) ) {
+        if ( ! isset( $frm_vars['action_type'] ) ) {
             return $where;
         }
 
@@ -341,7 +341,7 @@ class Frm_Form_Action_Factory {
 
 		foreach ( $keys as $key ) {
 			// don't register new action if old action with the same id is already registered
-			if ( !isset($this->actions[$key]) ) {
+			if ( ! isset( $this->actions[$key] ) ) {
 			    $this->actions[$key]->_register();
 			}
 		}

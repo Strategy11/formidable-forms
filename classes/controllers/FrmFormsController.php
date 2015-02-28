@@ -88,7 +88,7 @@ class FrmFormsController{
 
         $id = isset($values['id']) ? (int) $values['id'] : (int) FrmAppHelper::get_param('id');
 
-        if ( ! current_user_can('frm_edit_forms') || ( $_POST && (!isset($values['frm_save_form']) || !wp_verify_nonce($values['frm_save_form'], 'frm_save_form_nonce'))) ) {
+        if ( ! current_user_can( 'frm_edit_forms' ) || ( $_POST && ( ! isset( $values['frm_save_form'] ) || ! wp_verify_nonce( $values['frm_save_form'], 'frm_save_form_nonce' ) ) ) ) {
             $frm_settings = FrmAppHelper::get_settings();
             $errors = array( 'form' => $frm_settings->admin_permission );
         } else {
@@ -221,10 +221,14 @@ class FrmFormsController{
 
     public static function page_preview(){
         $params = FrmFormsHelper::get_params();
-        if (!$params['form']) return;
+        if ( ! $params['form'] ) {
+            return;
+        }
 
         $form = FrmForm::getOne($params['form']);
-        if(!$form) return;
+        if ( ! $form ) {
+            return;
+        }
         return self::show_form($form->id, '', true, true);
     }
 
@@ -350,7 +354,7 @@ class FrmFormsController{
 
         $trash_forms = $wpdb->get_results($wpdb->prepare("SELECT id, options FROM {$wpdb->prefix}frm_forms WHERE status = %s", 'trash'));
 
-        if ( !$trash_forms ) {
+        if ( ! $trash_forms ) {
             return;
         }
 
@@ -361,7 +365,7 @@ class FrmFormsController{
         $count = 0;
         foreach ( $trash_forms as $form ) {
             $form->options = maybe_unserialize($form->options);
-            if ( !isset($form->options['trash_time']) || $form->options['trash_time'] < $delete_timestamp ) {
+            if ( ! isset( $form->options['trash_time'] ) || $form->options['trash_time'] < $delete_timestamp ) {
                 FrmForm::destroy($form->id);
                 $count++;
             }
@@ -430,8 +434,9 @@ class FrmFormsController{
 
         global $wpdb, $frm_vars;
 
-        if(!$params)
+        if ( ! $params ) {
             $params = FrmFormsHelper::get_params();
+        }
 
         $wp_list_table = new FrmFormsListHelper( compact('params') );
 
@@ -517,7 +522,7 @@ class FrmFormsController{
         global $frm_vars;
 
         $form = FrmForm::getOne( $id );
-        if ( !$form ) {
+        if ( ! $form ) {
             wp_die( __('You are trying to edit a form that does not exist.', 'formidable') );
         }
 
@@ -626,7 +631,7 @@ class FrmFormsController{
             FrmEntriesHelper::maybe_get_entry($entry);
         }
 
-        if ( !$entry ) {
+        if ( ! $entry ) {
             return $content;
         }
 
@@ -672,7 +677,7 @@ class FrmFormsController{
             return $errors;
         }
 
-        if ( !is_array($ids) ) {
+        if ( ! is_array($ids) ) {
             $ids = explode(',', $ids);
         }
 
@@ -922,12 +927,12 @@ class FrmFormsController{
         $frm_settings = FrmAppHelper::get_settings();
 
         // don't show a draft form on a page
-        if ( $form->status == 'draft' && (!$post || $post->ID != $frm_settings->preview_page_id) ) {
+        if ( $form->status == 'draft' && ( ! $post || $post->ID != $frm_settings->preview_page_id ) ) {
             return __('Please select a valid form', 'formidable');
         }
 
         // don't show the form if user should be logged in
-        if ( $form->logged_in && !is_user_logged_in() ) {
+        if ( $form->logged_in && ! is_user_logged_in() ) {
             return do_shortcode($frm_settings->login_msg);
         }
 

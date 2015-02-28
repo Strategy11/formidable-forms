@@ -12,12 +12,12 @@
             <?php } ?>
             <div id="preview-action">
                 <?php
-                if ( !isset($hide_preview) || !$hide_preview ) {
+                if ( ! isset($hide_preview) || ! $hide_preview ) {
 
                     if ( isset($values['form_key']) ) {
                         $frm_settings = FrmAppHelper::get_settings();
                         if ( empty($frm_settings->preview_page_id) ) { ?>
-                    <a href="<?php echo FrmFormsHelper::get_direct_link($values['form_key']); ?>" class="preview button" target="wp-frm-preview-<?php echo $id ?>"><?php _e('Preview', 'formidable') ?></a>
+                    <a href="<?php echo esc_url( FrmFormsHelper::get_direct_link($values['form_key']) ); ?>" class="preview button" target="wp-frm-preview-<?php echo esc_attr( $id ) ?>"><?php _e( 'Preview', 'formidable' ) ?></a>
                 <?php
                         } else {
                 ?>
@@ -25,8 +25,8 @@
                         <a href="#" id="frm-previewDrop" class="frm-dropdown-toggle button" data-toggle="dropdown"><?php _e('Preview', 'formidable') ?> <b class="caret"></b></a>
 
                         <ul class="frm-dropdown-menu pull-right" role="menu" aria-labelledby="frm-previewDrop">
-                            <li><a href="<?php echo FrmFormsHelper::get_direct_link($values['form_key']); ?>" target="_blank"><?php _e('On Blank Page', 'formidable') ?></a></li>
-                            <li><a href="<?php echo add_query_arg('form', $values['form_key'], get_permalink($frm_settings->preview_page_id)) ?>" target="_blank"><?php _e('In Theme', 'formidable') ?></a></li>
+                            <li><a href="<?php echo esc_url( FrmFormsHelper::get_direct_link($values['form_key']) ); ?>" target="_blank"><?php _e( 'On Blank Page', 'formidable' ) ?></a></li>
+                            <li><a href="<?php echo esc_url( add_query_arg('form', $values['form_key'], get_permalink( $frm_settings->preview_page_id )) ) ?>" target="_blank"><?php _e( 'In Theme', 'formidable' ) ?></a></li>
                     	</ul>
                     </div>
                 <?php   }
@@ -48,8 +48,8 @@
                 <a href="#edit_frm_shortcode" class="edit-frm_shortcode hide-if-no-js" tabindex='4'><?php _e('Show', 'formidable') ?></a>
                 <div id="frm_shortcodediv" class="hide-if-js">
                     <p class="howto"><?php _e('Insert on a page, post, or text widget', 'formidable') ?>:</p>
-                	<p><input type="text" readonly="true" class="frm_select_box" value="[formidable id=<?php echo $id; ?>]" />
-                	    <input type="text" readonly="true" class="frm_select_box" value="[formidable id=<?php echo $id; ?> title=true description=true]" />
+                	<p><input type="text" readonly="true" class="frm_select_box" value="[formidable id=<?php echo esc_attr( $id ); ?>]" />
+                	    <input type="text" readonly="true" class="frm_select_box" value="[formidable id=<?php echo esc_attr( $id ); ?> title=true description=true]" />
                 	</p>
 
                 	<p class="howto"><?php _e('Insert in a template', 'formidable') ?>:</p>

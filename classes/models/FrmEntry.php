@@ -211,7 +211,7 @@ class FrmEntry{
             wp_cache_delete( $id, 'frm_entry');
         }
 
-        if ( !isset($frm_vars['saved_entries']) ) {
+        if ( ! isset( $frm_vars['saved_entries'] ) ) {
             $frm_vars['saved_entries'] = array();
         }
 
@@ -230,7 +230,7 @@ class FrmEntry{
         $id = (int) $id;
 
         $entry = self::getOne($id);
-        if ( !$entry ) {
+        if ( ! $entry ) {
             $result = false;
             return $result;
         }
@@ -359,12 +359,12 @@ class FrmEntry{
             wp_cache_set($cache_key, $entries, 'frm_entry', 300);
         }
 
-        if ( !$meta || !$entries ) {
+        if ( ! $meta || ! $entries ) {
             return stripslashes_deep($entries);
         }
         unset($meta);
 
-        if ( !is_array($where) && preg_match('/^it\.form_id=\d+$/', $where) ) {
+        if ( ! is_array( $where ) && preg_match('/^it\.form_id=\d+$/', $where) ) {
             $where = array('it.form_id' => substr($where, 11));
         }
 
@@ -387,11 +387,11 @@ class FrmEntry{
         }
 
         foreach ( $metas as $m_key => $meta_val ) {
-            if ( !isset($entries[$meta_val->item_id]) ) {
+            if ( ! isset( $entries[ $meta_val->item_id ] ) ) {
                 continue;
             }
 
-            if ( !isset($entries[$meta_val->item_id]->metas) ) {
+            if ( ! isset( $entries[ $meta_val->item_id ]->metas ) ) {
                 $entries[$meta_val->item_id]->metas = array();
             }
 
@@ -500,10 +500,10 @@ class FrmEntry{
             $value = reset($value);
         }
 
-        if ( $posted_field->required == '1' && !is_array($value) && trim($value) == '' ) {
+        if ( $posted_field->required == '1' && ! is_array( $value ) && trim( $value ) == '' ) {
             $frm_settings = FrmAppHelper::get_settings();
-            $errors['field'. $args['id']] = (!isset($posted_field->field_options['blank']) || $posted_field->field_options['blank'] == '') ? $frm_settings->blank_msg : $posted_field->field_options['blank'];
-        } else if ( $posted_field->type == 'text' && !isset($_POST['name']) ) {
+            $errors['field'. $args['id']] = ( ! isset( $posted_field->field_options['blank'] ) || $posted_field->field_options['blank'] == '') ? $frm_settings->blank_msg : $posted_field->field_options['blank'];
+        } else if ( $posted_field->type == 'text' && ! isset( $_POST['name'] ) ) {
             $_POST['name'] = $value;
         }
 
