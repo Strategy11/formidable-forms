@@ -808,7 +808,7 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
 
 .frm_full,
 .frm_full .wp-editor-wrap,
-.frm_full input:not([type='checkbox']):not([type='radio']),
+.frm_full input:not([type='checkbox']):not([type='radio']):not([type='button']),
 .frm_full select,
 .frm_full textarea{
     width:100% !important;
