@@ -2,9 +2,9 @@
 
 class FrmAppController {
 
-    public static function menu() {
-        add_filter('plugin_action_links_'. FrmAppHelper::plugin_folder() .'/formidable.php', 'FrmAppController::settings_link' );
-        add_filter('admin_body_class', 'FrmAppController::wp_admin_body_class' );
+	public static function menu() {
+		add_filter('plugin_action_links_'. FrmAppHelper::plugin_folder() .'/formidable.php', 'FrmAppController::settings_link');
+		add_filter('admin_body_class', 'FrmAppController::wp_admin_body_class');
 
         FrmAppHelper::maybe_add_permissions();
 
