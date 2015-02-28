@@ -8,7 +8,7 @@
 		<exclude name="Generic.Files.LineEndings.InvalidEOLChar" />
 		<exclude name="Squiz.WhiteSpace.SuperfluousWhitespace.EmptyLines" />
 		
-		<!-- WP VIP rules which are very restrictive and not all that applicable as WPSEO is not on VIP -->
+		<!-- WP VIP rules which are very restrictive and not all that applicable as FF is not on VIP -->
 		<exclude name="WordPress.VIP.DirectDatabaseQuery" />
 		<exclude name="WordPress.VIP.FileSystemWritesDisallow"/>
 		<exclude name="WordPress.VIP.RestrictedFunctions.user_meta" />
@@ -18,6 +18,7 @@
 		<exclude name="WordPress.VIP.RestrictedFunctions.get_term_link"/>
 
 		<!-- We should probably want to turn the below rules on, but these give issues with the current code base. -->
+		<exclude name="Generic.WhiteSpace.DisallowSpaceIndent.SpacesUsed" />
 		<exclude name="WordPress.WhiteSpace.ScopeIndent.Incorrect" />
 		<exclude name="WordPress.XSS.EscapeOutput" /><!-- This sniff also has known & reported bugs -->
 		<exclude name="WordPress.VIP.PostsPerPage.posts_per_page"/>
