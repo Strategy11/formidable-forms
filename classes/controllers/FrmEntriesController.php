@@ -1,6 +1,6 @@
 <?php
 
-class FrmEntriesController{
+class FrmEntriesController {
 
     public static function menu() {
         if ( current_user_can('administrator') && !current_user_can('frm_view_entries') ) {

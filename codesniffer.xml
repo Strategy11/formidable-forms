@@ -18,8 +18,13 @@
 		<exclude name="WordPress.VIP.RestrictedFunctions.get_term_link"/>
 		<exclude name="WordPress.VIP.SessionVariableUsage"/>
 
-		<!-- We should probably want to turn the below rules on, but these give issues with the current code base. -->
+		<!-- Temporary exclusions. Enable these when we have time to address them -->
+		<exclude name="WordPress.Classes.ValidClassName.NotCamelCaps" />
+		<exclude name="PEAR.Functions.FunctionCallSignature.SpaceAfterOpenBracket" />
+		<exclude name="PEAR.Functions.FunctionCallSignature.SpaceBeforeCloseBracket" />
 		<exclude name="Generic.WhiteSpace.DisallowSpaceIndent.SpacesUsed" />
+
+		<!-- We should probably want to turn the below rules on, but these give issues with the current code base. -->
 		<exclude name="WordPress.WhiteSpace.ScopeIndent.Incorrect" />
 		<exclude name="WordPress.XSS.EscapeOutput" /><!-- This sniff also has known & reported bugs -->
 		<exclude name="WordPress.VIP.PostsPerPage.posts_per_page"/>
