@@ -116,7 +116,7 @@
                     <td><select name="options[custom_style]" id="custom_style">
                         <option value="1" <?php selected($values['custom_style'], 1) ?>><?php _e('Always use default', 'formidable')?></option>
                         <?php foreach ( $styles as $s ) { ?>
-                        <option value="<?php echo esc_attr( $s->ID ) ?>" <?php selected( $s->ID, $values['custom_style'] ) ?>><?php echo $s->post_title . ( empty( $s->menu_order ) ? '' : ' ('. __( 'default', 'formidable' ) .')' ) ?></option>
+                        <option value="<?php echo esc_attr( $s->ID ) ?>" <?php selected( $s->ID, $values['custom_style'] ) ?>><?php echo esc_html( $s->post_title . ( empty( $s->menu_order ) ? '' : ' ('. __( 'default', 'formidable' ) .')' ) ) ?></option>
                         <?php } ?>
                         <option value="0" <?php selected($values['custom_style'], 0); selected($values['custom_style'], '') ?>><?php _e('Do not use Formidable styling', 'formidable')?></option>
                     </select></td>
@@ -187,7 +187,7 @@
                     if (isset($values['fields'])){
                         foreach($values['fields'] as $field){
                             if (apply_filters('frm_show_custom_html', true, $field['type'])){ ?>
-                                <p><label><?php echo $field['name'] ?></label>
+                                <p><label><?php echo esc_html( $field['name'] ) ?></label>
                                 <textarea name="field_options[custom_html_<?php echo esc_attr( $field['id'] ) ?>]" rows="7" id="custom_html_<?php echo esc_attr( $field['id'] ) ?>" class="field_custom_html frm_long_input"><?php echo FrmAppHelper::esc_textarea($field['custom_html']) ?></textarea></p>
                             <?php }
                             unset($field);

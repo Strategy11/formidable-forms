@@ -14,7 +14,7 @@
 
         <div class="misc-pub-section">
             <span class="dashicons dashicons-id wp-media-buttons-icon"></span>
-            <?php _e('Entry ID', 'formidable') ?>: <b><?php echo $entry->id ?></b>
+            <?php _e('Entry ID', 'formidable') ?>: <b><?php echo (int) $entry->id ?></b>
         </div>
 
         <div class="misc-pub-section">

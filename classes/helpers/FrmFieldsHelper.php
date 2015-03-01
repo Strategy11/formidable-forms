@@ -982,7 +982,7 @@ DEFAULT_HTML;
     }
 
     public static function show_default_blank_js($default_blank){ ?>
-    <a href="javascript:void(0)" class="frm_bstooltip <?php echo $default_blank ? '' : 'frm_inactive_icon '; ?>frm_default_val_icons frm_action_icon frm_error_icon frm_icon_font" title="<?php $default_blank ? esc_attr_e( 'Default value will NOT pass form validation', 'formidable' ) : esc_attr_e( 'Default value will pass form validation', 'formidable' ); ?>"></a>
+    <a href="javascript:void(0)" class="frm_bstooltip <?php echo $default_blank ? '' : 'frm_inactive_icon '; ?>frm_default_val_icons frm_action_icon frm_error_icon frm_icon_font" title="<?php echo $default_blank ? esc_attr( 'Default value will NOT pass form validation', 'formidable' ) : esc_attr( 'Default value will pass form validation', 'formidable' ); ?>"></a>
     <?php
     }
 

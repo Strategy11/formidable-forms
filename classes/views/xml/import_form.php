@@ -77,7 +77,7 @@
                     <td>
                         <?php _e('Include the following in the export file', 'formidable'); ?>:<br/>
                         <?php foreach ( $export_types as $t => $type ){ ?>
-                        <label><input type="checkbox" name="type[]" value="<?php echo esc_attr( $t ) ?>"/> <?php echo $type ?></label> &nbsp;
+                        <label><input type="checkbox" name="type[]" value="<?php echo esc_attr( $t ) ?>"/> <?php echo esc_html( $type ) ?></label> &nbsp;
                         <?php } ?>
                     </td>
                 </tr>

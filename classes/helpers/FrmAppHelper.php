@@ -416,7 +416,7 @@ class FrmAppHelper{
             <?php foreach($pages as $page){ ?>
                 <option value="<?php echo esc_attr($page->ID); ?>" <?php
                 echo ( ( ( isset($_POST[$field_name]) && $_POST[$field_name] == $page->ID ) || ( ! isset($_POST[$field_name]) && $page_id == $page->ID ) ) ? ' selected="selected"' : '' );
-                ?>><?php echo $truncate ? esc_attr( self::truncate($page->post_title, $truncate) ) : esc_attr($page->post_title); ?> </option>
+                ?>><?php echo esc_html( $truncate ? self::truncate( $page->post_title, $truncate ) : $page->post_title ); ?> </option>
             <?php } ?>
         </select>
     <?php

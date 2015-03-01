@@ -14,24 +14,24 @@
 <fieldset>
 <div class="frm_form_field frm_first_half form-field <?php echo esc_attr( $pos_class ) ?>">
 <label class="frm_primary_label"><?php _e('Text field', 'formidable') ?> <span class="frm_required">*</span></label>
-<input type="text" value="<?php echo esc_attr( __('This is sample text', 'formidable')) ?>"/>
+<input type="text" value="<?php esc_attr_e( 'This is sample text', 'formidable' ) ?>"/>
 <div class="frm_description"><?php _e('A field with a description', 'formidable') ?></div>
 </div>
 
 <div class="frm_form_field form-field frm_last_half frm_blank_field <?php echo esc_attr( $pos_class ) ?>">
 <label class="frm_primary_label"><?php _e('Text field with error', 'formidable') ?> <span class="frm_required">*</span></label>
-<input type="text" value="<?php echo esc_attr( __('This is sample text', 'formidable')) ?>"/>
-<div class="frm_error"><?php echo $frm_settings->blank_msg ?></div>
+<input type="text" value="<?php esc_attr_e( 'This is sample text', 'formidable' ) ?>"/>
+<div class="frm_error"><?php echo esc_html( $frm_settings->blank_msg ) ?></div>
 </div>
 
 <div class="frm_form_field frm_first_half form-field frm_focus_field <?php echo esc_attr( $pos_class ) ?>">
 <label class="frm_primary_label"><?php _e('Text field in active state', 'formidable') ?> <span class="frm_required">*</span></label>
-<input type="text" value="<?php echo esc_attr( __('Active state will be seen when the field is clicked', 'formidable')) ?>" />
+<input type="text" value="<?php esc_attr_e( 'Active state will be seen when the field is clicked', 'formidable' ) ?>" />
 </div>
 
 <div class="frm_form_field frm_last_half form-field <?php echo esc_attr( $pos_class ) ?>">
 <label class="frm_primary_label"><?php _e('Read-only field', 'formidable') ?></label>
-<input type="text" value="<?php echo esc_attr( __('This field is not editable', 'formidable')) ?>" disabled="disabled" />
+<input type="text" value="<?php esc_attr_e( 'This field is not editable', 'formidable' ) ?>" disabled="disabled" />
 </div>
 
 <div class="frm_form_field frm_section_heading form-field frm_first_half">
@@ -48,13 +48,13 @@
         </select>
     </div>
 
-    <div class="frm_form_field form-field frm_first_half <?php echo $pos_class ?>">
+    <div class="frm_form_field form-field frm_first_half <?php echo esc_attr( $pos_class ) ?>">
         <label class="frm_primary_label"><?php _e('Radio Buttons', 'formidable') ?></label>
         <div class="frm_radio"><input type="radio" /><label><?php _e('Option 1', 'formidable') ?></label></div>
         <div class="frm_radio"><input type="radio" /><label><?php _e('Option 2', 'formidable') ?></label></div>
     </div>
 
-    <div class="frm_form_field form-field frm_last_half <?php echo $pos_class ?>">
+    <div class="frm_form_field form-field frm_last_half <?php echo esc_attr( $pos_class ) ?>">
         <label class="frm_primary_label"><?php _e('Check Boxes', 'formidable') ?></label>
         <div class="frm_checkbox"><label><input type="checkbox" /><?php _e('Option 1', 'formidable') ?></label></div>
         <div class="frm_checkbox"><label><input type="checkbox" /><?php _e('Option 2', 'formidable') ?></label></div>
@@ -67,16 +67,16 @@
 <div class="frm_description frm_section_spacing"><?php _e('This is an example of a section description', 'formidable') ?></div>
 
 <div class="frm_form_field form-field">
-<div id="datepicker_sample" style="margin-bottom:<?php echo $style->post_content['field_margin'] ?>;"></div>
+<div id="datepicker_sample" style="margin-bottom:<?php echo esc_attr( $style->post_content['field_margin'] ) ?>;"></div>
 </div>
 
 </div>
 
 <div class="frm_form_field frm_section_heading form-field frm_first_half">
-    <h3 class="<?php echo $pos_class ?> frm_section_spacing"><?php _e('Repeatable Section', 'formidable') ?></h3>
+    <h3 class="<?php echo esc_attr( $pos_class ) ?> frm_section_spacing"><?php _e( 'Repeatable Section', 'formidable' ) ?></h3>
     <div>
         <div class="frm_repeat_sec">
-            <div class="frm_form_field form-field frm_full <?php echo $pos_class ?>">
+            <div class="frm_form_field form-field frm_full <?php echo esc_attr( $pos_class ) ?>">
                 <label class="frm_primary_label"><?php _e('Text Area', 'formidable') ?></label>
                 <textarea></textarea>
                 <div class="frm_description"><?php _e('Another field with a description', 'formidable') ?></div>
@@ -91,7 +91,7 @@
 </div>
 
 <div class="frm_submit">
-<input type="submit" disabled="disabled" style="opacity:1;" value="<?php echo esc_attr( __('Submit', 'formidable')) ?>" />
+<input type="submit" disabled="disabled" style="opacity:1;" value="<?php esc_attr_e( 'Submit', 'formidable' ) ?>" />
 </div>
 
 </fieldset>

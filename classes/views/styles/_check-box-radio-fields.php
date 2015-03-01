@@ -1,18 +1,16 @@
 <div class="field-group clearfix frm-half frm-first-row">
 	<label><?php _e('Radio', 'formidable') ?></label>
 	<select name="<?php echo esc_attr( $frm_style->get_field_name('radio_align') ) ?>" id="frm_radio_align">
-	    <?php foreach (array('block' => 'Multiple Rows', 'inline' => 'Single Row') as $pos => $pos_label){ ?>
-	        <option value="<?php echo esc_attr( $pos ) ?>" <?php selected($style->post_content['radio_align'], $pos) ?>><?php echo $pos_label ?></option>
-	    <?php }?>
+        <option value="block" <?php selected($style->post_content['radio_align'], 'block') ?>><?php _e( 'Multiple Rows' , 'formidable' ) ?></option>
+        <option value="inline" <?php selected($style->post_content['radio_align'], 'inline') ?>><?php _e( 'Single Row' , 'formidable' ) ?></option>
 	</select>
 </div>
 
 <div class="field-group clearfix frm-half frm-first-row">
 	<label><?php _e('Check Box', 'formidable') ?></label>
 	<select name="<?php echo esc_attr( $frm_style->get_field_name('check_align') ) ?>" id="frm_check_align">
-	    <?php foreach (array('block' => 'Multiple Rows', 'inline' => 'Single Row') as $pos => $pos_label){ ?>
-	        <option value="<?php echo esc_attr( $pos ) ?>" <?php selected($style->post_content['check_align'], $pos) ?>><?php echo $pos_label ?></option>
-	    <?php }?>
+        <option value="block" <?php selected($style->post_content['check_align'], 'block') ?>><?php _e( 'Multiple Rows' , 'formidable' ) ?></option>
+        <option value="inline" <?php selected($style->post_content['check_align'], 'inline') ?>><?php _e( 'Single Row' , 'formidable' ) ?></option>
 	</select>
 </div>
 

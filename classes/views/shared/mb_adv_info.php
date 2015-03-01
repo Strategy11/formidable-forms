@@ -104,7 +104,7 @@
             <a href="javascript:void(0)" class="frmbutton button <?php
             echo ( in_array( $skey, array('siteurl', 'sitename', 'entry_count') ) ) ? 'show_before_content show_after_content' : '';
             echo ( strpos( $skey, 'default-' ) === 0 ) ? 'hide_frm_not_email_subject' : '';
-            ?> frm_insert_code" data-code="<?php echo esc_attr( $skey ) ?>"><?php echo $sname ?></a>
+            ?> frm_insert_code" data-code="<?php echo esc_attr( $skey ) ?>"><?php echo esc_html( $sname ) ?></a>
         </li>
         <?php
             $col = ( $col == 'one' ) ? 'two' : 'one';
@@ -152,7 +152,7 @@
         foreach ($cond_shortcodes as $skey => $sname){
 	    ?>
 	    <li class="frm_col_<?php echo esc_attr( $col ) ?>">
-	        <a href="javascript:void(0)" class="frmbutton button frm_insert_code" data-code="if 125 <?php echo esc_attr($skey) ?>][/if 125"><?php echo $sname ?></a>
+	        <a href="javascript:void(0)" class="frmbutton button frm_insert_code" data-code="if 125 <?php echo esc_attr($skey) ?>][/if 125"><?php echo esc_html( $sname ) ?></a>
 	    </li>
 	    <?php
 	        $col = ( $col == 'one' ) ? 'two' : 'one';
@@ -202,7 +202,7 @@
         <ul class="frm_code_list">
         <?php foreach($user_fields as $uk => $uf){ ?>
             <li class="frm_col_<?php echo esc_attr( $col ) ?>">
-                <a href="javascript:void(0)" class="frmbutton button frm_insert_code" data-code="<?php echo esc_attr($uid->id .' show="'. $uk .'"') ?>"><?php echo $uf ?></a>
+                <a href="javascript:void(0)" class="frmbutton button frm_insert_code" data-code="<?php echo esc_attr($uid->id .' show="'. $uk .'"') ?>"><?php echo esc_html( $uf ) ?></a>
     	    </li>
         <?php
             $col = ($col == 'one') ? 'two' : 'one';

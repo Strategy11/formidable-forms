@@ -12,7 +12,7 @@ $form_action = apply_filters('frm_form_'. $form_action->post_excerpt .'_action_s
         </div>
         <div class="widget-title">
             <h3><span class="frm_form_action_icon <?php echo esc_attr( $action_control->action_options['classes'] ) ?>"></span>
-                <?php echo $form_action->post_title; ?>
+                <?php echo esc_html( $form_action->post_title ); ?>
             </h3>
             <span class="frm_email_icons alignright">
                 <a href="javascript:void(0)" data-removeid="frm_form_action_<?php echo esc_attr( $action_key ) ?>" class="frm_icon_font frm_delete_icon frm_remove_form_action"> </a>

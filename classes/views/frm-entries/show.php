@@ -34,14 +34,14 @@
                             if ( in_array($field->type, array('break', 'divider') ) ) {
                             ?>
                         </tbody></table>
-                        <br/><h3 class="<?php echo esc_attr( $first_h3 ) ?>"><?php echo $field->name ?></h3>
+                        <br/><h3 class="<?php echo esc_attr( $first_h3 ) ?>"><?php echo esc_html( $field->name ) ?></h3>
                         <table class="form-table"><tbody>
                         <?php
                                 $first_h3 = '';
                             } else {
                         ?>
                         <tr>
-                            <th scope="row"><?php echo $field->name ?>:</th>
+                            <th scope="row"><?php echo esc_html( $field->name ) ?>:</th>
                             <td>
                             <?php
                             $atts = array(
@@ -64,7 +64,7 @@
 
                         <?php if ( $entry->parent_item_id ) { ?>
                         <tr><th><?php _e('Parent Entry ID', 'formidable') ?>:</th>
-                            <td><?php echo $entry->parent_item_id ?>
+                            <td><?php echo (int) $entry->parent_item_id ?>
                         </td></tr>
                         <?php } ?>
                         </tbody></table>

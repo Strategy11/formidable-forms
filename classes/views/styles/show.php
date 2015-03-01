@@ -17,7 +17,7 @@
      		        <select name="id">
      		            <option value=""><?php _e('&mdash; Select &mdash;') ?></option>
      		            <?php foreach ( $styles as $s ) { ?>
-     		            <option value="<?php echo esc_attr( $s->ID ) ?>" <?php selected($s->ID, $style->ID) ?>><?php echo $s->post_title . (empty($s->menu_order) ? '' : ' ('. __( 'default', 'formidable' ) .')') ?></option>
+     		            <option value="<?php echo esc_attr( $s->ID ) ?>" <?php selected($s->ID, $style->ID) ?>><?php echo esc_html( $s->post_title . (empty($s->menu_order) ? '' : ' ('. __( 'default', 'formidable' ) .')') ) ?></option>
      		            <?php } ?>
      		        </select>
      		        <span class="submit-btn">

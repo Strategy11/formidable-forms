@@ -148,7 +148,7 @@ if ($display['options']){ ?>
     <div class="widget">
         <div class="widget-top">
     	    <div class="widget-title-action"><a href="javascript:void(0);" class="widget-action"></a></div>
-    		<div class="widget-title"><h4><?php _e('Field Options', 'formidable') ?> (ID <?php echo $field['id'] ?>)</h4></div>
+    		<div class="widget-title"><h4><?php _e('Field Options', 'formidable') ?> (ID <?php echo (int) $field['id'] ?>)</h4></div>
         </div>
     	<div class="widget-inside">
             <table class="form-table" style="clear:none;">
@@ -157,7 +157,7 @@ if ($display['options']){ ?>
                     <td>
                         <div class="hide-if-no-js edit-slug-box frm_help" title="<?php _e('The field key can be used as an alternative to the field ID in many cases.', 'formidable') ?>">
                             <?php _e('Field Key:', 'formidable') ?>
-                            <div class="<?php echo ($frm_settings->lock_keys) ? 'frm_field_key' : 'frm_ipe_field_key" title="'. __('Click to edit.', 'formidable'); ?>" ><?php echo $field['field_key']; ?></div>
+                            <div class="<?php echo ($frm_settings->lock_keys) ? 'frm_field_key' : 'frm_ipe_field_key" title="'. __('Click to edit.', 'formidable'); ?>" ><?php echo esc_html( $field['field_key'] ); ?></div>
                             <?php if ( ! $frm_settings->lock_keys ) { ?>
                             <input type="hidden" name="field_options[field_key_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['field_key'] ); ?>" />
                             <?php } ?>

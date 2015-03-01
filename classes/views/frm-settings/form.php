@@ -54,7 +54,7 @@
             <table class="form-table">
                 <?php foreach($frm_roles as $frm_role => $frm_role_description){ ?>
                 <tr>
-                    <td class="frm_left_label"><label><?php echo $frm_role_description ?></label></td>
+                    <td class="frm_left_label"><label><?php echo esc_html( $frm_role_description ) ?></label></td>
                     <td><?php FrmAppHelper::wp_roles_dropdown( $frm_role, $frm_settings->$frm_role, 'multiple' ) ?></td>
                 </tr>
                 <?php } ?>
@@ -73,7 +73,7 @@
 		    <p><label class="frm_left_label"><?php _e('reCAPTCHA Language', 'formidable') ?></label>
 			<select name="frm_re_lang" id="frm_re_lang">
 			    <?php foreach ( $captcha_lang as $lang => $lang_name ) { ?>
-				<option value="<?php echo esc_attr($lang) ?>" <?php selected($frm_settings->re_lang, $lang) ?>><?php echo $lang_name ?></option>
+				<option value="<?php echo esc_attr($lang) ?>" <?php selected($frm_settings->re_lang, $lang) ?>><?php echo esc_html( $lang_name ) ?></option>
                 <?php } ?>
             </select></p>
 
