@@ -1227,6 +1227,42 @@ function frmAdminBuildJS(){
 			});
 		}
 	}
+
+    function switchPostType(){
+        // update all rows of categories/taxonomies
+        var cat_rows = document.getElementById('frm_posttax_rows').childNodes;
+        var post_type = this.value;
+        var cur_select;
+        var new_select;
+
+        // Get new category/taxonomy options
+        jQuery.ajax({
+            type:'POST',url:ajaxurl,
+            data:{action:'frm_replace_posttax_options', post_type:post_type},
+            success:function(html){
+
+                // Loop through each category row, and replace the first dropdown
+                for (i = 0; i < cat_rows.length ; i++) {
+                    // Check if current element is a div
+                    if ( cat_rows[i].tagName != 'DIV' ) {
+                        continue;
+                    }
+
+                    // Get current category select
+                    cur_select = cat_rows[i].getElementsByTagName('select')[0];
+
+                    // Set up new select
+                    new_select = document.createElement("select");
+                    new_select.innerHTML = html;
+                    new_select.className = cur_select.className;
+                    new_select.name = cur_select.name;
+
+                    // Replace the old select with the new select
+                    cat_rows[i].replaceChild(new_select, cur_select);
+                }
+            }
+        });
+    }
 	
 	function addPosttaxRow(){
 		var id = jQuery(document.getElementById('form_id')).val();
@@ -1871,6 +1907,7 @@ function frmAdminBuildJS(){
 			$formActions.on('change', 'select.frm_single_post_field', checkDupPost);
 			$formActions.on('change', 'select.frm_toggle_post_content', togglePostContent);
 			$formActions.on('change', 'select.frm_dyncontent_opt', fillDyncontent);
+            $formActions.on('change', '.frm_post_type', switchPostType);
 			$formActions.on('click', '.frm_add_postmeta_row', addPostmetaRow);
 			$formActions.on('click', '.frm_add_posttax_row', addPosttaxRow);
 			$formActions.on('click', '.frm_toggle_cf_opts', toggleCfOpts);
