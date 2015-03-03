@@ -21,6 +21,14 @@ $defaults = $default_style->post_content;
     display:none;
 }
 
+.frm_preview_page:before{
+    content:normal !important;
+}
+
+.frm_preview_page{
+    padding:25px;
+}
+
 .with_frm_style .form-field.frm_col_field{
     clear:none;
     float:left;

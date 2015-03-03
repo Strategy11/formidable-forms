@@ -159,11 +159,32 @@ form label.frm_primary_label input{font-size:12px;}
 	color:#B94A48;
 }
 
-.with_frm_style .wp-editor-container textarea, .postbox .wp-editor-container textarea{border:none;}
-.with_frm_style .mceIframeContainer, .postbox .mceIframeContainer{background-color:#fff;}
-.frm_error_style{color:#B94A48;border:1px solid #EBCCD1;background-color:#F2DEDE;padding:8px 15px;font-size:14px;margin:5px 0 15px;-moz-border-radius:4px;-webkit-border-radius:4px;border-radius:4px;}
+.with_frm_style .wp-editor-container textarea,
+.postbox .wp-editor-container textarea{
+    border:none;
+}
+.with_frm_style .mceIframeContainer,
+.postbox .mceIframeContainer{
+    background-color:#fff;
+}
+.frm_error_style{
+    color:#B94A48;
+    border:1px solid #EBCCD1;
+    background-color:#F2DEDE;
+    padding:8px 15px;
+    font-size:14px;
+    margin:5px 0 15px;
+    -moz-border-radius:4px;
+    -webkit-border-radius:4px;
+    border-radius:4px;
+}
 .show_csv{display:none;}
-.frm_hidden, .button.frm_hidden{display:none;}
+.button.frm_hidden{
+    display:none;
+}
+.frm_no_margin{
+    margin:0;
+}
 
 /*Switch form dropdown*/
 .caret{display:inline-block;width:0;height:0;margin-left:2px;vertical-align:middle;border-top:4px solid #AAA;border-right:4px solid transparent;border-left:4px solid transparent;border-bottom:0 dotted;}
@@ -1022,6 +1043,41 @@ span.howto{display:inline;}
 
 .tagchecklist .frm_exclude_cat_list span{display:inline;}
 .frm_38_trigger .tagchecklist span a:before{line-height:23px;text-align:start;}
+
+/* Field options popup */
+.frm_field_opts_popup{
+    min-width:300px;
+    background-color:#fff;
+}
+.frm_field_opts_popup #wpadminbar{
+    display:none;
+}
+.frm_prepop{
+    float:left;
+    width:235px;
+    list-style:none;
+    overflow:auto;
+    border-right: 2px solid #DEDEDE;
+    padding-right:10px;
+    margin:0;
+}
+.frm_prepop li{
+    margin: 0 0 3px;
+}
+
+.frm_prepop li a{
+    background:#F5F5F5;
+    border:1px solid #EEEEEE;
+    border-color:#EEEEEE #DEDEDE #DEDEDE #EEEEEE;
+    display: block;
+    font-weight: bold;
+    height: 30px;
+    line-height: 30px;
+    margin: 0 10px 0 0;
+    text-align: center;
+    text-decoration: none;
+    cursor:pointer;
+}
 
 /* Star Rating */
 .frm_form_fields div.rating-cancel, .frm_form_fields div.star-rating{

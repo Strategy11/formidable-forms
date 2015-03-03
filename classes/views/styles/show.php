@@ -106,5 +106,4 @@
 </div><!-- /.wrap-->
 </div><!-- /.nav-menu-php -->
 
-<script type="text/javascript">jQuery('.control-section.accordion-section.open').removeClass('open');</script>
 <div id="this_css"></div>

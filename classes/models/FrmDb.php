@@ -242,10 +242,10 @@ class FrmDb{
 
         global $wpdb, $wp_roles;
 
-        $wpdb->query('DROP TABLE IF EXISTS '. $this->fields);
-        $wpdb->query('DROP TABLE IF EXISTS '. $this->forms);
-        $wpdb->query('DROP TABLE IF EXISTS '. $this->entries);
-        $wpdb->query('DROP TABLE IF EXISTS '. $this->entry_metas);
+        $wpdb->query( $wpdb->prepare('DROP TABLE IF EXISTS '. $this->fields) );
+        $wpdb->query( $wpdb->prepare('DROP TABLE IF EXISTS '. $this->forms) );
+        $wpdb->query( $wpdb->prepare('DROP TABLE IF EXISTS '. $this->entries) );
+        $wpdb->query( $wpdb->prepare('DROP TABLE IF EXISTS '. $this->entry_metas) );
 
         delete_option('frm_options');
         delete_option('frm_db_version');

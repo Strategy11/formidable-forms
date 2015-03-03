@@ -239,8 +239,8 @@ class FrmEntry{
 
         wp_cache_delete( $id .'_nometa', 'frm_entry');
         wp_cache_delete( $id, 'frm_entry');
-        $wpdb->query('DELETE FROM ' . $wpdb->prefix .'frm_item_metas WHERE item_id=' . $id);
-        $result = $wpdb->query('DELETE FROM ' . $wpdb->prefix .'frm_items WHERE id=' . $id);
+        $wpdb->query( $wpdb->prepare('DELETE FROM ' . $wpdb->prefix .'frm_item_metas WHERE item_id=%d', $id) );
+        $result = $wpdb->query( $wpdb->prepare('DELETE FROM ' . $wpdb->prefix .'frm_items WHERE id=%d', $id) );
         return $result;
     }
 

@@ -4,12 +4,8 @@
 <meta charset="<?php bloginfo( 'charset' ); ?>" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <?php wp_head(); ?>
-<style type="text/css">
-body:before{content:normal !important;}
-body{padding:25px;}
-</style>
 </head>
-<body>
+<body class="frm_preview_page">
 <?php echo FrmFormsController::show_form($form->id, '', true, true) ?>
 <?php wp_footer(); ?>
 </body>

@@ -362,6 +362,10 @@ class FrmFieldsController{
 
         $field = FrmField::getOne($field_id);
 
+        wp_enqueue_script( 'utils' );
+        wp_enqueue_style( 'formidable-admin', FrmAppHelper::plugin_url(). '/css/frm_admin.css' );
+        FrmAppHelper::load_admin_wide_js();
+
         include(FrmAppHelper::plugin_path() .'/classes/views/frm-fields/import_choices.php');
         die();
     }

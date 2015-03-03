@@ -153,10 +153,3 @@
 
 </div>
 </div>
-
-<script type="text/javascript">jQuery(document).ready(function($){
-    $('.frm_multiselect').multiselect({
-        templates: {ul:'<ul class="multiselect-container frm-dropdown-menu"></ul>'},
-        nonSelectedText:'<?php _e("Default", "formidable") ?>',
-    });
-});</script>

@@ -821,6 +821,122 @@ function frmFrontFormJS(){
 		return false;
 	}
 
+    /* Google Tables */
+    function compileGoogleTable(opts){
+        console.log(opts);
+        var data = new google.visualization.DataTable();
+
+        var showID = false;
+        if ( jQuery.inArray('id', opts.options.fields) ) {
+            showID = true;
+            data.addColumn('number',frm_js.id);
+        }
+
+        var colCount = opts.fields.length;
+        var type = 'string';
+        for ( var i = 0, l = colCount; i < l; i++ ) {
+            var thisCol = opts.fields[i];
+            type = getGraphType(thisCol);
+
+            data.addColumn(type, thisCol.name);
+        }
+
+        var showEdit = false;
+        if ( opts.options.edit_link ) {
+            showEdit = true;
+            data.addColumn('string', opts.options.edit_link);
+        }
+
+        var showDelete = false;
+        if ( opts.options.delete_link ) {
+            showDelete = true;
+            data.addColumn('string', opts.options.delete_link);
+        }
+
+        var col = 0;
+        if ( opts.entries !== null ) {
+            var entryCount = opts.entries.length;
+            data.addRows(entryCount);
+
+            var row = 0;
+
+            for ( var e = 0, len = entryCount; e < len; e++ ) {
+                col = 0;
+                var entry = opts.entries[e];
+                if ( showID ) {
+                    data.setCell(row, col, entry.id);
+                    col++;
+                }
+
+                for ( var field = 0, fieldCount = colCount; field < fieldCount; field++ ) {
+                    var thisEntryCol = opts.fields[field];
+                    type = getGraphType(thisEntryCol);
+
+                    var fieldVal = entry.metas[thisEntryCol.id];
+                    if ( type == 'number' && ( fieldVal === null || fieldVal === '' ) ) {
+                        fieldVal = 0;
+                    } else if ( type == 'boolean' ) {
+                        if ( fieldVal === null || fieldVal == 'false' || fieldVal === false ) {
+                            fieldVal = 'false';
+                        } else {
+                            fieldVal = 'true';
+                        }
+                    }
+
+                    data.setCell(row, col, fieldVal);
+
+                    col++;
+                }
+
+                if ( showEdit ) {
+                    data.setCell(row, col, '<a href="'+ entry.editLink +'">'+ opts.options.edit_link +'</a>');
+         		    col++;
+        	    }
+
+                if ( showDelete ) {
+                    data.setCell(row, col,'<a href="'+ entry.deleteLink +'" class="frm_delete_link" onclick="return confirm('+ opts.options.confirm +')">'+ opts.options.delete_link +'</a>');
+                }
+
+                row++;
+            }
+        } else {
+            data.addRows(1);
+            col = 0;
+
+            for ( i = 0, l = colCount; i < l; i++ ) {
+                if ( col > 0 ) {
+                    data.setCell(0, col, '');
+                } else {
+                    data.setCell(0, col, opts.options.no_entries);
+                }
+                col++;
+            }
+        }
+
+        var chart = new google.visualization.Table(document.getElementById('frm_google_table_'+ opts.options.form_id));
+        chart.draw( data, JSON.stringify(opts.graphOpts) );
+    }
+
+    function getGraphType(field){
+        var type = 'string';
+        if ( field.type == 'number' ){
+            type = 'number';
+        } else if ( field.type == 'checkbox' || field.type == 'select' ) {
+            var optCount = field.options.length;
+            if ( field.type == 'select' && field.options[0] === '' ) {
+                if ( field.field_options.post_field == 'post_status' ) {
+                    optCount = 3;
+                } else {
+                    optCount = optCount - 1;
+                }
+            }
+            if ( optCount == 1 ) {
+                type = 'boolean';
+            }
+        }
+        return type;
+    }
+
 	/* File Fields */
 	function nextUpload(){
 		/*jshint validthis:true */
@@ -1066,6 +1182,17 @@ function frmFrontFormJS(){
                 reset = 'persist';
 			}
 		},
+
+        generateGoogleTable: function(num){
+            var graphs = __FRMTABLES;
+    		if ( typeof graphs == 'undefined' ) {
+    			// there are no tables on this page
+    			return;
+    		}
+
+    		var tables = __FRMTABLES;
+            compileGoogleTable(tables[num]);
+        },
 		
 		/* Time fields */
 		removeUsedTimes: function(obj, timeField){

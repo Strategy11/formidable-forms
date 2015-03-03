@@ -35,16 +35,16 @@ class WP_Test_WordPress_Plugin_Tests extends WP_UnitTestCase {
         global $wpdb;
         FrmAppController::install();
 
-        $exists = $wpdb->query('DESCRIBE '. $wpdb->prefix . 'frm_fields');
+        $exists = $wpdb->query( $wpdb->prepare('DESCRIBE '. $wpdb->prefix . 'frm_fields') );
         $this->assertTrue($exists ? true : false);
 
-        $exists = $wpdb->query('DESCRIBE '. $wpdb->prefix . 'frm_forms');
+        $exists = $wpdb->query( $wpdb->prepare('DESCRIBE '. $wpdb->prefix . 'frm_forms') );
         $this->assertTrue($exists ? true : false);
 
-        $exists = $wpdb->query('DESCRIBE '. $wpdb->prefix . 'frm_items');
+        $exists = $wpdb->query( $wpdb->prepare('DESCRIBE '. $wpdb->prefix . 'frm_items') );
         $this->assertTrue($exists ? true : false);
 
-        $exists = $wpdb->query('DESCRIBE '. $wpdb->prefix . 'frm_item_metas');
+        $exists = $wpdb->query( $wpdb->prepare('DESCRIBE '. $wpdb->prefix . 'frm_item_metas') );
         $this->assertTrue($exists ? true : false);
 	}
 

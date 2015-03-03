@@ -34,22 +34,16 @@
 }
 
 /* Upgrade notice */
-#frm_install_message,
-.frm_previous_install{
-    padding:7px;
-}
+#frm_install_message, .frm_previous_install{padding:7px;}
 .frm_deauthorize_link .spinner{
     display:inline-block;
     margin-top:0;
     float:none;
 }
-.frm_plugin_updating{
-    line-height:24px;
-}
-.frm_plugin_updating .frm_spinner{
-    float:left;
-    display:block;
-}
+.frm_plugin_updating{line-height:24px;}
+.frm_plugin_updating .frm_spinner{float:left;display:block;}
+
+.frm_hidden{display:none;}
 
 /* Admin Bar */
 #wpadminbar #wp-admin-bar-frm-forms > .ab-item:before{font-family:'s11-fp' !important;content:'\e601';top:2px;}

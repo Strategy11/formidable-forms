@@ -139,7 +139,7 @@ function frmAdminBuildJS(){
 			inside.slideUp('fast');
 		}
 	}
-	
+
 	function clickTab(link){
 		link = jQuery(link);
 		var t = link.attr('href');
@@ -1403,6 +1403,14 @@ function frmAdminBuildJS(){
 		});
 	}
 
+    function clickTabsAfterAjax(){
+        /*jshint validthis:true */
+        var t = jQuery(this).attr('href');
+        jQuery(this).parent().addClass('tabs').siblings('li').removeClass('tabs');
+        jQuery(t).show().siblings('.tabs-panel').hide();
+        return false;
+    }
+
 	function clickContentTab(){
 		link = jQuery(this);
 		var t = link.attr('href');
@@ -1606,6 +1614,10 @@ function frmAdminBuildJS(){
 		}
 		jQuery('.frm_pos_container').removeClass('frm_top_container frm_left_container frm_right_container').addClass('frm_'+value+'_container');    
 	}
+
+    function collapseAllSections(){
+        jQuery('.control-section.accordion-section.open').removeClass('open');
+    }
 	
 	/* Global settings page */
 	function uninstallNow(){ 
@@ -1695,8 +1707,14 @@ function frmAdminBuildJS(){
 			jQuery('select[name="frm_export_forms[]"]').prop('multiple', true).next('.howto').show();
 		}
 	}
-	
-	
+
+    function initiateMultiselect(){
+        jQuery('.frm_multiselect').multiselect({
+            templates: {ul:'<ul class="multiselect-container frm-dropdown-menu"></ul>'},
+            nonSelectedText:frm_admin_js.default,
+        });
+    }
+
 	return{
 		init: function(){
 			window.onscroll = document.documentElement.onscroll = setMenuOffset;
@@ -2070,6 +2088,9 @@ function frmAdminBuildJS(){
 			// click content tabs
 			jQuery('.nav-tab-wrapper a').click(clickContentTab);
 
+            // click tabs after panel is replaced with ajax
+            jQuery('#side-sortables').on('click', '.frm_doing_ajax.categorydiv .category-tabs a', clickTabsAfterAjax);
+
 			var $postForm = jQuery(document.getElementById('post'));
 			jQuery('input[name="show_count"]').change(showCount);
 			
@@ -2085,6 +2106,8 @@ function frmAdminBuildJS(){
 		},
 		
 		styleInit: function(){
+            collapseAllSections();
+
             // update styling on change
             jQuery('#frm_styling_form .styling_settings').change(function(){
                 var locStr = jQuery('input[name^="frm_style_setting[post_content]"], select[name^="frm_style_setting[post_content]"], textarea[name^="frm_style_setting[post_content]"], input[name="style_name"]').serialize();
@@ -2215,6 +2238,7 @@ function frmAdminBuildJS(){
 			var $globalForm = jQuery(document.getElementById('form_global_settings'));
 			$globalForm.on('click', '.frm_show_auth_form', showAuthForm);
 			jQuery(document.getElementById('frm_uninstall_now')).click(uninstallNow);
+            initiateMultiselect();
 		},
 		
 		exportInit: function(){

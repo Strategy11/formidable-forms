@@ -98,41 +98,22 @@ class FrmAppController {
             $pro_db_version = FrmAppHelper::pro_is_installed() ? get_option( 'frmpro_db_version' ) : false;
             if ( ( (int) $db_version < (int) FrmAppHelper::$db_version ) ||
                 ( FrmAppHelper::pro_is_installed() && (int) $pro_db_version < (int) FrmAppHelper::$pro_db_version ) ) {
+                FrmAppHelper::load_admin_wide_js();
             ?>
-<div class="error" id="frm_install_message"><?php _e( 'Your update is not complete yet.<br/>Please deactivate and reactivate the plugin to complete the update or', 'formidable' ); ?> <a href="javascript:void(0)" id="frm_install_link"><?php _e( 'Update Now', 'formidable' ) ?></a></div>
-<script type="text/javascript">
-jQuery(document).ready(function($){ $(document.getElementById('frm_install_link')).click(frm_install_now); });
-function frm_install_now(){
-    var $msg = jQuery(document.getElementById('frm_install_message'));
-	$msg.html('<div class="frm_plugin_updating"><?php _e( 'Please wait while your site updates.', 'formidable' ) ?><div class="spinner frm_spinner"></div></div>');
-	jQuery.ajax({
-		type:"POST",url:ajaxurl,data:"action=frm_install",
-		success:function(){$msg.fadeOut('slow');}
-	});
-}
-</script>
+<div class="error" id="frm_install_message"><?php printf( __( 'Your update is not complete yet.<br/>Please deactivate and reactivate the plugin to complete the update or %1$s', 'formidable' ), '<a href="javascript:void(0)" id="frm_install_link">'. __( 'Update Now', 'formidable' ) .'</a>'); ?> </div>
 <?php
             }
         }
 
         global $frm_vars;
         if ( $frm_vars['pro_is_authorized'] && ! file_exists( FrmAppHelper::plugin_path() . '/pro/formidable-pro.php' ) ) {
+            FrmAppHelper::load_admin_wide_js();
+
             // user is authorized, but running free version
             $inst_install_url = 'http://formidablepro.com/knowledgebase/manually-install-formidable-pro/';
         ?>
-    <div class="error" class="frm_previous_install"><?php echo apply_filters( 'frm_pro_update_msg', sprintf( __( 'This site has been previously authorized to run Formidable Forms.<br/>%1$sInstall the pro version%2$s or %3$sdeauthorize%4$s this site to continue running the free version and remove this message.', 'formidable' ), '<a href="'. $inst_install_url .'" target="_blank">', '</a>', '<a href="javascript:void(0)" onclick="frm_deauthorize_now()" class="frm_deauthorize_link">', '</a>' ), $inst_install_url ); ?></div>
-<script type="text/javascript">
-function frm_deauthorize_now(){
-if(!confirm("<?php esc_attr_e( 'Are you sure you want to deauthorize Formidable Forms on this site?', 'formidable' ) ?>"))
-	return false;
-jQuery('.frm_deauthorize_link').html('<span class="spinner"></span>');
-jQuery.ajax({type:'POST',url:ajaxurl,data:'action=frm_deauthorize&nonce='+wp_create_nonce('frm_ajax'),
-success:function(msg){jQuery('.error').fadeOut('slow');}
-});
-return false;
-}
-</script>
-        <?php
+<div class="error" class="frm_previous_install"><?php echo apply_filters( 'frm_pro_update_msg', sprintf( __( 'This site has been previously authorized to run Formidable Forms.<br/>%1$sInstall the pro version%2$s or %3$sdeauthorize%4$s this site to continue running the free version and remove this message.', 'formidable' ), '<a href="'. $inst_install_url .'" target="_blank">', '</a>', '<a href="javascript:void(0)" onclick="frm_deauthorize_now()" class="frm_deauthorize_link">', '</a>' ), $inst_install_url ); ?></div>
+<?php
         }
     }
 
@@ -188,6 +169,8 @@ return false;
                 wp_enqueue_style( 'formidable-admin', FrmAppHelper::plugin_url(). '/css/frm_admin.css', array(), $version );
                 self::localize_script( 'admin' );
             }
+        } else if ( $pagenow == 'widgets.php' ) {
+            FrmAppHelper::load_admin_wide_js();
         }
     }
 
@@ -281,6 +264,7 @@ return false;
             'remove'    => __( 'Remove', 'formidable' ),
             'offset'    => apply_filters( 'frm_scroll_offset', 4 ),
             'nonce'     => wp_create_nonce( 'frm_form' ),
+            'id'        => __( 'ID', 'formidable' ),
         ));
 
         if ( $location == 'admin' ) {
@@ -295,6 +279,7 @@ return false;
                 'saved'             => esc_attr( __( 'Saved', 'formidable' ) ),
                 'ok'                => __( 'OK' ),
                 'cancel'            => __( 'Cancel', 'formidable' ),
+                'default'           => __( 'Default', 'formidable' ),
                 'clear_default'     => __( 'Clear default value when typing', 'formidable' ),
                 'no_clear_default'  => __( 'Do not clear default value when typing', 'formidable' ),
                 'valid_default'     => __( 'Default value will pass form validation', 'formidable' ),

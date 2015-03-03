@@ -1,4 +1,4 @@
-<div id="taxonomy-linkcategory" class="categorydiv">
+<div id="taxonomy-linkcategory" class="categorydiv <?php echo $class ?>">
 	<ul id="category-tabs" class="category-tabs frm-category-tabs">
 		<li class="tabs" ><a href="#frm-insert-fields-box" id="frm_insert_fields_tab"><?php _e( 'Insert Fields', 'formidable' ); ?></a></li>
 		<li class="hide-if-no-js"><a href="#frm-conditionals"><?php _e( 'Conditionals', 'formidable' ); ?></a></li>
@@ -247,16 +247,3 @@
     }
     ?>
 </div>
-
-<?php if (defined('DOING_AJAX')){ ?>
-<script type="text/javascript">
-jQuery(document).ready(function($){
-jQuery('.categorydiv .category-tabs a').click(function(){
-var t = $(this).attr('href');
-$(this).parent().addClass('tabs').siblings('li').removeClass('tabs');
-$(t).show().siblings('.tabs-panel').hide();
-return false;
-});
-});
-</script>
-<?php }

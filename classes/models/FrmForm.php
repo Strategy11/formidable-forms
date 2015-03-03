@@ -291,7 +291,7 @@ class FrmForm{
         global $wpdb;
 
         if ( is_array($id) ) {
-            $query_results = $wpdb->query( 'UPDATE '. $wpdb->prefix .'frm_forms SET status = "'. $status .'" WHERE id in ('. implode(',', $id) .')');
+            $query_results = $wpdb->query( $wpdb->prepare('UPDATE '. $wpdb->prefix .'frm_forms SET status = %s WHERE id in ', $status) .'('. implode(',', array_filter( $id, 'is_numeric' ) ) .')');
         } else {
             $query_results = $wpdb->update( $wpdb->prefix .'frm_forms', array('status' => $status), array('id' => $id));
         }

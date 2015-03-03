@@ -389,6 +389,8 @@ class FrmFormsController{
             return;
         }
 
+        FrmAppHelper::load_admin_wide_js();
+
         $shortcodes = array(
             'formidable' => array('name' => __('Form', 'formidable'), 'label' => __('Insert a Form', 'formidable')),
         );
@@ -583,7 +585,7 @@ class FrmFormsController{
         require(FrmAppHelper::plugin_path() .'/classes/views/frm-forms/settings.php');
     }
 
-    public static function mb_tags_box($form_id) {
+    public static function mb_tags_box( $form_id, $class = '' ) {
         $fields = FrmField::get_all_for_form($form_id, '', 'include');
         $linked_forms = array();
         $col = 'one';
