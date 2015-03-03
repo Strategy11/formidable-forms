@@ -5,7 +5,7 @@ class FrmFieldsController{
     public static function load_field(){
         $fields = $_POST['field'];
         if ( empty($fields) ) {
-            die();
+            wp_die();
         }
 
         $_GET['page'] = 'formidable';
@@ -24,7 +24,7 @@ class FrmFieldsController{
                 continue;
             }
 
-            $field_id = $field['id'];
+            $field_id = (int) $field['id'];
 
             if ( ! isset( $field['value'] ) ) {
                 $field['value'] = '';
@@ -43,12 +43,12 @@ class FrmFieldsController{
 
         echo json_encode($field_html);
 
-        die();
+        wp_die();
     }
 
     public static function create(){
-        $field_type = $_POST['field'];
-        $form_id = $_POST['form_id'];
+        $field_type = sanitize_text_field( $_POST['field'] );
+        $form_id = (int) $_POST['form_id'];
 
         $field = self::include_new_field($field_type, $form_id);
 
@@ -87,7 +87,7 @@ class FrmFieldsController{
 
         FrmField::update( $field_id, compact('form_id') );
 
-        die();
+        wp_die();
     }
 
     public static function edit_name($field = 'name', $id = '') {
@@ -129,7 +129,7 @@ class FrmFieldsController{
             'field_options' => $field->field_options,
             'form_id' => $field->form_id
         ) );
-        die();
+        wp_die();
     }
 
     public static function duplicate(){
@@ -137,7 +137,7 @@ class FrmFieldsController{
 
         $copy_field = FrmField::getOne($_POST['field_id']);
         if ( ! $copy_field ) {
-            die();
+            wp_die();
         }
 
         $form_id = (int) $_POST['form_id'];
@@ -153,12 +153,12 @@ class FrmFieldsController{
         $values['field_order'] = $field_count + 1;
 
         if ( ! $field_id = FrmField::create($values) ) {
-            die();
+            wp_die();
         }
 
         self::include_single_field($field_id, $values);
 
-        die();
+        wp_die();
     }
 
     /*
@@ -180,15 +180,15 @@ class FrmFieldsController{
 
     public static function destroy(){
         FrmField::destroy($_POST['field_id']);
-        die();
+        wp_die();
     }
 
     /* Field Options */
 
     //Add Single Option or Other Option
     public static function add_option(){
-        $id = $_POST['field_id'];
-        $opt_type = $_POST['opt_type'];
+        $id = (int) $_POST['field_id'];
+        $opt_type = sanitize_text_field( $_POST['opt_type'] );
 
         //Get the field
         $field = FrmField::getOne($id);
@@ -243,12 +243,12 @@ class FrmFieldsController{
         } else {
             require(FrmAppHelper::plugin_path() .'/classes/views/frm-fields/single-option.php');
         }
-        die();
+        wp_die();
     }
 
     public static function edit_option() {
         $ids = explode('-', $_POST['element_id']);
-        $id = $_POST['field_id'];
+        $id = (int) $_POST['field_id'];
         $update_value = trim($_POST['update_value']);
         if ( strpos($_POST['element_id'], 'key_') ) {
             $new_value = $update_value;
@@ -283,12 +283,12 @@ class FrmFieldsController{
 
         FrmField::update($field->id, array('options' => $options));
         echo (trim($_POST['update_value']) == '') ? __('(Blank)', 'formidable') : stripslashes($_POST['update_value']);
-        die();
+        wp_die();
     }
 
     public static function delete_option(){
-        $field = FrmField::getOne($_POST['field_id']);
-        $opt_key = $_POST['opt_key'];
+        $field = FrmField::getOne( (int) $_POST['field_id'] );
+        $opt_key = (int) $_POST['opt_key'];
         $options = maybe_unserialize($field->options);
         unset($options[$opt_key]);
         $response = array( 'other' => true );
@@ -320,15 +320,15 @@ class FrmFieldsController{
 
         FrmField::update($_POST['field_id'], array('options' => maybe_serialize($options)));
 
-        die();
+        wp_die();
     }
 
     public static function import_choices(){
-        if ( !current_user_can('frm_edit_forms') ) {
+        if ( ! current_user_can('frm_edit_forms') ) {
             return;
         }
 
-        $field_id = $_REQUEST['field_id'];
+        $field_id = (int) $_REQUEST['field_id'];
 
         global $current_screen, $hook_suffix;
 
@@ -367,7 +367,7 @@ class FrmFieldsController{
         FrmAppHelper::load_admin_wide_js();
 
         include(FrmAppHelper::plugin_path() .'/classes/views/frm-fields/import_choices.php');
-        die();
+        wp_die();
     }
 
     private static function get_bulk_prefilled_opts(array &$prepop) {
@@ -412,7 +412,7 @@ class FrmFieldsController{
             return;
         }
 
-        $field_id = $_POST['field_id'];
+        $field_id = (int) $_POST['field_id'];
         $field = FrmField::getOne($field_id);
 
         if ( ! in_array($field->type, array('radio', 'checkbox', 'select')) ) {
@@ -460,7 +460,7 @@ class FrmFieldsController{
             FrmFieldsHelper::show_single_option($field);
         }
 
-        die();
+        wp_die();
     }
 
     public static function update_order(){
@@ -468,7 +468,7 @@ class FrmFieldsController{
             foreach ($_POST['frm_field_id'] as $position => $item)
                 FrmField::update($item, array('field_order' => $position));
         }
-        die();
+        wp_die();
     }
 
     public static function change_type($type){

@@ -162,10 +162,11 @@ class FrmFormsListHelper extends FrmListHelper {
 
 	    $links = array();
 	    $counts = FrmForm::get_count();
+        $form_type = isset( $_REQUEST['form_type'] ) ? sanitize_text_field( $_REQUEST['form_type'] ) : 'published';
 
 	    foreach ( $statuses as $status => $name ) {
 
-	        if ( ( isset( $_REQUEST['form_type'] ) && $status == $_REQUEST['form_type']) || ( ! isset( $_REQUEST['form_type'] ) && 'published' == $status ) ) {
+	        if ( $status == $form_type ) {
     			$class = ' class="current"';
     		} else {
     		    $class = '';

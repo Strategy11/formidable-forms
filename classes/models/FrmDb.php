@@ -160,7 +160,7 @@ class FrmDb{
         }
     }
 
-    public function get_count($table, $args=array()){
+    public static function get_count($table, $args=array()){
         global $wpdb;
         $args = FrmAppHelper::get_where_clause_and_values( $args );
 
@@ -174,7 +174,7 @@ class FrmDb{
         return FrmAppHelper::get_where_clause_and_values( $args );
     }
 
-    public function get_var( $table, $args = array(), $field = 'id', $order_by = '', $type = 'var' ) {
+    public static function get_var( $table, $args = array(), $field = 'id', $order_by = '', $type = 'var' ) {
         global $wpdb;
 
         $args = FrmAppHelper::get_where_clause_and_values( $args );
@@ -192,14 +192,14 @@ class FrmDb{
     /**
      * @param string $table
      */
-    public function get_col($table, $args=array(), $field='id', $order_by=''){
+    public static function get_col($table, $args=array(), $field='id', $order_by=''){
         return self::get_var( $table, $args, $field, $order_by, 'col' );
     }
 
     /**
      * @param string $table
      */
-    public function get_one_record($table, $args=array(), $fields='*', $order_by=''){
+    public static function get_one_record($table, $args=array(), $fields='*', $order_by=''){
         global $wpdb;
 
         $args = FrmAppHelper::get_where_clause_and_values( $args );
@@ -216,7 +216,7 @@ class FrmDb{
     /**
      * @param string $table
      */
-    public function get_records($table, $args=array(), $order_by='', $limit='', $fields='*'){
+    public static function get_records($table, $args=array(), $order_by='', $limit='', $fields='*'){
         global $wpdb;
 
         $args = FrmAppHelper::get_where_clause_and_values( $args );
@@ -230,8 +230,7 @@ class FrmDb{
         }
 
         $query = 'SELECT '. $fields .' FROM '. $table . $args['where'] . $order_by . $limit;
-        $query = $wpdb->prepare($query, $args['values']);
-        return $wpdb->get_results($query);
+        return $wpdb->get_results( $wpdb->prepare($query, $args['values']) );
     }
 
     public function uninstall(){
@@ -242,10 +241,10 @@ class FrmDb{
 
         global $wpdb, $wp_roles;
 
-        $wpdb->query( $wpdb->prepare('DROP TABLE IF EXISTS '. $this->fields) );
-        $wpdb->query( $wpdb->prepare('DROP TABLE IF EXISTS '. $this->forms) );
-        $wpdb->query( $wpdb->prepare('DROP TABLE IF EXISTS '. $this->entries) );
-        $wpdb->query( $wpdb->prepare('DROP TABLE IF EXISTS '. $this->entry_metas) );
+        $wpdb->query( 'DROP TABLE IF EXISTS '. $this->fields );
+        $wpdb->query( 'DROP TABLE IF EXISTS '. $this->forms );
+        $wpdb->query( 'DROP TABLE IF EXISTS '. $this->entries );
+        $wpdb->query( 'DROP TABLE IF EXISTS '. $this->entry_metas );
 
         delete_option('frm_options');
         delete_option('frm_db_version');

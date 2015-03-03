@@ -132,13 +132,13 @@ class FrmFormActionsController{
     public static function add_form_action() {
         global $frm_vars;
 
-        $action_key = $_POST['list_id'];
-        $action_type = $_POST['type'];
+        $action_key = (int) $_POST['list_id'];
+        $action_type = sanitize_text_field( $_POST['type'] );
 
         $action_control = self::get_form_actions( $action_type );
         $action_control->_set($action_key);
 
-        $form_id = $_POST['form_id'];
+        $form_id = (int) $_POST['form_id'];
 
         $form_action = $action_control->prepare_new($form_id);
 
@@ -146,16 +146,16 @@ class FrmFormActionsController{
         $form = self::fields_to_values($form_id, $values);
 
         include(FrmAppHelper::plugin_path() .'/classes/views/frm-form-actions/form_action.php');
-        die();
+        wp_die();
     }
 
     public static function fill_action() {
-        $action_key = $_POST['action_id'];
-        $action_type = $_POST['action_type'];
+        $action_key = (int) $_POST['action_id'];
+        $action_type = sanitize_text_field( $_POST['action_type'] );
 
         $action_control = self::get_form_actions( $action_type );
         if ( empty($action_control) ) {
-            die();
+            wp_die();
         }
 
         $form_action = $action_control->get_single_action( $action_key );
@@ -164,7 +164,7 @@ class FrmFormActionsController{
         $form = self::fields_to_values($form_action->menu_order, $values);
 
         include(FrmAppHelper::plugin_path() .'/classes/views/frm-form-actions/_action_inside.php');
-        die();
+        wp_die();
     }
 
     private static function fields_to_values($form_id, array &$values) {

@@ -1442,12 +1442,19 @@ class FrmAppHelper{
     public static function get_where_clause_and_values( $args ) {
         $where = '';
         $values = array();
-        if ( is_array($args) ) {
-            foreach ( $args as $key => $value ) {
-                $where .= empty($where) ? ' WHERE' : ' AND';
-                $where .= ' '. $key .'=';
-                $where .= is_numeric($value) ? ( strpos($value, '.') !== false ? '%f' : '%d' ) : '%s';
+        if ( ! is_array($args) ) {
+            return compact('where', 'values');
+        }
 
+        foreach ( $args as $key => $value ) {
+            $where .= empty($where) ? ' WHERE' : ' AND';
+            $where .= ' '. $key;
+            if ( is_array($value) ) {
+                $where .= ' in ('. self::prepare_array_values( $value, '%s' ) .')';
+                $values = array_merge( $values, $value );
+            } else {
+                $where .= '=';
+                $where .= is_numeric($value) ? ( strpos($value, '.') !== false ? '%f' : '%d' ) : '%s';
                 $values[] = $value;
             }
         }

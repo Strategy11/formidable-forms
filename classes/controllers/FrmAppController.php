@@ -329,7 +329,7 @@ class FrmAppController {
         $css = get_transient( 'frmpro_css' );
 
         include(FrmAppHelper::plugin_path() .'/css/custom_theme.css.php');
-        die();
+        wp_die();
     }
 
     public static function footer_js( $location = 'footer' ) {
@@ -376,7 +376,7 @@ class FrmAppController {
             $frm_settings = FrmAppHelper::get_settings();
             wp_die( $frm_settings->admin_permission );
         }
-        die();
+        wp_die();
     }
 
     public static function drop_tables($tables) {
@@ -462,7 +462,7 @@ class FrmAppController {
         delete_option( 'frmpro-authorized' );
         delete_site_option( 'frmpro-credentials' );
         delete_site_option( 'frmpro-authorized' );
-        die();
+        wp_die();
     }
 
     //formidable shortcode

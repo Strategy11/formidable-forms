@@ -206,7 +206,7 @@ class FrmStylesController{
         $defaults = $frm_style->get_defaults();
 
         echo json_encode($defaults);
-        die();
+        wp_die();
     }
 
     public static function change_styling() {
@@ -223,7 +223,7 @@ class FrmStylesController{
         echo '<style type="text/css">';
         include(FrmAppHelper::plugin_path() .'/css/_single_theme.css.php');
         echo '</style>';
-        die();
+        wp_die();
     }
 
     private static function add_meta_boxes() {
@@ -261,7 +261,7 @@ class FrmStylesController{
         $defaults = $frm_style->get_defaults();
 
         include(FrmAppHelper::plugin_path() .'/css/_single_theme.css.php');
-        die();
+        wp_die();
     }
 
     /*

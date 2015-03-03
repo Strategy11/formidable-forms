@@ -463,10 +463,9 @@ class FrmForm{
 
         $query = 'SELECT * FROM ' . $wpdb->prefix .'frm_forms' . FrmAppHelper::prepend_and_or_where(' WHERE ', $where) . FrmAppHelper::esc_order($order_by) . FrmAppHelper::esc_limit($limit);
 
-        $frmdb = new FrmDb();
         if ($limit == ' LIMIT 1' || $limit == 1){
             if ( is_array($where) && ! empty($where) ) {
-                $results = $frmdb->get_one_record($wpdb->prefix .'frm_forms', $where, '*', $order_by);
+                $results = FrmDb::get_one_record($wpdb->prefix .'frm_forms', $where, '*', $order_by);
             } else {
                 $results = $wpdb->get_row($query);
             }
@@ -476,8 +475,8 @@ class FrmForm{
                 $results->options = maybe_unserialize($results->options);
             }
         }else{
-            if ( is_array($where) && !empty($where) ) {
-                $results = $frmdb->get_records($wpdb->prefix .'frm_forms', $where, $order_by, $limit);
+            if ( is_array($where) && ! empty($where) ) {
+                $results = FrmDb::get_records($wpdb->prefix .'frm_forms', $where, $order_by, $limit);
             } else {
                 $results = $wpdb->get_results($query);
             }

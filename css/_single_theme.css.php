@@ -12,7 +12,7 @@ if ( isset($_GET['frm_style_setting']) || isset($_GET['flat']) ) {
     $submit_style = isset($submit_style) ? $submit_style : 0;
 
     if ( isset($_GET['style_name']) && !empty($_GET['style_name']) ) {
-        $style_class = $_GET['style_name'] .'.with_frm_style';
+        $style_class = sanitize_text_field( $_GET['style_name'] ) .'.with_frm_style';
     } else {
         $style_class = 'with_frm_style';
     }

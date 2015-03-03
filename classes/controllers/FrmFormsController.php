@@ -152,7 +152,7 @@ class FrmFormsController{
         FrmForm::update($_POST['form_id'], $values);
         $key = FrmForm::getKeyById($_POST['form_id']);
         echo stripslashes($key);
-        die();
+        wp_die();
     }
 
     public static function edit_description(){
@@ -161,7 +161,7 @@ class FrmFormsController{
         FrmForm::update($_POST['form_id'], array('description' => $_POST['update_value']));
         $description = FrmAppHelper::use_wpautop(stripslashes($_POST['update_value']));
         echo $description;
-        die();
+        wp_die();
     }
 
     public static function update($values=false){
@@ -261,7 +261,7 @@ class FrmFormsController{
         }
 
         require(FrmAppHelper::plugin_path() .'/classes/views/frm-entries/direct.php');
-        die();
+        wp_die();
     }
 
     public static function untrash() {
@@ -401,12 +401,12 @@ class FrmFormsController{
     }
 
     public static function get_shortcode_opts() {
-        $shortcode = $_POST['shortcode'];
+        $shortcode = sanitize_text_field( $_POST['shortcode'] );
         if ( empty($shortcode) ) {
-            die();
+            wp_die();
         }
 
-        echo '<div id="sc-opts-'. $shortcode .'" class="frm_shortcode_option">';
+        echo '<div id="sc-opts-'. esc_attr( $shortcode ) .'" class="frm_shortcode_option">';
         echo '<input type="radio" name="frmsc" value="'. esc_attr($shortcode) .'" id="sc-'. esc_attr($shortcode) .'" style="display:none;" />';
 
         $form_id = '';
@@ -428,7 +428,7 @@ class FrmFormsController{
 
         echo '</div>';
 
-        die();
+        wp_die();
     }
 
     public static function display_forms_list($params=false, $message='', $current_page_ov = false, $errors = array()){
@@ -555,7 +555,7 @@ class FrmFormsController{
         if ( $form->default_template ) {
             wp_die(__('That template cannot be edited', 'formidable'));
         } else if ( defined('DOING_AJAX') ) {
-            die();
+            wp_die();
         } else if ( $create_link ) {
             require(FrmAppHelper::plugin_path() .'/classes/views/frm-forms/new.php');
         } else {
@@ -621,7 +621,7 @@ class FrmFormsController{
 	        'default_email' => true,
 	        'plain_text'    => $_POST['plain_text'],
 	    ) );
-	    die();
+	    wp_die();
 	}
 
     public static function filter_content($content, $form, $entry=false){

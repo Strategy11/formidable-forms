@@ -578,7 +578,7 @@ function frmAdminBuildJS(){
         }
         var data = {action:'frm_add_field_option',field_id:field_id,opt_type:opt_type};
         jQuery.post(ajaxurl,data,function(msg){
-            jQuery('#frm_field_'+field_id+'_opts').append(msg);
+            jQuery(document.getElementById('frm_field_'+field_id+'_opts')).append(msg);
         });
     }
 

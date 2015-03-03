@@ -326,7 +326,7 @@ BEFORE_HTML;
             } else if ( $code == 'form_description' ) {
                 $replace_with = FrmAppHelper::use_wpautop($form->description);
             } else if ( $code == 'entry_key' && isset($_GET) && isset($_GET['entry']) ) {
-                $replace_with = $_GET['entry'];
+                $replace_with = sanitize_text_field( $_GET['entry'] );
             } else {
                 $replace_with = '';
             }

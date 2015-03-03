@@ -146,7 +146,7 @@ class FrmXMLController{
 
         $type = false;
         if ( isset($_POST['type']) ) {
-            $type = $_POST['type'];
+            $type = sanitize_text_field( $_POST['type'] );
         }
 
         $format = isset($_POST['format']) ? $_POST['format'] : 'xml';
@@ -162,7 +162,7 @@ class FrmXMLController{
             do_action('frm_export_format_'. $format, compact('ids'));
         }
 
-        die();
+        wp_die();
     }
 
     public static function generate_xml($type, $args = array() ) {
