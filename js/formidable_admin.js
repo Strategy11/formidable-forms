@@ -1740,7 +1740,7 @@ function frmAdminBuildJS(){
 			}else if(document.getElementById('frm_styling_form') !== null){
 				// load styling settings js
 				frmAdminBuild.styleInit();
-			}else if(document.getElementById('custom_css') !== null){
+			}else if(document.getElementById('frm_custom_css_box') !== null){
 				// load styling settings js
 				frmAdminBuild.customCSSInit();
 			}else if(jQuery(document.getElementById('form_global_settings')).length > 0){
@@ -2226,7 +2226,7 @@ function frmAdminBuildJS(){
 		},
 
         customCSSInit: function() {
-            var customCSS = document.getElementById('custom_css');
+            var customCSS = document.getElementById('frm_custom_css_box');
             if ( customCSS !== null ) {
                 var editor = CodeMirror.fromTextArea(customCSS, {
                     lineNumbers: true

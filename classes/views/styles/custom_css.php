@@ -14,7 +14,7 @@
 		<input type="hidden" name="frm_action" value="save_css" />
         <?php wp_nonce_field( 'frm_custom_css_nonce', 'frm_custom_css' ); ?>
 
-        <textarea name="<?php echo esc_attr( $frm_style->get_field_name('custom_css') ) ?>" id="custom_css" class="hide-if-js" style="width:100%;"><?php echo FrmAppHelper::esc_textarea($style->post_content['custom_css']) ?></textarea>
+        <textarea name="<?php echo esc_attr( $frm_style->get_field_name('custom_css') ) ?>" id="frm_custom_css_box" class="hide-if-js"><?php echo FrmAppHelper::esc_textarea($style->post_content['custom_css']) ?></textarea>
 
         <?php
         foreach ( $style->post_content as $k => $v ) {

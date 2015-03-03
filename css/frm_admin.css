@@ -1649,6 +1649,10 @@ iframe#dyncontent_ifr{min-height:150px;}
 	font-style:normal;
 }
 
+#frm_custom_css_box{
+    width:100%;
+}
+
 /*form field groups*/
 .accordion-container .field-group {
 	float: left;
