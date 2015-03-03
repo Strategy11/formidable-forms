@@ -936,6 +936,64 @@ function frmFrontFormJS(){
         return type;
     }
 
+    function compileGraph(opts){
+        var data = new google.visualization.DataTable();
+        var useSepCol = false;
+
+        // add the rows
+        var rowCount = opts.rows.length;
+        if ( rowCount > 0 ) {
+            if ( opts.type == 'table' ) {
+                useSepCol = true;
+                var lastRow = opts.rows[rowCount - 1];
+                var count = lastRow[0] + 1;
+                data.addRows(count);
+
+                for ( var r = 0, len = rowCount; r < len; r++ ) {
+                    data.setCell( opts.rows[r] ); //data.setCell(0, 0, 'Mike');
+                }
+            }else{
+                var firstRow = opts.rows[0];
+                if ( typeof firstRow.tooltip != 'undefined' ) {
+                    useSepCol = true;
+                    data.addColumn({type:'string',role:'tooltip'});
+
+                    // remove the tooltip key from the array
+                    for ( var row = 0, rc = rowCount; row < rc; row++ ) {
+                        var tooltip = opts.rows[row].tooltip;
+                        opts.rows[row].tooltip = null;
+                        opts.rows[row].push(tooltip);
+                    }
+
+                    data.addRows(opts.rows);
+                }
+            }
+        }
+
+        // add the columns
+        var colCount = opts.cols.length;
+        if ( useSepCol ) {
+            if ( colCount > 0 ) {
+                for ( var i = 0, l = colCount; i < l; i++ ) {
+                    var col = opts.cols[i];
+                    data.addColumn(col.type, col.name);
+                }
+            }
+        } else {
+            var graphData = [];
+            graphData[0] = [];
+            for ( var c = 0, cur = colCount; c < cur; c++ ) {
+                graphData[0].push(opts.cols[c].name);
+            }
+            graphData = graphData.concat(opts.rows);
+            data = google.visualization.arrayToDataTable(graphData);
+        }
+
+        var type = (opts.type.charAt(0).toUpperCase() + opts.type.slice(1)) + 'Chart';
+        var chart = new google.visualization[type](document.getElementById('chart_'+ opts.graph_id));
+        chart.draw(data, opts.options);
+    }
+
 	/* File Fields */
 	function nextUpload(){
 		/*jshint validthis:true */
@@ -1133,6 +1191,11 @@ function frmFrontFormJS(){
 			getFormErrors(this);
 		},
 
+        scrollToID: function(id){
+            var frm_pos = jQuery(document.getElementBtId(id).offset());
+            window.scrollTo(frm_pos.left, frm_pos.top);
+        },
+
 		scrollMsg: function(id, object){
 			var newPos = '';
 			if(typeof(object) == 'undefined'){
@@ -1182,15 +1245,18 @@ function frmFrontFormJS(){
 			}
 		},
 
-        generateGoogleTable: function(num){
+        generateGoogleTable: function(num, type){
             var graphs = __FRMTABLES;
     		if ( typeof graphs == 'undefined' ) {
     			// there are no tables on this page
     			return;
     		}
 
-    		var tables = __FRMTABLES;
-            compileGoogleTable(tables[num]);
+            if(type == 'table'){
+                compileGoogleTable(graphs.table[num]);
+            }else{
+                compileGraph(graphs[type][num]);
+            }
         },
 		
 		/* Time fields */

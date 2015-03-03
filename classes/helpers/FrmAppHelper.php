@@ -1712,11 +1712,13 @@ class FrmAppHelper{
     */
     public static function load_admin_wide_js() {
         $version = FrmAppHelper::plugin_version();
-        wp_enqueue_script( 'formidable_global_admin', FrmAppHelper::plugin_url() . '/js/formidable_admin_global.js', array('jquery'), $version );
+        wp_enqueue_script( 'formidable_admin_global', FrmAppHelper::plugin_url() . '/js/formidable_admin_global.js', array('jquery'), $version );
 
-        wp_localize_script( 'formidable_global_admin', 'frmAdmin', array(
+        wp_localize_script( 'formidable_admin_global', 'frmAdmin', array(
             'updating_msg'      => __( 'Please wait while your site updates.', 'formidable' ),
             'deauth_confirm'    => __( 'Are you sure you want to deauthorize Formidable Forms on this site?', 'formidable' ),
+            'url'               => FrmAppHelper::plugin_url(),
+            'loading'           => __( 'Loading&hellip;' ),
             'nonce'             => wp_create_nonce('frm_ajax'),
         ) );
     }

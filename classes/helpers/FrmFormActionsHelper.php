@@ -15,13 +15,16 @@ class FrmFormActionsHelper{
         }
 
         $args = array(
-            'menu_order'    => $form_id,
             'post_type'     => FrmFormActionsController::$action_post_type,
             'post_status'   => 'publish',
             'numberposts'   => 99,
             'orderby'       => 'title',
             'order'         => 'ASC',
         );
+
+        if ( $form_id ) {
+            $args['menu_order'] = $form_id;
+        }
 
         $actions = FrmAppHelper::check_cache(serialize($args), 'frm_actions');
         if ( false == $actions ) {

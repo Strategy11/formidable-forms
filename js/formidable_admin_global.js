@@ -19,7 +19,7 @@ function frm_install_now(){
 	});
 }
 
-function frm_deauthorize_now(){
+function frmDeauthorizeNow(){
     if(!confirm(frmAdmin.deauth_confirm)){
 	    return false;
     }
@@ -46,6 +46,15 @@ function frmPrePop(opts){
 function frmUpdateBulkOpts(fieldID) {
     window.top.frmAdminBuild.updateOpts(fieldID,document.getElementById('frm_bulk_options').value);
     window.top.tb_remove();
+}
+
+function frmCreatePostEntry(id,post_id){
+    jQuery('#frm_create_entry p').replaceWith('<img src="'+ frmAdmin.url +'/images/wpspin_light.gif" alt="'+ frmAdmin.loading +'" />');
+    jQuery.ajax({
+        type:'POST',url:ajaxurl,
+        data:{action:'frm_create_post_entry',id:id,post_id:post_id,nonce:frmAdmin.nonce},
+        success:function(msg){jQuery(document.getElementById('frm_create_entry')).fadeOut('slow');}
+    });
 }
 
 function frmAdminPopupJS(){

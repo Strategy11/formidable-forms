@@ -2266,7 +2266,20 @@ function frmAdminBuildJS(){
 				}
 				}
 			});	
-		}
+		},
+
+        /* remove conditional logic if the field doesn't exist */
+        triggerRemoveLogic: function(fieldID, metaName){
+            jQuery('#frm_logic_'+ fieldID +'_'+ metaName +' .frm_remove_tag').click();
+        },
+
+        downloadXML: function(controller, ids, isTemplate){
+            var url = ajaxurl+'?action=frm_'+ controller +'_xml&ids='+ ids;
+            if(isTemplate !== null){
+                url = url +'&is_template='+ isTemplate;
+            }
+            location.href = url;
+        },
 	};
 }
 var frmAdminBuild = frmAdminBuildJS();
