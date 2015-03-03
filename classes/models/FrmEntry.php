@@ -258,7 +258,9 @@ class FrmEntry{
 
         $query = "SELECT it.*, fr.name as form_name, fr.form_key as form_key FROM {$wpdb->prefix}frm_items it
                   LEFT OUTER JOIN {$wpdb->prefix}frm_forms fr ON it.form_id=fr.id WHERE ";
-        $query .= $wpdb->prepare( is_numeric($id) ? 'it.id=%d' : 'it.item_key=%s', $id);
+        $query .= is_numeric($id) ? 'it.id=%d' : 'it.item_key=%s';
+        $query_args = array( $id );
+        $query = $wpdb->prepare( $query, $query_args );
 
         if ( ! $meta ) {
             $entry = FrmAppHelper::check_cache( $id .'_nometa', 'frm_entry', $query, 'get_row' );

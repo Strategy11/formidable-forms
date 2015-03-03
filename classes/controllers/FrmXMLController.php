@@ -211,27 +211,33 @@ class FrmXMLController{
             $table = $tables[$tb_type];
 
             $select = $table .'.id';
+            $query_vars = array();
 
             switch ( $tb_type ) {
                 case 'forms':
                     //add forms
                     if ( $args['ids'] ){
-                	    $where = ' ('. $table .'.id IN ('. $args['ids'] .') OR '. $table .'.parent_form_id IN ('. $args['ids'] .'))';
+                        $where = $table . '.id IN (' . FrmAppHelper::prepare_array_values( $args['ids'], '%d' ) . ') OR '. $table .'.parent_form_id IN (' . FrmAppHelper::prepare_array_values( $args['ids'], '%d' ) . ')';
+                        $query_vars = array_merge( $query_vars, explode( ',', $args['ids'] ) );
                 	} else {
-                	    $where = $wpdb->prepare( $table .'.status != %s', 'draft' );
+                        $where .= $table . '.status != %s';
+                        $query_vars[] = 'draft';
                 	}
                 break;
                 case 'actions':
                     $select = $table .'.ID';
-                	$where = $wpdb->prepare('post_type=%s', FrmFormActionsController::$action_post_type);
+                    $where = 'post_type=%s';
+                    $query_vars[] = FrmFormActionsController::$action_post_type;
                     if ( ! empty($args['ids']) ) {
-                        $where .= ' AND menu_order IN ('. $args['ids'] .')';
+                        $where .= ' AND menu_order IN (' . FrmAppHelper::prepare_array_values( $args['ids'], '%d' ) . ')';
+                        $query_vars = array_merge( $query_vars, explode( ',', $args['ids'] ) );
                     }
                 break;
                 case 'items':
                     //$join = "INNER JOIN {$wpdb->prefix}frm_item_metas im ON ($table.id = im.item_id)";
                     if ( $args['ids'] ) {
-                        $where = $table .'.form_id IN ('. $args['ids'] .')';
+                        $where = $table . '.form_id IN (' . FrmAppHelper::prepare_array_values( $args['ids'], '%d' ) . ')';
+                        $query_vars = array_merge( $query_vars, explode( ',', $args['ids'] ) );
                     }
                 break;
                 case 'styles':
@@ -240,34 +246,42 @@ class FrmXMLController{
                     $style_ids = array();
                     foreach ( $form_ids as $form_id ) {
                         $form_data = FrmForm::getOne( $form_id );
-                        $style_ids[] = $form_data->options['custom_style'];
+                        // For forms that have not been updated while running 2.0, check if custom_style is set
+                        if ( isset( $form_data->options['custom_style'] ) ) {
+                            $style_ids[] = $form_data->options['custom_style'];
+                        }
                         unset( $form_id, $form_data );
                     }
                     $select = $table .'.ID';
-                    $where = $wpdb->prepare('post_type=%s', 'frm_styles');
+                    $where = 'post_type=%s';
+                    $query_vars[] = 'frm_styles';
 
                     // Only export selected styles
                     if ( ! empty( $style_ids ) ) {
-                        $where .= ' AND ID IN ('. implode( ',', $style_ids ) .')';
+                        $where .= ' AND ID IN (' . FrmAppHelper::prepare_array_values( $style_ids, '%d' ) . ')';
+                        $query_vars = array_merge( $query_vars, $style_ids );
                     }
                 break;
                 default:
                     $select = $table .'.ID';
-                    $join = "INNER JOIN $wpdb->postmeta pm ON (pm.post_id=$table.ID)";
-                    $where = "pm.meta_key='frm_form_id' AND pm.meta_value ";
+                    $join = ' INNER JOIN ' . $wpdb->postmeta . ' pm ON (pm.post_id=' . $table . '.ID)';
+                    $where = "pm.meta_key=%s AND pm.meta_value ";
+                    $query_vars[] = 'frm_form_id';
+
                     if ( empty($args['ids']) ) {
                         $where .= '> 0';
                     } else {
-                        $where .= 'IN ('. $args['ids'] .')';
+                        $where .= 'IN (' . FrmAppHelper::prepare_array_values( $args['ids'], '%d' ) . ')';
+                        $query_vars = array_merge( $query_vars, explode( ',', $args['ids'] ) );
                     }
                 break;
             }
 
             if ( ! empty($where) ) {
-                $where = 'WHERE '. $where;
+                $where = ' WHERE '. $where;
             }
 
-            $records[$tb_type] = $wpdb->get_col( "SELECT $select FROM $table $join $where" );
+            $records[$tb_type] = $wpdb->get_col( $wpdb->prepare( 'SELECT ' . $select . ' FROM ' . $table . $join . $where, $query_vars ) );
             unset($tb_type);
         }
 

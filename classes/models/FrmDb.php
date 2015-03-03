@@ -272,7 +272,15 @@ class FrmDb{
     private function migrate_to_17() {
         global $wpdb;
 
-        $fields = $wpdb->get_results("SELECT id, field_options FROM $this->fields WHERE type in ('textarea', 'text', 'number', 'email', 'url', 'rte', 'date', 'phone', 'password', 'image', 'tag', 'file') AND field_options LIKE '%s:4:\"size\";%' AND field_options NOT LIKE '%s:4:\"size\";s:0:%'");
+        // Get query arguments
+        $query_args = $field_types = array('textarea', 'text', 'number', 'email', 'url', 'rte', 'date', 'phone', 'password', 'image', 'tag', 'file');
+        $query_args = array_merge( $query_args, array( '%'. FrmAppHelper::esc_like('s:4:"size";') .'%', '%'. FrmAppHelper::esc_like('s:4:"size";s:0:') .'%' ) );
+
+        // Prepare query
+        $query = $wpdb->prepare( 'SELECT id, field_options FROM ' . $this->fields . ' WHERE type IN (' . FrmAppHelper::prepare_array_values( $field_types, '%s' ) . ') AND field_options LIKE %s AND field_options NOT LIKE %s', $query_args );
+
+        // Get results
+        $fields = $wpdb->get_results( $query );
 
         $updated = 0;
         foreach ( $fields as $f ) {
@@ -314,7 +322,8 @@ class FrmDb{
     private function migrate_to_16() {
         global $wpdb;
 
-        $forms = $wpdb->get_results('SELECT id, options FROM '. $this->forms);
+        $query = $wpdb->prepare( 'SELECT id, options FROM '. $this->forms );
+        $forms = $wpdb->get_results( $query );
 
         /* Old email settings format:
         * email_to: Email or field id
@@ -574,7 +583,8 @@ class FrmDb{
     private function migrate_to_11() {
         global $wpdb;
 
-        $forms = $wpdb->get_results("SELECT id, options FROM $this->forms");
+        $query = $wpdb->prepare( 'SELECT id, options FROM ' . $this->forms );
+        $forms = $wpdb->get_results( $query );
         $sending = __('Sending', 'formidable');
         $img = FrmAppHelper::plugin_url() .'/images/ajax_loader.gif';
         $old_default_html = <<<DEFAULT_HTML
@@ -609,7 +619,9 @@ DEFAULT_HTML;
     private function migrate_to_6() {
         global $wpdb;
 
-        $fields = $wpdb->get_results("SELECT id, field_options FROM $this->fields WHERE type not in ('form', 'hidden', 'user_id', '". implode("','", FrmFieldsHelper::no_save_fields()) ."')");
+        $query_args = $no_save = array_merge( FrmFieldsHelper::no_save_fields(), array( 'form', 'hidden', 'user_id' ) );
+        $query = $wpdb->prepare( 'SELECT id, field_options FROM ' . $this->fields . ' WHERE type NOT IN ('. FrmAppHelper::prepare_array_values( $no_save, '%s' ) .')', $query_args );
+        $fields = $wpdb->get_results( $query );
 
         $default_html = <<<DEFAULT_HTML
 <div id="frm_field_[id]_container" class="form-field [required_class] [error_class]">
