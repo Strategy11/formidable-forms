@@ -823,7 +823,6 @@ function frmFrontFormJS(){
 
     /* Google Tables */
     function compileGoogleTable(opts){
-        console.log(opts);
         var data = new google.visualization.DataTable();
 
         var showID = false;
