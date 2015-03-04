@@ -50,11 +50,6 @@ class FrmHooksController{
         add_filter('widget_text', 'FrmAppController::widget_text_filter', 8 );
         add_action('wp_footer', 'FrmAppController::footer_js', 1, 0);
 
-        if ( ! FrmAppHelper::is_admin() ) {
-            // Update the session data
-            add_action('init', 'FrmAppController::referer_session', 1);
-        }
-
         // Entries controller
         add_action('wp', 'FrmEntriesController::process_entry', 10, 0);
         add_action('frm_wp', 'FrmEntriesController::process_entry', 10, 0);

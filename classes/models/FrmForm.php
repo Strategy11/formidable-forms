@@ -468,7 +468,7 @@ class FrmForm{
 
         if ( $limit == ' LIMIT 1' || $limit == 1 ) {
             if ( is_array($where) && ! empty($where) ) {
-                $results = FrmDb::get_row($wpdb->prefix .'frm_forms', $where, '*', $order_by);
+                $results = FrmDb::get_row($wpdb->prefix .'frm_forms', $where, '*', array('order_by' => $order_by) );
             } else {
                 $results = $wpdb->get_row($query);
             }

@@ -6,7 +6,6 @@ class FrmSettings{
     public $mu_menu;
     public $preview_page_id;
     public $lock_keys;
-    public $track;
     public $use_html;
     public $jquery_css;
     public $accordion_js;
@@ -81,7 +80,6 @@ class FrmSettings{
             'mu_menu'   => 0,
             'preview_page_id' => 0,
             'lock_keys' => false,
-            'track'     => false,
             'use_html'  => true,
             'jquery_css' => false,
             'accordion_js' => false,
@@ -196,7 +194,6 @@ class FrmSettings{
         $this->load_style = $params['frm_load_style'];
         $this->preview_page_id = (int) $params['frm-preview-page-id'];
         $this->lock_keys = isset($params['frm_lock_keys']) ? $params['frm_lock_keys'] : 0;
-        $this->track = isset($params['frm_track']) ? $params['frm_track'] : 0;
 
         $this->use_html = isset($params['frm_use_html']) ? $params['frm_use_html'] : 0;
         //$this->custom_style = isset($params['frm_custom_style']) ? $params['frm_custom_style'] : 0;

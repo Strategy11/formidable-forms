@@ -400,56 +400,6 @@ class FrmAppController {
         return $content;
     }
 
-    public static function referer_session() {
-    	$frm_settings = FrmAppHelper::get_settings();
-
-    	if ( ! isset($frm_settings->track) || ! $frm_settings->track || defined( 'WP_IMPORTING' ) ) {
-    	    return;
-    	}
-
-    	// keep the page history below 100
-    	$max = 100;
-
-    	if ( ! isset($_SESSION) ) {
-    		session_start();
-        }
-
-    	if ( ! isset($_SESSION['frm_http_pages']) || ! is_array( $_SESSION['frm_http_pages'] ) ) {
-    		$_SESSION['frm_http_pages'] = array('http://'. $_SERVER['SERVER_NAME']. $_SERVER['REQUEST_URI']);
-    	}
-
-    	if ( ! isset($_SESSION['frm_http_referer']) || ! is_array( $_SESSION['frm_http_referer'] ) ) {
-    		$_SESSION['frm_http_referer'] = array();
-    	}
-
-		if ( ! isset($_SERVER['HTTP_REFERER']) ) {
-		    $direct = __( 'Type-in or bookmark', 'formidable' );
-		    if ( ! in_array( $direct, $_SESSION['frm_http_referer'] ) ) {
-			    $_SESSION['frm_http_referer'][] = $direct;
-            }
-		} else if ( strpos($_SERVER['HTTP_REFERER'], FrmAppHelper::site_url()) === false && ! in_array( $_SERVER['HTTP_REFERER'], $_SESSION['frm_http_referer'] ) ) {
-    		$_SESSION['frm_http_referer'][] = $_SERVER['HTTP_REFERER'];
-    	}
-
-    	if ( $_SESSION['frm_http_pages'] && ! empty($_SESSION['frm_http_pages']) && ( end( $_SESSION['frm_http_pages'] ) != 'http://'. $_SERVER['SERVER_NAME']. $_SERVER['REQUEST_URI']) ) {
-    	    $ext = substr( strrchr( substr( $_SERVER['REQUEST_URI'], 0, strrpos( $_SERVER['REQUEST_URI'], '?' ) ), '.' ), 1 );
-    	    if ( ! in_array( $ext, array('css', 'js') ) ) {
-    		    $_SESSION['frm_http_pages'][] = 'http://'. $_SERVER['SERVER_NAME']. $_SERVER['REQUEST_URI'];
-    		}
-    	}
-
-    	//keep the page history below the max
-    	if ( count( $_SESSION['frm_http_pages'] ) > $max ) {
-    	    foreach ( $_SESSION['frm_http_pages'] as $pkey => $ppage ) {
-    	        if ( count( $_SESSION['frm_http_pages'] ) <= $max ) {
-    	            break;
-                }
-
-    		    unset($_SESSION['frm_http_pages'][ $pkey ]);
-    		}
-    	}
-    }
-
     public static function update_message($features){
         _deprecated_function( __FUNCTION__, '2.0', 'FrmAppHelper::update_message' );
         return FrmAppHelper::update_message( $features );

@@ -118,10 +118,6 @@
         <p><label class="frm_left_label"><?php _e('Preview Page', 'formidable'); ?></label>
         <?php FrmAppHelper::wp_pages_dropdown('frm-preview-page-id', $frm_settings->preview_page_id ) ?>
         </p>
-
-        <p><label class="frm_left_label"><?php _e('Tracking', 'formidable'); ?></label>
-            <label for="frm_track"><input type="checkbox" id="frm_track" name="frm_track" value="1" <?php checked($frm_settings->track, 1) ?>> <?php _e('Track referrer information and pages visited', 'formidable') ?></label>
-        </p>
     </div>
 
         <?php foreach($sections as $sec_name => $section){

@@ -27,7 +27,7 @@ class FrmEntry{
         if ( isset($values['description']) && ! empty($values['description']) ) {
             $new_values['description'] = maybe_serialize($values['description']);
         } else {
-            $referrerinfo = FrmAppHelper::get_referer_info();
+            $referrerinfo = FrmAppHelper::get_server_value('HTTP_REFERER');
 
             $new_values['description'] = serialize( array(
                 'browser' => FrmAppHelper::get_server_value('HTTP_USER_AGENT'),
@@ -96,7 +96,7 @@ class FrmEntry{
 
         global $wpdb;
 
-        $entry_exists = FrmDb::get_var( $wpdb->prefix .'frm_items', $check_val, 'id', 'created_at DESC' );
+        $entry_exists = FrmDb::get_var( $wpdb->prefix .'frm_items', $check_val, 'id', array('order_by' => 'created_at DESC') );
 
         if ( ! $entry_exists || empty($entry_exists) || ! isset($values['item_meta']) ) {
             return false;
@@ -257,14 +257,7 @@ class FrmEntry{
         $query = "SELECT it.*, fr.name as form_name, fr.form_key as form_key FROM {$wpdb->prefix}frm_items it
                   LEFT OUTER JOIN {$wpdb->prefix}frm_forms fr ON it.form_id=fr.id WHERE ";
 
-        if ( is_numeric($id) ) {
-            $query .= 'it.id=%d';
-            $args = array('it.id' => $id );
-        } else {
-            $query .= 'it.item_key=%s';
-            $args = array('it.item_key' => $id );
-        }
-
+        $query .= is_numeric($id) ? 'it.id=%d' : 'it.item_key=%s';
         $query_args = array( $id );
         $query = $wpdb->prepare( $query, $query_args );
 

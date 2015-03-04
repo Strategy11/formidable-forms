@@ -1435,43 +1435,8 @@ class FrmAppHelper{
     }
 
     public static function get_referer_info(){
-        $referrerinfo = '';
-    	$keywords = array();
-    	$i = 1;
-    	if ( isset($_SESSION) && isset($_SESSION['frm_http_referer']) && $_SESSION['frm_http_referer'] ) {
-        	foreach ($_SESSION['frm_http_referer'] as $referer) {
-        		$referrerinfo .= str_pad("Referer $i: ",20) . $referer. "\r\n";
-        		$keywords_used = self::get_referer_query($referer);
-        		if ( $keywords_used !== false ) {
-        			$keywords[] = $keywords_used;
-                }
-
-        		$i++;
-        	}
-
-        	$referrerinfo .= "\r\n";
-	    }else{
-	        $referrerinfo = self::get_server_value('HTTP_REFERER');
-	    }
-
-    	$i = 1;
-    	if ( isset($_SESSION) && isset($_SESSION['frm_http_pages']) && $_SESSION['frm_http_pages'] ) {
-        	foreach ( $_SESSION['frm_http_pages'] as $page ) {
-        		$referrerinfo .= str_pad("Page visited $i: ",20) . $page. "\r\n";
-        		$i++;
-        	}
-
-        	$referrerinfo .= "\r\n";
-	    }
-
-    	$i = 1;
-    	foreach ($keywords as $keyword) {
-    		$referrerinfo .= str_pad("Keyword $i: ",20) . $keyword. "\r\n";
-    		$i++;
-    	}
-    	$referrerinfo .= "\r\n";
-
-    	return $referrerinfo;
+        _deprecated_function( __FUNCTION__, '2.0', 'FrmAppHelper::get_server_value' );
+        return self::get_server_value('HTTP_REFERER');
     }
 
     public static function json_to_array($json_vars){
