@@ -440,7 +440,7 @@ class FrmFormAction {
 	        $query['menu_order'] = $form_id;
 	    }
 	    if ( 'all' != $type ) {
-	        $query['post_excerpt'] => $this->id_base);
+	        $query['post_excerpt'] = $this->id_base;
 	    }
 
         $post_ids = FrmDb::get_col( $wpdb->posts, $query, 'ID' );
