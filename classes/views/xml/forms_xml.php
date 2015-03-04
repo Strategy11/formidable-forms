@@ -26,7 +26,7 @@ foreach ( $forms as $form ) {
         <parent_form_id><?php echo $form->parent_form_id ?></parent_form_id>
 <?php
 
-        $fields = FrmDb::get_results( $wpdb->prefix .'frm_fields', array('form_id' => $form->id), '*', 'field_order' );
+        $fields = FrmDb::get_results( $wpdb->prefix .'frm_fields', array('form_id' => $form->id), '*', array('order_by' => 'field_order') );
 
 		foreach ( $fields as $field ){ ?>
 		<field>

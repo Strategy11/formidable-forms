@@ -561,7 +561,7 @@ class FrmFieldsController{
         }
 
         $important = apply_filters('frm_use_important_width', 1, $field);
-        $add_html['style'] = 'style="width:'. $field['size'] . ( $important ? ' !important' : '' ) .'"';
+        $add_html['style'] = 'style="width:'. esc_attr( $field['size'] ) . ( $important ? ' !important' : '' ) .'"';
 
         self::add_html_cols($field, $add_html);
     }

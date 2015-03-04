@@ -160,18 +160,13 @@ class FrmDb{
         }
     }
 
-    public static function get_count($table, $args=array()){
-        global $wpdb;
-        $args = FrmAppHelper::get_where_clause_and_values( $args );
-
-        $query = 'SELECT COUNT(*) FROM '. $table . $args['where'];
-        $query = $wpdb->prepare($query, $args['values']);
-        return $wpdb->get_var($query);
-    }
-
     public function get_where_clause_and_values( $args ){
         _deprecated_function( __FUNCTION__, '2.0', 'FrmAppHelper::get_where_clause_and_values');
         return FrmAppHelper::get_where_clause_and_values( $args );
+    }
+
+    public static function get_count( $table, $args = array() ) {
+        return self::get_var($table, $args, 'COUNT(*)');
     }
 
     public static function get_var( $table, $args = array(), $field = 'id', $order_by = '', $limit = '', $type = 'var' ) {
@@ -213,9 +208,9 @@ class FrmDb{
         return self::get_var( $table, $args, $fields, $order_by, 1, 'row' );
     }
 
-    public static function get_records( $table, $args=array(), $order_by = '', $limit = '', $fields = '*' ) {
+    public static function get_records( $table, $args = array(), $order_by = '', $limit = '', $fields = '*' ) {
         _deprecated_function( __FUNCTION__, '2.0', 'FrmDb::get_results' );
-        return self::get_results( $table, $args, $fields, $order_by, $limit );
+        return self::get_results( $table, $args, $fields, compact('order_by', 'limit') );
     }
 
     /*
@@ -223,24 +218,23 @@ class FrmDb{
     * @since 2.0
     * @param string $table
     */
-    public static function get_results( $table, $args = array(), $fields = '*', $order_by = '', $limit = '' ) {
+    public static function get_results( $table, $where = array(), $fields = '*', $args = array() ) {
         $group = '';
         self::get_group_and_table_name( $table, $group );
 
-        $args = FrmAppHelper::get_where_clause_and_values( $args );
+        $where = FrmAppHelper::get_where_clause_and_values( $where );
 
-        if ( ! empty($order_by) && strpos( $order_by, ' ORDER BY ' ) === false ) {
-            $order_by = ' ORDER BY '. $order_by;
-        }
-
-        if ( ! empty($limit) && strpos( $order_by, ' LIMIT ' ) === false ) {
-            $limit = ' LIMIT '. $limit;
+        foreach ( $args as $k => $v ) {
+            $db_name = strtoupper( str_replace( '_', ' ', $k ) );
+            if ( strpos( $v, $db_name ) === false ) {
+                $args[$k] = $db_name .' '. $v;
+            }
         }
 
         global $wpdb;
-        $query = $wpdb->prepare( 'SELECT '. $fields .' FROM '. $table . $args['where'] . $order_by . $limit, $args['values'] );
+        $query = $wpdb->prepare( 'SELECT '. $fields .' FROM '. $table . $where['where'] . implode(' ', $args), $where['values'] );
 
-        $cache_key = implode('_', $args) . str_replace( array(' ', ','), '_', $order_by . $limit . $fields ) .'_results';
+        $cache_key = implode('_', $where) . str_replace( array(' ', ','), '_', implode( '_', $args ) . $fields ) .'_results';
         $results = FrmAppHelper::check_cache( $cache_key, $group, $query, 'get_results' );
         return $results;
     }

@@ -256,7 +256,15 @@ class FrmEntry{
 
         $query = "SELECT it.*, fr.name as form_name, fr.form_key as form_key FROM {$wpdb->prefix}frm_items it
                   LEFT OUTER JOIN {$wpdb->prefix}frm_forms fr ON it.form_id=fr.id WHERE ";
-        $query .= is_numeric($id) ? 'it.id=%d' : 'it.item_key=%s';
+
+        if ( is_numeric($id) ) {
+            $query .= 'it.id=%d';
+            $args = array('it.id' => $id );
+        } else {
+            $query .= 'it.item_key=%s';
+            $args = array('it.item_key' => $id );
+        }
+
         $query_args = array( $id );
         $query = $wpdb->prepare( $query, $query_args );
 
@@ -270,7 +278,7 @@ class FrmEntry{
             return stripslashes_deep($entry);
         }
 
-        $entry = $wpdb->get_row($query);
+        $entry = FrmDb::get_row( 'frm_items', $query, 'it.*, fr.name as form_name, fr.form_key as form_key' );
         $entry = self::get_meta($entry);
 
         return stripslashes_deep($entry);

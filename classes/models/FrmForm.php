@@ -479,7 +479,7 @@ class FrmForm{
             }
         }else{
             if ( is_array($where) && ! empty($where) ) {
-                $results = FrmDb::get_results($wpdb->prefix .'frm_forms', $where, '*', $order_by, $limit);
+                $results = FrmDb::get_results( $wpdb->prefix .'frm_forms', $where, '*', compact('order_by', 'limit') );
             } else {
                 $results = $wpdb->get_results($query);
             }
