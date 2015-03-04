@@ -164,7 +164,7 @@ class FrmDb{
         global $wpdb;
         $args = FrmAppHelper::get_where_clause_and_values( $args );
 
-        $query = "SELECT COUNT(*) FROM {$table}". $args['where'];
+        $query = 'SELECT COUNT(*) FROM '. $table . $args['where'];
         $query = $wpdb->prepare($query, $args['values']);
         return $wpdb->get_var($query);
     }
@@ -174,16 +174,22 @@ class FrmDb{
         return FrmAppHelper::get_where_clause_and_values( $args );
     }
 
-    public static function get_var( $table, $args = array(), $field = 'id', $order_by = '', $type = 'var' ) {
+    public static function get_var( $table, $args = array(), $field = 'id', $order_by = '', $limit = '', $type = 'var' ) {
         global $wpdb;
 
         $args = FrmAppHelper::get_where_clause_and_values( $args );
-        if(!empty($order_by))
-            $order_by = " ORDER BY {$order_by}";
+        if ( ! empty($order_by) ) {
+            $order_by = ' ORDER BY '. $order_by;
+        }
+        if ( ! empty($limit) ) {
+            $limit = ' LIMIT '. $limit;
+        }
 
-        $query = $wpdb->prepare("SELECT {$field} FROM ". $table . $args['where'] . $order_by, $args['values']);
+        $query = $wpdb->prepare('SELECT '. $field .' FROM '. $table . $args['where'] . $order_by . $limit, $args['values']);
         if ( $type == 'col' ) {
             return $wpdb->get_col($query);
+        } else if ( $type == 'row' ) {
+            return $wpdb->get_row($query);
         } else {
             return $wpdb->get_var($query);
         }
@@ -192,40 +198,42 @@ class FrmDb{
     /**
      * @param string $table
      */
-    public static function get_col($table, $args=array(), $field='id', $order_by=''){
-        return self::get_var( $table, $args, $field, $order_by, 'col' );
+    public static function get_col( $table, $args = array(), $field = 'id', $order_by = '' ) {
+        return self::get_var( $table, $args, $field, $order_by, $limit, 'col' );
+    }
+
+    public static function get_row( $table, $args = array(), $fields = '*', $order_by = '' ) {
+        return self::get_var( $table, $args, $fields, $order_by, 1, 'row' );
     }
 
     /**
      * @param string $table
      */
-    public static function get_one_record($table, $args=array(), $fields='*', $order_by=''){
-        global $wpdb;
-
-        $args = FrmAppHelper::get_where_clause_and_values( $args );
-
-        if ( ! empty($order_by) ) {
-            $order_by = ' ORDER BY '. $order_by;
-        }
-
-        $query = 'SELECT '. $fields .' FROM '. $table . $args['where'] . $order_by .' LIMIT 1';
-        $query = $wpdb->prepare($query, $args['values']);
-        return $wpdb->get_row($query);
+    public static function get_one_record( $table, $args = array(), $fields = '*', $order_by = '' ) {
+        _deprecated_function( __FUNCTION__, '2.0', 'FrmDb::get_row' );
+        return self::get_var( $table, $args, $fields, $order_by, 1, 'row' );
     }
 
-    /**
-     * @param string $table
-     */
-    public static function get_records($table, $args=array(), $order_by='', $limit='', $fields='*'){
+    public static function get_records( $table, $args=array(), $order_by = '', $limit = '', $fields = '*' ) {
+        _deprecated_function( __FUNCTION__, '2.0', 'FrmDb::get_results' );
+        return self::get_results( $table, $args, $fields, $order_by, $limit );
+    }
+
+    /*
+    * Prepare a key/value array before DB call
+    * @since 2.0
+    * @param string $table
+    */
+    public static function get_results( $table, $args = array(), $fields = '*', $order_by = '', $limit = '' ) {
         global $wpdb;
 
         $args = FrmAppHelper::get_where_clause_and_values( $args );
 
-        if ( !empty($order_by) && strpos($order_by, ' ORDER BY ') === false ) {
+        if ( ! empty($order_by) && strpos( $order_by, ' ORDER BY ' ) === false ) {
             $order_by = ' ORDER BY '. $order_by;
         }
 
-        if ( !empty($limit) && strpos($order_by, ' LIMIT ') === false ) {
+        if ( ! empty($limit) && strpos( $order_by, ' LIMIT ' ) === false ) {
             $limit = ' LIMIT '. $limit;
         }
 
@@ -321,8 +329,7 @@ class FrmDb{
     private function migrate_to_16() {
         global $wpdb;
 
-        $query = $wpdb->prepare( 'SELECT id, options FROM '. $this->forms );
-        $forms = $wpdb->get_results( $query );
+        $forms = FrmDb::get_results( $this->forms, array(), 'id, options' );
 
         /* Old email settings format:
         * email_to: Email or field id
@@ -582,8 +589,8 @@ class FrmDb{
     private function migrate_to_11() {
         global $wpdb;
 
-        $query = $wpdb->prepare( 'SELECT id, options FROM ' . $this->forms );
-        $forms = $wpdb->get_results( $query );
+        $forms = FrmDb::get_results( $this->forms, array(), 'id, options');
+
         $sending = __('Sending', 'formidable');
         $img = FrmAppHelper::plugin_url() .'/images/ajax_loader.gif';
         $old_default_html = <<<DEFAULT_HTML
@@ -618,9 +625,8 @@ DEFAULT_HTML;
     private function migrate_to_6() {
         global $wpdb;
 
-        $query_args = $no_save = array_merge( FrmFieldsHelper::no_save_fields(), array( 'form', 'hidden', 'user_id' ) );
-        $query = $wpdb->prepare( 'SELECT id, field_options FROM ' . $this->fields . ' WHERE type NOT IN ('. FrmAppHelper::prepare_array_values( $no_save, '%s' ) .')', $query_args );
-        $fields = $wpdb->get_results( $query );
+        $no_save = array_merge( FrmFieldsHelper::no_save_fields(), array( 'form', 'hidden', 'user_id' ) );
+        $fields = FrmDb::get_results( $this->fields, array('type NOT' => $no_save), 'id, field_options' );
 
         $default_html = <<<DEFAULT_HTML
 <div id="frm_field_[id]_container" class="form-field [required_class] [error_class]">

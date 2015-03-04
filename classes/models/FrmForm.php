@@ -347,7 +347,7 @@ class FrmForm{
         }
 
         // Disconnect the entries from this form
-        $entries = $wpdb->get_col($wpdb->prepare('SELECT id FROM '. $wpdb->prefix .'frm_items WHERE form_id=%d', $id));
+        $entries = FrmDb::get_col( $wpdb->prefix .'frm_items', array('form_id' => $id) );
         foreach ( $entries as $entry_id ) {
             FrmEntry::destroy($entry_id);
             unset($entry_id);
@@ -440,10 +440,12 @@ class FrmForm{
             }
         }
 
-        $where = is_numeric($id) ? 'id=%d' : 'form_key=%s';
-        $query_args = array( $id );
-        $query = $wpdb->prepare( 'SELECT * FROM '. $table_name .' WHERE '. $where, $query_args );
-        $results = $wpdb->get_row( $query );
+        if ( is_numeric($id) ) {
+            $where['id'] = $id;
+        } else {
+            $where['form_key'] = $id;
+        }
+        $results = FrmDb::get_row( $table_name, $where );
 
         if ( isset($results->options) ) {
             wp_cache_set($results->id, $results, 'frm_form');
@@ -464,9 +466,9 @@ class FrmForm{
 
         $query = 'SELECT * FROM ' . $wpdb->prefix .'frm_forms' . FrmAppHelper::prepend_and_or_where(' WHERE ', $where) . FrmAppHelper::esc_order($order_by) . FrmAppHelper::esc_limit($limit);
 
-        if ($limit == ' LIMIT 1' || $limit == 1){
+        if ( $limit == ' LIMIT 1' || $limit == 1 ) {
             if ( is_array($where) && ! empty($where) ) {
-                $results = FrmDb::get_one_record($wpdb->prefix .'frm_forms', $where, '*', $order_by);
+                $results = FrmDb::get_row($wpdb->prefix .'frm_forms', $where, '*', $order_by);
             } else {
                 $results = $wpdb->get_row($query);
             }
@@ -477,7 +479,7 @@ class FrmForm{
             }
         }else{
             if ( is_array($where) && ! empty($where) ) {
-                $results = FrmDb::get_records($wpdb->prefix .'frm_forms', $where, $order_by, $limit);
+                $results = FrmDb::get_results($wpdb->prefix .'frm_forms', $where, '*', $order_by, $limit);
             } else {
                 $results = $wpdb->get_results($query);
             }

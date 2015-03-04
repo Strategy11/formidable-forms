@@ -3,6 +3,8 @@
 class FrmFieldsController{
 
     public static function load_field(){
+        check_ajax_referer( 'frm_ajax', 'nonce' );
+
         $fields = $_POST['field'];
         if ( empty($fields) ) {
             wp_die();
@@ -47,6 +49,8 @@ class FrmFieldsController{
     }
 
     public static function create(){
+        check_ajax_referer( 'frm_ajax', 'nonce' );
+
         $field_type = sanitize_text_field( $_POST['field'] );
         $form_id = (int) $_POST['form_id'];
 
@@ -91,6 +95,8 @@ class FrmFieldsController{
     }
 
     public static function edit_name($field = 'name', $id = '') {
+        check_ajax_referer( 'frm_ajax', 'nonce' );
+
         if ( empty($field) ) {
             $field = 'name';
         }
@@ -111,6 +117,8 @@ class FrmFieldsController{
     }
 
     public static function update_ajax_option(){
+        check_ajax_referer( 'frm_ajax', 'nonce' );
+
         $field = FrmField::getOne($_POST['field']);
         foreach ( array('clear_on_focus', 'separate_value', 'default_blank') as $val ) {
             if ( isset($_POST[$val]) ) {
@@ -133,6 +141,8 @@ class FrmFieldsController{
     }
 
     public static function duplicate(){
+        check_ajax_referer( 'frm_ajax', 'nonce' );
+
         global $wpdb;
 
         $copy_field = FrmField::getOne($_POST['field_id']);
@@ -179,6 +189,8 @@ class FrmFieldsController{
     }
 
     public static function destroy(){
+        check_ajax_referer( 'frm_ajax', 'nonce' );
+
         FrmField::destroy($_POST['field_id']);
         wp_die();
     }
@@ -187,6 +199,8 @@ class FrmFieldsController{
 
     //Add Single Option or Other Option
     public static function add_option(){
+        check_ajax_referer( 'frm_ajax', 'nonce' );
+
         $id = (int) $_POST['field_id'];
         $opt_type = sanitize_text_field( $_POST['opt_type'] );
 
@@ -247,6 +261,8 @@ class FrmFieldsController{
     }
 
     public static function edit_option() {
+        check_ajax_referer( 'frm_ajax', 'nonce' );
+
         $ids = explode('-', $_POST['element_id']);
         $id = (int) $_POST['field_id'];
         $update_value = trim($_POST['update_value']);
@@ -287,6 +303,8 @@ class FrmFieldsController{
     }
 
     public static function delete_option(){
+        check_ajax_referer( 'frm_ajax', 'nonce' );
+
         $field = FrmField::getOne( (int) $_POST['field_id'] );
         $opt_key = (int) $_POST['opt_key'];
         $options = maybe_unserialize($field->options);
@@ -324,8 +342,10 @@ class FrmFieldsController{
     }
 
     public static function import_choices(){
+        check_ajax_referer( 'frm_ajax', 'nonce' );
+
         if ( ! current_user_can('frm_edit_forms') ) {
-            return;
+            wp_die();
         }
 
         $field_id = (int) $_REQUEST['field_id'];
@@ -358,7 +378,7 @@ class FrmFieldsController{
 
         $admin_body_class .= ' admin-color-' . sanitize_html_class( get_user_option( 'admin_color' ), 'fresh' );
         $prepop = array();
-        self::get_bulk_prefilled_opts($prepop);
+        FrmFieldsHelper::get_bulk_prefilled_opts($prepop);
 
         $field = FrmField::getOne($field_id);
 
@@ -370,44 +390,9 @@ class FrmFieldsController{
         wp_die();
     }
 
-    private static function get_bulk_prefilled_opts(array &$prepop) {
-        $prepop[__('Countries', 'formidable')] = FrmAppHelper::get_countries();
-
-        $states = FrmAppHelper::get_us_states();
-        $state_abv = array_keys($states);
-        sort($state_abv);
-        $prepop[__('U.S. State Abbreviations', 'formidable')] = $state_abv;
-
-        $states = array_values($states);
-        sort($states);
-        $prepop[__('U.S. States', 'formidable')] = $states;
-        unset($state_abv, $states);
-
-        $prepop[__('Age', 'formidable')] = array(
-            __('Under 18', 'formidable'), __('18-24', 'formidable'), __('25-34', 'formidable'),
-            __('35-44', 'formidable'), __('45-54', 'formidable'), __('55-64', 'formidable'),
-            __('65 or Above', 'formidable'), __('Prefer Not to Answer', 'formidable')
-        );
-
-        $prepop[__('Satisfaction', 'formidable')] = array(
-            __('Very Satisfied', 'formidable'), __('Satisfied', 'formidable'), __('Neutral', 'formidable'),
-            __('Unsatisfied', 'formidable'), __('Very Unsatisfied', 'formidable'), __('N/A', 'formidable')
-        );
-
-        $prepop[__('Importance', 'formidable')] = array(
-            __('Very Important', 'formidable'), __('Important', 'formidable'), __('Neutral', 'formidable'),
-            __('Somewhat Important', 'formidable'), __('Not at all Important', 'formidable'), __('N/A', 'formidable')
-        );
-
-        $prepop[__('Agreement', 'formidable')] = array(
-            __('Strongly Agree', 'formidable'), __('Agree', 'formidable'), __('Neutral', 'formidable'),
-            __('Disagree', 'formidable'), __('Strongly Disagree', 'formidable'), __('N/A', 'formidable')
-        );
-
-        $prepop = apply_filters('frm_bulk_field_choices', $prepop);
-    }
-
     public static function import_options(){
+        check_ajax_referer( 'frm_ajax', 'nonce' );
+
         if ( ! is_admin() || ! current_user_can('frm_edit_forms') ) {
             return;
         }
@@ -464,6 +449,7 @@ class FrmFieldsController{
     }
 
     public static function update_order(){
+        check_ajax_referer( 'frm_ajax', 'nonce' );
         if ( isset($_POST) && isset($_POST['frm_field_id']) ) {
             foreach ($_POST['frm_field_id'] as $position => $item)
                 FrmField::update($item, array('field_order' => $position));

@@ -137,6 +137,7 @@ class FrmXMLController{
     }
 
     public static function export_xml() {
+        check_ajax_referer( 'frm_ajax', 'nonce' );
         FrmAppHelper::permission_check('frm_edit_forms', 'show');
 
         $ids = array();

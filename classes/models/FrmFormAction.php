@@ -435,16 +435,15 @@ class FrmFormAction {
 
 	    $this->form_id = $form_id;
 
-	    $query = $wpdb->prepare("SELECT ID FROM $wpdb->posts WHERE post_type=%s", FrmFormActionsController::$action_post_type);
+	    $query = array( 'post_type' => FrmFormActionsController::$action_post_type );
 	    if ( $form_id ) {
-	        $query .= $wpdb->prepare(" AND menu_order=%d", $form_id);
+	        $query['menu_order'] = $form_id;
 	    }
-
 	    if ( 'all' != $type ) {
-	        $query .= $wpdb->prepare(" AND post_excerpt=%s", $this->id_base);
+	        $query['post_excerpt'] => $this->id_base);
 	    }
 
-        $post_ids = $wpdb->get_col($query);
+        $post_ids = FrmDb::get_col( $wpdb->posts, $query, 'ID' );
 
         foreach ( $post_ids as $id ) {
             wp_delete_post($id);

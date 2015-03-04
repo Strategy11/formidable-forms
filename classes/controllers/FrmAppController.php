@@ -263,7 +263,7 @@ class FrmAppController {
             'loading'   => __( 'Loading&hellip;' ),
             'remove'    => __( 'Remove', 'formidable' ),
             'offset'    => apply_filters( 'frm_scroll_offset', 4 ),
-            'nonce'     => wp_create_nonce( 'frm_form' ),
+            'nonce'     => wp_create_nonce( 'frm_ajax' ),
             'id'        => __( 'ID', 'formidable' ),
         ));
 
@@ -451,7 +451,7 @@ class FrmAppController {
     }
 
     public static function update_message($features){
-         _deprecated_function( __FUNCTION__, '2.0', 'FrmAppHelper::update_message' );
+        _deprecated_function( __FUNCTION__, '2.0', 'FrmAppHelper::update_message' );
         return FrmAppHelper::update_message( $features );
     }
 

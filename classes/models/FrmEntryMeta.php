@@ -50,7 +50,7 @@ class FrmEntryMeta{
     public static function update_entry_metas($entry_id, $values){
         global $wpdb;
 
-        $prev_values = $wpdb->get_col($wpdb->prepare("SELECT field_id FROM {$wpdb->prefix}frm_item_metas WHERE item_id=%d AND field_id != %d", $entry_id, 0));
+        $prev_values = FrmDb::get_col( $wpdb->prefix .'frm_item_metas', array('item_id' => $entry_id, 'field_id !' => 0), 'field_id' );
 
         foreach ( $values as $field_id => $meta_value ) {
             // set the value for the file upload field and add new tags (in Pro version)
@@ -136,7 +136,7 @@ class FrmEntryMeta{
         _deprecated_function( __FUNCTION__, '1.07.10');
 
         global $wpdb;
-        return $wpdb->get_col($wpdb->prepare("SELECT meta_value FROM {$wpdb->prefix}frm_item_metas WHERE item_id=%d", $entry_id));
+        return FrmDb::get_col( $wpdb->prefix .'frm_item_metas', array('item_id' => $entry_id), 'meta_value' );
     }
 
     public static function get_entry_metas_for_field($field_id, $order='', $limit='', $args=array()){

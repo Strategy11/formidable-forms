@@ -144,6 +144,7 @@ class FrmFormsController{
     }
 
     public static function edit_key(){
+        check_ajax_referer( 'frm_ajax', 'nonce' );
         FrmAppHelper::permission_check('frm_edit_forms', 'hide');
 
         global $wpdb;
@@ -156,6 +157,7 @@ class FrmFormsController{
     }
 
     public static function edit_description(){
+        check_ajax_referer( 'frm_ajax', 'nonce' );
         FrmAppHelper::permission_check('frm_edit_forms', 'hide');
 
         FrmForm::update($_POST['form_id'], array('description' => $_POST['update_value']));
@@ -352,7 +354,7 @@ class FrmFormsController{
     public static function scheduled_delete($delete_timestamp = '') {
         global $wpdb;
 
-        $trash_forms = $wpdb->get_results($wpdb->prepare("SELECT id, options FROM {$wpdb->prefix}frm_forms WHERE status = %s", 'trash'));
+        $trash_forms = FrmDb::get_results($wpdb->prefix .'frm_forms', array('status' => 'trash'), 'id, options' );
 
         if ( ! $trash_forms ) {
             return;
@@ -401,6 +403,8 @@ class FrmFormsController{
     }
 
     public static function get_shortcode_opts() {
+        check_ajax_referer( 'frm_ajax', 'nonce' );
+
         $shortcode = sanitize_text_field( $_POST['shortcode'] );
         if ( empty($shortcode) ) {
             wp_die();
@@ -616,6 +620,7 @@ class FrmFormsController{
     }
 
     public static function get_email_html(){
+        check_ajax_referer( 'frm_ajax', 'nonce' );
 	    echo FrmEntriesController::show_entry_shortcode( array(
 	        'form_id'       => $_POST['form_id'],
 	        'default_email' => true,

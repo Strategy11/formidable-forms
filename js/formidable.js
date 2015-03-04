@@ -439,7 +439,7 @@ function frmFrontFormJS(){
 			data:{
                 action:'frm_fields_ajax_get_data', entry_id:selected,
                 field_id:f.LinkedField, current_field:f.HideField,
-                hide_id:f.hideContainerID
+                hide_id:f.hideContainerID, nonce:frm_js.nonce
             },
 			success:function(html){
 				if ( html !== '' ) {
@@ -523,7 +523,7 @@ function frmFrontFormJS(){
 			data:{
                 action:'frm_fields_ajax_data_options', hide_field:field_id,
                 entry_id:selected, selected_field_id:f.LinkedField, field_id:f.HideField,
-                hide_id:f.hideContainerID
+                hide_id:f.hideContainerID, nonce:frm_js.nonce
             },
 			success:function(html){
 				if(html === ''){
@@ -688,7 +688,7 @@ function frmFrontFormJS(){
 
 		jQuery.ajax({
 			type:'POST',url:frm_js.ajax_url,
-			data:jQuery(object).serialize() +'&action=frm_entries_'+ jQuery(object).find('input[name="frm_action"]').val()+'&_ajax_nonce=1',
+			data:jQuery(object).serialize() +'&action=frm_entries_'+ jQuery(object).find('input[name="frm_action"]').val()+'&nonce='+frm_js.nonce,
 			success:function(errObj){
 				errObj = errObj.replace(/^\s+|\s+$/g,'');
 				if(errObj.indexOf('{') === 0){
@@ -813,7 +813,7 @@ function frmFrontFormJS(){
 		$link.append('<span class="spinner" style="display:inline"></span>');
 		jQuery.ajax({
 			type:'POST',url:frm_js.ajax_url,
-			data:{action:'frm_entries_send_email', entry_id:entry_id, form_id:form_id},
+			data:{action:'frm_entries_send_email', entry_id:entry_id, form_id:form_id, nonce:frm_js.nonce},
 			success:function(msg){
 				$link.replaceWith(msg);
 			}
@@ -1056,7 +1056,7 @@ function frmFrontFormJS(){
 
 		jQuery.ajax({
 			type:'POST',url:frm_js.ajax_url,
-			data:'action=frm_add_form_row&field_id='+id+'&i='+i,
+			data:{action:'frm_add_form_row', field_id:id, i:i, nonce:frm_js.nonce},
 			success:function(html){
 				var item = jQuery(html).hide().fadeIn('slow');
 				jQuery('.frm_repeat_'+ id +':last').after(item);
@@ -1269,7 +1269,8 @@ function frmFrontFormJS(){
 				data:{
 					action:'frm_fields_ajax_time_options',
 					time_field:timeField, date_field:obj.id,
-					entry_id: (e ? e.val() : ''), date: jQuery(obj).val()
+					entry_id: (e ? e.val() : ''), date: jQuery(obj).val(),
+                    nonce:frm_js.nonce
 				},
 				success:function(opts){
 					var $timeField = jQuery(document.getElementById(timeField));
@@ -1315,7 +1316,7 @@ function frmEditEntry(entry_id,prefix,post_id,form_id,cancel,hclass){
 	$cont.html('<span class="frm-loading-img" id="'+prefix+entry_id+'"></span><div class="frm_orig_content" style="display:none">'+orig+'</div>');
 	jQuery.ajax({
 		type:'POST',url:frm_js.ajax_url,dataType:'html',
-		data:{action:'frm_entries_edit_entry_ajax', post_id:post_id, entry_id:entry_id, id:form_id},
+		data:{action:'frm_entries_edit_entry_ajax', post_id:post_id, entry_id:entry_id, id:form_id, nonce:frm_js.nonce},
 		success:function(html){
 			$cont.children('.frm-loading-img').replaceWith(html);
 			$edit.replaceWith('<span id="frm_edit_'+entry_id+'"><a onclick="frmCancelEdit('+entry_id+',\''+prefix+'\',\''+ frmFrontForm.escapeHtml(label) +'\','+post_id+','+form_id+',\''+hclass+'\')" class="'+hclass+'">'+cancel+'</a></span>');
@@ -1340,7 +1341,7 @@ function frmUpdateField(entry_id,field_id,value,message,num){
 	jQuery(document.getElementById('frm_update_field_'+entry_id+'_'+field_id)).html('<span class="frm-loading-img"></span>');
 	jQuery.ajax({
 		type:'POST',url:frm_js.ajax_url,
-		data:{action:'frm_entries_update_field_ajax', entry_id:entry_id, field_id:field_id, value:value},
+		data:{action:'frm_entries_update_field_ajax', entry_id:entry_id, field_id:field_id, value:value, nonce:frm_js.nonce},
 		success:function(){
 			if(message.replace(/^\s+|\s+$/g,'') === ''){
 				jQuery(document.getElementById('frm_update_field_'+entry_id+'_'+field_id+'_'+num)).fadeOut('slow');
@@ -1377,7 +1378,7 @@ function frm_resend_email(entry_id,form_id){
 	$link.append('<span class="spinner" style="display:inline"></span>');
 	jQuery.ajax({
 		type:'POST',url:frm_js.ajax_url,
-		data:{action:'frm_entries_send_email', entry_id:entry_id, form_id:form_id},
+		data:{action:'frm_entries_send_email', entry_id:entry_id, form_id:form_id, nonce:frm_js.nonce},
 		success:function(msg){
 			$link.replaceWith(msg);
 		}

@@ -10,9 +10,7 @@ $wp_query->in_the_loop = true; // Fake being in the loop.
 
 // fetch 20 posts at a time rather than loading the entire table into memory
 while ( $next_posts = array_splice( $item_ids, 0, 20 ) ) {
-    $where = ' WHERE id IN ' . FrmAppHelper::prepare_array_values( $next_posts, '%d' ) . ')';
-    $query = $wpdb->prepare( 'SELECT * FROM ' . $wpdb->posts .  $where, $next_posts );
-    $posts = $wpdb->get_results( $query );
+$posts = FrmDb::get_results( $wpdb->posts, array('ID' => $next_posts) );
 
 // Begin Loop
 foreach ( $posts as $post ) {
@@ -41,7 +39,8 @@ foreach ( $posts as $post ) {
 <?php	if ( $post->post_type == 'attachment' ) : ?>
 		<attachment_url><?php echo wp_get_attachment_url( $post->ID ); ?></attachment_url>
 <?php 	endif; ?>
-<?php	$postmeta = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $wpdb->postmeta WHERE post_id = %d", $post->ID ) );
+<?php
+        $postmeta = FrmDb::get_results( $wpdb->postmeta, array('post_id' => $post->ID) );
 		foreach ( $postmeta as $meta ) :
 			if ( apply_filters( 'wxr_export_skip_postmeta', false, $meta->meta_key, $meta ) )
 				continue;

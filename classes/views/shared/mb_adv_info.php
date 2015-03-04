@@ -38,11 +38,11 @@
                 ));
 
         	    if ($f->type == 'data'){ //get all fields from linked form
-                    if ( isset($f->field_options['form_select']) && is_numeric($f->field_options['form_select']) ){
-                        $linked_form = $wpdb->get_var($wpdb->prepare("SELECT form_id FROM {$wpdb->prefix}frm_fields WHERE id=%d", $f->field_options['form_select']));
+                    if ( isset($f->field_options['form_select']) && is_numeric($f->field_options['form_select']) ) {
+                        $linked_form = FrmDb::get_var( $wpdb->prefix .'frm_fields', array('id' => $f->field_options['form_select'] ), 'form_id' );
                         if ( ! in_array( $linked_form, $linked_forms ) ) {
                             $linked_forms[] = $linked_form;
-                            $linked_fields = FrmField::getAll("fi.type not in ('". implode("','", FrmFieldsHelper::no_save_fields() ) ."') and fi.form_id =". (int) $linked_form);
+                            $linked_fields = FrmField::getAll( array('fi.type not' => FrmFieldsHelper::no_save_fields(), 'fi.form_id' => $linked_form) );
                             $ldfe = '';
                             if ($linked_fields){
                                 foreach ($linked_fields as $linked_field){

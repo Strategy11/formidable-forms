@@ -96,9 +96,7 @@ class FrmEntry{
 
         global $wpdb;
 
-        $check_val = FrmAppHelper::get_where_clause_and_values( $check_val );
-
-        $entry_exists = $wpdb->get_results( $wpdb->prepare('SELECT id FROM '. $wpdb->prefix .'frm_items '. $check_val['where'] . ' ORDER BY created_at DESC', $check_val['values']) );
+        $entry_exists = FrmDb::get_var( $wpdb->prefix .'frm_items', $check_val, 'id', 'created_at DESC' );
 
         if ( ! $entry_exists || empty($entry_exists) || ! isset($values['item_meta']) ) {
             return false;
@@ -284,7 +282,7 @@ class FrmEntry{
         }
 
         global $wpdb;
-        $metas = $wpdb->get_results($wpdb->prepare("SELECT field_id, meta_value, field_key, item_id FROM {$wpdb->prefix}frm_item_metas m LEFT JOIN {$wpdb->prefix}frm_fields f ON m.field_id=f.id WHERE item_id=%d and field_id != %d", $entry->id, 0));
+        $metas = FrmDb::get_results( $wpdb->prefix .'frm_item_metas m LEFT JOIN '. $wpdb->prefix .'frm_fields f ON m.field_id=f.id', array('item_id' => $entry->id, 'field_id !' => 0), 'field_id, meta_value, field_key, item_id' );
 
         $entry->metas = array();
 
@@ -321,9 +319,12 @@ class FrmEntry{
             return $exists;
         }
 
-        $where = (is_numeric($id)) ? 'id=%d' : 'item_key=%s';
-
-        $id = $wpdb->get_var($wpdb->prepare("SELECT id FROM {$wpdb->prefix}frm_items WHERE $where", $id));
+        if ( is_numeric($id) ) {
+            $where['id'] = $id;
+        } else {
+            $where['item_key'] = $id;
+        }
+        $id = FrmDb::get_var( $wpdb->prefix .'frm_items', $where );
 
         $exists = ($id && $id > 0) ? true : false;
         return $exists;

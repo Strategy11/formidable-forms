@@ -130,6 +130,8 @@ class FrmFormActionsController{
     }
 
     public static function add_form_action() {
+        check_ajax_referer( 'frm_ajax', 'nonce' );
+
         global $frm_vars;
 
         $action_key = (int) $_POST['list_id'];
@@ -150,6 +152,8 @@ class FrmFormActionsController{
     }
 
     public static function fill_action() {
+        check_ajax_referer( 'frm_ajax', 'nonce' );
+
         $action_key = (int) $_POST['action_id'];
         $action_type = sanitize_text_field( $_POST['action_type'] );
 
@@ -192,7 +196,7 @@ class FrmFormActionsController{
 
         $registered_actions = self::$registered_actions->actions;
 
-        $old_actions = $wpdb->get_col($wpdb->prepare('SELECT ID FROM '. $wpdb->posts .' WHERE post_type=%s AND menu_order=%d', self::$action_post_type, $form_id));
+        $old_actions = FrmDb::get_col( $wpdb->posts, array('post_type' => self::$action_post_type, 'menu_order' => $form_id), 'ID' );
         $new_actions = array();
 
         foreach ( $registered_actions as $registered_action ) {

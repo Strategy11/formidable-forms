@@ -117,7 +117,7 @@ function frmAdminBuildJS(){
 				cont.find('.spinner').fadeIn('slow');
 				jQuery.ajax({
 					type:'POST',url:ajaxurl,
-					data:{action:'frm_form_action_fill', action_id:action_id, action_type:action_type},
+					data:{action:'frm_form_action_fill', action_id:action_id, action_type:action_type, nonce:frm_admin_js.nonce},
 					success:function(html){
 						cont.children('.widget-inside').html(html);
 					}
@@ -191,7 +191,8 @@ function frmAdminBuildJS(){
 		var $link = jQuery(document.getElementById('frm_deauthorize_link'));
 		$link.next('.spinner').show();
 		jQuery.ajax({
-			type:'POST',url:ajaxurl,data:'action=frm_deauthorize&nonce='+frm_admin_js.nonce,
+			type:'POST',url:ajaxurl,
+            data:{action:'frm_deauthorize', nonce:frm_admin_js.nonce},
 			success:function(msg){
 				jQuery('.spinner').fadeOut('slow');
 				$link.fadeOut('slow');
@@ -370,7 +371,7 @@ function frmAdminBuildJS(){
 
 		jQuery.ajax({
 			type:'POST',url:ajaxurl,
-			data:{action:'frm_load_field',field:h},
+			data:{action:'frm_load_field', field:h, nonce:frm_admin_js.nonce},
 			success:function(html){
 				html = html.replace(/^\s+|\s+$/g,'');
 				if(html.indexOf('{') !== 0){
@@ -410,7 +411,7 @@ function frmAdminBuildJS(){
 		}
 		jQuery.ajax({
 			type:'POST',url:ajaxurl,
-			data:{action:'frm_insert_field',form_id:form_id,field:field_type},
+			data:{action:'frm_insert_field',form_id:form_id,field:field_type,nonce:frm_admin_js.nonce},
 			success:function(msg){
 				jQuery('.frm_no_fields').hide();
 				$newFields.append(msg);
@@ -431,7 +432,7 @@ function frmAdminBuildJS(){
 		var children = fieldsInSection(field_id);
 		jQuery.ajax({
 			type:'POST',url:ajaxurl,
-			data:{action:'frm_duplicate_field', field_id:field_id, form_id:form_id, children:children},
+			data:{action:'frm_duplicate_field', field_id:field_id, form_id:form_id, children:children, nonce:frm_admin_js.nonce},
 			success:function(msg){
 				jQuery(document.getElementById('new_fields')).append(msg);
 			}
@@ -456,7 +457,8 @@ function frmAdminBuildJS(){
 		var form_id=jQuery('input[name="id"]').val();
 		var field_id=p.find('input[name="frm_fields_submitted[]"]').val();	
 		jQuery.ajax({
-			type:'POST',url:ajaxurl,data:'action=frm_populate_calc_dropdown&field_id='+field_id+'&form_id='+form_id,
+			type:'POST',url:ajaxurl,
+            data:{action:'frm_populate_calc_dropdown', field_id:field_id, form_id:form_id, nonce:frm_admin_js.nonce},
 			success:function(msg){p.find('.frm_shortcode_select').replaceWith(msg);}
 		});	
 	}
@@ -597,7 +599,7 @@ function frmAdminBuildJS(){
 		jQuery('.field_'+field_id+'_option').toggleClass('frm_with_key');
 		jQuery.ajax({
 			type:'POST',url:ajaxurl,
-			data:"action=frm_update_ajax_option&field="+field_id+"&separate_value=1"
+			data:{action:'frm_update_ajax_option', field:field_id, separate_value:'1', nonce:frm_admin_js.nonce}
 		});
 	}
 
@@ -619,7 +621,10 @@ function frmAdminBuildJS(){
 		}
 		var field_id=jQuery(this).closest('li.form-field').data('fid');
 		jQuery(this).toggleClass('frm_inactive_icon').attr('title', t).tooltip('destroy').tooltip('show');
-		jQuery.ajax({type:"POST",url:ajaxurl,data:"action=frm_update_ajax_option&field="+field_id+"&clear_on_focus="+switch_to});
+		jQuery.ajax({
+            type:"POST",url:ajaxurl,
+            data:{action:'frm_update_ajax_option', field:field_id, clear_on_focus:switch_to, nonce:frm_admin_js.nonce}
+        });
 		return false;
 	}
 
@@ -634,7 +639,7 @@ function frmAdminBuildJS(){
 		jQuery(this).toggleClass('frm_inactive_icon').attr('title', t).tooltip('destroy').next('.tooltip').remove();jQuery(this).tooltip('show');
 		jQuery.ajax({
 			type:"POST",url:ajaxurl,
-			data:"action=frm_update_ajax_option&field="+field_id+"&default_blank="+switch_to
+			data:{action:'frm_update_ajax_option', field:field_id, default_blank:switch_to, nonce:frm_admin_js.nonce}
 		});
 		return false;
 	}
@@ -648,7 +653,7 @@ function frmAdminBuildJS(){
         jQuery.ajax({
             type:'POST',
             url:ajaxurl,
-            data:'action=frm_delete_field_option&field_id='+fk[0]+'&opt_key='+fk[1],
+            data:{action:'frm_delete_field_option', field_id:fk[0], opt_key:fk[1], nonce:frm_admin_js.nonce},
             dataType: 'json',// Set the data type so jQuery can parse the msg
             success:function(msg){
                 if ( msg.other === false ) {
@@ -690,7 +695,7 @@ function frmAdminBuildJS(){
 	function deleteField(field_id){
 		jQuery.ajax({
 			type:'POST',url:ajaxurl,
-			data:'action=frm_delete_field&field_id='+field_id,
+			data:{action:'frm_delete_field', field_id:field_id, nonce:frm_admin_js.nonce},
 			success:function(msg){
 				var $thisField = jQuery(document.getElementById('frm_field_id_'+field_id));
 				$thisField.fadeOut('slow', function(){
@@ -715,11 +720,12 @@ function frmAdminBuildJS(){
 		}
 		jQuery.ajax({
 			type:'POST',url:ajaxurl,
-			data:"action=frm_add_logic_row&form_id="+form_id+"&field_id="+id+"&meta_name="+meta_name,
+			data:{action:'frm_add_logic_row', form_id:form_id, field_id:id, meta_name:meta_name, nonce:frm_admin_js.nonce},
 			success:function(html){
-				jQuery('#logic_'+id).fadeOut('slow', function(){
-					jQuery('#frm_logic_row_'+id).append(html);
-					jQuery('#frm_logic_row_'+id).parent('.frm_logic_rows').fadeIn('slow');
+				jQuery(document.getElementById('logic_'+id)).fadeOut('slow', function(){
+                    var logicRow = jQuery(document.getElementById('frm_logic_row_'+id));
+					logicRow.append(html);
+					logicRow.parent('.frm_logic_rows').fadeIn('slow');
 				});
 			}
 		});
@@ -794,7 +800,7 @@ function frmAdminBuildJS(){
 		// change form ids of all fields in section
 		var children = fieldsInSection(field_id);
 		jQuery.ajax({type:'POST',url:ajaxurl,
-			data:'action=frm_toggle_repeat&form_id='+form_id+'&parent_form_id='+main_form_id+'&children='+children+'&nonce='+frm_admin_js.nonce,
+			data:{action:'frm_toggle_repeat', form_id:form_id, parent_form_id:main_form_id, children:children, nonce:frm_admin_js.nonce},
 			success:function(id){
 				//return form id to hidden field
 				jQuery('input[name="field_options[form_select_'+field_id+']"]').val(id);
@@ -905,7 +911,7 @@ function frmAdminBuildJS(){
             var field_id = jQuery(this).closest('.frm_field_box').data('fid');
 			jQuery.ajax({
 				type:'POST',url:ajaxurl,
-				data:{action:'frm_field_option_ipe',update_value:text,element_id:id,field_id:field_id},
+				data:{action:'frm_field_option_ipe', update_value:text, element_id:id, field_id:field_id, nonce:frm_admin_js.nonce},
 				success:function(html){
 					checkUniqueOpt(id,html,text);
 				}
@@ -926,7 +932,7 @@ function frmAdminBuildJS(){
 		if(form_id){
             jQuery.ajax({
 				type:'POST',url:ajaxurl,
-                data:{action:'frm_get_field_selection',field_id:field_id,form_id:form_id},
+                data:{action:'frm_get_field_selection',field_id:field_id,form_id:form_id,nonce:frm_admin_js.nonce},
                 success:function(msg){ jQuery("#frm_show_selected_fields_"+field_id).html(msg).show();} 
             });
 		}
@@ -946,7 +952,7 @@ function frmAdminBuildJS(){
 		var order = serializeSort();
 		jQuery.ajax({
 			type:"POST",url:ajaxurl,
-			data:"action=frm_update_field_order&"+order
+			data:'action=frm_update_field_order&nonce='+frm_admin_js.nonce+'&'+order
 		});
 	}
 	
@@ -995,7 +1001,7 @@ function frmAdminBuildJS(){
 		jQuery(document.getElementById('frm_compact_fields')).val(v);
 		jQuery.ajax({
 			type:'POST',url:ajaxurl,
-			data:{action:'frm_save_form','frm_compact_fields':v},
+			data:{action:'frm_save_form','frm_compact_fields':v, nonce:frm_admin_js.nonce},
 			success:function(msg){
 				$thisEle.val(frm_admin_js.saved);
 				$thisEle.prevAll('.spinner').css('visibility', 'hidden').fadeOut();
@@ -1075,7 +1081,7 @@ function frmAdminBuildJS(){
 
         jQuery.ajax({
 			type:'POST',url:ajaxurl,
-			data:{action:'frm_add_form_action', type:type, list_id:(parseInt(len)+1), form_id:formId},
+			data:{action:'frm_add_form_action', type:type, list_id:(parseInt(len)+1), form_id:formId, nonce:frm_admin_js.nonce},
 			success:function(html){
 				jQuery('#frm_notification_settings .widget-inside').css('display','none');//Close any open actions first
 				jQuery('#frm_notification_settings').append(html);
@@ -1157,7 +1163,7 @@ function frmAdminBuildJS(){
 		}
 		jQuery.ajax({
 			type:'POST',url:ajaxurl,
-			data:{action:'frm_add_form_logic_row', form_id:form_id, email_id:id, meta_name:meta_name, type:type},
+			data:{action:'frm_add_form_logic_row', form_id:form_id, email_id:id, meta_name:meta_name, type:type, nonce:frm_admin_js.nonce},
 			success:function(html){
 				jQuery(document.getElementById('logic_link_'+id)).fadeOut('slow', function(){
 					var $logicRow = jQuery(document.getElementById('frm_logic_row_'+id));
@@ -1219,7 +1225,7 @@ function frmAdminBuildJS(){
 		}else{
 			jQuery.ajax({
 				type:'POST',url:ajaxurl,
-				data:{action:'frm_display_get_content', id:v},
+				data:{action:'frm_display_get_content', id:v, nonce:frm_admin_js.nonce},
 				success:function(val){
 					$dyn.val(val);
 					jQuery('.frm_dyncontent_opt').show();
@@ -1238,7 +1244,7 @@ function frmAdminBuildJS(){
         // Get new category/taxonomy options
         jQuery.ajax({
             type:'POST',url:ajaxurl,
-            data:{action:'frm_replace_posttax_options', post_type:post_type},
+            data:{action:'frm_replace_posttax_options', post_type:post_type, nonce:frm_admin_js.nonce},
             success:function(html){
 
                 // Loop through each category row, and replace the first dropdown
@@ -1271,7 +1277,7 @@ function frmAdminBuildJS(){
 		var tax_key = getMetaValue('frm_posttax_', jQuery('#frm_posttax_rows > div').size());
 		jQuery.ajax({
 			type:'POST',url:ajaxurl,
-			data:{action:'frm_add_posttax_row', form_id:id, post_type:post_type, tax_key:tax_key, action_key:key},
+			data:{action:'frm_add_posttax_row', form_id:id, post_type:post_type, tax_key:tax_key, action_key:key, nonce:frm_admin_js.nonce},
 			success:function(html){
 				jQuery(document.getElementById('frm_posttax_rows')).append(html);
 			}
@@ -1292,7 +1298,7 @@ function frmAdminBuildJS(){
 		}
 		jQuery.ajax({
 			type:'POST',url:ajaxurl,
-			data:{action:'frm_add_postmeta_row', form_id:id, meta_name:meta_name, action_key:key},
+			data:{action:'frm_add_postmeta_row', form_id:id, meta_name:meta_name, action_key:key, nonce:frm_admin_js.nonce},
 			success:function(html){
 				document.getElementById('postcustomstuff').style.display = 'block';
 				jQuery(document.getElementById('frm_postmeta_rows')).append(html);
@@ -1327,7 +1333,7 @@ function frmAdminBuildJS(){
 		jQuery.ajax({
 			type:'POST',url:ajaxurl,
 			data:{action:'frm_add_posttax_row', form_id:id, post_type:post_type, tax_key:tax_key, action_key:action_key,
-				meta_name:meta_name, field_id:field_id, show_exclude:show_exclude
+				meta_name:meta_name, field_id:field_id, show_exclude:show_exclude, nonce:frm_admin_js.nonce
 			},
 			success:function(html){
 				var $tax = jQuery(document.getElementById('frm_posttax_'+tax_key));
@@ -1388,7 +1394,7 @@ function frmAdminBuildJS(){
 
 		jQuery.ajax({
 			type:'POST',url:ajaxurl,
-			data:{action:'frm_get_cd_tags_box',form_id:form_id},
+			data:{action:'frm_get_cd_tags_box',form_id:form_id, nonce:frm_admin_js.nonce},
 			success:function(html){
 				jQuery('#frm_adv_info .categorydiv').html(html);
 			}
@@ -1396,7 +1402,7 @@ function frmAdminBuildJS(){
 
 		jQuery.ajax({
 			type:'POST',url:ajaxurl,
-			data:{action:'frm_get_date_field_select',form_id:form_id},
+			data:{action:'frm_get_date_field_select',form_id:form_id, nonce:frm_admin_js.nonce},
 			success:function(html){
 				jQuery(document.getElementById('date_select_container')).html(html);
 			}
@@ -1435,7 +1441,7 @@ function frmAdminBuildJS(){
 		var formId = jQuery(document.getElementById('form_id')).val();
 		jQuery.ajax({
 			type:'POST',url:ajaxurl,
-			data:{action:'frm_add_order_row',form_id:formId,order_key:(parseInt(l)+1)},
+			data:{action:'frm_add_order_row',form_id:formId,order_key:(parseInt(l)+1), nonce:frm_admin_js.nonce},
 			success:function(html){
 				jQuery('#frm_order_options .frm_logic_rows').append(html).prev('.frm_add_order_row').hide();
 			}
@@ -1450,7 +1456,7 @@ function frmAdminBuildJS(){
 		}
 		jQuery.ajax({
 			type:'POST',url:ajaxurl,
-			data:{action:'frm_add_where_row',form_id:form_id,where_key:(parseInt(l)+1)},
+			data:{action:'frm_add_where_row',form_id:form_id,where_key:(parseInt(l)+1), nonce:frm_admin_js.nonce},
 			success:function(html){
 				jQuery('#frm_where_options .frm_logic_rows').append(html).show().prev('.frm_add_where_row').hide();
 			}
@@ -1462,7 +1468,7 @@ function frmAdminBuildJS(){
 		var where_key = jQuery(this).closest('.frm_where_row').attr('id').replace('frm_where_field_', '');
 		jQuery.ajax({
 			type:'POST',url:ajaxurl,
-			data:{action:'frm_add_where_options',where_key:where_key,field_id:value},
+			data:{action:'frm_add_where_options',where_key:where_key,field_id:value, nonce:frm_admin_js.nonce},
 			success: function(html){jQuery(document.getElementById('where_field_options_'+where_key)).html(html);}
 		}); 
 	}
@@ -1508,7 +1514,7 @@ function frmAdminBuildJS(){
 			}
 			jQuery.ajax({
 				type:"POST",url:ajaxurl,
-				data:"action=frm_get_default_html&form_id="+jQuery('input[name="id"]').val()+'&plain_text='+p,
+				data:{action:'frm_get_default_html', form_id:jQuery('input[name="id"]').val(), plain_text:p, nonce:frm_admin_js.nonce},
 				success:function(msg){
 					insertContent(content_box,msg);
 				} 
@@ -2113,7 +2119,7 @@ function frmAdminBuildJS(){
                 var locStr = jQuery('input[name^="frm_style_setting[post_content]"], select[name^="frm_style_setting[post_content]"], textarea[name^="frm_style_setting[post_content]"], input[name="style_name"]').serialize();
                 jQuery.ajax({
                     type:'GET',url:ajaxurl,
-                    data:'action=frm_change_styling&'+locStr,
+                    data:'action=frm_change_styling&nonce='+frm_admin_js.nonce+'&'+locStr,
                     success:function(css){
                         document.getElementById('this_css').innerHTML = css;
                     }
@@ -2189,7 +2195,7 @@ function frmAdminBuildJS(){
 				}
 				jQuery.ajax({
 					type:'POST',url:ajaxurl,
-					data:'action=frm_settings_reset',
+					data:{action:frm_settings_reset, nonce:frm_admin_js.nonce},
 					success:function(errObj){
 						errObj=errObj.replace(/^\s+|\s+$/g,'');
 						if(errObj.indexOf('{') === 0){
@@ -2254,7 +2260,7 @@ function frmAdminBuildJS(){
 			addClass($fieldOpts, 'frm-loading-img');
 			jQuery.ajax({
 				type:"POST",url:ajaxurl,
-				data:{action:'frm_import_options',field_id:field_id,opts:opts},
+				data:{action:'frm_import_options', field_id:field_id, opts:opts, nonce:frm_admin_js.nonce},
 				success:function(html){jQuery('#frm_field_'+field_id+'_opts').html(html).removeClass('frm-loading-img');
 				if(jQuery('select[name="item_meta['+field_id+']"]').length>0){
 					var o = opts.replace(/\s\s*$/,'').split("\n");
@@ -2322,7 +2328,7 @@ function frm_add_logic_row(id,form_id){
 	console.warn('DEPRECATED: function frm_add_logic_row in v2.0'); 
 jQuery.ajax({
     type:"POST",url:ajaxurl,
-    data:"action=frm_add_logic_row&form_id="+form_id+"&field_id="+id+"&meta_name="+jQuery('#frm_logic_row_'+id+' > div').size(),
+    data:{action:'frm_add_logic_row',form_id:form_id, field_id:id, meta_name:jQuery('#frm_logic_row_'+id+' > div').size(), nonce:frm_admin_js.nonce},
     success:function(html){jQuery('#frm_logic_row_'+id).append(html);}
 });
 return false;
@@ -2332,7 +2338,7 @@ function frmGetFieldValues(f,cur,r,t,n){
 if(f){
     jQuery.ajax({
         type:'POST',url:ajaxurl,
-        data:'action=frm_get_field_values&current_field='+cur+'&field_id='+f+'&name='+n+'&t='+t+'&form_action='+jQuery('input[name="frm_action"]').val(),
+        data:'action=frm_get_field_values&current_field='+cur+'&field_id='+f+'&name='+n+'&t='+t+'&form_action='+jQuery('input[name="frm_action"]').val() +'&nonce='+frm_admin_js.nonce,
         success:function(msg){
 			document.getElementById('frm_show_selected_values_'+cur+'_'+r).innerHTML = msg;
 		} 
@@ -2348,7 +2354,7 @@ function frmImportCsv(formID){
 	
     jQuery.ajax({
 		type:"POST",url:ajaxurl,
-		data:"action=frm_import_csv&frm_skip_cookie=1"+urlVars,
+		data:'action=frm_import_csv&nonce='+frm_admin_js.nonce+'&frm_skip_cookie=1'+urlVars,
     success:function(count){
 		var max = jQuery('.frm_progress_bar').attr('aria-valuemax');
 		var imported = max - count;

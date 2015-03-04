@@ -82,7 +82,7 @@ function frmAdminPopupJS(){
             $spinner.show();
             jQuery.ajax({
     		    type:'POST',url:ajaxurl,
-    		    data:{action:'frm_get_shortcode_opts', shortcode:val},
+    		    data:{action:'frm_get_shortcode_opts', shortcode:val, nonce:frmAdmin.nonce},
     		    success:function(html){
     		        $spinner.hide();
     				$scOpts.append(html);
@@ -124,7 +124,7 @@ function frmAdminPopupJS(){
 	        var thisId = this.id;
 	    	jQuery.ajax({
 				type:'POST',url:ajaxurl,
-	        	data:{action:'frm_get_field_selection',field_id:0,form_id:form_id},
+	        	data:{action:'frm_get_field_selection',field_id:0,form_id:form_id, nonce:frmAdmin.nonce},
 	        	success:function(msg){
 	        	    msg = msg.replace('name="field_options[form_select_0]"', 'id="'+ thisId.replace('frm_form_', '') +'"');
 	        	    jQuery(document.getElementById(thisId+'_fields')).html(msg);

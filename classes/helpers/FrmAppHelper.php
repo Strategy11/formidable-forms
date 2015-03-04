@@ -853,14 +853,13 @@ class FrmAppHelper{
             $key = $key .'a';
         }
 
-        $query = "SELECT $column FROM $table_name WHERE $column = %s AND ID != %d LIMIT 1";
-        $key_check = $wpdb->get_var($wpdb->prepare($query, $key, $id));
+        $key_check = FrmDb::get_var( $table_name, array($column => $key, 'ID !' => $id), $column );
 
         if ( $key_check || is_numeric($key_check) ) {
             $suffix = 2;
 			do {
-				$alt_post_name = substr($key, 0, 200-(strlen($suffix)+1)). "$suffix";
-				$key_check = $wpdb->get_var($wpdb->prepare($query, $alt_post_name, $id));
+				$alt_post_name = substr( $key, 0, 200 - ( strlen( $suffix ) + 1 ) ) . $suffix;
+                $key_check = FrmDb::get_var( $table_name, array($column => $alt_post_name, 'ID !' => $id), $column );
 				$suffix++;
 			} while ($key_check || is_numeric($key_check));
 			$key = $alt_post_name;
@@ -1105,100 +1104,13 @@ class FrmAppHelper{
     }
 
     public static function get_us_states(){
-        return apply_filters('frm_us_states', array(
-            'AL' => 'Alabama', 'AK' => 'Alaska', 'AR' => 'Arkansas', 'AZ' => 'Arizona',
-            'CA' => 'California', 'CO' => 'Colorado', 'CT' => 'Connecticut', 'DE' => 'Delaware',
-            'DC' => 'District of Columbia',
-            'FL' => 'Florida', 'GA' => 'Georgia', 'HI' => 'Hawaii', 'ID' => 'Idaho',
-            'IL' => 'Illinois', 'IN' => 'Indiana', 'IA' => 'Iowa', 'KS' => 'Kansas',
-            'KY' => 'Kentucky', 'LA' => 'Louisiana', 'ME' => 'Maine','MD' => 'Maryland',
-            'MA' => 'Massachusetts', 'MI' => 'Michigan', 'MN' => 'Minnesota', 'MS' => 'Mississippi',
-            'MO' => 'Missouri', 'MT' => 'Montana', 'NE' => 'Nebraska', 'NV' => 'Nevada',
-            'NH' => 'New Hampshire', 'NJ' => 'New Jersey', 'NM' => 'New Mexico', 'NY' => 'New York',
-            'NC' => 'North Carolina', 'ND' => 'North Dakota', 'OH' => 'Ohio', 'OK' => 'Oklahoma',
-            'OR' => 'Oregon', 'PA' => 'Pennsylvania', 'RI' => 'Rhode Island', 'SC' => 'South Carolina',
-            'SD' => 'South Dakota', 'TN' => 'Tennessee', 'TX' => 'Texas', 'UT' => 'Utah',
-            'VT' => 'Vermont', 'VA' => 'Virginia', 'WA' => 'Washington', 'WV' => 'West Virginia',
-            'WI' => 'Wisconsin', 'WY' => 'Wyoming'
-        ));
+        _deprecated_function( __FUNCTION__, '2.0', 'FrmFieldsHelper::get_us_states' );
+        return FrmFieldsHelper::get_us_states();
     }
 
     public static function get_countries(){
-        return apply_filters('frm_countries', array(
-            __('Afghanistan', 'formidable'), __('Albania', 'formidable'), __('Algeria', 'formidable'),
-            __('American Samoa', 'formidable'), __('Andorra', 'formidable'), __('Angola', 'formidable'),
-            __('Anguilla', 'formidable'), __('Antarctica', 'formidable'), __('Antigua and Barbuda', 'formidable'),
-            __('Argentina', 'formidable'), __('Armenia', 'formidable'), __('Aruba', 'formidable'),
-            __('Australia', 'formidable'), __('Austria', 'formidable'), __('Azerbaijan', 'formidable'),
-            __('Bahamas', 'formidable'), __('Bahrain', 'formidable'), __('Bangladesh', 'formidable'),
-            __('Barbados', 'formidable'), __('Belarus', 'formidable'), __('Belgium', 'formidable'),
-            __('Belize', 'formidable'), __('Benin', 'formidable'), __('Bermuda', 'formidable'),
-            __('Bhutan', 'formidable'), __('Bolivia', 'formidable'), __('Bosnia and Herzegovina', 'formidable'),
-            __('Botswana', 'formidable'), __('Brazil', 'formidable'), __('Brunei', 'formidable'),
-            __('Bulgaria', 'formidable'), __('Burkina Faso', 'formidable'), __('Burundi', 'formidable'),
-            __('Cambodia', 'formidable'), __('Cameroon', 'formidable'), __('Canada', 'formidable'),
-            __('Cape Verde', 'formidable'), __('Cayman Islands', 'formidable'), __('Central African Republic', 'formidable'),
-            __('Chad', 'formidable'), __('Chile', 'formidable'), __('China', 'formidable'),
-            __('Colombia', 'formidable'), __('Comoros', 'formidable'), __('Congo', 'formidable'),
-            __('Costa Rica', 'formidable'), __('C&ocirc;te d\'Ivoire', 'formidable'), __('Croatia', 'formidable'),
-            __('Cuba', 'formidable'), __('Cyprus', 'formidable'), __('Czech Republic', 'formidable'),
-            __('Denmark', 'formidable'), __('Djibouti', 'formidable'), __('Dominica', 'formidable'),
-            __('Dominican Republic', 'formidable'), __('East Timor', 'formidable'), __('Ecuador', 'formidable'),
-            __('Egypt', 'formidable'), __('El Salvador', 'formidable'), __('Equatorial Guinea', 'formidable'),
-            __('Eritrea', 'formidable'), __('Estonia', 'formidable'), __('Ethiopia', 'formidable'),
-            __('Fiji', 'formidable'), __('Finland', 'formidable'), __('France', 'formidable'),
-            __('French Guiana', 'formidable'), __('French Polynesia', 'formidable'), __('Gabon', 'formidable'),
-            __('Gambia', 'formidable'), __('Georgia', 'formidable'), __('Germany', 'formidable'),
-            __('Ghana', 'formidable'), __('Gibraltar', 'formidable'), __('Greece', 'formidable'),
-            __('Greenland', 'formidable'), __('Grenada', 'formidable'), __('Guam', 'formidable'),
-            __('Guatemala', 'formidable'), __('Guinea', 'formidable'), __('Guinea-Bissau', 'formidable'),
-            __('Guyana', 'formidable'), __('Haiti', 'formidable'), __('Honduras', 'formidable'),
-            __('Hong Kong', 'formidable'), __('Hungary', 'formidable'), __('Iceland', 'formidable'),
-            __('India', 'formidable'), __('Indonesia', 'formidable'), __('Iran', 'formidable'),
-            __('Iraq', 'formidable'), __('Ireland', 'formidable'), __('Israel', 'formidable'),
-            __('Italy', 'formidable'), __('Jamaica', 'formidable'), __('Japan', 'formidable'),
-            __('Jordan', 'formidable'), __('Kazakhstan', 'formidable'), __('Kenya', 'formidable'),
-            __('Kiribati', 'formidable'), __('North Korea', 'formidable'), __('South Korea', 'formidable'),
-            __('Kuwait', 'formidable'), __('Kyrgyzstan', 'formidable'), __('Laos', 'formidable'),
-            __('Latvia', 'formidable'), __('Lebanon', 'formidable'), __('Lesotho', 'formidable'),
-            __('Liberia', 'formidable'), __('Libya', 'formidable'), __('Liechtenstein', 'formidable'),
-            __('Lithuania', 'formidable'), __('Luxembourg', 'formidable'), __('Macedonia', 'formidable'),
-            __('Madagascar', 'formidable'), __('Malawi', 'formidable'), __('Malaysia', 'formidable'),
-            __('Maldives', 'formidable'), __('Mali', 'formidable'), __('Malta', 'formidable'),
-            __('Marshall Islands', 'formidable'), __('Mauritania', 'formidable'), __('Mauritius', 'formidable'),
-            __('Mexico', 'formidable'), __('Micronesia', 'formidable'), __('Moldova', 'formidable'),
-            __('Monaco', 'formidable'), __('Mongolia', 'formidable'), __('Montenegro', 'formidable'),
-            __('Montserrat', 'formidable'), __('Morocco', 'formidable'), __('Mozambique', 'formidable'),
-            __('Myanmar', 'formidable'), __('Namibia', 'formidable'), __('Nauru', 'formidable'),
-            __('Nepal', 'formidable'), __('Netherlands', 'formidable'), __('New Zealand', 'formidable'),
-            __('Nicaragua', 'formidable'), __('Niger', 'formidable'), __('Nigeria', 'formidable'),
-            __('Norway', 'formidable'), __('Northern Mariana Islands', 'formidable'), __('Oman', 'formidable'),
-            __('Pakistan', 'formidable'), __('Palau', 'formidable'), __('Palestine', 'formidable'),
-            __('Panama', 'formidable'), __('Papua New Guinea', 'formidable'), __('Paraguay', 'formidable'),
-            __('Peru', 'formidable'), __('Philippines', 'formidable'), __('Poland', 'formidable'),
-            __('Portugal', 'formidable'), __('Puerto Rico', 'formidable'), __('Qatar', 'formidable'),
-            __('Romania', 'formidable'), __('Russia', 'formidable'), __('Rwanda', 'formidable'),
-            __('Saint Kitts and Nevis', 'formidable'), __('Saint Lucia', 'formidable'),
-            __('Saint Vincent and the Grenadines', 'formidable'), __('Samoa', 'formidable'),
-            __('San Marino', 'formidable'), __('Sao Tome and Principe', 'formidable'), __('Saudi Arabia', 'formidable'),
-            __('Senegal', 'formidable'), __('Serbia and Montenegro', 'formidable'), __('Seychelles', 'formidable'),
-            __('Sierra Leone', 'formidable'), __('Singapore', 'formidable'), __('Slovakia', 'formidable'),
-            __('Slovenia', 'formidable'), __('Solomon Islands', 'formidable'), __('Somalia', 'formidable'),
-            __('South Africa', 'formidable'), __('South Sudan', 'formidable'),
-            __('Spain', 'formidable'), __('Sri Lanka', 'formidable'),
-            __('Sudan', 'formidable'), __('Suriname', 'formidable'), __('Swaziland', 'formidable'),
-            __('Sweden', 'formidable'), __('Switzerland', 'formidable'), __('Syria', 'formidable'),
-            __('Taiwan', 'formidable'), __('Tajikistan', 'formidable'), __('Tanzania', 'formidable'),
-            __('Thailand', 'formidable'), __('Togo', 'formidable'), __('Tonga', 'formidable'),
-            __('Trinidad and Tobago', 'formidable'), __('Tunisia', 'formidable'), __('Turkey', 'formidable'),
-            __('Turkmenistan', 'formidable'), __('Tuvalu', 'formidable'), __('Uganda', 'formidable'),
-            __('Ukraine', 'formidable'), __('United Arab Emirates', 'formidable'), __('United Kingdom', 'formidable'),
-            __('United States', 'formidable'), __('Uruguay', 'formidable'), __('Uzbekistan', 'formidable'),
-            __('Vanuatu', 'formidable'), __('Vatican City', 'formidable'), __('Venezuela', 'formidable'),
-            __('Vietnam', 'formidable'), __('Virgin Islands, British', 'formidable'),
-            __('Virgin Islands, U.S.', 'formidable'), __('Yemen', 'formidable'), __('Zambia', 'formidable'),
-            __('Zimbabwe', 'formidable')
-        ));
+        _deprecated_function( __FUNCTION__, '2.0', 'FrmFieldsHelper::get_countries' );
+        return FrmFieldsHelper::get_countries();
     }
 
     public static function truncate($str, $length, $minword = 3, $continue = '...'){

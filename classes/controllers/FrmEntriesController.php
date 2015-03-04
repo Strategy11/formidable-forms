@@ -382,7 +382,7 @@ class FrmEntriesController {
         $form_id = (int) $params['form'];
 
         if ( $form_id ) {
-            $entry_ids = $wpdb->get_col($wpdb->prepare("SELECT id FROM {$wpdb->prefix}frm_items WHERE form_id=%d", $form_id));
+            $entry_ids = FrmDb::get_col( $wpdb->prefix .'frm_items', array('form_id' => $form_id) );
             $action = FrmFormActionsHelper::get_action_for_form($form_id, 'wppost', 1);
 
             if ( $action ) {

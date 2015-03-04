@@ -202,6 +202,8 @@ class FrmStylesController{
     }
 
     public static function reset_styling() {
+        check_ajax_referer( 'frm_ajax', 'nonce' );
+
         $frm_style = new FrmStyle();
         $defaults = $frm_style->get_defaults();
 
@@ -210,6 +212,8 @@ class FrmStylesController{
     }
 
     public static function change_styling() {
+        check_ajax_referer( 'frm_ajax', 'nonce' );
+
         $frm_style = new FrmStyle();
         $defaults = $frm_style->get_defaults();
 
