@@ -137,8 +137,10 @@ class FrmXMLController{
     }
 
     public static function export_xml() {
-        check_ajax_referer( 'frm_ajax', 'nonce' );
-        FrmAppHelper::permission_check('frm_edit_forms', 'show');
+        $error = FrmAppHelper::permission_nonce_error( 'frm_edit_forms', 'export-xml', 'export-xml-nonce' );
+        if ( ! empty($error) ) {
+            wp_die( $error );
+        }
 
         $ids = array();
         if ( isset($_POST['frm_export_forms']) ) {
@@ -147,7 +149,7 @@ class FrmXMLController{
 
         $type = false;
         if ( isset($_POST['type']) ) {
-            $type = sanitize_text_field( $_POST['type'] );
+            $type = $_POST['type'];
         }
 
         $format = isset($_POST['format']) ? $_POST['format'] : 'xml';

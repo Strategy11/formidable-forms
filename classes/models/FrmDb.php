@@ -175,7 +175,8 @@ class FrmDb{
     }
 
     public static function get_var( $table, $args = array(), $field = 'id', $order_by = '', $limit = '', $type = 'var' ) {
-        global $wpdb;
+        $group = '';
+        self::get_group_and_table_name( $table, $group );
 
         $args = FrmAppHelper::get_where_clause_and_values( $args );
         if ( ! empty($order_by) ) {
@@ -185,20 +186,18 @@ class FrmDb{
             $limit = ' LIMIT '. $limit;
         }
 
+        global $wpdb;
         $query = $wpdb->prepare('SELECT '. $field .' FROM '. $table . $args['where'] . $order_by . $limit, $args['values']);
-        if ( $type == 'col' ) {
-            return $wpdb->get_col($query);
-        } else if ( $type == 'row' ) {
-            return $wpdb->get_row($query);
-        } else {
-            return $wpdb->get_var($query);
-        }
+
+        $cache_key = implode('_', FrmAppHelper::array_flatten( $args ) ) . str_replace(' ', '_', $order_by . $limit) . $field .'_'. $type;
+        $results = FrmAppHelper::check_cache( $cache_key, $group, $query, 'get_'. $type );
+        return $results;
     }
 
     /**
      * @param string $table
      */
-    public static function get_col( $table, $args = array(), $field = 'id', $order_by = '' ) {
+    public static function get_col( $table, $args = array(), $field = 'id', $order_by = '', $limit = '' ) {
         return self::get_var( $table, $args, $field, $order_by, $limit, 'col' );
     }
 
@@ -225,7 +224,8 @@ class FrmDb{
     * @param string $table
     */
     public static function get_results( $table, $args = array(), $fields = '*', $order_by = '', $limit = '' ) {
-        global $wpdb;
+        $group = '';
+        self::get_group_and_table_name( $table, $group );
 
         $args = FrmAppHelper::get_where_clause_and_values( $args );
 
@@ -237,8 +237,28 @@ class FrmDb{
             $limit = ' LIMIT '. $limit;
         }
 
-        $query = 'SELECT '. $fields .' FROM '. $table . $args['where'] . $order_by . $limit;
-        return $wpdb->get_results( $wpdb->prepare($query, $args['values']) );
+        global $wpdb;
+        $query = $wpdb->prepare( 'SELECT '. $fields .' FROM '. $table . $args['where'] . $order_by . $limit, $args['values'] );
+
+        $cache_key = implode('_', $args) . str_replace( array(' ', ','), '_', $order_by . $limit . $fields ) .'_results';
+        $results = FrmAppHelper::check_cache( $cache_key, $group, $query, 'get_results' );
+        return $results;
+    }
+
+    /*
+    * Get 'frm_forms' from wp_frm_forms or a longer table param that includes a join
+    * Also add the wpdb->prefix to the table if it's missing
+    */
+    private static function get_group_and_table_name( &$table, &$group ) {
+        global $wpdb;
+
+        $table_parts = explode(' ', $table);
+        $group = reset($table_parts);
+        $group = str_replace( $wpdb->prefix, '', $group );
+
+        if ( $group == $table ) {
+            $table = $wpdb->prefix . $table;
+        }
     }
 
     public function uninstall(){

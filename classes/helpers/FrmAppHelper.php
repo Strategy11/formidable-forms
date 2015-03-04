@@ -731,6 +731,21 @@ class FrmAppHelper{
         return $value;
     }
 
+    /*
+    * Flatten a multi-dimensional array
+    */
+    public static function array_flatten( $array ) {
+        $return = array();
+        foreach ( $array as $key => $value ) {
+            if ( is_array($value) ){
+                $return = array_merge( $return, self::array_flatten($value) );
+            } else {
+                $return[$key] = $value;
+            }
+        }
+        return $return;
+    }
+
     public static function esc_textarea( $text ) {
         $safe_text = str_replace('&quot;', '"', $text);
         $safe_text = htmlspecialchars( $safe_text, ENT_NOQUOTES );
