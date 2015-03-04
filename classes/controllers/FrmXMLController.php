@@ -201,7 +201,7 @@ class FrmXMLController{
 
         //make sure ids are numeric
     	if ( is_array($args['ids']) && !empty($args['ids']) ) {
-	        $args['ids'] = implode(',', array_filter( $args['ids'], 'is_numeric' ));
+	        $args['ids'] = array_filter( $args['ids'], 'is_numeric' );
 	    }
 
 	    $records = array();
@@ -218,7 +218,7 @@ class FrmXMLController{
                     //add forms
                     if ( $args['ids'] ){
                         $where = $table . '.id IN (' . FrmAppHelper::prepare_array_values( $args['ids'], '%d' ) . ') OR '. $table .'.parent_form_id IN (' . FrmAppHelper::prepare_array_values( $args['ids'], '%d' ) . ')';
-                        $query_vars = array_merge( $query_vars, explode( ',', $args['ids'] ) );
+                        $query_vars = array_merge( $query_vars, $args['ids'] );
                 	} else {
                         $where .= $table . '.status != %s';
                         $query_vars[] = 'draft';
@@ -230,19 +230,19 @@ class FrmXMLController{
                     $query_vars[] = FrmFormActionsController::$action_post_type;
                     if ( ! empty($args['ids']) ) {
                         $where .= ' AND menu_order IN (' . FrmAppHelper::prepare_array_values( $args['ids'], '%d' ) . ')';
-                        $query_vars = array_merge( $query_vars, explode( ',', $args['ids'] ) );
+                        $query_vars = array_merge( $query_vars, $args['ids'] );
                     }
                 break;
                 case 'items':
                     //$join = "INNER JOIN {$wpdb->prefix}frm_item_metas im ON ($table.id = im.item_id)";
                     if ( $args['ids'] ) {
                         $where = $table . '.form_id IN (' . FrmAppHelper::prepare_array_values( $args['ids'], '%d' ) . ')';
-                        $query_vars = array_merge( $query_vars, explode( ',', $args['ids'] ) );
+                        $query_vars = array_merge( $query_vars, $args['ids'] );
                     }
                 break;
                 case 'styles':
                     // Loop through all exported forms and get their selected style IDs
-                    $form_ids = explode( ',', $args['ids'] );
+                    $form_ids = $args['ids'];
                     $style_ids = array();
                     foreach ( $form_ids as $form_id ) {
                         $form_data = FrmForm::getOne( $form_id );
@@ -272,7 +272,7 @@ class FrmXMLController{
                         $where .= '> 0';
                     } else {
                         $where .= 'IN (' . FrmAppHelper::prepare_array_values( $args['ids'], '%d' ) . ')';
-                        $query_vars = array_merge( $query_vars, explode( ',', $args['ids'] ) );
+                        $query_vars = array_merge( $query_vars, $args['ids'] );
                     }
                 break;
             }

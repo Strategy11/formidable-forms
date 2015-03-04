@@ -440,9 +440,10 @@ class FrmForm{
             }
         }
 
-        $where = $wpdb->prepare( is_numeric($id) ? 'id=%d' : 'form_key=%s', $id );
-
-        $results = $wpdb->get_row('SELECT * FROM '. $table_name .' WHERE '. $where);
+        $where = is_numeric($id) ? 'id=%d' : 'form_key=%s';
+        $query_args = array( $id );
+        $query = $wpdb->prepare( 'SELECT * FROM '. $table_name .' WHERE '. $where, $query_args );
+        $results = $wpdb->get_row( $query );
 
         if ( isset($results->options) ) {
             wp_cache_set($results->id, $results, 'frm_form');
@@ -505,7 +506,7 @@ class FrmForm{
     	    return $counts;
     	}
 
-    	$query = 'SELECT status, is_template FROM '. $wpdb->prefix .'frm_forms WHERE parent_form_id IS NULL OR parent_form_id < 1';
+        $query = $wpdb->prepare( 'SELECT status, is_template FROM '. $wpdb->prefix .'frm_forms WHERE parent_form_id IS NULL OR parent_form_id < %d', 1 );
 
     	$results = (array) $wpdb->get_results( $query );
     	$statuses = array('published', 'draft', 'template', 'trash');

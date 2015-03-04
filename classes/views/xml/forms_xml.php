@@ -6,9 +6,10 @@ if ( ! $item_ids ) {
 
 // fetch 20 posts at a time rather than loading the entire table into memory
 while ( $next_set = array_splice( $item_ids, 0, 20 ) ) {
-$where = 'WHERE id IN (' . join( ',', $next_set ) . ')';
-$forms = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}frm_forms $where");
-unset($where);
+    $where = 'WHERE id IN ' . FrmAppHelper::prepare_array_values( $next_set, '%d' ) . ')';
+    $query = $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'frm_forms ' . $where, $next_set );
+    $forms = $wpdb->get_results( $query );
+    unset( $where, $query_args, $query );
 
 // Begin Loop
 foreach ( $forms as $form ) {

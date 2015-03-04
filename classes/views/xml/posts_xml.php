@@ -10,8 +10,9 @@ $wp_query->in_the_loop = true; // Fake being in the loop.
 
 // fetch 20 posts at a time rather than loading the entire table into memory
 while ( $next_posts = array_splice( $item_ids, 0, 20 ) ) {
-$where = 'WHERE ID IN (' . join( ',', $next_posts ) . ')';
-$posts = $wpdb->get_results( "SELECT * FROM {$wpdb->posts} $where" );
+    $where = ' WHERE id IN ' . FrmAppHelper::prepare_array_values( $next_posts, '%d' ) . ')';
+    $query = $wpdb->prepare( 'SELECT * FROM ' . $wpdb->posts .  $where, $next_posts );
+    $posts = $wpdb->get_results( $query );
 
 // Begin Loop
 foreach ( $posts as $post ) {
