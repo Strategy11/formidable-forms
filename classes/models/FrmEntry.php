@@ -96,7 +96,7 @@ class FrmEntry{
 
         global $wpdb;
 
-        $entry_exists = FrmDb::get_var( $wpdb->prefix .'frm_items', $check_val, 'id', array('order_by' => 'created_at DESC') );
+        $entry_exists = FrmDb::get_col( $wpdb->prefix .'frm_items', $check_val, 'id', array('order_by' => 'created_at DESC') );
 
         if ( ! $entry_exists || empty($entry_exists) || ! isset($values['item_meta']) ) {
             return false;
@@ -107,7 +107,7 @@ class FrmEntry{
             $is_duplicate = true;
 
             //add more checks here to make sure it's a duplicate
-            $metas = FrmEntryMeta::get_entry_meta_info($entry_exist->id);
+            $metas = FrmEntryMeta::get_entry_meta_info($entry_exist);
             $field_metas = array();
             foreach ( $metas as $meta ) {
                 $field_metas[$meta->field_id] = $meta->meta_value;
