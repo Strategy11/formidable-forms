@@ -2,7 +2,7 @@
 <div class="wrap">
     <?php FrmStylesHelper::style_menu('custom_css'); ?>
 
-    <p><?php _e('You can add custom css here or in your theme style.css', 'formidable') ?></p>
+    <p><?php _e( 'You can add custom css here or in your theme style.css', 'formidable' ) ?></p>
 
     <?php include(FrmAppHelper::plugin_path() .'/classes/views/shared/errors.php'); ?>
 
@@ -25,7 +25,7 @@
         <input type="hidden" value="<?php echo esc_attr($v) ?>" name="<?php echo esc_attr( $frm_style->get_field_name( $k ) ) ?>" />    
         <?php
         } ?>
-		<p class="button-controls"><input type="submit" name="nav-menu-locations" id="nav-menu-locations" class="button button-primary left" value="<?php _e('Save Changes', 'formidable') ?>"  /></p>
+		<p class="button-controls"><input type="submit" name="nav-menu-locations" id="nav-menu-locations" class="button button-primary left" value="<?php _e( 'Save Changes', 'formidable' ) ?>"  /></p>
 
     </form>
 </div>

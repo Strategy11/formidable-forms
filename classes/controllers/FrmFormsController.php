@@ -14,7 +14,7 @@ class FrmFormsController{
     }
 
     public static function menu(){
-        add_submenu_page('formidable', 'Formidable | '. __('Forms', 'formidable'), __('Forms', 'formidable'), 'frm_view_forms', 'formidable', 'FrmFormsController::route' );
+        add_submenu_page('formidable', 'Formidable | '. __( 'Forms', 'formidable' ), __( 'Forms', 'formidable' ), 'frm_view_forms', 'formidable', 'FrmFormsController::route' );
 
 	    add_filter('get_user_option_managetoplevel_page_formidablecolumnshidden', 'FrmFormsController::hidden_columns' );
 
@@ -139,7 +139,7 @@ class FrmFormsController{
 
         FrmForm::update( $_POST['id'], $_POST );
 
-        $message = __('Settings Successfully Updated', 'formidable');
+        $message = __( 'Settings Successfully Updated', 'formidable' );
         return self::get_settings_vars($id, '', $message);
     }
 
@@ -190,7 +190,7 @@ class FrmFormsController{
             return self::get_edit_vars($id, $errors);
         }else{
             FrmForm::update( $id, $values );
-            $message = __('Form was Successfully Updated', 'formidable');
+            $message = __( 'Form was Successfully Updated', 'formidable' );
             if ( defined('DOING_AJAX') ) {
                 die($message);
             }
@@ -205,7 +205,7 @@ class FrmFormsController{
             FrmForm::duplicate( $id, true, true );
         }
 
-        return __('Form template was Successfully Created', 'formidable');
+        return __( 'Form template was Successfully Created', 'formidable' );
     }
 
     public static function duplicate(){
@@ -213,11 +213,11 @@ class FrmFormsController{
 
         $params = FrmFormsHelper::get_params();
         $form = FrmForm::duplicate( $params['id'], $params['template'], true );
-        $message = ($params['template']) ? __('Form template was Successfully Created', 'formidable') : __('Form was Successfully Copied', 'formidable');
+        $message = ($params['template']) ? __( 'Form template was Successfully Created', 'formidable' ) : __( 'Form was Successfully Copied', 'formidable' );
         if ( $form ) {
             return self::get_edit_vars($form, '', $message, true);
         } else {
-            return self::display_forms_list($params, __('There was a problem creating new template.', 'formidable'));
+            return self::display_forms_list($params, __( 'There was a problem creating new template.', 'formidable' ));
         }
     }
 
@@ -379,7 +379,7 @@ class FrmFormsController{
 
     public static function insert_form_button($content){
         if ( current_user_can('frm_view_forms') ) {
-            $content .= '<a href="#TB_inline?width=50&height=50&inlineId=frm_insert_form" class="thickbox button add_media frm_insert_form" title="' . __('Add forms and content', 'formidable') . '"><span class="frm-buttons-icon wp-media-buttons-icon"></span> Formidable</a>';
+            $content .= '<a href="#TB_inline?width=50&height=50&inlineId=frm_insert_form" class="thickbox button add_media frm_insert_form" title="' . __( 'Add forms and content', 'formidable' ) . '"><span class="frm-buttons-icon wp-media-buttons-icon"></span> Formidable</a>';
 
         }
         return $content;
@@ -394,7 +394,7 @@ class FrmFormsController{
         FrmAppHelper::load_admin_wide_js();
 
         $shortcodes = array(
-            'formidable' => array('name' => __('Form', 'formidable'), 'label' => __('Insert a Form', 'formidable')),
+            'formidable' => array('name' => __( 'Form', 'formidable' ), 'label' => __( 'Insert a Form', 'formidable' )),
         );
 
         $shortcodes = apply_filters('frm_popup_shortcodes', $shortcodes);
@@ -420,9 +420,9 @@ class FrmFormsController{
                 $form_id = 'id';
                 $opts = array(
                     //'key' => ',
-                    'title'         => array('val' => 1, 'label' => __('Display form title', 'formidable')),
-                    'description'   => array('val' => 1, 'label' => __('Display form description', 'formidable')),
-                    'minimize'      => array('val' => 1, 'label' => __('Minimize form HTML', 'formidable')),
+                    'title'         => array('val' => 1, 'label' => __( 'Display form title', 'formidable' )),
+                    'description'   => array('val' => 1, 'label' => __( 'Display form description', 'formidable' )),
+                    'minimize'      => array('val' => 1, 'label' => __( 'Minimize form HTML', 'formidable' )),
                 );
             break;
         }
@@ -467,19 +467,19 @@ class FrmFormsController{
         $type = isset( $_REQUEST['form_type'] ) ? $_REQUEST['form_type'] : 'published';
 
         if ( 'template' == $type ) {
-            $columns['name']        = __('Template Name', 'formidable');
-            $columns['type']        = __('Type', 'formidable');
-            $columns['form_key']    = __('Key', 'formidable');
+            $columns['name']        = __( 'Template Name', 'formidable' );
+            $columns['type']        = __( 'Type', 'formidable' );
+            $columns['form_key']    = __( 'Key', 'formidable' );
         } else {
-            $columns['name']        = __('Form Title', 'formidable');
-            $columns['entries']     = __('Entries', 'formidable');
-            $columns['form_key']    = __('Key', 'formidable');
-            $columns['shortcode']   = __('Shortcodes', 'formidable');
+            $columns['name']        = __( 'Form Title', 'formidable' );
+            $columns['entries']     = __( 'Entries', 'formidable' );
+            $columns['form_key']    = __( 'Key', 'formidable' );
+            $columns['shortcode']   = __( 'Shortcodes', 'formidable' );
         }
 
-        $columns['created_at'] = __('Date', 'formidable');
+        $columns['created_at'] = __( 'Date', 'formidable' );
 
-        add_screen_option( 'per_page', array('label' => __('Forms', 'formidable'), 'default' => 20, 'option' => 'formidable_page_formidable_per_page') );
+        add_screen_option( 'per_page', array('label' => __( 'Forms', 'formidable' ), 'default' => 20, 'option' => 'formidable_page_formidable_per_page') );
 
         return $columns;
 	}
@@ -529,11 +529,11 @@ class FrmFormsController{
 
         $form = FrmForm::getOne( $id );
         if ( ! $form ) {
-            wp_die( __('You are trying to edit a form that does not exist.', 'formidable') );
+            wp_die( __( 'You are trying to edit a form that does not exist.', 'formidable' ) );
         }
 
         if ( $form->parent_form_id ) {
-            wp_die( sprintf(__('You are trying to edit a child form. Please edit from %1$shere%2$s', 'formidable'), '<a href="'. esc_url(admin_url('admin.php') .'?page=formidable&frm_action=edit&id='. $form->parent_form_id) .'">', '</a>' ));
+            wp_die( sprintf(__( 'You are trying to edit a child form. Please edit from %1$shere%2$s', 'formidable' ), '<a href="'. esc_url(admin_url('admin.php') .'?page=formidable&frm_action=edit&id='. $form->parent_form_id) .'">', '</a>' ));
         }
 
         $frm_field_selection = FrmFieldsHelper::field_selection();
@@ -551,13 +551,13 @@ class FrmFormsController{
 
         $values = FrmAppHelper::setup_edit_vars($form, 'forms', $fields, true);
 
-        $edit_message = __('Form was Successfully Updated', 'formidable');
+        $edit_message = __( 'Form was Successfully Updated', 'formidable' );
         if ( $form->is_template && $message == $edit_message ) {
-            $message = __('Template was Successfully Updated', 'formidable');
+            $message = __( 'Template was Successfully Updated', 'formidable' );
         }
 
         if ( $form->default_template ) {
-            wp_die(__('That template cannot be edited', 'formidable'));
+            wp_die(__( 'That template cannot be edited', 'formidable' ));
         } else if ( defined('DOING_AJAX') ) {
             wp_die();
         } else if ( $create_link ) {
@@ -576,7 +576,7 @@ class FrmFormsController{
         $values = FrmAppHelper::setup_edit_vars($form, 'forms', $fields, true);
 
         if ( isset($values['default_template']) && $values['default_template'] ) {
-            wp_die(__('That template cannot be edited', 'formidable'));
+            wp_die(__( 'That template cannot be edited', 'formidable' ));
         }
 
         $action_controls = FrmFormActionsController::get_form_actions();
@@ -593,19 +593,19 @@ class FrmFormsController{
         $fields = FrmField::get_all_for_form($form_id, '', 'include');
         $linked_forms = array();
         $col = 'one';
-        $settings_tab = FrmAppHelper::is_admin_page('formidable') ? true : false;
+        $settings_tab = FrmAppHelper::is_admin_page('formidable' ) ? true : false;
 
         $cond_shortcodes = apply_filters('frm_conditional_shortcodes', array());
 
         $adv_shortcodes = array(
-            'sep=&#34;, &#34;' => array('label' => __('Separator', 'formidable'), 'title' => __('Use a different separator for checkbox fields', 'formidable') ),
-            'format=&#34;d-m-Y&#34;' => __('Date Format', 'formidable'),
-            'show=&#34;field_label&#34;' => __('Field Label', 'formidable'),
-            'wpautop=0' => array('label' => __('No Auto P', 'formidable'), 'title' => __('Do not automatically add any paragraphs or line breaks', 'formidable')),
+            'sep=&#34;, &#34;' => array('label' => __( 'Separator', 'formidable' ), 'title' => __( 'Use a different separator for checkbox fields', 'formidable' ) ),
+            'format=&#34;d-m-Y&#34;' => __( 'Date Format', 'formidable' ),
+            'show=&#34;field_label&#34;' => __( 'Field Label', 'formidable' ),
+            'wpautop=0' => array('label' => __( 'No Auto P', 'formidable' ), 'title' => __( 'Do not automatically add any paragraphs or line breaks', 'formidable' )),
         );
         $adv_shortcodes = apply_filters('frm_advanced_shortcodes', $adv_shortcodes);
 
-        // __('Leave blank instead of defaulting to User Login', 'formidable') : blank=1
+        // __( 'Leave blank instead of defaulting to User Login', 'formidable' ) : blank=1
 
         $user_fields = apply_filters('frm_user_shortcodes', array());
 
@@ -674,7 +674,7 @@ class FrmFormsController{
 
         $ids = FrmAppHelper::get_param('item-action', '');
         if ( empty($ids) ) {
-            $errors[] = __('No forms were specified', 'formidable');
+            $errors[] = __( 'No forms were specified', 'formidable' );
             return $errors;
         }
 
@@ -821,7 +821,7 @@ class FrmFormsController{
     }
 
     public static function json_error($errors) {
-        $errors['json'] = __('Abnormal HTML characters prevented your form from saving correctly', 'formidable');
+        $errors['json'] = __( 'Abnormal HTML characters prevented your form from saving correctly', 'formidable' );
         return $errors;
     }
 
@@ -878,7 +878,7 @@ class FrmFormsController{
         		$wp_admin_bar->add_menu( array(
         			'parent'    => 'frm-forms',
         			'id'        => 'edit_form_'. $form_id,
-        			'title'     => empty($name) ? __('(no title)') : $name,
+        			'title'     => empty($name) ? __( '(no title)') : $name,
         			'href'      => admin_url( 'admin.php?page=formidable&frm_action=edit&id='. $form_id )
         		) );
         	}
@@ -918,12 +918,12 @@ class FrmFormsController{
 
         // no form id or key set
         if ( empty($id) ) {
-            return __('Please select a valid form', 'formidable');
+            return __( 'Please select a valid form', 'formidable' );
         }
 
         $form = FrmForm::getOne($id);
         if ( ! $form || $form->parent_form_id ) {
-            return __('Please select a valid form', 'formidable');
+            return __( 'Please select a valid form', 'formidable' );
         }
 
         add_action('frm_load_form_hooks', 'FrmFormsController::trigger_load_form_hooks');
@@ -935,7 +935,7 @@ class FrmFormsController{
 
         // don't show a draft form on a page
         if ( $form->status == 'draft' && ( ! $post || $post->ID != $frm_settings->preview_page_id ) ) {
-            return __('Please select a valid form', 'formidable');
+            return __( 'Please select a valid form', 'formidable' );
         }
 
         // don't show the form if user should be logged in

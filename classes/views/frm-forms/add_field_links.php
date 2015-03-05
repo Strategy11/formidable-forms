@@ -3,7 +3,7 @@
     <?php
     $action = isset($_REQUEST['frm_action']) ? 'frm_action' : 'action';
     $action = FrmAppHelper::get_param($action);
-    $button = ( $action == 'new' || $action == 'duplicate' ) ? __('Create', 'formidable') : __('Update', 'formidable');
+    $button = ( $action == 'new' || $action == 'duplicate' ) ? __( 'Create', 'formidable' ) : __( 'Update', 'formidable' );
     ?>
 
     <?php include(FrmAppHelper::plugin_path() .'/classes/views/frm-forms/_publish_box.php') ?>
@@ -16,7 +16,7 @@
     <div id="taxonomy-linkcategory" class="categorydiv">
         <ul id="category-tabs" class="category-tabs frm-category-tabs">
     		<li class="tabs" ><a href="#frm-insert-fields" id="frm_insert_fields_tab"><?php _e( 'Fields', 'formidable' ); ?></a></li>
-    		<li class="hide-if-no-js"><a href="#frm-layout-classes" id="frm_layout_classes_tab" class="frm_help" title="<?php esc_attr_e('Open the Field Options and click on the CSS Layout Classes option to enable this tab') ?>"><?php _e( 'Layout', 'formidable' ); ?></a></li>
+    		<li class="hide-if-no-js"><a href="#frm-layout-classes" id="frm_layout_classes_tab" class="frm_help" title="<?php esc_attr_e( 'Open the Field Options and click on the CSS Layout Classes option to enable this tab') ?>"><?php _e( 'Layout', 'formidable' ); ?></a></li>
     		<?php do_action('frm_extra_form_instruction_tabs'); ?>
     	</ul>
 
@@ -77,42 +77,42 @@
     	<?php do_action('frm_extra_form_instructions'); ?>
 
     	<div id="frm-layout-classes" class="tabs-panel" style="display:none;max-height:none;">
-			<p class="howto"><?php _e('Add classes in the "CSS layout classes" field option', 'formidable') ?></p>
+			<p class="howto"><?php _e( 'Add classes in the "CSS layout classes" field option', 'formidable' ) ?></p>
     	    <ul class="frm_code_list">
     	    <?php $classes = array(
                     'frm_first'     => array(
-                        'label' => __('First', 'formidable'),
-                        'title' => __('Add this to the first field in each row along with a width. ie frm_first frm_third', 'formidable'),
+                        'label' => __( 'First', 'formidable' ),
+                        'title' => __( 'Add this to the first field in each row along with a width. ie frm_first frm_third', 'formidable' ),
                     ),
                     'frm_last'      => array(
-                        'label' => __('Last', 'formidable'),
-                        'title' => __('Add this to the last field in each row along with a width. ie frm_last frm_third', 'formidable'),
+                        'label' => __( 'Last', 'formidable' ),
+                        'title' => __( 'Add this to the last field in each row along with a width. ie frm_last frm_third', 'formidable' ),
                     ),
-                    'frm_half'      => __('1/2', 'formidable'),
-                    'frm_third'     => __('1/3', 'formidable'),
-                    'frm_two_thirds' => __('2/3', 'formidable'),
-    	            'frm_fourth'    => __('1/4', 'formidable'),
-                    'frm_fifth'     => __('1/5', 'formidable'),
-                    'frm_sixth'     => __('1/6', 'formidable'),
-                    'frm_seventh'   => __('1/7', 'formidable'),
-                    'frm_eigth'     => __('1/8', 'formidable'),
+                    'frm_half'      => __( '1/2', 'formidable' ),
+                    'frm_third'     => __( '1/3', 'formidable' ),
+                    'frm_two_thirds' => __( '2/3', 'formidable' ),
+    	            'frm_fourth'    => __( '1/4', 'formidable' ),
+                    'frm_fifth'     => __( '1/5', 'formidable' ),
+                    'frm_sixth'     => __( '1/6', 'formidable' ),
+                    'frm_seventh'   => __( '1/7', 'formidable' ),
+                    'frm_eigth'     => __( '1/8', 'formidable' ),
     	            'frm_inline'    => array(
-                        'label' => __('Inline', 'formidable'),
-                        'title' => __('Align fields in a row without a specific width.', 'formidable')
+                        'label' => __( 'Inline', 'formidable' ),
+                        'title' => __( 'Align fields in a row without a specific width.', 'formidable' )
                     ),
 
     	            'frm_full' => array(
-                        'label' => __('100% width', 'formidable'),
-                        'title' => __('Force the field to fill the full space with 100% width.', 'formidable')
+                        'label' => __( '100% width', 'formidable' ),
+                        'title' => __( 'Force the field to fill the full space with 100% width.', 'formidable' )
                     ),
-    	            'frm_grid_first' => __('First Grid Row', 'formidable'),
-    	            'frm_grid' => __('Even Grid Row', 'formidable'),
-    	            'frm_grid_odd' => __('Odd Grid Row', 'formidable'),
-    	            'frm_two_col' => array('label' => __('2 Col Options', 'formidable'), 'title' => __('Put your radio button or checkbox options into two columns.', 'formidable')),
-    	            'frm_three_col' => array('label' => __('3 Col Options', 'formidable'), 'title' => __('Put your radio button or checkbox options into three columns.', 'formidable')),
-    	            'frm_four_col' => array('label' => __('4 Col Options', 'formidable'), 'title' => __('Put your radio button or checkbox options into four columns.', 'formidable')),
-    	            'frm_total' => array('label' => __('Total', 'formidable'), 'title' => __('Add this to a read-only field to display the text in bold without a border or background.', 'formidable')),
-    	            'frm_scroll_box' => array('label' => __('Scroll Box', 'formidable'), 'title' => __('If you have many checkbox or radio button options, you may add this class to allow your user to easily scroll through the options.', 'formidable'))
+    	            'frm_grid_first' => __( 'First Grid Row', 'formidable' ),
+    	            'frm_grid' => __( 'Even Grid Row', 'formidable' ),
+    	            'frm_grid_odd' => __( 'Odd Grid Row', 'formidable' ),
+    	            'frm_two_col' => array('label' => __( '2 Col Options', 'formidable' ), 'title' => __( 'Put your radio button or checkbox options into two columns.', 'formidable' )),
+    	            'frm_three_col' => array('label' => __( '3 Col Options', 'formidable' ), 'title' => __( 'Put your radio button or checkbox options into three columns.', 'formidable' )),
+    	            'frm_four_col' => array('label' => __( '4 Col Options', 'formidable' ), 'title' => __( 'Put your radio button or checkbox options into four columns.', 'formidable' )),
+    	            'frm_total' => array('label' => __( 'Total', 'formidable' ), 'title' => __( 'Add this to a read-only field to display the text in bold without a border or background.', 'formidable' )),
+    	            'frm_scroll_box' => array('label' => __( 'Scroll Box', 'formidable' ), 'title' => __( 'If you have many checkbox or radio button options, you may add this class to allow your user to easily scroll through the options.', 'formidable' ))
     	        );
     	        $classes = apply_filters('frm_layout_classes', $classes);
     	        $col = 'one';

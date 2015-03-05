@@ -50,7 +50,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	function no_items() {
         $s = isset( $_REQUEST['s'] ) ? $_REQUEST['s'] : '';
 	    if ( ! empty($s) ) {
-            _e('No Entries Found', 'formidable');
+            _e( 'No Entries Found', 'formidable' );
             return;
         }
 
@@ -95,20 +95,20 @@ class FrmEntriesListHelper extends FrmListHelper {
     <input type="text" id="<?php echo esc_attr( $input_id ) ?>" name="s" value="<?php echo esc_attr( $search_str ); ?>" />
     <?php if ( isset($field_list) && !empty($field_list) ) { ?>
     <select name="fid" class="hide-if-js">
-        <option value="">&mdash; <?php _e('All Fields', 'formidable') ?> &mdash;</option>
-        <option value="created_at" <?php selected($fid, 'created_at') ?>><?php _e('Entry creation date', 'formidable') ?></option>
-        <option value="id" <?php selected($fid, 'id') ?>><?php _e('Entry ID', 'formidable') ?></option>
+        <option value="">&mdash; <?php _e( 'All Fields', 'formidable' ) ?> &mdash;</option>
+        <option value="created_at" <?php selected($fid, 'created_at') ?>><?php _e( 'Entry creation date', 'formidable' ) ?></option>
+        <option value="id" <?php selected($fid, 'id') ?>><?php _e( 'Entry ID', 'formidable' ) ?></option>
         <?php foreach($field_list as $f){ ?>
         <option value="<?php echo ($f->type == 'user_id') ? 'user_id' : $f->id ?>" <?php selected($fid, $f->id) ?>><?php echo FrmAppHelper::truncate($f->name, 30);  ?></option>
         <?php } ?>
     </select>
 
     <div class="button dropdown hide-if-no-js">
-        <a href="#" id="frm-fid-search" class="frm-dropdown-toggle" data-toggle="dropdown"><?php _e('Search', 'formidable') ?> <b class="caret"></b></a>
+        <a href="#" id="frm-fid-search" class="frm-dropdown-toggle" data-toggle="dropdown"><?php _e( 'Search', 'formidable' ) ?> <b class="caret"></b></a>
         <ul class="frm-dropdown-menu pull-right" id="frm-fid-search-menu" role="menu" aria-labelledby="frm-fid-search">
-            <li><a href="#" id="fid-">&mdash; <?php _e('All Fields', 'formidable') ?> &mdash;</a></li>
-            <li><a href="#" id="fid-created_at"><?php _e('Entry creation date', 'formidable') ?></a></li>
-            <li><a href="#" id="fid-id"><?php _e('Entry ID', 'formidable') ?></a></li>
+            <li><a href="#" id="fid-">&mdash; <?php _e( 'All Fields', 'formidable' ) ?> &mdash;</a></li>
+            <li><a href="#" id="fid-created_at"><?php _e( 'Entry creation date', 'formidable' ) ?></a></li>
+            <li><a href="#" id="fid-id"><?php _e( 'Entry ID', 'formidable' ) ?></a></li>
     	    <?php foreach ( $field_list as $f ) { ?>
             <li><a href="#" id="fid-<?php echo ($f->type == 'user_id') ? 'user_id' : $f->id ?>"><?php echo FrmAppHelper::truncate($f->name, 30); ?></a></li>
     	    <?php
@@ -120,7 +120,7 @@ class FrmEntriesListHelper extends FrmListHelper {
     } else {
         submit_button( $text, 'button', false, false, array('id' => 'search-submit') );
         if ( ! empty($search_str) ) { ?>
-    <a href="<?php echo admin_url('admin.php?page=formidable-entries&frm_action=list&form='.$form->id) ?>"><?php _e('Reset', 'formidable') ?></a>
+    <a href="<?php echo admin_url('admin.php?page=formidable-entries&frm_action=list&form='.$form->id) ?>"><?php _e( 'Reset', 'formidable' ) ?></a>
     <?php }
     } ?>
 
@@ -178,7 +178,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 					$val = "<abbr title='". FrmAppHelper::get_formatted_time($item->{$col_name}, '', 'g:i:s A') ."'>". $date ."</abbr>";
 					break;
 				case 'is_draft':
-				    $val = empty($item->is_draft) ? __('No') : __('Yes');
+				    $val = empty($item->is_draft) ? __( 'No') : __( 'Yes');
 			        break;
 				case 'form_id':
 				    $val = FrmFormsHelper::edit_form_link($item->form_id);
@@ -246,11 +246,11 @@ class FrmEntriesListHelper extends FrmListHelper {
      * @param string $view_link
      */
     private function get_actions( &$actions, $item, $view_link ) {
-		$actions['view'] = '<a href="' . esc_url( $view_link ) . '">'. __('View', 'formidable') .'</a>';
+		$actions['view'] = '<a href="' . esc_url( $view_link ) . '">'. __( 'View', 'formidable' ) .'</a>';
 
         if ( current_user_can('frm_delete_entries') ) {
             $delete_link = '?page=formidable-entries&frm_action=destroy&id='. $item->id .'&form='. $this->params['form'];
-		    $actions['delete'] = '<a href="' . wp_nonce_url( $delete_link ) . '" class="submitdelete" onclick="return confirm(\''. __('Are you sure you want to delete that?', 'formidable') .'\')">' . __( 'Delete' ) . '</a>';
+		    $actions['delete'] = '<a href="' . wp_nonce_url( $delete_link ) . '" class="submitdelete" onclick="return confirm(\''. __( 'Are you sure you want to delete that?', 'formidable' ) .'\')">' . __( 'Delete' ) . '</a>';
 	    }
 
         $actions = apply_filters('frm_row_actions', $actions, $item);

@@ -20,7 +20,7 @@ class FrmNotification{
 
         // Set the subject
         if ( empty($notification['email_subject']) ) {
-            $notification['email_subject'] = sprintf(__('%1$s Form submitted on %2$s', 'formidable'), $form->name, '[sitename]');
+            $notification['email_subject'] = sprintf(__( '%1$s Form submitted on %2$s', 'formidable' ), $form->name, '[sitename]');
         }
 
         $plain_text = $notification['plain_text'] ? true : false;
@@ -91,10 +91,10 @@ class FrmNotification{
         // Add the user info if it isn't already included
         if ( $notification['inc_user_info'] && $prev_mail_body == $mail_body ) {
             $data = maybe_unserialize($entry->description);
-            $mail_body .= "\r\n\r\n" . __('User Information', 'formidable') ."\r\n";
-            $mail_body .= __('IP Address', 'formidable') . ': '. $entry->ip ."\r\n";
-            $mail_body .= __('User-Agent (Browser/OS)', 'formidable') . ': '. FrmEntriesHelper::get_browser($data['browser']) ."\r\n";
-            $mail_body .= __('Referrer', 'formidable') . ': '. $data['referrer']."\r\n";
+            $mail_body .= "\r\n\r\n" . __( 'User Information', 'formidable' ) ."\r\n";
+            $mail_body .= __( 'IP Address', 'formidable' ) . ': '. $entry->ip ."\r\n";
+            $mail_body .= __( 'User-Agent (Browser/OS)', 'formidable' ) . ': '. FrmEntriesHelper::get_browser($data['browser']) ."\r\n";
+            $mail_body .= __( 'Referrer', 'formidable' ) . ': '. $data['referrer']."\r\n";
         }
         unset($prev_mail_body);
 

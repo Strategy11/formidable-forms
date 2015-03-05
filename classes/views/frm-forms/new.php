@@ -1,7 +1,7 @@
 <div class="wrap">
     <div class="frmicon icon32"><br/></div>
-    <h2><?php _e('Build New Form', 'formidable') ?>
-		<a href="?page=formidable-new" class="add-new-h2" style="visibility:hidden;"><?php _e('Add New', 'formidable'); ?></a>
+    <h2><?php _e( 'Build New Form', 'formidable' ) ?>
+		<a href="?page=formidable-new" class="add-new-h2" style="visibility:hidden;"><?php _e( 'Add New', 'formidable' ); ?></a>
 	</h2>
 
     <div id="poststuff">
@@ -25,7 +25,7 @@
             <?php require(FrmAppHelper::plugin_path() .'/classes/views/frm-forms/form.php'); ?>
 
             <p>
-                <input type="button" value="<?php _e('Create', 'formidable') ?>" class="frm_submit_<?php echo ( isset($values['ajax_load']) && $values['ajax_load'] ) ? '': 'no_'; ?>ajax button-primary" />
+                <input type="button" value="<?php _e( 'Create', 'formidable' ) ?>" class="frm_submit_<?php echo ( isset($values['ajax_load']) && $values['ajax_load'] ) ? '': 'no_'; ?>ajax button-primary" />
                 <span class="frm-loading-img"></span>
             </p>
         </form>

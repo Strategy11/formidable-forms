@@ -12,7 +12,7 @@ class FrmStylesController{
 
     public static function register_post_types() {
         register_post_type(self::$post_type, array(
-            'label' => __('Styles', 'formidable'),
+            'label' => __( 'Styles', 'formidable' ),
             'public' => false,
             'show_ui' => false,
             'capability_type' => 'page',
@@ -21,18 +21,18 @@ class FrmStylesController{
             ),
             'has_archive' => false,
             'labels' => array(
-                'name' => __('Styles', 'formidable'),
-                'singular_name' => __('Style', 'formidable'),
-                'menu_name' => __('Style', 'formidable'),
-                'edit' => __('Edit'),
-                'add_new_item' => __('Create a New Style', 'formidable'),
-                'edit_item' => __('Edit Style', 'formidable')
+                'name' => __( 'Styles', 'formidable' ),
+                'singular_name' => __( 'Style', 'formidable' ),
+                'menu_name' => __( 'Style', 'formidable' ),
+                'edit' => __( 'Edit'),
+                'add_new_item' => __( 'Create a New Style', 'formidable' ),
+                'edit_item' => __( 'Edit Style', 'formidable' )
             )
         ) );
     }
 
     public static function menu(){
-        add_submenu_page('formidable', 'Formidable | '. __('Styles', 'formidable'), __('Styles', 'formidable'), 'frm_change_settings', 'formidable-styles', 'FrmStylesController::route');
+        add_submenu_page('formidable', 'Formidable | '. __( 'Styles', 'formidable' ), __( 'Styles', 'formidable' ), 'frm_change_settings', 'formidable-styles', 'FrmStylesController::route');
     }
 
     public static function admin_init() {
@@ -56,7 +56,7 @@ class FrmStylesController{
     }
 
     public static function new_style($return = '') {
-        FrmAppHelper::update_message( __('create multiple styling templates', 'formidable'), 'wrap' );
+        FrmAppHelper::update_message( __( 'create multiple styling templates', 'formidable' ), 'wrap' );
         self::load_styler('default');
     }
 
@@ -91,7 +91,7 @@ class FrmStylesController{
             }
             // include the CSS that includes this style
             echo '<link href="'. admin_url('admin-ajax.php') .'?action=frmpro_css" type="text/css" rel="Stylesheet" class="frm-custom-theme" />';
-            $message = __('Your styling settings have been saved.', 'formidable');
+            $message = __( 'Your styling settings have been saved.', 'formidable' );
         }
 
         return self::edit($post_id, $message);
@@ -146,7 +146,7 @@ class FrmStylesController{
             unset($form);
         }
 
-        $message = __('Your form styles have been saved.', 'formidable');
+        $message = __( 'Your form styles have been saved.', 'formidable' );
         return self::manage($message, $forms);
     }
 
@@ -170,7 +170,7 @@ class FrmStylesController{
         $post_id = ( $_POST && isset($_POST['ID']) ) ? $_POST['ID'] : false;
         if ( isset($_POST['frm_custom_css']) && wp_verify_nonce($_POST['frm_custom_css'], 'frm_custom_css_nonce') ) {
             $frm_style->update($post_id);
-            $message = __('Your styling settings have been saved.', 'formidable');
+            $message = __( 'Your styling settings have been saved.', 'formidable' );
         }
 
         return self::custom_css($message);
@@ -234,16 +234,16 @@ class FrmStylesController{
 
         // setup meta boxes
         $meta_boxes = array(
-            'general'           => __('General', 'formidable'),
-            'field-labels'      => __('Field Labels', 'formidable'),
-            'field-description' => __('Field Description', 'formidable'),
-            'field-colors'      => __('Field Colors', 'formidable'),
-            'field-sizes'       => __('Field Settings', 'formidable'),
-            'check-box-radio-fields' => __('Check Box & Radio Fields', 'formidable'),
-            'section-fields'    => __('Section Fields', 'formidable'),
-            'date-fields'       => __('Date Fields', 'formidable'),
-            'buttons'           => __('Buttons', 'formidable'),
-            'form-messages'     => __('Form Messages', 'formidable'),
+            'general'           => __( 'General', 'formidable' ),
+            'field-labels'      => __( 'Field Labels', 'formidable' ),
+            'field-description' => __( 'Field Description', 'formidable' ),
+            'field-colors'      => __( 'Field Colors', 'formidable' ),
+            'field-sizes'       => __( 'Field Settings', 'formidable' ),
+            'check-box-radio-fields' => __( 'Check Box & Radio Fields', 'formidable' ),
+            'section-fields'    => __( 'Section Fields', 'formidable' ),
+            'date-fields'       => __( 'Date Fields', 'formidable' ),
+            'buttons'           => __( 'Buttons', 'formidable' ),
+            'form-messages'     => __( 'Form Messages', 'formidable' ),
         );
 
         foreach ( $meta_boxes as $nicename => $name ) {
@@ -283,7 +283,7 @@ class FrmStylesController{
 
         $frm_settings = FrmAppHelper::get_settings();
         if ( $frm_settings->load_style != 'none' ) {
-            wp_enqueue_style('formidable');
+            wp_enqueue_style('formidable' );
             $frm_vars['css_loaded'] = true;
         }
     }

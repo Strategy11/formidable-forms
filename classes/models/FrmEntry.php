@@ -443,12 +443,12 @@ class FrmEntry{
         $errors = array();
 
         if ( ! isset($values['form_id']) || ! isset($values['item_meta']) ) {
-            $errors['form'] = __('There was a problem with your submission. Please try again.', 'formidable');
+            $errors['form'] = __( 'There was a problem with your submission. Please try again.', 'formidable' );
             return $errors;
         }
 
         if ( is_admin() && is_user_logged_in() && ( ! isset($values['frm_submit_entry_'. $values['form_id']]) || ! wp_verify_nonce($values['frm_submit_entry_'. $values['form_id']], 'frm_submit_entry_nonce') ) ) {
-            $errors['form'] = __('You do not have permission to do that', 'formidable');
+            $errors['form'] = __( 'You do not have permission to do that', 'formidable' );
         }
 
         if ( ! isset($values['item_key']) || $values['item_key'] == '' ) {
@@ -559,7 +559,7 @@ class FrmEntry{
             // If captcha is missing, check if it was already verified
             if ( ! isset($_POST['recaptcha_checked']) || ! wp_verify_nonce($_POST['recaptcha_checked'], 'frm_form')) {
                 // There was no captcha submitted
-                $errors['field'. $args['id']] = __('The captcha is missing from this form', 'formidable');
+                $errors['field'. $args['id']] = __( 'The captcha is missing from this form', 'formidable' );
             }
             return;
         }
@@ -593,13 +593,13 @@ class FrmEntry{
             $form = FrmForm::getOne($values['form_id']);
 
             if ( isset($form->options['akismet']) && ! empty($form->options['akismet']) && ( $form->options['akismet'] != 'logged' || ! is_user_logged_in() ) ) {
-	            $errors['spam'] = __('Your entry appears to be spam!', 'formidable');
+	            $errors['spam'] = __( 'Your entry appears to be spam!', 'formidable' );
 	        }
 	    }
 
 	    // check for blacklist keys
     	if ( self::blacklist_check($values) ) {
-            $errors['spam'] = __('Your entry appears to be spam!', 'formidable');
+            $errors['spam'] = __( 'Your entry appears to be spam!', 'formidable' );
     	}
     }
 

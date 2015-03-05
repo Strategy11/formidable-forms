@@ -1,11 +1,11 @@
 <div id="titlediv">
 <ul class="frm_form_nav">
 <li class="first"><a<?php
-if ( ( $current_page == 'formidable') && isset($_GET['frm_action']) && (in_array($_GET['frm_action'], array('edit', 'new', 'duplicate'))) ) {
+if ( ( $current_page == 'formidable' ) && isset($_GET['frm_action']) && (in_array($_GET['frm_action'], array('edit', 'new', 'duplicate'))) ) {
     echo ' class="current_page"';
 } ?> href="<?php echo esc_url( admin_url('admin.php?page=formidable&frm_action=edit&id='. $id) ) ?>"><?php _e( 'Build', 'formidable' ) ?></a> </li>
 <li><a<?php
-if ( ( $current_page == 'formidable') && isset($_GET['frm_action']) && $_GET['frm_action'] == 'settings' ) {
+if ( ( $current_page == 'formidable' ) && isset($_GET['frm_action']) && $_GET['frm_action'] == 'settings' ) {
     echo ' class="current_page"';
 } ?> href="<?php echo esc_url( admin_url('admin.php?page=formidable&frm_action=settings&id='. $id) ) ?>"><?php _e( 'Settings', 'formidable' ) ?></a> </li>
 <li> <a<?php
@@ -24,6 +24,6 @@ if ( $current_page == 'formidable' && isset($_GET['frm_action']) && in_array($_G
 </ul>
 
 <?php if($form && $title == 'show'){ ?>
-    <input id="title" type="text" value="<?php echo esc_attr($form->name == '' ? __('(no title)') : $form->name) ?>" readonly="readonly" disabled="disabled" />
+    <input id="title" type="text" value="<?php echo esc_attr($form->name == '' ? __( '(no title)') : $form->name) ?>" readonly="readonly" disabled="disabled" />
 <?php } ?>
 </div>

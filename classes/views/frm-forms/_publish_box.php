@@ -6,7 +6,7 @@
         <div id="minor-publishing-actions">
             <?php if ( 'draft' == $values['status'] ) { ?>
             <div id="save-action">
-        	    <input type="button" value="<?php esc_html_e('Save Draft', 'formidable'); ?>" class="frm_submit_form frm_submit_<?php echo ( isset($values['ajax_load']) && $values['ajax_load'] ) ? '': 'no_'; ?>ajax button-secondary button-large" id="save-post" />
+        	    <input type="button" value="<?php esc_html_e( 'Save Draft', 'formidable' ); ?>" class="frm_submit_form frm_submit_<?php echo ( isset($values['ajax_load']) && $values['ajax_load'] ) ? '': 'no_'; ?>ajax button-secondary button-large" id="save-post" />
         	    <span class="spinner"></span>
             </div>
             <?php } ?>
@@ -22,7 +22,7 @@
                         } else {
                 ?>
                     <div class="preview dropdown">
-                        <a href="#" id="frm-previewDrop" class="frm-dropdown-toggle button" data-toggle="dropdown"><?php _e('Preview', 'formidable') ?> <b class="caret"></b></a>
+                        <a href="#" id="frm-previewDrop" class="frm-dropdown-toggle button" data-toggle="dropdown"><?php _e( 'Preview', 'formidable' ) ?> <b class="caret"></b></a>
 
                         <ul class="frm-dropdown-menu pull-right" role="menu" aria-labelledby="frm-previewDrop">
                             <li><a href="<?php echo esc_url( FrmFormsHelper::get_direct_link($values['form_key']) ); ?>" target="_blank"><?php _e( 'On Blank Page', 'formidable' ) ?></a></li>
@@ -44,35 +44,35 @@
             <?php if ( $values['is_template'] ) { ?>
                 <br/>
             <?php } else { ?>
-            	<span id="frm_shortcode"><span class="frm-buttons-icon wp-media-buttons-icon"></span> <?php _e('Form', 'formidable') ?> <strong><?php _e('Shortcodes', 'formidable') ?></strong></span>
-                <a href="#edit_frm_shortcode" class="edit-frm_shortcode hide-if-no-js" tabindex='4'><?php _e('Show', 'formidable') ?></a>
+            	<span id="frm_shortcode"><span class="frm-buttons-icon wp-media-buttons-icon"></span> <?php _e( 'Form', 'formidable' ) ?> <strong><?php _e( 'Shortcodes', 'formidable' ) ?></strong></span>
+                <a href="#edit_frm_shortcode" class="edit-frm_shortcode hide-if-no-js" tabindex='4'><?php _e( 'Show', 'formidable' ) ?></a>
                 <div id="frm_shortcodediv" class="hide-if-js">
-                    <p class="howto"><?php _e('Insert on a page, post, or text widget', 'formidable') ?>:</p>
+                    <p class="howto"><?php _e( 'Insert on a page, post, or text widget', 'formidable' ) ?>:</p>
                 	<p><input type="text" readonly="true" class="frm_select_box" value="[formidable id=<?php echo esc_attr( $id ); ?>]" />
                 	    <input type="text" readonly="true" class="frm_select_box" value="[formidable id=<?php echo esc_attr( $id ); ?> title=true description=true]" />
                 	</p>
 
-                	<p class="howto"><?php _e('Insert in a template', 'formidable') ?>:</p>
+                	<p class="howto"><?php _e( 'Insert in a template', 'formidable' ) ?>:</p>
                 	<p><input type="text" style="font-size:10px;width:98%;font-weight:normal" readonly="true" class="frm_select_box" value="&lt;?php echo FrmFormsController::get_form_shortcode(array('id' => $id, 'title' => false, 'description' => false)); ?&gt;" /></p>
 
-                    <p><a href="#edit_frm_shortcode" class="cancel-frm_shortcode hide-if-no-js"><?php _e('Hide', 'formidable'); ?></a></p>
+                    <p><a href="#edit_frm_shortcode" class="cancel-frm_shortcode hide-if-no-js"><?php _e( 'Hide', 'formidable' ); ?></a></p>
                 </div>
             <?php } ?>
             </div>
 
 
-            <div class="misc-pub-section misc-pub-post-status"><label for="post_status"><?php _e('Status', 'formidable') ?>:</label>
+            <div class="misc-pub-section misc-pub-post-status"><label for="post_status"><?php _e( 'Status', 'formidable' ) ?>:</label>
                 <span id="form-status-display"><?php echo FrmFormsHelper::status_nice_name($values['status']); ?></span>
                 <?php if ( 'draft' != $values['status'] && ( ! isset($_GET['frm_action']) || 'settings' != $_GET['frm_action'] ) ) { ?>
-                <a href="#post_status" class="edit-form-status hide-if-no-js" data-slidedown="form-status-select"><span aria-hidden="true"><?php _e('Edit') ?></span> <span class="screen-reader-text"><?php _e('Edit status') ?></span></a>
+                <a href="#post_status" class="edit-form-status hide-if-no-js" data-slidedown="form-status-select"><span aria-hidden="true"><?php _e( 'Edit') ?></span> <span class="screen-reader-text"><?php _e( 'Edit status') ?></span></a>
 
                 <div id="form-status-select" class="frm_hidden">
                     <select name="frm_change_status" id="form_change_status">
                         <option value="published" <?php selected($values['status'], 'published') ?>><?php _e( 'Published' ) ?></option>
                         <option value="draft" <?php selected($values['status'], 'draft') ?>><?php _e( 'Draft' ) ?></option>
                     </select>
-                    <a href="#post_status" class="save-form-status hide-if-no-js button"><?php _e('OK') ?></a>
-                    <a href="#post_status" class="cancel-form-status hide-if-no-js button-cancel" data-slideup="form-status-select"><?php _e('Cancel') ?></a>
+                    <a href="#post_status" class="save-form-status hide-if-no-js button"><?php _e( 'OK') ?></a>
+                    <a href="#post_status" class="cancel-form-status hide-if-no-js button-cancel" data-slideup="form-status-select"><?php _e( 'Cancel') ?></a>
                 </div>
                 <?php } ?>
             </div><!-- .misc-pub-section -->
@@ -96,9 +96,9 @@
 		<div id="publishing-action">
             <span class="spinner"></span>
             <?php if ( isset($_GET['frm_action']) && 'settings' == $_GET['frm_action'] ) { ?>
-            <input type="button" value="<?php _e('Update', 'formidable'); ?>" class="frm_submit_form frm_submit_settings_btn button-primary button-large" id="frm_submit_side_top" />
+            <input type="button" value="<?php _e( 'Update', 'formidable' ); ?>" class="frm_submit_form frm_submit_settings_btn button-primary button-large" id="frm_submit_side_top" />
             <?php } else { ?>
-    	    <input type="button" value="<?php echo isset($button) ? esc_attr($button) : __('Update', 'formidable'); ?>" class="frm_submit_form frm_submit_<?php echo ( isset($values['ajax_load']) && $values['ajax_load'] ) ? '': 'no_'; ?>ajax button-primary button-large" id="frm_submit_side_top" />
+    	    <input type="button" value="<?php echo isset($button) ? esc_attr($button) : __( 'Update', 'formidable' ); ?>" class="frm_submit_form frm_submit_<?php echo ( isset($values['ajax_load']) && $values['ajax_load'] ) ? '': 'no_'; ?>ajax button-primary button-large" id="frm_submit_side_top" />
     	    <?php } ?>
 		</div>
 

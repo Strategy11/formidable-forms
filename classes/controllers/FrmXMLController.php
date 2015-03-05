@@ -3,7 +3,7 @@
 class FrmXMLController{
 
     public static function menu() {
-        add_submenu_page('formidable', 'Formidable | '. __('Import/Export', 'formidable'), __('Import/Export', 'formidable'), 'frm_edit_forms', 'formidable-import', 'FrmXMLController::route');
+        add_submenu_page('formidable', 'Formidable | '. __( 'Import/Export', 'formidable' ), __( 'Import/Export', 'formidable' ), 'frm_edit_forms', 'formidable-import', 'FrmXMLController::route');
     }
 
     public static function add_default_templates() {
@@ -52,7 +52,7 @@ class FrmXMLController{
         $forms = FrmForm::getAll("status is NULL OR status = '' OR status = 'published'", 'name');
 
         $export_types = apply_filters('frm_xml_export_types',
-            array('forms' => __('Forms', 'formidable'))
+            array('forms' => __( 'Forms', 'formidable' ))
         );
 
         $export_format = apply_filters('frm_export_formats', array(
@@ -113,7 +113,7 @@ class FrmXMLController{
         //if(is_numeric($media_id)){
 
             if ( !function_exists( 'libxml_disable_entity_loader' ) ) {
-        		$errors[] = __('XML import is not enabled on your server.', 'formidable');
+        		$errors[] = __( 'XML import is not enabled on your server.', 'formidable' );
         		self::form($errors);
         		return;
         	}

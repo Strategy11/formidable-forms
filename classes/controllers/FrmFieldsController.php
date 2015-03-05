@@ -216,7 +216,7 @@ class FrmFieldsController{
         $opt_key = $last + 1;
 
         if ( 'other' == $opt_type ) {
-            $opt = __('Other', 'formidable');
+            $opt = __( 'Other', 'formidable' );
             $other_val = '';
             $opt_key = 'other_' . $opt_key;
 
@@ -230,7 +230,7 @@ class FrmFieldsController{
             if ( $first_opt != '' ) {
                 $next_opt++;
             }
-            $opt = __('Option', 'formidable') .' '. $next_opt;
+            $opt = __( 'Option', 'formidable' ) .' '. $next_opt;
             unset($next_opt);
         }
         $field_val = $opt;
@@ -298,7 +298,7 @@ class FrmFieldsController{
         }
 
         FrmField::update($field->id, array('options' => $options));
-        echo (trim($_POST['update_value']) == '') ? __('(Blank)', 'formidable') : stripslashes($_POST['update_value']);
+        echo (trim($_POST['update_value']) == '') ? __( '(Blank)', 'formidable' ) : stripslashes($_POST['update_value']);
         wp_die();
     }
 
@@ -552,7 +552,7 @@ class FrmFieldsController{
             return;
         }
 
-        if ( FrmAppHelper::is_admin_page('formidable') ) {
+        if ( FrmAppHelper::is_admin_page('formidable' ) ) {
             return;
         }
 
@@ -597,7 +597,7 @@ class FrmFieldsController{
             return;
         }
 
-        if ( FrmAppHelper::is_admin_page('formidable') ) {
+        if ( FrmAppHelper::is_admin_page('formidable' ) ) {
             // don't load on form builder page
             return;
         }
@@ -612,7 +612,7 @@ class FrmFieldsController{
         }
 
         // don't apply this to the form builder page
-        if ( FrmAppHelper::is_admin_page('formidable') ) {
+        if ( FrmAppHelper::is_admin_page('formidable' ) ) {
             return;
         }
 

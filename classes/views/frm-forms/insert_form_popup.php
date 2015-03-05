@@ -2,7 +2,7 @@
 <div id="frm_insert_form" style="display:none;">
     <div id="frm_popup_content">
     <div class="media-modal wp-core-ui">
-    	<a href="#" class="media-modal-close"><span class="media-modal-icon"><span class="screen-reader-text"><?php _e('Close panel', 'formidable') ?></span></span></a>
+    	<a href="#" class="media-modal-close"><span class="media-modal-icon"><span class="screen-reader-text"><?php _e( 'Close panel', 'formidable' ) ?></span></span></a>
 
     	<div class="media-modal-content">
     	<div class="media-frame mode-select wp-core-ui hide-router">
@@ -21,7 +21,7 @@
         </div>
         </div>
 
-        <div class="media-frame-title"><h1><?php _e('Insert a Form', 'formidable') ?> <span class="spinner" style="float:left;"></span><span class="dashicons dashicons-arrow-down"></span></h1></div>
+        <div class="media-frame-title"><h1><?php _e( 'Insert a Form', 'formidable' ) ?> <span class="spinner" style="float:left;"></span><span class="dashicons dashicons-arrow-down"></span></h1></div>
 
         <div class="media-frame-content">
         <div class="attachments-browser">
@@ -37,7 +37,7 @@
                 <input type="text" value="" id="frm_complete_shortcode" />
             </div>
             <div class="media-toolbar-primary search-form">
-                <a href="javascript:void(0);" class="button-primary button button-large media-button-group" id="frm_insert_shortcode"><?php _e('Insert into Post', 'formidable') ?></a>
+                <a href="javascript:void(0);" class="button-primary button button-large media-button-group" id="frm_insert_shortcode"><?php _e( 'Insert into Post', 'formidable' ) ?></a>
             </div>
             </div>
         </div>

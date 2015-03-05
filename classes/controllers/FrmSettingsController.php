@@ -3,7 +3,7 @@
 class FrmSettingsController{
 
     public static function menu(){
-        add_submenu_page('formidable', 'Formidable | '. __('Global Settings', 'formidable'), __('Global Settings', 'formidable'), 'frm_change_settings', 'formidable-settings', 'FrmSettingsController::route');
+        add_submenu_page('formidable', 'Formidable | '. __( 'Global Settings', 'formidable' ), __( 'Global Settings', 'formidable' ), 'frm_change_settings', 'formidable-settings', 'FrmSettingsController::route');
     }
 
     public static function license_box(){
@@ -44,10 +44,10 @@ class FrmSettingsController{
 
             if ( empty($errors) ) {
                 $frm_settings->store();
-                $message = __('Settings Saved', 'formidable');
+                $message = __( 'Settings Saved', 'formidable' );
             }
         }else{
-            $message = __('Settings Saved', 'formidable');
+            $message = __( 'Settings Saved', 'formidable' );
         }
 
         if($stop_load == 'stop_load'){

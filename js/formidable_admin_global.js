@@ -141,7 +141,7 @@ function frmAdminPopupJS(){
         init: function(){
             jQuery('.frm_switch_sc').click(switchSc);
             jQuery('.button.frm_insert_form').click(function(){
-                populateOpts('formidable');
+                populateOpts('formidable' );
             });
             jQuery(document.getElementById('frm_insert_shortcode')).click(insertShortcode);
 

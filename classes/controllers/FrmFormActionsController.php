@@ -6,7 +6,7 @@ class FrmFormActionsController{
 
     public static function register_post_types() {
         register_post_type(self::$action_post_type, array(
-            'label' => __('Form Actions', 'formidable'),
+            'label' => __( 'Form Actions', 'formidable' ),
             'description' => '',
             'public' => false,
             'show_ui' => false,

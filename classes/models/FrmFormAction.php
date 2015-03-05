@@ -34,7 +34,7 @@ class FrmFormAction {
 	 * @param array $instance Current settings
 	 */
 	public function form($instance, $args = array()) {
-		echo '<p class="no-options-widget">' . __('There are no options for this action.', 'formidable') . '</p>';
+		echo '<p class="no-options-widget">' . __( 'There are no options for this action.', 'formidable' ) . '</p>';
 		return 'noform';
 	}
 

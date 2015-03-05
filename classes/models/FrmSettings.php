@@ -84,14 +84,14 @@ class FrmSettings{
             'jquery_css' => false,
             'accordion_js' => false,
 
-            'success_msg' => __('Your responses were successfully submitted. Thank you!', 'formidable'),
-            'blank_msg' => __('This field cannot be blank.', 'formidable'),
-            'unique_msg' => __('This value must be unique.', 'formidable'),
-            'invalid_msg' => __('There was a problem with your submission. Errors are marked below.', 'formidable'),
-            'failed_msg' => __('We\'re sorry. It looks like you\'ve  already submitted that.', 'formidable'),
-            'submit_value' => __('Submit', 'formidable'),
-            'login_msg' => __('You do not have permission to view this form.', 'formidable'),
-            'admin_permission' => __('You do not have permission to do that', 'formidable'),
+            'success_msg' => __( 'Your responses were successfully submitted. Thank you!', 'formidable' ),
+            'blank_msg' => __( 'This field cannot be blank.', 'formidable' ),
+            'unique_msg' => __( 'This value must be unique.', 'formidable' ),
+            'invalid_msg' => __( 'There was a problem with your submission. Errors are marked below.', 'formidable' ),
+            'failed_msg' => __( 'We\'re sorry. It looks like you\'ve  already submitted that.', 'formidable' ),
+            'submit_value' => __( 'Submit', 'formidable' ),
+            'login_msg' => __( 'You do not have permission to view this form.', 'formidable' ),
+            'admin_permission' => __( 'You do not have permission to do that', 'formidable' ),
 
             'email_to' => '[admin_email]',
         );
@@ -152,7 +152,7 @@ class FrmSettings{
         }
 
         if ( ! isset($this->re_msg) || empty($this->re_msg) ) {
-            $this->re_msg = __('The reCAPTCHA was not entered correctly', 'formidable');
+            $this->re_msg = __( 'The reCAPTCHA was not entered correctly', 'formidable' );
         }
 
         if ( ! isset($this->privkey) ) {

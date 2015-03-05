@@ -100,7 +100,7 @@ class FrmHooksController{
         add_action('frm_field_options_form', 'FrmFieldsController::add_conditional_update_msg', 50);
 
         // Form Actions Controller
-        if ( FrmAppHelper::is_admin_page('formidable') ) {
+        if ( FrmAppHelper::is_admin_page('formidable' ) ) {
             add_action('frm_before_update_form_settings', 'FrmFormActionsController::update_settings');
         }
         add_action('frm_after_duplicate_form', 'FrmFormActionsController::duplicate_form_actions', 20, 3);

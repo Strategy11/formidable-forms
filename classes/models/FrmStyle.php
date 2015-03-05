@@ -17,7 +17,7 @@ class FrmStyle{
         $style = array(
             'post_type'     => FrmStylesController::$post_type,
             'ID'            => '',
-            'post_title'    => __('New Style', 'formidable'),
+            'post_title'    => __( 'New Style', 'formidable' ),
             'post_name'     => $key,
             'post_content'  => $this->get_defaults(),
             'menu_order'    => '',
@@ -134,7 +134,7 @@ class FrmStyle{
         wp_mkdir_p($target_path);
 
         $saving = true;
-        $css = '/* '. __('WARNING: Any changes made to this file will be lost when your Formidable settings are updated', 'formidable') .' */'. "\n";
+        $css = '/* '. __( 'WARNING: Any changes made to this file will be lost when your Formidable settings are updated', 'formidable' ) .' */'. "\n";
 
         ob_start();
         $frm_style = $this;
@@ -211,7 +211,7 @@ class FrmStyle{
             if ( empty($temp_styles) ) {
                 // create a new style if there are none
          		$new = $this->get_new();
-         		$new->post_title = $new->post_name = __('Formidable Style', 'formidable');
+         		$new->post_title = $new->post_name = __( 'Formidable Style', 'formidable' );
          		$new->menu_order = 1;
          		$new = $this->save( (array) $new);
          		$this->update('default');

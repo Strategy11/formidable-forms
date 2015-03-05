@@ -29,12 +29,12 @@
 <?php   }
     } else {
 ?>
-        <p><label><?php _e('Trigger this action after', 'formidable') ?></label>
+        <p><label><?php _e( 'Trigger this action after', 'formidable' ) ?></label>
 <?php
         $event_labels = array(
-            'create'    => __('Create', 'formidable'),
-            'update'    => __('Update', 'formidable'),
-            'delete'    => __('Delete', 'formidable'),
+            'create'    => __( 'Create', 'formidable' ),
+            'update'    => __( 'Update', 'formidable' ),
+            'delete'    => __( 'Delete', 'formidable' ),
         );
 
         foreach ( $action_control->action_options['event'] as $event ) { ?>
@@ -49,6 +49,6 @@
 
     do_action('frm_additional_action_settings', $form_action, compact('form', 'action_control', 'action_key', 'values'));
 ?>
-    <span class="alignright frm_action_id"><?php printf( __('Action ID: %1$s', 'formidable'), $form_action->ID); ?></span>
+    <span class="alignright frm_action_id"><?php printf( __( 'Action ID: %1$s', 'formidable' ), $form_action->ID); ?></span>
     </td></tr>
 </table>

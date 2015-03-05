@@ -562,7 +562,7 @@ class FrmDb{
             foreach ( $notifications as $new_notification ) {
                 $new_notification['post_type']      = $post_type;
                 $new_notification['post_excerpt']   = 'email';
-                $new_notification['post_title']     = __('Email Notification', 'formidable');
+                $new_notification['post_title']     = __( 'Email Notification', 'formidable' );
                 $new_notification['menu_order']     = $form->id;
                 $new_notification['post_status']    = 'publish';
                 $new_notification['post_content']   = FrmAppHelper::prepare_and_encode( $new_notification['post_content'] );
@@ -599,7 +599,7 @@ class FrmDb{
         $new_action = array(
             'post_type'     => $post_type,
             'post_excerpt'  => 'wppost',
-            'post_title'    => __('Create Posts', 'formidable'),
+            'post_title'    => __( 'Create Posts', 'formidable' ),
             'menu_order'    => $form->id,
             'post_status'   => 'publish',
             'post_content'  => array(),
@@ -639,7 +639,7 @@ class FrmDb{
 
         $forms = FrmDb::get_results( $this->forms, array(), 'id, options');
 
-        $sending = __('Sending', 'formidable');
+        $sending = __( 'Sending', 'formidable' );
         $img = FrmAppHelper::plugin_url() .'/images/ajax_loader.gif';
         $old_default_html = <<<DEFAULT_HTML
 <div class="frm_submit">

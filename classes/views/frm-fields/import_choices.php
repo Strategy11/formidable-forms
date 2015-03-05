@@ -18,7 +18,7 @@
 </head>
 <body class="wp-admin no-js wp-core-ui frm_field_opts_popup <?php echo apply_filters( 'admin_body_class', '' ) . " $admin_body_class"; ?>">
 <div style="padding:10px;">
-<p class="howto"><?php _e('Edit or add field options (one per line)', 'formidable') ?></p>
+<p class="howto"><?php _e( 'Edit or add field options (one per line)', 'formidable' ) ?></p>
 <ul class="frm_prepop">
     <?php foreach($prepop as $label => $pop){ ?>
     <li><a href="javascript:void(0)" onclick='frmPrePop(<?php echo str_replace("'", '&#145;', json_encode($pop)) ?>); return false;'><?php echo esc_html( $label ) ?></a></li>

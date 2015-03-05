@@ -14,7 +14,7 @@ $li_classes = apply_filters('frm_build_field_class', $li_classes, $field );
 if ( isset($values) && isset($values['ajax_load']) && $values['ajax_load'] && isset($count) && $count > 10 && ! in_array($field['type'], array('divider', 'end_divider')) ) {
 ?>
 <li id="frm_field_id_<?php echo esc_attr( $field['id'] ); ?>" class="<?php echo esc_attr( $li_classes ) ?> frm_field_loading" data-fid="<?php echo esc_attr( $field['id'] ) ?>" data-formid="<?php echo esc_attr( 'divider' == $field['type'] ? $field['form_select'] : $field['form_id'] ); ?>" data-ftype="<?php echo esc_attr( $display['type'] ) ?>">
-<img src="<?php echo FrmAppHelper::plugin_url() ?>/images/ajax_loader.gif" alt="<?php _e('Loading', 'formidable') ?>" />
+<img src="<?php echo FrmAppHelper::plugin_url() ?>/images/ajax_loader.gif" alt="<?php _e( 'Loading', 'formidable' ) ?>" />
 <span class="frm_hidden_fdata frm_hidden"><?php echo htmlspecialchars(json_encode($field)) ?></span>
 </li>
 <?php
@@ -47,9 +47,9 @@ if ( $field['type'] == 'divider' ) { ?>
 }
 ?>
 
-    <a href="javascript:void(0);" class="frm_bstooltip alignright frm-show-hover frm-move frm-hover-icon frm_icon_font frm_move_icon" title="<?php esc_attr_e('Move Field', 'formidable') ?>"> </a>
-    <a href="#" class="frm_bstooltip alignright frm-show-hover frm-hover-icon frm_icon_font frm_delete_icon frm_delete_field" title="<?php esc_attr_e('Delete Field', 'formidable') ?>"> </a>
-    <a href="#" class="frm_bstooltip alignright frm-show-hover frm-hover-icon frm_icon_font frm_duplicate_icon" title="<?php ( $field['type'] == 'divider' ) ? esc_attr_e('Duplicate Section', 'formidable') : esc_attr_e('Duplicate Field', 'formidable') ?>"> </a>
+    <a href="javascript:void(0);" class="frm_bstooltip alignright frm-show-hover frm-move frm-hover-icon frm_icon_font frm_move_icon" title="<?php esc_attr_e( 'Move Field', 'formidable' ) ?>"> </a>
+    <a href="#" class="frm_bstooltip alignright frm-show-hover frm-hover-icon frm_icon_font frm_delete_icon frm_delete_field" title="<?php esc_attr_e( 'Delete Field', 'formidable' ) ?>"> </a>
+    <a href="#" class="frm_bstooltip alignright frm-show-hover frm-hover-icon frm_icon_font frm_duplicate_icon" title="<?php ( $field['type'] == 'divider' ) ? esc_attr_e( 'Duplicate Section', 'formidable' ) : esc_attr_e( 'Duplicate Field', 'formidable' ) ?>"> </a>
     <input type="hidden" name="frm_fields_submitted[]" value="<?php echo esc_attr($field['id']) ?>" />
     <?php do_action('frm_extra_field_actions', $field['id']); ?>
     <?php if ( $display['required'] ) { ?>
@@ -59,7 +59,7 @@ if ( $field['type'] == 'divider' ) { ?>
     <?php }
 
     ?>
-    <label class="<?php echo ( $field['type'] == 'end_divider' ) ? '' : 'frm_ipe_field_label'; ?> frm_primary_label <?php echo ($field['type'] == 'break') ? 'button': ''; ?>" id="field_label_<?php echo esc_attr( $field['id'] ); ?>"><?php echo ($field['name'] == '') ? __('(no label)') : force_balance_tags($field['name']); ?></label>
+    <label class="<?php echo ( $field['type'] == 'end_divider' ) ? '' : 'frm_ipe_field_label'; ?> frm_primary_label <?php echo ($field['type'] == 'break') ? 'button': ''; ?>" id="field_label_<?php echo esc_attr( $field['id'] ); ?>"><?php echo ($field['name'] == '') ? __( '(no label)') : force_balance_tags($field['name']); ?></label>
 
 
 <div id="field_<?php echo esc_attr( $field['id'] ) ?>_inner_container" class="frm_inner_field_container">
@@ -96,7 +96,7 @@ if ( $display['conf_field'] ) { ?>
 <div id="frm_conf_field_<?php echo esc_attr( $field['id'] ) ?>_container" class="frm_conf_field_container frm_form_fields frm_conf_details<?php echo esc_attr( $field['id'] . ( $field['conf_field'] ? '' : ' frm_hidden' ) ); ?>">
     <div id="frm_conf_field_<?php echo esc_attr( $field['id'] ) ?>_inner_container" class="frm_inner_conf_container">
     	<input type="text" id="conf_field_<?php echo esc_attr( $field['field_key'] ) ?>" name="field_options[conf_input_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['conf_input'] ); ?>" <?php do_action('frm_field_input_html', $field) ?> />
-    	<div class="frm_ipe_field_conf_desc description <?php echo ($field['conf_desc'] == '') ? 'frm-show-click' : '' ?>"><?php echo ($field['conf_desc'] == '') ? __('(Click to add description)', 'formidable') : force_balance_tags($field['conf_desc']); ?></div>
+    	<div class="frm_ipe_field_conf_desc description <?php echo ($field['conf_desc'] == '') ? 'frm-show-click' : '' ?>"><?php echo ($field['conf_desc'] == '') ? __( '(Click to add description)', 'formidable' ) : force_balance_tags($field['conf_desc']); ?></div>
     	<input type="hidden" name="field_options[conf_desc_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['conf_desc'] ); ?>" />
 </div>
     <?php if ($display['clear_on_focus']){ ?>
@@ -124,15 +124,15 @@ if ( in_array($field['type'], array( 'select', 'radio', 'checkbox')) ) { ?>
     } else if ( ! isset( $field['post_field'] ) || ! in_array( $field['post_field'], array('post_category', 'post_status') ) ) {
 ?>
         <div id="frm_add_field_<?php echo esc_attr( $field['id'] ); ?>">
-            <a href="javascript:void(0);" data-opttype="single" class="button frm_cb_button frm_add_opt"><?php _e('Add Option', 'formidable') ?></a>
+            <a href="javascript:void(0);" data-opttype="single" class="button frm_cb_button frm_add_opt"><?php _e( 'Add Option', 'formidable' ) ?></a>
 
             <?php if ( FrmAppHelper::pro_is_installed() ) { ?>
-                <a href="javascript:void(0);" id="other_button_<?php echo esc_attr( $field['id'] ); ?>" data-opttype="other" data-ftype="<?php echo esc_attr( $field['type'] ) ?>" class="button frm_cb_button frm_add_opt<?php echo ( in_array( $field['type'], array('radio', 'select') ) && $field['other'] == true ? ' frm_hidden' : '' ); ?>"><?php _e('Add "Other"', 'formidable') ?></a>
+                <a href="javascript:void(0);" id="other_button_<?php echo esc_attr( $field['id'] ); ?>" data-opttype="other" data-ftype="<?php echo esc_attr( $field['type'] ) ?>" class="button frm_cb_button frm_add_opt<?php echo ( in_array( $field['type'], array('radio', 'select') ) && $field['other'] == true ? ' frm_hidden' : '' ); ?>"><?php _e( 'Add "Other"', 'formidable' ) ?></a>
                 <input type="hidden" value="<?php echo esc_attr( $field['other'] ); ?>" id="other_input_<?php echo esc_attr( $field['id'] ); ?>" name="field_options[other_<?php echo esc_attr( $field['id'] ); ?>]">
             <?php }
 
             if ( ! isset($field['post_field']) || $field['post_field'] != 'post_category' ) { ?>
-            <a href="<?php echo esc_url(admin_url('admin-ajax.php') .'?action=frm_import_choices&field_id='. $field['id'] .'&TB_iframe=1') ?>" title="<?php echo FrmAppHelper::truncate(esc_attr(strip_tags(str_replace('"', '&quot;', $field['name']))), 20) . ' '. __('Field Choices', 'formidable'); ?>" class="thickbox frm_orange"><?php _e('Bulk Edit Options', 'formidable') ?></a>
+            <a href="<?php echo esc_url(admin_url('admin-ajax.php') .'?action=frm_import_choices&field_id='. $field['id'] .'&TB_iframe=1') ?>" title="<?php echo FrmAppHelper::truncate(esc_attr(strip_tags(str_replace('"', '&quot;', $field['name']))), 20) . ' '. __( 'Field Choices', 'formidable' ); ?>" class="thickbox frm_orange"><?php _e( 'Bulk Edit Options', 'formidable' ) ?></a>
             <?php } ?>
         </div>
 <?php
@@ -148,16 +148,16 @@ if ($display['options']){ ?>
     <div class="widget">
         <div class="widget-top">
     	    <div class="widget-title-action"><a href="javascript:void(0);" class="widget-action"></a></div>
-    		<div class="widget-title"><h4><?php _e('Field Options', 'formidable') ?> (ID <?php echo (int) $field['id'] ?>)</h4></div>
+    		<div class="widget-title"><h4><?php _e( 'Field Options', 'formidable' ) ?> (ID <?php echo (int) $field['id'] ?>)</h4></div>
         </div>
     	<div class="widget-inside">
             <table class="form-table" style="clear:none;">
                 <?php $field_types = FrmFieldsHelper::get_field_types($field['type']); ?>
-                <tr><td style="width:150px"><label><?php _e('Field Type', 'formidable') ?></label></td>
+                <tr><td style="width:150px"><label><?php _e( 'Field Type', 'formidable' ) ?></label></td>
                     <td>
-                        <div class="hide-if-no-js edit-slug-box frm_help" title="<?php _e('The field key can be used as an alternative to the field ID in many cases.', 'formidable') ?>">
-                            <?php _e('Field Key:', 'formidable') ?>
-                            <div class="<?php echo ($frm_settings->lock_keys) ? 'frm_field_key' : 'frm_ipe_field_key" title="'. __('Click to edit.', 'formidable'); ?>" ><?php echo esc_html( $field['field_key'] ); ?></div>
+                        <div class="hide-if-no-js edit-slug-box frm_help" title="<?php _e( 'The field key can be used as an alternative to the field ID in many cases.', 'formidable' ) ?>">
+                            <?php _e( 'Field Key:', 'formidable' ) ?>
+                            <div class="<?php echo ($frm_settings->lock_keys) ? 'frm_field_key' : 'frm_ipe_field_key" title="'. __( 'Click to edit.', 'formidable' ); ?>" ><?php echo esc_html( $field['field_key'] ); ?></div>
                             <?php if ( ! $frm_settings->lock_keys ) { ?>
                             <input type="hidden" name="field_options[field_key_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['field_key'] ); ?>" />
                             <?php } ?>
@@ -193,7 +193,7 @@ if ($display['options']){ ?>
                 ?>
                 <?php if ($display['required']){ ?>
                 <div class="frm_required_details<?php echo esc_attr( $field['id'] . ( $field['required'] ? '' : ' frm_hidden' ) ); ?>">
-                    <span class="howto"><?php _e('Indicate required field with', 'formidable') ?></span>
+                    <span class="howto"><?php _e( 'Indicate required field with', 'formidable' ) ?></span>
                     <input type="text" name="field_options[required_indicator_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['required_indicator'] ); ?>" />
                 </div>
                 <?php } ?>
@@ -201,29 +201,29 @@ if ($display['options']){ ?>
                 </tr>
 
                 <?php if ($display['css']){ ?>
-                <tr><td><label><?php _e('CSS layout classes', 'formidable') ?></label>
-                    <span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php _e('Add a CSS class to the field container. Use our predefined classes to align multiple fields in single row.', 'formidable') ?>" ></span>
+                <tr><td><label><?php _e( 'CSS layout classes', 'formidable' ) ?></label>
+                    <span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php _e( 'Add a CSS class to the field container. Use our predefined classes to align multiple fields in single row.', 'formidable' ) ?>" ></span>
                     </td>
                     <td><input type="text" name="field_options[classes_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['classes'] ) ?>" id="frm_classes_<?php echo esc_attr( $field['id'] ) ?>" class="frm_classes frm_long_input" />
                     </td>
                 </tr>
                 <?php } ?>
                 <?php if ($display['label_position']){ ?>
-                    <tr><td style="width:150px"><label><?php _e('Label Position', 'formidable') ?></label></td>
+                    <tr><td style="width:150px"><label><?php _e( 'Label Position', 'formidable' ) ?></label></td>
                         <td><select name="field_options[label_<?php echo esc_attr( $field['id'] ) ?>]">
-                            <option value=""<?php selected($field['label'], ''); ?>><?php _e('Default', 'formidable') ?></option>
-                            <option value="top"<?php selected($field['label'], 'top'); ?>><?php _e('Top', 'formidable') ?></option>
-                            <option value="left"<?php selected($field['label'], 'left'); ?>><?php _e('Left', 'formidable') ?></option>
-                            <option value="right"<?php selected($field['label'], 'right'); ?>><?php _e('Right', 'formidable') ?></option>
-                            <option value="inline"<?php selected($field['label'], 'inline'); ?>><?php _e('Inline (left without a set width)', 'formidable') ?></option>
-                            <option value="none"<?php selected($field['label'], 'none'); ?>><?php _e('None', 'formidable') ?></option>
-                            <option value="hidden"<?php selected($field['label'], 'hidden'); ?>><?php _e('Hidden (but leave the space)', 'formidable') ?></option>
+                            <option value=""<?php selected($field['label'], ''); ?>><?php _e( 'Default', 'formidable' ) ?></option>
+                            <option value="top"<?php selected($field['label'], 'top'); ?>><?php _e( 'Top', 'formidable' ) ?></option>
+                            <option value="left"<?php selected($field['label'], 'left'); ?>><?php _e( 'Left', 'formidable' ) ?></option>
+                            <option value="right"<?php selected($field['label'], 'right'); ?>><?php _e( 'Right', 'formidable' ) ?></option>
+                            <option value="inline"<?php selected($field['label'], 'inline'); ?>><?php _e( 'Inline (left without a set width)', 'formidable' ) ?></option>
+                            <option value="none"<?php selected($field['label'], 'none'); ?>><?php _e( 'None', 'formidable' ) ?></option>
+                            <option value="hidden"<?php selected($field['label'], 'hidden'); ?>><?php _e( 'Hidden (but leave the space)', 'formidable' ) ?></option>
                         </select>
                         </td>
                     </tr>
                 <?php } ?>
                 <?php if ($display['size']){ ?>
-                    <tr><td style="width:150px"><label><?php _e('Field Size', 'formidable') ?></label></td>
+                    <tr><td style="width:150px"><label><?php _e( 'Field Size', 'formidable' ) ?></label></td>
                         <td>
                         <?php if(in_array($field['type'], array('select', 'time', 'data'))){ ?>
                             <?php if ( ! isset($values['custom_style']) || $values['custom_style'] ) { ?>
@@ -242,7 +242,7 @@ if ($display['options']){ ?>
                 if ( $display['required'] || $display['invalid'] || $display['unique'] || $display['conf_field'] ) { ?>
                     <tr class="frm_validation_msg <?php echo ($display['invalid'] || $field['required'] || (isset($field['unique']) && $field['unique']) || ( isset($field['conf_field']) && $field['conf_field'] ) ) ? '' : 'frm_hidden'; ?>"><td colspan="2">
                     <div class="menu-settings">
-                    <h3 class="frm_no_bg"><?php _e('Validation', 'formidable') ?></h3>
+                    <h3 class="frm_no_bg"><?php _e( 'Validation', 'formidable' ) ?></h3>
 
                     <div class="frm_validation_box">
                         <?php if ($display['required']){ ?>
@@ -251,19 +251,19 @@ if ($display['options']){ ?>
                         </p>
                         <?php } ?>
                         <?php if ($display['invalid']){ ?>
-                            <p><label><?php _e('Invalid Format', 'formidable') ?></label>
+                            <p><label><?php _e( 'Invalid Format', 'formidable' ) ?></label>
                                 <input type="text" name="field_options[invalid_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['invalid'] ); ?>" />
                             </p>
                         <?php } ?>
                         <?php if($display['unique']){ ?>
                         <p class="frm_unique_details<?php echo esc_attr( $field['id'] . ( $field['unique'] ? '' : ' frm_hidden' ) ); ?>">
-                            <label><?php _e('Unique', 'formidable') ?></label>
+                            <label><?php _e( 'Unique', 'formidable' ) ?></label>
                             <input type="text" name="field_options[unique_msg_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['unique_msg'] ); ?>" />
                         </p>
                         <?php } ?>
                         <?php if ( $display['conf_field'] ) { ?>
                         <p class="frm_conf_details<?php echo esc_attr( $field['id'] . ( $field['conf_field'] ? '' : ' frm_hidden' ) ); ?>">
-                            <label><?php _e('Confirmation', 'formidable') ?></label>
+                            <label><?php _e( 'Confirmation', 'formidable' ) ?></label>
                             <input type="text" name="field_options[conf_msg_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['conf_msg'] ); ?>" />
                         </p>
                         <?php } ?>
@@ -281,7 +281,7 @@ if ($display['options']){ ?>
 if ( $field['type'] == 'divider' ) { ?>
 </div>
 <div class="frm_no_section_fields">
-	<p class="howto"><?php _e('Drag fields from your form or the sidebar into this section', 'formidable') ?></p>
+	<p class="howto"><?php _e( 'Drag fields from your form or the sidebar into this section', 'formidable' ) ?></p>
 </div>
 <ul class="start_divider frm_sorting">
 <?php

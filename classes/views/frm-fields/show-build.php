@@ -56,7 +56,7 @@
 } else if ($field['type'] == 'captcha' ) {
 ?>
     <?php if ( empty($frm_settings->pubkey) ) { ?>
-    <div class="howto" style="font-weight:bold;color:#AA0000;"><?php printf(__('Your captcha will not appear on your form until you %1$sset up%2$s the Site and Private Keys', 'formidable'), '<a href="?page=formidable-settings">', '</a>') ?></div>
+    <div class="howto" style="font-weight:bold;color:#AA0000;"><?php printf(__( 'Your captcha will not appear on your form until you %1$sset up%2$s the Site and Private Keys', 'formidable' ), '<a href="?page=formidable-settings">', '</a>') ?></div>
     <?php } ?>
     <input type="hidden" name="<?php echo esc_attr( $field_name ) ?>" value="1" />
 <?php

@@ -53,7 +53,7 @@ class FrmFormsHelper{
             <option value=""><?php echo ( $args['blank'] == 1 ) ? ' ' : '- '. esc_attr( $args['blank'] ) .' -'; ?></option>
             <?php } ?>
             <?php foreach($forms as $form){ ?>
-                <option value="<?php echo esc_attr( $form->id ); ?>" <?php selected($field_value, $form->id); ?>><?php echo '' == $form->name ? __('(no title)', 'formidable') : esc_attr( FrmAppHelper::truncate($form->name, 33) ); ?></option>
+                <option value="<?php echo esc_attr( $form->id ); ?>" <?php selected($field_value, $form->id); ?>><?php echo '' == $form->name ? __( '(no title)', 'formidable' ) : esc_attr( FrmAppHelper::truncate($form->name, 33) ); ?></option>
             <?php } ?>
         </select>
         <?php
@@ -74,7 +74,7 @@ class FrmFormsHelper{
         if ( FrmAppHelper::is_admin_page('formidable-entries') && isset($_GET['frm_action']) && in_array($_GET['frm_action'], array('edit', 'show', 'destroy_all')) ) {
             $args['frm_action'] = 'list';
             $args['form'] = 0;
-        }else if ( FrmAppHelper::is_admin_page('formidable') && isset($_GET['frm_action']) && in_array($_GET['frm_action'], array('new', 'duplicate')) ) {
+        }else if ( FrmAppHelper::is_admin_page('formidable' ) && isset($_GET['frm_action']) && in_array($_GET['frm_action'], array('new', 'duplicate')) ) {
             $args['frm_action'] = 'edit';
         }else if(isset($_GET['post'])){
             $args['form'] = 0;
@@ -83,7 +83,7 @@ class FrmFormsHelper{
 
         ?>
 		<li class="dropdown last" id="frm_bs_dropdown">
-			<a href="#" id="frm-navbarDrop" class="frm-dropdown-toggle" data-toggle="dropdown"><?php _e('Switch Form', 'formidable') ?> <b class="caret"></b></a>
+			<a href="#" id="frm-navbarDrop" class="frm-dropdown-toggle" data-toggle="dropdown"><?php _e( 'Switch Form', 'formidable' ) ?> <b class="caret"></b></a>
 		    <ul class="frm-dropdown-menu" role="menu" aria-labelledby="frm-navbarDrop">
 			<?php foreach($forms as $form){
 			    if(isset($args['id']))
@@ -91,7 +91,7 @@ class FrmFormsHelper{
 			    if(isset($args['form']))
 			        $args['form'] = $form->id;
                 ?>
-				<li><a href="<?php echo isset($base) ? add_query_arg($args, $base) : add_query_arg($args); ?>" tabindex="-1"><?php echo empty($form->name) ? __('(no title)') : FrmAppHelper::truncate($form->name, 33); ?></a></li>
+				<li><a href="<?php echo isset($base) ? add_query_arg($args, $base) : add_query_arg($args); ?>" tabindex="-1"><?php echo empty($form->name) ? __( '(no title)') : FrmAppHelper::truncate($form->name, 33); ?></a></li>
 			<?php
 			        unset($form);
 			    } ?>
@@ -215,7 +215,7 @@ class FrmFormsHelper{
      */
     public static function get_default_html($loc){
         if($loc == 'submit'){
-            $sending = __('Sending', 'formidable');
+            $sending = __( 'Sending', 'formidable' );
             $draft_link = self::get_draft_link();
             $img = '[frmurl]/images/ajax_loader.gif';
             $default_html = <<<SUBMIT_HTML
@@ -461,7 +461,7 @@ BEFORE_HTML;
         }
 
         if ( $form_id ) {
-            $val = '<a href="'. admin_url('admin.php') .'?page=formidable&frm_action=edit&id='. $form_id .'">'. ( '' == $name ? __('(no title)') : FrmAppHelper::truncate($name, 40) ) .'</a>';
+            $val = '<a href="'. admin_url('admin.php') .'?page=formidable&frm_action=edit&id='. $form_id .'">'. ( '' == $name ? __( '(no title)') : FrmAppHelper::truncate($name, 40) ) .'</a>';
 	    } else {
 	        $val = '';
 	    }
@@ -473,16 +473,16 @@ BEFORE_HTML;
         $link = '';
         $labels = array(
             'restore' => array(
-                'long'  => __('Restore from Trash', 'formidable'),
-                'short' => __('Restore', 'formidable'),
+                'long'  => __( 'Restore from Trash', 'formidable' ),
+                'short' => __( 'Restore', 'formidable' ),
             ),
             'trash' => array(
-                'long'  => __('Move to Trash', 'formidable'),
-                'short' => __('Trash', 'formidable'),
+                'long'  => __( 'Move to Trash', 'formidable' ),
+                'short' => __( 'Trash', 'formidable' ),
             ),
             'delete' => array(
-                'long'  => __('Delete Permanently', 'formidable'),
-                'short' => __('Delete', 'formidable'),
+                'long'  => __( 'Delete Permanently', 'formidable' ),
+                'short' => __( 'Delete', 'formidable' ),
             ),
         );
 
@@ -494,7 +494,7 @@ BEFORE_HTML;
             if ( EMPTY_TRASH_DAYS ) {
                 $link = '<a href="'. wp_nonce_url( $base_url .'&frm_action=trash', 'trash_form_' . $id ) .'" class="submitdelete deletion">'. $labels['trash'][$length] .'</a>';
             } else {
-                $link = '<a href="'. wp_nonce_url( $base_url .'&frm_action=destroy', 'destroy_form_' . $id ) .'" class="submitdelete deletion" onclick="return confirm(\''. __('Are you sure you want to delete this form and all its entries?', 'formidable') .'\')">'. $labels['delete'][$length] .'</a>';
+                $link = '<a href="'. wp_nonce_url( $base_url .'&frm_action=destroy', 'destroy_form_' . $id ) .'" class="submitdelete deletion" onclick="return confirm(\''. __( 'Are you sure you want to delete this form and all its entries?', 'formidable' ) .'\')">'. $labels['delete'][$length] .'</a>';
             }
         }
 
@@ -503,9 +503,9 @@ BEFORE_HTML;
 
     public static function status_nice_name($status) {
         $nice_names = array(
-            'draft'     => __('Draft', 'formidable'),
-            'trash'     => __('Trash', 'formidable'),
-            'publish'   => __('Published', 'formidable'),
+            'draft'     => __( 'Draft', 'formidable' ),
+            'trash'     => __( 'Trash', 'formidable' ),
+            'publish'   => __( 'Published', 'formidable' ),
         );
 
         if ( ! in_array($status, array_keys($nice_names)) ) {

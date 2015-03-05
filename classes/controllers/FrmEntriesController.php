@@ -9,7 +9,7 @@ class FrmEntriesController {
             $wp_roles->add_cap( 'administrator', 'frm_delete_entries' );
         }
 
-        add_submenu_page('formidable', 'Formidable | '. __('Entries', 'formidable'), __('Entries', 'formidable'), 'frm_view_entries', 'formidable-entries', 'FrmEntriesController::route' );
+        add_submenu_page('formidable', 'Formidable | '. __( 'Entries', 'formidable' ), __( 'Entries', 'formidable' ), 'frm_view_entries', 'formidable-entries', 'FrmEntriesController::route' );
 
         if ( ! isset($_GET['frm_action']) || ! in_array($_GET['frm_action'], array('edit', 'show')) ) {
             $frm_settings = FrmAppHelper::get_settings();
@@ -52,14 +52,14 @@ class FrmEntriesController {
         $screen->add_help_tab( array(
             'id'      => 'formidable-entries-tab',
             'title'   => __( 'Overview', 'formidable' ),
-            'content' => '<p>' . __('This screen provides access to all of your entries. You can customize the display of this screen to suit your workflow.', 'formidable') .'</p>
-            <p>'. __('Hovering over a row in the entries list will display action links that allow you to manage your entry.', 'formidable') . '</p>',
+            'content' => '<p>' . __( 'This screen provides access to all of your entries. You can customize the display of this screen to suit your workflow.', 'formidable' ) .'</p>
+            <p>'. __( 'Hovering over a row in the entries list will display action links that allow you to manage your entry.', 'formidable' ) . '</p>',
         ));
 
         $screen->set_help_sidebar(
-    	    '<p><strong>' . __('For more information:', 'formidable') . '</strong></p>' .
-    	    '<p><a href="http://formidablepro.com/knowledgebase/manage-entries-from-the-back-end/" target="_blank">' . __('Documentation on Entries', 'formidable') . '</a></p>' .
-    	    '<p><a href="http://formidablepro.com/help-topics/" target="_blank">' . __('Support', 'formidable') . '</a></p>'
+    	    '<p><strong>' . __( 'For more information:', 'formidable' ) . '</strong></p>' .
+    	    '<p><a href="http://formidablepro.com/knowledgebase/manage-entries-from-the-back-end/" target="_blank">' . __( 'Documentation on Entries', 'formidable' ) . '</a></p>' .
+    	    '<p><a href="http://formidablepro.com/help-topics/" target="_blank">' . __( 'Support', 'formidable' ) . '</a></p>'
     	);
 
         return $help;
@@ -70,7 +70,7 @@ class FrmEntriesController {
         $form_id = FrmEntriesHelper::get_current_form_id();
 
         $columns[ $form_id .'_id' ] = 'ID';
-        $columns[ $form_id .'_item_key' ] = __('Entry Key', 'formidable');
+        $columns[ $form_id .'_item_key' ] = __( 'Entry Key', 'formidable' );
 
         if ( ! $form_id ) {
             return $columns;
@@ -117,7 +117,7 @@ class FrmEntriesController {
         $frm_vars['cols'] = $columns;
 
         if ( FrmAppHelper::is_admin_page('formidable-entries') && ( ! isset($_GET['frm_action']) || $_GET['frm_action'] == 'list' || $_GET['frm_action'] == 'destroy' ) ) {
-            add_screen_option( 'per_page', array('label' => __('Entries', 'formidable'), 'default' => 20, 'option' => 'formidable_page_formidable_entries_per_page') );
+            add_screen_option( 'per_page', array('label' => __( 'Entries', 'formidable' ), 'default' => 20, 'option' => 'formidable_page_formidable_entries_per_page') );
         }
 
         return $columns;
@@ -290,7 +290,7 @@ class FrmEntriesController {
 	        if ( 'trash' == $form->status ) {
 	            $delete_timestamp = time() - ( DAY_IN_SECONDS * EMPTY_TRASH_DAYS );
 	            $time_to_delete = FrmAppHelper::human_time_diff( $delete_timestamp, (isset($form->options['trash_time']) ? ($form->options['trash_time']) : time()));
-	            $errors['trash'] = sprintf(__('This form is in the trash and is scheduled to be deleted permanently in %s along with any entries.', 'formidable'), $time_to_delete);
+	            $errors['trash'] = sprintf(__( 'This form is in the trash and is scheduled to be deleted permanently in %s along with any entries.', 'formidable' ), $time_to_delete);
 	            unset($time_to_delete, $delete_timestamp);
 	        }
         }else{
@@ -317,7 +317,7 @@ class FrmEntriesController {
         }
 
         if ( empty($message) && isset($_GET['import-message']) ) {
-            $message = __('Your import is complete', 'formidable');
+            $message = __( 'Your import is complete', 'formidable' );
         }
 
         require(FrmAppHelper::plugin_path() .'/classes/views/frm-entries/list.php');
@@ -363,7 +363,7 @@ class FrmEntriesController {
 
         $message = '';
         if ( FrmEntry::destroy( $params['id'] ) ) {
-            $message = __('Entry was Successfully Destroyed', 'formidable');
+            $message = __( 'Entry was Successfully Destroyed', 'formidable' );
         }
 
         self::display_list($params, $message);
@@ -396,10 +396,10 @@ class FrmEntriesController {
             $wpdb->query($wpdb->prepare("DELETE em.* FROM {$wpdb->prefix}frm_item_metas as em INNER JOIN {$wpdb->prefix}frm_items as e on (em.item_id=e.id) and form_id=%d", $form_id));
             $results = $wpdb->query($wpdb->prepare("DELETE FROM {$wpdb->prefix}frm_items WHERE form_id=%d", $form_id));
             if ( $results ) {
-                $message = __('Entries were Successfully Destroyed', 'formidable');
+                $message = __( 'Entries were Successfully Destroyed', 'formidable' );
             }
         } else {
-            $errors = __('No entries were specified', 'formidable');
+            $errors = __( 'No entries were specified', 'formidable' );
         }
 
         self::display_list($params, $message, $errors);

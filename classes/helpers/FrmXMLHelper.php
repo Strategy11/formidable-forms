@@ -481,8 +481,8 @@ class FrmXMLHelper{
         }
 
         $t_strings = array(
-            'imported'  => __('Imported', 'formidable'),
-            'updated'   => __('Updated', 'formidable'),
+            'imported'  => __( 'Imported', 'formidable' ),
+            'updated'   => __( 'Updated', 'formidable' ),
         );
 
         $message = '<ul>';
@@ -508,7 +508,7 @@ class FrmXMLHelper{
 
         if ( $message == '<ul>' ) {
             $message = '';
-            $errors[] = __('Nothing was imported or updated', 'formidable');
+            $errors[] = __( 'Nothing was imported or updated', 'formidable' );
         } else {
             $message .= '</ul>';
         }

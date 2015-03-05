@@ -99,7 +99,7 @@ class FrmAppHelper{
     * @param $page string The name of the page to check
     * @return boolean
     */
-    public static function is_admin_page($page = 'formidable') {
+    public static function is_admin_page($page = 'formidable' ) {
         global $pagenow;
         if ( $pagenow ) {
             return $pagenow == 'admin.php' && $_GET['page'] == $page;
@@ -461,22 +461,22 @@ class FrmAppHelper{
 
     public static function frm_capabilities($type = 'auto') {
         $cap = array(
-            'frm_view_forms'        => __('View Forms and Templates', 'formidable'),
-            'frm_edit_forms'        => __('Add/Edit Forms and Templates', 'formidable'),
-            'frm_delete_forms'      => __('Delete Forms and Templates', 'formidable'),
-            'frm_change_settings'   => __('Access this Settings Page', 'formidable'),
-            'frm_view_entries'      => __('View Entries from Admin Area', 'formidable'),
-            'frm_delete_entries'    => __('Delete Entries from Admin Area', 'formidable'),
+            'frm_view_forms'        => __( 'View Forms and Templates', 'formidable' ),
+            'frm_edit_forms'        => __( 'Add/Edit Forms and Templates', 'formidable' ),
+            'frm_delete_forms'      => __( 'Delete Forms and Templates', 'formidable' ),
+            'frm_change_settings'   => __( 'Access this Settings Page', 'formidable' ),
+            'frm_view_entries'      => __( 'View Entries from Admin Area', 'formidable' ),
+            'frm_delete_entries'    => __( 'Delete Entries from Admin Area', 'formidable' ),
         );
 
         if ( ! self::pro_is_installed() && 'pro' != $type) {
             return $cap;
         }
 
-        $cap['frm_create_entries'] = __('Add Entries from Admin Area', 'formidable');
-        $cap['frm_edit_entries'] = __('Edit Entries from Admin Area', 'formidable');
-        $cap['frm_view_reports'] = __('View Reports', 'formidable');
-        $cap['frm_edit_displays'] = __('Add/Edit Views', 'formidable');
+        $cap['frm_create_entries'] = __( 'Add Entries from Admin Area', 'formidable' );
+        $cap['frm_edit_entries'] = __( 'Edit Entries from Admin Area', 'formidable' );
+        $cap['frm_view_reports'] = __( 'View Reports', 'formidable' );
+        $cap['frm_edit_displays'] = __( 'Add/Edit Views', 'formidable' );
 
         return $cap;
     }
@@ -911,7 +911,7 @@ class FrmAppHelper{
 
         $values['description'] = self::use_wpautop($values['description']);
         $frm_settings = self::get_settings();
-        $is_form_builder = self::is_admin_page('formidable');
+        $is_form_builder = self::is_admin_page('formidable' );
 
         foreach ( (array) $fields as $field ) {
             // Make sure to filter default values (for placeholder text), but not on the form builder page
@@ -1196,7 +1196,7 @@ class FrmAppHelper{
 
             $trimmed_format = trim($time_format);
             if ( $time_format && ! empty($trimmed_format) ) {
-                $formatted .= ' '. __('at', 'formidable') .' '. date_i18n($time_format, strtotime($date));
+                $formatted .= ' '. __( 'at', 'formidable' ) .' '. date_i18n($time_format, strtotime($date));
             }
         }
 
@@ -1484,13 +1484,13 @@ class FrmAppHelper{
 
     public static function maybe_add_tooltip($name, $class = 'closed', $form_name = '') {
         $tooltips = array(
-            'action_title'  => __('Give this action a label for easy reference.', 'formidable'),
-            'email_to'      => __('Add one or more recipient addresses separated by a ",".  FORMAT: Name <name@email.com> or name@email.com.  [admin_email] is the address set in WP General Settings.', 'formidable'),
-            'cc'            => __('Add CC addresses separated by a ",".  FORMAT: Name <name@email.com> or name@email.com.', 'formidable'),
-            'bcc'           => __('Add BCC addresses separated by a ",".  FORMAT: Name <name@email.com> or name@email.com.', 'formidable'),
-            'reply_to'      => __('If you would like a different reply to address than the "from" address, add a single address here.  FORMAT: Name <name@email.com> or name@email.com.', 'formidable'),
-            'from'          => __('Enter the name and/or email address of the sender. FORMAT: John Bates <john@example.com> or john@example.com.', 'formidable'),
-            'email_subject' => esc_attr( sprintf( __('If you leave the subject blank, the default will be used: %1$s Form submitted on %2$s', 'formidable'), $form_name, self::site_name() ) ),
+            'action_title'  => __( 'Give this action a label for easy reference.', 'formidable' ),
+            'email_to'      => __( 'Add one or more recipient addresses separated by a ",".  FORMAT: Name <name@email.com> or name@email.com.  [admin_email] is the address set in WP General Settings.', 'formidable' ),
+            'cc'            => __( 'Add CC addresses separated by a ",".  FORMAT: Name <name@email.com> or name@email.com.', 'formidable' ),
+            'bcc'           => __( 'Add BCC addresses separated by a ",".  FORMAT: Name <name@email.com> or name@email.com.', 'formidable' ),
+            'reply_to'      => __( 'If you would like a different reply to address than the "from" address, add a single address here.  FORMAT: Name <name@email.com> or name@email.com.', 'formidable' ),
+            'from'          => __( 'Enter the name and/or email address of the sender. FORMAT: John Bates <john@example.com> or john@example.com.', 'formidable' ),
+            'email_subject' => esc_attr( sprintf( __( 'If you leave the subject blank, the default will be used: %1$s Form submitted on %2$s', 'formidable' ), $form_name, self::site_name() ) ),
         );
 
         if ( ! isset( $tooltips[ $name ] ) ) {
@@ -1613,44 +1613,44 @@ class FrmAppHelper{
 
         $wp_list_table = _get_list_table('WP_Plugins_List_Table');
         echo '<tr class="plugin-update-tr active"><th colspan="' . $wp_list_table->get_column_count() . '" class="check-column plugin-update colspanchange"><div class="update-message">'.
-        __('You are running an outdated version of Formidable. This plugin may not work correctly if you do not update Formidable.', 'formidable') .
+        __( 'You are running an outdated version of Formidable. This plugin may not work correctly if you do not update Formidable.', 'formidable' ) .
         '</div></td></tr>';
     }
 
     public static function locales( $type = 'date' ) {
         $locales = array(
-            'en' => __('English', 'formidable'),    '' => __('English/Western', 'formidable'),
-            'af' => __('Afrikaans', 'formidable'),  'sq' => __('Albanian', 'formidable'),
-            'ar' => __('Arabic', 'formidable'),     'hy' => __('Armenian', 'formidable'),
-            'az' => __('Azerbaijani', 'formidable'), 'eu' => __('Basque', 'formidable'),
-            'bs' => __('Bosnian', 'formidable'),    'bg' => __('Bulgarian', 'formidable'),
-            'ca' => __('Catalan', 'formidable'),    'zh-HK' => __('Chinese Hong Kong', 'formidable'),
-            'zh-CN' => __('Chinese Simplified', 'formidable'), 'zh-TW' => __('Chinese Traditional', 'formidable'),
-            'hr' => __('Croatian', 'formidable'),   'cs' => __('Czech', 'formidable'),
-            'da' => __('Danish', 'formidable'),     'nl' => __('Dutch', 'formidable'),
-            'en-GB' => __('English/UK', 'formidable'), 'eo' => __('Esperanto', 'formidable'),
-            'et' => __('Estonian', 'formidable'),   'fo' => __('Faroese', 'formidable'),
-            'fa' => __('Farsi/Persian', 'formidable'), 'fil' => __('Filipino', 'formidable'),
-            'fi' => __('Finnish', 'formidable'),    'fr' => __('French', 'formidable'),
-            'fr-CA' => __('French/Canadian', 'formidable'), 'fr-CH' => __('French/Swiss', 'formidable'),
-            'de' => __('German', 'formidable'),     'de-AT' => __('German/Austria', 'formidable'),
-            'de-CH' => __('German/Switzerland', 'formidable'), 'el' => __('Greek', 'formidable'),
-            'he' => __('Hebrew', 'formidable'),     'iw' => __('Hebrew', 'formidable'),
-            'hi' => __('Hindi', 'formidable'),      'hu' => __('Hungarian', 'formidable'),
-            'is' => __('Icelandic', 'formidable'),  'id' => __('Indonesian', 'formidable'),
-            'it' => __('Italian', 'formidable'),    'ja' => __('Japanese', 'formidable'),
-            'ko' => __('Korean', 'formidable'),     'lv' => __('Latvian', 'formidable'),
-            'lt' => __('Lithuanian', 'formidable'), 'ms' => __('Malaysian', 'formidable'),
-            'no' => __('Norwegian', 'formidable'),  'pl' => __('Polish', 'formidable'),
-            'pt' => __('Portuguese', 'formidable'), 'pt-BR' => __('Portuguese/Brazilian', 'formidable'),
-            'pt-PT' => __('Portuguese/Portugal', 'formidable'), 'ro' => __('Romanian', 'formidable'),
-            'ru' => __('Russian', 'formidable'),    'sr' => __('Serbian', 'formidable'),
-            'sr-SR' => __('Serbian', 'formidable'), 'sk' => __('Slovak', 'formidable'),
-            'sl' => __('Slovenian', 'formidable'),  'es' => __('Spanish', 'formidable'),
-            'es-419' => __('Spanish/Latin America', 'formidable'), 'sv' => __('Swedish', 'formidable'),
-            'ta' => __('Tamil', 'formidable'),      'th' => __('Thai', 'formidable'),
-            'tu' => __('Turkish', 'formidable'),    'tr' => __('Turkish', 'formidable'),
-            'uk' => __('Ukranian', 'formidable'),   'vi' => __('Vietnamese', 'formidable'),
+            'en' => __( 'English', 'formidable' ),    '' => __( 'English/Western', 'formidable' ),
+            'af' => __( 'Afrikaans', 'formidable' ),  'sq' => __( 'Albanian', 'formidable' ),
+            'ar' => __( 'Arabic', 'formidable' ),     'hy' => __( 'Armenian', 'formidable' ),
+            'az' => __( 'Azerbaijani', 'formidable' ), 'eu' => __( 'Basque', 'formidable' ),
+            'bs' => __( 'Bosnian', 'formidable' ),    'bg' => __( 'Bulgarian', 'formidable' ),
+            'ca' => __( 'Catalan', 'formidable' ),    'zh-HK' => __( 'Chinese Hong Kong', 'formidable' ),
+            'zh-CN' => __( 'Chinese Simplified', 'formidable' ), 'zh-TW' => __( 'Chinese Traditional', 'formidable' ),
+            'hr' => __( 'Croatian', 'formidable' ),   'cs' => __( 'Czech', 'formidable' ),
+            'da' => __( 'Danish', 'formidable' ),     'nl' => __( 'Dutch', 'formidable' ),
+            'en-GB' => __( 'English/UK', 'formidable' ), 'eo' => __( 'Esperanto', 'formidable' ),
+            'et' => __( 'Estonian', 'formidable' ),   'fo' => __( 'Faroese', 'formidable' ),
+            'fa' => __( 'Farsi/Persian', 'formidable' ), 'fil' => __( 'Filipino', 'formidable' ),
+            'fi' => __( 'Finnish', 'formidable' ),    'fr' => __( 'French', 'formidable' ),
+            'fr-CA' => __( 'French/Canadian', 'formidable' ), 'fr-CH' => __( 'French/Swiss', 'formidable' ),
+            'de' => __( 'German', 'formidable' ),     'de-AT' => __( 'German/Austria', 'formidable' ),
+            'de-CH' => __( 'German/Switzerland', 'formidable' ), 'el' => __( 'Greek', 'formidable' ),
+            'he' => __( 'Hebrew', 'formidable' ),     'iw' => __( 'Hebrew', 'formidable' ),
+            'hi' => __( 'Hindi', 'formidable' ),      'hu' => __( 'Hungarian', 'formidable' ),
+            'is' => __( 'Icelandic', 'formidable' ),  'id' => __( 'Indonesian', 'formidable' ),
+            'it' => __( 'Italian', 'formidable' ),    'ja' => __( 'Japanese', 'formidable' ),
+            'ko' => __( 'Korean', 'formidable' ),     'lv' => __( 'Latvian', 'formidable' ),
+            'lt' => __( 'Lithuanian', 'formidable' ), 'ms' => __( 'Malaysian', 'formidable' ),
+            'no' => __( 'Norwegian', 'formidable' ),  'pl' => __( 'Polish', 'formidable' ),
+            'pt' => __( 'Portuguese', 'formidable' ), 'pt-BR' => __( 'Portuguese/Brazilian', 'formidable' ),
+            'pt-PT' => __( 'Portuguese/Portugal', 'formidable' ), 'ro' => __( 'Romanian', 'formidable' ),
+            'ru' => __( 'Russian', 'formidable' ),    'sr' => __( 'Serbian', 'formidable' ),
+            'sr-SR' => __( 'Serbian', 'formidable' ), 'sk' => __( 'Slovak', 'formidable' ),
+            'sl' => __( 'Slovenian', 'formidable' ),  'es' => __( 'Spanish', 'formidable' ),
+            'es-419' => __( 'Spanish/Latin America', 'formidable' ), 'sv' => __( 'Swedish', 'formidable' ),
+            'ta' => __( 'Tamil', 'formidable' ),      'th' => __( 'Thai', 'formidable' ),
+            'tu' => __( 'Turkish', 'formidable' ),    'tr' => __( 'Turkish', 'formidable' ),
+            'uk' => __( 'Ukranian', 'formidable' ),   'vi' => __( 'Vietnamese', 'formidable' ),
         );
 
         if ( $type == 'captcha' ) {

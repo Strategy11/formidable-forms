@@ -1,6 +1,6 @@
 <div id="form_entries_page" class="wrap">
     <div class="frmicon icon32"><br/></div>
-    <h2><?php _e('Entries', 'formidable'); ?>
+    <h2><?php _e( 'Entries', 'formidable' ); ?>
         <?php do_action('frm_entry_inside_h2', $form); ?>
     </h2>
 
@@ -22,7 +22,7 @@
             </div>
             <?php if ( $form ) { ?>
             <div id="titlediv">
-            <input id="title" type="text" value="<?php echo esc_attr($form->name == '' ? __('(no title)') : $form->name) ?>" readonly="readonly" disabled="disabled" />
+            <input id="title" type="text" value="<?php echo esc_attr($form->name == '' ? __( '(no title)') : $form->name) ?>" readonly="readonly" disabled="disabled" />
             </div>
             <?php } ?>
 

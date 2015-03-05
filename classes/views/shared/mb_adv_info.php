@@ -10,10 +10,10 @@
 
 	<div id="frm-insert-fields-box" class="tabs-panel" style="max-height:none;padding-right:0;">
 	    <ul class="subsubsub" style="float:right;margin:0;">
-            <li><a href="javascript:void(0)" class="current frmids"><?php _e('IDs', 'formidable') ?></a> |</li>
-            <li><a href="javascript:void(0)" class="frmkeys"><?php _e('Keys', 'formidable') ?></a></li>
+            <li><a href="javascript:void(0)" class="current frmids"><?php _e( 'IDs', 'formidable' ) ?></a> |</li>
+            <li><a href="javascript:void(0)" class="frmkeys"><?php _e( 'Keys', 'formidable' ) ?></a></li>
         </ul>
-        <ul class="alignleft" style="margin:5px 0 0;"><li><?php _e('Fields from your form', 'formidable') ?>:</li></ul>
+        <ul class="alignleft" style="margin:5px 0 0;"><li><?php _e( 'Fields from your form', 'formidable' ) ?>:</li></ul>
         <ul class="frm_code_list frm_full_width" style="clear:both;max-height:150px;overflow:auto;">
         <?php
             if ( !empty($fields) ) {
@@ -61,20 +61,20 @@
             } ?>
         </ul>
 
-        <?php _e('Helpers', 'formidable') ?>:
+        <?php _e( 'Helpers', 'formidable' ) ?>:
         <ul class="frm_code_list">
         <?php
         $col = 'one';
         $entry_shortcodes = array(
-            'id'        => __('Entry ID', 'formidable'),
-            'key'       => __('Entry Key', 'formidable'),
-            'post_id'   => __('Post ID', 'formidable'),
-            'ip'        => __('User IP', 'formidable'),
-            'created-at' => __('Entry created', 'formidable'),
-            'updated-at' => __('Entry updated', 'formidable'),
+            'id'        => __( 'Entry ID', 'formidable' ),
+            'key'       => __( 'Entry Key', 'formidable' ),
+            'post_id'   => __( 'Post ID', 'formidable' ),
+            'ip'        => __( 'User IP', 'formidable' ),
+            'created-at' => __( 'Entry created', 'formidable' ),
+            'updated-at' => __( 'Entry updated', 'formidable' ),
             ''          => '',
-            'siteurl'   => __('Site URL', 'formidable'),
-            'sitename'  => __('Site Name', 'formidable'),
+            'siteurl'   => __( 'Site URL', 'formidable' ),
+            'sitename'  => __( 'Site Name', 'formidable' ),
         );
 
         if ( ! FrmAppHelper::pro_is_installed() ) {
@@ -82,14 +82,14 @@
         }
 
         if ($settings_tab) {
-            $entry_shortcodes['default-message'] = __('Default Msg', 'formidable');
-            $entry_shortcodes['default-html'] = __('Default HTML', 'formidable');
-            $entry_shortcodes['default-plain'] = __('Default Plain', 'formidable');
+            $entry_shortcodes['default-message'] = __( 'Default Msg', 'formidable' );
+            $entry_shortcodes['default-html'] = __( 'Default HTML', 'formidable' );
+            $entry_shortcodes['default-plain'] = __( 'Default Plain', 'formidable' );
         } else {
-            $entry_shortcodes['detaillink'] = __('Detail Link', 'formidable');
-            $entry_shortcodes['editlink location=&#34;front&#34; label=&#34;Edit&#34; page_id=x'] = __('Edit Entry Link', 'formidable');
-            $entry_shortcodes['evenodd'] = __('Even/Odd', 'formidable');
-            $entry_shortcodes['entry_count'] = __('Entry Count', 'formidable');
+            $entry_shortcodes['detaillink'] = __( 'Detail Link', 'formidable' );
+            $entry_shortcodes['editlink location=&#34;front&#34; label=&#34;Edit&#34; page_id=x'] = __( 'Edit Entry Link', 'formidable' );
+            $entry_shortcodes['evenodd'] = __( 'Even/Odd', 'formidable' );
+            $entry_shortcodes['entry_count'] = __( 'Entry Count', 'formidable' );
         }
 
 
@@ -117,10 +117,10 @@
 	<div id="frm-conditionals" class="tabs-panel" style="display:none;max-height:none;padding-right:0;">
 	<?php if ( !empty($cond_shortcodes) ) { ?>
 	    <ul class="subsubsub" style="float:right;margin:0;">
-	        <li><a href="javascript:void(0)" class="current frmids"><?php _e('IDs', 'formidable') ?></a> |</li>
-	        <li><a href="javascript:void(0)" class="frmkeys"><?php _e('Keys', 'formidable') ?></a></li>
+	        <li><a href="javascript:void(0)" class="current frmids"><?php _e( 'IDs', 'formidable' ) ?></a> |</li>
+	        <li><a href="javascript:void(0)" class="frmkeys"><?php _e( 'Keys', 'formidable' ) ?></a></li>
 	    </ul>
-	    <ul class="alignleft" style="margin:5px 0 0;"><li><?php _e('Fields from your form', 'formidable') ?>:</li></ul>
+	    <ul class="alignleft" style="margin:5px 0 0;"><li><?php _e( 'Fields from your form', 'formidable' ) ?>:</li></ul>
 	    <ul class="frm_code_list frm_full_width" style="clear:both;max-height:150px;overflow:auto;">
 		    <?php if ( !empty($fields) ) {
 		        foreach ( $fields as $f){
@@ -145,7 +145,7 @@
 		    } ?>
         </ul>
 
-        <p class="howto"><?php _e('Click a button below to insert sample logic into your view', 'formidable') ?></p>
+        <p class="howto"><?php _e( 'Click a button below to insert sample logic into your view', 'formidable' ) ?></p>
         <ul class="frm_code_list">
         <?php
         $col = 'one';
@@ -181,13 +181,13 @@
         ?>
         <?php if ( isset($file) ) { ?>
         <li class="frm_col_<?php echo esc_attr( $col ) ?>">
-	        <a href="javascript:void(0)" class="frmbutton button frm_insert_code" data-code="<?php echo esc_attr($file->id) ?> size=thumbnail html=1"><?php _e('Image Size', 'formidable') ?></a>
+	        <a href="javascript:void(0)" class="frmbutton button frm_insert_code" data-code="<?php echo esc_attr($file->id) ?> size=thumbnail html=1"><?php _e( 'Image Size', 'formidable' ) ?></a>
 	    </li>
 	    <li class="frm_col_<?php echo $col = (($col == 'one') ? 'two' : 'one') ?>">
-	        <a href="javascript:void(0)" class="frmbutton button frm_insert_code" data-code="<?php echo esc_attr($file->id) ?> show=id"><?php _e('Image ID', 'formidable') ?></a>
+	        <a href="javascript:void(0)" class="frmbutton button frm_insert_code" data-code="<?php echo esc_attr($file->id) ?> show=id"><?php _e( 'Image ID', 'formidable' ) ?></a>
 	    </li>
 	    <li class="frm_col_<?php echo $col = (($col == 'one') ? 'two' : 'one') ?>">
-	        <a href="javascript:void(0)" class="frmbutton button frm_insert_code" data-code="<?php echo esc_attr($file->id) ?> show=label"><?php _e('Image Name', 'formidable') ?></a>
+	        <a href="javascript:void(0)" class="frmbutton button frm_insert_code" data-code="<?php echo esc_attr($file->id) ?> show=label"><?php _e( 'Image Name', 'formidable' ) ?></a>
 	    </li>
 	    <?php } ?>
         </ul>
@@ -198,7 +198,7 @@
 
         if ( isset($uid) && ! empty($user_fields) ) {
             $col = 'one'; ?>
-        <p class="howto"><?php _e('Insert user information', 'formidable') ?></p>
+        <p class="howto"><?php _e( 'Insert user information', 'formidable' ) ?></p>
         <ul class="frm_code_list">
         <?php foreach($user_fields as $uk => $uf){ ?>
             <li class="frm_col_<?php echo esc_attr( $col ) ?>">
@@ -214,10 +214,10 @@
 
         if ( isset($repeat_field) ) { ?>
         <div class="clear"></div>
-        <p class="howto"><?php _e('Repeating field options', 'formidable') ?></p>
+        <p class="howto"><?php _e( 'Repeating field options', 'formidable' ) ?></p>
             <ul class="frm_code_list">
         	    <li class="frm_col_one">
-                    <a href="javascript:void(0)" class="frmbutton button frm_insert_code" data-code="<?php echo esc_attr('foreach '. $repeat_field .'][/foreach') ?>"><?php _e('For Each', 'formidable')?></a>
+                    <a href="javascript:void(0)" class="frmbutton button frm_insert_code" data-code="<?php echo esc_attr('foreach '. $repeat_field .'][/foreach') ?>"><?php _e( 'For Each', 'formidable' )?></a>
         	    </li>
             </ul>
         <?php
@@ -226,14 +226,14 @@
         if ( isset($dfe) ) { ?>
 
         <div class="clear"></div>
-        <p class="howto"><?php _e('Dynamic field options', 'formidable') ?></p>
+        <p class="howto"><?php _e( 'Dynamic field options', 'formidable' ) ?></p>
             <ul class="frm_code_list">
         	    <li class="frm_col_one">
-                    <a href="javascript:void(0)" class="frmbutton button frm_insert_code" data-code="<?php echo esc_attr($dfe .' show="created-at"') ?>"><?php _e('Creation Date', 'formidable')?></a>
+                    <a href="javascript:void(0)" class="frmbutton button frm_insert_code" data-code="<?php echo esc_attr($dfe .' show="created-at"') ?>"><?php _e( 'Creation Date', 'formidable' )?></a>
         	    </li>
         	    <?php if ( isset($ldfe) ) { ?>
         	    <li class="frm_col_two">
-                    <a href="javascript:void(0)" class="frmbutton button frm_insert_code" data-code="<?php echo esc_attr($dfe .' show="'. $ldfe .'"') ?>"><?php _e('Field From Entry', 'formidable')?></a>
+                    <a href="javascript:void(0)" class="frmbutton button frm_insert_code" data-code="<?php echo esc_attr($dfe .' show="'. $ldfe .'"') ?>"><?php _e( 'Field From Entry', 'formidable' )?></a>
         	    </li>
         	    <?php } ?>
             </ul>

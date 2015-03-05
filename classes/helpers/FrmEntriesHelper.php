@@ -295,13 +295,13 @@ class FrmEntriesHelper{
             $values['browser'] = self::get_browser($data['browser']);
             $values['referrer'] = $data['referrer'];
         } else {
-            //$content .= "\r\n\r\n" . __('User Information', 'formidable') ."\r\n";
-            $values['ip'] = array('label' => __('IP Address', 'formidable'), 'val' => $atts['entry']->ip);
+            //$content .= "\r\n\r\n" . __( 'User Information', 'formidable' ) ."\r\n";
+            $values['ip'] = array('label' => __( 'IP Address', 'formidable' ), 'val' => $atts['entry']->ip);
             $values['browser'] = array(
-                'label' => __('User-Agent (Browser/OS)', 'formidable'),
+                'label' => __( 'User-Agent (Browser/OS)', 'formidable' ),
                 'val' => self::get_browser($data['browser']),
             );
-            $values['referrer'] = array('label' => __('Referrer', 'formidable'), 'val' => $data['referrer']);
+            $values['referrer'] = array('label' => __( 'Referrer', 'formidable' ), 'val' => $data['referrer']);
         }
     }
 
@@ -674,8 +674,8 @@ class FrmEntriesHelper{
     }
 
     public static function get_browser($u_agent) {
-        $bname = __('Unknown', 'formidable');
-        $platform = __('Unknown', 'formidable');
+        $bname = __( 'Unknown', 'formidable' );
+        $platform = __( 'Unknown', 'formidable' );
         $ub = '';
 
         //First get the platform?
