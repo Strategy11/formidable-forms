@@ -77,13 +77,7 @@ class FrmEntriesHelper{
             }
 
             $field_array = apply_filters('frm_setup_new_fields_vars', $field_array, $field);
-
-            foreach ( (array) $field->field_options as $k => $v ) {
-                if ( ! isset( $field_array[ $k ] ) ) {
-                    $field_array[ $k ] = $v;
-                }
-                unset($k, $v);
-            }
+            $field_array = array_merge( $field->field_options, $field_array );
 
             $values['fields'][] = $field_array;
 

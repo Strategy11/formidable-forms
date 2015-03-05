@@ -82,13 +82,12 @@ class FrmEntriesListHelper extends FrmListHelper {
     	$input_id = $input_id . '-search-input';
         $search_str = isset($_REQUEST['s']) ? esc_attr( stripslashes( $_REQUEST['s'] ) ) : '';
 
-    	if ( ! empty( $_REQUEST['orderby'] ) ) {
-    		echo '<input type="hidden" name="orderby" value="' . esc_attr( $_REQUEST['orderby'] ) . '" />';
-    	}
+        foreach ( array('orderby', 'order') as $get_var ) {
+        	if ( ! empty( $_REQUEST[ $get_var ] ) ) {
+        		echo '<input type="hidden" name="'. esc_attr( $get_var ) .'" value="' . esc_attr( $_REQUEST[ $get_var ] ) . '" />';
+        	}
+        }
 
-    	if ( ! empty( $_REQUEST['order'] ) ) {
-    		echo '<input type="hidden" name="order" value="' . esc_attr( $_REQUEST['order'] ) . '" />';
-    	}
 ?>
 <div class="search-box frm_sidebar">
     <label class="screen-reader-text" for="<?php echo esc_attr( $input_id ) ?>"><?php echo esc_attr( $text ); ?>:</label>

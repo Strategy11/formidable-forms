@@ -371,14 +371,7 @@ DEFAULT_HTML;
         }
 
         foreach (array('description' => $field['description'], 'required_label' => $required, 'error' => $error) as $code => $value){
-            if ( ! $value || $value == '' ) {
-                $html = preg_replace('/(\[if\s+'.$code.'\])(.*?)(\[\/if\s+'.$code.'\])/mis', '', $html);
-            } else{
-                $html = str_replace('[if '.$code.']', '', $html);
-        	    $html = str_replace('[/if '.$code.']', '', $html);
-            }
-
-            $html = str_replace('['.$code.']', $value, $html);
+            self::remove_inline_conditions( ( $value && $value != '' ), $code, $value, $html );
         }
 
         //replace [required_class]
@@ -485,6 +478,17 @@ DEFAULT_HTML;
             $html = str_replace('[collapse_this]', '', $html);
 
         return $html;
+    }
+
+    public static function remove_inline_conditions( $no_vars, $code, $replace_with, &$html ) {
+        if ( $no_vars ) {
+            $html = str_replace( '[if '. $code.']', '', $html );
+    	    $html = str_replace( '[/if '. $code.']', '', $html );
+        } else {
+            $html = preg_replace( '/(\[if\s+'. $code .'\])(.*?)(\[\/if\s+'. $code .'\])/mis', '', $html );
+        }
+
+        $html = str_replace( '['. $code .']', $replace_with, $html );
     }
 
     public static function get_shortcode_tag($shortcodes, $short_key, $args) {

@@ -247,12 +247,9 @@ class FrmAppHelper{
             return;
         }
 
-        if ( isset($_GET['action']) ) {
-            $_SERVER['REQUEST_URI'] = str_replace('&action='. $_GET['action'], '', $_SERVER['REQUEST_URI']);
-        }
-
-        if ( isset($_GET['action2']) ) {
-            $_SERVER['REQUEST_URI'] = str_replace('&action='. $_GET['action2'], '', $_SERVER['REQUEST_URI']);
+        $new_action = isset( $_GET['action'] ) ? sanitize_text_field( $_GET['action'] ) : ( isset( $_GET['action2'] ) ? sanitize_text_field( $_GET['action2'] ) : '' );
+        if ( ! empty( $new_action ) ) {
+            $_SERVER['REQUEST_URI'] = str_replace( '&action='. $new_action, '', $_SERVER['REQUEST_URI'] );
         }
     }
 
@@ -974,12 +971,7 @@ class FrmAppHelper{
             $field_array['unique_msg'] = '';
         }
 
-        foreach ( (array) $field->field_options as $k => $v ) {
-            if ( ! isset( $field_array[ $k ] ) ) {
-                $field_array[ $k ] = $v;
-            }
-            unset($k, $v);
-        }
+        $field_array = array_merge( $field->field_options, $field_array );
 
         $values['fields'][ $field->id ] = $field_array;
     }
@@ -1438,38 +1430,22 @@ class FrmAppHelper{
                 switch ( $p ) {
                     case 0:
                         $l1 = $name;
-                        if ( $name == '' ) {
-                            $vars[] = $this_val;
-                        } else if ( ! isset( $vars[ $l1 ] ) ) {
-                            $vars[ $l1 ] = $this_val;
-                        }
+                        self::add_value_to_array( $name, $l1, $this_val, $vars );
                     break;
 
                     case 1:
                         $l2 = $name;
-                        if ( $name == '' ) {
-                            $vars[ $l1 ][] = $this_val;
-                        } else if ( ! isset( $vars[ $l1 ][ $l2 ] ) ) {
-                            $vars[ $l1 ][ $l2 ] = $this_val;
-                        }
+                        self::add_value_to_array( $name, $l2, $this_val, $vars[ $l1 ] );
                     break;
 
                     case 2:
                         $l3 = $name;
-                        if ( $name == '' ) {
-                            $vars[ $l1 ][ $l2 ][] = $this_val;
-                        } else if ( ! isset( $vars[ $l1 ][ $l2 ][ $l3 ] ) ) {
-                            $vars[ $l1 ][ $l2 ][ $l3 ] = $this_val;
-                        }
+                        self::add_value_to_array( $name, $l3, $this_val, $vars[ $l1 ][ $l2 ] );
                     break;
 
                     case 3:
                         $l4 = $name;
-                        if ( $name == '' ) {
-                            $vars[ $l1 ][ $l2 ][ $l3 ][] = $this_val;
-                        } else if ( ! isset( $vars[ $l1 ][ $l2 ][ $l3 ][ $l4 ] ) ) {
-                            $vars[ $l1 ][ $l2 ][ $l3 ][ $l4 ] = $this_val;
-                        }
+                        self::add_value_to_array( $name, $l4, $this_val, $vars[ $l1 ][ $l2 ][ $l3 ] );
                     break;
                 }
 
@@ -1480,6 +1456,14 @@ class FrmAppHelper{
         }
 
         return $vars;
+    }
+
+    public static function add_value_to_array( $name, $l1, $val, &$vars ) {
+        if ( $name == '' ) {
+            $vars[] = $val;
+        } else if ( ! isset( $vars[ $l1 ] ) ) {
+            $vars[ $l1 ] = $val;
+        }
     }
 
     public static function maybe_add_tooltip($name, $class = 'closed', $form_name = '') {

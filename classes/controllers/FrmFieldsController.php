@@ -533,6 +533,10 @@ class FrmFieldsController{
     }
 
     private static function add_input_classes($field, array &$class) {
+        if ( $field['type'] == 'hidden' || $field['type'] == 'user_id' ) {
+            return;
+        }
+
         global $frm_vars;
         if ( is_admin() && ! FrmAppHelper::is_preview_page() && ! in_array($field['type'], array('scale', 'radio', 'checkbox', 'data')) ) {
             $class[] = 'dyn_default_value';

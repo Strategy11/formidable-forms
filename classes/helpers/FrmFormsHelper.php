@@ -331,13 +331,7 @@ BEFORE_HTML;
                 $replace_with = '';
             }
 
-            if ( FrmAppHelper::is_true($show) && $replace_with != '' ) {
-                $html = str_replace('[if '.$code.']', '', $html);
-        	    $html = str_replace('[/if '.$code.']', '', $html);
-            } else {
-                $html = preg_replace('/(\[if\s+'.$code.'\])(.*?)(\[\/if\s+'.$code.'\])/mis', '', $html);
-            }
-            $html = str_replace('['.$code.']', $replace_with, $html);
+            FrmFieldsHelper::remove_inline_conditions( ( FrmAppHelper::is_true($show) && $replace_with != '' ), $code, $replace_with, $html );
         }
 
         //replace [form_key]
