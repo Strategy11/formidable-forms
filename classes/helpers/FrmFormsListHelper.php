@@ -136,15 +136,22 @@ class FrmFormsListHelper extends FrmListHelper {
 
 ?>
     <div class="alignleft actions" style="overflow:visible;">
-    <div class="button dropdown" style="margin-top:1px;">
-        <a href="#" id="frm-templateDrop" class="frm-dropdown-toggle" data-toggle="dropdown"><?php _e( 'Create New Template', 'formidable' ) ?> <b class="caret"></b></a>
+    <div class="dropdown" style="margin-top:1px;">
+        <a href="#" id="frm-templateDrop" class="frm-dropdown-toggle button" data-toggle="dropdown"><?php _e( 'Create New Template', 'formidable' ) ?> <b class="caret"></b></a>
 		<ul class="frm-dropdown-menu" role="menu" aria-labelledby="frm-templateDrop">
-		<?php foreach ( $forms as $form ) {
+		<?php
+        if ( empty( $forms ) ) { ?>
+            <li class="frm_dropdown_li"><?php _e( 'You have not created any forms yet. <br/>Please create a form and then come back.', 'formidable' ) ?></li>
+        <?php
+        } else {
+            foreach ( $forms as $form ) {
 		        $args['id'] = $form->id; ?>
 			<li><a href="<?php echo add_query_arg($args, $base); ?>" tabindex="-1"><?php echo empty($form->name) ? __( '(no title)') : FrmAppHelper::truncate($form->name, 33); ?></a></li>
 			<?php
 			    unset($form);
-			} ?>
+			}
+        }
+        ?>
 		</ul>
 	</div>
 	</div>
