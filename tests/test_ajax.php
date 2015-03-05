@@ -110,6 +110,7 @@ class Tests_Frm_Ajax extends WP_Ajax_UnitTestCase {
             $this->assertTrue( $e->getMessage() ? true : false );
         }
 
+        global $wpdb;
         $exists = $wpdb->query( 'DESCRIBE '. $wpdb->prefix . 'frm_fields' );
         $this->assertTrue($exists ? true : false);
 	}

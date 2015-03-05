@@ -188,9 +188,13 @@ class WP_Test_WordPress_Plugin_Tests extends WP_UnitTestCase {
         $form->options['notification'] = $notification;
 
         global $wpdb;
-        $wpdb->update($wpdb->prefix .'frm_forms', array('options' => maybe_serialize($form->options)), array('id' => $form->id));
+        $updated = $wpdb->update($wpdb->prefix .'frm_forms', array('options' => maybe_serialize($form->options)), array('id' => $form->id));
+        wp_cache_delete( $form->id, 'frm_form');
+        $this->assertEquals( $updated, 1 );
 
         $form = FrmForm::getOne('contact-db12');
+
+        $this->assertTrue( isset($form->options['notification']) );
         $this->assertEquals( $form->options['notification'][0]['email_to'], 'emailto@test.com' );
 
         // migrate data
