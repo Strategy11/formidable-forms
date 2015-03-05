@@ -128,7 +128,7 @@ class FrmXMLHelper{
             $this_form = FrmForm::getAll($edit_query, '', 1);
             unset($edit_query);
 
-            if ( !empty($this_form) ) {
+            if ( ! empty( $this_form ) ) {
                 $old_id = $form_id = $this_form->id;
                 FrmForm::update($form_id, $form );
                 $imported['updated']['forms']++;
@@ -217,7 +217,7 @@ class FrmXMLHelper{
 
 
     		// Delete any fields attached to this form that were not included in the template
-    		if ( isset($form_fields) && !empty($form_fields) ) {
+    		if ( isset( $form_fields ) && ! empty( $form_fields ) ) {
                 foreach ($form_fields as $field){
                     if ( is_object($field) ) {
                         FrmField::destroy($field->id);
@@ -364,15 +364,15 @@ class FrmXMLHelper{
     		        }
 
                     $check_dup_array = array();
-    		        if ( isset($m['value']['order_by']) && !empty($m['value']['order_by']) ) {
-    		            if ( is_numeric($m['value']['order_by']) && isset($frm_duplicate_ids[$m['value']['order_by']]) ) {
-    		                $m['value']['order_by'] = $frm_duplicate_ids[$m['value']['order_by']];
-    		            } else if ( is_array($m['value']['order_by']) ) {
+    		        if ( isset( $m['value']['order_by'] ) && ! empty( $m['value']['order_by'] ) ) {
+    		            if ( is_numeric( $m['value']['order_by'] ) && isset( $frm_duplicate_ids[ $m['value']['order_by'] ] ) ) {
+    		                $m['value']['order_by'] = $frm_duplicate_ids[ $m['value']['order_by'] ];
+    		            } else if ( is_array( $m['value']['order_by'] ) ) {
                             $check_dup_array[] = 'order_by';
     		            }
     		        }
 
-    		        if ( isset($m['value']['where']) && !empty($m['value']['where']) ) {
+    		        if ( isset( $m['value']['where'] ) && ! empty( $m['value']['where'] ) ) {
     		            $check_dup_array[] = 'where';
     		        }
 

@@ -90,7 +90,7 @@ class FrmFormActionsHelper{
             $met[ $stop ] = $stop;
         }
 
-        if ( $notification['conditions']['any_all'] == 'all' && !empty($met) && isset($met[0]) && isset($met[1]) ) {
+        if ( $notification['conditions']['any_all'] == 'all' && ! empty( $met ) && isset( $met[0] ) && isset( $met[1] ) ) {
             $stop = ($notification['conditions']['send_stop'] == 'send') ? true : false;
         } else if ( $notification['conditions']['any_all'] == 'any' && $notification['conditions']['send_stop'] == 'send' && isset($met[0]) ) {
             $stop = false;

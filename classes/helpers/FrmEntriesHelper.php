@@ -3,7 +3,7 @@ if(!defined('ABSPATH')) die('You are not allowed to call this page directly.');
 
 class FrmEntriesHelper{
 
-    public static function setup_new_vars($fields, $form='', $reset=false){
+    public static function setup_new_vars( $fields, $form = '', $reset = false ) {
         global $frm_vars;
         $values = array();
         foreach ( array('name' => '', 'description' => '', 'item_key' => '') as $var => $default ) {
@@ -375,7 +375,7 @@ class FrmEntriesHelper{
     public static function replace_default_message($message, $atts) {
         if ( strpos($message, '[default-message') === false &&
             strpos($message, '[default_message') === false &&
-            !empty($message) ) {
+            ! empty( $message ) ) {
             return $message;
         }
 

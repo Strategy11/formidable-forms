@@ -142,7 +142,7 @@ class FrmFieldsHelper{
             unset($var, $default);
         }
 
-        if ( isset($setting) && !empty($setting) ) {
+        if ( isset( $setting ) && ! empty( $setting ) ) {
             if ( 'data' == $type ) {
                 $values['field_options']['data_type'] = $setting;
             }else{
@@ -184,7 +184,7 @@ class FrmFieldsHelper{
         return apply_filters('frm_field_html_id', 'field_'. $field['field_key'] . $plus, $field);
     }
 
-    public static function setup_edit_vars($record, $doing_ajax=false){
+    public static function setup_edit_vars( $record, $doing_ajax = false ) {
         $values = array('id' => $record->id, 'form_id' => $record->form_id);
         $defaults = array('name' => $record->name, 'description' => $record->description);
         $default_opts = array(
@@ -232,7 +232,7 @@ class FrmFieldsHelper{
         return apply_filters('frm_setup_edit_field_vars', $values, array('doing_ajax' => $doing_ajax));
     }
 
-    public static function get_default_field_opts($type, $field, $limit=false){
+    public static function get_default_field_opts( $type, $field, $limit = false ) {
         $field_options = array(
             'size' => '', 'max' => '', 'label' => '', 'blank' => '',
             'required_indicator' => '*', 'invalid' => '', 'separate_value' => 0,
@@ -292,7 +292,7 @@ class FrmFieldsHelper{
         return $msg;
     }
 
-    public static function get_form_fields($form_id, $error=false){
+    public static function get_form_fields( $form_id, $error = false ) {
         $fields = FrmField::get_all_for_form($form_id);
         $fields = apply_filters('frm_get_paged_fields', $fields, $form_id, $error);
         return $fields;
@@ -412,9 +412,10 @@ DEFAULT_HTML;
         }
 
         //insert custom CSS classes
-        if(!empty($field['classes'])){
-            if(!strpos($html, 'frm_form_field '))
+        if ( ! empty( $field['classes'] ) ) {
+            if ( ! strpos( $html, 'frm_form_field ') ) {
                 $error_class .= ' frm_form_field';
+            }
             $error_class .= ' '. $field['classes'];
         }
         $html = str_replace('[error_class]', $error_class, $html);

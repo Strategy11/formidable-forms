@@ -7,7 +7,7 @@ if(class_exists('FrmField'))
 class FrmField{
     static $use_cache = true;
 
-    public static function create( $values, $return=true ){
+    public static function create( $values, $return = true ) {
         global $wpdb, $frm_duplicate_ids;
 
         $new_values = array();
@@ -56,7 +56,7 @@ class FrmField{
         }
     }
 
-    public static function duplicate($old_form_id, $form_id, $copy_keys=false, $blog_id=false){
+    public static function duplicate( $old_form_id, $form_id, $copy_keys = false, $blog_id = false ) {
         global $frm_duplicate_ids;
         $fields = self::getAll(array('fi.form_id' => $old_form_id), 'field_order', '', $blog_id);
         foreach ( (array) $fields as $field ) {
@@ -349,12 +349,12 @@ class FrmField{
                 wp_cache_set($result->field_key, $result, 'frm_field');
 
                 $results[$r_key]->field_options = maybe_unserialize($result->field_options);
-                if ( isset($results[$r_key]->field_options['format']) && !empty($results[$r_key]->field_options['format']) ) {
-                    $results[$r_key]->field_options['format'] = addslashes($results[$r_key]->field_options['format']);
+                if ( isset( $results[ $r_key ]->field_options['format'] ) && ! empty( $results[ $r_key ]->field_options['format'] ) ) {
+                    $results[ $r_key ]->field_options['format'] = addslashes( $results[ $r_key ]->field_options['format'] );
                 }
 
-                $results[$r_key]->options = maybe_unserialize($result->options);
-                $results[$r_key]->default_value = maybe_unserialize($result->default_value);
+                $results[ $r_key ]->options = maybe_unserialize( $result->options );
+                $results[ $r_key ]->default_value = maybe_unserialize( $result->default_value );
                 $form_id = $result->form_id;
 
                 unset($r_key, $result);
@@ -366,7 +366,7 @@ class FrmField{
             wp_cache_set($results->field_key, $results, 'frm_field');
 
             $results->field_options = maybe_unserialize($results->field_options);
-            if ( isset($results->field_options['format']) && !empty($results->field_options['format']) ) {
+            if ( isset( $results->field_options['format'] ) && ! empty( $results->field_options['format'] ) ) {
                 $results->field_options['format'] = addslashes($results->field_options['format']);
             }
 

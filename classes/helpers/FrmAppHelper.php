@@ -28,7 +28,7 @@ class FrmAppHelper{
         return dirname(dirname(dirname(__FILE__)));
     }
 
-    public static function plugin_url($url=''){
+    public static function plugin_url( $url = '' ) {
         //prevously FRM_URL constant
         if ( empty($url) ) {
             $url = plugins_url('', self::plugin_folder() .'/formidable.php');
@@ -190,7 +190,7 @@ class FrmAppHelper{
         }
     }
 
-    public static function get_param($param, $default='', $src='get'){
+    public static function get_param( $param, $default = '', $src = 'get' ) {
         if(strpos($param, '[')){
             $params = explode('[', $param);
             $param = $params[0];
@@ -219,7 +219,7 @@ class FrmAppHelper{
         return $value;
     }
 
-    public static function get_post_param($param, $default=''){
+    public static function get_post_param( $param, $default = '' ) {
         return isset( $_POST[ $param ] ) ? stripslashes_deep( maybe_unserialize( $_POST[ $param ] ) ) : $default;
     }
 
@@ -408,7 +408,7 @@ class FrmAppHelper{
       return get_posts( array('post_type' => 'page', 'post_status' => array('publish', 'private'), 'numberposts' => 999, 'orderby' => 'title', 'order' => 'ASC'));
     }
 
-    public static function wp_pages_dropdown($field_name, $page_id, $truncate=false){
+    public static function wp_pages_dropdown( $field_name, $page_id, $truncate = false ) {
         $pages = self::get_pages();
     ?>
         <select name="<?php echo esc_attr($field_name); ?>" id="<?php echo esc_attr($field_name); ?>" class="frm-pages-dropdown">
@@ -663,7 +663,7 @@ class FrmAppHelper{
                 unset($opt_key, $opt_val, $temp_val);
             }
             // For multi-select dropdowns only
-            if ( is_array( $field['value'] ) && !empty( $field['value'] ) ) {
+            if ( is_array( $field['value'] ) && ! empty( $field['value'] ) ) {
                 $other_val = reset( $field['value'] );
             }
         }
@@ -849,12 +849,12 @@ class FrmAppHelper{
      * @param string $table_name
      * @param string $column
      */
-    public static function get_unique_key($name='', $table_name, $column, $id = 0, $num_chars = 6){
+    public static function get_unique_key( $name = '', $table_name, $column, $id = 0, $num_chars = 6 ) {
         global $wpdb;
 
         $key = '';
 
-        if (!empty($name)){
+        if ( ! empty( $name ) ) {
             $key = sanitize_key($name);
         }
 
@@ -890,7 +890,7 @@ class FrmAppHelper{
     /**
      * @param string $table
      */
-    public static function setup_edit_vars($record, $table, $fields='', $default=false, $post_values=array()){
+    public static function setup_edit_vars( $record, $table, $fields = '', $default = false, $post_values = array() ) {
         if ( ! $record ) {
             return false;
         }

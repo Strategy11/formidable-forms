@@ -45,7 +45,7 @@ class FrmFormsController{
         return self::display_forms_list($params, '', false, $errors);
     }
 
-    public static function new_form($values=false){
+    public static function new_form( $values = false ) {
         FrmAppHelper::permission_check('frm_edit_forms');
 
         global $frm_vars;
@@ -73,7 +73,7 @@ class FrmFormsController{
         }
     }
 
-    public static function create($values=false){
+    public static function create( $values = false ) {
         FrmAppHelper::permission_check('frm_edit_forms');
 
         global $frm_vars;
@@ -109,14 +109,14 @@ class FrmFormsController{
         }
     }
 
-    public static function edit($values=false){
+    public static function edit( $values = false ) {
         FrmAppHelper::permission_check('frm_edit_forms');
 
         $id = isset($values['id']) ? (int) $values['id'] : (int) FrmAppHelper::get_param('id');
         return self::get_edit_vars($id);
     }
 
-    public static function settings($id=false, $message=''){
+    public static function settings( $id = false, $message = '' ) {
         FrmAppHelper::permission_check('frm_edit_forms');
 
         if ( ! $id || ! is_numeric($id) ) {
@@ -166,7 +166,7 @@ class FrmFormsController{
         wp_die();
     }
 
-    public static function update($values=false){
+    public static function update( $values = false ) {
         FrmAppHelper::permission_check('frm_edit_forms');
 
         if ( empty($values) ) {
@@ -435,7 +435,7 @@ class FrmFormsController{
         wp_die();
     }
 
-    public static function display_forms_list($params=false, $message='', $current_page_ov = false, $errors = array()){
+    public static function display_forms_list( $params = false, $message = '', $current_page_ov = false, $errors = array() ) {
         FrmAppHelper::permission_check('frm_view_forms');
 
         global $wpdb, $frm_vars;
@@ -497,7 +497,7 @@ class FrmFormsController{
 	public static function hidden_columns($result){
         $return = false;
         foreach ( (array) $result as $r ) {
-            if(!empty($r)){
+            if ( ! empty( $r ) ) {
                 $return = true;
                 break;
             }
@@ -524,7 +524,7 @@ class FrmFormsController{
         return $save;
     }
 
-    private static function get_edit_vars($id, $errors = '', $message='', $create_link=false){
+    private static function get_edit_vars( $id, $errors = '', $message = '', $create_link = false ) {
         global $frm_vars;
 
         $form = FrmForm::getOne( $id );
@@ -567,7 +567,7 @@ class FrmFormsController{
         }
     }
 
-    public static function get_settings_vars($id, $errors = '', $message=''){
+    public static function get_settings_vars( $id, $errors = '', $message = '' ) {
         global $frm_vars;
 
         $form = FrmForm::getOne( $id );
@@ -629,7 +629,7 @@ class FrmFormsController{
 	    wp_die();
 	}
 
-    public static function filter_content($content, $form, $entry=false){
+    public static function filter_content( $content, $form, $entry = false ) {
         if ( ! $entry || ! is_object($entry) ) {
             if ( ! $entry || ! is_numeric($entry) ) {
                 $entry = ( $_POST && isset($_POST['id']) ) ? $_POST['id'] : false;
@@ -703,18 +703,18 @@ class FrmFormsController{
             break;
         }
 
-        if ( isset($message) && !empty($message) ) {
+        if ( isset( $message ) && ! empty( $message ) ) {
             echo '<div id="message" class="updated" style="padding:5px;">'. $message .'</div>';
         }
 
         return $errors;
     }
 
-    public static function add_default_templates($path, $default=true, $template=true){
+    public static function add_default_templates( $path, $default = true, $template = true ) {
         _deprecated_function( __FUNCTION__, '1.07.05', 'FrmXMLController::add_default_templates()' );
 
         $path = untrailingslashit(trim($path));
-        $templates = glob($path."/*.php");
+        $templates = glob( $path .'/*.php' );
 
         for($i = count($templates) - 1; $i >= 0; $i--){
             $filename = str_replace( '.php', '', str_replace( $path.'/', '', $templates[ $i ] ) );
@@ -966,7 +966,7 @@ class FrmFormsController{
         ob_end_clean();
 
         // check if minimizing is turned on
-        if ( isset($atts['minimize']) && !empty($atts['minimize']) ) {
+        if ( isset( $atts['minimize'] ) && ! empty( $atts['minimize'] ) ) {
             $contents = str_replace(array("\r\n", "\r", "\n", "\t", "    "), '', $contents);
         }
 
@@ -990,7 +990,7 @@ class FrmFormsController{
             $errors = isset( $frm_vars['created_entries'][ $form->id ] ) ? $frm_vars['created_entries'][ $form->id ]['errors'] : array();
         }
 
-        $fields = FrmFieldsHelper::get_form_fields($form->id, (isset($errors) && !empty($errors)));
+        $fields = FrmFieldsHelper::get_form_fields( $form->id, ( isset( $errors ) && ! empty( $errors ) ) );
 
         if ( $params['action'] != 'create' || $params['posted_form_id'] != $form->id || ! $_POST ) {
             do_action('frm_display_form_action', $params, $fields, $form, $title, $description);

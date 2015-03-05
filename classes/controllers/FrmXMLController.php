@@ -203,7 +203,7 @@ class FrmXMLController{
     	header( 'Content-Type: text/xml; charset=' . get_option( 'blog_charset' ), true );
 
         //make sure ids are numeric
-    	if ( is_array($args['ids']) && !empty($args['ids']) ) {
+    	if ( is_array( $args['ids'] ) && ! empty( $args['ids'] ) ) {
 	        $args['ids'] = array_filter( $args['ids'], 'is_numeric' );
 	    }
 

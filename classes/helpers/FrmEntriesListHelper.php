@@ -93,7 +93,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 <div class="search-box frm_sidebar">
     <label class="screen-reader-text" for="<?php echo esc_attr( $input_id ) ?>"><?php echo esc_attr( $text ); ?>:</label>
     <input type="text" id="<?php echo esc_attr( $input_id ) ?>" name="s" value="<?php echo esc_attr( $search_str ); ?>" />
-    <?php if ( isset($field_list) && !empty($field_list) ) { ?>
+    <?php if ( isset( $field_list ) && ! empty( $field_list ) ) { ?>
     <select name="fid" class="hide-if-js">
         <option value="">&mdash; <?php _e( 'All Fields', 'formidable' ) ?> &mdash;</option>
         <option value="created_at" <?php selected($fid, 'created_at') ?>><?php _e( 'Entry creation date', 'formidable' ) ?></option>

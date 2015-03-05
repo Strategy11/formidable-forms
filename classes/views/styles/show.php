@@ -6,7 +6,7 @@
 
 	<div class="manage-menus">
  		<span class="add-edit-menu-action">
- 		    <?php if ( count($styles) < 2 && !empty($style->ID) ) {
+ 		    <?php if ( count( $styles ) < 2 && ! empty( $style->ID ) ) {
  		        printf(__( 'Edit your style below, or %1$screate a new style%2$s.', 'formidable' ), '<a href="?page=formidable-styles&frm_action=new_style">', '</a>');
 
  		    } else { ?>
@@ -85,7 +85,7 @@
 					</div><!-- /#post-body -->
 					<div id="nav-menu-footer" class="submitbox">
 						<div class="major-publishing-actions">
-						    <?php if ( !empty($style->ID) && empty($style->menu_order) ) { ?>
+						    <?php if ( ! empty( $style->ID ) && empty( $style->menu_order ) ) { ?>
 						    <a href="<?php echo admin_url('admin.php?page=formidable-styles&frm_action=destroy&id='. $style->ID); ?>" class="submitdelete deletion" onclick="return confirm('<?php _e( 'Are you sure you want to delete that style?', 'formidable' ) ?>')" style="padding-right:10px;"><?php _e( 'Delete Style', 'formidable' ) ?></a>
 						    <?php } ?>
 						    <?php

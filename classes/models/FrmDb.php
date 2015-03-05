@@ -18,7 +18,7 @@ class FrmDb{
         $this->entry_metas    = $wpdb->prefix . 'frm_item_metas';
     }
 
-    public function upgrade($old_db_version=false){
+    public function upgrade( $old_db_version = false ) {
         global $wpdb;
         //$frm_db_version is the version of the database we're moving to
         $frm_db_version = FrmAppHelper::$db_version;
@@ -500,11 +500,11 @@ class FrmDb{
                         $new_notification['post_content'] = $notification['twilio'];
                     }
 
-                    if ( !empty($reply_to) ) {
+                    if ( ! empty( $reply_to ) ) {
                        $new_notification['post_content']['reply_to'] = $reply_to;
                     }
 
-                    if ( !empty($reply_to) || !empty($reply_to_name) ) {
+                    if ( ! empty( $reply_to ) || ! empty( $reply_to_name ) ) {
                         $new_notification['post_content']['from'] = ( empty($reply_to_name) ? '[sitename]' : $reply_to_name ) .' <'. ( empty($reply_to) ? '[admin_email]' : $reply_to ) .'>';
                     }
 
@@ -543,11 +543,11 @@ class FrmDb{
                 $reply_to = isset($notification['ar_reply_to']) ? $notification['ar_reply_to'] : '';
                 $reply_to_name = isset($notification['ar_reply_to_name']) ? $notification['ar_reply_to_name'] : '';
 
-                if ( !empty($reply_to) ) {
+                if ( ! empty( $reply_to ) ) {
                    $new_notification2['post_content']['reply_to'] = $reply_to;
                 }
 
-                if ( !empty($reply_to) || !empty($reply_to_name) ) {
+                if ( ! empty( $reply_to ) || ! empty( $reply_to_name ) ) {
                     $new_notification2['post_content']['from'] = ( empty($reply_to_name) ? '[sitename]' : $reply_to_name ) .' <'. ( empty($reply_to) ? '[admin_email]' : $reply_to ) .'>';
                 }
 

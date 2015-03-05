@@ -47,8 +47,8 @@ class FrmFormsListHelper extends FrmListHelper {
 	        preg_match_all('/".*?("|$)|((?<=[\\s",+])|^)[^\\s",+]+/', $s, $matches);
 		    $search_terms = array_map('trim', $matches[0]);
 	        foreach ( (array) $search_terms as $term ) {
-	            if ( !empty($s_query) ) {
-                    $s_query .= " AND";
+	            if ( ! empty( $s_query ) ) {
+                    $s_query .= ' AND';
                 }
 
 	            $term = FrmAppHelper::esc_like($term);

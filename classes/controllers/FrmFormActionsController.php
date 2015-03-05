@@ -201,19 +201,19 @@ class FrmFormActionsController{
 
         foreach ( $registered_actions as $registered_action ) {
             $action_ids = $registered_action->update_callback($form_id);
-            if ( !empty($action_ids) ) {
+            if ( ! empty( $action_ids ) ) {
                 $new_actions[] = $action_ids;
             }
         }
 
         //Only use array_merge if there are new actions
-        if ( !empty($new_actions) ) {
+        if ( ! empty( $new_actions ) ) {
             $new_actions = call_user_func_array('array_merge', $new_actions);
         }
         $old_actions = array_diff($old_actions, $new_actions);
 
         // delete any actions that were not included on the page
-        if ( !empty($old_actions) ) {
+        if ( ! empty( $old_actions ) ) {
             foreach ( $old_actions as $old_id ) {
                 wp_delete_post($old_id);
             }
@@ -276,7 +276,7 @@ class FrmFormActionsController{
             unset($action);
         }
 
-        if ( !empty($stored_actions) ) {
+        if ( ! empty( $stored_actions ) ) {
             asort($action_priority);
 
             // make sure hooks are loaded

@@ -115,7 +115,7 @@ class FrmEntry{
 
             // If prev entry is empty and current entry is not, they are not duplicates
             $filtered_vals = array_filter( $values['item_meta'] );
-            if ( empty( $field_metas ) && !empty( $filtered_vals ) ) {
+            if ( empty( $field_metas ) && ! empty( $filtered_vals ) ) {
                 return false;
             }
 
@@ -321,9 +321,9 @@ class FrmEntry{
         }
 
         if ( is_numeric($id) ) {
-            $where['id'] = $id;
+            $where = array( 'id' => $id );
         } else {
-            $where['item_key'] = $id;
+            $where = array( 'item_key' => $id );
         }
         $id = FrmDb::get_var( $wpdb->prefix .'frm_items', $where );
 
@@ -331,7 +331,7 @@ class FrmEntry{
         return $exists;
     }
 
-    public static function getAll($where, $order_by = '', $limit = '', $meta=false, $inc_form=true){
+    public static function getAll( $where, $order_by = '', $limit = '', $meta = false, $inc_form = true ) {
         global $wpdb;
 
         $limit = FrmAppHelper::esc_limit($limit);
@@ -413,7 +413,7 @@ class FrmEntry{
     }
 
     // Pagination Methods
-    public static function getRecordCount($where=''){
+    public static function getRecordCount( $where = '' ) {
         global $wpdb;
         $cache_key = 'count_'. maybe_serialize($where);
 
@@ -429,7 +429,7 @@ class FrmEntry{
         return $count;
     }
 
-    public static function getPageCount($p_size, $where=''){
+    public static function getPageCount( $p_size, $where = '' ) {
         if ( is_numeric($where) ) {
             return ceil( (int) $where / (int) $p_size );
         } else {
@@ -437,7 +437,7 @@ class FrmEntry{
         }
     }
 
-    public static function validate( $values, $exclude=false ){
+    public static function validate( $values, $exclude = false ) {
         global $wpdb;
 
         $errors = array();

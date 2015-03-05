@@ -140,11 +140,11 @@ class FrmForm{
             }
         }
 
-        if ( isset($values['new_status']) && !empty($values['new_status']) ) {
+        if ( isset( $values['new_status'] ) && ! empty( $values['new_status'] ) ) {
             $new_values['status'] = $values['new_status'];
         }
 
-        if ( !empty($new_values) ) {
+        if ( ! empty( $new_values ) ) {
             $query_results = $wpdb->update( $wpdb->prefix .'frm_forms', $new_values, array( 'id' => $id ) );
             if ( $query_results ) {
                 wp_cache_delete( $id, 'frm_form');
@@ -420,7 +420,7 @@ class FrmForm{
     /*
     * @return object form
     */
-    public static function getOne( $id, $blog_id=false ){
+    public static function getOne( $id, $blog_id = false ) {
         global $wpdb;
 
         if ( $blog_id && is_multisite() ) {
@@ -441,9 +441,9 @@ class FrmForm{
         }
 
         if ( is_numeric($id) ) {
-            $where['id'] = $id;
+            $where = array( 'id' => $id );
         } else {
-            $where['form_key'] = $id;
+            $where = array( 'form_key' => $id );
         }
         $results = FrmDb::get_row( $table_name, $where );
 

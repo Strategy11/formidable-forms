@@ -139,7 +139,7 @@ class FrmEntryMeta{
         return FrmDb::get_col( $wpdb->prefix .'frm_item_metas', array('item_id' => $entry_id), 'meta_value' );
     }
 
-    public static function get_entry_metas_for_field($field_id, $order='', $limit='', $args=array()){
+    public static function get_entry_metas_for_field( $field_id, $order = '', $limit = '', $args = array() ) {
         $defaults = array('value' => false, 'unique' => false, 'stripslashes' => true, 'is_draft' => false);
         $args = wp_parse_args( $args, $defaults );
 
@@ -221,7 +221,7 @@ class FrmEntryMeta{
         return $results;
     }
 
-    public static function getEntryIds($where = '', $order_by = '', $limit = '', $unique=true, $args = array()) {
+    public static function getEntryIds( $where = '', $order_by = '', $limit = '', $unique = true, $args = array() ) {
         $defaults = array('is_draft' => false, 'user_id' => '');
         $args = wp_parse_args($args, $defaults);
 
@@ -280,7 +280,7 @@ class FrmEntryMeta{
         $query[] = FrmAppHelper::prepend_and_or_where(' WHERE ', $where) . $order_by . $limit;
     }
 
-    public static function search_entry_metas($search, $field_id='', $operator){
+    public static function search_entry_metas( $search, $field_id = '', $operator ) {
         $cache_key = 'search_'. maybe_serialize($search) . $field_id . $operator;
         $results = wp_cache_get($cache_key, 'frm_entry');
         if ( false !== $results ) {

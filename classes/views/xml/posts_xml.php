@@ -52,7 +52,7 @@ foreach ( $posts as $post ) {
 <?php	endforeach;
 
 $taxonomies = get_object_taxonomies( $post->post_type );
-if ( !empty( $taxonomies ) ){
+if ( ! empty( $taxonomies ) ) {
     $terms = wp_get_object_terms( $post->ID, $taxonomies );
 
     foreach ( (array) $terms as $term ) {
@@ -76,6 +76,13 @@ foreach ( (array) $terms as $term ) {
         return;
     $frm_inc_tax[] = $term->term_id;
     $label = ($term->taxonomy == 'category' || $term->taxonomy == 'tag') ? $term->taxonomy : 'term'; ?>
-	<term><term_id><?php echo $term->term_id ?></term_id><term_taxonomy><?php echo $term->taxonomy; ?></term_taxonomy><?php if(!empty($term->name)){ echo '<term_name>' . FrmXMLHelper::cdata( $term->name ) . '</term_name>';} ?><?php if(!empty($term->description)){ ?><term_description><?php echo FrmXMLHelper::cdata( $term->description ) ?></term_description><?php } ?><term_slug><?php echo $term->slug; ?></term_slug></term>
+	<term><term_id><?php echo $term->term_id ?></term_id><term_taxonomy><?php echo $term->taxonomy; ?></term_taxonomy><?php
+    if ( ! empty( $term->name ) ) {
+        echo '<term_name>' . FrmXMLHelper::cdata( $term->name ) . '</term_name>';
+    }
+    if ( ! empty( $term->description ) ) {
+    ?><term_description><?php echo FrmXMLHelper::cdata( $term->description ) ?></term_description><?php
+    }
+    ?><term_slug><?php echo $term->slug; ?></term_slug></term>
 <?php
 }

@@ -102,6 +102,9 @@ class FrmStyle{
  		return $action_ids;
  	}
 
+    /**
+     * Create static css file
+     */
     public function save_settings($styles) {
         $filename = FrmAppHelper::plugin_path() .'/css/custom_theme.css.php';
 
@@ -111,27 +114,9 @@ class FrmStyle{
 
         $defaults = $this->get_defaults();
         $uploads = wp_upload_dir();
-        $target_path = $uploads['basedir'];
-
-        // create static css file
-        wp_mkdir_p($target_path);
-
-        $target_path .= "/formidable";
-        wp_mkdir_p($target_path);
-
-        if ( ! file_exists($target_path .'/index.php') ) {
-            // create index.php in uploads/formidable folder
-            if ( $fp = fopen($target_path .'/index.php', 'w') ) {
-                $index = "<?php\n// Silence is golden.\n?>";
-                fwrite($fp, $index);
-                fclose($fp);
-                unset($index);
-            }
-            unset($fp);
-        }
-
-        $target_path .= "/css";
-        wp_mkdir_p($target_path);
+        $target_path = $uploads['basedir'] .'/formidable';
+        $needed_dirs = array( $target_path, $target_path .'/css' );
+        $dirs_exist = true;
 
         $saving = true;
         $css = '/* '. __( 'WARNING: Any changes made to this file will be lost when your Formidable settings are updated', 'formidable' ) .' */'. "\n";
@@ -142,15 +127,36 @@ class FrmStyle{
         $css .= preg_replace('/\/\*(.|\s)*?\*\//', '', str_replace(array("\r\n", "\r", "\n", "\t", "    "), '', ob_get_contents()));
         ob_end_clean();
 
-        $css_file = $target_path .'/formidablepro.css';
-        if ( $fp = fopen($css_file, 'w') ) {
-            fwrite($fp, $css);
-            fclose($fp);
+        $access_type = get_filesystem_method();
+        if ( $access_type === 'direct' ) {
+        	$creds = request_filesystem_credentials( site_url() .'/wp-admin/', '', false, false, array() );
 
-            $stat = @stat( dirname( $css_file ) );
-            $perms = $stat['mode'] & 0007777;
-            //$perms = $perms & 0000666;
-            chmod( $css_file, $perms );
+        	// initialize the API
+        	if ( ! WP_Filesystem($creds) ) {
+        		// any problems and we exit
+        		$dirs_exist = false;
+        	}	
+
+        	global $wp_filesystem;
+
+            if ( $dirs_exist ) {
+                // Create the directories if need be:
+            	foreach ( $needed_dirs as $_dir ) {
+                    // Only check to see if the Dir exists upon creation failure. Less I/O this way.
+            		if ( ! $wp_filesystem->mkdir( $_dir, FS_CHMOD_DIR ) && ! $wp_filesystem->is_dir( $_dir ) ) {
+            			$dirs_exist = false;
+                    }
+            	}
+
+                $index_path = $target_path .'/index.php';
+                $wp_filesystem->put_contents( $index_path, "<?php\n// Silence is golden.\n?>", FS_CHMOD_FILE );
+
+                // only write the file if the folders exist
+                if ( $dirs_exist ) {
+                    $css_file = $target_path .'/css/formidablepro.css';
+                    $wp_filesystem->put_contents( $css_file, $css, FS_CHMOD_FILE );
+                }
+            }
         }
 
         update_option('frmpro_css', $css);

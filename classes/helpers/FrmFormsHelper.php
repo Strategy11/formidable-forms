@@ -18,7 +18,7 @@ class FrmFormsHelper{
         return $target_url;
     }
 
-    public static function forms_dropdown( $field_name, $field_value='', $args = array() ) {
+    public static function forms_dropdown( $field_name, $field_value = '', $args = array() ) {
         $defaults = array(
             'blank'     => true,
             'field_id'  => false,
@@ -108,10 +108,10 @@ class FrmFormsHelper{
     /*
     * Used when a form is created
     */
-    public static function setup_new_vars($values=array()){
+    public static function setup_new_vars( $values = array() ) {
         global $wpdb;
 
-        if(!empty($values)){
+        if ( ! empty( $values ) ) {
             $post_values = $values;
         }else{
             $values = array();
@@ -151,7 +151,7 @@ class FrmFormsHelper{
     /*
     * Used when editing a form
     */
-    public static function setup_edit_vars($values, $record, $post_values=array()){
+    public static function setup_edit_vars( $values, $record, $post_values = array() ) {
         if(empty($post_values))
             $post_values = stripslashes_deep($_POST);
 
@@ -319,7 +319,7 @@ BEFORE_HTML;
         $reset_fields = true;
     }
 
-    public static function replace_shortcodes($html, $form, $title=false, $description=false, $values=array()){
+    public static function replace_shortcodes( $html, $form, $title = false, $description = false, $values = array() ) {
         foreach (array('form_name' => $title, 'form_description' => $description, 'entry_key' => true) as $code => $show){
             if ( $code == 'form_name' ) {
                 $replace_with = $form->name;

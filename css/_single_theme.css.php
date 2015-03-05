@@ -11,7 +11,7 @@ if ( isset($_GET['frm_style_setting']) || isset($_GET['flat']) ) {
     $auto_width = isset($auto_width) ? $auto_width : 0;
     $submit_style = isset($submit_style) ? $submit_style : 0;
 
-    if ( isset($_GET['style_name']) && !empty($_GET['style_name']) ) {
+    if ( isset( $_GET['style_name'] ) && ! empty( $_GET['style_name'] ) ) {
         $style_class = sanitize_text_field( $_GET['style_name'] ) .'.with_frm_style';
     } else {
         $style_class = 'with_frm_style';

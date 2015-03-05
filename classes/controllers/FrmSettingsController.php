@@ -11,7 +11,7 @@ class FrmSettingsController{
         include(FrmAppHelper::plugin_path() .'/classes/views/frm-settings/license_box.php');
     }
 
-    public static function display_form($errors=array(), $message=''){
+    public static function display_form( $errors = array(), $message = '' ) {
         global $frm_vars;
 
         $frm_settings = FrmAppHelper::get_settings();
@@ -26,7 +26,7 @@ class FrmSettingsController{
         require(FrmAppHelper::plugin_path() .'/classes/views/frm-settings/form.php');
     }
 
-    public static function process_form($stop_load=false){
+    public static function process_form( $stop_load = false ) {
         global $frm_vars;
 
         $frm_settings = FrmAppHelper::get_settings();
@@ -58,7 +58,7 @@ class FrmSettingsController{
         self::display_form($errors, $message);
     }
 
-    public static function route($stop_load=false){
+    public static function route( $stop_load = false ) {
         $action = isset($_REQUEST['frm_action']) ? 'frm_action' : 'action';
         $action = FrmAppHelper::get_param($action);
         if ( $action == 'process-form' ) {

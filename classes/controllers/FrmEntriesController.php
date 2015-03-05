@@ -227,7 +227,7 @@ class FrmEntriesController {
 
         $return = false;
         foreach ( (array) $result as $r ) {
-            if(!empty($r)){
+            if ( ! empty( $r ) ) {
                 $form_prefix = explode('_', $r);
                 $form_prefix = $form_prefix[0];
 
@@ -612,7 +612,7 @@ class FrmEntriesController {
 
         $default_values = array(
             'id' => '', 'form_name' => '', 'paged' => 1, 'form' => $form->id, 'form_id' => $form->id,
-            'field_id' => '', 'search' => '', 'sort' => '', 'sdir' => '', 'action' => $action
+            'field_id' => '', 'search' => '', 'sort' => '', 'sdir' => '', 'action' => $action,
         );
 
         $values = array();

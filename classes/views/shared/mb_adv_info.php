@@ -16,7 +16,7 @@
         <ul class="alignleft" style="margin:5px 0 0;"><li><?php _e( 'Fields from your form', 'formidable' ) ?>:</li></ul>
         <ul class="frm_code_list frm_full_width" style="clear:both;max-height:150px;overflow:auto;">
         <?php
-            if ( !empty($fields) ) {
+            if ( ! empty( $fields ) ) {
                 global $wpdb;
                 $linked_forms[] = array();
 
@@ -115,15 +115,15 @@
 	</div>
 
 	<div id="frm-conditionals" class="tabs-panel" style="display:none;max-height:none;padding-right:0;">
-	<?php if ( !empty($cond_shortcodes) ) { ?>
+	<?php if ( ! empty( $cond_shortcodes ) ) { ?>
 	    <ul class="subsubsub" style="float:right;margin:0;">
 	        <li><a href="javascript:void(0)" class="current frmids"><?php _e( 'IDs', 'formidable' ) ?></a> |</li>
 	        <li><a href="javascript:void(0)" class="frmkeys"><?php _e( 'Keys', 'formidable' ) ?></a></li>
 	    </ul>
 	    <ul class="alignleft" style="margin:5px 0 0;"><li><?php _e( 'Fields from your form', 'formidable' ) ?>:</li></ul>
 	    <ul class="frm_code_list frm_full_width" style="clear:both;max-height:150px;overflow:auto;">
-		    <?php if ( !empty($fields) ) {
-		        foreach ( $fields as $f){
+		    <?php if ( ! empty( $fields ) ) {
+		        foreach ( $fields as $f ) {
                     if ( FrmFieldsHelper::is_no_save_field($f->type) || ( $f->type == 'data' && ( ! isset($f->field_options['data_type']) || $f->field_options['data_type'] == 'data' || $f->field_options['data_type'] == '' ) ) ) {
                         continue;
                 }

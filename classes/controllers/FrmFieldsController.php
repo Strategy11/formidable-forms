@@ -207,7 +207,7 @@ class FrmFieldsController{
         //Get the field
         $field = FrmField::getOne($id);
         $options = maybe_unserialize($field->options);
-        if ( !empty($options) ) {
+        if ( ! empty( $options ) ) {
             $keys = array_keys( $options );
             $last = str_replace( 'other_', '', end( $keys ) );
         } else {
@@ -506,7 +506,7 @@ class FrmFieldsController{
         return $display;
     }
 
-    public static function input_html($field, $echo=true){
+    public static function input_html( $field, $echo = true ) {
         $class = array(); //$field['type'];
         self::add_input_classes($field, $class);
 

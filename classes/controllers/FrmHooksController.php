@@ -1,5 +1,5 @@
 <?php
-    
+
 class FrmHooksController{
     /*
     * Trigger plugin-wide hook loading
