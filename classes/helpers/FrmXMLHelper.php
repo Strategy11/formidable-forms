@@ -823,7 +823,7 @@ class FrmXMLHelper{
                     'plain_text'    => isset($notification['ar_plain_text']) ? $notification['ar_plain_text'] : 0,
                     'inc_user_info' => 0,
                 ),
-                'post_name'     => $form_id .'_email_'. (isset($new_notification) ? '1' : '0'),
+                'post_name'     => $form_id .'_email_'. count( $notifications ) ),
             );
 
             $reply_to = isset($notification['ar_reply_to']) ? $notification['ar_reply_to'] : '';
