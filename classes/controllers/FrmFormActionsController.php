@@ -72,7 +72,7 @@ class FrmFormActionsController{
                 return $a;
             }
 
-            $actions[$a->id_base] = $a;
+            $actions[ $a->id_base ] = $a;
         }
         unset($temp_actions, $a);
 
@@ -86,7 +86,7 @@ class FrmFormActionsController{
         arsort($temp_actions);
         foreach ( $temp_actions as $type => $a ) {
             if ( ! isset($a->action_options['active']) || empty($a->action_options['active']) ) {
-                unset($actions[$type]);
+                unset( $actions[ $type ] );
                 if ( count($actions) <= $action_limit ) {
                     break;
                 }
@@ -111,7 +111,7 @@ class FrmFormActionsController{
         $action_map = array();
 
         foreach( $action_controls as $key => $control ) {
-            $action_map[$control->id_base] = $key;
+            $action_map[ $control->id_base ] = $key;
         }
 
     	foreach ( $form_actions as $action ) {
@@ -120,7 +120,7 @@ class FrmFormActionsController{
     	        continue;
     	    }
 
-    		self::action_control( $action, $form, $action->ID, $action_controls[$action_map[$action->post_excerpt]], $values );
+    		self::action_control( $action, $form, $action->ID, $action_controls[ $action_map[ $action->post_excerpt ] ], $values );
     	}
     }
 
@@ -270,8 +270,8 @@ class FrmFormActionsController{
             }
 
             // store actions so they can be triggered with the correct priority
-            $stored_actions[$action->ID] = $action;
-            $action_priority[$action->ID] = $link_settings[$action->post_excerpt]->action_options['priority'];
+            $stored_actions[ $action->ID ] = $action;
+            $action_priority[ $action->ID ] = $link_settings[ $action->post_excerpt ]->action_options['priority'];
 
             unset($action);
         }
@@ -283,7 +283,7 @@ class FrmFormActionsController{
             new FrmNotification();
 
             foreach ( $action_priority as $action_id => $priority ) {
-                $action = $stored_actions[$action_id];
+                $action = $stored_actions[ $action_id ];
                 do_action('frm_trigger_'. $action->post_excerpt .'_action', $action, $entry, $form, $event);
                 do_action('frm_trigger_'. $action->post_excerpt .'_'. $event .'_action', $action, $entry, $form);
 
@@ -331,12 +331,12 @@ class Frm_Form_Action_Factory {
 	}
 
 	public function register($action_class) {
-		$this->actions[$action_class] = new $action_class();
+		$this->actions[ $action_class ] = new $action_class();
 	}
 
 	public function unregister($action_class) {
-		if ( isset($this->actions[$action_class]) ) {
-			unset($this->actions[$action_class]);
+		if ( isset( $this->actions[ $action_class ] ) ) {
+			unset($this->actions[ $action_class ]);
 		}
 	}
 
@@ -345,8 +345,8 @@ class Frm_Form_Action_Factory {
 
 		foreach ( $keys as $key ) {
 			// don't register new action if old action with the same id is already registered
-			if ( ! isset( $this->actions[$key] ) ) {
-			    $this->actions[$key]->_register();
+			if ( ! isset( $this->actions[ $key ] ) ) {
+			    $this->actions[ $key ]->_register();
 			}
 		}
 	}

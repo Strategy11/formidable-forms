@@ -29,10 +29,10 @@ class FrmFormsListHelper extends FrmListHelper {
 		$s_query = ' (parent_form_id IS NULL OR parent_form_id < 1) AND ';
 		switch ( $this->status ) {
 		    case 'template':
-		        $s_query .=  "is_template = 1 AND status != 'trash'";
+		        $s_query .= "is_template = 1 AND status != 'trash'";
 		        break;
 		    case 'draft':
-		        $s_query .=  "is_template = 0 AND status = 'draft'";
+		        $s_query .= "is_template = 0 AND status = 'draft'";
 		        break;
 		    case 'trash':
 		        $s_query .= "status='trash'";

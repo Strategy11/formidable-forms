@@ -430,7 +430,7 @@ class FrmXMLHelper{
     * Edit post if the key and created time match
     */
     private static function maybe_editing_post( &$post ) {
-		$match_by =  array(
+		$match_by = array(
 		    'post_type'     => $post['post_type'],
 		    'name'          => $post['post_name'],
 		    'post_status'   => $post['post_status'],

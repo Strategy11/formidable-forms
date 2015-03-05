@@ -37,7 +37,7 @@ class FrmFieldsController{
 
             ob_start();
             include($path .'/classes/views/frm-forms/add_field.php');
-            $field_html[$field_id] = ob_get_contents();
+            $field_html[ $field_id ] = ob_get_contents();
             ob_end_clean();
         }
 
@@ -121,13 +121,13 @@ class FrmFieldsController{
 
         $field = FrmField::getOne($_POST['field']);
         foreach ( array('clear_on_focus', 'separate_value', 'default_blank') as $val ) {
-            if ( isset($_POST[$val]) ) {
-                $new_val = $_POST[$val];
+            if ( isset($_POST[ $val ]) ) {
+                $new_val = $_POST[ $val ];
                 if ( $val == 'separate_value' ) {
-                    $new_val = (isset($field->field_options[$val]) && $field->field_options[$val]) ? 0 : 1;
+                    $new_val = ( isset( $field->field_options[ $val ] ) && $field->field_options[ $val ] ) ? 0 : 1;
                 }
 
-                $field->field_options[$val] = $new_val;
+                $field->field_options[ $val ] = $new_val;
                 unset($new_val);
             }
             unset($val);
@@ -234,7 +234,7 @@ class FrmFieldsController{
             unset($next_opt);
         }
         $field_val = $opt;
-        $options[$opt_key] = $opt;
+        $options[ $opt_key ] = $opt;
 
         //Update options in DB
         FrmField::update($id, array('options' => maybe_serialize($options)));
@@ -248,7 +248,7 @@ class FrmFieldsController{
             'field_key' => $field_data->field_key,
         );
 
-        $field_name = "item_meta[$id]";
+        $field_name = 'item_meta['. $id .']';
         $html_id = FrmFieldsHelper::get_html_id($field);
         $checked = '';
 
@@ -277,11 +277,11 @@ class FrmFieldsController{
         $options = maybe_unserialize($field->options);
 
         $this_opt_id = end($ids);
-        $this_opt = (array) $options[$this_opt_id];
+        $this_opt = (array) $options[ $this_opt_id ];
         $other_opt = ( $this_opt_id && strpos( $this_opt_id, 'other') !== false ? true : false );
 
         $label = isset($this_opt['label']) ? $this_opt['label'] : reset($this_opt);
-        $value =  isset($this_opt['value']) ? $this_opt['value'] : '';
+        $value = isset($this_opt['value']) ? $this_opt['value'] : '';
 
         if ( ! isset( $new_label ) ) {
             $new_label = $label;
@@ -292,9 +292,9 @@ class FrmFieldsController{
         }
 
         if ( $update_value != $new_label && $other_opt == false && $separate_values ) {
-            $options[$this_opt_id] = array('value' => $update_value, 'label' => $new_label);
+            $options[ $this_opt_id ] = array( 'value' => $update_value, 'label' => $new_label );
         } else {
-            $options[$this_opt_id] = trim($_POST['update_value']);
+            $options[ $this_opt_id ] = trim( $_POST['update_value'] );
         }
 
         FrmField::update($field->id, array('options' => $options));
@@ -308,7 +308,7 @@ class FrmFieldsController{
         $field = FrmField::getOne( (int) $_POST['field_id'] );
         $opt_key = (int) $_POST['opt_key'];
         $options = maybe_unserialize($field->options);
-        unset($options[$opt_key]);
+        unset( $options[ $opt_key ] );
         $response = array( 'other' => true );
 
         //If the deleted option is an "other" option
@@ -412,7 +412,7 @@ class FrmFieldsController{
                 if ( strpos($opt, '|') !== false ) {
                     $vals = explode('|', $opt);
                     if ( $vals[0] != $vals[1] ) {
-                        $opts[$opt_key] = array('label' => trim($vals[0]), 'value' => trim($vals[1]));
+                        $opts[ $opt_key ] = array( 'label' => trim( $vals[0] ), 'value' => trim( $vals[1] ) );
                     }
                     unset($vals);
                 }
@@ -425,7 +425,7 @@ class FrmFieldsController{
             $other_array = array();
             foreach ( $field['options'] as $opt_key => $opt ) {
                 if ( $opt_key && strpos( $opt_key, 'other' ) !== false ) {
-                    $other_array[$opt_key] = $opt;
+                    $other_array[ $opt_key ] = $opt;
                 }
                 unset($opt_key, $opt);
             }
@@ -464,8 +464,8 @@ class FrmFieldsController{
             'rte'       => 'textarea',
             'website'   => 'url',
         );
-        if ( isset($type_switch[$type]) ) {
-            $type = $type_switch[$type];
+        if ( isset( $type_switch[ $type ] ) ) {
+            $type = $type_switch[ $type ];
         }
 
         $frm_field_selection = FrmFieldsHelper::field_selection();
@@ -582,11 +582,11 @@ class FrmFieldsController{
         // include "col" for valid html
         $unit = trim(preg_replace('/[0-9]+/', '', $field['size']));
 
-        if ( ! isset($calc[$unit]) ) {
+        if ( ! isset( $calc[ $unit ] ) ) {
             return;
         }
 
-        $size = (float) str_replace($unit, '', $field['size']) / $calc[$unit];
+        $size = (float) str_replace( $unit, '', $field['size'] ) / $calc[ $unit ];
 
         $add_html['cols'] = 'cols="'. (int) $size .'"';
     }
@@ -645,10 +645,10 @@ class FrmFieldsController{
 
             if ( is_numeric($k) && strpos($v, '=') ) {
                 $add_html[] = $v;
-            } else if ( ! empty($k) && isset($add_html[$k]) ) {
-                $add_html[$k] = str_replace($k .'="', $k .'="'. $v, $add_html[$k]);
+            } else if ( ! empty( $k ) && isset( $add_html[ $k ] ) ) {
+                $add_html[ $k ] = str_replace( $k .'="', $k .'="'. $v, $add_html[ $k ] );
             } else {
-                $add_html[$k] = $k .'="'. $v .'"';
+                $add_html[ $k ] = $k .'="'. $v .'"';
             }
 
             unset($k, $v);

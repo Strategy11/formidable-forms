@@ -164,7 +164,7 @@ class FrmAppHelper{
     * @return string
     */
     public static function get_server_value($value) {
-        return isset($_SERVER[$value]) ? $_SERVER[$value] : '';
+        return isset( $_SERVER[ $value ] ) ? $_SERVER[ $value ] : '';
     }
 
     /*
@@ -180,7 +180,7 @@ class FrmAppHelper{
                 continue;
             }
 
-            foreach ( explode(',', $_SERVER[$key]) as $ip ) {
+            foreach ( explode( ',', $_SERVER[ $key ] ) as $ip ) {
                 $ip = trim($ip); // just to be safe
 
                 if ( filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) !== false ) {
@@ -197,12 +197,12 @@ class FrmAppHelper{
         }
 
         if($src == 'get'){
-            $value = (isset($_POST[$param]) ? stripslashes_deep($_POST[$param]) : (isset($_GET[$param]) ? stripslashes_deep($_GET[$param]) : $default));
-            if ( ! isset($_POST[$param]) && isset($_GET[$param]) && ! is_array($value) ) {
-                $value = stripslashes_deep(htmlspecialchars_decode(urldecode($_GET[$param])));
+            $value = isset($_POST[ $param ] ? stripslashes_deep( $_POST[ $param ] ) : ( isset( $_GET[ $param ] ) ? stripslashes_deep( $_GET[ $param ] ) : $default ) );
+            if ( ! isset( $_POST[ $param ] ) && isset( $_GET[ $param ] ) && ! is_array( $value ) ) {
+                $value = stripslashes_deep( htmlspecialchars_decode( urldecode( $_GET[ $param ] ) ) );
             }
         }else{
-            $value = isset($_POST[$param]) ? stripslashes_deep(maybe_unserialize($_POST[$param])) : $default;
+            $value = isset( $_POST[ $param ] ) ? stripslashes_deep( maybe_unserialize( $_POST[ $param ] ) ) : $default;
         }
 
         if ( isset($params) && is_array($value) && ! empty($value) ) {
@@ -212,7 +212,7 @@ class FrmAppHelper{
                 }
 
                 $p = trim($p, ']');
-                $value = (isset($value[$p])) ? $value[$p] : $default;
+                $value = isset( $value[ $p ] ) ? $value[ $p ] : $default;
             }
         }
 
@@ -220,7 +220,7 @@ class FrmAppHelper{
     }
 
     public static function get_post_param($param, $default=''){
-        return isset($_POST[$param]) ? stripslashes_deep(maybe_unserialize($_POST[$param])) : $default;
+        return isset( $_POST[ $param ] ) ? stripslashes_deep( maybe_unserialize( $_POST[ $param ] ) ) : $default;
     }
 
     /*
@@ -231,8 +231,8 @@ class FrmAppHelper{
      * @param string $action
      */
     public static function simple_get($action) {
-        if ( $_GET && isset($_GET[$action]) ) {
-            return $_GET[$action];
+        if ( $_GET && isset( $_GET[ $action ] ) ) {
+            return $_GET[ $action ];
         } else {
             return '';
         }
@@ -268,8 +268,8 @@ class FrmAppHelper{
         }
 
         global $wp_query;
-        if ( isset($wp_query->query_vars[$param]) ) {
-            $value = $wp_query->query_vars[$param];
+        if ( isset( $wp_query->query_vars[ $param ] ) ) {
+            $value = $wp_query->query_vars[ $param ];
         }
 
         return $value;
@@ -360,8 +360,8 @@ class FrmAppHelper{
     public static function cache_delete_group($group) {
     	global $wp_object_cache;
 
-        if ( isset($wp_object_cache->cache[$group]) ) {
-            foreach ( $wp_object_cache->cache[$group] as $k => $v ) {
+        if ( isset( $wp_object_cache->cache[ $group ] ) ) {
+            foreach ( $wp_object_cache->cache[ $group ] as $k => $v ) {
                 wp_cache_delete($k, $group);
             }
             return true;
@@ -415,7 +415,7 @@ class FrmAppHelper{
             <option value=""> </option>
             <?php foreach($pages as $page){ ?>
                 <option value="<?php echo esc_attr($page->ID); ?>" <?php
-                echo ( ( ( isset($_POST[$field_name]) && $_POST[$field_name] == $page->ID ) || ( ! isset($_POST[$field_name]) && $page_id == $page->ID ) ) ? ' selected="selected"' : '' );
+                echo ( ( ( isset( $_POST[ $field_name ] ) && $_POST[ $field_name ] == $page->ID ) || ( ! isset( $_POST[ $field_name ] ) && $page_id == $page->ID ) ) ? ' selected="selected"' : '' );
                 ?>><?php echo esc_html( $truncate ? self::truncate( $page->post_title, $truncate ) : $page->post_title ); ?> </option>
             <?php } ?>
         </select>
@@ -553,7 +553,7 @@ class FrmAppHelper{
             return $error;
         }
 
-        if ( $_REQUEST && ( ! isset($_REQUEST[$nonce_name]) || ! wp_verify_nonce($_REQUEST[$nonce_name], $nonce) ) ) {
+        if ( $_REQUEST && ( ! isset( $_REQUEST[ $nonce_name ] ) || ! wp_verify_nonce( $_REQUEST[ $nonce_name ], $nonce ) ) ) {
             $frm_settings = self::get_settings();
             $error = $frm_settings->admin_permission;
         }
@@ -617,20 +617,20 @@ class FrmAppHelper{
         // Check posted vals before checking saved values
 
         // For fields inside repeating sections - note, don't check if $pointer is true because it will often be zero
-        if ( $parent && isset( $_POST['item_meta'][$parent][$pointer]['other'][$field['id']] ) ) {
+        if ( $parent && isset( $_POST['item_meta'][ $parent ][ $pointer ]['other'][ $field['id'] ] ) ) {
             if ( FrmFieldsHelper::is_field_with_multiple_values( $field ) ) {
-                $other_val = isset( $_POST['item_meta'][$parent][$pointer]['other'][$field['id']][$opt_key] ) ? $_POST['item_meta'][$parent][$pointer]['other'][$field['id']][$opt_key] : '';
+                $other_val = isset( $_POST['item_meta'][ $parent ][ $pointer ]['other'][ $field['id'] ][ $opt_key ] ) ? $_POST['item_meta'][ $parent ][ $pointer ]['other'][ $field['id'] ][ $opt_key ] : '';
             } else {
-                $other_val = $_POST['item_meta'][$parent][$pointer]['other'][$field['id']];
+                $other_val = $_POST['item_meta'][ $parent ][ $pointer ]['other'][ $field['id'] ];
             }
             return $other_val;
 
         // For normal fields
-        } else if ( isset( $field['id'] ) && isset( $_POST['item_meta']['other'][$field['id']] ) ) {
+        } else if ( isset( $field['id'] ) && isset( $_POST['item_meta']['other'][ $field['id'] ] ) ) {
             if ( FrmFieldsHelper::is_field_with_multiple_values( $field ) ) {
-                $other_val = isset( $_POST['item_meta']['other'][$field['id']][$opt_key] ) ? $_POST['item_meta']['other'][$field['id']][$opt_key] : '';
+                $other_val = isset( $_POST['item_meta']['other'][ $field['id'] ][ $opt_key ] ) ? $_POST['item_meta']['other'][ $field['id'] ][ $opt_key ] : '';
             } else {
-                $other_val = $_POST['item_meta']['other'][$field['id']];
+                $other_val = $_POST['item_meta']['other'][ $field['id'] ];
             }
             return $other_val;
         }
@@ -638,8 +638,8 @@ class FrmAppHelper{
         // For checkboxes
         if ( $field['type'] == 'checkbox' && is_array( $field['value'] ) ) {
              // Check if there is an "other" val in saved value and make sure the "other" val is not equal to the Other checkbox option
-            if ( isset( $field['value'][$opt_key] ) && $field['options'][$opt_key] != $field['value'][$opt_key] ) {
-                $other_val = $field['value'][$opt_key];
+            if ( isset( $field['value'][ $opt_key ] ) && $field['options'][ $opt_key ] != $field['value'][ $opt_key ] ) {
+                $other_val = $field['value'][ $opt_key ];
             }
 
         // For radio buttons and dropdowns
@@ -650,8 +650,8 @@ class FrmAppHelper{
                 // Multi-select dropdowns - key is not preserved
                 if ( is_array( $field['value'] ) ) {
                     $o_key = array_search( $temp_val, $field['value'] );
-                    if ( isset( $field['value'][$o_key] ) ) {
-                        unset( $field['value'][$o_key], $o_key );
+                    if ( isset( $field['value'][ $o_key ] ) ) {
+                        unset( $field['value'][ $o_key ], $o_key );
                     }
 
                 // For radio and regular dropdowns
@@ -740,7 +740,7 @@ class FrmAppHelper{
             if ( is_array($value) ){
                 $return = array_merge( $return, self::array_flatten($value) );
             } else {
-                $return[$key] = $value;
+                $return[ $key ] = $value;
             }
         }
         return $return;
@@ -792,11 +792,11 @@ class FrmAppHelper{
 
         $ver = 0;
 
-        if ( ! isset($wp_scripts->registered[$handle]) ) {
+        if ( ! isset( $wp_scripts->registered[ $handle ] ) ) {
             return $ver;
         }
 
-        $query = $wp_scripts->registered[$handle];
+        $query = $wp_scripts->registered[ $handle ];
     	if ( is_object( $query ) ) {
     	    $ver = $query->ver;
     	}
@@ -905,7 +905,7 @@ class FrmAppHelper{
 
         foreach ( array('name', 'description') as $var ) {
             $default_val = isset($record->{$var}) ? $record->{$var} : '';
-            $values[$var] = self::get_param($var, $default_val);
+            $values[ $var ] = self::get_param( $var, $default_val );
             unset($var, $default_val);
         }
 
@@ -949,7 +949,7 @@ class FrmAppHelper{
         }
 
         $field_type = isset($post_values['field_options']['type_'.$field->id]) ? $post_values['field_options']['type_'.$field->id] : $field->type;
-        $new_value = isset($post_values['item_meta'][$field->id]) ? maybe_unserialize($post_values['item_meta'][$field->id]) : $meta_value;
+        $new_value = isset( $post_values['item_meta'][ $field->id ] ) ? maybe_unserialize( $post_values['item_meta'][ $field->id ] ) : $meta_value;
 
         $field_array = array(
             'id'            => $field->id,
@@ -962,7 +962,7 @@ class FrmAppHelper{
             'required'      => $field->required,
             'field_key'     => $field->field_key,
             'field_order'   => $field->field_order,
-            'form_id'       => $field->form_id
+            'form_id'       => $field->form_id,
         );
 
         $args['field_type'] = $field_type;
@@ -975,13 +975,13 @@ class FrmAppHelper{
         }
 
         foreach ( (array) $field->field_options as $k => $v ) {
-            if ( ! isset($field_array[$k]) ) {
-                $field_array[$k] = $v;
+            if ( ! isset( $field_array[ $k ] ) ) {
+                $field_array[ $k ] = $v;
             }
             unset($k, $v);
         }
 
-        $values['fields'][$field->id] = $field_array;
+        $values['fields'][ $field->id ] = $field_array;
     }
 
     private static function fill_field_opts($field, array &$field_array, $args) {
@@ -989,14 +989,14 @@ class FrmAppHelper{
         $opt_defaults = FrmFieldsHelper::get_default_field_opts($field_array['type'], $field, true);
 
         foreach ( $opt_defaults as $opt => $default_opt ) {
-            $field_array[$opt] = ( $post_values && isset($post_values['field_options'][$opt .'_'. $field->id]) ) ? maybe_unserialize($post_values['field_options'][$opt .'_'. $field->id]) : ( isset($field->field_options[$opt]) ? $field->field_options[$opt] : $default_opt );
-            if ( $opt == 'blank' && $field_array[$opt] == '' ) {
-                $field_array[$opt] = $args['frm_settings']->blank_msg;
-            } else if ( $opt == 'invalid' && $field_array[$opt] == '' ) {
+            $field_array[ $opt ] = ( $post_values && isset( $post_values['field_options'] [ $opt .'_'. $field->id ] ) ) ? maybe_unserialize( $post_values['field_options'][ $opt .'_'. $field->id ] ) : ( isset( $field->field_options[ $opt ] ) ? $field->field_options[ $opt ] : $default_opt );
+            if ( $opt == 'blank' && $field_array[ $opt ] == '' ) {
+                $field_array[ $opt ] = $args['frm_settings']->blank_msg;
+            } else if ( $opt == 'invalid' && $field_array[ $opt ] == '' ) {
                 if ( $args['field_type'] == 'captcha' ) {
-                    $field_array[$opt] = $args['frm_settings']->re_msg;
+                    $field_array[ $opt ] = $args['frm_settings']->re_msg;
                 } else {
-                    $field_array[$opt] = sprintf(__('%s is invalid', 'formidable'), $field_array['name']);
+                    $field_array[ $opt ] = sprintf( __( '%s is invalid', 'formidable' ), $field_array['name'] );
                 }
             }
         }
@@ -1026,7 +1026,7 @@ class FrmAppHelper{
         }
 
         foreach ( $form->options as $opt => $value ) {
-            $values[$opt] = isset($post_values[$opt]) ? maybe_unserialize($post_values[$opt]) : $value;
+            $values[ $opt ] = isset( $post_values[ $opt ] ) ? maybe_unserialize( $post_values[ $opt ] ) : $value;
         }
 
         self::fill_form_defaults($post_values, $values);
@@ -1039,25 +1039,25 @@ class FrmAppHelper{
         $form_defaults = FrmFormsHelper::get_default_opts();
 
         foreach ( $form_defaults as $opt => $default ) {
-            if ( ! isset($values[$opt]) || $values[$opt] == '' ) {
+            if ( ! isset( $values[ $opt ] ) || $values[ $opt ] == '' ) {
                 if ( $opt == 'notification' ) {
-                    $values[$opt] = ( $post_values && isset($post_values[$opt]) ) ? $post_values[$opt] : $default;
+                    $values[ $opt ] = ( $post_values && isset( $post_values[ $opt ] ) ) ? $post_values[ $opt ] : $default;
 
                     foreach ( $default as $o => $d ) {
                         if ( $o == 'email_to' ) {
                             $d = ''; //allow blank email address
                         }
-                        $values[$opt][0][$o] = ( $post_values && isset($post_values[$opt][0][$o]) ) ? $post_values[$opt][0][$o] : $d;
+                        $values[ $opt ][0][ $o ] = ( $post_values && isset( $post_values[ $opt ][0][ $o ]) ) ? $post_values[ $opt ][0][ $o ] : $d;
                         unset($o, $d);
                     }
                 } else {
-                    $values[$opt] = ( $post_values && isset($post_values['options'][$opt]) ) ? $post_values['options'][$opt] : $default;
+                    $values[ $opt ] = ( $post_values && isset( $post_values['options'][ $opt ] ) ) ? $post_values['options'][ $opt ] : $default;
                 }
-            } else if ( $values[$opt] == 'notification' ) {
-                foreach ( $values[$opt] as $k => $n ) {
+            } else if ( $values[ $opt ] == 'notification' ) {
+                foreach ( $values[ $opt ] as $k => $n ) {
                     foreach ( $default as $o => $d ) {
-                        if ( ! isset($n[$o]) ) {
-                            $values[$opt][$k][$o] = ( $post_values && isset($post_values[$opt][$k][$o])) ? $post_values[$opt][$k][$o] : $d;
+                        if ( ! isset( $n[ $o ] ) ) {
+                            $values[ $opt ][ $k ][ $o ] = ( $post_values && isset( $post_values[ $opt ][ $k ][ $o ] ) ) ? $post_values[ $opt ][ $k ][ $o ] : $d;
                         }
                         unset($o, $d);
                     }
@@ -1074,8 +1074,8 @@ class FrmAppHelper{
         }
 
         foreach ( array('before', 'after', 'submit') as $h ) {
-            if ( ! isset($values[$h .'_html']) ) {
-                $values[$h .'_html'] = (isset($post_values['options'][$h .'_html']) ? $post_values['options'][$h .'_html'] : FrmFormsHelper::get_default_html($h));
+            if ( ! isset( $values[ $h .'_html'] ) ) {
+                $values[ $h .'_html' ] = ( isset( $post_values['options'][ $h .'_html' ] ) ? $post_values['options'][ $h .'_html' ] : FrmFormsHelper::get_default_html( $h ) );
             }
             unset($h);
         }
@@ -1086,7 +1086,7 @@ class FrmAppHelper{
      */
     public static function get_meta_value($field_id, $entry) {
         if ( isset($entry->metas) ) {
-            return isset($entry->metas[$field_id]) ? $entry->metas[$field_id] : false;
+            return isset( $entry->metas[ $field_id ] ) ? $entry->metas[ $field_id ] : false;
         } else {
             return FrmEntryMeta::get_entry_meta_by_field($entry->id, $field_id);
         }
@@ -1239,7 +1239,7 @@ class FrmAppHelper{
 
     	//Step one: the first chunk
     	for ( $i = 0, $j = count($chunks); $i < $j; $i++) {
-    		$seconds = $chunks[$i][0];
+    		$seconds = $chunks[ $i ][0];
 
     		// Finding the biggest chunk (if the chunk fits, break)
     		if ( ( $count = floor($diff / $seconds) ) != 0 )
@@ -1247,11 +1247,12 @@ class FrmAppHelper{
     	}
 
     	// Set output var
-    	$output = ( 1 == $count ) ? '1 '. $chunks[$i][1] : $count . ' ' . $chunks[$i][2];
+    	$output = ( 1 == $count ) ? '1 '. $chunks[ $i ][1] : $count . ' ' . $chunks[ $i ][2];
 
 
-    	if ( !(int)trim($output) )
+    	if ( ! (int) trim( $output ) ) {
     		$output = '0 ' . __( 'seconds', 'formidable' );
+        }
 
     	return $output;
     }
@@ -1329,8 +1330,8 @@ class FrmAppHelper{
 
         $limit = explode(',', trim($limit));
         foreach ( $limit as $k => $l ) {
-            if ( is_numeric($l) ) {
-                $limit[$k] = $l;
+            if ( is_numeric( $l ) ) {
+                $limit[ $k ] = $l;
             }
         }
 
@@ -1439,35 +1440,35 @@ class FrmAppHelper{
                         $l1 = $name;
                         if ( $name == '' ) {
                             $vars[] = $this_val;
-                        } else if ( ! isset($vars[$l1]) ) {
-                            $vars[$l1] = $this_val;
+                        } else if ( ! isset( $vars[ $l1 ] ) ) {
+                            $vars[ $l1 ] = $this_val;
                         }
                     break;
 
                     case 1:
                         $l2 = $name;
                         if ( $name == '' ) {
-                            $vars[$l1][] = $this_val;
-                        } else if ( ! isset($vars[$l1][$l2]) ) {
-                            $vars[$l1][$l2] = $this_val;
+                            $vars[ $l1 ][] = $this_val;
+                        } else if ( ! isset( $vars[ $l1 ][ $l2 ] ) ) {
+                            $vars[ $l1 ][ $l2 ] = $this_val;
                         }
                     break;
 
                     case 2:
                         $l3 = $name;
                         if ( $name == '' ) {
-                            $vars[$l1][$l2][] = $this_val;
-                        } else if ( ! isset($vars[$l1][$l2][$l3]) ) {
-                            $vars[$l1][$l2][$l3] = $this_val;
+                            $vars[ $l1 ][ $l2 ][] = $this_val;
+                        } else if ( ! isset( $vars[ $l1 ][ $l2 ][ $l3 ] ) ) {
+                            $vars[ $l1 ][ $l2 ][ $l3 ] = $this_val;
                         }
                     break;
 
                     case 3:
                         $l4 = $name;
                         if ( $name == '' ) {
-                            $vars[$l1][$l2][$l3][] = $this_val;
-                        } else if ( ! isset($vars[$l1][$l2][$l3][$l4] ) ) {
-                            $vars[$l1][$l2][$l3][$l4] = $this_val;
+                            $vars[ $l1 ][ $l2 ][ $l3 ][] = $this_val;
+                        } else if ( ! isset( $vars[ $l1 ][ $l2 ][ $l3 ][ $l4 ] ) ) {
+                            $vars[ $l1 ][ $l2 ][ $l3 ][ $l4 ] = $this_val;
                         }
                     break;
                 }
@@ -1502,7 +1503,7 @@ class FrmAppHelper{
             echo ' class="frm_help"';
         }
 
-        echo ' title="'. esc_attr($tooltips[$name]);
+        echo ' title="'. esc_attr( $tooltips[ $name ] );
 
         if ( 'open' != $class ) {
             echo '"';
@@ -1525,7 +1526,7 @@ class FrmAppHelper{
                 $val = stripslashes( $val );
 
                 // Add backslashes before double quotes and forward slashes only
-                $post_content[$key] = addcslashes( $val, '"\\/' );
+                $post_content[ $key ] = addcslashes( $val, '"\\/' );
             }
             unset( $key, $val );
         }

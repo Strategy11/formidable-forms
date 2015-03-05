@@ -38,13 +38,13 @@ class FrmFormActionsHelper{
 
         $settings = array();
         foreach ( $actions as $action ) {
-            if ( ! isset($action_controls[$action->post_excerpt]) || count($settings) >= $limit ) {
+            if ( ! isset( $action_controls[ $action->post_excerpt ] ) || count( $settings ) >= $limit ) {
                 continue;
             }
 
-            $action = $action_controls[$action->post_excerpt]->prepare_action($action);
+            $action = $action_controls[ $action->post_excerpt ]->prepare_action( $action );
 
-            $settings[$action->ID] = $action;
+            $settings[ $action->ID ] = $action;
         }
 
         if ( 1 === $limit ) {
@@ -76,7 +76,7 @@ class FrmFormActionsHelper{
                 $condition['hide_opt'] = reset($condition['hide_opt']);
             }
 
-            $observed_value = isset($entry->metas[$condition['hide_field']]) ? $entry->metas[$condition['hide_field']] : '';
+            $observed_value = isset( $entry->metas[ $condition['hide_field'] ] ) ? $entry->metas[ $condition['hide_field'] ] : '';
             if ( $condition['hide_opt'] == 'current_user' ) {
                 $condition['hide_opt'] = get_current_user_id();
             }
@@ -87,7 +87,7 @@ class FrmFormActionsHelper{
                 $stop = $stop ? false : true;
             }
 
-            $met[$stop] = $stop;
+            $met[ $stop ] = $stop;
         }
 
         if ( $notification['conditions']['any_all'] == 'all' && !empty($met) && isset($met[0]) && isset($met[1]) ) {

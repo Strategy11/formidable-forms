@@ -51,7 +51,7 @@ class FrmFormsController{
         global $frm_vars;
 
         $action = isset($_REQUEST['frm_action']) ? 'frm_action' : 'action';
-        $action = ($values) ? $values[$action] : FrmAppHelper::get_param($action);
+        $action = $values ? $values[ $action ] : FrmAppHelper::get_param( $action );
 
         if ($action == 'create'){
             return self::create($values);
@@ -717,7 +717,7 @@ class FrmFormsController{
         $templates = glob($path."/*.php");
 
         for($i = count($templates) - 1; $i >= 0; $i--){
-            $filename = str_replace('.php', '', str_replace($path.'/', '', $templates[$i]));
+            $filename = str_replace( '.php', '', str_replace( $path.'/', '', $templates[ $i ] ) );
             $template_query = array('form_key' => $filename);
             if ( $template ) {
                 $template_query['is_template'] = 1;
@@ -735,7 +735,7 @@ class FrmFormsController{
                 $values['default_template'] = 1;
             }
 
-            include($templates[$i]);
+            include( $templates[ $i ] );
 
             //get updated form
             if ( isset($form) && ! empty($form) ) {
@@ -772,7 +772,7 @@ class FrmFormsController{
                 add_filter('frm_validate_form', 'FrmFormsController::json_error');
             } else {
                 $vars = FrmAppHelper::json_to_array($json_vars);
-                $action = $vars[$action];
+                $action = $vars[ $action ];
             }
         }else{
             $action = FrmAppHelper::get_param($action);
@@ -844,7 +844,7 @@ class FrmFormsController{
         $actions = array();
         foreach ($frm_vars['forms_loaded'] as $form ) {
             if ( is_object($form) ) {
-                $actions[$form->id] = $form->name;
+                $actions[ $form->id ] = $form->name;
             }
             unset($form);
         }
@@ -987,7 +987,7 @@ class FrmFormsController{
         $message = $errors = '';
 
         if ( $params['posted_form_id'] == $form->id && $_POST ) {
-            $errors = isset($frm_vars['created_entries'][$form->id]) ? $frm_vars['created_entries'][$form->id]['errors'] : array();
+            $errors = isset( $frm_vars['created_entries'][ $form->id ] ) ? $frm_vars['created_entries'][ $form->id ]['errors'] : array();
         }
 
         $fields = FrmFieldsHelper::get_form_fields($form->id, (isset($errors) && !empty($errors)));
@@ -1013,7 +1013,7 @@ class FrmFormsController{
         }
 
         $values = FrmEntriesHelper::setup_new_vars($fields, $form, true);
-        $created = ( isset($frm_vars['created_entries']) && isset($frm_vars['created_entries'][$form->id]) ) ? $frm_vars['created_entries'][$form->id]['entry_id'] : 0;
+        $created = ( isset( $frm_vars['created_entries'] ) && isset( $frm_vars['created_entries'][ $form->id ] ) ) ? $frm_vars['created_entries'][ $form->id ]['entry_id'] : 0;
         $conf_method = apply_filters('frm_success_filter', 'message', $form, $form->options, 'create');
 
         if ( $created && is_numeric($created) && $conf_method != 'message' ) {

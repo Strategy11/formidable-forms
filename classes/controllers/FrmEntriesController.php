@@ -207,7 +207,7 @@ class FrmEntriesController {
             $form_id .'_updated_at' => 'updated_at',
             $form_id .'_ip'         => 'ip',
             $form_id .'_item_key'   => 'item_key',
-            $form_id .'_is_draft'   => 'is_draft'
+            $form_id .'_is_draft'   => 'is_draft',
         );
 
         foreach ( $fields as $field ) {
@@ -276,7 +276,7 @@ class FrmEntriesController {
         return $result;
     }
 
-    public static function display_list($params=array(), $message='', $errors = array()){
+    public static function display_list( $params = array(), $message = '', $errors = array() ) {
         global $wpdb, $frm_vars;
 
         $form = FrmEntriesHelper::get_current_form();
@@ -405,7 +405,7 @@ class FrmEntriesController {
         self::display_list($params, $message, $errors);
     }
 
-    public static function show_form($id='', $key='', $title=false, $description=false){
+    public static function show_form( $id = '', $key = '', $title = false, $description = false ) {
         _deprecated_function( __FUNCTION__, '1.07.05', 'FrmFormsController::show_form()' );
         return FrmFormsController::show_form($id, $key, $title, $description);
     }
@@ -415,7 +415,7 @@ class FrmEntriesController {
         return FrmFormsController::get_form($form, $title, $description);
     }
 
-    public static function process_entry($errors='', $ajax=false){
+    public static function process_entry( $errors = '', $ajax = false ) {
         if ( FrmAppHelper::is_admin() || ! isset($_POST) || ! isset($_POST['form_id']) || ! is_numeric($_POST['form_id']) || ! isset($_POST['item_key']) ) {
             return;
         }
@@ -432,21 +432,22 @@ class FrmEntriesController {
         if ( ! isset($frm_vars['form_params']) ) {
             $frm_vars['form_params'] = array();
         }
-        $frm_vars['form_params'][$form->id] = $params;
+        $frm_vars['form_params'][ $form->id ] = $params;
 
-        if(isset($frm_vars['created_entries'][$_POST['form_id']]))
+        if ( isset( $frm_vars['created_entries'][ $_POST['form_id'] ] ) ) {
             return;
+        }
 
         if ( $errors == '' ) {
             $errors = FrmEntry::validate($_POST);
         }
-        $frm_vars['created_entries'][$_POST['form_id']] = array('errors' => $errors);
+        $frm_vars['created_entries'][ $_POST['form_id'] ] = array('errors' => $errors);
 
         if( empty($errors) ){
             $_POST['frm_skip_cookie'] = 1;
             if($params['action'] == 'create'){
-                if ( apply_filters('frm_continue_to_create', true, $_POST['form_id']) && ! isset($frm_vars['created_entries'][$_POST['form_id']]['entry_id']) ) {
-                    $frm_vars['created_entries'][$_POST['form_id']]['entry_id'] = FrmEntry::create( $_POST );
+                if ( apply_filters( 'frm_continue_to_create', true, $_POST['form_id'] ) && ! isset( $frm_vars['created_entries'][ $_POST['form_id'] ]['entry_id'] ) ) {
+                    $frm_vars['created_entries'][ $_POST['form_id'] ]['entry_id'] = FrmEntry::create( $_POST );
                 }
             }
 
@@ -534,7 +535,7 @@ class FrmEntriesController {
         return $content;
     }
 
-    public static function &filter_email_value($value, $meta, $entry, $atts=array()){
+    public static function &filter_email_value( $value, $meta, $entry, $atts = array() ) {
         $field = FrmField::getOne($meta->field_id);
         if ( ! $field ) {
             return $value;
@@ -555,7 +556,7 @@ class FrmEntriesController {
         return self::filter_display_value($value, $field, $atts);
     }
 
-    public static function &filter_display_value($value, $field, $atts=array()){
+    public static function &filter_display_value( $value, $field, $atts = array() ) {
         $saved_value = ( isset($atts['saved_value']) && $atts['saved_value'] ) ? true : false;
         if ( ! in_array($field->type, array('radio', 'checkbox', 'radio', 'select')) || ! isset($field->field_options['separate_value']) || ! $field->field_options['separate_value'] || $saved_value ) {
             return $value;
@@ -568,10 +569,10 @@ class FrmEntriesController {
                 continue;
             }
 
-            $f_labels[$opt_key] = isset($opt['label']) ? $opt['label'] : reset($opt);
-            $f_values[$opt_key] = isset($opt['value']) ? $opt['value'] : $f_labels[$opt_key];
-            if ( $f_labels[$opt_key] == $f_values[$opt_key] ) {
-                unset($f_values[$opt_key], $f_labels[$opt_key]);
+            $f_labels[ $opt_key ] = isset( $opt['label'] ) ? $opt['label'] : reset($opt);
+            $f_values[ $opt_key ] = isset( $opt['value'] ) ? $opt['value'] : $f_labels[ $opt_key ];
+            if ( $f_labels[ $opt_key ] == $f_values[ $opt_key ] ) {
+                unset( $f_values[ $opt_key ], $f_labels[ $opt_key ] );
             }
             unset($opt_key, $opt);
         }
@@ -581,9 +582,9 @@ class FrmEntriesController {
                 if ( in_array($val, $f_values) ) {
                     $opt = array_search($val, $f_values);
                     if ( is_array($value) ) {
-                        $value[$v_key] = $f_labels[$opt];
+                        $value[ $v_key ] = $f_labels[ $opt ];
                     } else {
-                        $value = $f_labels[$opt];
+                        $value = $f_labels[ $opt ];
                     }
                 }
                 unset($v_key, $val);
@@ -602,8 +603,9 @@ class FrmEntriesController {
             FrmFormsHelper::maybe_get_form( $form );
         }
 
-        if(isset($frm_vars['form_params']) && is_array($frm_vars['form_params']) && isset($frm_vars['form_params'][$form->id]))
-            return $frm_vars['form_params'][$form->id];
+        if ( isset( $frm_vars['form_params'] ) && is_array( $frm_vars['form_params'] ) && isset( $frm_vars['form_params'][ $form->id ] ) ) {
+            return $frm_vars['form_params'][ $form->id ];
+        }
 
         $action_var = isset($_REQUEST['frm_action']) ? 'frm_action' : 'action';
         $action = apply_filters('frm_show_new_entry_page', FrmAppHelper::get_param($action_var, 'new'), $form);
@@ -620,19 +622,18 @@ class FrmEntriesController {
         }
 
         if ($form->id == $values['posted_form_id']){ //if there are two forms on the same page, make sure not to submit both
-            foreach ($default_values as $var => $default){
-                if($var == 'action')
-                    $values[$var] = FrmAppHelper::get_param($action_var, $default);
-                else
-                    $values[$var] = FrmAppHelper::get_param($var, $default);
-                unset($var);
-                unset($default);
+            foreach ( $default_values as $var => $default ) {
+                if ( $var == 'action' ) {
+                    $values[ $var ] = FrmAppHelper::get_param( $action_var, $default );
+                } else {
+                    $values[ $var ] = FrmAppHelper::get_param( $var, $default );
+                }
+                unset( $var, $default );
             }
         }else{
-            foreach ($default_values as $var => $default){
-                $values[$var] = $default;
-                unset($var);
-                unset($default);
+            foreach ( $default_values as $var => $default ) {
+                $values[ $var ] = $default;
+                unset( $var, $default );
             }
         }
 

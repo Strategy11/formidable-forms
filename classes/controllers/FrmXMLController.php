@@ -102,7 +102,7 @@ class FrmXMLController{
         ));
 
         $file_type = strtolower(pathinfo($_FILES['frm_import_file']['name'], PATHINFO_EXTENSION));
-        if ( $file_type != 'xml' && isset($export_format[$file_type]) ) {
+        if ( $file_type != 'xml' && isset( $export_format[ $file_type ] ) ) {
             // allow other file types to be imported
             do_action('frm_before_import_'. $file_type );
             return;
@@ -211,7 +211,7 @@ class FrmXMLController{
 
 	    foreach($type as $tb_type){
             $where = $join = '';
-            $table = $tables[$tb_type];
+            $table = $tables[ $tb_type ];
 
             $select = $table .'.id';
             $query_vars = array();
@@ -284,7 +284,7 @@ class FrmXMLController{
                 $where = ' WHERE '. $where;
             }
 
-            $records[$tb_type] = $wpdb->get_col( $wpdb->prepare( 'SELECT ' . $select . ' FROM ' . $table . $join . $where, $query_vars ) );
+            $records[ $tb_type ] = $wpdb->get_col( $wpdb->prepare( 'SELECT ' . $select . ' FROM ' . $table . $join . $where, $query_vars ) );
             unset($tb_type);
         }
 

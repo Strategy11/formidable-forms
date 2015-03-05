@@ -208,7 +208,7 @@ class FrmSettings{
         $frm_roles = FrmAppHelper::frm_capabilities();
         $roles = get_editable_roles();
         foreach ( $frm_roles as $frm_role => $frm_role_description ) {
-            $this->$frm_role = (array) ( isset($params[$frm_role]) ? $params[$frm_role] : 'administrator' );
+            $this->$frm_role = (array) ( isset( $params[ $frm_role ] ) ? $params[ $frm_role ] : 'administrator' );
 
             if ( count($this->$frm_role) === 1 ) {
                 $set_role = reset($this->$frm_role);

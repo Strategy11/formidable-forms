@@ -104,7 +104,7 @@ class FrmStylesController{
         $styles = $frm_style->get_all();
 
         if ( is_numeric($style) ) {
-            $style = $styles[$style];
+            $style = $styles[ $style ];
         } else if ( 'default' == $style ) {
             $style = $frm_style->get_default_style($styles);
         }
@@ -136,11 +136,11 @@ class FrmStylesController{
         $forms = FrmForm::getAll("is_template=0 AND (status is NULL OR status = '' OR status = 'published')");
 
         foreach ( $forms as $form ) {
-            if ( $_POST['style'][$form->id] == $_POST['prev_style'][$form->id] ) {
+            if ( $_POST['style'][ $form->id ] == $_POST['prev_style'][ $form->id ] ) {
                 continue;
             }
 
-            $form->options['custom_style'] = $_POST['style'][$form->id];
+            $form->options['custom_style'] = $_POST['style'][ $form->id ];
 
             $wpdb->update($wpdb->prefix .'frm_forms', array('options' => maybe_serialize($form->options)), array('id' => $form->id));
             unset($form);
@@ -220,7 +220,7 @@ class FrmStylesController{
         // remove the # from the colors
         foreach ( $_GET['frm_style_setting']['post_content'] as $k => $v ) {
             if ( ! is_array($v) && strpos($v, '#') === 0 ) {
-                $_GET['frm_style_setting']['post_content'][$k] = str_replace('#', '', $v);
+                $_GET['frm_style_setting']['post_content'][ $k ] = str_replace( '#', '', $v );
             }
         }
 
@@ -331,8 +331,8 @@ class FrmStylesController{
      */
     public static function get_style_val($val, $form = 'default') {
         $style = self::get_form_style($form);
-        if ( $style && isset($style->post_content[$val]) ) {
-            return $style->post_content[$val];
+        if ( $style && isset( $style->post_content[ $val ] ) ) {
+            return $style->post_content[ $val ];
         }
     }
 
@@ -351,7 +351,7 @@ class FrmStylesController{
             } else if ( 'alt_bg_color' == $name ) {
                 $setting = 'bg_color_active';
             }
-            $default_styles[$name] = $style->post_content[$setting];
+            $default_styles[ $name ] = $style->post_content[ $setting ];
             unset($name, $val);
         }
 
@@ -385,12 +385,12 @@ class FrmStylesController{
     	$i = 0;
     	$first_open = false;
     	do {
-    		if ( ! isset( $wp_meta_boxes ) || ! isset( $wp_meta_boxes[$page] ) || ! isset( $wp_meta_boxes[$page][$context] ) )
+    		if ( ! isset( $wp_meta_boxes ) || ! isset( $wp_meta_boxes[ $page ] ) || ! isset( $wp_meta_boxes[ $page ][ $context ] ) )
     			break;
 
     		foreach ( array( 'high', 'core', 'default', 'low' ) as $priority ) {
-    			if ( isset( $wp_meta_boxes[$page][$context][$priority] ) ) {
-    				foreach ( $wp_meta_boxes[$page][$context][$priority] as $box ) {
+    			if ( isset( $wp_meta_boxes[ $page ][ $context ][ $priority ] ) ) {
+    				foreach ( $wp_meta_boxes[ $page ][ $context ][ $priority ] as $box ) {
     					if ( false == $box || ! $box['title'] )
     						continue;
     					$i++;

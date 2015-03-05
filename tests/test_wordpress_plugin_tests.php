@@ -76,7 +76,7 @@ class WP_Test_WordPress_Plugin_Tests extends WP_UnitTestCase {
             $this->assertTrue($field_id > 0);
 
             if ( $field_id ) {
-                $this->field_ids[$field_id] = rand_str();
+                $this->field_ids[ $field_id ] = rand_str();
 
                 $field = FrmField::getOne($field_id);
                 $this->assertNotEmpty($field);

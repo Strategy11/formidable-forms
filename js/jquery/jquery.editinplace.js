@@ -530,7 +530,7 @@ $.extend(InlineEditor.prototype, {
 			|| ! $.isFunction(this.settings.delegate[aDelegateMethodName]))
 			return defaultReturnValue;
 		
-		var delegateReturnValue =  this.settings.delegate[aDelegateMethodName](this.dom, this.settings, optionalEvent);
+		var delegateReturnValue = this.settings.delegate[aDelegateMethodName](this.dom, this.settings, optionalEvent);
 		return (undefined === delegateReturnValue)
 			? defaultReturnValue
 			: delegateReturnValue;

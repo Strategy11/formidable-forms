@@ -132,12 +132,12 @@ class FrmFieldsHelper{
             if ( $var == 'field_options' ) {
                 $values['field_options'] = array();
                 foreach ( $default as $opt_var => $opt_default ) {
-                    $values['field_options'][$opt_var] = $opt_default;
+                    $values['field_options'][ $opt_var ] = $opt_default;
                     unset($opt_var, $opt_default);
                 }
 
             } else {
-                $values[$var] = $default;
+                $values[ $var ] = $default;
             }
             unset($var, $default);
         }
@@ -146,7 +146,7 @@ class FrmFieldsHelper{
             if ( 'data' == $type ) {
                 $values['field_options']['data_type'] = $setting;
             }else{
-                $values['field_options'][$setting] = 1;
+                $values['field_options'][ $setting ] = 1;
             }
         }
 
@@ -171,8 +171,8 @@ class FrmFieldsHelper{
         $fields = self::field_selection();
         $fields = array_merge($fields, self::pro_field_selection());
 
-        if ( isset($fields[$type]) ) {
-            $values['name'] = is_array($fields[$type]) ? $fields[$type]['name'] : $fields[$type];
+        if ( isset( $fields[ $type ] ) ) {
+            $values['name'] = is_array( $fields[ $type ] ) ? $fields[ $type ]['name'] : $fields[ $type ];
         }
 
         unset($fields);
@@ -198,12 +198,12 @@ class FrmFieldsHelper{
             $values['form_name'] = '';
         }else{
             foreach ($defaults as $var => $default){
-                $values[$var] = htmlspecialchars(FrmAppHelper::get_param($var, $default));
+                $values[ $var ] = htmlspecialchars( FrmAppHelper::get_param( $var, $default ) );
                 unset($var, $default);
             }
 
             foreach (array('field_key' => $record->field_key, 'type' => $record->type, 'default_value'=> $record->default_value, 'field_order' => $record->field_order, 'required' => $record->required) as $var => $default){
-                $values[$var] = FrmAppHelper::get_param($var, $default);
+                $values[ $var ] = FrmAppHelper::get_param( $var, $default );
                 unset($var, $default);
             }
 
@@ -223,7 +223,7 @@ class FrmFieldsHelper{
         }
 
         foreach($defaults as $opt => $default){
-            $values[$opt] = (isset($record->field_options[$opt])) ? $record->field_options[$opt] : $default;
+            $values[ $opt ] = isset( $record->field_options[ $opt ] ) ? $record->field_options[ $opt ] : $default;
             unset($opt, $default);
         }
 
@@ -272,7 +272,7 @@ class FrmFieldsHelper{
         $values['default_value'] = maybe_serialize($field->default_value);
 
         foreach ( array( 'name', 'description', 'type', 'field_order', 'field_options', 'required' ) as $col ) {
-            $values[$col] = $field->{$col};
+            $values[ $col ] = $field->{$col};
         }
     }
 
@@ -288,7 +288,7 @@ class FrmFieldsHelper{
             'invalid'   => array('full' => __('This field is invalid', 'formidable'), 'part' => $field->name.' '. __('is invalid', 'formidable'))
         );
 
-        $msg = ($field->field_options[$error] == $defaults[$error]['full'] || empty($field->field_options[$error])) ? ($defaults[$error]['part']) : $field->field_options[$error];
+        $msg = ( $field->field_options[ $error ] == $defaults[ $error ]['full'] || empty( $field->field_options[ $error ] ) ) ? $defaults[ $error ]['part'] : $field->field_options[ $error ];
         return $msg;
     }
 
@@ -429,7 +429,7 @@ DEFAULT_HTML;
         $frm_settings = FrmAppHelper::get_settings();
 
         foreach ( $shortcodes[0] as $short_key => $tag ) {
-            $atts = shortcode_parse_atts( $shortcodes[2][$short_key] );
+            $atts = shortcode_parse_atts( $shortcodes[2][ $short_key ] );
             $tag = self::get_shortcode_tag($shortcodes, $short_key, array('conditional' => false, 'conditional_check' => false));
 
             $replace_with = '';
@@ -453,7 +453,7 @@ DEFAULT_HTML;
                 $replace_with = FrmProEntriesController::entry_delete_link($atts);
             }
 
-            $html = str_replace($shortcodes[0][$short_key], $replace_with, $html);
+            $html = str_replace( $shortcodes[0][ $short_key ], $replace_with, $html );
         }
 
         if($form){
@@ -502,15 +502,15 @@ DEFAULT_HTML;
         }
 
         $with_tags = $args['conditional_check'] ? 3 : 2;
-        if ( ! empty($shortcodes[$with_tags][$short_key]) ) {
-            $tag = str_replace( '[' . $prefix, '', $shortcodes[0][$short_key]);
+        if ( ! empty( $shortcodes[ $with_tags ][ $short_key ] ) ) {
+            $tag = str_replace( '[' . $prefix, '', $shortcodes[0][ $short_key ] );
             $tag = str_replace(']', '', $tag);
             $tags = explode(' ', $tag);
             if ( is_array($tags) ) {
                 $tag = $tags[0];
             }
         } else {
-            $tag = $shortcodes[$with_tags - 1][$short_key];
+            $tag = $shortcodes[ $with_tags - 1 ][ $short_key ];
         }
 
         return $tag;
@@ -755,23 +755,23 @@ DEFAULT_HTML;
         );
 
         foreach ( $shortcodes[0] as $short_key => $tag ) {
-            $atts = shortcode_parse_atts( $shortcodes[3][$short_key] );
+            $atts = shortcode_parse_atts( $shortcodes[3][ $short_key ] );
 
-            if ( ! empty($shortcodes[3][$short_key]) ) {
-                $tag = str_replace( array('[', ']'), '', $shortcodes[0][$short_key]);
+            if ( ! empty( $shortcodes[3][ $short_key ] ) ) {
+                $tag = str_replace( array('[', ']'), '', $shortcodes[0][ $short_key ] );
                 $tags = explode(' ', $tag);
                 if ( is_array($tags) ) {
                     $tag = $tags[0];
                 }
             } else {
-                $tag = $shortcodes[2][$short_key];
+                $tag = $shortcodes[2][ $short_key ];
             }
 
             switch ( $tag ) {
                 case 'id':
                 case 'key':
                 case 'ip':
-                    $replace_with = $shortcode_values[$tag];
+                    $replace_with = $shortcode_values[ $tag ];
                 break;
 
                 case 'user_agent':
@@ -847,7 +847,7 @@ DEFAULT_HTML;
             }
 
             if ( isset($replace_with) ) {
-                $content = str_replace($shortcodes[0][$short_key], $replace_with, $content);
+                $content = str_replace( $shortcodes[0][ $short_key ], $replace_with, $content );
             }
 
             unset($atts, $conditional, $replace_with);
@@ -956,21 +956,21 @@ DEFAULT_HTML;
 
         if ( in_array($type, $single_input) ) {
             foreach ( $single_input as $input ) {
-                $field_types[$input] = ( isset($pro_field_selection[$input]) ) ? $pro_field_selection[$input] : $frm_field_selection[$input];
+                $field_types[ $input ] = isset( $pro_field_selection[ $input ] ) ? $pro_field_selection[ $input ] : $frm_field_selection[ $input ];
                 unset($input);
             }
         } else if ( in_array($type, $multiple_input) ) {
             foreach ( $multiple_input as $input ) {
-                $field_types[$input] = ( isset($pro_field_selection[$input]) ) ? $pro_field_selection[$input] : $frm_field_selection[$input];
+                $field_types[ $input ] = isset($pro_field_selection[ $input ] ) ? $pro_field_selection[ $input ] : $frm_field_selection[ $input ];
                 unset($input);
             }
         } else if ( in_array($type, $other_type) ) {
             foreach ( $other_type as $input ) {
-                $field_types[$input] = ( isset($pro_field_selection[$input]) ) ? $pro_field_selection[$input] : $frm_field_selection[$input];
+                $field_types[ $input ] = isset( $pro_field_selection[ $input ] ) ? $pro_field_selection[ $input ] : $frm_field_selection[ $input ];
                 unset($input);
             }
         } else {
-            $field_types[$type] = ( isset($pro_field_selection[$type]) ) ? $pro_field_selection[$type] : $frm_field_selection[$type];
+            $field_types[ $type ] = isset( $pro_field_selection[ $type ] ) ? $pro_field_selection[ $type ] : $frm_field_selection[ $type ];
         }
 
         return $field_types;
@@ -1005,7 +1005,7 @@ DEFAULT_HTML;
         }
         if(is_array($val)){
             foreach($val as $k => $v){
-                $val[$k] = str_replace($replace, $replace_with, $v);
+                $val[ $k ] = str_replace( $replace, $replace_with, $v );
                 unset($k, $v);
             }
         }else{

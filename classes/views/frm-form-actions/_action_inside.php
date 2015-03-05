@@ -39,7 +39,7 @@
 
         foreach ( $action_control->action_options['event'] as $event ) { ?>
             <label for="frm_action_event_<?php echo esc_attr( $event ) ?>" class="frm_action_events"><input type="checkbox" name="<?php echo esc_attr( $action_control->get_field_name('event') ) ?>[]" value="<?php echo esc_attr( $event ) ?>" id="<?php echo esc_attr( $action_control->get_field_id('frm_action_event_'. $event) ) ?>" <?php FrmAppHelper::checked($form_action->post_content['event'], $event) ?> />
-            <?php echo isset($event_labels[$event]) ? $event_labels[$event] : $event; ?>
+            <?php echo isset( $event_labels[ $event ] ) ? $event_labels[ $event ] : $event; ?>
             </label>
 <?php
         }
