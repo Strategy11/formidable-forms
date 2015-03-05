@@ -319,7 +319,7 @@ class FrmField{
 
         $old_where = $where;
         if ( is_array($where) ) {
-            $where = FrmAppHelper::get_where_clause_and_values( $where );
+            FrmDb::get_where_clause_and_values( $where );
 
             $query .= $where['where'] . $order_by . $limit;
             $query = $wpdb->prepare($query, $where['values']);

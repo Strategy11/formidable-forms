@@ -271,7 +271,7 @@ class FrmEntry{
             return stripslashes_deep($entry);
         }
 
-        $entry = FrmDb::get_row( 'frm_items', $query, 'it.*, fr.name as form_name, fr.form_key as form_key' );
+        $entry = $wpdb->get_row( $query );
         $entry = self::get_meta($entry);
 
         return stripslashes_deep($entry);

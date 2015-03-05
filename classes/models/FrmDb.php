@@ -160,9 +160,36 @@ class FrmDb{
         }
     }
 
-    public function get_where_clause_and_values( $args ){
-        _deprecated_function( __FUNCTION__, '2.0', 'FrmAppHelper::get_where_clause_and_values');
-        return FrmAppHelper::get_where_clause_and_values( $args );
+    /**
+     * Change array into format $wpdb->prepare can use
+     */
+    public static function get_where_clause_and_values( &$args ) {
+        if ( empty($args) ) {
+            // if there are no arguments, add one to prevent prepare from failing
+            $args = array( 1 => 1 );
+        }
+
+        $where = '';
+        $values = array();
+        if ( ! is_array( $args ) ) {
+            $args = compact('where', 'values');
+            return;
+        }
+
+        foreach ( $args as $key => $value ) {
+            $where .= empty($where) ? ' WHERE' : ' AND';
+            $where .= ' '. $key;
+            if ( is_array($value) ) {
+                $where .= ' in ('. FrmAppHelper::prepare_array_values( $value, '%s' ) .')';
+                $values = array_merge( $values, $value );
+            } else {
+                $where .= '=';
+                $where .= is_numeric($value) ? ( strpos($value, '.') !== false ? '%f' : '%d' ) : '%s';
+                $values[] = $value;
+            }
+        }
+
+        $args = compact('where', 'values');
     }
 
     public static function get_count( $table, $where = array(), $args = array() ) {
@@ -172,23 +199,23 @@ class FrmDb{
     public static function get_var( $table, $where = array(), $field = 'id', $args = array(), $limit = '', $type = 'var' ) {
         $group = '';
         self::get_group_and_table_name( $table, $group );
-
-        $where = FrmAppHelper::get_where_clause_and_values( $where );
+        self::get_where_clause_and_values( $where );
         self::convert_options_to_array( $args, '', $limit );
 
         global $wpdb;
-        $query = $wpdb->prepare('SELECT '. $field .' FROM '. $table . $where['where'] . $order_by . $limit, $where['values']);
+        $query = $wpdb->prepare('SELECT '. $field .' FROM '. $table . $where['where'] .' '. implode(' ', $args), $where['values']);
 
-        $cache_key = implode('_', FrmAppHelper::array_flatten( $where ) ) . str_replace(' ', '_', implode('_', $args)) . $field .'_'. $type;
+        $cache_key = implode('_', FrmAppHelper::array_flatten( $where ) ) . str_replace( array(' ', ','), '_', implode('_', $args) ) . $field .'_'. $type;
         $results = FrmAppHelper::check_cache( $cache_key, $group, $query, 'get_'. $type );
         return $results;
     }
 
     /**
      * @param string $table
+     * @param array $where
      */
-    public static function get_col( $table, $args = array(), $field = 'id', $args = array(), $limit = '' ) {
-        return self::get_var( $table, $args, $field, $args, $limit, 'col' );
+    public static function get_col( $table, $where = array(), $field = 'id', $args = array(), $limit = '' ) {
+        return self::get_var( $table, $where, $field, $args, $limit, 'col' );
     }
 
     /**
@@ -196,7 +223,7 @@ class FrmDb{
      */
     public static function get_row( $table, $where = array(), $fields = '*', $args = array() ) {
         $args['limit'] = 1;
-        return self::get_var( $table, $where, $fields, '', '', $args, 'row' );
+        return self::get_var( $table, $where, $fields, $args, '', 'row' );
     }
 
     /**
@@ -218,18 +245,7 @@ class FrmDb{
      * @param string $table
      */
     public static function get_results( $table, $where = array(), $fields = '*', $args = array() ) {
-        $group = '';
-        self::get_group_and_table_name( $table, $group );
-
-        $where = FrmAppHelper::get_where_clause_and_values( $where );
-        self::convert_options_to_array( $args );
-
-        global $wpdb;
-        $query = $wpdb->prepare( 'SELECT '. $fields .' FROM '. $table . $where['where'] . implode(' ', $args), $where['values'] );
-
-        $cache_key = implode('_', $where) . str_replace( array(' ', ','), '_', implode( '_', $args ) . $fields ) .'_results';
-        $results = FrmAppHelper::check_cache( $cache_key, $group, $query, 'get_results' );
-        return $results;
+        return self::get_var( $table, $where, $fields, $args, '', 'results' );
     }
 
     /*
@@ -261,7 +277,11 @@ class FrmDb{
             $args['limit'] = $limit;
         }
 
-        foreach ( $args as $k => $v ) {
+        $temp_args = $args;
+        foreach ( $temp_args as $k => $v ) {
+            if ( $k == 'limit' ) {
+                 $args[$k] = FrmAppHelper::esc_limit( $v );
+            }
             $db_name = strtoupper( str_replace( '_', ' ', $k ) );
             if ( strpos( $v, $db_name ) === false ) {
                 $args[$k] = $db_name .' '. $v;
