@@ -19,3 +19,8 @@ else {
 	require '../../../../tests/phpunit/includes/bootstrap.php';
 }
 
+if ( file_exists( __DIR__  .'/../vendor/autoload_52.php' ) ) {
+    include( __DIR__  .'/../vendor/autoload_52.php' );
+}
+
+@include __DIR__ . '/../vendor/autoload.php';

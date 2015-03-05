@@ -140,21 +140,24 @@ class FrmStyle{
         	global $wp_filesystem;
 
             if ( $dirs_exist ) {
+            	$chmod_dir = defined('FS_CHMOD_DIR') ? FS_CHMOD_DIR : ( fileperms( ABSPATH ) & 0777 | 0755 );
+            	$chmod_file = defined('FS_CHMOD_FILE') ? FS_CHMOD_FILE : ( fileperms( ABSPATH . 'index.php' ) & 0777 | 0644 );
+
                 // Create the directories if need be:
             	foreach ( $needed_dirs as $_dir ) {
                     // Only check to see if the Dir exists upon creation failure. Less I/O this way.
-            		if ( ! $wp_filesystem->mkdir( $_dir, FS_CHMOD_DIR ) && ! $wp_filesystem->is_dir( $_dir ) ) {
+            		if ( ! $wp_filesystem->mkdir( $_dir, $chmod_dir ) && ! $wp_filesystem->is_dir( $_dir ) ) {
             			$dirs_exist = false;
                     }
             	}
 
                 $index_path = $target_path .'/index.php';
-                $wp_filesystem->put_contents( $index_path, "<?php\n// Silence is golden.\n?>", FS_CHMOD_FILE );
+                $wp_filesystem->put_contents( $index_path, "<?php\n// Silence is golden.\n?>", $chmod_file );
 
                 // only write the file if the folders exist
                 if ( $dirs_exist ) {
                     $css_file = $target_path .'/css/formidablepro.css';
-                    $wp_filesystem->put_contents( $css_file, $css, FS_CHMOD_FILE );
+                    $wp_filesystem->put_contents( $css_file, $css, $chmod_file );
                 }
             }
         }

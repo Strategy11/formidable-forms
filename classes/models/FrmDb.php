@@ -279,6 +279,11 @@ class FrmDb{
 
         $temp_args = $args;
         foreach ( $temp_args as $k => $v ) {
+            if ( $v == '' ) {
+                unset($args[$k]);
+                continue;
+            }
+
             if ( $k == 'limit' ) {
                  $args[$k] = FrmAppHelper::esc_limit( $v );
             }
