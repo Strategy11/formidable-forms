@@ -53,8 +53,10 @@ class WP_Test_WordPress_Plugin_Tests extends WP_UnitTestCase {
 	}
 
 	function test_wpml_install(){
-	    $copy = new FrmProCopy();
-	    $copy->install();
+        if ( is_callable('FrmProCopy::install') ) {
+	        $copy = new FrmProCopy();
+	        $copy->install();
+        }
 	}
 
 	function test_create_form() {
