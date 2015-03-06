@@ -645,7 +645,7 @@ function frmAdminBuildJS(){
 	}
 
 	function deleteFieldOption(){
-		var cont = jQuery(this).parent('.frm_single_option').attr('id');
+        var cont = this.parentNode.id;
         var fk=cont.replace('frm_delete_field_', '').replace('_container', '').split('-');
         var field_id = jQuery(this).data('fid');
 		//id = 'frm_delete_field_'+field_id+'-'+opt_key+'_container'

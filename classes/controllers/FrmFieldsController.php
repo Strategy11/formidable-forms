@@ -306,7 +306,7 @@ class FrmFieldsController{
         check_ajax_referer( 'frm_ajax', 'nonce' );
 
         $field = FrmField::getOne( (int) $_POST['field_id'] );
-        $opt_key = (int) $_POST['opt_key'];
+        $opt_key = $_POST['opt_key'];
         $options = maybe_unserialize($field->options);
         unset( $options[ $opt_key ] );
         $response = array( 'other' => true );
@@ -436,6 +436,9 @@ class FrmFieldsController{
 
         $field['options'] = $opts;
         $field_name = $field['name'];
+
+        // Get html_id which will be used in single-option.php
+        $html_id = FrmFieldsHelper::get_html_id( $field );
 
         if ( $field['type'] == 'radio' || $field['type'] == 'checkbox' ) {
             require(FrmAppHelper::plugin_path() .'/classes/views/frm-fields/radio.php');
