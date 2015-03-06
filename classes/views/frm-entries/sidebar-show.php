@@ -3,7 +3,7 @@
     <h3 class="hndle"><span><?php _e( 'Entry Actions', 'formidable' ) ?></span></h3>
     <div class="inside">
         <div class="submitbox">
-        <div id="minor-publishing" style="border:none;">
+        <div id="minor-publishing" class="frm_remove_border">
             <div class="misc-pub-section">
                 <?php do_action('frm_show_entry_publish_box', $entry); ?>
                 <div class="clear"></div>
@@ -21,7 +21,7 @@
     	    <div id="delete-action">
     	        <a href="<?php echo esc_url( admin_url('admin.php?page=formidable-entries&frm_action=destroy&id='. $id .'&form='. $entry->form_id) ) ?>" class="submitdelete deletion" onclick="return confirm('<?php _e( 'Are you sure you want to delete that entry?', 'formidable' ) ?>');" title="<?php esc_attr_e( 'Delete' ) ?>"><?php _e( 'Delete' ) ?></a>
     	        <?php if ( ! empty($entry->post_id) ) { ?>
-        	    <a href="<?php echo esc_url( admin_url('admin.php?page=formidable-entries&frm_action=destroy&id='. $id .'&form='. $entry->form_id .'&keep_post=1') ) ?>" class="submitdelete deletion" style="margin-left:10px;" onclick="return confirm('<?php esc_attr_e( 'Are you sure you want to delete this entry?', 'formidable' ) ?>);" title="<?php esc_attr_e( 'Delete entry but leave the post', 'formidable' ) ?>"><?php _e( 'Delete without Post', 'formidable' ) ?></a>
+        	    <a href="<?php echo esc_url( admin_url('admin.php?page=formidable-entries&frm_action=destroy&id='. $id .'&form='. $entry->form_id .'&keep_post=1') ) ?>" class="submitdelete deletion frm_delete_wo_post" onclick="return confirm('<?php esc_attr_e( 'Are you sure you want to delete this entry?', 'formidable' ) ?>);" title="<?php esc_attr_e( 'Delete entry but leave the post', 'formidable' ) ?>"><?php _e( 'Delete without Post', 'formidable' ) ?></a>
         	    <?php } ?>
     	    </div>
     	    <?php } ?>

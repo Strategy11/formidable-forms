@@ -107,8 +107,25 @@ div.frm_msg_padding{
     padding:5px;
 }
 
+.frm_med_padding{
+    padding:10px;
+}
+
 .actions.frm_visible_overflow{
     overflow:visible;
+}
+
+.frm_no_entries_form{
+    padding:60px 0;
+}
+
+.frm_no_entries_form .frm_no_entries_header{
+    font-size:20px;
+    margin-bottom:10px;
+}
+
+.frm_no_entries_form .frm_no_entries_text{
+    line-height:200%;
 }
 
 .post-new-php.post-type-frm_display #poststuff {padding-top:10px;}
@@ -168,7 +185,8 @@ form label.frm_primary_label input{font-size:12px;}
 }
 
 .with_frm_style .wp-editor-container textarea,
-.postbox .wp-editor-container textarea{
+.postbox .wp-editor-container textarea,
+.frm_remove_border{
     border:none;
 }
 .with_frm_style .mceIframeContainer,
@@ -886,7 +904,7 @@ label.frm_action_events{
     line-height: 20px;
     float:right;
 }
-#frm_notification_settings .frm_bcc_button{
+#frm_notification_settings .frm_bcc_button, .submitdelete.frm_delete_wo_post{
     margin-left: 10px;
 }
 .frm_action_id{

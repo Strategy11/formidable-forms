@@ -1114,9 +1114,9 @@ DEFAULT_HTML;
     }
 
     public static function get_bulk_prefilled_opts(array &$prepop) {
-        $prepop[__( 'Countries', 'formidable' )] = FrmAppHelper::get_countries();
+        $prepop[__( 'Countries', 'formidable' )] = FrmFieldsHelper::get_countries();
 
-        $states = FrmAppHelper::get_us_states();
+        $states = FrmFieldsHelper::get_us_states();
         $state_abv = array_keys($states);
         sort($state_abv);
         $prepop[__( 'U.S. State Abbreviations', 'formidable' )] = $state_abv;
