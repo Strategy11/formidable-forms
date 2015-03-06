@@ -718,34 +718,15 @@ class FrmXMLHelper{
         if ( isset( $form_options['notification'] ) && is_array($form_options['notification']) ) {
             foreach ( $form_options['notification'] as $email_key => $notification ) {
 
-                // format the email data
-                $atts = array( 'email_to', 'reply_to' => '', 'reply_to_name' => '', 'event' );
+                $atts = array( 'email_to' => '', 'reply_to' => '', 'reply_to_name' => '', 'event' => '', 'form_id' => $form_id, 'email_key' => $email_key );
+
+                // Format the email data
                 self::format_email_data( &$atts, $notification );
 
-                $new_notification = array(
-                    'post_content'  => array(
-                        'email_message' => isset($notification['email_message']) ? $notification['email_message'] : '',
-                        'email_subject' => isset($notification['email_subject']) ? $notification['email_subject'] : '',
-                        'email_to'      => $atts['email_to'],
-                        'plain_text'    => isset($notification['plain_text']) ? $notification['plain_text'] : 0,
-                        'inc_user_info' => isset($notification['inc_user_info']) ? $notification['inc_user_info'] : 0,
-                        'event'         => $atts['event'],
-                        'conditions'    => isset($notification['conditions']) ? $notification['conditions'] : '',
-                    ),
-                    'post_name'         => $form_id .'_email_'. $email_key,
-                );
+                // Setup the new notification
+                $new_notification = array();
+                self::setup_new_notification( $new_notification, $notification, $atts );
 
-                if ( isset($notification['twilio']) && $notification['twilio'] ) {
-                    $new_notification['post_content'] = $notification['twilio'];
-                }
-
-                // Set reply to
-                $new_notification['post_content']['reply_to'] = $atts['reply_to'];
-
-                // Set from
-                if ( !empty( $atts['reply_to'] ) || !empty( $atts['reply_to_name'] ) ) {
-                    $new_notification['post_content']['from'] = ( empty($atts['reply_to_name']) ? '[sitename]' : $atts['reply_to_name'] ) .' <'. ( empty($atts['reply_to']) ? '[admin_email]' : $atts['reply_to'] ) .'>';
-                }
 
                 $notifications[] = $new_notification;
             }
@@ -754,6 +735,32 @@ class FrmXMLHelper{
 
     private static function format_email_data( $atts, $notification ) {
         // Format email_to
+        self::format_email_to_data( $atts, $notification );
+
+        // Format the reply to email and name
+        $reply_fields = array( 'reply_to' => '', 'reply_to_name' => '' );
+        foreach ( $reply_fields as $f => $val ) {
+            if ( isset( $notification[$f] ) ) {
+                $atts[$f] = $notification[$f];
+                if ( 'custom' == $notification[$f] ) {
+                    $atts[$f] = $notification['cust_' . $f];
+                } else if ( is_numeric( $atts[$f] ) && ! empty( $atts[$f] ) ) {
+                    $atts[$f] = '['. $atts[$f] .']';
+                }
+            }
+            unset( $f, $val );
+        }
+
+        // Format event
+        $atts['event'] = array('create');
+        if ( isset( $notification['update_email'] ) && 1 == $notification['update_email'] ) {
+            $atts['event'][] = 'update';
+        } else if ( isset($notification['update_email']) && 2 == $notification['update_email'] ) {
+            $atts['event'] = array('update');
+        }
+    }
+
+    private static function format_email_to_data( &$atts, $notification ) {
         if ( isset( $notification['email_to'] ) ) {
             $atts['email_to'] = preg_split( "/ (,|;) /", $notification['email_to']);
         } else {
@@ -781,27 +788,32 @@ class FrmXMLHelper{
             }
         }
         $atts['email_to'] = implode(', ', $atts['email_to']);
+    }
 
-        // Format the reply to email and name
-        $reply_fields = array( 'reply_to' => '', 'reply_to_name' => '' );
-        foreach ( $reply_fields as $f => $val ) {
-            if ( isset( $notification[$f] ) ) {
-                $atts[$f] = $notification[$f];
-                if ( 'custom' == $notification[$f] ) {
-                    $atts[$f] = $notification['cust_' . $f];
-                } else if ( is_numeric( $atts[$f] ) && ! empty( $atts[$f] ) ) {
-                    $atts[$f] = '['. $atts[$f] .']';
-                }
-            }
-            unset( $f, $val );
+    private static function setup_new_notification( &$new_notification, $notification, $atts ) {
+        $new_notification = array(
+            'post_content'  => array(
+                'email_message' => isset( $notification['email_message'] ) ? $notification['email_message'] : '',
+                'email_subject' => isset( $notification['email_subject'] ) ? $notification['email_subject'] : '',
+                'email_to'      => $atts['email_to'],
+                'plain_text'    => isset( $notification['plain_text'] ) ? $notification['plain_text'] : 0,
+                'inc_user_info' => isset( $notification['inc_user_info'] ) ? $notification['inc_user_info'] : 0,
+                'event'         => $atts['event'],
+                'conditions'    => isset( $notification['conditions'] ) ? $notification['conditions'] : '',
+            ),
+            'post_name'         => $atts['form_id'] .'_email_'. $atts['email_key'],
+        );
+
+        if ( isset( $notification['twilio'] ) && $notification['twilio'] ) {
+            $new_notification['post_content'] = $notification['twilio'];
         }
 
-        // Format event
-        $atts['event'] = array('create');
-        if ( isset( $notification['update_email'] ) && 1 == $notification['update_email'] ) {
-            $atts['event'][] = 'update';
-        } else if ( isset($notification['update_email']) && 2 == $notification['update_email'] ) {
-            $atts['event'] = array('update');
+        // Set reply to
+        $new_notification['post_content']['reply_to'] = $atts['reply_to'];
+
+        // Set from
+        if ( !empty( $atts['reply_to'] ) || !empty( $atts['reply_to_name'] ) ) {
+            $new_notification['post_content']['from'] = ( empty($atts['reply_to_name']) ? '[sitename]' : $atts['reply_to_name'] ) .' <'. ( empty($atts['reply_to']) ? '[admin_email]' : $atts['reply_to'] ) .'>';
         }
     }
 
