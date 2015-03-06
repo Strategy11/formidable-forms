@@ -462,11 +462,13 @@ class FrmEntry{
 
         $posted_fields = FrmField::getAll($where, 'field_order');
 
+        // Pass exclude value to validate_field function so it can be used for repeating sections
+        $args['exclude'] = $exclude;
+
         foreach ( $posted_fields as $posted_field ) {
-            self::validate_field($posted_field, $errors, $values);
+            self::validate_field($posted_field, $errors, $values, $args);
             unset($posted_field);
         }
-
 
         // check for spam
         self::spam_check($exclude, $values, $errors);
@@ -481,6 +483,7 @@ class FrmEntry{
             'id'    => $posted_field->id,
             'parent_field_id' => '', // the id of the repeat or embed form
             'key_pointer' => '', // the pointer in the posted array
+            'exclude'   => false, // exclude these field types from validation
         );
         $args = wp_parse_args( $args, $defaults );
 
