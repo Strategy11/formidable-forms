@@ -463,7 +463,7 @@ class FrmEntry{
         $posted_fields = FrmField::getAll($where, 'field_order');
 
         // Pass exclude value to validate_field function so it can be used for repeating sections
-        $args['exclude'] = $exclude;
+        $args = array( 'exclude' => $exclude );
 
         foreach ( $posted_fields as $posted_field ) {
             self::validate_field($posted_field, $errors, $values, $args);
