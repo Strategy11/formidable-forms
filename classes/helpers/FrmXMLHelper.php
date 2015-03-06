@@ -687,7 +687,7 @@ class FrmXMLHelper{
 
             // Switch field IDs and keys, if needed
             if ( $switch ) {
-            $new_notification['post_content'] = FrmFieldsHelper::switch_field_ids( $new_notification['post_content'] );
+                $new_notification['post_content'] = FrmFieldsHelper::switch_field_ids( $new_notification['post_content'] );
             }
             $new_notification['post_content']   = FrmAppHelper::prepare_and_encode( $new_notification['post_content'] );
 
@@ -721,19 +721,18 @@ class FrmXMLHelper{
                 $atts = array( 'email_to' => '', 'reply_to' => '', 'reply_to_name' => '', 'event' => '', 'form_id' => $form_id, 'email_key' => $email_key );
 
                 // Format the email data
-                self::format_email_data( &$atts, $notification );
+                self::format_email_data( $atts, $notification );
 
                 // Setup the new notification
                 $new_notification = array();
                 self::setup_new_notification( $new_notification, $notification, $atts );
-
 
                 $notifications[] = $new_notification;
             }
         }
     }
 
-    private static function format_email_data( $atts, $notification ) {
+    private static function format_email_data( &$atts, $notification ) {
         // Format email_to
         self::format_email_to_data( $atts, $notification );
 
@@ -791,18 +790,27 @@ class FrmXMLHelper{
     }
 
     private static function setup_new_notification( &$new_notification, $notification, $atts ) {
+        // Set up new notification
         $new_notification = array(
             'post_content'  => array(
-                'email_message' => isset( $notification['email_message'] ) ? $notification['email_message'] : '',
-                'email_subject' => isset( $notification['email_subject'] ) ? $notification['email_subject'] : '',
                 'email_to'      => $atts['email_to'],
-                'plain_text'    => isset( $notification['plain_text'] ) ? $notification['plain_text'] : 0,
-                'inc_user_info' => isset( $notification['inc_user_info'] ) ? $notification['inc_user_info'] : 0,
                 'event'         => $atts['event'],
-                'conditions'    => isset( $notification['conditions'] ) ? $notification['conditions'] : '',
             ),
             'post_name'         => $atts['form_id'] .'_email_'. $atts['email_key'],
         );
+
+        // Add more fields to the new notification
+        $add_fields = array( 'email_message', 'email_subject', 'plain_text', 'inc_user_info', 'conditions' );
+        foreach ( $add_fields as $add_field ) {
+            if ( isset ( $notification[$add_field] ) ) {
+                $new_notification['post_content'][$add_field] = $notification[$add_field];
+            } else if ( in_array( $add_field, array( 'plain_text', 'inc_user_info' ) ) ) {
+                $new_notification['post_content'][$add_field] = 0;
+            } else {
+                $new_notification['post_content'][$add_field] = '';
+            }
+            unset( $add_field );
+        }
 
         if ( isset( $notification['twilio'] ) && $notification['twilio'] ) {
             $new_notification['post_content'] = $notification['twilio'];
