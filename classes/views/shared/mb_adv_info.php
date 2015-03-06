@@ -87,7 +87,7 @@
             $entry_shortcodes['default-plain'] = __( 'Default Plain', 'formidable' );
         } else {
             $entry_shortcodes['detaillink'] = __( 'Detail Link', 'formidable' );
-            $entry_shortcodes['editlink location=&#34;front&#34; label=&#34;Edit&#34; page_id=x'] = __( 'Edit Entry Link', 'formidable' );
+            $entry_shortcodes['editlink location="front" label="Edit" page_id=x'] = __( 'Edit Entry Link', 'formidable' );
             $entry_shortcodes['evenodd'] = __( 'Even/Odd', 'formidable' );
             $entry_shortcodes['entry_count'] = __( 'Entry Count', 'formidable' );
         }

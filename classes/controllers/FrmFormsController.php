@@ -598,9 +598,9 @@ class FrmFormsController{
         $cond_shortcodes = apply_filters('frm_conditional_shortcodes', array());
 
         $adv_shortcodes = array(
-            'sep=&#34;, &#34;' => array('label' => __( 'Separator', 'formidable' ), 'title' => __( 'Use a different separator for checkbox fields', 'formidable' ) ),
-            'format=&#34;d-m-Y&#34;' => __( 'Date Format', 'formidable' ),
-            'show=&#34;field_label&#34;' => __( 'Field Label', 'formidable' ),
+            'sep=", "' => array('label' => __( 'Separator', 'formidable' ), 'title' => __( 'Use a different separator for checkbox fields', 'formidable' ) ),
+            'format="d-m-Y"' => __( 'Date Format', 'formidable' ),
+            'show="field_label"' => __( 'Field Label', 'formidable' ),
             'wpautop=0' => array('label' => __( 'No Auto P', 'formidable' ), 'title' => __( 'Do not automatically add any paragraphs or line breaks', 'formidable' )),
         );
         $adv_shortcodes = apply_filters('frm_advanced_shortcodes', $adv_shortcodes);
