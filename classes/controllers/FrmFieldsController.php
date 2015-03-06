@@ -102,7 +102,7 @@ class FrmFieldsController{
         }
 
         if ( empty($id) ) {
-            $id = str_replace('field_label_', '', $_POST['element_id']);
+            $id = str_replace( 'field_label_', '', sanitize_title( $_POST['element_id'] ) );
         }
 
         $value = trim($_POST['update_value']);

@@ -182,7 +182,7 @@ class FrmDb{
         $args = compact('where', 'values');
     }
 
-    private static function parse_where_from_array( $args, $base_where, &$where, &$values ) {
+    public static function parse_where_from_array( $args, $base_where, &$where, &$values ) {
         $condition = ' AND';
         if ( isset( $args['or'] ) ) {
             $condition = ' OR';
@@ -209,7 +209,14 @@ class FrmDb{
                     continue;
                 }
 
-                $where .= ' '. $key;
+                if ( strpos( $key, 'created_at' ) !== false || strpos( $key, 'updated_at' ) !== false  ) {
+                    $k = explode(' ', $key);
+                    $where .= ' DATE_FORMAT(' . reset( $k ) . ', %s) ' . str_replace( reset( $k ), '', $key );
+                    $values[] = '%Y-%m-%d %H:%i:%s';
+                } else {
+                    $where .= ' '. $key;
+                }
+
                 if ( is_array( $value ) ) {
                     $where .= ' in ('. FrmAppHelper::prepare_array_values( $value, '%s' ) .')';
                     $values = array_merge( $values, $value );

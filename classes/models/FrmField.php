@@ -180,6 +180,21 @@ class FrmField{
         return stripslashes_deep($results);
     }
 
+    /**
+     * Get the field type by key or id
+     * @param int|string The field id or key
+     */
+    public static function &get_type( $id ) {
+        $field = FrmAppHelper::check_cache( $id, 'frm_field' );
+        if ( $field ) {
+            $type = $field->type;
+        } else {
+            $type = FrmDb::get_var( 'frm_fields', array( 'or' => 1, 'id' => $id, 'field_key' => $id ), 'type' );
+        }
+
+        return $type;
+    }
+
     public static function get_all_types_in_form($form_id, $type, $limit = '', $inc_sub = 'exclude') {
         if ( ! $form_id ) {
             return array();
@@ -316,28 +331,27 @@ class FrmField{
         $limit = FrmAppHelper::esc_limit($limit);
 
         $query = "SELECT fi.*, fr.name as form_name  FROM {$table_name} fi LEFT OUTER JOIN {$form_table_name} fr ON fi.form_id=fr.id";
+        $query_type = ( $limit == ' LIMIT 1' || $limit == 1 ) ? 'row' : 'results';
 
-        $old_where = $where;
         if ( is_array($where) ) {
-            FrmDb::get_where_clause_and_values( $where );
-
-            $query .= $where['where'] . $order_by . $limit;
-            $query = $wpdb->prepare($query, $where['values']);
-
-            if ( count($old_where) == 1 && isset($old_where['fi.form_id']) ) {
+            if ( isset( $where['fi.form_id'] ) && count( $where ) == 1 ) {
                 // add sub fields to query
-                $form_id = $old_where['fi.form_id'];
-                $query = str_replace('fi.form_id='. $form_id, '(fi.form_id='. $form_id .' OR fr.parent_form_id = '. $form_id .')', $query);
+                $form_id = $where['fi.form_id'];
+                $where[] = array( 'or' => 1, 'fi.form_id' => $form_id, 'fr.parent_form_id' => $form_id );
+                unset( $where['fi.form_id'] );
             }
+
+            $results = FrmDb::get_var( $table_name . ' fi LEFT OUTER JOIN ' . $form_table_name . ' fr ON fi.form_id=fr.id', $where, 'fi.*, fr.name as form_name', array( 'order_by' => $order_by, 'limit' => $limit ), '', $query_type );
         }else{
             $query .= FrmAppHelper::prepend_and_or_where(' WHERE ', $where) . $order_by . $limit;
-        }
 
-        if ( $limit == ' LIMIT 1' || $limit == 1 ) {
-            $results = $wpdb->get_row($query);
-        } else {
-            $results = $wpdb->get_results($query);
+            if ( $query_type == 'row' ) {
+                $results = $wpdb->get_row($query);
+            } else {
+                $results = $wpdb->get_results($query);
+            }
         }
+        unset( $where );
 
         if ( ! $results ) {
             stripslashes_deep($results);

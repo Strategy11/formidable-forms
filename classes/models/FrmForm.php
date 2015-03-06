@@ -381,11 +381,8 @@ class FrmForm{
             return $r;
         }
 
-        $query = 'SELECT name FROM '. $wpdb->prefix .'frm_forms WHERE ';
-        $query .= is_numeric($id) ? 'id=%d' : 'form_key=%s';
-        $query = $wpdb->prepare($query, $id);
-
-        $r = FrmAppHelper::check_cache($id .'_name', 'frm_form', $query, 'get_var');
+        $query_key = is_numeric( $id ) ? 'id' : 'form_key';
+        $r = FrmDb::get_var( 'frm_forms', array( $query_key => $id ), 'name' );
         $r = stripslashes($r);
 
         return $r;
@@ -396,10 +393,7 @@ class FrmForm{
      * @return int form id
      */
     public static function &getIdByKey( $key ){
-        $key = sanitize_title( $key );
-        global $wpdb;
-        $query = $wpdb->prepare('SELECT id FROM '. $wpdb->prefix .'frm_forms WHERE form_key=%s LIMIT 1', $key);
-        $id = FrmAppHelper::check_cache('form_id_'. $key, 'frm_form', $query, 'get_var');
+        $id = FrmDb::get_var( 'frm_forms', array( 'form_key' => sanitize_title( $key ) ) );
         return $id;
     }
 
@@ -414,9 +408,7 @@ class FrmForm{
             return $cache->form_key;
         }
 
-        global $wpdb;
-        $query = $wpdb->prepare('SELECT form_key FROM '. $wpdb->prefix .'frm_forms WHERE id=%d', $id);
-        $key = FrmAppHelper::check_cache($id .'_key', 'frm_form', $query, 'get_var');
+        $key = FrmDb::get_var( 'frm_forms', array( 'id' => $id ), 'form_key' );
 
         return $key;
     }
@@ -512,9 +504,8 @@ class FrmForm{
     	    return $counts;
     	}
 
-        $query = $wpdb->prepare( 'SELECT status, is_template FROM '. $wpdb->prefix .'frm_forms WHERE parent_form_id IS NULL OR parent_form_id < %d', 1 );
+        $results = (array) FrmDb::get_results( 'frm_forms', array( 'or' => 1, 'parent_form_id' => null, 'parent_form_id <' => 0 ), 'status, is_template' );
 
-    	$results = (array) $wpdb->get_results( $query );
     	$statuses = array('published', 'draft', 'template', 'trash');
     	$counts = array_fill_keys( $statuses, 0 );
 

@@ -158,17 +158,18 @@ class FrmAppHelper{
 
     /**
      * Get any value from the $_SERVER
-     * Used by [ip] shortcode
      *
      * @since 2.0
      * @return string
      */
     public static function get_server_value($value) {
-        return isset( $_SERVER[ $value ] ) ? $_SERVER[ $value ] : '';
+        return isset( $_SERVER[ $value ] ) ? wp_strip_all_tags( $_SERVER[ $value ] ) : '';
     }
 
     /**
      * Check for the IP address in several places
+     * Used by [ip] shortcode
+     *
      * @return string The IP address of the current user
      */
     public static function get_ip_address(){
@@ -176,7 +177,7 @@ class FrmAppHelper{
             'HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED', 'HTTP_X_CLUSTER_CLIENT_IP',
             'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED', 'REMOTE_ADDR',
         ) as $key ) {
-            if ( ! array_key_exists($key, $_SERVER) ) {
+            if ( ! isset( $_SERVER[ $key ] ) ) {
                 continue;
             }
 

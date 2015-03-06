@@ -249,8 +249,7 @@ class FrmFieldsHelper{
 
         $key = is_numeric($field) ? FrmAppHelper::get_unique_key('', $wpdb->prefix .'frm_fields', 'field_key') : $field->field_key;
 
-        $query = $wpdb->prepare("SELECT COUNT(*) FROM {$wpdb->prefix}frm_fields fi LEFT JOIN {$wpdb->prefix}frm_forms fr ON (fi.form_id = fr.id) WHERE fr.id = %d OR fr.parent_form_id = %d", $form_id, $form_id);
-        $field_count = $wpdb->get_var($query);
+        $field_count = FrmDb::get_count( $wpdb->prefix . 'frm_fields fi LEFT JOIN ' . $wpdb->prefix . 'frm_forms fr ON (fi.form_id = fr.id)', array( 'or' => 1, 'fr.id' => $form_id, 'fr.parent_form_id' => $form_id ) );
 
         $frm_settings = FrmAppHelper::get_settings();
         return array(

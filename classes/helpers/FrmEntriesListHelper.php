@@ -20,25 +20,28 @@ class FrmEntriesListHelper extends FrmListHelper {
 		$default_orderby = 'id';
 		$default_order = 'DESC';
 
-	    $s_query = $wpdb->prepare('it.form_id=%d', $form_id);
+	    $s_query = array( 'it.form_id' => $form_id );
 
 		$s = isset( $_REQUEST['s'] ) ? stripslashes($_REQUEST['s']) : '';
 
 	    if ( $s != '' && FrmAppHelper::pro_is_installed() ) {
-	        $fid = isset( $_REQUEST['fid'] ) ? $_REQUEST['fid'] : '';
-	        $s_query = FrmProEntriesHelper::get_search_str($s_query, $s, $form_id, $fid);
+	        $fid = isset( $_REQUEST['fid'] ) ? sanitize_text_field( $_REQUEST['fid'] ) : '';
+	        $s_query = FrmProEntriesHelper::get_search_str( $s_query, $s, $form_id, $fid);
 	    }
 
-        $orderby = isset( $_REQUEST['orderby'] ) ? $_REQUEST['orderby'] : $default_orderby;
+        $orderby = isset( $_REQUEST['orderby'] ) ? sanitize_text_field( $_REQUEST['orderby'] ) : $default_orderby;
         if ( strpos($orderby, 'meta') !== false ) {
-            $order_field = FrmField::getOne(str_replace('meta_', '', $orderby));
-            $orderby .= in_array($order_field->type, array('number', 'scale')) ? ' +0 ' : '';
+            $order_field_type = FrmField::get_type( str_replace( 'meta_', '', $orderby ) );
+            $orderby .= in_array( $order_field_type, array('number', 'scale') ) ? ' +0 ' : '';
         }
-		$order = isset( $_REQUEST['order'] ) ? $_REQUEST['order'] : $default_order;
-        $page = $this->get_pagenum();
-        $start = isset( $_REQUEST['start'] ) ? $_REQUEST['start'] : (( $page - 1 ) * $per_page);
 
-        $this->items = FrmEntry::getAll($s_query, ' ORDER BY '. $orderby .' '. $order, ' LIMIT '. $start .','. $per_page, true, false);
+		$order = isset( $_REQUEST['order'] ) ? $_REQUEST['order'] : $default_order;
+        $order = FrmAppHelper::esc_order( $orderby .' '. $order );
+
+        $page = $this->get_pagenum();
+        $start = (int) isset( $_REQUEST['start'] ) ? $_REQUEST['start'] : (( $page - 1 ) * $per_page);
+
+        $this->items = FrmEntry::getAll($s_query, $order, ' LIMIT '. $start .','. $per_page, true, false);
         $total_items = FrmEntry::getRecordCount($s_query);
 
 		$this->set_pagination_args( array(

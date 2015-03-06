@@ -189,14 +189,7 @@ class FrmEntryMeta{
     }
 
     public static function get_entry_meta_info($entry_id){
-        global $wpdb;
-
-        $cache_key = 'entry_meta_info_'. $entry_id;
-        $query = $wpdb->prepare('SELECT * FROM '. $wpdb->prefix .'frm_item_metas WHERE item_id=%d', $entry_id);
-
-        $results = FrmAppHelper::check_cache($cache_key, 'frm_entry', $query, 'get_results');
-
-        return $results;
+        return FrmDb::get_results( 'frm_item_metas', array( 'item_id' => $entry_id) );
     }
 
     public static function getAll($where = '', $order_by = '', $limit = '', $stripslashes = false){

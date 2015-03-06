@@ -6,6 +6,8 @@ class FrmEntry{
     public static function create( $values ) {
         global $wpdb;
 
+        self::sanitize_entry_post( $values );
+
         $values = apply_filters('frm_pre_create_entry', $values);
 
         $new_values = array(
@@ -340,22 +342,22 @@ class FrmEntry{
         $entries = wp_cache_get($cache_key, 'frm_entry');
 
         if ( false === $entries ) {
+            $fields = 'it.id, it.item_key, it.name, it.ip, it.form_id, it.post_id, it.user_id, it.parent_item_id, it.updated_by, it.created_at, it.updated_at, it.is_draft';
+            $table = $wpdb->prefix .'frm_items it ';
+
             if ( $inc_form ) {
-                $query = "SELECT it.*, fr.name as form_name,fr.form_key as form_key
-                    FROM {$wpdb->prefix}frm_items it LEFT OUTER JOIN {$wpdb->prefix}frm_forms fr ON it.form_id=fr.id" .
-                    FrmAppHelper::prepend_and_or_where(' WHERE ', $where) . $order_by . $limit;
-            } else {
-                $query = "SELECT it.id, it.item_key, it.name, it.ip, it.form_id, it.post_id, it.user_id, it.parent_item_id,
-                    it.updated_by, it.created_at, it.updated_at, it.is_draft FROM {$wpdb->prefix}frm_items it" .
-                    FrmAppHelper::prepend_and_or_where(' WHERE ', $where) . $order_by . $limit;
+                $fields = 'it.*, fr.name as form_name,fr.form_key as form_key';
+                $table .= 'LEFT OUTER JOIN ' . $wpdb->prefix . 'frm_forms fr ON it.form_id=fr.id ';
             }
 
             if ( preg_match( '/ meta_([0-9]+)/', $order_by, $order_matches ) ) {
     		    // sort by a requested field
-                $new_query = ', (SELECT meta_value FROM '. $wpdb->prefix .'frm_item_metas WHERE field_id = '. $order_matches[1] .' AND item_id = it.id) as meta_'. $order_matches[1] .' FROM '. $wpdb->prefix .'frm_items ';
-    		    $query = str_replace( ' FROM '. $wpdb->prefix .'frm_items ', $new_query, $query );
-                unset($order_field);
+                $field_id = (int) $order_matches[1];
+                $fields .= ', (SELECT meta_value FROM '. $wpdb->prefix .'frm_item_metas WHERE field_id = '. $field_id .' AND item_id = it.id) as meta_'. sanitize_title( $order_matches[1] );
+                unset( $order_matches );
 		    }
+
+            $query = 'SELECT ' . $fields . ' FROM ' . $table . FrmAppHelper::prepend_and_or_where(' WHERE ', $where) . $order_by . $limit;
 
             $entries = $wpdb->get_results($query, OBJECT_K);
             unset($query);
@@ -372,19 +374,16 @@ class FrmEntry{
             $where = array('it.form_id' => substr($where, 11));
         }
 
+        $meta_where = array( 'field_id !' => 0 );
         if ( $limit == '' && is_array($where) && count($where) == 1 && isset($where['it.form_id']) ) {
-            $meta_where = $wpdb->prepare('fi.form_id=%d', $where['it.form_id']);
+            $meta_where['fi.form_id'] = $where['it.form_id'];
         } else {
-            $meta_where = "item_id in (". implode(',', array_filter(array_keys($entries), 'is_numeric')) .")";
+            $meta_where['item_id'] = array_keys( $entries );
         }
 
-        $query = "SELECT item_id, meta_value, field_id, field_key, form_id FROM {$wpdb->prefix}frm_item_metas it
-            LEFT OUTER JOIN {$wpdb->prefix}frm_fields fi ON it.field_id=fi.id
-            WHERE $meta_where and field_id != 0";
+        $metas = FrmDb::get_results( $wpdb->prefix . 'frm_item_metas it LEFT OUTER JOIN ' . $wpdb->prefix . 'frm_fields fi ON (it.field_id = fi.id)', $meta_where, 'item_id, meta_value, field_id, field_key, form_id' );
 
-        $cache_key = 'metas_'. sanitize_title_with_dashes($meta_where);
-        $metas = FrmAppHelper::check_cache($cache_key, 'frm_entry', $query, 'get_results');
-        unset($query, $cache_key);
+        unset( $meta_where );
 
         if ( ! $metas ) {
             return stripslashes_deep($entries);
@@ -415,16 +414,21 @@ class FrmEntry{
     // Pagination Methods
     public static function getRecordCount( $where = '' ) {
         global $wpdb;
-        $cache_key = 'count_'. maybe_serialize($where);
+        $table_join = $wpdb->prefix .'frm_items it LEFT OUTER JOIN '. $wpdb->prefix .'frm_forms fr ON it.form_id=fr.id';
 
         if ( is_numeric($where) ) {
-            $query = $wpdb->prepare('SELECT COUNT(*) FROM '. $wpdb->prefix .'frm_items WHERE form_id=%d', $where);
-        }else{
-            $query = 'SELECT COUNT(*) FROM '. $wpdb->prefix .'frm_items it LEFT OUTER JOIN '. $wpdb->prefix .'frm_forms fr ON it.form_id=fr.id' .
-                FrmAppHelper::prepend_and_or_where(' WHERE ', $where);
+            $table_join = 'frm_items';
+            $where = array( 'form_id' => $where );
         }
 
-        $count = FrmAppHelper::check_cache($cache_key, 'frm_entry', $query, 'get_var');
+        if ( is_array( $where ) ) {
+            $count = FrmDb::get_count( $table_join, $where );
+        } else {
+            global $wpdb;
+            $cache_key = 'count_'. maybe_serialize($where);
+            $query = 'SELECT COUNT(*) FROM '. $table_join . FrmAppHelper::prepend_and_or_where(' WHERE ', $where);
+            $count = FrmAppHelper::check_cache($cache_key, 'frm_entry', $query, 'get_var');
+        }
 
         return $count;
     }
@@ -456,9 +460,9 @@ class FrmEntry{
             $_POST['item_key'] = $values['item_key'] = FrmAppHelper::get_unique_key('', $wpdb->prefix .'frm_items', 'item_key');
         }
 
-        $where = apply_filters('frm_posted_field_ids', $wpdb->prepare('fi.form_id=%d', $values['form_id']));
+        $where = apply_filters('frm_posted_field_ids', array( 'fi.form_id' => $values['form_id'] ) );
         if ( $exclude ) {
-            $where .= " and fi.type not in ('". implode("','", array_filter($exclude, 'esc_sql')) ."')";
+            $where['fi.type not'] = $exclude;
         }
 
         $posted_fields = FrmField::getAll($where, 'field_order');
@@ -487,8 +491,17 @@ class FrmEntry{
      */
     public static function sanitize_entry_post( &$values ) {
         $sanitize_method = array(
-            'form_id' => 'int', 'frm_action' => 'sanitize_title',
-            'form_key' => 'sanitize_title', 'item_key' => 'sanitize_title',
+            'form_id'       => 'int',
+            'frm_action'    => 'sanitize_title',
+            'form_key'      => 'sanitize_title',
+            'item_key'      => 'sanitize_title',
+            'name'          => 'sanitize_text_field',
+            'frm_saving_draft' => 'int',
+            'is_draft'      => 'int',
+            'post_id'       => 'int',
+            'parent_item_id' => 'int',
+            'created_at'    => 'sanitize_title',
+            'updated_at'    => 'sanitize_title',
         );
 
         FrmAppHelper::sanitize_request( $sanitize_method, $values );
