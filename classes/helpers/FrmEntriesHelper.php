@@ -694,7 +694,7 @@ class FrmEntriesHelper{
         } else if ( preg_match('/Safari/i', $u_agent) ) {
             $bname = 'Apple Safari';
             $ub = 'Safari';
-        } else if ( preg_match('/Opera/i',$u_agent) ) {
+        } else if ( preg_match('/Opera/i', $u_agent) ) {
             $bname = $ub = 'Opera';
         } else if ( preg_match('/Netscape/i', $u_agent) ) {
             $bname = $ub = 'Netscape';
@@ -710,7 +710,7 @@ class FrmEntriesHelper{
         if ( $i != 1 ) {
             //we will have two since we are not using 'other' argument yet
             //see if version is before or after the name
-            if ( strripos($u_agent, 'Version') < strripos($u_agent,$ub) ) {
+            if ( strripos( $u_agent, 'Version' ) < strripos( $u_agent, $ub ) ) {
                 $version = $matches['version'][0];
             } else {
                 $version = $matches['version'][1];

@@ -61,5 +61,5 @@
     <input type="hidden" name="<?php echo esc_attr( $field_name ) ?>" value="1" />
 <?php
 } else {
-    do_action('frm_display_added_fields',$field);
+    do_action( 'frm_display_added_fields', $field );
 }

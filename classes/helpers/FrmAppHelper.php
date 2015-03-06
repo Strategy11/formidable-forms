@@ -2,7 +2,7 @@
 if(!defined('ABSPATH')) die('You are not allowed to call this page directly.');
 
 class FrmAppHelper{
-    public static $db_version = 18; //version of the database we are moving to
+    public static $db_version = 19; //version of the database we are moving to
     public static $pro_db_version = 27;
 
     /*
@@ -174,7 +174,7 @@ class FrmAppHelper{
     public static function get_ip_address(){
         foreach ( array(
             'HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED', 'HTTP_X_CLUSTER_CLIENT_IP',
-            'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED', 'REMOTE_ADDR'
+            'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED', 'REMOTE_ADDR',
         ) as $key ) {
             if ( ! array_key_exists($key, $_SERVER) ) {
                 continue;
@@ -945,7 +945,7 @@ class FrmAppHelper{
             }
         }
 
-        $field_type = isset($post_values['field_options']['type_'.$field->id]) ? $post_values['field_options']['type_'.$field->id] : $field->type;
+        $field_type = isset( $post_values['field_options'][ 'type_'. $field->id ] ) ? $post_values['field_options'][ 'type_'. $field->id ] : $field->type;
         $new_value = isset( $post_values['item_meta'][ $field->id ] ) ? maybe_unserialize( $post_values['item_meta'][ $field->id ] ) : $meta_value;
 
         $field_array = array(
@@ -1066,7 +1066,7 @@ class FrmAppHelper{
         }
 
         foreach ( array('before', 'after', 'submit') as $h ) {
-            if ( ! isset( $values[ $h .'_html'] ) ) {
+            if ( ! isset( $values[ $h .'_html' ] ) ) {
                 $values[ $h .'_html' ] = ( isset( $post_values['options'][ $h .'_html' ] ) ? $post_values['options'][ $h .'_html' ] : FrmFormsHelper::get_default_html( $h ) );
             }
             unset($h);
@@ -1204,13 +1204,13 @@ class FrmAppHelper{
 
     	// Array of time period chunks
     	$chunks = array(
-    		array( 60 * 60 * 24 * 365 , __( 'year', 'formidable' ), __( 'years', 'formidable' ) ),
-    		array( 60 * 60 * 24 * 30 , __( 'month', 'formidable' ), __( 'months', 'formidable' ) ),
+    		array( 60 * 60 * 24 * 365, __( 'year', 'formidable' ), __( 'years', 'formidable' ) ),
+    		array( 60 * 60 * 24 * 30, __( 'month', 'formidable' ), __( 'months', 'formidable' ) ),
     		array( 60 * 60 * 24 * 7, __( 'week', 'formidable' ), __( 'weeks', 'formidable' ) ),
-    		array( 60 * 60 * 24 , __( 'day', 'formidable' ), __( 'days', 'formidable' ) ),
-    		array( 60 * 60 , __( 'hour', 'formidable' ), __( 'hours', 'formidable' ) ),
-    		array( 60 , __( 'minute', 'formidable' ), __( 'minutes', 'formidable' ) ),
-    		array( 1, __( 'second', 'formidable' ), __( 'seconds', 'formidable' ) )
+    		array( 60 * 60 * 24, __( 'day', 'formidable' ), __( 'days', 'formidable' ) ),
+    		array( 60 * 60, __( 'hour', 'formidable' ), __( 'hours', 'formidable' ) ),
+    		array( 60, __( 'minute', 'formidable' ), __( 'minutes', 'formidable' ) ),
+    		array( 1, __( 'second', 'formidable' ), __( 'seconds', 'formidable' ) ),
     	);
 
     	// Difference in seconds
@@ -1357,29 +1357,27 @@ class FrmAppHelper{
     }
 
     // Pagination Methods
-    public static function getLastRecordNum($r_count,$current_p,$p_size){
-      return (($r_count < ($current_p * $p_size))?$r_count:($current_p * $p_size));
+    public static function get_last_record_num( $r_count, $current_p, $p_size ) {
+      return ( ( $r_count < ( $current_p * $p_size ) ) ? $r_count : ( $current_p * $p_size ) );
     }
 
     /**
      * @param integer $current_p
      */
-    public static function getFirstRecordNum($r_count,$current_p,$p_size){
-      if($current_p == 1)
-        return 1;
-      else
-        return (self::getLastRecordNum($r_count,($current_p - 1),$p_size) + 1);
+    public static function get_first_record_num( $r_count, $current_p, $p_size ) {
+        if ( $current_p == 1 ) {
+            return 1;
+        } else{
+            return ( self::get_last_record_num( $r_count, ( $current_p - 1 ), $p_size ) + 1 );
+        }
     }
 
     /**
      * @param string $table_name
      */
-    public static function &getRecordCount($where = '', $table_name) {
-        $cache_key = 'count_'. $table_name .'_'. maybe_serialize($where);
-        $query = 'SELECT COUNT(*) FROM ' . $table_name . self::prepend_and_or_where(' WHERE ', $where);
-
-        $count = self::check_cache($cache_key, 'formidable', $query, 'get_var');
-
+    public static function &getRecordCount( $where = '', $table_name ) {
+        _deprecated_function( __FUNCTION__, '2.0', 'FrmDb::get_count' );
+        $count = FrmDb::get_count( $table_name, $where );
         return $count;
     }
 

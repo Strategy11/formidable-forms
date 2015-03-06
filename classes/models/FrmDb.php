@@ -94,7 +94,7 @@ class FrmDb{
                 form_key varchar(255) default NULL,
                 name varchar(255) default NULL,
                 description text default NULL,
-                parent_form_id int(11) default NULL,
+                parent_form_id int(11) default 0,
                 logged_in tinyint(1) default NULL,
                 editable tinyint(1) default NULL,
                 is_template tinyint(1) default 0,
@@ -116,7 +116,7 @@ class FrmDb{
                 form_id int(11) default NULL,
                 post_id int(11) default NULL,
                 user_id int(11) default NULL,
-                parent_item_id int(11) default NULL,
+                parent_item_id int(11) default 0,
                 is_draft tinyint(1) default 0,
                 updated_by int(11) default NULL,
                 created_at datetime NOT NULL,
@@ -176,24 +176,60 @@ class FrmDb{
             return;
         }
 
-        foreach ( $args as $key => $value ) {
-            $where .= empty($where) ? ' WHERE' : ' AND';
-            $where .= ' '. $key;
-            if ( is_array($value) ) {
-                $where .= ' in ('. FrmAppHelper::prepare_array_values( $value, '%s' ) .')';
-                $values = array_merge( $values, $value );
-            } else {
-                $where .= '=';
-                $where .= is_numeric($value) ? ( strpos($value, '.') !== false ? '%f' : '%d' ) : '%s';
-                $values[] = $value;
-            }
-        }
+        $base_where = ' WHERE';
+        self::parse_where_from_array( $args, $base_where, $where, $values );
 
         $args = compact('where', 'values');
     }
 
+    private static function parse_where_from_array( $args, $base_where, &$where, &$values ) {
+        $condition = ' AND';
+        if ( isset( $args['or'] ) ) {
+            $condition = ' OR';
+            unset( $args['or'] );
+        }
+
+        foreach ( $args as $key => $value ) {
+            $where .= empty( $where ) ? $base_where : $condition;
+            if ( is_numeric( $key ) ) {
+                $where .= ' ( ';
+                $nested_where = '';
+                self::parse_where_from_array( $value, '', $nested_where, $values );
+                $where .= $nested_where;
+                $where .= ' ) ';
+            } else {
+                if ( is_array( $value ) && in_array( null, $value ) ) {
+                    $where .= ' ( ';
+                    $nested_where = '';
+                    foreach ( $value as $val ) {
+                        self::parse_where_from_array( array( $key => $val, 'or' => 1 ), '', $nested_where, $values );
+                    }
+                    $where .= $nested_where;
+                    $where .= ' ) ';
+                    continue;
+                }
+
+                $where .= ' '. $key;
+                if ( is_array( $value ) ) {
+                    $where .= ' in ('. FrmAppHelper::prepare_array_values( $value, '%s' ) .')';
+                    $values = array_merge( $values, $value );
+                } else if ( strpos( strtolower( $key ), ' like' ) !== false ) {
+                    $where .= ' %s';
+                    $values[] = '%'. FrmAppHelper::esc_like( $value ) .'%';
+                } else if ( $value === null ) {
+                    $where .= ' IS NULL';
+                } else {
+                    $where .= '=';
+                    $where .= is_numeric( $value ) ? ( strpos( $value, '.' ) !== false ? '%f' : '%d' ) : '%s';
+                    $values[] = $value;
+                }
+            }
+        }
+    }
+
     public static function get_count( $table, $where = array(), $args = array() ) {
-        return self::get_var( $table, $where, 'COUNT(*)', $args );
+        $count = self::get_var( $table, $where, 'COUNT(*)', $args );
+        return $count;
     }
 
     public static function get_var( $table, $where = array(), $field = 'id', $args = array(), $limit = '', $type = 'var' ) {

@@ -120,7 +120,7 @@ class FrmStylesController{
         $default_style = $frm_style->get_default_style($styles);
 
         if ( empty($forms) ) {
-            $forms = FrmForm::getAll("is_template=0 AND (status is NULL OR status = '' OR status = 'published')");
+            $forms = FrmForm::getAll( array( 'is_template' => 0, 'status' => array( null, '', 'published' ) ) );
         }
 
         include(FrmAppHelper::plugin_path() .'/classes/views/styles/manage.php');

@@ -26,19 +26,23 @@ class FrmFormsListHelper extends FrmListHelper {
 
 		$start = ( isset( $_REQUEST['start'] ) ) ? $_REQUEST['start'] : (( $page - 1 ) * $per_page);
 
-		$s_query = ' (parent_form_id IS NULL OR parent_form_id < 1) AND ';
+        $s_query = array();
+        $s_query[] = array( 'or' => 1, 'parent_form_id' => null, 'parent_form_id <' => 1 );
 		switch ( $this->status ) {
 		    case 'template':
-		        $s_query .= "is_template = 1 AND status != 'trash'";
+                $s_query['is_template'] = 1;
+                $s_query['status !'] = 'trash';
 		        break;
 		    case 'draft':
-		        $s_query .= "is_template = 0 AND status = 'draft'";
+                $s_query['is_template'] = 0;
+                $s_query['status'] = 'draft';
 		        break;
 		    case 'trash':
-		        $s_query .= "status='trash'";
+                $s_query['status'] = 'trash';
 		        break;
 		    default:
-		        $s_query .= "is_template = 0 AND status != 'trash'";
+                $s_query['is_template'] = 0;
+                $s_query['status !'] = 'trash';
 		        break;
 		}
 
@@ -47,21 +51,15 @@ class FrmFormsListHelper extends FrmListHelper {
 	        preg_match_all('/".*?("|$)|((?<=[\\s",+])|^)[^\\s",+]+/', $s, $matches);
 		    $search_terms = array_map('trim', $matches[0]);
 	        foreach ( (array) $search_terms as $term ) {
-	            if ( ! empty( $s_query ) ) {
-                    $s_query .= ' AND';
-                }
-
-	            $term = FrmAppHelper::esc_like($term);
-
-	            $s_query .= $wpdb->prepare(" (name like %s OR description like %s OR created_at like %s)", '%'. $term .'%', '%'. $term .'%', '%'. $term .'%');
-
+                $s_query[] = array(
+                    'or'    => true, 'name LIKE' => $term, 'description LIKE' => $term, 'created_at LIKE' => $term,
+                );
 	            unset($term);
             }
 	    }
 
         $this->items = FrmForm::getAll($s_query, $orderby .' '. $order, $start .','. $per_page);
-        $total_items = FrmAppHelper::getRecordCount($s_query, $wpdb->prefix .'frm_forms');
-
+        $total_items = FrmDb::get_count( 'frm_forms', $s_query );
 
 		$this->set_pagination_args( array(
 			'total_items' => $total_items,
@@ -141,7 +139,7 @@ class FrmFormsListHelper extends FrmListHelper {
 		<ul class="frm-dropdown-menu" role="menu" aria-labelledby="frm-templateDrop">
 		<?php
         if ( empty( $forms ) ) { ?>
-            <li class="frm_dropdown_li"><?php _e( 'You have not created any forms yet. <br/>Please create a form and then come back.', 'formidable' ) ?></li>
+            <li class="frm_dropdown_li"><?php _e( 'You have not created any forms yet. <br/>You must create a form before you can make a template.', 'formidable' ) ?></li>
         <?php
         } else {
             foreach ( $forms as $form ) {

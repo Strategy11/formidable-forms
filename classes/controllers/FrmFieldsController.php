@@ -158,7 +158,7 @@ class FrmFieldsController{
         $values = array();
         FrmFieldsHelper::fill_field( $values, $copy_field, $form_id );
 
-        $field_count = $wpdb->get_var( $wpdb->prepare('SELECT COUNT(*) FROM '. $wpdb->prefix .'frm_fields fi LEFT JOIN '. $wpdb->prefix .'frm_forms fr ON (fi.form_id = fr.id) WHERE fr.id = %d OR fr.parent_form_id = %d', $form_id, $form_id) );
+        $field_count = FrmDb::get_count( $wpdb->prefix .'frm_fields fi LEFT JOIN '. $wpdb->prefix .'frm_forms fr ON (fi.form_id = fr.id)', array( 'or' => 1, 'fr.id' => $form_id, 'fr.parent_form_id' => $form_id) );
 
         $values['field_order'] = $field_count + 1;
 

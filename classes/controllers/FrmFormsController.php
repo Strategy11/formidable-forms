@@ -490,7 +490,7 @@ class FrmFormsController{
 			'name'          => 'name',
 			'description'   => 'description',
 			'form_key'      => 'form_key',
-			'created_at'    => 'created_at'
+			'created_at'    => 'created_at',
 		);
 	}
 
@@ -861,7 +861,7 @@ class FrmFormsController{
             $wp_admin_bar->add_menu( array(
                 'title' => 'Edit Form',
                 'href'  => admin_url('admin.php?page=formidable&frm_action=edit&id='. current( array_keys( $actions ) )),
-                'id'    => 'frm-forms'
+                'id'    => 'frm-forms',
             ) );
         } else {
             $wp_admin_bar->add_menu( array(
