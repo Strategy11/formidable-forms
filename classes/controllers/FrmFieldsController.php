@@ -342,8 +342,6 @@ class FrmFieldsController{
     }
 
     public static function import_choices(){
-        check_ajax_referer( 'frm_ajax', 'nonce' );
-
         if ( ! current_user_can('frm_edit_forms') ) {
             wp_die();
         }

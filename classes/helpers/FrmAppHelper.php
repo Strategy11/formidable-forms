@@ -150,7 +150,7 @@ class FrmAppHelper{
      *
      * @since 2.0
      * @param $value - value to check
-     * @return true or false
+     * @return boolean
      */
     public static function is_empty_value( $value, $empty = '' ) {
         return ( is_array( $value ) && empty( $value ) ) || $value == $empty;
