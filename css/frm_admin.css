@@ -103,6 +103,14 @@ ul.frm_form_nav li.last > a{
 	float:right;
 }
 
+div.frm_msg_padding{
+    padding:5px;
+}
+
+.actions.frm_visible_overflow{
+    overflow:visible;
+}
+
 .post-new-php.post-type-frm_display #poststuff {padding-top:10px;}
 .frm_forms.with_frm_style{max-width:100%;}
 label.frm_primary_label,
@@ -1556,7 +1564,7 @@ ul .frm_col_two{float:right;}
 iframe#dyncontent_ifr{min-height:150px;}
 #frm-insert-fields-box ul.frm_code_list, #frm-conditionals ul.frm_code_list{padding-right:0.9em;}
 
-.frm_uninstall a.button{margin-top:1px;}
+.frm_uninstall a.button, .frm_small_top_margin{margin-top:1px;}
 
 #message.fade:not(.out),
 .frm_message.fade:not(.out){

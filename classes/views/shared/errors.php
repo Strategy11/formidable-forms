@@ -2,7 +2,7 @@
 <?php
 if ( isset($message) && $message != '' ) {
     if ( FrmAppHelper::is_admin() ) {
-        ?><div id="message" class="updated" style="padding:5px;"><?php
+        ?><div id="message" class="updated frm_msg_padding"><?php
         echo $message;
         ?></div><?php
     } else {

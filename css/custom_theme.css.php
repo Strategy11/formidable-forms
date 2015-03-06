@@ -205,6 +205,10 @@ foreach ( $styles as $style ) {
     visibility:hidden;
 }
 
+.frm_ajax_loading.frm_loading_now{
+    visibility:visible;
+}
+
 .frm_form_submit_style{
     height:auto;
 }

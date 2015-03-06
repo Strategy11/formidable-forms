@@ -411,7 +411,7 @@ class FrmFormsController{
         }
 
         echo '<div id="sc-opts-'. esc_attr( $shortcode ) .'" class="frm_shortcode_option">';
-        echo '<input type="radio" name="frmsc" value="'. esc_attr($shortcode) .'" id="sc-'. esc_attr($shortcode) .'" style="display:none;" />';
+        echo '<input type="radio" name="frmsc" value="'. esc_attr($shortcode) .'" id="sc-'. esc_attr($shortcode) .'" class="frm_hidden" />';
 
         $form_id = '';
         $opts = array();
@@ -704,7 +704,7 @@ class FrmFormsController{
         }
 
         if ( isset( $message ) && ! empty( $message ) ) {
-            echo '<div id="message" class="updated" style="padding:5px;">'. $message .'</div>';
+            echo '<div id="message" class="updated frm_msg_padding">'. $message .'</div>';
         }
 
         return $errors;

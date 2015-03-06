@@ -222,7 +222,7 @@ class FrmFormsHelper{
 <div class="frm_submit">
 [if back_button]<input type="button" value="[back_label]" name="frm_prev_page" formnovalidate="formnovalidate" class="frm_prev_page" [back_hook] />[/if back_button]
 <input type="submit" value="[button_label]" [button_action] />
-<img class="frm_ajax_loading" src="$img" alt="$sending" style="visibility:hidden;" />
+<img class="frm_ajax_loading" src="$img" alt="$sending"/>
 $draft_link
 </div>
 SUBMIT_HTML;

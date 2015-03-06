@@ -680,7 +680,7 @@ function frmFrontFormJS(){
 
 	function getFormErrors(object){
 		jQuery(object).find('input[type="submit"], input[type="button"]').attr('disabled','disabled');
-		jQuery(object).find('.frm_ajax_loading').addClass('frm_loading_now').css('visibility', 'visible');
+		jQuery(object).find('.frm_ajax_loading').addClass('frm_loading_now');
 
 		var jump = '';
 		var newPos = 0;
@@ -711,7 +711,7 @@ function frmFrontFormJS(){
 
 					object.submit();
 				}else if(typeof errObj != 'object'){
-					jQuery(object).find('.frm_ajax_loading').removeClass('frm_loading_now').css('visibility', 'hidden');
+					jQuery(object).find('.frm_ajax_loading').removeClass('frm_loading_now');
 					jump=jQuery(object).closest(document.getElementById('frm_form_'+jQuery(object).find('input[name="form_id"]').val()+'_container'));
 					newPos=jump.offset().top;
 					jump.replaceWith(errObj);
@@ -731,7 +731,7 @@ function frmFrontFormJS(){
 					}
 				}else{
 					jQuery(object).find('input[type="submit"], input[type="button"]').removeAttr('disabled');
-					jQuery(object).find('.frm_ajax_loading').removeClass('frm_loading_now').css('visibility', 'hidden');
+					jQuery(object).find('.frm_ajax_loading').removeClass('frm_loading_now');
 
 					//show errors
 					var cont_submit=true;

@@ -5,7 +5,7 @@ if ( isset($include_extra_container) ) { ?>
 }
 if (isset($message) && $message != ''){
     if ( FrmAppHelper::is_admin() ) {
-        ?><div id="message" class="frm_message updated" style="padding:5px;"><?php echo $message ?></div><?php
+        ?><div id="message" class="frm_message updated frm_msg_padding"><?php echo $message ?></div><?php
     }else{
         FrmFormsHelper::get_scroll_js($form->id);
         echo $message;

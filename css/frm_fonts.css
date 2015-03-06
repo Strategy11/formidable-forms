@@ -43,7 +43,7 @@
 .frm_plugin_updating{line-height:24px;}
 .frm_plugin_updating .frm_spinner{float:left;display:block;}
 
-.frm_hidden{display:none;}
+.frm_hidden, input.frm_hidden{display:none;}
 
 /* Admin Bar */
 #wpadminbar #wp-admin-bar-frm-forms > .ab-item:before{font-family:'s11-fp' !important;content:'\e601';top:2px;}

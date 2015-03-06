@@ -112,7 +112,7 @@ class FrmFormsListHelper extends FrmListHelper {
 
         if ( 'trash' == $this->status && current_user_can('frm_delete_forms') ) {
 ?>
-            <div class="alignleft actions" style="overflow:visible;">
+            <div class="alignleft actions frm_visible_overflow">
 			<?php submit_button( __( 'Empty Trash' ), 'apply', 'delete_all', false ); ?>
             </div>
 <?php
@@ -133,8 +133,8 @@ class FrmFormsListHelper extends FrmListHelper {
         );
 
 ?>
-    <div class="alignleft actions" style="overflow:visible;">
-    <div class="dropdown" style="margin-top:1px;">
+    <div class="alignleft actions frm_visible_overflow">
+    <div class="dropdown frm_small_top_margin">
         <a href="#" id="frm-templateDrop" class="frm-dropdown-toggle button" data-toggle="dropdown"><?php _e( 'Create New Template', 'formidable' ) ?> <b class="caret"></b></a>
 		<ul class="frm-dropdown-menu" role="menu" aria-labelledby="frm-templateDrop">
 		<?php
@@ -222,13 +222,14 @@ class FrmFormsListHelper extends FrmListHelper {
 		}
 
 		foreach ( $columns as $column_name => $column_display_name ) {
-			$class = 'class="'. $column_name .' column-'. $column_name . ( ('name' == $column_name) ? ' post-title page-title column-title' : '' ) .'"';
+            $class = $column_name .' column-'. $column_name . ( ('name' == $column_name) ? ' post-title page-title column-title' : '' );
 
 			$style = '';
 			if ( in_array( $column_name, $hidden ) ) {
-				$style = ' style="display:none;"';
+                $class .= ' frm_hidden';
 			}
 
+            $class = 'class="' . $class . '"';
 			$attributes = $class . $style;
 
 			switch ( $column_name ) {
