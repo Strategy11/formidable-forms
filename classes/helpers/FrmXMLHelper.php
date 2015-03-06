@@ -687,7 +687,7 @@ class FrmXMLHelper{
 
             // Switch field IDs and keys, if needed
             if ( $switch ) {
-            $new_notification['post_content'] = FrmFieldsHelper::switch_field_ids( $new_notification['post_content'] );
+                $new_notification['post_content'] = FrmFieldsHelper::switch_field_ids( $new_notification['post_content'] );
             }
             $new_notification['post_content']   = FrmAppHelper::prepare_and_encode( $new_notification['post_content'] );
 
@@ -718,83 +718,110 @@ class FrmXMLHelper{
         if ( isset( $form_options['notification'] ) && is_array($form_options['notification']) ) {
             foreach ( $form_options['notification'] as $email_key => $notification ) {
 
-                // format the email recipient data
-                if ( isset($notification['email_to']) ) {
-                    $email_to = preg_split( "/ (,|;) /", $notification['email_to']);
-                } else {
-                    $email_to = array();
-                }
+                $atts = array( 'email_to' => '', 'reply_to' => '', 'reply_to_name' => '', 'event' => '', 'form_id' => $form_id, 'email_key' => $email_key );
 
-                if ( isset($notification['also_email_to']) ) {
-                    $email_fields = (array) $notification['also_email_to'];
-                    $email_to = array_merge($email_fields, $email_to);
-                    unset($email_fields);
-                }
+                // Format the email data
+                self::format_email_data( $atts, $notification );
 
-                foreach ( $email_to as $key => $email_field ) {
-
-                    if ( is_numeric($email_field) ) {
-                        $email_to[$key] = '['. $email_field .']';
-                    }
-
-                    if ( strpos( $email_field, '|') ) {
-                        $email_opt = explode('|', $email_field);
-                        if ( isset($email_opt[0]) ) {
-                            $email_to[$key] = '['. $email_opt[0] .' show='. $email_opt[1] .']';
-                        }
-                        unset($email_opt);
-                    }
-                }
-                $email_to = implode(', ', $email_to);
-
-                // Format the reply to email and name
-                $atts = array( 'reply_to' => '', 'reply_to_name' => '' );
-                foreach ( $atts as $f => $val ) {
-                    if ( isset( $notification[$f] ) ) {
-                        $atts[$f] = $notification[$f];
-                        if ( 'custom' == $notification[$f] ) {
-                            $atts[$f] = $notification['cust_' . $f];
-                        } else if ( is_numeric( $atts[$f] ) && ! empty( $atts[$f] ) ) {
-                            $atts[$f] = '['. $atts[$f] .']';
-                        }
-                    }
-                    unset( $f, $val );
-                }
-
-                $event = array('create');
-                if ( isset($notification['update_email']) && 1 == $notification['update_email'] ) {
-                    $event[] = 'update';
-                } else if ( isset($notification['update_email']) && 2 == $notification['update_email'] ) {
-                    $event = array('update');
-                }
-
-                $new_notification = array(
-                    'post_content'  => array(
-                        'email_message' => isset($notification['email_message']) ? $notification['email_message'] : '',
-                        'email_subject' => isset($notification['email_subject']) ? $notification['email_subject'] : '',
-                        'email_to'      => $email_to,
-                        'plain_text'    => isset($notification['plain_text']) ? $notification['plain_text'] : 0,
-                        'inc_user_info' => isset($notification['inc_user_info']) ? $notification['inc_user_info'] : 0,
-                        'event'         => $event,
-                        'conditions'    => isset($notification['conditions']) ? $notification['conditions'] : '',
-                    ),
-                    'post_name'         => $form_id .'_email_'. $email_key,
-                );
-
-                if ( isset($notification['twilio']) && $notification['twilio'] ) {
-                    $new_notification['post_content'] = $notification['twilio'];
-                }
-
-                if ( !empty( $atts['reply_to'] ) ) {
-                   $new_notification['post_content']['reply_to'] = $atts['reply_to'];
-                }
-
-                if ( !empty( $atts['reply_to'] ) || !empty( $atts['reply_to_name'] ) ) {
-                    $new_notification['post_content']['from'] = ( empty($atts['reply_to_name']) ? '[sitename]' : $atts['reply_to_name'] ) .' <'. ( empty($atts['reply_to']) ? '[admin_email]' : $atts['reply_to'] ) .'>';
-                }
+                // Setup the new notification
+                $new_notification = array();
+                self::setup_new_notification( $new_notification, $notification, $atts );
 
                 $notifications[] = $new_notification;
             }
+        }
+    }
+
+    private static function format_email_data( &$atts, $notification ) {
+        // Format email_to
+        self::format_email_to_data( $atts, $notification );
+
+        // Format the reply to email and name
+        $reply_fields = array( 'reply_to' => '', 'reply_to_name' => '' );
+        foreach ( $reply_fields as $f => $val ) {
+            if ( isset( $notification[$f] ) ) {
+                $atts[$f] = $notification[$f];
+                if ( 'custom' == $notification[$f] ) {
+                    $atts[$f] = $notification['cust_' . $f];
+                } else if ( is_numeric( $atts[$f] ) && ! empty( $atts[$f] ) ) {
+                    $atts[$f] = '['. $atts[$f] .']';
+                }
+            }
+            unset( $f, $val );
+        }
+
+        // Format event
+        $atts['event'] = array('create');
+        if ( isset( $notification['update_email'] ) && 1 == $notification['update_email'] ) {
+            $atts['event'][] = 'update';
+        } else if ( isset($notification['update_email']) && 2 == $notification['update_email'] ) {
+            $atts['event'] = array('update');
+        }
+    }
+
+    private static function format_email_to_data( &$atts, $notification ) {
+        if ( isset( $notification['email_to'] ) ) {
+            $atts['email_to'] = preg_split( "/ (,|;) /", $notification['email_to']);
+        } else {
+            $atts['email_to'] = array();
+        }
+
+        if ( isset( $notification['also_email_to'] ) ) {
+            $email_fields = (array) $notification['also_email_to'];
+            $atts['email_to'] = array_merge( $email_fields, $atts['email_to'] );
+            unset( $email_fields );
+        }
+
+        foreach ( $atts['email_to'] as $key => $email_field ) {
+
+            if ( is_numeric( $email_field ) ) {
+                $atts['email_to'][$key] = '['. $email_field .']';
+            }
+
+            if ( strpos( $email_field, '|') ) {
+                $email_opt = explode( '|', $email_field );
+                if ( isset( $email_opt[0] ) ) {
+                    $atts['email_to'][$key] = '['. $email_opt[0] .' show='. $email_opt[1] .']';
+                }
+                unset( $email_opt );
+            }
+        }
+        $atts['email_to'] = implode(', ', $atts['email_to']);
+    }
+
+    private static function setup_new_notification( &$new_notification, $notification, $atts ) {
+        // Set up new notification
+        $new_notification = array(
+            'post_content'  => array(
+                'email_to'      => $atts['email_to'],
+                'event'         => $atts['event'],
+            ),
+            'post_name'         => $atts['form_id'] .'_email_'. $atts['email_key'],
+        );
+
+        // Add more fields to the new notification
+        $add_fields = array( 'email_message', 'email_subject', 'plain_text', 'inc_user_info', 'conditions' );
+        foreach ( $add_fields as $add_field ) {
+            if ( isset ( $notification[$add_field] ) ) {
+                $new_notification['post_content'][$add_field] = $notification[$add_field];
+            } else if ( in_array( $add_field, array( 'plain_text', 'inc_user_info' ) ) ) {
+                $new_notification['post_content'][$add_field] = 0;
+            } else {
+                $new_notification['post_content'][$add_field] = '';
+            }
+            unset( $add_field );
+        }
+
+        if ( isset( $notification['twilio'] ) && $notification['twilio'] ) {
+            $new_notification['post_content'] = $notification['twilio'];
+        }
+
+        // Set reply to
+        $new_notification['post_content']['reply_to'] = $atts['reply_to'];
+
+        // Set from
+        if ( !empty( $atts['reply_to'] ) || !empty( $atts['reply_to_name'] ) ) {
+            $new_notification['post_content']['from'] = ( empty($atts['reply_to_name']) ? '[sitename]' : $atts['reply_to_name'] ) .' <'. ( empty($atts['reply_to']) ? '[admin_email]' : $atts['reply_to'] ) .'>';
         }
     }
 
