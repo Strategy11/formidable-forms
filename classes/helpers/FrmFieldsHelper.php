@@ -71,12 +71,12 @@ class FrmFieldsHelper{
         return array('divider', 'end_divider', 'captcha', 'break', 'html');
     }
 
-    /*
-    * Check if this is a multiselect dropdown field
-    *
-    * @since 2.0
-    * @return boolean
-    */
+    /**
+     * Check if this is a multiselect dropdown field
+     *
+     * @since 2.0
+     * @return boolean
+     */
     public static function is_multiple_select($field) {
         if ( is_array($field) ) {
             return isset($field['multiple']) && $field['multiple'] && ( ( $field['type'] == 'select' || ( $field['type'] == 'data' && isset($field['data_type']) && $field['data_type'] == 'select') ) );
@@ -90,7 +90,7 @@ class FrmFieldsHelper{
     *
     * @since 2.0
     *
-    * @param $field array or object accepted
+    * @param array|object $field
     * @return boolean
     */
     public static function is_field_with_multiple_values( $field ) {
@@ -108,9 +108,9 @@ class FrmFieldsHelper{
         }
     }
 
-    /*
-    * If $field is numeric, get the field object
-    */
+    /**
+     * If $field is numeric, get the field object
+     */
     public static function maybe_get_field( &$field ) {
         if ( ! is_object($field) ) {
             $field = FrmField::getOne($field);
@@ -276,9 +276,9 @@ class FrmFieldsHelper{
         }
     }
 
-    /*
-    * @since 2.0
-    */
+    /**
+     * @since 2.0
+     */
     public static function get_error_msg($field, $error){
         $frm_settings = FrmAppHelper::get_settings();
         $default_settings = $frm_settings->default_options();
@@ -705,11 +705,11 @@ DEFAULT_HTML;
         return $m;
     }
 
-    /*
-    * Replace a few basic shortcodes and field ids
-    * @since 2.0
-    * @return string
-    */
+    /**
+     * Replace a few basic shortcodes and field ids
+     * @since 2.0
+     * @return string
+     */
     public static function basic_replace_shortcodes($value, $form, $entry) {
         if ( strpos($value, '[sitename]') !== false ) {
             $new_value = wp_specialchars_decode( FrmAppHelper::site_name(), ENT_QUOTES );
@@ -861,12 +861,12 @@ DEFAULT_HTML;
          return $content;
     }
 
-    /*
-    * Get the value to replace a few standard shortcodes
-    *
-    * @since 2.0
-    * @return string
-    */
+    /**
+     * Get the value to replace a few standard shortcodes
+     *
+     * @since 2.0
+     * @return string
+     */
     public static function dynamic_default_values( $tag, $atts = array(), $return_array = false ) {
         $new_value = '';
         switch ( $tag ) {
@@ -890,12 +890,12 @@ DEFAULT_HTML;
         return $new_value;
     }
 
-    /*
-    * Process the [get] shortcode
-    *
-    * @since 2.0
-    * @return string|array
-    */
+    /**
+     * Process the [get] shortcode
+     *
+     * @since 2.0
+     * @return string|array
+     */
     public static function process_get_shortcode( $atts, $return_array = false ) {
         if ( ! isset($atts['param']) ) {
             return '';
@@ -946,9 +946,6 @@ DEFAULT_HTML;
      }
 
     public static function get_field_types($type){
-        $frm_field_selection = self::field_selection();
-        $field_types = array();
-
         $single_input = array(
             'text', 'textarea', 'rte', 'number', 'email', 'url',
             'image', 'file', 'date', 'phone', 'hidden', 'time',
@@ -957,28 +954,27 @@ DEFAULT_HTML;
         $multiple_input = array('radio', 'checkbox', 'select', 'scale');
         $other_type = array('divider', 'html', 'break');
 
-        $pro_field_selection = self::pro_field_selection();
+        $field_selection = array_merge( self::pro_field_selection(), self::field_selection() );
 
+        $field_types = array();
         if ( in_array($type, $single_input) ) {
-            foreach ( $single_input as $input ) {
-                $field_types[ $input ] = isset( $pro_field_selection[ $input ] ) ? $pro_field_selection[ $input ] : $frm_field_selection[ $input ];
-                unset($input);
-            }
+            self::field_types_for_input( $single_input, $field_selection, $field_types );
         } else if ( in_array($type, $multiple_input) ) {
-            foreach ( $multiple_input as $input ) {
-                $field_types[ $input ] = isset($pro_field_selection[ $input ] ) ? $pro_field_selection[ $input ] : $frm_field_selection[ $input ];
-                unset($input);
-            }
+            self::field_types_for_input( $multiple_input, $field_selection, $field_types );
         } else if ( in_array($type, $other_type) ) {
-            foreach ( $other_type as $input ) {
-                $field_types[ $input ] = isset( $pro_field_selection[ $input ] ) ? $pro_field_selection[ $input ] : $frm_field_selection[ $input ];
-                unset($input);
-            }
+            self::field_types_for_input( $other_type, $field_selection, $field_types );
         } else {
-            $field_types[ $type ] = isset( $pro_field_selection[ $type ] ) ? $pro_field_selection[ $type ] : $frm_field_selection[ $type ];
+            $field_types[ $type ] = $field_selection[ $type ];
         }
 
         return $field_types;
+    }
+
+    private static function field_types_for_input( $inputs, $fields, &$field_types ) {
+        foreach ( $inputs as $input ) {
+            $field_types[ $input ] = $fields[ $input ];
+            unset($input);
+        }
     }
 
     public static function show_onfocus_js($clear_on_focus){ ?>

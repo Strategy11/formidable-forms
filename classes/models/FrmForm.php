@@ -5,9 +5,9 @@ if ( ! defined('ABSPATH') ) {
 
 class FrmForm{
 
-    /*
-    * @return int|boolean id on success or false on failure
-    */
+    /**
+     * @return int|boolean id on success or false on failure
+     */
     public static function create( $values ) {
         global $wpdb;
 
@@ -49,9 +49,9 @@ class FrmForm{
         return $id;
     }
 
-    /*
-    * @return int|boolean ID on success or false on failure
-    */
+    /**
+     * @return int|boolean ID on success or false on failure
+     */
     public static function duplicate( $id, $template = false, $copy_keys = false, $blog_id = false ) {
         global $wpdb;
 
@@ -116,9 +116,9 @@ class FrmForm{
         }
     }
 
-    /*
-    * @return int|boolean
-    */
+    /**
+     * @return int|boolean
+     */
     public static function update( $id, $values, $create_link = false ) {
         global $wpdb;
 
@@ -162,9 +162,9 @@ class FrmForm{
         return $query_results;
     }
 
-    /*
-    * @return array
-    */
+    /**
+     * @return array
+     */
     public static function set_update_options($new_values, $values) {
         if ( ! isset($values['options']) ) {
             return $new_values;
@@ -189,9 +189,9 @@ class FrmForm{
     }
 
 
-    /*
-    * @return array
-    */
+    /**
+     * @return array
+     */
     public static function update_fields($id, $values) {
 
         if ( ! isset($values['options']) && ! isset($values['item_meta']) && ! isset($values['field_options']) ) {
@@ -275,9 +275,9 @@ class FrmForm{
         return $values;
     }
 
-    /*
-    * @return int|boolean
-    */
+    /**
+     * @return int|boolean
+     */
     public static function set_status($id, $status) {
         if ( 'trash' == $status ) {
             return self::trash($id);
@@ -305,9 +305,9 @@ class FrmForm{
         return $query_results;
     }
 
-    /*
-    * @return int|boolean
-    */
+    /**
+     * @return int|boolean
+     */
     public static function trash($id) {
         if ( ! EMPTY_TRASH_DAYS ) {
             return self::destroy( $id );
@@ -335,9 +335,9 @@ class FrmForm{
         return $query_results;
     }
 
-    /*
-    * @return int|boolean
-    */
+    /**
+     * @return int|boolean
+     */
     public static function destroy( $id ){
         global $wpdb;
 
@@ -369,9 +369,9 @@ class FrmForm{
         return $query_results;
     }
 
-    /*
-    * @return string form name
-    */
+    /**
+     * @return string form name
+     */
     public static function &getName( $id ) {
         global $wpdb;
 
@@ -391,20 +391,24 @@ class FrmForm{
         return $r;
     }
 
-    /*
-    * @return int form id
-    */
+    /**
+     * @param string $key
+     * @return int form id
+     */
     public static function &getIdByKey( $key ){
+        $key = sanitize_title( $key );
         global $wpdb;
         $query = $wpdb->prepare('SELECT id FROM '. $wpdb->prefix .'frm_forms WHERE form_key=%s LIMIT 1', $key);
         $id = FrmAppHelper::check_cache('form_id_'. $key, 'frm_form', $query, 'get_var');
         return $id;
     }
 
-    /*
-    * @return string form key
-    */
+    /**
+     * @param int $id
+     * @return string form key
+     */
     public static function &getKeyById($id){
+        $id = (int) $id;
         $cache = FrmAppHelper::check_cache($id, 'frm_form');
         if ( $cache ) {
             return $cache->form_key;
@@ -417,9 +421,9 @@ class FrmForm{
         return $key;
     }
 
-    /*
-    * @return object form
-    */
+    /**
+     * @return object form
+     */
     public static function getOne( $id, $blog_id = false ) {
         global $wpdb;
 
@@ -454,9 +458,9 @@ class FrmForm{
         return stripslashes_deep($results);
     }
 
-    /*
-    * @return array of objects
-    */
+    /**
+     * @return array of objects
+     */
     public static function getAll( $where = array(), $order_by = '', $limit = '' ){
         global $wpdb;
 
@@ -495,9 +499,9 @@ class FrmForm{
         return stripslashes_deep($results);
     }
 
-    /*
-    * @return int count of forms
-    */
+    /**
+     * @return int count of forms
+     */
     public static function &get_count( ) {
     	global $wpdb;
 
@@ -538,9 +542,9 @@ class FrmForm{
     	return $counts;
     }
 
-    /*
-    * @return array of errors
-    */
+    /**
+     * @return array of errors
+     */
     public static function validate( $values ){
         $errors = array();
 

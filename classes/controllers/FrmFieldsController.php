@@ -171,9 +171,9 @@ class FrmFieldsController{
         wp_die();
     }
 
-    /*
-    * Load a single field in the form builder along with all needed variables
-    */
+    /**
+     * Load a single field in the form builder along with all needed variables
+     */
     public static function include_single_field( $field_id, $values, $form_id = 0 ) {
         $field = FrmFieldsHelper::setup_edit_vars(FrmField::getOne($field_id));
         $field_name = 'item_meta['. $field_id .']';

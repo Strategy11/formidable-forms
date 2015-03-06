@@ -268,11 +268,11 @@ class FrmStylesController{
         wp_die();
     }
 
-    /*
-    * Check if the Formidable styling should be loaded,
-    * then enqueue it for the footer
-    * @since 2.0
-    */
+    /**
+     * Check if the Formidable styling should be loaded,
+     * then enqueue it for the footer
+     * @since 2.0
+     */
     public static function enqueue_style() {
         global $frm_vars;
 
@@ -363,9 +363,9 @@ class FrmStylesController{
         return $important;
     }
 
-    /*
-    * Fallback for WP < 3.6
-    */
+    /**
+     * Fallback for WP < 3.6
+     */
     public static function do_accordion_sections( $screen, $context, $object ) {
         if ( function_exists('do_accordion_sections') ) {
             return do_accordion_sections( $screen, $context, $object );

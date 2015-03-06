@@ -29,7 +29,8 @@ class FrmFormAction {
 		return $new_instance;
 	}
 
-	/** Echo the settings update form
+	/**
+     * Echo the settings update form
 	 *
 	 * @param array $instance Current settings
 	 */
@@ -38,9 +39,9 @@ class FrmFormAction {
 		return 'noform';
 	}
 
-	/*
-	* Return an array of the default options
-	*/
+	/**
+	 * @return array of the default options
+	 */
 	public function get_defaults() {
 	    return array();
 	}
@@ -185,8 +186,8 @@ class FrmFormAction {
     *
     * Since 2.0
     *
-    * @param $action array
-    * @return $post_id integer
+    * @param array $action
+    * @return integer $post_id
     */
     public function maybe_create_action( $action, $forms ) {
         if ( isset( $action['ID'] ) && is_numeric( $action['ID'] ) && $forms[$action['menu_order']] == 'updated' ) {
@@ -477,9 +478,9 @@ class FrmFormAction {
 	    return $switch;
 	}
 
-	/*
-	* Migrate settings from form->options into new action.
-	*/
+	/**
+	 * Migrate settings from form->options into new action.
+	 */
 	public function migrate_to_2($form, $update = 'update') {
         $action = $this->prepare_new($form->id);
         $form->options = maybe_unserialize($form->options);

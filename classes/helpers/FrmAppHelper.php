@@ -5,17 +5,17 @@ class FrmAppHelper{
     public static $db_version = 19; //version of the database we are moving to
     public static $pro_db_version = 27;
 
-    /*
-    * @since 2.0
-    */
+    /**
+     * @since 2.0
+     */
     public static $plug_version = '2.0rc2';
 
-    /*
-    * @since 1.07.02
-    *
-    * @param none
-    * @return float The version of this plugin
-    */
+    /**
+     * @since 1.07.02
+     *
+     * @param none
+     * @return float The version of this plugin
+     */
     public static function plugin_version() {
         return self::$plug_version;
     }
@@ -41,33 +41,33 @@ class FrmAppHelper{
         return $url;
     }
 
-    /*
-    * @return string Site URL
-    */
+    /**
+     * @return string Site URL
+     */
     public static function site_url(){
         $url = self::plugin_url(site_url());
         return $url;
     }
 
-    /*
-    * Get the name of this site
-    * Used for [sitename] shortcode
-    *
-    * @since 2.0
-    * @return string
-    */
+    /**
+     * Get the name of this site
+     * Used for [sitename] shortcode
+     *
+     * @since 2.0
+     * @return string
+     */
     public static function site_name() {
         return get_option('blogname');
     }
 
-    /*
-    * Get the Formidable settings
-    *
-    * @since 2.0
-    *
-    * @param None
-    * @return Object $frm_setings
-    */
+    /**
+     * Get the Formidable settings
+     *
+     * @since 2.0
+     *
+     * @param None
+     * @return Object $frm_setings
+     */
     public static function get_settings() {
         global $frm_settings;
         if ( empty($frm_settings) ) {
@@ -76,11 +76,11 @@ class FrmAppHelper{
         return $frm_settings;
     }
 
-    /*
-    * Show a message in place of pro features
-    *
-    * @since 2.0
-    */
+    /**
+     * Show a message in place of pro features
+     *
+     * @since 2.0
+     */
     public static function update_message($features, $class = ''){
         if ( ! self::pro_is_installed() ) {
             include(self::plugin_path() .'/classes/views/shared/update_message.php');
@@ -91,14 +91,14 @@ class FrmAppHelper{
         return apply_filters('frm_pro_installed', false);
     }
 
-    /*
-    * Check for certain page in Formidable settings
-    *
-    * @since 2.0
-    *
-    * @param $page string The name of the page to check
-    * @return boolean
-    */
+    /**
+     * Check for certain page in Formidable settings
+     *
+     * @since 2.0
+     *
+     * @param string $page The name of the page to check
+     * @return boolean
+     */
     public static function is_admin_page($page = 'formidable' ) {
         global $pagenow;
         if ( $pagenow ) {
@@ -108,69 +108,69 @@ class FrmAppHelper{
         return is_admin() && isset($_GET['page']) && $_GET['page'] == $page;
     }
 
-    /*
-    * Check for the form preview page
-    *
-    * @since 2.0
-    *
-    * @param None
-    * @return boolean
-    */
+    /**
+     * Check for the form preview page
+     *
+     * @since 2.0
+     *
+     * @param None
+     * @return boolean
+     */
     public static function is_preview_page() {
         global $pagenow;
         return $pagenow && $pagenow == 'admin-ajax.php' && isset($_GET['action']) && $_GET['action'] == 'frm_forms_preview';
     }
 
-    /*
-    * Check for ajax except the form preview page
-    *
-    * @since 2.0
-    *
-    * @param None
-    * @return boolean
-    */
+    /**
+     * Check for ajax except the form preview page
+     *
+     * @since 2.0
+     *
+     * @param None
+     * @return boolean
+     */
     public static function doing_ajax() {
         return defined('DOING_AJAX') && DOING_AJAX && ! self::is_preview_page();
     }
 
-    /*
-    * Check if on an admin page
-    *
-    * @since 2.0
-    *
-    * @param None
-    * @return boolean
-    */
+    /**
+     * Check if on an admin page
+     *
+     * @since 2.0
+     *
+     * @param None
+     * @return boolean
+     */
     public static function is_admin() {
         return is_admin() && ( ! defined('DOING_AJAX') || ! DOING_AJAX );
     }
 
-    /*
-    * Check if value contains blank value or empty array
-    *
-    * @since 2.0
-    * @param $value - value to check
-    * @return true or false
-    */
+    /**
+     * Check if value contains blank value or empty array
+     *
+     * @since 2.0
+     * @param $value - value to check
+     * @return true or false
+     */
     public static function is_empty_value( $value, $empty = '' ) {
         return ( is_array( $value ) && empty( $value ) ) || $value == $empty;
     }
 
-    /*
-    * Get any value from the $_SERVER
-    * Used by [ip] shortcode
-    *
-    * @since 2.0
-    * @return string
-    */
+    /**
+     * Get any value from the $_SERVER
+     * Used by [ip] shortcode
+     *
+     * @since 2.0
+     * @return string
+     */
     public static function get_server_value($value) {
         return isset( $_SERVER[ $value ] ) ? $_SERVER[ $value ] : '';
     }
 
-    /*
-    * Check for the IP address in several places
-    * @return string The IP address of the current user
-    */
+    /**
+     * Check for the IP address in several places
+     * @return string The IP address of the current user
+     */
     public static function get_ip_address(){
         foreach ( array(
             'HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED', 'HTTP_X_CLUSTER_CLIENT_IP',
@@ -223,11 +223,8 @@ class FrmAppHelper{
         return isset( $_POST[ $param ] ) ? stripslashes_deep( maybe_unserialize( $_POST[ $param ] ) ) : $default;
     }
 
-    /*
-    * @since 2.0
-    */
-
     /**
+     * @since 2.0
      * @param string $action
      */
     public static function simple_get($action) {
@@ -238,10 +235,25 @@ class FrmAppHelper{
         }
     }
 
-    /*
-    * Used when switching the action for a bulk action
-    * @since 2.0
-    */
+    public static function sanitize_request( $sanitize_method, &$values ) {
+        $temp_values = $values;
+        foreach ( $temp_values as $k => $val ) {
+            if ( isset( $sanitize_method[ $k ] ) ) {
+                switch ( $sanitize_method[ $k ] ) {
+                    case 'sanitize_title' :
+                        $values[ $k ] = sanitize_title( $val );
+                        break;
+                    case 'int' :
+                        $values[ $k ] = (int) $val;
+                }
+            }
+        }
+    }
+
+    /**
+     * Used when switching the action for a bulk action
+     * @since 2.0
+     */
     public static function remove_get_action() {
         if ( ! isset($_GET) ) {
             return;
@@ -253,12 +265,12 @@ class FrmAppHelper{
         }
     }
 
-    /*
-    * Check the WP query for a parameter
-    *
-    * @since 2.0
-    * @return string|array
-    */
+    /**
+     * Check the WP query for a parameter
+     *
+     * @since 2.0
+     * @return string|array
+     */
     public static function get_query_var( $value, $param ) {
         if ( $value != '' ) {
             return $value;
@@ -283,17 +295,17 @@ class FrmAppHelper{
         }
     }
 
-    /*
-    * Check cache before fetching values and saving to cache
-    *
-    * @since 2.0
-    *
-    * @param string $cache_key The unique name for this cache
-    * @param string $group The name of the cache group
-    * @param string $query If blank, don't run a db call
-    * @param string $type The wpdb function to use with this query
-    * @return mixed $results The cache or query results
-    */
+    /**
+     * Check cache before fetching values and saving to cache
+     *
+     * @since 2.0
+     *
+     * @param string $cache_key The unique name for this cache
+     * @param string $group The name of the cache group
+     * @param string $query If blank, don't run a db call
+     * @param string $type The wpdb function to use with this query
+     * @return mixed $results The cache or query results
+     */
     public static function check_cache( $cache_key, $group = '', $query = '', $type = 'get_var', $time = 300 ) {
         $results = wp_cache_get($cache_key, $group);
         if ( ! self::is_empty_value( $results, false ) || empty($query) ) {
@@ -312,12 +324,12 @@ class FrmAppHelper{
         return $results;
     }
 
-    /*
-    * Data that should be stored for a long time can be stored in a transient.
-    * First check the cache, then check the transient
-    * @since 2.0
-    * @return mixed The cached value or false
-    */
+    /**
+     * Data that should be stored for a long time can be stored in a transient.
+     * First check the cache, then check the transient
+     * @since 2.0
+     * @return mixed The cached value or false
+     */
     public static function check_cache_and_transient($cache_key) {
         // check caching layer first
         $results = self::check_cache( $cache_key );
@@ -334,11 +346,8 @@ class FrmAppHelper{
         return $results;
     }
 
-    /*
-    * @since 2.0
-    */
-
     /**
+     * @since 2.0
      * @param string $cache_key
      */
     public static function delete_cache_and_transient($cache_key) {
@@ -346,14 +355,14 @@ class FrmAppHelper{
         wp_cache_delete($cache_key);
     }
 
-    /*
-    * Delete all caching in a single group
-    *
-    * @since 2.0
-    *
-    * @param string $group The name of the cache group
-    * @return boolean True or False
-    */
+    /**
+     * Delete all caching in a single group
+     *
+     * @since 2.0
+     *
+     * @param string $group The name of the cache group
+     * @return boolean True or False
+     */
     public static function cache_delete_group($group) {
     	global $wp_object_cache;
 
@@ -367,22 +376,22 @@ class FrmAppHelper{
     	return false;
     }
 
-    /*
-    * Check a value from a shortcode to see if true or false.
-    * True when value is 1, true, 'true', 'yes'
-    *
-    * @since 1.07.10
-    *
-    * @param string $value The value to compare
-    * @return boolean True or False
-    */
+    /**
+     * Check a value from a shortcode to see if true or false.
+     * True when value is 1, true, 'true', 'yes'
+     *
+     * @since 1.07.10
+     *
+     * @param string $value The value to compare
+     * @return boolean True or False
+     */
     public static function is_true($value) {
         return ( true === $value || 1 == $value || 'true' == $value || 'yes' == $value );
     }
 
-    /*
-    * Used to filter shortcode in text widgets
-    */
+    /**
+     * Used to filter shortcode in text widgets
+     */
     public static function widget_text_filter_callback( $matches ) {
         return do_shortcode( $matches[0] );
     }
@@ -497,11 +506,11 @@ class FrmAppHelper{
         return false;
     }
 
-    /*
-    * Make sure administrators can see Formidable menu
-    *
-    * @since 2.0
-    */
+    /**
+     * Make sure administrators can see Formidable menu
+     *
+     * @since 2.0
+     */
     public static function maybe_add_permissions() {
         if ( ! current_user_can('administrator') || current_user_can('frm_view_forms') ) {
             return;
@@ -516,13 +525,10 @@ class FrmAppHelper{
         unset($frm_roles);
     }
 
-    /*
-    * Check if the user has permision for action.
-    * Return permission message and stop the action if no permission
-    * @since 2.0
-    */
-
     /**
+     * Check if the user has permision for action.
+     * Return permission message and stop the action if no permission
+     * @since 2.0
      * @param string $permission
      */
     public static function permission_check($permission, $show_message = 'show') {
@@ -535,11 +541,11 @@ class FrmAppHelper{
         }
     }
 
-    /*
-    * Check user permission and nonce
-    * @since 2.0
-    * @return false|string The permission message or false if allowed
-    */
+    /**
+     * Check user permission and nonce
+     * @since 2.0
+     * @return false|string The permission message or false if allowed
+     */
     public static function permission_nonce_error($permission, $nonce_name = '', $nonce = '') {
         $error = false;
         if ( ! empty($permission) && current_user_can($permission) ) {
@@ -587,8 +593,8 @@ class FrmAppHelper{
     *
     * @since 2.0
     *
-    * @param $opt_key string
-    * @return boolean true or false. Returns true if current field option is an "Other" option
+    * @param string $opt_key
+    * @return boolean Returns true if current field option is an "Other" option
     */
     public static function is_other_opt( $opt_key ) {
         return $opt_key && strpos( $opt_key, 'other' ) !== false;
@@ -599,9 +605,9 @@ class FrmAppHelper{
     *
     * @since 2.0
     *
-    * @param $opt_key string
-    * @param $field array
-    * @return $other_val string
+    * @param string $opt_key
+    * @param array $field
+    * @return string $other_val
     */
     public static function get_other_val( $opt_key, $field, $parent = false, $pointer = false ) {
         $other_val = '';
@@ -673,11 +679,11 @@ class FrmAppHelper{
     *
     * @since 2.0
     *
-    * @param $field array
-    * @param $other_opt boolean
-    * @param $checked string
-    * @param $args array, should include opt_key and field name
-    * @return $other_val string
+    * @param array $field
+    * @param boolean $other_opt
+    * @param string $checked
+    * @param array $args should include opt_key and field name
+    * @return string $other_val
     */
     public static function prepare_other_input( $field, &$other_opt, &$checked, $args = array() ){
         //Check if this is an "Other" option
@@ -728,9 +734,9 @@ class FrmAppHelper{
         return $value;
     }
 
-    /*
-    * Flatten a multi-dimensional array
-    */
+    /**
+     * Flatten a multi-dimensional array
+     */
     public static function array_flatten( $array ) {
         $return = array();
         foreach ( $array as $key => $value ) {
@@ -749,10 +755,10 @@ class FrmAppHelper{
     	return apply_filters( 'esc_textarea', $safe_text, $text );
     }
 
-    /*
-    * Add auto paragraphs to text areas
-    * @since 2.0
-    */
+    /**
+     * Add auto paragraphs to text areas
+     * @since 2.0
+     */
     public static function use_wpautop($content) {
         if ( apply_filters('frm_use_wpautop', true) ) {
             $content = wpautop(str_replace( '<br>', '<br />', $content));
@@ -768,10 +774,10 @@ class FrmAppHelper{
         return $val;
     }
 
-    /*
-    * @since 2.0
-    * @return string The base Google APIS url for the current version of jQuery UI
-    */
+    /**
+     * @since 2.0
+     * @return string The base Google APIS url for the current version of jQuery UI
+     */
     public static function jquery_ui_base_url() {
         $url = 'http'. ( is_ssl() ? 's' : '' ) .'://ajax.googleapis.com/ajax/libs/jqueryui/'. self::script_version('jquery-ui-core');
         $url = apply_filters('frm_jquery_ui_base_url', $url);
@@ -879,13 +885,10 @@ class FrmAppHelper{
         return $key;
     }
 
-    /*
-    * Editing a Form or Entry
-    * @return bool|array
-    */
-
     /**
+     * Editing a Form or Entry
      * @param string $table
+     * @return bool|array
      */
     public static function setup_edit_vars( $record, $table, $fields = '', $default = false, $post_values = array() ) {
         if ( ! $record ) {
@@ -1024,9 +1027,9 @@ class FrmAppHelper{
         self::fill_form_defaults($post_values, $values);
     }
 
-    /*
-    * Set to POST value or default
-    */
+    /**
+     * Set to POST value or default
+     */
     private static function fill_form_defaults($post_values, array &$values) {
         $form_defaults = FrmFormsHelper::get_default_opts();
 
@@ -1084,10 +1087,10 @@ class FrmAppHelper{
         }
     }
 
-    /*
-    * @since 2.0
-    * @return string
-    */
+    /**
+     * @since 2.0
+     * @return string
+     */
     public static function get_field_size($field) {
         if ( '' == $field['size'] ) {
             global $frm_vars;
@@ -1195,9 +1198,9 @@ class FrmAppHelper{
         return $formatted;
     }
 
-    /*
-    * @returns string The time ago in words
-    */
+    /**
+     * @return string The time ago in words
+     */
     public static function human_time_diff( $from, $to = '' ) {
     	if ( empty($to) )
     		$to = time();
@@ -1249,14 +1252,14 @@ class FrmAppHelper{
     	return $output;
     }
 
-    /*
-    * Added for < WP 4.0 compatability
-    *
-    * @since 1.07.10
-    *
-    * @param $term The value to escape
-    * @return string The escaped value
-    */
+    /**
+     * Added for < WP 4.0 compatability
+     *
+     * @since 1.07.10
+     *
+     * @param string $term The value to escape
+     * @return string The escaped value
+     */
     public static function esc_like($term) {
         global $wpdb;
         if ( method_exists($wpdb, 'esc_like') ) { // WP 4.0
@@ -1331,10 +1334,10 @@ class FrmAppHelper{
         return ' LIMIT '. $limit;
     }
 
-    /*
-    * Get an array of values ready to go through $wpdb->prepare
-    * @since 2.0
-    */
+    /**
+     * Get an array of values ready to go through $wpdb->prepare
+     * @since 2.0
+     */
     public static function prepare_array_values( $array, $type = '%s' ) {
         $placeholders = array_fill(0, count($array), $type);
         return implode(', ', $placeholders);
@@ -1492,13 +1495,14 @@ class FrmAppHelper{
         }
     }
 
-    /* Prepare and json_encode post content
-    *
-    * Since 2.0
-    *
-    * @param $post_content array
-    * @return $post_content string ( json encoded array )
-    */
+    /**
+     * Prepare and json_encode post content
+     *
+     * @since 2.0
+     *
+     * @param array $post_content
+     * @return string $post_content ( json encoded array )
+     */
     public static function prepare_and_encode( $post_content ) {
 
         //Loop through array to strip slashes and add only the needed ones
@@ -1541,12 +1545,12 @@ class FrmAppHelper{
         return $string;
     }
 
-    /*
-    * @since 1.07.10
-    *
-    * @param string $post_type The name of the post type that may need to be highlighted
-    * @return echo The javascript to open and highlight the Formidable menu
-    */
+    /**
+     * @since 1.07.10
+     *
+     * @param string $post_type The name of the post type that may need to be highlighted
+     * @return echo The javascript to open and highlight the Formidable menu
+     */
     public static function maybe_highlight_menu($post_type) {
         global $post, $pagenow;
 
@@ -1562,10 +1566,10 @@ class FrmAppHelper{
         echo '<script type="text/javascript">jQuery(document).ready(function(){frmSelectSubnav();});</script>';
     }
 
-    /*
-    * Load the JS file on non-Formidable pages in the admin area
-    * @since 2.0
-    */
+    /**
+     * Load the JS file on non-Formidable pages in the admin area
+     * @since 2.0
+     */
     public static function load_admin_wide_js() {
         $version = FrmAppHelper::plugin_version();
         wp_enqueue_script( 'formidable_admin_global', FrmAppHelper::plugin_url() . '/js/formidable_admin_global.js', array('jquery'), $version );
@@ -1579,12 +1583,12 @@ class FrmAppHelper{
         ) );
     }
 
-    /*
-    * @since 1.07.10
-    *
-    * @param float $min_version The version the add-on requires
-    * @return echo The message on the plugins listing page
-    */
+    /**
+     * @since 1.07.10
+     *
+     * @param float $min_version The version the add-on requires
+     * @return echo The message on the plugins listing page
+     */
     public static function min_version_notice($min_version) {
         $frm_version = self::plugin_version();
 

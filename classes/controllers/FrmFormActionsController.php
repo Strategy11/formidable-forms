@@ -21,11 +21,11 @@ class FrmFormActionsController{
             'has_archive' => false,
         ) );
 
-        /*
-        * post_content: json settings
-        * menu_order: form id
-        * post_excerpt: action type
-        */
+        /**
+         * post_content: json settings
+         * menu_order: form id
+         * post_excerpt: action type
+         */
 
         self::actions_init();
     }

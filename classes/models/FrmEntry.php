@@ -75,10 +75,10 @@ class FrmEntry{
         return $entry_id;
     }
 
-    /*
-    * check for duplicate entries created in the last 5 minutes
-    * @return boolean
-    */
+    /**
+     * check for duplicate entries created in the last 5 minutes
+     * @return boolean
+     */
     public static function is_duplicate($new_values, $values) {
         if ( defined('WP_IMPORTING') ) {
             return false;
@@ -440,6 +440,7 @@ class FrmEntry{
     public static function validate( $values, $exclude = false ) {
         global $wpdb;
 
+        self::sanitize_entry_post( $values );
         $errors = array();
 
         if ( ! isset($values['form_id']) || ! isset($values['item_meta']) ) {
@@ -447,7 +448,7 @@ class FrmEntry{
             return $errors;
         }
 
-        if ( is_admin() && is_user_logged_in() && ( ! isset($values['frm_submit_entry_'. $values['form_id']]) || ! wp_verify_nonce($values['frm_submit_entry_'. $values['form_id']], 'frm_submit_entry_nonce') ) ) {
+        if ( FrmAppHelper::is_admin() && is_user_logged_in() && ( ! isset( $values['frm_submit_entry_'. $values['form_id'] ] ) || ! wp_verify_nonce($values['frm_submit_entry_'. $values['form_id']], 'frm_submit_entry_nonce') ) ) {
             $errors['form'] = __( 'You do not have permission to do that', 'formidable' );
         }
 
@@ -476,6 +477,21 @@ class FrmEntry{
         $errors = apply_filters('frm_validate_entry', $errors, $values, compact('exclude'));
 
         return $errors;
+    }
+
+    /**
+     * Sanitize the POST values before we use them
+     *
+     * @since 2.0
+     * @param array $values The POST values by reference
+     */
+    public static function sanitize_entry_post( &$values ) {
+        $sanitize_method = array(
+            'form_id' => 'int', 'frm_action' => 'sanitize_title',
+            'form_key' => 'sanitize_title', 'item_key' => 'sanitize_title',
+        );
+
+        FrmAppHelper::sanitize_request( $sanitize_method, $values );
     }
 
     public static function validate_field($posted_field, &$errors, $values, $args = array()) {
@@ -578,12 +594,11 @@ class FrmEntry{
         }
     }
 
-    /*
-    * check for spam
-    */
-
     /**
+     * check for spam
      * @param boolean $exclude
+     * @param array $values
+     * @param array $errors by reference
      */
     public static function spam_check($exclude, $values, &$errors) {
         if ( ! empty($exclude) || ! isset($values['item_meta']) || empty($values['item_meta']) || ! empty($errors) ) {
@@ -641,11 +656,11 @@ class FrmEntry{
     	return false;
     }
 
-    /*
-    * Check entries for spam
-    *
-    * @return boolean true if is spam
-    */
+    /**
+     * Check entries for spam
+     *
+     * @return boolean true if is spam
+     */
     public static function akismet($values) {
 	    $content = FrmEntriesHelper::entry_array_to_string($values);
 
@@ -672,12 +687,10 @@ class FrmEntry{
 		return ( is_array($response) && $response[1] == 'true' ) ? true : false;
     }
 
-    /*
-    * Called by FrmEntry::akismet
-    * @since 2.0
-    */
-
     /**
+     * Called by FrmEntry::akismet
+     * @since 2.0
+     *
      * @param string $content
      */
     private  static function parse_akismet_array( &$datas, $content ) {

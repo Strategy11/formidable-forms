@@ -398,9 +398,11 @@ class FrmXMLHelper{
 		$post['postmeta'][ (string) $meta->meta_key ] = $m['value'];
     }
 
-    /*
-    * Add terms to post
-    */
+    /**
+     * Add terms to post
+     * @param array $post by reference
+     * @param object $item The XML object data
+     */
     private static function populate_taxonomies( &$post, $item ) {
 		foreach ( $item->category as $c ) {
 			$att = $c->attributes();
@@ -429,9 +431,9 @@ class FrmXMLHelper{
 		}
     }
 
-    /*
-    * Edit post if the key and created time match
-    */
+    /**
+     * Edit post if the key and created time match
+     */
     private static function maybe_editing_post( &$post ) {
 		$match_by = array(
 		    'post_type'     => $post['post_type'],

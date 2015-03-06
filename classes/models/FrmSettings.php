@@ -71,9 +71,9 @@ class FrmSettings{
         return $settings;
     }
 
-    /*
-    * @return array
-    */
+    /**
+     * @return array
+     */
     public function default_options(){
         return array(
             'menu'      => 'Formidable',

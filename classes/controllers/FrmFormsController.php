@@ -6,9 +6,9 @@ class FrmFormsController{
         FrmHooksController::trigger_load_hook( 'load_form_hooks' );
     }
 
-    /*
-    * The hooks only needed when a form is loaded
-    */
+    /**
+     * The hooks only needed when a form is loaded
+     */
     public static function load_form_hooks() {
         add_filter('frm_form_classes', 'FrmFormsController::form_classes' );
     }
@@ -347,10 +347,10 @@ class FrmFormsController{
         self::display_forms_list('', $message, 1);
     }
 
-    /*
-    * Delete trashed forms based on how long they have been trashed
-    * @return int The number of forms deleted
-    */
+    /**
+     * Delete trashed forms based on how long they have been trashed
+     * @return int The number of forms deleted
+     */
     public static function scheduled_delete($delete_timestamp = '') {
         global $wpdb;
 

@@ -171,7 +171,7 @@ class FrmNotification{
     *
     * Things that won't work: First Last (with no email entered)
     * @since 2.0
-    * @param $atts array of email fields, pass by reference
+    * @param array $atts array of email fields, pass by reference
     * @param $admin_email
     */
     private static function format_email_fields( &$atts, $admin_email ) {
@@ -215,10 +215,10 @@ class FrmNotification{
     * Format individual email fields
     *
     * @since 2.0
-    * @param $atts array, pass by reference
-    * @param $f string (to, from, reply_to, etc)
-    * @param $val string - value saved in field
-    * @param $key int - if in array, this will be set
+    * @param array $atts pass by reference
+    * @param string $f (to, from, reply_to, etc)
+    * @param string $val value saved in field
+    * @param int $key if in array, this will be set
     */
     private static function format_single_field( &$atts, $f, $val, $key = false ) {
         $val = trim($val);

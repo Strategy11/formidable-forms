@@ -1,9 +1,9 @@
 <?php
 
 class FrmHooksController{
-    /*
-    * Trigger plugin-wide hook loading
-    */
+    /**
+     * Trigger plugin-wide hook loading
+     */
     public static function trigger_load_hook( $hooks = 'load_hooks' ) {
         $controllers = apply_filters('frm_load_controllers', array( 'FrmHooksController' ) );
 

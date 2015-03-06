@@ -2,9 +2,10 @@
 if(!defined('ABSPATH')) die('You are not allowed to call this page directly.');
 
 class FrmFormsHelper{
-    /*
-    * If $form is numeric, get the form object
-    */
+    /**
+     * If $form is numeric, get the form object
+     * @param object|int $form
+     */
     public static function maybe_get_form( &$form ) {
         if ( ! is_object($form) && ! is_array($form) ) {
             $form = FrmForm::getOne($form);
@@ -105,9 +106,9 @@ class FrmFormsHelper{
         echo ($sort_col == $col && $sort_dir == 'desc') ? ' asc' : ' desc';
     }
 
-    /*
-    * Used when a form is created
-    */
+    /**
+     * Used when a form is created
+     */
     public static function setup_new_vars( $values = array() ) {
         global $wpdb;
 
@@ -148,9 +149,9 @@ class FrmFormsHelper{
         return apply_filters('frm_setup_new_form_vars', $values);
     }
 
-    /*
-    * Used when editing a form
-    */
+    /**
+     * Used when editing a form
+     */
     public static function setup_edit_vars( $values, $record, $post_values = array() ) {
         if(empty($post_values))
             $post_values = stripslashes_deep($_POST);
@@ -262,12 +263,10 @@ BEFORE_HTML;
         echo $button_parts[1];
     }
 
-    /*
-    * Automatically add end section fields if they don't exist (2.0 migration)
-    * @since 2.0
-    */
-
     /**
+     * Automatically add end section fields if they don't exist (2.0 migration)
+     * @since 2.0
+     *
      * @param boolean $reset_fields
      */
     public static function auto_add_end_section_fields( $form, $fields, &$reset_fields ) {
@@ -303,9 +302,9 @@ BEFORE_HTML;
         self::maybe_create_end_section($open, $reset_fields, $end_section_values, ( $last_order + 1 ) );
     }
 
-    /*
-    * Create end section field if it doesn't exist. This is for migration from < 2.0
-    */
+    /**
+     * Create end section field if it doesn't exist. This is for migration from < 2.0
+     */
     public static function maybe_create_end_section( &$open, &$reset_fields, $end_section_values, $order ) {
         if ( ! $open ) {
             return;
@@ -520,13 +519,10 @@ BEFORE_HTML;
         return $values;
     }
 
-    /*
-    *
-    * @return int The number of forms changed
-    */
-
     /**
      * @param string $status
+     *
+     * @return int The number of forms changed
      */
     public static function change_form_status( $status ) {
         $available_status = array(

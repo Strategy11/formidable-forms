@@ -284,10 +284,13 @@ class FrmDb{
         return self::get_var( $table, $where, $fields, $args, '', 'results' );
     }
 
-    /*
-    * Get 'frm_forms' from wp_frm_forms or a longer table param that includes a join
-    * Also add the wpdb->prefix to the table if it's missing
-    */
+    /**
+     * Get 'frm_forms' from wp_frm_forms or a longer table param that includes a join
+     * Also add the wpdb->prefix to the table if it's missing
+     *
+     * @param string $table
+     * @param string $group
+     */
     private static function get_group_and_table_name( &$table, &$group ) {
         global $wpdb;
 
@@ -362,9 +365,9 @@ class FrmDb{
         return true;
     }
 
-    /*
-    * Change field size from character to pixel -- Multiply by 7.08
-    */
+    /**
+     * Change field size from character to pixel -- Multiply by 7.08
+     */
     private function migrate_to_17() {
         global $wpdb;
 
@@ -412,15 +415,16 @@ class FrmDb{
         update_option('widget_frm_show_form', $widgets);
     }
 
-    /*
-    * Migrate post and email notification settings into actions
-    */
+    /**
+     * Migrate post and email notification settings into actions
+     */
     private function migrate_to_16() {
         global $wpdb;
 
         $forms = FrmDb::get_results( $this->forms, array(), 'id, options' );
 
-        /* Old email settings format:
+        /**
+        * Old email settings format:
         * email_to: Email or field id
         * also_email_to: array of fields ids
         * reply_to: Email, field id, 'custom'

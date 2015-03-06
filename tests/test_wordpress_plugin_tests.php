@@ -106,9 +106,9 @@ class WP_Test_WordPress_Plugin_Tests extends WP_UnitTestCase {
         $this->search_all_entries();
     }
 
-    /*
-    * Search for a value in an entry
-    */
+    /**
+     * Search for a value in an entry
+     */
     function search_all_entries() {
 	    $this->assertTrue(is_numeric($this->form_id));
 

@@ -32,7 +32,7 @@ class FrmAppController {
             return;
         }
 
-        $current_page = (isset($_GET['page'])) ? $_GET['page'] : (isset($_GET['post_type']) ? $_GET['post_type'] : 'None');
+        $current_page = isset( $_GET['page'] ) ? sanitize_title( $_GET['page'] ) : ( isset( $_GET['post_type'] ) ? sanitize_title( $_GET['post_type'] ) : 'None' );
         if ( $form ) {
             FrmFormsHelper::maybe_get_form( $form );
 
@@ -151,9 +151,9 @@ class FrmAppController {
             }
         } else if ( $pagenow == 'post.php' || ($pagenow == 'post-new.php' && isset($_REQUEST['post_type']) && $_REQUEST['post_type'] == 'frm_display') ) {
             if ( isset($_REQUEST['post_type']) ) {
-                $post_type = $_REQUEST['post_type'];
+                $post_type = sanitize_title( $_REQUEST['post_type'] );
             } else if ( isset($_REQUEST['post']) && ! empty($_REQUEST['post']) ) {
-                $post = get_post( $_REQUEST['post'] );
+                $post = get_post( (int) $_REQUEST['post'] );
                 if ( ! $post ) {
                     return;
                 }
@@ -199,9 +199,9 @@ class FrmAppController {
         load_plugin_textdomain( 'formidable', false, FrmAppHelper::plugin_folder() .'/languages/' );
     }
 
-    /*
-    * Filter shortcodes in text widgets
-    */
+    /**
+     * Filter shortcodes in text widgets
+     */
     public static function widget_text_filter( $content ) {
     	$regex = '/\[\s*(formidable|display-frm-data|frm-stats|frm-graph|frm-entry-links|formresults|frm-search)\s+.*\]/';
     	return preg_replace_callback( $regex, 'FrmAppHelper::widget_text_filter_callback', $content );
@@ -271,7 +271,7 @@ class FrmAppController {
             $frm_settings = FrmAppHelper::get_settings();
             wp_localize_script('formidable_admin', 'frm_admin_js', array(
                 'confirm_uninstall' => __( 'Are you sure you want to do this? Clicking OK will delete all forms, form data, and all other Formidable data. There is no Undo.', 'formidable' ),
-                'get_page'          => (isset($_GET) && isset($_GET['page'])) ? $_GET['page'] : '',
+                'get_page'          => ( isset( $_GET ) && isset( $_GET['page'] ) ) ? sanitize_title( $_GET['page'] ) : '',
                 'desc'              => __( '(Click to add description)', 'formidable' ),
                 'blank'             => __( '(blank)', 'formidable' ),
                 'no_label'          => __( '(no label)', 'formidable' ),

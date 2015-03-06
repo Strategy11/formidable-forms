@@ -170,9 +170,11 @@ class FrmEntriesHelper{
         return $form_id;
     }
 
-    /*
-    * If $entry is numeric, get the entry object
-    */
+    /**
+     * If $entry is numeric, get the entry object
+     * @param int|object $entry by reference
+     *
+     */
     public static function maybe_get_entry( &$entry ) {
         if ( $entry && is_numeric($entry) ) {
             $entry = FrmEntry::getOne($entry);
@@ -254,10 +256,10 @@ class FrmEntriesHelper{
         }
     }
 
-    /*
-    * Replace returns with HTML line breaks for display
-    * @ since 2.0
-    */
+    /**
+     * Replace returns with HTML line breaks for display
+     * @since 2.0
+     */
     public static function textarea_display_value( &$value, $type, $plain_text ) {
         if ( $type == 'textarea' && ! $plain_text ) {
             $value = str_replace(array("\r\n", "\r", "\n"), ' <br/>', $value);
@@ -448,10 +450,10 @@ class FrmEntriesHelper{
         return $val;
     }
 
-    /*
-    * Prepare the saved value for display
-    * @return string
-    */
+    /**
+     * Prepare the saved value for display
+     * @return string
+     */
     public static function display_value($value, $field, $atts = array()) {
 
         $defaults = array(
@@ -543,9 +545,9 @@ class FrmEntriesHelper{
     *
     * @since 2.0
     *
-    * @param $field object
-    * @param $value string or array
-    * @param $args array
+    * @param object $field
+    * @param string|array $value
+    * @param array $args
     */
     public static function maybe_set_other_validation( $field, &$value, &$args ) {
         $args['other'] = false;
@@ -574,9 +576,9 @@ class FrmEntriesHelper{
     *
     * @since 2.0
     *
-    * @param $field object
-    * @param $value string or array
-    * @param $args array
+    * @param object $field
+    * @param string|array $value
+    * @param array $args
     */
     public static function set_other_repeating_vals( $field, &$value, &$args ){
         if ( ! $args['parent_field_id'] ) {
@@ -605,10 +607,10 @@ class FrmEntriesHelper{
     *
     * @since 2.0
     *
-    * @param $value string or array
-    * @param $other_vals string or array (usually of posted values)
-    * @param $field object
-    * @param $args array
+    * @param string|array $value
+    * @param string|array $other_vals (usually of posted values)
+    * @param object $field
+    * @param array $args
     */
     public static function set_other_validation_val( &$value, $other_vals, $field, &$args ) {
         // Checkboxes and multi-select dropdowns

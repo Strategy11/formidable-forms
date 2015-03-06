@@ -422,7 +422,7 @@ class FrmEntriesController {
 
         global $frm_vars;
 
-        $form = FrmForm::getOne($_POST['form_id']);
+        $form = FrmForm::getOne( (int) $_POST['form_id'] );
         if ( ! $form ) {
             return;
         }
@@ -434,14 +434,14 @@ class FrmEntriesController {
         }
         $frm_vars['form_params'][ $form->id ] = $params;
 
-        if ( isset( $frm_vars['created_entries'][ $_POST['form_id'] ] ) ) {
+        if ( isset( $frm_vars['created_entries'][ (int) $_POST['form_id'] ] ) ) {
             return;
         }
 
         if ( $errors == '' ) {
             $errors = FrmEntry::validate($_POST);
         }
-        $frm_vars['created_entries'][ $_POST['form_id'] ] = array('errors' => $errors);
+        $frm_vars['created_entries'][ (int) $_POST['form_id'] ] = array( 'errors' => $errors );
 
         if( empty($errors) ){
             $_POST['frm_skip_cookie'] = 1;
