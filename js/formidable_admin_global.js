@@ -201,7 +201,7 @@ function frmWidgetsJS(){
         }
     };
 }
-if(adminpage == 'widgets-php'){
+if(typeof adminpage != 'undefined' && adminpage == 'widgets-php'){
     var frmWidgets = frmWidgetsJS();
     frmWidgets.init();
 }
