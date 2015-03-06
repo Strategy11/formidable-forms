@@ -117,7 +117,7 @@ if ( $display['conf_field'] ) { ?>
 <?php }
 
 if ( in_array($field['type'], array( 'select', 'radio', 'checkbox')) ) { ?>
-    <div class="frm-show-click" style="margin-top:5px;">
+    <div class="frm-show-click frm_small_top_margin">
 <?php
     if ( isset($field['post_field']) && $field['post_field'] == 'post_category' ) {
         echo '<p class="howto">'. FrmFieldsHelper::get_term_link($field['taxonomy']) .'</p>';
@@ -151,9 +151,9 @@ if ($display['options']){ ?>
     		<div class="widget-title"><h4><?php _e( 'Field Options', 'formidable' ) ?> (ID <?php echo (int) $field['id'] ?>)</h4></div>
         </div>
     	<div class="widget-inside">
-            <table class="form-table" style="clear:none;">
+            <table class="form-table frm_clear_none">
                 <?php $field_types = FrmFieldsHelper::get_field_types($field['type']); ?>
-                <tr><td style="width:150px"><label><?php _e( 'Field Type', 'formidable' ) ?></label></td>
+                <tr><td class="frm_150_width"><label><?php _e( 'Field Type', 'formidable' ) ?></label></td>
                     <td>
                         <div class="hide-if-no-js edit-slug-box frm_help" title="<?php _e( 'The field key can be used as an alternative to the field ID in many cases.', 'formidable' ) ?>">
                             <?php _e( 'Field Key:', 'formidable' ) ?>
@@ -209,7 +209,7 @@ if ($display['options']){ ?>
                 </tr>
                 <?php } ?>
                 <?php if ($display['label_position']){ ?>
-                    <tr><td style="width:150px"><label><?php _e( 'Label Position', 'formidable' ) ?></label></td>
+                    <tr><td class="frm_150_width"><label><?php _e( 'Label Position', 'formidable' ) ?></label></td>
                         <td><select name="field_options[label_<?php echo esc_attr( $field['id'] ) ?>]">
                             <option value=""<?php selected($field['label'], ''); ?>><?php _e( 'Default', 'formidable' ) ?></option>
                             <option value="top"<?php selected($field['label'], 'top'); ?>><?php _e( 'Top', 'formidable' ) ?></option>
@@ -223,7 +223,7 @@ if ($display['options']){ ?>
                     </tr>
                 <?php } ?>
                 <?php if ($display['size']){ ?>
-                    <tr><td style="width:150px"><label><?php _e( 'Field Size', 'formidable' ) ?></label></td>
+                    <tr><td class="frm_150_width"><label><?php _e( 'Field Size', 'formidable' ) ?></label></td>
                         <td>
                         <?php if(in_array($field['type'], array('select', 'time', 'data'))){ ?>
                             <?php if ( ! isset($values['custom_style']) || $values['custom_style'] ) { ?>

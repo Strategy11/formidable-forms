@@ -24,7 +24,7 @@
         echo FrmFieldsHelper::dropdown_categories(array('name' => $field_name, 'field' => $field) );
     } else { ?>
     <select name="<?php echo esc_attr( $field_name ) . ( ( isset($field['multiple']) && $field['multiple']) ? '[]' : '' ); ?>" <?php
-        echo ( isset($field['size']) && $field['size'] ) ? 'style="width:auto"' : '';
+        echo ( isset($field['size']) && $field['size'] ) ? 'class="auto_width"' : '';
         echo ( isset($field['multiple']) && $field['multiple'] ) ? ' multiple="multiple"' : ''; ?> >
         <?php foreach ($field['options'] as $opt_key => $opt){
             $field_val = apply_filters('frm_field_value_saved', $opt, $opt_key, $field);
@@ -41,7 +41,7 @@
         </span>
     <?php } ?>
     <div class="clear"></div>
-    <div class="frm-show-click" style="margin-top:5px;">
+    <div class="frm-show-click frm_small_top_margin">
     <?php
 
     if ( ! isset($field['post_field']) || ! in_array($field['post_field'], array('post_status', 'post_category')) ) { ?>
@@ -56,7 +56,7 @@
 } else if ($field['type'] == 'captcha' ) {
 ?>
     <?php if ( empty($frm_settings->pubkey) ) { ?>
-    <div class="howto" style="font-weight:bold;color:#AA0000;"><?php printf(__( 'Your captcha will not appear on your form until you %1$sset up%2$s the Site and Private Keys', 'formidable' ), '<a href="?page=formidable-settings">', '</a>') ?></div>
+    <div class="howto frm_no_captcha_text"><?php printf(__( 'Your captcha will not appear on your form until you %1$sset up%2$s the Site and Private Keys', 'formidable' ), '<a href="?page=formidable-settings">', '</a>') ?></div>
     <?php } ?>
     <input type="hidden" name="<?php echo esc_attr( $field_name ) ?>" value="1" />
 <?php

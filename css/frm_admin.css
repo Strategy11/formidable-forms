@@ -111,6 +111,10 @@ div.frm_msg_padding{
     padding:10px;
 }
 
+#frm_notification_settings .frm_no_top_padding{
+    padding-top:0;
+}
+
 .actions.frm_visible_overflow{
     overflow:visible;
 }
@@ -126,6 +130,31 @@ div.frm_msg_padding{
 
 .frm_no_entries_form .frm_no_entries_text{
     line-height:200%;
+}
+
+#frm_bulk_options{
+    height:240px;
+    width:335px;
+    float:right;
+}
+
+.frm_no_captcha_text{
+    font-weight:bold;
+    color:#AA0000;
+}
+
+input.frm_insert_in_template{
+    font-size:10px;
+    width:98%;
+    font-weight:normal
+}
+
+.frm-dropdown-menu.frm-on-top{
+    z-index:99999;
+}
+
+.frm_clear_none{
+    clear:none;
 }
 
 .post-new-php.post-type-frm_display #poststuff {padding-top:10px;}
@@ -453,6 +482,10 @@ label input[type="checkbox"], label input[type="radio"]{vertical-align:baseline;
 .frm_38_trigger .widget-top a.widget-action:after {padding: 7px 12px 0;}
 #postbox-container-1{width:270px;}
 #postbox-container-1 .nodrag a{cursor:pointer;}
+#postbox-container-1 .frm_field_list #frm-insert-fields{
+    overflow:visible;
+    max-height:none;
+}
 #postbox-container-1 .frm_field_list #frm-insert-fields .button{
 	text-align:center;width:46%;float:left;padding-left:0;padding-right:0;font-size:11px !important; margin-bottom:6px;
 	border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px;
@@ -724,7 +757,7 @@ li.ui-state-default.edit_field_type_divider .frm-show-hover{
 	transition: opacity .15s ease-in-out;
 }
 
-.frm_sortable_field_opts{
+.frm_sortable_field_opts, .frm_small_top_margin{
 	margin-top:5px;
 }
 .frm_single_option .frm_delete_icon{
@@ -794,8 +827,11 @@ select.frm_cancelnew, input.frm_enternew{width:175px;}
 .frm_form_settings .advanced_settings .form-table td.td_select_padding{padding:8px 10px 0;}
 
 /*Form Actions Tab*/
-.frm_email_reply_container select{width:150px;}
-.frm_email_reply_container input{width:150px;}
+.frm_email_reply_container select,
+.frm_email_reply_container input,
+.form-table td.frm_150_width{
+    width:150px;
+}
 
 .frm_email_settings.frm_email_settings.widgets-holder-wrap{
     overflow:auto;
@@ -903,6 +939,9 @@ label.frm_action_events{
     height: 22px;
     line-height: 20px;
     float:right;
+}
+#frm_notification_settings .frm_bcc_cc_container{
+    width:96px;
 }
 #frm_notification_settings .frm_bcc_button, .submitdelete.frm_delete_wo_post{
     margin-left: 10px;

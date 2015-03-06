@@ -24,7 +24,7 @@
     <li><a href="javascript:void(0)" onclick='frmPrePop(<?php echo str_replace("'", '&#145;', json_encode($pop)) ?>); return false;'><?php echo esc_html( $label ) ?></a></li>
     <?php } ?>
 </ul>
-<textarea name="frm_bulk_options" id="frm_bulk_options" style="height:240px;width:335px;float:right;">
+<textarea name="frm_bulk_options" id="frm_bulk_options">
 <?php
 $other_array = array();
 foreach($field->options as $fkey => $fopt){

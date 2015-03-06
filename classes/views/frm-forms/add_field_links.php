@@ -20,7 +20,7 @@
     		<?php do_action('frm_extra_form_instruction_tabs'); ?>
     	</ul>
 
-    	<div id="frm-insert-fields" class="tabs-panel" style="max-height:none;overflow:visible;">
+    	<div id="frm-insert-fields" class="tabs-panel">
 		    <ul class="field_type_list">
             <?php
             $col_class = 'frm_col_one';

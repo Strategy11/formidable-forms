@@ -4,7 +4,7 @@
     </th>
     <td><input type="text" name="<?php echo esc_attr( $this->get_field_name('email_to') ) ?>" value="<?php echo esc_attr( $form_action->post_content['email_to'] ); ?>" class="frm_not_email_to frm_email_blur large-text <?php FrmAppHelper::maybe_add_tooltip('email_to', 'open') ?>" id="<?php echo esc_attr( $this->get_field_id('email_to') ) ?>" />
     </td>
-    <td style="width:96px;">
+    <td class="frm_bcc_cc_container">
         <a href="javascript:void(0)" class="button frm_email_buttons frm_bcc_button <?php
         echo ( ! empty($form_action->post_content['bcc'])  ? 'frm_hidden' : '' );
         ?>" data-emailrow="bcc"><?php _e( 'BCC', 'formidable' ) ?></a>
@@ -47,7 +47,7 @@
     <td><a href="javascript:void(0)" class="button frm_email_buttons frm_reply_to_button <?php echo ( ! empty( $form_action->post_content['reply_to'] )  ? 'frm_hidden' : '' ) ?>" data-emailrow="reply_to"><?php _e( 'Reply To', 'formidable' ) ?></a></td>
 </tr>
  <tr>
-     <td colspan="3" style="padding-top:0">
+     <td colspan="3" class="frm_no_top_padding">
          <p><label <?php FrmAppHelper::maybe_add_tooltip('email_subject', '', $form->name) ?>><?php _e( 'Subject', 'formidable' ) ?></label><br/>
          <input type="text" name="<?php echo esc_attr( $this->get_field_name('email_subject') ) ?>" class="frm_not_email_subject large-text <?php FrmAppHelper::maybe_add_tooltip('email_subject', 'open', $form->name) ?>" id="<?php echo esc_attr( $this->get_field_id('email_subject') ) ?>" size="55" value="<?php echo esc_attr( $form_action->post_content['email_subject'] ); ?>" /></p>
 
