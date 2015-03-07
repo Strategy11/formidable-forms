@@ -35,7 +35,7 @@ class FrmNotification{
         add_filter('frm_plain_text_email', ($plain_text ? '__return_true' : '__return_false'));
 
         //Get all values in entry in order to get User ID field ID
-        $values = FrmEntryMeta::getAll('it.field_id != 0 and it.item_id ='. $entry->id .' ORDER BY fi.field_order');
+        $values = FrmEntryMeta::getAll( array( 'it.field_id !' => 0, 'it.item_id' => $entry->id ), ' ORDER BY fi.field_order' );
         $user_id_field = $user_id_key = '';
         foreach ( $values as $value ) {
             if ( $value->field_type == 'user_id' ) {

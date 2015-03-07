@@ -74,11 +74,11 @@ class FrmEntriesListHelper extends FrmListHelper {
         if ( isset($this->params['form']) ) {
             $form = FrmForm::getOne($this->params['form']);
         } else {
-            $form = FrmForm::getAll("is_template=0 AND (status is NULL OR status = '' OR status = 'published')", 'name', ' LIMIT 1');
+            $form = FrmForm::getAll( array( 'is_template' => 0, 'status' => array(null, '', 'published') ), 'name', 1 );
         }
 
         if ( $form ) {
-            $field_list = FrmField::getAll("fi.type not in ('". implode("','", FrmFieldsHelper::no_save_fields() ) ."') and fi.form_id=". $form->id, 'field_order');
+            $field_list = FrmField::getAll( array('fi.form_id' => $form->id, 'fi.type not' => FrmFieldsHelper::no_save_fields() ), 'field_order');
         }
 
         $fid = isset($_REQUEST['fid']) ? esc_attr( stripslashes( $_REQUEST['fid'] ) ) : '';

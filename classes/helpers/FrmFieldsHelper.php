@@ -726,7 +726,7 @@ DEFAULT_HTML;
             return FrmProDisplaysHelper::get_shortcodes($content, $form_id);
         }
 
-        $fields = FrmField::getAll("fi.type not in ('". implode("','", self::no_save_fields() ) ."') and fi.form_id=". (int) $form_id);
+        $fields = FrmField::getAll( array('fi.form_id' => (int) $form_id, 'fi.type not' => self::no_save_fields() ) );
 
         $tagregexp = self::allowed_shortcodes($fields);
 

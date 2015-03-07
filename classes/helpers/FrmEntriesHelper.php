@@ -141,9 +141,9 @@ class FrmEntriesHelper{
     public static function set_current_form($form_id){
         global $frm_vars, $wpdb;
 
-        $query = $wpdb->prepare('is_template=%d AND (status is NULL OR status = %s OR status = %s)', '0', '', 'published');
+		$query = array( 'is_template' => 0, 'status' => array(null, '', 'published') );
         if ( $form_id ) {
-            $query .= $wpdb->prepare(' AND id = %d', $form_id);
+			$query['id'] = $form_id;
         }
         $frm_vars['current_form'] = FrmForm::getAll($query, 'name', 1);
 
@@ -419,7 +419,7 @@ class FrmEntriesHelper{
 	        $child_values = isset( $entry->metas[ $atts['embedded_field_id'] ] ) ? $entry->metas[ $atts['embedded_field_id'] ] : false;
 
             if ( $child_values ) {
-	            $child_entries = FrmEntry::getAll('it.id in ('. implode(',', array_filter( (array) $child_values, 'is_numeric') ) .')');
+	            $child_entries = FrmEntry::getAll( array('it.id' => (array) $child_values ) );
 	            //$atts['post_id']
 	        }
 	    }

@@ -910,8 +910,6 @@ class FrmFormsController{
     }
 
     public static function show_form($id = '', $key = '', $title = false, $description = false, $atts = array()) {
-        global $post;
-
         if ( empty($id) ) {
             $id = $key;
         }
@@ -934,7 +932,8 @@ class FrmFormsController{
         $frm_settings = FrmAppHelper::get_settings();
 
         // don't show a draft form on a page
-        if ( $form->status == 'draft' && ( ! $post || $post->ID != $frm_settings->preview_page_id ) ) {
+		global $post;
+        if ( $form->status == 'draft' && current_user_can('frm_edit_forms') && ( ! $post || $post->ID != $frm_settings->preview_page_id ) && ! FrmAppHelper::is_preview_page() ) {
             return __( 'Please select a valid form', 'formidable' );
         }
 

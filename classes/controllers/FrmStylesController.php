@@ -133,7 +133,7 @@ class FrmStylesController{
 
         global $wpdb;
 
-        $forms = FrmForm::getAll("is_template=0 AND (status is NULL OR status = '' OR status = 'published')");
+		$forms = FrmForm::getAll( array( 'is_template' => 0, 'status' => array( null, '', 'published' ) ) );
 
         foreach ( $forms as $form ) {
             if ( $_POST['style'][ $form->id ] == $_POST['prev_style'][ $form->id ] ) {

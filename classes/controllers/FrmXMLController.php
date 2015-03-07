@@ -49,7 +49,7 @@ class FrmXMLController{
     }
 
     public static function form($errors = array(), $message = '') {
-        $forms = FrmForm::getAll("status is NULL OR status = '' OR status = 'published'", 'name');
+        $forms = FrmForm::getAll( array('status' => array(null, '', 'published') ), 'name');
 
         $export_types = apply_filters('frm_xml_export_types',
             array('forms' => __( 'Forms', 'formidable' ))

@@ -86,17 +86,12 @@ class FrmField{
             $values['required'] = (int) $values['required'];
         }
 
-        if ( isset($values['default_value']) && is_array($values['default_value']) ) {
-            $values['default_value'] = serialize($values['default_value']);
-        }
-
-        if ( isset($values['field_options']) && is_array($values['field_options']) ) {
-            $values['field_options'] = serialize($values['field_options']);
-        }
-
-        if ( isset($values['options']) && is_array($values['options']) ) {
-            $values['options'] = serialize($values['options']);
-        }
+		// serialize array values
+		foreach ( array('default_value', 'field_options', 'options') as $opt ) {
+			if ( isset( $values[ $opt ] ) && is_array( $values[ $opt ] ) ) {
+				$values[ $opt ] = serialize( $values[ $opt ] );
+			}
+		}
 
         $query_results = $wpdb->update( $wpdb->prefix .'frm_fields', $values, array( 'id' => $id ) );
 
