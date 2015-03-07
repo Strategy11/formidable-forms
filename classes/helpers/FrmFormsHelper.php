@@ -379,20 +379,17 @@ BEFORE_HTML;
 
         //If submit button needs to be inline or centered
         if ( is_object($form) ) {
-            if ( isset( $form->options['submit_align'] ) && $form->options['submit_align'] ) {
-                if ( $form->options['submit_align'] == 'inline' ) {
-                    $class .= ' frm_inline_form';
-                } else if ( $form->options['submit_align'] == 'center' ) {
-                    $class .= ' frm_center_submit';
-                }
-            }
-        } else if ( isset($form['submit_align']) && $form['submit_align'] ) {
-            if ( $form['submit_align'] == 'inline' ) {
-                $class .= ' frm_inline_form';
-            } else if ( $form['submit_align'] == 'center' ) {
-                $class .= ' frm_center_submit';
-            }
-        }
+			$form = $form->options;
+		}
+
+		$submit_align = isset( $form['submit_align'] ) ? $form->options['submit_align'] : '';
+
+		if ( $submit_align == 'inline' ) {
+			$class .= ' frm_inline_form';
+		} else if ( $submit_align == 'center' ) {
+			$class .= ' frm_center_submit';
+		}
+
         $class = apply_filters('frm_add_form_style_class', $class, $style);
 
         return $class;

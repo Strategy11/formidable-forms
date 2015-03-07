@@ -191,46 +191,47 @@ class FrmDb{
 
         foreach ( $args as $key => $value ) {
             $where .= empty( $where ) ? $base_where : $condition;
-            if ( is_numeric( $key ) ) {
+            $array_inc_null = ( ! is_numeric( $key ) && is_array( $value ) && in_array( null, $value ) );
+            if ( is_numeric( $key ) || $array_inc_null ) {
                 $where .= ' ( ';
                 $nested_where = '';
-                self::parse_where_from_array( $value, '', $nested_where, $values );
-                $where .= $nested_where;
-                $where .= ' ) ';
-            } else {
-                if ( is_array( $value ) && in_array( null, $value ) ) {
-                    $where .= ' ( ';
-                    $nested_where = '';
+                if ( $array_inc_null ) {
                     foreach ( $value as $val ) {
                         self::parse_where_from_array( array( $key => $val, 'or' => 1 ), '', $nested_where, $values );
                     }
-                    $where .= $nested_where;
-                    $where .= ' ) ';
-                    continue;
-                }
-
-                if ( strpos( $key, 'created_at' ) !== false || strpos( $key, 'updated_at' ) !== false  ) {
-                    $k = explode(' ', $key);
-                    $where .= ' DATE_FORMAT(' . reset( $k ) . ', %s) ' . str_replace( reset( $k ), '', $key );
-                    $values[] = '%Y-%m-%d %H:%i:%s';
                 } else {
-                    $where .= ' '. $key;
+                    self::parse_where_from_array( $value, '', $nested_where, $values );
                 }
-
-                if ( is_array( $value ) ) {
-                    $where .= ' in ('. FrmAppHelper::prepare_array_values( $value, '%s' ) .')';
-                    $values = array_merge( $values, $value );
-                } else if ( strpos( strtolower( $key ), ' like' ) !== false ) {
-                    $where .= ' %s';
-                    $values[] = '%'. FrmAppHelper::esc_like( $value ) .'%';
-                } else if ( $value === null ) {
-                    $where .= ' IS NULL';
-                } else {
-                    $where .= '=';
-                    $where .= is_numeric( $value ) ? ( strpos( $value, '.' ) !== false ? '%f' : '%d' ) : '%s';
-                    $values[] = $value;
-                }
+                $where .= $nested_where;
+                $where .= ' ) ';
+            } else {
+                self::interpret_array_to_sql( $key, $value, $where, $values );
             }
+        }
+    }
+
+    private static function interpret_array_to_sql( $key, $value, &$where, &$values ) {
+        if ( strpos( $key, 'created_at' ) !== false || strpos( $key, 'updated_at' ) !== false  ) {
+            $k = explode(' ', $key);
+            $where .= ' DATE_FORMAT(' . reset( $k ) . ', %s) ' . str_replace( reset( $k ), '', $key );
+            $values[] = '%Y-%m-%d %H:%i:%s';
+        } else {
+            $where .= ' '. $key;
+        }
+
+        if ( is_array( $value ) ) {
+            // translate array of values to "in"
+            $where .= ' in ('. FrmAppHelper::prepare_array_values( $value, '%s' ) .')';
+            $values = array_merge( $values, $value );
+        } else if ( strpos( strtolower( $key ), ' like' ) !== false ) {
+            $where .= ' %s';
+            $values[] = '%'. FrmAppHelper::esc_like( $value ) .'%';
+        } else if ( $value === null ) {
+            $where .= ' IS NULL';
+        } else {
+            $where .= '=';
+            $where .= is_numeric( $value ) ? ( strpos( $value, '.' ) !== false ? '%f' : '%d' ) : '%s';
+            $values[] = $value;
         }
     }
 

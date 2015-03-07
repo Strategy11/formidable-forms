@@ -210,7 +210,8 @@ class FrmXMLController{
 	    $records = array();
 
 	    foreach($type as $tb_type){
-            $where = $join = '';
+            $where = array();
+			$join = '';
             $table = $tables[ $tb_type ];
 
             $select = $table .'.id';
@@ -220,27 +221,22 @@ class FrmXMLController{
                 case 'forms':
                     //add forms
                     if ( $args['ids'] ){
-                        $where = $table . '.id IN (' . FrmAppHelper::prepare_array_values( $args['ids'], '%d' ) . ') OR '. $table .'.parent_form_id IN (' . FrmAppHelper::prepare_array_values( $args['ids'], '%d' ) . ')';
-                        $query_vars = array_merge( $query_vars, $args['ids'] );
+						$where[] = array( 'or' => 1, $table . '.id' => $args['ids'], $table .'.parent_form_id' => $args['ids'] );
                 	} else {
-                        $where .= $table . '.status != %s';
-                        $query_vars[] = 'draft';
+						$where[ $table . '.status !'] = 'draft';
                 	}
                 break;
                 case 'actions':
                     $select = $table .'.ID';
-                    $where = 'post_type=%s';
-                    $query_vars[] = FrmFormActionsController::$action_post_type;
+					$where['post_type'] = FrmFormActionsController::$action_post_type;
                     if ( ! empty($args['ids']) ) {
-                        $where .= ' AND menu_order IN (' . FrmAppHelper::prepare_array_values( $args['ids'], '%d' ) . ')';
-                        $query_vars = array_merge( $query_vars, $args['ids'] );
+						$where['menu_order'] = $args['ids'];
                     }
                 break;
                 case 'items':
                     //$join = "INNER JOIN {$wpdb->prefix}frm_item_metas im ON ($table.id = im.item_id)";
                     if ( $args['ids'] ) {
-                        $where = $table . '.form_id IN (' . FrmAppHelper::prepare_array_values( $args['ids'], '%d' ) . ')';
-                        $query_vars = array_merge( $query_vars, $args['ids'] );
+						$where[ $table . '.form_id' ] = $args['ids'];
                     }
                 break;
                 case 'styles':
@@ -256,35 +252,27 @@ class FrmXMLController{
                         unset( $form_id, $form_data );
                     }
                     $select = $table .'.ID';
-                    $where = 'post_type=%s';
-                    $query_vars[] = 'frm_styles';
+                    $where['post_type'] = 'frm_styles';
 
                     // Only export selected styles
                     if ( ! empty( $style_ids ) ) {
-                        $where .= ' AND ID IN (' . FrmAppHelper::prepare_array_values( $style_ids, '%d' ) . ')';
-                        $query_vars = array_merge( $query_vars, $style_ids );
+                        $where['ID'] = $style_ids;
                     }
                 break;
                 default:
                     $select = $table .'.ID';
                     $join = ' INNER JOIN ' . $wpdb->postmeta . ' pm ON (pm.post_id=' . $table . '.ID)';
-                    $where = "pm.meta_key=%s AND pm.meta_value ";
-                    $query_vars[] = 'frm_form_id';
+                    $where['pm.meta_key'] = 'frm_form_id';
 
                     if ( empty($args['ids']) ) {
-                        $where .= '> 0';
+                        $where['pm.meta_value >'] = 1;
                     } else {
-                        $where .= 'IN (' . FrmAppHelper::prepare_array_values( $args['ids'], '%d' ) . ')';
-                        $query_vars = array_merge( $query_vars, $args['ids'] );
+                        $where['pm.meta_value'] = $args['ids'];
                     }
                 break;
             }
 
-            if ( ! empty($where) ) {
-                $where = ' WHERE '. $where;
-            }
-
-            $records[ $tb_type ] = $wpdb->get_col( $wpdb->prepare( 'SELECT ' . $select . ' FROM ' . $table . $join . $where, $query_vars ) );
+			$records[ $tb_type ] = FrmDb::get_col( $table . $join, $where, $select );
             unset($tb_type);
         }
 
