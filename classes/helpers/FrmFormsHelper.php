@@ -33,7 +33,7 @@ class FrmFormsHelper{
             $args['field_id'] = $field_name;
         }
 
-		$query = array( 'is_template' => 0, 'status' => array(null, '', 'published'), 'parent_form_id' => array( null, 0 ) );
+		$query = array( 'is_template' => 0, 'status' => array( null, '', 'published' ), 'parent_form_id' => array( null, 0 ) );
         if ( $args['exclude'] ) {
 			$query['id !'] = $args['exclude'];
         }
@@ -59,7 +59,7 @@ class FrmFormsHelper{
     }
 
     public static function form_switcher(){
-		$where = array( 'is_template' => 0, 'status' => array(null, '', 'published'), 'parent_form_id' => array(null, 0) );
+		$where = array( 'is_template' => 0, 'status' => array( null, '', 'published' ), 'parent_form_id' => array( null, 0 ) );
         $where = apply_filters('frm_forms_dropdown', $where, '');
 
         $forms = FrmForm::getAll($where, 'name');
@@ -119,8 +119,8 @@ class FrmFormsHelper{
         }
 
         foreach (array('name' => '', 'description' => '') as $var => $default){
-            if ( ! isset($values[$var]) ) {
-                $values[$var] = FrmAppHelper::get_param($var, $default);
+			if ( ! isset( $values[ $var ] ) ) {
+				$values[ $var ] = FrmAppHelper::get_param( $var, $default );
             }
         }
 
@@ -128,7 +128,7 @@ class FrmFormsHelper{
 
         foreach (array('form_id' => '', 'logged_in' => '', 'editable' => '', 'default_template' => 0, 'is_template' => 0, 'status' => 'draft', 'parent_form_id' => 0) as $var => $default){
             if ( ! isset( $values[ $var ] ) ) {
-                $values[$var] = FrmAppHelper::get_param($var, $default);
+				$values[ $var ] = FrmAppHelper::get_param( $var, $default );
             }
         }
 
@@ -171,16 +171,16 @@ class FrmFormsHelper{
         foreach ($defaults as $var => $default){
             if ( is_array($default) ) {
                 if ( ! isset( $values[ $var ] ) ) {
-                    $values[$var] = ($record && isset($record->options[$var])) ? $record->options[$var] : array();
+					$values[ $var ] = ( $record && isset( $record->options[ $var ] ) ) ? $record->options[ $var ] : array();
                 }
 
-                foreach($default as $k => $v){
-                    $values[$var][$k] = ($post_values && isset($post_values[$var][$k])) ? $post_values[$var][$k] : (($record && isset($record->options[$var]) && isset($record->options[$var][$k])) ? $record->options[$var][$k] : $v);
+                foreach ( $default as $k => $v ) {
+					$values[ $var ][ $k ] = ( $post_values && isset( $post_values[ $var ][ $k ] ) ) ? $post_values[ $var ][ $k ] : ( ( $record && isset( $record->options[ $var ] ) && isset( $record->options[ $var ][ $k ] ) ) ? $record->options[ $var ][ $k ] : $v);
 
-                    if ( is_array($v) ) {
+                    if ( is_array( $v ) ) {
                         foreach ( $v as $k1 => $v1 ) {
-                            $values[$var][$k][$k1] = ($post_values && isset($post_values[$var][$k][$k1])) ? $post_values[$var][$k][$k1] : (($record && isset($record->options[$var]) && isset($record->options[$var][$k]) && isset($record->options[$var][$k][$k1])) ? $record->options[$var][$k][$k1] : $v1);
-                            unset($k1, $v1);
+							$values[ $var ][ $k ][ $k1 ] = ( $post_values && isset( $post_values[ $var ][ $k ][ $k1 ] ) ) ? $post_values[ $var ][ $k ][ $k1 ] : ( ( $record && isset( $record->options[ $var ] ) && isset( $record->options[ $var ][ $k ] ) && isset( $record->options[ $var ][ $k ][ $k1 ] ) ) ? $record->options[ $var ][ $k ][ $k1 ] : $v1 );
+                            unset( $k1, $v1 );
                         }
                     }
 

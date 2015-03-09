@@ -135,7 +135,7 @@ class FrmFieldsController{
 
         FrmField::update( $_POST['field'], array(
             'field_options' => $field->field_options,
-            'form_id' => $field->form_id
+			'form_id'		=> $field->form_id,
         ) );
         wp_die();
     }

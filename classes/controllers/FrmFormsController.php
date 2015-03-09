@@ -252,7 +252,7 @@ class FrmFormsController{
             FrmProEntriesController::register_scripts();
         }
 
-        header("Content-Type: text/html; charset=". get_option( 'blog_charset' ));
+		header( 'Content-Type: text/html; charset='. get_option( 'blog_charset' ) );
 
         $plugin     = FrmAppHelper::get_param('plugin');
         $controller = FrmAppHelper::get_param('controller');
@@ -503,8 +503,9 @@ class FrmFormsController{
             }
         }
 
-        if($return)
+        if ( $return ) {
             return $result;
+		}
 
         $type = isset( $_REQUEST['form_type'] ) ? $_REQUEST['form_type'] : '';
 
@@ -965,8 +966,8 @@ class FrmFormsController{
         ob_end_clean();
 
         // check if minimizing is turned on
-        if ( isset( $atts['minimize'] ) && ! empty( $atts['minimize'] ) ) {
-            $contents = str_replace(array("\r\n", "\r", "\n", "\t", "    "), '', $contents);
+		if ( isset( $atts['minimize'] ) && ! empty( $atts['minimize'] ) ) {
+			$contents = str_replace( array( "\r\n", "\r", "\n", "\t", '    ' ), '', $contents );
         }
 
         return $contents;

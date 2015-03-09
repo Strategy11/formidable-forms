@@ -123,7 +123,7 @@ class FrmFormsListHelper extends FrmListHelper {
             return;
         }
 
-		$where = array( 'is_template' => 0, 'status' => array(null, '', 'published'), 'parent_form_id' => array(null, 0) );
+		$where = array( 'is_template' => 0, 'status' => array( null, '', 'published' ), 'parent_form_id' => array( null, 0 ) );
         $where = apply_filters('frm_forms_dropdown', $where, '');
 
         $forms = FrmForm::getAll($where, 'name');

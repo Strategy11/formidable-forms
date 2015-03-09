@@ -104,7 +104,7 @@ class FrmFormActionsController{
 
         do_action('frm_before_list_actions', $form); // use this hook to migrate old settings into a new action
 
-    	$form_actions = FrmFormActionsHelper::get_action_for_form($form->id) ;
+		$form_actions = FrmFormActionsHelper::get_action_for_form( $form->id );
 
         $action_controls = self::get_form_actions();
 

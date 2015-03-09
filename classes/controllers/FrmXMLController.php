@@ -49,7 +49,7 @@ class FrmXMLController{
     }
 
     public static function form($errors = array(), $message = '') {
-        $forms = FrmForm::getAll( array('status' => array(null, '', 'published') ), 'name');
+        $forms = FrmForm::getAll( array( 'status' => array( null, '', 'published' ) ), 'name' );
 
         $export_types = apply_filters('frm_xml_export_types',
             array('forms' => __( 'Forms', 'formidable' ))
@@ -112,22 +112,22 @@ class FrmXMLController{
         //$media_id = FrmProAppHelper::upload_file('frm_import_file');
         //if(is_numeric($media_id)){
 
-            if ( !function_exists( 'libxml_disable_entity_loader' ) ) {
-        		$errors[] = __( 'XML import is not enabled on your server.', 'formidable' );
-        		self::form($errors);
-        		return;
-        	}
+		if ( ! function_exists( 'libxml_disable_entity_loader' ) ) {
+			$errors[] = __( 'XML import is not enabled on your server.', 'formidable' );
+			self::form( $errors );
+			return;
+		}
 
-            $set_err = libxml_use_internal_errors(true);
-            $loader = libxml_disable_entity_loader( true );
+		$set_err = libxml_use_internal_errors( true );
+		$loader = libxml_disable_entity_loader( true );
 
-            $result = FrmXMLHelper::import_xml($file);
-            FrmXMLHelper::parse_message($result, $message, $errors);
+		$result = FrmXMLHelper::import_xml( $file );
+		FrmXMLHelper::parse_message( $result, $message, $errors );
 
-            unset($file);
+		unset( $file );
 
-            libxml_use_internal_errors( $set_err );
-        	libxml_disable_entity_loader( $loader );
+		libxml_use_internal_errors( $set_err );
+		libxml_disable_entity_loader( $loader );
         //}else{
         //    foreach ($media_id->errors as $error)
         //        echo $error[0];
@@ -195,7 +195,9 @@ class FrmXMLController{
 
         $sitename = sanitize_key( get_bloginfo( 'name' ) );
 
-    	if ( ! empty($sitename) ) $sitename .= '.';
+    	if ( ! empty( $sitename ) ) {
+			$sitename .= '.';
+		}
     	$filename = $sitename . 'formidable.' . date( 'Y-m-d' ) . '.xml';
 
     	header( 'Content-Description: File Transfer' );
@@ -223,7 +225,7 @@ class FrmXMLController{
                     if ( $args['ids'] ){
 						$where[] = array( 'or' => 1, $table . '.id' => $args['ids'], $table .'.parent_form_id' => $args['ids'] );
                 	} else {
-						$where[ $table . '.status !'] = 'draft';
+						$where[ $table . '.status !' ] = 'draft';
                 	}
                 break;
                 case 'actions':

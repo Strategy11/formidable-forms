@@ -11,11 +11,11 @@ class FrmEntriesController {
 
         add_submenu_page('formidable', 'Formidable | '. __( 'Entries', 'formidable' ), __( 'Entries', 'formidable' ), 'frm_view_entries', 'formidable-entries', 'FrmEntriesController::route' );
 
-        if ( ! isset($_GET['frm_action']) || ! in_array($_GET['frm_action'], array('edit', 'show')) ) {
+		if ( ! isset( $_GET['frm_action'] ) || ! in_array( $_GET['frm_action'], array( 'edit', 'show' ) ) ) {
             $frm_settings = FrmAppHelper::get_settings();
-            add_filter('manage_'. sanitize_title($frm_settings->menu) .'_page_formidable-entries_columns', 'FrmEntriesController::manage_columns' );
-            add_filter('manage_'. sanitize_title($frm_settings->menu) .'_page_formidable-entries_sortable_columns', 'FrmEntriesController::sortable_columns' );
-            add_filter('get_user_option_manage'. sanitize_title($frm_settings->menu) .'_page_formidable-entriescolumnshidden', 'FrmEntriesController::hidden_columns' );
+			add_filter( 'manage_' . sanitize_title( $frm_settings->menu ) . '_page_formidable-entries_columns', 'FrmEntriesController::manage_columns' );
+			add_filter( 'manage_' . sanitize_title( $frm_settings->menu ) . '_page_formidable-entries_sortable_columns', 'FrmEntriesController::sortable_columns' );
+			add_filter( 'get_user_option_manage' . sanitize_title( $frm_settings->menu ) . '_page_formidable-entriescolumnshidden', 'FrmEntriesController::hidden_columns' );
         }
     }
 
@@ -88,11 +88,11 @@ class FrmEntriesController {
 
                 if ( $sub_form_cols ) {
                     foreach ( $sub_form_cols as $k => $sub_form_col ) {
-                        if ( in_array($sub_form_col->type, FrmFieldsHelper::no_save_fields()) ) {
+                        if ( in_array( $sub_form_col->type, FrmFieldsHelper::no_save_fields() ) ) {
                             unset( $sub_form_cols[ $k ] );
                             continue;
                         }
-                        $columns[ $form_id .'_'. $sub_form_col->field_key .'-_-'. $form_col->id ] = FrmAppHelper::truncate( $sub_form_col->name, 35 );
+						$columns[ $form_id . '_' . $sub_form_col->field_key . '-_-' . $form_col->id ] = FrmAppHelper::truncate( $sub_form_col->name, 35 );
                         unset($sub_form_col);
                     }
                 }
@@ -166,12 +166,12 @@ class FrmEntriesController {
         $save = false;
 
         foreach ( (array) $frm_vars['prev_hidden_cols'] as $prev_hidden ) {
-            if ( empty($prev_hidden) || in_array($prev_hidden, $meta_value) ) {
+			if ( empty( $prev_hidden ) || in_array( $prev_hidden, $meta_value ) ) {
                 //don't add blank cols or process included cols
                 continue;
             }
 
-            $form_prefix = explode('_', $prev_hidden);
+			$form_prefix = explode( '_', $prev_hidden );
             $form_prefix = $form_prefix[0];
             if ( $form_prefix == $cur_form_prefix ) {
                 //don't add back columns that are meant to be hidden
@@ -338,13 +338,13 @@ class FrmEntriesController {
         $entry = FrmEntry::getOne($id, true);
 
         $data = maybe_unserialize($entry->description);
-        if ( ! is_array($data) || ! isset($data['referrer']) ) {
-            $data = array('referrer' => $data);
-        }
+		if ( ! is_array( $data ) || ! isset( $data['referrer'] ) ) {
+			$data = array( 'referrer' => $data );
+		}
 
-        $fields = FrmField::get_all_for_form($entry->form_id);
-        $date_format = get_option('date_format');
-        $time_format = get_option('time_format');
+		$fields = FrmField::get_all_for_form( $entry->form_id );
+		$date_format = get_option( 'date_format' );
+		$time_format = get_option( 'time_format' );
         $to_emails = array();
 
         include(FrmAppHelper::plugin_path() .'/classes/views/frm-entries/show.php');
@@ -594,11 +594,11 @@ class FrmEntriesController {
         return $value;
     }
 
-    public static function get_params($form=null){
+	public static function get_params( $form = null ) {
         global $frm_vars;
 
         if ( ! $form ) {
-            $form = FrmForm::getAll(array(), 'name', 1);
+			$form = FrmForm::getAll( array(), 'name', 1 );
         } else {
             FrmFormsHelper::maybe_get_form( $form );
         }

@@ -1,5 +1,7 @@
 <?php
-if(!defined('ABSPATH')) die('You are not allowed to call this page directly.');
+if ( ! defined('ABSPATH') ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 
 class FrmAppHelper{
     public static $db_version = 19; //version of the database we are moving to
@@ -412,7 +414,7 @@ class FrmAppHelper{
     }
 
     public static function get_pages(){
-      return get_posts( array('post_type' => 'page', 'post_status' => array('publish', 'private'), 'numberposts' => 999, 'orderby' => 'title', 'order' => 'ASC'));
+		return get_posts( array( 'post_type' => 'page', 'post_status' => array( 'publish', 'private' ), 'numberposts' => 999, 'orderby' => 'title', 'order' => 'ASC' ) );
     }
 
     public static function wp_pages_dropdown( $field_name, $page_id, $truncate = false ) {

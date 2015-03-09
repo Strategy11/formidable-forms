@@ -141,7 +141,7 @@ class FrmEntriesHelper{
     public static function set_current_form($form_id){
         global $frm_vars, $wpdb;
 
-		$query = array( 'is_template' => 0, 'status' => array(null, '', 'published') );
+		$query = array( 'is_template' => 0, 'status' => array( null, '', 'published' ) );
         if ( $form_id ) {
 			$query['id'] = $form_id;
         }
