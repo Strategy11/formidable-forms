@@ -878,7 +878,7 @@ function frmAdminBuildJS(){
 
 	function setIPELabel(){
 		jQuery(this).editInPlace({
-			url:ajaxurl,params:'action=frm_field_name_in_place_edit',
+			url:ajaxurl,params:'action=frm_field_name_in_place_edit&nonce='+frm_admin_js.nonce,
 			value_required:'true',
 			default_text:frm_admin_js.no_label,
 		});
@@ -1865,7 +1865,7 @@ function frmAdminBuildJS(){
 			});
 			
 			jQuery('.frm_ipe_form_key').editInPlace({
-				url:ajaxurl,params:"action=frm_form_key_in_place_edit&form_id="+this_form_id,
+				url:ajaxurl,params:"action=frm_form_key_in_place_edit&form_id="+this_form_id+'&nonce='+frm_admin_js.nonce,
 				show_buttons:"true",value_required:"true",
 				save_button: '<a class="inplace_save save button button-small">'+frm_admin_js.ok+'</a>',
 				cancel_button:'<a class="inplace_cancel cancel">'+frm_admin_js.cancel+'</a>',
@@ -1873,7 +1873,7 @@ function frmAdminBuildJS(){
 			});
 
 			jQuery('.frm_ipe_form_desc').editInPlace({
-				url:ajaxurl,params:'action=frm_form_desc_in_place_edit&form_id='+this_form_id,
+				url:ajaxurl,params:'action=frm_form_desc_in_place_edit&form_id='+this_form_id+'&nonce='+frm_admin_js.nonce,
 				field_type:'textarea',textarea_rows:3,textarea_cols:60,default_text:frm_admin_js.desc,
 				show_buttons:'true',
 				save_button: '<a class="inplace_save save button button-small">'+frm_admin_js.ok+'</a>',
