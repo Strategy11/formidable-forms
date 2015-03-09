@@ -33,11 +33,9 @@ class FrmFormsHelper{
             $args['field_id'] = $field_name;
         }
 
-        global $wpdb;
-
-        $query = "is_template=0 AND (status is NULL OR status = '' OR status = 'published') AND (parent_form_id IS NULL OR parent_form_id < 1)";
+		$query = array( 'is_template' => 0, 'status' => array(null, '', 'published'), 'parent_form_id' => array( null, 0 ) );
         if ( $args['exclude'] ) {
-            $query .= $wpdb->prepare(" AND id != %d", $args['exclude']);
+			$query['id !'] = $args['exclude'];
         }
 
         $where = apply_filters('frm_forms_dropdown', $query, $field_name);
@@ -61,7 +59,8 @@ class FrmFormsHelper{
     }
 
     public static function form_switcher(){
-        $where = apply_filters('frm_forms_dropdown', "(parent_form_id IS NULL OR parent_form_id < 1) AND is_template=0 AND (status is NULL OR status = '' OR status = 'published')", '');
+		$where = array( 'is_template' => 0, 'status' => array(null, '', 'published'), 'parent_form_id' => array(null, 0) );
+        $where = apply_filters('frm_forms_dropdown', $where, '');
 
         $forms = FrmForm::getAll($where, 'name');
 

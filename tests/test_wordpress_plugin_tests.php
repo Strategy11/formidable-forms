@@ -112,10 +112,7 @@ class WP_Test_WordPress_Plugin_Tests extends WP_UnitTestCase {
     function search_all_entries() {
 	    $this->assertTrue(is_numeric($this->form_id));
 
-        global $wpdb;
-	    $s_query = $wpdb->prepare('it.form_id=%d', $this->form_id);
-
-        $items = FrmEntry::getAll($s_query, '', '', true, false);
+        $items = FrmEntry::getAll( array( 'it.form_id' => $this->form_id ), '', '', true, false);
         $this->assertFalse(empty($items));
 
         $this->search_by_field();
@@ -128,8 +125,7 @@ class WP_Test_WordPress_Plugin_Tests extends WP_UnitTestCase {
         $fid = key($this->field_ids);
         $this->assertTrue(is_numeric($fid));
 
-        global $wpdb;
-	    $s_query = $wpdb->prepare('it.form_id=%d', $this->form_id);
+	    $s_query = array( 'it.form_id' => $this->form_id );
 
         if ( is_callable('FrmProEntriesHelper::get_search_str') ) {
 	        $s_query = FrmProEntriesHelper::get_search_str($s_query, $s, $this->form_id, $fid);

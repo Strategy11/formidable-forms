@@ -122,7 +122,9 @@ class FrmFormsListHelper extends FrmListHelper {
         if ( 'template' != $this->status ) {
             return;
         }
-        $where = apply_filters('frm_forms_dropdown', "(parent_form_id IS NULL OR parent_form_id < 1) AND is_template=0 AND (status is NULL OR status = '' OR status = 'published')", '');
+
+		$where = array( 'is_template' => 0, 'status' => array(null, '', 'published'), 'parent_form_id' => array(null, 0) );
+        $where = apply_filters('frm_forms_dropdown', $where, '');
 
         $forms = FrmForm::getAll($where, 'name');
 
