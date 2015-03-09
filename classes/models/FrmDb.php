@@ -166,7 +166,8 @@ class FrmDb{
     public static function get_where_clause_and_values( &$args ) {
         if ( empty($args) ) {
             // if there are no arguments, add one to prevent prepare from failing
-            $args = array( 1 => 1 );
+			$args = array( 'where' => ' WHERE 1=%d' , 'values' => array( 1 )  );
+			return;
         }
 
         $where = '';
