@@ -1,17 +1,17 @@
 <?php
 
-class FrmFieldsController{
+class FrmFieldsController {
 
-    public static function load_field(){
+    public static function load_field() {
         check_ajax_referer( 'frm_ajax', 'nonce' );
 
         $fields = $_POST['field'];
-        if ( empty($fields) ) {
+        if ( empty( $fields ) ) {
             wp_die();
         }
 
         $_GET['page'] = 'formidable';
-        $fields = stripslashes_deep($fields);
+        $fields = stripslashes_deep( $fields );
 
         $ajax = true;
         $values = array();
@@ -19,9 +19,9 @@ class FrmFieldsController{
         $field_html = array();
 
         foreach ( $fields as $field ) {
-            $field = htmlspecialchars_decode(nl2br($field));
-            $field = json_decode($field, true);
-            if ( ! isset($field['id']) ) {
+            $field = htmlspecialchars_decode( nl2br( $field ) );
+            $field = json_decode( $field, true );
+            if ( ! isset( $field['id'] ) ) {
                 // this field may have already been loaded
                 continue;
             }
@@ -331,18 +331,18 @@ class FrmFieldsController{
                 $field_options = maybe_unserialize( $field->field_options );
                 $field_options['other'] = 0;
                 FrmField::update( $_POST['field_id'], array( 'field_options' => maybe_serialize( $field_options ) ) );
-                $response = array('other' => false );
+                $response = array( 'other' => false );
             }
         }
         echo json_encode( $response );
 
-        FrmField::update($_POST['field_id'], array('options' => maybe_serialize($options)));
+        FrmField::update( $_POST['field_id'], array( 'options' => maybe_serialize( $options ) ) );
 
         wp_die();
     }
 
-    public static function import_choices(){
-        if ( ! current_user_can('frm_edit_forms') ) {
+    public static function import_choices() {
+        if ( ! current_user_can( 'frm_edit_forms' ) ) {
             wp_die();
         }
 
@@ -351,22 +351,22 @@ class FrmFieldsController{
         global $current_screen, $hook_suffix;
 
         // Catch plugins that include admin-header.php before admin.php completes.
-        if ( empty( $current_screen ) && function_exists('set_current_screen') ) {
+        if ( empty( $current_screen ) && function_exists( 'set_current_screen' ) ) {
             $hook_suffix = '';
         	set_current_screen();
         }
 
-        if ( function_exists('register_admin_color_schemes') ) {
+        if ( function_exists( 'register_admin_color_schemes' ) ) {
             register_admin_color_schemes();
         }
 
         $hook_suffix = $admin_body_class = '';
 
-        if ( get_user_setting('mfold') == 'f' ) {
+        if ( get_user_setting( 'mfold' ) == 'f' ) {
         	$admin_body_class .= ' folded';
         }
 
-        if ( function_exists('is_admin_bar_showing') && is_admin_bar_showing() ) {
+        if ( function_exists( 'is_admin_bar_showing' ) && is_admin_bar_showing() ) {
         	$admin_body_class .= ' admin-bar';
         }
 
@@ -639,8 +639,8 @@ class FrmFieldsController{
         }
     }
 
-    private static function add_shortcodes_to_html($field, array &$add_html) {
-        if ( ! isset($field['shortcodes']) || empty($field['shortcodes']) ) {
+    private static function add_shortcodes_to_html( $field, array &$add_html ) {
+        if ( ! isset( $field['shortcodes'] ) || empty( $field['shortcodes'] ) ) {
             return;
         }
 
@@ -682,7 +682,7 @@ class FrmFieldsController{
 
     public static function add_conditional_update_msg() {
         echo '<tr><td colspan="2">';
-        FrmAppHelper::update_message('calculate and conditionally hide and show fields');
+        FrmAppHelper::update_message( 'calculate and conditionally hide and show fields' );
         echo '</td></tr>';
     }
 }

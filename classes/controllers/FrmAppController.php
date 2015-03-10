@@ -49,7 +49,7 @@ class FrmAppController {
     }
 
     // Adds a settings link to the plugins page
-    public static function settings_link($links){
+    public static function settings_link($links) {
         $settings = '<a href="'. admin_url( 'admin.php?page=formidable-settings' ) .'">' . __( 'Settings', 'formidable' ) . '</a>';
         array_unshift( $links, $settings );
 
@@ -75,7 +75,7 @@ class FrmAppController {
     	return $actions;
     }
 
-    public static function pro_get_started_headline(){
+    public static function pro_get_started_headline() {
         if ( FrmAppHelper::is_admin_page( 'formidable' ) && isset( $_REQUEST['upgraded'] ) && 'true' == $_REQUEST['upgraded'] ) {
             self::install();
             ?>
@@ -85,7 +85,7 @@ class FrmAppController {
         }
 
         // Don't display this error as we're upgrading the thing... cmon
-        if ( isset($_GET['action']) && 'upgrade-plugin' == $_GET['action'] ) {
+        if ( isset( $_GET['action'] ) && 'upgrade-plugin' == $_GET['action'] ) {
             return;
         }
 
@@ -117,7 +117,7 @@ class FrmAppController {
         }
     }
 
-    public static function admin_js(){
+    public static function admin_js() {
         global $pagenow;
 
         if ( 'admin-ajax.php' == $pagenow && isset($_GET['action']) && $_GET['action'] != 'frm_import_choices' ) {
@@ -174,7 +174,7 @@ class FrmAppController {
         }
     }
 
-    public static function admin_body_class($classes){
+    public static function admin_body_class( $classes ) {
         global $wp_version;
 
         //we only need this class on Formidable pages
@@ -185,7 +185,7 @@ class FrmAppController {
         return $classes;
     }
 
-    public static function wp_admin_body_class($classes){
+    public static function wp_admin_body_class( $classes ) {
         global $wp_version;
         //we need this class everywhere in the admin for the menu
         if ( version_compare( $wp_version, '3.7.2', '>' ) ) {
@@ -195,7 +195,7 @@ class FrmAppController {
         return $classes;
     }
 
-    public static function load_lang(){
+    public static function load_lang() {
         load_plugin_textdomain( 'formidable', false, FrmAppHelper::plugin_folder() .'/languages/' );
     }
 
@@ -212,7 +212,7 @@ class FrmAppController {
         return FrmAppHelper::widget_text_filter_callback( $matches );
     }
 
-    public static function front_head(){
+    public static function front_head() {
         if ( is_multisite() ) {
             $old_db_version = get_option( 'frm_db_version' );
             $pro_db_version = FrmAppHelper::pro_is_installed() ? get_option( 'frmpro_db_version' ) : false;
@@ -242,10 +242,10 @@ class FrmAppController {
                 if ( 'all' == $frm_settings->load_style ) {
                     wp_enqueue_style( $k );
                 }
-                unset($k, $file);
+                unset( $k, $file );
             }
         }
-        unset($style);
+        unset( $style );
 
         if ( $frm_settings->load_style == 'all' ) {
             global $frm_vars;
@@ -256,7 +256,7 @@ class FrmAppController {
     /**
      * @param string $location
      */
-    public static function localize_script($location){
+    public static function localize_script($location) {
         wp_localize_script('formidable', 'frm_js', array(
             'ajax_url'  => admin_url( 'admin-ajax.php' ),
             'images_url' => FrmAppHelper::plugin_url() .'/images',
@@ -304,7 +304,7 @@ class FrmAppController {
     }
 
 
-    public static function custom_stylesheet(){
+    public static function custom_stylesheet() {
         global $frm_vars;
         $css_file = array();
 
@@ -325,7 +325,7 @@ class FrmAppController {
         return $css_file;
     }
 
-    public static function load_css(){
+    public static function load_css() {
         $css = get_transient( 'frmpro_css' );
 
         include(FrmAppHelper::plugin_path() .'/css/custom_theme.css.php');
@@ -339,16 +339,16 @@ class FrmAppController {
         if ( $frm_vars['load_css'] && ! FrmAppHelper::is_admin() && $frm_settings->load_style != 'none' ) {
             $css = apply_filters( 'get_frm_stylesheet', self::custom_stylesheet() );
 
-            if ( ! empty($css) ) {
+            if ( ! empty( $css ) ) {
                 foreach ( (array) $css as $css_key => $file ) {
                     wp_enqueue_style( $css_key );
-                    unset($css_key, $file);
+                    unset( $css_key, $file );
                 }
             }
-            unset($css);
+            unset( $css );
         }
 
-        if ( ! FrmAppHelper::is_admin() && $location != 'header' && ! empty($frm_vars['forms_loaded']) ) {
+        if ( ! FrmAppHelper::is_admin() && $location != 'header' && ! empty( $frm_vars['forms_loaded'] ) ) {
             //load formidable js
             wp_enqueue_script( 'formidable' );
         }
@@ -365,7 +365,7 @@ class FrmAppController {
         $frmdb->upgrade( $old_db_version );
     }
 
-    public static function uninstall(){
+    public static function uninstall() {
         check_ajax_referer( 'frm_ajax', 'nonce' );
 
         if ( current_user_can( 'administrator' ) ) {
@@ -389,7 +389,7 @@ class FrmAppController {
     }
 
     // Routes for wordpress pages -- we're just replacing content here folks.
-    public static function page_route($content){
+    public static function page_route($content) {
         global $post;
 
         $frm_settings = FrmAppHelper::get_settings();
@@ -400,12 +400,12 @@ class FrmAppController {
         return $content;
     }
 
-    public static function update_message($features){
+    public static function update_message($features) {
         _deprecated_function( __FUNCTION__, '2.0', 'FrmAppHelper::update_message' );
         return FrmAppHelper::update_message( $features );
     }
 
-    public static function deauthorize(){
+    public static function deauthorize() {
         check_ajax_referer( 'frm_ajax', 'nonce' );
 
         delete_option( 'frmpro-credentials' );
@@ -416,12 +416,12 @@ class FrmAppController {
     }
 
     //formidable shortcode
-    public static function get_form_shortcode($atts){
+    public static function get_form_shortcode( $atts ) {
         _deprecated_function( __FUNCTION__, '1.07.05', 'FrmFormsController::get_form_shortcode()' );
         return FrmFormsController::get_form_shortcode( $atts );
     }
 
-    public static function get_postbox_class(){
+    public static function get_postbox_class() {
         _deprecated_function( __FUNCTION__, '2.0' );
         return 'postbox-container';
     }

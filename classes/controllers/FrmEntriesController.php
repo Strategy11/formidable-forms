@@ -20,7 +20,7 @@ class FrmEntriesController {
     }
 
     /* Display in Back End */
-    public static function route(){
+    public static function route() {
         $action = FrmAppHelper::get_param('frm_action');
 
         switch ( $action ) {
@@ -30,8 +30,8 @@ class FrmEntriesController {
                 return self::$action();
 
             default:
-                do_action('frm_entry_action_route', $action);
-                if ( apply_filters('frm_entry_stop_action_route', false, $action) ) {
+                do_action( 'frm_entry_action_route', $action );
+                if ( apply_filters( 'frm_entry_stop_action_route', false, $action ) ) {
                     return;
                 }
 
@@ -41,7 +41,7 @@ class FrmEntriesController {
 
     public static function contextual_help($help, $screen_id, $screen) {
         // Only add to certain screens. add_help_tab was introduced in WordPress 3.3
-        if ( $screen_id != 'formidable_page_formidable-entries' || ! method_exists( $screen, 'add_help_tab' ) ){
+        if ( $screen_id != 'formidable_page_formidable-entries' || ! method_exists( $screen, 'add_help_tab' ) ) {
             return $help;
         }
 
@@ -65,7 +65,7 @@ class FrmEntriesController {
         return $help;
     }
 
-    public static function manage_columns($columns){
+    public static function manage_columns($columns) {
         global $frm_vars, $wpdb;
         $form_id = FrmEntriesHelper::get_current_form_id();
 
@@ -123,14 +123,15 @@ class FrmEntriesController {
         return $columns;
     }
 
-    public static function check_hidden_cols($check, $object_id, $meta_key, $meta_value, $prev_value){
+    public static function check_hidden_cols($check, $object_id, $meta_key, $meta_value, $prev_value) {
         $frm_settings = FrmAppHelper::get_settings();
         if ( $meta_key != 'manage'.  sanitize_title($frm_settings->menu) .'_page_formidable-entriescolumnshidden' || $meta_value == $prev_value ) {
             return $check;
         }
 
-        if ( empty($prev_value) )
-    		$prev_value = get_metadata('user', $object_id, $meta_key, true);
+        if ( empty($prev_value) ) {
+            		$prev_value = get_metadata('user', $object_id, $meta_key, true);
+        }
 
         global $frm_vars;
         //add a check so we don't create a loop
@@ -140,7 +141,7 @@ class FrmEntriesController {
     }
 
     //add hidden columns back from other forms
-    public static function update_hidden_cols($meta_id, $object_id, $meta_key, $meta_value ){
+    public static function update_hidden_cols($meta_id, $object_id, $meta_key, $meta_value ) {
         $frm_settings = FrmAppHelper::get_settings();
 
         $sanitized = sanitize_title($frm_settings->menu);
@@ -183,20 +184,20 @@ class FrmEntriesController {
             unset($form_prefix);
         }
 
-        if($save){
+        if($save) {
             $user = wp_get_current_user();
             update_user_option( $user->ID, 'manage'.  $sanitized .'_page_formidable-entriescolumnshidden', $meta_value, true );
         }
     }
 
-    public static function save_per_page($save, $option, $value){
+    public static function save_per_page($save, $option, $value) {
         if ( $option == 'formidable_page_formidable_entries_per_page' ) {
             $save = (int) $value;
         }
         return $save;
     }
 
-    public static function sortable_columns(){
+    public static function sortable_columns() {
         $form_id = FrmEntriesHelper::get_current_form_id();
 
         $fields = FrmField::get_all_for_form($form_id);
@@ -220,7 +221,7 @@ class FrmEntriesController {
         return $columns;
     }
 
-    public static function hidden_columns($result){
+    public static function hidden_columns($result) {
         global $frm_vars;
 
         $form_id = FrmEntriesHelper::get_current_form_id();
@@ -228,7 +229,7 @@ class FrmEntriesController {
         $return = false;
         foreach ( (array) $result as $r ) {
             if ( ! empty( $r ) ) {
-                $form_prefix = explode('_', $r);
+                $form_prefix = explode( '_', $r );
                 $form_prefix = $form_prefix[0];
 
                 if ( (int) $form_prefix == (int) $form_id ) {
@@ -240,13 +241,15 @@ class FrmEntriesController {
             }
         }
 
-        if($return)
-            return $result;
+        if($return) {
+                    return $result;
+        }
 
         $i = isset($frm_vars['cols']) ? count($frm_vars['cols']) : 0;
         $max_columns = 8;
-        if($i <= $max_columns)
-            return $result;
+        if($i <= $max_columns) {
+                    return $result;
+        }
 
         global $frm_vars;
         if ( isset($frm_vars['current_form']) && $frm_vars['current_form'] ) {
@@ -255,7 +258,7 @@ class FrmEntriesController {
 
         if ( isset($frm_vars['current_form']) && $frm_vars['current_form'] && isset($frm_vars['current_form']->options['hidden_cols']) && ! empty($frm_vars['current_form']->options['hidden_cols']) ) {
             $result = $frm_vars['current_form']->options['hidden_cols'];
-        }else{
+        } else {
             $cols = $frm_vars['cols'];
             $cols = array_reverse($cols, true);
 
@@ -265,9 +268,11 @@ class FrmEntriesController {
             $result[] = $form_id .'_item_key';
             $i--;
 
-            foreach($cols as $col_key => $col){
-                if($i > $max_columns)
-                    $result[] = $col_key; //remove some columns by default
+            foreach($cols as $col_key => $col) {
+                if($i > $max_columns) {
+                                    $result[] = $col_key;
+                }
+                //remove some columns by default
                 $i--;
                 unset($col_key, $col);
             }
@@ -282,24 +287,24 @@ class FrmEntriesController {
         $form = FrmEntriesHelper::get_current_form();
         $params = FrmEntriesHelper::get_admin_params( $form );
 
-        if($form){
+        if ( $form ) {
             $params['form'] = $form->id;
             $frm_vars['current_form'] = $form;
 	        $where_clause = " it.form_id=$form->id";
 
 	        if ( 'trash' == $form->status ) {
 	            $delete_timestamp = time() - ( DAY_IN_SECONDS * EMPTY_TRASH_DAYS );
-	            $time_to_delete = FrmAppHelper::human_time_diff( $delete_timestamp, (isset($form->options['trash_time']) ? ($form->options['trash_time']) : time()));
-	            $errors['trash'] = sprintf(__( 'This form is in the trash and is scheduled to be deleted permanently in %s along with any entries.', 'formidable' ), $time_to_delete);
-	            unset($time_to_delete, $delete_timestamp);
+	            $time_to_delete = FrmAppHelper::human_time_diff( $delete_timestamp, ( isset( $form->options['trash_time'] ) ? ( $form->options['trash_time'] ) : time() ) );
+	            $errors['trash'] = sprintf( __( 'This form is in the trash and is scheduled to be deleted permanently in %s along with any entries.', 'formidable' ), $time_to_delete );
+	            unset( $time_to_delete, $delete_timestamp );
 	        }
-        }else{
+        } else {
             $where_clause = '';
 		}
 
-        $table_class = apply_filters('frm_entries_list_class', 'FrmEntriesListHelper');
+        $table_class = apply_filters( 'frm_entries_list_class', 'FrmEntriesListHelper' );
 
-        $wp_list_table = new $table_class( array('params' => $params) );
+        $wp_list_table = new $table_class( array( 'params' => $params ) );
 
         $pagenum = $wp_list_table->get_pagenum();
 
@@ -324,7 +329,7 @@ class FrmEntriesController {
     }
 
     /* Back End CRUD */
-    public static function show($id = false){
+    public static function show($id = false) {
         FrmAppHelper::permission_check('frm_view_entries');
 
         if ( ! $id ) {
@@ -350,7 +355,7 @@ class FrmEntriesController {
         include(FrmAppHelper::plugin_path() .'/classes/views/frm-entries/show.php');
     }
 
-    public static function destroy(){
+    public static function destroy() {
         FrmAppHelper::permission_check('frm_delete_entries');
 
         $params = FrmEntriesHelper::get_admin_params();
@@ -366,13 +371,13 @@ class FrmEntriesController {
             $message = __( 'Entry was Successfully Destroyed', 'formidable' );
         }
 
-        self::display_list($params, $message);
+        self::display_list( $params, $message );
     }
 
-    public static function destroy_all(){
-        if ( ! current_user_can('frm_delete_entries') ) {
+    public static function destroy_all() {
+        if ( ! current_user_can( 'frm_delete_entries' ) ) {
             $frm_settings = FrmAppHelper::get_settings();
-            wp_die($frm_settings->admin_permission);
+            wp_die( $frm_settings->admin_permission );
         }
 
         global $wpdb;
@@ -382,19 +387,19 @@ class FrmEntriesController {
         $form_id = (int) $params['form'];
 
         if ( $form_id ) {
-            $entry_ids = FrmDb::get_col( 'frm_items', array('form_id' => $form_id) );
-            $action = FrmFormActionsHelper::get_action_for_form($form_id, 'wppost', 1);
+            $entry_ids = FrmDb::get_col( 'frm_items', array( 'form_id' => $form_id ) );
+            $action = FrmFormActionsHelper::get_action_for_form( $form_id, 'wppost', 1 );
 
             if ( $action ) {
                 // this action takes a while, so only trigger it if there are posts to delete
                 foreach ( $entry_ids as $entry_id ) {
-                    do_action('frm_before_destroy_entry', $entry_id);
-                    unset($entry_id);
+                    do_action( 'frm_before_destroy_entry', $entry_id );
+                    unset( $entry_id );
                 }
             }
 
-            $wpdb->query($wpdb->prepare("DELETE em.* FROM {$wpdb->prefix}frm_item_metas as em INNER JOIN {$wpdb->prefix}frm_items as e on (em.item_id=e.id) and form_id=%d", $form_id));
-            $results = $wpdb->query($wpdb->prepare("DELETE FROM {$wpdb->prefix}frm_items WHERE form_id=%d", $form_id));
+            $wpdb->query( $wpdb->prepare( "DELETE em.* FROM {$wpdb->prefix}frm_item_metas as em INNER JOIN {$wpdb->prefix}frm_items as e on (em.item_id=e.id) and form_id=%d", $form_id ) );
+            $results = $wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->prefix}frm_items WHERE form_id=%d", $form_id ) );
             if ( $results ) {
                 $message = __( 'Entries were Successfully Destroyed', 'formidable' );
             }
@@ -402,21 +407,21 @@ class FrmEntriesController {
             $errors = __( 'No entries were specified', 'formidable' );
         }
 
-        self::display_list($params, $message, $errors);
+        self::display_list( $params, $message, $errors );
     }
 
     public static function show_form( $id = '', $key = '', $title = false, $description = false ) {
         _deprecated_function( __FUNCTION__, '1.07.05', 'FrmFormsController::show_form()' );
-        return FrmFormsController::show_form($id, $key, $title, $description);
+        return FrmFormsController::show_form( $id, $key, $title, $description );
     }
 
-    public static function get_form($filename, $form, $title, $description) {
+    public static function get_form( $filename, $form, $title, $description ) {
         _deprecated_function( __FUNCTION__, '1.07.05', 'FrmFormsController::get_form()' );
-        return FrmFormsController::get_form($form, $title, $description);
+        return FrmFormsController::get_form( $form, $title, $description );
     }
 
     public static function process_entry( $errors = '', $ajax = false ) {
-        if ( FrmAppHelper::is_admin() || ! isset($_POST) || ! isset($_POST['form_id']) || ! is_numeric($_POST['form_id']) || ! isset($_POST['item_key']) ) {
+        if ( FrmAppHelper::is_admin() || ! isset( $_POST ) || ! isset( $_POST['form_id'] ) || ! is_numeric( $_POST['form_id'] ) || ! isset( $_POST['item_key'] ) ) {
             return;
         }
 
@@ -427,78 +432,78 @@ class FrmEntriesController {
             return;
         }
 
-        $params = self::get_params($form);
+        $params = self::get_params( $form );
 
-        if ( ! isset($frm_vars['form_params']) ) {
+        if ( ! isset( $frm_vars['form_params'] ) ) {
             $frm_vars['form_params'] = array();
         }
-        $frm_vars['form_params'][ $form->id ] = $params;
+        $frm_vars['form_params'][$form->id] = $params;
 
-        if ( isset( $frm_vars['created_entries'][ (int) $_POST['form_id'] ] ) ) {
+        if ( isset( $frm_vars['created_entries'][(int) $_POST['form_id']] ) ) {
             return;
         }
 
         if ( $errors == '' ) {
-            $errors = FrmEntry::validate($_POST);
+            $errors = FrmEntry::validate( $_POST );
         }
-        $frm_vars['created_entries'][ (int) $_POST['form_id'] ] = array( 'errors' => $errors );
+        $frm_vars['created_entries'][(int) $_POST['form_id']] = array( 'errors' => $errors );
 
-        if( empty($errors) ){
+        if ( empty( $errors ) ) {
             $_POST['frm_skip_cookie'] = 1;
-            if($params['action'] == 'create'){
-                if ( apply_filters( 'frm_continue_to_create', true, $_POST['form_id'] ) && ! isset( $frm_vars['created_entries'][ $_POST['form_id'] ]['entry_id'] ) ) {
-                    $frm_vars['created_entries'][ $_POST['form_id'] ]['entry_id'] = FrmEntry::create( $_POST );
+            if ( $params['action'] == 'create' ) {
+                if ( apply_filters( 'frm_continue_to_create', true, $_POST['form_id'] ) && ! isset( $frm_vars['created_entries'][$_POST['form_id']]['entry_id'] ) ) {
+                    $frm_vars['created_entries'][$_POST['form_id']]['entry_id'] = FrmEntry::create( $_POST );
                 }
             }
 
-            do_action('frm_process_entry', $params, $errors, $form, array('ajax' => $ajax));
-            unset($_POST['frm_skip_cookie']);
+            do_action( 'frm_process_entry', $params, $errors, $form, array( 'ajax' => $ajax ) );
+            unset( $_POST['frm_skip_cookie'] );
         }
     }
 
-    public static function delete_entry_before_redirect($url, $form, $atts){
-        self::_delete_entry($atts['id'], $form);
+    public static function delete_entry_before_redirect( $url, $form, $atts ) {
+        self::_delete_entry( $atts['id'], $form );
         return $url;
     }
 
     //Delete entry if not redirected
-    public static function delete_entry_after_save($atts){
-        self::_delete_entry($atts['entry_id'], $atts['form']);
+    public static function delete_entry_after_save( $atts ) {
+        self::_delete_entry( $atts['entry_id'], $atts['form'] );
     }
 
-    private static function _delete_entry($entry_id, $form){
+    private static function _delete_entry( $entry_id, $form ) {
         if ( ! $form ) {
             return;
         }
 
-        $form->options = maybe_unserialize($form->options);
-        if ( isset($form->options['no_save']) && $form->options['no_save'] ) {
+        $form->options = maybe_unserialize( $form->options );
+        if ( isset( $form->options['no_save'] ) && $form->options['no_save'] ) {
             FrmEntry::destroy( $entry_id );
         }
     }
 
-    public static function show_entry_shortcode($atts){
-        $atts = shortcode_atts(array(
+    public static function show_entry_shortcode( $atts ) {
+        $atts = shortcode_atts( array(
             'id' => false, 'entry' => false, 'fields' => false, 'plain_text' => false,
             'user_info' => false, 'include_blank' => false, 'default_email' => false,
             'form_id' => false, 'format' => 'text', 'direction' => 'ltr',
             'font_size' => '', 'text_color' => '',
             'border_width' => '', 'border_color' => '',
             'bg_color' => '', 'alt_bg_color' => '',
-        ), $atts);
+        ), $atts );
 
         if ( $atts['format'] != 'text' ) {
             //format options are text, array, or json
             $atts['plain_text'] = true;
         }
 
-        if ( ! $atts['entry'] || ! is_object($atts['entry']) ) {
+        if ( ! $atts['entry'] || ! is_object( $atts['entry'] ) ) {
             if ( ! $atts['id'] && ! $atts['default_email'] ) {
                 return;
             }
 
             if ( $atts['id'] ) {
-                $atts['entry'] = FrmEntry::getOne($atts['id'], true);
+                $atts['entry'] = FrmEntry::getOne( $atts['id'], true );
             }
         }
 
@@ -621,7 +626,8 @@ class FrmEntriesController {
             $values['posted_form_id'] = FrmAppHelper::get_param('form');
         }
 
-        if ($form->id == $values['posted_form_id']){ //if there are two forms on the same page, make sure not to submit both
+        if ($form->id == $values['posted_form_id']) {
+//if there are two forms on the same page, make sure not to submit both
             foreach ( $default_values as $var => $default ) {
                 if ( $var == 'action' ) {
                     $values[ $var ] = FrmAppHelper::get_param( $action_var, $default );
@@ -630,7 +636,7 @@ class FrmEntriesController {
                 }
                 unset( $var, $default );
             }
-        }else{
+        } else {
             foreach ( $default_values as $var => $default ) {
                 $values[ $var ] = $default;
                 unset( $var, $default );

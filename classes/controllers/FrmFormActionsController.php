@@ -1,11 +1,11 @@
 <?php
 
-class FrmFormActionsController{
+class FrmFormActionsController {
     public static $action_post_type = 'frm_form_actions';
     public static $registered_actions;
 
     public static function register_post_types() {
-        register_post_type(self::$action_post_type, array(
+        register_post_type( self::$action_post_type, array(
             'label' => __( 'Form Actions', 'formidable' ),
             'description' => '',
             'public' => false,
@@ -37,7 +37,7 @@ class FrmFormActionsController{
     }
 
     public static function register_actions() {
-        $action_classes = apply_filters('frm_registered_form_actions', array(
+        $action_classes = apply_filters( 'frm_registered_form_actions', array(
             'email'     => 'FrmEmailAction',
             'wppost'    => 'FrmDefPostAction',
             'register'  => 'FrmDefRegAction',
@@ -72,37 +72,37 @@ class FrmFormActionsController{
                 return $a;
             }
 
-            $actions[ $a->id_base ] = $a;
+            $actions[$a->id_base] = $a;
         }
-        unset($temp_actions, $a);
+        unset( $temp_actions, $a );
 
         $action_limit = 10;
-        if ( count($actions) <= $action_limit ) {
+        if ( count( $actions ) <= $action_limit ) {
             return $actions;
         }
 
         // remove the last few inactive icons if there are too many
         $temp_actions = $actions;
-        arsort($temp_actions);
+        arsort( $temp_actions );
         foreach ( $temp_actions as $type => $a ) {
-            if ( ! isset($a->action_options['active']) || empty($a->action_options['active']) ) {
-                unset( $actions[ $type ] );
-                if ( count($actions) <= $action_limit ) {
+            if ( ! isset( $a->action_options['active'] ) || empty( $a->action_options['active'] ) ) {
+                unset( $actions[$type] );
+                if ( count( $actions ) <= $action_limit ) {
                     break;
                 }
             }
-            unset($type, $a);
+            unset( $type, $a );
         }
 
         return $actions;
     }
 
-    public static function list_actions($form, $values) {
-        if ( empty($form) ) {
+    public static function list_actions( $form, $values ) {
+        if ( empty( $form ) ) {
             return;
         }
 
-        do_action('frm_before_list_actions', $form); // use this hook to migrate old settings into a new action
+        do_action( 'frm_before_list_actions', $form ); // use this hook to migrate old settings into a new action
 
 		$form_actions = FrmFormActionsHelper::get_action_for_form( $form->id );
 
@@ -208,52 +208,52 @@ class FrmFormActionsController{
 
         //Only use array_merge if there are new actions
         if ( ! empty( $new_actions ) ) {
-            $new_actions = call_user_func_array('array_merge', $new_actions);
+            $new_actions = call_user_func_array( 'array_merge', $new_actions );
         }
-        $old_actions = array_diff($old_actions, $new_actions);
+        $old_actions = array_diff( $old_actions, $new_actions );
 
         // delete any actions that were not included on the page
         if ( ! empty( $old_actions ) ) {
             foreach ( $old_actions as $old_id ) {
-                wp_delete_post($old_id);
+                wp_delete_post( $old_id );
             }
         }
     }
 
-    public static function trigger_create_actions($entry_id, $form_id) {
-        self::trigger_actions('create', $form_id, $entry_id);
+    public static function trigger_create_actions( $entry_id, $form_id ) {
+        self::trigger_actions( 'create', $form_id, $entry_id );
     }
 
     /**
      * @param string $event
      */
-    public static function trigger_actions($event, $form, $entry, $type = 'all') {
-        $form_actions = FrmFormActionsHelper::get_action_for_form((is_object($form) ? $form->id : $form), $type);
+    public static function trigger_actions( $event, $form, $entry, $type = 'all' ) {
+        $form_actions = FrmFormActionsHelper::get_action_for_form( ( is_object( $form ) ? $form->id : $form ), $type );
 
-        if ( empty($form_actions) ) {
+        if ( empty( $form_actions ) ) {
             return;
         }
 
         FrmFormsHelper::maybe_get_form( $form );
 
-        $link_settings = self::get_form_actions($type);
+        $link_settings = self::get_form_actions( $type );
         if ( 'all' != $type ) {
-            $link_settings = array($type => $link_settings);
+            $link_settings = array( $type => $link_settings );
         }
 
         $stored_actions = $action_priority = array();
 
         foreach ( $form_actions as $action ) {
 
-            if ( ! in_array($event, $action->post_content['event']) ) {
+            if ( ! in_array( $event, $action->post_content['event'] ) ) {
                 continue;
             }
 
-            if ( ! is_object($entry) ) {
-                $entry = FrmEntry::getOne($entry, true);
+            if ( ! is_object( $entry ) ) {
+                $entry = FrmEntry::getOne( $entry, true );
             }
 
-            if ( ! $form || ( is_numeric($form->parent_form_id) && $form->parent_form_id ) || ! $entry || $entry->form_id != $form->id ) {
+            if ( ! $form || ( is_numeric( $form->parent_form_id ) && $form->parent_form_id ) || ! $entry || $entry->form_id != $form->id ) {
                 //don't trigger actions for sub forms
                 continue;
             }
@@ -304,8 +304,8 @@ class FrmFormActionsController{
         $action_controls = self::get_form_actions( );
 
         foreach ( $action_controls as $action_control ) {
-            $action_control->duplicate_form_actions($form_id, $args['old_id']);
-            unset($action_control);
+            $action_control->duplicate_form_actions( $form_id, $args['old_id'] );
+            unset( $action_control );
         }
     }
 
@@ -316,7 +316,7 @@ class FrmFormActionsController{
             return $where;
         }
 
-        $where .= $wpdb->prepare(' AND post_excerpt = %s ', $frm_vars['action_type']);
+        $where .= $wpdb->prepare( ' AND post_excerpt = %s ', $frm_vars['action_type'] );
         return $where;
     }
 
