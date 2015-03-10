@@ -1,6 +1,6 @@
 <?php
 
-class FrmFormsController{
+class FrmFormsController {
 
     public static function trigger_load_form_hooks() {
         FrmHooksController::trigger_load_hook( 'load_form_hooks' );
@@ -13,7 +13,7 @@ class FrmFormsController{
         add_filter('frm_form_classes', 'FrmFormsController::form_classes' );
     }
 
-    public static function menu(){
+    public static function menu() {
         add_submenu_page('formidable', 'Formidable | '. __( 'Forms', 'formidable' ), __( 'Forms', 'formidable' ), 'frm_view_forms', 'formidable', 'FrmFormsController::route' );
 
 	    add_filter('get_user_option_managetoplevel_page_formidablecolumnshidden', 'FrmFormsController::hidden_columns' );
@@ -22,7 +22,7 @@ class FrmFormsController{
         add_filter('manage_toplevel_page_formidable_sortable_columns', 'FrmFormsController::get_sortable_columns' );
     }
 
-    public static function head(){
+    public static function head() {
         wp_enqueue_script('formidable-editinplace');
 
         if ( wp_is_mobile() ) {
@@ -30,12 +30,12 @@ class FrmFormsController{
     	}
     }
 
-    public static function register_widgets(){
+    public static function register_widgets() {
         require_once(FrmAppHelper::plugin_path() . '/classes/widgets/FrmShowForm.php');
         register_widget('FrmShowForm');
     }
 
-    public static function list_form(){
+    public static function list_form() {
         FrmAppHelper::permission_check('frm_view_forms');
 
         $params = FrmFormsHelper::get_params();
@@ -53,9 +53,9 @@ class FrmFormsController{
         $action = isset($_REQUEST['frm_action']) ? 'frm_action' : 'action';
         $action = $values ? $values[ $action ] : FrmAppHelper::get_param( $action );
 
-        if ($action == 'create'){
+        if ($action == 'create') {
             return self::create($values);
-        }else if ($action == 'new'){
+        } else if ($action == 'new') {
             $frm_field_selection = FrmFieldsHelper::field_selection();
             $values = FrmFormsHelper::setup_new_vars($values);
             $id = FrmForm::create( $values );
@@ -67,7 +67,7 @@ class FrmFormsController{
 
             $values['id'] = $id;
             require(FrmAppHelper::plugin_path() .'/classes/views/frm-forms/new.php');
-        }else{
+        } else {
             $all_templates = FrmForm::getAll( array( 'is_template' => 1), 'name');
             require(FrmAppHelper::plugin_path() .'/classes/views/frm-forms/new-selection.php');
         }
@@ -103,7 +103,7 @@ class FrmFormsController{
 
             $values = FrmAppHelper::setup_edit_vars($form, 'forms', $fields, true);
             require(FrmAppHelper::plugin_path() .'/classes/views/frm-forms/new.php');
-        }else{
+        } else {
             FrmForm::update( $id, $values, true );
             die(FrmAppHelper::js_redirect(admin_url('admin.php?page=formidable&frm_action=settings&id='. $id)));
         }
@@ -125,7 +125,7 @@ class FrmFormsController{
         return self::get_settings_vars($id, '', $message);
     }
 
-    public static function update_settings(){
+    public static function update_settings() {
         FrmAppHelper::permission_check('frm_edit_forms');
 
         $id = FrmAppHelper::get_param('id');
@@ -143,7 +143,7 @@ class FrmFormsController{
         return self::get_settings_vars($id, '', $message);
     }
 
-    public static function edit_key(){
+    public static function edit_key() {
         check_ajax_referer( 'frm_ajax', 'nonce' );
         FrmAppHelper::permission_check('frm_edit_forms', 'hide');
 
@@ -156,7 +156,7 @@ class FrmFormsController{
         wp_die();
     }
 
-    public static function edit_description(){
+    public static function edit_description() {
         check_ajax_referer( 'frm_ajax', 'nonce' );
         FrmAppHelper::permission_check('frm_edit_forms', 'hide');
 
@@ -208,7 +208,7 @@ class FrmFormsController{
         return __( 'Form template was Successfully Created', 'formidable' );
     }
 
-    public static function duplicate(){
+    public static function duplicate() {
         FrmAppHelper::permission_check('frm_edit_forms');
 
         $params = FrmFormsHelper::get_params();
@@ -221,7 +221,7 @@ class FrmFormsController{
         }
     }
 
-    public static function page_preview(){
+    public static function page_preview() {
         $params = FrmFormsHelper::get_params();
         if ( ! $params['form'] ) {
             return;
@@ -234,7 +234,7 @@ class FrmFormsController{
         return self::show_form($form->id, '', true, true);
     }
 
-    public static function preview(){
+    public static function preview() {
         do_action('frm_wp');
 
         global $frm_vars;
@@ -377,7 +377,7 @@ class FrmFormsController{
         return $count;
     }
 
-    public static function insert_form_button($content){
+    public static function insert_form_button($content) {
         if ( current_user_can('frm_view_forms') ) {
             $content .= '<a href="#TB_inline?width=50&height=50&inlineId=frm_insert_form" class="thickbox button add_media frm_insert_form" title="' . __( 'Add forms and content', 'formidable' ) . '"><span class="frm-buttons-icon wp-media-buttons-icon"></span> Formidable</a>';
 
@@ -385,7 +385,7 @@ class FrmFormsController{
         return $content;
     }
 
-    public static function insert_form_popup(){
+    public static function insert_form_popup() {
         $page = basename($_SERVER['PHP_SELF']);
         if ( ! in_array($page, array( 'post.php', 'page.php', 'page-new.php', 'post-new.php') ) ) {
             return;
@@ -494,7 +494,7 @@ class FrmFormsController{
 		);
 	}
 
-	public static function hidden_columns($result){
+	public static function hidden_columns($result) {
         $return = false;
         foreach ( (array) $result as $r ) {
             if ( ! empty( $r ) ) {
@@ -518,7 +518,7 @@ class FrmFormsController{
         return $result;
     }
 
-	public static function save_per_page($save, $option, $value){
+	public static function save_per_page($save, $option, $value) {
         if ( $option == 'formidable_page_formidable_per_page' ) {
             $save = (int) $value;
         }
@@ -620,7 +620,7 @@ class FrmFormsController{
         }
     }
 
-    public static function get_email_html(){
+    public static function get_email_html() {
         check_ajax_referer( 'frm_ajax', 'nonce' );
 	    echo FrmEntriesController::show_entry_shortcode( array(
 	        'form_id'       => $_POST['form_id'],
@@ -717,7 +717,7 @@ class FrmFormsController{
         $path = untrailingslashit(trim($path));
         $templates = glob( $path .'/*.php' );
 
-        for($i = count($templates) - 1; $i >= 0; $i--){
+        for($i = count($templates) - 1; $i >= 0; $i--) {
             $filename = str_replace( '.php', '', str_replace( $path.'/', '', $templates[ $i ] ) );
             $template_query = array( 'form_key' => $filename);
             if ( $template ) {
@@ -753,7 +753,7 @@ class FrmFormsController{
         }
     }
 
-    public static function route(){
+    public static function route() {
         $action = isset($_REQUEST['frm_action']) ? 'frm_action' : 'action';
         $vars = array();
 		if ( isset( $_POST['frm_compact_fields'] ) ) {
@@ -775,7 +775,7 @@ class FrmFormsController{
                 $vars = FrmAppHelper::json_to_array($json_vars);
                 $action = $vars[ $action ];
             }
-        }else{
+        } else {
             $action = FrmAppHelper::get_param($action);
     		if ( isset( $_REQUEST['delete_all'] ) ) {
                 // override the action for this page
@@ -1022,7 +1022,7 @@ class FrmFormsController{
             return;
         }
 
-        if ( $created && is_numeric($created) ){
+        if ( $created && is_numeric($created) ) {
             $message = isset($form->options['success_msg']) ? $form->options['success_msg'] : $frm_settings->success_msg;
             $class = 'frm_message';
         } else {

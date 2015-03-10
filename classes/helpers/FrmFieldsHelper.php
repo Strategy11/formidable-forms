@@ -3,9 +3,9 @@ if ( ! defined('ABSPATH') ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-class FrmFieldsHelper{
+class FrmFieldsHelper {
 
-    public static function field_selection(){
+    public static function field_selection() {
         $fields = apply_filters('frm_available_fields', array(
             'text'      => __( 'Single Line Text', 'formidable' ),
             'textarea'  => __( 'Paragraph Text', 'formidable' ),
@@ -20,7 +20,7 @@ class FrmFieldsHelper{
         return $fields;
     }
 
-    public static function pro_field_selection(){
+    public static function pro_field_selection() {
         return apply_filters('frm_pro_available_fields', array(
             'end_divider' => array(
                 'name'  => __( 'End Section', 'formidable' ),
@@ -147,7 +147,7 @@ class FrmFieldsHelper{
         if ( isset( $setting ) && ! empty( $setting ) ) {
             if ( 'data' == $type ) {
                 $values['field_options']['data_type'] = $setting;
-            }else{
+            } else {
                 $values['field_options'][ $setting ] = 1;
             }
         }
@@ -204,7 +204,7 @@ class FrmFieldsHelper{
                 unset($var, $default);
             }
 
-            foreach ( array( 'field_key' => $record->field_key, 'type' => $record->type, 'default_value'=> $record->default_value, 'field_order' => $record->field_order, 'required' => $record->required) as $var => $default){
+            foreach ( array( 'field_key' => $record->field_key, 'type' => $record->type, 'default_value'=> $record->default_value, 'field_order' => $record->field_order, 'required' => $record->required) as $var => $default) {
                 $values[ $var ] = FrmAppHelper::get_param( $var, $default );
                 unset($var, $default);
             }
@@ -281,7 +281,7 @@ class FrmFieldsHelper{
     /**
      * @since 2.0
      */
-    public static function get_error_msg($field, $error){
+    public static function get_error_msg($field, $error) {
         $frm_settings = FrmAppHelper::get_settings();
         $default_settings = $frm_settings->default_options();
 
@@ -300,8 +300,8 @@ class FrmFieldsHelper{
         return $fields;
     }
 
-    public static function get_default_html($type='text'){
-        if (apply_filters('frm_normal_field_type_html', true, $type)){
+    public static function get_default_html($type='text') {
+        if (apply_filters('frm_normal_field_type_html', true, $type)) {
             $input = (in_array($type, array( 'radio', 'checkbox', 'data'))) ? '<div class="frm_opt_container">[input]</div>' : '[input]';
             $for = '';
             if ( ! in_array( $type, array( 'radio', 'checkbox', 'data', 'scale') ) ) {
@@ -318,8 +318,9 @@ class FrmFieldsHelper{
     [if error]<div class="frm_error">[error]</div>[/if error]
 </div>
 DEFAULT_HTML;
-        }else
-            $default_html = apply_filters('frm_other_custom_html', '', $type);
+        } else {
+                    $default_html = apply_filters('frm_other_custom_html', '', $type);
+        }
 
         return apply_filters('frm_custom_html', $default_html, $type);
     }
@@ -372,7 +373,7 @@ DEFAULT_HTML;
             }
         }
 
-        foreach ( array( 'description' => $field['description'], 'required_label' => $required, 'error' => $error) as $code => $value){
+        foreach ( array( 'description' => $field['description'], 'required_label' => $required, 'error' => $error) as $code => $value) {
             self::remove_inline_conditions( ( $value && $value != '' ), $code, $value, $html );
         }
 
@@ -476,8 +477,9 @@ DEFAULT_HTML;
         }
 
         // remove [collapse_this] when running the free version
-        if (preg_match('/\[(collapse_this)\]/s', $html))
-            $html = str_replace('[collapse_this]', '', $html);
+        if (preg_match('/\[(collapse_this)\]/s', $html)) {
+                    $html = str_replace('[collapse_this]', '', $html);
+        }
 
         return $html;
     }
@@ -523,7 +525,7 @@ DEFAULT_HTML;
         return $tag;
     }
 
-    public static function display_recaptcha($field){
+    public static function display_recaptcha($field) {
         $frm_settings = FrmAppHelper::get_settings();
         $lang = apply_filters('frm_recaptcha_lang', $frm_settings->re_lang, $field);
 
@@ -559,7 +561,7 @@ DEFAULT_HTML;
         }
     }
 
-    public static function dropdown_categories($args){
+    public static function dropdown_categories($args) {
 		$defaults = array( 'field' => false, 'name' => false, 'show_option_all' => ' ' );
         $args = wp_parse_args($args, $defaults);
 
@@ -582,7 +584,7 @@ DEFAULT_HTML;
                 $args['field']['value'] = array_diff($args['field']['value'], explode(',', $exclude));
             }
             $selected = reset($args['field']['value']);
-        }else{
+        } else {
             $selected = $args['field']['value'];
         }
 
@@ -723,7 +725,7 @@ DEFAULT_HTML;
         return $value;
     }
 
-    public static function get_shortcodes($content, $form_id){
+    public static function get_shortcodes($content, $form_id) {
         if ( FrmAppHelper::pro_is_installed() ) {
             return FrmProDisplaysHelper::get_shortcodes($content, $form_id);
         }
@@ -946,7 +948,7 @@ DEFAULT_HTML;
          return $replace_with;
      }
 
-    public static function get_field_types($type){
+    public static function get_field_types($type) {
         $single_input = array(
             'text', 'textarea', 'rte', 'number', 'email', 'url',
             'image', 'file', 'date', 'phone', 'hidden', 'time',
@@ -988,7 +990,7 @@ DEFAULT_HTML;
     <?php
     }
 
-    public static function switch_field_ids($val){
+    public static function switch_field_ids($val) {
         global $frm_duplicate_ids;
         $replace = array();
         $replace_with = array();
@@ -1010,14 +1012,14 @@ DEFAULT_HTML;
                 $val[ $k ] = str_replace( $replace, $replace_with, $v );
                 unset($k, $v);
             }
-        }else{
+        } else {
             $val = str_replace($replace, $replace_with, $val);
         }
 
         return $val;
     }
 
-    public static function get_us_states(){
+    public static function get_us_states() {
         return apply_filters( 'frm_us_states', array(
             'AL' => 'Alabama', 'AK' => 'Alaska', 'AR' => 'Arkansas', 'AZ' => 'Arizona',
             'CA' => 'California', 'CO' => 'Colorado', 'CT' => 'Connecticut', 'DE' => 'Delaware',
@@ -1036,7 +1038,7 @@ DEFAULT_HTML;
         ) );
     }
 
-    public static function get_countries(){
+    public static function get_countries() {
         return apply_filters( 'frm_countries', array(
             __( 'Afghanistan', 'formidable' ), __( 'Albania', 'formidable' ), __( 'Algeria', 'formidable' ),
             __( 'American Samoa', 'formidable' ), __( 'Andorra', 'formidable' ), __( 'Angola', 'formidable' ),

@@ -183,6 +183,10 @@ class FrmDb{
         $args = compact('where', 'values');
     }
 
+    /**
+     * @param string $base_where
+     * @param string $where
+     */
     public static function parse_where_from_array( $args, $base_where, &$where, &$values ) {
         $condition = ' AND';
         if ( isset( $args['or'] ) ) {
@@ -211,6 +215,10 @@ class FrmDb{
         }
     }
 
+    /**
+     * @param string $key
+     * @param string $where
+     */
     private static function interpret_array_to_sql( $key, $value, &$where, &$values ) {
         if ( strpos( $key, 'created_at' ) !== false || strpos( $key, 'updated_at' ) !== false  ) {
             $k = explode(' ', $key);
@@ -236,6 +244,9 @@ class FrmDb{
         }
     }
 
+    /**
+     * @param string $table
+     */
     public static function get_count( $table, $where = array(), $args = array() ) {
         $count = self::get_var( $table, $where, 'COUNT(*)', $args );
         return $count;
@@ -265,6 +276,7 @@ class FrmDb{
 
     /**
      * @since 2.0
+     * @param string $table
      */
     public static function get_row( $table, $where = array(), $fields = '*', $args = array() ) {
         $args['limit'] = 1;

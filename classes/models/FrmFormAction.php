@@ -93,6 +93,9 @@ class FrmFormAction {
 		$this->control_options = wp_parse_args( $control_options, array( 'id_base' => $this->id_base) );
 	}
 
+	/**
+	 * @param string $id_base
+	 */
 	public function FrmFormAction( $id_base, $name, $action_options = array(), $control_options = array() ) {
 		FrmFormAction::__construct( $id_base, $name, $action_options, $control_options );
 	}

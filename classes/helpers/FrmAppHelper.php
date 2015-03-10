@@ -3,7 +3,7 @@ if ( ! defined('ABSPATH') ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-class FrmAppHelper{
+class FrmAppHelper {
     public static $db_version = 19; //version of the database we are moving to
     public static $pro_db_version = 27;
 
@@ -16,7 +16,7 @@ class FrmAppHelper{
      * @since 1.07.02
      *
      * @param none
-     * @return float The version of this plugin
+     * @return string The version of this plugin
      */
     public static function plugin_version() {
         return self::$plug_version;
@@ -26,7 +26,7 @@ class FrmAppHelper{
         return basename(self::plugin_path());
     }
 
-    public static function plugin_path(){
+    public static function plugin_path() {
         return dirname(dirname(dirname(__FILE__)));
     }
 
@@ -46,7 +46,7 @@ class FrmAppHelper{
     /**
      * @return string Site URL
      */
-    public static function site_url(){
+    public static function site_url() {
         $url = self::plugin_url(site_url());
         return $url;
     }
@@ -68,7 +68,7 @@ class FrmAppHelper{
      * @since 2.0
      *
      * @param None
-     * @return Object $frm_setings
+     * @return FrmSettings $frm_setings
      */
     public static function get_settings() {
         global $frm_settings;
@@ -83,7 +83,7 @@ class FrmAppHelper{
      *
      * @since 2.0
      */
-    public static function update_message($features, $class = ''){
+    public static function update_message($features, $class = '') {
         if ( ! self::pro_is_installed() ) {
             include(self::plugin_path() .'/classes/views/shared/update_message.php');
         }
@@ -162,6 +162,7 @@ class FrmAppHelper{
      * Get any value from the $_SERVER
      *
      * @since 2.0
+     * @param string $value
      * @return string
      */
     public static function get_server_value($value) {
@@ -174,7 +175,7 @@ class FrmAppHelper{
      *
      * @return string The IP address of the current user
      */
-    public static function get_ip_address(){
+    public static function get_ip_address() {
         foreach ( array(
             'HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED', 'HTTP_X_CLUSTER_CLIENT_IP',
             'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED', 'REMOTE_ADDR',
@@ -399,21 +400,21 @@ class FrmAppHelper{
         return do_shortcode( $matches[0] );
     }
 
-    public static function load_scripts($scripts){
+    public static function load_scripts($scripts) {
         _deprecated_function( __FUNCTION__, '2.0', 'wp_enqueue_script' );
         foreach ( (array) $scripts as $s ) {
             wp_enqueue_script($s);
         }
     }
 
-    public static function load_styles($styles){
+    public static function load_styles($styles) {
         _deprecated_function( __FUNCTION__, '2.0', 'wp_enqueue_style' );
         foreach ( (array) $styles as $s ) {
             wp_enqueue_style($s);
         }
     }
 
-    public static function get_pages(){
+    public static function get_pages() {
 		return get_posts( array( 'post_type' => 'page', 'post_status' => array( 'publish', 'private' ), 'numberposts' => 999, 'orderby' => 'title', 'order' => 'ASC' ) );
     }
 
@@ -490,7 +491,7 @@ class FrmAppHelper{
         return $cap;
     }
 
-    public static function user_has_permission($needed_role){
+    public static function user_has_permission($needed_role) {
         if ( $needed_role == '-1' ) {
             return false;
 		}
@@ -550,6 +551,7 @@ class FrmAppHelper{
     /**
      * Check user permission and nonce
      * @since 2.0
+     * @param string $permission
      * @return false|string The permission message or false if allowed
      */
     public static function permission_nonce_error($permission, $nonce_name = '', $nonce = '') {
@@ -576,7 +578,7 @@ class FrmAppHelper{
 		}
     }
 
-    public static function check_selected($values, $current){
+    public static function check_selected($values, $current) {
         self::recursive_trim($values);
         $current = trim($current);
 
@@ -680,7 +682,7 @@ class FrmAppHelper{
     * @param array $args should include opt_key and field name
     * @return string $other_val
     */
-    public static function prepare_other_input( $field, &$other_opt, &$checked, $args = array() ){
+    public static function prepare_other_input( $field, &$other_opt, &$checked, $args = array() ) {
         //Check if this is an "Other" option
         if ( !self::is_other_opt( $args['opt_key'] ) ) {
             return;
@@ -735,7 +737,7 @@ class FrmAppHelper{
     public static function array_flatten( $array ) {
         $return = array();
         foreach ( $array as $key => $value ) {
-            if ( is_array($value) ){
+            if ( is_array($value) ) {
                 $return = array_merge( $return, self::array_flatten($value) );
             } else {
                 $return[ $key ] = $value;
@@ -761,7 +763,7 @@ class FrmAppHelper{
         return $content;
     }
 
-    public static function replace_quotes($val){
+    public static function replace_quotes($val) {
         //Replace double quotes
         $val = str_replace( array( '&#8220;', '&#8221;', '&#8243;'), '"', $val);
         //Replace single quotes
@@ -802,11 +804,11 @@ class FrmAppHelper{
     	return $ver;
     }
 
-    public static function js_redirect($url){
+    public static function js_redirect($url) {
         return '<script type="text/javascript">window.location="'. $url .'"</script>';
     }
 
-    public static function get_user_id_param($user_id){
+    public static function get_user_id_param($user_id) {
         if ( ! $user_id || empty($user_id) || is_numeric($user_id) ) {
             return $user_id;
         }
@@ -998,6 +1000,9 @@ class FrmAppHelper{
         $field_array['size'] = self::get_field_size($field_array);
     }
 
+    /**
+     * @param string $table
+     */
     private static function fill_form_opts($record, $table, $post_values, array &$values) {
         if ( $table == 'entries' ) {
             $form = $record->form_id;
@@ -1108,17 +1113,17 @@ class FrmAppHelper{
     <?php
     }
 
-    public static function get_us_states(){
+    public static function get_us_states() {
         _deprecated_function( __FUNCTION__, '2.0', 'FrmFieldsHelper::get_us_states' );
         return FrmFieldsHelper::get_us_states();
     }
 
-    public static function get_countries(){
+    public static function get_countries() {
         _deprecated_function( __FUNCTION__, '2.0', 'FrmFieldsHelper::get_countries' );
         return FrmFieldsHelper::get_countries();
     }
 
-    public static function truncate($str, $length, $minword = 3, $continue = '...'){
+    public static function truncate($str, $length, $minword = 3, $continue = '...') {
         if ( is_array( $str ) ) {
             return;
 		}
@@ -1198,8 +1203,9 @@ class FrmAppHelper{
      * @return string The time ago in words
      */
     public static function human_time_diff( $from, $to = '' ) {
-    	if ( empty($to) )
-    		$to = time();
+    	if ( empty($to) ) {
+    	    		$to = time();
+    	}
 
     	// Array of time period chunks
     	$chunks = array(
@@ -1216,8 +1222,9 @@ class FrmAppHelper{
     	$diff = (int) ($to - $from);
 
     	// Something went wrong with date calculation and we ended up with a negative date.
-    	if ( $diff < 1)
-    		return '0 ' . __( 'seconds', 'formidable' );
+    	if ( $diff < 1) {
+    	    		return '0 ' . __( 'seconds', 'formidable' );
+    	}
 
     	/**
     	 * We only want to output one chunks of time here, eg:
@@ -1233,8 +1240,9 @@ class FrmAppHelper{
     		$seconds = $chunks[ $i ][0];
 
     		// Finding the biggest chunk (if the chunk fits, break)
-    		if ( ( $count = floor($diff / $seconds) ) != 0 )
-    			break;
+    		if ( ( $count = floor($diff / $seconds) ) != 0 ) {
+    		    			break;
+    		}
     	}
 
     	// Set output var
@@ -1258,7 +1266,8 @@ class FrmAppHelper{
      */
     public static function esc_like($term) {
         global $wpdb;
-        if ( method_exists($wpdb, 'esc_like') ) { // WP 4.0
+        if ( method_exists($wpdb, 'esc_like') ) {
+// WP 4.0
             $term = $wpdb->esc_like( $term );
         } else {
             $term = like_escape( $term );
@@ -1356,6 +1365,10 @@ class FrmAppHelper{
     }
 
     // Pagination Methods
+
+    /**
+     * @param integer $current_p
+     */
     public static function get_last_record_num( $r_count, $current_p, $p_size ) {
       return ( ( $r_count < ( $current_p * $p_size ) ) ? $r_count : ( $current_p * $p_size ) );
     }
@@ -1366,7 +1379,7 @@ class FrmAppHelper{
     public static function get_first_record_num( $r_count, $current_p, $p_size ) {
         if ( $current_p == 1 ) {
             return 1;
-        } else{
+        } else {
             return ( self::get_last_record_num( $r_count, ( $current_p - 1 ), $p_size ) + 1 );
         }
     }
@@ -1403,6 +1416,9 @@ class FrmAppHelper{
         return self::get_server_value('HTTP_REFERER');
     }
 
+    /**
+     * @return boolean
+     */
     public static function json_to_array($json_vars){
         $vars = array();
         foreach ( $json_vars as $jv ) {
@@ -1455,6 +1471,10 @@ class FrmAppHelper{
         return $vars;
     }
 
+    /**
+     * @param string $name
+     * @param string $l1
+     */
     public static function add_value_to_array( $name, $l1, $val, &$vars ) {
         if ( $name == '' ) {
             $vars[] = $val;
@@ -1525,17 +1545,19 @@ class FrmAppHelper{
         return $post_content;
     }
 
-    public static function maybe_json_decode($string){
+    public static function maybe_json_decode($string) {
         if ( is_array($string) ) {
             return $string;
         }
 
         $new_string = json_decode($string, true);
-        if ( function_exists('json_last_error') ) { // php 5.3+
+        if ( function_exists('json_last_error') ) {
+// php 5.3+
             if ( json_last_error() == JSON_ERROR_NONE ) {
                 $string = $new_string;
             }
-        } else if ( isset($new_string) ) { // php < 5.3 fallback
+        } else if ( isset($new_string) ) {
+// php < 5.3 fallback
             $string = $new_string;
         }
         return $string;

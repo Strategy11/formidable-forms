@@ -248,7 +248,7 @@ class FrmEntry{
 
     public static function &update_form( $id, $value, $form_id ){
         global $wpdb;
-        $form_id = isset($value) ? $form_id : NULL;
+        $form_id = isset($value) ? $form_id : null;
         $result = $wpdb->update( $wpdb->prefix .'frm_items', array( 'form_id' => $form_id), array( 'id' => $id ) );
 		if ( $result ) {
             wp_cache_delete( $id, 'frm_entry');

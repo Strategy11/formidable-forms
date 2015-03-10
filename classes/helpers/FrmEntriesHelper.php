@@ -3,7 +3,7 @@ if ( ! defined('ABSPATH') ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-class FrmEntriesHelper{
+class FrmEntriesHelper {
 
     public static function setup_new_vars( $fields, $form = '', $reset = false ) {
         global $frm_vars;
@@ -112,7 +112,7 @@ class FrmEntriesHelper{
         return apply_filters('frm_setup_new_entry', $values);
     }
 
-    public static function setup_edit_vars($values, $record){
+    public static function setup_edit_vars($values, $record) {
         //$values['description'] = maybe_unserialize( $record->description );
         $values['item_key'] = isset($_POST['item_key']) ? $_POST['item_key'] : $record->item_key;
         $values['form_id'] = $record->form_id;
@@ -120,7 +120,7 @@ class FrmEntriesHelper{
         return apply_filters('frm_setup_edit_entry_vars', $values, $record);
     }
 
-    public static function get_admin_params($form=null){
+    public static function get_admin_params($form=null) {
         $form_id = $form;
         if ( $form === null ) {
             $form_id = self::get_current_form_id();
@@ -140,7 +140,7 @@ class FrmEntriesHelper{
         return $values;
     }
 
-    public static function set_current_form($form_id){
+    public static function set_current_form($form_id) {
         global $frm_vars, $wpdb;
 
 		$query = array( 'is_template' => 0, 'status' => array( null, '', 'published' ) );
@@ -165,7 +165,7 @@ class FrmEntriesHelper{
         return self::set_current_form($form_id);
     }
 
-    public static function get_current_form_id(){
+    public static function get_current_form_id() {
         $form = self::get_current_form();
         $form_id = $form ? $form->id : 0;
 
@@ -385,7 +385,7 @@ class FrmEntriesHelper{
 
         foreach ( $shortcodes[0] as $short_key => $tag ) {
             $add_atts = shortcode_parse_atts( $shortcodes[2][ $short_key ] );
-            if ( $add_atts ){
+            if ( $add_atts ) {
                 $this_atts = array_merge($atts, $add_atts);
             } else {
                 $this_atts = $atts;
@@ -494,7 +494,8 @@ class FrmEntriesHelper{
 
         if ( is_array($value) && $atts['type'] != 'file' ) {
             foreach ( $value as $val ) {
-                if ( is_array($val) ) { //TODO: add options for display (li or ,)
+                if ( is_array($val) ) {
+//TODO: add options for display (li or ,)
                     $new_value .= implode($atts['sep'], $val);
                     if ( $atts['type'] != 'data' ) {
                         $new_value .= '<br/>';
@@ -582,7 +583,7 @@ class FrmEntriesHelper{
     * @param string|array $value
     * @param array $args
     */
-    public static function set_other_repeating_vals( $field, &$value, &$args ){
+    public static function set_other_repeating_vals( $field, &$value, &$args ) {
         if ( ! $args['parent_field_id'] ) {
             return;
         }
@@ -649,7 +650,7 @@ class FrmEntriesHelper{
         _deprecated_function( __FUNCTION__, '1.07.09');
     }
 
-    public static function enqueue_scripts($params){
+    public static function enqueue_scripts($params) {
         do_action('frm_enqueue_form_scripts', $params);
     }
 
