@@ -290,7 +290,6 @@ class FrmEntriesController {
         if ( $form ) {
             $params['form'] = $form->id;
             $frm_vars['current_form'] = $form;
-	        $where_clause = " it.form_id=$form->id";
 
 	        if ( 'trash' == $form->status ) {
 	            $delete_timestamp = time() - ( DAY_IN_SECONDS * EMPTY_TRASH_DAYS );
@@ -298,8 +297,6 @@ class FrmEntriesController {
 	            $errors['trash'] = sprintf( __( 'This form is in the trash and is scheduled to be deleted permanently in %s along with any entries.', 'formidable' ), $time_to_delete );
 	            unset( $time_to_delete, $delete_timestamp );
 	        }
-        } else {
-            $where_clause = '';
 		}
 
         $table_class = apply_filters( 'frm_entries_list_class', 'FrmEntriesListHelper' );

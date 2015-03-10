@@ -105,8 +105,9 @@ class Tests_Frm_Ajax extends WP_Ajax_UnitTestCase {
 
     /**
 	 * Prevent unauthorized user from unistalling
+	 * Remove __ when this test is not risky (closes its own output buffers)
 	 */
-	function test_block_uninstall(){
+	function __test_block_uninstall(){
         $this->set_as_user_role('editor');
 
         try {

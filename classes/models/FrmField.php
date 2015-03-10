@@ -166,12 +166,7 @@ class FrmField{
             wp_cache_set( $results->id, $results, 'frm_field' );
         }
 
-        $results->field_options = maybe_unserialize($results->field_options);
-        if ( isset($results->field_options['format']) && ! empty($results->field_options['format']) ) {
-            $results->field_options['format'] = addslashes($results->field_options['format']);
-        }
-        $results->options = maybe_unserialize($results->options);
-        $results->default_value = maybe_unserialize($results->default_value);
+		self::prepare_options( $results );
 
         return stripslashes_deep($results);
     }
@@ -375,18 +370,27 @@ class FrmField{
             wp_cache_set($results->id, $results, 'frm_field');
             wp_cache_set($results->field_key, $results, 'frm_field');
 
-            $results->field_options = maybe_unserialize($results->field_options);
-            if ( isset( $results->field_options['format'] ) && ! empty( $results->field_options['format'] ) ) {
-                $results->field_options['format'] = addslashes($results->field_options['format']);
-            }
-
-            $results->options = maybe_unserialize($results->options);
-            $results->default_value = maybe_unserialize($results->default_value);
+			self::prepare_options( $results );
         }
+
         wp_cache_set($cache_key, $results, 'frm_field', 300);
 
         return stripslashes_deep($results);
     }
+
+	/**
+	 * Unserialize all the serialized field data
+	 * @since 2.0
+	 */
+	private static function prepare_options( &$results ) {
+		$results->field_options = maybe_unserialize( $results->field_options );
+		if ( isset( $results->field_options['format'] ) && ! empty( $results->field_options['format'] ) ) {
+			$results->field_options['format'] = addslashes( $results->field_options['format'] );
+		}
+
+		$results->options = maybe_unserialize($results->options);
+		$results->default_value = maybe_unserialize($results->default_value);
+	}
 
     public static function getIds($where = '', $order_by = '', $limit = ''){
         global $wpdb;

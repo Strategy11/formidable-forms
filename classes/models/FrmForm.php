@@ -491,6 +491,21 @@ class FrmForm{
         return stripslashes_deep($results);
     }
 
+	/**
+	 * Get all published forms
+	 * @since 2.0
+	 */
+	public static function get_published_forms( $query = array(), $limit = 999, $inc_children = 'exclude' ) {
+		$query['is_template'] = 0;
+		$query['status'] = array( null, '', 'published' );
+		if ( $inc_children == 'exclude' ) {
+			$query['parent_form_id'] = array( null, 0 );
+		}
+
+		$forms = self::getAll( $query, 'name', $limit );
+		return $forms;
+	}
+
     /**
      * @return int count of forms
      */

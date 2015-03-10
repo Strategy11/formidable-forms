@@ -141,13 +141,14 @@ class FrmEntriesHelper {
     }
 
     public static function set_current_form($form_id) {
-        global $frm_vars, $wpdb;
+		global $frm_vars;
 
-		$query = array( 'is_template' => 0, 'status' => array( null, '', 'published' ) );
+		$query = array();
         if ( $form_id ) {
 			$query['id'] = $form_id;
         }
-        $frm_vars['current_form'] = FrmForm::getAll($query, 'name', 1);
+
+        $frm_vars['current_form'] = FrmForm::get_published_forms( $query, 1 );
 
         return $frm_vars['current_form'];
     }
@@ -155,13 +156,11 @@ class FrmEntriesHelper {
     public static function get_current_form($form_id = 0) {
         global $frm_vars, $wpdb;
 
-        if ( isset($frm_vars['current_form']) && $frm_vars['current_form'] ) {
-            if ( ! $form_id || $form_id == $frm_vars['current_form']->id ) {
-                return $frm_vars['current_form'];
-            }
-        }
+		if ( isset($frm_vars['current_form']) && $frm_vars['current_form'] && ( ! $form_id || $form_id == $frm_vars['current_form']->id ) ) {
+			return $frm_vars['current_form'];
+		}
 
-        $form_id = FrmAppHelper::get_param('form', $form_id);
+        $form_id = (int) FrmAppHelper::get_param('form', $form_id);
         return self::set_current_form($form_id);
     }
 

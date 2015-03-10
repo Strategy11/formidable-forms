@@ -381,7 +381,7 @@ if ( ! isset($collapse_icon) ) {
     font-family:<?php echo stripslashes($font) ?>;
     font-size:<?php echo $submit_font_size; ?>;
     height:<?php echo $submit_height . $important ?>;
-    line-height:normal <?php echo $important ?>;
+    line-height:normal<?php echo $important ?>;
     text-align:center;
     background:#<?php echo $submit_bg_color; if ( ! empty($submit_bg_img) ) echo ' url('. $submit_bg_img .')'; ?>;
     border-width:<?php echo $submit_border_width ?>;

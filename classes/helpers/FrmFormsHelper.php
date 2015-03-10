@@ -35,13 +35,13 @@ class FrmFormsHelper{
             $args['field_id'] = $field_name;
         }
 
-		$query = array( 'is_template' => 0, 'status' => array( null, '', 'published' ), 'parent_form_id' => array( null, 0 ) );
+		$query = array();
         if ( $args['exclude'] ) {
 			$query['id !'] = $args['exclude'];
         }
 
         $where = apply_filters('frm_forms_dropdown', $query, $field_name);
-        $forms = FrmForm::getAll($where, 'name');
+		$forms = FrmForm::get_published_forms( $where );
         ?>
         <select name="<?php echo esc_attr( $field_name ); ?>" id="<?php echo esc_attr( $args['field_id'] ) ?>" <?php
             if ( $args['onchange'] ) {
@@ -61,10 +61,8 @@ class FrmFormsHelper{
     }
 
     public static function form_switcher(){
-		$where = array( 'is_template' => 0, 'status' => array( null, '', 'published' ), 'parent_form_id' => array( null, 0 ) );
-        $where = apply_filters('frm_forms_dropdown', $where, '');
-
-        $forms = FrmForm::getAll($where, 'name');
+		$where = apply_filters( 'frm_forms_dropdown', array(), '' );
+		$forms = FrmForm::get_published_forms( $where );
 
         $args = array( 'id' => 0, 'form' => 0);
 		if ( isset( $_GET['id'] ) && ! isset( $_GET['form'] ) ) {

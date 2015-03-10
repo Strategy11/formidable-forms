@@ -123,10 +123,8 @@ class FrmFormsListHelper extends FrmListHelper {
             return;
         }
 
-		$where = array( 'is_template' => 0, 'status' => array( null, '', 'published' ), 'parent_form_id' => array( null, 0 ) );
-        $where = apply_filters('frm_forms_dropdown', $where, '');
-
-        $forms = FrmForm::getAll($where, 'name');
+		$where = apply_filters( 'frm_forms_dropdown', array(), '' );
+		$forms = FrmForm::get_published_forms( $where );
 
         $base = admin_url('admin.php?page=formidable&form_type=template');
         $args = array(

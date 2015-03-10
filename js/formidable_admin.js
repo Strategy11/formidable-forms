@@ -251,7 +251,7 @@ function frmAdminBuildJS(){
 				}
 
 				if(typeof form_id == 'undefined' || form_id === ''){
-					form_id = jQuery(document.getElementById('form_id')).val();
+					form_id = this_form_id;
 				}
 
 				// reordering between sections
@@ -402,7 +402,7 @@ function frmAdminBuildJS(){
 	function addFieldClick(){
 		var $thisObj = jQuery(this);
 		var field_type = $thisObj.closest('li').attr('id');
-		var form_id = jQuery(document.getElementById('form_id')).val();
+		var form_id = this_form_id;
 		var $button = $thisObj.closest('.frmbutton');
 		var switchto = $button.data('switchto');
 		if(switchto){
@@ -428,11 +428,10 @@ function frmAdminBuildJS(){
 
 	function duplicateField(){
 		var field_id = jQuery(this).closest('li').data('fid');
-		var form_id = jQuery(document.getElementById('form_id')).val();
 		var children = fieldsInSection(field_id);
 		jQuery.ajax({
 			type:'POST',url:ajaxurl,
-			data:{action:'frm_duplicate_field', field_id:field_id, form_id:form_id, children:children, nonce:frm_admin_js.nonce},
+			data:{action:'frm_duplicate_field', field_id:field_id, form_id:this_form_id, children:children, nonce:frm_admin_js.nonce},
 			success:function(msg){
 				jQuery(document.getElementById('new_fields')).append(msg);
 			}
@@ -713,7 +712,7 @@ function frmAdminBuildJS(){
 	
 	function addFieldLogicRow(){
 		var id=jQuery(this).closest('li.form-field').data('fid');
-		var form_id = jQuery(document.getElementById('form_id')).val();
+		var form_id = this_form_id;
 		var meta_name = 0;
 		if(jQuery('#frm_logic_row_'+id+' .frm_logic_row').length>0){
 			meta_name = 1 + parseInt(jQuery('#frm_logic_row_'+id+' .frm_logic_row:last').attr('id').replace('frm_logic_'+id+'_', ''));
@@ -1077,7 +1076,7 @@ function frmAdminBuildJS(){
 			len = jQuery('.frm_form_action_settings:last').attr('id').replace('frm_form_action_', '');
 		}
 		var type = jQuery(this).data('actiontype');
-		var formId = jQuery(document.getElementById('form_id')).val();
+		var formId = this_form_id;
 
         jQuery.ajax({
 			type:'POST',url:ajaxurl,
@@ -1155,7 +1154,7 @@ function frmAdminBuildJS(){
 	
 	function addFormLogicRow(){
 		var id=jQuery(this).data('emailkey');
-		var form_id = jQuery(document.getElementById('form_id')).val();
+		var form_id = this_form_id;
 		var type = jQuery(this).closest('.frm_form_action_settings').find('.frm_action_name').val();
 		var meta_name = 0;
 		if(jQuery('#frm_form_action_'+id+' .frm_logic_row').length){
@@ -1271,7 +1270,7 @@ function frmAdminBuildJS(){
     }
 	
 	function addPosttaxRow(){
-		var id = jQuery(document.getElementById('form_id')).val();
+		var id = this_form_id;
 		var key = jQuery(this).closest('.frm_form_action_settings').data('actionkey');
 		var post_type = jQuery(this).closest('.frm_form_action_settings').find('select[name$="[post_content][post_type]"]').val();
 		var tax_key = getMetaValue('frm_posttax_', jQuery('#frm_posttax_rows > div').size());
@@ -1438,10 +1437,9 @@ function frmAdminBuildJS(){
 		if(jQuery('#frm_order_options .frm_logic_rows div:last').length>0){
 			l = jQuery('#frm_order_options .frm_logic_rows div:last').attr('id').replace('frm_order_field_', '');
 		}
-		var formId = jQuery(document.getElementById('form_id')).val();
 		jQuery.ajax({
 			type:'POST',url:ajaxurl,
-			data:{action:'frm_add_order_row',form_id:formId,order_key:(parseInt(l)+1), nonce:frm_admin_js.nonce},
+			data:{action:'frm_add_order_row',form_id:this_form_id,order_key:(parseInt(l)+1), nonce:frm_admin_js.nonce},
 			success:function(html){
 				jQuery('#frm_order_options .frm_logic_rows').append(html).prev('.frm_add_order_row').hide();
 			}
@@ -1449,14 +1447,13 @@ function frmAdminBuildJS(){
 	}
 	
 	function addWhereRow(){
-		var form_id = jQuery(document.getElementById('form_id')).val();
 		var l = 0;
 		if(jQuery('#frm_where_options .frm_logic_rows div:last').length){
 			l = jQuery('#frm_where_options .frm_logic_rows div:last').attr('id').replace('frm_where_field_', '');
 		}
 		jQuery.ajax({
 			type:'POST',url:ajaxurl,
-			data:{action:'frm_add_where_row',form_id:form_id,where_key:(parseInt(l)+1), nonce:frm_admin_js.nonce},
+			data:{action:'frm_add_where_row',form_id:this_form_id,where_key:(parseInt(l)+1), nonce:frm_admin_js.nonce},
 			success:function(html){
 				jQuery('#frm_where_options .frm_logic_rows').append(html).show().prev('.frm_add_where_row').hide();
 			}
@@ -1736,7 +1733,11 @@ function frmAdminBuildJS(){
 			});
 
 			jQuery('a[data-toggle]').click(toggleDiv);
-			
+
+			if ( typeof this_form_id == 'undefined' ) {
+				this_form_id = jQuery(document.getElementById('form_id')).val();
+			}
+
 			if($newFields.length > 0){
 				// only load this on the form builder page
 				frmAdminBuild.buildInit();

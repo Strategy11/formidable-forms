@@ -74,7 +74,7 @@ class FrmEntriesListHelper extends FrmListHelper {
         if ( isset($this->params['form']) ) {
             $form = FrmForm::getOne($this->params['form']);
         } else {
-            $form = FrmForm::getAll( array( 'is_template' => 0, 'status' => array( null, '', 'published' ) ), 'name', 1 );
+			$form = FrmForm::get_published_forms( array(), 1 );
         }
 
         if ( $form ) {

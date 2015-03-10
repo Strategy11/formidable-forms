@@ -120,7 +120,7 @@ class FrmStylesController {
         $default_style = $frm_style->get_default_style($styles);
 
         if ( empty($forms) ) {
-            $forms = FrmForm::getAll( array( 'is_template' => 0, 'status' => array( null, '', 'published' ) ) );
+            $forms = FrmForm::get_published_forms();
         }
 
         include(FrmAppHelper::plugin_path() .'/classes/views/styles/manage.php');
@@ -133,8 +133,7 @@ class FrmStylesController {
 
         global $wpdb;
 
-		$forms = FrmForm::getAll( array( 'is_template' => 0, 'status' => array( null, '', 'published' ) ) );
-
+		$forms = FrmForm::get_published_forms();
         foreach ( $forms as $form ) {
             if ( $_POST['style'][ $form->id ] == $_POST['prev_style'][ $form->id ] ) {
                 continue;
