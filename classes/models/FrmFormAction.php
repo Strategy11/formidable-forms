@@ -345,6 +345,9 @@ class FrmFormAction {
         // delete all styling caches
         FrmAppHelper::cache_delete_group('frm_actions');
 
+		// Remove the balanceTags filter in case WordPress is trying to validate the XHTML
+		remove_filter( 'content_save_pre', 'balanceTags', 50 );
+
 		return wp_insert_post($settings);
 	}
 

@@ -621,6 +621,9 @@ class FrmXMLHelper{
         ) );
 
         if ( ! $exists ) {
+			// Remove the balanceTags filter in case WordPress is trying to validate the XHTML
+			remove_filter( 'content_save_pre', 'balanceTags', 50 );
+
             wp_insert_post( $new_action );
             $imported['imported']['actions']++;
         }
@@ -702,6 +705,9 @@ class FrmXMLHelper{
             ) );
 
             if ( empty($exists) ) {
+				// Remove the balancTags filter in case WordPress is trying to validate the XHTML
+				remove_filter( 'content_save_pre', 'balanceTags', 50 );
+
                 wp_insert_post( $new_notification );
                 $imported['imported']['actions']++;
             }

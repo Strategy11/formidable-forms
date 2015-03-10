@@ -467,7 +467,7 @@ class FrmEntry{
 		// Don't get subfields
 		$where['fr.parent_form_id'] = array( null, 0 );
 		// Don't get excluded fields (like file upload fields in the ajax validation)
-		if ( !empty( $exclude ) ) {
+		if ( ! empty( $exclude ) ) {
 			$where['fi.type not'] = $exclude;
 		}
 
