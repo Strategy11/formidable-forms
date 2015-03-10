@@ -59,7 +59,7 @@ class FrmEntriesHelper {
                 'required' => $field->required,
                 'field_key' => $field->field_key,
                 'field_order' => $field->field_order,
-                'form_id' => $field->form_id
+                'form_id' => $field->form_id,
             );
 
             $opt_defaults = FrmFieldsHelper::get_default_field_opts($field_array['type'], $field, true);
@@ -120,7 +120,7 @@ class FrmEntriesHelper {
         return apply_filters('frm_setup_edit_entry_vars', $values, $record);
     }
 
-    public static function get_admin_params($form=null) {
+    public static function get_admin_params( $form = null ) {
         $form_id = $form;
         if ( $form === null ) {
             $form_id = self::get_current_form_id();
@@ -132,7 +132,7 @@ class FrmEntriesHelper {
         foreach ( array(
             'id' => '', 'form_name' => '', 'paged' => 1, 'form' => $form_id,
             'field_id' => '', 'search' => '', 'sort' => '', 'sdir' => '', 'fid' => '',
-            'keep_post' => ''
+            'keep_post' => '',
         ) as $var => $default ) {
             $values[ $var ] = FrmAppHelper::get_param( $var, $default );
         }
@@ -494,7 +494,7 @@ class FrmEntriesHelper {
         if ( is_array($value) && $atts['type'] != 'file' ) {
             foreach ( $value as $val ) {
                 if ( is_array($val) ) {
-//TODO: add options for display (li or ,)
+					//TODO: add options for display (li or ,)
                     $new_value .= implode($atts['sep'], $val);
                     if ( $atts['type'] != 'data' ) {
                         $new_value .= '<br/>';
@@ -623,9 +623,8 @@ class FrmEntriesHelper {
             if ( count( $value ) == 0 ) {
                 $value = '';
             }
-
-        // Radio and dropdowns
         } else {
+			// Radio and dropdowns
             $other_key = array_filter( array_keys($field->options), 'is_string');
             $other_key = reset( $other_key );
 

@@ -1,6 +1,6 @@
 <?php
 if ( ! isset($saving) ) {
-    header("Content-type: text/css");
+    header( 'Content-type: text/css' );
 
     if ( isset($css) && $css ) {
         echo $css;

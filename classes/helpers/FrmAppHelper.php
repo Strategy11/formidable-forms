@@ -625,8 +625,9 @@ class FrmAppHelper {
             }
             return $other_val;
 
-        // For normal fields
         } else if ( isset( $field['id'] ) && isset( $_POST['item_meta']['other'][ $field['id'] ] ) ) {
+			// For normal fields
+
             if ( FrmFieldsHelper::is_field_with_multiple_values( $field ) ) {
                 $other_val = isset( $_POST['item_meta']['other'][ $field['id'] ][ $opt_key ] ) ? $_POST['item_meta']['other'][ $field['id'] ][ $opt_key ] : '';
             } else {
@@ -641,10 +642,11 @@ class FrmAppHelper {
             if ( isset( $field['value'][ $opt_key ] ) && $field['options'][ $opt_key ] != $field['value'][ $opt_key ] ) {
                 $other_val = $field['value'][ $opt_key ];
             }
-
-        // For radio buttons and dropdowns
         } else {
-        //Check if saved value equals any of the options. If not, set it as the other value.
+			/**
+			 * For radio buttons and dropdowns
+        	 * Check if saved value equals any of the options. If not, set it as the other value.
+			 */
             foreach ( $field['options'] as $opt_key => $opt_val ) {
                 $temp_val = is_array( $opt_val ) ? $opt_val['value'] : $opt_val;
                 // Multi-select dropdowns - key is not preserved
@@ -652,10 +654,9 @@ class FrmAppHelper {
                     $o_key = array_search( $temp_val, $field['value'] );
                     if ( isset( $field['value'][ $o_key ] ) ) {
                         unset( $field['value'][ $o_key ], $o_key );
-                    }
-
-                // For radio and regular dropdowns
+					}
                 } else if ( $temp_val == $field['value'] ) {
+					// For radio and regular dropdowns
                     return '';
                 } else {
                     $other_val = $field['value'];
@@ -1267,7 +1268,7 @@ class FrmAppHelper {
     public static function esc_like($term) {
         global $wpdb;
         if ( method_exists($wpdb, 'esc_like') ) {
-// WP 4.0
+			// WP 4.0
             $term = $wpdb->esc_like( $term );
         } else {
             $term = like_escape( $term );
@@ -1391,24 +1392,6 @@ class FrmAppHelper {
         _deprecated_function( __FUNCTION__, '2.0', 'FrmDb::get_count' );
         $count = FrmDb::get_count( $table_name, $where );
         return $count;
-    }
-
-    public static function get_referer_query($query) {
-    	if (strpos($query, "google.")) {
-    	    //$pattern = '/^.*\/search.*[\?&]q=(.*)$/';
-            $pattern = '/^.*[\?&]q=(.*)$/';
-    	} else if (strpos($query, "bing.com")) {
-    		$pattern = '/^.*q=(.*)$/';
-    	} else if (strpos($query, "yahoo.")) {
-    		$pattern = '/^.*[\?&]p=(.*)$/';
-    	} else if (strpos($query, "ask.")) {
-    		$pattern = '/^.*[\?&]q=(.*)$/';
-    	} else {
-    		return false;
-    	}
-    	preg_match($pattern, $query, $matches);
-    	$querystr = substr($matches[1], 0, strpos($matches[1], '&'));
-    	return urldecode($querystr);
     }
 
     public static function get_referer_info(){
@@ -1552,12 +1535,12 @@ class FrmAppHelper {
 
         $new_string = json_decode($string, true);
         if ( function_exists('json_last_error') ) {
-// php 5.3+
+			// php 5.3+
             if ( json_last_error() == JSON_ERROR_NONE ) {
                 $string = $new_string;
             }
         } else if ( isset($new_string) ) {
-// php < 5.3 fallback
+			// php < 5.3 fallback
             $string = $new_string;
         }
         return $string;

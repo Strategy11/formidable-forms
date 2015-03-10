@@ -100,12 +100,11 @@ class FrmFieldsHelper {
             return false;
         }
 
-        // For field array
         if ( is_array( $field ) ) {
+			// For field array
             return $field['type'] == 'checkbox' || ( $field['type'] == 'data' && isset($field['data_type']) && $field['data_type'] == 'checkbox' ) || self::is_multiple_select( $field );
-
-        // For field object
         } else {
+			// For field object
             return $field->type == 'checkbox' || ( $field->type == 'data' && $field->field_options['data_type'] == 'checkbox' ) || self::is_multiple_select($field);
         }
     }
@@ -137,7 +136,6 @@ class FrmFieldsHelper {
                     $values['field_options'][ $opt_var ] = $opt_default;
                     unset($opt_var, $opt_default);
                 }
-
             } else {
                 $values[ $var ] = $default;
             }
@@ -192,7 +190,7 @@ class FrmFieldsHelper {
         $default_opts = array(
             'field_key' => $record->field_key, 'type' => $record->type,
             'default_value'=> $record->default_value, 'field_order' => $record->field_order,
-            'required' => $record->required
+            'required' => $record->required,
         );
 
 		if ( $doing_ajax ) {
@@ -204,7 +202,7 @@ class FrmFieldsHelper {
                 unset($var, $default);
             }
 
-            foreach ( array( 'field_key' => $record->field_key, 'type' => $record->type, 'default_value'=> $record->default_value, 'field_order' => $record->field_order, 'required' => $record->required) as $var => $default) {
+            foreach ( array( 'field_key' => $record->field_key, 'type' => $record->type, 'default_value' => $record->default_value, 'field_order' => $record->field_order, 'required' => $record->required ) as $var => $default ) {
                 $values[ $var ] = FrmAppHelper::get_param( $var, $default );
                 unset($var, $default);
             }
@@ -239,7 +237,7 @@ class FrmFieldsHelper {
             'size' => '', 'max' => '', 'label' => '', 'blank' => '',
             'required_indicator' => '*', 'invalid' => '', 'separate_value' => 0,
             'clear_on_focus' => 0, 'default_blank' => 0, 'classes' => '',
-            'custom_html' => ''
+			'custom_html' => '',
         );
 
 		if ( $limit ) {
@@ -261,7 +259,7 @@ class FrmFieldsHelper {
             'field_order' => $field_count+1, 'required' => false,
             'blank' => $frm_settings->blank_msg, 'unique_msg' => $frm_settings->unique_msg,
             'invalid' => __( 'This field is invalid', 'formidable' ), 'form_id' => $form_id,
-            'field_options' => $field_options
+			'field_options' => $field_options,
         );
     }
 
@@ -300,7 +298,7 @@ class FrmFieldsHelper {
         return $fields;
     }
 
-    public static function get_default_html($type='text') {
+	public static function get_default_html( $type = 'text' ) {
         if (apply_filters('frm_normal_field_type_html', true, $type)) {
             $input = (in_array($type, array( 'radio', 'checkbox', 'data'))) ? '<div class="frm_opt_container">[input]</div>' : '[input]';
             $for = '';

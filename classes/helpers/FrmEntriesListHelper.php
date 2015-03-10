@@ -12,7 +12,7 @@ class FrmEntriesListHelper extends FrmListHelper {
             $this->items = array();
     		$this->set_pagination_args( array(
     			'total_items' => 0,
-    			'per_page' => $per_page
+				'per_page' => $per_page,
     		) );
             return;
         }
@@ -46,7 +46,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 		$this->set_pagination_args( array(
 			'total_items' => $total_items,
-			'per_page' => $per_page
+			'per_page' => $per_page,
 		) );
 	}
 
@@ -95,7 +95,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 <div class="search-box frm_sidebar">
     <label class="screen-reader-text" for="<?php echo esc_attr( $input_id ) ?>"><?php echo esc_attr( $text ); ?>:</label>
     <input type="text" id="<?php echo esc_attr( $input_id ) ?>" name="s" value="<?php echo esc_attr( $search_str ); ?>" />
-    <?php if ( isset( $field_list ) && ! empty( $field_list ) ) { ?>
+    <?php
+	if ( isset( $field_list ) && ! empty( $field_list ) ) { ?>
     <select name="fid" class="hide-if-js">
         <option value="">&mdash; <?php _e( 'All Fields', 'formidable' ) ?> &mdash;</option>
         <option value="created_at" <?php selected($fid, 'created_at') ?>><?php _e( 'Entry creation date', 'formidable' ) ?></option>
@@ -111,7 +112,8 @@ class FrmEntriesListHelper extends FrmListHelper {
             <li><a href="#" id="fid-">&mdash; <?php _e( 'All Fields', 'formidable' ) ?> &mdash;</a></li>
             <li><a href="#" id="fid-created_at"><?php _e( 'Entry creation date', 'formidable' ) ?></a></li>
             <li><a href="#" id="fid-id"><?php _e( 'Entry ID', 'formidable' ) ?></a></li>
-    	    <?php foreach ( $field_list as $f ) { ?>
+    	    <?php
+			foreach ( $field_list as $f ) { ?>
             <li><a href="#" id="fid-<?php echo ($f->type == 'user_id') ? 'user_id' : $f->id ?>"><?php echo FrmAppHelper::truncate($f->name, 30); ?></a></li>
     	    <?php
     	        unset($f);
@@ -121,9 +123,10 @@ class FrmEntriesListHelper extends FrmListHelper {
     <?php submit_button( $text, 'button hide-if-js', false, false, array( 'id' => 'search-submit') );
     } else {
         submit_button( $text, 'button', false, false, array( 'id' => 'search-submit') );
-        if ( ! empty($search_str) ) { ?>
+		if ( ! empty( $search_str ) ) { ?>
     <a href="<?php echo admin_url('admin.php?page=formidable-entries&frm_action=list&form='.$form->id) ?>"><?php _e( 'Reset', 'formidable' ) ?></a>
-    <?php }
+    <?php
+		}
     } ?>
 
 </div>
@@ -177,7 +180,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 				case 'created_at':
 				case 'updated_at':
 				    $date = FrmAppHelper::get_formatted_time($item->{$col_name});
-					$val = "<abbr title='". FrmAppHelper::get_formatted_time($item->{$col_name}, '', 'g:i:s A') ."'>". $date ."</abbr>";
+					$val = '<abbr title="' . FrmAppHelper::get_formatted_time( $item->{$col_name}, '', 'g:i:s A' ) . '">' . $date . '</abbr>';
 					break;
 				case 'is_draft':
 				    $val = empty($item->is_draft) ? __( 'No') : __( 'Yes');

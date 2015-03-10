@@ -624,7 +624,7 @@ class FrmEntriesController {
         }
 
         if ($form->id == $values['posted_form_id']) {
-//if there are two forms on the same page, make sure not to submit both
+			//if there are two forms on the same page, make sure not to submit both
             foreach ( $default_values as $var => $default ) {
                 if ( $var == 'action' ) {
                     $values[ $var ] = FrmAppHelper::get_param( $action_var, $default );
