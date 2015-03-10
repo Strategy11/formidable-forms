@@ -39,7 +39,7 @@ class FrmFormsController{
         FrmAppHelper::permission_check('frm_view_forms');
 
         $params = FrmFormsHelper::get_params();
-        $errors = self::process_bulk_form_actions(array());
+        $errors = self::process_bulk_form_actions( array());
         $errors = apply_filters('frm_admin_list_form_action', $errors);
 
         return self::display_forms_list($params, '', false, $errors);
@@ -68,7 +68,7 @@ class FrmFormsController{
             $values['id'] = $id;
             require(FrmAppHelper::plugin_path() .'/classes/views/frm-forms/new.php');
         }else{
-            $all_templates = FrmForm::getAll(array('is_template' => 1), 'name');
+            $all_templates = FrmForm::getAll( array( 'is_template' => 1), 'name');
             require(FrmAppHelper::plugin_path() .'/classes/views/frm-forms/new-selection.php');
         }
     }
@@ -148,7 +148,7 @@ class FrmFormsController{
         FrmAppHelper::permission_check('frm_edit_forms', 'hide');
 
         global $wpdb;
-        $values = array('form_key' => trim($_POST['update_value']));
+        $values = array( 'form_key' => trim($_POST['update_value']));
 
         FrmForm::update($_POST['form_id'], $values);
         $key = FrmForm::getKeyById($_POST['form_id']);
@@ -160,7 +160,7 @@ class FrmFormsController{
         check_ajax_referer( 'frm_ajax', 'nonce' );
         FrmAppHelper::permission_check('frm_edit_forms', 'hide');
 
-        FrmForm::update($_POST['form_id'], array('description' => $_POST['update_value']));
+        FrmForm::update($_POST['form_id'], array( 'description' => $_POST['update_value']));
         $description = FrmAppHelper::use_wpautop(stripslashes($_POST['update_value']));
         echo $description;
         wp_die();
@@ -257,7 +257,7 @@ class FrmFormsController{
         $plugin     = FrmAppHelper::get_param('plugin');
         $controller = FrmAppHelper::get_param('controller');
         $key = (isset($_GET['form']) ? $_GET['form'] : (isset($_POST['form']) ? $_POST['form'] : ''));
-        $form = FrmForm::getAll(array('form_key' => $key), '', 1);
+        $form = FrmForm::getAll( array( 'form_key' => $key), '', 1);
         if ( empty($form) ) {
             $form = FrmForm::getAll('', '', 1);
         }
@@ -354,7 +354,7 @@ class FrmFormsController{
     public static function scheduled_delete($delete_timestamp = '') {
         global $wpdb;
 
-        $trash_forms = FrmDb::get_results($wpdb->prefix .'frm_forms', array('status' => 'trash'), 'id, options' );
+        $trash_forms = FrmDb::get_results($wpdb->prefix .'frm_forms', array( 'status' => 'trash'), 'id, options' );
 
         if ( ! $trash_forms ) {
             return;
@@ -394,7 +394,7 @@ class FrmFormsController{
         FrmAppHelper::load_admin_wide_js();
 
         $shortcodes = array(
-            'formidable' => array('name' => __( 'Form', 'formidable' ), 'label' => __( 'Insert a Form', 'formidable' )),
+            'formidable' => array( 'name' => __( 'Form', 'formidable' ), 'label' => __( 'Insert a Form', 'formidable' )),
         );
 
         $shortcodes = apply_filters('frm_popup_shortcodes', $shortcodes);
@@ -420,9 +420,9 @@ class FrmFormsController{
                 $form_id = 'id';
                 $opts = array(
                     //'key' => ',
-                    'title'         => array('val' => 1, 'label' => __( 'Display form title', 'formidable' )),
-                    'description'   => array('val' => 1, 'label' => __( 'Display form description', 'formidable' )),
-                    'minimize'      => array('val' => 1, 'label' => __( 'Minimize form HTML', 'formidable' )),
+                    'title'         => array( 'val' => 1, 'label' => __( 'Display form title', 'formidable' )),
+                    'description'   => array( 'val' => 1, 'label' => __( 'Display form description', 'formidable' )),
+                    'minimize'      => array( 'val' => 1, 'label' => __( 'Minimize form HTML', 'formidable' )),
                 );
             break;
         }
@@ -479,7 +479,7 @@ class FrmFormsController{
 
         $columns['created_at'] = __( 'Date', 'formidable' );
 
-        add_screen_option( 'per_page', array('label' => __( 'Forms', 'formidable' ), 'default' => 20, 'option' => 'formidable_page_formidable_per_page') );
+        add_screen_option( 'per_page', array( 'label' => __( 'Forms', 'formidable' ), 'default' => 20, 'option' => 'formidable_page_formidable_per_page') );
 
         return $columns;
 	}
@@ -599,10 +599,10 @@ class FrmFormsController{
         $cond_shortcodes = apply_filters('frm_conditional_shortcodes', array());
 
         $adv_shortcodes = array(
-            'sep=", "' => array('label' => __( 'Separator', 'formidable' ), 'title' => __( 'Use a different separator for checkbox fields', 'formidable' ) ),
+            'sep=", "' => array( 'label' => __( 'Separator', 'formidable' ), 'title' => __( 'Use a different separator for checkbox fields', 'formidable' ) ),
             'format="d-m-Y"' => __( 'Date Format', 'formidable' ),
             'show="field_label"' => __( 'Field Label', 'formidable' ),
-            'wpautop=0' => array('label' => __( 'No Auto P', 'formidable' ), 'title' => __( 'Do not automatically add any paragraphs or line breaks', 'formidable' )),
+            'wpautop=0' => array( 'label' => __( 'No Auto P', 'formidable' ), 'title' => __( 'Do not automatically add any paragraphs or line breaks', 'formidable' )),
         );
         $adv_shortcodes = apply_filters('frm_advanced_shortcodes', $adv_shortcodes);
 
@@ -719,7 +719,7 @@ class FrmFormsController{
 
         for($i = count($templates) - 1; $i >= 0; $i--){
             $filename = str_replace( '.php', '', str_replace( $path.'/', '', $templates[ $i ] ) );
-            $template_query = array('form_key' => $filename);
+            $template_query = array( 'form_key' => $filename);
             if ( $template ) {
                 $template_query['is_template'] = 1;
             }
@@ -748,7 +748,7 @@ class FrmFormsController{
             }
 
             if ( $form ) {
-                do_action('frm_after_duplicate_form', $form->id, (array) $form, array('old_id' => $old_id));
+                do_action('frm_after_duplicate_form', $form->id, (array) $form, array( 'old_id' => $old_id));
             }
         }
     }
@@ -897,7 +897,7 @@ class FrmFormsController{
             return $sc .']';
         }
 
-        $shortcode_atts = shortcode_atts(array(
+        $shortcode_atts = shortcode_atts( array(
             'id' => '', 'key' => '', 'title' => false, 'description' => false,
             'readonly' => false, 'entry_id' => false, 'fields' => array(),
             'exclude_fields' => array(), 'minimize' => false,

@@ -44,7 +44,7 @@ class FrmStylesController{
         wp_enqueue_script('jquery-ui-datepicker');
 
         $version = FrmAppHelper::plugin_version();
-        wp_enqueue_script('jquery-frm-themepicker', FrmAppHelper::plugin_url() .'/js/jquery/jquery-ui-themepicker.js', array('jquery'), $version);
+        wp_enqueue_script('jquery-frm-themepicker', FrmAppHelper::plugin_url() .'/js/jquery/jquery-ui-themepicker.js', array( 'jquery'), $version);
 
         wp_enqueue_style('jquery-ui-base', FrmAppHelper::jquery_ui_base_url() .'/themes/base/ui.all.css');
         wp_enqueue_style('frm-custom-theme', admin_url('admin-ajax.php') .'?action=frmpro_css');
@@ -142,7 +142,7 @@ class FrmStylesController{
 
             $form->options['custom_style'] = $_POST['style'][ $form->id ];
 
-            $wpdb->update($wpdb->prefix .'frm_forms', array('options' => maybe_serialize($form->options)), array('id' => $form->id));
+            $wpdb->update($wpdb->prefix .'frm_forms', array( 'options' => maybe_serialize($form->options)), array( 'id' => $form->id));
             unset($form);
         }
 
@@ -153,7 +153,7 @@ class FrmStylesController{
     public static function custom_css( $message = '', $style = null ) {
         wp_enqueue_style('codemirror', FrmAppHelper::plugin_url() . '/css/codemirror.css');
         wp_enqueue_script('codemirror', FrmAppHelper::plugin_url() . '/js/codemirror/codemirror.js', array(), '4.7');
-        wp_enqueue_script('codemirror-css', FrmAppHelper::plugin_url() . '/js/codemirror/css.js', array('codemirror'), '4.7');
+        wp_enqueue_script( 'codemirror-css', FrmAppHelper::plugin_url() . '/js/codemirror/css.js', array( 'codemirror' ), '4.7' );
 
         if ( ! isset($style) ) {
             $frm_style = new FrmStyle();

@@ -1,7 +1,7 @@
 <div id="titlediv">
 <ul class="frm_form_nav">
 <li class="first"><a<?php
-if ( ( $current_page == 'formidable' ) && isset($_GET['frm_action']) && (in_array($_GET['frm_action'], array('edit', 'new', 'duplicate'))) ) {
+if ( ( $current_page == 'formidable' ) && isset($_GET['frm_action']) && (in_array($_GET['frm_action'], array( 'edit', 'new', 'duplicate'))) ) {
     echo ' class="current_page"';
 } ?> href="<?php echo esc_url( admin_url('admin.php?page=formidable&frm_action=edit&id='. $id) ) ?>"><?php _e( 'Build', 'formidable' ) ?></a> </li>
 <li><a<?php
@@ -17,7 +17,7 @@ if ( $current_page == 'frm_display' || $pagenow == 'post.php' || $pagenow == 'po
     echo ' class="current_page"';
 } ?> href="<?php echo esc_url( (FrmAppHelper::pro_is_installed() ? admin_url('edit.php?post_type=frm_display') : admin_url( 'admin.php?page=formidable-entry-templates')) .'&form='. $id .'&show_nav=1' ); ?>"><?php _e( 'Views', 'formidable' ) ?></a></li>
 <li> <a<?php
-if ( $current_page == 'formidable' && isset($_GET['frm_action']) && in_array($_GET['frm_action'], array('reports')) ) {
+if ( $current_page == 'formidable' && isset($_GET['frm_action']) && in_array($_GET['frm_action'], array( 'reports')) ) {
     echo ' class="current_page"';
 } ?> href="<?php echo esc_url( admin_url('admin.php?page=formidable&frm_action=reports&form='. $id .'&show_nav=1') ) ?>"><?php _e( 'Reports', 'formidable' ) ?></a></li>
 <?php FrmFormsHelper::form_switcher(); ?>

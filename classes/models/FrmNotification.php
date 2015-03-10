@@ -52,16 +52,16 @@ class FrmNotification{
             if  ( $f == 'from' && empty($notification[$f]) ) {
                 $notification[$f] = '[admin_email]';
             //Remove brackets
-            } else if ( in_array($f, array('email_to', 'cc', 'bcc', 'reply_to', 'from')) ) {
+            } else if ( in_array($f, array( 'email_to', 'cc', 'bcc', 'reply_to', 'from')) ) {
                 //Add a space in case there isn't one
                 $notification[$f] = str_replace('<', ' ', $notification[$f]);
-                $notification[$f] = str_replace(array('"', '>'), '', $notification[$f]);
+                $notification[$f] = str_replace( array( '"', '>'), '', $notification[$f]);
 
                 //Switch userID shortcode to email address
                 if ( strpos($notification[$f], '[' . $user_id_field . ']' ) !== false || strpos($notification[$f], '[' . $user_id_key . ']' ) !== false ) {
                     $user_data = get_userdata($entry->metas[$user_id_field]);
                     $user_email = $user_data->user_email;
-                    $notification[$f] = str_replace( array('[' . $user_id_field . ']','[' . $user_id_key . ']') , $user_email , $notification[$f]);
+                    $notification[$f] = str_replace( array( '[' . $user_id_field . ']','[' . $user_id_key . ']') , $user_email , $notification[$f]);
                 }
             }
 
@@ -180,7 +180,7 @@ class FrmNotification{
         $atts['from'] = ( empty($atts['from']) || $atts['from'] == '[admin_email]' ) ? $admin_email : $atts['from'];
 
         // Filter values in these fields
-        $filter_fields = array('to_email','bcc','cc','from','reply_to');
+        $filter_fields = array( 'to_email','bcc','cc','from','reply_to');
 
         foreach ( $filter_fields as $f ) {
             // If empty, just skip it
@@ -292,7 +292,7 @@ class FrmNotification{
         $header[]       = 'From: ' . $atts['from'];
 
         //Allow for cc and bcc arrays
-        $array_fields = array('CC' => $atts['cc'], 'BCC' => $atts['bcc']);
+        $array_fields = array( 'CC' => $atts['cc'], 'BCC' => $atts['bcc']);
         foreach ( $array_fields as $key => $a_field ) {
             if ( empty($a_field) ) {
                 continue;

@@ -13,7 +13,7 @@ class FrmField{
         $key = isset($values['field_key']) ? $values['field_key'] : $values['name'];
         $new_values['field_key'] = FrmAppHelper::get_unique_key($key, $wpdb->prefix .'frm_fields', 'field_key');
 
-        foreach ( array('name', 'description', 'type', 'default_value') as $col ) {
+        foreach ( array( 'name', 'description', 'type', 'default_value') as $col ) {
             $new_values[$col] = $values[$col];
         }
 
@@ -59,7 +59,7 @@ class FrmField{
 
     public static function duplicate( $old_form_id, $form_id, $copy_keys = false, $blog_id = false ) {
         global $frm_duplicate_ids;
-        $fields = self::getAll(array('fi.form_id' => $old_form_id), 'field_order', '', $blog_id);
+        $fields = self::getAll( array( 'fi.form_id' => $old_form_id), 'field_order', '', $blog_id);
         foreach ( (array) $fields as $field ) {
             $new_key = ($copy_keys) ? $field->field_key : '';
             if ( $copy_keys && substr($field->field_key, -1) == 2 ) {
@@ -88,7 +88,7 @@ class FrmField{
         }
 
 		// serialize array values
-		foreach ( array('default_value', 'field_options', 'options') as $opt ) {
+		foreach ( array( 'default_value', 'field_options', 'options') as $opt ) {
 			if ( isset( $values[ $opt ] ) && is_array( $values[ $opt ] ) ) {
 				$values[ $opt ] = serialize( $values[ $opt ] );
 			}
@@ -139,7 +139,7 @@ class FrmField{
         delete_transient('frm_all_form_fields_'. $form_id .'exclude');
         delete_transient('frm_all_form_fields_'. $form_id .'include');
 
-        $cache_key = serialize(array('fi.form_id' => (int) $form_id)) . 'field_orderlb';
+        $cache_key = serialize( array( 'fi.form_id' => (int) $form_id)) . 'field_orderlb';
         wp_cache_delete($cache_key, 'frm_field');
 
         $form = FrmForm::getOne($form_id);
@@ -222,7 +222,7 @@ class FrmField{
         }
 
         self::$use_cache = false;
-        $results = self::getAll(array('fi.form_id' => (int) $form_id, 'fi.type' => $type), 'field_order', $limit);
+        $results = self::getAll( array( 'fi.form_id' => (int) $form_id, 'fi.type' => $type), 'field_order', $limit);
         self::$use_cache = true;
         self::include_sub_fields($results, $inc_sub, $type);
 
@@ -253,7 +253,7 @@ class FrmField{
         }
 
         self::$use_cache = false;
-        $results = self::getAll(array('fi.form_id' => (int) $form_id), 'field_order', $limit);
+        $results = self::getAll( array( 'fi.form_id' => (int) $form_id), 'field_order', $limit);
         self::$use_cache = true;
         self::include_sub_fields($results, $inc_sub, 'all');
 

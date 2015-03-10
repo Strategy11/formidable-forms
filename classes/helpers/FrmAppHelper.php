@@ -721,7 +721,7 @@ class FrmAppHelper{
 
     public static function recursive_trim(&$value) {
         if ( is_array($value) ) {
-            $value = array_map(array('FrmAppHelper', 'recursive_trim'), $value);
+			$value = array_map( array( 'FrmAppHelper', 'recursive_trim' ), $value);
         } else {
             $value = trim($value);
         }
@@ -862,7 +862,7 @@ class FrmAppHelper{
             $key = base_convert( rand($min_slug_value, $max_slug_value), 10, 36 );
         }
 
-        if ( is_numeric($key) || in_array($key, array('id', 'key', 'created-at', 'detaillink', 'editlink', 'siteurl', 'evenodd')) ) {
+        if ( is_numeric($key) || in_array($key, array( 'id', 'key', 'created-at', 'detaillink', 'editlink', 'siteurl', 'evenodd')) ) {
             $key = $key .'a';
         }
 
@@ -896,9 +896,9 @@ class FrmAppHelper{
             $post_values = stripslashes_deep($_POST);
         }
 
-        $values = array('id' => $record->id, 'fields' => array());
+        $values = array( 'id' => $record->id, 'fields' => array());
 
-        foreach ( array('name', 'description') as $var ) {
+        foreach ( array( 'name', 'description') as $var ) {
             $default_val = isset($record->{$var}) ? $record->{$var} : '';
             $values[ $var ] = self::get_param( $var, $default_val );
             unset($var, $default_val);
@@ -937,7 +937,7 @@ class FrmAppHelper{
                 if ( ! isset($field->field_options['custom_field']) ) {
                     $field->field_options['custom_field'] = '';
                 }
-                $meta_value = FrmProEntryMetaHelper::get_post_value($record->post_id, $field->field_options['post_field'], $field->field_options['custom_field'], array('truncate' => false, 'type' => $field->type, 'form_id' => $field->form_id, 'field' => $field));
+                $meta_value = FrmProEntryMetaHelper::get_post_value($record->post_id, $field->field_options['post_field'], $field->field_options['custom_field'], array( 'truncate' => false, 'type' => $field->type, 'form_id' => $field->form_id, 'field' => $field));
             } else {
                 $meta_value = self::get_meta_value($field->id, $record);
             }
@@ -1063,7 +1063,7 @@ class FrmAppHelper{
             $values['custom_style'] = ( $post_values && isset($post_values['options']['custom_style']) ) ? $_POST['options']['custom_style'] : ( $frm_settings->load_style != 'none' );
         }
 
-        foreach ( array('before', 'after', 'submit') as $h ) {
+        foreach ( array( 'before', 'after', 'submit') as $h ) {
             if ( ! isset( $values[ $h .'_html' ] ) ) {
                 $values[ $h .'_html' ] = ( isset( $post_values['options'][ $h .'_html' ] ) ? $post_values['options'][ $h .'_html' ] : FrmFormsHelper::get_default_html( $h ) );
             }
@@ -1296,7 +1296,7 @@ class FrmAppHelper{
 
         $order_by = '';
         if ( count($order_query) > 1 ) {
-            $sort_options = array('asc', 'desc');
+            $sort_options = array( 'asc', 'desc');
             $order_by = end($order_query);
             if ( ! in_array($order_by, $sort_options) ) {
                 $order_by = 'asc';
@@ -1517,7 +1517,7 @@ class FrmAppHelper{
         $post_content = json_encode( $post_content );
 
 	    // add extra slashes for \r\n since WP strips them
-	    $post_content = str_replace( array('\\r', '\\n', '\\u'), array('\\\\r', '\\\\n', '\\\\u'), $post_content );
+	    $post_content = str_replace( array( '\\r', '\\n', '\\u'), array( '\\\\r', '\\\\n', '\\\\u'), $post_content );
 
         // allow for &quot
 	    $post_content = str_replace( '&quot;', '\\"', $post_content );
@@ -1568,7 +1568,7 @@ class FrmAppHelper{
      */
     public static function load_admin_wide_js() {
         $version = FrmAppHelper::plugin_version();
-        wp_enqueue_script( 'formidable_admin_global', FrmAppHelper::plugin_url() . '/js/formidable_admin_global.js', array('jquery'), $version );
+        wp_enqueue_script( 'formidable_admin_global', FrmAppHelper::plugin_url() . '/js/formidable_admin_global.js', array( 'jquery'), $version );
 
         wp_localize_script( 'formidable_admin_global', 'frmAdmin', array(
             'updating_msg'      => __( 'Please wait while your site updates.', 'formidable' ),

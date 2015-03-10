@@ -174,7 +174,7 @@ class FrmFormActionsController {
     private static function fields_to_values($form_id, array &$values) {
         $form = FrmForm::getOne($form_id);
 
-        $values = array('fields' => array(), 'id' => $form->id);
+        $values = array( 'fields' => array(), 'id' => $form->id);
 
         $fields = FrmField::get_all_for_form($form->id);
         foreach ( $fields as $k => $f ) {
@@ -196,7 +196,7 @@ class FrmFormActionsController {
 
         $registered_actions = self::$registered_actions->actions;
 
-        $old_actions = FrmDb::get_col( $wpdb->posts, array('post_type' => self::$action_post_type, 'menu_order' => $form_id), 'ID' );
+        $old_actions = FrmDb::get_col( $wpdb->posts, array( 'post_type' => self::$action_post_type, 'menu_order' => $form_id), 'ID' );
         $new_actions = array();
 
         foreach ( $registered_actions as $registered_action ) {

@@ -3,7 +3,7 @@
 class FrmEntriesController {
 
     public static function menu() {
-        if ( current_user_can('administrator') && !current_user_can('frm_view_entries') ) {
+		if ( current_user_can( 'administrator' ) && ! current_user_can( 'frm_view_entries' ) ) {
             global $wp_roles;
             $wp_roles->add_cap( 'administrator', 'frm_view_entries' );
             $wp_roles->add_cap( 'administrator', 'frm_delete_entries' );
@@ -117,7 +117,7 @@ class FrmEntriesController {
         $frm_vars['cols'] = $columns;
 
         if ( FrmAppHelper::is_admin_page('formidable-entries') && ( ! isset($_GET['frm_action']) || $_GET['frm_action'] == 'list' || $_GET['frm_action'] == 'destroy' ) ) {
-            add_screen_option( 'per_page', array('label' => __( 'Entries', 'formidable' ), 'default' => 20, 'option' => 'formidable_page_formidable_entries_per_page') );
+            add_screen_option( 'per_page', array( 'label' => __( 'Entries', 'formidable' ), 'default' => 20, 'option' => 'formidable_page_formidable_entries_per_page') );
         }
 
         return $columns;
@@ -363,7 +363,7 @@ class FrmEntriesController {
         if ( isset($params['keep_post']) && $params['keep_post'] ) {
             //unlink entry from post
             global $wpdb;
-            $wpdb->update( $wpdb->prefix .'frm_items', array('post_id' => ''), array('id' => $params['id']) );
+			$wpdb->update( $wpdb->prefix .'frm_items', array( 'post_id' => '' ), array( 'id' => $params['id'] ) );
         }
 
         $message = '';
@@ -563,7 +563,7 @@ class FrmEntriesController {
 
     public static function &filter_display_value( $value, $field, $atts = array() ) {
         $saved_value = ( isset($atts['saved_value']) && $atts['saved_value'] ) ? true : false;
-        if ( ! in_array($field->type, array('radio', 'checkbox', 'radio', 'select')) || ! isset($field->field_options['separate_value']) || ! $field->field_options['separate_value'] || $saved_value ) {
+        if ( ! in_array( $field->type, array( 'radio', 'checkbox', 'radio', 'select' ) ) || ! isset( $field->field_options['separate_value'] ) || ! $field->field_options['separate_value'] || $saved_value ) {
             return $value;
         }
 
@@ -643,7 +643,7 @@ class FrmEntriesController {
             }
         }
 
-        if ( in_array($values['action'], array('create', 'update')) && ( ! isset($_POST) || ( ! isset($_POST['action']) && ! isset($_POST['frm_action']) ) ) ) {
+		if ( in_array( $values['action'], array( 'create', 'update' ) ) && ( ! $_POST || ( ! isset( $_POST['action'] ) && ! isset( $_POST['frm_action'] ) ) ) ) {
             $values['action'] = 'new';
         }
 

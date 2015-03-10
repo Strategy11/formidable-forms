@@ -18,20 +18,20 @@
                         $first_h3 = 'frm_first_h3';
                         $embedded_field_id = 0;
                         foreach ( $fields as $field ) {
-                            if ( in_array($field->type, array('divider', 'end_divider')) ) {
+                            if ( in_array($field->type, array( 'divider', 'end_divider')) ) {
                                 $embedded_field_id = 0;
                             }
 
-                            if ( in_array($field->type, array('captcha', 'html', 'end_divider')) ) {
+                            if ( in_array($field->type, array( 'captcha', 'html', 'end_divider')) ) {
                                 continue;
                             }
 
-                            if ( in_array($field->type, array('form', 'divider')) && isset($field->field_options['form_select']) && ! empty($field->field_options['form_select']) ) {
+                            if ( in_array($field->type, array( 'form', 'divider')) && isset($field->field_options['form_select']) && ! empty($field->field_options['form_select']) ) {
                                 $embedded_field_id = $field->type == 'form' ? '' : 'form';
                                 $embedded_field_id .= $field->field_options['form_select'];
                             }
 
-                            if ( in_array($field->type, array('break', 'divider') ) ) {
+                            if ( in_array($field->type, array( 'break', 'divider') ) ) {
                             ?>
                         </tbody></table>
                         <br/><h3 class="<?php echo esc_attr( $first_h3 ) ?>"><?php echo esc_html( $field->name ) ?></h3>

@@ -53,7 +53,7 @@
                 	</p>
 
                 	<p class="howto"><?php _e( 'Insert in a template', 'formidable' ) ?>:</p>
-                	<p><input type="text" readonly="true" class="frm_select_box frm_insert_in_template" value="&lt;?php echo FrmFormsController::get_form_shortcode(array('id' => $id, 'title' => false, 'description' => false)); ?&gt;" /></p>
+                	<p><input type="text" readonly="true" class="frm_select_box frm_insert_in_template" value="&lt;?php echo FrmFormsController::get_form_shortcode( array( 'id' => $id, 'title' => false, 'description' => false)); ?&gt;" /></p>
 
                     <p><a href="#edit_frm_shortcode" class="cancel-frm_shortcode hide-if-no-js"><?php _e( 'Hide', 'formidable' ); ?></a></p>
                 </div>

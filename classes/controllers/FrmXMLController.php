@@ -52,7 +52,7 @@ class FrmXMLController{
         $forms = FrmForm::getAll( array( 'status' => array( null, '', 'published' ) ), 'name' );
 
         $export_types = apply_filters('frm_xml_export_types',
-            array('forms' => __( 'Forms', 'formidable' ))
+            array( 'forms' => __( 'Forms', 'formidable' ))
         );
 
         $export_format = apply_filters('frm_export_formats', array(
@@ -167,12 +167,12 @@ class FrmXMLController{
     	global $wpdb;
 
 	    $type = (array) $type;
-        if ( in_array('items', $type) && ! in_array('forms', $type) ) {
+        if ( in_array( 'items', $type) && ! in_array( 'forms', $type) ) {
             // make sure the form is included if there are entries
             $type[] = 'forms';
         }
 
-	    if ( in_array('forms', $type) ) {
+	    if ( in_array( 'forms', $type) ) {
             // include actions with forms
 	        $type[] = 'actions';
 	    }
@@ -185,7 +185,7 @@ class FrmXMLController{
 	        'actions'   => $wpdb->posts,
 	    );
 
-	    $defaults = array('ids' => false);
+	    $defaults = array( 'ids' => false);
 	    $args = wp_parse_args( $args, $defaults );
 
         $sitename = sanitize_key( get_bloginfo( 'name' ) );

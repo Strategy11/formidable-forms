@@ -27,7 +27,7 @@ class WP_Test_WordPress_Plugin_Tests extends WP_UnitTestCase {
 
         if ( is_callable('FrmUpdatesController::pro_is_authorized') ) {
             // set pro flag
-            update_option('frmpro-credentials', array('license' => '87fu-uit7-896u-ihy8'));
+            update_option('frmpro-credentials', array( 'license' => '87fu-uit7-896u-ihy8'));
             update_option('pro_auth_store', true);
             add_filter('frm_pro_installed', '__return_true');
         }
@@ -184,7 +184,7 @@ class WP_Test_WordPress_Plugin_Tests extends WP_UnitTestCase {
         $form->options['notification'] = $notification;
 
         global $wpdb;
-        $updated = $wpdb->update($wpdb->prefix .'frm_forms', array('options' => maybe_serialize($form->options)), array('id' => $form->id));
+        $updated = $wpdb->update($wpdb->prefix .'frm_forms', array( 'options' => maybe_serialize($form->options)), array( 'id' => $form->id));
         wp_cache_delete( $form->id, 'frm_form');
         $this->assertEquals( $updated, 1 );
 

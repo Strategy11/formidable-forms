@@ -17,7 +17,7 @@
 <div class="field-group clearfix clear">
 	<label><?php _e( 'Position', 'formidable' ) ?></label>
 	<select name="<?php echo esc_attr( $frm_style->get_field_name('position') ) ?>" id="frm_position">
-	    <?php foreach ( array('none' => __( 'top', 'formidable' ), 'left' => __( 'left', 'formidable' ), 'right' => __( 'right', 'formidable' ) ) as $pos => $pos_label ) { ?>
+	    <?php foreach ( array( 'none' => __( 'top', 'formidable' ), 'left' => __( 'left', 'formidable' ), 'right' => __( 'right', 'formidable' ) ) as $pos => $pos_label ) { ?>
 	        <option value="<?php echo esc_attr( $pos ) ?>" <?php selected($style->post_content['position'], $pos) ?>><?php echo $pos_label ?></option>
 	    <?php } ?>
 	</select>

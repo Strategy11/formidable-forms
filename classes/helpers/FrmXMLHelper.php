@@ -57,7 +57,7 @@ class FrmXMLHelper{
 		}
 
         // add terms, forms (form and field ids), posts (post ids), and entries to db, in that order
-        foreach ( array('term', 'form', 'view') as $item_type ) {
+		foreach ( array( 'term', 'form', 'view' ) as $item_type ) {
             // grab cats, tags, and terms, or forms or posts
             if ( isset($xml->{$item_type} ) ) {
                 $function_name = 'import_xml_'. $item_type .'s';
@@ -114,7 +114,7 @@ class FrmXMLHelper{
             $form['options'] = FrmAppHelper::maybe_json_decode($form['options']);
 
             // if template, allow to edit if form keys match, otherwise, creation date must also match
-            $edit_query = array('form_key' => $form['form_key'], 'is_template' => $form['is_template']);
+            $edit_query = array( 'form_key' => $form['form_key'], 'is_template' => $form['is_template']);
             if ( ! $form['is_template'] ) {
                 $edit_query['created_at'] = $form['created_at'];
             }
@@ -229,7 +229,7 @@ class FrmXMLHelper{
             }
 
 		    // Update field ids/keys to new ones
-		    do_action('frm_after_duplicate_form', $form_id, $form, array('old_id' => $old_id));
+		    do_action('frm_after_duplicate_form', $form_id, $form, array( 'old_id' => $old_id));
 
             $imported['forms'][ (int) $item->id] = $form_id;
 
@@ -361,7 +361,7 @@ class FrmXMLHelper{
 		            $m['value'] = FrmFieldsHelper::switch_field_ids($m['value']);
     		    } else if ( $m['key'] == 'frm_options' ) {
 
-                    foreach ( array('date_field_id', 'edate_field_id') as $setting_name ) {
+					foreach ( array( 'date_field_id', 'edate_field_id' ) as $setting_name ) {
     		            if ( isset($m['value'][$setting_name]) && is_numeric($m['value'][$setting_name]) && isset($frm_duplicate_ids[$m['value'][$setting_name]]) ) {
     		                $m['value'][$setting_name] = $frm_duplicate_ids[$m['value'][$setting_name]];
     		            }
@@ -443,7 +443,7 @@ class FrmXMLHelper{
 		    'posts_per_page' => 1,
 		);
 
-		if ( in_array($post['post_status'], array('trash', 'draft')) ) {
+		if ( in_array( $post['post_status'], array( 'trash', 'draft' ) ) ) {
 		    $match_by['include'] = $post['post_id'];
 		    unset($match_by['name']);
 		}
@@ -586,7 +586,7 @@ class FrmXMLHelper{
         $new_action = array(
             'post_type'     => $post_type,
             'post_excerpt'  => 'wppost',
-            'post_title'    => __('Create Posts', 'formidable'),
+			'post_title'    => __( 'Create Posts', 'formidable' ),
             'menu_order'    => $form_id,
             'post_status'   => 'publish',
             'post_content'  => array(),
@@ -606,7 +606,7 @@ class FrmXMLHelper{
             unset($post_setting);
         }
 
-        $new_action['event'] = array('create', 'update');
+        $new_action['event'] = array( 'create', 'update');
 
         if ( $switch ) {
             $new_action['post_content'] = self::switch_post_setting_field_ids( $new_action['post_content'] );
@@ -684,7 +684,7 @@ class FrmXMLHelper{
         foreach ( $notifications as $new_notification ) {
             $new_notification['post_type']      = $post_type;
             $new_notification['post_excerpt']   = 'email';
-            $new_notification['post_title']     = __('Email Notification', 'formidable');
+			$new_notification['post_title']     = __( 'Email Notification', 'formidable' );
             $new_notification['menu_order']     = $form_id;
             $new_notification['post_status']    = 'publish';
 
@@ -754,11 +754,11 @@ class FrmXMLHelper{
         }
 
         // Format event
-        $atts['event'] = array('create');
+        $atts['event'] = array( 'create');
         if ( isset( $notification['update_email'] ) && 1 == $notification['update_email'] ) {
             $atts['event'][] = 'update';
         } else if ( isset($notification['update_email']) && 2 == $notification['update_email'] ) {
-            $atts['event'] = array('update');
+            $atts['event'] = array( 'update');
         }
     }
 

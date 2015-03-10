@@ -27,14 +27,14 @@
         <?php if ( $entry->user_id ) { ?>
         <div class="misc-pub-section">
             <span class="dashicons dashicons-admin-users wp-media-buttons-icon"></span>
-            <?php printf(__( 'Created by: %1$s', 'formidable' ), FrmProFieldsHelper::get_display_name($entry->user_id, 'display_name', array('link' => true))); ?>
+            <?php printf(__( 'Created by: %1$s', 'formidable' ), FrmProFieldsHelper::get_display_name($entry->user_id, 'display_name', array( 'link' => true))); ?>
         </div>
         <?php } ?>
 
         <?php if ( $entry->updated_by && $entry->updated_by != $entry->user_id ) { ?>
         <div class="misc-pub-section">
             <span class="dashicons dashicons-admin-users wp-media-buttons-icon"></span>
-            <?php printf(__( 'Updated by: %1$s', 'formidable' ), FrmProFieldsHelper::get_display_name($entry->updated_by,  'display_name', array('link' => true)) ); ?>
+            <?php printf(__( 'Updated by: %1$s', 'formidable' ), FrmProFieldsHelper::get_display_name($entry->updated_by,  'display_name', array( 'link' => true)) ); ?>
         </div>
         <?php } ?>
         <?php } ?>
@@ -68,7 +68,7 @@
 
         <?php
         foreach ( (array) $data as $k => $d ) {
-            if ( in_array($k, array('browser', 'referrer')) ) {
+            if ( in_array($k, array( 'browser', 'referrer')) ) {
                 continue;
             }
         ?>

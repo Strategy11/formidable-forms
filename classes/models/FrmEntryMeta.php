@@ -52,7 +52,7 @@ class FrmEntryMeta{
     public static function update_entry_metas($entry_id, $values){
         global $wpdb;
 
-        $prev_values = FrmDb::get_col( $wpdb->prefix .'frm_item_metas', array('item_id' => $entry_id, 'field_id !' => 0), 'field_id' );
+        $prev_values = FrmDb::get_col( $wpdb->prefix .'frm_item_metas', array( 'item_id' => $entry_id, 'field_id !' => 0), 'field_id' );
 
         foreach ( $values as $field_id => $meta_value ) {
             // set the value for the file upload field and add new tags (in Pro version)
@@ -138,11 +138,11 @@ class FrmEntryMeta{
         _deprecated_function( __FUNCTION__, '1.07.10');
 
         global $wpdb;
-        return FrmDb::get_col( $wpdb->prefix .'frm_item_metas', array('item_id' => $entry_id), 'meta_value' );
+        return FrmDb::get_col( $wpdb->prefix .'frm_item_metas', array( 'item_id' => $entry_id), 'meta_value' );
     }
 
     public static function get_entry_metas_for_field( $field_id, $order = '', $limit = '', $args = array() ) {
-        $defaults = array('value' => false, 'unique' => false, 'stripslashes' => true, 'is_draft' => false);
+        $defaults = array( 'value' => false, 'unique' => false, 'stripslashes' => true, 'is_draft' => false);
         $args = wp_parse_args( $args, $defaults );
 
         $query = array();
@@ -217,7 +217,7 @@ class FrmEntryMeta{
     }
 
     public static function getEntryIds( $where = '', $order_by = '', $limit = '', $unique = true, $args = array() ) {
-        $defaults = array('is_draft' => false, 'user_id' => '');
+        $defaults = array( 'is_draft' => false, 'user_id' => '');
         $args = wp_parse_args($args, $defaults);
 
         $query = array();
@@ -286,7 +286,7 @@ class FrmEntryMeta{
         if (is_array($search)){
             $where = '';
 			foreach ( $search as $field => $value ) {
-                if ( $value <= 0 || ! in_array($field, array('year', 'month', 'day')) ) {
+                if ( $value <= 0 || ! in_array($field, array( 'year', 'month', 'day')) ) {
                     continue;
                 }
 

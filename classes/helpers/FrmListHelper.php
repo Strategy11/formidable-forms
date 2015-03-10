@@ -1,5 +1,7 @@
 <?php
-if ( !defined('ABSPATH') ) die('You are not allowed to call this page directly.');
+if ( ! defined('ABSPATH') ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 
 class FrmListHelper extends WP_List_Table {
     var $params;

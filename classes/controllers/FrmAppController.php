@@ -24,7 +24,7 @@ class FrmAppController {
         wp_enqueue_style( 'frm_fonts',  FrmAppHelper::plugin_url() .'/css/frm_fonts.css', array(), FrmAppHelper::plugin_version() );
     }
 
-    public static function get_form_nav($form, $show_nav = '', $title = 'show') {
+    public static function get_form_nav( $form, $show_nav = '', $title = 'show' ) {
         global $pagenow, $frm_vars;
 
         $show_nav = FrmAppHelper::get_param( 'show_nav', $show_nav );
@@ -68,7 +68,7 @@ class FrmAppController {
         if ( ( (int) $db_version < (int) FrmAppHelper::$db_version ) ||
             ( FrmAppHelper::pro_is_installed() && (int) $pro_db_version < (int) FrmAppHelper::$pro_db_version ) ) {
 
-            return '<a href="'. add_query_arg( array('upgraded' => 'true'), menu_page_url( 'formidable', 0 ) ) .'">'. __( 'Click here to complete the upgrade', 'formidable' ) .'</a>';
+            return '<a href="'. add_query_arg( array( 'upgraded' => 'true' ), menu_page_url( 'formidable', 0 ) ) .'">'. __( 'Click here to complete the upgrade', 'formidable' ) .'</a>';
 
     	}
 
@@ -124,7 +124,7 @@ class FrmAppController {
             return;
         }
 
-        wp_register_script( 'bootstrap_tooltip', FrmAppHelper::plugin_url() .'/js/bootstrap.min.js', array('jquery'), '3.3.2' );
+        wp_register_script( 'bootstrap_tooltip', FrmAppHelper::plugin_url() .'/js/bootstrap.min.js', array( 'jquery' ), '3.3.2' );
 
         if ( isset($_GET) && ( ( isset($_GET['page']) && strpos( $_GET['page'], 'formidable' ) === 0 ) ||
             ( $pagenow == 'edit.php' && isset($_GET['post_type']) && $_GET['post_type'] == 'frm_display' ) )
@@ -137,19 +137,19 @@ class FrmAppController {
             wp_enqueue_script( 'admin-widgets' );
             wp_enqueue_style( 'widgets' );
             wp_enqueue_script( 'formidable' );
-            wp_enqueue_script( 'formidable_admin', FrmAppHelper::plugin_url() .'/js/formidable_admin.js', array('formidable', 'jquery', 'jquery-ui-core', 'jquery-ui-draggable', 'bootstrap_tooltip'), $version, true );
+            wp_enqueue_script( 'formidable_admin', FrmAppHelper::plugin_url() .'/js/formidable_admin.js', array( 'formidable', 'jquery', 'jquery-ui-core', 'jquery-ui-draggable', 'bootstrap_tooltip' ), $version, true );
             self::localize_script( 'admin' );
 
             wp_enqueue_style( 'formidable-admin', FrmAppHelper::plugin_url() .'/css/frm_admin.css', array(), $version );
             add_thickbox();
 
-            wp_register_script( 'formidable-editinplace', FrmAppHelper::plugin_url() .'/js/jquery/jquery.editinplace.packed.js', array('jquery'), '2.3.0' );
+            wp_register_script( 'formidable-editinplace', FrmAppHelper::plugin_url() .'/js/jquery/jquery.editinplace.packed.js', array( 'jquery' ), '2.3.0' );
 
             if ( FrmAppHelper::is_admin_page( 'formidable-settings' ) || FrmAppHelper::is_admin_page( 'formidable-styles' ) ) {
                 // load multselect js
-                wp_enqueue_script( 'bootstrap-multiselect', FrmAppHelper::plugin_url() .'/js/bootstrap-multiselect.js', array('jquery', 'bootstrap_tooltip'), '0.9.8', true );
+                wp_enqueue_script( 'bootstrap-multiselect', FrmAppHelper::plugin_url() .'/js/bootstrap-multiselect.js', array( 'jquery', 'bootstrap_tooltip' ), '0.9.8', true );
             }
-        } else if ( $pagenow == 'post.php' || ($pagenow == 'post-new.php' && isset($_REQUEST['post_type']) && $_REQUEST['post_type'] == 'frm_display') ) {
+        } else if ( $pagenow == 'post.php' || ( $pagenow == 'post-new.php' && isset( $_REQUEST['post_type'] ) && $_REQUEST['post_type'] == 'frm_display' ) ) {
             if ( isset($_REQUEST['post_type']) ) {
                 $post_type = sanitize_title( $_REQUEST['post_type'] );
             } else if ( isset($_REQUEST['post']) && ! empty($_REQUEST['post']) ) {
@@ -165,7 +165,7 @@ class FrmAppController {
             if ( $post_type == 'frm_display' ) {
                 $version = FrmAppHelper::plugin_version();
                 wp_enqueue_script( 'jquery-ui-draggable' );
-                wp_enqueue_script( 'formidable_admin', FrmAppHelper::plugin_url() . '/js/formidable_admin.js', array('formidable', 'jquery', 'jquery-ui-draggable', 'bootstrap_tooltip'), $version );
+                wp_enqueue_script( 'formidable_admin', FrmAppHelper::plugin_url() . '/js/formidable_admin.js', array( 'formidable', 'jquery', 'jquery-ui-draggable', 'bootstrap_tooltip' ), $version );
                 wp_enqueue_style( 'formidable-admin', FrmAppHelper::plugin_url(). '/css/frm_admin.css', array(), $version );
                 self::localize_script( 'admin' );
             }
@@ -223,8 +223,8 @@ class FrmAppController {
         }
 
         $version = FrmAppHelper::plugin_version();
-        wp_register_script( 'formidable', FrmAppHelper::plugin_url() . '/js/formidable.min.js', array('jquery'), $version, true );
-        wp_register_script( 'jquery-placeholder', FrmAppHelper::plugin_url() .'/js/jquery/jquery.placeholder.js', array('jquery'), '2.0.7', true );
+        wp_register_script( 'formidable', FrmAppHelper::plugin_url() . '/js/formidable.min.js', array( 'jquery' ), $version, true );
+        wp_register_script( 'jquery-placeholder', FrmAppHelper::plugin_url() .'/js/jquery/jquery.placeholder.js', array( 'jquery' ), '2.0.7', true );
 
         if ( FrmAppHelper::is_admin() ) {
             // don't load this in back-end

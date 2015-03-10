@@ -108,11 +108,11 @@
     	            'frm_grid_first' => __( 'First Grid Row', 'formidable' ),
     	            'frm_grid' => __( 'Even Grid Row', 'formidable' ),
     	            'frm_grid_odd' => __( 'Odd Grid Row', 'formidable' ),
-    	            'frm_two_col' => array('label' => __( '2 Col Options', 'formidable' ), 'title' => __( 'Put your radio button or checkbox options into two columns.', 'formidable' )),
-    	            'frm_three_col' => array('label' => __( '3 Col Options', 'formidable' ), 'title' => __( 'Put your radio button or checkbox options into three columns.', 'formidable' )),
-    	            'frm_four_col' => array('label' => __( '4 Col Options', 'formidable' ), 'title' => __( 'Put your radio button or checkbox options into four columns.', 'formidable' )),
-    	            'frm_total' => array('label' => __( 'Total', 'formidable' ), 'title' => __( 'Add this to a read-only field to display the text in bold without a border or background.', 'formidable' )),
-    	            'frm_scroll_box' => array('label' => __( 'Scroll Box', 'formidable' ), 'title' => __( 'If you have many checkbox or radio button options, you may add this class to allow your user to easily scroll through the options.', 'formidable' ))
+    	            'frm_two_col' => array( 'label' => __( '2 Col Options', 'formidable' ), 'title' => __( 'Put your radio button or checkbox options into two columns.', 'formidable' )),
+    	            'frm_three_col' => array( 'label' => __( '3 Col Options', 'formidable' ), 'title' => __( 'Put your radio button or checkbox options into three columns.', 'formidable' )),
+    	            'frm_four_col' => array( 'label' => __( '4 Col Options', 'formidable' ), 'title' => __( 'Put your radio button or checkbox options into four columns.', 'formidable' )),
+    	            'frm_total' => array( 'label' => __( 'Total', 'formidable' ), 'title' => __( 'Add this to a read-only field to display the text in bold without a border or background.', 'formidable' )),
+    	            'frm_scroll_box' => array( 'label' => __( 'Scroll Box', 'formidable' ), 'title' => __( 'If you have many checkbox or radio button options, you may add this class to allow your user to easily scroll through the options.', 'formidable' ))
     	        );
     	        $classes = apply_filters('frm_layout_classes', $classes);
     	        $col = 'one';

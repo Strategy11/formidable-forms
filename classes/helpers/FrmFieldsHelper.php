@@ -70,7 +70,7 @@ class FrmFieldsHelper{
     }
 
     public static function no_save_fields() {
-        return array('divider', 'end_divider', 'captcha', 'break', 'html');
+		return array( 'divider', 'end_divider', 'captcha', 'break', 'html' );
     }
 
     /**
@@ -187,8 +187,8 @@ class FrmFieldsHelper{
     }
 
     public static function setup_edit_vars( $record, $doing_ajax = false ) {
-        $values = array('id' => $record->id, 'form_id' => $record->form_id);
-        $defaults = array('name' => $record->name, 'description' => $record->description);
+        $values = array( 'id' => $record->id, 'form_id' => $record->form_id);
+        $defaults = array( 'name' => $record->name, 'description' => $record->description);
         $default_opts = array(
             'field_key' => $record->field_key, 'type' => $record->type,
             'default_value'=> $record->default_value, 'field_order' => $record->field_order,
@@ -204,7 +204,7 @@ class FrmFieldsHelper{
                 unset($var, $default);
             }
 
-            foreach (array('field_key' => $record->field_key, 'type' => $record->type, 'default_value'=> $record->default_value, 'field_order' => $record->field_order, 'required' => $record->required) as $var => $default){
+            foreach ( array( 'field_key' => $record->field_key, 'type' => $record->type, 'default_value'=> $record->default_value, 'field_order' => $record->field_order, 'required' => $record->required) as $var => $default){
                 $values[ $var ] = FrmAppHelper::get_param( $var, $default );
                 unset($var, $default);
             }
@@ -231,7 +231,7 @@ class FrmFieldsHelper{
 
         $values['custom_html'] = (isset($record->field_options['custom_html'])) ? $record->field_options['custom_html'] : self::get_default_html($record->type);
 
-        return apply_filters('frm_setup_edit_field_vars', $values, array('doing_ajax' => $doing_ajax));
+        return apply_filters('frm_setup_edit_field_vars', $values, array( 'doing_ajax' => $doing_ajax));
     }
 
     public static function get_default_field_opts( $type, $field, $limit = false ) {
@@ -286,8 +286,8 @@ class FrmFieldsHelper{
         $default_settings = $frm_settings->default_options();
 
         $defaults = array(
-            'unique_msg' => array('full' => $default_settings['unique_msg'], 'part' => $field->name.' '. __( 'must be unique', 'formidable' )),
-            'invalid'   => array('full' => __( 'This field is invalid', 'formidable' ), 'part' => $field->name.' '. __( 'is invalid', 'formidable' ))
+            'unique_msg' => array( 'full' => $default_settings['unique_msg'], 'part' => $field->name.' '. __( 'must be unique', 'formidable' )),
+            'invalid'   => array( 'full' => __( 'This field is invalid', 'formidable' ), 'part' => $field->name.' '. __( 'is invalid', 'formidable' ))
         );
 
         $msg = ( $field->field_options[ $error ] == $defaults[ $error ]['full'] || empty( $field->field_options[ $error ] ) ) ? $defaults[ $error ]['part'] : $field->field_options[ $error ];
@@ -302,9 +302,9 @@ class FrmFieldsHelper{
 
     public static function get_default_html($type='text'){
         if (apply_filters('frm_normal_field_type_html', true, $type)){
-            $input = (in_array($type, array('radio', 'checkbox', 'data'))) ? '<div class="frm_opt_container">[input]</div>' : '[input]';
+            $input = (in_array($type, array( 'radio', 'checkbox', 'data'))) ? '<div class="frm_opt_container">[input]</div>' : '[input]';
             $for = '';
-            if ( ! in_array( $type, array('radio', 'checkbox', 'data', 'scale') ) ) {
+            if ( ! in_array( $type, array( 'radio', 'checkbox', 'data', 'scale') ) ) {
                 $for = 'for="field_[key]"';
             }
 
@@ -372,7 +372,7 @@ DEFAULT_HTML;
             }
         }
 
-        foreach (array('description' => $field['description'], 'required_label' => $required, 'error' => $error) as $code => $value){
+        foreach ( array( 'description' => $field['description'], 'required_label' => $required, 'error' => $error) as $code => $value){
             self::remove_inline_conditions( ( $value && $value != '' ), $code, $value, $html );
         }
 
@@ -383,7 +383,7 @@ DEFAULT_HTML;
         //replace [label_position]
         $field['label'] = apply_filters('frm_html_label_position', $field['label'], $field, $form);
         $field['label'] = ( $field['label'] && $field['label'] != '' ) ? $field['label'] : 'top';
-        $html = str_replace('[label_position]', ( ( in_array( $field['type'], array('divider', 'end_divider', 'break') ) ) ? $field['label'] : ' frm_primary_label'), $html);
+		$html = str_replace( '[label_position]', ( ( in_array( $field['type'], array( 'divider', 'end_divider', 'break' ) ) ) ? $field['label'] : ' frm_primary_label' ), $html );
 
         //replace [field_name]
         $html = str_replace('[field_name]', $field['name'], $html);
@@ -426,7 +426,7 @@ DEFAULT_HTML;
 
         foreach ( $shortcodes[0] as $short_key => $tag ) {
             $atts = shortcode_parse_atts( $shortcodes[2][ $short_key ] );
-            $tag = self::get_shortcode_tag($shortcodes, $short_key, array('conditional' => false, 'conditional_check' => false));
+            $tag = self::get_shortcode_tag($shortcodes, $short_key, array( 'conditional' => false, 'conditional_check' => false));
 
             $replace_with = '';
 
@@ -494,7 +494,7 @@ DEFAULT_HTML;
     }
 
     public static function get_shortcode_tag($shortcodes, $short_key, $args) {
-        $args = wp_parse_args($args, array('conditional' => false, 'conditional_check' => false, 'foreach' => false));
+        $args = wp_parse_args($args, array( 'conditional' => false, 'conditional_check' => false, 'foreach' => false));
         if ( ( $args['conditional'] || $args['foreach'] ) && ! $args['conditional_check'] ) {
             $args['conditional_check'] = true;
         }
@@ -560,8 +560,7 @@ DEFAULT_HTML;
     }
 
     public static function dropdown_categories($args){
-
-        $defaults = array('field' => false, 'name' => false, 'show_option_all' => ' ');
+		$defaults = array( 'field' => false, 'name' => false, 'show_option_all' => ' ' );
         $args = wp_parse_args($args, $defaults);
 
         if ( ! $args['field'] ) {
@@ -729,7 +728,7 @@ DEFAULT_HTML;
             return FrmProDisplaysHelper::get_shortcodes($content, $form_id);
         }
 
-        $fields = FrmField::getAll( array('fi.form_id' => (int) $form_id, 'fi.type not' => self::no_save_fields() ) );
+        $fields = FrmField::getAll( array( 'fi.form_id' => (int) $form_id, 'fi.type not' => self::no_save_fields() ) );
 
         $tagregexp = self::allowed_shortcodes($fields);
 
@@ -765,7 +764,7 @@ DEFAULT_HTML;
             $atts = shortcode_parse_atts( $shortcodes[3][ $short_key ] );
 
             if ( ! empty( $shortcodes[3][ $short_key ] ) ) {
-                $tag = str_replace( array('[', ']'), '', $shortcodes[0][ $short_key ] );
+				$tag = str_replace( array( '[', ']' ), '', $shortcodes[0][ $short_key ] );
                 $tags = explode(' ', $tag);
                 if ( is_array($tags) ) {
                     $tag = $tags[0];
@@ -808,7 +807,7 @@ DEFAULT_HTML;
                 case 'updated_by':
                 case 'updated-by':
                     $this_tag = str_replace('-', '_', $tag);
-                    $replace_with = self::get_display_value($entry->{$this_tag}, (object) array('type' => 'user_id'), $atts);
+                    $replace_with = self::get_display_value($entry->{$this_tag}, (object) array( 'type' => 'user_id'), $atts);
                     unset($this_tag);
                 break;
 
@@ -953,8 +952,8 @@ DEFAULT_HTML;
             'image', 'file', 'date', 'phone', 'hidden', 'time',
             'user_id', 'tag', 'password'
         );
-        $multiple_input = array('radio', 'checkbox', 'select', 'scale');
-        $other_type = array('divider', 'html', 'break');
+		$multiple_input = array( 'radio', 'checkbox', 'select', 'scale' );
+		$other_type = array( 'divider', 'html', 'break' );
 
         $field_selection = array_merge( self::pro_field_selection(), self::field_selection() );
 

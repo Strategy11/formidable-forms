@@ -120,7 +120,7 @@ class FrmFieldsController {
         check_ajax_referer( 'frm_ajax', 'nonce' );
 
         $field = FrmField::getOne($_POST['field']);
-        foreach ( array('clear_on_focus', 'separate_value', 'default_blank') as $val ) {
+		foreach ( array( 'clear_on_focus', 'separate_value', 'default_blank' ) as $val ) {
             if ( isset($_POST[ $val ]) ) {
                 $new_val = $_POST[ $val ];
                 if ( $val == 'separate_value' ) {
@@ -237,7 +237,7 @@ class FrmFieldsController {
         $options[ $opt_key ] = $opt;
 
         //Update options in DB
-        FrmField::update($id, array('options' => maybe_serialize($options)));
+        FrmField::update($id, array( 'options' => maybe_serialize($options)));
 
         $field_data = $field;
         $field = array(
@@ -297,7 +297,7 @@ class FrmFieldsController {
             $options[ $this_opt_id ] = trim( $_POST['update_value'] );
         }
 
-        FrmField::update($field->id, array('options' => $options));
+        FrmField::update($field->id, array( 'options' => $options));
         echo (trim($_POST['update_value']) == '') ? __( '(Blank)', 'formidable' ) : stripslashes($_POST['update_value']);
         wp_die();
     }
@@ -398,7 +398,7 @@ class FrmFieldsController {
         $field_id = (int) $_POST['field_id'];
         $field = FrmField::getOne($field_id);
 
-        if ( ! in_array($field->type, array('radio', 'checkbox', 'select')) ) {
+		if ( ! in_array( $field->type, array( 'radio', 'checkbox', 'select' ) ) ) {
             return;
         }
 
@@ -540,7 +540,7 @@ class FrmFieldsController {
         }
 
         global $frm_vars;
-        if ( is_admin() && ! FrmAppHelper::is_preview_page() && ! in_array($field['type'], array('scale', 'radio', 'checkbox', 'data')) ) {
+		if ( is_admin() && ! FrmAppHelper::is_preview_page() && ! in_array( $field['type'], array( 'scale', 'radio', 'checkbox', 'data' ) ) ) {
             $class[] = 'dyn_default_value';
         }
 
@@ -554,7 +554,7 @@ class FrmFieldsController {
     }
 
     private static function add_html_size($field, array &$add_html) {
-        if ( ! isset($field['size']) || $field['size'] <= 0 || in_array($field['type'], array('select', 'data', 'time', 'hidden')) ) {
+		if ( ! isset( $field['size'] ) || $field['size'] <= 0 || in_array( $field['type'], array( 'select', 'data', 'time', 'hidden' ) ) ) {
             return;
         }
 
@@ -574,7 +574,7 @@ class FrmFieldsController {
     }
 
     private static function add_html_cols($field, array &$add_html) {
-        if ( ! in_array($field['type'], array('textarea', 'rte')) ) {
+		if ( ! in_array( $field['type'], array( 'textarea', 'rte' ) ) ) {
             return;
         }
 
@@ -600,7 +600,7 @@ class FrmFieldsController {
 
     private static function add_html_length($field, array &$add_html) {
         // check for max setting and if this field accepts maxlength
-        if ( ! isset($field['max']) || empty($field['max']) || in_array( $field['type'], array('textarea', 'rte', 'hidden') ) ) {
+		if ( ! isset( $field['max'] ) || empty( $field['max'] ) || in_array( $field['type'], array( 'textarea', 'rte', 'hidden' ) ) ) {
             return;
         }
 
@@ -625,12 +625,12 @@ class FrmFieldsController {
 
         $frm_settings = FrmAppHelper::get_settings();
 
-        if ( $frm_settings->use_html && ! in_array($field['type'], array('select', 'radio', 'checkbox', 'hidden')) ) {
+		if ( $frm_settings->use_html && ! in_array( $field['type'], array( 'select', 'radio', 'checkbox', 'hidden' ) ) ) {
             // use HMTL5 placeholder with js fallback
             $add_html['placeholder'] = 'placeholder="'. esc_attr($field['default_value']) .'"';
             wp_enqueue_script('jquery-placeholder');
         } else if ( ! $frm_settings->use_html ) {
-            $val = str_replace(array("\r\n", "\n"), '\r', addslashes(str_replace('&#039;', "'", esc_attr($field['default_value']))));
+            $val = str_replace( array("\r\n", "\n"), '\r', addslashes(str_replace('&#039;', "'", esc_attr($field['default_value']))));
             $add_html['data-frmval'] = 'data-frmval="'. esc_attr($val) .'"';
             $class[] = 'frm_toggle_default';
 

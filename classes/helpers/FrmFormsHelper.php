@@ -66,14 +66,14 @@ class FrmFormsHelper{
 
         $forms = FrmForm::getAll($where, 'name');
 
-        $args = array('id' => 0, 'form' => 0);
+        $args = array( 'id' => 0, 'form' => 0);
 		if ( isset( $_GET['id'] ) && ! isset( $_GET['form'] ) ) {
 			unset( $args['form'] );
 		} else if ( isset( $_GET['form']) && ! isset( $_GET['id'] ) ) {
 			unset( $args['id'] );
         }
 
-        if ( FrmAppHelper::is_admin_page('formidable-entries') && isset($_GET['frm_action']) && in_array($_GET['frm_action'], array('edit', 'show', 'destroy_all')) ) {
+        if ( FrmAppHelper::is_admin_page('formidable-entries') && isset($_GET['frm_action']) && in_array($_GET['frm_action'], array( 'edit', 'show', 'destroy_all')) ) {
             $args['frm_action'] = 'list';
             $args['form'] = 0;
 		} else if ( FrmAppHelper::is_admin_page('formidable' ) && isset( $_GET['frm_action'] ) && in_array( $_GET['frm_action'], array( 'new', 'duplicate' ) ) ) {
@@ -123,7 +123,7 @@ class FrmFormsHelper{
             $post_values = isset($_POST) ? $_POST : array();
         }
 
-        foreach (array('name' => '', 'description' => '') as $var => $default){
+        foreach ( array( 'name' => '', 'description' => '') as $var => $default){
 			if ( ! isset( $values[ $var ] ) ) {
 				$values[ $var ] = FrmAppHelper::get_param( $var, $default );
             }
@@ -131,7 +131,7 @@ class FrmFormsHelper{
 
         $values['description'] = FrmAppHelper::use_wpautop($values['description']);
 
-        foreach (array('form_id' => '', 'logged_in' => '', 'editable' => '', 'default_template' => 0, 'is_template' => 0, 'status' => 'draft', 'parent_form_id' => 0) as $var => $default){
+        foreach ( array( 'form_id' => '', 'logged_in' => '', 'editable' => '', 'default_template' => 0, 'is_template' => 0, 'status' => 'draft', 'parent_form_id' => 0) as $var => $default){
             if ( ! isset( $values[ $var ] ) ) {
 				$values[ $var ] = FrmAppHelper::get_param( $var, $default );
             }
@@ -324,7 +324,7 @@ BEFORE_HTML;
     }
 
     public static function replace_shortcodes( $html, $form, $title = false, $description = false, $values = array() ) {
-        foreach (array('form_name' => $title, 'form_description' => $description, 'entry_key' => true) as $code => $show){
+        foreach ( array( 'form_name' => $title, 'form_description' => $description, 'entry_key' => true) as $code => $show){
             if ( $code == 'form_name' ) {
                 $replace_with = $form->name;
             } else if ( $code == 'form_description' ) {
@@ -427,7 +427,7 @@ BEFORE_HTML;
     public static function form_loaded($form, $this_load, $global_load) {
         global $frm_vars;
         $small_form = new stdClass();
-        foreach ( array('id', 'form_key', 'name' ) as $var ) {
+        foreach ( array( 'id', 'form_key', 'name' ) as $var ) {
             $small_form->{$var} = $form->{$var};
             unset($var);
         }
@@ -516,7 +516,7 @@ BEFORE_HTML;
 
     public static function get_params() {
         $values = array();
-        foreach ( array('template' => 0, 'id' => '', 'paged' => 1, 'form' => '', 'search' => '', 'sort' => '', 'sdir' => '') as $var => $default ) {
+        foreach ( array( 'template' => 0, 'id' => '', 'paged' => 1, 'form' => '', 'search' => '', 'sort' => '', 'sdir' => '') as $var => $default ) {
             $values[$var] = FrmAppHelper::get_param($var, $default);
         }
 

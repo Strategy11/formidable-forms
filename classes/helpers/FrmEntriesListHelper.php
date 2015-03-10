@@ -32,7 +32,7 @@ class FrmEntriesListHelper extends FrmListHelper {
         $orderby = isset( $_REQUEST['orderby'] ) ? sanitize_text_field( $_REQUEST['orderby'] ) : $default_orderby;
         if ( strpos($orderby, 'meta') !== false ) {
             $order_field_type = FrmField::get_type( str_replace( 'meta_', '', $orderby ) );
-            $orderby .= in_array( $order_field_type, array('number', 'scale') ) ? ' +0 ' : '';
+            $orderby .= in_array( $order_field_type, array( 'number', 'scale') ) ? ' +0 ' : '';
         }
 
 		$order = isset( $_REQUEST['order'] ) ? $_REQUEST['order'] : $default_order;
@@ -78,14 +78,14 @@ class FrmEntriesListHelper extends FrmListHelper {
         }
 
         if ( $form ) {
-            $field_list = FrmField::getAll( array('fi.form_id' => $form->id, 'fi.type not' => FrmFieldsHelper::no_save_fields() ), 'field_order');
+            $field_list = FrmField::getAll( array( 'fi.form_id' => $form->id, 'fi.type not' => FrmFieldsHelper::no_save_fields() ), 'field_order');
         }
 
         $fid = isset($_REQUEST['fid']) ? esc_attr( stripslashes( $_REQUEST['fid'] ) ) : '';
     	$input_id = $input_id . '-search-input';
         $search_str = isset($_REQUEST['s']) ? esc_attr( stripslashes( $_REQUEST['s'] ) ) : '';
 
-        foreach ( array('orderby', 'order') as $get_var ) {
+        foreach ( array( 'orderby', 'order') as $get_var ) {
         	if ( ! empty( $_REQUEST[ $get_var ] ) ) {
         		echo '<input type="hidden" name="'. esc_attr( $get_var ) .'" value="' . esc_attr( $_REQUEST[ $get_var ] ) . '" />';
         	}
@@ -118,9 +118,9 @@ class FrmEntriesListHelper extends FrmListHelper {
     	    } ?>
         </ul>
     </div>
-    <?php submit_button( $text, 'button hide-if-js', false, false, array('id' => 'search-submit') );
+    <?php submit_button( $text, 'button hide-if-js', false, false, array( 'id' => 'search-submit') );
     } else {
-        submit_button( $text, 'button', false, false, array('id' => 'search-submit') );
+        submit_button( $text, 'button', false, false, array( 'id' => 'search-submit') );
         if ( ! empty($search_str) ) { ?>
     <a href="<?php echo admin_url('admin.php?page=formidable-entries&frm_action=list&form='.$form->id) ?>"><?php _e( 'Reset', 'formidable' ) ?></a>
     <?php }
@@ -152,7 +152,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 			if ( in_array( $column_name, $hidden ) ) {
 				$class .= ' frm_hidden';
-			} else if ( ! $action_col && ! in_array($column_name, array('cb', 'id', 'form_id', 'post_id')) ) {
+			} else if ( ! $action_col && ! in_array($column_name, array( 'cb', 'id', 'form_id', 'post_id')) ) {
 			    $action_col = $column_name;
             }
 

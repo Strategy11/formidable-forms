@@ -33,20 +33,20 @@
                         continue;
                     }
 
-                FrmAppHelper::insert_opt_html(array(
+                FrmAppHelper::insert_opt_html( array(
                     'id' => $f->id, 'key' => $f->field_key, 'name' => $f->name, 'type' => $f->type
                 ));
 
         	    if ($f->type == 'data'){ //get all fields from linked form
                     if ( isset($f->field_options['form_select']) && is_numeric($f->field_options['form_select']) ) {
-                        $linked_form = FrmDb::get_var( $wpdb->prefix .'frm_fields', array('id' => $f->field_options['form_select'] ), 'form_id' );
+                        $linked_form = FrmDb::get_var( $wpdb->prefix .'frm_fields', array( 'id' => $f->field_options['form_select'] ), 'form_id' );
                         if ( ! in_array( $linked_form, $linked_forms ) ) {
                             $linked_forms[] = $linked_form;
-                            $linked_fields = FrmField::getAll( array('fi.type not' => FrmFieldsHelper::no_save_fields(), 'fi.form_id' => $linked_form) );
+                            $linked_fields = FrmField::getAll( array( 'fi.type not' => FrmFieldsHelper::no_save_fields(), 'fi.form_id' => $linked_form) );
                             $ldfe = '';
 							if ( $linked_fields ) {
 								foreach ( $linked_fields as $linked_field ) {
-                                    FrmAppHelper::insert_opt_html(array('id' => $f->id ." show=". $linked_field->id, 'key' => $f->field_key ." show=". $linked_field->field_key, 'name' => $linked_field->name, 'type' => $linked_field->type));
+                                    FrmAppHelper::insert_opt_html( array( 'id' => $f->id ." show=". $linked_field->id, 'key' => $f->field_key ." show=". $linked_field->field_key, 'name' => $linked_field->name, 'type' => $linked_field->type));
 
                                     $ldfe = $linked_field->id;
                                     unset($linked_field);
@@ -102,7 +102,7 @@
         ?>
         <li class="frm_col_<?php echo esc_attr( $col ) ?>">
             <a href="javascript:void(0)" class="frmbutton button <?php
-            echo ( in_array( $skey, array('siteurl', 'sitename', 'entry_count') ) ) ? 'show_before_content show_after_content' : '';
+            echo ( in_array( $skey, array( 'siteurl', 'sitename', 'entry_count') ) ) ? 'show_before_content show_after_content' : '';
             echo ( strpos( $skey, 'default-' ) === 0 ) ? 'hide_frm_not_email_subject' : '';
             ?> frm_insert_code" data-code="<?php echo esc_attr( $skey ) ?>"><?php echo esc_html( $sname ) ?></a>
         </li>
