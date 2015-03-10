@@ -281,7 +281,7 @@ class FrmEntriesController {
         return $result;
     }
 
-    public static function display_list( $params = array(), $message = '', $errors = array() ) {
+	public static function display_list( $message = '', $errors = array() ) {
         global $wpdb, $frm_vars;
 
         $form = FrmEntriesHelper::get_current_form();
@@ -368,7 +368,7 @@ class FrmEntriesController {
             $message = __( 'Entry was Successfully Destroyed', 'formidable' );
         }
 
-        self::display_list( $params, $message );
+        self::display_list( $message );
     }
 
     public static function destroy_all() {
@@ -404,7 +404,7 @@ class FrmEntriesController {
             $errors = __( 'No entries were specified', 'formidable' );
         }
 
-        self::display_list( $params, $message, $errors );
+        self::display_list( $message, $errors );
     }
 
     public static function show_form( $id = '', $key = '', $title = false, $description = false ) {

@@ -104,15 +104,13 @@ class Tests_Frm_Ajax extends WP_Ajax_UnitTestCase {
 	}
 
     /**
-	 * Prevent unauthorized user from unistalling
-	 * Remove __ when this test is not risky (closes its own output buffers)
+	 * Prevent unauthorized user from uninstalling
 	 */
-	function __test_block_uninstall(){
+	function test_block_uninstall(){
         $this->set_as_user_role('editor');
 
         try {
-            $frmdb = new FrmDb();
-            $uninstalled = $frmdb->uninstall();
+			$uninstalled = FrmDb::uninstall();
             $this->assertNotEquals($uninstalled, true);
         } catch ( WPAjaxDieStopException $e ) {
             $this->assertTrue( $e->getMessage() ? true : false );
