@@ -1499,6 +1499,7 @@ ul.start_divider{
 }
 
 #frm_create_template_form{
+	font-weight:bold;
 	position:relative;
 	z-index:9999;
 	margin-bottom:75px;
