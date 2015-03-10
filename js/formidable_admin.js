@@ -989,7 +989,21 @@ function frmAdminBuildJS(){
 		$thisId.siblings('a').show();
 		return false;
 	}
-	
+
+	function createFromTemplate() {
+		var dropdown = document.getElementById('frm_create_template_dropdown');
+		jQuery.ajax({
+			type:'POST',url:ajaxurl,
+			data:{
+				action:'frm_create_from_template', this_form:this_form_id,
+				id:dropdown.options[dropdown.selectedIndex].value, nonce:frm_admin_js.nonce
+			},
+			success:function(url){
+				window.location = url;
+			}
+		});
+	}
+
 	function submitBuild(){
 		var $thisEle = jQuery(this);
 		var p = $thisEle.val();
@@ -1846,7 +1860,8 @@ function frmAdminBuildJS(){
 			if($form_name.val() === ''){
 				$form_name.focus();
 			}
-			
+
+			jQuery(document.getElementById('frm_create_template_button')).click(createFromTemplate);
 			jQuery('.frm_submit_ajax').click(submitBuild);
 			jQuery('.frm_submit_no_ajax').click(submitNoAjax);
 			

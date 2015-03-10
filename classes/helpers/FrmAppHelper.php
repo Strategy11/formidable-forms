@@ -1129,7 +1129,7 @@ class FrmAppHelper {
 		}
 
         $length = (int) $length;
-        $str = strip_tags($str);
+		$str = wp_strip_all_tags( $str );
         $original_len = (function_exists('mb_strlen')) ? mb_strlen($str) : strlen($str);
 
 		if ( $length == 0 ) {

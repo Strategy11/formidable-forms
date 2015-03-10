@@ -1495,10 +1495,14 @@ ul.start_divider{
 	line-height:43px;
 	font-size: 43px;
 	font-weight: 300;
-	margin:25px 0 100px;
+	margin-bottom: 25px;
 }
 
-
+#frm_create_template_form{
+	position:relative;
+	z-index:9999;
+	margin-bottom:75px;
+}
 
 .frm_inline_label{
 	padding-left:3px;

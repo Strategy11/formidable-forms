@@ -12,7 +12,7 @@ if ( $form && isset($form->options['no_save']) && $form->options['no_save'] ) { 
 } else {
 ?>
 <div class="frm_no_entries_header"><?php _e( 'You have not created any forms yet.', 'formidable' ); ?></div>
-<p class="frm_no_entries_text"><?php printf( __( 'To view entries, you must first %1$sbuild a form%2$s', 'formidable' ), '<a href="'. admin_url('admin.php?page=formidable&frm_action=new-selection') .'">', '</a>'); ?></p>
+<p class="frm_no_entries_text"><?php printf( __( 'To view entries, you must first %1$sbuild a form%2$s', 'formidable' ), '<a href="'. esc_url( admin_url( 'admin.php?page=formidable&frm_action=new' ) ) . '">', '</a>' ); ?></p>
 <?php
 } ?>
 </div>

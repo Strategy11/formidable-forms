@@ -65,11 +65,10 @@ class FrmFormsController {
             $action_control = FrmFormActionsController::get_form_actions( 'email' );
             $action_control->create($form->id);
 
+			$all_templates = FrmForm::getAll( array( 'is_template' => 1 ), 'name' );
+
             $values['id'] = $id;
             require(FrmAppHelper::plugin_path() .'/classes/views/frm-forms/new.php');
-        } else {
-            $all_templates = FrmForm::getAll( array( 'is_template' => 1), 'name');
-            require(FrmAppHelper::plugin_path() .'/classes/views/frm-forms/new-selection.php');
         }
     }
 
@@ -102,6 +101,8 @@ class FrmFormsController {
             $fields = FrmField::get_all_for_form($id);
 
             $values = FrmAppHelper::setup_edit_vars($form, 'forms', $fields, true);
+			$all_templates = FrmForm::getAll( array( 'is_template' => 1 ), 'name' );
+
             require(FrmAppHelper::plugin_path() .'/classes/views/frm-forms/new.php');
         } else {
             FrmForm::update( $id, $values, true );
@@ -207,6 +208,25 @@ class FrmFormsController {
 
         return __( 'Form template was Successfully Created', 'formidable' );
     }
+
+	/**
+	 * Redirect to the url for creating from a template
+	 * Also delete the current form
+	 * @since 2.0
+	 */
+	public static function _create_from_template() {
+		check_ajax_referer( 'frm_ajax', 'nonce' );
+
+		$current_form = (int) FrmAppHelper::get_param( 'this_form' );
+		$template_id = (int) FrmAppHelper::get_param( 'id' );
+
+		if ( $current_form ) {
+			FrmForm::destroy( $current_form );
+		}
+
+		echo admin_url( 'admin.php?page=formidable&action=duplicate&id=' . $template_id );
+		wp_die();
+	}
 
     public static function duplicate() {
         FrmAppHelper::permission_check('frm_edit_forms');
@@ -557,6 +577,8 @@ class FrmFormsController {
             $message = __( 'Template was Successfully Updated', 'formidable' );
         }
 
+		$all_templates = FrmForm::getAll( array( 'is_template' => 1 ), 'name' );
+
         if ( $form->default_template ) {
             wp_die(__( 'That template cannot be edited', 'formidable' ));
         } else if ( defined('DOING_AJAX') ) {
@@ -788,7 +810,6 @@ class FrmFormsController {
 
         switch ( $action ) {
             case 'new':
-            case 'new-selection':
                 return self::new_form($vars);
             case 'create':
             case 'edit':

@@ -273,6 +273,10 @@ BEFORE_HTML;
      * @param boolean $reset_fields
      */
     public static function auto_add_end_section_fields( $form, $fields, &$reset_fields ) {
+		if ( empty( $fields ) ) {
+			return;
+		}
+
         $end_section_values = apply_filters('frm_before_field_created', FrmFieldsHelper::setup_new_vars('end_divider', $form->id));
         $open = false;
         foreach ( $fields as $field ) {

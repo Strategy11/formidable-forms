@@ -32,6 +32,15 @@
 	    <div class="clear"></div>
 
     	<div class="frm_drag_inst"><?php _e( 'Add Fields Here', 'formidable' ) ?></div>
+		<p id="frm_create_template_form">
+			<?php _e( 'Or load fields from a template', 'formidable' ); ?>
+			<select id="frm_create_template_dropdown">
+				<?php foreach ( $all_templates as $temp ) { ?>
+				<option value="<?php echo esc_attr( $temp->id ) ?>"><?php echo FrmAppHelper::truncate( $temp->name, 40 ) ?></option>
+				<?php } ?>
+			</select>
+			<input type="button" id="frm_create_template_button" class="button-secondary" value="<?php esc_attr_e( 'Load Template', 'formidable' ) ?>" />
+		</p>
 
     	<div class="alignleft sketch3">
 	        <div class="alignright"><?php _e( '3. Save your form', 'formidable' ) ?></div>
