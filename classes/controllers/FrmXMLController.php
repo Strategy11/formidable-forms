@@ -1,13 +1,13 @@
 <?php
 
-class FrmXMLController{
+class FrmXMLController {
 
     public static function menu() {
         add_submenu_page('formidable', 'Formidable | '. __( 'Import/Export', 'formidable' ), __( 'Import/Export', 'formidable' ), 'frm_edit_forms', 'formidable-import', 'FrmXMLController::route');
     }
 
     public static function add_default_templates() {
-        if ( !function_exists( 'libxml_disable_entity_loader' ) ){
+        if ( !function_exists( 'libxml_disable_entity_loader' ) ) {
     		// XML import is not enabled on your server
     		return;
     	}
@@ -42,7 +42,7 @@ class FrmXMLController{
 		} else if ( $action == 'export_xml' ) {
             return self::export_xml();
         } else {
-            if ( apply_filters('frm_xml_route', true, $action) ){
+            if ( apply_filters('frm_xml_route', true, $action) ) {
                 return self::form();
             }
         }
@@ -217,7 +217,7 @@ class FrmXMLController{
             switch ( $tb_type ) {
                 case 'forms':
                     //add forms
-                    if ( $args['ids'] ){
+                    if ( $args['ids'] ) {
 						$where[] = array( 'or' => 1, $table . '.id' => $args['ids'], $table .'.parent_form_id' => $args['ids'] );
                 	} else {
 						$where[ $table . '.status !' ] = 'draft';

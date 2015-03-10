@@ -275,6 +275,7 @@ class FrmForm{
     }
 
     /**
+     * @param string $status
      * @return int|boolean
      */
     public static function set_status($id, $status) {

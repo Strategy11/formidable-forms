@@ -5,6 +5,9 @@ if ( ! defined('ABSPATH') ) {
 
 class FrmEntryMeta{
 
+    /**
+     * @param string $meta_key
+     */
     public static function add_entry_meta($entry_id, $field_id, $meta_key = null, $meta_value) {
         global $wpdb;
 
@@ -29,6 +32,9 @@ class FrmEntryMeta{
         return $id;
     }
 
+    /**
+     * @param string $meta_key
+     */
     public static function update_entry_meta($entry_id, $field_id, $meta_key = null, $meta_value){
         if ( ! $field_id ) {
             return false;
@@ -164,6 +170,10 @@ class FrmEntryMeta{
         return stripslashes_deep($values);
     }
 
+    /**
+     * @param string $order
+     * @param string $limit
+     */
     private static function meta_field_query($field_id, $order, $limit, $args, array &$query) {
         global $wpdb;
         $query[] = 'SELECT';
@@ -230,6 +240,12 @@ class FrmEntryMeta{
         return $results;
     }
 
+    /**
+     * @param string $where
+     * @param string $order_by
+     * @param string $limit
+     * @param boolean $unique
+     */
     private static function get_ids_query($where, $order_by, $limit, $unique, $args, array &$query) {
         global $wpdb;
         $query[] = 'SELECT';

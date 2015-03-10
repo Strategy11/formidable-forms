@@ -19,9 +19,9 @@ class FrmField{
 
         $new_values['options'] = $values['options'];
 
-        $new_values['field_order'] = isset($values['field_order']) ? (int) $values['field_order'] : NULL;
+        $new_values['field_order'] = isset($values['field_order']) ? (int) $values['field_order'] : null;
         $new_values['required'] = isset($values['required']) ? (int) $values['required'] : 0;
-        $new_values['form_id'] = isset($values['form_id']) ? (int) $values['form_id'] : NULL;
+        $new_values['form_id'] = isset($values['form_id']) ? (int) $values['form_id'] : null;
         $new_values['field_options'] = $values['field_options'];
         $new_values['created_at'] = current_time('mysql', 1);
 

@@ -1,6 +1,6 @@
 <?php
 
-class FrmStylesController{
+class FrmStylesController {
     public static $post_type = 'frm_styles';
     public static $screen = 'formidable_page_formidable-styles';
 
@@ -31,7 +31,7 @@ class FrmStylesController{
         ) );
     }
 
-    public static function menu(){
+    public static function menu() {
         add_submenu_page('formidable', 'Formidable | '. __( 'Styles', 'formidable' ), __( 'Styles', 'formidable' ), 'frm_change_settings', 'formidable-styles', 'FrmStylesController::route');
     }
 
@@ -258,7 +258,7 @@ class FrmStylesController{
         include(FrmAppHelper::plugin_path() .'/classes/views/styles/_'. $sec['args'] .'.php');
     }
 
-    public static function load_css(){
+    public static function load_css() {
         header('Content-type: text/css');
 
         $frm_style = new FrmStyle();

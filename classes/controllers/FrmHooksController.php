@@ -1,6 +1,6 @@
 <?php
 
-class FrmHooksController{
+class FrmHooksController {
     /**
      * Trigger plugin-wide hook loading
      */
@@ -40,7 +40,7 @@ class FrmHooksController{
 
     }
 
-    public function load_hooks(){
+    public function load_hooks() {
         if ( ! is_admin() ) {
             add_filter('the_content', 'FrmAppController::page_route', 10);
         }

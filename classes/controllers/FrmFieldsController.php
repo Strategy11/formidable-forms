@@ -48,7 +48,7 @@ class FrmFieldsController {
         wp_die();
     }
 
-    public static function create(){
+    public static function create() {
         check_ajax_referer( 'frm_ajax', 'nonce' );
 
         $field_type = sanitize_text_field( $_POST['field'] );
@@ -62,6 +62,9 @@ class FrmFieldsController {
         wp_die();
     }
 
+    /**
+     * @param integer $form_id
+     */
     public static function include_new_field($field_type, $form_id) {
         $values = array();
         if ( FrmAppHelper::pro_is_installed() ) {
@@ -116,7 +119,7 @@ class FrmFieldsController {
         wp_die();
     }
 
-    public static function update_ajax_option(){
+    public static function update_ajax_option() {
         check_ajax_referer( 'frm_ajax', 'nonce' );
 
         $field = FrmField::getOne($_POST['field']);
@@ -140,7 +143,7 @@ class FrmFieldsController {
         wp_die();
     }
 
-    public static function duplicate(){
+    public static function duplicate() {
         check_ajax_referer( 'frm_ajax', 'nonce' );
 
         global $wpdb;
@@ -188,7 +191,7 @@ class FrmFieldsController {
         return $field;
     }
 
-    public static function destroy(){
+    public static function destroy() {
         check_ajax_referer( 'frm_ajax', 'nonce' );
 
         FrmField::destroy($_POST['field_id']);
@@ -198,7 +201,7 @@ class FrmFieldsController {
     /* Field Options */
 
     //Add Single Option or Other Option
-    public static function add_option(){
+    public static function add_option() {
         check_ajax_referer( 'frm_ajax', 'nonce' );
 
         $id = (int) $_POST['field_id'];
@@ -302,7 +305,7 @@ class FrmFieldsController {
         wp_die();
     }
 
-    public static function delete_option(){
+    public static function delete_option() {
         check_ajax_referer( 'frm_ajax', 'nonce' );
 
         $field = FrmField::getOne( (int) $_POST['field_id'] );
@@ -388,7 +391,7 @@ class FrmFieldsController {
         wp_die();
     }
 
-    public static function import_options(){
+    public static function import_options() {
         check_ajax_referer( 'frm_ajax', 'nonce' );
 
         if ( ! is_admin() || ! current_user_can('frm_edit_forms') ) {
@@ -449,7 +452,7 @@ class FrmFieldsController {
         wp_die();
     }
 
-    public static function update_order(){
+    public static function update_order() {
         check_ajax_referer( 'frm_ajax', 'nonce' );
         if ( isset($_POST) && isset($_POST['frm_field_id']) ) {
 			foreach ( $_POST['frm_field_id'] as $position => $item ) {
@@ -459,7 +462,7 @@ class FrmFieldsController {
         wp_die();
     }
 
-    public static function change_type($type){
+    public static function change_type($type) {
         $type_switch = array(
             'scale'     => 'radio',
             '10radio'   => 'radio',
@@ -479,8 +482,8 @@ class FrmFieldsController {
         return $type;
     }
 
-    public static function display_field_options($display){
-        switch($display['type']){
+    public static function display_field_options($display) {
+        switch($display['type']) {
             case 'captcha':
                 $display['required'] = false;
                 $display['invalid'] = true;
@@ -673,7 +676,7 @@ class FrmFieldsController {
         return $opt;
     }
 
-    public static function check_label($opt){
+    public static function check_label($opt) {
         if ( is_array($opt) ) {
             $opt = (isset($opt['label']) ? $opt['label'] : reset($opt));
         }

@@ -1,12 +1,12 @@
 <?php
 
-class FrmSettingsController{
+class FrmSettingsController {
 
-    public static function menu(){
+    public static function menu() {
         add_submenu_page('formidable', 'Formidable | '. __( 'Global Settings', 'formidable' ), __( 'Global Settings', 'formidable' ), 'frm_change_settings', 'formidable-settings', 'FrmSettingsController::route');
     }
 
-    public static function license_box(){
+    public static function license_box() {
         $a = isset($_GET['t']) ? $_GET['t'] : 'general_settings';
         include(FrmAppHelper::plugin_path() .'/classes/views/frm-settings/license_box.php');
     }
@@ -46,7 +46,7 @@ class FrmSettingsController{
                 $frm_settings->store();
                 $message = __( 'Settings Saved', 'formidable' );
             }
-        }else{
+        } else {
             $message = __( 'Settings Saved', 'formidable' );
         }
 
