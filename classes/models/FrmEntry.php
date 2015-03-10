@@ -464,9 +464,12 @@ class FrmEntry{
         }
 
         $where = apply_filters('frm_posted_field_ids', array( 'fi.form_id' => $values['form_id'] ) );
-        if ( $exclude ) {
-            $where['fi.type not'] = $exclude;
-        }
+		// Don't get subfields
+		$where['fr.parent_form_id'] = array( null, 0 );
+		// Don't get excluded fields (like file upload fields in the ajax validation)
+		if ( !empty( $exclude ) ) {
+			$where['fi.type not'] = $exclude;
+		}
 
         $posted_fields = FrmField::getAll($where, 'field_order');
 
@@ -515,7 +518,7 @@ class FrmEntry{
             'id'    => $posted_field->id,
             'parent_field_id' => '', // the id of the repeat or embed form
             'key_pointer' => '', // the pointer in the posted array
-            'exclude'   => false, // exclude these field types from validation
+            'exclude'   => array(), // exclude these field types from validation
         );
         $args = wp_parse_args( $args, $defaults );
 
