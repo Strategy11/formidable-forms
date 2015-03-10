@@ -45,7 +45,7 @@ a.frm_icon_font:hover{
 }
 
 .frm_logo_icon:before {
-	content: "\e601";
+	content: "\e638";
 }
 .frm_required_icon:before {
 	content: "\e612";
