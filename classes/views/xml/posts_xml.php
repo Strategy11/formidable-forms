@@ -68,12 +68,15 @@ if ( empty( $taxonomies ) )
     return;
 
 global $frm_inc_tax;
-if(empty($frm_inc_tax))
+if ( empty( $frm_inc_tax ) ) {
    $frm_inc_tax = array();
+}
 
 foreach ( (array) $terms as $term ) {
-    if(in_array($term->term_id, $frm_inc_tax))
+	if ( in_array( $term->term_id, $frm_inc_tax ) ) {
         return;
+	}
+
     $frm_inc_tax[] = $term->term_id;
     $label = ($term->taxonomy == 'category' || $term->taxonomy == 'tag') ? $term->taxonomy : 'term'; ?>
 	<term><term_id><?php echo $term->term_id ?></term_id><term_taxonomy><?php echo $term->taxonomy; ?></term_taxonomy><?php

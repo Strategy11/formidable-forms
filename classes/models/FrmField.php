@@ -1,8 +1,7 @@
 <?php
-if(!defined('ABSPATH')) die('You are not allowed to call this page directly.');;
-
-if(class_exists('FrmField'))
-    return;
+if ( ! defined('ABSPATH') ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 
 class FrmField{
     static $use_cache = true;
@@ -26,34 +25,36 @@ class FrmField{
         $new_values['field_options'] = $values['field_options'];
         $new_values['created_at'] = current_time('mysql', 1);
 
-        if(isset($values['id'])){
+		if ( isset( $values['id'] ) ) {
             $frm_duplicate_ids[$values['field_key']] = $new_values['field_key'];
             $new_values = apply_filters('frm_duplicated_field', $new_values);
         }
 
-        foreach($new_values as $k => $v){
-            if(is_array($v))
-                $new_values[$k] = serialize($v);
-            unset($k);
-            unset($v);
+		foreach ( $new_values as $k => $v ) {
+            if ( is_array( $v ) ) {
+				$new_values[ $k ] = serialize( $v );
+			}
+            unset( $k, $v );
         }
 
         //if(isset($values['id']) and is_numeric($values['id']))
         //    $new_values['id'] = $values['id'];
 
         $query_results = $wpdb->insert( $wpdb->prefix .'frm_fields', $new_values );
-        if($return){
-            if($query_results){
-                self::delete_form_transient($new_values['form_id']);
-                $new_id = $wpdb->insert_id;
-                if ( isset($values['id']) ) {
-                    $frm_duplicate_ids[$values['id']] = $new_id;
-                }
-                return $new_id;
-            }else{
-                return false;
-            }
-        }
+		if ( ! $return ) {
+			return;
+		}
+
+		if ( $query_results ) {
+			self::delete_form_transient( $new_values['form_id'] );
+			$new_id = $wpdb->insert_id;
+			if ( isset( $values['id'] ) ) {
+				$frm_duplicate_ids[ $values['id'] ] = $new_id;
+			}
+			return $new_id;
+		} else {
+			return false;
+		}
     }
 
     public static function duplicate( $old_form_id, $form_id, $copy_keys = false, $blog_id = false ) {
@@ -96,9 +97,9 @@ class FrmField{
         $query_results = $wpdb->update( $wpdb->prefix .'frm_fields', $values, array( 'id' => $id ) );
 
         $form_id = 0;
-        if(isset($values['form_id'])){
+		if ( isset( $values['form_id'] ) ) {
             $form_id = $values['form_id'];
-        }else{
+		} else {
             $field = self::getOne($id);
             if ( $field ) {
                 $form_id = $field->form_id;
@@ -107,7 +108,7 @@ class FrmField{
         }
         unset($values);
 
-        if($query_results){
+		if ( $query_results ) {
             wp_cache_delete( $id, 'frm_field' );
             if ( $form_id ) {
                 self::delete_form_transient($form_id);

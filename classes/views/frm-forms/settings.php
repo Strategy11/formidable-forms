@@ -28,7 +28,7 @@
         	<li <?php echo ($a == 'advanced_settings') ? 'class="tabs active"' : '' ?>><a href="#advanced_settings"><?php _e( 'General', 'formidable' ) ?></a></li>
         	<li <?php echo ($a == 'email_settings') ? 'class="tabs active"' : '' ?>><a href="#email_settings"><?php _e( 'Form Actions', 'formidable' ); ?></a></li>
             <li <?php echo ($a == 'html_settings') ? 'class="tabs active"' : '' ?>><a href="#html_settings"><?php _e( 'Customize HTML', 'formidable' ) ?></a></li>
-            <?php foreach($sections as $sec_name => $section){ ?>
+            <?php foreach ( $sections as $sec_name => $section ) { ?>
                 <li <?php echo ($a == $sec_name .'_settings') ? 'class="tabs active"' : '' ?>><a href="#<?php echo esc_attr( $sec_name ) ?>_settings"><?php echo ucfirst($sec_name) ?></a></li>
             <?php } ?>
         </ul>
@@ -58,7 +58,10 @@
                     </td>
                     <td>
                         <span class="success_action_redirect_box success_action_box<?php echo ($values['success_action'] == 'redirect') ? '' : ' frm_hidden'; ?>">
-                            <input type="text" name="options[success_url]" id="success_url" value="<?php if(isset($values['success_url'])) echo esc_attr($values['success_url']); ?>" placeholder="http://example.com" />
+                            <input type="text" name="options[success_url]" id="success_url" value="<?php
+							if ( isset( $values['success_url'] ) ) {
+								echo esc_attr( $values['success_url'] );
+							} ?>" placeholder="http://example.com" />
                         </span>
 
                         <?php if ( FrmAppHelper::pro_is_installed() ){ ?>
@@ -184,9 +187,9 @@
 
                 <div id="add_html_fields">
                     <?php
-                    if (isset($values['fields'])){
-                        foreach($values['fields'] as $field){
-                            if (apply_filters('frm_show_custom_html', true, $field['type'])){ ?>
+					if ( isset( $values['fields'] ) ) {
+						foreach ( $values['fields'] as $field ) {
+							if ( apply_filters( 'frm_show_custom_html', true, $field['type'] ) ) { ?>
                                 <p><label><?php echo esc_html( $field['name'] ) ?></label>
                                 <textarea name="field_options[custom_html_<?php echo esc_attr( $field['id'] ) ?>]" rows="7" id="custom_html_<?php echo esc_attr( $field['id'] ) ?>" class="field_custom_html frm_long_input"><?php echo FrmAppHelper::esc_textarea($field['custom_html']) ?></textarea></p>
                             <?php }
@@ -203,11 +206,11 @@
             </div>
         </div>
 
-        <?php foreach($sections as $sec_name => $section){ ?>
+		<?php foreach ( $sections as $sec_name => $section ) { ?>
             <div id="<?php echo esc_attr( $sec_name ) ?>_settings" class="tabs-panel <?php echo ($a == $sec_name .'_settings') ? ' frm_block' : ' frm_hidden'; ?>"><?php
-            if(isset($section['class'])){
+			if ( isset( $section['class'] ) ) {
                 call_user_func(array($section['class'], $section['function']), $values);
-            }else{
+			} else {
                 call_user_func((isset($section['function']) ? $section['function'] : $section), $values);
             } ?>
             </div>

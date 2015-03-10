@@ -1,5 +1,7 @@
 <?php
-if(!defined('ABSPATH')) die('You are not allowed to call this page directly.');
+if ( ! defined('ABSPATH') ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 
 class FrmEntry{
 
@@ -248,8 +250,9 @@ class FrmEntry{
         global $wpdb;
         $form_id = isset($value) ? $form_id : NULL;
         $result = $wpdb->update( $wpdb->prefix .'frm_items', array('form_id' => $form_id), array( 'id' => $id ) );
-        if($result)
+		if ( $result ) {
             wp_cache_delete( $id, 'frm_entry');
+		}
         return $result;
     }
 

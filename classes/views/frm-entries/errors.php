@@ -29,9 +29,9 @@ if ( ! FrmAppHelper::is_admin() ) {
 }
 
 $frm_settings = FrmAppHelper::get_settings();
-if(empty($frm_settings->invalid_msg)){
+if ( empty( $frm_settings->invalid_msg ) ) {
     $show_img = false;
-    foreach( $errors as $error ){
+	foreach ( $errors as $error ) {
         if ( $show_img && ! empty($img) ) {
             ?><img src="<?php echo esc_attr( $img ) ?>" alt="" /><?php
         }else{
@@ -43,7 +43,7 @@ if(empty($frm_settings->invalid_msg)){
     echo $frm_settings->invalid_msg;
 
     $show_img = true;
-    foreach( $errors as $err_key => $error ){
+	foreach ( $errors as $err_key => $error ) {
         if ( ! is_numeric($err_key) && ( $err_key == 'cptch_number' || strpos($err_key, 'field') === 0 ) ) {
             continue;
         }

@@ -15,7 +15,7 @@
             <input type="hidden" name="frm_action" value="duplicate" />
             <input type="hidden" name="page" value="formidable" />
             <select name="id">
-                <?php foreach ($all_templates as $temp){ ?>
+                <?php foreach ( $all_templates as $temp ) { ?>
                 <option value="<?php echo esc_attr( $temp->id ) ?>"><?php echo FrmAppHelper::truncate($temp->name, 40) ?></option>
                 <?php } ?>
             </select><br/>

@@ -1,5 +1,7 @@
 <?php
-if(!defined('ABSPATH')) die('You are not allowed to call this page directly.');
+if ( ! defined('ABSPATH') ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 
 class FrmEntriesHelper{
 
@@ -63,7 +65,7 @@ class FrmEntriesHelper{
             $opt_defaults = FrmFieldsHelper::get_default_field_opts($field_array['type'], $field, true);
             $opt_defaults['required_indicator'] = '';
 
-            foreach ($opt_defaults as $opt => $default_opt){
+			foreach ( $opt_defaults as $opt => $default_opt ) {
                 $field_array[ $opt ] = ( isset( $field->field_options[ $opt ] ) && $field->field_options[ $opt ] != '' ) ? $field->field_options[ $opt ] : $default_opt;
                 unset($opt, $default_opt);
             }

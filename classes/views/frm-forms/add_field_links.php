@@ -116,7 +116,7 @@
     	        );
     	        $classes = apply_filters('frm_layout_classes', $classes);
     	        $col = 'one';
-    	        foreach($classes as $c => $d){
+				foreach ( $classes as $c => $d ) {
     	            $title = ( ! empty($d) && is_array($d) && isset($d['title']) ) ? $d['title'] : '';
     	        ?>
     	        <li class="frm_col_<?php echo esc_attr( $col ) ?>">

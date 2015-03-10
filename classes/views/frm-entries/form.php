@@ -17,15 +17,16 @@ echo FrmFormsHelper::replace_shortcodes($values['before_html'], $form, $title, $
 <input type="hidden" name="plugin" value="<?php echo esc_attr($plugin); ?>" />
 <?php }
 
-if($values['fields']){
-foreach($values['fields'] as $field){
-    if (apply_filters('frm_show_normal_field_type', true, $field['type']))
-        echo FrmFieldsHelper::replace_shortcodes($field['custom_html'], $field, $errors, $form);
-    else
-        do_action('frm_show_other_field_type', $field, $form, array('action' => $form_action));
+if ( $values['fields'] ) {
+	foreach ( $values['fields'] as $field ) {
+		if ( apply_filters( 'frm_show_normal_field_type', true, $field['type'] ) ) {
+			echo FrmFieldsHelper::replace_shortcodes( $field['custom_html'], $field, $errors, $form );
+		} else {
+			do_action( 'frm_show_other_field_type', $field, $form, array( 'action' => $form_action ) );
+		}
 
-    do_action('frm_get_field_scripts', $field, $form);
-}
+    	do_action('frm_get_field_scripts', $field, $form);
+	}
 }
 
 $frm_settings = FrmAppHelper::get_settings();

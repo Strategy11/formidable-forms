@@ -1,5 +1,7 @@
 <?php
-if(!defined('ABSPATH')) die('You are not allowed to call this page directly.');
+if ( ! defined('ABSPATH') ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 
 class FrmFieldsHelper{
 
@@ -193,11 +195,11 @@ class FrmFieldsHelper{
             'required' => $record->required
         );
 
-        if($doing_ajax){
+		if ( $doing_ajax ) {
             $values = $values + $defaults + $default_opts;
             $values['form_name'] = '';
-        }else{
-            foreach ($defaults as $var => $default){
+		} else {
+			foreach ( $defaults as $var => $default ) {
                 $values[ $var ] = htmlspecialchars( FrmAppHelper::get_param( $var, $default ) );
                 unset($var, $default);
             }
@@ -217,12 +219,12 @@ class FrmFieldsHelper{
 
         $defaults = self::get_default_field_opts($values['type'], $record, true);
 
-        if($values['type'] == 'captcha'){
+		if ( $values['type'] == 'captcha' ) {
             $frm_settings = FrmAppHelper::get_settings();
             $defaults['invalid'] = $frm_settings->re_msg;
         }
 
-        foreach($defaults as $opt => $default){
+		foreach ( $defaults as $opt => $default ) {
             $values[ $opt ] = isset( $record->field_options[ $opt ] ) ? $record->field_options[ $opt ] : $default;
             unset($opt, $default);
         }
@@ -240,8 +242,9 @@ class FrmFieldsHelper{
             'custom_html' => ''
         );
 
-        if($limit)
+		if ( $limit ) {
             return $field_options;
+		}
 
         global $wpdb;
 
@@ -449,7 +452,7 @@ DEFAULT_HTML;
             $html = str_replace( $shortcodes[0][ $short_key ], $replace_with, $html );
         }
 
-        if($form){
+		if ( $form ) {
             $form = (array) $form;
 
             //replace [form_key]
@@ -618,7 +621,7 @@ DEFAULT_HTML;
         if ( is_array($args['field']['value']) ) {
             $skip = true;
             foreach ( $args['field']['value'] as $v ) {
-                if($skip){
+				if ( $skip ) {
                     $skip = false;
                     continue;
                 }
@@ -1003,8 +1006,8 @@ DEFAULT_HTML;
             $replace_with[] = '['. $new .' ';
             unset($old, $new);
         }
-        if(is_array($val)){
-            foreach($val as $k => $v){
+		if ( is_array( $val ) ) {
+			foreach ( $val as $k => $v ) {
                 $val[ $k ] = str_replace( $replace, $replace_with, $v );
                 unset($k, $v);
             }

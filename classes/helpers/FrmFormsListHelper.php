@@ -258,7 +258,7 @@ class FrmFormsListHelper extends FrmListHelper {
 				    }
 			        break;
 			    case 'entries':
-			        if( isset($item->options['no_save']) && $item->options['no_save'] ) {
+					if ( isset( $item->options['no_save'] ) && $item->options['no_save'] ) {
 			            $val = '<i class="frm_icon_font frm_forbid_icon frm_bstooltip" title="'. esc_attr('Entries are not being saved', 'formidable' ) .'"></i>';
 			        } else {
 			            $text = FrmEntry::getRecordCount($item->id);

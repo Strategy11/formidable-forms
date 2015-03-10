@@ -3,7 +3,7 @@
 		<li class="tabs" ><a href="#frm-insert-fields-box" id="frm_insert_fields_tab"><?php _e( 'Insert Fields', 'formidable' ); ?></a></li>
 		<li class="hide-if-no-js"><a href="#frm-conditionals"><?php _e( 'Conditionals', 'formidable' ); ?></a></li>
 		<li class="hide-if-no-js"><a href="#frm-adv-info-tab"><?php _e( 'Advanced', 'formidable' ); ?></a></li>
-		<?php if($settings_tab){ ?>
+		<?php if ( $settings_tab ) { ?>
 		<li id="frm_html_tab" class="hide-if-no-js frm_hidden"><a href="#frm-html-tags" id="frm_html_tags_tab" ><?php _e( 'HTML Tags', 'formidable' ); ?></a></li>
 		<?php } ?>
 	</ul>
@@ -44,8 +44,8 @@
                             $linked_forms[] = $linked_form;
                             $linked_fields = FrmField::getAll( array('fi.type not' => FrmFieldsHelper::no_save_fields(), 'fi.form_id' => $linked_form) );
                             $ldfe = '';
-                            if ($linked_fields){
-                                foreach ($linked_fields as $linked_field){
+							if ( $linked_fields ) {
+								foreach ( $linked_fields as $linked_field ) {
                                     FrmAppHelper::insert_opt_html(array('id' => $f->id ." show=". $linked_field->id, 'key' => $f->field_key ." show=". $linked_field->field_key, 'name' => $linked_field->name, 'type' => $linked_field->type));
 
                                     $ldfe = $linked_field->id;
@@ -93,8 +93,8 @@
         }
 
 
-        foreach ($entry_shortcodes as $skey => $sname) {
-             if (empty($skey)) {
+		foreach ( $entry_shortcodes as $skey => $sname ) {
+			if ( empty( $skey ) ) {
                  $col = 'one';
                  echo '<li class="clear frm_block"></li>';
                  continue;
@@ -149,7 +149,7 @@
         <ul class="frm_code_list">
         <?php
         $col = 'one';
-        foreach ($cond_shortcodes as $skey => $sname){
+		foreach ( $cond_shortcodes as $skey => $sname ) {
 	    ?>
 	    <li class="frm_col_<?php echo esc_attr( $col ) ?>">
 	        <a href="javascript:void(0)" class="frmbutton button frm_insert_code" data-code="if 125 <?php echo esc_attr($skey) ?>][/if 125"><?php echo esc_html( $sname ) ?></a>
@@ -169,7 +169,7 @@
 		<ul class="frm_code_list">
         <?php
         $col = 'one';
-        foreach ($adv_shortcodes as $skey => $sname){
+		foreach ( $adv_shortcodes as $skey => $sname ) {
 	    ?>
 	    <li class="frm_col_<?php echo esc_attr( $col ) ?>">
 	        <a href="javascript:void(0)" class="frmbutton button frm_insert_code <?php echo is_array( $sname ) ? 'frm_help' : ''; ?>" data-code="125 <?php echo esc_attr( $skey ) ?>" <?php echo is_array( $sname ) ? 'title="'. esc_attr( $sname['title'] ) .'"' : ''; ?>><?php echo is_array( $sname ) ? $sname['label'] : $sname; ?></a>
@@ -200,7 +200,7 @@
             $col = 'one'; ?>
         <p class="howto"><?php _e( 'Insert user information', 'formidable' ) ?></p>
         <ul class="frm_code_list">
-        <?php foreach($user_fields as $uk => $uf){ ?>
+        <?php foreach ( $user_fields as $uk => $uf ) { ?>
             <li class="frm_col_<?php echo esc_attr( $col ) ?>">
                 <a href="javascript:void(0)" class="frmbutton button frm_insert_code" data-code="<?php echo esc_attr($uid->id .' show="'. $uk .'"') ?>"><?php echo esc_html( $uf ) ?></a>
     	    </li>

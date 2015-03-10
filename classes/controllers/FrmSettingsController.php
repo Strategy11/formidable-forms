@@ -50,7 +50,7 @@ class FrmSettingsController{
             $message = __( 'Settings Saved', 'formidable' );
         }
 
-        if($stop_load == 'stop_load'){
+		if ( $stop_load == 'stop_load' ) {
             $frm_vars['settings_routed'] = true;
             return;
         }

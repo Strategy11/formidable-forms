@@ -23,7 +23,7 @@ if ( $current_page == 'formidable' && isset($_GET['frm_action']) && in_array($_G
 <?php FrmFormsHelper::form_switcher(); ?>
 </ul>
 
-<?php if($form && $title == 'show'){ ?>
+<?php if ( $form && $title == 'show' ) { ?>
     <input id="title" type="text" value="<?php echo esc_attr($form->name == '' ? __( '(no title)') : $form->name) ?>" readonly="readonly" disabled="disabled" />
 <?php } ?>
 </div>

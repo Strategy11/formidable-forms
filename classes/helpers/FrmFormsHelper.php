@@ -1,5 +1,7 @@
 <?php
-if(!defined('ABSPATH')) die('You are not allowed to call this page directly.');
+if ( ! defined('ABSPATH') ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 
 class FrmFormsHelper{
     /**
@@ -51,7 +53,7 @@ class FrmFormsHelper{
             <?php if ( $args['blank'] ) { ?>
             <option value=""><?php echo ( $args['blank'] == 1 ) ? ' ' : '- '. esc_attr( $args['blank'] ) .' -'; ?></option>
             <?php } ?>
-            <?php foreach($forms as $form){ ?>
+            <?php foreach ( $forms as $form ) { ?>
                 <option value="<?php echo esc_attr( $form->id ); ?>" <?php selected($field_value, $form->id); ?>><?php echo '' == $form->name ? __( '(no title)', 'formidable' ) : esc_attr( FrmAppHelper::truncate($form->name, 33) ); ?></option>
             <?php } ?>
         </select>
@@ -65,18 +67,18 @@ class FrmFormsHelper{
         $forms = FrmForm::getAll($where, 'name');
 
         $args = array('id' => 0, 'form' => 0);
-        if ( isset($_GET['id']) && ! isset($_GET['form']) ) {
-            unset($args['form']);
-        } else if(isset($_GET['form']) && ! isset($_GET['id']) ) {
-            unset($args['id']);
+		if ( isset( $_GET['id'] ) && ! isset( $_GET['form'] ) ) {
+			unset( $args['form'] );
+		} else if ( isset( $_GET['form']) && ! isset( $_GET['id'] ) ) {
+			unset( $args['id'] );
         }
 
         if ( FrmAppHelper::is_admin_page('formidable-entries') && isset($_GET['frm_action']) && in_array($_GET['frm_action'], array('edit', 'show', 'destroy_all')) ) {
             $args['frm_action'] = 'list';
             $args['form'] = 0;
-        }else if ( FrmAppHelper::is_admin_page('formidable' ) && isset($_GET['frm_action']) && in_array($_GET['frm_action'], array('new', 'duplicate')) ) {
+		} else if ( FrmAppHelper::is_admin_page('formidable' ) && isset( $_GET['frm_action'] ) && in_array( $_GET['frm_action'], array( 'new', 'duplicate' ) ) ) {
             $args['frm_action'] = 'edit';
-        }else if(isset($_GET['post'])){
+		} else if ( isset( $_GET['post'] ) ) {
             $args['form'] = 0;
             $base = admin_url('edit.php?post_type=frm_display');
         }
@@ -85,11 +87,14 @@ class FrmFormsHelper{
 		<li class="dropdown last" id="frm_bs_dropdown">
 			<a href="#" id="frm-navbarDrop" class="frm-dropdown-toggle" data-toggle="dropdown"><?php _e( 'Switch Form', 'formidable' ) ?> <b class="caret"></b></a>
 		    <ul class="frm-dropdown-menu frm-on-top" role="menu" aria-labelledby="frm-navbarDrop">
-			<?php foreach($forms as $form){
-			    if(isset($args['id']))
+			<?php
+			foreach ( $forms as $form ) {
+				if ( isset( $args['id'] ) ) {
 			        $args['id'] = $form->id;
-			    if(isset($args['form']))
+				}
+			    if ( isset( $args['form'] ) ) {
 			        $args['form'] = $form->id;
+				}
                 ?>
 				<li><a href="<?php echo isset($base) ? add_query_arg($args, $base) : add_query_arg($args); ?>" tabindex="-1"><?php echo empty($form->name) ? __( '(no title)') : FrmAppHelper::truncate($form->name, 33); ?></a></li>
 			<?php
@@ -152,8 +157,9 @@ class FrmFormsHelper{
      * Used when editing a form
      */
     public static function setup_edit_vars( $values, $record, $post_values = array() ) {
-        if(empty($post_values))
-            $post_values = stripslashes_deep($_POST);
+		if ( empty( $post_values ) ) {
+			$post_values = stripslashes_deep( $_POST );
+		}
 
         $values['form_key'] = isset($post_values['form_key']) ? $post_values['form_key'] : $record->form_key;
         $values['default_template'] = isset($post_values['default_template']) ? $post_values['default_template'] : $record->default_template;
@@ -168,7 +174,7 @@ class FrmFormsHelper{
     public static function fill_default_opts($values, $record, $post_values) {
 
         $defaults = self::get_default_opts();
-        foreach ($defaults as $var => $default){
+		foreach ( $defaults as $var => $default ) {
             if ( is_array($default) ) {
                 if ( ! isset( $values[ $var ] ) ) {
 					$values[ $var ] = ( $record && isset( $record->options[ $var ] ) ) ? $record->options[ $var ] : array();
@@ -214,7 +220,7 @@ class FrmFormsHelper{
      * @param string $loc
      */
     public static function get_default_html($loc){
-        if($loc == 'submit'){
+		if ( $loc == 'submit' ) {
             $sending = __( 'Sending', 'formidable' );
             $draft_link = self::get_draft_link();
             $img = '[frmurl]/images/ajax_loader.gif';
@@ -226,12 +232,12 @@ class FrmFormsHelper{
 $draft_link
 </div>
 SUBMIT_HTML;
-        }else if ($loc == 'before'){
+		} else if ( $loc == 'before' ) {
             $default_html = <<<BEFORE_HTML
 [if form_name]<h3>[form_name]</h3>[/if form_name]
 [if form_description]<div class="frm_description">[form_description]</div>[/if form_description]
 BEFORE_HTML;
-        }else{
+		} else {
             $default_html = '';
         }
 
@@ -338,7 +344,7 @@ BEFORE_HTML;
         //replace [frmurl]
         $html = str_replace('[frmurl]', FrmFieldsHelper::dynamic_default_values( 'frmurl' ), $html);
 
-        if(strpos($html, '[button_label]')){
+		if ( strpos( $html, '[button_label]' ) ) {
             add_filter('frm_submit_button', 'FrmFormsHelper::submit_button_label');
             $replace_with = apply_filters('frm_submit_button', $title, $form);
             $html = str_replace('[button_label]', $replace_with, $html);
@@ -346,11 +352,13 @@ BEFORE_HTML;
 
         $html = apply_filters('frm_form_replace_shortcodes', $html, $form, $values);
 
-        if(strpos($html, '[if back_button]'))
-            $html = preg_replace('/(\[if\s+back_button\])(.*?)(\[\/if\s+back_button\])/mis', '', $html);
+		if ( strpos( $html, '[if back_button]' ) ) {
+			$html = preg_replace( '/(\[if\s+back_button\])(.*?)(\[\/if\s+back_button\])/mis', '', $html );
+		}
 
-        if(strpos($html, '[if save_draft]'))
-            $html = preg_replace('/(\[if\s+save_draft\])(.*?)(\[\/if\s+save_draft\])/mis', '', $html);
+		if ( strpos( $html, '[if save_draft]' ) ) {
+			$html = preg_replace( '/(\[if\s+save_draft\])(.*?)(\[\/if\s+save_draft\])/mis', '', $html );
+		}
 
         return $html;
     }

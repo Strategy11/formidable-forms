@@ -1,5 +1,7 @@
 <?php
-if(!defined('ABSPATH')) die('You are not allowed to call this page directly.');
+if ( ! defined('ABSPATH') ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 
 class FrmEntryMeta{
 
@@ -154,7 +156,7 @@ class FrmEntryMeta{
             return $values;
         }
 
-        foreach($values as $k => $v){
+		foreach ( $values as $k => $v ) {
             $values[$k] = maybe_unserialize($v);
             unset($k, $v);
         }
@@ -283,7 +285,7 @@ class FrmEntryMeta{
         global $wpdb;
         if (is_array($search)){
             $where = '';
-            foreach ($search as $field => $value){
+			foreach ( $search as $field => $value ) {
                 if ( $value <= 0 || ! in_array($field, array('year', 'month', 'day')) ) {
                     continue;
                 }

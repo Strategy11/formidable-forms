@@ -110,7 +110,7 @@ class FrmFormActionsController {
 
         $action_map = array();
 
-        foreach( $action_controls as $key => $control ) {
+		foreach ( $action_controls as $key => $control ) {
             $action_map[ $control->id_base ] = $key;
         }
 

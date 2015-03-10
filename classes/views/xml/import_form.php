@@ -87,7 +87,7 @@
                     <th scope="row"><label><?php _e( 'Select Form(s)', 'formidable' ); ?></label></th>
                     <td>
                         <select name="frm_export_forms[]" multiple="multiple" class="frm_chzn">
-                        <?php foreach($forms as $form){ ?>
+						<?php foreach ( $forms as $form ) { ?>
                             <option value="<?php echo esc_attr( $form->id ) ?>"><?php
                         echo ( $form->name == '' ) ? __( '(no title)' ) : $form->name;
                         echo ' &mdash; '. $form->form_key;

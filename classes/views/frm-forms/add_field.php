@@ -171,19 +171,25 @@ if ($display['options']){ ?>
                         } ?>
                 </select>
 
-                <?php if ( $display['required'] ) { ?>
+                <?php
+				if ( $display['required'] ) { ?>
                     <label for="frm_req_field_<?php echo esc_attr( $field['id'] ) ?>" class="frm_inline_label"><input type="checkbox" id="frm_req_field_<?php echo esc_attr( $field['id'] ) ?>" class="frm_req_field" name="field_options[required_<?php echo esc_attr( $field['id'] ) ?>]" value="1" <?php echo $field['required'] ? 'checked="checked"': ''; ?> /> <?php _e( 'Required', 'formidable' ) ?></label>
-                <?php } ?>
-                <?php if($display['unique']){
+                <?php
+                }
+
+				if ( $display['unique'] ) {
                     if ( ! isset( $field['unique'] ) ) {
                         $field['unique'] = false;
                     }
                 ?>
                 <label for="frm_uniq_field_<?php echo esc_attr( $field['id'] ) ?>" class="frm_inline_label frm_help" title="<?php esc_attr_e( 'Unique: Do not allow the same response multiple times. For example, if one user enters \'Joe\' then no one else will be allowed to enter the same name.', 'formidable' ) ?>"><input type="checkbox" name="field_options[unique_<?php echo esc_attr( $field['id'] ) ?>]" id="frm_uniq_field_<?php echo esc_attr( $field['id'] ) ?>" value="1" <?php checked( $field['unique'], 1 ); ?> class="frm_mark_unique" /> <?php _e( 'Unique', 'formidable' ) ?></label>
-                <?php } ?>
-                <?php if($display['read_only']){
-                    if(!isset($field['read_only']))
+                <?php
+                }
+
+				if ( $display['read_only'] ) {
+                    if ( ! isset( $field['read_only'] ) ) {
                         $field['read_only'] = false;
+					}
                 ?>
                 <label for="frm_read_only_field_<?php echo esc_attr( $field['id'] ) ?>" class="frm_inline_label frm_help" title="<?php esc_attr_e( 'Read Only: Show this field but do not allow the field value to be edited from the front-end.', 'formidable' ) ?>" ><input type="checkbox" id="frm_read_only_field_<?php echo esc_attr( $field['id'] ) ?>" name="field_options[read_only_<?php echo esc_attr( $field['id'] ) ?>]" value="1" <?php echo $field['read_only'] ? ' checked="checked"' : ''; ?>/> <?php _e( 'Read Only', 'formidable' ) ?></label>
                 <?php }
@@ -191,7 +197,8 @@ if ($display['options']){ ?>
                 do_action('frm_field_options_form_top', $field, $display, $values);
 
                 ?>
-                <?php if ($display['required']){ ?>
+                <?php
+				if ( $display['required'] ) { ?>
                 <div class="frm_required_details<?php echo esc_attr( $field['id'] . ( $field['required'] ? '' : ' frm_hidden' ) ); ?>">
                     <span class="howto"><?php _e( 'Indicate required field with', 'formidable' ) ?></span>
                     <input type="text" name="field_options[required_indicator_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['required_indicator'] ); ?>" />
@@ -200,15 +207,18 @@ if ($display['options']){ ?>
                     </td>
                 </tr>
 
-                <?php if ($display['css']){ ?>
+                <?php
+				if ( $display['css'] ) { ?>
                 <tr><td><label><?php _e( 'CSS layout classes', 'formidable' ) ?></label>
                     <span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php _e( 'Add a CSS class to the field container. Use our predefined classes to align multiple fields in single row.', 'formidable' ) ?>" ></span>
                     </td>
                     <td><input type="text" name="field_options[classes_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['classes'] ) ?>" id="frm_classes_<?php echo esc_attr( $field['id'] ) ?>" class="frm_classes frm_long_input" />
                     </td>
                 </tr>
-                <?php } ?>
-                <?php if ($display['label_position']){ ?>
+                <?php
+				}
+
+				if ( $display['label_position'] ) { ?>
                     <tr><td class="frm_150_width"><label><?php _e( 'Label Position', 'formidable' ) ?></label></td>
                         <td><select name="field_options[label_<?php echo esc_attr( $field['id'] ) ?>]">
                             <option value=""<?php selected($field['label'], ''); ?>><?php _e( 'Default', 'formidable' ) ?></option>
@@ -225,7 +235,7 @@ if ($display['options']){ ?>
                 <?php if ($display['size']){ ?>
                     <tr><td class="frm_150_width"><label><?php _e( 'Field Size', 'formidable' ) ?></label></td>
                         <td>
-                        <?php if(in_array($field['type'], array('select', 'time', 'data'))){ ?>
+                        <?php if ( in_array( $field['type'], array( 'select', 'time', 'data' ) ) ) { ?>
                             <?php if ( ! isset($values['custom_style']) || $values['custom_style'] ) { ?>
                                 <label for="size_<?php echo esc_attr( $field['id'] ) ?>"><input type="checkbox" name="field_options[size_<?php echo esc_attr( $field['id'] ) ?>]" id="size_<?php echo esc_attr( $field['id'] ) ?>" value="1" <?php echo ( isset($field['size']) && $field['size'] ) ? 'checked="checked"' : ''; ?> /> <?php _e( 'automatic width', 'formidable' ) ?></label>
                             <?php }
@@ -254,19 +264,24 @@ if ($display['options']){ ?>
                             <p><label><?php _e( 'Invalid Format', 'formidable' ) ?></label>
                                 <input type="text" name="field_options[invalid_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['invalid'] ); ?>" />
                             </p>
-                        <?php } ?>
-                        <?php if($display['unique']){ ?>
+                        <?php
+						}
+
+						if ( $display['unique'] ) { ?>
                         <p class="frm_unique_details<?php echo esc_attr( $field['id'] . ( $field['unique'] ? '' : ' frm_hidden' ) ); ?>">
                             <label><?php _e( 'Unique', 'formidable' ) ?></label>
                             <input type="text" name="field_options[unique_msg_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['unique_msg'] ); ?>" />
                         </p>
-                        <?php } ?>
-                        <?php if ( $display['conf_field'] ) { ?>
+                        <?php
+                        }
+
+						if ( $display['conf_field'] ) { ?>
                         <p class="frm_conf_details<?php echo esc_attr( $field['id'] . ( $field['conf_field'] ? '' : ' frm_hidden' ) ); ?>">
                             <label><?php _e( 'Confirmation', 'formidable' ) ?></label>
                             <input type="text" name="field_options[conf_msg_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['conf_msg'] ); ?>" />
                         </p>
-                        <?php } ?>
+                        <?php
+                        } ?>
                     </div>
                     </div>
                     </td>

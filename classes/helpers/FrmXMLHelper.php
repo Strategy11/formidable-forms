@@ -3,20 +3,21 @@ if ( !defined('ABSPATH') ) die('You are not allowed to call this page directly.'
 
 class FrmXMLHelper{
 
-    public static function get_xml_values($opt, $padding){
-        if(is_array($opt)){
-            foreach($opt as $ok => $ov){
-                echo "\n". $padding;
-                echo '<'. (is_numeric($ok) ? 'key:' : '') . $ok .'>';
-                self::get_xml_values($ov, $padding .'    ');
-                if(is_array($ov))
-                    echo "\n". $padding;
-                echo '</'. (is_numeric($ok) ? 'key:' : '') . $ok .'>';
-            }
-        }else{
-            echo self::cdata($opt);
-        }
-    }
+	public static function get_xml_values( $opt, $padding ) {
+		if ( is_array( $opt ) ) {
+			foreach ( $opt as $ok => $ov ) {
+				echo "\n" . $padding;
+				echo '<' . ( is_numeric( $ok ) ? 'key:' : '' ) . $ok . '>';
+				self::get_xml_values( $ov, $padding .'    ' );
+				if ( is_array( $ov ) ) {
+					echo "\n" . $padding;
+				}
+				echo '</' . ( is_numeric( $ok ) ? 'key:' : '' ) . $ok . '>';
+			}
+		} else {
+			echo self::cdata( $opt );
+		}
+	}
 
     public static function import_xml($file){
         $defaults = array(
@@ -218,7 +219,7 @@ class FrmXMLHelper{
 
     		// Delete any fields attached to this form that were not included in the template
     		if ( isset( $form_fields ) && ! empty( $form_fields ) ) {
-                foreach ($form_fields as $field){
+				foreach ( $form_fields as $field ) {
                     if ( is_object($field) ) {
                         FrmField::destroy($field->id);
                     }

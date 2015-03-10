@@ -26,7 +26,7 @@
     <select name="<?php echo esc_attr( $field_name ) . ( ( isset($field['multiple']) && $field['multiple']) ? '[]' : '' ); ?>" <?php
         echo ( isset($field['size']) && $field['size'] ) ? 'class="auto_width"' : '';
         echo ( isset($field['multiple']) && $field['multiple'] ) ? ' multiple="multiple"' : ''; ?> >
-        <?php foreach ($field['options'] as $opt_key => $opt){
+		<?php foreach ( $field['options'] as $opt_key => $opt ) {
             $field_val = apply_filters('frm_field_value_saved', $opt, $opt_key, $field);
             $opt = apply_filters('frm_field_label_seen', $opt, $opt_key, $field);
             $selected = ($field['default_value'] == $field_val || FrmAppHelper::get_other_val( $opt_key, $field ) )?(' selected="selected"'):(''); ?>

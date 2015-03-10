@@ -37,9 +37,9 @@ class FrmXMLController{
     public static function route() {
         $action = isset($_REQUEST['frm_action']) ? 'frm_action' : 'action';
         $action = FrmAppHelper::get_param($action);
-        if($action == 'import_xml') {
+		if ( $action == 'import_xml' ) {
             return self::import_xml();
-        } else if($action == 'export_xml') {
+		} else if ( $action == 'export_xml' ) {
             return self::export_xml();
         } else {
             if ( apply_filters('frm_xml_route', true, $action) ){
@@ -110,7 +110,6 @@ class FrmXMLController{
         unset($file_type);
 
         //$media_id = FrmProAppHelper::upload_file('frm_import_file');
-        //if(is_numeric($media_id)){
 
 		if ( ! function_exists( 'libxml_disable_entity_loader' ) ) {
 			$errors[] = __( 'XML import is not enabled on your server.', 'formidable' );
@@ -128,10 +127,6 @@ class FrmXMLController{
 
 		libxml_use_internal_errors( $set_err );
 		libxml_disable_entity_loader( $loader );
-        //}else{
-        //    foreach ($media_id->errors as $error)
-        //        echo $error[0];
-        //}
 
         self::form($errors, $message);
     }
@@ -211,7 +206,7 @@ class FrmXMLController{
 
 	    $records = array();
 
-	    foreach($type as $tb_type){
+		foreach ( $type as $tb_type ) {
             $where = array();
 			$join = '';
             $table = $tables[ $tb_type ];

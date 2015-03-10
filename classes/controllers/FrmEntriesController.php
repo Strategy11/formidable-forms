@@ -184,7 +184,7 @@ class FrmEntriesController {
             unset($form_prefix);
         }
 
-        if($save) {
+		if ( $save ) {
             $user = wp_get_current_user();
             update_user_option( $user->ID, 'manage'.  $sanitized .'_page_formidable-entriescolumnshidden', $meta_value, true );
         }
@@ -241,15 +241,15 @@ class FrmEntriesController {
             }
         }
 
-        if($return) {
-                    return $result;
-        }
+        if ( $return ) {
+			return $result;
+		}
 
         $i = isset($frm_vars['cols']) ? count($frm_vars['cols']) : 0;
         $max_columns = 8;
-        if($i <= $max_columns) {
-                    return $result;
-        }
+        if ( $i <= $max_columns ) {
+			return $result;
+		}
 
         global $frm_vars;
         if ( isset($frm_vars['current_form']) && $frm_vars['current_form'] ) {
@@ -268,10 +268,10 @@ class FrmEntriesController {
             $result[] = $form_id .'_item_key';
             $i--;
 
-            foreach($cols as $col_key => $col) {
-                if($i > $max_columns) {
-                                    $result[] = $col_key;
-                }
+			foreach ( $cols as $col_key => $col ) {
+                if ( $i > $max_columns ) {
+					$result[] = $col_key;
+				}
                 //remove some columns by default
                 $i--;
                 unset($col_key, $col);

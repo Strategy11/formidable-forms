@@ -100,7 +100,7 @@ class FrmEntriesListHelper extends FrmListHelper {
         <option value="">&mdash; <?php _e( 'All Fields', 'formidable' ) ?> &mdash;</option>
         <option value="created_at" <?php selected($fid, 'created_at') ?>><?php _e( 'Entry creation date', 'formidable' ) ?></option>
         <option value="id" <?php selected($fid, 'id') ?>><?php _e( 'Entry ID', 'formidable' ) ?></option>
-        <?php foreach($field_list as $f){ ?>
+        <?php foreach ( $field_list as $f ) { ?>
         <option value="<?php echo ($f->type == 'user_id') ? 'user_id' : $f->id ?>" <?php selected($fid, $f->id) ?>><?php echo FrmAppHelper::truncate($f->name, 30);  ?></option>
         <?php } ?>
     </select>
@@ -226,13 +226,13 @@ class FrmEntriesListHelper extends FrmListHelper {
 				break;
 			}
 
-			if(isset($val)){
+			if ( isset( $val ) ) {
 			    $r .= "<td $attributes>";
-			    if($column_name == $action_col){
+				if ( $column_name == $action_col ) {
 					$edit_link = '?page=formidable-entries&frm_action=edit&id='. $item->id;
 			        $r .= '<a href="'. (isset($actions['edit']) ? $edit_link : $view_link) .'" class="row-title" >'. $val .'</a> ';
 			        $r .= $action_links;
-			    }else{
+				} else {
 			        $r .= $val;
 			    }
 			    $r .= '</td>';

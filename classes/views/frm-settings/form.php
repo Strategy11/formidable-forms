@@ -16,7 +16,7 @@
         <ul class="frm-category-tabs">
             <?php $a = isset($_GET['t']) ? $_GET['t'] : 'general_settings'; ?>
         	<li <?php echo ($a == 'general_settings') ? 'class="tabs active"' : '' ?>><a href="#general_settings" class="frm_cursor_pointer"><?php _e( 'General', 'formidable' ) ?></a></li>
-            <?php foreach($sections as $sec_name => $section){ ?>
+			<?php foreach ( $sections as $sec_name => $section ) { ?>
                 <li <?php echo ($a == $sec_name .'_settings') ? 'class="tabs active"' : '' ?>><a href="#<?php echo esc_attr( $sec_name ) ?>_settings"><?php echo isset($section['name']) ? $section['name'] : ucfirst($sec_name) ?></a></li>
             <?php } ?>
         </ul>
@@ -52,7 +52,7 @@
 
             <h3><?php _e( 'User Permissions', 'formidable' ); ?> <span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php _e( 'Select users that are allowed access to Formidable. Without access to View Forms, users will be unable to see the Formidable menu.', 'formidable' ) ?>" ></span></h3>
             <table class="form-table">
-                <?php foreach($frm_roles as $frm_role => $frm_role_description){ ?>
+				<?php foreach ( $frm_roles as $frm_role => $frm_role_description ) { ?>
                 <tr>
                     <td class="frm_left_label"><label><?php echo esc_html( $frm_role_description ) ?></label></td>
                     <td><?php FrmAppHelper::wp_roles_dropdown( $frm_role, $frm_settings->$frm_role, 'multiple' ) ?></td>
@@ -120,13 +120,13 @@
         </p>
     </div>
 
-        <?php foreach($sections as $sec_name => $section){
-            if($a == $sec_name .'_settings'){ ?>
+        <?php foreach ( $sections as $sec_name => $section ) {
+			if ( $a == $sec_name .'_settings' ) { ?>
 <style type="text/css">.<?php echo esc_attr( $sec_name ) ?>_settings{display:block;}</style><?php }?>
             <div id="<?php echo esc_attr( $sec_name ) ?>_settings" class="<?php echo esc_attr( $sec_name ) ?>_settings tabs-panel <?php echo ( $a == $sec_name .'_settings' ) ? 'frm_block' : 'frm_hidden'; ?>"><?php
-                if(isset($section['class'])){
+				if ( isset( $section['class'] ) ) {
                     call_user_func(array($section['class'], $section['function']));
-                }else{
+				} else {
                     call_user_func((isset($section['function']) ? $section['function'] : $section));
                 } ?>
             </div>

@@ -186,9 +186,9 @@ class FrmFormsController{
 
         $id = isset($values['id']) ? (int) $values['id'] : (int) FrmAppHelper::get_param('id');
 
-        if( count($errors) > 0 ){
+		if ( count( $errors ) > 0 ) {
             return self::get_edit_vars($id, $errors);
-        }else{
+		} else {
             FrmForm::update( $id, $values );
             $message = __( 'Form was Successfully Updated', 'formidable' );
             if ( defined('DOING_AJAX') ) {
@@ -756,8 +756,8 @@ class FrmFormsController{
     public static function route(){
         $action = isset($_REQUEST['frm_action']) ? 'frm_action' : 'action';
         $vars = array();
-        if(isset($_POST['frm_compact_fields'])){
-            if ( !current_user_can('frm_edit_forms') && !current_user_can('administrator') ) {
+		if ( isset( $_POST['frm_compact_fields'] ) ) {
+			if ( ! current_user_can('frm_edit_forms') && ! current_user_can('administrator') ) {
                 $frm_settings = FrmAppHelper::get_settings();
                 wp_die($frm_settings->admin_permission);
             }
@@ -843,7 +843,7 @@ class FrmFormsController{
         }
 
         $actions = array();
-        foreach ($frm_vars['forms_loaded'] as $form ) {
+        foreach ( $frm_vars['forms_loaded'] as $form ) {
             if ( is_object($form) ) {
                 $actions[ $form->id ] = $form->name;
             }

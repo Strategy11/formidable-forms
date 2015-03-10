@@ -452,8 +452,9 @@ class FrmFieldsController {
     public static function update_order(){
         check_ajax_referer( 'frm_ajax', 'nonce' );
         if ( isset($_POST) && isset($_POST['frm_field_id']) ) {
-            foreach ($_POST['frm_field_id'] as $position => $item)
-                FrmField::update($item, array('field_order' => $position));
+			foreach ( $_POST['frm_field_id'] as $position => $item ) {
+				FrmField::update( $item, array( 'field_order' => $position ) );
+			}
         }
         wp_die();
     }
@@ -661,12 +662,12 @@ class FrmFieldsController {
         }
     }
 
-    public static function check_value($opt, $opt_key, $field){
-        if(is_array($opt)){
-            if ( isset($field['separate_value']) && $field['separate_value'] ) {
-                $opt = isset($opt['value']) ? $opt['value'] : (isset($opt['label']) ? $opt['label'] : reset($opt));
+    public static function check_value( $opt, $opt_key, $field ) {
+        if ( is_array( $opt ) ) {
+            if ( isset( $field['separate_value'] ) && $field['separate_value'] ) {
+                $opt = isset( $opt['value'] ) ? $opt['value'] : ( isset( $opt['label'] ) ? $opt['label'] : reset( $opt ) );
             } else {
-                $opt = (isset($opt['label']) ? $opt['label'] : reset($opt));
+                $opt = isset( $opt['label'] ) ? $opt['label'] : reset( $opt );
             }
         }
         return $opt;

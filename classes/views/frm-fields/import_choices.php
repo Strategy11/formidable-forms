@@ -20,19 +20,19 @@
 <div class="frm_med_padding">
 <p class="howto"><?php _e( 'Edit or add field options (one per line)', 'formidable' ) ?></p>
 <ul class="frm_prepop">
-    <?php foreach($prepop as $label => $pop){ ?>
+	<?php foreach ( $prepop as $label => $pop ) { ?>
     <li><a href="javascript:void(0)" onclick='frmPrePop(<?php echo str_replace("'", '&#145;', json_encode($pop)) ?>); return false;'><?php echo esc_html( $label ) ?></a></li>
     <?php } ?>
 </ul>
 <textarea name="frm_bulk_options" id="frm_bulk_options">
 <?php
 $other_array = array();
-foreach($field->options as $fkey => $fopt){
+foreach ( $field->options as $fkey => $fopt ) {
     //If it is an other option, don't include it
     if ( $fkey && strpos( $fkey, 'other') !== false ) {
         continue;
     }
-    if(is_array($fopt)){
+	if ( is_array( $fopt ) ) {
         $label = (isset($fopt['label'])) ? $fopt['label'] : reset($fopt);
         $value = (isset($fopt['value'])) ? $fopt['value'] : $label;
         if ( $label != $value && isset($field->field_options['separate_value']) && $field->field_options['separate_value'] ) {

@@ -490,7 +490,7 @@ DEFAULT_HTML;
 
         $new_default_html = FrmFormsHelper::get_default_html('submit');
         $draft_link = FrmFormsHelper::get_draft_link();
-        foreach($forms as $form){
+		foreach ( $forms as $form ) {
             $form->options = maybe_unserialize($form->options);
             if ( ! isset($form->options['submit_html']) || empty($form->options['submit_html']) ) {
                 continue;
@@ -499,7 +499,7 @@ DEFAULT_HTML;
             if ( $form->options['submit_html'] != $new_default_html && $form->options['submit_html'] == $old_default_html ) {
                 $form->options['submit_html'] = $new_default_html;
                 $wpdb->update($this->forms, array('options' => serialize($form->options)), array( 'id' => $form->id ));
-            }else if(!strpos($form->options['submit_html'], 'save_draft')){
+			} else if ( ! strpos( $form->options['submit_html'], 'save_draft' ) ) {
                 $form->options['submit_html'] = preg_replace('~\<\/div\>(?!.*\<\/div\>)~', $draft_link ."\r\n</div>", $form->options['submit_html']);
                 $wpdb->update($this->forms, array('options' => serialize($form->options)), array( 'id' => $form->id ));
             }

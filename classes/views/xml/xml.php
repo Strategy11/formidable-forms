@@ -5,7 +5,7 @@
 	<pubDate><?php echo date( 'D, d M Y H:i:s +0000' ); ?></pubDate>
 
 <?php
-foreach($type as $tb_type){
+foreach ( $type as $tb_type ) {
 
     if ( ! isset( $tables[ $tb_type ] ) ) {
         do_action('frm_xml_import_'. $tb_type, $args);

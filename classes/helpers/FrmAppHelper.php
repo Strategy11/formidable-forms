@@ -194,22 +194,22 @@ class FrmAppHelper{
     }
 
     public static function get_param( $param, $default = '', $src = 'get' ) {
-        if(strpos($param, '[')){
+        if ( strpos($param, '[') ) {
             $params = explode('[', $param);
             $param = $params[0];
         }
 
-        if($src == 'get'){
+		if ( $src == 'get' ) {
             $value = isset( $_POST[ $param ] ) ? stripslashes_deep( $_POST[ $param ] ) : ( isset( $_GET[ $param ] ) ? stripslashes_deep( $_GET[ $param ] ) : $default );
             if ( ! isset( $_POST[ $param ] ) && isset( $_GET[ $param ] ) && ! is_array( $value ) ) {
                 $value = stripslashes_deep( htmlspecialchars_decode( urldecode( $_GET[ $param ] ) ) );
             }
-        }else{
+		} else {
             $value = isset( $_POST[ $param ] ) ? stripslashes_deep( maybe_unserialize( $_POST[ $param ] ) ) : $default;
         }
 
-        if ( isset($params) && is_array($value) && ! empty($value) ) {
-            foreach($params as $k => $p){
+		if ( isset( $params ) && is_array( $value ) && ! empty( $value ) ) {
+            foreach ( $params as $k => $p ) {
                 if ( ! $k || ! is_array($value) ) {
                     continue;
                 }
@@ -422,7 +422,7 @@ class FrmAppHelper{
     ?>
         <select name="<?php echo esc_attr($field_name); ?>" id="<?php echo esc_attr($field_name); ?>" class="frm-pages-dropdown">
             <option value=""> </option>
-            <?php foreach($pages as $page){ ?>
+            <?php foreach ( $pages as $page ) { ?>
                 <option value="<?php echo esc_attr($page->ID); ?>" <?php
                 echo ( ( ( isset( $_POST[ $field_name ] ) && $_POST[ $field_name ] == $page->ID ) || ( ! isset( $_POST[ $field_name ] ) && $page_id == $page->ID ) ) ? ' selected="selected"' : '' );
                 ?>><?php echo esc_html( $truncate ? self::truncate( $page->post_title, $truncate ) : $page->post_title ); ?> </option>
@@ -491,8 +491,9 @@ class FrmAppHelper{
     }
 
     public static function user_has_permission($needed_role){
-        if($needed_role == '-1')
+        if ( $needed_role == '-1' ) {
             return false;
+		}
 
         // $needed_role will be equal to blank if "Logged-in users" is selected
         if ( ( $needed_role == '' && is_user_logged_in() ) || current_user_can( $needed_role ) ) {
@@ -500,11 +501,13 @@ class FrmAppHelper{
         }
 
         $roles = array( 'administrator', 'editor', 'author', 'contributor', 'subscriber' );
-        foreach ($roles as $role){
-        	if (current_user_can($role))
+        foreach ( $roles as $role ) {
+			if ( current_user_can( $role ) ) {
         		return true;
-        	if ($role == $needed_role)
+			}
+        	if ( $role == $needed_role ) {
         		break;
+			}
         }
         return false;
     }
@@ -567,26 +570,15 @@ class FrmAppHelper{
         return $error;
     }
 
-    public static function checked($values, $current){
-        if(self::check_selected($values, $current))
+    public static function checked( $values, $current ) {
+		if ( self::check_selected( $values, $current ) ) {
             echo ' checked="checked"';
+		}
     }
 
     public static function check_selected($values, $current){
-        //if(is_array($current))
-        //    $current = (isset($current['value'])) ? $current['value'] : $current['label'];
-
         self::recursive_trim($values);
         $current = trim($current);
-
-        /*if(is_array($values))
-            $values = array_map('htmlentities', $values);
-        else
-             $values = htmlentities($values);
-
-        $values = preg_replace("/&#?[a-z0-9]{2,8};/i", "", $values);
-        $current = preg_replace("/&#?[a-z0-9]{2,8};/i", "", $current);
-        */
 
         return ( is_array($values) && in_array($current, $values) ) || ( ! is_array($values) && $values == $current );
     }
@@ -819,10 +811,10 @@ class FrmAppHelper{
             return $user_id;
         }
 
-        if($user_id == 'current'){
+		if ( $user_id == 'current' ) {
             $user_ID = get_current_user_id();
             $user_id = $user_ID;
-        }else{
+		} else {
             if ( is_email($user_id) ) {
                 $user = get_user_by('email', $user_id);
             } else {
@@ -864,7 +856,7 @@ class FrmAppHelper{
             $key = sanitize_key($name);
         }
 
-        if(empty($key)){
+		if ( empty( $key ) ) {
             $max_slug_value = pow(36, $num_chars);
             $min_slug_value = 37; // we want to have at least 2 characters in the slug
             $key = base_convert( rand($min_slug_value, $max_slug_value), 10, 36 );
@@ -1127,17 +1119,18 @@ class FrmAppHelper{
     }
 
     public static function truncate($str, $length, $minword = 3, $continue = '...'){
-        if(is_array($str))
+        if ( is_array( $str ) ) {
             return;
+		}
 
         $length = (int) $length;
         $str = strip_tags($str);
         $original_len = (function_exists('mb_strlen')) ? mb_strlen($str) : strlen($str);
 
-        if($length == 0){
+		if ( $length == 0 ) {
             return '';
-        }else if($length <= 10){
-            $sub = (function_exists('mb_substr')) ? mb_substr($str, 0, $length) : substr($str, 0, $length);
+        } else if ( $length <= 10 ) {
+			$sub = function_exists( 'mb_substr' ) ? mb_substr( $str, 0, $length ) : substr( $str, 0, $length );
             return $sub . (($length < $original_len) ? $continue : '');
         }
 
@@ -1146,7 +1139,7 @@ class FrmAppHelper{
 
         $words = (function_exists('mb_split')) ? mb_split(' ', $str) : explode(' ', $str);
 
-        foreach ($words as $word){
+		foreach ( $words as $word ) {
             $part = (($sub != '') ? ' ' : '') . $word;
             $total_len = (function_exists('mb_strlen')) ? mb_strlen($sub . $part) : strlen($sub. $part);
             if ( $total_len > $length && str_word_count($sub) ) {
@@ -1346,16 +1339,16 @@ class FrmAppHelper{
         return implode(', ', $placeholders);
     }
 
-    public static function prepend_and_or_where( $starts_with = ' WHERE ', $where = '' ){
+    public static function prepend_and_or_where( $starts_with = ' WHERE ', $where = '' ) {
         if ( empty($where) ) {
             return '';
         }
 
-        if(is_array($where)){
+		if ( is_array( $where ) ) {
             global $wpdb;
             FrmDb::get_where_clause_and_values( $where );
-            $where = $wpdb->prepare($where['where'], $where['values']);
-        }else{
+            $where = $wpdb->prepare( $where['where'], $where['values'] );
+		} else {
             $where = $starts_with . $where;
         }
 
@@ -1509,7 +1502,7 @@ class FrmAppHelper{
     public static function prepare_and_encode( $post_content ) {
 
         //Loop through array to strip slashes and add only the needed ones
-        foreach( $post_content as $key => $val ) {
+		foreach ( $post_content as $key => $val ) {
             if ( isset( $post_content[ $key ] ) && ! is_array( $val ) ) {
                 // Strip all slashes so everything is the same, no matter where the value is coming from
                 $val = stripslashes( $val );

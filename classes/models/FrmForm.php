@@ -27,10 +27,9 @@ class FrmForm{
         $options = array();
 
         $defaults = FrmFormsHelper::get_default_opts();
-        foreach ($defaults as $var => $default) {
-            $options[$var] = isset($values['options'][$var]) ? $values['options'][$var] : $default;
-            unset($var);
-            unset($default);
+		foreach ( $defaults as $var => $default ) {
+			$options[ $var ] = isset( $values['options'][ $var ] ) ? $values['options'][ $var ] : $default;
+            unset( $var, $default );
         }
 
         $options['before_html'] = isset($values['options']['before_html']) ? $values['options']['before_html'] : FrmFormsHelper::get_default_html('before');
@@ -173,8 +172,8 @@ class FrmForm{
         $options = array();
 
         $defaults = FrmFormsHelper::get_default_opts();
-        foreach ($defaults as $var => $default) {
-            $options[$var] = isset($values['options'][$var]) ? $values['options'][$var] : $default;
+		foreach ( $defaults as $var => $default ) {
+			$options[ $var ] = isset( $values['options'][ $var ] ) ? $values['options'][ $var ] : $default;
         }
 
         $options['custom_style'] = isset($values['options']['custom_style']) ? $values['options']['custom_style'] : 0;
@@ -469,7 +468,7 @@ class FrmForm{
                 $results = $wpdb->get_row($query);
             }
 
-            if($results){
+			if ( $results ) {
                 wp_cache_set($results->id, $results, 'frm_form');
                 $results->options = maybe_unserialize($results->options);
             }
@@ -480,11 +479,11 @@ class FrmForm{
                 $results = $wpdb->get_results($query);
             }
 
-            if($results){
-                foreach($results as $result){
-                    wp_cache_set($result->id, $result, 'frm_form');
-                    $result->options = maybe_unserialize($result->options);
-                }
+			if ( $results ) {
+				foreach ( $results as $result ) {
+					wp_cache_set( $result->id, $result, 'frm_form' );
+					$result->options = maybe_unserialize( $result->options );
+				}
             }
         }
 
