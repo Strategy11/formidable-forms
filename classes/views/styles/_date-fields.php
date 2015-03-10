@@ -32,8 +32,8 @@ unset($theme_names);
 	</select>
 </div>
 
-<div class="field-group clearfix frm-half frm-first-row" style="text-align:right;">
-    <img id="frm_show_cal" src="//jqueryui.com/resources/images/themeGallery/theme_90_<?php echo esc_attr( $alt_img_name[ $style->post_content['theme_css'] ] ) ?>.png" alt="" style="width:90px;height:80px;margin-right:6px;" />
+<div class="field-group clearfix frm-half frm-first-row frm_right_text">
+    <img id="frm_show_cal" src="//jqueryui.com/resources/images/themeGallery/theme_90_<?php echo esc_attr( $alt_img_name[ $style->post_content['theme_css'] ] ) ?>.png" alt="" />
 	<input type="hidden" value="<?php echo esc_attr($style->post_content['theme_css']) ?>" id="frm_theme_css" name="<?php echo esc_attr( $frm_style->get_field_name('theme_css') ) ?>" />
     <input type="hidden" value="<?php echo esc_attr($style->post_content['theme_name']) ?>" id="frm_theme_name" name="<?php echo esc_attr( $frm_style->get_field_name('theme_name') ) ?>" />
 </div>

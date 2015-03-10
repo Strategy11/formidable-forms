@@ -6,12 +6,12 @@
 <div id="titlediv">
     <input type="text" name="name" value="<?php echo esc_attr($form->name); ?>" id="title" placeholder="<?php esc_attr_e( 'Enter title here') ?>" />
     <div id="edit-slug-box" class="hide-if-no-js">
-        <div class="alignright" style="width:13em;max-width:30%">
+        <div id="frm_form_key_box" class="alignright">
         <strong><?php _e( 'Form Key:', 'formidable' ) ?></strong>
         <div id="editable-post-name" class="frm_ipe_form_key" title="<?php _e( 'Click to edit.', 'formidable' ) ?>"><?php echo esc_html( $form->form_key ); ?></div>
         </div>
-        <div class="frm_ipe_form_desc alignleft" style="width:70%"><?php echo ($form->description == '') ? __( '(Click to add description)', 'formidable' ) : force_balance_tags($form->description); ?></div>
-        <div style="clear:both"></div>
+        <div id="frm_form_desc" class="frm_ipe_form_desc alignleft"><?php echo ($form->description == '') ? __( '(Click to add description)', 'formidable' ) : force_balance_tags($form->description); ?></div>
+        <div class="frm_clear"></div>
     </div>
 </div>
 

@@ -14,7 +14,7 @@
 </div>
 
 <div class="clear"></div>
-<p style="margin-bottom:0;">
+<p class="frm_no_bottom_margin">
     <label><input type="checkbox" name="<?php echo esc_attr( $frm_style->get_field_name('auto_width') ) ?>" id="frm_auto_width" value="1" <?php checked( $style->post_content['auto_width'], 1 ) ?> />
 	<?php _e( 'Automatic Width for drop-down fields', 'formidable' ) ?></label>
 </p>

@@ -17,7 +17,7 @@
     ?>
     <div class="frm_form_builder<?php echo FrmFormsHelper::get_form_style_class($form); ?>">
 
-        <p style="display:none;margin-top:0;">
+        <p class="frm_hidden frm-no-margin">
             <input type="button" value="<?php _e( 'Update', 'formidable' ) ?>" class="frm_submit_<?php echo ( isset($values['ajax_load']) && $values['ajax_load'] ) ? '': 'no_'; ?>ajax button-primary" />
             <span class="frm-loading-img"></span>
         </p>

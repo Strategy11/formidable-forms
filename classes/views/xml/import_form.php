@@ -63,7 +63,7 @@
                             </li>
 
                             <li><label for="csv_col_sep"><?php _e( 'Column separation', 'formidable' ) ?>:</label>
-                            <input name="csv_col_sep" value="," type="text" style="width:45px;" /></li>
+                            <input id="frm_csv_col_sep" name="csv_col_sep" value="," type="text" /></li>
                         </ul>
                     </td>
                 </tr>

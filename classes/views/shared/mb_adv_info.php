@@ -4,17 +4,17 @@
 		<li class="hide-if-no-js"><a href="#frm-conditionals"><?php _e( 'Conditionals', 'formidable' ); ?></a></li>
 		<li class="hide-if-no-js"><a href="#frm-adv-info-tab"><?php _e( 'Advanced', 'formidable' ); ?></a></li>
 		<?php if($settings_tab){ ?>
-		<li id="frm_html_tab" class="hide-if-no-js" style="display:none;"><a href="#frm-html-tags" id="frm_html_tags_tab" ><?php _e( 'HTML Tags', 'formidable' ); ?></a></li>
+		<li id="frm_html_tab" class="hide-if-no-js frm_hidden"><a href="#frm-html-tags" id="frm_html_tags_tab" ><?php _e( 'HTML Tags', 'formidable' ); ?></a></li>
 		<?php } ?>
 	</ul>
 
-	<div id="frm-insert-fields-box" class="tabs-panel" style="max-height:none;padding-right:0;">
-	    <ul class="subsubsub" style="float:right;margin:0;">
+	<div id="frm-insert-fields-box" class="tabs-panel">
+	    <ul class="subsubsub">
             <li><a href="javascript:void(0)" class="current frmids"><?php _e( 'IDs', 'formidable' ) ?></a> |</li>
             <li><a href="javascript:void(0)" class="frmkeys"><?php _e( 'Keys', 'formidable' ) ?></a></li>
         </ul>
-        <ul class="alignleft" style="margin:5px 0 0;"><li><?php _e( 'Fields from your form', 'formidable' ) ?>:</li></ul>
-        <ul class="frm_code_list frm_full_width" style="clear:both;max-height:150px;overflow:auto;">
+        <ul class="alignleft"><li><?php _e( 'Fields from your form', 'formidable' ) ?>:</li></ul>
+        <ul class="frm_code_list frm_full_width">
         <?php
             if ( ! empty( $fields ) ) {
                 global $wpdb;
@@ -96,7 +96,7 @@
         foreach ($entry_shortcodes as $skey => $sname) {
              if (empty($skey)) {
                  $col = 'one';
-                 echo '<li class="clear" style="display:block;height:10px;"></li>';
+                 echo '<li class="clear frm_block"></li>';
                  continue;
             }
         ?>
@@ -114,14 +114,14 @@
         </ul>
 	</div>
 
-	<div id="frm-conditionals" class="tabs-panel" style="display:none;max-height:none;padding-right:0;">
+	<div id="frm-conditionals" class="tabs-panel frm_hidden">
 	<?php if ( ! empty( $cond_shortcodes ) ) { ?>
-	    <ul class="subsubsub" style="float:right;margin:0;">
+	    <ul class="subsubsub">
 	        <li><a href="javascript:void(0)" class="current frmids"><?php _e( 'IDs', 'formidable' ) ?></a> |</li>
 	        <li><a href="javascript:void(0)" class="frmkeys"><?php _e( 'Keys', 'formidable' ) ?></a></li>
 	    </ul>
-	    <ul class="alignleft" style="margin:5px 0 0;"><li><?php _e( 'Fields from your form', 'formidable' ) ?>:</li></ul>
-	    <ul class="frm_code_list frm_full_width" style="clear:both;max-height:150px;overflow:auto;">
+	    <ul class="alignleft"><li><?php _e( 'Fields from your form', 'formidable' ) ?>:</li></ul>
+	    <ul class="frm_code_list frm_full_width">
 		    <?php if ( ! empty( $fields ) ) {
 		        foreach ( $fields as $f ) {
                     if ( FrmFieldsHelper::is_no_save_field($f->type) || ( $f->type == 'data' && ( ! isset($f->field_options['data_type']) || $f->field_options['data_type'] == 'data' || $f->field_options['data_type'] == '' ) ) ) {
@@ -165,7 +165,7 @@
           } ?>
 	</div>
 
-	<div id="frm-adv-info-tab" class="tabs-panel" style="display:none;max-height:355px;">
+	<div id="frm-adv-info-tab" class="tabs-panel frm_hidden">
 		<ul class="frm_code_list">
         <?php
         $col = 'one';

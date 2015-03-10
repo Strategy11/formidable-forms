@@ -1,4 +1,4 @@
-<div id="frm-html-tags" class="tabs-panel" style="display:none;max-height:none;padding-right:0;">
+<div id="frm-html-tags" class="tabs-panel">
     <ul class="frm_code_list">
     <?php
     $col = 'one';

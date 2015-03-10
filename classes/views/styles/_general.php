@@ -32,7 +32,7 @@
 	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name('fieldset_padding') ) ?>" id="frm_fieldset_padding" value="<?php echo esc_attr( $style->post_content['fieldset_padding'] ) ?>" size="4" />
 </div>
 
-<div class="field-group clearfix" style="padding-right:0;width:100%;">
+<div id="frm_gen_font_box" class="field-group clearfix">
 	<label><?php _e( 'Font Family', 'formidable' ) ?></label>
 	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name('font') ) ?>" id="frm_font" value="<?php echo esc_attr( $style->post_content['font'] ) ?>"  class="frm_full_width" />
 </div>
@@ -67,7 +67,7 @@
 </div>
 
 <div class="clear"></div>
-<p style="margin-bottom:0;">
+<p class="frm_no_bottom_margin">
     <label><input type="checkbox" name="<?php echo esc_attr( $frm_style->get_field_name('important_style') ) ?>" id="frm_important_style" value="1" <?php checked($style->post_content['important_style'], 1) ?> />
 	    <?php _e( 'Override theme styling', 'formidable' ) ?> <span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'This will add !important to many of the lines in the Formidable styling to make sure it will be used.', 'formidable' ) ?>" ></span>
 	</label>

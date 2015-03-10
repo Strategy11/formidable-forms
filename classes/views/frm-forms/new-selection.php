@@ -5,8 +5,8 @@
     <div class="clear"></div>
     <div id="menu-management" class="nav-menus-php frm-menu-boxes">
         <div class="menu-edit">
-        <div id="nav-menu-header"><div class="major-publishing-actions" style="padding:8px 0;">
-            <div style="font-size:15px;background:transparent;" class="search"><?php _e( 'Start From Template', 'formidable' ) ?></div>
+        <div id="nav-menu-header"><div class="major-publishing-actions frm_create_form_header">
+            <div class="frm_create_form_header_inner search"><?php _e( 'Start From Template', 'formidable' ) ?></div>
         </div></div>
 
         <form method="get">
@@ -31,13 +31,13 @@
 
     <div id="menu-management" class="nav-menus-php frm-menu-boxes">
         <div class="menu-edit">
-        <div id="nav-menu-header"><div class="major-publishing-actions" style="padding:8px 0;">
-            <div style="font-size:15px;background:transparent;" class="search"><?php _e( 'Start From Scratch', 'formidable' ) ?></div>
+        <div id="nav-menu-header"><div class="major-publishing-actions frm_create_form_header">
+            <div class="frm_create_form_header_inner search"><?php _e( 'Start From Scratch', 'formidable' ) ?></div>
         </div></div>
 
         <form method="get">
             <div id="post-body">
-            <p style="padding-bottom:26px;"><?php _e( 'Start with a blank form and build anything.', 'formidable' ); ?></p>
+            <p class="frm_blank_form_text"><?php _e( 'Start with a blank form and build anything.', 'formidable' ); ?></p>
             <input type="hidden" name="frm_action" value="new" />
             <input type="hidden" name="page" value="formidable" />
             </div>

@@ -1,7 +1,7 @@
 <div id="form_settings_page" class="wrap">
     <div class="frmicon icon32"><br/></div>
     <h2><?php _e( 'Settings', 'formidable' ) ?>
-        <a href="#" class="add-new-h2" style="visibility:hidden;"></a>
+        <a href="#" class="add-new-h2 frm_invisible"></a>
     </h2>
 
     <div id="poststuff">
@@ -33,14 +33,14 @@
             <?php } ?>
         </ul>
         </div>
-        <div style="display:<?php echo ($a == 'advanced_settings') ? 'block' : 'none'; ?>;" class="advanced_settings tabs-panel">
+        <div class="advanced_settings tabs-panel <?php echo ($a == 'advanced_settings') ? 'frm_block' : 'frm_hidden' ?>">
             <h3 class="frm_first_h3"><?php _e( 'On Submit', 'formidable' ); ?> <span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php _e( 'Choose what will happen after the user submits this form.', 'formidable' ); if ( ! FrmAppHelper::pro_is_installed() ) { _e( ' Upgrade to Formidable Forms to get access to all options in the dropdown.', 'formidable' ); } ?>" ></span>
             </h3>
 
             <!--On Submit Section-->
             <table class="form-table">
                 <tr>
-                    <td style="width:175px;">
+                    <td class="frm_175_width">
                         <select name="options[success_action]" id="success_action">
                             <option value="message" <?php selected($values['success_action'], 'message') ?>><?php _e( 'Show Message', 'formidable' )?></option>
                             <?php if ( FrmAppHelper::pro_is_installed() ) { ?>
@@ -57,19 +57,19 @@
                         </select>
                     </td>
                     <td>
-                        <span class="success_action_redirect_box success_action_box" <?php echo ($values['success_action'] == 'redirect') ? '' : 'style="display:none;"'; ?>>
-                            <input type="text" name="options[success_url]" id="success_url" value="<?php if(isset($values['success_url'])) echo esc_attr($values['success_url']); ?>" style="width:95%" placeholder="http://example.com" />
+                        <span class="success_action_redirect_box success_action_box<?php echo ($values['success_action'] == 'redirect') ? '' : ' frm_hidden'; ?>">
+                            <input type="text" name="options[success_url]" id="success_url" value="<?php if(isset($values['success_url'])) echo esc_attr($values['success_url']); ?>" placeholder="http://example.com" />
                         </span>
 
                         <?php if ( FrmAppHelper::pro_is_installed() ){ ?>
-                        <span class="success_action_page_box success_action_box" <?php echo ($values['success_action'] == 'page') ? '' : 'style="display:none;"'; ?>>
+                        <span class="success_action_page_box success_action_box<?php echo ($values['success_action'] == 'page') ? '' : ' frm_hidden'; ?>">
                             <label><?php _e( 'Use Content from Page', 'formidable' ) ?></label>
                             <?php FrmAppHelper::wp_pages_dropdown( 'options[success_page_id]', $values['success_page_id'] ) ?>
                         </span>
                         <?php } ?>
                     </td>
                 </tr>
-                <tr <?php echo ($values['success_action'] == 'message') ? '' : 'style="display:none;"'; ?> class="frm_show_form_opt success_action_message_box success_action_box">
+                <tr class="frm_show_form_opt success_action_message_box success_action_box<?php echo ($values['success_action'] == 'message') ? '' : ' frm_hidden'; ?>">
                     <td colspan="2">
                         <label for="show_form"><input type="checkbox" name="options[show_form]" id="show_form" value="1" <?php checked($values['show_form'], 1) ?> /> <?php _e( 'Show the form with the confirmation message', 'formidable' )?></label>
                     </td>
@@ -131,7 +131,7 @@
             <!--Message Section-->
             <h3 id="frm_messages_header" class="<?php echo ( ( isset($values['edit_action']) && $values['edit_action'] == 'message' && isset($values['editable']) && $values['editable'] == 1 ) || $values['success_action'] == 'message' || $values['save_draft'] == 1 ) ? '' : 'frm_hidden'; ?>"><?php _e( 'Messages', 'formidable' ); ?> <span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php _e( 'Set up your confirmation messages.', 'formidable' ) ?>" ></span></h3>
             <table class="form-table">
-                <tr class="success_action_message_box success_action_box" <?php echo ($values['success_action'] == 'message') ? '' : 'style="display:none;"'; ?>>
+                <tr class="success_action_message_box success_action_box<?php echo ($values['success_action'] == 'message') ? '' : ' frm_hidden'; ?>">
                     <td>
                         <div><?php _e( 'On Submit', 'formidable' ) ?></div>
                         <textarea id="success_msg" name="options[success_msg]" cols="50" rows="2" class="frm_long_input"><?php echo FrmAppHelper::esc_textarea($values['success_msg']); ?></textarea>
@@ -142,7 +142,7 @@
         </div>
 
 
-        <div id="frm_notification_settings" class="frm_email_settings email_settings tabs-panel widgets-holder-wrap" style="display:<?php echo ($a == 'email_settings') ? 'block' : 'none'; ?>;">
+        <div id="frm_notification_settings" class="frm_email_settings email_settings tabs-panel widgets-holder-wrap <?php echo ($a == 'email_settings') ? ' frm_block' : ' frm_hidden'; ?>">
             <div id="frm_email_addon_menu" class="manage-menus">
                 <h3><?php _e( 'Add New Action', 'formidable' ) ?></h3>
                 <ul class="frm_actions_list">
@@ -163,7 +163,7 @@
             </div>
             <div class="frm_no_actions">
                 <div class="inner_actions">
-                    <img src="<?php echo FrmAppHelper::plugin_url() .'/images/sketch_arrow1.png'; ?>" alt="" style="width:80px;"/>
+                    <img src="<?php echo FrmAppHelper::plugin_url() .'/images/sketch_arrow1.png'; ?>" alt=""/>
                     <div class="clear"></div>
                     <?php _e( 'Click an action to add it to this form', 'formidable' ) ?>
                 </div>
@@ -171,9 +171,9 @@
             <?php FrmFormActionsController::list_actions($form, $values); ?>
         </div>
 
-        <div id="html_settings" class="tabs-panel" style="display:<?php echo ($a == 'html_settings') ? 'block' : 'none'; ?>;">
+        <div id="html_settings" class="tabs-panel <?php echo ($a == 'html_settings') ? ' frm_block' : ' frm_hidden'; ?>">
 
-            <div class="frm_field_html_box frm_top_container" style="margin-right:260px;">
+            <div class="frm_field_html_box frm_top_container">
                 <p><label><?php _e( 'Form Classes', 'formidable' ) ?></label>
                     <input type="text" name="options[form_class]" value="<?php echo esc_attr($values['form_class']) ?>" />
                 </p>
@@ -204,7 +204,7 @@
         </div>
 
         <?php foreach($sections as $sec_name => $section){ ?>
-            <div id="<?php echo esc_attr( $sec_name ) ?>_settings" class="tabs-panel" style="display:<?php echo ($a == $sec_name .'_settings') ? 'block' : 'none'; ?>;"><?php
+            <div id="<?php echo esc_attr( $sec_name ) ?>_settings" class="tabs-panel <?php echo ($a == $sec_name .'_settings') ? ' frm_block' : ' frm_hidden'; ?>"><?php
             if(isset($section['class'])){
                 call_user_func(array($section['class'], $section['function']), $values);
             }else{

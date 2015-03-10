@@ -1,4 +1,4 @@
-<p style="margin-top:0;">
+<p class="frm_no_top_margin">
 	<label for="frm_submit_style"><input type="checkbox" name="<?php echo esc_attr( $frm_style->get_field_name('submit_style') ) ?>" id="frm_submit_style" <?php echo $style->post_content['submit_style'] ? 'checked="checked"': ''; ?> value="1" /> <?php _e( 'Disable submit button styling', 'formidable' ); ?> <span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Note: If disabled, you may not see the change take effect until you make 2 more styling changes or click "Update Options".', 'formidable' ) ?>" ></span></label>
 </p>
 

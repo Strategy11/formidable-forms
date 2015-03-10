@@ -1,4 +1,4 @@
-<div class="general_settings metabox-holder tabs-panel" style="min-height:0px;border-bottom:none;display:<?php echo ($a == 'general_settings') ? 'block' : 'none'; ?>;">
+<div class="general_settings metabox-holder tabs-panel frm_license_box <?php echo ($a == 'general_settings') ? 'frm_block' : 'frm_hidden'; ?>">
 <?php if ( ! is_multisite() || is_super_admin() ) { ?>
     <div class="postbox">
         <div class="inside">

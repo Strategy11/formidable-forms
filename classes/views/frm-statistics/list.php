@@ -2,7 +2,7 @@
     <div class="frmicon icon32"><br/></div>
     <h2>
 		<?php _e( 'Reports', 'formidable' ) ?>
-		<a href="#" class="add-new-h2" style="visibility:hidden;"><?php _e( 'Add New', 'formidable' ); ?></a>
+		<a href="#" class="add-new-h2 frm_invisible"><?php _e( 'Add New', 'formidable' ); ?></a>
 	</h2>
 
     <?php
@@ -14,6 +14,6 @@
 		FrmAppHelper::update_message('view reports and statistics on your saved entries');
 	?>
 
-    <img src="http://fp.strategy11.com/wp-content/themes/formidablepro/images/reports1.png" alt="Reports" style="max-width:100%"/>
+    <img class="frm_no_reports" src="http://fp.strategy11.com/wp-content/themes/formidablepro/images/reports1.png" alt="Reports"/>
 
 </div>

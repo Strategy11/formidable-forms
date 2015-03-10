@@ -91,7 +91,7 @@
 </div>
 
 <div class="frm_submit">
-<input type="submit" disabled="disabled" style="opacity:1;" value="<?php esc_attr_e( 'Submit', 'formidable' ) ?>" />
+<input type="submit" disabled="disabled" class="frm_full_opacity" value="<?php esc_attr_e( 'Submit', 'formidable' ) ?>" />
 </div>
 
 </fieldset>

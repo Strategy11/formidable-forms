@@ -2,7 +2,7 @@
     <div class="frmicon icon32"><br/></div>
     <h2>
         <?php _e( 'Views', 'formidable' ); ?>
-        <a href="#" class="add-new-h2" style="visibility:hidden;"><?php _e( 'Add New', 'formidable' ); ?></a>
+        <a href="#" class="add-new-h2 frm_invisible"><?php _e( 'Add New', 'formidable' ); ?></a>
     </h2>
 
     <?php
@@ -13,6 +13,6 @@
         FrmAppHelper::update_message('display collected data in lists, calendars, and other formats');
     ?>
 
-    <img src="http://fp.strategy11.com/images/custom-display-settings.png" alt="Display" style="max-width:100%"/>
+    <img class="frm_no_views" src="http://fp.strategy11.com/images/custom-display-settings.png" alt="Display"/>
 
 </div>

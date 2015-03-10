@@ -76,7 +76,7 @@
         </div>
     	<?php do_action('frm_extra_form_instructions'); ?>
 
-    	<div id="frm-layout-classes" class="tabs-panel" style="display:none;max-height:none;">
+    	<div id="frm-layout-classes" class="tabs-panel">
 			<p class="howto"><?php _e( 'Add classes in the "CSS layout classes" field option', 'formidable' ) ?></p>
     	    <ul class="frm_code_list">
     	    <?php $classes = array(

@@ -15,7 +15,7 @@
         <div class="contextual-help-tabs">
         <ul class="frm-category-tabs">
             <?php $a = isset($_GET['t']) ? $_GET['t'] : 'general_settings'; ?>
-        	<li <?php echo ($a == 'general_settings') ? 'class="tabs active"' : '' ?>><a href="#general_settings" style="cursor:pointer"><?php _e( 'General', 'formidable' ) ?></a></li>
+        	<li <?php echo ($a == 'general_settings') ? 'class="tabs active"' : '' ?>><a href="#general_settings" class="frm_cursor_pointer"><?php _e( 'General', 'formidable' ) ?></a></li>
             <?php foreach($sections as $sec_name => $section){ ?>
                 <li <?php echo ($a == $sec_name .'_settings') ? 'class="tabs active"' : '' ?>><a href="#<?php echo esc_attr( $sec_name ) ?>_settings"><?php echo isset($section['name']) ? $section['name'] : ucfirst($sec_name) ?></a></li>
             <?php } ?>
@@ -29,8 +29,8 @@
         <input type="hidden" name="action" value="process-form" />
         <?php wp_nonce_field('process_form_nonce', 'process_form'); ?>
 
-        <div class="general_settings tabs-panel" style="border-top:none;display:<?php echo ($a == 'general_settings') ? 'block' : 'none'; ?>;">
-            <p class="submit" style="padding:0;">
+        <div class="general_settings tabs-panel <?php echo ($a == 'general_settings') ? 'frm_block' : 'frm_hidden'; ?>">
+            <p class="submit">
             <input class="button-primary" type="submit" value="<?php _e( 'Update Options', 'formidable' ) ?>" />
             </p>
 
@@ -123,7 +123,7 @@
         <?php foreach($sections as $sec_name => $section){
             if($a == $sec_name .'_settings'){ ?>
 <style type="text/css">.<?php echo esc_attr( $sec_name ) ?>_settings{display:block;}</style><?php }?>
-            <div id="<?php echo esc_attr( $sec_name ) ?>_settings" class="<?php echo esc_attr( $sec_name ) ?>_settings tabs-panel" style="display:<?php echo ( $a == $sec_name .'_settings' ) ? 'block' : 'none'; ?>;"><?php
+            <div id="<?php echo esc_attr( $sec_name ) ?>_settings" class="<?php echo esc_attr( $sec_name ) ?>_settings tabs-panel <?php echo ( $a == $sec_name .'_settings' ) ? 'frm_block' : 'frm_hidden'; ?>"><?php
                 if(isset($section['class'])){
                     call_user_func(array($section['class'], $section['function']));
                 }else{
@@ -132,7 +132,7 @@
             </div>
         <?php } ?>
 
-        <p class="alignright frm_uninstall" style="padding-top:1.25em;">
+        <p class="alignright frm_uninstall">
             <a href="javascript:void(0)" id="frm_uninstall_now"><?php _e( 'Uninstall Formidable', 'formidable' ) ?></a>
             <span class="spinner frm_spinner"></span>
         </p>
