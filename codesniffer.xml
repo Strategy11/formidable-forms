@@ -3,6 +3,7 @@
 	<description>Formidable Forms rules for PHP_CodeSniffer</description>
 
 	<exclude-pattern>tests/*</exclude-pattern>
+	<exclude-pattern>vendor/*</exclude-pattern>
 
 	<rule ref="WordPress-VIP">
 		<exclude name="Generic.Files.LineEndings.InvalidEOLChar" />
@@ -29,6 +30,7 @@
 		<exclude name="WordPress.WhiteSpace.OperatorSpacing.NoSpaceAfter" />
 
 		<!-- We should probably want to turn the below rules on, but these give issues with the current code base. -->
+		<exclude name="WordPress.Files.FileName.UnderscoresNotAllowed" />
 		<exclude name="WordPress.WhiteSpace.ScopeIndent.Incorrect" />
 		<exclude name="WordPress.Classes.ValidClassName.NotCamelCaps" />
 		<exclude name="WordPress.XSS.EscapeOutput" /><!-- This sniff also has known & reported bugs -->

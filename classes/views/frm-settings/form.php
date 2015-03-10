@@ -118,6 +118,10 @@
         <p><label class="frm_left_label"><?php _e( 'Preview Page', 'formidable' ); ?></label>
         <?php FrmAppHelper::wp_pages_dropdown('frm-preview-page-id', $frm_settings->preview_page_id ) ?>
         </p>
+
+		<p class="submit">
+			<input class="button-primary" type="submit" value="<?php _e( 'Update Options', 'formidable' ) ?>" />
+		</p>
     </div>
 
         <?php foreach ( $sections as $sec_name => $section ) {
