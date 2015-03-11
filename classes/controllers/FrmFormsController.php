@@ -72,11 +72,11 @@ class FrmFormsController {
         }
     }
 
-    public static function create( $values = false ) {
+	public static function create( $values = array() ) {
         FrmAppHelper::permission_check('frm_edit_forms');
 
         global $frm_vars;
-        if ( ! $values ) {
+        if ( empty( $values ) ) {
             $values = $_POST;
         }
 
@@ -357,14 +357,14 @@ class FrmFormsController {
         //check nonce url
         $permission_error = FrmAppHelper::permission_nonce_error('frm_delete_forms', '_wpnonce', 'bulk-toplevel_page_formidable');
         if ( $permission_error !== false ) {
-            self::display_forms_list('', '', 1, array($permission_error));
+			self::display_forms_list( array(), '', 1, array( $permission_error ) );
             return;
         }
 
         $count = self::scheduled_delete(time());
         $message = sprintf(_n( '%1$s form permanently deleted.', '%1$s forms permanently deleted.', $count, 'formidable' ), $count);
 
-        self::display_forms_list('', $message, 1);
+		self::display_forms_list( array(), $message, 1 );
     }
 
     /**

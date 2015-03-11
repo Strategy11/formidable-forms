@@ -32,6 +32,8 @@ class FrmAppController {
             return;
         }
 
+		$current_page = isset( $_GET['page'] ) ? sanitize_title( $_GET['page'] ) : ( isset( $_GET['post_type'] ) ? sanitize_title( $_GET['post_type'] ) : 'None' );
+
         if ( $form ) {
             FrmFormsHelper::maybe_get_form( $form );
 
