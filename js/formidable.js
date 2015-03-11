@@ -1021,7 +1021,7 @@ function frmFrontFormJS(){
             }
         }
 
-        obj.closest('.frm_form_field').find('.frm_uploaded_files:last').after('<input name="'+ fileName +'[]" data-fid="'+ id +'"class="frm_multiple_file" multiple="multiple" type="file" />');
+        obj.closest('.frm_form_field').find('.frm_uploaded_files:last').after('<input name="'+ fileName +'[]" data-fid="'+ id +'"class="frm_transparent frm_multiple_file" multiple="multiple" type="file" />');
 	}
 
 	function removeDiv(){

@@ -93,6 +93,10 @@ $defaults = $default_style->post_content;
     margin-bottom:5px;
 }
 
+.with_frm_style input[type=file] {
+	background-color:transparent;
+}
+
 .with_frm_style select[multiple="multiple"]{
     height:auto;
     line-height:normal;
