@@ -16,26 +16,27 @@
         <ul class="alignleft"><li><?php _e( 'Fields from your form', 'formidable' ) ?>:</li></ul>
         <ul class="frm_code_list frm_full_width">
         <?php
-            if ( ! empty( $fields ) ) {
-                global $wpdb;
-                $linked_forms[] = array();
+		if ( ! empty( $fields ) ) {
+			global $wpdb;
+			$linked_forms[] = array();
 
-                foreach ( $fields as $f ) {
-                    if ( $f->type == 'divider' && isset($f->field_options['repeat']) && $f->field_options['repeat'] ) {
-                        $repeat_field = $f->id;
-                    }
+			foreach ( $fields as $f ) {
+				if ( $f->type == 'divider' && isset( $f->field_options['repeat'] ) && $f->field_options['repeat'] ) {
+					$repeat_field = $f->id;
+				}
 
-                    if ( FrmFieldsHelper::is_no_save_field($f->type) ) {
-                        continue;
-                    }
+				if ( FrmFieldsHelper::is_no_save_field( $f->type ) ) {
+					continue;
+				}
 
-                    if ( $f->type == 'data' && ( ! isset( $f->field_options['data_type'] ) || $f->field_options['data_type'] == 'data' || $f->field_options['data_type'] == '' ) ) {
-                        continue;
-                    }
+				if ( $f->type == 'data' && ( ! isset( $f->field_options['data_type'] ) || $f->field_options['data_type'] == 'data' || $f->field_options['data_type'] == '' ) ) {
+					continue;
+				}
 
-                FrmAppHelper::insert_opt_html( array(
-                    'id' => $f->id, 'key' => $f->field_key, 'name' => $f->name, 'type' => $f->type
-                ));
+				FrmAppHelper::insert_opt_html( array(
+					'id' => $f->id, 'key' => $f->field_key,
+					'name' => $f->name, 'type' => $f->type,
+				) );
 
         	    if ($f->type == 'data'){ //get all fields from linked form
                     if ( isset($f->field_options['form_select']) && is_numeric($f->field_options['form_select']) ) {
