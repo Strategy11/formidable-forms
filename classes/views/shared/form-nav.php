@@ -2,7 +2,7 @@
 <ul class="frm_form_nav">
 <li class="first"><a<?php FrmAppHelper::select_current_page( 'formidable', $current_page, array( 'edit', 'new', 'duplicate' ) ); ?> href="<?php echo esc_url( admin_url('admin.php?page=formidable&frm_action=edit&id='. $id) ) ?>"><?php _e( 'Build', 'formidable' ) ?></a> </li>
 <li><a<?php FrmAppHelper::select_current_page( 'formidable', $current_page, array( 'settings' ) ); ?> href="<?php echo esc_url( admin_url('admin.php?page=formidable&frm_action=settings&id='. $id) ) ?>"><?php _e( 'Settings', 'formidable' ) ?></a> </li>
-<li> <a<?php FrmAppHelper::select_current_page( 'formidable-entries' ); ?> href="<?php echo esc_url( admin_url('admin.php?page=formidable-entries&frm_action=list&form='. $id) ) ?>"><?php _e( 'Entries', 'formidable' ) ?></a></li>
+<li> <a<?php FrmAppHelper::select_current_page( 'formidable-entries', $current_page ); ?> href="<?php echo esc_url( admin_url('admin.php?page=formidable-entries&frm_action=list&form='. $id) ) ?>"><?php _e( 'Entries', 'formidable' ) ?></a></li>
 <li> <a<?php
 if ( $current_page == 'frm_display' || $pagenow == 'post.php' || $pagenow == 'post-new.php' || $current_page == 'formidable-entry-templates' ) {
     echo ' class="current_page"';
