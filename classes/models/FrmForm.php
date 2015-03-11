@@ -291,7 +291,11 @@ class FrmForm{
         global $wpdb;
 
         if ( is_array($id) ) {
-            $query_results = $wpdb->query( $wpdb->prepare('UPDATE '. $wpdb->prefix .'frm_forms SET status = %s WHERE id in ', $status) .'('. implode(',', array_filter( $id, 'is_numeric' ) ) .')');
+			$where = array( 'id' => $id );
+			FrmDb::get_where_clause_and_values( $where );
+			array_unshift( $where['values'], $status );
+
+			$query_results = $wpdb->query( $wpdb->prepare( 'UPDATE ' . $wpdb->prefix . 'frm_forms SET status = %s ' . $where['where'], $where['values'] ) );
         } else {
             $query_results = $wpdb->update( $wpdb->prefix .'frm_forms', array( 'status' => $status), array( 'id' => $id));
         }
@@ -466,6 +470,7 @@ class FrmForm{
             if ( is_array($where) && ! empty($where) ) {
                 $results = FrmDb::get_row($wpdb->prefix .'frm_forms', $where, '*', array( 'order_by' => $order_by) );
             } else {
+				// the query has already been prepared if this is not an array
                 $results = $wpdb->get_row($query);
             }
 

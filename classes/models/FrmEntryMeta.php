@@ -88,8 +88,12 @@ class FrmEntryMeta{
             return;
         }
 
+		// prepare the query
+		$where = array( 'item_id' => $entry_id, 'field_id' => $prev_values );
+		FrmDb::get_where_clause_and_values( $where );
+
         // Delete any leftovers
-        $wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->prefix}frm_item_metas WHERE item_id=%d AND field_id in", $entry_id ) . '  (' . implode(',', $prev_values) . ')' );
+        $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'frm_item_metas ' . $where['where'] ), $where['values'] );
     }
 
     public static function duplicate_entry_metas($old_id, $new_id){
@@ -203,7 +207,7 @@ class FrmEntryMeta{
         return FrmDb::get_results( 'frm_item_metas', array( 'item_id' => $entry_id) );
     }
 
-    public static function getAll($where = '', $order_by = '', $limit = '', $stripslashes = false){
+	public static function getAll( $where = array(), $order_by = '', $limit = '', $stripslashes = false ) {
         global $wpdb;
         $query = 'SELECT it.*, fi.type as field_type, fi.field_key as field_key,
             fi.required as required, fi.form_id as field_form_id, fi.name as field_name, fi.options as fi_options
@@ -225,7 +229,7 @@ class FrmEntryMeta{
         return $results;
     }
 
-    public static function getEntryIds( $where = '', $order_by = '', $limit = '', $unique = true, $args = array() ) {
+    public static function getEntryIds( $where = array(), $order_by = '', $limit = '', $unique = true, $args = array() ) {
         $defaults = array( 'is_draft' => false, 'user_id' => '');
         $args = wp_parse_args($args, $defaults);
 
@@ -287,7 +291,7 @@ class FrmEntryMeta{
             $where .= $draft_where . $user_where;
         }
 
-        $query[] = FrmAppHelper::prepend_and_or_where(' WHERE ', $where) . $order_by . $limit;
+        $query[] = FrmAppHelper::prepend_and_or_where(' WHERE ', $where) . $order_by . $limit; // TODO: check prepare
     }
 
     public static function search_entry_metas( $search, $field_id = '', $operator ) {

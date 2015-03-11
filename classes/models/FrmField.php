@@ -335,6 +335,7 @@ class FrmField{
 
             $results = FrmDb::get_var( $table_name . ' fi LEFT OUTER JOIN ' . $form_table_name . ' fr ON fi.form_id=fr.id', $where, 'fi.*, fr.name as form_name', array( 'order_by' => $order_by, 'limit' => $limit ), '', $query_type );
         }else{
+			// if the query is not an array, then it has already been prepared
             $query .= FrmAppHelper::prepend_and_or_where(' WHERE ', $where) . $order_by . $limit;
 
             if ( $query_type == 'row' ) {

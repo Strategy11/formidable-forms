@@ -360,7 +360,7 @@ class FrmEntry{
                 unset( $order_matches );
 		    }
 
-            $query = 'SELECT ' . $fields . ' FROM ' . $table . FrmAppHelper::prepend_and_or_where(' WHERE ', $where) . $order_by . $limit;
+            $query = 'SELECT ' . $fields . ' FROM ' . $table . FrmAppHelper::prepend_and_or_where(' WHERE ', $where) . $order_by . $limit; // TODO: Check prepare
 
             $entries = $wpdb->get_results($query, OBJECT_K);
             unset($query);

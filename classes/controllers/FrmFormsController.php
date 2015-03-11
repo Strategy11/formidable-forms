@@ -279,7 +279,7 @@ class FrmFormsController {
         $key = (isset($_GET['form']) ? $_GET['form'] : (isset($_POST['form']) ? $_POST['form'] : ''));
         $form = FrmForm::getAll( array( 'form_key' => $key), '', 1);
         if ( empty($form) ) {
-            $form = FrmForm::getAll('', '', 1);
+			$form = FrmForm::getAll( array(), '', 1 );
         }
 
         require(FrmAppHelper::plugin_path() .'/classes/views/frm-entries/direct.php');
@@ -748,7 +748,7 @@ class FrmFormsController {
             if ( $default ) {
                 $template_query['default_template'] = 1;
             }
-            $form = FrmForm::getAll($template_query, '', 1);
+			$form = FrmForm::getAll( $template_query, '', 1 );
 
             $values = FrmFormsHelper::setup_new_vars();
             $values['form_key'] = $filename;
@@ -766,7 +766,7 @@ class FrmFormsController {
                 $form = FrmForm::getOne($form->id);
             } else {
                 $old_id = false;
-                $form = FrmForm::getAll($template_query, '', 1);
+				$form = FrmForm::getAll( $template_query, '', 1 );
             }
 
             if ( $form ) {

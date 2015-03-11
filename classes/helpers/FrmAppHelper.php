@@ -1306,15 +1306,22 @@ class FrmAppHelper {
 
         $order_by = '';
         if ( count($order_query) > 1 ) {
-            $sort_options = array( 'asc', 'desc');
-            $order_by = end($order_query);
-            if ( ! in_array($order_by, $sort_options) ) {
-                $order_by = 'asc';
-            }
+			$order_by = end( $order_query );
+			self::esc_order_by( $order_by );
         }
 
         return ' ORDER BY '. $order . ' '. $order_by;
     }
+
+	/**
+	 * Make sure this is ordering by either ASC or DESC
+	 */
+	public static function esc_order_by( &$order_by ) {
+		$sort_options = array( 'asc', 'desc' );
+		if ( ! in_array( strtolower( $order_by ), $sort_options ) ) {
+			$order_by = 'asc';
+		}
+	}
 
     /**
      * @param string $limit

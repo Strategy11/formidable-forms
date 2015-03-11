@@ -393,14 +393,11 @@ class FrmDb{
         global $wpdb;
 
         // Get query arguments
-		$query_args = $field_types = array( 'textarea', 'text', 'number', 'email', 'url', 'rte', 'date', 'phone', 'password', 'image', 'tag', 'file' );
-        $query_args = array_merge( $query_args, array( '%'. FrmAppHelper::esc_like('s:4:"size";') .'%', '%'. FrmAppHelper::esc_like('s:4:"size";s:0:') .'%' ) );
-
-        // Prepare query
-        $query = $wpdb->prepare( 'SELECT id, field_options FROM ' . $this->fields . ' WHERE type IN (' . FrmAppHelper::prepare_array_values( $field_types, '%s' ) . ') AND field_options LIKE %s AND field_options NOT LIKE %s', $query_args );
+		$field_types = array( 'textarea', 'text', 'number', 'email', 'url', 'rte', 'date', 'phone', 'password', 'image', 'tag', 'file' );
+		$query = array( 'type' => $field_types, 'field_options like' => 's:4:"size";', 'field_options not like' => 's:4:"size";s:0:' );
 
         // Get results
-        $fields = $wpdb->get_results( $query );
+		$fields = FrmDb::get_results( $this->fields, $query, 'id, field_options' );
 
         $updated = 0;
         foreach ( $fields as $f ) {

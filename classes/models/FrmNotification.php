@@ -317,6 +317,9 @@ class FrmNotification{
         if ( $atts['plain_text'] ) {
             $message    = wordwrap($message, 70, "\r\n"); //in case any lines are longer than 70 chars
             $message    = wp_specialchars_decode(strip_tags($message), ENT_QUOTES );
+        } else {
+			// remove line breaks in HTML emails to prevent conflicts with Mandrill
+        	add_filter( 'mandrill_nl2br', 'FrmNotification::remove_mandrill_br' );
         }
 
         $header         = apply_filters('frm_email_header', $header, array(
@@ -337,6 +340,9 @@ class FrmNotification{
             $sent = mail($recipient, $atts['subject'], $message, $header);
         }
 
+		// remove the filter now so other emails can still use it
+		remove_filter( 'mandrill_nl2br', 'FrmNotification::remove_mandrill_br' );
+
         do_action('frm_notification', $recipient, $atts['subject'], $message);
 
         if ( $sent ) {
@@ -350,4 +356,13 @@ class FrmNotification{
         }
     }
 
+	/**
+	 * This function should only be fired when Mandrill is sending an HTML email
+	 * This will make sure Mandrill doesn't mess with our HTML emails
+	 *
+	 * @since 2.0
+	 */
+	public static function remove_mandrill_br( $nl2br ) {
+		return false;
+	}
 }
