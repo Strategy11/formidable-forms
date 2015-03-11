@@ -388,30 +388,8 @@ DEFAULT_HTML;
         $html = str_replace('[field_name]', $field['name'], $html);
 
         //replace [error_class]
-        $error_class = isset($errors['field'. $field_id]) ? ' frm_blank_field' : '';
-        $error_class .= ' frm_'. $field['label'] .'_container';
-        if ( $field['id'] != $field_id ) {
-            // add a class for repeating/embedded fields
-            $error_class .= ' frm_field_'. $field['id'] .'_container';
-        }
-
-        //Add classes to inline confirmation field (if it doesn't already have classes set)
-        if ( isset($field['conf_field']) && $field['conf_field'] == 'inline' && ! $field['classes'] ) {
-            $error_class .= ' frm_first_half';
-        }
-
-        //Add class if field includes other option
-        if ( isset( $field['other'] ) && true == $field['other'] ) {
-            $error_class .= ' frm_other_container';
-        }
-
-        //insert custom CSS classes
-        if ( ! empty( $field['classes'] ) ) {
-            if ( ! strpos( $html, 'frm_form_field ') ) {
-                $error_class .= ' frm_form_field';
-            }
-            $error_class .= ' '. $field['classes'];
-        }
+		$error_class = isset ( $errors['field'. $field_id] ) ? ' frm_blank_field' : '';
+		self::get_more_field_classes( $error_class, $field, $field_id, $html );
         $html = str_replace('[error_class]', $error_class, $html);
 
         //replace [entry_key]
@@ -481,6 +459,49 @@ DEFAULT_HTML;
 
         return $html;
     }
+
+	/**
+	* Add more classes to certain fields (like confirmation fields, other fields, repeating fields, etc.)
+	*
+	* @since 2.0
+	* @param $error_class string, pass by reference
+	* @param $field array
+	* @param $field_id int
+	* @param $html string
+	*/
+	private static function get_more_field_classes( &$error_class, $field, $field_id, $html ){
+		$error_class .= ' frm_'. $field['label'] .'_container';
+		if ( $field['id'] != $field_id ) {
+			// add a class for repeating/embedded fields
+			$error_class .= ' frm_field_'. $field['id'] .'_container';
+		}
+
+		//Add classes to inline confirmation field (if it doesn't already have classes set)
+		if ( isset ( $field['conf_field'] ) && $field['conf_field'] == 'inline' && ! $field['classes'] ) {
+			$error_class .= ' frm_first_half';
+		}
+
+		//Add class if field includes other option
+		if ( isset( $field['other'] ) && true == $field['other'] ) {
+			$error_class .= ' frm_other_container';
+		}
+
+		// If this is a repeating section that should be hidden with exclude_fields or fields shortcode, hide it
+		if ( $field['type'] == 'divider' && $field['repeat'] ) {
+			global $frm_vars;
+			if ( isset( $frm_vars['show_fields'] ) && ! empty ( $frm_vars['show_fields'] ) && ! in_array( $field['id'], $frm_vars['show_fields'] ) && ! in_array( $field['field_key'], $frm_vars['show_fields'] ) ) {
+				$error_class .= ' frm_hidden';
+			}
+		}
+
+		//insert custom CSS classes
+		if ( ! empty( $field['classes'] ) ) {
+			if ( ! strpos( $html, 'frm_form_field ') ) {
+				$error_class .= ' frm_form_field';
+			}
+			$error_class .= ' '. $field['classes'];
+		}
+	}
 
     public static function remove_inline_conditions( $no_vars, $code, $replace_with, &$html ) {
         if ( $no_vars ) {
