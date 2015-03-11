@@ -22,4 +22,6 @@ if ( file_exists( dirname( __FILE__ )  . '/../vendor/autoload_52.php' ) ) {
 	include( dirname( __FILE__ )  . '/../vendor/autoload_52.php' );
 }
 
-include( dirname( __FILE__ ) . '/../vendor/autoload.php' );
+if ( version_compare( phpversion(), '5.3', '>=' ) ) {
+	include( dirname( __FILE__ ) . '/../vendor/autoload.php' );
+}

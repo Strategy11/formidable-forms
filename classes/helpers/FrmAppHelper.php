@@ -1405,10 +1405,10 @@ class FrmAppHelper {
         return self::get_server_value('HTTP_REFERER');
     }
 
-    /**
-     * @return boolean
-     */
-    public static function json_to_array($json_vars){
+	/**
+	 * @return array
+	 */
+	public static function json_to_array( $json_vars ) {
         $vars = array();
         foreach ( $json_vars as $jv ) {
             $jv_name = explode('[', $jv['name']);
@@ -1503,8 +1503,7 @@ class FrmAppHelper {
 	/**
 	 * Add the current_page class to that page in the form nav
 	 */
-	public static function select_current_page( $page, $action = array() ) {
-		$current_page = isset( $_GET['page'] ) ? sanitize_title( $_GET['page'] ) : ( isset( $_GET['post_type'] ) ? sanitize_title( $_GET['post_type'] ) : 'None' );
+	public static function select_current_page( $page, $current_page, $action = array() ) {
 		if ( $current_page != $page ) {
 			return;
 		}

@@ -120,15 +120,16 @@ class FrmEntryMeta{
             return stripslashes_deep($result);
         }
 
+		$get_table = $wpdb->prefix .'frm_item_metas';
+		$query = array( 'item_id' => $entry_id );
         if ( is_numeric($field_id) ) {
-            $query = $wpdb->prepare("SELECT meta_value FROM {$wpdb->prefix}frm_item_metas WHERE field_id=%d and item_id=%d", $field_id, $entry_id);
+			$query['field_id'] = $field_id;
         } else {
-            $query = $wpdb->prepare("SELECT meta_value FROM {$wpdb->prefix}frm_item_metas it LEFT OUTER JOIN {$wpdb->prefix}frm_fields fi ON it.field_id=fi.id WHERE fi.field_key=%s and item_id=%d", $field_id, $entry_id);
+			$get_table .= ' it LEFT OUTER JOIN ' . $wpdb->prefix . 'frm_fields fi ON it.field_id=fi.id';
+			$query['fi.field_key'] = $field_id;
         }
-        $query .= ' LIMIT 1';
 
-        $cache_key = 'get_entry_meta_by_field_'. $entry_id .'f'. $field_id;
-        $result = FrmAppHelper::check_cache($cache_key, 'frm_entry', $query, 'get_var');
+		$result = FrmDb::get_var( $get_table, $query, 'meta_value' );
         $result = maybe_unserialize($result);
 
         if ( $cached ) {
@@ -270,11 +271,11 @@ class FrmEntryMeta{
             return;
         }
 
-        $draft_where = $user_where = '';
+		$draft_where = $user_where = '';
         if ( ! $args['is_draft'] ) {
-            $draft_where = ' AND e.is_draft=0';
+			$draft_where = $wpdb->prepare( ' AND e.is_draft=%d', 0 );
         } else if ( $args['is_draft'] == 1 ) {
-            $draft_where = ' AND e.is_draft=1';
+			$draft_where = $wpdb->prepare( ' AND e.is_draft=%d', 1 );
         }
 
         if ( ! empty($args['user_id']) ) {
@@ -291,7 +292,8 @@ class FrmEntryMeta{
             $where .= $draft_where . $user_where;
         }
 
-        $query[] = FrmAppHelper::prepend_and_or_where(' WHERE ', $where) . $order_by . $limit; // TODO: check prepare
+		// The query has already been prepared
+		$query[] = FrmAppHelper::prepend_and_or_where(' WHERE ', $where) . $order_by . $limit;
     }
 
     public static function search_entry_metas( $search, $field_id = '', $operator ) {

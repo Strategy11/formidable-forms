@@ -238,7 +238,13 @@ class FrmDb{
         } else if ( $value === null ) {
             $where .= ' IS NULL';
         } else {
-            $where .= '=';
+			// allow a - to prevent = from being added
+			if ( substr( $key, -1 ) == '-' ) {
+				$value = rtrim( $value, '-' );
+			} else {
+				$where .= '=';
+			}
+
             $where .= is_numeric( $value ) ? ( strpos( $value, '.' ) !== false ? '%f' : '%d' ) : '%s';
             $values[] = $value;
         }
@@ -304,6 +310,38 @@ class FrmDb{
     public static function get_results( $table, $where = array(), $fields = '*', $args = array() ) {
         return self::get_var( $table, $where, $fields, $args, '', 'results' );
     }
+
+	/**
+	 * Check for like, not like, in, not in, =, !=, >, <, <=, >=
+	 * Return a value to append to the where array key
+	 *
+	 * @return string
+	 */
+	public static function append_where_is( $where_is ) {
+		$switch_to = array(
+			'='		=> '',
+			'!=' 	=> '!',
+			'<='	=> '<',
+			'>='	=> '>',
+			'like'	=> 'like',
+			'not like' => 'not like',
+			'in'	=> '',
+			'not in' => 'not',
+		);
+
+		$where_is = strtolower( $where_is );
+		if ( isset( $switch_to[ $where_is ] ) ) {
+			return $switch_to[ $where_is ];
+		}
+
+		// > and < need a little more work since we don't want them switched to >= and <=
+		if ( $where_is == '>' || $where_is == '<' ) {
+			return $where_is . '-'; // the - indicates that the = should not be added later
+		}
+
+		// fallback to = if the query is none of these
+		return '';
+	}
 
     /**
      * Get 'frm_forms' from wp_frm_forms or a longer table param that includes a join

@@ -356,11 +356,12 @@ class FrmEntry{
             if ( preg_match( '/ meta_([0-9]+)/', $order_by, $order_matches ) ) {
     		    // sort by a requested field
                 $field_id = (int) $order_matches[1];
-                $fields .= ', (SELECT meta_value FROM '. $wpdb->prefix .'frm_item_metas WHERE field_id = '. $field_id .' AND item_id = it.id) as meta_'. sanitize_title( $order_matches[1] );
-                unset( $order_matches );
+				$fields .= ', (SELECT meta_value FROM '. $wpdb->prefix .'frm_item_metas WHERE field_id = '. $field_id .' AND item_id = it.id) as meta_'. $field_id;
+				unset( $order_matches, $field_id );
 		    }
 
-            $query = 'SELECT ' . $fields . ' FROM ' . $table . FrmAppHelper::prepend_and_or_where(' WHERE ', $where) . $order_by . $limit; // TODO: Check prepare
+			// prepare the query
+			$query = 'SELECT ' . $fields . ' FROM ' . $table . FrmAppHelper::prepend_and_or_where(' WHERE ', $where) . $order_by . $limit;
 
             $entries = $wpdb->get_results($query, OBJECT_K);
             unset($query);

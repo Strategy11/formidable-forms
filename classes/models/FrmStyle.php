@@ -3,6 +3,9 @@ class FrmStyle{
     public $number = false;	// Unique ID number of the current instance.
 	public $id = 0; // the id of the post
 
+	/**
+	 * @param int|string $id The id of the stylsheet or 'default'
+	 */
 	public function __construct( $id = 0 ) {
         $this->id = $id;
     }
