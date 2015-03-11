@@ -21,6 +21,10 @@ $defaults = $default_style->post_content;
     display:none;
 }
 
+.frm_transparent{
+	color:transparent;
+}
+
 .frm_preview_page:before{
     content:normal !important;
 }

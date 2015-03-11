@@ -295,6 +295,10 @@ if ( ! isset($collapse_icon) ) {
     font-size:<?php echo $field_font_size ?>;
 }
 
+.<?php echo $style_class ?> input[type=file].frm_transparent{
+    color:transparent<?php echo $important ?>;
+}
+
 .<?php echo $style_class ?> .frm_default,
 .<?php echo $style_class ?> .placeholder,
 .<?php echo $style_class ?> .chosen-container-multi .chosen-choices li.search-field .default,
