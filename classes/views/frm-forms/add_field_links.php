@@ -1,12 +1,12 @@
 <div id="postbox-container-1" class="postbox-container">
 
-    <?php
-    $action = isset($_REQUEST['frm_action']) ? 'frm_action' : 'action';
-    $action = FrmAppHelper::get_param($action);
-    $button = ( $action == 'new' || $action == 'duplicate' ) ? __( 'Create', 'formidable' ) : __( 'Update', 'formidable' );
-    ?>
+<?php
+$action = isset( $_REQUEST['frm_action'] ) ? 'frm_action' : 'action';
+$action = sanitize_title( FrmAppHelper::get_param( $action ) );
+$button = ( $action == 'new' || $action == 'duplicate' ) ? __( 'Create', 'formidable' ) : __( 'Update', 'formidable' );
 
-    <?php include(FrmAppHelper::plugin_path() .'/classes/views/frm-forms/_publish_box.php') ?>
+include(FrmAppHelper::plugin_path() .'/classes/views/frm-forms/_publish_box.php');
+?>
 
     <div id="frm_position_ele"></div>
 
@@ -17,12 +17,12 @@
         <ul id="category-tabs" class="category-tabs frm-category-tabs">
     		<li class="tabs" ><a href="#frm-insert-fields" id="frm_insert_fields_tab"><?php _e( 'Fields', 'formidable' ); ?></a></li>
     		<li class="hide-if-no-js"><a href="#frm-layout-classes" id="frm_layout_classes_tab" class="frm_help" title="<?php esc_attr_e( 'Open the Field Options and click on the CSS Layout Classes option to enable this tab') ?>"><?php _e( 'Layout', 'formidable' ); ?></a></li>
-    		<?php do_action('frm_extra_form_instruction_tabs'); ?>
+<?php do_action('frm_extra_form_instruction_tabs'); ?>
     	</ul>
 
     	<div id="frm-insert-fields" class="tabs-panel">
 		    <ul class="field_type_list">
-            <?php
+<?php
 $col_class = 'frm_col_one';
 foreach ( $frm_field_selection as $field_key => $field_type ) { ?>
                 <li class="frmbutton button <?php echo esc_attr( $col_class .' frm_t'. $field_key ) ?>" id="<?php echo esc_attr( $field_key ) ?>"><a href="#" class="frm_add_field"><?php echo esc_html( $field_type ) ?></a></li>
