@@ -1249,7 +1249,6 @@ class FrmAppHelper {
     	// Set output var
     	$output = ( 1 == $count ) ? '1 '. $chunks[ $i ][1] : $count . ' ' . $chunks[ $i ][2];
 
-
     	if ( ! (int) trim( $output ) ) {
     		$output = '0 ' . __( 'seconds', 'formidable' );
         }
@@ -1500,6 +1499,19 @@ class FrmAppHelper {
             echo '"';
         }
     }
+
+	/**
+	 * Add the current_page class to that page in the form nav
+	 */
+	public static function select_current_page( $page, $action = array() ) {
+		$current_page = isset( $_GET['page'] ) ? sanitize_title( $_GET['page'] ) : ( isset( $_GET['post_type'] ) ? sanitize_title( $_GET['post_type'] ) : 'None' );
+		if ( $current_page != $page ) {
+			return;
+		}
+		if ( empty( $action ) || ( isset( $_GET['frm_action'] ) && ( in_array( sanitize_title( $_GET['frm_action'] ), $action ) ) ) ) {
+			echo ' class="current_page"';
+		}
+	}
 
     /**
      * Prepare and json_encode post content

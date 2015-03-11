@@ -2,12 +2,12 @@
 
 class FrmShowForm extends WP_Widget {
 
-	function __construct() {
+	public function __construct() {
 		$widget_ops = array( 'description' => __( 'Display a Formidable Form', 'formidable' ) );
 		$this->WP_Widget('frm_show_form', __( 'Formidable Form', 'formidable' ), $widget_ops);
 	}
 
-	function widget( $args, $instance ) {
+	public function widget( $args, $instance ) {
         if ( empty($instance['title']) ) {
             $title = FrmForm::getName( $instance['form'] );
         } else {
@@ -35,11 +35,11 @@ class FrmShowForm extends WP_Widget {
 		echo $args['after_widget'];
 	}
 
-	function update( $new_instance, $old_instance ) {
+	public function update( $new_instance, $old_instance ) {
 		return $new_instance;
 	}
 
-	function form( $instance ) {
+	public function form( $instance ) {
 	    //Defaults
 		$instance = wp_parse_args( (array) $instance, array(
 		    'title' => false, 'form' => false, 'description' => false,

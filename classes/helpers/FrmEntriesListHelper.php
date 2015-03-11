@@ -2,7 +2,7 @@
 
 class FrmEntriesListHelper extends FrmListHelper {
 
-	function prepare_items() {
+	public function prepare_items() {
         global $wpdb, $per_page;
 
         $per_page = $this->get_items_per_page( 'formidable_page_formidable_entries_per_page');
@@ -50,7 +50,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 		) );
 	}
 
-	function no_items() {
+	public function no_items() {
         $s = isset( $_REQUEST['s'] ) ? $_REQUEST['s'] : '';
 	    if ( ! empty($s) ) {
             _e( 'No Entries Found', 'formidable' );
@@ -66,7 +66,7 @@ class FrmEntriesListHelper extends FrmListHelper {
         include(FrmAppHelper::plugin_path() .'/classes/views/frm-entries/no_entries.php');
 	}
 
-	function search_box( $text, $input_id ) {
+	public function search_box( $text, $input_id ) {
     	if ( ! $this->has_items() && ! isset( $_REQUEST['s'] ) ) {
     		return;
     	}
@@ -133,7 +133,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 <?php
 	}
 
-	function single_row( $item, $style = '' ) {
+	public function single_row( $item, $style = '' ) {
 		// Set up the hover actions for this user
 		$actions = array();
 		$view_link = '?page=formidable-entries&frm_action=show&id='. $item->id;

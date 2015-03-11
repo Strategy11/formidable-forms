@@ -45,13 +45,13 @@ class FrmFormsController {
         return self::display_forms_list($params, '', false, $errors);
     }
 
-    public static function new_form( $values = false ) {
+	public static function new_form( $values = array() ) {
         FrmAppHelper::permission_check('frm_edit_forms');
 
         global $frm_vars;
 
         $action = isset($_REQUEST['frm_action']) ? 'frm_action' : 'action';
-        $action = $values ? $values[ $action ] : FrmAppHelper::get_param( $action );
+		$action = empty( $values ) ? sanitize_title( FrmAppHelper::get_param( $action ) ) : $values[ $action ];
 
         if ($action == 'create') {
             return self::create($values);
@@ -455,12 +455,12 @@ class FrmFormsController {
         wp_die();
     }
 
-    public static function display_forms_list( $params = false, $message = '', $current_page_ov = false, $errors = array() ) {
+    public static function display_forms_list( $params = array(), $message = '', $current_page_ov = false, $errors = array() ) {
         FrmAppHelper::permission_check('frm_view_forms');
 
         global $wpdb, $frm_vars;
 
-        if ( ! $params ) {
+		if ( empty( $params ) ) {
             $params = FrmFormsHelper::get_params();
         }
 
@@ -475,7 +475,6 @@ class FrmFormsController {
             wp_redirect( add_query_arg( 'paged', $total_pages ) );
             die();
         }
-
 
         require(FrmAppHelper::plugin_path() .'/classes/views/frm-forms/list.php');
     }

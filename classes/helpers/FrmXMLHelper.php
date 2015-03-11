@@ -218,7 +218,6 @@ class FrmXMLHelper{
     		    unset($field);
     		}
 
-
     		// Delete any fields attached to this form that were not included in the template
     		if ( isset( $form_fields ) && ! empty( $form_fields ) ) {
 				foreach ( $form_fields as $field ) {

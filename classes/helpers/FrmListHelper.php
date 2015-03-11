@@ -6,7 +6,7 @@ if ( ! defined('ABSPATH') ) {
 class FrmListHelper extends WP_List_Table {
     var $params;
 
-	function __construct($args) {
+	public function __construct( $args ) {
 	    $args = wp_parse_args( $args, array(
 			'params' => array()
 		) );
@@ -16,11 +16,11 @@ class FrmListHelper extends WP_List_Table {
 		parent::__construct( $args );
 	}
 
-	function ajax_user_can() {
+	public function ajax_user_can() {
 		return current_user_can( 'administrator' );
 	}
 
-	function display_rows() {
+	public function display_rows() {
 		$style = '';
 		foreach ( $this->items as $item ) {
 			$style = ( ' class="alternate"' == $style ) ? '' : ' class="alternate"';

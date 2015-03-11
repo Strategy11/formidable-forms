@@ -6,13 +6,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmFormsListHelper extends FrmListHelper {
     var $status = '';
 
-	function __construct($args) {
+	public function __construct( $args ) {
 		$this->status = isset( $_REQUEST['form_type'] ) ? $_REQUEST['form_type'] : '';
 
 		parent::__construct( $args );
 	}
 
-	function prepare_items() {
+	public function prepare_items() {
 	    global $wpdb, $per_page, $mode;
 
 	    $mode = empty( $_REQUEST['mode'] ) ? 'list' : $_REQUEST['mode'];
@@ -69,7 +69,7 @@ class FrmFormsListHelper extends FrmListHelper {
 		) );
 	}
 
-	function no_items() {
+	public function no_items() {
 	    if ( 'template' == $this->status ) {
             _e( 'No Templates Found.', 'formidable' ) ?>
             <br/><br/><?php _e( 'To add a new template:', 'formidable' ) ?>
@@ -83,7 +83,7 @@ class FrmFormsListHelper extends FrmListHelper {
 <?php   }
 	}
 
-	function get_bulk_actions(){
+	public function get_bulk_actions(){
 	    $actions = array();
 
 	    if ( in_array($this->status, array( '', 'published')) ) {
@@ -107,7 +107,7 @@ class FrmFormsListHelper extends FrmListHelper {
         return $actions;
     }
 
-    function extra_tablenav( $which ) {
+	public function extra_tablenav( $which ) {
         if ( 'top' != $which ) {
             return;
         }
@@ -158,7 +158,7 @@ class FrmFormsListHelper extends FrmListHelper {
 <?php
 	}
 
-	function get_views() {
+	public function get_views() {
 
 		$statuses = array(
 		    'published' => __( 'My Forms', 'formidable' ),
@@ -189,7 +189,7 @@ class FrmFormsListHelper extends FrmListHelper {
 		return $links;
 	}
 
-	function pagination( $which ) {
+	public function pagination( $which ) {
 		global $mode;
 
 		parent::pagination( $which );
@@ -199,7 +199,7 @@ class FrmFormsListHelper extends FrmListHelper {
 		}
 	}
 
-	function single_row( $item, $style = '' ) {
+	public function single_row( $item, $style = '' ) {
 	    global $frm_vars, $mode;
 
 		// Set up the hover actions for this user

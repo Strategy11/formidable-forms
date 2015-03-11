@@ -398,7 +398,6 @@ class FrmStylesController {
     					$i++;
     					$hidden_class = in_array( $box['id'], $hidden ) ? 'hide-if-js' : '';
 
-
     					if ( ! $first_open && empty( $hidden_class ) ) {
     						$first_open = true;
     					}
@@ -424,4 +423,3 @@ class FrmStylesController {
     	return $i;
     }
 }
-

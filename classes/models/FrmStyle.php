@@ -1,14 +1,14 @@
 <?php
 class FrmStyle{
     public $number = false;	// Unique ID number of the current instance.
-    public $id = false; // the id of the post
+	public $id = 0; // the id of the post
 
-    public function __construct($id = false) {
+	public function __construct( $id = 0 ) {
         $this->id = $id;
     }
 
     public function get_new() {
-        $this->id = false;
+		$this->id = 0;
 
         $max_slug_value = pow(36, 6);
         $min_slug_value = 37; // we want to have at least 2 characters in the slug
@@ -178,7 +178,7 @@ class FrmStyle{
             if ( $style ) {
                 $this->id = $style->ID;
             } else {
-                $this->id = false;
+                $this->id = 0;
             }
             return $style;
         }

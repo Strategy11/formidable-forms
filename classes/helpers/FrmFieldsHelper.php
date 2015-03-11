@@ -833,7 +833,6 @@ DEFAULT_HTML;
                     $atts['entry_key'] = $entry->item_key;
                     //$replace_with = apply_filters('frmpro_fields_replace_shortcodes', $replace_with, $tag, $atts, $field);
 
-
                     if ( is_array($replace_with) ) {
                         $replace_with = implode($sep, $replace_with);
                     }
