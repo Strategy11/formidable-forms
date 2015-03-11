@@ -1,5 +1,7 @@
 <?php
-if ( !defined('ABSPATH') ) die('You are not allowed to call this page directly.');
+if ( ! defined('ABSPATH') ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 
 class FrmXMLHelper{
 
@@ -346,7 +348,7 @@ class FrmXMLHelper{
 
 	    $m = array(
 			'key'   => (string) $meta->meta_key,
-			'value' => (string) $meta->meta_value
+			'value' => (string) $meta->meta_value,
 		);
 
 		//switch old form and field ids to new ones
@@ -509,7 +511,6 @@ class FrmXMLHelper{
                 $message .= implode(', ', $s_message);
                 $message .= '</li>';
             }
-
         }
 
         if ( $message == '<ul>' ) {
@@ -596,7 +597,7 @@ class FrmXMLHelper{
         $post_settings = array(
             'post_type', 'post_category', 'post_content',
             'post_excerpt', 'post_title', 'post_name', 'post_date',
-            'post_status', 'post_custom_fields', 'post_password'
+			'post_status', 'post_custom_fields', 'post_password',
         );
 
         foreach ( $post_settings as $post_setting ) {
@@ -770,7 +771,7 @@ class FrmXMLHelper{
 
     private static function format_email_to_data( &$atts, $notification ) {
         if ( isset( $notification['email_to'] ) ) {
-            $atts['email_to'] = preg_split( "/ (,|;) /", $notification['email_to']);
+			$atts['email_to'] = preg_split( '/ (,|;) /', $notification['email_to'] );
         } else {
             $atts['email_to'] = array();
         }
@@ -865,13 +866,13 @@ class FrmXMLHelper{
             $reply_to = isset($notification['ar_reply_to']) ? $notification['ar_reply_to'] : '';
             $reply_to_name = isset($notification['ar_reply_to_name']) ? $notification['ar_reply_to_name'] : '';
 
-            if ( !empty($reply_to) ) {
-               $new_notification2['post_content']['reply_to'] = $reply_to;
-            }
+			if ( ! empty( $reply_to ) ) {
+				$new_notification2['post_content']['reply_to'] = $reply_to;
+			}
 
-            if ( !empty($reply_to) || !empty($reply_to_name) ) {
+			if ( ! empty( $reply_to ) || ! empty( $reply_to_name ) ) {
                 $new_notification2['post_content']['from'] = ( empty($reply_to_name) ? '[sitename]' : $reply_to_name ) .' <'. ( empty($reply_to) ? '[admin_email]' : $reply_to ) .'>';
-            }
+			}
 
             $notifications[] = $new_notification2;
             unset( $new_notification2 );

@@ -18,7 +18,6 @@
         </ul>
     <?php
     }
-
 } else if ( $field['type'] == 'select' ) {
     if ( isset($field['post_field']) && $field['post_field'] == 'post_category' ) {
         echo FrmFieldsHelper::dropdown_categories( array( 'name' => $field_name, 'field' => $field) );

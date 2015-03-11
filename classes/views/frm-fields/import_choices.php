@@ -8,8 +8,9 @@
     wp_admin_css();
     wp_admin_css( 'colors' );
     wp_admin_css( 'ie' );
-    if ( is_multisite() )
+	if ( is_multisite() ) {
     	wp_admin_css( 'ms' );
+	}
 
     do_action('admin_print_styles');
     do_action('admin_print_scripts');

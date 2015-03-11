@@ -46,7 +46,7 @@
                             $ldfe = '';
 							if ( $linked_fields ) {
 								foreach ( $linked_fields as $linked_field ) {
-                                    FrmAppHelper::insert_opt_html( array( 'id' => $f->id ." show=". $linked_field->id, 'key' => $f->field_key ." show=". $linked_field->field_key, 'name' => $linked_field->name, 'type' => $linked_field->type));
+                                    FrmAppHelper::insert_opt_html( array( 'id' => $f->id . ' show=' . $linked_field->id, 'key' => $f->field_key . ' show=' . $linked_field->field_key, 'name' => $linked_field->name, 'type' => $linked_field->type ) );
 
                                     $ldfe = $linked_field->id;
                                     unset($linked_field);

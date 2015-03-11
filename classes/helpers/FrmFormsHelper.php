@@ -44,18 +44,20 @@ class FrmFormsHelper{
 		$forms = FrmForm::get_published_forms( $where );
         ?>
         <select name="<?php echo esc_attr( $field_name ); ?>" id="<?php echo esc_attr( $args['field_id'] ) ?>" <?php
-            if ( $args['onchange'] ) {
-                echo ' onchange="'. esc_attr( $args['onchange'] ) .'"';
-            }
-            if ( ! empty($args['class']) ) {
-                echo ' class="'. esc_attr( $args['class'] ) .'"';
-            } ?>>
-            <?php if ( $args['blank'] ) { ?>
-            <option value=""><?php echo ( $args['blank'] == 1 ) ? ' ' : '- '. esc_attr( $args['blank'] ) .' -'; ?></option>
-            <?php } ?>
-            <?php foreach ( $forms as $form ) { ?>
-                <option value="<?php echo esc_attr( $form->id ); ?>" <?php selected($field_value, $form->id); ?>><?php echo '' == $form->name ? __( '(no title)', 'formidable' ) : esc_attr( FrmAppHelper::truncate($form->name, 33) ); ?></option>
-            <?php } ?>
+		if ( $args['onchange'] ) {
+			echo ' onchange="' . esc_attr( $args['onchange'] ) . '"';
+		}
+		if ( ! empty( $args['class'] ) ) {
+			echo ' class="' . esc_attr( $args['class'] ) . '"';
+		} ?>>
+		<?php if ( $args['blank'] ) { ?>
+			<option value=""><?php echo ( $args['blank'] == 1 ) ? ' ' : '- ' . esc_attr( $args['blank'] ) . ' -'; ?></option>
+		<?php } ?>
+		<?php foreach ( $forms as $form ) { ?>
+			<option value="<?php echo esc_attr( $form->id ); ?>" <?php selected( $field_value, $form->id ); ?>><?php
+				echo '' == $form->name ? __( '(no title)', 'formidable' ) : esc_attr( FrmAppHelper::truncate($form->name, 33) ); 
+			?></option>
+		<?php } ?>
         </select>
         <?php
     }
@@ -96,8 +98,8 @@ class FrmFormsHelper{
                 ?>
 				<li><a href="<?php echo isset($base) ? add_query_arg($args, $base) : add_query_arg($args); ?>" tabindex="-1"><?php echo empty($form->name) ? __( '(no title)') : FrmAppHelper::truncate($form->name, 33); ?></a></li>
 			<?php
-			        unset($form);
-			    } ?>
+				unset( $form );
+			} ?>
 			</ul>
 		</li>
         <?php
@@ -190,7 +192,6 @@ class FrmFormsHelper{
 
                     unset($k, $v);
                 }
-
             }else{
                 $values[$var] = ($post_values && isset($post_values['options'][$var])) ? $post_values['options'][$var] : (($record && isset($record->options[$var])) ? $record->options[$var] : $default);
             }

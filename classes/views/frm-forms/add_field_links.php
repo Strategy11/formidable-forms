@@ -52,12 +52,12 @@
 	                <a href="#" id="frm-<?php echo esc_attr( $field_key ) ?>Drop" class="frm-dropdown-toggle" data-toggle="dropdown"><?php echo esc_html( $field_label ) ?> <b class="caret"></b></a>
 
                     <ul class="frm-dropdown-menu" role="menu" aria-labelledby="frm-<?php echo esc_attr( $field_key ) ?>Drop">
-                	<?php foreach ( $field_type['types'] as $k => $type ) {
-                        ?>
+                	<?php
+					foreach ( $field_type['types'] as $k => $type ) { ?>
                         <li class="frm_t<?php echo esc_attr( $field_key ) ?>" id="<?php echo esc_attr( $field_key ) ?>|<?php echo esc_attr( $k ) ?>"><?php echo apply_filters( 'frmpro_field_links', $type, $id, $field_key .'|'. $k ) ?></li>
                 	<?php
-                	        unset($k, $type);
-                	    } ?>
+						unset( $k, $type );
+					} ?>
                 	</ul>
                 </li>
 <?php

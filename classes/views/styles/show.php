@@ -6,10 +6,11 @@
 
 	<div class="manage-menus">
  		<span class="add-edit-menu-action">
- 		    <?php if ( count( $styles ) < 2 && ! empty( $style->ID ) ) {
+ 		    <?php
+			if ( count( $styles ) < 2 && ! empty( $style->ID ) ) {
  		        printf(__( 'Edit your style below, or %1$screate a new style%2$s.', 'formidable' ), '<a href="?page=formidable-styles&frm_action=new_style">', '</a>');
 
- 		    } else { ?>
+			} else { ?>
  		        <form method="get">
  		            <input type="hidden" name="page" value="<?php echo esc_attr( $_GET['page'] ) ?>"/>
  		            <input type="hidden" name="frm_action" value="edit" />
@@ -26,7 +27,7 @@
  		        </form>
  		        <span class="add-new-menu-action"><?php printf(__( 'or %1$screate a new style%2$s.', 'formidable' ), '<a href="?page=formidable-styles&frm_action=new_style">', '</a>'); ?></span>
 <?php
- 		    } ?>
+			} ?>
 
 		</span>
     </div><!-- /manage-menus -->

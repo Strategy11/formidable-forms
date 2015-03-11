@@ -124,7 +124,7 @@ class FrmStyle{
         ob_start();
         $frm_style = $this;
         include($filename);
-        $css .= preg_replace('/\/\*(.|\s)*?\*\//', '', str_replace( array("\r\n", "\r", "\n", "\t", "    "), '', ob_get_contents()));
+		$css .= preg_replace( '/\/\*(.|\s)*?\*\//', '', str_replace( array( "\r\n", "\r", "\n", "\t", '    ' ), '', ob_get_contents() ) );
         ob_end_clean();
 
         $access_type = get_filesystem_method();
@@ -135,7 +135,7 @@ class FrmStyle{
         	if ( ! WP_Filesystem($creds) ) {
         		// any problems and we exit
         		$dirs_exist = false;
-        	}	
+			}
 
         	global $wp_filesystem;
 
@@ -334,7 +334,7 @@ class FrmStyle{
             'width'             => '150px',
             'required_color'    => 'B94A48',
             'required_weight'   => 'bold',
-            'label_padding'     =>  '0 0 3px 0',
+            'label_padding'     => '0 0 3px 0',
 
             'description_font_size' => '12px',
             'description_color' => '666666',

@@ -51,8 +51,8 @@ class FrmNotification{
             //Don't allow empty From
             if  ( $f == 'from' && empty($notification[$f]) ) {
                 $notification[$f] = '[admin_email]';
-            //Remove brackets
             } else if ( in_array($f, array( 'email_to', 'cc', 'bcc', 'reply_to', 'from')) ) {
+				//Remove brackets
                 //Add a space in case there isn't one
                 $notification[$f] = str_replace('<', ' ', $notification[$f]);
                 $notification[$f] = str_replace( array( '"', '>'), '', $notification[$f]);
@@ -61,7 +61,7 @@ class FrmNotification{
                 if ( strpos($notification[$f], '[' . $user_id_field . ']' ) !== false || strpos($notification[$f], '[' . $user_id_key . ']' ) !== false ) {
                     $user_data = get_userdata($entry->metas[$user_id_field]);
                     $user_email = $user_data->user_email;
-                    $notification[$f] = str_replace( array( '[' . $user_id_field . ']','[' . $user_id_key . ']') , $user_email , $notification[$f]);
+					$notification[ $f ] = str_replace( array( '[' . $user_id_field . ']', '[' . $user_id_key . ']' ), $user_email, $notification[ $f ] );
                 }
             }
 
@@ -69,9 +69,9 @@ class FrmNotification{
         }
 
         //Put recipients, cc, and bcc into an array if they aren't empty
-        $to_emails = ( ! empty( $notification['email_to'] ) ? preg_split( "/(,|;)/", $notification['email_to'] ) : '' );
-        $cc = ( ! empty( $notification['cc'] ) ? preg_split( "/(,|;)/", $notification['cc'] ) : '' );
-        $bcc = ( ! empty( $notification['bcc'] ) ? preg_split( "/(,|;)/", $notification['bcc'] ) : '' );
+		$to_emails = ( ! empty( $notification['email_to'] ) ? preg_split( '/(,|;)/', $notification['email_to'] ) : '' );
+		$cc = ( ! empty( $notification['cc'] ) ? preg_split( '/(,|;)/', $notification['cc'] ) : '' );
+		$bcc = ( ! empty( $notification['bcc'] ) ? preg_split( '/(,|;)/', $notification['bcc'] ) : '' );
 
         $to_emails = apply_filters('frm_to_email', $to_emails, array(), $form->id, compact('email_key', 'entry', 'form'));
 
@@ -180,7 +180,7 @@ class FrmNotification{
         $atts['from'] = ( empty($atts['from']) || $atts['from'] == '[admin_email]' ) ? $admin_email : $atts['from'];
 
         // Filter values in these fields
-        $filter_fields = array( 'to_email','bcc','cc','from','reply_to');
+		$filter_fields = array( 'to_email', 'bcc', 'cc', 'from', 'reply_to' );
 
         foreach ( $filter_fields as $f ) {
             // If empty, just skip it
@@ -239,14 +239,12 @@ class FrmNotification{
             // If inputted correcly, $part_2 should be an email
             if ( is_email( $part_2 ) ) {
                 $part_1 = trim( str_replace( $part_2, '', $val ) );
-
-            // In case someone just puts a name in the From or Reply To field
             } else if ( in_array( $f, array( 'from', 'reply_to' ) ) ) {
+				// In case someone just puts a name in the From or Reply To field
                 $part_1 = $part_2;
                 $part_2 = get_option('admin_email');
-
-            // In case someone just puts a name in any other email field
             } else {
+				// In case someone just puts a name in any other email field
                 if ( false !== $key ) {
                     unset( $atts[$f][$key] );
                     return;

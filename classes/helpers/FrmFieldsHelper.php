@@ -857,9 +857,9 @@ DEFAULT_HTML;
             }
 
             unset($atts, $conditional, $replace_with);
-         }
+		}
 
-         return $content;
+		return $content;
     }
 
     /**
@@ -926,9 +926,9 @@ DEFAULT_HTML;
     }
 
     public static function get_display_value($replace_with, $field, $atts = array()) {
-        $sep = (isset($atts['sep'])) ? $atts['sep'] : ', ';
+		$sep = isset( $atts['sep'] ) ? $atts['sep'] : ', ';
 
-        $replace_with = apply_filters('frm_get_display_value', $replace_with, $field, $atts);
+		$replace_with = apply_filters( 'frm_get_display_value', $replace_with, $field, $atts );
 
         if ( $field->type == 'textarea' || $field->type == 'rte' ) {
             $autop = isset($atts['wpautop']) ? $atts['wpautop'] : true;
@@ -938,19 +938,19 @@ DEFAULT_HTML;
                 }
                 $replace_with = wpautop($replace_with);
             }
-             unset($autop);
-         } else if ( is_array($replace_with) ) {
-             $replace_with = implode($sep, $replace_with);
-         }
+			unset( $autop );
+		} else if ( is_array( $replace_with ) ) {
+			$replace_with = implode( $sep, $replace_with );
+		}
 
-         return $replace_with;
-     }
+		return $replace_with;
+	}
 
     public static function get_field_types($type) {
         $single_input = array(
             'text', 'textarea', 'rte', 'number', 'email', 'url',
             'image', 'file', 'date', 'phone', 'hidden', 'time',
-            'user_id', 'tag', 'password'
+            'user_id', 'tag', 'password',
         );
 		$multiple_input = array( 'radio', 'checkbox', 'select', 'scale' );
 		$other_type = array( 'divider', 'html', 'break' );
@@ -1032,7 +1032,7 @@ DEFAULT_HTML;
             'OR' => 'Oregon', 'PA' => 'Pennsylvania', 'RI' => 'Rhode Island', 'SC' => 'South Carolina',
             'SD' => 'South Dakota', 'TN' => 'Tennessee', 'TX' => 'Texas', 'UT' => 'Utah',
             'VT' => 'Vermont', 'VA' => 'Virginia', 'WA' => 'Washington', 'WV' => 'West Virginia',
-            'WI' => 'Wisconsin', 'WY' => 'Wyoming'
+            'WI' => 'Wisconsin', 'WY' => 'Wyoming',
         ) );
     }
 
@@ -1130,22 +1130,22 @@ DEFAULT_HTML;
         $prepop[__( 'Age', 'formidable' )] = array(
             __( 'Under 18', 'formidable' ), __( '18-24', 'formidable' ), __( '25-34', 'formidable' ),
             __( '35-44', 'formidable' ), __( '45-54', 'formidable' ), __( '55-64', 'formidable' ),
-            __( '65 or Above', 'formidable' ), __( 'Prefer Not to Answer', 'formidable' )
+            __( '65 or Above', 'formidable' ), __( 'Prefer Not to Answer', 'formidable' ),
         );
 
         $prepop[__( 'Satisfaction', 'formidable' )] = array(
             __( 'Very Satisfied', 'formidable' ), __( 'Satisfied', 'formidable' ), __( 'Neutral', 'formidable' ),
-            __( 'Unsatisfied', 'formidable' ), __( 'Very Unsatisfied', 'formidable' ), __( 'N/A', 'formidable' )
+            __( 'Unsatisfied', 'formidable' ), __( 'Very Unsatisfied', 'formidable' ), __( 'N/A', 'formidable' ),
         );
 
         $prepop[__( 'Importance', 'formidable' )] = array(
             __( 'Very Important', 'formidable' ), __( 'Important', 'formidable' ), __( 'Neutral', 'formidable' ),
-            __( 'Somewhat Important', 'formidable' ), __( 'Not at all Important', 'formidable' ), __( 'N/A', 'formidable' )
+            __( 'Somewhat Important', 'formidable' ), __( 'Not at all Important', 'formidable' ), __( 'N/A', 'formidable' ),
         );
 
         $prepop[__( 'Agreement', 'formidable' )] = array(
             __( 'Strongly Agree', 'formidable' ), __( 'Agree', 'formidable' ), __( 'Neutral', 'formidable' ),
-            __( 'Disagree', 'formidable' ), __( 'Strongly Disagree', 'formidable' ), __( 'N/A', 'formidable' )
+            __( 'Disagree', 'formidable' ), __( 'Strongly Disagree', 'formidable' ), __( 'N/A', 'formidable' ),
         );
 
         $prepop = apply_filters('frm_bulk_field_choices', $prepop);

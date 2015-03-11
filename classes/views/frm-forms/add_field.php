@@ -68,8 +68,8 @@ if ( $field['type'] == 'divider' ) { ?>
 include(FrmAppHelper::plugin_path() .'/classes/views/frm-fields/show-build.php');
 
 if ($display['clear_on_focus']){ ?>
-    <span id="frm_clear_on_focus_<?php echo esc_attr( $field['id'] ) ?>" class="frm-show-click">
-<?php
+    <span id="frm_clear_on_focus_<?php echo esc_attr( $field['id'] ) ?>" class="frm-show-click"><?php
+
     if ( $display['default_blank'] ) {
         FrmFieldsHelper::show_default_blank_js($field['default_blank']);
     }
@@ -117,8 +117,8 @@ if ( $display['conf_field'] ) { ?>
 <?php }
 
 if ( in_array($field['type'], array( 'select', 'radio', 'checkbox')) ) { ?>
-    <div class="frm-show-click frm_small_top_margin">
-<?php
+    <div class="frm-show-click frm_small_top_margin"><?php
+
     if ( isset($field['post_field']) && $field['post_field'] == 'post_category' ) {
         echo '<p class="howto">'. FrmFieldsHelper::get_term_link($field['taxonomy']) .'</p>';
     } else if ( ! isset( $field['post_field'] ) || ! in_array( $field['post_field'], array( 'post_category', 'post_status') ) ) {
@@ -126,10 +126,12 @@ if ( in_array($field['type'], array( 'select', 'radio', 'checkbox')) ) { ?>
         <div id="frm_add_field_<?php echo esc_attr( $field['id'] ); ?>">
             <a href="javascript:void(0);" data-opttype="single" class="button frm_cb_button frm_add_opt"><?php _e( 'Add Option', 'formidable' ) ?></a>
 
-            <?php if ( FrmAppHelper::pro_is_installed() ) { ?>
+            <?php
+			if ( FrmAppHelper::pro_is_installed() ) { ?>
                 <a href="javascript:void(0);" id="other_button_<?php echo esc_attr( $field['id'] ); ?>" data-opttype="other" data-ftype="<?php echo esc_attr( $field['type'] ) ?>" class="button frm_cb_button frm_add_opt<?php echo ( in_array( $field['type'], array( 'radio', 'select') ) && $field['other'] == true ? ' frm_hidden' : '' ); ?>"><?php _e( 'Add "Other"', 'formidable' ) ?></a>
                 <input type="hidden" value="<?php echo esc_attr( $field['other'] ); ?>" id="other_input_<?php echo esc_attr( $field['id'] ); ?>" name="field_options[other_<?php echo esc_attr( $field['id'] ); ?>]">
-            <?php }
+            <?php
+            }
 
             if ( ! isset($field['post_field']) || $field['post_field'] != 'post_category' ) { ?>
             <a href="<?php echo esc_url(admin_url('admin-ajax.php') .'?action=frm_import_choices&field_id='. $field['id'] .'&TB_iframe=1') ?>" title="<?php echo FrmAppHelper::truncate(esc_attr(strip_tags(str_replace('"', '&quot;', $field['name']))), 20) . ' '. __( 'Field Choices', 'formidable' ); ?>" class="thickbox frm_orange"><?php _e( 'Bulk Edit Options', 'formidable' ) ?></a>
@@ -164,11 +166,12 @@ if ($display['options']){ ?>
                         </div>
 
                 <select <?php if ( count($field_types) == 1 ) { ?>disabled="disabled"<?php } else { ?>name="field_options[type_<?php echo esc_attr( $field['id'] ) ?>]"<?php } ?>>
-                    <?php foreach ( $field_types as $fkey => $ftype ) { ?>
+                    <?php
+					foreach ( $field_types as $fkey => $ftype ) { ?>
                         <option value="<?php echo esc_attr( $fkey ) ?>" <?php echo ( $fkey == $field['type'] ) ? ' selected="selected"' : ''; ?> <?php echo array_key_exists($fkey, $disabled_fields ) ? 'disabled="disabled"' : '';  ?>><?php echo is_array($ftype) ? $ftype['name'] : $ftype ?> </option>
                     <?php
-                            unset($fkey, $ftype);
-                        } ?>
+						unset( $fkey, $ftype );
+					} ?>
                 </select>
 
                 <?php
@@ -235,15 +238,18 @@ if ($display['options']){ ?>
                 <?php if ($display['size']){ ?>
                     <tr><td class="frm_150_width"><label><?php _e( 'Field Size', 'formidable' ) ?></label></td>
                         <td>
-                        <?php if ( in_array( $field['type'], array( 'select', 'time', 'data' ) ) ) { ?>
-                            <?php if ( ! isset($values['custom_style']) || $values['custom_style'] ) { ?>
+                        <?php
+						if ( in_array( $field['type'], array( 'select', 'time', 'data' ) ) ) {
+							if ( ! isset( $values['custom_style'] ) || $values['custom_style'] ) { ?>
                                 <label for="size_<?php echo esc_attr( $field['id'] ) ?>"><input type="checkbox" name="field_options[size_<?php echo esc_attr( $field['id'] ) ?>]" id="size_<?php echo esc_attr( $field['id'] ) ?>" value="1" <?php echo ( isset($field['size']) && $field['size'] ) ? 'checked="checked"' : ''; ?> /> <?php _e( 'automatic width', 'formidable' ) ?></label>
-                            <?php }
-                            }else{ ?>
+                            <?php
+                            }
+						} else { ?>
                                 <input type="text" name="field_options[size_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['size'] ); ?>" size="5" /> <span class="howto"><?php _e( 'pixels wide', 'formidable' ) ?></span>
 
                                 <input type="text" name="field_options[max_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['max'] ); ?>" size="5" /> <span class="howto"><?php echo ( $field['type'] == 'textarea' || $field['type'] == 'rte' ) ? __( 'rows high', 'formidable' ) : __( 'characters maximum', 'formidable' ) ?></span>
-                        <?php } ?>
+                        <?php
+                        } ?>
                         </td>
                     </tr>
                 <?php } ?>
@@ -255,12 +261,15 @@ if ($display['options']){ ?>
                     <h3 class="frm_no_bg"><?php _e( 'Validation', 'formidable' ) ?></h3>
 
                     <div class="frm_validation_box">
-                        <?php if ($display['required']){ ?>
+                        <?php
+						if ( $display['required'] ) { ?>
                         <p class="frm_required_details<?php echo esc_attr( $field['id'] . ( $field['required'] ? '' : ' frm_hidden' ) ); ?>"><label><?php _e( 'Required', 'formidable' ) ?></label>
                             <input type="text" name="field_options[blank_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['blank'] ); ?>" />
                         </p>
-                        <?php } ?>
-                        <?php if ($display['invalid']){ ?>
+                        <?php
+                        }
+						
+						if ( $display['invalid'] ) { ?>
                             <p><label><?php _e( 'Invalid Format', 'formidable' ) ?></label>
                                 <input type="text" name="field_options[invalid_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['invalid'] ); ?>" />
                             </p>

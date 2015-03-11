@@ -80,8 +80,9 @@ class FrmField{
     public static function update( $id, $values ){
         global $wpdb;
 
-        if (isset($values['field_key']))
+		if ( isset( $values['field_key'] ) ) {
             $values['field_key'] = FrmAppHelper::get_unique_key($values['field_key'], $wpdb->prefix .'frm_fields', 'field_key', $id);
+		}
 
         if ( isset($values['required']) ) {
             $values['required'] = (int) $values['required'];
@@ -118,21 +119,21 @@ class FrmField{
         return $query_results;
     }
 
-    public static function destroy( $id ){
-      global $wpdb;
+    public static function destroy( $id ) {
+		global $wpdb;
 
-      do_action('frm_before_destroy_field', $id);
+		do_action( 'frm_before_destroy_field', $id );
 
-      wp_cache_delete( $id, 'frm_field' );
-      $field = self::getOne($id);
-      if ( ! $field ) {
-          return false;
-      }
+		wp_cache_delete( $id, 'frm_field' );
+		$field = self::getOne( $id );
+		if ( ! $field ) {
+			return false;
+		}
 
-      self::delete_form_transient($field->form_id);
+		self::delete_form_transient( $field->form_id );
 
-      $wpdb->query($wpdb->prepare('DELETE FROM '. $wpdb->prefix .'frm_item_metas WHERE field_id=%d', $id));
-      return $wpdb->query($wpdb->prepare('DELETE FROM '. $wpdb->prefix .'frm_fields WHERE id=%d', $id));
+		$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'frm_item_metas WHERE field_id=%d', $id ) );
+		return $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'frm_fields WHERE id=%d', $id ) );
     }
 
     public static function delete_form_transient($form_id) {
@@ -315,9 +316,9 @@ class FrmField{
             $form_table_name = $wpdb->prefix .'frm_forms';
         }
 
-        if ( ! empty($order_by) && ! preg_match("/ORDER BY/", $order_by) ) {
+		if ( ! empty( $order_by ) && strpos( $order_by, 'ORDER BY' ) === false ) {
             $order_by = ' ORDER BY '. $order_by;
-        }
+		}
 
         $limit = FrmAppHelper::esc_limit($limit);
 

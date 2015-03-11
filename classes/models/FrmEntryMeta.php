@@ -76,7 +76,6 @@ class FrmEntryMeta{
                 // if value does not exist, then create it
                 self::add_entry_meta($entry_id, $field_id, '', $values[$field_id]);
             }
-
         }
 
         if ( empty($prev_values) ) {
@@ -90,7 +89,7 @@ class FrmEntryMeta{
         }
 
         // Delete any leftovers
-        $wpdb->query($wpdb->prepare("DELETE FROM {$wpdb->prefix}frm_item_metas WHERE item_id=%d AND field_id in", $entry_id) ."  (". implode(',', $prev_values) .")");
+        $wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->prefix}frm_item_metas WHERE item_id=%d AND field_id in", $entry_id ) . '  (' . implode(',', $prev_values) . ')' );
     }
 
     public static function duplicate_entry_metas($old_id, $new_id){
@@ -321,8 +320,9 @@ class FrmEntryMeta{
             $where .= $wpdb->prepare(' field_id=%d', $field_id);
             $query = "SELECT DISTINCT item_id FROM {$wpdb->prefix}frm_item_metas". FrmAppHelper::prepend_and_or_where(' WHERE ', $where);
         }else{
-            if ($operator == 'LIKE')
-                $search = "%{$search}%";
+			if ( $operator == 'LIKE' ) {
+                $search = '%' . $search . '%';
+			}
             $query = $wpdb->prepare("SELECT DISTINCT item_id FROM {$wpdb->prefix}frm_item_metas WHERE meta_value {$operator} %s and field_id = %d", $search, $field_id);
         }
 

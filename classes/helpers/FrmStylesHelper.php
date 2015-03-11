@@ -26,7 +26,7 @@ class FrmStylesHelper{
             'mint-choc'     => 'Mint Choc',
             'black-tie'     => 'Black Tie',
             'trontastic'    => 'Trontastic',
-            'swanky-purse'  => 'Swanky Purse'
+            'swanky-purse'  => 'Swanky Purse',
         );
 
         $themes = apply_filters('frm_jquery_themes', $themes);

@@ -16,7 +16,6 @@ if ( isset($_GET['frm_style_setting']) || isset($_GET['flat']) ) {
     } else {
         $style_class = 'with_frm_style';
     }
-
 } else {
     $style_class = 'frm_style_'. $style->post_name .'.with_frm_style';
     extract($style->post_content);
@@ -372,7 +371,8 @@ if ( ! isset($collapse_icon) ) {
     box-shadow:0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(<?php echo FrmStylesHelper::hex2rgb($border_color_active) ?>, 0.6);
 }
 
-<?php if ( ! $submit_style ) { ?>
+<?php
+if ( ! $submit_style ) { ?>
 .<?php echo $style_class ?> input[type=submit],
 .<?php echo $style_class ?> .frm_submit input[type=button],
 .frm_form_submit_style,
@@ -383,7 +383,10 @@ if ( ! isset($collapse_icon) ) {
     height:<?php echo $submit_height . $important ?>;
     line-height:normal<?php echo $important ?>;
     text-align:center;
-    background:#<?php echo $submit_bg_color; if ( ! empty($submit_bg_img) ) echo ' url('. $submit_bg_img .')'; ?>;
+    background:#<?php echo $submit_bg_color;
+	if ( ! empty($submit_bg_img) ) {
+		echo ' url('. $submit_bg_img .')';
+	} ?>;
     border-width:<?php echo $submit_border_width ?>;
     border-color:#<?php echo $submit_border_color . $important ?>;
     border-style:solid;
@@ -409,7 +412,7 @@ if ( ! isset($collapse_icon) ) {
 }
 
 <?php
-    if ( empty($submit_bg_img) ) {
+	if ( empty( $submit_bg_img ) ) {
 ?>.<?php echo $style_class ?> input[type=submit]:hover,
 .<?php echo $style_class ?> .frm_submit input[type=button]:hover,
 .<?php echo $style_class ?>.frm_login_form input[type=submit]:hover{
@@ -439,7 +442,6 @@ if ( ! isset($collapse_icon) ) {
 }
 <?php
     }
-
 }
 ?>
 

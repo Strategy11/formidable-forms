@@ -1,5 +1,7 @@
 <?php
-if ( !defined('ABSPATH') ) die('You are not allowed to call this page directly.');
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 
 class FrmFormsListHelper extends FrmListHelper {
     var $status = '';
@@ -63,7 +65,7 @@ class FrmFormsListHelper extends FrmListHelper {
 
 		$this->set_pagination_args( array(
 			'total_items' => $total_items,
-			'per_page' => $per_page
+			'per_page' => $per_page,
 		) );
 	}
 
@@ -190,7 +192,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	function pagination( $which ) {
 		global $mode;
 
-		parent::pagination ( $which );
+		parent::pagination( $which );
 
 		if ( 'top' == $which ) {
 			$this->view_switcher( $mode );

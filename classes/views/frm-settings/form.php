@@ -124,7 +124,8 @@
 		</p>
     </div>
 
-        <?php foreach ( $sections as $sec_name => $section ) {
+        <?php
+		foreach ( $sections as $sec_name => $section ) {
 			if ( $a == $sec_name .'_settings' ) { ?>
 <style type="text/css">.<?php echo esc_attr( $sec_name ) ?>_settings{display:block;}</style><?php }?>
             <div id="<?php echo esc_attr( $sec_name ) ?>_settings" class="<?php echo esc_attr( $sec_name ) ?>_settings tabs-panel <?php echo ( $a == $sec_name .'_settings' ) ? 'frm_block' : 'frm_hidden'; ?>"><?php
@@ -134,7 +135,8 @@
                     call_user_func((isset($section['function']) ? $section['function'] : $section));
                 } ?>
             </div>
-        <?php } ?>
+        <?php
+        } ?>
 
         <p class="alignright frm_uninstall">
             <a href="javascript:void(0)" id="frm_uninstall_now"><?php _e( 'Uninstall Formidable', 'formidable' ) ?></a>

@@ -12,13 +12,14 @@ if ( ! empty($opts) ) { ?>
     <ul>
 <?php
 foreach ( $opts as $opt => $val ) {
-    if ( isset($val['type']) && 'text' == $val['type'] ) { ?>
+    if ( isset( $val['type'] ) && 'text' == $val['type'] ) { ?>
         <li><label class="setting" for="frmsc_<?php echo esc_attr( $shortcode .'_'. $opt ) ?>">
             <span><?php echo esc_html( $val['label'] ) ?></span>
             <input type="text" id="frmsc_<?php echo esc_attr( $shortcode .'_'. $opt ) ?>" value="<?php echo esc_attr( $val['val'] ) ?>" />
             </label>
         </li>
-    <?php } else if ( isset($val['type']) && 'select' == $val['type'] ) { ?>
+<?php
+    } else if ( isset( $val['type'] ) && 'select' == $val['type'] ) { ?>
         <li><label class="setting" for="frmsc_<?php echo esc_attr( $shortcode .'_'. $opt ) ?>">
             <span><?php echo esc_html( $val['label'] ) ?></span>
             <select id="frmsc_<?php echo esc_attr( $shortcode .'_'. $opt ) ?>">
@@ -28,12 +29,13 @@ foreach ( $opts as $opt => $val ) {
             </select>
             </label>
         </li>
-    <?php } else { ?>
+    <?php
+    } else { ?>
         <li><label class="setting" for="frmsc_<?php echo esc_attr( $shortcode .'_'. $opt ) ?>"><input type="checkbox" id="frmsc_<?php echo esc_attr( $shortcode .'_'. $opt ) ?>" value="<?php echo esc_attr( $val['val'] ) ?>" /> <?php echo esc_html( $val['label'] ) ?></label></li>
 <?php
-        }
-    }
-    ?>
+	}
+}
+?>
     </ul>
 <?php
 }

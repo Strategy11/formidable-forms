@@ -527,16 +527,16 @@ class FrmForm{
     	foreach ( $results as $row ) {
             if ( 'trash' != $row->status ) {
     	        if ( $row->is_template ) {
-    	            $counts[ 'template' ] ++;
+					$counts['template']++;
     	        } else {
-    	            $counts[ 'published' ] ++;
+					$counts['published']++;
     	        }
     	    } else {
-        	    $counts[ 'trash' ] ++;
+				$counts['trash']++;
         	}
 
     	    if ( 'draft' == $row->status ) {
-    	        $counts[ 'draft' ] ++;
+				$counts['draft']++;
     	    }
 
     		unset($row);
@@ -553,13 +553,6 @@ class FrmForm{
      */
     public static function validate( $values ){
         $errors = array();
-
-      /*if( $values['form_key'] == null || $values['form_key'] == '' ){
-          if( $values['name'] == null || $values['name'] == '' )
-              $errors[] = "Key can't be blank";
-          else
-             $_POST['form_key'] = $values['name'];
-      }*/
 
         return apply_filters('frm_validate_form', $errors, $values);
     }

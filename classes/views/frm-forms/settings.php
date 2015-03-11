@@ -128,7 +128,7 @@
                     <td><label><?php _e( 'Submit Button Text', 'formidable' ) ?></label></td>
                     <td><input type="text" name="options[submit_value]" value="<?php echo esc_attr($values['submit_value']); ?>" /></td>
                 </tr>
-                 <?php do_action('frm_add_form_button_options', $values); ?>
+				<?php do_action( 'frm_add_form_button_options', $values ); ?>
             </table>
 
             <!--Message Section-->

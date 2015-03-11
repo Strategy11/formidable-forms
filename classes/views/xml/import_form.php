@@ -87,17 +87,19 @@
                     <th scope="row"><label><?php _e( 'Select Form(s)', 'formidable' ); ?></label></th>
                     <td>
                         <select name="frm_export_forms[]" multiple="multiple" class="frm_chzn">
-						<?php foreach ( $forms as $form ) { ?>
+						<?php
+						foreach ( $forms as $form ) { ?>
                             <option value="<?php echo esc_attr( $form->id ) ?>"><?php
-                        echo ( $form->name == '' ) ? __( '(no title)' ) : $form->name;
-                        echo ' &mdash; '. $form->form_key;
-                        if ( $form->is_template && $form->default_template ) {
-                            echo ' '. __( '(default template)', 'formidable' );
-                        } else if ( $form->is_template ) {
-                            echo ' '. __( '(template)', 'formidable' );
-                        }
+								echo ( $form->name == '' ) ? __( '(no title)' ) : $form->name;
+								echo ' &mdash; ' . $form->form_key;
+								if ( $form->is_template && $form->default_template ) {
+									echo ' ' . __( '(default template)', 'formidable' );
+								} else if ( $form->is_template ) {
+									echo ' ' . __( '(template)', 'formidable' );
+								}
                         ?></option>
-                        <?php } ?>
+                        <?php
+                        } ?>
                         </select>
                         <p class="howto"><?php _e( 'Hold down the CTRL/Command button to select multiple forms', 'formidable' ); ?></p>
                     </td>

@@ -1370,9 +1370,9 @@ class FrmAppHelper {
     /**
      * @param integer $current_p
      */
-    public static function get_last_record_num( $r_count, $current_p, $p_size ) {
-      return ( ( $r_count < ( $current_p * $p_size ) ) ? $r_count : ( $current_p * $p_size ) );
-    }
+	public static function get_last_record_num( $r_count, $current_p, $p_size ) {
+		return ( ( $r_count < ( $current_p * $p_size ) ) ? $r_count : ( $current_p * $p_size ) );
+	}
 
     /**
      * @param integer $current_p

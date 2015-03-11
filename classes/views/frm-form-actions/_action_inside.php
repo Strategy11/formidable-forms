@@ -15,39 +15,41 @@
 <table class="form-table frm-no-margin">
     <tr><td>
 <?php
-    if ( ! isset($action_control->action_options['event']) ) {
-        $events = 'create';
-    }
+if ( ! isset( $action_control->action_options['event'] ) ) {
+	$events = 'create';
+}
 
-    if ( ! is_array($action_control->action_options['event']) ) {
-        $action_control->action_options['event'] = explode(',', $action_control->action_options['event']);
-    }
+if ( ! is_array( $action_control->action_options['event'] ) ) {
+	$action_control->action_options['event'] = explode( ',', $action_control->action_options['event'] );
+}
 
-    if ( count($action_control->action_options['event']) == 1 || $action_control->action_options['force_event'] ) {
-        foreach ( $action_control->action_options['event'] as $e) { ?>
-        <input type="hidden" name="<?php echo esc_attr( $action_control->get_field_name('event') ) ?>[]" value="<?php echo esc_attr( $e ) ?>" />
-<?php   }
-    } else {
+if ( count( $action_control->action_options['event'] ) == 1 || $action_control->action_options['force_event'] ) {
+	foreach ( $action_control->action_options['event'] as $e ) { ?>
+	<input type="hidden" name="<?php echo esc_attr( $action_control->get_field_name('event') ) ?>[]" value="<?php echo esc_attr( $e ) ?>" />
+<?php
+	}
+} else {
 ?>
-        <p><label><?php _e( 'Trigger this action after', 'formidable' ) ?></label>
+	<p><label><?php _e( 'Trigger this action after', 'formidable' ) ?></label>
 <?php
-        $event_labels = array(
-            'create'    => __( 'Create', 'formidable' ),
-            'update'    => __( 'Update', 'formidable' ),
-            'delete'    => __( 'Delete', 'formidable' ),
-        );
+	$event_labels = array(
+		'create'    => __( 'Create', 'formidable' ),
+		'update'    => __( 'Update', 'formidable' ),
+		'delete'    => __( 'Delete', 'formidable' ),
+	);
 
-        foreach ( $action_control->action_options['event'] as $event ) { ?>
-            <label for="frm_action_event_<?php echo esc_attr( $event ) ?>" class="frm_action_events"><input type="checkbox" name="<?php echo esc_attr( $action_control->get_field_name('event') ) ?>[]" value="<?php echo esc_attr( $event ) ?>" id="<?php echo esc_attr( $action_control->get_field_id('frm_action_event_'. $event) ) ?>" <?php FrmAppHelper::checked($form_action->post_content['event'], $event) ?> />
+	foreach ( $action_control->action_options['event'] as $event ) { ?>
+		<label for="frm_action_event_<?php echo esc_attr( $event ) ?>" class="frm_action_events">
+			<input type="checkbox" name="<?php echo esc_attr( $action_control->get_field_name('event') ) ?>[]" value="<?php echo esc_attr( $event ) ?>" id="<?php echo esc_attr( $action_control->get_field_id('frm_action_event_'. $event) ) ?>" <?php FrmAppHelper::checked($form_action->post_content['event'], $event) ?> />
             <?php echo isset( $event_labels[ $event ] ) ? $event_labels[ $event ] : $event; ?>
-            </label>
+		</label>
 <?php
-        }
-?>      </p>
+	}
+?> 	</p>
 <?php
-    }
+}
 
-    do_action('frm_additional_action_settings', $form_action, compact('form', 'action_control', 'action_key', 'values'));
+do_action( 'frm_additional_action_settings', $form_action, compact( 'form', 'action_control', 'action_key', 'values' ) );
 ?>
     <span class="alignright frm_action_id"><?php printf( __( 'Action ID: %1$s', 'formidable' ), $form_action->ID); ?></span>
     </td></tr>

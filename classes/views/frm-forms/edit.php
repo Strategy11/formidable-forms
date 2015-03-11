@@ -9,10 +9,10 @@
     <div id="post-body" class="metabox-holder columns-2">
     <div id="post-body-content">
     <?php
-        if ( ! $values['is_template'] ) {
-            FrmAppController::get_form_nav($id, true, 'hide');
-        }
-        require(FrmAppHelper::plugin_path() .'/classes/views/shared/errors.php');
+	if ( ! $values['is_template'] ) {
+		FrmAppController::get_form_nav( $id, true, 'hide' );
+	}
+	require( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' );
 
     ?>
     <div class="frm_form_builder<?php echo FrmFormsHelper::get_form_style_class($form); ?>">

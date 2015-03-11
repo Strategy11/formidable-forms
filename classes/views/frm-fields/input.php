@@ -27,8 +27,7 @@ do_action('frm_field_input_html', $field);
 
             $field_val = apply_filters('frm_field_value_saved', $opt, $opt_key, $field);
             $opt = apply_filters('frm_field_label_seen', $opt, $opt_key, $field);
-            ?>
-<div class="<?php echo apply_filters('frm_radio_class', 'frm_radio', $field, $field_val)?>"><?php
+            ?><div class="<?php echo apply_filters('frm_radio_class', 'frm_radio', $field, $field_val)?>"><?php
 
             if ( ! isset( $atts ) || ! isset( $atts['label'] ) || $atts['label'] ) {
 ?><label for="<?php echo esc_attr( $html_id ) ?>-<?php echo esc_attr( $opt_key ) ?>"><?php
@@ -38,7 +37,6 @@ do_action('frm_field_input_html', $field);
             $other_opt = false;
             $other_args = FrmAppHelper::prepare_other_input( $field, $other_opt, $checked, array( 'field_name' => $field_name, 'opt_key' => $opt_key ) );
             ?>
-
             <input type="radio" name="<?php echo esc_attr( $field_name ) ?>" id="<?php echo esc_attr( $html_id ) ?>-<?php echo esc_attr( $opt_key ) ?>" value="<?php echo esc_attr( $field_val ) ?>" <?php
             echo $checked;
             do_action('frm_field_input_html', $field);
@@ -56,7 +54,6 @@ do_action('frm_field_input_html', $field);
 <?php
         }
     }
-
 }else if ($field['type'] == 'select'){
     $read_only = false;
     if ( isset($field['post_field']) && $field['post_field'] == 'post_category' ) {
@@ -71,7 +68,7 @@ do_action('frm_field_input_html', $field);
 <?php   }
     $other_opt = $other_checked = false;
 	foreach ( $field['options'] as $opt_key => $opt ) {
-        $field_val = apply_filters('frm_field_value_saved', $opt, $opt_key, $field);
+		$field_val = apply_filters( 'frm_field_value_saved', $opt, $opt_key, $field );
         $opt = apply_filters('frm_field_label_seen', $opt, $opt_key, $field);
         $selected = FrmAppHelper::check_selected($field['value'], $field_val );
         if ( $other_opt === false ) {
@@ -89,7 +86,6 @@ do_action('frm_field_input_html', $field);
         <input type="text" <?php echo ( $read_only ? 'readonly="readonly" disabled="disabled"' : '' );?> class="frm_other_input<?php echo ( $other_checked ? '' : ' frm_pos_none' ); echo ( $field['multiple'] ? ' frm_other_full' : '' ); ?>" name="<?php echo esc_attr( $other_args['name'] ) ?>" value="<?php echo esc_attr($other_args['value']);?>"><?php
         }
     }
-
 }else if ($field['type'] == 'checkbox'){
     $checked_values = $field['value'];
     $read_only = false;
@@ -146,7 +142,6 @@ do_action('frm_field_input_html', $field);
 <?php
         }
     }
-
 } else if ( $field['type'] == 'captcha' && ! FrmAppHelper::is_admin() ) {
     $frm_settings = FrmAppHelper::get_settings();
     if ( ! empty($frm_settings->pubkey) ) {
