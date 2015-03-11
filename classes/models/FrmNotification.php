@@ -320,8 +320,8 @@ class FrmNotification{
         }
 
         $header         = apply_filters('frm_email_header', $header, array(
-            'to_email' => $atts['to_email'], 'subject' => $atts['subject'])
-        );
+			'to_email' => $atts['to_email'], 'subject' => $atts['subject'],
+		) );
 
         if ( apply_filters('frm_encode_subject', 1, $atts['subject'] ) ) {
             $atts['subject'] = '=?'. $charset .'?B?'. base64_encode($atts['subject']) .'?=';

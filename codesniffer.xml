@@ -30,6 +30,7 @@
 		<exclude name="WordPress.WhiteSpace.OperatorSpacing.NoSpaceAfter" />
 		<exclude name="WordPress.Arrays.ArrayKeySpacingRestrictions.NoSpacesAroundArrayKeys" />
 		<exclude name="WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid" />
+		<exclude name="Generic.WhiteSpace.ScopeIndent.IncorrectExact" />
 
 		<!-- We should probably want to turn the below rules on, but these give issues with the current code base. -->
 		<exclude name="WordPress.Files.FileName.UnderscoresNotAllowed" />

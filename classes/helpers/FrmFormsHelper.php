@@ -55,7 +55,7 @@ class FrmFormsHelper{
 		<?php } ?>
 		<?php foreach ( $forms as $form ) { ?>
 			<option value="<?php echo esc_attr( $form->id ); ?>" <?php selected( $field_value, $form->id ); ?>><?php
-				echo '' == $form->name ? __( '(no title)', 'formidable' ) : esc_attr( FrmAppHelper::truncate($form->name, 33) ); 
+				echo '' == $form->name ? __( '(no title)', 'formidable' ) : esc_attr( FrmAppHelper::truncate( $form->name, 33 ) );
 			?></option>
 		<?php } ?>
         </select>

@@ -268,7 +268,7 @@ if ($display['options']){ ?>
                         </p>
                         <?php
                         }
-						
+
 						if ( $display['invalid'] ) { ?>
                             <p><label><?php _e( 'Invalid Format', 'formidable' ) ?></label>
                                 <input type="text" name="field_options[invalid_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['invalid'] ); ?>" />

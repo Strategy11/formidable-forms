@@ -26,11 +26,11 @@ do_action('frm_field_input_html', $field);
             }
 
             $field_val = apply_filters('frm_field_value_saved', $opt, $opt_key, $field);
-            $opt = apply_filters('frm_field_label_seen', $opt, $opt_key, $field);
-            ?><div class="<?php echo apply_filters('frm_radio_class', 'frm_radio', $field, $field_val)?>"><?php
+            $opt = apply_filters('frm_field_label_seen', $opt, $opt_key, $field); ?>
+			<div class="<?php echo apply_filters('frm_radio_class', 'frm_radio', $field, $field_val)?>"><?php
 
-            if ( ! isset( $atts ) || ! isset( $atts['label'] ) || $atts['label'] ) {
-?><label for="<?php echo esc_attr( $html_id ) ?>-<?php echo esc_attr( $opt_key ) ?>"><?php
+			if ( ! isset( $atts ) || ! isset( $atts['label'] ) || $atts['label'] ) {
+				?><label for="<?php echo esc_attr( $html_id ) ?>-<?php echo esc_attr( $opt_key ) ?>"><?php
             }
             $checked = FrmAppHelper::check_selected($field['value'], $field_val) ? 'checked="checked" ' : ' ';
 
@@ -42,7 +42,7 @@ do_action('frm_field_input_html', $field);
             do_action('frm_field_input_html', $field);
 ?>/><?php
 
-            if ( ! isset( $atts ) || ! isset( $atts['label'] ) || $atts['label'] ) {
+			if ( ! isset( $atts ) || ! isset( $atts['label'] ) || $atts['label'] ) {
                 echo ' '. $opt .'</label>';
             }
 
@@ -66,22 +66,24 @@ do_action('frm_field_input_html', $field);
 <?php   }else{ ?>
 <select name="<?php echo esc_attr( $field_name ) ?>" id="<?php echo esc_attr( $html_id ) ?>" <?php do_action('frm_field_input_html', $field) ?>>
 <?php   }
-    $other_opt = $other_checked = false;
-	foreach ( $field['options'] as $opt_key => $opt ) {
-		$field_val = apply_filters( 'frm_field_value_saved', $opt, $opt_key, $field );
-        $opt = apply_filters('frm_field_label_seen', $opt, $opt_key, $field);
-        $selected = FrmAppHelper::check_selected($field['value'], $field_val );
-        if ( $other_opt === false ) {
-            $other_args = FrmAppHelper::prepare_other_input( $field, $other_opt, $selected, array( 'field_name' => $field_name, 'opt_key' => $opt_key ) );
-            if ( FrmAppHelper::is_other_opt( $opt_key ) && $selected ) {
-                $other_checked = true;
-            }
-        }
-         ?>
+
+		$other_opt = $other_checked = false;
+		foreach ( $field['options'] as $opt_key => $opt ) {
+			$field_val = apply_filters( 'frm_field_value_saved', $opt, $opt_key, $field );
+			$opt = apply_filters( 'frm_field_label_seen', $opt, $opt_key, $field );
+			$selected = FrmAppHelper::check_selected( $field['value'], $field_val );
+			if ( $other_opt === false ) {
+				$other_args = FrmAppHelper::prepare_other_input( $field, $other_opt, $selected, array( 'field_name' => $field_name, 'opt_key' => $opt_key ) );
+				if ( FrmAppHelper::is_other_opt( $opt_key ) && $selected ) {
+					$other_checked = true;
+				}
+			}
+			?>
         <option value="<?php echo esc_attr($field_val) ?>" <?php echo $selected ? ' selected="selected"' : ''; ?><?php echo ( FrmAppHelper::is_other_opt( $opt_key ) ) ? ' class="frm_other_trigger"' : '';?>><?php echo ($opt == '') ? ' ' : $opt; ?></option>
-    <?php } ?>
+    <?php
+    	} ?>
 </select>
-        <?php
+<?php
         if ( $other_opt ) { ?>
         <input type="text" <?php echo ( $read_only ? 'readonly="readonly" disabled="disabled"' : '' );?> class="frm_other_input<?php echo ( $other_checked ? '' : ' frm_pos_none' ); echo ( $field['multiple'] ? ' frm_other_full' : '' ); ?>" name="<?php echo esc_attr( $other_args['name'] ) ?>" value="<?php echo esc_attr($other_args['value']);?>"><?php
         }
@@ -120,7 +122,7 @@ do_action('frm_field_input_html', $field);
             $other_args = FrmAppHelper::prepare_other_input( $field, $other_opt, $checked, array( 'field_name' => $field_name, 'opt_key' => $opt_key ) );
 
             ?>
-<div class="<?php echo esc_attr( apply_filters( 'frm_checkbox_class', 'frm_checkbox', $field, $field_val ) ) ?>" id="frm_checkbox_<?php echo esc_attr( $field['id'] ) ?>-<?php echo esc_attr( $opt_key ) ?>"><?php
+			<div class="<?php echo esc_attr( apply_filters( 'frm_checkbox_class', 'frm_checkbox', $field, $field_val ) ) ?>" id="frm_checkbox_<?php echo esc_attr( $field['id'] ) ?>-<?php echo esc_attr( $opt_key ) ?>"><?php
 
             if ( ! isset( $atts ) || ! isset( $atts['label'] ) || $atts['label'] ) {
                 ?><label for="<?php echo esc_attr( $html_id ) ?>-<?php echo esc_attr( $opt_key ) ?>"><?php

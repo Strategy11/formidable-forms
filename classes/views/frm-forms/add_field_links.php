@@ -23,29 +23,30 @@
     	<div id="frm-insert-fields" class="tabs-panel">
 		    <ul class="field_type_list">
             <?php
-            $col_class = 'frm_col_one';
-            foreach ( $frm_field_selection as $field_key => $field_type ) { ?>
+$col_class = 'frm_col_one';
+foreach ( $frm_field_selection as $field_key => $field_type ) { ?>
                 <li class="frmbutton button <?php echo esc_attr( $col_class .' frm_t'. $field_key ) ?>" id="<?php echo esc_attr( $field_key ) ?>"><a href="#" class="frm_add_field"><?php echo esc_html( $field_type ) ?></a></li>
-            <?php
-                $col_class = (empty($col_class)) ? 'frm_col_one' : '';
-                unset($field_key, $field_type);
-            } ?>
+<?php
+	$col_class = empty( $col_class ) ? 'frm_col_one' : '';
+	unset( $field_key, $field_type );
+} ?>
             </ul>
             <div class="clear"></div>
             <hr/>
 			<ul<?php echo apply_filters('frm_drag_field_class', '') ?> style="margin-top:2px;">
-            <?php $col_class = 'frm_col_one';
-            $no_allow_class = apply_filters('frm_noallow_class', 'frm_noallow');
-            foreach ( FrmFieldsHelper::pro_field_selection() as $field_key => $field_type ) {
+<?php
+$col_class = 'frm_col_one';
+$no_allow_class = apply_filters( 'frm_noallow_class', 'frm_noallow' );
+foreach ( FrmFieldsHelper::pro_field_selection() as $field_key => $field_type ) {
 
-                if ( is_array($field_type) ) {
-                    $field_label = $field_type['name'];
+	if ( is_array( $field_type ) ) {
+		$field_label = $field_type['name'];
 
-                    if ( isset($field_type['switch_from']) ) { ?>
+		if ( isset( $field_type['switch_from'] ) ) { ?>
                 <li class="frmbutton button <?php echo esc_attr( $col_class .' '. $no_allow_class .' frm_t'. $field_key ) ?>" id="<?php echo esc_attr( $field_key ) ?>" data-switchto="<?php echo esc_attr( $field_type['switch_from'] ) ?>" style="display:none !important;"><?php echo apply_filters( 'frmpro_field_links', $field_label, $id, $field_key ) ?></li>
 <?php
-                        continue;
-                    }
+			continue;
+		}
 
 ?>
                 <li class="frmbutton button <?php echo esc_attr( $col_class .' '. $no_allow_class .' frm_t'. $field_key ) ?> dropdown" id="<?php echo esc_attr( $field_key ) ?>" <?php echo ( isset( $field_type['switch_to'] ) ) ? 'data-switchto="'. esc_attr( $field_type['switch_to'] ) .'"' : ''; ?>>
@@ -114,36 +115,36 @@
     	            'frm_total' => array( 'label' => __( 'Total', 'formidable' ), 'title' => __( 'Add this to a read-only field to display the text in bold without a border or background.', 'formidable' )),
     	            'frm_scroll_box' => array( 'label' => __( 'Scroll Box', 'formidable' ), 'title' => __( 'If you have many checkbox or radio button options, you may add this class to allow your user to easily scroll through the options.', 'formidable' ))
     	        );
-    	        $classes = apply_filters('frm_layout_classes', $classes);
-    	        $col = 'one';
-				foreach ( $classes as $c => $d ) {
-    	            $title = ( ! empty($d) && is_array($d) && isset($d['title']) ) ? $d['title'] : '';
-    	        ?>
+
+$classes = apply_filters( 'frm_layout_classes', $classes );
+$col = 'one';
+foreach ( $classes as $c => $d ) {
+	$title = ( ! empty( $d ) && is_array( $d ) && isset( $d['title'] ) ) ? $d['title'] : '';
+?>
     	        <li class="frm_col_<?php echo esc_attr( $col ) ?>">
                     <a href="javascript:void(0);" class="frmbutton frm_insert_code button show_frm_classes<?php
-                    if ( ! empty($title) ) {
-                        echo ' frm_help';
-                    } ?>" data-code="<?php echo esc_attr($c) ?>" <?php
-                    if ( ! empty($title) ) {
-                        ?>title="<?php echo esc_attr($title); ?>"<?php
-                    } ?>>
-                <?php
-                        if ( empty($d) ) {
-                            echo $c;
-                        } else if ( ! is_array( $d ) ) {
-                            echo $d;
-                        } else if ( isset($d['label']) ) {
-                            echo $d['label'];
-                        }
-                ?>
+	if ( ! empty( $title ) ) {
+		echo ' frm_help';
+	} ?>" data-code="<?php echo esc_attr($c) ?>" <?php
+	if ( ! empty( $title ) ) {
+		?>title="<?php echo esc_attr($title); ?>"<?php
+	} ?>>
+<?php
+	if ( empty( $d ) ) {
+    	echo $c;
+	} else if ( ! is_array( $d ) ) {
+    	echo $d;
+	} else if ( isset( $d['label'] ) ) {
+    	echo $d['label'];
+	}
+?>
                     </a>
                 </li>
-                <?php
-                    $col = ($col == 'one') ? 'two' : 'one';
-    	            unset($c);
-    	            unset($d);
-    	        }
-    	    ?>
+<?php
+	$col = ( $col == 'one' ) ? 'two' : 'one';
+	unset( $c, $d );
+}
+?>
     	    </ul>
     	</div>
     </div>
