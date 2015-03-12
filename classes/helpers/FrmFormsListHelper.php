@@ -136,7 +136,7 @@ class FrmFormsListHelper extends FrmListHelper {
 
 ?>
     <div class="alignleft actions frm_visible_overflow">
-    <div class="dropdown frm_small_top_margin">
+    <div class="dropdown frm_tiny_top_margin">
         <a href="#" id="frm-templateDrop" class="frm-dropdown-toggle button" data-toggle="dropdown"><?php _e( 'Create New Template', 'formidable' ) ?> <b class="caret"></b></a>
 		<ul class="frm-dropdown-menu" role="menu" aria-labelledby="frm-templateDrop">
 		<?php

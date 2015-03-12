@@ -628,15 +628,36 @@ function frmFrontFormJS(){
 				thisFullCalc = thisFullCalc.replace('['+thisFieldId+']', vals[thisFieldId]);
 			}
 
+			// Set the number of decimal places
+			var dec = false;
+			if ( thisCalc.calc_dec ) {
+				dec = thisCalc.calc_dec;
+			}
+
 			// allow .toFixed for reverse compatability
 			if ( thisFullCalc.indexOf(').toFixed(') ) {
-				var calcParts = thisFullCalc.split(').toFixed(');
+			var calcParts = thisFullCalc.split(').toFixed(');
 				if ( isNumeric(calcParts[1]) ) {
-					thisFullCalc = 'parseFloat('+ thisFullCalc +')';
+					dec = calcParts[1];
+					thisFullCalc = thisFullCalc.replace(').toFixed(' + calcParts[1], '');
 				}
 			}
 
 			var total = parseFloat(eval(thisFullCalc));
+
+			// Set decimal points
+			if ( isNumeric( dec ) ) {
+				total = total.toFixed(dec);
+			}
+
+			var prefix = '';
+			if ( thisCalc.calc_prefix ) {
+				prefix = thisCalc.calc_prefix;
+			}
+
+			// Add the prefix
+			total = prefix + total;
+
 			if ( typeof total === 'undefined' ) {
 				total = 0;
 			}

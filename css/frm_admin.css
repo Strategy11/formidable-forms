@@ -157,6 +157,14 @@ input.frm_insert_in_template{
     margin-bottom:0;
 }
 
+.frm_tiny_top_margin{
+	margin-top:1px;
+}
+
+.frm_small_top_margin{
+	margin-top:5px;
+}
+
 .frm_cursor_pointer{
     cursor:pointer;
 }
@@ -452,6 +460,14 @@ form label.frm_primary_label input{font-size:12px;}
 }
 .frm_conf_below .frm_conf_field_container{
 	margin-top:10px;
+}
+
+#frm_calc_dec, #frm_calc_pre{
+	width:50px;
+}
+
+#frm_calc_pre{
+	margin-left:20px;
 }
 
 .frm_form_fields div.star{
@@ -798,7 +814,7 @@ li.ui-state-default.edit_field_type_divider .frm-show-hover{
 	transition: opacity .15s ease-in-out;
 }
 
-.frm_sortable_field_opts, .frm_small_top_margin{
+.frm_sortable_field_opts{
 	margin-top:5px;
 }
 .frm_single_option .frm_delete_icon{
@@ -1747,7 +1763,7 @@ ul .frm_col_two{float:right;}
 iframe#dyncontent_ifr{min-height:150px;}
 #frm-insert-fields-box ul.frm_code_list, #frm-conditionals ul.frm_code_list{padding-right:0.9em;}
 
-.frm_uninstall a.button, .frm_small_top_margin{margin-top:1px;}
+.frm_uninstall a.button{margin-top:1px;}
 
 #message.fade:not(.out),
 .frm_message.fade:not(.out){
