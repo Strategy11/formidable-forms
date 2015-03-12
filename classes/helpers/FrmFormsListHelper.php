@@ -77,13 +77,13 @@ class FrmFormsListHelper extends FrmListHelper {
                 <li><?php printf(__( 'After your form is created, go to Formidable -> %1$sForms%2$s.', 'formidable' ), '<a href="?page=formidable">', '</a>') ?></li>
                 <li><?php _e( 'Place your mouse over the name of the form you just created, and click the "Create Template" link.', 'formidable' ) ?></li>
             </ol>
-<?php   }else{
+<?php   } else {
             _e( 'No Forms Found.', 'formidable' ) ?>
             <a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable&frm_action=new' ) ) ?>"><?php _e( 'Add New', 'formidable' ); ?></a>
 <?php   }
 	}
 
-	public function get_bulk_actions(){
+	public function get_bulk_actions() {
 	    $actions = array();
 
 	    if ( in_array($this->status, array( '', 'published')) ) {

@@ -3,7 +3,7 @@ if ( ! defined('ABSPATH') ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-class FrmFormActionsHelper{
+class FrmFormActionsHelper {
 
     public static function get_action_for_form($form_id, $type = 'all', $limit = 99) {
         $action_controls = FrmFormActionsController::get_form_actions( $type );
@@ -101,7 +101,7 @@ class FrmFormActionsHelper{
         return $stop;
     }
 
-    public static function default_action_opts($class = ''){
+    public static function default_action_opts($class = '') {
         return array(
             'classes'   => 'frm_icon_font '. $class,
             'active'    => false,

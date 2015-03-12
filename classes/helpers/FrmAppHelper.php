@@ -1400,7 +1400,7 @@ class FrmAppHelper {
         return $count;
     }
 
-    public static function get_referer_info(){
+    public static function get_referer_info() {
         _deprecated_function( __FUNCTION__, '2.0', 'FrmAppHelper::get_server_value' );
         return self::get_server_value('HTTP_REFERER');
     }

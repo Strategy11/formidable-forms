@@ -28,36 +28,36 @@ class FrmXMLController {
             $message = $result;
         */
 
-        unset($files);
+        unset( $files );
 
         libxml_use_internal_errors( $set_err );
     	libxml_disable_entity_loader( $loader );
     }
 
     public static function route() {
-        $action = isset($_REQUEST['frm_action']) ? 'frm_action' : 'action';
-        $action = FrmAppHelper::get_param($action);
+        $action = isset( $_REQUEST['frm_action'] ) ? 'frm_action' : 'action';
+        $action = FrmAppHelper::get_param( $action );
 		if ( $action == 'import_xml' ) {
             return self::import_xml();
 		} else if ( $action == 'export_xml' ) {
             return self::export_xml();
         } else {
-            if ( apply_filters('frm_xml_route', true, $action) ) {
+            if ( apply_filters( 'frm_xml_route', true, $action ) ) {
                 return self::form();
             }
         }
     }
 
-    public static function form($errors = array(), $message = '') {
+    public static function form( $errors = array(), $message = '' ) {
         $forms = FrmForm::getAll( array( 'status' => array( null, '', 'published' ) ), 'name' );
 
-        $export_types = apply_filters('frm_xml_export_types',
-            array( 'forms' => __( 'Forms', 'formidable' ))
+        $export_types = apply_filters( 'frm_xml_export_types',
+            array( 'forms' => __( 'Forms', 'formidable' ) )
         );
 
-        $export_format = apply_filters('frm_export_formats', array(
-            'xml' => array( 'name' => 'XML', 'support' => 'forms', 'count' => 'multiple'),
-        ));
+        $export_format = apply_filters( 'frm_export_formats', array(
+            'xml' => array( 'name' => 'XML', 'support' => 'forms', 'count' => 'multiple' ),
+        ) );
 
         if ( FrmAppHelper::pro_is_installed() ) {
             $frmpro_settings = new FrmProSettings();

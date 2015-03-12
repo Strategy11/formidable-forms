@@ -3,7 +3,7 @@ if ( ! defined('ABSPATH') ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-class FrmEntryMeta{
+class FrmEntryMeta {
 
     /**
      * @param string $meta_key
@@ -35,7 +35,7 @@ class FrmEntryMeta{
     /**
      * @param string $meta_key
      */
-    public static function update_entry_meta($entry_id, $field_id, $meta_key = null, $meta_value){
+    public static function update_entry_meta($entry_id, $field_id, $meta_key = null, $meta_value) {
         if ( ! $field_id ) {
             return false;
         }
@@ -55,7 +55,7 @@ class FrmEntryMeta{
         return $wpdb->update( $wpdb->prefix .'frm_item_metas', array( 'meta_value' => $meta_value ), $where_values );
     }
 
-    public static function update_entry_metas($entry_id, $values){
+    public static function update_entry_metas($entry_id, $values) {
         global $wpdb;
 
         $prev_values = FrmDb::get_col( $wpdb->prefix .'frm_item_metas', array( 'item_id' => $entry_id, 'field_id !' => 0), 'field_id' );
@@ -96,7 +96,7 @@ class FrmEntryMeta{
         $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'frm_item_metas ' . $where['where'] ), $where['values'] );
     }
 
-    public static function duplicate_entry_metas($old_id, $new_id){
+    public static function duplicate_entry_metas($old_id, $new_id) {
         $metas = self::get_entry_meta_info($old_id);
         foreach ( $metas as $meta ) {
             self::add_entry_meta($new_id, $meta->field_id, null, $meta->meta_value);
@@ -104,7 +104,7 @@ class FrmEntryMeta{
         }
     }
 
-    public static function delete_entry_meta($entry_id, $field_id){
+    public static function delete_entry_meta($entry_id, $field_id) {
         global $wpdb;
         return $wpdb->query($wpdb->prepare("DELETE FROM {$wpdb->prefix}frm_item_metas WHERE field_id=%d AND item_id=%d", $field_id, $entry_id));
     }
@@ -144,7 +144,7 @@ class FrmEntryMeta{
         return $result;
     }
 
-    public static function get_entry_metas($entry_id){
+    public static function get_entry_metas($entry_id) {
         _deprecated_function( __FUNCTION__, '1.07.10');
 
         global $wpdb;
@@ -204,7 +204,7 @@ class FrmEntryMeta{
         $query[] = $order . $limit;
     }
 
-    public static function get_entry_meta_info($entry_id){
+    public static function get_entry_meta_info($entry_id) {
         return FrmDb::get_results( 'frm_item_metas', array( 'item_id' => $entry_id) );
     }
 
@@ -260,7 +260,7 @@ class FrmEntryMeta{
         if ( is_array($where) ) {
             if ( ! $args['is_draft'] ) {
                 $where['e.is_draft'] = 0;
-            } else if ( $args['is_draft'] == 1 ){
+            } else if ( $args['is_draft'] == 1 ) {
                 $where['e.is_draft'] = 1;
             }
 
@@ -304,7 +304,7 @@ class FrmEntryMeta{
         }
 
         global $wpdb;
-        if (is_array($search)){
+        if (is_array($search)) {
             $where = '';
 			foreach ( $search as $field => $value ) {
                 if ( $value <= 0 || ! in_array($field, array( 'year', 'month', 'day')) ) {
@@ -325,7 +325,7 @@ class FrmEntryMeta{
             }
             $where .= $wpdb->prepare(' field_id=%d', $field_id);
             $query = "SELECT DISTINCT item_id FROM {$wpdb->prefix}frm_item_metas". FrmAppHelper::prepend_and_or_where(' WHERE ', $where);
-        }else{
+        } else {
 			if ( $operator == 'LIKE' ) {
                 $search = '%' . $search . '%';
 			}

@@ -1,12 +1,12 @@
 <?php
 
-class FrmDb{
+class FrmDb {
     var $fields;
     var $forms;
     var $entries;
     var $entry_metas;
 
-    public function __construct(){
+    public function __construct() {
         if ( ! defined('ABSPATH') ) {
             die('You are not allowed to call this page directly.');
         }
@@ -403,7 +403,7 @@ class FrmDb{
         }
     }
 
-    public function uninstall(){
+    public function uninstall() {
         if ( !current_user_can('administrator') ) {
             $frm_settings = FrmAppHelper::get_settings();
             wp_die($frm_settings->admin_permission);

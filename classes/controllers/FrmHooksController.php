@@ -5,7 +5,7 @@ class FrmHooksController {
      * Trigger plugin-wide hook loading
      */
     public static function trigger_load_hook( $hooks = 'load_hooks' ) {
-        $controllers = apply_filters('frm_load_controllers', array( 'FrmHooksController' ) );
+        $controllers = apply_filters( 'frm_load_controllers', array( 'FrmHooksController' ) );
 
         $trigger_hooks = $hooks;
         $hooks = (array) $hooks;
@@ -13,7 +13,7 @@ class FrmHooksController {
         if ( 'load_hooks' == $trigger_hooks ) {
             if ( is_admin() ) {
                 $hooks[] = 'load_admin_hooks';
-                if ( defined('DOING_AJAX') ) {
+                if ( defined( 'DOING_AJAX' ) ) {
                     $hooks[] = 'load_ajax_hooks';
                     $hooks[] = 'load_form_hooks';
                 }

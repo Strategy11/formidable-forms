@@ -469,7 +469,7 @@ DEFAULT_HTML;
 	* @param $field_id int
 	* @param $html string
 	*/
-	private static function get_more_field_classes( &$error_class, $field, $field_id, $html ){
+	private static function get_more_field_classes( &$error_class, $field, $field_id, $html ) {
 		$error_class .= ' frm_'. $field['label'] .'_container';
 		if ( $field['id'] != $field_id ) {
 			// add a class for repeating/embedded fields
