@@ -1064,7 +1064,7 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
     pointer-events:none;
 }
 
-.frm_form_field .frm_repeat_sec:last-child .frm_add_form_row{
+.frm_section_heading div.frm_repeat_sec:last-of-type .frm_add_form_row{
     opacity:100;
     pointer-events:auto;
 }
