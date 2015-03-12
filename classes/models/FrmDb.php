@@ -261,11 +261,22 @@ class FrmDb{
     public static function get_var( $table, $where = array(), $field = 'id', $args = array(), $limit = '', $type = 'var' ) {
         $group = '';
         self::get_group_and_table_name( $table, $group );
-        self::get_where_clause_and_values( $where );
-        self::convert_options_to_array( $args, '', $limit );
+		self::convert_options_to_array( $args, '', $limit );
 
-        global $wpdb;
-        $query = $wpdb->prepare('SELECT '. $field .' FROM '. $table . $where['where'] .' '. implode(' ', $args), $where['values']);
+		$query = 'SELECT ' . $field . ' FROM ' . $table;
+		if ( is_array( $where ) || empty( $where ) ) {
+			// only separate into array values and query string if is array
+        	self::get_where_clause_and_values( $where );
+			global $wpdb;
+			$query = $wpdb->prepare( $query . $where['where'] . ' ' . implode( ' ', $args ), $where['values'] );
+		} else {
+			/**
+			 * Allow the $where to be prepared before we recieve it here.
+			 * This is a fallback for reverse compatability, but is not recommended
+			 */
+			_deprecated_argument( 'where', '2.0', __( 'Use the query in an array format so it can be properly prepared.', 'formidable' ) );
+			$query .= $where . ' ' . implode( ' ', $args );
+		}
 
         $cache_key = implode('_', FrmAppHelper::array_flatten( $where ) ) . str_replace( array( ' ', ','), '_', implode('_', $args) ) . $field .'_'. $type;
         $results = FrmAppHelper::check_cache( $cache_key, $group, $query, 'get_'. $type );
