@@ -300,7 +300,7 @@ class FrmAppController {
                 'nonce'             => wp_create_nonce( 'frm_ajax' ),
                 'no_save_warning'   => __( 'Warning: There is no way to retrieve unsaved entries.', 'formidable' ),
                 'jquery_ui_url'     => FrmAppHelper::jquery_ui_base_url(),
-            ));
+            ) );
         }
     }
 

@@ -3,7 +3,7 @@ if ( ! defined('ABSPATH') ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-class FrmXMLHelper{
+class FrmXMLHelper {
 
 	public static function get_xml_values( $opt, $padding ) {
 		if ( is_array( $opt ) ) {
@@ -21,7 +21,7 @@ class FrmXMLHelper{
 		}
 	}
 
-    public static function import_xml($file){
+    public static function import_xml($file) {
         $defaults = array(
             'forms' => 0, 'fields' => 0, 'terms' => 0,
             'posts' => 0, 'views' => 0, 'actions' => 0,
@@ -557,7 +557,7 @@ class FrmXMLHelper{
 		return $str;
 	}
 
-    public static function migrate_form_settings_to_actions( $form_options, $form_id, &$imported = array(), $switch = false ){
+    public static function migrate_form_settings_to_actions( $form_options, $form_id, &$imported = array(), $switch = false ) {
         // Get post type
         $post_type = FrmFormActionsController::$action_post_type;
 

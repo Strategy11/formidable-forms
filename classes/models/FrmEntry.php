@@ -3,7 +3,7 @@ if ( ! defined('ABSPATH') ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-class FrmEntry{
+class FrmEntry {
 
     public static function create( $values ) {
         global $wpdb;
@@ -139,7 +139,7 @@ class FrmEntry{
         return $is_duplicate;
     }
 
-    public static function duplicate( $id ){
+    public static function duplicate( $id ) {
         global $wpdb;
 
         $values = self::getOne( $id );
@@ -171,7 +171,7 @@ class FrmEntry{
         return $entry_id;
     }
 
-    public static function update( $id, $values ){
+    public static function update( $id, $values ) {
         global $wpdb, $frm_vars;
         if ( isset($frm_vars['saved_entries']) && is_array($frm_vars['saved_entries']) && in_array( (int) $id, (array) $frm_vars['saved_entries'] ) ) {
             return;
@@ -256,7 +256,7 @@ class FrmEntry{
         return $result;
     }
 
-    public static function getOne( $id, $meta = false){
+    public static function getOne( $id, $meta = false) {
         global $wpdb;
 
         $query = "SELECT it.*, fr.name as form_name, fr.form_key as form_key FROM {$wpdb->prefix}frm_items it

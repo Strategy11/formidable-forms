@@ -179,28 +179,28 @@ class FrmFormsController {
             $values = FrmProEntry::mod_other_vals( $values, 'back' );
         }
 
-        $errors = FrmForm::validate($values);
-        $permission_error = FrmAppHelper::permission_nonce_error('frm_edit_forms', 'frm_save_form', 'frm_save_form_nonce');
+        $errors = FrmForm::validate( $values );
+        $permission_error = FrmAppHelper::permission_nonce_error( 'frm_edit_forms', 'frm_save_form', 'frm_save_form_nonce' );
         if ( $permission_error !== false ) {
             $errors['form'] = $permission_error;
         }
 
-        $id = isset($values['id']) ? (int) $values['id'] : (int) FrmAppHelper::get_param('id');
+        $id = isset( $values['id'] ) ? (int) $values['id'] : (int) FrmAppHelper::get_param( 'id' );
 
 		if ( count( $errors ) > 0 ) {
-            return self::get_edit_vars($id, $errors);
+            return self::get_edit_vars( $id, $errors );
 		} else {
             FrmForm::update( $id, $values );
             $message = __( 'Form was Successfully Updated', 'formidable' );
-            if ( defined('DOING_AJAX') ) {
-                die($message);
+            if ( defined( 'DOING_AJAX' ) ) {
+                die( $message );
             }
-            return self::get_edit_vars($id, '', $message);
+            return self::get_edit_vars( $id, '', $message );
         }
     }
 
-    public static function bulk_create_template($ids) {
-        FrmAppHelper::permission_check('frm_edit_forms');
+    public static function bulk_create_template( $ids ) {
+        FrmAppHelper::permission_check( 'frm_edit_forms' );
 
         foreach ( $ids as $id ) {
             FrmForm::duplicate( $id, true, true );
@@ -247,22 +247,22 @@ class FrmFormsController {
             return;
         }
 
-        $form = FrmForm::getOne($params['form']);
+        $form = FrmForm::getOne( $params['form'] );
         if ( ! $form ) {
             return;
         }
-        return self::show_form($form->id, '', true, true);
+        return self::show_form( $form->id, '', true, true );
     }
 
     public static function preview() {
-        do_action('frm_wp');
+        do_action( 'frm_wp' );
 
         global $frm_vars;
         $frm_vars['preview'] = true;
 
-        if ( !defined( 'ABSPATH' ) && !defined( 'XMLRPC_REQUEST' )) {
+        if ( ! defined( 'ABSPATH' ) && ! defined( 'XMLRPC_REQUEST' ) ) {
             global $wp;
-            $root = dirname(dirname(dirname(dirname(__FILE__))));
+            $root = dirname( dirname( dirname( dirname( __FILE__ ) ) ) );
             include_once( $root.'/wp-config.php' );
             $wp->init();
             $wp->register_globals();
@@ -456,7 +456,7 @@ class FrmFormsController {
     }
 
     public static function display_forms_list( $params = array(), $message = '', $current_page_ov = false, $errors = array() ) {
-        FrmAppHelper::permission_check('frm_view_forms');
+        FrmAppHelper::permission_check( 'frm_view_forms' );
 
         global $wpdb, $frm_vars;
 
@@ -464,7 +464,7 @@ class FrmFormsController {
             $params = FrmFormsHelper::get_params();
         }
 
-        $wp_list_table = new FrmFormsListHelper( compact('params') );
+        $wp_list_table = new FrmFormsListHelper( compact( 'params' ) );
 
         $pagenum = $wp_list_table->get_pagenum();
 
@@ -498,7 +498,7 @@ class FrmFormsController {
 
         $columns['created_at'] = __( 'Date', 'formidable' );
 
-        add_screen_option( 'per_page', array( 'label' => __( 'Forms', 'formidable' ), 'default' => 20, 'option' => 'formidable_page_formidable_per_page') );
+        add_screen_option( 'per_page', array( 'label' => __( 'Forms', 'formidable' ), 'default' => 20, 'option' => 'formidable_page_formidable_per_page' ) );
 
         return $columns;
 	}
@@ -513,7 +513,7 @@ class FrmFormsController {
 		);
 	}
 
-	public static function hidden_columns($result) {
+	public static function hidden_columns( $result ) {
         $return = false;
         foreach ( (array) $result as $r ) {
             if ( ! empty( $r ) ) {
@@ -537,7 +537,7 @@ class FrmFormsController {
         return $result;
     }
 
-	public static function save_per_page($save, $option, $value) {
+	public static function save_per_page( $save, $option, $value ) {
         if ( $option == 'formidable_page_formidable_per_page' ) {
             $save = (int) $value;
         }
@@ -652,81 +652,81 @@ class FrmFormsController {
 	}
 
     public static function filter_content( $content, $form, $entry = false ) {
-        if ( ! $entry || ! is_object($entry) ) {
-            if ( ! $entry || ! is_numeric($entry) ) {
-                $entry = ( $_POST && isset($_POST['id']) ) ? $_POST['id'] : false;
+        if ( ! $entry || ! is_object( $entry ) ) {
+            if ( ! $entry || ! is_numeric( $entry ) ) {
+                $entry = ( $_POST && isset( $_POST['id'] ) ) ? $_POST['id'] : false;
             }
 
-            FrmEntriesHelper::maybe_get_entry($entry);
+            FrmEntriesHelper::maybe_get_entry( $entry );
         }
 
         if ( ! $entry ) {
             return $content;
         }
 
-        if ( is_object($form) ) {
+        if ( is_object( $form ) ) {
             $form = $form->id;
         }
 
-        $shortcodes = FrmFieldsHelper::get_shortcodes($content, $form);
-        $content = apply_filters('frm_replace_content_shortcodes', $content, $entry, $shortcodes);
+        $shortcodes = FrmFieldsHelper::get_shortcodes( $content, $form );
+        $content = apply_filters( 'frm_replace_content_shortcodes', $content, $entry, $shortcodes );
 
         return $content;
     }
 
-    public static function replace_content_shortcodes($content, $entry, $shortcodes) {
-        return FrmFieldsHelper::replace_content_shortcodes($content, $entry, $shortcodes);
+    public static function replace_content_shortcodes( $content, $entry, $shortcodes ) {
+        return FrmFieldsHelper::replace_content_shortcodes( $content, $entry, $shortcodes );
     }
 
-    public static function process_bulk_form_actions($errors) {
+    public static function process_bulk_form_actions( $errors ) {
         if ( ! $_REQUEST ) {
             return $errors;
         }
 
-        $bulkaction = FrmAppHelper::get_param('action');
+        $bulkaction = FrmAppHelper::get_param( 'action' );
         if ( $bulkaction == -1 ) {
-            $bulkaction = FrmAppHelper::get_param('action2');
+            $bulkaction = FrmAppHelper::get_param( 'action2' );
         }
 
-        if ( ! empty($bulkaction) && strpos($bulkaction, 'bulk_') === 0 ) {
+        if ( ! empty( $bulkaction ) && strpos( $bulkaction, 'bulk_' ) === 0 ) {
             FrmAppHelper::remove_get_action();
 
-            $bulkaction = str_replace('bulk_', '', $bulkaction);
+            $bulkaction = str_replace( 'bulk_', '', $bulkaction );
         }
 
-        $ids = FrmAppHelper::get_param('item-action', '');
-        if ( empty($ids) ) {
+        $ids = FrmAppHelper::get_param( 'item-action', '' );
+        if ( empty( $ids ) ) {
             $errors[] = __( 'No forms were specified', 'formidable' );
             return $errors;
         }
 
-        $permission_error = FrmAppHelper::permission_nonce_error('', '_wpnonce', 'bulk-toplevel_page_formidable');
+        $permission_error = FrmAppHelper::permission_nonce_error( '', '_wpnonce', 'bulk-toplevel_page_formidable' );
         if ( $permission_error !== false ) {
             $errors[] = $permission_error;
             return $errors;
         }
 
-        if ( ! is_array($ids) ) {
-            $ids = explode(',', $ids);
+        if ( ! is_array( $ids ) ) {
+            $ids = explode( ',', $ids );
         }
 
         switch ( $bulkaction ) {
             case 'delete':
-                $message = self::bulk_destroy($ids);
+                $message = self::bulk_destroy( $ids );
             break;
             case 'trash':
-                $message = self::bulk_trash($ids);
+                $message = self::bulk_trash( $ids );
             break;
             case 'untrash':
-                $message = self::bulk_untrash($ids);
+                $message = self::bulk_untrash( $ids );
             break;
             case 'create_template':
-                $message = self::bulk_create_template($ids);
+                $message = self::bulk_create_template( $ids );
             break;
         }
 
         if ( isset( $message ) && ! empty( $message ) ) {
-            echo '<div id="message" class="updated frm_msg_padding">'. $message .'</div>';
+            echo '<div id="message" class="updated frm_msg_padding">'.$message.'</div>';
         }
 
         return $errors;
@@ -841,7 +841,7 @@ class FrmFormsController {
         }
     }
 
-    public static function json_error($errors) {
+    public static function json_error( $errors ) {
         $errors['json'] = __( 'Abnormal HTML characters prevented your form from saving correctly', 'formidable' );
         return $errors;
     }
@@ -930,57 +930,57 @@ class FrmFormsController {
         );
     }
 
-    public static function show_form($id = '', $key = '', $title = false, $description = false, $atts = array()) {
-        if ( empty($id) ) {
+    public static function show_form( $id = '', $key = '', $title = false, $description = false, $atts = array() ) {
+        if ( empty( $id ) ) {
             $id = $key;
         }
 
         // no form id or key set
-        if ( empty($id) ) {
+        if ( empty( $id ) ) {
             return __( 'Please select a valid form', 'formidable' );
         }
 
-        $form = FrmForm::getOne($id);
+        $form = FrmForm::getOne( $id );
         if ( ! $form || $form->parent_form_id ) {
             return __( 'Please select a valid form', 'formidable' );
         }
 
-        add_action('frm_load_form_hooks', 'FrmFormsController::trigger_load_form_hooks');
+        add_action( 'frm_load_form_hooks', 'FrmFormsController::trigger_load_form_hooks' );
         FrmAppHelper::trigger_hook_load( 'form', $form );
 
-        $form = apply_filters('frm_pre_display_form', $form);
+        $form = apply_filters( 'frm_pre_display_form', $form );
 
         $frm_settings = FrmAppHelper::get_settings();
 
         // don't show a draft form on a page
 		global $post;
-        if ( $form->status == 'draft' && current_user_can('frm_edit_forms') && ( ! $post || $post->ID != $frm_settings->preview_page_id ) && ! FrmAppHelper::is_preview_page() ) {
+        if ( $form->status == 'draft' && current_user_can( 'frm_edit_forms' ) && ( ! $post || $post->ID != $frm_settings->preview_page_id ) && ! FrmAppHelper::is_preview_page() ) {
             return __( 'Please select a valid form', 'formidable' );
         }
 
         // don't show the form if user should be logged in
         if ( $form->logged_in && ! is_user_logged_in() ) {
-            return do_shortcode($frm_settings->login_msg);
+            return do_shortcode( $frm_settings->login_msg );
         }
 
         // don't show the form if user doesn't have permission
-        if ( $form->logged_in && get_current_user_id() && isset($form->options['logged_in_role']) && $form->options['logged_in_role'] != '' && !FrmAppHelper::user_has_permission($form->options['logged_in_role']) ) {
-            return do_shortcode($frm_settings->login_msg);
+        if ( $form->logged_in && get_current_user_id() && isset( $form->options['logged_in_role'] ) && $form->options['logged_in_role'] != '' && ! FrmAppHelper::user_has_permission( $form->options['logged_in_role'] ) ) {
+            return do_shortcode( $frm_settings->login_msg );
         }
 
-        $form = self::get_form($form, $title, $description, $atts);
+        $form = self::get_form( $form, $title, $description, $atts );
 
         // check for external shortcodes
-        $form = do_shortcode($form);
+        $form = do_shortcode( $form );
 
         return $form;
     }
 
-    public static function get_form($form, $title, $description, $atts = array()) {
+    public static function get_form( $form, $title, $description, $atts = array() ) {
         ob_start();
 
-        self::get_form_contents($form, $title, $description, $atts);
-        FrmEntriesHelper::enqueue_scripts( FrmEntriesController::get_params($form) );
+        self::get_form_contents( $form, $title, $description, $atts );
+        FrmEntriesHelper::enqueue_scripts( FrmEntriesController::get_params( $form ) );
 
         $contents = ob_get_contents();
         ob_end_clean();

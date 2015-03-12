@@ -11,7 +11,7 @@ class FrmStylesController {
     }
 
     public static function register_post_types() {
-        register_post_type(self::$post_type, array(
+        register_post_type( self::$post_type, array(
             'label' => __( 'Styles', 'formidable' ),
             'public' => false,
             'show_ui' => false,
@@ -24,7 +24,7 @@ class FrmStylesController {
                 'name' => __( 'Styles', 'formidable' ),
                 'singular_name' => __( 'Style', 'formidable' ),
                 'menu_name' => __( 'Style', 'formidable' ),
-                'edit' => __( 'Edit'),
+                'edit' => __( 'Edit' ),
                 'add_new_item' => __( 'Create a New Style', 'formidable' ),
                 'edit_item' => __( 'Edit Style', 'formidable' )
             )
@@ -187,8 +187,8 @@ class FrmStylesController {
             case 'save_css':
                 return self::$action();
             default:
-            	do_action('frm_style_action_route', $action);
-            	if ( apply_filters('frm_style_stop_action_route', false, $action) ) {
+            	do_action( 'frm_style_action_route', $action );
+            	if ( apply_filters( 'frm_style_stop_action_route', false, $action ) ) {
                 	return;
             	}
 
@@ -206,7 +206,7 @@ class FrmStylesController {
         $frm_style = new FrmStyle();
         $defaults = $frm_style->get_defaults();
 
-        echo json_encode($defaults);
+        echo json_encode( $defaults );
         wp_die();
     }
 
@@ -275,14 +275,14 @@ class FrmStylesController {
     public static function enqueue_style() {
         global $frm_vars;
 
-        if ( isset($frm_vars['css_loaded']) && $frm_vars['css_loaded'] ) {
+        if ( isset( $frm_vars['css_loaded'] ) && $frm_vars['css_loaded'] ) {
             // the CSS has already been loaded
             return;
         }
 
         $frm_settings = FrmAppHelper::get_settings();
         if ( $frm_settings->load_style != 'none' ) {
-            wp_enqueue_style('formidable' );
+            wp_enqueue_style( 'formidable' );
             $frm_vars['css_loaded'] = true;
         }
     }
@@ -295,14 +295,14 @@ class FrmStylesController {
         return $styles;
     }
 
-    public static function get_form_style($form = 'default') {
-        $style = FrmFormsHelper::get_form_style($form);
+    public static function get_form_style( $form = 'default' ) {
+        $style = FrmFormsHelper::get_form_style( $form );
 
-        if ( empty($style) || 1 == $style ) {
+        if ( empty( $style ) || 1 == $style ) {
             $style = 'default';
         }
 
-        $frm_style = new FrmStyle($style);
+        $frm_style = new FrmStyle( $style );
         return $frm_style->get_one();
     }
 
@@ -366,7 +366,7 @@ class FrmStylesController {
      * Fallback for WP < 3.6
      */
     public static function do_accordion_sections( $screen, $context, $object ) {
-        if ( function_exists('do_accordion_sections') ) {
+        if ( function_exists( 'do_accordion_sections' ) ) {
             return do_accordion_sections( $screen, $context, $object );
         }
 
@@ -416,7 +416,7 @@ class FrmStylesController {
     				}
     			}
     		}
-    	} while(0);
+    	} while ( 0 );
     	?>
     	</div><!-- .accordion-container -->
     	<?php

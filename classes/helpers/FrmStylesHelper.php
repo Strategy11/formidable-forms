@@ -1,7 +1,7 @@
 <?php
-class FrmStylesHelper{
+class FrmStylesHelper {
 
-    public static function jquery_themes(){
+    public static function jquery_themes() {
         $themes = array(
             'ui-lightness'  => 'UI Lightness',
             'ui-darkness'   => 'UI Darkness',
@@ -33,7 +33,7 @@ class FrmStylesHelper{
         return $themes;
     }
 
-    public static function jquery_css_url($theme_css){
+    public static function jquery_css_url($theme_css) {
         if ( $theme_css == -1 ) {
             return;
         }

@@ -3,7 +3,7 @@ if ( ! defined('ABSPATH') ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-class FrmFormsHelper{
+class FrmFormsHelper {
     /**
      * If $form is numeric, get the form object
      * @param object|int $form
@@ -62,7 +62,7 @@ class FrmFormsHelper{
         <?php
     }
 
-    public static function form_switcher(){
+    public static function form_switcher() {
 		$where = apply_filters( 'frm_forms_dropdown', array(), '' );
 		$forms = FrmForm::get_published_forms( $where );
 
@@ -105,7 +105,7 @@ class FrmFormsHelper{
         <?php
     }
 
-    public static function get_sortable_classes($col, $sort_col, $sort_dir){
+    public static function get_sortable_classes($col, $sort_col, $sort_dir) {
         echo ($sort_col == $col) ? 'sorted' : 'sortable';
         echo ($sort_col == $col && $sort_dir == 'desc') ? ' asc' : ' desc';
     }
@@ -118,12 +118,12 @@ class FrmFormsHelper{
 
         if ( ! empty( $values ) ) {
             $post_values = $values;
-        }else{
+        } else {
             $values = array();
             $post_values = isset($_POST) ? $_POST : array();
         }
 
-        foreach ( array( 'name' => '', 'description' => '') as $var => $default){
+        foreach ( array( 'name' => '', 'description' => '') as $var => $default) {
 			if ( ! isset( $values[ $var ] ) ) {
 				$values[ $var ] = FrmAppHelper::get_param( $var, $default );
             }
@@ -131,7 +131,7 @@ class FrmFormsHelper{
 
         $values['description'] = FrmAppHelper::use_wpautop($values['description']);
 
-        foreach ( array( 'form_id' => '', 'logged_in' => '', 'editable' => '', 'default_template' => 0, 'is_template' => 0, 'status' => 'draft', 'parent_form_id' => 0) as $var => $default){
+        foreach ( array( 'form_id' => '', 'logged_in' => '', 'editable' => '', 'default_template' => 0, 'is_template' => 0, 'status' => 'draft', 'parent_form_id' => 0) as $var => $default) {
             if ( ! isset( $values[ $var ] ) ) {
 				$values[ $var ] = FrmAppHelper::get_param( $var, $default );
             }
@@ -192,7 +192,7 @@ class FrmFormsHelper{
 
                     unset($k, $v);
                 }
-            }else{
+            } else {
                 $values[$var] = ($post_values && isset($post_values['options'][$var])) ? $post_values['options'][$var] : (($record && isset($record->options[$var])) ? $record->options[$var] : $default);
             }
 
@@ -202,7 +202,7 @@ class FrmFormsHelper{
         return $values;
     }
 
-    public static function get_default_opts(){
+    public static function get_default_opts() {
         $frm_settings = FrmAppHelper::get_settings();
 
         return array(
@@ -218,7 +218,7 @@ class FrmFormsHelper{
     /**
      * @param string $loc
      */
-    public static function get_default_html($loc){
+    public static function get_default_html($loc) {
 		if ( $loc == 'submit' ) {
             $sending = __( 'Sending', 'formidable' );
             $draft_link = self::get_draft_link();
@@ -243,12 +243,12 @@ BEFORE_HTML;
         return $default_html;
     }
 
-    public static function get_draft_link(){
+    public static function get_draft_link() {
         $link = '[if save_draft]<a href="javascript:void(0)" class="frm_save_draft" [draft_hook]>[draft_label]</a>[/if save_draft]';
         return $link;
     }
 
-    public static function get_custom_submit($html, $form, $submit, $form_action, $values){
+    public static function get_custom_submit($html, $form, $submit, $form_action, $values) {
         $button = self::replace_shortcodes($html, $form, $submit, $form_action, $values);
         if ( ! strpos($button, '[button_action]') ) {
             return;
@@ -327,7 +327,7 @@ BEFORE_HTML;
     }
 
     public static function replace_shortcodes( $html, $form, $title = false, $description = false, $values = array() ) {
-        foreach ( array( 'form_name' => $title, 'form_description' => $description, 'entry_key' => true) as $code => $show){
+        foreach ( array( 'form_name' => $title, 'form_description' => $description, 'entry_key' => true) as $code => $show) {
             if ( $code == 'form_name' ) {
                 $replace_with = $form->name;
             } else if ( $code == 'form_description' ) {
@@ -366,7 +366,7 @@ BEFORE_HTML;
         return $html;
     }
 
-    public static function submit_button_label($submit){
+    public static function submit_button_label($submit) {
         if ( ! $submit || empty($submit) ) {
             $frm_settings = FrmAppHelper::get_settings();
             $submit = $frm_settings->submit_value;

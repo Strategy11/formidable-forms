@@ -31,18 +31,18 @@ class FrmSettingsController {
 
         $frm_settings = FrmAppHelper::get_settings();
 
-        if ( ! isset($_POST['process_form']) || ! wp_verify_nonce($_POST['process_form'], 'process_form_nonce') ) {
-            wp_die($frm_settings->admin_permission);
+        if ( ! isset( $_POST['process_form'] ) || ! wp_verify_nonce( $_POST['process_form'], 'process_form_nonce' ) ) {
+            wp_die( $frm_settings->admin_permission );
         }
 
         $errors = array();
         $message = '';
 
-        if ( ! isset($frm_vars['settings_routed']) || ! $frm_vars['settings_routed'] ) {
+        if ( ! isset( $frm_vars['settings_routed'] ) || ! $frm_vars['settings_routed'] ) {
             //$errors = $frm_settings->validate($_POST,array());
-            $frm_settings->update(stripslashes_deep($_POST));
+            $frm_settings->update( stripslashes_deep( $_POST ) );
 
-            if ( empty($errors) ) {
+            if ( empty( $errors ) ) {
                 $frm_settings->store();
                 $message = __( 'Settings Saved', 'formidable' );
             }
@@ -55,14 +55,14 @@ class FrmSettingsController {
             return;
         }
 
-        self::display_form($errors, $message);
+        self::display_form( $errors, $message );
     }
 
     public static function route( $stop_load = false ) {
-        $action = isset($_REQUEST['frm_action']) ? 'frm_action' : 'action';
-        $action = FrmAppHelper::get_param($action);
+        $action = isset( $_REQUEST['frm_action'] ) ? 'frm_action' : 'action';
+        $action = FrmAppHelper::get_param( $action );
         if ( $action == 'process-form' ) {
-            return self::process_form($stop_load);
+            return self::process_form( $stop_load );
         } else if ( $stop_load != 'stop_load' ) {
             return self::display_form();
         }
