@@ -33,7 +33,7 @@ function frmFrontFormJS(){
 	
 	function toggleSection(){
 		/*jshint validthis:true */
-		jQuery(this).next('.frm_toggle_container').slideToggle('fast');
+		jQuery(this).parent().children('.frm_toggle_container').slideToggle('fast');
 		jQuery(this).toggleClass('active').children('.ui-icon-triangle-1-e, .ui-icon-triangle-1-s')
 			.toggleClass('ui-icon-triangle-1-s ui-icon-triangle-1-e');
 	}
