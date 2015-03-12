@@ -590,6 +590,8 @@ class FrmFormsController {
     }
 
     public static function get_settings_vars( $id, $errors = '', $message = '' ) {
+		FrmAppHelper::permission_check( 'frm_edit_forms' );
+
         global $frm_vars;
 
         $form = FrmForm::getOne( $id );

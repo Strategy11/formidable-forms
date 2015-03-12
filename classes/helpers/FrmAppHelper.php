@@ -556,9 +556,10 @@ class FrmAppHelper {
      */
     public static function permission_nonce_error($permission, $nonce_name = '', $nonce = '') {
         $error = false;
-        if ( ! empty($permission) && current_user_can($permission) ) {
-            return $error;
-        }
+		if ( ! empty( $permission ) && ! current_user_can( $permission ) ) {
+			$frm_settings = self::get_settings();
+			return $frm_settings->admin_permission;
+		}
 
         if ( empty($nonce_name) ) {
             return $error;

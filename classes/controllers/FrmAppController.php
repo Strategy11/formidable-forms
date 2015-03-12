@@ -113,7 +113,15 @@ class FrmAppController {
             // user is authorized, but running free version
             $inst_install_url = 'http://formidablepro.com/knowledgebase/manually-install-formidable-pro/';
         ?>
-<div class="error" class="frm_previous_install"><?php echo apply_filters( 'frm_pro_update_msg', sprintf( __( 'This site has been previously authorized to run Formidable Forms.<br/>%1$sInstall the pro version%2$s or %3$sdeauthorize%4$s this site to continue running the free version and remove this message.', 'formidable' ), '<a href="'. $inst_install_url .'" target="_blank">', '</a>', '<a href="javascript:void(0)" onclick="frmDeauthorizeNow()" class="frm_deauthorize_link">', '</a>' ), $inst_install_url ); ?></div>
+<div class="error" class="frm_previous_install">
+		<?php
+		echo apply_filters( 'frm_pro_update_msg',
+			sprintf(
+				__( 'This site has been previously authorized to run Formidable Forms.<br/>%1$sInstall the pro version%2$s or %3$sdeauthorize%4$s this site to continue running the free version and remove this message.', 'formidable' ),
+				'<a href="' . esc_url( $inst_install_url ) . '" target="_blank">', '</a>',
+				'<a href="javascript:void(0)" onclick="frmDeauthorizeNow()" class="frm_deauthorize_link">', '</a>'
+			), esc_url( $inst_install_url ) ); ?>
+</div>
 <?php
         }
     }

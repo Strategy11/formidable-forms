@@ -114,7 +114,7 @@ class FrmFieldsController {
             $value = '';
         }
 
-        FrmField::update($id, array($field => $value));
+		FrmField::update( $id, array( $field => $value ) );
         echo stripslashes($value);
         wp_die();
     }

@@ -117,7 +117,7 @@ class FrmEntriesController {
         $frm_vars['cols'] = $columns;
 
         if ( FrmAppHelper::is_admin_page('formidable-entries') && ( ! isset($_GET['frm_action']) || $_GET['frm_action'] == 'list' || $_GET['frm_action'] == 'destroy' ) ) {
-            add_screen_option( 'per_page', array( 'label' => __( 'Entries', 'formidable' ), 'default' => 20, 'option' => 'formidable_page_formidable_entries_per_page') );
+			add_screen_option( 'per_page', array( 'label' => __( 'Entries', 'formidable' ), 'default' => 20, 'option' => 'formidable_page_formidable_entries_per_page' ) );
         }
 
         return $columns;
@@ -424,7 +424,8 @@ class FrmEntriesController {
 
         global $frm_vars;
 
-        $form = FrmForm::getOne( (int) $_POST['form_id'] );
+		$form_id = (int) $_POST['form_id'];
+		$form = FrmForm::getOne( $form_id );
         if ( ! $form ) {
             return;
         }
@@ -434,22 +435,22 @@ class FrmEntriesController {
         if ( ! isset( $frm_vars['form_params'] ) ) {
             $frm_vars['form_params'] = array();
         }
-        $frm_vars['form_params'][$form->id] = $params;
+		$frm_vars['form_params'][ $form->id ] = $params;
 
-        if ( isset( $frm_vars['created_entries'][(int) $_POST['form_id']] ) ) {
+		if ( isset( $frm_vars['created_entries'][ $form_id ] ) ) {
             return;
         }
 
         if ( $errors == '' ) {
             $errors = FrmEntry::validate( $_POST );
         }
-        $frm_vars['created_entries'][(int) $_POST['form_id']] = array( 'errors' => $errors );
+		$frm_vars['created_entries'][ $form_id ] = array( 'errors' => $errors );
 
         if ( empty( $errors ) ) {
             $_POST['frm_skip_cookie'] = 1;
             if ( $params['action'] == 'create' ) {
-                if ( apply_filters( 'frm_continue_to_create', true, $_POST['form_id'] ) && ! isset( $frm_vars['created_entries'][$_POST['form_id']]['entry_id'] ) ) {
-                    $frm_vars['created_entries'][$_POST['form_id']]['entry_id'] = FrmEntry::create( $_POST );
+				if ( apply_filters( 'frm_continue_to_create', true, $form_id ) && ! isset( $frm_vars['created_entries'][ $form_id ]['entry_id'] ) ) {
+					$frm_vars['created_entries'][ $form_id ]['entry_id'] = FrmEntry::create( $_POST );
                 }
             }
 
@@ -623,7 +624,7 @@ class FrmEntriesController {
             $values['posted_form_id'] = FrmAppHelper::get_param('form');
         }
 
-        if ($form->id == $values['posted_form_id']) {
+		if ( $form->id == $values['posted_form_id'] ) {
 			//if there are two forms on the same page, make sure not to submit both
             foreach ( $default_values as $var => $default ) {
                 if ( $var == 'action' ) {

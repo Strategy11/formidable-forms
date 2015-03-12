@@ -289,7 +289,10 @@ class FrmFormsListHelper extends FrmListHelper {
      */
     private function get_actions( &$actions, $item, $edit_link, $duplicate_link ) {
 		if ( 'trash' == $this->status ) {
-		    $actions['restore'] = FrmFormsHelper::delete_trash_link($item->id, $item->status, 'short');
+			if ( current_user_can('frm_edit_forms') ) {
+				$actions['restore'] = FrmFormsHelper::delete_trash_link( $item->id, $item->status, 'short' );
+			}
+
 		    if ( current_user_can('frm_delete_forms') ) {
     		    $actions['trash'] = '<a href="' . esc_url(wp_nonce_url( '?page=formidable&form_status=trash&frm_action=destroy&id='. $item->id, 'destroy_form_'. $item->id )) .'" class="submitdelete"  onclick="return confirm(\''. __( 'Are you sure you want to permanently delete that?', 'formidable' ) .'\')">' . __( 'Delete Permanently' ) . '</a>';
     		}
@@ -312,7 +315,12 @@ class FrmFormsListHelper extends FrmListHelper {
         	}
         }
 
-        $actions['trash'] = FrmFormsHelper::delete_trash_link($item->id, $item->status, 'short');
+		$actions['trash'] = FrmFormsHelper::delete_trash_link( $item->id, $item->status, 'short' );
+		if ( empty( $actions['trash'] ) ) {
+			// the user doesn't have permission
+			unset( $actions['trash'] );
+		}
+
 		$actions['view'] = '<a href="'. FrmFormsHelper::get_direct_link($item->form_key, $item) .'" target="_blank">'. __( 'Preview') .'</a>';
     }
 

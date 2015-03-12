@@ -1087,12 +1087,14 @@ function frmFrontFormJS(){
                 var reset = 'reset';
                 // hide fields with conditional logic
                 jQuery(html).find('input, select, textarea').each(function(){
-            		fieldID = this.name.replace('item_meta[', '').split(']')[2].replace('[', '');
-                    if ( jQuery.inArray(fieldID, checked ) == -1 ) {
-                        checked.push(fieldID);
-                        checkDependentField('und', fieldID, null, jQuery(this), reset);
-                        reset = 'persist';
-                    }
+					if ( this.type != 'file' ) {
+						fieldID = this.name.replace('item_meta[', '').split(']')[2].replace('[', '');
+						if ( jQuery.inArray(fieldID, checked ) == -1 ) {
+							checked.push(fieldID);
+							checkDependentField('und', fieldID, null, jQuery(this), reset);
+							reset = 'persist';
+						}
+					}
                 });
 
                 var star = jQuery(html).find('.star');
