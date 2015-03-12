@@ -462,12 +462,8 @@ form label.frm_primary_label input{font-size:12px;}
 	margin-top:10px;
 }
 
-#frm_calc_dec, #frm_calc_pre{
+#frm_calc_dec{
 	width:50px;
-}
-
-#frm_calc_pre{
-	margin-left:20px;
 }
 
 .frm_form_fields div.star{

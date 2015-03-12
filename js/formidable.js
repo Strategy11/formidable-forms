@@ -37,7 +37,14 @@ function frmFrontFormJS(){
 		jQuery(this).toggleClass('active').children('.ui-icon-triangle-1-e, .ui-icon-triangle-1-s')
 			.toggleClass('ui-icon-triangle-1-s ui-icon-triangle-1-e');
 	}
-    
+
+	// Remove the frm_transparent class from a single file upload field when it changes
+	// Hide the old file when a new file is uploaded
+	function showFileUploadText(){
+		this.className = this.className.replace( 'frm_transparent', '');
+		this.parentNode.getElementsByTagName('a')[0].className += ' frm_hidden';
+	}
+
     // Show "Other" text box when Other item is checked/selected
     // Hide and clear text box when item is unchecked/unselected
 	function showOtherText(){
@@ -629,17 +636,14 @@ function frmFrontFormJS(){
 			}
 
 			// Set the number of decimal places
-			var dec = false;
-			if ( thisCalc.calc_dec ) {
-				dec = thisCalc.calc_dec;
-			}
+			var dec = thisCalc.calc_dec;
 
 			// allow .toFixed for reverse compatability
 			if ( thisFullCalc.indexOf(').toFixed(') ) {
 			var calcParts = thisFullCalc.split(').toFixed(');
 				if ( isNumeric(calcParts[1]) ) {
 					dec = calcParts[1];
-					thisFullCalc = thisFullCalc.replace(').toFixed(' + calcParts[1], '');
+					thisFullCalc = thisFullCalc.replace(').toFixed(' + dec, '');
 				}
 			}
 
@@ -649,14 +653,6 @@ function frmFrontFormJS(){
 			if ( isNumeric( dec ) ) {
 				total = total.toFixed(dec);
 			}
-
-			var prefix = '';
-			if ( thisCalc.calc_prefix ) {
-				prefix = thisCalc.calc_prefix;
-			}
-
-			// Add the prefix
-			total = prefix + total;
 
 			if ( typeof total === 'undefined' ) {
 				total = 0;
@@ -1190,6 +1186,8 @@ function frmFrontFormJS(){
             
             jQuery(document).on('change', '.frm_other_container input[type="checkbox"], .frm_other_container input[type="radio"], .frm_other_container select', showOtherText);
 			
+			jQuery(document).on('change', 'input[type=file].frm_transparent', showFileUploadText);
+
 			jQuery(document).on('click', '.frm_remove_form_row', removeRow);
 			jQuery(document).on('click', '.frm_add_form_row', addRow);
 

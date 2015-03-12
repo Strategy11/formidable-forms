@@ -299,6 +299,13 @@ if ( ! isset($collapse_icon) ) {
     color:transparent<?php echo $important ?>;
 }
 
+.<?php echo $style_class ?> input[type=file].frm_transparent:focus{
+	background-color:transparent<?php echo $important ?>;
+	border:none;
+	outline:none;
+	box-shadow:none;
+}
+
 .<?php echo $style_class ?> .frm_default,
 .<?php echo $style_class ?> .placeholder,
 .<?php echo $style_class ?> .chosen-container-multi .chosen-choices li.search-field .default,
