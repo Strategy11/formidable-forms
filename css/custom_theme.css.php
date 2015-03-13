@@ -1064,7 +1064,7 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
     pointer-events:none;
 }
 
-.frm_section_heading div.frm_repeat_sec:last-of-type .frm_add_form_row{
+.frm_section_heading div.frm_repeat_sec:last-child .frm_add_form_row{
     opacity:100;
     pointer-events:auto;
 }
@@ -1073,17 +1073,11 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
     float:left;
 }
 
-.frm_form_field .frm_repeat_sec:first-of-type .frm_remove_form_row,
-.frm_form_field .frm_repeat_grid:first-of-type .frm_remove_form_row,
-.frm_form_field .frm_repeat_inline:first-of-type .frm_remove_form_row{
-    display:none;
-}
-
 .frm_form_field .frm_repeat_grid .frm_form_field label.frm_primary_label{
     display:none !important;
 }
 
-.frm_form_field .frm_repeat_grid:first-of-type .frm_form_field label.frm_primary_label{
+.frm_form_field .frm_repeat_grid.frm_first_repeat .frm_form_field label.frm_primary_label{
     display:inherit !important;
 }
 
