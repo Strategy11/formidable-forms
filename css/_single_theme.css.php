@@ -289,21 +289,18 @@ if ( ! isset($collapse_icon) ) {
 
 .<?php echo $style_class ?> input[type=file]{
     color:#<?php echo $text_color . $important ?>;
-    border:none;
     padding:0px;
-    font-family:<?php echo stripslashes($font) ?>;
-    font-size:<?php echo $field_font_size ?>;
+    font-family:<?php echo stripslashes($font) . $important ?>;
+    font-size:<?php echo $field_font_size . $important ?>;
 }
 
 .<?php echo $style_class ?> input[type=file].frm_transparent{
     color:transparent<?php echo $important ?>;
 }
 
-.<?php echo $style_class ?> input[type=file].frm_transparent:focus{
-	background-color:transparent<?php echo $important ?>;
-	border:none;
-	outline:none;
-	box-shadow:none;
+.<?php echo $style_class ?> .frm_file_names, .<?php echo $style_class ?> .frm_uploaded_files .frm_remove_link{
+	font-family:<?php echo stripslashes($font) . $important ?>;
+	font-size:<?php echo $field_font_size . $important ?>;
 }
 
 .<?php echo $style_class ?> .frm_default,
@@ -365,7 +362,7 @@ if ( ! isset($collapse_icon) ) {
 }
 
 
-.<?php echo $style_class ?> .form-field input:focus,
+.<?php echo $style_class ?> .form-field input:not([type=file]):focus,
 .<?php echo $style_class ?> select:focus,
 .<?php echo $style_class ?> textarea:focus,
 .<?php echo $style_class ?> .frm_focus_field input[type=text],
