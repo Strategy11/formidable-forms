@@ -25,6 +25,13 @@ $defaults = $default_style->post_content;
 	color:transparent;
 }
 
+.input[type=file].frm_transparent:focus, .with_frm_style input[type=file]{
+	background-color:transparent;
+	border:none;
+	outline:none;
+	box-shadow:none;
+}
+
 .frm_preview_page:before{
     content:normal !important;
 }
@@ -91,10 +98,6 @@ $defaults = $default_style->post_content;
 .with_frm_style .frm_scale input{
     display:block;
     margin-bottom:5px;
-}
-
-.with_frm_style input[type=file] {
-	background-color:transparent;
 }
 
 .with_frm_style select[multiple="multiple"]{
