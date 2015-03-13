@@ -231,7 +231,10 @@ class FrmEntryMeta {
     }
 
     public static function getEntryIds( $where = array(), $order_by = '', $limit = '', $unique = true, $args = array() ) {
-        $defaults = array( 'is_draft' => false, 'user_id' => '');
+		$defaults = array(
+			'is_draft' => false, 'user_id' => '',
+			'group_by' => '',
+		);
         $args = wp_parse_args($args, $defaults);
 
         $query = array();
@@ -268,6 +271,10 @@ class FrmEntryMeta {
                 $where['e.user_id'] = $args['user_id'];
             }
             $query[] = FrmAppHelper::prepend_and_or_where(' WHERE ', $where) . $order_by . $limit;
+
+			if ( $args['group_by'] ) {
+				$query[] = ' GROUP BY '. sanitize_text_field( $args['group_by'] );
+			}
             return;
         }
 

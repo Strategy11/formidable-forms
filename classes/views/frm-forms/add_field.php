@@ -14,7 +14,7 @@ $li_classes = apply_filters('frm_build_field_class', $li_classes, $field );
 if ( isset($values) && isset($values['ajax_load']) && $values['ajax_load'] && isset($count) && $count > 10 && ! in_array($field['type'], array( 'divider', 'end_divider')) ) {
 ?>
 <li id="frm_field_id_<?php echo esc_attr( $field['id'] ); ?>" class="<?php echo esc_attr( $li_classes ) ?> frm_field_loading" data-fid="<?php echo esc_attr( $field['id'] ) ?>" data-formid="<?php echo esc_attr( 'divider' == $field['type'] ? $field['form_select'] : $field['form_id'] ); ?>" data-ftype="<?php echo esc_attr( $display['type'] ) ?>">
-<img src="<?php echo FrmAppHelper::plugin_url() ?>/images/ajax_loader.gif" alt="<?php _e( 'Loading', 'formidable' ) ?>" />
+<img src="<?php echo FrmAppHelper::plugin_url() ?>/images/ajax_loader.gif" alt="<?php esc_attr_e( 'Loading', 'formidable' ) ?>" />
 <span class="frm_hidden_fdata frm_hidden"><?php echo htmlspecialchars(json_encode($field)) ?></span>
 </li>
 <?php
@@ -157,7 +157,7 @@ if ($display['options']){ ?>
                 <?php $field_types = FrmFieldsHelper::get_field_types($field['type']); ?>
                 <tr><td class="frm_150_width"><label><?php _e( 'Field Type', 'formidable' ) ?></label></td>
                     <td>
-                        <div class="hide-if-no-js edit-slug-box frm_help" title="<?php _e( 'The field key can be used as an alternative to the field ID in many cases.', 'formidable' ) ?>">
+						<div class="hide-if-no-js edit-slug-box frm_help" title="<?php esc_attr_e( 'The field key can be used as an alternative to the field ID in many cases.', 'formidable' ) ?>">
                             <?php _e( 'Field Key:', 'formidable' ) ?>
                             <div class="<?php echo ($frm_settings->lock_keys) ? 'frm_field_key' : 'frm_ipe_field_key" title="'. __( 'Click to edit.', 'formidable' ); ?>" ><?php echo esc_html( $field['field_key'] ); ?></div>
                             <?php if ( ! $frm_settings->lock_keys ) { ?>
@@ -213,7 +213,7 @@ if ($display['options']){ ?>
                 <?php
 				if ( $display['css'] ) { ?>
                 <tr><td><label><?php _e( 'CSS layout classes', 'formidable' ) ?></label>
-                    <span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php _e( 'Add a CSS class to the field container. Use our predefined classes to align multiple fields in single row.', 'formidable' ) ?>" ></span>
+					<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Add a CSS class to the field container. Use our predefined classes to align multiple fields in single row.', 'formidable' ) ?>" ></span>
                     </td>
                     <td><input type="text" name="field_options[classes_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['classes'] ) ?>" id="frm_classes_<?php echo esc_attr( $field['id'] ) ?>" class="frm_classes frm_long_input" />
                     </td>

@@ -22,7 +22,7 @@
             <?php do_action('frm_csv_opts', $forms) ?>
 
             <p class="submit">
-                <input type="submit" value="<?php _e( 'Upload file and import', 'formidable' ) ?>" class="button-primary" />
+				<input type="submit" value="<?php esc_attr_e( 'Upload file and import', 'formidable' ) ?>" class="button-primary" />
             </p>
         </form>
     </div>
@@ -52,7 +52,7 @@
                         <ul class="frm_hidden csv_opts export-filters">
                             <li>
                             <label for="csv_format"><?php _e( 'Format', 'formidable' ) ?>:</label>
-                            <span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php _e( 'If your CSV special characters are not working correctly, try a different formatting option.', 'formidable' ) ?>"></span>
+							<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'If your CSV special characters are not working correctly, try a different formatting option.', 'formidable' ) ?>"></span>
                             <select name="csv_format">
                             <option value="UTF-8" <?php selected($csv_format, 'UTF-8') ?>>UTF-8</option>
                             <option value="ISO-8859-1" <?php selected($csv_format, 'ISO-8859-1'); ?>>ISO-8859-1</option>
@@ -106,7 +106,7 @@
                 </tr>
             </table>
             <p class="submit">
-                <input type="submit" value="<?php _e( 'Export Selection', 'formidable' ) ?>" class="button-primary" />
+				<input type="submit" value="<?php esc_attr_e( 'Export Selection', 'formidable' ) ?>" class="button-primary" />
             </p>
         </form>
 

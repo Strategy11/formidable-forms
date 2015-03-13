@@ -52,7 +52,7 @@
 				?>
 			</tbody>
 		</table>
-		<p class="button-controls"><input type="submit" name="nav-menu-locations" id="nav-menu-locations" class="button button-primary left" value="<?php _e( 'Save Changes', 'formidable' ) ?>"  /></p>
+		<p class="button-controls"><input type="submit" name="nav-menu-locations" id="nav-menu-locations" class="button button-primary left" value="<?php esc_attr_e( 'Save Changes', 'formidable' ) ?>" /></p>
 		<?php wp_nonce_field( 'frm_manage_style_nonce', 'frm_manage_style' ); ?>
 	</form>
 </div><!-- #menu-locations-wrap -->

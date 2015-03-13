@@ -31,9 +31,8 @@
 
         <div class="general_settings tabs-panel <?php echo ($a == 'general_settings') ? 'frm_block' : 'frm_hidden'; ?>">
             <p class="submit">
-            <input class="button-primary" type="submit" value="<?php _e( 'Update Options', 'formidable' ) ?>" />
+				<input class="button-primary" type="submit" value="<?php esc_attr_e( 'Update Options', 'formidable' ) ?>" />
             </p>
-
 
             <h3><?php _e( 'Styling & Scripts', 'formidable' ); ?></h3>
 
@@ -50,7 +49,9 @@
 
             <?php do_action('frm_style_general_settings', $frm_settings); ?>
 
-            <h3><?php _e( 'User Permissions', 'formidable' ); ?> <span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php _e( 'Select users that are allowed access to Formidable. Without access to View Forms, users will be unable to see the Formidable menu.', 'formidable' ) ?>" ></span></h3>
+			<h3><?php _e( 'User Permissions', 'formidable' ); ?>
+				<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Select users that are allowed access to Formidable. Without access to View Forms, users will be unable to see the Formidable menu.', 'formidable' ) ?>"></span>
+			</h3>
             <table class="form-table">
 				<?php foreach ( $frm_roles as $frm_role => $frm_role_description ) { ?>
                 <tr>
@@ -60,7 +61,9 @@
                 <?php } ?>
             </table>
 
-            <h3><?php _e( 'reCAPTCHA', 'formidable' ); ?> <span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php _e( 'reCAPTCHA is a free, accessible CAPTCHA service that helps to digitize books while blocking spam on your blog. reCAPTCHA asks commenters to retype two words scanned from a book to prove that they are a human. This verifies that they are not a spambot.', 'formidable' ) ?>" ></span></h3>
+			<h3><?php _e( 'reCAPTCHA', 'formidable' ); ?>
+				<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'reCAPTCHA is a free, accessible CAPTCHA service that helps to digitize books while blocking spam on your blog. reCAPTCHA asks commenters to retype two words scanned from a book to prove that they are a human. This verifies that they are not a spambot.', 'formidable' ) ?>" ></span>
+			</h3>
 
             <p class="howto">reCAPTCHA requires an API key, consisting of a "site" and a "private" key. You can sign up for a <a href="https://www.google.com/recaptcha/" target="_blank">free reCAPTCHA key</a>.</p>
 
@@ -77,30 +80,54 @@
                 <?php } ?>
             </select></p>
 
-            <h3><?php _e( 'Default Messages', 'formidable' ); ?> <span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php _e( 'You can override the success message and submit button settings on individual forms.', 'formidable' ) ?>" ></span></h3>
+			<h3><?php _e( 'Default Messages', 'formidable' ); ?>
+				<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'You can override the success message and submit button settings on individual forms.', 'formidable' ) ?>"></span>
+			</h3>
 
-            <p><label class="frm_left_label"><?php _e( 'Failed/Duplicate Entry', 'formidable' ); ?> <span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php _e( 'The message seen when a form is submitted and passes validation, but something goes wrong.', 'formidable' ) ?>" ></span></label>
-                <input type="text" id="frm_failed_msg" name="frm_failed_msg" class="frm_with_left_label" value="<?php echo esc_attr($frm_settings->failed_msg) ?>" /></p>
+			<p>
+				<label class="frm_left_label"><?php _e( 'Failed/Duplicate Entry', 'formidable' ); ?>
+					<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'The message seen when a form is submitted and passes validation, but something goes wrong.', 'formidable' ) ?>" ></span>
+				</label>
+                <input type="text" id="frm_failed_msg" name="frm_failed_msg" class="frm_with_left_label" value="<?php echo esc_attr( $frm_settings->failed_msg ) ?>" />
+			</p>
 
-            <p><label class="frm_left_label"><?php _e( 'Blank Field', 'formidable' ); ?> <span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php _e( 'The message seen when a required field is left blank.', 'formidable' ) ?>" ></span></label>
-            <input type="text" id="frm_blank_msg" name="frm_blank_msg" class="frm_with_left_label" value="<?php echo esc_attr($frm_settings->blank_msg) ?>" /></p>
+			<p>
+				<label class="frm_left_label"><?php _e( 'Blank Field', 'formidable' ); ?>
+					<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'The message seen when a required field is left blank.', 'formidable' ) ?>" ></span>
+				</label>
+				<input type="text" id="frm_blank_msg" name="frm_blank_msg" class="frm_with_left_label" value="<?php echo esc_attr( $frm_settings->blank_msg ) ?>" />
+			</p>
 
-            <p><label class="frm_left_label"><?php _e( 'Incorrect Field', 'formidable' ); ?> <span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php _e( 'The message seen when a field response is either incorrect or missing.', 'formidable' ) ?>" ></span></label>
-            <input type="text" id="frm_invalid_msg" name="frm_invalid_msg" class="frm_with_left_label" value="<?php echo esc_attr($frm_settings->invalid_msg) ?>" /></p>
+			<p>
+				<label class="frm_left_label"><?php _e( 'Incorrect Field', 'formidable' ); ?>
+					<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'The message seen when a field response is either incorrect or missing.', 'formidable' ) ?>" ></span>
+				</label>
+				<input type="text" id="frm_invalid_msg" name="frm_invalid_msg" class="frm_with_left_label" value="<?php echo esc_attr( $frm_settings->invalid_msg ) ?>" />
+			</p>
 
 <?php if ( FrmAppHelper::pro_is_installed() ) { ?>
-            <p><label class="frm_left_label"><?php _e( 'Unique Value', 'formidable' ); ?> <span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php _e( 'The message seen when a user selects a value in a unique field that has already been used.', 'formidable' ) ?>" ></span></label>
-            <input type="text" id="frm_unique_msg" name="frm_unique_msg" class="frm_with_left_label" value="<?php echo esc_attr($frm_settings->unique_msg) ?>" /></p>
-<?php }else{ ?>
-    <input type="hidden" id="frm_unique_msg" name="frm_unique_msg" value="<?php echo esc_attr($frm_settings->unique_msg) ?>" />
-    <input type="hidden" id="frm_login_msg" name="frm_login_msg" class="frm_with_left_label" value="<?php echo esc_attr($frm_settings->login_msg) ?>" />
+			<p>
+				<label class="frm_left_label"><?php _e( 'Unique Value', 'formidable' ); ?>
+					<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'The message seen when a user selects a value in a unique field that has already been used.', 'formidable' ) ?>" ></span>
+				</label>
+            	<input type="text" id="frm_unique_msg" name="frm_unique_msg" class="frm_with_left_label" value="<?php echo esc_attr( $frm_settings->unique_msg ) ?>" />
+			</p>
+<?php } else { ?>
+			<input type="hidden" id="frm_unique_msg" name="frm_unique_msg" value="<?php echo esc_attr( $frm_settings->unique_msg ) ?>" />
+			<input type="hidden" id="frm_login_msg" name="frm_login_msg" class="frm_with_left_label" value="<?php echo esc_attr( $frm_settings->login_msg ) ?>" />
 <?php } ?>
 
-        <p><label class="frm_left_label"><?php _e( 'Success Message', 'formidable' ); ?> <span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php _e( 'The default message seen after a form is submitted.', 'formidable' ) ?>" ></span></label>
-            <input type="text" id="frm_success_msg" name="frm_success_msg" class="frm_with_left_label" value="<?php echo esc_attr($frm_settings->success_msg) ?>" /></p>
+		<p>
+			<label class="frm_left_label"><?php _e( 'Success Message', 'formidable' ); ?>
+				<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'The default message seen after a form is submitted.', 'formidable' ) ?>" ></span>
+			</label>
+            <input type="text" id="frm_success_msg" name="frm_success_msg" class="frm_with_left_label" value="<?php echo esc_attr($frm_settings->success_msg) ?>" />
+		</p>
 
-        <p><label class="frm_left_label"><?php _e( 'Default Submit Button', 'formidable' ); ?></label>
-            <input type="text" value="<?php echo esc_attr($frm_settings->submit_value) ?>" id="frm_submit_value" name="frm_submit_value" class="frm_with_left_label" /></p>
+		<p>
+			<label class="frm_left_label"><?php _e( 'Default Submit Button', 'formidable' ); ?></label>
+			<input type="text" value="<?php echo esc_attr( $frm_settings->submit_value ) ?>" id="frm_submit_value" name="frm_submit_value" class="frm_with_left_label" />
+		</p>
 
         <?php do_action('frm_settings_form', $frm_settings); ?>
 
@@ -140,7 +167,7 @@
             <span class="spinner frm_spinner"></span>
         </p>
         <p class="submit">
-        <input class="button-primary" type="submit" value="<?php _e( 'Update Options', 'formidable' ) ?>" />
+			<input class="button-primary" type="submit" value="<?php esc_attr_e( 'Update Options', 'formidable' ) ?>" />
         </p>
 
     </form>

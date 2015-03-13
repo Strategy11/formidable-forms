@@ -18,7 +18,7 @@
     <div class="frm_form_builder<?php echo FrmFormsHelper::get_form_style_class($form); ?>">
 
         <p class="frm_hidden frm-no-margin">
-            <input type="button" value="<?php _e( 'Update', 'formidable' ) ?>" class="frm_submit_<?php echo ( isset($values['ajax_load']) && $values['ajax_load'] ) ? '': 'no_'; ?>ajax button-primary" />
+			<input type="button" value="<?php esc_attr_e( 'Update', 'formidable' ) ?>" class="frm_submit_<?php echo ( isset( $values['ajax_load'] ) && $values['ajax_load'] ) ? '' : 'no_'; ?>ajax button-primary" />
             <span class="frm-loading-img"></span>
         </p>
 
@@ -30,7 +30,7 @@
         <?php require(FrmAppHelper::plugin_path() .'/classes/views/frm-forms/form.php'); ?>
 
         <p>
-            <input type="button" value="<?php _e( 'Update', 'formidable' ) ?>" class="frm_submit_<?php echo ( isset($values['ajax_load']) && $values['ajax_load'] ) ? '': 'no_'; ?>ajax button-primary" />
+			<input type="button" value="<?php esc_attr_e( 'Update', 'formidable' ) ?>" class="frm_submit_<?php echo ( isset( $values['ajax_load'] ) && $values['ajax_load'] ) ? '' : 'no_'; ?>ajax button-primary" />
             <span class="frm-loading-img"></span>
         </p>
     </form>

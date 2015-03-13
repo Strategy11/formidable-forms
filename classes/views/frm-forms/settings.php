@@ -34,7 +34,11 @@
         </ul>
         </div>
         <div class="advanced_settings tabs-panel <?php echo ($a == 'advanced_settings') ? 'frm_block' : 'frm_hidden' ?>">
-            <h3 class="frm_first_h3"><?php _e( 'On Submit', 'formidable' ); ?> <span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php _e( 'Choose what will happen after the user submits this form.', 'formidable' ); if ( ! FrmAppHelper::pro_is_installed() ) { _e( ' Upgrade to Formidable Forms to get access to all options in the dropdown.', 'formidable' ); } ?>" ></span>
+			<h3 class="frm_first_h3"><?php _e( 'On Submit', 'formidable' ); ?>
+				<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Choose what will happen after the user submits this form.', 'formidable' );
+				if ( ! FrmAppHelper::pro_is_installed() ) {
+					esc_attr_e( ' Upgrade to Formidable Forms to get access to all options in the dropdown.', 'formidable' );
+				} ?>" ></span>
             </h3>
 
             <!--On Submit Section-->
@@ -96,11 +100,16 @@
             </table>
 
             <!--AJAX Section-->
-            <h3>AJAX <span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php _e( 'Make stuff happen in the background without a page refresh', 'formidable' ) ?>" ></span></h3>
+			<h3><?php _e( 'AJAX', 'formidable' ) ?>
+				<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Make stuff happen in the background without a page refresh', 'formidable' ) ?>" ></span>
+			</h3>
             <table class="form-table">
                 <tr>
                     <td>
-                        <label for="ajax_load"><input type="checkbox" name="options[ajax_load]" id="ajax_load" value="1"<?php echo ($values['ajax_load']) ? ' checked="checked"' : ''; ?> /> <?php _e( 'Load and save form builder page with AJAX', 'formidable' ) ?></label> <span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php _e( 'Recommended for long forms.', 'formidable' ) ?>" ></span>
+						<label for="ajax_load">
+							<input type="checkbox" name="options[ajax_load]" id="ajax_load" value="1"<?php echo ( $values['ajax_load'] ) ? ' checked="checked"' : ''; ?> /> <?php _e( 'Load and save form builder page with AJAX', 'formidable' ) ?>
+						</label>
+						<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Recommended for long forms.', 'formidable' ) ?>" ></span>
                     </td>
                 </tr>
                 <?php do_action('frm_add_form_ajax_options', $values); ?>
@@ -112,7 +121,9 @@
             </table>
 
             <!--Styling & Buttons Section-->
-            <h3><?php _e( 'Styling & Buttons', 'formidable' ) ?> <span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php _e( 'Select a style for this form and set the text for your buttons.', 'formidable' ) ?>" ></span></h3>
+			<h3><?php _e( 'Styling & Buttons', 'formidable' ) ?>
+				<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Select a style for this form and set the text for your buttons.', 'formidable' ) ?>" ></span>
+			</h3>
             <table class="form-table">
                 <tr>
                     <td class="frm_left_label"><label for="custom_style"><?php _e( 'Style Template', 'formidable' ) ?></label></td>
@@ -132,7 +143,9 @@
             </table>
 
             <!--Message Section-->
-            <h3 id="frm_messages_header" class="<?php echo ( ( isset($values['edit_action']) && $values['edit_action'] == 'message' && isset($values['editable']) && $values['editable'] == 1 ) || $values['success_action'] == 'message' || $values['save_draft'] == 1 ) ? '' : 'frm_hidden'; ?>"><?php _e( 'Messages', 'formidable' ); ?> <span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php _e( 'Set up your confirmation messages.', 'formidable' ) ?>" ></span></h3>
+			<h3 id="frm_messages_header" class="<?php echo ( ( isset( $values['edit_action'] ) && $values['edit_action'] == 'message' && isset( $values['editable'] ) && $values['editable'] == 1 ) || $values['success_action'] == 'message' || $values['save_draft'] == 1 ) ? '' : 'frm_hidden'; ?>"><?php _e( 'Messages', 'formidable' ); ?>
+				<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Set up your confirmation messages.', 'formidable' ) ?>" ></span>
+			</h3>
             <table class="form-table">
                 <tr class="success_action_message_box success_action_box<?php echo ($values['success_action'] == 'message') ? '' : ' frm_hidden'; ?>">
                     <td>
@@ -225,7 +238,7 @@
 </div>
 
     <p>
-        <input type="submit" value="<?php _e( 'Update', 'formidable' ) ?>" class="button-primary" />
+        <input type="submit" value="<?php esc_attr_e( 'Update', 'formidable' ) ?>" class="button-primary" />
     </p>
     </form>
 

@@ -228,19 +228,37 @@ class FrmDb {
             $where .= ' '. $key;
         }
 
+		$lowercase_key = explode( ' ', strtolower( $key ) );
+		$lowercase_key = end( $lowercase_key );
         if ( is_array( $value ) ) {
             // translate array of values to "in"
             $where .= ' in ('. FrmAppHelper::prepare_array_values( $value, '%s' ) .')';
             $values = array_merge( $values, $value );
-        } else if ( strpos( strtolower( $key ), ' like' ) !== false ) {
-            $where .= ' %s';
-            $values[] = '%'. FrmAppHelper::esc_like( $value ) .'%';
+        } else if ( strpos( $lowercase_key, 'like' ) !== false ) {
+			/**
+			 * Allow string to start or end with the value
+			 * If the key is like% then skip the first % for starts with
+			 * If the key is %like then skip the last % for ends with
+			 */
+			$start = $end = '%';
+			if ( $lowercase_key == 'like%' ) {
+				$start = '';
+				$where = rtrim( $where, '%' );
+			} else if ( $lowercase_key == '%like' ) {
+				$end = '';
+				$where = rtrim( rtrim( $where, '%like' ), '%LIKE' );
+				$where .= 'like';
+			}
+
+			$where .= ' %s';
+			$values[] = $start . FrmAppHelper::esc_like( $value ) . $end;
+
         } else if ( $value === null ) {
             $where .= ' IS NULL';
         } else {
 			// allow a - to prevent = from being added
 			if ( substr( $key, -1 ) == '-' ) {
-				$value = rtrim( $value, '-' );
+				$where = rtrim( $where, '-' );
 			} else {
 				$where .= '=';
 			}
@@ -338,6 +356,8 @@ class FrmDb {
 			'not like' => 'not like',
 			'in'	=> '',
 			'not in' => 'not',
+			'like%'	=> 'like%',
+			'%like'	=> '%like',
 		);
 
 		$where_is = strtolower( $where_is );

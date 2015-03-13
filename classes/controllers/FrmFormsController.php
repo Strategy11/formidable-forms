@@ -85,7 +85,7 @@ class FrmFormsController {
             $values = FrmProEntry::mod_other_vals( $values, 'back' );
         }
 
-        $id = isset($values['id']) ? (int) $values['id'] : (int) FrmAppHelper::get_param('id');
+		$id = isset($values['id']) ? intval( $values['id'] ) : intval( FrmAppHelper::get_param( 'id' ) );
 
         if ( ! current_user_can( 'frm_edit_forms' ) || ( $_POST && ( ! isset( $values['frm_save_form'] ) || ! wp_verify_nonce( $values['frm_save_form'], 'frm_save_form_nonce' ) ) ) ) {
             $frm_settings = FrmAppHelper::get_settings();
@@ -113,7 +113,7 @@ class FrmFormsController {
     public static function edit( $values = false ) {
         FrmAppHelper::permission_check('frm_edit_forms');
 
-        $id = isset($values['id']) ? (int) $values['id'] : (int) FrmAppHelper::get_param('id');
+		$id = isset( $values['id'] ) ? intval( $values['id'] ) : intval( FrmAppHelper::get_param( 'id' ) );
         return self::get_edit_vars($id);
     }
 
@@ -121,7 +121,7 @@ class FrmFormsController {
         FrmAppHelper::permission_check('frm_edit_forms');
 
         if ( ! $id || ! is_numeric($id) ) {
-            $id = (int) FrmAppHelper::get_param('id');
+			$id = intval( FrmAppHelper::get_param( 'id' ) );
         }
         return self::get_settings_vars($id, '', $message);
     }
@@ -129,7 +129,7 @@ class FrmFormsController {
     public static function update_settings() {
         FrmAppHelper::permission_check('frm_edit_forms');
 
-		$id = (int) FrmAppHelper::get_param('id');
+		$id = intval( FrmAppHelper::get_param( 'id' ) );
 
         $errors = FrmForm::validate($_POST);
         if ( count($errors) > 0 ) {

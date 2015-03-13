@@ -424,7 +424,7 @@ class FrmEntriesController {
 
         global $frm_vars;
 
-		$form_id = (int) $_POST['form_id'];
+		$form_id = intval( $_POST['form_id'] );
 		$form = FrmForm::getOne( $form_id );
         if ( ! $form ) {
             return;

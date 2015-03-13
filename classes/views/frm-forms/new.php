@@ -25,7 +25,7 @@
             <?php require(FrmAppHelper::plugin_path() .'/classes/views/frm-forms/form.php'); ?>
 
             <p>
-                <input type="button" value="<?php _e( 'Create', 'formidable' ) ?>" class="frm_submit_<?php echo ( isset($values['ajax_load']) && $values['ajax_load'] ) ? '': 'no_'; ?>ajax button-primary" />
+				<input type="button" value="<?php esc_attr_e( 'Create', 'formidable' ) ?>" class="frm_submit_<?php echo ( isset( $values['ajax_load'] ) && $values['ajax_load'] ) ? '' : 'no_'; ?>ajax button-primary" />
                 <span class="frm-loading-img"></span>
             </p>
         </form>

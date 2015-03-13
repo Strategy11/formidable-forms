@@ -134,13 +134,13 @@ class FrmFormActionsController {
 
         global $frm_vars;
 
-        $action_key = (int) $_POST['list_id'];
+		$action_key = intval( $_POST['list_id'] );
         $action_type = sanitize_text_field( $_POST['type'] );
 
         $action_control = self::get_form_actions( $action_type );
         $action_control->_set($action_key);
 
-        $form_id = (int) $_POST['form_id'];
+        $form_id = intval( $_POST['form_id'] );
 
         $form_action = $action_control->prepare_new($form_id);
 
@@ -154,7 +154,7 @@ class FrmFormActionsController {
     public static function fill_action() {
         check_ajax_referer( 'frm_ajax', 'nonce' );
 
-        $action_key = (int) $_POST['action_id'];
+        $action_key = intval( $_POST['action_id'] );
         $action_type = sanitize_text_field( $_POST['action_type'] );
 
         $action_control = self::get_form_actions( $action_type );

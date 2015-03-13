@@ -1717,10 +1717,11 @@ function frmAdminBuildJS(){
 		}
 
 		var c = $selected.data('count');
+		var exportField = jQuery('select[name="frm_export_forms[]"]');
 		if(c == 'single'){
-			jQuery('select[name="frm_export_forms[]"]').prop('multiple', false).next('.howto').hide();
+			exportField.prop('multiple', false).next('.howto').hide();
 		}else{
-			jQuery('select[name="frm_export_forms[]"]').prop('multiple', true).next('.howto').show();
+			exportField.prop('multiple', true).next('.howto').show();
 		}
 	}
 
@@ -2267,6 +2268,7 @@ function frmAdminBuildJS(){
 			jQuery('#frm_export_xml input, #frm_export_xml select').change(removeExportError);
 			jQuery('input[name="frm_import_file"]').change(checkCSVExtension);
 			jQuery('select[name="format"]').change(checkExportTypes);
+			initiateMultiselect();
 		},
 		
 		updateOpts: function(field_id,opts){

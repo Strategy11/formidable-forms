@@ -96,7 +96,7 @@
 		<div id="publishing-action">
             <span class="spinner"></span>
             <?php if ( isset($_GET['frm_action']) && 'settings' == $_GET['frm_action'] ) { ?>
-            <input type="button" value="<?php _e( 'Update', 'formidable' ); ?>" class="frm_submit_form frm_submit_settings_btn button-primary button-large" id="frm_submit_side_top" />
+			<input type="button" value="<?php esc_attr_e( 'Update', 'formidable' ); ?>" class="frm_submit_form frm_submit_settings_btn button-primary button-large" id="frm_submit_side_top" />
             <?php } else { ?>
     	    <input type="button" value="<?php echo isset($button) ? esc_attr($button) : __( 'Update', 'formidable' ); ?>" class="frm_submit_form frm_submit_<?php echo ( isset($values['ajax_load']) && $values['ajax_load'] ) ? '': 'no_'; ?>ajax button-primary button-large" id="frm_submit_side_top" />
     	    <?php } ?>

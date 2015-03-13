@@ -22,7 +22,7 @@
      		            <?php } ?>
      		        </select>
      		        <span class="submit-btn">
-     		            <input type="submit" class="button-secondary" value="<?php _e( 'Select', 'formidable' ) ?>"/>
+						<input type="submit" class="button-secondary" value="<?php esc_attr_e( 'Select', 'formidable' ) ?>" />
      		        </span>
  		        </form>
  		        <span class="add-new-menu-action"><?php printf(__( 'or %1$screate a new style%2$s.', 'formidable' ), '<a href="?page=formidable-styles&frm_action=new_style">', '</a>'); ?></span>
