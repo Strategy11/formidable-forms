@@ -129,7 +129,7 @@ class FrmFormsController {
     public static function update_settings() {
         FrmAppHelper::permission_check('frm_edit_forms');
 
-        $id = FrmAppHelper::get_param('id');
+		$id = (int) FrmAppHelper::get_param('id');
 
         $errors = FrmForm::validate($_POST);
         if ( count($errors) > 0 ) {
@@ -138,7 +138,7 @@ class FrmFormsController {
 
         do_action('frm_before_update_form_settings', $id);
 
-        FrmForm::update( $_POST['id'], $_POST );
+		FrmForm::update( $id, $_POST );
 
         $message = __( 'Settings Successfully Updated', 'formidable' );
         return self::get_settings_vars($id, '', $message);
@@ -167,10 +167,8 @@ class FrmFormsController {
         wp_die();
     }
 
-    public static function update( $values = false ) {
-        FrmAppHelper::permission_check('frm_edit_forms');
-
-        if ( empty($values) ) {
+	public static function update( $values = array() ) {
+		if ( empty( $values ) ) {
             $values = $_POST;
         }
 
@@ -780,10 +778,8 @@ class FrmFormsController {
         $action = isset($_REQUEST['frm_action']) ? 'frm_action' : 'action';
         $vars = array();
 		if ( isset( $_POST['frm_compact_fields'] ) ) {
-			if ( ! current_user_can('frm_edit_forms') && ! current_user_can('administrator') ) {
-                $frm_settings = FrmAppHelper::get_settings();
-                wp_die($frm_settings->admin_permission);
-            }
+			FrmAppHelper::permission_check( 'frm_edit_forms' );
+
             $json_vars = htmlspecialchars_decode(nl2br(stripslashes(str_replace('&quot;', '\\\"', $_POST['frm_compact_fields'] ))));
             $json_vars = json_decode($json_vars, true);
             if ( empty($json_vars) ) {
@@ -797,6 +793,8 @@ class FrmFormsController {
             } else {
                 $vars = FrmAppHelper::json_to_array($json_vars);
                 $action = $vars[ $action ];
+				$_REQUEST = array_merge( $_REQUEST, $vars );
+				unset( $_REQUEST['frm_compact_fields'] );
             }
         } else {
             $action = FrmAppHelper::get_param($action);

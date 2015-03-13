@@ -555,12 +555,12 @@ class FrmAppHelper {
      * @return false|string The permission message or false if allowed
      */
     public static function permission_nonce_error($permission, $nonce_name = '', $nonce = '') {
-        $error = false;
-		if ( ! empty( $permission ) && ! current_user_can( $permission ) ) {
+		if ( ! empty( $permission ) && ! current_user_can( $permission ) && ! current_user_can( 'administrator' ) ) {
 			$frm_settings = self::get_settings();
 			return $frm_settings->admin_permission;
 		}
 
+		$error = false;
         if ( empty($nonce_name) ) {
             return $error;
         }
