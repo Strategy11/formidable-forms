@@ -16,6 +16,15 @@ class FrmStylesController {
             'public' => false,
             'show_ui' => false,
             'capability_type' => 'page',
+			'capabilities' => array(
+				'edit_post'		=> 'frm_change_settings',
+				'edit_posts'	=> 'frm_change_settings',
+				'edit_others_posts' => 'frm_change_settings',
+				'publish_posts' => 'frm_change_settings',
+				'delete_post'	=> 'frm_change_settings',
+				'delete_posts'	=> 'frm_change_settings',
+				'read_private_posts' => 'read_private_posts',
+			),
             'supports' => array(
                 'title',
             ),
