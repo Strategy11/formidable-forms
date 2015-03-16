@@ -163,7 +163,7 @@ class FrmAppController {
         } else if ( $pagenow == 'post.php' || ( $pagenow == 'post-new.php' && isset( $_REQUEST['post_type'] ) && $_REQUEST['post_type'] == 'frm_display' ) ) {
             if ( isset($_REQUEST['post_type']) ) {
                 $post_type = sanitize_title( $_REQUEST['post_type'] );
-			} else if ( isset( $_REQUEST['post'] ) && ! empty( intval( $_REQUEST['post'] ) ) ) {
+			} else if ( isset( $_REQUEST['post'] ) && intval( $_REQUEST['post'] ) ) {
 				$post = get_post( intval( $_REQUEST['post'] ) );
                 if ( ! $post ) {
                     return;
