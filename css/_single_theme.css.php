@@ -646,7 +646,6 @@ if ( ! $submit_style ) { ?>
 }
 .<?php echo $style_class ?> .frm_button .frm_icon_font:before{
     font-size:<?php echo $submit_font_size . $important ?>;
-    vertical-align:bottom;
 }
 
 /* RTL Grids */

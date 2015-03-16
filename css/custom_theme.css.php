@@ -17,7 +17,8 @@ $default_style = $frm_style->get_default_style($styles);
 $defaults = $default_style->post_content;
 ?>
 
-.frm_hidden{
+.frm_hidden,
+.with_frm_style .frm_button.frm_hidden{
     display:none;
 }
 
@@ -139,7 +140,8 @@ $defaults = $default_style->post_content;
 .with_frm_style .frm_button{
     text-decoration:none;
     border:1px solid #eee;
-    padding:5px;
+	padding:5px;
+	display:inline-block;
 }
 
 .with_frm_style .frm_submit{
@@ -1070,10 +1072,6 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
 .frm_section_heading div.frm_repeat_sec:last-child .frm_add_form_row{
     opacity:100;
     pointer-events:auto;
-}
-
-.frm_form_field .frm_remove_form_row, .frm_form_field .frm_add_form_row{
-    float:left;
 }
 
 .frm_form_field .frm_repeat_grid .frm_form_field label.frm_primary_label{
