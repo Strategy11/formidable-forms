@@ -32,9 +32,9 @@ class WP_Test_WordPress_Plugin_Tests extends WP_UnitTestCase {
             add_filter('frm_pro_installed', '__return_true');
         }
 
-        global $wpdb;
         FrmAppController::install();
 
+		global $wpdb;
         $exists = $wpdb->query( 'DESCRIBE '. $wpdb->prefix . 'frm_fields' );
         $this->assertTrue($exists ? true : false);
 

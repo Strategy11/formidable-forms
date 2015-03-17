@@ -141,7 +141,12 @@ input.frm_insert_in_template{
     display:block;
 }
 
-.button.frm_hidden, .frm_hidden{
+.frm_inline{
+	display:inline;
+}
+
+.button.frm_hidden,
+.frm_hidden{
     display:none;
 }
 
@@ -965,7 +970,7 @@ select.frm_cancelnew, input.frm_enternew{width:175px;}
     outline: none;
 }
 .frm_form_action_settings .widget-inside{
-	min-height:12px;
+	min-height:25px;
 }
 .frm_form_action_settings .widget-title h3,
 #frm_email_addon_menu h3{

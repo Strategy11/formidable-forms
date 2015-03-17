@@ -1484,6 +1484,16 @@ function frmAdminBuildJS(){
 		}); 
 	}
 
+	function hideWhereOptions(){
+		var value = this.value;
+		var where_key = jQuery(this).closest('.frm_where_row').attr('id').replace('frm_where_field_', '');
+		if(value == 'group_by'){
+			document.getElementById('where_field_options_'+where_key).style.visibility = 'hidden';
+		}else{
+			document.getElementById('where_field_options_'+where_key).style.visibility = 'visible';
+		}
+	}
+
 	/* Customization Panel */
 	function insertCode(){
 		insertFieldCode(jQuery(this), jQuery(this).data('code'));
@@ -2126,6 +2136,7 @@ function frmAdminBuildJS(){
 			$addRemove.on('click', '.frm_add_order_row', addOrderRow);
 			$addRemove.on('click', '.frm_add_where_row', addWhereRow);
 			$addRemove.on('change', '.frm_insert_where_options', insertWhereOptions);
+			$addRemove.on('change', '.frm_where_is_options', hideWhereOptions);
 		},
 		
 		styleInit: function(){
