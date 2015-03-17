@@ -1159,14 +1159,20 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
 .frm_form_field.frm_total input,
 .frm_form_field.frm_total textarea{
     opacity:1;
-    background-color:transparent;
-    border:none;
+    background-color:transparent !important;
+    border:none !important;
     font-weight:bold;
     -moz-box-shadow:none;
     -webkit-box-shadow:none;
     box-shadow:none !important;
     display:inline;
-    width:auto;
+    width:auto !important;
+	-moz-appearance:textfield;
+}
+
+.frm_form_field.frm_total input::-webkit-outer-spin-button,
+.frm_form_field.frm_total input::-webkit-inner-spin-button {
+	    -webkit-appearance: none;
 }
 
 .frm_form_field.frm_total input:focus,
