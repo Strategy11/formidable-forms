@@ -223,9 +223,16 @@ class FrmAppHelper {
         return $value;
     }
 
-    public static function get_post_param( $param, $default = '' ) {
-        return isset( $_POST[ $param ] ) ? stripslashes_deep( maybe_unserialize( $_POST[ $param ] ) ) : $default;
-    }
+	public static function get_post_param( $param, $default = '', $sanitize = '' ) {
+		$val = $default;
+		if ( isset( $_POST[ $param ] ) ) {
+			$val = stripslashes_deep( maybe_unserialize( $_POST[ $param ] ) );
+			if ( ! empty( $sanitize ) ) {
+				$val = call_user_func( $sanitize, $val );
+			}
+		}
+		return $val;
+	}
 
     /**
      * @since 2.0
@@ -801,7 +808,7 @@ class FrmAppHelper {
     }
 
     public static function js_redirect($url) {
-        return '<script type="text/javascript">window.location="'. $url .'"</script>';
+		return '<script type="text/javascript">window.location="' . esc_url( $url ) . '"</script>';
     }
 
     public static function get_user_id_param($user_id) {
@@ -1586,9 +1593,9 @@ class FrmAppHelper {
      * Load the JS file on non-Formidable pages in the admin area
      * @since 2.0
      */
-    public static function load_admin_wide_js() {
+	public static function load_admin_wide_js( $load = true ) {
         $version = FrmAppHelper::plugin_version();
-        wp_enqueue_script( 'formidable_admin_global', FrmAppHelper::plugin_url() . '/js/formidable_admin_global.js', array( 'jquery'), $version );
+		wp_register_script( 'formidable_admin_global', FrmAppHelper::plugin_url() . '/js/formidable_admin_global.js', array( 'jquery'), $version );
 
         wp_localize_script( 'formidable_admin_global', 'frmGlobal', array(
 			'updating_msg' => __( 'Please wait while your site updates.', 'formidable' ),
@@ -1597,6 +1604,10 @@ class FrmAppHelper {
 			'loading'      => __( 'Loading&hellip;' ),
 			'nonce'        => wp_create_nonce( 'frm_ajax' ),
         ) );
+
+		if ( $load ) {
+			wp_enqueue_script( 'formidable_admin_global' );
+		}
     }
 
     /**

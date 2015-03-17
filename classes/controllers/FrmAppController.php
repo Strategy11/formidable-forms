@@ -137,8 +137,13 @@ class FrmAppController {
 		unset( $action );
 
 		$version = FrmAppHelper::plugin_version();
+		FrmAppHelper::load_admin_wide_js( false );
 
-		wp_register_script( 'formidable_admin', FrmAppHelper::plugin_url() .'/js/formidable_admin.js', array( 'formidable', 'jquery', 'jquery-ui-core', 'jquery-ui-draggable', 'bootstrap_tooltip', 'bootstrap-multiselect' ), $version, true );
+		wp_register_script( 'formidable_admin', FrmAppHelper::plugin_url() . '/js/formidable_admin.js', array(
+			'formidable_admin_global', 'formidable', 'jquery',
+			'jquery-ui-core', 'jquery-ui-draggable',
+			'bootstrap_tooltip', 'bootstrap-multiselect',
+		), $version, true );
 		wp_register_style( 'formidable-admin', FrmAppHelper::plugin_url() .'/css/frm_admin.css', array(), $version );
         wp_register_script( 'bootstrap_tooltip', FrmAppHelper::plugin_url() .'/js/bootstrap.min.js', array( 'jquery' ), '3.3.2' );
 
