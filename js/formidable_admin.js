@@ -1170,12 +1170,13 @@ function frmAdminBuildJS(){
 		var id=jQuery(this).data('emailkey');
 		var type = jQuery(this).closest('.frm_form_action_settings').find('.frm_action_name').val();
 		var meta_name = 0;
+		var form_id = document.getElementById('form_id').value;
 		if(jQuery('#frm_form_action_'+id+' .frm_logic_row').length){
 			meta_name = 1 + parseInt(jQuery('#frm_form_action_'+id+' .frm_logic_row:last').attr('id').replace('frm_logic_'+id+'_', ''));	
 		}
 		jQuery.ajax({
 			type:'POST',url:ajaxurl,
-			data:{action:'frm_add_form_logic_row', email_id:id, meta_name:meta_name, type:type, nonce:frm_admin_js.nonce},
+			data:{action:'frm_add_form_logic_row', email_id:id, form_id:form_id, meta_name:meta_name, type:type, nonce:frm_admin_js.nonce},
 			success:function(html){
 				jQuery(document.getElementById('logic_link_'+id)).fadeOut('slow', function(){
 					var $logicRow = jQuery(document.getElementById('frm_logic_row_'+id));
