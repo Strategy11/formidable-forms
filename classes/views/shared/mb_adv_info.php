@@ -115,7 +115,7 @@
         </ul>
 	</div>
 
-	<div id="frm-conditionals" class="tabs-panel frm_hidden">
+	<div id="frm-conditionals" class="tabs-panel">
 	<?php if ( ! empty( $cond_shortcodes ) ) { ?>
 	    <ul class="subsubsub">
 	        <li><a href="javascript:void(0)" class="current frmids"><?php _e( 'IDs', 'formidable' ) ?></a> |</li>
@@ -166,7 +166,7 @@
           } ?>
 	</div>
 
-	<div id="frm-adv-info-tab" class="tabs-panel frm_hidden">
+	<div id="frm-adv-info-tab" class="tabs-panel">
 		<ul class="frm_code_list">
         <?php
         $col = 'one';

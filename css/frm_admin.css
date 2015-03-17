@@ -906,6 +906,9 @@ select.frm_cancelnew, input.frm_enternew{width:175px;}
     max-height:none;
     padding-right:0;
 }
+#frm-conditionals, #frm-adv-info-tab{
+	display:none;
+}
 #frm-insert-fields-box ul.subsubsub,
 #frm-conditionals ul.subsubsub{
     float:right;
