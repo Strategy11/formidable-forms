@@ -3,7 +3,12 @@ jQuery(document).ready(function(){
     if(installLink !== null){
         jQuery(installLink).click(frm_install_now);
     }
-    
+
+	var deauthLink = jQuery('.frm_deauthorize_link');
+	if(deauthLink.length){
+		deauthLink.click(frmDeauthorizeNow);
+	}
+
     if(typeof tb_remove == 'function') {
         frmAdminPopup.init();
     }
@@ -11,22 +16,23 @@ jQuery(document).ready(function(){
 
 function frm_install_now(){
     var $msg = jQuery(document.getElementById('frm_install_message'));
-	$msg.html('<div class="frm_plugin_updating">'+frmAdmin.updating_msg+'<div class="spinner frm_spinner"></div></div>');
+	$msg.html('<div class="frm_plugin_updating">'+frmGlobal.updating_msg+'<div class="spinner frm_spinner"></div></div>');
 	jQuery.ajax({
 		type:'POST',url:ajaxurl,
-        data:{action:'frm_install',nonce:frmAdmin.nonce},
+        data:{action:'frm_install',nonce:frmGlobal.nonce},
 		success:function(){$msg.fadeOut('slow');}
 	});
+	return false;
 }
 
 function frmDeauthorizeNow(){
-    if(!confirm(frmAdmin.deauth_confirm)){
+    if(!confirm(frmGlobal.deauthorize)){
 	    return false;
     }
-    jQuery('.frm_deauthorize_link').html('<span class="spinner"></span>');
+    jQuery(this).html('<span class="spinner"></span>');
     jQuery.ajax({
         type:'POST',url:ajaxurl,
-        data:{action:'frm_deauthorize',nonce:frmAdmin.nonce},
+        data:{action:'frm_deauthorize',nonce:frmGlobal.nonce},
         success:function(msg){jQuery('.error').fadeOut('slow');}
     });
     return false;
@@ -49,10 +55,10 @@ function frmUpdateBulkOpts(fieldID) {
 }
 
 function frmCreatePostEntry(id,post_id){
-    jQuery('#frm_create_entry p').replaceWith('<img src="'+ frmAdmin.url +'/images/wpspin_light.gif" alt="'+ frmAdmin.loading +'" />');
+    jQuery('#frm_create_entry p').replaceWith('<img src="'+ frmGlobal.url +'/images/wpspin_light.gif" alt="'+ frmGlobal.loading +'" />');
     jQuery.ajax({
         type:'POST',url:ajaxurl,
-        data:{action:'frm_create_post_entry',id:id,post_id:post_id,nonce:frmAdmin.nonce},
+        data:{action:'frm_create_post_entry',id:id,post_id:post_id,nonce:frmGlobal.nonce},
         success:function(msg){jQuery(document.getElementById('frm_create_entry')).fadeOut('slow');}
     });
 }
@@ -82,7 +88,7 @@ function frmAdminPopupJS(){
             $spinner.show();
             jQuery.ajax({
     		    type:'POST',url:ajaxurl,
-    		    data:{action:'frm_get_shortcode_opts', shortcode:val, nonce:frmAdmin.nonce},
+    		    data:{action:'frm_get_shortcode_opts', shortcode:val, nonce:frmGlobal.nonce},
     		    success:function(html){
     		        $spinner.hide();
     				$scOpts.append(html);
@@ -124,7 +130,7 @@ function frmAdminPopupJS(){
 	        var thisId = this.id;
 	    	jQuery.ajax({
 				type:'POST',url:ajaxurl,
-	        	data:{action:'frm_get_field_selection',field_id:0,form_id:form_id, nonce:frmAdmin.nonce},
+	        	data:{action:'frm_get_field_selection',field_id:0,form_id:form_id, nonce:frmGlobal.nonce},
 	        	success:function(msg){
 	        	    msg = msg.replace('name="field_options[form_select_0]"', 'id="'+ thisId.replace('frm_form_', '') +'"');
 	        	    jQuery(document.getElementById(thisId+'_fields')).html(msg);
@@ -174,7 +180,7 @@ function frmWidgetsJS(){
             jQuery.ajax({
                 type:'POST', url:ajaxurl,
                 dataType: 'json',
-                data:{action:'frm_get_dynamic_widget_opts',display_id:display_id,nonce:frmAdmin.nonce},
+                data:{action:'frm_get_dynamic_widget_opts',display_id:display_id,nonce:frmGlobal.nonce},
                 success:function(opts){
                     var catField = widget.find('.frm_list_items_cat_id');
                     catField.find('option').remove().end();

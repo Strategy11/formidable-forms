@@ -30,17 +30,16 @@ class FrmHooksController {
 
         // Instansiate Controllers
         foreach ( $controllers as $c ) {
-            $class = new $c;
             foreach ( $hooks as $hook ) {
-                $class->$hook();
-                unset($hook);
+				call_user_func( array( $c, $hook ) );
+				unset( $hook );
             }
-            unset($c, $class);
+			unset( $c );
         }
 
     }
 
-    public function load_hooks() {
+	public static function load_hooks() {
         if ( ! is_admin() ) {
             add_filter('the_content', 'FrmAppController::page_route', 10);
         }
@@ -80,7 +79,7 @@ class FrmHooksController {
         add_filter('frm_show_entry_styles', 'FrmStylesController::show_entry_styles');
     }
 
-    public function load_admin_hooks() {
+	public static function load_admin_hooks() {
         add_action('admin_menu', 'FrmAppController::menu', 1);
         add_action('admin_enqueue_scripts', 'FrmAppController::load_wp_admin_style' );
         add_filter('update_plugin_complete_actions', 'FrmAppController::update_action_links', 10, 2 );
@@ -132,7 +131,7 @@ class FrmHooksController {
         add_action('admin_menu', 'FrmXMLController::menu', 41);
     }
 
-    public function load_ajax_hooks() {
+	public static function load_ajax_hooks() {
         add_action('wp_ajax_frm_install', 'FrmAppController::install' );
         add_action('wp_ajax_frm_uninstall', 'FrmAppController::uninstall' );
         add_action('wp_ajax_frm_deauthorize', 'FrmAppController::deauthorize' );
@@ -179,7 +178,7 @@ class FrmHooksController {
         add_action('wp_ajax_frm_export_xml', 'FrmXMLController::export_xml');
     }
 
-    public function load_form_hooks() {
+	public static function load_form_hooks() {
         // Fields Controller
         add_filter('frm_field_type', 'FrmFieldsController::change_type');
         add_action('frm_field_input_html', 'FrmFieldsController::input_html');
@@ -190,11 +189,11 @@ class FrmHooksController {
         add_filter('frm_use_important_width', 'FrmStylesController::important_style', 10, 2 );
     }
 
-    public function load_view_hooks() {
+	public static function load_view_hooks() {
         // Hooks go here when a view is loaded
     }
 
-    public function load_multisite_hooks() {
+	public static function load_multisite_hooks() {
         // drop tables when mu site is deleted
         add_filter( 'wpmu_drop_tables', 'FrmAppController::drop_tables' );
     }

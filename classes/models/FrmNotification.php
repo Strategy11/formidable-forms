@@ -362,7 +362,7 @@ class FrmNotification{
 	 *
 	 * @since 2.0
 	 */
-	public static function remove_mandrill_br( $nl2br ) {
+	public static function remove_mandrill_br() {
 		return false;
 	}
 }
