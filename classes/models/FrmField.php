@@ -150,6 +150,10 @@ class FrmField{
     }
 
     public static function getOne( $id ){
+		if ( empty( $id ) ) {
+			return;
+		}
+
         global $wpdb;
 
         $where = is_numeric($id) ? 'id=%d' : 'field_key=%s';

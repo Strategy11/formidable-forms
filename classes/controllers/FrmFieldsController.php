@@ -51,7 +51,7 @@ class FrmFieldsController {
     public static function create() {
         check_ajax_referer( 'frm_ajax', 'nonce' );
 
-		$field_type = FrmAppHelper::get_post_param( 'field', '', 'sanitize_title' );
+		$field_type = FrmAppHelper::get_post_param( 'field', '', 'sanitize_text_field' );
 		$form_id = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
 
         $field = self::include_new_field($field_type, $form_id);

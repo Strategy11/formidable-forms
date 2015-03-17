@@ -984,7 +984,7 @@ DEFAULT_HTML;
             self::field_types_for_input( $multiple_input, $field_selection, $field_types );
         } else if ( in_array($type, $other_type) ) {
             self::field_types_for_input( $other_type, $field_selection, $field_types );
-        } else {
+		} else if ( isset( $field_selection[ $type ] ) ) {
             $field_types[ $type ] = $field_selection[ $type ];
         }
 
