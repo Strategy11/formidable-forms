@@ -32,7 +32,7 @@ class FrmAppController {
             return;
         }
 
-		$current_page = isset( $_GET['page'] ) ? sanitize_title( $_GET['page'] ) : ( isset( $_GET['post_type'] ) ? sanitize_title( $_GET['post_type'] ) : 'None' );
+		$current_page = isset( $_GET['page'] ) ? FrmAppHelper::simple_get( 'page', 'sanitize_title' ) : ( isset( $_GET['post_type'] ) ? FrmAppHelper::simple_get( 'post_type', 'sanitize_title' ) : 'None' );
 
         if ( $form ) {
             FrmFormsHelper::maybe_get_form( $form );
@@ -77,7 +77,7 @@ class FrmAppController {
     }
 
     public static function pro_get_started_headline() {
-        if ( FrmAppHelper::is_admin_page( 'formidable' ) && isset( $_REQUEST['upgraded'] ) && 'true' == $_REQUEST['upgraded'] ) {
+		if ( FrmAppHelper::is_admin_page( 'formidable' ) && isset( $_REQUEST['upgraded'] ) && 'true' == sanitize_title( $_REQUEST['upgraded'] ) ) {
             self::install();
             ?>
 <div id="message" class="frm_message updated"><?php _e( 'Congratulations! Formidable is ready to roll.', 'formidable' ) ?></div>
@@ -86,7 +86,7 @@ class FrmAppController {
         }
 
         // Don't display this error as we're upgrading the thing... cmon
-        if ( isset( $_GET['action'] ) && 'upgrade-plugin' == $_GET['action'] ) {
+        if ( 'upgrade-plugin' == FrmAppHelper::simple_get( 'action', 'sanitize_title' ) ) {
             return;
         }
 
@@ -101,7 +101,7 @@ class FrmAppController {
                 ( FrmAppHelper::pro_is_installed() && (int) $pro_db_version < (int) FrmAppHelper::$pro_db_version ) ) {
                 FrmAppHelper::load_admin_wide_js();
             ?>
-<div class="error" id="frm_install_message"><?php printf( __( 'Your update is not complete yet.<br/>Please deactivate and reactivate the plugin to complete the update or %1$s', 'formidable' ), '<a href="javascript:void(0)" id="frm_install_link">'. __( 'Update Now', 'formidable' ) .'</a>'); ?> </div>
+<div class="error" id="frm_install_message"><?php echo wp_kses_post( sprintf( __( 'Your update is not complete yet.<br/>Please deactivate and reactivate the plugin to complete the update or %1$s', 'formidable' ), '<a href="#" id="frm_install_link">'. esc_html( __( 'Update Now', 'formidable' ) ) .'</a>') ); ?> </div>
 <?php
             }
         }
@@ -115,12 +115,13 @@ class FrmAppController {
         ?>
 <div class="error" class="frm_previous_install">
 		<?php
-		echo apply_filters( 'frm_pro_update_msg',
+		echo wp_kses_post( apply_filters( 'frm_pro_update_msg',
 			sprintf(
 				__( 'This site has been previously authorized to run Formidable Forms.<br/>%1$sInstall the pro version%2$s or %3$sdeauthorize%4$s this site to continue running the free version and remove this message.', 'formidable' ),
 				'<a href="' . esc_url( $inst_install_url ) . '" target="_blank">', '</a>',
-				'<a href="javascript:void(0)" onclick="frmDeauthorizeNow()" class="frm_deauthorize_link">', '</a>'
-			), esc_url( $inst_install_url ) ); ?>
+				'<a href="#" class="frm_deauthorize_link">', '</a>'
+			), esc_url( $inst_install_url )
+		) ); ?>
 </div>
 <?php
         }
@@ -129,9 +130,11 @@ class FrmAppController {
     public static function admin_js() {
         global $pagenow;
 
-        if ( 'admin-ajax.php' == $pagenow && isset($_GET['action']) && $_GET['action'] != 'frm_import_choices' ) {
+		$action = FrmAppHelper::simple_get( 'action', 'sanitize_title' );
+		if ( 'admin-ajax.php' == $pagenow && $action != 'frm_import_choices' ) {
             return;
         }
+		unset( $action );
 
 		$version = FrmAppHelper::plugin_version();
 
@@ -142,9 +145,9 @@ class FrmAppController {
 		// load multselect js
 		wp_register_script( 'bootstrap-multiselect', FrmAppHelper::plugin_url() .'/js/bootstrap-multiselect.js', array( 'jquery', 'bootstrap_tooltip' ), '0.9.8', true );
 
-        if ( isset($_GET) && ( ( isset($_GET['page']) && strpos( $_GET['page'], 'formidable' ) === 0 ) ||
-            ( $pagenow == 'edit.php' && isset($_GET['post_type']) && $_GET['post_type'] == 'frm_display' ) )
-        ) {
+		$page = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
+		$post_type = FrmAppHelper::simple_get( 'post_type', 'sanitize_title' );
+		if ( strpos( $page, 'formidable' ) === 0 || ( $pagenow == 'edit.php' && $post_type == 'frm_display' ) ) {
             add_filter( 'admin_body_class', 'FrmAppController::admin_body_class' );
 
             wp_enqueue_script( 'jquery-ui-sortable' );
@@ -160,11 +163,11 @@ class FrmAppController {
 
             wp_register_script( 'formidable-editinplace', FrmAppHelper::plugin_url() .'/js/jquery/jquery.editinplace.packed.js', array( 'jquery' ), '2.3.0' );
 
-        } else if ( $pagenow == 'post.php' || ( $pagenow == 'post-new.php' && isset( $_REQUEST['post_type'] ) && $_REQUEST['post_type'] == 'frm_display' ) ) {
+        } else if ( $pagenow == 'post.php' || ( $pagenow == 'post-new.php' && $post_type == 'frm_display' ) ) {
             if ( isset($_REQUEST['post_type']) ) {
                 $post_type = sanitize_title( $_REQUEST['post_type'] );
-			} else if ( isset( $_REQUEST['post'] ) && intval( $_REQUEST['post'] ) ) {
-				$post = get_post( intval( $_REQUEST['post'] ) );
+			} else if ( isset( $_REQUEST['post'] ) && absint( $_REQUEST['post'] ) ) {
+				$post = get_post( absint( $_REQUEST['post'] ) );
                 if ( ! $post ) {
                     return;
                 }
@@ -174,7 +177,6 @@ class FrmAppController {
             }
 
             if ( $post_type == 'frm_display' ) {
-                $version = FrmAppHelper::plugin_version();
                 wp_enqueue_script( 'jquery-ui-draggable' );
                 wp_enqueue_script( 'formidable_admin' );
                 wp_enqueue_style( 'formidable-admin' );
@@ -282,7 +284,6 @@ class FrmAppController {
             $frm_settings = FrmAppHelper::get_settings();
             wp_localize_script('formidable_admin', 'frm_admin_js', array(
                 'confirm_uninstall' => __( 'Are you sure you want to do this? Clicking OK will delete all forms, form data, and all other Formidable data. There is no Undo.', 'formidable' ),
-                'get_page'          => ( isset( $_GET ) && isset( $_GET['page'] ) ) ? sanitize_title( $_GET['page'] ) : '',
                 'desc'              => __( '(Click to add description)', 'formidable' ),
                 'blank'             => __( '(blank)', 'formidable' ),
                 'no_label'          => __( '(no label)', 'formidable' ),
@@ -295,7 +296,6 @@ class FrmAppController {
                 'no_clear_default'  => __( 'Do not clear default value when typing', 'formidable' ),
                 'valid_default'     => __( 'Default value will pass form validation', 'formidable' ),
                 'no_valid_default'  => __( 'Default value will NOT pass form validation', 'formidable' ),
-                'deauthorize'       => __( 'Are you sure you want to deactivate Formidable Forms on this site?', 'formidable' ),
                 'confirm'           => __( 'Are you sure?', 'formidable' ),
                 'conf_delete'       => __( 'Are you sure you want to delete this field and all data associated with it?', 'formidable' ),
                 'conf_delete_sec'   => __( 'WARNING: This will delete all fields inside of the section as well.', 'formidable' ),
@@ -307,7 +307,6 @@ class FrmAppController {
                 'confirm_password'  => __( 'Confirm Password', 'formidable' ),
                 'import_complete'   => __( 'Import Complete', 'formidable' ),
                 'updating'          => __( 'Please wait while your site updates.', 'formidable' ),
-                'nonce'             => wp_create_nonce( 'frm_ajax' ),
                 'no_save_warning'   => __( 'Warning: There is no way to retrieve unsaved entries.', 'formidable' ),
                 'jquery_ui_url'     => FrmAppHelper::jquery_ui_base_url(),
             ) );

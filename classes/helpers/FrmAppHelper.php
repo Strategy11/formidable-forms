@@ -231,25 +231,19 @@ class FrmAppHelper {
      * @since 2.0
      * @param string $action
      */
-    public static function simple_get($action) {
-        if ( $_GET && isset( $_GET[ $action ] ) ) {
-            return $_GET[ $action ];
-        } else {
-            return '';
-        }
+	public static function simple_get( $action, $sanitize = 'sanitize_text_field' ) {
+		$val = '';
+		if ( $_GET && isset( $_GET[ $action ] ) ) {
+			$val = call_user_func( $sanitize, $_GET[ $action ] );
+		}
+		return $val;
     }
 
     public static function sanitize_request( $sanitize_method, &$values ) {
         $temp_values = $values;
         foreach ( $temp_values as $k => $val ) {
             if ( isset( $sanitize_method[ $k ] ) ) {
-                switch ( $sanitize_method[ $k ] ) {
-                    case 'sanitize_title' :
-                        $values[ $k ] = sanitize_title( $val );
-                        break;
-                    case 'int' :
-                        $values[ $k ] = (int) $val;
-                }
+				call_user_func( $sanitize_method[ $k ], $val );
             }
         }
     }
@@ -1508,7 +1502,9 @@ class FrmAppHelper {
 		if ( $current_page != $page ) {
 			return;
 		}
-		if ( empty( $action ) || ( isset( $_GET['frm_action'] ) && ( in_array( sanitize_title( $_GET['frm_action'] ), $action ) ) ) ) {
+
+		$frm_action = FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
+		if ( empty( $action ) || ( ! empty( $frm_action ) && in_array( $frm_action, $action ) ) ) {
 			echo ' class="current_page"';
 		}
 	}
@@ -1594,12 +1590,12 @@ class FrmAppHelper {
         $version = FrmAppHelper::plugin_version();
         wp_enqueue_script( 'formidable_admin_global', FrmAppHelper::plugin_url() . '/js/formidable_admin_global.js', array( 'jquery'), $version );
 
-        wp_localize_script( 'formidable_admin_global', 'frmAdmin', array(
-            'updating_msg'      => __( 'Please wait while your site updates.', 'formidable' ),
-            'deauth_confirm'    => __( 'Are you sure you want to deauthorize Formidable Forms on this site?', 'formidable' ),
-            'url'               => FrmAppHelper::plugin_url(),
-            'loading'           => __( 'Loading&hellip;' ),
-            'nonce'             => wp_create_nonce('frm_ajax'),
+        wp_localize_script( 'formidable_admin_global', 'frmGlobal', array(
+			'updating_msg' => __( 'Please wait while your site updates.', 'formidable' ),
+            'deauthorize'  => __( 'Are you sure you want to deauthorize Formidable Forms on this site?', 'formidable' ),
+			'url'          => FrmAppHelper::plugin_url(),
+			'loading'      => __( 'Loading&hellip;' ),
+			'nonce'        => wp_create_nonce( 'frm_ajax' ),
         ) );
     }
 

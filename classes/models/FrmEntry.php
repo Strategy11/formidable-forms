@@ -498,15 +498,15 @@ class FrmEntry {
      */
     public static function sanitize_entry_post( &$values ) {
         $sanitize_method = array(
-            'form_id'       => 'int',
+            'form_id'       => 'absint',
             'frm_action'    => 'sanitize_title',
             'form_key'      => 'sanitize_title',
             'item_key'      => 'sanitize_title',
             'name'          => 'sanitize_text_field',
-            'frm_saving_draft' => 'int',
-            'is_draft'      => 'int',
-            'post_id'       => 'int',
-            'parent_item_id' => 'int',
+            'frm_saving_draft' => 'absint',
+            'is_draft'      => 'absint',
+            'post_id'       => 'absint',
+            'parent_item_id' => 'absint',
             'created_at'    => 'sanitize_title',
             'updated_at'    => 'sanitize_title',
         );

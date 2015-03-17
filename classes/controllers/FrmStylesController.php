@@ -194,7 +194,7 @@ class FrmStylesController {
             case 'manage_styles':
             case 'custom_css':
             case 'save_css':
-                return self::$action();
+				return call_user_func( array( 'FrmStylesController', $action ) );
             default:
             	do_action( 'frm_style_action_route', $action );
             	if ( apply_filters( 'frm_style_stop_action_route', false, $action ) ) {
@@ -202,7 +202,7 @@ class FrmStylesController {
             	}
 
                 if ( 'new_style' == $action ) {
-                    return self::$action();
+                    return call_user_func( array( 'FrmStylesController', $action ) );
                 }
 
                 return self::edit();

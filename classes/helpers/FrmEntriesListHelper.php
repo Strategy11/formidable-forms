@@ -39,7 +39,7 @@ class FrmEntriesListHelper extends FrmListHelper {
         $order = FrmAppHelper::esc_order( $orderby .' '. $order );
 
         $page = $this->get_pagenum();
-		$start = (int) isset( $_REQUEST['start'] ) ? intval( $_REQUEST['start'] ) : ( ( $page - 1 ) * $per_page );
+		$start = (int) isset( $_REQUEST['start'] ) ? absint( $_REQUEST['start'] ) : ( ( $page - 1 ) * $per_page );
 
         $this->items = FrmEntry::getAll($s_query, $order, ' LIMIT '. $start .','. $per_page, true, false);
         $total_items = FrmEntry::getRecordCount($s_query);

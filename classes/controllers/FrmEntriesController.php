@@ -27,7 +27,7 @@ class FrmEntriesController {
             case 'show':
             case 'destroy':
             case 'destroy_all':
-                return self::$action();
+                return call_user_func( array( 'FrmEntriesController', $action ) );
 
             default:
                 do_action( 'frm_entry_action_route', $action );
@@ -45,21 +45,23 @@ class FrmEntriesController {
             return $help;
         }
 
-        if ( ! isset($_GET) || ! isset($_GET['page']) || $_GET['page'] != 'formidable-entries' || ( isset($_GET['frm_action']) && $_GET['frm_action'] != 'list' ) ) {
+		$action = FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
+		$page = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
+		if ( $page != 'formidable-entries' || ( ! empty( $action ) && $action != 'list' ) ) {
             return $help;
         }
+		unset( $action, $page );
 
         $screen->add_help_tab( array(
             'id'      => 'formidable-entries-tab',
             'title'   => __( 'Overview', 'formidable' ),
-            'content' => '<p>' . __( 'This screen provides access to all of your entries. You can customize the display of this screen to suit your workflow.', 'formidable' ) .'</p>
-            <p>'. __( 'Hovering over a row in the entries list will display action links that allow you to manage your entry.', 'formidable' ) . '</p>',
+			'content' => '<p>' . esc_html__( 'This screen provides access to all of your entries. You can customize the display of this screen to suit your workflow.', 'formidable' ) .'</p> <p>'. esc_html__( 'Hovering over a row in the entries list will display action links that allow you to manage your entry.', 'formidable' ) . '</p>',
         ));
 
         $screen->set_help_sidebar(
-    	    '<p><strong>' . __( 'For more information:', 'formidable' ) . '</strong></p>' .
-    	    '<p><a href="http://formidablepro.com/knowledgebase/manage-entries-from-the-back-end/" target="_blank">' . __( 'Documentation on Entries', 'formidable' ) . '</a></p>' .
-    	    '<p><a href="http://formidablepro.com/help-topics/" target="_blank">' . __( 'Support', 'formidable' ) . '</a></p>'
+			'<p><strong>' . esc_html__( 'For more information:', 'formidable' ) . '</strong></p>' .
+			'<p><a href="http://formidablepro.com/knowledgebase/manage-entries-from-the-back-end/" target="_blank">' . esc_html__( 'Documentation on Entries', 'formidable' ) . '</a></p>' .
+			'<p><a href="http://formidablepro.com/help-topics/" target="_blank">' . esc_html__( 'Support', 'formidable' ) . '</a></p>'
     	);
 
         return $help;
@@ -70,7 +72,7 @@ class FrmEntriesController {
         $form_id = FrmEntriesHelper::get_current_form_id();
 
         $columns[ $form_id .'_id' ] = 'ID';
-        $columns[ $form_id .'_item_key' ] = __( 'Entry Key', 'formidable' );
+		$columns[ $form_id . '_item_key' ] = esc_html__( 'Entry Key', 'formidable' );
 
         if ( ! $form_id ) {
             return $columns;
@@ -116,7 +118,8 @@ class FrmEntriesController {
 
         $frm_vars['cols'] = $columns;
 
-        if ( FrmAppHelper::is_admin_page('formidable-entries') && ( ! isset($_GET['frm_action']) || $_GET['frm_action'] == 'list' || $_GET['frm_action'] == 'destroy' ) ) {
+		$action = FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
+		if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) && ( $action == 'list' || $action == 'destroy' ) ) {
 			add_screen_option( 'per_page', array( 'label' => __( 'Entries', 'formidable' ), 'default' => 20, 'option' => 'formidable_page_formidable_entries_per_page' ) );
         }
 
@@ -424,7 +427,7 @@ class FrmEntriesController {
 
         global $frm_vars;
 
-		$form_id = intval( $_POST['form_id'] );
+		$form_id = absint( $_POST['form_id'] );
 		$form = FrmForm::getOne( $form_id );
         if ( ! $form ) {
             return;

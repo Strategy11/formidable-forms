@@ -26,7 +26,7 @@ class FrmFieldsController {
                 continue;
             }
 
-            $field_id = intval( $field['id'] );
+            $field_id = absint( $field['id'] );
 
             if ( ! isset( $field['value'] ) ) {
                 $field['value'] = '';
@@ -52,7 +52,7 @@ class FrmFieldsController {
         check_ajax_referer( 'frm_ajax', 'nonce' );
 
         $field_type = sanitize_text_field( $_POST['field'] );
-        $form_id = intval( $_POST['form_id'] );
+        $form_id = absint( $_POST['form_id'] );
 
         $field = self::include_new_field($field_type, $form_id);
 
@@ -86,8 +86,8 @@ class FrmFieldsController {
     public static function update_form_id() {
         check_ajax_referer( 'frm_ajax', 'nonce' );
 
-		$field_id = intval( $_POST['field'] );
-		$form_id = intval( $_POST['form_id'] );
+		$field_id = absint( $_POST['field'] );
+		$form_id = absint( $_POST['form_id'] );
         if ( ! $field_id || ! $form_id ) {
             return;
         }
@@ -148,12 +148,12 @@ class FrmFieldsController {
 
         global $wpdb;
 
-		$copy_field = FrmField::getOne( intval( $_POST['field_id'] ) );
+		$copy_field = FrmField::getOne( absint( $_POST['field_id'] ) );
         if ( ! $copy_field ) {
             wp_die();
         }
 
-		$form_id = intval( $_POST['form_id'] );
+		$form_id = absint( $_POST['form_id'] );
 
         do_action('frm_duplicate_field', $copy_field, $form_id);
         do_action('frm_duplicate_field_'. $copy_field->type, $copy_field, $form_id);
@@ -204,7 +204,7 @@ class FrmFieldsController {
     public static function add_option() {
         check_ajax_referer( 'frm_ajax', 'nonce' );
 
-        $id = intval( $_POST['field_id'] );
+        $id = absint( $_POST['field_id'] );
         $opt_type = sanitize_text_field( $_POST['opt_type'] );
 
         //Get the field
@@ -267,7 +267,7 @@ class FrmFieldsController {
         check_ajax_referer( 'frm_ajax', 'nonce' );
 
         $ids = explode('-', $_POST['element_id']);
-		$id = intval( $_POST['field_id'] );
+		$id = absint( $_POST['field_id'] );
         $update_value = trim($_POST['update_value']);
         if ( strpos($_POST['element_id'], 'key_') ) {
             $new_value = $update_value;
@@ -308,7 +308,7 @@ class FrmFieldsController {
     public static function delete_option() {
         check_ajax_referer( 'frm_ajax', 'nonce' );
 
-		$field = FrmField::getOne( intval( $_POST['field_id'] ) );
+		$field = FrmField::getOne( absint( $_POST['field_id'] ) );
         $opt_key = $_POST['opt_key'];
         $options = maybe_unserialize($field->options);
         unset( $options[ $opt_key ] );
@@ -349,7 +349,7 @@ class FrmFieldsController {
             wp_die();
         }
 
-		$field_id = intval( $_REQUEST['field_id'] );
+		$field_id = absint( $_REQUEST['field_id'] );
 
         global $current_screen, $hook_suffix;
 
@@ -398,7 +398,7 @@ class FrmFieldsController {
             return;
         }
 
-		$field_id = intval( $_POST['field_id'] );
+		$field_id = absint( $_POST['field_id'] );
         $field = FrmField::getOne($field_id);
 
 		if ( ! in_array( $field->type, array( 'radio', 'checkbox', 'select' ) ) ) {
