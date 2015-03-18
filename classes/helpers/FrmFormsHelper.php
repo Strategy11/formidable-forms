@@ -278,18 +278,30 @@ BEFORE_HTML;
 			return;
 		}
 
-        $end_section_values = apply_filters('frm_before_field_created', FrmFieldsHelper::setup_new_vars('end_divider', $form->id));
-        $open = false;
+		$end_section_values = apply_filters( 'frm_before_field_created', FrmFieldsHelper::setup_new_vars( 'end_divider', $form->id ) );
+		$open = $prev_order = false;
+		$add_order = 0;
         foreach ( $fields as $field ) {
+			if ( $prev_order === $field->field_order ) {
+				$add_order++;
+			}
+
+			if ( $add_order ) {
+				$reset_fields = true;
+				$field->field_order = $field->field_order + $add_order;
+				FrmField::update( $field->id, array( 'field_order' => $field->field_order ) );
+			}
+
             switch ( $field->type ) {
                 case 'divider':
                     // create an end section if open
-                    self::maybe_create_end_section($open, $reset_fields, $end_section_values, ( $field->field_order - 1 ) );
+					self::maybe_create_end_section( $open, $reset_fields, $add_order, $end_section_values, $field );
+
                     // mark it open for the next end section
                     $open = true;
                 break;
                 case 'break';
-                    self::maybe_create_end_section($open, $reset_fields, $end_section_values, ( $field->field_order - 1 ) );
+					self::maybe_create_end_section( $open, $reset_fields, $add_order, $end_section_values, $field );
                 break;
                 case 'end_divider':
                     if ( ! $open ) {
@@ -301,26 +313,29 @@ BEFORE_HTML;
                     // There is already an end section here, so there is no need to create one
                     $open = false;
             }
-
-            unset($field);
+			$prev_order = $field->field_order;
         }
 
-        $last_order = end($fields);
-        $last_order = $last_order->field_order;
-        self::maybe_create_end_section($open, $reset_fields, $end_section_values, ( $last_order + 1 ) );
+		self::maybe_create_end_section($open, $reset_fields, $add_order, $end_section_values, $field );
     }
 
-    /**
-     * Create end section field if it doesn't exist. This is for migration from < 2.0
-     */
-    public static function maybe_create_end_section( &$open, &$reset_fields, $end_section_values, $order ) {
+	/**
+	 * Create end section field if it doesn't exist. This is for migration from < 2.0
+	 * Fix any ordering that may be messed up
+	 */
+	public static function maybe_create_end_section( &$open, &$reset_fields, &$add_order, $end_section_values, $field ) {
         if ( ! $open ) {
             return;
         }
 
-        $end_section_values['field_order'] = $order;
+		$end_section_values['field_order'] = $field->field_order + 1;
 
         FrmField::create( $end_section_values );
+
+		$add_order += 2;
+
+		// bump the order of current field
+		FrmField::update( $field->id, array( 'field_order' => $field->field_order + $add_order ) );
 
         $open = false;
         $reset_fields = true;

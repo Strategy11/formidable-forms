@@ -25,3 +25,6 @@ if ( file_exists( dirname( __FILE__ )  . '/../vendor/autoload_52.php' ) ) {
 if ( version_compare( phpversion(), '5.3', '>=' ) ) {
 	include( dirname( __FILE__ ) . '/../vendor/autoload.php' );
 }
+
+// include unit test base class
+require_once dirname( __FILE__ ) . '/base/FrmUnitTest.php';

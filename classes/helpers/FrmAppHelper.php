@@ -524,13 +524,13 @@ class FrmAppHelper {
             return;
         }
 
-        global $current_user;
+		$user_id = get_current_user_id();
+		$user = new WP_User( $user_id );
         $frm_roles = self::frm_capabilities();
         foreach ( $frm_roles as $frm_role => $frm_role_description ) {
-            $current_user->add_cap( $frm_role );
+			$user->add_cap( $frm_role );
             unset($frm_role, $frm_role_description);
         }
-        unset($frm_roles);
     }
 
     /**

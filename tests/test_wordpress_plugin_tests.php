@@ -1,6 +1,6 @@
 <?php
 
-class WP_Test_WordPress_Plugin_Tests extends WP_UnitTestCase {
+class WP_Test_WordPress_Plugin_Tests extends FrmUnitTest {
 	/**
 	 * form_id
 	 * @var int
@@ -32,20 +32,7 @@ class WP_Test_WordPress_Plugin_Tests extends WP_UnitTestCase {
             add_filter('frm_pro_installed', '__return_true');
         }
 
-        FrmAppController::install();
-
-		global $wpdb;
-        $exists = $wpdb->query( 'DESCRIBE '. $wpdb->prefix . 'frm_fields' );
-        $this->assertTrue($exists ? true : false);
-
-        $exists = $wpdb->query( 'DESCRIBE '. $wpdb->prefix . 'frm_forms' );
-        $this->assertTrue($exists ? true : false);
-
-        $exists = $wpdb->query( 'DESCRIBE '. $wpdb->prefix . 'frm_items' );
-        $this->assertTrue($exists ? true : false);
-
-        $exists = $wpdb->query( 'DESCRIBE '. $wpdb->prefix . 'frm_item_metas' );
-        $this->assertTrue($exists ? true : false);
+		$this->frm_install();
 	}
 
 	function test_plugin_activated() {
@@ -168,7 +155,7 @@ class WP_Test_WordPress_Plugin_Tests extends WP_UnitTestCase {
         update_option('frm_db_version', 12);
 
         // install form in older format
-        add_filter('frm_default_templates_files', 'WP_Test_WordPress_Plugin_Tests::install_data');
+		add_filter( 'frm_default_templates_files', 'FrmUnitTest::install_data' );
         FrmXMLController::add_default_templates();
 
         $form = FrmForm::getOne('contact-db12');
@@ -203,34 +190,5 @@ class WP_Test_WordPress_Plugin_Tests extends WP_UnitTestCase {
             $this->assertTrue( strpos($action->post_content['email_to'], 'emailto@test.com') !== false );
         }
 		*/
-    }
-
-	function test_uninstall(){
-        $this->set_as_user_role('administrator');
-
-        $frmdb = new FrmDb();
-        $uninstalled = $frmdb->uninstall();
-        $this->assertTrue($uninstalled);
-	}
-
-    /* Helper Functions */
-    function get_one_form( $form_key ) {
-        $form = FrmForm::getOne( $form_key );
-        $this->assertTrue($form ? true : false);
-        return $form;
-    }
-
-    function set_as_user_role( $role ) {
-        // create user
-        $user_id = $this->factory->user->create( array( 'role' => $role ) );
-		$user = new WP_User($user_id);
-		$this->assertTrue($user->exists(), "Problem getting user $user_id");
-
-        // log in as user
-        wp_set_current_user($user_id);
-    }
-
-    static function install_data() {
-        return array(dirname(__FILE__) .'/testdata.xml');
     }
 }

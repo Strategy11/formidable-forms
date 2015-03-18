@@ -292,11 +292,6 @@ class FrmField{
     }
 
     public static function getAll($where = array(), $order_by = '', $limit = '', $blog_id = false) {
-        if ( $order_by == 'field_order' ) {
-            //make sure the older field is first if there are two with the same order number
-            $order_by .= ',fi.id';
-        }
-
         $cache_key = maybe_serialize($where) . $order_by .'l'. $limit .'b'. $blog_id;
         if ( self::$use_cache ) {
             // make sure old cache doesn't get saved as a transient
