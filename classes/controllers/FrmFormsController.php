@@ -820,7 +820,7 @@ class FrmFormsController {
             case 'delete_all':
             case 'settings':
             case 'update_settings':
-				return call_user_func( array( 'FrmFormsController', $action ), $vars );
+				return self::$action( $vars );
             default:
                 do_action('frm_form_action_'. $action);
                 if ( apply_filters('frm_form_stop_action_'. $action, false) ) {

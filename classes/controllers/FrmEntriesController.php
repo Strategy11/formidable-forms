@@ -27,7 +27,7 @@ class FrmEntriesController {
             case 'show':
             case 'destroy':
             case 'destroy_all':
-                return call_user_func( array( 'FrmEntriesController', $action ) );
+                return self::$action();
 
             default:
                 do_action( 'frm_entry_action_route', $action );

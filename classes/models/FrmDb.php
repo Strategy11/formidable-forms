@@ -164,20 +164,21 @@ class FrmDb {
      * Change array into format $wpdb->prepare can use
      */
     public static function get_where_clause_and_values( &$args ) {
+		// add an argumanet to prevent prepare from failing
+		$where = ' WHERE 1=%d';
+		$values = array( 1 );
+
         if ( empty($args) ) {
-            // if there are no arguments, add one to prevent prepare from failing
-			$args = array( 'where' => ' WHERE 1=%d', 'values' => array( 1 )  );
+			$args = compact('where', 'values');
 			return;
         }
 
-        $where = '';
-        $values = array();
         if ( ! is_array( $args ) ) {
-            $args = compact('where', 'values');
+            $args = array( '', array() );
             return;
         }
 
-        $base_where = ' WHERE';
+        $base_where = '';
         self::parse_where_from_array( $args, $base_where, $where, $values );
 
         $args = compact('where', 'values');

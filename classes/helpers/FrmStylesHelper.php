@@ -135,7 +135,9 @@ class FrmStylesHelper {
     }
 
     public static function bs_icon_select($style, $frm_style, $type = 'arrow') {
-		$icons = call_user_func( array( 'FrmStylesHelper', $type . '_icons' ) );
+		$function_name = $type . '_icons';
+		$icons = self::$function_name();
+		unset( $function_name );
 
         $name = ( 'arrow' == $type ) ? 'collapse_icon' : 'repeat_icon';
 ?>

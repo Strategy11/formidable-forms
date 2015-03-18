@@ -62,11 +62,9 @@ class FrmXMLHelper {
 		foreach ( array( 'term', 'form', 'view' ) as $item_type ) {
             // grab cats, tags, and terms, or forms or posts
             if ( isset($xml->{$item_type} ) ) {
-				$imported = call_user_func_array(
-					array( 'FrmXMLHelper', 'import_xml_' . $item_type . 's' ),
-					array( $xml->{$item_type}, $imported )
-				);
-    		    unset($xml->{$item_type});
+				$function_name = 'import_xml_' . $item_type . 's';
+				$imported = self::$function_name( $xml->{$item_type}, $imported );
+				unset( $function_name, $xml->{$item_type} );
             }
         }
 
