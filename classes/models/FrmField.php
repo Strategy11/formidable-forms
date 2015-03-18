@@ -41,13 +41,16 @@ class FrmField{
         //    $new_values['id'] = $values['id'];
 
         $query_results = $wpdb->insert( $wpdb->prefix .'frm_fields', $new_values );
+		if ( $query_results ) {
+			self::delete_form_transient( $new_values['form_id'] );
+			$new_id = $wpdb->insert_id;
+		}
+
 		if ( ! $return ) {
 			return;
 		}
 
 		if ( $query_results ) {
-			self::delete_form_transient( $new_values['form_id'] );
-			$new_id = $wpdb->insert_id;
 			if ( isset( $values['id'] ) ) {
 				$frm_duplicate_ids[ $values['id'] ] = $new_id;
 			}

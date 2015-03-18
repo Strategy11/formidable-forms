@@ -62,7 +62,7 @@ class FrmXMLHelper {
 		foreach ( array( 'term', 'form', 'view' ) as $item_type ) {
             // grab cats, tags, and terms, or forms or posts
             if ( isset($xml->{$item_type} ) ) {
-				call_user_func_array(
+				$imported = call_user_func_array(
 					array( 'FrmXMLHelper', 'import_xml_' . $item_type . 's' ),
 					array( $xml->{$item_type}, $imported )
 				);
@@ -99,6 +99,7 @@ class FrmXMLHelper {
     }
 
     public static function import_xml_forms($forms, $imported) {
+
 		foreach ( $forms as $item ) {
             $form = array(
                 'id'            => (int) $item->id,
@@ -152,7 +153,8 @@ class FrmXMLHelper {
             } else {
                 $old_id = false;
                 //form does not exist, so create it
-                if ( $form_id = FrmForm::create( $form ) ) {
+				$form_id = FrmForm::create( $form );
+                if ( $form_id ) {
                     $imported['imported']['forms']++;
                     // Keep track of whether this specific form was updated or not
                     $imported['form_status'][$form_id] = 'imported';
@@ -329,7 +331,7 @@ class FrmXMLHelper {
 			$post['attachment_url'] = (string) $item->attachment_url;
 		}
 
-		if ( $post['post_type'] == FrmFormActionsController::$action_post_type ) {
+		if ( $post['post_type'] == FrmFormActionsController::$action_post_type && isset( $imported['forms'][ (int) $post['menu_order'] ] ) ) {
 		    // update to new form id
 		    $post['menu_order'] = $imported['forms'][ (int) $post['menu_order'] ];
 		}

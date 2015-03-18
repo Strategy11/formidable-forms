@@ -808,7 +808,7 @@ class FrmAppHelper {
     }
 
     public static function js_redirect($url) {
-		return '<script type="text/javascript">window.location="' . esc_url( $url ) . '"</script>';
+		return '<script type="text/javascript">window.location="' . $url . '"</script>';
     }
 
     public static function get_user_id_param($user_id) {
