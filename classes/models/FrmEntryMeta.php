@@ -93,7 +93,7 @@ class FrmEntryMeta {
 		FrmDb::get_where_clause_and_values( $where );
 
         // Delete any leftovers
-        $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'frm_item_metas ' . $where['where'] ), $where['values'] );
+        $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'frm_item_metas ' . $where['where'], $where['values'] ) );
     }
 
     public static function duplicate_entry_metas($old_id, $new_id) {
