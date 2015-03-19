@@ -176,6 +176,7 @@ class FrmAppHelper {
      * @return string The IP address of the current user
      */
     public static function get_ip_address() {
+		$ip = '';
         foreach ( array(
             'HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED', 'HTTP_X_CLUSTER_CLIENT_IP',
             'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED', 'REMOTE_ADDR',
@@ -192,6 +193,8 @@ class FrmAppHelper {
                 }
             }
         }
+
+		return sanitize_text_field( $ip );
     }
 
     public static function get_param( $param, $default = '', $src = 'get' ) {
@@ -1365,7 +1368,7 @@ class FrmAppHelper {
 		if ( is_array( $where ) ) {
             global $wpdb;
             FrmDb::get_where_clause_and_values( $where );
-            $where = $wpdb->prepare( $where['where'], $where['values'] );
+			$where = $wpdb->prepare( $where['where'], $where['values'] );
 		} else {
             $where = $starts_with . $where;
         }
