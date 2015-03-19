@@ -142,6 +142,7 @@ class FrmAppController {
 		wp_register_script( 'formidable_admin', FrmAppHelper::plugin_url() . '/js/formidable_admin.js', array(
 			'formidable_admin_global', 'formidable', 'jquery',
 			'jquery-ui-core', 'jquery-ui-draggable',
+			'jquery-ui-sortable',
 			'bootstrap_tooltip', 'bootstrap-multiselect',
 		), $version, true );
 		wp_register_style( 'formidable-admin', FrmAppHelper::plugin_url() .'/css/frm_admin.css', array(), $version );
@@ -155,8 +156,6 @@ class FrmAppController {
 		if ( strpos( $page, 'formidable' ) === 0 || ( $pagenow == 'edit.php' && $post_type == 'frm_display' ) ) {
             add_filter( 'admin_body_class', 'FrmAppController::admin_body_class' );
 
-            wp_enqueue_script( 'jquery-ui-sortable' );
-            wp_enqueue_script( 'jquery-ui-draggable' );
             wp_enqueue_script( 'admin-widgets' );
             wp_enqueue_style( 'widgets' );
             wp_enqueue_script( 'formidable' );

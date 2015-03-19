@@ -294,7 +294,7 @@ class FrmDb {
 			$query .= $where . ' ' . implode( ' ', $args );
 		}
 
-        $cache_key = implode('_', FrmAppHelper::array_flatten( $where ) ) . str_replace( array( ' ', ','), '_', implode('_', $args) ) . $field .'_'. $type;
+        $cache_key = str_replace( array( ' ', ',' ), '_', trim( implode('_', FrmAppHelper::array_flatten( $where ) ) . implode( '_', $args ) . $field .'_'. $type, ' WHERE' ) );
         $results = FrmAppHelper::check_cache( $cache_key, $group, $query, 'get_'. $type );
         return $results;
     }
@@ -389,6 +389,9 @@ class FrmDb {
         if ( $group == $table ) {
             $table = $wpdb->prefix . $table;
         }
+
+		// switch to singular group name
+		$group = rtrim( $group, 's' );
     }
 
     private static function convert_options_to_array( &$args, $order_by = '', $limit = '' ) {
