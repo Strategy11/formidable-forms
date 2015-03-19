@@ -4,15 +4,21 @@
         <a href="?page=formidable&amp;frm_action=new" class="add-new-h2"><?php _e( 'Add New', 'formidable' ); ?></a>
     </h2>
 
+	<?php
+	// Add form messages
+	require( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' );
+	?>
+
     <div id="poststuff">
 
     <div id="post-body" class="metabox-holder columns-2">
     <div id="post-body-content">
     <?php
+
+	// Add form nav
 	if ( ! $values['is_template'] ) {
 		FrmAppController::get_form_nav( $id, true, 'hide' );
 	}
-	require( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' );
 
     ?>
     <div class="frm_form_builder<?php echo FrmFormsHelper::get_form_style_class($form); ?>">
