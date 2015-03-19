@@ -1739,7 +1739,7 @@ function frmAdminBuildJS(){
     function initiateMultiselect(){
         jQuery('.frm_multiselect').multiselect({
             templates: {ul:'<ul class="multiselect-container frm-dropdown-menu"></ul>'},
-            nonSelectedText:frm_admin_js.default,
+            nonSelectedText:frm_admin_js.default
         });
     }
 

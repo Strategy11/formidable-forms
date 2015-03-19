@@ -3,7 +3,6 @@ function frmFrontFormJS(){
 	var show_fields = [];
 	var hide_later = [];
     var frm_checked_dep = [];
-    var frm_checked_logic = [];
 
 	function setNextPage(e){
 		/*jshint validthis:true */
@@ -41,6 +40,7 @@ function frmFrontFormJS(){
 	// Remove the frm_transparent class from a single file upload field when it changes
 	// Hide the old file when a new file is uploaded
 	function showFileUploadText(){
+		/*jshint validthis:true */
 		this.className = this.className.replace( 'frm_transparent', '');
 		this.parentNode.getElementsByTagName('a')[0].className += ' frm_hidden';
 	}
@@ -137,7 +137,6 @@ function frmFrontFormJS(){
 
         if ( reset != 'persist' ) {
             show_fields = []; // reset this variable after each click
-            frm_checked_logic = [];
         }
 		var this_opts = [];
 		for ( var i = 0, l = rules.length; i < l; i++ ) {
@@ -196,19 +195,7 @@ function frmFrontFormJS(){
                 f.hideContainerID = f.containerID.replace(f.FieldName, f.HideField);
                 f.hiddenName = f.inputName.replace('['+ f.FieldName +']', '['+ f.HideField +']');
             }
-
-            if ( jQuery.inArray(f.inputName +'-'+f.hiddenName, frm_checked_logic) > -1 ) {
-                return;
-            } else {
-                frm_checked_logic.push(f.inputName +'-'+ f.hiddenName);
-            }
         } else {
-            if ( jQuery.inArray(f.inputName +'-'+f.hiddenName, frm_checked_logic) > -1 ) {
-                return;
-            } else {
-                frm_checked_logic.push(f.inputName +'-'+ f.hiddenName);
-            }
-
             getRepeat = true;
             parentField = jQuery('input[name^="'+ f.inputName +'"], textarea[name^="'+ f.inputName +'"], select[name^="'+ f.inputName +'"]');
             if ( parentField.length > 1 ) {
