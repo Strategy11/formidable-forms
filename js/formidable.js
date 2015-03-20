@@ -1139,8 +1139,6 @@ function frmFrontFormJS(){
 
 	return{
 		init: function(){
-			frmFrontForm.invisible('.frm_ajax_loading');
-
 			jQuery(document).on('click', '.frm_trigger', toggleSection);
 			var $blankField = jQuery('.frm_blank_field');
 			if ( $blankField.length ) {

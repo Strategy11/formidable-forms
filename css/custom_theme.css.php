@@ -219,7 +219,7 @@ foreach ( $styles as $style ) {
 }
 
 .frm_ajax_loading.frm_loading_now{
-    visibility:visible;
+    visibility:visible !important;
 }
 
 .frm_form_submit_style{
