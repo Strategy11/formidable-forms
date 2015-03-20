@@ -2223,7 +2223,7 @@ function frmAdminBuildJS(){
 				}
 				jQuery.ajax({
 					type:'POST',url:ajaxurl,
-					data:{action:frm_settings_reset, nonce:frmGlobal.nonce},
+					data:{action:'frm_settings_reset', nonce:frmGlobal.nonce},
 					success:function(errObj){
 						errObj=errObj.replace(/^\s+|\s+$/g,'');
 						if(errObj.indexOf('{') === 0){
