@@ -323,17 +323,18 @@ function frmFrontFormJS(){
 			return;
 		}
 
+		var display = 'none';
 		if ( f.Show == 'show' ) {
 			if ( show_fields[f.HideField][i] !== true ) {
 				showField(show_fields[f.HideField][i], f.FieldName, rec);
-			}else{
-				var hideMe = document.getElementById(f.hideContainerID);
-				if ( hideMe !== null ) {
-					hideMe.style.display = '';
-				}
+				return;
 			}
-		}else{
-			document.getElementById(f.hideContainerID).style.display = 'none';
+			display = '';
+		}
+
+		var hideMe = document.getElementById(f.hideContainerID);
+		if ( hideMe !== null ) {
+			hideMe.style.display = display;
 		}
 	}
 
