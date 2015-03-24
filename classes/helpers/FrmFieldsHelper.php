@@ -317,7 +317,7 @@ class FrmFieldsHelper {
 </div>
 DEFAULT_HTML;
         } else {
-                    $default_html = apply_filters('frm_other_custom_html', '', $type);
+			$default_html = apply_filters('frm_other_custom_html', '', $type);
         }
 
         return apply_filters('frm_custom_html', $default_html, $type);

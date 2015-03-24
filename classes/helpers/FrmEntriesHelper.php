@@ -684,24 +684,27 @@ class FrmEntriesHelper {
             $platform = 'Windows';
         }
 
+		$agent_options = array(
+			'Firefox' => 'Mozilla Firefox',
+			'Chrome' => 'Google Chrome',
+			'Safari' => 'Apple Safari',
+			'Opera' => 'Opera',
+			'Netscape' => 'Netscape',
+		);
+
         // Next get the name of the useragent yes seperately and for good reason
-        if ( preg_match('/MSIE/i', $u_agent) && ! preg_match('/Opera/i', $u_agent) ) {
+        if ( strpos( $u_agent, 'MSIE' ) !== false && strpos( $u_agent, 'Opera' ) === false ) {
             $bname = 'Internet Explorer';
             $ub = 'MSIE';
-        } else if ( preg_match('/Firefox/i', $u_agent) ) {
-            $bname = 'Mozilla Firefox';
-            $ub = 'Firefox';
-        } else if ( preg_match('/Chrome/i', $u_agent) ) {
-            $bname = 'Google Chrome';
-            $ub = 'Chrome';
-        } else if ( preg_match('/Safari/i', $u_agent) ) {
-            $bname = 'Apple Safari';
-            $ub = 'Safari';
-        } else if ( preg_match('/Opera/i', $u_agent) ) {
-            $bname = $ub = 'Opera';
-        } else if ( preg_match('/Netscape/i', $u_agent) ) {
-            $bname = $ub = 'Netscape';
-        }
+        } else {
+			foreach ( $agent_options as $agent_key => $agent_name ) {
+				if ( strpos( $u_agent, $agent_key ) !== false ) {
+					$bname = $agent_name;
+					$ub = $agent_key;
+					break;
+				}
+			}
+		}
 
         // finally get the correct version number
         $known = array( 'Version', $ub, 'other');
