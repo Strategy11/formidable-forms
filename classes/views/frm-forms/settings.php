@@ -4,12 +4,16 @@
         <a href="#" class="add-new-h2 frm_invisible"></a>
     </h2>
 
+	<?php
+	// Add form messages
+	require(FrmAppHelper::plugin_path() .'/classes/views/shared/errors.php');
+	?>
+
     <div id="poststuff">
         <div id="post-body" class="metabox-holder columns-2">
         <div id="post-body-content">
         <?php
             FrmAppController::get_form_nav($id, true);
-    	    require(FrmAppHelper::plugin_path() .'/classes/views/shared/errors.php');
         ?>
 
 <form method="post" class="frm_form_settings">
