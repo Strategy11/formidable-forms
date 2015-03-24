@@ -498,6 +498,11 @@ class FrmEntriesController {
             $atts['plain_text'] = true;
         }
 
+		if ( is_object( $atts['entry'] ) && ! isset( $atts['entry']->metas ) ) {
+			// if the entry does not include metas, force it again
+			$atts['entry'] = false;
+		}
+
         if ( ! $atts['entry'] || ! is_object( $atts['entry'] ) ) {
             if ( ! $atts['id'] && ! $atts['default_email'] ) {
                 return;

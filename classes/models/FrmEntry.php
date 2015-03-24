@@ -231,7 +231,7 @@ class FrmEntry {
         global $wpdb;
         $id = (int) $id;
 
-        $entry = self::getOne($id);
+		$entry = self::getOne( $id );
         if ( ! $entry ) {
             $result = false;
             return $result;
