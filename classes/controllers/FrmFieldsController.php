@@ -324,6 +324,7 @@ class FrmFieldsController {
 
 		$field_id = FrmAppHelper::get_post_param( 'field_id', 0, 'absint' );
 		$field = FrmField::getOne( $field_id );
+		// Opt key will NOT be numeric for "Other" options
 		$opt_key = FrmAppHelper::get_post_param( 'opt_key', 0, 'sanitize_title' );
 
 		$options = $field->options;
