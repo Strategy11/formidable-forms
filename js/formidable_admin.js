@@ -1488,9 +1488,9 @@ function frmAdminBuildJS(){
 		var value = this.value;
 		var where_key = jQuery(this).closest('.frm_where_row').attr('id').replace('frm_where_field_', '');
 		if(value == 'group_by'){
-			document.getElementById('where_field_options_'+where_key).style.visibility = 'hidden';
+			document.getElementById('where_field_options_'+where_key).style.display = 'none';
 		}else{
-			document.getElementById('where_field_options_'+where_key).style.visibility = 'visible';
+			document.getElementById('where_field_options_'+where_key).style.display = 'inline-block';
 		}
 	}
 

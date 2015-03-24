@@ -866,6 +866,11 @@ select.frm_cancelnew, input.frm_enternew{width:175px;}
 .csv_opts #frm_csv_col_sep{width:45px;}
 
 #frm_where_options select{max-width:200px;}
+#frm_where_options select.frm_insert_where_options{width:34%;}
+#frm_where_options select.frm_where_is_options{width:25%;}
+#frm_where_options span.frm_where_val{width:25%;display:inline-block;}
+#frm_where_options span.frm_where_val.frm_hidden{display:none;}
+#frm_where_options span.frm_where_val input, #frm_where_options span.frm_where_val select{width:100%;}
 #frm_where_options{min-height:31px;}
 
 .tabs-panel.active .tabs-panel, .frm_settings_form .tabs-panel .tabs-panel{border:none;padding:0;} /*for add-on reverse compatability */
