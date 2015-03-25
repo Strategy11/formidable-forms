@@ -72,6 +72,19 @@ class FrmField{
             $values = array();
             FrmFieldsHelper::fill_field( $values, $field, $form_id, $new_key );
 
+			// If this is a repeating section, create new form
+			if ( $field->type == 'divider' && isset( $field->field_options['repeat'] ) && $field->field_options['repeat'] ) {
+				// create the repeatable form
+				$repeat_form_values = FrmFormsHelper::setup_new_vars( array( 'parent_form_id' => $form_id ) );
+				$new_repeat_form_id = FrmForm::create( $repeat_form_values );
+				$old_repeat_form_id = $field->field_options['form_select'];
+			}
+
+			// If this is a field inside of a repeating section, associate it with the correct form
+			if ( $field->form_id != $old_form_id && isset( $old_repeat_form_id ) && $field->form_id == $old_repeat_form_id ) {
+				$values['form_id'] = $new_repeat_form_id;
+			}
+
             $values = apply_filters('frm_duplicated_field', $values);
             $new_id = self::create($values);
             $frm_duplicate_ids[$field->id] = $new_id;

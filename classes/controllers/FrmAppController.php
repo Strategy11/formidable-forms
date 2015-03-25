@@ -240,7 +240,7 @@ class FrmAppController {
         }
 
         $version = FrmAppHelper::plugin_version();
-        wp_register_script( 'formidable', FrmAppHelper::plugin_url() . '/js/formidable.min.js', array( 'jquery' ), $version, true );
+        wp_register_script( 'formidable', FrmAppHelper::plugin_url() . '/js/formidable.js', array( 'jquery' ), $version, true );
         wp_register_script( 'jquery-placeholder', FrmAppHelper::plugin_url() .'/js/jquery/jquery.placeholder.js', array( 'jquery' ), '2.0.7', true );
 
         if ( FrmAppHelper::is_admin() ) {
