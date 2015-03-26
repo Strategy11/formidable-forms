@@ -86,14 +86,14 @@ class FrmField{
 			}
 
 			// If this is a field inside of a repeating section, associate it with the correct form
-			if ( $field->form_id != $old_form_id && isset( $old_repeat_form_id ) && $field->form_id == $old_repeat_form_id ) {
+			if ( $field->form_id != $old_form_id && isset( $old_repeat_form_id ) && isset( $new_repeat_form_id ) && $field->form_id == $old_repeat_form_id ) {
 				$values['form_id'] = $new_repeat_form_id;
 			}
 
             $values = apply_filters('frm_duplicated_field', $values);
             $new_id = self::create($values);
-            $frm_duplicate_ids[$field->id] = $new_id;
-            $frm_duplicate_ids[$field->field_key] = $new_id;
+            $frm_duplicate_ids[ $field->id ] = $new_id;
+            $frm_duplicate_ids[ $field->field_key ] = $new_id;
             unset($field);
         }
     }
