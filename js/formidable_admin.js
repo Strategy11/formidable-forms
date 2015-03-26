@@ -1381,6 +1381,8 @@ function frmAdminBuildJS(){
 		var value = jQuery(this).val();
 
 		var $cont = document.getElementById('date_select_container');
+		var tab = document.getElementById('frm_listing_tab');
+		var label = tab.dataset.label;
 		if(value == 'calendar'){
 			jQuery('.hide_dyncontent, .hide_single_content').show();
 			jQuery('.limit_container').hide();
@@ -1388,6 +1390,7 @@ function frmAdminBuildJS(){
 		}else if(value == 'dynamic'){
 			jQuery('.hide_dyncontent, .limit_container, .hide_single_content').show();
 		}else if(value == 'one'){
+			label = tab.dataset.one;
 			jQuery('.hide_dyncontent, .limit_container, .hide_single_content').hide();
 		}else{
 			jQuery('.hide_dyncontent').hide();
@@ -1397,6 +1400,7 @@ function frmAdminBuildJS(){
 		if(value !== 'calendar'){
 			$cont.style.display = 'none';
 		}
+		tab.innerHTML = label;
 	}
 	
 	function displayFormSelected(){
