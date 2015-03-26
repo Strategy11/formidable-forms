@@ -77,7 +77,12 @@ class FrmField{
 				// create the repeatable form
 				$repeat_form_values = FrmFormsHelper::setup_new_vars( array( 'parent_form_id' => $form_id ) );
 				$new_repeat_form_id = FrmForm::create( $repeat_form_values );
+
+				// Save old form_select
 				$old_repeat_form_id = $field->field_options['form_select'];
+
+				// Update form_select for repeating field
+				$values['field_options']['form_select'] = $new_repeat_form_id;
 			}
 
 			// If this is a field inside of a repeating section, associate it with the correct form

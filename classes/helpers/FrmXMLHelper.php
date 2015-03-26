@@ -98,6 +98,9 @@ class FrmXMLHelper {
 
     public static function import_xml_forms($forms, $imported) {
 
+		// Keep track of repeating sections that are created
+		$repeat_fields = array();
+
 		foreach ( $forms as $item ) {
             $form = array(
                 'id'            => (int) $item->id,
@@ -156,6 +159,17 @@ class FrmXMLHelper {
                     $imported['imported']['forms']++;
                     // Keep track of whether this specific form was updated or not
                     $imported['form_status'][$form_id] = 'imported';
+
+					// Check if any repeating sections form_select need to be updated
+					if ( isset( $repeat_fields[ $form['id'] ] ) ) {
+						// Get section field
+						$section_field = FrmField::getOne( $repeat_fields[ $form['id'] ] );
+						$field_opts = maybe_unserialize( $section_field->field_options );
+						$field_opts['form_select'] = $form_id;
+
+						// update form_select now
+						FrmField::update( $repeat_fields[ $form['id'] ], array( 'field_options' => maybe_serialize( $field_opts ) ) );
+					}
                 }
             }
 
@@ -209,15 +223,29 @@ class FrmXMLHelper {
 
     		            unset($form_fields[$form_fields[$f['field_key']]]); //unset old field id
     		            unset($form_fields[$f['field_key']]); //unset old field key
-    		        } else if ( FrmField::create( $f ) ) {
+					} else {
+						$new_id = FrmField::create( $f );
+						if ( $new_id == false ) {
+							continue;
+						}
+
     		            // if no matching field id or key in this form, create the field
     		            $imported['imported']['fields']++;
     		        }
-    		    } else if ( FrmField::create( $f ) ) {
+				} else {
+					$new_id = FrmField::create( $f );
+					if ( $new_id == false ) {
+						continue;
+					}
 		            $imported['imported']['fields']++;
     		    }
 
-    		    unset($field);
+				// Check if a repeating section was just created
+				if ( isset( $new_id ) && $f['type'] == 'divider' && isset( $f['field_options']['repeat'] ) && $f['field_options']['repeat'] ) {
+					$repeat_fields[ $f['field_options']['form_select'] ] = $new_id;
+				}
+
+				unset($field, $new_id);
     		}
 
     		// Delete any fields attached to this form that were not included in the template
