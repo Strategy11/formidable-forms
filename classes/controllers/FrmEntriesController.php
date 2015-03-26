@@ -347,7 +347,7 @@ class FrmEntriesController {
 			$data = array( 'referrer' => $data );
 		}
 
-		$fields = FrmField::get_all_for_form( $entry->form_id );
+		$fields = FrmField::get_all_for_form( $entry->form_id, '', 'include' );
 		$date_format = get_option( 'date_format' );
 		$time_format = get_option( 'time_format' );
         $to_emails = array();
@@ -519,7 +519,7 @@ class FrmEntriesController {
         }
 
         if ( ! $atts['fields'] || ! is_array($atts['fields']) ) {
-            $atts['fields'] = FrmField::get_all_for_form($atts['form_id']);
+            $atts['fields'] = FrmField::get_all_for_form( $atts['form_id'], '', 'include' );
         }
 
         $values = array();
