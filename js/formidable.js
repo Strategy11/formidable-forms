@@ -893,12 +893,20 @@ function frmFrontFormJS(){
                 }
 
                 if ( showEdit ) {
-                    data.setCell(row, col, '<a href="'+ entry.editLink +'">'+ opts.options.edit_link +'</a>');
+					if ( typeof entry.editLink !== 'undefined' ) {
+                    	data.setCell(row, col, '<a href="'+ entry.editLink +'">'+ opts.options.edit_link +'</a>');
+					} else {
+						data.setCell(row, col, '');
+					}
          		    col++;
         	    }
 
                 if ( showDelete ) {
-                    data.setCell(row, col,'<a href="'+ entry.deleteLink +'" class="frm_delete_link" onclick="return confirm('+ opts.options.confirm +')">'+ opts.options.delete_link +'</a>');
+					if ( typeof entry.deleteLink !== 'undefined' ) {
+                    	data.setCell(row, col,'<a href="'+ entry.deleteLink +'" class="frm_delete_link" onclick="return confirm('+ opts.options.confirm +')">'+ opts.options.delete_link +'</a>');
+					} else {
+						data.setCell(row, col, '');
+					}
                 }
 
                 row++;
@@ -918,7 +926,7 @@ function frmFrontFormJS(){
         }
 
         var chart = new google.visualization.Table(document.getElementById('frm_google_table_'+ opts.options.form_id));
-        chart.draw( data, JSON.stringify(opts.graphOpts) );
+        chart.draw( data, opts.graphOpts );
     }
 
     function getGraphType(field){
