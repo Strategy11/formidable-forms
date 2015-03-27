@@ -1654,6 +1654,7 @@ html[xmlns] .frm_clearfix{
 }
 
 @media only screen and (max-width: 600px) {
+	.frm_form_field.frm_half,
     .frm_form_field.frm_left_half,
     .frm_form_field.frm_right_half,
     .frm_form_field.frm_first_half,
@@ -1662,7 +1663,8 @@ html[xmlns] .frm_clearfix{
     .frm_form_field.frm_third,
     .frm_form_field.frm_last_third,
     .frm_form_field.frm_first_two_thirds,
-    .frm_form_field.frm_last_two_thirds{
+	.frm_form_field.frm_last_two_thirds,
+	.frm_form_field.frm_two_thirds{
         width:100%;
         margin-left:0;
         margin-right:0;
@@ -1677,7 +1679,8 @@ html[xmlns] .frm_clearfix{
         width:48%;
     }
 
-    .frm_form_field.frm_first_fourth + .frm_form_field.frm_fourth{
+	.frm_form_field.frm_first_fourth + .frm_form_field.frm_fourth,
+	.frm_form_field.frm_first.frm_fourth + .frm_form_field.frm_fourth{
         margin-right:0;
     }
 
