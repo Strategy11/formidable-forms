@@ -230,8 +230,23 @@ class FrmDb {
 		$lowercase_key = end( $lowercase_key );
         if ( is_array( $value ) ) {
             // translate array of values to "in"
-            $where .= ' in ('. FrmAppHelper::prepare_array_values( $value, '%s' ) .')';
-            $values = array_merge( $values, $value );
+			if ( strpos( $lowercase_key, 'like' ) !== false ) {
+				$where = rtrim( $where, $key );
+				$where .= '(';
+				$start = true;
+				foreach ( $value as $v ) {
+					if ( ! $start ) {
+						$where .= ' OR ';
+					}
+					$start = false;
+					$where .= $key . ' %s';
+					$values[] = '%' . FrmAppHelper::esc_like( $v ) . '%';
+				}
+				$where .= ')';
+			} else {
+            	$where .= ' in ('. FrmAppHelper::prepare_array_values( $value, '%s' ) .')';
+				$values = array_merge( $values, $value );
+			}
         } else if ( strpos( $lowercase_key, 'like' ) !== false ) {
 			/**
 			 * Allow string to start or end with the value
