@@ -96,25 +96,18 @@ class FrmEntriesHelper {
             }
         }
 
-        $frm_settings = FrmAppHelper::get_settings();
+		$form_defaults = FrmFormsHelper::get_default_opts();
 
-        $form_defaults = array(
-            'custom_style'  => ($frm_settings->load_style != 'none'),
-            'email_to'      => '',
-            'submit_value'  => $frm_settings->submit_value,
-            'success_msg'   => $frm_settings->success_msg,
-            'akismet'       => '',
-            'form_class'    => '',
-        );
+		$frm_settings = FrmAppHelper::get_settings();
+		$form_defaults['custom_style']  = ( $frm_settings->load_style != 'none' );
 
-        $values = array_merge($form_defaults, $values);
+		$values = array_merge( $form_defaults, $values );
 
-        return apply_filters('frm_setup_new_entry', $values);
+		return apply_filters( 'frm_setup_new_entry', $values );
     }
 
     public static function setup_edit_vars($values, $record) {
-        //$values['description'] = maybe_unserialize( $record->description );
-        $values['item_key'] = isset($_POST['item_key']) ? $_POST['item_key'] : $record->item_key;
+		$values['item_key'] = FrmAppHelper::get_post_param( 'item_key', $record->item_key, 'sanitize_title' );
         $values['form_id'] = $record->form_id;
         $values['is_draft'] = $record->is_draft;
         return apply_filters('frm_setup_edit_entry_vars', $values, $record);
