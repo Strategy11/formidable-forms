@@ -486,11 +486,20 @@ DEFAULT_HTML;
 			$error_class .= ' frm_other_container';
 		}
 
-		// If this is a repeating section that should be hidden with exclude_fields or fields shortcode, hide it
-		if ( $field['type'] == 'divider' && $field['repeat'] ) {
-			global $frm_vars;
-			if ( isset( $frm_vars['show_fields'] ) && ! empty ( $frm_vars['show_fields'] ) && ! in_array( $field['id'], $frm_vars['show_fields'] ) && ! in_array( $field['field_key'], $frm_vars['show_fields'] ) ) {
-				$error_class .= ' frm_hidden';
+		// If this is a Section
+		if ( $field['type'] == 'divider' ) {
+
+			// If the top margin needs to be removed from a section heading
+			if ( $field['label'] == 'none' ) {
+				$error_class .= ' frm_hide_section';
+			}
+
+			// If this is a repeating section that should be hidden with exclude_fields or fields shortcode, hide it
+			if ( $field['repeat'] ) {
+				global $frm_vars;
+				if ( isset( $frm_vars['show_fields'] ) && ! empty ( $frm_vars['show_fields'] ) && ! in_array( $field['id'], $frm_vars['show_fields'] ) && ! in_array( $field['field_key'], $frm_vars['show_fields'] ) ) {
+					$error_class .= ' frm_hidden';
+				}
 			}
 		}
 
