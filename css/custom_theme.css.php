@@ -88,6 +88,10 @@ $defaults = $default_style->post_content;
 	margin-top:0px !important;
 }
 
+.with_frm_style .frm_section_heading.frm_hide_section .frm_description.frm_section_spacing{
+	display:none;
+}
+
 .with_frm_style .frm_hidden_container label.frm_primary_label,
 .with_frm_style .frm_pos_hidden,
 .frm_hidden_container label.frm_primary_label{
