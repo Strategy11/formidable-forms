@@ -220,6 +220,8 @@ class FrmEntriesHelper {
                     $child_entries = FrmProEntry::get_sub_entries($atts['entry']->id, true);
                     $val = FrmProEntryMetaHelper::get_sub_meta_values($child_entries, $f);
                     if ( ! empty( $val ) ) {
+						//Flatten multi-dimensional array for multi-file upload field
+						self::flatten_multi_file_upload( $val, $f );
                         $atts['entry']->metas[ $f->id ] = $val;
                     }
                 }
@@ -256,6 +258,16 @@ class FrmEntriesHelper {
             $values[ $f->id ] = array( 'label' => $f->name, 'val' => $val );
         }
     }
+
+	/**
+	* Flatten multi-dimensional array for multi-file upload fields
+	* @since 2.0
+	*/
+	public static function flatten_multi_file_upload( &$val, $field ) {
+		if ( $field->type == 'file' && isset( $field->field_options['multiple'] ) && $field->field_options['multiple'] ) {
+			$val = FrmAppHelper::array_flatten( $val );
+		}
+	}
 
     /**
      * Replace returns with HTML line breaks for display
