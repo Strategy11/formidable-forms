@@ -163,10 +163,10 @@ class FrmDb {
     /**
      * Change array into format $wpdb->prepare can use
      */
-    public static function get_where_clause_and_values( &$args ) {
+    public static function get_where_clause_and_values( &$args, $starts_with = ' WHERE ' ) {
         if ( empty($args) ) {
 			// add an arg to prevent prepare from failing
-			$args = array( 'where' => ' WHERE 1=%d', 'values' => array( 1 ) );
+			$args = array( 'where' => $starts_with . '1=%d', 'values' => array( 1 ) );
 			return;
         }
 
@@ -174,7 +174,7 @@ class FrmDb {
 		$values = array();
 
 		if ( is_array( $args ) ) {
-			$base_where = ' WHERE';
+			$base_where = $starts_with;
 			self::parse_where_from_array( $args, $base_where, $where, $values );
 		}
 

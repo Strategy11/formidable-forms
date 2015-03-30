@@ -197,7 +197,7 @@ class FrmAppHelper {
 		return sanitize_text_field( $ip );
     }
 
-    public static function get_param( $param, $default = '', $src = 'get' ) {
+    public static function get_param( $param, $default = '', $src = 'get', $sanitize = '' ) {
         if ( strpos($param, '[') ) {
             $params = explode('[', $param);
             $param = $params[0];
@@ -209,7 +209,7 @@ class FrmAppHelper {
                 $value = stripslashes_deep( htmlspecialchars_decode( urldecode( $_GET[ $param ] ) ) );
             }
 		} else {
-            $value = isset( $_POST[ $param ] ) ? stripslashes_deep( maybe_unserialize( $_POST[ $param ] ) ) : $default;
+            $value = self::get_post_param( $param, $default, $sanitize );
         }
 
 		if ( isset( $params ) && is_array( $value ) && ! empty( $value ) ) {
@@ -1367,7 +1367,7 @@ class FrmAppHelper {
 
 		if ( is_array( $where ) ) {
             global $wpdb;
-            FrmDb::get_where_clause_and_values( $where );
+            FrmDb::get_where_clause_and_values( $where, $starts_with );
 			$where = $wpdb->prepare( $where['where'], $where['values'] );
 		} else {
             $where = $starts_with . $where;
