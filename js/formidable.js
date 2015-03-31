@@ -620,7 +620,9 @@ function frmFrontFormJS(){
 					vals[thisFieldId] = 0;
 				}
 
-				thisFullCalc = thisFullCalc.replace('['+thisFieldId+']', vals[thisFieldId]);
+				var findVar = '['+ thisFieldId +']';
+				findVar = findVar.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
+				thisFullCalc = thisFullCalc.replace(new RegExp(findVar, 'g'), vals[thisFieldId]);
 			}
 
 			// Set the number of decimal places
@@ -1285,7 +1287,7 @@ function frmFrontFormJS(){
 					action:'frm_fields_ajax_time_options',
 					time_field:timeField, date_field:obj.id,
 					entry_id: (e ? e.val() : ''), date: jQuery(obj).val(),
-                    nonce:frm_js.nonce
+					nonce:frm_js.nonce
 				},
 				success:function(opts){
 					var $timeField = jQuery(document.getElementById(timeField));
