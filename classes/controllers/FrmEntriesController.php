@@ -348,8 +348,6 @@ class FrmEntriesController {
 		}
 
 		$fields = FrmField::get_all_for_form( $entry->form_id, '', 'include' );
-		$date_format = get_option( 'date_format' );
-		$time_format = get_option( 'time_format' );
         $to_emails = array();
 
         include(FrmAppHelper::plugin_path() .'/classes/views/frm-entries/show.php');

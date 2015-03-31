@@ -9,7 +9,7 @@ class FrmFormsHelper {
      * @param object|int $form
      */
     public static function maybe_get_form( &$form ) {
-        if ( ! is_object($form) && ! is_array($form) ) {
+		if ( ! is_object( $form ) && ! is_array( $form ) && ! empty( $form ) ) {
             $form = FrmForm::getOne($form);
         }
     }
