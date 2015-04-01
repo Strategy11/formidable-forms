@@ -1988,19 +1988,19 @@ iframe#dyncontent_ifr{min-height:150px;}
   height: 101px;
 }
 .farbtastic .wheel {
-  background: url(../pro/images/styler/wheel.png) no-repeat;
+  background: url(../images/styler/wheel.png) no-repeat;
   width: 195px;
   height: 195px;
 }
 .farbtastic .overlay {
-  background: url(../pro/images/styler/mask.png) no-repeat;
+  background: url(../images/styler/mask.png) no-repeat;
 }
 .farbtastic .marker {
   width: 17px;
   height: 17px;
   margin: -8px 0 0 -8px;
   overflow: hidden; 
-  background: url(../pro/images/styler/marker.png) no-repeat;
+  background: url(../images/styler/marker.png) no-repeat;
 }
 				
 /* ---------------------------------------------------------------
