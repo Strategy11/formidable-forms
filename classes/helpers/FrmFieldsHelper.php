@@ -22,18 +22,8 @@ class FrmFieldsHelper {
 
     public static function pro_field_selection() {
         return apply_filters('frm_pro_available_fields', array(
-            'end_divider' => array(
-                'name'  => __( 'End Section', 'formidable' ),
-                'switch_from' => 'divider',
-            ),
-            'divider'   => array(
-                'name'  => __( 'Section', 'formidable' ),
-                'types' => array(
-                    ''   => __( 'Heading', 'formidable' ),
-                    'slide'  => __( 'Collapsible', 'formidable' ),
-                    'repeat' => __( 'Repeatable', 'formidable' ),
-                ),
-            ),
+            'end_divider' => __( 'End Section', 'formidable' ),
+            'divider'   => __( 'Section', 'formidable' ),
             'break'     => __( 'Page Break', 'formidable' ),
             'file'      => __( 'File Upload', 'formidable' ),
             'rte'       => __( 'Rich Text', 'formidable' ),
@@ -43,15 +33,7 @@ class FrmFieldsHelper {
             'time'      => __( 'Time', 'formidable' ),
             'image'     => __( 'Image URL', 'formidable' ),
             'scale'     => __( 'Scale', 'formidable' ),
-            'data'      => array(
-                'name'  => __( 'Dynamic Field', 'formidable' ),
-                'types' => array(
-                    'select'    => __( 'Dropdown', 'formidable' ),
-                    'radio'     => __( 'Radio Buttons', 'formidable' ),
-                    'checkbox'  => __( 'Checkboxes', 'formidable' ),
-                    'data'      => __( 'List', 'formidable' ),
-                ),
-            ),
+            'data'      => __( 'Dynamic Field', 'formidable' ),
             'form'      => __( 'Embed Form', 'formidable' ),
             'hidden'    => __( 'Hidden Field', 'formidable' ),
             'user_id'   => __( 'User ID (hidden)', 'formidable' ),
