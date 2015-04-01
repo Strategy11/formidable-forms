@@ -22,7 +22,10 @@ class FrmFieldsHelper {
 
     public static function pro_field_selection() {
         return apply_filters('frm_pro_available_fields', array(
-            'end_divider' => __( 'End Section', 'formidable' ),
+            'end_divider' => array(
+            	'name'  => __( 'End Section', 'formidable' ),
+            	'switch_from' => 'divider',
+			),
             'divider'   => __( 'Section', 'formidable' ),
             'break'     => __( 'Page Break', 'formidable' ),
             'file'      => __( 'File Upload', 'formidable' ),
