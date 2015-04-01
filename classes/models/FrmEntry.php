@@ -80,7 +80,7 @@ class FrmEntry {
     }
 
     /**
-     * check for duplicate entries created in the last 5 minutes
+     * check for duplicate entries created in the last minute
      * @return boolean
      */
     public static function is_duplicate($new_values, $values) {
@@ -89,7 +89,7 @@ class FrmEntry {
         }
 
         $check_val = $new_values;
-        $check_val['created_at >'] = date('Y-m-d H:i:s', (strtotime($new_values['created_at']) - (60*5)));
+		$check_val['created_at >'] = date( 'Y-m-d H:i:s', ( strtotime( $new_values['created_at'] ) - 60 ) );
 
         unset($check_val['created_at'], $check_val['updated_at']);
         unset($check_val['is_draft'], $check_val['id'], $check_val['item_key']);
