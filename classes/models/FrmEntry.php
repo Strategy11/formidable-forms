@@ -12,6 +12,10 @@ class FrmEntry {
 
         $values = apply_filters('frm_pre_create_entry', $values);
 
+		if ( ! isset( $values['item_key'] ) ) {
+			$values['item_key'] = '';
+		}
+
         $new_values = array(
             'item_key'  => FrmAppHelper::get_unique_key($values['item_key'], $wpdb->prefix .'frm_items', 'item_key'),
             'name'      => isset($values['name']) ? $values['name'] : $values['item_key'],

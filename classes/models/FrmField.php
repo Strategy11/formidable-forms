@@ -391,7 +391,7 @@ class FrmField{
             }
 
             unset($form_id);
-        }else{
+		} else if ( $results ) {
             wp_cache_set($results->id, $results, 'frm_field');
             wp_cache_set($results->field_key, $results, 'frm_field');
 

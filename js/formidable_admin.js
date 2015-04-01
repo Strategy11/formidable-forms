@@ -766,15 +766,19 @@ function frmAdminBuildJS(){
 
 			if(main_form_id == prev_form){
 				//create form
-				toggleFormid(field_id, '', main_form_id);
+				toggleFormid(field_id, '', main_form_id, 1);
 			}else{
-				toggleFormid(field_id, prev_form, main_form_id);
+				toggleFormid(field_id, prev_form, main_form_id, 1);
 			}
 		}else{
-			jQuery('#frm_field_id_'+field_id+' .show_repeat_sec').fadeOut('slow');
-			jQuery(this).closest('li.frm_field_box').removeClass('repeat_section').addClass('no_repeat_section');
+			if(confirm(frm_admin_js.conf_no_repeat)){
+				jQuery('#frm_field_id_'+field_id+' .show_repeat_sec').fadeOut('slow');
+				jQuery(this).closest('li.frm_field_box').removeClass('repeat_section').addClass('no_repeat_section');
 
-			toggleFormid(field_id, main_form_id, main_form_id);
+				toggleFormid(field_id, main_form_id, main_form_id, 0);
+			}else{
+				this.checked = true;
+			}
 		}
 	}
 
@@ -795,11 +799,11 @@ function frmAdminBuildJS(){
 		$thisField.find('.frm_'+ addRemove +'_form_row .frm_repeat_label').text(obj.value);
 	}
 	
-	function toggleFormid(field_id, form_id, main_form_id){
+	function toggleFormid(field_id, form_id, main_form_id, checked){
 		// change form ids of all fields in section
 		var children = fieldsInSection(field_id);
 		jQuery.ajax({type:'POST',url:ajaxurl,
-			data:{action:'frm_toggle_repeat', form_id:form_id, parent_form_id:main_form_id, children:children, nonce:frmGlobal.nonce},
+			data:{action:'frm_toggle_repeat', form_id:form_id, parent_form_id:main_form_id, checked:checked, field_id:field_id, children:children, nonce:frmGlobal.nonce},
 			success:function(id){
 				//return form id to hidden field
 				jQuery('input[name="field_options[form_select_'+field_id+']"]').val(id);

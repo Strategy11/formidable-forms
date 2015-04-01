@@ -303,6 +303,7 @@ class FrmAppController {
                 'confirm'           => __( 'Are you sure?', 'formidable' ),
                 'conf_delete'       => __( 'Are you sure you want to delete this field and all data associated with it?', 'formidable' ),
                 'conf_delete_sec'   => __( 'WARNING: This will delete all fields inside of the section as well.', 'formidable' ),
+				'conf_no_repeat'    => __( 'Warning: If you have entries with multiple rows, all but the first row will be lost.', 'formidable' ),
                 'default_unique'    => $frm_settings->unique_msg,
                 'default_conf'      => __( 'The entered values do not match', 'formidable' ),
                 'enter_email'       => __( 'Enter Email', 'formidable' ),
