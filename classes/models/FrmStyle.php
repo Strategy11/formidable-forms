@@ -203,13 +203,13 @@ class FrmStyle{
         return $style;
     }
 
-    public function get_all() {
+    public function get_all( $orderby = 'title', $order = 'ASC', $limit = 99 ) {
         $post_atts = array(
-            'post_type'     => FrmStylesController::$post_type,
-            'post_status'   => 'publish',
-            'numberposts'   => 99,
-            'order_by'      => 'title',
-            'order'         => 'ASC',
+			'post_type'   => FrmStylesController::$post_type,
+			'post_status' => 'publish',
+			'numberposts' => $limit,
+			'orderby'     => $orderby,
+			'order'       => $order,
         );
 
         $temp_styles = FrmAppHelper::check_cache(serialize($post_atts), 'frm_styles', $post_atts, 'get_posts');
@@ -269,7 +269,7 @@ class FrmStyle{
 
     public function get_default_style($styles = null) {
         if ( ! isset($styles) ) {
-            $styles = $this->get_all();
+			$styles = $this->get_all( 'menu_order', 'DESC', 1 );
         }
 
         foreach ( $styles as $style ) {

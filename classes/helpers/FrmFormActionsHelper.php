@@ -28,11 +28,7 @@ class FrmFormActionsHelper {
             $args['menu_order'] = $form_id;
         }
 
-        $actions = FrmAppHelper::check_cache(serialize($args), 'frm_actions');
-        if ( false == $actions ) {
-            $actions = get_posts( $args );
-            wp_cache_set(serialize($args), $actions, 'frm_actions', 300);
-        }
+		$actions = FrmAppHelper::check_cache( serialize( $args ), 'frm_actions', $args, 'get_posts' );
 
         if ( ! $actions ) {
             return array();
