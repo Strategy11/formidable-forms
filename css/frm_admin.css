@@ -1407,7 +1407,8 @@ a.frm_button:hover{
 }
 ul.start_divider{
 	padding:6px 12px 0;
-	border-bottom:1px dashed #CCC;
+	border-left:1px solid #D7D7D7;
+	border-bottom:1px solid #D7D7D7;
 	min-height:100px;
 }
 
@@ -1432,7 +1433,7 @@ ul.start_divider{
 	color:#CCC;
 }
 
-.frm_sorting li.ui-state-default.edit_field_type_break{border-bottom:1px solid #ccc; padding-bottom:5px;}
+.frm_sorting li.ui-state-default.edit_field_type_break{border-bottom:1px dashed #D7D7D7; padding-bottom:5px;}
 .frm_sorting .divider_section_only > .frm_ipe_field_label{font-size:116%;}
 #frm_form_editor_container .edit_field_type_break .frm_primary_label.frm_ipe_field_label.button{
 	width:150px;
