@@ -84,6 +84,7 @@ class FrmAppHelper {
      * @since 2.0
      */
     public static function update_message($features, $class = '') {
+		return; // hide the upgrade messages for now
         if ( ! self::pro_is_installed() ) {
             include(self::plugin_path() .'/classes/views/shared/update_message.php');
         }
