@@ -4,33 +4,7 @@
 
 	<?php include(FrmAppHelper::plugin_path() .'/classes/views/shared/errors.php'); ?>
 
-	<div class="manage-menus">
- 		<span class="add-edit-menu-action">
- 		    <?php
-			if ( count( $styles ) < 2 && ! empty( $style->ID ) ) {
- 		        printf(__( 'Edit your style below, or %1$screate a new style%2$s.', 'formidable' ), '<a href="?page=formidable-styles&frm_action=new_style">', '</a>');
-
-			} else { ?>
- 		        <form method="get">
- 		            <input type="hidden" name="page" value="<?php echo esc_attr( $_GET['page'] ) ?>"/>
- 		            <input type="hidden" name="frm_action" value="edit" />
-     		        <label class="selected-menu"><?php _e( 'Select a style to edit:', 'formidable' ); ?></label>
-     		        <select name="id">
-     		            <option value=""><?php _e( '&mdash; Select &mdash;') ?></option>
-     		            <?php foreach ( $styles as $s ) { ?>
-     		            <option value="<?php echo esc_attr( $s->ID ) ?>" <?php selected($s->ID, $style->ID) ?>><?php echo esc_html( $s->post_title . (empty($s->menu_order) ? '' : ' ('. __( 'default', 'formidable' ) .')') ) ?></option>
-     		            <?php } ?>
-     		        </select>
-     		        <span class="submit-btn">
-						<input type="submit" class="button-secondary" value="<?php esc_attr_e( 'Select', 'formidable' ) ?>" />
-     		        </span>
- 		        </form>
- 		        <span class="add-new-menu-action"><?php printf(__( 'or %1$screate a new style%2$s.', 'formidable' ), '<a href="?page=formidable-styles&frm_action=new_style">', '</a>'); ?></span>
-<?php
-			} ?>
-
-		</span>
-    </div><!-- /manage-menus -->
+	<?php do_action( 'frm_style_switcher', $style, $styles ) ?>
 
 	<form id="frm_styling_form" action="" name="frm_styling_form" method="post">
 	    <input type="hidden" name="ID" value="<?php echo esc_attr( $style->ID ) ?>" />
