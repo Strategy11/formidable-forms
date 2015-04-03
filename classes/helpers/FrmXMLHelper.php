@@ -142,7 +142,7 @@ class FrmXMLHelper {
                 // Keep track of whether this specific form was updated or not
                 $imported['form_status'][$form_id] = 'updated';
 
-                $form_fields = FrmField::get_all_for_form($form_id);
+				$form_fields = FrmField::get_all_for_form( $form_id, '', 'exclude' );
                 $old_fields = array();
                 foreach ( $form_fields as $f ) {
                     $old_fields[$f->id] = $f;

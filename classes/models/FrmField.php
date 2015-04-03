@@ -256,7 +256,7 @@ class FrmField{
         return $results;
     }
 
-    public static function get_all_for_form($form_id, $limit = '', $inc_sub = 'exclude') {
+	public static function get_all_for_form( $form_id, $limit = '', $inc_sub = 'include' ) {
         if ( ! (int) $form_id ) {
             return array();
         }
@@ -280,9 +280,12 @@ class FrmField{
         }
 
         self::$use_cache = false;
-        $results = self::getAll( array( 'fi.form_id' => (int) $form_id), 'field_order', $limit);
+
+		// get the fields, but make sure to not get the subfields if set to exclude
+		$results = self::getAll( array( 'fi.form_id' => absint( $form_id ), 'fi.form_id !' => 0 ), 'field_order', $limit );
         self::$use_cache = true;
-        self::include_sub_fields($results, $inc_sub, 'all');
+
+		self::include_sub_fields( $results, $inc_sub, 'all' );
 
         if ( empty($limit) ) {
             set_transient('frm_all_form_fields_'. $form_id . $inc_sub, $results, 60*60*6);
@@ -303,7 +306,7 @@ class FrmField{
             }
 
             if ( $type == 'all' ) {
-                $sub_fields = self::get_all_for_form($field->field_options['form_select']);
+                $sub_fields = self::get_all_for_form( $field->field_options['form_select'], '', 'exclude' );
             } else {
                 $sub_fields = self::get_all_types_in_form($field->form_id, $type);
             }
