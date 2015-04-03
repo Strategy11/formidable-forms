@@ -1649,7 +1649,7 @@ function frmAdminBuildJS(){
 		} else if ( value == 'no_label' ) {
 			value = 'none';
 		}
-		jQuery('.frm_pos_container').removeClass('frm_top_container frm_left_container frm_right_container frm_none_container').addClass('frm_'+value+'_container');    
+		jQuery('.frm_pos_container').removeClass('frm_top_container frm_left_container frm_right_container frm_none_container').addClass('frm_'+value+'_container');
 	}
 
     function collapseAllSections(){
