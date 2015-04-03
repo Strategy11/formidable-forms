@@ -119,6 +119,11 @@ if ( ! isset($collapse_icon) ) {
     content:"\e<?php echo isset($minus_icons[$repeat_icon]) ? $minus_icons[$repeat_icon]['+'] : $minus_icons[1]['+'] ?>";
 }
 
+.<?php echo $style_class ?> .frm_icon_font.frm_minus_icon:before,
+.<?php echo $style_class ?> .frm_icon_font.frm_plus_icon:before{
+	color:#<?php echo $submit_text_color . $important ?>;
+}
+
 .<?php echo $style_class ?> .frm_trigger.active .frm_icon_font.frm_arrow_icon:before{
     content:"\e<?php echo isset($arrow_icons[$collapse_icon]) ? $arrow_icons[$collapse_icon]['-'] : $arrow_icons[1]['-'] ?>";
 }
