@@ -72,7 +72,7 @@ class FrmDb {
         /* Create/Upgrade Fields Table */
         $sql[] = 'CREATE TABLE '. $this->fields .' (
                 id int(11) NOT NULL auto_increment,
-                field_key varchar(255) default NULL,
+				field_key varchar(100) default NULL,
                 name text default NULL,
                 description text default NULL,
                 type text default NULL,
@@ -91,7 +91,7 @@ class FrmDb {
         /* Create/Upgrade Forms Table */
         $sql[] = 'CREATE TABLE '. $this->forms .' (
                 id int(11) NOT NULL auto_increment,
-                form_key varchar(255) default NULL,
+				form_key varchar(100) default NULL,
                 name varchar(255) default NULL,
                 description text default NULL,
                 parent_form_id int(11) default 0,
@@ -109,7 +109,7 @@ class FrmDb {
         /* Create/Upgrade Items Table */
         $sql[] = 'CREATE TABLE '. $this->entries .' (
                 id int(11) NOT NULL auto_increment,
-                item_key varchar(255) default NULL,
+				item_key varchar(100) default NULL,
                 name varchar(255) default NULL,
                 description text default NULL,
                 ip text default NULL,
