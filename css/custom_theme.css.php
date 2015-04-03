@@ -872,8 +872,8 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
     border-right:none;
 }
 
-.frm_grid,
-.frm_grid_odd{
+.with_frm_style .frm_grid,
+.with_frm_style .frm_grid_odd{
     border-top:none;
 }
 
