@@ -562,7 +562,7 @@ class FrmFormsController {
         FrmFormsHelper::auto_add_end_section_fields( $form, $fields, $reset_fields );
 
         if ( $reset_fields ) {
-            $fields = FrmField::get_all_for_form($form->id);
+            $fields = FrmField::get_all_for_form( $form->id, '', 'exclude' );
         }
 
         unset($end_section_values, $last_order, $open, $reset_fields);

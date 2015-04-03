@@ -86,7 +86,7 @@ class FrmEntriesController {
             }
 
             if ( $form_col->type == 'form' && isset( $form_col->field_options['form_select'] ) && ! empty( $form_col->field_options['form_select'] ) ) {
-				$sub_form_cols = FrmField::get_all_for_form( $form_col->field_options['form_select'], '', 'exclude' );
+				$sub_form_cols = FrmField::get_all_for_form( $form_col->field_options['form_select'] );
 
                 if ( $sub_form_cols ) {
                     foreach ( $sub_form_cols as $k => $sub_form_col ) {
@@ -203,7 +203,7 @@ class FrmEntriesController {
     public static function sortable_columns() {
         $form_id = FrmEntriesHelper::get_current_form_id();
 
-		$fields = FrmField::get_all_for_form( $form_id, '', 'exclude' );
+		$fields = FrmField::get_all_for_form( $form_id );
 
         $columns = array(
             $form_id .'_id'         => 'id',
