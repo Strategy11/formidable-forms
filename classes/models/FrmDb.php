@@ -467,6 +467,14 @@ class FrmDb {
 		}
 		unset($roles, $frm_roles);
 
+		// delete actions, views, and styles
+		$post_ids = $wpdb->get_col( $wpdb->prepare( 'SELECT ID FROM ' . $wpdb->posts .' WHERE post_type in (%s, %s, %s)', FrmFormActionsController::$action_post_type, FrmStylesController::$post_type, 'frm_display' ) );
+		foreach( $post_ids as $post_id ) {
+			// Delete's each post.
+			wp_delete_post( $post_id, true );
+		}
+		unset( $post_ids );
+
         do_action('frm_after_uninstall');
         return true;
     }
