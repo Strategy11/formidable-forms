@@ -2261,7 +2261,7 @@ function frmAdminBuildJS(){
 			
 			jQuery(document.getElementById('datepicker_sample')).datepicker();
 			
-			jQuery(document.getElementById('frm_position')).change(setPosClass);
+			//jQuery(document.getElementById('frm_position')).change(setPosClass);
 			
 			jQuery('select[name$="[theme_selector]"]').change(function(){
 				var themeVal = jQuery(this).val();

@@ -66,8 +66,8 @@ $defaults = $default_style->post_content;
 }
 
 .with_frm_style .frm_left_container label.frm_primary_label{
-    display:inline !important;
-    float:left !important;
+    display:inline;
+    float:left;
     margin-right:10px;
 }
 
@@ -732,7 +732,7 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
 .frm_form_field.frm_right_container input,
 .frm_form_field.frm_right_container select,
 .frm_form_field.frm_right_container textarea{
-    max-width:70% !important;
+    max-width:70%;
 }
 
 .frm_form_field.frm_left_third,
