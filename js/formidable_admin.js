@@ -1646,8 +1646,10 @@ function frmAdminBuildJS(){
 		var value = this.value;
 		if(value == 'none'){
 			value='top';
+		} else if ( value == 'no_label' ) {
+			value = 'none';
 		}
-		jQuery('.frm_pos_container').removeClass('frm_top_container frm_left_container frm_right_container').addClass('frm_'+value+'_container');    
+		jQuery('.frm_pos_container').removeClass('frm_top_container frm_left_container frm_right_container frm_none_container').addClass('frm_'+value+'_container');    
 	}
 
     function collapseAllSections(){
@@ -2259,7 +2261,7 @@ function frmAdminBuildJS(){
 			
 			jQuery(document.getElementById('datepicker_sample')).datepicker();
 			
-			//jQuery(document.getElementById('frm_position')).change(setPosClass);
+			jQuery(document.getElementById('frm_position')).change(setPosClass);
 			
 			jQuery('select[name$="[theme_selector]"]').change(function(){
 				var themeVal = jQuery(this).val();

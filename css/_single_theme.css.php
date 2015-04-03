@@ -22,7 +22,7 @@ if ( isset($_GET['frm_style_setting']) || isset($_GET['flat']) ) {
 }
 
 $important = empty($important_style) ? '' : ' !important';
-$label_margin = (int) $width + 15;
+$label_margin = (int) $width + 10;
 
 $minus_icons = FrmStylesHelper::minus_icons();
 $arrow_icons = FrmStylesHelper::arrow_icons();
