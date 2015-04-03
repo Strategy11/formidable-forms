@@ -762,6 +762,10 @@ class FrmXMLHelper {
                 // Format the email data
                 self::format_email_data( $atts, $notification );
 
+				if ( isset( $notification['twilio'] ) && $notification['twilio'] ) {
+					do_action( 'frm_create_twilio_action', $atts, $notification );
+				}
+
                 // Setup the new notification
                 $new_notification = array();
                 self::setup_new_notification( $new_notification, $notification, $atts );
@@ -849,10 +853,6 @@ class FrmXMLHelper {
                 $new_notification['post_content'][$add_field] = '';
             }
             unset( $add_field );
-        }
-
-        if ( isset( $notification['twilio'] ) && $notification['twilio'] ) {
-            $new_notification['post_content'] = $notification['twilio'];
         }
 
         // Set reply to
