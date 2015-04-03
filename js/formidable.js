@@ -175,6 +175,7 @@ function frmFrontFormJS(){
         f.hiddenName = 'item_meta['+ f.HideField +']';
         f.containerID = 'frm_field_'+ f.FieldName +'_container';
         f.hideContainerID = 'frm_field_'+ f.HideField +'_container';
+		f.hideBy = '#';
         var getRepeat = false;
 
         if ( typeof parentField !== 'undefined' && parentField !== null ) {
@@ -185,6 +186,7 @@ function frmFrontFormJS(){
             if ( typeof parentField.attr('name') === 'undefined' ) {
                 return;
             }
+
             // Accommodate for "other" options
             f.inputName = parentField.attr('name').replace( '[other]', '' ).replace('[]', '');
 
@@ -198,10 +200,26 @@ function frmFrontFormJS(){
         } else {
             getRepeat = true;
             parentField = jQuery('input[name^="'+ f.inputName +'"], textarea[name^="'+ f.inputName +'"], select[name^="'+ f.inputName +'"]');
-            if ( parentField.length > 1 ) {
+            if ( parentField.length < 1 ) {
+				// logic triggered on page load for fields in repeating section
+				parentField = jQuery('.'+f.containerID+' input, .'+f.containerID+' textarea, .'+f.containerID+' select');
+				if ( parentField.length ) {
+					hideOrShowField(i, f, field_id, selected, rec, parentField);
+					return;
+				}
+			}
+
+			if ( parentField.length > 1 ) {
                 parentField = parentField.eq(0);
             }
         }
+
+		// check if only the dependent field is in a repeating section
+		var hideContainer = document.getElementById(f.hideContainerID);
+		if(hideContainer === null){
+			// it is a repeating section, use the class
+			f.hideBy = '.';
+		}
 
 		if ( f.FieldName != field_id || typeof selected == 'undefined' || selected == 'und' ) {
 			if ( (f.Type == 'radio' || f.Type == 'data-radio') && parentField.attr('type') == 'radio') {
@@ -277,7 +295,7 @@ function frmFrontFormJS(){
         } else if ( typeof f.LinkedField != 'undefined' && f.Type.indexOf('data-') === 0 ) {
 			if ( typeof(f.DataType) == 'undefined' || f.DataType === 'data' ) {
                 if ( selected === '' ) {
-                    hideAndClearField(f.hideContainerID);
+                    hideAndClearField(f.hideContainerID, f.hideBy);
     			} else if ( f.Type == 'data-radio' ) {
                     if ( typeof f.DataType == 'undefined' ) {
                         show_fields[f.HideField][i] = operators(f.Condition, f.Value, selected);
@@ -285,7 +303,7 @@ function frmFrontFormJS(){
                         show_fields[f.HideField][i] = {'funcName':'getData','f':f,'sel':selected};
                     }
                 } else if ( f.Type == 'data-checkbox' || ( f.Type == 'data-select' && jQuery.isArray(selected) ) ) {
-                    hideAndClearField(f.hideContainerID);
+                    hideAndClearField(f.hideContainerID, f.hideBy);
     				show_fields[f.HideField][i] = true;
     				getData(f, selected, 1);
                 } else if ( f.Type == 'data-select' ) {
@@ -307,8 +325,12 @@ function frmFrontFormJS(){
 		hideFieldNow(i, f, rec);
 	}
 
-    function hideAndClearField(hideContainer){
-        hideContainer = jQuery(document.getElementById(hideContainer));
+	function hideAndClearField(hideContainer, hideBy){
+		if(hideBy === '.'){
+			hideContainer = jQuery('.'+hideContainer);
+		}else{
+			hideContainer = jQuery(document.getElementById(hideContainer));
+		}
 		hideContainer.fadeOut('slow');
 		hideContainer.find('.frm_data_field_container').empty();
     }
@@ -318,7 +340,7 @@ function frmFrontFormJS(){
 			hide_later.push({
 				'result':show_fields[f.HideField][i], 'show':f.Show,
                 'match':f.MatchType, 'fname':f.FieldName, 'fkey':f.HideField,
-                'hideContainerID':f.hideContainerID
+				'hideContainerID':f.hideContainerID, 'hideBy':f.hideBy
 			});
 			return;
 		}
@@ -332,9 +354,20 @@ function frmFrontFormJS(){
 			display = '';
 		}
 
-		var hideMe = document.getElementById(f.hideContainerID);
-		if ( hideMe !== null ) {
-			hideMe.style.display = display;
+		if(f.hideBy === '.'){
+			var hideClass = jQuery('.'+f.hideContainerID);
+			if(hideClass.length){
+				if(display === 'none'){
+					hideClass.hide();
+				}else{
+					hideClass.show();
+				}
+			}
+		}else{
+			var hideMe = document.getElementById(f.hideContainerID);
+			if ( hideMe !== null ) {
+				hideMe.style.display = display;
+			}
 		}
 	}
 
@@ -344,9 +377,9 @@ function frmFrontFormJS(){
                 return;
             }
 
-            var container = document.getElementById(hvalue.hideContainerID);
+			var container = jQuery(hvalue.hideBy + hvalue.hideContainerID);
             var hideField = hvalue.show;
-            if ( container !== null ) {
+            if ( container.length ) {
                 if ( ( hvalue.match == 'any' && (jQuery.inArray(true, show_fields[hvalue.fkey]) == -1) ) ||
                     ( hvalue.match == 'all' && (jQuery.inArray(false, show_fields[hvalue.fkey]) > -1) ) ) {
                     if ( hvalue.show == 'show' ) {
@@ -357,10 +390,10 @@ function frmFrontFormJS(){
                 }
 
                 if ( hideField == 'show' ) {
-                    container.style.display = '';
+                    container.show();
                 } else {
-                    jQuery(container).filter(':hidden').hide();
-                    container.style.display = 'none';
+                    container.filter(':hidden').hide();
+                    container.hide();
                 }
 
                 if ( typeof hvalue.result !== false && typeof hvalue.result !== true ) {
@@ -1071,14 +1104,19 @@ function frmFrontFormJS(){
 
 		jQuery.ajax({
 			type:'POST',url:frm_js.ajax_url,
+			dataType: 'json',
 			data:{action:'frm_add_form_row', field_id:id, i:i, nonce:frm_js.nonce},
-			success:function(html){
+			success:function(r){
+				var html = r.html;
 				var item = jQuery(html).hide().fadeIn('slow');
 				jQuery('.frm_repeat_'+ id +':last').after(item);
 
                 var checked = ['other'];
                 var fieldID;
                 var reset = 'reset';
+
+				frmFrontForm.hideCondFields(JSON.stringify(r.logic.hide));
+
                 // hide fields with conditional logic
                 jQuery(html).find('input, select, textarea').each(function(){
 					if ( this.type != 'file' ) {
@@ -1090,6 +1128,17 @@ function frmFrontFormJS(){
 						}
 					}
                 });
+
+				// check logic on fields outside of this section
+				var checkLen = r.logic.check.length;
+				for ( var f = 0, l = checkLen; f < l; f++ ) {
+					if ( jQuery.inArray(r.logic.check[f], checked ) == -1 ) {
+						if(jQuery(html).find('.frm_field_'+r.logic.check[f]+'_container').length < 1){
+							checkDependentField('und', r.logic.check[f], null, null, reset);
+	                		reset = 'persist';
+						}
+					}
+				}
 
                 var star = jQuery(html).find('.star');
                 if ( star.length > 0 ) {
