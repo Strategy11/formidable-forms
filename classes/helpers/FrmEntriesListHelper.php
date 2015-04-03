@@ -29,14 +29,14 @@ class FrmEntriesListHelper extends FrmListHelper {
 	        $s_query = FrmProEntriesHelper::get_search_str( $s_query, $s, $form_id, $fid);
 	    }
 
-        $orderby = isset( $_REQUEST['orderby'] ) ? sanitize_text_field( $_REQUEST['orderby'] ) : $default_orderby;
+        $orderby = isset( $_REQUEST['orderby'] ) ? sanitize_title( $_REQUEST['orderby'] ) : $default_orderby;
         if ( strpos($orderby, 'meta') !== false ) {
             $order_field_type = FrmField::get_type( str_replace( 'meta_', '', $orderby ) );
             $orderby .= in_array( $order_field_type, array( 'number', 'scale') ) ? ' +0 ' : '';
         }
 
-		$order = isset( $_REQUEST['order'] ) ? $_REQUEST['order'] : $default_order;
-        $order = FrmAppHelper::esc_order( $orderby .' '. $order );
+		$order = isset( $_REQUEST['order'] ) ? sanitize_title( $_REQUEST['order'] ) : $default_order;
+		$order = ' ORDER BY ' . $orderby . ' ' . $order;
 
         $page = $this->get_pagenum();
 		$start = (int) isset( $_REQUEST['start'] ) ? absint( $_REQUEST['start'] ) : ( ( $page - 1 ) * $per_page );
