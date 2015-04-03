@@ -1869,6 +1869,15 @@ function frmAdminBuildJS(){
 			}
 			
 			setupSortable('ul.frm_sorting');
+
+			// Show message if section has no fields inside
+			var frm_sorting = document.getElementsByClassName('start_divider frm_sorting');
+			for ( i = 0; i < frm_sorting.length ; i++) {
+				if ( frm_sorting[i].children.length < 2 ) {
+					frm_sorting[i].parentNode.getElementsByClassName('frm_no_section_fields')[0].className = 'frm_no_section_fields frm_block';
+				}
+			}
+
 			jQuery('.field_type_list > li').draggable({
 				connectToSortable:'#new_fields',cursor:'move',
 				helper:'clone',revert:'invalid',delay:10,

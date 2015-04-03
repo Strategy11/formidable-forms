@@ -137,7 +137,8 @@ input.frm_insert_in_template{
     clear:both;
 }
 
-.frm_block{
+.frm_block,
+.frm_no_section_fields.frm_block{
     display:block;
 }
 
