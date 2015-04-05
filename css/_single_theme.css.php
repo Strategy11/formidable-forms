@@ -213,6 +213,9 @@ if ( ! isset($collapse_icon) ) {
 
 .<?php echo $style_class ?> .frm_scale label{
     font-weight:<?php echo $check_weight . $important ?>;
+    font-family:<?php echo stripslashes($font) . $important ?>;
+    font-size:<?php echo $check_font_size . $important ?>;
+    color:#<?php echo $check_label_color . $important ?>;
 }
 
 .<?php echo $style_class ?> .frm_required{

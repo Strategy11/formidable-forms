@@ -102,7 +102,6 @@ $defaults = $default_style->post_content;
 
 .with_frm_style .frm_scale input{
     display:block;
-    margin-bottom:5px;
 }
 
 .with_frm_style select[multiple="multiple"]{
