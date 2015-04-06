@@ -106,4 +106,24 @@
             <field_options><![CDATA[{"label":"none","blank":"","clear_on_focus":0,"default_blank":0}]]></field_options>
 		</field>
 	</form>
+	<view>
+		<title>Email Notification</title>
+		<link></link>
+		<post_author><![CDATA[admin]]></post_author>
+		<description></description>
+		<content><![CDATA[{"email_to":"[admin_email]","cc":"","bcc":"","reply_to":"","from":"[sitename] <[admin_email]>","email_subject":"","email_message":"[default-message]","event":["create"],"conditions":{"send_stop":"send","any_all":"any"}}]]></content>
+		<excerpt><![CDATA[email]]></excerpt>
+		<post_id>1</post_id>
+		<post_date>2015-04-06 17:18:12</post_date>
+		<post_date_gmt>2015-04-06 17:18:12</post_date_gmt>
+		<comment_status>open</comment_status>
+		<ping_status>open</ping_status>
+		<post_name>1_email_1</post_name>
+		<status>publish</status>
+		<post_parent>0</post_parent>
+		<menu_order>1</menu_order>
+		<post_type>frm_form_actions</post_type>
+		<post_password></post_password>
+		<is_sticky>0</is_sticky>
+	</view>
 </channel>
