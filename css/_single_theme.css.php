@@ -197,7 +197,23 @@ if ( ! isset($collapse_icon) ) {
 
 .<?php echo $style_class ?> .frm_left_container label.frm_primary_label{
     display:inline<?php echo $important ?>;
-    width:<?php echo $width ?>;
+	width:<?php echo $width . $important ?>;
+	max-width:29%<?php echo $important ?>;
+	margin-right:10px<?php echo $important ?>;
+}
+
+.<?php echo $style_class ?> .frm_form_field.frm_left_container input,
+.<?php echo $style_class ?> .frm_form_field.frm_left_container select,
+.<?php echo $style_class ?> .frm_form_field.frm_left_container textarea,
+.<?php echo $style_class ?> .frm_form_field.frm_right_container input,
+.<?php echo $style_class ?> .frm_form_field.frm_right_container select,
+.<?php echo $style_class ?> .frm_form_field.frm_right_container textarea{
+	max-width:68%<?php echo $important ?>;
+}
+
+.<?php echo $style_class ?> .frm_right_container label.frm_primary_label{
+	max-width:29%<?php echo $important ?>;
+	margin-left:10px<?php echo $important ?>;
 }
 
 .<?php echo $style_class ?> .frm_right_container label.frm_primary_label,
@@ -668,7 +684,6 @@ if ( ! $submit_style ) { ?>
 .<?php echo $style_class ?> .frm_form_field.frm_fourth,
 .<?php echo $style_class ?> .frm_form_field.frm_fifth,
 .<?php echo $style_class ?> .frm_form_field.frm_inline,
-
 .<?php echo $style_class ?> .frm_form_field.frm_left_half,
 .<?php echo $style_class ?> .frm_form_field.frm_left_third,
 .<?php echo $style_class ?> .frm_form_field.frm_left_two_thirds,

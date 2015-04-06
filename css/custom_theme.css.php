@@ -66,9 +66,7 @@ $defaults = $default_style->post_content;
 }
 
 .with_frm_style .frm_left_container label.frm_primary_label{
-    display:inline;
     float:left;
-    margin-right:10px;
 }
 
 .with_frm_style .frm_right_container label.frm_primary_label,
@@ -704,7 +702,7 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
     -webkit-box-sizing:border-box;
     -moz-box-sizing:border-box;
     box-sizing:border-box;
-    max-width:29%;
+    max-width:25%;
     margin-right:0;
     margin-left:0;
 }
@@ -723,15 +721,6 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
 .frm_form_field.frm_last_half.frm_right_container .frm_primary_label,
 .frm_form_field.frm_half.frm_right_container .frm_primary_label{
     padding-left:10px;
-}
-
-.frm_form_field.frm_left_container input,
-.frm_form_field.frm_left_container select,
-.frm_form_field.frm_left_container textarea,
-.frm_form_field.frm_right_container input,
-.frm_form_field.frm_right_container select,
-.frm_form_field.frm_right_container textarea{
-    max-width:70%;
 }
 
 .frm_form_field.frm_left_third,
