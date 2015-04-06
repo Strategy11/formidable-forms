@@ -1052,6 +1052,10 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
     margin-top:20px;
 }
 
+.with_frm_style .frm_repeat_inline{
+	clear:both;
+}
+
 .frm_form_field .frm_repeat_sec .frm_add_form_row{
     opacity:0;
 	*visibility:visible;
