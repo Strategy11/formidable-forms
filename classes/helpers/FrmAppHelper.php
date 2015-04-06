@@ -1023,6 +1023,8 @@ class FrmAppHelper {
         }
 
         $values['form_name'] = isset($record->form_id) ? $form->name : '';
+		$values['parent_form_id'] = isset( $record->form_id ) ? $form->parent_form_id : 0;
+
         if ( ! is_array($form->options) ) {
             return;
         }

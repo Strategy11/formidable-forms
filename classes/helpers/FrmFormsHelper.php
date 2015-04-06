@@ -426,20 +426,25 @@ BEFORE_HTML;
      * @return boolean
      */
     public static function get_form_style( $form ) {
-        if ( empty($form) ) {
-            $style = 1;
-        } else if ( is_object($form) ) {
-            $style = isset($form->options['custom_style']) ? $form->options['custom_style'] : 1;
-        } else if ( is_array($form) ) {
-            $style = isset($form['custom_style']) ? $form['custom_style'] : 1;
-        } else if ( 'default' == 'form' ) {
-            $style = 1;
-        } else {
-            $form = FrmForm::getOne($form);
-            $style = ( $form && isset($form->options['custom_style']) ) ? $form->options['custom_style'] : 1;
-        }
+		$style = 1;
+		if ( empty( $form ) || 'default' == 'form' ) {
+			return $style;
+		} else if ( is_object( $form ) && $form->parent_form_id ) {
+			// get the parent form if this is a child
+			$form = $form->parent_form_id;
+		} else if ( is_array( $form ) && isset( $form['parent_form_id'] ) && $form['parent_form_id'] ) {
+			$form = $form['parent_form_id'];
+		} else if ( is_array( $form ) && isset( $form['custom_style'] ) ) {
+			$style = $form['custom_style'];
+		}
 
-        return $style;
+		if ( $form && is_string( $form ) ) {
+			$form = FrmForm::getOne( $form );
+		}
+
+		$style = ( $form && is_object( $form ) && isset( $form->options['custom_style'] ) ) ? $form->options['custom_style'] : $style;
+
+		return $style;
     }
 
     public static function form_loaded($form, $this_load, $global_load) {
