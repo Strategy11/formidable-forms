@@ -42,7 +42,7 @@ class FrmFormActionsController {
             'wppost'    => 'FrmDefPostAction',
             'register'  => 'FrmDefRegAction',
             'paypal'    => 'FrmDefPayPalAction',
-            'aweber'    => 'FrmDefAweberAction',
+            //'aweber'    => 'FrmDefAweberAction',
             'mailchimp' => 'FrmDefMlcmpAction',
             'twilio'    => 'FrmDefTwilioAction',
             'highrise'  => 'FrmDefHrsAction',
