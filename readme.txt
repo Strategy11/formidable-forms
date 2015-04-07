@@ -14,7 +14,7 @@ Build WordPress forms the fast and simple way with a simple drag-and-drop interf
 [View Documentation](http://formidablepro.com/knowledgebase/ "View Documentation")
 
 = New Beta Features =
-Check out the [2.0 beta version](https://downloads.wordpress.org/plugin/formidable.2.0b7.zip "2.0 beta version") now that allows you to style your forms and view your collected submissions. Let us know if you run into any bugs!
+Check out the [2.0 beta version](https://downloads.wordpress.org/plugin/formidable.2.0b9.zip "2.0 beta version") now that allows you to style your forms and view your collected submissions. Let us know if you run into any bugs!
 
 = Features =
 * Create forms with 5 field types: text, paragraph text, radio, checkbox, and dropdown
@@ -129,32 +129,32 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * Pro: Escape all quotes in CSV
 * Pro: Don't require dynamic fields with no options
 * Pro: Remove stray div in the calendar view
-* Remove 'no files selected' text if files are selected
-* Add decimal option to calculations
-* Add starts with and ends with options in Views
-* Add IP option to view filters
-* Added entry ID to view order options
-* Added hooks: frm_selectable_dates, frm_main_feedback, frm_allowed_times, frm_view_order, frm_csv_headers, frm_map_csv_field
-* Allow min or max in the graph shortcode to be equal to 0
-* Keep users on current page when they click "Save Draft"
-* Add pending for post status options in the post settings
-* Include JS with form when editing in place
-* Fix displaying stats accuracy with partial stars
-* Enqueued scripts right before they are printed for easier integration with more popup plugins
-* Allow slashes in Phone Number Format option
-* Allow default templates to be deleted
-* Reduce the baseline memory load
-* Load the form styling on view pages when set to only load styling on applicable pages
-* Change deletelink so it deletes with ajax
-* Add [user_role] shortcode for current user's role 
-* Add read-only option to Dynamic fields
-* Add single row and multiple row options to Dynamic Radio and Checkbox fields
-* Allow arrays in View filters
-* Allow drafts to be searched with the frm-search form
-* Fix sql error when searching by Hebrew characters
-* Allow the use of field keys in the frm-stats shortcode
-* Force tooltip wrapping in graphs
-* Improve frm_total class for number fields
+* Pro: Remove 'no files selected' text if files are selected
+* Pro: Add decimal option to calculations
+* Pro: Add starts with, ends with, and group by options in View filters
+* Pro: Add IP option to view filters
+* Pro: Added entry ID to view order options
+* Pro: Added hooks: frm_selectable_dates, frm_main_feedback, frm_allowed_times, frm_view_order, frm_csv_headers, frm_map_csv_field
+* Pro: Allow min or max in the graph shortcode to be equal to 0
+* Pro: Keep users on current page when they click "Save Draft"
+* Pro: Add pending for post status options in the post settings
+* Pro: Include JS with form when editing in place
+* Pro: Fix displaying stats accuracy with partial stars
+* Pro: Enqueued scripts right before they are printed for easier integration with more popup plugins
+* Pro: Allow slashes in Phone Number Format option
+* Pro: Allow default templates to be deleted
+* Pro: Reduce the baseline memory load
+* Pro: Load the form styling on view pages when set to only load styling on applicable pages
+* Pro: Change deletelink so it deletes with ajax
+* Pro: Add [user_role] shortcode for current user's role 
+* Pro: Add read-only option to Dynamic fields
+* Pro: Add single row and multiple row options to Dynamic Radio and Checkbox fields
+* Pro: Allow arrays in View filters
+* Pro: Allow drafts to be searched with the frm-search form
+* Pro: Fix sql error when searching by Hebrew characters
+* Pro: Allow the use of field keys in the frm-stats shortcode
+* Pro: Force tooltip wrapping in graphs
+* Pro: Improve frm_total class for number fields
 * Lots of other small features, bug fixes, and code cleanup. Too many little features to list!
 
 = 1.07.12 =
