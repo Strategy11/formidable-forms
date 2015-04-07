@@ -368,10 +368,9 @@ table.form_results.with_frm_style tr.frm_odd,
 }
 
 .frm_toggle_container ul{
-    margin-left:0;
+	margin:5px 0;
     padding-left:0;
 	list-style-type:none;
-	margin-bottom:5px;
 }
 
 .frm_toggle_container .frm_month_heading{
