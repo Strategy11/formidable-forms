@@ -435,8 +435,8 @@ class FrmFormsController {
         $opts = array();
         switch( $shortcode ) {
             case 'formidable':
-                $form_id = 'id';
                 $opts = array(
+					'form_id'       => 'id',
                     //'key' => ',
                     'title'         => array( 'val' => 1, 'label' => __( 'Display form title', 'formidable' )),
                     'description'   => array( 'val' => 1, 'label' => __( 'Display form description', 'formidable' )),
@@ -445,6 +445,12 @@ class FrmFormsController {
             break;
         }
         $opts = apply_filters('frm_sc_popup_opts', $opts, $shortcode);
+
+		if ( isset( $opts['form_id'] ) && is_string( $opts['form_id'] ) ) {
+			// allow other shortcodes to use the required form id option
+			$form_id = $opts['form_id'];
+			unset( $opts['form_id'] );
+		}
 
         include(FrmAppHelper::plugin_path() .'/classes/views/frm-forms/shortcode_opts.php');
 
