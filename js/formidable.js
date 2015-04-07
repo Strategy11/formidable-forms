@@ -74,7 +74,8 @@ function frmFrontFormJS(){
             }
         }
         if ( select ) {
-            var otherField = this.parentNode.getElementsByClassName('frm_other_input');
+			var otherField = jQuery(this).parent().children('.frm_other_input');
+
             if ( other ) {
                 // Remove frm_pos_none
                 otherField[0].className = otherField[0].className.replace( 'frm_pos_none', '' );
