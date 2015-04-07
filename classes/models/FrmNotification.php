@@ -315,7 +315,7 @@ class FrmNotification{
         $message        = do_shortcode($atts['message']);
 
         if ( $atts['plain_text'] ) {
-            $message    = wordwrap($message, 70, "\r\n"); //in case any lines are longer than 70 chars
+            //$message    = wordwrap($message, 70, "\r\n"); //in case any lines are longer than 70 chars
             $message    = wp_specialchars_decode(strip_tags($message), ENT_QUOTES );
         } else {
 			// remove line breaks in HTML emails to prevent conflicts with Mandrill
