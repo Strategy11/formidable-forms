@@ -370,6 +370,16 @@ table.form_results.with_frm_style tr.frm_odd,
 .frm_toggle_container ul{
     margin-left:0;
     padding-left:0;
+	list-style-type:none;
+	margin-bottom:5px;
+}
+
+.frm_toggle_container .frm_month_heading{
+	text-indent:15px;
+}
+
+.frm_toggle_container .frm_month_listing{
+	margin-left:40px;
 }
 
 #frm_loading{
