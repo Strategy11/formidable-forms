@@ -102,10 +102,20 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * Move visual form styler to free version
 * Added multiple emails to free version
 * Added BCC, CC, and reply to options to emails
+* Replaced the reCaptcha with the new no-captcha recaptcha
 * Allow multiple roles to be selected for the permissions on the global settings page
 * Updated the UI
 * Added a trash can for forms as well as draft forms
+* Extra security with sanitizing output and prepare database queries extra just to be sure
+* Switch to frm_first frm_last frm_half classes for more flexibility
+* Added more responsiveness to the styling classes
 * Change the field width option from characters to pixels
+* Change the user browser info into a more easily readable format, and include it in the lite version
+* Add (hidden) legend tag for accessibility
+* Fix preview page with 2015 theme
+* Reduce duplicate entry check to 1 minute
+* Remove a bunch of upgrade messages in the lite version
+* Reduce size of indexed db columns for utf8mb4 in WordPress 4.2
 * Pro: Added multiple form styling templates, more styling options, and updated the default styling
 * Pro: Added repeatable fields and embedded forms
 * Pro: Created form actions and consolidated notifications and add-ons
@@ -114,7 +124,38 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * Pro: Added read-only radio and check box fields
 * Pro: View pagination will automatically take on Genesis theme styling
 * Pro: Entire sections can be moved and duplicated
-* Lots of other small features and bug fixes. Too many little features to list!
+* Pro: Add frm_repeat_start_rows filter to allow the form to start with multiple rows in a repeating section
+* Pro: Make the query work for custom code returning a string query on the frm_where_filter hook for reverse compatibility
+* Pro: Escape all quotes in CSV
+* Pro: Don't require dynamic fields with no options
+* Pro: Remove stray div in the calendar view
+* Remove 'no files selected' text if files are selected
+* Add decimal option to calculations
+* Add starts with and ends with options in Views
+* Add IP option to view filters
+* Added entry ID to view order options
+* Added hooks: frm_selectable_dates, frm_main_feedback, frm_allowed_times, frm_view_order, frm_csv_headers, frm_map_csv_field
+* Allow min or max in the graph shortcode to be equal to 0
+* Keep users on current page when they click "Save Draft"
+* Add pending for post status options in the post settings
+* Include JS with form when editing in place
+* Fix displaying stats accuracy with partial stars
+* Enqueued scripts right before they are printed for easier integration with more popup plugins
+* Allow slashes in Phone Number Format option
+* Allow default templates to be deleted
+* Reduce the baseline memory load
+* Load the form styling on view pages when set to only load styling on applicable pages
+* Change deletelink so it deletes with ajax
+* Add [user_role] shortcode for current user's role 
+* Add read-only option to Dynamic fields
+* Add single row and multiple row options to Dynamic Radio and Checkbox fields
+* Allow arrays in View filters
+* Allow drafts to be searched with the frm-search form
+* Fix sql error when searching by Hebrew characters
+* Allow the use of field keys in the frm-stats shortcode
+* Force tooltip wrapping in graphs
+* Improve frm_total class for number fields
+* Lots of other small features, bug fixes, and code cleanup. Too many little features to list!
 
 = 1.07.12 =
 * Add a bunch more caching
