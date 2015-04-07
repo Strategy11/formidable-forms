@@ -457,11 +457,6 @@ if ( ! $submit_style ) { ?>
     margin-bottom:<?php echo $submit_margin ?>;
 }
 
-.<?php echo $style_class ?>.frm_inline_form .frm_submit input[type=submit]{
-    margin-top:<?php echo ( str_replace( 'px', '', $font_size ) + 9 ) . 'px' . $important ?>;
-    margin-bottom:<?php echo ( str_replace( 'px', '', $font_size ) + 9 ) . 'px' . $important ?>;
-}
-
 .<?php echo $style_class ?> input[type=submit]:focus,
 .<?php echo $style_class ?> .frm_submit input[type=button]:focus,
 .<?php echo $style_class ?>.frm_login_form input[type=submit]:focus.
