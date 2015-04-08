@@ -78,8 +78,12 @@ class FrmEntry {
             FrmEntryMeta::update_entry_metas($entry_id, $values['item_meta']);
         }
 
-        do_action('frm_after_create_entry', $entry_id, $new_values['form_id']);
-        do_action('frm_after_create_entry_'. $new_values['form_id'], $entry_id);
+		// this is a child entry
+		$is_child = isset( $values['parent_form_id'] ) && isset( $values['parent_nonce'] ) && ! empty( $values['parent_form_id'] ) && wp_verify_nonce( $values['parent_nonce'], 'parent' );
+
+		do_action( 'frm_after_create_entry', $entry_id, $new_values['form_id'], compact( 'is_child' ) );
+		do_action( 'frm_after_create_entry_'. $new_values['form_id'], $entry_id , compact( 'is_child' ) );
+
         return $entry_id;
     }
 

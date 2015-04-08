@@ -59,7 +59,7 @@ class FrmHooksController {
 
         // Form Actions Controller
         add_action('init', 'FrmFormActionsController::register_post_types', 1);
-        add_action('frm_after_create_entry', 'FrmFormActionsController::trigger_create_actions', 20, 2);
+		add_action( 'frm_after_create_entry', 'FrmFormActionsController::trigger_create_actions', 20, 3 );
 
         // Forms Controller
         add_action('widgets_init', 'FrmFormsController::register_widgets' );

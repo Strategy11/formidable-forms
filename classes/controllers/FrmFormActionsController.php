@@ -220,14 +220,14 @@ class FrmFormActionsController {
         }
     }
 
-    public static function trigger_create_actions( $entry_id, $form_id ) {
-        self::trigger_actions( 'create', $form_id, $entry_id );
-    }
+	public static function trigger_create_actions( $entry_id, $form_id, $args = array() ) {
+		self::trigger_actions( 'create', $form_id, $entry_id, 'all', $args );
+	}
 
     /**
      * @param string $event
      */
-    public static function trigger_actions( $event, $form, $entry, $type = 'all' ) {
+	public static function trigger_actions( $event, $form, $entry, $type = 'all', $args = array() ) {
         $form_actions = FrmFormActionsHelper::get_action_for_form( ( is_object( $form ) ? $form->id : $form ), $type );
 
         if ( empty( $form_actions ) ) {
@@ -253,7 +253,9 @@ class FrmFormActionsController {
                 $entry = FrmEntry::getOne( $entry, true );
             }
 
-            if ( ! $form || ( is_numeric( $form->parent_form_id ) && $form->parent_form_id ) || ! $entry || $entry->form_id != $form->id ) {
+			$child_entry = ( ! $form || ( is_numeric( $form->parent_form_id ) && $form->parent_form_id ) || ! $entry || $entry->form_id != $form->id || $entry->parent_item_id || ( isset( $args['is_child'] ) && $args['is_child'] ) );
+
+			if ( $child_entry ) {
                 //don't trigger actions for sub forms
                 continue;
             }
