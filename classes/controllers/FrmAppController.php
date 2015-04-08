@@ -95,13 +95,21 @@ class FrmAppController {
         }
 
         if ( ! isset($_GET['activate']) ) {
-            $db_version = get_option( 'frm_db_version' );
+            $db_version = (int) get_option( 'frm_db_version' );
             $pro_db_version = FrmAppHelper::pro_is_installed() ? get_option( 'frmpro_db_version' ) : false;
-            if ( ( (int) $db_version < (int) FrmAppHelper::$db_version ) ||
-                ( FrmAppHelper::pro_is_installed() && (int) $pro_db_version < (int) FrmAppHelper::$pro_db_version ) ) {
+			$needs_update = ( ( $db_version < FrmAppHelper::$db_version ) || ( FrmAppHelper::pro_is_installed() && (int) $pro_db_version < FrmAppHelper::$pro_db_version ) );
+
+			if ( $needs_update ) {
                 FrmAppHelper::load_admin_wide_js();
+
+				$message = FrmAppHelper::kses( __( 'Your update is not complete yet.<br/>Please deactivate and reactivate the plugin to complete the update or %1$s', 'formidable' ), array( 'br' ) );
+				$message = sprintf( $message,  '<a href="#" id="frm_install_link">' . FrmAppHelper::kses( __( 'Update Now', 'formidable' ) ) . '</a>' );
+				if ( FrmAppHelper::$db_version >= 21 && $db_version > 1 && $db_version < 21 ) {
+					// if we are moving through #21, show the 2.0 message
+					$message .= '<br/> There are a few things you should know about 2.0. <a href="https://formidablepro.com/things-to-know-about-2-0/">Read more</a>';
+				}
             ?>
-<div class="error" id="frm_install_message"><?php echo wp_kses_post( sprintf( __( 'Your update is not complete yet.<br/>Please deactivate and reactivate the plugin to complete the update or %1$s', 'formidable' ), '<a href="#" id="frm_install_link">'. esc_html( __( 'Update Now', 'formidable' ) ) .'</a>') ); ?> </div>
+<div class="error" id="frm_install_message"><?php echo $message; ?> </div>
 <?php
             }
         }

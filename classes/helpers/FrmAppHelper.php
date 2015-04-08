@@ -4,7 +4,7 @@ if ( ! defined('ABSPATH') ) {
 }
 
 class FrmAppHelper {
-    public static $db_version = 20; //version of the database we are moving to
+    public static $db_version = 21; //version of the database we are moving to
     public static $pro_db_version = 27;
 
     /**
@@ -258,6 +258,28 @@ class FrmAppHelper {
             }
         }
     }
+
+	/**
+	 * Sanitize the value, and allow some HTML
+	 * @since 2.0
+	 */
+	public static function kses( $value, $allowed = array() ) {
+		$html = array(
+		    'a' => array(
+				'href'  => array(),
+				'title' => array(),
+				'id'    => array(),
+				'class' => array(),
+		    ),
+		);
+
+		$allowed_html = array();
+		foreach ( $allowed as $a ) {
+			$allowed_html[ $a ] = isset( $html[ $a ] ) ? $html[ $a ] : array();
+		}
+
+		return wp_kses( $value, $allowed_html );
+	}
 
     /**
      * Used when switching the action for a bulk action
