@@ -754,7 +754,10 @@ function frmFrontFormJS(){
 				}else if(typeof errObj != 'object'){
 					jQuery(object).find('.frm_ajax_loading').removeClass('frm_loading_now');
 					jump=jQuery(object).closest(document.getElementById('frm_form_'+jQuery(object).find('input[name="form_id"]').val()+'_container'));
-					newPos=jump.offset().top;
+					var offset = jump.offset();
+					if ( typeof offset !== 'undefined' ) {
+						newPos = offset.top;
+					}
 					jump.replaceWith(errObj);
 					cOff = document.documentElement.scrollTop || document.body.scrollTop;
 					if(newPos && newPos > frm_js.offset && cOff > newPos){
@@ -1151,6 +1154,10 @@ function frmFrontFormJS(){
 				if ( autocomplete.length > 0 && jQuery().chosen ) {
                     // trigger autocomplete
 					jQuery('.frm_chzn').chosen({allow_single_deselect:true});
+				}
+
+				if(typeof(frmThemeOverride_frmAddRow) == 'function'){
+					frmThemeOverride_frmAddRow(id, r);
 				}
 			}
 		});
