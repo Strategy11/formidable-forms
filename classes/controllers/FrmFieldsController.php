@@ -600,8 +600,8 @@ class FrmFieldsController {
 
         // convert to cols for textareas
         $calc = array(
-            ''      => 7.08,
-            'px'    => 7.08,
+            ''      => 9,
+            'px'    => 9,
             'rem'   => 0.444,
             'em'    => 0.544,
         );

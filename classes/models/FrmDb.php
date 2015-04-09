@@ -480,10 +480,11 @@ class FrmDb {
     }
 
     /**
-     * Change field size from character to pixel -- Multiply by 7.08
+     * Change field size from character to pixel -- Multiply by 9
      */
     private function migrate_to_17() {
         global $wpdb;
+		$pixel_conversion = 9;
 
         // Get query arguments
 		$field_types = array( 'textarea', 'text', 'number', 'email', 'url', 'rte', 'date', 'phone', 'password', 'image', 'tag', 'file' );
@@ -499,7 +500,7 @@ class FrmDb {
                 continue;
             }
 
-            $f->field_options['size'] = round(7.08 * (int) $f->field_options['size']);
+			$f->field_options['size'] = round( $pixel_conversion * (int) $f->field_options['size'] );
             $f->field_options['size'] .= 'px';
             $u = FrmField::update( $f->id, array( 'field_options' => $f->field_options ) );
             if ( $u ) {
@@ -519,7 +520,7 @@ class FrmDb {
             if ( ! is_array($widget) || ! isset($widget['size']) ) {
                 continue;
             }
-            $size = round(7.08 * (int) $widget['size']);
+			$size = round( $pixel_conversion * (int) $widget['size'] );
             $size .= 'px';
             $widgets[$k]['size'] = $size;
         }
