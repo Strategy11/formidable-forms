@@ -13,7 +13,7 @@
 .frm_38_trigger #toplevel_page_formidable .wp-menu-image:before,
 .frm_38_trigger .wp-media-buttons .add_media span.wp-media-buttons-icon.frm-buttons-icon:before {
 	font-family: 's11-fp' !important;
-	content: '\e638'; 
+	content: '\e601'; 
 	text-shadow: none;
 }
 .frm_inactive_menu{
@@ -46,7 +46,7 @@
 .frm_hidden, input.frm_hidden{display:none;}
 
 /* Admin Bar */
-#wpadminbar #wp-admin-bar-frm-forms > .ab-item:before{font-family:'s11-fp' !important;content:'\e638';top:2px;}
+#wpadminbar #wp-admin-bar-frm-forms > .ab-item:before{font-family:'s11-fp' !important;content:'\e601';top:2px;}
 
 /* Popup shortcode builder */
 #frm_insert_form_content{margin:20px;}
