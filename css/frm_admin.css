@@ -1352,7 +1352,7 @@ span.howto{display:inline;}
 .frm_sorting .no_repeat_section li.ui-state-default.edit_field_type_end_divider:hover{
 	border:1px solid transparent;
 	font-weight:normal;
-	background-color:transparent;
+	background-color:transparent !important;
 	background-image:none;
 	padding:5px;
 	margin:20px 0;
