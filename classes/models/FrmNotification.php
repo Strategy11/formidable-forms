@@ -255,8 +255,7 @@ class FrmNotification{
         }
 
         // Set up formatted value
-        $final_val = $part_1 . ' <'. $part_2 .'>';
-        $final_val = str_replace('"', '', $final_val);
+        $final_val = '"'. str_replace( '"', '', $part_1 ) . '" <'. $part_2 .'>';
 
         // If value is an array
         if ( false !== $key ) {
