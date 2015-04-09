@@ -1362,6 +1362,11 @@ span.howto{display:inline;}
 	border:1px solid #d1e5ee;
 }
 
+#new_fields li.frm_cancel_sort{
+	/* If a section gets dropped into a section, hide it */
+	display:none;
+}
+
 .divider_drop{
 	text-align:center;
 }
