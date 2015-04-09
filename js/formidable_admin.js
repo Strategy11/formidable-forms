@@ -222,6 +222,7 @@ function frmAdminBuildJS(){
 			forcePlaceholderSize:true,
 			receive:function(event,ui){
 				if ( cancelSort ) {
+					ui.item.addClass('frm_cancel_sort');
 					return;
 				}
 
