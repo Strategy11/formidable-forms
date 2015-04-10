@@ -567,6 +567,11 @@ class FrmDb {
         */
 
         foreach ( $forms as $form ) {
+			if ( $form->is_template && $form->default_template ) {
+				// don't migrate the default templates since the email will be added anyway
+				continue;
+			}
+
             // Format form options
             $form_options = maybe_unserialize($form->options);
 
