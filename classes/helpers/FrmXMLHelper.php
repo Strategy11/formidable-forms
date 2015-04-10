@@ -639,7 +639,13 @@ class FrmXMLHelper {
         $new_action['event'] = array( 'create', 'update');
 
         if ( $switch ) {
-            $new_action['post_content'] = self::switch_post_setting_field_ids( $new_action['post_content'] );
+			// Fields with string or int saved
+			$basic_fields = array( 'post_title', 'post_content', 'post_excerpt', 'post_password', 'post_date', 'post_status' );
+
+			// Fields with arrays saved
+			$array_fields = array( 'post_category', 'post_custom_fields' );
+
+			$new_action['post_content'] = self::switch_action_field_ids( $new_action['post_content'], $basic_fields, $array_fields );
         }
         $new_action['post_content'] = json_encode($new_action['post_content']);
 
@@ -659,19 +665,13 @@ class FrmXMLHelper {
         }
     }
 
-    private static function switch_post_setting_field_ids( $post_content ) {
+	private static function switch_action_field_ids( $post_content, $basic_fields, $array_fields = array() ) {
         global $frm_duplicate_ids;
 
         // If there aren't IDs that were switched, end now
         if ( ! $frm_duplicate_ids ) {
             return;
         }
-
-        // Fields with string or int saved
-        $basic_fields = array( 'post_title', 'post_content', 'post_excerpt', 'post_password', 'post_date', 'post_status' );
-
-        // Fields with arrays saved
-        $array_fields = array( 'post_category', 'post_custom_fields' );
 
         // Get old IDs
         $old = array_keys( $frm_duplicate_ids );
@@ -723,6 +723,18 @@ class FrmXMLHelper {
 
             // Switch field IDs and keys, if needed
             if ( $switch ) {
+
+				// Switch field IDs in conditional logic
+				if ( $new_notification['post_content']['conditions'] ) {
+					foreach ( $new_notification['post_content']['conditions'] as $email_key => $val ) {
+						if ( is_numeric( $email_key ) ) {
+							$new_notification['post_content']['conditions'][$email_key] = self::switch_action_field_ids( $val, array( 'hide_field' ) );
+						}
+						unset( $email_key, $val);
+					}
+				}
+
+				// Switch all other field IDs in email
                 $new_notification['post_content'] = FrmFieldsHelper::switch_field_ids( $new_notification['post_content'] );
             }
             $new_notification['post_content']   = FrmAppHelper::prepare_and_encode( $new_notification['post_content'] );
