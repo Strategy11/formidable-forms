@@ -665,6 +665,15 @@ class FrmXMLHelper {
         }
     }
 
+	/**
+	* Switch old field IDs for new field IDs in emails and post
+	*
+	* @since 2.0
+	* @param $post_content - string to check for old field IDs
+	* @param $basic_fields - array of fields with string or int saved
+	* @param $array_fields - array of fields with arrays saved
+	* @return $post_content - string with new field IDs
+	*/
 	private static function switch_action_field_ids( $post_content, $basic_fields, $array_fields = array() ) {
         global $frm_duplicate_ids;
 
@@ -724,15 +733,8 @@ class FrmXMLHelper {
             // Switch field IDs and keys, if needed
             if ( $switch ) {
 
-				// Switch field IDs in conditional logic
-				if ( $new_notification['post_content']['conditions'] ) {
-					foreach ( $new_notification['post_content']['conditions'] as $email_key => $val ) {
-						if ( is_numeric( $email_key ) ) {
-							$new_notification['post_content']['conditions'][$email_key] = self::switch_action_field_ids( $val, array( 'hide_field' ) );
-						}
-						unset( $email_key, $val);
-					}
-				}
+				// Switch field IDs in email conditional logic
+				self::switch_email_contition_field_ids( $new_notification['post_content'] );
 
 				// Switch all other field IDs in email
                 $new_notification['post_content'] = FrmFieldsHelper::switch_field_ids( $new_notification['post_content'] );
@@ -875,6 +877,23 @@ class FrmXMLHelper {
             $new_notification['post_content']['from'] = ( empty($atts['reply_to_name']) ? '[sitename]' : $atts['reply_to_name'] ) .' <'. ( empty($atts['reply_to']) ? '[admin_email]' : $atts['reply_to'] ) .'>';
         }
     }
+
+	/**
+	* Switch field IDs in pre-2.0 email conditional logic
+	*
+	* @param $post_content array, pass by reference
+	*/
+	private static function switch_email_contition_field_ids( &$post_content ){
+		// Switch field IDs in conditional logic
+		if ( isset( $post_content['conditions'] ) && is_array( $post_content['conditions'] ) ) {
+			foreach ( $post_content['conditions'] as $email_key => $val ) {
+				if ( is_numeric( $email_key ) ) {
+					$post_content['conditions'][$email_key] = self::switch_action_field_ids( $val, array( 'hide_field' ) );
+				}
+				unset( $email_key, $val);
+			}
+		}
+	}
 
     private static function migrate_autoresponder_to_action( $form_options, $form_id, &$notifications ) {
         if ( isset($form_options['auto_responder']) && $form_options['auto_responder'] && isset($form_options['ar_email_message']) && $form_options['ar_email_message'] ) {
