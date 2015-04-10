@@ -725,7 +725,7 @@ class FrmXMLHelper {
             if ( $switch ) {
 
 				// Switch field IDs in conditional logic
-				if ( $new_notification['post_content']['conditions'] ) {
+				if ( isset( $new_notification['post_content']['conditions'] ) && $new_notification['post_content']['conditions'] ) {
 					foreach ( $new_notification['post_content']['conditions'] as $email_key => $val ) {
 						if ( is_numeric( $email_key ) ) {
 							$new_notification['post_content']['conditions'][$email_key] = self::switch_action_field_ids( $val, array( 'hide_field' ) );
