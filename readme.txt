@@ -3,8 +3,8 @@ Contributors: sswells, srwells, jamie.wahlin
 Donate link: http://formidablepro.com/donate
 Tags: admin, AJAX, captcha, contact, contact form, database, email, feedback, form, forms, javascript, jquery, page, plugin, poll, Post, spam, survey, template, widget, wpmu, form builder
 Requires at least: 3.3.3
-Tested up to: 4.1
-Stable tag: 1.07.11
+Tested up to: 4.2
+Stable tag: 2.0
 
 Beautiful forms in 60 seconds. The WordPress form builder that enables you to create forms with a simple drag-and-drop interface and in-place editing.
 
@@ -13,32 +13,22 @@ Build WordPress forms the fast and simple way with a simple drag-and-drop interf
 
 [View Documentation](http://formidablepro.com/knowledgebase/ "View Documentation")
 
-= New Beta Features =
-Check out the [2.0 beta version](https://downloads.wordpress.org/plugin/formidable.2.0b9.zip "2.0 beta version") now that allows you to style your forms and view your collected submissions. Let us know if you run into any bugs!
-
 = Features =
-* Create forms with 5 field types: text, paragraph text, radio, checkbox, and dropdown
+* Create forms with 7 field types: text, email, url, paragraph text, radio, checkbox, and dropdown
 * Create forms from existing templates or add your own. A contact form template is included.
-* Send an email notification to one or more email addresses, defaulting to the admin email in your WordPress settings
-* Customize the HTML in your form for any layout you would like, or use our CSS classes to arrange your fields
-* Save all responses to your WordPress database (but without a UI to view them)
-* Integrate with reCAPTCHA and Akismet for Spam control
-* Use placeholder default values in form fields that clear when clicked
-* Direct links available for previews and emailing surveys with and without integration with your theme
-* Track the pages visited and include them in your email notifications
-* Change the name on the Formidable menu to anything you would like
-* Insert your forms on a page, post, or widget using a shortcode [formidable id=x]
-* Support for bugs. We want it to be perfect!
-
-= Version 2.0 Features =
-* Insert Email and URL fields in your forms
-* Integrate with the one-click reCaptcha
-* Send multiple emails, including an autoresponder to the form submitter
+* Send unlimited email notifications, including autoresponders to the form submitter
 * Create a single styling template using our visual form styler
 * View form submissions from the back-end
 * Import and export forms with XML
 * Send forms to the trash
 * Generate shortcodes with an advanced shortcode UI
+* Customize the HTML in your form for any layout you would like, or use our CSS classes to arrange your fields
+* Integrate with the one-click reCAPTCHA and Akismet for Spam control
+* Use placeholder default values in form fields that clear when clicked
+* Direct links available for previews and emailing surveys with and without integration with your theme
+* Change the name on the Formidable menu to anything you would like
+* Insert your forms on a page, post, or widget using a shortcode [formidable id=x]
+* Support for bugs. We want it to be perfect!
 
 = [Pro Features](http://formidablepro.com/ "Pro Features") =
 * Access even more field types: Section headings (repeatable in 2.0), page breaks, file upload, rich text, number, phone number, date, time, scale, dynamic fields populated from other forms, hidden field, user ID field, password, HTML, and tags
