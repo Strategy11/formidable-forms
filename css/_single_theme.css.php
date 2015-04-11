@@ -202,6 +202,10 @@ if ( ! isset($collapse_icon) ) {
 	margin-right:10px<?php echo $important ?>;
 }
 
+.<?php echo $style_class ?> .frm_left_container.frm_inline label.frm_primary_label{
+	max-width:90%<?php echo $important ?>;
+}
+
 .<?php echo $style_class ?> .frm_form_field.frm_left_container input,
 .<?php echo $style_class ?> .frm_form_field.frm_left_container select,
 .<?php echo $style_class ?> .frm_form_field.frm_left_container textarea,
