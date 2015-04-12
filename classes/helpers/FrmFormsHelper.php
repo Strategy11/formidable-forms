@@ -295,13 +295,13 @@ BEFORE_HTML;
             switch ( $field->type ) {
                 case 'divider':
                     // create an end section if open
-					self::maybe_create_end_section( $open, $reset_fields, $add_order, $end_section_values, $field );
+					self::maybe_create_end_section( $open, $reset_fields, $add_order, $end_section_values, $field, 'move' );
 
                     // mark it open for the next end section
                     $open = true;
                 break;
                 case 'break';
-					self::maybe_create_end_section( $open, $reset_fields, $add_order, $end_section_values, $field );
+					self::maybe_create_end_section( $open, $reset_fields, $add_order, $end_section_values, $field, 'move' );
                 break;
                 case 'end_divider':
                     if ( ! $open ) {
@@ -323,7 +323,7 @@ BEFORE_HTML;
 	 * Create end section field if it doesn't exist. This is for migration from < 2.0
 	 * Fix any ordering that may be messed up
 	 */
-	public static function maybe_create_end_section( &$open, &$reset_fields, &$add_order, $end_section_values, $field ) {
+	public static function maybe_create_end_section( &$open, &$reset_fields, &$add_order, $end_section_values, $field, $move = 'no' ) {
         if ( ! $open ) {
             return;
         }
@@ -332,11 +332,12 @@ BEFORE_HTML;
 
         FrmField::create( $end_section_values );
 
+		if ( $move == 'move' ) {
+			// bump the order of current field unless we're at the end of the form
+			FrmField::update( $field->id, array( 'field_order' => $field->field_order + 2 ) );
+		}
+
 		$add_order += 2;
-
-		// bump the order of current field
-		FrmField::update( $field->id, array( 'field_order' => $field->field_order + $add_order ) );
-
         $open = false;
         $reset_fields = true;
     }
