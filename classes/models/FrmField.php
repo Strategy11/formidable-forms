@@ -430,7 +430,6 @@ class FrmField{
 	 * @since 2.0.1
 	 */
 	private static function get_fields_from_transients( $form_id, $inc_sub = 'exclude' ) {
-		error_log('prepare get');
 		$fields = array();
 		self::get_next_transient( $fields, 'frm_form_fields_' . $form_id . $inc_sub );
 		return $fields;

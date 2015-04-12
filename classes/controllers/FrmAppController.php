@@ -94,26 +94,6 @@ class FrmAppController {
             return;
         }
 
-        if ( ! isset($_GET['activate']) ) {
-            $db_version = (int) get_option( 'frm_db_version' );
-            $pro_db_version = FrmAppHelper::pro_is_installed() ? get_option( 'frmpro_db_version' ) : false;
-			$needs_update = ( ( $db_version < FrmAppHelper::$db_version ) || ( FrmAppHelper::pro_is_installed() && (int) $pro_db_version < FrmAppHelper::$pro_db_version ) );
-
-			if ( $needs_update ) {
-                FrmAppHelper::load_admin_wide_js();
-
-				$message = FrmAppHelper::kses( __( 'Your update is not complete yet.<br/>Please deactivate and reactivate the plugin to complete the update or %1$s', 'formidable' ), array( 'br' ) );
-				$message = sprintf( $message,  '<a href="#" id="frm_install_link">' . FrmAppHelper::kses( __( 'Update Now', 'formidable' ) ) . '</a>' );
-				if ( FrmAppHelper::$db_version >= 21 && $db_version > 1 && $db_version < 21 ) {
-					// if we are moving through #21, show the 2.0 message
-					$message .= '<br/> There are a few things you should know about 2.0. <a href="https://formidablepro.com/things-to-know-about-2-0/">Read more</a>';
-				}
-            ?>
-<div class="error" id="frm_install_message"><?php echo $message; ?> </div>
-<?php
-            }
-        }
-
         global $frm_vars;
         if ( $frm_vars['pro_is_authorized'] && ! file_exists( FrmAppHelper::plugin_path() . '/pro/formidable-pro.php' ) ) {
             FrmAppHelper::load_admin_wide_js();
@@ -135,15 +115,36 @@ class FrmAppController {
         }
     }
 
-    public static function admin_js() {
-        global $pagenow;
+	/**
+	 * Check if the database is outdated
+	 *
+	 * @since 2.0.1
+	 * @return boolean
+	 */
+	public static function needs_update() {
+		$db_version = (int) get_option( 'frm_db_version' );
+		$pro_db_version = FrmAppHelper::pro_is_installed() ? get_option( 'frmpro_db_version' ) : false;
+		return ( ( $db_version < FrmAppHelper::$db_version ) || ( FrmAppHelper::pro_is_installed() && (int) $pro_db_version < FrmAppHelper::$pro_db_version ) );
+	}
+
+	/**
+	 * Check for database update and trigger js loading
+	 *
+	 * @since 2.0.1
+	 */
+	public static function admin_init() {
+		if ( ! FrmAppHelper::doing_ajax() && self::needs_update() ) {
+			self::network_upgrade_site();
+		}
 
 		$action = FrmAppHelper::simple_get( 'action', 'sanitize_title' );
-		if ( 'admin-ajax.php' == $pagenow && $action != 'frm_import_choices' ) {
-            return;
-        }
-		unset( $action );
+		if ( ! FrmAppHelper::doing_ajax() || $action == 'frm_import_choices' ) {
+			// don't continue during ajax calls
+			self::admin_js();
+		}
+	}
 
+    public static function admin_js() {
 		$version = FrmAppHelper::plugin_version();
 		FrmAppHelper::load_admin_wide_js( false );
 
@@ -161,6 +162,8 @@ class FrmAppController {
 
 		$page = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
 		$post_type = FrmAppHelper::simple_get( 'post_type', 'sanitize_title' );
+
+		global $pagenow;
 		if ( strpos( $page, 'formidable' ) === 0 || ( $pagenow == 'edit.php' && $post_type == 'frm_display' ) ) {
             add_filter( 'admin_body_class', 'FrmAppController::admin_body_class' );
 
@@ -376,6 +379,40 @@ class FrmAppController {
             wp_enqueue_script( 'formidable' );
         }
     }
+
+	/**
+	 * Run silent upgrade on each site in the network during a network upgrade.
+	 * Update database settings for all sites in a network during network upgrade process.
+	 *
+	 * @since 2.0.1
+	 *
+	 * @param int $blog_id Blog ID.
+	 */
+	public static function network_upgrade_site( $blog_id = 0 ) {
+		if ( $blog_id ) {
+			switch_to_blog( $blog_id );
+			$upgrade_url = admin_url( 'admin-ajax.php' );
+			restore_current_blog();
+		} else {
+			$upgrade_url = admin_url( 'admin-ajax.php' );
+		}
+
+		$upgrade_url = add_query_arg( array( 'action' => 'frm_silent_upgrade' ), $upgrade_url );
+		wp_remote_post( $upgrade_url );
+	}
+
+	/**
+	 * Silent database upgrade (no redirect).
+	 * Called via ajax request during network upgrade process.
+	 *
+	 * @since 2.0.1
+	 */
+	public static function ajax_install() {
+		if ( self::needs_update() ) {
+			self::install();
+		}
+		wp_die();
+	}
 
     public static function activation_install() {
         FrmAppHelper::delete_cache_and_transient( 'frm_plugin_version' );

@@ -84,7 +84,7 @@ class FrmHooksController {
         add_action('admin_enqueue_scripts', 'FrmAppController::load_wp_admin_style' );
         add_filter('update_plugin_complete_actions', 'FrmAppController::update_action_links', 10, 2 );
         add_action('admin_notices', 'FrmAppController::pro_get_started_headline' );
-        add_action('admin_init', 'FrmAppController::admin_js', 11);
+		add_action( 'admin_init', 'FrmAppController::admin_init', 11 );
         register_activation_hook(FrmAppHelper::plugin_path().'/formidable.php', 'FrmAppController::activation_install' );
 
         // Entries Controller
@@ -132,6 +132,8 @@ class FrmHooksController {
     }
 
 	public static function load_ajax_hooks() {
+		add_action( 'wp_ajax_frm_silent_upgrade', 'FrmAppController::ajax_install' );
+		add_action( 'wp_ajax_nopriv_frm_silent_upgrade', 'FrmAppController::ajax_install' );
         add_action('wp_ajax_frm_install', 'FrmAppController::install' );
         add_action('wp_ajax_frm_uninstall', 'FrmAppController::uninstall' );
         add_action('wp_ajax_frm_deauthorize', 'FrmAppController::deauthorize' );
@@ -194,6 +196,8 @@ class FrmHooksController {
     }
 
 	public static function load_multisite_hooks() {
+		add_action( 'wpmu_upgrade_site', 'FrmAppController::network_upgrade_site' );
+
         // drop tables when mu site is deleted
         add_filter( 'wpmu_drop_tables', 'FrmAppController::drop_tables' );
     }
