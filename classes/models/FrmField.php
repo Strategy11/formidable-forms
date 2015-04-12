@@ -5,6 +5,7 @@ if ( ! defined('ABSPATH') ) {
 
 class FrmField{
     static $use_cache = true;
+	static $transient_size = 200;
 
     public static function create( $values, $return = true ) {
         global $wpdb, $frm_duplicate_ids;
@@ -164,6 +165,9 @@ class FrmField{
 		delete_transient( 'frm_form_fields_'. $form_id .'exclude' );
 		delete_transient( 'frm_form_fields_'. $form_id .'include' );
 
+		global $wpdb;
+		$wpdb->query( $wpdb->prepare( 'DELETE FROM '. $wpdb->options .' WHERE option_name LIKE %s OR option_name LIKE %s OR option_name LIKE %s OR option_name LIKE %s', '_transient_timeout_frm_form_fields_' . $form_id .'ex%', '_transient_frm_form_fields_' . $form_id .'ex%', '_transient_timeout_frm_form_fields_' . $form_id .'in%', '_transient_frm_form_fields_' . $form_id .'in%' ) );
+
 		$cache_key = serialize( array( 'fi.form_id' => $form_id ) ) . 'field_orderlb';
         wp_cache_delete($cache_key, 'frm_field');
 
@@ -223,8 +227,8 @@ class FrmField{
             return array();
         }
 
-		$results = get_transient( 'frm_form_fields_' . $form_id . $inc_sub );
-        if ( $results !== false ) {
+		$results = self::get_fields_from_transients( $form_id, $inc_sub );
+		if ( ! empty( $results ) ) {
             $fields = array();
             $count = 0;
             foreach ( $results as $result ) {
@@ -261,8 +265,8 @@ class FrmField{
             return array();
         }
 
-		$results = get_transient( 'frm_form_fields_' . $form_id . $inc_sub );
-        if ( $results !== false ) {
+		$results = self::get_fields_from_transients( $form_id, $inc_sub );
+		if ( ! empty( $results ) ) {
             if ( empty($limit) ) {
                 return stripslashes_deep($results);
             }
@@ -288,7 +292,7 @@ class FrmField{
 		self::include_sub_fields( $results, $inc_sub, 'all' );
 
         if ( empty($limit) ) {
-			set_transient( 'frm_form_fields_' . $form_id . $inc_sub, $results, 60 * 60 * 6 );
+			self::set_field_transient( $results, $form_id, $inc_sub );
         }
 
         return $results;
@@ -418,6 +422,52 @@ class FrmField{
 
 		$results->options = maybe_unserialize($results->options);
 		$results->default_value = maybe_unserialize($results->default_value);
+	}
+
+	/**
+	 * If a form has too many fields, thay won't all save into a single transient.
+	 * We'll break them into groups of 200
+	 * @since 2.0.1
+	 */
+	private static function get_fields_from_transients( $form_id, $inc_sub = 'exclude' ) {
+		error_log('prepare get');
+		$fields = array();
+		self::get_next_transient( $fields, 'frm_form_fields_' . $form_id . $inc_sub );
+		return $fields;
+	}
+
+	/**
+	 * Called by get_fields_from_transients
+	 * @since 2.0.1
+	 */
+	private static function get_next_transient( &$fields, $base_name, $next = 0 ) {
+		$name = $next ? $base_name . $next : $base_name;
+		$next_fields = get_transient( $name );
+
+		if ( $next_fields ) {
+			$fields = array_merge( $fields, $next_fields );
+
+			if ( count( $next_fields ) == self::$transient_size ) {
+				// if this transient is full, check for another
+				$next++;
+				self::get_next_transient( $fields, $base_name, $next );
+			}
+		}
+	}
+
+	/**
+	 * Save the transients in chunks for large forms
+	 * @since 2.0.1
+	 */
+	private static function set_field_transient( &$fields, $form_id, $inc_sub, $next = 0 ) {
+		$base_name = 'frm_form_fields_' . $form_id . $inc_sub;
+		$field_chunks = array_chunk( $fields, self::$transient_size );
+
+		foreach ( $field_chunks as $field ) {
+			$name = $next ? $base_name . $next : $base_name;
+			set_transient( $name, $field, 60 * 60 * 6 );
+			$next++;
+		}
 	}
 
     public static function getIds($where = '', $order_by = '', $limit = ''){
