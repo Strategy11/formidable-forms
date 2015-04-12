@@ -475,6 +475,14 @@ class FrmDb {
 		}
 		unset( $post_ids );
 
+		// delete transients
+		delete_transient( 'frmpro_css' );
+		delete_transient( 'frm_options' );
+		delete_transient( 'frmpro_options' );
+
+		$query = 'DELETE FROM '. $wpdb->options .' WHERE option_name LIKE "_transient_timeout_frm_form_fields_%" OR option_name LIKE "_transient_frm_form_fields_%"';
+		$wpdb->query( $query );
+
         do_action('frm_after_uninstall');
         return true;
     }

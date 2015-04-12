@@ -300,9 +300,13 @@ class FrmEntry {
 
         $entry->metas = array();
 
+		$include_key = apply_filters( 'frm_include_meta_keys', false );
         foreach ( $metas as $meta_val ) {
             if ( $meta_val->item_id == $entry->id ) {
                 $entry->metas[$meta_val->field_id] = maybe_unserialize($meta_val->meta_value);
+				if ( $include_key ) {
+					$entry->metas[ $meta_val->field_key ] = $entry->metas[ $meta_val->field_id ];
+				}
                  continue;
             }
 

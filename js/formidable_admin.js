@@ -372,7 +372,7 @@ function frmAdminBuildJS(){
 
 		jQuery.ajax({
 			type:'POST',url:ajaxurl,
-			data:{action:'frm_load_field', field:h, nonce:frmGlobal.nonce},
+			data:{action:'frm_load_field', field:h, form_id:this_form_id, nonce:frmGlobal.nonce},
 			success:function(html){
 				html = html.replace(/^\s+|\s+$/g,'');
 				if(html.indexOf('{') !== 0){

@@ -14,7 +14,7 @@ class FrmFieldsController {
         $fields = stripslashes_deep( $fields );
 
         $ajax = true;
-        $values = array();
+		$values = array( 'id' => FrmAppHelper::get_post_param( 'form_id', '', 'absint' ) );
         $path = FrmAppHelper::plugin_path();
         $field_html = array();
 
