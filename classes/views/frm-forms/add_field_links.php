@@ -16,7 +16,7 @@ include(FrmAppHelper::plugin_path() .'/classes/views/frm-forms/_publish_box.php'
     <div id="taxonomy-linkcategory" class="categorydiv">
         <ul id="category-tabs" class="category-tabs frm-category-tabs">
     		<li class="tabs" ><a href="#frm-insert-fields" id="frm_insert_fields_tab"><?php _e( 'Fields', 'formidable' ); ?></a></li>
-    		<li class="hide-if-no-js"><a href="#frm-layout-classes" id="frm_layout_classes_tab" class="frm_help" title="<?php esc_attr_e( 'Open the Field Options and click on the CSS Layout Classes option to enable this tab') ?>"><?php _e( 'Layout', 'formidable' ); ?></a></li>
+    		<li class="hide-if-no-js"><a href="#frm-layout-classes" id="frm_layout_classes_tab" class="frm_help" title="<?php esc_attr_e( 'Open the Field Options and click on the CSS Layout Classes option to enable this tab', 'formidable' ) ?>"><?php _e( 'Layout', 'formidable' ); ?></a></li>
 <?php do_action('frm_extra_form_instruction_tabs'); ?>
     	</ul>
 

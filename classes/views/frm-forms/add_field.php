@@ -59,7 +59,7 @@ if ( $field['type'] == 'divider' ) { ?>
     <?php }
 
     ?>
-    <label class="<?php echo ( $field['type'] == 'end_divider' ) ? '' : 'frm_ipe_field_label'; ?> frm_primary_label <?php echo ($field['type'] == 'break') ? 'button': ''; ?>" id="field_label_<?php echo esc_attr( $field['id'] ); ?>"><?php echo ($field['name'] == '') ? __( '(no label)') : force_balance_tags($field['name']); ?></label>
+    <label class="<?php echo ( $field['type'] == 'end_divider' ) ? '' : 'frm_ipe_field_label'; ?> frm_primary_label <?php echo ( $field['type'] == 'break' ) ? 'button': ''; ?>" id="field_label_<?php echo esc_attr( $field['id'] ); ?>"><?php echo ( $field['name'] == '' ) ? __( '(no label)', 'formidable' ) : force_balance_tags( $field['name'] ); ?></label>
 
 
 <div id="field_<?php echo esc_attr( $field['id'] ) ?>_inner_container" class="frm_inner_field_container">

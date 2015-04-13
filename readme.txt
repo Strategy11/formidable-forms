@@ -12,6 +12,7 @@ Beautiful forms in 60 seconds. The WordPress form builder that enables you to cr
 Build WordPress forms the fast and simple way with a simple drag-and-drop interface (and a visual form styler in version 2.0). Create custom Formidable forms or generate them from a template.
 
 [View Documentation](http://formidablepro.com/knowledgebase/ "View Documentation")
+[Contribute on Github](https://github.com/Strategy11/formidable-forms "Contribute on Github")
 
 = Features =
 * Create forms with 7 field types: text, email, url, paragraph text, radio, checkbox, and dropdown
@@ -30,7 +31,7 @@ Build WordPress forms the fast and simple way with a simple drag-and-drop interf
 * Insert your forms on a page, post, or widget using a shortcode [formidable id=x]
 * Support for bugs. We want it to be perfect!
 
-= [Pro Features](http://formidablepro.com/ "Pro Features") =
+= Pro Features =
 * Access even more field types: Section headings (repeatable in 2.0), page breaks, file upload, rich text, number, phone number, date, time, scale, dynamic fields populated from other forms, hidden field, user ID field, password, HTML, and tags
 * Conditionally send your email notifications based on values in your form
 * Create multiple styling templates and assign them to any of your forms, and add instant Bootstrap styling
