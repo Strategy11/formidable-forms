@@ -442,7 +442,7 @@ class FrmAppHelper {
     }
 
     public static function get_pages() {
-		return get_posts( array( 'post_type' => 'page', 'post_status' => array( 'publish', 'private' ), 'numberposts' => 999, 'orderby' => 'title', 'order' => 'ASC' ) );
+		return get_posts( array( 'post_type' => 'page', 'post_status' => array( 'publish', 'private' ), 'numberposts' => -1, 'orderby' => 'title', 'order' => 'ASC' ) );
     }
 
     public static function wp_pages_dropdown( $field_name, $page_id, $truncate = false ) {
