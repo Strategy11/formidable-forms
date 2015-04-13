@@ -69,9 +69,9 @@ class FrmNotification{
         }
 
         //Put recipients, cc, and bcc into an array if they aren't empty
-		$to_emails = ( ! empty( $notification['email_to'] ) ? preg_split( '/(,|;)/', $notification['email_to'] ) : '' );
-		$cc = self::explode_cc( $notification['cc'] );
-		$bcc = self::explode_cc( $notification['bcc'] );
+		$to_emails = self::explode_emails( $notification['email_to'] );
+		$cc = self::explode_emails( $notification['cc'] );
+		$bcc = self::explode_emails( $notification['bcc'] );
 
         $to_emails = apply_filters('frm_to_email', $to_emails, array(), $form->id, compact('email_key', 'entry', 'form'));
 
@@ -107,7 +107,6 @@ class FrmNotification{
 
         // check for a phone number
         foreach ( (array) $to_emails as $email_key => $e ) {
-            $e = trim($e);
             if ( $e != '[admin_email]' && ! is_email($e) ) {
                 $e = explode(' ', $e);
 
@@ -165,11 +164,17 @@ class FrmNotification{
 
 	/**
 	 * Extract the emails from cc and bcc. Allow separation by , or ;.
+	 * Trim the emails here as well
 	 *
 	 * @since 2.0.1
 	 */
-	private static function explode_cc( $emails ) {
+	private static function explode_emails( $emails ) {
 		$emails = ( ! empty( $emails ) ? preg_split( '/(,|;)/', $emails ) : '' );
+		if ( is_array( $emails ) ) {
+			$emails = array_map( 'trim', $emails );
+		} else {
+			$emails = trim( $emails );
+		}
 		return $emails;
 	}
 
