@@ -97,8 +97,11 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * Added frm_include_meta_keys hook for including the previously included meta values referenced by field key
 * Delete transients with uninstall
 * Make sure the legend stays hidden after opening form in a popup
-* PRO: Fixed issue with losing conditional logic on fields loaded with ajax on the form builder page
-* PRO: Fixed the auto field reordering when adding end sections to old forms
+* Pro: Fixed issue with losing conditional logic on fields loaded with ajax on the form builder page
+* Pro: Fixed the auto field reordering when adding end sections to old forms
+* Pro: Fixed the daily entries graph on the reports page
+* Pro: Allow the post author to be overridden with hooks
+* Pro: Fixed the [get-param] shortcode for reverse compatability
 
 = 2.0 =
 * Move visual form styler to free version
@@ -118,6 +121,7 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * Reduce duplicate entry check to 1 minute
 * Remove a bunch of upgrade messages in the lite version
 * Reduce size of indexed db columns for utf8mb4 in WordPress 4.2
+* Fixed a SQL vulnerability. Thanks @KacperSzurek for finding it!
 * Pro: Added multiple form styling templates, more styling options, and updated the default styling
 * Pro: Added repeatable fields and embedded forms
 * Pro: Created form actions and consolidated notifications and add-ons
