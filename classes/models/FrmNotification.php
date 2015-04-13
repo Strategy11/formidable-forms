@@ -70,8 +70,8 @@ class FrmNotification{
 
         //Put recipients, cc, and bcc into an array if they aren't empty
 		$to_emails = ( ! empty( $notification['email_to'] ) ? preg_split( '/(,|;)/', $notification['email_to'] ) : '' );
-		$cc = ( ! empty( $notification['cc'] ) ? preg_split( '/(,|;)/', $notification['cc'] ) : '' );
-		$bcc = ( ! empty( $notification['bcc'] ) ? preg_split( '/(,|;)/', $notification['bcc'] ) : '' );
+		$cc = self::explode_cc( $notification['cc'] );
+		$bcc = self::explode_cc( $notification['bcc'] );
 
         $to_emails = apply_filters('frm_to_email', $to_emails, array(), $form->id, compact('email_key', 'entry', 'form'));
 
@@ -162,6 +162,16 @@ class FrmNotification{
             'attachments', 'reply_to'
         ));
     }
+
+	/**
+	 * Extract the emails from cc and bcc. Allow separation by , or ;.
+	 *
+	 * @since 2.0.1
+	 */
+	private static function explode_cc( $emails ) {
+		$emails = ( ! empty( $emails ) ? preg_split( '/(,|;)/', $emails ) : '' );
+		return $emails;
+	}
 
     /**
     * Put To, BCC, CC, Reply To, and From fields in Name <test@mail.com> format
@@ -290,19 +300,22 @@ class FrmNotification{
 
         //Allow for cc and bcc arrays
         $array_fields = array( 'CC' => $atts['cc'], 'BCC' => $atts['bcc']);
+		$cc = array( 'CC' => array(), 'BCC' => array() );
         foreach ( $array_fields as $key => $a_field ) {
             if ( empty($a_field) ) {
                 continue;
             }
-            if ( is_array($a_field ) ) {
-                foreach ( $a_field as $email ) {
-                    $header[] = $key . ': ' . $email;
-                }
-            } else {
-                $header[] = $key . ': ' . $a_field;
+
+			foreach ( (array) $a_field as $email ) {
+				$cc[ $key ][] = $email;
             }
             unset($key, $a_field);
         }
+		$cc = array_filter( $cc ); // remove cc and bcc if they are empty
+
+		foreach ( $cc as $k => $v ) {
+			$header[] = $k . ': '. implode( ',', $v );
+		}
 
         $content_type   = $atts['plain_text'] ? 'text/plain' : 'text/html';
         $charset        = get_option('blog_charset');
