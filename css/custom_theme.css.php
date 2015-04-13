@@ -22,6 +22,10 @@ $defaults = $default_style->post_content;
     display:none;
 }
 
+legend.frm_hidden{
+    display:none !important;
+}
+
 .frm_transparent{
 	color:transparent;
 }
