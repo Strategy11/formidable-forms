@@ -92,6 +92,7 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 = 2.0.01 =
 * Break transients into chunks for large forms ( > 200 fields )
 * Remove the upgrade link and perform the upgrade automatically
+* Allow upgrades to be done automatically in WordPress multisite with the 'Upgrade Network' option
 * Updated translations
 * Only add one line in the email headers for cc and bcc
 * Added frm_include_meta_keys hook for including the previously included meta values referenced by field key
@@ -101,7 +102,7 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * Pro: Fixed the auto field reordering when adding end sections to old forms
 * Pro: Fixed the daily entries graph on the reports page
 * Pro: Allow the post author to be overridden with hooks
-* Pro: Fixed the [get-param] shortcode for reverse compatability
+* Pro: Fixed the [get-param] shortcode for reverse compatibility
 
 = 2.0 =
 * Move visual form styler to free version
