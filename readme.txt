@@ -89,6 +89,17 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 [See more FAQs](http://formidablepro.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 2.0.01 =
+* Break transients into chunks for large forms ( > 200 fields )
+* Remove the upgrade link and perform the upgrade automatically
+* Updated translations
+* Only add one line in the email headers for cc and bcc
+* Added frm_include_meta_keys hook for including the previously included meta values referenced by field key
+* Delete transients with uninstall
+* Make sure the legend stays hidden after opening form in a popup
+* PRO: Fixed issue with losing conditional logic on fields loaded with ajax on the form builder page
+* PRO: Fixed the auto field reordering when adding end sections to old forms
+
 = 2.0 =
 * Move visual form styler to free version
 * Added multiple emails to free version
