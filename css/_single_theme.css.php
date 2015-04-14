@@ -171,6 +171,7 @@ if ( ! isset($collapse_icon) ) {
 .<?php echo $style_class ?> .frm_left_container div.frm_description,
 .<?php echo $style_class ?> .frm_left_container .frm_error{
     margin-left:<?php echo $label_margin ?>px;
+	max-width:62%<?php echo $important ?>;
 }
 
 .<?php echo $style_class ?> .form-field.frm_col_field div.frm_description{
@@ -188,6 +189,7 @@ if ( ! isset($collapse_icon) ) {
 .<?php echo $style_class ?> .frm_right_container div.frm_description,
 .<?php echo $style_class ?> .frm_right_container .frm_error{
     margin-right:<?php echo $label_margin ?>px<?php echo $important ?>;
+	max-width:62%<?php echo $important ?>;
 }
 
 .<?php echo $style_class ?> .frm_inline_container label.frm_primary_label,
@@ -198,7 +200,7 @@ if ( ! isset($collapse_icon) ) {
 .<?php echo $style_class ?> .frm_left_container label.frm_primary_label{
     display:inline<?php echo $important ?>;
 	width:<?php echo $width . $important ?>;
-	max-width:25%<?php echo $important ?>;
+	max-width:33%<?php echo $important ?>;
 	margin-right:10px<?php echo $important ?>;
 }
 
@@ -209,10 +211,24 @@ if ( ! isset($collapse_icon) ) {
 .<?php echo $style_class ?> .frm_form_field.frm_left_container input,
 .<?php echo $style_class ?> .frm_form_field.frm_left_container select,
 .<?php echo $style_class ?> .frm_form_field.frm_left_container textarea,
+.<?php echo $style_class ?> .frm_form_field.frm_left_container .frm_opt_container,
 .<?php echo $style_class ?> .frm_form_field.frm_right_container input,
 .<?php echo $style_class ?> .frm_form_field.frm_right_container select,
-.<?php echo $style_class ?> .frm_form_field.frm_right_container textarea{
-	max-width:68%<?php echo $important ?>;
+.<?php echo $style_class ?> .frm_form_field.frm_right_container textarea,
+.<?php echo $style_class ?> .frm_form_field.frm_right_container .frm_opt_container{
+	max-width:62%<?php echo $important ?>;
+}
+
+.<?php echo $style_class ?> .frm_form_field.frm_left_container .frm_opt_container,
+.<?php echo $style_class ?> .frm_form_field.frm_right_container .frm_opt_container{
+	display:inline-block<?php echo $important ?>;
+}
+
+.<?php echo $style_class ?> .frm_form_field.frm_left_container input[type=checkbox],
+.<?php echo $style_class ?> .frm_form_field.frm_left_container input[type=radio],
+.<?php echo $style_class ?> .frm_form_field.frm_right_container input[type=checkbox],
+.<?php echo $style_class ?> .frm_form_field.frm_right_container input[type=radio]{
+	max-width:100%<?php echo $important ?>;
 }
 
 .<?php echo $style_class ?> .frm_right_container label.frm_primary_label{
@@ -494,28 +510,12 @@ if ( ! $submit_style ) { ?>
     display:<?php echo $radio_align . $important ?>;
 }
 
-.<?php echo $style_class ?> .frm_left_container .frm_radio{
-    margin<?php echo ($radio_align == 'block' ? "-left:{$label_margin}px;" : ':0') . $important; ?>
-}
-
-.<?php echo $style_class ?> .frm_right_container .frm_radio{
-    margin<?php echo ($radio_align == 'block' ? "-right:{$label_margin}px;" : ':0') . $important; ?>
-}
-
 .<?php echo $style_class ?> .horizontal_radio .frm_radio{
     margin:0 5px 0 0<?php echo $important ?>;
 }
 
 .<?php echo $style_class ?> .frm_checkbox{
     display:<?php echo $check_align . $important ?>;
-}
-
-.<?php echo $style_class ?> .frm_left_container .frm_checkbox{
-    margin<?php echo ($check_align == 'block') ? "-left:{$label_margin}px;" : ':0'; ?>
-}
-
-.<?php echo $style_class ?> .frm_right_container .frm_checkbox{
-    margin<?php echo ($check_align == 'block') ? "-right:{$label_margin}px;" : ':0'; ?>
 }
 
 .<?php echo $style_class ?> .horizontal_radio .frm_checkbox,

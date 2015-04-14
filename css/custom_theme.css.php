@@ -715,7 +715,7 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
     -webkit-box-sizing:border-box;
     -moz-box-sizing:border-box;
     box-sizing:border-box;
-    max-width:25%;
+    max-width:33%;
     margin-right:0;
     margin-left:0;
 }
@@ -1724,6 +1724,22 @@ html[xmlns] .frm_clearfix{
         float: none;
         display:block;
     }
+
+	.frm_right_container p.description,
+	.frm_right_container div.description,
+	.frm_right_container div.frm_description,
+	.frm_right_container .frm_error{
+		margin-right:33% !important;
+		padding-right:12px !important;
+	}
+
+	.frm_left_container p.description,
+	.frm_left_container div.description,
+	.frm_left_container div.frm_description,
+	.frm_left_container .frm_error{
+		margin-left:33% !important;
+		padding-left:12px !important;
+	}
 }
 <?php
 echo $defaults['custom_css'];
