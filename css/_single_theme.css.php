@@ -232,7 +232,7 @@ if ( ! isset($collapse_icon) ) {
 }
 
 .<?php echo $style_class ?> .frm_right_container label.frm_primary_label{
-	max-width:25%<?php echo $important ?>;
+	max-width:33%<?php echo $important ?>;
 	margin-left:10px<?php echo $important ?>;
 }
 

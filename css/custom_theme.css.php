@@ -736,6 +736,30 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
     padding-left:10px;
 }
 
+.with_frm_style .frm_form_field.frm_first_half.frm_right_container div.frm_description,
+.with_frm_style .frm_form_field.frm_first_half.frm_right_container .frm_error,
+.with_frm_style .frm_form_field.frm_first_half .frm_right_container div.frm_description,
+.with_frm_style .frm_form_field.frm_first_half .frm_right_container .frm_error,
+.with_frm_style .frm_form_field.frm_last_half.frm_right_container div.frm_description,
+.with_frm_style .frm_form_field.frm_last_half.frm_right_container .frm_error,
+.with_frm_style .frm_form_field.frm_half.frm_right_container div.frm_description,
+.with_frm_style .frm_form_field.frm_half.frm_right_container .frm_error{
+	margin-right:33%;
+	padding-right:12px;
+}
+
+.with_frm_style .frm_form_field.frm_first_half.frm_left_container div.frm_description,
+.with_frm_style .frm_form_field.frm_first_half.frm_left_container .frm_error,
+.with_frm_style .frm_form_field.frm_first_half .frm_left_container div.frm_description,
+.with_frm_style .frm_form_field.frm_first_half .frm_left_container .frm_error,
+.with_frm_style .frm_form_field.frm_last_half.frm_left_container div.frm_description,
+.with_frm_style .frm_form_field.frm_last_half.frm_left_container .frm_error,
+.with_frm_style .frm_form_field.frm_half.frm_left_container div.frm_description,
+.with_frm_style .frm_form_field.frm_half.frm_left_container .frm_error{
+	margin-left:33%;
+	padding-left:12px;
+}
+
 .frm_form_field.frm_left_third,
 .frm_form_field.frm_third,
 .frm_form_field.frm_right_third,

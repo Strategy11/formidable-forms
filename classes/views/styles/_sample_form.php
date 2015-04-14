@@ -50,14 +50,18 @@
 
     <div class="frm_form_field form-field frm_first_half <?php echo esc_attr( $pos_class ) ?>">
         <label class="frm_primary_label"><?php _e( 'Radio Buttons', 'formidable' ) ?></label>
-        <div class="frm_radio"><input type="radio" /><label><?php _e( 'Option 1', 'formidable' ) ?></label></div>
-        <div class="frm_radio"><input type="radio" /><label><?php _e( 'Option 2', 'formidable' ) ?></label></div>
+		<div class="frm_opt_container">
+        	<div class="frm_radio"><input type="radio" /><label><?php _e( 'Option 1', 'formidable' ) ?></label></div>
+        	<div class="frm_radio"><input type="radio" /><label><?php _e( 'Option 2', 'formidable' ) ?></label></div>
+		</div>
     </div>
 
     <div class="frm_form_field form-field frm_last_half <?php echo esc_attr( $pos_class ) ?>">
         <label class="frm_primary_label"><?php _e( 'Check Boxes', 'formidable' ) ?></label>
-        <div class="frm_checkbox"><label><input type="checkbox" /><?php _e( 'Option 1', 'formidable' ) ?></label></div>
-        <div class="frm_checkbox"><label><input type="checkbox" /><?php _e( 'Option 2', 'formidable' ) ?></label></div>
+		<div class="frm_opt_container">
+			<div class="frm_checkbox"><label><input type="checkbox" /><?php _e( 'Option 1', 'formidable' ) ?></label></div>
+        	<div class="frm_checkbox"><label><input type="checkbox" /><?php _e( 'Option 2', 'formidable' ) ?></label></div>
+		</div>
     </div>
     </div>
 </div>
