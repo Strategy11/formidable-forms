@@ -219,12 +219,12 @@ class FrmEntriesHelper {
                     }
                 }
             }
-
-            // Don't include blank values
-            if ( ! $atts['include_blank'] && FrmAppHelper::is_empty_value( $atts['entry']->metas[ $f->id ] ) ) {
-                return;
-            }
         }
+
+		// Don't include blank values
+		if ( ! $atts['include_blank'] && isset( $atts['entry']->metas[ $f->id ] ) && FrmAppHelper::is_empty_value( $atts['entry']->metas[ $f->id ] ) ) {
+			return;
+		}
 
         $val = '';
         if ( $atts['entry'] ) {
