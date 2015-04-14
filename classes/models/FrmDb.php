@@ -28,7 +28,7 @@ class FrmDb {
         }
 
         if ( $frm_db_version != $old_db_version ) {
-            require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 
             $this->create_tables();
             $this->migrate_data($frm_db_version, $old_db_version);
@@ -142,7 +142,12 @@ class FrmDb {
         )';
 
         foreach ( $sql as $q ) {
-            dbDelta($q . $charset_collate .';');
+			if ( function_exists( 'dbDelta' ) ) {
+				dbDelta( $q . $charset_collate .';' );
+			} else {
+				global $wpdb;
+				$wpdb->query( $q . $charset_collate );
+			}
             unset($q);
         }
     }
@@ -151,7 +156,7 @@ class FrmDb {
      * @param integer $frm_db_version
      */
     private function migrate_data($frm_db_version, $old_db_version) {
-        $migrations = array(4, 6, 11, 16, 17);
+		$migrations = array( 4, 6, 11, 16, 17, 23 );
         foreach ( $migrations as $migration ) {
             if ( $frm_db_version >= $migration && $old_db_version < $migration ) {
                 $function_name = 'migrate_to_'. $migration;
@@ -486,6 +491,20 @@ class FrmDb {
         do_action('frm_after_uninstall');
         return true;
     }
+
+	/**
+	 * Check if the parent_form_id columns exists.
+	 * If not, try and add it again
+	 *
+	 * @since 2.0.2
+	 */
+	private function migrate_to_23() {
+		global $wpdb;
+		$exists = $wpdb->get_row( 'SHOW COLUMNS FROM '. $this->forms .' LIKE "parent_form_id"' );
+		if ( empty( $exists ) ) {
+			$wpdb->query( 'ALTER TABLE '. $this->forms .' ADD parent_form_id int(11) default 0' );
+		}
+	}
 
     /**
      * Change field size from character to pixel -- Multiply by 9

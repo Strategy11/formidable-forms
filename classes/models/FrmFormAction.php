@@ -210,7 +210,7 @@ class FrmFormAction {
 
         $action->menu_order = $form_id;
         $switch = $this->get_global_switch_fields();
-        foreach ( $action->post_content as $key => $val ) {
+        foreach ( (array) $action->post_content as $key => $val ) {
             if ( is_numeric($val) && isset($frm_duplicate_ids[$val]) ) {
                 $action->post_content[$key] = $frm_duplicate_ids[$val];
             } else if ( ! is_array( $val ) ) {
