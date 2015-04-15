@@ -57,40 +57,9 @@ class FrmAppController {
         return $links;
     }
 
-    public static function update_action_links( $actions, $plugin ) {
-        $frm_plugin = FrmAppHelper::plugin_folder() .'/formidable.php';
-    	if ( $frm_plugin != $plugin ) {
-    		return $actions;
-        }
-
-        $db_version = get_option( 'frm_db_version' );
-        $pro_db_version = FrmAppHelper::pro_is_installed() ? get_option( 'frmpro_db_version' ) : false;
-
-        if ( ( (int) $db_version < (int) FrmAppHelper::$db_version ) ||
-            ( FrmAppHelper::pro_is_installed() && (int) $pro_db_version < (int) FrmAppHelper::$pro_db_version ) ) {
-
-            return '<a href="'. add_query_arg( array( 'upgraded' => 'true' ), menu_page_url( 'formidable', 0 ) ) .'">'. __( 'Click here to complete the upgrade', 'formidable' ) .'</a>';
-
-    	}
-
-    	return $actions;
-    }
-
     public static function pro_get_started_headline() {
-		if ( FrmAppHelper::is_admin_page( 'formidable' ) && isset( $_REQUEST['upgraded'] ) && 'true' == sanitize_title( $_REQUEST['upgraded'] ) ) {
-            self::install();
-            ?>
-<div id="message" class="frm_message updated"><?php _e( 'Congratulations! Formidable is ready to roll.', 'formidable' ) ?></div>
-<?php
-            return;
-        }
-
-        // Don't display this error as we're upgrading the thing... cmon
-        if ( 'upgrade-plugin' == FrmAppHelper::simple_get( 'action', 'sanitize_title' ) ) {
-            return;
-        }
-
-        if ( is_multisite() && ! current_user_can( 'administrator' ) ) {
+        // Don't display this error as we're upgrading the thing, or if the user shouldn't see the message
+        if ( 'upgrade-plugin' == FrmAppHelper::simple_get( 'action', 'sanitize_title' ) || ! current_user_can( 'update_plugins' ) ) {
             return;
         }
 
