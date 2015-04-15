@@ -1410,6 +1410,7 @@ function frmAdminBuildJS(){
 	
 	function displayFormSelected(){
 		var form_id = jQuery(this).val();
+		this_form_id = form_id; // set the global form id
 		if (form_id === ''){
 			return;
 		}
