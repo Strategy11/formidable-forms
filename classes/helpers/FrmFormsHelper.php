@@ -244,7 +244,7 @@ BEFORE_HTML;
     }
 
     public static function get_draft_link() {
-        $link = '[if save_draft]<a href="javascript:void(0)" class="frm_save_draft" [draft_hook]>[draft_label]</a>[/if save_draft]';
+        $link = '[if save_draft]<a href="#" class="frm_save_draft" [draft_hook]>[draft_label]</a>[/if save_draft]';
         return $link;
     }
 
