@@ -4,7 +4,7 @@ Donate link: http://formidablepro.com/donate
 Tags: admin, AJAX, captcha, contact, contact form, database, email, feedback, form, forms, javascript, jquery, page, plugin, poll, Post, spam, survey, template, widget, wpmu, form builder
 Requires at least: 3.3.3
 Tested up to: 4.2
-Stable tag: 2.0
+Stable tag: 2.0.01
 
 Beautiful forms in 60 seconds. The WordPress form builder that enables you to create forms with a simple drag-and-drop interface and in-place editing.
 
@@ -89,6 +89,27 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 [See more FAQs](http://formidablepro.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 2.0.02 =
+* Make sure frm_to_email hook is reverse compatible
+* Fix php example in the shortcode examples
+* Add styling for frm_half classes combined with left or right labels
+* Add a fallback if dbDelta is missing
+* Remove inline js from the draft button in the default HTML to prevent 404/403 errors on some servers. This change only applies to new forms
+* Move the legend tag into the customizable HTML, but without a migration so it won't be added to existing forms
+* Move the "before fields" HTML into the fieldset to it will be parallell with the "After fields" HTML
+* Make sure partial form transients aren't saved for long forms. Make sure it's all or nothing.
+* Make sure the parent_form_id column was added, and try to add it again if it's not there
+* Pro: Allow [25 show=count]. This shortcode will return a count of items instead of the items themselves. Intended for use with a repeating section field, but would work with anything.
+* Pro: Fix filtering by text from a dynamic field
+* Pro: Make sure conditional logic doesn't apply to fields that follow a section with logic
+* Pro: Make sure any post fields used in custom code are included when the post is created
+* Pro: Load the datepicker localization file from the new hosted location
+* Pro: Rework the CSV export generation with lower memory usage and more hooks for easily removing columns
+* Pro: Fix exporting checkbox fields inside a CSV
+* Pro: Update the pagination for Genesis the '...'
+* Pro: Hopefully fix the missing date format issue some users are running into with the datepicker. Unverified since we couldn't replicate.
+* Pro: When creating a new view, make sure the filter and order rows include the fields from the selected form
+
 = 2.0.01 =
 * Break transients into chunks for large forms ( > 200 fields )
 * Remove the upgrade link and perform the upgrade automatically
