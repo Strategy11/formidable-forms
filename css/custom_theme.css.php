@@ -458,6 +458,10 @@ table.form_results.with_frm_style tr.frm_odd,
     background-image:none;
 }
 
+ul.frm_pagination > li.active a{
+	text-decoration:none;
+}
+
 .frm_pagination_cont ul.frm_pagination > li:first-child{
     margin-left:0;
 }
