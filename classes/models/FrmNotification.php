@@ -73,7 +73,7 @@ class FrmNotification{
 		$cc = self::explode_emails( $notification['cc'] );
 		$bcc = self::explode_emails( $notification['bcc'] );
 
-        $to_emails = apply_filters('frm_to_email', $to_emails, array(), $form->id, compact('email_key', 'entry', 'form'));
+        $to_emails = apply_filters('frm_to_email', $to_emails, $values, $form->id, compact('email_key', 'entry', 'form'));
 
         // Stop now if there aren't any recipients
         if ( empty( $to_emails ) && empty( $cc ) && empty( $bcc ) ) {
