@@ -446,7 +446,7 @@ class FrmField{
 		if ( $next_fields ) {
 			$fields = array_merge( $fields, $next_fields );
 
-			if ( count( $next_fields ) == self::$transient_size ) {
+			if ( count( $next_fields ) >= self::$transient_size ) {
 				// if this transient is full, check for another
 				$next++;
 				self::get_next_transient( $fields, $base_name, $next );
@@ -464,7 +464,16 @@ class FrmField{
 
 		foreach ( $field_chunks as $field ) {
 			$name = $next ? $base_name . $next : $base_name;
-			set_transient( $name, $field, 60 * 60 * 6 );
+			$set = set_transient( $name, $field, 60 * 60 * 6 );
+			if( ! $set ) {
+				// the transient didn't save
+				if ( $name != $base_name ) {
+					// if the first saved an others fail, this will show an incmoplete form
+					self::delete_form_transient( $form_id );
+				}
+				return;
+			}
+
 			$next++;
 		}
 	}
