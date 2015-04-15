@@ -28,7 +28,6 @@ function frmFrontFormJS(){
 		if ( thisType != 'submit' ) {
 			f.trigger('submit');
 		}
-		return false;
 	}
 	
 	function toggleSection(){
