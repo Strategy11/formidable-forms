@@ -85,6 +85,17 @@ class FrmAppController {
     }
 
 	/**
+	 * If there are CURL problems on this server, wp_remote_post won't work for installing
+	 * Use a javascript fallback instead.
+	 *
+	 * @since 2.0.3
+	 */
+	public static function install_js_fallback() {
+		FrmAppHelper::load_admin_wide_js();
+		echo '<div id="hidden frm_install_message"></div><script type="text/javascript">jQuery(document).ready(function(){frm_install_now();});</script>';
+	}
+
+	/**
 	 * Check if the database is outdated
 	 *
 	 * @since 2.0.1
@@ -367,7 +378,11 @@ class FrmAppController {
 		}
 
 		$upgrade_url = add_query_arg( array( 'action' => 'frm_silent_upgrade' ), $upgrade_url );
-		wp_remote_post( $upgrade_url );
+		$r = wp_remote_post( $upgrade_url );
+		if( is_wp_error( $r ) ) {
+			// if the remove post fails, use javascript instead
+			add_action( 'admin_notices', 'FrmAppController::install_js_fallback' );
+		}
 	}
 
 	/**
