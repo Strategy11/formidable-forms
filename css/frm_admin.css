@@ -846,6 +846,7 @@ li.ui-state-default.selected.edit_field_type_divider .divider_section_only .frm-
 #form_settings_page #post-body-content{min-width:650px;}
 #form_settings_page .frm_posttax_row select{max-width:35%;}
 select.frm_cancelnew, input.frm_enternew{width:175px;}
+.frm_field_box .widget-inside{background:#FBFBFB;}
 
 /* Global Settings */
 .categorydiv .frm_settings_form div.tabs-panel.general_settings{border-top:none;}
