@@ -63,8 +63,7 @@ class FrmAppController {
             return;
         }
 
-        global $frm_vars;
-        if ( $frm_vars['pro_is_authorized'] && ! file_exists( FrmAppHelper::plugin_path() . '/pro/formidable-pro.php' ) ) {
+		if ( get_site_option( 'frmpro-authorized' ) && ! file_exists( FrmAppHelper::plugin_path() . '/pro/formidable-pro.php' ) ) {
             FrmAppHelper::load_admin_wide_js();
 
             // user is authorized, but running free version
