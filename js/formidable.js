@@ -193,7 +193,7 @@ function frmFrontFormJS(){
 
             var container = parentField.closest('.frm_repeat_sec');
             if ( container.length ) {
-                var repeatInput = container.children('.frm_field_'+ f.FieldName +'_container');
+                var repeatInput = container.find('.frm_field_'+ f.FieldName +'_container');
                 f.containerID = repeatInput.attr('id');
                 f.hideContainerID = f.containerID.replace(f.FieldName, f.HideField);
                 f.hiddenName = f.inputName.replace('['+ f.FieldName +']', '['+ f.HideField +']');
