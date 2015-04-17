@@ -133,7 +133,7 @@ class FrmHooksController {
 	public static function load_ajax_hooks() {
 		add_action( 'wp_ajax_frm_silent_upgrade', 'FrmAppController::ajax_install' );
 		add_action( 'wp_ajax_nopriv_frm_silent_upgrade', 'FrmAppController::ajax_install' );
-        add_action('wp_ajax_frm_install', 'FrmAppController::install' );
+		add_action( 'wp_ajax_frm_install', 'FrmAppController::ajax_install' );
         add_action('wp_ajax_frm_uninstall', 'FrmAppController::uninstall' );
         add_action('wp_ajax_frm_deauthorize', 'FrmAppController::deauthorize' );
 

@@ -581,6 +581,7 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
     float:left;
     width:17px;
     height:17px;
+	font-size:16px;
     line-height:normal;
     cursor:pointer;
     display:block;

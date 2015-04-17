@@ -375,6 +375,10 @@ DEFAULT_HTML;
         //replace [error_class]
 		$error_class = isset ( $errors['field'. $field_id] ) ? ' frm_blank_field' : '';
 		self::get_more_field_classes( $error_class, $field, $field_id, $html );
+		if ( $field['type'] == 'html' && strpos( $html, '[error_class]' ) === false ) {
+			// there is no error_class shortcode to use for addign fields
+			$html = str_replace( 'class="frm_form_field', 'class="frm_form_field ' . $error_class, $html );
+		}
         $html = str_replace('[error_class]', $error_class, $html);
 
         //replace [entry_key]
