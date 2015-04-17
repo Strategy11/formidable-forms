@@ -28,7 +28,7 @@
     ?>
     </ul>
 
-    <ul class="frm_code_list clear">
+    <ul class="frm_code_list frm_clear">
         <?php
         $col = 'one';
 		foreach ( array(

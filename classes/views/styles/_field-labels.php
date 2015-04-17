@@ -14,7 +14,7 @@
 	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name('font_size') ) ?>" id="frm_font_size" value="<?php echo esc_attr($style->post_content['font_size']) ?>"  size="3" />
 </div>
 
-<div class="field-group clearfix clear">
+<div class="field-group clearfix frm_clear">
 	<label><?php _e( 'Position', 'formidable' ) ?></label>
 	<select name="<?php echo esc_attr( $frm_style->get_field_name('position') ) ?>" id="frm_position">
 	    <?php foreach ( array( 'none' => __( 'top', 'formidable' ), 'left' => __( 'left', 'formidable' ), 'right' => __( 'right', 'formidable' ), 'no_label' => __( 'none', 'formidable' ) ) as $pos => $pos_label ) { ?>
@@ -36,7 +36,7 @@
 	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name('width') ) ?>" id="frm_width" value="<?php echo esc_attr( $style->post_content['width'] ) ?>" />
 </div>
 
-<div class="field-group clearfix clear">
+<div class="field-group clearfix frm_clear">
 	<label><?php _e( 'Padding', 'formidable' ) ?></label>
 	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name('label_padding') ) ?>" id="frm_label_padding" value="<?php echo esc_attr( $style->post_content['label_padding'] ) ?>" />
 </div>
