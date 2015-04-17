@@ -659,6 +659,7 @@ class FrmXMLHelper {
         if ( ! $exists ) {
 			// Remove the balanceTags filter in case WordPress is trying to validate the XHTML
 			remove_filter( 'content_save_pre', 'balanceTags', 50 );
+			remove_filter( 'content_save_pre', 'wp_filter_post_kses' );
 
             wp_insert_post( $new_action );
             $imported['imported']['actions']++;
