@@ -1574,7 +1574,7 @@ class FrmAppHelper {
         $post_content = json_encode( $post_content );
 
 	    // add extra slashes for \r\n since WP strips them
-	    $post_content = str_replace( array( '\\r', '\\n', '\\u'), array( '\\\\r', '\\\\n', '\\\\u'), $post_content );
+		$post_content = str_replace( array( '\\r', '\\n', '\\u', '\\t'), array( '\\\\r', '\\\\n', '\\\\u', '\\\\t'), $post_content );
 
         // allow for &quot
 	    $post_content = str_replace( '&quot;', '\\"', $post_content );
