@@ -212,15 +212,19 @@ if ( ! isset($collapse_icon) ) {
 .<?php echo $style_class ?> .frm_form_field.frm_left_container select,
 .<?php echo $style_class ?> .frm_form_field.frm_left_container textarea,
 .<?php echo $style_class ?> .frm_form_field.frm_left_container .frm_opt_container,
+.<?php echo $style_class ?> .frm_form_field.frm_left_container .g-recaptcha,
 .<?php echo $style_class ?> .frm_form_field.frm_right_container input,
 .<?php echo $style_class ?> .frm_form_field.frm_right_container select,
 .<?php echo $style_class ?> .frm_form_field.frm_right_container textarea,
-.<?php echo $style_class ?> .frm_form_field.frm_right_container .frm_opt_container{
+.<?php echo $style_class ?> .frm_form_field.frm_right_container .frm_opt_container,
+.<?php echo $style_class ?> .frm_form_field.frm_right_container .g-recaptcha{
 	max-width:62%<?php echo $important ?>;
 }
 
 .<?php echo $style_class ?> .frm_form_field.frm_left_container .frm_opt_container,
-.<?php echo $style_class ?> .frm_form_field.frm_right_container .frm_opt_container{
+.<?php echo $style_class ?> .frm_form_field.frm_right_container .frm_opt_container,
+.<?php echo $style_class ?> .frm_form_field.frm_left_container .g-recaptcha,
+.<?php echo $style_class ?> .frm_form_field.frm_right_container .g-recaptcha{
 	display:inline-block<?php echo $important ?>;
 }
 
