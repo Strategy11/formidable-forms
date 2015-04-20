@@ -6,13 +6,6 @@ class FrmFormsController {
         FrmHooksController::trigger_load_hook( 'load_form_hooks' );
     }
 
-    /**
-     * The hooks only needed when a form is loaded
-     */
-    public static function load_form_hooks() {
-        add_filter('frm_form_classes', 'FrmFormsController::form_classes' );
-    }
-
     public static function menu() {
         add_submenu_page('formidable', 'Formidable | '. __( 'Forms', 'formidable' ), __( 'Forms', 'formidable' ), 'frm_view_forms', 'formidable', 'FrmFormsController::route' );
 

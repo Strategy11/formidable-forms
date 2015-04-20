@@ -186,6 +186,9 @@ class FrmHooksController {
         add_filter('frm_field_value_saved', 'FrmFieldsController::check_value', 50, 3);
         add_filter('frm_field_label_seen', 'FrmFieldsController::check_label');
 
+		// Forms Controller
+		add_filter( 'frm_form_classes', 'FrmFormsController::form_classes' );
+
         // Styles Controller
         add_filter('frm_use_important_width', 'FrmStylesController::important_style', 10, 2 );
     }
