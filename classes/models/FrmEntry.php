@@ -606,6 +606,12 @@ class FrmEntry {
             return;
         }
 
+		$frm_settings = FrmAppHelper::get_settings();
+		if ( empty( $frm_settings->pubkey ) ) {
+			// don't require the captcha if it shouldn't be shown
+			return;
+		}
+
         if ( ! isset($_POST['g-recaptcha-response']) ) {
             // If captcha is missing, check if it was already verified
 			if ( ! isset( $_POST['recaptcha_checked'] ) || ! wp_verify_nonce( $_POST['recaptcha_checked'], 'frm_ajax' ) ) {
@@ -614,8 +620,6 @@ class FrmEntry {
             }
             return;
         }
-
-        $frm_settings = FrmAppHelper::get_settings();
 
         $resp = wp_remote_post( 'https://www.google.com/recaptcha/api/siteverify?secret='. $frm_settings->privkey .'&response='. $_POST['g-recaptcha-response'] .'&remoteip='. FrmAppHelper::get_ip_address() );
         $response = json_decode(wp_remote_retrieve_body( $resp ), true);
