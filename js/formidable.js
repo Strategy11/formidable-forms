@@ -764,7 +764,7 @@ function frmFrontFormJS(){
 					}
 					jump.replaceWith(errObj);
 					cOff = document.documentElement.scrollTop || document.body.scrollTop;
-					if(newPos && newPos > frm_js.offset && cOff > newPos){
+					if(newPos && frm_js.offset != -1 && newPos > frm_js.offset && cOff > newPos){
 						jQuery(window).scrollTop(newPos-frm_js.offset);
 					}
 					if(typeof(frmThemeOverride_frmAfterSubmit) == 'function'){
@@ -1095,7 +1095,21 @@ function frmFrontFormJS(){
 	function removeRow(){
 		/*jshint validthis:true */
 		var id = 'frm_section_'+ jQuery(this).data('parent') +'-'+ jQuery(this).data('key');
-		fadeOut(jQuery(document.getElementById(id)));
+		var thisRow = jQuery(document.getElementById(id));
+		var fields = thisRow.find('input, select, textarea');
+
+		thisRow.fadeOut('slow', function(){
+			thisRow.remove();
+
+			fields.each(function(){
+				/* update calculations when a row is removed */
+				if ( this.type != 'file' ) {
+					var fieldID = this.name.replace('item_meta[', '').split(']')[2].replace('[', '');
+					doCalculation('', fieldID);
+				}
+			});
+		});
+
 		return false;
 	}
 
@@ -1132,6 +1146,7 @@ function frmFrontFormJS(){
 						if ( jQuery.inArray(fieldID, checked ) == -1 ) {
 							checked.push(fieldID);
 							checkDependentField('und', fieldID, null, jQuery(this), reset);
+							doCalculation('', fieldID);
 							reset = 'persist';
 						}
 					}
