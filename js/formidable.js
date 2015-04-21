@@ -601,7 +601,11 @@ function frmFrontFormJS(){
 					jQuery('.frm_chzn').chosen({allow_single_deselect:true});
 				}
 
-				checkDependentField(prev, f.HideField, 'stop', parentField);
+				if(parentField.length){
+					checkDependentField(prev, f.HideField, 'stop', parentField);
+				}else{
+					checkDependentField(prev, f.HideField, 'stop');
+				}
 			}
 		});
 	}
