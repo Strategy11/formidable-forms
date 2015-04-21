@@ -144,7 +144,6 @@ class FrmAppController {
 
 		global $pagenow;
 		if ( strpos( $page, 'formidable' ) === 0 || ( $pagenow == 'edit.php' && $post_type == 'frm_display' ) ) {
-            add_filter( 'admin_body_class', 'FrmAppController::admin_body_class' );
 
             wp_enqueue_script( 'admin-widgets' );
             wp_enqueue_style( 'widgets' );
@@ -179,17 +178,6 @@ class FrmAppController {
         } else if ( $pagenow == 'widgets.php' ) {
             FrmAppHelper::load_admin_wide_js();
         }
-    }
-
-    public static function admin_body_class( $classes ) {
-        global $wp_version;
-
-        //we only need this class on Formidable pages
-        if ( version_compare( $wp_version, '3.4.9', '>' ) ) {
-            $classes .= ' frm_35_trigger';
-        }
-
-        return $classes;
     }
 
     public static function wp_admin_body_class( $classes ) {

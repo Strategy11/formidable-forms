@@ -2,7 +2,7 @@
 Contributors: sswells, srwells, jamie.wahlin
 Donate link: http://formidablepro.com/donate
 Tags: admin, AJAX, captcha, contact, contact form, database, email, feedback, form, forms, javascript, jquery, page, plugin, poll, Post, spam, survey, template, widget, wpmu, form builder
-Requires at least: 3.3.3
+Requires at least: 3.6
 Tested up to: 4.2
 Stable tag: 2.0.01
 
