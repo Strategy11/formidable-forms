@@ -657,11 +657,9 @@ class FrmXMLHelper {
         ) );
 
         if ( ! $exists ) {
-			// Remove the balanceTags filter in case WordPress is trying to validate the XHTML
-			remove_filter( 'content_save_pre', 'balanceTags', 50 );
-			remove_filter( 'content_save_pre', 'wp_filter_post_kses' );
-
-            wp_insert_post( $new_action );
+			// this isn't an email, but we need to use a class that will always be included
+			$action = new FrmEmailAction();
+			$action->insert_action( $new_action );
             $imported['imported']['actions']++;
         }
     }
@@ -750,10 +748,8 @@ class FrmXMLHelper {
             ) );
 
             if ( empty($exists) ) {
-				// Remove the balancTags filter in case WordPress is trying to validate the XHTML
-				remove_filter( 'content_save_pre', 'balanceTags', 50 );
-
-                wp_insert_post( $new_notification );
+				$action = new FrmEmailAction();
+				$action->insert_action( $new_notification );
                 $imported['imported']['actions']++;
             }
             unset($new_notification);
@@ -870,8 +866,8 @@ class FrmXMLHelper {
             unset( $add_field );
         }
 
-        // Set reply to
-        $new_notification['post_content']['reply_to'] = $atts['reply_to'];
+		// Set reply to
+		$new_notification['post_content']['reply_to'] = $atts['reply_to'];
 
         // Set from
         if ( !empty( $atts['reply_to'] ) || !empty( $atts['reply_to_name'] ) ) {

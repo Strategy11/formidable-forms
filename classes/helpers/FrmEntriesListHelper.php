@@ -25,7 +25,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 		$s = isset( $_REQUEST['s'] ) ? stripslashes($_REQUEST['s']) : '';
 
 	    if ( $s != '' && FrmAppHelper::pro_is_installed() ) {
-	        $fid = isset( $_REQUEST['fid'] ) ? sanitize_text_field( $_REQUEST['fid'] ) : '';
+	        $fid = isset( $_REQUEST['fid'] ) ? absint( $_REQUEST['fid'] ) : '';
 	        $s_query = FrmProEntriesHelper::get_search_str( $s_query, $s, $form_id, $fid);
 	    }
 
