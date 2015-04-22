@@ -477,7 +477,7 @@ DEFAULT_HTML;
 
 		// Add class to Dynamic fields
 		if ( $field['type'] == 'data' ) {
-			$error_class .= ' frm_dynamic_container';
+			$error_class .= ' frm_dynamic_' . $field['data_type'] . '_container';
 		}
 
 		// If this is a Section

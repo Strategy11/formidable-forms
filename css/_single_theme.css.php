@@ -197,18 +197,18 @@ if ( ! isset($collapse_icon) ) {
 .<?php echo $style_class ?> .frm_form_field.frm_left_container input:not([type=radio]):not([type=checkbox]),
 .<?php echo $style_class ?> .frm_form_field.frm_left_container select,
 .<?php echo $style_class ?> .frm_form_field.frm_left_container textarea,
-.<?php echo $style_class ?> .frm_form_field.frm_left_container:not(.frm_dynamic_container) .frm_opt_container,
+.<?php echo $style_class ?> .frm_form_field.frm_left_container:not(.frm_dynamic_select_container) .frm_opt_container,
 .<?php echo $style_class ?> .frm_form_field.frm_left_container .g-recaptcha,
 .<?php echo $style_class ?> .frm_form_field.frm_right_container input:not([type=radio]):not([type=checkbox]),
 .<?php echo $style_class ?> .frm_form_field.frm_right_container select,
 .<?php echo $style_class ?> .frm_form_field.frm_right_container textarea,
-.<?php echo $style_class ?> .frm_form_field.frm_right_container:not(.frm_dynamic_container) .frm_opt_container,
+.<?php echo $style_class ?> .frm_form_field.frm_right_container:not(.frm_dynamic_select_container) .frm_opt_container,
 .<?php echo $style_class ?> .frm_form_field.frm_right_container .g-recaptcha{
 	max-width:62%<?php echo $important ?>;
 }
 
-.<?php echo $style_class ?> .frm_form_field.frm_left_container:not(.frm_dynamic_container) .frm_opt_container,
-.<?php echo $style_class ?> .frm_form_field.frm_right_container:not(.frm_dynamic_container) .frm_opt_container,
+.<?php echo $style_class ?> .frm_form_field.frm_left_container:not(.frm_dynamic_select_container) .frm_opt_container,
+.<?php echo $style_class ?> .frm_form_field.frm_right_container:not(.frm_dynamic_select_container) .frm_opt_container,
 .<?php echo $style_class ?> .frm_form_field.frm_left_container .g-recaptcha,
 .<?php echo $style_class ?> .frm_form_field.frm_right_container .g-recaptcha{
 	display:inline-block<?php echo $important ?>;
@@ -245,7 +245,7 @@ if ( ! isset($collapse_icon) ) {
 }
 
 .<?php echo $style_class ?> .frm_inline_container label.frm_primary_label,
-.<?php echo $style_class ?> .frm_inline_container:not(.frm_dynamic_container) .frm_opt_container{
+.<?php echo $style_class ?> .frm_inline_container:not(.frm_dynamic_select_container) .frm_opt_container{
     display:inline<?php echo $important ?>;
 }
 
@@ -909,12 +909,12 @@ if ( ! $submit_style ) { ?>
 	.<?php echo $style_class ?> .frm_form_field.frm_left_container input:not([type=radio]):not([type=checkbox]),
 	.<?php echo $style_class ?> .frm_form_field.frm_left_container select,
 	.<?php echo $style_class ?> .frm_form_field.frm_left_container textarea,
-	.<?php echo $style_class ?> .frm_form_field.frm_left_container:not(.frm_dynamic_container) .frm_opt_container,
+	.<?php echo $style_class ?> .frm_form_field.frm_left_container:not(.frm_dynamic_select_container) .frm_opt_container,
 	.<?php echo $style_class ?> .frm_form_field.frm_left_container .g-recaptcha,
 	.<?php echo $style_class ?> .frm_form_field.frm_right_container input:not([type=radio]):not([type=checkbox]),
 	.<?php echo $style_class ?> .frm_form_field.frm_right_container select,
 	.<?php echo $style_class ?> .frm_form_field.frm_right_container textarea,
-	.<?php echo $style_class ?> .frm_form_field.frm_right_container:not(.frm_dynamic_container) .frm_opt_container,
+	.<?php echo $style_class ?> .frm_form_field.frm_right_container:not(.frm_dynamic_select_container) .frm_opt_container,
 	.<?php echo $style_class ?> .frm_form_field.frm_right_container .g-recaptcha,
 	.<?php echo $style_class ?> .frm_left_container p.description,
 	.<?php echo $style_class ?> .frm_left_container div.description,
