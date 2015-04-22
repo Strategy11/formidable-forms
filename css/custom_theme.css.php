@@ -704,39 +704,6 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
     margin-right:4%;
 }
 
-.frm_form_field.frm_left_half.frm_left_container .frm_primary_label,
-.frm_form_field.frm_right_half.frm_left_container .frm_primary_label,
-.frm_form_field.frm_left_half.frm_right_container .frm_primary_label,
-.frm_form_field.frm_right_half.frm_right_container .frm_primary_label,
-.frm_form_field.frm_first_half.frm_left_container .frm_primary_label,
-.frm_form_field.frm_last_half.frm_left_container .frm_primary_label,
-.frm_form_field.frm_first_half.frm_right_container .frm_primary_label,
-.frm_form_field.frm_last_half.frm_right_container .frm_primary_label,
-.frm_form_field.frm_half.frm_right_container .frm_primary_label{
-    -webkit-box-sizing:border-box;
-    -moz-box-sizing:border-box;
-    box-sizing:border-box;
-    max-width:33%;
-    margin-right:0;
-    margin-left:0;
-}
-
-.frm_form_field.frm_left_half.frm_left_container .frm_primary_label,
-.frm_form_field.frm_right_half.frm_left_container .frm_primary_label,
-.frm_form_field.frm_first_half.frm_left_container .frm_primary_label,
-.frm_form_field.frm_last_half.frm_left_container .frm_primary_label,
-.frm_form_field.frm_half.frm_left_container .frm_primary_label{
-    padding-right:10px;
-}
-
-.frm_form_field.frm_left_half.frm_right_container .frm_primary_label,
-.frm_form_field.frm_right_half.frm_right_container .frm_primary_label,
-.frm_form_field.frm_first_half.frm_right_container .frm_primary_label,
-.frm_form_field.frm_last_half.frm_right_container .frm_primary_label,
-.frm_form_field.frm_half.frm_right_container .frm_primary_label{
-    padding-left:10px;
-}
-
 .with_frm_style .frm_form_field.frm_first_half.frm_right_container div.frm_description,
 .with_frm_style .frm_form_field.frm_first_half.frm_right_container .frm_error,
 .with_frm_style .frm_form_field.frm_first_half .frm_right_container div.frm_description,
@@ -876,6 +843,59 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
 .frm_full .wp-editor-wrap input{
     width:auto !important;
 }
+
+/* Left and right label styling for non-Formidable styling - very basic, not responsive */
+.frm_form_field.frm_left_container label.frm_primary_label{
+	float:left;
+	display:inline;
+	max-width:33%;
+	margin-right:10px;
+}
+
+.frm_form_field.frm_left_container input:not([type=radio]):not([type=checkbox]),
+.frm_form_field.frm_left_container select,
+.frm_form_field.frm_left_container textarea,
+.frm_form_field.frm_left_container:not(.frm_dynamic_container) .frm_opt_container,
+.frm_form_field.frm_left_container .g-recaptcha,
+.frm_form_field.frm_right_container input:not([type=radio]):not([type=checkbox]),
+.frm_form_field.frm_right_container select,
+.frm_form_field.frm_right_container textarea,
+.frm_form_field.frm_right_container:not(.frm_dynamic_container) .frm_opt_container,
+.frm_form_field.frm_right_container .g-recaptcha{
+	max-width:62%;
+}
+
+.frm_form_field.frm_left_container:not(.frm_dynamic_container) .frm_opt_container,
+.frm_form_field.frm_right_container:not(.frm_dynamic_container) .frm_opt_container,
+.frm_form_field.frm_left_container .g-recaptcha,
+.frm_form_field.frm_right_container .g-recaptcha{
+	display:inline-block;
+}
+
+.frm_left_container p.description,
+.frm_left_container div.description,
+.frm_left_container div.frm_description,
+.frm_left_container .frm_error{
+    margin-left:33%;
+	max-width:62%;
+}
+
+.frm_form_field.frm_left_half.frm_left_container .frm_primary_label,
+.frm_form_field.frm_right_half.frm_left_container .frm_primary_label,
+.frm_form_field.frm_left_half.frm_right_container .frm_primary_label,
+.frm_form_field.frm_right_half.frm_right_container .frm_primary_label,
+.frm_form_field.frm_first_half.frm_left_container .frm_primary_label,
+.frm_form_field.frm_last_half.frm_left_container .frm_primary_label,
+.frm_form_field.frm_first_half.frm_right_container .frm_primary_label,
+.frm_form_field.frm_last_half.frm_right_container .frm_primary_label,
+.frm_form_field.frm_half.frm_right_container .frm_primary_label,
+.frm_form_field.frm_half.frm_left_container .frm_primary_label{
+	-webkit-box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	box-sizing:border-box;
+	max-width:33%;
+}
+/* End of left and right label styling */
 
 .wp-editor-wrap *,
 .wp-editor-wrap *:after,
@@ -1736,46 +1756,6 @@ html[xmlns] .frm_clearfix{
     .frm_form_field.frm_four_col .frm_checkbox:nth-child(2n+2){
     	margin-right:0;
     }
-
-	.frm_form_field.frm_left_half.frm_left_container .frm_primary_label,
-	.frm_form_field.frm_right_half.frm_left_container .frm_primary_label,
-	.frm_form_field.frm_first_half.frm_left_container .frm_primary_label,
-	.frm_form_field.frm_last_half.frm_left_container .frm_primary_label,
-	.frm_form_field.frm_half.frm_left_container .frm_primary_label,
-	.frm_form_field.frm_left_half.frm_right_container .frm_primary_label,
-	.frm_form_field.frm_right_half.frm_right_container .frm_primary_label,
-	.frm_form_field.frm_first_half.frm_right_container .frm_primary_label,
-	.frm_form_field.frm_last_half.frm_right_container .frm_primary_label,
-	.frm_form_field.frm_half.frm_right_container .frm_primary_label{
-		max-width:100%;
-		margin-right:0;
-		margin-left:0;
-		padding-right:0;
-		padding-left:0;
-		width:100%;
-	}
-
-	.with_frm_style .frm_form_field.frm_first_half.frm_right_container div.frm_description,
-	.with_frm_style .frm_form_field.frm_first_half.frm_right_container .frm_error,
-	.with_frm_style .frm_form_field.frm_first_half .frm_right_container div.frm_description,
-	.with_frm_style .frm_form_field.frm_first_half .frm_right_container .frm_error,
-	.with_frm_style .frm_form_field.frm_last_half.frm_right_container div.frm_description,
-	.with_frm_style .frm_form_field.frm_last_half.frm_right_container .frm_error,
-	.with_frm_style .frm_form_field.frm_half.frm_right_container div.frm_description,
-	.with_frm_style .frm_form_field.frm_half.frm_right_container .frm_error,
-	.with_frm_style .frm_form_field.frm_first_half.frm_left_container div.frm_description,
-	.with_frm_style .frm_form_field.frm_first_half.frm_left_container .frm_error,
-	.with_frm_style .frm_form_field.frm_first_half .frm_left_container div.frm_description,
-	.with_frm_style .frm_form_field.frm_first_half .frm_left_container .frm_error,
-	.with_frm_style .frm_form_field.frm_last_half.frm_left_container div.frm_description,
-	.with_frm_style .frm_form_field.frm_last_half.frm_left_container .frm_error,
-	.with_frm_style .frm_form_field.frm_half.frm_left_container div.frm_description,
-	.with_frm_style .frm_form_field.frm_half.frm_left_container .frm_error{
-		margin-right:0;
-		margin-left:0;
-		padding-right:0;
-		padding-left:0;
-	}
 }
 
 @media only screen and (max-width: 500px) {

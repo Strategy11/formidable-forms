@@ -27,6 +27,17 @@ $label_margin = (int) $width + 10;
 $minus_icons = FrmStylesHelper::minus_icons();
 $arrow_icons = FrmStylesHelper::arrow_icons();
 
+// If left/right label is over a certain size, adjust the field description margin at a different screen size
+$temp_label_width = str_replace( 'px', '', $width );
+$change_margin = false;
+if ( $temp_label_width >= 230 ) {
+	$change_margin = 800 . 'px';
+} else if ( $width >= 215 ) {
+	$change_margin = 700 . 'px';
+} else if ( $width >= 180 ) {
+	$change_margin = 650 . 'px';
+}
+
 if ( ! isset($collapse_icon) ) {
     $collapse_icon = 0;
 }
@@ -176,6 +187,13 @@ if ( ! isset($collapse_icon) ) {
 	margin-right:10px<?php echo $important ?>;
 }
 
+.<?php echo $style_class ?> .frm_right_container label.frm_primary_label{
+	display:inline<?php echo $important ?>;
+	width:<?php echo $width . $important; ?>;
+	max-width:33%<?php echo $important ?>;
+	margin-left:10px<?php echo $important ?>;
+}
+
 .<?php echo $style_class ?> .frm_form_field.frm_left_container input:not([type=radio]):not([type=checkbox]),
 .<?php echo $style_class ?> .frm_form_field.frm_left_container select,
 .<?php echo $style_class ?> .frm_form_field.frm_left_container textarea,
@@ -204,16 +222,6 @@ if ( ! isset($collapse_icon) ) {
 	max-width:62%<?php echo $important ?>;
 }
 
-.<?php echo $style_class ?> .form-field.frm_col_field div.frm_description{
-    width:<?php echo ($field_width == '' ? 'auto' : $field_width)  . $important ?>;
-    max-width:100%;
-}
-
-.<?php echo $style_class ?> .frm_left_container .attachment-thumbnail{
-    clear:both;
-    margin-left:<?php echo $label_margin ?>px<?php echo $important ?>;
-}
-
 .<?php echo $style_class ?> .frm_right_container p.description,
 .<?php echo $style_class ?> .frm_right_container div.description,
 .<?php echo $style_class ?> .frm_right_container div.frm_description,
@@ -222,21 +230,25 @@ if ( ! isset($collapse_icon) ) {
 	max-width:62%<?php echo $important ?>;
 }
 
-.<?php echo $style_class ?> .frm_inline_container label.frm_primary_label,
-.<?php echo $style_class ?> .frm_inline_container:not(.frm_dynamic_container) .frm_opt_container{
-    display:inline<?php echo $important ?>;
+.<?php echo $style_class ?> .frm_left_container .attachment-thumbnail{
+	clear:both;
+	margin-left:<?php echo $label_margin ?>px<?php echo $important ?>;
 }
 
 .<?php echo $style_class ?> .frm_left_container.frm_inline label.frm_primary_label{
 	max-width:90%<?php echo $important ?>;
 }
 
-.<?php echo $style_class ?> .frm_right_container label.frm_primary_label{
-	max-width:33%<?php echo $important ?>;
-	margin-left:10px<?php echo $important ?>;
+.<?php echo $style_class ?> .form-field.frm_col_field div.frm_description{
+    width:<?php echo ($field_width == '' ? 'auto' : $field_width)  . $important ?>;
+    max-width:100%;
 }
 
-.<?php echo $style_class ?> .frm_right_container label.frm_primary_label,
+.<?php echo $style_class ?> .frm_inline_container label.frm_primary_label,
+.<?php echo $style_class ?> .frm_inline_container:not(.frm_dynamic_container) .frm_opt_container{
+    display:inline<?php echo $important ?>;
+}
+
 .<?php echo $style_class ?> .frm_pos_right{
     display:inline<?php echo $important ?>;
     width:<?php echo $width . $important; ?>;
@@ -817,7 +829,28 @@ if ( ! $submit_style ) { ?>
     height:15px<?php echo $important ?>;
 }
 /* End Chosen */
+
 /* Responsive CSS */
+<?php if ( $change_margin ) { ?>
+@media only screen and (max-width: <?php echo $change_margin ?>){
+	.<?php echo $style_class ?> .frm_left_container p.description,
+	.<?php echo $style_class ?> .frm_left_container div.description,
+	.<?php echo $style_class ?> .frm_left_container div.frm_description,
+	.<?php echo $style_class ?> .frm_left_container .frm_error,
+	.<?php echo $style_class ?> .frm_left_container .attachment-thumbnail{
+		margin-left:33%<?php echo $important ?>;
+		padding-left:10px<?php echo $important ?>;
+	}
+	.<?php echo $style_class ?> .frm_right_container p.description,
+	.<?php echo $style_class ?> .frm_right_container div.description,
+	.<?php echo $style_class ?> .frm_right_container div.frm_description,
+	.<?php echo $style_class ?> .frm_right_container .frm_error{
+		margin-right:33%<?php echo $important ?>;
+		padding-right:10px<?php echo $important ?>;
+	}
+}
+<?php } ?>
+
 @media only screen and (max-width: 600px){
 	.<?php echo $style_class ?> .frm_form_field.frm_half.frm_left_container input:not([type=radio]):not([type=checkbox]),
 	.<?php echo $style_class ?> .frm_form_field.frm_half.frm_left_container select,
@@ -830,6 +863,45 @@ if ( ! $submit_style ) { ?>
 	.<?php echo $style_class ?> .frm_form_field.frm_half.frm_right_container .frm_opt_container,
 	.<?php echo $style_class ?> .frm_form_field.frm_half.frm_right_container.g-recaptcha{
 		max-width:100%<?php echo $important ?>;
+	}
+	.<?php echo $style_class ?> .frm_form_field.frm_left_half.frm_left_container .frm_primary_label,
+	.<?php echo $style_class ?> .frm_form_field.frm_right_half.frm_left_container .frm_primary_label,
+	.<?php echo $style_class ?> .frm_form_field.frm_first_half.frm_left_container .frm_primary_label,
+	.<?php echo $style_class ?> .frm_form_field.frm_last_half.frm_left_container .frm_primary_label,
+	.<?php echo $style_class ?> .frm_form_field.frm_half.frm_left_container .frm_primary_label,
+	.<?php echo $style_class ?> .frm_form_field.frm_left_half.frm_right_container .frm_primary_label,
+	.<?php echo $style_class ?> .frm_form_field.frm_right_half.frm_right_container .frm_primary_label,
+	.<?php echo $style_class ?> .frm_form_field.frm_first_half.frm_right_container .frm_primary_label,
+	.<?php echo $style_class ?> .frm_form_field.frm_last_half.frm_right_container .frm_primary_label,
+	.<?php echo $style_class ?> .frm_form_field.frm_half.frm_right_container .frm_primary_label{
+		max-width:100%<?php echo $important ?>;
+		margin-right:0;
+		margin-left:0;
+		padding-right:0;
+		padding-left:0;
+		width:100%<?php echo $important ?>;
+	}
+
+	.<?php echo $style_class ?> .frm_form_field.frm_first_half.frm_right_container div.frm_description,
+	.<?php echo $style_class ?> .frm_form_field.frm_first_half.frm_right_container .frm_error,
+	.<?php echo $style_class ?> .frm_form_field.frm_first_half .frm_right_container div.frm_description,
+	.<?php echo $style_class ?> .frm_form_field.frm_first_half .frm_right_container .frm_error,
+	.<?php echo $style_class ?> .frm_form_field.frm_last_half.frm_right_container div.frm_description,
+	.<?php echo $style_class ?> .frm_form_field.frm_last_half.frm_right_container .frm_error,
+	.<?php echo $style_class ?> .frm_form_field.frm_half.frm_right_container div.frm_description,
+	.<?php echo $style_class ?> .frm_form_field.frm_half.frm_right_container .frm_error,
+	.<?php echo $style_class ?> .frm_form_field.frm_first_half.frm_left_container div.frm_description,
+	.<?php echo $style_class ?> .frm_form_field.frm_first_half.frm_left_container .frm_error,
+	.<?php echo $style_class ?> .frm_form_field.frm_first_half .frm_left_container div.frm_description,
+	.<?php echo $style_class ?> .frm_form_field.frm_first_half .frm_left_container .frm_error,
+	.<?php echo $style_class ?> .frm_form_field.frm_last_half.frm_left_container div.frm_description,
+	.<?php echo $style_class ?> .frm_form_field.frm_last_half.frm_left_container .frm_error,
+	.<?php echo $style_class ?> .frm_form_field.frm_half.frm_left_container div.frm_description,
+	.<?php echo $style_class ?> .frm_form_field.frm_half.frm_left_container .frm_error{
+		margin-right:0;
+		margin-left:0;
+		padding-right:0;
+		padding-left:0;
 	}
 }
 
