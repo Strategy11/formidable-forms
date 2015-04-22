@@ -1655,6 +1655,7 @@ function frmAdminBuildJS(){
 				type:'POST',url:ajaxurl,data:"action=frm_uninstall&nonce="+frmGlobal.nonce,
                 success:function(msg){
 					jQuery('.frm_uninstall').fadeOut('slow');
+					window.location=msg;
 				}
 			});
 		}

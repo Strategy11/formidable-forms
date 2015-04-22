@@ -366,7 +366,7 @@ class FrmAppController {
 
 		$upgrade_url = add_query_arg( array( 'action' => 'frm_silent_upgrade' ), $upgrade_url );
 		$r = wp_remote_post( $upgrade_url );
-		if( is_wp_error( $r ) ) {
+		if ( is_wp_error( $r ) ) {
 			// if the remove post fails, use javascript instead
 			add_action( 'admin_notices', 'FrmAppController::install_js_fallback' );
 		}
@@ -402,7 +402,10 @@ class FrmAppController {
         if ( current_user_can( 'administrator' ) ) {
             $frmdb = new FrmDb();
             $frmdb->uninstall();
-            echo true;
+
+			//disable the plugin and redirect after uninstall so the tables don't get added right back
+			deactivate_plugins( FrmAppHelper::plugin_folder() .'/formidable.php', false, false );
+			echo esc_url( admin_url('plugins.php?deactivate=true') );
         } else {
             $frm_settings = FrmAppHelper::get_settings();
             wp_die( $frm_settings->admin_permission );
