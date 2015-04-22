@@ -345,29 +345,7 @@ class FrmFormAction {
         // delete all styling caches
         FrmAppHelper::cache_delete_group('frm_actions');
 
-		return $this->insert_action( $settings );
-	}
-
-	/**
-	 * Since actions are JSON encoded, we don't want any filters messing with it.
-	 * Remove the filters and then add them back in case any posts or views are
-	 * also being imported.
-	 *
-	 * @since 2.0.4
-	 */
-	public function insert_action( $settings ) {
-		global $wp_filter;
-		$filters = $wp_filter['content_save_pre'];
-
-		// Remove the balanceTags filter in case WordPress is trying to validate the XHTML
-		remove_all_filters( 'content_save_pre' );
-
-		$post = wp_insert_post( $settings );
-
-		// add the content filters back for views or posts
-		$wp_filter['content_save_pre'] = $filters;
-
-		return $post;
+		return FrmAppHelper::save_json_post( $settings );
 	}
 
 	public function get_single_action( $id ) {

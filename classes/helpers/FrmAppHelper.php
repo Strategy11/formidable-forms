@@ -1557,16 +1557,9 @@ class FrmAppHelper {
      * @return string $post_content ( json encoded array )
      */
     public static function prepare_and_encode( $post_content ) {
-
         //Loop through array to strip slashes and add only the needed ones
 		foreach ( $post_content as $key => $val ) {
-            if ( isset( $post_content[ $key ] ) && ! is_array( $val ) ) {
-                // Strip all slashes so everything is the same, no matter where the value is coming from
-                $val = stripslashes( $val );
-
-                // Add backslashes before double quotes and forward slashes only
-                $post_content[ $key ] = addcslashes( $val, '"\\/' );
-            }
+			self::prepare_action_slashes( $val, $key, $post_content );
             unset( $key, $val );
         }
 
@@ -1581,6 +1574,49 @@ class FrmAppHelper {
 
         return $post_content;
     }
+
+	private static function prepare_action_slashes( $val, $key, &$post_content ) {
+		if ( ! isset( $post_content[ $key ] ) ) {
+			return;
+		}
+
+		if ( is_array( $val ) ) {
+			foreach ( $val as $k1 => $v1 ) {
+				self::prepare_action_slashes( $v1, $k1, $post_content[ $key ] );
+				unset( $k1, $v1 );
+			}
+		} else {
+			// Strip all slashes so everything is the same, no matter where the value is coming from
+			$val = stripslashes( $val );
+
+			// Add backslashes before double quotes and forward slashes only
+			$post_content[ $key ] = addcslashes( $val, '"\\/' );
+		}
+	}
+
+	/**
+	 * Since actions are JSON encoded, we don't want any filters messing with it.
+	 * Remove the filters and then add them back in case any posts or views are
+	 * also being imported.
+	 *
+	 * Used when saving form actions and styles
+	 *
+	 * @since 2.0.4
+	 */
+	public static function save_json_post( $settings ) {
+		global $wp_filter;
+		$filters = $wp_filter['content_save_pre'];
+
+		// Remove the balanceTags filter in case WordPress is trying to validate the XHTML
+		remove_all_filters( 'content_save_pre' );
+
+		$post = wp_insert_post( $settings );
+
+		// add the content filters back for views or posts
+		$wp_filter['content_save_pre'] = $filters;
+
+		return $post;
+	}
 
     public static function maybe_json_decode($string) {
         if ( is_array($string) ) {
