@@ -1252,6 +1252,10 @@ function frmFrontFormJS(){
 			jQuery(document).on('click', '.frm_clear_file_link', clearFile);
 			jQuery(document).on('click', '.frm_remove_link', removeDiv);
 
+			jQuery(document).on('focusin', 'input[data-frmmask]', function(){
+				jQuery(this).mask( jQuery(this).data('frmmask') );
+			});
+
 			jQuery(document).on('change', '.frm-show-form input[name^="item_meta"], .frm-show-form select[name^="item_meta"], .frm-show-form textarea[name^="item_meta"]', maybeCheckDependent);
 			
 			jQuery(document).on('click', '.frm-show-form input[type="submit"], .frm-show-form input[name="frm_prev_page"], .frm-show-form .frm_save_draft', setNextPage);
