@@ -621,10 +621,17 @@ class FrmEntry {
             return;
         }
 
-        $resp = wp_remote_post( 'https://www.google.com/recaptcha/api/siteverify?secret='. $frm_settings->privkey .'&response='. $_POST['g-recaptcha-response'] .'&remoteip='. FrmAppHelper::get_ip_address() );
+        $arg_array = array(
+            'body'      => array(
+				'secret'   => $frm_settings->privkey,
+				'response' => $_POST['g-recaptcha-response'],
+				'remoteip' => FrmAppHelper::get_ip_address(),
+			),
+		);
+        $resp = wp_remote_post( 'https://www.google.com/recaptcha/api/siteverify', $arg_array );
         $response = json_decode(wp_remote_retrieve_body( $resp ), true);
 
-        if ( ! $response['success'] ) {
+        if ( isset( $response['success'] ) && ! $response['success'] ) {
             // What happens when the CAPTCHA was entered incorrectly
             $errors['field'. $args['id']] = ( ! isset($field->field_options['invalid']) || $field->field_options['invalid'] == '' ) ? $frm_settings->re_msg : $field->field_options['invalid'];
         }
