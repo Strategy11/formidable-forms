@@ -127,6 +127,16 @@ function frmAdminBuildJS(){
 		}
 
 		jQuery(b).closest('.frm_field_box').siblings().find('.widget-inside').slideUp('fast');
+		if ( ( typeof b.className != 'undefined' && b.className.indexOf('widget-action') !== -1 ) || jQuery(b).closest('.start_divider').length < 1){
+			return;
+		}
+
+		var inside = jQuery(b).closest('div.widget').children('.widget-inside');
+		if(inside.is(':hidden')){
+			inside.slideDown('fast');
+		}else{
+			inside.slideUp('fast');
+		}
 	}
 
 	function clickTab(link){
