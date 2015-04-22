@@ -819,12 +819,12 @@ if ( ! $submit_style ) { ?>
 /* End Chosen */
 /* Responsive CSS */
 @media only screen and (max-width: 600px){
-	.<?php echo $style_class ?> .frm_form_field.frm_half.frm_left_container input,
+	.<?php echo $style_class ?> .frm_form_field.frm_half.frm_left_container input:not([type=radio]):not([type=checkbox]),
 	.<?php echo $style_class ?> .frm_form_field.frm_half.frm_left_container select,
 	.<?php echo $style_class ?> .frm_form_field.frm_half.frm_left_container textarea,
 	.<?php echo $style_class ?> .frm_form_field.frm_half.frm_left_container .frm_opt_container,
 	.<?php echo $style_class ?> .frm_form_field.frm_half.frm_left_container.g-recaptcha,
-	.<?php echo $style_class ?> .frm_form_field.frm_half.frm_right_container input,
+	.<?php echo $style_class ?> .frm_form_field.frm_half.frm_right_container input:not([type=radio]):not([type=checkbox]),
 	.<?php echo $style_class ?> .frm_form_field.frm_half.frm_right_container select,
 	.<?php echo $style_class ?> .frm_form_field.frm_half.frm_right_container textarea,
 	.<?php echo $style_class ?> .frm_form_field.frm_half.frm_right_container .frm_opt_container,
@@ -834,12 +834,12 @@ if ( ! $submit_style ) { ?>
 }
 
 @media only screen and (max-width: 500px) {
-	.<?php echo $style_class ?> .frm_form_field.frm_left_container input,
+	.<?php echo $style_class ?> .frm_form_field.frm_left_container input:not([type=radio]):not([type=checkbox]),
 	.<?php echo $style_class ?> .frm_form_field.frm_left_container select,
 	.<?php echo $style_class ?> .frm_form_field.frm_left_container textarea,
 	.<?php echo $style_class ?> .frm_form_field.frm_left_container:not(.frm_dynamic_container) .frm_opt_container,
 	.<?php echo $style_class ?> .frm_form_field.frm_left_container .g-recaptcha,
-	.<?php echo $style_class ?> .frm_form_field.frm_right_container input,
+	.<?php echo $style_class ?> .frm_form_field.frm_right_container input:not([type=radio]):not([type=checkbox]),
 	.<?php echo $style_class ?> .frm_form_field.frm_right_container select,
 	.<?php echo $style_class ?> .frm_form_field.frm_right_container textarea,
 	.<?php echo $style_class ?> .frm_form_field.frm_right_container:not(.frm_dynamic_container) .frm_opt_container,
