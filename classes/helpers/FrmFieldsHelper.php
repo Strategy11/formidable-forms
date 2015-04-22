@@ -475,6 +475,11 @@ DEFAULT_HTML;
 			$error_class .= ' frm_other_container';
 		}
 
+		// Add class to Dynamic fields
+		if ( $field['type'] == 'data' ) {
+			$error_class .= ' frm_dynamic_container';
+		}
+
 		// If this is a Section
 		if ( $field['type'] == 'divider' ) {
 

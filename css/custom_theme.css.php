@@ -64,13 +64,9 @@ legend.frm_hidden{
 }
 
 .with_frm_style .frm_inline_container label.frm_primary_label,
-.with_frm_style .frm_inline_container .frm_opt_container{
+.with_frm_style .frm_inline_container:not(.frm_dynamic_container) .frm_opt_container{
     display:inline;
     margin-right:10px;
-}
-
-.with_frm_style .frm_left_container label.frm_primary_label{
-    float:left;
 }
 
 .with_frm_style .frm_right_container label.frm_primary_label,
@@ -1741,6 +1737,45 @@ html[xmlns] .frm_clearfix{
     	margin-right:0;
     }
 
+	.frm_form_field.frm_left_half.frm_left_container .frm_primary_label,
+	.frm_form_field.frm_right_half.frm_left_container .frm_primary_label,
+	.frm_form_field.frm_first_half.frm_left_container .frm_primary_label,
+	.frm_form_field.frm_last_half.frm_left_container .frm_primary_label,
+	.frm_form_field.frm_half.frm_left_container .frm_primary_label,
+	.frm_form_field.frm_left_half.frm_right_container .frm_primary_label,
+	.frm_form_field.frm_right_half.frm_right_container .frm_primary_label,
+	.frm_form_field.frm_first_half.frm_right_container .frm_primary_label,
+	.frm_form_field.frm_last_half.frm_right_container .frm_primary_label,
+	.frm_form_field.frm_half.frm_right_container .frm_primary_label{
+		max-width:100%;
+		margin-right:0;
+		margin-left:0;
+		padding-right:0;
+		padding-left:0;
+		width:100%;
+	}
+
+	.with_frm_style .frm_form_field.frm_first_half.frm_right_container div.frm_description,
+	.with_frm_style .frm_form_field.frm_first_half.frm_right_container .frm_error,
+	.with_frm_style .frm_form_field.frm_first_half .frm_right_container div.frm_description,
+	.with_frm_style .frm_form_field.frm_first_half .frm_right_container .frm_error,
+	.with_frm_style .frm_form_field.frm_last_half.frm_right_container div.frm_description,
+	.with_frm_style .frm_form_field.frm_last_half.frm_right_container .frm_error,
+	.with_frm_style .frm_form_field.frm_half.frm_right_container div.frm_description,
+	.with_frm_style .frm_form_field.frm_half.frm_right_container .frm_error,
+	.with_frm_style .frm_form_field.frm_first_half.frm_left_container div.frm_description,
+	.with_frm_style .frm_form_field.frm_first_half.frm_left_container .frm_error,
+	.with_frm_style .frm_form_field.frm_first_half .frm_left_container div.frm_description,
+	.with_frm_style .frm_form_field.frm_first_half .frm_left_container .frm_error,
+	.with_frm_style .frm_form_field.frm_last_half.frm_left_container div.frm_description,
+	.with_frm_style .frm_form_field.frm_last_half.frm_left_container .frm_error,
+	.with_frm_style .frm_form_field.frm_half.frm_left_container div.frm_description,
+	.with_frm_style .frm_form_field.frm_half.frm_left_container .frm_error{
+		margin-right:0;
+		margin-left:0;
+		padding-right:0;
+		padding-left:0;
+	}
 }
 
 @media only screen and (max-width: 500px) {
@@ -1753,22 +1788,6 @@ html[xmlns] .frm_clearfix{
         float: none;
         display:block;
     }
-
-	.frm_right_container p.description,
-	.frm_right_container div.description,
-	.frm_right_container div.frm_description,
-	.frm_right_container .frm_error{
-		margin-right:33% !important;
-		padding-right:12px !important;
-	}
-
-	.frm_left_container p.description,
-	.frm_left_container div.description,
-	.frm_left_container div.frm_description,
-	.frm_left_container .frm_error{
-		margin-left:33% !important;
-		padding-left:12px !important;
-	}
 }
 <?php
 echo $defaults['custom_css'];
