@@ -665,6 +665,11 @@ if ( ! $submit_style ) { ?>
     width:auto<?php echo $important ?>;
 }
 
+.<?php echo $style_class ?> .frm_text_block input,
+.<?php echo $style_class ?> .frm_text_block label.frm_primary_label{
+    margin-left:-20px;
+}
+
 .<?php echo $style_class ?> .frm_button{
     padding-top:<?php echo $field_pad . $important ?>;
     padding-bottom:<?php echo $field_pad . $important ?>;
