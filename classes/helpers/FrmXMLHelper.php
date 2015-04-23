@@ -704,7 +704,7 @@ class FrmXMLHelper {
 
     private static function migrate_email_settings_to_action( $form_options, $form_id, $post_type, &$imported, $switch ) {
         // No old notifications or autoresponders to carry over
-        if ( ! isset( $form_options['auto_responder'] ) && ! isset( $form_options['notification'] ) ) {
+		if ( ! isset( $form_options['auto_responder'] ) && ! isset( $form_options['notification'] ) && ! isset( $form_options['email_to'] ) ) {
             return;
         }
 
