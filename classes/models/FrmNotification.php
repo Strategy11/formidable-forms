@@ -256,7 +256,7 @@ class FrmNotification{
                 $part_1 = trim( str_replace( $part_2, '', $val ) );
             } else if ( in_array( $f, array( 'from', 'reply_to' ) ) ) {
 				// In case someone just puts a name in the From or Reply To field
-                $part_1 = $part_2;
+				$part_1 = $val;
                 $part_2 = get_option('admin_email');
             } else {
 				// In case someone just puts a name in any other email field
