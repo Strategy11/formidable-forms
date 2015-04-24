@@ -430,7 +430,7 @@ form label.frm_primary_label input{font-size:12px;}
 .frm_form_fields input[type="radio"], .frm_form_fields input[type="checkbox"]{width:auto;padding:0;}
 .frm_catlevel_2, .frm_catlevel_3, .frm_catlevel_4, .frm_catlevel_5{margin-left:18px;}
 .frm_form_fields input.auto_width, .frm_form_fields select.auto_width, .frm_form_fields textarea.auto_width{width:auto;}
-.frm_set_select select, .frm_set_select select.auto_width{width:100%;}
+
 .frm_form_fields input:focus, .frm_form_fields select:focus, 
 .frm_form_fields textarea:focus, .frm_focus_field input{background-color:#fff;border-color:#ddd;}	
 

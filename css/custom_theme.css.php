@@ -137,11 +137,6 @@ legend.frm_hidden{
     width:auto;
 }
 
-.frm_set_select .with_frm_style select,
-.frm_set_select .with_frm_style select.auto_width{
-    width:100%;
-}
-
 .with_frm_style .frm_button{
     text-decoration:none;
     border:1px solid #eee;

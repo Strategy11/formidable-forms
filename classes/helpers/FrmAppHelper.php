@@ -4,7 +4,7 @@ if ( ! defined('ABSPATH') ) {
 }
 
 class FrmAppHelper {
-	public static $db_version = 24; //version of the database we are moving to
+	public static $db_version = 25; //version of the database we are moving to
 	public static $pro_db_version = 27;
 
 	/**
@@ -1029,8 +1029,6 @@ class FrmAppHelper {
         if ( $field_array['custom_html'] == '' ) {
             $field_array['custom_html'] = FrmFieldsHelper::get_default_html($args['field_type']);
         }
-
-        $field_array['size'] = self::get_field_size($field_array);
     }
 
     /**
@@ -1120,18 +1118,6 @@ class FrmAppHelper {
         } else {
             return FrmEntryMeta::get_entry_meta_by_field($entry->id, $field_id);
         }
-    }
-
-    /**
-     * @since 2.0
-     * @return string
-     */
-    public static function get_field_size($field) {
-        if ( '' == $field['size'] ) {
-            global $frm_vars;
-            $field['size'] = isset($frm_vars['sidebar_width']) ? $frm_vars['sidebar_width'] : '';
-        }
-        return $field['size'];
     }
 
     public static function insert_opt_html($args) {

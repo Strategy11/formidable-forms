@@ -156,7 +156,7 @@ class FrmDb {
      * @param integer $frm_db_version
      */
     private function migrate_data($frm_db_version, $old_db_version) {
-		$migrations = array( 4, 6, 11, 16, 17, 23 );
+		$migrations = array( 4, 6, 11, 16, 17, 23, 25 );
         foreach ( $migrations as $migration ) {
             if ( $frm_db_version >= $migration && $old_db_version < $migration ) {
                 $function_name = 'migrate_to_'. $migration;
@@ -491,6 +491,29 @@ class FrmDb {
         do_action('frm_after_uninstall');
         return true;
     }
+
+	/**
+	 * Migrate old styling settings. If sites are using the old
+	 * default 400px field width, switch it to 100%
+	 *
+	 * @since 2.0.4
+	 */
+	private function migrate_to_25() {
+		// get the style that was created with the style migration
+		$frm_style = new FrmStyle();
+		$styles = $frm_style->get_all( 'post_date', 'ASC', 1 );
+		if ( empty( $styles ) ) {
+			return;
+		}
+
+		foreach ( $styles as $style ) {
+			if ( $style->post_content['field_width'] == '400px' ) {
+				$style->post_content['field_width'] = '100%';
+				$frm_style->save( (array) $style );
+				return;
+			}
+		}
+	}
 
 	/**
 	 * Check if the parent_form_id columns exists.

@@ -72,8 +72,6 @@ class FrmEntriesHelper {
 
             unset($opt_defaults);
 
-            $field_array['size'] = FrmAppHelper::get_field_size($field_array);
-
             if ( $field_array['custom_html'] == '' ) {
                 $field_array['custom_html'] = FrmFieldsHelper::get_default_html($field->type);
             }
