@@ -836,7 +836,7 @@ if ( ! $submit_style ) { ?>
 /* End Chosen */
 
 /* Responsive CSS */
-<?php if ( $change_margin ) { ?>
+<?php if ( $change_margin !== false ) { ?>
 @media only screen and (max-width: <?php echo $change_margin ?>){
 	.<?php echo $style_class ?> .frm_left_container p.description,
 	.<?php echo $style_class ?> .frm_left_container div.description,
