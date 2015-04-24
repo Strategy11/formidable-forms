@@ -45,6 +45,10 @@ class FrmForm{
         $wpdb->insert( $wpdb->prefix .'frm_forms', $new_values );
 
         $id = $wpdb->insert_id;
+
+		// Clear form caching
+		self::clear_form_cache();
+
         return $id;
     }
 
@@ -89,6 +93,9 @@ class FrmForm{
         $query_results = $wpdb->insert( $wpdb->prefix .'frm_forms', $new_values );
 
         if ( $query_results ) {
+			// Clear form caching
+			self::clear_form_cache();
+
             $form_id = $wpdb->insert_id;
             FrmField::duplicate($id, $form_id, $copy_keys, $blog_id);
 
@@ -333,7 +340,7 @@ class FrmForm{
         );
 
         if ( $query_results ) {
-            wp_cache_delete( $id, 'frm_form');
+			self::clear_form_cache();
         }
 
         return $query_results;
@@ -365,6 +372,9 @@ class FrmForm{
             // Delete all form actions linked to this form
             $action_control = FrmFormActionsController::get_form_actions( 'email' );
             $action_control->destroy($id, 'all');
+
+			// Clear form caching
+			self::clear_form_cache();
 
             do_action('frm_destroy_form', $id);
             do_action('frm_destroy_form_'. $id);
@@ -552,6 +562,16 @@ class FrmForm{
 
     	return $counts;
     }
+
+	/**
+	 * Clear form caching
+	 * Called when a form is created, duplicated, or deleted
+	 *
+	 * @since 2.0.4
+	 */
+	public static function clear_form_cache() {
+		FrmAppHelper::cache_delete_group( 'frm_form' );
+	}
 
     /**
      * @return array of errors

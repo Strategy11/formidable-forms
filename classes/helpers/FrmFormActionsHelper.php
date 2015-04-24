@@ -16,18 +16,7 @@ class FrmFormActionsHelper {
             return $action_controls->get_all( $form_id, $limit );
         }
 
-        $args = array(
-            'post_type'     => FrmFormActionsController::$action_post_type,
-            'post_status'   => 'publish',
-            'numberposts'   => 99,
-            'orderby'       => 'title',
-            'order'         => 'ASC',
-        );
-
-        if ( $form_id ) {
-            $args['menu_order'] = $form_id;
-        }
-
+		$args = self::action_args( $form_id );
 		$actions = FrmAppHelper::check_cache( serialize( $args ), 'frm_actions', $args, 'get_posts' );
 
         if ( ! $actions ) {
@@ -51,6 +40,32 @@ class FrmFormActionsHelper {
 
         return $settings;
     }
+
+	public static function action_args( $form_id = 0 ) {
+		$args = array(
+			'post_type'   => FrmFormActionsController::$action_post_type,
+			'post_status' => 'publish',
+			'numberposts' => 99,
+			'orderby'     => 'title',
+			'order'       => 'ASC',
+		);
+
+		if ( $form_id ) {
+			$args['menu_order'] = $form_id;
+		}
+
+		return $args;
+	}
+
+	/**
+	 * Delete the action cache when a form action is created, deleted, or updated
+	 *
+	 * @since 2.0.4
+	 */
+	public static function clear_action_cache( $form_id ) {
+		$args = self::action_args( $form_id );
+		wp_cache_delete( serialize( $args ), 'frm_actions' );
+	}
 
     public static function action_conditions_met($action, $entry) {
         $notification = $action->post_content;

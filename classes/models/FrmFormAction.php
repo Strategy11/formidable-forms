@@ -342,8 +342,8 @@ class FrmFormAction {
             unset($settings['ID']);
         }
 
-        // delete all styling caches
-        FrmAppHelper::cache_delete_group('frm_actions');
+		// delete all action caches
+		FrmFormActionsHelper::clear_action_cache( $settings['menu_order'] );
 
 		return FrmAppHelper::save_json_post( $settings );
 	}
@@ -451,6 +451,7 @@ class FrmFormAction {
 
         foreach ( $post_ids as $id ) {
             wp_delete_post($id);
+			FrmFormActionsHelper::clear_action_cache( $form_id );
         }
 	}
 
