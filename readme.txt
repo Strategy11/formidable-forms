@@ -4,7 +4,7 @@ Donate link: http://formidablepro.com/donate
 Tags: admin, AJAX, captcha, contact, contact form, database, email, feedback, form, forms, javascript, jquery, page, plugin, poll, Post, spam, survey, template, widget, wpmu, form builder
 Requires at least: 3.6
 Tested up to: 4.2
-Stable tag: 2.0.01
+Stable tag: 2.0.03
 
 Beautiful forms in 60 seconds. The WordPress form builder that enables you to create forms with a simple drag-and-drop interface and in-place editing.
 
@@ -89,6 +89,29 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 [See more FAQs](http://formidablepro.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 2.0.04 =
+* Fix XSS vulnerability from add_query_args and remove_query_args
+* Remove unneeded options from the form widget and switch old styling setting width from 400px to 100%
+* Fix the new form class box in the customizable HTML
+* Remove WP support for v3.5 and lower
+* Don't require the captcha if the keys haven't been configured
+* Styling enhancements for left and right label settings
+* Deactivate plugin after uninstall to prevent tables from being added back
+* Add frm_text_block class to Layout tab
+* Fix migration of email settigns that haven't been updated in over two years
+* Fix emailing from only a multiple word name with no email
+* Send emails for WordPress default if trying to send from Yahoo
+* Pro: Trigger calculation update each time a row is added or removed from repeating section
+* Pro: Allow phone format inside of repeating sections
+* Pro: Add allow=everyone option to frm-entry-update-field shortcode to prevent permission checking when updating a single field
+* Pro: Fix graph limit defaulting to 10 and the min and max options
+* Pro: Fix CSV download vulnerability without permission check
+* Pro: Fix searching by field on entry listing page
+* Pro: Fix exporting multiple entries with the bulk CSV export option
+* Pro: Fix Entry ID filter in views when using a comma separated list of ids
+* Pro: Fix 3+ level dynamic fields to hide the last field when the first is changed
+* Pro: Fix apostraphes in form action logic
+
 = 2.0.03 =
 * Use frm_clear instead of clear to minimize conflicts
 * Add js fallback for database update on sites without CURL
