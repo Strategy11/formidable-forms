@@ -337,7 +337,7 @@ class FrmNotification{
         $charset        = get_option('blog_charset');
 
         $header[]       = 'Reply-To: '. $atts['reply_to'];
-        $header[]       = 'Content-Type: '. $content_type .'; charset="'. $charset . '"';
+		$header[]       = 'Content-Type: ' . $content_type . '; charset="' . esc_attr( $charset ) . '"';
         $atts['subject'] = wp_specialchars_decode(strip_tags(stripslashes($atts['subject'])), ENT_QUOTES );
 
         $message        = do_shortcode($atts['message']);

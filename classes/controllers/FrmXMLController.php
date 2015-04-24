@@ -273,7 +273,7 @@ class FrmXMLController {
             unset($tb_type);
         }
 
-        echo '<?xml version="1.0" encoding="' . get_bloginfo('charset') . "\" ?>\n";
+		echo '<?xml version="1.0" encoding="' . esc_attr( get_bloginfo('charset') ) . "\" ?>\n";
         include(FrmAppHelper::plugin_path() .'/classes/views/xml/xml.php');
     }
 

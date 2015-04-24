@@ -99,7 +99,7 @@ class FrmStylesController {
                 $post_id = reset($id);
             }
             // include the CSS that includes this style
-            echo '<link href="'. admin_url('admin-ajax.php') .'?action=frmpro_css" type="text/css" rel="Stylesheet" class="frm-custom-theme" />';
+			echo '<link href="' . esc_url( admin_url( 'admin-ajax.php' ) . '?action=frmpro_css' ) . '" type="text/css" rel="Stylesheet" class="frm-custom-theme" />';
             $message = __( 'Your styling settings have been saved.', 'formidable' );
         }
 

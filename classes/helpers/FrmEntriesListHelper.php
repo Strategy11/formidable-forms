@@ -124,7 +124,7 @@ class FrmEntriesListHelper extends FrmListHelper {
     } else {
         submit_button( $text, 'button', false, false, array( 'id' => 'search-submit') );
 		if ( ! empty( $search_str ) ) { ?>
-    <a href="<?php echo admin_url('admin.php?page=formidable-entries&frm_action=list&form='.$form->id) ?>"><?php _e( 'Reset', 'formidable' ) ?></a>
+	<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-entries&frm_action=list&form=' . $form->id ) ) ?>"><?php _e( 'Reset', 'formidable' ) ?></a>
     <?php
 		}
     } ?>
@@ -159,7 +159,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 			    $action_col = $column_name;
             }
 
-			$attributes = 'class="'. $class .'"';
+			$attributes = 'class="' . esc_attr( $class ) . '"';
             unset($class);
 
             $col_name = preg_replace('/^('. $this->params['form'] .'_)/', '', $column_name);
@@ -180,7 +180,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 				case 'created_at':
 				case 'updated_at':
 				    $date = FrmAppHelper::get_formatted_time($item->{$col_name});
-					$val = '<abbr title="' . FrmAppHelper::get_formatted_time( $item->{$col_name}, '', 'g:i:s A' ) . '">' . $date . '</abbr>';
+					$val = '<abbr title="' . esc_attr( FrmAppHelper::get_formatted_time( $item->{$col_name}, '', 'g:i:s A' ) ) . '">' . $date . '</abbr>';
 					break;
 				case 'is_draft':
 				    $val = empty($item->is_draft) ? __( 'No') : __( 'Yes');
@@ -233,7 +233,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 			    $r .= "<td $attributes>";
 				if ( $column_name == $action_col ) {
 					$edit_link = '?page=formidable-entries&frm_action=edit&id='. $item->id;
-			        $r .= '<a href="'. (isset($actions['edit']) ? $edit_link : $view_link) .'" class="row-title" >'. $val .'</a> ';
+					$r .= '<a href="' . esc_url( isset( $actions['edit'] ) ? $edit_link : $view_link ) . '" class="row-title" >' . $val . '</a> ';
 			        $r .= $action_links;
 				} else {
 			        $r .= $val;
@@ -255,7 +255,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 
         if ( current_user_can('frm_delete_entries') ) {
             $delete_link = '?page=formidable-entries&frm_action=destroy&id='. $item->id .'&form='. $this->params['form'];
-		    $actions['delete'] = '<a href="' . wp_nonce_url( $delete_link ) . '" class="submitdelete" onclick="return confirm(\''. __( 'Are you sure you want to delete that?', 'formidable' ) .'\')">' . __( 'Delete' ) . '</a>';
+			$actions['delete'] = '<a href="' . esc_url( wp_nonce_url( $delete_link ) ) . '" class="submitdelete" onclick="return confirm(\'' . esc_attr( __( 'Are you sure you want to delete that?', 'formidable' ) ) . '\')">' . __( 'Delete' ) . '</a>';
 	    }
 
         $actions = apply_filters('frm_row_actions', $actions, $item);

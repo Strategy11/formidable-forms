@@ -390,7 +390,7 @@ class FrmFormsController {
 
     public static function insert_form_button($content) {
         if ( current_user_can('frm_view_forms') ) {
-            $content .= '<a href="#TB_inline?width=50&height=50&inlineId=frm_insert_form" class="thickbox button add_media frm_insert_form" title="' . __( 'Add forms and content', 'formidable' ) . '"><span class="frm-buttons-icon wp-media-buttons-icon"></span> Formidable</a>';
+			$content .= '<a href="#TB_inline?width=50&height=50&inlineId=frm_insert_form" class="thickbox button add_media frm_insert_form" title="' . esc_attr( __( 'Add forms and content', 'formidable' ) ) . '"><span class="frm-buttons-icon wp-media-buttons-icon"></span> Formidable</a>';
 
         }
         return $content;
@@ -469,7 +469,7 @@ class FrmFormsController {
 
         $total_pages = $wp_list_table->get_pagination_arg( 'total_pages' );
         if ( $pagenum > $total_pages && $total_pages > 0 ) {
-            wp_redirect( add_query_arg( 'paged', $total_pages ) );
+			wp_redirect( esc_url_raw( add_query_arg( 'paged', $total_pages ) ) );
             die();
         }
 
@@ -911,7 +911,7 @@ class FrmFormsController {
         if ( isset($frm_vars['skip_shortcode']) && $frm_vars['skip_shortcode'] ) {
             $sc = '[formidable';
             foreach ( $atts as $k => $v ) {
-                $sc .= ' '. $k .'="'. $v .'"';
+                $sc .= ' ' . $k . '="' . esc_attr( $v ) . '"';
             }
             return $sc .']';
         }
@@ -1049,7 +1049,7 @@ class FrmFormsController {
             $class = 'frm_error_style';
         }
         $message = apply_filters('frm_content', $message, $form, $created);
-        $message = '<div class="'. $class .'">'. wpautop(do_shortcode($message)) .'</div>';
+		$message = '<div class="' . esc_attr( $class ) . '">' . wpautop( do_shortcode( $message ) ) . '</div>';
         $message = apply_filters('frm_main_feedback', $message, $form, $created);
 
         if ( ! isset($form->options['show_form']) || $form->options['show_form'] ) {

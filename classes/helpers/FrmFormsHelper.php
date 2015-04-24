@@ -96,7 +96,7 @@ class FrmFormsHelper {
 			        $args['form'] = $form->id;
 				}
                 ?>
-				<li><a href="<?php echo isset($base) ? add_query_arg($args, $base) : add_query_arg($args); ?>" tabindex="-1"><?php echo empty($form->name) ? __( '(no title)') : FrmAppHelper::truncate($form->name, 33); ?></a></li>
+				<li><a href="<?php echo esc_url( isset( $base ) ? add_query_arg( $args, $base ) : add_query_arg( $args ) ); ?>" tabindex="-1"><?php echo empty( $form->name ) ? __( '(no title)') : FrmAppHelper::truncate( $form->name, 33 ); ?></a></li>
 			<?php
 				unset( $form );
 			} ?>
@@ -261,7 +261,7 @@ BEFORE_HTML;
 
         $classes = apply_filters('frm_submit_button_class', array(), $form);
         if ( ! empty($classes) ) {
-            echo ' class="'. implode(' ', $classes) .'"';
+			echo ' class="' . esc_attr( implode( ' ', $classes ) ) . '"';
         }
 
         do_action('frm_submit_button_action', $form, $form_action);
@@ -483,7 +483,7 @@ BEFORE_HTML;
         }
 
         if ( $form_id ) {
-            $val = '<a href="'. admin_url('admin.php') .'?page=formidable&frm_action=edit&id='. $form_id .'">'. ( '' == $name ? __( '(no title)') : FrmAppHelper::truncate($name, 40) ) .'</a>';
+			$val = '<a href="' . esc_url( admin_url( 'admin.php' ) . '?page=formidable&frm_action=edit&id=' . $form_id ) . '">' . ( '' == $name ? __( '(no title)' ) : FrmAppHelper::truncate( $name, 40 ) ) . '</a>';
 	    } else {
 	        $val = '';
 	    }
@@ -511,12 +511,12 @@ BEFORE_HTML;
         $current_page = isset( $_REQUEST['form_type'] ) ? $_REQUEST['form_type'] : '';
         $base_url = '?page=formidable&form_type='. $current_page .'&id='. $id;
         if ( 'trash' == $status ) {
-            $link = '<a href="'. esc_url(wp_nonce_url( $base_url .'&frm_action=untrash', 'untrash_form_' . $id )) .'" class="submitdelete deletion">'. $labels['restore'][$length] .'</a>';
+			$link = '<a href="'. esc_url( wp_nonce_url( $base_url . '&frm_action=untrash', 'untrash_form_' . $id ) ) . '" class="submitdelete deletion">' . $labels['restore'][ $length ] . '</a>';
         } else if ( current_user_can('frm_delete_forms') ) {
             if ( EMPTY_TRASH_DAYS ) {
-                $link = '<a href="'. wp_nonce_url( $base_url .'&frm_action=trash', 'trash_form_' . $id ) .'" class="submitdelete deletion">'. $labels['trash'][$length] .'</a>';
+				$link = '<a href="' . esc_url( wp_nonce_url( $base_url . '&frm_action=trash', 'trash_form_' . $id ) ) . '" class="submitdelete deletion">' . $labels['trash'][ $length ] . '</a>';
             } else {
-                $link = '<a href="'. wp_nonce_url( $base_url .'&frm_action=destroy', 'destroy_form_' . $id ) .'" class="submitdelete deletion" onclick="return confirm(\''. __( 'Are you sure you want to delete this form and all its entries?', 'formidable' ) .'\')">'. $labels['delete'][$length] .'</a>';
+				$link = '<a href="' . esc_url( wp_nonce_url( $base_url .'&frm_action=destroy', 'destroy_form_' . $id ) ) . '" class="submitdelete deletion" onclick="return confirm(\'' . esc_attr( __( 'Are you sure you want to delete this form and all its entries?', 'formidable' ) ) . '\')">' . $labels['delete'][ $length ] . '</a>';
             }
         }
 
@@ -580,7 +580,7 @@ BEFORE_HTML;
         }
 
         $available_status['untrash']['message'] = sprintf(_n( '%1$s form restored from the Trash.', '%1$s forms restored from the Trash.', $count, 'formidable' ), $count );
-        $available_status['trash']['message'] = sprintf(_n( '%1$s form moved to the Trash. %2$sUndo%3$s', '%1$s forms moved to the Trash. %2$sUndo%3$s', $count, 'formidable' ), $count, '<a href="'. esc_url(wp_nonce_url( '?page=formidable&frm_action=untrash&form_type='. ( isset( $_REQUEST['form_type'] ) ? $_REQUEST['form_type'] : '' ) .'&id='. $params['id'], 'untrash_form_' . $params['id'] )) .'">', '</a>' );
+		$available_status['trash']['message'] = sprintf( _n( '%1$s form moved to the Trash. %2$sUndo%3$s', '%1$s forms moved to the Trash. %2$sUndo%3$s', $count, 'formidable' ), $count, '<a href="' . esc_url( wp_nonce_url( '?page=formidable&frm_action=untrash&form_type='. ( isset( $_REQUEST['form_type'] ) ? sanitize_title( $_REQUEST['form_type'] ) : '' ) . '&id=' . $params['id'], 'untrash_form_' . $params['id'] ) ) . '">', '</a>' );
 
         $message = $available_status[$status]['message'];
 

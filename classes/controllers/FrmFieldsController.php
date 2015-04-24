@@ -540,7 +540,7 @@ class FrmFieldsController {
         $class = apply_filters('frm_field_classes', implode(' ', $class), $field);
 
         if ( ! empty($class) ) {
-            $add_html['class'] = 'class="'. trim($class) .'"';
+			$add_html['class'] = 'class="' . esc_attr( trim( $class ) ) . '"';
         }
 
         self::add_shortcodes_to_html($field, $add_html);
@@ -615,7 +615,7 @@ class FrmFieldsController {
 
         $size = (float) str_replace( $unit, '', $field['size'] ) / $calc[ $unit ];
 
-        $add_html['cols'] = 'cols="'. (int) $size .'"';
+		$add_html['cols'] = 'cols="' . absint( $size ) . '"';
     }
 
     private static function add_html_length($field, array &$add_html) {
@@ -629,7 +629,7 @@ class FrmFieldsController {
             return;
         }
 
-        $add_html['maxlength'] = 'maxlength="'. $field['max'] .'"';
+		$add_html['maxlength'] = 'maxlength="' . esc_attr( $field['max'] ) . '"';
     }
 
     private static function add_html_placeholder($field, array &$add_html, array &$class) {
@@ -675,7 +675,7 @@ class FrmFieldsController {
             } else if ( ! empty( $k ) && isset( $add_html[ $k ] ) ) {
                 $add_html[ $k ] = str_replace( $k .'="', $k .'="'. $v, $add_html[ $k ] );
             } else {
-                $add_html[ $k ] = $k .'="'. $v .'"';
+				$add_html[ $k ] = $k . '="' . esc_attr( $v ) . '"';
             }
 
             unset($k, $v);

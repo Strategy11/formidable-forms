@@ -146,7 +146,7 @@ class FrmFormsListHelper extends FrmListHelper {
         } else {
             foreach ( $forms as $form ) {
 		        $args['id'] = $form->id; ?>
-			<li><a href="<?php echo add_query_arg($args, $base); ?>" tabindex="-1"><?php echo empty($form->name) ? __( '(no title)') : FrmAppHelper::truncate($form->name, 33); ?></a></li>
+			<li><a href="<?php echo esc_url( add_query_arg( $args, $base ) ); ?>" tabindex="-1"><?php echo empty( $form->name ) ? __( '(no title)' ) : FrmAppHelper::truncate( $form->name, 33 ); ?></a></li>
 			<?php
 			    unset($form);
 			}
@@ -212,9 +212,9 @@ class FrmFormsListHelper extends FrmListHelper {
         $action_links = $this->row_actions( $actions );
 
 		// Set up the checkbox ( because the user is editable, otherwise its empty )
-		$checkbox = '<input type="checkbox" name="item-action[]" id="cb-item-action-'. $item->id .'" value="'. $item->id .'" />';
+		$checkbox = '<input type="checkbox" name="item-action[]" id="cb-item-action-' . absint( $item->id ) . '" value="' . esc_attr( $item->id ) . '" />';
 
-		$r = '<tr id="item-action-'. $item->id .'"'. $style .'>';
+		$r = '<tr id="item-action-' . absint( $item->id ) . '"' . $style . '>';
 
 		list( $columns, $hidden ) = $this->get_column_info();
 
@@ -231,7 +231,7 @@ class FrmFormsListHelper extends FrmListHelper {
                 $class .= ' frm_hidden';
 			}
 
-            $class = 'class="' . $class . '"';
+			$class = 'class="' . esc_attr( $class ) . '"';
 			$attributes = $class . $style;
 
 			switch ( $column_name ) {
@@ -249,7 +249,7 @@ class FrmFormsListHelper extends FrmListHelper {
 				    break;
 				case 'created_at':
 				    $date = date($format, strtotime($item->created_at));
-					$val = '<abbr title="'. date('Y/m/d g:i:s A', strtotime($item->created_at)) .'">'. $date .'</abbr>';
+					$val = '<abbr title="' . esc_attr( date( 'Y/m/d g:i:s A', strtotime( $item->created_at ) ) ) . '">' . $date . '</abbr>';
 					break;
 				case 'shortcode':
 				    $val = '<input type="text" readonly="true" class="frm_select_box" value="'. esc_attr("[formidable id={$item->id}]") .'" /><br/>';
@@ -305,12 +305,12 @@ class FrmFormsListHelper extends FrmListHelper {
             }
 
 		    if ( $item->is_template ) {
-		        $actions['frm_duplicate'] = '<a href="'. wp_nonce_url( $duplicate_link ) .'">'. __( 'Create Form from Template', 'formidable' ) .'</a>';
+				$actions['frm_duplicate'] = '<a href="'. esc_url( wp_nonce_url( $duplicate_link ) ) . '">' . __( 'Create Form from Template', 'formidable' ) . '</a>';
             } else {
     		    $actions['frm_settings'] = '<a href="'. esc_url('?page=formidable&frm_action=settings&id='. $item->id ) . '">'. __( 'Settings', 'formidable' ) .'</a>';
 
     		    if ( FrmAppHelper::pro_is_installed() ) {
-        	        $actions['duplicate'] = '<a href="' . wp_nonce_url( $duplicate_link ) . '">'. __( 'Duplicate', 'formidable' ) .'</a>';
+					$actions['duplicate'] = '<a href="' . esc_url( wp_nonce_url( $duplicate_link ) ) . '">' . __( 'Duplicate', 'formidable' ) . '</a>';
         	    }
         	}
         }
@@ -321,7 +321,7 @@ class FrmFormsListHelper extends FrmListHelper {
 			unset( $actions['trash'] );
 		}
 
-		$actions['view'] = '<a href="'. FrmFormsHelper::get_direct_link($item->form_key, $item) .'" target="_blank">'. __( 'Preview') .'</a>';
+		$actions['view'] = '<a href="' . esc_url( FrmFormsHelper::get_direct_link( $item->form_key, $item ) ) . '" target="_blank">' . __( 'Preview') . '</a>';
     }
 
     /**
@@ -338,7 +338,7 @@ class FrmFormsListHelper extends FrmListHelper {
         if ( 'trash' == $this->status ) {
             $val .= $form_name;
         } else {
-            $val .= '<a href="'. ( isset($actions['frm_edit']) ? $edit_link : FrmFormsHelper::get_direct_link($item->form_key, $item) ) .'" class="row-title">'. $form_name .'</a> ';
+			$val .= '<a href="' . esc_url( isset( $actions['frm_edit'] ) ? $edit_link : FrmFormsHelper::get_direct_link( $item->form_key, $item ) ) . '" class="row-title">' . FrmAppHelper::kses( $form_name ) . '</a> ';
         }
 
         $this->add_draft_label( $item, $val );

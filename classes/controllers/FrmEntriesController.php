@@ -312,11 +312,11 @@ class FrmEntriesController {
 
         $total_pages = $wp_list_table->get_pagination_arg( 'total_pages' );
         if ( $pagenum > $total_pages && $total_pages > 0 ) {
-            $url = add_query_arg( 'paged', $total_pages );
+			$url = add_query_arg( 'paged', $total_pages );
             if ( headers_sent() ) {
                 echo FrmAppHelper::js_redirect($url);
             } else {
-                wp_redirect($url);
+                wp_redirect( esc_url_raw( $url ) );
             }
             die();
         }

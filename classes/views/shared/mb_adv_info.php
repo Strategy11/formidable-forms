@@ -203,7 +203,7 @@
         <ul class="frm_code_list">
         <?php foreach ( $user_fields as $uk => $uf ) { ?>
             <li class="frm_col_<?php echo esc_attr( $col ) ?>">
-                <a href="javascript:void(0)" class="frmbutton button frm_insert_code" data-code="<?php echo esc_attr($uid->id .' show="'. $uk .'"') ?>"><?php echo esc_html( $uf ) ?></a>
+				<a href="javascript:void(0)" class="frmbutton button frm_insert_code" data-code="<?php echo esc_attr( $uid->id . ' show="' . $uk . '"' ) ?>"><?php echo esc_html( $uf ) ?></a>
     	    </li>
         <?php
             $col = ($col == 'one') ? 'two' : 'one';

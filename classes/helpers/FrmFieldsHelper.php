@@ -639,7 +639,7 @@ DEFAULT_HTML;
             $add_html .= FrmProFieldsController::input_html($args['field'], false);
         }
 
-        $dropdown = str_replace("<select name='". $args['name'] ."' id='$id' class='$class'", "<select name='". $args['name'] ."' id='$id' ". $add_html, $dropdown);
+		$dropdown = str_replace( "<select name='" . esc_attr( $args['name'] ) ."' id='" . esc_attr( $id ) . "' class='" . esc_attr( $class ) . "'", "<select name='" . esc_attr( $args['name'] ) . "' id='" . esc_attr( $id ) . "' " . $add_html, $dropdown );
 
         if ( is_array($args['field']['value']) ) {
             $skip = true;
@@ -648,7 +648,7 @@ DEFAULT_HTML;
                     $skip = false;
                     continue;
                 }
-                $dropdown = str_replace(' value="'. $v. '"', ' value="'. $v .'" selected="selected"', $dropdown);
+				$dropdown = str_replace(' value="' . esc_attr( $v ) . '"', ' value="' . esc_attr( $v ) . '" selected="selected"', $dropdown );
                 unset($v);
             }
         }
