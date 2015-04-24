@@ -150,7 +150,7 @@ class FrmXMLController {
         $format = isset($_POST['format']) ? $_POST['format'] : 'xml';
 
         if ( ! headers_sent() && ! $type ) {
-            wp_redirect(admin_url('admin.php?page=formidable-import'));
+            wp_redirect( esc_url_raw( admin_url( 'admin.php?page=formidable-import' ) ) );
             die();
         }
 
