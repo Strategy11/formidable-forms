@@ -25,7 +25,7 @@ class FrmShowForm extends WP_Widget {
 		}
 
 		echo FrmFormsController::show_form($instance['form'], '', false, $instance['description']);
-        $frm_vars['sidebar_width'] = '';
+
 		echo '</div>';
 		echo $args['after_widget'];
 	}
