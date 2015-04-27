@@ -38,10 +38,10 @@ foreach ( $field->options as $fkey => $fopt ) {
         $value = (isset($fopt['value'])) ? $fopt['value'] : $label;
         if ( $label != $value && isset($field->field_options['separate_value']) && $field->field_options['separate_value'] ) {
             echo "$label|$value\n";
-        } else{
+		} else {
             echo $label ."\n";
         }
-    }else{
+	} else {
         echo $fopt ."\n";
     }
 } ?>

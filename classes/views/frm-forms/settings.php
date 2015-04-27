@@ -72,7 +72,7 @@
 							} ?>" placeholder="http://example.com" />
                         </span>
 
-                        <?php if ( FrmAppHelper::pro_is_installed() ){ ?>
+						<?php if ( FrmAppHelper::pro_is_installed() ) { ?>
                         <span class="success_action_page_box success_action_box<?php echo ($values['success_action'] == 'page') ? '' : ' frm_hidden'; ?>">
                             <label><?php _e( 'Use Content from Page', 'formidable' ) ?></label>
                             <?php FrmAppHelper::wp_pages_dropdown( 'options[success_page_id]', $values['success_page_id'] ) ?>

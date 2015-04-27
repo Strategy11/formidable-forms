@@ -22,7 +22,7 @@ foreach ( $type as $tb_type ) {
         include(dirname(__FILE__) .'/posts_xml.php');
     } else if ( file_exists(dirname(__FILE__) .'/'. $tb_type .'_xml.php') ) {
         include(dirname(__FILE__) .'/'. $tb_type .'_xml.php');
-    } else if ( file_exists( FrmAppHelper::plugin_path() .'/pro/classes/views/xml/'. $tb_type .'_xml.php') ){
+	} else if ( file_exists( FrmAppHelper::plugin_path() . '/pro/classes/views/xml/' . $tb_type . '_xml.php' ) ) {
         include( FrmAppHelper::plugin_path() .'/pro/classes/views/xml/'. $tb_type .'_xml.php' );
     }
 

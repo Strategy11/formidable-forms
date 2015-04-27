@@ -49,7 +49,7 @@ class FrmNotification{
         //Filter and prepare the email fields
         foreach ( $filter_fields as $f ) {
             //Don't allow empty From
-            if  ( $f == 'from' && empty($notification[$f]) ) {
+			if  ( $f == 'from' && empty( $notification[ $f ] ) ) {
                 $notification[$f] = '[admin_email]';
             } else if ( in_array($f, array( 'email_to', 'cc', 'bcc', 'reply_to', 'from')) ) {
 				//Remove brackets

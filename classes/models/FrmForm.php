@@ -488,7 +488,7 @@ class FrmForm{
                 wp_cache_set($results->id, $results, 'frm_form');
                 $results->options = maybe_unserialize($results->options);
             }
-        }else{
+		} else {
             if ( is_array($where) && ! empty($where) ) {
                 $results = FrmDb::get_results( $wpdb->prefix .'frm_forms', $where, '*', compact('order_by', 'limit') );
             } else {

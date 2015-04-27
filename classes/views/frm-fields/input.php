@@ -1,6 +1,6 @@
 <?php if ( in_array($field['type'], array( 'email', 'url', 'text')) ) { ?>
 <input type="<?php echo ( $frm_settings->use_html || $field['type'] == 'password' ) ? $field['type'] : 'text'; ?>" id="<?php echo esc_attr( $html_id ) ?>" name="<?php echo esc_attr( $field_name ) ?>" value="<?php echo esc_attr( $field['value'] ) ?>" <?php do_action('frm_field_input_html', $field) ?>/>
-<?php }else if ($field['type'] == 'textarea'){ ?>
+<?php } else if ( $field['type'] == 'textarea' ) { ?>
 <textarea name="<?php echo esc_attr( $field_name ) ?>" id="<?php echo esc_attr( $html_id ) ?>" <?php
 if ( $field['max'] ) {
     echo 'rows="'. esc_attr( $field['max'] ) .'" ';
@@ -54,16 +54,16 @@ do_action('frm_field_input_html', $field);
 <?php
         }
     }
-}else if ($field['type'] == 'select'){
+} else if ( $field['type'] == 'select' ) {
     $read_only = false;
     if ( isset($field['post_field']) && $field['post_field'] == 'post_category' ) {
         echo FrmFieldsHelper::dropdown_categories( array( 'name' => $field_name, 'field' => $field) );
-    }else{
+	} else {
         if ( isset( $field['read_only'] ) && $field['read_only'] && ( ! isset( $frm_vars['readonly'] ) || $frm_vars['readonly'] != 'disabled' ) && ! FrmAppHelper::is_admin() ) {
             $read_only = true; ?>
 <input type="hidden" value="<?php echo esc_attr($field['value']) ?>" name="<?php echo esc_attr( $field_name ) ?>" id="<?php echo esc_attr( $html_id ) ?>" />
 <select disabled="disabled" <?php do_action('frm_field_input_html', $field) ?>>
-<?php   }else{ ?>
+<?php	} else { ?>
 <select name="<?php echo esc_attr( $field_name ) ?>" id="<?php echo esc_attr( $html_id ) ?>" <?php do_action('frm_field_input_html', $field) ?>>
 <?php   }
 
@@ -88,7 +88,7 @@ do_action('frm_field_input_html', $field);
         <input type="text" <?php echo ( $read_only ? 'readonly="readonly" disabled="disabled"' : '' );?> class="frm_other_input<?php echo ( $other_checked ? '' : ' frm_pos_none' ); echo ( $field['multiple'] ? ' frm_other_full' : '' ); ?>" name="<?php echo esc_attr( $other_args['name'] ) ?>" value="<?php echo esc_attr($other_args['value']);?>"><?php
         }
     }
-}else if ($field['type'] == 'checkbox'){
+} else if ( $field['type'] == 'checkbox' ) {
     $checked_values = $field['value'];
     $read_only = false;
 

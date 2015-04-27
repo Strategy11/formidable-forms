@@ -67,7 +67,7 @@ if ( $field['type'] == 'divider' ) { ?>
 <?php
 include(FrmAppHelper::plugin_path() .'/classes/views/frm-fields/show-build.php');
 
-if ($display['clear_on_focus']){ ?>
+if ( $display['clear_on_focus'] ) { ?>
     <span id="frm_clear_on_focus_<?php echo esc_attr( $field['id'] ) ?>" class="frm-show-click"><?php
 
     if ( $display['default_blank'] ) {
@@ -85,7 +85,7 @@ if ($display['clear_on_focus']){ ?>
 <div class="clear"></div>
 </div>
 <?php
-if ($display['description']){ ?>
+if ( $display['description'] ) { ?>
     <div class="frm_ipe_field_desc description <?php echo ($field['description'] == '') ? 'frm-show-click' : '' ?>" id="field_description_<?php echo esc_attr( $field['id'] ); ?>"><?php echo ($field['description'] == '') ? __( '(Click to add description)', 'formidable' ) : force_balance_tags( $field['description'] ); ?></div>
     <input type="hidden" name="field_options[description_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['description'] ); ?>" />
 
@@ -99,7 +99,7 @@ if ( $display['conf_field'] ) { ?>
     	<div class="frm_ipe_field_conf_desc description <?php echo ($field['conf_desc'] == '') ? 'frm-show-click' : '' ?>"><?php echo ($field['conf_desc'] == '') ? __( '(Click to add description)', 'formidable' ) : force_balance_tags($field['conf_desc']); ?></div>
     	<input type="hidden" name="field_options[conf_desc_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['conf_desc'] ); ?>" />
 </div>
-    <?php if ($display['clear_on_focus']){ ?>
+	<?php if ( $display['clear_on_focus'] ) { ?>
         <div class="alignleft">
             <span id="frm_clear_on_focus_<?php echo esc_attr( $field['id'] ) ?>" class="frm-show-click">
                 <?php
@@ -146,7 +146,7 @@ if ( in_array($field['type'], array( 'select', 'radio', 'checkbox')) ) { ?>
 
 do_action('frm_before_field_options', $field);
 
-if ($display['options']){ ?>
+if ( $display['options'] ) { ?>
     <div class="widget">
         <div class="widget-top">
     	    <div class="widget-title-action"><a href="javascript:void(0);" class="widget-action"></a></div>
@@ -235,7 +235,7 @@ if ($display['options']){ ?>
                         </td>
                     </tr>
                 <?php } ?>
-                <?php if ($display['size']){ ?>
+				<?php if ( $display['size'] ) { ?>
                     <tr><td class="frm_150_width"><label><?php _e( 'Field Size', 'formidable' ) ?></label></td>
                         <td>
                         <?php

@@ -737,7 +737,7 @@ class FrmFormsController {
         $path = untrailingslashit(trim($path));
         $templates = glob( $path .'/*.php' );
 
-        for($i = count($templates) - 1; $i >= 0; $i--) {
+		for ( $i = count( $templates ) - 1; $i >= 0; $i-- ) {
             $filename = str_replace( '.php', '', str_replace( $path.'/', '', $templates[ $i ] ) );
             $template_query = array( 'form_key' => $filename);
             if ( $template ) {

@@ -38,7 +38,8 @@
 					'name' => $f->name, 'type' => $f->type,
 				) );
 
-        	    if ($f->type == 'data'){ //get all fields from linked form
+				if ( $f->type == 'data' ) {
+					//get all fields from linked form
                     if ( isset($f->field_options['form_select']) && is_numeric($f->field_options['form_select']) ) {
                         $linked_form = FrmDb::get_var( $wpdb->prefix .'frm_fields', array( 'id' => $f->field_options['form_select'] ), 'form_id' );
                         if ( ! in_array( $linked_form, $linked_forms ) ) {

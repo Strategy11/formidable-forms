@@ -3,10 +3,10 @@ if ( isset($include_extra_container) ) { ?>
 <div class="<?php echo esc_attr( $include_extra_container ) ?>" id="frm_form_<?php echo esc_attr( $form->id ) ?>_container">
 <?php
 }
-if (isset($message) && $message != ''){
+if ( isset( $message ) && $message != '' ) {
     if ( FrmAppHelper::is_admin() ) {
         ?><div id="message" class="frm_message updated frm_msg_padding"><?php echo $message ?></div><?php
-    }else{
+	} else {
         FrmFormsHelper::get_scroll_js($form->id);
         echo $message;
     }
@@ -34,12 +34,12 @@ if ( empty( $frm_settings->invalid_msg ) ) {
 	foreach ( $errors as $error ) {
         if ( $show_img && ! empty($img) ) {
             ?><img src="<?php echo esc_attr( $img ) ?>" alt="" /><?php
-        }else{
+		} else {
             $show_img = true;
         }
         echo $error . '<br/>';
     }
-}else{
+} else {
     echo $frm_settings->invalid_msg;
 
     $show_img = true;
@@ -51,7 +51,7 @@ if ( empty( $frm_settings->invalid_msg ) ) {
         echo '<br/>';
         if ( $show_img && ! empty($img) ) {
             ?><img src="<?php echo esc_attr( $img ) ?>" alt="" /><?php
-        }else{
+		} else {
             $show_img = true;
         }
         echo $error;

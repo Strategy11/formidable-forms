@@ -1,6 +1,6 @@
 <?php if ( in_array($display['type'], array( 'text', 'website', 'email', 'url') ) ) { ?>
     <input type="text" name="<?php echo esc_attr( $field_name ) ?>" id="<?php echo esc_attr( $html_id ) ?>" value="<?php echo esc_attr( $field['default_value'] ); ?>" <?php echo ( isset($field['size']) && $field['size'] ) ? esc_attr( 'style="width:'. $field['size'] . ( is_numeric($field['size']) ? 'px' : '') .';"' ) : ''; ?> class="dyn_default_value" />
-<?php }else if ($field['type'] == 'textarea'){ ?>
+<?php } else if ( $field['type'] == 'textarea' ) { ?>
     <textarea name="<?php echo esc_attr( $field_name ) ?>" <?php
     echo ( isset($field['size']) && $field['size'] ) ? esc_attr( 'style="width:'. $field['size'] . ( is_numeric($field['size']) ? 'px' : '') .';"' ) : '';
     ?> rows="<?php echo esc_attr( $field['max'] ); ?>" id="<?php echo esc_attr( $html_id ) ?>" class="dyn_default_value"><?php echo FrmAppHelper::esc_textarea(force_balance_tags($field['default_value'])); ?></textarea>

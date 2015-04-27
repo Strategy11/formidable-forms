@@ -1,8 +1,8 @@
 <?php
 
 if ( isset($_GET['frm_style_setting']) || isset($_GET['flat']) ) {
-    if ( isset($_GET['frm_style_setting']) ){
-        extract($_GET['frm_style_setting']['post_content']);
+	if ( isset( $_GET['frm_style_setting'] ) ) {
+		extract( $_GET['frm_style_setting']['post_content'] );
     } else {
         extract($_GET);
     }
@@ -599,7 +599,7 @@ if ( ! $submit_style ) { ?>
 }
 
 .form_results.<?php echo $style_class ?>{
-    border-color:<?php echo $field_border_width ?> solid #<?php echo $border_color . $important ?>;
+    border:<?php echo $field_border_width ?> solid #<?php echo $border_color . $important ?>;
 }
 
 .form_results.<?php echo $style_class ?> tr td{
@@ -671,8 +671,7 @@ if ( ! $submit_style ) { ?>
 }
 
 .<?php echo $style_class ?> .frm_button{
-    padding-top:<?php echo $field_pad . $important ?>;
-    padding-bottom:<?php echo $field_pad . $important ?>;
+    padding:<?php echo $field_pad . $important ?>;
     -moz-border-radius:<?php echo $border_radius . $important ?>;
     -webkit-border-radius:<?php echo $border_radius . $important ?>;
     border-radius:<?php echo $border_radius . $important ?>;

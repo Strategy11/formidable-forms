@@ -344,7 +344,7 @@ class FrmField{
 
             $table_name = $prefix .'frm_fields';
             $form_table_name = $prefix .'frm_forms';
-        }else{
+		} else {
             $table_name = $wpdb->prefix .'frm_fields';
             $form_table_name = $wpdb->prefix .'frm_forms';
         }
@@ -367,7 +367,7 @@ class FrmField{
             }
 
             $results = FrmDb::get_var( $table_name . ' fi LEFT OUTER JOIN ' . $form_table_name . ' fr ON fi.form_id=fr.id', $where, 'fi.*, fr.name as form_name', array( 'order_by' => $order_by, 'limit' => $limit ), '', $query_type );
-        }else{
+		} else {
 			// if the query is not an array, then it has already been prepared
             $query .= FrmAppHelper::prepend_and_or_where(' WHERE ', $where) . $order_by . $limit;
 
