@@ -654,7 +654,7 @@ function frmFrontFormJS(){
 
                 vals[thisFieldId] = getCalcFieldId(thisFieldCall, thisFieldId, thisField, all_calcs, vals);
 
-				if ( typeof vals[thisFieldId] === 'undefined' ) {
+				if ( typeof vals[thisFieldId] === 'undefined' || isNaN(vals[thisFieldId]) ) {
 					vals[thisFieldId] = 0;
 				}
 
