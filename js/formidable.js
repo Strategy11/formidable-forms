@@ -105,10 +105,24 @@ function frmFrontFormJS(){
 
 	function maybeCheckDependent(e){
 		/*jshint validthis:true */
-		var nameParts = this.name.replace('item_meta[', '').split(']');
-		var field_id = nameParts[0];
+
+		var field_id = getFieldId( this );
 		if ( ! field_id ) {
 			return;
+		}
+
+		checkDependentField('und', field_id, null, jQuery(this));
+		doCalculation(e, field_id);
+	}
+
+	/* Get the ID of the field that changed*/
+	function getFieldId( field ) {
+		var nameParts = field.name.replace('item_meta[', '').split(']');
+		var field_id = nameParts[0];
+
+		// Check if 'this' is an other text field and get field ID for it
+		if ( field_id == 'other' ) {
+			field_id = nameParts[1].replace('[', '');
 		}
 
 		if ( jQuery('input[name="item_meta['+ field_id +'][form]"]').length ) {
@@ -116,8 +130,7 @@ function frmFrontFormJS(){
 			field_id = nameParts[2].replace('[', '');
 		}
 
-		checkDependentField('und', field_id, null, jQuery(this));
-		doCalculation(e, field_id);
+		return field_id;
 	}
 	
 	function checkDependentField(selected, field_id, rec, parentField, reset){
@@ -701,7 +714,8 @@ function frmFrontFormJS(){
             if ( typeof vals[thisFieldId] === 'undefined' ) {
                 vals[thisFieldId] = 0;
             }
-            var thisVal = jQuery(this).val();
+
+			var thisVal = getOptionValue( thisField, this );
 
             if ( thisField.type == 'date' ) {
                 d = jQuery.datepicker.parseDate(all_calcs.date, thisVal);
@@ -722,6 +736,53 @@ function frmFrontFormJS(){
 
         return vals[thisFieldId];
     }
+
+	function getOptionValue( thisField, currentOpt ) {
+		// If current option is an other option, get other value
+		if ( isOtherOption( thisField, currentOpt ) ) {
+			var thisVal = getOtherValue( thisField, currentOpt );
+		// Else, get option value normally
+		} else {
+			var thisVal = jQuery(currentOpt).val();
+		}
+		return thisVal;
+	}
+
+	function isOtherOption( thisField, currentOpt ) {
+		if ( thisField.type == 'checkbox' || thisField.type == 'radio' ) {
+			// Get the base of the option ids
+			var idBase = thisField.key.replace( '[id^="', '');
+			idBase = idBase.replace( '"]', '' );
+
+			// Remove the base from the current option id
+			var optKey = currentOpt.id.replace( idBase, '' );
+
+			// If 'other' appears in the option key, this is an Other option
+			if ( optKey.indexOf( 'other' ) > -1 ) {
+				return true;
+			}
+		} else if ( thisField.type == 'select' ) {
+			// If 'other' option was selected
+			var optClass = currentOpt.className;
+			if ( optClass && optClass.indexOf( 'frm_other_trigger' ) > -1 ) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	function getOtherValue( thisField, currentOpt ) {
+		var otherVal = 0;
+		if ( thisField.type == 'checkbox' || thisField.type == 'radio' ) {
+			otherVal = jQuery(currentOpt).closest('.frm_' + thisField.type).children('.frm_other_input').val();
+		} else if ( thisField.type == 'select' ) {
+			otherVal = jQuery(currentOpt).closest('.frm_other_container').children('.frm_other_input').val();
+		}
+		if ( otherVal == undefined ) {
+			otherVal = 0;
+		}
+		return otherVal;
+	}
 
 	function getFormErrors(object){
 		jQuery(object).find('input[type="submit"], input[type="button"]').attr('disabled','disabled');
