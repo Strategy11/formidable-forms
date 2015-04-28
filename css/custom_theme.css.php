@@ -260,10 +260,12 @@ a.frm_save_draft{
 
 .with_frm_style .frm_radio input[type=radio]{
     border-radius:10px;
+	-webkit-appearance:radio;
 }
 
 .with_frm_style .frm_checkbox input[type=checkbox]{
     border-radius:0;
+	-webkit-appearance:checkbox;
 }
 
 .with_frm_style .frm_radio input[type=radio],
