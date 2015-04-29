@@ -530,6 +530,12 @@ if ( ! $submit_style ) { ?>
     display:<?php echo $check_align . $important ?>;
 }
 
+.<?php echo $style_class ?> .vertical_radio .frm_checkbox,
+.<?php echo $style_class ?> .vertical_radio .frm_radio,
+.vertical_radio .frm_catlevel_1{
+	display:block<?php echo $important ?>;
+}
+
 .<?php echo $style_class ?> .horizontal_radio .frm_checkbox,
 .<?php echo $style_class ?> .horizontal_radio .frm_radio,
 .horizontal_radio .frm_catlevel_1{
