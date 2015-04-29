@@ -271,6 +271,8 @@ a.frm_save_draft{
 .with_frm_style .frm_radio input[type=radio],
 .with_frm_style .frm_checkbox input[type=checkbox]{
     margin-right:5px;
+	width:auto;
+	border:none;
 }
 
 .with_frm_style :invalid,
