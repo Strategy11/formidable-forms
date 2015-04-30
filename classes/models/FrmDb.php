@@ -473,6 +473,11 @@ class FrmDb {
 		unset($roles, $frm_roles);
 
 		// delete actions, views, and styles
+
+		// prevent the post deletion from triggering entries to be deleted
+		remove_action( 'before_delete_post', 'FrmProDisplaysController::before_delete_post' );
+		remove_action( 'deleted_post', 'FrmProEntriesController::delete_entry' );
+
 		$post_ids = $wpdb->get_col( $wpdb->prepare( 'SELECT ID FROM ' . $wpdb->posts .' WHERE post_type in (%s, %s, %s)', FrmFormActionsController::$action_post_type, FrmStylesController::$post_type, 'frm_display' ) );
 		foreach ( $post_ids as $post_id ) {
 			// Delete's each post.
@@ -485,8 +490,7 @@ class FrmDb {
 		delete_transient( 'frm_options' );
 		delete_transient( 'frmpro_options' );
 
-		$query = 'DELETE FROM '. $wpdb->options .' WHERE option_name LIKE "_transient_timeout_frm_form_fields_%" OR option_name LIKE "_transient_frm_form_fields_%"';
-		$wpdb->query( $query );
+		$wpdb->query( $wpdb->prepare( 'DELETE FROM '. $wpdb->options .' WHERE option_name LIKE %s OR option_name LIKE %s', '_transient_timeout_frm_form_fields_%', '_transient_frm_form_fields_%' ) );
 
         do_action('frm_after_uninstall');
         return true;
