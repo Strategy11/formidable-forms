@@ -468,7 +468,7 @@ form label.frm_primary_label input{font-size:12px;}
 	margin-top:10px;
 }
 
-#frm_calc_dec{
+.frm_calc_dec{
 	width:50px;
 }
 

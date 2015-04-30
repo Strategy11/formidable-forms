@@ -5,7 +5,7 @@
 			<p class="alignright"><?php printf( __( '%1$sClick here%2$s to get it now', 'formidable' ), '<a href="http://formidablepro.com">', '</a>' ) ?> &#187;</p>
 			<p><?php _e( 'Ready to take your forms to the next level?<br/>Formidable Forms will help you create views, manage data, and get reports.', 'formidable' ) ?></p>
 
-            <p>Already signed up? <a href="http://formidablepro.com/knowledgebase/manually-install-formidable-pro/" target="_blank"><?php _e( 'Click here', 'formidable' ) ?></a> to get installation instructions and download the pro version.</p>
+			<p>Already signed up? <a href="https://formidablepro.com/knowledgebase/install-formidable-forms/" target="_blank"><?php _e( 'Click here', 'formidable' ) ?></a> to get installation instructions and download the pro version.</p>
         </div>
     </div>
 <?php } ?>

@@ -9,12 +9,13 @@ class FrmXMLHelper {
 		if ( is_array( $opt ) ) {
 			foreach ( $opt as $ok => $ov ) {
 				echo "\n" . $padding;
-				echo '<' . ( is_numeric( $ok ) ? 'key:' : '' ) . $ok . '>';
+				$tag = ( is_numeric( $ok ) ? 'key:' : '' ) . $ok;
+				echo '<' . $tag . '>';
 				self::get_xml_values( $ov, $padding .'    ' );
 				if ( is_array( $ov ) ) {
 					echo "\n" . $padding;
 				}
-				echo '</' . ( is_numeric( $ok ) ? 'key:' : '' ) . $ok . '>';
+				echo '</' . $tag . '>';
 			}
 		} else {
 			echo self::cdata( $opt );

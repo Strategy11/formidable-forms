@@ -101,7 +101,7 @@ if ( $display['conf_field'] ) { ?>
 </div>
 	<?php if ( $display['clear_on_focus'] ) { ?>
         <div class="alignleft">
-            <span id="frm_clear_on_focus_<?php echo esc_attr( $field['id'] ) ?>" class="frm-show-click">
+			<span id="frm_clear_on_focus_<?php echo esc_attr( $field['id'] ) ?>_conf" class="frm-show-click">
                 <?php
                 if ( $display['default_blank'] ) {
                     FrmFieldsHelper::show_default_blank_js($field['default_blank']);
@@ -314,7 +314,7 @@ if ( $field['type'] == 'divider' ) { ?>
 <?php
 }
 
-if ( ! isset( $ajax ) ) { ?>
+if ( ! isset( $ajax ) && $field['type'] != 'divider' ) { ?>
 </li>
 <?php
 }
