@@ -1035,7 +1035,8 @@ label.frm_action_events{
 
 #frm_notification_settings th,
 #frm_notification_settings td,
-.frm_settings_form td{
+.frm_settings_form td,
+#frm_notification_settings .frm_form_action_settings p{
 	padding-top:7px;
 	padding-bottom:7px;
 }

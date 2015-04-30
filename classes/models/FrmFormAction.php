@@ -343,7 +343,7 @@ class FrmFormAction {
         }
 
 		// delete all action caches
-		FrmFormActionsHelper::clear_action_cache( $settings['menu_order'] );
+		self::clear_cache();
 
 		return FrmAppHelper::save_json_post( $settings );
 	}
@@ -383,7 +383,7 @@ class FrmFormAction {
             $query['menu_order'] = $this->form_id;
         }
 
-	    $actions = get_posts( $query );
+		$actions = FrmAppHelper::check_cache( serialize( $query ), 'frm_actions', $query, 'get_posts' );
         unset($query);
 
         remove_filter( 'posts_where' , 'FrmFormActionsController::limit_by_type' );
@@ -451,8 +451,17 @@ class FrmFormAction {
 
         foreach ( $post_ids as $id ) {
             wp_delete_post($id);
-			FrmFormActionsHelper::clear_action_cache( $form_id );
         }
+		self::clear_cache();
+	}
+
+	/**
+	 * Delete the action cache when a form action is created, deleted, or updated
+	 *
+	 * @since 2.0.5
+	 */
+	public static function clear_cache( ) {
+		FrmAppHelper::cache_delete_group( 'frm_actions' );
 	}
 
 	public function get_settings() {

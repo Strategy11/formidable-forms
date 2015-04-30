@@ -153,7 +153,7 @@ class FrmForm{
         if ( ! empty( $new_values ) ) {
             $query_results = $wpdb->update( $wpdb->prefix .'frm_forms', $new_values, array( 'id' => $id ) );
             if ( $query_results ) {
-                wp_cache_delete( $id, 'frm_form');
+				self::clear_form_cache();
             }
         } else {
             $query_results = true;
@@ -308,9 +308,7 @@ class FrmForm{
         }
 
         if ( $query_results ) {
-            foreach ( (array) $id as $i ) {
-                wp_cache_delete( $i, 'frm_form');
-            }
+			self::clear_form_cache();
         }
 
         return $query_results;
@@ -455,6 +453,7 @@ class FrmForm{
         } else {
             $where = array( 'form_key' => $id );
         }
+
         $results = FrmDb::get_row( $table_name, $where );
 
         if ( isset($results->options) ) {
@@ -565,7 +564,8 @@ class FrmForm{
 
 	/**
 	 * Clear form caching
-	 * Called when a form is created, duplicated, or deleted
+	 * Called when a form is created, updated, duplicated, or deleted
+	 * or when the form status is changed
 	 *
 	 * @since 2.0.4
 	 */

@@ -67,7 +67,7 @@ class FrmAppController {
             FrmAppHelper::load_admin_wide_js();
 
             // user is authorized, but running free version
-            $inst_install_url = 'http://formidablepro.com/knowledgebase/manually-install-formidable-pro/';
+            $inst_install_url = 'https://formidablepro.com/knowledgebase/install-formidable-forms/';
         ?>
 <div class="error" class="frm_previous_install">
 		<?php

@@ -97,12 +97,19 @@ class FrmFormActionsController {
         return $actions;
     }
 
+	/**
+	 * @since 2.0
+	 */
     public static function list_actions( $form, $values ) {
         if ( empty( $form ) ) {
             return;
         }
 
-        do_action( 'frm_before_list_actions', $form ); // use this hook to migrate old settings into a new action
+		/**
+		 * use this hook to migrate old settings into a new action
+		 * @since 2.0
+		 */
+		do_action( 'frm_before_list_actions', $form );
 
 		$form_actions = FrmFormActionsHelper::get_action_for_form( $form->id );
 
@@ -217,6 +224,7 @@ class FrmFormActionsController {
             foreach ( $old_actions as $old_id ) {
                 wp_delete_post( $old_id );
             }
+			FrmAppHelper::cache_delete_group( 'frm_actions' );
         }
     }
 

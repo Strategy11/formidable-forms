@@ -78,6 +78,8 @@ class FrmEntry {
             FrmEntryMeta::update_entry_metas($entry_id, $values['item_meta']);
         }
 
+		self::clear_cache();
+
 		// this is a child entry
 		$is_child = isset( $values['parent_form_id'] ) && isset( $values['parent_nonce'] ) && ! empty( $values['parent_form_id'] ) && wp_verify_nonce( $values['parent_nonce'], 'parent' );
 
@@ -174,6 +176,7 @@ class FrmEntry {
         $frm_vars['saved_entries'][] = (int) $entry_id;
 
         FrmEntryMeta::duplicate_entry_metas($id, $entry_id);
+		self::clear_cache();
 
         do_action('frm_after_duplicate_entry', $entry_id, $new_values['form_id'], array( 'old_id' => $id));
         return $entry_id;
@@ -217,8 +220,7 @@ class FrmEntry {
         $query_results = $wpdb->update( $wpdb->prefix .'frm_items', $new_values, compact('id') );
 
         if ( $query_results ) {
-            wp_cache_delete( $id .'_nometa', 'frm_entry');
-            wp_cache_delete( $id, 'frm_entry');
+			self::clear_cache();
         }
 
         if ( ! isset( $frm_vars['saved_entries'] ) ) {
@@ -247,10 +249,11 @@ class FrmEntry {
 
         do_action('frm_before_destroy_entry', $id, $entry);
 
-        wp_cache_delete( $id .'_nometa', 'frm_entry');
-        wp_cache_delete( $id, 'frm_entry');
         $wpdb->query( $wpdb->prepare('DELETE FROM ' . $wpdb->prefix .'frm_item_metas WHERE item_id=%d', $id) );
         $result = $wpdb->query( $wpdb->prepare('DELETE FROM ' . $wpdb->prefix .'frm_items WHERE id=%d', $id) );
+
+		self::clear_cache();
+
         return $result;
     }
 
@@ -259,10 +262,23 @@ class FrmEntry {
         $form_id = isset($value) ? $form_id : null;
         $result = $wpdb->update( $wpdb->prefix .'frm_items', array( 'form_id' => $form_id), array( 'id' => $id ) );
 		if ( $result ) {
-            wp_cache_delete( $id, 'frm_entry');
+			self::clear_cache();
 		}
         return $result;
     }
+
+	/**
+	 * Clear entry caching
+	 * Called when an entry is changed
+	 *
+	 * @since 2.0.5
+	 */
+	public static function clear_cache() {
+		FrmAppHelper::cache_delete_group( 'frm_entry' );
+		FrmAppHelper::cache_delete_group( 'frm_item' );
+		FrmAppHelper::cache_delete_group( 'frm_entry_meta' );
+		FrmAppHelper::cache_delete_group( 'frm_item_meta' );
+	}
 
     public static function getOne( $id, $meta = false) {
         global $wpdb;

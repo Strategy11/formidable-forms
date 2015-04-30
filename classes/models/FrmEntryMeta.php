@@ -27,7 +27,12 @@ class FrmEntryMeta {
 
         $query_results = $wpdb->insert( $wpdb->prefix .'frm_item_metas', $new_values );
 
-        $id = $query_results ? $wpdb->insert_id : 0;
+		if ( $query_results ) {
+			self::clear_cache();
+			$id = $wpdb->insert_id;
+		} else {
+			$id = 0;
+		}
 
         return $id;
     }
@@ -51,6 +56,7 @@ class FrmEntryMeta {
         $meta_value = maybe_serialize($values['meta_value']);
 
         wp_cache_delete( $entry_id, 'frm_entry');
+		self::clear_cache();
 
         return $wpdb->update( $wpdb->prefix .'frm_item_metas', array( 'meta_value' => $meta_value ), $where_values );
     }
@@ -94,6 +100,7 @@ class FrmEntryMeta {
 
         // Delete any leftovers
         $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'frm_item_metas ' . $where['where'], $where['values'] ) );
+		self::clear_cache();
     }
 
     public static function duplicate_entry_metas($old_id, $new_id) {
@@ -102,12 +109,25 @@ class FrmEntryMeta {
             self::add_entry_meta($new_id, $meta->field_id, null, $meta->meta_value);
             unset($meta);
         }
+		self::clear_cache();
     }
 
     public static function delete_entry_meta($entry_id, $field_id) {
         global $wpdb;
+		self::clear_cache();
         return $wpdb->query($wpdb->prepare("DELETE FROM {$wpdb->prefix}frm_item_metas WHERE field_id=%d AND item_id=%d", $field_id, $entry_id));
     }
+
+	/**
+	 * Clear entry meta caching
+	 * Called when a meta is added or changed
+	 *
+	 * @since 2.0.5
+	 */
+	public static function clear_cache() {
+		FrmAppHelper::cache_delete_group( 'frm_entry_meta' );
+		FrmAppHelper::cache_delete_group( 'frm_item_meta' );
+	}
 
     public static function get_entry_meta_by_field($entry_id, $field_id) {
         global $wpdb;
