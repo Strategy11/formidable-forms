@@ -18,7 +18,7 @@ class FrmEntry {
 
         $new_values = array(
             'item_key'  => FrmAppHelper::get_unique_key($values['item_key'], $wpdb->prefix .'frm_items', 'item_key'),
-            'name'      => isset($values['name']) ? $values['name'] : $values['item_key'],
+			'name'      => FrmAppHelper::truncate( ( isset( $values['name'] ) ? $values['name'] : $values['item_key'] ), 255, 1, '' ),
             'ip'        => FrmAppHelper::get_ip_address(),
             'is_draft'  => ( ( isset($values['frm_saving_draft']) && $values['frm_saving_draft'] == 1 ) ||  ( isset($values['is_draft']) && $values['is_draft'] == 1) ) ? 1 : 0,
             'form_id'   => isset($values['form_id']) ? (int) $values['form_id']: null,
