@@ -675,14 +675,16 @@ class FrmEntriesHelper {
         $platform = __( 'Unknown', 'formidable' );
         $ub = '';
 
-        //First get the platform?
-        if ( preg_match('/linux/i', $u_agent) ) {
-            $platform = 'Linux';
-        } else if ( preg_match('/macintosh|mac os x/i', $u_agent) ) {
-            $platform = 'Mac';
-        } else if ( preg_match('/windows|win32/i', $u_agent) ) {
-            $platform = 'Windows';
-        }
+		// Get the operating system
+		if ( preg_match('/windows|win32/i', $u_agent) ) {
+			$platform = 'Windows';
+		} else if ( preg_match('/android/i', $u_agent) ) {
+			$platform = 'Android';
+		} else if ( preg_match('/linux/i', $u_agent) ) {
+			$platform = 'Linux';
+		} else if ( preg_match('/macintosh|mac os x/i', $u_agent) ) {
+			$platform = 'OS X';
+		}
 
 		$agent_options = array(
 			'Firefox' => 'Mozilla Firefox',

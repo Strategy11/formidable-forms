@@ -119,15 +119,24 @@ function frmFrontFormJS(){
 	function getFieldId( field ) {
 		var nameParts = field.name.replace('item_meta[', '').split(']');
 		var field_id = nameParts[0];
+		var isRepeating = false;
 
-		// Check if 'this' is an other text field and get field ID for it
-		if ( field_id == 'other' ) {
-			field_id = nameParts[1].replace('[', '');
-		}
-
+		// Check if 'this' is in a repeating section
 		if ( jQuery('input[name="item_meta['+ field_id +'][form]"]').length ) {
 			// this is a repeatable section with name: item_meta[370][0][414]
 			field_id = nameParts[2].replace('[', '');
+			isRepeating = true;
+		}
+
+		// Check if 'this' is an other text field and get field ID for it
+		if ( 'other' == field_id ) {
+			if ( isRepeating ) {
+				// name for other fields: item_meta[370][0][other][414]
+				field_id = nameParts[3].replace('[', '');
+			} else {
+				// Other field name: item_meta[other][370]
+				field_id = nameParts[1].replace('[', '');
+			}
 		}
 
 		return field_id;
