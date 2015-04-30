@@ -738,12 +738,13 @@ function frmFrontFormJS(){
     }
 
 	function getOptionValue( thisField, currentOpt ) {
+		var thisVal;
 		// If current option is an other option, get other value
 		if ( isOtherOption( thisField, currentOpt ) ) {
-			var thisVal = getOtherValue( thisField, currentOpt );
+			thisVal = getOtherValue( thisField, currentOpt );
 		// Else, get option value normally
 		} else {
-			var thisVal = jQuery(currentOpt).val();
+			thisVal = jQuery(currentOpt).val();
 		}
 		return thisVal;
 	}
@@ -778,15 +779,19 @@ function frmFrontFormJS(){
 		} else if ( thisField.type == 'select' ) {
 			otherVal = jQuery(currentOpt).closest('.frm_other_container').children('.frm_other_input').val();
 		}
-		if ( otherVal == undefined ) {
+		if ( otherVal === undefined ) {
 			otherVal = 0;
 		}
 		return otherVal;
 	}
 
-	function getFormErrors(object){
+	function getFormErrors(object, action){
 		jQuery(object).find('input[type="submit"], input[type="button"]').attr('disabled','disabled');
 		jQuery(object).find('.frm_ajax_loading').addClass('frm_loading_now');
+
+		if(typeof action == 'undefined'){
+			jQuery(object).find('input[name="frm_action"]').val();
+		}
 
 		var jump = '';
 		var newPos = 0;
@@ -794,7 +799,7 @@ function frmFrontFormJS(){
 
 		jQuery.ajax({
 			type:'POST',url:frm_js.ajax_url,
-			data:jQuery(object).serialize() +'&action=frm_entries_'+ jQuery(object).find('input[name="frm_action"]').val()+'&nonce='+frm_js.nonce,
+			data:jQuery(object).serialize() +'&action=frm_entries_'+ action +'&nonce='+frm_js.nonce,
 			success:function(errObj){
 				errObj = errObj.replace(/^\s+|\s+$/g,'');
 				if(errObj.indexOf('{') === 0){
@@ -1314,7 +1319,7 @@ function frmFrontFormJS(){
 			jQuery(document).on('click', '.frm_remove_link', removeDiv);
 
 			jQuery(document).on('focusin', 'input[data-frmmask]', function(){
-				jQuery(this).mask( jQuery(this).data('frmmask') );
+				jQuery(this).mask( jQuery(this).data('frmmask').toString() );
 			});
 
 			jQuery(document).on('change', '.frm-show-form input[name^="item_meta"], .frm-show-form select[name^="item_meta"], .frm-show-form textarea[name^="item_meta"]', maybeCheckDependent);
@@ -1346,7 +1351,29 @@ function frmFrontFormJS(){
 			if(jQuery(this).find('.wp-editor-wrap').length && typeof(tinyMCE) != 'undefined'){
 				tinyMCE.triggerSave();
 			}
-			getFormErrors(this);
+
+			var object = this;
+			var action = jQuery(object).find('input[name="frm_action"]').val();
+			var jsErrors = [];
+			if ( typeof frmThemeOverride_jsErrors == 'function' ) {
+				jsErrors = frmThemeOverride_jsErrors( action );
+			}
+
+			if ( jsErrors.length === 0 ) {
+				getFormErrors( object, action );
+			} else {
+				for ( var key in jsErrors ) {
+					$fieldCont = jQuery(object).find(jQuery(document.getElementById('frm_field_'+key+'_container')));
+					if ( $fieldCont.length && $fieldCont.is(':visible') ) {
+						$fieldCont.addClass('frm_blank_field');
+						if ( typeof frmThemeOverride_frmPlaceError == 'function' ) {
+							frmThemeOverride_frmPlaceError( key, errObj );
+						} else {
+							$fieldCont.append( '<div class="frm_error">'+ errObj[key] +'</div>' );
+						}
+					}
+				}
+			}
 		},
 
         scrollToID: function(id){
