@@ -603,10 +603,11 @@ function frmAdminBuildJS(){
 	}
 
 	function showDefaults(n,fval){
+		var defaults = jQuery('#frm_clear_on_focus_'+n+',#frm_clear_on_focus_'+n+' a, #frm_clear_on_focus_'+n+'_conf,#frm_clear_on_focus_'+n+'_conf a');
 		if(fval){
-			jQuery('#frm_clear_on_focus_'+n+',#frm_clear_on_focus_'+n+' a').css('visibility','visible').fadeIn('slow');
+			defaults.css('visibility','visible').fadeIn('slow');
 		}else{
-			jQuery('#frm_clear_on_focus_'+n+',#frm_clear_on_focus_'+n+' a').css('visibility','visible').fadeOut('slow');
+			defaults.css('visibility','visible').fadeOut('slow');
 		}
 		return false;
 	}
