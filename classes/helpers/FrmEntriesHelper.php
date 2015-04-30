@@ -464,6 +464,7 @@ class FrmEntriesHelper {
             'type' => '', 'html' => false, 'show_filename' => true,
             'truncate' => false, 'sep' => ', ', 'post_id' => 0,
             'form_id' => $field->form_id, 'field' => $field, 'keepjs' => 0,
+			'return_array' => false,
         );
 
         $atts = wp_parse_args( $atts, $defaults );
@@ -509,7 +510,7 @@ class FrmEntriesHelper {
 
         if ( ! empty($new_value) ) {
             $value = $new_value;
-        } else if ( is_array($value) && $atts['type'] != 'file' ) {
+        } else if ( is_array($value) && $atts['type'] != 'file' && ! $atts['return_array'] ) {
             $value = implode($atts['sep'], $value);
         }
 
