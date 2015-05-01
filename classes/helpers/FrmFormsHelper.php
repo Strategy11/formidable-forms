@@ -123,7 +123,7 @@ class FrmFormsHelper {
             $post_values = isset($_POST) ? $_POST : array();
         }
 
-        foreach ( array( 'name' => '', 'description' => '') as $var => $default) {
+		foreach ( array( 'name' => '', 'description' => '' ) as $var => $default ) {
 			if ( ! isset( $values[ $var ] ) ) {
 				$values[ $var ] = FrmAppHelper::get_param( $var, $default );
             }
@@ -131,7 +131,7 @@ class FrmFormsHelper {
 
         $values['description'] = FrmAppHelper::use_wpautop($values['description']);
 
-        foreach ( array( 'form_id' => '', 'logged_in' => '', 'editable' => '', 'default_template' => 0, 'is_template' => 0, 'status' => 'draft', 'parent_form_id' => 0) as $var => $default) {
+		foreach ( array( 'form_id' => '', 'logged_in' => '', 'editable' => '', 'default_template' => 0, 'is_template' => 0, 'status' => 'draft', 'parent_form_id' => 0 ) as $var => $default ) {
             if ( ! isset( $values[ $var ] ) ) {
 				$values[ $var ] = FrmAppHelper::get_param( $var, $default );
             }
@@ -344,7 +344,7 @@ BEFORE_HTML;
     }
 
     public static function replace_shortcodes( $html, $form, $title = false, $description = false, $values = array() ) {
-        foreach ( array( 'form_name' => $title, 'form_description' => $description, 'entry_key' => true) as $code => $show) {
+		foreach ( array( 'form_name' => $title, 'form_description' => $description, 'entry_key' => true ) as $code => $show ) {
             if ( $code == 'form_name' ) {
                 $replace_with = $form->name;
             } else if ( $code == 'form_description' ) {

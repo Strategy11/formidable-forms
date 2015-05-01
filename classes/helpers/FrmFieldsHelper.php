@@ -356,7 +356,7 @@ DEFAULT_HTML;
             }
         }
 
-        foreach ( array( 'description' => $field['description'], 'required_label' => $required, 'error' => $error) as $code => $value) {
+		foreach ( array( 'description' => $field['description'], 'required_label' => $required, 'error' => $error ) as $code => $value ) {
             self::remove_inline_conditions( ( $value && $value != '' ), $code, $value, $html );
         }
 
