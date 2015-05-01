@@ -426,7 +426,7 @@ class FrmFormsController {
 
         $form_id = '';
         $opts = array();
-        switch( $shortcode ) {
+		switch ( $shortcode ) {
             case 'formidable':
                 $opts = array(
 					'form_id'       => 'id',
