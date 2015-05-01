@@ -46,9 +46,9 @@ class FrmFormsController {
         $action = isset($_REQUEST['frm_action']) ? 'frm_action' : 'action';
 		$action = empty( $values ) ? sanitize_title( FrmAppHelper::get_param( $action ) ) : $values[ $action ];
 
-        if ($action == 'create') {
+		if ( $action == 'create' ) {
             return self::create($values);
-        } else if ($action == 'new') {
+		} else if ( $action == 'new' ) {
             $frm_field_selection = FrmFieldsHelper::field_selection();
             $values = FrmFormsHelper::setup_new_vars($values);
             $id = FrmForm::create( $values );

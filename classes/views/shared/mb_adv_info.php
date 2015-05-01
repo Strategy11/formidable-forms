@@ -83,7 +83,7 @@
             unset($entry_shortcodes['post_id']);
         }
 
-        if ($settings_tab) {
+		if ( $settings_tab ) {
             $entry_shortcodes['default-message'] = __( 'Default Msg', 'formidable' );
             $entry_shortcodes['default-html'] = __( 'Default HTML', 'formidable' );
             $entry_shortcodes['default-plain'] = __( 'Default Plain', 'formidable' );

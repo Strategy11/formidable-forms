@@ -68,7 +68,7 @@
                     </td>
                 </tr>
 
-                <?php if (count($export_types) == 1) {
+				<?php if ( count( $export_types ) == 1 ) {
                     reset($export_types); ?>
                 <tr><td colspan="2"><input type="hidden" name="type[]" value="<?php echo key($export_types) ?>" /></td></tr>
                 <?php } else { ?>

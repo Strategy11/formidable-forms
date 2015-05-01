@@ -336,7 +336,7 @@ class FrmEntryMeta {
         }
 
         global $wpdb;
-        if (is_array($search)) {
+		if ( is_array( $search ) ) {
             $where = '';
 			foreach ( $search as $field => $value ) {
                 if ( $value <= 0 || ! in_array($field, array( 'year', 'month', 'day')) ) {

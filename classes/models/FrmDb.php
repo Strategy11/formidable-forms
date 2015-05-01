@@ -400,11 +400,14 @@ class FrmDb {
      * @param string $group
      */
     private static function get_group_and_table_name( &$table, &$group ) {
-        global $wpdb;
+		global $wpdb, $wpmuBaseTablePrefix;
 
         $table_parts = explode(' ', $table);
         $group = reset($table_parts);
         $group = str_replace( $wpdb->prefix, '', $group );
+
+		$prefix = $wpmuBaseTablePrefix ? $wpmuBaseTablePrefix : $wpdb->base_prefix;
+		$group = str_replace( $prefix, '', $group );
 
         if ( $group == $table ) {
             $table = $wpdb->prefix . $table;

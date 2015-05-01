@@ -729,7 +729,7 @@ class FrmEntriesHelper {
         }
 
         // check if we have a number
-        if ( $version == '') {
+		if ( $version == '' ) {
             $version = '?';
         }
 

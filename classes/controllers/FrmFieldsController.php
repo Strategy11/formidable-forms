@@ -500,7 +500,7 @@ class FrmFieldsController {
     }
 
     public static function display_field_options($display) {
-        switch($display['type']) {
+		switch ( $display['type'] ) {
             case 'captcha':
                 $display['required'] = false;
                 $display['invalid'] = true;

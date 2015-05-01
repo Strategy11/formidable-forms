@@ -506,7 +506,7 @@ class FrmAppHelper {
             'frm_delete_entries'    => __( 'Delete Entries from Admin Area', 'formidable' ),
         );
 
-        if ( ! self::pro_is_installed() && 'pro' != $type) {
+		if ( ! self::pro_is_installed() && 'pro' != $type ) {
             return $cap;
         }
 
@@ -1243,8 +1243,8 @@ class FrmAppHelper {
     	$diff = (int) ($to - $from);
 
     	// Something went wrong with date calculation and we ended up with a negative date.
-    	if ( $diff < 1) {
-    	    		return '0 ' . __( 'seconds', 'formidable' );
+		if ( $diff < 1 ) {
+			return '0 ' . __( 'seconds', 'formidable' );
     	}
 
     	/**
@@ -1257,7 +1257,7 @@ class FrmAppHelper {
         $count = 0;
 
     	//Step one: the first chunk
-    	for ( $i = 0, $j = count($chunks); $i < $j; $i++) {
+		for ( $i = 0, $j = count( $chunks ); $i < $j; $i++ ) {
     		$seconds = $chunks[ $i ][0];
 
     		// Finding the biggest chunk (if the chunk fits, break)

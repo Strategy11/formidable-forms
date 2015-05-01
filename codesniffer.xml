@@ -23,7 +23,6 @@
 		<exclude name="PEAR.Functions.FunctionCallSignature.SpaceBeforeCloseBracket" />
 		<exclude name="WordPress.WhiteSpace.ControlStructureSpacing.NoSpaceAfterOpenParenthesis" />
 		<exclude name="WordPress.WhiteSpace.ControlStructureSpacing.NoSpaceBeforeOpenParenthesis" />
-		<exclude name="WordPress.WhiteSpace.ControlStructureSpacing.NoSpaceAfterStructureOpen" />
 		<exclude name="WordPress.WhiteSpace.OperatorSpacing.NoSpaceBefore" />
 		<exclude name="WordPress.WhiteSpace.OperatorSpacing.NoSpaceAfter" />
 		<exclude name="WordPress.Arrays.ArrayKeySpacingRestrictions.NoSpacesAroundArrayKeys" />

@@ -284,7 +284,7 @@ class FrmFieldsHelper {
     }
 
 	public static function get_default_html( $type = 'text' ) {
-        if (apply_filters('frm_normal_field_type_html', true, $type)) {
+		if ( apply_filters( 'frm_normal_field_type_html', true, $type ) ) {
             $input = (in_array($type, array( 'radio', 'checkbox', 'data'))) ? '<div class="frm_opt_container">[input]</div>' : '[input]';
             $for = '';
             if ( ! in_array( $type, array( 'radio', 'checkbox', 'data', 'scale') ) ) {
@@ -442,8 +442,8 @@ DEFAULT_HTML;
         }
 
         // remove [collapse_this] when running the free version
-        if (preg_match('/\[(collapse_this)\]/s', $html)) {
-                    $html = str_replace('[collapse_this]', '', $html);
+		if ( preg_match( '/\[(collapse_this)\]/s', $html ) ) {
+			$html = str_replace( '[collapse_this]', '', $html );
         }
 
         return $html;
