@@ -574,7 +574,7 @@ class FrmXMLHelper {
 	    $str = maybe_unserialize($str);
 	    if ( is_array($str) ) {
 	        $str = json_encode($str);
-	    } else if (seems_utf8( $str ) == false ) {
+		} else if ( seems_utf8( $str ) == false ) {
 			$str = utf8_encode( $str );
 		}
 
