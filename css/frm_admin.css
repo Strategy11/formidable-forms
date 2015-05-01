@@ -754,6 +754,10 @@ table td, .form-table tr td{vertical-align:top;}
 	opacity:80;
 }
 
+.subform_section .frm_sortable_field_opts{
+	display:none;
+}
+
 #frm_form_editor_container .subform_section label.frm_primary_label{
 	display:block;
 }

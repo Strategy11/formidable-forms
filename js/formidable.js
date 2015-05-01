@@ -737,7 +737,7 @@ function frmFrontFormJS(){
                 n = parseFloat(n.replace(/,/g,'').match(/-?[\d\.]+$/));
             }
 
-			if ( typeof n === 'undefined' ) {
+			if ( typeof n === 'undefined' || isNaN(n) ) {
 				n = 0;
 			}
 			vals[thisFieldId] += n;

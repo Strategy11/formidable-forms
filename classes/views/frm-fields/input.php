@@ -96,11 +96,11 @@ do_action('frm_field_input_html', $field);
         $read_only = true;
         if ( $checked_values ) {
             foreach ( (array) $checked_values as $checked_value ) { ?>
-<input type="hidden" value="<?php echo esc_attr( $checked_value ) ?>" name="<?php echo esc_attr( $field_name ) ?>[]" />
+<input type="hidden" value="<?php echo esc_attr( $checked_value ) ?>" id="<?php echo esc_attr( $html_id ) ?>-<?php echo esc_attr( $checked_value ) ?>" name="<?php echo esc_attr( $field_name ) ?>[]" />
 <?php
             }
         } else { ?>
-<input type="hidden" value="<?php echo esc_attr( $checked_values ) ?>" name="<?php echo esc_attr( $field_name ) ?>[]" />
+<input type="hidden" value="<?php echo esc_attr( $checked_values ) ?>" id="<?php echo esc_attr( $html_id ) ?>-<?php echo esc_attr( $checked_value ) ?>" name="<?php echo esc_attr( $field_name ) ?>[]" />
 <?php
         }
     }
