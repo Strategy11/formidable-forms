@@ -11,15 +11,6 @@ function frmAdminBuildJS(){
 		element[0].style.display = 'none';
 	}
 	
-	function toggleDiv(){
-		var div=jQuery(this).data('toggle');
-		if(jQuery(div).is(':visible')){
-			jQuery(div).slideUp('fast');
-		}else{
-			jQuery(div).slideDown('fast');
-		}
-	}
-	
 	function empty($obj){
 		if ( $obj !== null ) {
 			while ( $obj.firstChild ) {
@@ -202,7 +193,15 @@ function frmAdminBuildJS(){
 	}
 	
 	function showAuthForm(){
-		jQuery('#pro_cred_form,.frm_pro_installed').toggle();
+		var form = document.getElementById('pro_cred_form');
+		var cred = jQuery('.frm_pro_installed');
+		if(cred.is(':visible')){
+			cred.hide();
+			form.style.display = 'block';
+		}else{
+			cred.show();
+			form.style.display = 'none';
+		}
 	}
 	
 	
@@ -594,7 +593,7 @@ function frmAdminBuildJS(){
 
 	function toggleSepValues(){
 		var field_id = jQuery(this).closest('li').data('fid');
-		jQuery('.field_'+field_id+'_option_key').toggle();
+		toggle( jQuery('.field_'+field_id+'_option_key') );
 		jQuery('.field_'+field_id+'_option').toggleClass('frm_with_key');
 		jQuery.ajax({
 			type:'POST',url:ajaxurl,
@@ -1361,8 +1360,18 @@ function frmAdminBuildJS(){
 	}
 
 	function toggleCfOpts(){
-		jQuery(this).closest('.frm_postmeta_row').find('.frm_enternew, .frm_cancelnew').toggle();
-		jQuery(this).closest('.frm_postmeta_row').find('input.frm_enternew, select.frm_cancelnew').val('');
+		var row = jQuery(this).closest('.frm_postmeta_row');
+		var cancel = row.find('.frm_cancelnew');
+		var select = row.find('.frm_enternew');
+		if(row.find('select.frm_cancelnew').is(':visible')){
+			cancel.hide();
+			select.show();
+		}else{
+			cancel.show();
+			select.hide();
+		}
+
+		row.find('input.frm_enternew, select.frm_cancelnew').val('');
 		return false;
 	}
 	
@@ -1756,6 +1765,26 @@ function frmAdminBuildJS(){
         });
     }
 
+	/* Helpers */
+	function toggle( cname, id ) {
+		if(id == '#'){
+			var cont = document.getElementById(cname);
+			var hidden = cont.style.display;
+			if(hidden == 'none'){
+				cont.style.display = 'block';
+			}else{
+				cont.style.display = 'none';
+			}
+		}else{
+			var vis = cname.is(':visible');
+			if(vis){
+				cname.hide();
+			}else{
+				cname.show();
+			}
+		}
+	}
+
 	return{
 		init: function(){
 			window.onscroll = document.documentElement.onscroll = setMenuOffset;
@@ -1769,8 +1798,6 @@ function frmAdminBuildJS(){
 					$openDrop.removeClass('open');
 				}
 			});
-
-			jQuery('a[data-toggle]').click(toggleDiv);
 
 			if ( typeof this_form_id == 'undefined' ) {
 				this_form_id = jQuery(document.getElementById('form_id')).val();

@@ -1266,7 +1266,18 @@ function frmFrontFormJS(){
 			$remove.remove();
 		});
 	}
-	
+
+	function toggleDiv(){
+		/*jshint validthis:true */
+		var div=jQuery(this).data('frmtoggle');
+		if(jQuery(div).is(':visible')){
+			jQuery(div).slideUp('fast');
+		}else{
+			jQuery(div).slideDown('fast');
+		}
+		return false;
+	}
+
 	function empty($obj) {
 		if ( $obj !== null ) {
 			while ( $obj.firstChild ) {
@@ -1342,17 +1353,19 @@ function frmFrontFormJS(){
 			jQuery(document).on('click', '.frm_remove_form_row', removeRow);
 			jQuery(document).on('click', '.frm_add_form_row', addRow);
 
+			jQuery('a[data-frmtoggle]').click(toggleDiv);
+
 			// toggle collapsible entries shortcode
-			jQuery('.frm_month_heading, .frm_year_heading').toggle(
-				function(){
-					jQuery(this).children('.ui-icon-triangle-1-e, .ui-icon-triangle-1-s').addClass('ui-icon-triangle-1-s').removeClass('ui-icon-triangle-1-e');
+			jQuery('.frm_month_heading, .frm_year_heading').click( function(){
+				var content = jQuery(this).children('.ui-icon-triangle-1-e, .ui-icon-triangle-1-s');
+				if ( content.hasClass('ui-icon-triangle-1-e') ) {
+					content.addClass('ui-icon-triangle-1-s').removeClass('ui-icon-triangle-1-e');
 					jQuery(this).next('.frm_toggle_container').fadeIn('slow');
-				},
-				function(){
-					jQuery(this).children('.ui-icon-triangle-1-s, .ui-icon-triangle-1-e').addClass('ui-icon-triangle-1-e').removeClass('ui-icon-triangle-1-s');
+				} else {
+					content.addClass('ui-icon-triangle-1-e').removeClass('ui-icon-triangle-1-s');
 					jQuery(this).next('.frm_toggle_container').hide();
 				}
-			);
+			});
 		},
 
 		submitForm: function(e){
