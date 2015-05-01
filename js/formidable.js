@@ -285,7 +285,7 @@ function frmFrontFormJS(){
             }
         }
 
-		if ( selected === '' ) {
+		if ( selected === '' || selected.length < 1 ) {
 			show_fields[f.HideField][i] = false;
 		} else {
 			show_fields[f.HideField][i] = {'funcName':'getDataOpts', 'f':f, 'sel':selected};
@@ -606,7 +606,7 @@ function frmFrontFormJS(){
                                 parentField.attr('checked','checked');
                             }
 						} else if ( dataType == 'select' ) {
-							var selOpt = parentField.children('option[value='+ cval +']');
+							var selOpt = parentField.children('option[value="'+ cval +'"]');
 							if(selOpt.length){
 								selOpt.prop('selected', true);
 							}else{
