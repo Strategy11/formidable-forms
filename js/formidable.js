@@ -45,8 +45,10 @@ function frmFrontFormJS(){
 		this.parentNode.getElementsByTagName('a')[0].className += ' frm_hidden';
 	}
 
-    // Show "Other" text box when Other item is checked/selected
-    // Hide and clear text box when item is unchecked/unselected
+	/**
+	 * Show "Other" text box when Other item is checked/selected
+	 * Hide and clear text box when item is unchecked/unselected
+	 */
 	function showOtherText(){
         /*jshint validthis:true */
         var type = this.type;
@@ -89,10 +91,10 @@ function frmFrontFormJS(){
 
         // Radio
         } else if ( type == 'radio' ) {
-            jQuery(this).closest('.frm_radio').children('.frm_other_input').removeClass('frm_pos_none');
-            jQuery(this).closest('.frm_radio').siblings().children('.frm_other_input')
-            .addClass('frm_pos_none').val('');
-            
+			if ( jQuery(this).is(':checked' ) ) {
+				jQuery(this).closest('.frm_radio').children('.frm_other_input').removeClass('frm_pos_none');
+				jQuery(this).closest('.frm_radio').siblings().children('.frm_other_input').addClass('frm_pos_none').val('');
+			}
         // Checkboxes
         } else if ( type == 'checkbox' ) {
             if ( this.checked ) {
@@ -727,13 +729,13 @@ function frmFrontFormJS(){
 			var thisVal = getOptionValue( thisField, this );
 
             if ( thisField.type == 'date' ) {
-                d = jQuery.datepicker.parseDate(all_calcs.date, thisVal);
+                var d = jQuery.datepicker.parseDate(all_calcs.date, thisVal);
                 if ( d !== null ) {
                     vals[thisFieldId] = Math.ceil(d/(1000*60*60*24));
                 }
             }
             var n = thisVal;
-            if ( n !== '' ){
+            if ( n !== '' && n !== 0 ) {
                 n = parseFloat(n.replace(/,/g,'').match(/-?[\d\.]+$/));
             }
 
@@ -788,7 +790,7 @@ function frmFrontFormJS(){
 		} else if ( thisField.type == 'select' ) {
 			otherVal = jQuery(currentOpt).closest('.frm_other_container').children('.frm_other_input').val();
 		}
-		if ( otherVal === undefined ) {
+		if ( typeof otherVal === 'undefined' ) {
 			otherVal = 0;
 		}
 		return otherVal;
