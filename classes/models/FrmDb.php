@@ -433,22 +433,22 @@ class FrmDb {
         $temp_args = $args;
         foreach ( $temp_args as $k => $v ) {
             if ( $v == '' ) {
-                unset($args[$k]);
+				unset( $args[ $k ] );
                 continue;
             }
 
             if ( $k == 'limit' ) {
-                 $args[$k] = FrmAppHelper::esc_limit( $v );
+				$args[ $k ] = FrmAppHelper::esc_limit( $v );
             }
             $db_name = strtoupper( str_replace( '_', ' ', $k ) );
             if ( strpos( $v, $db_name ) === false ) {
-                $args[$k] = $db_name .' '. $v;
+				$args[ $k ] = $db_name . ' ' . $v;
             }
         }
     }
 
     public function uninstall() {
-        if ( !current_user_can('administrator') ) {
+		if ( ! current_user_can( 'administrator' ) ) {
             $frm_settings = FrmAppHelper::get_settings();
             wp_die($frm_settings->admin_permission);
         }
@@ -579,7 +579,7 @@ class FrmDb {
             }
 			$size = round( $pixel_conversion * (int) $widget['size'] );
             $size .= 'px';
-            $widgets[$k]['size'] = $size;
+			$widgets[ $k ]['size'] = $size;
         }
         update_option('widget_frm_show_form', $widgets);
     }

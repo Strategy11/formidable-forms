@@ -36,9 +36,9 @@ class FrmAppHelper {
             $url = plugins_url('', self::plugin_folder() .'/formidable.php');
         }
 
-        if ( is_ssl() && !preg_match('/^https:\/\/.*\..*$/', $url) ) {
-            $url = str_replace('http://', 'https://', $url);
-        }
+		if ( is_ssl() && ! preg_match( '/^https:\/\/.*\..*$/', $url ) ) {
+			$url = str_replace( 'http://', 'https://', $url );
+		}
 
         return $url;
     }
@@ -713,7 +713,7 @@ class FrmAppHelper {
     */
     public static function prepare_other_input( $field, &$other_opt, &$checked, $args = array() ) {
         //Check if this is an "Other" option
-        if ( !self::is_other_opt( $args['opt_key'] ) ) {
+		if ( ! self::is_other_opt( $args['opt_key'] ) ) {
             return;
         }
 

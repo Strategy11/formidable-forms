@@ -193,7 +193,7 @@ class FrmFormsHelper {
                     unset($k, $v);
                 }
             } else {
-                $values[$var] = ($post_values && isset($post_values['options'][$var])) ? $post_values['options'][$var] : (($record && isset($record->options[$var])) ? $record->options[$var] : $default);
+				$values[ $var ] = ( $post_values && isset( $post_values['options'][ $var ] ) ) ? $post_values['options'][ $var ] : ( ( $record && isset( $record->options[ $var ] ) ) ? $record->options[ $var ] : $default );
             }
 
             unset($var, $default);
@@ -534,7 +534,7 @@ BEFORE_HTML;
             $status = 'publish';
         }
 
-        $name = $nice_names[$status];
+		$name = $nice_names[ $status ];
 
         return $name;
     }
@@ -542,7 +542,7 @@ BEFORE_HTML;
     public static function get_params() {
         $values = array();
         foreach ( array( 'template' => 0, 'id' => '', 'paged' => 1, 'form' => '', 'search' => '', 'sort' => '', 'sdir' => '') as $var => $default ) {
-            $values[$var] = FrmAppHelper::get_param($var, $default);
+			$values[ $var ] = FrmAppHelper::get_param( $var, $default );
         }
 
         return $values;
@@ -563,11 +563,11 @@ BEFORE_HTML;
             ),
         );
 
-        if ( ! isset($available_status[$status]) ) {
+		if ( ! isset( $available_status[ $status ] ) ) {
             return;
         }
 
-        FrmAppHelper::permission_check($available_status[$status]['permission']);
+		FrmAppHelper::permission_check( $available_status[ $status ]['permission'] );
 
         $params = self::get_params();
 
@@ -575,15 +575,15 @@ BEFORE_HTML;
         check_admin_referer($status .'_form_' . $params['id']);
 
         $count = 0;
-        if ( FrmForm::set_status( $params['id'], $available_status[$status]['new_status'] ) ) {
+		if ( FrmForm::set_status( $params['id'], $available_status[ $status ]['new_status'] ) ) {
             $count++;
         }
 
         $available_status['untrash']['message'] = sprintf(_n( '%1$s form restored from the Trash.', '%1$s forms restored from the Trash.', $count, 'formidable' ), $count );
 		$available_status['trash']['message'] = sprintf( _n( '%1$s form moved to the Trash. %2$sUndo%3$s', '%1$s forms moved to the Trash. %2$sUndo%3$s', $count, 'formidable' ), $count, '<a href="' . esc_url( wp_nonce_url( '?page=formidable&frm_action=untrash&form_type='. ( isset( $_REQUEST['form_type'] ) ? sanitize_title( $_REQUEST['form_type'] ) : '' ) . '&id=' . $params['id'], 'untrash_form_' . $params['id'] ) ) . '">', '</a>' );
 
-        $message = $available_status[$status]['message'];
+		$message = $available_status[ $status ]['message'];
 
-        FrmFormsController::display_forms_list($params, $message, 1);
+		FrmFormsController::display_forms_list( $params, $message, 1 );
     }
 }

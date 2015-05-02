@@ -7,7 +7,7 @@ class FrmXMLController {
     }
 
     public static function add_default_templates() {
-        if ( !function_exists( 'libxml_disable_entity_loader' ) ) {
+		if ( ! function_exists( 'libxml_disable_entity_loader' ) ) {
     		// XML import is not enabled on your server
     		return;
     	}

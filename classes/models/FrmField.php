@@ -15,7 +15,7 @@ class FrmField{
         $new_values['field_key'] = FrmAppHelper::get_unique_key($key, $wpdb->prefix .'frm_fields', 'field_key');
 
         foreach ( array( 'name', 'description', 'type', 'default_value') as $col ) {
-            $new_values[$col] = $values[$col];
+			$new_values[ $col ] = $values[ $col ];
         }
 
         $new_values['options'] = $values['options'];
@@ -27,7 +27,7 @@ class FrmField{
         $new_values['created_at'] = current_time('mysql', 1);
 
 		if ( isset( $values['id'] ) ) {
-            $frm_duplicate_ids[$values['field_key']] = $new_values['field_key'];
+			$frm_duplicate_ids[ $values['field_key'] ] = $new_values['field_key'];
             $new_values = apply_filters('frm_duplicated_field', $new_values);
         }
 
@@ -236,7 +236,7 @@ class FrmField{
                     continue;
                 }
 
-                $fields[$result->id] = $result;
+				$fields[ $result->id ] = $result;
                 $count++;
                 if ( $limit == 1 ) {
                     $fields = $result;
@@ -274,7 +274,7 @@ class FrmField{
             $fields = array();
             $count = 0;
             foreach ( $results as $result ) {
-                $fields[$result->id] = $result;
+				$fields[ $result->id ] = $result;
                 if ( ! empty($limit) && $count >= $limit ) {
                     break;
                 }
@@ -385,7 +385,7 @@ class FrmField{
                 wp_cache_set($result->id, $result, 'frm_field');
                 wp_cache_set($result->field_key, $result, 'frm_field');
 
-                $results[$r_key]->field_options = maybe_unserialize($result->field_options);
+				$results[ $r_key ]->field_options = maybe_unserialize( $result->field_options );
                 if ( isset( $results[ $r_key ]->field_options['format'] ) && ! empty( $results[ $r_key ]->field_options['format'] ) ) {
                     $results[ $r_key ]->field_options['format'] = addslashes( $results[ $r_key ]->field_options['format'] );
                 }

@@ -50,22 +50,22 @@ class FrmNotification{
         foreach ( $filter_fields as $f ) {
             //Don't allow empty From
 			if ( $f == 'from' && empty( $notification[ $f ] ) ) {
-                $notification[$f] = '[admin_email]';
+				$notification[ $f ] = '[admin_email]';
             } else if ( in_array($f, array( 'email_to', 'cc', 'bcc', 'reply_to', 'from')) ) {
 				//Remove brackets
                 //Add a space in case there isn't one
-                $notification[$f] = str_replace('<', ' ', $notification[$f]);
-                $notification[$f] = str_replace( array( '"', '>'), '', $notification[$f]);
+				$notification[ $f ] = str_replace( '<', ' ', $notification[ $f ] );
+				$notification[ $f ] = str_replace( array( '"', '>' ), '', $notification[ $f ] );
 
                 //Switch userID shortcode to email address
-                if ( strpos($notification[$f], '[' . $user_id_field . ']' ) !== false || strpos($notification[$f], '[' . $user_id_key . ']' ) !== false ) {
-                    $user_data = get_userdata($entry->metas[$user_id_field]);
+				if ( strpos( $notification[ $f ], '[' . $user_id_field . ']' ) !== false || strpos( $notification[ $f ], '[' . $user_id_key . ']' ) !== false ) {
+					$user_data = get_userdata( $entry->metas[ $user_id_field ] );
                     $user_email = $user_data->user_email;
 					$notification[ $f ] = str_replace( array( '[' . $user_id_field . ']', '[' . $user_id_key . ']' ), $user_email, $notification[ $f ] );
                 }
             }
 
-            $notification[$f] = FrmFieldsHelper::basic_replace_shortcodes($notification[$f], $form, $entry);
+			$notification[ $f ] = FrmFieldsHelper::basic_replace_shortcodes( $notification[ $f ], $form, $entry );
         }
 
         //Put recipients, cc, and bcc into an array if they aren't empty
@@ -127,7 +127,7 @@ class FrmNotification{
                     'email_key' => $email_key,
                 ) );
 
-                unset($to_emails[$email_key]);
+				unset( $to_emails[ $email_key ] );
             }
         }
 
@@ -199,13 +199,13 @@ class FrmNotification{
 
         foreach ( $filter_fields as $f ) {
             // If empty, just skip it
-            if ( empty($atts[$f]) ) {
+			if ( empty( $atts[ $f ] ) ) {
                 continue;
             }
 
             // to_email, cc, and bcc can be an array
-            if ( is_array($atts[$f]) ) {
-                foreach ( $atts[$f] as $key => $val ) {
+			if ( is_array( $atts[ $f ] ) ) {
+				foreach ( $atts[ $f ] as $key => $val ) {
                     self::format_single_field( $atts, $f, $val, $key );
                     unset( $key, $val );
                 }
@@ -213,7 +213,7 @@ class FrmNotification{
                 continue;
             }
 
-            self::format_single_field( $atts, $f, $atts[$f] );
+			self::format_single_field( $atts, $f, $atts[ $f ] );
         }
 
         // If reply-to isn't set, make it match the from settings
@@ -242,7 +242,7 @@ class FrmNotification{
         if ( is_email($val) ) {
             // add sender's name if not included in $from
             if ( $f == 'from' ) {
-                $part_2 = $atts[$f];
+				$part_2 = $atts[ $f ];
                 $part_1  = $atts['from_name'] ? $atts['from_name'] : wp_specialchars_decode( FrmAppHelper::site_name(), ENT_QUOTES );
             } else {
                 return;
@@ -261,10 +261,10 @@ class FrmNotification{
             } else {
 				// In case someone just puts a name in any other email field
                 if ( false !== $key ) {
-                    unset( $atts[$f][$key] );
+					unset( $atts[ $f ][ $key ] );
                     return;
                 }
-                $atts[$f] = '';
+				$atts[ $f ] = '';
                 return;
             }
         }
@@ -285,10 +285,10 @@ class FrmNotification{
 
         // If value is an array
         if ( false !== $key ) {
-            $atts[$f][$key] = $final_val;
+			$atts[ $f ][ $key ] = $final_val;
             return;
         }
-        $atts[$f] = $final_val;
+		$atts[ $f ] = $final_val;
     }
 
     public static function send_email($atts) {

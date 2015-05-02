@@ -13,7 +13,7 @@ $theme_names = array_keys($jquery_themes);
 $theme_names = array_combine($theme_names, $theme_names);
 
 foreach ( $theme_names as $k => $v ) {
-    $theme_names[$k] = str_replace('-', '_', $v);
+	$theme_names[ $k ] = str_replace( '-', '_', $v );
     unset($k, $v);
 }
 

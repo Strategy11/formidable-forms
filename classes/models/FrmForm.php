@@ -18,7 +18,7 @@ class FrmForm{
             'status'        => isset($values['status']) ? $values['status'] : 'draft',
             'logged_in'     => isset($values['logged_in']) ? $values['logged_in'] : 0,
             'is_template'   => isset($values['is_template']) ? (int) $values['is_template'] : 0,
-            'parent_form_id'=> isset($values['parent_form_id']) ? (int) $values['parent_form_id'] : 0,
+			'parent_form_id' => isset( $values['parent_form_id'] ) ? absint( $values['parent_form_id'] ) : 0,
             'editable'      => isset($values['editable']) ? (int) $values['editable'] : 0,
             'default_template' => isset($values['default_template']) ? (int) $values['default_template'] : 0,
             'created_at'    => isset($values['created_at']) ? $values['created_at'] : current_time('mysql', 1),
@@ -142,7 +142,7 @@ class FrmForm{
 
         foreach ( $values as $value_key => $value ) {
             if ( in_array($value_key, $form_fields) ) {
-                $new_values[$value_key] = $value;
+				$new_values[ $value_key ] = $value;
             }
         }
 
@@ -217,15 +217,15 @@ class FrmForm{
         $existing_keys = array_keys($values['item_meta']);
         foreach ( $all_fields as $fid ) {
             if ( ! in_array($fid->id, $existing_keys) && ( isset($values['frm_fields_submitted']) && in_array($fid->id, $values['frm_fields_submitted']) ) || isset($values['options']) ) {
-                $values['item_meta'][$fid->id] = '';
+				$values['item_meta'][ $fid->id ] = '';
             }
-            $field_array[$fid->id] = $fid;
+			$field_array[ $fid->id ] = $fid;
         }
         unset($all_fields);
 
         foreach ( $values['item_meta'] as $field_id => $default_value ) {
-            if ( isset($field_array[$field_id]) ) {
-                $field = $field_array[$field_id];
+			if ( isset( $field_array[ $field_id ] ) ) {
+				$field = $field_array[ $field_id ];
             } else {
                 $field = FrmField::getOne($field_id);
             }
@@ -234,10 +234,10 @@ class FrmForm{
                 continue;
             }
 
-            if ( isset($values['options']) || isset($values['field_options']['custom_html_'. $field_id]) ) {
+			if ( isset( $values['options'] ) || isset( $values['field_options'][ 'custom_html_' . $field_id ] ) ) {
                 //updating the settings page
-                if ( isset($values['field_options']['custom_html_'. $field_id]) ) {
-                    $field->field_options['custom_html'] = isset($values['field_options']['custom_html_'.$field_id]) ? $values['field_options']['custom_html_'.$field_id] : ( isset($field->field_options['custom_html']) ? $field->field_options['custom_html'] : FrmFieldsHelper::get_default_html($field->type));
+				if ( isset( $values['field_options'][ 'custom_html_' . $field_id ] ) ) {
+					$field->field_options['custom_html'] = isset( $values['field_options'][ 'custom_html_' . $field_id ] ) ? $values['field_options'][ 'custom_html_' . $field_id ] : ( isset( $field->field_options['custom_html'] ) ? $field->field_options['custom_html'] : FrmFieldsHelper::get_default_html( $field->type ) );
                     $field->field_options = apply_filters('frm_update_form_field_options', $field->field_options, $field, $values);
                     FrmField::update($field_id, array( 'field_options' => $field->field_options));
                 } else if ( $field->type == 'hidden' || $field->type == 'user_id' ) {
@@ -250,24 +250,24 @@ class FrmForm{
                 }
             }
 
-            if ( ( isset($values['options']) || isset($values['field_options']['custom_html_'. $field_id]) ) && ! defined('WP_IMPORTING') ) {
+			if ( ( isset( $values['options'] ) || isset( $values['field_options'][ 'custom_html_' . $field_id ] ) ) && ! defined( 'WP_IMPORTING' ) ) {
                 continue;
             }
 
             //updating the form
             foreach ( array( 'size', 'max', 'label', 'invalid', 'blank', 'classes') as $opt ) {
-                $field->field_options[$opt] = isset($values['field_options'][$opt .'_'. $field_id]) ? trim($values['field_options'][$opt .'_'. $field_id]) : '';
+				$field->field_options[ $opt ] = isset( $values['field_options'][ $opt . '_' . $field_id ] ) ? trim( $values['field_options'][ $opt . '_' . $field_id ] ) : '';
             }
 
-            $field->field_options['required_indicator'] = isset($values['field_options']['required_indicator_'. $field_id]) ? trim($values['field_options']['required_indicator_'. $field_id]) : '*';
-            $field->field_options['separate_value'] = isset($values['field_options']['separate_value_'. $field_id]) ? trim($values['field_options']['separate_value_'. $field_id]) : 0;
+			$field->field_options['required_indicator'] = isset( $values['field_options'][ 'required_indicator_' . $field_id ] ) ? trim( $values['field_options'][ 'required_indicator_' . $field_id ] ) : '*';
+			$field->field_options['separate_value'] = isset( $values['field_options'][ 'separate_value_' . $field_id ] ) ? trim( $values['field_options'][ 'separate_value_' . $field_id ] ) : 0;
 
             $field->field_options = apply_filters('frm_update_field_options', $field->field_options, $field, $values);
-            $default_value = maybe_serialize($values['item_meta'][$field_id]);
-            $field_key = isset($values['field_options']['field_key_'. $field_id]) ? $values['field_options']['field_key_'. $field_id] : $field->field_key;
-            $required = isset($values['field_options']['required_'. $field_id]) ? $values['field_options']['required_'. $field_id] : false;
-            $field_type = isset($values['field_options']['type_'. $field_id]) ? $values['field_options']['type_'. $field_id] : $field->type;
-            $field_description = isset($values['field_options']['description_'. $field_id]) ? $values['field_options']['description_'. $field_id] : $field->description;
+			$default_value = maybe_serialize( $values['item_meta'][ $field_id ] );
+			$field_key = isset( $values['field_options'][ 'field_key_' . $field_id ] ) ? $values['field_options'][ 'field_key_' . $field_id ] : $field->field_key;
+			$required = isset( $values['field_options'][ 'required_' . $field_id ] ) ? $values['field_options'][ 'required_' . $field_id ] : false;
+			$field_type = isset( $values['field_options'][ 'type_' . $field_id ] ) ? $values['field_options'][ 'type_' . $field_id ] : $field->type;
+			$field_description = isset( $values['field_options'][ 'description_' . $field_id ] ) ? $values['field_options'][ 'description_' . $field_id ] : $field->description;
 
             FrmField::update($field_id, array(
                 'field_key' => $field_key, 'type' => $field_type,

@@ -61,7 +61,7 @@ class FrmStyle{
  			$new_instance = stripslashes_deep( (array) $new_instance);
  			$this->id = $new_instance['ID'];
  			if ( $id != $this->id || ! $_POST || ! isset($_POST['frm_style_setting']) ) {
- 			    $all_instances[$number] = $new_instance;
+				$all_instances[ $number ] = $new_instance;
 
  			    if ( $new_instance['menu_order'] && $_POST && empty($_POST['prev_menu_order']) && isset($_POST['frm_style_setting']['menu_order']) ) {
  			        // this style was set to default, so remove default setting on previous default style
@@ -88,13 +88,13 @@ class FrmStyle{
             foreach ( $default_settings as $setting => $default ) {
                 if ( strpos($setting, 'color') !== false || in_array($setting, array( 'error_bg', 'error_border', 'error_text')) ) {
                     //if is a color
-                    $new_instance['post_content'][$setting] = str_replace('#', '', $new_instance['post_content'][$setting]);
-                } else if ( in_array($setting, array( 'submit_style', 'important_style', 'auto_width')) && ! isset($new_instance['post_content'][$setting]) ) {
-                    $new_instance['post_content'][$setting] = 0;
+					$new_instance['post_content'][ $setting ] = str_replace( '#', '', $new_instance['post_content'][ $setting ] );
+				} else if ( in_array( $setting, array( 'submit_style', 'important_style', 'auto_width' ) ) && ! isset( $new_instance['post_content'][ $setting ] ) ) {
+					$new_instance['post_content'][ $setting ] = 0;
                 }
             }
 
-			$all_instances[$number] = $new_instance;
+			$all_instances[ $number ] = $new_instance;
 
             $action_ids[] = $this->save($new_instance);
 
@@ -256,12 +256,12 @@ class FrmStyle{
             $style->post_content = $this->override_defaults($style->post_content);
             $style->post_content = wp_parse_args( $style->post_content, $default_values);
 
-            $styles[$style->ID] = $style;
+			$styles[ $style->ID ] = $style;
         }
 
         if ( ! $default_style ) {
             $default_style = reset($styles);
-            $styles[$default_style->ID]->menu_order = 1;
+			$styles[ $default_style->ID ]->menu_order = 1;
         }
 
         return $styles;
@@ -361,12 +361,12 @@ class FrmStyle{
             'bg_color'          => 'ffffff',
             //'bg_color_hv'       => 'ffffff',
             'bg_color_active'   => 'ffffff',
-            'border_color_active'=> '66afe9',
+			'border_color_active' => '66afe9',
             'text_color_error'  => '444444',
             'bg_color_error'    => 'ffffff',
-            'border_color_error'=> 'B94A48',
-            'border_width_error'=> '1px',
-            'border_style_error'=> 'solid',
+			'border_color_error' => 'B94A48',
+			'border_width_error' => '1px',
+			'border_style_error' => 'solid',
             'bg_color_disabled' => 'ffffff',
             'border_color_disabled' => 'E5E5E5',
             'text_color_disabled' => 'A1A1A1',
@@ -382,7 +382,7 @@ class FrmStyle{
             'section_weight'    => 'bold',
             'section_pad'       => '15px 0 3px 0',
             'section_mar_top'   => '15px',
-            'section_mar_bottom'=> '12px',
+			'section_mar_bottom' => '12px',
             'section_bg_color'  => '',
             'section_border_color' => 'e8e8e8',
             'section_border_width' => '2px',

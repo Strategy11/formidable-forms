@@ -72,7 +72,7 @@ class FrmFormActionsController {
                 return $a;
             }
 
-            $actions[$a->id_base] = $a;
+			$actions[ $a->id_base ] = $a;
         }
         unset( $temp_actions, $a );
 
@@ -86,7 +86,7 @@ class FrmFormActionsController {
         arsort( $temp_actions );
         foreach ( $temp_actions as $type => $a ) {
             if ( ! isset( $a->action_options['active'] ) || empty( $a->action_options['active'] ) ) {
-                unset( $actions[$type] );
+				unset( $actions[ $type ] );
                 if ( count( $actions ) <= $action_limit ) {
                     break;
                 }

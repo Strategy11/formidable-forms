@@ -180,7 +180,7 @@ class FrmFormsListHelper extends FrmListHelper {
     		}
 
     		if ( $counts->{$status} || 'published' == $status ) {
-		        $links[$status] = '<a href="?page=formidable&form_type='. $status .'" '. $class .'>'. sprintf( __( '%1$s <span class="count">(%2$s)</span>', 'formidable' ), $name, number_format_i18n( $counts->{$status} ) ) .'</a>';
+				$links[ $status ] = '<a href="' . esc_url( '?page=formidable&form_type=' . $status ) . '" ' . $class . '>' . sprintf( __( '%1$s <span class="count">(%2$s)</span>', 'formidable' ), $name, number_format_i18n( $counts->{$status} ) ) . '</a>';
 		    }
 
 		    unset($status, $name);

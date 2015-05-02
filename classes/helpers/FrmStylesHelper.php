@@ -12,7 +12,7 @@ class FrmStylesHelper {
             'overcast'      => 'Overcast',
             'le-frog'       => 'Le Frog',
             'flick'         => 'Flick',
-            'pepper-grinder'=> 'Pepper Grinder',
+			'pepper-grinder' => 'Pepper Grinder',
             'eggplant'      => 'Eggplant',
             'dark-hive'     => 'Dark Hive',
             'cupertino'     => 'Cupertino',
@@ -118,12 +118,12 @@ class FrmStylesHelper {
         if ( 'arrow' == $type && is_numeric($key) ) {
             //frm_arrowup6_icon
             $arrow = array( '-' => 'down', '+' => 'up');
-            $class = 'frm_arrow'. $arrow[$icon];
+			$class = 'frm_arrow' . $arrow[ $icon ];
         } else {
             //frm_minus1_icon
             $key = str_replace('p', '', $key);
             $plus = array( '-' => 'minus', '+' => 'plus');
-            $class = 'frm_'. $plus[$icon];
+			$class = 'frm_' . $plus[ $icon ];
         }
 
         if ( $key ) {
@@ -143,7 +143,7 @@ class FrmStylesHelper {
 ?>
     	<select name="<?php echo esc_attr( $frm_style->get_field_name($name) ) ?>" id="frm_<?php echo esc_attr( $name ) ?>" class="frm_icon_font frm_multiselect hide-if-js">
             <?php foreach ( $icons as $key => $icon ) { ?>
-    	    <option value="<?php echo esc_attr( $key ) ?>" <?php selected( $style->post_content[$name], $key ) ?>>
+			<option value="<?php echo esc_attr( $key ) ?>" <?php selected( $style->post_content[ $name ], $key ) ?>>
                 <?php echo '&#xe'. $icon['+'] .'; &#xe'. $icon['-'] .';'; ?>
             </option>
             <?php } ?>
@@ -151,8 +151,8 @@ class FrmStylesHelper {
 
         <div class="btn-group hide-if-no-js" id="frm_<?php echo esc_attr( $name ) ?>_select">
             <button class="multiselect dropdown-toggle btn btn-default" data-toggle="dropdown" type="button">
-                <i class="frm_icon_font <?php echo esc_attr( self::icon_key_to_class( $style->post_content[$name], '+', $type ) ) ?>"></i>
-                <i class="frm_icon_font <?php echo esc_attr( self::icon_key_to_class( $style->post_content[$name], '-', $type ) ) ?>"></i>
+				<i class="frm_icon_font <?php echo esc_attr( self::icon_key_to_class( $style->post_content[ $name ], '+', $type ) ) ?>"></i>
+				<i class="frm_icon_font <?php echo esc_attr( self::icon_key_to_class( $style->post_content[ $name ], '-', $type ) ) ?>"></i>
                 <b class="caret"></b>
             </button>
             <ul class="multiselect-container frm-dropdown-menu">

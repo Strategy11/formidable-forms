@@ -37,11 +37,11 @@ class FrmXMLHelper {
 
         unset($defaults);
 
-        if ( !defined('WP_IMPORTING') ) {
+		if ( ! defined( 'WP_IMPORTING' ) ) {
             define('WP_IMPORTING', true);
         }
 
-        if ( !class_exists('DOMDocument') ) {
+		if ( ! class_exists( 'DOMDocument' ) ) {
             return new WP_Error( 'SimpleXML_parse_error', __( 'Your server does not have XML enabled', 'formidable' ), libxml_get_errors() );
         }
 
@@ -126,9 +126,9 @@ class FrmXMLHelper {
                 $edit_query['created_at'] = $form['created_at'];
             }
 
-            if ( ! empty($form['parent_form_id']) && isset($imported['forms'][$form['parent_form_id']]) ) {
+			if ( ! empty( $form['parent_form_id'] ) && isset( $imported['forms'][ $form['parent_form_id'] ] ) ) {
                 // replace the old parent id with the new one
-                $form['parent_form_id'] = $imported['forms'][$form['parent_form_id']];
+				$form['parent_form_id'] = $imported['forms'][ $form['parent_form_id'] ];
             }
 
             $edit_query = apply_filters('frm_match_xml_form', $edit_query, $form);
@@ -141,13 +141,13 @@ class FrmXMLHelper {
                 FrmForm::update($form_id, $form );
                 $imported['updated']['forms']++;
                 // Keep track of whether this specific form was updated or not
-                $imported['form_status'][$form_id] = 'updated';
+				$imported['form_status'][ $form_id ] = 'updated';
 
 				$form_fields = FrmField::get_all_for_form( $form_id );
                 $old_fields = array();
                 foreach ( $form_fields as $f ) {
-                    $old_fields[$f->id] = $f;
-                    $old_fields[$f->field_key] = $f->id;
+					$old_fields[ $f->id ] = $f;
+					$old_fields[ $f->field_key ] = $f->id;
                     unset($f);
                 }
                 $form_fields = $old_fields;
@@ -159,7 +159,7 @@ class FrmXMLHelper {
                 if ( $form_id ) {
                     $imported['imported']['forms']++;
                     // Keep track of whether this specific form was updated or not
-                    $imported['form_status'][$form_id] = 'imported';
+					$imported['form_status'][ $form_id ] = 'imported';
 
 					// Check if any repeating sections form_select need to be updated
 					if ( isset( $repeat_fields[ $form['id'] ] ) ) {
@@ -205,25 +205,25 @@ class FrmXMLHelper {
 
     		    if ( ! empty($this_form) ) {
     		        // check for field to edit by field id
-    		        if ( isset($form_fields[$f['id']]) ) {
+					if ( isset( $form_fields[ $f['id'] ] ) ) {
     		            FrmField::update( $f['id'], $f );
     		            $imported['updated']['fields']++;
 
-    		            unset($form_fields[$f['id']]);
+						unset( $form_fields[ $f['id'] ] );
 
     		            //unset old field key
-    		            if ( isset($form_fields[$f['field_key']]) ) {
-    		                unset($form_fields[$f['field_key']]);
-    		            }
-    		        } else if ( isset($form_fields[$f['field_key']]) ) {
+						if ( isset( $form_fields[ $f['field_key'] ] ) ) {
+							unset( $form_fields[ $f['field_key'] ] );
+						}
+					} else if ( isset( $form_fields[ $f['field_key'] ] ) ) {
     		            // check for field to edit by field key
     		            unset($f['id']);
 
-    		            FrmField::update( $form_fields[$f['field_key']], $f );
+						FrmField::update( $form_fields[ $f['field_key'] ], $f );
     		            $imported['updated']['fields']++;
 
-    		            unset($form_fields[$form_fields[$f['field_key']]]); //unset old field id
-    		            unset($form_fields[$f['field_key']]); //unset old field key
+						unset( $form_fields[ $form_fields[ $f['field_key'] ] ] ); //unset old field id
+						unset( $form_fields[ $f['field_key'] ] ); //unset old field key
 					} else {
 						$new_id = FrmField::create( $f );
 						if ( $new_id == false ) {
@@ -263,7 +263,7 @@ class FrmXMLHelper {
 		    // Update field ids/keys to new ones
 		    do_action('frm_after_duplicate_form', $form_id, $form, array( 'old_id' => $old_id));
 
-            $imported['forms'][ (int) $item->id] = $form_id;
+			$imported['forms'][ (int) $item->id ] = $form_id;
 
             // Send pre 2.0 form options through function that creates actions
             self::migrate_form_settings_to_actions( $form['options'], $form_id, $imported, $switch = true );
@@ -335,8 +335,8 @@ class FrmXMLHelper {
             self::update_postmeta($post, $post_id);
 
             $this_type = 'posts';
-            if ( isset($post_types[$post['post_type']]) ) {
-                $this_type = $post_types[$post['post_type']];
+			if ( isset( $post_types[ $post['post_type'] ] ) ) {
+				$this_type = $post_types[ $post['post_type'] ];
             }
 
             if ( isset($post['ID']) && $post_id == $post['ID'] ) {
@@ -347,7 +347,7 @@ class FrmXMLHelper {
 
             unset($post);
 
-			$imported['posts'][ (int) $old_id] = $post_id;
+			$imported['posts'][ (int) $old_id ] = $post_id;
 		}
 
 		return $imported;
@@ -394,8 +394,8 @@ class FrmXMLHelper {
     		    } else if ( $m['key'] == 'frm_options' ) {
 
 					foreach ( array( 'date_field_id', 'edate_field_id' ) as $setting_name ) {
-    		            if ( isset($m['value'][$setting_name]) && is_numeric($m['value'][$setting_name]) && isset($frm_duplicate_ids[$m['value'][$setting_name]]) ) {
-    		                $m['value'][$setting_name] = $frm_duplicate_ids[$m['value'][$setting_name]];
+						if ( isset( $m['value'][ $setting_name ] ) && is_numeric( $m['value'][ $setting_name ] ) && isset( $frm_duplicate_ids[ $m['value'][ $setting_name ] ] ) ) {
+							$m['value'][ $setting_name ] = $frm_duplicate_ids[ $m['value'][ $setting_name ] ];
     		            }
     		        }
 
@@ -413,9 +413,9 @@ class FrmXMLHelper {
     		        }
 
                     foreach ( $check_dup_array as $check_k ) {
-                        foreach ( (array) $m['value'][$check_k] as $mk => $mv ) {
-		                    if ( isset($frm_duplicate_ids[$mv]) ) {
-		                        $m['value'][$check_k][$mk] = $frm_duplicate_ids[$mv];
+						foreach ( (array) $m['value'][ $check_k ] as $mk => $mv ) {
+							if ( isset( $frm_duplicate_ids[ $mv ] ) ) {
+								$m['value'][ $check_k ][ $mk ] = $frm_duplicate_ids[ $mv ];
 		                    }
 		                    unset($mk, $mv);
 		                }
@@ -455,11 +455,11 @@ class FrmXMLHelper {
 		        $name = (string) $c;
 		    }
 
-		    if ( ! isset($post['tax_input'][$taxonomy]) ) {
-		        $post['tax_input'][$taxonomy] = array();
-		    }
+			if ( ! isset( $post['tax_input'][ $taxonomy ] ) ) {
+				$post['tax_input'][ $taxonomy ] = array();
+			}
 
-		    $post['tax_input'][$taxonomy][] = $name;
+			$post['tax_input'][ $taxonomy ][] = $name;
 		    unset($name);
 		}
     }
@@ -525,7 +525,7 @@ class FrmXMLHelper {
 
         $message = '<ul>';
         foreach ( $result as $type => $results ) {
-            if ( ! isset($t_strings[$type]) ) {
+			if ( ! isset( $t_strings[ $type ] ) ) {
                 // only print imported and updated
                 continue;
             }
@@ -537,7 +537,7 @@ class FrmXMLHelper {
             }
 
             if ( ! empty($s_message) ) {
-                $message .= '<li><strong>'. $t_strings[$type] .':</strong> ';
+				$message .= '<li><strong>' . $t_strings[ $type ] . ':</strong> ';
                 $message .= implode(', ', $s_message);
                 $message .= '</li>';
             }
@@ -567,7 +567,7 @@ class FrmXMLHelper {
             'actions'   => sprintf( _n( '%1$s Form Action', '%1$s Form Actions', $m, 'formidable' ), $m ),
         );
 
-        $s_message[] = isset($strings[$type]) ? $strings[$type] : ' '. $m .' '. ucfirst($type);
+		$s_message[] = isset( $strings[ $type ] ) ? $strings[ $type ] : ' ' . $m . ' ' . ucfirst( $type );
     }
 
 	public static function cdata( $str ) {
@@ -631,8 +631,8 @@ class FrmXMLHelper {
         );
 
         foreach ( $post_settings as $post_setting ) {
-            if ( isset( $form_options[$post_setting] ) ) {
-                $new_action['post_content'][$post_setting] = $form_options[$post_setting];
+			if ( isset( $form_options[ $post_setting ] ) ) {
+				$new_action['post_content'][ $post_setting ] = $form_options[ $post_setting ];
             }
             unset($post_setting);
         }
@@ -691,11 +691,11 @@ class FrmXMLHelper {
         foreach ( $post_content as $key => $setting ) {
             if ( ! is_array( $setting ) && in_array( $key, $basic_fields ) ) {
                 // Replace old IDs with new IDs
-                $post_content[$key] = str_replace( $old, $new, $setting );
+				$post_content[ $key ] = str_replace( $old, $new, $setting );
             } else if ( is_array( $setting ) && in_array( $key, $array_fields ) ) {
                 foreach ( $setting as $k => $val ) {
                     // Replace old IDs with new IDs
-                    $post_content[$key][$k] = str_replace( $old, $new, $val );
+					$post_content[ $key ][ $k ] = str_replace( $old, $new, $val );
                 }
             }
             unset( $key, $setting );
@@ -792,12 +792,12 @@ class FrmXMLHelper {
         // Format the reply to email and name
         $reply_fields = array( 'reply_to' => '', 'reply_to_name' => '' );
         foreach ( $reply_fields as $f => $val ) {
-            if ( isset( $notification[$f] ) ) {
-                $atts[$f] = $notification[$f];
-                if ( 'custom' == $notification[$f] ) {
-                    $atts[$f] = $notification['cust_' . $f];
-                } else if ( is_numeric( $atts[$f] ) && ! empty( $atts[$f] ) ) {
-                    $atts[$f] = '['. $atts[$f] .']';
+			if ( isset( $notification[ $f ] ) ) {
+				$atts[ $f ] = $notification[ $f ];
+				if ( 'custom' == $notification[ $f ] ) {
+					$atts[ $f ] = $notification[ 'cust_' . $f ];
+				} else if ( is_numeric( $atts[ $f ] ) && ! empty( $atts[ $f ] ) ) {
+					$atts[ $f ] = '[' . $atts[ $f ] . ']';
                 }
             }
             unset( $f, $val );
@@ -828,13 +828,13 @@ class FrmXMLHelper {
         foreach ( $atts['email_to'] as $key => $email_field ) {
 
             if ( is_numeric( $email_field ) ) {
-                $atts['email_to'][$key] = '['. $email_field .']';
+				$atts['email_to'][ $key ] = '[' . $email_field . ']';
             }
 
             if ( strpos( $email_field, '|') ) {
                 $email_opt = explode( '|', $email_field );
                 if ( isset( $email_opt[0] ) ) {
-                    $atts['email_to'][$key] = '['. $email_opt[0] .' show='. $email_opt[1] .']';
+					$atts['email_to'][ $key ] = '[' . $email_opt[0] . ' show=' . $email_opt[1] . ']';
                 }
                 unset( $email_opt );
             }
@@ -855,12 +855,12 @@ class FrmXMLHelper {
         // Add more fields to the new notification
         $add_fields = array( 'email_message', 'email_subject', 'plain_text', 'inc_user_info', 'conditions' );
         foreach ( $add_fields as $add_field ) {
-            if ( isset ( $notification[$add_field] ) ) {
-                $new_notification['post_content'][$add_field] = $notification[$add_field];
+			if ( isset ( $notification[ $add_field ] ) ) {
+				$new_notification['post_content'][ $add_field ] = $notification[ $add_field ];
             } else if ( in_array( $add_field, array( 'plain_text', 'inc_user_info' ) ) ) {
-                $new_notification['post_content'][$add_field] = 0;
+				$new_notification['post_content'][ $add_field ] = 0;
             } else {
-                $new_notification['post_content'][$add_field] = '';
+				$new_notification['post_content'][ $add_field ] = '';
             }
             unset( $add_field );
         }
@@ -869,7 +869,7 @@ class FrmXMLHelper {
 		$new_notification['post_content']['reply_to'] = $atts['reply_to'];
 
         // Set from
-        if ( !empty( $atts['reply_to'] ) || !empty( $atts['reply_to_name'] ) ) {
+		if ( ! empty( $atts['reply_to'] ) || ! empty( $atts['reply_to_name'] ) ) {
             $new_notification['post_content']['from'] = ( empty($atts['reply_to_name']) ? '[sitename]' : $atts['reply_to_name'] ) .' <'. ( empty($atts['reply_to']) ? '[admin_email]' : $atts['reply_to'] ) .'>';
         }
     }
@@ -884,7 +884,7 @@ class FrmXMLHelper {
 		if ( isset( $post_content['conditions'] ) && is_array( $post_content['conditions'] ) ) {
 			foreach ( $post_content['conditions'] as $email_key => $val ) {
 				if ( is_numeric( $email_key ) ) {
-					$post_content['conditions'][$email_key] = self::switch_action_field_ids( $val, array( 'hide_field' ) );
+					$post_content['conditions'][ $email_key ] = self::switch_action_field_ids( $val, array( 'hide_field' ) );
 				}
 				unset( $email_key, $val);
 			}

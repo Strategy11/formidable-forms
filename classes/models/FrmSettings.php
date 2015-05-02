@@ -130,8 +130,8 @@ class FrmSettings{
         $settings = $this->default_options();
 
         foreach ( $settings as $setting => $default ) {
-            if ( isset($params['frm_'. $setting]) ) {
-                $this->{$setting} = $params['frm_'. $setting];
+			if ( isset( $params[ 'frm_' . $setting ] ) ) {
+				$this->{$setting} = $params[ 'frm_' . $setting ];
             } else if ( ! isset($this->{$setting}) ) {
                 $this->{$setting} = $default;
             }

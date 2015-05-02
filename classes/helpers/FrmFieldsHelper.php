@@ -174,7 +174,7 @@ class FrmFieldsHelper {
         $defaults = array( 'name' => $record->name, 'description' => $record->description);
         $default_opts = array(
             'field_key' => $record->field_key, 'type' => $record->type,
-            'default_value'=> $record->default_value, 'field_order' => $record->field_order,
+			'default_value' => $record->default_value, 'field_order' => $record->field_order,
             'required' => $record->required,
         );
 
@@ -240,8 +240,8 @@ class FrmFieldsHelper {
         $frm_settings = FrmAppHelper::get_settings();
         return array(
             'name' => __( 'Untitled', 'formidable' ), 'description' => '',
-            'field_key' => $key, 'type' => $type, 'options'=>'', 'default_value'=>'',
-            'field_order' => $field_count+1, 'required' => false,
+			'field_key' => $key, 'type' => $type, 'options' => '', 'default_value' => '',
+			'field_order' => $field_count + 1, 'required' => false,
             'blank' => $frm_settings->blank_msg, 'unique_msg' => $frm_settings->unique_msg,
             'invalid' => __( 'This field is invalid', 'formidable' ), 'form_id' => $form_id,
 			'field_options' => $field_options,
@@ -345,7 +345,7 @@ DEFAULT_HTML;
         if ( ! is_array( $errors ) ) {
             $errors = array();
         }
-        $error = isset($errors['field'. $field_id]) ? $errors['field'. $field_id] : false;
+		$error = isset( $errors[ 'field' . $field_id ] ) ? $errors[ 'field' . $field_id ] : false;
 
         //If field type is section heading, add class so a bottom margin can be added to either the h3 or description
         if ( $field['type'] == 'divider' ) {
@@ -373,7 +373,7 @@ DEFAULT_HTML;
         $html = str_replace('[field_name]', $field['name'], $html);
 
         //replace [error_class]
-		$error_class = isset ( $errors['field'. $field_id] ) ? ' frm_blank_field' : '';
+		$error_class = isset ( $errors[ 'field' . $field_id ] ) ? ' frm_blank_field' : '';
 		self::get_more_field_classes( $error_class, $field, $field_id, $html );
 		if ( $field['type'] == 'html' && strpos( $html, '[error_class]' ) === false ) {
 			// there is no error_class shortcode to use for addign fields
@@ -1143,39 +1143,39 @@ DEFAULT_HTML;
     }
 
     public static function get_bulk_prefilled_opts(array &$prepop) {
-        $prepop[__( 'Countries', 'formidable' )] = FrmFieldsHelper::get_countries();
+		$prepop[ __( 'Countries', 'formidable' ) ] = FrmFieldsHelper::get_countries();
 
         $states = FrmFieldsHelper::get_us_states();
         $state_abv = array_keys($states);
         sort($state_abv);
-        $prepop[__( 'U.S. State Abbreviations', 'formidable' )] = $state_abv;
+		$prepop[ __( 'U.S. State Abbreviations', 'formidable' ) ] = $state_abv;
 
         $states = array_values($states);
         sort($states);
-        $prepop[__( 'U.S. States', 'formidable' )] = $states;
+		$prepop[ __( 'U.S. States', 'formidable' ) ] = $states;
         unset($state_abv, $states);
 
-        $prepop[__( 'Age', 'formidable' )] = array(
+		$prepop[ __( 'Age', 'formidable' ) ] = array(
             __( 'Under 18', 'formidable' ), __( '18-24', 'formidable' ), __( '25-34', 'formidable' ),
             __( '35-44', 'formidable' ), __( '45-54', 'formidable' ), __( '55-64', 'formidable' ),
             __( '65 or Above', 'formidable' ), __( 'Prefer Not to Answer', 'formidable' ),
         );
 
-        $prepop[__( 'Satisfaction', 'formidable' )] = array(
+		$prepop[ __( 'Satisfaction', 'formidable' ) ] = array(
             __( 'Very Satisfied', 'formidable' ), __( 'Satisfied', 'formidable' ), __( 'Neutral', 'formidable' ),
             __( 'Unsatisfied', 'formidable' ), __( 'Very Unsatisfied', 'formidable' ), __( 'N/A', 'formidable' ),
         );
 
-        $prepop[__( 'Importance', 'formidable' )] = array(
+		$prepop[ __( 'Importance', 'formidable' ) ] = array(
             __( 'Very Important', 'formidable' ), __( 'Important', 'formidable' ), __( 'Neutral', 'formidable' ),
             __( 'Somewhat Important', 'formidable' ), __( 'Not at all Important', 'formidable' ), __( 'N/A', 'formidable' ),
         );
 
-        $prepop[__( 'Agreement', 'formidable' )] = array(
+		$prepop[ __( 'Agreement', 'formidable' ) ] = array(
             __( 'Strongly Agree', 'formidable' ), __( 'Agree', 'formidable' ), __( 'Neutral', 'formidable' ),
             __( 'Disagree', 'formidable' ), __( 'Strongly Disagree', 'formidable' ), __( 'N/A', 'formidable' ),
         );
 
-        $prepop = apply_filters('frm_bulk_field_choices', $prepop);
+		$prepop = apply_filters( 'frm_bulk_field_choices', $prepop );
     }
 }

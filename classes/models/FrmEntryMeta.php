@@ -73,14 +73,14 @@ class FrmEntryMeta {
             if ( $prev_values && in_array($field_id, $prev_values) ) {
                 if ( ( is_array( $meta_value ) && empty( $meta_value ) ) || ( ! is_array( $meta_value ) && trim( $meta_value ) == '' ) ) {
                     // remove blank fields
-                    unset($values[$field_id]);
+					unset( $values[ $field_id ] );
                 } else {
                     // if value exists, then update it
-                    self::update_entry_meta($entry_id, $field_id, '', $values[$field_id]);
+					self::update_entry_meta( $entry_id, $field_id, '', $values[ $field_id ] );
                 }
             } else {
                 // if value does not exist, then create it
-                self::add_entry_meta($entry_id, $field_id, '', $values[$field_id]);
+				self::add_entry_meta( $entry_id, $field_id, '', $values[ $field_id ] );
             }
         }
 
@@ -135,8 +135,8 @@ class FrmEntryMeta {
         $entry_id = (int) $entry_id;
 
         $cached = FrmAppHelper::check_cache( $entry_id, 'frm_entry' );
-        if ( $cached && isset($cached->metas) && isset($cached->metas[$field_id]) ) {
-            $result = $cached->metas[$field_id];
+		if ( $cached && isset( $cached->metas ) && isset( $cached->metas[ $field_id ] ) ) {
+			$result = $cached->metas[ $field_id ];
             return stripslashes_deep($result);
         }
 
@@ -156,7 +156,7 @@ class FrmEntryMeta {
             if ( ! isset( $cached->metas ) ) {
                 $cached->metas = array();
             }
-            $cached->metas[$field_id] = $result;
+			$cached->metas[ $field_id ] = $result;
             wp_cache_set($entry_id, $cached, 'frm_entry');
         }
         $result = stripslashes_deep($result);
@@ -192,7 +192,7 @@ class FrmEntryMeta {
         }
 
 		foreach ( $values as $k => $v ) {
-            $values[$k] = maybe_unserialize($v);
+			$values[ $k ] = maybe_unserialize( $v );
             unset($k, $v);
         }
 
@@ -248,7 +248,7 @@ class FrmEntryMeta {
         }
 
         foreach ( $results as $k => $result ) {
-            $results[$k]->meta_value = stripslashes_deep(maybe_unserialize($result->meta_value));
+			$results[ $k ]->meta_value = stripslashes_deep( maybe_unserialize( $result->meta_value ) );
             unset($k, $result);
         }
 

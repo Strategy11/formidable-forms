@@ -17,7 +17,7 @@ foreach ( $type as $tb_type ) {
         continue;
     }
 
-    $item_ids = $records[$tb_type];
+	$item_ids = $records[ $tb_type ];
     if ( in_array($tb_type, array( 'styles', 'actions') ) ) {
         include(dirname(__FILE__) .'/posts_xml.php');
     } else if ( file_exists(dirname(__FILE__) .'/'. $tb_type .'_xml.php') ) {
@@ -26,7 +26,7 @@ foreach ( $type as $tb_type ) {
         include( FrmAppHelper::plugin_path() .'/pro/classes/views/xml/'. $tb_type .'_xml.php' );
     }
 
-    unset($item_ids, $records[$tb_type], $tb_type);
+	unset( $item_ids, $records[ $tb_type ], $tb_type );
 }
 
 ?>
