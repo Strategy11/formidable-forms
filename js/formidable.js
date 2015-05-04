@@ -521,7 +521,7 @@ function frmFrontFormJS(){
 			return;
 		}
 
-		var hiddenInput = jQuery('input[name^="'+ f.hiddenName +'"], select[name^="'+ f.hiddenName +'"], textarea[name^="'+ f.hiddenName +'"]');
+		var hiddenInput = jQuery('input[name^="'+ f.hiddenName +'"], select[name^="'+ f.hiddenName +'"]:not(":disabled"), textarea[name^="'+ f.hiddenName +'"]');
 
 		var prev = [];
 		hiddenInput.each(function(){
