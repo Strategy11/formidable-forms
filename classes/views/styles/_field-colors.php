@@ -35,7 +35,7 @@
             	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name('field_border_width') ) ?>" id="frm_field_border_width" value="<?php echo esc_attr( $style->post_content['field_border_width'] ) ?>" size="4" />
             </div>
             <div class="field-group clearfix">
-            	<label><?php _e( 'Style', 'formidable' )?></label>
+				<label><?php _e( 'Style', 'formidable' ) ?></label>
             	<select name="<?php echo esc_attr( $frm_style->get_field_name('field_border_style') ) ?>" id="frm_field_border_style">
             	    <option value="solid" <?php selected($style->post_content['field_border_style'], 'solid') ?>><?php _e( 'solid', 'formidable' ) ?></option>
             		<option value="dotted" <?php selected($style->post_content['field_border_style'], 'dotted') ?>><?php _e( 'dotted', 'formidable' ) ?></option>

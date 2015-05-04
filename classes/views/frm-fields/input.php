@@ -27,7 +27,7 @@ do_action('frm_field_input_html', $field);
 
             $field_val = apply_filters('frm_field_value_saved', $opt, $opt_key, $field);
             $opt = apply_filters('frm_field_label_seen', $opt, $opt_key, $field); ?>
-			<div class="<?php echo apply_filters('frm_radio_class', 'frm_radio', $field, $field_val)?>"><?php
+			<div class="<?php echo esc_attr( apply_filters( 'frm_radio_class', 'frm_radio', $field, $field_val ) ) ?>"><?php
 
 			if ( ! isset( $atts ) || ! isset( $atts['label'] ) || $atts['label'] ) {
 				?><label for="<?php echo esc_attr( $html_id ) ?>-<?php echo esc_attr( $opt_key ) ?>"><?php
@@ -37,7 +37,7 @@ do_action('frm_field_input_html', $field);
             $other_opt = false;
             $other_args = FrmAppHelper::prepare_other_input( $field, $other_opt, $checked, array( 'field_name' => $field_name, 'opt_key' => $opt_key ) );
             ?>
-            <input type="radio" name="<?php echo esc_attr( $field_name ) ?>" id="<?php echo esc_attr( $html_id ) ?>-<?php echo esc_attr( $opt_key ) ?>" value="<?php echo esc_attr( $field_val ) ?>" <?php
+            <input type="radio" name="<?php echo esc_attr( $field_name ) ?>" id="<?php echo esc_attr( $html_id . '-' . $opt_key ) ?>" value="<?php echo esc_attr( $field_val ) ?>" <?php
             echo $checked;
             do_action('frm_field_input_html', $field);
 ?>/><?php

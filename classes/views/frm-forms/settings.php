@@ -55,7 +55,7 @@
                                 <option value="redirect" <?php selected($values['success_action'], 'redirect');
                                 ?>><?php _e( 'Redirect to URL', 'formidable' ) ?></option>
                                 <option value="page" <?php selected($values['success_action'], 'page');
-                                ?>><?php _e( 'Show Page Content', 'formidable' )?></option>
+								?>><?php _e( 'Show Page Content', 'formidable' ) ?></option>
                             <?php } else { ?>
                             <option value="redirect" disabled="disabled" <?php selected($values['success_action'], 'redirect');
                             ?>><?php _e( 'Redirect to URL', 'formidable' ); echo ' '. __( '(Pro feature)', 'formidable' ); ?></option>
@@ -82,7 +82,7 @@
                 </tr>
                 <tr class="frm_show_form_opt success_action_message_box success_action_box<?php echo ($values['success_action'] == 'message') ? '' : ' frm_hidden'; ?>">
                     <td colspan="2">
-                        <label for="show_form"><input type="checkbox" name="options[show_form]" id="show_form" value="1" <?php checked($values['show_form'], 1) ?> /> <?php _e( 'Show the form with the confirmation message', 'formidable' )?></label>
+						<label for="show_form"><input type="checkbox" name="options[show_form]" id="show_form" value="1" <?php checked( $values['show_form'], 1 ) ?> /> <?php _e( 'Show the form with the confirmation message', 'formidable' ) ?></label>
                     </td>
                 </tr>
                 <tr>
@@ -94,8 +94,8 @@
                     <td colspan="2"><?php _e( 'Use Akismet to check entries for spam for', 'formidable' ) ?>
                         <select name="options[akismet]">
                             <option value=""><?php _e( 'no one', 'formidable' ) ?></option>
-                            <option value="1" <?php selected($values['akismet'], 1)?>><?php _e( 'everyone', 'formidable' ) ?></option>
-                            <option value="logged" <?php selected($values['akismet'], 'logged')?>><?php _e( 'visitors who are not logged in', 'formidable' ) ?></option>
+							<option value="1" <?php selected( $values['akismet'], 1 ) ?>><?php _e( 'everyone', 'formidable' ) ?></option>
+							<option value="logged" <?php selected( $values['akismet'], 'logged' ) ?>><?php _e( 'visitors who are not logged in', 'formidable' ) ?></option>
                         </select>
                     </td>
                 </tr>
@@ -132,11 +132,11 @@
                 <tr>
                     <td class="frm_left_label"><label for="custom_style"><?php _e( 'Style Template', 'formidable' ) ?></label></td>
                     <td><select name="options[custom_style]" id="custom_style">
-                        <option value="1" <?php selected($values['custom_style'], 1) ?>><?php _e( 'Always use default', 'formidable' )?></option>
+						<option value="1" <?php selected( $values['custom_style'], 1 ) ?>><?php _e( 'Always use default', 'formidable' ) ?></option>
                         <?php foreach ( $styles as $s ) { ?>
                         <option value="<?php echo esc_attr( $s->ID ) ?>" <?php selected( $s->ID, $values['custom_style'] ) ?>><?php echo esc_html( $s->post_title . ( empty( $s->menu_order ) ? '' : ' ('. __( 'default', 'formidable' ) .')' ) ) ?></option>
                         <?php } ?>
-                        <option value="0" <?php selected($values['custom_style'], 0); selected($values['custom_style'], '') ?>><?php _e( 'Do not use Formidable styling', 'formidable' )?></option>
+						<option value="0" <?php selected( $values['custom_style'], 0 ); selected( $values['custom_style'], '' ) ?>><?php _e( 'Do not use Formidable styling', 'formidable' ) ?></option>
                     </select></td>
                 </tr>
                 <tr>

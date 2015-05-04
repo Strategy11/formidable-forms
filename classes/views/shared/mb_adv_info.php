@@ -219,7 +219,7 @@
         <p class="howto"><?php _e( 'Repeating field options', 'formidable' ) ?></p>
             <ul class="frm_code_list">
         	    <li class="frm_col_one">
-                    <a href="javascript:void(0)" class="frmbutton button frm_insert_code" data-code="<?php echo esc_attr('foreach '. $repeat_field .'][/foreach') ?>"><?php _e( 'For Each', 'formidable' )?></a>
+					<a href="javascript:void(0)" class="frmbutton button frm_insert_code" data-code="<?php echo esc_attr( 'foreach ' . $repeat_field . '][/foreach' ) ?>"><?php _e( 'For Each', 'formidable' ) ?></a>
         	    </li>
             </ul>
         <?php
@@ -231,11 +231,11 @@
         <p class="howto"><?php _e( 'Dynamic field options', 'formidable' ) ?></p>
             <ul class="frm_code_list">
         	    <li class="frm_col_one">
-                    <a href="javascript:void(0)" class="frmbutton button frm_insert_code" data-code="<?php echo esc_attr($dfe .' show="created-at"') ?>"><?php _e( 'Creation Date', 'formidable' )?></a>
+					<a href="javascript:void(0)" class="frmbutton button frm_insert_code" data-code="<?php echo esc_attr( $dfe . ' show="created-at"' ) ?>"><?php _e( 'Creation Date', 'formidable' ) ?></a>
         	    </li>
         	    <?php if ( isset($ldfe) ) { ?>
         	    <li class="frm_col_two">
-                    <a href="javascript:void(0)" class="frmbutton button frm_insert_code" data-code="<?php echo esc_attr($dfe .' show="'. $ldfe .'"') ?>"><?php _e( 'Field From Entry', 'formidable' )?></a>
+					<a href="javascript:void(0)" class="frmbutton button frm_insert_code" data-code="<?php echo esc_attr( $dfe . ' show="' . $ldfe . '"' ) ?>"><?php _e( 'Field From Entry', 'formidable' ) ?></a>
         	    </li>
         	    <?php } ?>
             </ul>

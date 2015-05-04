@@ -13,7 +13,7 @@
         ?>" data-emailrow="cc"><?php _e( 'CC', 'formidable' ) ?></a>
     </td>
 </tr>
-<tr id="frm_cc_row" class="<?php echo ( empty($form_action->post_content['cc'])  ? 'frm_hidden' : '' )?>" >
+<tr id="frm_cc_row" class="<?php echo empty( $form_action->post_content['cc'] )  ? 'frm_hidden' : ''; ?>" >
     <th><label <?php FrmAppHelper::maybe_add_tooltip('cc') ?>><?php _e( 'CC', 'formidable' ) ?></label>
     </th>
     <td class="frm_right_addon">
@@ -22,7 +22,7 @@
     </td>
     <td></td>
 </tr>
-<tr id="frm_bcc_row" class="<?php echo ( empty($form_action->post_content['bcc'])  ? 'frm_hidden' : '' )?>" >
+<tr id="frm_bcc_row" class="<?php echo empty( $form_action->post_content['bcc'] )  ? 'frm_hidden' : ''; ?>" >
     <th><label <?php FrmAppHelper::maybe_add_tooltip('bcc') ?>><?php _e( 'BCC', 'formidable' ) ?></label>
     </th>
     <td class="frm_right_addon">
@@ -31,7 +31,7 @@
     </td>
     <td></td>
 </tr>
-<tr id="frm_reply_to_row" class="<?php echo ( empty($form_action->post_content['reply_to'])  ? 'frm_hidden' : '' )?>">
+<tr id="frm_reply_to_row" class="<?php echo empty( $form_action->post_content['reply_to'] )  ? 'frm_hidden' : ''; ?>">
     <th><label <?php FrmAppHelper::maybe_add_tooltip('reply_to') ?>><?php _e( 'Reply to', 'formidable' ) ?></label>
     </th>
     <td class="frm_right_addon">
