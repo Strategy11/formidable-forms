@@ -44,7 +44,7 @@ class FrmFormsController {
         global $frm_vars;
 
         $action = isset($_REQUEST['frm_action']) ? 'frm_action' : 'action';
-		$action = empty( $values ) ? sanitize_title( FrmAppHelper::get_param( $action ) ) : $values[ $action ];
+		$action = empty( $values ) ? FrmAppHelper::get_param( $action, '', 'get', 'sanitize_title' ) : $values[ $action ];
 
 		if ( $action == 'create' ) {
             return self::create($values);
@@ -78,7 +78,7 @@ class FrmFormsController {
             $values = FrmProEntry::mod_other_vals( $values, 'back' );
         }
 
-		$id = isset($values['id']) ? absint( $values['id'] ) : absint( FrmAppHelper::get_param( 'id' ) );
+		$id = isset($values['id']) ? absint( $values['id'] ) : FrmAppHelper::get_param( 'id', '', 'get', 'absint' );
 
         if ( ! current_user_can( 'frm_edit_forms' ) || ( $_POST && ( ! isset( $values['frm_save_form'] ) || ! wp_verify_nonce( $values['frm_save_form'], 'frm_save_form_nonce' ) ) ) ) {
             $frm_settings = FrmAppHelper::get_settings();
@@ -106,7 +106,7 @@ class FrmFormsController {
     public static function edit( $values = false ) {
         FrmAppHelper::permission_check('frm_edit_forms');
 
-		$id = isset( $values['id'] ) ? absint( $values['id'] ) : absint( FrmAppHelper::get_param( 'id' ) );
+		$id = isset( $values['id'] ) ? absint( $values['id'] ) : FrmAppHelper::get_param( 'id', '', 'get', 'absint' );
         return self::get_edit_vars($id);
     }
 
@@ -114,7 +114,7 @@ class FrmFormsController {
         FrmAppHelper::permission_check('frm_edit_forms');
 
         if ( ! $id || ! is_numeric($id) ) {
-			$id = absint( FrmAppHelper::get_param( 'id' ) );
+			$id = FrmAppHelper::get_param( 'id', '', 'get', 'absint' );
         }
         return self::get_settings_vars($id, '', $message);
     }
@@ -122,7 +122,7 @@ class FrmFormsController {
     public static function update_settings() {
         FrmAppHelper::permission_check('frm_edit_forms');
 
-		$id = absint( FrmAppHelper::get_param( 'id' ) );
+		$id = FrmAppHelper::get_param( 'id', '', 'get', 'absint' );
 
         $errors = FrmForm::validate($_POST);
         if ( count($errors) > 0 ) {
@@ -176,7 +176,7 @@ class FrmFormsController {
             $errors['form'] = $permission_error;
         }
 
-        $id = isset( $values['id'] ) ? (int) $values['id'] : (int) FrmAppHelper::get_param( 'id' );
+		$id = isset( $values['id'] ) ? absint( $values['id'] ) : FrmAppHelper::get_param( 'id', '', 'get', 'absint' );
 
 		if ( count( $errors ) > 0 ) {
             return self::get_edit_vars( $id, $errors );
@@ -208,8 +208,8 @@ class FrmFormsController {
 	public static function _create_from_template() {
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
-		$current_form = (int) FrmAppHelper::get_param( 'this_form' );
-		$template_id = (int) FrmAppHelper::get_param( 'id' );
+		$current_form = FrmAppHelper::get_param( 'this_form', '', 'get', 'absint' );
+		$template_id = FrmAppHelper::get_param( 'id', '', 'get', 'absint' );
 
 		if ( $current_form ) {
 			FrmForm::destroy( $current_form );
@@ -265,8 +265,6 @@ class FrmFormsController {
 
 		header( 'Content-Type: text/html; charset='. get_option( 'blog_charset' ) );
 
-        $plugin     = FrmAppHelper::get_param('plugin');
-        $controller = FrmAppHelper::get_param('controller');
         $key = (isset($_GET['form']) ? $_GET['form'] : (isset($_POST['form']) ? $_POST['form'] : ''));
         $form = FrmForm::getAll( array( 'form_key' => $key), '', 1);
         if ( empty($form) ) {
@@ -682,9 +680,9 @@ class FrmFormsController {
             return $errors;
         }
 
-        $bulkaction = FrmAppHelper::get_param( 'action' );
+		$bulkaction = FrmAppHelper::get_param( 'action', '', 'get', 'sanitize_title' );
         if ( $bulkaction == -1 ) {
-            $bulkaction = FrmAppHelper::get_param( 'action2' );
+			$bulkaction = FrmAppHelper::get_param( 'action2', '', 'get', 'sanitize_title' );
         }
 
         if ( ! empty( $bulkaction ) && strpos( $bulkaction, 'bulk_' ) === 0 ) {
@@ -783,7 +781,7 @@ class FrmFormsController {
             $json_vars = json_decode($json_vars, true);
             if ( empty($json_vars) ) {
                 // json decoding failed so we should return an error message
-                $action = FrmAppHelper::get_param($action);
+				$action = FrmAppHelper::get_param( $action, '', 'get', 'sanitize_title' );
                 if ( 'edit' == $action ) {
                     $action = 'update';
                 }
@@ -796,7 +794,7 @@ class FrmFormsController {
 				unset( $_REQUEST['frm_compact_fields'] );
             }
         } else {
-            $action = FrmAppHelper::get_param($action);
+			$action = FrmAppHelper::get_param( $action, '', 'get', 'sanitize_title' );
     		if ( isset( $_REQUEST['delete_all'] ) ) {
                 // override the action for this page
     			$action = 'delete_all';
@@ -826,9 +824,9 @@ class FrmFormsController {
                     return;
                 }
 
-                $action = FrmAppHelper::get_param('action');
+				$action = FrmAppHelper::get_param( 'action', '', 'get', 'sanitize_title' );
                 if ( $action == -1 ) {
-                    $action = FrmAppHelper::get_param('action2');
+					$action = FrmAppHelper::get_param( 'action2', '', 'get', 'sanitize_title' );
                 }
 
                 if ( strpos($action, 'bulk_') === 0 ) {

@@ -36,7 +36,7 @@ class FrmXMLController {
 
     public static function route() {
         $action = isset( $_REQUEST['frm_action'] ) ? 'frm_action' : 'action';
-        $action = FrmAppHelper::get_param( $action );
+		$action = FrmAppHelper::get_param( $action, '', 'get', 'sanitize_title' );
 		if ( $action == 'import_xml' ) {
             return self::import_xml();
 		} else if ( $action == 'export_xml' ) {

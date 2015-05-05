@@ -2,7 +2,7 @@
 
 <?php
 $action = isset( $_REQUEST['frm_action'] ) ? 'frm_action' : 'action';
-$action = sanitize_title( FrmAppHelper::get_param( $action ) );
+$action = FrmAppHelper::get_param( $action, '', 'get', 'sanitize_title' );
 $button = ( $action == 'new' || $action == 'duplicate' ) ? __( 'Create', 'formidable' ) : __( 'Update', 'formidable' );
 
 include(FrmAppHelper::plugin_path() .'/classes/views/frm-forms/_publish_box.php');

@@ -71,7 +71,7 @@ class FrmStylesController {
 
     public static function edit($style_id = false, $message = '') {
         if ( ! $style_id ) {
-            $style_id = FrmAppHelper::get_param('id');
+			$style_id = FrmAppHelper::get_param( 'id', '', 'get', 'absint' );
             if ( empty($style_id) ) {
                 $style_id = 'default';
             }
@@ -185,7 +185,7 @@ class FrmStylesController {
     }
 
     public static function route() {
-        $action = FrmAppHelper::get_param('frm_action');
+		$action = FrmAppHelper::get_param( 'frm_action', '', 'get', 'sanitize_title' );
 
         switch ( $action ) {
             case 'edit':

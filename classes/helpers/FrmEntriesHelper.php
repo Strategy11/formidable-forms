@@ -151,7 +151,7 @@ class FrmEntriesHelper {
 			return $frm_vars['current_form'];
 		}
 
-        $form_id = (int) FrmAppHelper::get_param('form', $form_id);
+		$form_id = FrmAppHelper::get_param('form', $form_id, 'get', 'absint' );
         return self::set_current_form($form_id);
     }
 
@@ -174,7 +174,7 @@ class FrmEntriesHelper {
     }
 
     public static function fill_entry_values($atts, $f, array &$values) {
-        if ( FrmFieldsHelper::is_no_save_field($f->type) ) {
+		if ( FrmFieldsHelper::is_no_save_field( $f->type ) ) {
             return;
         }
 
@@ -215,6 +215,10 @@ class FrmEntriesHelper {
 						self::flatten_multi_file_upload( $val, $f );
                         $atts['entry']->metas[ $f->id ] = $val;
                     }
+				} else {
+					$val = '';
+					FrmProEntriesHelper::get_dfe_values( $f, $atts['entry'], $val );
+					$atts['entry']->metas[ $f->id ] = $val;
                 }
             }
         }

@@ -21,7 +21,7 @@ class FrmEntriesController {
 
     /* Display in Back End */
     public static function route() {
-        $action = FrmAppHelper::get_param('frm_action');
+		$action = FrmAppHelper::get_param( 'frm_action', '', 'get', 'sanitize_title' );
 
         switch ( $action ) {
             case 'show':
@@ -329,14 +329,14 @@ class FrmEntriesController {
     }
 
     /* Back End CRUD */
-    public static function show($id = false) {
+	public static function show( $id = 0 ) {
         FrmAppHelper::permission_check('frm_view_entries');
 
         if ( ! $id ) {
-            $id = FrmAppHelper::get_param('id');
+			$id = FrmAppHelper::get_param( 'id', 0, 'get', 'absint' );
 
             if ( ! $id ) {
-                $id = FrmAppHelper::get_param('item_id');
+				$id = FrmAppHelper::get_param( 'item_id', 0, 'get', 'absint' );
             }
         }
 
@@ -617,7 +617,7 @@ class FrmEntriesController {
         }
 
         $action_var = isset($_REQUEST['frm_action']) ? 'frm_action' : 'action';
-        $action = apply_filters('frm_show_new_entry_page', FrmAppHelper::get_param($action_var, 'new'), $form);
+		$action = apply_filters( 'frm_show_new_entry_page', FrmAppHelper::get_param( $action_var, 'new', 'get', 'sanitize_title' ), $form );
 
         $default_values = array(
             'id' => '', 'form_name' => '', 'paged' => 1, 'form' => $form->id, 'form_id' => $form->id,
@@ -625,16 +625,16 @@ class FrmEntriesController {
         );
 
         $values = array();
-        $values['posted_form_id'] = FrmAppHelper::get_param('form_id');
-        if ( ! is_numeric($values['posted_form_id']) ) {
-            $values['posted_form_id'] = FrmAppHelper::get_param('form');
+		$values['posted_form_id'] = FrmAppHelper::get_param( 'form_id', '', 'get', 'absint' );
+		if ( ! $values['posted_form_id'] ) {
+			$values['posted_form_id'] = FrmAppHelper::get_param( 'form', '', 'get', 'absint' );
         }
 
 		if ( $form->id == $values['posted_form_id'] ) {
 			//if there are two forms on the same page, make sure not to submit both
             foreach ( $default_values as $var => $default ) {
                 if ( $var == 'action' ) {
-                    $values[ $var ] = FrmAppHelper::get_param( $action_var, $default );
+					$values[ $var ] = FrmAppHelper::get_param( $action_var, $default, 'get', 'sanitize_title' );
                 } else {
                     $values[ $var ] = FrmAppHelper::get_param( $var, $default );
                 }

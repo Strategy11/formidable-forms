@@ -183,7 +183,7 @@ class FrmFieldsHelper {
             $values['form_name'] = '';
 		} else {
 			foreach ( $defaults as $var => $default ) {
-                $values[ $var ] = htmlspecialchars( FrmAppHelper::get_param( $var, $default ) );
+                $values[ $var ] = FrmAppHelper::get_param( $var, $default, 'get', 'htmlspecialchars' );
                 unset($var, $default);
             }
 

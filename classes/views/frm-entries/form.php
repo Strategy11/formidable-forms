@@ -10,11 +10,7 @@ FrmFormsHelper::form_loaded($form, $values['custom_style'], $frm_vars['load_css'
 <input type="hidden" name="form_key" value="<?php echo esc_attr($form->form_key) ?>" />
 <?php wp_nonce_field('frm_submit_entry_nonce', 'frm_submit_entry_'. $form->id); ?>
 
-<?php if ( isset( $id ) ) { ?><input type="hidden" name="id" value="<?php echo esc_attr( $id ) ?>" /><?php } ?>
-<?php if ( isset( $controller ) && isset( $plugin ) ) { ?>
-<input type="hidden" name="controller" value="<?php echo esc_attr($controller); ?>" />
-<input type="hidden" name="plugin" value="<?php echo esc_attr($plugin); ?>" />
-<?php }
+<?php if ( isset( $id ) ) { ?><input type="hidden" name="id" value="<?php echo esc_attr( $id ) ?>" /><?php }
 
 if ( $values['fields'] ) {
 	foreach ( $values['fields'] as $field ) {

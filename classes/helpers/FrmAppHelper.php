@@ -209,6 +209,7 @@ class FrmAppHelper {
             if ( ! isset( $_POST[ $param ] ) && isset( $_GET[ $param ] ) && ! is_array( $value ) ) {
                 $value = stripslashes_deep( htmlspecialchars_decode( urldecode( $_GET[ $param ] ) ) );
             }
+			self::sanitize_value( $value, $sanitize );
 		} else {
             $value = self::get_post_param( $param, $default, $sanitize );
         }
@@ -231,13 +232,16 @@ class FrmAppHelper {
 		$val = $default;
 		if ( isset( $_POST[ $param ] ) ) {
 			$val = stripslashes_deep( maybe_unserialize( $_POST[ $param ] ) );
-			if ( ! empty( $sanitize ) ) {
-				$val = call_user_func( $sanitize, $val );
-			}
+			self::sanitize_value( $value, $sanitize );
 		}
 		return $val;
 	}
 
+	public static function sanitize_value( &$value, $sanitize ) {
+		if ( ! empty( $sanitize ) ) {
+			$value = call_user_func( $sanitize, $value );
+		}
+	}
     /**
      * @since 2.0
      * @param string $action
