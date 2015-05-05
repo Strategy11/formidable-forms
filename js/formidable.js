@@ -1170,8 +1170,6 @@ function frmFrontFormJS(){
                 var fieldID;
                 var reset = 'reset';
 
-				frmFrontForm.hideCondFields(JSON.stringify(r.logic.hide));
-
                 // hide fields with conditional logic
                 jQuery(html).find('input, select, textarea').each(function(){
 					if ( this.type != 'file' ) {
