@@ -272,7 +272,7 @@ class FrmNotification{
 		// if sending the email from a yahoo address, change it to the WordPress default
 		if ( $f == 'from' && strpos( $part_2, '@yahoo.com' ) ) {
 			// Get the site domain and get rid of www.
-			$sitename = strtolower( wp_strip_all_tags( $_SERVER['SERVER_NAME'] ) );
+			$sitename = strtolower( FrmAppHelper::get_server_value( 'SERVER_NAME' ) );
 			if ( substr( $sitename, 0, 4 ) == 'www.' ) {
 				$sitename = substr( $sitename, 4 );
 			}

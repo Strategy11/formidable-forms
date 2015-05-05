@@ -137,17 +137,9 @@ class FrmXMLController {
             wp_die( $error );
         }
 
-        $ids = array();
-        if ( isset($_POST['frm_export_forms']) ) {
-            $ids = $_POST['frm_export_forms'];
-        }
-
-        $type = false;
-        if ( isset($_POST['type']) ) {
-            $type = $_POST['type'];
-        }
-
-        $format = isset($_POST['format']) ? $_POST['format'] : 'xml';
+		$ids = isset( $_POST['frm_export_forms'] ) ? $_POST['frm_export_forms'] : array();
+		$type = isset( $_POST['type'] ) ? $_POST['type'] : array();
+		$format = FrmAppHelper::get_post_param( 'format', 'xml', 'sanitize_title' );
 
         if ( ! headers_sent() && ! $type ) {
             wp_redirect( esc_url_raw( admin_url( 'admin.php?page=formidable-import' ) ) );

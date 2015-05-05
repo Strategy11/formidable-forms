@@ -395,7 +395,7 @@ class FrmFormsController {
     }
 
     public static function insert_form_popup() {
-        $page = basename($_SERVER['PHP_SELF']);
+		$page = basename( FrmAppHelper::get_server_value( 'PHP_SELF' ) );
         if ( ! in_array($page, array( 'post.php', 'page.php', 'page-new.php', 'post-new.php') ) ) {
             return;
         }

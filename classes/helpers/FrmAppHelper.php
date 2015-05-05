@@ -296,7 +296,7 @@ class FrmAppHelper {
 
         $new_action = isset( $_GET['action'] ) ? sanitize_text_field( $_GET['action'] ) : ( isset( $_GET['action2'] ) ? sanitize_text_field( $_GET['action2'] ) : '' );
         if ( ! empty( $new_action ) ) {
-            $_SERVER['REQUEST_URI'] = str_replace( '&action='. $new_action, '', $_SERVER['REQUEST_URI'] );
+			$_SERVER['REQUEST_URI'] = str_replace( '&action=' . $new_action, '', FrmAppHelper::get_server_value( 'REQUEST_URI' ) );
         }
     }
 
@@ -663,7 +663,7 @@ class FrmAppHelper {
             if ( FrmFieldsHelper::is_field_with_multiple_values( $field ) ) {
                 $other_val = isset( $_POST['item_meta']['other'][ $field['id'] ][ $opt_key ] ) ? $_POST['item_meta']['other'][ $field['id'] ][ $opt_key ] : '';
             } else {
-                $other_val = $_POST['item_meta']['other'][ $field['id'] ];
+				$other_val = sanitize_text_field( $_POST['item_meta']['other'][ $field['id'] ] );
             }
             return $other_val;
         }

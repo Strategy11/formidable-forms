@@ -755,8 +755,8 @@ class FrmEntry {
     private  static function parse_akismet_array( &$datas, $content ) {
         $datas['blog'] = FrmAppHelper::site_url();
         $datas['user_ip'] = preg_replace( '/[^0-9., ]/', '', FrmAppHelper::get_ip_address() );
-        $datas['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
-        $datas['referrer'] = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : false;
+		$datas['user_agent'] = FrmAppHelper::get_server_value( 'HTTP_USER_AGENT' );
+		$datas['referrer'] = isset( $_SERVER['HTTP_REFERER'] ) ? FrmAppHelper::get_server_value( 'HTTP_REFERER' ) : false;
         $datas['comment_type'] = 'formidable';
         $datas['comment_content'] = $content;
 
@@ -766,7 +766,7 @@ class FrmEntry {
 
         foreach ( $_SERVER as $key => $value ) {
             if ( ! in_array($key, array( 'HTTP_COOKIE', 'HTTP_COOKIE2', 'PHP_AUTH_PW')) && is_string($value) ) {
-				$datas[ $key ] = $value;
+				$datas[ $key ] = wp_strip_all_tags( $value );
             } else {
 				$datas[ $key ] = '';
             }
