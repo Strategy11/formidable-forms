@@ -1108,6 +1108,10 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
     margin-right:0;
 }
 
+.with_frm_style .frm_other_input.frm_other_full{
+	margin-top:10px;
+}
+
 .with_frm_style .frm_repeat_sec{
     margin-bottom:20px;
     margin-top:20px;

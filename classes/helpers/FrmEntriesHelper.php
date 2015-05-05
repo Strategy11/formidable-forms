@@ -636,13 +636,20 @@ class FrmEntriesHelper {
             // Multi-select dropdown
             if ( is_array( $value ) ) {
                 $o_key = array_search( $field->options[ $other_key ], $value );
-                if ( $o_key ) {
-                    // Modify original value so key is preserved
-                    $value[ $other_key ] = $value[ $o_key ];
-                    unset( $value[ $o_key ] );
-                    $args['temp_value'] = $value;
-                    $value[ $other_key ] = reset( $other_vals );
-                }
+
+				if ( $o_key !== false ) {
+					// Modify the original value so other key will be preserved
+					$value[ $other_key ] = $value[ $o_key ];
+
+					// By default, the array keys will be numeric for multi-select dropdowns
+					// If going backwards and forwards between pages, the array key will match the other key
+					if ( $o_key != $other_key ) {
+						unset( $value[ $o_key ] );
+					}
+
+					$args['temp_value'] = $value;
+					$value[ $other_key ] = reset( $other_vals );
+				}
             } else if ( $field->options[ $other_key ] == $value ) {
                 $value = $other_vals;
             }

@@ -749,51 +749,7 @@ function frmFrontFormJS(){
     }
 
 	function getOptionValue( thisField, currentOpt ) {
-		var thisVal;
-		// If current option is an other option, get other value
-		if ( isOtherOption( thisField, currentOpt ) ) {
-			thisVal = getOtherValue( thisField, currentOpt );
-		// Else, get option value normally
-		} else {
-			thisVal = jQuery(currentOpt).val();
-		}
-		return thisVal;
-	}
-
-	function isOtherOption( thisField, currentOpt ) {
-		if ( thisField.type == 'checkbox' || thisField.type == 'radio' ) {
-			// Get the base of the option ids
-			var idBase = thisField.key.replace( '[id^="', '');
-			idBase = idBase.replace( '"]', '' );
-
-			// Remove the base from the current option id
-			var optKey = currentOpt.id.replace( idBase, '' );
-
-			// If 'other' appears in the option key, this is an Other option
-			if ( optKey.indexOf( 'other' ) > -1 ) {
-				return true;
-			}
-		} else if ( thisField.type == 'select' ) {
-			// If 'other' option was selected
-			var optClass = currentOpt.className;
-			if ( optClass && optClass.indexOf( 'frm_other_trigger' ) > -1 ) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	function getOtherValue( thisField, currentOpt ) {
-		var otherVal = 0;
-		if ( thisField.type == 'checkbox' || thisField.type == 'radio' ) {
-			otherVal = jQuery(currentOpt).closest('.frm_' + thisField.type).children('.frm_other_input').val();
-		} else if ( thisField.type == 'select' ) {
-			otherVal = jQuery(currentOpt).closest('.frm_other_container').children('.frm_other_input').val();
-		}
-		if ( typeof otherVal === 'undefined' ) {
-			otherVal = 0;
-		}
-		return otherVal;
+		return jQuery(currentOpt).val();
 	}
 
 	function getFormErrors(object, action){
