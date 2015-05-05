@@ -119,7 +119,7 @@ class FrmEntriesController {
         $frm_vars['cols'] = $columns;
 
 		$action = FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
-		if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) && ( $action == 'list' || $action == 'destroy' ) ) {
+		if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) && in_array( $action, array( '', 'list', 'destroy' ) ) ) {
 			add_screen_option( 'per_page', array( 'label' => __( 'Entries', 'formidable' ), 'default' => 20, 'option' => 'formidable_page_formidable_entries_per_page' ) );
         }
 
