@@ -9,7 +9,7 @@ Stable tag: 2.0.04
 Beautiful forms in 60 seconds. The WordPress form builder that enables you to create forms with a simple drag-and-drop interface and in-place editing.
 
 == Description ==
-Build WordPress forms the fast and simple way with a simple drag-and-drop interface (and a visual form styler in version 2.0). Create custom Formidable forms or generate them from a template.
+Build WordPress forms the fast and simple way with a simple drag-and-drop interface (and a visual form styler in version 2.0). Create custom Formidable forms or generate them from a template with this stunning WordPress form plugin.
 
 [View Documentation](http://formidablepro.com/knowledgebase/ "View Documentation")
 [Contribute on Github](https://github.com/Strategy11/formidable-forms "Contribute on Github")
@@ -89,6 +89,29 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 [See more FAQs](http://formidablepro.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 2.0.05 =
+* Remove deprecated jQuery toggle() calls
+* Add html ids to hidden fields
+* Make sure the entry name doesn't exceed allowed database field size
+* Adjust user agent displayed values
+* Update Bootstrap javascript to v3.3.4
+* Clear more caching for forms, fields, and entries when changes are made
+* Lire only: Remove the entry search box on the entries page since the functionality is in pro
+* Pro: Fix issue with the CSV export on the Import/Export page
+* Pro: Allow for FRMRULES to be on the page multiple times for ajax-loaded forms
+* Pro: Add frmThemeOverride_jsErrors function hook
+* Pro: Conditionally require fields in a conditional embedded form
+* Pro: Fix date calculations and calculations across multiple pages
+* Pro: Show the user display name by default with dynamic fields using a user ID field
+* Pro: Fix read-only date fields on form submitted with ajax
+* Pro: Fix issue with browsing view revisions
+* Pro: Fix numeric phone formats without other characters
+* Pro: Update masked input js to v1.4
+* Pro: Fix issue with NaN showing instead of 0 in values without a number
+* Pro: Fix conflict with Easy Digital download auto-updating
+* Pro: Include list dynamic fields in the CSV and default email message
+* Pro: Match up logic when an option with & is selected
+
 = 2.0.04 =
 * Fix XSS vulnerability from add_query_args and remove_query_args
 * Remove unneeded options from the form widget and switch old styling setting width from 400px to 100%
