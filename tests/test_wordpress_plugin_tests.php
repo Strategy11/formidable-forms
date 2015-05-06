@@ -1,23 +1,6 @@
 <?php
 
 class WP_Test_WordPress_Plugin_Tests extends FrmUnitTest {
-	/**
-	 * form_id
-	 * @var int
-	 */
-	protected $form_id = 0;
-
-	/**
-	 * field_ids
-	 * @var array
-	 */
-	protected $field_ids = array();
-
-	/**
-	 * user_id
-	 * @var int
-	 */
-	protected $user_id = 0;
 
 	/**
 	 * Ensure that the plugin has been installed and activated.
@@ -76,22 +59,8 @@ class WP_Test_WordPress_Plugin_Tests extends FrmUnitTest {
         }
 
         $this->create_entry();
+		$this->search_all_entries();
 	}
-
-    // create an entry
-    function create_entry() {
-        $values = array(
-            'form_id'   => $this->form_id,
-            'item_key'  => rand_str(),
-            'item_meta' => $this->field_ids,
-        );
-        $entry_id = FrmEntry::create( $values );
-
-	    $this->assertTrue(is_numeric($entry_id));
-        $this->assertTrue($entry_id > 0);
-
-        $this->search_all_entries();
-    }
 
     /**
      * Search for a value in an entry
@@ -122,13 +91,6 @@ class WP_Test_WordPress_Plugin_Tests extends FrmUnitTest {
         $this->assertFalse(empty($items));
     }
 
-    function test_import_xml() {
-        FrmXMLController::add_default_templates();
-
-        $form = $this->get_one_form( 'contact' );
-        $this->assertEquals($form->form_key, 'contact');
-    }
-
     function test_duplicate_form(){
         $form = $this->get_one_form( 'contact' );
 
@@ -139,7 +101,7 @@ class WP_Test_WordPress_Plugin_Tests extends FrmUnitTest {
 
     function test_delete_form(){
         $forms = FrmForm::getAll();
-        $this->assertTrue( count($forms) === 1 );
+        $this->assertTrue( count( $forms ) >= 1 );
 
         foreach ( $forms as $form ) {
             if ( $form->is_template ) {
@@ -147,16 +109,12 @@ class WP_Test_WordPress_Plugin_Tests extends FrmUnitTest {
             }
 
             $id = FrmForm::destroy( $form->id );
-            $this->assertTrue( $id );
+            $this->assertNotEmpty( $id );
         }
     }
 
     function test_migrate_from_12_to_17() {
         update_option('frm_db_version', 12);
-
-        // install form in older format
-		add_filter( 'frm_default_templates_files', 'FrmUnitTest::install_data' );
-        FrmXMLController::add_default_templates();
 
         $form = FrmForm::getOne('contact-db12');
         $this->assertTrue( $form ? true : false );
@@ -172,23 +130,21 @@ class WP_Test_WordPress_Plugin_Tests extends FrmUnitTest {
 
         global $wpdb;
         $updated = $wpdb->update($wpdb->prefix .'frm_forms', array( 'options' => maybe_serialize($form->options)), array( 'id' => $form->id));
-        wp_cache_delete( $form->id, 'frm_form');
+		FrmForm::clear_form_cache();
         $this->assertEquals( $updated, 1 );
 
-        $form = FrmForm::getOne('contact-db12');
+		$form = FrmForm::getOne( 'contact-db12' );
 
-		/*
-		TODO: Make this test work
-        $this->assertTrue( isset($form->options['notification']) );
-        $this->assertEquals( $form->options['notification'][0]['email_to'], 'emailto@test.com' );
+		$this->assertNotEmpty( $form->options, 'The form settings are empty' );
+		$this->assertTrue( isset( $form->options['notification'] ), 'The old notification settings are missing' );
+		$this->assertEquals( $form->options['notification'][0]['email_to'], 'emailto@test.com' );
 
         // migrate data
-        FrmAppController::install();
+		FrmAppController::install();
 
-        $form_actions = FrmFormActionsHelper::get_action_for_form($form->id, 'email');
+		$form_actions = FrmFormActionsHelper::get_action_for_form( $form->id, 'email' );
         foreach ( $form_actions as $action ) {
-            $this->assertTrue( strpos($action->post_content['email_to'], 'emailto@test.com') !== false );
+			$this->assertTrue( strpos( $action->post_content['email_to'], 'emailto@test.com' ) !== false );
         }
-		*/
     }
 }
