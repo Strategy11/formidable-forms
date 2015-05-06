@@ -210,13 +210,14 @@ class FrmField{
     /**
      * Get the field type by key or id
      * @param int|string The field id or key
+	 * @param mixed $col The name of the column in the fields database table
      */
-    public static function &get_type( $id ) {
+    public static function &get_type( $id, $col = 'type' ) {
         $field = FrmAppHelper::check_cache( $id, 'frm_field' );
         if ( $field ) {
-            $type = $field->type;
+            $type = $field->{$col};
         } else {
-            $type = FrmDb::get_var( 'frm_fields', array( 'or' => 1, 'id' => $id, 'field_key' => $id ), 'type' );
+            $type = FrmDb::get_var( 'frm_fields', array( 'or' => 1, 'id' => $id, 'field_key' => $id ), $col );
         }
 
         return $type;
