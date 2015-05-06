@@ -252,9 +252,9 @@ class FrmFormsListHelper extends FrmListHelper {
 					$val = '<abbr title="' . esc_attr( date( 'Y/m/d g:i:s A', strtotime( $item->created_at ) ) ) . '">' . $date . '</abbr>';
 					break;
 				case 'shortcode':
-					$val = '<input type="text" readonly="readonly" class="frm_select_box" value="' . esc_attr( "[formidable id=' . $item->id .']" ) . '" /><br/>';
+					$val = '<input type="text" readonly="readonly" class="frm_select_box" value="' . esc_attr( '[formidable id=' . $item->id .']' ) . '" /><br/>';
 				    if ( 'excerpt' == $mode ) {
-						$val .= '<input type="text" readonly="readonly" class="frm_select_box" value="' . esc_attr( "[formidable key=' . $item->form_key . ']" ) . '" />';
+						$val .= '<input type="text" readonly="readonly" class="frm_select_box" value="' . esc_attr( '[formidable key=' . $item->form_key . ']' ) . '" />';
 				    }
 			        break;
 			    case 'entries':
