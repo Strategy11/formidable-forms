@@ -96,7 +96,7 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * Adjust user agent displayed values
 * Update Bootstrap javascript to v3.3.4
 * Clear more caching for forms, fields, and entries when changes are made
-* Lire only: Remove the entry search box on the entries page since the functionality is in pro
+* Lite only: Remove the entry search box on the entries page since the functionality is in pro
 * Pro: Fix issue with the CSV export on the Import/Export page
 * Pro: Allow for FRMRULES to be on the page multiple times for ajax-loaded forms
 * Pro: Add frmThemeOverride_jsErrors function hook
