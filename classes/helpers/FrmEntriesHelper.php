@@ -429,7 +429,6 @@ class FrmEntriesHelper {
 
             if ( $child_values ) {
 	            $child_entries = FrmEntry::getAll( array( 'it.id' => (array) $child_values ) );
-	            //$atts['post_id']
 	        }
 	    }
 
@@ -455,6 +454,7 @@ class FrmEntriesHelper {
         }
 
         $val = implode(', ', (array) $field_value );
+		$val = wp_filter_post_kses( $val );
 
         return $val;
     }
@@ -522,6 +522,10 @@ class FrmEntriesHelper {
         if ( $atts['truncate'] && $atts['type'] != 'image' ) {
             $value = FrmAppHelper::truncate($value, 50);
         }
+
+		if ( ! $atts['keepjs'] ) {
+			$value = wp_filter_post_kses( $value );
+		}
 
         return apply_filters('frm_display_value', $value, $field, $atts);
     }
