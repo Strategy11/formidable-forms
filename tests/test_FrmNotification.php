@@ -33,8 +33,12 @@ class WP_Test_FrmNotification extends FrmUnitTest {
 		$this->assertNotEmpty( $entry );
 
 		foreach ( $actions as $action ) {
-			$email = FrmNotification::trigger_email( $action, $entry, $form );
-			$this->assertNotEmpty( $email );
+			FrmNotification::trigger_email( $action, $entry, $form );
+
+			$this->assertEquals( 'address@tld.com', $GLOBALS['phpmailer']->mock_sent[0]['to'][0][0] );
+			$this->assertNotEmpty( strpos( $GLOBALS['phpmailer']->mock_sent[0]['header'], 'Reply-To: test@test.com' ) );
+
+			// TODO: check email body, cc, bcc, from
 		}
 	}
 }
