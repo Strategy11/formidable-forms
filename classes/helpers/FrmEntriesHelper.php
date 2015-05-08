@@ -224,11 +224,6 @@ class FrmEntriesHelper {
             }
         }
 
-		// Don't include blank values
-		if ( ! $atts['include_blank'] && isset( $atts['entry']->metas[ $f->id ] ) && FrmAppHelper::is_empty_value( $atts['entry']->metas[ $f->id ] ) ) {
-			return;
-		}
-
         $val = '';
         if ( $atts['entry'] ) {
             $prev_val = maybe_unserialize( $atts['entry']->metas[ $f->id ] );
@@ -241,6 +236,11 @@ class FrmEntriesHelper {
                 $val = apply_filters('frm_email_value', $prev_val, (object) $meta, $atts['entry']);
             }
         }
+
+		// Don't include blank values
+		if ( ! $atts['include_blank'] && FrmAppHelper::is_empty_value( $val ) ) {
+			return;
+		}
 
         self::textarea_display_value( $val, $f->type, $atts['plain_text'] );
 
@@ -704,11 +704,11 @@ class FrmEntriesHelper {
 		}
 
 		$agent_options = array(
-			'Firefox' => 'Mozilla Firefox',
 			'Chrome' => 'Google Chrome',
 			'Safari' => 'Apple Safari',
 			'Opera' => 'Opera',
 			'Netscape' => 'Netscape',
+			'Firefox' => 'Mozilla Firefox',
 		);
 
         // Next get the name of the useragent yes seperately and for good reason
