@@ -445,6 +445,14 @@ class FrmEntriesController {
         if ( $errors == '' ) {
             $errors = FrmEntry::validate( $_POST );
         }
+
+		/**
+		 * Use this filter to add trigger actions and add errors after
+		 * all other errors have been processed
+		 * @since 2.0.6
+		 */
+		$errors = apply_filters( 'frm_entries_before_create', $errors, $form );
+
 		$frm_vars['created_entries'][ $form_id ] = array( 'errors' => $errors );
 
         if ( empty( $errors ) ) {

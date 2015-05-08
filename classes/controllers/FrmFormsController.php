@@ -614,22 +614,79 @@ class FrmFormsController {
         $col = 'one';
         $settings_tab = FrmAppHelper::is_admin_page('formidable' ) ? true : false;
 
-        $cond_shortcodes = apply_filters('frm_conditional_shortcodes', array());
+		$cond_shortcodes = apply_filters( 'frm_conditional_shortcodes', array() );
+		$adv_shortcodes = self::get_advanced_shortcodes();
+		$user_fields = apply_filters( 'frm_user_shortcodes', array() );
+		$entry_shortcodes = self::get_shortcode_helpers( $settings_tab );
 
-        $adv_shortcodes = array(
-            'sep=", "' => array( 'label' => __( 'Separator', 'formidable' ), 'title' => __( 'Use a different separator for checkbox fields', 'formidable' ) ),
-            'format="d-m-Y"' => __( 'Date Format', 'formidable' ),
-            'show="field_label"' => __( 'Field Label', 'formidable' ),
-            'wpautop=0' => array( 'label' => __( 'No Auto P', 'formidable' ), 'title' => __( 'Do not automatically add any paragraphs or line breaks', 'formidable' )),
-        );
-        $adv_shortcodes = apply_filters('frm_advanced_shortcodes', $adv_shortcodes);
-
-        // __( 'Leave blank instead of defaulting to User Login', 'formidable' ) : blank=1
-
-        $user_fields = apply_filters('frm_user_shortcodes', array());
-
-        include(FrmAppHelper::plugin_path() .'/classes/views/shared/mb_adv_info.php');
+		include( FrmAppHelper::plugin_path() . '/classes/views/shared/mb_adv_info.php' );
     }
+
+	/**
+	 * Get an array of the options to display in the advanced tab
+	 * of the customization panel
+	 * @since 2.0.6
+	 */
+	private static function get_advanced_shortcodes() {
+		$adv_shortcodes = array(
+			'sep=", "'       => array(
+				'label' => __( 'Separator', 'formidable' ),
+				'title' => __( 'Use a different separator for checkbox fields', 'formidable' ),
+			),
+			'format="d-m-Y"' => __( 'Date Format', 'formidable' ),
+			'show="field_label"' => __( 'Field Label', 'formidable' ),
+			'wpautop=0'      => array(
+				'label' => __( 'No Auto P', 'formidable' ),
+				'title' => __( 'Do not automatically add any paragraphs or line breaks', 'formidable' ),
+			),
+		);
+		$adv_shortcodes = apply_filters( 'frm_advanced_shortcodes', $adv_shortcodes );
+		// __( 'Leave blank instead of defaulting to User Login', 'formidable' ) : blank=1
+
+		return $adv_shortcodes;
+	}
+
+	/**
+	 * Get an array of the helper shortcodes to display in the customization panel
+	 * @since 2.0.6
+	 */
+	private static function get_shortcode_helpers( $settings_tab ) {
+		$entry_shortcodes = array(
+			'id'        => __( 'Entry ID', 'formidable' ),
+			'key'       => __( 'Entry Key', 'formidable' ),
+			'post_id'   => __( 'Post ID', 'formidable' ),
+			'ip'        => __( 'User IP', 'formidable' ),
+			'created-at' => __( 'Entry created', 'formidable' ),
+			'updated-at' => __( 'Entry updated', 'formidable' ),
+			''          => '',
+			'siteurl'   => __( 'Site URL', 'formidable' ),
+			'sitename'  => __( 'Site Name', 'formidable' ),
+        );
+
+		if ( ! FrmAppHelper::pro_is_installed() ) {
+			unset( $entry_shortcodes['post_id'] );
+		}
+
+		if ( $settings_tab ) {
+			$entry_shortcodes['default-message'] = __( 'Default Msg', 'formidable' );
+			$entry_shortcodes['default-html'] = __( 'Default HTML', 'formidable' );
+			$entry_shortcodes['default-plain'] = __( 'Default Plain', 'formidable' );
+		} else {
+			$entry_shortcodes['detaillink'] = __( 'Detail Link', 'formidable' );
+			$entry_shortcodes['editlink location="front" label="Edit" page_id=x'] = __( 'Edit Entry Link', 'formidable' );
+			$entry_shortcodes['evenodd'] = __( 'Even/Odd', 'formidable' );
+			$entry_shortcodes['entry_count'] = __( 'Entry Count', 'formidable' );
+		}
+
+		/**
+		 * Use this hook to add or remove buttons in the helpers section
+		 * in the customization panel
+		 * @since 2.0.6
+		 */
+		$entry_shortcodes = apply_filters( 'frm_helper_shortcodes', $entry_shortcodes, $settings_tab );
+
+		return $entry_shortcodes;
+	}
 
     // Insert the form class setting into the form
     public static function form_classes($form) {

@@ -67,34 +67,6 @@
         <ul class="frm_code_list">
         <?php
         $col = 'one';
-        $entry_shortcodes = array(
-            'id'        => __( 'Entry ID', 'formidable' ),
-            'key'       => __( 'Entry Key', 'formidable' ),
-            'post_id'   => __( 'Post ID', 'formidable' ),
-            'ip'        => __( 'User IP', 'formidable' ),
-            'created-at' => __( 'Entry created', 'formidable' ),
-            'updated-at' => __( 'Entry updated', 'formidable' ),
-            ''          => '',
-            'siteurl'   => __( 'Site URL', 'formidable' ),
-            'sitename'  => __( 'Site Name', 'formidable' ),
-        );
-
-        if ( ! FrmAppHelper::pro_is_installed() ) {
-            unset($entry_shortcodes['post_id']);
-        }
-
-		if ( $settings_tab ) {
-            $entry_shortcodes['default-message'] = __( 'Default Msg', 'formidable' );
-            $entry_shortcodes['default-html'] = __( 'Default HTML', 'formidable' );
-            $entry_shortcodes['default-plain'] = __( 'Default Plain', 'formidable' );
-        } else {
-            $entry_shortcodes['detaillink'] = __( 'Detail Link', 'formidable' );
-            $entry_shortcodes['editlink location="front" label="Edit" page_id=x'] = __( 'Edit Entry Link', 'formidable' );
-            $entry_shortcodes['evenodd'] = __( 'Even/Odd', 'formidable' );
-            $entry_shortcodes['entry_count'] = __( 'Entry Count', 'formidable' );
-        }
-
-
 		foreach ( $entry_shortcodes as $skey => $sname ) {
 			if ( empty( $skey ) ) {
                  $col = 'one';
