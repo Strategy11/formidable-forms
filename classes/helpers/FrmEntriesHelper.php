@@ -523,7 +523,7 @@ class FrmEntriesHelper {
             $value = FrmAppHelper::truncate($value, 50);
         }
 
-		if ( ! $atts['keepjs'] ) {
+		if ( ! $atts['keepjs'] && ! is_array( $value ) ) {
 			$value = wp_filter_post_kses( $value );
 		}
 
