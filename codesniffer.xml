@@ -11,7 +11,6 @@
 		
 		<!-- WP VIP rules which are very restrictive and not all that applicable as FF is not on VIP -->
 		<exclude name="WordPress.VIP.DirectDatabaseQuery" />
-		<exclude name="WordPress.VIP.FileSystemWritesDisallow"/>
 		<exclude name="WordPress.VIP.RestrictedFunctions.user_meta" />
 		<exclude name="WordPress.VIP.RestrictedVariables.user_meta"/>
 		<exclude name="WordPress.VIP.RestrictedFunctions.switch_to_blog"/>
@@ -32,7 +31,6 @@
 		<exclude name="WordPress.WhiteSpace.ScopeIndent.Incorrect" />
 		<exclude name="WordPress.Classes.ValidClassName.NotCamelCaps" />
 		<exclude name="WordPress.XSS.EscapeOutput" /><!-- This sniff also has known & reported bugs -->
-		<exclude name="WordPress.VIP.PostsPerPage.posts_per_page"/>
 
 		<!-- Demanding Yoda conditions is stupid. -->
 		<exclude name="WordPress.PHP.YodaConditions"/>

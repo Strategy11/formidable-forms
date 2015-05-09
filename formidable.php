@@ -28,21 +28,21 @@ $frm_vars = array(
     'pro_is_authorized' => false,
 );
 
-function frm_forms_autoloader($class_name) {
+function frm_forms_autoloader( $class_name ) {
     // Only load Frm classes here
-    if ( ! preg_match('/^Frm.+$/', $class_name) ) {
+	if ( ! preg_match( '/^Frm.+$/', $class_name ) ) {
         return;
     }
 
     $filepath = dirname(__FILE__);
-    if ( preg_match('/^FrmPro.+$/', $class_name) || 'FrmUpdatesController' == $class_name ) {
+	if ( preg_match( '/^FrmPro.+$/', $class_name ) || 'FrmUpdatesController' == $class_name ) {
         $filepath .= '/pro';
     }
     $filepath .= '/classes';
 
-    if ( preg_match('/^.+Helper$/', $class_name) ) {
+	if ( preg_match( '/^.+Helper$/', $class_name ) ) {
         $filepath .= '/helpers/';
-    } else if ( preg_match('/^.+Controller$/', $class_name) ) {
+	} else if ( preg_match( '/^.+Controller$/', $class_name ) ) {
         $filepath .= '/controllers/';
     } else {
         $filepath .= '/models/';

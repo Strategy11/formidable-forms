@@ -81,7 +81,7 @@ class FrmEntriesController {
         $form_cols = FrmField::get_all_for_form($form_id, '', 'include');
 
         foreach ( $form_cols as $form_col ) {
-            if ( FrmFieldsHelper::is_no_save_field($form_col->type) ) {
+			if ( FrmFieldsHelper::is_no_save_field( $form_col->type ) ) {
                 continue;
             }
 
@@ -126,13 +126,13 @@ class FrmEntriesController {
         return $columns;
     }
 
-    public static function check_hidden_cols($check, $object_id, $meta_key, $meta_value, $prev_value) {
+	public static function check_hidden_cols( $check, $object_id, $meta_key, $meta_value, $prev_value ) {
         $frm_settings = FrmAppHelper::get_settings();
         if ( $meta_key != 'manage'.  sanitize_title($frm_settings->menu) .'_page_formidable-entriescolumnshidden' || $meta_value == $prev_value ) {
             return $check;
         }
 
-        if ( empty($prev_value) ) {
+		if ( empty( $prev_value ) ) {
             		$prev_value = get_metadata('user', $object_id, $meta_key, true);
         }
 
