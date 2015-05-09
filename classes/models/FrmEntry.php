@@ -237,7 +237,7 @@ class FrmEntry {
         return $query_results;
     }
 
-    public static function &destroy( $id ){
+	public static function &destroy( $id ) {
         global $wpdb;
         $id = (int) $id;
 
@@ -257,7 +257,7 @@ class FrmEntry {
         return $result;
     }
 
-    public static function &update_form( $id, $value, $form_id ){
+	public static function &update_form( $id, $value, $form_id ) {
         global $wpdb;
         $form_id = isset($value) ? $form_id : null;
         $result = $wpdb->update( $wpdb->prefix .'frm_items', array( 'form_id' => $form_id), array( 'id' => $id ) );
@@ -345,7 +345,7 @@ class FrmEntry {
     /**
      * @param string $id
      */
-    public static function &exists( $id ){
+	public static function &exists( $id ) {
         global $wpdb;
 
         if ( FrmAppHelper::check_cache( $id, 'frm_entry' ) ) {

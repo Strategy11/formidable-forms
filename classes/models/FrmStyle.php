@@ -301,7 +301,7 @@ class FrmStyle{
 	    return $settings;
 	}
 
-    public function get_defaults(){
+	public function get_defaults() {
         return array(
             'theme_css'         => 'ui-lightness',
             'theme_name'        => 'UI Lightness',

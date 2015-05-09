@@ -74,7 +74,7 @@ class FrmSettings{
     /**
      * @return array
      */
-    public function default_options(){
+	public function default_options() {
         return array(
             'menu'      => 'Formidable',
             'mu_menu'   => 0,
@@ -97,7 +97,7 @@ class FrmSettings{
         );
     }
 
-    private function set_default_options(){
+	private function set_default_options() {
         $this->fill_recaptcha_settings();
 
         if ( ! isset($this->load_style) ) {
@@ -169,7 +169,7 @@ class FrmSettings{
         return $errors;
     }
 
-    public function update($params){
+	public function update( $params ) {
         $this->fill_with_defaults($params);
         $this->update_settings($params);
 
@@ -236,7 +236,7 @@ class FrmSettings{
 		}
     }
 
-    public function store(){
+	public function store() {
         // Save the posted value in the database
 
         update_option('frm_options', $this);

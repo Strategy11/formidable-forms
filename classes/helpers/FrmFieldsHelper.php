@@ -1198,12 +1198,12 @@ DEFAULT_HTML;
 		?> name="<?php echo esc_attr( $args['name'] ) ?>" value="<?php echo esc_attr( $args['value'] ); ?>"><?php
 	}
 
-    public static function show_onfocus_js($clear_on_focus){
+	public static function show_onfocus_js( $clear_on_focus ) {
 		_deprecated_function( __FUNCTION__, '2.0.6', 'FrmFieldsHelper::show_icon_link_js' );
 		self::show_icon_link_js( $clear_on_focus, 'onfocus' );
     }
 
-    public static function show_default_blank_js($default_blank){
+	public static function show_default_blank_js( $default_blank ) {
 		_deprecated_function( __FUNCTION__, '2.0.6', 'FrmFieldsHelper::show_icon_link_js' );
 		self::show_icon_link_js( $default_blank, 'default' );
     }

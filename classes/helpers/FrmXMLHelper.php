@@ -879,7 +879,7 @@ class FrmXMLHelper {
 	*
 	* @param $post_content array, pass by reference
 	*/
-	private static function switch_email_contition_field_ids( &$post_content ){
+	private static function switch_email_contition_field_ids( &$post_content ) {
 		// Switch field IDs in conditional logic
 		if ( isset( $post_content['conditions'] ) && is_array( $post_content['conditions'] ) ) {
 			foreach ( $post_content['conditions'] as $email_key => $val ) {

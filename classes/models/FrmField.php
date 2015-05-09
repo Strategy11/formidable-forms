@@ -99,7 +99,7 @@ class FrmField{
         }
     }
 
-    public static function update( $id, $values ){
+	public static function update( $id, $values ) {
         global $wpdb;
 
 		$id = absint( $id );
@@ -180,7 +180,7 @@ class FrmField{
         }
     }
 
-    public static function getOne( $id ){
+	public static function getOne( $id ) {
 		if ( empty( $id ) ) {
 			return;
 		}
@@ -479,7 +479,7 @@ class FrmField{
 		}
 	}
 
-    public static function getIds($where = '', $order_by = '', $limit = ''){
+	public static function getIds( $where = '', $order_by = '', $limit = '' ) {
 		_deprecated_function( __FUNCTION__, '2.0' );
         global $wpdb;
         if ( ! empty($order_by) && ! strpos($order_by, 'ORDER BY') !== false ) {

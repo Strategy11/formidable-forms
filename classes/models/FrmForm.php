@@ -338,7 +338,7 @@ class FrmForm{
     /**
      * @return int|boolean
      */
-    public static function destroy( $id ){
+	public static function destroy( $id ) {
         global $wpdb;
 
         $form = self::getOne($id);
@@ -395,7 +395,7 @@ class FrmForm{
      * @param string $key
      * @return int form id
      */
-    public static function &getIdByKey( $key ){
+	public static function &getIdByKey( $key ) {
         $id = FrmDb::get_var( 'frm_forms', array( 'form_key' => sanitize_title( $key ) ) );
         return $id;
     }
@@ -404,7 +404,7 @@ class FrmForm{
      * @param int $id
      * @return string form key
      */
-    public static function &getKeyById($id){
+	public static function &getKeyById( $id ) {
         $id = (int) $id;
         $cache = FrmAppHelper::check_cache($id, 'frm_form');
         if ( $cache ) {
@@ -554,7 +554,7 @@ class FrmForm{
     /**
      * @return array of errors
      */
-    public static function validate( $values ){
+	public static function validate( $values ) {
         $errors = array();
 
         return apply_filters('frm_validate_form', $errors, $values);
