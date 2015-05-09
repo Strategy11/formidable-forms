@@ -1,6 +1,6 @@
 <?php
 
-class FrmNotification{
+class FrmNotification {
 	public function __construct() {
         if ( ! defined('ABSPATH') ) {
             die('You are not allowed to call this page directly.');

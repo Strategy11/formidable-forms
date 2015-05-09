@@ -1,5 +1,5 @@
 <?php
-class FrmStyle{
+class FrmStyle {
     public $number = false;	// Unique ID number of the current instance.
 	public $id = 0; // the id of the post
 

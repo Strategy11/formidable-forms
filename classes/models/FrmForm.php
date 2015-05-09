@@ -3,7 +3,7 @@ if ( ! defined('ABSPATH') ) {
     die('You are not allowed to call this page directly.');
 }
 
-class FrmForm{
+class FrmForm {
 
     /**
      * @return int|boolean id on success or false on failure
