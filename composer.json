@@ -18,7 +18,7 @@
 	"require": {
 		"composer/installers": "~1.0",
 		"xrstf/composer-php52": "^1.0.17",
-		"phpmailer/phpmailer": "dev-travis"
+		"phpmailer/phpmailer": "dev-master"
 	},
 	"autoload": {
 		"classmap": [
