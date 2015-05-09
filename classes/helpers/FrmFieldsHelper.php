@@ -382,7 +382,7 @@ DEFAULT_HTML;
         $html = str_replace('[error_class]', $error_class, $html);
 
         //replace [entry_key]
-        $entry_key = ( $_GET && isset($_GET['entry']) ) ? $_GET['entry'] : '';
+        $entry_key = FrmAppHelper::simple_get( 'entry', 'sanitize_title' );
         $html = str_replace('[entry_key]', $entry_key, $html);
 
         //replace [input]
@@ -573,9 +573,9 @@ DEFAULT_HTML;
             $opt = apply_filters('frm_field_label_seen', $opt, $opt_key, $field);
 
             // If this is an "Other" option, get the HTML for it
-            if ( FrmAppHelper::is_other_opt( $opt_key ) ) {
+			if ( self::is_other_opt( $opt_key ) ) {
                 // Get string for Other text field, if needed
-                $other_val = FrmAppHelper::get_other_val( $opt_key, $field );
+				$other_val = self::get_other_val( compact( 'opt_key', 'field' ) );
                 require(FrmAppHelper::plugin_path() .'/pro/classes/views/frmpro-fields/other-option.php');
             } else {
                 require(FrmAppHelper::plugin_path() .'/classes/views/frm-fields/single-option.php');
@@ -1006,13 +1006,204 @@ DEFAULT_HTML;
         }
     }
 
+    /**
+    * Check if current field option is an "other" option
+    *
+    * @since 2.0.6
+    *
+    * @param string $opt_key
+    * @return boolean Returns true if current field option is an "Other" option
+    */
+    public static function is_other_opt( $opt_key ) {
+        return $opt_key && strpos( $opt_key, 'other' ) !== false;
+    }
+
+    /**
+    * Get value that belongs in "Other" text box
+    *
+    * @since 2.0.6
+    *
+    * @param array $args
+    */
+    public static function get_other_val( $args ) {
+		$defaults = array(
+			'opt_key' => 0, 'field' => array(),
+			'parent' => false, 'pointer' => false,
+		);
+		$args = wp_parse_args( $args, $defaults );
+
+		$opt_key = $args['opt_key'];
+		$field = $args['field'];
+		$parent = $args['parent'];
+		$pointer = $args['pointer'];
+		$other_val = '';
+
+		// If option is an "other" option and there is a value set for this field,
+		// check if the value belongs in the current "Other" option text field
+		if ( ! FrmFieldsHelper::is_other_opt( $opt_key ) || ! isset( $field['value'] ) || ! $field['value'] ) {
+			return $other_val;
+		}
+
+		// Check posted vals before checking saved values
+
+		// For fields inside repeating sections - note, don't check if $pointer is true because it will often be zero
+		if ( $parent && isset( $_POST['item_meta'][ $parent ][ $pointer ]['other'][ $field['id'] ] ) ) {
+			if ( FrmFieldsHelper::is_field_with_multiple_values( $field ) ) {
+				$other_val = isset( $_POST['item_meta'][ $parent ][ $pointer ]['other'][ $field['id'] ][ $opt_key ] ) ? sanitize_text_field( $_POST['item_meta'][ $parent ][ $pointer ]['other'][ $field['id'] ][ $opt_key ] ) : '';
+			} else {
+				$other_val = sanitize_text_field( $_POST['item_meta'][ $parent ][ $pointer ]['other'][ $field['id'] ] );
+			}
+			return $other_val;
+
+		} else if ( isset( $field['id'] ) && isset( $_POST['item_meta']['other'][ $field['id'] ] ) ) {
+			// For normal fields
+
+			if ( FrmFieldsHelper::is_field_with_multiple_values( $field ) ) {
+				$other_val = isset( $_POST['item_meta']['other'][ $field['id'] ][ $opt_key ] ) ? sanitize_text_field( $_POST['item_meta']['other'][ $field['id'] ][ $opt_key ] ) : '';
+			} else {
+				$other_val = sanitize_text_field( $_POST['item_meta']['other'][ $field['id'] ] );
+			}
+			return $other_val;
+		}
+
+		// For checkboxes
+		if ( $field['type'] == 'checkbox' && is_array( $field['value'] ) ) {
+			// Check if there is an "other" val in saved value and make sure the
+			// "other" val is not equal to the Other checkbox option
+			if ( isset( $field['value'][ $opt_key ] ) && $field['options'][ $opt_key ] != $field['value'][ $opt_key ] ) {
+				$other_val = $field['value'][ $opt_key ];
+			}
+		} else {
+			/**
+			 * For radio buttons and dropdowns
+			 * Check if saved value equals any of the options. If not, set it as the other value.
+			 */
+			foreach ( $field['options'] as $opt_key => $opt_val ) {
+				$temp_val = is_array( $opt_val ) ? $opt_val['value'] : $opt_val;
+				// Multi-select dropdowns - key is not preserved
+				if ( is_array( $field['value'] ) ) {
+					$o_key = array_search( $temp_val, $field['value'] );
+					if ( isset( $field['value'][ $o_key ] ) ) {
+						unset( $field['value'][ $o_key ], $o_key );
+					}
+				} else if ( $temp_val == $field['value'] ) {
+					// For radio and regular dropdowns
+					return '';
+				} else {
+					$other_val = $field['value'];
+				}
+				unset( $opt_key, $opt_val, $temp_val );
+			}
+			// For multi-select dropdowns only
+			if ( is_array( $field['value'] ) && ! empty( $field['value'] ) ) {
+				$other_val = reset( $field['value'] );
+			}
+		}
+
+		return $other_val;
+    }
+
+    /**
+    * Check if there is a saved value for the "Other" text field. If so, set it as the $other_val.
+    * Intended for front-end use
+    *
+    * @since 2.0.6
+    *
+    * @param array $args should include field, opt_key and field name
+    * @param boolean $other_opt
+    * @param string $checked
+    * @return string $other_val
+    */
+    public static function prepare_other_input( $args, &$other_opt, &$checked ) {
+		//Check if this is an "Other" option
+		if ( ! self::is_other_opt( $args['opt_key'] ) ) {
+			return;
+		}
+
+		$other_opt = true;
+		$other_args = array();
+		$parent = $pointer = '';
+
+		self::set_other_name( $args, $other_args );
+		self::set_other_value( $args, $other_args );
+
+		if ( $other_args['value'] ) {
+			$checked = 'checked="checked" ';
+		}
+
+        return $other_args;
+    }
+
+	/**
+	 * @param array $args
+	 * @param array $other_args
+	 * @since 2.0.6
+	 */
+	private static function set_other_name( $args, &$other_args ) {
+		//Set up name for other field
+		$other_args['name'] = str_replace( '[]', '', $args['field_name'] );
+		$other_args['name'] = preg_replace('/\[' . $args['field']['id'] . '\]$/', '', $other_args['name']);
+		$other_args['name'] = $other_args['name'] . '[other]' . '[' . $args['field']['id'] . ']';
+
+		//Converts item_meta[field_id] => item_meta[other][field_id] and
+		//item_meta[parent][0][field_id] => item_meta[parent][0][other][field_id]
+		if ( self::is_field_with_multiple_values( $args['field'] ) ) {
+			$other_args['name'] .= '[' . $args['opt_key'] . ']';
+		}
+	}
+
+	/**
+	 * Find the parent and pointer, and get text for "other" text field
+	 * @param array $args
+	 * @param array $other_args
+	 *
+	 * @since 2.0.6
+	 */
+	private static function set_other_value( $args, &$other_args ) {
+		// Check for parent ID and pointer
+		$temp_array = explode( '[', $args['field_name'] );
+
+		// Count should only be greater than 3 if inside of a repeating section
+		if ( count( $temp_array ) > 3 ) {
+			$parent = str_replace( ']', '', $temp_array[1] );
+			$pointer = str_replace( ']', '', $temp_array[2]);
+		}
+
+		// Get text for "other" text field
+		$other_args['value'] = self::get_other_val( array( 'opt_key' => $args['opt_key'], 'field' => $args['field'], 'parent' => $parent, 'pointer' => $pointer ) );
+	}
+
+	/**
+	 * If this field includes an other option, show it
+	 * @param $args array
+	 * @since 2.0.6
+	 */
+	public static function include_other_input( $args ) {
+        if ( ! $args['other_opt'] ) {
+        	return;
+		}
+
+		$classes = array( 'frm_other_input' );
+		if ( ! $args['checked'] || trim( $args['checked'] ) == '' ) {
+			// hide the field if the other option is not selected
+			$classes[] = 'frm_pos_none';
+		}
+		if ( $field['type'] == 'select' && $args['field']['multiple'] ) {
+			$classes[] = 'frm_other_full';
+		}
+
+        ?><input type="text" class="<?php echo sanitize_text_field( implode( ' ', $classes ) ) ?>" <?php
+		echo ( $args['read_only'] ? ' readonly="readonly" disabled="disabled"' : '' );
+		?> name="<?php echo esc_attr( $args['name'] ) ?>" value="<?php echo esc_attr( $args['value'] ); ?>"><?php
+	}
+
     public static function show_onfocus_js($clear_on_focus){ ?>
     <a href="javascript:void(0)" class="frm_bstooltip <?php echo ($clear_on_focus) ? '' : 'frm_inactive_icon '; ?>frm_default_val_icons frm_action_icon frm_reload_icon frm_icon_font" title="<?php echo esc_attr($clear_on_focus ? __( 'Clear default value when typing', 'formidable' ) : __( 'Do not clear default value when typing', 'formidable' )); ?>"></a>
     <?php
     }
 
     public static function show_default_blank_js($default_blank){ ?>
-    <a href="javascript:void(0)" class="frm_bstooltip <?php echo $default_blank ? '' : 'frm_inactive_icon '; ?>frm_default_val_icons frm_action_icon frm_error_icon frm_icon_font" title="<?php echo $default_blank ? esc_attr( 'Default value will NOT pass form validation', 'formidable' ) : esc_attr( 'Default value will pass form validation', 'formidable' ); ?>"></a>
+	<a href="javascript:void(0)" class="frm_bstooltip <?php echo $default_blank ? '' : 'frm_inactive_icon '; ?>frm_default_val_icons frm_action_icon frm_error_icon frm_icon_font" title="<?php echo esc_attr( $default_blank ? __( 'Default value will NOT pass form validation', 'formidable' ) : __( 'Default value will pass form validation', 'formidable' ) ); ?>"></a>
     <?php
     }
 

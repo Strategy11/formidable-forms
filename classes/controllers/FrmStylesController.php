@@ -91,8 +91,10 @@ class FrmStylesController {
     public static function save() {
         $frm_style = new FrmStyle();
         $message = '';
-        $post_id = ( $_POST && isset($_POST['ID']) ) ? $_POST['ID'] : false;
-        if ( $post_id !== false && isset($_POST['frm_style']) && wp_verify_nonce($_POST['frm_style'], 'frm_style_nonce') ) {
+		$post_id = FrmAppHelper::get_post_param( 'ID', false, 'sanitize_title' );
+		$style_nonce = FrmAppHelper::get_post_param( 'frm_style', '', 'sanitize_text_field' );
+
+		if ( $post_id !== false && wp_verify_nonce( $style_nonce, 'frm_style_nonce' ) ) {
             $id = $frm_style->update($post_id);
             if ( empty($post_id) && ! empty($id) ) {
                 // set the post id to the new style so it will be loaded for editing
@@ -136,7 +138,8 @@ class FrmStylesController {
     }
 
     private static function manage_styles() {
-        if ( ! $_POST || ! isset($_POST['style']) || ! isset($_POST['frm_manage_style']) || ! wp_verify_nonce($_POST['frm_manage_style'], 'frm_manage_style_nonce') ) {
+		$style_nonce = FrmAppHelper::get_post_param( 'frm_manage_style', '', 'sanitize_text_field' );
+		if ( ! $_POST || ! isset( $_POST['style'] ) || ! wp_verify_nonce( $style_nonce, 'frm_manage_style_nonce' ) ) {
             return self::manage();
         }
 
@@ -175,8 +178,9 @@ class FrmStylesController {
         $frm_style = new FrmStyle();
 
         $message = '';
-        $post_id = ( $_POST && isset($_POST['ID']) ) ? $_POST['ID'] : false;
-        if ( isset($_POST['frm_custom_css']) && wp_verify_nonce($_POST['frm_custom_css'], 'frm_custom_css_nonce') ) {
+		$post_id = FrmAppHelper::get_post_param( 'ID', false, 'sanitize_text_field' );
+		$nonce = FrmAppHelper::get_post_param( 'frm_custom_css', '', 'sanitize_text_field' );
+		if ( wp_verify_nonce( $nonce, 'frm_custom_css_nonce' ) ) {
             $frm_style->update($post_id);
             $message = __( 'Your styling settings have been saved.', 'formidable' );
         }
@@ -262,7 +266,7 @@ class FrmStylesController {
 
     public static function include_style_section($atts, $sec) {
         extract($atts);
-        $current_tab = isset($_GET['page-tab']) ? $_GET['page-tab'] : 'default';
+		$current_tab = FrmAppHelper::simple_get( 'page-tab', 'sanitize_title', 'default' );
         include(FrmAppHelper::plugin_path() .'/classes/views/styles/_'. $sec['args'] .'.php');
     }
 

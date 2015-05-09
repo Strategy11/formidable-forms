@@ -14,7 +14,7 @@
             </div>
             <div id="postbox-container-1" class="postbox-container">
                 <input type="hidden" name="page" value="formidable-entries" />
-                <input type="hidden" name="form" value="<?php echo ($form) ? $form->id : ''; ?>" />
+				<input type="hidden" name="form" value="<?php echo esc_attr( $form ? $form->id : '' ); ?>" />
                 <input type="hidden" name="frm_action" value="list" />
                 <?php $wp_list_table->search_box( __( 'Search', 'formidable' ), 'entry' ); ?>
             </div>
@@ -22,7 +22,7 @@
             </div>
             <?php if ( $form ) { ?>
             <div id="titlediv">
-            <input id="title" type="text" value="<?php echo esc_attr($form->name == '' ? __( '(no title)') : $form->name) ?>" readonly="readonly" disabled="disabled" />
+				<input id="title" type="text" value="<?php echo esc_attr( $form->name == '' ? __( '(no title)' ) : $form->name ) ?>" readonly="readonly" disabled="disabled" />
             </div>
             <?php } ?>
 

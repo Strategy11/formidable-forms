@@ -14,7 +14,7 @@
         <div id="contextual-help-columns">
         <div class="contextual-help-tabs">
         <ul class="frm-category-tabs">
-            <?php $a = isset($_GET['t']) ? $_GET['t'] : 'general_settings'; ?>
+			<?php $a = FrmAppHelper::simple_get( 't', 'sanitize_title', 'general_settings' ); ?>
         	<li <?php echo ($a == 'general_settings') ? 'class="tabs active"' : '' ?>><a href="#general_settings" class="frm_cursor_pointer"><?php _e( 'General', 'formidable' ) ?></a></li>
 			<?php foreach ( $sections as $sec_name => $section ) { ?>
                 <li <?php echo ($a == $sec_name .'_settings') ? 'class="tabs active"' : '' ?>><a href="#<?php echo esc_attr( $sec_name ) ?>_settings"><?php echo isset($section['name']) ? $section['name'] : ucfirst($sec_name) ?></a></li>
@@ -24,7 +24,7 @@
 
     <?php do_action('frm_before_settings'); ?>
 
-    <form name="frm_settings_form" method="post" class="frm_settings_form" action="?page=formidable-settings<?php echo (isset($_GET['t'])) ? '&amp;t='. $_GET['t'] : ''; ?>">
+	<form name="frm_settings_form" method="post" class="frm_settings_form" action="?page=formidable-settings<?php echo ( $a ? '&amp;t=' . $a : '' ); ?>">
         <input type="hidden" name="frm_action" value="process-form" />
         <input type="hidden" name="action" value="process-form" />
         <?php wp_nonce_field('process_form_nonce', 'process_form'); ?>

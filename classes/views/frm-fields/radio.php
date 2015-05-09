@@ -8,11 +8,11 @@ foreach ( $field['options'] as $opt_key => $opt ) {
     $opt = apply_filters('frm_field_label_seen', $opt, $opt_key, $field);
 
     // Get string for Other text field, if needed
-    $other_val = FrmAppHelper::get_other_val( $opt_key, $field );
+	$other_val = FrmFieldsHelper::get_other_val( compact( 'opt_key', 'field' ) );
 
     $checked = ( $other_val || isset($field['value']) &&  (( ! is_array($field['value']) && $field['value'] == $field_val ) || (is_array($field['value']) && in_array($field_val, $field['value']) ) ) ) ? ' checked="checked"':'';
 
-    if ( FrmAppHelper::is_other_opt( $opt_key ) ) {
+	if ( FrmFieldsHelper::is_other_opt( $opt_key ) ) {
         include(FrmAppHelper::plugin_path() .'/pro/classes/views/frmpro-fields/other-option.php');
     } else {
         include(FrmAppHelper::plugin_path() .'/classes/views/frm-fields/single-option.php');

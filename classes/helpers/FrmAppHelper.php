@@ -10,7 +10,7 @@ class FrmAppHelper {
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '2.0.05';
+	public static $plug_version = '2.0.06';
 
     /**
      * @since 1.07.02
@@ -104,11 +104,12 @@ class FrmAppHelper {
      */
     public static function is_admin_page($page = 'formidable' ) {
         global $pagenow;
+		$get_page = self::simple_get( 'page', 'sanitize_title' );
         if ( $pagenow ) {
-            return $pagenow == 'admin.php' && $_GET['page'] == $page;
+			return $pagenow == 'admin.php' && $get_page == $page;
         }
 
-        return is_admin() && isset($_GET['page']) && $_GET['page'] == $page;
+		return is_admin() && $get_page == $page;
     }
 
     /**
@@ -121,7 +122,8 @@ class FrmAppHelper {
      */
     public static function is_preview_page() {
         global $pagenow;
-        return $pagenow && $pagenow == 'admin-ajax.php' && isset($_GET['action']) && $_GET['action'] == 'frm_forms_preview';
+		$action = FrmAppHelper::simple_get( 'action', 'sanitize_title' );
+		return $pagenow && $pagenow == 'admin-ajax.php' && $action == 'frm_forms_preview';
     }
 
     /**
@@ -211,7 +213,7 @@ class FrmAppHelper {
             }
 			self::sanitize_value( $value, $sanitize );
 		} else {
-            $value = self::get_post_param( $param, $default, $sanitize );
+            $value = self::simple_request( array( 'type' => 'post', 'param' => $param, 'default' => $default, 'sanitize' => $sanitize ) );
         }
 
 		if ( isset( $params ) && is_array( $value ) && ! empty( $value ) ) {
@@ -228,13 +230,11 @@ class FrmAppHelper {
         return $value;
     }
 
+	/**
+	 * @todo Deprecate this and use simple_request instead
+	 */
 	public static function get_post_param( $param, $default = '', $sanitize = '' ) {
-		$val = $default;
-		if ( isset( $_POST[ $param ] ) ) {
-			$val = stripslashes_deep( maybe_unserialize( $_POST[ $param ] ) );
-			self::sanitize_value( $value, $sanitize );
-		}
-		return $val;
+		return self::simple_request( array( 'type' => 'post', 'param' => $param, 'default' => $default, 'sanitize' => $sanitize ) );
 	}
 
 	public static function sanitize_value( &$value, $sanitize ) {
@@ -242,17 +242,46 @@ class FrmAppHelper {
 			$value = call_user_func( $sanitize, $value );
 		}
 	}
+
     /**
      * @since 2.0
      * @param string $action
+	 * @todo Deprecate this and use simple_request instead
      */
-	public static function simple_get( $action, $sanitize = 'sanitize_text_field' ) {
-		$val = '';
-		if ( $_GET && isset( $_GET[ $action ] ) ) {
-			$val = call_user_func( $sanitize, $_GET[ $action ] );
-		}
-		return $val;
+	public static function simple_get( $param, $sanitize = 'sanitize_text_field', $default = '' ) {
+		return self::simple_request( array( 'type' => 'get', 'param' => $param, 'default' => $default, 'sanitize' => $sanitize ) );
     }
+
+	/**
+	 * Get a GET/POST/REQUEST value and sanitize it
+	 *
+	 * @since 2.0.6
+	 */
+	public static function simple_request( $args ) {
+		$defaults = array(
+			'param' => '', 'default' => '',
+			'type' => 'get', 'sanitize' => 'sanitize_text_field',
+		);
+		$args = wp_parse_args( $args, $defaults );
+
+		$value = $args['default'];
+		if ( $args['type'] == 'get' ) {
+			if ( $_GET && isset( $_GET[ $args['param'] ] ) ) {
+				$value = $_GET[ $args['param'] ];
+			}
+		} else if ( $args['type'] == 'post' ) {
+			if ( isset( $_POST[ $args['param'] ] ) ) {
+				$value = stripslashes_deep( maybe_unserialize( $_POST[ $args['param'] ] ) );
+			}
+		} else {
+			if ( isset( $_REQUEST[ $args['param'] ] ) ) {
+				$value = $_REQUEST[ $args['param'] ];
+			}
+		}
+
+		self::sanitize_value( $value, $args['sanitize'] );
+		return $value;
+	}
 
     public static function sanitize_request( $sanitize_method, &$values ) {
         $temp_values = $values;
@@ -451,13 +480,14 @@ class FrmAppHelper {
 
     public static function wp_pages_dropdown( $field_name, $page_id, $truncate = false ) {
         $pages = self::get_pages();
+		$selected = self::get_post_param( $field_name, $page_id, 'absint' );
     ?>
         <select name="<?php echo esc_attr($field_name); ?>" id="<?php echo esc_attr($field_name); ?>" class="frm-pages-dropdown">
             <option value=""> </option>
             <?php foreach ( $pages as $page ) { ?>
-                <option value="<?php echo esc_attr($page->ID); ?>" <?php
-                echo ( ( ( isset( $_POST[ $field_name ] ) && $_POST[ $field_name ] == $page->ID ) || ( ! isset( $_POST[ $field_name ] ) && $page_id == $page->ID ) ) ? ' selected="selected"' : '' );
-                ?>><?php echo esc_html( $truncate ? self::truncate( $page->post_title, $truncate ) : $page->post_title ); ?> </option>
+				<option value="<?php echo esc_attr($page->ID); ?>" <?php selected( $selected, $page->ID ) ?>>
+					<?php echo esc_html( $truncate ? self::truncate( $page->post_title, $truncate ) : $page->post_title ); ?>
+				</option>
             <?php } ?>
         </select>
     <?php
@@ -626,7 +656,8 @@ class FrmAppHelper {
     * @return boolean Returns true if current field option is an "Other" option
     */
     public static function is_other_opt( $opt_key ) {
-        return $opt_key && strpos( $opt_key, 'other' ) !== false;
+        _deprecated_function( __FUNCTION__, '2.0.6', 'FrmFieldsHelper::is_other_optt' );
+        return FrmFieldsHelper::is_other_opt( $opt_key );
     }
 
     /**
@@ -639,68 +670,8 @@ class FrmAppHelper {
     * @return string $other_val
     */
     public static function get_other_val( $opt_key, $field, $parent = false, $pointer = false ) {
-        $other_val = '';
-
-        //If option is an "other" option and there is a value set for this field, check if the value belongs in the current "Other" option text field
-        if ( ! self::is_other_opt( $opt_key ) || ! isset( $field['value'] ) || ! $field['value'] ) {
-            return $other_val;
-        }
-
-        // Check posted vals before checking saved values
-
-        // For fields inside repeating sections - note, don't check if $pointer is true because it will often be zero
-        if ( $parent && isset( $_POST['item_meta'][ $parent ][ $pointer ]['other'][ $field['id'] ] ) ) {
-            if ( FrmFieldsHelper::is_field_with_multiple_values( $field ) ) {
-                $other_val = isset( $_POST['item_meta'][ $parent ][ $pointer ]['other'][ $field['id'] ][ $opt_key ] ) ? $_POST['item_meta'][ $parent ][ $pointer ]['other'][ $field['id'] ][ $opt_key ] : '';
-            } else {
-                $other_val = $_POST['item_meta'][ $parent ][ $pointer ]['other'][ $field['id'] ];
-            }
-            return $other_val;
-
-        } else if ( isset( $field['id'] ) && isset( $_POST['item_meta']['other'][ $field['id'] ] ) ) {
-			// For normal fields
-
-            if ( FrmFieldsHelper::is_field_with_multiple_values( $field ) ) {
-                $other_val = isset( $_POST['item_meta']['other'][ $field['id'] ][ $opt_key ] ) ? $_POST['item_meta']['other'][ $field['id'] ][ $opt_key ] : '';
-            } else {
-				$other_val = sanitize_text_field( $_POST['item_meta']['other'][ $field['id'] ] );
-            }
-            return $other_val;
-        }
-
-        // For checkboxes
-        if ( $field['type'] == 'checkbox' && is_array( $field['value'] ) ) {
-             // Check if there is an "other" val in saved value and make sure the "other" val is not equal to the Other checkbox option
-            if ( isset( $field['value'][ $opt_key ] ) && $field['options'][ $opt_key ] != $field['value'][ $opt_key ] ) {
-                $other_val = $field['value'][ $opt_key ];
-            }
-        } else {
-			/**
-			 * For radio buttons and dropdowns
-        	 * Check if saved value equals any of the options. If not, set it as the other value.
-			 */
-            foreach ( $field['options'] as $opt_key => $opt_val ) {
-                $temp_val = is_array( $opt_val ) ? $opt_val['value'] : $opt_val;
-                // Multi-select dropdowns - key is not preserved
-                if ( is_array( $field['value'] ) ) {
-                    $o_key = array_search( $temp_val, $field['value'] );
-                    if ( isset( $field['value'][ $o_key ] ) ) {
-                        unset( $field['value'][ $o_key ], $o_key );
-					}
-                } else if ( $temp_val == $field['value'] ) {
-					// For radio and regular dropdowns
-                    return '';
-                } else {
-                    $other_val = $field['value'];
-                }
-                unset($opt_key, $opt_val, $temp_val);
-            }
-            // For multi-select dropdowns only
-            if ( is_array( $field['value'] ) && ! empty( $field['value'] ) ) {
-                $other_val = reset( $field['value'] );
-            }
-        }
-        return $other_val;
+		_deprecated_function( __FUNCTION__, '2.0.6', 'FrmFieldsHelper::get_other_val' );
+		return FrmFieldsHelper::get_other_val( compact( 'opt_key', 'field', 'parent', 'pointer' ) );
     }
 
     /**
@@ -716,42 +687,9 @@ class FrmAppHelper {
     * @return string $other_val
     */
     public static function prepare_other_input( $field, &$other_opt, &$checked, $args = array() ) {
-        //Check if this is an "Other" option
-		if ( ! self::is_other_opt( $args['opt_key'] ) ) {
-            return;
-        }
-
-        $other_opt = true;
-        $other_args = array();
-        $parent = $pointer = '';
-
-        // Check for parent ID and pointer
-        $temp_array = explode( '[', $args['field_name'] );
-        // Count should only be greater than 3 if inside of a repeating section
-        if ( count( $temp_array ) > 3 ) {
-            $parent = str_replace( ']', '', $temp_array[1] );
-            $pointer = str_replace( ']', '', $temp_array[2]);
-        }
-        unset( $temp_array );
-
-        //Set up name for other field
-        $other_args['name'] = str_replace( '[]', '', $args['field_name'] );
-        $other_args['name'] = preg_replace('/\[' . $field['id'] . '\]$/', '', $other_args['name']);
-        $other_args['name'] = $other_args['name'] . '[other]' . '[' . $field['id'] . ']';
-        //Converts item_meta[field_id] => item_meta[other][field_id] and
-        //item_meta[parent][0][field_id] => item_meta[parent][0][other][field_id]
-        if ( FrmFieldsHelper::is_field_with_multiple_values( $field ) ) {
-            $other_args['name'] .= '[' . $args['opt_key'] . ']';
-        }
-
-        // Get text for "other" text field
-        $other_args['value'] = self::get_other_val( $args['opt_key'], $field, $parent, $pointer );
-
-        if ( $other_args['value'] ) {
-            $checked = 'checked="checked" ';
-        }
-
-        return $other_args;
+		_deprecated_function( __FUNCTION__, '2.0.6', 'FrmFieldsHelper::prepare_other_input' );
+		$args['field'] = $field;
+		return FrmFieldsHelper::prepare_other_input( $args, $other_opt, $checked );
     }
 
     public static function recursive_trim(&$value) {
@@ -1072,29 +1010,7 @@ class FrmAppHelper {
 
         foreach ( $form_defaults as $opt => $default ) {
             if ( ! isset( $values[ $opt ] ) || $values[ $opt ] == '' ) {
-                if ( $opt == 'notification' ) {
-                    $values[ $opt ] = ( $post_values && isset( $post_values[ $opt ] ) ) ? $post_values[ $opt ] : $default;
-
-                    foreach ( $default as $o => $d ) {
-                        if ( $o == 'email_to' ) {
-                            $d = ''; //allow blank email address
-                        }
-                        $values[ $opt ][0][ $o ] = ( $post_values && isset( $post_values[ $opt ][0][ $o ]) ) ? $post_values[ $opt ][0][ $o ] : $d;
-                        unset($o, $d);
-                    }
-                } else {
-                    $values[ $opt ] = ( $post_values && isset( $post_values['options'][ $opt ] ) ) ? $post_values['options'][ $opt ] : $default;
-                }
-            } else if ( $values[ $opt ] == 'notification' ) {
-                foreach ( $values[ $opt ] as $k => $n ) {
-                    foreach ( $default as $o => $d ) {
-                        if ( ! isset( $n[ $o ] ) ) {
-                            $values[ $opt ][ $k ][ $o ] = ( $post_values && isset( $post_values[ $opt ][ $k ][ $o ] ) ) ? $post_values[ $opt ][ $k ][ $o ] : $d;
-                        }
-                        unset($o, $d);
-                    }
-                    unset($k, $n);
-                }
+				$values[ $opt ] = ( $post_values && isset( $post_values['options'][ $opt ] ) ) ? $post_values['options'][ $opt ] : $default;
             }
 
             unset($opt, $defaut);
@@ -1102,7 +1018,7 @@ class FrmAppHelper {
 
         if ( ! isset($values['custom_style']) ) {
             $frm_settings = self::get_settings();
-            $values['custom_style'] = ( $post_values && isset($post_values['options']['custom_style']) ) ? $_POST['options']['custom_style'] : ( $frm_settings->load_style != 'none' );
+			$values['custom_style'] = ( $post_values && isset( $post_values['options']['custom_style'] ) ) ? absint( $_POST['options']['custom_style'] ) : ( $frm_settings->load_style != 'none' );
         }
 
         foreach ( array( 'before', 'after', 'submit') as $h ) {
@@ -1582,6 +1498,27 @@ class FrmAppHelper {
 			// Add backslashes before double quotes and forward slashes only
 			$post_content[ $key ] = addcslashes( $val, '"\\/' );
 		}
+	}
+
+	/**
+	 * Prepare and save settings in styles and actions
+	 *
+	 * @param array $settings
+	 * @param string $group
+	 *
+	 * @since 2.0.6
+	 */
+	public function save_settings( $settings, $group ) {
+        $settings['post_content'] = FrmAppHelper::prepare_and_encode( (array) $settings['post_content'] );
+
+		if ( empty( $settings['ID'] ) ) {
+			unset( $settings['ID']);
+		}
+
+		// delete all caches for this group
+		self::cache_delete_group( $group );
+
+		return self::save_json_post( $settings );
 	}
 
 	/**

@@ -35,7 +35,7 @@ class FrmFormAction {
 	 * @param array $instance Current settings
 	 */
 	public function form($instance, $args = array()) {
-		echo '<p class="no-options-widget">' . __( 'There are no options for this action.', 'formidable' ) . '</p>';
+		echo '<p class="no-options-widget">' . esc_html__( 'There are no options for this action.', 'formidable' ) . '</p>';
 		return 'noform';
 	}
 
@@ -334,18 +334,7 @@ class FrmFormAction {
  	}
 
 	public function save_settings($settings) {
-	    $settings = (array) $settings;
-
-        $settings['post_content'] = FrmAppHelper::prepare_and_encode( $settings['post_content'] );
-
-	    if ( empty($settings['ID']) ) {
-            unset($settings['ID']);
-        }
-
-		// delete all action caches
-		self::clear_cache();
-
-		return FrmAppHelper::save_json_post( $settings );
+		return FrmAppHelper::save_settings( $settings, 'frm_actions' );
 	}
 
 	public function get_single_action( $id ) {

@@ -1,5 +1,5 @@
 <?php
-$a = isset($_GET['t']) ? $_GET['t'] : 'advanced_settings';
+$a = FrmAppHelper::simple_get( 't', 'sanitize_title', 'advanced_settings' );
 
 $form_action = apply_filters('frm_form_action_settings', $form_action, $form_action->post_excerpt);
 $form_action = apply_filters('frm_form_'. $form_action->post_excerpt .'_action_settings', $form_action);

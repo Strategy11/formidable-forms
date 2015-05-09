@@ -14,13 +14,14 @@
 
         <div class="misc-pub-section">
             <span class="dashicons dashicons-id wp-media-buttons-icon"></span>
-            <?php _e( 'Entry ID', 'formidable' ) ?>: <b><?php echo (int) $entry->id ?></b>
+			<?php _e( 'Entry ID', 'formidable' ) ?>:
+			<b><?php echo absint( $entry->id ) ?></b>
         </div>
 
         <div class="misc-pub-section">
             <span class="dashicons dashicons-post-status wp-media-buttons-icon"></span>
             <?php _e( 'Entry Key', 'formidable' ) ?>:
-            <b><?php echo $entry->item_key ?></b>
+			<b><?php echo sanitize_title( $entry->item_key ) ?></b>
         </div>
 
         <?php if ( FrmAppHelper::pro_is_installed() ) { ?>
@@ -49,7 +50,7 @@
     <div class="inside">
         <div class="misc-pub-section">
             <?php _e( 'IP Address', 'formidable' ) ?>:
-            <b><?php echo $entry->ip; ?></b>
+			<b><?php echo sanitize_text_field( $entry->ip ); ?></b>
         </div>
 
         <?php if ( isset($data['browser']) ) { ?>
@@ -62,7 +63,7 @@
         <?php if ( isset($data['referrer']) ) { ?>
         <div class="misc-pub-section">
             <b><?php _e( 'Referrer', 'formidable' ) ?></b>:<br/>
-            <?php echo str_replace("\r\n", '<br/>', $data['referrer']);  ?>
+			<?php echo wp_kses_post( str_replace( "\r\n", '<br/>', $data['referrer'] ) );  ?>
         </div>
         <?php } ?>
 
@@ -73,8 +74,8 @@
             }
         ?>
         <div class="misc-pub-section">
-            <b><?php echo ucfirst(str_replace('-', ' ', $k)); ?></b>:
-            <?php echo implode(', ', (array) $d); ?>
+			<b><?php echo sanitize_text_field( ucfirst( str_replace( '-', ' ', $k ) ) ); ?></b>:
+			<?php echo wp_kses_post( implode( ', ', (array) $d ) ); ?>
         </div>
         <?php
             unset($k, $d);

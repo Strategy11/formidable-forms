@@ -55,7 +55,7 @@
 
                         <?php if ( $entry->parent_item_id ) { ?>
                         <tr><th><?php _e( 'Parent Entry ID', 'formidable' ) ?>:</th>
-                            <td><?php echo (int) $entry->parent_item_id ?>
+							<td><?php echo absint( $entry->parent_item_id ) ?>
                         </td></tr>
                         <?php } ?>
                         </tbody></table>

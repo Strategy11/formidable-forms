@@ -25,12 +25,7 @@ class FrmForm{
         );
 
         $options = array();
-
-        $defaults = FrmFormsHelper::get_default_opts();
-		foreach ( $defaults as $var => $default ) {
-			$options[ $var ] = isset( $values['options'][ $var ] ) ? $values['options'][ $var ] : $default;
-            unset( $var, $default );
-        }
+		FrmFormsHelper::fill_form_options( $options );
 
         $options['before_html'] = isset($values['options']['before_html']) ? $values['options']['before_html'] : FrmFormsHelper::get_default_html('before');
         $options['after_html'] = isset($values['options']['after_html']) ? $values['options']['after_html'] : FrmFormsHelper::get_default_html('after');
@@ -177,11 +172,7 @@ class FrmForm{
         }
 
         $options = array();
-
-        $defaults = FrmFormsHelper::get_default_opts();
-		foreach ( $defaults as $var => $default ) {
-			$options[ $var ] = isset( $values['options'][ $var ] ) ? $values['options'][ $var ] : $default;
-        }
+		FrmFormsHelper::fill_form_options( $options );
 
         $options['custom_style'] = isset($values['options']['custom_style']) ? $values['options']['custom_style'] : 0;
         $options['before_html'] = isset($values['options']['before_html']) ? $values['options']['before_html'] : FrmFormsHelper::get_default_html('before');
@@ -464,43 +455,30 @@ class FrmForm{
     }
 
     /**
-     * @return array of objects
+     * @return object|array of objects
      */
-    public static function getAll( $where = array(), $order_by = '', $limit = '' ){
-        global $wpdb;
-
-        if ( is_numeric($limit) ) {
-            $limit = ' LIMIT '. $limit;
-        }
-
-        $query = 'SELECT * FROM ' . $wpdb->prefix .'frm_forms' . FrmAppHelper::prepend_and_or_where(' WHERE ', $where) . FrmAppHelper::esc_order($order_by) . FrmAppHelper::esc_limit($limit);
-
-        if ( $limit == ' LIMIT 1' || $limit == 1 ) {
-            if ( is_array($where) && ! empty($where) ) {
-                $results = FrmDb::get_row($wpdb->prefix .'frm_forms', $where, '*', array( 'order_by' => $order_by) );
-            } else {
-				// the query has already been prepared if this is not an array
-                $results = $wpdb->get_row($query);
-            }
-
-			if ( $results ) {
-                wp_cache_set($results->id, $results, 'frm_form');
-                $results->options = maybe_unserialize($results->options);
-            }
+	public static function getAll( $where = array(), $order_by = '', $limit = '' ) {
+		if ( is_array( $where ) && ! empty( $where ) ) {
+			$results = FrmDb::get_results( 'frm_forms', $where, '*', array( 'order_by' => $order_by, 'limit' => $limit ) );
 		} else {
-            if ( is_array($where) && ! empty($where) ) {
-                $results = FrmDb::get_results( $wpdb->prefix .'frm_forms', $where, '*', compact('order_by', 'limit') );
-            } else {
-                $results = $wpdb->get_results($query);
-            }
+			global $wpdb;
 
-			if ( $results ) {
-				foreach ( $results as $result ) {
-					wp_cache_set( $result->id, $result, 'frm_form' );
-					$result->options = maybe_unserialize( $result->options );
-				}
-            }
-        }
+			// the query has already been prepared if this is not an array
+			$query = 'SELECT * FROM ' . $wpdb->prefix . 'frm_forms' . FrmAppHelper::prepend_and_or_where( ' WHERE ', $where ) . FrmAppHelper::esc_order( $order_by ) . FrmAppHelper::esc_limit( $limit );
+			$results = $wpdb->get_results( $query );
+		}
+
+		if ( $results ) {
+			foreach ( $results as $result ) {
+				wp_cache_set( $result->id, $result, 'frm_form' );
+				$result->options = maybe_unserialize( $result->options );
+			}
+		}
+
+		if ( $limit == ' LIMIT 1' || $limit == 1 ) {
+			// return the first form object if we are only getting one form
+			$results = reset( $results );
+		}
 
         return stripslashes_deep($results);
     }

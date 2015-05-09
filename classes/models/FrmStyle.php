@@ -31,16 +31,7 @@ class FrmStyle{
     }
 
     public function save($settings) {
-        $settings['post_content'] = FrmAppHelper::prepare_and_encode( $settings['post_content'] );
-
-	    if ( empty($settings['ID']) ) {
-            unset($settings['ID']);
-        }
-
-        // delete all styling caches
-        FrmAppHelper::cache_delete_group('frm_styles');
-
-		return FrmAppHelper::save_json_post( $settings );
+		return FrmAppHelper::save_settings( $settings, 'frm_styles' );
     }
 
     public function duplicate($id) {

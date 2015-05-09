@@ -42,25 +42,36 @@ class FrmFormsHelper {
 
         $where = apply_filters('frm_forms_dropdown', $query, $field_name);
 		$forms = FrmForm::get_published_forms( $where );
+		$add_html = array();
+		self::add_html_attr( $args['onchange'], 'onchange', $add_html );
+		self::add_html_attr( $args['class'], 'class', $add_html );
+
         ?>
-        <select name="<?php echo esc_attr( $field_name ); ?>" id="<?php echo esc_attr( $args['field_id'] ) ?>" <?php
-		if ( $args['onchange'] ) {
-			echo ' onchange="' . esc_attr( $args['onchange'] ) . '"';
-		}
-		if ( ! empty( $args['class'] ) ) {
-			echo ' class="' . esc_attr( $args['class'] ) . '"';
-		} ?>>
+		<select name="<?php echo esc_attr( $field_name ); ?>" id="<?php echo esc_attr( $args['field_id'] ) ?>" <?php echo implode( ' ', $add_html ); ?>>
 		<?php if ( $args['blank'] ) { ?>
 			<option value=""><?php echo ( $args['blank'] == 1 ) ? ' ' : '- ' . esc_attr( $args['blank'] ) . ' -'; ?></option>
 		<?php } ?>
 		<?php foreach ( $forms as $form ) { ?>
 			<option value="<?php echo esc_attr( $form->id ); ?>" <?php selected( $field_value, $form->id ); ?>><?php
-				echo '' == $form->name ? __( '(no title)', 'formidable' ) : esc_attr( FrmAppHelper::truncate( $form->name, 33 ) );
+				echo ( '' == $form->name ) ? esc_html__( '(no title)', 'formidable' ) : esc_html( FrmAppHelper::truncate( $form->name, 33 ) );
 			?></option>
 		<?php } ?>
         </select>
         <?php
     }
+
+	/**
+	 * @param string $class
+	 * @param string $param
+	 * @param array $add_html
+	 *
+	 * @since 2.0.6
+	 */
+	public static function add_html_attr( $class, $param, &$add_html ) {
+		if ( ! empty( $class ) ) {
+			$add_html[ $param ] = sanitize_title( $param ) . '="' . esc_attr( trim( sanitize_text_field( $class ) ) ) . '"';
+		}
+	}
 
     public static function form_switcher() {
 		$where = apply_filters( 'frm_forms_dropdown', array(), '' );
@@ -73,10 +84,11 @@ class FrmFormsHelper {
 			unset( $args['id'] );
         }
 
-        if ( FrmAppHelper::is_admin_page('formidable-entries') && isset($_GET['frm_action']) && in_array($_GET['frm_action'], array( 'edit', 'show', 'destroy_all')) ) {
+		$frm_action = FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
+		if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) && in_array( $frm_action, array( 'edit', 'show', 'destroy_all' ) ) ) {
             $args['frm_action'] = 'list';
             $args['form'] = 0;
-		} else if ( FrmAppHelper::is_admin_page('formidable' ) && isset( $_GET['frm_action'] ) && in_array( $_GET['frm_action'], array( 'new', 'duplicate' ) ) ) {
+		} else if ( FrmAppHelper::is_admin_page('formidable' ) && in_array( $frm_action, array( 'new', 'duplicate' ) ) ) {
             $args['frm_action'] = 'edit';
 		} else if ( isset( $_GET['post'] ) ) {
             $args['form'] = 0;
@@ -96,7 +108,7 @@ class FrmFormsHelper {
 			        $args['form'] = $form->id;
 				}
                 ?>
-				<li><a href="<?php echo esc_url( isset( $base ) ? add_query_arg( $args, $base ) : add_query_arg( $args ) ); ?>" tabindex="-1"><?php echo empty( $form->name ) ? __( '(no title)') : FrmAppHelper::truncate( $form->name, 33 ); ?></a></li>
+				<li><a href="<?php echo esc_url( isset( $base ) ? add_query_arg( $args, $base ) : add_query_arg( $args ) ); ?>" tabindex="-1"><?php echo esc_html( empty( $form->name ) ? __( '(no title)') : FrmAppHelper::truncate( $form->name, 33 ) ); ?></a></li>
 			<?php
 				unset( $form );
 			} ?>
@@ -215,6 +227,18 @@ class FrmFormsHelper {
         );
     }
 
+	/**
+	 * @param array $options
+	 * @since 2.0.6
+	 */
+	public static function fill_form_options( &$options ) {
+		$defaults = self::get_default_opts();
+		foreach ( $defaults as $var => $default ) {
+			$options[ $var ] = isset( $values['options'][ $var ] ) ? $values['options'][ $var ] : $default;
+			unset( $var, $default );
+		}
+	}
+
     /**
      * @param string $loc
      */
@@ -282,6 +306,7 @@ BEFORE_HTML;
 		$end_section_values = apply_filters( 'frm_before_field_created', FrmFieldsHelper::setup_new_vars( 'end_divider', $form->id ) );
 		$open = $prev_order = false;
 		$add_order = 0;
+		$last_field = false;
         foreach ( $fields as $field ) {
 			if ( $prev_order === $field->field_order ) {
 				$add_order++;
@@ -315,9 +340,12 @@ BEFORE_HTML;
                     $open = false;
             }
 			$prev_order = $field->field_order;
+
+			$last_field = $field;
+			unset( $field );
         }
 
-		self::maybe_create_end_section($open, $reset_fields, $add_order, $end_section_values, $field );
+		self::maybe_create_end_section( $open, $reset_fields, $add_order, $end_section_values, $last_field );
     }
 
 	/**
@@ -350,7 +378,7 @@ BEFORE_HTML;
             } else if ( $code == 'form_description' ) {
                 $replace_with = FrmAppHelper::use_wpautop($form->description);
             } else if ( $code == 'entry_key' && isset($_GET) && isset($_GET['entry']) ) {
-                $replace_with = sanitize_text_field( $_GET['entry'] );
+                $replace_with = FrmAppHelper::simple_get( 'entry' );
             } else {
                 $replace_with = '';
             }
@@ -425,7 +453,7 @@ BEFORE_HTML;
     /**
      * @param string|boolean $form
      *
-     * @return boolean
+     * @return string
      */
     public static function get_form_style( $form ) {
 		$style = 1;
@@ -469,6 +497,57 @@ BEFORE_HTML;
         }
     }
 
+	/**
+	 * Display the validation error messages when an entry is submitted
+	 *
+	 * @param array $args - includes img, errors
+	 * @since 2.0.6
+	 */
+	public static function show_errors( $args ) {
+		$frm_settings = FrmAppHelper::get_settings();
+		if ( empty( $frm_settings->invalid_msg ) ) {
+			$show_img = false;
+		} else {
+			echo wp_kses_post( $frm_settings->invalid_msg );
+			$show_img = true;
+		}
+
+		self::show_error( array( 'img' => $args['img'], 'errors' => $args['errors'], 'show_img' => $show_img ) );
+	}
+
+	/**
+	 * Display the error message in the front-end along with the image if set
+	 * The image was removed from the styling settings, but it may still be set with a hook
+	 * If the message in the global settings is empty, show every validation message in the error box
+	 *
+	 * @param array $args - includes img, errors, and show_img
+	 * @param boolean $show_img
+	 * @since 2.0.6
+	 */
+	public static function show_error( $args ) {
+		$line_break_first = $args['show_img'];
+		foreach ( $args['errors'] as $error_key => $error ) {
+			if ( $line_break_first && ! is_numeric( $error_key ) && ( $error_key == 'cptch_number' || strpos( $error_key, 'field' ) === 0 ) ) {
+				continue;
+			}
+
+			if ( $line_break_first ) {
+				echo '<br/>';
+			}
+
+			if ( $args['show_img'] && ! empty( $args['img'] ) ) {
+				?><img src="<?php echo esc_attr( $args['img'] ) ?>" alt="" /><?php
+			} else {
+				$args['show_img'] = true;
+			}
+
+			echo wp_kses_post( $error );
+
+			if ( ! $line_break_first ) {
+				echo '<br/>';
+			}
+		}
+	}
     public static function get_scroll_js($form_id) {
         ?><script type="text/javascript">jQuery(document).ready(function(){frmFrontForm.scrollMsg(<?php echo (int) $form_id ?>);})</script><?php
     }

@@ -16,7 +16,7 @@ class FrmSettingsController {
     }
 
     public static function license_box() {
-        $a = isset($_GET['t']) ? $_GET['t'] : 'general_settings';
+		$a = FrmAppHelper::simple_get( 't', 'sanitize_title', 'general_settings' );
         include(FrmAppHelper::plugin_path() .'/classes/views/frm-settings/license_box.php');
     }
 
@@ -40,7 +40,8 @@ class FrmSettingsController {
 
         $frm_settings = FrmAppHelper::get_settings();
 
-        if ( ! isset( $_POST['process_form'] ) || ! wp_verify_nonce( $_POST['process_form'], 'process_form_nonce' ) ) {
+		$process_form = FrmAppHelper::simple_request( array( 'param' => 'process_form', 'sanitize' => 'sanitize_text_field', 'type' => 'post' ) );
+		if ( ! wp_verify_nonce( $process_form, 'process_form_nonce' ) ) {
             wp_die( $frm_settings->admin_permission );
         }
 

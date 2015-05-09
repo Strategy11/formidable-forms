@@ -332,14 +332,14 @@ class FrmFieldsController {
         $response = array( 'other' => true );
 
         //If the deleted option is an "other" option
-        if ( FrmAppHelper::is_other_opt( $opt_key ) ) {
+		if ( FrmFieldsHelper::is_other_opt( $opt_key ) ) {
             //Assume all other options are gone, unless proven otherwise
             $other = false;
 
             //Check if all other options are really gone
             foreach ( $options as $o_key => $o_val ) {
                 //If there is still an other option in the field, set other to true
-                if ( FrmAppHelper::is_other_opt( $o_key ) ) {
+				if ( FrmFieldsHelper::is_other_opt( $o_key ) ) {
                     $other = true;
                     break;
                 }
@@ -350,13 +350,13 @@ class FrmFieldsController {
             if ( false === $other ) {
                 $field_options = maybe_unserialize( $field->field_options );
                 $field_options['other'] = 0;
-                FrmField::update( $_POST['field_id'], array( 'field_options' => maybe_serialize( $field_options ) ) );
+				FrmField::update( $field_id, array( 'field_options' => maybe_serialize( $field_options ) ) );
                 $response = array( 'other' => false );
             }
         }
         echo json_encode( $response );
 
-        FrmField::update( $_POST['field_id'], array( 'options' => maybe_serialize( $options ) ) );
+		FrmField::update( $field_id, array( 'options' => maybe_serialize( $options ) ) );
 
         wp_die();
     }
@@ -471,11 +471,10 @@ class FrmFieldsController {
 
     public static function update_order() {
         check_ajax_referer( 'frm_ajax', 'nonce' );
-        if ( isset($_POST) && isset($_POST['frm_field_id']) ) {
-			foreach ( $_POST['frm_field_id'] as $position => $item ) {
-				FrmField::update( $item, array( 'field_order' => $position ) );
-			}
-        }
+		$fields = FrmAppHelper::get_post_param( 'frm_field_id' );
+		foreach ( (array) $fields as $position => $item ) {
+			FrmField::update( absint( $item ), array( 'field_order' => absint( $position ) ) );
+		}
         wp_die();
     }
 
@@ -539,13 +538,11 @@ class FrmFieldsController {
 
         $class = apply_filters('frm_field_classes', implode(' ', $class), $field);
 
-        if ( ! empty($class) ) {
-			$add_html['class'] = 'class="' . esc_attr( trim( $class ) ) . '"';
-        }
+		FrmFormsHelper::add_html_attr( $class, 'class', $add_html );
 
         self::add_shortcodes_to_html($field, $add_html);
 
-        $add_html = implode(' ', $add_html);
+		$add_html = ' ' . implode( ' ', $add_html ) . '  ';
 
         if ( $echo ) {
             echo $add_html;

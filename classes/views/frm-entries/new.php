@@ -8,7 +8,7 @@ if ( empty($values) || ! isset($values['fields']) || empty($values['fields']) ) 
     return;
 } ?>
 <div class="frm_forms <?php echo FrmFormsHelper::get_form_style_class($values); ?>" id="frm_form_<?php echo esc_attr( $form->id ) ?>_container">
-<form enctype="<?php echo apply_filters('frm_form_enctype', 'multipart/form-data', $form) ?>" method="post" class="frm-show-form <?php do_action('frm_form_classes', $form) ?>" id="form_<?php echo esc_attr( $form->form_key ) ?>" <?php echo $frm_settings->use_html ? '' : 'action=""'; ?>>
+<form enctype="<?php echo esc_attr( apply_filters( 'frm_form_enctype', 'multipart/form-data', $form ) ) ?>" method="post" class="frm-show-form <?php do_action('frm_form_classes', $form) ?>" id="form_<?php echo esc_attr( $form->form_key ) ?>" <?php echo $frm_settings->use_html ? '' : 'action=""'; ?>>
 <?php
 include(FrmAppHelper::plugin_path() .'/classes/views/frm-entries/errors.php');
 $form_action = 'create';

@@ -9,7 +9,7 @@ class FrmNotification{
     }
 
     public static function trigger_email($action, $entry, $form) {
-        if ( defined('WP_IMPORTING') ) {
+		if ( defined( 'WP_IMPORTING' ) && WP_IMPORTING  ) {
             return;
         }
 
@@ -378,7 +378,7 @@ class FrmNotification{
             $sent_to = array_filter( $sent_to );
             if ( apply_filters('frm_echo_emails', false) ) {
                 $temp = str_replace('<', '&lt;', $sent_to);
-                echo implode(', ', (array) $temp);
+				echo ' ' . FrmAppHelper::kses( implode(', ', (array) $temp ) );
             }
             return $sent_to;
         }

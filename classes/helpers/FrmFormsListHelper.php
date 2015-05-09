@@ -146,7 +146,7 @@ class FrmFormsListHelper extends FrmListHelper {
         } else {
             foreach ( $forms as $form ) {
 		        $args['id'] = $form->id; ?>
-			<li><a href="<?php echo esc_url( add_query_arg( $args, $base ) ); ?>" tabindex="-1"><?php echo empty( $form->name ) ? __( '(no title)' ) : FrmAppHelper::truncate( $form->name, 33 ); ?></a></li>
+			<li><a href="<?php echo esc_url( add_query_arg( $args, $base ) ); ?>" tabindex="-1"><?php echo esc_html( empty( $form->name ) ? __( '(no title)' ) : FrmAppHelper::truncate( $form->name, 33 ) ); ?></a></li>
 			<?php
 			    unset($form);
 			}

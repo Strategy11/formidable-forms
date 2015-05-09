@@ -137,8 +137,8 @@ class FrmXMLController {
             wp_die( $error );
         }
 
-		$ids = isset( $_POST['frm_export_forms'] ) ? $_POST['frm_export_forms'] : array();
-		$type = isset( $_POST['type'] ) ? $_POST['type'] : array();
+		$ids = FrmAppHelper::get_post_param( 'frm_export_forms', array() );
+		$type = FrmAppHelper::get_post_param( 'type', array() );
 		$format = FrmAppHelper::get_post_param( 'format', 'xml', 'sanitize_title' );
 
         if ( ! headers_sent() && ! $type ) {

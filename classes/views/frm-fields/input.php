@@ -35,7 +35,7 @@ do_action('frm_field_input_html', $field);
             $checked = FrmAppHelper::check_selected($field['value'], $field_val) ? 'checked="checked" ' : ' ';
 
             $other_opt = false;
-            $other_args = FrmAppHelper::prepare_other_input( $field, $other_opt, $checked, array( 'field_name' => $field_name, 'opt_key' => $opt_key ) );
+            $other_args = FrmFieldsHelper::prepare_other_input( compact( 'field_name', 'opt_key', 'field' ), $other_opt, $checked );
             ?>
             <input type="radio" name="<?php echo esc_attr( $field_name ) ?>" id="<?php echo esc_attr( $html_id . '-' . $opt_key ) ?>" value="<?php echo esc_attr( $field_val ) ?>" <?php
             echo $checked;
@@ -46,9 +46,12 @@ do_action('frm_field_input_html', $field);
                 echo ' '. $opt .'</label>';
             }
 
-            if ( $other_opt ) { ?>
-                <input type="text" <?php echo ( $read_only ? ' readonly="readonly" disabled="disabled"' : '' ); ?> class="frm_other_input <?php echo ( $checked != ' ' ? '' : ' frm_pos_none' ); ?>" name="<?php echo esc_attr( $other_args['name'] ) ?>" value="<?php echo esc_attr( $other_args['value'] ); ?>"><?php
-            }
+			FrmFieldsHelper::include_other_input( array(
+				'other_opt' => $other_opt, 'read_only' => $read_only,
+				'checked' => $checked, 'name' => $other_args['name'],
+				'value' => $other_args['value'], 'field' => $field,
+			) );
+
             unset( $other_opt, $other_args );
 ?></div>
 <?php
@@ -73,20 +76,22 @@ do_action('frm_field_input_html', $field);
 			$opt = apply_filters( 'frm_field_label_seen', $opt, $opt_key, $field );
 			$selected = FrmAppHelper::check_selected( $field['value'], $field_val );
 			if ( $other_opt === false ) {
-				$other_args = FrmAppHelper::prepare_other_input( $field, $other_opt, $selected, array( 'field_name' => $field_name, 'opt_key' => $opt_key ) );
-				if ( FrmAppHelper::is_other_opt( $opt_key ) && $selected ) {
+				$other_args = FrmFieldsHelper::prepare_other_input( compact( 'field', 'field_name', 'opt_key' ), $other_opt, $selected );
+				if ( FrmFieldsHelper::is_other_opt( $opt_key ) && $selected ) {
 					$other_checked = true;
 				}
 			}
 			?>
-        <option value="<?php echo esc_attr($field_val) ?>" <?php echo $selected ? ' selected="selected"' : ''; ?><?php echo ( FrmAppHelper::is_other_opt( $opt_key ) ) ? ' class="frm_other_trigger"' : '';?>><?php echo ($opt == '') ? ' ' : $opt; ?></option>
+		<option value="<?php echo esc_attr($field_val) ?>" <?php echo $selected ? ' selected="selected"' : ''; ?><?php echo ( FrmFieldsHelper::is_other_opt( $opt_key ) ) ? ' class="frm_other_trigger"' : '';?>><?php echo ($opt == '') ? ' ' : $opt; ?></option>
     <?php
     	} ?>
 </select>
 <?php
-        if ( $other_opt ) { ?>
-        <input type="text" <?php echo ( $read_only ? 'readonly="readonly" disabled="disabled"' : '' );?> class="frm_other_input<?php echo ( $other_checked ? '' : ' frm_pos_none' ); echo ( $field['multiple'] ? ' frm_other_full' : '' ); ?>" name="<?php echo esc_attr( $other_args['name'] ) ?>" value="<?php echo esc_attr($other_args['value']);?>"><?php
-        }
+		FrmFieldsHelper::include_other_input( array(
+			'other_opt' => $other_opt, 'read_only' => $read_only,
+			'checked' => $other_checked, 'name' => $other_args['name'],
+			'value' => $other_args['value'], 'field' => $field,
+		) );
     }
 } else if ( $field['type'] == 'checkbox' ) {
     $checked_values = $field['value'];
@@ -119,7 +124,7 @@ do_action('frm_field_input_html', $field);
 
             // Check if other opt, and get values for other field if needed
             $other_opt = false;
-            $other_args = FrmAppHelper::prepare_other_input( $field, $other_opt, $checked, array( 'field_name' => $field_name, 'opt_key' => $opt_key ) );
+			$other_args = FrmFieldsHelper::prepare_other_input( compact( 'field', 'field_name', 'opt_key' ), $other_opt, $checked );
 
             ?>
 			<div class="<?php echo esc_attr( apply_filters( 'frm_checkbox_class', 'frm_checkbox', $field, $field_val ) ) ?>" id="frm_checkbox_<?php echo esc_attr( $field['id'] ) ?>-<?php echo esc_attr( $opt_key ) ?>"><?php
@@ -134,9 +139,11 @@ do_action('frm_field_input_html', $field);
                 echo ' '. $opt .'</label>';
             }
 
-            if ( $other_opt ) { ?>
-                <input type="text" <?php echo ( $read_only ? ' readonly="readonly" disabled="disabled"' : '' );?> class="frm_other_input <?php echo ( $checked ? '' : 'frm_pos_none' ); ?>" name="<?php echo esc_attr( $other_args['name'] ) ?>" value="<?php echo esc_attr( $other_args['value'] );?>"><?php
-            }
+			FrmFieldsHelper::include_other_input( array(
+				'other_opt' => $other_opt, 'read_only' => $read_only,
+				'checked' => $checked, 'name' => $other_args['name'],
+				'value' => $other_args['value'], 'field' => $field,
+			) );
 
             unset( $other_opt, $other_args, $checked );
 

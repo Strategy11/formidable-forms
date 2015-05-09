@@ -28,7 +28,7 @@
         <div id="contextual-help-columns">
         <div class="contextual-help-tabs">
         <ul class="frm-category-tabs frm-form-setting-tabs">
-            <?php $a = isset($_GET['t']) ? $_GET['t'] : 'advanced_settings'; ?>
+			<?php $a = FrmAppHelper::simple_get( 't', 'sanitize_title', 'advanced_settings' ); ?>
         	<li <?php echo ($a == 'advanced_settings') ? 'class="tabs active"' : '' ?>><a href="#advanced_settings"><?php _e( 'General', 'formidable' ) ?></a></li>
         	<li <?php echo ($a == 'email_settings') ? 'class="tabs active"' : '' ?>><a href="#email_settings"><?php _e( 'Form Actions', 'formidable' ); ?></a></li>
             <li <?php echo ($a == 'html_settings') ? 'class="tabs active"' : '' ?>><a href="#html_settings"><?php _e( 'Customize HTML', 'formidable' ) ?></a></li>

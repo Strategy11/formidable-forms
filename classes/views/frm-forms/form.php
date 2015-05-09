@@ -10,7 +10,7 @@
         <strong><?php _e( 'Form Key:', 'formidable' ) ?></strong>
 		<div id="editable-post-name" class="frm_ipe_form_key" title="<?php esc_attr_e( 'Click to edit.', 'formidable' ) ?>"><?php echo esc_html( $form->form_key ); ?></div>
         </div>
-        <div id="frm_form_desc" class="frm_ipe_form_desc alignleft"><?php echo ($form->description == '') ? __( '(Click to add description)', 'formidable' ) : force_balance_tags($form->description); ?></div>
+		<div id="frm_form_desc" class="frm_ipe_form_desc alignleft"><?php echo ( $form->description == '' ) ? esc_html__( '(Click to add description)', 'formidable' ) : wp_kses_post( force_balance_tags( $form->description ) ); ?></div>
         <div class="frm_clear"></div>
     </div>
 </div>

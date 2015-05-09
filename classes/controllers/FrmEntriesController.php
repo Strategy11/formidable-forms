@@ -11,7 +11,7 @@ class FrmEntriesController {
 
         add_submenu_page('formidable', 'Formidable | '. __( 'Entries', 'formidable' ), __( 'Entries', 'formidable' ), 'frm_view_entries', 'formidable-entries', 'FrmEntriesController::route' );
 
-		if ( ! isset( $_GET['frm_action'] ) || ! in_array( $_GET['frm_action'], array( 'edit', 'show' ) ) ) {
+		if ( ! in_array( FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' ), array( 'edit', 'show' ) ) ) {
             $frm_settings = FrmAppHelper::get_settings();
 			add_filter( 'manage_' . sanitize_title( $frm_settings->menu ) . '_page_formidable-entries_columns', 'FrmEntriesController::manage_columns' );
 			add_filter( 'manage_' . sanitize_title( $frm_settings->menu ) . '_page_formidable-entries_sortable_columns', 'FrmEntriesController::sortable_columns' );

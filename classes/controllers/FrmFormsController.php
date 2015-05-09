@@ -141,12 +141,13 @@ class FrmFormsController {
         check_ajax_referer( 'frm_ajax', 'nonce' );
         FrmAppHelper::permission_check('frm_edit_forms', 'hide');
 
-        global $wpdb;
-        $values = array( 'form_key' => trim($_POST['update_value']));
+		$form_key = FrmAppHelper::get_post_param( 'update_value', '', 'sanitize_title' );
+		$values = array( 'form_key' => trim( $form_key ) );
 
-        FrmForm::update($_POST['form_id'], $values);
-        $key = FrmForm::getKeyById($_POST['form_id']);
-        echo stripslashes($key);
+		$form_id = FrmAppHelper::get_post_param( 'form_id', '', 'absint' );
+		FrmForm::update( $form_id, $values );
+		$key = FrmForm::getKeyById( $form_id );
+		echo stripslashes( $key );
         wp_die();
     }
 
@@ -154,8 +155,12 @@ class FrmFormsController {
         check_ajax_referer( 'frm_ajax', 'nonce' );
         FrmAppHelper::permission_check('frm_edit_forms', 'hide');
 
-        FrmForm::update($_POST['form_id'], array( 'description' => $_POST['update_value']));
-        $description = FrmAppHelper::use_wpautop(stripslashes($_POST['update_value']));
+		$form_id = FrmAppHelper::get_post_param( 'form_id', '', 'absint' );
+		$value = FrmAppHelper::get_post_param( 'update_value', '', 'wp_filter_post_kses' );
+
+		FrmForm::update( $form_id, array( 'description' => $value ) );
+
+		$description = FrmAppHelper::use_wpautop( stripslashes( $value ) );
         echo $description;
         wp_die();
     }
@@ -215,7 +220,7 @@ class FrmFormsController {
 			FrmForm::destroy( $current_form );
 		}
 
-		echo admin_url( 'admin.php?page=formidable&action=duplicate&id=' . $template_id );
+		echo esc_url( admin_url( 'admin.php?page=formidable&action=duplicate&id=' . $template_id ) );
 		wp_die();
 	}
 
@@ -265,9 +270,13 @@ class FrmFormsController {
 
 		header( 'Content-Type: text/html; charset='. get_option( 'blog_charset' ) );
 
-        $key = (isset($_GET['form']) ? $_GET['form'] : (isset($_POST['form']) ? $_POST['form'] : ''));
-        $form = FrmForm::getAll( array( 'form_key' => $key), '', 1);
-        if ( empty($form) ) {
+		$key = FrmAppHelper::simple_get( 'form', 'sanitize_title' );
+		if ( $key == '' ) {
+			$key = FrmAppHelper::get_post_param( 'form', '', 'sanitize_title' );
+		}
+
+		$form = FrmForm::getAll( array( 'form_key' => $key ), '', 1 );
+		if ( empty( $form ) ) {
 			$form = FrmForm::getAll( array(), '', 1 );
         }
 
@@ -414,7 +423,7 @@ class FrmFormsController {
     public static function get_shortcode_opts() {
         check_ajax_referer( 'frm_ajax', 'nonce' );
 
-        $shortcode = sanitize_text_field( $_POST['shortcode'] );
+		$shortcode = FrmAppHelper::get_post_param( 'shortcode', '', 'sanitize_text_field' );
         if ( empty($shortcode) ) {
             wp_die();
         }
@@ -691,16 +700,16 @@ class FrmFormsController {
     // Insert the form class setting into the form
     public static function form_classes($form) {
         if ( isset($form->options['form_class']) ) {
-            echo esc_attr($form->options['form_class']);
+			echo esc_attr( sanitize_text_field( $form->options['form_class'] ) );
         }
     }
 
     public static function get_email_html() {
         check_ajax_referer( 'frm_ajax', 'nonce' );
 	    echo FrmEntriesController::show_entry_shortcode( array(
-	        'form_id'       => $_POST['form_id'],
+			'form_id'       => FrmAppHelper::get_post_param( 'form_id', '', 'absint' ),
 	        'default_email' => true,
-	        'plain_text'    => $_POST['plain_text'],
+			'plain_text'    => FrmAppHelper::get_post_param( 'plain_text', '', 'absint' ),
 	    ) );
 	    wp_die();
 	}
@@ -708,7 +717,7 @@ class FrmFormsController {
     public static function filter_content( $content, $form, $entry = false ) {
         if ( ! $entry || ! is_object( $entry ) ) {
             if ( ! $entry || ! is_numeric( $entry ) ) {
-                $entry = ( $_POST && isset( $_POST['id'] ) ) ? $_POST['id'] : false;
+				$entry = FrmAppHelper::get_post_param( 'id', false, 'sanitize_title' );
             }
 
             FrmEntriesHelper::maybe_get_entry( $entry );
@@ -780,7 +789,7 @@ class FrmFormsController {
         }
 
         if ( isset( $message ) && ! empty( $message ) ) {
-            echo '<div id="message" class="updated frm_msg_padding">'.$message.'</div>';
+			echo '<div id="message" class="updated frm_msg_padding">' . FrmAppHelper::kses( $message ) . '</div>';
         }
 
         return $errors;
