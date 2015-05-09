@@ -521,7 +521,6 @@ BEFORE_HTML;
 	 * If the message in the global settings is empty, show every validation message in the error box
 	 *
 	 * @param array $args - includes img, errors, and show_img
-	 * @param boolean $show_img
 	 * @since 2.0.6
 	 */
 	public static function show_error( $args ) {

@@ -232,6 +232,10 @@ class FrmAppHelper {
 
 	/**
 	 * @todo Deprecate this and use simple_request instead
+	 *
+	 * @param string $param
+	 * @param mixed $default
+	 * @param string $sanitize
 	 */
 	public static function get_post_param( $param, $default = '', $sanitize = '' ) {
 		return self::simple_request( array( 'type' => 'post', 'param' => $param, 'default' => $default, 'sanitize' => $sanitize ) );
@@ -243,11 +247,15 @@ class FrmAppHelper {
 		}
 	}
 
-    /**
-     * @since 2.0
-     * @param string $action
+	/**
+	 * @since 2.0
+	 *
+	 * @param string $param
+	 * @param string $sanitize
+	 * @param string $default
+	 *
 	 * @todo Deprecate this and use simple_request instead
-     */
+	 */
 	public static function simple_get( $param, $sanitize = 'sanitize_text_field', $default = '' ) {
 		return self::simple_request( array( 'type' => 'get', 'param' => $param, 'default' => $default, 'sanitize' => $sanitize ) );
     }

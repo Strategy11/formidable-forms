@@ -125,6 +125,10 @@ class FrmStylesController {
         include(FrmAppHelper::plugin_path() .'/classes/views/styles/show.php');
     }
 
+	/**
+	 * @param string $message
+	 * @param array $forms
+	 */
     private static function manage($message = '', $forms = array()) {
         $frm_style = new FrmStyle();
         $styles = $frm_style->get_all();
