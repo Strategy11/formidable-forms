@@ -19,6 +19,8 @@
 		<exclude name="WordPress.VIP.RestrictedFunctions.get_term_link"/>
 
 		<!-- Temporary exclusions. Enable these when we have time to address them -->
+		<exclude name="PEAR.Functions.FunctionCallSignature.SpaceAfterOpenBracket" />
+		<exclude name="PEAR.Functions.FunctionCallSignature.SpaceBeforeCloseBracket" />
 		<exclude name="WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid" />
 		<exclude name="Generic.WhiteSpace.DisallowSpaceIndent.SpacesUsed" />
 		<exclude name="Generic.WhiteSpace.ScopeIndent.IncorrectExact" />
