@@ -12,12 +12,12 @@ class FrmSettingsController {
 			}
 		}
 
-        add_submenu_page('formidable', 'Formidable | '. __( 'Global Settings', 'formidable' ), __( 'Global Settings', 'formidable' ), 'frm_change_settings', 'formidable-settings', 'FrmSettingsController::route');
+        add_submenu_page( 'formidable', 'Formidable | ' . __( 'Global Settings', 'formidable' ), __( 'Global Settings', 'formidable' ), 'frm_change_settings', 'formidable-settings', 'FrmSettingsController::route' );
     }
 
     public static function license_box() {
 		$a = FrmAppHelper::simple_get( 't', 'sanitize_title', 'general_settings' );
-        include(FrmAppHelper::plugin_path() .'/classes/views/frm-settings/license_box.php');
+        include( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/license_box.php' );
     }
 
     public static function display_form( $errors = array(), $message = '' ) {
@@ -28,11 +28,11 @@ class FrmSettingsController {
 
         $uploads = wp_upload_dir();
         $target_path = $uploads['basedir'] . '/formidable/css';
-        $sections = apply_filters('frm_add_settings_section', array());
+        $sections = apply_filters( 'frm_add_settings_section', array() );
 
-        $captcha_lang = FrmAppHelper::locales('captcha');
+        $captcha_lang = FrmAppHelper::locales( 'captcha' );
 
-        require(FrmAppHelper::plugin_path() .'/classes/views/frm-settings/form.php');
+        require( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/form.php' );
     }
 
     public static function process_form( $stop_load = false ) {

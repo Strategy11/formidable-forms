@@ -3,7 +3,7 @@ if ( ! defined('ABSPATH') ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-class FrmField{
+class FrmField {
     static $use_cache = true;
 	static $transient_size = 200;
 
