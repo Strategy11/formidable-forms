@@ -36,7 +36,7 @@
 
     if ( $display['default_blank'] ) { ?>
         <span id="frm_clear_on_focus_<?php echo esc_attr( $field['id'] ) ?>" class="frm_clear_on_focus frm-show-click">
-        <?php FrmFieldsHelper::show_default_blank_js($field['default_blank']); ?>
+		<?php FrmFieldsHelper::show_icon_link_js( $field['default_blank'], 'default' ); ?>
         </span>
     <?php } ?>
     <div class="clear"></div>

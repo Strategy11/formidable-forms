@@ -71,10 +71,10 @@ if ( $display['clear_on_focus'] ) { ?>
     <span id="frm_clear_on_focus_<?php echo esc_attr( $field['id'] ) ?>" class="frm-show-click"><?php
 
     if ( $display['default_blank'] ) {
-        FrmFieldsHelper::show_default_blank_js($field['default_blank']);
+		FrmFieldsHelper::show_icon_link_js( $field['default_blank'], 'default' );
     }
 
-    FrmFieldsHelper::show_onfocus_js($field['clear_on_focus']);
+	FrmFieldsHelper::show_icon_link_js( $field['clear_on_focus'], 'onfocus' );
 ?>
     </span>
 <?php
@@ -104,10 +104,10 @@ if ( $display['conf_field'] ) { ?>
 			<span id="frm_clear_on_focus_<?php echo esc_attr( $field['id'] ) ?>_conf" class="frm-show-click">
                 <?php
                 if ( $display['default_blank'] ) {
-                    FrmFieldsHelper::show_default_blank_js($field['default_blank']);
+					FrmFieldsHelper::show_icon_link_js( $field['default_blank'], 'default' );
                 }
 
-                    FrmFieldsHelper::show_onfocus_js($field['clear_on_focus']);
+				FrmFieldsHelper::show_icon_link_js( $field['clear_on_focus'], 'onfocus' );
                 ?>
             </span>
         </div>

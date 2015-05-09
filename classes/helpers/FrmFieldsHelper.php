@@ -1122,7 +1122,6 @@ DEFAULT_HTML;
 
 		$other_opt = true;
 		$other_args = array();
-		$parent = $pointer = '';
 
 		self::set_other_name( $args, $other_args );
 		self::set_other_value( $args, $other_args );
@@ -1160,6 +1159,8 @@ DEFAULT_HTML;
 	 * @since 2.0.6
 	 */
 	private static function set_other_value( $args, &$other_args ) {
+		$parent = $pointer = '';
+
 		// Check for parent ID and pointer
 		$temp_array = explode( '[', $args['field_name'] );
 
@@ -1188,7 +1189,7 @@ DEFAULT_HTML;
 			// hide the field if the other option is not selected
 			$classes[] = 'frm_pos_none';
 		}
-		if ( $field['type'] == 'select' && $args['field']['multiple'] ) {
+		if ( $args['field']['type'] == 'select' && $args['field']['multiple'] ) {
 			$classes[] = 'frm_other_full';
 		}
 
@@ -1197,14 +1198,23 @@ DEFAULT_HTML;
 		?> name="<?php echo esc_attr( $args['name'] ) ?>" value="<?php echo esc_attr( $args['value'] ); ?>"><?php
 	}
 
-    public static function show_onfocus_js($clear_on_focus){ ?>
-    <a href="javascript:void(0)" class="frm_bstooltip <?php echo ($clear_on_focus) ? '' : 'frm_inactive_icon '; ?>frm_default_val_icons frm_action_icon frm_reload_icon frm_icon_font" title="<?php echo esc_attr($clear_on_focus ? __( 'Clear default value when typing', 'formidable' ) : __( 'Do not clear default value when typing', 'formidable' )); ?>"></a>
-    <?php
+    public static function show_onfocus_js($clear_on_focus){
+		_deprecated_function( __FUNCTION__, '2.0.6', 'FrmFieldsHelper::show_icon_link_js' );
+		self::show_icon_link_js( $clear_on_focus, 'onfocus' );
     }
 
-    public static function show_default_blank_js($default_blank){ ?>
-	<a href="javascript:void(0)" class="frm_bstooltip <?php echo $default_blank ? '' : 'frm_inactive_icon '; ?>frm_default_val_icons frm_action_icon frm_error_icon frm_icon_font" title="<?php echo esc_attr( $default_blank ? __( 'Default value will NOT pass form validation', 'formidable' ) : __( 'Default value will pass form validation', 'formidable' ) ); ?>"></a>
-    <?php
+    public static function show_default_blank_js($default_blank){
+		_deprecated_function( __FUNCTION__, '2.0.6', 'FrmFieldsHelper::show_icon_link_js' );
+		self::show_icon_link_js( $default_blank, 'default' );
+    }
+
+    public static function show_icon_link_js( $value, $type = 'onfocus' ) {
+		if ( $type == 'onfocus' ) {
+    		$message = $value ? __( 'Clear default value when typing', 'formidable' ) : __( 'Do not clear default value when typing', 'formidable' );
+		} else {
+			$message = $value ? __( 'Default value will NOT pass form validation', 'formidable' ) : __( 'Default value will pass form validation', 'formidable' );
+		}
+    ?><a href="javascript:void(0)" class="frm_bstooltip <?php echo $value ? '' : 'frm_inactive_icon '; ?>frm_default_val_icons frm_action_icon frm_error_icon frm_icon_font" title="<?php echo esc_attr( $message ); ?>"></a><?php
     }
 
     public static function switch_field_ids($val) {
