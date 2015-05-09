@@ -1508,7 +1508,7 @@ class FrmAppHelper {
 	 *
 	 * @since 2.0.6
 	 */
-	public function save_settings( $settings, $group ) {
+	public static function save_settings( $settings, $group ) {
         $settings['post_content'] = FrmAppHelper::prepare_and_encode( (array) $settings['post_content'] );
 
 		if ( empty( $settings['ID'] ) ) {
