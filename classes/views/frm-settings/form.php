@@ -7,7 +7,7 @@
     <div id="poststuff" class="metabox-holder">
     <div id="post-body">
         <div class="meta-box-sortables">
-        <div class="categorydiv postbox">
+        <div class="categorydiv postbox" id="frm-categorydiv">
         <h3 class="hndle"><span><?php _e( 'Global Settings', 'formidable' ) ?></span></h3>
         <div class="inside frm-help-tabs">
         <div id="contextual-help-back"></div>
