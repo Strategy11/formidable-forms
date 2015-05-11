@@ -401,6 +401,7 @@ class FrmFormAction {
 
 	public function prepare_action($action) {
 	    $action->post_content = FrmAppHelper::maybe_json_decode($action->post_content);
+		$action->post_excerpt = sanitize_title( $action->post_excerpt );
 
         $default_values = $this->get_global_defaults();
 

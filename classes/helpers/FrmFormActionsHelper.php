@@ -25,13 +25,19 @@ class FrmFormActionsHelper {
 
         $settings = array();
         foreach ( $actions as $action ) {
-            if ( ! isset( $action_controls[ $action->post_excerpt ] ) || count( $settings ) >= $limit ) {
+			// some plugins/themes are formatting the post_excerpt
+			$action->post_excerpt = sanitize_title( $action->post_excerpt );
+
+			if ( ! isset( $action_controls[ $action->post_excerpt ] ) ) {
                 continue;
             }
 
             $action = $action_controls[ $action->post_excerpt ]->prepare_action( $action );
+			$action = $settings[ $action->ID ];
 
-            $settings[ $action->ID ] = $action;
+			if ( count( $settings ) >= $limit ) {
+				break;
+			}
         }
 
         if ( 1 === $limit ) {
