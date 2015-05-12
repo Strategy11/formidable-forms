@@ -1217,14 +1217,14 @@ DEFAULT_HTML;
 	public static function show_default_blank_js( $is_selected ) {
 		$atts = array(
 			'icon'        => 'frm_error_icon',
-			'message'     => $is_selected ? __( 'Clear default value when typing', 'formidable' ) : __( 'Do not clear default value when typing', 'formidable' ),
+			'message'     => $is_selected ? __( 'Default value will NOT pass form validation', 'formidable' ) : __( 'Default value will pass form validation', 'formidable' ),
 			'is_selected' => $is_selected,
 		);
 		self::show_icon_link_js( $atts );
 	}
 
 	public static function show_icon_link_js( $atts ) {
-		$atts['icon'] .= $atts['is_selected'] ? '' : ' frm_inactive_icon ';
+		$atts['icon'] .= $atts['is_selected'] ? ' ' : ' frm_inactive_icon ';
 		?><a href="javascript:void(0)" class="frm_bstooltip <?php echo esc_attr( $atts['icon'] ); ?>frm_default_val_icons frm_action_icon frm_icon_font" title="<?php echo esc_attr( $atts['message'] ); ?>"></a><?php
 	}
 
