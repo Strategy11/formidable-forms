@@ -33,7 +33,7 @@ class FrmFormActionsHelper {
             }
 
             $action = $action_controls[ $action->post_excerpt ]->prepare_action( $action );
-			$action = $settings[ $action->ID ];
+			$settings[ $action->ID ] = $action;
 
 			if ( count( $settings ) >= $limit ) {
 				break;
