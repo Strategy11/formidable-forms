@@ -834,7 +834,7 @@ function frmFrontFormJS(){
 						if($fieldCont.length && $fieldCont.is(':visible')){
 							cont_submit=false;
 							if(jump === ''){
-								frmFrontForm.scrollMsg(key, object);
+								frmFrontForm.scrollMsg( key, object, true );
 								jump='#frm_field_'+key+'_container';
 							}
                             var $recapcha = jQuery(object).find('#frm_field_'+key+'_container .g-recaptcha');
@@ -1369,7 +1369,7 @@ function frmFrontFormJS(){
             window.scrollTo(frm_pos.left, frm_pos.top);
         },
 
-		scrollMsg: function(id, object){
+		scrollMsg: function( id, object, animate ) {
 			var newPos = '';
 			if(typeof(object) == 'undefined'){
 				newPos = jQuery(document.getElementById('frm_form_'+id+'_container')).offset().top;
@@ -1385,12 +1385,22 @@ function frmFrontFormJS(){
 			var m=jQuery('html').css('margin-top');
 			var b=jQuery('body').css('margin-top');
 			if(m || b){
-				newPos=newPos-parseInt(m)-parseInt(b);
+				newPos = newPos - parseInt(m) - parseInt(b);
 			}
 
-			var cOff = document.documentElement.scrollTop || document.body.scrollTop;
-			if(newPos && (!cOff || cOff > newPos)){
-				jQuery(window).scrollTop(newPos);
+			if ( newPos && window.innerHeight ) {
+				var screenTop = document.documentElement.scrollTop || document.body.scrollTop;
+				var screenBottom = screenTop + window.innerHeight;
+
+				if( newPos > screenBottom || newPos < screenTop ) {
+					// Not in view
+					if ( typeof animate === 'undefined' ) {
+						jQuery(window).scrollTop(newPos);
+					}else{
+						jQuery('html,body').animate({scrollTop: newPos}, 500);
+					}
+					return false;
+				}
 			}
 		},
 
