@@ -4,7 +4,7 @@ Donate link: http://formidablepro.com/donate
 Tags: admin, AJAX, captcha, contact, contact form, database, email, feedback, form, forms, javascript, jquery, page, plugin, poll, Post, spam, survey, template, widget, wpmu, form builder
 Requires at least: 3.6
 Tested up to: 4.2
-Stable tag: 2.0.04
+Stable tag: 2.0.06
 
 Beautiful forms in 60 seconds. The WordPress form builder that enables you to create forms with a simple drag-and-drop interface and in-place editing.
 
@@ -89,6 +89,18 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 [See more FAQs](http://formidablepro.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 2.0.06 =
+* Fix an XSS vulnerability in the lite version. When the pro version is active, the vulnerability was resolved.
+* Fix the shortcode display on form listing page
+* Add frm_helper_shortcode filter
+* Prevent javascript error on form settings page when WooThemes Helper plugin is active
+* Prevent conflict from unknown plugin/theme that was modifying the post excerpt in form actions, which prevented them from showing
+* Only scroll to the errored field and success message if they are not already in view
+* Make sure admins always have permission to view menus 
+* Pro: Fix datepicker field when the jQuery CSS is set to load on all pages
+* Pro: Added frm_footer_scripts hook
+* Pro: Don't autoselect 0 in scale fields
+
 = 2.0.05 =
 * Remove deprecated jQuery toggle() calls
 * Add html ids to hidden fields
