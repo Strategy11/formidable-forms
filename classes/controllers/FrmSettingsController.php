@@ -4,13 +4,7 @@ class FrmSettingsController {
 
     public static function menu() {
 		// Make sure admins can see the menu items
-		if ( current_user_can( 'administrator' ) && ! current_user_can( 'frm_change_settings' ) ) {
-			$role = get_role( 'administrator' );
-			$frm_roles = FrmAppHelper::frm_capabilities();
-			foreach ( $frm_roles as $frm_role => $frm_role_description ) {
-				$role->add_cap( $frm_role );
-			}
-		}
+		FrmAppHelper::force_capability( 'frm_change_settings' );
 
         add_submenu_page( 'formidable', 'Formidable | ' . __( 'Global Settings', 'formidable' ), __( 'Global Settings', 'formidable' ), 'frm_change_settings', 'formidable-settings', 'FrmSettingsController::route' );
     }

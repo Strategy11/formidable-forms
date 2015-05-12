@@ -132,10 +132,11 @@ class Tests_Frm_Ajax extends WP_Ajax_UnitTestCase {
         // create user
         $user_id = $this->factory->user->create( array( 'role' => $role ) );
 		$user = new WP_User($user_id);
-		$this->assertTrue($user->exists(), "Problem getting user $user_id");
+		$this->assertTrue( $user->exists(), 'Problem getting user ' . $user_id );
 
         // log in as user
         wp_set_current_user($user_id);
         $this->$user_id = $user_id;
+		$this->assertTrue( current_user_can( $role ) );
     }
 }

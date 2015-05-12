@@ -112,39 +112,14 @@ class WP_Test_WordPress_Plugin_Tests extends FrmUnitTest {
             $this->assertNotEmpty( $id );
         }
     }
-
-    function test_migrate_from_12_to_17() {
-        update_option('frm_db_version', 12);
-
-        $form = FrmForm::getOne('contact-db12');
-        $this->assertTrue( $form ? true : false );
-        $this->assertTrue( is_numeric($form->id) );
-        $notification = array( 0 => array(
-            'email_to' => 'emailto@test.com', 'also_email_to' => array(1,2),
-            'reply_to' => 'replyto@test.com', 'reply_to_name' => 'Reply to me',
-            'cust_reply_to' => '', 'cust_reply_to_name' => '', 'plain_text' => 1,
-            'email_message' => 'This is my email message. [default-message]',
-            'email_subject' => 'The subject', 'update_email' => 2, 'inc_user_info' => 1,
-        ) );
-        $form->options['notification'] = $notification;
-
-        global $wpdb;
-        $updated = $wpdb->update($wpdb->prefix .'frm_forms', array( 'options' => maybe_serialize($form->options)), array( 'id' => $form->id));
-		FrmForm::clear_form_cache();
-        $this->assertEquals( $updated, 1 );
-
-		$form = FrmForm::getOne( 'contact-db12' );
-
-		$this->assertNotEmpty( $form->options, 'The form settings are empty' );
-		$this->assertTrue( isset( $form->options['notification'] ), 'The old notification settings are missing' );
-		$this->assertEquals( $form->options['notification'][0]['email_to'], 'emailto@test.com' );
-
-        // migrate data
-		FrmAppController::install();
-
-		$form_actions = FrmFormActionsHelper::get_action_for_form( $form->id, 'email' );
-        foreach ( $form_actions as $action ) {
-			$this->assertTrue( strpos( $action->post_content['email_to'], 'emailto@test.com' ) !== false );
-        }
-    }
 }
+
+/**
+*
+* Namespacing allows more flexibility
+* 	- Mock objects without real data
+* Check out PHPUnit test doubles, PHPunit data providers, Test-driven development (TDD)
+* qunit/phantomjs for js unit testing
+* See: "Browser Eyeballing != Javascript testing" by Jordna Kaspar
+*
+*/

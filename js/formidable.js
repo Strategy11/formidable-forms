@@ -3,12 +3,14 @@ function frmFrontFormJS(){
 	var show_fields = [];
 	var hide_later = [];
     var frm_checked_dep = [];
+	var action = '';
+	var jsErrors = [];
 
 	function setNextPage(e){
 		/*jshint validthis:true */
 		var $thisObj = jQuery(this);
 		var thisType = $thisObj.attr('type');
-		if ( thisType != 'submit' ) {
+		if ( thisType !== 'submit' ) {
 			e.preventDefault();
 		}
 
@@ -16,16 +18,16 @@ function frmFrontFormJS(){
 		var v = '';
 		var d = '';
 		var thisName = this.name;
-		if ( thisName == 'frm_prev_page' || this.className.indexOf('frm_prev_page') !== -1 ) {
+		if ( thisName === 'frm_prev_page' || this.className.indexOf('frm_prev_page') !== -1 ) {
 			v = jQuery(f).find('.frm_next_page').attr('id').replace('frm_next_p_', '');
-		} else if ( thisName == 'frm_save_draft' || this.className.indexOf('frm_save_draft') !== -1 ) {
+		} else if ( thisName === 'frm_save_draft' || this.className.indexOf('frm_save_draft') !== -1 ) {
 			d = 1;
 		}
 
 		jQuery('.frm_next_page').val(v);
 		jQuery('.frm_saving_draft').val(d);
 
-		if ( thisType != 'submit' ) {
+		if ( thisType !== 'submit' ) {
 			f.trigger('submit');
 		}
 	}
@@ -56,18 +58,18 @@ function frmFrontFormJS(){
         var select = false;
 
         // Dropdowns
-        if ( type == 'select-one' ) {
+        if ( type === 'select-one' ) {
             select = true;
             var curOpt = this.options[this.selectedIndex];
-            if ( curOpt.className == 'frm_other_trigger' ) {
+            if ( curOpt.className === 'frm_other_trigger' ) {
                 other = true;
             }
-        } else if ( type == 'select-multiple' ) {
+        } else if ( type === 'select-multiple' ) {
             select = true;
             var allOpts = this.options;
             other = false;
             for ( var i = 0; i < allOpts.length; i++ ) {
-                if ( allOpts[i].className == 'frm_other_trigger' ) {
+                if ( allOpts[i].className === 'frm_other_trigger' ) {
                     if ( allOpts[i].selected ) {
                         other = true;
                         break;
@@ -90,13 +92,13 @@ function frmFrontFormJS(){
             }
 
         // Radio
-        } else if ( type == 'radio' ) {
+        } else if ( type === 'radio' ) {
 			if ( jQuery(this).is(':checked' ) ) {
 				jQuery(this).closest('.frm_radio').children('.frm_other_input').removeClass('frm_pos_none');
 				jQuery(this).closest('.frm_radio').siblings().children('.frm_other_input').addClass('frm_pos_none').val('');
 			}
         // Checkboxes
-        } else if ( type == 'checkbox' ) {
+        } else if ( type === 'checkbox' ) {
             if ( this.checked ) {
                 jQuery(this).closest('.frm_checkbox').children('.frm_other_input').removeClass('frm_pos_none'); 
             } else {
@@ -131,7 +133,7 @@ function frmFrontFormJS(){
 		}
 
 		// Check if 'this' is an other text field and get field ID for it
-		if ( 'other' == field_id ) {
+		if ( 'other' === field_id ) {
 			if ( isRepeating ) {
 				// name for other fields: item_meta[370][0][other][414]
 				field_id = nameParts[3].replace('[', '');
@@ -145,28 +147,28 @@ function frmFrontFormJS(){
 	}
 	
 	function checkDependentField(selected, field_id, rec, parentField, reset){
-		if(typeof(__FRMRULES) == 'undefined'){
+		if ( typeof __FRMRULES  === 'undefined' ) {
 			return;
 		}
 
 		var all_rules=__FRMRULES;
 		var rules = all_rules[field_id];
-		if ( typeof rules =='undefined'){
+		if ( typeof rules === 'undefined' ) {
 			return;
 		}
 
-		if ( typeof(rec) == 'undefined' || rec === null ) {
+		if ( typeof(rec) === 'undefined' || rec === null ) {
 			//stop recursion?
 			rec = 'go';
 		}
 
-        if ( reset != 'persist' ) {
+		if ( reset !== 'persist' ) {
             show_fields = []; // reset this variable after each click
         }
 		var this_opts = [];
 		for ( var i = 0, l = rules.length; i < l; i++ ) {
             var rule = rules[i];
-            if ( typeof rule != 'undefined' ) {
+            if ( typeof rule !== 'undefined' ) {
                 for ( var j = 0, rcl = rule.Conditions.length; j < rcl; j++ ) {
 					var c = rule.Conditions[j];
 					c.HideField = rule.Setting.FieldName;
@@ -179,20 +181,20 @@ function frmFrontFormJS(){
 
 		var len = this_opts.length;
 		for ( i = 0, l = len; i < l; i++ ) {
-            if ( this_opts[i].FieldName == field_id ) {
+            if ( this_opts[i].FieldName === field_id ) {
 			    hideOrShowField(i, this_opts[i], field_id, selected, rec, parentField);
             } else {
                 hideOrShowField(i, this_opts[i], field_id, selected, rec);
             }
 			
-			if ( i == (len-1) ) {
+			if ( i === ( len - 1 ) ) {
 				hideFieldLater(rec);
 			}
 		}
 	}
 
 	function hideOrShowField(i, f, field_id, selected, rec, parentField){
-		if ( typeof show_fields[f.HideField] == 'undefined' ) { 
+		if ( typeof show_fields[f.HideField] === 'undefined' ) {
 			show_fields[f.HideField] = [];
 		}
 
@@ -246,13 +248,13 @@ function frmFrontFormJS(){
 			f.hideBy = '.';
 		}
 
-		if ( f.FieldName != field_id || typeof selected == 'undefined' || selected == 'und' ) {
-			if ( (f.Type == 'radio' || f.Type == 'data-radio') && parentField.attr('type') == 'radio') {
+		if ( f.FieldName !== field_id || typeof selected === 'undefined' || selected === 'und' ) {
+			if ( ( f.Type === 'radio' || f.Type === 'data-radio' ) && parentField.attr('type') === 'radio' ) {
 				selected = jQuery('input[name="'+ f.inputName +'"]:checked').val();
-                if ( typeof selected == 'undefined' ) {
+                if ( typeof selected === 'undefined' ) {
                     selected = '';
                 }
-			} else if ( f.Type == 'select' || f.Type == 'time' || f.Type == 'data-select' || (f.Type != 'checkbox' && f.Type != 'data-checkbox')) {
+			} else if ( f.Type === 'select' || f.Type === 'time' || f.Type === 'data-select' || ( f.Type !== 'checkbox' && f.Type !== 'data-checkbox' ) ) {
 				selected = parentField.val();
 			}
 		}
@@ -750,6 +752,12 @@ function frmFrontFormJS(){
 
 	function getOptionValue( thisField, currentOpt ) {
 		return jQuery(currentOpt).val();
+	}
+
+	function getAjaxFormErrors( object ) {
+		if ( typeof frmThemeOverride_jsErrors == 'function' ) {
+			jsErrors = frmThemeOverride_jsErrors( action, object );
+		}
 	}
 
 	function getFormErrors(object, action){
@@ -1331,11 +1339,9 @@ function frmFrontFormJS(){
 			}
 
 			var object = this;
-			var action = jQuery(object).find('input[name="frm_action"]').val();
-			var jsErrors = [];
-			if ( typeof frmThemeOverride_jsErrors == 'function' ) {
-				jsErrors = frmThemeOverride_jsErrors( action );
-			}
+			action = jQuery(object).find('input[name="frm_action"]').val();
+			jsErrors = [];
+			getAjaxFormErrors( object );
 
 			if ( jsErrors.length === 0 ) {
 				getFormErrors( object, action );

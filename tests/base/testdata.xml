@@ -198,6 +198,19 @@
 		</field>
 		<field>
 		    <id>14</id>
+            <field_key><![CDATA[date14]]></field_key>
+            <name><![CDATA[Date]]></name>
+            <description><![CDATA[]]></description>
+            <type><![CDATA[date]]></type>
+            <default_value><![CDATA[]]></default_value>
+            <field_order>7</field_order>
+            <form_id>2</form_id>
+            <required>1</required>
+            <options><![CDATA[]]></options>
+            <field_options><![CDATA[{"max":"10","blank":""}]]></field_options>
+		</field>
+		<field>
+		    <id>14</id>
             <field_key><![CDATA[62n6q3]]></field_key>
             <name><![CDATA[Captcha]]></name>
             <description><![CDATA[]]></description>

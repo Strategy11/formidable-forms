@@ -535,6 +535,7 @@ class FrmFieldsController {
         self::add_html_size($field, $add_html);
         self::add_html_length($field, $add_html);
         self::add_html_placeholder($field, $add_html, $class);
+		self::add_html_required( $field, $add_html );
 
         $class = apply_filters('frm_field_classes', implode(' ', $class), $field);
 
@@ -656,6 +657,15 @@ class FrmFieldsController {
             }
         }
     }
+
+	/**
+	 * @since 2.0.6
+	 */
+	private static function add_html_required( $field, &$add_html ) {
+		if ( FrmFieldsHelper::is_required_field( $field ) && ! in_array( $field['type'], array( 'data', 'radio', 'checkbox' ) ) ) {
+			$add_html['required'] = 'required';
+		}
+	}
 
     private static function add_shortcodes_to_html( $field, array &$add_html ) {
         if ( ! isset( $field['shortcodes'] ) || empty( $field['shortcodes'] ) ) {

@@ -3,11 +3,7 @@
 class FrmEntriesController {
 
     public static function menu() {
-		if ( current_user_can( 'administrator' ) && ! current_user_can( 'frm_view_entries' ) ) {
-            global $wp_roles;
-            $wp_roles->add_cap( 'administrator', 'frm_view_entries' );
-            $wp_roles->add_cap( 'administrator', 'frm_delete_entries' );
-        }
+		FrmAppHelper::force_capability( 'frm_view_entries' );
 
         add_submenu_page('formidable', 'Formidable | '. __( 'Entries', 'formidable' ), __( 'Entries', 'formidable' ), 'frm_view_entries', 'formidable-entries', 'FrmEntriesController::route' );
 

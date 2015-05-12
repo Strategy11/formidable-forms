@@ -90,9 +90,16 @@ class FrmFieldsHelper {
             return $field['type'] == 'checkbox' || ( $field['type'] == 'data' && isset($field['data_type']) && $field['data_type'] == 'checkbox' ) || self::is_multiple_select( $field );
         } else {
 			// For field object
-            return $field->type == 'checkbox' || ( $field->type == 'data' && $field->field_options['data_type'] == 'checkbox' ) || self::is_multiple_select($field);
+			return $field->type == 'checkbox' || ( $field->type == 'data' && isset( $field->field_options['data_type'] ) && $field->field_options['data_type'] == 'checkbox' ) || self::is_multiple_select($field);
         }
     }
+
+	/**
+	 * @since 2.0.6
+	 */
+	public static function is_required_field( $field ) {
+		return $field['required'] != '0';
+	}
 
     /**
      * If $field is numeric, get the field object
@@ -341,7 +348,7 @@ DEFAULT_HTML;
         $html = str_replace('[key]', $field['field_key'], $html);
 
         //replace [description] and [required_label] and [error]
-        $required = ($field['required'] == '0') ? '' : $field['required_indicator'];
+		$required = self::is_required_field( $field ) ? $field['required_indicator'] : '';
         if ( ! is_array( $errors ) ) {
             $errors = array();
         }
@@ -361,7 +368,7 @@ DEFAULT_HTML;
         }
 
         //replace [required_class]
-        $required_class = ($field['required'] == '0') ? '' : ' frm_required_field';
+        $required_class = self::is_required_field( $field ) ? ' frm_required_field' : '';
         $html = str_replace('[required_class]', $required_class, $html);
 
         //replace [label_position]

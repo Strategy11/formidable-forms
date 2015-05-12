@@ -10,6 +10,9 @@ class WP_Test_FrmNotification extends FrmUnitTest {
 		$this->assertTrue( true );
 	}
 
+	/**
+	 * @covers FrmNotification::trigger_email
+	 */
 	public function test_trigger_email(){
 		// get the imported form with the email action
 		$form = $this->get_one_form( 'contact-with-email' );
@@ -36,9 +39,9 @@ class WP_Test_FrmNotification extends FrmUnitTest {
 			FrmNotification::trigger_email( $action, $entry, $form );
 
 			$this->assertEquals( 'address@tld.com', $GLOBALS['phpmailer']->mock_sent[0]['to'][0][0] );
-			//$this->assertNotEmpty( strpos( $GLOBALS['phpmailer']->mock_sent[0]['header'], 'Reply-To: test@test.com' ) );
+			//$this->assertNotEmpty( strpos( $GLOBALS['phpmailer']->mock_sent[0]['header'], 'Reply-To: admin@example.org' ) );
 
-			// TODO: check email body, cc, bcc, from
+			// TODO: check email body, reply to, cc, bcc, from
 		}
 	}
 }

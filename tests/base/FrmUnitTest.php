@@ -28,20 +28,30 @@ class FrmUnitTest extends WP_UnitTestCase {
 
 		FrmAppController::install();
 
-		global $wpdb;
-		$exists = $wpdb->query( 'DESCRIBE ' . $wpdb->prefix . 'frm_fields' );
-		$this->assertTrue( $exists ? true : false );
-
-		$exists = $wpdb->query( 'DESCRIBE ' . $wpdb->prefix . 'frm_forms' );
-		$this->assertTrue( $exists ? true : false );
-
-		$exists = $wpdb->query( 'DESCRIBE ' . $wpdb->prefix . 'frm_items' );
-		$this->assertTrue( $exists ? true : false );
-
-		$exists = $wpdb->query( 'DESCRIBE ' . $wpdb->prefix . 'frm_item_metas' );
-		$this->assertTrue( $exists ? true : false );
-
+		$this->do_tables_exist();
 		$this->import_xml();
+	}
+
+	function get_table_names() {
+		global $wpdb;
+
+		$tables = array(
+			$wpdb->prefix . 'frm_fields', $wpdb->prefix . 'frm_forms',
+			$wpdb->prefix . 'frm_items',  $wpdb->prefix . 'frm_item_metas',
+		);
+		if ( is_multisite() && is_callable( 'FrmProCopy::table_name' ) ) {
+			$tables[] = FrmProCopy::table_name();
+		}
+
+		return $tables;
+	}
+
+	function do_tables_exist( $should_exist = true ) {
+		global $wpdb;
+		$method = $should_exist ? 'assertNotEmpty' : 'assertEmpty';
+		foreach ( $this->get_table_names() as $table_name ) {
+			$this->$method( $wpdb->query( 'DESCRIBE ' . $table_name ), $table_name . ' table failed to (un)install' );
+		}
 	}
 
     function import_xml() {
@@ -77,7 +87,9 @@ class FrmUnitTest extends WP_UnitTestCase {
 
         // log in as user
         wp_set_current_user( $user_id );
-		FrmAppHelper::maybe_add_permissions();
+		$this->assertTrue( current_user_can( $role ), 'Failed setting the current user role' );
+
+		FrmAppHelper::maybe_add_permissions( 'frm_view_entries' );
     }
 
 	/**
@@ -86,7 +98,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 	function set_field_value( $field ) {
 		$value = rand_str();
 		$field_values = array(
-			'email'  => 'test@test.com',
+			'email'  => 'admin@example.org',
 			'url'    => 'http://test.com',
 			'number' => 120,
 			'date'   => '2015-01-01',
@@ -97,6 +109,43 @@ class FrmUnitTest extends WP_UnitTestCase {
 		}
 
 		return $value;
+	}
+
+	function set_front_end() {
+		set_current_screen( 'front' );
+		$this->clean_up_global_scope();
+		$this->go_to( home_url( '/' ) );
+		$this->assertFalse( is_admin(), 'Failed to switch to the front-end' );
+	}
+
+	function set_admin_screen( $page = 'index.php' ) {
+		global $current_screen;
+
+		$screens = array(
+			'index.php' => array( 'base' => 'dashboard', 'id' => 'dashboard' ),
+		);
+
+		$screen = $screens[ $page ];
+
+		$_GET = $_POST = $_REQUEST = array();
+		$GLOBALS['taxnow'] = $GLOBALS['typenow'] = '';
+		$screen = (object) $screen;
+		$hook = parse_url( $page );
+
+		if ( ! empty( $hook['query'] ) ) {
+			$args = wp_parse_args( $hook['query'] );
+			if ( isset( $args['taxonomy'] ) )
+				$GLOBALS['taxnow'] = $_GET['taxonomy'] = $_POST['taxonomy'] = $_REQUEST['taxonomy'] = $args['taxonomy'];
+			if ( isset( $args['post_type'] ) )
+				$GLOBALS['typenow'] = $_GET['post_type'] = $_POST['post_type'] = $_REQUEST['post_type'] = $args['post_type'];
+			else if ( isset( $screen->post_type ) )
+				$GLOBALS['typenow'] = $_GET['post_type'] = $_POST['post_type'] = $_REQUEST['post_type'] = $screen->post_type;
+		}
+
+		$GLOBALS['hook_suffix'] = $hook['path'];
+		set_current_screen();
+
+		$this->assertEquals( $screen->id, $current_screen->id, $page );
 	}
 
     /**
