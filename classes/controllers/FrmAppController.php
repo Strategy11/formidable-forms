@@ -296,27 +296,36 @@ class FrmAppController {
         }
     }
 
-
     public static function custom_stylesheet() {
         global $frm_vars;
-        $css_file = array();
+		$stylesheet_urls = array();
+		self::maybe_enqueue_jquery_css();
 
         if ( ! isset( $frm_vars['css_loaded'] ) || ! $frm_vars['css_loaded'] ) {
             //include css in head
-            $uploads = FrmStylesHelper::get_upload_base();
-            if ( is_readable( $uploads['basedir'] . '/formidable/css/formidablepro.css' ) ) {
-                $css_file['formidable'] = $uploads['baseurl'] . '/formidable/css/formidablepro.css';
-            } else {
-                $css_file['formidable'] = admin_url( 'admin-ajax.php' ) . '?action=frmpro_css';
-            }
+			self::get_url_to_custom_style( $stylesheet_urls );
         }
 
-        if ( isset( $frm_vars['datepicker_loaded'] ) && ! empty( $frm_vars['datepicker_loaded'] ) ) {
-            FrmStylesHelper::enqueue_jquery_css();
-        }
-
-        return $css_file;
+		return $stylesheet_urls;
     }
+
+	private static function get_url_to_custom_style( &$stylesheet_urls ) {
+		$uploads = FrmStylesHelper::get_upload_base();
+		$saved_css_path = '/formidable/css/formidablepro.css';
+		if ( is_readable( $uploads['basedir'] . $saved_css_path ) ) {
+			$url = $uploads['baseurl'] . $saved_css_path;
+		} else {
+			$url = admin_url( 'admin-ajax.php' ) . '?action=frmpro_css';
+		}
+		$stylesheet_urls['formidable'] = $url;
+	}
+
+	private static function maybe_enqueue_jquery_css() {
+		global $frm_vars;
+		if ( isset( $frm_vars['datepicker_loaded'] ) && ! empty( $frm_vars['datepicker_loaded'] ) ) {
+			FrmStylesHelper::enqueue_jquery_css();
+		}
+	}
 
     public static function load_css() {
         $css = get_transient( 'frmpro_css' );
