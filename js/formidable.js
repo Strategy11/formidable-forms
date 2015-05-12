@@ -1360,8 +1360,12 @@ function frmFrontFormJS(){
 			}
 		},
 
+		checkFormErrors: function(object, action){
+			getFormErrors( object, action );
+		},
+
         scrollToID: function(id){
-            var frm_pos = jQuery(document.getElementBtId(id).offset());
+            var frm_pos = jQuery(document.getElementById(id).offset());
             window.scrollTo(frm_pos.left, frm_pos.top);
         },
 
