@@ -795,7 +795,7 @@ function frmFrontFormJS(){
 				}else if(typeof errObj != 'object'){
 					jQuery(object).find('.frm_ajax_loading').removeClass('frm_loading_now');
 					var formID = jQuery(object).find('input[name="form_id"]').val();
-					jQuery(object).closest( document.getElementById('frm_form_'+ formID +'_container') ).replaceWith(errObj);
+					jQuery(object).closest( '#frm_form_'+ formID +'_container' ).replaceWith(errObj);
 					frmFrontForm.scrollMsg( formID );
 
 					if(typeof(frmThemeOverride_frmAfterSubmit) == 'function'){
