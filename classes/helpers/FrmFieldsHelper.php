@@ -1205,24 +1205,28 @@ DEFAULT_HTML;
 		?> name="<?php echo esc_attr( $args['name'] ) ?>" value="<?php echo esc_attr( $args['value'] ); ?>"><?php
 	}
 
-	public static function show_onfocus_js( $clear_on_focus ) {
-		_deprecated_function( __FUNCTION__, '2.0.6', 'FrmFieldsHelper::show_icon_link_js' );
-		self::show_icon_link_js( $clear_on_focus, 'onfocus' );
-    }
+	public static function show_onfocus_js( $is_selected ) {
+		$atts = array(
+			'icon'        => 'frm_reload_icon',
+			'message'     => $is_selected ? __( 'Clear default value when typing', 'formidable' ) : __( 'Do not clear default value when typing', 'formidable' ),
+			'is_selected' => $is_selected,
+		);
+		self::show_icon_link_js( $atts );
+	}
 
-	public static function show_default_blank_js( $default_blank ) {
-		_deprecated_function( __FUNCTION__, '2.0.6', 'FrmFieldsHelper::show_icon_link_js' );
-		self::show_icon_link_js( $default_blank, 'default' );
-    }
+	public static function show_default_blank_js( $is_selected ) {
+		$atts = array(
+			'icon'        => 'frm_error_icon',
+			'message'     => $is_selected ? __( 'Clear default value when typing', 'formidable' ) : __( 'Do not clear default value when typing', 'formidable' ),
+			'is_selected' => $is_selected,
+		);
+		self::show_icon_link_js( $atts );
+	}
 
-    public static function show_icon_link_js( $value, $type = 'onfocus' ) {
-		if ( $type == 'onfocus' ) {
-    		$message = $value ? __( 'Clear default value when typing', 'formidable' ) : __( 'Do not clear default value when typing', 'formidable' );
-		} else {
-			$message = $value ? __( 'Default value will NOT pass form validation', 'formidable' ) : __( 'Default value will pass form validation', 'formidable' );
-		}
-    ?><a href="javascript:void(0)" class="frm_bstooltip <?php echo $value ? '' : 'frm_inactive_icon '; ?>frm_default_val_icons frm_action_icon frm_error_icon frm_icon_font" title="<?php echo esc_attr( $message ); ?>"></a><?php
-    }
+	public static function show_icon_link_js( $atts ) {
+		$atts['icon'] .= $atts['is_selected'] ? '' : ' frm_inactive_icon ';
+		?><a href="javascript:void(0)" class="frm_bstooltip <?php echo esc_attr( $atts['icon'] ); ?>frm_default_val_icons frm_action_icon frm_icon_font" title="<?php echo esc_attr( $atts['message'] ); ?>"></a><?php
+	}
 
     public static function switch_field_ids($val) {
         global $frm_duplicate_ids;
