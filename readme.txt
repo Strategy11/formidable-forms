@@ -91,6 +91,7 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 == Changelog ==
 = 2.0.06 =
 * Fix an XSS vulnerability in the lite version. When the pro version is active, the vulnerability was resolved.
+* Increased security
 * Fix the shortcode display on form listing page
 * Add frm_helper_shortcode filter
 * Prevent javascript error on form settings page when WooThemes Helper plugin is active

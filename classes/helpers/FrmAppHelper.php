@@ -681,7 +681,7 @@ class FrmAppHelper {
     * @return boolean Returns true if current field option is an "Other" option
     */
     public static function is_other_opt( $opt_key ) {
-        _deprecated_function( __FUNCTION__, '2.0.6', 'FrmFieldsHelper::is_other_optt' );
+        _deprecated_function( __FUNCTION__, '2.0.6', 'FrmFieldsHelper::is_other_opt' );
         return FrmFieldsHelper::is_other_opt( $opt_key );
     }
 
