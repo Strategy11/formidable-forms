@@ -768,10 +768,6 @@ function frmFrontFormJS(){
 			jQuery(object).find('input[name="frm_action"]').val();
 		}
 
-		var jump = '';
-		var newPos = 0;
-		var cOff = 0;
-
 		jQuery.ajax({
 			type:'POST',url:frm_js.ajax_url,
 			data:jQuery(object).serialize() +'&action=frm_entries_'+ action +'&nonce='+frm_js.nonce,
@@ -798,25 +794,19 @@ function frmFrontFormJS(){
 					object.submit();
 				}else if(typeof errObj != 'object'){
 					jQuery(object).find('.frm_ajax_loading').removeClass('frm_loading_now');
-					jump=jQuery(object).closest(document.getElementById('frm_form_'+jQuery(object).find('input[name="form_id"]').val()+'_container'));
-					var offset = jump.offset();
-					if ( typeof offset !== 'undefined' ) {
-						newPos = offset.top;
-					}
-					jump.replaceWith(errObj);
-					cOff = document.documentElement.scrollTop || document.body.scrollTop;
-					if(newPos && frm_js.offset != -1 && newPos > frm_js.offset && cOff > newPos){
-						jQuery(window).scrollTop(newPos-frm_js.offset);
-					}
+					var formID = jQuery(object).find('input[name="form_id"]').val();
+					jQuery(object).closest( document.getElementById('frm_form_'+ formID +'_container') ).replaceWith(errObj);
+					frmFrontForm.scrollMsg( formID );
+
 					if(typeof(frmThemeOverride_frmAfterSubmit) == 'function'){
-						var fin = jQuery(errObj).find('input[name="form_id"]').val();
-						var p = '';
-						if(fin) p = jQuery('input[name="frm_page_order_'+fin+'"]').val();
-						frmThemeOverride_frmAfterSubmit(fin,p,errObj,object);
+						var pageOrder = jQuery('input[name="frm_page_order_'+ formID +'"]').val();
+						var formReturned = jQuery(errObj).find('input[name="form_id"]').val();
+						frmThemeOverride_frmAfterSubmit(formReturned, pageOrder, errObj, object);
 					}
-					if(jQuery(object).find('input[name="id"]').length){
-						var eid = jQuery(object).find('input[name="id"]').val();
-						jQuery(document.getElementById('frm_edit_'+eid)).find('a').addClass('frm_ajax_edited').click();
+
+					var entryIdField = jQuery(object).find('input[name="id"]');
+					if(entryIdField.length){
+						jQuery(document.getElementById('frm_edit_'+ entryIdField.val())).find('a').addClass('frm_ajax_edited').click();
 					}
 				}else{
 					jQuery(object).find('input[type="submit"], input[type="button"]').removeAttr('disabled');
@@ -826,7 +816,7 @@ function frmFrontFormJS(){
 					var cont_submit=true;
 					jQuery('.form-field').removeClass('frm_blank_field');
 					jQuery('.form-field .frm_error').replaceWith('');
-					jump = '';
+					var jump = '';
 					var show_captcha = false;
                     var $fieldCont = null;
 					for (var key in errObj){
