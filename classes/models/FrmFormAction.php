@@ -372,7 +372,7 @@ class FrmFormAction {
             $query['menu_order'] = $this->form_id;
         }
 
-		$actions = FrmAppHelper::check_cache( serialize( $query ), 'frm_actions', $query, 'get_posts' );
+		$actions = FrmAppHelper::check_cache( serialize( $query ) . '_type_' . $type, 'frm_actions', $query, 'get_posts' );
         unset($query);
 
         remove_filter( 'posts_where' , 'FrmFormActionsController::limit_by_type' );
