@@ -93,7 +93,7 @@ class WP_Test_WordPress_Plugin_Tests extends FrmUnitTest {
             }
 
             $id = FrmForm::destroy( $form->id );
-            $this->assertNotEmpty( $id );
+            $this->assertNotEmpty( $id, 'Failed to delete form ' . $form->form_key );
         }
     }
 }
