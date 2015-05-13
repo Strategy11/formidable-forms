@@ -1,6 +1,6 @@
 <?php
 
-class WP_Test_FrmProEntriesContrller extends FrmUnitTest {
+class WP_Test_FrmProEntriesController extends FrmUnitTest {
 	public function test_add_js() {
         $frm_settings = FrmAppHelper::get_settings();
 
@@ -22,7 +22,7 @@ class WP_Test_FrmProEntriesContrller extends FrmUnitTest {
 	public function test_footer_js() {
 		$this->set_front_end();
 
-		$form = do_shortcode( '[formidable id="contact-with-email"]' );
+		$form = do_shortcode( '[formidable id="' . $this->contact_form_key . '"]' );
 		$this->assertNotEmpty( $form );
 
         ob_start();

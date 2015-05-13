@@ -1,10 +1,6 @@
 <?php
 
 class WP_Test_FrmNotification extends FrmUnitTest {
-    function setUp() {
-		parent::setUp();
-		$this->frm_install();
-	}
 
 	public function test_class_is_tested() {
 		$this->assertTrue( true );
@@ -15,7 +11,7 @@ class WP_Test_FrmNotification extends FrmUnitTest {
 	 */
 	public function test_trigger_email(){
 		// get the imported form with the email action
-		$form = $this->get_one_form( 'contact-with-email' );
+		$form = $this->get_one_form( $this->contact_form_key );
 
 		// get the email settings
 		$actions = FrmFormActionsHelper::get_action_for_form( $form->id, 'email' );

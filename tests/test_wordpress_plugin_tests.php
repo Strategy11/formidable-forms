@@ -2,22 +2,6 @@
 
 class WP_Test_WordPress_Plugin_Tests extends FrmUnitTest {
 
-	/**
-	 * Ensure that the plugin has been installed and activated.
-	 */
-    function setUp() {
-		parent::setUp();
-
-        if ( is_callable('FrmUpdatesController::pro_is_authorized') ) {
-            // set pro flag
-            update_option('frmpro-credentials', array( 'license' => '87fu-uit7-896u-ihy8'));
-            update_option('pro_auth_store', true);
-            add_filter('frm_pro_installed', '__return_true');
-        }
-
-		$this->frm_install();
-	}
-
 	function test_plugin_activated() {
 		$this->assertTrue( is_plugin_active( 'formidable/formidable.php' ) );
 	}

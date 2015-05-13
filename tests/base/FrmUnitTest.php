@@ -19,6 +19,16 @@ class FrmUnitTest extends WP_UnitTestCase {
 	 */
 	protected $user_id = 0;
 
+	protected $contact_form_key = 'contact-with-email';
+
+	/**
+	 * Ensure that the plugin has been installed and activated.
+	 */
+	function setUp() {
+		parent::setUp();
+		$this->frm_install();
+	}
+
     /* Helper Functions */
 	function frm_install() {
 		if ( ! defined( 'WP_IMPORTING' ) ) {
