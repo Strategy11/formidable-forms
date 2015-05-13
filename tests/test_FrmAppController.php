@@ -26,7 +26,7 @@ class WP_Test_FrmAppController extends FrmUnitTest {
 		if ( $frm_settings->load_style == 'all' ) {
 			$this->assertTrue( $style_included !== false, 'The formidablepro stylesheet is missing' );
 		} else {
-			$this->assertTrue( $style_included === false, 'The formidablepro stylesheet is included when it should not be' );
+			$this->assertFalse( $style_included, 'The formidablepro stylesheet is included when it should not be' );
 		}
 	}
 
@@ -67,11 +67,11 @@ class WP_Test_FrmAppController extends FrmUnitTest {
 	}
 
 	private function check_menu( $allow = 'allow' ) {
-		update_option( 'siteurl', 'http://example.com' );
+		$url = get_option( 'siteurl', true );
 		do_action( 'admin_menu' );
 
 		$expected = array(
-			'formidable' => 'http://example.com/wp-admin/admin.php?page=formidable',
+			'formidable' => $url . '/wp-admin/admin.php?page=formidable',
 		);
 
 		foreach ( $expected as $name => $value ) {

@@ -10,6 +10,7 @@ class WP_Test_WordPress_Plugin_Tests extends FrmUnitTest {
         if ( is_callable('FrmProCopy::install') ) {
 	        $copy = new FrmProCopy();
 	        $copy->install();
+			$this->do_tables_exist( true );
         }
 	}
 
@@ -72,30 +73,9 @@ class WP_Test_WordPress_Plugin_Tests extends FrmUnitTest {
         }
 
         $items = FrmEntry::getAll($s_query, '', '', true, false);
-        $this->assertFalse(empty($items));
+		$this->assertNotEmpty( $items );
     }
 
-    function test_duplicate_form(){
-        $form = $this->get_one_form( 'contact' );
-
-        $id = FrmForm::duplicate( $form->id );
-        $this->assertTrue( is_numeric($id) );
-        $this->assertTrue( $id > 0 );
-    }
-
-    function test_delete_form(){
-        $forms = FrmForm::getAll();
-        $this->assertTrue( count( $forms ) >= 1 );
-
-        foreach ( $forms as $form ) {
-            if ( $form->is_template ) {
-                continue;
-            }
-
-            $id = FrmForm::destroy( $form->id );
-            $this->assertNotEmpty( $id, 'Failed to delete form ' . $form->form_key );
-        }
-    }
 }
 
 /**
