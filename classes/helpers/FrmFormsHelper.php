@@ -229,9 +229,10 @@ class FrmFormsHelper {
 
 	/**
 	 * @param array $options
+	 * @param array $values
 	 * @since 2.0.6
 	 */
-	public static function fill_form_options( &$options ) {
+	public static function fill_form_options( &$options, $values ) {
 		$defaults = self::get_default_opts();
 		foreach ( $defaults as $var => $default ) {
 			$options[ $var ] = isset( $values['options'][ $var ] ) ? $values['options'][ $var ] : $default;

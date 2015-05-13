@@ -25,7 +25,7 @@ class FrmForm {
         );
 
         $options = array();
-		FrmFormsHelper::fill_form_options( $options );
+		FrmFormsHelper::fill_form_options( $options, $values );
 
         $options['before_html'] = isset($values['options']['before_html']) ? $values['options']['before_html'] : FrmFormsHelper::get_default_html('before');
         $options['after_html'] = isset($values['options']['after_html']) ? $values['options']['after_html'] : FrmFormsHelper::get_default_html('after');
@@ -172,7 +172,7 @@ class FrmForm {
         }
 
         $options = array();
-		FrmFormsHelper::fill_form_options( $options );
+		FrmFormsHelper::fill_form_options( $options, $values );
 
         $options['custom_style'] = isset($values['options']['custom_style']) ? $values['options']['custom_style'] : 0;
         $options['before_html'] = isset($values['options']['before_html']) ? $values['options']['before_html'] : FrmFormsHelper::get_default_html('before');
