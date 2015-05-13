@@ -220,7 +220,7 @@ class FrmFormsController {
 			FrmForm::destroy( $current_form );
 		}
 
-		echo esc_url( admin_url( 'admin.php?page=formidable&action=duplicate&id=' . $template_id ) );
+		echo admin_url( 'admin.php?page=formidable&action=duplicate&id=' . $template_id );
 		wp_die();
 	}
 

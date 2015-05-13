@@ -414,7 +414,7 @@ class FrmAppController {
 
 			//disable the plugin and redirect after uninstall so the tables don't get added right back
 			deactivate_plugins( FrmAppHelper::plugin_folder() . '/formidable.php', false, false );
-			echo esc_url( admin_url( 'plugins.php?deactivate=true' ) );
+			echo admin_url( 'plugins.php?deactivate=true' );
         } else {
             $frm_settings = FrmAppHelper::get_settings();
             wp_die( $frm_settings->admin_permission );
