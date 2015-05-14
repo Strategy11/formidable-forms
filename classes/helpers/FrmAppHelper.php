@@ -211,9 +211,9 @@ class FrmAppHelper {
             if ( ! isset( $_POST[ $param ] ) && isset( $_GET[ $param ] ) && ! is_array( $value ) ) {
                 $value = stripslashes_deep( htmlspecialchars_decode( urldecode( $_GET[ $param ] ) ) );
             }
-			self::sanitize_value( $value, $sanitize );
+			self::sanitize_value( $sanitize, $value );
 		} else {
-            $value = self::simple_request( array( 'type' => 'post', 'param' => $param, 'default' => $default, 'sanitize' => $sanitize ) );
+            $value = self::get_simple_request( array( 'type' => $src, 'param' => $param, 'default' => $default, 'sanitize' => $sanitize ) );
         }
 
 		if ( isset( $params ) && is_array( $value ) && ! empty( $value ) ) {
@@ -231,20 +231,13 @@ class FrmAppHelper {
     }
 
 	/**
-	 * @todo Deprecate this and use simple_request instead
 	 *
 	 * @param string $param
 	 * @param mixed $default
 	 * @param string $sanitize
 	 */
 	public static function get_post_param( $param, $default = '', $sanitize = '' ) {
-		return self::simple_request( array( 'type' => 'post', 'param' => $param, 'default' => $default, 'sanitize' => $sanitize ) );
-	}
-
-	public static function sanitize_value( &$value, $sanitize ) {
-		if ( ! empty( $sanitize ) ) {
-			$value = call_user_func( $sanitize, $value );
-		}
+		return self::get_simple_request( array( 'type' => 'post', 'param' => $param, 'default' => $default, 'sanitize' => $sanitize ) );
 	}
 
 	/**
@@ -253,11 +246,9 @@ class FrmAppHelper {
 	 * @param string $param
 	 * @param string $sanitize
 	 * @param string $default
-	 *
-	 * @todo Deprecate this and use simple_request instead
 	 */
 	public static function simple_get( $param, $sanitize = 'sanitize_text_field', $default = '' ) {
-		return self::simple_request( array( 'type' => 'get', 'param' => $param, 'default' => $default, 'sanitize' => $sanitize ) );
+		return self::get_simple_request( array( 'type' => 'get', 'param' => $param, 'default' => $default, 'sanitize' => $sanitize ) );
     }
 
 	/**
@@ -265,7 +256,7 @@ class FrmAppHelper {
 	 *
 	 * @since 2.0.6
 	 */
-	public static function simple_request( $args ) {
+	public static function get_simple_request( $args ) {
 		$defaults = array(
 			'param' => '', 'default' => '',
 			'type' => 'get', 'sanitize' => 'sanitize_text_field',
@@ -287,15 +278,25 @@ class FrmAppHelper {
 			}
 		}
 
-		self::sanitize_value( $value, $args['sanitize'] );
+		self::sanitize_value( $args['sanitize'], $value );
 		return $value;
+	}
+
+	public static function sanitize_value( $sanitize, &$value ) {
+		if ( ! empty( $sanitize ) ) {
+			if ( is_array( $value ) ) {
+				$value = array_map( $sanitize, $value );
+			} else {
+				$value = call_user_func( $sanitize, $value );
+			}
+		}
 	}
 
     public static function sanitize_request( $sanitize_method, &$values ) {
         $temp_values = $values;
         foreach ( $temp_values as $k => $val ) {
             if ( isset( $sanitize_method[ $k ] ) ) {
-				call_user_func( $sanitize_method[ $k ], $val );
+				$values[ $k ] = call_user_func( $sanitize_method[ $k ], $val );
             }
         }
     }

@@ -34,7 +34,7 @@ class FrmSettingsController {
 
         $frm_settings = FrmAppHelper::get_settings();
 
-		$process_form = FrmAppHelper::simple_request( array( 'param' => 'process_form', 'sanitize' => 'sanitize_text_field', 'type' => 'post' ) );
+		$process_form = FrmAppHelper::get_post_param( 'process_form', '', 'sanitize_text_field' );
 		if ( ! wp_verify_nonce( $process_form, 'process_form_nonce' ) ) {
             wp_die( $frm_settings->admin_permission );
         }
