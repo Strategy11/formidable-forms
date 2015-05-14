@@ -88,6 +88,19 @@ class FrmUnitTest extends WP_UnitTestCase {
 		return $fields;
 	}
 
+	/**
+	* Set the global current user to 1
+	*/
+	function set_current_user_to_1( ) {
+		$user_id = 1;
+		$user = get_user_by( 'id', $user_id );
+		if ( $user == false ) {
+			$user_id = $this->set_as_user_role( 'admin' );
+		} else {
+			wp_set_current_user( $user_id );
+		}
+	}
+
     function set_as_user_role( $role ) {
         // create user
         $user_id = $this->factory->user->create( array( 'role' => $role ) );
@@ -100,6 +113,8 @@ class FrmUnitTest extends WP_UnitTestCase {
 		$this->assertTrue( current_user_can( $role ), 'Failed setting the current user role' );
 
 		FrmAppHelper::maybe_add_permissions( 'frm_view_entries' );
+
+		return $user_id;
     }
 
 	/**
