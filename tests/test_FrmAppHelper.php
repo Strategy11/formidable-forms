@@ -18,8 +18,8 @@ class WP_Test_FrmAppHelper extends FrmUnitTest {
 	 */
 	function test_plugin_folder() {
 		$folder = FrmAppHelper::plugin_folder();
-		$expected = 'formidable';
-		$this->assertEquals( $folder, $expected );
+		$expected = array( 'formidable', 'formidable-forms' );
+		$this->assertTrue( in_array( $folder, $expected ) );
 	}
 
 	/**
@@ -94,16 +94,103 @@ class WP_Test_FrmAppHelper extends FrmUnitTest {
 	 * @covers FrmAppHelper::get_param
 	 */
 	function test_get_param() {
-		$_GET['test'] = 'test';
+		$set_value = '<script></script>test';
+		$expected_value = 'test';
+		$_GET['test'] = $_POST['test2'] = $_POST['item_meta'][25] = $set_value;
+
 		$result = FrmAppHelper::get_param( 'test', '', 'get', 'sanitize_text_field' );
-		$this->assertEquals( $result, 'test' );
+		$this->assertEquals( $result, $expected_value );
 
-		$_POST['test2'] = 'test';
 		$result = FrmAppHelper::get_param( 'test2', '', 'post', 'sanitize_text_field' );
-		$this->assertEquals( $result, 'test' );
+		$this->assertEquals( $result, $expected_value );
 
-		$_POST['item_meta'][25] = 'test';
-		$result = FrmAppHelper::get_param( 'item_meta[25]', '', 'post' );
-		$this->assertEquals( $result, 'test' );
+		$result = FrmAppHelper::get_param( 'item_meta[25]', '', 'post', 'sanitize_text_field' );
+		$this->assertEquals( $result, $expected_value );
+	}
+
+	/**
+	 * @covers FrmAppHelper::get_post_param
+	 * @covers FrmAppHelper::get_simple_request
+	 */
+	function test_get_post_param() {
+		$set_value = '<script></script>test';
+		$expected_value = 'test';
+		$_POST['test3'] = $set_value;
+
+		$result = FrmAppHelper::get_post_param( 'test3', '', 'sanitize_text_field' );
+		$this->assertEquals( $result, $expected_value );
+	}
+
+	/**
+	 * @covers FrmAppHelper::sanitize_value
+	 */
+	function test_sanitize_value() {
+		$set_value = '<script></script>test';
+		$expected_value = 'test';
+		FrmAppHelper::sanitize_value( 'sanitize_text_field', $set_value );
+		$this->assertEquals( $set_value, $expected_value );
+	}
+
+	/**
+	 * @covers FrmAppHelper::simple_get
+	 * @covers FrmAppHelper::get_simple_request
+	 */
+	function test_simple_get() {
+		$set_value = '<script></script>test';
+		$expected_value = 'test';
+		$_GET['test4'] = $set_value;
+
+		$result = FrmAppHelper::simple_get( 'test4' );
+		$this->assertEquals( $result, $expected_value );
+	}
+
+	/**
+	 * @covers FrmAppHelper::sanitize_request
+	 */
+	function test_sanitize_request() {
+		$values = array(
+			'form_id' => '<script></script>12',
+            'frm_action' => '<script></script>create me',
+            'form_key'   => '<script></script>This is a <b>text</b> field',
+			'content'    => '<script></script>This is a <b>text</b> field',
+		);
+
+        $sanitize_method = array(
+            'form_id'    => 'absint',
+            'frm_action' => 'sanitize_title',
+            'form_key'   => 'sanitize_text_field',
+			'content'    => 'wp_kses_post',
+        );
+
+        FrmAppHelper::sanitize_request( $sanitize_method, $values );
+
+		$this->assertEquals( $values['form_id'], absint( $values['form_id'] ) );
+		$this->assertEquals( $values['frm_action'], sanitize_title( $values['frm_action'] ) );
+		$this->assertEquals( $values['form_key'], sanitize_text_field( $values['form_key'] ) );
+		$this->assertEquals( $values['content'], wp_kses_post( $values['content'] ) );
+	}
+
+	/**
+	 * @covers FrmAppHelper::kses
+	 */
+	function test_kses() {
+		$start_value = '<script><script>Hello, <a href="/test">click here</a>';
+
+		$stripped_value = FrmAppHelper::kses( $start_value );
+		$this->assertEquals( $stripped_value, 'Hello, click here' );
+
+		$stripped_value = FrmAppHelper::kses( $start_value, array( 'a' ) );
+		$this->assertEquals( $stripped_value, 'Hello, <a href="/test">click here</a>' );
+	}
+
+	/**
+	 * @covers FrmAppHelper::remove_get_action
+	 */
+	function test_remove_get_action() {
+		$_GET['action'] = 'bulk_trash';
+		$start_url = $_SERVER['REQUEST_URI'] = admin_url( 'admin.php?page=formidable&action=bulk_trash' );
+		FrmAppHelper::remove_get_action();
+		$new_url = FrmAppHelper::get_server_value( 'REQUEST_URI' );
+		$this->assertNotEquals( $new_url, $start_url );
 	}
 }

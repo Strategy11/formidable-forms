@@ -26,6 +26,11 @@ class FrmUnitTest extends WP_UnitTestCase {
 	 */
 	function setUp() {
 		parent::setUp();
+
+		$this->factory->form = new Form_Factory( $this );
+		$this->factory->field = new Field_Factory( $this );
+		$this->factory->entry = new Entry_Factory( $this );
+
 		$this->frm_install();
 	}
 
@@ -69,7 +74,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 		add_filter( 'frm_default_templates_files', 'FrmUnitTest::install_data' );
         FrmXMLController::add_default_templates();
 
-        $form = $this->get_one_form( 'contact-db12' );
+        $form = $this->factory->form->get_object_by_id( 'contact-db12' );
         $this->assertEquals( $form->form_key, 'contact-db12' );
     }
 

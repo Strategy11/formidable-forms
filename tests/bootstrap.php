@@ -28,5 +28,7 @@ if ( version_compare( phpversion(), '5.3', '>=' ) && file_exists( dirname( __FIL
 	include( dirname( __FILE__ ) . '/../vendor/autoload.php' );
 }
 
+require_once dirname( __FILE__ ) . '/base/frm_factory.php';
+
 // include unit test base class
 require_once dirname( __FILE__ ) . '/base/FrmUnitTest.php';

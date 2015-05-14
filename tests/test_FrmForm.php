@@ -15,7 +15,7 @@ class WP_Test_FrmForm extends FrmUnitTest {
 	 * @covers FrmForm::duplicate
 	 */
 	function test_duplicate(){
-		$form = $this->get_one_form( 'contact' );
+		$form = $this->factory->form->get_object_by_id( 'contact' );
 
 		$id = FrmForm::duplicate( $form->id );
 		$this->assertTrue( is_numeric( $id ) );
@@ -42,4 +42,5 @@ class WP_Test_FrmForm extends FrmUnitTest {
 			$this->assertEmpty( $subforms_exist, 'Failed to delete child forms for parent form ' . $form->form_key );
 		}
 	}
+	
 }

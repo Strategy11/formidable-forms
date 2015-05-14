@@ -11,23 +11,15 @@ class WP_Test_FrmNotification extends FrmUnitTest {
 	 */
 	public function test_trigger_email(){
 		// get the imported form with the email action
-		$form = $this->get_one_form( $this->contact_form_key );
+		$form = $this->factory->form->get_object_by_id( $this->contact_form_key );
 
 		// get the email settings
 		$actions = FrmFormActionsHelper::get_action_for_form( $form->id, 'email' );
 		$this->assertNotEmpty( $actions );
 
-		$entry_data = array(
-			'form_id'   => $form->id,
-			'item_meta' => array(),
-		);
+		$entry_data = $this->factory->field->generate_entry_array( $form );
+		$entry_id = $this->factory->entry->create( $entry_data );
 
-		$form_fields = $this->get_fields( $form->id );
-		foreach ( $form_fields as $field ) {
-			$entry_data['item_meta'][ $field->id ] = $this->set_field_value( $field );
-		}
-
-		$entry_id = $this->create_entry( $entry_data );
 		$entry = FrmEntry::getOne( $entry_id, true );
 		$this->assertNotEmpty( $entry );
 
