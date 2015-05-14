@@ -751,7 +751,127 @@ function frmFrontFormJS(){
     }
 
 	function getOptionValue( thisField, currentOpt ) {
-		return jQuery(currentOpt).val();
+		var thisVal;
+
+		// If current option is an other option, get other value
+		if ( isOtherOption( thisField, currentOpt ) ) {
+			thisVal = getOtherValue( thisField, currentOpt );
+		// Else, get option value normally
+		} else {
+			thisVal = jQuery(currentOpt).val();
+		}
+
+		return thisVal;
+	}
+
+	/* Check if current option is an "Other" option */
+	function isOtherOption( thisField, currentOpt ) {
+		var isOtherOpt = false;
+
+		if ( thisField.type == 'checkbox' || thisField.type == 'radio' ) {
+			isOtherOpt = isOtherCheckboxRadioOpt( thisField, currentOpt )
+		} else if ( thisField.type == 'select' ) {
+			isOtherOpt = isOtherSelectOpt( thisField, currentOpt );
+		}
+
+		return isOtherOpt;
+	}
+
+	/* Return true if current option is an Other option in radio/checkbox field */
+	/* Note that both the CB/radio option and the text field will return true when hidden */
+	function isOtherCheckboxRadioOpt( thisField, currentOpt ) {
+		var isOtherOpt = false;
+
+		// Get the base of the option ids
+		var idBase = thisField.key.replace( '[id^="', '');
+		idBase = idBase.replace( '"]', '' );
+
+		// Remove the base from the current option id
+		var optKey = currentOpt.id.replace( idBase, '' );
+
+		// If 'other' appears in the option key, this is an Other option
+		if ( optKey.indexOf( 'other' ) > -1 ) {
+			isOtherOpt = true;
+		}
+
+		return isOtherOpt;
+	}
+
+	/* Return true if current option is an Other option in dropdown field */
+	function isOtherSelectOpt( thisField, currentOpt ) {
+		var isOtherOpt = false;
+
+		if ( currentOpt.type == 'hidden' ) {
+			var otherName = currentOpt.name.replace( 'item_meta', 'item_meta[other]' );
+			if ( document.getElementsByName( otherName ).length ) {
+				isOtherOpt = true;
+			}
+		} else {
+			var optClass = currentOpt.className;
+			if ( optClass && optClass.indexOf( 'frm_other_trigger' ) > -1 ) {
+				isOtherOpt = true;
+			}
+		}
+
+		return isOtherOpt;
+	}
+
+	/* Get value from Other text field */
+	function getOtherValue( thisField, currentOpt ) {
+		var otherVal = 0;
+
+		if ( currentOpt.type == 'hidden' ) {
+			if ( thisField.type == 'select' ) {
+				otherVal = getHiddenOtherSelectValue( currentOpt );
+			} else {
+				otherVal = getHiddenOtherCheckboxRadioValue( currentOpt );
+			}
+		} else if ( thisField.type == 'select' ) {
+			otherVal = getOtherSelectValue( currentOpt );
+		} else {
+			otherVal = getOtherCheckboxRadioValue( thisField, currentOpt );
+		}
+
+		if ( typeof otherVal === 'undefined' ) {
+			otherVal = 0;
+		}
+
+		return otherVal;
+	}
+
+	/* Get value from Other text field when dropdown field is hidden */
+	function getHiddenOtherSelectValue( currentOpt ) {
+		var otherName = '';
+		var otherVal = '';
+
+		if ( currentOpt.name.indexOf( '[other]' ) > -1 ) {
+			otherName = currentOpt.name;
+		} else {
+			otherName = currentOpt.name.replace( 'item_meta', 'item_meta[other]' );
+		}
+		if ( otherName ) {
+			otherVal = document.getElementsByName(otherName)[0].value;
+		}
+		return otherVal;
+	}
+
+	/* Get value from Other text field when radio/checkbox field is hidden */
+	function getHiddenOtherCheckboxRadioValue( currentOpt ) {
+		// If field name is like this: item_meta[8139][other_4], always return 0
+		// If like this: item_meta[other][8139][other_4], get the value
+		if ( currentOpt.name.indexOf('item_meta[other]') > -1 ) {
+			return currentOpt.value;
+		}
+	}
+
+	/* Get value from Other text field in a dropdown field */
+	function getOtherSelectValue( currentOpt ) {
+		return jQuery(currentOpt).closest('.frm_other_container').children('.frm_other_input').val();
+	}
+
+	/* Get value from Other text field in a Checkbox/radio field */
+	function getOtherCheckboxRadioValue( thisField, currentOpt ) {
+		return jQuery(currentOpt).closest('.frm_' + thisField.type).children('.frm_other_input').val();
 	}
 
 	function getAjaxFormErrors( object ) {
