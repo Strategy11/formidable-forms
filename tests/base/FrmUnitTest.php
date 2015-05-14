@@ -78,21 +78,6 @@ class FrmUnitTest extends WP_UnitTestCase {
         $this->assertEquals( $form->form_key, 'contact-db12' );
     }
 
-    function get_one_form( $form_key ) {
-        $form = FrmForm::getOne( $form_key );
-        $this->assertNotEmpty( $form, 'Problem getting form ' . $form_key );
-        return $form;
-    }
-
-	/**
-	 * Get all fields in a form
-	 */
-	function get_fields( $form_id ) {
-		$fields = FrmField::get_all_for_form( $form_id );
-		$this->assertNotEmpty( $fields );
-		return $fields;
-	}
-
 	/**
 	* Set the global current user to 1
 	*/
@@ -121,25 +106,6 @@ class FrmUnitTest extends WP_UnitTestCase {
 
 		return $user_id;
     }
-
-	/**
-	 * When creating an entry, set the correct data formats
-	 */
-	function set_field_value( $field ) {
-		$value = rand_str();
-		$field_values = array(
-			'email'  => 'admin@example.org',
-			'url'    => 'http://test.com',
-			'number' => 120,
-			'date'   => '2015-01-01',
-		);
-
-		if ( isset( $field_values[ $field->type ] ) ) {
-			$value = $field_values[ $field->type ];
-		}
-
-		return $value;
-	}
 
 	function set_front_end() {
 		set_current_screen( 'front' );
@@ -177,24 +143,6 @@ class FrmUnitTest extends WP_UnitTestCase {
 
 		$this->assertEquals( $screen->id, $current_screen->id, $page );
 	}
-
-    /**
-	 * create an entry
-	 */
-    function create_entry( $values = array() ) {
-        $default_values = array(
-            'form_id'   => $this->form_id,
-            'item_key'  => rand_str(),
-            'item_meta' => $this->field_ids,
-        );
-		$values = array_merge( $default_values, $values );
-        $entry_id = FrmEntry::create( $values );
-
-	    $this->assertTrue( is_numeric( $entry_id ) );
-        $this->assertTrue( $entry_id > 0 );
-
-		return $entry_id;
-    }
 
     static function install_data() {
         return array( dirname( __FILE__ ) . '/testdata.xml' );
