@@ -2,7 +2,7 @@
 /**
  * @group ajax
  */
-class Tests_Frm_Ajax extends WP_Ajax_UnitTestCase {
+class Tests_Frm_Ajax extends FrmAjaxUnitTest {
 	/**
 	 * form_id
 	 * @var int
@@ -27,15 +27,14 @@ class Tests_Frm_Ajax extends WP_Ajax_UnitTestCase {
 
 	public function setUp() {
 		parent::setUp();
-        FrmAppController::install();
 
 		// Set a user so the $post has 'post_author'
 		$this->user_id = $this->factory->user->create( array( 'role' => 'administrator' ) );
 		wp_set_current_user( $this->user_id );
 
-        $values = FrmFormsHelper::setup_new_vars(false);
-        $form_id = FrmForm::create( $values );
-        $this->form_id = (int) $form_id;
+		$form = $this->factory->form->create_and_get();
+		$this->assertNotEmpty( $form );
+		$this->form_id = $form->id;
 	}
 
 	function test_plugin_activated() {

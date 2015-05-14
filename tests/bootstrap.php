@@ -32,3 +32,4 @@ require_once dirname( __FILE__ ) . '/base/frm_factory.php';
 
 // include unit test base class
 require_once dirname( __FILE__ ) . '/base/FrmUnitTest.php';
+require_once dirname( __FILE__ ) . '/base/FrmAjaxUnitTest.php';

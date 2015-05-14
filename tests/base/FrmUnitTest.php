@@ -26,12 +26,11 @@ class FrmUnitTest extends WP_UnitTestCase {
 	 */
 	function setUp() {
 		parent::setUp();
+		$this->frm_install();
 
 		$this->factory->form = new Form_Factory( $this );
 		$this->factory->field = new Field_Factory( $this );
 		$this->factory->entry = new Entry_Factory( $this );
-
-		$this->frm_install();
 	}
 
     /* Helper Functions */
@@ -74,7 +73,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 		add_filter( 'frm_default_templates_files', 'FrmUnitTest::install_data' );
         FrmXMLController::add_default_templates();
 
-        $form = $this->factory->form->get_object_by_id( 'contact-db12' );
+        $form = FrmForm::getOne( 'contact-db12' );
         $this->assertEquals( $form->form_key, 'contact-db12' );
     }
 
@@ -83,7 +82,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 	*/
 	function set_current_user_to_1( ) {
 		$user_id = 1;
-		$user = get_user_by( 'id', $user_id );
+		$user = $this->factory->user->get_object_by_id( $user_id );
 		if ( $user == false ) {
 			$user_id = $this->set_as_user_role( 'admin' );
 		} else {
@@ -93,18 +92,16 @@ class FrmUnitTest extends WP_UnitTestCase {
 
     function set_as_user_role( $role ) {
         // create user
-        $user_id = $this->factory->user->create( array( 'role' => $role ) );
-		$user = new WP_User( $user_id );
+		$user = $this->factory->user->create_and_get( array( 'role' => $role ) );
+		$this->assertTrue( $user->exists(), 'Problem getting user' );
 
-		$this->assertTrue( $user->exists(), 'Problem getting user ' . $user_id );
-
-        // log in as user
-        wp_set_current_user( $user_id );
+		// log in as user
+		wp_set_current_user( $user->ID );
 		$this->assertTrue( current_user_can( $role ), 'Failed setting the current user role' );
 
 		FrmAppHelper::maybe_add_permissions( 'frm_view_entries' );
 
-		return $user_id;
+		return $user->ID;
     }
 
 	function set_front_end() {
