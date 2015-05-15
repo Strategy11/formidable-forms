@@ -35,7 +35,7 @@ class FrmFormsController {
         $errors = self::process_bulk_form_actions( array());
         $errors = apply_filters('frm_admin_list_form_action', $errors);
 
-        return self::display_forms_list($params, '', false, $errors);
+		return self::display_forms_list( $params, '', $errors );
     }
 
 	public static function new_form( $values = array() ) {
@@ -220,7 +220,7 @@ class FrmFormsController {
 			FrmForm::destroy( $current_form );
 		}
 
-		echo admin_url( 'admin.php?page=formidable&action=duplicate&id=' . $template_id );
+		echo esc_url_raw( admin_url( 'admin.php?page=formidable&action=duplicate&id=' . $template_id ) );
 		wp_die();
 	}
 
@@ -332,7 +332,7 @@ class FrmFormsController {
 
         $message = sprintf(_n( '%1$s form permanently deleted.', '%1$s forms permanently deleted.', $count, 'formidable' ), $count);
 
-        self::display_forms_list($params, $message, 1);
+		self::display_forms_list( $params, $message );
     }
 
     public static function bulk_destroy($ids) {
@@ -355,14 +355,14 @@ class FrmFormsController {
         //check nonce url
         $permission_error = FrmAppHelper::permission_nonce_error('frm_delete_forms', '_wpnonce', 'bulk-toplevel_page_formidable');
         if ( $permission_error !== false ) {
-			self::display_forms_list( array(), '', 1, array( $permission_error ) );
+			self::display_forms_list( array(), '', array( $permission_error ) );
             return;
         }
 
         $count = self::scheduled_delete(time());
         $message = sprintf(_n( '%1$s form permanently deleted.', '%1$s forms permanently deleted.', $count, 'formidable' ), $count);
 
-		self::display_forms_list( array(), $message, 1 );
+		self::display_forms_list( array(), $message );
     }
 
     /**
@@ -459,8 +459,12 @@ class FrmFormsController {
         wp_die();
     }
 
-    public static function display_forms_list( $params = array(), $message = '', $current_page_ov = false, $errors = array() ) {
+	public static function display_forms_list( $params = array(), $message = '', $errors = array(), $deprecated_errors = array() ) {
         FrmAppHelper::permission_check( 'frm_view_forms' );
+		if ( ! empty( $deprecated_errors ) ) {
+			$errors = $deprecated_errors;
+			_deprecated_argument( 'errors', '2.0.8' );
+		}
 
         global $wpdb, $frm_vars;
 
@@ -1015,29 +1019,40 @@ class FrmFormsController {
 
         $frm_settings = FrmAppHelper::get_settings();
 
-        // don't show a draft form on a page
-		global $post;
-        if ( $form->status == 'draft' && current_user_can( 'frm_edit_forms' ) && ( ! $post || $post->ID != $frm_settings->preview_page_id ) && ! FrmAppHelper::is_preview_page() ) {
-            return __( 'Please select a valid form', 'formidable' );
-        }
+		if ( self::is_viewable_draft_form( $form ) ) {
+			// don't show a draft form on a page
+			$form = __( 'Please select a valid form', 'formidable' );
+		} else if ( self::user_should_login( $form ) ) {
+			$form = do_shortcode( $frm_settings->login_msg );
+		} else if ( self::user_has_permission_to_view( $form ) ) {
+			$form = do_shortcode( $frm_settings->login_msg );
+		} else {
+			$form = self::get_form( $form, $title, $description, $atts );
 
-        // don't show the form if user should be logged in
-        if ( $form->logged_in && ! is_user_logged_in() ) {
-            return do_shortcode( $frm_settings->login_msg );
-        }
+			/**
+			 * Use this shortcode to check for external shortcodes that may span
+			 * across multiple fields in the customizable HTML
+			 * @since 2.0.8
+			 */
+			$form = apply_filters( 'frm_filter_final_form', $form );
+		}
 
-        // don't show the form if user doesn't have permission
-        if ( $form->logged_in && get_current_user_id() && isset( $form->options['logged_in_role'] ) && $form->options['logged_in_role'] != '' && ! FrmAppHelper::user_has_permission( $form->options['logged_in_role'] ) ) {
-            return do_shortcode( $frm_settings->login_msg );
-        }
-
-        $form = self::get_form( $form, $title, $description, $atts );
-
-        // check for external shortcodes
-        $form = do_shortcode( $form );
-
-        return $form;
+		return $form;
     }
+
+	private static function is_viewable_draft_form( $form ) {
+		global $post;
+		$frm_settings = FrmAppHelper::get_settings();
+		return $form->status == 'draft' && current_user_can( 'frm_edit_forms' ) && ( ! $post || $post->ID != $frm_settings->preview_page_id ) && ! FrmAppHelper::is_preview_page();
+	}
+
+	private static function user_should_login( $form ) {
+		return $form->logged_in && ! is_user_logged_in();
+	}
+
+	private static function user_has_permission_to_view( $form ) {
+		return $form->logged_in && get_current_user_id() && isset( $form->options['logged_in_role'] ) && $form->options['logged_in_role'] != '' && ! FrmAppHelper::user_has_permission( $form->options['logged_in_role'] );
+	}
 
     public static function get_form( $form, $title, $description, $atts = array() ) {
         ob_start();

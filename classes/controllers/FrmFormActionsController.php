@@ -219,14 +219,17 @@ class FrmFormActionsController {
         }
         $old_actions = array_diff( $old_actions, $new_actions );
 
-        // delete any actions that were not included on the page
-        if ( ! empty( $old_actions ) ) {
-            foreach ( $old_actions as $old_id ) {
-                wp_delete_post( $old_id );
-            }
-			FrmAppHelper::cache_delete_group( 'frm_actions' );
-        }
+		self::delete_missing_actions( $old_actions );
     }
+
+	public static function delete_missing_actions( $old_actions ) {
+		if ( ! empty( $old_actions ) ) {
+			foreach ( $old_actions as $old_id ) {
+				wp_delete_post( $old_id );
+			}
+			FrmAppHelper::cache_delete_group( 'frm_actions' );
+		}
+	}
 
 	public static function trigger_create_actions( $entry_id, $form_id, $args = array() ) {
 		self::trigger_actions( 'create', $form_id, $entry_id, 'all', $args );

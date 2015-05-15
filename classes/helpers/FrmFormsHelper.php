@@ -409,6 +409,8 @@ BEFORE_HTML;
 			$html = preg_replace( '/(\[if\s+save_draft\])(.*?)(\[\/if\s+save_draft\])/mis', '', $html );
 		}
 
+		$html = do_shortcode( $html );
+
         return $html;
     }
 
@@ -663,6 +665,6 @@ BEFORE_HTML;
 
 		$message = $available_status[ $status ]['message'];
 
-		FrmFormsController::display_forms_list( $params, $message, 1 );
+		FrmFormsController::display_forms_list( $params, $message );
     }
 }

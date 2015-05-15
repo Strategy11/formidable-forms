@@ -665,14 +665,15 @@ class FrmXMLHelper {
     }
 
 	/**
-	* Switch old field IDs for new field IDs in emails and post
-	*
-	* @since 2.0
-	* @param $post_content - string to check for old field IDs
-	* @param $basic_fields - array of fields with string or int saved
-	* @param $array_fields - array of fields with arrays saved
-	* @return $post_content - string with new field IDs
-	*/
+	 * Switch old field IDs for new field IDs in emails and post
+	 *
+	 * @since 2.0
+	 * @param string $post_content - check for old field IDs
+	 * @param array $basic_fields - fields with string or int saved
+	 * @param array $array_fields - fields with arrays saved
+	 *
+	 * @return string $post_content - new field IDs
+	 */
 	private static function switch_action_field_ids( $post_content, $basic_fields, $array_fields = array() ) {
         global $frm_duplicate_ids;
 

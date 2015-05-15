@@ -448,10 +448,9 @@ DEFAULT_HTML;
             $html = apply_filters('frm_replace_shortcodes', $html, $field, array( 'errors' => $errors, 'form' => $form ));
         }
 
-        // remove [collapse_this] when running the free version
-		if ( preg_match( '/\[(collapse_this)\]/s', $html ) ) {
-			$html = str_replace( '[collapse_this]', '', $html );
-        }
+		self::remove_collapse_shortcode( $html );
+
+		$html = do_shortcode( $html );
 
         return $html;
     }
@@ -553,6 +552,16 @@ DEFAULT_HTML;
 
         return $tag;
     }
+
+	/**
+	 * Remove [collapse_this] if it's still included after all processing
+	 * @since 2.0.8
+	 */
+	private static function remove_collapse_shortcode( &$html ) {
+		if ( preg_match( '/\[(collapse_this)\]/s', $html ) ) {
+			$html = str_replace( '[collapse_this]', '', $html );
+		}
+	}
 
     public static function display_recaptcha($field) {
         $frm_settings = FrmAppHelper::get_settings();
