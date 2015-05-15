@@ -359,7 +359,7 @@
 	</form>
 	<form>
 		<id>698</id>
-		<form_key><![CDATA[boymfd]]></form_key>
+		<form_key><![CDATA[all_field_types]]></form_key>
 		<name><![CDATA[All field types]]></name>
 		<description><![CDATA[]]></description>
 		<created_at>2015-05-13 19:12:29</created_at>
@@ -2611,7 +2611,7 @@ Test]]></meta_value>
 		</postmeta>
 		<postmeta>
 			<meta_key>frm_options</meta_key>
-			<meta_value><![CDATA[{"date_field_id":"created_at","edate_field_id":"","repeat_event_field_id":"","repeat_edate_field_id":"","before_content":"","after_content":"","limit":"100","page_size":"2","where":{"1":"8099","2":"8125","3":"created_at","4":"id"},"where_is":{"1":"LIKE","2":"=","3":"<=","4":"!="},"where_val":{"1":"[get param=first_name]","2":"current_user","3":"NOW","4":"10000"},"empty_msg":"No Entries Found","insert_pos":"1"}]]></meta_value>
+			<meta_value><![CDATA[{"date_field_id":"created_at","edate_field_id":"","repeat_event_field_id":"","repeat_edate_field_id":"","before_content":"","after_content":"","limit":"100","page_size":"","where":{"1":"8099","2":"8125","3":"created_at","4":"id"},"where_is":{"1":"LIKE","2":"=","3":"<=","4":"!="},"where_val":{"1":"[get param=first_name]","2":"current_user","3":"NOW","4":"10000"},"empty_msg":"No Entries Found","insert_pos":"1"}]]></meta_value>
 		</postmeta>
 	</view>
 	<view>
@@ -2681,7 +2681,7 @@ Favorite colors: [8101]
 		<link></link>
 		<post_author><![CDATA[admin]]></post_author>
 		<description></description>
-		<content><![CDATA[<a href="[detaillink]">[8099]</a>]]></content>
+		<content><![CDATA[Listing Page: <a href="[detaillink]">[8099]</a>]]></content>
 		<excerpt><![CDATA[]]></excerpt>
 		<post_id>6773</post_id>
 		<post_date>2015-05-13 13:53:44</post_date>
@@ -2705,7 +2705,7 @@ Favorite colors: [8101]
 		</postmeta>
 		<postmeta>
 			<meta_key>frm_param</meta_key>
-			<meta_value><![CDATA[entry]]></meta_value>
+			<meta_value><![CDATA[detail]]></meta_value>
 		</postmeta>
 		<postmeta>
 			<meta_key>frm_dyncontent</meta_key>
