@@ -8,7 +8,9 @@ if ( isset( $message ) && $message != '' ) {
 		?><div id="message" class="frm_message updated frm_msg_padding"><?php echo wp_kses_post( $message ) ?></div><?php
 	} else {
         FrmFormsHelper::get_scroll_js($form->id);
-		echo wp_kses_post( $message );
+
+		// we need to allow scripts here for javascript in the success message
+		echo $message;
     }
 }
 
