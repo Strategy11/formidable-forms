@@ -82,7 +82,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 	*/
 	function set_current_user_to_1( ) {
 		$user_id = 1;
-		$user = $this->factory->user->get_object_by_id( $user_id );
+		$user = get_user_by( 'id', $user_id );
 		if ( $user == false ) {
 			$user_id = $this->set_as_user_role( 'admin' );
 		} else {
@@ -104,10 +104,17 @@ class FrmUnitTest extends WP_UnitTestCase {
 		return $user->ID;
     }
 
-	function set_front_end() {
+	function set_front_end( $page = '' ) {
+		if ( $page == '' ) {
+			$page = home_url( '/' );
+		} else if ( $page == 'new' ) {
+			$new_post = $this->factory->post->create_and_get();
+			$page = get_permalink( $new_post->ID );
+		}
+
 		set_current_screen( 'front' );
 		$this->clean_up_global_scope();
-		$this->go_to( home_url( '/' ) );
+		$this->go_to( $page );
 		$this->assertFalse( is_admin(), 'Failed to switch to the front-end' );
 	}
 
