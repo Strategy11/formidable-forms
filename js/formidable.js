@@ -519,7 +519,7 @@ function frmFrontFormJS(){
 
 	function getDataOpts(f,selected,field_id,rec) {
 		//don't check the same field twice when more than a 2-level dependency, and parent is not on this page
-		if(rec == 'stop' && (jQuery.inArray(f.HideField, frm_checked_dep) > -1) && f.parentField.attr('type') == 'hidden'){
+		if(rec == 'stop' && (jQuery.inArray(f.HideField, frm_checked_dep) > -1) && f.parentField && f.parentField.attr('type') == 'hidden'){
 			return;
 		}
 
