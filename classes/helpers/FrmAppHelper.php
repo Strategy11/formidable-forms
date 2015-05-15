@@ -286,8 +286,8 @@ class FrmAppHelper {
 	* Preserve backslashes in a value, but make sure value doesn't get compounding slashes
 	*
 	* @since 2.0.8
-	* @param $value string
-	* @return $value string
+	* @param string $value
+	* @return string $value
 	*/
 	public static function preserve_backslashes( $value ){
 		// If backslashes have already been added, don't add them again
