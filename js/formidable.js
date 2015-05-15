@@ -741,7 +741,7 @@ function frmFrontFormJS(){
                 n = parseFloat(n.replace(/,/g,'').match(/-?[\d\.]+$/));
             }
 
-			if ( typeof n === 'undefined' || isNaN(n) ) {
+			if ( typeof n === 'undefined' || isNaN(n) || n == '' ) {
 				n = 0;
 			}
 			vals[thisFieldId] += n;
@@ -802,8 +802,8 @@ function frmFrontFormJS(){
 		var isOtherOpt = false;
 
 		if ( currentOpt.type == 'hidden' ) {
-			var otherName = currentOpt.name.replace( 'item_meta', 'item_meta[other]' );
-			if ( document.getElementsByName( otherName ).length ) {
+			var otherText = document.getElementById( currentOpt.id + '-other' );
+			if ( otherText != null && otherText.value != '' ) {
 				isOtherOpt = true;
 			}
 		} else {
@@ -859,7 +859,7 @@ function frmFrontFormJS(){
 	function getHiddenOtherCheckboxRadioValue( currentOpt ) {
 		// If field name is like this: item_meta[8139][other_4], always return 0
 		// If like this: item_meta[other][8139][other_4], get the value
-		if ( currentOpt.name.indexOf('item_meta[other]') > -1 ) {
+		if ( currentOpt.name.indexOf('[other]') > -1 ) {
 			return currentOpt.value;
 		}
 	}
