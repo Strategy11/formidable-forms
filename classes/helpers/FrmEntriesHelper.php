@@ -280,20 +280,11 @@ class FrmEntriesHelper {
             return;
         }
 
-        if ( isset($atts['entry']->description) ) {
-            $data = maybe_unserialize($atts['entry']->description);
-        } else if ( $atts['default_email'] ) {
-            $atts['entry']->ip = '[ip]';
-            $data = array(
-                'browser' => '[browser]',
-                'referrer' => '[referrer]',
-            );
-        } else {
-            $data = array(
-                'browser' => '',
-                'referrer' => '',
-            );
-        }
+		$data  = self::get_entry_description_data( $atts );
+
+		if ( $atts['default_email'] ) {
+			$atts['entry']->ip = '[ip]';
+		}
 
         if ( $atts['format'] != 'text' ) {
             $values['ip'] = $atts['entry']->ip;
@@ -309,6 +300,29 @@ class FrmEntriesHelper {
             $values['referrer'] = array( 'label' => __( 'Referrer', 'formidable' ), 'val' => $data['referrer']);
         }
     }
+
+	/**
+	 * @param array $atts - include (object) entry, (boolean) default_email
+	 * @since 2.0.8
+	 */
+	public static function get_entry_description_data( $atts ) {
+		$default_data = array(
+			'browser' => '',
+			'referrer' => '',
+		);
+		$data = $default_data;
+
+		if ( isset( $atts['entry']->description ) ) {
+			$data = maybe_unserialize( $atts['entry']->description );
+		} else if ( $atts['default_email'] ) {
+			$data = array(
+				'browser'  => '[browser]',
+				'referrer' => '[referrer]',
+			);
+		}
+
+		return array_merge( $default_data, $data );
+	}
 
     public static function convert_entry_to_content($values, $atts, array &$content) {
 

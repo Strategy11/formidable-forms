@@ -113,6 +113,8 @@ class FrmField {
             $values['required'] = (int) $values['required'];
         }
 
+		self::preserve_phone_format_backslashes( $values );
+
 		// serialize array values
 		foreach ( array( 'default_value', 'field_options', 'options') as $opt ) {
 			if ( isset( $values[ $opt ] ) && is_array( $values[ $opt ] ) ) {
@@ -143,6 +145,18 @@ class FrmField {
 
         return $query_results;
     }
+
+	/**
+	* Keep backslashes in the phone format option
+	*
+	* @since 2.0.8
+	* @param $values array - pass by reference
+	*/
+	private static function preserve_phone_format_backslashes( &$values ) {
+		if ( isset( $values['field_options']['format'] ) ) {
+			$values['field_options']['format'] = FrmAppHelper::preserve_backslashes( $values['field_options']['format'] );
+		}
+	}
 
     public static function destroy( $id ) {
 		global $wpdb;

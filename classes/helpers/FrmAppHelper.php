@@ -282,6 +282,21 @@ class FrmAppHelper {
 		return $value;
 	}
 
+	/**
+	* Preserve backslashes in a value, but make sure value doesn't get compounding slashes
+	*
+	* @since 2.0.8
+	* @param $value string
+	* @return $value string
+	*/
+	public static function preserve_backslashes( $value ){
+		// If backslashes have already been added, don't add them again
+		if ( strpos( $value, '\\\\' ) === false ) {
+			$value = addslashes( $value );
+		}
+		return $value;
+	}
+
 	public static function sanitize_value( $sanitize, &$value ) {
 		if ( ! empty( $sanitize ) ) {
 			if ( is_array( $value ) ) {

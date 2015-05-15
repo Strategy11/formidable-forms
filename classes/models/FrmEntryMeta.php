@@ -164,7 +164,7 @@ class FrmEntryMeta {
         return $result;
     }
 
-	public static function get_entry_meta( $entry_id, $field_id, $return_var = true ) {
+	public static function get_entry_meta( $entry_id, $field_id ) {
 		_deprecated_function( __FUNCTION__, '2.0', 'FrmEntryMeta::get_entry_meta_by_field' );
 		return self::get_entry_meta_by_field( $entry_id, $field_id );
 	}
@@ -273,10 +273,9 @@ class FrmEntryMeta {
     }
 
     /**
-     * @param string $where
+     * @param string|array $where
      * @param string $order_by
      * @param string $limit
-     * @param boolean $unique
      */
     private static function get_ids_query($where, $order_by, $limit, $unique, $args, array &$query) {
         global $wpdb;

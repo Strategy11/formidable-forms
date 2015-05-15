@@ -32,7 +32,7 @@
     <div class="postbox">
     <h3 class="hndle"><span><?php _e( 'Export', 'formidable' ) ?></span></h3>
     <div class="inside with_frm_style">
-        <form method="post" action="<?php echo admin_url('admin-ajax.php'); ?>" id="frm_export_xml">
+		<form method="post" action="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>" id="frm_export_xml">
             <input type="hidden" name="action" value="frm_export_xml" />
             <?php wp_nonce_field('export-xml-nonce', 'export-xml'); ?>
 
