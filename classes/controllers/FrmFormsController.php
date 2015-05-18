@@ -1150,7 +1150,7 @@ class FrmFormsController {
 	private static function maybe_minimize_form( $atts, &$content ) {
 		// check if minimizing is turned on
 		if ( self::is_minification_on( $atts ) ) {
-			$contents = str_replace( array( "\r\n", "\r", "\n", "\t", '    ' ), '', $contents );
+			$content = str_replace( array( "\r\n", "\r", "\n", "\t", '    ' ), '', $content );
 		}
 	}
 

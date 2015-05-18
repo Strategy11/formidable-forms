@@ -856,7 +856,7 @@ class FrmXMLHelper {
         // Add more fields to the new notification
         $add_fields = array( 'email_message', 'email_subject', 'plain_text', 'inc_user_info', 'conditions' );
         foreach ( $add_fields as $add_field ) {
-			if ( isset ( $notification[ $add_field ] ) ) {
+			if ( isset( $notification[ $add_field ] ) ) {
 				$new_notification['post_content'][ $add_field ] = $notification[ $add_field ];
             } else if ( in_array( $add_field, array( 'plain_text', 'inc_user_info' ) ) ) {
 				$new_notification['post_content'][ $add_field ] = 0;

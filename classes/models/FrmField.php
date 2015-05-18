@@ -404,7 +404,6 @@ class FrmField {
 	 */
 	private static function format_field_results( &$results ) {
 		if ( is_array( $results ) ) {
-			$form_id = 0;
 			foreach ( $results as $r_key => $result ) {
 				wp_cache_set( $result->id, $result, 'frm_field' );
 				wp_cache_set( $result->field_key, $result, 'frm_field' );
@@ -416,7 +415,6 @@ class FrmField {
 
 				$results[ $r_key ]->options = maybe_unserialize( $result->options );
 				$results[ $r_key ]->default_value = maybe_unserialize( $result->default_value );
-				$form_id = $result->form_id;
 
 				unset( $r_key, $result );
 			}
