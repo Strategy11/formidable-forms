@@ -392,39 +392,41 @@ class FrmField {
         }
         unset( $where );
 
-        if ( ! $results ) {
-            stripslashes_deep($results);
-        }
+		self::format_field_results( $results );
 
-        if ( is_array($results) ) {
-            foreach ( $results as $r_key => $result ) {
-                wp_cache_set($result->id, $result, 'frm_field');
-                wp_cache_set($result->field_key, $result, 'frm_field');
+		wp_cache_set( $cache_key, $results, 'frm_field', 300 );
+
+		return stripslashes_deep( $results );
+	}
+
+	/**
+	 * @since 2.0.8
+	 */
+	private static function format_field_results( &$results ) {
+		if ( is_array( $results ) ) {
+			$form_id = 0;
+			foreach ( $results as $r_key => $result ) {
+				wp_cache_set( $result->id, $result, 'frm_field' );
+				wp_cache_set( $result->field_key, $result, 'frm_field' );
 
 				$results[ $r_key ]->field_options = maybe_unserialize( $result->field_options );
-                if ( isset( $results[ $r_key ]->field_options['format'] ) && ! empty( $results[ $r_key ]->field_options['format'] ) ) {
-                    $results[ $r_key ]->field_options['format'] = addslashes( $results[ $r_key ]->field_options['format'] );
-                }
+				if ( isset( $results[ $r_key ]->field_options['format'] ) && ! empty( $results[ $r_key ]->field_options['format'] ) ) {
+					$results[ $r_key ]->field_options['format'] = addslashes( $results[ $r_key ]->field_options['format'] );
+				}
 
-                $results[ $r_key ]->options = maybe_unserialize( $result->options );
-                $results[ $r_key ]->default_value = maybe_unserialize( $result->default_value );
-                $form_id = $result->form_id;
+				$results[ $r_key ]->options = maybe_unserialize( $result->options );
+				$results[ $r_key ]->default_value = maybe_unserialize( $result->default_value );
+				$form_id = $result->form_id;
 
-                unset($r_key, $result);
-            }
-
-            unset($form_id);
+				unset( $r_key, $result );
+			}
 		} else if ( $results ) {
-            wp_cache_set($results->id, $results, 'frm_field');
-            wp_cache_set($results->field_key, $results, 'frm_field');
+			wp_cache_set( $results->id, $results, 'frm_field' );
+			wp_cache_set( $results->field_key, $results, 'frm_field' );
 
 			self::prepare_options( $results );
-        }
-
-        wp_cache_set($cache_key, $results, 'frm_field', 300);
-
-        return stripslashes_deep($results);
-    }
+		}
+	}
 
 	/**
 	 * Unserialize all the serialized field data

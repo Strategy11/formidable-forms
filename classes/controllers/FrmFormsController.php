@@ -719,14 +719,7 @@ class FrmFormsController {
 	}
 
     public static function filter_content( $content, $form, $entry = false ) {
-        if ( ! $entry || ! is_object( $entry ) ) {
-            if ( ! $entry || ! is_numeric( $entry ) ) {
-				$entry = FrmAppHelper::get_post_param( 'id', false, 'sanitize_title' );
-            }
-
-            FrmEntriesHelper::maybe_get_entry( $entry );
-        }
-
+		$entry = self::get_entry_by_param( $entry );
         if ( ! $entry ) {
             return $content;
         }
@@ -740,6 +733,16 @@ class FrmFormsController {
 
         return $content;
     }
+
+	private static function get_entry_by_param( &$entry ) {
+		if ( ! $entry || ! is_object( $entry ) ) {
+			if ( ! $entry || ! is_numeric( $entry ) ) {
+				$entry = FrmAppHelper::get_post_param( 'id', false, 'sanitize_title' );
+			}
+
+			FrmEntriesHelper::maybe_get_entry( $entry );
+		}
+	}
 
     public static function replace_content_shortcodes( $content, $entry, $shortcodes ) {
         return FrmFieldsHelper::replace_content_shortcodes( $content, $entry, $shortcodes );
@@ -1063,10 +1066,7 @@ class FrmFormsController {
         $contents = ob_get_contents();
         ob_end_clean();
 
-        // check if minimizing is turned on
-		if ( isset( $atts['minimize'] ) && ! empty( $atts['minimize'] ) ) {
-			$contents = str_replace( array( "\r\n", "\r", "\n", "\t", '    ' ), '', $contents );
-        }
+		self::maybe_minimize_form( $atts, $contents );
 
         return $contents;
     }
@@ -1143,4 +1143,22 @@ class FrmFormsController {
 
         do_action('frm_after_entry_processed', array( 'entry_id' => $created, 'form' => $form));
     }
+
+	/**
+	 * @since 2.0.8
+	 */
+	private static function maybe_minimize_form( $atts, &$content ) {
+		// check if minimizing is turned on
+		if ( self::is_minification_on( $atts ) ) {
+			$contents = str_replace( array( "\r\n", "\r", "\n", "\t", '    ' ), '', $contents );
+		}
+	}
+
+	/**
+	 * @since 2.0.8
+	 * @return boolean
+	 */
+	private static function is_minification_on( $atts ) {
+		return isset( $atts['minimize'] ) && ! empty( $atts['minimize'] );
+	}
 }
