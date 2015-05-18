@@ -380,7 +380,7 @@ DEFAULT_HTML;
         $html = str_replace('[field_name]', $field['name'], $html);
 
         //replace [error_class]
-		$error_class = isset ( $errors[ 'field' . $field_id ] ) ? ' frm_blank_field' : '';
+		$error_class = isset( $errors[ 'field' . $field_id ] ) ? ' frm_blank_field' : '';
 		self::get_more_field_classes( $error_class, $field, $field_id, $html );
 		if ( $field['type'] == 'html' && strpos( $html, '[error_class]' ) === false ) {
 			// there is no error_class shortcode to use for addign fields
@@ -472,7 +472,7 @@ DEFAULT_HTML;
 		}
 
 		//Add classes to inline confirmation field (if it doesn't already have classes set)
-		if ( isset ( $field['conf_field'] ) && $field['conf_field'] == 'inline' && ! $field['classes'] ) {
+		if ( isset( $field['conf_field'] ) && $field['conf_field'] == 'inline' && ! $field['classes'] ) {
 			$error_class .= ' frm_first_half';
 		}
 
@@ -497,7 +497,7 @@ DEFAULT_HTML;
 			// If this is a repeating section that should be hidden with exclude_fields or fields shortcode, hide it
 			if ( $field['repeat'] ) {
 				global $frm_vars;
-				if ( isset( $frm_vars['show_fields'] ) && ! empty ( $frm_vars['show_fields'] ) && ! in_array( $field['id'], $frm_vars['show_fields'] ) && ! in_array( $field['field_key'], $frm_vars['show_fields'] ) ) {
+				if ( isset( $frm_vars['show_fields'] ) && ! empty( $frm_vars['show_fields'] ) && ! in_array( $field['id'], $frm_vars['show_fields'] ) && ! in_array( $field['field_key'], $frm_vars['show_fields'] ) ) {
 					$error_class .= ' frm_hidden';
 				}
 			}

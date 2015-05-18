@@ -282,5 +282,4 @@ class FrmXMLController {
 
         return $mimes;
     }
-
 }

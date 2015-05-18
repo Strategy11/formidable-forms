@@ -15,5 +15,4 @@
 ?>
 
     <img class="frm_no_reports" src="http://fp.strategy11.com/wp-content/themes/formidablepro/images/reports1.png" alt="Reports"/>
-
 </div>

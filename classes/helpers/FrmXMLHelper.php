@@ -935,5 +935,5 @@ class FrmXMLHelper {
             unset( $new_notification2 );
         }
     }
-
 }
+

@@ -14,5 +14,4 @@
 ?>
 
     <img class="frm_no_views" src="http://fp.strategy11.com/images/custom-display-settings.png" alt="Display"/>
-
 </div>

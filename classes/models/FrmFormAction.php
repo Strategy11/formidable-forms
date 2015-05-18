@@ -15,8 +15,7 @@ class FrmFormAction {
 
 	// Member functions that you must over-ride.
 
-	/** Update a particular instance.
-	 *
+	/**
 	 * This function should check that $new_instance is set correctly.
 	 * The newly calculated value of $instance should be returned.
 	 * If "false" is returned, the instance won't be saved/updated.

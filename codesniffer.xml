@@ -25,12 +25,13 @@
 		<exclude name="Generic.WhiteSpace.ScopeIndent.Incorrect" />
 		<exclude name="WordPress.CSRF.NonceVerification.NoNonceVerification" />
 
-		<!-- We should probably want to turn the below rules on, but these give issues with the current code base. -->
+		<!-- We should probably turn the below rules on, but these give issues with the current code base. -->
 		<exclude name="WordPress.Files.FileName.UnderscoresNotAllowed" />
 		<exclude name="WordPress.WhiteSpace.ScopeIndent.Incorrect" />
 		<exclude name="WordPress.Classes.ValidClassName.NotCamelCaps" />
 		<exclude name="WordPress.XSS.EscapeOutput" /><!-- This sniff also has known & reported bugs -->
 		<exclude name="WordPress.VIP.PostsPerPage.posts_per_page" />
+		<exclude name="Generic.Files.LowercasedFilename.NotFound" />
 
 		<!-- Demanding Yoda conditions is stupid. -->
 		<exclude name="WordPress.PHP.YodaConditions"/>

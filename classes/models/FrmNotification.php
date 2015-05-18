@@ -374,7 +374,7 @@ class FrmNotification {
         do_action('frm_notification', $recipient, $atts['subject'], $message);
 
         if ( $sent ) {
-            $sent_to = array_merge( (array)$atts['to_email'], (array) $atts['cc'], (array) $atts['bcc']);
+			$sent_to = array_merge( (array) $atts['to_email'], (array) $atts['cc'], (array) $atts['bcc'] );
             $sent_to = array_filter( $sent_to );
             if ( apply_filters('frm_echo_emails', false) ) {
                 $temp = str_replace('<', '&lt;', $sent_to);

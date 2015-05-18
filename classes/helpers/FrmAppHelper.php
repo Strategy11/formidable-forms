@@ -289,7 +289,7 @@ class FrmAppHelper {
 	* @param string $value
 	* @return string $value
 	*/
-	public static function preserve_backslashes( $value ){
+	public static function preserve_backslashes( $value ) {
 		// If backslashes have already been added, don't add them again
 		if ( strpos( $value, '\\\\' ) === false ) {
 			$value = addslashes( $value );
