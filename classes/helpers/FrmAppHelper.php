@@ -1160,26 +1160,30 @@ class FrmAppHelper {
             $date = FrmProAppHelper::convert_date($date, $frmpro_settings->date_format, 'Y-m-d');
         }
 
-        $do_time = ( date('H:i:s', strtotime($date)) == '00:00:00' ) ? false : true;
+		$formatted = self::get_localized_date( $date_format, $date );
 
-        $date = get_date_from_gmt($date);
+		$do_time = ( date( 'H:i:s', strtotime( $date ) ) != '00:00:00' );
+		if ( $do_time ) {
+			if ( empty($time_format) ) {
+				$time_format = get_option('time_format');
+			}
 
-        $formatted = date_i18n($date_format, strtotime($date));
-
-        if ( $do_time ) {
-
-            if ( empty($time_format) ) {
-                $time_format = get_option('time_format');
-            }
-
-            $trimmed_format = trim($time_format);
-            if ( $time_format && ! empty($trimmed_format) ) {
-                $formatted .= ' '. __( 'at', 'formidable' ) .' '. date_i18n($time_format, strtotime($date));
-            }
-        }
+			$trimmed_format = trim( $time_format );
+			if ( $time_format && ! empty( $trimmed_format ) ) {
+				$formatted .= ' ' . __( 'at', 'formidable' ) . ' ' . self::get_localized_date( $time_format, $date );
+			}
+		}
 
         return $formatted;
     }
+
+	/**
+	 * @since 2.0.8
+	 */
+	public static function get_localized_date( $date_format, $date ) {
+		$date = get_date_from_gmt( $date );
+		return date_i18n( $date_format, strtotime( $date ) );
+	}
 
     /**
      * @return string The time ago in words

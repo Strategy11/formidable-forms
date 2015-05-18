@@ -264,15 +264,14 @@ class FrmFormActionsController {
                 $entry = FrmEntry::getOne( $entry, true );
             }
 
+			if ( empty( $entry ) || $entry->is_draft ) {
+				continue;
+			}
+
 			$child_entry = ( ( $form && is_numeric( $form->parent_form_id ) && $form->parent_form_id ) || ( $entry && ( $entry->form_id != $form->id || $entry->parent_item_id ) ) || ( isset( $args['is_child'] ) && $args['is_child'] ) );
 
 			if ( $child_entry ) {
                 //don't trigger actions for sub forms
-                continue;
-            }
-
-            if ( $entry->is_draft ) {
-                // TODO: add trigger actions for drafts
                 continue;
             }
 
