@@ -1,25 +1,13 @@
 <?php
 
 class FrmUnitTest extends WP_UnitTestCase {
-	/**
-	 * form_id
-	 * @var int
-	 */
+
+	protected $form;
 	protected $form_id = 0;
-
-	/**
-	 * field_ids
-	 * @var array
-	 */
 	protected $field_ids = array();
-
-	/**
-	 * user_id
-	 * @var int
-	 */
 	protected $user_id = 0;
-
 	protected $contact_form_key = 'contact-with-email';
+	protected $is_pro_active = false;
 
 	/**
 	 * Ensure that the plugin has been installed and activated.
@@ -31,6 +19,12 @@ class FrmUnitTest extends WP_UnitTestCase {
 		$this->factory->form = new Form_Factory( $this );
 		$this->factory->field = new Field_Factory( $this );
 		$this->factory->entry = new Entry_Factory( $this );
+
+		$this->is_pro_active = FrmAppHelper::pro_is_installed();
+		$current_class_name = get_class( $this );
+		if ( strpos( $current_class_name, 'FrmPro' ) && ! $this->is_pro_active ) {
+			$this->markTestSkipped( 'Pro is not active' );
+		}
 	}
 
     /* Helper Functions */
@@ -123,7 +117,14 @@ class FrmUnitTest extends WP_UnitTestCase {
 
 		$screens = array(
 			'index.php' => array( 'base' => 'dashboard', 'id' => 'dashboard' ),
+			'admin.php?page=formidable' => array( 'base' => 'admin', 'id' => 'toplevel_page_formidable' ),
 		);
+
+		if ( $page == 'formidable-edit' ) {
+			$form = $this->factory->form->get_object_by_id( $this->contact_form_key );
+			$page = 'admin.php?page=formidable&frm_action=edit&id=' . $form->id;
+			$screens[ $page ] = $screens['admin.php?page=formidable'];
+		}
 
 		$screen = $screens[ $page ];
 
@@ -132,20 +133,11 @@ class FrmUnitTest extends WP_UnitTestCase {
 		$screen = (object) $screen;
 		$hook = parse_url( $page );
 
-		if ( ! empty( $hook['query'] ) ) {
-			$args = wp_parse_args( $hook['query'] );
-			if ( isset( $args['taxonomy'] ) )
-				$GLOBALS['taxnow'] = $_GET['taxonomy'] = $_POST['taxonomy'] = $_REQUEST['taxonomy'] = $args['taxonomy'];
-			if ( isset( $args['post_type'] ) )
-				$GLOBALS['typenow'] = $_GET['post_type'] = $_POST['post_type'] = $_REQUEST['post_type'] = $args['post_type'];
-			else if ( isset( $screen->post_type ) )
-				$GLOBALS['typenow'] = $_GET['post_type'] = $_POST['post_type'] = $_REQUEST['post_type'] = $screen->post_type;
-		}
-
 		$GLOBALS['hook_suffix'] = $hook['path'];
 		set_current_screen();
 
-		$this->assertEquals( $screen->id, $current_screen->id, $page );
+		$this->assertTrue( $current_screen->in_admin(), 'Failed to switch to the back-end' );
+		$this->assertEquals( $screen->base, $current_screen->base, $page );
 	}
 
     static function install_data() {

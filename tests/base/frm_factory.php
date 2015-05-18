@@ -6,18 +6,10 @@ class Form_Factory extends WP_UnitTest_Factory_For_Thing {
 		parent::__construct( $factory );
 
 		global $wpdb;
-		$this->default_generation_definitions = array(
-			'form_key'       => FrmAppHelper::get_unique_key( '', $wpdb->prefix . 'frm_forms', 'form_key' ),
-			'name'           => new WP_UnitTest_Generator_Sequence( 'Form name %s' ),
-			'description'    => new WP_UnitTest_Generator_Sequence( 'Form description %s' ),
-			'status'         => 'published',
-		);
+		$this->default_generation_definitions = FrmFormsHelper::setup_new_vars( false );
 	}
 
 	function create_object( $args = array() ) {
-		if ( empty( $args ) ) {
-	        $args = FrmFormsHelper::setup_new_vars( false );
-		}
 		return FrmForm::create( $args );
 	}
 
@@ -91,6 +83,7 @@ class Field_Factory extends WP_UnitTest_Factory_For_Thing {
 			'url'    => 'http://test.com',
 			'number' => 120,
 			'date'   => '2015-01-01',
+			'user_id' => get_current_user_id(),
 		);
 
 		if ( isset( $field_values[ $field->type ] ) ) {

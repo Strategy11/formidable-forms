@@ -356,6 +356,19 @@
             <options><![CDATA[]]></options>
             <field_options><![CDATA[{"max":"10","blank":"This field cannot be blank.","size":"","label":"","invalid":"Date is invalid","classes":"","required_indicator":"*","separate_value":0,"slide":0,"form_select":"","show_hide":"show","any_all":"any","align":"block","hide_field":[],"hide_field_cond":["=="],"hide_opt":[],"star":0,"ftypes":[],"data_type":"select","restrict":0,"start_year":"2000","end_year":"2020","read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"step":1,"clock":12,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","calc_dec":"","dyn_default_value":"","multiple":0,"unique_msg":"","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":0}]]></field_options>
 		</field>
+		<field>
+		    <id>8096</id>
+            <field_key><![CDATA[user14]]></field_key>
+            <name><![CDATA[User ID]]></name>
+            <description><![CDATA[]]></description>
+            <type><![CDATA[user_id]]></type>
+            <default_value><![CDATA[]]></default_value>
+            <field_order>8</field_order>
+            <form_id>697</form_id>
+            <required>0</required>
+            <options><![CDATA[]]></options>
+            <field_options><![CDATA[{"max":"10","blank":"This field cannot be blank.","size":"","label":"","invalid":"Date is invalid","classes":"","required_indicator":"*","separate_value":0,"slide":0,"form_select":"","show_hide":"show","any_all":"any","align":"block","hide_field":[],"hide_field_cond":["=="],"hide_opt":[],"star":0,"ftypes":[],"data_type":"select","restrict":0,"start_year":"2000","end_year":"2020","read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"step":1,"clock":12,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","calc_dec":"","dyn_default_value":"","multiple":0,"unique_msg":"","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":0}]]></field_options>
+		</field>
 	</form>
 	<form>
 		<id>698</id>
