@@ -750,7 +750,7 @@ class FrmFormsController {
             return $errors;
         }
 
-		$bulkaction = FrmAppHelper::get_param( 'action', '', 'get', 'sanitize_title' );
+		$bulkaction = FrmAppHelper::get_param( 'action', '', 'get', 'sanitize_text_field' );
         if ( $bulkaction == -1 ) {
 			$bulkaction = FrmAppHelper::get_param( 'action2', '', 'get', 'sanitize_title' );
         }
@@ -894,7 +894,7 @@ class FrmFormsController {
                     return;
                 }
 
-				$action = FrmAppHelper::get_param( 'action', '', 'get', 'sanitize_title' );
+				$action = FrmAppHelper::get_param( 'action', '', 'get', 'sanitize_text_field' );
                 if ( $action == -1 ) {
 					$action = FrmAppHelper::get_param( 'action2', '', 'get', 'sanitize_title' );
                 }
