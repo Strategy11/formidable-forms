@@ -719,7 +719,7 @@ class FrmFormsController {
 	}
 
     public static function filter_content( $content, $form, $entry = false ) {
-		$entry = self::get_entry_by_param( $entry );
+		self::get_entry_by_param( $entry );
         if ( ! $entry ) {
             return $content;
         }
