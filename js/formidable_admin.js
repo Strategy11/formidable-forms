@@ -1056,7 +1056,7 @@ function frmAdminBuildJS(){
 
 	function preFormSave(b){
 		if(jQuery('form.inplace_form').length){
-			jQuery('.inplace_save').click();
+			jQuery('.inplace_save, .postbox').click();
 		}
 
 		if(jQuery(b).attr('id') == 'save-post'){

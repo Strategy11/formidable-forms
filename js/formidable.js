@@ -44,7 +44,10 @@ function frmFrontFormJS(){
 	function showFileUploadText(){
 		/*jshint validthis:true */
 		this.className = this.className.replace( 'frm_transparent', '');
-		this.parentNode.getElementsByTagName('a')[0].className += ' frm_hidden';
+		var currentClass = this.parentNode.getElementsByTagName('a')[0].className;
+		if ( currentClass.indexOf('frm_clear_file_link') == -1 ) {
+			currentClass += ' frm_hidden';
+		}
 	}
 
 	/**
@@ -1220,7 +1223,7 @@ function frmFrontFormJS(){
 		obj.wrap('<div class="frm_file_names frm_uploaded_files">');
 		var files = obj.get(0).files;
 		for ( var i = 0; i < files.length; i++ ) {
-			if ( files.length == 1 ) {
+			if ( 0 == i ) {
 				obj.after(files[i].name+' <a href="#" class="frm_clear_file_link">'+frm_js.remove+'</a>');
 			} else {
 				obj.after(files[i].name +'<br/>');
