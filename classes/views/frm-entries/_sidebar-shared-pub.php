@@ -13,7 +13,7 @@ if ( ! isset( $entry) ) {
 <?php if ( $entry->updated_at && $entry->updated_at != $entry->created_at ) { ?>
 <div class="misc-pub-section curtime misc-pub-curtime">
     <span id="timestamp">
-    <?php printf(__( 'Updated on: <b>%1$s</b>', 'formidable' ), date_i18n( $datef, strtotime( $entry->updated_at ) )); ?>
+	<?php printf( __( 'Updated on: <b>%1$s</b>', 'formidable' ), FrmAppHelper::get_localized_date( $date_format, $entry->updated_at ) ); ?>
     </span>
 </div>
 <?php } ?>
