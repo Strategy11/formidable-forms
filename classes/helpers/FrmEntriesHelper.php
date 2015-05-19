@@ -218,7 +218,7 @@ class FrmEntriesHelper {
                     }
 				} else {
 					$val = '';
-					FrmProEntriesHelper::get_dfe_values( $f, $atts['entry'], $val );
+					FrmProEntriesHelper::get_dynamic_list_values( $f, $atts['entry'], $val );
 					$atts['entry']->metas[ $f->id ] = $val;
                 }
             }
@@ -424,7 +424,7 @@ class FrmEntriesHelper {
     public static function prepare_display_value($entry, $field, $atts) {
 		$field_value = isset( $entry->metas[ $field->id ] ) ? $entry->metas[ $field->id ] : false;
         if ( FrmAppHelper::pro_is_installed() ) {
-		    FrmProEntriesHelper::get_dfe_values($field, $entry, $field_value);
+			FrmProEntriesHelper::get_dynamic_list_values( $field, $entry, $field_value );
         }
 
         if ( $field->form_id == $entry->form_id || empty($atts['embedded_field_id']) ) {
