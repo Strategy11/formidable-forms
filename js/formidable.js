@@ -739,7 +739,7 @@ function frmFrontFormJS(){
                     vals[thisFieldId] = Math.ceil(d/(1000*60*60*24));
                 }
             }
-            var n = thisVal;
+            var n = thisVal.trim();
             if ( n !== '' && n !== 0 ) {
                 n = parseFloat(n.replace(/,/g,'').match(/-?[\d\.]+$/));
             }
