@@ -311,7 +311,7 @@ class FrmField {
 			self::set_field_transient( $results, $form_id, $inc_sub );
         }
 
-        return $results;
+        return stripslashes_deep( $results );
     }
 
     public static function include_sub_fields(&$results, $inc_sub, $type = 'all') {
