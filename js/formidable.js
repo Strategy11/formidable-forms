@@ -744,7 +744,7 @@ function frmFrontFormJS(){
                 n = parseFloat(n.replace(/,/g,'').match(/-?[\d\.]+$/));
             }
 
-			if ( typeof n === 'undefined' || isNaN(n) || n == '' ) {
+			if ( typeof n === 'undefined' || isNaN(n) || n === '' ) {
 				n = 0;
 			}
 			vals[thisFieldId] += n;
@@ -774,7 +774,7 @@ function frmFrontFormJS(){
 		if ( currentOpt.type == 'hidden' ) {
 			isOtherOpt = isHiddenOtherOpt( thisField, currentOpt );
 		} else if ( thisField.type == 'checkbox' || thisField.type == 'radio' ) {
-			isOtherOpt = isOtherCheckboxRadioOpt( thisField, currentOpt )
+			isOtherOpt = isOtherCheckboxRadioOpt( thisField, currentOpt );
 		} else if ( thisField.type == 'select' ) {
 			isOtherOpt = isOtherSelectOpt( thisField, currentOpt );
 		}
@@ -786,7 +786,7 @@ function frmFrontFormJS(){
 		var isOtherOpt = false;
 		if ( thisField.type == 'select' || thisField.type == 'radio' ) {
 			var otherText = document.getElementById( currentOpt.id + '-other' );
-			if ( otherText != null && otherText.value != '' ) {
+			if ( otherText !== null && otherText.value !== '' ) {
 				isOtherOpt = true;
 			}
 		} else if ( thisField.type == 'checkbox' ) {
@@ -859,7 +859,7 @@ function frmFrontFormJS(){
 		var parts = currentOpt.name.split( '[' );
 		if ( parts.length == 2 ) {
 			var otherText = document.getElementById( currentOpt.id + '-other' );
-			if ( otherText != null && otherText.value != '' ) {
+			if ( otherText !== null && otherText.value !== '' ) {
 				otherVal = otherText.value;
 			}
 		}
@@ -872,7 +872,7 @@ function frmFrontFormJS(){
 
 		var otherTextId = currentOpt.id.replace( 'other_', 'otext-other_');
 		var otherText = document.getElementById( otherTextId );
-		if ( otherText == null ) {
+		if ( otherText === null ) {
 			otherVal = currentOpt.value;
 		}
 		return otherVal;
@@ -955,23 +955,32 @@ function frmFrontFormJS(){
                     var $fieldCont = null;
 					for (var key in errObj){
 						$fieldCont = jQuery(object).find(jQuery(document.getElementById('frm_field_'+key+'_container')));
-						if($fieldCont.length && $fieldCont.is(':visible')){
-							cont_submit=false;
-							if(jump === ''){
-								frmFrontForm.scrollMsg( key, object, true );
-								jump='#frm_field_'+key+'_container';
+
+						if ( $fieldCont.length ) {
+							if ( ! $fieldCont.is(':visible') ) {
+								var inCollapsedSection = $fieldCont.closest('.frm_toggle_container');
+								if ( inCollapsedSection.length ) {
+									inCollapsedSection.prev('.frm_trigger').click();
+								}
 							}
-                            var $recapcha = jQuery(object).find('#frm_field_'+key+'_container .g-recaptcha');
-							if($recapcha.length){
-								show_captcha = true;
-                                grecaptcha.reset();
-							}
+							if ( $fieldCont.is(':visible') ) {
+								cont_submit = false;
+								if ( jump === '' ) {
+									frmFrontForm.scrollMsg( key, object, true );
+									jump = '#frm_field_'+key+'_container';
+								}
+								var $recapcha = jQuery(object).find('#frm_field_'+key+'_container .g-recaptcha');
+								if ( $recapcha.length ) {
+									show_captcha = true;
+									grecaptcha.reset();
+								}
 							
-							$fieldCont.addClass('frm_blank_field');
-							if(typeof(frmThemeOverride_frmPlaceError) == 'function'){
-								frmThemeOverride_frmPlaceError(key,errObj);
-							}else{
-								$fieldCont.append('<div class="frm_error">'+errObj[key]+'</div>');
+								$fieldCont.addClass('frm_blank_field');
+								if ( typeof frmThemeOverride_frmPlaceError == 'function' ) {
+									frmThemeOverride_frmPlaceError(key,errObj);
+								} else {
+									$fieldCont.append('<div class="frm_error">'+errObj[key]+'</div>');
+								}
 							}
 						}else if(key == 'redirect'){
 							window.location = errObj[key];
@@ -1223,7 +1232,7 @@ function frmFrontFormJS(){
 		obj.wrap('<div class="frm_file_names frm_uploaded_files">');
 		var files = obj.get(0).files;
 		for ( var i = 0; i < files.length; i++ ) {
-			if ( 0 == i ) {
+			if ( 0 === i ) {
 				obj.after(files[i].name+' <a href="#" class="frm_clear_file_link">'+frm_js.remove+'</a>');
 			} else {
 				obj.after(files[i].name +'<br/>');
