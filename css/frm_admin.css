@@ -839,6 +839,7 @@ li.ui-state-default.edit_field_type_divider .frm-show-hover{
 li.ui-state-default.selected .frm-show-click,
 li.ui-state-default.selected.edit_field_type_divider .frm-show-click{
 	display:inline;
+	vertical-align:top;
 }
 .frm_field_box:not(.edit_field_type_divider):hover > .frm-show-hover,
 .frm_field_box .divider_section_only:hover > .frm-show-hover,
