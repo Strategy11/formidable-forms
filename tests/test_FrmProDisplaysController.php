@@ -49,12 +49,15 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		) );
 		$single_view = reset( $single_view );
 
-		$entry = $this->factory->entry->get_object_by_id( 'jamie-entry' );
-		$this->assertNotEmpty( $result, 'View with old ID is not loading.');
-		update_post_meta( $single_view->ID, 'frm_entry_id', $entry );
+		$form_id = get_post_meta( $single_view->ID, 'frm_form_id', true );
+
+		$entry_data = $this->factory->field->generate_entry_array( $form_id );
+		$entry = $this->factory->entry->create_and_get( $entry_data );
+		$this->assertNotEmpty( $entry );
+		update_post_meta( $single_view->ID, 'frm_entry_id', $entry->id );
 		$single_view = do_shortcode( '[display-frm-data id=' . $single_view->ID . ']' );
-		$single_result = strpos( $single_view, 'Jamie' );
-		$this->assertTrue( $single_result, 'Single entry View with old settings is not compatible with current version.');
+		$single_result = strpos( $single_view, 'Favorite colors' );
+		$this->assertTrue( $single_result !== false, 'Single entry View with old settings is not compatible with current version.');
 	}
 	
 	function _test_detail_param(){

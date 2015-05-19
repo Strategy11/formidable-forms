@@ -54,12 +54,13 @@ class Field_Factory extends WP_UnitTest_Factory_For_Thing {
 	}
 
 	function generate_entry_array( $form ) {
+		$form_id = is_object( $form ) ? $form->id : $form;
 		$entry_data = array(
-			'form_id'   => $form->id,
+			'form_id'   => $form_id,
 			'item_meta' => array(),
 		);
 
-		$form_fields = $this->get_fields_from_form( $form->id );
+		$form_fields = $this->get_fields_from_form( $form_id );
 		foreach ( $form_fields as $field ) {
 			$entry_data['item_meta'][ $field->id ] = $this->set_field_value( $field );
 		}

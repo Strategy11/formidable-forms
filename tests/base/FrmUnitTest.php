@@ -140,6 +140,23 @@ class FrmUnitTest extends WP_UnitTestCase {
 		$this->assertEquals( $screen->base, $current_screen->base, $page );
 	}
 
+	function clean_up_global_scope() {
+		parent::clean_up_global_scope();
+
+		global $frm_update;
+		$frm_update  = new FrmUpdatesController();
+
+		global $frm_vars;
+		$frm_vars = array(
+			'load_css'          => false,
+			'forms_loaded'      => array(),
+			'created_entries'   => array(),
+			'pro_is_authorized' => $frm_update->pro_is_authorized(),
+			'next_page'         => array(),
+			'prev_page'         => array(),
+		);
+	}
+
     static function install_data() {
         return array( dirname( __FILE__ ) . '/testdata.xml' );
     }
