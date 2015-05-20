@@ -93,8 +93,7 @@ class FrmFieldsController {
             wp_die();
         }
 
-        FrmField::update( $field_id, compact('form_id') );
-
+		echo FrmField::update( $field_id, compact( 'form_id' ) );
         wp_die();
     }
 
