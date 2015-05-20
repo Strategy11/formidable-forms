@@ -90,7 +90,7 @@ class FrmFieldsController {
 		$form_id = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
 
         if ( ! $field_id || ! $form_id ) {
-            return;
+            wp_die();
         }
 
         FrmField::update( $field_id, compact('form_id') );

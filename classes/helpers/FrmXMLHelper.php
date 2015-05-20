@@ -31,8 +31,9 @@ class FrmXMLHelper {
 
         $imported = array(
             'imported' => $defaults,
-            'updated' => $defaults,
-            'forms' => array(),
+			'updated'  => $defaults,
+			'forms'    => array(),
+			'terms'    => array(),
         );
 
         unset($defaults);
@@ -80,22 +81,41 @@ class FrmXMLHelper {
 			    continue;
 			}
 
-            $term_id = wp_insert_term( (string) $t->term_name, (string) $t->term_taxonomy, array(
+			$parent = self::get_term_parent_id( $t );
+
+			$term = wp_insert_term( (string) $t->term_name, (string) $t->term_taxonomy, array(
                 'slug'          => (string) $t->term_slug,
                 'description'   => (string) $t->term_description,
-                'term_parent'   => (string) $t->term_parent,
+				'parent'        => empty( $parent ) ? 0 : $parent,
                 'slug'          => (string) $t->term_slug,
             ));
 
-            if ( $term_id ) {
+			if ( $term && is_array( $term ) ) {
                 $imported['imported']['terms']++;
+				$imported['terms'][ (int) $t->term_id ] = $term['term_id'];
             }
 
-            unset($term_id, $t);
+			unset( $term, $t );
 		}
 
 		return $imported;
     }
+
+	/**
+	 * @since 2.0.8
+	 */
+	private static function get_term_parent_id( $t ) {
+		$parent = (string) $t->term_parent;
+		if ( ! empty( $parent ) ) {
+			$parent = term_exists( (string) $t->term_parent, (string) $t->term_taxonomy );
+			if ( $parent ) {
+				$parent = $parent['term_id'];
+			} else {
+				$parent = 0;
+			}
+		}
+		return $parent;
+	}
 
     public static function import_xml_forms($forms, $imported) {
 
