@@ -759,7 +759,6 @@ function frmFrontFormJS(){
 		// If current option is an other option, get other value
 		if ( isOtherOption( thisField, currentOpt ) ) {
 			thisVal = getOtherValue( thisField, currentOpt );
-		// Else, get option value normally
 		} else {
 			thisVal = jQuery(currentOpt).val();
 		}

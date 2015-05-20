@@ -284,7 +284,7 @@ class FrmField {
 		$results = self::get_fields_from_transients( $form_id, $inc_sub );
 		if ( ! empty( $results ) ) {
             if ( empty($limit) ) {
-                return stripslashes_deep($results);
+				return $results;
             }
 
             $fields = array();
@@ -296,7 +296,7 @@ class FrmField {
                 }
             }
 
-            return stripslashes_deep($fields);
+			return $fields;
         }
 
         self::$use_cache = false;
@@ -311,7 +311,7 @@ class FrmField {
 			self::set_field_transient( $results, $form_id, $inc_sub );
         }
 
-        return stripslashes_deep( $results );
+		return $results;
     }
 
     public static function include_sub_fields(&$results, $inc_sub, $type = 'all') {
@@ -409,10 +409,6 @@ class FrmField {
 				wp_cache_set( $result->field_key, $result, 'frm_field' );
 
 				$results[ $r_key ]->field_options = maybe_unserialize( $result->field_options );
-				if ( isset( $results[ $r_key ]->field_options['format'] ) && ! empty( $results[ $r_key ]->field_options['format'] ) ) {
-					$results[ $r_key ]->field_options['format'] = addslashes( $results[ $r_key ]->field_options['format'] );
-				}
-
 				$results[ $r_key ]->options = maybe_unserialize( $result->options );
 				$results[ $r_key ]->default_value = maybe_unserialize( $result->default_value );
 
@@ -432,9 +428,6 @@ class FrmField {
 	 */
 	private static function prepare_options( &$results ) {
 		$results->field_options = maybe_unserialize( $results->field_options );
-		if ( isset( $results->field_options['format'] ) && ! empty( $results->field_options['format'] ) ) {
-			$results->field_options['format'] = addslashes( $results->field_options['format'] );
-		}
 
 		$results->options = maybe_unserialize($results->options);
 		$results->default_value = maybe_unserialize($results->default_value);
