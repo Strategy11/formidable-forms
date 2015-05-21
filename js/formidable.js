@@ -1089,7 +1089,7 @@ function frmFrontFormJS(){
         var data = new google.visualization.DataTable();
 
         var showID = false;
-        if ( jQuery.inArray('id', opts.options.fields) ) {
+        if ( jQuery.inArray('id', opts.options.fields) !== -1 ) {
             showID = true;
             data.addColumn('number',frm_js.id);
         }
