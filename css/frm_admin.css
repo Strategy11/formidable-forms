@@ -451,6 +451,10 @@ form label.frm_primary_label input{font-size:12px;}
 	width:auto;
 }
 
+.frm_inner_field_container {
+	margin-bottom:10px;
+}
+
 .frm_conf_inline .frm_inner_field_container,
 .frm_conf_inline .frm_inner_conf_container{
 	width:192px;
@@ -812,6 +816,7 @@ table td, .form-table tr td{vertical-align:top;}
 li.ui-state-default.edit_field_type_divider .frm-show-click{
 	display:none;
 }
+
 .frm-show-hover,
 .frm_single_visible_hover,
 li.ui-state-default.edit_field_type_divider .frm-show-hover{
@@ -846,6 +851,13 @@ li.ui-state-default.selected > .frm-show-hover,
 li.ui-state-default.selected.edit_field_type_divider .divider_section_only .frm-show-hover{
 	opacity:100;
 	*visibility:visible;
+}
+
+li.ui-state-default.selected .frm-show-click.frm_import_options {
+	vertical-align:middle;
+    padding: 10px 5px 12px;
+    background: #fbfbfb;
+    border: solid 1px #ebebeb;
 }
 
 .frm_sorting span.ui-icon{width:16px;}
@@ -1343,6 +1355,7 @@ span.howto{display:inline;}
 .frm_sorting li.ui-state-default.selected > .widget,
 .frm_sorting li.ui-state-default.selected.edit_field_type_divider .divider_section_only .widget{
 	display:block;
+	margin-top: 15px;
 }
 
 #new_fields{
