@@ -93,7 +93,9 @@ class FrmFieldsController {
             wp_die();
         }
 
-		echo FrmField::update( $field_id, compact( 'form_id' ) );
+		$updated = FrmField::update( $field_id, compact( 'form_id' ) );
+		echo absint( $updated );
+
         wp_die();
     }
 
@@ -117,7 +119,7 @@ class FrmFieldsController {
         }
 
 		FrmField::update( $id, array( $field => $value ) );
-        echo stripslashes($value);
+		echo stripslashes( wp_kses_post( $value ) );
         wp_die();
     }
 

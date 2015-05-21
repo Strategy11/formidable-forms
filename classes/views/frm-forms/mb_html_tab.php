@@ -33,7 +33,8 @@
         $col = 'one';
 		foreach ( array(
             'form_name' => __( 'Form Name', 'formidable' ), 'form_description' => __( 'Form Description', 'formidable' ),
-            'form_key' => __( 'Form Key', 'formidable' ), 'deletelink' => __( 'Delete Entry Link', 'formidable' ) ) as $skey => $sname ) { ?>
+            'form_key' => __( 'Form Key', 'formidable' ), 'deletelink' => __( 'Delete Entry Link', 'formidable' ),
+		) as $skey => $sname ) { ?>
         <li class="frm_col_<?php echo esc_attr( $col ) ?>">
     	    <a href="javascript:void(0)" class="show_before_html show_after_html frmbutton button frm_insert_code" data-code="<?php echo esc_attr($skey) ?>"><?php echo $sname; ?></a>
     	</li>

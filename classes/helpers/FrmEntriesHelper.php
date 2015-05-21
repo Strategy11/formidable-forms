@@ -199,7 +199,7 @@ class FrmEntriesHelper {
                     $p_val = FrmProEntryMetaHelper::get_post_value($atts['entry']->post_id, $f->field_options['post_field'], $f->field_options['custom_field'], array(
                         'truncate' => (($f->field_options['post_field'] == 'post_category') ? true : false),
                         'form_id' => $atts['entry']->form_id, 'field' => $f, 'type' => $f->type,
-                        'exclude_cat' => (isset($f->field_options['exclude_cat']) ? $f->field_options['exclude_cat'] : 0)
+						'exclude_cat' => ( isset( $f->field_options['exclude_cat'] ) ? $f->field_options['exclude_cat'] : 0 ),
                     ));
                     if ( $p_val != '' ) {
                         $atts['entry']->metas[ $f->id ] = $p_val;
@@ -291,7 +291,6 @@ class FrmEntriesHelper {
             $values['browser'] = self::get_browser($data['browser']);
             $values['referrer'] = $data['referrer'];
         } else {
-            //$content .= "\r\n\r\n" . __( 'User Information', 'formidable' ) ."\r\n";
 			$values['ip'] = array( 'label' => __( 'IP Address', 'formidable' ), 'val' => $atts['entry']->ip );
             $values['browser'] = array(
                 'label' => __( 'User-Agent (Browser/OS)', 'formidable' ),
@@ -373,6 +372,7 @@ class FrmEntriesHelper {
                 $content[] = '<tr'. ( $odd ? $atts['bg_color'] : $bg_color_alt ) .'>';
             }
 
+			$value['val'] = str_replace( "\r\n", '<br/>', $value['val'] );
             if ( 'rtl' == $atts['direction'] ) {
                 $content[] = '<td '. $row_style .'>'. $value['val'] .'</td><th '. $row_style .'>'. $value['label'] . '</th>';
             } else {

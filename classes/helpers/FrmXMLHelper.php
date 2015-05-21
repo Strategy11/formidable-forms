@@ -206,7 +206,7 @@ class FrmXMLHelper {
     		        'form_id'       => (int) $form_id,
     		        'required'      => (int) $field->required,
     		        'options'       => FrmAppHelper::maybe_json_decode( (string) $field->options),
-    		        'field_options' => FrmAppHelper::maybe_json_decode( (string) $field->field_options)
+					'field_options' => FrmAppHelper::maybe_json_decode( (string) $field->field_options ),
     		    );
 
     		    if ( is_array($f['default_value']) && in_array($f['type'], array(
@@ -688,7 +688,7 @@ class FrmXMLHelper {
 	 * Switch old field IDs for new field IDs in emails and post
 	 *
 	 * @since 2.0
-	 * @param string $post_content - check for old field IDs
+	 * @param array $post_content - check for old field IDs
 	 * @param array $basic_fields - fields with string or int saved
 	 * @param array $array_fields - fields with arrays saved
 	 *
