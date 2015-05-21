@@ -110,7 +110,7 @@ class FrmEntry {
 
         global $wpdb;
 
-        $entry_exists = FrmDb::get_col( $wpdb->prefix .'frm_items', $check_val, 'id', array( 'order_by' => 'created_at DESC') );
+		$entry_exists = FrmDb::get_col( $wpdb->prefix . 'frm_items', $check_val, 'id', array( 'order_by' => 'created_at DESC' ) );
 
         if ( ! $entry_exists || empty($entry_exists) || ! isset($values['item_meta']) ) {
             return false;
@@ -178,7 +178,7 @@ class FrmEntry {
         FrmEntryMeta::duplicate_entry_metas($id, $entry_id);
 		self::clear_cache();
 
-        do_action('frm_after_duplicate_entry', $entry_id, $new_values['form_id'], array( 'old_id' => $id));
+		do_action( 'frm_after_duplicate_entry', $entry_id, $new_values['form_id'], array( 'old_id' => $id ) );
         return $entry_id;
     }
 
@@ -260,7 +260,7 @@ class FrmEntry {
 	public static function &update_form( $id, $value, $form_id ) {
         global $wpdb;
         $form_id = isset($value) ? $form_id : null;
-        $result = $wpdb->update( $wpdb->prefix .'frm_items', array( 'form_id' => $form_id), array( 'id' => $id ) );
+		$result = $wpdb->update( $wpdb->prefix . 'frm_items', array( 'form_id' => $form_id ), array( 'id' => $id ) );
 		if ( $result ) {
 			self::clear_cache();
 		}
@@ -312,7 +312,7 @@ class FrmEntry {
         }
 
         global $wpdb;
-        $metas = FrmDb::get_results( $wpdb->prefix .'frm_item_metas m LEFT JOIN '. $wpdb->prefix .'frm_fields f ON m.field_id=f.id', array( 'item_id' => $entry->id, 'field_id !' => 0), 'field_id, meta_value, field_key, item_id' );
+		$metas = FrmDb::get_results( $wpdb->prefix . 'frm_item_metas m LEFT JOIN ' . $wpdb->prefix . 'frm_fields f ON m.field_id=f.id', array( 'item_id' => $entry->id, 'field_id !' => 0 ), 'field_id, meta_value, field_key, item_id' );
 
         $entry->metas = array();
 
@@ -403,7 +403,7 @@ class FrmEntry {
         unset($meta);
 
         if ( ! is_array( $where ) && preg_match('/^it\.form_id=\d+$/', $where) ) {
-            $where = array( 'it.form_id' => substr($where, 11));
+			$where = array( 'it.form_id' => substr( $where, 11 ) );
         }
 
         $meta_where = array( 'field_id !' => 0 );
@@ -589,7 +589,7 @@ class FrmEntry {
     }
 
     public static function validate_url_field(&$errors, $field, &$value, $args) {
-        if ( $value == '' || ! in_array($field->type, array( 'website', 'url', 'image')) ) {
+		if ( $value == '' || ! in_array( $field->type, array( 'website', 'url', 'image' ) ) ) {
             return;
         }
 
@@ -765,7 +765,7 @@ class FrmEntry {
         }
 
         foreach ( $_SERVER as $key => $value ) {
-            if ( ! in_array($key, array( 'HTTP_COOKIE', 'HTTP_COOKIE2', 'PHP_AUTH_PW')) && is_string($value) ) {
+			if ( ! in_array( $key, array( 'HTTP_COOKIE', 'HTTP_COOKIE2', 'PHP_AUTH_PW' ) ) && is_string( $value ) ) {
 				$datas[ $key ] = wp_strip_all_tags( $value );
             } else {
 				$datas[ $key ] = '';

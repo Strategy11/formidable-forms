@@ -11,7 +11,7 @@ $display = apply_filters('frm_display_field_options', array(
 $li_classes = 'form-field edit_form_item frm_field_box frm_top_container frm_not_divider edit_field_type_'. $display['type'];
 $li_classes = apply_filters('frm_build_field_class', $li_classes, $field );
 
-if ( isset($values) && isset($values['ajax_load']) && $values['ajax_load'] && isset($count) && $count > 10 && ! in_array($field['type'], array( 'divider', 'end_divider')) ) {
+if ( isset( $values ) && isset( $values['ajax_load'] ) && $values['ajax_load'] && isset( $count ) && $count > 10 && ! in_array( $field['type'], array( 'divider', 'end_divider' ) ) ) {
 ?>
 <li id="frm_field_id_<?php echo esc_attr( $field['id'] ); ?>" class="<?php echo esc_attr( $li_classes ) ?> frm_field_loading" data-fid="<?php echo esc_attr( $field['id'] ) ?>" data-formid="<?php echo esc_attr( 'divider' == $field['type'] ? $field['form_select'] : $field['form_id'] ); ?>" data-ftype="<?php echo esc_attr( $display['type'] ) ?>">
 <img src="<?php echo FrmAppHelper::plugin_url() ?>/images/ajax_loader.gif" alt="<?php esc_attr_e( 'Loading', 'formidable' ) ?>" />
@@ -116,19 +116,19 @@ if ( $display['conf_field'] ) { ?>
 <div class="clear"></div>
 <?php }
 
-if ( in_array($field['type'], array( 'select', 'radio', 'checkbox')) ) { ?>
+if ( in_array( $field['type'], array( 'select', 'radio', 'checkbox' ) ) ) { ?>
     <div class="frm-show-click frm_small_top_margin"><?php
 
     if ( isset($field['post_field']) && $field['post_field'] == 'post_category' ) {
         echo '<p class="howto">'. FrmFieldsHelper::get_term_link($field['taxonomy']) .'</p>';
-    } else if ( ! isset( $field['post_field'] ) || ! in_array( $field['post_field'], array( 'post_category', 'post_status') ) ) {
+	} else if ( ! isset( $field['post_field'] ) || ! in_array( $field['post_field'], array( 'post_category', 'post_status' ) ) ) {
 ?>
         <div id="frm_add_field_<?php echo esc_attr( $field['id'] ); ?>">
             <a href="javascript:void(0);" data-opttype="single" class="button frm_cb_button frm_add_opt"><?php _e( 'Add Option', 'formidable' ) ?></a>
 
             <?php
 			if ( FrmAppHelper::pro_is_installed() ) { ?>
-                <a href="javascript:void(0);" id="other_button_<?php echo esc_attr( $field['id'] ); ?>" data-opttype="other" data-ftype="<?php echo esc_attr( $field['type'] ) ?>" class="button frm_cb_button frm_add_opt<?php echo ( in_array( $field['type'], array( 'radio', 'select') ) && $field['other'] == true ? ' frm_hidden' : '' ); ?>"><?php _e( 'Add "Other"', 'formidable' ) ?></a>
+				<a href="javascript:void(0);" id="other_button_<?php echo esc_attr( $field['id'] ); ?>" data-opttype="other" data-ftype="<?php echo esc_attr( $field['type'] ) ?>" class="button frm_cb_button frm_add_opt<?php echo ( in_array( $field['type'], array( 'radio', 'select' ) ) && $field['other'] == true ? ' frm_hidden' : '' ); ?>"><?php _e( 'Add "Other"', 'formidable' ) ?></a>
                 <input type="hidden" value="<?php echo esc_attr( $field['other'] ); ?>" id="other_input_<?php echo esc_attr( $field['id'] ); ?>" name="field_options[other_<?php echo esc_attr( $field['id'] ); ?>]">
             <?php
             }

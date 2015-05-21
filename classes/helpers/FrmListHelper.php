@@ -8,7 +8,7 @@ class FrmListHelper extends WP_List_Table {
 
 	public function __construct( $args ) {
 	    $args = wp_parse_args( $args, array(
-			'params' => array()
+			'params' => array(),
 		) );
 
 		$this->params = $args['params'];

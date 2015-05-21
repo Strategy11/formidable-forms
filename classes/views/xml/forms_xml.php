@@ -6,7 +6,7 @@ if ( ! $item_ids ) {
 
 // fetch 20 posts at a time rather than loading the entire table into memory
 while ( $next_set = array_splice( $item_ids, 0, 20 ) ) {
-	$forms = FrmDb::get_results( $wpdb->prefix .'frm_forms', array( 'id' => $next_set));
+	$forms = FrmDb::get_results( $wpdb->prefix . 'frm_forms', array( 'id' => $next_set ) );
 
 	// Begin Loop
 	foreach ( $forms as $form ) {
@@ -26,7 +26,7 @@ while ( $next_set = array_splice( $item_ids, 0, 20 ) ) {
         <parent_form_id><?php echo $form->parent_form_id ?></parent_form_id>
 <?php
 
-        $fields = FrmDb::get_results( $wpdb->prefix .'frm_fields', array( 'form_id' => $form->id), '*', array( 'order_by' => 'field_order') );
+		$fields = FrmDb::get_results( $wpdb->prefix . 'frm_fields', array( 'form_id' => $form->id ), '*', array( 'order_by' => 'field_order' ) );
 
 		foreach ( $fields as $field ) { ?>
 		<field>

@@ -781,7 +781,7 @@ class FrmAppHelper {
 
     public static function replace_quotes($val) {
         //Replace double quotes
-        $val = str_replace( array( '&#8220;', '&#8221;', '&#8243;'), '"', $val);
+		$val = str_replace( array( '&#8220;', '&#8221;', '&#8243;' ), '"', $val );
         //Replace single quotes
         $val = str_replace( array( '&#8216;', '&#8217;', '&#8242;', '&prime;', '&rsquo;', '&lsquo;' ), "'", $val );
         return $val;
@@ -880,17 +880,17 @@ class FrmAppHelper {
             $key = base_convert( rand($min_slug_value, $max_slug_value), 10, 36 );
         }
 
-        if ( is_numeric($key) || in_array($key, array( 'id', 'key', 'created-at', 'detaillink', 'editlink', 'siteurl', 'evenodd')) ) {
+		if ( is_numeric($key) || in_array( $key, array( 'id', 'key', 'created-at', 'detaillink', 'editlink', 'siteurl', 'evenodd' ) ) ) {
             $key = $key .'a';
         }
 
-        $key_check = FrmDb::get_var( $table_name, array($column => $key, 'ID !' => $id), $column );
+		$key_check = FrmDb::get_var( $table_name, array( $column => $key, 'ID !' => $id ), $column );
 
         if ( $key_check || is_numeric($key_check) ) {
             $suffix = 2;
 			do {
 				$alt_post_name = substr( $key, 0, 200 - ( strlen( $suffix ) + 1 ) ) . $suffix;
-                $key_check = FrmDb::get_var( $table_name, array($column => $alt_post_name, 'ID !' => $id), $column );
+				$key_check = FrmDb::get_var( $table_name, array( $column => $alt_post_name, 'ID !' => $id ), $column );
 				$suffix++;
 			} while ($key_check || is_numeric($key_check));
 			$key = $alt_post_name;
@@ -914,9 +914,9 @@ class FrmAppHelper {
             $post_values = stripslashes_deep($_POST);
         }
 
-        $values = array( 'id' => $record->id, 'fields' => array());
+		$values = array( 'id' => $record->id, 'fields' => array() );
 
-        foreach ( array( 'name', 'description') as $var ) {
+		foreach ( array( 'name', 'description' ) as $var ) {
             $default_val = isset($record->{$var}) ? $record->{$var} : '';
             $values[ $var ] = self::get_param( $var, $default_val );
             unset($var, $default_val);
@@ -955,7 +955,7 @@ class FrmAppHelper {
                 if ( ! isset($field->field_options['custom_field']) ) {
                     $field->field_options['custom_field'] = '';
                 }
-                $meta_value = FrmProEntryMetaHelper::get_post_value($record->post_id, $field->field_options['post_field'], $field->field_options['custom_field'], array( 'truncate' => false, 'type' => $field->type, 'form_id' => $field->form_id, 'field' => $field));
+				$meta_value = FrmProEntryMetaHelper::get_post_value( $record->post_id, $field->field_options['post_field'], $field->field_options['custom_field'], array( 'truncate' => false, 'type' => $field->type, 'form_id' => $field->form_id, 'field' => $field ) );
             } else {
                 $meta_value = self::get_meta_value($field->id, $record);
             }
@@ -1062,7 +1062,7 @@ class FrmAppHelper {
 			$values['custom_style'] = ( $post_values && isset( $post_values['options']['custom_style'] ) ) ? absint( $_POST['options']['custom_style'] ) : ( $frm_settings->load_style != 'none' );
         }
 
-        foreach ( array( 'before', 'after', 'submit') as $h ) {
+		foreach ( array( 'before', 'after', 'submit' ) as $h ) {
             if ( ! isset( $values[ $h .'_html' ] ) ) {
                 $values[ $h .'_html' ] = ( isset( $post_values['options'][ $h .'_html' ] ) ? $post_values['options'][ $h .'_html' ] : FrmFormsHelper::get_default_html( $h ) );
             }
@@ -1518,7 +1518,7 @@ class FrmAppHelper {
         $post_content = json_encode( $post_content );
 
 	    // add extra slashes for \r\n since WP strips them
-		$post_content = str_replace( array( '\\r', '\\n', '\\u', '\\t'), array( '\\\\r', '\\\\n', '\\\\u', '\\\\t'), $post_content );
+		$post_content = str_replace( array( '\\r', '\\n', '\\u', '\\t' ), array( '\\\\r', '\\\\n', '\\\\u', '\\\\t' ), $post_content );
 
         // allow for &quot
 	    $post_content = str_replace( '&quot;', '\\"', $post_content );
@@ -1636,7 +1636,7 @@ class FrmAppHelper {
      */
 	public static function load_admin_wide_js( $load = true ) {
         $version = FrmAppHelper::plugin_version();
-		wp_register_script( 'formidable_admin_global', FrmAppHelper::plugin_url() . '/js/formidable_admin_global.js', array( 'jquery'), $version );
+		wp_register_script( 'formidable_admin_global', FrmAppHelper::plugin_url() . '/js/formidable_admin_global.js', array( 'jquery' ), $version );
 
         wp_localize_script( 'formidable_admin_global', 'frmGlobal', array(
 			'updating_msg' => __( 'Please wait while your site updates.', 'formidable' ),

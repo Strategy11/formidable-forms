@@ -1,4 +1,4 @@
-<?php if ( in_array($display['type'], array( 'text', 'website', 'email', 'url') ) ) { ?>
+<?php if ( in_array( $display['type'], array( 'text', 'website', 'email', 'url' ) ) ) { ?>
     <input type="text" name="<?php echo esc_attr( $field_name ) ?>" id="<?php echo esc_attr( $html_id ) ?>" value="<?php echo esc_attr( $field['default_value'] ); ?>" <?php echo ( isset($field['size']) && $field['size'] ) ? esc_attr( 'style="width:'. $field['size'] . ( is_numeric($field['size']) ? 'px' : '') .';"' ) : ''; ?> class="dyn_default_value" />
 <?php } else if ( $field['type'] == 'textarea' ) { ?>
     <textarea name="<?php echo esc_attr( $field_name ) ?>" <?php
@@ -10,7 +10,7 @@
 } else if ( $field['type'] == 'radio' || $field['type'] == 'checkbox' ) {
     $field['default_value'] = maybe_unserialize($field['default_value']);
     if ( isset($field['post_field']) && $field['post_field'] == 'post_category' ) {
-        do_action('frm_after_checkbox', array( 'field' => $field, 'field_name' => $field_name, 'type' => $field['type']));
+		do_action( 'frm_after_checkbox', array( 'field' => $field, 'field_name' => $field_name, 'type' => $field['type'] ) );
     } else {
         do_action('frm_add_multiple_opts_labels', $field); ?>
         <ul id="frm_field_<?php echo esc_attr( $field['id'] ) ?>_opts" class="frm_sortable_field_opts frm_clear<?php echo (count($field['options']) > 10) ? ' frm_field_opts_list' : ''; ?>">
@@ -20,7 +20,7 @@
     }
 } else if ( $field['type'] == 'select' ) {
     if ( isset($field['post_field']) && $field['post_field'] == 'post_category' ) {
-        echo FrmFieldsHelper::dropdown_categories( array( 'name' => $field_name, 'field' => $field) );
+		echo FrmFieldsHelper::dropdown_categories( array( 'name' => $field_name, 'field' => $field ) );
     } else { ?>
     <select name="<?php echo esc_attr( $field_name ) . ( ( isset($field['multiple']) && $field['multiple']) ? '[]' : '' ); ?>" <?php
         echo ( isset($field['size']) && $field['size'] ) ? 'class="auto_width"' : '';
@@ -43,7 +43,7 @@
     <div class="frm-show-click frm_small_top_margin">
     <?php
 
-    if ( ! isset($field['post_field']) || ! in_array($field['post_field'], array( 'post_status', 'post_category')) ) { ?>
+	if ( ! isset( $field['post_field'] ) || ! in_array( $field['post_field'], array( 'post_status', 'post_category' ) ) ) { ?>
         <?php do_action('frm_add_multiple_opts_labels', $field); ?>
         <ul id="frm_field_<?php echo esc_attr( $field['id'] ) ?>_opts" class="frm_sortable_field_opts<?php echo ( count($field['options']) > 10 ) ? ' frm_field_opts_list' : ''; ?>">
         <?php FrmFieldsHelper::show_single_option($field); ?>

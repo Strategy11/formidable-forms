@@ -99,21 +99,21 @@ foreach ( FrmFieldsHelper::pro_field_selection() as $field_key => $field_type ) 
 					'frm_eighth'    => __( '1/8', 'formidable' ),
     	            'frm_inline'    => array(
                         'label' => __( 'Inline', 'formidable' ),
-                        'title' => __( 'Align fields in a row without a specific width.', 'formidable' )
+						'title' => __( 'Align fields in a row without a specific width.', 'formidable' ),
                     ),
 
     	            'frm_full' => array(
                         'label' => __( '100% width', 'formidable' ),
-                        'title' => __( 'Force the field to fill the full space with 100% width.', 'formidable' )
+						'title' => __( 'Force the field to fill the full space with 100% width.', 'formidable' ),
                     ),
     	            'frm_grid_first' => __( 'First Grid Row', 'formidable' ),
     	            'frm_grid' => __( 'Even Grid Row', 'formidable' ),
     	            'frm_grid_odd' => __( 'Odd Grid Row', 'formidable' ),
-    	            'frm_two_col' => array( 'label' => __( '2 Col Options', 'formidable' ), 'title' => __( 'Put your radio button or checkbox options into two columns.', 'formidable' )),
-    	            'frm_three_col' => array( 'label' => __( '3 Col Options', 'formidable' ), 'title' => __( 'Put your radio button or checkbox options into three columns.', 'formidable' )),
-    	            'frm_four_col' => array( 'label' => __( '4 Col Options', 'formidable' ), 'title' => __( 'Put your radio button or checkbox options into four columns.', 'formidable' )),
-    	            'frm_total' => array( 'label' => __( 'Total', 'formidable' ), 'title' => __( 'Add this to a read-only field to display the text in bold without a border or background.', 'formidable' )),
-					'frm_scroll_box' => array( 'label' => __( 'Scroll Box', 'formidable' ), 'title' => __( 'If you have many checkbox or radio button options, you may add this class to allow your user to easily scroll through the options.', 'formidable' )),
+					'frm_two_col' => array( 'label' => __( '2 Col Options', 'formidable' ), 'title' => __( 'Put your radio button or checkbox options into two columns.', 'formidable' ) ),
+					'frm_three_col' => array( 'label' => __( '3 Col Options', 'formidable' ), 'title' => __( 'Put your radio button or checkbox options into three columns.', 'formidable' ) ),
+					'frm_four_col' => array( 'label' => __( '4 Col Options', 'formidable' ), 'title' => __( 'Put your radio button or checkbox options into four columns.', 'formidable' ) ),
+					'frm_total' => array( 'label' => __( 'Total', 'formidable' ), 'title' => __( 'Add this to a read-only field to display the text in bold without a border or background.', 'formidable' ) ),
+					'frm_scroll_box' => array( 'label' => __( 'Scroll Box', 'formidable' ), 'title' => __( 'If you have many checkbox or radio button options, you may add this class to allow your user to easily scroll through the options.', 'formidable' ) ),
 					'frm_text_block' => array( 'label' => __( 'Align Option Text', 'formidable' ), 'title' => __( 'If you have a large amount of text in a checkbox or radio button field, use this class to align all the text in a block.', 'formidable' ) ),
     	        );
 

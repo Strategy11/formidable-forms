@@ -646,7 +646,7 @@ class FrmFieldsController {
             $add_html['placeholder'] = 'placeholder="'. esc_attr($field['default_value']) .'"';
             wp_enqueue_script('jquery-placeholder');
         } else if ( ! $frm_settings->use_html ) {
-            $val = str_replace( array("\r\n", "\n"), '\r', addslashes(str_replace('&#039;', "'", esc_attr($field['default_value']))));
+			$val = str_replace( array( "\r\n", "\n" ), '\r', addslashes( str_replace( '&#039;', "'", esc_attr( $field['default_value'] ) ) ) );
             $add_html['data-frmval'] = 'data-frmval="'. esc_attr($val) .'"';
             $class[] = 'frm_toggle_default';
 

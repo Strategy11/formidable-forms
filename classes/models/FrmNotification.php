@@ -51,7 +51,7 @@ class FrmNotification {
             //Don't allow empty From
 			if ( $f == 'from' && empty( $notification[ $f ] ) ) {
 				$notification[ $f ] = '[admin_email]';
-            } else if ( in_array($f, array( 'email_to', 'cc', 'bcc', 'reply_to', 'from')) ) {
+			} else if ( in_array( $f, array( 'email_to', 'cc', 'bcc', 'reply_to', 'from' ) ) ) {
 				//Remove brackets
                 //Add a space in case there isn't one
 				$notification[ $f ] = str_replace( '<', ' ', $notification[ $f ] );
@@ -315,7 +315,7 @@ class FrmNotification {
         $header[]       = 'From: ' . $atts['from'];
 
         //Allow for cc and bcc arrays
-        $array_fields = array( 'CC' => $atts['cc'], 'BCC' => $atts['bcc']);
+		$array_fields = array( 'CC' => $atts['cc'], 'BCC' => $atts['bcc'] );
 		$cc = array( 'CC' => array(), 'BCC' => array() );
         foreach ( $array_fields as $key => $a_field ) {
             if ( empty($a_field) ) {

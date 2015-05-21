@@ -42,7 +42,7 @@ class FrmFieldsHelper {
             'user_id'   => __( 'User ID (hidden)', 'formidable' ),
             'password'  => __( 'Password', 'formidable' ),
             'html'      => __( 'HTML', 'formidable' ),
-            'tag'       => __( 'Tags', 'formidable' )
+			'tag'       => __( 'Tags', 'formidable' ),
             //'address' => 'Address' //Address line 1, Address line 2, City, State/Providence, Postal Code, Select Country
             //'city_selector' => 'US State/County/City selector',
             //'full_name' => 'First and Last Name',
@@ -177,8 +177,8 @@ class FrmFieldsHelper {
     }
 
     public static function setup_edit_vars( $record, $doing_ajax = false ) {
-        $values = array( 'id' => $record->id, 'form_id' => $record->form_id);
-        $defaults = array( 'name' => $record->name, 'description' => $record->description);
+		$values = array( 'id' => $record->id, 'form_id' => $record->form_id );
+		$defaults = array( 'name' => $record->name, 'description' => $record->description );
         $default_opts = array(
             'field_key' => $record->field_key, 'type' => $record->type,
 			'default_value' => $record->default_value, 'field_order' => $record->field_order,
@@ -221,7 +221,7 @@ class FrmFieldsHelper {
 
         $values['custom_html'] = (isset($record->field_options['custom_html'])) ? $record->field_options['custom_html'] : self::get_default_html($record->type);
 
-        return apply_filters('frm_setup_edit_field_vars', $values, array( 'doing_ajax' => $doing_ajax));
+		return apply_filters( 'frm_setup_edit_field_vars', $values, array( 'doing_ajax' => $doing_ajax ) );
     }
 
     public static function get_default_field_opts( $type, $field, $limit = false ) {
@@ -276,8 +276,8 @@ class FrmFieldsHelper {
         $default_settings = $frm_settings->default_options();
 
         $defaults = array(
-            'unique_msg' => array( 'full' => $default_settings['unique_msg'], 'part' => $field->name.' '. __( 'must be unique', 'formidable' )),
-            'invalid'   => array( 'full' => __( 'This field is invalid', 'formidable' ), 'part' => $field->name.' '. __( 'is invalid', 'formidable' ))
+			'unique_msg' => array( 'full' => $default_settings['unique_msg'], 'part' => $field->name . ' ' . __( 'must be unique', 'formidable' ) ),
+			'invalid'   => array( 'full' => __( 'This field is invalid', 'formidable' ), 'part' => $field->name . ' ' . __( 'is invalid', 'formidable' ) ),
         );
 
         $msg = ( $field->field_options[ $error ] == $defaults[ $error ]['full'] || empty( $field->field_options[ $error ] ) ) ? $defaults[ $error ]['part'] : $field->field_options[ $error ];
@@ -292,9 +292,9 @@ class FrmFieldsHelper {
 
 	public static function get_default_html( $type = 'text' ) {
 		if ( apply_filters( 'frm_normal_field_type_html', true, $type ) ) {
-            $input = (in_array($type, array( 'radio', 'checkbox', 'data'))) ? '<div class="frm_opt_container">[input]</div>' : '[input]';
+			$input = ( in_array( $type, array( 'radio', 'checkbox', 'data' ) ) ) ? '<div class="frm_opt_container">[input]</div>' : '[input]';
             $for = '';
-            if ( ! in_array( $type, array( 'radio', 'checkbox', 'data', 'scale') ) ) {
+			if ( ! in_array( $type, array( 'radio', 'checkbox', 'data', 'scale' ) ) ) {
                 $for = 'for="field_[key]"';
             }
 
@@ -399,7 +399,7 @@ DEFAULT_HTML;
 
         foreach ( $shortcodes[0] as $short_key => $tag ) {
             $atts = shortcode_parse_atts( $shortcodes[2][ $short_key ] );
-            $tag = self::get_shortcode_tag($shortcodes, $short_key, array( 'conditional' => false, 'conditional_check' => false));
+			$tag = self::get_shortcode_tag( $shortcodes, $short_key, array( 'conditional' => false, 'conditional_check' => false ) );
 
             $replace_with = '';
 
@@ -524,7 +524,7 @@ DEFAULT_HTML;
     }
 
     public static function get_shortcode_tag($shortcodes, $short_key, $args) {
-        $args = wp_parse_args($args, array( 'conditional' => false, 'conditional_check' => false, 'foreach' => false));
+		$args = wp_parse_args( $args, array( 'conditional' => false, 'conditional_check' => false, 'foreach' => false ) );
         if ( ( $args['conditional'] || $args['foreach'] ) && ! $args['conditional_check'] ) {
             $args['conditional_check'] = true;
         }
@@ -852,7 +852,7 @@ DEFAULT_HTML;
                 case 'updated_by':
                 case 'updated-by':
                     $this_tag = str_replace('-', '_', $tag);
-                    $replace_with = self::get_display_value($entry->{$this_tag}, (object) array( 'type' => 'user_id'), $atts);
+					$replace_with = self::get_display_value( $entry->{$this_tag}, (object) array( 'type' => 'user_id' ), $atts );
                     unset($this_tag);
                 break;
 

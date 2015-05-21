@@ -18,7 +18,7 @@ foreach ( $type as $tb_type ) {
     }
 
 	$item_ids = $records[ $tb_type ];
-    if ( in_array($tb_type, array( 'styles', 'actions') ) ) {
+	if ( in_array( $tb_type, array( 'styles', 'actions' ) ) ) {
         include(dirname(__FILE__) .'/posts_xml.php');
     } else if ( file_exists(dirname(__FILE__) .'/'. $tb_type .'_xml.php') ) {
         include(dirname(__FILE__) .'/'. $tb_type .'_xml.php');

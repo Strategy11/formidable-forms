@@ -15,7 +15,7 @@ class FrmXMLController {
         $set_err = libxml_use_internal_errors(true);
         $loader = libxml_disable_entity_loader( true );
 
-        $files = apply_filters('frm_default_templates_files', array(FrmAppHelper::plugin_path() .'/classes/views/xml/default-templates.xml'));
+		$files = apply_filters( 'frm_default_templates_files', array( FrmAppHelper::plugin_path() . '/classes/views/xml/default-templates.xml' ) );
 
         foreach ( (array) $files as $file ) {
             FrmXMLHelper::import_xml($file);
@@ -98,8 +98,8 @@ class FrmXMLController {
         //add_filter('upload_mimes', 'FrmXMLController::allow_mime');
 
         $export_format = apply_filters('frm_export_formats', array(
-            'xml' => array( 'name' => 'XML', 'support' => 'forms', 'count' => 'multiple'),
-        ));
+			'xml' => array( 'name' => 'XML', 'support' => 'forms', 'count' => 'multiple' ),
+		) );
 
         $file_type = strtolower(pathinfo($_FILES['frm_import_file']['name'], PATHINFO_EXTENSION));
         if ( $file_type != 'xml' && isset( $export_format[ $file_type ] ) ) {
@@ -177,7 +177,7 @@ class FrmXMLController {
 	        'actions'   => $wpdb->posts,
 	    );
 
-	    $defaults = array( 'ids' => false);
+		$defaults = array( 'ids' => false );
 	    $args = wp_parse_args( $args, $defaults );
 
         $sitename = sanitize_key( get_bloginfo( 'name' ) );

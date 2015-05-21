@@ -77,7 +77,7 @@ class FrmStyle {
             $default_settings = $this->get_defaults();
 
             foreach ( $default_settings as $setting => $default ) {
-                if ( strpos($setting, 'color') !== false || in_array($setting, array( 'error_bg', 'error_border', 'error_text')) ) {
+				if ( strpos( $setting, 'color' ) !== false || in_array( $setting, array( 'error_bg', 'error_border', 'error_text' ) ) ) {
                     //if is a color
 					$new_instance['post_content'][ $setting ] = str_replace( '#', '', $new_instance['post_content'][ $setting ] );
 				} else if ( in_array( $setting, array( 'submit_style', 'important_style', 'auto_width' ) ) && ! isset( $new_instance['post_content'][ $setting ] ) ) {

@@ -10,10 +10,10 @@
         'label_position' => __( 'Label Position', 'formidable' ),
         'required_label' => __( 'Required Label', 'formidable' ),
         'input' => __( 'Input Field', 'formidable' ),
-        'input opt=1' => array( 'label' => __( 'Single Option', 'formidable' ), 'title' => __( 'Show a single radio or checkbox option by replacing 1 with the order of the option', 'formidable' )),
+		'input opt=1' => array( 'label' => __( 'Single Option', 'formidable' ), 'title' => __( 'Show a single radio or checkbox option by replacing 1 with the order of the option', 'formidable' ) ),
         'input label=0' => __( 'Hide Option Label', 'formidable' ),
-        'required_class' => array( 'label' => __( 'Required Class', 'formidable' ), 'title' => __( 'Add class name if field is required', 'formidable' )),
-        'error_class' => array( 'label' => __( 'Error Class', 'formidable' ), 'title' => __( 'Add class name if field has an error on form submit', 'formidable' ))
+		'required_class' => array( 'label' => __( 'Required Class', 'formidable' ), 'title' => __( 'Add class name if field is required', 'formidable' ) ),
+		'error_class' => array( 'label' => __( 'Error Class', 'formidable' ), 'title' => __( 'Add class name if field has an error on form submit', 'formidable' ) ),
     );
 
 	foreach ( $entry_shortcodes as $skey => $sname ) {
@@ -41,8 +41,7 @@
             $col = ($col == 'one') ? 'two' : 'one';
         }
 
-        foreach ( array(
-            'button_label' => __( 'Button Label', 'formidable' ), 'button_action' => __( 'Button Hook', 'formidable' ) ) as $skey => $sname ) { ?>
+        foreach ( array( 'button_label' => __( 'Button Label', 'formidable' ), 'button_action' => __( 'Button Hook', 'formidable' ) ) as $skey => $sname ) { ?>
         <li class="frm_col_<?php echo esc_attr( $col ) ?>">
     	    <a href="javascript:void(0)" class="show_submit_html frmbutton button frm_insert_code" data-code="<?php echo esc_attr($skey) ?>"><?php echo $sname; ?></a>
     	</li>

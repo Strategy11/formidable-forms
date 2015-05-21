@@ -141,7 +141,7 @@ class FrmXMLHelper {
             $form['options'] = FrmAppHelper::maybe_json_decode($form['options']);
 
             // if template, allow to edit if form keys match, otherwise, creation date must also match
-            $edit_query = array( 'form_key' => $form['form_key'], 'is_template' => $form['is_template']);
+			$edit_query = array( 'form_key' => $form['form_key'], 'is_template' => $form['is_template'] );
             if ( ! $form['is_template'] ) {
                 $edit_query['created_at'] = $form['created_at'];
             }
@@ -281,7 +281,7 @@ class FrmXMLHelper {
             }
 
 		    // Update field ids/keys to new ones
-		    do_action('frm_after_duplicate_form', $form_id, $form, array( 'old_id' => $old_id));
+			do_action( 'frm_after_duplicate_form', $form_id, $form, array( 'old_id' => $old_id ) );
 
 			$imported['forms'][ (int) $item->id ] = $form_id;
 
@@ -657,7 +657,7 @@ class FrmXMLHelper {
             unset($post_setting);
         }
 
-        $new_action['event'] = array( 'create', 'update');
+		$new_action['event'] = array( 'create', 'update' );
 
         if ( $switch ) {
 			// Fields with string or int saved
@@ -779,10 +779,10 @@ class FrmXMLHelper {
     private static function migrate_notifications_to_action( $form_options, $form_id, &$notifications ) {
         if ( ! isset( $form_options['notification'] ) && isset( $form_options['email_to'] ) && ! empty( $form_options['email_to'] ) ) {
             // add old settings into notification array
-            $form_options['notification'] = array(0 => $form_options);
+			$form_options['notification'] = array( 0 => $form_options );
         } else if ( isset( $form_options['notification']['email_to'] ) ) {
             // make sure it's in the correct format
-            $form_options['notification'] = array(0 => $form_options['notification']);
+			$form_options['notification'] = array( 0 => $form_options['notification'] );
         }
 
         if ( isset( $form_options['notification'] ) && is_array($form_options['notification']) ) {
@@ -825,11 +825,11 @@ class FrmXMLHelper {
         }
 
         // Format event
-        $atts['event'] = array( 'create');
+		$atts['event'] = array( 'create' );
         if ( isset( $notification['update_email'] ) && 1 == $notification['update_email'] ) {
             $atts['event'][] = 'update';
         } else if ( isset($notification['update_email']) && 2 == $notification['update_email'] ) {
-            $atts['event'] = array( 'update');
+			$atts['event'] = array( 'update' );
         }
     }
 

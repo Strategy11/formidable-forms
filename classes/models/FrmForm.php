@@ -95,7 +95,7 @@ class FrmForm {
             FrmField::duplicate($id, $form_id, $copy_keys, $blog_id);
 
             // update form settings after fields are created
-            do_action('frm_after_duplicate_form', $form_id, $new_values, array( 'old_id' => $id));
+			do_action( 'frm_after_duplicate_form', $form_id, $new_values, array( 'old_id' => $id ) );
             return $form_id;
         }
 
@@ -113,7 +113,7 @@ class FrmForm {
 
         if ( $new_opts != $values['options'] ) {
             global $wpdb;
-            $wpdb->update($wpdb->prefix .'frm_forms', array( 'options' => maybe_serialize($new_opts)), array( 'id' => $form_id));
+			$wpdb->update( $wpdb->prefix . 'frm_forms', array( 'options' => maybe_serialize( $new_opts ) ), array( 'id' => $form_id ) );
         }
     }
 
@@ -230,12 +230,12 @@ class FrmForm {
 				if ( isset( $values['field_options'][ 'custom_html_' . $field_id ] ) ) {
 					$field->field_options['custom_html'] = isset( $values['field_options'][ 'custom_html_' . $field_id ] ) ? $values['field_options'][ 'custom_html_' . $field_id ] : ( isset( $field->field_options['custom_html'] ) ? $field->field_options['custom_html'] : FrmFieldsHelper::get_default_html( $field->type ) );
                     $field->field_options = apply_filters('frm_update_form_field_options', $field->field_options, $field, $values);
-                    FrmField::update($field_id, array( 'field_options' => $field->field_options));
+					FrmField::update( $field_id, array( 'field_options' => $field->field_options ) );
                 } else if ( $field->type == 'hidden' || $field->type == 'user_id' ) {
                     $prev_opts = $field->field_options;
                     $field->field_options = apply_filters('frm_update_form_field_options', $field->field_options, $field, $values);
                     if ( $prev_opts != $field->field_options ) {
-                        FrmField::update($field_id, array( 'field_options' => $field->field_options));
+						FrmField::update( $field_id, array( 'field_options' => $field->field_options ) );
                     }
                     unset($prev_opts);
                 }
@@ -246,7 +246,7 @@ class FrmForm {
             }
 
             //updating the form
-            foreach ( array( 'size', 'max', 'label', 'invalid', 'blank', 'classes') as $opt ) {
+			foreach ( array( 'size', 'max', 'label', 'invalid', 'blank', 'classes' ) as $opt ) {
 				$field->field_options[ $opt ] = isset( $values['field_options'][ $opt . '_' . $field_id ] ) ? trim( $values['field_options'][ $opt . '_' . $field_id ] ) : '';
             }
 
@@ -281,7 +281,7 @@ class FrmForm {
             return self::trash($id);
         }
 
-        $statuses  = array( 'published', 'draft', 'trash');
+		$statuses  = array( 'published', 'draft', 'trash' );
         if ( ! in_array( $status, $statuses ) ) {
             return false;
         }
@@ -295,7 +295,7 @@ class FrmForm {
 
 			$query_results = $wpdb->query( $wpdb->prepare( 'UPDATE ' . $wpdb->prefix . 'frm_forms SET status = %s ' . $where['where'], $where['values'] ) );
         } else {
-            $query_results = $wpdb->update( $wpdb->prefix .'frm_forms', array( 'status' => $status), array( 'id' => $id));
+			$query_results = $wpdb->update( $wpdb->prefix . 'frm_forms', array( 'status' => $status ), array( 'id' => $id ) );
         }
 
         if ( $query_results ) {
@@ -324,8 +324,8 @@ class FrmForm {
         global $wpdb;
         $query_results = $wpdb->update(
             $wpdb->prefix .'frm_forms',
-            array( 'status' => 'trash', 'options' => serialize($options)),
-            array( 'id' => $id)
+			array( 'status' => 'trash', 'options' => serialize( $options ) ),
+			array( 'id' => $id )
         );
 
         if ( $query_results ) {
@@ -347,7 +347,7 @@ class FrmForm {
         }
 
         // Disconnect the entries from this form
-        $entries = FrmDb::get_col( $wpdb->prefix .'frm_items', array( 'form_id' => $id) );
+		$entries = FrmDb::get_col( $wpdb->prefix . 'frm_items', array( 'form_id' => $id ) );
         foreach ( $entries as $entry_id ) {
             FrmEntry::destroy($entry_id);
             unset($entry_id);
@@ -513,7 +513,7 @@ class FrmForm {
 
         $results = (array) FrmDb::get_results( 'frm_forms', array( 'or' => 1, 'parent_form_id' => null, 'parent_form_id <' => 0 ), 'status, is_template' );
 
-    	$statuses = array( 'published', 'draft', 'template', 'trash');
+		$statuses = array( 'published', 'draft', 'template', 'trash' );
     	$counts = array_fill_keys( $statuses, 0 );
 
     	foreach ( $results as $row ) {

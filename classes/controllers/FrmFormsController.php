@@ -372,7 +372,7 @@ class FrmFormsController {
     public static function scheduled_delete($delete_timestamp = '') {
         global $wpdb;
 
-        $trash_forms = FrmDb::get_results($wpdb->prefix .'frm_forms', array( 'status' => 'trash'), 'id, options' );
+		$trash_forms = FrmDb::get_results( $wpdb->prefix . 'frm_forms', array( 'status' => 'trash' ), 'id, options' );
 
         if ( ! $trash_forms ) {
             return;
@@ -405,14 +405,14 @@ class FrmFormsController {
 
     public static function insert_form_popup() {
 		$page = basename( FrmAppHelper::get_server_value( 'PHP_SELF' ) );
-        if ( ! in_array($page, array( 'post.php', 'page.php', 'page-new.php', 'post-new.php') ) ) {
+		if ( ! in_array( $page, array( 'post.php', 'page.php', 'page-new.php', 'post-new.php' ) ) ) {
             return;
         }
 
         FrmAppHelper::load_admin_wide_js();
 
         $shortcodes = array(
-            'formidable' => array( 'name' => __( 'Form', 'formidable' ), 'label' => __( 'Insert a Form', 'formidable' )),
+			'formidable' => array( 'name' => __( 'Form', 'formidable' ), 'label' => __( 'Insert a Form', 'formidable' ) ),
         );
 
         $shortcodes = apply_filters('frm_popup_shortcodes', $shortcodes);
@@ -438,9 +438,9 @@ class FrmFormsController {
                 $opts = array(
 					'form_id'       => 'id',
                     //'key' => ',
-                    'title'         => array( 'val' => 1, 'label' => __( 'Display form title', 'formidable' )),
-                    'description'   => array( 'val' => 1, 'label' => __( 'Display form description', 'formidable' )),
-                    'minimize'      => array( 'val' => 1, 'label' => __( 'Minimize form HTML', 'formidable' )),
+					'title'         => array( 'val' => 1, 'label' => __( 'Display form title', 'formidable' ) ),
+					'description'   => array( 'val' => 1, 'label' => __( 'Display form description', 'formidable' ) ),
+					'minimize'      => array( 'val' => 1, 'label' => __( 'Minimize form HTML', 'formidable' ) ),
                 );
             break;
         }
@@ -810,7 +810,7 @@ class FrmFormsController {
 
 		for ( $i = count( $templates ) - 1; $i >= 0; $i-- ) {
             $filename = str_replace( '.php', '', str_replace( $path.'/', '', $templates[ $i ] ) );
-            $template_query = array( 'form_key' => $filename);
+			$template_query = array( 'form_key' => $filename );
             if ( $template ) {
                 $template_query['is_template'] = 1;
             }
@@ -839,7 +839,7 @@ class FrmFormsController {
             }
 
             if ( $form ) {
-                do_action('frm_after_duplicate_form', $form->id, (array) $form, array( 'old_id' => $old_id));
+				do_action( 'frm_after_duplicate_form', $form->id, (array) $form, array( 'old_id' => $old_id ) );
             }
         }
     }
@@ -970,7 +970,7 @@ class FrmFormsController {
         			'parent'    => 'frm-forms',
         			'id'        => 'edit_form_'. $form_id,
         			'title'     => empty($name) ? __( '(no title)') : $name,
-        			'href'      => admin_url( 'admin.php?page=formidable&frm_action=edit&id='. $form_id )
+					'href'      => admin_url( 'admin.php?page=formidable&frm_action=edit&id=' . $form_id ),
         		) );
         	}
         }
@@ -1116,7 +1116,7 @@ class FrmFormsController {
 
         if ( $created && is_numeric($created) && $conf_method != 'message' ) {
             do_action('frm_success_action', $conf_method, $form, $form->options, $created);
-            do_action('frm_after_entry_processed', array( 'entry_id' => $created, 'form' => $form));
+			do_action( 'frm_after_entry_processed', array( 'entry_id' => $created, 'form' => $form ) );
             return;
         }
 
@@ -1141,7 +1141,7 @@ class FrmFormsController {
             include(FrmAppHelper::plugin_path() .'/classes/views/frm-entries/errors.php');
         }
 
-        do_action('frm_after_entry_processed', array( 'entry_id' => $created, 'form' => $form));
+		do_action( 'frm_after_entry_processed', array( 'entry_id' => $created, 'form' => $form ) );
     }
 
 	/**

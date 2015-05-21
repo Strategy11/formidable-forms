@@ -6,7 +6,7 @@ class FrmEmailAction extends FrmFormAction {
 		$action_ops = array(
 		    'classes'   => 'frm_email_icon frm_icon_font',
             'active'    => true,
-            'event'     => array( 'create'),
+			'event'     => array( 'create' ),
             'limit'     => 99,
             'priority'  => 10,
             'ajax_load' => false,
@@ -33,7 +33,7 @@ class FrmEmailAction extends FrmFormAction {
             'email_message' => '[default-message]',
             'inc_user_info' => 0,
             'plain_text'    => 0,
-            'event'         => array( 'create'),
+			'event'         => array( 'create' ),
 	    );
 	}
 

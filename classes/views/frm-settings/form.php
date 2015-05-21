@@ -154,9 +154,9 @@
 <style type="text/css">.<?php echo esc_attr( $sec_name ) ?>_settings{display:block;}</style><?php }?>
             <div id="<?php echo esc_attr( $sec_name ) ?>_settings" class="<?php echo esc_attr( $sec_name ) ?>_settings tabs-panel <?php echo ( $a == $sec_name .'_settings' ) ? 'frm_block' : 'frm_hidden'; ?>"><?php
 				if ( isset( $section['class'] ) ) {
-                    call_user_func( array($section['class'], $section['function']));
+					call_user_func( array( $section['class'], $section['function'] ) );
 				} else {
-                    call_user_func((isset($section['function']) ? $section['function'] : $section));
+					call_user_func( ( isset( $section['function'] ) ? $section['function'] : $section ) );
                 } ?>
             </div>
         <?php

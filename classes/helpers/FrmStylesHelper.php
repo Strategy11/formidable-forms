@@ -83,11 +83,11 @@ class FrmStylesHelper {
 
     public static function minus_icons() {
         return array(
-            0 => array( '-' => '62e', '+' => '62f'),
-            1 => array( '-' => '600', '+' => '602'),
-            2 => array( '-' => '604', '+' => '603'),
-            3 => array( '-' => '633', '+' => '632'),
-            4 => array( '-' => '613', '+' => '60f'),
+			0 => array( '-' => '62e', '+' => '62f' ),
+			1 => array( '-' => '600', '+' => '602' ),
+			2 => array( '-' => '604', '+' => '603' ),
+			3 => array( '-' => '633', '+' => '632' ),
+			4 => array( '-' => '613', '+' => '60f' ),
         );
     }
 
@@ -95,13 +95,13 @@ class FrmStylesHelper {
         $minus_icons = self::minus_icons();
 
         return array(
-            6 => array( '-' => '62d', '+' => '62a'),
-            0 => array( '-' => '60d', '+' => '609'),
-            1 => array( '-' => '60e', '+' => '60c'),
-            2 => array( '-' => '630', '+' => '631'),
-            3 => array( '-' => '62b', '+' => '628'),
-            4 => array( '-' => '62c', '+' => '629'),
-            5 => array( '-' => '635', '+' => '634'),
+			6 => array( '-' => '62d', '+' => '62a' ),
+			0 => array( '-' => '60d', '+' => '609' ),
+			1 => array( '-' => '60e', '+' => '60c' ),
+			2 => array( '-' => '630', '+' => '631' ),
+			3 => array( '-' => '62b', '+' => '628' ),
+			4 => array( '-' => '62c', '+' => '629' ),
+			5 => array( '-' => '635', '+' => '634' ),
             'p0' => $minus_icons[0],
             'p1' => $minus_icons[1],
             'p2' => $minus_icons[2],
@@ -117,12 +117,12 @@ class FrmStylesHelper {
     public static function icon_key_to_class($key, $icon = '+', $type = 'arrow') {
         if ( 'arrow' == $type && is_numeric($key) ) {
             //frm_arrowup6_icon
-            $arrow = array( '-' => 'down', '+' => 'up');
+			$arrow = array( '-' => 'down', '+' => 'up' );
 			$class = 'frm_arrow' . $arrow[ $icon ];
         } else {
             //frm_minus1_icon
             $key = str_replace('p', '', $key);
-            $plus = array( '-' => 'minus', '+' => 'plus');
+			$plus = array( '-' => 'minus', '+' => 'plus' );
 			$class = 'frm_' . $plus[ $icon ];
         }
 
@@ -186,7 +186,7 @@ class FrmStylesHelper {
             $g = hexdec( substr($hex,2,2) );
             $b = hexdec( substr($hex,4,2) );
         }
-        $rgb = array($r, $g, $b);
+		$rgb = array( $r, $g, $b );
         return implode(',', $rgb); // returns the rgb values separated by commas
         //return $rgb; // returns an array with the rgb values
     }

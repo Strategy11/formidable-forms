@@ -86,7 +86,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	public function get_bulk_actions() {
 	    $actions = array();
 
-	    if ( in_array($this->status, array( '', 'published')) ) {
+		if ( in_array( $this->status, array( '', 'published' ) ) ) {
 	        $actions['bulk_create_template'] = __( 'Create Template', 'formidable' );
 	    }
 

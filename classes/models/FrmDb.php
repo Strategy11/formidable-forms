@@ -341,7 +341,7 @@ class FrmDb {
      */
     public static function get_one_record( $table, $args = array(), $fields = '*', $order_by = '' ) {
         _deprecated_function( __FUNCTION__, '2.0', 'FrmDb::get_row' );
-        return self::get_var( $table, $args, $fields, array( 'order_by' => $order_by, 'limit' => 1), '', 'row' );
+		return self::get_var( $table, $args, $fields, array( 'order_by' => $order_by, 'limit' => 1 ), '', 'row' );
     }
 
     public static function get_records( $table, $args = array(), $order_by = '', $limit = '', $fields = '*' ) {
@@ -419,7 +419,7 @@ class FrmDb {
 
     private static function convert_options_to_array( &$args, $order_by = '', $limit = '' ) {
         if ( ! is_array($args) ) {
-            $args = array( 'order_by' => $args);
+			$args = array( 'order_by' => $args );
         }
 
         if ( ! empty( $order_by ) ) {
@@ -663,10 +663,10 @@ DEFAULT_HTML;
 
             if ( $form->options['submit_html'] != $new_default_html && $form->options['submit_html'] == $old_default_html ) {
                 $form->options['submit_html'] = $new_default_html;
-                $wpdb->update($this->forms, array( 'options' => serialize($form->options)), array( 'id' => $form->id ));
+				$wpdb->update( $this->forms, array( 'options' => serialize( $form->options ) ), array( 'id' => $form->id ) );
 			} else if ( ! strpos( $form->options['submit_html'], 'save_draft' ) ) {
                 $form->options['submit_html'] = preg_replace('~\<\/div\>(?!.*\<\/div\>)~', $draft_link ."\r\n</div>", $form->options['submit_html']);
-                $wpdb->update($this->forms, array( 'options' => serialize($form->options)), array( 'id' => $form->id ));
+				$wpdb->update( $this->forms, array( 'options' => serialize( $form->options ) ), array( 'id' => $form->id ) );
             }
             unset($form);
         }
@@ -677,7 +677,7 @@ DEFAULT_HTML;
         global $wpdb;
 
         $no_save = array_merge( FrmFieldsHelper::no_save_fields(), array( 'form', 'hidden', 'user_id' ) );
-        $fields = FrmDb::get_results( $this->fields, array( 'type NOT' => $no_save), 'id, field_options' );
+		$fields = FrmDb::get_results( $this->fields, array( 'type NOT' => $no_save ), 'id, field_options' );
 
         $default_html = <<<DEFAULT_HTML
 <div id="frm_field_[id]_container" class="form-field [required_class] [error_class]">
@@ -704,7 +704,7 @@ DEFAULT_HTML;
             $field->field_options = maybe_unserialize($field->field_options);
             if ( ! isset( $field->field_options['custom_html'] ) || empty( $field->field_options['custom_html'] ) || $field->field_options['custom_html'] == $default_html || $field->field_options['custom_html'] == $old_default_html ) {
                 $field->field_options['custom_html'] = $new_default_html;
-                $wpdb->update($this->fields, array( 'field_options' => maybe_serialize($field->field_options)), array( 'id' => $field->id ));
+				$wpdb->update( $this->fields, array( 'field_options' => maybe_serialize( $field->field_options ) ), array( 'id' => $field->id ) );
             }
             unset($field);
         }
@@ -715,7 +715,7 @@ DEFAULT_HTML;
         global $wpdb;
 		$user_ids = FrmEntryMeta::getAll( array( 'fi.type' => 'user_id' ) );
         foreach ( $user_ids as $user_id ) {
-            $wpdb->update( $this->entries, array( 'user_id' => $user_id->meta_value), array( 'id' => $user_id->item_id) );
+			$wpdb->update( $this->entries, array( 'user_id' => $user_id->meta_value ), array( 'id' => $user_id->item_id ) );
         }
     }
 }

@@ -77,7 +77,7 @@ class FrmFormsHelper {
 		$where = apply_filters( 'frm_forms_dropdown', array(), '' );
 		$forms = FrmForm::get_published_forms( $where );
 
-        $args = array( 'id' => 0, 'form' => 0);
+		$args = array( 'id' => 0, 'form' => 0 );
 		if ( isset( $_GET['id'] ) && ! isset( $_GET['form'] ) ) {
 			unset( $args['form'] );
 		} else if ( isset( $_GET['form']) && ! isset( $_GET['id'] ) ) {
@@ -622,7 +622,7 @@ BEFORE_HTML;
 
     public static function get_params() {
         $values = array();
-        foreach ( array( 'template' => 0, 'id' => '', 'paged' => 1, 'form' => '', 'search' => '', 'sort' => '', 'sdir' => '') as $var => $default ) {
+		foreach ( array( 'template' => 0, 'id' => '', 'paged' => 1, 'form' => '', 'search' => '', 'sort' => '', 'sdir' => '' ) as $var => $default ) {
 			$values[ $var ] = FrmAppHelper::get_param( $var, $default );
         }
 

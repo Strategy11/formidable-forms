@@ -226,9 +226,9 @@
 		<?php foreach ( $sections as $sec_name => $section ) { ?>
             <div id="<?php echo esc_attr( $sec_name ) ?>_settings" class="tabs-panel <?php echo ($a == $sec_name .'_settings') ? ' frm_block' : ' frm_hidden'; ?>"><?php
 			if ( isset( $section['class'] ) ) {
-                call_user_func( array($section['class'], $section['function']), $values);
+				call_user_func( array( $section['class'], $section['function'] ), $values );
 			} else {
-                call_user_func((isset($section['function']) ? $section['function'] : $section), $values);
+				call_user_func( ( isset( $section['function'] ) ? $section['function'] : $section ), $values );
             } ?>
             </div>
         <?php } ?>

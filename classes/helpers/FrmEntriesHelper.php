@@ -227,7 +227,7 @@ class FrmEntriesHelper {
         $val = '';
         if ( $atts['entry'] ) {
             $prev_val = maybe_unserialize( $atts['entry']->metas[ $f->id ] );
-            $meta = array( 'item_id' => $atts['id'], 'field_id' => $f->id, 'meta_value' => $prev_val, 'field_type' => $f->type);
+			$meta = array( 'item_id' => $atts['id'], 'field_id' => $f->id, 'meta_value' => $prev_val, 'field_type' => $f->type );
 
             //This filter applies to the default-message shortcode and frm-show-entry shortcode only
             if ( isset($atts['filter']) && $atts['filter'] == false ) {
@@ -271,7 +271,7 @@ class FrmEntriesHelper {
      */
     public static function textarea_display_value( &$value, $type, $plain_text ) {
         if ( $type == 'textarea' && ! $plain_text ) {
-            $value = str_replace( array("\r\n", "\r", "\n"), ' <br/>', $value);
+			$value = str_replace( array( "\r\n", "\r", "\n" ), ' <br/>', $value );
         }
     }
 
@@ -292,12 +292,12 @@ class FrmEntriesHelper {
             $values['referrer'] = $data['referrer'];
         } else {
             //$content .= "\r\n\r\n" . __( 'User Information', 'formidable' ) ."\r\n";
-            $values['ip'] = array( 'label' => __( 'IP Address', 'formidable' ), 'val' => $atts['entry']->ip);
+			$values['ip'] = array( 'label' => __( 'IP Address', 'formidable' ), 'val' => $atts['entry']->ip );
             $values['browser'] = array(
                 'label' => __( 'User-Agent (Browser/OS)', 'formidable' ),
                 'val' => self::get_browser($data['browser']),
             );
-            $values['referrer'] = array( 'label' => __( 'Referrer', 'formidable' ), 'val' => $data['referrer']);
+			$values['referrer'] = array( 'label' => __( 'Referrer', 'formidable' ), 'val' => $data['referrer'] );
         }
     }
 
@@ -436,7 +436,7 @@ class FrmEntriesHelper {
 
 	    if ( strpos($atts['embedded_field_id'], 'form') === 0 ) {
             //this is a repeating section
-            $child_entries = FrmEntry::getAll( array( 'it.parent_item_id' => $entry->id) );
+			$child_entries = FrmEntry::getAll( array( 'it.parent_item_id' => $entry->id ) );
         } else {
             // get all values for this field
 	        $child_values = isset( $entry->metas[ $atts['embedded_field_id'] ] ) ? $entry->metas[ $atts['embedded_field_id'] ] : false;
@@ -740,7 +740,7 @@ class FrmEntriesHelper {
 		}
 
         // finally get the correct version number
-        $known = array( 'Version', $ub, 'other');
+		$known = array( 'Version', $ub, 'other' );
         $pattern = '#(?<browser>' . join('|', $known) . ')[/ ]+(?<version>[0-9.|a-zA-Z.]*)#';
         preg_match_all($pattern, $u_agent, $matches); // get the matching numbers
 
