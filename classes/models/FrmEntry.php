@@ -565,6 +565,12 @@ class FrmEntry {
             $value = '';
         }
 
+		// Check for an array with only one value
+		// Don't reset values in "Other" fields because array keys need to be preserved
+		if ( is_array($value) && count( $value ) == 1 && $args['other'] !== true ) {
+			$value = reset($value);
+		}
+
         if ( $posted_field->required == '1' && ! is_array( $value ) && trim( $value ) == '' ) {
             $frm_settings = FrmAppHelper::get_settings();
 			$errors[ 'field' . $args['id'] ] = ( ! isset( $posted_field->field_options['blank'] ) || $posted_field->field_options['blank'] == '' ) ? $frm_settings->blank_msg : $posted_field->field_options['blank'];
