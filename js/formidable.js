@@ -1139,9 +1139,9 @@ function frmFrontFormJS(){
                         fieldVal = 0;
                     } else if ( type == 'boolean' ) {
                         if ( fieldVal === null || fieldVal == 'false' || fieldVal === false ) {
-                            fieldVal = 'false';
+                            fieldVal = false;
                         } else {
-                            fieldVal = 'true';
+                            fieldVal = true;
                         }
                     }
 
