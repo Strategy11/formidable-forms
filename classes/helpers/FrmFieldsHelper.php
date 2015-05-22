@@ -1209,9 +1209,39 @@ DEFAULT_HTML;
 			$classes[] = 'frm_other_full';
 		}
 
-        ?><input type="text" class="<?php echo sanitize_text_field( implode( ' ', $classes ) ) ?>" <?php
+		// Set up HTML ID for Other field
+		$other_id = self::get_other_field_html_id( $args['field']['type'], $args['html_id'], $args['opt_key'] );
+
+		?><input type="text" id="<?php echo esc_attr( $other_id ) ?>" class="<?php echo sanitize_text_field( implode( ' ', $classes ) ) ?>" <?php
 		echo ( $args['read_only'] ? ' readonly="readonly" disabled="disabled"' : '' );
 		?> name="<?php echo esc_attr( $args['name'] ) ?>" value="<?php echo esc_attr( $args['value'] ); ?>"><?php
+	}
+
+	/**
+	* Get the HTML id for an "Other" text field
+	* Note: This does not affect fields in repeating sections
+	*
+	* @since 2.0.08
+	* @param string $type - field type
+	* @param string $html_id
+	* @param string|boolean $opt_key
+	* @return string $other_id
+	*/
+	public static function get_other_field_html_id( $type, $html_id, $opt_key = false ){
+		$other_id = $html_id;
+
+		// If hidden radio field, add an opt key of 0
+		if ( $type == 'radio' && $opt_key === false ) {
+			$opt_key = 0;
+		}
+
+		if ( $opt_key !== false ) {
+			$other_id .= '-' . $opt_key;
+		}
+
+		$other_id .= '-otext';
+
+		return $other_id;
 	}
 
 	public static function show_onfocus_js( $is_selected ) {

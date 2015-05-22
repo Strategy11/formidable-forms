@@ -50,6 +50,7 @@ do_action('frm_field_input_html', $field);
 				'other_opt' => $other_opt, 'read_only' => $read_only,
 				'checked' => $checked, 'name' => $other_args['name'],
 				'value' => $other_args['value'], 'field' => $field,
+				'html_id' => $html_id, 'opt_key' => $opt_key,
 			) );
 
             unset( $other_opt, $other_args );
@@ -91,6 +92,7 @@ do_action('frm_field_input_html', $field);
 			'other_opt' => $other_opt, 'read_only' => $read_only,
 			'checked' => $other_checked, 'name' => $other_args['name'],
 			'value' => $other_args['value'], 'field' => $field,
+			'html_id' => $html_id, 'opt_key' => false,
 		) );
     }
 } else if ( $field['type'] == 'checkbox' ) {
@@ -143,6 +145,7 @@ do_action('frm_field_input_html', $field);
 				'other_opt' => $other_opt, 'read_only' => $read_only,
 				'checked' => $checked, 'name' => $other_args['name'],
 				'value' => $other_args['value'], 'field' => $field,
+				'html_id' => $html_id, 'opt_key' => $opt_key,
 			) );
 
             unset( $other_opt, $other_args, $checked );
