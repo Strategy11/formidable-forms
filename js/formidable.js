@@ -189,12 +189,11 @@ function frmFrontFormJS(){
 	}
 
 	function getRulesForField( field_id ) {
-		var all_rules = __FRMRULES;
-		if ( typeof all_rules  === 'undefined' || typeof all_rules[field_id] === 'undefined' ) {
+		if ( typeof __FRMRULES  === 'undefined' || typeof __FRMRULES[field_id] === 'undefined' ) {
 			return;
 		}
 
-		var rules = compileRules( all_rules[field_id] );
+		var rules = compileRules( __FRMRULES[field_id] );
 		return rules;
 	}
 
@@ -1210,6 +1209,7 @@ function frmFrontFormJS(){
     function compileGraph(opts){
         var data = new google.visualization.DataTable();
         var useSepCol = false;
+		var useTooltip = false;
 
         // add the rows
         var rowCount = opts.rows.length;
@@ -1227,16 +1227,20 @@ function frmFrontFormJS(){
                 var firstRow = opts.rows[0];
                 if ( typeof firstRow.tooltip != 'undefined' ) {
                     useSepCol = true;
-                    data.addColumn({type:'string',role:'tooltip'});
+					useTooltip = true;
 
-                    // remove the tooltip key from the array
-                    for ( var row = 0, rc = rowCount; row < rc; row++ ) {
-                        var tooltip = opts.rows[row].tooltip;
-                        opts.rows[row].tooltip = null;
-                        opts.rows[row].push(tooltip);
-                    }
+					// reset the tooltip key to numeric
+					for ( var row = 0, rc = rowCount; row < rc; row++ ) {
+						var tooltip = opts.rows[row].tooltip;
+						delete opts.rows[row].tooltip;
 
-                    data.addRows(opts.rows);
+						var rowArray = Object.keys(opts.rows[row]).map( function(k){
+							return opts.rows[row][k];
+						} );
+
+						opts.rows[row] = rowArray;
+						opts.rows[row].push(tooltip);
+					}
                 }
             }
         }
@@ -1250,6 +1254,10 @@ function frmFrontFormJS(){
                     data.addColumn(col.type, col.name);
                 }
             }
+			if ( useTooltip ) {
+				data.addColumn({type:'string',role:'tooltip'});
+				data.addRows(opts.rows);
+			}
         } else {
             var graphData = [];
             graphData[0] = [];
@@ -1262,6 +1270,7 @@ function frmFrontFormJS(){
 
         var type = (opts.type.charAt(0).toUpperCase() + opts.type.slice(1)) + 'Chart';
         var chart = new google.visualization[type](document.getElementById('chart_'+ opts.graph_id));
+
         chart.draw(data, opts.options);
     }
 
