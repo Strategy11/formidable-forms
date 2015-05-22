@@ -1214,7 +1214,7 @@ DEFAULT_HTML;
 
 		?><input type="text" id="<?php echo esc_attr( $other_id ) ?>" class="<?php echo sanitize_text_field( implode( ' ', $classes ) ) ?>" <?php
 		echo ( $args['read_only'] ? ' readonly="readonly" disabled="disabled"' : '' );
-		?> name="<?php echo esc_attr( $args['name'] ) ?>" value="<?php echo esc_attr( $args['value'] ); ?>"><?php
+		?> name="<?php echo esc_attr( $args['name'] ) ?>" value="<?php echo esc_attr( $args['value'] ); ?>" /><?php
 	}
 
 	/**
