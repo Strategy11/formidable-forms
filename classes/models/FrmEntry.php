@@ -365,7 +365,7 @@ class FrmEntry {
     }
 
     public static function getAll( $where, $order_by = '', $limit = '', $meta = false, $inc_form = true ) {
-        global $wpdb;
+		global $wpdb;
 
         $limit = FrmAppHelper::esc_limit($limit);
 
@@ -394,7 +394,9 @@ class FrmEntry {
             $entries = $wpdb->get_results($query, OBJECT_K);
             unset($query);
 
-            wp_cache_set($cache_key, $entries, 'frm_entry', 300);
+			if ( ! FrmAppHelper::prevent_caching() ) {
+				wp_cache_set( $cache_key, $entries, 'frm_entry', 300 );
+			}
         }
 
         if ( ! $meta || ! $entries ) {
@@ -435,10 +437,12 @@ class FrmEntry {
             unset($m_key, $meta_val);
         }
 
-        foreach ( $entries as $entry ) {
-            wp_cache_set( $entry->id, $entry, 'frm_entry');
-            unset($entry);
-        }
+		if ( ! FrmAppHelper::prevent_caching() ) {
+			foreach ( $entries as $entry ) {
+				wp_cache_set( $entry->id, $entry, 'frm_entry' );
+				unset( $entry );
+			}
+		}
 
         return stripslashes_deep($entries);
     }

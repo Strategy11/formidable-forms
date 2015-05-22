@@ -138,6 +138,14 @@ class FrmAppHelper {
         return defined('DOING_AJAX') && DOING_AJAX && ! self::is_preview_page();
     }
 
+	/**
+	 * @since 2.0.8
+	 */
+	public static function prevent_caching() {
+		global $frm_vars;
+		return isset( $frm_vars['prevent_caching'] ) && $frm_vars['prevent_caching'];
+	}
+
     /**
      * Check if on an admin page
      *
