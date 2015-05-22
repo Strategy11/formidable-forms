@@ -852,7 +852,11 @@ function frmFrontFormJS(){
 
 		if ( thisField.type == 'select' ) {
 			if ( currentOpt.type == 'hidden' ) {
-				otherVal = getOtherValueLimited( currentOpt );
+				if ( isCurrentOptRepeating( currentOpt ) ) {
+					// Do nothing because regular doCalculation code takes care of it
+				} else {
+					otherVal = getOtherValueLimited( currentOpt );
+				}
 			} else {
 				otherVal = getOtherSelectValue( currentOpt );
 			}
@@ -865,6 +869,16 @@ function frmFrontFormJS(){
 		}
 
 		return otherVal;
+	}
+
+	/* Check if current option is in a repeating section */
+	function isCurrentOptRepeating( currentOpt ) {
+		var isRepeating = false;
+		var parts = currentOpt.name.split( '[' );
+		if ( parts.length > 2 ) {
+			isRepeating = true;
+		}
+		return isRepeating;
 	}
 
 	/* Get value from Other text field in a visible dropdown field */
