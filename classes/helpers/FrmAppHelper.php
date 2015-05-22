@@ -415,7 +415,9 @@ class FrmAppHelper {
             $results = $wpdb->{$type}($query);
         }
 
-        wp_cache_set($cache_key, $results, $group, $time);
+		if ( ! self::prevent_caching() ) {
+			wp_cache_set( $cache_key, $results, $group, $time );
+		}
 
         return $results;
     }
