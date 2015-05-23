@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @group forms
+ */
 class WP_Test_FrmProFormsHelper extends FrmUnitTest {
 
 	/**

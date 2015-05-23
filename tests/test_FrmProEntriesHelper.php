@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @group entries
+ */
 class WP_Test_FrmProEntriesHelper extends FrmUnitTest {
     /**
      * Search for a value in an entry

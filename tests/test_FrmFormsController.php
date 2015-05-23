@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @group forms
+ */
 class WP_Test_FrmFormsController extends FrmUnitTest {
 
 	function test_trigger_load_form_hooks() {

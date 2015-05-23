@@ -1,6 +1,10 @@
 <?php
 
+/**
+ * @group entries
+ */
 class WP_Test_FrmProEntriesController extends FrmUnitTest {
+
 	public function test_add_js() {
         $frm_settings = FrmAppHelper::get_settings();
 

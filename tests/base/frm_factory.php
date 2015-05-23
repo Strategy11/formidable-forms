@@ -9,7 +9,7 @@ class Form_Factory extends WP_UnitTest_Factory_For_Thing {
 		$this->default_generation_definitions = FrmFormsHelper::setup_new_vars( false );
 	}
 
-	function create_object( $args = array() ) {
+	function create_object( $args ) {
 		return FrmForm::create( $args );
 	}
 
@@ -40,7 +40,7 @@ class Field_Factory extends WP_UnitTest_Factory_For_Thing {
 
 	}
 
-	function create_object( $args = array() ) {
+	function create_object( $args ) {
 		$field_values = FrmFieldsHelper::setup_new_vars( $args['type'], $args['form_id'] );
         return FrmField::create( $field_values );
 	}

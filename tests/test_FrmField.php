@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @group fields
+ */
 class WP_Test_FrmField extends FrmUnitTest {
 	function test_create() {
 		$form_id = $this->factory->form->get_id_by_key( 'contact-db12' );

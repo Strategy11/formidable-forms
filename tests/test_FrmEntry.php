@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @group entries
+ */
 class WP_Test_FrmEntry extends FrmUnitTest {
 	/**
 	 * @covers FrmEntry::create

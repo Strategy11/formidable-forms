@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @group views
+ */
 class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	function setUp() {
 		parent::setUp();
