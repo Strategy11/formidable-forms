@@ -89,6 +89,33 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 [See more FAQs](http://formidablepro.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 2.0.08 =
+* Fix security vulnerability allowing shortcodes to be excuted inside a form https://research.g0blin.co.uk/?p=618&d=i4ziyggqao0oz0L0vpUTd8KZwrO2P9Mw\
+* Added frm_filter_final_form hook. This will need to be used to cover shortcodes that span multiple blocks of field HTML since we can't do a general shortcode replacement on the rendered form
+* Revert change that prevented scripts from firing in the form success message
+* Fix timestamp timezone on view/edit entry page
+* Added frm_entries_{$col_name}_column hook to allow custom columns on the entries listing page
+* Pro: Allow the last page of a form to be conditional
+* Pro: When a field is conditionally hidden, clear the value and trigger calculations and child logic 
+* Pro: Improved accuracy of calculations using the other option, and across page breaks
+* Pro: Added frm_calendar_day_names hook for displaying the full weekday name in calendar view
+* Pro: Allow a comma-separated list of ids when filtering by entry id in the view settings
+* Pro: Include the remove link on multiple file uploads
+* Pro: Display a view row correctly right after a quick-edit
+* Pro: Delete views when their form is permanently deleted
+* Pro: Only show the ID column in google table when specified
+* Pro: Fix boolean values in google entry table
+* Pro: Reduce the memory usage when exporting a CSV by preventing entry caching
+* Pro: Fix dependent taxonomies
+* Pro: Fix the graph tooltips and wrap the text on graphs so it doesn't go beyond the width of the graph
+* Pro: Allow the frm_user_can_edit hook to fire when loading a form with the entry id in the form shortcode
+* Pro: Fix backslash removal in the phone format option when the form is saved
+* Pro: Make sure validation is always performed even if there are only radio fields on the page, before showing a message that the entry failed
+* Pro: Fix Dynamic List fields dependent on Dynamic checkboxes
+* Pro: Keep the user on the last page when a draft is saved and there is only one field on the last page
+* Pro: Export the category name in the CSV instead of the id
+* Pro: Save user ID even if it's in a conditional section/page
+
 = 2.0.07 =
 * Don't escape urls in ajax
 * Correctly save all the options on the form settings page
