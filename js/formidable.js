@@ -393,7 +393,7 @@ function frmFrontFormJS(){
 			var inputs = container.find('select, textarea, input:not([type=hidden])');
 			if ( inputs.length ){
 				inputs.prop('checked', false).prop('selectedIndex', 0);
-				inputs.not(':checkbox, :radio, select').val('');
+				inputs.not(':checkbox, :radio, select, :readonly').val('');
 				var field_id = f.HideField;
 				var i = false;
 				inputs.each(function(){
