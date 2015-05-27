@@ -1123,6 +1123,7 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
 
 .frm_form_field .frm_repeat_sec .frm_add_form_row{
     opacity:0;
+	display:none;
 	*visibility:visible;
 	-moz-transition: opacity .15s ease-in-out;
 	-webkit-transition: opacity .15s ease-in-out;
@@ -1132,6 +1133,7 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
 
 .frm_section_heading div.frm_repeat_sec:last-child .frm_add_form_row{
     opacity:100;
+	display:inline-block;
     pointer-events:auto;
 }
 
@@ -1424,6 +1426,10 @@ html[xmlns] .frm_clearfix{
     max-height:240px;
     word-wrap:break-word;
     -webkit-overflow-scrolling:touch;
+}
+
+.with_frm_style .chosen-container .chosen-results li:before{
+	background:none;
 }
 
 .with_frm_style .chosen-container .chosen-results li{
