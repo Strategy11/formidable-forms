@@ -452,6 +452,8 @@ function frmFrontFormJS(){
 				if ( display == 'none' ) {
 					hideAndClearField( jQuery(hideMe), f );
 				} else {
+					doCalcForSingleField( f.HideField, f.hiddenName );
+
 					hideMe.style.display = display;
 				}
 			}
@@ -719,59 +721,91 @@ function frmFrontFormJS(){
 			var thisCalc = all_calcs.calc[keys[i]];
 			var thisFullCalc = thisCalc.calc;
 
-			// loop through the fields in this calculation
-			fCount = thisCalc.fields.length;
-			for ( var f = 0, c = fCount; f < c; f++ ) {
-				var thisFieldId = thisCalc.fields[f];
-				var thisField = all_calcs.fields[thisFieldId];
-				var thisFieldCall = 'input'+ all_calcs.fieldKeys[thisFieldId];
-
-				if ( thisField.type == 'checkbox' || thisField.type == 'select' ) {
-					thisFieldCall = thisFieldCall +':checked,select'+ all_calcs.fieldKeys[thisFieldId] +' option:selected,'+ thisFieldCall+'[type=hidden]';
-				} else if ( thisField.type == 'radio' || thisField.type == 'scale' ) {
-					thisFieldCall = thisFieldCall +':checked,'+ thisFieldCall +'[type=hidden]';
-				} else if ( thisField.type == 'textarea' ) {
-                    thisFieldCall = thisFieldCall + ',textarea'+ all_calcs.fieldKeys[thisFieldId];
-				}
-
-                vals[thisFieldId] = getCalcFieldId(thisFieldCall, thisFieldId, thisField, all_calcs, vals);
-
-				if ( typeof vals[thisFieldId] === 'undefined' || isNaN(vals[thisFieldId]) ) {
-					vals[thisFieldId] = 0;
-				}
-
-				var findVar = '['+ thisFieldId +']';
-				findVar = findVar.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
-				thisFullCalc = thisFullCalc.replace(new RegExp(findVar, 'g'), vals[thisFieldId]);
-			}
-
-			// Set the number of decimal places
-			var dec = thisCalc.calc_dec;
-
-			// allow .toFixed for reverse compatability
-			if ( thisFullCalc.indexOf(').toFixed(') ) {
-			var calcParts = thisFullCalc.split(').toFixed(');
-				if ( isNumeric(calcParts[1]) ) {
-					dec = calcParts[1];
-					thisFullCalc = thisFullCalc.replace(').toFixed(' + dec, '');
-				}
-			}
-
-			var total = parseFloat(eval(thisFullCalc));
-
-			// Set decimal points
-			if ( isNumeric( dec ) ) {
-				total = total.toFixed(dec);
-			}
-
-			if ( typeof total === 'undefined' ) {
-				total = 0;
-			}
-
-			jQuery(document.getElementById('field_'+ keys[i])).val(total).trigger({
-				type:'change', frmTriggered:keys[i], selfTriggered:true
-			});
+			doSingleCalculation( thisCalc, thisFullCalc, all_calcs, keys[i], vals );
 		}
+	}
+
+	function doSingleCalculation( thisCalc, thisFullCalc, all_calcs, field_key, vals ) {
+		// loop through the fields in this calculation
+		thisFullCalc = getValsForSingleCalc( thisCalc, thisFullCalc, all_calcs, vals );
+
+		// Set the number of decimal places
+		var dec = thisCalc.calc_dec;
+
+		// allow .toFixed for reverse compatability
+		if ( thisFullCalc.indexOf(').toFixed(') ) {
+		var calcParts = thisFullCalc.split(').toFixed(');
+			if ( isNumeric(calcParts[1]) ) {
+				dec = calcParts[1];
+				thisFullCalc = thisFullCalc.replace(').toFixed(' + dec, '');
+			}
+		}
+
+		var total = parseFloat(eval(thisFullCalc));
+
+		// Set decimal points
+		if ( isNumeric( dec ) ) {
+			total = total.toFixed(dec);
+		}
+
+		if ( typeof total === 'undefined' ) {
+			total = 0;
+		}
+
+		jQuery(document.getElementById('field_'+ field_key)).val(total).trigger({
+			type:'change', frmTriggered:field_key, selfTriggered:true
+		});
+	}
+
+	function getValsForSingleCalc( thisCalc, thisFullCalc, all_calcs, vals ) {
+		var fCount = thisCalc.fields.length;
+		for ( var f = 0, c = fCount; f < c; f++ ) {
+			var thisFieldId = thisCalc.fields[f];
+			var thisField = all_calcs.fields[thisFieldId];
+			var thisFieldCall = 'input'+ all_calcs.fieldKeys[thisFieldId];
+
+			if ( thisField.type == 'checkbox' || thisField.type == 'select' ) {
+				thisFieldCall = thisFieldCall +':checked,select'+ all_calcs.fieldKeys[thisFieldId] +' option:selected,'+ thisFieldCall+'[type=hidden]';
+			} else if ( thisField.type == 'radio' || thisField.type == 'scale' ) {
+				thisFieldCall = thisFieldCall +':checked,'+ thisFieldCall +'[type=hidden]';
+			} else if ( thisField.type == 'textarea' ) {
+                thisFieldCall = thisFieldCall + ',textarea'+ all_calcs.fieldKeys[thisFieldId];
+			}
+
+            vals[thisFieldId] = getCalcFieldId(thisFieldCall, thisFieldId, thisField, all_calcs, vals);
+
+			if ( typeof vals[thisFieldId] === 'undefined' || isNaN(vals[thisFieldId]) ) {
+				vals[thisFieldId] = 0;
+			}
+
+			var findVar = '['+ thisFieldId +']';
+			findVar = findVar.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
+			thisFullCalc = thisFullCalc.replace(new RegExp(findVar, 'g'), vals[thisFieldId]);
+		}
+		return thisFullCalc;
+	}
+
+	function doCalcForSingleField( field_id, field_name ) {
+		if ( typeof __FRMCALC == 'undefined' ) {
+			// there are no calculations on this page
+			return;
+		}
+		var all_calcs = __FRMCALC;
+
+		//The next three lines are ugly. Need a better way to do this.
+		var currentField = document.getElementsByName(field_name);
+		var field_key = currentField[0].id.split('_');
+		field_key = field_key[1];
+
+		var thisCalc = all_calcs.calc[field_key];
+		if ( typeof thisCalc == 'undefined' ) {
+			// this field has no calculation
+			return;
+		}
+		var thisFullCalc = thisCalc.calc;
+		var vals = [];
+
+		doSingleCalculation( thisCalc, thisFullCalc, all_calcs, field_key, vals );
 	}
 
     function getCalcFieldId(thisFieldCall, thisFieldId, thisField, all_calcs, vals){
