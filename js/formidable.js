@@ -343,7 +343,7 @@ function frmFrontFormJS(){
         } else if ( typeof f.LinkedField != 'undefined' && f.Type.indexOf('data-') === 0 ) {
 			if ( typeof(f.DataType) == 'undefined' || f.DataType === 'data' ) {
                 if ( selected === '' ) {
-                    hideAndClearDynamicField(f.hideContainerID, f.hideBy);
+                    hideAndClearDynamicField(f.hideContainerID, f.hideBy, f.HideField);
     			} else if ( f.Type == 'data-radio' ) {
                     if ( typeof f.DataType == 'undefined' ) {
                         show_fields[f.HideField][i] = operators(f.Condition, f.Value, selected);
@@ -351,7 +351,7 @@ function frmFrontFormJS(){
                         show_fields[f.HideField][i] = {'funcName':'getData','f':f,'sel':selected};
                     }
                 } else if ( f.Type == 'data-checkbox' || ( f.Type == 'data-select' && jQuery.isArray(selected) ) ) {
-                    hideAndClearDynamicField(f.hideContainerID, f.hideBy);
+                    hideAndClearDynamicField(f.hideContainerID, f.hideBy, f.HideField);
     				show_fields[f.HideField][i] = true;
     				getData(f, selected, 1);
                 } else if ( f.Type == 'data-select' ) {
@@ -373,9 +373,9 @@ function frmFrontFormJS(){
 		hideFieldNow(i, f, rec);
 	}
 
-	function hideAndClearDynamicField(hideContainer, hideBy){
+	function hideAndClearDynamicField(hideContainer, hideBy, field_id){
 		if ( jQuery.inArray(hideContainer, hidden_fields) == -1 ) {
-			hidden_fields.push(hideContainer);
+			hidden_fields[ field_id ] = hideContainer;
 			if(hideBy === '.'){
 				hideContainer = jQuery('.'+hideContainer);
 			}else{
@@ -389,12 +389,13 @@ function frmFrontFormJS(){
 	function hideAndClearField( container, f ) {
 		container.hide();
 		if ( jQuery.inArray(container.attr('id'), hidden_fields) == -1 ) {
-			hidden_fields.push(container.attr('id'));
+			var field_id = f.HideField;
+			hidden_fields[ field_id ] = container.attr('id');
+
 			var inputs = container.find('select[name^="item_meta"]:not([readonly]), textarea[name^="item_meta"]:not([readonly]), input[name^="item_meta"]:not([type=hidden]):not([readonly])');
 			if ( inputs.length ){
 				inputs.prop('checked', false).prop('selectedIndex', 0);
 				inputs.not(':checkbox, :radio, select').val('');
-				var field_id = f.HideField;
 				var i = false;
 				inputs.each(function(){
 					setDefaultValue( jQuery(this) );
@@ -720,7 +721,12 @@ function frmFrontFormJS(){
 			var thisCalc = all_calcs.calc[keys[i]];
 			var thisFullCalc = thisCalc.calc;
 
-			// TODO: If field is hidden, do not doSingleCalculation
+			// If field is hidden, don't do the calculation
+			var calcFieldId = thisCalc.field_id;
+			if ( calcFieldId in hidden_fields ) {
+				continue;
+			}
+
 			doSingleCalculation( thisCalc, all_calcs, keys[i], vals );
 		}
 	}
