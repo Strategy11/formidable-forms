@@ -505,4 +505,11 @@ class FrmField {
         return $results;
     }
 
+	public static function is_option_true_in_array( $field, $option ) {
+		return isset( $field[ $option ] ) && $field[ $option ];
+	}
+
+	public static function is_option_value_in_object( $field, $option ) {
+		return isset( $field->field_options[ $option ] ) && $field->field_options[ $option ] != '';
+	}
 }

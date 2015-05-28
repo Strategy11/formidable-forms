@@ -390,18 +390,30 @@ function frmFrontFormJS(){
 		container.hide();
 		if ( jQuery.inArray(container.attr('id'), hidden_fields) == -1 ) {
 			hidden_fields.push(container.attr('id'));
-			var inputs = container.find('select, textarea, input:not([type=hidden])');
+			var inputs = container.find('select[name^="item_meta"]:not([readonly]), textarea[name^="item_meta"]:not([readonly]), input[name^="item_meta"]:not([type=hidden]):not([readonly])');
 			if ( inputs.length ){
 				inputs.prop('checked', false).prop('selectedIndex', 0);
-				inputs.not(':checkbox, :radio, select, :readonly').val('');
+				inputs.not(':checkbox, :radio, select').val('');
 				var field_id = f.HideField;
 				var i = false;
 				inputs.each(function(){
+					setDefaultValue( jQuery(this) );
 					if ( i === false ) {
 						jQuery(this).trigger({type:'change', frmTriggered:'dependent', selfTriggered:true});
 					}
 					i = true;
 				});
+			}
+		}
+	}
+
+	function setDefaultValue( $input ) {
+		var defaultValue = $input.data('frmval');
+		if ( typeof defaultValue !== 'undefined' ) {
+			if ( ! $input.is(':checkbox, :radio') ) {
+				$input.val( defaultValue );
+			} else if ( $input.val() == defaultValue ) {
+				$input.prop('checked', true);
 			}
 		}
 	}

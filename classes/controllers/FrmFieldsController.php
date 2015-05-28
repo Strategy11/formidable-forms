@@ -631,13 +631,12 @@ class FrmFieldsController {
     }
 
     private static function add_html_placeholder($field, array &$add_html, array &$class) {
-        // check for a default value and placeholder setting
-        if ( ! isset($field['clear_on_focus']) || ! $field['clear_on_focus'] || empty($field['default_value']) ) {
-            return;
-        }
+		if ( empty( $field['default_value'] ) || FrmAppHelper::is_admin_page( 'formidable' ) ) {
+			return;
+		}
 
-        // don't apply this to the form builder page
-        if ( FrmAppHelper::is_admin_page('formidable' ) ) {
+        if ( ! FrmField::is_option_true_in_array( $field, 'clear_on_focus' ) ) {
+			$add_html['data-frmval'] = 'data-frmval="' . esc_attr( $field['default_value'] ) . '"';
             return;
         }
 
