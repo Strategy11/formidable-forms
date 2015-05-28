@@ -1,8 +1,8 @@
 <?php if ( in_array( $display['type'], array( 'text', 'website', 'email', 'url' ) ) ) { ?>
-    <input type="text" name="<?php echo esc_attr( $field_name ) ?>" id="<?php echo esc_attr( $html_id ) ?>" value="<?php echo esc_attr( $field['default_value'] ); ?>" <?php echo ( isset($field['size']) && $field['size'] ) ? esc_attr( 'style="width:'. $field['size'] . ( is_numeric($field['size']) ? 'px' : '') .';"' ) : ''; ?> class="dyn_default_value" />
+    <input type="text" name="<?php echo esc_attr( $field_name ) ?>" id="<?php echo esc_attr( $html_id ) ?>" value="<?php echo esc_attr( $field['default_value'] ); ?>" <?php echo ( FrmField::is_option_true( $field, 'size' ) ) ? esc_attr( 'style="width:'. $field['size'] . ( is_numeric($field['size']) ? 'px' : '') .';"' ) : ''; ?> class="dyn_default_value" />
 <?php } else if ( $field['type'] == 'textarea' ) { ?>
     <textarea name="<?php echo esc_attr( $field_name ) ?>" <?php
-    echo ( isset($field['size']) && $field['size'] ) ? esc_attr( 'style="width:'. $field['size'] . ( is_numeric($field['size']) ? 'px' : '') .';"' ) : '';
+    echo ( FrmField::is_option_true( $field, 'size' ) ) ? esc_attr( 'style="width:'. $field['size'] . ( is_numeric($field['size']) ? 'px' : '') .';"' ) : '';
     ?> rows="<?php echo esc_attr( $field['max'] ); ?>" id="<?php echo esc_attr( $html_id ) ?>" class="dyn_default_value"><?php echo FrmAppHelper::esc_textarea(force_balance_tags($field['default_value'])); ?></textarea>
 
 <?php
@@ -22,9 +22,9 @@
     if ( isset($field['post_field']) && $field['post_field'] == 'post_category' ) {
 		echo FrmFieldsHelper::dropdown_categories( array( 'name' => $field_name, 'field' => $field ) );
     } else { ?>
-    <select name="<?php echo esc_attr( $field_name ) . ( ( isset($field['multiple']) && $field['multiple']) ? '[]' : '' ); ?>" <?php
-        echo ( isset($field['size']) && $field['size'] ) ? 'class="auto_width"' : '';
-        echo ( isset($field['multiple']) && $field['multiple'] ) ? ' multiple="multiple"' : ''; ?> >
+	<select name="<?php echo esc_attr( $field_name ) . ( FrmField::is_option_true( $field, 'multiple' ) ? '[]' : '' ); ?>" <?php
+		echo FrmField::is_option_true( $field, 'size' ) ? 'class="auto_width"' : '';
+		echo FrmField::is_option_true( $field, 'multiple' ) ? ' multiple="multiple"' : ''; ?> >
 		<?php foreach ( $field['options'] as $opt_key => $opt ) {
             $field_val = apply_filters('frm_field_value_saved', $opt, $opt_key, $field);
             $opt = apply_filters('frm_field_label_seen', $opt, $opt_key, $field);

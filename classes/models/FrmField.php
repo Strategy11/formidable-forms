@@ -75,7 +75,7 @@ class FrmField {
             FrmFieldsHelper::fill_field( $values, $field, $form_id, $new_key );
 
 			// If this is a repeating section, create new form
-			if ( $field->type == 'divider' && isset( $field->field_options['repeat'] ) && $field->field_options['repeat'] ) {
+			if ( $field->type == 'divider' && self::is_option_true( $field, 'repeat' ) ) {
 				// create the repeatable form
 				$repeat_form_values = FrmFormsHelper::setup_new_vars( array( 'parent_form_id' => $form_id ) );
 				$new_repeat_form_id = FrmForm::create( $repeat_form_values );
@@ -505,8 +505,53 @@ class FrmField {
         return $results;
     }
 
+	/**
+	 * Check if a field is read only. Read only can be set in the field options,
+	 * but disabled with the shortcode options
+	 *
+	 * @since 2.0.9
+	 */
+	public static function is_read_only( $field ) {
+		global $frm_vars;
+		return ( self::is_option_true( $field, 'read_only' ) && ( ! isset( $frm_vars['readonly'] ) || $frm_vars['readonly'] != 'disabled' ) );
+	}
+
+	/**
+	 * @since 2.0.9
+	 */
+	public static function is_option_true( $field, $option ) {
+		if ( is_array( $field ) ) {
+			return self::is_option_true_in_array( $field, $option );
+		} else {
+			return self::is_option_true_in_object( $field, $option );
+		}
+	}
+
+	/**
+	 * @since 2.0.9
+	 */
+	public static function is_option_empty( $field, $option ) {
+		if ( is_array( $field ) ) {
+			return self::is_option_empty_in_array( $field, $option );
+		} else {
+			return self::is_option_empty_in_object( $field, $option );
+		}
+	}
+
 	public static function is_option_true_in_array( $field, $option ) {
 		return isset( $field[ $option ] ) && $field[ $option ];
+	}
+
+	public static function is_option_true_in_object( $field, $option ) {
+		return isset( $field->field_options[ $option ] ) && $field->field_options[ $option ];
+	}
+
+	public static function is_option_empty_in_array( $field, $option ) {
+		return ! isset( $field[ $option ] ) || empty( $field[ $option ] );
+	}
+
+	public static function is_option_empty_in_object( $field, $option ) {
+		return ! isset( $field->field_options[ $option ] ) || empty( $field->field_options[ $option ] );
 	}
 
 	public static function is_option_value_in_object( $field, $option ) {

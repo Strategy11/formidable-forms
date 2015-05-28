@@ -571,7 +571,7 @@ class FrmEntriesController {
 
     public static function &filter_display_value( $value, $field, $atts = array() ) {
         $saved_value = ( isset($atts['saved_value']) && $atts['saved_value'] ) ? true : false;
-        if ( ! in_array( $field->type, array( 'radio', 'checkbox', 'radio', 'select' ) ) || ! isset( $field->field_options['separate_value'] ) || ! $field->field_options['separate_value'] || $saved_value ) {
+		if ( ! in_array( $field->type, array( 'radio', 'checkbox', 'radio', 'select' ) ) || ! FrmField::is_option_true( $field, 'separate_value' ) || $saved_value ) {
             return $value;
         }
 

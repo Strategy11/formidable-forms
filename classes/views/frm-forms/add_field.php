@@ -243,7 +243,10 @@ if ( $display['options'] ) { ?>
                         <?php
 						if ( in_array( $field['type'], array( 'select', 'time', 'data' ) ) ) {
 							if ( ! isset( $values['custom_style'] ) || $values['custom_style'] ) { ?>
-                                <label for="size_<?php echo esc_attr( $field['id'] ) ?>"><input type="checkbox" name="field_options[size_<?php echo esc_attr( $field['id'] ) ?>]" id="size_<?php echo esc_attr( $field['id'] ) ?>" value="1" <?php echo ( isset($field['size']) && $field['size'] ) ? 'checked="checked"' : ''; ?> /> <?php _e( 'automatic width', 'formidable' ) ?></label>
+								<label for="size_<?php echo esc_attr( $field['id'] ) ?>">
+									<input type="checkbox" name="field_options[size_<?php echo esc_attr( $field['id'] ) ?>]" id="size_<?php echo esc_attr( $field['id'] ) ?>" value="1" <?php echo FrmField::is_option_true( $field, 'size' ) ? 'checked="checked"' : ''; ?> />
+									<?php _e( 'automatic width', 'formidable' ) ?>
+								</label>
                             <?php
                             }
 						} else { ?>
@@ -258,7 +261,8 @@ if ( $display['options'] ) { ?>
                 <?php do_action('frm_field_options_form', $field, $display, $values);
 
                 if ( $display['required'] || $display['invalid'] || $display['unique'] || $display['conf_field'] ) { ?>
-                    <tr class="frm_validation_msg <?php echo ($display['invalid'] || $field['required'] || (isset($field['unique']) && $field['unique']) || ( isset($field['conf_field']) && $field['conf_field'] ) ) ? '' : 'frm_hidden'; ?>"><td colspan="2">
+					<tr class="frm_validation_msg <?php echo ($display['invalid'] || $field['required'] || FrmField::is_option_true( $field, 'unique' ) || FrmField::is_option_true( $field, 'conf_field' ) ) ? '' : 'frm_hidden'; ?>">
+					<td colspan="2">
                     <div class="menu-settings">
                     <h3 class="frm_no_bg"><?php _e( 'Validation', 'formidable' ) ?></h3>
 

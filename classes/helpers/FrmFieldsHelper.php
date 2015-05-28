@@ -66,9 +66,9 @@ class FrmFieldsHelper {
      */
     public static function is_multiple_select($field) {
         if ( is_array($field) ) {
-            return isset($field['multiple']) && $field['multiple'] && ( ( $field['type'] == 'select' || ( $field['type'] == 'data' && isset($field['data_type']) && $field['data_type'] == 'select') ) );
+            return FrmField::is_option_true( $field, 'multiple' ) && ( ( $field['type'] == 'select' || ( $field['type'] == 'data' && isset($field['data_type']) && $field['data_type'] == 'select') ) );
         } else {
-            return isset($field->field_options['multiple']) && $field->field_options['multiple'] && ( ( $field->type == 'select' || ( $field->type == 'data' && isset($field->field_options['data_type']) && $field->field_options['data_type'] == 'select') ) );
+            return FrmField::is_option_true( $field, 'multiple' ) && ( ( $field->type == 'select' || ( $field->type == 'data' && isset($field->field_options['data_type']) && $field->field_options['data_type'] == 'select') ) );
         }
     }
 
@@ -354,7 +354,7 @@ DEFAULT_HTML;
 
         //If field type is section heading, add class so a bottom margin can be added to either the h3 or description
         if ( $field['type'] == 'divider' ) {
-            if ( isset( $field['description'] ) && $field['description'] ) {
+            if ( FrmField::is_option_true( $field, 'description' ) ) {
                 $html = str_replace( 'frm_description', 'frm_description frm_section_spacing', $html );
             } else {
                 $html = str_replace('[label_position]', '[label_position] frm_section_spacing', $html);
@@ -1054,7 +1054,7 @@ DEFAULT_HTML;
 
 		// If option is an "other" option and there is a value set for this field,
 		// check if the value belongs in the current "Other" option text field
-		if ( ! FrmFieldsHelper::is_other_opt( $opt_key ) || ! isset( $field['value'] ) || ! $field['value'] ) {
+		if ( ! FrmFieldsHelper::is_other_opt( $opt_key ) || ! FrmField::is_option_true( $field, 'value' ) ) {
 			return $other_val;
 		}
 

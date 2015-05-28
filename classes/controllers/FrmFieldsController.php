@@ -139,7 +139,7 @@ class FrmFieldsController {
 				$new_val = FrmAppHelper::get_post_param( $val, 0, 'absint' );
 
                 if ( $val == 'separate_value' ) {
-                    $new_val = ( isset( $field->field_options[ $val ] ) && $field->field_options[ $val ] ) ? 0 : 1;
+					$new_val = FrmField::is_option_true( $field, $val ) ? 0 : 1;
                 }
 
                 $field->field_options[ $val ] = $new_val;
@@ -292,7 +292,7 @@ class FrmFieldsController {
         }
 
         $field = FrmField::getOne($id);
-        $separate_values = ( isset($field->field_options['separate_value']) && $field->field_options['separate_value'] );
+        $separate_values = FrmField::is_option_true( $field, 'separate_value' );
 
         $this_opt_id = end($ids);
 		$this_opt = (array) $field->options[ $this_opt_id ];
@@ -618,7 +618,7 @@ class FrmFieldsController {
 
     private static function add_html_length($field, array &$add_html) {
         // check for max setting and if this field accepts maxlength
-		if ( ! isset( $field['max'] ) || empty( $field['max'] ) || in_array( $field['type'], array( 'textarea', 'rte', 'hidden' ) ) ) {
+		if ( FrmField::is_option_empty( $field, 'max' ) || in_array( $field['type'], array( 'textarea', 'rte', 'hidden' ) ) ) {
             return;
         }
 
@@ -635,7 +635,7 @@ class FrmFieldsController {
 			return;
 		}
 
-        if ( ! FrmField::is_option_true_in_array( $field, 'clear_on_focus' ) ) {
+        if ( ! FrmField::is_option_true( $field, 'clear_on_focus' ) ) {
 			if ( is_array( $field['default_value'] ) ) {
 				$field['default_value'] = json_encode( $field['default_value'] );
 			}
@@ -661,7 +661,7 @@ class FrmFieldsController {
     }
 
     private static function add_shortcodes_to_html( $field, array &$add_html ) {
-        if ( ! isset( $field['shortcodes'] ) || empty( $field['shortcodes'] ) ) {
+        if ( FrmField::is_option_empty( $field, 'shortcodes' ) ) {
             return;
         }
 
@@ -684,7 +684,7 @@ class FrmFieldsController {
 
     public static function check_value( $opt, $opt_key, $field ) {
         if ( is_array( $opt ) ) {
-            if ( isset( $field['separate_value'] ) && $field['separate_value'] ) {
+            if ( FrmField::is_option_true( $field, 'separate_value' ) ) {
                 $opt = isset( $opt['value'] ) ? $opt['value'] : ( isset( $opt['label'] ) ? $opt['label'] : reset( $opt ) );
             } else {
                 $opt = isset( $opt['label'] ) ? $opt['label'] : reset( $opt );

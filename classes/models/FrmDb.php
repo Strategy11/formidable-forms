@@ -702,7 +702,7 @@ DEFAULT_HTML;
         $new_default_html = FrmFieldsHelper::get_default_html('text');
         foreach ( $fields as $field ) {
             $field->field_options = maybe_unserialize($field->field_options);
-            if ( ! isset( $field->field_options['custom_html'] ) || empty( $field->field_options['custom_html'] ) || $field->field_options['custom_html'] == $default_html || $field->field_options['custom_html'] == $old_default_html ) {
+			if ( ! FrmField::is_option_empty( $field, 'custom_html' ) || $field->field_options['custom_html'] == $default_html || $field->field_options['custom_html'] == $old_default_html ) {
                 $field->field_options['custom_html'] = $new_default_html;
 				$wpdb->update( $this->fields, array( 'field_options' => maybe_serialize( $field->field_options ) ), array( 'id' => $field->id ) );
             }

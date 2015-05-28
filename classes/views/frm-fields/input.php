@@ -11,7 +11,7 @@ do_action('frm_field_input_html', $field);
 
 } else if ( $field['type'] == 'radio' ) {
     $read_only = false;
-    if ( isset($field['read_only']) && $field['read_only'] && ( ! isset($frm_vars['readonly']) || $frm_vars['readonly'] != 'disabled') && ! FrmAppHelper::is_admin() ) {
+	if ( FrmField::is_read_only( $field ) && ! FrmAppHelper::is_admin() ) {
         $read_only = true; ?>
 <input type="hidden" value="<?php echo esc_attr( $field['value'] ) ?>" name="<?php echo esc_attr( $field_name ) ?>" />
 <?php
@@ -63,7 +63,7 @@ do_action('frm_field_input_html', $field);
     if ( isset($field['post_field']) && $field['post_field'] == 'post_category' ) {
 		echo FrmFieldsHelper::dropdown_categories( array( 'name' => $field_name, 'field' => $field ) );
 	} else {
-        if ( isset( $field['read_only'] ) && $field['read_only'] && ( ! isset( $frm_vars['readonly'] ) || $frm_vars['readonly'] != 'disabled' ) && ! FrmAppHelper::is_admin() ) {
+		if ( FrmField::is_read_only( $field ) && ! FrmAppHelper::is_admin() ) {
             $read_only = true; ?>
 <input type="hidden" value="<?php echo esc_attr($field['value']) ?>" name="<?php echo esc_attr( $field_name ) ?>" id="<?php echo esc_attr( $html_id ) ?>" />
 <select disabled="disabled" <?php do_action('frm_field_input_html', $field) ?>>
@@ -99,7 +99,7 @@ do_action('frm_field_input_html', $field);
     $checked_values = $field['value'];
     $read_only = false;
 
-    if ( isset($field['read_only']) && $field['read_only'] && ( ! isset($frm_vars['readonly']) || $frm_vars['readonly'] != 'disabled') && ! FrmAppHelper::is_admin() ) {
+	if ( FrmField::is_read_only( $field ) && ! FrmAppHelper::is_admin() ) {
         $read_only = true;
         if ( $checked_values ) {
             foreach ( (array) $checked_values as $checked_value ) { ?>

@@ -25,7 +25,7 @@ class FrmEntriesHelper {
             if ( ! $reset && $_POST && isset( $_POST['item_meta'][ $field->id ] ) && $_POST['item_meta'][ $field->id ] != '' ) {
                 $new_value = stripslashes_deep( $_POST['item_meta'][ $field->id ] );
                 $posted_val = true;
-            } else if ( isset($field->field_options['clear_on_focus']) && $field->field_options['clear_on_focus'] ) {
+            } else if ( FrmField::is_option_true( $field, 'clear_on_focus' ) ) {
                 $new_value = '';
             }
 
@@ -260,7 +260,7 @@ class FrmEntriesHelper {
 	* @since 2.0
 	*/
 	public static function flatten_multi_file_upload( &$val, $field ) {
-		if ( $field->type == 'file' && isset( $field->field_options['multiple'] ) && $field->field_options['multiple'] ) {
+		if ( $field->type == 'file' && FrmField::is_option_true( $field, 'multiple' ) ) {
 			$val = FrmAppHelper::array_flatten( $val );
 		}
 	}
@@ -585,7 +585,7 @@ class FrmEntriesHelper {
         self::set_other_repeating_vals( $field, $value, $args );
 
         // Check if there are any posted "Other" values
-        if ( isset( $field->field_options['other'] ) && $field->field_options['other'] && isset( $_POST['item_meta']['other'][ $field->id ] ) ) {
+		if ( FrmField::is_option_true( $field, 'other' ) && isset( $_POST['item_meta']['other'][ $field->id ] ) ) {
 
             // Save original value
             $args['temp_value'] = $value;
@@ -612,7 +612,7 @@ class FrmEntriesHelper {
         }
 
         // Check if there are any other posted "other" values for this field
-        if ( isset( $field->field_options['other'] ) && $field->field_options['other'] && isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ]['other'][ $field->id ] ) ) {
+		if ( FrmField::is_option_true( $field, 'other' ) && isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ]['other'][ $field->id ] ) ) {
             // Save original value
             $args['temp_value'] = $value;
             $args['other'] = true;

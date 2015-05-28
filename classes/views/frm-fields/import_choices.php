@@ -36,7 +36,7 @@ foreach ( $field->options as $fkey => $fopt ) {
 	if ( is_array( $fopt ) ) {
         $label = (isset($fopt['label'])) ? $fopt['label'] : reset($fopt);
         $value = (isset($fopt['value'])) ? $fopt['value'] : $label;
-        if ( $label != $value && isset($field->field_options['separate_value']) && $field->field_options['separate_value'] ) {
+		if ( $label != $value && FrmField::is_option_true( $field, 'separate_value' ) ) {
             echo "$label|$value\n";
 		} else {
             echo $label ."\n";
