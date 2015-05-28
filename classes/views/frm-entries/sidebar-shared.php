@@ -43,8 +43,6 @@
     </div>
 </div>
 
-
-
 <div class="postbox">
     <h3 class="hndle"><span><?php _e( 'User Information', 'formidable' ) ?></span></h3>
     <div class="inside">
@@ -53,10 +51,10 @@
 			<b><?php echo sanitize_text_field( $entry->ip ); ?></b>
         </div>
 
-        <?php if ( isset($data['browser']) ) { ?>
+        <?php if ( isset( $browser ) ) { ?>
         <div class="misc-pub-section">
             <b><?php _e( 'Browser/OS', 'formidable' ) ?></b>:<br/>
-            <?php echo FrmEntriesHelper::get_browser($data['browser']); ?>
+			<?php echo wp_kses_post( $browser ); ?>
         </div>
         <?php } ?>
 

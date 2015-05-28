@@ -564,21 +564,6 @@ class FrmAppHelper {
         }
     }
 
-	/**
-	 * Make sure admins have permission to see the menu items
-	 * @since 2.0.6
-	 */
-	public static function force_capability( $cap = 'frm_change_settings' ) {
-		// Make sure admins can see the menu items
-		if ( current_user_can( 'administrator' ) && ! current_user_can( $cap ) ) {
-			$role = get_role( 'administrator' );
-			$frm_roles = self::frm_capabilities();
-			foreach ( $frm_roles as $frm_role => $frm_role_description ) {
-				$role->add_cap( $frm_role );
-			}
-		}
-	}
-
     public static function frm_capabilities($type = 'auto') {
         $cap = array(
             'frm_view_forms'        => __( 'View Forms and Templates', 'formidable' ),
@@ -643,6 +628,20 @@ class FrmAppHelper {
             unset($frm_role, $frm_role_description);
         }
     }
+
+	/**
+	 * Make sure admins have permission to see the menu items
+	 * @since 2.0.6
+	 */
+	public static function force_capability( $cap = 'frm_change_settings' ) {
+		if ( current_user_can( 'administrator' ) && ! current_user_can( $cap ) ) {
+			$role = get_role( 'administrator' );
+			$frm_roles = self::frm_capabilities();
+			foreach ( $frm_roles as $frm_role => $frm_role_description ) {
+				$role->add_cap( $frm_role );
+			}
+		}
+	}
 
     /**
      * Check if the user has permision for action.

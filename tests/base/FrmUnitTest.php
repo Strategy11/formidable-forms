@@ -27,7 +27,9 @@ class FrmUnitTest extends WP_UnitTestCase {
 		}
 	}
 
-    /* Helper Functions */
+	/**
+	 * @covers FrmAppController::install()
+	 */
 	function frm_install() {
 		if ( ! defined( 'WP_IMPORTING' ) ) {
 			// set this to false so all our tests won't be done with this active
@@ -93,20 +95,24 @@ class FrmUnitTest extends WP_UnitTestCase {
 		wp_set_current_user( $user->ID );
 		$this->assertTrue( current_user_can( $role ), 'Failed setting the current user role' );
 
-		FrmAppHelper::maybe_add_permissions( 'frm_view_entries' );
+		FrmAppHelper::maybe_add_permissions();
 
 		return $user->ID;
     }
 
+	function go_to_new_post() {
+		$new_post = $this->factory->post->create_and_get();
+		$page = get_permalink( $new_post->ID );
+
+		$this->set_front_end( $page );
+		return $new_post->ID;
+	}
+
 	function set_front_end( $page = '' ) {
 		if ( $page == '' ) {
 			$page = home_url( '/' );
-		} else if ( $page == 'new' ) {
-			$new_post = $this->factory->post->create_and_get();
-			$page = get_permalink( $new_post->ID );
 		}
 
-		set_current_screen( 'front' );
 		$this->clean_up_global_scope();
 		$this->go_to( $page );
 		$this->assertFalse( is_admin(), 'Failed to switch to the front-end' );
@@ -138,10 +144,15 @@ class FrmUnitTest extends WP_UnitTestCase {
 
 		$this->assertTrue( $current_screen->in_admin(), 'Failed to switch to the back-end' );
 		$this->assertEquals( $screen->base, $current_screen->base, $page );
+
+		FrmHooksController::trigger_load_hook();
 	}
 
 	function clean_up_global_scope() {
 		parent::clean_up_global_scope();
+		if ( isset( $GLOBALS['current_screen'] ) ) {
+			unset( $GLOBALS['current_screen'] );
+		}
 
 		global $frm_vars;
 		$frm_vars = array(

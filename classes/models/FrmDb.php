@@ -248,7 +248,7 @@ class FrmDb {
 					$values[] = '%' . FrmAppHelper::esc_like( $v ) . '%';
 				}
 				$where .= ')';
-			} else {
+			} else if ( ! empty( $value ) ) {
             	$where .= ' in ('. FrmAppHelper::prepare_array_values( $value, '%s' ) .')';
 				$values = array_merge( $values, $value );
 			}

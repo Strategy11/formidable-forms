@@ -1,9 +1,6 @@
 <?php
 
-FrmHooksController::load_ajax_hooks();
-if ( is_callable( 'FrmProHooksController::load_ajax_hooks' ) ) {
-	FrmProHooksController::load_ajax_hooks();
-}
+FrmHooksController::trigger_load_hook( 'load_ajax_hooks' );
 FrmHooksController::trigger_load_hook( 'load_form_hooks' );
 
 /**

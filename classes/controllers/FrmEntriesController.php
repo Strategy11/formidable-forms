@@ -439,7 +439,7 @@ class FrmEntriesController {
         }
 
         if ( $errors == '' ) {
-            $errors = FrmEntry::validate( $_POST );
+			$errors = FrmEntryValidate::validate( $_POST );
         }
 
 		/**
@@ -526,11 +526,11 @@ class FrmEntriesController {
 
         $values = array();
         foreach ( $atts['fields'] as $f ) {
-            FrmEntriesHelper::fill_entry_values($atts, $f, $values);
+			FrmEntryFormat::fill_entry_values( $atts, $f, $values );
             unset($f);
         }
 
-        FrmEntriesHelper::fill_entry_user_info($atts, $values);
+		FrmEntryFormat::fill_entry_user_info( $atts, $values );
 
         if ( $atts['format'] == 'json' ) {
             return json_encode($values);
@@ -539,7 +539,7 @@ class FrmEntriesController {
         }
 
         $content = array();
-        FrmEntriesHelper::convert_entry_to_content($values, $atts, $content);
+		FrmEntryFormat::convert_entry_to_content( $values, $atts, $content );
 
         if ( 'text' == $atts['format'] ) {
             $content = implode('', $content);
@@ -560,7 +560,7 @@ class FrmEntriesController {
 
     public static function &filter_shortcode_value($value, $tag, $atts, $field) {
         $plain_text = add_filter('frm_plain_text_email', true);
-        FrmEntriesHelper::textarea_display_value( $value, $field->type, $plain_text );
+		FrmEntryFormat::textarea_display_value( $field->type, $plain_text, $value );
 
         if ( isset($atts['show']) && $atts['show'] == 'value' ) {
             return $value;
@@ -662,6 +662,9 @@ class FrmEntriesController {
         $data = maybe_unserialize($entry->description);
         $date_format = get_option('date_format');
         $time_format = get_option('time_format');
+		if ( isset( $data['browser'] ) ) {
+			$browser = FrmEntryFormat::get_browser( $data['browser'] );
+		}
 
         include(FrmAppHelper::plugin_path() .'/classes/views/frm-entries/sidebar-shared.php');
     }

@@ -26,7 +26,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	}
 	
 	function test_view_reverse_compatibility() {
-		$this->set_front_end( 'new' );
+		$this->go_to_new_post();
 
 		// Check that $display->frm_old_id still works
 		$all_entries_view = get_posts( array(

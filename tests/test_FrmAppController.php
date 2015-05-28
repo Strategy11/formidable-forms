@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * @group app
+ */
 class WP_Test_FrmAppController extends FrmUnitTest {
 	public function test_class_is_tested() {
 		$this->assertTrue( true );
@@ -46,24 +48,25 @@ class WP_Test_FrmAppController extends FrmUnitTest {
 
 	public function test_menu() {
 		$this->set_admin_screen();
-
-		$current_user = get_current_user_id();
 		$this->set_as_user_role( 'administrator' );
-		//$this->assertTrue( current_user_can( 'frm_view_forms' ), 'The user does not have frm_view_forms permission' );
 
-		//$this->check_menu();
+		$this->markTestIncomplete( 'Needs work' );
 
-		wp_set_current_user( $current_user );
+        ob_start();
+        require( ABSPATH . 'wp-admin/menu.php' );
+        $menu = ob_get_contents();
+        ob_end_clean();
+		echo $menu;
+		$this->assertTrue( current_user_can( 'frm_view_forms' ), 'The user cannot frm_view_forms' );
+
+		$this->check_menu();
 	}
 
 	public function test_block_menu() {
-		$current_user = get_current_user_id();
 		$this->set_as_user_role( 'subscriber' );
 		$this->assertFalse( current_user_can( 'frm_view_forms' ) );
 
 		$this->check_menu( 'block' );
-
-		wp_set_current_user( $current_user );
 	}
 
 	private function check_menu( $allow = 'allow' ) {
@@ -84,7 +87,12 @@ class WP_Test_FrmAppController extends FrmUnitTest {
 		}
 	}
 
+	/**
+	 * @covers FrmAppController::load_wp_admin_style
+	 */
 	public function test_load_wp_admin_style() {
+		$this->set_admin_screen();
+
         ob_start();
 		do_action( 'admin_enqueue_scripts' );
         do_action( 'admin_print_styles' );
@@ -92,10 +100,12 @@ class WP_Test_FrmAppController extends FrmUnitTest {
         ob_end_clean();
 
 		$this->assertNotEmpty( $styles );
-		// TODO: make this function fire from admin
-		//$this->assertTrue( strpos( $styles, FrmAppHelper::plugin_url() . '/css/frm_fonts.css' ) !== false, 'The frm_fonts stylesheet is missing' );
+		$this->assertTrue( strpos( $styles, FrmAppHelper::plugin_url() . '/css/frm_fonts.css' ) !== false, 'The frm_fonts stylesheet is missing' );
 	}
 
+	/**
+	 * @covers FrmAppController::install
+	 */
 	public function test_install() {
 		$this->frm_install();
 	}

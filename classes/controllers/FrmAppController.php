@@ -3,22 +3,21 @@
 class FrmAppController {
 
 	public static function menu() {
-		add_filter( 'plugin_action_links_' . FrmAppHelper::plugin_folder() . '/formidable.php', 'FrmAppController::settings_link' );
-		add_filter( 'admin_body_class', 'FrmAppController::wp_admin_body_class' );
-
         FrmAppHelper::maybe_add_permissions();
-
         if ( ! current_user_can( 'frm_view_forms' ) ) {
             return;
         }
 
-        $count = count( get_post_types( array( 'show_ui' => true, '_builtin' => false, 'show_in_menu' => true ) ) );
-        $pos = ( (int) $count > 0 ) ? '22.7' : '29.3';
-        $pos = apply_filters( 'frm_menu_position', $pos );
-
         $frm_settings = FrmAppHelper::get_settings();
-        add_menu_page( 'Formidable', $frm_settings->menu, 'frm_view_forms', 'formidable', 'FrmFormsController::route', FrmAppHelper::plugin_url() . '/images/form_16.png', $pos );
+        add_menu_page( 'Formidable', $frm_settings->menu, 'frm_view_forms', 'formidable', 'FrmFormsController::route', FrmAppHelper::plugin_url() . '/images/form_16.png', self::get_menu_position() );
     }
+
+	private static function get_menu_position() {
+		$count = count( get_post_types( array( 'show_ui' => true, '_builtin' => false, 'show_in_menu' => true ) ) );
+		$pos = $count ? '22.7' : '29.3';
+		$pos = apply_filters( 'frm_menu_position', $pos );
+		return $pos;
+	}
 
     public static function load_wp_admin_style() {
         wp_enqueue_style( 'frm_fonts', FrmAppHelper::plugin_url() . '/css/frm_fonts.css', array(), FrmAppHelper::plugin_version() );
@@ -32,7 +31,7 @@ class FrmAppController {
             return;
         }
 
-		$current_page = isset( $_GET['page'] ) ? FrmAppHelper::simple_get( 'page', 'sanitize_title' ) : ( isset( $_GET['post_type'] ) ? FrmAppHelper::simple_get( 'post_type', 'sanitize_title' ) : 'None' );
+		$current_page = isset( $_GET['page'] ) ? FrmAppHelper::simple_get( 'page', 'sanitize_title' ) : FrmAppHelper::simple_get( 'post_type', 'sanitize_title', 'None' );
 
         if ( $form ) {
             FrmFormsHelper::maybe_get_form( $form );
@@ -458,7 +457,6 @@ class FrmAppController {
         wp_die();
     }
 
-    //formidable shortcode
     public static function get_form_shortcode( $atts ) {
         _deprecated_function( __FUNCTION__, '1.07.05', 'FrmFormsController::get_form_shortcode()' );
         return FrmFormsController::get_form_shortcode( $atts );

@@ -91,10 +91,11 @@ class WP_Test_FrmDb extends FrmUnitTest {
 		$uninstalled = $frmdb->uninstall();
 		$this->assertTrue( $uninstalled );
 
-		//$this->do_tables_exist( false );
+		$this->markTestIncomplete( 'Make sure uninstall is complete' );
+		$this->do_tables_exist( false );
 
-		//$this->assertEmpty( get_option('frm_db_version', true ) );
-		//$this->assertEmpty( get_option('frm_options', true ) );
+		$this->assertEmpty( get_option('frm_db_version', true ) );
+		$this->assertEmpty( get_option('frm_options', true ) );
 
 		// TODO: Check if roles exist FrmAppHelper::frm_capabilities()
 		// TODO: Check if any posts exist for extra types
