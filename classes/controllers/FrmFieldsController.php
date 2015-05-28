@@ -636,6 +636,9 @@ class FrmFieldsController {
 		}
 
         if ( ! FrmField::is_option_true_in_array( $field, 'clear_on_focus' ) ) {
+			if ( is_array( $field['default_value'] ) ) {
+				$field['default_value'] = json_encode( $field['default_value'] );
+			}
 			$add_html['data-frmval'] = 'data-frmval="' . esc_attr( $field['default_value'] ) . '"';
             return;
         }

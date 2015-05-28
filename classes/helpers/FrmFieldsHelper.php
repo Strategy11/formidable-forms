@@ -178,15 +178,18 @@ class FrmFieldsHelper {
 
     public static function setup_edit_vars( $record, $doing_ajax = false ) {
 		$values = array( 'id' => $record->id, 'form_id' => $record->form_id );
-		$defaults = array( 'name' => $record->name, 'description' => $record->description );
-        $default_opts = array(
-            'field_key' => $record->field_key, 'type' => $record->type,
-			'default_value' => $record->default_value, 'field_order' => $record->field_order,
-            'required' => $record->required,
-        );
+		$defaults = array(
+			'name'          => $record->name,
+			'description'   => $record->description,
+			'field_key'     => $record->field_key,
+			'type'          => $record->type,
+			'default_value' => $record->default_value,
+			'field_order'   => $record->field_order,
+			'required'      => $record->required,
+		);
 
 		if ( $doing_ajax ) {
-            $values = $values + $defaults + $default_opts;
+            $values = $values + $defaults;
             $values['form_name'] = '';
 		} else {
 			foreach ( $defaults as $var => $default ) {
@@ -194,15 +197,10 @@ class FrmFieldsHelper {
                 unset($var, $default);
             }
 
-            foreach ( array( 'field_key' => $record->field_key, 'type' => $record->type, 'default_value' => $record->default_value, 'field_order' => $record->field_order, 'required' => $record->required ) as $var => $default ) {
-                $values[ $var ] = FrmAppHelper::get_param( $var, $default );
-                unset($var, $default);
-            }
-
-            $values['form_name'] = ($record->form_id) ? FrmForm::getName( $record->form_id ) : '';
+			$values['form_name'] = $record->form_id ? FrmForm::getName( $record->form_id ) : '';
         }
 
-        unset($defaults, $default_opts);
+		unset( $defaults );
 
         $values['options'] = $record->options;
         $values['field_options'] = $record->field_options;
@@ -1227,7 +1225,7 @@ DEFAULT_HTML;
 	* @param string|boolean $opt_key
 	* @return string $other_id
 	*/
-	public static function get_other_field_html_id( $type, $html_id, $opt_key = false ){
+	public static function get_other_field_html_id( $type, $html_id, $opt_key = false ) {
 		$other_id = $html_id;
 
 		// If hidden radio field, add an opt key of 0

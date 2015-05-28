@@ -412,7 +412,7 @@ function frmFrontFormJS(){
 		if ( typeof defaultValue !== 'undefined' ) {
 			if ( ! $input.is(':checkbox, :radio') ) {
 				$input.val( defaultValue );
-			} else if ( $input.val() == defaultValue ) {
+			} else if ( $input.val() == defaultValue || ( jQuery.isArray(defaultValue) && jQuery.inArray($input.val(), defaultValue) !== -1 ) ) {
 				$input.prop('checked', true);
 			}
 		}
