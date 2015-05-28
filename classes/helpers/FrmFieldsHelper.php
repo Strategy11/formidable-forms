@@ -50,49 +50,25 @@ class FrmFieldsHelper {
         ));
     }
 
-    public static function is_no_save_field($type) {
-        return in_array($type, self::no_save_fields());
-    }
+	public static function is_no_save_field( $type ) {
+		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmField::is_no_save_field' );
+		return FrmField::is_no_save_field( $type );
+	}
 
-    public static function no_save_fields() {
-		return array( 'divider', 'end_divider', 'captcha', 'break', 'html' );
-    }
+	public static function no_save_fields() {
+		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmField::no_save_fields' );
+		return FrmField::no_save_fields();
+	}
 
-    /**
-     * Check if this is a multiselect dropdown field
-     *
-     * @since 2.0
-     * @return boolean
-     */
-    public static function is_multiple_select($field) {
-        if ( is_array($field) ) {
-            return FrmField::is_option_true( $field, 'multiple' ) && ( ( $field['type'] == 'select' || ( $field['type'] == 'data' && isset($field['data_type']) && $field['data_type'] == 'select') ) );
-        } else {
-            return FrmField::is_option_true( $field, 'multiple' ) && ( ( $field->type == 'select' || ( $field->type == 'data' && isset($field->field_options['data_type']) && $field->field_options['data_type'] == 'select') ) );
-        }
-    }
+	public static function is_multiple_select( $field ) {
+		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmField::is_multiple_select' );
+		return FrmField::is_multiple_select( $field );
+	}
 
-    /**
-    * Check if this field can hold an array of values
-    *
-    * @since 2.0
-    *
-    * @param array|object $field
-    * @return boolean
-    */
-    public static function is_field_with_multiple_values( $field ) {
-        if ( ! $field ) {
-            return false;
-        }
-
-        if ( is_array( $field ) ) {
-			// For field array
-            return $field['type'] == 'checkbox' || ( $field['type'] == 'data' && isset($field['data_type']) && $field['data_type'] == 'checkbox' ) || self::is_multiple_select( $field );
-        } else {
-			// For field object
-			return $field->type == 'checkbox' || ( $field->type == 'data' && isset( $field->field_options['data_type'] ) && $field->field_options['data_type'] == 'checkbox' ) || self::is_multiple_select($field);
-        }
-    }
+	public static function is_field_with_multiple_values( $field ) {
+		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmField::is_field_with_multiple_values' );
+		return FrmField::is_field_with_multiple_values( $field );
+	}
 
 	/**
 	 * @since 2.0.6
@@ -327,7 +303,7 @@ DEFAULT_HTML;
         $field_id = $args['field_id'];
         $html_id = self::get_html_id($field, $args['field_plus_id']);
 
-        if ( self::is_multiple_select($field) ) {
+        if ( FrmField::is_multiple_select($field) ) {
             $field_name .= '[]';
         }
 
@@ -771,7 +747,7 @@ DEFAULT_HTML;
             return FrmProDisplaysHelper::get_shortcodes($content, $form_id);
         }
 
-        $fields = FrmField::getAll( array( 'fi.form_id' => (int) $form_id, 'fi.type not' => self::no_save_fields() ) );
+        $fields = FrmField::getAll( array( 'fi.form_id' => (int) $form_id, 'fi.type not' => FrmField::no_save_fields() ) );
 
         $tagregexp = self::allowed_shortcodes($fields);
 
@@ -1062,7 +1038,7 @@ DEFAULT_HTML;
 
 		// For fields inside repeating sections - note, don't check if $pointer is true because it will often be zero
 		if ( $parent && isset( $_POST['item_meta'][ $parent ][ $pointer ]['other'][ $field['id'] ] ) ) {
-			if ( FrmFieldsHelper::is_field_with_multiple_values( $field ) ) {
+			if ( FrmField::is_field_with_multiple_values( $field ) ) {
 				$other_val = isset( $_POST['item_meta'][ $parent ][ $pointer ]['other'][ $field['id'] ][ $opt_key ] ) ? sanitize_text_field( $_POST['item_meta'][ $parent ][ $pointer ]['other'][ $field['id'] ][ $opt_key ] ) : '';
 			} else {
 				$other_val = sanitize_text_field( $_POST['item_meta'][ $parent ][ $pointer ]['other'][ $field['id'] ] );
@@ -1072,7 +1048,7 @@ DEFAULT_HTML;
 		} else if ( isset( $field['id'] ) && isset( $_POST['item_meta']['other'][ $field['id'] ] ) ) {
 			// For normal fields
 
-			if ( FrmFieldsHelper::is_field_with_multiple_values( $field ) ) {
+			if ( FrmField::is_field_with_multiple_values( $field ) ) {
 				$other_val = isset( $_POST['item_meta']['other'][ $field['id'] ][ $opt_key ] ) ? sanitize_text_field( $_POST['item_meta']['other'][ $field['id'] ][ $opt_key ] ) : '';
 			} else {
 				$other_val = sanitize_text_field( $_POST['item_meta']['other'][ $field['id'] ] );
@@ -1160,7 +1136,7 @@ DEFAULT_HTML;
 
 		//Converts item_meta[field_id] => item_meta[other][field_id] and
 		//item_meta[parent][0][field_id] => item_meta[parent][0][other][field_id]
-		if ( self::is_field_with_multiple_values( $args['field'] ) ) {
+		if ( FrmField::is_field_with_multiple_values( $args['field'] ) ) {
 			$other_args['name'] .= '[' . $args['opt_key'] . ']';
 		}
 	}

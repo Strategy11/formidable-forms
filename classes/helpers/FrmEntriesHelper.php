@@ -32,7 +32,7 @@ class FrmEntriesHelper {
             $is_default = ($new_value == $default) ? true : false;
 
     		//If checkbox, multi-select dropdown, or checkbox data from entries field, set return array to true
-            $return_array = FrmFieldsHelper::is_field_with_multiple_values( $field );
+			$return_array = FrmField::is_field_with_multiple_values( $field );
 
             $field->default_value = apply_filters('frm_get_default_value', $field->default_value, $field, true, $return_array);
 
@@ -175,7 +175,7 @@ class FrmEntriesHelper {
     }
 
     public static function fill_entry_values($atts, $f, array &$values) {
-		if ( FrmFieldsHelper::is_no_save_field( $f->type ) ) {
+		if ( FrmField::is_no_save_field( $f->type ) ) {
             return;
         }
 

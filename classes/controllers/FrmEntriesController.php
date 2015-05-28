@@ -77,7 +77,7 @@ class FrmEntriesController {
         $form_cols = FrmField::get_all_for_form($form_id, '', 'include');
 
         foreach ( $form_cols as $form_col ) {
-			if ( FrmFieldsHelper::is_no_save_field( $form_col->type ) ) {
+			if ( FrmField::is_no_save_field( $form_col->type ) ) {
                 continue;
             }
 
@@ -86,7 +86,7 @@ class FrmEntriesController {
 
                 if ( $sub_form_cols ) {
                     foreach ( $sub_form_cols as $k => $sub_form_col ) {
-                        if ( in_array( $sub_form_col->type, FrmFieldsHelper::no_save_fields() ) ) {
+						if ( FrmField::is_no_save_field( $sub_form_col->type ) ) {
                             unset( $sub_form_cols[ $k ] );
                             continue;
                         }

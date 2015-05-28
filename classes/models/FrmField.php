@@ -505,6 +505,48 @@ class FrmField {
         return $results;
     }
 
+	public static function is_no_save_field( $type ) {
+		return in_array( $type, self::no_save_fields() );
+	}
+
+	public static function no_save_fields() {
+		return array( 'divider', 'end_divider', 'captcha', 'break', 'html' );
+	}
+
+	/**
+	 * Check if this field can hold an array of values
+	 *
+	 * @since 2.0.9
+	 *
+	 * @param array|object $field
+	 * @return boolean
+	 */
+	public static function is_field_with_multiple_values( $field ) {
+		if ( ! $field ) {
+			return false;
+		}
+
+		if ( is_array( $field ) ) {
+			return $field['type'] == 'checkbox' || ( $field['type'] == 'data' && isset($field['data_type']) && $field['data_type'] == 'checkbox' ) || self::is_multiple_select( $field );
+		} else {
+			return $field->type == 'checkbox' || ( $field->type == 'data' && isset( $field->field_options['data_type'] ) && $field->field_options['data_type'] == 'checkbox' ) || self::is_multiple_select($field);
+		}
+	}
+
+	/**
+	 * Check if this is a multiselect dropdown field
+	 *
+	 * @since 2.0.9
+	 * @return boolean
+	 */
+	public static function is_multiple_select( $field ) {
+		if ( is_array( $field ) ) {
+			return self::is_option_true( $field, 'multiple' ) && ( ( $field['type'] == 'select' || ( $field['type'] == 'data' && isset( $field['data_type'] ) && $field['data_type'] == 'select') ) );
+		} else {
+			return self::is_option_true( $field, 'multiple' ) && ( ( $field->type == 'select' || ( $field->type == 'data' && isset($field->field_options['data_type'] ) && $field->field_options['data_type'] == 'select') ) );
+		}
+	}
+
 	/**
 	 * Check if a field is read only. Read only can be set in the field options,
 	 * but disabled with the shortcode options

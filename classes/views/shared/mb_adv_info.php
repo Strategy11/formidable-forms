@@ -25,7 +25,7 @@
 					$repeat_field = $f->id;
 				}
 
-				if ( FrmFieldsHelper::is_no_save_field( $f->type ) ) {
+				if ( FrmField::is_no_save_field( $f->type ) ) {
 					continue;
 				}
 
@@ -44,7 +44,7 @@
                         $linked_form = FrmDb::get_var( $wpdb->prefix .'frm_fields', array( 'id' => $f->field_options['form_select'] ), 'form_id' );
                         if ( ! in_array( $linked_form, $linked_forms ) ) {
                             $linked_forms[] = $linked_form;
-							$linked_fields = FrmField::getAll( array( 'fi.type not' => FrmFieldsHelper::no_save_fields(), 'fi.form_id' => $linked_form ) );
+							$linked_fields = FrmField::getAll( array( 'fi.type not' => FrmField::no_save_fields(), 'fi.form_id' => $linked_form ) );
                             $ldfe = '';
 							if ( $linked_fields ) {
 								foreach ( $linked_fields as $linked_field ) {
@@ -98,7 +98,7 @@
 	    <ul class="frm_code_list frm_full_width">
 		    <?php if ( ! empty( $fields ) ) {
 		        foreach ( $fields as $f ) {
-                    if ( FrmFieldsHelper::is_no_save_field($f->type) || ( $f->type == 'data' && ( ! isset($f->field_options['data_type']) || $f->field_options['data_type'] == 'data' || $f->field_options['data_type'] == '' ) ) ) {
+					if ( FrmField::is_no_save_field( $f->type ) || ( $f->type == 'data' && ( ! isset( $f->field_options['data_type'] ) || $f->field_options['data_type'] == 'data' || $f->field_options['data_type'] == '' ) ) ) {
                         continue;
                 }
             ?>

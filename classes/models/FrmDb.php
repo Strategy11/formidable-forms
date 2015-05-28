@@ -676,7 +676,7 @@ DEFAULT_HTML;
     private function migrate_to_6() {
         global $wpdb;
 
-        $no_save = array_merge( FrmFieldsHelper::no_save_fields(), array( 'form', 'hidden', 'user_id' ) );
+		$no_save = array_merge( FrmField::no_save_fields(), array( 'form', 'hidden', 'user_id' ) );
 		$fields = FrmDb::get_results( $this->fields, array( 'type NOT' => $no_save ), 'id, field_options' );
 
         $default_html = <<<DEFAULT_HTML
