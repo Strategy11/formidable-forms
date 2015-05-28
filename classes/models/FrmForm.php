@@ -416,6 +416,17 @@ class FrmForm {
         return $key;
     }
 
+	/**
+	 * If $form is numeric, get the form object
+	 * @param object|int $form
+	 * @since 2.0.9
+	 */
+	public static function maybe_get_form( &$form ) {
+		if ( ! is_object( $form ) && ! is_array( $form ) && ! empty( $form ) ) {
+			$form = self::getOne( $form );
+		}
+	}
+
     /**
      * @return object form
      */
@@ -560,4 +571,54 @@ class FrmForm {
         return apply_filters('frm_validate_form', $errors, $values);
     }
 
+	public static function get_admin_params( $form = null ) {
+		$form_id = $form;
+		if ( $form === null ) {
+			$form_id = FrmForm::get_current_form_id();
+		} else if ( $form && is_object( $form ) ) {
+			$form_id = $form->id;
+		}
+
+		$values = array();
+		foreach ( array(
+			'id' => '', 'form_name' => '', 'paged' => 1, 'form' => $form_id,
+			'field_id' => '', 'search' => '', 'sort' => '', 'sdir' => '', 'fid' => '',
+			'keep_post' => '',
+		) as $var => $default ) {
+			$values[ $var ] = FrmAppHelper::get_param( $var, $default );
+		}
+
+		return $values;
+	}
+
+	public static function get_current_form_id() {
+		$form = self::get_current_form();
+		$form_id = $form ? $form->id : 0;
+
+		return $form_id;
+	}
+
+	public static function get_current_form( $form_id = 0 ) {
+		global $frm_vars, $wpdb;
+
+		if ( isset( $frm_vars['current_form'] ) && $frm_vars['current_form'] && ( ! $form_id || $form_id == $frm_vars['current_form']->id ) ) {
+			return $frm_vars['current_form'];
+		}
+
+		$form_id = FrmAppHelper::get_param( 'form', $form_id, 'get', 'absint' );
+		return self::set_current_form( $form_id );
+	}
+
+	public static function set_current_form( $form_id ) {
+		global $frm_vars;
+
+		$query = array();
+		if ( $form_id ) {
+			$query['id'] = $form_id;
+		}
+
+		$frm_vars['current_form'] = self::get_published_forms( $query, 1 );
+
+		return $frm_vars['current_form'];
+	}
 }

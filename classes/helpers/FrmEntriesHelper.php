@@ -113,54 +113,23 @@ class FrmEntriesHelper {
     }
 
     public static function get_admin_params( $form = null ) {
-        $form_id = $form;
-        if ( $form === null ) {
-            $form_id = self::get_current_form_id();
-        } else if ( $form && is_object($form) ) {
-            $form_id = $form->id;
-        }
-
-        $values = array();
-        foreach ( array(
-            'id' => '', 'form_name' => '', 'paged' => 1, 'form' => $form_id,
-            'field_id' => '', 'search' => '', 'sort' => '', 'sdir' => '', 'fid' => '',
-            'keep_post' => '',
-        ) as $var => $default ) {
-            $values[ $var ] = FrmAppHelper::get_param( $var, $default );
-        }
-
-        return $values;
+		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmForm::get_admin_params' );
+		return FrmForm::set_current_form( $form );
     }
 
-    public static function set_current_form($form_id) {
-		global $frm_vars;
+	public static function set_current_form( $form_id ) {
+		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmForm::set_current_form' );
+		return FrmForm::set_current_form( $form_id );
+	}
 
-		$query = array();
-        if ( $form_id ) {
-			$query['id'] = $form_id;
-        }
-
-        $frm_vars['current_form'] = FrmForm::get_published_forms( $query, 1 );
-
-        return $frm_vars['current_form'];
-    }
-
-    public static function get_current_form($form_id = 0) {
-        global $frm_vars, $wpdb;
-
-		if ( isset($frm_vars['current_form']) && $frm_vars['current_form'] && ( ! $form_id || $form_id == $frm_vars['current_form']->id ) ) {
-			return $frm_vars['current_form'];
-		}
-
-		$form_id = FrmAppHelper::get_param('form', $form_id, 'get', 'absint' );
-        return self::set_current_form($form_id);
-    }
+	public static function get_current_form( $form_id = 0 ) {
+		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmForm::get_current_form' );
+		return FrmForm::get_current_form( $form_id );
+	}
 
     public static function get_current_form_id() {
-        $form = self::get_current_form();
-        $form_id = $form ? $form->id : 0;
-
-        return $form_id;
+		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmForm::get_current_form_id' );
+		return FrmForm::get_current_form_id();
     }
 
     /**

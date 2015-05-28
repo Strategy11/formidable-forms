@@ -65,7 +65,7 @@ class FrmEntriesController {
 
     public static function manage_columns($columns) {
         global $frm_vars, $wpdb;
-        $form_id = FrmEntriesHelper::get_current_form_id();
+		$form_id = FrmForm::get_current_form_id();
 
         $columns[ $form_id .'_id' ] = 'ID';
 		$columns[ $form_id . '_item_key' ] = esc_html__( 'Entry Key', 'formidable' );
@@ -197,7 +197,7 @@ class FrmEntriesController {
     }
 
     public static function sortable_columns() {
-        $form_id = FrmEntriesHelper::get_current_form_id();
+		$form_id = FrmForm::get_current_form_id();
 
 		$fields = FrmField::get_all_for_form( $form_id );
 
@@ -223,7 +223,7 @@ class FrmEntriesController {
     public static function hidden_columns($result) {
         global $frm_vars;
 
-        $form_id = FrmEntriesHelper::get_current_form_id();
+		$form_id = FrmForm::get_current_form_id();
 
         $return = false;
         foreach ( (array) $result as $r ) {
@@ -283,8 +283,8 @@ class FrmEntriesController {
 	public static function display_list( $message = '', $errors = array() ) {
         global $wpdb, $frm_vars;
 
-        $form = FrmEntriesHelper::get_current_form();
-        $params = FrmEntriesHelper::get_admin_params( $form );
+		$form = FrmForm::get_current_form();
+		$params = FrmForm::get_admin_params( $form );
 
         if ( $form ) {
             $params['form'] = $form->id;
@@ -352,7 +352,7 @@ class FrmEntriesController {
     public static function destroy() {
         FrmAppHelper::permission_check('frm_delete_entries');
 
-        $params = FrmEntriesHelper::get_admin_params();
+		$params = FrmForm::get_admin_params();
 
         if ( isset($params['keep_post']) && $params['keep_post'] ) {
             //unlink entry from post
@@ -375,14 +375,14 @@ class FrmEntriesController {
         }
 
         global $wpdb;
-        $params = FrmEntriesHelper::get_admin_params();
+		$params = FrmForm::get_admin_params();
         $message = '';
         $errors = array();
         $form_id = (int) $params['form'];
 
         if ( $form_id ) {
             $entry_ids = FrmDb::get_col( 'frm_items', array( 'form_id' => $form_id ) );
-            $action = FrmFormActionsHelper::get_action_for_form( $form_id, 'wppost', 1 );
+			$action = FrmFormAction::get_action_for_form( $form_id, 'wppost', 1 );
 
             if ( $action ) {
                 // this action takes a while, so only trigger it if there are posts to delete
@@ -613,7 +613,7 @@ class FrmEntriesController {
         if ( ! $form ) {
 			$form = FrmForm::getAll( array(), 'name', 1 );
         } else {
-            FrmFormsHelper::maybe_get_form( $form );
+			FrmForm::maybe_get_form( $form );
         }
 
         if ( isset( $frm_vars['form_params'] ) && is_array( $frm_vars['form_params'] ) && isset( $frm_vars['form_params'][ $form->id ] ) ) {

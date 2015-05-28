@@ -245,7 +245,7 @@ class FrmFormActionsController {
             return;
         }
 
-        FrmFormsHelper::maybe_get_form( $form );
+		FrmForm::maybe_get_form( $form );
 
         $link_settings = self::get_form_actions( $type );
         if ( 'all' != $type ) {
@@ -276,7 +276,7 @@ class FrmFormActionsController {
             }
 
             // check conditional logic
-            $stop = FrmFormActionsHelper::action_conditions_met($action, $entry);
+			$stop = FrmFormAction::action_conditions_met( $action, $entry );
             if ( $stop ) {
                 continue;
             }

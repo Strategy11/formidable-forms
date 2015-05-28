@@ -34,7 +34,7 @@ class FrmAppController {
 		$current_page = isset( $_GET['page'] ) ? FrmAppHelper::simple_get( 'page', 'sanitize_title' ) : FrmAppHelper::simple_get( 'post_type', 'sanitize_title', 'None' );
 
         if ( $form ) {
-            FrmFormsHelper::maybe_get_form( $form );
+			FrmForm::maybe_get_form( $form );
 
             if ( is_object( $form ) ) {
                 $id = $form->id;

@@ -4,15 +4,11 @@ if ( ! defined('ABSPATH') ) {
 }
 
 class FrmFormsHelper {
-    /**
-     * If $form is numeric, get the form object
-     * @param object|int $form
-     */
-    public static function maybe_get_form( &$form ) {
-		if ( ! is_object( $form ) && ! is_array( $form ) && ! empty( $form ) ) {
-            $form = FrmForm::getOne($form);
-        }
-    }
+
+	public static function maybe_get_form( &$form ) {
+		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmForm::maybe_get_form' );
+		FrmForm::maybe_get_form( $form );
+	}
 
     public static function get_direct_link($key, $form = false ) {
         $target_url = esc_url(admin_url('admin-ajax.php') . '?action=frm_forms_preview&form='. $key);

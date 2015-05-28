@@ -513,12 +513,12 @@ class FrmEntry {
 
 	public static function validate_url_field( &$errors, $field, &$value, $args ) {
 		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmEntryValidate::validate_url_field' );
-		FrmEntryValidate::validate_url_field( $errors, $field, $values, $args );
+		FrmEntryValidate::validate_url_field( $errors, $field, $value, $args );
 	}
 
 	public static function validate_email_field( &$errors, $field, $value, $args ) {
 		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmEntryValidate::validate_email_field' );
-		FrmEntryValidate::validate_email_field( $errors, $field, $values, $args );
+		FrmEntryValidate::validate_email_field( $errors, $field, $value, $args );
 	}
 
 	public static function validate_recaptcha( &$errors, $field, $args ) {
