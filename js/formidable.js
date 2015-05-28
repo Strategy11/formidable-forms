@@ -452,8 +452,7 @@ function frmFrontFormJS(){
 				if ( display == 'none' ) {
 					hideAndClearField( jQuery(hideMe), f );
 				} else {
-					doCalcForSingleField( f.HideField, f.hiddenName );
-
+					doCalcForSingleField( f.HideField );
 					hideMe.style.display = display;
 				}
 			}
@@ -721,11 +720,14 @@ function frmFrontFormJS(){
 			var thisCalc = all_calcs.calc[keys[i]];
 			var thisFullCalc = thisCalc.calc;
 
-			doSingleCalculation( thisCalc, thisFullCalc, all_calcs, keys[i], vals );
+			// TODO: If field is hidden, do not doSingleCalculation
+			doSingleCalculation( thisCalc, all_calcs, keys[i], vals );
 		}
 	}
 
-	function doSingleCalculation( thisCalc, thisFullCalc, all_calcs, field_key, vals ) {
+	function doSingleCalculation( thisCalc, all_calcs, field_key, vals ) {
+		var thisFullCalc = thisCalc.calc;
+
 		// loop through the fields in this calculation
 		thisFullCalc = getValsForSingleCalc( thisCalc, thisFullCalc, all_calcs, vals );
 
@@ -785,27 +787,21 @@ function frmFrontFormJS(){
 		return thisFullCalc;
 	}
 
-	function doCalcForSingleField( field_id, field_name ) {
+	function doCalcForSingleField( field_id ) {
 		if ( typeof __FRMCALC == 'undefined' ) {
 			// there are no calculations on this page
 			return;
 		}
 		var all_calcs = __FRMCALC;
-
-		//The next three lines are ugly. Need a better way to do this.
-		var currentField = document.getElementsByName(field_name);
-		var field_key = currentField[0].id.split('_');
-		field_key = field_key[1];
-
-		var thisCalc = all_calcs.calc[field_key];
-		if ( typeof thisCalc == 'undefined' ) {
+		var field_key = all_calcs.fieldsWithCalc[ field_id ];
+		if ( typeof field_key == 'undefined' ) {
 			// this field has no calculation
 			return;
 		}
-		var thisFullCalc = thisCalc.calc;
-		var vals = [];
 
-		doSingleCalculation( thisCalc, thisFullCalc, all_calcs, field_key, vals );
+		var thisCalc = all_calcs.calc[field_key];
+		var vals = [];
+		doSingleCalculation( thisCalc, all_calcs, field_key, vals );
 	}
 
     function getCalcFieldId(thisFieldCall, thisFieldId, thisField, all_calcs, vals){
