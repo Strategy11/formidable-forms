@@ -427,7 +427,7 @@ class FrmEntriesController {
             return;
         }
 
-        $params = self::get_params( $form );
+		$params = FrmForm::get_params( $form );
 
         if ( ! isset( $frm_vars['form_params'] ) ) {
             $frm_vars['form_params'] = array();
@@ -608,55 +608,9 @@ class FrmEntriesController {
     }
 
 	public static function get_params( $form = null ) {
-        global $frm_vars;
-
-        if ( ! $form ) {
-			$form = FrmForm::getAll( array(), 'name', 1 );
-        } else {
-			FrmForm::maybe_get_form( $form );
-        }
-
-        if ( isset( $frm_vars['form_params'] ) && is_array( $frm_vars['form_params'] ) && isset( $frm_vars['form_params'][ $form->id ] ) ) {
-            return $frm_vars['form_params'][ $form->id ];
-        }
-
-        $action_var = isset($_REQUEST['frm_action']) ? 'frm_action' : 'action';
-		$action = apply_filters( 'frm_show_new_entry_page', FrmAppHelper::get_param( $action_var, 'new', 'get', 'sanitize_title' ), $form );
-
-        $default_values = array(
-            'id' => '', 'form_name' => '', 'paged' => 1, 'form' => $form->id, 'form_id' => $form->id,
-            'field_id' => '', 'search' => '', 'sort' => '', 'sdir' => '', 'action' => $action,
-        );
-
-        $values = array();
-		$values['posted_form_id'] = FrmAppHelper::get_param( 'form_id', '', 'get', 'absint' );
-		if ( ! $values['posted_form_id'] ) {
-			$values['posted_form_id'] = FrmAppHelper::get_param( 'form', '', 'get', 'absint' );
-        }
-
-		if ( $form->id == $values['posted_form_id'] ) {
-			//if there are two forms on the same page, make sure not to submit both
-            foreach ( $default_values as $var => $default ) {
-                if ( $var == 'action' ) {
-					$values[ $var ] = FrmAppHelper::get_param( $action_var, $default, 'get', 'sanitize_title' );
-                } else {
-                    $values[ $var ] = FrmAppHelper::get_param( $var, $default );
-                }
-                unset( $var, $default );
-            }
-        } else {
-            foreach ( $default_values as $var => $default ) {
-                $values[ $var ] = $default;
-                unset( $var, $default );
-            }
-        }
-
-		if ( in_array( $values['action'], array( 'create', 'update' ) ) && ( ! $_POST || ( ! isset( $_POST['action'] ) && ! isset( $_POST['frm_action'] ) ) ) ) {
-            $values['action'] = 'new';
-        }
-
-        return $values;
-    }
+		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmForm::get_params' );
+		return FrmForm::get_params( $form );
+	}
 
     public static function entry_sidebar($entry) {
         $data = maybe_unserialize($entry->description);

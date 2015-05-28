@@ -67,7 +67,8 @@ class FrmHooksController {
         add_filter( 'frm_replace_content_shortcodes', 'FrmFormsController::replace_content_shortcodes', 20, 3 );
         add_action( 'admin_bar_init', 'FrmFormsController::admin_bar_css' );
         add_action( 'wp_before_admin_bar_render', 'FrmFormsController::admin_bar_configure' );
-        add_action( 'wp_scheduled_delete', 'FrmFormsController::scheduled_delete' );
+
+		add_action( 'wp_scheduled_delete', 'FrmForm::scheduled_delete' );
 
         // Form Shortcodes
         add_shortcode( 'formidable', 'FrmFormsController::get_form_shortcode' );

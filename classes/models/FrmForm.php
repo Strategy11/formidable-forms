@@ -372,6 +372,36 @@ class FrmForm {
         return $query_results;
     }
 
+	/**
+	 * Delete trashed forms based on how long they have been trashed
+	 * @return int The number of forms deleted
+	 */
+	public static function scheduled_delete( $delete_timestamp = '' ) {
+		global $wpdb;
+
+		$trash_forms = FrmDb::get_results( $wpdb->prefix . 'frm_forms', array( 'status' => 'trash' ), 'id, options' );
+
+		if ( ! $trash_forms ) {
+			return;
+		}
+
+		if ( empty( $delete_timestamp ) ) {
+			$delete_timestamp = time() - ( DAY_IN_SECONDS * EMPTY_TRASH_DAYS );
+		}
+
+		$count = 0;
+		foreach ( $trash_forms as $form ) {
+			$form->options = maybe_unserialize( $form->options );
+			if ( ! isset( $form->options['trash_time'] ) || $form->options['trash_time'] < $delete_timestamp ) {
+				self::destroy( $form->id );
+				$count++;
+			}
+
+			unset( $form );
+		}
+		return $count;
+	}
+
     /**
      * @return string form name
      */
@@ -570,6 +600,57 @@ class FrmForm {
 
         return apply_filters('frm_validate_form', $errors, $values);
     }
+
+	public static function get_params( $form = null ) {
+		global $frm_vars;
+
+		if ( ! $form ) {
+			$form = self::getAll( array(), 'name', 1 );
+		} else {
+			self::maybe_get_form( $form );
+		}
+
+		if ( isset( $frm_vars['form_params'] ) && is_array( $frm_vars['form_params'] ) && isset( $frm_vars['form_params'][ $form->id ] ) ) {
+			return $frm_vars['form_params'][ $form->id ];
+		}
+
+		$action_var = isset($_REQUEST['frm_action']) ? 'frm_action' : 'action';
+		$action = apply_filters( 'frm_show_new_entry_page', FrmAppHelper::get_param( $action_var, 'new', 'get', 'sanitize_title' ), $form );
+
+		$default_values = array(
+			'id' => '', 'form_name' => '', 'paged' => 1, 'form' => $form->id, 'form_id' => $form->id,
+			'field_id' => '', 'search' => '', 'sort' => '', 'sdir' => '', 'action' => $action,
+		);
+
+		$values = array();
+		$values['posted_form_id'] = FrmAppHelper::get_param( 'form_id', '', 'get', 'absint' );
+		if ( ! $values['posted_form_id'] ) {
+			$values['posted_form_id'] = FrmAppHelper::get_param( 'form', '', 'get', 'absint' );
+		}
+
+		if ( $form->id == $values['posted_form_id'] ) {
+			//if there are two forms on the same page, make sure not to submit both
+			foreach ( $default_values as $var => $default ) {
+				if ( $var == 'action' ) {
+					$values[ $var ] = FrmAppHelper::get_param( $action_var, $default, 'get', 'sanitize_title' );
+				} else {
+					$values[ $var ] = FrmAppHelper::get_param( $var, $default );
+				}
+				unset( $var, $default );
+			}
+		} else {
+			foreach ( $default_values as $var => $default ) {
+				$values[ $var ] = $default;
+				unset( $var, $default );
+			}
+		}
+
+		if ( in_array( $values['action'], array( 'create', 'update' ) ) && ( ! $_POST || ( ! isset( $_POST['action'] ) && ! isset( $_POST['frm_action'] ) ) ) ) {
+			$values['action'] = 'new';
+		}
+
+		return $values;
+	}
 
 	public static function get_admin_params( $form = null ) {
 		$form_id = $form;

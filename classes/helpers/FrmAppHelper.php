@@ -1660,6 +1660,13 @@ class FrmAppHelper {
 		}
     }
 
+	/**
+	 * @since 2.0.9
+	 */
+	public static function load_font_style() {
+		wp_enqueue_style( 'frm_fonts', self::plugin_url() . '/css/frm_fonts.css', array(), self::plugin_version() );
+	}
+
     /**
      * @since 1.07.10
      *

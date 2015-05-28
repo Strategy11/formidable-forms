@@ -359,41 +359,16 @@ class FrmFormsController {
             return;
         }
 
-        $count = self::scheduled_delete(time());
+		$count = FrmForm::scheduled_delete( time() );
         $message = sprintf(_n( '%1$s form permanently deleted.', '%1$s forms permanently deleted.', $count, 'formidable' ), $count);
 
 		self::display_forms_list( array(), $message );
     }
 
-    /**
-     * Delete trashed forms based on how long they have been trashed
-     * @return int The number of forms deleted
-     */
-    public static function scheduled_delete($delete_timestamp = '') {
-        global $wpdb;
-
-		$trash_forms = FrmDb::get_results( $wpdb->prefix . 'frm_forms', array( 'status' => 'trash' ), 'id, options' );
-
-        if ( ! $trash_forms ) {
-            return;
-        }
-
-        if ( empty($delete_timestamp) ) {
-            $delete_timestamp = time() - ( DAY_IN_SECONDS * EMPTY_TRASH_DAYS );
-        }
-
-        $count = 0;
-        foreach ( $trash_forms as $form ) {
-            $form->options = maybe_unserialize($form->options);
-            if ( ! isset( $form->options['trash_time'] ) || $form->options['trash_time'] < $delete_timestamp ) {
-                FrmForm::destroy($form->id);
-                $count++;
-            }
-
-            unset($form);
-        }
-        return $count;
-    }
+	public static function scheduled_delete( $delete_timestamp = '' ) {
+		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmForm::scheduled_delete' );
+		return FrmForm::scheduled_delete( $delete_timestamp );
+	}
 
     public static function insert_form_button($content) {
         if ( current_user_can('frm_view_forms') ) {
@@ -919,7 +894,7 @@ class FrmFormsController {
 
     /* FRONT-END FORMS */
     public static function admin_bar_css() {
-        FrmAppController::load_wp_admin_style();
+        FrmAppHelper::load_font_style();
     }
 
     public static function admin_bar_configure() {
@@ -1063,7 +1038,7 @@ class FrmFormsController {
         ob_start();
 
         self::get_form_contents( $form, $title, $description, $atts );
-        FrmEntriesHelper::enqueue_scripts( FrmEntriesController::get_params( $form ) );
+		FrmEntriesHelper::enqueue_scripts( FrmForm::get_params( $form ) );
 
         $contents = ob_get_contents();
         ob_end_clean();
@@ -1081,9 +1056,7 @@ class FrmFormsController {
         $submit = isset($form->options['submit_value']) ? $form->options['submit_value'] : $frm_settings->submit_value;
 
         $user_ID = get_current_user_id();
-
-        $params = FrmEntriesController::get_params($form);
-
+		$params = FrmForm::get_params( $form );
         $message = $errors = '';
 
         if ( $params['posted_form_id'] == $form->id && $_POST ) {
