@@ -652,6 +652,15 @@ class FrmForm {
 		return $values;
 	}
 
+	public static function list_page_params() {
+		$values = array();
+		foreach ( array( 'template' => 0, 'id' => '', 'paged' => 1, 'form' => '', 'search' => '', 'sort' => '', 'sdir' => '' ) as $var => $default ) {
+			$values[ $var ] = FrmAppHelper::get_param( $var, $default );
+		}
+
+		return $values;
+	}
+
 	public static function get_admin_params( $form = null ) {
 		$form_id = $form;
 		if ( $form === null ) {
@@ -701,5 +710,22 @@ class FrmForm {
 		$frm_vars['current_form'] = self::get_published_forms( $query, 1 );
 
 		return $frm_vars['current_form'];
+	}
+
+	public static function is_form_loaded( $form, $this_load, $global_load ) {
+		global $frm_vars;
+		$small_form = new stdClass();
+		foreach ( array( 'id', 'form_key', 'name' ) as $var ) {
+			$small_form->{$var} = $form->{$var};
+			unset($var);
+		}
+
+		$frm_vars['forms_loaded'][] = $small_form;
+
+		if ( $this_load && empty($global_load) ) {
+			$global_load = $frm_vars['load_css'] = true;
+		}
+
+		return ( ( ! isset($frm_vars['css_loaded']) || ! $frm_vars['css_loaded'] ) && $global_load );
 	}
 }

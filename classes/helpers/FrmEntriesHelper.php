@@ -132,15 +132,9 @@ class FrmEntriesHelper {
 		return FrmForm::get_current_form_id();
     }
 
-    /**
-     * If $entry is numeric, get the entry object
-     * @param int|object $entry by reference
-     *
-     */
     public static function maybe_get_entry( &$entry ) {
-        if ( $entry && is_numeric($entry) ) {
-            $entry = FrmEntry::getOne($entry);
-        }
+		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmEntry::maybe_get_entry' );
+		FrmEntry::maybe_get_entry( $entry );
     }
 
     public static function replace_default_message($message, $atts) {
@@ -164,7 +158,7 @@ class FrmEntriesHelper {
                 $this_atts = $atts;
             }
 
-            $default = FrmEntriesController::show_entry_shortcode($this_atts);
+			$default = FrmEntryFormat::show_entry( $this_atts );
 
             // Add the default message
             $message = str_replace( $shortcodes[0][ $short_key ], $default, $message );
@@ -427,9 +421,10 @@ class FrmEntriesHelper {
         }
     }
 
-    public static function enqueue_scripts($params) {
-        do_action('frm_enqueue_form_scripts', $params);
-    }
+	public static function enqueue_scripts( $params ) {
+		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmFormsController::enqueue_scripts' );
+		return FrmFormsController::enqueue_scripts();
+	}
 
     // Add submitted values to a string for spam checking
     public static function entry_array_to_string($values) {

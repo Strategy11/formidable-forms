@@ -476,26 +476,6 @@ BEFORE_HTML;
 		return $style;
     }
 
-    public static function form_loaded($form, $this_load, $global_load) {
-        global $frm_vars;
-        $small_form = new stdClass();
-        foreach ( array( 'id', 'form_key', 'name' ) as $var ) {
-            $small_form->{$var} = $form->{$var};
-            unset($var);
-        }
-
-        $frm_vars['forms_loaded'][] = $small_form;
-
-        if ( $this_load && empty($global_load) ) {
-            $global_load = $frm_vars['load_css'] = true;
-        }
-
-        if ( ( ! isset($frm_vars['css_loaded']) || ! $frm_vars['css_loaded'] ) && $global_load ) {
-            echo FrmAppController::footer_js('header');
-            $frm_vars['css_loaded'] = true;
-        }
-    }
-
 	/**
 	 * Display the validation error messages when an entry is submitted
 	 *
@@ -616,51 +596,13 @@ BEFORE_HTML;
         return $name;
     }
 
-    public static function get_params() {
-        $values = array();
-		foreach ( array( 'template' => 0, 'id' => '', 'paged' => 1, 'form' => '', 'search' => '', 'sort' => '', 'sdir' => '' ) as $var => $default ) {
-			$values[ $var ] = FrmAppHelper::get_param( $var, $default );
-        }
+	public static function get_params() {
+		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmForm::list_page_params' );
+		return FrmForm::list_page_params();
+	}
 
-        return $values;
-    }
-
-    /**
-     * @param string $status
-     *
-     * @return int The number of forms changed
-     */
-    public static function change_form_status( $status ) {
-        $available_status = array(
-            'untrash'   => array(
-                'permission' => 'frm_edit_forms', 'new_status' => 'published',
-            ),
-            'trash'     => array(
-                'permission' => 'frm_delete_forms', 'new_status' => 'trash',
-            ),
-        );
-
-		if ( ! isset( $available_status[ $status ] ) ) {
-            return;
-        }
-
-		FrmAppHelper::permission_check( $available_status[ $status ]['permission'] );
-
-        $params = self::get_params();
-
-        //check nonce url
-        check_admin_referer($status .'_form_' . $params['id']);
-
-        $count = 0;
-		if ( FrmForm::set_status( $params['id'], $available_status[ $status ]['new_status'] ) ) {
-            $count++;
-        }
-
-        $available_status['untrash']['message'] = sprintf(_n( '%1$s form restored from the Trash.', '%1$s forms restored from the Trash.', $count, 'formidable' ), $count );
-		$available_status['trash']['message'] = sprintf( _n( '%1$s form moved to the Trash. %2$sUndo%3$s', '%1$s forms moved to the Trash. %2$sUndo%3$s', $count, 'formidable' ), $count, '<a href="' . esc_url( wp_nonce_url( '?page=formidable&frm_action=untrash&form_type='. ( isset( $_REQUEST['form_type'] ) ? sanitize_title( $_REQUEST['form_type'] ) : '' ) . '&id=' . $params['id'], 'untrash_form_' . $params['id'] ) ) . '">', '</a>' );
-
-		$message = $available_status[ $status ]['message'];
-
-		FrmFormsController::display_forms_list( $params, $message );
-    }
+	public static function form_loaded( $form, $this_load, $global_load ) {
+		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmFormsController::maybe_load_css' );
+		FrmFormsController::maybe_load_css( $form, $this_load, $global_load );
+	}
 }

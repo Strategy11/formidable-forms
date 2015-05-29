@@ -1,6 +1,6 @@
 <?php
 global $frm_vars;
-FrmFormsHelper::form_loaded($form, $values['custom_style'], $frm_vars['load_css']);
+FrmFormsController::maybe_load_css( $form, $values['custom_style'], $frm_vars['load_css'] );
 ?>
 <div class="frm_form_fields <?php echo esc_attr( apply_filters( 'frm_form_fields_class', '', $values ) ); ?>">
 <fieldset>

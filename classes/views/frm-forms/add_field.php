@@ -27,8 +27,8 @@ if ( ! isset( $frm_all_field_selection ) ) {
     if ( isset($frm_field_selection) && isset($pro_field_selection) ) {
         $frm_all_field_selection = array_merge($frm_field_selection, $pro_field_selection);
     } else {
-        $pro_field_selection = FrmFieldsHelper::pro_field_selection();
-        $frm_all_field_selection = array_merge(FrmFieldsHelper::field_selection(), $pro_field_selection);
+		$pro_field_selection = FrmField::pro_field_selection();
+		$frm_all_field_selection = array_merge( FrmField::field_selection(), $pro_field_selection );
     }
 }
 
@@ -54,7 +54,7 @@ if ( $field['type'] == 'divider' ) { ?>
     <?php do_action('frm_extra_field_actions', $field['id']); ?>
     <?php if ( $display['required'] ) { ?>
     <span id="require_field_<?php echo esc_attr( $field['id'] ); ?>">
-		<a href="javascript:void(0);" class="frm_req_field frm_action_icon frm_required_icon frm_icon_font alignleft frm_required<?php echo (int) $field['required'] ?>" id="req_field_<?php echo esc_attr( $field['id'] ); ?>" title="Click to Mark as <?php echo FrmFieldsHelper::is_required_field( $field ) ? 'not ' : ''; ?>Required"></a>
+		<a href="javascript:void(0);" class="frm_req_field frm_action_icon frm_required_icon frm_icon_font alignleft frm_required<?php echo (int) $field['required'] ?>" id="req_field_<?php echo esc_attr( $field['id'] ); ?>" title="Click to Mark as <?php echo FrmField::is_required( $field ) ? 'not ' : ''; ?>Required"></a>
     </span>
     <?php }
 

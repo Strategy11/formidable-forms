@@ -111,7 +111,7 @@ class FrmFormActionsController {
 		 */
 		do_action( 'frm_before_list_actions', $form );
 
-		$form_actions = FrmFormActionsHelper::get_action_for_form( $form->id );
+		$form_actions = FrmFormAction::get_action_for_form( $form->id );
 
         $action_controls = self::get_form_actions();
 
@@ -239,7 +239,7 @@ class FrmFormActionsController {
      * @param string $event
      */
 	public static function trigger_actions( $event, $form, $entry, $type = 'all', $args = array() ) {
-        $form_actions = FrmFormActionsHelper::get_action_for_form( ( is_object( $form ) ? $form->id : $form ), $type );
+		$form_actions = FrmFormAction::get_action_for_form( ( is_object( $form ) ? $form->id : $form ), $type );
 
         if ( empty( $form_actions ) ) {
             return;

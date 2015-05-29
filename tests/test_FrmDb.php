@@ -75,7 +75,7 @@ class WP_Test_FrmDb extends FrmUnitTest {
 		// migrate data
 		FrmAppController::install();
 
-		$form_actions = FrmFormActionsHelper::get_action_for_form( $form->id, 'email' );
+		$form_actions = FrmFormAction::get_action_for_form( $form->id, 'email' );
 		foreach ( $form_actions as $action ) {
 			$this->assertTrue( strpos( $action->post_content['email_to'], 'emailto@test.com' ) !== false );
 		}

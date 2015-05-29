@@ -6,7 +6,7 @@
 class WP_Test_FrmField extends FrmUnitTest {
 	function test_create() {
 		$form_id = $this->factory->form->get_id_by_key( 'contact-db12' );
-		$field_types = array_merge( FrmFieldsHelper::field_selection(), FrmFieldsHelper::pro_field_selection() );
+		$field_types = array_merge( FrmField::field_selection(), FrmField::pro_field_selection() );
 		foreach ( $field_types as $field_type => $field_info ) {
 			$field_id = $this->factory->field->create( array( 'type' => $field_type, 'form_id' => $form_id ) );
             $this->assertTrue( is_numeric( $field_id ) );

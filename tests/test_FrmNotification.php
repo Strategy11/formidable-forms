@@ -14,7 +14,7 @@ class WP_Test_FrmNotification extends FrmUnitTest {
 		$form = $this->factory->form->get_object_by_id( $this->contact_form_key );
 
 		// get the email settings
-		$actions = FrmFormActionsHelper::get_action_for_form( $form->id, 'email' );
+		$actions = FrmFormAction::get_action_for_form( $form->id, 'email' );
 		$this->assertNotEmpty( $actions );
 
 		$entry_data = $this->factory->field->generate_entry_array( $form );

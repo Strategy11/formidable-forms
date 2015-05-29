@@ -503,7 +503,7 @@ class FrmFormAction {
 	}
 
 	public function get_settings() {
-	    return FrmFormActionsHelper::get_action_for_form($this->form_id, $this->id_base);
+		return self::get_action_for_form( $this->form_id, $this->id_base );
 	}
 
 	public function get_global_defaults() {

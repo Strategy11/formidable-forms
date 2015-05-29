@@ -37,7 +37,7 @@ foreach ( $frm_field_selection as $field_key => $field_type ) { ?>
 <?php
 $col_class = 'frm_col_one';
 $no_allow_class = apply_filters( 'frm_noallow_class', 'frm_noallow' );
-foreach ( FrmFieldsHelper::pro_field_selection() as $field_key => $field_type ) {
+foreach ( FrmField::pro_field_selection() as $field_key => $field_type ) {
 
 	if ( is_array( $field_type ) ) {
 		$field_label = $field_type['name'];

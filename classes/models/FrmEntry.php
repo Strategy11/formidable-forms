@@ -280,6 +280,17 @@ class FrmEntry {
 		FrmAppHelper::cache_delete_group( 'frm_item_meta' );
 	}
 
+	/**
+	 * If $entry is numeric, get the entry object
+	 * @param int|object $entry by reference
+	 * @since 2.0.9
+	 */
+	public static function maybe_get_entry( &$entry ) {
+		if ( $entry && is_numeric( $entry ) ) {
+			$entry = self::getOne( $entry );
+		}
+	}
+
     public static function getOne( $id, $meta = false) {
         global $wpdb;
 

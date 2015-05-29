@@ -45,9 +45,7 @@ class FrmHooksController {
         }
 
         add_action( 'plugins_loaded', 'FrmAppController::load_lang' );
-        add_action( 'init', 'FrmAppController::front_head' );
         add_filter( 'widget_text', 'FrmAppController::widget_text_filter', 8 );
-        add_action( 'wp_footer', 'FrmAppController::footer_js', 1, 0 );
 
         // Entries controller
         add_action( 'wp', 'FrmEntriesController::process_entry', 10, 0 );
@@ -63,10 +61,12 @@ class FrmHooksController {
 
         // Forms Controller
         add_action( 'widgets_init', 'FrmFormsController::register_widgets' );
+		add_action( 'init', 'FrmFormsController::front_head' );
         add_filter( 'frm_content', 'FrmFormsController::filter_content', 10, 3 );
         add_filter( 'frm_replace_content_shortcodes', 'FrmFormsController::replace_content_shortcodes', 20, 3 );
         add_action( 'admin_bar_init', 'FrmFormsController::admin_bar_css' );
         add_action( 'wp_before_admin_bar_render', 'FrmFormsController::admin_bar_configure' );
+		add_action( 'wp_footer', 'FrmFormsController::footer_js', 1, 0 );
 
 		add_action( 'wp_scheduled_delete', 'FrmForm::scheduled_delete' );
 
@@ -140,9 +140,6 @@ class FrmHooksController {
         add_action( 'wp_ajax_frm_uninstall', 'FrmAppController::uninstall' );
         add_action( 'wp_ajax_frm_deauthorize', 'FrmAppController::deauthorize' );
 
-        add_action( 'wp_ajax_frmpro_css', 'FrmAppController::load_css' );
-        add_action( 'wp_ajax_nopriv_frmpro_css', 'FrmAppController::load_css' );
-
         // Fields Controller
         add_action( 'wp_ajax_frm_load_field', 'FrmFieldsController::load_field' );
         add_action( 'wp_ajax_frm_insert_field', 'FrmFieldsController::create' );
@@ -177,6 +174,8 @@ class FrmHooksController {
         add_action( 'wp_ajax_frm_change_styling', 'FrmStylesController::change_styling' );
         add_action( 'wp_ajax_frmpro_load_css', 'FrmStylesController::load_css' );
         add_action( 'wp_ajax_nopriv_frmpro_load_css', 'FrmStylesController::load_css' );
+		add_action( 'wp_ajax_frmpro_css', 'FrmStylesController::load_saved_css' );
+		add_action( 'wp_ajax_nopriv_frmpro_css', 'FrmStylesController::load_saved_css' );
 
         // XML Controller
         add_action( 'wp_ajax_frm_export_xml', 'FrmXMLController::export_xml' );
@@ -201,6 +200,7 @@ class FrmHooksController {
     }
 
 	public static function load_multisite_hooks() {
+		add_action( 'init', 'FrmAppController::front_head' );
 		add_action( 'wpmu_upgrade_site', 'FrmAppController::network_upgrade_site' );
 
         // drop tables when mu site is deleted

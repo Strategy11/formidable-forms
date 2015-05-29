@@ -5,87 +5,6 @@ if ( ! defined('ABSPATH') ) {
 
 class FrmFieldsHelper {
 
-    public static function field_selection() {
-        $fields = apply_filters('frm_available_fields', array(
-            'text'      => __( 'Single Line Text', 'formidable' ),
-            'textarea'  => __( 'Paragraph Text', 'formidable' ),
-            'checkbox'  => __( 'Checkboxes', 'formidable' ),
-            'radio'     => __( 'Radio Buttons', 'formidable' ),
-            'select'    => __( 'Dropdown', 'formidable' ),
-            'email'     => __( 'Email Address', 'formidable' ),
-            'url'       => __( 'Website/URL', 'formidable' ),
-            'captcha'   => __( 'reCAPTCHA', 'formidable' ),
-        ));
-
-        return $fields;
-    }
-
-    public static function pro_field_selection() {
-        return apply_filters('frm_pro_available_fields', array(
-            'end_divider' => array(
-            	'name'  => __( 'End Section', 'formidable' ),
-            	'switch_from' => 'divider',
-			),
-            'divider'   => __( 'Section', 'formidable' ),
-            'break'     => __( 'Page Break', 'formidable' ),
-            'file'      => __( 'File Upload', 'formidable' ),
-            'rte'       => __( 'Rich Text', 'formidable' ),
-            'number'    => __( 'Number', 'formidable' ),
-            'phone'     => __( 'Phone Number', 'formidable' ),
-            'date'      => __( 'Date', 'formidable' ),
-            'time'      => __( 'Time', 'formidable' ),
-            'image'     => __( 'Image URL', 'formidable' ),
-            'scale'     => __( 'Scale', 'formidable' ),
-            'data'      => __( 'Dynamic Field', 'formidable' ),
-            'form'      => __( 'Embed Form', 'formidable' ),
-            'hidden'    => __( 'Hidden Field', 'formidable' ),
-            'user_id'   => __( 'User ID (hidden)', 'formidable' ),
-            'password'  => __( 'Password', 'formidable' ),
-            'html'      => __( 'HTML', 'formidable' ),
-			'tag'       => __( 'Tags', 'formidable' ),
-            //'address' => 'Address' //Address line 1, Address line 2, City, State/Providence, Postal Code, Select Country
-            //'city_selector' => 'US State/County/City selector',
-            //'full_name' => 'First and Last Name',
-            //'quiz'    => 'Question and Answer' // for captcha alternative
-        ));
-    }
-
-	public static function is_no_save_field( $type ) {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmField::is_no_save_field' );
-		return FrmField::is_no_save_field( $type );
-	}
-
-	public static function no_save_fields() {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmField::no_save_fields' );
-		return FrmField::no_save_fields();
-	}
-
-	public static function is_multiple_select( $field ) {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmField::is_multiple_select' );
-		return FrmField::is_multiple_select( $field );
-	}
-
-	public static function is_field_with_multiple_values( $field ) {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmField::is_field_with_multiple_values' );
-		return FrmField::is_field_with_multiple_values( $field );
-	}
-
-	/**
-	 * @since 2.0.6
-	 */
-	public static function is_required_field( $field ) {
-		return $field['required'] != '0';
-	}
-
-    /**
-     * If $field is numeric, get the field object
-     */
-    public static function maybe_get_field( &$field ) {
-        if ( ! is_object($field) ) {
-            $field = FrmField::getOne($field);
-        }
-    }
-
     public static function setup_new_vars($type = '', $form_id = '') {
 
         if ( strpos($type, '|') ) {
@@ -136,8 +55,8 @@ class FrmFieldsHelper {
             $values['name'] = __( 'Website', 'formidable' );
         }
 
-        $fields = self::field_selection();
-        $fields = array_merge($fields, self::pro_field_selection());
+		$fields = FrmField::field_selection();
+        $fields = array_merge($fields, FrmField::pro_field_selection());
 
         if ( isset( $fields[ $type ] ) ) {
             $values['name'] = is_array( $fields[ $type ] ) ? $fields[ $type ]['name'] : $fields[ $type ];
@@ -322,7 +241,7 @@ DEFAULT_HTML;
         $html = str_replace('[key]', $field['field_key'], $html);
 
         //replace [description] and [required_label] and [error]
-		$required = self::is_required_field( $field ) ? $field['required_indicator'] : '';
+		$required = FrmField::is_required( $field ) ? $field['required_indicator'] : '';
         if ( ! is_array( $errors ) ) {
             $errors = array();
         }
@@ -342,7 +261,7 @@ DEFAULT_HTML;
         }
 
         //replace [required_class]
-        $required_class = self::is_required_field( $field ) ? ' frm_required_field' : '';
+		$required_class = FrmField::is_required( $field ) ? ' frm_required_field' : '';
         $html = str_replace('[required_class]', $required_class, $html);
 
         //replace [label_position]
@@ -973,7 +892,7 @@ DEFAULT_HTML;
 		$multiple_input = array( 'radio', 'checkbox', 'select', 'scale' );
 		$other_type = array( 'divider', 'html', 'break' );
 
-        $field_selection = array_merge( self::pro_field_selection(), self::field_selection() );
+		$field_selection = array_merge( FrmField::pro_field_selection(), FrmField::field_selection() );
 
         $field_types = array();
         if ( in_array($type, $single_input) ) {
@@ -1402,5 +1321,45 @@ DEFAULT_HTML;
         );
 
 		$prepop = apply_filters( 'frm_bulk_field_choices', $prepop );
+    }
+
+	public static function field_selection() {
+		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmField::field_selection' );
+		return FrmField::field_selection();
+	}
+
+	public static function pro_field_selection() {
+		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmField::pro_field_selection' );
+		return FrmField::pro_field_selection();
+	}
+
+	public static function is_no_save_field( $type ) {
+		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmField::is_no_save_field' );
+		return FrmField::is_no_save_field( $type );
+	}
+
+	public static function no_save_fields() {
+		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmField::no_save_fields' );
+		return FrmField::no_save_fields();
+	}
+
+	public static function is_multiple_select( $field ) {
+		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmField::is_multiple_select' );
+		return FrmField::is_multiple_select( $field );
+	}
+
+	public static function is_field_with_multiple_values( $field ) {
+		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmField::is_field_with_multiple_values' );
+		return FrmField::is_field_with_multiple_values( $field );
+	}
+
+	public static function is_required_field( $field ) {
+		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmField::is_required' );
+		return FrmField::is_required( $field );
+	}
+
+    public static function maybe_get_field( &$field ) {
+		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmField::maybe_get_field' );
+		FrmField::maybe_get_field( $field );
     }
 }

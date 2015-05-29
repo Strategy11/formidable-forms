@@ -7,6 +7,51 @@ class FrmField {
     static $use_cache = true;
 	static $transient_size = 200;
 
+	public static function field_selection() {
+		$fields = apply_filters('frm_available_fields', array(
+			'text'      => __( 'Single Line Text', 'formidable' ),
+			'textarea'  => __( 'Paragraph Text', 'formidable' ),
+			'checkbox'  => __( 'Checkboxes', 'formidable' ),
+			'radio'     => __( 'Radio Buttons', 'formidable' ),
+			'select'    => __( 'Dropdown', 'formidable' ),
+			'email'     => __( 'Email Address', 'formidable' ),
+			'url'       => __( 'Website/URL', 'formidable' ),
+			'captcha'   => __( 'reCAPTCHA', 'formidable' ),
+		));
+
+		return $fields;
+	}
+
+	public static function pro_field_selection() {
+		return apply_filters('frm_pro_available_fields', array(
+			'end_divider' => array(
+				'name'  => __( 'End Section', 'formidable' ),
+				'switch_from' => 'divider',
+			),
+			'divider'   => __( 'Section', 'formidable' ),
+			'break'     => __( 'Page Break', 'formidable' ),
+			'file'      => __( 'File Upload', 'formidable' ),
+			'rte'       => __( 'Rich Text', 'formidable' ),
+			'number'    => __( 'Number', 'formidable' ),
+			'phone'     => __( 'Phone Number', 'formidable' ),
+			'date'      => __( 'Date', 'formidable' ),
+			'time'      => __( 'Time', 'formidable' ),
+			'image'     => __( 'Image URL', 'formidable' ),
+			'scale'     => __( 'Scale', 'formidable' ),
+			'data'      => __( 'Dynamic Field', 'formidable' ),
+			'form'      => __( 'Embed Form', 'formidable' ),
+			'hidden'    => __( 'Hidden Field', 'formidable' ),
+			'user_id'   => __( 'User ID (hidden)', 'formidable' ),
+			'password'  => __( 'Password', 'formidable' ),
+			'html'      => __( 'HTML', 'formidable' ),
+			'tag'       => __( 'Tags', 'formidable' ),
+			//'address' => 'Address' //Address line 1, Address line 2, City, State/Providence, Postal Code, Select Country
+			//'city_selector' => 'US State/County/City selector',
+			//'full_name' => 'First and Last Name',
+			//'quiz'    => 'Question and Answer' // for captcha alternative
+		));
+	}
+
     public static function create( $values, $return = true ) {
         global $wpdb, $frm_duplicate_ids;
 
@@ -194,6 +239,15 @@ class FrmField {
             self::delete_form_transient( $form->parent_form_id );
         }
     }
+
+	/**
+	 * If $field is numeric, get the field object
+	 */
+	public static function maybe_get_field( &$field ) {
+		if ( ! is_object( $field ) ) {
+			$field = self::getOne( $field );
+		}
+	}
 
 	public static function getOne( $id ) {
 		if ( empty( $id ) ) {
@@ -556,6 +610,13 @@ class FrmField {
 	public static function is_read_only( $field ) {
 		global $frm_vars;
 		return ( self::is_option_true( $field, 'read_only' ) && ( ! isset( $frm_vars['readonly'] ) || $frm_vars['readonly'] != 'disabled' ) );
+	}
+
+	/**
+	 * @since 2.0.9
+	 */
+	public static function is_required( $field ) {
+		return $field['required'] != '0';
 	}
 
 	/**

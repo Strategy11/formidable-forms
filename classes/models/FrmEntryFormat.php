@@ -1,6 +1,69 @@
 <?php
 	
 class FrmEntryFormat {
+	public static function show_entry( $atts ) {
+		$atts = shortcode_atts( array(
+			'id' => false, 'entry' => false, 'fields' => false, 'plain_text' => false,
+			'user_info' => false, 'include_blank' => false, 'default_email' => false,
+			'form_id' => false, 'format' => 'text', 'direction' => 'ltr',
+			'font_size' => '', 'text_color' => '',
+			'border_width' => '', 'border_color' => '',
+			'bg_color' => '', 'alt_bg_color' => '',
+		), $atts );
+
+		if ( $atts['format'] != 'text' ) {
+			//format options are text, array, or json
+			$atts['plain_text'] = true;
+		}
+
+		if ( is_object( $atts['entry'] ) && ! isset( $atts['entry']->metas ) ) {
+			// if the entry does not include metas, force it again
+			$atts['entry'] = false;
+		}
+
+		if ( ! $atts['entry'] || ! is_object( $atts['entry'] ) ) {
+			if ( ! $atts['id'] && ! $atts['default_email'] ) {
+				return;
+			}
+
+			if ( $atts['id'] ) {
+				$atts['entry'] = FrmEntry::getOne( $atts['id'], true );
+			}
+		}
+
+		if ( $atts['entry'] ) {
+			$atts['form_id'] = $atts['entry']->form_id;
+			$atts['id'] = $atts['entry']->id;
+		}
+
+		if ( ! $atts['fields'] || ! is_array($atts['fields']) ) {
+			$atts['fields'] = FrmField::get_all_for_form( $atts['form_id'], '', 'include' );
+		}
+
+		$values = array();
+		foreach ( $atts['fields'] as $f ) {
+			self::fill_entry_values( $atts, $f, $values );
+			unset($f);
+		}
+
+		self::fill_entry_user_info( $atts, $values );
+
+		if ( $atts['format'] == 'json' ) {
+			return json_encode($values);
+		} else if ( $atts['format'] == 'array' ) {
+			return $values;
+		}
+
+		$content = array();
+		self::convert_entry_to_content( $values, $atts, $content );
+
+		if ( 'text' == $atts['format'] ) {
+			$content = implode('', $content);
+		}
+
+		return $content;
+	}
+
 	public static function fill_entry_values( $atts, $f, array &$values ) {
 		if ( FrmField::is_no_save_field( $f->type ) ) {
 			return;
