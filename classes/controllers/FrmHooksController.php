@@ -39,6 +39,10 @@ class FrmHooksController {
 
     }
 
+    public static function trigger_load_form_hooks() {
+        self::trigger_load_hook( 'load_form_hooks' );
+    }
+
 	public static function load_hooks() {
         if ( ! is_admin() ) {
             add_filter( 'the_content', 'FrmAppController::page_route', 10 );

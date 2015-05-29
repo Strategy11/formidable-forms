@@ -1711,9 +1711,9 @@ class FrmAppHelper {
 				'updating'          => __( 'Please wait while your site updates.', 'formidable' ),
 				'no_save_warning'   => __( 'Warning: There is no way to retrieve unsaved entries.', 'formidable' ),
 				'jquery_ui_url'     => self::jquery_ui_base_url(),
-				) );
-			}
+			) );
 		}
+	}
 
     /**
      * @since 1.07.10

@@ -2,10 +2,6 @@
 
 class FrmFormsController {
 
-    public static function trigger_load_form_hooks() {
-        FrmHooksController::trigger_load_hook( 'load_form_hooks' );
-    }
-
     public static function menu() {
         add_submenu_page('formidable', 'Formidable | '. __( 'Forms', 'formidable' ), __( 'Forms', 'formidable' ), 'frm_view_forms', 'formidable', 'FrmFormsController::route' );
 
@@ -264,9 +260,7 @@ class FrmFormsController {
             $wp->register_globals();
         }
 
-        if ( FrmAppHelper::pro_is_installed() ) {
-            FrmProEntriesController::register_scripts();
-        }
+		self::register_pro_scripts();
 
 		header( 'Content-Type: text/html; charset='. get_option( 'blog_charset' ) );
 
@@ -283,6 +277,14 @@ class FrmFormsController {
         require(FrmAppHelper::plugin_path() .'/classes/views/frm-entries/direct.php');
         wp_die();
     }
+
+	public static function register_pro_scripts() {
+		if ( FrmAppHelper::pro_is_installed() ) {
+			wp_register_script( 'jquery-frm-rating', FrmAppHelper::plugin_url() . '/pro/js/jquery.rating.min.js', array( 'jquery' ), '4.11', true );
+			wp_register_script( 'jquery-maskedinput', FrmAppHelper::plugin_url() . '/pro/js/jquery.maskedinput.min.js', array( 'jquery' ), '1.4', true );
+			wp_register_script( 'jquery-chosen', FrmAppHelper::plugin_url() .'/pro/js/chosen.jquery.min.js', array( 'jquery' ), '1.2.0', true );
+		}
+	}
 
     public static function untrash() {
 		self::change_form_status( 'untrash' );
@@ -884,7 +886,7 @@ class FrmFormsController {
             }
         }
 
-        add_action('frm_load_form_hooks', 'FrmFormsController::trigger_load_form_hooks');
+		add_action( 'frm_load_form_hooks', 'FrmHooksController::trigger_load_form_hooks' );
         FrmAppHelper::trigger_hook_load( 'form' );
 
         switch ( $action ) {
@@ -1027,7 +1029,7 @@ class FrmFormsController {
             return __( 'Please select a valid form', 'formidable' );
         }
 
-        add_action( 'frm_load_form_hooks', 'FrmFormsController::trigger_load_form_hooks' );
+		add_action( 'frm_load_form_hooks', 'FrmHooksController::trigger_load_form_hooks' );
         FrmAppHelper::trigger_hook_load( 'form', $form );
 
         $form = apply_filters( 'frm_pre_display_form', $form );
@@ -1176,6 +1178,7 @@ class FrmFormsController {
 		$load_css = FrmForm::is_form_loaded( $form, $this_load, $global_load );
 
 		if ( $load_css ) {
+			global $frm_vars;
 			self::footer_js( 'header' );
 			$frm_vars['css_loaded'] = true;
 		}

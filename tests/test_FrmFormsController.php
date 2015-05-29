@@ -5,20 +5,6 @@
  */
 class WP_Test_FrmFormsController extends FrmUnitTest {
 
-	function test_trigger_load_form_hooks() {
-		FrmFormsController::trigger_load_form_hooks();
-		$expected_hooks = array(
-			'frm_field_type' => 'FrmFieldsController::change_type',
-			'frm_field_input_html' => 'FrmFieldsController::input_html',
-			'frm_field_value_saved' => 'FrmFieldsController::check_value',
-		);
-
-		foreach ( $expected_hooks as $tag => $function ) {
-			$has_filter = has_filter( $tag, $function );
-			$this->assertTrue( $has_filter !== false, 'The ' . $tag .' hook is not loaded' );
-		}
-	}
-
 	function test_register_widgets() {
 		global $wp_widget_factory;
 		$this->assertTrue( isset( $wp_widget_factory->widgets['FrmShowForm'] ) );

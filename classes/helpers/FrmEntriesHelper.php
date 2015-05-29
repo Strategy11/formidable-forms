@@ -423,7 +423,7 @@ class FrmEntriesHelper {
 
 	public static function enqueue_scripts( $params ) {
 		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmFormsController::enqueue_scripts' );
-		return FrmFormsController::enqueue_scripts();
+		return FrmFormsController::enqueue_scripts( $params );
 	}
 
     // Add submitted values to a string for spam checking
