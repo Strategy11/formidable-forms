@@ -69,4 +69,4 @@ script:
 - phpunit --group=ajax -c phpunit.xml
 - phpunit --group=entries -c phpunit.xml
 - phpunit --group=styles -c phpunit.xml
-- phpunit -c phpunit.xml
+- phpunit --exclude-group=ajax -c phpunit.xml

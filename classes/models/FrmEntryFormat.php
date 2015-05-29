@@ -1,5 +1,5 @@
 <?php
-	
+
 class FrmEntryFormat {
 	public static function show_entry( $atts ) {
 		$atts = shortcode_atts( array(

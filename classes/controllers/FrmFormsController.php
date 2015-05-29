@@ -993,7 +993,7 @@ class FrmFormsController {
         global $frm_vars;
         if ( isset($frm_vars['skip_shortcode']) && $frm_vars['skip_shortcode'] ) {
             $sc = '[formidable';
-			if ( ! empty( $atts ) ){
+			if ( ! empty( $atts ) ) {
 				foreach ( $atts as $k => $v ) {
 					$sc .= ' ' . $k . '="' . esc_attr( $v ) . '"';
 				}
