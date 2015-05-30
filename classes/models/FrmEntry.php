@@ -35,11 +35,9 @@ class FrmEntry {
         if ( isset($values['description']) && ! empty($values['description']) ) {
             $new_values['description'] = maybe_serialize($values['description']);
         } else {
-            $referrerinfo = FrmAppHelper::get_server_value('HTTP_REFERER');
-
             $new_values['description'] = serialize( array(
-                'browser' => FrmAppHelper::get_server_value('HTTP_USER_AGENT'),
-                'referrer' => $referrerinfo,
+				'browser'  => FrmAppHelper::get_server_value( 'HTTP_USER_AGENT' ),
+				'referrer' => FrmAppHelper::get_server_value( 'HTTP_REFERER' ),
             ) );
         }
 

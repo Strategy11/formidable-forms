@@ -405,7 +405,9 @@ BEFORE_HTML;
 			$html = preg_replace( '/(\[if\s+save_draft\])(.*?)(\[\/if\s+save_draft\])/mis', '', $html );
 		}
 
-		$html = do_shortcode( $html );
+		if ( apply_filters( 'frm_do_html_shortcodes', true ) ) {
+			$html = do_shortcode( $html );
+		}
 
         return $html;
     }

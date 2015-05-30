@@ -343,7 +343,9 @@ DEFAULT_HTML;
 
 		self::remove_collapse_shortcode( $html );
 
-		$html = do_shortcode( $html );
+		if ( apply_filters( 'frm_do_html_shortcodes', true ) ) {
+			$html = do_shortcode( $html );
+		}
 
         return $html;
     }
