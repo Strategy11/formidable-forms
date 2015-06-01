@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @group notification
+ */
 class WP_Test_FrmNotification extends FrmUnitTest {
 
 	public function test_class_is_tested() {
@@ -24,9 +27,10 @@ class WP_Test_FrmNotification extends FrmUnitTest {
 		$this->assertNotEmpty( $entry );
 
 		foreach ( $actions as $action ) {
+			$expected_to = $action->post_content['email_to'];
 			FrmNotification::trigger_email( $action, $entry, $form );
 
-			$this->assertEquals( 'address@tld.com', $GLOBALS['phpmailer']->mock_sent[0]['to'][0][0] );
+			$this->assertEquals( $expected_to, $GLOBALS['phpmailer']->mock_sent[0]['to'][0][0] );
 			//$this->assertNotEmpty( strpos( $GLOBALS['phpmailer']->mock_sent[0]['header'], 'Reply-To: admin@example.org' ) );
 
 			// TODO: check email body, reply to, cc, bcc, from
