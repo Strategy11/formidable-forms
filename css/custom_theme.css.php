@@ -141,7 +141,7 @@ legend.frm_hidden{
     text-decoration:none;
     border:1px solid #eee;
 	padding:5px;
-	display:inline-block;
+	display:inline;
 }
 
 .with_frm_style .frm_submit{
