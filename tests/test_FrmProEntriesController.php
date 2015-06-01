@@ -60,7 +60,7 @@ SCRIPT;
 	public function test_formresults() {
 		$forms_to_test = array( 'regular_form' => $this->all_fields_form_key, 'post_form' => $this->create_post_form_key );
 		foreach ( $forms_to_test as $i => $form_key ) {
-			//self::test_single_form_formresults( $i, $form_key );
+			self::_test_single_form_formresults( $i, $form_key );
 		}
 	}
 
@@ -87,7 +87,7 @@ SCRIPT;
 		$params = '';
 		foreach ( $params_to_test as $param ) {
 			$params .= $param;
-			self::check_formresults_values( $form_id, $entry_count, $field_count, $params );
+			self::_check_formresults_values( $form_id, $entry_count, $field_count, $params );
 		}
 
 		// Check for the correct number of rows and columns
