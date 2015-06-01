@@ -711,27 +711,24 @@ function frmFrontFormJS(){
 		}
 
 		var keys = calc.total;
-
-		var vals = [];
 		var len = keys.length;
-        var fCount = 0;
+		var vals = [];
 
 		// loop through each calculation this field is used in
 		for ( var i = 0, l = len; i < l; i++ ) {
-			var thisCalc = all_calcs.calc[keys[i]];
-			var thisFullCalc = thisCalc.calc;
 
-			// If field is hidden, don't do the calculation
-			var calcFieldId = thisCalc.field_id;
+			// If field with calculation is hidden, don't do the calculation
+			var calcFieldId = all_calcs.calc[ keys[i] ].field_id;
 			if ( calcFieldId in hidden_fields ) {
 				continue;
 			}
 
-			doSingleCalculation( thisCalc, all_calcs, keys[i], vals );
+			doSingleCalculation( all_calcs, keys[i], vals );
 		}
 	}
 
-	function doSingleCalculation( thisCalc, all_calcs, field_key, vals ) {
+	function doSingleCalculation( all_calcs, field_key, vals ) {
+		var thisCalc = all_calcs.calc[ field_key ];
 		var thisFullCalc = thisCalc.calc;
 
 		// loop through the fields in this calculation
@@ -805,9 +802,8 @@ function frmFrontFormJS(){
 			return;
 		}
 
-		var thisCalc = all_calcs.calc[field_key];
 		var vals = [];
-		doSingleCalculation( thisCalc, all_calcs, field_key, vals );
+		doSingleCalculation( all_calcs, field_key, vals );
 	}
 
     function getCalcFieldId(thisFieldCall, thisFieldId, thisField, all_calcs, vals){
