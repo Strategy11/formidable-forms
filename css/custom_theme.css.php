@@ -1133,7 +1133,7 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
 
 .frm_section_heading div.frm_repeat_sec:last-child .frm_add_form_row{
     opacity:100;
-	display:inline-block;
+	display:inline;
     pointer-events:auto;
 }
 
