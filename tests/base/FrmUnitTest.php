@@ -7,6 +7,8 @@ class FrmUnitTest extends WP_UnitTestCase {
 	protected $field_ids = array();
 	protected $user_id = 0;
 	protected $contact_form_key = 'contact-with-email';
+	protected $all_fields_form_key = 'all_field_types';
+	protected $create_post_form_key = 'create-a-post';
 	protected $is_pro_active = false;
 
 	/**
@@ -36,6 +38,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 			define( 'WP_IMPORTING', false );
 		}
 
+		FrmHooksController::trigger_load_hook( 'load_admin_hooks' );
 		FrmAppController::install();
 
 		$this->do_tables_exist();
@@ -78,7 +81,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 	*/
 	function set_current_user_to_1( ) {
 		$user_id = 1;
-		$user = get_user_by( 'id', $user_id );
+		$user = $this->factory->user->get_object_by_id( $user_id );
 		if ( $user == false ) {
 			$user_id = $this->set_as_user_role( 'admin' );
 		} else {
@@ -169,6 +172,15 @@ class FrmUnitTest extends WP_UnitTestCase {
 			$frm_update  = new FrmUpdatesController();
 			$frm_vars['pro_is_authorized'] = $frm_update->pro_is_authorized();
 		}
+	}
+
+	function get_footer_output() {
+        ob_start();
+        do_action( 'wp_footer' );
+        $output = ob_get_contents();
+        ob_end_clean();
+
+		return $output;
 	}
 
     static function install_data() {
