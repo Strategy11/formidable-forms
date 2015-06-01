@@ -38,6 +38,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 			define( 'WP_IMPORTING', false );
 		}
 
+		FrmHooksController::trigger_load_hook( 'load_admin_hooks' );
 		FrmAppController::install();
 
 		$this->do_tables_exist();
@@ -171,6 +172,15 @@ class FrmUnitTest extends WP_UnitTestCase {
 			$frm_update  = new FrmUpdatesController();
 			$frm_vars['pro_is_authorized'] = $frm_update->pro_is_authorized();
 		}
+	}
+
+	function get_footer_output() {
+        ob_start();
+        do_action( 'wp_footer' );
+        $output = ob_get_contents();
+        ob_end_clean();
+
+		return $output;
 	}
 
     static function install_data() {

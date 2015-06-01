@@ -29,10 +29,7 @@ class WP_Test_FrmProEntriesController extends FrmUnitTest {
 		$form = do_shortcode( '[formidable id="' . $this->contact_form_key . '"]' );
 		$this->assertNotEmpty( $form );
 
-        ob_start();
-        do_action( 'wp_footer' );
-        $output = ob_get_contents();
-        ob_end_clean();
+        $output = $this->get_footer_output();
 
 		$expected_date_script = <<<EXPECTED
 $(document).on('focusin','#field_date14', function(){
@@ -65,21 +62,19 @@ SCRIPT;
 	}
 
 	public function _test_single_form_formresults( $array_key, $form_key ) {
-		// Get form id by key
 		$form_id = $this->factory->form->get_id_by_key( $form_key );
 
-		// Check number of entries
-		$actual_entry_count = 3;
+		$expected_entry_count = 3;
 
 		// Get number of entries
 		$entry_count = FrmEntry::getRecordCount( $form_id );
-		$this->assertTrue( $entry_count == $actual_entry_count, 'Entries are not being retrieved correctly. Retrieved ' . $entry_count . ' but should have ' . $actual_entry_count . ' for form ' . $this->all_fields_form_key );
+		$this->assertTrue( $entry_count == $expected_entry_count, 'Entries are not being retrieved correctly. Retrieved ' . $entry_count . ' but should have ' . $expected_entry_count . ' for form ' . $this->all_fields_form_key );
 
 		// Get number of fields
-		$actual_field_count = 36;//Includes 3 fields from repeating section form
+		$expected_field_count = 36;//Includes 3 fields from repeating section form
 		// Probably exclude specific field types (embed form, divider, end divider, html, ...);
 		$field_count = count( FrmField::get_all_for_form( $form_id ) );
-		$this->assertTrue( $field_count == $actual_field_count, 'Fields are not being retrieved correctly. Retrieved ' . $field_count . ', but should have ' . $actual_field_count );
+		$this->assertTrue( $field_count == $expected_field_count, 'Fields are not being retrieved correctly. Retrieved ' . $field_count . ', but should have ' . $expected_field_count );
 
 		// Regular form (no post or custom fields)
 		// This will always test parameters in the same order. What about different combinations of parameters?
