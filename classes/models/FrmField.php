@@ -386,7 +386,8 @@ class FrmField {
             }
 
             if ( ! empty($sub_fields) ) {
-                array_splice($results, $k, 1, $sub_fields);
+				$index = $k + 1;
+				array_splice($results, $index, 0, $sub_fields);
             }
             unset($field, $sub_fields);
         }
@@ -564,7 +565,7 @@ class FrmField {
 	}
 
 	public static function no_save_fields() {
-		return array( 'divider', 'end_divider', 'captcha', 'break', 'html' );
+		return array( 'divider', 'end_divider', 'captcha', 'break', 'html', 'form' );
 	}
 
 	/**
