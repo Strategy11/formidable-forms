@@ -83,6 +83,7 @@ class Field_Factory extends WP_UnitTest_Factory_For_Thing {
 			'email'  => 'admin@example.org',
 			'url'    => 'http://test.com',
 			'number' => 120,
+			'scale'  => 8,
 			'date'   => '2015-01-01',
 			'user_id' => get_current_user_id(),
 		);

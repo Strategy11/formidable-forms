@@ -22,8 +22,8 @@ class FrmEntry {
             'ip'        => FrmAppHelper::get_ip_address(),
             'is_draft'  => ( ( isset($values['frm_saving_draft']) && $values['frm_saving_draft'] == 1 ) ||  ( isset($values['is_draft']) && $values['is_draft'] == 1) ) ? 1 : 0,
             'form_id'   => isset($values['form_id']) ? (int) $values['form_id']: null,
-            'post_id'   => isset($values['post_id']) ? (int) $values['post_id']: null,
-            'parent_item_id' => isset($values['parent_item_id']) ? (int) $values['parent_item_id']: null,
+			'post_id'   => isset( $values['post_id'] ) ? (int) $values['post_id']: 0,
+			'parent_item_id' => isset( $values['parent_item_id'] ) ? (int) $values['parent_item_id']: 0,
             'created_at' => isset($values['created_at']) ? $values['created_at'] : current_time('mysql', 1),
             'updated_at' => isset($values['updated_at']) ? $values['updated_at'] : ( isset($values['created_at']) ? $values['created_at'] : current_time('mysql', 1) ),
         );
@@ -92,22 +92,21 @@ class FrmEntry {
      * @return boolean
      */
     public static function is_duplicate($new_values, $values) {
-        if ( defined('WP_IMPORTING') ) {
+		if ( defined('WP_IMPORTING') && WP_IMPORTING ) {
             return false;
         }
 
         $check_val = $new_values;
 		$check_val['created_at >'] = date( 'Y-m-d H:i:s', ( strtotime( $new_values['created_at'] ) - 60 ) );
 
-        unset($check_val['created_at'], $check_val['updated_at']);
-        unset($check_val['is_draft'], $check_val['id'], $check_val['item_key']);
+		unset( $check_val['created_at'], $check_val['updated_at'] );
+		unset( $check_val['is_draft'], $check_val['id'], $check_val['item_key'] );
 
         if ( $new_values['item_key'] == $new_values['name'] ) {
             unset($check_val['name']);
         }
 
         global $wpdb;
-
 		$entry_exists = FrmDb::get_col( $wpdb->prefix . 'frm_items', $check_val, 'id', array( 'order_by' => 'created_at DESC' ) );
 
         if ( ! $entry_exists || empty($entry_exists) || ! isset($values['item_meta']) ) {
@@ -140,7 +139,7 @@ class FrmEntry {
             }
 
             if ( $is_duplicate ) {
-                return $is_duplicate;
+				break;
             }
         }
 

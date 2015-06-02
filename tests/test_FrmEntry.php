@@ -6,14 +6,18 @@
 class WP_Test_FrmEntry extends FrmUnitTest {
 	/**
 	 * @covers FrmEntry::create
+	 * @covers FrmEntry::is_duplicate
 	 */
-	function test_create() {
+	function test_is_duplicate() {
 		$form = $this->factory->form->get_object_by_id( $this->contact_form_key );
 		$entry_data = $this->factory->field->generate_entry_array( $form );
 		$entry = FrmEntry::create( $entry_data );
 
 		$this->assertNotEmpty( $entry );
 		$this->assertTrue( is_numeric( $entry ) );
+
+		$entry = FrmEntry::create( $entry_data );
+		$this->assertEmpty( $entry, 'Failed to detect duplicate entry' );
 	}
 
 	/**
