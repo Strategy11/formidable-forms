@@ -374,6 +374,7 @@ class FrmField {
         }
 
         $form_fields = $results;
+		$index_offset = 1;
         foreach ( $form_fields as $k => $field ) {
             if ( 'form' != $field->type || ! isset($field->field_options['form_select']) ) {
                 continue;
@@ -386,7 +387,8 @@ class FrmField {
             }
 
             if ( ! empty($sub_fields) ) {
-				$index = $k + 1;
+				$index = $k + $index_offset;
+				$index_offset+= count( $sub_fields );
 				array_splice($results, $index, 0, $sub_fields);
             }
             unset($field, $sub_fields);
