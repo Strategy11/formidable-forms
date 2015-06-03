@@ -55,6 +55,8 @@ SCRIPT;
 	* Check if formresults shortcode is working for normal and post forms
 	*/
 	public function test_formresults() {
+		// Set current post (needed for edit link)
+		$this->go_to_new_post();
 		$forms_to_test = array( 'regular_form' => $this->all_fields_form_key, 'post_form' => $this->create_post_form_key );
 		foreach ( $forms_to_test as $form_key ) {
 			self::_test_single_form_formresults( $form_key );
@@ -180,7 +182,7 @@ SCRIPT;
 		self::_check_row_num( $formresults, $args['entry_count'], $param_msg_text, $args );
 		self::_check_col_num( $formresults, $args['field_count'], $param_msg_text, $args );
 		self::_check_for_google_table( $formresults, $args, $param_msg_text, $args );
-		self::_check_for_edit_link( $formresults, $args['entry_count'], $args['current_params'], $param_msg_text );
+		self::_check_for_edit_link( $formresults, $param_msg_text, $args );
 		self::_check_for_delete_link( $formresults, $args['entry_count'], $args['current_params'], $param_msg_text );
 	}
 
@@ -202,14 +204,15 @@ SCRIPT;
 		}
 	}
 
-	function _check_for_edit_link( $formresults, $expected_row_num, $params, $param_text ) {
-		if ( strpos( $params, 'edit_link' ) !== false ) {
+	function _check_for_edit_link( $formresults, $param_text, $args ) {
+		if ( strpos( $args['current_params'], 'edit_link' ) !== false ) {
 			// TODO: Check if edit link shows up for different users
-			$params_array = explode( '"', $params );
+			$params_array = explode( '"', $args['current_params'] );
 			$edit_link_key = array_search( ' edit_link=', $params_array );
 			$edit_link_text = $params_array[ $edit_link_key + 1 ];
-			$edit_link_count = substr_count( $formresults, $edit_link_text );
-			$this->assertEquals( $edit_link_count, $expected_row_num, 'Formresults (with' . $param_text . ' parameters) is not showing the correct number of edit links' );
+			$edit_link_count = substr_count( $formresults, $edit_link_text ) - 2;
+
+			$this->assertEquals( $edit_link_count, $args['entry_count'], 'Formresults (with' . $param_text . ' parameters) is showing ' . $edit_link_count . ' edit links, but ' . $args['entry_count'] . ' are expected for form ' . $args['form_key'] );
 		}
 	}
 

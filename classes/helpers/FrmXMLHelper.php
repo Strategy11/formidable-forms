@@ -289,7 +289,7 @@ class FrmXMLHelper {
 	* @param array $imported_forms
 	*/
 	private static function update_repeat_field_options( $repeat_fields, $imported_forms ) {
-		foreach( $repeat_fields as $old_form_id => $new_repeat_fields ) {
+		foreach ( $repeat_fields as $old_form_id => $new_repeat_fields ) {
 			foreach ( $new_repeat_fields as $repeat_field_id ) {
 				// Get section/embed form field
 				$repeat_field = FrmField::getOne( $repeat_field_id );
