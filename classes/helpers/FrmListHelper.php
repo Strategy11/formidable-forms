@@ -20,6 +20,10 @@ class FrmListHelper extends WP_List_Table {
 		return current_user_can( 'administrator' );
 	}
 
+	public function get_columns() {
+		return array();
+	}
+
 	public function display_rows() {
 		$style = '';
 		foreach ( $this->items as $item ) {
