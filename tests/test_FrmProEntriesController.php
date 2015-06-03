@@ -56,71 +56,68 @@ SCRIPT;
 	*/
 	public function test_formresults() {
 		$forms_to_test = array( 'regular_form' => $this->all_fields_form_key, 'post_form' => $this->create_post_form_key );
-		foreach ( $forms_to_test as $i => $form_key ) {
-			self::_test_single_form_formresults( $i, $form_key );
+		foreach ( $forms_to_test as $form_key ) {
+			self::_test_single_form_formresults( $form_key );
 		}
 	}
 
 	/**
 	 * @covers FrmProEntriesController::get_form_results
 	 */
-	public function _test_single_form_formresults( $array_key, $form_key ) {
-		$form_id = $this->factory->form->get_id_by_key( $form_key );
+	public function _test_single_form_formresults( $form_key ) {
+		$args['form_key'] = $form_key;
+		$args['form_id'] = $this->factory->form->get_id_by_key( $form_key );
 
-		self::_check_expectations( $form_key, $form_id );
+		$args['field_count'] = $args['entry_count'] = 0;
+		self::_set_and_check_expectations( $args );
+		// Set current post?
 
 		if ( $form_key == $this->all_fields_form_key ) {
-			$embed_form_id = $this->factory->form->get_id_by_key( $this->contact_form_key );
-			$embed_form_field_count = self::_get_field_count( $embed_form_id, 8 );
-
-			$params_to_test = array( 'none' => '', 'fields' => '493ito,p3eiuk,uc580i,4t3qo4,e9ul34,gbm7pi', 'drafts' => 'both', 'edit_link' => 'Click to edit', 'delete_link' => 'Click to delete', 'google' => 1, 'pagesize' => 2, 'cols' => 3 );
+			$fields = '493ito,p3eiuk,uc580i,4t3qo4,e9ul34,gbm7pi';
 		} else {
-			$params_to_test = array( 'none' => '', 'cols' => 3 );
+			$fields = 'yi6yvm';
 		}
 
-		$params = '';
-		foreach ( $params_to_test as $pname => $pval ) {
-			if ( $pname != 'none' ) {
-				$params .= ' ' . $pname . '="' . $pval . '"';
-			}
+		// No google=1
+		$args['params_to_test'] = array(
+			'none' => '',
+			'fields' => $fields,
+			'drafts' => 'both',
+			'edit_link' => 'Click to edit',
+			'delete_link' => 'Click to delete',
+			'cols' => 3,
+			'user_id' => 'current'
+		);
+		// TODO: Add testing for sort, style, no_entries, clickable, user_id
+		self::_test_params( $args );
 
-			// Set the expected number of columns
-			if ( $pname == 'fields' ) {
-				$field_count = count( explode( ',', $pval ) );
-				// e9ul34 is an embed form field
-				if ( strpos( $pval, 'e9ul34' ) !== false ) {
-					$field_count+= $embed_form_field_count - 1;
-				}
-			} else if ( $pname == 'cols' ) {
-				$field_count = $pval;
-			} else if ( $pname == 'edit_link' || $pname == 'delete_link' ) {
-				$field_count++;
-			}
-
-			// Set the expected number of rows
-			if ( $pname == 'pagesize' ) {
-				$entry_count = $pval;
-			}
-
-			self::_check_formresults_values( $form_id, $entry_count, $field_count, $params );
-			unset( $pname, $pval);
-		}
-		// Check w/ and w/o posts, custom fields, Dynamic fields, etc.
+		// With google=1
+		$args['params_to_test'] = array(
+			'google' => 1,
+			'fields' => $fields,
+			'drafts' => 'both',
+			'edit_link' => 'Click to edit',
+			'delete_link' => 'Click to delete',
+			'pagesize' => 2,
+			'cols' => 3,
+			'user_id' => 'current'
+		);
+		self::_test_params( $args );
 	}
 
-	function _check_expectations( $form_key, $form_id ) {
-		if ( $form_key == $this->all_fields_form_key ) {
+	function _set_and_check_expectations( &$args ) {
+		if ( $args['form_key'] == $this->all_fields_form_key ) {
 			$expected_entry_count = 3;
 			$expected_field_count = 33 + 3 + 8;
 		} else {
 			$expected_entry_count = 0;
 			$expected_field_count = 10;
 		}
-		$entry_count = FrmEntry::getRecordCount( $form_id );
-		$this->assertTrue( $entry_count == $expected_entry_count, 'Entries are not being retrieved correctly. Retrieved ' . $entry_count . ' but should have ' . $expected_entry_count . ' for form ' . $form_key );
+		$args['entry_count'] = FrmEntry::getRecordCount( $args['form_id'] );
+		$this->assertTrue( $args['entry_count'] == $expected_entry_count, 'Entries are not being retrieved correctly. Retrieved ' . $args['entry_count'] . ' but should have ' . $expected_entry_count . ' for form ' . $args['form_key'] );
 
 		// Get number of fields in form (exlcluding no_save_fields)
-		$field_count = self::_get_field_count( $form_id, $expected_field_count );
+		$args['field_count'] = self::_get_field_count( $args['form_id'], $expected_field_count );
 	}
 
 	function _get_field_count( $form_id, $expected ) {
@@ -139,32 +136,69 @@ SCRIPT;
 		return $field_count;
 	}
 
-	function _check_formresults_values( $form_id, $expected_row_num, $expected_col_num, $params='' ) {
-		$param_text = $params ? $params : ' no';
-		$formresults = do_shortcode('[formresults id="' . $form_id . '"' . $params . ']');
 
-		self::_check_row_num( $formresults, $expected_row_num, $param_text );
-		self::_check_col_num( $formresults, $expected_col_num, $param_text );
-		self::_check_for_google_table( $formresults, $params, $param_text, $form_id );
-		self::_check_for_edit_link( $formresults, $expected_row_num, $params, $param_text );
-		self::_check_for_delete_link( $formresults, $expected_row_num, $params, $param_text );
+	function _test_params( $args ) {
+		if ( $args['form_key'] == $this->all_fields_form_key ) {
+			$embed_form_id = $this->factory->form->get_id_by_key( $this->contact_form_key );
+			$embed_form_field_count = self::_get_field_count( $embed_form_id, 8 );
+		}
+
+		$args['current_params'] = '';
+		foreach ( $args['params_to_test'] as $pname => $pval ) {
+			if ( $pname != 'none' ) {
+				$args['current_params'] .= ' ' . $pname . '="' . $pval . '"';
+			}
+
+			// Set the expected number of columns
+			if ( $pname == 'fields' ) {
+				$args['field_count'] = count( explode( ',', $pval ) );
+				// e9ul34 is an embed form field
+				if ( strpos( $pval, 'e9ul34' ) !== false ) {
+					$args['field_count']+= $embed_form_field_count - 1;
+				}
+			} else if ( $pname == 'cols' ) {
+				$args['field_count'] = $pval;
+			} else if ( $pname == 'edit_link' || $pname == 'delete_link' ) {
+				$args['field_count']++;
+			}
+
+			// Set the expected number of rows
+			if ( $pname == 'pagesize' ) {
+				$args['entry_count'] = $pval;
+			}
+
+			self::_check_formresults_values( $args );
+			unset( $pname, $pval);
+		}
+		// Check w/ and w/o posts, custom fields, Dynamic fields, etc.
 	}
 
-	function _check_row_num( $formresults, $expected_row_num, $param_text ) {
+	function _check_formresults_values( $args ) {
+		$param_msg_text = $args['current_params'] ? $args['current_params'] : ' no';
+		$formresults = do_shortcode('[formresults id="' . $args['form_id'] . '"' . $args['current_params'] . ']');
+
+		self::_check_row_num( $formresults, $args['entry_count'], $param_msg_text, $args );
+		self::_check_col_num( $formresults, $args['field_count'], $param_msg_text, $args );
+		self::_check_for_google_table( $formresults, $args, $param_msg_text, $args );
+		self::_check_for_edit_link( $formresults, $args['entry_count'], $args['current_params'], $param_msg_text );
+		self::_check_for_delete_link( $formresults, $args['entry_count'], $args['current_params'], $param_msg_text );
+	}
+
+	function _check_row_num( $formresults, $expected_row_num, $param_msg_txt, $args ) {
 		$actual_row_num = substr_count( $formresults, '<tr') - 2;
 
-		$this->assertNotEquals( -2, $actual_row_num, 'Formresults (with' . $param_text . ' parameters) is not showing up at all.');
-		$this->assertEquals( $expected_row_num, $actual_row_num, 'Formresults (with' . $param_text . ' parameters) is not showing the correct number of rows/entries' );
+		$this->assertNotEquals( -2, $actual_row_num, 'Formresults (with' . $param_msg_txt . ' parameters) is not showing up at all for form ' . $args['form_key'] . '.');
+		$this->assertEquals( $expected_row_num, $actual_row_num, 'Formresults (with' . $param_msg_txt . ' parameters) is showing ' . $actual_row_num . ', but ' . $expected_row_num . ' are expected for form ' . $args['form_key'] . '.' );
 	}
 
-	function _check_col_num( $formresults, $expected_col_num, $param_text ) {
+	function _check_col_num( $formresults, $expected_col_num, $param_text, $args ) {
 		$actual_col_num = substr_count( $formresults, '<th>')/2;
-		$this->assertEquals( $expected_col_num, $actual_col_num, 'Formresults (with' . $param_text . ' parameters) is showing ' . $actual_col_num . ', but ' . $expected_col_num . ' are expected.' );
+		$this->assertEquals( $expected_col_num, $actual_col_num, 'Formresults (with' . $param_text . ' parameters) is showing ' . $actual_col_num . ', but ' . $expected_col_num . ' are expected for field ' . $args['form_key'] . '.' );
 	}
 
-	function _check_for_google_table( $formresults, $params, $param_text, $form_id ) {
-		if ( strpos( $params, 'google=' ) !== false ) {
-			$this->assertTrue( strpos( $formresults, 'frm_google_table_' . $form_id ), 'Formresults (with' . $param_text . ' parameters) is not showing google table when it should be' );
+	function _check_for_google_table( $formresults, $params, $param_text, $args ) {
+		if ( strpos( $args['current_params'], 'google=' ) !== false ) {
+			$this->assertTrue( strpos( $formresults, 'frm_google_table_' . $args['form_id'] ), 'Formresults (with' . $param_text . ' parameters) is not showing google table when it should be' );
 		}
 	}
 
