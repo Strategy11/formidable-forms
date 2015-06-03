@@ -10,7 +10,6 @@ class FrmEntriesController {
 		if ( ! in_array( FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' ), array( 'edit', 'show' ) ) ) {
             $frm_settings = FrmAppHelper::get_settings();
 			add_filter( 'manage_' . sanitize_title( $frm_settings->menu ) . '_page_formidable-entries_columns', 'FrmEntriesController::manage_columns' );
-			add_filter( 'manage_' . sanitize_title( $frm_settings->menu ) . '_page_formidable-entries_sortable_columns', 'FrmEntriesController::sortable_columns' );
 			add_filter( 'get_user_option_manage' . sanitize_title( $frm_settings->menu ) . '_page_formidable-entriescolumnshidden', 'FrmEntriesController::hidden_columns' );
         }
     }
@@ -63,7 +62,7 @@ class FrmEntriesController {
         return $help;
     }
 
-    public static function manage_columns($columns) {
+	public static function manage_columns( $columns ) {
         global $frm_vars, $wpdb;
 		$form_id = FrmForm::get_current_form_id();
 
@@ -194,30 +193,6 @@ class FrmEntriesController {
             $save = (int) $value;
         }
         return $save;
-    }
-
-    public static function sortable_columns() {
-		$form_id = FrmForm::get_current_form_id();
-
-		$fields = FrmField::get_all_for_form( $form_id );
-
-        $columns = array(
-            $form_id .'_id'         => 'id',
-            $form_id .'_created_at' => 'created_at',
-            $form_id .'_updated_at' => 'updated_at',
-            $form_id .'_ip'         => 'ip',
-            $form_id .'_item_key'   => 'item_key',
-            $form_id .'_is_draft'   => 'is_draft',
-        );
-
-        foreach ( $fields as $field ) {
-		    if ( $field->type != 'checkbox' && ( ! isset($field->field_options['post_field']) || $field->field_options['post_field'] == '' ) ) {
-                // Can't sort on checkboxes because they are stored serialized, or post fields
-			    $columns[ $form_id .'_'. $field->field_key ] = 'meta_'. $field->id;
-		    }
-        }
-
-        return $columns;
     }
 
     public static function hidden_columns($result) {

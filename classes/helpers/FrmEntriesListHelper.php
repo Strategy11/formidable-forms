@@ -8,7 +8,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	public function prepare_items() {
         global $wpdb, $per_page;
 
-        $per_page = $this->get_items_per_page( 'formidable_page_formidable_entries_per_page');
+		$per_page = $this->get_items_per_page( 'formidable_page_formidable_entries_per_page' );
 
         $form_id = $this->params['form'];
         if ( ! $form_id ) {
@@ -71,6 +71,29 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 	public function search_box( $text, $input_id ) {
 		// Searching is a pro feature
+	}
+
+	protected function get_sortable_columns() {
+		$form_id = FrmForm::get_current_form_id();
+		$fields = FrmField::get_all_for_form( $form_id );
+
+		$columns = array(
+			$form_id . '_id'         => 'id',
+			$form_id . '_created_at' => 'created_at',
+			$form_id . '_updated_at' => 'updated_at',
+			$form_id . '_ip'         => 'ip',
+			$form_id . '_item_key'   => 'item_key',
+			$form_id . '_is_draft'   => 'is_draft',
+		);
+
+		foreach ( $fields as $field ) {
+			if ( $field->type != 'checkbox' && ( ! isset( $field->field_options['post_field'] ) || $field->field_options['post_field'] == '' ) ) {
+				// Can't sort on checkboxes because they are stored serialized, or post fields
+				$columns[ $form_id . '_' . $field->field_key ] = 'meta_' . $field->id;
+			}
+		}
+
+		return $columns;
 	}
 
 	public function single_row( $item, $style = '' ) {
