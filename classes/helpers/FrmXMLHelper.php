@@ -285,7 +285,7 @@ class FrmXMLHelper {
 	* Update form_select for all imported repeating sections and embedded forms
 	*
 	* @since 2.0.09
-	* @param array $repeat_fields, old form ID as keys and section field IDs as items
+	* @param array $repeat_fields - old form ID as keys and section field IDs as items
 	* @param array $imported_forms
 	*/
 	private static function update_repeat_field_options( $repeat_fields, $imported_forms ) {
@@ -294,6 +294,10 @@ class FrmXMLHelper {
 				// Get section/embed form field
 				$repeat_field = FrmField::getOne( $repeat_field_id );
 				$field_opts = maybe_unserialize( $repeat_field->field_options );
+
+				if ( ! $imported_forms[ $old_form_id ] ) {
+					return;
+				}
 				$field_opts['form_select'] = $imported_forms[ $old_form_id ];
 
 				// update form_select now
@@ -308,10 +312,10 @@ class FrmXMLHelper {
 	* @since 2.0.09
 	* @param array $f - field array
 	* @param int $repeat_field_id
-	* @param array $repeat_fields, pass by reference
+	* @param array $repeat_fields - pass by reference
 	*/
 	private static function track_repeating_fields( $f, $repeat_field_id, &$repeat_fields ) {
-		if ( ( $f['type'] == 'divider' && isset( $f['field_options']['repeat'] ) && $f['field_options']['repeat'] ) || $f['type'] == 'form' ) {
+		if ( FrmField::is_repeating_field( $f ) || $f['type'] == 'form' ) {
 			$old_form_id = $f['field_options']['form_select'];
 			if ( ! isset( $repeat_fields[ $old_form_id ] ) ) {
 				$repeat_fields[ $old_form_id ] = array();

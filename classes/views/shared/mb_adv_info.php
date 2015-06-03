@@ -21,7 +21,7 @@
 			$linked_forms[] = array();
 
 			foreach ( $fields as $f ) {
-				if ( $f->type == 'divider' && isset( $f->field_options['repeat'] ) && $f->field_options['repeat'] ) {
+				if ( FrmField::is_repeating_field( $f ) ) {
 					$repeat_field = $f->id;
 				}
 

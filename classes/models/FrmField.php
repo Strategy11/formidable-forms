@@ -663,4 +663,16 @@ class FrmField {
 	public static function is_option_value_in_object( $field, $option ) {
 		return isset( $field->field_options[ $option ] ) && $field->field_options[ $option ] != '';
 	}
+
+	/**
+	* @since 2.0.09
+	*/
+	public static function is_repeating_field( $field ) {
+		if ( is_array( $field ) ) {
+			$is_repeating_field = ( 'divider' == $field['type'] );
+		} else {
+			$is_repeating_field = ( 'divider' == $field->type );
+		}
+		return ( $is_repeating_field && self::is_option_true( $field, 'repeat' ) );
+	}
 }
