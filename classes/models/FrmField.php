@@ -388,7 +388,7 @@ class FrmField {
 
             if ( ! empty($sub_fields) ) {
 				$index = $k + $index_offset;
-				$index_offset+= count( $sub_fields );
+				$index_offset += count( $sub_fields );
 				array_splice($results, $index, 0, $sub_fields);
             }
             unset($field, $sub_fields);
