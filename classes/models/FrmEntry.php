@@ -502,8 +502,8 @@ class FrmEntry {
             'is_draft'      => 'absint',
             'post_id'       => 'absint',
             'parent_item_id' => 'absint',
-            'created_at'    => 'sanitize_title',
-            'updated_at'    => 'sanitize_title',
+            'created_at'    => 'sanitize_text_field',
+            'updated_at'    => 'sanitize_text_field',
         );
 
         FrmAppHelper::sanitize_request( $sanitize_method, $values );
