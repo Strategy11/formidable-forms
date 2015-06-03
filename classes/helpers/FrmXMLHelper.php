@@ -118,7 +118,6 @@ class FrmXMLHelper {
 	}
 
     public static function import_xml_forms($forms, $imported) {
-
 		// Keep track of repeating sections that are created
 		$repeat_fields = array();
 
@@ -181,16 +180,7 @@ class FrmXMLHelper {
                     // Keep track of whether this specific form was updated or not
 					$imported['form_status'][ $form_id ] = 'imported';
 
-					// Check if any repeating sections form_select need to be updated
-					if ( isset( $repeat_fields[ $form['id'] ] ) ) {
-						// Get section field
-						$section_field = FrmField::getOne( $repeat_fields[ $form['id'] ] );
-						$field_opts = maybe_unserialize( $section_field->field_options );
-						$field_opts['form_select'] = $form_id;
-
-						// update form_select now
-						FrmField::update( $repeat_fields[ $form['id'] ], array( 'field_options' => maybe_serialize( $field_opts ) ) );
-					}
+					self::update_repeat_field_options( $repeat_fields, $form['id'], $form_id );
                 }
             }
 
@@ -249,6 +239,7 @@ class FrmXMLHelper {
 						if ( $new_id == false ) {
 							continue;
 						}
+						self::track_repeating_fields( $f, $new_id, $imported, $repeat_fields );
 
     		            // if no matching field id or key in this form, create the field
     		            $imported['imported']['fields']++;
@@ -258,13 +249,10 @@ class FrmXMLHelper {
 					if ( $new_id == false ) {
 						continue;
 					}
+
+					self::track_repeating_fields( $f, $new_id, $imported, $repeat_fields );
 		            $imported['imported']['fields']++;
     		    }
-
-				// Check if a repeating section was just created
-				if ( isset( $new_id ) && $f['type'] == 'divider' && isset( $f['field_options']['repeat'] ) && $f['field_options']['repeat'] ) {
-					$repeat_fields[ $f['field_options']['form_select'] ] = $new_id;
-				}
 
 				unset($field, $new_id);
     		}
@@ -293,6 +281,49 @@ class FrmXMLHelper {
 
 		return $imported;
     }
+
+	/**
+	* Update form_select for imported repeating sections and embedded forms
+	*
+	* @since 2.0.09
+	* @param array $repeat_fields, old form ID as keys and section field IDs as items
+	* @param int $old_form_id
+	* @param int $new_form_id
+	*/
+	private static function update_repeat_field_options( $repeat_fields, $old_form_id, $new_form_id ) {
+		// Check if any repeating sections form_select need to be updated
+		if ( isset( $repeat_fields[ $old_form_id ] ) ) {
+			// Get section/embed form field
+			$section_field = FrmField::getOne( $repeat_fields[ $old_form_id ] );
+			$field_opts = maybe_unserialize( $section_field->field_options );
+			$field_opts['form_select'] = $new_form_id;
+
+			// update form_select now
+			FrmField::update( $repeat_fields[ $old_form_id ], array( 'field_options' => maybe_serialize( $field_opts ) ) );
+		}
+	}
+
+	/**
+	* Keep track of imported repeating fields and embedded forms
+	* Note: If the subform was imported before the parent form, then this update the repeat field now
+	*
+	* @since 2.0.09
+	* @param array $f - field array
+	* @param int $repeat_field_id
+	* @param array $imported
+	* @param array $repeat_fields, pass by reference
+	*/
+	private static function track_repeating_fields( $f, $repeat_field_id, $imported, &$repeat_fields ) {
+		if ( ( $f['type'] == 'divider' && isset( $f['field_options']['repeat'] ) && $f['field_options']['repeat'] ) || $f['type'] == 'form' ) {
+			$old_form_id = $f['field_options']['form_select'];
+			$repeat_fields[ $old_form_id ] = $repeat_field_id;
+
+			// If embedded form was imported already, update form_select now
+			if ( array_key_exists( $old_form_id, $imported['forms'] ) ) {
+				self::update_repeat_field_options( $repeat_fields, $old_form_id, $imported['forms'][ $old_form_id ] );
+			}
+		}
+	}
 
     public static function import_xml_views($views, $imported) {
         $imported['posts'] = array();
