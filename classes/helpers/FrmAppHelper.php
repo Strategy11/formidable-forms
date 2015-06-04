@@ -325,10 +325,10 @@ class FrmAppHelper {
     }
 
 	public static function sanitize_array( &$values ) {
-	   $temp_values = $values;
-	   foreach ( $temp_values as $k => $val ) {
-	        $values[ $k ] = wp_kses_post( $val );
-	   }
+		$temp_values = $values;
+		foreach ( $temp_values as $k => $val ) {
+			$values[ $k ] = wp_kses_post( $val );
+		}
 	}
 
 	/**
