@@ -223,6 +223,8 @@ class FrmDb {
      * @param string $where
      */
     private static function interpret_array_to_sql( $key, $value, &$where, &$values ) {
+		$key = trim( $key );
+
         if ( strpos( $key, 'created_at' ) !== false || strpos( $key, 'updated_at' ) !== false  ) {
             $k = explode(' ', $key);
             $where .= ' DATE_FORMAT(' . reset( $k ) . ', %s) ' . str_replace( reset( $k ), '', $key );
@@ -233,6 +235,7 @@ class FrmDb {
 
 		$lowercase_key = explode( ' ', strtolower( $key ) );
 		$lowercase_key = end( $lowercase_key );
+
         if ( is_array( $value ) ) {
             // translate array of values to "in"
 			if ( strpos( $lowercase_key, 'like' ) !== false ) {
