@@ -4,6 +4,7 @@ function frmFrontFormJS(){
 	var hide_later = [];
 	var hidden_fields = [];
     var frm_checked_dep = [];
+	var addingRow = '';
 	var action = '';
 	var jsErrors = [];
 
@@ -174,6 +175,8 @@ function frmFrontFormJS(){
 			hidden_fields = [];
         }
 
+		var isRepeat = maybeSetRowId( parentField );
+
 		var len = rules.length;
 		for ( var i = 0, l = len; i < l; i++ ) {
 			if ( rules[i].FieldName === field_id ) {
@@ -184,8 +187,28 @@ function frmFrontFormJS(){
 
 			if ( i === ( len - 1 ) ) {
 				hideFieldLater(rec);
+				if ( isRepeat ) {
+					addingRow = '';
+				}
 			}
 		}
+	}
+
+	function maybeSetRowId( parentField ) {
+		var isRepeat = false;
+		if ( addingRow == '' && typeof parentField !== 'undefined' && parentField !== null ) {
+			if ( parentField.length > 1 ) {
+				parentField = parentField.eq(0);
+			}
+			isRepeat = parentField.closest('.frm_repeat_sec');
+			if ( typeof isRepeat !== 'undefined' ) {
+				addingRow = isRepeat.attr('id');
+				isRepeat = true;
+			} else {
+				isRepeat = false;
+			}
+		}
+		return isRepeat;
 	}
 
 	function getRulesForField( field_id ) {
@@ -248,17 +271,29 @@ function frmFrontFormJS(){
         } else {
             getRepeat = true;
             parentField = jQuery('input[name^="'+ f.inputName +'"], textarea[name^="'+ f.inputName +'"], select[name^="'+ f.inputName +'"]');
-            if ( parentField.length < 1 ) {
+
+			if ( parentField.length < 1 ) {
 				// logic triggered on page load for fields in repeating section
-				parentField = jQuery('.'+f.containerID+' input, .'+f.containerID+' textarea, .'+f.containerID+' select');
-				if ( parentField.length ) {
-					hideOrShowField(i, f, field_id, selected, rec, parentField);
+				var parentClass = '.'+ f.containerID;
+				if ( addingRow !== '' ) {
+					parentClass = '#' + addingRow +' '+ parentClass;
+				}
+
+				var parentContainer = jQuery(parentClass);
+				if ( parentContainer.length ) {
+					parentField = parentContainer.find('input, textarea, select');
+					if ( parentField.length ) {
+						hideOrShowField(i, f, field_id, selected, rec, parentField);
+					} else {
+						show_fields[f.HideField][i] = false;
+						hideFieldNow(i, f, rec);
+					}
 					return;
 				}
 			}
 
 			if ( parentField.length > 1 ) {
-                parentField = parentField.eq(0);
+				parentField = parentField.eq(0);
             }
         }
 
@@ -280,11 +315,11 @@ function frmFrontFormJS(){
 			}
 		}
 
-		if ( typeof selected == 'undefined' ) {
+		if ( typeof selected === 'undefined' ) {
 			selected = parentField.val();
         }
 
-		if ( typeof selected == 'undefined' ) {
+		if ( typeof selected === 'undefined' ) {
             // check for repeating/embedded field
             if ( getRepeat === true ) {
                 var repeat = jQuery('.'+ f.containerID +' input, .'+ f.containerID +' select, .'+ f.containerID +' textarea');
@@ -300,7 +335,7 @@ function frmFrontFormJS(){
 
         // get selected checkbox values
         var checkVals = [];
-        if ( f.Type == 'checkbox' || f.Type == 'data-checkbox' ) {
+        if ( f.Type === 'checkbox' || f.Type === 'data-checkbox' ) {
             checkVals = getCheckedVal(f.containerID, f.inputName);
 
             if ( checkVals.length ) {
@@ -316,17 +351,17 @@ function frmFrontFormJS(){
 			show_fields[f.HideField][i] = {'funcName':'getDataOpts', 'f':f, 'sel':selected};
 		}
 
-        if ( f.Type == 'checkbox' || (f.Type == 'data-checkbox' && typeof(f.LinkedField) == 'undefined') ) {
+        if ( f.Type === 'checkbox' || (f.Type === 'data-checkbox' && typeof f.LinkedField === 'undefined') ) {
             show_fields[f.HideField][i] = false;
 
             var match = false;
             if ( selected !== '') {
-                if ( f.Condition == '!=' ) {
+                if ( f.Condition === '!=' ) {
                     show_fields[f.HideField][i] = true;
                 }
                 for ( var b = 0; b<selected.length; b++ ) {
                     match = operators(f.Condition, f.Value, selected[b]);
-                    if ( f.Condition == '!=' ) {
+                    if ( f.Condition === '!=' ) {
                         if ( show_fields[f.HideField][i] === true && match === false ) {
                             show_fields[f.HideField][i] = false;
                         }
@@ -340,25 +375,25 @@ function frmFrontFormJS(){
                     show_fields[f.HideField][i] = true;
                 }
             }
-        } else if ( typeof f.LinkedField != 'undefined' && f.Type.indexOf('data-') === 0 ) {
-			if ( typeof(f.DataType) == 'undefined' || f.DataType === 'data' ) {
+        } else if ( typeof f.LinkedField !== 'undefined' && f.Type.indexOf('data-') === 0 ) {
+			if ( typeof f.DataType === 'undefined' || f.DataType === 'data' ) {
                 if ( selected === '' ) {
                     hideAndClearDynamicField(f.hideContainerID, f.hideBy, f.HideField);
-    			} else if ( f.Type == 'data-radio' ) {
-                    if ( typeof f.DataType == 'undefined' ) {
+    			} else if ( f.Type === 'data-radio' ) {
+                    if ( typeof f.DataType === 'undefined' ) {
                         show_fields[f.HideField][i] = operators(f.Condition, f.Value, selected);
                     } else {
                         show_fields[f.HideField][i] = {'funcName':'getData','f':f,'sel':selected};
                     }
-                } else if ( f.Type == 'data-checkbox' || ( f.Type == 'data-select' && jQuery.isArray(selected) ) ) {
+                } else if ( f.Type === 'data-checkbox' || ( f.Type === 'data-select' && jQuery.isArray(selected) ) ) {
                     hideAndClearDynamicField(f.hideContainerID, f.hideBy, f.HideField);
     				show_fields[f.HideField][i] = true;
     				getData(f, selected, 1);
-                } else if ( f.Type == 'data-select' ) {
+                } else if ( f.Type === 'data-select' ) {
                     show_fields[f.HideField][i] = {'funcName':'getData','f':f,'sel':selected};
                 }
             }
-        }else if ( typeof(f.Value)=='undefined' && f.Type.indexOf('data') === 0 ) {
+        }else if ( typeof f.Value === 'undefined' && f.Type.indexOf('data') === 0 ) {
 			if ( selected === '' ) {
 				f.Value = '1';
 			} else {
@@ -374,7 +409,7 @@ function frmFrontFormJS(){
 	}
 
 	function hideAndClearDynamicField(hideContainer, hideBy, field_id){
-		if ( jQuery.inArray(hideContainer, hidden_fields) == -1 ) {
+		if ( jQuery.inArray(hideContainer, hidden_fields) === -1 ) {
 			hidden_fields[ field_id ] = hideContainer;
 			if(hideBy === '.'){
 				hideContainer = jQuery('.'+hideContainer);
@@ -388,7 +423,7 @@ function frmFrontFormJS(){
 
 	function hideAndClearField( container, f ) {
 		container.hide();
-		if ( jQuery.inArray(container.attr('id'), hidden_fields) == -1 ) {
+		if ( jQuery.inArray(container.attr('id'), hidden_fields) === -1 ) {
 			var field_id = f.HideField;
 			hidden_fields[ field_id ] = container.attr('id');
 
@@ -420,7 +455,7 @@ function frmFrontFormJS(){
 	}
 
 	function hideFieldNow(i, f, rec){
-		if ( f.MatchType == 'all' || show_fields[f.HideField][i] === false ) {
+		if ( f.MatchType === 'all' || show_fields[f.HideField][i] === false ) {
 			hide_later.push({
 				'result':show_fields[f.HideField][i], 'show':f.Show,
 				'match':f.MatchType, 'FieldName':f.FieldName, 'HideField':f.HideField,
@@ -430,7 +465,7 @@ function frmFrontFormJS(){
 		}
 
 		var display = 'none';
-		if ( f.Show == 'show' ) {
+		if ( f.Show === 'show' ) {
 			if ( show_fields[f.HideField][i] !== true ) {
 				showField(show_fields[f.HideField][i], f.FieldName, rec);
 				return;
@@ -450,7 +485,7 @@ function frmFrontFormJS(){
 		}else{
 			var hideMe = document.getElementById(f.hideContainerID);
 			if ( hideMe !== null ) {
-				if ( display == 'none' ) {
+				if ( display === 'none' ) {
 					hideAndClearField( jQuery(hideMe), f );
 				} else {
 					doCalcForSingleField( f.HideField );
@@ -462,23 +497,23 @@ function frmFrontFormJS(){
 
 	function hideFieldLater(rec){
 		jQuery.each(hide_later, function(hkey,hvalue){
-            if ( typeof hvalue == 'undefined' || typeof hvalue.result == 'undefined' ) {
+            if ( typeof hvalue === 'undefined' || typeof hvalue.result === 'undefined' ) {
                 return;
             }
 
 			var container = jQuery(hvalue.hideBy + hvalue.hideContainerID);
             var hideField = hvalue.show;
             if ( container.length ) {
-				if ( ( hvalue.match == 'any' && (jQuery.inArray(true, show_fields[hvalue.HideField]) == -1) ) ||
-					( hvalue.match == 'all' && (jQuery.inArray(false, show_fields[hvalue.HideField]) > -1) ) ) {
-                    if ( hvalue.show == 'show' ) {
+				if ( ( hvalue.match === 'any' && (jQuery.inArray(true, show_fields[hvalue.HideField]) === -1) ) ||
+					( hvalue.match === 'all' && (jQuery.inArray(false, show_fields[hvalue.HideField]) > -1) ) ) {
+                    if ( hvalue.show === 'show' ) {
                         hideField = 'hide';
                     } else {
                         hideField = 'show';
                     }
                 }
 
-                if ( hideField == 'show' ) {
+                if ( hideField === 'show' ) {
                     container.show();
                 } else {
 					hideAndClearField(container, hvalue);
@@ -494,13 +529,13 @@ function frmFrontFormJS(){
 	}
 
 	function operators(op, a, b){
-		if(typeof(b) == 'undefined'){
-			b='';
+		if ( typeof b === 'undefined' ) {
+			b = '';
 		}
 		if(jQuery.isArray(b) && jQuery.inArray(a,b) > -1){
 			b = a;
 		}
-		if(String(a).search(/^\s*(\+|-)?((\d+(\.\d+)?)|(\.\d+))\s*$/) != -1){
+		if(String(a).search(/^\s*(\+|-)?((\d+(\.\d+)?)|(\.\d+))\s*$/) !== -1){
 			a = parseFloat(a);
 			b = parseFloat(b);
 		}
@@ -1362,6 +1397,7 @@ function frmFrontFormJS(){
                 var checked = ['other'];
                 var fieldID;
                 var reset = 'reset';
+				addingRow = item.attr('id');
 
                 // hide fields with conditional logic
                 jQuery(html).find('input, select, textarea').each(function(){
@@ -1375,6 +1411,7 @@ function frmFrontFormJS(){
 						}
 					}
                 });
+				addingRow = '';
 
 				// check logic on fields outside of this section
 				var checkLen = r.logic.check.length;
