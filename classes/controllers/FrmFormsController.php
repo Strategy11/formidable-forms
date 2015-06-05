@@ -8,7 +8,6 @@ class FrmFormsController {
 	    add_filter('get_user_option_managetoplevel_page_formidablecolumnshidden', 'FrmFormsController::hidden_columns' );
 
 	    add_filter('manage_toplevel_page_formidable_columns', 'FrmFormsController::get_columns', 0 );
-        add_filter('manage_toplevel_page_formidable_sortable_columns', 'FrmFormsController::get_sortable_columns' );
     }
 
     public static function head() {
@@ -518,19 +517,9 @@ class FrmFormsController {
 
         $columns['created_at'] = __( 'Date', 'formidable' );
 
-        add_screen_option( 'per_page', array( 'label' => __( 'Forms', 'formidable' ), 'default' => 20, 'option' => 'formidable_page_formidable_per_page' ) );
+		add_screen_option( 'per_page', array( 'label' => __( 'Forms', 'formidable' ), 'default' => 20, 'option' => 'formidable_page_formidable_per_page' ) );
 
         return $columns;
-	}
-
-	public static function get_sortable_columns() {
-		return array(
-		    'id'            => 'id',
-			'name'          => 'name',
-			'description'   => 'description',
-			'form_key'      => 'form_key',
-			'created_at'    => 'created_at',
-		);
 	}
 
 	public static function hidden_columns( $result ) {

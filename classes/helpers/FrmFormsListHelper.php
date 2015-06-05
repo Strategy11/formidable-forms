@@ -158,6 +158,16 @@ class FrmFormsListHelper extends FrmListHelper {
 <?php
 	}
 
+	protected function get_sortable_columns() {
+		return array(
+		    'id'            => 'id',
+			'name'          => 'name',
+			'description'   => 'description',
+			'form_key'      => 'form_key',
+			'created_at'    => 'created_at',
+		);
+	}
+
 	public function get_views() {
 
 		$statuses = array(
