@@ -123,7 +123,7 @@ class FrmForm {
     public static function update( $id, $values, $create_link = false ) {
         global $wpdb;
 
-        if ( $create_link || isset($values['options']) || isset($values['item_meta']) || isset($values['field_options']) ) {
+        if ( ! isset( $values['status'] ) && ( $create_link || isset( $values['options'] ) || isset( $values['item_meta'] ) || isset( $values['field_options'] ) ) ) {
             $values['status'] = 'published';
         }
 
