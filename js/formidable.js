@@ -116,7 +116,7 @@ function frmFrontFormJS(){
 		/*jshint validthis:true */
 
 		var field_id = getFieldId( this );
-		if ( ! field_id || typeof field_id == 'undefined' ) {
+		if ( ! field_id || typeof field_id === 'undefined' ) {
 			return;
 		}
 
@@ -196,7 +196,7 @@ function frmFrontFormJS(){
 
 	function maybeSetRowId( parentField ) {
 		var isRepeat = false;
-		if ( addingRow == '' && typeof parentField !== 'undefined' && parentField !== null ) {
+		if ( addingRow === '' && typeof parentField !== 'undefined' && parentField !== null ) {
 			if ( parentField.length > 1 ) {
 				parentField = parentField.eq(0);
 			}
@@ -623,7 +623,7 @@ function frmFrontFormJS(){
 
 		var prev = [];
 		hiddenInput.each(function(){
-            if ( this.type == 'radio' || this.type == 'checkbox' ) {
+            if ( this.type === 'radio' || this.type === 'checkbox' ) {
                 if ( this.checked === true ) {
                     prev.push(jQuery(this).val());
                 }
@@ -696,7 +696,7 @@ function frmFrontFormJS(){
 
 					//select options that were selected previously
 					jQuery.each(prev, function(ckey,cval){
-                        if ( typeof(cval) == 'undefined' || cval === '' ) {
+                        if ( typeof(cval) === 'undefined' || cval === '' ) {
                             return;
                         }
 						if ( dataType == 'checkbox' || dataType == 'radio' ) {
@@ -733,14 +733,14 @@ function frmFrontFormJS(){
 	}
 
 	function doCalculation(field_id){
-		if ( typeof __FRMCALC == 'undefined' ) {
+		if ( typeof __FRMCALC === 'undefined' ) {
 			// there are no calculations on this page
 			return;
 		}
 
 		var all_calcs = __FRMCALC;
 		var calc = all_calcs.fields[field_id];
-		if ( typeof calc == 'undefined' ) {
+		if ( typeof calc === 'undefined' ) {
 			// this field is not used in a calculation
 			return;
 		}
@@ -826,13 +826,13 @@ function frmFrontFormJS(){
 	}
 
 	function doCalcForSingleField( field_id ) {
-		if ( typeof __FRMCALC == 'undefined' ) {
+		if ( typeof __FRMCALC === 'undefined' ) {
 			// there are no calculations on this page
 			return;
 		}
 		var all_calcs = __FRMCALC;
 		var field_key = all_calcs.fieldsWithCalc[ field_id ];
-		if ( typeof field_key == 'undefined' ) {
+		if ( typeof field_key === 'undefined' ) {
 			// this field has no calculation
 			return;
 		}
@@ -895,7 +895,7 @@ function frmFrontFormJS(){
 
 		// If hidden, check for a value
 		if ( currentOpt.type == 'hidden' ) {
-			if ( getOtherValueLimited( currentOpt ) != '' ) {
+			if ( getOtherValueLimited( currentOpt ) !== '' ) {
 				isOtherOpt = true;
 			}
 		} else if ( thisField.type == 'select' ) {
@@ -1121,6 +1121,23 @@ function frmFrontFormJS(){
 	}
 
     /* Google Tables */
+
+	function prepareGraphTypes( graphs, graphType ) {
+		for ( var num = 0; num < graphs.length; num++ ) {
+			prepareGraphs( graphs[num], graphType );
+		}
+	}
+
+	function prepareGraphs( opts, type ) {
+		google.load('visualization', '1.0', {'packages':[type], 'callback': function(){
+			if ( type == 'table' ) {
+				compileGoogleTable( opts );
+			} else {
+				compileGraph( opts );
+			}
+		}});
+	}
+
     function compileGoogleTable(opts){
         var data = new google.visualization.DataTable();
 
@@ -1650,19 +1667,20 @@ function frmFrontFormJS(){
 			}
 		},
 
-        generateGoogleTable: function(num, type){
-            var graphs = __FRMTABLES;
-    		if ( typeof graphs == 'undefined' ) {
-    			// there are no tables on this page
-    			return;
-    		}
-
-            if(type == 'table'){
-                compileGoogleTable(graphs.table[num]);
-            }else{
-                compileGraph(graphs[type][num]);
-            }
-        },
+		loadGoogle: function(){
+			if ( typeof google !== 'undefined' && google && google.load ) {
+				console.log('load');
+				var graphs = __FRMTABLES;
+				var packages = Object.keys( graphs );
+				//google.load('visualization', '1.0', {'packages':packages});
+				for ( var i = 0; i < packages.length; i++ ) {
+					prepareGraphTypes( graphs[ packages[i] ], packages[i] );
+				}
+			} else {
+				console.log('timeout');
+				setTimeout( frmFrontForm.loadGoogle, 30 );
+			}
+		},
 		
 		/* Time fields */
 		removeUsedTimes: function(obj, timeField){
