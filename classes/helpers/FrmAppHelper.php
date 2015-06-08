@@ -43,6 +43,11 @@ class FrmAppHelper {
         return $url;
     }
 
+    public static function relative_plugin_url( $url = '' ) {
+        $url = self::plugin_url( $url );
+		return str_replace( array( 'https:', 'http:' ), '', $url );
+    }
+
     /**
      * @return string Site URL
      */

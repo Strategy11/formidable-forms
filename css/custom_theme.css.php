@@ -562,7 +562,7 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
 /* End Calendar Styling */
 
 .frm-loading-img{
-    background:url(<?php echo FrmAppHelper::plugin_url() ?>/images/ajax_loader.gif) no-repeat center center;
+    background:url(<?php echo FrmAppHelper::relative_plugin_url() ?>/images/ajax_loader.gif) no-repeat center center;
     padding:6px 12px;
 }
 
@@ -1356,7 +1356,7 @@ html[xmlns] .frm_clearfix{
     width:12px;
     height:12px;
     font-size:1px;
-    background:url('<?php echo FrmAppHelper::plugin_url() ?>/pro/images/chosen-sprite.png') -42px 1px no-repeat;
+    background:url('<?php echo FrmAppHelper::relative_plugin_url() ?>/pro/images/chosen-sprite.png') -42px 1px no-repeat;
 }
 
 .with_frm_style .chosen-container-single .chosen-single abbr:hover{
@@ -1377,7 +1377,7 @@ html[xmlns] .frm_clearfix{
 }
 
 .with_frm_style .chosen-container-single .chosen-single div b{
-    background:url('<?php echo FrmAppHelper::plugin_url() ?>/pro/images/chosen-sprite.png') no-repeat 0px 2px;
+    background:url('<?php echo FrmAppHelper::relative_plugin_url() ?>/pro/images/chosen-sprite.png') no-repeat 0px 2px;
     display:block;
     width:100%;
     height:100%;
@@ -1397,8 +1397,8 @@ html[xmlns] .frm_clearfix{
     box-sizing:border-box;
     width:100%;
     height:auto;
-    background:white url('<?php echo FrmAppHelper::plugin_url() ?>/pro/images/chosen-sprite.png') no-repeat 100% -20px;
-    background:url('<?php echo FrmAppHelper::plugin_url() ?>/pro/images/chosen-sprite.png') no-repeat 100% -20px;
+    background:white url('<?php echo FrmAppHelper::relative_plugin_url() ?>/pro/images/chosen-sprite.png') no-repeat 100% -20px;
+    background:url('<?php echo FrmAppHelper::relative_plugin_url() ?>/pro/images/chosen-sprite.png') no-repeat 100% -20px;
     font-size:1em;
     font-family:sans-serif;
     line-height:normal;
@@ -1541,7 +1541,7 @@ html[xmlns] .frm_clearfix{
     display:block;
     width:12px;
     height:12px;
-    background:url('<?php echo FrmAppHelper::plugin_url() ?>/pro/images/chosen-sprite.png') -42px 1px no-repeat;
+    background:url('<?php echo FrmAppHelper::relative_plugin_url() ?>/pro/images/chosen-sprite.png') -42px 1px no-repeat;
     font-size:1px;
 }
 
@@ -1681,7 +1681,7 @@ html[xmlns] .frm_clearfix{
 
 .with_frm_style .chosen-rtl .chosen-search input[type="text"]{
     padding:4px 5px 4px 20px;
-    background:white url('<?php echo FrmAppHelper::plugin_url() ?>/pro/images/chosen-sprite.png') no-repeat -30px -20px;background:url('<?php echo FrmAppHelper::plugin_url() ?>/pro/images/chosen-sprite.png') no-repeat -30px -20px;
+    background:white url('<?php echo FrmAppHelper::relative_plugin_url() ?>/pro/images/chosen-sprite.png') no-repeat -30px -20px;background:url('<?php echo FrmAppHelper::relative_plugin_url() ?>/pro/images/chosen-sprite.png') no-repeat -30px -20px;
     direction:rtl;
 }
 
@@ -1697,8 +1697,8 @@ html[xmlns] .frm_clearfix{
 /* Fonts */
 @font-face {
 	font-family:'s11-fp';
-	src:url('<?php echo FrmAppHelper::plugin_url() ?>/fonts/s11-fp.eot');
-	src:local('☺'), url('<?php echo FrmAppHelper::plugin_url() ?>/fonts/s11-fp.woff') format('woff'), url('<?php echo FrmAppHelper::plugin_url() ?>/fonts/s11-fp.ttf') format('truetype'), url('<?php echo FrmAppHelper::plugin_url() ?>/fonts/s11-fp.svg') format('svg');
+	src:url('<?php echo FrmAppHelper::relative_plugin_url() ?>/fonts/s11-fp.eot');
+	src:local('☺'), url('<?php echo FrmAppHelper::relative_plugin_url() ?>/fonts/s11-fp.woff') format('woff'), url('<?php echo FrmAppHelper::relative_plugin_url() ?>/fonts/s11-fp.ttf') format('truetype'), url('<?php echo FrmAppHelper::relative_plugin_url() ?>/fonts/s11-fp.svg') format('svg');
 	font-weight:normal;
 	font-style:normal;
 }
@@ -1714,7 +1714,7 @@ html[xmlns] .frm_clearfix{
     .with_frm_style .chosen-container-multi .chosen-choices .search-choice .search-choice-close,
     .with_frm_style .chosen-container .chosen-results-scroll-down span,
     .with_frm_style .chosen-container .chosen-results-scroll-up span{
-        background-image:url('<?php echo FrmAppHelper::plugin_url() ?>/pro/images/chosen-sprite2x.png') !important;
+        background-image:url('<?php echo FrmAppHelper::relative_plugin_url() ?>/pro/images/chosen-sprite2x.png') !important;
         background-size:52px 37px !important;
         background-repeat:no-repeat !important;
     }
