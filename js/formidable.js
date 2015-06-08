@@ -433,6 +433,12 @@ function frmFrontFormJS(){
 				inputs.not(':checkbox, :radio, select').val('');
 				var i = false;
 				inputs.each(function(){
+					if ( this.tagName == 'SELECT' ) {
+						var autocomplete = document.getElementById( this.id + '_chosen' );
+						if ( autocomplete !== null ) {
+							jQuery(this).trigger('chosen:updated');
+						}
+					}
 					setDefaultValue( jQuery(this) );
 					if ( i === false ) {
 						jQuery(this).trigger({type:'change', frmTriggered:'dependent', selfTriggered:true});
