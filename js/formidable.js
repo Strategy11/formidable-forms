@@ -200,7 +200,7 @@ function frmFrontFormJS(){
 			if ( parentField.length > 1 ) {
 				parentField = parentField.eq(0);
 			}
-			isRepeat = parentField.closest('.frm_repeat_sec');
+			isRepeat = parentField.closest('.frm_repeat_sec, .frm_repeat_inline, .frm_repeat_grid');
 			if ( typeof isRepeat !== 'undefined' ) {
 				addingRow = isRepeat.attr('id');
 				isRepeat = true;
@@ -261,7 +261,7 @@ function frmFrontFormJS(){
             // Accommodate for "other" options
             f.inputName = parentField.attr('name').replace( '[other]', '' ).replace('[]', '');
 
-            var container = parentField.closest('.frm_repeat_sec');
+            var container = parentField.closest('.frm_repeat_sec, .frm_repeat_inline, .frm_repeat_grid');
             if ( container.length ) {
                 var repeatInput = container.find('.frm_field_'+ f.FieldName +'_container');
                 f.containerID = repeatInput.attr('id');
