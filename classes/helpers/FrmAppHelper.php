@@ -174,6 +174,10 @@ class FrmAppHelper {
         return ( is_array( $value ) && empty( $value ) ) || $value == $empty;
     }
 
+    public static function is_not_empty_value( $value, $empty = '' ) {
+        return ! self::is_empty_value( $value, $empty );
+    }
+
     /**
      * Get any value from the $_SERVER
      *

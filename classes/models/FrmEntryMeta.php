@@ -11,13 +11,13 @@ class FrmEntryMeta {
     public static function add_entry_meta($entry_id, $field_id, $meta_key = null, $meta_value) {
         global $wpdb;
 
-        if ( ( is_array( $meta_value ) && empty( $meta_value ) ) || ( ! is_array( $meta_value ) && trim( $meta_value ) == '' ) ) {
+        if ( FrmAppHelper::is_empty_value( $meta_value ) ) {
             // don't save blank fields
             return;
         }
 
         $new_values = array(
-            'meta_value'    => is_array($meta_value) ? serialize(array_filter($meta_value)) : trim($meta_value),
+			'meta_value'    => is_array( $meta_value ) ? serialize( array_filter( $meta_value, 'FrmAppHelper::is_not_empty_value' ) ) : trim( $meta_value ),
             'item_id'       => $entry_id,
             'field_id'      => $field_id,
             'created_at'    => current_time('mysql', 1),
@@ -51,7 +51,7 @@ class FrmEntryMeta {
         $values['meta_value'] = $meta_value;
         $values = apply_filters('frm_update_entry_meta', $values);
 		if ( is_array($values['meta_value']) ) {
-			$values['meta_value'] = array_filter($values['meta_value']);
+			$values['meta_value'] = array_filter( $values['meta_value'], 'FrmAppHelper::is_not_empty_value' );
 		}
         $meta_value = maybe_serialize($values['meta_value']);
 
