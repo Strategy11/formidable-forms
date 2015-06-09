@@ -1283,6 +1283,10 @@ html[xmlns] .frm_clearfix{
 }
 
 /* Login form */
+.with_frm_style.frm_login_form.frm_inline_login .login-remember input{
+	vertical-align:baseline;
+}
+
 .with_frm_style.frm_login_form.frm_inline_login label{
 	display:inline;
 }
@@ -1292,6 +1296,15 @@ html[xmlns] .frm_clearfix{
 .with_frm_style.frm_login_form.frm_inline_login .login-remember{
 	float:left;
 	margin-right:5px;
+}
+
+.with_frm_style.frm_login_form.frm_inline_login form{
+	position:relative;
+}
+
+.with_frm_style.frm_login_form.frm_inline_login .login-remember{
+	position:absolute;
+	top:35px;
 }
 
 .with_frm_style.frm_login_form.frm_inline_login input[type=submit]{
