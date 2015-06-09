@@ -284,7 +284,7 @@ class FrmFieldsController {
 		$ids = explode( '-', $element_id );
 		$id = FrmAppHelper::get_post_param( 'field_id', 0, 'absint' );
 
-		$orig_update_value = $update_value = trim( FrmAppHelper::get_post_param( 'update_value', '', 'wp_kses_post' ) );
+		$orig_update_value = $update_value = trim( FrmAppHelper::get_post_param( 'update_value' ) );
 		if ( strpos( $element_id, 'key_' ) ) {
             $new_value = $update_value;
         } else {
