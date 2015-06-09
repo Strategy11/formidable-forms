@@ -1828,6 +1828,10 @@ html[xmlns] .frm_clearfix{
         float: none;
         display:block;
     }
+
+	.frm_form_field input[type=file] {
+		width:200px;
+	}
 }
 <?php
 echo $defaults['custom_css'];
