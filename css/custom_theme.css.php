@@ -1282,6 +1282,40 @@ html[xmlns] .frm_clearfix{
     height:1%;
 }
 
+/* Login form */
+.with_frm_style.frm_login_form.frm_inline_login label{
+	display:inline;
+}
+
+.with_frm_style.frm_login_form.frm_inline_login .login-username,
+.with_frm_style.frm_login_form.frm_inline_login .login-password,
+.with_frm_style.frm_login_form.frm_inline_login .login-remember{
+	float:left;
+	margin-right:5px;
+}
+
+.with_frm_style.frm_login_form.frm_inline_login input[type=submit]{
+	margin:0 !important;
+}
+
+.with_frm_style.frm_login_form.frm_inline_login.frm_no_labels .login-username label,
+.with_frm_style.frm_login_form.frm_inline_login.frm_no_labels .login-password label{
+	display:none;
+}
+
+.with_frm_style.frm-open-login{
+	float:left;
+	margin-right:15px;
+}
+
+.with_frm_style.frm-open-login a{
+	text-decoration:none;
+}
+
+.with_frm_style.frm_slide.frm_login_form form{
+	display:none;
+}
+
 /* Start Chosen */
 .with_frm_style .chosen-container{
     font-size:<?php echo $defaults['field_font_size'] ?>;
