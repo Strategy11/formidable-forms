@@ -1303,12 +1303,12 @@ html[xmlns] .frm_clearfix{
 	display:none;
 }
 
-.with_frm_style.frm-open-login{
+.with_frm_style .frm-open-login{
 	float:left;
 	margin-right:15px;
 }
 
-.with_frm_style.frm-open-login a{
+.with_frm_style .frm-open-login a{
 	text-decoration:none;
 }
 
