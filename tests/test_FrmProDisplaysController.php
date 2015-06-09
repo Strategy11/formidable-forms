@@ -40,8 +40,8 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		$this->assertNotEmpty( $old_id, 'That view does not have an old ID.');
 
 		$view = do_shortcode( '[display-frm-data id=' . $old_id . ']' );
-		$result = strpos( $view, 'All Entries' ) || strpos( $view, 'No Entries Found' );
-		$this->assertTrue( $result, 'View with old ID is not loading.');
+		$result = strpos( $view, 'All Entries' ) !== false || strpos( $view, 'No Entries Found' ) !== false;
+		$this->assertTrue( $result, 'View with old ID ' . $old_id . ' is not loading.');
 
 		// Check that old single entry View settings ($display->frm_entry_id) still work
 		$single_view = get_posts( array(
