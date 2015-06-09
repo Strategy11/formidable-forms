@@ -6,6 +6,7 @@ $display = apply_filters('frm_display_field_options', array(
     'description' => true, 'options' => true, 'label_position' => true,
     'invalid' => false, 'size' => false, 'clear_on_focus' => false,
     'default_blank' => true, 'css' => true, 'conf_field' => false,
+	'max' => true,
 ));
 
 $li_classes = 'form-field edit_form_item frm_field_box frm_top_container frm_not_divider edit_field_type_'. $display['type'];
@@ -252,8 +253,9 @@ if ( $display['options'] ) { ?>
 						} else { ?>
                                 <input type="text" name="field_options[size_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['size'] ); ?>" size="5" /> <span class="howto"><?php _e( 'pixels wide', 'formidable' ) ?></span>
 
+								<?php if ( $display['max'] ) { ?>
                                 <input type="text" name="field_options[max_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['max'] ); ?>" size="5" /> <span class="howto"><?php echo ( $field['type'] == 'textarea' || $field['type'] == 'rte' ) ? __( 'rows high', 'formidable' ) : __( 'characters maximum', 'formidable' ) ?></span>
-                        <?php
+                        <?php	}
                         } ?>
                         </td>
                     </tr>
