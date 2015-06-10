@@ -1830,7 +1830,7 @@ html[xmlns] .frm_clearfix{
     }
 
 	.frm_form_field input[type=file] {
-		width:200px;
+		max-width:220px;
 	}
 }
 <?php
