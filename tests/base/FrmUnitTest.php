@@ -76,6 +76,19 @@ class FrmUnitTest extends WP_UnitTestCase {
         $this->assertEquals( $form->form_key, 'contact-db12' );
     }
 
+	function get_all_fields_for_form_key( $form_key ) {
+		$field_totals = array( $this->all_fields_form_key => 44, $this->create_post_form_key => 10, $this->contact_form_key => 8 );
+		$expected_field_num = isset( $field_totals[ $form_key ] ) ? $field_totals[ $form_key ] : 0;
+
+		$form_id = $this->factory->form->get_id_by_key( $form_key );
+		$fields = FrmField::get_all_for_form( $form_id, '', 'include' );
+
+		$actual_field_num = count( $fields );
+		$this->assertEquals( $actual_field_num, $expected_field_num, $actual_field_num . ' fields were retrieved for ' . $form_key . ' form, but ' . $expected_field_num . ' were expected. This could mean that certain fields were not imported correctly.');
+
+		return $fields;
+	}
+
 	/**
 	* Set the global current user to 1
 	*/

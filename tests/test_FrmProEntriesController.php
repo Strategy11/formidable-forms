@@ -74,7 +74,6 @@ SCRIPT;
 
 		$args['field_count'] = $args['entry_count'] = 0;
 		self::_set_and_check_expectations( $args );
-		// Set current post?
 
 		if ( $form_key == $this->all_fields_form_key ) {
 			$fields = '493ito,p3eiuk,uc580i,4t3qo4,e9ul34,gbm7pi';
@@ -112,23 +111,20 @@ SCRIPT;
 	function _set_and_check_expectations( &$args ) {
 		if ( $args['form_key'] == $this->all_fields_form_key ) {
 			$expected_entry_count = 3;
-			$expected_field_count = 33 + 3 + 8;
 		} else {
 			$expected_entry_count = 0;
-			$expected_field_count = 10;
 		}
 		$args['entry_count'] = FrmEntry::getRecordCount( $args['form_id'] );
 		$this->assertTrue( $args['entry_count'] == $expected_entry_count, 'Entries are not being retrieved correctly. Retrieved ' . $args['entry_count'] . ' but should have ' . $expected_entry_count . ' for form ' . $args['form_key'] );
 
 		// Get number of fields in form (exlcluding no_save_fields)
-		$args['field_count'] = self::_get_field_count( $args['form_id'], $expected_field_count );
+		$args['field_count'] = self::_get_field_count( $args['form_key'] );
 	}
 
-	function _get_field_count( $form_id, $expected ) {
+	function _get_field_count( $form_key ) {
 		// Get all fields in form
-		$all_fields = FrmField::get_all_for_form( $form_id, '', 'include' );
+		$all_fields = $this->get_all_fields_for_form_key( $form_key );
 		$field_count = count( $all_fields );
-		$this->assertTrue( $field_count == $expected, 'Fields are not being retrieved correctly. Retrieved ' . $field_count . ', but should have ' . $expected );
 
 		// Remove excluded field types from field count
 		$exclude_fields = FrmField::no_save_fields();
@@ -143,8 +139,7 @@ SCRIPT;
 
 	function _test_params( $args ) {
 		if ( $args['form_key'] == $this->all_fields_form_key ) {
-			$embed_form_id = $this->factory->form->get_id_by_key( $this->contact_form_key );
-			$embed_form_field_count = self::_get_field_count( $embed_form_id, 8 );
+			$embed_form_field_count = self::_get_field_count( $this->contact_form_key  );
 		}
 
 		$args['current_params'] = '';
