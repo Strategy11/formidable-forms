@@ -295,7 +295,7 @@ class FrmXMLHelper {
 				$repeat_field = FrmField::getOne( $repeat_field_id );
 				$field_opts = maybe_unserialize( $repeat_field->field_options );
 
-				if ( ! $imported_forms[ $old_form_id ] ) {
+				if ( ! isset( $imported_forms[ $old_form_id ] ) ) {
 					return;
 				}
 				$field_opts['form_select'] = $imported_forms[ $old_form_id ];
@@ -315,8 +315,8 @@ class FrmXMLHelper {
 	* @param array $repeat_fields - pass by reference
 	*/
 	private static function track_repeating_fields( $f, $repeat_field_id, &$repeat_fields ) {
-		if ( FrmField::is_repeating_field( $f ) || $f['type'] == 'form' ) {
-			$old_form_id = $f['field_options']['form_select'];
+		if ( ( $f['type'] == 'divider' && FrmField::is_option_true( $f['field_options'], 'repeat' ) ) || $f['type'] == 'form' ) {
+			$old_form_id = trim( $f['field_options']['form_select'] );
 			if ( ! isset( $repeat_fields[ $old_form_id ] ) ) {
 				$repeat_fields[ $old_form_id ] = array();
 			}
