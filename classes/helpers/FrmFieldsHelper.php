@@ -767,7 +767,7 @@ DEFAULT_HTML;
 
                     $sep = isset($atts['sep']) ? $atts['sep'] : ', ';
 
-                    $replace_with = FrmEntryMeta::get_entry_meta_by_field($entry->id, $field->id);
+                    $replace_with = FrmEntryMeta::get_meta_value( $entry, $field->id );
 
                     $atts['entry_id'] = $entry->id;
                     $atts['entry_key'] = $entry->item_key;

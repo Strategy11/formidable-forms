@@ -982,7 +982,7 @@ class FrmAppHelper {
                 }
 				$meta_value = FrmProEntryMetaHelper::get_post_value( $record->post_id, $field->field_options['post_field'], $field->field_options['custom_field'], array( 'truncate' => false, 'type' => $field->type, 'form_id' => $field->form_id, 'field' => $field ) );
             } else {
-                $meta_value = self::get_meta_value($field->id, $record);
+				$meta_value = FrmEntryMeta::get_meta_value( $record, $field->id );
             }
         }
 
@@ -1095,16 +1095,10 @@ class FrmAppHelper {
         }
     }
 
-    /**
-     * @return string
-     */
-    public static function get_meta_value($field_id, $entry) {
-        if ( isset($entry->metas) ) {
-            return isset( $entry->metas[ $field_id ] ) ? $entry->metas[ $field_id ] : false;
-        } else {
-            return FrmEntryMeta::get_entry_meta_by_field($entry->id, $field_id);
-        }
-    }
+	public static function get_meta_value( $field_id, $entry ) {
+		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmEntryMeta::get_meta_value' );
+		return FrmEntryMeta::get_meta_value( $entry, $field_id );
+	}
 
     public static function insert_opt_html($args) {
         $class = '';
