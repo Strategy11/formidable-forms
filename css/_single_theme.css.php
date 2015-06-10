@@ -894,7 +894,7 @@ if ( ! $submit_style ) { ?>
 	}
 
 	.<?php echo $style_class ?> .frm_form_field.frm_last.frm_repeat_buttons label.frm_primary_label{
-		display:none;
+		display:none !important;
 	}
 
 	.<?php echo $style_class ?> .frm_repeat_inline,
