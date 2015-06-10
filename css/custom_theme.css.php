@@ -137,6 +137,10 @@ legend.frm_hidden{
     width:auto;
 }
 
+.with_frm_style .frm_repeat_buttons{
+	white-space:nowrap;
+}
+
 .with_frm_style .frm_button{
     text-decoration:none;
     border:1px solid #eee;
