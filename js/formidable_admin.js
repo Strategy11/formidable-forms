@@ -1724,8 +1724,8 @@ function frmAdminBuildJS(){
 
 	function checkCSVExtension(){
 		var f = jQuery(this).val();
-		var re = /\..+$/;
-		if (f.match(re) == '.csv' || f.match(re) == '.CSV'){
+		var re = /\.csv$/i;
+		if(f.match(re) !== null){
 			jQuery('.show_csv').fadeIn();
 		}else{
 			jQuery('.show_csv').fadeOut();
