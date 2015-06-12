@@ -757,25 +757,18 @@ function frmAdminBuildJS(){
 	function toggleRepeat(){
 		var field_id = jQuery(this).closest('li.frm_field_box').data('fid');
 		var main_form_id = jQuery('input[name="id"]').val();
+		var prev_form = jQuery('input[name="field_options[form_select_'+field_id+']"]').val();
 
 		if(this.checked){
 			jQuery('#frm_field_id_'+field_id+' .show_repeat_sec').fadeIn('slow');
 			jQuery(this).closest('li.frm_field_box').addClass('repeat_section').removeClass('no_repeat_section');
-			var form_id = jQuery('input[name="field_options[form_select_'+field_id+']"]').val();
-			var prev_form = jQuery('#frm_field_id_'+field_id).data('formid');
 
-			if(main_form_id == prev_form){
-				//create form
-				toggleFormid(field_id, '', main_form_id, 1);
-			}else{
-				toggleFormid(field_id, prev_form, main_form_id, 1);
-			}
+			toggleFormid(field_id, prev_form, main_form_id, 1);
 		}else{
 			if(confirm(frm_admin_js.conf_no_repeat)){
 				jQuery('#frm_field_id_'+field_id+' .show_repeat_sec').fadeOut('slow');
 				jQuery(this).closest('li.frm_field_box').removeClass('repeat_section').addClass('no_repeat_section');
-
-				toggleFormid(field_id, main_form_id, main_form_id, 0);
+				toggleFormid(field_id, prev_form, main_form_id, 0);
 			}else{
 				this.checked = true;
 			}
