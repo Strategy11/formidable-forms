@@ -130,6 +130,7 @@ legend.frm_hidden{
     border:none;
 }
 
+.with_frm_style .auto_width #loginform input,
 .with_frm_style .auto_width input,
 .with_frm_style input.auto_width,
 .with_frm_style select.auto_width,
@@ -1835,6 +1836,19 @@ html[xmlns] .frm_clearfix{
 
 	.frm_form_field input[type=file] {
 		max-width:220px;
+	}
+
+	.with_frm_style.frm_login_form.frm_inline_login p{
+		clear:both;
+		float:none;
+	}
+
+	.with_frm_style.frm_login_form.frm_inline_login form{
+		position:static;
+	}
+
+	.with_frm_style.frm_login_form.frm_inline_login .login-remember{
+		position:static;
 	}
 }
 <?php
