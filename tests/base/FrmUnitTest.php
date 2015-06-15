@@ -8,6 +8,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 	protected $user_id = 0;
 	protected $contact_form_key = 'contact-with-email';
 	protected $all_fields_form_key = 'all_field_types';
+	protected $repeat_sec_form_key = 'rep_sec_form';
 	protected $create_post_form_key = 'create-a-post';
 	protected $is_pro_active = false;
 
@@ -77,7 +78,7 @@ class FrmUnitTest extends WP_UnitTestCase {
     }
 
 	function get_all_fields_for_form_key( $form_key ) {
-		$field_totals = array( $this->all_fields_form_key => 44, $this->create_post_form_key => 10, $this->contact_form_key => 8 );
+		$field_totals = array( $this->all_fields_form_key => 44, $this->create_post_form_key => 10, $this->contact_form_key => 8, $this->repeat_sec_form_key => 3 );
 		$expected_field_num = isset( $field_totals[ $form_key ] ) ? $field_totals[ $form_key ] : 0;
 
 		$form_id = $this->factory->form->get_id_by_key( $form_key );
@@ -85,6 +86,16 @@ class FrmUnitTest extends WP_UnitTestCase {
 
 		$actual_field_num = count( $fields );
 		$this->assertEquals( $actual_field_num, $expected_field_num, $actual_field_num . ' fields were retrieved for ' . $form_key . ' form, but ' . $expected_field_num . ' were expected. This could mean that certain fields were not imported correctly.');
+
+		return $fields;
+	}
+
+	function get_all_field_types_for_form_key( $form_key, $expected_field_num, $type ) {
+		$form_id = $this->factory->form->get_id_by_key( $form_key );
+		$fields = FrmField::get_all_types_in_form( $form_id, $type );
+
+		$actual_field_num = count( $fields );
+		$this->assertEquals( $actual_field_num, $expected_field_num, $actual_field_num . ' ' . $type . ' fields were retrieved for ' . $form_key . ' form, but ' . $expected_field_num . ' were expected. This could mean that certain fields were not imported correctly.');
 
 		return $fields;
 	}
