@@ -96,8 +96,13 @@ class FrmEntry {
             return false;
         }
 
+		$duplicate_entry_time = apply_filters( 'frm_time_to_check_duplicates', 60, $new_values );
+		if ( empty( $duplicate_entry_time ) ) {
+			return false;
+		}
+
         $check_val = $new_values;
-		$check_val['created_at >'] = date( 'Y-m-d H:i:s', ( strtotime( $new_values['created_at'] ) - 60 ) );
+		$check_val['created_at >'] = date( 'Y-m-d H:i:s', ( strtotime( $new_values['created_at'] ) - absint( $duplicate_entry_time ) ) );
 
 		unset( $check_val['created_at'], $check_val['updated_at'] );
 		unset( $check_val['is_draft'], $check_val['id'], $check_val['item_key'] );
