@@ -238,10 +238,6 @@ function frmFrontFormJS(){
 	}
 
 	function hideOrShowField(i, f, field_id, selected, rec, parentField){
-		if ( typeof show_fields[f.HideField] === 'undefined' ) {
-			show_fields[f.HideField] = [];
-		}
-
         f.inputName = 'item_meta['+ f.FieldName +']';
         f.hiddenName = 'item_meta['+ f.HideField +']';
         f.containerID = 'frm_field_'+ f.FieldName +'_container';
@@ -269,6 +265,7 @@ function frmFrontFormJS(){
                 f.hiddenName = f.inputName.replace('['+ f.FieldName +']', '['+ f.HideField +']');
             }
         } else {
+			setEmptyKeyInArray(f);
             getRepeat = true;
             parentField = jQuery('input[name^="'+ f.inputName +'"], textarea[name^="'+ f.inputName +'"], select[name^="'+ f.inputName +'"]');
 
@@ -296,7 +293,7 @@ function frmFrontFormJS(){
 							hideOrShowField(i, f, field_id, selected, rec, parentField);
 						}
 					} else {
-						show_fields[f.HideField][i] = false;
+						show_fields[f.hideContainerID][i] = false;
 						hideFieldNow(i, f, rec);
 					}
 					return;
@@ -307,6 +304,8 @@ function frmFrontFormJS(){
 				parentField = parentField.eq(0);
             }
         }
+
+		setEmptyKeyInArray(f);
 
 		// check if only the dependent field is in a repeating section
 		var hideContainer = document.getElementById(f.hideContainerID);
@@ -327,6 +326,9 @@ function frmFrontFormJS(){
 		}
 
 		if ( typeof selected === 'undefined' ) {
+			if ( parentField.length === 0 ) {
+				return; // the parent field is currently getting processed
+			}
 			selected = parentField.val();
         }
 
@@ -357,33 +359,33 @@ function frmFrontFormJS(){
         }
 
 		if ( selected === '' || selected.length < 1 ) {
-			show_fields[f.HideField][i] = false;
+			show_fields[f.hideContainerID][i] = false;
 		} else {
-			show_fields[f.HideField][i] = {'funcName':'getDataOpts', 'f':f, 'sel':selected};
+			show_fields[f.hideContainerID][i] = {'funcName':'getDataOpts', 'f':f, 'sel':selected};
 		}
 
         if ( f.Type === 'checkbox' || (f.Type === 'data-checkbox' && typeof f.LinkedField === 'undefined') ) {
-            show_fields[f.HideField][i] = false;
+            show_fields[f.hideContainerID][i] = false;
 
             var match = false;
             if ( selected !== '') {
                 if ( f.Condition === '!=' ) {
-                    show_fields[f.HideField][i] = true;
+                    show_fields[f.hideContainerID][i] = true;
                 }
                 for ( var b = 0; b<selected.length; b++ ) {
                     match = operators(f.Condition, f.Value, selected[b]);
                     if ( f.Condition === '!=' ) {
-                        if ( show_fields[f.HideField][i] === true && match === false ) {
-                            show_fields[f.HideField][i] = false;
+                        if ( show_fields[f.hideContainerID][i] === true && match === false ) {
+                            show_fields[f.hideContainerID][i] = false;
                         }
-                    } else if(show_fields[f.HideField][i] === false && match){
-                        show_fields[f.HideField][i] = true;
+                    } else if(show_fields[f.hideContainerID][i] === false && match){
+                        show_fields[f.hideContainerID][i] = true;
                     }
                 }
             } else {
                 match = operators(f.Condition, f.Value, '');
-                if(show_fields[f.HideField][i] === false && match){
-                    show_fields[f.HideField][i] = true;
+                if(show_fields[f.hideContainerID][i] === false && match){
+                    show_fields[f.hideContainerID][i] = true;
                 }
             }
         } else if ( typeof f.LinkedField !== 'undefined' && f.Type.indexOf('data-') === 0 ) {
@@ -392,16 +394,16 @@ function frmFrontFormJS(){
                     hideAndClearDynamicField(f.hideContainerID, f.hideBy, f.HideField);
     			} else if ( f.Type === 'data-radio' ) {
                     if ( typeof f.DataType === 'undefined' ) {
-                        show_fields[f.HideField][i] = operators(f.Condition, f.Value, selected);
+                        show_fields[f.hideContainerID][i] = operators(f.Condition, f.Value, selected);
                     } else {
-                        show_fields[f.HideField][i] = {'funcName':'getData','f':f,'sel':selected};
+                        show_fields[f.hideContainerID][i] = {'funcName':'getData','f':f,'sel':selected};
                     }
                 } else if ( f.Type === 'data-checkbox' || ( f.Type === 'data-select' && jQuery.isArray(selected) ) ) {
                     hideAndClearDynamicField(f.hideContainerID, f.hideBy, f.HideField);
-    				show_fields[f.HideField][i] = true;
+    				show_fields[f.hideContainerID][i] = true;
     				getData(f, selected, 1);
                 } else if ( f.Type === 'data-select' ) {
-                    show_fields[f.HideField][i] = {'funcName':'getData','f':f,'sel':selected};
+                    show_fields[f.hideContainerID][i] = {'funcName':'getData','f':f,'sel':selected};
                 }
             }
         }else if ( typeof f.Value === 'undefined' && f.Type.indexOf('data') === 0 ) {
@@ -410,13 +412,19 @@ function frmFrontFormJS(){
 			} else {
 				f.Value = selected;
 			}
-			show_fields[f.HideField][i] = operators(f.Condition, f.Value, selected);
+			show_fields[f.hideContainerID][i] = operators(f.Condition, f.Value, selected);
 			f.Value = undefined;
 		}else{
-			show_fields[f.HideField][i] = operators(f.Condition, f.Value, selected);
+			show_fields[f.hideContainerID][i] = operators(f.Condition, f.Value, selected);
         }
 
 		hideFieldNow(i, f, rec);
+	}
+
+	function setEmptyKeyInArray(f) {
+		if ( typeof show_fields[f.hideContainerID] === 'undefined' ) {
+			show_fields[f.hideContainerID] = [];
+		}
 	}
 
 	function hideAndClearDynamicField(hideContainer, hideBy, field_id){
@@ -472,9 +480,9 @@ function frmFrontFormJS(){
 	}
 
 	function hideFieldNow(i, f, rec){
-		if ( f.MatchType === 'all' || show_fields[f.HideField][i] === false ) {
+		if ( f.MatchType === 'all' || show_fields[f.hideContainerID][i] === false ) {
 			hide_later.push({
-				'result':show_fields[f.HideField][i], 'show':f.Show,
+				'result':show_fields[f.hideContainerID][i], 'show':f.Show,
 				'match':f.MatchType, 'FieldName':f.FieldName, 'HideField':f.HideField,
 				'hideContainerID':f.hideContainerID, 'hideBy':f.hideBy
 			});
@@ -483,8 +491,8 @@ function frmFrontFormJS(){
 
 		var display = 'none';
 		if ( f.Show === 'show' ) {
-			if ( show_fields[f.HideField][i] !== true ) {
-				showField(show_fields[f.HideField][i], f.FieldName, rec);
+			if ( show_fields[f.hideContainerID][i] !== true ) {
+				showField(show_fields[f.hideContainerID][i], f.FieldName, rec);
 				return;
 			}
 			display = '';
@@ -521,8 +529,8 @@ function frmFrontFormJS(){
 			var container = jQuery(hvalue.hideBy + hvalue.hideContainerID);
             var hideField = hvalue.show;
             if ( container.length ) {
-				if ( ( hvalue.match === 'any' && (jQuery.inArray(true, show_fields[hvalue.HideField]) === -1) ) ||
-					( hvalue.match === 'all' && (jQuery.inArray(false, show_fields[hvalue.HideField]) > -1) ) ) {
+				if ( ( hvalue.match === 'any' && (jQuery.inArray(true, show_fields[hvalue.hideContainerID]) === -1) ) ||
+					( hvalue.match === 'all' && (jQuery.inArray(false, show_fields[hvalue.hideContainerID]) > -1) ) ) {
                     if ( hvalue.show === 'show' ) {
                         hideField = 'hide';
                     } else {
@@ -530,7 +538,7 @@ function frmFrontFormJS(){
                     }
                 }
 
-                if ( hideField === 'show' && hvalue.result !== false ) {
+                if ( hideField === 'show' ) {
                     container.show();
                 } else {
 					hideAndClearField(container, hvalue);
