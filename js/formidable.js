@@ -283,7 +283,18 @@ function frmFrontFormJS(){
 				if ( parentContainer.length ) {
 					parentField = parentContainer.find('input, textarea, select');
 					if ( parentField.length ) {
-						hideOrShowField(i, f, field_id, selected, rec, parentField);
+						if ( addingRow === '' ) {
+							var lastId = '';
+							parentField.each(function(){
+								var thisId = jQuery(this).closest('.frm_form_field').attr('id');
+								if ( thisId != lastId ) { // don't trigger radio/checkbox multiple times
+									hideOrShowField(i, f, f.FieldName, selected, rec, jQuery(this));
+								}
+								lastId = thisId;
+							});
+						} else {
+							hideOrShowField(i, f, field_id, selected, rec, parentField);
+						}
 					} else {
 						show_fields[f.HideField][i] = false;
 						hideFieldNow(i, f, rec);
@@ -519,7 +530,7 @@ function frmFrontFormJS(){
                     }
                 }
 
-                if ( hideField === 'show' ) {
+                if ( hideField === 'show' && hvalue.result !== false ) {
                     container.show();
                 } else {
 					hideAndClearField(container, hvalue);
@@ -1675,7 +1686,6 @@ function frmFrontFormJS(){
 
 		loadGoogle: function(){
 			if ( typeof google !== 'undefined' && google && google.load ) {
-				console.log('load');
 				var graphs = __FRMTABLES;
 				var packages = Object.keys( graphs );
 				//google.load('visualization', '1.0', {'packages':packages});
@@ -1683,7 +1693,6 @@ function frmFrontFormJS(){
 					prepareGraphTypes( graphs[ packages[i] ], packages[i] );
 				}
 			} else {
-				console.log('timeout');
 				setTimeout( frmFrontForm.loadGoogle, 30 );
 			}
 		},
