@@ -381,6 +381,11 @@ DEFAULT_HTML;
 			$error_class .= ' frm_dynamic_' . $field['data_type'] . '_container';
 		}
 
+		// Add class to inline Scale field
+		if ( $field['type'] == 'scale' && $field['label'] == 'inline' ) {
+			$error_class .= ' frm_scale_container';
+		}
+
 		// If this is a Section
 		if ( $field['type'] == 'divider' ) {
 
