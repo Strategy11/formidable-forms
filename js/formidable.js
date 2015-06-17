@@ -791,9 +791,10 @@ function frmFrontFormJS(){
 		// loop through each calculation this field is used in
 		for ( var i = 0, l = len; i < l; i++ ) {
 
-			// If field with calculation is hidden, don't do the calculation
+			// If field is hidden with conditional logic or if it's on a different page, don't do the calc
 			var calcFieldId = all_calcs.calc[ keys[i] ].field_id;
-			if ( calcFieldId in hidden_fields ) {
+			var t = document.getElementById( 'frm_field_' + calcFieldId + '_container' );
+			if ( t === null || t.offsetHeight == 0 ) {
 				continue;
 			}
 
