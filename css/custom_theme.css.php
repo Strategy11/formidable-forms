@@ -1819,6 +1819,9 @@ html[xmlns] .frm_clearfix{
     .frm_form_field.frm_four_col .frm_checkbox:nth-child(2n+2){
     	margin-right:0;
     }
+	.frm_form_field .frm_repeat_grid.frm_first_repeat .frm_form_field.frm_repeat_buttons label.frm_primary_label{
+		display:none !important;
+	}
 }
 
 @media only screen and (max-width: 500px) {
