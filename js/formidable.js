@@ -446,7 +446,7 @@ function frmFrontFormJS(){
 			var field_id = f.HideField;
 			hidden_fields[ field_id ] = container.attr('id');
 
-			var inputs = container.find('select[name^="item_meta"]:not([readonly]), textarea[name^="item_meta"]:not([readonly]), input[name^="item_meta"]:not([type=hidden]):not([readonly])');
+			var inputs = getInputsInContainer( container );
 			if ( inputs.length ){
 				inputs.prop('checked', false).prop('selectedIndex', 0);
 				inputs.not(':checkbox, :radio, select').val('');
@@ -458,7 +458,7 @@ function frmFrontFormJS(){
 							jQuery(this).trigger('chosen:updated');
 						}
 					}
-					setDefaultValue( jQuery(this) );
+
 					if ( i === false ) {
 						jQuery(this).trigger({type:'change', frmTriggered:'dependent', selfTriggered:true});
 					}
@@ -468,13 +468,25 @@ function frmFrontFormJS(){
 		}
 	}
 
+	function getInputsInContainer( container ) {
+		return container.find('select[name^="item_meta"], textarea[name^="item_meta"], input[name^="item_meta"]:not([type=hidden])');
+	}
+
+	function showFieldAndSetValue( container, f ) {
+		setDefaultValue( getInputsInContainer( container ) );
+		doCalcForSingleField( f.HideField );
+		container.show();
+	}
+
 	function setDefaultValue( $input ) {
-		var defaultValue = $input.data('frmval');
-		if ( typeof defaultValue !== 'undefined' ) {
-			if ( ! $input.is(':checkbox, :radio') ) {
-				$input.val( defaultValue );
-			} else if ( $input.val() == defaultValue || ( jQuery.isArray(defaultValue) && jQuery.inArray($input.val(), defaultValue) !== -1 ) ) {
-				$input.prop('checked', true);
+		if ( $input.length ) {
+			var defaultValue = $input.data('frmval');
+			if ( typeof defaultValue !== 'undefined' ) {
+				if ( ! $input.is(':checkbox, :radio') ) {
+					$input.val( defaultValue );
+				} else if ( $input.val() == defaultValue || ( jQuery.isArray(defaultValue) && jQuery.inArray($input.val(), defaultValue) !== -1 ) ) {
+					$input.prop('checked', true);
+				}
 			}
 		}
 	}
@@ -504,7 +516,7 @@ function frmFrontFormJS(){
 				if(display === 'none'){
 					hideAndClearField( hideClass, f );
 				}else{
-					hideClass.show();
+					showFieldAndSetValue( hideClass, f );
 				}
 			}
 		}else{
@@ -513,8 +525,7 @@ function frmFrontFormJS(){
 				if ( display === 'none' ) {
 					hideAndClearField( jQuery(hideMe), f );
 				} else {
-					doCalcForSingleField( f.HideField );
-					hideMe.style.display = display;
+					showFieldAndSetValue( jQuery(hideMe), f );
 				}
 			}
 		}
@@ -539,7 +550,7 @@ function frmFrontFormJS(){
                 }
 
                 if ( hideField === 'show' ) {
-                    container.show();
+					showFieldAndSetValue( container, hvalue );
                 } else {
 					hideAndClearField(container, hvalue);
                 }
