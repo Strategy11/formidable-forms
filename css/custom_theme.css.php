@@ -1792,14 +1792,27 @@ html[xmlns] .frm_clearfix{
     .frm_form_field.frm_fourth,
     .frm_form_field.frm_right_fourth,
     .frm_form_field.frm_first_fourth,
-    .frm_form_field.frm_last_fourth{
+	.frm_form_field.frm_last_fourth,
+	.frm_form_field.frm_fifth{
         width:48%;
     }
 
 	.frm_form_field.frm_first_fourth + .frm_form_field.frm_fourth,
-	.frm_form_field.frm_first.frm_fourth + .frm_form_field.frm_fourth{
+	.frm_form_field.frm_first.frm_fourth + .frm_form_field.frm_fourth,
+	.frm_form_field.frm_first.frm_fifth + .frm_form_field.frm_fifth,
+	.frm_form_field.frm_first.frm_fifth + .frm_form_field.frm_fifth + .frm_form_field.frm_fifth + .frm_form_field.frm_fifth{
         margin-right:0;
     }
+
+	.frm_form_field.frm_fifth.frm_first,
+	.frm_form_field.frm_first.frm_fifth + .frm_form_field.frm_fifth + .frm_form_field.frm_fifth{
+		margin-right:4%
+	}
+
+	.frm_form_field.frm_fifth.frm_last{
+		clear:both;
+		float:none;
+	}
 
     .frm_form_field.frm_first_inline,
     .frm_form_field.frm_inline,

@@ -894,9 +894,6 @@ if ( ! $submit_style ) { ?>
 		width:100%<?php echo $important ?>;
 	}
 
-	.<?php echo $style_class ?> .frm_form_field.frm_last.frm_repeat_buttons label.frm_primary_label{
-		display:none !important;
-	}
 
 	.<?php echo $style_class ?> .frm_repeat_inline,
 	.<?php echo $style_class ?> .frm_repeat_grid{
