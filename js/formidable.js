@@ -828,9 +828,12 @@ function frmFrontFormJS(){
 			total = 0;
 		}
 
-		jQuery(document.getElementById('field_'+ field_key)).val(total).trigger({
-			type:'change', frmTriggered:field_key, selfTriggered:true
-		});
+		var field = jQuery(document.getElementById('field_'+ field_key));
+		if ( field.val() != total ) {
+			field.val(total).trigger({
+				type:'change', frmTriggered:field_key, selfTriggered:true
+			});
+		}
 	}
 
 	function getValsForSingleCalc( thisCalc, thisFullCalc, all_calcs, vals ) {
