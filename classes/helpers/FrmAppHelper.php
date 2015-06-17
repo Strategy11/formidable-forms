@@ -1792,7 +1792,7 @@ class FrmAppHelper {
             // remove the languages unavailable for the datepicker
             $unset = array(
                 'en', 'fil', 'fr-CA', 'de-AT', 'de-AT',
-                'de-CH', 'iw', 'hi', 'id', 'pt', 'pt-PT',
+                'de-CH', 'iw', 'hi', 'pt', 'pt-PT',
                 'es-419', 'tr',
             );
         }
