@@ -487,6 +487,9 @@ function frmFrontFormJS(){
 				} else if ( $input.val() == defaultValue || ( jQuery.isArray(defaultValue) && jQuery.inArray($input.val(), defaultValue) !== -1 ) ) {
 					$input.prop('checked', true);
 				}
+				$input.trigger({
+					type:'change', selfTriggered:true
+				});
 			}
 		}
 	}
