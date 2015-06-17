@@ -1621,14 +1621,15 @@ function frmFrontFormJS(){
 			if ( jsErrors.length === 0 ) {
 				getFormErrors( object, action );
 			} else {
+				var $fieldCont = null;
 				for ( var key in jsErrors ) {
 					$fieldCont = jQuery(object).find(jQuery(document.getElementById('frm_field_'+key+'_container')));
 					if ( $fieldCont.length && $fieldCont.is(':visible') ) {
 						$fieldCont.addClass('frm_blank_field');
 						if ( typeof frmThemeOverride_frmPlaceError == 'function' ) {
-							frmThemeOverride_frmPlaceError( key, errObj );
+							frmThemeOverride_frmPlaceError( key, jsErrors );
 						} else {
-							$fieldCont.append( '<div class="frm_error">'+ errObj[key] +'</div>' );
+							$fieldCont.append( '<div class="frm_error">'+ jsErrors[key] +'</div>' );
 						}
 					}
 				}
