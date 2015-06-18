@@ -391,15 +391,15 @@ function frmFrontFormJS(){
         } else if ( typeof f.LinkedField !== 'undefined' && f.Type.indexOf('data-') === 0 ) {
 			if ( typeof f.DataType === 'undefined' || f.DataType === 'data' ) {
                 if ( selected === '' ) {
-                    hideAndClearDynamicField(f.hideContainerID, f.hideBy, f.HideField);
+                    hideAndClearDynamicField( f.hideContainerID, f.hideBy, f.HideField, 'hide' );
     			} else if ( f.Type === 'data-radio' ) {
                     if ( typeof f.DataType === 'undefined' ) {
                         show_fields[f.hideContainerID][i] = operators(f.Condition, f.Value, selected);
                     } else {
                         show_fields[f.hideContainerID][i] = {'funcName':'getData','f':f,'sel':selected};
                     }
-                } else if ( f.Type === 'data-checkbox' || ( f.Type === 'data-select' && jQuery.isArray(selected) ) ) {
-                    hideAndClearDynamicField(f.hideContainerID, f.hideBy, f.HideField);
+                } else if ( f.Type === 'data-checkbox' || ( f.Type === 'data-select' && isNotEmptyArray( selected ) ) ) {
+                    hideAndClearDynamicField( f.hideContainerID, f.hideBy, f.HideField, 'show' );
     				show_fields[f.hideContainerID][i] = true;
     				getData(f, selected, 1);
                 } else if ( f.Type === 'data-select' ) {
@@ -427,7 +427,7 @@ function frmFrontFormJS(){
 		}
 	}
 
-	function hideAndClearDynamicField(hideContainer, hideBy, field_id){
+	function hideAndClearDynamicField(hideContainer, hideBy, field_id, hide){
 		if ( jQuery.inArray(hideContainer, hidden_fields) === -1 ) {
 			hidden_fields[ field_id ] = hideContainer;
 			if(hideBy === '.'){
@@ -435,7 +435,9 @@ function frmFrontFormJS(){
 			}else{
 				hideContainer = jQuery(document.getElementById(hideContainer));
 			}
-			hideContainer.fadeOut('slow');
+			if ( hide === 'hide' ) {
+				hideContainer.hide();
+			}
 			hideContainer.find('.frm_data_field_container').empty();
 		}
     }
@@ -632,19 +634,21 @@ function frmFrontFormJS(){
                 hide_id:f.hideContainerID, nonce:frm_js.nonce
             },
 			success:function(html){
-				if ( html !== '' ) {
-					fcont.style.display = '';
-				}
-				
 				if ( append ) {
 					cont.append(html);
 				} else {
 					cont.html(html);
-                    var parentField = cont.children('input');
-					var val = parentField.val();
-					if(html === '' || val === ''){
-						fcont.style.display = 'none';
-					}
+				}
+
+				var parentField = cont.children('input');
+				var val = parentField.val();
+				if ( ( html === '' && ! append ) || val === '' ) {
+					fcont.style.display = 'none';
+				} else {
+					fcont.style.display = '';
+				}
+
+				if ( ! append ) {
 					checkDependentField(selected, f.HideField, null, parentField);
 				}
 				return true;
@@ -716,15 +720,19 @@ function frmFrontFormJS(){
                 hide_id:f.hideContainerID, nonce:frm_js.nonce
             },
 			success:function(html){
-				if(html === ''){
+				$dataField.html(html);
+				var parentField = $dataField.find('select, input, textarea');
+				var val = 1;
+				if ( parentField.attr('type') == 'hidden' ) {
+					val = parentField.val();
+				}
+
+				if ( html === '' || val === '' ) {
 					fcont.style.display = 'none';
 					prev = '';
 				}else if(f.MatchType != 'all'){
 					fcont.style.display = '';
 				}
-				
-				$dataField.html(html);
-                var parentField = $dataField.find('select, input, textarea');
 
 				if(html !== '' && prev !== ''){
 					if(!jQuery.isArray(prev)){
@@ -1530,6 +1538,10 @@ function frmFrontFormJS(){
 				$obj.removeChild($obj.firstChild);
 			}
 		}
+	}
+
+	function isNotEmptyArray( value ) {
+		return jQuery.isArray( value ) && ( value.length > 1 || value[0] !== '' );
 	}
 
 	function isNumeric( obj ) {
