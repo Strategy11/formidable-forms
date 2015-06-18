@@ -1644,6 +1644,10 @@ function frmFrontFormJS(){
 			if ( jsErrors.length === 0 ) {
 				getFormErrors( object, action );
 			} else {
+				// Remove all previous errors
+				jQuery('.form-field').removeClass('frm_blank_field');
+				jQuery('.form-field .frm_error').replaceWith('');
+
 				var $fieldCont = null;
 				for ( var key in jsErrors ) {
 					$fieldCont = jQuery(object).find(jQuery(document.getElementById('frm_field_'+key+'_container')));
