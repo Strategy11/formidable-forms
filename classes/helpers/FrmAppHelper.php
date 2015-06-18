@@ -1197,18 +1197,25 @@ class FrmAppHelper {
 
 		$do_time = ( date( 'H:i:s', strtotime( $date ) ) != '00:00:00' );
 		if ( $do_time ) {
-			if ( empty($time_format) ) {
-				$time_format = get_option('time_format');
-			}
-
-			$trimmed_format = trim( $time_format );
-			if ( $time_format && ! empty( $trimmed_format ) ) {
-				$formatted .= ' ' . __( 'at', 'formidable' ) . ' ' . self::get_localized_date( $time_format, $date );
-			}
+			$formatted .= self::add_time_to_date( $time_format, $date );
 		}
 
         return $formatted;
     }
+
+	private static function add_time_to_date( $time_format, $date ) {
+		if ( empty( $time_format ) ) {
+			$time_format = get_option('time_format');
+		}
+
+		$trimmed_format = trim( $time_format );
+		$time = '';
+		if ( $time_format && ! empty( $trimmed_format ) ) {
+			$time = ' ' . __( 'at', 'formidable' ) . ' ' . self::get_localized_date( $time_format, $date );
+		}
+
+		return $time;
+	}
 
 	/**
 	 * @since 2.0.8
