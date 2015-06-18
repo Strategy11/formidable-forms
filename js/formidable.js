@@ -648,6 +648,10 @@ function frmFrontFormJS(){
 					fcont.style.display = '';
 				}
 
+				parentField.trigger({
+					type:'change', selfTriggered:true
+				});
+
 				if ( ! append ) {
 					checkDependentField(selected, f.HideField, null, parentField);
 				}
@@ -802,7 +806,7 @@ function frmFrontFormJS(){
 			// If field is hidden with conditional logic or if it's on a different page, don't do the calc
 			var calcFieldId = all_calcs.calc[ keys[i] ].field_id;
 			var t = document.getElementById( 'frm_field_' + calcFieldId + '_container' );
-			if ( t === null || t.offsetHeight == 0 ) {
+			if ( t === null || t.offsetHeight === 0 ) {
 				continue;
 			}
 
