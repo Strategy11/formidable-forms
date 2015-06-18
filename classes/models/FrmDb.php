@@ -28,6 +28,9 @@ class FrmDb {
         }
 
         if ( $frm_db_version != $old_db_version ) {
+			// update rewrite rules for views and other custom post types
+			flush_rewrite_rules();
+
 			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 
             $this->create_tables();
