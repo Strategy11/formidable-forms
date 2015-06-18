@@ -767,7 +767,7 @@ class FrmAppHelper {
 			}
 			$value = array_map( array( 'FrmAppHelper', 'recursive_function_map' ), $value, $function );
 		} else {
-			$value = $function( $value );
+			$value = call_user_func( $function, $value );
 		}
 
 		return $value;
@@ -1136,29 +1136,29 @@ class FrmAppHelper {
 
         $length = (int) $length;
 		$str = wp_strip_all_tags( $str );
-        $original_len = (function_exists('mb_strlen')) ? mb_strlen($str) : strlen($str);
+		$original_len = self::mb_function( array( 'mb_strlen', 'strlen' ), array( $str ) );
 
 		if ( $length == 0 ) {
             return '';
         } else if ( $length <= 10 ) {
-			$sub = function_exists( 'mb_substr' ) ? mb_substr( $str, 0, $length ) : substr( $str, 0, $length );
+			$sub = self::mb_function( array( 'mb_substr', 'substr' ), array( $str, 0, $length ) );
             return $sub . (($length < $original_len) ? $continue : '');
         }
 
         $sub = '';
         $len = 0;
 
-        $words = (function_exists('mb_split')) ? mb_split(' ', $str) : explode(' ', $str);
+		$words = self::mb_function( array( 'mb_split', 'explode' ), array( ' ', $str ) );
 
 		foreach ( $words as $word ) {
             $part = (($sub != '') ? ' ' : '') . $word;
-            $total_len = (function_exists('mb_strlen')) ? mb_strlen($sub . $part) : strlen($sub. $part);
+			$total_len = self::mb_function( array( 'mb_strlen', 'strlen' ), array( $sub . $part ) );
             if ( $total_len > $length && str_word_count($sub) ) {
                 break;
             }
 
             $sub .= $part;
-            $len += (function_exists('mb_strlen')) ? mb_strlen($part) : strlen($part);
+			$len += self::mb_function( array( 'mb_strlen', 'strlen' ), array( $part ) );
 
             if ( str_word_count($sub) > $minword && $total_len >= $length ) {
                 break;
@@ -1169,6 +1169,15 @@ class FrmAppHelper {
 
         return $sub . (($len < $original_len) ? $continue : '');
     }
+
+	public static function mb_function( $function_names, $args ) {
+		$mb_function_name = $function_names[0];
+		$function_name = $function_names[1];
+		if ( function_exists( $mb_function_name ) ) {
+			$function_name = $mb_function_name;
+		}
+		return call_user_func_array( $function_name, $args );
+	}
 
     public static function get_formatted_time($date, $date_format = '', $time_format = '' ) {
         if ( empty($date) ) {
