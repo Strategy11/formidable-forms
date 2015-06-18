@@ -707,7 +707,7 @@ class FrmAppHelper {
     }
 
     public static function check_selected($values, $current) {
-        self::recursive_trim($values);
+        $values = self::recursive_function_map( $value, 'trim' );
         $current = trim($current);
 
         return ( is_array($values) && in_array($current, $values) ) || ( ! is_array($values) && $values == $current );
@@ -758,15 +758,20 @@ class FrmAppHelper {
 		return FrmFieldsHelper::prepare_other_input( $args, $other_opt, $checked );
     }
 
-    public static function recursive_trim(&$value) {
-        if ( is_array($value) ) {
-			$value = array_map( array( 'FrmAppHelper', 'recursive_trim' ), $value);
-        } else {
-            $value = trim($value);
-        }
+	public static function recursive_function_map( $value, $function ) {
+		if ( is_array( $value ) ) {
+			if ( count( $value ) ) {
+				$function = explode( ', ', self::prepare_array_values( $value, $function ) );
+			} else {
+				$function = array( $function );
+			}
+			$value = array_map( array( 'FrmAppHelper', 'recursive_function_map' ), $value, $function );
+		} else {
+			$value = $function( $value );
+		}
 
-        return $value;
-    }
+		return $value;
+	}
 
     /**
      * Flatten a multi-dimensional array
