@@ -556,12 +556,11 @@ function frmFrontFormJS(){
 
                 if ( hideField === 'show' ) {
 					showFieldAndSetValue( container, hvalue );
+					if ( typeof hvalue.result !== false && typeof hvalue.result !== true ) {
+						showField( hvalue.result, hvalue.FieldName, rec );
+					}
                 } else {
 					hideAndClearField(container, hvalue);
-                }
-
-                if ( typeof hvalue.result !== false && typeof hvalue.result !== true ) {
-					showField(hvalue.result,hvalue.FieldName,rec);
                 }
             }
 
@@ -652,9 +651,6 @@ function frmFrontFormJS(){
 					type:'change', selfTriggered:true
 				});
 
-				if ( ! append ) {
-					checkDependentField(selected, f.HideField, null, parentField);
-				}
 				return true;
 			}
 		});
@@ -774,11 +770,7 @@ function frmFrontFormJS(){
 					jQuery('.frm_chzn').chosen({allow_single_deselect:true});
 				}
 
-				if(parentField.length){
-					checkDependentField(prev, f.HideField, 'stop', parentField);
-				}else{
-					checkDependentField(prev, f.HideField, 'stop');
-				}
+				parentField.trigger({ type:'change', selfTriggered:true });
 			}
 		});
 	}
@@ -1869,5 +1861,3 @@ function frm_resend_email(entry_id,form_id){
 		}
 	});
 }
-
-
