@@ -4,7 +4,7 @@ Donate link: http://formidablepro.com/donate
 Tags: admin, AJAX, captcha, contact, contact form, database, email, feedback, form, forms, javascript, jquery, page, plugin, poll, Post, spam, survey, template, widget, wpmu, form builder
 Requires at least: 3.6
 Tested up to: 4.2
-Stable tag: 2.0.08
+Stable tag: 2.0.09
 
 Beautiful forms in 60 seconds. The WordPress form builder that enables you to create forms with a simple drag-and-drop interface and in-place editing.
 
@@ -89,6 +89,55 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 [See more FAQs](http://formidablepro.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 2.0.09 =
+* Add frm_time_to_check duplicate entries filter
+* Allow custom JavaScript validation
+* Add frm_do_html_shortcodes fiter
+* Fix the duplicate entry check
+* Include get_columns function in list tables for 4.3
+* Use relative URLs in the stylesheet
+* Make frm_fifth classes responsive
+* Allow 0 to be saved in a checkbox field
+* Fix saving forms as drafts
+* **Pro Features:**
+* Reduce database calls for Views
+* Allow format for default [time] and [date] shortcodes ie [time format='H:i A' round=5]
+* Include Dynamic List fields in calculation options
+* Make file upload fields more responsive
+* Improve repeating section styling
+* Improve calculation triggering when fields involved are conditionally hidden
+* Don't clear readonly fields or default values when hidden conditionally
+* Don't trigger dynamic field values if there is other logic telling the field to be hidden
+* Include Indonesian option for datepicker
+* Allow the post author to be changed by the user ID field on edit
+* Trigger calculations at the time a conditional field is shown
+* Keep the value submitted in a dynamic list field
+* Fix graphs that show multiple fields and define the x-axis
+* Allow graphs to be included in the success message after ajax submit
+* Conditionally show the max character setting in number fields based on whether HTML5 is enabled
+* Allow scale fields to work in calculations across multiple pages
+* Turn off ajax submit if repeating section includes a file
+* Fix entry creation date format on import
+* Fix filtering by a checkbox field in the frm-stats shortcode
+* Fix logic for third-level fields with conditional logic inside a repeating section
+* Make sure conditional logic only affects the newly added row when triggered after a row is added
+* Make sure orphaned data is deleted when switching divider to repeating/non-repeating
+* Allow drafts=both with user_id filter in View shortcode
+* Fix conditionally required fields when option includes quote
+* Fix date field errors on multi-page form that submits with Ajax
+* Prevent the JetPack conflict with the shortcodes module
+* Fix sorting in dependent Dynamic fields
+* Registration add-on login form styling
+* Fix inline scale field labels
+* Fix spacing issue with repeating section grid
+* Fix truncation with special characters
+* Fix importing repeating sections and embedded forms
+* Fix readonly checkboxes in calculations
+* Don't show empty custom field rows in the post settings
+* A few fixes to the formresults shortcode including the file display
+* Fix error when duplicating a section without any included fields
+* Fix timezones for searching by entry creation and updated dates in a view
+
 = 2.0.08 =
 * Fix security vulnerability allowing shortcodes to be excuted inside a form https://research.g0blin.co.uk/?p=618&d=i4ziyggqao0oz0L0vpUTd8KZwrO2P9Mw
 * Added frm_filter_final_form hook. This will need to be used to cover shortcodes that span multiple blocks of field HTML since we can't do a general shortcode replacement on the rendered form
