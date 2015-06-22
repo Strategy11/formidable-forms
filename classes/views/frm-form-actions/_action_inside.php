@@ -32,11 +32,11 @@ if ( count( $action_control->action_options['event'] ) == 1 || $action_control->
 ?>
 	<p><label><?php _e( 'Trigger this action after', 'formidable' ) ?></label>
 <?php
-	$event_labels = array(
+	$event_labels = apply_filters( 'frm_action_triggers', array(
 		'create'    => __( 'Create', 'formidable' ),
 		'update'    => __( 'Update', 'formidable' ),
 		'delete'    => __( 'Delete', 'formidable' ),
-	);
+	) );
 
 	foreach ( $action_control->action_options['event'] as $event ) { ?>
 		<label for="frm_action_event_<?php echo esc_attr( $event ) ?>" class="frm_action_events">
