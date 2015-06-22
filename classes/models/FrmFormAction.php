@@ -88,6 +88,7 @@ class FrmFormAction {
             'tooltip'   => $name,
         );
 
+		$action_options = apply_filters( 'frm_' . $id_base . '_action_options', $action_options );
 		$this->action_options = wp_parse_args( $action_options, $default_options );
 		$this->control_options = wp_parse_args( $control_options, array( 'id_base' => $this->id_base ) );
 	}
