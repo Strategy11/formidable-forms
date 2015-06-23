@@ -669,6 +669,16 @@ textarea.inplace_field{
 	border: 1px solid #DDD;
 	cursor:text;
 }
+.frm_ipe_field_key,
+.frm_field_key { 
+	float: none;   
+	margin: 1px;
+  	padding: 3px 5px;
+	width:14em;
+}
+.frm_ipe_field_key .inplace_field {
+  width: 14.5em !important;
+}
 .frm_ipe_form_key.editInPlace-active, .frm_ipe_field_key.editInPlace-active{
 	white-space:normal;
 	width:auto;
@@ -716,8 +726,7 @@ textarea.inplace_field{
 /* End In place edit */
 
 .frm_field_key{background-color:#F7F7F7;}
-.edit-slug-box{width:13em;max-width:30%;float:right;}
-.edit-slug-box{color:#777;}
+
 #frm_form_editor_container #edit-slug-box {padding:0;}
 table td, .form-table tr td{vertical-align:top;}
 
@@ -2076,6 +2085,10 @@ Responsive Design
   		background: none;
 		border:none;
 	}
+	.frm_inline_label {
+	  display: block;
+	  margin: 5px 0;
+  	}
 }
 @media only screen and (max-width: 1050px) {
 	.frm_drag_inst{font-size: 20px;}

@@ -158,16 +158,8 @@ if ( $display['options'] ) { ?>
     	<div class="widget-inside">
             <table class="form-table frm_clear_none">
                 <?php $field_types = FrmFieldsHelper::get_field_types($field['type']); ?>
-                <tr><td class="frm_150_width"><label><?php _e( 'Field Type', 'formidable' ) ?></label></td>
+				<tr><td class="frm_150_width"><label><?php _e( 'Field Type', 'formidable' ) ?></label></td>
                     <td>
-						<div class="hide-if-no-js edit-slug-box frm_help" title="<?php esc_attr_e( 'The field key can be used as an alternative to the field ID in many cases.', 'formidable' ) ?>">
-                            <?php _e( 'Field Key:', 'formidable' ) ?>
-							<div class="<?php echo $frm_settings->lock_keys ? 'frm_field_key' : 'frm_ipe_field_key" title="'. esc_attr( __( 'Click to edit.', 'formidable' ) ); ?>" ><?php echo esc_html( $field['field_key'] ); ?></div>
-                            <?php if ( ! $frm_settings->lock_keys ) { ?>
-                            <input type="hidden" name="field_options[field_key_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['field_key'] ); ?>" />
-                            <?php } ?>
-                        </div>
-
                 <select <?php if ( count($field_types) == 1 ) { ?>disabled="disabled"<?php } else { ?>name="field_options[type_<?php echo esc_attr( $field['id'] ) ?>]"<?php } ?>>
                     <?php
 					foreach ( $field_types as $fkey => $ftype ) { ?>
@@ -212,6 +204,19 @@ if ( $display['options'] ) { ?>
                 <?php } ?>
                     </td>
                 </tr>
+				<tr>
+					<td class="frm_150_width">
+						<div class="hide-if-no-js edit-slug-box frm_help" title="<?php esc_attr_e( 'The field key can be used as an alternative to the field ID in many cases.', 'formidable' ) ?>">
+                            <?php _e( 'Field Key', 'formidable' ) ?>
+					</td>
+					<td>
+							<div class="<?php echo $frm_settings->lock_keys ? 'frm_field_key' : 'frm_ipe_field_key" title="'. esc_attr( __( 'Click to edit.', 'formidable' ) ); ?>" ><?php echo esc_html( $field['field_key'] ); ?></div>
+                            <?php if ( ! $frm_settings->lock_keys ) { ?>
+                            <input type="hidden" name="field_options[field_key_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['field_key'] ); ?>" />
+                            <?php } ?>
+                        </div>
+					</td>
+				</tr>
 
                 <?php
 				if ( $display['css'] ) { ?>
