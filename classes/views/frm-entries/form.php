@@ -38,6 +38,12 @@ if ( FrmAppHelper::is_admin() && ! $frm_settings->lock_keys ) { ?>
 do_action('frm_entry_form', $form, $form_action, $errors);
 
 global $frm_vars;
+// close open section div
+if ( isset( $frm_vars['div'] ) && $frm_vars['div'] ) {
+	echo "</div>\n";
+	unset( $frm_vars['div'] );
+}
+
 // close open collapsible toggle div
 if ( isset($frm_vars['collapse_div']) && $frm_vars['collapse_div'] ) {
     echo "</div>\n";
