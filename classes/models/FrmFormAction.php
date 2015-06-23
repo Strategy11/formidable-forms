@@ -176,7 +176,7 @@ class FrmFormAction {
         }
 
         $this->form_id = $old_id;
-        $actions = $this->get_all();
+        $actions = $this->get_all( $old_id );
 
         $this->form_id = $form_id;
         foreach ( $actions as $action ) {

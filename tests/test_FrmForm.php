@@ -23,6 +23,11 @@ class WP_Test_FrmForm extends FrmUnitTest {
 		$id = FrmForm::duplicate( $form->id );
 		$this->assertTrue( is_numeric( $id ) );
 		$this->assertNotEmpty( $id );
+
+		// check the number of form actions
+		$original_actions = FrmFormAction::get_action_for_form( $form->id );
+		$new_actions = FrmFormAction::get_action_for_form( $id );
+		$this->assertEquals( count( $original_actions ), count( $new_actions ) );
 	}
 
 	/**
