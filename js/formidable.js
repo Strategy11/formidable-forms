@@ -1012,12 +1012,6 @@ function frmFrontFormJS(){
 		return jQuery(currentOpt).closest('.frm_other_container').find('.frm_other_input').val();
 	}
 
-	function getAjaxFormErrors( object ) {
-		if ( typeof frmThemeOverride_jsErrors == 'function' ) {
-			jsErrors = frmThemeOverride_jsErrors( action, object );
-		}
-	}
-
 	function getFormErrors(object, action){
 		jQuery(object).find('input[type="submit"], input[type="button"]').attr('disabled','disabled');
 		jQuery(object).find('.frm_ajax_loading').addClass('frm_loading_now');
@@ -1652,6 +1646,12 @@ function frmFrontFormJS(){
 						}
 					}
 				}
+			}
+		},
+
+		getAjaxFormErrors: function( object ) {
+			if ( typeof frmThemeOverride_jsErrors == 'function' ) {
+				jsErrors = frmThemeOverride_jsErrors( action, object );
 			}
 		},
 
