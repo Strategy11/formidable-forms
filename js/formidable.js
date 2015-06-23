@@ -164,7 +164,7 @@ function frmFrontFormJS(){
 
 		return field_id;
 	}
-	
+
 	function checkDependentField(selected, field_id, rec, parentField, reset){
 		var rules = getRulesForField( field_id );
 		if ( typeof rules === 'undefined' ) {
@@ -468,7 +468,7 @@ function frmFrontFormJS(){
 					}
 
 					if ( i === false ) {
-						jQuery(this).trigger({type:'change', frmTriggered:'dependent', selfTriggered:true});
+						triggerChange( jQuery(this) );
 					}
 					i = true;
 				});
@@ -496,11 +496,16 @@ function frmFrontFormJS(){
 				} else if ( $input.val() == defaultValue || ( jQuery.isArray(defaultValue) && jQuery.inArray($input.val(), defaultValue) !== -1 ) ) {
 					$input.prop('checked', true);
 				}
-				$input.trigger({
-					type:'change', selfTriggered:true
-				});
+				triggerChange( $input );
 			}
 		}
+	}
+
+	function triggerChange( input, fieldKey ) {
+		if ( typeof fieldKey === 'undefined' ) {
+			fieldKey = getFieldId( input );
+		}
+		input.trigger({ type:'change', selfTriggered:true, frmTriggered:fieldKey });
 	}
 
 	function hideFieldNow(i, f, rec){
@@ -522,23 +527,18 @@ function frmFrontFormJS(){
 			display = '';
 		}
 
+		var hideClass;
 		if(f.hideBy === '.'){
-			var hideClass = jQuery('.'+f.hideContainerID);
-			if(hideClass.length){
-				if(display === 'none'){
-					hideAndClearField( hideClass, f );
-				}else{
-					showFieldAndSetValue( hideClass, f );
-				}
-			}
+			hideClass = jQuery('.'+f.hideContainerID);
 		}else{
-			var hideMe = document.getElementById(f.hideContainerID);
-			if ( hideMe !== null ) {
-				if ( display === 'none' ) {
-					hideAndClearField( jQuery(hideMe), f );
-				} else {
-					showFieldAndSetValue( jQuery(hideMe), f );
-				}
+			hideClass = jQuery( document.getElementById(f.hideContainerID) );
+		}
+
+		if(hideClass.length){
+			if ( display === 'none' ) {
+				hideAndClearField( hideClass, f );
+			} else {
+				showFieldAndSetValue( hideClass, f );
 			}
 		}
 	}
@@ -654,9 +654,7 @@ function frmFrontFormJS(){
 					fcont.style.display = '';
 				}
 
-				parentField.trigger({
-					type:'change', selfTriggered:true
-				});
+				triggerChange( parentField );
 
 				return true;
 			}
@@ -777,7 +775,7 @@ function frmFrontFormJS(){
 					jQuery('.frm_chzn').chosen({allow_single_deselect:true});
 				}
 
-				parentField.trigger({ type:'change', selfTriggered:true });
+				triggerChange( parentField );
 			}
 		});
 	}
@@ -849,9 +847,8 @@ function frmFrontFormJS(){
 		}
 
 		if ( field.val() != total ) {
-			field.val(total).trigger({
-				type:'change', frmTriggered:field_key, selfTriggered:true
-			});
+			field.val(total);
+			triggerChange( field, field_key );
 		}
 	}
 
@@ -860,8 +857,8 @@ function frmFrontFormJS(){
 		for ( var f = 0, c = fCount; f < c; f++ ) {
 			var field = {
 				'triggerField': triggerField, 'thisFieldId': thisCalc.fields[f],
-				'thisField': all_calcs.fields[field.thisFieldId],
-				'thisFieldCall': 'input'+ all_calcs.fieldKeys[field.thisFieldId]
+				'thisField': all_calcs.fields[ thisCalc.fields[f] ],
+				'thisFieldCall': 'input'+ all_calcs.fieldKeys[ thisCalc.fields[f] ]
 			};
 
 			if ( field.thisField.type == 'checkbox' || field.thisField.type == 'select' ) {
