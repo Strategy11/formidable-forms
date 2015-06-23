@@ -129,12 +129,18 @@ function frmFrontFormJS(){
 		}
 
 		checkDependentField('und', field_id, null, jQuery(this), reset);
-		doCalculation(field_id);
+		doCalculation(field_id, jQuery(this));
 	}
 
 	/* Get the ID of the field that changed*/
 	function getFieldId( field ) {
-		var nameParts = field.name.replace('item_meta[', '').split(']');
+		var fieldName = '';
+		if ( field instanceof jQuery ) {
+			fieldName = field.attr('name');
+		} else {
+			fieldName = field.name;
+		}
+		var nameParts = fieldName.replace('item_meta[', '').split(']');
 		var field_id = nameParts[0];
 		var isRepeating = false;
 
@@ -475,8 +481,9 @@ function frmFrontFormJS(){
 	}
 
 	function showFieldAndSetValue( container, f ) {
-		setDefaultValue( getInputsInContainer( container ) );
-		doCalcForSingleField( f.HideField );
+		var inputs = getInputsInContainer( container );
+		setDefaultValue( inputs );
+		doCalcForSingleField( f.HideField, inputs );
 		container.show();
 	}
 
@@ -775,7 +782,7 @@ function frmFrontFormJS(){
 		});
 	}
 
-	function doCalculation(field_id){
+	function doCalculation(field_id, triggerField){
 		if ( typeof __FRMCALC === 'undefined' ) {
 			// there are no calculations on this page
 			return;
@@ -802,16 +809,16 @@ function frmFrontFormJS(){
 				continue;
 			}
 
-			doSingleCalculation( all_calcs, keys[i], vals );
+			doSingleCalculation( all_calcs, keys[i], vals, triggerField );
 		}
 	}
 
-	function doSingleCalculation( all_calcs, field_key, vals ) {
+	function doSingleCalculation( all_calcs, field_key, vals, triggerField ) {
 		var thisCalc = all_calcs.calc[ field_key ];
 		var thisFullCalc = thisCalc.calc;
 
 		// loop through the fields in this calculation
-		thisFullCalc = getValsForSingleCalc( thisCalc, thisFullCalc, all_calcs, vals );
+		thisFullCalc = getValsForSingleCalc( thisCalc, thisFullCalc, all_calcs, vals, triggerField );
 
 		// Set the number of decimal places
 		var dec = thisCalc.calc_dec;
@@ -835,8 +842,12 @@ function frmFrontFormJS(){
 		if ( typeof total === 'undefined' ) {
 			total = 0;
 		}
+		var field = jQuery( document.getElementById('field_'+ field_key) );
+		if ( field.length < 1 && typeof triggerField !== 'undefined' ) {
+			var fieldInfo = { 'triggerField': triggerField, 'thisFieldId': objectSearch( all_calcs.fieldsWithCalc, field_key ) };
+			field = getSiblingField( fieldInfo );
+		}
 
-		var field = jQuery(document.getElementById('field_'+ field_key));
 		if ( field.val() != total ) {
 			field.val(total).trigger({
 				type:'change', frmTriggered:field_key, selfTriggered:true
@@ -844,35 +855,37 @@ function frmFrontFormJS(){
 		}
 	}
 
-	function getValsForSingleCalc( thisCalc, thisFullCalc, all_calcs, vals ) {
+	function getValsForSingleCalc( thisCalc, thisFullCalc, all_calcs, vals, triggerField ) {
 		var fCount = thisCalc.fields.length;
 		for ( var f = 0, c = fCount; f < c; f++ ) {
-			var thisFieldId = thisCalc.fields[f];
-			var thisField = all_calcs.fields[thisFieldId];
-			var thisFieldCall = 'input'+ all_calcs.fieldKeys[thisFieldId];
+			var field = {
+				'triggerField': triggerField, 'thisFieldId': thisCalc.fields[f],
+				'thisField': all_calcs.fields[field.thisFieldId],
+				'thisFieldCall': 'input'+ all_calcs.fieldKeys[field.thisFieldId]
+			};
 
-			if ( thisField.type == 'checkbox' || thisField.type == 'select' ) {
-				thisFieldCall = thisFieldCall +':checked,select'+ all_calcs.fieldKeys[thisFieldId] +' option:selected,'+ thisFieldCall+'[type=hidden]';
-			} else if ( thisField.type == 'radio' || thisField.type == 'scale' ) {
-				thisFieldCall = thisFieldCall +':checked,'+ thisFieldCall +'[type=hidden]';
-			} else if ( thisField.type == 'textarea' ) {
-                thisFieldCall = thisFieldCall + ',textarea'+ all_calcs.fieldKeys[thisFieldId];
+			if ( field.thisField.type == 'checkbox' || field.thisField.type == 'select' ) {
+				field.thisFieldCall = field.thisFieldCall +':checked,select'+ all_calcs.fieldKeys[field.thisFieldId] +' option:selected,'+ field.thisFieldCall+'[type=hidden]';
+			} else if ( field.thisField.type == 'radio' || field.thisField.type == 'scale' ) {
+				field.thisFieldCall = field.thisFieldCall +':checked,'+ field.thisFieldCall +'[type=hidden]';
+			} else if ( field.thisField.type == 'textarea' ) {
+				field.thisFieldCall = field.thisFieldCall + ',textarea'+ all_calcs.fieldKeys[field.thisFieldId];
 			}
 
-            vals[thisFieldId] = getCalcFieldId(thisFieldCall, thisFieldId, thisField, all_calcs, vals);
+			vals[field.thisFieldId] = getCalcFieldId(field, all_calcs, vals);
 
-			if ( typeof vals[thisFieldId] === 'undefined' || isNaN(vals[thisFieldId]) ) {
-				vals[thisFieldId] = 0;
+			if ( typeof vals[field.thisFieldId] === 'undefined' || isNaN(vals[field.thisFieldId]) ) {
+				vals[field.thisFieldId] = 0;
 			}
 
-			var findVar = '['+ thisFieldId +']';
+			var findVar = '['+ field.thisFieldId +']';
 			findVar = findVar.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
-			thisFullCalc = thisFullCalc.replace(new RegExp(findVar, 'g'), vals[thisFieldId]);
+			thisFullCalc = thisFullCalc.replace(new RegExp(findVar, 'g'), vals[field.thisFieldId]);
 		}
 		return thisFullCalc;
 	}
 
-	function doCalcForSingleField( field_id ) {
+	function doCalcForSingleField( field_id, triggerField ) {
 		if ( typeof __FRMCALC === 'undefined' ) {
 			// there are no calculations on this page
 			return;
@@ -885,25 +898,33 @@ function frmFrontFormJS(){
 		}
 
 		var vals = [];
-		doSingleCalculation( all_calcs, field_key, vals );
+		doSingleCalculation( all_calcs, field_key, vals, triggerField );
 	}
 
-    function getCalcFieldId(thisFieldCall, thisFieldId, thisField, all_calcs, vals){
-        if ( typeof vals[thisFieldId] !== 'undefined' && vals[thisFieldId] !== 0 ) {
-            return vals[thisFieldId];
-        }
+	function getCalcFieldId( field, all_calcs, vals ) {
+		if ( typeof vals[field.thisFieldId] !== 'undefined' && vals[field.thisFieldId] !== 0 ) {
+			return vals[field.thisFieldId];
+		}
 
-        jQuery(thisFieldCall).each(function(){
-            if ( typeof vals[thisFieldId] === 'undefined' ) {
-                vals[thisFieldId] = 0;
-            }
+		if ( typeof vals[field.thisFieldId] === 'undefined' ) {
+			vals[field.thisFieldId] = 0;
+		}
 
-			var thisVal = getOptionValue( thisField, this );
+		var calcField = jQuery(field.thisFieldCall);
+		if ( calcField.length < 1 ) {
+			calcField = getSiblingField( field );
+			if ( calcField === null || calcField.length < 1 ) {
+				return vals[field.thisFieldId];
+			}
+		}
 
-            if ( thisField.type == 'date' ) {
+		calcField.each(function(){
+			var thisVal = getOptionValue( field.thisField, this );
+
+			if ( field.thisField.type == 'date' ) {
                 var d = jQuery.datepicker.parseDate(all_calcs.date, thisVal);
                 if ( d !== null ) {
-                    vals[thisFieldId] = Math.ceil(d/(1000*60*60*24));
+					vals[field.thisFieldId] = Math.ceil(d/(1000*60*60*24));
                 }
             }
 
@@ -917,11 +938,22 @@ function frmFrontFormJS(){
 			if ( typeof n === 'undefined' || isNaN(n) || n === '' ) {
 				n = 0;
 			}
-			vals[thisFieldId] += n;
+			vals[field.thisFieldId] += n;
 		});
 
-        return vals[thisFieldId];
+		return vals[field.thisFieldId];
     }
+
+	function getSiblingField( field ) {
+		if ( typeof field.triggerField === 'undefined' ) {
+			return null;
+		}
+		var container = field.triggerField.closest('.frm_repeat_sec, .frm_repeat_inline, .frm_repeat_grid');
+		if ( container.length ) {
+			var inputClass = '.frm_field_'+ field.thisFieldId +'_container ';
+			return container.find(inputClass +'input, '+inputClass +'select, '+inputClass +'textarea');
+		}
+	}
 
 	function getOptionValue( thisField, currentOpt ) {
 		var thisVal;
@@ -1530,6 +1562,17 @@ function frmFrontFormJS(){
 		}
 	}
 
+	function objectSearch( array, value ) {
+		for( var prop in array ) {
+			if( array.hasOwnProperty( prop ) ) {
+				if( array[ prop ] === value ) {
+					return prop;
+				}
+			}
+		}
+		return null;
+	}
+
 	function isNotEmptyArray( value ) {
 		return jQuery.isArray( value ) && ( value.length > 1 || value[0] !== '' );
 	}
@@ -1625,7 +1668,7 @@ function frmFrontFormJS(){
 			var object = this;
 			action = jQuery(object).find('input[name="frm_action"]').val();
 			jsErrors = [];
-			getAjaxFormErrors( object );
+			frmFrontForm.getAjaxFormErrors( object );
 
 			if ( jsErrors.length === 0 ) {
 				getFormErrors( object, action );
