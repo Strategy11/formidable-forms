@@ -46,8 +46,10 @@ class FrmDb {
         do_action('frm_after_install');
 
         /**** update the styling settings ****/
-        $frm_style = new FrmStyle();
-        $frm_style->update( 'default' );
+		if ( is_admin() ) {
+			$frm_style = new FrmStyle();
+			$frm_style->update( 'default' );
+		}
     }
 
     public function collation() {
