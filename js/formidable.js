@@ -550,6 +550,7 @@ function frmFrontFormJS(){
 
 	function hideFieldLater(rec){
 		jQuery.each(hide_later, function(hkey,hvalue){
+			delete hide_later[hkey];
             if ( typeof hvalue === 'undefined' || typeof hvalue.result === 'undefined' ) {
                 return;
             }
@@ -575,8 +576,6 @@ function frmFrontFormJS(){
 					hideAndClearField(container, hvalue);
                 }
             }
-
-			delete hide_later[hkey];
 		});
 	}
 
