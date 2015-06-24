@@ -866,21 +866,21 @@ function frmFrontFormJS(){
 			var field = {
 				'triggerField': fieldInfo.triggerField, 'thisFieldId': thisCalc.fields[f],
 				'inSection': fieldInfo.inSection,
+				'valKey': fieldInfo.inSection +''+ thisCalc.fields[f],
 				'thisField': all_calcs.fields[ thisCalc.fields[f] ],
 				'thisFieldCall': 'input'+ all_calcs.fieldKeys[ thisCalc.fields[f] ]
 			};
 
 			field = getCallForField( field, all_calcs );
+			vals = getCalcFieldId(field, all_calcs, vals);
 
-			vals[field.thisFieldId] = getCalcFieldId(field, all_calcs, vals);
-
-			if ( typeof vals[field.thisFieldId] === 'undefined' || isNaN(vals[field.thisFieldId]) ) {
-				vals[field.thisFieldId] = 0;
+			if ( typeof vals[field.valKey] === 'undefined' || isNaN(vals[field.valKey]) ) {
+				vals[field.valKey] = 0;
 			}
 
 			var findVar = '['+ field.thisFieldId +']';
 			findVar = findVar.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
-			thisFullCalc = thisFullCalc.replace(new RegExp(findVar, 'g'), vals[field.thisFieldId]);
+			thisFullCalc = thisFullCalc.replace(new RegExp(findVar, 'g'), vals[field.valKey]);
 		}
 		return thisFullCalc;
 	}
@@ -913,13 +913,11 @@ function frmFrontFormJS(){
 	}
 
 	function getCalcFieldId( field, all_calcs, vals ) {
-		if ( typeof vals[field.thisFieldId] !== 'undefined' && vals[field.thisFieldId] !== 0 && field.inSection === false ) {
-			return vals[field.thisFieldId];
+		if ( typeof vals[field.valKey] !== 'undefined' && vals[field.valKey] !== 0 ) {
+			return vals;
 		}
 
-		if ( typeof vals[field.thisFieldId] === 'undefined' ) {
-			vals[field.thisFieldId] = 0;
-		}
+		vals[field.valKey] = 0;
 
 		var calcField;
 		if ( field.inSection === false ) {
@@ -932,7 +930,7 @@ function frmFrontFormJS(){
 		}
 
 		if ( calcField === null || typeof calcField === 'undefined' || calcField.length < 1 ) {
-			return vals[field.thisFieldId];
+			return vals;
 		}
 
 		calcField.each(function(){
@@ -941,7 +939,7 @@ function frmFrontFormJS(){
 			if ( field.thisField.type == 'date' ) {
                 var d = jQuery.datepicker.parseDate(all_calcs.date, thisVal);
                 if ( d !== null ) {
-					vals[field.thisFieldId] = Math.ceil(d/(1000*60*60*24));
+					vals[field.valKey] = Math.ceil(d/(1000*60*60*24));
                 }
             }
 
@@ -955,10 +953,10 @@ function frmFrontFormJS(){
 			if ( typeof n === 'undefined' || isNaN(n) || n === '' ) {
 				n = 0;
 			}
-			vals[field.thisFieldId] += n;
+			vals[field.valKey] += n;
 		});
 
-		return vals[field.thisFieldId];
+		return vals;
     }
 
 	function getSiblingField( field ) {
