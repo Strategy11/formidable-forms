@@ -487,21 +487,21 @@ function frmFrontFormJS(){
 		container.show();
 	}
 
-	function setDefaultValue( $input ) {
-		if ( $input.length ) {
-			var defaultValue = $input.data('frmval');
-			if ( typeof defaultValue !== 'undefined' ) {
-				if ( ! $input.is(':checkbox, :radio') ) {
-					$input.val( defaultValue );
-				} else {
-					if ( ! jQuery.isArray(defaultValue) ) {
-						defaultValue = [ defaultValue ];
-					}
-					for ( var i = 0, l = defaultValue.length; i < l; i++ ) {
-						jQuery('input[value="'+ defaultValue[i] +'"][name="'+ $input.attr('name') +'"]').prop('checked', true);
+	function setDefaultValue( input ) {
+		var inputLenth = input.length;
+		if ( inputLenth ) {
+			for ( var i = 0, l = inputLenth; i < l; i++ ) {
+				var field = jQuery(input[i]);
+				var defaultValue = field.data('frmval');
+				if ( typeof defaultValue !== 'undefined' ) {
+					if ( ! field.is(':checkbox, :radio') ) {
+						field.val( defaultValue );
+						triggerChange( field );
+					} else if ( field.val() == defaultValue || ( jQuery.isArray(defaultValue) && jQuery.inArray(field.val(), defaultValue) !== -1 ) ) {
+						field.prop('checked', true);
+						triggerChange( field );
 					}
 				}
-				triggerChange( $input );
 			}
 		}
 	}
