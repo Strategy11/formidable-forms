@@ -819,8 +819,17 @@ function frmFrontFormJS(){
 		var thisCalc = all_calcs.calc[ field_key ];
 		var thisFullCalc = thisCalc.calc;
 
+		var totalField = jQuery( document.getElementById('field_'+ field_key) );
+		var fieldInfo = { 'triggerField': triggerField, 'inSection': false, 'thisFieldCall': 'input[id^="field_'+ field_key+'-"]' };
+		if ( totalField.length < 1 && typeof triggerField !== 'undefined' ) {
+			// check if the total field is inside of a repeating/embedded form
+			fieldInfo.inSection = true;
+			fieldInfo.thisFieldId = objectSearch( all_calcs.fieldsWithCalc, field_key );
+			totalField = getSiblingField( fieldInfo );
+		}
+
 		// loop through the fields in this calculation
-		thisFullCalc = getValsForSingleCalc( thisCalc, thisFullCalc, all_calcs, vals, triggerField );
+		thisFullCalc = getValsForSingleCalc( thisCalc, thisFullCalc, all_calcs, vals, fieldInfo );
 
 		// Set the number of decimal places
 		var dec = thisCalc.calc_dec;
@@ -844,34 +853,24 @@ function frmFrontFormJS(){
 		if ( typeof total === 'undefined' ) {
 			total = 0;
 		}
-		var field = jQuery( document.getElementById('field_'+ field_key) );
-		if ( field.length < 1 && typeof triggerField !== 'undefined' ) {
-			var fieldInfo = { 'triggerField': triggerField, 'thisFieldId': objectSearch( all_calcs.fieldsWithCalc, field_key ) };
-			field = getSiblingField( fieldInfo );
-		}
 
-		if ( field.val() != total ) {
-			field.val(total);
-			triggerChange( field, field_key );
+		if ( totalField.val() != total ) {
+			totalField.val(total);
+			triggerChange( totalField, field_key );
 		}
 	}
 
-	function getValsForSingleCalc( thisCalc, thisFullCalc, all_calcs, vals, triggerField ) {
+	function getValsForSingleCalc( thisCalc, thisFullCalc, all_calcs, vals, fieldInfo ) {
 		var fCount = thisCalc.fields.length;
 		for ( var f = 0, c = fCount; f < c; f++ ) {
 			var field = {
-				'triggerField': triggerField, 'thisFieldId': thisCalc.fields[f],
+				'triggerField': fieldInfo.triggerField, 'thisFieldId': thisCalc.fields[f],
+				'inSection': fieldInfo.inSection,
 				'thisField': all_calcs.fields[ thisCalc.fields[f] ],
 				'thisFieldCall': 'input'+ all_calcs.fieldKeys[ thisCalc.fields[f] ]
 			};
 
-			if ( field.thisField.type == 'checkbox' || field.thisField.type == 'select' ) {
-				field.thisFieldCall = field.thisFieldCall +':checked,select'+ all_calcs.fieldKeys[field.thisFieldId] +' option:selected,'+ field.thisFieldCall+'[type=hidden]';
-			} else if ( field.thisField.type == 'radio' || field.thisField.type == 'scale' ) {
-				field.thisFieldCall = field.thisFieldCall +':checked,'+ field.thisFieldCall +'[type=hidden]';
-			} else if ( field.thisField.type == 'textarea' ) {
-				field.thisFieldCall = field.thisFieldCall + ',textarea'+ all_calcs.fieldKeys[field.thisFieldId];
-			}
+			field = getCallForField( field, all_calcs );
 
 			vals[field.thisFieldId] = getCalcFieldId(field, all_calcs, vals);
 
@@ -884,6 +883,17 @@ function frmFrontFormJS(){
 			thisFullCalc = thisFullCalc.replace(new RegExp(findVar, 'g'), vals[field.thisFieldId]);
 		}
 		return thisFullCalc;
+	}
+
+	function getCallForField( field, all_calcs ) {
+		if ( field.thisField.type == 'checkbox' || field.thisField.type == 'select' ) {
+			field.thisFieldCall = field.thisFieldCall +':checked,select'+ all_calcs.fieldKeys[field.thisFieldId] +' option:selected,'+ field.thisFieldCall+'[type=hidden]';
+		} else if ( field.thisField.type == 'radio' || field.thisField.type == 'scale' ) {
+			field.thisFieldCall = field.thisFieldCall +':checked,'+ field.thisFieldCall +'[type=hidden]';
+		} else if ( field.thisField.type == 'textarea' ) {
+			field.thisFieldCall = field.thisFieldCall + ',textarea'+ all_calcs.fieldKeys[field.thisFieldId];
+		}
+		return field;
 	}
 
 	function doCalcForSingleField( field_id, triggerField ) {
@@ -903,7 +913,7 @@ function frmFrontFormJS(){
 	}
 
 	function getCalcFieldId( field, all_calcs, vals ) {
-		if ( typeof vals[field.thisFieldId] !== 'undefined' && vals[field.thisFieldId] !== 0 ) {
+		if ( typeof vals[field.thisFieldId] !== 'undefined' && vals[field.thisFieldId] !== 0 && field.inSection === false ) {
 			return vals[field.thisFieldId];
 		}
 
@@ -911,12 +921,18 @@ function frmFrontFormJS(){
 			vals[field.thisFieldId] = 0;
 		}
 
-		var calcField = jQuery(field.thisFieldCall);
-		if ( calcField.length < 1 ) {
+		var calcField;
+		if ( field.inSection === false ) {
+			calcField = jQuery(field.thisFieldCall);
+		} else {
 			calcField = getSiblingField( field );
-			if ( calcField === null || typeof calcField === 'undefined' || calcField.length < 1 ) {
-				return vals[field.thisFieldId];
+			if ( calcField === null || typeof calcField === 'undefined' ) {
+				calcField = jQuery(field.thisFieldCall);
 			}
+		}
+
+		if ( calcField === null || typeof calcField === 'undefined' || calcField.length < 1 ) {
+			return vals[field.thisFieldId];
 		}
 
 		calcField.each(function(){
@@ -952,7 +968,15 @@ function frmFrontFormJS(){
 		var container = field.triggerField.closest('.frm_repeat_sec, .frm_repeat_inline, .frm_repeat_grid');
 		if ( container.length ) {
 			var inputClass = '.frm_field_'+ field.thisFieldId +'_container ';
-			return container.find(inputClass +'input, '+inputClass +'select, '+inputClass +'textarea');
+			var fieldCallParts = field.thisFieldCall.split(',');
+			var siblingFieldCall = '';
+			for ( var i = 0, l = fieldCallParts.length; i < l; i++ ) {
+				if ( siblingFieldCall !== '' ) {
+					siblingFieldCall = siblingFieldCall +',';
+				}
+				siblingFieldCall = siblingFieldCall + inputClass + fieldCallParts[i].replace('[id=', '[id^=');
+			}
+			return container.find(siblingFieldCall);
 		}
 		return null;
 	}
@@ -963,10 +987,8 @@ function frmFrontFormJS(){
 		// If current option is an other option, get other value
 		if ( isOtherOption( thisField, currentOpt ) ) {
 			thisVal = getOtherValueAnyField( thisField, currentOpt );
-		} else if ( currentOpt.type === 'checkbox' || currentOpt.type === 'radio' ) {
-			if ( currentOpt.checked ) {
-				thisVal = currentOpt.value;
-			}
+		} else if ( (currentOpt.type === 'checkbox' || currentOpt.type === 'radio') && currentOpt.checked ) {
+			thisVal = currentOpt.value;
 		} else {
 			thisVal = jQuery(currentOpt).val();
 		}
