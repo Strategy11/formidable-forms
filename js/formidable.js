@@ -914,7 +914,7 @@ function frmFrontFormJS(){
 		var calcField = jQuery(field.thisFieldCall);
 		if ( calcField.length < 1 ) {
 			calcField = getSiblingField( field );
-			if ( calcField === null || calcField.length < 1 ) {
+			if ( calcField === null || typeof calcField === 'undefined' || calcField.length < 1 ) {
 				return vals[field.thisFieldId];
 			}
 		}
@@ -954,6 +954,7 @@ function frmFrontFormJS(){
 			var inputClass = '.frm_field_'+ field.thisFieldId +'_container ';
 			return container.find(inputClass +'input, '+inputClass +'select, '+inputClass +'textarea');
 		}
+		return null;
 	}
 
 	function getOptionValue( thisField, currentOpt ) {
@@ -962,10 +963,17 @@ function frmFrontFormJS(){
 		// If current option is an other option, get other value
 		if ( isOtherOption( thisField, currentOpt ) ) {
 			thisVal = getOtherValueAnyField( thisField, currentOpt );
+		} else if ( currentOpt.type === 'checkbox' || currentOpt.type === 'radio' ) {
+			if ( currentOpt.checked ) {
+				thisVal = currentOpt.value;
+			}
 		} else {
 			thisVal = jQuery(currentOpt).val();
 		}
 
+		if ( typeof thisVal === 'undefined' ) {
+			thisVal = '';
+		}
 		return thisVal;
 	}
 
