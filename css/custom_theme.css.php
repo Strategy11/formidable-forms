@@ -63,6 +63,12 @@ legend.frm_hidden{
     width:auto;
 }
 
+.with_frm_style .frm_inline_container label.frm_primary_label,
+.with_frm_style .frm_inline_container:not(.frm_dynamic_select_container) .frm_opt_container{
+    display:inline;
+    margin-right:10px;
+}
+
 .with_frm_style .frm_right_container label.frm_primary_label,
 .with_frm_style .frm_pos_right{
     display:inline;
