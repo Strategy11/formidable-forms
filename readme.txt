@@ -4,7 +4,7 @@ Donate link: http://formidablepro.com/donate
 Tags: admin, AJAX, captcha, contact, contact form, database, email, feedback, form, forms, javascript, jquery, page, plugin, poll, Post, spam, survey, template, widget, wpmu, form builder
 Requires at least: 3.6
 Tested up to: 4.2
-Stable tag: 2.0.09
+Stable tag: 2.0.10
 
 Beautiful forms in 60 seconds. The WordPress form builder that enables you to create forms with a simple drag-and-drop interface and in-place editing.
 
@@ -89,6 +89,17 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 [See more FAQs](http://formidablepro.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 2.0.10 =
+* Add frm_action_triggers hook for adding custom triggers into the actions
+* Add frm_{action name here}_action_options hook so any action can be altered
+* Prevent extra form actions when a form is duplicated
+* Load correct version of formidable.js based on wp-config debugging constant (Thanks @naomicbush for the contributions!)
+* Revert get_sortable_columns changes for < WP 4.0 support
+* **Pro Features:**
+* Allow calculations inside repeating sections and embedded forms
+* Set default values for conditional checkboxes and radio fields and inside conditional sections
+* A few changes to the way section fields create divs
+
 = 2.0.09 =
 * Add frm_time_to_check duplicate entries filter
 * Allow custom JavaScript validation
