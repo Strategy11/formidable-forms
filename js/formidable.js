@@ -493,8 +493,13 @@ function frmFrontFormJS(){
 			if ( typeof defaultValue !== 'undefined' ) {
 				if ( ! $input.is(':checkbox, :radio') ) {
 					$input.val( defaultValue );
-				} else if ( $input.val() == defaultValue || ( jQuery.isArray(defaultValue) && jQuery.inArray($input.val(), defaultValue) !== -1 ) ) {
-					$input.prop('checked', true);
+				} else {
+					if ( ! jQuery.isArray(defaultValue) ) {
+						defaultValue = [ defaultValue ];
+					}
+					for ( var i = 0, l = defaultValue.length; i < l; i++ ) {
+						jQuery('input[value="'+ defaultValue[i] +'"][name="'+ $input.attr('name') +'"]').prop('checked', true);
+					}
 				}
 				triggerChange( $input );
 			}
@@ -1039,6 +1044,59 @@ function frmFrontFormJS(){
 	/* Get value from Other text field in a visible dropdown field */
 	function getOtherSelectValue( currentOpt ) {
 		return jQuery(currentOpt).closest('.frm_other_container').find('.frm_other_input').val();
+	}
+
+	function validateForm( action, object ) {
+		var errors = [];
+
+		// Make sure required text field is filled in
+		var requiredFields = jQuery(object).find('.frm_required_field input, .frm_required_field select, .frm_required_field textarea');
+		if ( requiredFields.length ) {
+			for ( var r = 0, rl = requiredFields.length; r < rl; r++ ) {
+				// this won't work with radio/checkbox
+				errors = checkRequiredField( requiredFields[r], errors );
+			}
+		}
+
+		// Make sure required email field is filled in
+		var emailFields = jQuery(object).find('input[type=email]');
+		if ( emailFields.length ) {
+			for ( var e = 0, el = emailFields.length; e < el; e++ ) {
+				errors = checkEmailField( emailFields[e], errors, emailFields );
+			}
+		}
+		return errors;
+	}
+
+	function checkRequiredField( field, errors ) {
+		if ( jQuery(field).val() === '' ) {
+			var rFieldID = getFieldId( field );
+			errors[ rFieldID ] = '';
+		}
+		return errors;
+	}
+
+	function checkEmailField( field, errors, emailFields ) {
+		var emailAddress = field.value;
+		var fieldID = getFieldId( field );
+		var isConf = (fieldID.indexOf('conf_') === 0);
+		if ( emailAddress !== '' || isConf ) {
+			var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+			if ( re.test( emailAddress ) === false ) {
+				errors[ fieldID ] = '';
+				if ( isConf ) {
+					errors[ fieldID.replace('conf_', '') ] = '';
+				}
+			} else if ( isConf ) {
+				var confName = field.name.replace('conf_', '');
+				var match = emailFields.filter('[name="'+ confName +'"]').val();
+				if ( match !== emailAddress ) {
+					errors[ fieldID ] = '';
+					errors[ fieldID.replace('conf_', '') ] = '';
+				}
+			}
+		}
+		return errors;
 	}
 
 	function getFormErrors(object, action){
@@ -1692,6 +1750,8 @@ function frmFrontFormJS(){
 		getAjaxFormErrors: function( object ) {
 			if ( typeof frmThemeOverride_jsErrors == 'function' ) {
 				jsErrors = frmThemeOverride_jsErrors( action, object );
+			} else {
+				//jsErrors = validateForm( action, object );
 			}
 		},
 
