@@ -1162,7 +1162,8 @@ class FrmFormsController {
 
 	public static function front_head() {
 		$version = FrmAppHelper::plugin_version();
-		wp_register_script( 'formidable', FrmAppHelper::plugin_url() . '/js/formidable.min.js', array( 'jquery' ), $version, true );
+		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+		wp_register_script( 'formidable', FrmAppHelper::plugin_url() . "/js/formidable{$suffix}.js", array( 'jquery' ), $version, true );
 		wp_register_script( 'jquery-placeholder', FrmAppHelper::plugin_url() . '/js/jquery/jquery.placeholder.js', array( 'jquery' ), '2.0.7', true );
 
 		if ( FrmAppHelper::is_admin() ) {
