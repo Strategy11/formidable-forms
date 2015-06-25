@@ -508,7 +508,7 @@ function frmFrontFormJS(){
 
 	function triggerChange( input, fieldKey ) {
 		if ( typeof fieldKey === 'undefined' ) {
-			fieldKey = getFieldId( input );
+			fieldKey = 'dependent';
 		}
 		input.trigger({ type:'change', selfTriggered:true, frmTriggered:fieldKey });
 	}
