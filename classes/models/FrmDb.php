@@ -36,11 +36,11 @@ class FrmDb {
             $this->create_tables();
             $this->migrate_data($frm_db_version, $old_db_version);
 
-            /**** ADD/UPDATE DEFAULT TEMPLATES ****/
-            FrmXMLController::add_default_templates();
-
             /***** SAVE DB VERSION *****/
             update_option('frm_db_version', $frm_db_version);
+
+            /**** ADD/UPDATE DEFAULT TEMPLATES ****/
+            FrmXMLController::add_default_templates();
         }
 
         do_action('frm_after_install');
