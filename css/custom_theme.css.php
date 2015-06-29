@@ -1133,7 +1133,8 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
 .frm_form_field .frm_repeat_sec .frm_add_form_row{
     opacity:0;
 	display:none;
-	*visibility:visible;
+	*display:inline;
+	display:inline\0/; /* For IE 8-9 */
 	-moz-transition: opacity .15s ease-in-out;
 	-webkit-transition: opacity .15s ease-in-out;
 	transition: opacity .15s ease-in-out;
