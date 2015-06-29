@@ -9,6 +9,7 @@ class FrmEntryFormat {
 			'font_size' => '', 'text_color' => '',
 			'border_width' => '', 'border_color' => '',
 			'bg_color' => '', 'alt_bg_color' => '',
+			'clickable' => false,
 		), $atts );
 
 		if ( $atts['format'] != 'text' ) {
@@ -60,6 +61,10 @@ class FrmEntryFormat {
 		if ( 'text' == $atts['format'] ) {
 			$content = implode('', $content);
 		}
+
+		if ( $atts['clickable'] ) {
+			$content = make_clickable( $content );
+	        }
 
 		return $content;
 	}
