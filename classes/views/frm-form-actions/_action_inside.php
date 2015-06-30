@@ -40,7 +40,7 @@ if ( count( $action_control->action_options['event'] ) == 1 || $action_control->
 	) );
 
 	foreach ( $action_control->action_options['event'] as $event ) { ?>
-		<option value="<?php echo esc_attr( $event ) ?>" <?php echo in_array( $event, (array) $form_action->post_content['event'] ) ? ' selected="selected"' : ''; ?> /><?php echo isset( $event_labels[ $event ] ) ? $event_labels[ $event ] : $event; ?></option>
+		<option value="<?php echo esc_attr( $event ) ?>" <?php echo in_array( $event, (array) $form_action->post_content['event'] ) ? ' selected="selected"' : ''; ?> ><?php echo isset( $event_labels[ $event ] ) ? $event_labels[ $event ] : $event; ?></option>
 <?php
 	}
 ?>		</select>

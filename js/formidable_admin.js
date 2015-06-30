@@ -111,6 +111,7 @@ function frmAdminBuildJS(){
 					data:{action:'frm_form_action_fill', action_id:action_id, action_type:action_type, nonce:frmGlobal.nonce},
 					success:function(html){
 						cont.children('.widget-inside').html(html);
+						initiateMultiselect();
 					}
 				});
                 }
@@ -1101,6 +1102,7 @@ function frmAdminBuildJS(){
 
 				//check if icon should be active
 				checkActiveAction(type);
+				initiateMultiselect();
 			}
 		});
 	}
@@ -2005,7 +2007,8 @@ function frmAdminBuildJS(){
 			$formActions.on('click', '.frm_add_posttax_row', addPosttaxRow);
 			$formActions.on('click', '.frm_toggle_cf_opts', toggleCfOpts);
 			jQuery('.frm_actions_list').on('click', '.frm_active_action', addFormAction);
-			
+			initiateMultiselect();
+
 			//set actions icons to inactive
 			jQuery('ul.frm_actions_list li').each(function(){
 				checkActiveAction(jQuery(this).children('a').data('actiontype'));
