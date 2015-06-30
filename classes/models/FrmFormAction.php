@@ -339,8 +339,10 @@ class FrmFormAction {
 
 	public function get_single_action( $id ) {
 	    $action = get_post($id);
-	    $action = $this->prepare_action($action);
-	    $this->_set($id);
+		if ( $action ) {
+			$action = $this->prepare_action( $action );
+			$this->_set( $id );
+		}
 	    return $action;
 	}
 
