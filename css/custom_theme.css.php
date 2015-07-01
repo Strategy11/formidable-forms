@@ -1872,7 +1872,7 @@ html[xmlns] .frm_clearfix{
 		position:static;
 	}
 
-	.g-recaptcha > div > div{
+	.with_frm_style .g-recaptcha > div > div{
 		width:inherit !important;
 		display:block;
 		overflow:hidden;
@@ -1882,10 +1882,10 @@ html[xmlns] .frm_clearfix{
 		box-shadow:2px 0px 4px -1px rgba(0,0,0,.08);
 		-moz-box-shadow:2px 0px 4px -1px rgba(0,0,0,.08);
 	}
-	.g-recaptcha iframe{
+
+	.with_frm_style .g-recaptcha iframe{
 		width:100%;
 	}
-
 }
 <?php
 echo $defaults['custom_css'];
