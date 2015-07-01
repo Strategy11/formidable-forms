@@ -1754,6 +1754,7 @@ class FrmAppHelper {
 				'import_complete'   => __( 'Import Complete', 'formidable' ),
 				'updating'          => __( 'Please wait while your site updates.', 'formidable' ),
 				'no_save_warning'   => __( 'Warning: There is no way to retrieve unsaved entries.', 'formidable' ),
+				'private'           => __( 'Private' ),
 				'jquery_ui_url'     => self::jquery_ui_base_url(),
 			) );
 		}

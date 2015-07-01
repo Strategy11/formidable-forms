@@ -1508,6 +1508,15 @@ function frmAdminBuildJS(){
 		}
 	}
 
+	function setDefaultPostStatus() {
+		var urlQuery = window.location.search.substring(1);
+		if ( urlQuery.indexOf('action=edit') === -1 ) {
+			document.getElementById('post-visibility-display').innerHTML = frm_admin_js.private;
+			document.getElementById('hidden-post-visibility').value = 'private';
+			document.getElementById('visibility-radio-private').checked = true;
+		}
+	}
+
 	/* Customization Panel */
 	function insertCode(){
 		insertFieldCode(jQuery(this), jQuery(this).data('code'));
@@ -2182,6 +2191,8 @@ function frmAdminBuildJS(){
 			$addRemove.on('click', '.frm_add_where_row', addWhereRow);
 			$addRemove.on('change', '.frm_insert_where_options', insertWhereOptions);
 			$addRemove.on('change', '.frm_where_is_options', hideWhereOptions);
+
+			setDefaultPostStatus();
 		},
 		
 		styleInit: function(){
