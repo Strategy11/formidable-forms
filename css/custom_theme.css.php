@@ -1871,6 +1871,21 @@ html[xmlns] .frm_clearfix{
 	.with_frm_style.frm_login_form.frm_inline_login .login-remember{
 		position:static;
 	}
+
+	.g-recaptcha > div > div{
+		width:inherit !important;
+		display:block;
+		overflow:hidden;
+		max-width:302px;
+		border-right:1px solid #d3d3d3;
+		border-radius:4px;
+		box-shadow:2px 0px 4px -1px rgba(0,0,0,.08);
+		-moz-box-shadow:2px 0px 4px -1px rgba(0,0,0,.08);
+	}
+	.g-recaptcha iframe{
+		width:100%;
+	}
+
 }
 <?php
 echo $defaults['custom_css'];
