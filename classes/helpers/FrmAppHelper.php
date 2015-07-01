@@ -760,17 +760,30 @@ class FrmAppHelper {
 
 	public static function recursive_function_map( $value, $function ) {
 		if ( is_array( $value ) ) {
+			$original_function = $function;
 			if ( count( $value ) ) {
 				$function = explode( ', ', self::prepare_array_values( $value, $function ) );
 			} else {
 				$function = array( $function );
 			}
-			$value = array_map( array( 'FrmAppHelper', 'recursive_function_map' ), $value, $function );
+			if ( ! self::is_assoc( $value ) ) {
+				$value = array_map( array( 'FrmAppHelper', 'recursive_function_map' ), $value, $function );
+			} else {
+				foreach ( $value as $k => $v ) {
+					if ( ! is_array( $v ) ) {
+						$value[ $k ] = call_user_func( $original_function, $v );
+					}
+				}
+			}
 		} else {
 			$value = call_user_func( $function, $value );
 		}
 
 		return $value;
+	}
+
+	public static function is_assoc( $array ) {
+		return (bool) count( array_filter( array_keys( $array ), 'is_string' ) );
 	}
 
     /**
