@@ -492,6 +492,10 @@ function frmFrontFormJS(){
 		if ( inputLenth ) {
 			for ( var i = 0, l = inputLenth; i < l; i++ ) {
 				var field = jQuery(input[i]);
+				// If the field already has a value (i.e. when form is loaded for editing an entry), don't get the default value
+				if ( field.val() ) {
+					return;
+				}
 				var defaultValue = field.data('frmval');
 				if ( typeof defaultValue !== 'undefined' ) {
 					if ( ! field.is(':checkbox, :radio') ) {
