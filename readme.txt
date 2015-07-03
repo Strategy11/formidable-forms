@@ -89,6 +89,21 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 [See more FAQs](http://formidablepro.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 2.0.11 =
+* Fix issue with clearing array keys when sanitizing an array when displaying entry values
+* When the email "reply to" value uses the "from" setting, only use the email address without the name
+* Switch the form action events to dropdown instead of checkboxes
+* Shrink the reCaptcha on small screens
+* **Pro Features:**
+* Set new views to private by default
+* Allow clickable=1 in the frm-show-entry shortcode
+* Make sure to show the Add row button for repeating sections in IE9
+* Correctly require a password before showing password protected views
+* Add update_single_field function for easier updating of a single field
+* Add frm_datepicker_formats hook for adding format additional options on the Formidable -> global settings page
+* Add frm_csv_row hook for adding data to a row in the CSV
+* Keep the Pending status selected after save in the post settings
+
 = 2.0.10 =
 * Add frm_action_triggers hook for adding custom triggers into the actions
 * Add frm_{action name here}_action_options hook so any action can be altered
