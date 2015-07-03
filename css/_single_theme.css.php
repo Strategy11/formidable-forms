@@ -250,7 +250,7 @@ if ( ! isset($collapse_icon) ) {
     display:inline<?php echo $important ?>;
 }
 
-.<?php echo $style_class ?> .frm_inline_container.frm_scale_container label.frm_primary_label{
+.<?php echo $style_class ?> .frm_inline_container label.frm_primary_label{
 	margin-right:10px<?php echo $important ?>;
 }
 

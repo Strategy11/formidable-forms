@@ -65,7 +65,6 @@ legend.frm_hidden{
 
 .with_frm_style .frm_inline_container label.frm_primary_label,
 .with_frm_style .frm_inline_container:not(.frm_dynamic_select_container) .frm_opt_container{
-    display:inline;
     margin-right:10px;
 }
 
