@@ -52,6 +52,10 @@ class FrmXMLHelper {
 			return new WP_Error( 'SimpleXML_parse_error', __( 'There was an error when reading this XML file', 'formidable' ), libxml_get_errors() );
 		}
 
+		if ( ! function_exists('simplexml_import_dom') ) {
+			return new WP_Error( 'SimpleXML_parse_error', __( 'Your server in missing the simplexml_import_dom function', 'formidable' ), libxml_get_errors() );
+		}
+
 		$xml = simplexml_import_dom( $dom );
 		unset( $dom );
 
