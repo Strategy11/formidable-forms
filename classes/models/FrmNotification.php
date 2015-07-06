@@ -357,6 +357,7 @@ class FrmNotification {
 			// remove line breaks in HTML emails to prevent conflicts with Mandrill
         	add_filter( 'mandrill_nl2br', 'FrmNotification::remove_mandrill_br' );
         }
+		$message = apply_filters( 'frm_email_message', $message, $atts );
 
         $header         = apply_filters('frm_email_header', $header, array(
 			'to_email' => $atts['to_email'], 'subject' => $atts['subject'],
