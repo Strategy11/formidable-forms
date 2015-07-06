@@ -241,7 +241,7 @@ class FrmFormActionsController {
 	public static function trigger_actions( $event, $form, $entry, $type = 'all', $args = array() ) {
 		$form_actions = FrmFormAction::get_action_for_form( ( is_object( $form ) ? $form->id : $form ), $type );
 
-        if ( empty( $form_actions ) ) {
+		if ( empty( $form_actions ) || ( defined( 'WP_IMPORTING' ) && WP_IMPORTING ) ) {
             return;
         }
 
