@@ -1823,11 +1823,6 @@ iframe#dyncontent_ifr{min-height:150px;}
 
 .frm_uninstall a.button{margin-top:1px;}
 
-#message.fade:not(.out),
-.frm_message.fade:not(.out){
-    opacity:1;
-}
-
 /*!
  * Bootstrap v3.0.2
  */
@@ -1849,16 +1844,6 @@ iframe#dyncontent_ifr{min-height:150px;}
 .tooltip.bottom .tooltip-arrow{top:0;left:50%;margin-left:-5px;border-width:0 5px 5px;border-bottom-color:#6D6D6D;}
 .tooltip.bottom-left .tooltip-arrow{top:0;left:5px;border-width:0 5px 5px;border-bottom-color:#6D6D6D;}
 .tooltip.bottom-right .tooltip-arrow{top:0;right:5px;border-width:0 5px 5px;border-bottom-color:#6D6D6D;}
-
-.fade {
-  opacity: 0;
-  -webkit-transition: opacity 0.15s linear;
-          transition: opacity 0.15s linear;
-}
-
-.fade.in {
-  opacity: 1;
-}
 
 .frm_progress {
   overflow: hidden;
