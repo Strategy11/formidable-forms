@@ -1794,7 +1794,7 @@ select.texture{display: none;}
 #wp-content-editor-tools{
 	background-color:transparent;
 }
-#frm_adv_info{position:fixed;z-index:5;width:280px;}
+#frm_adv_info{position:fixed;z-index:9999;width:280px;}
 .frm_noallow{
     opacity:.5;
     filter:alpha(opacity=50);
