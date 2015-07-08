@@ -1765,7 +1765,7 @@ function frmAdminBuildJS(){
     function initiateMultiselect(){
         jQuery('.frm_multiselect').multiselect({
             templates: {ul:'<ul class="multiselect-container frm-dropdown-menu"></ul>'},
-            nonSelectedText:frm_admin_js.default
+			nonSelectedText:frm_admin_js['default']
         });
     }
 
@@ -1907,7 +1907,7 @@ function frmAdminBuildJS(){
 			setupSortable('ul.frm_sorting');
 
 			// Show message if section has no fields inside
-			var frm_sorting = document.getElementsByClassName('start_divider frm_sorting');
+			var frm_sorting = jQuery('.start_divider .frm_sorting');
 			for ( i = 0; i < frm_sorting.length ; i++) {
 				if ( frm_sorting[i].children.length < 2 ) {
 					jQuery(frm_sorting[i]).parent().children('.frm_no_section_fields').addClass('frm_block');
