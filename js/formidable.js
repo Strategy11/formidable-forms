@@ -130,19 +130,25 @@ function frmFrontFormJS(){
 
 		checkDependentField('und', field_id, null, jQuery(this), reset);
 		doCalculation(field_id, jQuery(this));
+		//validateField( field_id, this );
 	}
 
 	/* Get the ID of the field that changed*/
-	function getFieldId( field ) {
+	function getFieldId( field, fullID ) {
 		var fieldName = '';
 		if ( field instanceof jQuery ) {
 			fieldName = field.attr('name');
 		} else {
 			fieldName = field.name;
 		}
-		var nameParts = fieldName.replace('item_meta[', '').split(']');
+		var nameParts = fieldName.replace('item_meta[', '').replace('[]', '').split(']');
+		nameParts = nameParts.filter(function(n){ return n !== ''; });
 		var field_id = nameParts[0];
 		var isRepeating = false;
+
+		if ( nameParts.length === 1 ) {
+			return field_id;
+		}
 
 		// Check if 'this' is in a repeating section
 		if ( jQuery('input[name="item_meta['+ field_id +'][form]"]').length ) {
@@ -160,6 +166,11 @@ function frmFrontFormJS(){
 				// Other field name: item_meta[other][370]
 				field_id = nameParts[1].replace('[', '');
 			}
+		}
+
+		if ( fullID === true ) {
+			// For use in the container div id
+			field_id = field_id +'-'+ nameParts[0] +'-'+ nameParts[1].replace('[', '');
 		}
 
 		return field_id;
@@ -1102,12 +1113,43 @@ function frmFrontFormJS(){
 				errors = checkEmailField( emailFields[e], errors, emailFields );
 			}
 		}
+
+		var numberFields = jQuery(object).find('input[type=number]');
+		if ( numberFields.length ) {
+			for ( var n = 0, nl = numberFields.length; n < nl; n++ ) {
+				errors = checkNumberField( numberFields[n], errors );
+			}
+		}
+
 		return errors;
 	}
 
-	function checkRequiredField( field, errors ) {
+	function validateField( fieldId, field ) {
+		var errors = [];
+		var $fieldCont = jQuery(field).closest('.frm_form_field');
+		if ( $fieldCont.hasClass('.frm_required_field') ) {
+			errors = checkRequiredField( field, errors );
+		}
+
+		if ( errors.length < 1 ) {
+			if ( field.type == 'email' ) {
+				var emailFields = jQuery(field).closest('form').find('input[type=email]');
+				errors = checkEmailField( field, errors, emailFields );
+			}
+		}
+
+		if (  Object.keys(errors).length > 0 ) {
+			for ( var key in errors ) {
+				addFieldError( $fieldCont, key, errors );
+			}
+		} else {
+			removeFieldError( $fieldCont );
+		}
+	}
+
+	function checkRequiredField( field, errors, rFieldID ) {
 		if ( jQuery(field).val() === '' ) {
-			var rFieldID = getFieldId( field );
+			rFieldID = getFieldId( field, true );
 			errors[ rFieldID ] = '';
 		}
 		return errors;
@@ -1115,7 +1157,7 @@ function frmFrontFormJS(){
 
 	function checkEmailField( field, errors, emailFields ) {
 		var emailAddress = field.value;
-		var fieldID = getFieldId( field );
+		var fieldID = getFieldId( field, true );
 		var isConf = (fieldID.indexOf('conf_') === 0);
 		if ( emailAddress !== '' || isConf ) {
 			var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
@@ -1133,6 +1175,19 @@ function frmFrontFormJS(){
 				}
 			}
 		}
+		return errors;
+	}
+
+	function checkNumberField( field, errors ) {
+		var number = field.value;
+		if ( isNaN(number / 1) !== false ) {
+			var fieldID = getFieldId( field, true );
+			errors[ fieldID ] = '';
+		}
+		return errors;
+	}
+
+	function checkDateField( field, errors ) {
 		return errors;
 	}
 
@@ -1216,13 +1271,8 @@ function frmFrontFormJS(){
 									show_captcha = true;
 									grecaptcha.reset();
 								}
-							
-								$fieldCont.addClass('frm_blank_field');
-								if ( typeof frmThemeOverride_frmPlaceError == 'function' ) {
-									frmThemeOverride_frmPlaceError(key,errObj);
-								} else {
-									$fieldCont.append('<div class="frm_error">'+errObj[key]+'</div>');
-								}
+
+								addFieldError( $fieldCont, key, errObj );
 							}
 						}else if(key == 'redirect'){
 							window.location = errObj[key];
@@ -1241,6 +1291,22 @@ function frmFrontFormJS(){
 				jQuery(object).find('input[type="submit"], input[type="button"]').removeAttr('disabled');object.submit();
 			}
 		});
+	}
+
+	function addFieldError( $fieldCont, key, jsErrors ) {
+		if ( $fieldCont.length && $fieldCont.is(':visible') ) {
+			$fieldCont.addClass('frm_blank_field');
+			if ( typeof frmThemeOverride_frmPlaceError == 'function' ) {
+				frmThemeOverride_frmPlaceError( key, jsErrors );
+			} else {
+				$fieldCont.append( '<div class="frm_error">'+ jsErrors[key] +'</div>' );
+			}
+		}
+	}
+
+	function removeFieldError( $fieldCont ) {
+		$fieldCont.removeClass('frm_blank_field');
+		$fieldCont.find('.frm_error').remove();
 	}
 
 	function clearDefault(){
@@ -1762,24 +1828,16 @@ function frmFrontFormJS(){
 			jsErrors = [];
 			frmFrontForm.getAjaxFormErrors( object );
 
-			if ( jsErrors.length === 0 ) {
+			if ( Object.keys(jsErrors).length === 0 ) {
 				getFormErrors( object, action );
 			} else {
 				// Remove all previous errors
 				jQuery('.form-field').removeClass('frm_blank_field');
 				jQuery('.form-field .frm_error').replaceWith('');
 
-				var $fieldCont = null;
 				for ( var key in jsErrors ) {
-					$fieldCont = jQuery(object).find(jQuery(document.getElementById('frm_field_'+key+'_container')));
-					if ( $fieldCont.length && $fieldCont.is(':visible') ) {
-						$fieldCont.addClass('frm_blank_field');
-						if ( typeof frmThemeOverride_frmPlaceError == 'function' ) {
-							frmThemeOverride_frmPlaceError( key, jsErrors );
-						} else {
-							$fieldCont.append( '<div class="frm_error">'+ jsErrors[key] +'</div>' );
-						}
-					}
+					var $fieldCont = jQuery(object).find(jQuery('#frm_field_'+key+'_container'));
+					addFieldError( $fieldCont, key, jsErrors );
 				}
 			}
 		},
