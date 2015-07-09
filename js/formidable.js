@@ -531,6 +531,11 @@ function frmFrontFormJS(){
 		if ( typeof fieldKey === 'undefined' ) {
 			fieldKey = 'dependent';
 		}
+
+		if ( input.length > 1 ) {
+			input = input.eq(0);
+		}
+
 		input.trigger({ type:'change', selfTriggered:true, frmTriggered:fieldKey });
 	}
 
