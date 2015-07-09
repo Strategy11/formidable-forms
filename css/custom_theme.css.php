@@ -1291,8 +1291,16 @@ html[xmlns] .frm_clearfix{
 }
 
 /* Login form */
+.with_frm_style.frm_login_form{
+	clear:both;
+}
+
 .with_frm_style.frm_login_form.frm_inline_login .login-remember input{
 	vertical-align:baseline;
+}
+
+.with_frm_style.frm_login_form.frm_inline_login .login-submit{
+	float:left;
 }
 
 .with_frm_style.frm_login_form.frm_inline_login label{
