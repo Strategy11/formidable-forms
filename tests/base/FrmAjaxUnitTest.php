@@ -1,5 +1,6 @@
 <?php
 
+FrmHooksController::trigger_load_hook( 'load_admin_hooks' );
 FrmHooksController::trigger_load_hook( 'load_ajax_hooks' );
 FrmHooksController::trigger_load_hook( 'load_form_hooks' );
 
@@ -35,6 +36,10 @@ class FrmAjaxUnitTest extends WP_Ajax_UnitTestCase {
 
         $form = FrmForm::getOne( 'contact-db12' );
         $this->assertEquals( $form->form_key, 'contact-db12' );
+
+		$entry = FrmEntry::getOne( 'utah' );
+		$this->assertNotEmpty( $entry );
+		$this->assertEquals( $entry->item_key, 'utah' );
     }
 
     function set_as_user_role( $role ) {

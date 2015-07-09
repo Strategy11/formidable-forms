@@ -47,6 +47,7 @@ class WP_Test_FrmProFieldsControllerAjax extends FrmAjaxUnitTest {
 		foreach ( $children as $child ) {
 			$child_ids[] = $child->id;
 		}
+		$this->assertNotEmpty( $child_ids, 'There are no fields to toggle to repeating' );
 
 		self::_switch_to_not_repeating( $repeating_section, $child_ids );
 		self::_switch_to_repeating( $repeating_section, $child_ids );
@@ -120,10 +121,11 @@ class WP_Test_FrmProFieldsControllerAjax extends FrmAjaxUnitTest {
 		$this->assertEmpty( $items, 'Rows in wp_frm_items were not deleted when switching from repeating to non-repeating.');
 
 		// Check if frm_item_metas were moved to parent entries
-		$new_child_metas = FrmDb::get_results( $wpdb->prefix . 'frm_item_metas m LEFT JOIN ' . $wpdb->prefix . 'frm_items i ON i.id=m.item_id', array( 'field_id' => $args['children'] ), 'i.form_id', array( 'order_by' => 'i.created_at ASC' ) );
+		$new_child_metas = FrmDb::get_col( $wpdb->prefix . 'frm_item_metas m LEFT JOIN ' . $wpdb->prefix . 'frm_items it ON it.id=m.item_id', array( 'field_id' => $args['children'] ), 'it.form_id', array( 'order_by' => 'it.created_at ASC' ) );
+
 		$this->assertNotEmpty( $new_child_metas, 'No entries to check (when switching divider to non-repeatable).');
-		foreach ( $new_child_metas as $item_meta ) {
-			$this->assertEquals( $args['parent_form_id'], $item_meta->form_id, 'Child entries are not moved to parent form when a divider is switched from repeating to non-repeating.');
+		foreach ( $new_child_metas as $new_form_id ) {
+			$this->assertEquals( $args['parent_form_id'], $new_form_id, 'Child entries are not moved to parent form (' . $args['parent_form_id'] . ') when a divider is switched from repeating to non-repeating.');
 		}
 
 		// Make sure frm_item_metas for repeating section are cleaned up
