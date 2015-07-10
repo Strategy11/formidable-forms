@@ -478,7 +478,7 @@ function frmFrontFormJS(){
 						}
 					}
 
-					if ( i === false ) {
+					if ( i === false || ["checkbox","radio"].indexOf( this.type ) < 0 ) {
 						triggerChange( jQuery(this) );
 					}
 					i = true;
@@ -494,7 +494,15 @@ function frmFrontFormJS(){
 	function showFieldAndSetValue( container, f ) {
 		var inputs = getInputsInContainer( container );
 		setDefaultValue( inputs );
-		doCalcForSingleField( f.HideField, inputs );
+
+		if ( inputs.length > 1 ) {
+			for ( var i = 0; i < inputs.length; i++ ) {
+				doCalcForSingleField( f.HideField, jQuery( inputs[i] ) );
+			}
+		} else {
+			doCalcForSingleField( f.HideField, inputs );
+		}
+
 		container.show();
 	}
 
@@ -830,14 +838,39 @@ function frmFrontFormJS(){
 		// loop through each calculation this field is used in
 		for ( var i = 0, l = len; i < l; i++ ) {
 
-			// If field is hidden with conditional logic or if it's on a different page, don't do the calc
-			var calcFieldId = all_calcs.calc[ keys[i] ].field_id;
-			var t = document.getElementById( 'frm_field_' + calcFieldId + '_container' );
-			if ( t !== null && t.offsetHeight === 0 ) {
+			// Stop calculation if total field is conditionally hidden
+			if ( fieldIsConditionallyHidden( all_calcs, triggerField, keys[i] ) ) {
 				continue;
 			}
 
 			doSingleCalculation( all_calcs, keys[i], vals, triggerField );
+		}
+	}
+
+	/**
+	* If field is hidden with conditional logic, don't do the calc
+	*/
+	function fieldIsConditionallyHidden( all_calcs, triggerField, field_key ) {
+		var totalFieldId = all_calcs.calc[ field_key ].field_id;
+		var t = document.getElementById( 'frm_field_' + totalFieldId + '_container' );
+		if ( t !== null ) {
+			if ( t.offsetHeight === 0 ) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+		// Check if we're dealing with a conditionally hidden repeating field
+		var container = triggerField.closest('.frm_repeat_sec, .frm_repeat_inline, .frm_repeat_grid');
+		if ( container.length ) {
+			var idPart = container[0].id.replace( 'frm_section_', '' );
+			var totalField = document.getElementById( 'frm_field_' + totalFieldId + '-' + idPart + '_container' );
+			if ( totalField !== null && totalField.offsetHeight === 0 ) {
+				return true;
+			} else {
+				return false;
+			}
 		}
 	}
 
@@ -1660,7 +1693,7 @@ function frmFrontFormJS(){
 						if ( jQuery.inArray(fieldID, checked ) == -1 ) {
 							checked.push(fieldID);
 							checkDependentField('und', fieldID, null, jQuery(this), reset);
-							doCalculation(fieldID);
+							doCalculation(fieldID, jQuery(this));
 							reset = 'persist';
 						}
 					}
