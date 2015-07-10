@@ -967,19 +967,20 @@ function frmFrontFormJS(){
                 if ( d !== null ) {
 					vals[field.valKey] = Math.ceil(d/(1000*60*60*24));
                 }
-            }
+			} else {
+				var n = thisVal;
 
-            var n = thisVal;
+				if ( n !== '' && n !== 0 ) {
+					n = n.trim();
+					n = parseFloat(n.replace(/,/g,'').match(/-?[\d\.]+$/));
+				}
 
-            if ( n !== '' && n !== 0 ) {
-				n = n.trim();
-                n = parseFloat(n.replace(/,/g,'').match(/-?[\d\.]+$/));
-            }
-
-			if ( typeof n === 'undefined' || isNaN(n) || n === '' ) {
-				n = 0;
+				if ( typeof n === 'undefined' || isNaN(n) || n === '' ) {
+					n = 0;
+				}
+				vals[field.valKey] += n;
 			}
-			vals[field.valKey] += n;
+
 		});
 
 		return vals;
