@@ -435,6 +435,7 @@ class FrmEntriesHelper {
 			}
 
 			if ( is_array($val) ) {
+				$val = FrmAppHelper::array_flatten( $val );
 			    $val = implode(',', $val);
 			}
 

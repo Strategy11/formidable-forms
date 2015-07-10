@@ -931,14 +931,15 @@ class FrmFormsController {
 
     /* FRONT-END FORMS */
     public static function admin_bar_css() {
-        FrmAppHelper::load_font_style();
-    }
-
-    public static function admin_bar_configure() {
 		if ( is_admin() || ! current_user_can( 'frm_edit_forms' ) ) {
             return;
         }
 
+		add_action( 'wp_before_admin_bar_render', 'FrmFormsController::admin_bar_configure' );
+		FrmAppHelper::load_font_style();
+	}
+
+	public static function admin_bar_configure() {
         global $frm_vars;
         if ( empty($frm_vars['forms_loaded']) ) {
             return;
@@ -1104,6 +1105,7 @@ class FrmFormsController {
             $errors = isset( $frm_vars['created_entries'][ $form->id ] ) ? $frm_vars['created_entries'][ $form->id ]['errors'] : array();
         }
 
+		$include_form_tag = apply_filters( 'frm_include_form_tag', true, $form );
         $fields = FrmFieldsHelper::get_form_fields( $form->id, ( isset( $errors ) && ! empty( $errors ) ) );
 
         if ( $params['action'] != 'create' || $params['posted_form_id'] != $form->id || ! $_POST ) {

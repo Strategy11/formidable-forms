@@ -1,4 +1,13 @@
 <?php
+if ( empty($values) || ! isset($values['fields']) || empty($values['fields']) ) { ?>
+<div class="frm_forms <?php echo FrmFormsHelper::get_form_style_class($form); ?>" id="frm_form_<?php echo esc_attr( $form->id ) ?>_container">
+	<div class="frm_error_style"><strong><?php _e( 'Oops!', 'formidable' ) ?></strong> <?php printf( __( 'You did not add any fields to your form. %1$sGo back%2$s and add some.', 'formidable' ), '<a href="' . esc_url( admin_url( '?page=formidable&frm_action=edit&id=' . $form->id ) ) . '">', '</a>' ) ?>
+    </div>
+</div>
+<?php
+    return;
+}
+
 global $frm_vars;
 FrmFormsController::maybe_load_css( $form, $values['custom_style'], $frm_vars['load_css'] );
 ?>
@@ -59,7 +68,7 @@ if ( has_action('frm_entries_footer_scripts') ) { ?>
 </script><?php
 }
 
-if ( ! $form->is_template && $form->status == 'published' && ! FrmAppHelper::is_admin() ) {
+if ( FrmForm::show_submit( $form ) ) {
     unset($values['fields']);
     FrmFormsHelper::get_custom_submit($values['submit_html'], $form, $submit, $form_action, $values);
 }

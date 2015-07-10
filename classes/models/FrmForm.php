@@ -728,4 +728,10 @@ class FrmForm {
 
 		return ( ( ! isset($frm_vars['css_loaded']) || ! $frm_vars['css_loaded'] ) && $global_load );
 	}
+
+	public static function show_submit( $form ) {
+		$show = ( ! $form->is_template && $form->status == 'published' && ! FrmAppHelper::is_admin() );
+		$show = apply_filters( 'frm_show_submit_button', $show, $form );
+		return $show;
+	}
 }
