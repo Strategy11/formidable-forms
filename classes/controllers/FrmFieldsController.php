@@ -553,6 +553,10 @@ class FrmFieldsController {
     }
 
     private static function add_input_classes($field, array &$class) {
+        if ( isset($field['input_class']) && ! empty($field['input_class']) ) {
+            $class[] = $field['input_class'];
+        }
+
         if ( $field['type'] == 'hidden' || $field['type'] == 'user_id' ) {
             return;
         }
@@ -564,10 +568,6 @@ class FrmFieldsController {
 
         if ( isset($field['size']) && $field['size'] > 0 ) {
             $class[] = 'auto_width';
-        }
-
-        if ( isset($field['input_class']) && ! empty($field['input_class']) ) {
-            $class[] = $field['input_class'];
         }
     }
 

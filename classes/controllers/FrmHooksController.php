@@ -52,7 +52,7 @@ class FrmHooksController {
         add_filter( 'widget_text', 'FrmAppController::widget_text_filter', 8 );
 
         // Entries controller
-        add_action( 'wp', 'FrmEntriesController::process_entry', 10, 0 );
+        add_action( 'wp_loaded', 'FrmEntriesController::process_entry', 10, 0 );
         add_action( 'frm_wp', 'FrmEntriesController::process_entry', 10, 0 );
         add_filter( 'frm_redirect_url', 'FrmEntriesController::delete_entry_before_redirect', 50, 3 );
         add_action( 'frm_after_entry_processed', 'FrmEntriesController::delete_entry_after_save', 100 );
