@@ -16,9 +16,10 @@ class FrmEntry {
 			$values['item_key'] = '';
 		}
 
+		$item_name = self::get_new_entry_name( $values, $values['item_key'] );
         $new_values = array(
             'item_key'  => FrmAppHelper::get_unique_key($values['item_key'], $wpdb->prefix .'frm_items', 'item_key'),
-			'name'      => FrmAppHelper::truncate( ( isset( $values['name'] ) ? $values['name'] : $values['item_key'] ), 255, 1, '' ),
+			'name'      => FrmAppHelper::truncate( $item_name, 255, 1, '' ),
             'ip'        => FrmAppHelper::get_ip_address(),
             'is_draft'  => ( ( isset($values['frm_saving_draft']) && $values['frm_saving_draft'] == 1 ) ||  ( isset($values['is_draft']) && $values['is_draft'] == 1) ) ? 1 : 0,
             'form_id'   => isset($values['form_id']) ? (int) $values['form_id']: null,
@@ -194,8 +195,9 @@ class FrmEntry {
 
         $user_ID = get_current_user_id();
 
+		$item_name = self::get_new_entry_name( $values );
         $new_values = array(
-            'name'      => isset($values['name']) ? $values['name'] : '',
+			'name'      => $item_name,
             'form_id'   => isset($values['form_id']) ? (int) $values['form_id'] : null,
             'is_draft'  => ( ( isset($values['frm_saving_draft']) && $values['frm_saving_draft'] == 1 ) ||  ( isset($values['is_draft']) && $values['is_draft'] == 1) ) ? 1 : 0,
             'updated_at' => current_time('mysql', 1),
@@ -280,6 +282,15 @@ class FrmEntry {
 		FrmAppHelper::cache_delete_group( 'frm_item' );
 		FrmAppHelper::cache_delete_group( 'frm_entry_meta' );
 		FrmAppHelper::cache_delete_group( 'frm_item_meta' );
+	}
+
+	/**
+	 * After switching to the wp_loaded hook for processing entries,
+	 * we can no longer use 'name', but check it as a fallback
+	 * @since 2.0.11
+	 */
+	public static function get_new_entry_name( $values, $default = '' ) {
+		return isset( $values['item_name'] ) ? $values['item_name'] : ( isset( $values['name'] ) ? $values['name'] : $default );
 	}
 
 	/**
@@ -502,7 +513,7 @@ class FrmEntry {
             'frm_action'    => 'sanitize_title',
             'form_key'      => 'sanitize_title',
             'item_key'      => 'sanitize_title',
-            'name'          => 'sanitize_text_field',
+            'item_name'     => 'sanitize_text_field',
             'frm_saving_draft' => 'absint',
             'is_draft'      => 'absint',
             'post_id'       => 'absint',
