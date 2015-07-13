@@ -53,7 +53,6 @@ class FrmHooksController {
 
         // Entries controller
         add_action( 'wp_loaded', 'FrmEntriesController::process_entry', 10, 0 );
-        add_action( 'frm_wp', 'FrmEntriesController::process_entry', 10, 0 );
         add_filter( 'frm_redirect_url', 'FrmEntriesController::delete_entry_before_redirect', 50, 3 );
         add_action( 'frm_after_entry_processed', 'FrmEntriesController::delete_entry_after_save', 100 );
         add_filter( 'frm_email_value', 'FrmEntriesController::filter_email_value', 10, 3 );
