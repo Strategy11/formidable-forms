@@ -1269,6 +1269,10 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
     margin-right:4px;
 }
 
+.frm_form_field.frm_capitalize input{
+    text-transform:capitalize;
+}
+
 .frm_clearfix:after{
     content:".";
     display:block;
