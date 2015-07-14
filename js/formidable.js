@@ -855,8 +855,10 @@ function frmFrontFormJS(){
 		var t = document.getElementById( 'frm_field_' + totalFieldId + '_container' );
 		if ( t !== null ) {
 			if ( t.offsetHeight === 0 ) {
+				// Conditionally hidden field
 				return true;
 			} else {
+				// Regular, visible field
 				return false;
 			}
 		}
@@ -867,10 +869,15 @@ function frmFrontFormJS(){
 			var idPart = container[0].id.replace( 'frm_section_', '' );
 			var totalField = document.getElementById( 'frm_field_' + totalFieldId + '-' + idPart + '_container' );
 			if ( totalField !== null && totalField.offsetHeight === 0 ) {
+				// Conditionally hidden field (repeating)
 				return true;
 			} else {
+				// Regular, visible field or hidden field (repeating)
 				return false;
 			}
+		} else {
+			// Hidden field
+			return false;
 		}
 	}
 
@@ -1023,17 +1030,11 @@ function frmFrontFormJS(){
 		if ( typeof field.triggerField === 'undefined' ) {
 			return null;
 		}
+
 		var container = field.triggerField.closest('.frm_repeat_sec, .frm_repeat_inline, .frm_repeat_grid');
 		if ( container.length ) {
-			var inputClass = '.frm_field_'+ field.thisFieldId +'_container ';
-			var fieldCallParts = field.thisFieldCall.split(',');
-			var siblingFieldCall = '';
-			for ( var i = 0, l = fieldCallParts.length; i < l; i++ ) {
-				if ( siblingFieldCall !== '' ) {
-					siblingFieldCall = siblingFieldCall +',';
-				}
-				siblingFieldCall = siblingFieldCall + inputClass + fieldCallParts[i].replace('[id=', '[id^=');
-			}
+			var siblingFieldCall = field.thisFieldCall.replace('[id=', '[id^=');
+
 			return container.find(siblingFieldCall);
 		}
 		return null;
