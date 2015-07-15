@@ -5,7 +5,8 @@
 </div>
 
 <div id="message" class="frm_message"><strong><?php echo __( 'SAMPLE:', 'formidable' ) .'</strong> '. $frm_settings->success_msg ?></div>
-<?php $pos_class = 'frm_pos_container '. ($style->post_content['position'] == 'none' ? 'frm_top_container' : 'frm_'. $style->post_content['position'] .'_container'); ?>
+
+<?php $pos_class = 'frm_pos_container frm_' . ( $style->post_content['position'] == 'none' ? 'top' : ( $style->post_content['position'] == 'no_label' ? 'none' : $style->post_content['position'] ) ) . '_container'; ?>
 
 <h3><?php _e( 'Form Title', 'formidable' ) ?></h3>
 <div class="frm_description"><p><?php _e( 'This is an example form description for styling purposes.', 'formidable' ) ?></p></div>
