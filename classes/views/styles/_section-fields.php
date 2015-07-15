@@ -30,7 +30,7 @@
 				<option value="600" <?php selected($style->post_content['section_weight'], '600') ?>><?php _e( '600', 'formidable' ) ?></option>
 				<option value="bold" <?php selected($style->post_content['section_weight'], 'bold') ?>><?php _e( 'bold', 'formidable' ) ?></option>
 				<option value="800" <?php selected($style->post_content['section_weight'], '800') ?>><?php _e( '800', 'formidable' ) ?></option>
-				<option value="900" <?php selected($style->post_content['section_weight'], '900') ?>><?php _e( '900', 'formidable' ) ?></option>	
+				<option value="900" <?php selected($style->post_content['section_weight'], '900') ?>><?php _e( '900', 'formidable' ) ?></option>
         	</select>
         </div>
 
