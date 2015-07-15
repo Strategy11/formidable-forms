@@ -375,7 +375,7 @@ function frmFrontFormJS(){
             }
         }
 
-		if ( selected === '' || selected.length < 1 ) {
+		if ( selected === null || selected === '' || selected.length < 1 ) {
 			show_fields[f.hideContainerID][i] = false;
 		} else {
 			show_fields[f.hideContainerID][i] = {'funcName':'getDataOpts', 'f':f, 'sel':selected};
