@@ -819,6 +819,7 @@ table td, .form-table tr td{vertical-align:top;}
 }
 .sortable-placeholder{
 	width:100% !important;
+	height:80px;
 }
 
 .frm-show-click,

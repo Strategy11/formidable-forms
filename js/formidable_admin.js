@@ -218,7 +218,8 @@ function frmAdminBuildJS(){
 			cancel:'.widget,.frm_field_opts_list,input,textarea,select,.edit_field_type_end_divider,.frm_ipe_field_option,.frm_sortable_field_opts',
 			accepts:'field_type_list',
 			revert:true,
-			forcePlaceholderSize:true,
+			forcePlaceholderSize:false,
+			tolerance:'pointer',
 			receive:function(event,ui){
 				if ( cancelSort ) {
 					ui.item.addClass('frm_cancel_sort');
@@ -319,6 +320,11 @@ function frmAdminBuildJS(){
 					return;
 				}
 				updateFieldOrder();
+			},
+			start: function( event, ui ) {
+				if ( ui.item.hasClass('edit_field_type_divider') ) {
+					jQuery(sort).sortable( 'refreshPositions' );
+				}
 			},
 			stop:function(event, ui){
 				if ( cancelSort ) {
