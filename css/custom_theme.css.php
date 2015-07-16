@@ -1297,7 +1297,8 @@ html[xmlns] .frm_clearfix{
 }
 
 /* Login form */
-.with_frm_style.frm_login_form{
+.with_frm_style.frm_login_form,
+.with_frm_style.frm_login_form form{
 	clear:both;
 }
 
@@ -1322,6 +1323,7 @@ html[xmlns] .frm_clearfix{
 
 .with_frm_style.frm_login_form.frm_inline_login form{
 	position:relative;
+	clear:none;
 }
 
 .with_frm_style.frm_login_form.frm_inline_login .login-remember{
@@ -1345,6 +1347,8 @@ html[xmlns] .frm_clearfix{
 
 .with_frm_style .frm-open-login a{
 	text-decoration:none;
+	border:none;
+	outline:none;
 }
 
 .with_frm_style.frm_slide.frm_login_form form{
