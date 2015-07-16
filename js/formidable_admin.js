@@ -220,6 +220,7 @@ function frmAdminBuildJS(){
 			revert:true,
 			forcePlaceholderSize:false,
 			tolerance:'pointer',
+			container: 'ul.frm_sorting',
 			receive:function(event,ui){
 				if ( cancelSort ) {
 					ui.item.addClass('frm_cancel_sort');
@@ -322,7 +323,7 @@ function frmAdminBuildJS(){
 				updateFieldOrder();
 			},
 			start: function( event, ui ) {
-				if ( ui.item.hasClass('edit_field_type_divider') ) {
+				if ( ui.item[0].offsetHeight > 120 ) {
 					jQuery(sort).sortable( 'refreshPositions' );
 				}
 			},
