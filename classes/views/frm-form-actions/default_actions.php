@@ -5,7 +5,7 @@ class FrmDefPostAction extends FrmFormAction {
 		$action_ops = FrmFormAction::default_action_opts();
 	    $action_ops['classes'] = 'ab-icon frm_dashicon_font dashicons-before';
 
-		$this->FrmFormAction('wppost', __( 'Create Post', 'formidable' ), $action_ops);
+		parent::__construct( 'wppost', __( 'Create Post', 'formidable' ), $action_ops );
 	}
 }
 
@@ -13,7 +13,7 @@ class FrmDefPostAction extends FrmFormAction {
 class FrmDefRegAction extends FrmFormAction {
 	public function __construct() {
 		$action_ops = FrmFormAction::default_action_opts('frm_register_icon');
-		$this->FrmFormAction('register', __( 'Register User', 'formidable' ), $action_ops);
+		parent::__construct( 'register', __( 'Register User', 'formidable' ), $action_ops );
 	}
 }
 
@@ -21,7 +21,7 @@ class FrmDefRegAction extends FrmFormAction {
 class FrmDefPayPalAction extends FrmFormAction {
 	public function __construct() {
 		$action_ops = FrmFormAction::default_action_opts('frm_paypal_icon');
-		$this->FrmFormAction('paypal', __( 'Collect Payment', 'formidable' ), $action_ops);
+		parent::__construct( 'paypal', __( 'Collect Payment', 'formidable' ), $action_ops );
 	}
 }
 
@@ -29,7 +29,7 @@ class FrmDefPayPalAction extends FrmFormAction {
 class FrmDefAweberAction extends FrmFormAction {
 	public function __construct() {
 		$action_ops = FrmFormAction::default_action_opts('frm_aweber_icon');
-		$this->FrmFormAction('aweber', __( 'Aweber', 'formidable' ), $action_ops);
+		parent::__construct( 'aweber', __( 'Aweber', 'formidable' ), $action_ops );
 	}
 }
 
@@ -37,7 +37,7 @@ class FrmDefAweberAction extends FrmFormAction {
 class FrmDefMlcmpAction extends FrmFormAction {
 	public function __construct() {
 		$action_ops = FrmFormAction::default_action_opts('frm_mailchimp_icon');
-		$this->FrmFormAction('mailchimp', __( 'MailChimp', 'formidable' ), $action_ops);
+		parent::__construct( 'mailchimp', __( 'MailChimp', 'formidable' ), $action_ops );
 	}
 }
 
@@ -45,7 +45,7 @@ class FrmDefMlcmpAction extends FrmFormAction {
 class FrmDefTwilioAction extends FrmFormAction {
 	public function __construct() {
 		$action_ops = FrmFormAction::default_action_opts('frm_sms_icon');
-		$this->FrmFormAction('twilio', __( 'Twilio', 'formidable' ), $action_ops);
+		parent::__construct( 'twilio', __( 'Twilio', 'formidable' ), $action_ops );
 	}
 }
 
@@ -53,6 +53,6 @@ class FrmDefTwilioAction extends FrmFormAction {
 class FrmDefHrsAction extends FrmFormAction {
 	public function __construct() {
 		$action_ops = FrmFormAction::default_action_opts('frm_highrise_icon');
-		$this->FrmFormAction('highrise', __( 'Highrise', 'formidable' ), $action_ops);
+		parent::__construct( 'highrise', __( 'Highrise', 'formidable' ), $action_ops );
 	}
 }

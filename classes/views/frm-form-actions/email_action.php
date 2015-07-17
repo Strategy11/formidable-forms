@@ -13,7 +13,7 @@ class FrmEmailAction extends FrmFormAction {
 		);
 		$action_ops = apply_filters('frm_email_control_settings', $action_ops);
 
-		$this->FrmFormAction('email', __( 'Email Notification', 'formidable' ), $action_ops);
+		parent::__construct('email', __( 'Email Notification', 'formidable' ), $action_ops);
 	}
 
 	public function form( $form_action, $args = array() ) {
