@@ -21,15 +21,9 @@
 <div class="field-group clearfix">
 	<label><?php _e( 'Weight', 'formidable' ) ?></label>
 	<select name="<?php echo esc_attr( $frm_style->get_field_name('check_weight') ) ?>" id="frm_check_weight">
-		<option value="100" <?php selected($style->post_content['check_weight'], '100') ?>><?php _e( '100', 'formidable' ) ?></option>
-		<option value="200" <?php selected($style->post_content['check_weight'], '200') ?>><?php _e( '200', 'formidable' ) ?></option>
-		<option value="300" <?php selected($style->post_content['check_weight'], '300') ?>><?php _e( '300', 'formidable' ) ?></option>
-		<option value="normal" <?php selected($style->post_content['check_weight'], 'normal') ?>><?php _e( 'normal', 'formidable' ) ?></option>
-		<option value="500" <?php selected($style->post_content['check_weight'], '500') ?>><?php _e( '500', 'formidable' ) ?></option>
-		<option value="600" <?php selected($style->post_content['check_weight'], '600') ?>><?php _e( '600', 'formidable' ) ?></option>
-		<option value="bold" <?php selected($style->post_content['check_weight'], 'bold') ?>><?php _e( 'bold', 'formidable' ) ?></option>
-		<option value="800" <?php selected($style->post_content['check_weight'], '800') ?>><?php _e( '800', 'formidable' ) ?></option>
-		<option value="900" <?php selected($style->post_content['check_weight'], '900') ?>><?php _e( '900', 'formidable' ) ?></option>
+		<?php foreach ( FrmStyle::get_bold_options() as $value => $name ) { ?>
+		<option value="<?php echo esc_attr( $value ) ?>" <?php selected( $style->post_content['check_weight'], $value ) ?>><?php echo $name ?></option>
+		<?php } ?>
 	</select>
 </div>
 <div class="field-group clearfix">

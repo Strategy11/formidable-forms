@@ -425,4 +425,13 @@ class FrmStyle {
 		return 'frm_style_setting'. ( empty($post_field) ? '' : '['. $post_field .']' ) .'[' . $field_name . ']';
 	}
 
+	public static function get_bold_options() {
+		return array(
+			100 => 100, 200 => 200, 300 => 300,
+			'normal' => __( 'normal', 'formidable' ),
+			500 => 500, 600 => 600,
+			'bold' => __( 'bold', 'formidable' ),
+			800 => 800, 900 => 900,
+		);
+	}
 }
