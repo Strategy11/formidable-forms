@@ -4,7 +4,7 @@ Donate link: http://formidablepro.com/donate
 Tags: admin, AJAX, captcha, contact, contact form, database, email, feedback, form, forms, javascript, jquery, page, plugin, poll, Post, spam, survey, template, widget, wpmu, form builder
 Requires at least: 3.6
 Tested up to: 4.2
-Stable tag: 2.0.10
+Stable tag: 2.0.11
 
 Beautiful forms in 60 seconds. The WordPress form builder that enables you to create forms with a simple drag-and-drop interface and in-place editing.
 
@@ -94,6 +94,17 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * When the email "reply to" value uses the "from" setting, only use the email address without the name
 * Switch the form action events to dropdown instead of checkboxes
 * Shrink the reCaptcha on small screens
+* Add font-weight 100-900 options to styler
+* Add frm_email_message filter
+* Fixes for javascript errors while form building in IE8
+* Only load font.css for the admin bar when user can edit forms
+* Add frm_include_form_tag filter for using div instead of form tag
+* Add frm_show_submit_button filter for hiding and showing the submit button
+* Fix date calculations using date formats that begin with the year
+* Allow classes to be included on a hidden input
+* Process the entry a little sooner (wp_loaded instead of wp)
+* Add frm_capitalize layout class
+* Make frm_customize class work for more field types
 * **Pro Features:**
 * Set new views to private by default
 * Allow clickable=1 in the frm-show-entry shortcode
@@ -103,6 +114,16 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * Add frm_datepicker_formats hook for adding format additional options on the Formidable -> global settings page
 * Add frm_csv_row hook for adding data to a row in the CSV
 * Keep the Pending status selected after save in the post settings
+* Add frm_is_dynamic_field_empty filter for overriding whether a dependent dynamic field is available for validation or if the value should be cleared
+* Improve dragging and dropping large sections of fields
+* Don't trigger form actions while importing
+* Make sure $entry_ids is still intact for the frm_after_content hook
+* Replace m/d/Y format option
+* Fix updating a field with the frm-entry-update-field shortcode
+* Work on calculating different combinations of fields inside and outside a repeating section
+* Only return unique values when a list field is displayed based on checkboxes
+* Fix searching entries with a trailing space
+* Fix truncating in the dynamic content
 
 = 2.0.10 =
 * Add frm_action_triggers hook for adding custom triggers into the actions
