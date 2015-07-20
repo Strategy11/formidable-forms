@@ -122,7 +122,7 @@ class FrmField {
 			// If this is a repeating section, create new form
 			if ( $field->type == 'divider' && self::is_option_true( $field, 'repeat' ) ) {
 				// create the repeatable form
-				$repeat_form_values = FrmFormsHelper::setup_new_vars( array( 'parent_form_id' => $form_id ) );
+				$repeat_form_values = FrmFormsHelper::setup_new_vars( array( 'parent_form_id' => $form_id, 'status' => 'published', 'name' => $field->name ) );
 				$new_repeat_form_id = FrmForm::create( $repeat_form_values );
 
 				// Save old form_select
