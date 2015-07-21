@@ -120,9 +120,7 @@ class FrmFieldsController {
 
 		FrmField::update( $id, array( $field => $value ) );
 
-		if ( $field == 'name' ) {
-			do_action( 'frm_after_update_field_name', $id, $value );
-		}
+		do_action( 'frm_after_update_field_' . $field, compact( 'id', 'value' ) );
 
 		echo stripslashes( wp_kses_post( $value ) );
         wp_die();
