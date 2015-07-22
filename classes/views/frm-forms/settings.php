@@ -32,8 +32,14 @@
         	<li <?php echo ($a == 'advanced_settings') ? 'class="tabs active"' : '' ?>><a href="#advanced_settings"><?php _e( 'General', 'formidable' ) ?></a></li>
         	<li <?php echo ($a == 'email_settings') ? 'class="tabs active"' : '' ?>><a href="#email_settings"><?php _e( 'Form Actions', 'formidable' ); ?></a></li>
             <li <?php echo ($a == 'html_settings') ? 'class="tabs active"' : '' ?>><a href="#html_settings"><?php _e( 'Customize HTML', 'formidable' ) ?></a></li>
-            <?php foreach ( $sections as $sec_name => $section ) { ?>
-                <li <?php echo ($a == $sec_name .'_settings') ? 'class="tabs active"' : '' ?>><a href="#<?php echo esc_attr( $sec_name ) ?>_settings"><?php echo ucfirst($sec_name) ?></a></li>
+            <?php foreach ( $sections as $key => $section ) {
+				if ( isset( $section['name'] ) ) {
+					$sec_name = $section['name'];
+					$sec_anchor = $section['anchor'];
+				} else {
+					$sec_anchor = $sec_name = $key;
+				} ?>
+                <li <?php echo ($a == $sec_anchor .'_settings') ? 'class="tabs active"' : '' ?>><a href="#<?php echo esc_attr( $sec_anchor ) ?>_settings"><?php echo ucfirst($sec_name) ?></a></li>
             <?php } ?>
         </ul>
         </div>
@@ -100,7 +106,6 @@
                     </td>
                 </tr>
                 <?php } ?>
-                <?php do_action('frm_additional_form_options', $values); ?>
             </table>
 
             <!--AJAX Section-->
@@ -159,7 +164,16 @@
                 </tr>
                 <?php do_action('frm_add_form_msg_options', $values); ?>
             </table>
-        </div>
+
+			<!--Misc Section-->
+			<?php if ( has_action( 'frm_additional_form_options' ) ) { ?>
+				<h3><?php _e( 'Miscellaneous', 'formidable' ); ?></h3>
+				<table class="form-table">
+					<?php do_action('frm_additional_form_options', $values); ?>
+				</table>
+				<?php } ?>
+
+		</div>
 
 
         <div id="frm_notification_settings" class="frm_email_settings email_settings tabs-panel widgets-holder-wrap <?php echo ($a == 'email_settings') ? ' frm_block' : ' frm_hidden'; ?>">
@@ -223,8 +237,13 @@
             </div>
         </div>
 
-		<?php foreach ( $sections as $sec_name => $section ) { ?>
-            <div id="<?php echo esc_attr( $sec_name ) ?>_settings" class="tabs-panel <?php echo ($a == $sec_name .'_settings') ? ' frm_block' : ' frm_hidden'; ?>"><?php
+		<?php foreach ( $sections as $key => $section ) {
+			if ( isset( $section['anchor'] ) ) {
+				$sec_anchor = $section['anchor'];
+			} else {
+				$sec_anchor = $key;
+			} ?>
+            <div id="<?php echo esc_attr( $sec_anchor ) ?>_settings" class="tabs-panel <?php echo ($a == $sec_anchor .'_settings') ? ' frm_block' : ' frm_hidden'; ?>"><?php
 			if ( isset( $section['class'] ) ) {
 				call_user_func( array( $section['class'], $section['function'] ), $values );
 			} else {
