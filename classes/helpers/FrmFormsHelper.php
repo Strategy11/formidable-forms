@@ -119,6 +119,12 @@ class FrmFormsHelper {
         echo ($sort_col == $col && $sort_dir == 'desc') ? ' asc' : ' desc';
     }
 
+	public static function get_success_message( $atts ) {
+		$message = apply_filters( 'frm_content', $atts['message'], $atts['form'], $atts['created'] );
+		$message = '<div class="' . esc_attr( $atts['class'] ) . '">' . wpautop( do_shortcode( $message ) ) . '</div>';
+		return $message;
+	}
+
     /**
      * Used when a form is created
      */
