@@ -331,6 +331,16 @@ if ( ! isset($collapse_icon) ) {
     box-shadow:0 1px 1px rgba(0, 0, 0, 0.075) inset;
 }
 
+.<?php echo $style_class ?> input[type=file]::-webkit-file-upload-button{
+    color:#<?php echo $text_color . $important ?>;
+    background-color:#<?php echo $bg_color . $important; ?>;
+	padding:<?php echo $field_pad . $important ?>;
+	border-radius:<?php echo $border_radius . $important ?>;
+	border-color:#<?php echo $border_color . $important ?>;
+	border-width:<?php echo $field_border_width . $important ?>;
+	border-style:<?php echo $field_border_style . $important ?>;
+}
+
 .<?php echo $style_class ?> input[type=text],
 .<?php echo $style_class ?> input[type=password],
 .<?php echo $style_class ?> input[type=email],
@@ -338,6 +348,7 @@ if ( ! isset($collapse_icon) ) {
 .<?php echo $style_class ?> input[type=url],
 .<?php echo $style_class ?> input[type=tel],
 .<?php echo $style_class ?> input[type=file],
+.<?php echo $style_class ?> input[type=file]::-webkit-file-upload-button,
 .<?php echo $style_class ?> input[type=search],
 .<?php echo $style_class ?> select{
     height:<?php echo ($field_height == '' ? 'auto' : $field_height) . $important  ?>;

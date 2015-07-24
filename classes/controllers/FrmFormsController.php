@@ -1145,8 +1145,11 @@ class FrmFormsController {
             $message = $frm_settings->failed_msg;
             $class = 'frm_error_style';
         }
-        $message = apply_filters('frm_content', $message, $form, $created);
-		$message = '<div class="' . esc_attr( $class ) . '">' . wpautop( do_shortcode( $message ) ) . '</div>';
+
+		$message = FrmFormsHelper::get_success_message( array(
+			'message' => $message, 'form' => $form,
+			'entry_id' => $created, 'class' => $class,
+		) );
         $message = apply_filters('frm_main_feedback', $message, $form, $created);
 
         if ( ! isset($form->options['show_form']) || $form->options['show_form'] ) {

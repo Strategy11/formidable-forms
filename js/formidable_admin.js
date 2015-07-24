@@ -803,8 +803,9 @@ function frmAdminBuildJS(){
 	function toggleFormid(field_id, form_id, main_form_id, checked){
 		// change form ids of all fields in section
 		var children = fieldsInSection(field_id);
+		var field_name = document.getElementById('field_label_' + field_id).innerHTML;
 		jQuery.ajax({type:'POST',url:ajaxurl,
-			data:{action:'frm_toggle_repeat', form_id:form_id, parent_form_id:main_form_id, checked:checked, field_id:field_id, children:children, nonce:frmGlobal.nonce},
+			data:{action:'frm_toggle_repeat', form_id:form_id, parent_form_id:main_form_id, checked:checked, field_id:field_id, field_name:field_name, children:children, nonce:frmGlobal.nonce},
 			success:function(id){
 				//return form id to hidden field
 				jQuery('input[name="field_options[form_select_'+field_id+']"]').val(id);
@@ -1772,6 +1773,7 @@ function frmAdminBuildJS(){
     function initiateMultiselect(){
         jQuery('.frm_multiselect').multiselect({
             templates: {ul:'<ul class="multiselect-container frm-dropdown-menu"></ul>'},
+			buttonContainer: '<div class="btn-group frm-btn-group" />',
 			nonSelectedText:frm_admin_js['default']
         });
     }

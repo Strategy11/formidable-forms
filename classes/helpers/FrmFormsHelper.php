@@ -24,6 +24,7 @@ class FrmFormsHelper {
             'onchange'  => false,
             'exclude'   => false,
             'class'     => '',
+			'inc_children' => 'exclude',
         );
         $args = wp_parse_args( $args, $defaults );
 
@@ -37,7 +38,7 @@ class FrmFormsHelper {
         }
 
         $where = apply_filters('frm_forms_dropdown', $query, $field_name);
-		$forms = FrmForm::get_published_forms( $where );
+		$forms = FrmForm::get_published_forms( $where, 999, $args['inc_children'] );
 		$add_html = array();
 		self::add_html_attr( $args['onchange'], 'onchange', $add_html );
 		self::add_html_attr( $args['class'], 'class', $add_html );
@@ -117,6 +118,12 @@ class FrmFormsHelper {
         echo ($sort_col == $col) ? 'sorted' : 'sortable';
         echo ($sort_col == $col && $sort_dir == 'desc') ? ' asc' : ' desc';
     }
+
+	public static function get_success_message( $atts ) {
+		$message = apply_filters( 'frm_content', $atts['message'], $atts['form'], $atts['created'] );
+		$message = '<div class="' . esc_attr( $atts['class'] ) . '">' . wpautop( do_shortcode( $message ) ) . '</div>';
+		return $message;
+	}
 
     /**
      * Used when a form is created

@@ -241,7 +241,7 @@ class FrmFormActionsController {
 	public static function trigger_actions( $event, $form, $entry, $type = 'all', $args = array() ) {
 		$form_actions = FrmFormAction::get_action_for_form( ( is_object( $form ) ? $form->id : $form ), $type );
 
-		if ( empty( $form_actions ) || ( defined( 'WP_IMPORTING' ) && WP_IMPORTING ) ) {
+		if ( empty( $form_actions ) ) {
             return;
         }
 
@@ -254,9 +254,11 @@ class FrmFormActionsController {
 
         $stored_actions = $action_priority = array();
 
-        foreach ( $form_actions as $action ) {
+		$importing = in_array( $event, array( 'create', 'update' ) ) && defined( 'WP_IMPORTING' ) && WP_IMPORTING;
 
-            if ( ! in_array( $event, $action->post_content['event'] ) ) {
+        foreach ( $form_actions as $action ) {
+			$trigger_on_import = $importing && in_array( 'import', $action->post_content['event'] );
+			if ( ! in_array( $event, $action->post_content['event'] ) && ! $trigger_on_import ) {
                 continue;
             }
 

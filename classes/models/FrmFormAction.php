@@ -626,4 +626,13 @@ class FrmFormAction {
 			'limit'     => 0,
 		);
 	}
+
+	public static function trigger_labels() {
+		return apply_filters( 'frm_action_triggers', array(
+			'create' => __( 'Create', 'formidable' ),
+			'update' => __( 'Update', 'formidable' ),
+			'delete' => __( 'Delete', 'formidable' ),
+			'import' => __( 'Import', 'formidable' ),
+		) );
+	}
 }

@@ -219,6 +219,7 @@ foreach ( $styles as $style ) {
 
 .frm_ajax_loading{
     visibility:hidden;
+	width:auto;
 }
 
 .frm_ajax_loading.frm_loading_now{

@@ -33,12 +33,8 @@ if ( count( $action_control->action_options['event'] ) == 1 || $action_control->
 	<p><label class="frm_left_label"><?php _e( 'Trigger this action after', 'formidable' ) ?></label>
 		<select name="<?php echo esc_attr( $action_control->get_field_name('event') ) ?>[]" multiple="multiple" class="frm_multiselect" id="<?php echo esc_attr( $action_control->get_field_id('event') ) ?>">
 <?php
-	$event_labels = apply_filters( 'frm_action_triggers', array(
-		'create'    => __( 'Create', 'formidable' ),
-		'update'    => __( 'Update', 'formidable' ),
-		'delete'    => __( 'Delete', 'formidable' ),
-	) );
 
+	$event_labels = FrmFormAction::trigger_labels();
 	foreach ( $action_control->action_options['event'] as $event ) { ?>
 		<option value="<?php echo esc_attr( $event ) ?>" <?php echo in_array( $event, (array) $form_action->post_content['event'] ) ? ' selected="selected"' : ''; ?> ><?php echo isset( $event_labels[ $event ] ) ? $event_labels[ $event ] : $event; ?></option>
 <?php
