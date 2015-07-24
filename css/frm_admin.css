@@ -1243,7 +1243,13 @@ a.frm_action_icon:hover {text-decoration:none;}
 
 .frm_action_icon.frm_required_icon:before{content: '\e612'; font-size:7px; vertical-align:top; line-height: 2.1em; margin-right:3px;}
 .frm_38_trigger .frm_action_icon.frm_required_icon:before{font-size:8px;}
-.frm_action_icon.frm_required_icon {color:#000;margin-top:0;}
+.frm_action_icon.frm_required_icon,
+.ui-state-default .frm_action_icon.frm_required_icon{
+	color:#000;
+	margin-top:0;
+}
+
+.ui-state-default a.frm_action_icon.frm_required0,
 a.frm_inactive_icon.frm_action_icon.frm_required_icon,
 a.frm_action_icon.frm_required0{
 	color:#ababab;
