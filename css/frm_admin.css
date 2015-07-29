@@ -287,6 +287,10 @@ form label.frm_primary_label input{font-size:12px;}
     color:#AA0000;
 }
 
+.frm_image_from_url{
+	height:50px;
+}
+
 /*Switch form dropdown*/
 .caret{display:inline-block;width:0;height:0;margin-left:2px;vertical-align:middle;border-top:4px solid #AAA;border-right:4px solid transparent;border-left:4px solid transparent;border-bottom:0 dotted;}
 .dropdown{position:relative;}

@@ -507,7 +507,7 @@ if ( ! $submit_style ) { ?>
 
 .<?php echo $style_class ?> input[type=submit]:focus,
 .<?php echo $style_class ?> .frm_submit input[type=button]:focus,
-.<?php echo $style_class ?>.frm_login_form input[type=submit]:focus.
+.<?php echo $style_class ?>.frm_login_form input[type=submit]:focus,
 .<?php echo $style_class ?> input[type=submit]:active,
 .<?php echo $style_class ?> .frm_submit input[type=button]:active,
 .<?php echo $style_class ?>.frm_login_form input[type=submit]:active{

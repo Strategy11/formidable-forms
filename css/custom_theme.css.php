@@ -565,6 +565,10 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
 }
 /* End Calendar Styling */
 
+.frm_image_from_url{
+	height:50px;
+}
+
 .frm-loading-img{
     background:url(<?php echo FrmAppHelper::relative_plugin_url() ?>/images/ajax_loader.gif) no-repeat center center;
     padding:6px 12px;
