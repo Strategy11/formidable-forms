@@ -264,7 +264,7 @@ class FrmEntryMeta {
         return $results;
     }
 
-    public static function getEntryIds( $where = array(), $order_by = '', $limit = '', $unique = true, $args = array(), $return_parent_id = false ) {
+    public static function getEntryIds( $where = array(), $order_by = '', $limit = '', $unique = true, $args = array() ) {
 		$defaults = array(
 			'is_draft' => false,
 			'user_id'  => '',
@@ -273,7 +273,7 @@ class FrmEntryMeta {
         $args = wp_parse_args($args, $defaults);
 
         $query = array();
-        self::get_ids_query($where, $order_by, $limit, $unique, $args, $query, $return_parent_id);
+        self::get_ids_query($where, $order_by, $limit, $unique, $args, $query );
         $query = implode(' ', $query);
 
         $cache_key = 'ids_'. maybe_serialize($where) . $order_by . 'l'. $limit . 'u'. $unique . maybe_serialize($args);
@@ -287,11 +287,14 @@ class FrmEntryMeta {
      * @param string $order_by
      * @param string $limit
      */
-    private static function get_ids_query($where, $order_by, $limit, $unique, $args, array &$query, $return_parent_id = false) {
+    private static function get_ids_query($where, $order_by, $limit, $unique, $args, array &$query ) {
         global $wpdb;
         $query[] = 'SELECT';
 
-		if ( $return_parent_id ) {
+		$defaults = array( 'return_parent_id' => false );
+		$args = array_merge( $defaults, $args );
+
+		if ( $args['return_parent_id'] ) {
 			$query[] = $unique ? 'DISTINCT(e.parent_item_id)' : 'e.parent_item_id';
 		} else {
 			$query[] = $unique ? 'DISTINCT(it.item_id)' : 'it.item_id';
