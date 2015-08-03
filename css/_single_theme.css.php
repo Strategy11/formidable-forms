@@ -173,7 +173,7 @@ if ( ! isset($collapse_icon) ) {
 }
 
 /* Form description */
-.<?php echo $style_class ?> .frm-show-form > div.frm_description p{
+.<?php echo $style_class ?> .frm-show-form div.frm_description p{
     font-size:<?php echo $form_desc_size . $important ?>;
     color:#<?php echo $form_desc_color . $important ?>;
 }
