@@ -911,13 +911,13 @@ function frmFrontFormJS(){
 
 		var total = parseFloat(eval(thisFullCalc));
 
+		if ( typeof total === 'undefined' ) {
+			total = 0;
+		}
+
 		// Set decimal points
 		if ( isNumeric( dec ) ) {
 			total = total.toFixed(dec);
-		}
-
-		if ( typeof total === 'undefined' ) {
-			total = 0;
 		}
 
 		if ( totalField.val() != total ) {
@@ -1654,7 +1654,7 @@ function frmFrontFormJS(){
 				/* update calculations when a row is removed */
 				if ( this.type != 'file' ) {
 					var fieldID = this.name.replace('item_meta[', '').split(']')[2].replace('[', '');
-					doCalculation(fieldID);
+					doCalculation(fieldID, jQuery(this));
 				}
 			});
 		});
