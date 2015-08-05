@@ -348,7 +348,6 @@ if ( ! isset($collapse_icon) ) {
 .<?php echo $style_class ?> input[type=url],
 .<?php echo $style_class ?> input[type=tel],
 .<?php echo $style_class ?> input[type=file],
-.<?php echo $style_class ?> input[type=file]::-webkit-file-upload-button,
 .<?php echo $style_class ?> input[type=search],
 .<?php echo $style_class ?> select{
     height:<?php echo ($field_height == '' ? 'auto' : $field_height) . $important  ?>;
