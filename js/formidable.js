@@ -254,89 +254,132 @@ function frmFrontFormJS(){
 		return this_opts;
 	}
 
-	function hideOrShowField(i, f, field_id, selected, rec, parentField){
-        f.inputName = 'item_meta['+ f.FieldName +']';
-        f.hiddenName = 'item_meta['+ f.HideField +']';
-        f.containerID = 'frm_field_'+ f.FieldName +'_container';
-        f.hideContainerID = 'frm_field_'+ f.HideField +'_container';
+	/**
+	* Track whether fields should hide or show in show_fields variable
+	*/
+	function hideOrShowField(i, f, triggerFieldId, selected, rec, parentField){
+		// Instantiate variables
+		f.inputName = 'item_meta['+ f.FieldName +']';
+		f.hiddenName = 'item_meta['+ f.HideField +']';
+		f.containerID = 'frm_field_'+ f.FieldName +'_container';
+		f.hideContainerID = 'frm_field_'+ f.HideField +'_container';
 		f.hideBy = '#';
-        var getRepeat = false;
+		var getRepeat = false;
 
-        if ( typeof parentField !== 'undefined' && parentField !== null ) {
-            if ( parentField.length > 1 ) {
-                parentField = parentField.eq(0);
-            }
+		if ( typeof parentField !== 'undefined' && parentField !== null ) {
+			parentField = maybeGetFirstElement( parentField );
 
-            if ( typeof parentField.attr('name') === 'undefined' ) {
-                return;
-            }
-
-            // Accommodate for "other" options
-            f.inputName = parentField.attr('name').replace( '[other]', '' ).replace('[]', '');
-
-            var container = parentField.closest('.frm_repeat_sec, .frm_repeat_inline, .frm_repeat_grid');
-            if ( container.length ) {
-                var repeatInput = container.find('.frm_field_'+ f.FieldName +'_container');
-                f.containerID = repeatInput.attr('id');
-                f.hideContainerID = f.containerID.replace(f.FieldName, f.HideField);
-                f.hiddenName = f.inputName.replace('['+ f.FieldName +']', '['+ f.HideField +']');
-            }
-        } else {
-			setEmptyKeyInArray(f);
-            getRepeat = true;
-            parentField = jQuery('input[name^="'+ f.inputName +'"], textarea[name^="'+ f.inputName +'"], select[name^="'+ f.inputName +'"]');
-
-			if ( parentField.length < 1 ) {
-				// logic triggered on page load for fields in repeating section
-				var parentClass = '.'+ f.containerID;
-				if ( addingRow !== '' ) {
-					parentClass = '#' + addingRow +' '+ parentClass;
-				}
-
-				var parentContainer = jQuery(parentClass);
-				if ( parentContainer.length ) {
-					parentField = parentContainer.find('input, textarea, select');
-					if ( parentField.length ) {
-						if ( addingRow === '' ) {
-							var lastId = '';
-							parentField.each(function(){
-								var thisId = jQuery(this).closest('.frm_form_field').attr('id');
-								if ( thisId != lastId ) { // don't trigger radio/checkbox multiple times
-									hideOrShowField(i, f, f.FieldName, selected, rec, jQuery(this));
-								}
-								lastId = thisId;
-							});
-						} else {
-							hideOrShowField(i, f, field_id, selected, rec, parentField);
-						}
-					} else {
-						show_fields[f.hideContainerID][i] = false;
-						hideFieldNow(i, f, rec);
-					}
-					return;
-				}
+			if ( typeof parentField.attr('name') === 'undefined' ) {
+				return;
 			}
 
-			if ( parentField.length > 1 ) {
-				parentField = parentField.eq(0);
-            }
-        }
+			updateObjectForRepeatingSection( parentField, f );
+		} else {
+			getRepeat = true;
+			parentField = jQuery('input[name^="'+ f.inputName +'"], textarea[name^="'+ f.inputName +'"], select[name^="'+ f.inputName +'"]');
+
+			// If in repeating section
+			if ( parentField.length < 1 ) {
+				checkRepeatingFields( i, f, triggerFieldId, selected, rec );
+				return;
+			}
+
+			parentField = maybeGetFirstElement( parentField );
+		}
 
 		setEmptyKeyInArray(f);
 
-		// check if only the dependent field is in a repeating section
-		var hideContainer = document.getElementById(f.hideContainerID);
-		if(hideContainer === null){
-			// it is a repeating section, use the class
-			f.hideBy = '.';
+		maybeUpdateHideBy( f );
+
+		selected = getEnteredValue( i, f, triggerFieldId, selected, rec, parentField, getRepeat );
+		if ( selected === false ) {
+			return;
 		}
 
-		if ( f.FieldName !== field_id || typeof selected === 'undefined' || selected === 'und' ) {
+		updateShowFields( i, f, selected );
+
+		adjustShowFieldsForRepeat(f, i);
+
+		hideFieldNow(i, f, rec);
+	}
+
+	function maybeGetFirstElement( parentField ) {
+        if ( parentField.length > 1 ) {
+            parentField = parentField.eq(0);
+        }
+		return parentField;
+	}
+
+	function updateObjectForRepeatingSection( parentField, f ) {
+        var container = parentField.closest('.frm_repeat_sec, .frm_repeat_inline, .frm_repeat_grid');
+        if ( container.length ) {
+            var repeatInput = container.find('.frm_field_'+ f.FieldName +'_container');
+            f.containerID = repeatInput.attr('id');
+            f.hideContainerID = f.containerID.replace(f.FieldName, f.HideField);
+            f.hiddenName = f.inputName.replace('['+ f.FieldName +']', '['+ f.HideField +']');
+        }
+	}
+
+	/**
+	* If field in logic is repeating, loop through each repeating field
+	*/
+	function checkRepeatingFields( i, f, triggerFieldId, selected, rec ) {
+		// Get class for repeating field
+		var repeatingFieldClass = '.'+ f.containerID;
+		if ( addingRow !== '' && addingRow != undefined ) {
+			repeatingFieldClass = '#' + addingRow +' '+ repeatingFieldClass;
+		}
+
+		// Get all repeating field divs
+		var repeatingFieldDivs = jQuery(repeatingFieldClass);
+		if ( repeatingFieldDivs.length ) {
+			var repeatingFields = repeatingFieldDivs.find('input, textarea, select');
+
+			// If non-hidden fields exist in the repeating field divs
+			if ( repeatingFields.length ) {
+				if ( addingRow === '' || addingRow === undefined ) {
+					var lastId = '';
+
+					// Loop through each input/select/textarea in repeating fields
+					repeatingFields.each(function(){
+						var thisId = jQuery(this).closest('.frm_form_field').attr('id');
+						if ( thisId != lastId ) { // don't trigger radio/checkbox multiple times
+							hideOrShowField(i, f, f.FieldName, selected, rec, jQuery(this));
+						}
+						lastId = thisId;
+					});
+				} else {
+					hideOrShowField(i, f, triggerFieldId, selected, rec, repeatingFields);
+				}
+			} else {
+				setEmptyKeyInArray(f);
+				show_fields[f.hideContainerID][i] = false;
+				hideFieldNow(i, f, rec);
+			}
+		}
+	}
+
+	/**
+	* Check if only the dependent field is in a repeating section
+	*/
+	function maybeUpdateHideBy( f ) {
+		var hideContainer = document.getElementById(f.hideContainerID);
+		if ( hideContainer === null ) {
+		// it is a repeating section, use the class
+			f.hideBy = '.';
+		}
+	}
+
+	/**
+	* Get the entered/selected value in the current field
+	*/
+	function getEnteredValue( i, f, triggerFieldId, selected, rec, parentField, getRepeat ) {
+		if ( f.FieldName !== triggerFieldId || typeof selected === 'undefined' || selected === 'und' ) {
 			if ( ( f.Type === 'radio' || f.Type === 'data-radio' ) && parentField.attr('type') === 'radio' ) {
 				selected = jQuery('input[name="'+ f.inputName +'"]:checked').val();
-                if ( typeof selected === 'undefined' ) {
-                    selected = '';
-                }
+				if ( typeof selected === 'undefined' ) {
+					selected = '';
+				}
 			} else if ( f.Type === 'select' || f.Type === 'time' || f.Type === 'data-select' || ( f.Type !== 'checkbox' && f.Type !== 'data-checkbox' ) ) {
 				selected = parentField.val();
 			}
@@ -344,86 +387,93 @@ function frmFrontFormJS(){
 
 		if ( typeof selected === 'undefined' ) {
 			if ( parentField.length === 0 ) {
-				return; // the parent field is currently getting processed
+				return false; // the parent field is currently getting processed
 			}
 			selected = parentField.val();
-        }
+		}
 
 		if ( typeof selected === 'undefined' ) {
-            // check for repeating/embedded field
-            if ( getRepeat === true ) {
-                var repeat = jQuery('.'+ f.containerID +' input, .'+ f.containerID +' select, .'+ f.containerID +' textarea');
-                if ( repeat.length ) {
-                    repeat.each(function(){
-                        hideOrShowField(i, f, f.FieldName, selected, rec, jQuery(this));
-                    });
-                    return;
-                }
-            }
+			// check for repeating/embedded field
+			if ( getRepeat === true ) {
+				var repeat = jQuery('.'+ f.containerID +' input, .'+ f.containerID +' select, .'+ f.containerID +' textarea');
+				if ( repeat.length ) {
+					repeat.each(function(){
+						hideOrShowField(i, f, f.FieldName, selected, rec, jQuery(this));
+					});
+					return false;
+				}
+			}
 			selected = '';
 		}
 
-        // get selected checkbox values
-        var checkVals = [];
-        if ( f.Type === 'checkbox' || f.Type === 'data-checkbox' ) {
-            checkVals = getCheckedVal(f.containerID, f.inputName);
+		// get selected checkbox values
+		var checkVals = [];
+		if ( f.Type === 'checkbox' || f.Type === 'data-checkbox' ) {
+			checkVals = getCheckedVal(f.containerID, f.inputName);
 
-            if ( checkVals.length ) {
-                selected = checkVals;
-            }else{
-                selected = '';
-            }
-        }
+			if ( checkVals.length ) {
+				selected = checkVals;
+			}else{
+				selected = '';
+			}
+		}
 
+		return selected;
+	}
+
+	/**
+	* Add values to the show_fields array
+	*/
+	function updateShowFields( i, f, selected ) {
 		if ( selected === null || selected === '' || selected.length < 1 ) {
 			show_fields[f.hideContainerID][i] = false;
 		} else {
 			show_fields[f.hideContainerID][i] = {'funcName':'getDataOpts', 'f':f, 'sel':selected};
 		}
 
-        if ( f.Type === 'checkbox' || (f.Type === 'data-checkbox' && typeof f.LinkedField === 'undefined') ) {
-            show_fields[f.hideContainerID][i] = false;
+		if ( f.Type === 'checkbox' || (f.Type === 'data-checkbox' && typeof f.LinkedField === 'undefined') ) {
+			show_fields[f.hideContainerID][i] = false;
 
-            var match = false;
-            if ( selected !== '') {
-                if ( f.Condition === '!=' ) {
-                    show_fields[f.hideContainerID][i] = true;
-                }
-                for ( var b = 0; b<selected.length; b++ ) {
-                    match = operators(f.Condition, f.Value, selected[b]);
-                    if ( f.Condition === '!=' ) {
-                        if ( show_fields[f.hideContainerID][i] === true && match === false ) {
-                            show_fields[f.hideContainerID][i] = false;
-                        }
-                    } else if(show_fields[f.hideContainerID][i] === false && match){
-                        show_fields[f.hideContainerID][i] = true;
-                    }
-                }
-            } else {
-                match = operators(f.Condition, f.Value, '');
-                if(show_fields[f.hideContainerID][i] === false && match){
-                    show_fields[f.hideContainerID][i] = true;
-                }
-            }
-        } else if ( typeof f.LinkedField !== 'undefined' && f.Type.indexOf('data-') === 0 ) {
+			var match = false;
+			if ( selected !== '') {
+				if ( f.Condition === '!=' ) {
+					show_fields[f.hideContainerID][i] = true;
+				}
+				for ( var b = 0; b<selected.length; b++ ) {
+					match = operators(f.Condition, f.Value, selected[b]);
+					if ( f.Condition === '!=' ) {
+						if ( show_fields[f.hideContainerID][i] === true && match === false ) {
+							show_fields[f.hideContainerID][i] = false;
+						}
+					} else if(show_fields[f.hideContainerID][i] === false && match){
+						show_fields[f.hideContainerID][i] = true;
+					}
+				}
+			} else {
+				match = operators(f.Condition, f.Value, '');
+				if(show_fields[f.hideContainerID][i] === false && match){
+					show_fields[f.hideContainerID][i] = true;
+				}
+			}
+		} else if ( typeof f.LinkedField !== 'undefined' && f.Type.indexOf('data-') === 0 ) {
 			if ( typeof f.DataType === 'undefined' || f.DataType === 'data' ) {
-                if ( selected === '' ) {
-                    hideAndClearDynamicField( f.hideContainerID, f.hideBy, f.HideField, 'hide' );
-    			} else if ( f.Type === 'data-radio' ) {
-                    if ( typeof f.DataType === 'undefined' ) {
-                        show_fields[f.hideContainerID][i] = operators(f.Condition, f.Value, selected);
-                    } else {
-                        show_fields[f.hideContainerID][i] = {'funcName':'getData','f':f,'sel':selected};
-                    }
-                } else if ( f.Type === 'data-checkbox' || ( f.Type === 'data-select' && isNotEmptyArray( selected ) ) ) {
-                    hideAndClearDynamicField( f.hideContainerID, f.hideBy, f.HideField, 'show' );
-    				show_fields[f.hideContainerID][i] = true;
-    				getData(f, selected, 1);
-                } else if ( f.Type === 'data-select' ) {
-                    show_fields[f.hideContainerID][i] = {'funcName':'getData','f':f,'sel':selected};
-                }
-            }
-        }else if ( typeof f.Value === 'undefined' && f.Type.indexOf('data') === 0 ) {
+				if ( selected === '' ) {
+					hideAndClearDynamicField( f.hideContainerID, f.hideBy, f.HideField, 'hide' );
+				} else if ( f.Type === 'data-radio' ) {
+					if ( typeof f.DataType === 'undefined' ) {
+						show_fields[f.hideContainerID][i] = operators(f.Condition, f.Value, selected);
+					} else {
+						show_fields[f.hideContainerID][i] = {'funcName':'getData','f':f,'sel':selected};
+					}
+				} else if ( f.Type === 'data-checkbox' || ( f.Type === 'data-select' && isNotEmptyArray( selected ) ) ) {
+					hideAndClearDynamicField( f.hideContainerID, f.hideBy, f.HideField, 'show' );
+					show_fields[f.hideContainerID][i] = true;
+					getData(f, selected, 1);
+				} else if ( f.Type === 'data-select' ) {
+					show_fields[f.hideContainerID][i] = {'funcName':'getData','f':f,'sel':selected};
+				}
+			}
+		}else if ( typeof f.Value === 'undefined' && f.Type.indexOf('data') === 0 ) {
 			if ( selected === '' ) {
 				f.Value = '1';
 			} else {
@@ -433,14 +483,37 @@ function frmFrontFormJS(){
 			f.Value = undefined;
 		}else{
 			show_fields[f.hideContainerID][i] = operators(f.Condition, f.Value, selected);
-        }
-
-		hideFieldNow(i, f, rec);
+		}
 	}
 
 	function setEmptyKeyInArray(f) {
 		if ( typeof show_fields[f.hideContainerID] === 'undefined' ) {
 			show_fields[f.hideContainerID] = [];
+		}
+	}
+
+	/**
+	* If a dependent field is in a repeating section, adjust the show_fields array so it includes every repeating field individually
+	*/
+	function adjustShowFieldsForRepeat(f, i){
+		var hideFieldRepeatContainer = jQuery( '.' + f.hideContainerID ).closest('.frm_repeat_sec, .frm_repeat_inline, .frm_repeat_grid');
+
+		if ( hideFieldRepeatContainer.length ) {
+			//f.hideContainerID is in repeating section
+			var result = show_fields[f.hideContainerID][i];
+			delete show_fields[f.hideContainerID];
+
+			var fCopy = f;
+			var originalId = f.hideContainerID;
+			var repeatId;
+			jQuery.each(hideFieldRepeatContainer, function(key,val){
+				repeatId = '-' + val.id.replace( 'frm_section_', '' ) + '_container';
+				repeatId = originalId.replace( '_container', repeatId );
+				fCopy.hideContainerID = repeatId;
+
+				setEmptyKeyInArray(fCopy);
+				show_fields[repeatId][i] = result;
+			});
 		}
 	}
 
