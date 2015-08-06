@@ -37,6 +37,10 @@ legend.frm_hidden{
 	box-shadow:none;
 }
 
+.with_frm_style input[type=file]{
+	display:initial;
+}
+
 .frm_preview_page:before{
     content:normal !important;
 }
