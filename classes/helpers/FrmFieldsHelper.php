@@ -687,6 +687,7 @@ DEFAULT_HTML;
             'editlink', 'id', 'key', 'ip',
             'siteurl', 'sitename', 'admin_email',
             'post[-|_]id', 'created[-|_]at', 'updated[-|_]at', 'updated[-|_]by',
+			'parent[-|_]id',
         );
 
         foreach ( $fields as $field ) {
