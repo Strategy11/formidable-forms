@@ -1828,6 +1828,7 @@ html[xmlns] .frm_clearfix{
 	.frm_form_field.frm_first.frm_eighth + .frm_form_field.frm_eighth + .frm_form_field.frm_eighth + .frm_form_field.frm_eighth,
 	.frm_form_field.frm_last.frm_eighth{
 		margin-right:0;
+		float:right;
 	}
 
 	.frm_form_field .frm_repeat_grid .frm_form_field.frm_sixth label.frm_primary_label,
@@ -1881,6 +1882,7 @@ html[xmlns] .frm_clearfix{
 	.frm_form_field.frm_first.frm_sixth + .frm_form_field.frm_sixth + .frm_form_field.frm_sixth,
 	.frm_form_field.frm_first.frm_seventh + .frm_form_field.frm_seventh + .frm_form_field.frm_seventh{
 		margin-right:4%;
+		float:left;
 	}
 
 	.frm_form_field.frm_first_fourth + .frm_form_field.frm_fourth,
@@ -1894,6 +1896,7 @@ html[xmlns] .frm_clearfix{
 	.frm_form_field.frm_first.frm_eighth + .frm_form_field.frm_eighth,
 	.frm_form_field.frm_first.frm_eighth + .frm_form_field.frm_eighth + .frm_form_field.frm_eighth + .frm_form_field.frm_eighth + .frm_form_field.frm_eighth + .frm_form_field.frm_eighth{
         margin-right:0;
+		float:right;
     }
 
 	.frm_form_field.frm_fifth.frm_last{
