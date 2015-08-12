@@ -1479,7 +1479,7 @@ ul.start_divider{
 	padding:6px;
 }
 .frm_sorting li.ui-state-default.edit_field_type_divider{
-	padding:0;
+	padding:0 0 25px 0;
 }
 .frm_sorting li.edit_field_type_end_divider,
 .frm_sorting .no_repeat_section li.ui-state-default.edit_field_type_end_divider:hover{
