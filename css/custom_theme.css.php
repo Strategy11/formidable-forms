@@ -156,50 +156,12 @@ legend.frm_hidden{
 }
 
 .frm_inline_form .frm_form_field.form-field{
-    float:left;
     margin-right:4%;
-    clear:none;
-}
-
-.frm_inline_form .frm_form_field.frm_left_half,
-.frm_inline_form .frm_form_field.frm_left_third,
-.frm_inline_form .frm_form_field.frm_left_two_thirds,
-.frm_inline_form .frm_form_field.frm_left_fourth,
-.frm_inline_form .frm_form_field.frm_left_fifth,
-.frm_inline_form .frm_form_field.frm_left_inline,
-.frm_inline_form .frm_form_field.frm_first_half,
-.frm_inline_form .frm_form_field.frm_first_third,
-.frm_inline_form .frm_form_field.frm_first_two_thirds,
-.frm_inline_form .frm_form_field.frm_first_fourth,
-.frm_inline_form .frm_form_field.frm_first_fifth,
-.frm_inline_form .frm_form_field.frm_first_sixth,
-.frm_inline_form .frm_form_field.frm_first_seventh,
-.frm_inline_form .frm_form_field.frm_first_eighth,
-.frm_inline_form .frm_form_field.frm_first_inline {
-    clear:left;
-}
-
-.frm_inline_form .frm_form_field.frm_right_half,
-.frm_inline_form .frm_form_field.frm_right_third,
-.frm_inline_form .frm_form_field.frm_right_two_thirds,
-.frm_inline_form .frm_form_field.frm_right_fourth,
-.frm_inline_form .frm_form_field.frm_right_fifth,
-.frm_inline_form .frm_form_field.frm_right_inline,
-.frm_inline_form .frm_form_field.frm_last_half,
-.frm_inline_form .frm_form_field.frm_last_third,
-.frm_inline_form .frm_form_field.frm_last_two_thirds,
-.frm_inline_form .frm_form_field.frm_last_fourth,
-.frm_inline_form .frm_form_field.frm_last_fifth,
-.frm_inline_form .frm_form_field.frm_last_sixth,
-.frm_inline_form .frm_form_field.frm_last_seventh,
-.frm_inline_form .frm_form_field.frm_last_eighth,
-.frm_inline_form .frm_form_field.frm_last_inline{
-    margin-right:0;
+	display:inline-block;
 }
 
 .frm_inline_form .frm_submit{
-    clear:none;
-    float:left;
+	display:inline-block;
 }
 
 .with_frm_style.frm_center_submit .frm_submit{

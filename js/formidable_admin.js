@@ -220,7 +220,6 @@ function frmAdminBuildJS(){
 			revert:true,
 			forcePlaceholderSize:false,
 			tolerance:'pointer',
-			container: 'ul.frm_sorting',
 			receive:function(event,ui){
 				if ( cancelSort ) {
 					ui.item.addClass('frm_cancel_sort');
