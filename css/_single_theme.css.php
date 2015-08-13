@@ -51,12 +51,21 @@ if ( ! isset($collapse_icon) ) {
     <?php if ( 'rtl' == $direction ) { ?>
     unicode-bidi:embed;
     <?php } ?>
+    <?php if ( $center_form ) { ?>
+    margin:0 auto;
+    <?php } ?>
 }
 
 .<?php echo $style_class ?>,
 .<?php echo $style_class ?> form{
     text-align:<?php echo $form_align . $important ?>;
 }
+
+<?php if ( $center_form ) {?>
+.frm_inline_form.<?php echo $style_class ?> form{
+	text-align:center;
+}
+<?php } ?>
 
 .<?php echo $style_class ?> fieldset{
     border:<?php echo $fieldset ?> solid #<?php echo $fieldset_color . $important ?>;

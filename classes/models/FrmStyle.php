@@ -306,6 +306,7 @@ class FrmStyle {
             'theme_css'         => 'ui-lightness',
             'theme_name'        => 'UI Lightness',
 
+			'center_form'		=> '',
             'form_width'        => '100%',
             'form_align'        => 'left',
             'direction'         => is_rtl() ? 'rtl' : 'ltr',

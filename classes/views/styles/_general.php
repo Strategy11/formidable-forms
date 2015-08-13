@@ -1,3 +1,9 @@
+<p>
+    <label><input type="checkbox" name="<?php echo esc_attr( $frm_style->get_field_name('center_form') ) ?>" id="frm_center_form" value="1" <?php checked($style->post_content['center_form'], 1) ?> />
+	    <?php _e( 'Center form on page', 'formidable' ) ?> <span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'This will center your form on the page where it is published if the form width is less than the available width on the page.', 'formidable' ) ?>" ></span>
+	</label>
+</p>
+
 <div class="field-group clearfix frm-first-row">
 	<label><?php _e( 'Alignment', 'formidable' ) ?></label>
 	<select name="<?php echo esc_attr( $frm_style->get_field_name('form_align') ) ?>" id="frm_form_align">
