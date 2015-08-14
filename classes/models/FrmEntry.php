@@ -529,7 +529,7 @@ class FrmEntry {
      * @param string $key
      * @return int entry_id
      */
-	public static function getIdByKey( $key ) {
+	public static function get_id_by_key( $key ) {
         $entry_id = FrmDb::get_var( 'frm_items', array( 'item_key' => sanitize_title( $key ) ) );
         return $entry_id;
     }
