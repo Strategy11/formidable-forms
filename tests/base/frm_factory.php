@@ -126,4 +126,8 @@ class Entry_Factory extends WP_UnitTest_Factory_For_Thing {
 		return FrmEntry::getOne( $entry_id );
 	}
 
+	function get_id_by_key( $entry_key ) {
+		return FrmEntry::getIdByKey( $entry_key );
+	}
+
 }

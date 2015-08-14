@@ -525,6 +525,15 @@ class FrmEntry {
         FrmAppHelper::sanitize_request( $sanitize_method, $values );
     }
 
+    /**
+     * @param string $key
+     * @return int entry_id
+     */
+	public static function getIdByKey( $key ) {
+        $entry_id = FrmDb::get_var( 'frm_items', array( 'item_key' => sanitize_title( $key ) ) );
+        return $entry_id;
+    }
+
 	public static function validate( $values, $exclude = false ) {
 		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmEntryValidate::validate' );
 		return FrmEntryValidate::validate( $values, $exclude );
