@@ -367,9 +367,12 @@ class FrmXMLHelper {
 
 			unset($item);
 
+			$post_id = false;
             if ( $post['post_type'] == $form_action_type ) {
                 $action_control = FrmFormActionsController::get_form_actions( $post['post_excerpt'] );
-                $post_id = $action_control->maybe_create_action( $post, $imported['form_status'] );
+				if ( $action_control ) {
+					$post_id = $action_control->maybe_create_action( $post, $imported['form_status'] );
+				}
                 unset($action_control);
             } else if ( $post['post_type'] == 'frm_styles' ) {
                 // Properly encode post content before inserting the post

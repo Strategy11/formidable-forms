@@ -182,7 +182,7 @@ class FrmEntryFormat {
 		$data = $default_data;
 
 		if ( isset( $atts['entry']->description ) ) {
-			$data = maybe_unserialize( $atts['entry']->description );
+			$data = (array) maybe_unserialize( $atts['entry']->description );
 		} else if ( $atts['default_email'] ) {
 			$data = array(
 				'browser'  => '[browser]',
