@@ -23,7 +23,7 @@ class FrmAppController {
         FrmAppHelper::load_font_style();
     }
 
-    public static function get_form_nav( $form, $show_nav = '', $title = 'show' ) {
+	public static function get_form_nav( $form, $show_nav = false, $title = 'show' ) {
         global $pagenow, $frm_vars;
 
 		$show_nav = FrmAppHelper::get_param( 'show_nav', $show_nav, 'get', 'absint' );

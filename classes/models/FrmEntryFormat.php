@@ -64,7 +64,7 @@ class FrmEntryFormat {
 
 		if ( $atts['clickable'] ) {
 			$content = make_clickable( $content );
-	        }
+		}
 
 		return $content;
 	}
