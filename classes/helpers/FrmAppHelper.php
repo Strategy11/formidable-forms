@@ -35,10 +35,9 @@ class FrmAppHelper {
         return plugins_url( '', self::plugin_folder() .'/formidable.php' );
     }
 
-    public static function relative_plugin_url( $url = '' ) {
-        $url = self::plugin_url( $url );
-		return str_replace( array( 'https:', 'http:' ), '', $url );
-    }
+	public static function relative_plugin_url() {
+		return str_replace( array( 'https:', 'http:' ), '', self::plugin_url() );
+	}
 
     /**
      * @return string Site URL
