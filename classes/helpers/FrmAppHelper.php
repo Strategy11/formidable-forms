@@ -10,7 +10,7 @@ class FrmAppHelper {
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '2.0.11';
+	public static $plug_version = '2.0.12b';
 
     /**
      * @since 1.07.02
@@ -30,17 +30,9 @@ class FrmAppHelper {
         return dirname(dirname(dirname(__FILE__)));
     }
 
-    public static function plugin_url( $url = '' ) {
+    public static function plugin_url() {
         //prevously FRM_URL constant
-        if ( empty($url) ) {
-            $url = plugins_url('', self::plugin_folder() .'/formidable.php');
-        }
-
-		if ( is_ssl() && ! preg_match( '/^https:\/\/.*\..*$/', $url ) ) {
-			$url = str_replace( 'http://', 'https://', $url );
-		}
-
-        return $url;
+        return plugins_url( '', self::plugin_folder() .'/formidable.php' );
     }
 
     public static function relative_plugin_url( $url = '' ) {
@@ -52,8 +44,7 @@ class FrmAppHelper {
      * @return string Site URL
      */
     public static function site_url() {
-        $url = self::plugin_url(site_url());
-        return $url;
+        return site_url();
     }
 
     /**
