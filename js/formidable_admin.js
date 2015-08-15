@@ -870,16 +870,6 @@ function frmAdminBuildJS(){
 		}
 	}
 
-	function setIPEKey(){
-		jQuery(this).editInPlace({
-			show_buttons:"true",value_required:"true",
-			save_button: '<a class="inplace_save save button button-small">'+frm_admin_js.ok+'</a>',
-			cancel_button:'<a class="inplace_cancel cancel">'+frm_admin_js.cancel+'</a>',
-			bg_out:"#fffbcc",
-			callback:function(x,text){jQuery(this).next('input').val(text);return text;}
-		});
-	}
-
 	function setIPELabel(){
 		jQuery(this).editInPlace({
 			url:ajaxurl,params:'action=frm_field_name_in_place_edit&nonce='+frmGlobal.nonce,
@@ -1970,7 +1960,6 @@ function frmAdminBuildJS(){
 			
 			$newFields.on('keypress', '.frm_ipe_field_label, .frm_ipe_field_option, .frm_ipe_field_option_key', blurField);
 			$newFields.on('mouseenter', '.frm_ipe_field_option, .frm_ipe_field_option_key', setIPEOpts);
-			$newFields.on('mouseenter', '.frm_ipe_field_key', setIPEKey);
 			$newFields.on('mouseenter', '.frm_ipe_field_label', setIPELabel);
 			$newFields.on('mouseenter', '.frm_ipe_field_desc, .frm_ipe_field_conf_desc', setIPEDesc);
 			$newFields.on('click', '.frm_add_logic_row', addFieldLogicRow);

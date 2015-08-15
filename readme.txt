@@ -92,7 +92,8 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 = 2.0.12 =
 * Add option to center form on page
 * Improve 6th, 7th and 8th layout classes for smaller screens
-* Change the 'frm_after_update_field_name' hook to include an array of values
+* Remove in-place-editing from the field keys on the form builder page
+* Add 'frm_after_update_field_name' hook for changing a field name during editing
 * Update Bootstrap multiselect to v0.9.13
 * Fix: Prevent loading icon from being huge in some themes
 * Fix: When the jQuery UI css is loaded by another plugin on the form builder page, the required icon looked the same whether required or not. This styling conflict is resolved.
@@ -103,6 +104,7 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * Allow views to be created using the repeated entries. Since each repeating row is an entry in a hidden form, we can allow views to be created using those repeating rows for more flexability.
 * Added order parameter to frm-entry-links
 * Allow options in a post status field to come from the form builder. The options should have separate values and the saved values can include 'publish', 'draft', 'private', 'scheduled'.
+* Remove the option to lock field and form keys. This is more of a hassle than a feature.
 * Allow the entry key to be used with the frm-field-value shortcode instead of forcing the entry
 * Replaced inline 50px height for image fields with .frm_image_from_url class for easier control
 * Improve file upload field in Chrome to prevent extra space from showing.

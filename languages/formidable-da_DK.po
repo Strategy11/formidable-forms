@@ -6764,7 +6764,7 @@ msgstr "Indsnævre, hvilke poster der skal avendes. De egnskaber vælges med SQL
 
 #: pro/classes/views/displays/mb_advanced.php:68
 #@ formidable
-msgid "No Entries Messsage"
+msgid "No Entries Message"
 msgstr "Besked ved ingen poster"
 
 #: pro/classes/views/displays/mb_advanced.php:78

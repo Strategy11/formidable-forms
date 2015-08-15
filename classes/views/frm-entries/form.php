@@ -34,7 +34,7 @@ if ( $values['fields'] ) {
 }
 
 $frm_settings = FrmAppHelper::get_settings();
-if ( FrmAppHelper::is_admin() && ! $frm_settings->lock_keys ) { ?>
+if ( FrmAppHelper::is_admin() ) { ?>
 <div class="frm_form_field form-field">
 <label class="frm_primary_label"><?php _e( 'Entry Key', 'formidable' ) ?></label>
 <input type="text" name="item_key" value="<?php echo esc_attr($values['item_key']) ?>" />

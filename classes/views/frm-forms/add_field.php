@@ -210,11 +210,7 @@ if ( $display['options'] ) { ?>
                             <?php _e( 'Field Key', 'formidable' ) ?>
 					</td>
 					<td>
-							<div class="<?php echo $frm_settings->lock_keys ? 'frm_field_key' : 'frm_ipe_field_key" title="'. esc_attr( __( 'Click to edit.', 'formidable' ) ); ?>" ><?php echo esc_html( $field['field_key'] ); ?></div>
-                            <?php if ( ! $frm_settings->lock_keys ) { ?>
-                            <input type="hidden" name="field_options[field_key_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['field_key'] ); ?>" />
-                            <?php } ?>
-                        </div>
+						<input type="text" name="field_options[field_key_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['field_key'] ); ?>" />
 					</td>
 				</tr>
 

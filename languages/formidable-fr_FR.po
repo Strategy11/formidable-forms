@@ -8111,8 +8111,8 @@ msgstr "Réstreindre les entrées qui seront utilisés. Les options uniques util
 
 #: pro/classes/views/displays/mb_advanced.php:68
 #@ formidable
-msgid "No Entries Messsage"
-msgstr "Pas de messsage"
+msgid "No Entries Message"
+msgstr "Pas de message"
 
 #: pro/classes/views/displays/mb_advanced.php:106
 #@ formidable
