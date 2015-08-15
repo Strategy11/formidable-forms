@@ -89,6 +89,37 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 [See more FAQs](http://formidablepro.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 2.0.12 =
+* Add option to center form on page
+* Improve 6th, 7th and 8th layout classes for smaller screens
+* Change the 'frm_after_update_field_name' hook to include an array of values
+* Update Bootstrap multiselect to v0.9.13
+* Fix: Prevent loading icon from being huge in some themes
+* Fix: When the jQuery UI css is loaded by another plugin on the form builder page, the required icon looked the same whether required or not. This styling conflict is resolved.
+* Fix: Make sure the form description size can be changed in the styling settings.
+* **Pro Features:**
+* Views can now be filtered by fields in the repeating sections.
+* Added [parent_id] shortcode for use in views. This shortcode will only have a value when the displaying entries in repeating sections.
+* Allow views to be created using the repeated entries. Since each repeating row is an entry in a hidden form, we can allow views to be created using those repeating rows for more flexability.
+* Added order parameter to frm-entry-links
+* Allow options in a post status field to come from the form builder. The options should have separate values and the saved values can include 'publish', 'draft', 'private', 'scheduled'.
+* Allow the entry key to be used with the frm-field-value shortcode instead of forcing the entry
+* Replaced inline 50px height for image fields with .frm_image_from_url class for easier control
+* Improve file upload field in Chrome to prevent extra space from showing.
+* Added 'frm_save_post_name' filter. This can be used for custom form actions that create posts.
+* Added 'frm_display_data_opts' filter.
+* Fix: When forms were submitted without ajax, the redirect wasn't working consistently.
+* Fix: The shortcodes weren't processing in the message shown after an entry is updated. 
+* Fix: When we prevented the PayPal action from triggering on import, we stopped all actions. This is now fixed so an action can be set (in the code) to be triggered on import. Posts will now be created on import again.
+* Fix: The dynamic list field was showing the entry ID in the entries tab instead of the value.
+* Fix: The Add row button wasn't showing in a repeating section when returning to edit an entry if there were more than two rows in the section.
+* Fix: Improve dropping a field between two sections.
+* Fix: Remove nonce check for frm-entry-update-field shortode. Page caching gives front-end nonce checks issues.
+* Fix: We changed the parameters sent to the frm_after_update_field hook without realizing it. The 'field_id' attribute was sometimes an object, but was previously always an integer. This has been updated for reverse compatibility, and 'field' has been added with the full field object.
+* Fix: If you put -100 for the start date in a date field, -100 would show in the date field instead of 1915. This is now working correctly for dynamic values like this with three digits.
+* Fix: When filtering a view with a Dynamic field, NOT EQUAL TO will work correctly.
+* Fix: Double quotes were causing trouble when included inside an error message returned by the frm_validate_field_entry hook
+
 = 2.0.11 =
 * Fix issue with clearing array keys when sanitizing an array when displaying entry values
 * When the email "reply to" value uses the "from" setting, only use the email address without the name
