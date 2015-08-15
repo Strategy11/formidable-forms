@@ -527,6 +527,7 @@ class FrmForm {
 	/**
 	 * Get all published forms
 	 * @since 2.0
+	 * @return array of forms
 	 */
 	public static function get_published_forms( $query = array(), $limit = 999, $inc_children = 'exclude' ) {
 		$query['is_template'] = 0;

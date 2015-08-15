@@ -112,7 +112,7 @@ class FrmFormsController {
         if ( ! $id || ! is_numeric($id) ) {
 			$id = FrmAppHelper::get_param( 'id', '', 'get', 'absint' );
         }
-        return self::get_settings_vars($id, '', $message);
+		return self::get_settings_vars( $id, array(), $message );
     }
 
     public static function update_settings() {
@@ -130,7 +130,7 @@ class FrmFormsController {
 		FrmForm::update( $id, $_POST );
 
         $message = __( 'Settings Successfully Updated', 'formidable' );
-        return self::get_settings_vars($id, '', $message);
+		return self::get_settings_vars( $id, array(), $message );
     }
 
     public static function edit_key() {
@@ -185,9 +185,9 @@ class FrmFormsController {
             FrmForm::update( $id, $values );
             $message = __( 'Form was Successfully Updated', 'formidable' );
             if ( defined( 'DOING_AJAX' ) ) {
-                die( $message );
+				wp_die( $message );
             }
-            return self::get_edit_vars( $id, '', $message );
+			return self::get_edit_vars( $id, array(), $message );
         }
     }
 
@@ -227,7 +227,7 @@ class FrmFormsController {
         $form = FrmForm::duplicate( $params['id'], $params['template'], true );
         $message = ($params['template']) ? __( 'Form template was Successfully Created', 'formidable' ) : __( 'Form was Successfully Copied', 'formidable' );
         if ( $form ) {
-            return self::get_edit_vars($form, '', $message, true);
+			return self::get_edit_vars( $form, array(), $message, true );
         } else {
             return self::display_forms_list($params, __( 'There was a problem creating new template.', 'formidable' ));
         }
@@ -564,7 +564,7 @@ class FrmFormsController {
         return $save;
     }
 
-    private static function get_edit_vars( $id, $errors = '', $message = '', $create_link = false ) {
+	private static function get_edit_vars( $id, $errors = array(), $message = '', $create_link = false ) {
         global $frm_vars;
 
         $form = FrmForm::getOne( $id );
@@ -609,7 +609,7 @@ class FrmFormsController {
         }
     }
 
-    public static function get_settings_vars( $id, $errors = '', $message = '' ) {
+	public static function get_settings_vars( $id, $errors = array(), $message = '' ) {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 
         global $frm_vars;
