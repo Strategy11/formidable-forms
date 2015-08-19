@@ -85,16 +85,18 @@ function frmFrontFormJS(){
         if ( select ) {
 			var otherField = jQuery(this).parent().children('.frm_other_input');
 
-            if ( other ) {
-                // Remove frm_pos_none
-                otherField[0].className = otherField[0].className.replace( 'frm_pos_none', '' );
-            } else {
-                // Add frm_pos_none
-                if ( otherField[0].className.indexOf( 'frm_pos_none' ) < 1 ) {
-                    otherField[0].className = otherField[0].className + ' frm_pos_none';
-                }
-                otherField[0].value = '';
-            }
+			if ( otherField.length ) {
+				if ( other ) {
+					// Remove frm_pos_none
+					otherField[0].className = otherField[0].className.replace( 'frm_pos_none', '' );
+				} else {
+					// Add frm_pos_none
+					if ( otherField[0].className.indexOf( 'frm_pos_none' ) < 1 ) {
+						otherField[0].className = otherField[0].className + ' frm_pos_none';
+					}
+					otherField[0].value = '';
+				}
+			}
 
         // Radio
         } else if ( type === 'radio' ) {
