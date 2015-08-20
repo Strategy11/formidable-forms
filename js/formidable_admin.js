@@ -1682,7 +1682,31 @@ function frmAdminBuildJS(){
 		}
 		return false;
 	}
-	
+
+	function saveAddonLicense() {
+		var button = jQuery(this);
+		var buttonName = this.name;
+		var pluginSlug = button.data('plugin');
+		var action = buttonName.replace('edd_'+pluginSlug+'_license_', '');
+		var license = document.getElementById('edd_'+pluginSlug+'_license_key').value;
+		jQuery.ajax({
+			type:'POST',url:ajaxurl,dataType:'json',
+			data:{action:'frm_addon_'+action,license:license,plugin:pluginSlug,nonce:frmGlobal.nonce},
+			success:function(msg){
+				if ( msg.success === true ) {
+					var newClass = 'frm_hidden';
+					if ( action == 'activate' ) {
+						newClass = 'frm_inactive_icon';
+					}
+					button.closest('.edd_frm_license_row').find('.frm_icon_font').removeClass('frm_hidden').addClass(newClass);
+					button.replaceWith(msg.message);
+				} else {
+					button.after(msg.message);
+				}
+			}
+		});
+	}
+
 	/* Import/Export page */
 	function validateExport(e){
 		e.preventDefault();
@@ -2326,6 +2350,9 @@ function frmAdminBuildJS(){
 			$globalForm.on('click', '.frm_show_auth_form', showAuthForm);
 			jQuery(document.getElementById('frm_uninstall_now')).click(uninstallNow);
             initiateMultiselect();
+
+			// activate addon licenses
+			jQuery('.edd_frm_save_license').click(saveAddonLicense);
 		},
 		
 		exportInit: function(){

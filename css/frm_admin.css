@@ -899,6 +899,12 @@ select.frm_cancelnew, input.frm_enternew{width:175px;}
 .frm_38_trigger .categorydiv div.tabs-panel.general_settings .postbox{margin-bottom:0;}
 .tabs-panel{height:auto !important; min-height:260px;}
 .tabs-panel.panel_secondary{min-height:20px;margin-top:10px;margin-left:150px;}
+.edd_frm_status_icon.frm_icon_font{
+	color:#D54E21;
+}
+.edd_frm_status_icon.frm_icon_font.frm_inactive_icon{
+	color:green;
+}
 
 /* Styles tabs */
 #general-style #frm_gen_font_box{padding-right:0;width:100%;}
