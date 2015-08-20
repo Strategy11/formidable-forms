@@ -12,7 +12,7 @@
 		?>
 
 		<div class="edd_frm_license_row">
-			<label class="frm_left_label" for="edd_<?php echo esc_attr( $slug ) ?>_license_key"><?php echo $plugin->plugin_name ?></label>
+			<label class="frm_left_label" for="edd_<?php echo esc_attr( $slug ) ?>_license_key"><?php echo FrmAppHelper::kses( $plugin->plugin_name ) ?></label>
 			<input id="edd_<?php echo esc_attr( $slug ) ?>_license_key" name="edd_<?php echo esc_attr( $slug ) ?>_license_key" type="text" class="regular-text" value="<?php echo esc_attr( $license ); ?>" />
 
 			<span class="frm_icon_font frm_action_icon frm_error_icon edd_frm_status_icon <?php echo esc_attr( $icon_class ); ?>"></span>

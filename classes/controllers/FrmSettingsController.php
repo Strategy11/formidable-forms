@@ -25,7 +25,7 @@ class FrmSettingsController {
 
 		$sections = array();
 		if ( apply_filters( 'frm_include_addon_page', false ) ) {
-			$sections['licenses'] = array('class' => 'FrmAddonsController', 'function' => 'show_addons' );
+			$sections['licenses'] = array( 'class' => 'FrmAddonsController', 'function' => 'show_addons' );
 		}
         $sections = apply_filters( 'frm_add_settings_section', $sections );
 

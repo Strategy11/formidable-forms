@@ -4,7 +4,9 @@
 //set_site_transient( 'update_plugins', null );
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * Allows plugins to use their own update API.
@@ -29,7 +31,7 @@ class EDD_SL_Plugin_Updater {
      * @param string  $_plugin_file Path to the plugin file.
      * @param array   $_api_data    Optional data to send with API calls.
      */
-    function __construct( $_api_url, $_plugin_file, $_api_data = null ) {
+    public function __construct( $_api_url, $_plugin_file, $_api_data = null ) {
         $this->api_url  = trailingslashit( $_api_url );
         $this->api_data = $_api_data;
         $this->name     = plugin_basename( $_plugin_file );
@@ -77,7 +79,7 @@ class EDD_SL_Plugin_Updater {
             $_transient_data = new stdClass;
         }
 
-        if( 'plugins.php' == $pagenow && is_multisite() ) {
+        if ( 'plugins.php' == $pagenow && is_multisite() ) {
             return $_transient_data;
         }
 
@@ -87,7 +89,7 @@ class EDD_SL_Plugin_Updater {
 
             if ( false !== $version_info && is_object( $version_info ) && isset( $version_info->new_version ) ) {
 
-                if( version_compare( $this->version, $version_info->new_version, '<' ) ) {
+                if ( version_compare( $this->version, $version_info->new_version, '<' ) ) {
 
 					if ( empty( $version_info->plugin ) ) {
 						$version_info->plugin = $this->name;
@@ -101,7 +103,6 @@ class EDD_SL_Plugin_Updater {
                 $_transient_data->checked[ $this->name ] = $this->version;
 
             }
-
         }
 
         return $_transient_data;
@@ -115,11 +116,11 @@ class EDD_SL_Plugin_Updater {
      */
     public function show_update_notification( $file, $plugin ) {
 
-        if( ! current_user_can( 'update_plugins' ) ) {
+        if ( ! current_user_can( 'update_plugins' ) ) {
             return;
         }
 
-        if( ! is_multisite() ) {
+        if ( ! is_multisite() ) {
             return;
         }
 
@@ -144,12 +145,11 @@ class EDD_SL_Plugin_Updater {
                 set_transient( $cache_key, $version_info, 3600 );
             }
 
-
-            if( ! is_object( $version_info ) ) {
+            if ( ! is_object( $version_info ) ) {
                 return;
             }
 
-            if( version_compare( $this->version, $version_info->new_version, '<' ) ) {
+            if ( version_compare( $this->version, $version_info->new_version, '<' ) ) {
 
                 $update_cache->response[ $this->name ] = $version_info;
 
@@ -211,7 +211,6 @@ class EDD_SL_Plugin_Updater {
      */
     function plugins_api_filter( $_data, $_action = '', $_args = null ) {
 
-
         if ( $_action != 'plugin_information' ) {
 
             return $_data;
@@ -229,7 +228,7 @@ class EDD_SL_Plugin_Updater {
             'is_ssl' => is_ssl(),
             'fields' => array(
                 'banners' => false, // These will be supported soon hopefully
-                'reviews' => false
+                'reviews' => false,
             )
         );
 
@@ -275,13 +274,15 @@ class EDD_SL_Plugin_Updater {
 
         $data = array_merge( $this->api_data, $_data );
 
-        if ( $data['slug'] != $this->slug )
+        if ( $data['slug'] != $this->slug ) {
             return;
+		}
 
-        if ( empty( $data['license'] ) )
+        if ( empty( $data['license'] ) ) {
             return;
+		}
 
-        if( $this->api_url == home_url() ) {
+        if ( $this->api_url == home_url() ) {
             return false; // Don't allow a plugin to ping itself
         }
 
@@ -312,29 +313,27 @@ class EDD_SL_Plugin_Updater {
 
     public function show_changelog() {
 
-
-        if( empty( $_REQUEST['edd_sl_action'] ) || 'view_plugin_changelog' != $_REQUEST['edd_sl_action'] ) {
+        if ( empty( $_REQUEST['edd_sl_action'] ) || 'view_plugin_changelog' != $_REQUEST['edd_sl_action'] ) {
             return;
         }
 
-        if( empty( $_REQUEST['plugin'] ) ) {
+        if ( empty( $_REQUEST['plugin'] ) ) {
             return;
         }
 
-        if( empty( $_REQUEST['slug'] ) ) {
+        if ( empty( $_REQUEST['slug'] ) ) {
             return;
         }
 
-        if( ! current_user_can( 'update_plugins' ) ) {
+        if ( ! current_user_can( 'update_plugins' ) ) {
             wp_die( __( 'You do not have permission to install plugin updates', 'edd' ), __( 'Error', 'edd' ), array( 'response' => 403 ) );
         }
 
         $response = $this->api_request( 'plugin_latest_version', array( 'slug' => $_REQUEST['slug'] ) );
 
-        if( $response && isset( $response->sections['changelog'] ) ) {
+        if ( $response && isset( $response->sections['changelog'] ) ) {
             echo '<div style="background:#fff;padding:10px;">' . $response->sections['changelog'] . '</div>';
         }
-
 
         exit;
     }

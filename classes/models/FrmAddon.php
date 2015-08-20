@@ -50,7 +50,7 @@ class FrmAddon {
 			}
 
 			// setup the updater
-			$edd_updater = new EDD_SL_Plugin_Updater( $this->store_url, $this->plugin_file, array(
+			new EDD_SL_Plugin_Updater( $this->store_url, $this->plugin_file, array(
 				'version' 	=> $this->version,
 				'license' 	=> $license,
 				'item_name' => $this->plugin_name,
@@ -61,8 +61,6 @@ class FrmAddon {
 
 	public static function activate() {
 	 	check_ajax_referer( 'frm_ajax', 'nonce' );
-
-		$message = '';
 
 		if ( ! isset( $_POST['license'] ) || empty( $_POST['license'] ) ) {
 			wp_die( __( 'Oops! You forgot to enter your license number.', 'formidable' ) );
@@ -81,7 +79,7 @@ class FrmAddon {
 			$is_valid = 'invalid';
 			if ( is_array( $license_data ) && $license_data['license'] == 'valid' ) {
 				$is_valid = $license_data['license'];
-				$response['success'] = true;
+				$response['success'] = __( 'Enjoy!', 'formidable' );
 			} else {
 				$response['message'] = __( 'That license is invalid', 'formidable' );
 			}
@@ -127,10 +125,10 @@ class FrmAddon {
 
 	public function send_mothership_request( $action, $license ) {
 		$api_params = array(
-			'edd_action'=> $action,
-			'license' 	=> $license,
-			'item_name' => urlencode( $this->plugin_name ),
-			'url'       => home_url(),
+			'edd_action' => $action,
+			'license'    => $license,
+			'item_name'  => urlencode( $this->plugin_name ),
+			'url'        => home_url(),
 		);
 
 		$arg_array = array(
@@ -140,7 +138,7 @@ class FrmAddon {
 			'user-agent' => $this->plugin_slug . '/' . $this->version . '; ' . get_bloginfo( 'url' ),
 		);
 
-		$resp = wp_remote_post( $this->store_url, array( 'timeout' => 15, 'sslverify' => false, 'body' => $api_params ) );
+		$resp = wp_remote_post( $this->store_url, $arg_array );
 		$body = wp_remote_retrieve_body( $resp );
 
 		if ( is_wp_error( $resp ) ) {
