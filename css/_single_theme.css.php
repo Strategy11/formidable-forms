@@ -467,14 +467,15 @@ if ( ! $submit_style ) { ?>
 .<?php echo $style_class ?>.frm_login_form input[type=submit]{
     width:<?php echo ($submit_width == '' ? 'auto' : $submit_width) . $important ?>;
     font-family:<?php echo stripslashes($font) ?>;
-    font-size:<?php echo $submit_font_size; ?>;
+    font-size:<?php echo $submit_font_size . $important; ?>;
     height:<?php echo $submit_height . $important ?>;
     line-height:normal<?php echo $important ?>;
     text-align:center;
     background:#<?php echo $submit_bg_color;
 	if ( ! empty($submit_bg_img) ) {
 		echo ' url('. $submit_bg_img .')';
-	} ?>;
+	}
+	echo $important; ?>;
     border-width:<?php echo $submit_border_width ?>;
     border-color:#<?php echo $submit_border_color . $important ?>;
     border-style:solid;
@@ -709,7 +710,7 @@ if ( ! $submit_style ) { ?>
     font-family:<?php echo stripslashes($font) . $important ?>;
     font-weight:<?php echo $submit_weight . $important ?>;
     color:#<?php echo $submit_text_color . $important ?>;
-    background:#<?php echo $submit_bg_color ?>;
+    background:#<?php echo $submit_bg_color . $important ?>;
     border-width:<?php echo $submit_border_width ?>;
     border-color:#<?php echo $submit_border_color . $important ?>;
 }
