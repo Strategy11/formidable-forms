@@ -633,6 +633,7 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
 .frm_form_field.frm_last,
 .frm_form_field.frm_half,
 .frm_form_field.frm_third,
+.frm_form_field.frm_two_thirds,
 .frm_form_field.frm_fourth,
 .frm_form_field.frm_three_fourths,
 .frm_form_field.frm_fifth,
@@ -645,12 +646,12 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
 .frm_form_field.frm_inline{
     clear:none;
     float:left;
+	margin-left:2.5%;
 }
 
 .frm_form_field.frm_left_half,
 .frm_form_field.frm_left_third,
 .frm_form_field.frm_left_two_thirds,
-.frm_form_field.frm_two_thirds,
 .frm_form_field.frm_left_fourth,
 .frm_form_field.frm_left_fifth,
 .frm_form_field.frm_left_inline,
@@ -772,22 +773,6 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
 .frm_form_field.frm_right_inline,
 .frm_form_field.frm_last_inline{
     width:auto;
-}
-
-.frm_form_field.frm_half,
-.frm_form_field.frm_third,
-.frm_form_field.frm_two_thirds,
-.frm_form_field.frm_fourth,
-.frm_form_field.frm_three_fourths,
-.frm_form_field.frm_fifth,
-.frm_form_field.frm_two_fifths,
-.frm_form_field.frm_three_fifths,
-.frm_form_field.frm_four_fifths,
-.frm_form_field.frm_sixth,
-.frm_form_field.frm_seventh,
-.frm_form_field.frm_eighth,
-.frm_form_field.frm_inline{
-    margin-left:2.5%;
 }
 
 .frm_form_field.frm_first{
