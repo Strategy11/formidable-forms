@@ -669,6 +669,10 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
     float:left;
 }
 
+.frm_form_field.frm_alignright{
+	float:right !important;
+}
+
 .frm_form_field.frm_left_half,
 .frm_form_field.frm_right_half,
 .frm_form_field.frm_first_half,
