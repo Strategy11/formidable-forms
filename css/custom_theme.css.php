@@ -679,13 +679,6 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
     width:48.75%;
 }
 
-.frm_form_field.frm_half,
-.frm_form_field.frm_left_half,
-.frm_form_field.frm_first_half,
-.frm_form_field.frm_half.frm_first{
-    margin-left:2.5%;
-}
-
 .with_frm_style .frm_form_field.frm_first_half.frm_right_container div.frm_description,
 .with_frm_style .frm_form_field.frm_first_half.frm_right_container .frm_error,
 .with_frm_style .frm_form_field.frm_first_half .frm_right_container div.frm_description,
@@ -726,15 +719,6 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
     width:65.82%;
 }
 
-.frm_form_field.frm_left_third,
-.frm_form_field.frm_first_third,
-.frm_form_field.frm_third,
-.frm_form_field.frm_left_two_thirds,
-.frm_form_field.frm_first_two_thirds,
-.frm_form_field.frm_two_thirds{
-    margin-left:2.5%;
-}
-
 .frm_form_field.frm_left_fourth,
 .frm_form_field.frm_fourth,
 .frm_form_field.frm_right_fourth,
@@ -745,13 +729,6 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
 
 .frm_form_field.frm_three_fourths{
 	width:74.36%;
-}
-
-.frm_form_field.frm_left_fourth,
-.frm_form_field.frm_fourth,
-.frm_form_field.frm_three_fourths,
-.frm_form_field.frm_first_fourth{
-    margin-left:2.5%;
 }
 
 .frm_form_field.frm_left_fifth,
@@ -774,24 +751,10 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
 	width:79.5%;
 }
 
-.frm_form_field.frm_left_fifth,
-.frm_form_field.frm_fifth,
-.frm_form_field.frm_first_fifth,
-.frm_form_field.frm_two_fifths,
-.frm_form_field.frm_three_fifths,
-.frm_form_field.frm_four_fifths{
-    margin-left:2.5%;
-}
-
 .frm_form_field.frm_sixth,
 .frm_form_field.frm_first_sixth,
 .frm_form_field.frm_last_sixth{
     width:14.58%;
-}
-
-.frm_form_field.frm_sixth,
-.frm_form_field.frm_first_sixth{
-    margin-left:2.5%;
 }
 
 .frm_form_field.frm_seventh,
@@ -800,20 +763,10 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
     width:12.14%;
 }
 
-.frm_form_field.frm_seventh,
-.frm_form_field.frm_first_seventh{
-    margin-left:2.5%;
-}
-
 .frm_form_field.frm_eighth,
 .frm_form_field.frm_first_eighth,
 .frm_form_field.frm_last_eighth{
     width:10.31%;
-}
-
-.frm_form_field.frm_eighth,
-.frm_form_field.frm_first_eighth{
-    margin-left:2.5%;
 }
 
 .frm_form_field.frm_left_inline,
@@ -824,28 +777,37 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
     width:auto;
 }
 
+.frm_form_field.frm_half,
+.frm_form_field.frm_left_half,
+.frm_form_field.frm_first_half,
+.frm_form_field.frm_left_third,
+.frm_form_field.frm_first_third,
+.frm_form_field.frm_third,
+.frm_form_field.frm_left_two_thirds,
+.frm_form_field.frm_first_two_thirds,
+.frm_form_field.frm_two_thirds,
+.frm_form_field.frm_left_fourth,
+.frm_form_field.frm_fourth,
+.frm_form_field.frm_three_fourths,
+.frm_form_field.frm_first_fourth,
+.frm_form_field.frm_left_fifth,
+.frm_form_field.frm_fifth,
+.frm_form_field.frm_first_fifth,
+.frm_form_field.frm_two_fifths,
+.frm_form_field.frm_three_fifths,
+.frm_form_field.frm_four_fifths,
+.frm_form_field.frm_sixth,
+.frm_form_field.frm_first_sixth,
+.frm_form_field.frm_seventh,
+.frm_form_field.frm_first_seventh,
+.frm_form_field.frm_eighth,
+.frm_form_field.frm_first_eighth,
 .frm_form_field.frm_left_inline,
 .frm_form_field.frm_first_inline,
 .frm_form_field.frm_inline{
     margin-left:2.5%;
 }
 
-.frm_form_field.frm_left_half,
-.frm_form_field.frm_half.frm_first,
-.frm_form_field.frm_left_third,
-.frm_form_field.frm_left_two_thirds,
-.frm_form_field.frm_left_fourth,
-.frm_form_field.frm_left_fifth,
-.frm_form_field.frm_left_inline,
-.frm_form_field.frm_first_half,
-.frm_form_field.frm_first_third,
-.frm_form_field.frm_first_two_thirds,
-.frm_form_field.frm_first_fourth,
-.frm_form_field.frm_first_fifth,
-.frm_form_field.frm_first_sixth,
-.frm_form_field.frm_first_seventh,
-.frm_form_field.frm_first_eighth,
-.frm_form_field.frm_first_inline,
 .frm_form_field.frm_first{
 	margin-left:0;
 }
