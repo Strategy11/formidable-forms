@@ -618,7 +618,11 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
 .frm_form_field.frm_half,
 .frm_form_field.frm_third,
 .frm_form_field.frm_fourth,
+.frm_form_field.frm_three_fourths,
 .frm_form_field.frm_fifth,
+.frm_form_field.frm_two_fifths,
+.frm_form_field.frm_three_fifths,
+.frm_form_field.frm_four_fifths,
 .frm_form_field.frm_sixth,
 .frm_form_field.frm_seventh,
 .frm_form_field.frm_eighth,
@@ -630,6 +634,7 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
 .frm_form_field.frm_left_half,
 .frm_form_field.frm_left_third,
 .frm_form_field.frm_left_two_thirds,
+.frm_form_field.frm_two_thirds,
 .frm_form_field.frm_left_fourth,
 .frm_form_field.frm_left_fifth,
 .frm_form_field.frm_left_inline,
@@ -664,7 +669,6 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
 .frm_form_field.frm_last_inline,
 .frm_form_field.frm_last{
     clear:none;
-    float:right;
 }
 
 .frm_form_field.frm_left_half,
@@ -672,13 +676,14 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
 .frm_form_field.frm_first_half,
 .frm_form_field.frm_last_half,
 .frm_form_field.frm_half{
-    width:48%;
+    width:48.75%;
 }
 
+.frm_form_field.frm_half,
 .frm_form_field.frm_left_half,
 .frm_form_field.frm_first_half,
 .frm_form_field.frm_half.frm_first{
-    margin-right:4%;
+    margin-left:2.5%;
 }
 
 .with_frm_style .frm_form_field.frm_first_half.frm_right_container div.frm_description,
@@ -710,7 +715,7 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
 .frm_form_field.frm_right_third,
 .frm_form_field.frm_first_third,
 .frm_form_field.frm_last_third{
-    width:30%;
+    width:31.66%;
 }
 
 .frm_form_field.frm_left_two_thirds,
@@ -718,7 +723,7 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
 .frm_form_field.frm_first_two_thirds,
 .frm_form_field.frm_last_two_thirds,
 .frm_form_field.frm_two_thirds{
-    width:65%;
+    width:65.82%;
 }
 
 .frm_form_field.frm_left_third,
@@ -727,7 +732,7 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
 .frm_form_field.frm_left_two_thirds,
 .frm_form_field.frm_first_two_thirds,
 .frm_form_field.frm_two_thirds{
-    margin-right:5%;
+    margin-left:2.5%;
 }
 
 .frm_form_field.frm_left_fourth,
@@ -735,13 +740,18 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
 .frm_form_field.frm_right_fourth,
 .frm_form_field.frm_first_fourth,
 .frm_form_field.frm_last_fourth{
-    width:22%;
+    width:23.12%;
+}
+
+.frm_form_field.frm_three_fourths{
+	width:74.36%;
 }
 
 .frm_form_field.frm_left_fourth,
 .frm_form_field.frm_fourth,
+.frm_form_field.frm_three_fourths,
 .frm_form_field.frm_first_fourth{
-    margin-right:4%;
+    margin-left:2.5%;
 }
 
 .frm_form_field.frm_left_fifth,
@@ -749,46 +759,61 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
 .frm_form_field.frm_right_fifth,
 .frm_form_field.frm_first_fifth,
 .frm_form_field.frm_last_fifth{
-    width:16%;
+    width:18%;
+}
+
+.frm_form_field.frm_two_fifths {
+	width:38.5%;
+}
+
+.frm_form_field.frm_three_fifths {
+	width:59%;
+}
+
+.frm_form_field.frm_four_fifths {
+	width:79.5%;
 }
 
 .frm_form_field.frm_left_fifth,
 .frm_form_field.frm_fifth,
-.frm_form_field.frm_first_fifth{
-    margin-right:5%;
+.frm_form_field.frm_first_fifth,
+.frm_form_field.frm_two_fifths,
+.frm_form_field.frm_three_fifths,
+.frm_form_field.frm_four_fifths{
+    margin-left:2.5%;
 }
 
 .frm_form_field.frm_sixth,
 .frm_form_field.frm_first_sixth,
 .frm_form_field.frm_last_sixth{
-    width:13%;
+    width:14.58%;
 }
 
 .frm_form_field.frm_sixth,
 .frm_form_field.frm_first_sixth{
-    margin-right:4%;
+    margin-left:2.5%;
 }
 
 .frm_form_field.frm_seventh,
 .frm_form_field.frm_first_seventh,
 .frm_form_field.frm_last_seventh{
-    width:11%;
+    width:12.14%;
 }
 
 .frm_form_field.frm_seventh,
 .frm_form_field.frm_first_seventh{
-    margin-right:3%;
+    margin-left:2.5%;
 }
 
 .frm_form_field.frm_eighth,
 .frm_form_field.frm_first_eighth,
 .frm_form_field.frm_last_eighth{
-    width:10%;
+    width:10.31%;
 }
 
 .frm_form_field.frm_eighth,
 .frm_form_field.frm_first_eighth{
-    margin-right:2.5%;
+    margin-left:2.5%;
 }
 
 .frm_form_field.frm_left_inline,
@@ -802,11 +827,27 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
 .frm_form_field.frm_left_inline,
 .frm_form_field.frm_first_inline,
 .frm_form_field.frm_inline{
-    margin-right:4%;
+    margin-left:2.5%;
 }
 
-.frm_form_field.frm_last{
-    margin-right:0;
+.frm_form_field.frm_left_half,
+.frm_form_field.frm_half.frm_first,
+.frm_form_field.frm_left_third,
+.frm_form_field.frm_left_two_thirds,
+.frm_form_field.frm_left_fourth,
+.frm_form_field.frm_left_fifth,
+.frm_form_field.frm_left_inline,
+.frm_form_field.frm_first_half,
+.frm_form_field.frm_first_third,
+.frm_form_field.frm_first_two_thirds,
+.frm_form_field.frm_first_fourth,
+.frm_form_field.frm_first_fifth,
+.frm_form_field.frm_first_sixth,
+.frm_form_field.frm_first_seventh,
+.frm_form_field.frm_first_eighth,
+.frm_form_field.frm_first_inline,
+.frm_form_field.frm_first{
+	margin-left:0;
 }
 
 .frm_full,
@@ -1765,34 +1806,6 @@ html[xmlns] .frm_clearfix{
 }
 
 @media only screen and (max-width: 900px) {
-	.frm_form_field.frm_sixth,
-	.frm_form_field.frm_seventh{
-		width:30%;
-	}
-
-	.frm_form_field.frm_seventh{
-		margin-right:5%;
-	}
-
-	.frm_form_field.frm_seventh.frm_last{
-		clear:both;
-		float:none;
-	}
-
-	.frm_form_field.frm_eighth{
-		width:22%;
-		margin-right:4%;
-	}
-
-	.frm_form_field.frm_first.frm_sixth + .frm_form_field.frm_sixth + .frm_form_field.frm_sixth,
-	.frm_form_field.frm_first.frm_seventh + .frm_form_field.frm_seventh + .frm_form_field.frm_seventh,
-	.frm_form_field.frm_first.frm_seventh + .frm_form_field.frm_seventh + .frm_form_field.frm_seventh + .frm_form_field.frm_seventh + .frm_form_field.frm_seventh + .frm_form_field.frm_seventh,
-	.frm_form_field.frm_first.frm_eighth + .frm_form_field.frm_eighth + .frm_form_field.frm_eighth + .frm_form_field.frm_eighth,
-	.frm_form_field.frm_last.frm_eighth{
-		margin-right:0;
-		float:right;
-	}
-
 	.frm_form_field .frm_repeat_grid .frm_form_field.frm_sixth label.frm_primary_label,
 	.frm_form_field .frm_repeat_grid .frm_form_field.frm_seventh label.frm_primary_label,
 	.frm_form_field .frm_repeat_grid .frm_form_field.frm_eighth label.frm_primary_label{
@@ -1817,60 +1830,27 @@ html[xmlns] .frm_clearfix{
     .frm_form_field.frm_last_third,
     .frm_form_field.frm_first_two_thirds,
 	.frm_form_field.frm_last_two_thirds,
-	.frm_form_field.frm_two_thirds{
-        width:100%;
-        margin-left:0;
-        margin-right:0;
-        float:none;
-    }
-
+	.frm_form_field.frm_two_thirds,
     .frm_form_field.frm_left_fourth,
     .frm_form_field.frm_fourth,
     .frm_form_field.frm_right_fourth,
     .frm_form_field.frm_first_fourth,
 	.frm_form_field.frm_last_fourth,
+	.frm_form_field.frm_three_fourths,
 	.frm_form_field.frm_fifth,
+	.frm_form_field.frm_two_fifths,
+	.frm_form_field.frm_three_fifths,
+	.frm_form_field.frm_four_fifths,
 	.frm_form_field.frm_sixth,
 	.frm_form_field.frm_seventh,
-	.frm_form_field.frm_eighth{
-        width:48%;
-    }
-
-	.frm_form_field.frm_fifth:not(.frm_last),
-	.frm_form_field.frm_sixth:not(.frm_last),
-	.frm_form_field.frm_seventh:not(.frm_last),
-	.frm_form_field.frm_fifth.frm_first,
-	.frm_form_field.frm_first.frm_fifth + .frm_form_field.frm_fifth + .frm_form_field.frm_fifth,
-	.frm_form_field.frm_first.frm_sixth + .frm_form_field.frm_sixth + .frm_form_field.frm_sixth,
-	.frm_form_field.frm_first.frm_seventh + .frm_form_field.frm_seventh + .frm_form_field.frm_seventh{
-		margin-right:4%;
-		float:left;
-	}
-
-	.frm_form_field.frm_first_fourth + .frm_form_field.frm_fourth,
-	.frm_form_field.frm_first.frm_fourth + .frm_form_field.frm_fourth,
-	.frm_form_field.frm_first.frm_fifth + .frm_form_field.frm_fifth,
-	.frm_form_field.frm_first.frm_fifth + .frm_form_field.frm_fifth + .frm_form_field.frm_fifth + .frm_form_field.frm_fifth,
-	.frm_form_field.frm_first.frm_sixth + .frm_form_field.frm_sixth,
-	.frm_form_field.frm_first.frm_sixth + .frm_form_field.frm_sixth + .frm_form_field.frm_sixth + .frm_form_field.frm_sixth,
-	.frm_form_field.frm_first.frm_seventh + .frm_form_field.frm_seventh,
-	.frm_form_field.frm_first.frm_seventh + .frm_form_field.frm_seventh + .frm_form_field.frm_seventh + .frm_form_field.frm_seventh,
-	.frm_form_field.frm_first.frm_eighth + .frm_form_field.frm_eighth,
-	.frm_form_field.frm_first.frm_eighth + .frm_form_field.frm_eighth + .frm_form_field.frm_eighth + .frm_form_field.frm_eighth + .frm_form_field.frm_eighth + .frm_form_field.frm_eighth{
-        margin-right:0;
-		float:right;
-    }
-
-	.frm_form_field.frm_fifth.frm_last{
-		clear:both;
-		float:none;
-	}
-
+	.frm_form_field.frm_eighth,
     .frm_form_field.frm_first_inline,
     .frm_form_field.frm_inline,
     .frm_form_field.frm_last_inline{
+        width:100%;
+        margin-left:0;
         margin-right:0;
-        clear:both;
+		clear:both;
         float:none;
     }
 
