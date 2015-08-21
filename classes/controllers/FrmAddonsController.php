@@ -9,11 +9,6 @@ class FrmAddonsController {
 			return;
 		}
 
-		$activate_labels = array(
-			'activate'   => __( 'Activate License', 'formidable' ),
-			'deactivate' => __( 'Deactivate License', 'formidable' ),
-		);
-
 		include( FrmAppHelper::plugin_path() . '/classes/views/addons/settings.php' );
 	}
 }

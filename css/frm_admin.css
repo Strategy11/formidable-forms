@@ -899,8 +899,16 @@ select.frm_cancelnew, input.frm_enternew{width:175px;}
 .frm_38_trigger .categorydiv div.tabs-panel.general_settings .postbox{margin-bottom:0;}
 .tabs-panel{height:auto !important; min-height:260px;}
 .tabs-panel.panel_secondary{min-height:20px;margin-top:10px;margin-left:150px;}
+.edd_frm_license_row{
+	line-height:2em;
+	clear:both;
+}
+.frm_license_msg{
+	margin-top:0;
+}
 .edd_frm_status_icon.frm_icon_font{
 	color:#D54E21;
+	margin:0 5px;
 }
 .edd_frm_status_icon.frm_icon_font.frm_inactive_icon{
 	color:green;

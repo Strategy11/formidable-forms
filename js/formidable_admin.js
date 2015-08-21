@@ -1693,15 +1693,22 @@ function frmAdminBuildJS(){
 			type:'POST',url:ajaxurl,dataType:'json',
 			data:{action:'frm_addon_'+action,license:license,plugin:pluginSlug,nonce:frmGlobal.nonce},
 			success:function(msg){
+				var thisRow = button.closest('.edd_frm_license_row');
+				if ( action == 'deactivate' ) {
+					license = '';
+					document.getElementById('edd_'+pluginSlug+'_license_key').value = '';
+				}
+				thisRow.find('.edd_frm_license').html( license );
 				if ( msg.success === true ) {
-					var newClass = 'frm_hidden';
-					if ( action == 'activate' ) {
-						newClass = 'frm_inactive_icon';
-					}
-					button.closest('.edd_frm_license_row').find('.frm_icon_font').removeClass('frm_hidden').addClass(newClass);
-					button.replaceWith(msg.message);
-				} else {
-					button.after(msg.message);
+					thisRow.find('.frm_icon_font').removeClass('frm_hidden');
+				}
+				thisRow.find('div.alignleft').toggleClass( 'frm_hidden', 1000 );
+				var messageBox = thisRow.find('.frm_license_msg');
+				messageBox.html(msg.message);
+				if ( msg.message !== '' ){
+					setTimeout(function(){
+						messageBox.html('');
+					},5000);
 				}
 			}
 		});
