@@ -46,7 +46,7 @@ class FrmSettings{
         $this->set_default_options();
     }
 
-    private function translate_settings($settings) {
+	private function translate_settings( $settings ) {
         if ( $settings ) { //workaround for W3 total cache conflict
             return unserialize(serialize($settings));
         }
@@ -124,7 +124,7 @@ class FrmSettings{
         }
     }
 
-    public function fill_with_defaults($params = array()) {
+	public function fill_with_defaults( $params = array() ) {
         $settings = $this->default_options();
 
         foreach ( $settings as $setting => $default ) {
@@ -182,7 +182,7 @@ class FrmSettings{
         do_action( 'frm_update_settings', $params );
     }
 
-    private function update_settings($params) {
+	private function update_settings( $params ) {
         $this->mu_menu = isset($params['frm_mu_menu']) ? $params['frm_mu_menu'] : 0;
 
         $this->pubkey = trim($params['frm_pubkey']);
@@ -198,7 +198,7 @@ class FrmSettings{
 		$this->accordion_js = isset( $params['frm_accordion_js'] ) ? absint( $params['frm_accordion_js'] ) : 0;
     }
 
-    private function update_roles($params) {
+	private function update_roles( $params ) {
         //update roles
         global $wp_roles;
 

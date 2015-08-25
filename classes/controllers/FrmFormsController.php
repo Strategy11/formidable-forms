@@ -290,7 +290,7 @@ class FrmFormsController {
 		self::change_form_status( 'untrash' );
     }
 
-    public static function bulk_untrash($ids) {
+	public static function bulk_untrash( $ids ) {
         FrmAppHelper::permission_check('frm_edit_forms');
 
         $count = FrmForm::set_status( $ids, 'published' );
@@ -338,7 +338,7 @@ class FrmFormsController {
 		self::display_forms_list( $params, $message );
 	}
 
-    public static function bulk_trash($ids) {
+	public static function bulk_trash( $ids ) {
         FrmAppHelper::permission_check('frm_delete_forms');
 
         $count = 0;
@@ -372,7 +372,7 @@ class FrmFormsController {
 		self::display_forms_list( $params, $message );
     }
 
-    public static function bulk_destroy($ids) {
+	public static function bulk_destroy( $ids ) {
         FrmAppHelper::permission_check('frm_delete_forms');
 
         $count = 0;
@@ -407,7 +407,7 @@ class FrmFormsController {
 		return FrmForm::scheduled_delete( $delete_timestamp );
 	}
 
-    public static function insert_form_button($content) {
+	public static function insert_form_button( $content ) {
         if ( current_user_can('frm_view_forms') ) {
 			$content .= '<a href="#TB_inline?width=50&height=50&inlineId=frm_insert_form" class="thickbox button add_media frm_insert_form" title="' . esc_attr( __( 'Add forms and content', 'formidable' ) ) . '"><span class="frm-buttons-icon wp-media-buttons-icon"></span> Formidable</a>';
 
@@ -499,7 +499,7 @@ class FrmFormsController {
         require(FrmAppHelper::plugin_path() .'/classes/views/frm-forms/list.php');
     }
 
-    public static function get_columns($columns) {
+	public static function get_columns( $columns ) {
 	    $columns['cb'] = '<input type="checkbox" />';
 	    $columns['id'] = 'ID';
 
@@ -714,7 +714,7 @@ class FrmFormsController {
 	}
 
     // Insert the form class setting into the form
-    public static function form_classes($form) {
+	public static function form_classes( $form ) {
         if ( isset($form->options['form_class']) ) {
 			echo esc_attr( sanitize_text_field( $form->options['form_class'] ) );
         }
@@ -990,7 +990,7 @@ class FrmFormsController {
     }
 
     //formidable shortcode
-    public static function get_form_shortcode($atts) {
+	public static function get_form_shortcode( $atts ) {
         global $frm_vars;
         if ( isset($frm_vars['skip_shortcode']) && $frm_vars['skip_shortcode'] ) {
             $sc = '[formidable';
@@ -1090,7 +1090,7 @@ class FrmFormsController {
 		do_action( 'frm_enqueue_form_scripts', $params );
 	}
 
-    public static function get_form_contents($form, $title, $description, $atts) {
+	public static function get_form_contents( $form, $title, $description, $atts ) {
         global $frm_vars;
 
         $frm_settings = FrmAppHelper::get_settings();

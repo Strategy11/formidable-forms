@@ -8,7 +8,7 @@ class FrmEntryMeta {
     /**
      * @param string $meta_key
      */
-    public static function add_entry_meta($entry_id, $field_id, $meta_key = null, $meta_value) {
+	public static function add_entry_meta( $entry_id, $field_id, $meta_key = null, $meta_value ) {
         global $wpdb;
 
         if ( FrmAppHelper::is_empty_value( $meta_value ) ) {
@@ -40,7 +40,7 @@ class FrmEntryMeta {
     /**
      * @param string $meta_key
      */
-    public static function update_entry_meta($entry_id, $field_id, $meta_key = null, $meta_value) {
+	public static function update_entry_meta( $entry_id, $field_id, $meta_key = null, $meta_value ) {
         if ( ! $field_id ) {
             return false;
         }
@@ -61,7 +61,7 @@ class FrmEntryMeta {
         return $wpdb->update( $wpdb->prefix .'frm_item_metas', array( 'meta_value' => $meta_value ), $where_values );
     }
 
-    public static function update_entry_metas($entry_id, $values) {
+	public static function update_entry_metas( $entry_id, $values ) {
         global $wpdb;
 
 		$prev_values = FrmDb::get_col( $wpdb->prefix .'frm_item_metas', array( 'item_id' => $entry_id, 'field_id !' => 0 ), 'field_id' );
@@ -103,7 +103,7 @@ class FrmEntryMeta {
 		self::clear_cache();
     }
 
-    public static function duplicate_entry_metas($old_id, $new_id) {
+	public static function duplicate_entry_metas( $old_id, $new_id ) {
         $metas = self::get_entry_meta_info($old_id);
         foreach ( $metas as $meta ) {
             self::add_entry_meta($new_id, $meta->field_id, null, $meta->meta_value);
@@ -112,7 +112,7 @@ class FrmEntryMeta {
 		self::clear_cache();
     }
 
-    public static function delete_entry_meta($entry_id, $field_id) {
+	public static function delete_entry_meta( $entry_id, $field_id ) {
         global $wpdb;
 		self::clear_cache();
         return $wpdb->query($wpdb->prepare("DELETE FROM {$wpdb->prefix}frm_item_metas WHERE field_id=%d AND item_id=%d", $field_id, $entry_id));
@@ -140,7 +140,7 @@ class FrmEntryMeta {
 		}
 	}
 
-    public static function get_entry_meta_by_field($entry_id, $field_id) {
+	public static function get_entry_meta_by_field( $entry_id, $field_id ) {
         global $wpdb;
 
 		if ( is_object( $entry_id ) ) {
@@ -178,7 +178,7 @@ class FrmEntryMeta {
 		return self::get_entry_meta_by_field( $entry_id, $field_id );
 	}
 
-    public static function get_entry_metas($entry_id) {
+	public static function get_entry_metas( $entry_id ) {
         _deprecated_function( __FUNCTION__, '1.07.10');
 
         global $wpdb;
@@ -212,7 +212,7 @@ class FrmEntryMeta {
      * @param string $order
      * @param string $limit
      */
-    private static function meta_field_query($field_id, $order, $limit, $args, array &$query) {
+	private static function meta_field_query( $field_id, $order, $limit, $args, array &$query ) {
         global $wpdb;
         $query[] = 'SELECT';
         $query[] = $args['unique'] ? 'DISTINCT(em.meta_value)' : 'em.meta_value';
@@ -238,7 +238,7 @@ class FrmEntryMeta {
         $query[] = $order . $limit;
     }
 
-    public static function get_entry_meta_info($entry_id) {
+	public static function get_entry_meta_info( $entry_id ) {
 		return FrmDb::get_results( 'frm_item_metas', array( 'item_id' => $entry_id ) );
     }
 
@@ -287,7 +287,7 @@ class FrmEntryMeta {
      * @param string $order_by
      * @param string $limit
      */
-    private static function get_ids_query($where, $order_by, $limit, $unique, $args, array &$query ) {
+	private static function get_ids_query( $where, $order_by, $limit, $unique, $args, array &$query ) {
         global $wpdb;
         $query[] = 'SELECT';
 

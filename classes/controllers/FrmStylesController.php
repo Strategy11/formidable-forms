@@ -127,12 +127,12 @@ class FrmStylesController {
 		}
 	}
 
-    public static function new_style($return = '') {
+	public static function new_style( $return = '' ) {
         FrmAppHelper::update_message( __( 'create multiple styling templates', 'formidable' ), 'wrap' );
         self::load_styler('default');
     }
 
-    public static function edit($style_id = false, $message = '') {
+	public static function edit( $style_id = false, $message = '' ) {
         if ( ! $style_id ) {
 			$style_id = FrmAppHelper::get_param( 'id', '', 'get', 'absint' );
             if ( empty($style_id) ) {
@@ -171,7 +171,7 @@ class FrmStylesController {
         return self::edit($post_id, $message);
     }
 
-    public static function load_styler($style, $message = '') {
+	public static function load_styler( $style, $message = '' ) {
         global $frm_settings;
 
         $frm_style = new FrmStyle();
@@ -192,7 +192,7 @@ class FrmStylesController {
 	 * @param string $message
 	 * @param array $forms
 	 */
-    private static function manage($message = '', $forms = array()) {
+	private static function manage( $message = '', $forms = array() ) {
         $frm_style = new FrmStyle();
         $styles = $frm_style->get_all();
         $default_style = $frm_style->get_default_style($styles);
@@ -331,7 +331,7 @@ class FrmStylesController {
         }
     }
 
-    public static function include_style_section($atts, $sec) {
+	public static function include_style_section( $atts, $sec ) {
         extract($atts);
 		$current_tab = FrmAppHelper::simple_get( 'page-tab', 'sanitize_title', 'default' );
         include(FrmAppHelper::plugin_path() .'/classes/views/styles/_'. $sec['args'] .'.php');
@@ -397,7 +397,7 @@ class FrmStylesController {
      * @param string $class
      * @param string $style
      */
-    public static function get_form_style_class($class, $style) {
+	public static function get_form_style_class( $class, $style ) {
         if ( 1 == $style ) {
             $style = 'default';
         }
@@ -415,14 +415,14 @@ class FrmStylesController {
     /**
      * @param string $val
      */
-    public static function get_style_val($val, $form = 'default') {
+	public static function get_style_val( $val, $form = 'default' ) {
         $style = self::get_form_style($form);
         if ( $style && isset( $style->post_content[ $val ] ) ) {
             return $style->post_content[ $val ];
         }
     }
 
-    public static function show_entry_styles($default_styles) {
+	public static function show_entry_styles( $default_styles ) {
         $frm_style = new FrmStyle('default');
         $style = $frm_style->get_one();
 
@@ -444,7 +444,7 @@ class FrmStylesController {
         return $default_styles;
     }
 
-    public static function &important_style($important, $field) {
+	public static function &important_style( $important, $field ) {
         $important = self::get_style_val('important_style', $field['form_id']);
         return $important;
     }

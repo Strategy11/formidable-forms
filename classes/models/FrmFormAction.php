@@ -24,7 +24,7 @@ class FrmFormAction {
 	 * @param array $old_instance Old settings for this instance
 	 * @return array Settings to save or bool false to cancel saving
 	 */
-	public function update($new_instance, $old_instance) {
+	public function update( $new_instance, $old_instance ) {
 		return $new_instance;
 	}
 
@@ -33,7 +33,7 @@ class FrmFormAction {
 	 *
 	 * @param array $instance Current settings
 	 */
-	public function form($instance, $args = array()) {
+	public function form( $instance, $args = array() ) {
 		echo '<p class="no-options-widget">' . esc_html__( 'There are no options for this action.', 'formidable' ) . '</p>';
 		return 'noform';
 	}
@@ -49,7 +49,7 @@ class FrmFormAction {
 	    return array();
 	}
 
-	public function migrate_values($action, $form) {
+	public function migrate_values( $action, $form ) {
 	    return $action;
 	}
 
@@ -108,7 +108,7 @@ class FrmFormAction {
 	 * @param string $field_name Field name
 	 * @return string Name attribute for $field_name
 	 */
-	public function get_field_name($field_name, $post_field = 'post_content') {
+	public function get_field_name( $field_name, $post_field = 'post_content' ) {
 		return $this->option_name . '[' . $this->number . ']'. ( empty($post_field) ? '' : '['. $post_field .']' ) .'[' . $field_name . ']';
 	}
 
@@ -120,18 +120,18 @@ class FrmFormAction {
 	 * @param string $field_name Field name
 	 * @return string ID attribute for $field_name
 	 */
-	public function get_field_id($field_name) {
+	public function get_field_id( $field_name ) {
 		return $field_name .'_'. $this->number;
 	}
 
 	// Private Function. Don't worry about this.
 
-	public function _set($number) {
+	public function _set( $number ) {
 		$this->number = $number;
 		$this->id = $this->id_base . '-' . $number;
 	}
 
-    public function prepare_new($form_id = false) {
+	public function prepare_new( $form_id = false ) {
         if ( $form_id ) {
             $this->form_id = $form_id;
         }
@@ -161,7 +161,7 @@ class FrmFormAction {
         return (object) $form_action;
     }
 
-    public function create($form_id) {
+	public function create( $form_id ) {
         $this->form_id = $form_id;
 
         $action = $this->prepare_new();
@@ -169,7 +169,7 @@ class FrmFormAction {
         return $this->save_settings($action);
     }
 
-    public function duplicate_form_actions($form_id, $old_id) {
+	public function duplicate_form_actions( $form_id, $old_id ) {
         if ( $form_id == $old_id ) {
             // don't duplicate the actions if this is a template getting updated
             return;
@@ -205,7 +205,7 @@ class FrmFormAction {
         return $post_id;
     }
 
-    public function duplicate_one($action, $form_id) {
+	public function duplicate_one( $action, $form_id ) {
         global $frm_duplicate_ids;
 
         $action->menu_order = $form_id;
@@ -233,7 +233,7 @@ class FrmFormAction {
         return $this->save_settings($action);
     }
 
-    private function duplicate_array_walk($action, $subkey, $val) {
+	private function duplicate_array_walk( $action, $subkey, $val ) {
         global $frm_duplicate_ids;
 
         if ( is_array($subkey) ) {
@@ -333,7 +333,7 @@ class FrmFormAction {
  		return $action_ids;
  	}
 
-	public function save_settings($settings) {
+	public function save_settings( $settings ) {
 		return FrmAppHelper::save_settings( $settings, 'frm_actions' );
 	}
 
@@ -450,7 +450,7 @@ class FrmFormAction {
 		return $args;
 	}
 
-	public function prepare_action($action) {
+	public function prepare_action( $action ) {
 	    $action->post_content = FrmAppHelper::maybe_json_decode($action->post_content);
 		$action->post_excerpt = sanitize_title( $action->post_excerpt );
 
@@ -475,7 +475,7 @@ class FrmFormAction {
         return $action;
 	}
 
-	public function destroy($form_id = false, $type = 'default') {
+	public function destroy( $form_id = false, $type = 'default' ) {
 	    global $wpdb;
 
 	    $this->form_id = $form_id;
@@ -535,7 +535,7 @@ class FrmFormAction {
 	/**
 	 * Migrate settings from form->options into new action.
 	 */
-	public function migrate_to_2($form, $update = 'update') {
+	public function migrate_to_2( $form, $update = 'update' ) {
         $action = $this->prepare_new($form->id);
         $form->options = maybe_unserialize($form->options);
 

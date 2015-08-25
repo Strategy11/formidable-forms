@@ -155,7 +155,7 @@ class FrmXMLController {
         wp_die();
     }
 
-    public static function generate_xml($type, $args = array() ) {
+	public static function generate_xml( $type, $args = array() ) {
     	global $wpdb;
 
 	    $type = (array) $type;
@@ -269,7 +269,7 @@ class FrmXMLController {
         include(FrmAppHelper::plugin_path() .'/classes/views/xml/xml.php');
     }
 
-    public static function allow_mime($mimes) {
+	public static function allow_mime( $mimes ) {
         if ( ! isset( $mimes['csv'] ) ) {
             // allow csv files
             $mimes['csv'] = 'text/csv';

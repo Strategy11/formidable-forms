@@ -105,7 +105,7 @@ class FrmEntriesHelper {
 		return apply_filters( 'frm_setup_new_entry', $values );
     }
 
-    public static function setup_edit_vars($values, $record) {
+	public static function setup_edit_vars( $values, $record ) {
 		$values['item_key'] = FrmAppHelper::get_post_param( 'item_key', $record->item_key, 'sanitize_title' );
         $values['form_id'] = $record->form_id;
         $values['is_draft'] = $record->is_draft;
@@ -137,7 +137,7 @@ class FrmEntriesHelper {
 		FrmEntry::maybe_get_entry( $entry );
     }
 
-    public static function replace_default_message($message, $atts) {
+	public static function replace_default_message( $message, $atts ) {
         if ( strpos($message, '[default-message') === false &&
             strpos($message, '[default_message') === false &&
             ! empty( $message ) ) {
@@ -167,7 +167,7 @@ class FrmEntriesHelper {
         return $message;
     }
 
-    public static function prepare_display_value($entry, $field, $atts) {
+	public static function prepare_display_value( $entry, $field, $atts ) {
 		$field_value = isset( $entry->metas[ $field->id ] ) ? $entry->metas[ $field->id ] : false;
         if ( FrmAppHelper::pro_is_installed() ) {
 			FrmProEntriesHelper::get_dynamic_list_values( $field, $entry, $field_value );
@@ -223,7 +223,7 @@ class FrmEntriesHelper {
      * Prepare the saved value for display
      * @return string
      */
-    public static function display_value($value, $field, $atts = array()) {
+	public static function display_value( $value, $field, $atts = array() ) {
 
         $defaults = array(
             'type' => '', 'html' => false, 'show_filename' => true,
@@ -290,7 +290,7 @@ class FrmEntriesHelper {
         return apply_filters('frm_display_value', $value, $field, $atts);
     }
 
-    public static function set_posted_value($field, $value, $args) {
+	public static function set_posted_value( $field, $value, $args ) {
         // If validating a field with "other" opt, set back to prev value now
         if ( isset( $args['other'] ) && $args['other'] ) {
             $value = $args['temp_value'];
@@ -302,7 +302,7 @@ class FrmEntriesHelper {
         }
     }
 
-    public static function get_posted_value($field, &$value, $args) {
+	public static function get_posted_value( $field, &$value, $args ) {
 		$field_id = is_object( $field ) ? $field->id : $field;
 
         if ( empty($args['parent_field_id']) ) {
@@ -427,7 +427,7 @@ class FrmEntriesHelper {
 	}
 
     // Add submitted values to a string for spam checking
-    public static function entry_array_to_string($values) {
+	public static function entry_array_to_string( $values ) {
         $content = '';
 		foreach ( $values['item_meta'] as $val ) {
 			if ( $content != '' ) {
@@ -460,7 +460,7 @@ class FrmEntriesHelper {
 		FrmEntryFormat::textarea_display_value( $type, $plain_text, $value );
 	}
 
-	public static function fill_entry_user_info($atts, array &$values) {
+	public static function fill_entry_user_info( $atts, array &$values ) {
 		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmEntryFormat::fill_entry_user_info' );
 		FrmEntryFormat::fill_entry_user_info( $atts, $values );
 	}

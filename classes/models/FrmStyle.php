@@ -30,11 +30,11 @@ class FrmStyle {
         return (object) $style;
     }
 
-    public function save($settings) {
+	public function save( $settings ) {
 		return FrmAppHelper::save_settings( $settings, 'frm_styles' );
     }
 
-    public function duplicate($id) {
+	public function duplicate( $id ) {
         // duplicating is a pro feature
     }
 
@@ -99,7 +99,7 @@ class FrmStyle {
     /**
      * Create static css file
      */
-    public function save_settings($styles) {
+	public function save_settings( $styles ) {
         $filename = FrmAppHelper::plugin_path() .'/css/custom_theme.css.php';
 
         if ( ! is_file($filename) ) {
@@ -162,7 +162,7 @@ class FrmStyle {
         set_transient('frmpro_css', $css);
 	}
 
-	public function destroy($id) {
+	public function destroy( $id ) {
         return wp_delete_post($id);
     }
 
@@ -258,7 +258,7 @@ class FrmStyle {
         return $styles;
     }
 
-    public function get_default_style($styles = null) {
+	public function get_default_style( $styles = null ) {
         if ( ! isset($styles) ) {
 			$styles = $this->get_all( 'menu_order', 'DESC', 1 );
         }
@@ -270,7 +270,7 @@ class FrmStyle {
         }
     }
 
-	public function override_defaults($settings) {
+	public function override_defaults( $settings ) {
 	    if ( ! is_array($settings) ) {
 	        return $settings;
 	    }
@@ -422,7 +422,7 @@ class FrmStyle {
         );
     }
 
-    public function get_field_name($field_name, $post_field = 'post_content') {
+	public function get_field_name( $field_name, $post_field = 'post_content' ) {
 		return 'frm_style_setting'. ( empty($post_field) ? '' : '['. $post_field .']' ) .'[' . $field_name . ']';
 	}
 

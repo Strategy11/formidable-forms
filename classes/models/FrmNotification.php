@@ -8,7 +8,7 @@ class FrmNotification {
         add_action('frm_trigger_email_action', 'FrmNotification::trigger_email', 10, 3);
     }
 
-    public static function trigger_email($action, $entry, $form) {
+	public static function trigger_email( $action, $entry, $form ) {
 		if ( defined( 'WP_IMPORTING' ) && WP_IMPORTING  ) {
             return;
         }
@@ -147,12 +147,12 @@ class FrmNotification {
         return $sent_to;
     }
 
-    public function entry_created($entry_id, $form_id) {
+	public function entry_created( $entry_id, $form_id ) {
         _deprecated_function( __FUNCTION__, '2.0', 'FrmFormActionsController::trigger_actions("create", '. $form_id .', '. $entry_id .', "email")');
         FrmFormActionsController::trigger_actions('create', $form_id, $entry_id, 'email');
     }
 
-    public function send_notification_email($to_email, $subject, $message, $from = '', $from_name = '', $plain_text = true, $attachments = array(), $reply_to = '') {
+	public function send_notification_email( $to_email, $subject, $message, $from = '', $from_name = '', $plain_text = true, $attachments = array(), $reply_to = '' ) {
         _deprecated_function( __FUNCTION__, '2.0', 'FrmNotification::send_email' );
 
         return self::send_email(compact(
@@ -299,7 +299,7 @@ class FrmNotification {
 		$atts[ $f ] = $final_val;
     }
 
-    public static function send_email($atts) {
+	public static function send_email( $atts ) {
         $admin_email = get_option('admin_email');
         $defaults = array(
             'to_email'      => $admin_email,

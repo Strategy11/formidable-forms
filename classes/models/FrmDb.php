@@ -160,7 +160,7 @@ class FrmDb {
     /**
      * @param integer $frm_db_version
      */
-    private function migrate_data($frm_db_version, $old_db_version) {
+	private function migrate_data( $frm_db_version, $old_db_version ) {
 		$migrations = array( 4, 6, 11, 16, 17, 23, 25 );
         foreach ( $migrations as $migration ) {
             if ( $frm_db_version >= $migration && $old_db_version < $migration ) {

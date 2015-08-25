@@ -22,7 +22,7 @@ class FrmXMLHelper {
 		}
 	}
 
-    public static function import_xml($file) {
+	public static function import_xml( $file ) {
         $defaults = array(
             'forms' => 0, 'fields' => 0, 'terms' => 0,
             'posts' => 0, 'views' => 0, 'actions' => 0,
@@ -79,7 +79,7 @@ class FrmXMLHelper {
 	    return $return;
     }
 
-    public static function import_xml_terms($terms, $imported) {
+	public static function import_xml_terms( $terms, $imported ) {
         foreach ( $terms as $t ) {
 			if ( term_exists((string) $t->term_slug, (string) $t->term_taxonomy) ) {
 			    continue;
@@ -121,7 +121,7 @@ class FrmXMLHelper {
 		return $parent;
 	}
 
-    public static function import_xml_forms($forms, $imported) {
+	public static function import_xml_forms( $forms, $imported ) {
 		// Keep track of repeating sections that are created
 		$repeat_fields = array();
 
@@ -329,7 +329,7 @@ class FrmXMLHelper {
 		}
 	}
 
-    public static function import_xml_views($views, $imported) {
+	public static function import_xml_views( $views, $imported ) {
         $imported['posts'] = array();
         $form_action_type = FrmFormActionsController::$action_post_type;
 
@@ -564,7 +564,7 @@ class FrmXMLHelper {
     /**
      * @param string $message
      */
-    public static function parse_message($result, &$message, &$errors) {
+	public static function parse_message( $result, &$message, &$errors ) {
         if ( is_wp_error($result) ) {
             $errors[] = $result->get_error_message();
         } else if ( ! $result ) {
@@ -609,7 +609,7 @@ class FrmXMLHelper {
         }
     }
 
-    public static function item_count_message($m, $type, &$s_message) {
+	public static function item_count_message( $m, $type, &$s_message ) {
         if ( ! $m ) {
             return;
         }

@@ -219,7 +219,7 @@ class FrmField {
 		return $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'frm_fields WHERE id=%d', $id ) );
     }
 
-    public static function delete_form_transient($form_id) {
+	public static function delete_form_transient( $form_id ) {
 		$form_id = absint( $form_id );
 		delete_transient( 'frm_form_fields_'. $form_id .'exclude' );
 		delete_transient( 'frm_form_fields_'. $form_id .'include' );
@@ -291,7 +291,7 @@ class FrmField {
         return $type;
     }
 
-    public static function get_all_types_in_form($form_id, $type, $limit = '', $inc_sub = 'exclude') {
+	public static function get_all_types_in_form( $form_id, $type, $limit = '', $inc_sub = 'exclude' ) {
         if ( ! $form_id ) {
             return array();
         }
@@ -394,7 +394,7 @@ class FrmField {
         }
     }
 
-    public static function getAll($where = array(), $order_by = '', $limit = '', $blog_id = false) {
+	public static function getAll( $where = array(), $order_by = '', $limit = '', $blog_id = false ) {
         $cache_key = maybe_serialize($where) . $order_by .'l'. $limit .'b'. $blog_id;
         if ( self::$use_cache ) {
             // make sure old cache doesn't get saved as a transient

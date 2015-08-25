@@ -33,7 +33,7 @@ class FrmStylesHelper {
         return $themes;
     }
 
-    public static function jquery_css_url($theme_css) {
+	public static function jquery_css_url( $theme_css ) {
         if ( $theme_css == -1 ) {
             return;
         }
@@ -71,7 +71,7 @@ class FrmStylesHelper {
         return $uploads;
     }
 
-    public static function style_menu($active = '') {
+	public static function style_menu( $active = '' ) {
 ?>
         <h2 class="nav-tab-wrapper">
 			<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-styles' ) ) ?>" class="nav-tab <?php echo ( '' == $active ) ? 'nav-tab-active' : '' ?>"><?php _e( 'Edit Styles', 'formidable' ) ?></a>
@@ -114,7 +114,7 @@ class FrmStylesHelper {
      * @since 2.0
      * @return The class for this icon
      */
-    public static function icon_key_to_class($key, $icon = '+', $type = 'arrow') {
+	public static function icon_key_to_class( $key, $icon = '+', $type = 'arrow' ) {
         if ( 'arrow' == $type && is_numeric($key) ) {
             //frm_arrowup6_icon
 			$arrow = array( '-' => 'down', '+' => 'up' );
@@ -134,7 +134,7 @@ class FrmStylesHelper {
         return $class;
     }
 
-    public static function bs_icon_select($style, $frm_style, $type = 'arrow') {
+	public static function bs_icon_select( $style, $frm_style, $type = 'arrow' ) {
 		$function_name = $type . '_icons';
 		$icons = self::$function_name();
 		unset( $function_name );
@@ -174,7 +174,7 @@ class FrmStylesHelper {
 <?php
     }
 
-    public static function hex2rgb($hex) {
+	public static function hex2rgb( $hex ) {
         $hex = str_replace('#', '', $hex);
 
         if ( strlen($hex) == 3 ) {

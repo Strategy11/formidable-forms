@@ -67,7 +67,7 @@ class FrmFieldsHelper {
         return $values;
     }
 
-    public static function get_html_id($field, $plus = '') {
+	public static function get_html_id( $field, $plus = '' ) {
         return apply_filters('frm_field_html_id', 'field_'. $field['field_key'] . $plus, $field);
     }
 
@@ -164,7 +164,7 @@ class FrmFieldsHelper {
     /**
      * @since 2.0
      */
-    public static function get_error_msg($field, $error) {
+	public static function get_error_msg( $field, $error ) {
         $frm_settings = FrmAppHelper::get_settings();
         $default_settings = $frm_settings->default_options();
 
@@ -208,7 +208,7 @@ DEFAULT_HTML;
         return apply_filters('frm_custom_html', $default_html, $type);
     }
 
-    public static function replace_shortcodes($html, $field, $errors = array(), $form = false, $args = array()) {
+	public static function replace_shortcodes( $html, $field, $errors = array(), $form = false, $args = array() ) {
         $html = apply_filters('frm_before_replace_shortcodes', $html, $field, $errors, $form);
 
         $defaults = array(
@@ -423,7 +423,7 @@ DEFAULT_HTML;
         $html = str_replace( '['. $code .']', $replace_with, $html );
     }
 
-    public static function get_shortcode_tag($shortcodes, $short_key, $args) {
+	public static function get_shortcode_tag( $shortcodes, $short_key, $args ) {
 		$args = wp_parse_args( $args, array( 'conditional' => false, 'conditional_check' => false, 'foreach' => false ) );
         if ( ( $args['conditional'] || $args['foreach'] ) && ! $args['conditional_check'] ) {
             $args['conditional_check'] = true;
@@ -463,7 +463,7 @@ DEFAULT_HTML;
 		}
 	}
 
-    public static function display_recaptcha($field) {
+	public static function display_recaptcha( $field ) {
         $frm_settings = FrmAppHelper::get_settings();
         $lang = apply_filters('frm_recaptcha_lang', $frm_settings->re_lang, $field);
 
@@ -481,7 +481,7 @@ DEFAULT_HTML;
 <?php
     }
 
-    public static function show_single_option($field) {
+	public static function show_single_option( $field ) {
         $field_name = $field['name'];
         $html_id = self::get_html_id($field);
         foreach ( $field['options'] as $opt_key => $opt ) {
@@ -499,7 +499,7 @@ DEFAULT_HTML;
         }
     }
 
-    public static function dropdown_categories($args) {
+	public static function dropdown_categories( $args ) {
 		$defaults = array( 'field' => false, 'name' => false, 'show_option_all' => ' ' );
         $args = wp_parse_args($args, $defaults);
 
@@ -572,7 +572,7 @@ DEFAULT_HTML;
         return $dropdown;
     }
 
-    public static function get_term_link($tax_id) {
+	public static function get_term_link( $tax_id ) {
         $tax = get_taxonomy($tax_id);
         if ( ! $tax ) {
             return;
@@ -587,7 +587,7 @@ DEFAULT_HTML;
         return $link;
     }
 
-    public static function value_meets_condition($observed_value, $cond, $hide_opt) {
+	public static function value_meets_condition( $observed_value, $cond, $hide_opt ) {
 		// Remove white space from hide_opt
 		if ( ! is_array( $hide_opt ) ) {
 			$hide_opt = rtrim( $hide_opt );
@@ -617,7 +617,7 @@ DEFAULT_HTML;
         return $m;
     }
 
-    public static function array_value_condition($observed_value, $cond, $hide_opt) {
+	public static function array_value_condition( $observed_value, $cond, $hide_opt ) {
         $m = false;
         if ( $cond == '==' ) {
             if ( is_array($hide_opt) ) {
@@ -656,7 +656,7 @@ DEFAULT_HTML;
      * @since 2.0
      * @return string
      */
-    public static function basic_replace_shortcodes($value, $form, $entry) {
+	public static function basic_replace_shortcodes( $value, $form, $entry ) {
         if ( strpos($value, '[sitename]') !== false ) {
             $new_value = wp_specialchars_decode( FrmAppHelper::site_name(), ENT_QUOTES );
             $value = str_replace('[sitename]', $new_value, $value);
@@ -668,7 +668,7 @@ DEFAULT_HTML;
         return $value;
     }
 
-    public static function get_shortcodes($content, $form_id) {
+	public static function get_shortcodes( $content, $form_id ) {
         if ( FrmAppHelper::pro_is_installed() ) {
             return FrmProDisplaysHelper::get_shortcodes($content, $form_id);
         }
@@ -682,7 +682,7 @@ DEFAULT_HTML;
         return $matches;
     }
 
-    public static function allowed_shortcodes($fields = array()) {
+	public static function allowed_shortcodes( $fields = array() ) {
         $tagregexp = array(
             'editlink', 'id', 'key', 'ip',
             'siteurl', 'sitename', 'admin_email',
@@ -699,7 +699,7 @@ DEFAULT_HTML;
         return $tagregexp;
     }
 
-    public static function replace_content_shortcodes($content, $entry, $shortcodes) {
+	public static function replace_content_shortcodes( $content, $entry, $shortcodes ) {
         $shortcode_values = array(
            'id'     => $entry->id,
            'key'    => $entry->item_key,
@@ -870,7 +870,7 @@ DEFAULT_HTML;
         return $new_value;
     }
 
-    public static function get_display_value($replace_with, $field, $atts = array()) {
+	public static function get_display_value( $replace_with, $field, $atts = array() ) {
 		$sep = isset( $atts['sep'] ) ? $atts['sep'] : ', ';
 
 		$replace_with = apply_filters( 'frm_get_display_value', $replace_with, $field, $atts );
@@ -891,7 +891,7 @@ DEFAULT_HTML;
 		return $replace_with;
 	}
 
-    public static function get_field_types($type) {
+	public static function get_field_types( $type ) {
         $single_input = array(
             'text', 'textarea', 'rte', 'number', 'email', 'url',
             'image', 'file', 'date', 'phone', 'hidden', 'time',
@@ -1168,7 +1168,7 @@ DEFAULT_HTML;
 		?><a href="javascript:void(0)" class="frm_bstooltip <?php echo esc_attr( $atts['icon'] ); ?>frm_default_val_icons frm_action_icon frm_icon_font" title="<?php echo esc_attr( $atts['message'] ); ?>"></a><?php
 	}
 
-    public static function switch_field_ids($val) {
+	public static function switch_field_ids( $val ) {
         global $frm_duplicate_ids;
         $replace = array();
         $replace_with = array();
@@ -1294,7 +1294,7 @@ DEFAULT_HTML;
         ) );
     }
 
-    public static function get_bulk_prefilled_opts(array &$prepop) {
+	public static function get_bulk_prefilled_opts( array &$prepop ) {
 		$prepop[ __( 'Countries', 'formidable' ) ] = FrmFieldsHelper::get_countries();
 
         $states = FrmFieldsHelper::get_us_states();

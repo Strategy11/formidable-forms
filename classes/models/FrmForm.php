@@ -102,7 +102,7 @@ class FrmForm {
         return false;
     }
 
-    public static function after_duplicate($form_id, $values) {
+	public static function after_duplicate( $form_id, $values ) {
         $new_opts = $values['options'] = maybe_unserialize($values['options']);
 
         if ( isset($new_opts['success_msg']) ) {
@@ -166,7 +166,7 @@ class FrmForm {
     /**
      * @return array
      */
-    public static function set_update_options($new_values, $values) {
+	public static function set_update_options( $new_values, $values ) {
         if ( ! isset($values['options']) ) {
             return $new_values;
         }
@@ -189,7 +189,7 @@ class FrmForm {
     /**
      * @return array
      */
-    public static function update_fields($id, $values) {
+	public static function update_fields( $id, $values ) {
 
         if ( ! isset($values['options']) && ! isset($values['item_meta']) && ! isset($values['field_options']) ) {
             return $values;
@@ -276,7 +276,7 @@ class FrmForm {
      * @param string $status
      * @return int|boolean
      */
-    public static function set_status($id, $status) {
+	public static function set_status( $id, $status ) {
         if ( 'trash' == $status ) {
             return self::trash($id);
         }
@@ -308,7 +308,7 @@ class FrmForm {
     /**
      * @return int|boolean
      */
-    public static function trash($id) {
+	public static function trash( $id ) {
         if ( ! EMPTY_TRASH_DAYS ) {
             return self::destroy( $id );
         }

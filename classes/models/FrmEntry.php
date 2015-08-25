@@ -92,7 +92,7 @@ class FrmEntry {
      * check for duplicate entries created in the last minute
      * @return boolean
      */
-    public static function is_duplicate($new_values, $values) {
+	public static function is_duplicate( $new_values, $values ) {
 		if ( defined('WP_IMPORTING') && WP_IMPORTING ) {
             return false;
         }
@@ -330,7 +330,7 @@ class FrmEntry {
         return stripslashes_deep($entry);
     }
 
-    public static function get_meta($entry) {
+	public static function get_meta( $entry ) {
         if ( ! $entry ) {
             return $entry;
         }

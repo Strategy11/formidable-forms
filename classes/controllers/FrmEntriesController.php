@@ -35,7 +35,7 @@ class FrmEntriesController {
         }
     }
 
-    public static function contextual_help($help, $screen_id, $screen) {
+	public static function contextual_help( $help, $screen_id, $screen ) {
         // Only add to certain screens. add_help_tab was introduced in WordPress 3.3
         if ( $screen_id != 'formidable_page_formidable-entries' || ! method_exists( $screen, 'add_help_tab' ) ) {
             return $help;
@@ -140,7 +140,7 @@ class FrmEntriesController {
     }
 
     //add hidden columns back from other forms
-    public static function update_hidden_cols($meta_id, $object_id, $meta_key, $meta_value ) {
+	public static function update_hidden_cols( $meta_id, $object_id, $meta_key, $meta_value ) {
         $frm_settings = FrmAppHelper::get_settings();
 
         $sanitized = sanitize_title($frm_settings->menu);
@@ -189,7 +189,7 @@ class FrmEntriesController {
         }
     }
 
-    public static function save_per_page($save, $option, $value) {
+	public static function save_per_page( $save, $option, $value ) {
         if ( $option == 'formidable_page_formidable_entries_per_page' ) {
             $save = (int) $value;
         }
@@ -219,7 +219,7 @@ class FrmEntriesController {
 		return $columns;
 	}
 
-    public static function hidden_columns($result) {
+	public static function hidden_columns( $result ) {
         global $frm_vars;
 
 		$form_id = FrmForm::get_current_form_id();
@@ -498,7 +498,7 @@ class FrmEntriesController {
         return $value;
     }
 
-    public static function &filter_shortcode_value($value, $tag, $atts, $field) {
+	public static function &filter_shortcode_value( $value, $tag, $atts, $field ) {
         $plain_text = add_filter('frm_plain_text_email', true);
 		FrmEntryFormat::textarea_display_value( $field->type, $plain_text, $value );
 
@@ -552,7 +552,7 @@ class FrmEntriesController {
 		return FrmForm::get_params( $form );
 	}
 
-    public static function entry_sidebar($entry) {
+	public static function entry_sidebar( $entry ) {
         $data = maybe_unserialize($entry->description);
         $date_format = get_option('date_format');
         $time_format = get_option('time_format');
@@ -562,5 +562,4 @@ class FrmEntriesController {
 
         include(FrmAppHelper::plugin_path() .'/classes/views/frm-entries/sidebar-shared.php');
     }
-
 }
