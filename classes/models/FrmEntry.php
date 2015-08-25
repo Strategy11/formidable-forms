@@ -304,7 +304,7 @@ class FrmEntry {
 		}
 	}
 
-    public static function getOne( $id, $meta = false) {
+	public static function getOne( $id, $meta = false ) {
         global $wpdb;
 
         $query = "SELECT it.*, fr.name as form_name, fr.form_key as form_key FROM {$wpdb->prefix}frm_items it
@@ -573,5 +573,4 @@ class FrmEntry {
 		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmEntryValidate::akismet' );
 		return FrmEntryValidate::akismet( $values );
 	}
-
 }

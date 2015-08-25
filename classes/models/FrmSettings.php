@@ -243,5 +243,4 @@ class FrmSettings{
 
         do_action( 'frm_store_settings' );
     }
-
 }

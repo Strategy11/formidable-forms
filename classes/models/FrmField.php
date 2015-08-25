@@ -367,7 +367,7 @@ class FrmField {
 		return $results;
     }
 
-    public static function include_sub_fields(&$results, $inc_sub, $type = 'all') {
+	public static function include_sub_fields( &$results, $inc_sub, $type = 'all' ) {
         if ( 'include' != $inc_sub ) {
             return;
         }

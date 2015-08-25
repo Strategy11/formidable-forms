@@ -387,5 +387,4 @@ class FrmEntryMeta {
 
         return $results;
     }
-
 }

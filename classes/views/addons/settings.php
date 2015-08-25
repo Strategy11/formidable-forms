@@ -2,7 +2,7 @@
 	<h2><?php _e( 'Plugin Licenses', 'formidable' ); ?></h2>
 
 	<?php
-		
+
 	foreach ( $plugins as $slug => $plugin ) {
 		$license = get_option( 'edd_'. $slug .'_license_key' );
 		$status  = get_option( 'edd_'. $slug .'_license_active' );

@@ -31,5 +31,4 @@ class FrmListHelper extends WP_List_Table {
 			echo "\n\t", $this->single_row( $item, $style );
 		}
 	}
-
 }

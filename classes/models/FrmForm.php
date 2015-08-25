@@ -543,7 +543,7 @@ class FrmForm {
     /**
      * @return int count of forms
      */
-    public static function &get_count( ) {
+    public static function &get_count() {
     	global $wpdb;
 
     	$cache_key = 'frm_form_counts';

@@ -501,7 +501,7 @@ class FrmFormAction {
 	 *
 	 * @since 2.0.5
 	 */
-	public static function clear_cache( ) {
+	public static function clear_cache() {
 		FrmAppHelper::cache_delete_group( 'frm_actions' );
 	}
 

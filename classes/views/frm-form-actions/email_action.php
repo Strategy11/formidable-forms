@@ -36,5 +36,4 @@ class FrmEmailAction extends FrmFormAction {
 			'event'         => array( 'create' ),
 	    );
 	}
-
 }

@@ -16,5 +16,4 @@ class FrmStatisticsController {
 		$form = FrmAppHelper::get_param( 'form', false, 'get', 'sanitize_title' );
 		require( FrmAppHelper::plugin_path() . '/classes/views/frm-statistics/list_displays.php' );
 	}
-
 }

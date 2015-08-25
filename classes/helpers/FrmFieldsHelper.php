@@ -5,7 +5,7 @@ if ( ! defined('ABSPATH') ) {
 
 class FrmFieldsHelper {
 
-    public static function setup_new_vars($type = '', $form_id = '') {
+	public static function setup_new_vars( $type = '', $form_id = '' ) {
 
         if ( strpos($type, '|') ) {
             list($type, $setting) = explode('|', $type);

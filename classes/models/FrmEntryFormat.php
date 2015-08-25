@@ -325,5 +325,4 @@ class FrmEntryFormat {
 			$content[] = '</tbody></table>';
 		}
 	}
-
 }

@@ -72,7 +72,7 @@ class FrmAddon {
 		update_option( $this_plugin->option_name . 'key', $license );
 
 		$response = array( 'success' => false, 'message' => '' );
-		try{
+		try {
 			$license_data = $this_plugin->send_mothership_request( 'activate_license', $license );
 
 			// $license_data->license will be either "valid" or "invalid"
@@ -85,8 +85,7 @@ class FrmAddon {
 			}
 
 			update_option( $this_plugin->option_name . 'active', $is_valid );
-		}
-		catch(Exception $e) {
+		} catch ( Exception $e ) {
 			$response['message'] = $e->getMessage();
 		}
 
@@ -102,7 +101,7 @@ class FrmAddon {
 		$this_plugin = self::get_addon( $plugin_slug );
 
 		$response = array( 'success' => false, 'message' => '' );
-		try{
+		try {
 			// $license_data->license will be either "deactivated" or "failed"
 			$license_data = $this_plugin->send_mothership_request( 'deactivate_license', $license );
 			if ( is_array( $license_data ) && $license_data['license'] == 'deactivated' ) {
@@ -111,8 +110,7 @@ class FrmAddon {
 			} else {
 				$response['message'] = __( 'There was an error deactivating your license.', 'formidable' );
 			}
-		}
-		catch ( Exception $e ) {
+		} catch ( Exception $e ) {
 			$response['message'] = $e->getMessage();
 		}
 
@@ -164,5 +162,4 @@ class FrmAddon {
 
 		return __( 'Your License Key was invalid', 'formidable' );
 	}
-
 }

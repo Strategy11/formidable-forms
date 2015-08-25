@@ -92,7 +92,7 @@ class FrmEntryValidate {
         $errors = apply_filters('frm_validate_field_entry', $errors, $posted_field, $value, $args);
     }
 
-    public static function validate_url_field(&$errors, $field, &$value, $args) {
+	public static function validate_url_field( &$errors, $field, &$value, $args ) {
 		if ( $value == '' || ! in_array( $field->type, array( 'website', 'url', 'image' ) ) ) {
             return;
         }
@@ -110,7 +110,7 @@ class FrmEntryValidate {
         }
     }
 
-    public static function validate_email_field(&$errors, $field, $value, $args) {
+	public static function validate_email_field( &$errors, $field, $value, $args ) {
         if ( $value == '' || $field->type != 'email' ) {
             return;
         }
@@ -121,7 +121,7 @@ class FrmEntryValidate {
         }
     }
 
-    public static function validate_recaptcha(&$errors, $field, $args) {
+	public static function validate_recaptcha( &$errors, $field, $args ) {
         if ( $field->type != 'captcha' || FrmAppHelper::is_admin() ) {
             return;
         }

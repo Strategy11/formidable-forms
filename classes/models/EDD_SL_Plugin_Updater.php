@@ -75,7 +75,7 @@ class EDD_SL_Plugin_Updater {
 
         global $pagenow;
 
-        if( ! is_object( $_transient_data ) ) {
+        if ( ! is_object( $_transient_data ) ) {
             $_transient_data = new stdClass;
         }
 
@@ -138,7 +138,7 @@ class EDD_SL_Plugin_Updater {
             $cache_key    = md5( 'edd_plugin_' .sanitize_key( $this->name ) . '_version_info' );
             $version_info = get_transient( $cache_key );
 
-            if( false === $version_info ) {
+            if ( false === $version_info ) {
 
                 $version_info = $this->api_request( 'plugin_latest_version', array( 'slug' => $this->slug ) );
 
@@ -229,7 +229,7 @@ class EDD_SL_Plugin_Updater {
             'fields' => array(
                 'banners' => false, // These will be supported soon hopefully
                 'reviews' => false,
-            )
+            ),
         );
 
         $api_response = $this->api_request( 'plugin_information', $to_send );
@@ -293,7 +293,7 @@ class EDD_SL_Plugin_Updater {
             'item_id'    => isset( $data['item_id'] ) ? $data['item_id'] : false,
             'slug'       => $data['slug'],
             'author'     => $data['author'],
-            'url'        => home_url()
+            'url'        => home_url(),
         );
 
         $request = wp_remote_post( $this->api_url, array( 'timeout' => 15, 'sslverify' => false, 'body' => $api_params ) );
@@ -337,5 +337,4 @@ class EDD_SL_Plugin_Updater {
 
         exit;
     }
-
 }
