@@ -4,7 +4,7 @@ Donate link: http://formidablepro.com/donate
 Tags: admin, AJAX, captcha, contact, contact form, database, email, feedback, form, forms, javascript, jquery, page, plugin, poll, Post, spam, survey, template, widget, wpmu, form builder
 Requires at least: 3.6
 Tested up to: 4.3
-Stable tag: 2.0.11
+Stable tag: 2.0.12
 
 Beautiful forms in 60 seconds. The WordPress form builder that enables you to create forms with a simple drag-and-drop interface and in-place editing.
 
@@ -91,10 +91,12 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 == Changelog ==
 = 2.0.12 =
 * Add option to center form on page
-* Improve 6th, 7th and 8th layout classes for smaller screens
+* Improve styling classes for more consistency across different field classes, and make all classes responsive
+* Added a few more styling classes: frm_three_fourths, frm_two_fifths, frm_three_fifths
 * Remove in-place-editing from the field keys on the form builder page
 * Add 'frm_after_update_field_name' hook for changing a field name during editing
 * Update Bootstrap multiselect to v0.9.13
+* Add license page to prepare for add-ons. Big things are coming.
 * Fix: Prevent loading icon from being huge in some themes
 * Fix: When the jQuery UI css is loaded by another plugin on the form builder page, the required icon looked the same whether required or not. This styling conflict is resolved.
 * Fix: Make sure the form description size can be changed in the styling settings.
@@ -110,6 +112,7 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * Improve file upload field in Chrome to prevent extra space from showing.
 * Added 'frm_save_post_name' filter. This can be used for custom form actions that create posts.
 * Added 'frm_display_data_opts' filter.
+* Prevent frm_display_id custom field from saving when a field is selected in the create post settings instead of customized content
 * Fix: When forms were submitted without ajax, the redirect wasn't working consistently.
 * Fix: The shortcodes weren't processing in the message shown after an entry is updated. 
 * Fix: When we prevented the PayPal action from triggering on import, we stopped all actions. This is now fixed so an action can be set (in the code) to be triggered on import. Posts will now be created on import again.
@@ -121,6 +124,8 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * Fix: If you put -100 for the start date in a date field, -100 would show in the date field instead of 1915. This is now working correctly for dynamic values like this with three digits.
 * Fix: When filtering a view with a Dynamic field, NOT EQUAL TO will work correctly.
 * Fix: Double quotes were causing trouble when included inside an error message returned by the frm_validate_field_entry hook
+* Fix: Graphs using x_axis and start_date were having trouble
+* Fix: The js error after selecting an option in autocomplete field is fixed when there are calculations in the form.
 
 = 2.0.11 =
 * Fix issue with clearing array keys when sanitizing an array when displaying entry values
