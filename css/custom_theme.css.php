@@ -632,11 +632,15 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
 .frm_form_field.frm_last_inline,
 .frm_form_field.frm_last,
 .frm_form_field.frm_half,
+.frm_submit.frm_half,
 .frm_form_field.frm_third,
+.frm_submit.frm_third,
 .frm_form_field.frm_two_thirds,
 .frm_form_field.frm_fourth,
+.frm_submit.frm_fourth,
 .frm_form_field.frm_three_fourths,
 .frm_form_field.frm_fifth,
+.frm_submit.frm_fifth,
 .frm_form_field.frm_two_fifths,
 .frm_form_field.frm_three_fifths,
 .frm_form_field.frm_four_fifths,
@@ -678,12 +682,14 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
 .frm_form_field.frm_right_half,
 .frm_form_field.frm_first_half,
 .frm_form_field.frm_last_half,
-.frm_form_field.frm_half{
+.frm_form_field.frm_half,
+.frm_submit.frm_half{
     width:48.75%;
 }
 
 .frm_form_field.frm_left_third,
 .frm_form_field.frm_third,
+.frm_submit.frm_third,
 .frm_form_field.frm_right_third,
 .frm_form_field.frm_first_third,
 .frm_form_field.frm_last_third{
@@ -700,6 +706,7 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
 
 .frm_form_field.frm_left_fourth,
 .frm_form_field.frm_fourth,
+.frm_submit.frm_fourth,
 .frm_form_field.frm_right_fourth,
 .frm_form_field.frm_first_fourth,
 .frm_form_field.frm_last_fourth{
@@ -712,6 +719,7 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
 
 .frm_form_field.frm_left_fifth,
 .frm_form_field.frm_fifth,
+.frm_submit.frm_fifth,
 .frm_form_field.frm_right_fifth,
 .frm_form_field.frm_first_fifth,
 .frm_form_field.frm_last_fifth{
@@ -1751,23 +1759,27 @@ html[xmlns] .frm_clearfix{
 
 @media only screen and (max-width: 600px) {
 	.frm_form_field.frm_half,
+	.frm_submit.frm_half,
     .frm_form_field.frm_left_half,
     .frm_form_field.frm_right_half,
     .frm_form_field.frm_first_half,
     .frm_form_field.frm_last_half,
     .frm_form_field.frm_first_third,
     .frm_form_field.frm_third,
+	.frm_submit.frm_third,
     .frm_form_field.frm_last_third,
     .frm_form_field.frm_first_two_thirds,
 	.frm_form_field.frm_last_two_thirds,
 	.frm_form_field.frm_two_thirds,
     .frm_form_field.frm_left_fourth,
     .frm_form_field.frm_fourth,
+	.frm_submit.frm_fourth,
     .frm_form_field.frm_right_fourth,
     .frm_form_field.frm_first_fourth,
 	.frm_form_field.frm_last_fourth,
 	.frm_form_field.frm_three_fourths,
 	.frm_form_field.frm_fifth,
+	.frm_submit.frm_fifth,
 	.frm_form_field.frm_two_fifths,
 	.frm_form_field.frm_three_fifths,
 	.frm_form_field.frm_four_fifths,
