@@ -46,7 +46,7 @@ class FrmDb {
         do_action('frm_after_install');
 
         /**** update the styling settings ****/
-		if ( is_admin() ) {
+		if ( is_admin() && function_exists( 'get_filesystem_method' ) ) {
 			$frm_style = new FrmStyle();
 			$frm_style->update( 'default' );
 		}
