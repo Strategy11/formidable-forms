@@ -230,6 +230,7 @@ SCRIPT;
 
 	/**
 	* @covers FrmProEntriesController::get_field_value_shortcode
+	* TODO: Test with post fields, IP, and user_id parameters
 	*/
 	function test_get_field_value_shortcode(){
 		$tests = array( 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 );
@@ -237,7 +238,7 @@ SCRIPT;
 		$entry_id = $this->factory->entry->get_id_by_key( 'jamie_entry_key' );
 
 		foreach ( $tests as $test ) {
-			$sc_atts = self::_setup_frm_field_value_sc_atts( $test, $field_id, $entry_id, 'jamie_entry_key' );
+			$sc_atts = self::_setup_frm_field_value_sc_atts( $test, $field_id, $entry_id );
 			$sc_atts_list = self::_get_sc_atts_list( $sc_atts );
 			$expected_result = self::_get_expected_frm_field_value( $test );
 
@@ -263,7 +264,9 @@ SCRIPT;
 	* Test 11: same as test 3 but with field key
 	* Test 12: same as test 4 but with field key
 	*/
-	function _setup_frm_field_value_sc_atts( $test, $field_id, $entry_id, $entry_key ){
+	function _setup_frm_field_value_sc_atts( $test, $field_id, $entry_id ){
+		$entry_key = 'jamie_entry_key';
+
 		// Use field key for tests 9 - 12
 		if ( $test > 8 && $test < 13 ) {
 			$field_id = '493ito';
@@ -320,5 +323,105 @@ SCRIPT;
 		}
 		$sc_atts_list = rtrim( $sc_atts_list );
 		return $sc_atts_list;
+	}
+
+	/**
+	* @covers FrmProEntriesController::get_frm_field_value_entry
+	* TODO: Test with post fields, IP, and user_id parameters
+	*/
+	function test_get_frm_field_value_entry(){
+		$tests = array( 1, 2, 3, 4, 5, 6, 7, 8, 9 );
+		$field = FrmField::getOne( '493ito' );
+		$entry_id = $this->factory->entry->get_id_by_key( 'jamie_entry_key' );
+
+		foreach ( $tests as $test ) {
+			$msg = '';
+			$atts = self::_setup_frm_field_value_entry_atts( $test, $entry_id, $msg );
+			$expected_result = self::_get_expected_entry_result( $test, $entry_id );
+			$entry = self::_do_get_frm_field_value_entry( $field, $atts );
+
+			$this->assertEquals( $expected_result, $entry, 'The get_frm_field_value_entry function is not retrieving the correct entry with the following parameters: ' . $msg );
+		}
+	}
+
+	/**
+	* Set up entry attribute for get_frm_field_value_entry
+	*
+	* Test 1: entry=ID
+	* Test 2: entry=Key
+	* Test 3: entry=entry_param with ID in URL
+	* Test 4: entry=entry_param with key in URL
+	* Test 5: entry=entry_param with empty param in URL
+	* Test 6: entry=entry_param with nothing in URL
+	* Test 7: entry=incorrect ID
+	* Test 8: entry=incorrect key
+	* Test 9: entry=entry_param with incorrect key in URL
+	*/
+	function _setup_frm_field_value_entry_atts( $test, $entry_id, &$msg ){
+		$atts = array(
+			'user_id' => false,
+			'ip'	=> false
+		);
+		$entry_key = 'jamie_entry_key';
+
+		if ( $test == 1 ) {
+			$atts['entry'] = $entry_id;
+			$msg = 'entry=ID';
+
+		} else if ( $test == 2 ) {
+			$atts['entry'] = $entry_key;
+			$msg = 'entry=key';
+
+		} else if ( $test == 3 ) {
+			$atts['entry'] = 'my_param';
+			$_GET['my_param'] = $entry_id;
+			$msg = 'entry=entry_param with ID in URL';
+
+		} else if ( $test == 4 ) {
+			$atts['entry'] = 'my_param';
+			$_GET['my_param'] = $entry_key;
+			$msg = 'entry=entry_param with key in URL';
+
+		} else if ( $test == 5 ) {
+			$atts['entry'] = 'my_param';
+			$_GET['my_param'] = '';
+			$msg = 'entry=entry_param with empty param in URL';
+
+		} else if ( $test == 6 ) {
+			$atts['entry'] = 'my_param';
+			$msg = 'entry=entry_param with no param in URL';
+
+		} else if ( $test == 7 ) {
+			$atts['entry'] = 99999999;
+			$msg = 'entry=incorrect ID';
+
+		} else if ( $test == 8 ) {
+			$atts['entry'] = 'djf98j98jfo';
+			$msg = 'entry=incorrect key';
+
+		} else if ( $test == 9 ) {
+			$atts['entry'] = 'my_param';
+			$_GET['my_param'] = 'djf98j98jfo';
+			$msg = 'entry=entry_param with incorrect key in URL';
+		}
+
+		return $atts;
+	}
+
+	function _get_expected_entry_result( $test, $entry_id ) {
+		if ( $test > 0 && $test < 5 ) {
+			$e_result = FrmDb::get_row( 'frm_items', array( 'id' => $entry_id ), 'post_id, id', array( 'order_by' => 'created_at DESC' ) );
+		} else if ( $test >= 5 ) {
+			$e_result = false;
+		}
+		return $e_result;
+	}
+
+	function _do_get_frm_field_value_entry( $field, $atts ){
+		$class = new ReflectionClass('FrmProEntriesController');
+		$method = $class->getMethod('get_frm_field_value_entry');
+		$method->setAccessible(true);
+		$entry = $method->invokeArgs( null, array( $field, &$atts ) );
+		return $entry;
 	}
 }
