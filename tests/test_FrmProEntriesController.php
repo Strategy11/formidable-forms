@@ -227,4 +227,98 @@ SCRIPT;
 			$this->assertEquals( $delete_link_count, $expected_row_num, 'Formresults (with' . $param_text . ' parameters) is not showing the correct number of delete links' );
 		}
 	}
+
+	/**
+	* @covers FrmProEntriesController::get_field_value_shortcode
+	*/
+	function test_get_field_value_shortcode(){
+		$tests = array( 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 );
+		$field_id = $this->factory->field->get_id_by_key( '493ito' );
+		$entry_id = $this->factory->entry->get_id_by_key( 'jamie_entry_key' );
+
+		foreach ( $tests as $test ) {
+			$sc_atts = self::_setup_frm_field_value_sc_atts( $test, $field_id, $entry_id, 'jamie_entry_key' );
+			$sc_atts_list = self::_get_sc_atts_list( $sc_atts );
+			$expected_result = self::_get_expected_frm_field_value( $test );
+
+			$value = FrmProEntriesController::get_field_value_shortcode( $sc_atts );
+
+			$this->assertEquals( $expected_result, $value, 'The frm-field-value shortcode is not retrieving the correct value with the following parameters: ' . $sc_atts_list );
+		}
+	}
+
+	/**
+	* Set up various atts for the frm-field-value function
+	* Test 0: no parameters
+	* Test 1: field_id=ID entry=ID
+	* Test 2: field_id=ID entry_id=ID
+	* Test 3: field_id=ID entry=Key
+	* Test 4: field_id=ID entry_id=Key
+	* Test 5: field_id=ID entry=entry_param with ID in URL
+	* Test 6: field_id=ID entry_id=entry_param with ID in URL
+	* Test 7: field_id=ID entry=entry_param with key in URL
+	* Test 8: field_id=ID entry_id=entry_param with key in URL
+	* Test 9: same as test 1 but with field key
+	* Test 10: same as test 2 but with field key
+	* Test 11: same as test 3 but with field key
+	* Test 12: same as test 4 but with field key
+	*/
+	function _setup_frm_field_value_sc_atts( $test, $field_id, $entry_id, $entry_key ){
+		// Use field key for tests 9 - 12
+		if ( $test > 8 && $test < 13 ) {
+			$field_id = '493ito';
+		}
+
+		$sc_atts = array(
+			'field_id' => $field_id
+		);
+
+		if ( in_array( $test, array( 1, 2, 5, 6, 9, 10 ) ) ) {
+			// Tests 1, 2, 5, and 6 use the entry ID
+			$entry = $entry_id;
+		} else if ( in_array( $test, array( 3, 4, 7, 8, 11, 12 ) ) ) {
+			// Tests 3, 4, 7, and 8 use the entry key
+			$entry = $entry_key;
+		}
+
+		// Test 5-8 pull the entry param from the URL
+		if ( in_array( $test, array( 5, 6, 7, 8 ) ) ) {
+			$_GET = array( 'my_param' => $entry );
+			$entry = 'my_param';
+		}
+
+		if ( $test === 0 ) {
+			// Test with no atts
+			$sc_atts = array();
+
+		} else if ( in_array( $test, array( 2, 4, 6, 8, 10, 12 ) ) ) {
+			// Test with entry_id for reverse compatibility
+			$sc_atts['entry_id'] = $entry;
+
+		} else {
+			// Test with entry parameter
+			$sc_atts['entry'] = $entry;
+		}
+
+		return $sc_atts;
+	}
+
+	function _get_expected_frm_field_value( $test ){
+		if ( $test === 0 ) {
+			$e_result = 'You are missing options in your shortcode. field_id is required.';
+		} else if ( $test > 0 && $test < 13 ) {
+			$e_result = 'Jamie';
+		}
+
+		return $e_result;
+	}
+
+	function _get_sc_atts_list( $sc_atts ) {
+		$sc_atts_list = '';
+		foreach ( $sc_atts as $key => $val ) {
+			$sc_atts_list .= $key . ':' . $val . ', ';
+		}
+		$sc_atts_list = rtrim( $sc_atts_list );
+		return $sc_atts_list;
+	}
 }

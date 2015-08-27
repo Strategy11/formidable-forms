@@ -94,6 +94,10 @@ class Field_Factory extends WP_UnitTest_Factory_For_Thing {
 
 		return $value;
 	}
+
+	function get_id_by_key( $field_key ) {
+		return FrmField::get_id_by_key( $field_key );
+	}
 }
 
 class Entry_Factory extends WP_UnitTest_Factory_For_Thing {
