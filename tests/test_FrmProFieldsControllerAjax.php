@@ -55,7 +55,7 @@ class WP_Test_FrmProFieldsControllerAjax extends FrmAjaxUnitTest {
 		self::_switch_to_not_repeating( $repeating_section, $child_ids );
 		self::_switch_to_repeating( $repeating_section, $child_ids );
 
-		// Again, but update the form this time
+		// TODO: Again, but update the form this time
 		// Update form
 		/*self::_switch_to_not_repeating( $repeating_section, $child_ids );
 		// Update form
@@ -202,9 +202,15 @@ class WP_Test_FrmProFieldsControllerAjax extends FrmAjaxUnitTest {
 		    $this->_handleAjax( 'frm_toggle_repeat' );
 		} catch ( WPAjaxDieContinueException $e ) {
 		    // We expected this, do nothing.
+			unset( $e );
 		}
 
 		$new_form_id = self::_check_if_new_form_created( $old_count, $args );
+
+		// Check if correct form ID is echoed
+		$response = $this->_last_response;
+		$this->assertEquals( $response, $new_form_id, 'The incorrect form ID is echoed when switching to a repeating section.' );
+
 		self::_check_if_fields_moved( $new_form_id, $args['children'], 'repeatable' );
 		self::_check_if_child_entries_created( $args, $new_form_id );
 		self::_check_repeat_options_updated( $repeating_section, 1, $new_form_id, 'repeatable' );
