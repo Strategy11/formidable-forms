@@ -233,7 +233,7 @@ SCRIPT;
 	* TODO: Test with post fields, IP, and user_id parameters
 	*/
 	function test_get_field_value_shortcode(){
-		$tests = array( 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 );
+		$tests = array( 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13 );
 		$field_id = $this->factory->field->get_id_by_key( '493ito' );
 		$entry_id = $this->factory->entry->get_id_by_key( 'jamie_entry_key' );
 
@@ -263,15 +263,20 @@ SCRIPT;
 	* Test 10: same as test 2 but with field key
 	* Test 11: same as test 3 but with field key
 	* Test 12: same as test 4 but with field key
+	* Test 13: field_id=ID entry=entry_param with no param in URL (tests default param)
 	*/
 	function _setup_frm_field_value_sc_atts( $test, $field_id, $entry_id ){
 		$entry_key = 'jamie_entry_key';
+
+		// Make sure previous URL params are cleared
+		if ( isset( $_GET['my_param'] ) ) {
+			unset( $_GET['my_param'] );
+		}
 
 		// Use field key for tests 9 - 12
 		if ( $test > 8 && $test < 13 ) {
 			$field_id = '493ito';
 		}
-
 		$sc_atts = array(
 			'field_id' => $field_id
 		);
@@ -298,9 +303,12 @@ SCRIPT;
 			// Test with entry_id for reverse compatibility
 			$sc_atts['entry_id'] = $entry;
 
-		} else {
+		} else if ( in_array( $test, array( 1, 3, 5, 7, 9, 11 ) ) ) {
 			// Test with entry parameter
 			$sc_atts['entry'] = $entry;
+		} else if ( $test == 13 ) {
+			$sc_atts['entry'] = 'my_param';
+			$sc_atts['default'] = 'Name';
 		}
 
 		return $sc_atts;
@@ -311,6 +319,8 @@ SCRIPT;
 			$e_result = 'You are missing options in your shortcode. field_id is required.';
 		} else if ( $test > 0 && $test < 13 ) {
 			$e_result = 'Jamie';
+		} else if ( $test == 13 ) {
+			$e_result = 'Name';
 		}
 
 		return $e_result;
@@ -363,6 +373,11 @@ SCRIPT;
 			'ip'	=> false
 		);
 		$entry_key = 'jamie_entry_key';
+
+		// Make sure previous URL params are cleared
+		if ( isset( $_GET['my_param'] ) ) {
+			unset( $_GET['my_param'] );
+		}
 
 		if ( $test == 1 ) {
 			$atts['entry'] = $entry_id;
