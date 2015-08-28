@@ -144,6 +144,10 @@ function frmFrontFormJS(){
 			fieldName = field.name;
 		}
 		var nameParts = fieldName.replace('item_meta[', '').replace('[]', '').split(']');
+		if ( nameParts.length < 1 ) {
+			return 0;
+		}
+
 		nameParts = nameParts.filter(function(n){ return n !== ''; });
 		var field_id = nameParts[0];
 		var isRepeating = false;
@@ -328,7 +332,7 @@ function frmFrontFormJS(){
 	function checkRepeatingFields( i, f, triggerFieldId, selected, rec ) {
 		// Get class for repeating field
 		var repeatingFieldClass = '.'+ f.containerID;
-		if ( addingRow !== '' && addingRow != undefined ) {
+		if ( addingRow !== '' && addingRow !== undefined ) {
 			repeatingFieldClass = '#' + addingRow +' '+ repeatingFieldClass;
 		}
 
