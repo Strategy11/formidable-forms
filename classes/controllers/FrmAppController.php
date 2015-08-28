@@ -256,7 +256,7 @@ class FrmAppController {
 
 		$upgrade_url = add_query_arg( array( 'action' => 'frm_silent_upgrade' ), $upgrade_url );
 		$r = wp_remote_get( esc_url_raw( $upgrade_url ) );
-		if ( is_wp_error( $r ) ) {
+		if ( is_wp_error( $r ) || ! is_array( $r ) || ! empty( $response['body'] ) ) {
 			// if the remove post fails, use javascript instead
 			add_action( 'admin_notices', 'FrmAppController::install_js_fallback' );
 		}
