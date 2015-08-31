@@ -1706,7 +1706,7 @@ class FrmAppHelper {
      */
 	public static function localize_script( $location ) {
 		wp_localize_script( 'formidable', 'frm_js', array(
-			'ajax_url'  => admin_url( 'admin-ajax.php' ),
+			'ajax_url'  => admin_url( 'admin-ajax.php', is_ssl() ? 'admin' : 'http' ),
 			'images_url' => self::plugin_url() . '/images',
 			'loading'   => __( 'Loading&hellip;' ),
 			'remove'    => __( 'Remove', 'formidable' ),
