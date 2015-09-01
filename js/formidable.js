@@ -234,6 +234,17 @@ function frmFrontFormJS(){
 		return isRepeat;
 	}
 
+	function getHelpers() {
+		var helpers = document.getElementById( 'frm_helpers' ).value;
+		if ( helpers ) {
+			helpers = JSON.parse( helpers );
+		} else {
+			helpers = new Array;
+		}
+
+		return helpers;
+	}
+
 	function getRulesForField( field_id ) {
 		if ( typeof __FRMRULES  === 'undefined' || typeof __FRMRULES[field_id] === 'undefined' ) {
 			return;
@@ -570,12 +581,53 @@ function frmFrontFormJS(){
 		return container.find('select[name^="item_meta"], textarea[name^="item_meta"], input[name^="item_meta"]:not([type=hidden])');
 	}
 
+	function addToHideFields( htmlFieldId ) {
+		// Get all currently hidden fields
+		var frmHideFieldsInput = document.getElementById('frm_hide_fields');
+		var hiddenFields = frmHideFieldsInput.value;
+		if ( hiddenFields ) {
+			hiddenFields = JSON.parse( hiddenFields );
+		} else {
+			hiddenFields = new Array;
+		}
+
+		// If field id is already in the array, move on
+		if ( hiddenFields.indexOf( htmlFieldId ) > -1 ) {
+			return;
+		} else {
+			// Add new conditionally hidden field to array
+			hiddenFields.push( htmlFieldId );
+			hiddenFields = JSON.stringify( hiddenFields );
+			frmHideFieldsInput.value = hiddenFields;
+		}
+	}
+
+	function removeFromHideFields( htmlFieldId ) {
+		// Get all currently hidden fields
+		var frmHideFieldsInput = document.getElementById('frm_hide_fields');
+		var hiddenFields = frmHideFieldsInput.value;
+		if ( hiddenFields ) {
+			hiddenFields = JSON.parse( hiddenFields );
+		} else {
+			return;
+		}
+
+		// If field id is in the array, delete it
+		var item_index = hiddenFields.indexOf( htmlFieldId );
+		if ( item_index > -1 ) {
+			hiddenFields.splice(item_index, 1);
+			hiddenFields = JSON.stringify( hiddenFields );
+			frmHideFieldsInput.value = hiddenFields;
+		}
+	}
+
 	function showFieldAndSetValue( container, f ) {
 		var inputs = getInputsInContainer( container );
 		setDefaultValue( inputs );
 
 		if ( inputs.length > 1 ) {
 			for ( var i = 0; i < inputs.length; i++ ) {
+				showFieldAndSetValue( jQuery( inputs[i] ), f )
 				doCalcForSingleField( f.HideField, jQuery( inputs[i] ) );
 			}
 		} else {
@@ -655,8 +707,10 @@ function frmFrontFormJS(){
 		if(hideClass.length){
 			if ( display === 'none' ) {
 				hideAndClearField( hideClass, f );
+				addToHideFields( hideClass.attr('id') );
 			} else {
 				showFieldAndSetValue( hideClass, f );
+				removeFromHideFields( hideClass.attr('id') );
 			}
 		}
 	}
@@ -682,11 +736,13 @@ function frmFrontFormJS(){
 
                 if ( hideField === 'show' ) {
 					showFieldAndSetValue( container, hvalue );
+					removeFromHideFields( container.attr('id') );
 					if ( typeof hvalue.result !== false && typeof hvalue.result !== true ) {
 						showField( hvalue.result, hvalue.FieldName, rec );
 					}
                 } else {
 					hideAndClearField(container, hvalue);
+					addToHideFields( container.attr('id') );
                 }
             }
 		});
@@ -918,7 +974,7 @@ function frmFrontFormJS(){
 		for ( var i = 0, l = len; i < l; i++ ) {
 
 			// Stop calculation if total field is conditionally hidden
-			if ( fieldIsConditionallyHidden( all_calcs, triggerField, keys[i] ) ) {
+			if ( fieldIsConditionallyHidden( all_calcs.calc[ keys[i] ].field_id ) ) {
 				continue;
 			}
 
@@ -927,37 +983,29 @@ function frmFrontFormJS(){
 	}
 
 	/**
-	* If field is hidden with conditional logic, don't do the calc
+	* Check if field (or its HTML parent) is hidden with conditional logic
 	*/
-	function fieldIsConditionallyHidden( all_calcs, triggerField, field_key ) {
-		var totalFieldId = all_calcs.calc[ field_key ].field_id;
-		var t = document.getElementById( 'frm_field_' + totalFieldId + '_container' );
-		if ( t !== null ) {
-			if ( t.offsetHeight === 0 ) {
-				// Conditionally hidden field
-				return true;
-			} else {
-				// Regular, visible field
-				return false;
-			}
-		}
-
-		// Check if we're dealing with a conditionally hidden repeating field
-		var container = triggerField.closest('.frm_repeat_sec, .frm_repeat_inline, .frm_repeat_grid');
-		if ( container.length ) {
-			var idPart = container[0].id.replace( 'frm_section_', '' );
-			var totalField = document.getElementById( 'frm_field_' + totalFieldId + '-' + idPart + '_container' );
-			if ( totalField !== null && totalField.offsetHeight === 0 ) {
-				// Conditionally hidden field (repeating)
-				return true;
-			} else {
-				// Regular, visible field or hidden field (repeating)
-				return false;
-			}
+	function fieldIsConditionallyHidden( field_id ) {
+		var hiddenFields = document.getElementById( 'frm_hide_fields').value;
+		if ( hiddenFields ) {
+			hiddenFields = JSON.parse( hiddenFields );
 		} else {
-			// Hidden field
 			return false;
 		}
+
+		// If total field is a regular conditionally hidden field
+		if ( hiddenFields.indexOf( 'frm_field_' + field_id + '_container' ) > -1 ) {
+			return true;
+		}
+
+		var helpers = getHelpers();
+
+		// Field is inside of section/embedded form which is hidden with conditional logic
+		if ( helpers && helpers[ field_id ] != null && hiddenFields.indexOf( 'frm_field_' + helpers[ field_id ] + '_container' ) > -1 ) {
+			return true;
+		}
+
+		return false;
 	}
 
 	function doSingleCalculation( all_calcs, field_key, vals, triggerField ) {

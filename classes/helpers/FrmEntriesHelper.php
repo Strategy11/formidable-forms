@@ -18,35 +18,7 @@ class FrmEntriesHelper {
         }
 
         foreach ( (array) $fields as $field ) {
-            $default = $field->default_value;
-            $posted_val = false;
-            $new_value = $default;
-
-            if ( ! $reset && $_POST && isset( $_POST['item_meta'][ $field->id ] ) && $_POST['item_meta'][ $field->id ] != '' ) {
-                $new_value = stripslashes_deep( $_POST['item_meta'][ $field->id ] );
-                $posted_val = true;
-            } else if ( FrmField::is_option_true( $field, 'clear_on_focus' ) ) {
-                $new_value = '';
-            }
-
-            $is_default = ($new_value == $default) ? true : false;
-
-    		//If checkbox, multi-select dropdown, or checkbox data from entries field, set return array to true
-			$return_array = FrmField::is_field_with_multiple_values( $field );
-
-            $field->default_value = apply_filters('frm_get_default_value', $field->default_value, $field, true, $return_array);
-
-            if ( ! is_array( $new_value ) ) {
-                if ( $is_default ) {
-                    $new_value = $field->default_value;
-                } else if ( ! $posted_val ) {
-                    $new_value = apply_filters('frm_filter_default_value', $new_value, $field);
-                }
-
-                $new_value = str_replace('"', '&quot;', $new_value);
-            }
-
-            unset($is_default, $posted_val);
+            $new_value = self::set_field_value( $field, $reset );
 
             $field_array = array(
                 'id' => $field->id,
@@ -104,6 +76,44 @@ class FrmEntriesHelper {
 
 		return apply_filters( 'frm_setup_new_entry', $values );
     }
+
+	/**
+	* Set the value for each field
+	* This function is used when the form is first loaded and on all page turns
+	*
+	* @since 2.0.13
+	*
+	* @param object $field
+	* @param boolean $reset
+	* @return string|array $new_value
+	*/
+	private static function set_field_value( $field, $reset ) {
+		//If checkbox, multi-select dropdown, or checkbox data from entries field, the value should be an array
+		$return_array = FrmField::is_field_with_multiple_values( $field );
+
+		// Do any shortcodes in default value and allow customization of default value
+		$field->default_value = apply_filters('frm_get_default_value', $field->default_value, $field, true, $return_array);
+		// Calls FrmProFieldsHelper::get_default_value
+
+		$default = $new_value = $field->default_value;
+
+		if ( ! $reset && $_POST && isset( $_POST['item_meta'][ $field->id ] ) ) {
+			// If value was posted, get it
+
+			$new_value = stripslashes_deep( $_POST['item_meta'][ $field->id ] );
+
+		} else if ( FrmField::is_option_true( $field, 'clear_on_focus' ) ) {
+			// If clear on focus is selected, the value should be blank (unless it was posted, of course)
+
+			$new_value = '';
+		}
+
+		if ( ! is_array( $new_value ) ) {
+			$new_value = str_replace('"', '&quot;', $new_value);
+		}
+
+		return $new_value;
+	}
 
 	public static function setup_edit_vars( $values, $record ) {
 		$values['item_key'] = FrmAppHelper::get_post_param( 'item_key', $record->item_key, 'sanitize_title' );
