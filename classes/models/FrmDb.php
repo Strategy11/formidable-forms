@@ -60,11 +60,7 @@ class FrmDb {
 
         $charset_collate = '';
 		if ( ! empty( $wpdb->charset ) ) {
-			$charset = $wpdb->charset;
-			if ( 'utf8mb4' === $wpdb->charset && ! $wpdb->has_cap( 'utf8mb4' ) ) {
-				$charset = 'utf8';
-			}
-			$charset_collate .= ' DEFAULT CHARACTER SET '. $charset;
+			$charset_collate .= ' DEFAULT CHARACTER SET '. $wpdb->charset;
 		}
 
         if ( ! empty($wpdb->collate) ) {
