@@ -1128,7 +1128,7 @@ function frmFrontFormJS(){
 			var thisVal = getOptionValue( field.thisField, this );
 
 			if ( field.thisField.type == 'date' ) {
-                var d = jQuery.datepicker.parseDate(all_calcs.date, thisVal);
+				var d = getDateFieldValue( all_calcs.date, thisVal );
                 if ( d !== null ) {
 					vals[field.valKey] = Math.ceil(d/(1000*60*60*24));
                 }
@@ -1150,6 +1150,62 @@ function frmFrontFormJS(){
 
 		return vals;
     }
+
+	/**
+	* Get the value from a date field regardless of whether datepicker is defined for it
+	* Limitations: If using a format with a 2-digit date, '20' will be added to the front if the year is prior to 70
+	*/
+	function getDateFieldValue( dateFormat, thisVal ) {
+		if ( ! thisVal ) {
+			// If no value was selected in date field
+			var d = 0;
+
+		} else if ( jQuery.datepicker === undefined ) {
+			// If date field is not on the current page
+
+			if ( dateFormat.indexOf( '/' ) > -1 ) {
+				var formatPieces = dateFormat.split('/');
+				var datePieces = thisVal.split( '/' );
+			} else {
+				var formatPieces = dateFormat.split( '-' );
+				var datePieces = thisVal.split( '-' );
+			}
+
+			var year, month, day;
+			year = month = day = '';
+
+			for ( var i = 0; i < formatPieces.length; i++ ) {
+				if ( formatPieces[ i ] == 'y' ) {
+					var currentYear = new Date().getFullYear() + 10;
+					var currentYearPlusTen = currentYear.toString().substr(2,2);
+
+					if ( datePieces[ i ] > currentYearPlusTen ) {
+						year = '19' + datePieces[ i ];
+					} else {
+						year = '20' + datePieces[ i ];
+					}
+				} else if ( formatPieces[ i ] == 'yy' ) {
+					year = datePieces[ i ];
+				} else if ( formatPieces[ i ] == 'm' || formatPieces[ i ] == 'mm' ) {
+					month = datePieces[ i ];
+					if ( month.length < 2 ) {
+						month = '0' + month;
+					}
+				} else if ( formatPieces[ i ] == 'd' || formatPieces[ i ] == 'dd' ) {
+					day = datePieces[ i ];
+					if ( day.length < 2 ) {
+						day = '0' + day;
+					}
+				}
+			}
+
+			var d = Date.parse( year + '-' + month + '-' + day );
+
+		} else {
+		    var d = jQuery.datepicker.parseDate(dateFormat, thisVal);
+		}
+		return d;
+	}
 
 	function getSiblingField( field ) {
 		if ( typeof field.triggerField === 'undefined' ) {
