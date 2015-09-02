@@ -120,7 +120,7 @@ class FrmField {
             FrmFieldsHelper::fill_field( $values, $field, $form_id, $new_key );
 
 			// If this is a repeating section, create new form
-			if ( $field->type == 'divider' && self::is_option_true( $field, 'repeat' ) ) {
+			if ( self::is_repeating_field( $field ) ) {
 				// create the repeatable form
 				$new_repeat_form_id = apply_filters( 'frm_create_repeat_form', 0, array( 'parent_form_id' => $form_id, 'field_name' => $field->name ) );
 

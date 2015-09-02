@@ -1285,8 +1285,8 @@ html[xmlns] .frm_clearfix{
 	margin:0 !important;
 }
 
-.with_frm_style.frm_login_form.frm_inline_login.frm_no_labels .login-username label,
-.with_frm_style.frm_login_form.frm_inline_login.frm_no_labels .login-password label{
+.with_frm_style.frm_login_form.frm_no_labels .login-username label,
+.with_frm_style.frm_login_form.frm_no_labels .login-password label{
 	display:none;
 }
 

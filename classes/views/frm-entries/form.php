@@ -12,7 +12,7 @@ global $frm_vars;
 FrmFormsController::maybe_load_css( $form, $values['custom_style'], $frm_vars['load_css'] );
 
 // Get conditionally hidden fields
-$frm_hide_fields = ( isset( $_POST['frm_hide_fields'] ) ? stripslashes( $_POST['frm_hide_fields'] ) : '' );
+$frm_hide_fields = FrmAppHelper::get_post_param( 'frm_hide_fields', '', 'sanitize_text_field' );
 
 // Get helpers
 $frm_helpers = apply_filters( 'frm_get_parent_child_field_helpers', '', $values['fields'] );
