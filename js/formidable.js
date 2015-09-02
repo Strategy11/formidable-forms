@@ -549,7 +549,7 @@ function frmFrontFormJS(){
 		}
     }
 
-	function hideAndClearField( container, f ) {
+	function hideFieldAndClearValue( container, f ) {
 		container.hide();
 		if ( jQuery.inArray(container.attr('id'), hidden_fields) === -1 ) {
 			var field_id = f.HideField;
@@ -623,15 +623,12 @@ function frmFrontFormJS(){
 
 	function showFieldAndSetValue( container, f ) {
 		var inputs = getInputsInContainer( container );
-		setDefaultValue( inputs );
 
-		if ( inputs.length > 1 ) {
+		if ( inputs.length ) {
 			for ( var i = 0; i < inputs.length; i++ ) {
-				showFieldAndSetValue( jQuery( inputs[i] ), f )
-				doCalcForSingleField( f.HideField, jQuery( inputs[i] ) );
+				setDefaultValue( jQuery( inputs[i] ) );
+				doCalcForSingleField( inputs[i] );
 			}
-		} else {
-			doCalcForSingleField( f.HideField, inputs );
 		}
 
 		container.show();
@@ -706,7 +703,7 @@ function frmFrontFormJS(){
 
 		if(hideClass.length){
 			if ( display === 'none' ) {
-				hideAndClearField( hideClass, f );
+				hideFieldAndClearValue( hideClass, f );
 				addToHideFields( hideClass.attr('id') );
 			} else {
 				showFieldAndSetValue( hideClass, f );
@@ -741,7 +738,7 @@ function frmFrontFormJS(){
 						showField( hvalue.result, hvalue.FieldName, rec );
 					}
                 } else {
-					hideAndClearField(container, hvalue);
+					hideFieldAndClearValue(container, hvalue);
 					addToHideFields( container.attr('id') );
                 }
             }
@@ -1089,20 +1086,21 @@ function frmFrontFormJS(){
 		return field;
 	}
 
-	function doCalcForSingleField( field_id, triggerField ) {
+	function doCalcForSingleField( field_input ) {
 		if ( typeof __FRMCALC === 'undefined' ) {
 			// there are no calculations on this page
 			return;
 		}
+
 		var all_calcs = __FRMCALC;
-		var field_key = all_calcs.fieldsWithCalc[ field_id ];
-		if ( typeof field_key === 'undefined' ) {
-			// this field has no calculation
+		var field_key = field_input.id.replace( 'field_', '' );
+		if ( all_calcs.calc[ field_key ] === undefined ) {
+			// This field doesn't have any calculations
 			return;
 		}
 
 		var vals = [];
-		doSingleCalculation( all_calcs, field_key, vals, triggerField );
+		doSingleCalculation( all_calcs, field_key, vals, null );
 	}
 
 	function getCalcFieldId( field, all_calcs, vals ) {
