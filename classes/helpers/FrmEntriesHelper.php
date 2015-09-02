@@ -95,7 +95,7 @@ class FrmEntriesHelper {
 		$field->default_value = apply_filters('frm_get_default_value', $field->default_value, $field, true, $return_array);
 		// Calls FrmProFieldsHelper::get_default_value
 
-		$default = $new_value = $field->default_value;
+		$new_value = $field->default_value;
 
 		if ( ! $reset && $_POST && isset( $_POST['item_meta'][ $field->id ] ) ) {
 			// If value was posted, get it
