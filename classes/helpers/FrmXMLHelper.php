@@ -122,8 +122,8 @@ class FrmXMLHelper {
 	}
 
 	public static function import_xml_forms( $forms, $imported ) {
-		// Keep track of repeating sections that are created
-		$repeat_fields = array();
+		// Keep track of repeating sections and child forms that are imported
+		$repeat_fields = $child_forms_missing_parent = array();
 
 		foreach ( $forms as $item ) {
             $form = array(
@@ -149,10 +149,7 @@ class FrmXMLHelper {
                 $edit_query['created_at'] = $form['created_at'];
             }
 
-			if ( ! empty( $form['parent_form_id'] ) && isset( $imported['forms'][ $form['parent_form_id'] ] ) ) {
-                // replace the old parent id with the new one
-				$form['parent_form_id'] = $imported['forms'][ $form['parent_form_id'] ];
-            }
+			$old_parent_form_id = self::maybe_replace_parent_form_id( $imported['forms'], $form['parent_form_id'] );
 
             $edit_query = apply_filters('frm_match_xml_form', $edit_query, $form);
 
@@ -183,81 +180,12 @@ class FrmXMLHelper {
                     $imported['imported']['forms']++;
                     // Keep track of whether this specific form was updated or not
 					$imported['form_status'][ $form_id ] = 'imported';
+
+					self::track_child_forms_missing_parent( $form_id, $old_parent_form_id, $child_forms_missing_parent );
                 }
             }
 
-    		foreach ( $item->field as $field ) {
-    		    $f = array(
-    		        'id'            => (int) $field->id,
-    		        'field_key'     => (string) $field->field_key,
-    		        'name'          => (string) $field->name,
-    		        'description'   => (string) $field->description,
-    		        'type'          => (string) $field->type,
-    		        'default_value' => FrmAppHelper::maybe_json_decode( (string) $field->default_value),
-    		        'field_order'   => (int) $field->field_order,
-    		        'form_id'       => (int) $form_id,
-    		        'required'      => (int) $field->required,
-    		        'options'       => FrmAppHelper::maybe_json_decode( (string) $field->options),
-					'field_options' => FrmAppHelper::maybe_json_decode( (string) $field->field_options ),
-    		    );
-
-    		    if ( is_array($f['default_value']) && in_array($f['type'], array(
-    		        'text', 'email', 'url', 'textarea',
-    		        'number','phone', 'date', 'time',
-    		        'hidden', 'password', 'tag', 'image',
-    		    )) ) {
-    		        if ( count($f['default_value']) === 1 ) {
-    		            $f['default_value'] = '['. reset($f['default_value']) .']';
-    		        } else {
-    		            $f['default_value'] = reset($f['default_value']);
-    		        }
-    		    }
-
-    		    $f = apply_filters('frm_duplicated_field', $f);
-
-    		    if ( ! empty($this_form) ) {
-    		        // check for field to edit by field id
-					if ( isset( $form_fields[ $f['id'] ] ) ) {
-    		            FrmField::update( $f['id'], $f );
-    		            $imported['updated']['fields']++;
-
-						unset( $form_fields[ $f['id'] ] );
-
-    		            //unset old field key
-						if ( isset( $form_fields[ $f['field_key'] ] ) ) {
-							unset( $form_fields[ $f['field_key'] ] );
-						}
-					} else if ( isset( $form_fields[ $f['field_key'] ] ) ) {
-    		            // check for field to edit by field key
-    		            unset($f['id']);
-
-						FrmField::update( $form_fields[ $f['field_key'] ], $f );
-    		            $imported['updated']['fields']++;
-
-						unset( $form_fields[ $form_fields[ $f['field_key'] ] ] ); //unset old field id
-						unset( $form_fields[ $f['field_key'] ] ); //unset old field key
-					} else {
-						$new_id = FrmField::create( $f );
-						if ( $new_id == false ) {
-							continue;
-						}
-						self::track_repeating_fields( $f, $new_id, $repeat_fields );
-
-    		            // if no matching field id or key in this form, create the field
-    		            $imported['imported']['fields']++;
-    		        }
-				} else {
-					$new_id = FrmField::create( $f );
-					if ( $new_id == false ) {
-						continue;
-					}
-
-					self::track_repeating_fields( $f, $new_id, $repeat_fields );
-		            $imported['imported']['fields']++;
-    		    }
-
-				unset($field, $new_id);
-    		}
+    		self::import_xml_fields( $item->field, $form_id, $this_form, $form_fields, $imported, $repeat_fields );
 
     		// Delete any fields attached to this form that were not included in the template
     		if ( isset( $form_fields ) && ! empty( $form_fields ) ) {
@@ -281,9 +209,158 @@ class FrmXMLHelper {
 		    unset($form, $item);
 		}
 		self::update_repeat_field_options( $repeat_fields, $imported['forms'] );
+		self::update_child_form_parents( $child_forms_missing_parent, $imported['forms'] );
 
 		return $imported;
     }
+
+	/**
+	* Replace the parent_form_id on child forms if their parent was already imported
+	* @since 2.0.13
+	*
+	* @param array $imported_forms
+	* @param int $parent_form_id
+	* @return int $old_parent_form_id
+	*/
+	private static function maybe_replace_parent_form_id( $imported_forms, &$parent_form_id ) {
+		$old_parent_form_id = 0;
+
+		if ( ! empty( $parent_form_id ) ) {
+			if ( isset( $imported_forms[ $parent_form_id ] ) ) {
+				// The parent has already been imported
+
+            	// replace the old parent id with the new one
+				$parent_form_id = $imported_forms[ $parent_form_id ];
+			} else {
+				// The parent will be imported after
+
+				$old_parent_form_id = $parent_form_id;
+			}
+        }
+
+		return $old_parent_form_id;
+	}
+
+	/**
+	* Track child forms that were imported before their parents
+	* @since 2.0.13
+	*
+	* @param int $new_form_id
+	* @param int $old_parent_form_id
+	* @param array $child_forms_missing_parent
+	*/
+	private static function track_child_forms_missing_parent( $new_form_id, $old_parent_form_id, &$child_forms_missing_parent ){
+		if ( $old_parent_form_id ) {
+			if ( ! isset( $child_forms_missing_parent[ $old_parent_form_id ] ) ) {
+				$child_forms_missing_parent[ $old_parent_form_id ] = array();
+			}
+
+			// Multiple child forms may have the same parent
+			$child_forms_missing_parent[ $old_parent_form_id ][] = $new_form_id;
+		}
+	}
+
+	/**
+	* Import all fields for a form
+	* @since 2.0.13
+	*
+	* TODO: Cut down on params
+	*/
+	private static function import_xml_fields( $xml_fields, $form_id, $this_form, &$form_fields, &$imported, &$repeat_fields ) {
+		foreach ( $xml_fields as $field ) {
+		    $f = array(
+		        'id'            => (int) $field->id,
+		        'field_key'     => (string) $field->field_key,
+		        'name'          => (string) $field->name,
+		        'description'   => (string) $field->description,
+		        'type'          => (string) $field->type,
+		        'default_value' => FrmAppHelper::maybe_json_decode( (string) $field->default_value),
+		        'field_order'   => (int) $field->field_order,
+		        'form_id'       => (int) $form_id,
+		        'required'      => (int) $field->required,
+		        'options'       => FrmAppHelper::maybe_json_decode( (string) $field->options),
+				'field_options' => FrmAppHelper::maybe_json_decode( (string) $field->field_options ),
+		    );
+
+		    if ( is_array($f['default_value']) && in_array($f['type'], array(
+		        'text', 'email', 'url', 'textarea',
+		        'number','phone', 'date', 'time',
+		        'hidden', 'password', 'tag', 'image',
+		    )) ) {
+		        if ( count($f['default_value']) === 1 ) {
+		            $f['default_value'] = '['. reset($f['default_value']) .']';
+		        } else {
+		            $f['default_value'] = reset($f['default_value']);
+		        }
+		    }
+
+		    $f = apply_filters('frm_duplicated_field', $f);
+
+		    if ( ! empty($this_form) ) {
+		        // check for field to edit by field id
+				if ( isset( $form_fields[ $f['id'] ] ) ) {
+		            FrmField::update( $f['id'], $f );
+		            $imported['updated']['fields']++;
+
+					unset( $form_fields[ $f['id'] ] );
+
+		            //unset old field key
+					if ( isset( $form_fields[ $f['field_key'] ] ) ) {
+						unset( $form_fields[ $f['field_key'] ] );
+					}
+				} else if ( isset( $form_fields[ $f['field_key'] ] ) ) {
+		            // check for field to edit by field key
+		            unset($f['id']);
+
+					FrmField::update( $form_fields[ $f['field_key'] ], $f );
+		            $imported['updated']['fields']++;
+
+					unset( $form_fields[ $form_fields[ $f['field_key'] ] ] ); //unset old field id
+					unset( $form_fields[ $f['field_key'] ] ); //unset old field key
+				} else {
+					$new_id = FrmField::create( $f );
+					if ( $new_id == false ) {
+						continue;
+					}
+					self::track_repeating_fields( $f, $new_id, $repeat_fields );
+
+		            // if no matching field id or key in this form, create the field
+		            $imported['imported']['fields']++;
+		        }
+			} else {
+				$new_id = FrmField::create( $f );
+				if ( $new_id == false ) {
+					continue;
+				}
+
+				self::track_repeating_fields( $f, $new_id, $repeat_fields );
+	            $imported['imported']['fields']++;
+		    }
+
+			unset($field, $new_id);
+		}
+	}
+
+	/**
+	* Update parent_form_id for child forms that were imported before parents
+	*
+	* @since 2.0.13
+	*
+	* @param array $child_forms_missing_parent
+	* @param array $imported_forms
+	*/
+	private static function update_child_form_parents( $child_forms_missing_parent, $imported_forms ) {
+		foreach ( $child_forms_missing_parent as $old_parent_form_id => $child_form_ids ) {
+			if ( isset( $imported_forms[ $old_parent_form_id ] ) ) {
+
+				// Update all children with this old parent_form_id
+				$new_parent_form_id = (int) $imported_forms[ $old_parent_form_id ];
+				foreach( $child_form_ids as $child_form_id ) {
+					FrmForm::update( $child_form_id, array( 'parent_form_id' => $new_parent_form_id ) );
+				}
+			}
+		}
+	}
 
 	/**
 	* Update form_select for all imported repeating sections and embedded forms

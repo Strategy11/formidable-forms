@@ -131,7 +131,7 @@ class FrmForm {
             $values['form_key'] = FrmAppHelper::get_unique_key($values['form_key'], $wpdb->prefix .'frm_forms', 'form_key', $id);
         }
 
-        $form_fields = array( 'form_key', 'name', 'description', 'status' );
+        $form_fields = array( 'form_key', 'name', 'description', 'status', 'parent_form_id' );
 
         $new_values = self::set_update_options( array(), $values);
 
