@@ -1160,7 +1160,7 @@ function frmFrontFormJS(){
 			// If no value was selected in date field
 			var d = 0;
 
-		} else if ( jQuery.datepicker === undefined ) {
+		} else if ( typeof jQuery.datepicker === 'undefined' ) {
 			// If date field is not on the current page
 
 			if ( dateFormat.indexOf( '/' ) > -1 ) {
@@ -1176,10 +1176,10 @@ function frmFrontFormJS(){
 
 			for ( var i = 0; i < formatPieces.length; i++ ) {
 				if ( formatPieces[ i ] == 'y' ) {
-					var currentYear = new Date().getFullYear() + 10;
-					var currentYearPlusTen = currentYear.toString().substr(2,2);
+					var currentYear = new Date().getFullYear() + 15;
+					var currentYearPlusFifteen = currentYear.toString().substr(2,2);
 
-					if ( datePieces[ i ] > currentYearPlusTen ) {
+					if ( datePieces[ i ] > currentYearPlusFifteen ) {
 						year = '19' + datePieces[ i ];
 					} else {
 						year = '20' + datePieces[ i ];
