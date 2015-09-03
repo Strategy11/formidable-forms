@@ -181,7 +181,7 @@ class FrmXMLHelper {
                     // Keep track of whether this specific form was updated or not
 					$imported['form_status'][ $form_id ] = 'imported';
 
-					self::track_child_forms_missing_parent( $form_id, $old_parent_form_id, $child_forms_missing_parent );
+					self::track_child_forms_missing_parent( (int) $form_id, $old_parent_form_id, $child_forms_missing_parent );
                 }
             }
 
@@ -355,7 +355,7 @@ class FrmXMLHelper {
 
 				// Update all children with this old parent_form_id
 				$new_parent_form_id = (int) $imported_forms[ $old_parent_form_id ];
-				foreach( $child_form_ids as $child_form_id ) {
+				foreach ( $child_form_ids as $child_form_id ) {
 					FrmForm::update( $child_form_id, array( 'parent_form_id' => $new_parent_form_id ) );
 				}
 			}
