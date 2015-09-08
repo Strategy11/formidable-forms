@@ -250,7 +250,7 @@ function frmFrontFormJS(){
 		if ( helpers ) {
 			helpers = JSON.parse( helpers );
 		} else {
-			helpers = new Array;
+			helpers = [];
 		}
 
 		return helpers;
@@ -344,14 +344,15 @@ function frmFrontFormJS(){
 
 	// Get the input name of a specific field in a given row of a repeating section
 	function getRepeatingFieldName( fieldId, parentHtmlId, fieldType ) {
+		var repeatFieldName = '';
 		if ( parentHtmlId.indexOf( 'frm_section' ) > -1 ) {
 			// The HTML id provided is the frm_section HTML id
 			var repeatSecParts = parentHtmlId.replace( 'frm_section_', '' ).split( '-' );
-			var repeatFieldName = 'item_meta[' + repeatSecParts[0] + '][' + repeatSecParts[1] + '][' + fieldId +']';
+			repeatFieldName = 'item_meta[' + repeatSecParts[0] + '][' + repeatSecParts[1] + '][' + fieldId +']';
 		} else {
 			// The HTML id provided is the field div HTML id
 			var fieldDivParts = parentHtmlId.replace( 'frm_field_', '').replace( '_container', '').split('-');
-			var repeatFieldName = 'item_meta[' + fieldDivParts[1] + '][' + fieldDivParts[2] + '][' + fieldId +']';
+			repeatFieldName = 'item_meta[' + fieldDivParts[1] + '][' + fieldDivParts[2] + '][' + fieldId +']';
 		}
 
 		return repeatFieldName;
@@ -446,7 +447,7 @@ function frmFrontFormJS(){
 			fieldValue = '';
 		}
 
-		return fieldValue
+		return fieldValue;
 	}
 
 	function setEmptyKeyInShowFieldsArray(f) {
@@ -580,7 +581,7 @@ function frmFrontFormJS(){
 		if ( hiddenFields ) {
 			hiddenFields = JSON.parse( hiddenFields );
 		} else {
-			hiddenFields = new Array;
+			hiddenFields = [];
 		}
 
 		// If field id is already in the array, move on
@@ -987,7 +988,7 @@ function frmFrontFormJS(){
 		var helpers = getHelpers();
 
 		// Field is inside of section/embedded form which is hidden with conditional logic
-		if ( helpers && helpers[ field_id ] != null && hiddenFields.indexOf( 'frm_field_' + helpers[ field_id ] + '_container' ) > -1 ) {
+		if ( helpers && helpers[ field_id ] !== null && hiddenFields.indexOf( 'frm_field_' + helpers[ field_id ] + '_container' ) > -1 ) {
 			return true;
 		}
 
@@ -1051,6 +1052,7 @@ function frmFrontFormJS(){
 			};
 
 			field = getCallForField( field, all_calcs );
+
 			vals = getCalcFieldId(field, all_calcs, vals);
 
 			if ( typeof vals[field.valKey] === 'undefined' || isNaN(vals[field.valKey]) ) {
@@ -1145,20 +1147,20 @@ function frmFrontFormJS(){
 	* Limitations: If using a format with a 2-digit date, '20' will be added to the front if the year is prior to 70
 	*/
 	function getDateFieldValue( dateFormat, thisVal ) {
-		if ( ! thisVal ) {
-			// If no value was selected in date field
-			var d = 0;
+		var d = 0;
 
+		if ( ! thisVal ) {
+			// If no value was selected in date field, use 0
 		} else if ( typeof jQuery.datepicker === 'undefined' ) {
 			// If date field is not on the current page
 
+			var splitAt = '-';
 			if ( dateFormat.indexOf( '/' ) > -1 ) {
-				var formatPieces = dateFormat.split('/');
-				var datePieces = thisVal.split( '/' );
-			} else {
-				var formatPieces = dateFormat.split( '-' );
-				var datePieces = thisVal.split( '-' );
+				splitAt = '/';
 			}
+
+			var formatPieces = dateFormat.split( splitAt );
+			var datePieces = thisVal.split( splitAt );
 
 			var year, month, day;
 			year = month = day = '';
@@ -1188,10 +1190,10 @@ function frmFrontFormJS(){
 				}
 			}
 
-			var d = Date.parse( year + '-' + month + '-' + day );
+			d = Date.parse( year + '-' + month + '-' + day );
 
 		} else {
-		    var d = jQuery.datepicker.parseDate(dateFormat, thisVal);
+		    d = jQuery.datepicker.parseDate(dateFormat, thisVal);
 		}
 		return d;
 	}
