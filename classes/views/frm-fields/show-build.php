@@ -43,7 +43,7 @@
     <div class="frm-show-click frm_small_top_margin">
     <?php
 
-	if ( ! isset( $field['post_field'] ) || ! in_array( $field['post_field'], array( 'post_status', 'post_category' ) ) ) { ?>
+	if ( ! isset( $field['post_field'] ) || ! in_array( $field['post_field'], array( 'post_category' ) ) ) { ?>
         <?php do_action('frm_add_multiple_opts_labels', $field); ?>
         <ul id="frm_field_<?php echo esc_attr( $field['id'] ) ?>_opts" class="frm_sortable_field_opts<?php echo ( count($field['options']) > 10 ) ? ' frm_field_opts_list' : ''; ?>">
         <?php FrmFieldsHelper::show_single_option($field); ?>
