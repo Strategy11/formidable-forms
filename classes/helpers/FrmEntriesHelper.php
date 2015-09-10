@@ -18,7 +18,7 @@ class FrmEntriesHelper {
         }
 
         foreach ( (array) $fields as $field ) {
-            $new_value = self::set_field_value( $field, $reset );
+            $new_value = self::get_field_value_for_new_entry( $field, $reset );
 
             $field_array = array(
                 'id' => $field->id,
@@ -79,15 +79,15 @@ class FrmEntriesHelper {
 
 	/**
 	* Set the value for each field
-	* This function is used when the form is first loaded and on all page turns
+	* This function is used when the form is first loaded and on all page turns *for a new entry*
 	*
 	* @since 2.0.13
 	*
-	* @param object $field
+	* @param object $field - this is passed by reference since it is an object
 	* @param boolean $reset
 	* @return string|array $new_value
 	*/
-	private static function set_field_value( $field, $reset ) {
+	private static function get_field_value_for_new_entry( $field, $reset ) {
 		//If checkbox, multi-select dropdown, or checkbox data from entries field, the value should be an array
 		$return_array = FrmField::is_field_with_multiple_values( $field );
 

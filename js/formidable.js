@@ -829,26 +829,17 @@ function frmFrontFormJS(){
 
 		var hiddenInput = jQuery('input[name^="'+ f.hiddenName +'"], select[name^="'+ f.hiddenName +'"]:not(":disabled"), textarea[name^="'+ f.hiddenName +'"]');
 
-		var prev = [];
-		hiddenInput.each(function(){
-            if ( this.type === 'radio' || this.type === 'checkbox' ) {
-                if ( this.checked === true ) {
-                    prev.push(jQuery(this).val());
-                }
-            } else {
-                prev.push(jQuery(this).val());
-            }
-		});
+		// Get the previously selected field value
+		var prev = getPrevFieldValue( hiddenInput );
+
+		// Get default value
+		var defaultValue = hiddenInput.data('frmval');
 
         if(f.DataType == 'select'){
 			if((rec == 'stop' || jQuery('#'+ f.hideContainerID +' .frm-loading-img').length) && (jQuery.inArray(f.HideField, frm_checked_dep) > -1)){
 				return;
 			}
 		}
-		
-		if(prev.length === 0){
-            prev = '';
-        }
 
 		frm_checked_dep.push(f.HideField);
 
@@ -882,7 +873,7 @@ function frmFrontFormJS(){
 			data:{
                 action:'frm_fields_ajax_data_options', hide_field:field_id,
                 entry_id:selected, selected_field_id:f.LinkedField, field_id:f.HideField,
-                hide_id:f.hideContainerID, nonce:frm_js.nonce
+				default_value:defaultValue, hide_id:f.hideContainerID, nonce:frm_js.nonce
             },
 			success:function(html){
 				$dataField.html(html);
@@ -899,36 +890,41 @@ function frmFrontFormJS(){
 					fcont.style.display = '';
 				}
 
-				if(html !== '' && prev !== ''){
-					if(!jQuery.isArray(prev)){
-						var new_prev = [];
-						new_prev.push(prev);
-						prev = new_prev;
-					}
-
-					//select options that were selected previously
-					jQuery.each(prev, function(ckey,cval){
-                        if ( typeof(cval) === 'undefined' || cval === '' ) {
-                            return;
-                        }
-						if ( dataType == 'checkbox' || dataType == 'radio' ) {
-                            if ( parentField.length > 1 ) {
-                                parentField.filter('[value="' + cval+ '"]').attr('checked','checked');
-                            } else if ( parentField.val() == cval ){
-                                parentField.attr('checked','checked');
-                            }
-						} else if ( dataType == 'select' ) {
-							var selOpt = parentField.children('option[value="'+ cval +'"]');
-							if(selOpt.length){
-								selOpt.prop('selected', true);
-							}else{
-                                //remove options that no longer exist
-								prev.splice(ckey, 1);
-							}
-						}else{
-							parentField.val(cval);
+				if(html !== ''){
+					if ( prev !== '' ) {
+						if(!jQuery.isArray(prev)){
+							var new_prev = [];
+							new_prev.push(prev);
+							prev = new_prev;
 						}
-					});
+
+						//select options that were selected previously
+						jQuery.each(prev, function(ckey,cval){
+							if ( typeof(cval) === 'undefined' || cval === '' ) {
+								return;
+							}
+							if ( dataType == 'checkbox' || dataType == 'radio' ) {
+								if ( parentField.length > 1 ) {
+									parentField.filter('[value="' + cval+ '"]').attr('checked','checked');
+								} else if ( parentField.val() == cval ){
+									parentField.attr('checked','checked');
+								}
+							} else if ( dataType == 'select' ) {
+								var selOpt = parentField.children('option[value="'+ cval +'"]');
+								if(selOpt.length){
+									selOpt.prop('selected', true);
+								}else{
+									//remove options that no longer exist
+									prev.splice(ckey, 1);
+								}
+							}else{
+								parentField.val(cval);
+							}
+						});
+					} else {
+						// If no options were selected previously, set to default value
+						setDefaultValue( getInputsInContainer( $dataField ) );
+					}
 				}
 
 				if(parentField.hasClass('frm_chzn') && jQuery().chosen){
@@ -938,6 +934,29 @@ function frmFrontFormJS(){
 				triggerChange( parentField );
 			}
 		});
+	}
+
+	function getPrevFieldValue( inputs ) {
+		var prev = [];
+		var thisVal = '';
+		inputs.each(function(){
+			thisVal = this.value;
+			if ( this.type === 'radio' || this.type === 'checkbox' ) {
+				if ( this.checked === true ) {
+					prev.push( thisVal );
+				}
+			} else {
+				if ( thisVal !== '' ) {
+					prev.push( thisVal );
+				}
+			}
+		});
+
+		if ( prev.length === 0 ) {
+			prev = '';
+		}
+
+		return prev;
 	}
 
 	function doCalculation(field_id, triggerField){
