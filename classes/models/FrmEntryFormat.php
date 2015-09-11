@@ -146,7 +146,7 @@ class FrmEntryFormat {
 	}
 
 	public static function fill_entry_user_info( $atts, array &$values ) {
-		if ( ! $atts['user_info'] ) {
+		if ( ! $atts['user_info'] || empty( $atts['entry'] ) ) {
 			return;
 		}
 
