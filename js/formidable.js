@@ -980,7 +980,7 @@ function frmFrontFormJS(){
 		for ( var i = 0, l = len; i < l; i++ ) {
 
 			// Stop calculation if total field is conditionally hidden
-			if ( fieldIsConditionallyHidden( all_calcs.calc[ keys[i] ].field_id ) ) {
+			if ( fieldIsConditionallyHidden( all_calcs.calc[ keys[i] ].field_id, triggerField.attr('name') ) ) {
 				continue;
 			}
 
@@ -991,7 +991,7 @@ function frmFrontFormJS(){
 	/**
 	* Check if field (or its HTML parent) is hidden with conditional logic
 	*/
-	function fieldIsConditionallyHidden( field_id ) {
+	function fieldIsConditionallyHidden( field_id, triggerFieldName ) {
 		var hiddenFields = document.getElementById( 'frm_hide_fields').value;
 		if ( hiddenFields ) {
 			hiddenFields = JSON.parse( hiddenFields );
@@ -999,19 +999,36 @@ function frmFrontFormJS(){
 			return false;
 		}
 
-		// If total field is a regular conditionally hidden field
-		if ( hiddenFields.indexOf( 'frm_field_' + field_id + '_container' ) > -1 ) {
+		var checkFieldId = field_id;
+
+		// If triggerField is repeating, assume total field is also repeating
+		if ( isRepeatingFieldByName( triggerFieldName ) ) {
+			var triggerFieldParts = triggerFieldName.replace('item_meta', '').replace( /\[/g, '').split( ']' );
+			var checkFieldId = field_id + '-' + triggerFieldParts[0] + '-' + triggerFieldParts[1];
+		}
+
+		// If total field is a conditionally hidden (could be repeating or non-repeating)
+		if ( hiddenFields.indexOf( 'frm_field_' + checkFieldId + '_container' ) > -1 ) {
 			return true;
 		}
 
+		// If field is inside of section/embedded form which is hidden with conditional logic
 		var helpers = getHelpers();
-
-		// Field is inside of section/embedded form which is hidden with conditional logic
 		if ( helpers && helpers[ field_id ] !== null && hiddenFields.indexOf( 'frm_field_' + helpers[ field_id ] + '_container' ) > -1 ) {
 			return true;
 		}
 
 		return false;
+	}
+
+	function isRepeatingFieldByName( fieldName ) {
+		var isRepeating = false;
+		var fieldNameParts = fieldName.split( '[' );
+		if ( fieldNameParts.length == 4 ) {
+			isRepeating = true;
+		}
+
+		return isRepeating;
 	}
 
 	function doSingleCalculation( all_calcs, field_key, vals, triggerField ) {
