@@ -1383,7 +1383,7 @@ span.howto{display:inline;}
 #frm_form_editor_container .ui-widget-content{display:none; padding:15px;}
 #frm_form_editor_container .ui-widget-content label{float:left; width:170px; text-align:right; padding-right:5px; clear:both;}
 #frm_form_editor_container .ui-widget-content label.nofloat{clear:none; float:none; margin-left:10px;}
-#frm_form_editor_container .ui-state-default{color:#333;}
+#frm_form_editor_container .ui-state-default{color:#333 !important;}
 #frm_form_editor_container .ui-state-default a.frm_orange, #postbox-container-1 a.frm_orange{color:#D54E21;}
 
 #styling_settings input[type=checkbox], #styling_settings input[type=radio] {border:solid 1px #bbb;}
@@ -1414,13 +1414,15 @@ span.howto{display:inline;}
 #postbox-container-1 .ui-state-default,
 .frm_sorting > li.ui-state-default,
 .frm_sorting .no_repeat_section li.ui-state-default.edit_field_type_end_divider:hover{
-	border:1px solid transparent;
-	font-weight:normal;
-	background-color:transparent;
+	border:1px solid transparent !important;
+	font-weight:lighter !important;
+	background-color:transparent !important;
 	background-image:none;
 	padding:5px;
 	margin:20px 0;
 	box-shadow:none;
+	display:block !important;
+	text-align:inherit !important;
 }
 .frm_sorting > li.ui-state-default.edit_field_type_form{
 	border:1px solid #d1e5ee;
