@@ -1891,7 +1891,7 @@ function frmFrontFormJS(){
 				jQuery('.frm_repeat_'+ id +':last').after(item);
 
                 var checked = ['other'];
-                var fieldID;
+                var fieldID, fieldObject;
                 var reset = 'reset';
 				addingRow = item.attr('id');
 
@@ -1900,9 +1900,10 @@ function frmFrontFormJS(){
 					if ( this.type != 'file' ) {
 						fieldID = this.name.replace('item_meta[', '').split(']')[2].replace('[', '');
 						if ( jQuery.inArray(fieldID, checked ) == -1 ) {
+							fieldObject = jQuery( '#' + this.id );
 							checked.push(fieldID);
-							checkDependentField(fieldID, null, jQuery(this), reset);
-							doCalculation(fieldID, jQuery(this));
+							checkDependentField(fieldID, null, fieldObject, reset);
+							doCalculation(fieldID, fieldObject);
 							reset = 'persist';
 						}
 					}
