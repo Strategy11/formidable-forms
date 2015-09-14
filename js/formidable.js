@@ -524,7 +524,7 @@ function frmFrontFormJS(){
 			} else if ( logicRules.Type === 'data-checkbox' || ( logicRules.Type === 'data-select' && isNotEmptyArray( fieldValue ) ) ) {
 				hideAndClearDynamicField( logicRules.hideContainerID, logicRules.HideField, 'show' );
 				show_fields[logicRules.hideContainerID][i] = true;
-				getData(logicRules, fieldValue, 1);
+				getData(logicRules, fieldValue, 0);
 			} else if ( logicRules.Type === 'data-select' ) {
 				show_fields[logicRules.hideContainerID][i] = {'funcName':'getData','f':logicRules,'sel':fieldValue};
 			}
@@ -827,7 +827,7 @@ function frmFrontFormJS(){
 			return;
 		}
 
-		var hiddenInput = jQuery('input[name^="'+ f.hiddenName +'"], select[name^="'+ f.hiddenName +'"]:not(":disabled"), textarea[name^="'+ f.hiddenName +'"]');
+		var hiddenInput = jQuery( '#' + f.hideContainerID ).find('select[name^="item_meta"], textarea[name^="item_meta"], input[name^="item_meta"]');
 
 		// Get the previously selected field value
 		var prev = getPrevFieldValue( hiddenInput );
