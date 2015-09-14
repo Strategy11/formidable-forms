@@ -148,7 +148,12 @@ function frmFrontFormJS(){
 			return 0;
 		}
 
-		nameParts = nameParts.filter(function(n){ return n !== ''; });
+		for ( var i = 0; i < nameParts.length; i++ ) {
+			if ( nameParts[i] === '' ) {
+				nameParts.splice( i, 1);
+			}
+		}
+
 		var field_id = nameParts[0];
 		var isRepeating = false;
 
@@ -1988,6 +1993,29 @@ function frmFrontFormJS(){
 		return !jQuery.isArray( obj ) && (obj - parseFloat( obj ) + 1) >= 0;
 	}
 
+	function addIndexOfFallbackForIE8() {
+		if ( !Array.prototype.indexOf ) {
+			Array.prototype.indexOf = function(elt /*, from*/) {
+				var len = this.length >>> 0;
+
+				var from = Number(arguments[1]) || 0;
+				from = (from < 0)
+				? Math.ceil(from)
+				: Math.floor(from);
+				if (from < 0) {
+					from += len;
+				}
+
+				for (; from < len; from++) {
+					if ( from in this && this[from] === elt ) {
+						return from;
+					}
+				}
+				return -1;
+			};
+		}
+	}
+
     /* Get checked values with IE8 fallback */
     function getCheckedVal(containerID, inputName) {
         var checkVals = [];
@@ -2064,6 +2092,8 @@ function frmFrontFormJS(){
 					jQuery(this).next('.frm_toggle_container').hide();
 				}
 			});
+
+			addIndexOfFallbackForIE8();
 		},
 
 		submitForm: function(e){
