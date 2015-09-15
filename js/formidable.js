@@ -625,7 +625,7 @@ function frmFrontFormJS(){
 		if ( inputs.length ) {
 			for ( var i = 0; i < inputs.length; i++ ) {
 				setDefaultValue( jQuery( inputs[i] ) );
-				doCalcForSingleField( inputs[i] );
+				maybeDoCalcForSingleField( inputs[i] );
 			}
 		}
 
@@ -1029,7 +1029,7 @@ function frmFrontFormJS(){
 	function isRepeatingFieldByName( fieldName ) {
 		var isRepeating = false;
 		var fieldNameParts = fieldName.split( '[' );
-		if ( fieldNameParts.length == 4 ) {
+		if ( fieldNameParts.length >= 4 ) {
 			isRepeating = true;
 		}
 
@@ -1118,21 +1118,47 @@ function frmFrontFormJS(){
 		return field;
 	}
 
-	function doCalcForSingleField( field_input ) {
+	function maybeDoCalcForSingleField( field_input ) {
 		if ( typeof __FRMCALC === 'undefined' ) {
 			// there are no calculations on this page
 			return;
 		}
 
 		var all_calcs = __FRMCALC;
-		var field_key = field_input.id.replace( 'field_', '' );
+		var field_key = getFieldKey( field_input.id, field_input.name );
+		var triggerField = maybeGetTriggerField( field_input );
+
 		if ( all_calcs.calc[ field_key ] === undefined ) {
 			// This field doesn't have any calculations
 			return;
 		}
 
 		var vals = [];
-		doSingleCalculation( all_calcs, field_key, vals, null );
+		doSingleCalculation( all_calcs, field_key, vals, triggerField );
+	}
+
+	function getFieldKey( fieldHtmlId, fieldName ) {
+		var field_key = fieldHtmlId.replace( 'field_', '' );
+
+		if ( isRepeatingFieldByName( fieldName ) ) {
+			var fieldKeyParts = field_key.split('-');
+			var newFieldKey = '';
+			for ( var i=0; i<fieldKeyParts.length-1; i++ ){
+				newFieldKey = newFieldKey + fieldKeyParts[i];
+			}
+			field_key = newFieldKey;
+		}
+
+		return field_key;
+	}
+
+	function maybeGetTriggerField( fieldInput ) {
+		var triggerField = null;
+		if ( isRepeatingFieldByName( fieldInput.name ) ) {
+			triggerField = jQuery( fieldInput ).closest('.frm_form_field');
+		}
+
+		return triggerField;
 	}
 
 	function getCalcFieldId( field, all_calcs, vals ) {
