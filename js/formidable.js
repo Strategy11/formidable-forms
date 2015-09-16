@@ -2042,6 +2042,14 @@ function frmFrontFormJS(){
 		}
 	}
 
+	function addTrimFallbackForIE8(){
+		if ( typeof String.prototype.trim !== 'function' ) {
+			String.prototype.trim = function() {
+				return this.replace(/^\s+|\s+$/g, '');
+			};
+		}
+	}
+
     /* Get checked values with IE8 fallback */
     function getCheckedVal(containerID, inputName) {
         var checkVals = [];
@@ -2119,7 +2127,9 @@ function frmFrontFormJS(){
 				}
 			});
 
+			// Add fallbacks for the beloved IE8
 			addIndexOfFallbackForIE8();
+			addTrimFallbackForIE8();
 		},
 
 		submitForm: function(e){
