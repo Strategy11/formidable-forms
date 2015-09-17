@@ -650,7 +650,8 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
 .frm_submit.frm_seventh,
 .frm_form_field.frm_eighth,
 .frm_submit.frm_eighth,
-.frm_form_field.frm_inline{
+.frm_form_field.frm_inline,
+.frm_submit.frm_inline{
     clear:none;
     float:left;
 	margin-left:2.5%;
@@ -765,6 +766,7 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
 .frm_form_field.frm_left_inline,
 .frm_form_field.frm_first_inline,
 .frm_form_field.frm_inline,
+.frm_submit.frm_inline,
 .frm_form_field.frm_right_inline,
 .frm_form_field.frm_last_inline{
     width:auto;
@@ -1797,6 +1799,7 @@ html[xmlns] .frm_clearfix{
 	.frm_submit.frm_eighth,
     .frm_form_field.frm_first_inline,
     .frm_form_field.frm_inline,
+	.frm_submit.frm_inline,
     .frm_form_field.frm_last_inline{
         width:100%;
         margin-left:0;
