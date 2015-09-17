@@ -148,12 +148,7 @@ function frmFrontFormJS(){
 		if ( nameParts.length < 1 ) {
 			return 0;
 		}
-
-		for ( var i = 0; i < nameParts.length; i++ ) {
-			if ( nameParts[i] === '' ) {
-				nameParts.splice( i, 1);
-			}
-		}
+		nameParts = nameParts.filter(function(n){ return n !== ''; });
 
 		var field_id = nameParts[0];
 		var isRepeating = false;
@@ -2185,6 +2180,37 @@ function frmFrontFormJS(){
 		}
 	}
 
+	function addFilterFallbackForIE8(){
+		if ( !Array.prototype.filter ) {
+
+			Array.prototype.filter = function(fun /*, thisp */) {
+				"use strict";
+
+				if ( this === void 0 || this === null ) {
+					throw new TypeError();
+				}
+
+				var t = Object( this );
+				var len = t.length >>> 0;
+				if ( typeof fun !== "function" ) {
+					throw new TypeError();
+				}
+
+				var res = [];
+				var thisp = arguments[1];
+				for (var i = 0; i < len; i++) {
+					if ( i in t ) {
+						var val = t[i]; // in case fun mutates this
+						if (fun.call(thisp, val, i, t))
+							res.push(val);
+					}
+				}
+
+				return res;
+			};
+		}
+	}
+
     /* Get checked values with IE8 fallback */
     function getCheckedVal(containerID, inputName) {
         var checkVals = [];
@@ -2271,6 +2297,7 @@ function frmFrontFormJS(){
 			// Add fallbacks for the beloved IE8
 			addIndexOfFallbackForIE8();
 			addTrimFallbackForIE8();
+			addFilterFallbackForIE8()
 		},
 
 		submitForm: function(e){
