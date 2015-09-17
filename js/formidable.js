@@ -1009,7 +1009,7 @@ function frmFrontFormJS(){
 		// If triggerField is repeating, assume total field is also repeating
 		if ( isRepeatingFieldByName( triggerFieldName ) ) {
 			var triggerFieldParts = triggerFieldName.replace('item_meta', '').replace( /\[/g, '').split( ']' );
-			var checkFieldId = field_id + '-' + triggerFieldParts[0] + '-' + triggerFieldParts[1];
+			checkFieldId = field_id + '-' + triggerFieldParts[0] + '-' + triggerFieldParts[1];
 		}
 
 		// If total field is a conditionally hidden (could be repeating or non-repeating)
@@ -1093,7 +1093,6 @@ function frmFrontFormJS(){
 			};
 
 			field = getCallForField( field, all_calcs );
-
 			vals = getCalcFieldId(field, all_calcs, vals);
 
 			if ( typeof vals[field.valKey] === 'undefined' || isNaN(vals[field.valKey]) ) {
@@ -1724,7 +1723,7 @@ function frmFrontFormJS(){
 
                 if ( showDelete ) {
 					if ( typeof entry.deleteLink !== 'undefined' ) {
-                    	data.setCell(row, col,'<a href="'+ entry.deleteLink +'" class="frm_delete_link" onclick="return confirm('+ opts.options.confirm +')">'+ opts.options.delete_link +'</a>');
+                    	data.setCell(row, col,'<a href="'+ entry.deleteLink +'" class="frm_delete_link" data-frmconfirm="'+ opts.options.confirm +'">'+ opts.options.delete_link +'</a>');
 					} else {
 						data.setCell(row, col, '');
 					}
@@ -1974,11 +1973,91 @@ function frmFrontFormJS(){
 		return false;
 	}
 
+	/* In-place edit */
+	function editEntry(){
+		/*jshint validthis:true */
+		var $edit = jQuery(this);
+		var entry_id = $edit.data('entryid');
+		var prefix = $edit.data('prefix');
+		var post_id = $edit.data('pageid');
+		var form_id = $edit.data('formid');
+		var cancel = $edit.data('cancel');
+		var fields = $edit.data('fields');
+		var exclude_fields = $edit.data('excludefields');
+
+		var $cont = jQuery(document.getElementById(prefix+entry_id));
+		var orig = $cont.html();
+		$cont.html('<span class="frm-loading-img" id="'+prefix+entry_id+'"></span><div class="frm_orig_content" style="display:none">'+orig+'</div>');
+		jQuery.ajax({
+			type:'POST',url:frm_js.ajax_url,dataType:'html',
+			data:{
+				action:'frm_entries_edit_entry_ajax', post_id:post_id,
+				entry_id:entry_id, id:form_id, nonce:frm_js.nonce,
+				fields:fields, exclude_fields:exclude_fields,
+			},
+			success:function(html){
+				$cont.children('.frm-loading-img').replaceWith(html);
+				$edit.removeClass('frm_inplace_edit').addClass('frm_cancel_edit');
+				$edit.html(cancel);
+			}
+		});
+		return false;
+	}
+
+	function cancelEdit(){
+		/*jshint validthis:true */
+		var $edit = jQuery(this);
+		var entry_id = $edit.data('entryid');
+		var prefix = $edit.data('prefix');
+		var label = $edit.data('edit');
+
+		if(!$edit.hasClass('frm_ajax_edited')){
+			var $cont = jQuery(document.getElementById(prefix+entry_id));
+			$cont.children('.frm_forms').replaceWith('');
+			$cont.children('.frm_orig_content').fadeIn('slow').removeClass('frm_orig_content');
+		}
+		$edit.removeClass('frm_cancel_edit').addClass('frm_inplace_edit');
+		$edit.html(label);
+		return false;
+	}
+
+	function deleteEntry(){
+		/*jshint validthis:true */
+		var $link = jQuery(this);
+		var confirmText = $link.data('deleteconfirm');
+		if ( confirm( confirmText ) ) {
+			var entry_id = $link.data('entryid');
+			var prefix = $link.data('prefix');
+
+			$link.replaceWith('<span class="frm-loading-img" id="frm_delete_'+entry_id+'"></span>');
+			jQuery.ajax({
+				type:'POST',url:frm_js.ajax_url,
+				data:{action:'frm_entries_destroy', entry:entry_id, nonce:frm_js.nonce},
+				success:function(html){
+					console.log(html);
+					if(html.replace(/^\s+|\s+$/g,'') == 'success'){
+						jQuery(document.getElementById(prefix+entry_id)).fadeOut('slow');
+						jQuery(document.getElementById('frm_delete_'+entry_id)).fadeOut('slow');
+					}else{
+						jQuery(document.getElementById('frm_delete_'+entry_id)).replaceWith(html);
+					}
+				}
+			});
+		}
+		return false;
+	}
+
 	/* General Helpers */
 	function fadeOut($remove){
 		$remove.fadeOut('slow', function(){
 			$remove.remove();
 		});
+	}
+
+	function confirmClick() {
+		/*jshint validthis:true */
+		var message = jQuery(this).data('frmconfirm');
+		return confirm(message);
 	}
 
 	function toggleDiv(){
@@ -2025,9 +2104,7 @@ function frmFrontFormJS(){
 				var len = this.length >>> 0;
 
 				var from = Number(arguments[1]) || 0;
-				from = (from < 0)
-				? Math.ceil(from)
-				: Math.floor(from);
+				from = (from < 0) ? Math.ceil(from) : Math.floor(from);
 				if (from < 0) {
 					from += len;
 				}
@@ -2113,7 +2190,13 @@ function frmFrontFormJS(){
 			jQuery(document).on('click', '.frm_remove_form_row', removeRow);
 			jQuery(document).on('click', '.frm_add_form_row', addRow);
 
+			jQuery(document).on('click', 'a[data-frmconfirm]', confirmClick);
 			jQuery('a[data-frmtoggle]').click(toggleDiv);
+
+			// In place edit
+			jQuery('.frm_edit_link_container').on('click', 'a.frm_inplace_edit', editEntry);
+			jQuery('.frm_edit_link_container').on('click', 'a.frm_cancel_edit', cancelEdit);
+			jQuery('.frm_ajax_delete').click(deleteEntry);
 
 			// toggle collapsible entries shortcode
 			jQuery('.frm_month_heading, .frm_year_heading').click( function(){
@@ -2295,7 +2378,23 @@ jQuery(document).ready(function($){
 	frmFrontForm.init();
 });
 
+function frmUpdateField(entry_id,field_id,value,message,num){
+	jQuery(document.getElementById('frm_update_field_'+entry_id+'_'+field_id)).html('<span class="frm-loading-img"></span>');
+	jQuery.ajax({
+		type:'POST',url:frm_js.ajax_url,
+		data:{action:'frm_entries_update_field_ajax', entry_id:entry_id, field_id:field_id, value:value, nonce:frm_js.nonce},
+		success:function(){
+			if(message.replace(/^\s+|\s+$/g,'') === ''){
+				jQuery(document.getElementById('frm_update_field_'+entry_id+'_'+field_id+'_'+num)).fadeOut('slow');
+			}else{
+				jQuery(document.getElementById('frm_update_field_'+entry_id+'_'+field_id+'_'+num)).replaceWith(message);
+			}
+		}
+	});
+}
+
 function frmEditEntry(entry_id,prefix,post_id,form_id,cancel,hclass){
+	console.warn('DEPRECATED: function frmEditEntry in v2.0.13 use frmFrontForm.editEntry');
 	var $edit = jQuery(document.getElementById('frm_edit_'+entry_id));
 	var label = $edit.html();
 	var $cont = jQuery(document.getElementById(prefix+entry_id));
@@ -2312,6 +2411,7 @@ function frmEditEntry(entry_id,prefix,post_id,form_id,cancel,hclass){
 }
 
 function frmCancelEdit(entry_id,prefix,label,post_id,form_id,hclass){
+	console.warn('DEPRECATED: function frmCancelEdit in v2.0.13 use frmFrontForm.cancelEdit');
 	var $edit = jQuery(document.getElementById('frm_edit_'+entry_id));
 	var $link = $edit.find('a');
 	var cancel = $link.html();
@@ -2324,22 +2424,8 @@ function frmCancelEdit(entry_id,prefix,label,post_id,form_id,hclass){
 	$edit.replaceWith('<a id="frm_edit_'+entry_id+'" class="frm_edit_link '+hclass+'" href="javascript:frmEditEntry('+entry_id+',\''+prefix+'\','+post_id+','+form_id+',\''+ frmFrontForm.escapeHtml(cancel) +'\',\''+hclass+'\')">'+label+'</a>');
 }
 
-function frmUpdateField(entry_id,field_id,value,message,num){
-	jQuery(document.getElementById('frm_update_field_'+entry_id+'_'+field_id)).html('<span class="frm-loading-img"></span>');
-	jQuery.ajax({
-		type:'POST',url:frm_js.ajax_url,
-		data:{action:'frm_entries_update_field_ajax', entry_id:entry_id, field_id:field_id, value:value, nonce:frm_js.nonce},
-		success:function(){
-			if(message.replace(/^\s+|\s+$/g,'') === ''){
-				jQuery(document.getElementById('frm_update_field_'+entry_id+'_'+field_id+'_'+num)).fadeOut('slow');
-			}else{
-				jQuery(document.getElementById('frm_update_field_'+entry_id+'_'+field_id+'_'+num)).replaceWith(message);
-			}
-		}
-	});
-}
-
-function frmDeleteEntry(entry_id,prefix){	
+function frmDeleteEntry(entry_id,prefix){
+	console.warn('DEPRECATED: function frmDeleteEntry in v2.0.13 use frmFrontForm.deleteEntry');
 	jQuery(document.getElementById('frm_delete_'+entry_id)).replaceWith('<span class="frm-loading-img" id="frm_delete_'+entry_id+'"></span>');
 	jQuery.ajax({
 		type:'POST',url:frm_js.ajax_url,

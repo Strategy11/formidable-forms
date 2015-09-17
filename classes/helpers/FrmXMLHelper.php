@@ -249,7 +249,7 @@ class FrmXMLHelper {
 	* @param int $old_parent_form_id
 	* @param array $child_forms_missing_parent
 	*/
-	private static function track_child_forms_missing_parent( $new_form_id, $old_parent_form_id, &$child_forms_missing_parent ){
+	private static function track_child_forms_missing_parent( $new_form_id, $old_parent_form_id, &$child_forms_missing_parent ) {
 		if ( $old_parent_form_id ) {
 			if ( ! isset( $child_forms_missing_parent[ $old_parent_form_id ] ) ) {
 				$child_forms_missing_parent[ $old_parent_form_id ] = array();
