@@ -5,6 +5,7 @@ function frmFrontFormJS(){
 	var hidden_fields = [];
     var frm_checked_dep = [];
 	var addingRow = '';
+	var currentlyAddingRow = false;
 	var action = '';
 	var jsErrors = [];
 
@@ -1902,6 +1903,15 @@ function frmFrontFormJS(){
 
 	function addRow(){
 		/*jshint validthis:true */
+
+		// If row is currently being added, leave now
+		if ( currentlyAddingRow === true ) {
+			return false;
+		}
+
+		// Indicate that a row is being added (so double clicking Add button doesn't cause problems)
+		currentlyAddingRow = true;
+
 		var id = jQuery(this).data('parent');
 		var i = 0;
 		if ( jQuery('.frm_repeat_'+id).length > 0 ) {
@@ -1966,9 +1976,13 @@ function frmFrontFormJS(){
 				if(typeof(frmThemeOverride_frmAddRow) == 'function'){
 					frmThemeOverride_frmAddRow(id, r);
 				}
+
+				currentlyAddingRow = false;
+			},
+			error: function() {
+				currentlyAddingRow = false;
 			}
 		});
-
 
 		return false;
 	}
