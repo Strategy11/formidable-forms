@@ -125,7 +125,7 @@ class FrmStyle {
         if ( $access_type === 'direct' ) {
         	$creds = request_filesystem_credentials( site_url() .'/wp-admin/', '', false, false, array() );
 		} else {
-			$creds = $this->get_ftp_creds();
+			$creds = $this->get_ftp_creds( $access_type );
 		}
 
 		if ( ! empty( $creds ) ) {
@@ -166,7 +166,7 @@ class FrmStyle {
         set_transient('frmpro_css', $css);
 	}
 
-	private function get_ftp_creds() {
+	private function get_ftp_creds( $type ) {
 		$credentials = get_option( 'ftp_credentials', array( 'hostname' => '', 'username' => '' ) );
 
 		$credentials['hostname'] = defined('FTP_HOST') ? FTP_HOST : $credentials['hostname'];
@@ -194,8 +194,6 @@ class FrmStyle {
 		} else if ( ( defined( 'FTP_SSL' ) && FTP_SSL ) && 'ftpext' == $type ) {
 			//Only the FTP Extension understands SSL
 			$credentials['connection_type'] = 'ftps';
-		} else if ( ! empty( $_POST['connection_type'] ) ) {
-			$credentials['connection_type'] = wp_unslash( $_POST['connection_type'] );
 		} else if ( ! isset( $credentials['connection_type'] ) ) {
 			//All else fails (And it's not defaulted to something else saved), Default to FTP
 			$credentials['connection_type'] = 'ftp';
