@@ -2019,7 +2019,6 @@ function frmFrontFormJS(){
 				type:'POST',url:frm_js.ajax_url,
 				data:{action:'frm_entries_destroy', entry:entry_id, nonce:frm_js.nonce},
 				success:function(html){
-					console.log(html);
 					if(html.replace(/^\s+|\s+$/g,'') == 'success'){
 						jQuery(document.getElementById(prefix+entry_id)).fadeOut('slow');
 						jQuery(document.getElementById('frm_delete_'+entry_id)).fadeOut('slow');
