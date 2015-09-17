@@ -645,8 +645,11 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
 .frm_form_field.frm_three_fifths,
 .frm_form_field.frm_four_fifths,
 .frm_form_field.frm_sixth,
+.frm_submit.frm_sixth,
 .frm_form_field.frm_seventh,
+.frm_submit.frm_seventh,
 .frm_form_field.frm_eighth,
+.frm_submit.frm_eighth,
 .frm_form_field.frm_inline{
     clear:none;
     float:left;
@@ -739,18 +742,21 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
 }
 
 .frm_form_field.frm_sixth,
+.frm_submit.frm_sixth,
 .frm_form_field.frm_first_sixth,
 .frm_form_field.frm_last_sixth{
     width:14.58%;
 }
 
 .frm_form_field.frm_seventh,
+.frm_submit.frm_seventh,
 .frm_form_field.frm_first_seventh,
 .frm_form_field.frm_last_seventh{
     width:12.14%;
 }
 
 .frm_form_field.frm_eighth,
+.frm_submit.frm_eighth,
 .frm_form_field.frm_first_eighth,
 .frm_form_field.frm_last_eighth{
     width:10.31%;
@@ -1784,8 +1790,11 @@ html[xmlns] .frm_clearfix{
 	.frm_form_field.frm_three_fifths,
 	.frm_form_field.frm_four_fifths,
 	.frm_form_field.frm_sixth,
+	.frm_submit.frm_sixth,
 	.frm_form_field.frm_seventh,
+	.frm_submit.frm_seventh,
 	.frm_form_field.frm_eighth,
+	.frm_submit.frm_eighth,
     .frm_form_field.frm_first_inline,
     .frm_form_field.frm_inline,
     .frm_form_field.frm_last_inline{
