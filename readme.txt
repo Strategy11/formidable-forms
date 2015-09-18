@@ -89,6 +89,46 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 [See more FAQs](http://formidablepro.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 2.0.13 =
+* Allow recaptcha to be conditionally hidden on previous pages of form
+* Fix error with embedded form on a conditionally hidden page
+* Show the editlink after an entry is edited in place
+* Make sure collapsible section icons show regardless of characters in the section title
+* Don't require conditionally hidden dynamic category fields
+* Add fields attribute to [editlink] shortcode
+* Fix calculations using repeating checkboxes
+* Prevent double click on Add button in repeating section
+* Clear conditionally hidden fields even if they aren't visible
+* Make sure pro templates get imported in multisite
+* Use separate values by default for post status fields
+* Make sure the separate values option is allows for post status fields
+* Show the frmcal-week-end class consistently
+* Fix default values in repeating Dynamic fields
+* Make Private Views show up in shortcode builder
+* Don't do calculations in conditionally hidden repeating fields
+* Do calcs in repeating fields when adding a row
+* Improve JS for IE8
+* Fix unique time error
+* Fix default date in jQuery calendar
+* Allow entry key with frm-field-value shortcode
+* Fix unique time error
+* Improve calculations across page breaks
+* Prevent clearing default values when hiding/showing sections
+* Run calculations in collapsible sections
+* Fix duplicating regular sections
+* Add post ID View filter
+* Fix empty graphs
+* Allow frm-entry-update-field, editlink, and deletelink inside foreach loop
+* Fix importing parent_form_id on child forms
+* Allow css file updating if FTP creds are present
+* A few jshint fixes
+* Add 'frm_ajax_url' hook
+* Allow layout classes to be used with submit button
+* Remove frm_last class
+* Prevent get_filesystem_method error in multisite after update
+* Conditionally use ssl for the ajax url for form submission
+
+
 = 2.0.12 =
 * Add option to center form on page
 * Improve styling classes for more consistency across different field classes, and make all classes responsive
