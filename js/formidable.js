@@ -5,6 +5,7 @@ function frmFrontFormJS(){
 	var hidden_fields = [];
     var frm_checked_dep = [];
 	var addingRow = '';
+	var currentlyAddingRow = false;
 	var action = '';
 	var jsErrors = [];
 
@@ -147,12 +148,7 @@ function frmFrontFormJS(){
 		if ( nameParts.length < 1 ) {
 			return 0;
 		}
-
-		for ( var i = 0; i < nameParts.length; i++ ) {
-			if ( nameParts[i] === '' ) {
-				nameParts.splice( i, 1);
-			}
-		}
+		nameParts = nameParts.filter(function(n){ return n !== ''; });
 
 		var field_id = nameParts[0];
 		var isRepeating = false;
@@ -187,6 +183,8 @@ function frmFrontFormJS(){
 		return field_id;
 	}
 
+
+	/* Conditional Logic Functions */
 
 	/**
 	*
@@ -250,17 +248,6 @@ function frmFrontFormJS(){
 		return isRepeat;
 	}
 
-	function getHelpers() {
-		var helpers = document.getElementById( 'frm_helpers' ).value;
-		if ( helpers ) {
-			helpers = JSON.parse( helpers );
-		} else {
-			helpers = [];
-		}
-
-		return helpers;
-	}
-
 	function getRulesForField( field_id ) {
 		if ( typeof __FRMRULES  === 'undefined' || typeof __FRMRULES[field_id] === 'undefined' ) {
 			return;
@@ -317,7 +304,7 @@ function frmFrontFormJS(){
 		var fieldValue = getBasicEnteredValue( logicRules );
 
 		// If field to hide/show is a repeating field and the logic field is not repeating, loop through each one of the repeating fields with that field ID
-		if ( isRepeatingField( logicRules.HideField ) ) {
+		if ( isRepeatingFieldById( logicRules.HideField ) ) {
 			checkLogicForRepeatingHideField( i, logicRules, fieldValue, rec );
 			return;
 		}
@@ -332,8 +319,8 @@ function frmFrontFormJS(){
 	// Hide/show field is repeating
 	function checkRepeatingFieldInSingleRow( i, logicRules, rec, repeatSecHtmlId ) {
 		// If logic field is a repeating field, update inputName accordingly
-		if ( isRepeatingField( logicRules.FieldName ) ) {
-			logicRules.inputName = getRepeatingFieldName( logicRules.FieldName, repeatSecHtmlId, logicRules.Type );
+		if ( isRepeatingFieldById( logicRules.FieldName ) ) {
+			logicRules.inputName = getRepeatingFieldName( logicRules.FieldName, repeatSecHtmlId );
 			logicRules.containerID = getRepeatingFieldHtmlId( logicRules.FieldName, repeatSecHtmlId );
 		}
 		// Updat hideContainerID for repeating fields
@@ -347,51 +334,11 @@ function frmFrontFormJS(){
 		hideFieldNow(i, logicRules, rec);
 	}
 
-	// Get the input name of a specific field in a given row of a repeating section
-	function getRepeatingFieldName( fieldId, parentHtmlId, fieldType ) {
-		var repeatFieldName = '';
-		if ( parentHtmlId.indexOf( 'frm_section' ) > -1 ) {
-			// The HTML id provided is the frm_section HTML id
-			var repeatSecParts = parentHtmlId.replace( 'frm_section_', '' ).split( '-' );
-			repeatFieldName = 'item_meta[' + repeatSecParts[0] + '][' + repeatSecParts[1] + '][' + fieldId +']';
-		} else {
-			// The HTML id provided is the field div HTML id
-			var fieldDivParts = parentHtmlId.replace( 'frm_field_', '').replace( '_container', '').split('-');
-			repeatFieldName = 'item_meta[' + fieldDivParts[1] + '][' + fieldDivParts[2] + '][' + fieldId +']';
-		}
-
-		return repeatFieldName;
-	}
-
-	// Get the HTML id for a given repeating field
-	function getRepeatingFieldHtmlId( fieldId, repeatSecHtmlId ){
-		var repeatSecParts = repeatSecHtmlId.replace( 'frm_section_', '' ).split( '-' );
-		var repeatFieldHtmlId = 'frm_field_' + fieldId + '-' + repeatSecParts[0] + '-' + repeatSecParts[1] + '_container';
-		return repeatFieldHtmlId;
-	}
-
-	function maybeGetFirstElement( jQueryObj ) {
-        if ( jQueryObj.length > 1 ) {
-            jQueryObj = jQueryObj.eq(0);
-        }
-		return jQueryObj;
-	}
-
-	// Check if a given field is repeating
-	function isRepeatingField( fieldId ) {
-		var fieldDiv = document.getElementById( 'frm_field_' + fieldId + '_container' );
-		if ( typeof fieldDiv === 'undefined' || fieldDiv === null ) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
 	// If the trigger field is NOT repeating, but the current logic field and the show/hide field are repeating
 	function checkLogicForTwoRepeatingFields( i, logicRules, rec ) {
 		var allRepeatFields = document.getElementsByClassName('frm_field_' + logicRules.FieldName + '_container');
 		for ( var r = 0; r < allRepeatFields.length; r++ ) {
-			logicRules.inputName = getRepeatingFieldName( logicRules.FieldName, allRepeatFields[r].id, logicRules.Type );
+			logicRules.inputName = getRepeatingFieldName( logicRules.FieldName, allRepeatFields[r].id );
 			logicRules.containerID = allRepeatFields[r].id;
 			logicRules.hideContainerID = allRepeatFields[r].id.replace( logicRules.FieldName, logicRules.HideField );
 
@@ -536,16 +483,79 @@ function frmFrontFormJS(){
 		}
 	}
 
-	function hideAndClearDynamicField(hideContainer,field_id, hide){
-		if ( jQuery.inArray(hideContainer, hidden_fields) === -1 ) {
-			hidden_fields[ field_id ] = hideContainer;
-			hideContainer = jQuery(document.getElementById(hideContainer));
-			if ( hide === 'hide' ) {
-				hideContainer.hide();
-			}
-			hideContainer.find('.frm_data_field_container').empty();
+	function hideFieldNow(i, f, rec){
+		if ( f.MatchType === 'all' || show_fields[f.hideContainerID][i] === false ) {
+			hide_later.push({
+				'result':show_fields[f.hideContainerID][i], 'show':f.Show,
+				'match':f.MatchType, 'FieldName':f.FieldName, 'HideField':f.HideField,
+				'hideContainerID':f.hideContainerID
+			});
+			return;
 		}
-    }
+
+		var display = 'none';
+		if ( f.Show === 'show' ) {
+			if ( show_fields[f.hideContainerID][i] !== true ) {
+				showField(show_fields[f.hideContainerID][i], f.FieldName, rec);
+				return;
+			}
+			display = '';
+		}
+
+		var hideFieldContainer = jQuery( document.getElementById(f.hideContainerID) );
+
+		if ( display == 'none' ) {
+			// Hide the field
+			routeToHideFieldAndClearVal( hideFieldContainer, f);
+		} else {
+			// Show the field
+			routeToShowFieldAndSetVal( hideFieldContainer, f);
+		}
+	}
+
+	function hideFieldLater(rec){
+		jQuery.each(hide_later, function(hkey,hvalue){
+			delete hide_later[hkey];
+            if ( typeof hvalue === 'undefined' || typeof hvalue.result === 'undefined' ) {
+                return;
+            }
+
+			var container = jQuery('#' + hvalue.hideContainerID);
+			var hideField = hvalue.show;
+			if ( ( hvalue.match === 'any' && (jQuery.inArray(true, show_fields[hvalue.hideContainerID]) === -1) ) ||
+			( hvalue.match === 'all' && (jQuery.inArray(false, show_fields[hvalue.hideContainerID]) > -1) ) ) {
+				if ( hvalue.show === 'show' ) {
+					hideField = 'hide';
+				} else {
+					hideField = 'show';
+				}
+			}
+
+			if ( hideField === 'show' ) {
+				routeToShowFieldAndSetVal( container, hvalue );
+
+				if ( typeof hvalue.result !== false && typeof hvalue.result !== true ) {
+					showField( hvalue.result, hvalue.FieldName, rec );
+				}
+			} else {
+				routeToHideFieldAndClearVal( container, hvalue );
+			}
+		});
+	}
+
+	/* Hide Field Functions */
+	function routeToHideFieldAndClearVal( hideFieldContainer, f ) {
+		if ( hideFieldContainer.length ) {
+			// Field is not type=hidden
+			hideFieldAndClearValue( hideFieldContainer, f );
+		} else {
+			// Field is type=hidden
+			var fieldName = getFieldName( f.HideField, f.hideContainerID );
+			var inputs = jQuery( 'input[name^="' + fieldName + '"]' );
+			clearValueForInputs( inputs );
+		}
+		addToHideFields( f.hideContainerID );
+	}
 
 	function hideFieldAndClearValue( container, f ) {
 		container.hide();
@@ -555,28 +565,28 @@ function frmFrontFormJS(){
 
 			var inputs = getInputsInContainer( container );
 			if ( inputs.length ){
-				inputs.prop('checked', false).prop('selectedIndex', 0);
-				inputs.not(':checkbox, :radio, select').val('');
-				var i = false;
-				inputs.each(function(){
-					if ( this.tagName == 'SELECT' ) {
-						var autocomplete = document.getElementById( this.id + '_chosen' );
-						if ( autocomplete !== null ) {
-							jQuery(this).trigger('chosen:updated');
-						}
-					}
-
-					if ( i === false || ["checkbox","radio"].indexOf( this.type ) < 0 ) {
-						triggerChange( jQuery(this) );
-					}
-					i = true;
-				});
+				clearValueForInputs( inputs )
 			}
 		}
 	}
 
-	function getInputsInContainer( container ) {
-		return container.find('select[name^="item_meta"], textarea[name^="item_meta"], input[name^="item_meta"]:not([type=hidden])');
+	function clearValueForInputs( inputs ) {
+		inputs.prop('checked', false).prop('selectedIndex', 0);
+		inputs.not(':checkbox, :radio, select').val('');
+		var i = false;
+		inputs.each(function(){
+			if ( this.tagName == 'SELECT' ) {
+				var autocomplete = document.getElementById( this.id + '_chosen' );
+				if ( autocomplete !== null ) {
+					jQuery(this).trigger('chosen:updated');
+				}
+			}
+
+			if ( i === false || ["checkbox","radio"].indexOf( this.type ) < 0 ) {
+				triggerChange( jQuery(this) );
+			}
+			i = true;
+		});
 	}
 
 	function addToHideFields( htmlFieldId ) {
@@ -600,36 +610,46 @@ function frmFrontFormJS(){
 		}
 	}
 
-	function removeFromHideFields( htmlFieldId ) {
-		// Get all currently hidden fields
-		var frmHideFieldsInput = document.getElementById('frm_hide_fields');
-		var hiddenFields = frmHideFieldsInput.value;
-		if ( hiddenFields ) {
-			hiddenFields = JSON.parse( hiddenFields );
-		} else {
-			return;
+	function hideAndClearDynamicField(hideContainer,field_id, hide){
+		if ( jQuery.inArray(hideContainer, hidden_fields) === -1 ) {
+			hidden_fields[ field_id ] = hideContainer;
+			hideContainer = jQuery(document.getElementById(hideContainer));
+			if ( hide === 'hide' ) {
+				hideContainer.hide();
+			}
+			hideContainer.find('.frm_data_field_container').empty();
 		}
+    }
 
-		// If field id is in the array, delete it
-		var item_index = hiddenFields.indexOf( htmlFieldId );
-		if ( item_index > -1 ) {
-			hiddenFields.splice(item_index, 1);
-			hiddenFields = JSON.stringify( hiddenFields );
-			frmHideFieldsInput.value = hiddenFields;
+	/* Show Field Functions */
+	function routeToShowFieldAndSetVal( hideFieldContainer, f ) {
+		if ( hideFieldContainer.length ) {
+			// Field is not type=hidden
+			showFieldAndSetValue( hideFieldContainer, f );
+		} else {
+			// Set field value (don't show it)
+			var fieldName = getFieldName( f.HideField, f.hideContainerID );
+			var inputs = jQuery( 'input[name^="' + fieldName + '"]' );
+			setValForInputs( inputs )
 		}
+		removeFromHideFields( f.hideContainerID );
 	}
 
 	function showFieldAndSetValue( container, f ) {
 		var inputs = getInputsInContainer( container );
 
+		setValForInputs( inputs )
+
+		container.show();
+	}
+
+	function setValForInputs( inputs ){
 		if ( inputs.length ) {
 			for ( var i = 0; i < inputs.length; i++ ) {
 				setDefaultValue( jQuery( inputs[i] ) );
 				maybeDoCalcForSingleField( inputs[i] );
 			}
 		}
-
-		container.show();
 	}
 
 	function setDefaultValue( input ) {
@@ -661,6 +681,25 @@ function frmFrontFormJS(){
 		}
 	}
 
+	function removeFromHideFields( htmlFieldId ) {
+		// Get all currently hidden fields
+		var frmHideFieldsInput = document.getElementById('frm_hide_fields');
+		var hiddenFields = frmHideFieldsInput.value;
+		if ( hiddenFields ) {
+			hiddenFields = JSON.parse( hiddenFields );
+		} else {
+			return;
+		}
+
+		// If field id is in the array, delete it
+		var item_index = hiddenFields.indexOf( htmlFieldId );
+		if ( item_index > -1 ) {
+			hiddenFields.splice(item_index, 1);
+			hiddenFields = JSON.stringify( hiddenFields );
+			frmHideFieldsInput.value = hiddenFields;
+		}
+	}
+
 	function triggerChange( input, fieldKey ) {
 		if ( typeof fieldKey === 'undefined' ) {
 			fieldKey = 'dependent';
@@ -671,73 +710,6 @@ function frmFrontFormJS(){
 		}
 
 		input.trigger({ type:'change', selfTriggered:true, frmTriggered:fieldKey });
-	}
-
-	function hideFieldNow(i, f, rec){
-		if ( f.MatchType === 'all' || show_fields[f.hideContainerID][i] === false ) {
-			hide_later.push({
-				'result':show_fields[f.hideContainerID][i], 'show':f.Show,
-				'match':f.MatchType, 'FieldName':f.FieldName, 'HideField':f.HideField,
-				'hideContainerID':f.hideContainerID
-			});
-			return;
-		}
-
-		var display = 'none';
-		if ( f.Show === 'show' ) {
-			if ( show_fields[f.hideContainerID][i] !== true ) {
-				showField(show_fields[f.hideContainerID][i], f.FieldName, rec);
-				return;
-			}
-			display = '';
-		}
-
-		var hideClass;
-		hideClass = jQuery( document.getElementById(f.hideContainerID) );
-
-
-		if(hideClass.length){
-			if ( display === 'none' ) {
-				hideFieldAndClearValue( hideClass, f );
-				addToHideFields( hideClass.attr('id') );
-			} else {
-				showFieldAndSetValue( hideClass, f );
-				removeFromHideFields( hideClass.attr('id') );
-			}
-		}
-	}
-
-	function hideFieldLater(rec){
-		jQuery.each(hide_later, function(hkey,hvalue){
-			delete hide_later[hkey];
-            if ( typeof hvalue === 'undefined' || typeof hvalue.result === 'undefined' ) {
-                return;
-            }
-
-			var container = jQuery('#' + hvalue.hideContainerID);
-            var hideField = hvalue.show;
-            if ( container.length ) {
-				if ( ( hvalue.match === 'any' && (jQuery.inArray(true, show_fields[hvalue.hideContainerID]) === -1) ) ||
-					( hvalue.match === 'all' && (jQuery.inArray(false, show_fields[hvalue.hideContainerID]) > -1) ) ) {
-                    if ( hvalue.show === 'show' ) {
-                        hideField = 'hide';
-                    } else {
-                        hideField = 'show';
-                    }
-                }
-
-                if ( hideField === 'show' ) {
-					showFieldAndSetValue( container, hvalue );
-					removeFromHideFields( container.attr('id') );
-					if ( typeof hvalue.result !== false && typeof hvalue.result !== true ) {
-						showField( hvalue.result, hvalue.FieldName, rec );
-					}
-                } else {
-					hideFieldAndClearValue(container, hvalue);
-					addToHideFields( container.attr('id') );
-                }
-            }
-		});
 	}
 
 	function operators(op, a, b){
@@ -1902,6 +1874,15 @@ function frmFrontFormJS(){
 
 	function addRow(){
 		/*jshint validthis:true */
+
+		// If row is currently being added, leave now
+		if ( currentlyAddingRow === true ) {
+			return false;
+		}
+
+		// Indicate that a row is being added (so double clicking Add button doesn't cause problems)
+		currentlyAddingRow = true;
+
 		var id = jQuery(this).data('parent');
 		var i = 0;
 		if ( jQuery('.frm_repeat_'+id).length > 0 ) {
@@ -1966,9 +1947,13 @@ function frmFrontFormJS(){
 				if(typeof(frmThemeOverride_frmAddRow) == 'function'){
 					frmThemeOverride_frmAddRow(id, r);
 				}
+
+				currentlyAddingRow = false;
+			},
+			error: function() {
+				currentlyAddingRow = false;
 			}
 		});
-
 
 		return false;
 	}
@@ -2034,7 +2019,6 @@ function frmFrontFormJS(){
 				type:'POST',url:frm_js.ajax_url,
 				data:{action:'frm_entries_destroy', entry:entry_id, nonce:frm_js.nonce},
 				success:function(html){
-					console.log(html);
 					if(html.replace(/^\s+|\s+$/g,'') == 'success'){
 						jQuery(document.getElementById(prefix+entry_id)).fadeOut('slow');
 						jQuery(document.getElementById('frm_delete_'+entry_id)).fadeOut('slow');
@@ -2098,6 +2082,82 @@ function frmFrontFormJS(){
 		return !jQuery.isArray( obj ) && (obj - parseFloat( obj ) + 1) >= 0;
 	}
 
+	function getInputsInContainer( container ) {
+		return container.find('select[name^="item_meta"], textarea[name^="item_meta"], input[name^="item_meta"]');
+	}
+
+	// Get the beginning part of the name for a given field
+	function getFieldName( fieldId, fieldDivId ){
+		var fieldName = 'item_meta[' + fieldId + ']';
+
+		// If field is repeating
+		if ( isRepeatingFieldById( fieldId ) ) {
+			fieldName = getRepeatingFieldName( fieldId, fieldDivId );
+		}
+
+		return fieldName;
+	}
+
+	function getHelpers() {
+		var helpers = document.getElementById( 'frm_helpers' ).value;
+		if ( helpers ) {
+			helpers = JSON.parse( helpers );
+		} else {
+			helpers = [];
+		}
+
+		return helpers;
+	}
+
+	// Get the input name of a specific field in a given row of a repeating section
+	function getRepeatingFieldName( fieldId, parentHtmlId ) {
+		var repeatFieldName = '';
+		if ( parentHtmlId.indexOf( 'frm_section' ) > -1 ) {
+			// The HTML id provided is the frm_section HTML id
+			var repeatSecParts = parentHtmlId.replace( 'frm_section_', '' ).split( '-' );
+			repeatFieldName = 'item_meta[' + repeatSecParts[0] + '][' + repeatSecParts[1] + '][' + fieldId +']';
+		} else {
+			// The HTML id provided is the field div HTML id
+			var fieldDivParts = parentHtmlId.replace( 'frm_field_', '').replace( '_container', '').split('-');
+			repeatFieldName = 'item_meta[' + fieldDivParts[1] + '][' + fieldDivParts[2] + '][' + fieldId +']';
+		}
+
+		return repeatFieldName;
+	}
+
+	// Get the HTML id for a given repeating field
+	function getRepeatingFieldHtmlId( fieldId, repeatSecHtmlId ){
+		var repeatSecParts = repeatSecHtmlId.replace( 'frm_section_', '' ).split( '-' );
+		var repeatFieldHtmlId = 'frm_field_' + fieldId + '-' + repeatSecParts[0] + '-' + repeatSecParts[1] + '_container';
+		return repeatFieldHtmlId;
+	}
+
+	function maybeGetFirstElement( jQueryObj ) {
+        if ( jQueryObj.length > 1 ) {
+            jQueryObj = jQueryObj.eq(0);
+        }
+		return jQueryObj;
+	}
+
+	// Check if a given field is repeating
+	function isRepeatingFieldById( fieldId ){
+		// Check field div first
+		var fieldDiv = document.getElementById( 'frm_field_' + fieldId + '_container' );
+		if ( typeof fieldDiv != 'undefined' && fieldDiv != null ) {
+			return false;
+		}
+
+		// Check input next so type=hidden fields don't get marked as repeating
+		var fieldInput = jQuery( 'input[name^="item_meta[' + fieldId + ']"],select[name^="item_meta[' + fieldId + ']"], textarea[name^="item_meta[' + fieldId + ']"]' );
+		if ( fieldInput.length < 1 ) {
+			// TODO: Change this so Section (on diff page), HTML (on diff page), reCaptcha (on diff page), and page break fields don't return true
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/* Fallback functions */
 	function addIndexOfFallbackForIE8() {
 		if ( !Array.prototype.indexOf ) {
 			Array.prototype.indexOf = function(elt /*, from*/) {
@@ -2124,6 +2184,53 @@ function frmFrontFormJS(){
 			String.prototype.trim = function() {
 				return this.replace(/^\s+|\s+$/g, '');
 			};
+		}
+	}
+
+	function addFilterFallbackForIE8(){
+		if ( !Array.prototype.filter ) {
+
+			Array.prototype.filter = function(fun /*, thisp */) {
+				"use strict";
+
+				if ( this === void 0 || this === null ) {
+					throw new TypeError();
+				}
+
+				var t = Object( this );
+				var len = t.length >>> 0;
+				if ( typeof fun !== "function" ) {
+					throw new TypeError();
+				}
+
+				var res = [];
+				var thisp = arguments[1];
+				for (var i = 0; i < len; i++) {
+					if ( i in t ) {
+						var val = t[i]; // in case fun mutates this
+						if (fun.call(thisp, val, i, t))
+							res.push(val);
+					}
+				}
+
+				return res;
+			};
+		}
+	}
+
+	function addKeysFallbackForIE8(){
+		if ( !Object.keys ) {
+		  Object.keys = function(obj) {
+		    var keys = [];
+
+		    for (var i in obj) {
+		      if (obj.hasOwnProperty(i)) {
+		        keys.push(i);
+		      }
+		    }
+
+		    return keys;
+		  };
 		}
 	}
 
@@ -2213,6 +2320,8 @@ function frmFrontFormJS(){
 			// Add fallbacks for the beloved IE8
 			addIndexOfFallbackForIE8();
 			addTrimFallbackForIE8();
+			addFilterFallbackForIE8();
+			addKeysFallbackForIE8();
 		},
 
 		submitForm: function(e){
