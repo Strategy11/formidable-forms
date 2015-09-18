@@ -122,7 +122,7 @@ class FrmEntryValidate {
     }
 
 	public static function validate_recaptcha( &$errors, $field, $args ) {
-        if ( $field->type != 'captcha' || FrmAppHelper::is_admin() ) {
+        if ( $field->type != 'captcha' || FrmAppHelper::is_admin() || apply_filters( 'frm_is_field_hidden', false, $field, stripslashes_deep( $_POST ) ) ) {
             return;
         }
 
