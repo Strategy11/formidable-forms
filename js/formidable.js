@@ -2141,8 +2141,16 @@ function frmFrontFormJS(){
 
 	// Check if a given field is repeating
 	function isRepeatingFieldById( fieldId ){
+		// Check field div first
+		var fieldDiv = document.getElementById( 'frm_field_' + fieldId + '_container' );
+		if ( typeof fieldDiv != 'undefined' && fieldDiv != null ) {
+			return false;
+		}
+
+		// Check input next so type=hidden fields don't get marked as repeating
 		var fieldInput = jQuery( 'input[name^="item_meta[' + fieldId + ']"],select[name^="item_meta[' + fieldId + ']"], textarea[name^="item_meta[' + fieldId + ']"]' );
 		if ( fieldInput.length < 1 ) {
+			// TODO: Change this so Section (on diff page), HTML (on diff page), reCaptcha (on diff page), and page break fields don't return true
 			return true;
 		} else {
 			return false;
@@ -2207,6 +2215,22 @@ function frmFrontFormJS(){
 
 				return res;
 			};
+		}
+	}
+
+	function addKeysFallbackForIE8(){
+		if ( !Object.keys ) {
+		  Object.keys = function(obj) {
+		    var keys = [];
+
+		    for (var i in obj) {
+		      if (obj.hasOwnProperty(i)) {
+		        keys.push(i);
+		      }
+		    }
+
+		    return keys;
+		  };
 		}
 	}
 
@@ -2296,7 +2320,8 @@ function frmFrontFormJS(){
 			// Add fallbacks for the beloved IE8
 			addIndexOfFallbackForIE8();
 			addTrimFallbackForIE8();
-			addFilterFallbackForIE8()
+			addFilterFallbackForIE8();
+			addKeysFallbackForIE8();
 		},
 
 		submitForm: function(e){
