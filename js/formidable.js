@@ -153,7 +153,7 @@ function frmFrontFormJS(){
 		var field_id = nameParts[0];
 		var isRepeating = false;
 
-		if ( nameParts.length === 1 ) {
+		if ( nameParts.length === 1 || nameParts[1] == '[form' ) {
 			return field_id;
 		}
 
@@ -389,7 +389,7 @@ function frmFrontFormJS(){
 			fieldValue = jQuery('input[name="'+ f.inputName +'"]:checked').val();
 		} else if ( f.Type === 'select' || f.Type === 'data-select' ) {
 			// If dropdown field on the current page
-			fieldValue = jQuery('select[name="'+ f.inputName +'"]').val();
+			fieldValue = jQuery('select[name^="'+ f.inputName +'"]').val();
 		} else {
 			// If text field on the current page
 			fieldValue = jQuery('input[name="'+ f.inputName +'"]').val();
