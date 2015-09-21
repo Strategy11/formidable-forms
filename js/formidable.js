@@ -565,7 +565,7 @@ function frmFrontFormJS(){
 
 			var inputs = getInputsInContainer( container );
 			if ( inputs.length ){
-				clearValueForInputs( inputs )
+				clearValueForInputs( inputs );
 			}
 		}
 	}
@@ -630,7 +630,7 @@ function frmFrontFormJS(){
 			// Set field value (don't show it)
 			var fieldName = getFieldName( f.HideField, f.hideContainerID );
 			var inputs = jQuery( 'input[name^="' + fieldName + '"]' );
-			setValForInputs( inputs )
+			setValForInputs( inputs );
 		}
 		removeFromHideFields( f.hideContainerID );
 	}
@@ -638,7 +638,7 @@ function frmFrontFormJS(){
 	function showFieldAndSetValue( container, f ) {
 		var inputs = getInputsInContainer( container );
 
-		setValForInputs( inputs )
+		setValForInputs( inputs );
 
 		container.show();
 	}
@@ -2143,7 +2143,7 @@ function frmFrontFormJS(){
 	function isRepeatingFieldById( fieldId ){
 		// Check field div first
 		var fieldDiv = document.getElementById( 'frm_field_' + fieldId + '_container' );
-		if ( typeof fieldDiv != 'undefined' && fieldDiv != null ) {
+		if ( typeof fieldDiv !== 'undefined' && fieldDiv !== null ) {
 			return false;
 		}
 
@@ -2191,7 +2191,6 @@ function frmFrontFormJS(){
 		if ( !Array.prototype.filter ) {
 
 			Array.prototype.filter = function(fun /*, thisp */) {
-				"use strict";
 
 				if ( this === void 0 || this === null ) {
 					throw new TypeError();
@@ -2199,7 +2198,7 @@ function frmFrontFormJS(){
 
 				var t = Object( this );
 				var len = t.length >>> 0;
-				if ( typeof fun !== "function" ) {
+				if ( typeof fun !== 'function' ) {
 					throw new TypeError();
 				}
 
