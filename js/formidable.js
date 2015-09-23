@@ -1909,6 +1909,11 @@ function frmFrontFormJS(){
                 // hide fields with conditional logic
                 jQuery(html).find('input, select, textarea').each(function(){
 					if ( this.type != 'file' ) {
+
+						// Readonly dropdown fields won't have a name attribute
+						if ( this.name == '' ) {
+							return true;
+						}
 						fieldID = this.name.replace('item_meta[', '').split(']')[2].replace('[', '');
 						if ( jQuery.inArray(fieldID, checked ) == -1 ) {
 							fieldObject = jQuery( '#' + this.id );

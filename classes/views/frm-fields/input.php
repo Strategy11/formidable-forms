@@ -107,7 +107,7 @@ do_action('frm_field_input_html', $field);
 <?php
             }
         } else { ?>
-<input type="hidden" value="<?php echo esc_attr( $checked_values ) ?>" id="<?php echo esc_attr( $html_id ) ?>-<?php echo esc_attr( sanitize_title( $checked_value ) ) ?>" name="<?php echo esc_attr( $field_name ) ?>[]" />
+<input type="hidden" value="" name="<?php echo esc_attr( $field_name ) ?>[]" />
 <?php
         }
     }
