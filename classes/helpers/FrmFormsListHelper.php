@@ -232,7 +232,8 @@ class FrmFormsListHelper extends FrmListHelper {
 			}
 
 			$class = 'class="' . esc_attr( $class ) . '"';
-			$attributes = $class . $style;
+			$data_colname = ' data-colname="' . esc_attr( $column_display_name ) . '"';
+			$attributes = $class . $style . $data_colname;
 
 			switch ( $column_name ) {
 				case 'cb':
