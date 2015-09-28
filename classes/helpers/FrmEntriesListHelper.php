@@ -90,8 +90,16 @@ class FrmEntriesListHelper extends FrmListHelper {
 		list( $columns, $hidden ) = $this->get_column_info();
         $action_col = false;
 
+		// Use this to add a specific class to Entry ID column
+		$check_for_id_col = $item->form_id . '_id';
+
 		foreach ( $columns as $column_name => $column_display_name ) {
 			$class = $column_name .' column-'. $column_name;
+
+			// Add specific class to ID column
+			if ( $check_for_id_col == $column_name ) {
+				$class .= ' frm_col_id';
+			}
 
 			if ( in_array( $column_name, $hidden ) ) {
 				$class .= ' frm_hidden';

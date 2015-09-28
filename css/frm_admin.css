@@ -2142,6 +2142,45 @@ Responsive Design
         display:table-cell;
         width:auto !important;
     }
+
+	.wp-list-table.toplevel_page_formidable .column-entries,
+	.wp-list-table.toplevel_page_formidable .column-form_key,
+	.wp-list-table.toplevel_page_formidable .column-shortcode,
+	.wp-list-table.toplevel_page_formidable .column-created_at{
+	    display:none !important;
+	}
+
+	.wp-list-table.toplevel_page_formidable td.column-entries,
+	.wp-list-table.toplevel_page_formidable td.column-form_key,
+	.wp-list-table.toplevel_page_formidable td.column-shortcode,
+	.wp-list-table.toplevel_page_formidable td.column-created_at{
+	    padding: 3px 8px 3px 35%;
+		text-align:left;
+	}
+
+	.wp-list-table.toplevel_page_formidable td.column-title:before,
+	.wp-list-table.toplevel_page_formidable td.column-id:before{
+		display:none !important;
+	}
+
+	.wp-list-table.toplevel_page_formidable td.column-title,
+	.wp-list-table.toplevel_page_formidable td.column-id{
+		display:table-cell !important;
+	}
+
+	.wp-list-table.formidable_page_formidable-entries thead th{
+		display:none;
+	}
+
+	.wp-list-table.formidable_page_formidable-entries thead td#cb + th{
+		display:table-cell;
+		width:100%;
+	}
+
+	.wp-list-table.formidable_page_formidable-entries tbody td.frm_col_id .toggle-row{
+		display:block;
+	}
+
 }
 @media (min-width:768px){
     .navbar-right .frm-dropdown-menu{right:0;left:auto;}

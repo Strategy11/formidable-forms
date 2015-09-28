@@ -64,10 +64,18 @@ do_action('frm_field_input_html', $field);
 		echo FrmFieldsHelper::dropdown_categories( array( 'name' => $field_name, 'field' => $field ) );
 	} else {
 		if ( FrmField::is_read_only( $field ) && ! FrmAppHelper::is_admin() ) {
-            $read_only = true; ?>
-<input type="hidden" value="<?php echo esc_attr($field['value']) ?>" name="<?php echo esc_attr( $field_name ) ?>" id="<?php echo esc_attr( $html_id ) ?>" />
-<select disabled="disabled" <?php do_action('frm_field_input_html', $field) ?>>
-<?php	} else { ?>
+			$read_only = true;
+
+			if ( is_array( $field['value'] ) ) {
+				foreach ( $field['value'] as $selected_value ) { ?>
+					<input type="hidden" value="<?php echo esc_attr( $selected_value ) ?>" name="<?php echo esc_attr( $field_name ) ?>[]" /> <?php
+				}
+			} else { ?>
+				<input type="hidden" value="<?php echo esc_attr($field['value']) ?>" name="<?php echo esc_attr( $field_name ) ?>" id="<?php echo esc_attr( $html_id ) ?>" /> <?php
+			} ?>
+				<select disabled="disabled" <?php do_action('frm_field_input_html', $field) ?>> <?php
+
+		} else { ?>
 <select name="<?php echo esc_attr( $field_name ) ?>" id="<?php echo esc_attr( $html_id ) ?>" <?php do_action('frm_field_input_html', $field) ?>>
 <?php   }
 
@@ -107,7 +115,7 @@ do_action('frm_field_input_html', $field);
 <?php
             }
         } else { ?>
-<input type="hidden" value="<?php echo esc_attr( $checked_values ) ?>" id="<?php echo esc_attr( $html_id ) ?>-<?php echo esc_attr( sanitize_title( $checked_value ) ) ?>" name="<?php echo esc_attr( $field_name ) ?>[]" />
+<input type="hidden" value="" name="<?php echo esc_attr( $field_name ) ?>[]" />
 <?php
         }
     }
