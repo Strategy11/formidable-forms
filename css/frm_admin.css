@@ -2168,17 +2168,9 @@ Responsive Design
 		display:table-cell !important;
 	}
 
-	.wp-list-table.formidable_page_formidable-entries thead th{
-		display:none;
-	}
-
-	.wp-list-table.formidable_page_formidable-entries thead td#cb + th{
-		display:table-cell;
-		width:100%;
-	}
-
-	.wp-list-table.formidable_page_formidable-entries tbody td.frm_col_id .toggle-row{
-		display:block;
+	.wp-list-table.formidable_page_formidable-entries th.frm_hidden,
+	.wp-list-table.formidable_page_formidable-entries td.frm_hidden{
+		display:none !important;
 	}
 
 }

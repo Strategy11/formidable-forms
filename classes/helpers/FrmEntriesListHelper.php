@@ -73,6 +73,29 @@ class FrmEntriesListHelper extends FrmListHelper {
 		// Searching is a pro feature
 	}
 
+	/**
+	* Gets the name of the primary column in the Entries screen
+	*
+	* @since 2.0.14
+	*
+	* @return string $primary_column
+	*/
+	protected function get_primary_column_name() {
+		$columns = get_column_headers( $this->screen );
+		$hidden = get_hidden_columns( $this->screen );
+
+		$primary_column = false;
+
+		foreach ( $columns as $column_key => $column_display_name ) {
+			if ( 'cb' != $column_key && ! in_array( $column_key, $hidden ) ) {
+				$primary_column = $column_key;
+				break;
+			}
+		}
+
+		return $primary_column;
+	}
+
 	public function single_row( $item, $style = '' ) {
 		// Set up the hover actions for this user
 		$actions = array();
@@ -87,18 +110,14 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 		$r = "<tr id='item-action-{$item->id}'$style>";
 
-		list( $columns, $hidden ) = $this->get_column_info();
+		list( $columns, $hidden, $sortable, $primary ) = $this->get_column_info();
         $action_col = false;
-
-		// Use this to add a specific class to Entry ID column
-		$check_for_id_col = $item->form_id . '_id';
 
 		foreach ( $columns as $column_name => $column_display_name ) {
 			$class = $column_name .' column-'. $column_name;
 
-			// Add specific class to ID column
-			if ( $check_for_id_col == $column_name ) {
-				$class .= ' frm_col_id';
+			if ( $column_name === $primary ) {
+				$class .= ' column-primary';
 			}
 
 			if ( in_array( $column_name, $hidden ) ) {
@@ -108,7 +127,8 @@ class FrmEntriesListHelper extends FrmListHelper {
             }
 
 			$attributes = 'class="' . esc_attr( $class ) . '"';
-            unset($class);
+			unset($class);
+			$attributes .= ' data-colname="' . $column_display_name  . '"';
 
             $col_name = preg_replace('/^('. $this->params['form'] .'_)/', '', $column_name);
 			$this->column_name = $col_name;
