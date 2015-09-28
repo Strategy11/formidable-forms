@@ -1971,7 +1971,7 @@ function frmFrontFormJS(){
 		var prefix = $edit.data('prefix');
 		var post_id = $edit.data('pageid');
 		var form_id = $edit.data('formid');
-		var label = $edit.data('edit');
+		var cancel = $edit.data('cancel');
 		var fields = $edit.data('fields');
 		var exclude_fields = $edit.data('excludefields');
 
@@ -1988,7 +1988,7 @@ function frmFrontFormJS(){
 			success:function(html){
 				$cont.children('.frm-loading-img').replaceWith(html);
 				$edit.removeClass('frm_inplace_edit').addClass('frm_cancel_edit');
-				$edit.html(label);
+				$edit.html(cancel);
 			}
 		});
 		return false;
