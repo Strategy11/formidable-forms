@@ -3,7 +3,7 @@ if ( ! defined('ABSPATH') ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-class FrmListHelper extends FrmListTable {
+class FrmListHelper extends WP_List_Table {
     var $params;
 
 	public function __construct( $args ) {

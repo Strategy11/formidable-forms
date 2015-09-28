@@ -84,7 +84,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 		$columns = get_column_headers( $this->screen );
 		$hidden = get_hidden_columns( $this->screen );
 
-		$primary_column = false;
+		$primary_column = '';
 
 		foreach ( $columns as $column_key => $column_display_name ) {
 			if ( 'cb' != $column_key && ! in_array( $column_key, $hidden ) ) {
@@ -110,7 +110,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 		$r = "<tr id='item-action-{$item->id}'$style>";
 
-		list( $columns, $hidden, $sortable, $primary ) = $this->get_column_info();
+		list( $columns, $hidden, , $primary ) = $this->get_column_info();
         $action_col = false;
 
 		foreach ( $columns as $column_name => $column_display_name ) {
