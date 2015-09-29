@@ -346,7 +346,7 @@ class FrmEntriesHelper {
             // Save original value
             $args['temp_value'] = $value;
             $args['other'] = true;
-            $other_vals = $_POST['item_meta']['other'][ $field->id ];
+            $other_vals = stripslashes_deep( $_POST['item_meta']['other'][ $field->id ] );
 
             // Set the validation value now
             self::set_other_validation_val( $value, $other_vals, $field, $args );
