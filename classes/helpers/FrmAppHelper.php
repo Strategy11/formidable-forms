@@ -10,7 +10,7 @@ class FrmAppHelper {
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '2.0.14b3';
+	public static $plug_version = '2.0.14b4';
 
     /**
      * @since 1.07.02
@@ -542,8 +542,6 @@ class FrmAppHelper {
     }
 
 	public static function wp_roles_dropdown( $field_name, $capability, $multiple = 'single' ) {
-        $capability = (array) self::get_param($field_name, $capability, 'post');
-
     ?>
         <select name="<?php echo esc_attr($field_name); ?>" id="<?php echo esc_attr($field_name); ?>" <?php
             echo ( 'multiple' == $multiple ) ? 'multiple="multiple"' : '';
