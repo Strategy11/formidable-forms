@@ -267,6 +267,7 @@ function frmFrontFormJS(){
 					c.HideField = rule.Setting.FieldName;
 					c.MatchType = rule.MatchType;
 					c.Show = rule.Show;
+					c.Form = rule.Form;
                     this_opts.push(c);
                 }
             }
@@ -488,7 +489,7 @@ function frmFrontFormJS(){
 			hide_later.push({
 				'result':show_fields[f.hideContainerID][i], 'show':f.Show,
 				'match':f.MatchType, 'FieldName':f.FieldName, 'HideField':f.HideField,
-				'hideContainerID':f.hideContainerID
+				'hideContainerID':f.hideContainerID, 'Form':f.Form
 			});
 			return;
 		}
@@ -554,7 +555,7 @@ function frmFrontFormJS(){
 			var inputs = jQuery( 'input[name^="' + fieldName + '"]' );
 			clearValueForInputs( inputs );
 		}
-		addToHideFields( f.hideContainerID );
+		addToHideFields( f.hideContainerID, f.Form );
 	}
 
 	function hideFieldAndClearValue( container, f ) {
@@ -589,9 +590,9 @@ function frmFrontFormJS(){
 		});
 	}
 
-	function addToHideFields( htmlFieldId ) {
+	function addToHideFields( htmlFieldId, formId ) {
 		// Get all currently hidden fields
-		var frmHideFieldsInput = document.getElementById('frm_hide_fields');
+		var frmHideFieldsInput = document.getElementById('frm_hide_fields_' + formId);
 		var hiddenFields = frmHideFieldsInput.value;
 		if ( hiddenFields ) {
 			hiddenFields = JSON.parse( hiddenFields );
@@ -632,7 +633,7 @@ function frmFrontFormJS(){
 			var inputs = jQuery( 'input[name^="' + fieldName + '"]' );
 			setValForInputs( inputs );
 		}
-		removeFromHideFields( f.hideContainerID );
+		removeFromHideFields( f.hideContainerID, f.Form );
 	}
 
 	function showFieldAndSetValue( container, f ) {
@@ -681,9 +682,9 @@ function frmFrontFormJS(){
 		}
 	}
 
-	function removeFromHideFields( htmlFieldId ) {
+	function removeFromHideFields( htmlFieldId, formId ) {
 		// Get all currently hidden fields
-		var frmHideFieldsInput = document.getElementById('frm_hide_fields');
+		var frmHideFieldsInput = document.getElementById('frm_hide_fields_' + formId);
 		var hiddenFields = frmHideFieldsInput.value;
 		if ( hiddenFields ) {
 			hiddenFields = JSON.parse( hiddenFields );
@@ -957,7 +958,7 @@ function frmFrontFormJS(){
 		for ( var i = 0, l = len; i < l; i++ ) {
 
 			// Stop calculation if total field is conditionally hidden
-			if ( fieldIsConditionallyHidden( all_calcs.calc[ keys[i] ].field_id, triggerField.attr('name') ) ) {
+			if ( fieldIsConditionallyHidden( all_calcs.calc[ keys[i] ], triggerField.attr('name') ) ) {
 				continue;
 			}
 
@@ -968,8 +969,10 @@ function frmFrontFormJS(){
 	/**
 	* Check if field (or its HTML parent) is hidden with conditional logic
 	*/
-	function fieldIsConditionallyHidden( field_id, triggerFieldName ) {
-		var hiddenFields = document.getElementById( 'frm_hide_fields').value;
+	function fieldIsConditionallyHidden( calcDetails, triggerFieldName ) {
+		var field_id = calcDetails.field_id;
+		var form_id = calcDetails.form_id;
+		var hiddenFields = document.getElementById( 'frm_hide_fields_' + form_id).value;
 		if ( hiddenFields ) {
 			hiddenFields = JSON.parse( hiddenFields );
 		} else {
@@ -990,7 +993,7 @@ function frmFrontFormJS(){
 		}
 
 		// If field is inside of section/embedded form which is hidden with conditional logic
-		var helpers = getHelpers();
+		var helpers = getHelpers( form_id );
 		if ( helpers && helpers[ field_id ] !== null && hiddenFields.indexOf( 'frm_field_' + helpers[ field_id ] + '_container' ) > -1 ) {
 			return true;
 		}
@@ -2103,8 +2106,8 @@ function frmFrontFormJS(){
 		return fieldName;
 	}
 
-	function getHelpers() {
-		var helpers = document.getElementById( 'frm_helpers' ).value;
+	function getHelpers( form_id ) {
+		var helpers = document.getElementById( 'frm_helpers_' + form_id ).value;
 		if ( helpers ) {
 			helpers = JSON.parse( helpers );
 		} else {
