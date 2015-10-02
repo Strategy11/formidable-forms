@@ -183,7 +183,7 @@ class EDD_SL_Plugin_Updater {
                     esc_html( $version_info->name ),
                     '<a target="_blank" class="thickbox" href="' . esc_url( $changelog_link ) . '">',
                     esc_html( $version_info->new_version ),
-					'</a>',
+					'</a>'
                 );
             } else {
                 printf(
@@ -193,7 +193,7 @@ class EDD_SL_Plugin_Updater {
                     esc_html( $version_info->new_version ),
 					'</a>',
                     '<a href="' . esc_url( wp_nonce_url( self_admin_url( 'update.php?action=upgrade-plugin&plugin=' ) . $this->name, 'upgrade-plugin_' . $this->name ) ) .'">',
-					'</a>',
+					'</a>'
                 );
             }
 
