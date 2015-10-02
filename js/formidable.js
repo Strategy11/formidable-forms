@@ -267,7 +267,7 @@ function frmFrontFormJS(){
 					c.HideField = rule.Setting.FieldName;
 					c.MatchType = rule.MatchType;
 					c.Show = rule.Show;
-					c.Form = rule.Form;
+					c.FormId = rule.FormId;
                     this_opts.push(c);
                 }
             }
@@ -489,7 +489,7 @@ function frmFrontFormJS(){
 			hide_later.push({
 				'result':show_fields[f.hideContainerID][i], 'show':f.Show,
 				'match':f.MatchType, 'FieldName':f.FieldName, 'HideField':f.HideField,
-				'hideContainerID':f.hideContainerID, 'Form':f.Form
+				'hideContainerID':f.hideContainerID, 'FormId':f.FormId
 			});
 			return;
 		}
@@ -555,7 +555,7 @@ function frmFrontFormJS(){
 			var inputs = jQuery( 'input[name^="' + fieldName + '"]' );
 			clearValueForInputs( inputs );
 		}
-		addToHideFields( f.hideContainerID, f.Form );
+		addToHideFields( f.hideContainerID, f.FormId );
 	}
 
 	function hideFieldAndClearValue( container, f ) {
@@ -633,7 +633,7 @@ function frmFrontFormJS(){
 			var inputs = jQuery( 'input[name^="' + fieldName + '"]' );
 			setValForInputs( inputs );
 		}
-		removeFromHideFields( f.hideContainerID, f.Form );
+		removeFromHideFields( f.hideContainerID, f.FormId );
 	}
 
 	function showFieldAndSetValue( container, f ) {
