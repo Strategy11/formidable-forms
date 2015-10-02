@@ -1008,7 +1008,7 @@ class FrmAppHelper {
             'field_key'     => $field->field_key,
             'field_order'   => $field->field_order,
             'form_id'       => $field->form_id,
-			'parent_form_id'	=> $args['parent_form_id'],
+			'parent_form_id' => $args['parent_form_id'],
         );
 
         $args['field_type'] = $field_type;
