@@ -3,8 +3,8 @@ Contributors: sswells, srwells, jamie.wahlin
 Donate link: http://formidablepro.com/donate
 Tags: admin, AJAX, captcha, contact, contact form, database, email, feedback, form, forms, javascript, jquery, page, plugin, poll, Post, spam, survey, template, widget, wpmu, form builder
 Requires at least: 3.6
-Tested up to: 4.3
-Stable tag: 2.0.12
+Tested up to: 4.3.1
+Stable tag: 2.0.14
 
 Beautiful forms in 60 seconds. The WordPress form builder that enables you to create forms with a simple drag-and-drop interface and in-place editing.
 
@@ -89,6 +89,23 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 [See more FAQs](http://formidablepro.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 2.0.14 =
+* Stripslashes in Other field
+* Prevent collapse icon from being inserted inside of section
+* Make sure roles dropdowns show correctly after clicking update (in Global Settings)
+* Make form listing and entry listing pages responsive
+* Don't truncate form name in excerpt mode
+* Fix validating embedded forms
+* Fix filtering by repeating fields in Dynamic Views > Detail Page
+* Fix dependent Dynamic autocomplete fields with default values
+* Fix logic on embedded forms and multiselect dd
+* Some readonly field fixes
+* Read-only improvements for multiselect dropdown
+* Improve JavaScript for multiple forms on a page
+* Use the minified css for jQuery UI styling
+* Allow view filtering with time fields using NOW
+* Allow times to be formatted with [25 format='g:i A']
+
 = 2.0.13 =
 * Allow recaptcha to be conditionally hidden on previous pages of form
 * Fix error with embedded form on a conditionally hidden page
