@@ -973,7 +973,7 @@ class FrmFormsController {
         		'title' => '<span class="ab-icon"></span><span class="ab-label">' . __( 'Edit Forms', 'formidable' ) . '</span>',
         		'href'  => admin_url( 'admin.php?page=formidable&frm_action=edit&id='. current( array_keys( $actions ) ) ),
         		'meta'  => array(
-        			'title' => __( 'Edit Forms', 'formidable' ),
+					'title' => __( 'Edit Forms', 'formidable' ),
         		),
         	) );
 

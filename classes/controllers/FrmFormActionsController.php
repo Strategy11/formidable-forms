@@ -15,8 +15,8 @@ class FrmFormActionsController {
             'show_in_menu' => true,
             'capability_type' => 'page',
             'supports' => array(
-                'title', 'editor', 'excerpt', 'custom-fields',
-                'page-attributes',
+				'title', 'editor', 'excerpt', 'custom-fields',
+				'page-attributes',
             ),
             'has_archive' => false,
         ) );

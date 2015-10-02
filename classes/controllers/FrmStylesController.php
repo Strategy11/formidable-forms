@@ -26,15 +26,15 @@ class FrmStylesController {
 				'read_private_posts' => 'read_private_posts',
 			),
             'supports' => array(
-                'title',
+				'title',
             ),
             'has_archive' => false,
             'labels' => array(
-                'name' => __( 'Styles', 'formidable' ),
-                'singular_name' => __( 'Style', 'formidable' ),
-                'menu_name' => __( 'Style', 'formidable' ),
-                'edit' => __( 'Edit' ),
-                'add_new_item' => __( 'Create a New Style', 'formidable' ),
+				'name' => __( 'Styles', 'formidable' ),
+				'singular_name' => __( 'Style', 'formidable' ),
+				'menu_name' => __( 'Style', 'formidable' ),
+				'edit' => __( 'Edit' ),
+				'add_new_item' => __( 'Create a New Style', 'formidable' ),
 				'edit_item'    => __( 'Edit Style', 'formidable' ),
 			),
         ) );
