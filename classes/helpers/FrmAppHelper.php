@@ -934,7 +934,7 @@ class FrmAppHelper {
      * @param string $table
      * @return bool|array
      */
-    public static function setup_edit_vars( $record, $table, $fields = '', $default = false, $post_values = array() ) {
+    public static function setup_edit_vars( $record, $table, $fields = '', $default = false, $post_values = array(), $args = array() ) {
         if ( ! $record ) {
             return false;
         }
@@ -962,7 +962,8 @@ class FrmAppHelper {
             if ( ! $is_form_builder ) {
                 $field->default_value = apply_filters('frm_get_default_value', $field->default_value, $field, true );
             }
-            self::fill_field_defaults($field, $record, $values, compact('default', 'post_values', 'frm_settings'));
+			$parent_form_id = isset( $args['parent_form_id'] ) ? $args['parent_form_id'] : $field->form_id;
+			self::fill_field_defaults($field, $record, $values, compact('default', 'post_values', 'frm_settings', 'parent_form_id' ) );
         }
 
         self::fill_form_opts($record, $table, $post_values, $values);
@@ -1007,6 +1008,7 @@ class FrmAppHelper {
             'field_key'     => $field->field_key,
             'field_order'   => $field->field_order,
             'form_id'       => $field->form_id,
+			'parent_form_id'=> $args['parent_form_id'],
         );
 
         $args['field_type'] = $field_type;

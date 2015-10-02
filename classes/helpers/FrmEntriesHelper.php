@@ -5,7 +5,7 @@ if ( ! defined('ABSPATH') ) {
 
 class FrmEntriesHelper {
 
-    public static function setup_new_vars( $fields, $form = '', $reset = false ) {
+    public static function setup_new_vars( $fields, $form = '', $reset = false, $args = array() ) {
         global $frm_vars;
         $values = array();
 		foreach ( array( 'name' => '', 'description' => '', 'item_key' => '' ) as $var => $default ) {
@@ -32,6 +32,7 @@ class FrmEntriesHelper {
                 'field_key' => $field->field_key,
                 'field_order' => $field->field_order,
                 'form_id' => $field->form_id,
+				'parent_form_id' => isset( $args['parent_form_id'] ) ? $args['parent_form_id'] : $field->form_id,
             );
 
             $opt_defaults = FrmFieldsHelper::get_default_field_opts($field_array['type'], $field, true);
