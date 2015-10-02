@@ -48,7 +48,7 @@ class FrmStylesHelper {
             if ( file_exists($uploads['basedir'] . $file_path) ) {
                 $css_file = $uploads['baseurl'] . $file_path;
             } else {
-                $css_file = FrmAppHelper::jquery_ui_base_url() .'/themes/'. $theme_css . '/jquery-ui.css';
+                $css_file = FrmAppHelper::jquery_ui_base_url() .'/themes/'. $theme_css . '/jquery-ui.min.css';
             }
         }
 

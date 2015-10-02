@@ -219,6 +219,9 @@ class FrmEntriesListHelper extends FrmListHelper {
 		}
 
 		$field = FrmField::getOne( $col_name );
+		if ( ! $field ) {
+			return;
+		}
 
 		$atts = array(
 			'type' => $field->type, 'truncate' => true,
