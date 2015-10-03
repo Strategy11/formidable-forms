@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class FrmAddon {
-	public $store_url = 'http://formidablepros.com';
+	public $store_url = 'http://formidablepro.com';
 	public $plugin_file;
 	public $plugin_name;
 	public $plugin_slug;
