@@ -486,11 +486,21 @@ function frmFrontFormJS(){
 
 	function hideFieldNow(i, f, rec){
 		if ( f.MatchType === 'all' || show_fields[f.hideContainerID][i] === false ) {
-			hide_later.push({
-				'result':show_fields[f.hideContainerID][i], 'show':f.Show,
-				'match':f.MatchType, 'FieldName':f.FieldName, 'HideField':f.HideField,
-				'hideContainerID':f.hideContainerID, 'FormId':f.FormId
-			});
+
+			if ( !( f.hideContainerID in hide_later ) ) {
+
+				hide_later[ f.hideContainerID ] = {
+					'show':f.Show,
+					'match':f.MatchType,
+					'FieldName':f.FieldName,
+					'HideField':f.HideField,
+					'hideContainerID':f.hideContainerID,
+					'FormId':f.FormId,
+					'DynamicInfoIndices':[],
+				};
+			}
+			maybeAddDynamicInfoIndex( f.hideContainerID, i );
+
 			return;
 		}
 
@@ -514,12 +524,27 @@ function frmFrontFormJS(){
 		}
 	}
 
+	function maybeAddDynamicInfoIndex( hideContainerID, i ) {
+		var dynamicInfoIndex = false;
+
+		if ( show_fields[ hideContainerID ][ i ] !== false && show_fields[ hideContainerID ][ i ] !== true ) {
+			dynamicInfoIndex = i;
+		}
+
+		if ( dynamicInfoIndex !== false ) {
+			hide_later[ hideContainerID ].DynamicInfoIndices.push( dynamicInfoIndex );
+		}
+	}
+
 	function hideFieldLater(rec){
-		jQuery.each(hide_later, function(hkey,hvalue){
-			delete hide_later[hkey];
-            if ( typeof hvalue === 'undefined' || typeof hvalue.result === 'undefined' ) {
-                return;
-            }
+		var hvalue;
+		for ( var key in hide_later) {
+			hvalue = hide_later[key];
+			delete hide_later[key];
+
+			if ( typeof hvalue === 'undefined' ) {
+				return;
+			}
 
 			var container = jQuery('#' + hvalue.hideContainerID);
 			var hideField = hvalue.show;
@@ -534,14 +559,11 @@ function frmFrontFormJS(){
 
 			if ( hideField === 'show' ) {
 				routeToShowFieldAndSetVal( container, hvalue );
-
-				if ( typeof hvalue.result !== false && typeof hvalue.result !== true ) {
-					showField( hvalue.result, hvalue.FieldName, rec );
-				}
+				maybeGetDynamicFieldData( hvalue, rec );
 			} else {
 				routeToHideFieldAndClearVal( container, hvalue );
 			}
-		});
+		}
 	}
 
 	/* Hide Field Functions */
@@ -626,7 +648,7 @@ function frmFrontFormJS(){
 	function routeToShowFieldAndSetVal( hideFieldContainer, f ) {
 		if ( hideFieldContainer.length ) {
 			// Field is not type=hidden
-			showFieldAndSetValue( hideFieldContainer, f );
+			showFieldAndSetValue( hideFieldContainer );
 		} else {
 			// Set field value (don't show it)
 			var fieldName = getFieldName( f.HideField, f.hideContainerID );
@@ -636,7 +658,7 @@ function frmFrontFormJS(){
 		removeFromHideFields( f.hideContainerID, f.FormId );
 	}
 
-	function showFieldAndSetValue( container, f ) {
+	function showFieldAndSetValue( container ) {
 		var inputs = getInputsInContainer( container );
 
 		setValForInputs( inputs );
@@ -698,6 +720,17 @@ function frmFrontFormJS(){
 			hiddenFields.splice(item_index, 1);
 			hiddenFields = JSON.stringify( hiddenFields );
 			frmHideFieldsInput.value = hiddenFields;
+		}
+	}
+
+	// Check if dynamic data needs to be retrieved
+	function maybeGetDynamicFieldData( hvalue, rec ) {
+		if ( hvalue.DynamicInfoIndices.length > 0 ) {
+			var dynamicIndex;
+			for ( var t = 0; t < hvalue.DynamicInfoIndices.length; t++ ) {
+				dynamicIndex = hvalue.DynamicInfoIndices[ t ];
+				showField( show_fields[ hvalue.hideContainerID ][ dynamicIndex ], hvalue.FieldName, rec );
+			}
 		}
 	}
 
@@ -1118,7 +1151,11 @@ function frmFrontFormJS(){
 			var fieldKeyParts = field_key.split('-');
 			var newFieldKey = '';
 			for ( var i=0; i<fieldKeyParts.length-1; i++ ){
-				newFieldKey = newFieldKey + fieldKeyParts[i];
+				if ( newFieldKey == '' ) {
+					newFieldKey = fieldKeyParts[i];
+				} else {
+					newFieldKey = newFieldKey + '-' + fieldKeyParts[i];
+				}
 			}
 			field_key = newFieldKey;
 		}
@@ -1129,7 +1166,11 @@ function frmFrontFormJS(){
 	function maybeGetTriggerField( fieldInput ) {
 		var triggerField = null;
 		if ( isRepeatingFieldByName( fieldInput.name ) ) {
-			triggerField = jQuery( fieldInput ).closest('.frm_form_field');
+			if ( fieldInput.type != 'hidden' ) {
+				triggerField = jQuery( fieldInput ).closest('.frm_form_field');
+			} else {
+				triggerField = jQuery( fieldInput );
+			}
 		}
 
 		return triggerField;
@@ -1919,6 +1960,9 @@ function frmFrontFormJS(){
 						}
 						fieldID = this.name.replace('item_meta[', '').split(']')[2].replace('[', '');
 						if ( jQuery.inArray(fieldID, checked ) == -1 ) {
+							if ( this.id == false ) {
+								return;
+							}
 							fieldObject = jQuery( '#' + this.id );
 							checked.push(fieldID);
 							checkDependentField(fieldID, null, fieldObject, reset);
