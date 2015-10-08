@@ -114,6 +114,7 @@ class FrmHooksController {
 
         add_filter( 'set-screen-option', 'FrmFormsController::save_per_page', 10, 3 );
         add_action( 'admin_footer', 'FrmFormsController::insert_form_popup' );
+		add_action( 'media_buttons', 'FrmFormsController::print_form_button' );
         add_filter( 'media_buttons_context', 'FrmFormsController::insert_form_button' );
 
         // Forms Model
