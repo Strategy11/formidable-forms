@@ -5666,7 +5666,7 @@ msgstr "última atualização"
 #, php-format
 #@ formidable
 msgid "%s is invalid"
-msgstr "% é inválido"
+msgstr "%s é inválido"
 
 #: classes/views/frm-settings/form.php:88
 #@ formidable
