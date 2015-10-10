@@ -194,7 +194,11 @@ class FrmUnitTest extends WP_UnitTestCase {
 		if ( class_exists( 'FrmUpdatesController' ) ) {
 			global $frm_update;
 			$frm_update  = new FrmUpdatesController();
-			$frm_vars['pro_is_authorized'] = $frm_update->pro_is_authorized();
+		}
+
+		if ( class_exists( 'FrmProEddController' ) ) {
+			$frmedd_update  = new FrmProEddController();
+			$frm_vars['pro_is_authorized'] = $frmedd_update->pro_is_authorized();
 		}
 	}
 
