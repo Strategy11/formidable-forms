@@ -64,9 +64,9 @@
 								?>><?php _e( 'Show Page Content', 'formidable' ) ?></option>
                             <?php } else { ?>
                             <option value="redirect" disabled="disabled" <?php selected($values['success_action'], 'redirect');
-                            ?>><?php _e( 'Redirect to URL', 'formidable' ); echo ' '. __( '(Pro feature)', 'formidable' ); ?></option>
+                            ?>><?php _e( 'Redirect to URL', 'formidable' ); echo ' '. __( '(Premium feature)', 'formidable' ); ?></option>
                             <option value="page" disabled="disabled" <?php selected($values['success_action'], 'page');
-                            ?>><?php _e( 'Show Page Content', 'formidable' ); echo ' '. __( '(Pro feature)', 'formidable' ); ?></option>
+                            ?>><?php _e( 'Show Page Content', 'formidable' ); echo ' '. __( '(Premium feature)', 'formidable' ); ?></option>
                             <?php } ?>
                         </select>
                     </td>
