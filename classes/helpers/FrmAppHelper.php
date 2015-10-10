@@ -1723,7 +1723,7 @@ class FrmAppHelper {
 			wp_localize_script( 'formidable_admin', 'frm_admin_js', array(
 				'confirm_uninstall' => __( 'Are you sure you want to do this? Clicking OK will delete all forms, form data, and all other Formidable data. There is no Undo.', 'formidable' ),
 				'desc'              => __( '(Click to add description)', 'formidable' ),
-				'blank'             => __( '(blank)', 'formidable' ),
+				'blank'             => __( '(Blank)', 'formidable' ),
 				'no_label'          => __( '(no label)', 'formidable' ),
 				'saving'            => esc_attr( __( 'Saving', 'formidable' ) ),
 				'saved'             => esc_attr( __( 'Saved', 'formidable' ) ),
