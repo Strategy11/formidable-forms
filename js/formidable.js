@@ -1,7 +1,7 @@
 function frmFrontFormJS(){
 	'use strict';
 	var show_fields = [];
-	var hide_later = [];
+	var hide_later = {};
 	var hidden_fields = [];
     var frm_checked_dep = [];
 	var addingRow = '';
@@ -212,15 +212,19 @@ function frmFrontFormJS(){
         }
 
 		var isRepeat = maybeSetRowId( changedInput );
+		var currentRuleIndex = {};
+		var hideField;
 
-		var len = rules.length;
-		for ( var i = 0, l = len; i < l; i++ ) {
+		for ( var i = 0, len = rules.length; i < len; i++ ) {
+			hideField = rules[i].HideField;
+			setCurrentRuleIndex( hideField, currentRuleIndex );
+
 			if ( rules[i].FieldName === field_id ) {
 				// Field in logic is the same field that triggered the change
-				hideOrShowField(i, rules[i], rec, changedInput);
+				hideOrShowField( currentRuleIndex[ hideField ], rules[i], rec, changedInput);
 			} else {
 				// Field in logic is different from the field that triggered the change
-				hideOrShowField(i, rules[i], rec);
+				hideOrShowField( currentRuleIndex[ hideField ], rules[i], rec);
 			}
 
 			if ( i === ( len - 1 ) ) {
@@ -229,6 +233,14 @@ function frmFrontFormJS(){
 					addingRow = '';
 				}
 			}
+		}
+	}
+
+	function setCurrentRuleIndex( hideField, currentRuleIndex ) {
+		if ( ! ( hideField in currentRuleIndex ) ) {
+			currentRuleIndex[ hideField ] = 0;
+		} else {
+			currentRuleIndex[ hideField ] += 1;
 		}
 	}
 
@@ -496,7 +508,7 @@ function frmFrontFormJS(){
 					'HideField':f.HideField,
 					'hideContainerID':f.hideContainerID,
 					'FormId':f.FormId,
-					'DynamicInfoIndices':[],
+					'DynamicInfoIndices':[]
 				};
 			}
 			maybeAddDynamicInfoIndex( f.hideContainerID, i );
@@ -2030,7 +2042,7 @@ function frmFrontFormJS(){
 			data:{
 				action:'frm_entries_edit_entry_ajax', post_id:post_id,
 				entry_id:entry_id, id:form_id, nonce:frm_js.nonce,
-				fields:fields, exclude_fields:exclude_fields,
+				fields:fields, exclude_fields:exclude_fields
 			},
 			success:function(html){
 				$cont.children('.frm-loading-img').replaceWith(html);
