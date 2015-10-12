@@ -79,7 +79,7 @@ class FrmDb {
                 id int(11) NOT NULL auto_increment,
 				field_key varchar(100) default NULL,
                 name text default NULL,
-                description text default NULL,
+                description longtext default NULL,
                 type text default NULL,
                 default_value longtext default NULL,
                 options longtext default NULL,
