@@ -369,7 +369,7 @@ form label.frm_primary_label input{font-size:12px;}
 .multiselect-container.frm-dropdown-menu{
 	top:auto;
 	left:auto;
-	font-size:inherit;
+	font-size:14px;
 	padding-top:3px;
 }
 
