@@ -144,6 +144,11 @@ function frmFrontFormJS(){
 		} else {
 			fieldName = field.name;
 		}
+
+		if ( fieldName == '' ) {
+			return 0;
+		}
+
 		var nameParts = fieldName.replace('item_meta[', '').replace('[]', '').split(']');
 		if ( nameParts.length < 1 ) {
 			return 0;
@@ -1919,10 +1924,14 @@ function frmFrontFormJS(){
 			fields.each(function(){
 				/* update calculations when a row is removed */
 				if ( this.type != 'file' ) {
-					var fieldID = this.name.replace('item_meta[', '').split(']')[2].replace('[', '');
+					var fieldID = getFieldId( this, false );
 					doCalculation(fieldID, jQuery(this));
 				}
 			});
+
+			if(typeof(frmThemeOverride_frmRemoveRow) == 'function'){
+				frmThemeOverride_frmRemoveRow(id, thisRow);
+			}
 		});
 
 		return false;
