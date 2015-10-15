@@ -109,7 +109,10 @@ class FrmField {
 
     public static function duplicate( $old_form_id, $form_id, $copy_keys = false, $blog_id = false ) {
         global $frm_duplicate_ids;
-		$fields = self::getAll( array( 'fi.form_id' => $old_form_id ), 'field_order', '', $blog_id );
+
+		$where = array( array( 'or' => 1, 'fi.form_id' => $old_form_id, 'fr.parent_form_id' => $old_form_id ) );
+		$fields = self::getAll( $where, 'field_order', '', $blog_id );
+
         foreach ( (array) $fields as $field ) {
             $new_key = ($copy_keys) ? $field->field_key : '';
             if ( $copy_keys && substr($field->field_key, -1) == 2 ) {
@@ -296,7 +299,7 @@ class FrmField {
             return array();
         }
 
-		$results = self::get_fields_from_transients( $form_id, $inc_sub );
+		$results = self::get_fields_from_transients( $form_id, array( 'inc_embed' => $inc_sub, 'inc_repeat' => $inc_sub ) );
 		if ( ! empty( $results ) ) {
             $fields = array();
             $count = 0;
@@ -322,19 +325,22 @@ class FrmField {
         }
 
         self::$use_cache = false;
-		$results = self::getAll( array( 'fi.form_id' => (int) $form_id, 'fi.type' => $type ), 'field_order', $limit );
+
+		$where = array( 'fi.form_id' => (int) $form_id, 'fi.type' => $type );
+		self::maybe_include_repeating_fields( $inc_sub, $where );
+		$results = self::getAll( $where, 'field_order', $limit );
         self::$use_cache = true;
         self::include_sub_fields($results, $inc_sub, $type);
 
         return $results;
     }
 
-	public static function get_all_for_form( $form_id, $limit = '', $inc_sub = 'exclude' ) {
+	public static function get_all_for_form( $form_id, $limit = '', $inc_embed = 'exclude', $inc_repeat = 'include' ) {
         if ( ! (int) $form_id ) {
             return array();
         }
 
-		$results = self::get_fields_from_transients( $form_id, $inc_sub );
+		$results = self::get_fields_from_transients( $form_id, array( 'inc_embed' => $inc_embed, 'inc_repeat' => $inc_repeat ) );
 		if ( ! empty( $results ) ) {
             if ( empty($limit) ) {
 				return $results;
@@ -354,21 +360,37 @@ class FrmField {
 
         self::$use_cache = false;
 
-		// get the fields, but make sure to not get the subfields if set to exclude
-		$results = self::getAll( array( 'fi.form_id' => absint( $form_id ) ), 'field_order', $limit );
+		$where = array( 'fi.form_id' => absint( $form_id ) );
+		self::maybe_include_repeating_fields( $inc_repeat, $where );
+		$results = self::getAll( $where, 'field_order', $limit );
+
         self::$use_cache = true;
 
-		self::include_sub_fields( $results, $inc_sub, 'all' );
+		self::include_sub_fields( $results, $inc_embed, 'all' );
 
         if ( empty($limit) ) {
-			self::set_field_transient( $results, $form_id, $inc_sub );
+			self::set_field_transient( $results, $form_id, 0, array( 'inc_embed' => $inc_embed, 'inc_repeat' => $inc_repeat ) );
         }
 
 		return $results;
     }
 
-	public static function include_sub_fields( &$results, $inc_sub, $type = 'all' ) {
-        if ( 'include' != $inc_sub ) {
+	/**
+	* If repeating fields should be included, adjust $where accordingly
+	*
+	* @param string $inc_repeat
+	* @param array $where - pass by reference
+	*/
+	private static function maybe_include_repeating_fields( $inc_repeat, &$where ) {
+		if ( $inc_repeat == 'include' ) {
+			$form_id = $where['fi.form_id'];
+			$where[] = array( 'or' => 1, 'fi.form_id' => $form_id, 'fr.parent_form_id' => $form_id );
+			unset( $where['fi.form_id'] );
+		}
+	}
+
+	public static function include_sub_fields( &$results, $inc_embed, $type = 'all' ) {
+		if ( 'include' != $inc_embed ) {
             return;
         }
 
@@ -431,13 +453,6 @@ class FrmField {
         $query_type = ( $limit == ' LIMIT 1' || $limit == 1 ) ? 'row' : 'results';
 
         if ( is_array($where) ) {
-            if ( isset( $where['fi.form_id'] ) && count( $where ) == 1 ) {
-                // add sub fields to query
-                $form_id = $where['fi.form_id'];
-                $where[] = array( 'or' => 1, 'fi.form_id' => $form_id, 'fr.parent_form_id' => $form_id );
-                unset( $where['fi.form_id'] );
-            }
-
             $results = FrmDb::get_var( $table_name . ' fi LEFT OUTER JOIN ' . $form_table_name . ' fr ON fi.form_id=fr.id', $where, 'fi.*, fr.name as form_name', array( 'order_by' => $order_by, 'limit' => $limit ), '', $query_type );
 		} else {
 			// if the query is not an array, then it has already been prepared
@@ -494,9 +509,9 @@ class FrmField {
 	 * We'll break them into groups of 200
 	 * @since 2.0.1
 	 */
-	private static function get_fields_from_transients( $form_id, $inc_sub = 'exclude' ) {
+	private static function get_fields_from_transients( $form_id, $args ) {
 		$fields = array();
-		self::get_next_transient( $fields, 'frm_form_fields_' . $form_id . $inc_sub );
+		self::get_next_transient( $fields, 'frm_form_fields_' . $form_id . $args['inc_embed'] . $args['inc_repeat'] );
 		return $fields;
 	}
 
@@ -523,8 +538,8 @@ class FrmField {
 	 * Save the transients in chunks for large forms
 	 * @since 2.0.1
 	 */
-	private static function set_field_transient( &$fields, $form_id, $inc_sub, $next = 0 ) {
-		$base_name = 'frm_form_fields_' . $form_id . $inc_sub;
+	private static function set_field_transient( &$fields, $form_id, $next = 0, $args = array() ) {
+		$base_name = 'frm_form_fields_' . $form_id . $args['inc_embed'] . $args['inc_repeat'];
 		$field_chunks = array_chunk( $fields, self::$transient_size );
 
 		foreach ( $field_chunks as $field ) {
