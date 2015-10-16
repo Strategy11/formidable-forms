@@ -90,16 +90,6 @@ class FrmUnitTest extends WP_UnitTestCase {
 		return $fields;
 	}
 
-	function get_all_field_types_for_form_key( $form_key, $expected_field_num, $type ) {
-		$form_id = $this->factory->form->get_id_by_key( $form_key );
-		$fields = FrmField::get_all_types_in_form( $form_id, $type );
-
-		$actual_field_num = count( $fields );
-		$this->assertEquals( $actual_field_num, $expected_field_num, $actual_field_num . ' ' . $type . ' fields were retrieved for ' . $form_key . ' form, but ' . $expected_field_num . ' were expected. This could mean that certain fields were not imported correctly.');
-
-		return $fields;
-	}
-
 	/**
 	* Set the global current user to 1
 	*/

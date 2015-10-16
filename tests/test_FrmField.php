@@ -15,16 +15,19 @@ class WP_Test_FrmField extends FrmUnitTest {
 	}
 
 	/**
-	 * @covers FrmField::getAll
-	 */
+	* @covers FrmField::getAll
+	*/
 	function test_getAll() {
-		$form_id = $this->factory->form->get_id_by_key( $this->contact_form_key );
-		$fields = FrmField::getAll( array( 'fi.form_id' => (int) $form_id ) );
-		$this->assertNotEmpty( $fields );
-		$this->assertTrue( count( $fields ) >= 7 );
+		$forms = array(
+			$this->contact_form_key => 8,
+			$this->all_fields_form_key => 33
+		);
 
-		foreach ( $fields as $field ) {
-			
+		foreach ( $forms as $form_key => $expected_count ) {
+			$form_id = $this->factory->form->get_id_by_key( $form_key );
+			$fields = FrmField::getAll( array( 'fi.form_id' => (int) $form_id ) );
+			$this->assertNotEmpty( $fields );
+			$this->assertEquals( $expected_count, count( $fields ), 'An incorrect number of fields are retrieved with FrmField::getAll.' );
 		}
 	}
 
@@ -32,8 +35,26 @@ class WP_Test_FrmField extends FrmUnitTest {
 	 * @covers FrmField::get_all_for_form
 	 */
 	function test_get_all_for_form() {
-		$form_id = FrmForm::getIdByKey( $this->contact_form_key );
-		$fields = $this->factory->field->get_fields_from_form( $form_id );
-		$this->assertNotEmpty( $fields );
+		$forms = array(
+			'basic_test' => array( 'form_key' => $this->contact_form_key, 'count' => 8 ),
+			'repeat' => array( 'form_key' => $this->all_fields_form_key, 'count' => 33 + 3 ),
+			'no_repeat_or_embed' => array( 'form_key' => $this->all_fields_form_key, 'count' => 33 ),
+			'repeat_and_embed' => array( 'form_key' => $this->all_fields_form_key, 'count' => 33 + 3 + 8 )
+		);
+
+		foreach ( $forms as $test => $args ) {
+			$form_id = FrmForm::getIdByKey( $args['form_key'] );
+
+			if ( $test == 'no_repeat_or_embed' ) {
+				$fields = FrmField::get_all_for_form( $form_id, '', 'exclude', 'exclude' );
+			} else if ( $test == 'repeat_and_embed' ) {
+				$fields = FrmField::get_all_for_form( $form_id, '', 'include', 'include' );
+			} else {
+				$fields = FrmField::get_all_for_form( $form_id );
+			}
+
+			$this->assertNotEmpty( $fields );
+			$this->assertEquals( $args['count'], count( $fields ), 'An incorrect number of fields are retrieved with FrmField::get_all_for_form.' );
+		}
 	}
 }
