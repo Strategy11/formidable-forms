@@ -32,7 +32,7 @@ class FrmAppHelper {
 
     public static function plugin_url() {
         //prevously FRM_URL constant
-        return plugins_url( '', self::plugin_folder() .'/formidable.php' );
+        return plugins_url( '', self::plugin_path() .'/formidable.php' );
     }
 
 	public static function relative_plugin_url() {
