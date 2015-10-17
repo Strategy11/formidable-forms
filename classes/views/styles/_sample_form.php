@@ -77,7 +77,7 @@
 
 </div>
 
-<div class="frm_form_field frm_section_heading form-field frm_first_half">
+<div class="frm_form_field frm_section_heading form-field">
     <h3 class="<?php echo esc_attr( $pos_class ) ?> frm_section_spacing"><?php _e( 'Repeatable Section', 'formidable' ) ?></h3>
     <div>
         <div class="frm_repeat_sec">

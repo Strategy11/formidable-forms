@@ -495,8 +495,9 @@ if ( ! $submit_style ) { ?>
     box-shadow:0 1px 1px #<?php echo $submit_shadow_color; ?>;
     -ms-filter:"progid:DXImageTransform.Microsoft.Shadow(Strength=3, Direction=135, Color='#<?php echo $submit_shadow_color; ?>')";
     filter:progid:DXImageTransform.Microsoft.Shadow(Strength=3, Direction=135, Color='#<?php echo $submit_shadow_color; ?>');
-    margin-top:<?php echo $submit_margin ?>;
-    margin-bottom:<?php echo $submit_margin ?>;
+	margin:<?php echo $submit_margin ?>;
+	margin-left:0;
+	margin-right:0;
     vertical-align:middle;
 }
 
@@ -702,7 +703,7 @@ if ( ! $submit_style ) { ?>
 }
 
 .<?php echo $style_class ?> .frm_button{
-    padding:<?php echo $field_pad . $important ?>;
+    padding:<?php echo esc_html( $submit_padding . $important ) ?>;
     -moz-border-radius:<?php echo $border_radius . $important ?>;
     -webkit-border-radius:<?php echo $border_radius . $important ?>;
     border-radius:<?php echo $border_radius . $important ?>;
@@ -712,7 +713,8 @@ if ( ! $submit_style ) { ?>
     color:#<?php echo $submit_text_color . $important ?>;
     background:#<?php echo $submit_bg_color . $important ?>;
     border-width:<?php echo $submit_border_width ?>;
-    border-color:#<?php echo $submit_border_color . $important ?>;
+    border-color:#<?php echo esc_html( $submit_border_color . $important ) ?>;
+	height:#<?php echo esc_html( $submit_height . $important ) ?>;
 }
 .<?php echo $style_class ?> .frm_button .frm_icon_font:before{
     font-size:<?php echo $submit_font_size . $important ?>;
