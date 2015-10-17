@@ -1197,6 +1197,7 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
     display:inline;
     width:auto !important;
 	-moz-appearance:textfield;
+	padding:0;
 }
 
 .frm_form_field.frm_total input::-webkit-outer-spin-button,

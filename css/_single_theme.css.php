@@ -695,6 +695,7 @@ if ( ! $submit_style ) { ?>
     border:none<?php echo $important ?>;
     display:inline<?php echo $important ?>;
     width:auto<?php echo $important ?>;
+	padding:0<?php echo $important ?>;
 }
 
 .<?php echo $style_class ?> .frm_text_block input,
