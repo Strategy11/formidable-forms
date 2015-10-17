@@ -896,8 +896,9 @@ class FrmFormsController {
             } else {
                 $vars = FrmAppHelper::json_to_array($json_vars);
                 $action = $vars[ $action ];
+				unset( $_REQUEST['frm_compact_fields'], $_POST['frm_compact_fields'] );
 				$_REQUEST = array_merge( $_REQUEST, $vars );
-				unset( $_REQUEST['frm_compact_fields'] );
+				$_POST = array_merge( $_POST, $_REQUEST );
             }
         } else {
 			$action = FrmAppHelper::get_param( $action, '', 'get', 'sanitize_title' );
