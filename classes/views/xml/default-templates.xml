@@ -25,7 +25,7 @@
             <form_id>1</form_id>
             <required>1</required>
             <options><![CDATA[]]></options>
-            <field_options><![CDATA[{"blank":"","separate_value":0,"classes":"frm_first_half"}]]></field_options>
+            <field_options><![CDATA[{"blank":"","separate_value":0,"classes":"frm_first frm_half"}]]></field_options>
 		</field>
 		<field>
 		    <id>2</id>
@@ -38,7 +38,7 @@
             <form_id>1</form_id>
             <required>1</required>
             <options><![CDATA[]]></options>
-            <field_options><![CDATA[{"label":"hidden","blank":"","classes":"frm_last_half"}]]></field_options>
+            <field_options><![CDATA[{"label":"hidden","blank":"","classes":"frm_half"}]]></field_options>
 		</field>
 		<field>
 		    <id>3</id>

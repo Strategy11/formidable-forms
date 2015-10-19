@@ -368,7 +368,7 @@ DEFAULT_HTML;
 
 		//Add classes to inline confirmation field (if it doesn't already have classes set)
 		if ( isset( $field['conf_field'] ) && $field['conf_field'] == 'inline' && ! $field['classes'] ) {
-			$error_class .= ' frm_first_half';
+			$error_class .= ' frm_first frm_half';
 		}
 
 		//Add class if field includes other option

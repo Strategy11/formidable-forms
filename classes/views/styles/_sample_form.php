@@ -13,29 +13,29 @@
 
 <div class="frm_form_fields frm_sample_form">
 <fieldset>
-<div class="frm_form_field frm_first_half form-field <?php echo esc_attr( $pos_class ) ?>">
+<div class="frm_form_field frm_first frm_half form-field <?php echo esc_attr( $pos_class ) ?>">
 <label class="frm_primary_label"><?php _e( 'Text field', 'formidable' ) ?> <span class="frm_required">*</span></label>
 <input type="text" value="<?php esc_attr_e( 'This is sample text', 'formidable' ) ?>"/>
 <div class="frm_description"><?php _e( 'A field with a description', 'formidable' ) ?></div>
 </div>
 
-<div class="frm_form_field form-field frm_last_half frm_blank_field <?php echo esc_attr( $pos_class ) ?>">
+<div class="frm_form_field form-field frm_half frm_blank_field <?php echo esc_attr( $pos_class ) ?>">
 <label class="frm_primary_label"><?php _e( 'Text field with error', 'formidable' ) ?> <span class="frm_required">*</span></label>
 <input type="text" value="<?php esc_attr_e( 'This is sample text', 'formidable' ) ?>"/>
 <div class="frm_error"><?php echo esc_html( $frm_settings->blank_msg ) ?></div>
 </div>
 
-<div class="frm_form_field frm_first_half form-field frm_focus_field <?php echo esc_attr( $pos_class ) ?>">
+<div class="frm_form_field frm_first frm_half form-field frm_focus_field <?php echo esc_attr( $pos_class ) ?>">
 <label class="frm_primary_label"><?php _e( 'Text field in active state', 'formidable' ) ?> <span class="frm_required">*</span></label>
 <input type="text" value="<?php esc_attr_e( 'Active state will be seen when the field is clicked', 'formidable' ) ?>" />
 </div>
 
-<div class="frm_form_field frm_last_half form-field <?php echo esc_attr( $pos_class ) ?>">
+<div class="frm_form_field frm_half form-field <?php echo esc_attr( $pos_class ) ?>">
 <label class="frm_primary_label"><?php _e( 'Read-only field', 'formidable' ) ?></label>
 <input type="text" value="<?php esc_attr_e( 'This field is not editable', 'formidable' ) ?>" disabled="disabled" />
 </div>
 
-<div class="frm_form_field frm_section_heading form-field frm_first_half">
+<div class="frm_form_field frm_section_heading form-field frm_first frm_half">
     <h3 class="frm_pos_top frm_trigger active frm_section_spacing"><i class="frm_icon_font frm_arrow_icon frm_before_collapse"></i> <?php _e( 'Collapsible Section', 'formidable' ) ?> <i class="frm_icon_font frm_arrow_icon frm_after_collapse"></i></h3>
     <div class="frm_toggle_container">
 
@@ -49,7 +49,7 @@
         </select>
     </div>
 
-    <div class="frm_form_field form-field frm_first_half <?php echo esc_attr( $pos_class ) ?>">
+    <div class="frm_form_field form-field frm_first frm_half <?php echo esc_attr( $pos_class ) ?>">
         <label class="frm_primary_label"><?php _e( 'Radio Buttons', 'formidable' ) ?></label>
 		<div class="frm_opt_container">
         	<div class="frm_radio"><input type="radio" /><label><?php _e( 'Option 1', 'formidable' ) ?></label></div>
@@ -57,7 +57,7 @@
 		</div>
     </div>
 
-    <div class="frm_form_field form-field frm_last_half <?php echo esc_attr( $pos_class ) ?>">
+    <div class="frm_form_field form-field frm_half <?php echo esc_attr( $pos_class ) ?>">
         <label class="frm_primary_label"><?php _e( 'Check Boxes', 'formidable' ) ?></label>
 		<div class="frm_opt_container">
 			<div class="frm_checkbox"><label><input type="checkbox" /><?php _e( 'Option 1', 'formidable' ) ?></label></div>
@@ -67,7 +67,7 @@
     </div>
 </div>
 
-<div id="frm_field_304_container" class="frm_form_field frm_section_heading form-field frm_last_half">
+<div id="frm_field_304_container" class="frm_form_field frm_section_heading form-field frm_half">
 <h3 class="frm_pos_top"><?php _e( 'Section Heading', 'formidable' ) ?></h3>
 <div class="frm_description frm_section_spacing"><?php _e( 'This is an example of a section description', 'formidable' ) ?></div>
 
