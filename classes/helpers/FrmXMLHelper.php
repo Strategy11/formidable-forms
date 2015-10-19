@@ -485,6 +485,8 @@ class FrmXMLHelper {
 			$imported['posts'][ (int) $old_id ] = $post_id;
 		}
 
+		self::maybe_update_stylesheet( $imported );
+
 		return $imported;
     }
 
@@ -637,6 +639,15 @@ class FrmXMLHelper {
             unset($k, $v);
         }
     }
+
+	private static function maybe_update_stylesheet( $imported ) {
+		if ( ( isset( $imported['imported']['styles'] ) && ! empty( $imported['imported']['styles'] ) ) || ( isset( $imported['updated']['styles'] ) && ! empty( $imported['updated']['styles'] ) ) ) {
+			if ( is_admin() && function_exists( 'get_filesystem_method' ) ) {
+				$frm_style = new FrmStyle();
+				$frm_style->update( 'default' );
+			}
+		}
+	}
 
     /**
      * @param string $message
