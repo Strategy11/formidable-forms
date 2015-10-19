@@ -229,7 +229,7 @@ class FrmFormsController {
         if ( $form ) {
 			return self::get_edit_vars( $form, array(), $message, true );
         } else {
-            return self::display_forms_list($params, __( 'There was a problem creating new template.', 'formidable' ));
+            return self::display_forms_list($params, __( 'There was a problem creating the new template.', 'formidable' ));
         }
     }
 
