@@ -6,7 +6,7 @@ $display = apply_filters('frm_display_field_options', array(
     'description' => true, 'options' => true, 'label_position' => true,
     'invalid' => false, 'size' => false, 'clear_on_focus' => false,
     'default_blank' => true, 'css' => true, 'conf_field' => false,
-	'max' => true,
+	'max' => true, 'captcha_size' => false,
 ));
 
 $li_classes = 'form-field edit_form_item frm_field_box frm_top_container frm_not_divider edit_field_type_'. $display['type'];
@@ -260,7 +260,19 @@ if ( $display['options'] ) { ?>
                         } ?>
                         </td>
                     </tr>
-                <?php } ?>
+                <?php }
+				if ( $display['captcha_size'] ) { ?>
+                <tr><td><label><?php _e( 'Size', 'formidable' ) ?></label>
+					<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Set the size of the captcha field. The compact option is best if your form is in a small area.', 'formidable' ) ?>" ></span>
+                    </td>
+                    <td><select name="field_options[captcha_size_<?php echo esc_attr( $field['id'] ) ?>]">
+                        <option value="default"<?php selected($field['captcha_size'], 'default'); ?>><?php _e( 'Default', 'formidable' ) ?></option>
+                        <option value="compact"<?php selected($field['captcha_size'], 'compact'); ?>><?php _e( 'Compact', 'formidable' ) ?></option>
+                    </select>
+                    </td>
+                </tr>
+                <?php
+				} ?>
                 <?php do_action('frm_field_options_form', $field, $display, $values);
 
                 if ( $display['required'] || $display['invalid'] || $display['unique'] || $display['conf_field'] ) { ?>

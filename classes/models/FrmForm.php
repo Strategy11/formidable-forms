@@ -246,7 +246,7 @@ class FrmForm {
             }
 
             //updating the form
-			foreach ( array( 'size', 'max', 'label', 'invalid', 'blank', 'classes' ) as $opt ) {
+			foreach ( array( 'size', 'max', 'label', 'invalid', 'blank', 'classes', 'captcha_size' ) as $opt ) {
 				$field->field_options[ $opt ] = isset( $values['field_options'][ $opt . '_' . $field_id ] ) ? trim( $values['field_options'][ $opt . '_' . $field_id ] ) : '';
             }
 

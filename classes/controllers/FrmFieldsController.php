@@ -508,6 +508,7 @@ class FrmFieldsController {
                 $display['required'] = false;
                 $display['invalid'] = true;
                 $display['default_blank'] = false;
+				$display['captcha_size'] = true;
             break;
             case 'radio':
                 $display['default_blank'] = false;
