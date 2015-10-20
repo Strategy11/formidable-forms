@@ -409,29 +409,13 @@ class FrmFormsController {
 
 	/**
 	* Inserts Formidable button
-	* Hook is deprecated since WP 3.5.0, maintain for reverse compatibility
-	*
-	* @param string $content
-	* @return string $content
-	*/
-	public static function insert_form_button( $content ) {
-		global $wp_version;
-		if ( current_user_can('frm_view_forms') && ( version_compare( $wp_version, '2.5.0' ) < 0 ) ) {
-			$content .= '<a href="#TB_inline?width=50&height=50&inlineId=frm_insert_form" class="thickbox button add_media frm_insert_form" title="' . esc_attr( __( 'Add forms and content', 'formidable' ) ) . '"><span class="frm-buttons-icon wp-media-buttons-icon"></span> Formidable</a>';
-
-		}
-		return $content;
-	}
-
-	/**
-	* Inserts Formidable button
 	* Hook exists since 2.5.0
 	*
 	* @since 2.0.15
 	*/
 	public static function print_form_button() {
 		if ( current_user_can('frm_view_forms') ) {
-			$content = '<a href="#TB_inline?width=50&height=50&inlineId=frm_insert_form" class="thickbox button add_media frm_insert_form" title="' . esc_attr( __( 'Add forms and content', 'formidable' ) ) . '"><span class="frm-buttons-icon wp-media-buttons-icon"></span> Formidable</a>';
+			$content = '<a href="#TB_inline?width=50&height=50&inlineId=frm_insert_form" class="thickbox button add_media frm_insert_form" title="' . esc_attr__( 'Add forms and content', 'formidable' ) . '"><span class="frm-buttons-icon wp-media-buttons-icon"></span> Formidable</a>';
 			echo wp_kses_post( $content );
 		}
 	}
