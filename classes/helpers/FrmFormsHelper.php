@@ -397,9 +397,9 @@ BEFORE_HTML;
         $html = str_replace('[frmurl]', FrmFieldsHelper::dynamic_default_values( 'frmurl' ), $html);
 
 		if ( strpos( $html, '[button_label]' ) ) {
-            add_filter('frm_submit_button', 'FrmFormsHelper::submit_button_label');
-            $replace_with = apply_filters('frm_submit_button', $title, $form);
-            $html = str_replace('[button_label]', $replace_with, $html);
+			add_filter( 'frm_submit_button', 'FrmFormsHelper::submit_button_label', 1 );
+			$replace_with = apply_filters( 'frm_submit_button', 0, $form );
+			$html = str_replace( '[button_label]', $replace_with, $html );
         }
 
         $html = apply_filters('frm_form_replace_shortcodes', $html, $form, $values);
