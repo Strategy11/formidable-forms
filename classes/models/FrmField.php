@@ -224,8 +224,10 @@ class FrmField {
 
 	public static function delete_form_transient( $form_id ) {
 		$form_id = absint( $form_id );
-		delete_transient( 'frm_form_fields_'. $form_id .'exclude' );
-		delete_transient( 'frm_form_fields_'. $form_id .'include' );
+		delete_transient( 'frm_form_fields_'. $form_id .'excludeinclude' );
+		delete_transient( 'frm_form_fields_'. $form_id .'includeinclude' );
+		delete_transient( 'frm_form_fields_'. $form_id .'includeexclude' );
+		delete_transient( 'frm_form_fields_'. $form_id .'excludeexclude' );
 
 		global $wpdb;
 		$wpdb->query( $wpdb->prepare( 'DELETE FROM '. $wpdb->options .' WHERE option_name LIKE %s OR option_name LIKE %s OR option_name LIKE %s OR option_name LIKE %s', '_transient_timeout_frm_form_fields_' . $form_id .'ex%', '_transient_frm_form_fields_' . $form_id .'ex%', '_transient_timeout_frm_form_fields_' . $form_id .'in%', '_transient_frm_form_fields_' . $form_id .'in%' ) );
