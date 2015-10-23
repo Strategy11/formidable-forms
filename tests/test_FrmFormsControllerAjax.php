@@ -21,10 +21,9 @@ class WP_Test_FrmFormsControllerAjax extends FrmAjaxUnitTest {
 		$form_id = FrmForm::getIdByKey( $this->contact_form_key );
 
 		self::_setup_post_values( $form_id );
-		self::_assert_doing_ajax_true();
 
 		try {
-			FrmFormsController::update();
+			$this->_handleAjax( 'frm_save_form' );
 		} catch ( WPAjaxDieStopException $e ) {
 			unset( $e );
 			// Expected to return form successfully updated message
@@ -80,16 +79,6 @@ class WP_Test_FrmFormsControllerAjax extends FrmAjaxUnitTest {
 
 			$_REQUEST = $_POST;
 		}
-	}
-
-	function _assert_doing_ajax_true() {
-		if ( defined( 'DOING_AJAX' ) ) {
-			$doing_ajax = true;
-		} else {
-			$doing_ajax = false;
-		}
-
-		$this->assertTrue( $doing_ajax, 'DOING_AJAX must be true for this test to work.' );
 	}
 
 	function _check_updated_values( $form_id ) {
