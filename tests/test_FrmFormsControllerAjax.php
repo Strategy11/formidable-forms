@@ -1,52 +1,34 @@
 <?php
 
 /**
- * @group forms
+ * @group ajax
  */
-class WP_Test_FrmFormsController extends FrmUnitTest {
+class WP_Test_FrmFormsControllerAjax extends FrmAjaxUnitTest {
 
-	function test_register_widgets() {
-		global $wp_widget_factory;
-		$this->assertTrue( isset( $wp_widget_factory->widgets['FrmShowForm'] ) );
-	}
+	public function setUp() {
+		parent::setUp();
 
-	function test_head() {
-		$this->set_front_end();
-		$edit_in_place = wp_script_is( 'formidable-editinplace', 'enqueued' );
-		$this->assertFalse( $edit_in_place, 'The edit-in-place script should not be enqueued' );
+		$this->user_id = $this->factory->user->create( array( 'role' => 'administrator' ) );
+		wp_set_current_user( $this->user_id );
 
-		/*
-		$this->set_admin_screen( 'formidable-edit' );
-
-		$edit_in_place = wp_script_is( 'formidable-editinplace', 'enqueued' );
-		$this->assertTrue( $edit_in_place, 'The edit-in-place script was not enqueued' );
-
-		if ( wp_is_mobile() ) {
-			$touchpunch = wp_script_is( 'jquery-touch-punch', 'enqueued' );
-			$this->assertTrue( $touchpunch, 'The touch punch script was not enqueued' );
-		}
-		*/
-	}
-
-	function test_get_form_shortcode() {
-		$form = FrmFormsController::get_form_shortcode( array( 'id' => $this->contact_form_key ) );
-		$this->assertNotEmpty( strpos( $form, '<form ' ), 'The form is missing' );
 	}
 
 	/**
 	* @covers FrmFormsController::update
-	* without ajax
+	* with ajax
 	*/
-	function test_form_update_no_ajax() {
-		$form_id = $this->factory->form->get_id_by_key( $this->contact_form_key );
-		$this->set_current_user_to_1();
-		self::_setup_post_values( $form_id );
-		self::_check_doing_ajax();
+	function test_form_update_with_ajax() {
+		$form_id = FrmForm::getIdByKey( $this->contact_form_key );
 
-		ob_start();
-		FrmFormsController::update();
-		$html = ob_get_contents();
-		ob_end_clean();
+		self::_setup_post_values( $form_id );
+		self::_assert_doing_ajax_true();
+
+		try {
+			FrmFormsController::update();
+		} catch ( WPAjaxDieStopException $e ) {
+			unset( $e );
+			// Expected to return form successfully updated message
+		}
 
 		self::_check_updated_values( $form_id );
 	}
@@ -100,15 +82,14 @@ class WP_Test_FrmFormsController extends FrmUnitTest {
 		}
 	}
 
-	// Make sure DOING_AJAX is false
-	function _check_doing_ajax() {
+	function _assert_doing_ajax_true() {
 		if ( defined( 'DOING_AJAX' ) ) {
 			$doing_ajax = true;
 		} else {
 			$doing_ajax = false;
 		}
 
-		$this->assertFalse( $doing_ajax, 'DOING_AJAX must be false for this test to work. Maybe run this test individually to make sure DOING_AJAX is false.' );
+		$this->assertTrue( $doing_ajax, 'DOING_AJAX must be true for this test to work.' );
 	}
 
 	function _check_updated_values( $form_id ) {

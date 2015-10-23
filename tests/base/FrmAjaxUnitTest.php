@@ -12,6 +12,7 @@ class FrmAjaxUnitTest extends WP_Ajax_UnitTestCase {
 	protected $field_id = 0;
 	protected $user_id = 0;
 	protected $is_pro_active = false;
+	protected $contact_form_key = 'contact-with-email';
 
 	function setUp() {
 		parent::setUp();
