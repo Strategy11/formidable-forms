@@ -4,7 +4,7 @@ Donate link: http://formidablepro.com/donate
 Tags: admin, AJAX, captcha, contact, contact form, database, email, feedback, form, forms, javascript, jquery, page, plugin, poll, Post, spam, survey, template, widget, wpmu, form builder
 Requires at least: 3.6
 Tested up to: 4.3.1
-Stable tag: 2.0.14
+Stable tag: 2.0.15
 
 Beautiful forms in 60 seconds. The WordPress form builder that enables you to create forms with a simple drag-and-drop interface and in-place editing.
 
@@ -89,6 +89,43 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 [See more FAQs](http://formidablepro.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 2.0.15 =
+* Send plugin updates through formidablepro.com
+* Update Swedish translation
+* Use media_buttons hook instead of deprecated media_buttons_context hook
+* Unit test updates
+* Fix Portuguese translation error
+* Allow more characters in field description
+* Prevent plugin styling conflict with user roles dropdown
+* Fix installing when the plugin is activated
+* Get rid of ambiguity in FrmField::getAll function
+* Fix the plugin url when used in the mu-plugins folder
+* Make selected values show on form builder page before refresh
+* Minor styling changes to frm_total class
+* Update stylesheet after import
+* Make long text wrap in Chrome cb/radio fields
+* Add 'compact' option to Recaptcha
+* **Pro Features:**
+* Fix conditional logic bug
+* Fix calculations in repeating sections with visibility admin
+* Fix dynamic list fields in repeating sections
+* Fix JS error when removing row w/ read only field
+* Add JavaScript hook for removeRow function
+* Fix error for ordering view by time
+* Fix error with no posted values in embedded forms
+* Escape CSV cells with ' if they start with = (this is to prevent a vulnerability in Excel)
+* Prevent array keys from being appended to user meta vals
+* Switch autoupdating to EDD at formidablepro.com
+* Prevent frm_display_id from switching when View is updated
+* Fix multi-file upload display for embedded forms
+* Allow text value to autopopulate dynamic fields
+* Make embedded fields show up in View filters
+* Don't let userID field affect css class in repeating section
+* Don't check for shortcodes if no brackets are present
+* A few auto updating fixes for multisite
+* Switch [foreach 25] when form is duplicated
+
+
 = 2.0.14 =
 * Stripslashes in Other field
 * Prevent collapse icon from being inserted inside of section
