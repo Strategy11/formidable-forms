@@ -398,7 +398,7 @@ BEFORE_HTML;
 
 		if ( strpos( $html, '[button_label]' ) ) {
 			add_filter( 'frm_submit_button', 'FrmFormsHelper::submit_button_label', 1 );
-			$replace_with = apply_filters( 'frm_submit_button', 0, $form );
+			$replace_with = apply_filters( 'frm_submit_button', $title, $form );
 			$html = str_replace( '[button_label]', $replace_with, $html );
         }
 
