@@ -1415,7 +1415,7 @@ span.howto{display:inline;}
 .frm_sorting > li.ui-state-default,
 .frm_sorting .no_repeat_section li.ui-state-default.edit_field_type_end_divider:hover{
 	border:1px solid transparent;
-	font-weight:lighter !important;
+	font-weight:normal !important;
 	background-color:transparent;
 	background-image:none;
 	padding:5px;
