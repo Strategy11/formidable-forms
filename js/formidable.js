@@ -685,27 +685,54 @@ function frmFrontFormJS(){
 
 	function setValForInputs( inputs ){
 		if ( inputs.length ) {
+			var fieldValSet = false;
 			for ( var i = 0; i < inputs.length; i++ ) {
-				setDefaultValue( jQuery( inputs[i] ) );
-				maybeDoCalcForSingleField( inputs[i] );
+
+				// If the value is already set in this field, move on
+				if ( fieldValSet && inputs[i-1].name == inputs[i].name ) {
+					continue;
+				}
+
+				// Check if the value is set if we haven't already
+				if ( i === 0 || inputs[i-1].name != inputs[i].name ) {
+					fieldValSet = isValueSet( inputs[i] );
+				}
+
+				if ( ! fieldValSet ) {
+					setDefaultValue( jQuery( inputs[i] ) );
+					maybeDoCalcForSingleField( inputs[i] );
+				}
 			}
 		}
 	}
 
-	function setDefaultValue( input ) {
-		var inputLenth = input.length;
+	// Check if a field already has a value set
+	// input is not a jQuery object
+	function isValueSet( input ) {
+		var valueSet = false;
 
-		// If the field already has a value (i.e. when form is loaded for editing an entry), don't get the default value
-		if ( input.is(':checkbox, :radio') ) {
-			if ( input.is(':checked') ) {
-				return;
+		if ( input.type == 'checkbox' || input.type == 'radio' ) {
+
+			var radioVals = document.getElementsByName( input.name );
+			var l = radioVals.length;
+			for ( var i=0; i<l; i++ ) {
+				if ( radioVals[i].checked ) {
+					valueSet = true;
+					break;
+				}
 			}
-		} else if ( input.val() ) {
-			return;
+		} else if ( input.value ) {
+			valueSet = true;
 		}
 
-		if ( inputLenth ) {
-			for ( var i = 0, l = inputLenth; i < l; i++ ) {
+		return valueSet;
+	}
+
+	function setDefaultValue( input ) {
+		var inputLength = input.length;
+
+		if ( inputLength ) {
+			for ( var i = 0, l = inputLength; i < l; i++ ) {
 				var field = jQuery(input[i]);
 				var defaultValue = field.data('frmval');
 				if ( typeof defaultValue !== 'undefined' ) {
