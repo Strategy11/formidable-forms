@@ -23,6 +23,12 @@ class FrmAddon {
 		}
 
 		add_filter( 'frm_installed_addons', array( &$this, 'insert_installed_addon' ) );
+		$this->edd_plugin_updater();
+	}
+
+	public static function load_hooks() {
+		add_filter( 'frm_include_addon_page', '__return_true' );
+		new static();
 	}
 
 	public function insert_installed_addon( $plugins ) {
@@ -44,7 +50,9 @@ class FrmAddon {
 		// retrieve our license key from the DB
 		$license = trim( get_option( $this->option_name . 'key' ) );
 
-		if ( ! empty( $license ) ) {
+		if ( empty( $license ) ) {
+			add_action( 'after_plugin_row_' . plugin_basename( $this->plugin_file ), array( $this, 'show_license_message' ), 10, 2 );
+		} else {
 			if ( ! class_exists('EDD_SL_Plugin_Updater') ) {
 				include( dirname( __FILE__ ) . '/EDD_SL_Plugin_Updater.php' );
 			}
@@ -57,6 +65,15 @@ class FrmAddon {
 				'author' 	=> $this->author,
 			) );
 		}
+	}
+
+	public function show_license_message( $file, $plugin ) {
+		$wp_list_table = _get_list_table( 'WP_Plugins_List_Table' );
+		echo '<tr class="plugin-update-tr active"><td colspan="' . $wp_list_table->get_column_count() . '" class="plugin-update colspanchange"><div class="update-message">';
+		echo ' ' . sprintf( __( 'Your %1$s license key is missing. Please add it on the %2$slicenses page%3$s.', 'formidable' ), $this->plugin_name, '<a href="' . esc_url( admin_url('admin.php?page=formidable-settings&t=licenses_settings' ) ) . '">', '</a>' );
+		$id = sanitize_title( $plugin['Name'] );
+		echo '<script type="text/javascript">var d = document.getElementById("' . esc_attr( $id ) . '");if ( d !== null ){ d.className = d.className + " update"; }</script>';
+		echo '</div></td></tr>';
 	}
 
 	public static function activate() {
