@@ -887,7 +887,7 @@ li.ui-state-default.selected .frm-show-click.frm_import_options select {
 #form_settings_page #post-body-content{min-width:650px;}
 #form_settings_page .frm_posttax_row select{max-width:35%;}
 select.frm_cancelnew, input.frm_enternew{width:175px;}
-.frm_field_box .widget-inside{background:#FBFBFB;}
+
 
 /* Global Settings */
 .categorydiv .frm_settings_form div.tabs-panel.general_settings{border-top:none;}
@@ -1486,8 +1486,8 @@ a.frm_button:hover{
 }
 ul.start_divider{
 	padding:6px 12px 0;
-	border-left:1px solid #D7D7D7;
-	border-bottom:1px solid #D7D7D7;
+	border-left:1px solid #5B9DD9;
+	border-bottom:1px solid #5B9DD9;
 	min-height:100px;
 }
 
@@ -1704,8 +1704,10 @@ table td.frm_left_label{
 .frm_sorting li.ui-state-default.frm_not_divider.selected,
 .frm_38_trigger .frm_sorting li.ui-state-default.frm_not_divider.selected,
 .frm_sorting li.ui-state-default.selected.edit_field_type_divider .divider_section_only{
-	border:1px solid #e4f3ff;
 	background-color: #fbfdff;
+	border: 1px solid #5b9dd9;
+	    -webkit-box-shadow: 0 0 1px #96B0C7;;
+	    box-shadow: 0 0 1px #96B0C7;
 }
 .start_divider.frm_sorting li.ui-state-default.frm_not_divider.selected {
 	border:1px solid #E7E7E7;
