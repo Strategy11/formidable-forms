@@ -1708,6 +1708,8 @@ table td.frm_left_label{
 	border: 1px solid #5b9dd9;
 	    -webkit-box-shadow: 0 0 1px #96B0C7;;
 	    box-shadow: 0 0 1px #96B0C7;
+		-webkit-transition: 0.5s border-color ease-in-out;
+		    transition: .5s border-color ease-in-out;
 }
 .start_divider.frm_sorting li.ui-state-default.frm_not_divider.selected {
 	border:1px solid #E7E7E7;
