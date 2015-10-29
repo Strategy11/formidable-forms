@@ -203,7 +203,7 @@ div.frm_msg_padding{
 .frm_forms.with_frm_style{max-width:100%;}
 label.frm_primary_label,
 #frm_form_editor_container label.frm_primary_label{
-	font-size:12px;
+	
 	font-weight:bold;
 }
 .form-field label.frm_primary_label{
@@ -412,7 +412,7 @@ form label.frm_primary_label input{font-size:12px;}
     vertical-align: middle;
 }
 
-.frm_scale{text-align:center;float:left;}
+.frm_scale{text-align:center;float:left;margin-right:10px;}
 .frm_scale input{display:block;margin:5px}
 .frm_form_fields:not(.frm_sample_form) input, .frm_form_fields:not(.frm_sample_form) select, .frm_form_fields:not(.frm_sample_form) textarea{
 	margin-bottom:0;
@@ -1008,7 +1008,7 @@ select.frm_cancelnew, input.frm_enternew{width:175px;}
 .frm_email_reply_container select,
 .frm_email_reply_container input,
 .form-table td.frm_150_width{
-    width:150px;
+    width:170px;
 }
 
 #frm_notification_settings .frm_no_top_padding{
@@ -1294,7 +1294,7 @@ span.howto{display:inline;}
 .frm_sorting .form-field .widget select,
 #wpcontent .frm_sorting .form-field .widget select,
 .frm_sorting .form-field .widget textarea{
-	width:auto;font-size:11px;
+	width:auto;
 }
 
 .tagchecklist span.no_taglist {
@@ -1523,13 +1523,6 @@ ul.start_divider{
 
 .frm_validation_msg p label{float:left;width:25%;max-width:100px;}
 .frm_sorting .form-field .widget .frm_validation_msg input{width:71%;}
-
-.frm_38_trigger .frm_sorting .widget-inside .form-table td,
-.frm_38_trigger .frm_sorting .widget-inside .form-table td p,
-.frm_38_trigger .frm_sorting .widget-inside .form-wrap label{
-	font-size:12px;
-	padding:10px;
-}
 
 .frm_38_trigger .frm_sorting .widget-inside .form-table td p,
 .frm_38_trigger .frm_sorting .widget-inside .form-wrap label{
