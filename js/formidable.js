@@ -158,7 +158,7 @@ function frmFrontFormJS(){
 		var field_id = nameParts[0];
 		var isRepeating = false;
 
-		if ( nameParts.length === 1 || nameParts[1] == '[form' ) {
+		if ( nameParts.length === 1 || nameParts[1] == '[form' || nameParts[1] == '[id' ) {
 			return field_id;
 		}
 
@@ -663,47 +663,67 @@ function frmFrontFormJS(){
 
 	/* Show Field Functions */
 	function routeToShowFieldAndSetVal( hideFieldContainer, f ) {
+		var inSection = isAContainerField( hideFieldContainer );
+		var inputAtts = {inSection:inSection, formId:f.FormId};
+
+		removeFromHideFields( f.hideContainerID, f.FormId );
 		if ( hideFieldContainer.length ) {
 			// Field is not type=hidden
-			showFieldAndSetValue( hideFieldContainer );
+			showFieldAndSetValue( hideFieldContainer, inputAtts );
 		} else {
 			// Set field value (don't show it)
 			var fieldName = getFieldName( f.HideField, f.hideContainerID );
 			var inputs = jQuery( 'input[name^="' + fieldName + '"]' );
-			setValForInputs( inputs );
+			setValForInputs( inputs, inputAtts );
 		}
-		removeFromHideFields( f.hideContainerID, f.FormId );
 	}
 
-	function showFieldAndSetValue( container ) {
+	function showFieldAndSetValue( container, inputAtts ) {
 		var inputs = getInputsInContainer( container );
 
-		setValForInputs( inputs );
+		setValForInputs( inputs, inputAtts );
 
 		container.show();
 	}
 
-	function setValForInputs( inputs ){
+	function setValForInputs( inputs, fieldAtts ){
 		if ( inputs.length ) {
-			var fieldValSet = false;
+			fieldAtts.valSet = false;
+			fieldAtts.isHidden = false;
+
 			for ( var i = 0; i < inputs.length; i++ ) {
 
-				// If the value is already set in this field, move on
-				if ( fieldValSet && inputs[i-1].name == inputs[i].name ) {
+				if ( skipThisInput( inputs, i, fieldAtts ) === true ) {
 					continue;
 				}
 
-				// Check if the value is set if we haven't already
-				if ( i === 0 || inputs[i-1].name != inputs[i].name ) {
-					fieldValSet = isValueSet( inputs[i] );
-				}
-
-				if ( ! fieldValSet ) {
-					setDefaultValue( jQuery( inputs[i] ) );
-					maybeDoCalcForSingleField( inputs[i] );
-				}
+				setDefaultValue( jQuery( inputs[i] ) );
+				maybeDoCalcForSingleField( inputs[i] );
 			}
 		}
+	}
+
+	function skipThisInput( inputs, i, fieldAtts ) {
+		var goToNextIteration = false;
+
+		if ( i === 0 || inputs[i-1].name != inputs[i].name ) {
+			// This field hasn't been checked yet
+
+			if ( fieldAtts.inSection && isInputConditionallyHidden( inputs[i], fieldAtts ) ) {
+				fieldAtts.isHidden = true;
+				fieldAtts.valSet = false;
+			} else {
+				fieldAtts.isHidden = false;
+				fieldAtts.valSet = isValueSet( inputs[i] );
+			}
+		}
+
+		if ( fieldAtts.valSet || fieldAtts.isHidden ) {
+			// If the value is already set or the field should remain hidden, move on
+			goToNextIteration = true;
+		}
+
+		return goToNextIteration;
 	}
 
 	// Check if a field already has a value set
@@ -1172,6 +1192,11 @@ function frmFrontFormJS(){
 	function maybeDoCalcForSingleField( field_input ) {
 		if ( typeof __FRMCALC === 'undefined' ) {
 			// there are no calculations on this page
+			return;
+		}
+
+		// Exit now if field is a type that can't do calculations
+		if ( field_input.type != 'text' && field_input.type != 'hidden' ) {
 			return;
 		}
 
@@ -2255,6 +2280,69 @@ function frmFrontFormJS(){
 		} else {
 			return false;
 		}
+	}
+
+	// Check if field is a section or embedded form
+	function isAContainerField( hideFieldContainer ) {
+		var inSection = false;
+		if ( hideFieldContainer.hasClass( 'frm_section_heading' ) || hideFieldContainer.hasClass( 'frm_embed_form_container' ) ) {
+			inSection = true;
+		}
+
+		return inSection;
+	}
+
+	function isInputConditionallyHidden( input, fieldAtts ) {
+		var isHidden = false;
+		if ( typeof input.name !== 'undefined' ) {
+			var containerHtmlId;
+			var nameParts = input.name.replace( /\]/g, '' ).split( '[' );
+			if ( nameParts.length < 4 ) {
+				if ( nameParts.length == 3 && nameParts[2] == 'form' ) {
+					return true;
+				}
+
+				// Non-repeating input
+				containerHtmlId = 'frm_field_' + nameParts[1] + '_container';
+
+			} else {
+				if ( nameParts[3] == 0 ) {
+					return true;
+				}
+
+				// Repeating or embedded form inputs
+				containerHtmlId = 'frm_field_' + nameParts[3] + '-' + nameParts[1] + '-' + nameParts[2] + '_container';
+			}
+
+			isHidden = isContainerConditionallyHidden( containerHtmlId, fieldAtts );
+
+		} else {
+			isHidden = true;
+		}
+
+		return isHidden;
+	}
+
+	function isContainerConditionallyHidden( containerHtmlId, fieldAtts ) {
+		var isHidden = false;
+		var hiddenFields;
+
+		if ( typeof fieldAtts.hiddenFields !== 'undefined' ) {
+			hiddenFields = fieldAtts.hiddenFields;
+		} else {
+			var frmHideFieldsInput = document.getElementById('frm_hide_fields_' + fieldAtts.formId);
+			hiddenFields = frmHideFieldsInput.value;
+			fieldAtts.hiddenFields = hiddenFields;
+		}
+
+		if ( hiddenFields ) {
+			hiddenFields = JSON.parse( hiddenFields );
+			if ( hiddenFields.indexOf( containerHtmlId ) > -1 ) {
+				isHidden = true;
+			}
+		}
+
+		return isHidden;
 	}
 
 	/* Fallback functions */
