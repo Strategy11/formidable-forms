@@ -835,14 +835,14 @@ function frmFrontFormJS(){
 					/* If no value, then assume no match */
 					return 0;
 				}
-				return d.indexOf(c) != -1;
+				return d.toLowerCase().indexOf( c.toLowerCase() ) != -1;
 			},
 			'not LIKE': function(c,d){
 				if(!d){
 					/* If no value, then assume no match */
 					return 1;
 				}
-				return d.indexOf(c) == -1;
+				return d.toLowerCase().indexOf( c.toLowerCase() ) == -1;
 			}
 		};
 		return theOperators[op](a, b);

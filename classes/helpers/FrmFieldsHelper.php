@@ -612,7 +612,7 @@ DEFAULT_HTML;
         } else if ( $cond == '<' ) {
             $m = $observed_value < $hide_opt;
         } else if ( $cond == 'LIKE' || $cond == 'not LIKE' ) {
-            $m = strpos($observed_value, $hide_opt);
+            $m = stripos($observed_value, $hide_opt);
             if ( $cond == 'not LIKE' ) {
                 $m = ( $m === false ) ? true : false;
             } else {
