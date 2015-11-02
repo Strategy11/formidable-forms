@@ -132,6 +132,11 @@ class FrmStylesController {
         self::load_styler('default');
     }
 
+	public static function duplicate() {
+		FrmAppHelper::update_message( __( 'duplicate styling templates', 'formidable' ), 'wrap' );
+		self::load_styler('default');
+	}
+
 	public static function edit( $style_id = false, $message = '' ) {
         if ( ! $style_id ) {
 			$style_id = FrmAppHelper::get_param( 'id', '', 'get', 'absint' );
@@ -272,7 +277,7 @@ class FrmStylesController {
                 	return;
             	}
 
-                if ( 'new_style' == $action ) {
+                if ( 'new_style' == $action || 'duplicate' == $action ) {
                     return self::$action();
                 }
 
