@@ -902,10 +902,10 @@ function frmFrontFormJS(){
 			return;
 		}
 
-		var hiddenInput = jQuery( '#' + f.hideContainerID ).find('select[name^="item_meta"], textarea[name^="item_meta"], input[name^="item_meta"]');
+		var hiddenInput = jQuery( '#' + f.hideContainerID ).find('select[name^="item_meta"], textarea[name^="item_meta"], input[name^="item_meta"]:not([type="hidden"])');
 
 		// Get the previously selected field value
-		var prev = getPrevFieldValue( hiddenInput );
+		var prev_val = getPrevFieldValue( hiddenInput );
 
 		// Get default value
 		var defaultValue = hiddenInput.data('frmval');
@@ -946,67 +946,28 @@ function frmFrontFormJS(){
 			type:'POST',
             url:frm_js.ajax_url,
 			data:{
-                action:'frm_fields_ajax_data_options', hide_field:field_id,
-                entry_id:selected, selected_field_id:f.LinkedField, field_id:f.HideField,
-				default_value:defaultValue, hide_id:f.hideContainerID, nonce:frm_js.nonce
+				action:'frm_fields_ajax_data_options', trigger_field_id:field_id,
+				entry_id:selected, linked_field_id:f.LinkedField, field_id:f.HideField,
+				default_value:defaultValue, container_id:f.hideContainerID, prev_val:prev_val,
+				nonce:frm_js.nonce
             },
 			success:function(html){
 				$dataField.html(html);
-				var parentField = $dataField.find('select, input, textarea');
-				var val = 1;
-				if ( parentField.attr('type') == 'hidden' ) {
-					val = parentField.val();
-				}
+				var $dynamicFieldInputs = $dataField.find('select, input, textarea');
 
-				if ( html === '' || val === '' ) {
+				if ( html === '' || ( $dynamicFieldInputs.length == 1 && $dynamicFieldInputs.attr('type') == 'hidden' ) ) {
+					// Hide the Dynamic field
 					fcont.style.display = 'none';
-					prev = '';
-				}else if(f.MatchType != 'all'){
+				} else if ( f.MatchType != 'all' ) {
+					// Show the Dynamic field
 					fcont.style.display = '';
 				}
 
-				if(html !== ''){
-					if ( prev !== '' ) {
-						if(!jQuery.isArray(prev)){
-							var new_prev = [];
-							new_prev.push(prev);
-							prev = new_prev;
-						}
-
-						//select options that were selected previously
-						jQuery.each(prev, function(ckey,cval){
-							if ( typeof(cval) === 'undefined' || cval === '' ) {
-								return;
-							}
-							if ( dataType == 'checkbox' || dataType == 'radio' ) {
-								if ( parentField.length > 1 ) {
-									parentField.filter('[value="' + cval+ '"]').attr('checked','checked');
-								} else if ( parentField.val() == cval ){
-									parentField.attr('checked','checked');
-								}
-							} else if ( dataType == 'select' ) {
-								var selOpt = parentField.children('option[value="'+ cval +'"]');
-								if(selOpt.length){
-									selOpt.prop('selected', true);
-								}else{
-									//remove options that no longer exist
-									prev.splice(ckey, 1);
-								}
-							}else{
-								parentField.val(cval);
-							}
-						});
-					} else {
-						// If no options were selected previously, set to default value
-						setDefaultValue( getInputsInContainer( $dataField ) );
-					}
-				}
-
-				if(parentField.hasClass('frm_chzn') && jQuery().chosen){
+				if( $dynamicFieldInputs.hasClass('frm_chzn') && jQuery().chosen){
 					jQuery('.frm_chzn').chosen({allow_single_deselect:true});
 				}
 
-				triggerChange( parentField );
+				triggerChange( $dynamicFieldInputs );
 			}
 		});
 	}
