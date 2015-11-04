@@ -902,7 +902,7 @@ function frmFrontFormJS(){
 			return;
 		}
 
-		var hiddenInput = jQuery( '#' + f.hideContainerID ).find('select[name^="item_meta"], textarea[name^="item_meta"], input[name^="item_meta"]:not([type="hidden"])');
+		var hiddenInput = jQuery( '#' + f.hideContainerID ).find('select[name^="item_meta"], textarea[name^="item_meta"], input[name^="item_meta"]');
 
 		// Get the previously selected field value
 		var prev_val = getPrevFieldValue( hiddenInput );
