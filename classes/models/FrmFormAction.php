@@ -457,7 +457,7 @@ class FrmFormAction {
         $default_values = $this->get_global_defaults();
 
         // fill default values
-        $action->post_content = wp_parse_args( $action->post_content, $default_values);
+        $action->post_content += $default_values;
 
         foreach ( $default_values as $k => $vals ) {
             if ( is_array($vals) && ! empty($vals) ) {
