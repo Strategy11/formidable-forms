@@ -542,8 +542,8 @@ label input[type="checkbox"], label input[type="radio"]{vertical-align:baseline;
     height:34px;
 }
 .frm_form_builder a:hover{text-decoration:underline;}
-.frm_38_trigger .widget-title h4 {padding:10px 15px;}
-.frm_38_trigger .widget-top a.widget-action:after {padding: 7px 12px 0;}
+.frm_form_builder .frm_38_trigger .widget-title h4 {padding:10px 15px;}
+.frm_form_builder .frm_38_trigger .widget-top a.widget-action:after {padding: 7px 12px 0;}
 #postbox-container-1{width:270px;}
 #postbox-container-1 .nodrag a{cursor:pointer;}
 #postbox-container-1 .frm_field_list #frm-insert-fields{
@@ -1043,8 +1043,11 @@ select.frm_cancelnew, input.frm_enternew{width:175px;}
 #frm_email_addon_menu h3{
     display: inline-block;
 	border-bottom:none;
+	padding: 10px;
 }
 #frm_email_addon_menu h3{
+	font-size: 14px;
+	line-height: 1.4;
     margin: 0;
     padding: 10px 15px;
     overflow: hidden;
@@ -1161,15 +1164,9 @@ label.frm_action_events{
 #form_show_entry_page .inside h3{
 	border-top:1px solid #eee;
 	border-bottom:none;
-	margin:15px -15px;
-	padding-left:15px;
-}
-
-#poststuff .frm_form_settings .advanced_settings h3,
-#poststuff .frm_form_settings .frm_email_settings .widget-inside h3,
-#form_show_entry_page .inside h3{
-	margin-bottom:0;
-	padding-bottom:0;
+	margin:15px -15px 0;
+	padding: 8px 15px;
+	font-size:14px;
 }
 
 #poststuff .frm_form_settings h3.frm_first_h3,
