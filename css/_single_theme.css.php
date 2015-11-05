@@ -121,7 +121,7 @@ if ( ! isset( $center_form ) ) {
 
 .<?php echo esc_html( $style_class ) ?> label.frm_primary_label,
 .<?php echo esc_html( $style_class ) ?>.frm_login_form label{
-    font-family:<?php echo esc_html( stripslashes( $font ) ) ?>;
+    font-family:<?php echo FrmAppHelper::kses( stripslashes( $font ) ) ?>;
     font-size:<?php echo esc_html( $font_size . $important ) ?>;
     color:#<?php echo esc_html( $label_color . $important ) ?>;
     font-weight:<?php echo esc_html( $weight . $important ) ?>;
@@ -176,7 +176,7 @@ if ( ! isset( $center_form ) ) {
 .<?php echo esc_html( $style_class ) ?> .frm_error{
     margin:0;
     padding:0;
-    font-family:<?php echo esc_html( stripslashes($font) . $important ) ?>;
+    font-family:<?php echo FrmAppHelper::kses( stripslashes($font) . $important ) ?>;
     font-size:<?php echo esc_html( $description_font_size . $important ) ?>;
     color:#<?php echo esc_html( $description_color . $important ) ?>;
     font-weight:<?php echo esc_html( $description_weight . $important ) ?>;
@@ -279,7 +279,7 @@ if ( ! isset( $center_form ) ) {
 
 .<?php echo esc_html( $style_class ) ?> .frm_scale label{
     font-weight:<?php echo esc_html( $check_weight . $important ) ?>;
-    font-family:<?php echo esc_html( stripslashes($font) . $important ) ?>;
+    font-family:<?php echo FrmAppHelper::kses( stripslashes($font) . $important ) ?>;
     font-size:<?php echo esc_html( $check_font_size . $important ) ?>;
     color:#<?php echo esc_html( $check_label_color . $important ) ?>;
 }
@@ -299,7 +299,7 @@ if ( ! isset( $center_form ) ) {
 .<?php echo esc_html( $style_class ) ?> select,
 .<?php echo esc_html( $style_class ) ?> textarea,
 .<?php echo esc_html( $style_class ) ?> .chosen-container{
-    font-family:<?php echo esc_html( stripslashes($font)  . $important ) ?>;
+    font-family:<?php echo FrmAppHelper::kses( stripslashes($font)  . $important ) ?>;
     font-size:<?php echo esc_html( $field_font_size ) ?>;
     margin-bottom:0<?php echo esc_html( $important ) ?>;
 }
@@ -374,7 +374,7 @@ if ( ! isset( $center_form ) ) {
 .<?php echo esc_html( $style_class ) ?> input[type=file]{
     color:#<?php echo esc_html( $text_color . $important ) ?>;
     padding:0px;
-    font-family:<?php echo esc_html( stripslashes( $font ) . $important ) ?>;
+    font-family:<?php echo FrmAppHelper::kses( stripslashes( $font ) . $important ) ?>;
     font-size:<?php echo esc_html( $field_font_size . $important ) ?>;
 }
 
@@ -383,7 +383,7 @@ if ( ! isset( $center_form ) ) {
 }
 
 .<?php echo esc_html( $style_class ) ?> .frm_file_names, .<?php echo esc_html( $style_class ) ?> .frm_uploaded_files .frm_remove_link{
-	font-family:<?php echo esc_html( stripslashes( $font ) . $important ) ?>;
+	font-family:<?php echo FrmAppHelper::kses( stripslashes( $font ) . $important ) ?>;
 	font-size:<?php echo esc_html( $field_font_size . $important ) ?>;
 }
 
@@ -470,7 +470,7 @@ if ( ! $submit_style ) { ?>
 .frm_form_submit_style,
 .<?php echo esc_html( $style_class ) ?>.frm_login_form input[type=submit]{
     width:<?php echo esc_html( ( $submit_width == '' ? 'auto' : $submit_width ) . $important ) ?>;
-    font-family:<?php echo esc_html( stripslashes( $font ) ) ?>;
+    font-family:<?php echo FrmAppHelper::kses( stripslashes( $font ) ) ?>;
     font-size:<?php echo esc_html( $submit_font_size . $important ); ?>;
     height:<?php echo esc_html( $submit_height . $important ) ?>;
     line-height:normal<?php echo esc_html( $important ) ?>;
@@ -535,13 +535,13 @@ if ( ! $submit_style ) { ?>
 ?>
 
 .<?php echo esc_html( $style_class ) ?> a.frm_save_draft{
-    font-family:<?php echo esc_html( stripslashes( $font ) ) ?>;
+    font-family:<?php echo FrmAppHelper::kses( stripslashes( $font ) ) ?>;
     font-size:<?php echo esc_html( $submit_font_size ) ?>;
     font-weight:<?php echo esc_html( $submit_weight ) ?>;
 }
 
 .<?php echo esc_html( $style_class ) ?> #frm_field_cptch_number_container{
-    font-family:<?php echo esc_html( stripslashes( $font ) ) ?>;
+    font-family:<?php echo FrmAppHelper::kses( stripslashes( $font ) ) ?>;
     font-size:<?php echo esc_html( $font_size . $important ) ?>;
     color:#<?php echo esc_html( $label_color . $important ) ?>;
     font-weight:<?php echo esc_html( $weight . $important ) ?>;
@@ -574,7 +574,7 @@ if ( ! $submit_style ) { ?>
 
 .<?php echo esc_html( $style_class ) ?> .frm_radio label,
 .<?php echo esc_html( $style_class ) ?> .frm_checkbox label{
-    font-family:<?php echo esc_html( stripslashes($font) . $important ) ?>;
+    font-family:<?php echo FrmAppHelper::kses( stripslashes($font) . $important ) ?>;
     font-size:<?php echo esc_html( $check_font_size . $important ) ?>;
     color:#<?php echo esc_html( $check_label_color . $important ) ?>;
     font-weight:<?php echo esc_html( $check_weight . $important ) ?>;
@@ -714,7 +714,7 @@ if ( ! $submit_style ) { ?>
     -webkit-border-radius:<?php echo esc_html( $border_radius . $important ) ?>;
     border-radius:<?php echo esc_html( $border_radius . $important ) ?>;
     font-size:<?php echo esc_html( $submit_font_size . $important ) ?>;
-    font-family:<?php echo esc_html( stripslashes($font) . $important ) ?>;
+    font-family:<?php echo FrmAppHelper::kses( stripslashes($font) . $important ) ?>;
     font-weight:<?php echo esc_html( $submit_weight . $important ) ?>;
     color:#<?php echo esc_html( $submit_text_color . $important ) ?>;
     background:#<?php echo esc_html( $submit_bg_color . $important ) ?>;
