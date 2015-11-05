@@ -47,7 +47,7 @@ class WP_Test_FrmProAppHelper extends FrmUnitTest {
 		// Dynamic field is equal to Utah
 		$test_values[] = array(
 			'nickname'	=> 'dynamic field is equal to val',
-			'where_field_key'	=> 'dynamic-state-level-1',
+			'where_field_key'	=> 'dynamic-state',
 			'where_val' => 'Utah',
 			'where_is'	=> '=',
 			'form_key'	=> 'city_form',
@@ -58,7 +58,7 @@ class WP_Test_FrmProAppHelper extends FrmUnitTest {
 		// NOTE: Remember opposite should be returned for NOT filters
 		$test_values[] = array(
 			'nickname'	=> 'dynamic field is NOT equal to val',
-			'where_field_key'	=> 'dynamic-state-level-1',
+			'where_field_key'	=> 'dynamic-state',
 			'where_val' => 'Utah',
 			'where_is'	=> '!=',
 			'form_key'	=> 'city_form',
@@ -68,7 +68,7 @@ class WP_Test_FrmProAppHelper extends FrmUnitTest {
 		// Dynamic field is like Ut
 		$test_values[] = array(
 			'nickname'	=> 'dynamic field is LIKE val',
-			'where_field_key'	=> 'dynamic-state-level-1',
+			'where_field_key'	=> 'dynamic-state',
 			'where_val' => 'Utah',
 			'where_is'	=> 'LIKE',
 			'form_key'	=> 'city_form',
@@ -79,7 +79,7 @@ class WP_Test_FrmProAppHelper extends FrmUnitTest {
 		// NOTE: Remember opposite should be returned for NOT filters
 		$test_values[] = array(
 			'nickname'	=> 'dynamic field is not LIKE val',
-			'where_field_key'	=> 'dynamic-state-level-1',
+			'where_field_key'	=> 'dynamic-state',
 			'where_val' => 'Utah',
 			'where_is'	=> 'not LIKE',
 			'form_key'	=> 'city_form',
@@ -89,7 +89,7 @@ class WP_Test_FrmProAppHelper extends FrmUnitTest {
 		// Dynamic field is equal to ____(blank)
 		$test_values[] = array(
 			'nickname'	=> 'dynamic field is equal to blank',
-			'where_field_key'	=> 'dynamic-state-level-1',
+			'where_field_key'	=> 'dynamic-state',
 			'where_val' => '',
 			'where_is'	=> '=',
 			'form_key'	=> 'city_form',
@@ -99,7 +99,7 @@ class WP_Test_FrmProAppHelper extends FrmUnitTest {
 		// Dynamic field is not equal to ______(blank)
 		$test_values[] = array(
 			'nickname'	=> 'dynamic field is NOT equal to blank',
-			'where_field_key'	=> 'dynamic-state-level-1',
+			'where_field_key'	=> 'dynamic-state',
 			'where_val' => '',
 			'where_is'	=> '!=',
 			'form_key'	=> 'city_form',
@@ -109,7 +109,7 @@ class WP_Test_FrmProAppHelper extends FrmUnitTest {
 		// Dynamic field is equal to entry key
 		$test_values[] = array(
 			'nickname'	=> 'dynamic field is equal to entry key',
-			'where_field_key'	=> 'dynamic-state-level-1',
+			'where_field_key'	=> 'dynamic-state',
 			'where_val' => 'utah_entry',
 			'where_is'	=> '=',
 			'form_key'	=> 'city_form',
@@ -119,7 +119,7 @@ class WP_Test_FrmProAppHelper extends FrmUnitTest {
 		// Dynamic field is equal to entry ID
 		$test_values[] = array(
 			'nickname'	=> 'dynamic field is equal to entry ID',
-			'where_field_key'	=> 'dynamic-state-level-1',
+			'where_field_key'	=> 'dynamic-state',
 			'where_val' => $utah_entry_id,
 			'where_is'	=> '=',
 			'form_key'	=> 'city_form',
@@ -130,7 +130,7 @@ class WP_Test_FrmProAppHelper extends FrmUnitTest {
 		$entry_id = $this->factory->entry->get_id_by_key( 'utah_entry' );
 		$test_values[] = array(
 			'nickname'	=> 'dynamic field is equal to array',
-			'where_field_key'	=> 'dynamic-state-level-1',
+			'where_field_key'	=> 'dynamic-state',
 			'where_val' => array(1,2,3),
 			'where_is'	=> '=',
 			'form_key'	=> 'city_form',

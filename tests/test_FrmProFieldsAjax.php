@@ -42,11 +42,13 @@ class WP_Test_FrmProFieldsAjax extends FrmAjaxUnitTest {
 	function get_dependent_data_response( $atts ) {
 		$_POST = array(
 			'action'            => 'frm_fields_ajax_data_options',
-			'hide_field'        => $atts['parent_field']->id,
+			'trigger_field_id'  => $atts['parent_field']->id,
 			'entry_id'          => $atts['selected_option'], //array|int
-			'selected_field_id' => 'taxonomy',
 			'field_id'          => $atts['child_field']->id,
-			'hide_id'           => 'frm_field_' . $atts['child_field']->id . '_container',
+			'container_id'      => 'frm_field_' . $atts['child_field']->id . '_container',
+			'linked_field_id'   => 'taxonomy',
+			'default_value'     => '',
+			'prev_val'          => ''
 		);
 
 		try {

@@ -259,4 +259,274 @@ class WP_Test_FrmProFieldsControllerAjax extends FrmAjaxUnitTest {
 		$new_child_metas = array_unique( $new_child_metas );
 		$this->assertEquals( $child_ids, $new_child_metas, 'When switching from non-repeating to repeating, the item_id is not updated on frm_item_metas for child fields' );
 	}
+	/**
+	* @covers FrmProFieldsController::ajax_data_options
+	*/
+	function test_frm_fields_ajax_data_options(){
+		self::_check_dependent_dynamic_fields();
+
+		// Test three levels
+		// Repeating field
+		// Test hierarchical category fields
+		// Test with no parent val selected
+	}
+
+	function _check_dependent_dynamic_fields() {
+		$tests = array(
+			'checkbox',
+			'checkbox_prev_val',
+			'checkbox_default_val',
+			'checkbox_readonly_default_val',
+			'select',
+			'select_prev_val',
+			'select_default_val',
+			'select_readonly_default_val',
+			'radio',
+			'radio_prev_val',
+			'radio_default_val',
+			'multi_radio',
+			'multi_radio_readonly_default_val',
+		);
+
+		$args = self::_get_dynamic_fields_args();
+
+		$post_vals = self::_get_dynamic_posted_vals( $args );
+
+		foreach ( $tests as $test ) {
+			$_POST = $post_vals;
+
+			self::_modify_dynamic_posted_vals( $test, $args );
+			self::_modify_dynamic_field_for_test( $test, $args );
+
+			try {
+			    $this->_handleAjax( 'frm_fields_ajax_data_options' );
+			} catch ( WPAjaxDieContinueException $e ) {
+			    // Nothing was echoed
+			}
+
+			// The data returned from the ajax request
+			$response = $this->_last_response;
+
+			self::_check_dynamic_field_options( $response, $args, $test );
+			self::_check_dynamic_field_value( $response, $args, $test );
+			self::_check_dynamic_field_default_value( $response, $args, $test );
+
+			$this->_last_response = '';
+		}
+	}
+	function _get_dynamic_fields_args() {
+		$args = array();
+
+		// Get the Dynamic field
+		$field_id = FrmField::get_id_by_key( 'dynamic-state' );
+		$args['field'] = FrmField::getOne( $field_id );
+
+		// Get the Parent field
+		$parent_field_id = FrmField::get_id_by_key( 'dynamic-country' );
+		$args['parent_field'] = FrmField::getOne( $parent_field_id );
+		$values = array( 'hide_field' => array(), 'form_select' => $args['parent_field']->field_options['form_select'], 'restrict' => '' );
+		$args['parent_options'] = FrmProFieldsHelper::get_linked_options( $values, $args['field'], '');
+
+		foreach ( $args['parent_options'] as $key => $opt ) {
+			if ( $opt == 'United States' ) {
+				$args['us_id'] = $key;
+				break;
+			}
+		}
+
+		self::_get_the_join_field( $args );
+		self::_get_the_expected_dynamic_field_entry_ids( $args );
+		self::_get_the_prev_val( $args );
+
+		return $args;
+	}
+	function _get_dynamic_posted_vals( $args ) {
+
+		$post_vals = array(
+			'trigger_field_id' => $args['parent_field']->id,
+			'entry_id' => $args['us_id'],
+			'field_id' => $args['field']->id,
+			'container_id' => 'frm_field_' . $args['field']->id . '_container',
+			'linked_field_id' => $args['field']->field_options['form_select'],
+			'default_value' => '',
+			'prev_val' => ''
+		);
+
+		return $post_vals;
+	}
+
+	function _modify_dynamic_posted_vals( $test, $args ) {
+		if ( strpos( $test, 'prev_val' ) !== false ) {
+			$_POST['prev_val'] = $args['prev_val'];
+		} else if ( strpos( $test, 'default_val' ) !== false ) {
+			$_POST['default_value'] = $args['prev_val'];
+		} else if ( $test == 'multi-radio' ) {
+			$_POST['entry_id'] = array_keys( $args['parent_options'] );
+		}
+	}
+
+	function _modify_dynamic_field_for_test( $test, $args ) {
+		$update_field = false;
+			if ( strpos( $test, 'readonly' ) !== false ) {
+			$update_field = true;
+			$new_field_options = $args['field']->field_options;
+			$new_field_options['read_only'] = true;
+		}
+
+		if ( in_array( $test, array( 'radio', 'select' ) ) ) {
+			$update_field = true;
+			$new_field_options = $args['field']->field_options;
+			$new_field_options['read_only'] = false;
+			$new_field_options['data_type'] = $test;
+			$args['field']->field_options['data_type'] = $test;
+		}
+
+		if ( $update_field ) {
+			$field_values = array(
+				'field_options' => $new_field_options
+			);
+
+			FrmField::update( $args['field']->id, $field_values );
+		}
+	}
+
+	function _check_dynamic_field_options( $response, $args, $test ) {
+		$expected_ids = self::_package_expected_ids( $args );
+
+		// Check if the options are correct
+		foreach ( $expected_ids as $e ) {
+			self::_check_for_value_id_substring( $e, $response, $test );
+			self::_check_for_readonly_input( $e, $response, $test );
+			self::_check_for_input_id_substring( $e, $response, $test );
+		}
+
+		self::_make_sure_brazil_options_are_not_present( $args, $response, $test );
+	}
+	function _package_expected_ids( $args ) {
+		if ( is_array( $_POST['entry_id'] ) ) {
+			$expected_ids = array();
+			foreach ( $_POST['entry_id'] as $e ) {
+				$expected_ids = array_merge( $expected_ids, $args['expected_ids'][ $e ] );
+			}
+		} else if ( ! is_array( $_POST['entry_id'] ) ) {
+			$expected_ids = $args['expected_ids'][ $_POST['entry_id'] ];
+		}
+
+		return $expected_ids;
+	}
+	function _check_for_value_id_substring( $e, $response, $test ) {
+		// Check for the value="ID" substring
+		$substring = 'value="' . $e . '"';
+		$this->assertTrue( strpos( $response, $substring ) !== false, 'The substring ' . $substring . ' didn\'t show up in the field in the ' . $test . ' test.' );
+	}
+
+	function _check_for_readonly_input( $e, $response, $test ) {
+		if ( strpos( $test, 'readonly' ) !== false ) {
+			$substring = '<input type="hidden"';
+
+			$this->assertTrue( strpos( $response, $substring ) !== false, 'The substring ' . $substring . ' didn\'t show up in the field in the ' . $test . ' test.' );
+		}
+	}
+			function _check_for_input_id_substring( $e, $response, $test ) {
+		if ( strpos( $test, 'checkbox' ) !== false || strpos( $test, 'radio' ) !== false ) {
+			$substring = 'id="field_dynamic-state-' . $e . '"';
+		} else if ( strpos( $test, 'select' ) !== false ) {
+			$substring = '<select';
+		}
+
+		$this->assertTrue( strpos( $response, $substring ) !== false, 'The substring ' . $substring . ' didn\'t show up in the field in the ' . $test . ' test.' );
+	}
+
+	// Make sure Sao Paulo isn't in the options when only US States should be showing
+	function _make_sure_brazil_options_are_not_present( $args, $response, $test ) {
+		if ( $_POST['entry_id'] == $args['us_id'] ) {
+			$substring = 'Sao Paulo';
+			$this->assertFalse( strpos( $response, $substring ), 'Sao Paulo is showing up in the Dynamic field options when it shouldn\'t be (' . $test . ' test).' );
+		}
+	}
+
+	function _check_dynamic_field_value( $response, $args, $test ) {
+		$selected_vals = array();
+
+		if ( strpos( $test, 'prev_val' ) !== false || strpos( $test, 'default_val' ) !== false ) {
+			$selected_vals = $args['prev_val'];
+		}
+
+		foreach ( $selected_vals as $selected_val ) {
+			self::_check_if_dynamic_field_value_selected( $test, $response, $selected_val );
+		}
+
+		if ( empty( $selected_vals ) ) {
+			self::_make_sure_no_values_selected( $test, $response );
+		}
+	}
+
+	function _check_if_dynamic_field_value_selected( $test, $response, $selected_val ) {
+
+		if ( strpos( $test, 'checkbox' ) !== false || strpos( $test, 'radio' ) !== false ) {
+			$substring = 'value="' . $selected_val . '"  checked="checked"';
+
+		} else if ( strpos( $test, 'select' ) !== false ) {
+			$substring = 'value="' . $selected_val . '" selected="selected"';
+
+		}
+
+		$this->assertTrue( strpos( $response, $substring ) !== false, 'The correct value was not selected in the dependent Dynamic field in the ' . $test . ' test.' );
+
+	}
+
+	function _make_sure_no_values_selected( $test, $response ) {
+		if ( strpos( $test, 'checkbox' ) !== false || strpos( $test, 'radio' ) !== false ) {
+			// Checkbox/radio with no values selected
+			$substring = 'checked="true"';
+			$this->assertFalse( strpos( $response, $substring ), 'A value was selected in a dependent Dynamic field when it shouldn\'t be in the ' . $test . ' test.' );
+
+		} else if ( strpos( $test, 'select' ) !== false ) {
+			// Dropdown with no option selected
+			$substring = '<option value="" selected="selected"> </option>';
+			$this->assertTrue( strpos( $response, $substring ) !== false, 'The correct value was not selected in the dependent Dynamic field in the ' . $test . ' test.' );
+		}
+	}
+
+	// Make sure data-frmval is set when it should be
+	function _check_dynamic_field_default_value( $response, $args, $test ) {
+		$default_vals = array();
+			if ( strpos( $test, 'default_val' ) !== false ) {
+			$default_vals = $args['prev_val'];
+		}
+			foreach ( $default_vals as $default ) {
+			$substring = 'data-frmval="[&quot;' . $default . '&quot;]"';
+
+			$this->assertTrue( strpos( $response, $substring ) !== false, 'The correct value was not selected in the dependent Dynamic field in the ' . $test . ' test.' );
+		}
+	}
+
+	// Get the joining field (for example, the Dynamic Country field in the State form)
+	function _get_the_join_field( &$args ) {
+		$linked_field = FrmField::getOne( $args['field']->field_options['form_select'] );
+		$join_fields = FrmField::get_all_types_in_form( $linked_field->form_id, 'data' );
+		foreach ( $join_fields as $j ) {
+			if ( $j->field_options['form_select'] == $args['parent_field']->field_options['form_select'] ) {
+				$args['join_field'] = $j;
+				break;
+			}
+		}
+	}
+
+	// Get all entry IDs for selected option
+	function _get_the_expected_dynamic_field_entry_ids( &$args ) {
+		global $wpdb;
+
+		$args['expected_ids'] = array();
+		foreach ( $args['parent_options'] as $entry_id => $opt ) {
+			$query = 'SELECT item_id FROM ' . $wpdb->prefix . 'frm_item_metas WHERE field_id=' . $args['join_field']->id . ' AND meta_value=' . $entry_id;
+			$args['expected_ids'][ $entry_id ] = $wpdb->get_col( $query );
+		}
+	}
+
+	function _get_the_prev_val( &$args ) {
+		$state_array = $args['expected_ids'][ $args['us_id'] ];
+		$random_key = array_rand( $state_array );
+		$args['prev_val'] = array( $state_array[ $random_key ] );
+	}
 }
