@@ -71,7 +71,7 @@ class EDD_SL_Plugin_Updater {
      * @param array   $_transient_data Update array build by WordPress.
      * @return array Modified update array with custom plugin data.
      */
-    function check_update( $_transient_data ) {
+    public function check_update( $_transient_data ) {
 
         global $pagenow;
 
@@ -212,7 +212,7 @@ class EDD_SL_Plugin_Updater {
      * @param object  $_args
      * @return object $_data
      */
-    function plugins_api_filter( $_data, $_action = '', $_args = null ) {
+    public function plugins_api_filter( $_data, $_action = '', $_args = null ) {
 
         if ( $_action != 'plugin_information' ) {
 
@@ -252,7 +252,7 @@ class EDD_SL_Plugin_Updater {
      * @param string  $url
      * @return object $array
      */
-    function http_request_args( $args, $url ) {
+    public function http_request_args( $args, $url ) {
         // If it is an https request and we are performing a package download, disable ssl verification
         if ( strpos( $url, 'https://' ) !== false && strpos( $url, 'edd_action=package_download' ) ) {
             $args['sslverify'] = false;
@@ -299,6 +299,13 @@ class EDD_SL_Plugin_Updater {
             'url'        => home_url(),
         );
 
+		$cache_key = md5( 'edd_plugin_' . sanitize_key( $api_params['item_name'] . $api_params['item_id'] ) . '_' . $api_params['add_action'] );
+		$cached_response = get_transient( $cache_key );
+		if ( $cached_response ) {
+			// if this has been checked within 24 hours, don't check again
+			return $cached_response;
+		}
+
         $request = wp_remote_post( $this->api_url, array( 'timeout' => 15, 'sslverify' => false, 'body' => $api_params ) );
 
         if ( ! is_wp_error( $request ) ) {
@@ -310,6 +317,8 @@ class EDD_SL_Plugin_Updater {
         } else {
             $request = false;
         }
+
+		set_transient( $cache_key, $request, 60*60*24 );
 
         return $request;
     }
