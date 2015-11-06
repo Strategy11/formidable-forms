@@ -1010,7 +1010,7 @@ Jam Band, Electronic, Electronica, JamTronica, EDM, Producer, Rock,  Jazz, Soul,
         <parent_form_id>698</parent_form_id>
 		<field>
 		    <id>8132</id>
-            <field_key><![CDATA[gbm7pi]]></field_key>
+            <field_key><![CDATA[repeating-text]]></field_key>
             <name><![CDATA[Single Line Text]]></name>
             <description><![CDATA[]]></description>
             <type><![CDATA[text]]></type>
@@ -1023,7 +1023,7 @@ Jam Band, Electronic, Electronica, JamTronica, EDM, Producer, Rock,  Jazz, Soul,
 		</field>
 		<field>
 		    <id>8133</id>
-            <field_key><![CDATA[z708ek]]></field_key>
+            <field_key><![CDATA[repeating-checkbox]]></field_key>
             <name><![CDATA[Checkboxes]]></name>
             <description><![CDATA[]]></description>
             <type><![CDATA[checkbox]]></type>
@@ -1036,7 +1036,7 @@ Jam Band, Electronic, Electronica, JamTronica, EDM, Producer, Rock,  Jazz, Soul,
 		</field>
 		<field>
 		    <id>8134</id>
-            <field_key><![CDATA[vj1s02]]></field_key>
+            <field_key><![CDATA[repeating-date]]></field_key>
             <name><![CDATA[Date]]></name>
             <description><![CDATA[]]></description>
             <type><![CDATA[date]]></type>

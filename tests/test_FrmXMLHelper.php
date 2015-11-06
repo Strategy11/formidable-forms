@@ -12,6 +12,7 @@ class WP_Test_FrmXMLHelper extends FrmUnitTest {
 		foreach ( $imported_fields as $f ) {
 			self::_check_imported_repeating_fields( $f, $fields_tested );
 			self::_check_imported_embed_form_fields( $f, $fields_tested );
+			// Check fields inside repeating section
 		}
 
 		$this->assertEquals( $fields_tested, $total_fields_to_test, 'Only ' . $fields_tested . ' fields were tested, but ' . $total_fields_to_test . ' were expected.');
