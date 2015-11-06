@@ -169,7 +169,7 @@ class FrmNotification {
 	 * @since 2.0.1
 	 */
 	private static function explode_emails( $emails ) {
-		$emails = ( ! empty( $emails ) ? preg_split( '/(,|;)/', $emails ) : '' );
+		$emails = ( ! empty( $emails ) ? preg_split( '/(,|;|\s)/', $emails ) : '' );
 		if ( is_array( $emails ) ) {
 			$emails = array_map( 'trim', $emails );
 		} else {
