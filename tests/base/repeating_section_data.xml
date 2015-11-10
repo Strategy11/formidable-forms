@@ -325,7 +325,7 @@
             <form_id>698</form_id>
             <required></required>
             <options><![CDATA[]]></options>
-            <field_options><![CDATA[{"size":"","max":"","label":"","blank":"","required_indicator":"*","invalid":"","separate_value":0,"clear_on_focus":0,"default_blank":0,"classes":"","custom_html":"<div id=\"frm_field_[id]_container\" class=\"frm_form_field form-field [required_class][error_class]\">\n[input]\n<\/div>","slide":0,"form_select":"697","show_hide":"show","any_all":"any","align":"block","hide_field":[],"hide_field_cond":["=="],"hide_opt":[],"star":0,"ftypes":[],"data_type":"select","restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"step":1,"clock":12,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","calc_dec":"","dyn_default_value":"","multiple":0,"unique_msg":"This value must be unique.","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":0}]]></field_options>
+            <field_options><![CDATA[{"size":"","max":"","label":"","blank":"","required_indicator":"*","invalid":"","separate_value":0,"clear_on_focus":0,"default_blank":0,"classes":"","custom_html":"<div id=\"frm_field_[id]_container\" class=\"frm_form_field form-field [required_class][error_class]\">\n[input]\n<\/div>","slide":0,"form_select":"12","show_hide":"show","any_all":"any","align":"block","hide_field":[],"hide_field_cond":["=="],"hide_opt":[],"star":0,"ftypes":[],"data_type":"select","restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"step":1,"clock":12,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","calc_dec":"","dyn_default_value":"","multiple":0,"unique_msg":"This value must be unique.","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":0}]]></field_options>
 		</field>
 		<field>
 		    <id>8124</id>
@@ -416,7 +416,7 @@
             <form_id>698</form_id>
             <required></required>
             <options><![CDATA[]]></options>
-            <field_options><![CDATA[{"size":"","max":"","label":"top","blank":"","required_indicator":"*","invalid":"","separate_value":0,"clear_on_focus":0,"default_blank":0,"classes":"","custom_html":"<div id=\"frm_field_[id]_container\" class=\"frm_form_field frm_section_heading form-field[error_class]\">\n<h3 class=\"frm_pos_[label_position][collapse_class]\">[field_name]<\/h3>\n[if description]<div class=\"frm_description\">[description]<\/div>[\/if description]\n[collapse_this]\n<\/div>","repeat":"1","form_select":"13","slide":0,"show_hide":"show","any_all":"any","align":"block","hide_field":[],"hide_field_cond":["=="],"hide_opt":[],"star":0,"ftypes":[],"data_type":"select","restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"step":1,"clock":12,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","calc_dec":"","dyn_default_value":"","multiple":0,"unique_msg":"This value must be unique.","autocom":0,"format":"","add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":0}]]></field_options>
+            <field_options><![CDATA[{"size":"","max":"","label":"top","blank":"","required_indicator":"*","invalid":"","separate_value":0,"clear_on_focus":0,"default_blank":0,"classes":"","custom_html":"<div id=\"frm_field_[id]_container\" class=\"frm_form_field frm_section_heading form-field[error_class]\">\n<h3 class=\"frm_pos_[label_position][collapse_class]\">[field_name]<\/h3>\n[if description]<div class=\"frm_description\">[description]<\/div>[\/if description]\n[collapse_this]\n<\/div>","repeat":"1","form_select":"6","slide":0,"show_hide":"show","any_all":"any","align":"block","hide_field":[],"hide_field_cond":["=="],"hide_opt":[],"star":0,"ftypes":[],"data_type":"select","restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"step":1,"clock":12,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","calc_dec":"","dyn_default_value":"","multiple":0,"unique_msg":"This value must be unique.","autocom":0,"format":"","add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":0}]]></field_options>
 		</field>
 		<field>
 		    <id>8131</id>
@@ -446,7 +446,7 @@
 		</field>
 	</form>
 	<form>
-		<id>13</id>
+		<id>6</id>
 		<form_key><![CDATA[rep_sec_form]]></form_key>
 		<name><![CDATA[]]></name>
 		<description><![CDATA[]]></description>
@@ -457,7 +457,7 @@
 		<editable>0</editable>
 		<options><![CDATA[{"submit_value":"Submit","success_action":"message","success_msg":"Your responses were successfully submitted. Thank you!","show_form":0,"akismet":"","no_save":0,"ajax_load":0,"form_class":"","custom_style":1,"before_html":"<legend class=\"frm_hidden\">[form_name]<\/legend>\n[if form_name]<h3>[form_name]<\/h3>[\/if form_name]\n[if form_description]<div class=\"frm_description\">[form_description]<\/div>[\/if form_description]","after_html":"","submit_html":"<div class=\"frm_submit\">\n[if back_button]<input type=\"button\" value=\"[back_label]\" name=\"frm_prev_page\" formnovalidate=\"formnovalidate\" class=\"frm_prev_page\" [back_hook] \/>[\/if back_button]\n<input type=\"submit\" value=\"[button_label]\" [button_action] \/>\n<img class=\"frm_ajax_loading\" src=\"[frmurl]\/images\/ajax_loader.gif\" alt=\"Sending\"\/>\n[if save_draft]<a href=\"#\" class=\"frm_save_draft\" [draft_hook]>[draft_label]<\/a>[\/if save_draft]\n<\/div>","edit_value":"Update","edit_msg":"Your submission was successfully saved.","edit_action":"message","edit_url":"","edit_page_id":0,"logged_in_role":"","save_draft":0,"draft_msg":"Your draft has been saved.","editable_role":"","open_editable_role":"-1","copy":0,"single_entry":0,"single_entry_type":"user","success_page_id":"","success_url":"","ajax_submit":0,"cookie_expiration":8000,"prev_value":"Previous","submit_align":"","paypal":0,"paypal_item_name":"","paypal_amount_field":"","paypal_amount":"","paypal_list":[],"paypal_stop_email":0,"paypal_type":""}]]></options>
 		<status><![CDATA[draft]]></status>
-        <parent_form_id>698</parent_form_id>
+        <parent_form_id>13</parent_form_id>
 		<field>
 		    <id>8132</id>
             <field_key><![CDATA[repeating-text]]></field_key>
@@ -466,7 +466,7 @@
             <type><![CDATA[text]]></type>
             <default_value><![CDATA[]]></default_value>
             <field_order>31</field_order>
-            <form_id>13</form_id>
+            <form_id>6</form_id>
             <required></required>
             <options><![CDATA[]]></options>
             <field_options><![CDATA[{"size":"","max":"","label":"","blank":"This field cannot be blank.","required_indicator":"*","invalid":"","separate_value":0,"clear_on_focus":0,"default_blank":0,"classes":"","custom_html":"<div id=\"frm_field_[id]_container\" class=\"frm_form_field form-field [required_class][error_class]\">\n    <label for=\"field_[key]\" class=\"frm_primary_label\">[field_name]\n        <span class=\"frm_required\">[required_label]<\/span>\n    <\/label>\n    [input]\n    [if description]<div class=\"frm_description\">[description]<\/div>[\/if description]\n    [if error]<div class=\"frm_error\">[error]<\/div>[\/if error]\n<\/div>","slide":0,"form_select":"","show_hide":"show","any_all":"any","align":"block","hide_field":[],"hide_field_cond":["=="],"hide_opt":[],"star":0,"ftypes":[],"data_type":"select","restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"step":1,"clock":12,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","calc_dec":"","dyn_default_value":"","multiple":0,"unique_msg":"","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":0}]]></field_options>
@@ -479,7 +479,7 @@
             <type><![CDATA[checkbox]]></type>
             <default_value><![CDATA[]]></default_value>
             <field_order>32</field_order>
-            <form_id>13</form_id>
+            <form_id>6</form_id>
             <required></required>
             <options><![CDATA[["Option 1","Option 2"]]]></options>
             <field_options><![CDATA[{"size":"","max":"","label":"","blank":"This field cannot be blank.","required_indicator":"*","invalid":"","separate_value":0,"clear_on_focus":0,"default_blank":0,"classes":"","custom_html":"<div id=\"frm_field_[id]_container\" class=\"frm_form_field form-field [required_class][error_class]\">\n    <label  class=\"frm_primary_label\">[field_name]\n        <span class=\"frm_required\">[required_label]<\/span>\n    <\/label>\n    <div class=\"frm_opt_container\">[input]<\/div>\n    [if description]<div class=\"frm_description\">[description]<\/div>[\/if description]\n    [if error]<div class=\"frm_error\">[error]<\/div>[\/if error]\n<\/div>","slide":0,"form_select":"","show_hide":"show","any_all":"any","align":"block","hide_field":[],"hide_field_cond":["=="],"hide_opt":[],"star":0,"ftypes":[],"data_type":"select","restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"step":1,"clock":12,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","calc_dec":"","dyn_default_value":"","multiple":0,"unique_msg":"","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":"0"}]]></field_options>
@@ -492,7 +492,7 @@
             <type><![CDATA[date]]></type>
             <default_value><![CDATA[]]></default_value>
             <field_order>33</field_order>
-            <form_id>13</form_id>
+            <form_id>6</form_id>
             <required></required>
             <options><![CDATA[]]></options>
             <field_options><![CDATA[{"size":"","max":"10","label":"","blank":"This field cannot be blank.","required_indicator":"*","invalid":"Date is invalid","separate_value":0,"clear_on_focus":0,"default_blank":0,"classes":"","custom_html":"<div id=\"frm_field_[id]_container\" class=\"frm_form_field form-field [required_class][error_class]\">\n    <label for=\"field_[key]\" class=\"frm_primary_label\">[field_name]\n        <span class=\"frm_required\">[required_label]<\/span>\n    <\/label>\n    [input]\n    [if description]<div class=\"frm_description\">[description]<\/div>[\/if description]\n    [if error]<div class=\"frm_error\">[error]<\/div>[\/if error]\n<\/div>","slide":0,"form_select":"","show_hide":"show","any_all":"any","align":"block","hide_field":[],"hide_field_cond":["=="],"hide_opt":[],"star":0,"ftypes":[],"data_type":"select","restrict":0,"start_year":"2000","end_year":"2020","read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"step":1,"clock":12,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","calc_dec":"","dyn_default_value":"","multiple":0,"unique_msg":"","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":0}]]></field_options>
@@ -505,7 +505,7 @@
 		<description><![CDATA[{"browser":"Mozilla\/5.0 (Macintosh; Intel Mac OS X 10.10; rv:37.0) Gecko\/20100101 Firefox\/37.0","referrer":"http:\/\/localhost:8888\/features\/wp-admin\/admin-ajax.php?action=frm_forms_preview&form=boymfd"}]]></description>
 		<created_at>2015-05-13 19:30:23</created_at>
 		<updated_at>2015-05-13 19:30:23</updated_at>
-		<form_id>13</form_id>
+		<form_id>6</form_id>
 		<post_id>0</post_id>
 		<ip>::1</ip>
 		<is_draft>0</is_draft>
@@ -533,7 +533,7 @@
 		<description><![CDATA[{"browser":"Mozilla\/5.0 (Macintosh; Intel Mac OS X 10.10; rv:37.0) Gecko\/20100101 Firefox\/37.0","referrer":"http:\/\/localhost:8888\/features\/wp-admin\/admin-ajax.php?action=frm_forms_preview&form=boymfd"}]]></description>
 		<created_at>2015-05-13 19:30:23</created_at>
 		<updated_at>2015-05-13 19:30:23</updated_at>
-		<form_id>13</form_id>
+		<form_id>6</form_id>
 		<post_id>0</post_id>
 		<ip>::1</ip>
 		<is_draft>0</is_draft>
@@ -561,7 +561,7 @@
 		<description><![CDATA[{"browser":"Mozilla\/5.0 (Macintosh; Intel Mac OS X 10.10; rv:37.0) Gecko\/20100101 Firefox\/37.0","referrer":"http:\/\/localhost:8888\/features\/wp-admin\/admin-ajax.php?action=frm_forms_preview&form=boymfd"}]]></description>
 		<created_at>2015-05-13 19:30:23</created_at>
 		<updated_at>2015-05-13 19:30:23</updated_at>
-		<form_id>13</form_id>
+		<form_id>6</form_id>
 		<post_id>0</post_id>
 		<ip>::1</ip>
 		<is_draft>0</is_draft>
@@ -589,7 +589,7 @@
 		<description><![CDATA[{"browser":"Mozilla\/5.0 (Macintosh; Intel Mac OS X 10.10; rv:37.0) Gecko\/20100101 Firefox\/37.0","referrer":"http:\/\/localhost:8888\/features\/wp-admin\/admin-ajax.php?action=frm_forms_preview&form=boymfd"}]]></description>
 		<created_at>2015-05-13 19:37:13</created_at>
 		<updated_at>2015-05-13 19:37:13</updated_at>
-		<form_id>13</form_id>
+		<form_id>6</form_id>
 		<post_id>0</post_id>
 		<ip>::1</ip>
 		<is_draft>0</is_draft>
@@ -617,7 +617,7 @@
 		<description><![CDATA[{"browser":"Mozilla\/5.0 (Macintosh; Intel Mac OS X 10.10; rv:37.0) Gecko\/20100101 Firefox\/37.0","referrer":"http:\/\/localhost:8888\/features\/wp-admin\/admin-ajax.php?action=frm_forms_preview&form=boymfd"}]]></description>
 		<created_at>2015-05-13 19:37:13</created_at>
 		<updated_at>2015-05-13 19:37:13</updated_at>
-		<form_id>13</form_id>
+		<form_id>6</form_id>
 		<post_id>0</post_id>
 		<ip>::1</ip>
 		<is_draft>0</is_draft>
@@ -645,7 +645,7 @@
 		<description><![CDATA[{"browser":"Mozilla\/5.0 (Macintosh; Intel Mac OS X 10.10; rv:37.0) Gecko\/20100101 Firefox\/37.0","referrer":"http:\/\/localhost:8888\/features\/wp-admin\/admin-ajax.php?action=frm_forms_preview&form=boymfd"}]]></description>
 		<created_at>2015-05-13 19:37:13</created_at>
 		<updated_at>2015-05-13 19:37:13</updated_at>
-		<form_id>13</form_id>
+		<form_id>6</form_id>
 		<post_id>0</post_id>
 		<ip>::1</ip>
 		<is_draft>0</is_draft>
@@ -673,7 +673,7 @@
 		<description><![CDATA[{"browser":"Mozilla\/5.0 (Macintosh; Intel Mac OS X 10.10; rv:37.0) Gecko\/20100101 Firefox\/37.0","referrer":"http:\/\/localhost:8888\/features\/wp-admin\/admin-ajax.php?action=frm_forms_preview&form=boymfd"}]]></description>
 		<created_at>2015-05-13 19:40:11</created_at>
 		<updated_at>2015-05-13 19:40:11</updated_at>
-		<form_id>13</form_id>
+		<form_id>6</form_id>
 		<post_id>0</post_id>
 		<ip>::1</ip>
 		<is_draft>0</is_draft>
@@ -701,7 +701,7 @@
 		<description><![CDATA[{"browser":"Mozilla\/5.0 (Macintosh; Intel Mac OS X 10.10; rv:37.0) Gecko\/20100101 Firefox\/37.0","referrer":"http:\/\/localhost:8888\/features\/wp-admin\/admin-ajax.php?action=frm_forms_preview&form=boymfd"}]]></description>
 		<created_at>2015-05-13 19:40:11</created_at>
 		<updated_at>2015-05-13 19:40:11</updated_at>
-		<form_id>13</form_id>
+		<form_id>6</form_id>
 		<post_id>0</post_id>
 		<ip>::1</ip>
 		<is_draft>0</is_draft>
@@ -729,7 +729,7 @@
 		<description><![CDATA[{"browser":"Mozilla\/5.0 (Macintosh; Intel Mac OS X 10.10; rv:37.0) Gecko\/20100101 Firefox\/37.0","referrer":"http:\/\/localhost:8888\/features\/wp-admin\/admin-ajax.php?action=frm_forms_preview&form=boymfd"}]]></description>
 		<created_at>2015-05-13 19:40:11</created_at>
 		<updated_at>2015-05-13 19:40:11</updated_at>
-		<form_id>13</form_id>
+		<form_id>6</form_id>
 		<post_id>0</post_id>
 		<ip>::1</ip>
 		<is_draft>0</is_draft>

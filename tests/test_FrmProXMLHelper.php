@@ -103,20 +103,13 @@ class WP_Test_FrmProXMLHelper extends FrmUnitTest {
 	}
 
 	function test_xml_import_to_update_entries() {
-		// Note: The repeating_section_data.xml file has a form_select of 13. This could potentially change at any time and I need to find a way to make the XML file match whatever is correct
+		$args = self::_get_xml_update_args();
 
-		$args = array(
-			'repeating_section_id' => FrmField::get_id_by_key( 'repeating-section' )
-		);
-
-		$repeating_field_ids = self::_get_fields_in_repeating_section( $args );
-
+		// TODO generate XML file
 		$path = FrmAppHelper::plugin_path() . '/tests/base/repeating_section_data.xml';
 		$message = FrmXMLHelper::import_xml( $path );
 
-		self::_check_xml_updated_fields();
-		self::_check_xml_updated_repeating_fields( $repeating_field_ids );
-		self::_check_xml_updated_repeating_section();
+		self::_check_xml_update_repeating_section_values( $args );
 		//self::_check_xml_updated_repeating_entries();
 		//self::_check_parent_entries();
 
@@ -124,56 +117,34 @@ class WP_Test_FrmProXMLHelper extends FrmUnitTest {
 		self::_check_the_imported_and_updated_numbers( $message );
 	}
 
-	function _check_xml_updated_fields() {
-		$parent_form_id = FrmForm::getIdByKey( 'all_field_types' );
-		$fields = FrmField::get_all_for_form( $parent_form_id, '', 'include', 'include' );
-
-		// 36 fields expected
-		$this->assertEquals( 36, count( $fields ), 'Fields were either added or removed on XML import, but they should have been updated.' );
-	}
-
-	function _check_xml_updated_repeating_fields( $repeating_field_ids ) {
+	function _get_xml_update_args() {
 		$repeating_section_id = FrmField::get_id_by_key( 'repeating-section' );
+		$repeating_section_values = self::_get_repeating_section_values( $repeating_section_id );
 		$repeating_section = FrmField::getOne( $repeating_section_id );
+		$repeating_fields = FrmField::get_all_for_form( $repeating_section->field_options['form_select'] );
 
-		$fields = FrmField::get_all_for_form( $repeating_section->field_options['form_select'] );
-
-		// Expected number of fields in repeating form: 3
-		$this->assertEquals( 3, count( $fields ), 'Fields in repeating section were either added or deleted when they should have been updated.' );
-
-		// Make sure the same fields are still in the section
-		$repeating_field_keys = array( 'repeating-text', 'repeating-checkbox', 'repeating-date' );
-		foreach ( $fields as $field ) {
-			// Check field key
-			$this->assertTrue( in_array( $field->field_key, $repeating_field_keys ), 'A field with the key ' . $field->field_key . ' was created when it should have been upated.' );
-			// Check field ID
-			$this->assertTrue( in_array( $field->id, $repeating_field_ids ), 'A field with the key ' . $field->field_key . ' and ID ' . $field->id . ' was created when it should have been upated.' );
-		}
-
-	}
-
-	function _check_xml_updated_repeating_section() {
-		$expected_form_select = FrmForm::getIdByKey( 'rep_sec_form' );
-		$repeating_section_id = FrmField::get_id_by_key( 'repeating-section' );
-		$repeating_section = FrmField::getOne( $repeating_section_id );
-
-		$this->assertEquals( $expected_form_select, $repeating_section->field_options['form_select'], 'A repeating section\'s form_select was changed on XML import, but it should have remained the same.' );
-	}
-
-	function _check_the_imported_and_updated_numbers( $message ) {
-		foreach ( $message['imported'] as $type => $number ) {
-			$this->assertEquals( 0, $number, $number . ' ' . $type . ' were imported but they should have been updated.' );
-		}
-
-		$expected_numbers = array(
-			'forms' => 2,
-			'fields' => 36,
-			'items' => 12
+		$args = array(
+			'repeating_section_id' => $repeating_section_id,
+			'repeating_section_values' => $repeating_section_values,
+			'repeating_fields' => $repeating_fields
 		);
 
-		foreach ( $expected_numbers as $type => $e_number ) {
-			$this->assertEquals( $e_number, $message['updated'][ $type ], 'There is a discrepancy between the number of ' . $type . ' expected to be updated vs. the actual number of updated ' . $type . '. Before digging into this, check the $expected_numbers to make sure it is correct.' );
-		}
+		return $args;
+	}
+
+	function _get_repeating_section_values( $repeating_section_id ) {
+		global $wpdb;
+
+		$query = 'SELECT meta_value FROM ' . $wpdb->prefix . 'frm_item_metas WHERE field_id=' . $repeating_section_id;
+		$meta_values = $wpdb->get_col( $query );
+
+		return $meta_values;
+	}
+
+	function _check_xml_update_repeating_section_values( $args ) {
+		$new_values = self::_get_repeating_section_values( $args['repeating_section_id'] );
+
+		$this->assertEquals( $args['repeating_section_values'], $new_values, 'The meta_value for a repeating section was modified on XML import (update) when it should not have been.' );
 	}
 
 	function _check_xml_updated_repeating_entries() {
