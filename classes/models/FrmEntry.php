@@ -523,7 +523,7 @@ class FrmEntry {
 			'is_draft'  => self::get_is_draft_value( $values ),
 			'form_id'   => self::get_form_id( $values ),
 			'post_id'   => self::get_post_id( $values ),
-			'parent_item_id' => self::get_parent_item_id(),
+			'parent_item_id' => self::get_parent_item_id( $values ),
 			'created_at' => self::get_created_at( $values ),
 			'updated_at' => self::get_updated_at( $values ),
 			'description' => self::get_entry_description( $values ),
