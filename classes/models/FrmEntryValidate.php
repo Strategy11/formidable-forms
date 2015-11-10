@@ -182,7 +182,7 @@ class FrmEntryValidate {
 
 	private static function is_akismet_spam( $values ) {
 		global $wpcom_api_key;
-		return ( ( function_exists( 'akismet_http_post' ) || is_callable('Akismet::http_post') ) && ( get_option('wordpress_api_key') || $wpcom_api_key ) && self::akismet( $values ) );
+		return ( is_callable('Akismet::http_post') && ( get_option('wordpress_api_key') || $wpcom_api_key ) && self::akismet( $values ) );
 	}
 
 	private static function is_akismet_enabled_for_user( $form_id ) {
