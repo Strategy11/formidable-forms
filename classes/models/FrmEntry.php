@@ -121,61 +121,44 @@ class FrmEntry {
         return $entry_id;
     }
 
-    public static function update( $id, $values ) {
-        global $wpdb, $frm_vars;
-        if ( isset($frm_vars['saved_entries']) && is_array($frm_vars['saved_entries']) && in_array( (int) $id, (array) $frm_vars['saved_entries'] ) ) {
-            return;
-        }
+	/**
+	* Update an entry (not via XML)
+	*
+	* @param int $id
+	* @param array $values
+	* @return boolean|int $update_results
+	*/
+	public static function update( $id, $values ) {
+		$update_results = self::update_entry( $id, $values, 'standard' );
 
-        $values = apply_filters('frm_pre_update_entry', $values, $id);
+		return $update_results;
+	}
 
-        $user_ID = get_current_user_id();
+	/**
+	* Update an entry with some differences depending on the update type
+	*
+	* @since 2.0.16
+	*
+	* @param int $id
+	* @param array $values
+	* @return boolean|int $query_results
+	*/
+	private static function update_entry( $id, $values, $update_type ) {
+		global $wpdb;
 
-		$item_name = self::get_new_entry_name( $values );
-        $new_values = array(
-			'name'      => $item_name,
-            'form_id'   => isset($values['form_id']) ? (int) $values['form_id'] : null,
-            'is_draft'  => ( ( isset($values['frm_saving_draft']) && $values['frm_saving_draft'] == 1 ) ||  ( isset($values['is_draft']) && $values['is_draft'] == 1) ) ? 1 : 0,
-            'updated_at' => current_time('mysql', 1),
-            'updated_by' => isset($values['updated_by']) ? $values['updated_by'] : $user_ID,
-        );
+		$update = self::before_update_entry( $id, $values, $update_type );
+		if ( ! $update ) {
+			return false;
+		}
 
-        if ( isset($values['post_id']) ) {
-            $new_values['post_id'] = (int) $values['post_id'];
-        }
+		$new_values = self::package_entry_to_update( $id, $values );
 
-        if ( isset($values['item_key']) ) {
-            $new_values['item_key'] = FrmAppHelper::get_unique_key($values['item_key'], $wpdb->prefix .'frm_items', 'item_key', $id);
-        }
+		$query_results = $wpdb->update( $wpdb->prefix .'frm_items', $new_values, compact('id') );
 
-        if ( isset($values['parent_item_id']) ) {
-            $new_values['parent_item_id'] = (int) $values['parent_item_id'];
-        }
+		self::after_update_entry( $query_results, $id, $values, $new_values );
 
-        if ( isset($values['frm_user_id']) && is_numeric($values['frm_user_id']) ) {
-            $new_values['user_id'] = $values['frm_user_id'];
-        }
-
-        $new_values = apply_filters('frm_update_entry', $new_values, $id);
-        $query_results = $wpdb->update( $wpdb->prefix .'frm_items', $new_values, compact('id') );
-
-        if ( $query_results ) {
-			self::clear_cache();
-        }
-
-        if ( ! isset( $frm_vars['saved_entries'] ) ) {
-            $frm_vars['saved_entries'] = array();
-        }
-
-        $frm_vars['saved_entries'][] = (int) $id;
-
-        if ( isset($values['item_meta']) ) {
-            FrmEntryMeta::update_entry_metas($id, $values['item_meta']);
-        }
-        do_action('frm_after_update_entry', $id, $new_values['form_id']);
-        do_action('frm_after_update_entry_'. $new_values['form_id'], $id);
-        return $query_results;
-    }
+		return $query_results;
+	}
 
 	public static function &destroy( $id ) {
         global $wpdb;
@@ -734,6 +717,94 @@ class FrmEntry {
 	}
 
 	/**
+	* Perform some actions right before updating an entry
+	*
+	* @since 2.0.16
+	* @param int $id
+	* @param array $values
+	* @param string $update_type
+	* @return boolean $update
+	*/
+	private static function before_update_entry( $id, $values, $update_type ) {
+		$update = true;
+
+		global $frm_vars;
+
+		if ( isset( $frm_vars['saved_entries'] ) && is_array( $frm_vars['saved_entries'] ) && in_array( (int) $id, (array) $frm_vars['saved_entries'] ) ) {
+			$update = false;
+		}
+
+		if ( $update && $update_type != 'xml' ) {
+			$values = apply_filters('frm_pre_update_entry', $values, $id);
+		}
+
+		return $update;
+	}
+
+	/**
+	* Package the entry data for updating
+	*
+	* @since 2.0.16
+	* @param int $id
+	* @param array $values
+	* @return array $new_values
+	*/
+	private static function package_entry_to_update( $id, $values ) {
+		global $wpdb;
+
+		$new_values = array(
+			'name'      => self::get_new_entry_name( $values ),
+			'form_id'   => self::get_form_id( $values ),
+			'is_draft'  => self::get_is_draft_value( $values ),
+			'updated_at' => current_time('mysql', 1),
+			'updated_by' => isset($values['updated_by']) ? $values['updated_by'] : get_current_user_id(),
+			'post_id'	=> self::get_post_id( $values ),
+			'parent_item_id' => self::get_parent_item_id( $values ),
+		);
+
+		if ( isset($values['item_key']) ) {
+			$new_values['item_key'] = FrmAppHelper::get_unique_key($values['item_key'], $wpdb->prefix .'frm_items', 'item_key', $id);
+		}
+
+		if ( isset($values['frm_user_id']) && is_numeric($values['frm_user_id']) ) {
+			$new_values['user_id'] = $values['frm_user_id'];
+		}
+
+		$new_values = apply_filters('frm_update_entry', $new_values, $id);
+
+		return $new_values;
+	}
+
+	/**
+	* Perform some actions right after updating an entry
+	*
+	* @since 2.0.16
+	* @param boolean|int $query_results
+	* @param int $id
+	* @param array $values
+	* @param array $new_values
+	*/
+	private static function after_update_entry( $query_results, $id, $values, $new_values ) {
+		if ( $query_results ) {
+			self::clear_cache();
+		}
+
+		global $frm_vars;
+		if ( ! isset( $frm_vars['saved_entries'] ) ) {
+			$frm_vars['saved_entries'] = array();
+		}
+
+		$frm_vars['saved_entries'][] = (int) $id;
+
+		if ( isset( $values['item_meta'] ) ) {
+			FrmEntryMeta::update_entry_metas( $id, $values['item_meta'] );
+		}
+
+		do_action('frm_after_update_entry', $id, $new_values['form_id'] );
+		do_action('frm_after_update_entry_'. $new_values['form_id'], $id );
+	}
+
+	/**
 	* Create entry from an XML import
 	* Certain actions aren't necessary when importing (like saving sub entries, checking for duplicates, etc.)
 	*
@@ -749,6 +820,21 @@ class FrmEntry {
 		$entry_id = self::continue_to_create_entry( $values, $new_values );
 
 		return $entry_id;
+	}
+
+	/**
+	* Update entry from an XML import
+	* Certain actions aren't necessary when importing (like saving sub entries and modifying other vals)
+	*
+	* @since 2.0.16
+	* @param int $id
+	* @param array $values
+	* @return int | boolean $updated
+	*/
+	public static function update_entry_from_xml( $id, $values ) {
+		$updated = self::update_entry( $id, $values, 'xml' );
+
+		return $updated;
 	}
 
     /**
