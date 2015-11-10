@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class FrmAddon {
-	public $store_url = 'http://formidablepro.com';
+	public $store_url = 'https://formidablepro.com';
 	public $plugin_file;
 	public $plugin_name;
 	public $plugin_slug;
@@ -61,7 +61,6 @@ class FrmAddon {
 			new EDD_SL_Plugin_Updater( $this->store_url, $this->plugin_file, array(
 				'version' 	=> $this->version,
 				'license' 	=> $license,
-				'item_name' => $this->plugin_name,
 				'author' 	=> $this->author,
 			) );
 		}
