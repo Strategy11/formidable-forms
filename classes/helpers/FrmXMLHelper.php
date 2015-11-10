@@ -122,8 +122,10 @@ class FrmXMLHelper {
 	}
 
 	public static function import_xml_forms( $forms, $imported ) {
-		// Keep track of repeating sections and child forms that are imported
-		$repeat_fields = $child_forms_missing_parent = array();
+		$child_forms = array();
+
+		// Import child forms first
+		self::put_child_forms_first( $forms );
 
 		foreach ( $forms as $item ) {
             $form = array(
@@ -148,8 +150,6 @@ class FrmXMLHelper {
             if ( ! $form['is_template'] ) {
                 $edit_query['created_at'] = $form['created_at'];
             }
-
-			$old_parent_form_id = self::maybe_replace_parent_form_id( $imported['forms'], $form['parent_form_id'] );
 
             $edit_query = apply_filters('frm_match_xml_form', $edit_query, $form);
 
@@ -180,12 +180,11 @@ class FrmXMLHelper {
                     $imported['imported']['forms']++;
                     // Keep track of whether this specific form was updated or not
 					$imported['form_status'][ $form_id ] = 'imported';
-
-					self::track_child_forms_missing_parent( (int) $form_id, $old_parent_form_id, $child_forms_missing_parent );
+					self::track_imported_child_forms( (int) $form_id, $form['parent_form_id'], $child_forms );
                 }
             }
 
-    		self::import_xml_fields( $item->field, $form_id, $this_form, $form_fields, $imported, $repeat_fields );
+    		self::import_xml_fields( $item->field, $form_id, $this_form, $form_fields, $imported );
 
     		// Delete any fields attached to this form that were not included in the template
     		if ( isset( $form_fields ) && ! empty( $form_fields ) ) {
@@ -208,55 +207,66 @@ class FrmXMLHelper {
 
 		    unset($form, $item);
 		}
-		self::update_repeat_field_options( $repeat_fields, $imported['forms'] );
-		self::update_child_form_parents( $child_forms_missing_parent, $imported['forms'] );
+
+		self::maybe_update_child_form_parent_id( $imported['forms'], $child_forms );
 
 		return $imported;
     }
 
 	/**
-	* Replace the parent_form_id on child forms if their parent was already imported
-	* @since 2.0.13
+	* Put child forms first so they will be imported before parents
 	*
-	* @param array $imported_forms
-	* @param int $parent_form_id
-	* @return int $old_parent_form_id
+	* @since 2.0.16
+	* @param array $forms
 	*/
-	private static function maybe_replace_parent_form_id( $imported_forms, &$parent_form_id ) {
-		$old_parent_form_id = 0;
+	private static function put_child_forms_first( &$forms ) {
+		$child_forms = array();
+		$regular_forms = array();
 
-		if ( ! empty( $parent_form_id ) ) {
-			if ( isset( $imported_forms[ $parent_form_id ] ) ) {
-				// The parent has already been imported
+		foreach ( $forms as $form ) {
+			$parent_form_id = isset( $form->parent_form_id) ? (int) $form->parent_form_id : 0;
 
-            	// replace the old parent id with the new one
-				$parent_form_id = $imported_forms[ $parent_form_id ];
+			if ( $parent_form_id ) {
+				$child_forms[] = $form;
 			} else {
-				// The parent will be imported after
-
-				$old_parent_form_id = $parent_form_id;
+				$regular_forms[] = $form;
 			}
-        }
+		}
 
-		return $old_parent_form_id;
+		$forms = array_merge( $child_forms, $regular_forms );
 	}
 
 	/**
-	* Track child forms that were imported before their parents
-	* @since 2.0.13
+	* Keep track of all imported child forms
 	*
-	* @param int $new_form_id
-	* @param int $old_parent_form_id
-	* @param array $child_forms_missing_parent
+	* @since 2.0.16
+	* @param int $form_id
+	* @param int $parent_form_id
+	* @param array $child_forms
 	*/
-	private static function track_child_forms_missing_parent( $new_form_id, $old_parent_form_id, &$child_forms_missing_parent ) {
-		if ( $old_parent_form_id ) {
-			if ( ! isset( $child_forms_missing_parent[ $old_parent_form_id ] ) ) {
-				$child_forms_missing_parent[ $old_parent_form_id ] = array();
-			}
+	private static function track_imported_child_forms( $form_id, $parent_form_id, &$child_forms ) {
+		if ( $parent_form_id ) {
+			$child_forms[ $form_id ] = $parent_form_id;
+		}
+	}
 
-			// Multiple child forms may have the same parent
-			$child_forms_missing_parent[ $old_parent_form_id ][] = $new_form_id;
+	/**
+	* Update the parent_form_id on imported child forms
+	* Child forms are imported first so their parent_form_id will need to be updated after the parent is imported
+	*
+	* @since 2.0.6
+	* @param array $imported_forms
+	* @param array $child_forms
+	*/
+	private static function maybe_update_child_form_parent_id( $imported_forms, $child_forms ) {
+		foreach ( $child_forms as $child_form_id => $old_parent_form_id ) {
+
+			if ( isset( $imported_forms[ $old_parent_form_id ] ) && $imported_forms[ $old_parent_form_id ] != $old_parent_form_id ) {
+				// Update all children with this old parent_form_id
+				$new_parent_form_id = (int) $imported_forms[ $old_parent_form_id ];
+
+				FrmForm::update( $child_form_id, array( 'parent_form_id' => $new_parent_form_id ) );
+			}
 		}
 	}
 
@@ -266,7 +276,7 @@ class FrmXMLHelper {
 	*
 	* TODO: Cut down on params
 	*/
-	private static function import_xml_fields( $xml_fields, $form_id, $this_form, &$form_fields, &$imported, &$repeat_fields ) {
+	private static function import_xml_fields( $xml_fields, $form_id, $this_form, &$form_fields, &$imported ) {
 		foreach ( $xml_fields as $field ) {
 		    $f = array(
 		        'id'            => (int) $field->id,
@@ -296,6 +306,8 @@ class FrmXMLHelper {
 
 		    $f = apply_filters('frm_duplicated_field', $f);
 
+			self::maybe_update_form_select( $f, $imported );
+
 		    if ( ! empty($this_form) ) {
 		        // check for field to edit by field id
 				if ( isset( $form_fields[ $f['id'] ] ) ) {
@@ -322,7 +334,6 @@ class FrmXMLHelper {
 					if ( $new_id == false ) {
 						continue;
 					}
-					self::track_repeating_fields( $f, $new_id, $repeat_fields );
 
 		            // if no matching field id or key in this form, create the field
 		            $imported['imported']['fields']++;
@@ -333,7 +344,6 @@ class FrmXMLHelper {
 					continue;
 				}
 
-				self::track_repeating_fields( $f, $new_id, $repeat_fields );
 	            $imported['imported']['fields']++;
 		    }
 
@@ -342,67 +352,24 @@ class FrmXMLHelper {
 	}
 
 	/**
-	* Update parent_form_id for child forms that were imported before parents
+	* Switch the form_select on a repeating field or embedded form if it needs to be switched
 	*
-	* @since 2.0.13
-	*
-	* @param array $child_forms_missing_parent
-	* @param array $imported_forms
+	* @since 2.0.16
+	* @param array $f
+	* @param array $imported
 	*/
-	private static function update_child_form_parents( $child_forms_missing_parent, $imported_forms ) {
-		foreach ( $child_forms_missing_parent as $old_parent_form_id => $child_form_ids ) {
-			if ( isset( $imported_forms[ $old_parent_form_id ] ) ) {
+	private static function maybe_update_form_select( &$f, $imported ) {
+		if ( ! isset( $imported['forms'] ) ) {
+			return;
+		}
 
-				// Update all children with this old parent_form_id
-				$new_parent_form_id = (int) $imported_forms[ $old_parent_form_id ];
-				foreach ( $child_form_ids as $child_form_id ) {
-					FrmForm::update( $child_form_id, array( 'parent_form_id' => $new_parent_form_id ) );
+		if ( $f['type'] == 'form' || ( $f['type'] == 'divider' && FrmField::is_option_true( $f['field_options'], 'repeat' ) ) ) {
+			if ( FrmField::is_option_true( $f['field_options'], 'form_select' ) ) {
+				$form_select = $f['field_options']['form_select'];
+				if ( isset( $imported['forms'][ $form_select ] ) ) {
+					$f['field_options']['form_select'] = $imported['forms'][ $form_select ];
 				}
 			}
-		}
-	}
-
-	/**
-	* Update form_select for all imported repeating sections and embedded forms
-	*
-	* @since 2.0.09
-	* @param array $repeat_fields - old form ID as keys and section field IDs as items
-	* @param array $imported_forms
-	*/
-	private static function update_repeat_field_options( $repeat_fields, $imported_forms ) {
-		foreach ( $repeat_fields as $old_form_id => $new_repeat_fields ) {
-			foreach ( $new_repeat_fields as $repeat_field_id ) {
-				// Get section/embed form field
-				$repeat_field = FrmField::getOne( $repeat_field_id );
-				$field_opts = maybe_unserialize( $repeat_field->field_options );
-
-				if ( ! isset( $imported_forms[ $old_form_id ] ) ) {
-					return;
-				}
-				$field_opts['form_select'] = $imported_forms[ $old_form_id ];
-
-				// update form_select now
-				FrmField::update( $repeat_field_id, array( 'field_options' => maybe_serialize( $field_opts ) ) );
-			}
-		}
-	}
-
-	/**
-	* Keep track of imported repeating fields and embedded forms
-	*
-	* @since 2.0.09
-	* @param array $f - field array
-	* @param int $repeat_field_id
-	* @param array $repeat_fields - pass by reference
-	*/
-	private static function track_repeating_fields( $f, $repeat_field_id, &$repeat_fields ) {
-		if ( ( $f['type'] == 'divider' && FrmField::is_option_true( $f['field_options'], 'repeat' ) ) || $f['type'] == 'form' ) {
-			$old_form_id = trim( $f['field_options']['form_select'] );
-			if ( ! isset( $repeat_fields[ $old_form_id ] ) ) {
-				$repeat_fields[ $old_form_id ] = array();
-			}
-
-			$repeat_fields[ $old_form_id ][] = $repeat_field_id;
 		}
 	}
 
