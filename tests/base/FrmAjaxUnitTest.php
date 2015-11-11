@@ -37,6 +37,7 @@ class FrmAjaxUnitTest extends WP_Ajax_UnitTestCase {
 
         $form = FrmForm::getOne( 'contact-db12' );
         $this->assertEquals( $form->form_key, 'contact-db12' );
+		$this->assertEquals( $form->id, 7, 'Update the testdata.xml file. Switch 7 to ' . $form->id );
 
 		$entry = FrmEntry::getOne( 'utah' );
 		$this->assertNotEmpty( $entry );

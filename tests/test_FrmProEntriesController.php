@@ -76,7 +76,7 @@ SCRIPT;
 		self::_set_and_check_expectations( $args );
 
 		if ( $form_key == $this->all_fields_form_key ) {
-			$fields = '493ito,p3eiuk,uc580i,4t3qo4,e9ul34,gbm7pi';
+			$fields = '493ito,p3eiuk,uc580i,4t3qo4,e9ul34,repeating-text';
 		} else {
 			$fields = 'yi6yvm';
 		}
