@@ -14,13 +14,13 @@ class WP_Test_FrmProStatisticsController extends FrmUnitTest {
 			foreach ( $fields as $field_key ) {
 				$field = FrmField::getOne( $field_key );
 				$value = do_shortcode( '[frm-stats id=' . $field->id . ' type=count]' );
-				$this->assertNotEmpty( $value, 'Field ' . $field_id . ' has no saved values' );
+				$this->assertNotEmpty( $value, 'Field ' . $field_key . ' has no saved values' );
 
 				if ( ! empty( $field->options ) ) {
 					$first_option = array_filter( $field->options );
 					$first_option = reset( $first_option );
 					$filter_by_value = do_shortcode( '[frm-stats id=' . $field->id . ' type=count value="' . $first_option . '"]' );
-					$this->assertNotEmpty( $filter_by_value, 'Field ' . $field_id . ' has no saved values for "' . $first_option . '"' );
+					$this->assertNotEmpty( $filter_by_value, 'Field ' . $field_key . ' has no saved values for "' . $first_option . '"' );
 				}
 			}
 		}
