@@ -56,11 +56,26 @@ class FrmStylesHelper {
     }
 
     public static function enqueue_jquery_css() {
-        $theme_css = FrmStylesController::get_style_val('theme_css');
+		$form = self::get_form_for_page();
+		$theme_css = FrmStylesController::get_style_val( 'theme_css', $form );
         if ( $theme_css != -1 ) {
             wp_enqueue_style('jquery-theme', self::jquery_css_url($theme_css), array(), FrmAppHelper::plugin_version());
         }
     }
+
+	public static function get_form_for_page() {
+		global $frm_vars;
+		$form_id = 'default';
+		if ( ! empty( $frm_vars['forms_loaded'] ) ) {
+			foreach ( $frm_vars['forms_loaded'] as $form ) {
+				if ( is_object( $form ) ) {
+					$form_id = $form->id;
+					break;
+				}
+			}
+		}
+		return $form_id;
+	}
 
     public static function get_upload_base() {
         $uploads = wp_upload_dir();
