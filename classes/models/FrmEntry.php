@@ -12,10 +12,23 @@ class FrmEntry {
 	* @return int | boolean $entry_id
 	*/
 	public static function create( $values ) {
-		$new_values = self::before_insert_entry_in_database( $values );
+		$entry_id = self::create_entry( $values, 'standard' );
 
-		// don't create duplicate entry
-		if ( self::is_duplicate( $new_values, $values ) ) {
+		return $entry_id;
+	}
+
+	/**
+	* Create a new entry with some differences depending on type
+	*
+	* @param array $values
+	* @param string $type
+	* @return int | boolean $entry_id
+	*/
+	private static function create_entry( $values, $type ) {
+		$new_values = self::before_insert_entry_in_database( $values, $type );
+
+		// Don't check XML entries for duplicates
+		if ( $type != 'xml' && self::is_duplicate( $new_values, $values ) ) {
 			return false;
 		}
 
@@ -428,11 +441,11 @@ class FrmEntry {
 	* @param boolean $importing
 	* @return array $new_values
 	*/
-	private static function before_insert_entry_in_database( &$values, $importing = false ) {
+	private static function before_insert_entry_in_database( &$values, $type ) {
 
 		self::sanitize_entry_post( $values );
 
-		if ( $importing === false ) {
+		if ( $type != 'xml' ) {
 			$values = apply_filters('frm_pre_create_entry', $values);
 		}
 
@@ -725,7 +738,7 @@ class FrmEntry {
 	* @param string $update_type
 	* @return boolean $update
 	*/
-	private static function before_update_entry( $id, $values, $update_type ) {
+	private static function before_update_entry( $id, &$values, $update_type ) {
 		$update = true;
 
 		global $frm_vars;
@@ -813,11 +826,7 @@ class FrmEntry {
 	* @return int | boolean $entry_id
 	*/
 	public static function create_entry_from_xml( $values ){
-		$importing = true;
-
-		$new_values = self::before_insert_entry_in_database( $values, $importing );
-
-		$entry_id = self::continue_to_create_entry( $values, $new_values );
+		$entry_id = self::create_entry( $values, 'xml' );
 
 		return $entry_id;
 	}
