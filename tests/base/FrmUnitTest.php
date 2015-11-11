@@ -204,4 +204,20 @@ class FrmUnitTest extends WP_UnitTestCase {
     static function install_data() {
         return array( dirname( __FILE__ ) . '/testdata.xml' );
     }
+
+	static function generate_xml( $type, $xml_args ) {
+		ob_start();
+		FrmXMLController::generate_xml( $type, $xml_args );
+		$xml = ob_get_contents();
+		ob_end_clean();
+
+		$cwd = getcwd();
+		$path = "$cwd" .'/'. "index.html";
+		@chmod( $path,0755 );
+		$fw = fopen( $path, "w" );
+		fputs( $fw,$xml, strlen( $xml ) );
+		fclose( $fw );
+
+		return $path;
+	}
 }

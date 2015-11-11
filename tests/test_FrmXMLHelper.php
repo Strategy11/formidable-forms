@@ -4,6 +4,14 @@
  */
 class WP_Test_FrmXMLHelper extends FrmUnitTest {
 
+	function test_imported_repeating_section_form() {
+		$expected_parent_id = FrmForm::getIdByKey( $this->all_fields_form_key );
+		$repeating_section_form_id = FrmForm::getIdByKey( $this->repeat_sec_form_key );
+		$repeating_section_form = FrmForm::getOne( $repeating_section_form_id );
+
+		$this->assertEquals( $expected_parent_id, $repeating_section_form->parent_form_id, 'The parent_form_id was not set properly on an imported repeating section.' );
+	}
+
 	function test_imported_fields(){
 		$imported_fields = $this->get_all_fields_for_form_key( $this->all_fields_form_key );
 
@@ -76,8 +84,7 @@ class WP_Test_FrmXMLHelper extends FrmUnitTest {
 		$args = self::_get_xml_update_args();
 
 		// TODO: export XML file instead of using repeating_section_data.xml
-		//self::_generate_xml_for_all_fields_form();
-		$path = FrmAppHelper::plugin_path() . '/tests/base/repeating_section_data.xml';
+		$path = self::_generate_xml_for_all_fields_form( $args );
 		$message = FrmXMLHelper::import_xml( $path );
 
 		self::_check_xml_updated_forms_parent_id( $args );
@@ -85,7 +92,6 @@ class WP_Test_FrmXMLHelper extends FrmUnitTest {
 		self::_check_xml_updated_repeating_fields( $args );
 		self::_check_xml_updated_repeating_section( $args );
 
-		// Note: 3 parent entries should be updated and 9 repeating entries should be updated
 		self::_check_the_imported_and_updated_numbers( $message );
 	}
 
@@ -151,7 +157,6 @@ class WP_Test_FrmXMLHelper extends FrmUnitTest {
 		$expected_numbers = array(
 			'forms' => 2,
 			'fields' => 36,
-			'items' => 12
 		);
 
 		foreach ( $expected_numbers as $type => $e_number ) {
@@ -159,114 +164,15 @@ class WP_Test_FrmXMLHelper extends FrmUnitTest {
 		}
 	}
 
-	/*function _generate_xml_for_all_fields_form() {
-		global $wpdb;
+	function _generate_xml_for_all_fields_form( $args ) {
+		$type = array( 'forms','items','actions' );
 
-		$type = array(
-			'forms',
-			'items',
-			'actions'
-		};
-
-		$tables = array(
-			'items'     => $wpdb->prefix .'frm_items',
-			'forms'     => $wpdb->prefix .'frm_forms',
-			'posts'     => $wpdb->posts,
-			'styles'    => $wpdb->posts,
-			'actions'   => $wpdb->posts,
+		$xml_args = array(
+			'ids' => array( $args['parent_form_id'] )
 		);
 
-		$defaults = array( 'ids' => false );
-		$args = wp_parse_args( $args, $defaults );
+		$path = FrmUnitTest::generate_xml( $type, $xml_args );
 
-		$sitename = sanitize_key( get_bloginfo( 'name' ) );
-
-		if ( ! empty( $sitename ) ) {
-			$sitename .= '.';
-		}
-		$filename = $sitename . 'formidable.' . date( 'Y-m-d' ) . '.xml';
-
-		$xml = new SimpleXMLElement('<xml/>');
-
-		header( 'Content-Description: File Transfer' );
-		header( 'Content-Disposition: attachment; filename=' . $filename );
-		header( 'Content-Type: text/xml; charset=' . get_option( 'blog_charset' ), true );
-
-		//make sure ids are numeric
-		if ( is_array( $args['ids'] ) && ! empty( $args['ids'] ) ) {
-			$args['ids'] = array_filter( $args['ids'], 'is_numeric' );
-		}
-
-		$records = array();
-
-		foreach ( $type as $tb_type ) {
-			$where = array();
-			$join = '';
-			$table = $tables[ $tb_type ];
-
-			$select = $table .'.id';
-			$query_vars = array();
-
-			switch ( $tb_type ) {
-				case 'forms':
-					//add forms
-					if ( $args['ids'] ) {
-						$where[] = array( 'or' => 1, $table . '.id' => $args['ids'], $table .'.parent_form_id' => $args['ids'] );
-					} else {
-						$where[ $table . '.status !' ] = 'draft';
-					}
-					break;
-					case 'actions':
-					$select = $table .'.ID';
-					$where['post_type'] = FrmFormActionsController::$action_post_type;
-					if ( ! empty($args['ids']) ) {
-						$where['menu_order'] = $args['ids'];
-					}
-					break;
-					case 'items':
-					//$join = "INNER JOIN {$wpdb->prefix}frm_item_metas im ON ($table.id = im.item_id)";
-					if ( $args['ids'] ) {
-						$where[ $table . '.form_id' ] = $args['ids'];
-					}
-					break;
-					case 'styles':
-					// Loop through all exported forms and get their selected style IDs
-					$form_ids = $args['ids'];
-					$style_ids = array();
-					foreach ( $form_ids as $form_id ) {
-						$form_data = FrmForm::getOne( $form_id );
-						// For forms that have not been updated while running 2.0, check if custom_style is set
-						if ( isset( $form_data->options['custom_style'] ) ) {
-							$style_ids[] = $form_data->options['custom_style'];
-						}
-						unset( $form_id, $form_data );
-					}
-					$select = $table .'.ID';
-					$where['post_type'] = 'frm_styles';
-
-					// Only export selected styles
-					if ( ! empty( $style_ids ) ) {
-						$where['ID'] = $style_ids;
-					}
-					break;
-					default:
-					$select = $table .'.ID';
-					$join = ' INNER JOIN ' . $wpdb->postmeta . ' pm ON (pm.post_id=' . $table . '.ID)';
-					$where['pm.meta_key'] = 'frm_form_id';
-
-					if ( empty($args['ids']) ) {
-						$where['pm.meta_value >'] = 1;
-					} else {
-						$where['pm.meta_value'] = $args['ids'];
-					}
-					break;
-				}
-
-				$records[ $tb_type ] = FrmDb::get_col( $table . $join, $where, $select );
-				unset($tb_type);
-			}
-
-			echo '<?xml version="1.0" encoding="' . esc_attr( get_bloginfo('charset') ) . "\" ?>\n";
-			include(FrmAppHelper::plugin_path() .'/classes/views/xml/xml.php');
-	}*/
+		return $path;
+	}
 }
