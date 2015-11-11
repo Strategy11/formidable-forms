@@ -438,7 +438,7 @@ class FrmEntry {
 	*
 	* @since 2.0.16
 	* @param array $values
-	* @param boolean $importing
+	* @param string $type
 	* @return array $new_values
 	*/
 	private static function before_insert_entry_in_database( &$values, $type ) {

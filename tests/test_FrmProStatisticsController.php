@@ -11,8 +11,9 @@ class WP_Test_FrmProStatisticsController extends FrmUnitTest {
 		);
 
 		foreach ( $forms_to_test as $form_key => $fields ) {
-			foreach ( $fields as $field_id ) {
-				$field = $this->factory->field->get_object_by_id( $field_id );
+			foreach ( $fields as $field_key ) {
+				$field_id = FrmField::get_id_by_key( $field_key );
+				$field = FrmField::getOne( $field_id );
 				$value = do_shortcode( '[frm-stats id=' . $field->id . ' type=count]' );
 				$this->assertNotEmpty( $value, 'Field ' . $field_id . ' has no saved values' );
 
