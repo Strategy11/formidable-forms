@@ -791,9 +791,11 @@ function frmFrontFormJS(){
 	function maybeGetDynamicFieldData( hvalue, rec ) {
 		if ( hvalue.DynamicInfoIndices.length > 0 ) {
 			var dynamicIndex;
+			var parentField;
 			for ( var t = 0; t < hvalue.DynamicInfoIndices.length; t++ ) {
 				dynamicIndex = hvalue.DynamicInfoIndices[ t ];
-				showField( show_fields[ hvalue.hideContainerID ][ dynamicIndex ], hvalue.FieldName, rec );
+				parentField = show_fields[ hvalue.hideContainerID ][ dynamicIndex ].f.FieldName;
+				showField( show_fields[ hvalue.hideContainerID ][ dynamicIndex ], parentField, rec );
 			}
 		}
 	}
