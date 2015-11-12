@@ -113,7 +113,6 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * Fix autoupdating for add-ons
 * Show a message if no license has been entered for an add-on
 
-== Changelog ==
 = 2.0.15 =
 * Send plugin updates through formidablepro.com
 * Update Swedish translation
