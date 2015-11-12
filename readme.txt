@@ -4,7 +4,7 @@ Donate link: http://formidablepro.com/donate
 Tags: admin, AJAX, captcha, contact, contact form, database, email, feedback, form, forms, javascript, jquery, page, plugin, poll, Post, spam, survey, template, widget, wpmu, form builder
 Requires at least: 3.6
 Tested up to: 4.3.1
-Stable tag: 2.0.15
+Stable tag: 2.0.16
 
 Beautiful forms in 60 seconds. The WordPress form builder that enables you to create forms with a simple drag-and-drop interface and in-place editing.
 
@@ -87,6 +87,31 @@ A. The field and form names and descriptions are all changed with in-place edit.
 A. Try clearing your browser cache. As plugin modifications are made, frequent javascript and stylesheet changes are also made. However, the previous versions may be cached so you aren't using the modified files. After clearing your cache and you're still having issues, please let us know.
 
 [See more FAQs](http://formidablepro.com/formidable-faqs/ "Formidable Form FAQs")
+
+== Changelog ==
+= 2.0.16 =
+* Escape font family correctly for quotation marks
+* Only check for updates every 24 hours
+* Allow emails to be separated by a space
+* Prevent old versions of Akismet from causing errors
+* Add unit tests for XML import
+* Styling updates for WP 4.4
+* Save form action settings even if they aren't in the default options
+* More contrast on form builder page
+* Use normal font weight for from builder
+* **Pro Features:**
+* Allow Styles to be duplicated
+* Allow the form key in the CSV download url
+* Make like/not like conditional logic not case-sensitive
+* Fix multiple conditional logics on a Dynamic field
+* Fix XML import with repeating fields
+* Fix notice for old dfe fields
+* Make sure integer is being used for auto_id
+* Fix read-only dependent Dynamic field with a default value
+* Fix conditional radio button default value issue
+* Fixes for conditional logic on sections
+* Fix autoupdating for add-ons
+* Show a message if no license has been entered for an add-on
 
 == Changelog ==
 = 2.0.15 =
