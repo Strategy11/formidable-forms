@@ -771,12 +771,18 @@ class FrmEntry {
 			'is_draft'  => self::get_is_draft_value( $values ),
 			'updated_at' => current_time('mysql', 1),
 			'updated_by' => isset($values['updated_by']) ? $values['updated_by'] : get_current_user_id(),
-			'post_id'	=> self::get_post_id( $values ),
-			'parent_item_id' => self::get_parent_item_id( $values ),
 		);
+
+		if ( isset($values['post_id']) ) {
+			$new_values['post_id'] = (int) $values['post_id'];
+		}
 
 		if ( isset($values['item_key']) ) {
 			$new_values['item_key'] = FrmAppHelper::get_unique_key($values['item_key'], $wpdb->prefix .'frm_items', 'item_key', $id);
+		}
+
+		if ( isset($values['parent_item_id']) ) {
+			$new_values['parent_item_id'] = (int) $values['parent_item_id'];
 		}
 
 		if ( isset($values['frm_user_id']) && is_numeric($values['frm_user_id']) ) {
