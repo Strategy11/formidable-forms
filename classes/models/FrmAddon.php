@@ -28,7 +28,7 @@ class FrmAddon {
 
 	public static function load_hooks() {
 		add_filter( 'frm_include_addon_page', '__return_true' );
-		new static();
+		//new static();
 	}
 
 	public function insert_installed_addon( $plugins ) {
