@@ -169,7 +169,7 @@ class FrmNotification {
 	 * @since 2.0.1
 	 */
 	private static function explode_emails( $emails ) {
-		$emails = ( ! empty( $emails ) ? preg_split( '/(,|;|\s)/', $emails ) : '' );
+		$emails = ( ! empty( $emails ) ? preg_split( '/(,|;)/', $emails ) : '' );
 		if ( is_array( $emails ) ) {
 			$emails = array_map( 'trim', $emails );
 		} else {
@@ -289,7 +289,7 @@ class FrmNotification {
 		}
 
         // Set up formatted value
-        $final_val = '"'. str_replace( '"', '', $part_1 ) . '" <'. $part_2 .'>';
+		$final_val = str_replace( '"', '', $part_1 ) . ' <'. $part_2 .'>';
 
         // If value is an array
         if ( false !== $key ) {
