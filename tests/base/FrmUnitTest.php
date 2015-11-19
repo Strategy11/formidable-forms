@@ -206,13 +206,115 @@ class FrmUnitTest extends WP_UnitTestCase {
     }
 
 	static function generate_xml( $type, $xml_args ) {
+		// Code copied from FrmXMLController::generate_xml
+		global $wpdb;
+
+		$type = (array) $type;
+		if ( in_array( 'items', $type) && ! in_array( 'forms', $type) ) {
+			// make sure the form is included if there are entries
+			$type[] = 'forms';
+		}
+
+		if ( in_array( 'forms', $type) ) {
+			// include actions with forms
+			$type[] = 'actions';
+		}
+
+		$tables = array(
+			'items'     => $wpdb->prefix .'frm_items',
+			'forms'     => $wpdb->prefix .'frm_forms',
+			'posts'     => $wpdb->posts,
+			'styles'    => $wpdb->posts,
+			'actions'   => $wpdb->posts,
+		);
+
+		$defaults = array( 'ids' => false );
+		$args = wp_parse_args( $xml_args, $defaults );
+
+		//make sure ids are numeric
+		if ( is_array( $args['ids'] ) && ! empty( $args['ids'] ) ) {
+			$args['ids'] = array_filter( $args['ids'], 'is_numeric' );
+		}
+
+		$records = array();
+
+		foreach ( $type as $tb_type ) {
+			$where = array();
+			$join = '';
+			$table = $tables[ $tb_type ];
+
+			$select = $table .'.id';
+			$query_vars = array();
+
+			switch ( $tb_type ) {
+                case 'forms':
+                    //add forms
+                    if ( $args['ids'] ) {
+						$where[] = array( 'or' => 1, $table . '.id' => $args['ids'], $table .'.parent_form_id' => $args['ids'] );
+                	} else {
+						$where[ $table . '.status !' ] = 'draft';
+                	}
+                break;
+                case 'actions':
+                    $select = $table .'.ID';
+					$where['post_type'] = FrmFormActionsController::$action_post_type;
+                    if ( ! empty($args['ids']) ) {
+						$where['menu_order'] = $args['ids'];
+                    }
+                break;
+                case 'items':
+                    //$join = "INNER JOIN {$wpdb->prefix}frm_item_metas im ON ($table.id = im.item_id)";
+                    if ( $args['ids'] ) {
+						$where[ $table . '.form_id' ] = $args['ids'];
+                    }
+                break;
+                case 'styles':
+                    // Loop through all exported forms and get their selected style IDs
+                    $form_ids = $args['ids'];
+                    $style_ids = array();
+                    foreach ( $form_ids as $form_id ) {
+                        $form_data = FrmForm::getOne( $form_id );
+                        // For forms that have not been updated while running 2.0, check if custom_style is set
+                        if ( isset( $form_data->options['custom_style'] ) ) {
+                            $style_ids[] = $form_data->options['custom_style'];
+                        }
+                        unset( $form_id, $form_data );
+                    }
+                    $select = $table .'.ID';
+                    $where['post_type'] = 'frm_styles';
+
+                    // Only export selected styles
+                    if ( ! empty( $style_ids ) ) {
+                        $where['ID'] = $style_ids;
+                    }
+                break;
+                default:
+                    $select = $table .'.ID';
+                    $join = ' INNER JOIN ' . $wpdb->postmeta . ' pm ON (pm.post_id=' . $table . '.ID)';
+                    $where['pm.meta_key'] = 'frm_form_id';
+
+                    if ( empty($args['ids']) ) {
+                        $where['pm.meta_value >'] = 1;
+                    } else {
+                        $where['pm.meta_value'] = $args['ids'];
+                    }
+                break;
+			}
+
+			$records[ $tb_type ] = FrmDb::get_col( $table . $join, $where, $select );
+			unset($tb_type);
+		}
+
+		$xml_header = '<?xml version="1.0" encoding="' . esc_attr( get_bloginfo('charset') ) . "\" ?>\n";
 		ob_start();
-		FrmXMLController::generate_xml( $type, $xml_args );
-		$xml = ob_get_contents();
+		include(FrmAppHelper::plugin_path() .'/classes/views/xml/xml.php');
+		$xml_body = ob_get_contents();
 		ob_end_clean();
 
+		$xml = $xml_header . $xml_body;
+
 		$cwd = getcwd();
-		$path = "$cwd" .'/'. "index.html";
+		$path = "$cwd" .'/'. "temp.xml";
 		@chmod( $path,0755 );
 		$fw = fopen( $path, "w" );
 		fputs( $fw,$xml, strlen( $xml ) );

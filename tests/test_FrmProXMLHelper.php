@@ -104,8 +104,6 @@ class WP_Test_FrmProXMLHelper extends FrmUnitTest {
 
 	function test_xml_import_to_update_entries() {
 		$args = self::_get_xml_update_args();
-
-		// TODO figure out what to do about headers already sent messages
 		$path = self::_generate_xml_for_all_fields_form( $args );
 		$message = FrmXMLHelper::import_xml( $path );
 
@@ -114,6 +112,9 @@ class WP_Test_FrmProXMLHelper extends FrmUnitTest {
 		//self::_check_xml_updated_repeating_entries();
 
 		self::_check_the_imported_and_updated_numbers( $args, $message );
+
+		// Delete the temp.XML file
+		unlink( $path );
 	}
 
 	function _get_xml_update_args() {
