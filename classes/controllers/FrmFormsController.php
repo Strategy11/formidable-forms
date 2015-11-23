@@ -133,33 +133,31 @@ class FrmFormsController {
 		return self::get_settings_vars( $id, array(), $message );
     }
 
-    public static function edit_key() {
-        check_ajax_referer( 'frm_ajax', 'nonce' );
-        FrmAppHelper::permission_check('frm_edit_forms', 'hide');
+	public static function edit_key() {
+		$values = self::edit_in_place_value( 'form_key' );
+		echo stripslashes( FrmForm::getKeyById( $values['form_id'] ) );
+		wp_die();
+	}
 
-		$form_key = FrmAppHelper::get_post_param( 'update_value', '', 'sanitize_title' );
-		$values = array( 'form_key' => trim( $form_key ) );
+	public static function edit_description() {
+		$values = self::edit_in_place_value( 'description' );
+		echo FrmAppHelper::use_wpautop( stripslashes( $values['description'] ) );
+		wp_die();
+	}
 
-		$form_id = FrmAppHelper::get_post_param( 'form_id', '', 'absint' );
-		FrmForm::update( $form_id, $values );
-		$key = FrmForm::getKeyById( $form_id );
-		echo stripslashes( $key );
-        wp_die();
-    }
-
-    public static function edit_description() {
-        check_ajax_referer( 'frm_ajax', 'nonce' );
-        FrmAppHelper::permission_check('frm_edit_forms', 'hide');
+	private static function edit_in_place_value( $field ) {
+		check_ajax_referer( 'frm_ajax', 'nonce' );
+		FrmAppHelper::permission_check('frm_edit_forms', 'hide');
 
 		$form_id = FrmAppHelper::get_post_param( 'form_id', '', 'absint' );
 		$value = FrmAppHelper::get_post_param( 'update_value', '', 'wp_filter_post_kses' );
 
-		FrmForm::update( $form_id, array( 'description' => $value ) );
+		$values = array( $field => trim( $value ) );
+		FrmForm::update( $form_id, $values );
+		$values['form_id'] = $form_id;
 
-		$description = FrmAppHelper::use_wpautop( stripslashes( $value ) );
-        echo $description;
-        wp_die();
-    }
+		return $values;
+	}
 
 	public static function update( $values = array() ) {
 		if ( empty( $values ) ) {
