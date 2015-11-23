@@ -165,17 +165,20 @@ class FrmFieldsHelper {
      * @since 2.0
      */
 	public static function get_error_msg( $field, $error ) {
-        $frm_settings = FrmAppHelper::get_settings();
-        $default_settings = $frm_settings->default_options();
+		$frm_settings = FrmAppHelper::get_settings();
+		$default_settings = $frm_settings->default_options();
+		$field_name = is_array( $field ) ? $field['name'] : $field->name;
 
-        $defaults = array(
-			'unique_msg' => array( 'full' => $default_settings['unique_msg'], 'part' => $field->name . ' ' . __( 'must be unique', 'formidable' ) ),
-			'invalid'   => array( 'full' => __( 'This field is invalid', 'formidable' ), 'part' => $field->name . ' ' . __( 'is invalid', 'formidable' ) ),
-        );
+		$defaults = array(
+			'unique_msg' => array( 'full' => $default_settings['unique_msg'], 'part' => sprintf( __('%s must be unique', 'formidable' ), $field_name ) ),
+			'invalid'   => array( 'full' => __( 'This field is invalid', 'formidable' ), 'part' => sprintf( __('%s is invalid', 'formidable' ), $field_name ) ),
+			'blank'     => array( 'full' => $frm_settings->blank_msg, 'part' => $frm_settings->blank_msg ),
+		);
 
-        $msg = ( $field->field_options[ $error ] == $defaults[ $error ]['full'] || empty( $field->field_options[ $error ] ) ) ? $defaults[ $error ]['part'] : $field->field_options[ $error ];
-        return $msg;
-    }
+		$msg = FrmField::get_option( $field, $error );
+		$msg = ( $msg == $defaults[ $error ]['full'] || empty( $msg ) ) ? $defaults[ $error ]['part'] : $msg;
+		return $msg;
+	}
 
     public static function get_form_fields( $form_id, $error = false ) {
         $fields = FrmField::get_all_for_form($form_id);
@@ -1148,6 +1151,19 @@ DEFAULT_HTML;
 		$other_id .= '-otext';
 
 		return $other_id;
+	}
+
+	public static function clear_on_focus_html( $field, $display, $id = '' ) {
+		if ( $display['clear_on_focus'] ) {
+			?><span id="frm_clear_on_focus_<?php echo esc_attr( $field['id'] . $id ) ?>" class="frm-show-click"><?php
+
+			if ( $display['default_blank'] ) {
+				self::show_default_blank_js( $field['default_blank'] );
+			}
+
+			self::show_onfocus_js( $field['clear_on_focus'] );
+			?></span><?php
+		}
 	}
 
 	public static function show_onfocus_js( $is_selected ) {
