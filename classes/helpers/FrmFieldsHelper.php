@@ -1155,14 +1155,14 @@ DEFAULT_HTML;
 
 	public static function clear_on_focus_html( $field, $display, $id = '' ) {
 		if ( $display['clear_on_focus'] ) {
-			?><span id="frm_clear_on_focus_<?php echo esc_attr( $field['id'] . $id ) ?>" class="frm-show-click"><?php
+			echo '<span id="frm_clear_on_focus_' . esc_attr( $field['id'] . $id ) . '" class="frm-show-click">';
 
 			if ( $display['default_blank'] ) {
 				self::show_default_blank_js( $field['default_blank'] );
 			}
-
 			self::show_onfocus_js( $field['clear_on_focus'] );
-			?></span><?php
+
+			echo '</span>';
 		}
 	}
 
