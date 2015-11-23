@@ -831,7 +831,7 @@ class FrmEntry {
 	* @param array $values
 	* @return int | boolean $entry_id
 	*/
-	public static function create_entry_from_xml( $values ){
+	public static function create_entry_from_xml( $values ) {
 		$entry_id = self::create_entry( $values, 'xml' );
 
 		return $entry_id;

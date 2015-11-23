@@ -35,7 +35,9 @@
 		<exclude name="WordPress.Classes.ValidClassName.NotCamelCaps" />
 		<exclude name="WordPress.XSS.EscapeOutput" /><!-- This sniff also has known & reported bugs -->
 		<exclude name="WordPress.VIP.PostsPerPage.posts_per_page" />
+		<exclude name="WordPress.VIP.RestrictedFunctions.wp_get_post_terms" />
 		<exclude name="Generic.Files.LowercasedFilename.NotFound" />
+		<exclude name="WordPress.WP.PreparedSQL.NotPrepared" /><!-- This isn't allowing variables -->
 
 		<!-- Demanding Yoda conditions is stupid. -->
 		<exclude name="WordPress.PHP.YodaConditions"/>
