@@ -15,6 +15,7 @@
 		<exclude name="WordPress.VIP.RestrictedFunctions.switch_to_blog"/>
 		<exclude name="WordPress.VIP.RestrictedFunctions.get_term_by"/>
 		<exclude name="WordPress.VIP.RestrictedFunctions.get_term_link"/>
+		<exclude name="WordPress.VIP.RestrictedFunctions.term_exists" />
 
 		<!-- Temporary exclusions. Enable these when we have time to address them -->
 		<exclude name="PEAR.Functions.FunctionCallSignature.SpaceAfterOpenBracket" />
@@ -26,6 +27,7 @@
 		<exclude name="WordPress.CSRF.NonceVerification.NoNonceVerification" />
 		<exclude name="WordPress.Arrays.ArrayDeclaration.ValueNoNewline" />
 		<exclude name="WordPress.Arrays.ArrayDeclaration.IndexNoNewline" />
+		<exclude name="PEAR.Functions.FunctionCallSignature.Indent" />
 
 		<!-- We should probably turn the below rules on, but these give issues with the current code base. -->
 		<exclude name="WordPress.Files.FileName.UnderscoresNotAllowed" />
