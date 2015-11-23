@@ -135,13 +135,13 @@ class FrmFormsController {
 
 	public static function edit_key() {
 		$values = self::edit_in_place_value( 'form_key' );
-		echo stripslashes( FrmForm::getKeyById( $values['form_id'] ) );
+		echo wp_kses( stripslashes( FrmForm::getKeyById( $values['form_id'] ) ) );
 		wp_die();
 	}
 
 	public static function edit_description() {
 		$values = self::edit_in_place_value( 'description' );
-		echo FrmAppHelper::use_wpautop( stripslashes( $values['description'] ) );
+		echo wp_kses_post( FrmAppHelper::use_wpautop( stripslashes( $values['description'] ) ) );
 		wp_die();
 	}
 
