@@ -681,6 +681,26 @@ class FrmField {
 	}
 
 	/**
+	 * @since 2.0.18
+	 */
+	public static function get_option( $field, $option ) {
+		if ( is_array( $field ) ) {
+			$option = self::get_option_in_array( $field, $option );
+		} else {
+			$option = self::get_option_in_object( $field, $option );
+		}
+		return $option;
+	}
+
+	public static function get_option_in_array( $field, $option ) {
+		return $field[ $option ];
+	}
+
+	public static function get_option_in_object( $field, $option ) {
+		return $field->field_options[ $option ];
+	}
+
+	/**
 	* @since 2.0.09
 	*/
 	public static function is_repeating_field( $field ) {

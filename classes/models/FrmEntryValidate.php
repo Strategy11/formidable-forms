@@ -76,8 +76,7 @@ class FrmEntryValidate {
 		}
 
         if ( $posted_field->required == '1' && ! is_array( $value ) && trim( $value ) == '' ) {
-            $frm_settings = FrmAppHelper::get_settings();
-			$errors[ 'field' . $args['id'] ] = ( ! isset( $posted_field->field_options['blank'] ) || $posted_field->field_options['blank'] == '' ) ? $frm_settings->blank_msg : $posted_field->field_options['blank'];
+			$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $posted_field, 'blank' );
         } else if ( $posted_field->type == 'text' && ! isset( $_POST['item_name'] ) ) {
             $_POST['item_name'] = $value;
         }
