@@ -133,7 +133,7 @@ function frmFrontFormJS(){
 
 		checkDependentField(field_id, null, jQuery(this), reset);
 		doCalculation(field_id, jQuery(this));
-		//validateField( field_id, this );
+		validateField( field_id, this );
 	}
 
 	/* Get the ID of the field that changed*/
@@ -145,7 +145,7 @@ function frmFrontFormJS(){
 			fieldName = field.name;
 		}
 
-		if ( fieldName == '' ) {
+		if ( fieldName === '' ) {
 			return 0;
 		}
 
@@ -1183,7 +1183,7 @@ function frmFrontFormJS(){
 			var fieldKeyParts = field_key.split('-');
 			var newFieldKey = '';
 			for ( var i=0; i<fieldKeyParts.length-1; i++ ){
-				if ( newFieldKey == '' ) {
+				if ( newFieldKey === '' ) {
 					newFieldKey = fieldKeyParts[i];
 				} else {
 					newFieldKey = newFieldKey + '-' + fieldKeyParts[i];
@@ -1420,7 +1420,7 @@ function frmFrontFormJS(){
 		return jQuery(currentOpt).closest('.frm_other_container').find('.frm_other_input').val();
 	}
 
-	function validateForm( action, object ) {
+	function validateForm( object ) {
 		var errors = [];
 
 		// Make sure required text field is filled in
@@ -1432,18 +1432,19 @@ function frmFrontFormJS(){
 			}
 		}
 
-		// Make sure required email field is filled in
 		var emailFields = jQuery(object).find('input[type=email]');
-		if ( emailFields.length ) {
-			for ( var e = 0, el = emailFields.length; e < el; e++ ) {
-				errors = checkEmailField( emailFields[e], errors, emailFields );
-			}
-		}
-
-		var numberFields = jQuery(object).find('input[type=number]');
-		if ( numberFields.length ) {
-			for ( var n = 0, nl = numberFields.length; n < nl; n++ ) {
-				errors = checkNumberField( numberFields[n], errors );
+		var fields = jQuery(object).find('input,select,textarea');
+		if ( fields.length ) {
+			for ( var n = 0, nl = fields.length; n < nl; n++ ) {
+				if ( fields[n].type == 'hidden' ) {
+					// don't vaidate
+				} else if ( fields[n].type == 'number' ) {
+					errors = checkNumberField( fields[n], errors );
+				} else if ( fields[n].type == 'tel' ) {
+					errors = checkPhoneField( fields[n], errors );
+				} else if ( fields[n].type == 'email' ) {
+					errors = checkEmailField( fields[n], errors, emailFields );
+				}
 			}
 		}
 
@@ -1461,11 +1462,16 @@ function frmFrontFormJS(){
 			if ( field.type == 'email' ) {
 				var emailFields = jQuery(field).closest('form').find('input[type=email]');
 				errors = checkEmailField( field, errors, emailFields );
+			} else if ( field.type == 'number' ) {
+				errors = checkNumberField( field, errors );
+			} else if ( field.type == 'tel' ) {
+				errors = checkPhoneField( field, errors );
 			}
 		}
 
 		if (  Object.keys(errors).length > 0 ) {
 			for ( var key in errors ) {
+				removeFieldError( $fieldCont );
 				addFieldError( $fieldCont, key, errors );
 			}
 		} else {
@@ -1473,10 +1479,12 @@ function frmFrontFormJS(){
 		}
 	}
 
-	function checkRequiredField( field, errors, rFieldID ) {
+	function checkRequiredField( field, errors ) {
 		if ( jQuery(field).val() === '' ) {
-			rFieldID = getFieldId( field, true );
-			errors[ rFieldID ] = '';
+			var fieldID = getFieldId( field, true );
+			if ( !(fieldID in errors) ) {
+				errors[ fieldID ] = getFieldValidationMessage( field, 'data-reqmsg' );
+			}
 		}
 		return errors;
 	}
@@ -1484,10 +1492,14 @@ function frmFrontFormJS(){
 	function checkEmailField( field, errors, emailFields ) {
 		var emailAddress = field.value;
 		var fieldID = getFieldId( field, true );
+		if ( fieldID in errors ) {
+			return errors;
+		}
+
 		var isConf = (fieldID.indexOf('conf_') === 0);
 		if ( emailAddress !== '' || isConf ) {
 			var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
-			if ( re.test( emailAddress ) === false ) {
+			if ( emailAddress !== '' && re.test( emailAddress ) === false ) {
 				errors[ fieldID ] = '';
 				if ( isConf ) {
 					errors[ fieldID.replace('conf_', '') ] = '';
@@ -1496,7 +1508,7 @@ function frmFrontFormJS(){
 				var confName = field.name.replace('conf_', '');
 				var match = emailFields.filter('[name="'+ confName +'"]').val();
 				if ( match !== emailAddress ) {
-					errors[ fieldID ] = '';
+					errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
 					errors[ fieldID.replace('conf_', '') ] = '';
 				}
 			}
@@ -1506,15 +1518,38 @@ function frmFrontFormJS(){
 
 	function checkNumberField( field, errors ) {
 		var number = field.value;
-		if ( isNaN(number / 1) !== false ) {
+		if ( number !== '' && isNaN(number / 1) !== false ) {
 			var fieldID = getFieldId( field, true );
-			errors[ fieldID ] = '';
+			if ( !(fieldID in errors) ) {
+				errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
+			}
 		}
 		return errors;
 	}
 
-	function checkDateField( field, errors ) {
+	function checkPhoneField( field, errors ) {
+		var fieldID = getFieldId( field, true );
+		if ( fieldID in errors ) {
+			return errors;
+		}
+
+		var text = field.value;
+		var format = getFieldValidationMessage( field, 'pattern' );
+		if ( format !== '' && text !== '' ) {
+			format = new RegExp( '^'+ format +'$', 'i' );
+			if ( format.test( text ) === false ) {
+				errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
+			}
+		}
 		return errors;
+	}
+
+	function getFieldValidationMessage( field, messageType ) {
+		var msg = field.getAttribute(messageType);
+		if ( msg === null ) {
+			msg = '';
+		}
+		return msg;
 	}
 
 	function getFormErrors(object, action){
@@ -1991,12 +2026,12 @@ function frmFrontFormJS(){
 					if ( this.type != 'file' ) {
 
 						// Readonly dropdown fields won't have a name attribute
-						if ( this.name == '' ) {
+						if ( this.name === '' ) {
 							return true;
 						}
 						fieldID = this.name.replace('item_meta[', '').split(']')[2].replace('[', '');
 						if ( jQuery.inArray(fieldID, checked ) == -1 ) {
-							if ( this.id == false ) {
+							if ( this.id === false ) {
 								return;
 							}
 							fieldObject = jQuery( '#' + this.id );
@@ -2476,34 +2511,47 @@ function frmFrontFormJS(){
 
 		submitForm: function(e){
 			e.preventDefault();
+			var object = this;
+			var errors = frmFrontForm.validateFormSubmit( object );
+
+			if ( Object.keys(errors).length === 0 ) {
+				frmFrontForm.checkFormErrors( object, action );
+			}
+		},
+
+		validateFormSubmit: function( object ){
 			if(jQuery(this).find('.wp-editor-wrap').length && typeof(tinyMCE) != 'undefined'){
 				tinyMCE.triggerSave();
 			}
 
-			var object = this;
 			action = jQuery(object).find('input[name="frm_action"]').val();
 			jsErrors = [];
 			frmFrontForm.getAjaxFormErrors( object );
 
-			if ( Object.keys(jsErrors).length === 0 ) {
-				getFormErrors( object, action );
-			} else {
-				// Remove all previous errors
-				jQuery('.form-field').removeClass('frm_blank_field');
-				jQuery('.form-field .frm_error').replaceWith('');
-
-				for ( var key in jsErrors ) {
-					var $fieldCont = jQuery(object).find(jQuery('#frm_field_'+key+'_container'));
-					addFieldError( $fieldCont, key, jsErrors );
-				}
+			if ( Object.keys(jsErrors).length ) {
+				frmFrontForm.addAjaxFormErrors( object );
 			}
+
+			return jsErrors;
 		},
 
 		getAjaxFormErrors: function( object ) {
 			if ( typeof frmThemeOverride_jsErrors == 'function' ) {
 				jsErrors = frmThemeOverride_jsErrors( action, object );
 			} else {
-				//jsErrors = validateForm( action, object );
+				jsErrors = validateForm( object );
+			}
+			return jsErrors;
+		},
+
+		addAjaxFormErrors: function( object ) {
+			// Remove all previous errors
+			jQuery('.form-field').removeClass('frm_blank_field');
+			jQuery('.form-field .frm_error').replaceWith('');
+
+			for ( var key in jsErrors ) {
+				var $fieldCont = jQuery(object).find(jQuery('#frm_field_'+key+'_container'));
+				addFieldError( $fieldCont, key, jsErrors );
 			}
 		},
 
