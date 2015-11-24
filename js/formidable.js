@@ -1436,14 +1436,18 @@ function frmFrontFormJS(){
 		var fields = jQuery(object).find('input,select,textarea');
 		if ( fields.length ) {
 			for ( var n = 0, nl = fields.length; n < nl; n++ ) {
-				if ( fields[n].type == 'hidden' ) {
-					// don't vaidate
-				} else if ( fields[n].type == 'number' ) {
-					errors = checkNumberField( fields[n], errors );
-				} else if ( fields[n].type == 'tel' ) {
-					errors = checkPhoneField( fields[n], errors );
-				} else if ( fields[n].type == 'email' ) {
-					errors = checkEmailField( fields[n], errors, emailFields );
+				var field = fields[n];
+				var value = field.value;
+				if ( value !== '' ) {
+					if ( field.type == 'hidden' ) {
+						// don't vaidate
+					} else if ( field.type == 'number' ) {
+						errors = checkNumberField( field, errors );
+					} else if ( field.type == 'email' ) {
+						errors = checkEmailField( field, errors, emailFields );
+					} else if ( field.pattern !== null ) {
+						errors = checkPatternField( field, errors );
+					}
 				}
 			}
 		}
@@ -1464,8 +1468,8 @@ function frmFrontFormJS(){
 				errors = checkEmailField( field, errors, emailFields );
 			} else if ( field.type == 'number' ) {
 				errors = checkNumberField( field, errors );
-			} else if ( field.type == 'tel' ) {
-				errors = checkPhoneField( field, errors );
+			} else if ( field.pattern !== null ) {
+				errors = checkPatternField( field, errors );
 			}
 		}
 
@@ -1480,7 +1484,26 @@ function frmFrontFormJS(){
 	}
 
 	function checkRequiredField( field, errors ) {
-		if ( jQuery(field).val() === '' ) {
+		var val = '';
+		if ( field.type == 'checkbox' || field.type == 'radio' ) {
+			var checked = document.querySelector('input[name="'+field.name+'"]:checked');
+			if ( checked !== null ) {
+				val = checked.value;
+			}
+		} else {
+			val = jQuery(field).val();
+			if ( typeof val !== 'string' ) {
+				var tempVal = val;
+				val = '';
+				for ( var i = 0; i < tempVal.length; i++ ) {
+					if ( tempVal[i] !== '' ) {
+						val = tempVal[i];
+					}
+				}
+			}
+		}
+
+		if ( val === '' ) {
 			var fieldID = getFieldId( field, true );
 			if ( !(fieldID in errors) ) {
 				errors[ fieldID ] = getFieldValidationMessage( field, 'data-reqmsg' );
@@ -1527,18 +1550,17 @@ function frmFrontFormJS(){
 		return errors;
 	}
 
-	function checkPhoneField( field, errors ) {
-		var fieldID = getFieldId( field, true );
-		if ( fieldID in errors ) {
-			return errors;
-		}
-
+	function checkPatternField( field, errors ) {
 		var text = field.value;
 		var format = getFieldValidationMessage( field, 'pattern' );
+
 		if ( format !== '' && text !== '' ) {
-			format = new RegExp( '^'+ format +'$', 'i' );
-			if ( format.test( text ) === false ) {
-				errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
+			var fieldID = getFieldId( field, true );
+			if ( !(fieldID in errors) ) {
+				format = new RegExp( '^'+ format +'$', 'i' );
+				if ( format.test( text ) === false ) {
+					errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
+				}
 			}
 		}
 		return errors;
