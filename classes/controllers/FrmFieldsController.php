@@ -540,6 +540,7 @@ class FrmFieldsController {
         self::add_html_size($field, $add_html);
         self::add_html_length($field, $add_html);
         self::add_html_placeholder($field, $add_html, $class);
+		self::add_validation_messages( $field, $add_html );
 
         $class = apply_filters('frm_field_classes', implode(' ', $class), $field);
 
@@ -547,6 +548,7 @@ class FrmFieldsController {
 
         self::add_shortcodes_to_html($field, $add_html);
 
+		$add_html = apply_filters( 'frm_field_extra_html', $add_html, $field );
 		$add_html = ' ' . implode( ' ', $add_html ) . '  ';
 
         if ( $echo ) {
@@ -663,6 +665,25 @@ class FrmFieldsController {
             }
         }
     }
+
+	private static function add_validation_messages( $field, array &$add_html ) {
+		if ( FrmField::is_required( $field ) ) {
+			$required_message = FrmFieldsHelper::get_error_msg( $field, 'blank' );
+			$add_html['data-reqmsg'] = 'data-reqmsg="' . esc_attr( $required_message ) . '"';
+		}
+
+		if ( ! FrmField::is_option_empty( $field, 'invalid' ) ) {
+			$invalid_message = FrmFieldsHelper::get_error_msg( $field, 'invalid' );
+			$add_html['data-invmsg'] = 'data-invmsg="' . esc_attr( $invalid_message ) . '"';
+		}
+
+		if ( $field['type'] == 'tel' ) {
+			$format = FrmEntryValidate::phone_format( $field );
+			$format = substr( $format, 2, -2 );
+			$key = 'pattern';
+			$add_html[ $key ] = $key . '="' . esc_attr( $format ) . '"';
+		}
+	}
 
     private static function add_shortcodes_to_html( $field, array &$add_html ) {
         if ( FrmField::is_option_empty( $field, 'shortcodes' ) ) {
