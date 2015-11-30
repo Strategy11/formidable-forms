@@ -2558,11 +2558,16 @@ function frmFrontFormJS(){
 		},
 
 		getAjaxFormErrors: function( object ) {
+			jsErrors = validateForm( object );
 			if ( typeof frmThemeOverride_jsErrors == 'function' ) {
-				jsErrors = frmThemeOverride_jsErrors( action, object );
-			} else {
-				jsErrors = validateForm( object );
+				var customErrors = frmThemeOverride_jsErrors( action, object );
+				if ( Object.keys(customErrors).length  ) {
+					for ( var key in customErrors ) {
+						jsErrors[ key ] = customErrors[ key ];
+					}
+				}
 			}
+
 			return jsErrors;
 		},
 
