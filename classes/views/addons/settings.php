@@ -1,5 +1,5 @@
 <div class="wrap">
-	<h2><?php _e( 'Plugin Licenses', 'formidable' ); ?></h2>
+	<h4><?php _e( 'Plugin Licenses', 'formidable' ); ?></h4>
 
 	<?php
 
@@ -11,7 +11,7 @@
 		?>
 
 		<div class="edd_frm_license_row">
-			<label class="frm_left_label" for="edd_<?php echo esc_attr( $slug ) ?>_license_key"><?php echo FrmAppHelper::kses( $plugin->plugin_name ) ?></label>
+			<label class="frm_left_label" for="edd_<?php echo esc_attr( $slug ) ?>_license_key"><?php echo wp_kses( sprintf( '%s license key', $plugin->plugin_name ), array() ); ?></label>
 			<div class="edd_frm_authorized alignleft <?php echo esc_attr( $activate == 'activate' ) ? 'frm_hidden' : '' ?>">
 				<span class="edd_frm_license"><?php echo esc_html( $license ); ?></span>
 				<span class="frm_icon_font frm_action_icon frm_error_icon edd_frm_status_icon frm_inactive_icon"></span>

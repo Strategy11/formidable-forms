@@ -195,7 +195,7 @@ class FrmStylesController {
 
 	/**
 	 * @param string $message
-	 * @param array $forms
+	 * @param array|object $forms
 	 */
 	private static function manage( $message = '', $forms = array() ) {
         $frm_style = new FrmStyle();

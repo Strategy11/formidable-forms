@@ -65,7 +65,7 @@
 						    <?php } ?>
 						    <?php
 						    if ( $style->ID ) {
-							    echo '<span class="howto"><span>.frm_style_'. $style->post_name .'</span></span>';
+							    echo '<span class="howto"><span>.frm_style_'. esc_attr( $style->post_name ) .'</span></span>';
 							} ?>
                             <div class="publishing-action">
                                 <input type="button" value="<?php esc_attr_e( 'Reset to Default', 'formidable' ) ?>" class="button-secondary frm_reset_style" />
@@ -78,7 +78,7 @@
 	</div><!-- /#menu-management-liquid -->
 	</div><!-- /#nav-menus-frame -->
 	</form>
-</div><!-- /.wrap-->
-</div><!-- /.nav-menu-php -->
+</div>
+</div>
 
 <div id="this_css"></div>
