@@ -83,8 +83,8 @@ class FrmEntryValidate {
 
         self::validate_url_field($errors, $posted_field, $value, $args);
         self::validate_email_field($errors, $posted_field, $value, $args);
-		self::validate_number_field( $errors, $posted_field, $value );
-		self::validate_phone_field( $errors, $posted_field, $value );
+		self::validate_number_field( $errors, $posted_field, $value, $args );
+		self::validate_phone_field( $errors, $posted_field, $value, $args );
 
         FrmEntriesHelper::set_posted_value($posted_field, $value, $args);
 
@@ -122,14 +122,14 @@ class FrmEntryValidate {
         }
     }
 
-	public static function validate_number_field( &$errors, $field, $value ) {
+	public static function validate_number_field( &$errors, $field, $value, $args ) {
 		//validate the number format
 		if ( $field->type != 'number' ) {
 			return;
 		}
 
 		if ( ! is_numeric( $value) ) {
-			$errors[ 'field' . $field->temp_id ] = FrmFieldsHelper::get_error_msg( $field, 'invalid' );
+			$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $field, 'invalid' );
 		}
 
 		// validate number settings
@@ -139,15 +139,15 @@ class FrmEntryValidate {
 			if ( $frm_settings->use_html && isset( $field->field_options['minnum'] ) && isset( $field->field_options['maxnum'] ) ) {
 				//minnum maxnum
 				if ( (float) $value < $field->field_options['minnum'] ) {
-					$errors[ 'field' . $field->temp_id ] = __( 'Please select a higher number', 'formidable' );
+					$errors[ 'field' . $args['id'] ] = __( 'Please select a higher number', 'formidable' );
 				} else if ( (float) $value > $field->field_options['maxnum'] ) {
-					$errors[ 'field' . $field->temp_id ] = __( 'Please select a lower number', 'formidable' );
+					$errors[ 'field' . $args['id'] ] = __( 'Please select a lower number', 'formidable' );
 				}
 			}
 		}
 	}
 
-	public static function validate_phone_field( &$errors, $field, $value ) {
+	public static function validate_phone_field( &$errors, $field, $value, $args ) {
 		if ( $field->type != 'phone' ) {
 			return;
 		}
@@ -155,7 +155,7 @@ class FrmEntryValidate {
 		$pattern = self::phone_format( $field );
 
 		if ( ! preg_match( $pattern, $value ) ) {
-			$errors[ 'field' . $field->temp_id ] = FrmFieldsHelper::get_error_msg( $field, 'invalid' );
+			$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $field, 'invalid' );
 		}
 	}
 
