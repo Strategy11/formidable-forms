@@ -49,7 +49,11 @@ class FrmXMLController {
     }
 
     public static function form( $errors = array(), $message = '' ) {
-        $forms = FrmForm::getAll( array( 'status' => array( null, '', 'published' ) ), 'name' );
+		$where = array(
+			'parent_form_id' => array( null, 0 ),
+			'status' => array( null, '', 'published' )
+		);
+		$forms = FrmForm::getAll( $where, 'name' );
 
         $export_types = apply_filters( 'frm_xml_export_types',
             array( 'forms' => __( 'Forms', 'formidable' ) )
