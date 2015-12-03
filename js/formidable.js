@@ -1637,7 +1637,7 @@ function frmFrontFormJS(){
 					var show_captcha = false;
                     var $fieldCont = null;
 					for (var key in errObj){
-						$fieldCont = jQuery(object).find(jQuery(document.getElementById('frm_field_'+key+'_container')));
+						$fieldCont = jQuery(object).find('#frm_field_'+key+'_container');
 
 						if ( $fieldCont.length ) {
 							if ( ! $fieldCont.is(':visible') ) {
@@ -2599,7 +2599,7 @@ function frmFrontFormJS(){
 			if(typeof(object) == 'undefined'){
 				newPos = jQuery(document.getElementById('frm_form_'+id+'_container')).offset().top;
 			}else{
-				newPos = jQuery(object).find(document.getElementById('frm_field_'+id+'_container')).offset().top;
+				newPos = jQuery(object).find('#frm_field_'+id+'_container').offset().top;
 			}
 
 			if(!newPos){
