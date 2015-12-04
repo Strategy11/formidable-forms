@@ -835,14 +835,14 @@ function frmFrontFormJS(){
 			'LIKE': function(c,d){
 				if(!d){
 					/* If no value, then assume no match */
-					return 0;
+					return false;
 				}
 				return d.toLowerCase().indexOf( c.toLowerCase() ) != -1;
 			},
 			'not LIKE': function(c,d){
 				if(!d){
 					/* If no value, then assume no match */
-					return 1;
+					return true;
 				}
 				return d.toLowerCase().indexOf( c.toLowerCase() ) == -1;
 			}
