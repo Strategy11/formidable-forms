@@ -89,6 +89,26 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 [See more FAQs](http://formidablepro.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 2.0.18 =
+* Add frm_field_extra_html hook
+* Change the License submenu to Plugin Licenses
+* Prevent specific html entity from breaking email message
+* PHP 7 updates
+* Add filter for removing wpautop from form success message
+* Fix HTML error on form builder page
+* **Pro Features:**
+* Allow ? and * in Phone Number Format
+* Remove child form from export options
+* Fix LIKE conditional logic bug
+* Some auto-update adjustments
+* Add frm_search_any_terms filter
+* PHP 7 updates
+* Fix file upload issue in CSV export
+* Fix issue with duplicate classes in HTML field
+* Fix filtering by user_id=current in graphs
+* Fix Dynamic List field with value like 9.99
+* Make sure userID field doesn't lose value when conditionally hidden/shown
+
 = 2.0.17 =
 * **Pro Features:**
 * Fix post update bug
