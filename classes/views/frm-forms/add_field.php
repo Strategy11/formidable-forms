@@ -191,6 +191,7 @@ if ( $display['options'] ) { ?>
 					<td class="frm_150_width">
 						<div class="hide-if-no-js edit-slug-box frm_help" title="<?php esc_attr_e( 'The field key can be used as an alternative to the field ID in many cases.', 'formidable' ) ?>">
                             <?php _e( 'Field Key', 'formidable' ) ?>
+						</div>
 					</td>
 					<td>
 						<input type="text" name="field_options[field_key_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['field_key'] ); ?>" />
