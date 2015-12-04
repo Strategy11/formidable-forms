@@ -334,6 +334,7 @@ class FrmFormAction {
  	}
 
 	public function save_settings( $settings ) {
+		self::clear_cache();
 		return FrmAppHelper::save_settings( $settings, 'frm_actions' );
 	}
 
