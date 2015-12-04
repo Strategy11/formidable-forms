@@ -81,10 +81,12 @@ class FrmEntryValidate {
             $_POST['item_name'] = $value;
         }
 
-        self::validate_url_field($errors, $posted_field, $value, $args);
-        self::validate_email_field($errors, $posted_field, $value, $args);
-		self::validate_number_field( $errors, $posted_field, $value, $args );
-		self::validate_phone_field( $errors, $posted_field, $value, $args );
+		if ( $value != '' ) {
+			self::validate_url_field( $errors, $posted_field, $value, $args );
+			self::validate_email_field( $errors, $posted_field, $value, $args );
+			self::validate_number_field( $errors, $posted_field, $value, $args );
+			self::validate_phone_field( $errors, $posted_field, $value, $args );
+		}
 
         FrmEntriesHelper::set_posted_value($posted_field, $value, $args);
 
