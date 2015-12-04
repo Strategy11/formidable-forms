@@ -121,7 +121,8 @@ class FrmFormsHelper {
 
 	public static function get_success_message( $atts ) {
 		$message = apply_filters( 'frm_content', $atts['message'], $atts['form'], $atts['entry_id'] );
-		$message = '<div class="' . esc_attr( $atts['class'] ) . '">' . wpautop( do_shortcode( $message ) ) . '</div>';
+		$message = FrmAppHelper::use_wpautop( do_shortcode( $message ) );
+		$message = '<div class="' . esc_attr( $atts['class'] ) . '">' . $message . '</div>';
 		return $message;
 	}
 
