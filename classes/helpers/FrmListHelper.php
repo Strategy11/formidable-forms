@@ -81,10 +81,12 @@ class FrmListHelper {
 
 	protected $compat_fields = array( '_args', '_pagination_args', 'screen', '_actions', '_pagination' );
 
-	protected $compat_methods = array( 'set_pagination_args', 'get_views', 'get_bulk_actions', 'bulk_actions',
-		'row_actions', 'months_dropdown', 'view_switcher', 'comments_bubble', 'get_items_per_page', 'pagination',
+	protected $compat_methods = array(
+		'set_pagination_args', 'get_views', 'get_bulk_actions', 'bulk_actions',
+		'row_actions', 'view_switcher', 'get_items_per_page', 'pagination',
 		'get_sortable_columns', 'get_column_info', 'get_table_classes', 'display_tablenav', 'extra_tablenav',
-		'single_row_columns' );
+		'single_row_columns',
+	);
 
 	/**
 	* Construct the table object
@@ -104,8 +106,9 @@ class FrmListHelper {
 
 		add_filter( "manage_{$this->screen->id}_columns", array( $this, 'get_columns' ), 0 );
 
-		if ( !$args['plural'] )
+		if ( ! $args['plural'] ) {
 			$args['plural'] = $this->screen->base;
+		}
 
 		$args['plural'] = sanitize_key( $args['plural'] );
 		$args['singular'] = sanitize_key( $args['singular'] );
@@ -136,8 +139,7 @@ class FrmListHelper {
 	public function display_rows() {
 		$style = '';
 		foreach ( $this->items as $item ) {
-			$style = ( ' class="alternate"' == $style ) ? '' : ' class="alternate"';
-			echo "\n\t", $this->single_row( $item, $style );
+			echo "\n\t", $this->single_row( $item );
 		}
 	}
 
@@ -245,8 +247,9 @@ class FrmListHelper {
 			'per_page' => 0,
 		) );
 
-		if ( !$args['total_pages'] && $args['per_page'] > 0 )
+		if ( ! $args['total_pages'] && $args['per_page'] > 0 ) {
 			$args['total_pages'] = ceil( $args['total_items'] / $args['per_page'] );
+		}
 
 		// Redirect if page number is invalid and headers are not already sent.
 		if ( ! headers_sent() && ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) && $args['total_pages'] > 0 && $this->get_pagenum() > $args['total_pages'] ) {
@@ -268,11 +271,13 @@ class FrmListHelper {
 	 * @return int Number of items that correspond to the given pagination argument.
 	 */
 	public function get_pagination_arg( $key ) {
-		if ( 'page' == $key )
+		if ( 'page' == $key ) {
 			return $this->get_pagenum();
+		}
 
-		if ( isset( $this->_pagination_args[$key] ) )
-			return $this->_pagination_args[$key];
+		if ( isset( $this->_pagination_args[ $key ] ) ) {
+			return $this->_pagination_args[ $key ];
+		}
 	}
 
 	/**
@@ -284,7 +289,7 @@ class FrmListHelper {
 	 * @return bool
 	 */
 	public function has_items() {
-		return !empty( $this->items );
+		return ! empty( $this->items );
 	}
 
 	/**
@@ -307,26 +312,28 @@ class FrmListHelper {
 	 * @param string $input_id The search input id
 	 */
 	public function search_box( $text, $input_id ) {
-		if ( empty( $_REQUEST['s'] ) && !$this->has_items() )
+		if ( empty( $_REQUEST['s'] ) && ! $this->has_items() ) {
 			return;
+		}
 
 		$input_id = $input_id . '-search-input';
 
-		if ( ! empty( $_REQUEST['orderby'] ) )
-			echo '<input type="hidden" name="orderby" value="' . esc_attr( $_REQUEST['orderby'] ) . '" />';
-		if ( ! empty( $_REQUEST['order'] ) )
-			echo '<input type="hidden" name="order" value="' . esc_attr( $_REQUEST['order'] ) . '" />';
-		if ( ! empty( $_REQUEST['post_mime_type'] ) )
-			echo '<input type="hidden" name="post_mime_type" value="' . esc_attr( $_REQUEST['post_mime_type'] ) . '" />';
-		if ( ! empty( $_REQUEST['detached'] ) )
-			echo '<input type="hidden" name="detached" value="' . esc_attr( $_REQUEST['detached'] ) . '" />';
+		foreach ( array( 'orderby', 'order' ) as $search_params ) {
+			$this->hidden_search_inputs( $search_params );
+		}
 ?>
 <p class="search-box">
-	<label class="screen-reader-text" for="<?php echo $input_id ?>"><?php echo $text; ?>:</label>
-	<input type="search" id="<?php echo $input_id ?>" name="s" value="<?php _admin_search_query(); ?>" />
-	<?php submit_button( $text, 'button', '', false, array('id' => 'search-submit') ); ?>
+	<label class="screen-reader-text" for="<?php echo esc_attr( $input_id ) ?>"><?php echo wp_kses( $text, array() ); ?>:</label>
+	<input type="search" id="<?php echo esc_attr( $input_id ) ?>" name="s" value="<?php _admin_search_query(); ?>" />
+	<?php submit_button( $text, 'button', '', false, array( 'id' => 'search-submit' ) ); ?>
 </p>
 <?php
+	}
+
+	private function hidden_search_inputs( $param_name ) {
+		if ( ! empty( $_REQUEST[ $param_name ] ) ) {
+			echo '<input type="hidden" name="' . esc_attr( $param_name ) . '" value="' . esc_attr( $_REQUEST[ $param_name ] ) . '" />';
+		}
 	}
 
 	/**
@@ -360,17 +367,18 @@ class FrmListHelper {
 		 *
 		 * @param array $views An array of available list table views.
 		 */
-		$views = apply_filters( "views_{$this->screen->id}", $views );
+		$views = apply_filters( 'views_' . $this->screen->id, $views );
 
-		if ( empty( $views ) )
+		if ( empty( $views ) ) {
 			return;
+		}
 
 		echo "<ul class='subsubsub'>\n";
 		foreach ( $views as $class => $view ) {
 			$views[ $class ] = "\t<li class='$class'>$view";
 		}
 		echo implode( " |</li>\n", $views ) . "</li>\n";
-		echo "</ul>";
+		echo '</ul>';
 	}
 
 	/**
@@ -417,17 +425,18 @@ class FrmListHelper {
 			$two = '2';
 		}
 
-		if ( empty( $this->_actions ) )
+		if ( empty( $this->_actions ) ) {
 			return;
+		}
 
-		echo "<label for='bulk-action-selector-" . esc_attr( $which ) . "' class='screen-reader-text'>" . __( 'Select bulk action' ) . "</label>";
-		echo "<select name='action$two' id='bulk-action-selector-" . esc_attr( $which ) . "'>\n";
-		echo "<option value='-1' selected='selected'>" . __( 'Bulk Actions' ) . "</option>\n";
+		echo "<label for='bulk-action-selector-" . esc_attr( $which ) . "' class='screen-reader-text'>" . esc_attr__( 'Select bulk action' ) . "</label>";
+		echo "<select name='action" . esc_attr( $two ) . "' id='bulk-action-selector-" . esc_attr( $which ) . "'>\n";
+		echo "<option value='-1' selected='selected'>" . esc_attr__( 'Bulk Actions' ) . "</option>\n";
 
 		foreach ( $this->_actions as $name => $title ) {
 			$class = 'edit' == $name ? ' class="hide-if-no-js"' : '';
 
-			echo "\t<option value='$name'$class>$title</option>\n";
+			echo "\t<option value='". esc_attr( $name ) ."'$class>$title</option>\n";
 		}
 
 		echo "</select>\n";
@@ -445,16 +454,24 @@ class FrmListHelper {
 	 * @return string|false The action name or False if no action was selected
 	 */
 	public function current_action() {
-		if ( isset( $_REQUEST['filter_action'] ) && ! empty( $_REQUEST['filter_action'] ) )
+		if ( isset( $_REQUEST['filter_action'] ) && ! empty( $_REQUEST['filter_action'] ) ) {
 			return false;
+		}
 
-		if ( isset( $_REQUEST['action'] ) && -1 != $_REQUEST['action'] )
-			return $_REQUEST['action'];
+		$action = $this->get_bulk_action( 'action' );
+		if ( $action === false ) {
+			$action = $this->get_bulk_action( 'action2' );
+		}
 
-		if ( isset( $_REQUEST['action2'] ) && -1 != $_REQUEST['action2'] )
-			return $_REQUEST['action2'];
+		return $action;
+	}
 
-		return false;
+	private static function get_bulk_action( $action_name ) {
+		$action = false;
+		if ( isset( $_REQUEST[ $action_name ] ) && -1 != sanitize_text_field( $_REQUEST[ $action_name ] ) ) {
+			$action = sanitize_text_field( $_REQUEST[ $action_name ] );
+		}
+		return $action;
 	}
 
 	/**
@@ -471,8 +488,9 @@ class FrmListHelper {
 		$action_count = count( $actions );
 		$i = 0;
 
-		if ( !$action_count )
+		if ( ! $action_count ) {
 			return '';
+		}
 
 		$out = '<div class="' . ( $always_visible ? 'row-actions visible' : 'row-actions' ) . '">';
 		foreach ( $actions as $action => $link ) {
@@ -485,79 +503,6 @@ class FrmListHelper {
 		$out .= '<button type="button" class="toggle-row"><span class="screen-reader-text">' . __( 'Show more details' ) . '</span></button>';
 
 		return $out;
-	}
-
-	/**
-	 * Display a monthly dropdown for filtering items
-	 *
-	 * @since 2.0.18
-	 * @access protected
-	 *
-	 * @global wpdb      $wpdb
-	 * @global WP_Locale $wp_locale
-	 *
-	 * @param string $post_type
-	 */
-	protected function months_dropdown( $post_type ) {
-		global $wpdb, $wp_locale;
-
-		/**
-		 * Filter whether to remove the 'Months' drop-down from the post list table.
-		 *
-		 * @since 4.2.0
-		 *
-		 * @param bool   $disable   Whether to disable the drop-down. Default false.
-		 * @param string $post_type The post type.
-		 */
-		if ( apply_filters( 'disable_months_dropdown', false, $post_type ) ) {
-			return;
-		}
-
-		$months = $wpdb->get_results( $wpdb->prepare( "
-			SELECT DISTINCT YEAR( post_date ) AS year, MONTH( post_date ) AS month
-			FROM $wpdb->posts
-			WHERE post_type = %s
-			ORDER BY post_date DESC
-		", $post_type ) );
-
-		/**
-		 * Filter the 'Months' drop-down results.
-		 *
-		 * @since 3.7.0
-		 *
-		 * @param object $months    The months drop-down query results.
-		 * @param string $post_type The post type.
-		 */
-		$months = apply_filters( 'months_dropdown_results', $months, $post_type );
-
-		$month_count = count( $months );
-
-		if ( !$month_count || ( 1 == $month_count && 0 == $months[0]->month ) )
-			return;
-
-		$m = isset( $_GET['m'] ) ? (int) $_GET['m'] : 0;
-?>
-		<label for="filter-by-date" class="screen-reader-text"><?php _e( 'Filter by date' ); ?></label>
-		<select name="m" id="filter-by-date">
-			<option<?php selected( $m, 0 ); ?> value="0"><?php _e( 'All dates' ); ?></option>
-<?php
-		foreach ( $months as $arc_row ) {
-			if ( 0 == $arc_row->year )
-				continue;
-
-			$month = zeroise( $arc_row->month, 2 );
-			$year = $arc_row->year;
-
-			printf( "<option %s value='%s'>%s</option>\n",
-				selected( $m, $year . $month, false ),
-				esc_attr( $arc_row->year . $month ),
-				/* translators: 1: month name, 2: 4-digit year */
-				sprintf( __( '%1$s %2$d' ), $wp_locale->get_month( $month ), $year )
-			);
-		}
-?>
-		</select>
-<?php
 	}
 
 	/**
@@ -590,53 +535,6 @@ class FrmListHelper {
 	}
 
 	/**
-	 * Display a comment count bubble
-	 *
-	 * @since 2.0.18
-	 * @access protected
-	 *
-	 * @param int $post_id          The post ID.
-	 * @param int $pending_comments Number of pending comments.
-	 */
-	protected function comments_bubble( $post_id, $pending_comments ) {
-		$approved_comments = get_comments_number();
-
-		$approved_comments_number = number_format_i18n( $approved_comments );
-		$pending_comments_number = number_format_i18n( $pending_comments );
-
-		$approved_only_phrase = sprintf( _n( '%s comment', '%s comments', $approved_comments ), $approved_comments_number );
-		$approved_phrase = sprintf( _n( '%s approved comment', '%s approved comments', $approved_comments ), $approved_comments_number );
-		$pending_phrase = sprintf( _n( '%s pending comment', '%s pending comments', $pending_comments ), $pending_comments_number );
-
-		// No comments at all.
-		if ( ! $approved_comments && ! $pending_comments ) {
-			printf( '<span aria-hidden="true">—</span><span class="screen-reader-text">%s</span>',
-				__( 'No comments' )
-			);
-		// Approved comments have different display depending on some conditions.
-		} elseif ( $approved_comments ) {
-			printf( '<a href="%s" class="post-com-count post-com-count-approved"><span class="comment-count-approved" aria-hidden="true">%s</span><span class="screen-reader-text">%s</span></a>',
-				esc_url( add_query_arg( array( 'p' => $post_id, 'comment_status' => 'approved' ), admin_url( 'edit-comments.php' ) ) ),
-				$approved_comments_number,
-				$pending_comments ? $approved_phrase : $approved_only_phrase
-			);
-		} else {
-			printf( '<span class="post-com-count post-com-count-no-comments"><span class="comment-count comment-count-no-comments" aria-hidden="true">%s</span><span class="screen-reader-text">%s</span></span>',
-				$approved_comments_number,
-				$pending_comments ? __( 'No approved comments' ) : __( 'No comments' )
-			);
-		}
-
-		if ( $pending_comments ) {
-			printf( '<a href="%s" class="post-com-count post-com-count-pending"><span class="comment-count-pending" aria-hidden="true">%s</span><span class="screen-reader-text">%s</span></a>',
-				esc_url( add_query_arg( array( 'p' => $post_id, 'comment_status' => 'moderated' ), admin_url( 'edit-comments.php' ) ) ),
-				$pending_comments_number,
-				$pending_phrase
-			);
-		}
-	}
-
-	/**
 	 * Get the current page number
 	 *
 	 * @since 2.0.18
@@ -647,8 +545,9 @@ class FrmListHelper {
 	public function get_pagenum() {
 		$pagenum = isset( $_REQUEST['paged'] ) ? absint( $_REQUEST['paged'] ) : 0;
 
-		if ( isset( $this->_pagination_args['total_pages'] ) && $pagenum > $this->_pagination_args['total_pages'] )
+		if ( isset( $this->_pagination_args['total_pages'] ) && $pagenum > $this->_pagination_args['total_pages'] ) {
 			$pagenum = $this->_pagination_args['total_pages'];
+		}
 
 		return max( 1, $pagenum );
 	}
@@ -665,8 +564,9 @@ class FrmListHelper {
 	 */
 	protected function get_items_per_page( $option, $default = 20 ) {
 		$per_page = (int) get_user_option( $option );
-		if ( empty( $per_page ) || $per_page < 1 )
+		if ( empty( $per_page ) || $per_page < 1 ) {
 			$per_page = $default;
+		}
 
 		/**
 		 * Filter the number of items to be displayed on each page of the list table.
@@ -708,7 +608,7 @@ class FrmListHelper {
 
 		$current = $this->get_pagenum();
 
-		$current_url = set_url_scheme( 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] );
+		$current_url = set_url_scheme( 'http://' . FrmAppHelper::get_server_value( 'HTTP_HOST' ) . FrmAppHelper::get_server_value( 'REQUEST_URI' ) );
 
 		$current_url = remove_query_arg( array( 'hotkeys_highlight_last', 'hotkeys_highlight_first' ), $current_url );
 
@@ -748,7 +648,7 @@ class FrmListHelper {
 			$page_links[] = '<span class="tablenav-pages-navspan" aria-hidden="true">&lsaquo;</span>';
 		} else {
 			$page_links[] = sprintf( "<a class='prev-page' href='%s'><span class='screen-reader-text'>%s</span><span aria-hidden='true'>%s</span></a>",
-				esc_url( add_query_arg( 'paged', max( 1, $current-1 ), $current_url ) ),
+				esc_url( add_query_arg( 'paged', max( 1, $current - 1 ), $current_url ) ),
 				__( 'Previous page' ),
 				'&lsaquo;'
 			);
@@ -771,7 +671,7 @@ class FrmListHelper {
 			$page_links[] = '<span class="tablenav-pages-navspan" aria-hidden="true">&rsaquo;</span>';
 		} else {
 			$page_links[] = sprintf( "<a class='next-page' href='%s'><span class='screen-reader-text'>%s</span><span aria-hidden='true'>%s</span></a>",
-				esc_url( add_query_arg( 'paged', min( $total_pages, $current+1 ), $current_url ) ),
+				esc_url( add_query_arg( 'paged', min( $total_pages, $current + 1 ), $current_url ) ),
 				__( 'Next page' ),
 				'&rsaquo;'
 			);
@@ -798,7 +698,7 @@ class FrmListHelper {
 		} else {
 			$page_class = ' no-pages';
 		}
-		$this->_pagination = "<div class='tablenav-pages{$page_class}'>$output</div>";
+		$this->_pagination = "<div class='tablenav-pages" . esc_attr( $page_class ) . "'>$output</div>";
 
 		echo $this->_pagination;
 	}
@@ -834,7 +734,7 @@ class FrmListHelper {
 
 		// We need a primary defined so responsive views show something,
 		// so let's fall back to the first non-checkbox column.
-		foreach( $columns as $col => $column_name ) {
+		foreach ( $columns as $col => $column_name ) {
 			if ( 'cb' === $col ) {
 				continue;
 			}
@@ -920,14 +820,16 @@ class FrmListHelper {
 
 		$sortable = array();
 		foreach ( $_sortable as $id => $data ) {
-			if ( empty( $data ) )
+			if ( empty( $data ) ) {
 				continue;
+			}
 
 			$data = (array) $data;
-			if ( !isset( $data[1] ) )
+			if ( ! isset( $data[1] ) ) {
 				$data[1] = false;
+			}
 
-			$sortable[$id] = $data;
+			$sortable[ $id ] = $data;
 		}
 
 		$primary = $this->get_primary_column_name();
@@ -963,23 +865,25 @@ class FrmListHelper {
 	public function print_column_headers( $with_id = true ) {
 		list( $columns, $hidden, $sortable, $primary ) = $this->get_column_info();
 
-		$current_url = set_url_scheme( 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] );
+		$current_url = set_url_scheme( 'http://' . FrmAppHelper::get_server_value( 'HTTP_HOST' ) . FrmAppHelper::get_server_value( 'REQUEST_URI' ) );
 		$current_url = remove_query_arg( 'paged', $current_url );
 
-		if ( isset( $_GET['orderby'] ) )
-			$current_orderby = $_GET['orderby'];
-		else
+		if ( isset( $_GET['orderby'] ) ) {
+			$current_orderby = sanitize_text_field( $_GET['orderby'] );
+		} else {
 			$current_orderby = '';
+		}
 
-		if ( isset( $_GET['order'] ) && 'desc' == $_GET['order'] )
+		if ( isset( $_GET['order'] ) && 'desc' == $_GET['order'] ) {
 			$current_order = 'desc';
-		else
+		} else {
 			$current_order = 'asc';
+		}
 
 		if ( ! empty( $columns['cb'] ) ) {
 			static $cb_counter = 1;
 			$columns['cb'] = '<label class="screen-reader-text" for="cb-select-all-' . $cb_counter . '">' . __( 'Select All' ) . '</label>'
-				. '<input id="cb-select-all-' . $cb_counter . '" type="checkbox" />';
+				. '<input id="cb-select-all-' . esc_attr( $cb_counter ) . '" type="checkbox" />';
 			$cb_counter++;
 		}
 
@@ -990,17 +894,18 @@ class FrmListHelper {
 				$class[] = 'hidden';
 			}
 
-			if ( 'cb' == $column_key )
+			if ( 'cb' == $column_key ) {
 				$class[] = 'check-column';
-			elseif ( in_array( $column_key, array( 'posts', 'comments', 'links' ) ) )
+			} else if ( in_array( $column_key, array( 'posts', 'comments', 'links' ) ) ) {
 				$class[] = 'num';
+			}
 
 			if ( $column_key === $primary ) {
 				$class[] = 'column-primary';
 			}
 
-			if ( isset( $sortable[$column_key] ) ) {
-				list( $orderby, $desc_first ) = $sortable[$column_key];
+			if ( isset( $sortable[ $column_key ] ) ) {
+				list( $orderby, $desc_first ) = $sortable[ $column_key ];
 
 				if ( $current_orderby == $orderby ) {
 					$order = 'asc' == $current_order ? 'desc' : 'asc';
@@ -1017,10 +922,11 @@ class FrmListHelper {
 
 			$tag = ( 'cb' === $column_key ) ? 'td' : 'th';
 			$scope = ( 'th' === $tag ) ? 'scope="col"' : '';
-			$id = $with_id ? "id='$column_key'" : '';
+			$id = $with_id ? "id='" . esc_attr( $column_key ) . "'" : '';
 
-			if ( !empty( $class ) )
+			if ( ! empty( $class ) ) {
 				$class = "class='" . join( ' ', $class ) . "'";
+			}
 
 			echo "<$tag $scope $id $class>$column_display_name</$tag>";
 		}
@@ -1037,7 +943,7 @@ class FrmListHelper {
 
 		$this->display_tablenav( 'top' );
 ?>
-<table class="wp-list-table <?php echo implode( ' ', $this->get_table_classes() ); ?>">
+<table class="wp-list-table <?php echo esc_attr( implode( ' ', $this->get_table_classes() ) ); ?>">
 	<thead>
 	<tr>
 		<?php $this->print_column_headers(); ?>
@@ -1046,7 +952,7 @@ class FrmListHelper {
 
 	<tbody id="the-list"<?php
 		if ( $singular ) {
-			echo " data-wp-lists='list:$singular'";
+			echo " data-wp-lists='list:" . esc_attr( $singular ) . "'";
 		} ?>>
 		<?php $this->display_rows_or_placeholder(); ?>
 	</tbody>
@@ -1082,8 +988,9 @@ class FrmListHelper {
 	 * @param string $which
 	 */
 	protected function display_tablenav( $which ) {
-		if ( 'top' == $which )
+		if ( 'top' == $which ) {
 			wp_nonce_field( 'bulk-' . $this->_args['plural'] );
+		}
 ?>
 	<div class="tablenav <?php echo esc_attr( $which ); ?>">
 
@@ -1120,7 +1027,7 @@ class FrmListHelper {
 		if ( $this->has_items() ) {
 			$this->display_rows();
 		} else {
-			echo '<tr class="no-items"><td class="colspanchange" colspan="' . $this->get_column_count() . '">';
+			echo '<tr class="no-items"><td class="colspanchange" colspan="' . esc_attr( $this->get_column_count() ) . '">';
 			$this->no_items();
 			echo '</td></tr>';
 		}
@@ -1139,19 +1046,6 @@ class FrmListHelper {
 		$this->single_row_columns( $item );
 		echo '</tr>';
 	}
-
-	/**
-	 *
-	 * @param object $item
-	 * @param string $column_name
-	 */
-	protected function column_default( $item, $column_name ) {}
-
-	/**
-	 *
-	 * @param object $item
-	 */
-	protected function column_cb( $item ) {}
 
 	/**
 	 * Generates the columns for a single row of the table
@@ -1181,9 +1075,7 @@ class FrmListHelper {
 			$attributes = "class='$classes' $data";
 
 			if ( 'cb' == $column_name ) {
-				echo '<th scope="row" class="check-column">';
-				echo $this->column_cb( $item );
-				echo '</th>';
+				echo '<th scope="row" class="check-column"></th>';
 			} elseif ( method_exists( $this, '_column_' . $column_name ) ) {
 				echo call_user_func(
 					array( $this, '_column_' . $column_name ),
@@ -1196,12 +1088,11 @@ class FrmListHelper {
 				echo "<td $attributes>";
 				echo call_user_func( array( $this, 'column_' . $column_name ), $item );
 				echo $this->handle_row_actions( $item, $column_name, $primary );
-				echo "</td>";
+				echo '</td>';
 			} else {
 				echo "<td $attributes>";
-				echo $this->column_default( $item, $column_name );
 				echo $this->handle_row_actions( $item, $column_name, $primary );
-				echo "</td>";
+				echo '</td>';
 			}
 		}
 	}
