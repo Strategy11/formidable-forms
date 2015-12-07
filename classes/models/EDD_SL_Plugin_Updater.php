@@ -51,11 +51,8 @@ class EDD_SL_Plugin_Updater {
      * @return void
      */
     public function init() {
-
         add_filter( 'pre_set_site_transient_update_plugins', array( $this, 'check_update' ) );
         add_filter( 'plugins_api', array( $this, 'plugins_api_filter' ), 10, 3 );
-
-        add_action( 'after_plugin_row_' . $this->name, array( $this, 'show_update_notification' ), 10, 2 );
     }
 
     /**
@@ -281,17 +278,13 @@ class EDD_SL_Plugin_Updater {
             return;
 		}
 
-        if ( empty( $data['license'] ) ) {
-            return;
-		}
-
         if ( $this->api_url == home_url() ) {
             return false; // Don't allow a plugin to ping itself
         }
 
         $api_params = array(
             'edd_action' => 'get_version',
-            'license'    => $data['license'],
+            'license'    => ! empty( $data['license'] ) ? $data['license'] : '',
             'item_name'  => isset( $data['item_name'] ) ? $data['item_name'] : false,
             'item_id'    => isset( $data['item_id'] ) ? $data['item_id'] : false,
             'slug'       => $data['slug'],
