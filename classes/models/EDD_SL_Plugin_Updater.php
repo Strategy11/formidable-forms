@@ -51,8 +51,11 @@ class EDD_SL_Plugin_Updater {
      * @return void
      */
     public function init() {
+
         add_filter( 'pre_set_site_transient_update_plugins', array( $this, 'check_update' ) );
         add_filter( 'plugins_api', array( $this, 'plugins_api_filter' ), 10, 3 );
+
+		add_action( 'after_plugin_row_' . $this->name, array( $this, 'show_update_notification' ), 10, 2 );
     }
 
     /**
@@ -165,37 +168,6 @@ class EDD_SL_Plugin_Updater {
 
         // Restore our filter
         add_filter( 'pre_set_site_transient_update_plugins', array( $this, 'check_update' ) );
-
-        if ( ! empty( $update_cache->response[ $this->name ] ) && version_compare( $this->version, $version_info->new_version, '<' ) ) {
-
-            // build a plugin list row, with update notification
-            $wp_list_table = _get_list_table( 'WP_Plugins_List_Table' );
-            echo '<tr class="plugin-update-tr"><td colspan="' . $wp_list_table->get_column_count() . '" class="plugin-update colspanchange"><div class="update-message">';
-
-            $changelog_link = self_admin_url( 'index.php?edd_sl_action=view_plugin_changelog&plugin=' . $this->name . '&slug=' . $this->slug . '&TB_iframe=true&width=772&height=911' );
-
-            if ( empty( $version_info->download_link ) ) {
-                printf(
-                    __( 'There is a new version of %1$s available. %2$sView version %3$s details%4$s.', 'edd' ),
-                    esc_html( $version_info->name ),
-                    '<a target="_blank" class="thickbox" href="' . esc_url( $changelog_link ) . '">',
-                    esc_html( $version_info->new_version ),
-					'</a>'
-                );
-            } else {
-                printf(
-                    __( 'There is a new version of %1$s available. %2$sView version %3$s details%4$s or %5$supdate now%6$s.', 'edd' ),
-                    esc_html( $version_info->name ),
-                    '<a target="_blank" class="thickbox" href="' . esc_url( $changelog_link ) . '">',
-                    esc_html( $version_info->new_version ),
-					'</a>',
-                    '<a href="' . esc_url( wp_nonce_url( self_admin_url( 'update.php?action=upgrade-plugin&plugin=' ) . $this->name, 'upgrade-plugin_' . $this->name ) ) .'">',
-					'</a>'
-                );
-            }
-
-            echo '</div></td></tr>';
-        }
     }
 
 
