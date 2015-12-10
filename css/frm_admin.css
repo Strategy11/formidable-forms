@@ -1404,7 +1404,7 @@ span.howto{display:inline;}
 	margin-bottom:0;
 }
 .frm_sorting .no_repeat_section li.ui-state-default.edit_field_type_end_divider{
-	display:none;
+	display:none !important;
 }
 
 #postbox-container-1 .ui-state-default,
