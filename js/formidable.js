@@ -896,8 +896,10 @@ function frmFrontFormJS(){
 		childFieldArgs.repeatId = maybeGetRepeatId( childFieldArgs, childSelect );
 		childFieldArgs.parentVals = getParentLookupFieldVals( childFieldArgs );
 
-		if ( childFieldArgs.fieldType == 'select' ) {
+		if ( childFieldArgs.fieldType == 'lookup' ) {
 			maybeReplaceSelectLookupFieldOptions( childFieldArgs, childSelect );
+		} else {
+			maybeInsertTextLookupFieldValue( childFieldArgs, childSelect );
 		}
 	}
 
@@ -918,7 +920,7 @@ function frmFrontFormJS(){
 			currentParentId = parentIds[i];
 			currentParentArgs = __FRMLOOKUP[ currentParentId ];
 
-			if ( currentParentArgs.fieldType == 'select' ) {
+			if ( currentParentArgs.lookupType == 'select' ) {
 				// If child is repeating, parent may be repeating as well
 				var parentSelect = document.getElementById( 'field_' + currentParentArgs.fieldKey + childFieldArgs.repeatId );
 
@@ -1003,10 +1005,46 @@ function frmFrontFormJS(){
 			// If the original value is no longer present, try setting to default value
 			var defaultValue = childSelect.getAttribute('data-frmval');
 			if ( defaultValue !== null ) {
-			childSelect.value = defaultValue;
+				childSelect.value = defaultValue;
+			}
 		}
 	}
-}
+
+	// Get new value for a Lookup field if all parents have a value
+	function maybeInsertTextLookupFieldValue( childFieldArgs, childInput ) {
+		if ( childFieldArgs.parentVals === false  ) {
+			// If any parents have blank values, set the field value to blank
+			insertTextLookupFieldValue ( childFieldArgs, childInput, '' );
+		} else {
+			// If all parents have values, check for an updated
+			jQuery.ajax({
+				type:'POST',
+				url:frm_js.ajax_url,
+				data:{
+					action:'frm_get_lookup_text_value', parent_fields:childFieldArgs.parents,
+					parent_vals:childFieldArgs.parentVals, field_id:childFieldArgs.fieldId, nonce:frm_js.nonce
+				},
+				success:function(newValue){
+					maybeInsertNewTextLookupFieldValue( childFieldArgs, childInput, newValue );
+				},
+				error:function(){
+				}
+			});
+		}
+	}
+
+	// Insert a new text Lookup value if the value changed
+	function maybeInsertNewTextLookupFieldValue( childFieldArgs, childInput, newValue ) {
+		if ( childInput.value != newValue ) {
+			insertTextLookupFieldValue( childFieldArgs, childInput, newValue );
+		}
+	}
+
+	// Insert a new text field Lookup value
+	function insertTextLookupFieldValue( childFieldArgs, childInput, newValue ) {
+		childInput.value = newValue;
+		triggerChange( jQuery( childInput ), childFieldArgs.fieldKey );
+	}
 
 	function triggerChange( input, fieldKey ) {
 		if ( typeof fieldKey === 'undefined' ) {

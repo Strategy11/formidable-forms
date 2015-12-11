@@ -769,6 +769,38 @@ function frmAdminBuildJS(){
 		return false;
 	}
 
+	function hideOrShowAutopopulateValues() {
+		var fieldId = this.id.replace( 'autopopulate_values_', '' );
+		var sections = document.querySelectorAll( '.frm_autopopulate_values_section_' + fieldId );
+
+		var l = sections.length;
+		for ( var i = 0; i<l; i++ ) {
+			if ( this.checked ) {
+				sections[i].className = sections[i].className.replace( 'frm_hidden', '' );
+			} else {
+				sections[i].className = sections[i].className + ' frm_hidden';
+			}
+		}
+	}
+
+	function updateAutopopulateFieldSelection() {
+		var fieldID = this.id.replace( 'autopopulate_values_form_', '' );
+		var fieldSelect = document.getElementById( 'autopopulate_values_field_' + fieldID );
+
+		if ( this.value == '' ) {
+			fieldSelect.options.length = 1;
+		} else {
+			var formID = this.value;
+			jQuery.ajax({
+				type:'POST',url:ajaxurl,
+				data:{action:'frm_get_field_opts_for_form',form_id:formID,nonce:frmGlobal.nonce},
+				success:function(fields){
+					fieldSelect.innerHTML = fields;
+				}
+			});
+		}
+	}
+
 	function clickVis(e){
 		clickAction(this);
 		if(!jQuery(e.target).is('.inplace_field, .frm_ipe_field_label, .frm_ipe_field_desc, .frm_ipe_field_conf_desc, .frm_ipe_field_option, .frm_ipe_field_option_key')){
@@ -2027,6 +2059,8 @@ function frmAdminBuildJS(){
 			$newFields.on('click', '.frm_add_logic_row', addFieldLogicRow);
             $newFields.on('click', '.frm_remove_tag', removeThisTag);
 			$newFields.on('click', '.frm_add_watch_lookup_row', addWatchLookupRow);
+			$newFields.on('change', '.autopopulate_values', hideOrShowAutopopulateValues);
+			$newFields.on('change', '.frm_autopopulate_values_form', updateAutopopulateFieldSelection);
 
 			jQuery(document.getElementById('frm-insert-fields')).on('click', '.frm_add_field', addFieldClick);
 			$newFields.on('click', '.frm_duplicate_icon', duplicateField);
