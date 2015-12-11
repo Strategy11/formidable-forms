@@ -53,17 +53,18 @@ function frmAdminBuildJS(){
 	}
 	
 	function removeThisTag(){
-		var id=jQuery(this).data('removeid');
-		var show=jQuery(this).data('showlast');
+		var deleteButton = jQuery(this);
+		var id=deleteButton.data('removeid');
+		var show=deleteButton.data('showlast');
 		if(typeof(show) == 'undefined'){
 			show = '';
 		}
 
 		if(show !== ''){
-			if ( jQuery(this).closest('.frm_add_remove').find('.frm_remove_tag').length > 1 )
+			if ( deleteButton.closest('.frm_add_remove').find('.frm_remove_tag').length > 1 )
 				show = '';
-		}else if(id.indexOf('frm_logic_') === 0 && jQuery(this).closest('.frm_logic_rows').find('.frm_logic_row').length<2){
-			show='#'+jQuery(this).closest('td').children('.frm_add_logic_link').attr('id');
+		}else if(id.indexOf('frm_logic_') === 0 && deleteButton.closest('.frm_logic_rows').find('.frm_logic_row').length<2){
+			show='#'+deleteButton.closest('td').children('.frm_add_logic_link').attr('id');
 		}else if(id.indexOf('frm_postmeta_') === 0){
 			if(jQuery('#frm_postmeta_rows .frm_postmeta_row').length<2)
 				show='.frm_add_postmeta_row.button';
@@ -71,6 +72,12 @@ function frmAdminBuildJS(){
 				if(show !== '')
 					show += ',';
 				show += '#'+jQuery('#frm_postmeta_rows .frm_postmeta_row:not(#'+id+')').last().attr('id')+' .frm_toggle_cf_opts';
+			}
+		} else if ( id.indexOf('frm_watch_lookup_') === 0 ) {
+			var fieldId = deleteButton.data( 'fieldid' );
+			var lookupBlock = document.getElementById( 'frm_watch_lookup_block_' + fieldId );
+			if ( lookupBlock.children.length<2 ) {
+				show='#frm_add_watch_lookup_link_' + fieldId;
 			}
 		}
 
@@ -732,6 +739,30 @@ function frmAdminBuildJS(){
                     var logicRow = jQuery(document.getElementById('frm_logic_row_'+id));
 					logicRow.append(html);
 					logicRow.parent('.frm_logic_rows').fadeIn('slow');
+				});
+			}
+		});
+		return false;
+	}
+
+	function addWatchLookupRow(){
+		var id=jQuery(this).closest('li.form-field').data('fid');
+		var form_id = this_form_id;
+		var row_key = 0;
+		var lookupBlockRows = document.getElementById( 'frm_watch_lookup_block_'+id  ).childNodes;
+		if ( lookupBlockRows.length > 0 ) {
+			var lastRowId = lookupBlockRows[ lookupBlockRows.length - 1 ].id;
+			row_key = 1 + parseInt( lastRowId.replace( 'frm_watch_lookup_' + id + '_', '' ) );
+		}
+
+		jQuery.ajax({
+			type:'POST',url:ajaxurl,
+			data:{action:'frm_add_watch_lookup_row', form_id:form_id, field_id:id, row_key:row_key, nonce:frmGlobal.nonce},
+			success:function(newRow){
+				jQuery(document.getElementById('frm_add_watch_lookup_link_'+id)).fadeOut('slow', function(){
+                    var watchRowBlock = jQuery(document.getElementById('frm_watch_lookup_block_'+id));
+					watchRowBlock.append(newRow);
+					watchRowBlock.fadeIn('slow');
 				});
 			}
 		});
@@ -1995,6 +2026,7 @@ function frmAdminBuildJS(){
 			$newFields.on('mouseenter', '.frm_ipe_field_desc, .frm_ipe_field_conf_desc', setIPEDesc);
 			$newFields.on('click', '.frm_add_logic_row', addFieldLogicRow);
             $newFields.on('click', '.frm_remove_tag', removeThisTag);
+			$newFields.on('click', '.frm_add_watch_lookup_row', addWatchLookupRow);
 
 			jQuery(document.getElementById('frm-insert-fields')).on('click', '.frm_add_field', addFieldClick);
 			$newFields.on('click', '.frm_duplicate_icon', duplicateField);

@@ -201,6 +201,8 @@ function frmFrontFormJS(){
 	* reset = reset or persist
 	*/
 	function checkDependentField(field_id, rec, changedInput, reset){
+		checkLookupFieldsDependentOnThis( field_id, changedInput );
+
 		var rules = getRulesForField( field_id );
 		if ( typeof rules === 'undefined' ) {
 			return;
@@ -834,6 +836,177 @@ function frmFrontFormJS(){
 			}
 		}
 	}
+
+	/*****************************************************
+	Lookup Field Functions
+	******************************************************/
+
+	// Check all lookup fields dependent on a parent lookup field
+	function checkLookupFieldsDependentOnThis( field_id, changedInput ) {
+		if ( typeof __FRMLOOKUP  === 'undefined' || typeof __FRMLOOKUP[field_id] === 'undefined' ) {
+			return;
+		}
+
+		var triggerFieldArgs = __FRMLOOKUP[field_id];
+
+		if ( changedInput === null || typeof(changedInput) === 'undefined' ) {
+			return;
+		}
+
+		var parentRepeatId = maybeGetRepeatId( triggerFieldArgs, changedInput[0] );
+
+		var currentChildId;
+		for ( var i = 0, l = triggerFieldArgs.dependents.length; i < l; i++ ) {
+			currentChildId = triggerFieldArgs.dependents[ i ];
+			updateLookupFieldById( currentChildId, parentRepeatId );
+		}
+	}
+
+	// Update the field options for a lookup field by field ID
+	function updateLookupFieldById( field_id, parentRepeatId ) {
+		if ( typeof __FRMLOOKUP  === 'undefined' || typeof __FRMLOOKUP[field_id] === 'undefined' ) {
+			return;
+		}
+
+		var childFieldArgs = __FRMLOOKUP[field_id];
+
+		// If lookup field has no parents, no need to update this field
+		if ( childFieldArgs.parents.length < 1 ) {
+			return;
+		}
+
+		var childFieldElements = [];
+
+		if ( parentRepeatId ) {
+			// If parent is in a repeating section, child must be repeating
+			var childField = document.getElementById( 'field_' + childFieldArgs.fieldKey + parentRepeatId );
+			childFieldElements.push( childField );
+		} else {
+			childFieldElements = document.querySelectorAll('*[id^="field_' + childFieldArgs.fieldKey + '"]');
+		}
+
+		var childFieldNum = childFieldElements.length;
+		for ( var i = 0; i<childFieldNum; i++ ) {
+			updateSingleLookupField( childFieldArgs, childFieldElements[i] );
+		}
+	}
+
+	// Update the field options for an individual lookup field
+	function updateSingleLookupField( childFieldArgs, childSelect ) {
+		childFieldArgs.repeatId = maybeGetRepeatId( childFieldArgs, childSelect );
+		childFieldArgs.parentVals = getParentLookupFieldVals( childFieldArgs );
+
+		if ( childFieldArgs.fieldType == 'select' ) {
+			maybeReplaceSelectLookupFieldOptions( childFieldArgs, childSelect );
+		}
+	}
+
+	// Get the repeating row index from a field element
+	function maybeGetRepeatId( triggerFieldArgs, changedInput ) {
+		var repeatId = changedInput.id.replace( 'field_' + triggerFieldArgs.fieldKey, '' );
+		return repeatId;
+	}
+
+	// Get the field values from all parents
+	function getParentLookupFieldVals( childFieldArgs ) {
+		var parentVals = [];
+		var parentIds = childFieldArgs.parents;
+
+		var currentParentArgs, currentParentId;
+		var l = parentIds.length;
+		for ( var i = 0; i < l; i++ ) {
+			currentParentId = parentIds[i];
+			currentParentArgs = __FRMLOOKUP[ currentParentId ];
+
+			if ( currentParentArgs.fieldType == 'select' ) {
+				// If child is repeating, parent may be repeating as well
+				var parentSelect = document.getElementById( 'field_' + currentParentArgs.fieldKey + childFieldArgs.repeatId );
+
+				// If parent isn't repeating (but the child is)
+				if ( parentSelect === null && childFieldArgs.repeatId ) {
+					parentSelect = document.getElementById( 'field_' + currentParentArgs.fieldKey );
+				}
+
+				// If any parents have blank values, don't waste time looking for values
+				if ( parentSelect.value === '' ) {
+					parentVals = false;
+					break;
+				}
+
+				parentVals[i] = parentSelect.value;
+			}
+		}
+
+		return parentVals;
+	}
+
+	// Get new options for a Lookup field if all parents have a value
+	function maybeReplaceSelectLookupFieldOptions( childFieldArgs, childSelect ) {
+		if ( childSelect.type == 'hidden' ) {
+			// Field is on a different page or is hidden with the visibility option
+			return;
+		}
+
+		if ( childFieldArgs.parentVals === false  ) {
+			// If any parents have blank values, don't waste time looking for values
+			childSelect.options.length = 1;
+			childSelect.value = '';
+			triggerChange( jQuery(childSelect), childFieldArgs.fieldKey );
+		} else {
+			// If all parents have values, check for updated options
+			jQuery.ajax({
+				type:'POST',
+				url:frm_js.ajax_url,
+				data:{
+					action:'frm_replace_lookup_field_options', parent_fields:childFieldArgs.parents,
+					parent_vals:childFieldArgs.parentVals, field_id:childFieldArgs.fieldId, nonce:frm_js.nonce
+				},
+				success:function(newOptions){
+					replaceSelectLookupFieldOptions( childFieldArgs, childSelect, newOptions );
+				},
+				error:function(){
+				}
+			});
+		}
+	}
+
+	// Replace the options in a Lookup Field dropdown
+	function replaceSelectLookupFieldOptions( childFieldArgs, childSelect, newOptions ) {
+		var origVal = childSelect.value;
+
+		newOptions = JSON.parse( newOptions );
+
+		// Remove old options
+		for ( var i = childSelect.options.length; i>0; i-- ) {
+			childSelect.remove(i);
+		}
+
+		// Add new options
+		var optsLength = newOptions.length;
+		for ( i = 0; i<optsLength; i++ ) {
+			childSelect.options[i+1]=new Option(newOptions[i], newOptions[i], false, false);
+		}
+
+		setLookupFieldVal( childSelect, origVal );
+
+		// Trigger a change if the new value is different from the old value
+		if ( childSelect.value != origVal ) {
+			triggerChange( jQuery(childSelect), childFieldArgs.fieldKey );
+		}
+	}
+
+	// Set the value in a refreshed Lookup Field
+	function setLookupFieldVal( childSelect, origVal ) {
+		// Try setting the dropdown to the original value
+		childSelect.value = origVal;
+		if ( childSelect.value === '' ) {
+			// If the original value is no longer present, try setting to default value
+			var defaultValue = childSelect.getAttribute('data-frmval');
+			if ( defaultValue !== null ) {
+			childSelect.value = defaultValue;
+		}
+	}
+}
 
 	function triggerChange( input, fieldKey ) {
 		if ( typeof fieldKey === 'undefined' ) {
@@ -2071,9 +2244,11 @@ function frmFrontFormJS(){
 		var id = jQuery(this).data('parent');
 		var i = 0;
 		if ( jQuery('.frm_repeat_'+id).length > 0 ) {
-			i = 1 + parseInt(jQuery('.frm_repeat_'+ id +':last').attr('id').replace('frm_section_'+ id +'-', ''));
-			if ( typeof i == 'undefined' ) {
+			var lastRowIndex = jQuery('.frm_repeat_'+ id +':last').attr('id').replace('frm_section_'+ id +'-', '');
+			if ( lastRowIndex.indexOf( 'i' ) > -1 ) {
 				i = 1;
+			} else {
+				i = 1 + parseInt( lastRowIndex );
 			}
 		}
 
@@ -2106,6 +2281,7 @@ function frmFrontFormJS(){
 							}
 							fieldObject = jQuery( '#' + this.id );
 							checked.push(fieldID);
+							updateLookupFieldById( fieldID, '-' + i );
 							checkDependentField(fieldID, null, fieldObject, reset);
 							doCalculation(fieldID, fieldObject);
 							reset = 'persist';
@@ -2695,6 +2871,17 @@ function frmFrontFormJS(){
 			for ( var i = 0, l = len; i < l; i++ ) {
 				checkDependentField(ids[i], null, null, reset);
                 reset = 'persist';
+			}
+		},
+
+		checkAllDependentLookupFields: function(ids){
+			ids = JSON.parse(ids);
+
+			var fieldId;
+			var len = ids.length;
+			for ( var i = 0, l = len; i < l; i++ ) {
+				fieldId = ids[i];
+				updateLookupFieldById( fieldId, '' );
 			}
 		},
 

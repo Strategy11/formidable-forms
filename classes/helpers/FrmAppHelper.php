@@ -1013,6 +1013,8 @@ class FrmAppHelper {
 
         $args['field_type'] = $field_type;
         self::fill_field_opts($field, $field_array, $args);
+		// Track the original field's type
+		$field_array['original_type'] = isset( $field->field_options['original_type'] ) ? $field->field_options['original_type'] : $field->type;
 
         $field_array = apply_filters('frm_setup_edit_fields_vars', $field_array, $field, $values['id']);
 

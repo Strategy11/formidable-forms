@@ -227,7 +227,7 @@ if ( $display['options'] ) { ?>
                     <tr><td class="frm_150_width"><label><?php _e( 'Field Size', 'formidable' ) ?></label></td>
                         <td>
                         <?php
-						if ( in_array( $field['type'], array( 'select', 'time', 'data' ) ) ) {
+						if ( in_array( $field['type'], array( 'select', 'time', 'data', 'lookup' ) ) ) {
 							if ( ! isset( $values['custom_style'] ) || $values['custom_style'] ) { ?>
 								<label for="size_<?php echo esc_attr( $field['id'] ) ?>">
 									<input type="checkbox" name="field_options[size_<?php echo esc_attr( $field['id'] ) ?>]" id="size_<?php echo esc_attr( $field['id'] ) ?>" value="1" <?php echo FrmField::is_option_true( $field, 'size' ) ? 'checked="checked"' : ''; ?> />
