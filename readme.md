@@ -12,6 +12,7 @@ Beautiful forms in 60 seconds. The WordPress form builder that enables you to cr
 Build WordPress forms the fast and simple way with a simple drag-and-drop interface (and a visual form styler in version 2.0). Create custom Formidable forms or generate them from a template with this stunning WordPress form plugin.
 
 [View Documentation](http://formidablepro.com/knowledgebase/ "View Documentation")
+
 [Contribute on Github](https://github.com/Strategy11/formidable-forms "Contribute on Github")
 
 ### Features
