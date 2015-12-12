@@ -21,7 +21,7 @@ function frmFrontFormJS(){
 		var v = '';
 		var d = '';
 		var thisName = this.name;
-		if ( thisName === 'frm_prev_page' || jQuery(this).children().find(".frm_prev_page").length !== 0 ) {
+		if ( thisName === 'frm_prev_page' || jQuery(this).hasClass(".frm_prev_page") !== false) {
 			v = jQuery(f).find('.frm_next_page').attr('id').replace('frm_next_p_', '');
 		} else if ( thisName === 'frm_save_draft' || this.className.indexOf('frm_save_draft') !== -1 ) {
 			d = 1;
