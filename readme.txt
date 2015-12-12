@@ -4,7 +4,7 @@ Donate link: http://formidablepro.com/donate
 Tags: admin, AJAX, captcha, contact, contact form, database, email, feedback, form, forms, javascript, jquery, page, plugin, poll, Post, spam, survey, template, widget, wpmu, form builder
 Requires at least: 3.6
 Tested up to: 4.3.1
-Stable tag: 2.0.17
+Stable tag: 2.0.18
 
 Beautiful forms in 60 seconds. The WordPress form builder that enables you to create forms with a simple drag-and-drop interface and in-place editing.
 
@@ -255,7 +255,7 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * Added 'frm_display_data_opts' filter.
 * Prevent frm_display_id custom field from saving when a field is selected in the create post settings instead of customized content
 * Fix: When forms were submitted without ajax, the redirect wasn't working consistently.
-* Fix: The shortcodes weren't processing in the message shown after an entry is updated. 
+* Fix: The shortcodes weren't processing in the message shown after an entry is updated.
 * Fix: When we prevented the PayPal action from triggering on import, we stopped all actions. This is now fixed so an action can be set (in the code) to be triggered on import. Posts will now be created on import again.
 * Fix: The dynamic list field was showing the entry ID in the entries tab instead of the value.
 * Fix: The Add row button wasn't showing in a repeating section when returning to edit an entry if there were more than two rows in the section.
@@ -371,7 +371,7 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * Fix timestamp timezone on view/edit entry page
 * Added frm_entries_{$col_name}_column hook to allow custom columns on the entries listing page
 * Pro: Allow the last page of a form to be conditional
-* Pro: When a field is conditionally hidden, clear the value and trigger calculations and child logic 
+* Pro: When a field is conditionally hidden, clear the value and trigger calculations and child logic
 * Pro: Improved accuracy of calculations using the other option, and across page breaks
 * Pro: Added frm_calendar_day_names hook for displaying the full weekday name in calendar view
 * Pro: Allow a comma-separated list of ids when filtering by entry id in the view settings
@@ -553,7 +553,7 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * Pro: Reduce the baseline memory load
 * Pro: Load the form styling on view pages when set to only load styling on applicable pages
 * Pro: Change deletelink so it deletes with ajax
-* Pro: Add [user_role] shortcode for current user's role 
+* Pro: Add [user_role] shortcode for current user's role
 * Pro: Add read-only option to Dynamic fields
 * Pro: Add single row and multiple row options to Dynamic Radio and Checkbox fields
 * Pro: Allow arrays in View filters
@@ -911,7 +911,7 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * PRO: Fixed the delete link in entry edit links shortcode to prevent it from going to a blank form when using the page_id param
 * PRO: Fixed calendar to show the correct number of extra boxes when not starting on Sunday
 * PRO: Fixed repeated, inline conditional logic in custom displays
-* PRO: Fixed option to copy forms to other sites in multi-site installs, so they will no longer be copied when the box is unchecked 
+* PRO: Fixed option to copy forms to other sites in multi-site installs, so they will no longer be copied when the box is unchecked
 * PRO: Fixed admin-only fields to not validate for users who can't see the field
 
 = 1.06.08 =
@@ -925,7 +925,7 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * PRO: Fixed conditional logic on email notifications to make sure they are stopped when they should be
 * PRO: Automatically send emails to the saved value of a field when used in the "Email recipients" box without requiring show=field_value
 
-= 1.06.07 = 
+= 1.06.07 =
 * Added mb_split fallback for servers without mbstring installed
 * Changed menu position to prevent override from other plugins and themes
 * PRO: Fixed issue with the form shortcode showing if using multiple forms with default values on the same page
@@ -1020,7 +1020,7 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * PRO: Added three icons to the error icon setting
 * PRO: Fixed duplicate deletion messages when using [deletelink] in the form customizable HTML
 * PRO: Updated calculations and conditional logic to work across multi-paged forms
-* PRO: Added basic support for data from entries csv import 
+* PRO: Added basic support for data from entries csv import
 * PRO: Show image for data from entries fields using upload fields
 
 = 1.06.03 =
@@ -1047,7 +1047,7 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * PRO: Allow [if created-at less_than='-1 month'] type of statements in the custom display for date fields, created-at, and updated-at
 * PRO: Added option to display the field label in custom displays. Ex [25 show="field_label"]
 * PRO: Added option to turn off auto paragraphs for paragraph fields. Ex [25 wpautop=0]
-* PRO: Added options to custom display shortcode: [display-frm-data id=5 get="whatever" get_value="value"]. This allows the use of [get param="whatever"] in the custom display. 
+* PRO: Added options to custom display shortcode: [display-frm-data id=5 get="whatever" get_value="value"]. This allows the use of [get param="whatever"] in the custom display.
 * PRO: Updated the frm-entry-links shortcode to use show_delete with type=list
 * PRO: Updated custom display where options to fetch entries more accurately when "not like" and "not equal to" are used
 * PRO: Fixed image upload naming for uploads with numeric names like 1.png
@@ -1190,7 +1190,7 @@ $[25 decimal=2 dec_point='.' thousands_sep=',']
 * PRO: Fixed bug causing the options to be empty if the data from entries options are limited to the current user and the form they are pulled from are creating posts
 * PRO: Fixed empty results in the [formresults] table for forms that create posts
 * PRO: When a blog is deleted in WP multi-site, delete database table rows related to copying forms from that blog
-* PRO: Don't strip out desired backslashes 
+* PRO: Don't strip out desired backslashes
 * PRO: Updated to latest version of datepicker javascript
 
 = 1.05.05 =
@@ -1275,7 +1275,7 @@ $[25 decimal=2 dec_point='.' thousands_sep=',']
 * PRO: Show the linked image instead of the url when a file is linked in a "just show it" data from entries field
 * PRO: Added functionality for ordering by post fields in a custom display
 
-= 1.05.01 = 
+= 1.05.01 =
 * PRO: Fix custom display settings for posts
 
 = 1.05.0 =
@@ -1283,7 +1283,7 @@ $[25 decimal=2 dec_point='.' thousands_sep=',']
 * Updated some templates with fields aligned in a row
 * Moved error messages underneath input fields
 * Added option to display labels "hidden" instead of just none. This makes aligning fields in a row with only one label easier
-* Additional XHTML compliance for multiple forms on one 
+* Additional XHTML compliance for multiple forms on one
 * Removed the HTML5 required attribute (temporarily)
 * Corrected the label position styling in the regular version
 * A little UI clean up
@@ -1291,7 +1291,7 @@ $[25 decimal=2 dec_point='.' thousands_sep=',']
 * PRO: Added custom post type support
 * PRO: Added hierarchy to post categories
 * PRO: Added a loading indicator while files are uploading
-* PRO: Added a `[default-message]` shortcode for use in the email message. Now you can add to the default message without completely replacing it 
+* PRO: Added a `[default-message]` shortcode for use in the email message. Now you can add to the default message without completely replacing it
 * PRO: Added default styling to the formresults shortcode, as well as additional shortcode options: `[formresults id=x style=1 no_entries="No Entries Found" fields="25,26,27"]`
 * PRO: Added localizations options to calendar
 * PRO: Fixed collapsible Section headings to work with updated HTML

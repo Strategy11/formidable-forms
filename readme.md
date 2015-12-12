@@ -9,7 +9,7 @@ Requires at least: 3.6
 
 Tested up to: 4.3.1
 
-Stable tag: [2.0.17](https://github.com/Strategy11/formidable-forms/releases/tag/v2.0.17)
+Stable tag: [2.0.18](https://github.com/Strategy11/formidable-forms/releases/tag/v2.0.18)
 
 Beautiful forms in 60 seconds. The WordPress form builder that enables you to create forms with a simple drag-and-drop interface and in-place editing.
 
