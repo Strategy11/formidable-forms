@@ -95,7 +95,8 @@ class FrmAddon {
 			$is_valid = 'invalid';
 			if ( is_array( $license_data ) && $license_data['license'] == 'valid' ) {
 				$is_valid = $license_data['license'];
-				$response['success'] = __( 'Enjoy!', 'formidable' );
+				$response['success'] = true;
+				$response['message'] = __( 'Enjoy!', 'formidable' );
 			} else {
 				$response['message'] = __( 'That license is invalid', 'formidable' );
 			}
