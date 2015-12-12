@@ -1235,7 +1235,7 @@ function frmAdminBuildJS(){
 				jQuery.each(function(index, el) {
 					// Check if current element is a div
 					if ( jQuery(this).is("div") ) {
-						continue;
+						return true;
 					}
 
 					// Get current category select
