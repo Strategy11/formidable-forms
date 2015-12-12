@@ -1676,8 +1676,9 @@ function frmAdminBuildJS(){
 				thisRow.find('.edd_frm_license').html( license );
 				if ( msg.success === true ) {
 					thisRow.find('.frm_icon_font').removeClass('frm_hidden');
+					thisRow.find('div.alignleft').toggleClass( 'frm_hidden', 1000 );
 				}
-				thisRow.find('div.alignleft').toggleClass( 'frm_hidden', 1000 );
+
 				var messageBox = thisRow.find('.frm_license_msg');
 				messageBox.html(msg.message);
 				if ( msg.message !== '' ){
