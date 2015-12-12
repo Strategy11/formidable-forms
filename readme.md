@@ -94,7 +94,7 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 
 [See more FAQs](http://formidablepro.com/formidable-faqs/ "Formidable Form FAQs")
 
-## Changelog
+## [Changelog](CHANGELOG.md)
 ### 2.0.18
 * PHP 7 updates
 * Add frm_field_extra_html hook
