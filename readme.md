@@ -9,7 +9,7 @@ Requires at least: 3.6
 
 Tested up to: 4.3.1
 
-Stable tag: 2.0.17
+Stable tag: [2.0.17](https://github.com/Strategy11/formidable-forms/releases/tag/v2.0.17)
 
 Beautiful forms in 60 seconds. The WordPress form builder that enables you to create forms with a simple drag-and-drop interface and in-place editing.
 
@@ -95,7 +95,7 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 [See more FAQs](http://formidablepro.com/formidable-faqs/ "Formidable Form FAQs")
 
 ## [Changelog](CHANGELOG.md)
-### 2.0.18
+### [2.0.18](https://github.com/Strategy11/formidable-forms/releases/tag/v2.0.18)
 * PHP 7 updates
 * Add frm_field_extra_html hook
 * Prevent specific html entity from breaking email message
@@ -114,6 +114,6 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * Fix Dynamic List field with value like 9.99
 * Make sure userID field doesn't lose value when conditionally hidden/shown
 
-### 2.0.17
+### [2.0.17](https://github.com/Strategy11/formidable-forms/releases/tag/v2.0.17)
 * **Pro Features:**
 * Fix post update bug
