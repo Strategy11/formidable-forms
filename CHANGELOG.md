@@ -7,20 +7,20 @@
 * Fix HTML error on form builder page
 * Change the "Licenses" submenu to "Plugin Licenses"
 * **Pro Features:**
-* Allow ? and * in Phone Number Format
-* Remove child form from export options
-* Fix LIKE conditional logic bug
-* Some auto-update adjustments
-* Add frm_search_any_terms filter
-* Fix file upload issue in CSV export
-* Fix issue with duplicate classes in HTML field
-* Fix filtering with user_id=current in graphs
-* Fix Dynamic List field with value like 9.99
-* Make sure userID field doesn't lose value when conditionally hidden/shown
+    * Allow ? and * in Phone Number Format
+    * Remove child form from export options
+    * Fix LIKE conditional logic bug
+    * Some auto-update adjustments
+    * Add frm_search_any_terms filter
+    * Fix file upload issue in CSV export
+    * Fix issue with duplicate classes in HTML field
+    * Fix filtering with user_id=current in graphs
+    * Fix Dynamic List field with value like 9.99
+    * Make sure userID field doesn't lose value when conditionally hidden/shown
 
 ### [2.0.17](https://github.com/Strategy11/formidable-forms/releases/tag/v2.0.17)
 * **Pro Features:**
-* Fix post update bug
+    * Fix post update bug
 
 ### [2.0.16](https://github.com/Strategy11/formidable-forms/releases/tag/v2.0.16)
 * Escape font family correctly for quotation marks
@@ -33,18 +33,18 @@
 * More contrast on form builder page
 * Use normal font weight for from builder
 * **Pro Features:**
-* Allow Styles to be duplicated
-* Allow the form key in the CSV download url
-* Make like/not like conditional logic not case-sensitive
-* Fix multiple conditional logics on a Dynamic field
-* Fix XML import with repeating fields
-* Fix notice for old dfe fields
-* Make sure integer is being used for auto_id
-* Fix read-only dependent Dynamic field with a default value
-* Fix conditional radio button default value issue
-* Fixes for conditional logic on sections
-* Fix autoupdating for add-ons
-* Show a message if no license has been entered for an add-on
+    * Allow Styles to be duplicated
+    * Allow the form key in the CSV download url
+    * Make like/not like conditional logic not case-sensitive
+    * Fix multiple conditional logics on a Dynamic field
+    * Fix XML import with repeating fields
+    * Fix notice for old dfe fields
+    * Make sure integer is being used for auto_id
+    * Fix read-only dependent Dynamic field with a default value
+    * Fix conditional radio button default value issue
+    * Fixes for conditional logic on sections
+    * Fix autoupdating for add-ons
+    * Show a message if no license has been entered for an add-on
 
 ### [2.0.15](https://github.com/Strategy11/formidable-forms/releases/tag/v2.0.15)
 * Send plugin updates through formidablepro.com
@@ -63,24 +63,24 @@
 * Make long text wrap in Chrome cb/radio fields
 * Add 'compact' option to Recaptcha
 * **Pro Features:**
-* Fix conditional logic bug
-* Fix calculations in repeating sections with visibility admin
-* Fix dynamic list fields in repeating sections
-* Fix JS error when removing row w/ read only field
-* Add JavaScript hook for removeRow function
-* Fix error for ordering view by time
-* Fix error with no posted values in embedded forms
-* Escape CSV cells with ' if they start with = (this is to prevent a vulnerability in Excel)
-* Prevent array keys from being appended to user meta vals
-* Switch autoupdating to EDD at formidablepro.com
-* Prevent frm_display_id from switching when View is updated
-* Fix multi-file upload display for embedded forms
-* Allow text value to autopopulate dynamic fields
-* Make embedded fields show up in View filters
-* Don't let userID field affect css class in repeating section
-* Don't check for shortcodes if no brackets are present
-* A few auto updating fixes for multisite
-* Switch [foreach 25] when form is duplicated
+    * Fix conditional logic bug
+    * Fix calculations in repeating sections with visibility admin
+    * Fix dynamic list fields in repeating sections
+    * Fix JS error when removing row w/ read only field
+    * Add JavaScript hook for removeRow function
+    * Fix error for ordering view by time
+    * Fix error with no posted values in embedded forms
+    * Escape CSV cells with ' if they start with = (this is to prevent a vulnerability in Excel)
+    * Prevent array keys from being appended to user meta vals
+    * Switch autoupdating to EDD at formidablepro.com
+    * Prevent frm_display_id from switching when View is updated
+    * Fix multi-file upload display for embedded forms
+    * Allow text value to autopopulate dynamic fields
+    * Make embedded fields show up in View filters
+    * Don't let userID field affect css class in repeating section
+    * Don't check for shortcodes if no brackets are present
+    * A few auto updating fixes for multisite
+    * Switch [foreach 25] when form is duplicated
 
 
 ### [2.0.14](https://github.com/Strategy11/formidable-forms/releases/tag/v2.0.14)
@@ -152,31 +152,31 @@
 * Fix: When the jQuery UI css is loaded by another plugin on the form builder page, the required icon looked the same whether required or not. This styling conflict is resolved.
 * Fix: Make sure the form description size can be changed in the styling settings.
 * **Pro Features:**
-* Views can now be filtered by fields in the repeating sections.
-* Added [parent_id] shortcode for use in views. This shortcode will only have a value when the displaying entries in repeating sections.
-* Allow views to be created using the repeated entries. Since each repeating row is an entry in a hidden form, we can allow views to be created using those repeating rows for more flexability.
-* Added order parameter to frm-entry-links
-* Allow options in a post status field to come from the form builder. The options should have separate values and the saved values can include 'publish', 'draft', 'private', 'scheduled'.
-* Remove the option to lock field and form keys. This is more of a hassle than a feature.
-* Allow the entry key to be used with the frm-field-value shortcode instead of forcing the entry
-* Replaced inline 50px height for image fields with .frm_image_from_url class for easier control
-* Improve file upload field in Chrome to prevent extra space from showing.
-* Added 'frm_save_post_name' filter. This can be used for custom form actions that create posts.
-* Added 'frm_display_data_opts' filter.
-* Prevent frm_display_id custom field from saving when a field is selected in the create post settings instead of customized content
-* Fix: When forms were submitted without ajax, the redirect wasn't working consistently.
-* Fix: The shortcodes weren't processing in the message shown after an entry is updated.
-* Fix: When we prevented the PayPal action from triggering on import, we stopped all actions. This is now fixed so an action can be set (in the code) to be triggered on import. Posts will now be created on import again.
-* Fix: The dynamic list field was showing the entry ID in the entries tab instead of the value.
-* Fix: The Add row button wasn't showing in a repeating section when returning to edit an entry if there were more than two rows in the section.
-* Fix: Improve dropping a field between two sections.
-* Fix: Remove nonce check for frm-entry-update-field shortode. Page caching gives front-end nonce checks issues.
-* Fix: We changed the parameters sent to the frm_after_update_field hook without realizing it. The 'field_id' attribute was sometimes an object, but was previously always an integer. This has been updated for reverse compatibility, and 'field' has been added with the full field object.
-* Fix: If you put -100 for the start date in a date field, -100 would show in the date field instead of 1915. This is now working correctly for dynamic values like this with three digits.
-* Fix: When filtering a view with a Dynamic field, NOT EQUAL TO will work correctly.
-* Fix: Double quotes were causing trouble when included inside an error message returned by the frm_validate_field_entry hook
-* Fix: Graphs using x_axis and start_date were having trouble
-* Fix: The js error after selecting an option in autocomplete field is fixed when there are calculations in the form.
+    * Views can now be filtered by fields in the repeating sections.
+    * Added [parent_id] shortcode for use in views. This shortcode will only have a value when the displaying entries in repeating sections.
+    * Allow views to be created using the repeated entries. Since each repeating row is an entry in a hidden form, we can allow views to be created using those repeating rows for more flexability.
+    * Added order parameter to frm-entry-links
+    * Allow options in a post status field to come from the form builder. The options should have separate values and the saved values can include 'publish', 'draft', 'private', 'scheduled'.
+    * Remove the option to lock field and form keys. This is more of a hassle than a feature.
+    * Allow the entry key to be used with the frm-field-value shortcode instead of forcing the entry
+    * Replaced inline 50px height for image fields with .frm_image_from_url class for easier control
+    * Improve file upload field in Chrome to prevent extra space from showing.
+    * Added 'frm_save_post_name' filter. This can be used for custom form actions that create posts.
+    * Added 'frm_display_data_opts' filter.
+    * Prevent frm_display_id custom field from saving when a field is selected in the create post settings instead of customized content
+    * Fix: When forms were submitted without ajax, the redirect wasn't working consistently.
+    * Fix: The shortcodes weren't processing in the message shown after an entry is updated.
+    * Fix: When we prevented the PayPal action from triggering on import, we stopped all actions. This is now fixed so an action can be set (in the code) to be triggered on import. Posts will now be created on import again.
+    * Fix: The dynamic list field was showing the entry ID in the entries tab instead of the value.
+    * Fix: The Add row button wasn't showing in a repeating section when returning to edit an entry if there were more than two rows in the section.
+    * Fix: Improve dropping a field between two sections.
+    * Fix: Remove nonce check for frm-entry-update-field shortode. Page caching gives front-end nonce checks issues.
+    * Fix: We changed the parameters sent to the frm_after_update_field hook without realizing it. The 'field_id' attribute was sometimes an object, but was previously always an integer. This has been updated for reverse compatibility, and 'field' has been added with the full field object.
+    * Fix: If you put -100 for the start date in a date field, -100 would show in the date field instead of 1915. This is now working correctly for dynamic values like this with three digits.
+    * Fix: When filtering a view with a Dynamic field, NOT EQUAL TO will work correctly.
+    * Fix: Double quotes were causing trouble when included inside an error message returned by the frm_validate_field_entry hook
+    * Fix: Graphs using x_axis and start_date were having trouble
+    * Fix: The js error after selecting an option in autocomplete field is fixed when there are calculations in the form.
 
 ### [2.0.11](https://github.com/Strategy11/formidable-forms/releases/tag/v2.0.11)
 * Fix issue with clearing array keys when sanitizing an array when displaying entry values
@@ -195,24 +195,24 @@
 * Add frm_capitalize layout class
 * Make frm_customize class work for more field types
 * **Pro Features:**
-* Set new views to private by default
-* Allow clickable=1 in the frm-show-entry shortcode
-* Make sure to show the Add row button for repeating sections in IE9
-* Correctly require a password before showing password protected views
-* Add update_single_field function for easier updating of a single field
-* Add frm_datepicker_formats hook for adding format additional options on the Formidable -> global settings page
-* Add frm_csv_row hook for adding data to a row in the CSV
-* Keep the Pending status selected after save in the post settings
-* Add frm_is_dynamic_field_empty filter for overriding whether a dependent dynamic field is available for validation or if the value should be cleared
-* Improve dragging and dropping large sections of fields
-* Don't trigger form actions while importing
-* Make sure $entry_ids is still intact for the frm_after_content hook
-* Replace m/d/Y format option
-* Fix updating a field with the frm-entry-update-field shortcode
-* Work on calculating different combinations of fields inside and outside a repeating section
-* Only return unique values when a list field is displayed based on checkboxes
-* Fix searching entries with a trailing space
-* Fix truncating in the dynamic content
+    * Set new views to private by default
+    * Allow clickable=1 in the frm-show-entry shortcode
+    * Make sure to show the Add row button for repeating sections in IE9
+    * Correctly require a password before showing password protected views
+    * Add update_single_field function for easier updating of a single field
+    * Add frm_datepicker_formats hook for adding format additional options on the Formidable -> global settings page
+    * Add frm_csv_row hook for adding data to a row in the CSV
+    * Keep the Pending status selected after save in the post settings
+    * Add frm_is_dynamic_field_empty filter for overriding whether a dependent dynamic field is available for validation or if the value should be cleared
+    * Improve dragging and dropping large sections of fields
+    * Don't trigger form actions while importing
+    * Make sure $entry_ids is still intact for the frm_after_content hook
+    * Replace m/d/Y format option
+    * Fix updating a field with the frm-entry-update-field shortcode
+    * Work on calculating different combinations of fields inside and outside a repeating section
+    * Only return unique values when a list field is displayed based on checkboxes
+    * Fix searching entries with a trailing space
+    * Fix truncating in the dynamic content
 
 ### [2.0.10](https://github.com/Strategy11/formidable-forms/releases/tag/v2.0.10)
 * Add frm_action_triggers hook for adding custom triggers into the actions
@@ -220,10 +220,10 @@
 * Prevent extra form actions when a form is duplicated
 * Load correct version of formidable.js based on wp-config debugging constant (Thanks @naomicbush for the contributions!)
 * Revert get_sortable_columns changes for < WP 4.0 support
-* **Pro Features:**
-* Allow calculations inside repeating sections and embedded forms
-* Set default values for conditional checkboxes and radio fields and inside conditional sections
-* A few changes to the way section fields create divs
+    * **Pro Features:**
+    * Allow calculations inside repeating sections and embedded forms
+    * Set default values for conditional checkboxes and radio fields and inside conditional sections
+    * A few changes to the way section fields create divs
 
 ### [2.0.09](https://github.com/Strategy11/formidable-forms/releases/tag/v2.0.09)
 * Add frm_time_to_check duplicate entries filter
@@ -236,43 +236,43 @@
 * Allow 0 to be saved in a checkbox field
 * Fix saving forms as drafts
 * **Pro Features:**
-* Reduce database calls for Views
-* Allow format for default [time] and [date] shortcodes ie [time format###'H:i A' round5]
-* Include Dynamic List fields in calculation options
-* Make file upload fields more responsive
-* Improve repeating section styling
-* Improve calculation triggering when fields involved are conditionally hidden
-* Don't clear readonly fields or default values when hidden conditionally
-* Don't trigger dynamic field values if there is other logic telling the field to be hidden
-* Include Indonesian option for datepicker
-* Allow the post author to be changed by the user ID field on edit
-* Trigger calculations at the time a conditional field is shown
-* Keep the value submitted in a dynamic list field
-* Fix graphs that show multiple fields and define the x-axis
-* Allow graphs to be included in the success message after ajax submit
-* Conditionally show the max character setting in number fields based on whether HTML5 is enabled
-* Allow scale fields to work in calculations across multiple pages
-* Turn off ajax submit if repeating section includes a file
-* Fix entry creation date format on import
-* Fix filtering by a checkbox field in the frm-stats shortcode
-* Fix logic for third-level fields with conditional logic inside a repeating section
-* Make sure conditional logic only affects the newly added row when triggered after a row is added
-* Make sure orphaned data is deleted when switching divider to repeating/non-repeating
-* Allow drafts=both with user_id filter in View shortcode
-* Fix conditionally required fields when option includes quote
-* Fix date field errors on multi-page form that submits with Ajax
-* Prevent the JetPack conflict with the shortcodes module
-* Fix sorting in dependent Dynamic fields
-* Registration add-on login form styling
-* Fix inline scale field labels
-* Fix spacing issue with repeating section grid
-* Fix truncation with special characters
-* Fix importing repeating sections and embedded forms
-* Fix readonly checkboxes in calculations
-* Don't show empty custom field rows in the post settings
-* A few fixes to the formresults shortcode including the file display
-* Fix error when duplicating a section without any included fields
-* Fix timezones for searching by entry creation and updated dates in a view
+    * Reduce database calls for Views
+    * Allow format for default [time] and [date] shortcodes ie [time format###'H:i A' round5]
+    * Include Dynamic List fields in calculation options
+    * Make file upload fields more responsive
+    * Improve repeating section styling
+    * Improve calculation triggering when fields involved are conditionally hidden
+    * Don't clear readonly fields or default values when hidden conditionally
+    * Don't trigger dynamic field values if there is other logic telling the field to be hidden
+    * Include Indonesian option for datepicker
+    * Allow the post author to be changed by the user ID field on edit
+    * Trigger calculations at the time a conditional field is shown
+    * Keep the value submitted in a dynamic list field
+    * Fix graphs that show multiple fields and define the x-axis
+    * Allow graphs to be included in the success message after ajax submit
+    * Conditionally show the max character setting in number fields based on whether HTML5 is enabled
+    * Allow scale fields to work in calculations across multiple pages
+    * Turn off ajax submit if repeating section includes a file
+    * Fix entry creation date format on import
+    * Fix filtering by a checkbox field in the frm-stats shortcode
+    * Fix logic for third-level fields with conditional logic inside a repeating section
+    * Make sure conditional logic only affects the newly added row when triggered after a row is added
+    * Make sure orphaned data is deleted when switching divider to repeating/non-repeating
+    * Allow drafts=both with user_id filter in View shortcode
+    * Fix conditionally required fields when option includes quote
+    * Fix date field errors on multi-page form that submits with Ajax
+    * Prevent the JetPack conflict with the shortcodes module
+    * Fix sorting in dependent Dynamic fields
+    * Registration add-on login form styling
+    * Fix inline scale field labels
+    * Fix spacing issue with repeating section grid
+    * Fix truncation with special characters
+    * Fix importing repeating sections and embedded forms
+    * Fix readonly checkboxes in calculations
+    * Don't show empty custom field rows in the post settings
+    * A few fixes to the formresults shortcode including the file display
+    * Fix error when duplicating a section without any included fields
+    * Fix timezones for searching by entry creation and updated dates in a view
 
 ### [2.0.08](https://github.com/Strategy11/formidable-forms/releases/tag/v2.0.08)
 * Fix security vulnerability allowing shortcodes to be excuted inside a form https://research.g0blin.co.uk/?p###618&di4ziyggqao0oz0L0vpUTd8KZwrO2P9Mw
@@ -362,7 +362,7 @@
 * Pro: Fix exporting multiple entries with the bulk CSV export option
 * Pro: Fix Entry ID filter in views when using a comma separated list of ids
 * Pro: Fix 3+ level dynamic fields to hide the last field when the first is changed
-* Pro: Fix apostraphes in form action logic
+* Pro: Fix apostrophes in form action logic
 
 ### [2.0.03](https://github.com/Strategy11/formidable-forms/releases/tag/v2.0.03)
 * Use frm_clear instead of clear to minimize conflicts
@@ -372,7 +372,7 @@
 * Pro: If a comma separated list of dates is sent for formatting, explode it before formatting
 * Pro: Increase the backtrack limit when needed when replacing shortcodes in the view content if server has the limit below default
 * Pro: Fix issue causing csv export error
-* Pro: Fix the issue cuasing new posts to not be linked to a view if a field is selected for the post content
+* Pro: Fix the issue causing new posts to not be linked to a view if a field is selected for the post content
 * Pro: Fix issue some users are having with blank date fields
 * Pro: Fix ending collapsible sections at the end of a section instead of waiting for the next section
 * Pro: Fix firing calculations on page load when there are multiple calculations
