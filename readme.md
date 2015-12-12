@@ -103,17 +103,17 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * Fix HTML error on form builder page
 * Change the "Licenses" submenu to "Plugin Licenses"
 * **Pro Features:**
-* Allow ? and * in Phone Number Format
-* Remove child form from export options
-* Fix LIKE conditional logic bug
-* Some auto-update adjustments
-* Add frm_search_any_terms filter
-* Fix file upload issue in CSV export
-* Fix issue with duplicate classes in HTML field
-* Fix filtering with user_id=current in graphs
-* Fix Dynamic List field with value like 9.99
-* Make sure userID field doesn't lose value when conditionally hidden/shown
+                * Allow ? and * in Phone Number Format
+                * Remove child form from export options
+                * Fix LIKE conditional logic bug
+                * Some auto-update adjustments
+                * Add frm_search_any_terms filter
+                * Fix file upload issue in CSV export
+                * Fix issue with duplicate classes in HTML field
+                * Fix filtering with user_id=current in graphs
+                * Fix Dynamic List field with value like 9.99
+                * Make sure userID field doesn't lose value when conditionally hidden/shown
 
 ### [2.0.17](https://github.com/Strategy11/formidable-forms/releases/tag/v2.0.17)
 * **Pro Features:**
-* Fix post update bug
+                * Fix post update bug
