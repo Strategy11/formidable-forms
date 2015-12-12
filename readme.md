@@ -1,5 +1,5 @@
 # Formidable Forms
-Contributors: sswells, srwells, jamie.wahlin
+Contributors: @sswells, @srwells, @jamie.wahlin
 
 Donate link: http://formidablepro.com/donate
 
