@@ -520,23 +520,19 @@ function frmFrontFormJS(){
 			return;
 		}
 
-		var display = 'none';
-		if ( f.Show === 'show' ) {
-			if ( show_fields[f.hideContainerID][i] !== true ) {
-				showField(show_fields[f.hideContainerID][i], f.FieldName, rec);
-				return;
-			}
-			display = '';
-		}
 
 		var hideFieldContainer = jQuery( document.getElementById(f.hideContainerID) );
 
-		if ( display == 'none' ) {
+		if ( f.Show === 'show' ) {
+			if ( show_fields[f.hideContainerID][i] !== true ) {
+				showField(show_fields[f.hideContainerID][i], f.FieldName, rec);
+			} else {
+				// Show the field
+				routeToShowFieldAndSetVal( hideFieldContainer, f);
+			}
+		} else {
 			// Hide the field
 			routeToHideFieldAndClearVal( hideFieldContainer, f);
-		} else {
-			// Show the field
-			routeToShowFieldAndSetVal( hideFieldContainer, f);
 		}
 	}
 
@@ -956,7 +952,12 @@ function frmFrontFormJS(){
 		frm_checked_dep.push(f.HideField);
 
         var fcont = document.getElementById(f.hideContainerID);
-		//don't get values for fields that are to remain hidden on the page
+
+		// If field is on a different page or hidden with visibility option, don't retrieve new options
+		if ( fcont === null ) {
+			return;
+		}
+
 		var $dataField = jQuery(fcont).find('.frm_data_field_container');
         if($dataField.length === 0 && hiddenInput.length ){
 		    checkDependentField(f.HideField, 'stop', hiddenInput);
@@ -1688,7 +1689,12 @@ function frmFrontFormJS(){
 							if ( ! $fieldCont.is(':visible') ) {
 								var inCollapsedSection = $fieldCont.closest('.frm_toggle_container');
 								if ( inCollapsedSection.length ) {
-									inCollapsedSection.prev('.frm_trigger').click();
+									var frmTrigger = inCollapsedSection.prev();
+									if ( ! frmTrigger.hasClass('frm_trigger') ) {
+										// If the frmTrigger object is the section description, check to see if the previous element is the trigger
+										frmTrigger = frmTrigger.prev('.frm_trigger');
+									}
+									frmTrigger.click();
 								}
 							}
 							if ( $fieldCont.is(':visible') ) {
@@ -2101,7 +2107,7 @@ function frmFrontFormJS(){
 						}
 						fieldID = this.name.replace('item_meta[', '').split(']')[2].replace('[', '');
 						if ( jQuery.inArray(fieldID, checked ) == -1 ) {
-							if ( this.id === false ) {
+							if ( this.id == false ) {
 								return;
 							}
 							fieldObject = jQuery( '#' + this.id );
