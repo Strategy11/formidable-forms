@@ -769,9 +769,9 @@ function frmAdminBuildJS(){
 		return false;
 	}
 
-	function hideOrShowAutopopulateValues() {
-		var fieldId = this.id.replace( 'autopopulate_values_', '' );
-		var sections = document.querySelectorAll( '.frm_autopopulate_values_section_' + fieldId );
+	function hideOrShowAutopopulateValue() {
+		var fieldId = this.id.replace( 'autopopulate_value_', '' );
+		var sections = document.querySelectorAll( '.frm_autopopulate_value_section_' + fieldId );
 
 		var l = sections.length;
 		for ( var i = 0; i<l; i++ ) {
@@ -783,9 +783,9 @@ function frmAdminBuildJS(){
 		}
 	}
 
-	function updateAutopopulateFieldSelection() {
-		var fieldID = this.id.replace( 'autopopulate_values_form_', '' );
-		var fieldSelect = document.getElementById( 'autopopulate_values_field_' + fieldID );
+	function updateGetValueFieldSelection() {
+		var fieldID = this.id.replace( 'get_values_form_', '' );
+		var fieldSelect = document.getElementById( 'get_values_field_' + fieldID );
 
 		if ( this.value == '' ) {
 			fieldSelect.options.length = 1;
@@ -2059,8 +2059,8 @@ function frmAdminBuildJS(){
 			$newFields.on('click', '.frm_add_logic_row', addFieldLogicRow);
             $newFields.on('click', '.frm_remove_tag', removeThisTag);
 			$newFields.on('click', '.frm_add_watch_lookup_row', addWatchLookupRow);
-			$newFields.on('change', '.autopopulate_values', hideOrShowAutopopulateValues);
-			$newFields.on('change', '.frm_autopopulate_values_form', updateAutopopulateFieldSelection);
+			$newFields.on('change', '.autopopulate_value', hideOrShowAutopopulateValue);
+			$newFields.on('change', '.frm_get_values_form', updateGetValueFieldSelection);
 
 			jQuery(document.getElementById('frm-insert-fields')).on('click', '.frm_add_field', addFieldClick);
 			$newFields.on('click', '.frm_duplicate_icon', duplicateField);
