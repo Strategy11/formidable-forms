@@ -520,23 +520,17 @@ function frmFrontFormJS(){
 			return;
 		}
 
-		var display = 'none';
+		var hideFieldContainer = jQuery( "#"+f.hideContainerID);
 		if ( f.Show === 'show' ) {
 			if ( show_fields[f.hideContainerID][i] !== true ) {
 				showField(show_fields[f.hideContainerID][i], f.FieldName, rec);
-				return;
+			} else {
+				// Show the field
+				routeToShowFieldAndSetVal( hideFieldContainer, f);
 			}
-			display = '';
-		}
-
-		var hideFieldContainer = jQuery("#"+f.hideContainerID);
-
-		if ( display == 'none' ) {
+		} else {
 			// Hide the field
 			routeToHideFieldAndClearVal( hideFieldContainer, f);
-		} else {
-			// Show the field
-			routeToShowFieldAndSetVal( hideFieldContainer, f);
 		}
 	}
 
@@ -952,9 +946,10 @@ function frmFrontFormJS(){
 		}
 
 		frm_checked_dep.push(f.HideField);
-
-        // var fcont = document.getElementById(f.hideContainerID);
-		//don't get values for fields that are to remain hidden on the page
+		var fcont = jQuery("#"+f.hideContainerID);
+		if ( fcont === null ) {
+			return;
+		}
 		var $dataField = jQuery("#"+f.hideContainerID).find('.frm_data_field_container');
         if($dataField.length === 0 && hiddenInput.length ){
 		    checkDependentField(f.HideField, 'stop', hiddenInput);
@@ -1686,7 +1681,11 @@ function frmFrontFormJS(){
 							if ( ! $fieldCont.is(':visible') ) {
 								var inCollapsedSection = $fieldCont.closest('.frm_toggle_container');
 								if ( inCollapsedSection.length ) {
-									inCollapsedSection.prev('.frm_trigger').click();
+									if ( ! frmTrigger.hasClass('frm_trigger') ) {
+										// If the frmTrigger object is the section description, check to see if the previous element is the trigger
+										frmTrigger = frmTrigger.prev('.frm_trigger');
+									}
+									frmTrigger.click();
 								}
 							}
 							if ( $fieldCont.is(':visible') ) {
@@ -2099,7 +2098,7 @@ function frmFrontFormJS(){
 						}
 						fieldID = this.name.replace('item_meta[', '').split(']')[2].replace('[', '');
 						if ( jQuery.inArray(fieldID, checked ) == -1 ) {
-							if ( this.id === false ) {
+							if ( this.id == false ) {
 								return;
 							}
 							fieldObject = jQuery( '#' + this.id );
