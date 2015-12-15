@@ -6,6 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmAddon {
 	public $store_url = 'https://formidablepro.com';
+	public $download_id;
 	public $plugin_file;
 	public $plugin_name;
 	public $plugin_slug;
@@ -58,11 +59,16 @@ class FrmAddon {
 			}
 
 			// setup the updater
-			new EDD_SL_Plugin_Updater( $this->store_url, $this->plugin_file, array(
+			$api_data = array(
 				'version' 	=> $this->version,
 				'license' 	=> $license,
 				'author' 	=> $this->author,
-			) );
+			);
+			if ( is_numeric( $this->download_id ) ) {
+				$api_data['item_id'] = $this->download_id;
+			}
+
+			new EDD_SL_Plugin_Updater( $this->store_url, $this->plugin_file, $api_data );
 		}
 	}
 
@@ -93,11 +99,24 @@ class FrmAddon {
 
 			// $license_data->license will be either "valid" or "invalid"
 			$is_valid = 'invalid';
-			if ( is_array( $license_data ) && $license_data['license'] == 'valid' ) {
-				$is_valid = $license_data['license'];
-				$response['success'] = __( 'Enjoy!', 'formidable' );
-			} else {
+			if ( is_array( $license_data ) ) {
+				if ( $license_data['license'] == 'valid' ) {
+					$is_valid = $license_data['license'];
+					$response['message'] = __( 'Enjoy!', 'formidable' );
+					$response['success'] = true;
+				} else if ( $license_data['license'] == 'invalid' ) {
+					$response['message'] = __( 'That license is invalid', 'formidable' );
+				}
+			} else if ( $license_data == 'expired' ) {
+				$response['message'] = __( 'That license is expired', 'formidable' );
+			} else if ( $license_data == 'no_activations_left' ) {
+				$response['message'] = __( 'That license has been used too many times', 'formidable' );
+			} else if ( $license_data == 'invalid_item_id' ) {
+				$response['message'] = __( 'Opps! That is the wrong license number for this plugin.', 'formidable' );
+			} else if ( $license_data == 'missing' ) {
 				$response['message'] = __( 'That license is invalid', 'formidable' );
+			} else {
+				$response['message'] = FrmAppHelper::kses( $license_data, array('a') );
 			}
 
 			update_option( $this_plugin->option_name . 'active', $is_valid );
@@ -144,6 +163,9 @@ class FrmAddon {
 			'item_name'  => urlencode( $this->plugin_name ),
 			'url'        => home_url(),
 		);
+		if ( is_numeric( $this->download_id ) ) {
+			$api_params['item_id'] = absint( $this->download_id );
+		}
 
 		$arg_array = array(
 			'body'      => $api_params,
@@ -155,27 +177,27 @@ class FrmAddon {
 		$resp = wp_remote_post( $this->store_url, $arg_array );
 		$body = wp_remote_retrieve_body( $resp );
 
+		$message = __( 'Your License Key was invalid', 'formidable' );
 		if ( is_wp_error( $resp ) ) {
 			$message = sprintf( __( 'You had an error communicating with Formidable Pro\'s API. %1$sClick here%2$s for more information.', 'formidable' ), '<a href="http://formidablepro.com/knowledgebase/why-cant-i-activate-formidable-pro/" target="_blank">', '</a>');
 			if ( is_wp_error( $resp ) ) {
 				$message .= ' '. $resp->get_error_message();
 			}
-			return $message;
 		} else if ( $body == 'error' || is_wp_error( $body ) ) {
-			return __( 'You had an HTTP error connecting to Formidable Pro\'s API', 'formidable' );
+			$message = __( 'You had an HTTP error connecting to Formidable Pro\'s API', 'formidable' );
 		} else {
 			$json_res = json_decode( $body, true );
 			if ( null !== $json_res ) {
 				if ( is_array( $json_res ) && isset( $json_res['error'] ) ) {
-					return $json_res['error'];
+					$message = $json_res['error'];
 				} else {
-					return $json_res;
+					$message = $json_res;
 				}
 			} else if ( isset( $resp['response'] ) && isset( $resp['response']['code'] ) ) {
-				return sprintf( __( 'There was a %1$s error: %2$s', 'formidable' ), $resp['response']['code'], $resp['response']['message'] .' '. $resp['body'] );
+				$message = sprintf( __( 'There was a %1$s error: %2$s', 'formidable' ), $resp['response']['code'], $resp['response']['message'] .' '. $resp['body'] );
 			}
 		}
 
-		return __( 'Your License Key was invalid', 'formidable' );
+		return $message;
 	}
 }
