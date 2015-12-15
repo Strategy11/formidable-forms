@@ -116,7 +116,7 @@ class FrmAddon {
 			} else if ( $license_data == 'missing' ) {
 				$response['message'] = __( 'That license is invalid', 'formidable' );
 			} else {
-				$response['message'] = FrmAppHelper::kses( $license_data, array('a') );
+				$response['message'] = FrmAppHelper::kses( $license_data, array( 'a' ) );
 			}
 
 			update_option( $this_plugin->option_name . 'active', $is_valid );
