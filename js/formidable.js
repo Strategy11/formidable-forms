@@ -687,7 +687,7 @@ function frmFrontFormJS(){
 				hideContainer.hide();
 				addToHideFields( logicRules.hideContainerID, logicRules.FormId );
 			}
-			hideContainer.find('.frm_data_field_container').empty();
+			hideContainer.find('.frm_opt_container').empty();
 		}
     }
 
@@ -891,7 +891,7 @@ function frmFrontFormJS(){
 
 	function getData(f,selected,append){
         var fcont = document.getElementById(f.hideContainerID);
-		var cont = jQuery(fcont).find('.frm_data_field_container');
+		var cont = jQuery(fcont).find('.frm_opt_container');
 		if ( cont.length === 0 ) {
 			return true;
 		}
@@ -958,7 +958,7 @@ function frmFrontFormJS(){
 			return;
 		}
 
-		var $dataField = jQuery(fcont).find('.frm_data_field_container');
+		var $dataField = jQuery(fcont).find('.frm_opt_container');
         if($dataField.length === 0 && hiddenInput.length ){
 		    checkDependentField(f.HideField, 'stop', hiddenInput);
             return false;
