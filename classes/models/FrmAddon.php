@@ -130,7 +130,7 @@ class FrmAddon {
 		return $transient;
 	}
 
-	function is_current_version( $transient ) {
+	private function is_current_version( $transient ) {
 		if ( empty( $transient->checked ) || ! isset( $transient->checked[ $this->plugin_folder ] ) ) {
 			return false;
 		}
@@ -143,12 +143,12 @@ class FrmAddon {
 		return isset( $transient->response ) && isset( $transient->response[ $this->plugin_folder ] ) && $transient->checked[ $this->plugin_folder ] == $transient->response[ $this->plugin_folder ]->new_version;
 	}
 
-	function has_been_cleared() {
+	private function has_been_cleared() {
 		global $frm_vars;
 		return isset( $frm_vars['cleared'] ) ? $frm_vars['cleared'] : false;
 	}
 
-	function cleared_plugins() {
+	private function cleared_plugins() {
 		global $frm_vars;
 		$frm_vars['cleared'] = true;
 	}
@@ -272,7 +272,7 @@ class FrmAddon {
 		return $message;
 	}
 
-    function manually_queue_update(){
+    public function manually_queue_update(){
         set_site_transient( 'update_plugins', null );
     }
 }
