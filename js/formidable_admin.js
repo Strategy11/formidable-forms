@@ -174,38 +174,7 @@ function frmAdminBuildJS(){
 			jQuery('.frm_settings_form').attr('action', '?page=formidable-settings&t='+t.replace('#', ''));
 		}
 	}
-	
-	function deauthorize(){
-		if(!confirm(frmGlobal.deauthorize)){
-			return false;
-		}
-		var $link = jQuery(document.getElementById('frm_deauthorize_link'));
-		$link.next('.spinner').show();
-		jQuery.ajax({
-			type:'POST',url:ajaxurl,
-            data:{action:'frm_deauthorize', nonce:frmGlobal.nonce},
-			success:function(msg){
-				jQuery('.spinner').fadeOut('slow');
-				$link.fadeOut('slow');
-				showAuthForm();
-			}
-		});
-		return false;
-	}
-	
-	function showAuthForm(){
-		var form = document.getElementById('pro_cred_form');
-		var cred = jQuery('.frm_pro_installed');
-		if(cred.is(':visible')){
-			cred.hide();
-			form.style.display = 'block';
-		}else{
-			cred.show();
-			form.style.display = 'none';
-		}
-	}
-	
-	
+
 	/* Form Builder */
 	function setupSortable(sort){
 		var opts = {
@@ -1683,6 +1652,66 @@ function frmAdminBuildJS(){
 		return false;
 	}
 
+	function authorize(){
+		var button = jQuery(this);
+		var pluginSlug = button.data('plugin');
+		var license = document.getElementById('edd_'+pluginSlug+'_license_key').value;
+		jQuery.ajax({
+			type:'POST',url:ajaxurl,dataType:'json',
+			data:{action:'frm_addon_activate',license:license,plugin:pluginSlug,nonce:frmGlobal.nonce},
+			success:function(msg){
+				var messageBox = jQuery('.frm_pro_license_msg');
+				if ( msg.success === true ) {
+					document.getElementById('frm_license_top').style.display = 'none';
+					document.getElementById('frm_license_bottom').style.display = 'block';
+					messageBox.removeClass('frm_error_style').addClass('frm_message');
+				}else{
+					messageBox.addClass('frm_error_style').removeClass('frm_message');
+				}
+
+				messageBox.html(msg.message);
+				if ( msg.message !== '' ){
+					setTimeout(function(){
+						messageBox.html('');
+						messageBox.removeClass('frm_error_style frm_message');
+					},5000);
+				}
+			}
+		});
+	}
+
+	function deauthorize(){
+		if(!confirm(frmGlobal.deauthorize)){
+			return false;
+		}
+		var $link = jQuery(this);
+		$link.next('.spinner').show();
+		var pluginSlug = $link.data('plugin');
+		var license = document.getElementById('edd_'+pluginSlug+'_license_key').value;
+		jQuery.ajax({
+			type:'POST',url:ajaxurl,
+			data:{action:'frm_addon_deactivate',license:license,plugin:pluginSlug,nonce:frmGlobal.nonce},
+			success:function(msg){
+				jQuery('.spinner').fadeOut('slow');
+				$link.fadeOut('slow');
+				showAuthForm();
+			}
+		});
+		return false;
+	}
+
+	function showAuthForm(){
+		var form = document.getElementById('frm_license_top');
+		var cred = jQuery('#frm_license_bottom');
+		if(cred.is(':visible')){
+			cred.hide();
+			form.style.display = 'block';
+		}else{
+			cred.show();
+			form.style.display = 'none';
+		}
+	}
+
 	function saveAddonLicense() {
 		var button = jQuery(this);
 		var buttonName = this.name;
@@ -1926,6 +1955,7 @@ function frmAdminBuildJS(){
 			jQuery('.frm_select_box').focus(function(){this.select();});
 			
 			jQuery(document.getElementById('frm_deauthorize_link')).click(deauthorize);
+			jQuery('.frm_authorize_link').click(authorize);
 		},
 		
 		buildInit: function(){			
