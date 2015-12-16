@@ -72,7 +72,7 @@ class FrmAppController {
 		<?php
 		echo wp_kses_post( apply_filters( 'frm_pro_update_msg',
 			sprintf(
-				__( 'This site has been previously authorized to run Formidable Forms.<br/>%1$sInstall the pro version%2$s or %3$sdeauthorize%4$s this site to continue running the free version and remove this message.', 'formidable' ),
+				__( 'This site has been previously authorized to run Formidable Forms.<br/>%1$sInstall Formidable Pro%2$s or %3$sdeauthorize%4$s this site to continue running the free version and remove this message.', 'formidable' ),
 				'<a href="' . esc_url( $inst_install_url ) . '" target="_blank">', '</a>',
 				'<a href="#" class="frm_deauthorize_link">', '</a>'
 			), esc_url( $inst_install_url )
