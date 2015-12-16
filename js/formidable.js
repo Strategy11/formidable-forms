@@ -406,7 +406,7 @@ function frmFrontFormJS(){
 		if ( f.Type == 'radio' || f.Type === 'data-radio' ) {
 			// If radio field on the current page
 			fieldValue = jQuery('input[name="'+ f.inputName +'"]:checked').val();
-		} else if ( f.Type === 'select' || f.Type === 'data-select' ) {
+		} else if ( f.Type === 'select' || f.Type === 'data-select' || f.Type === 'lookup' ) {
 			// If dropdown field on the current page
 			fieldValue = jQuery('select[name^="'+ f.inputName +'"]').val();
 		} else {
