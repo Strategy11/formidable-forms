@@ -58,9 +58,6 @@ class FrmAddon {
 		if ( empty( $license ) ) {
 			add_action( 'after_plugin_row_' . plugin_basename( $this->plugin_file ), array( $this, 'show_license_message' ), 10, 2 );
 		} else {
-			if ( ! class_exists('EDD_SL_Plugin_Updater') ) {
-				include( dirname( __FILE__ ) . '/EDD_SL_Plugin_Updater.php' );
-			}
 
 			// setup the updater
 			$api_data = array(
@@ -72,7 +69,7 @@ class FrmAddon {
 				$api_data['item_id'] = $this->download_id;
 			}
 
-			new EDD_SL_Plugin_Updater( $this->store_url, $this->plugin_file, $api_data );
+			new FrmEDD_SL_Plugin_Updater( $this->store_url, $this->plugin_file, $api_data );
 
 			add_filter( 'site_transient_update_plugins', array( &$this, 'clear_expired_download' ) );
 		}

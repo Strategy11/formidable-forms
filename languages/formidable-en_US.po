@@ -1866,7 +1866,7 @@ msgstr ""
 msgid "Margin"
 msgstr ""
 
-#: classes/models/EDD_SL_Plugin_Updater.php:341
+#: classes/models/FrmEDD_SL_Plugin_Updater.php:341
 #: classes/views/styles/_field-colors.php:10
 #: classes/views/styles/_form-messages.php:7
 #@ edd
@@ -8128,19 +8128,19 @@ msgstr ""
 msgid "Your server is missing the simplexml_import_dom function"
 msgstr ""
 
-#: classes/models/EDD_SL_Plugin_Updater.php:182
+#: classes/models/FrmEDD_SL_Plugin_Updater.php:182
 #, php-format
 #@ edd
 msgid "There is a new version of %1$s available. %2$sView version %3$s details%4$s."
 msgstr ""
 
-#: classes/models/EDD_SL_Plugin_Updater.php:190
+#: classes/models/FrmEDD_SL_Plugin_Updater.php:190
 #, php-format
 #@ edd
 msgid "There is a new version of %1$s available. %2$sView version %3$s details%4$s or %5$supdate now%6$s."
 msgstr ""
 
-#: classes/models/EDD_SL_Plugin_Updater.php:341
+#: classes/models/FrmEDD_SL_Plugin_Updater.php:341
 #@ edd
 msgid "You do not have permission to install plugin updates"
 msgstr ""

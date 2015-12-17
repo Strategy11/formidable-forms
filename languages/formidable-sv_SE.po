@@ -1947,7 +1947,7 @@ msgid "Margin"
 msgstr "Marginal"
 
 # @ formidable
-#: classes/models/EDD_SL_Plugin_Updater.php:332
+#: classes/models/FrmEDD_SL_Plugin_Updater.php:332
 #: classes/views/styles/_field-colors.php:10
 #: classes/views/styles/_form-messages.php:7
 msgid "Error"
@@ -8536,7 +8536,7 @@ msgid "Your server is missing the simplexml_import_dom function"
 msgstr "Din server saknar funktionen simplexml_import_dom"
 
 # @ edd
-#: classes/models/EDD_SL_Plugin_Updater.php:182
+#: classes/models/FrmEDD_SL_Plugin_Updater.php:182
 #, php-format
 msgid ""
 "There is a new version of %1$s available. %2$sView version %3$s details%4$s."
@@ -8545,7 +8545,7 @@ msgstr ""
 "%4$s."
 
 # @ edd
-#: classes/models/EDD_SL_Plugin_Updater.php:190
+#: classes/models/FrmEDD_SL_Plugin_Updater.php:190
 #, php-format
 msgid ""
 "There is a new version of %1$s available. %2$sView version %3$s details%4$s "
@@ -8554,7 +8554,7 @@ msgstr ""
 "En ny version av %1$s finns tillgänglig. %2$sVisa detaljer för version %3$s"
 "%4$s eller %5$suppdatera nu%6$s."
 
-#: classes/models/EDD_SL_Plugin_Updater.php:332
+#: classes/models/FrmEDD_SL_Plugin_Updater.php:332
 msgid "You do not have permission to install plugin updates"
 msgstr "Du har inte behörighet att installera tilläggsuppdateringar"
 
