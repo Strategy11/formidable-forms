@@ -1075,7 +1075,7 @@ msgstr "Sélectionnez une valeur à insérer dans la case ci-dessous"
 #: pro/classes/views/xml/map_csv_fields.php:56
 #@ formidable
 msgid "Entry ID"
-msgstr "Entrez votre identifiant"
+msgstr "ID de l'entrée"
 
 #: pro/classes/helpers/FrmProFieldsHelper.php:2653
 #@ formidable
