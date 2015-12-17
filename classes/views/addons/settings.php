@@ -4,6 +4,10 @@
 	<?php
 
 	foreach ( $plugins as $slug => $plugin ) {
+		if ( $slug == 'formidable_pro' ) {
+			continue;
+		}
+
 		$license = get_option( 'edd_'. $slug .'_license_key' );
 		$status  = get_option( 'edd_'. $slug .'_license_active' );
 		$activate = ( false !== $license && $status == 'valid' ) ? 'deactivate' : 'activate';
