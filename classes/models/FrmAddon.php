@@ -102,7 +102,7 @@ class FrmAddon {
 	}
 
 	public function clear_expired_download( $transient ) {
-		if ( ! is_object($transient) ) {
+		if ( ! is_object( $transient ) ) {
 			return $transient;
 		}
 
@@ -116,10 +116,13 @@ class FrmAddon {
 			$version_info = get_transient( $cache_key );
 			if ( $version_info !== false ) {
 				$transient->response[ $this->plugin_folder ] = $version_info;
-			} else if ( ! $this->has_been_cleared() ) {
-				// if the transient has expired, clear the update and trigger it again
-				$this->cleared_plugins();
-				$this->manually_queue_update();
+			} else {
+				if ( ! $this->has_been_cleared() ) {
+					// if the transient has expired, clear the update and trigger it again
+					$this->cleared_plugins();
+					$this->manually_queue_update();
+				}
+
 				unset( $transient->response[ $this->plugin_folder ] );
 			}
 		}
@@ -141,13 +144,12 @@ class FrmAddon {
 	}
 
 	private function has_been_cleared() {
-		global $frm_vars;
-		return isset( $frm_vars['cleared'] ) ? $frm_vars['cleared'] : false;
+		$last_cleared = get_option( 'frm_last_cleared' );
+		return ( $last_cleared < date( 'Y-m-d H:i:s', strtotime('-5 minutes') ) );
 	}
 
 	private function cleared_plugins() {
-		global $frm_vars;
-		$frm_vars['cleared'] = true;
+		update_option( 'frm_last_cleared', date('Y-m-d H:i:s') );
 	}
 
 	public static function activate() {
