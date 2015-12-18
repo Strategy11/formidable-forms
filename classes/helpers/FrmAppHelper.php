@@ -57,6 +57,10 @@ class FrmAppHelper {
         return get_option('blogname');
     }
 
+	public static function affiliate() {
+		return '';
+	}
+
     /**
      * Get the Formidable settings
      *

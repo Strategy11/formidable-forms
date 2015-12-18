@@ -19,7 +19,7 @@ class FrmAddonsController {
 			$addons = $addons['products'];
 		}
 		$addons = array_reverse( $addons );
-		$append_affiliate = '';
+		$append_affiliate = FrmAppHelper::affiliate();
 
 		$plugin_names = array(
 			'formidable-pro' => 'formidable/pro', 'wp-multilingual' => 'formidable-wpml',
