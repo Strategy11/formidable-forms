@@ -56,21 +56,21 @@ class FrmAppController {
 	private static function get_form_nav_items( $id ) {
 		$nav_items = array(
 			array(
-				'link'    => admin_url( 'admin.php?page=formidable&frm_action=edit&id=' . $id ),
+				'link'    => admin_url( 'admin.php?page=formidable&frm_action=edit&id=' . absint( $id ) ),
 				'label'   => __( 'Build', 'formidable' ),
 				'current' => array( 'edit', 'new', 'duplicate' ),
 				'page'    => 'formidable',
 				'permission' => 'frm_edit_forms',
 			),
 			array(
-				'link'    => admin_url( 'admin.php?page=formidable&frm_action=settings&id=' . $id ),
+				'link'    => admin_url( 'admin.php?page=formidable&frm_action=settings&id=' . absint( $id ) ),
 				'label'   => __( 'Settings', 'formidable' ),
 				'current' => array( 'settings' ),
 				'page'    => 'formidable',
 				'permission' => 'frm_edit_forms',
 			),
 			array(
-				'link'    => admin_url( 'admin.php?page=formidable-entries&frm_action=list&form=' . $id ),
+				'link'    => admin_url( 'admin.php?page=formidable-entries&frm_action=list&form=' . absint( $id ) ),
 				'label'   => __( 'Entries', 'formidable' ),
 				'current' => array(),
 				'page'    => 'formidable-entries',
