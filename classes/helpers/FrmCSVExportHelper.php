@@ -132,7 +132,7 @@ class FrmCSVExportHelper{
 		$row = array();
 		self::add_field_values_to_csv( $row );
 		self::add_entry_data_to_csv( $row );
-		$row = apply_filters( 'frm_csv_row', $row, array( 'entry' => self::$entry, 'date_format' => self::$wp_date_format ) );
+		$row = apply_filters( 'frm_csv_row', $row, array( 'entry' => self::$entry, 'date_format' => self::$wp_date_format, 'comment_count' => self::$comment_count ) );
 		self::print_csv_row( $row );
 	}
 
