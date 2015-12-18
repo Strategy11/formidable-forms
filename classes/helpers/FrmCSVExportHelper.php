@@ -87,7 +87,7 @@ class FrmCSVExportHelper{
 	private static function csv_headings( &$headings ) {
 		foreach ( self::$fields as $col ) {
 			if ( isset( $col->field_options['separate_value'] ) && $col->field_options['separate_value'] && ! in_array( $col->type, array( 'user_id', 'file', 'data', 'date' ) ) ) {
-				$headings[ $col->id . '_label'] = strip_tags( $col->name . ' ' . __( '(label)', 'formidable' ) );
+				$headings[ $col->id . '_label' ] = strip_tags( $col->name . ' ' . __( '(label)', 'formidable' ) );
 			}
 
 			$headings[ $col->id ] = strip_tags( $col->name );
@@ -178,7 +178,7 @@ class FrmCSVExportHelper{
 				$sep_value = FrmEntriesHelper::display_value( $field_value, $col, array(
 					'type' => $col->type, 'post_id' => self::$entry->post_id, 'show_icon' => false,
 					'entry_id' => self::$entry->id, 'sep' => self::$separator,
-					'embedded_field_id' => ( isset( self::$entry->embedded_fields ) && isset( self::$entry->embedded_fields[ $entry->id ] ) ) ? 'form' . self::$entry->embedded_fields[ self::$entry->id ] : 0,
+					'embedded_field_id' => ( isset( self::$entry->embedded_fields ) && isset( self::$entry->embedded_fields[ self::$entry->id ] ) ) ? 'form' . self::$entry->embedded_fields[ self::$entry->id ] : 0,
 					) );
 				$row[ $col->id . '_label' ] = $sep_value;
 				unset( $sep_value );
@@ -239,9 +239,9 @@ class FrmCSVExportHelper{
 
 		switch ( self::$to_encoding ) {
             case 'macintosh':
-            // this map was derived from the differences between the MacRoman and UTF-8 Charsets
-            // Reference:
-            //   - http://www.alanwood.net/demos/macroman.html
+				// this map was derived from the differences between the MacRoman and UTF-8 Charsets
+				// Reference:
+				//   - http://www.alanwood.net/demos/macroman.html
                 $convmap = array(
                     256, 304, 0, 0xffff,
                     306, 337, 0, 0xffff,
@@ -276,7 +276,7 @@ class FrmCSVExportHelper{
                 );
             break;
             case 'ISO-8859-1':
-                $convmap = array(256, 10000, 0, 0xffff);
+                $convmap = array( 256, 10000, 0, 0xffff );
             break;
         }
 

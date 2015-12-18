@@ -61,7 +61,7 @@ class FrmXMLController {
 
         $export_format = apply_filters( 'frm_export_formats', array(
             'xml' => array( 'name' => 'XML', 'support' => 'forms', 'count' => 'multiple' ),
-			'csv' => array( 'name' => 'CSV', 'support' => 'items', 'count' => 'single'),
+			'csv' => array( 'name' => 'CSV', 'support' => 'items', 'count' => 'single' ),
         ) );
 
         include(FrmAppHelper::plugin_path() .'/classes/views/xml/import_form.php');
@@ -305,10 +305,10 @@ class FrmXMLController {
 		$where = array( 'fi.type not' => FrmField::no_save_fields() );
 		$where[] = array( 'or' => 1, 'fi.form_id' => $form->id, 'fr.parent_form_id' => $form->id );
 
-		$csv_fields = apply_filters('frm_csv_field_ids', '', $form_id, array( 'form' => $form));
+		$csv_fields = apply_filters( 'frm_csv_field_ids', '', $form_id, array( 'form' => $form ) );
 		if ( $csv_fields ) {
 			if ( ! is_array( $csv_fields ) ) {
-				$csv_fields = explode(',', $csv_fields);
+				$csv_fields = explode( ',', $csv_fields );
 			}
 			if ( ! empty($csv_fields) )	{
 				$where['fi.id'] = $csv_fields;
@@ -316,7 +316,7 @@ class FrmXMLController {
 		}
 		$form_cols = FrmField::getAll( $where, 'field_order' );
 
-		$item_id = FrmAppHelper::get_param( 'item_id', false, 'get', 'sanitize_text_field' );
+		$item_id = FrmAppHelper::get_param( 'item_id', 0, 'get', 'sanitize_text_field' );
 		if ( ! empty( $item_id ) ) {
 			$item_id = explode( ',', $item_id );
 		}
@@ -333,7 +333,7 @@ class FrmXMLController {
 		 * $query is the array of options to be filtered. It includes form_id, and maybe id (array of entry ids),
 		 * and the search query. This should return an array, but it can be handled as a string as well.
 		 */
-		$query = apply_filters ('frm_csv_where', $query, compact( 'form_id', 'search', 'fid', 'item_id' ) );
+		$query = apply_filters( 'frm_csv_where', $query, compact( 'form_id', 'search', 'fid', 'item_id' ) );
 
 		$entry_ids = FrmDb::get_col( $wpdb->prefix .'frm_items it', $query );
 		unset( $query );
