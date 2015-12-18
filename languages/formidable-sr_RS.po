@@ -256,7 +256,7 @@ msgstr "Opis"
 #: classes/controllers/FrmFormsController.php:499
 #: classes/controllers/FrmFormsController.php:503
 #: pro/classes/controllers/FrmProDisplaysController.php:145
-#: pro/classes/helpers/FrmProCSVExportHelper.php:107
+#: pro/classes/helpers/FrmCSVExportHelper.php:107
 #: pro/classes/helpers/FrmProFieldsHelper.php:2667
 #: pro/classes/helpers/FrmProFieldsHelper.php:2682
 #: pro/classes/views/displays/mb_advanced.php:95
@@ -1980,7 +1980,7 @@ msgid "Search"
 msgstr "Pretraga"
 
 #: classes/controllers/FrmAppController.php:262
-#: pro/classes/helpers/FrmProCSVExportHelper.php:106
+#: pro/classes/helpers/FrmCSVExportHelper.php:106
 #: pro/classes/helpers/FrmProFieldsHelper.php:2666
 #: pro/classes/helpers/FrmProFieldsHelper.php:2681
 #: pro/classes/views/displays/mb_advanced.php:94
@@ -3392,7 +3392,7 @@ msgstr "dopada mi se"
 msgid "NOT like"
 msgstr "NE dopada mi se"
 
-#: pro/classes/helpers/FrmProCSVExportHelper.php:100
+#: pro/classes/helpers/FrmCSVExportHelper.php:100
 #: pro/classes/views/xml/map_csv_fields.php:50
 #@ formidable
 msgid "Timestamp"
@@ -3498,7 +3498,7 @@ msgstr "Pregledati unos"
 msgid "Entry Actions"
 msgstr "Uneti akcije"
 
-#: pro/classes/helpers/FrmProCSVExportHelper.php:101
+#: pro/classes/helpers/FrmCSVExportHelper.php:101
 #@ formidable
 msgid "Last Updated"
 msgstr "Pslednji put updateovano"
@@ -5205,22 +5205,22 @@ msgstr "Login"
 msgid "GET/POST"
 msgstr "UZMI/POST"
 
-#: pro/classes/helpers/FrmProCSVExportHelper.php:85
+#: pro/classes/helpers/FrmCSVExportHelper.php:85
 #@ formidable
 msgid "(label)"
 msgstr "(oznaka)"
 
-#: pro/classes/helpers/FrmProCSVExportHelper.php:93
+#: pro/classes/helpers/FrmCSVExportHelper.php:93
 #@ formidable
 msgid "Comment"
 msgstr "Komentar"
 
-#: pro/classes/helpers/FrmProCSVExportHelper.php:94
+#: pro/classes/helpers/FrmCSVExportHelper.php:94
 #@ formidable
 msgid "Comment User"
 msgstr "Korisnik komenara"
 
-#: pro/classes/helpers/FrmProCSVExportHelper.php:95
+#: pro/classes/helpers/FrmCSVExportHelper.php:95
 #@ formidable
 msgid "Comment Date"
 msgstr "Datum komentara"
@@ -5321,7 +5321,7 @@ msgstr "Klik za editovanje."
 #: classes/helpers/FrmFormsListHelper.php:357
 #: classes/views/frm-forms/_publish_box.php:72
 #: pro/classes/controllers/FrmProEntriesController.php:1334
-#: pro/classes/helpers/FrmProCSVExportHelper.php:104
+#: pro/classes/helpers/FrmCSVExportHelper.php:104
 #@ formidable
 #@ default
 msgid "Draft"
@@ -5666,12 +5666,12 @@ msgstr "Ups, niste izabrali fajl."
 msgid "There was an error when reading this XML file"
 msgstr "Pojavila se greška prilikom ušitavanja ovog XML fajla."
 
-#: pro/classes/helpers/FrmProCSVExportHelper.php:102
+#: pro/classes/helpers/FrmCSVExportHelper.php:102
 #@ formidable
 msgid "Created By"
 msgstr "Kreirano od strane"
 
-#: pro/classes/helpers/FrmProCSVExportHelper.php:103
+#: pro/classes/helpers/FrmCSVExportHelper.php:103
 #@ formidable
 msgid "Updated By"
 msgstr "Update-ovano od strane"
@@ -8098,7 +8098,7 @@ msgstr ""
 msgid "A Formidable Forms update is available, but your license is invalid."
 msgstr ""
 
-#: pro/classes/helpers/FrmProCSVExportHelper.php:105
+#: pro/classes/helpers/FrmCSVExportHelper.php:105
 #: pro/classes/views/displays/where_row.php:12
 #@ formidable
 msgid "IP"

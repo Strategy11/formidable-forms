@@ -1795,17 +1795,24 @@ function frmAdminBuildJS(){
 	}
 
 	function checkExportTypes(){
-		var $selected = jQuery(this).find(':selected');
+		var $dropdown = jQuery(this);
+		var $selected = $dropdown.find(':selected');
 		var s = $selected.data('support');
+
+		var multiple = s.indexOf('|');
 		jQuery('input[name="type[]"]').each(function(){
-			if(s.indexOf(jQuery(this).val()) >= 0){
-				jQuery(this).prop('disabled', false);
+			this.checked = false;
+			if(s.indexOf(this.value) >= 0){
+				this.disabled = false;
+				if ( multiple == -1 ) {
+					this.checked = true;
+				}
 			}else{
-				jQuery(this).prop('disabled', true);
+				this.disabled = true;
 			}
 		});
 
-		if(jQuery(this).val() == 'csv'){
+		if($dropdown.val() == 'csv'){
 			jQuery('.csv_opts').show();
 		}else{
 			jQuery('.csv_opts').hide();
@@ -2397,7 +2404,7 @@ function frmAdminBuildJS(){
 			jQuery(document.getElementById('frm_export_xml')).submit(validateExport);
 			jQuery('#frm_export_xml input, #frm_export_xml select').change(removeExportError);
 			jQuery('input[name="frm_import_file"]').change(checkCSVExtension);
-			jQuery('select[name="format"]').change(checkExportTypes);
+			jQuery('select[name="format"]').change(checkExportTypes).change();
 			initiateMultiselect();
 		},
 		

@@ -44,9 +44,6 @@
 						<?php foreach ( $export_format as $t => $type ) { ?>
                             <option value="<?php echo esc_attr( $t ) ?>" data-support="<?php echo esc_attr( $type['support'] ) ?>" <?php echo isset( $type['count'] ) ? 'data-count="'. esc_attr( $type['count'] ) .'"' : ''; ?>><?php echo isset( $type['name'] ) ? $type['name'] : $t ?></option>
                         <?php } ?>
-                        <?php if ( ! isset($export_format['csv']) ) { ?>
-                            <option value="csv" disabled="disabled">CSV <?php _e( '(Premium feature)', 'formidable' ); ?></option>
-                        <?php } ?>
                         </select>
 
                         <ul class="frm_hidden csv_opts export-filters">
@@ -54,11 +51,9 @@
                             <label for="csv_format"><?php _e( 'Format', 'formidable' ) ?>:</label>
 							<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'If your CSV special characters are not working correctly, try a different formatting option.', 'formidable' ) ?>"></span>
                             <select name="csv_format">
-                            <option value="UTF-8" <?php selected($csv_format, 'UTF-8') ?>>UTF-8</option>
-                            <option value="ISO-8859-1" <?php selected($csv_format, 'ISO-8859-1'); ?>>ISO-8859-1</option>
-                            <option value="windows-1256" <?php selected($csv_format, 'windows-1256'); ?>>windows-1256</option>
-                            <option value="windows-1251" <?php selected($csv_format, 'windows-1251'); ?>>windows-1251</option>
-                            <option value="macintosh" <?php selected($csv_format, 'macintosh'); ?>><?php _e( 'Macintosh', 'formidable' ) ?></option>
+								<?php foreach ( FrmCSVExportHelper::csv_format_options() as $format ) { ?>
+								<option value="<?php echo esc_attr( $format ) ?>"><?php echo esc_html( $format ) ?></option>
+								<?php } ?>
                             </select>
                             </li>
 
@@ -68,11 +63,7 @@
                     </td>
                 </tr>
 
-				<?php if ( count( $export_types ) == 1 ) {
-                    reset($export_types); ?>
-                <tr><td colspan="2"><input type="hidden" name="type[]" value="<?php echo key($export_types) ?>" /></td></tr>
-                <?php } else { ?>
-                <tr class="form-field">
+                <tr class="form-field" id="frm_csv_data_export">
                     <th scope="row"><label><?php _e( 'Data to Export', 'formidable' ); ?></label></th>
                     <td>
                         <?php _e( 'Include the following in the export file', 'formidable' ); ?>:<br/>
@@ -81,7 +72,6 @@
                         <?php } ?>
                     </td>
                 </tr>
-                <?php } ?>
 
                 <tr class="form-field">
                     <th scope="row"><label><?php _e( 'Select Form(s)', 'formidable' ); ?></label></th>
