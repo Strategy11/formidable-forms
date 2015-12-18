@@ -2,7 +2,7 @@
 <div class="wrap">
     <?php FrmStylesHelper::style_menu('manage'); ?>
 
-	<p><?php printf(__( 'Easily change which template your forms are using by making changes below or %1$screate a new style%2$s.', 'formidable' ), '<a href="?page=formidable-styles&frm_action=new_style">', '</a>'); ?></p>
+	<p><?php printf(__( 'Easily change which template your forms are using by making changes below.', 'formidable' ), '<a href="?page=formidable-styles&frm_action=new_style">', '</a>'); ?></p>
 
 	<?php include(FrmAppHelper::plugin_path() .'/classes/views/shared/errors.php'); ?>
 
