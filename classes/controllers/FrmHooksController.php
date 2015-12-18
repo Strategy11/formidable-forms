@@ -91,6 +91,9 @@ class FrmHooksController {
 		add_filter( 'plugin_action_links_' . FrmAppHelper::plugin_folder() . '/formidable.php', 'FrmAppController::settings_link' );
 		register_activation_hook( FrmAppHelper::plugin_folder() . '/formidable.php', 'FrmAppController::activation_install' );
 
+		// Addons Controller
+		add_action( 'admin_menu', 'FrmAddonsController::menu', 100 );
+
         // Entries Controller
         add_action( 'admin_menu', 'FrmEntriesController::menu', 12 );
         add_filter( 'contextual_help', 'FrmEntriesController::contextual_help', 10, 3 );
@@ -122,10 +125,6 @@ class FrmHooksController {
         // Settings Controller
         add_action( 'admin_menu', 'FrmSettingsController::menu', 45 );
         add_action( 'frm_before_settings', 'FrmSettingsController::license_box' );
-
-        // Stats Controller
-        add_action( 'admin_menu', 'FrmStatisticsController::menu', 24 );
-        add_action( 'frm_form_action_reports', 'FrmStatisticsController::list_reports' );
 
         // Styles Controller
         add_action( 'admin_menu', 'FrmStylesController::menu', 14 );

@@ -32,6 +32,9 @@ class FrmAppController {
         }
 
 		$current_page = isset( $_GET['page'] ) ? FrmAppHelper::simple_get( 'page', 'sanitize_title' ) : FrmAppHelper::simple_get( 'post_type', 'sanitize_title', 'None' );
+		if ( $pagenow == 'post.php' || $pagenow == 'post-new.php' ) {
+			$current_page = 'frm_display';
+		}
 
         if ( $form ) {
 			FrmForm::maybe_get_form( $form );
@@ -45,8 +48,39 @@ class FrmAppController {
             $form = $id = false;
         }
 
+		$nav_items = self::get_form_nav_items( $id );
+
         include( FrmAppHelper::plugin_path() . '/classes/views/shared/form-nav.php' );
     }
+
+	private static function get_form_nav_items( $id ) {
+		$nav_items = array(
+			array(
+				'link'    => admin_url( 'admin.php?page=formidable&frm_action=edit&id=' . $id ),
+				'label'   => __( 'Build', 'formidable' ),
+				'current' => array( 'edit', 'new', 'duplicate' ),
+				'page'    => 'formidable',
+				'permission' => 'frm_edit_forms',
+			),
+			array(
+				'link'    => admin_url( 'admin.php?page=formidable&frm_action=settings&id=' . $id ),
+				'label'   => __( 'Settings', 'formidable' ),
+				'current' => array( 'settings' ),
+				'page'    => 'formidable',
+				'permission' => 'frm_edit_forms',
+			),
+			array(
+				'link'    => admin_url( 'admin.php?page=formidable-entries&frm_action=list&form=' . $id ),
+				'label'   => __( 'Entries', 'formidable' ),
+				'current' => array(),
+				'page'    => 'formidable-entries',
+				'permission' => 'frm_view_entries',
+			),
+		);
+
+		$nav_items = apply_filters( 'frm_form_nav_list', $nav_items, array( 'form_id' => $id ) );
+		return $nav_items;
+	}
 
     // Adds a settings link to the plugins page
     public static function settings_link( $links ) {

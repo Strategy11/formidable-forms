@@ -280,6 +280,11 @@ form label.frm_primary_label input{font-size:12px;}
 	margin-top:10px;
 }
 
+.frm-no-thumb.plugin-card .name,
+.frm-no-thumb.plugin-card .desc{
+	margin-left:0;
+}
+
 #frm_bulk_options{
     height:240px;
     width:335px;

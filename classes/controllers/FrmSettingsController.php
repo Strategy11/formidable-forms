@@ -26,7 +26,7 @@ class FrmSettingsController {
 		$sections = array();
 		if ( apply_filters( 'frm_include_addon_page', false ) ) {
 			$sections['licenses'] = array(
-				'class' => 'FrmAddonsController', 'function' => 'show_addons',
+				'class' => 'FrmAddonsController', 'function' => 'license_settings',
 				'name' => __( 'Plugin Licenses', 'formidable' ),
 			);
 		}
