@@ -58,7 +58,6 @@
             <label for="<?php echo esc_attr( $this->get_field_id('inc_user_info') ) ?>"><input type="checkbox" name="<?php echo esc_attr( $this->get_field_name('inc_user_info') ) ?>" class="frm_not_inc_user_info" id="<?php echo esc_attr( $this->get_field_id('inc_user_info') ) ?>" value="1" <?php checked( $form_action->post_content['inc_user_info'], 1 ); ?> /> <?php _e( 'Append IP Address, Browser, and Referring URL to message', 'formidable' ) ?></label>
 
         <p><label for="<?php echo esc_attr( $this->get_field_id('plain_text') ) ?>"><input type="checkbox" name="<?php echo esc_attr( $this->get_field_name('plain_text') ) ?>" id="<?php echo esc_attr( $this->get_field_id('plain_text') ) ?>" value="1" <?php checked( $form_action->post_content['plain_text'], 1 ); ?> /> <?php _e( 'Send Emails in Plain Text', 'formidable' ) ?></label></p>
-        <?php FrmAppHelper::update_message('conditionally send email notifications'); ?>
     </td>
 </tr>
 </table>

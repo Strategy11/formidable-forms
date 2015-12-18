@@ -103,7 +103,6 @@ class FrmHooksController {
 
         // Fields Controller
         add_filter( 'frm_display_field_options', 'FrmFieldsController::display_field_options' );
-        add_action( 'frm_field_options_form', 'FrmFieldsController::add_conditional_update_msg', 50 );
 
         // Form Actions Controller
         if ( FrmAppHelper::is_admin_page( 'formidable' ) ) {

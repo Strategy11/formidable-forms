@@ -358,11 +358,6 @@ class FrmAppController {
         return $content;
     }
 
-    public static function update_message( $features ) {
-        _deprecated_function( __FUNCTION__, '2.0', 'FrmAppHelper::update_message' );
-        return FrmAppHelper::update_message( $features );
-    }
-
     public static function deauthorize() {
         check_ajax_referer( 'frm_ajax', 'nonce' );
 

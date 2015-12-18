@@ -725,10 +725,4 @@ class FrmFieldsController {
 
         return $opt;
     }
-
-    public static function add_conditional_update_msg() {
-        echo '<tr><td colspan="2">';
-        FrmAppHelper::update_message( 'calculate and conditionally hide and show fields' );
-        echo '</td></tr>';
-    }
 }
