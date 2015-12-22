@@ -30,7 +30,7 @@ class FrmFieldsHelper {
         }
 
         if ( isset( $setting ) && ! empty( $setting ) ) {
-            if ( 'data' == $type ) {
+            if ( in_array( $type, array( 'data', 'lookup' ) ) ) {
                 $values['field_options']['data_type'] = $setting;
             } else {
                 $values['field_options'][ $setting ] = 1;

@@ -201,7 +201,7 @@ function frmFrontFormJS(){
 	* reset = reset or persist
 	*/
 	function checkDependentField(field_id, rec, changedInput, reset){
-		checkLookupFieldsDependentOnThis( field_id, changedInput );
+		checkFieldsWatchingThis( field_id, changedInput );
 
 		var rules = getRulesForField( field_id );
 		if ( typeof rules === 'undefined' ) {
@@ -837,8 +837,8 @@ function frmFrontFormJS(){
 	Lookup Field Functions
 	******************************************************/
 
-	// Check all lookup fields dependent on a parent lookup field
-	function checkLookupFieldsDependentOnThis( field_id, changedInput ) {
+	// Check all fields that are "watching" a lookup field that changed
+	function checkFieldsWatchingThis( field_id, changedInput ) {
 		if ( typeof __FRMLOOKUP  === 'undefined' || typeof __FRMLOOKUP[field_id] === 'undefined' ) {
 			return;
 		}
@@ -854,12 +854,30 @@ function frmFrontFormJS(){
 		var currentChildId;
 		for ( var i = 0, l = triggerFieldArgs.dependents.length; i < l; i++ ) {
 			currentChildId = triggerFieldArgs.dependents[ i ];
-			updateLookupFieldById( currentChildId, parentRepeatId );
+			updateWatchingFieldById( currentChildId, parentRepeatId );
 		}
 	}
 
-	// Update the field options for a lookup field by field ID
-	function updateLookupFieldById( field_id, parentRepeatId ) {
+	// Get the repeating row index from a field element (could be an input, select, or frm_opt_container div)
+	function maybeGetRepeatId( triggerFieldArgs, fieldElement ) {
+		var repeatId = '';
+		if ( triggerFieldArgs.lookupType == 'radio' ) {
+			if ( fieldElement.type == 'radio' || fieldElement.type == 'hidden' ) {
+				// If input[type=radio]
+				repeatId = fieldElement.getAttribute('data-lookupref').replace( 'frm_lookup_' + triggerFieldArgs.fieldKey, '' );
+			} else {
+				// If div.frm_opt_container
+				repeatId = fieldElement.id.replace( 'frm_lookup_cont_' + triggerFieldArgs.fieldKey, '' );
+			}
+		} else {
+			// If input or select
+			repeatId = fieldElement.id.replace( 'field_' + triggerFieldArgs.fieldKey, '' );
+		}
+		return repeatId;
+	}
+
+	// Update the field options/value for a field ID that is watching a Lookup field
+	function updateWatchingFieldById( field_id, parentRepeatId ) {
 		if ( typeof __FRMLOOKUP  === 'undefined' || typeof __FRMLOOKUP[field_id] === 'undefined' ) {
 			return;
 		}
@@ -872,13 +890,13 @@ function frmFrontFormJS(){
 		}
 
 		var childFieldElements = [];
+		if ( childFieldArgs.lookupType == 'radio' ) {
+			childFieldElements = getAllRadioLookupFieldElements( childFieldArgs, parentRepeatId );
 
-		if ( parentRepeatId ) {
-			// If parent is in a repeating section, child must be repeating
-			var childField = document.getElementById( 'field_' + childFieldArgs.fieldKey + parentRepeatId );
-			childFieldElements.push( childField );
+		} else if ( childFieldArgs.lookupType == 'select' ) {
+			childFieldElements = getAllSelectLookupFieldElements( childFieldArgs, parentRepeatId );
 		} else {
-			childFieldElements = document.querySelectorAll('*[id^="field_' + childFieldArgs.fieldKey + '"]');
+			childFieldElements = getAllTextFieldElements( childFieldArgs, parentRepeatId );
 		}
 
 		var childFieldNum = childFieldElements.length;
@@ -887,22 +905,62 @@ function frmFrontFormJS(){
 		}
 	}
 
-	// Update the field options for an individual lookup field
-	function updateSingleLookupField( childFieldArgs, childSelect ) {
-		childFieldArgs.repeatId = maybeGetRepeatId( childFieldArgs, childSelect );
-		childFieldArgs.parentVals = getParentLookupFieldVals( childFieldArgs );
+	// Get all the opt container for all occurrences of a specific Radio Lookup field (current page only)
+	function getAllRadioLookupFieldElements( childFieldArgs, parentRepeatId ) {
+		var childFieldElements = [];
+		if ( parentRepeatId ) {
+			// If parent is in a repeating section, child must be repeating
+			var childField = document.getElementById( 'frm_lookup_cont_' + childFieldArgs.fieldKey + parentRepeatId );
+			childFieldElements.push( childField );
 
-		if ( childFieldArgs.fieldType == 'lookup' ) {
-			maybeReplaceSelectLookupFieldOptions( childFieldArgs, childSelect );
 		} else {
-			maybeInsertTextLookupFieldValue( childFieldArgs, childSelect );
+			childFieldElements = document.querySelectorAll('*[id^="frm_lookup_cont_' + childFieldArgs.fieldKey + '"]');
 		}
+		return childFieldElements;
 	}
 
-	// Get the repeating row index from a field element
-	function maybeGetRepeatId( triggerFieldArgs, changedInput ) {
-		var repeatId = changedInput.id.replace( 'field_' + triggerFieldArgs.fieldKey, '' );
-		return repeatId;
+	// Get all the occurrences of a specific Select Lookup field (on the current page only)
+	function getAllSelectLookupFieldElements( childFieldArgs, parentRepeatId ) {
+		var childFieldElements = [];
+		if ( parentRepeatId ) {
+			// If parent is in a repeating section, child must be repeating
+			var childField = document.getElementById( 'field_' + childFieldArgs.fieldKey + parentRepeatId );
+			if ( childField.type == 'select' ) {
+				childFieldElements.push( childField );
+			}
+
+		} else {
+			childFieldElements = document.querySelectorAll('*[id^="field_' + childFieldArgs.fieldKey + '" type="select"]');
+		}
+		return childFieldElements;
+	}
+
+	// Get all the occurences of a specific Text field
+	function getAllTextFieldElements( childFieldArgs, parentRepeatId ) {
+		var childFieldElements = [];
+		if ( parentRepeatId ) {
+			// If parent is in a repeating section, child must be repeating
+			var childField = document.getElementById( 'field_' + childFieldArgs.fieldKey + parentRepeatId );
+			childFieldElements.push( childField );
+
+		} else {
+			childFieldElements = document.querySelectorAll('*[id^="field_' + childFieldArgs.fieldKey + '"]');
+		}
+		return childFieldElements;
+	}
+
+	// Update the field options for an individual lookup field
+	function updateSingleLookupField( childFieldArgs, childElement ) {
+		childFieldArgs.repeatId = maybeGetRepeatId( childFieldArgs, childElement );
+		childFieldArgs.parentVals = getParentLookupFieldVals( childFieldArgs );
+
+		if ( childFieldArgs.lookupType == 'select' ) {
+			maybeReplaceSelectLookupFieldOptions( childFieldArgs, childElement );
+		} else if ( childFieldArgs.lookupType == 'radio' ) {
+			replaceRadioLookupFieldOptions( childFieldArgs, childElement );
+		} else {
+			maybeInsertTextLookupFieldValue( childFieldArgs, childElement );
+		}
 	}
 
 	// Get the field values from all parents
@@ -912,33 +970,78 @@ function frmFrontFormJS(){
 
 		var currentParentArgs, currentParentId;
 		var l = parentIds.length;
+		var parentValue = false;
 		for ( var i = 0; i < l; i++ ) {
 			currentParentId = parentIds[i];
 			currentParentArgs = __FRMLOOKUP[ currentParentId ];
 
 			if ( currentParentArgs.lookupType == 'select' ) {
-				// If child is repeating, parent may be repeating as well
-				var parentSelect = document.getElementById( 'field_' + currentParentArgs.fieldKey + childFieldArgs.repeatId );
-
-				// If parent isn't repeating (but the child is)
-				if ( parentSelect === null && childFieldArgs.repeatId ) {
-					parentSelect = document.getElementById( 'field_' + currentParentArgs.fieldKey );
-				}
-
-				// If any parents have blank values, don't waste time looking for values
-				if ( parentSelect.value === '' ) {
-					parentVals = false;
-					break;
-				}
-
-				parentVals[i] = parentSelect.value;
+				parentValue = getValueFromSelectLookup( currentParentArgs, childFieldArgs );
+			} else if ( currentParentArgs.lookupType == 'radio' ) {
+				parentValue = getValueFromRadioLookup( currentParentArgs, childFieldArgs );
 			}
+
+			// If any parents have blank values, don't waste time looking for values
+			if ( parentValue === '' || parentValue === false ) {
+				parentVals = false;
+				break;
+			}
+
+			parentVals[i] = parentValue;
 		}
 
 		return parentVals;
 	}
 
-	// Get new options for a Lookup field if all parents have a value
+	// Get the value from a Dropdown Lookup field
+	function getValueFromSelectLookup( currentParentArgs, childFieldArgs ) {
+		var parentValue = false;
+
+		// If child is repeating, parent may be repeating as well
+		var parentSelect = document.getElementById( 'field_' + currentParentArgs.fieldKey + childFieldArgs.repeatId );
+
+		// If parent isn't repeating (but the child is)
+		if ( parentSelect === null && childFieldArgs.repeatId ) {
+			parentSelect = document.getElementById( 'field_' + currentParentArgs.fieldKey );
+		}
+
+		parentValue = parentSelect.value;
+
+		return parentValue;
+	}
+
+	// Get the value from a Radio Lookup field
+	function getValueFromRadioLookup( currentParentArgs, childFieldArgs ) {
+
+		// If child is repeating, parent may be repeating as well
+		var parentRadioInputs = document.querySelectorAll( '[data-lookupref="frm_lookup_' + currentParentArgs.fieldKey + childFieldArgs.repeatId + '"]' );
+
+		// If child is repeating, but the parent is not
+		if ( parentRadioInputs.length == 0 && childFieldArgs.repeatId ) {
+			parentRadioInputs = document.querySelectorAll( '[data-lookupref="frm_lookup_' + currentParentArgs.fieldKey + '"]' );
+		}
+
+		var parentValue = getValueFromRadioInputs( parentRadioInputs );
+
+		return parentValue;
+	}
+
+	// Get the value from array of radio inputs (could be type="hidden" or type="radio")
+	function getValueFromRadioInputs( radioInputs ) {
+		var radioValue = false;
+
+		var l = radioInputs.length;
+		for ( var i = 0; i<l; i++ ) {
+			if ( radioInputs[i].type == 'hidden' || radioInputs[i].checked ) {
+				radioValue = radioInputs[i].value;
+				break;
+			}
+		}
+
+		return radioValue;
+	}
+
+	// Get new options for a Dropdown Lookup field if all parents have a value
 	function maybeReplaceSelectLookupFieldOptions( childFieldArgs, childSelect ) {
 		if ( childSelect.type == 'hidden' ) {
 			// Field is on a different page or is hidden with the visibility option
@@ -1006,7 +1109,7 @@ function frmFrontFormJS(){
 		}
 	}
 
-	// Get new value for a Lookup field if all parents have a value
+	// Get new value for a text field if all Lookup Field parents have a value
 	function maybeInsertTextLookupFieldValue( childFieldArgs, childInput ) {
 		if ( childFieldArgs.parentVals === false  ) {
 			// If any parents have blank values, set the field value to blank
@@ -1040,6 +1143,41 @@ function frmFrontFormJS(){
 	function insertTextLookupFieldValue( childFieldArgs, childInput, newValue ) {
 		childInput.value = newValue;
 		triggerChange( jQuery( childInput ), childFieldArgs.fieldKey );
+	}
+
+	// Replace the options in a Radio Lookup field
+	function replaceRadioLookupFieldOptions( childFieldArgs, radioCont ) {
+		var repeatingFieldId = getRepeatingFieldIdForRadioLookup( radioCont );
+		var radioInputs = radioCont.getElementsByTagName( 'input' );
+		var currentValue = getValueFromRadioInputs( radioInputs )
+
+		jQuery.ajax({
+			type:'POST',
+			url:frm_js.ajax_url,
+			data:{
+				action:'frm_replace_radio_lookup_options',
+				parent_fields:childFieldArgs.parents,
+				parent_vals:childFieldArgs.parentVals,
+				field_id:childFieldArgs.fieldId,
+				repeating_field_id:repeatingFieldId,
+				row_index:childFieldArgs.repeatId,
+				current_value:currentValue,
+				nonce:frm_js.nonce
+			},
+			success:function(newHtml){
+				radioCont.innerHTML = newHtml;
+				triggerChange( jQuery( radioInputs[0] ), childFieldArgs.fieldKey );
+			}
+		});
+	}
+
+	// Get the repeating section field ID for a Radio Lookup field
+	function getRepeatingFieldIdForRadioLookup( radioCont ) {
+		var repeatingFieldId = 0;
+		if ( radioCont.getAttribute( 'data-lookuprepeat' ) !== 'undefined' ) {
+			repeatingFieldId = radioCont.getAttribute( 'data-lookuprepeat' );
+		}
+		return repeatingFieldId;
 	}
 
 	function triggerChange( input, fieldKey ) {
@@ -2325,7 +2463,7 @@ function frmFrontFormJS(){
 							}
 							fieldObject = jQuery( '#' + this.id );
 							checked.push(fieldID);
-							updateLookupFieldById( fieldID, '-' + i );
+							updateWatchingFieldById( fieldID, '-' + i );
 							checkDependentField(fieldID, null, fieldObject, reset);
 							doCalculation(fieldID, fieldObject);
 							reset = 'persist';
@@ -2925,7 +3063,7 @@ function frmFrontFormJS(){
 			var len = ids.length;
 			for ( var i = 0, l = len; i < l; i++ ) {
 				fieldId = ids[i];
-				updateLookupFieldById( fieldId, '' );
+				updateWatchingFieldById( fieldId, '' );
 			}
 		},
 

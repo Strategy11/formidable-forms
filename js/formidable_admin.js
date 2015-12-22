@@ -755,6 +755,7 @@ function frmAdminBuildJS(){
 	function updateGetValueFieldSelection() {
 		var fieldID = this.id.replace( 'get_values_form_', '' );
 		var fieldSelect = document.getElementById( 'get_values_field_' + fieldID );
+		var fieldType = this.getAttribute('data-fieldtype');
 
 		if ( this.value == '' ) {
 			fieldSelect.options.length = 1;
@@ -762,7 +763,12 @@ function frmAdminBuildJS(){
 			var formID = this.value;
 			jQuery.ajax({
 				type:'POST',url:ajaxurl,
-				data:{action:'frm_get_field_opts_for_form',form_id:formID,nonce:frmGlobal.nonce},
+				data:{
+					action:'frm_get_options_for_get_values_field',
+					form_id:formID,
+					field_type:fieldType,
+					nonce:frmGlobal.nonce
+				},
 				success:function(fields){
 					fieldSelect.innerHTML = fields;
 				}

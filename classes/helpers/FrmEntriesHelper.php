@@ -121,7 +121,7 @@ class FrmEntriesHelper {
 	* @param array $args
 	* @return boolean $value_is_posted
 	*/
-	private static function value_is_posted( $field, $args ){
+	public static function value_is_posted( $field, $args ){
 		$value_is_posted = false;
 		if ( $_POST ) {
 			$repeating = isset( $args['repeating'] ) && $args['repeating'];
