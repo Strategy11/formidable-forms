@@ -128,12 +128,10 @@ class FrmStylesController {
 	}
 
 	public static function new_style( $return = '' ) {
-        FrmAppHelper::update_message( __( 'create multiple styling templates', 'formidable' ), 'wrap' );
         self::load_styler('default');
     }
 
 	public static function duplicate() {
-		FrmAppHelper::update_message( __( 'duplicate styling templates', 'formidable' ), 'wrap' );
 		self::load_styler('default');
 	}
 

@@ -540,7 +540,7 @@ class FrmFieldsController {
         self::add_html_size($field, $add_html);
         self::add_html_length($field, $add_html);
         self::add_html_placeholder($field, $add_html, $class);
-		self::add_validation_messages( $field, $add_html );
+		//self::add_validation_messages( $field, $add_html ); uncomment this when the js validation is complete
 
         $class = apply_filters('frm_field_classes', implode(' ', $class), $field);
 
@@ -725,11 +725,5 @@ class FrmFieldsController {
         }
 
         return $opt;
-    }
-
-    public static function add_conditional_update_msg() {
-        echo '<tr><td colspan="2">';
-        FrmAppHelper::update_message( 'calculate and conditionally hide and show fields' );
-        echo '</td></tr>';
     }
 }

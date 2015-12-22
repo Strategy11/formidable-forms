@@ -8,11 +8,13 @@ class FrmAddon {
 	public $store_url = 'https://formidablepro.com';
 	public $download_id;
 	public $plugin_file;
+	public $plugin_folder;
 	public $plugin_name;
 	public $plugin_slug;
 	public $option_name;
 	public $version;
 	public $author = 'Strategy11';
+	private $license;
 
 	public function __construct() {
 
@@ -22,6 +24,9 @@ class FrmAddon {
 		if ( empty( $this->option_name ) ) {
 			$this->option_name = 'edd_' . $this->plugin_slug . '_license_';
 		}
+
+		$this->plugin_folder = plugin_basename( $this->plugin_file );
+		$this->license = $this->get_license();
 
 		add_filter( 'frm_installed_addons', array( &$this, 'insert_installed_addon' ) );
 		$this->edd_plugin_updater();
@@ -48,15 +53,11 @@ class FrmAddon {
 
 	public function edd_plugin_updater() {
 
-		// retrieve our license key from the DB
-		$license = trim( get_option( $this->option_name . 'key' ) );
+		$license = $this->license;
 
 		if ( empty( $license ) ) {
 			add_action( 'after_plugin_row_' . plugin_basename( $this->plugin_file ), array( $this, 'show_license_message' ), 10, 2 );
 		} else {
-			if ( ! class_exists('EDD_SL_Plugin_Updater') ) {
-				include( dirname( __FILE__ ) . '/EDD_SL_Plugin_Updater.php' );
-			}
 
 			// setup the updater
 			$api_data = array(
@@ -68,8 +69,27 @@ class FrmAddon {
 				$api_data['item_id'] = $this->download_id;
 			}
 
-			new EDD_SL_Plugin_Updater( $this->store_url, $this->plugin_file, $api_data );
+			new FrmEDD_SL_Plugin_Updater( $this->store_url, $this->plugin_file, $api_data );
+
+			add_filter( 'site_transient_update_plugins', array( &$this, 'clear_expired_download' ) );
 		}
+	}
+
+	public function get_license() {
+		return trim( get_option( $this->option_name . 'key' ) );
+	}
+
+	public function set_license( $license ) {
+		update_option( $this->option_name . 'key', $license );
+	}
+
+	public function clear_license() {
+		delete_option( $this->option_name . 'active' );
+		delete_option( $this->option_name . 'key' );
+	}
+
+	public function set_active( $is_active ) {
+		update_option( $this->option_name . 'active', $is_active );
 	}
 
 	public function show_license_message( $file, $plugin ) {
@@ -79,6 +99,57 @@ class FrmAddon {
 		$id = sanitize_title( $plugin['Name'] );
 		echo '<script type="text/javascript">var d = document.getElementById("' . esc_attr( $id ) . '");if ( d !== null ){ d.className = d.className + " update"; }</script>';
 		echo '</div></td></tr>';
+	}
+
+	public function clear_expired_download( $transient ) {
+		if ( ! is_object( $transient ) ) {
+			return $transient;
+		}
+
+		if ( $this->is_current_version( $transient ) ) {
+			//make sure it doesn't show there is an update if plugin is up-to-date
+			if ( isset( $transient->response[ $this->plugin_folder ] ) ) {
+				unset( $transient->response[ $this->plugin_folder ] );
+			}
+		} else if ( isset( $transient->response ) && isset( $transient->response[ $this->plugin_folder ] ) ) {
+			$cache_key = 'edd_plugin_' . md5( sanitize_key( $this->license . $this->version ) . '_get_version' );
+			$version_info = get_transient( $cache_key );
+			if ( $version_info !== false ) {
+				$transient->response[ $this->plugin_folder ] = $version_info;
+			} else {
+				if ( ! $this->has_been_cleared() ) {
+					// if the transient has expired, clear the update and trigger it again
+					$this->cleared_plugins();
+					$this->manually_queue_update();
+				}
+
+				unset( $transient->response[ $this->plugin_folder ] );
+			}
+		}
+
+		return $transient;
+	}
+
+	private function is_current_version( $transient ) {
+		if ( empty( $transient->checked ) || ! isset( $transient->checked[ $this->plugin_folder ] ) ) {
+			return false;
+		}
+
+		$response = ! isset( $transient->response ) || empty( $transient->response );
+		if ( $response ) {
+			return true;
+		}
+
+		return isset( $transient->response ) && isset( $transient->response[ $this->plugin_folder ] ) && $transient->checked[ $this->plugin_folder ] == $transient->response[ $this->plugin_folder ]->new_version;
+	}
+
+	private function has_been_cleared() {
+		$last_cleared = get_option( 'frm_last_cleared' );
+		return ( $last_cleared < date( 'Y-m-d H:i:s', strtotime('-5 minutes') ) );
+	}
+
+	private function cleared_plugins() {
+		update_option( 'frm_last_cleared', date('Y-m-d H:i:s') );
 	}
 
 	public static function activate() {
@@ -91,7 +162,7 @@ class FrmAddon {
 		$license = stripslashes( sanitize_text_field( $_POST['license'] ) );
 		$plugin_slug = sanitize_text_field( $_POST['plugin'] );
 		$this_plugin = self::get_addon( $plugin_slug );
-		update_option( $this_plugin->option_name . 'key', $license );
+		$this_plugin->set_license( $license );
 
 		$response = array( 'success' => false, 'message' => '' );
 		try {
@@ -102,7 +173,7 @@ class FrmAddon {
 			if ( is_array( $license_data ) ) {
 				if ( $license_data['license'] == 'valid' ) {
 					$is_valid = $license_data['license'];
-					$response['message'] = __( 'Enjoy!', 'formidable' );
+					$response['message'] = __( 'Your license has been activated. Enjoy!', 'formidable' );
 					$response['success'] = true;
 				} else if ( $license_data['license'] == 'invalid' ) {
 					$response['message'] = __( 'That license is invalid', 'formidable' );
@@ -112,14 +183,14 @@ class FrmAddon {
 			} else if ( $license_data == 'no_activations_left' ) {
 				$response['message'] = __( 'That license has been used too many times', 'formidable' );
 			} else if ( $license_data == 'invalid_item_id' ) {
-				$response['message'] = __( 'Opps! That is the wrong license number for this plugin.', 'formidable' );
+				$response['message'] = __( 'Oops! That is the wrong license number for this plugin.', 'formidable' );
 			} else if ( $license_data == 'missing' ) {
 				$response['message'] = __( 'That license is invalid', 'formidable' );
 			} else {
 				$response['message'] = FrmAppHelper::kses( $license_data, array( 'a' ) );
 			}
 
-			update_option( $this_plugin->option_name . 'active', $is_valid );
+			$this_plugin->set_active( $is_valid );
 		} catch ( Exception $e ) {
 			$response['message'] = $e->getMessage();
 		}
@@ -149,8 +220,7 @@ class FrmAddon {
 			$response['message'] = $e->getMessage();
 		}
 
-		delete_option( $this_plugin->option_name . 'active' );
-		delete_option( $this_plugin->option_name . 'key' );
+		$this_plugin->clear_license();
 
 		echo json_encode( $response );
 		wp_die();
@@ -200,4 +270,8 @@ class FrmAddon {
 
 		return $message;
 	}
+
+    public function manually_queue_update(){
+        set_site_transient( 'update_plugins', null );
+    }
 }

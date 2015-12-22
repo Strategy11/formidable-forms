@@ -68,21 +68,22 @@ class FrmEntryMeta {
 
         foreach ( $values as $field_id => $meta_value ) {
             // set the value for the file upload field and add new tags (in Pro version)
-            $values = apply_filters( 'frm_prepare_data_before_db', $values, $field_id, $entry_id );
+			$meta_value = apply_filters( 'frm_prepare_data_before_db', $meta_value, $field_id, $entry_id );
 
-            if ( $prev_values && in_array($field_id, $prev_values) ) {
-                if ( ( is_array( $meta_value ) && empty( $meta_value ) ) || ( ! is_array( $meta_value ) && trim( $meta_value ) == '' ) ) {
-                    // remove blank fields
+			if ( $prev_values && in_array($field_id, $prev_values) ) {
+
+				if ( ( is_array( $meta_value ) && empty( $meta_value ) ) || ( ! is_array( $meta_value ) && trim( $meta_value ) == '' ) ) {
+					// remove blank fields
 					unset( $values[ $field_id ] );
-                } else {
-                    // if value exists, then update it
-					self::update_entry_meta( $entry_id, $field_id, '', $values[ $field_id ] );
-                }
-            } else {
-                // if value does not exist, then create it
-				self::add_entry_meta( $entry_id, $field_id, '', $values[ $field_id ] );
-            }
-        }
+				} else {
+					// if value exists, then update it
+					self::update_entry_meta( $entry_id, $field_id, '', $meta_value );
+				}
+			} else {
+				// if value does not exist, then create it
+				self::add_entry_meta( $entry_id, $field_id, '', $meta_value );
+			}
+		}
 
         if ( empty($prev_values) ) {
             return;

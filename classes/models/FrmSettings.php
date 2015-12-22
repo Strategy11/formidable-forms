@@ -75,7 +75,7 @@ class FrmSettings{
      */
 	public function default_options() {
         return array(
-            'menu'      => 'Formidable',
+            'menu'      => __( 'Forms', 'formidable' ),
             'mu_menu'   => 0,
             'preview_page_id' => 0,
             'use_html'  => true,

@@ -1,7 +1,9 @@
 <div id="taxonomy-linkcategory" class="categorydiv <?php echo $class ?>">
 	<ul id="category-tabs" class="category-tabs frm-category-tabs">
 		<li class="tabs" ><a href="#frm-insert-fields-box" id="frm_insert_fields_tab"><?php _e( 'Insert Fields', 'formidable' ); ?></a></li>
+		<?php if ( ! empty( $cond_shortcodes ) ) { ?>
 		<li class="hide-if-no-js"><a href="#frm-conditionals"><?php _e( 'Conditionals', 'formidable' ); ?></a></li>
+		<?php } ?>
 		<li class="hide-if-no-js"><a href="#frm-adv-info-tab"><?php _e( 'Advanced', 'formidable' ); ?></a></li>
 		<?php if ( $settings_tab ) { ?>
 		<li id="frm_html_tab" class="hide-if-no-js frm_hidden"><a href="#frm-html-tags" id="frm_html_tags_tab" ><?php _e( 'HTML Tags', 'formidable' ); ?></a></li>
@@ -88,8 +90,8 @@
         </ul>
 	</div>
 
-	<div id="frm-conditionals" class="tabs-panel">
 	<?php if ( ! empty( $cond_shortcodes ) ) { ?>
+	<div id="frm-conditionals" class="tabs-panel">
 	    <ul class="subsubsub">
 	        <li><a href="javascript:void(0)" class="current frmids"><?php _e( 'IDs', 'formidable' ) ?></a> |</li>
 	        <li><a href="javascript:void(0)" class="frmkeys"><?php _e( 'Keys', 'formidable' ) ?></a></li>
@@ -134,10 +136,8 @@
 	    }
         ?>
         </ul>
-    <?php } else {
-            FrmAppHelper::update_message('use inline conditional logic');
-          } ?>
 	</div>
+	<?php } ?>
 
 	<div id="frm-adv-info-tab" class="tabs-panel">
 		<ul class="frm_code_list">
@@ -168,7 +168,6 @@
 
         <div class="clear"></div>
         <?php
-        //FrmAppHelper::update_message('all of the advanced shortcode options');
 
         if ( isset($uid) && ! empty($user_fields) ) {
             $col = 'one'; ?>

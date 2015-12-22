@@ -347,7 +347,7 @@ msgstr ""
 #: classes/controllers/FrmFormsController.php:514
 #: classes/controllers/FrmFormsController.php:518
 #: pro/classes/controllers/FrmProDisplaysController.php:145
-#: pro/classes/helpers/FrmProCSVExportHelper.php:107
+#: pro/classes/helpers/FrmCSVExportHelper.php:107
 #: pro/classes/helpers/FrmProFieldsHelper.php:2836
 #: pro/classes/helpers/FrmProFieldsHelper.php:2851
 #: pro/classes/views/displays/mb_advanced.php:95
@@ -479,7 +479,7 @@ msgid "Display form description"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:1721
-#: pro/classes/helpers/FrmProCSVExportHelper.php:106
+#: pro/classes/helpers/FrmCSVExportHelper.php:106
 #: pro/classes/helpers/FrmProFieldsHelper.php:2835
 #: pro/classes/helpers/FrmProFieldsHelper.php:2850
 #: pro/classes/views/displays/mb_advanced.php:94
@@ -1866,7 +1866,7 @@ msgstr ""
 msgid "Margin"
 msgstr ""
 
-#: classes/models/EDD_SL_Plugin_Updater.php:341
+#: classes/models/FrmEDD_SL_Plugin_Updater.php:341
 #: classes/views/styles/_field-colors.php:10
 #: classes/views/styles/_form-messages.php:7
 #@ edd
@@ -2333,7 +2333,7 @@ msgstr ""
 msgid "Created at"
 msgstr ""
 
-#: pro/classes/helpers/FrmProCSVExportHelper.php:101
+#: pro/classes/helpers/FrmCSVExportHelper.php:101
 #@ formidable
 msgid "Last Updated"
 msgstr ""
@@ -4227,7 +4227,7 @@ msgstr ""
 msgid "Hourly Entries"
 msgstr ""
 
-#: pro/classes/helpers/FrmProCSVExportHelper.php:100
+#: pro/classes/helpers/FrmCSVExportHelper.php:100
 #: pro/classes/views/xml/map_csv_fields.php:50
 #@ formidable
 msgid "Timestamp"
@@ -5144,22 +5144,22 @@ msgstr ""
 msgid "GET/POST"
 msgstr ""
 
-#: pro/classes/helpers/FrmProCSVExportHelper.php:85
+#: pro/classes/helpers/FrmCSVExportHelper.php:85
 #@ formidable
 msgid "(label)"
 msgstr ""
 
-#: pro/classes/helpers/FrmProCSVExportHelper.php:93
+#: pro/classes/helpers/FrmCSVExportHelper.php:93
 #@ formidable
 msgid "Comment"
 msgstr ""
 
-#: pro/classes/helpers/FrmProCSVExportHelper.php:94
+#: pro/classes/helpers/FrmCSVExportHelper.php:94
 #@ formidable
 msgid "Comment User"
 msgstr ""
 
-#: pro/classes/helpers/FrmProCSVExportHelper.php:95
+#: pro/classes/helpers/FrmCSVExportHelper.php:95
 #@ formidable
 msgid "Comment Date"
 msgstr ""
@@ -5249,7 +5249,7 @@ msgstr ""
 #: classes/helpers/FrmFormsListHelper.php:361
 #: classes/views/frm-forms/_publish_box.php:72
 #: pro/classes/controllers/FrmProEntriesController.php:1331
-#: pro/classes/helpers/FrmProCSVExportHelper.php:104
+#: pro/classes/helpers/FrmCSVExportHelper.php:104
 #@ formidable
 #@ default
 msgid "Draft"
@@ -5554,12 +5554,12 @@ msgstr ""
 msgid "There was an error when reading this XML file"
 msgstr ""
 
-#: pro/classes/helpers/FrmProCSVExportHelper.php:102
+#: pro/classes/helpers/FrmCSVExportHelper.php:102
 #@ formidable
 msgid "Created By"
 msgstr ""
 
-#: pro/classes/helpers/FrmProCSVExportHelper.php:103
+#: pro/classes/helpers/FrmCSVExportHelper.php:103
 #@ formidable
 msgid "Updated By"
 msgstr ""
@@ -8022,7 +8022,7 @@ msgstr ""
 msgid "A Formidable Forms update is available, but your license is invalid."
 msgstr ""
 
-#: pro/classes/helpers/FrmProCSVExportHelper.php:105
+#: pro/classes/helpers/FrmCSVExportHelper.php:105
 #: pro/classes/views/displays/where_row.php:13
 #@ formidable
 msgid "IP"
@@ -8128,19 +8128,19 @@ msgstr ""
 msgid "Your server is missing the simplexml_import_dom function"
 msgstr ""
 
-#: classes/models/EDD_SL_Plugin_Updater.php:182
+#: classes/models/FrmEDD_SL_Plugin_Updater.php:182
 #, php-format
 #@ edd
 msgid "There is a new version of %1$s available. %2$sView version %3$s details%4$s."
 msgstr ""
 
-#: classes/models/EDD_SL_Plugin_Updater.php:190
+#: classes/models/FrmEDD_SL_Plugin_Updater.php:190
 #, php-format
 #@ edd
 msgid "There is a new version of %1$s available. %2$sView version %3$s details%4$s or %5$supdate now%6$s."
 msgstr ""
 
-#: classes/models/EDD_SL_Plugin_Updater.php:341
+#: classes/models/FrmEDD_SL_Plugin_Updater.php:341
 #@ edd
 msgid "You do not have permission to install plugin updates"
 msgstr ""

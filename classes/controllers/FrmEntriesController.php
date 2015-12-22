@@ -56,8 +56,8 @@ class FrmEntriesController {
 
         $screen->set_help_sidebar(
 			'<p><strong>' . esc_html__( 'For more information:', 'formidable' ) . '</strong></p>' .
-			'<p><a href="http://formidablepro.com/knowledgebase/manage-entries-from-the-back-end/" target="_blank">' . esc_html__( 'Documentation on Entries', 'formidable' ) . '</a></p>' .
-			'<p><a href="http://formidablepro.com/help-topics/" target="_blank">' . esc_html__( 'Support', 'formidable' ) . '</a></p>'
+			'<p><a href="http://formidablepro.com/knowledgebase/manage-entries-from-the-back-end/' . FrmAppHelper::affiliate() . '" target="_blank">' . esc_html__( 'Documentation on Entries', 'formidable' ) . '</a></p>' .
+			'<p><a href="http://formidablepro.com/help-topics/' . FrmAppHelper::affiliate() . '" target="_blank">' . esc_html__( 'Support', 'formidable' ) . '</a></p>'
     	);
 
         return $help;

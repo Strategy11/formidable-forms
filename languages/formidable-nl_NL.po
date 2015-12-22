@@ -359,7 +359,7 @@ msgstr "Geef verplicht veld aan met"
 #: classes/controllers/FrmFormsController.php:499
 #: classes/controllers/FrmFormsController.php:503
 #: pro/classes/controllers/FrmProDisplaysController.php:145
-#: pro/classes/helpers/FrmProCSVExportHelper.php:107
+#: pro/classes/helpers/FrmCSVExportHelper.php:107
 #: pro/classes/helpers/FrmProFieldsHelper.php:2667
 #: pro/classes/helpers/FrmProFieldsHelper.php:2682
 #: pro/classes/views/displays/mb_advanced.php:95
@@ -504,7 +504,7 @@ msgid "Display form description"
 msgstr "Laat de omschrijving van het formulier zien"
 
 #: classes/controllers/FrmAppController.php:262
-#: pro/classes/helpers/FrmProCSVExportHelper.php:106
+#: pro/classes/helpers/FrmCSVExportHelper.php:106
 #: pro/classes/helpers/FrmProFieldsHelper.php:2666
 #: pro/classes/helpers/FrmProFieldsHelper.php:2681
 #: pro/classes/views/displays/mb_advanced.php:94
@@ -2379,7 +2379,7 @@ msgstr "Acties"
 msgid "Created at"
 msgstr "Gemaakt op"
 
-#: pro/classes/helpers/FrmProCSVExportHelper.php:101
+#: pro/classes/helpers/FrmCSVExportHelper.php:101
 #@ formidable
 msgid "Last Updated"
 msgstr "laatste keer bijgewerkt op"
@@ -4299,7 +4299,7 @@ msgstr "Jaarlijkse inzendingen"
 msgid "Hourly Entries"
 msgstr "Inzendingen per uur"
 
-#: pro/classes/helpers/FrmProCSVExportHelper.php:100
+#: pro/classes/helpers/FrmCSVExportHelper.php:100
 #: pro/classes/views/xml/map_csv_fields.php:50
 #@ formidable
 msgid "Timestamp"
@@ -5217,22 +5217,22 @@ msgstr "Login"
 msgid "GET/POST"
 msgstr "GET/POST"
 
-#: pro/classes/helpers/FrmProCSVExportHelper.php:85
+#: pro/classes/helpers/FrmCSVExportHelper.php:85
 #@ formidable
 msgid "(label)"
 msgstr "(label)"
 
-#: pro/classes/helpers/FrmProCSVExportHelper.php:93
+#: pro/classes/helpers/FrmCSVExportHelper.php:93
 #@ formidable
 msgid "Comment"
 msgstr "Reactie"
 
-#: pro/classes/helpers/FrmProCSVExportHelper.php:94
+#: pro/classes/helpers/FrmCSVExportHelper.php:94
 #@ formidable
 msgid "Comment User"
 msgstr "Reactie gebruiker"
 
-#: pro/classes/helpers/FrmProCSVExportHelper.php:95
+#: pro/classes/helpers/FrmCSVExportHelper.php:95
 #@ formidable
 msgid "Comment Date"
 msgstr "Reactie datum"
@@ -5321,7 +5321,7 @@ msgstr "Klik om te bewerken"
 #: classes/helpers/FrmFormsListHelper.php:357
 #: classes/views/frm-forms/_publish_box.php:72
 #: pro/classes/controllers/FrmProEntriesController.php:1334
-#: pro/classes/helpers/FrmProCSVExportHelper.php:104
+#: pro/classes/helpers/FrmCSVExportHelper.php:104
 #@ formidable
 #@ default
 msgid "Draft"
@@ -5666,12 +5666,12 @@ msgstr "Oeps, er is geen bestand geselecteerd."
 msgid "There was an error when reading this XML file"
 msgstr "Er is een fout ontstaan bij het lezen van het XML bestand"
 
-#: pro/classes/helpers/FrmProCSVExportHelper.php:102
+#: pro/classes/helpers/FrmCSVExportHelper.php:102
 #@ formidable
 msgid "Created By"
 msgstr "Gemaakt door"
 
-#: pro/classes/helpers/FrmProCSVExportHelper.php:103
+#: pro/classes/helpers/FrmCSVExportHelper.php:103
 #@ formidable
 msgid "Updated By"
 msgstr "Bijgewerkt door"
@@ -8098,7 +8098,7 @@ msgstr ""
 msgid "A Formidable Forms update is available, but your license is invalid."
 msgstr ""
 
-#: pro/classes/helpers/FrmProCSVExportHelper.php:105
+#: pro/classes/helpers/FrmCSVExportHelper.php:105
 #: pro/classes/views/displays/where_row.php:12
 #@ formidable
 msgid "IP"

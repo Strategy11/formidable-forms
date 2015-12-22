@@ -345,7 +345,7 @@ msgstr "Markera obligatoriskt fält med"
 #: classes/controllers/FrmFormsController.php:511
 #: classes/controllers/FrmFormsController.php:515
 #: pro/classes/controllers/FrmProDisplaysController.php:145
-#: pro/classes/helpers/FrmProCSVExportHelper.php:107
+#: pro/classes/helpers/FrmCSVExportHelper.php:107
 #: pro/classes/helpers/FrmProFieldsHelper.php:2834
 #: pro/classes/helpers/FrmProFieldsHelper.php:2849
 #: pro/classes/views/displays/mb_advanced.php:95
@@ -476,7 +476,7 @@ msgstr "Visa formulärbeskrivning"
 
 # @ formidable
 #: classes/helpers/FrmAppHelper.php:1718
-#: pro/classes/helpers/FrmProCSVExportHelper.php:106
+#: pro/classes/helpers/FrmCSVExportHelper.php:106
 #: pro/classes/helpers/FrmProFieldsHelper.php:2833
 #: pro/classes/helpers/FrmProFieldsHelper.php:2848
 #: pro/classes/views/displays/mb_advanced.php:94
@@ -1947,7 +1947,7 @@ msgid "Margin"
 msgstr "Marginal"
 
 # @ formidable
-#: classes/models/EDD_SL_Plugin_Updater.php:332
+#: classes/models/FrmEDD_SL_Plugin_Updater.php:332
 #: classes/views/styles/_field-colors.php:10
 #: classes/views/styles/_form-messages.php:7
 msgid "Error"
@@ -2425,7 +2425,7 @@ msgid "Created at"
 msgstr "Skapat"
 
 # @ formidable
-#: pro/classes/helpers/FrmProCSVExportHelper.php:101
+#: pro/classes/helpers/FrmCSVExportHelper.php:101
 msgid "Last Updated"
 msgstr "Senast uppdaterat"
 
@@ -4374,7 +4374,7 @@ msgid "Hourly Entries"
 msgstr "Poster timvis"
 
 # @ formidable
-#: pro/classes/helpers/FrmProCSVExportHelper.php:100
+#: pro/classes/helpers/FrmCSVExportHelper.php:100
 #: pro/classes/views/xml/map_csv_fields.php:50
 msgid "Timestamp"
 msgstr "Tidsstämpel"
@@ -5314,22 +5314,22 @@ msgid "GET/POST"
 msgstr "GET/POST"
 
 # @ formidable
-#: pro/classes/helpers/FrmProCSVExportHelper.php:85
+#: pro/classes/helpers/FrmCSVExportHelper.php:85
 msgid "(label)"
 msgstr "(etikett)"
 
 # @ formidable
-#: pro/classes/helpers/FrmProCSVExportHelper.php:93
+#: pro/classes/helpers/FrmCSVExportHelper.php:93
 msgid "Comment"
 msgstr "Kommentar"
 
 # @ formidable
-#: pro/classes/helpers/FrmProCSVExportHelper.php:94
+#: pro/classes/helpers/FrmCSVExportHelper.php:94
 msgid "Comment User"
 msgstr "Kommentarsförfattare"
 
 # @ formidable
-#: pro/classes/helpers/FrmProCSVExportHelper.php:95
+#: pro/classes/helpers/FrmCSVExportHelper.php:95
 msgid "Comment Date"
 msgstr "Kommentarsdatum"
 
@@ -5426,7 +5426,7 @@ msgstr "Klicka för att redigera."
 #: classes/helpers/FrmFormsListHelper.php:361
 #: classes/views/frm-forms/_publish_box.php:72
 #: pro/classes/controllers/FrmProEntriesController.php:1330
-#: pro/classes/helpers/FrmProCSVExportHelper.php:104
+#: pro/classes/helpers/FrmCSVExportHelper.php:104
 msgid "Draft"
 msgstr "Utkast"
 
@@ -5748,12 +5748,12 @@ msgid "There was an error when reading this XML file"
 msgstr "Det uppstod ett fel när XML-filen skulle läsas"
 
 # @ formidable
-#: pro/classes/helpers/FrmProCSVExportHelper.php:102
+#: pro/classes/helpers/FrmCSVExportHelper.php:102
 msgid "Created By"
 msgstr "Skapat av"
 
 # @ formidable
-#: pro/classes/helpers/FrmProCSVExportHelper.php:103
+#: pro/classes/helpers/FrmCSVExportHelper.php:103
 msgid "Updated By"
 msgstr "Uppdaterat av"
 
@@ -8401,7 +8401,7 @@ msgstr ""
 "ogiltig."
 
 # @ formidable
-#: pro/classes/helpers/FrmProCSVExportHelper.php:105
+#: pro/classes/helpers/FrmCSVExportHelper.php:105
 #: pro/classes/views/displays/where_row.php:13
 msgid "IP"
 msgstr "IP"
@@ -8536,7 +8536,7 @@ msgid "Your server is missing the simplexml_import_dom function"
 msgstr "Din server saknar funktionen simplexml_import_dom"
 
 # @ edd
-#: classes/models/EDD_SL_Plugin_Updater.php:182
+#: classes/models/FrmEDD_SL_Plugin_Updater.php:182
 #, php-format
 msgid ""
 "There is a new version of %1$s available. %2$sView version %3$s details%4$s."
@@ -8545,7 +8545,7 @@ msgstr ""
 "%4$s."
 
 # @ edd
-#: classes/models/EDD_SL_Plugin_Updater.php:190
+#: classes/models/FrmEDD_SL_Plugin_Updater.php:190
 #, php-format
 msgid ""
 "There is a new version of %1$s available. %2$sView version %3$s details%4$s "
@@ -8554,7 +8554,7 @@ msgstr ""
 "En ny version av %1$s finns tillgänglig. %2$sVisa detaljer för version %3$s"
 "%4$s eller %5$suppdatera nu%6$s."
 
-#: classes/models/EDD_SL_Plugin_Updater.php:332
+#: classes/models/FrmEDD_SL_Plugin_Updater.php:332
 msgid "You do not have permission to install plugin updates"
 msgstr "Du har inte behörighet att installera tilläggsuppdateringar"
 

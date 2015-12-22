@@ -57,6 +57,10 @@ class FrmAppHelper {
         return get_option('blogname');
     }
 
+	public static function affiliate() {
+		return '';
+	}
+
     /**
      * Get the Formidable settings
      *
@@ -79,10 +83,7 @@ class FrmAppHelper {
      * @since 2.0
      */
 	public static function update_message( $features, $class = '' ) {
-		return; // hide the upgrade messages for now
-        if ( ! self::pro_is_installed() ) {
-            include(self::plugin_path() .'/classes/views/shared/update_message.php');
-        }
+		_deprecated_function( __FUNCTION__, '2.0.19' );
     }
 
     public static function pro_is_installed() {

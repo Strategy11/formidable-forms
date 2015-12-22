@@ -56,19 +56,13 @@ class FrmXMLController {
 		$forms = FrmForm::getAll( $where, 'name' );
 
         $export_types = apply_filters( 'frm_xml_export_types',
-            array( 'forms' => __( 'Forms', 'formidable' ) )
+            array( 'forms' => __( 'Forms', 'formidable' ), 'items' => __( 'Entries', 'formidable' ) )
         );
 
         $export_format = apply_filters( 'frm_export_formats', array(
             'xml' => array( 'name' => 'XML', 'support' => 'forms', 'count' => 'multiple' ),
+			'csv' => array( 'name' => 'CSV', 'support' => 'items', 'count' => 'single' ),
         ) );
-
-        if ( FrmAppHelper::pro_is_installed() ) {
-            $frmpro_settings = new FrmProSettings();
-            $csv_format = $frmpro_settings->csv_format;
-        } else {
-            $csv_format = 'UTF-8';
-        }
 
         include(FrmAppHelper::plugin_path() .'/classes/views/xml/import_form.php');
     }
@@ -113,8 +107,6 @@ class FrmXMLController {
         }
         unset($file_type);
 
-        //$media_id = FrmProAppHelper::upload_file('frm_import_file');
-
 		if ( ! function_exists( 'libxml_disable_entity_loader' ) ) {
 			$errors[] = __( 'XML import is not enabled on your server.', 'formidable' );
 			self::form( $errors );
@@ -152,6 +144,8 @@ class FrmXMLController {
 
         if ( $format == 'xml' ) {
             self::generate_xml($type, compact('ids'));
+		} if ( $format == 'csv' ) {
+			self::generate_csv( compact('ids') );
         } else {
             do_action('frm_export_format_'. $format, compact('ids'));
         }
@@ -272,6 +266,86 @@ class FrmXMLController {
 		echo '<?xml version="1.0" encoding="' . esc_attr( get_bloginfo('charset') ) . "\" ?>\n";
         include(FrmAppHelper::plugin_path() .'/classes/views/xml/xml.php');
     }
+
+
+	public static function generate_csv( $atts ) {
+		$form_ids = $atts['ids'];
+		if ( empty( $form_ids ) ) {
+			wp_die( __( 'Please select a form', 'formidable' ) );
+		}
+		self::csv( reset( $form_ids ) );
+	}
+
+	/**
+	 * Export to CSV
+	 * @since 2.0.19
+	 */
+	public static function csv( $form_id = false, $search = '', $fid = '' ) {
+		FrmAppHelper::permission_check( 'frm_view_entries' );
+
+		if ( ! $form_id ) {
+			$form_id = FrmAppHelper::get_param( 'form', '', 'get', 'sanitize_text_field' );
+			$search = FrmAppHelper::get_param( ( isset( $_REQUEST['s'] ) ? 's' : 'search' ), '', 'get', 'sanitize_text_field' );
+			$fid = FrmAppHelper::get_param( 'fid', '', 'get', 'sanitize_text_field' );
+		}
+
+		if ( ! ini_get('safe_mode') ) {
+			set_time_limit(0); //Remove time limit to execute this function
+			$mem_limit = str_replace('M', '', ini_get('memory_limit'));
+			if ( (int) $mem_limit < 256 ) {
+				ini_set('memory_limit', '256M');
+			}
+		}
+
+		global $wpdb;
+
+		$form = FrmForm::getOne( $form_id );
+		$form_id = $form->id;
+
+		$where = array( 'fi.type not' => FrmField::no_save_fields() );
+		$where[] = array( 'or' => 1, 'fi.form_id' => $form->id, 'fr.parent_form_id' => $form->id );
+
+		$csv_fields = apply_filters( 'frm_csv_field_ids', '', $form_id, array( 'form' => $form ) );
+		if ( $csv_fields ) {
+			if ( ! is_array( $csv_fields ) ) {
+				$csv_fields = explode( ',', $csv_fields );
+			}
+			if ( ! empty($csv_fields) )	{
+				$where['fi.id'] = $csv_fields;
+			}
+		}
+		$form_cols = FrmField::getAll( $where, 'field_order' );
+
+		$item_id = FrmAppHelper::get_param( 'item_id', 0, 'get', 'sanitize_text_field' );
+		if ( ! empty( $item_id ) ) {
+			$item_id = explode( ',', $item_id );
+		}
+
+		$query = array( 'form_id' => $form_id );
+
+		if ( $item_id ) {
+			$query['id'] = $item_id;
+		}
+
+		/**
+		 * Allows the query to be changed for fetching the entry ids to include in the export
+		 *
+		 * $query is the array of options to be filtered. It includes form_id, and maybe id (array of entry ids),
+		 * and the search query. This should return an array, but it can be handled as a string as well.
+		 */
+		$query = apply_filters( 'frm_csv_where', $query, compact( 'form_id', 'search', 'fid', 'item_id' ) );
+
+		$entry_ids = FrmDb::get_col( $wpdb->prefix .'frm_items it', $query );
+		unset( $query );
+
+		if ( empty( $entry_ids ) ) {
+			esc_html_e( 'There are no entries for that form.', 'formidable' );
+		} else {
+			FrmCSVExportHelper::generate_csv( compact( 'form', 'entry_ids', 'form_cols' ) );
+		}
+
+		wp_die();
+	}
 
 	public static function allow_mime( $mimes ) {
         if ( ! isset( $mimes['csv'] ) ) {

@@ -91,6 +91,9 @@ class FrmHooksController {
 		add_filter( 'plugin_action_links_' . FrmAppHelper::plugin_folder() . '/formidable.php', 'FrmAppController::settings_link' );
 		register_activation_hook( FrmAppHelper::plugin_folder() . '/formidable.php', 'FrmAppController::activation_install' );
 
+		// Addons Controller
+		add_action( 'admin_menu', 'FrmAddonsController::menu', 100 );
+
         // Entries Controller
         add_action( 'admin_menu', 'FrmEntriesController::menu', 12 );
         add_filter( 'contextual_help', 'FrmEntriesController::contextual_help', 10, 3 );
@@ -100,7 +103,6 @@ class FrmHooksController {
 
         // Fields Controller
         add_filter( 'frm_display_field_options', 'FrmFieldsController::display_field_options' );
-        add_action( 'frm_field_options_form', 'FrmFieldsController::add_conditional_update_msg', 50 );
 
         // Form Actions Controller
         if ( FrmAppHelper::is_admin_page( 'formidable' ) ) {
@@ -122,10 +124,6 @@ class FrmHooksController {
         // Settings Controller
         add_action( 'admin_menu', 'FrmSettingsController::menu', 45 );
         add_action( 'frm_before_settings', 'FrmSettingsController::license_box' );
-
-        // Stats Controller
-        add_action( 'admin_menu', 'FrmStatisticsController::menu', 24 );
-        add_action( 'frm_form_action_reports', 'FrmStatisticsController::list_reports' );
 
         // Styles Controller
         add_action( 'admin_menu', 'FrmStylesController::menu', 14 );
@@ -184,6 +182,8 @@ class FrmHooksController {
 		add_action( 'wp_ajax_nopriv_frmpro_css', 'FrmStylesController::load_saved_css' );
 
         // XML Controller
+		add_action( 'wp_ajax_frm_entries_csv', 'FrmXMLController::csv' );
+		add_action( 'wp_ajax_nopriv_frm_entries_csv', 'FrmXMLController::csv' );
         add_action( 'wp_ajax_frm_export_xml', 'FrmXMLController::export_xml' );
     }
 
