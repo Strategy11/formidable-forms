@@ -845,7 +845,7 @@ function frmFrontFormJS(){
 
 		var triggerFieldArgs = __FRMLOOKUP[field_id];
 
-		if ( changedInput === null || typeof(changedInput) === 'undefined' ) {
+		if ( changedInput === null || typeof(changedInput) === 'undefined' || changedInput.is('[disabled]') ) {
 			return;
 		}
 
@@ -925,12 +925,12 @@ function frmFrontFormJS(){
 		if ( parentRepeatId ) {
 			// If parent is in a repeating section, child must be repeating
 			var childField = document.getElementById( 'field_' + childFieldArgs.fieldKey + parentRepeatId );
-			if ( childField.type == 'select' ) {
+			if ( childField.tagName == 'SELECT' ) {
 				childFieldElements.push( childField );
 			}
 
 		} else {
-			childFieldElements = document.querySelectorAll('*[id^="field_' + childFieldArgs.fieldKey + '" type="select"]');
+			childFieldElements = document.querySelectorAll('select[id^="field_' + childFieldArgs.fieldKey + '"]');
 		}
 		return childFieldElements;
 	}
