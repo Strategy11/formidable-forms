@@ -299,6 +299,7 @@ function frmFrontFormJS(){
 		logicRules.hiddenName = 'item_meta['+ logicRules.HideField +']';
 		logicRules.containerID = 'frm_field_'+ logicRules.FieldName +'_container';
 		logicRules.hideContainerID = 'frm_field_'+ logicRules.HideField +'_container';
+		logicRules.Value = logicRules.Value.trim();
 
 		// If the trigger field is a repeating field, only check single row of repeating section
 		if ( addingRow !== '' ) {
@@ -392,12 +393,14 @@ function frmFrontFormJS(){
 			}else{
 				fieldValue = '';
 			}
+			fieldValue = fieldValue.trim();
 			return fieldValue;
 		}
 
 		// If field is on another page
 		fieldValue = jQuery('input[name="'+ f.inputName +'"][type="hidden"]').val();
 		if ( typeof fieldValue !== 'undefined' ) {
+			fieldValue = fieldValue.trim();
 			return fieldValue;
 		}
 
@@ -416,6 +419,7 @@ function frmFrontFormJS(){
 			fieldValue = '';
 		}
 
+		fieldValue = fieldValue.trim();
 		return fieldValue;
 	}
 
