@@ -393,7 +393,7 @@ function frmFrontFormJS(){
 			}else{
 				fieldValue = '';
 			}
-			fieldValue = fieldValue.trim();
+
 			return fieldValue;
 		}
 
