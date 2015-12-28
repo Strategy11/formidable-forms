@@ -1,95 +1,5 @@
-=== Formidable Forms ===
-Contributors: sswells, srwells, jamie.wahlin
-Donate link: http://formidablepro.com/donate
-Tags: admin, AJAX, captcha, contact, contact form, database, email, feedback, form, forms, javascript, jquery, page, plugin, poll, Post, spam, survey, template, widget, wpmu, form builder
-Requires at least: 3.6
-Tested up to: 4.3.1
-Stable tag: 2.0.18
-
-Beautiful forms in 60 seconds. The WordPress form builder that enables you to create forms with a simple drag-and-drop interface and in-place editing.
-
-== Description ==
-Build WordPress forms the fast and simple way with a simple drag-and-drop interface (and a visual form styler in version 2.0). Create custom Formidable forms or generate them from a template with this stunning WordPress form plugin.
-
-[View Documentation](http://formidablepro.com/knowledgebase/ "View Documentation")
-[Contribute on Github](https://github.com/Strategy11/formidable-forms "Contribute on Github")
-
-= Features =
-* Create forms with 7 field types: text, email, url, paragraph text, radio, checkbox, and dropdown
-* Create forms from existing templates or add your own. A contact form template is included.
-* Send unlimited email notifications, including autoresponders to the form submitter
-* Create a single styling template using our visual form styler
-* View form submissions from the back-end
-* Import and export forms with XML
-* Send forms to the trash
-* Generate shortcodes with an advanced shortcode UI
-* Customize the HTML in your form for any layout you would like, or use our CSS classes to arrange your fields
-* Integrate with the one-click reCAPTCHA and Akismet for Spam control
-* Use placeholder default values in form fields that clear when clicked
-* Direct links available for previews and emailing surveys with and without integration with your theme
-* Change the name on the Formidable menu to anything you would like
-* Insert your forms on a page, post, or widget using a shortcode [formidable id=x]
-* Support for bugs. We want it to be perfect!
-
-= Pro Features =
-* Access even more field types: Section headings (repeatable in 2.0), page breaks, file upload, rich text, number, phone number, date, time, scale, dynamic fields populated from other forms, hidden field, user ID field, password, HTML, and tags
-* Conditionally send your email notifications based on values in your form
-* Create multiple styling templates and assign them to any of your forms, and add instant Bootstrap styling
-* Flexibly and powerfully view, edit, and delete entries from anywhere on your site, and specify who has permission to do so
-* Generate graphs and stats based on your submitted data
-* Create and edit WordPress posts from the front-end
-* Use our add-ons for user registration, payment, and integration with other services like MailChimp, Aweber, Highrise, Twilio for SMS, WPML, and Zapier
-* Logged-in users can save drafts and return later
-* Integrate the Math Captcha plugin for alternative spam protection
-* Generate custom calculations
-* Hide and show fields conditionally based on other fields or the user's role
-* Export and import entries with CSV
-* Import our pre-built form/view demo templates as a starting point or a final product
-* Support for all Formidable features. If you have questions or need guidance on how to set up your application, we are happy to help. We want to make you look fabulous for your clients, and allow you to take on big jobs.
-
-Learn more at: http://formidablepro.com
-
-== Installation ==
-1. Go to your Plugins -> Add New page in your WordPress admin
-2. Search for 'Formidable'
-3. Click the 'Install Now' button
-4. Activate the plugin through the 'Plugins' menu
-5. Go to the Formidable menu
-6. Click the 'Add New' button to create a new form
-7. Insert your form with the shortcode [formidable id=x] in pages, posts, or text widgets. Alternatively use `<?php echo FrmFormsController::show_form(2, $key = '', $title=true, $description=true); ?>` in your template
-
-== Screenshots ==
-1. Create beautiful WordPress forms without any code.
-2. Form creation page
-3. Field Options and CSS Layout Classes
-4. Field Options for checkbox fields
-5. Entry Management page
-6. Form Widget
-
-== Frequently Asked Questions ==
-= Q. Why aren't I getting any emails? =
-
-A. Try the following steps:
-
-   1. Double check to make sure your email address is present and correct in the "Emails" tab on the form "Settings" page
-   2. Make sure you are receiving other emails from your site (ie comment notifications, forgot password...)
-   3. Check your SPAM box
-   4. Try a different email address.
-   5. Install WP Mail SMPT or another similar plugin and configure the SMTP settings
-   6. If none of these steps fix the problem, let us know and we'll try to help you find the bottleneck.
-
-= Q. How do I edit the field name? =
-
-A. The field and form names and descriptions are all changed with in-place edit. Just click on the text you would like to change, and it will turn into a text field.
-
-= Q. Why isn't the form builder page working after I updated? =
-
-A. Try clearing your browser cache. As plugin modifications are made, frequent javascript and stylesheet changes are also made. However, the previous versions may be cached so you aren't using the modified files. After clearing your cache and you're still having issues, please let us know.
-
-[See more FAQs](http://formidablepro.com/formidable-faqs/ "Formidable Form FAQs")
-
-== Changelog ==
-= 2.0.18 =
+## Changelog
+### [2.0.18](https://github.com/Strategy11/formidable-forms/releases/tag/v2.0.18)
 * PHP 7 updates
 * Add frm_field_extra_html hook
 * Prevent specific html entity from breaking email message
@@ -97,22 +7,22 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * Fix HTML error on form builder page
 * Change the "Licenses" submenu to "Plugin Licenses"
 * **Pro Features:**
-* Allow ? and * in Phone Number Format
-* Remove child form from export options
-* Fix LIKE conditional logic bug
-* Some auto-update adjustments
-* Add frm_search_any_terms filter
-* Fix file upload issue in CSV export
-* Fix issue with duplicate classes in HTML field
-* Fix filtering with user_id=current in graphs
-* Fix Dynamic List field with value like 9.99
-* Make sure userID field doesn't lose value when conditionally hidden/shown
+    * Allow ? and * in Phone Number Format
+    * Remove child form from export options
+    * Fix LIKE conditional logic bug
+    * Some auto-update adjustments
+    * Add frm_search_any_terms filter
+    * Fix file upload issue in CSV export
+    * Fix issue with duplicate classes in HTML field
+    * Fix filtering with user_id=current in graphs
+    * Fix Dynamic List field with value like 9.99
+    * Make sure userID field doesn't lose value when conditionally hidden/shown
 
-= 2.0.17 =
+### [2.0.17](https://github.com/Strategy11/formidable-forms/releases/tag/v2.0.17)
 * **Pro Features:**
-* Fix post update bug
+    * Fix post update bug
 
-= 2.0.16 =
+### [2.0.16](https://github.com/Strategy11/formidable-forms/releases/tag/v2.0.16)
 * Escape font family correctly for quotation marks
 * Only check for updates every 24 hours
 * Allow emails to be separated by a space
@@ -123,20 +33,20 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * More contrast on form builder page
 * Use normal font weight for from builder
 * **Pro Features:**
-* Allow Styles to be duplicated
-* Allow the form key in the CSV download url
-* Make like/not like conditional logic not case-sensitive
-* Fix multiple conditional logics on a Dynamic field
-* Fix XML import with repeating fields
-* Fix notice for old dfe fields
-* Make sure integer is being used for auto_id
-* Fix read-only dependent Dynamic field with a default value
-* Fix conditional radio button default value issue
-* Fixes for conditional logic on sections
-* Fix autoupdating for add-ons
-* Show a message if no license has been entered for an add-on
+    * Allow Styles to be duplicated
+    * Allow the form key in the CSV download url
+    * Make like/not like conditional logic not case-sensitive
+    * Fix multiple conditional logics on a Dynamic field
+    * Fix XML import with repeating fields
+    * Fix notice for old dfe fields
+    * Make sure integer is being used for auto_id
+    * Fix read-only dependent Dynamic field with a default value
+    * Fix conditional radio button default value issue
+    * Fixes for conditional logic on sections
+    * Fix autoupdating for add-ons
+    * Show a message if no license has been entered for an add-on
 
-= 2.0.15 =
+### [2.0.15](https://github.com/Strategy11/formidable-forms/releases/tag/v2.0.15)
 * Send plugin updates through formidablepro.com
 * Update Swedish translation
 * Use media_buttons hook instead of deprecated media_buttons_context hook
@@ -153,27 +63,27 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * Make long text wrap in Chrome cb/radio fields
 * Add 'compact' option to Recaptcha
 * **Pro Features:**
-* Fix conditional logic bug
-* Fix calculations in repeating sections with visibility admin
-* Fix dynamic list fields in repeating sections
-* Fix JS error when removing row w/ read only field
-* Add JavaScript hook for removeRow function
-* Fix error for ordering view by time
-* Fix error with no posted values in embedded forms
-* Escape CSV cells with ' if they start with = (this is to prevent a vulnerability in Excel)
-* Prevent array keys from being appended to user meta vals
-* Switch autoupdating to EDD at formidablepro.com
-* Prevent frm_display_id from switching when View is updated
-* Fix multi-file upload display for embedded forms
-* Allow text value to autopopulate dynamic fields
-* Make embedded fields show up in View filters
-* Don't let userID field affect css class in repeating section
-* Don't check for shortcodes if no brackets are present
-* A few auto updating fixes for multisite
-* Switch [foreach 25] when form is duplicated
+    * Fix conditional logic bug
+    * Fix calculations in repeating sections with visibility admin
+    * Fix dynamic list fields in repeating sections
+    * Fix JS error when removing row w/ read only field
+    * Add JavaScript hook for removeRow function
+    * Fix error for ordering view by time
+    * Fix error with no posted values in embedded forms
+    * Escape CSV cells with ' if they start with = (this is to prevent a vulnerability in Excel)
+    * Prevent array keys from being appended to user meta vals
+    * Switch autoupdating to EDD at formidablepro.com
+    * Prevent frm_display_id from switching when View is updated
+    * Fix multi-file upload display for embedded forms
+    * Allow text value to autopopulate dynamic fields
+    * Make embedded fields show up in View filters
+    * Don't let userID field affect css class in repeating section
+    * Don't check for shortcodes if no brackets are present
+    * A few auto updating fixes for multisite
+    * Switch [foreach 25] when form is duplicated
 
 
-= 2.0.14 =
+### [2.0.14](https://github.com/Strategy11/formidable-forms/releases/tag/v2.0.14)
 * Stripslashes in Other field
 * Prevent collapse icon from being inserted inside of section
 * Make sure roles dropdowns show correctly after clicking update (in Global Settings)
@@ -190,7 +100,7 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * Allow view filtering with time fields using NOW
 * Allow times to be formatted with [25 format='g:i A']
 
-= 2.0.13 =
+### [2.0.13](https://github.com/Strategy11/formidable-forms/releases/tag/v2.0.13)
 * Allow recaptcha to be conditionally hidden on previous pages of form
 * Fix error with embedded form on a conditionally hidden page
 * Show the editlink after an entry is edited in place
@@ -230,7 +140,7 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * Conditionally use ssl for the ajax url for form submission
 
 
-= 2.0.12 =
+### [2.0.12](https://github.com/Strategy11/formidable-forms/releases/tag/v2.0.12)
 * Add option to center form on page
 * Improve styling classes for more consistency across different field classes, and make all classes responsive
 * Added a few more styling classes: frm_three_fourths, frm_two_fifths, frm_three_fifths
@@ -242,33 +152,33 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * Fix: When the jQuery UI css is loaded by another plugin on the form builder page, the required icon looked the same whether required or not. This styling conflict is resolved.
 * Fix: Make sure the form description size can be changed in the styling settings.
 * **Pro Features:**
-* Views can now be filtered by fields in the repeating sections.
-* Added [parent_id] shortcode for use in views. This shortcode will only have a value when the displaying entries in repeating sections.
-* Allow views to be created using the repeated entries. Since each repeating row is an entry in a hidden form, we can allow views to be created using those repeating rows for more flexability.
-* Added order parameter to frm-entry-links
-* Allow options in a post status field to come from the form builder. The options should have separate values and the saved values can include 'publish', 'draft', 'private', 'scheduled'.
-* Remove the option to lock field and form keys. This is more of a hassle than a feature.
-* Allow the entry key to be used with the frm-field-value shortcode instead of forcing the entry
-* Replaced inline 50px height for image fields with .frm_image_from_url class for easier control
-* Improve file upload field in Chrome to prevent extra space from showing.
-* Added 'frm_save_post_name' filter. This can be used for custom form actions that create posts.
-* Added 'frm_display_data_opts' filter.
-* Prevent frm_display_id custom field from saving when a field is selected in the create post settings instead of customized content
-* Fix: When forms were submitted without ajax, the redirect wasn't working consistently.
-* Fix: The shortcodes weren't processing in the message shown after an entry is updated.
-* Fix: When we prevented the PayPal action from triggering on import, we stopped all actions. This is now fixed so an action can be set (in the code) to be triggered on import. Posts will now be created on import again.
-* Fix: The dynamic list field was showing the entry ID in the entries tab instead of the value.
-* Fix: The Add row button wasn't showing in a repeating section when returning to edit an entry if there were more than two rows in the section.
-* Fix: Improve dropping a field between two sections.
-* Fix: Remove nonce check for frm-entry-update-field shortode. Page caching gives front-end nonce checks issues.
-* Fix: We changed the parameters sent to the frm_after_update_field hook without realizing it. The 'field_id' attribute was sometimes an object, but was previously always an integer. This has been updated for reverse compatibility, and 'field' has been added with the full field object.
-* Fix: If you put -100 for the start date in a date field, -100 would show in the date field instead of 1915. This is now working correctly for dynamic values like this with three digits.
-* Fix: When filtering a view with a Dynamic field, NOT EQUAL TO will work correctly.
-* Fix: Double quotes were causing trouble when included inside an error message returned by the frm_validate_field_entry hook
-* Fix: Graphs using x_axis and start_date were having trouble
-* Fix: The js error after selecting an option in autocomplete field is fixed when there are calculations in the form.
+    * Views can now be filtered by fields in the repeating sections.
+    * Added [parent_id] shortcode for use in views. This shortcode will only have a value when the displaying entries in repeating sections.
+    * Allow views to be created using the repeated entries. Since each repeating row is an entry in a hidden form, we can allow views to be created using those repeating rows for more flexability.
+    * Added order parameter to frm-entry-links
+    * Allow options in a post status field to come from the form builder. The options should have separate values and the saved values can include 'publish', 'draft', 'private', 'scheduled'.
+    * Remove the option to lock field and form keys. This is more of a hassle than a feature.
+    * Allow the entry key to be used with the frm-field-value shortcode instead of forcing the entry
+    * Replaced inline 50px height for image fields with .frm_image_from_url class for easier control
+    * Improve file upload field in Chrome to prevent extra space from showing.
+    * Added 'frm_save_post_name' filter. This can be used for custom form actions that create posts.
+    * Added 'frm_display_data_opts' filter.
+    * Prevent frm_display_id custom field from saving when a field is selected in the create post settings instead of customized content
+    * Fix: When forms were submitted without ajax, the redirect wasn't working consistently.
+    * Fix: The shortcodes weren't processing in the message shown after an entry is updated.
+    * Fix: When we prevented the PayPal action from triggering on import, we stopped all actions. This is now fixed so an action can be set (in the code) to be triggered on import. Posts will now be created on import again.
+    * Fix: The dynamic list field was showing the entry ID in the entries tab instead of the value.
+    * Fix: The Add row button wasn't showing in a repeating section when returning to edit an entry if there were more than two rows in the section.
+    * Fix: Improve dropping a field between two sections.
+    * Fix: Remove nonce check for frm-entry-update-field shortode. Page caching gives front-end nonce checks issues.
+    * Fix: We changed the parameters sent to the frm_after_update_field hook without realizing it. The 'field_id' attribute was sometimes an object, but was previously always an integer. This has been updated for reverse compatibility, and 'field' has been added with the full field object.
+    * Fix: If you put -100 for the start date in a date field, -100 would show in the date field instead of 1915. This is now working correctly for dynamic values like this with three digits.
+    * Fix: When filtering a view with a Dynamic field, NOT EQUAL TO will work correctly.
+    * Fix: Double quotes were causing trouble when included inside an error message returned by the frm_validate_field_entry hook
+    * Fix: Graphs using x_axis and start_date were having trouble
+    * Fix: The js error after selecting an option in autocomplete field is fixed when there are calculations in the form.
 
-= 2.0.11 =
+### [2.0.11](https://github.com/Strategy11/formidable-forms/releases/tag/v2.0.11)
 * Fix issue with clearing array keys when sanitizing an array when displaying entry values
 * When the email "reply to" value uses the "from" setting, only use the email address without the name
 * Switch the form action events to dropdown instead of checkboxes
@@ -285,37 +195,37 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * Add frm_capitalize layout class
 * Make frm_customize class work for more field types
 * **Pro Features:**
-* Set new views to private by default
-* Allow clickable=1 in the frm-show-entry shortcode
-* Make sure to show the Add row button for repeating sections in IE9
-* Correctly require a password before showing password protected views
-* Add update_single_field function for easier updating of a single field
-* Add frm_datepicker_formats hook for adding format additional options on the Formidable -> global settings page
-* Add frm_csv_row hook for adding data to a row in the CSV
-* Keep the Pending status selected after save in the post settings
-* Add frm_is_dynamic_field_empty filter for overriding whether a dependent dynamic field is available for validation or if the value should be cleared
-* Improve dragging and dropping large sections of fields
-* Don't trigger form actions while importing
-* Make sure $entry_ids is still intact for the frm_after_content hook
-* Replace m/d/Y format option
-* Fix updating a field with the frm-entry-update-field shortcode
-* Work on calculating different combinations of fields inside and outside a repeating section
-* Only return unique values when a list field is displayed based on checkboxes
-* Fix searching entries with a trailing space
-* Fix truncating in the dynamic content
+    * Set new views to private by default
+    * Allow clickable=1 in the frm-show-entry shortcode
+    * Make sure to show the Add row button for repeating sections in IE9
+    * Correctly require a password before showing password protected views
+    * Add update_single_field function for easier updating of a single field
+    * Add frm_datepicker_formats hook for adding format additional options on the Formidable -> global settings page
+    * Add frm_csv_row hook for adding data to a row in the CSV
+    * Keep the Pending status selected after save in the post settings
+    * Add frm_is_dynamic_field_empty filter for overriding whether a dependent dynamic field is available for validation or if the value should be cleared
+    * Improve dragging and dropping large sections of fields
+    * Don't trigger form actions while importing
+    * Make sure $entry_ids is still intact for the frm_after_content hook
+    * Replace m/d/Y format option
+    * Fix updating a field with the frm-entry-update-field shortcode
+    * Work on calculating different combinations of fields inside and outside a repeating section
+    * Only return unique values when a list field is displayed based on checkboxes
+    * Fix searching entries with a trailing space
+    * Fix truncating in the dynamic content
 
-= 2.0.10 =
+### [2.0.10](https://github.com/Strategy11/formidable-forms/releases/tag/v2.0.10)
 * Add frm_action_triggers hook for adding custom triggers into the actions
 * Add frm_{action name here}_action_options hook so any action can be altered
 * Prevent extra form actions when a form is duplicated
 * Load correct version of formidable.js based on wp-config debugging constant (Thanks @naomicbush for the contributions!)
 * Revert get_sortable_columns changes for < WP 4.0 support
-* **Pro Features:**
-* Allow calculations inside repeating sections and embedded forms
-* Set default values for conditional checkboxes and radio fields and inside conditional sections
-* A few changes to the way section fields create divs
+    * **Pro Features:**
+    * Allow calculations inside repeating sections and embedded forms
+    * Set default values for conditional checkboxes and radio fields and inside conditional sections
+    * A few changes to the way section fields create divs
 
-= 2.0.09 =
+### [2.0.09](https://github.com/Strategy11/formidable-forms/releases/tag/v2.0.09)
 * Add frm_time_to_check duplicate entries filter
 * Allow custom JavaScript validation
 * Add frm_do_html_shortcodes fiter
@@ -326,46 +236,46 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * Allow 0 to be saved in a checkbox field
 * Fix saving forms as drafts
 * **Pro Features:**
-* Reduce database calls for Views
-* Allow format for default [time] and [date] shortcodes ie [time format='H:i A' round=5]
-* Include Dynamic List fields in calculation options
-* Make file upload fields more responsive
-* Improve repeating section styling
-* Improve calculation triggering when fields involved are conditionally hidden
-* Don't clear readonly fields or default values when hidden conditionally
-* Don't trigger dynamic field values if there is other logic telling the field to be hidden
-* Include Indonesian option for datepicker
-* Allow the post author to be changed by the user ID field on edit
-* Trigger calculations at the time a conditional field is shown
-* Keep the value submitted in a dynamic list field
-* Fix graphs that show multiple fields and define the x-axis
-* Allow graphs to be included in the success message after ajax submit
-* Conditionally show the max character setting in number fields based on whether HTML5 is enabled
-* Allow scale fields to work in calculations across multiple pages
-* Turn off ajax submit if repeating section includes a file
-* Fix entry creation date format on import
-* Fix filtering by a checkbox field in the frm-stats shortcode
-* Fix logic for third-level fields with conditional logic inside a repeating section
-* Make sure conditional logic only affects the newly added row when triggered after a row is added
-* Make sure orphaned data is deleted when switching divider to repeating/non-repeating
-* Allow drafts=both with user_id filter in View shortcode
-* Fix conditionally required fields when option includes quote
-* Fix date field errors on multi-page form that submits with Ajax
-* Prevent the JetPack conflict with the shortcodes module
-* Fix sorting in dependent Dynamic fields
-* Registration add-on login form styling
-* Fix inline scale field labels
-* Fix spacing issue with repeating section grid
-* Fix truncation with special characters
-* Fix importing repeating sections and embedded forms
-* Fix readonly checkboxes in calculations
-* Don't show empty custom field rows in the post settings
-* A few fixes to the formresults shortcode including the file display
-* Fix error when duplicating a section without any included fields
-* Fix timezones for searching by entry creation and updated dates in a view
+    * Reduce database calls for Views
+    * Allow format for default [time] and [date] shortcodes ie [time format###'H:i A' round5]
+    * Include Dynamic List fields in calculation options
+    * Make file upload fields more responsive
+    * Improve repeating section styling
+    * Improve calculation triggering when fields involved are conditionally hidden
+    * Don't clear readonly fields or default values when hidden conditionally
+    * Don't trigger dynamic field values if there is other logic telling the field to be hidden
+    * Include Indonesian option for datepicker
+    * Allow the post author to be changed by the user ID field on edit
+    * Trigger calculations at the time a conditional field is shown
+    * Keep the value submitted in a dynamic list field
+    * Fix graphs that show multiple fields and define the x-axis
+    * Allow graphs to be included in the success message after ajax submit
+    * Conditionally show the max character setting in number fields based on whether HTML5 is enabled
+    * Allow scale fields to work in calculations across multiple pages
+    * Turn off ajax submit if repeating section includes a file
+    * Fix entry creation date format on import
+    * Fix filtering by a checkbox field in the frm-stats shortcode
+    * Fix logic for third-level fields with conditional logic inside a repeating section
+    * Make sure conditional logic only affects the newly added row when triggered after a row is added
+    * Make sure orphaned data is deleted when switching divider to repeating/non-repeating
+    * Allow drafts=both with user_id filter in View shortcode
+    * Fix conditionally required fields when option includes quote
+    * Fix date field errors on multi-page form that submits with Ajax
+    * Prevent the JetPack conflict with the shortcodes module
+    * Fix sorting in dependent Dynamic fields
+    * Registration add-on login form styling
+    * Fix inline scale field labels
+    * Fix spacing issue with repeating section grid
+    * Fix truncation with special characters
+    * Fix importing repeating sections and embedded forms
+    * Fix readonly checkboxes in calculations
+    * Don't show empty custom field rows in the post settings
+    * A few fixes to the formresults shortcode including the file display
+    * Fix error when duplicating a section without any included fields
+    * Fix timezones for searching by entry creation and updated dates in a view
 
-= 2.0.08 =
-* Fix security vulnerability allowing shortcodes to be excuted inside a form https://research.g0blin.co.uk/?p=618&d=i4ziyggqao0oz0L0vpUTd8KZwrO2P9Mw
+### [2.0.08](https://github.com/Strategy11/formidable-forms/releases/tag/v2.0.08)
+* Fix security vulnerability allowing shortcodes to be excuted inside a form https://research.g0blin.co.uk/?p###618&di4ziyggqao0oz0L0vpUTd8KZwrO2P9Mw
 * Added frm_filter_final_form hook. This will need to be used to cover shortcodes that span multiple blocks of field HTML since we can't do a general shortcode replacement on the rendered form
 * Revert change that prevented scripts from firing in the form success message
 * Fix timestamp timezone on view/edit entry page
@@ -391,11 +301,11 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * Pro: Export the category name in the CSV instead of the id
 * Pro: Save user ID even if it's in a conditional section/page
 
-= 2.0.07 =
+### [2.0.07](https://github.com/Strategy11/formidable-forms/releases/tag/v2.0.07)
 * Don't escape urls in ajax
 * Correctly save all the options on the form settings page
 
-= 2.0.06 =
+### [2.0.06](https://github.com/Strategy11/formidable-forms/releases/tag/v2.0.06)
 * Fix an XSS vulnerability in the lite version. When the pro version is active, the vulnerability was resolved.
 * Increased security
 * Fix the shortcode display on form listing page
@@ -408,7 +318,7 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * Pro: Added frm_footer_scripts hook
 * Pro: Don't autoselect 0 in scale fields
 
-= 2.0.05 =
+### [2.0.05](https://github.com/Strategy11/formidable-forms/releases/tag/v2.0.05)
 * Remove deprecated jQuery toggle() calls
 * Add html ids to hidden fields
 * Make sure the entry name doesn't exceed allowed database field size
@@ -431,7 +341,7 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * Pro: Include list dynamic fields in the CSV and default email message
 * Pro: Match up logic when an option with & is selected
 
-= 2.0.04 =
+### [2.0.04](https://github.com/Strategy11/formidable-forms/releases/tag/v2.0.04)
 * Fix XSS vulnerability from add_query_args and remove_query_args
 * Remove unneeded options from the form widget and switch old styling setting width from 400px to 100%
 * Fix the new form class box in the customizable HTML
@@ -452,9 +362,9 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * Pro: Fix exporting multiple entries with the bulk CSV export option
 * Pro: Fix Entry ID filter in views when using a comma separated list of ids
 * Pro: Fix 3+ level dynamic fields to hide the last field when the first is changed
-* Pro: Fix apostraphes in form action logic
+* Pro: Fix apostrophes in form action logic
 
-= 2.0.03 =
+### [2.0.03](https://github.com/Strategy11/formidable-forms/releases/tag/v2.0.03)
 * Use frm_clear instead of clear to minimize conflicts
 * Add js fallback for database update on sites without CURL
 * Fix issues with emails migrating to actions in php 5.3, and t showing in some emails after updating settings
@@ -462,13 +372,13 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * Pro: If a comma separated list of dates is sent for formatting, explode it before formatting
 * Pro: Increase the backtrack limit when needed when replacing shortcodes in the view content if server has the limit below default
 * Pro: Fix issue causing csv export error
-* Pro: Fix the issue cuasing new posts to not be linked to a view if a field is selected for the post content
+* Pro: Fix the issue causing new posts to not be linked to a view if a field is selected for the post content
 * Pro: Fix issue some users are having with blank date fields
 * Pro: Fix ending collapsible sections at the end of a section instead of waiting for the next section
 * Pro: Fix firing calculations on page load when there are multiple calculations
 * Pro: Don't allow theme to affect the font size of stars
 
-= 2.0.02 =
+### [2.0.02](https://github.com/Strategy11/formidable-forms/releases/tag/v2.0.02)
 * Make sure frm_to_email hook is reverse compatible
 * Fix php example in the shortcode examples
 * Add styling for frm_half classes combined with left or right labels
@@ -489,7 +399,7 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * Pro: Hopefully fix the missing date format issue some users are running into with the datepicker. Unverified since we couldn't replicate.
 * Pro: When creating a new view, make sure the filter and order rows include the fields from the selected form
 
-= 2.0.01 =
+### [2.0.01](https://github.com/Strategy11/formidable-forms/releases/tag/v2.0.01)
 * Break transients into chunks for large forms ( > 200 fields )
 * Remove the upgrade link and perform the upgrade automatically
 * Allow upgrades to be done automatically in WordPress multisite with the 'Upgrade Network' option
@@ -504,7 +414,7 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * Pro: Allow the post author to be overridden with hooks
 * Pro: Fixed the [get-param] shortcode for reverse compatibility
 
-= 2.0 =
+### 2.0
 * Move visual form styler to free version
 * Added multiple emails to free version
 * Added BCC, CC, and reply to options to emails
@@ -564,11 +474,11 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * Pro: Improve frm_total class for number fields
 * Lots of other small features, bug fixes, and code cleanup. Too many little features to list!
 
-= 1.07.12 =
+### [1.07.12](https://github.com/Strategy11/formidable-forms/releases/tag/v1.07.12)
 * Add a bunch more caching
 * Scroll to field on click in form builder
 
-= 1.07.11 =
+### [1.07.11](https://github.com/Strategy11/formidable-forms/releases/tag/v1.07.11)
 * Added hook: frm_check_blacklist for disabling the comment blacklist spam check
 * Make nonce id unique per form
 * Make sure there is at least one word before truncation
@@ -584,7 +494,7 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * Pro: Add nonce check for importing entries
 * Pro: Fixed display of files with an icon when editing an entry
 
-= 1.07.10 =
+### [1.07.10](https://github.com/Strategy11/formidable-forms/releases/tag/v1.07.10)
 * Improve ajax form load speed on form builder page
 * Added 4.0 compatibility for deprecated like_escape function
 * Remove label html in radio and checkbox fields when label=0 is used on the [input] tag in the customizable HTML
@@ -592,7 +502,7 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * Added Italian translation
 * Added a few ajax nonce checks but don't require valid nonce for logged-out users for caching reasons
 * Allow data-something="value" inside the [input] short code
-* Pro: Allow [default-message] to have short code parameters to set rtl (direction=rtl), font size (font_size="14px"), and styling (text_color="000" border_width="1px" border_color="000" bg_color="fff" alt_bg_color="eee").
+* Pro: Allow [default-message] to have short code parameters to set rtl (direction###rtl), font size (font_size"14px"), and styling (text_color###"000" border_width"1px" border_color###"000" bg_color"fff" alt_bg_color="eee").
 * Pro: Added frm_html_scoll_box class for scrolling content in an HTML field
 * Pro: Allow recurring entries using values like "Third Wednesday of [frmcal-date]"
 * Pro: Allow comma separated view filters for entry key and id
@@ -615,14 +525,14 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * Pro: Added support for multiselect drop downs in calculations
 * Pro: Updated the way templates are fetched for wpmu copying
 * Pro: Show any additional info on the entry view page that is stored in the entry description
-* Pro: Update to Chosen 1.1.0
+* Pro: Update to Chosen [1.1.0](https://github.com/Strategy11/formidable-forms/releases/tag/v1.1.0)
 * Pro: Allow comma-separated values to populate a checkbox field
 * Pro: Make fields and exclude_fields parameter work with multi-page forms (required fields are still a limitation)
-* Pro: Allow drafts=1 or drafts=both in stats shortcode
+* Pro: Allow drafts###1 or draftsboth in stats shortcode
 * Pro: Allow field keys in stats filtering
 * Miscellaneous bug fixes
 
-= 1.07.09 =
+### [1.07.09](https://github.com/Strategy11/formidable-forms/releases/tag/v1.07.09)
 * Added hook: frm_bulk_field_choices for adding custom prepopulated options
 * Cleanup styling on bulk option popup
 * Fixed submission error affecting some sites
@@ -631,7 +541,7 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * PRO: Fixed cascading calculations
 * PRO: Allow HTML for the label and cancel links in the edit link shortcodes
 
-= 1.07.08 =
+### [1.07.08](https://github.com/Strategy11/formidable-forms/releases/tag/v1.07.08)
 * Check the words on the WordPress blacklist before submitting an entry
 * PRO: Added server dynamic default value for getting values from the PHP SERVER array like the current url
 * PRO: Added hook: frm_csv_sep for changing , to a different separator for checkbox fields
@@ -644,7 +554,7 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * PRO: Improved database call for Views.
 * PRO: Added a no conflict styling mode for overriding theme styling in the styling settings
 
-= 1.07.07 =
+### [1.07.07](https://github.com/Strategy11/formidable-forms/releases/tag/v1.07.07)
 * Added clarity to message in license box when pro is not installed
 * Added Spanish and Serbian translations. Thank you Ognjen Djuraskovic!
 * Fixed XML form export in free version
@@ -654,9 +564,9 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * PRO: Prevent comments on the view entry page from being deleted when the entry is updated
 * PRO: Only run before delete entry hook on delete all button if posts are turned on
 * PRO: Switch out ids for dependent fields after importing forms
-* PRO: Added x_axis=month and x_axis=quarter option to graph shortcode
+* PRO: Added x_axis###month and x_axisquarter option to graph shortcode
 
-= 1.07.06 =
+### [1.07.06](https://github.com/Strategy11/formidable-forms/releases/tag/v1.07.06)
 * Return graceful error message if no DOMDocument enabled
 * Allow fields to be updated via XML import by field key for non-templates
 * Added minimize=1 option to the [formidable] short code to minimize the form HTML to prevent wpautop interference
@@ -664,7 +574,7 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * PRO: Allow field keys in the frm-stats shortcode for fieldid=value
 * PRO: Fixed attaching file upload to entries when using single files
 
-= 1.07.05 =
+### [1.07.05](https://github.com/Strategy11/formidable-forms/releases/tag/v1.07.05)
 * Added XML import/export
 * Moved more email settings and bulk form delete to free version
 * Added form edit links to admin bar
@@ -673,11 +583,11 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * Encode email subject with frm_encode_subject hook to prevent encoding
 * PRO: Allow entries to be edited via csv import when entry ID is included
 * PRO: Expanded conditional logic for email notifications
-* PRO: Allow the frm-field-value shortcode to get the entry ID from the URL. [frm-field-value field_id=x entry_id=id]. Replace "id" with the name of the parameter in your URL
+* PRO: Allow the frm-field-value shortcode to get the entry ID from the URL. [frm-field-value field_id###x entry_idid]. Replace "id" with the name of the parameter in your URL
 * PRO: Added separate set of confirmation options for editing
 * PRO: Added option to disable visual tab on each view
 * PRO: Added 'action' parameter back to the frm_redirect_url hook
-* PRO: Added drafts parameter to view shortcode to show draft entries. [display-frm-data id=40 drafts=1]
+* PRO: Added drafts parameter to view shortcode to show draft entries. [display-frm-data id###40 drafts1]
 * PRO: Switched star ratings to icon font
 * PRO: Added multiple="multiple" into multiple file upload fields
 * PRO: Allow field keys in the exlude_fields shortcode option
@@ -707,7 +617,7 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * PRO: Added frm_jquery_themes hook for creating custom jQuery calendar themes
 * PRO: Added frm_no_data_graph hook for customizing "No Data" message for graphs
 
-= 1.07.04 =
+### [1.07.04](https://github.com/Strategy11/formidable-forms/releases/tag/v1.07.04)
 * Minor back-end styling fixes
 * PRO: Added frm_show_delete_all hook to hide the "delete all entries" button, and show by default for those with back-end entry editing capabilities
 * PRO: Fixed inserting conditional examples from the sidebar box
@@ -719,11 +629,11 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * PRO: Allow subscribers and below to add custom taxonomies to posts
 * PRO: Fixed conditional data from entries fields across multiple pages in an ajax form
 
-= 1.07.03 =
+### [1.07.03](https://github.com/Strategy11/formidable-forms/releases/tag/v1.07.03)
 * Removed auto updating from free version
 * PRO: Added secondary ordering options in Views
 * PRO: Allow newly added custom fields on the "Create posts" tab to be selected from existing options
-* PRO: Allow html=1 and show_filename=1 to be used together for showing a filename linking to the file
+* PRO: Allow html###1 and show_filename1 to be used together for showing a filename linking to the file
 * PRO: If not using show_filename=1, default to show the file type icon or non-image file types
 * PRO: Fixed ordering in a view set to show a single entry
 * PRO: Fixed adding new filters to views
@@ -734,7 +644,7 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * PRO: In a view, use limit over page size if limit is lower
 * PRO: Fixed going backwards in a multi-paged form, when 2 or more pages are skipped at a time
 
-= 1.07.02 =
+### [1.07.02](https://github.com/Strategy11/formidable-forms/releases/tag/v1.07.02)
 * Added form switcher to nav and other UI enhancements
 * Remove slashes from a single entry retrieved from cache
 * Remove slashes added by ajax before saving to db
@@ -755,10 +665,10 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * PRO: Switch field IDs in email settings in duplicated form
 * PRO: Added option to save drafts
 * PRO: Added phone format option, including an input mask if format is not a regular expression
-* PRO: Added exclude_fields to the form shortcode. Ex [formidable id=2 exclude_fields="25,26"]
+* PRO: Added exclude_fields to the form shortcode. Ex [formidable id###2 exclude_fields"25,26"]
 * PRO: Added styling reset button on styling page
 * PRO: Switch "Custom Display" terminology to "View"
-* PRO: Allow any values in the form shortcode to set $_GET values. [formidable id=x get="something"]. Then use [get param="get"] in a field
+* PRO: Allow any values in the form shortcode to set $_GET values. [formidable id###x get"something"]. Then use [get param="get"] in a field
 * PRO: Allow the field value to be used to filter data from entries values in custom displays, statistics, and graphs
 * PRO: Increased CSV export efficiency
 * PRO: Allow for quotation marks in values used to get stats in the frm-stats shortcode
@@ -787,7 +697,7 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * PRO: Added show_filename option to file upload fields
 * PRO: Allow dropdown data from entries fields to be set as read only
 
-= 1.07.01 =
+### [1.07.01](https://github.com/Strategy11/formidable-forms/releases/tag/v1.07.01)
 * Added for attribute to labels for newly created fields
 * Fixed issue with slashes showing in content if retrieved from cache
 * Prevent multiple checks for updates when pro is authorized, but free version is installed
@@ -800,7 +710,7 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * PRO: Allow autocomplete selection to be unselected on front-end
 * PRO: Fixed conditional validation for fields in a conditional section heading beyond page 1
 
-= 1.07.0 =
+### [1.07.0](https://github.com/Strategy11/formidable-forms/releases/tag/v1.07.0)
 * Submit build form in one input with ajax to prevent max_input_vars limitations
 * Load fields on the build page with ajax for long forms and other form builder page optimization
 * Added submit button to customizable HTML
@@ -828,7 +738,7 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * PRO: Added "confirm" option to frm-entry-links shortocode that is used before an entry is deleted
 * PRO: Copy conditional logic and field calculations into duplicated forms
 * PRO: Allow clickable=1 and images to be used with Google formresults shortcode
-* PRO: Allow [25 show="user_email"] for data from entries fields to get user info from the user ID from the linked form, and [25 show="30" show_info="user_email"] to get values from a field linked through 2 data from entries fields
+* PRO: Allow [25 show###"user_email"] for data from entries fields to get user info from the user ID from the linked form, and [25 show"30" show_info="user_email"] to get values from a field linked through 2 data from entries fields
 * PRO: Allow tags fields to be used with hierarchal taxonomies
 * PRO: No longer require fields in a conditionally hidden section heading
 * PRO: Added option for frmThemeOverride_frmAfterSubmit function for custom javascript after ajax submit
@@ -844,12 +754,12 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * PRO: Removed "custom display" from the post type options on the "create posts" settings tab
 * PRO: Allow multiple values to be imported into an entry via csv in a multi-select dropdown field
 
-= 1.06.11 =
+### [1.06.11](https://github.com/Strategy11/formidable-forms/releases/tag/v1.06.11)
 * Added styling classes: two thirds, scroll box, columns (frm_first_two_thirds, frm_last_two_thirds, frm_scroll_box, frm_total, frm_two_col, frm_three_col, frm_four_col, )
 * Added container in default html for new check box and radio fields
 * PRO: Added a print link on the view entry page in the back-end
 * PRO: Added support for category stats in the frm-stats shortcode
-* PRO: Allow the edit link to dynamically get the id of the entry when used on a post page. Ex: [frm-entry-edit-link id=current label="Edit" page_id=92]
+* PRO: Allow the edit link to dynamically get the id of the entry when used on a post page. Ex: [frm-entry-edit-link id###current label"Edit" page_id=92]
 * PRO: Allow non-admin users to see the user ID drop down in the back-end when they have permission to edit entries from the back-end
 * PRO: Added frm_data_sort hook for sorting data from entries options
 * PRO: Allow dropdown fields to be selected as the post title
@@ -857,10 +767,10 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * PRO: When importing templates, use the path shown in the box whether it has been saved or not
 * PRO: Fixed admin-only fields to still save to created post
 * PRO: Fixed issue preventing required multiple file upload fields from being required
-* PRO: Updated input mask script to 1.3.1
+* PRO: Updated input mask script to [1.3.1](https://github.com/Strategy11/formidable-forms/releases/tag/v1.3.1)
 * PRO: Added hooks for entries in the admin: frm_row_actions, frm_edit_entry_publish_box, frm_show_entry_publish_box, frm_edit_entry_sidebar
 
-= 1.06.10 =
+### [1.06.10](https://github.com/Strategy11/formidable-forms/releases/tag/v1.06.10)
 * Allow the usage of any html attributes inside the [input] tag in the customizable HTML
 * PRO: Added "Chosen" autocomplete to dropdown fields
 * PRO: Added automatic width option to data from entries fields
@@ -870,7 +780,7 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * PRO: Resolved conflict between ajax submit and plugins/themes with whitespace in php files
 * PRO: Fixed template export to properly serialize and escape for multiple choice fields
 
-= 1.06.09 =
+### [1.06.09](https://github.com/Strategy11/formidable-forms/releases/tag/v1.06.09)
 * DROPPED PHP4 SUPPORT. Do not update if you run PHP4.
 * Added the "create template" link into the free version
 * Added quotes around the menu position number to minimize menu position conflicts with other plugins
@@ -883,7 +793,7 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * PRO: Added unique error message into global and field settings
 * PRO: Added option to limit by ranges in the frm-stats shortcode. Ex: [frm-stats id=50 '-1 month'<45<'-3 days']
 * PRO: Automatically strip javascript before displaying entries through a custom display
-* PRO: Added striphtml=1 and keepjs=1 options for use in custom displays
+* PRO: Added striphtml###1 and keepjs1 options for use in custom displays
 * PRO: Added option to get the field description with [125 show="description"]
 * PRO: Added separate value column on entries page
 * PRO: Added link to delete entry only and leave post
@@ -914,7 +824,7 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * PRO: Fixed option to copy forms to other sites in multi-site installs, so they will no longer be copied when the box is unchecked
 * PRO: Fixed admin-only fields to not validate for users who can't see the field
 
-= 1.06.08 =
+### [1.06.08](https://github.com/Strategy11/formidable-forms/releases/tag/v1.06.08)
 * Changed class names on action links on the form listing table to prevent conflicts with themes and other plugins
 * PRO: Filter shortcodes if any in the login message
 * PRO: Fixed order of fields shown in default email notification
@@ -925,14 +835,14 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * PRO: Fixed conditional logic on email notifications to make sure they are stopped when they should be
 * PRO: Automatically send emails to the saved value of a field when used in the "Email recipients" box without requiring show=field_value
 
-= 1.06.07 =
+### [1.06.07](https://github.com/Strategy11/formidable-forms/releases/tag/v1.06.07)  
 * Added mb_split fallback for servers without mbstring installed
 * Changed menu position to prevent override from other plugins and themes
 * PRO: Fixed issue with the form shortcode showing if using multiple forms with default values on the same page
 * PRO: Fixed javascript error in frm-entry-update-field shortcode
 * PRO: Send the "read more" link to the single entry page instead of showing in-place for dynamic displays
 
-= 1.06.06 =
+### [1.06.06](https://github.com/Strategy11/formidable-forms/releases/tag/v1.06.06)
 * Removed generic classes from input fields like "text" and "date"
 * Correctly jump down to form with error messages
 * Added frm_setup_new_entry hook for overriding defaults for all fields in one hook when presenting a blank form
@@ -946,9 +856,9 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * PRO: Added multiple-image upload
 * PRO: Added unlimited emails per form and conditional routing
 * PRO: Use the "customized content" box to save the actual content if no field is selected for the post content
-* PRO: Added frm-field-value shortcode to get the value of a field in another form. [frm-field-value field_id=25 user_id=current entry_id=140 ip=1]
-* PRO: Added frm-show-entry shortcode to show an entry in the same formats as the default email message. [frm-show-entry id=100 plain_text=1 user_info=1]
-* PRO: Added frm_set_get shortcode to artificially set $_GET values for use in custom displays or dynamic defaults values. [frm-set-get any_param="any value" another="value 2"] This can be fetched with [get param="any_param"] [get param="another"]
+* PRO: Added frm-field-value shortcode to get the value of a field in another form. [frm-field-value field_id###25 user_idcurrent entry_id###140 ip1]
+* PRO: Added frm-show-entry shortcode to show an entry in the same formats as the default email message. [frm-show-entry id###100 plain_text1 user_info=1]
+* PRO: Added frm_set_get shortcode to artificially set $\_GET values for use in custom displays or dynamic defaults values. [frm-set-get any_param\#\#\#"any value" another"value 2"] This can be fetched with [get param###"any_param"] [get param"another"]
 * PRO: Extended conditional logic for displaying fields to include text, number, email, website, and time fields
 * PRO: Added support for the [frm-search] shortcode into the [formresults] table
 * PRO: Updated NicEdit
@@ -977,7 +887,7 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * PRO: Fixed double filtering forms if inserted in the dynamic box of a custom display used for posts
 * PRO: Fixed page size and limit overriding single entry displays
 
-= 1.06.05 =
+### [1.06.05](https://github.com/Strategy11/formidable-forms/releases/tag/v1.06.05)
 * Fixed WP 3.4 layout issues with missing sidebars
 * Added responsive css for WP 3.4 to keep the form builder sidebar box showing on small screens
 * Updated the delete option trash can to appear more easily
@@ -988,7 +898,7 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * PRO: Fixed delete link to work on pages without forms
 * PRO: Added support to import checkbox field values in multiple columns
 
-= 1.06.04 =
+### [1.06.04](https://github.com/Strategy11/formidable-forms/releases/tag/v1.06.04)
 * Moved form processing to avoid multiple submissions when some plugins are activated and remove the page before redirection
 * Removed BuddyPress filters from the email notifications to avoid forcing them to send from noreply@domain.com
 * Allow blank required indicator and to email in forms
@@ -1009,7 +919,7 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * PRO: Allow field IDs as dynamic default values ie [25]. This will ONLY work when the value has just been posted.
 * PRO: Added the display object into the args array to pass to the frm_where_filter hook
 * PRO: Allow for negative numbers in calculations
-* PRO: Allow for unlimited GET parameter setting in the custom display shortcode. [display-frm-data id=2 whatever=value whatever2=value2]
+* PRO: Allow for unlimited GET parameter setting in the custom display shortcode. [display-frm-data id###2 whatevervalue whatever2=value2]
 * PRO: Switched phone field to HTML5 "tel" input type
 * PRO: Added a frm_cookie_expiration hook to change the cookie expiration time
 * PRO: Added cookie expiration option
@@ -1023,7 +933,7 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * PRO: Added basic support for data from entries csv import
 * PRO: Show image for data from entries fields using upload fields
 
-= 1.06.03 =
+### [1.06.03](https://github.com/Strategy11/formidable-forms/releases/tag/v1.06.03)
 * Added option to not store entries in the database from a specific form
 * Added option to skip Akismet spam check for logged in users
 * The forms, entries, and custom display page columns that are shown and entries per page are now customizable for those running at least v3.1 of WordPress
@@ -1037,17 +947,17 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * PRO: Removed a vulnerable Open Flash Charts file. If you do not update, be sure to REMOVE THIS FILE! (pro/js/ofc-library/ofc_upload_image.php)
 * PRO: Added option to use a separate value for the radio, checkbox, and select choices
 * PRO: Added option to use dynamic default values for radio, checkbox, dropdown, and user ID fields
-* PRO: Added option to use Google charts and automatically fall back to them on mobile devices [frm-graph id=x type=bar google=1]
+* PRO: Added option to use Google charts and automatically fall back to them on mobile devices [frm-graph id###x typebar google=1]
 * PRO: Added data from entry field support to graphs
-* PRO: Added option to use Google tables for easy pagination and sorting [formresults id=x google=1]
-* PRO: Added edit link option to formresults shortcode. [formresults id=x edit_link="Edit" page_id=5]
+* PRO: Added option to use Google tables for easy pagination and sorting [formresults id###x google1]
+* PRO: Added edit link option to formresults shortcode. [formresults id###x edit_link"Edit" page_id=5]
 * PRO: Added date support to built-in calculations for date1-date2 types of calculations
 * PRO: Added checking for disabled used dates for fields set as post fields in date picker for dates marked as unique
 * PRO: Added not_like, less_than, and greater_than options to conditional custom display statements. Ex [if 25 not_like="hello"]...[/if 25]
 * PRO: Allow [if created-at less_than='-1 month'] type of statements in the custom display for date fields, created-at, and updated-at
 * PRO: Added option to display the field label in custom displays. Ex [25 show="field_label"]
 * PRO: Added option to turn off auto paragraphs for paragraph fields. Ex [25 wpautop=0]
-* PRO: Added options to custom display shortcode: [display-frm-data id=5 get="whatever" get_value="value"]. This allows the use of [get param="whatever"] in the custom display.
+* PRO: Added options to custom display shortcode: [display-frm-data id###5 get"whatever" get_value###"value"]. This allows the use of [get param"whatever"] in the custom display.
 * PRO: Updated the frm-entry-links shortcode to use show_delete with type=list
 * PRO: Updated custom display where options to fetch entries more accurately when "not like" and "not equal to" are used
 * PRO: Fixed image upload naming for uploads with numeric names like 1.png
@@ -1057,7 +967,7 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * PRO: Switched out the case-sensitive sorting in data from entries fields
 * PRO: If a custom display has detail link parameters defined, ONLY allow those parameters
 * PRO: Added an input mask option available via the $frm_input_masks global and 'frm_input_masks' hook
-* PRO: Added type=maximum and type=minimum to the frm-stats shortcode
+* PRO: Added type###maximum and typeminimum to the frm-stats shortcode
 * PRO: Month and year dropdowns added to custom display calendar, along with a few styling changes
 * PRO: Get the custom display calendar month and day names from WordPress
 * PRO: Allow dynamic default values in HTML field type
@@ -1080,10 +990,10 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * PRO: Fixed update checking to not cause a slow down if the formidablepro.com server is down
 * PRO: Updated the user_id parameter for the display-frm-data shortcode to be used even if there's no user ID field selected in the where options for that custom display
 * PRO: Added DOING_AJAX flags for WPML compatibility
-* PRO: Added time_ago=1 option for displaying dates. Ex: [created-at time_ago=1] or [25 time_ago=1]
+* PRO: Added time_ago###1 option for displaying dates. Ex: [created-at time_ago1] or [25 time_ago=1]
 * PRO: Updated file upload process to change the file path before uploading instead of moving the files afterwards
 
-= 1.06.02 =
+### [1.06.02](https://github.com/Strategy11/formidable-forms/releases/tag/v1.06.02)
 * Fixed selection of dropdowns on the form builder page in Chrome
 * Added WPML integration. Requires the add-on available from WPML. Pro version includes a quick translation page.
 * Added option to use the custom menu name site wide in multi-site installs
@@ -1096,8 +1006,8 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * PRO: Added option to restrict the file types uploaded in file upload fields
 * PRO: Added export to XML and export to CSV to bulk action dropdowns
 * PRO: Added [user_id] dynamic default value
-* PRO: Allow dynamic dates in the frm-graph shortcode. Ex [frm-graph id=x x_axis="created_at" x_start="-1 month"]
-* PRO: Added bar_flat to the graphs. Ex [frm-graph id=x type="bar_flat"]
+* PRO: Allow dynamic dates in the frm-graph shortcode. Ex [frm-graph id###x x_axis"created_at" x_start="-1 month"]
+* PRO: Added bar_flat to the graphs. Ex [frm-graph id###x type"bar_flat"]
 * PRO: Dynamically hide some x-axis labels if there are too many for the width of the graph. Note: Does not work with percentage widths
 * PRO: Added the option to select an end date in calendar custom displays for displaying multiple day events
 * PRO: Added 'frm_show_entry_dates' filter for customizing which dates an entry should show on
@@ -1109,7 +1019,7 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * PRO: Make a guess at which fields should match up on CSV import
 * PRO: Added option to resend the email notifications when entry is updated. (This will be expanded when conditional email routing is added.)
 * PRO: Don't send autoresponder message when importing
-* PRO: Allow an entry id in the frm-stats shortcode. Ex [frm-stats id=25 entry_id=100]. Display a star vote as stars for a single entry in a custom display with [frm-stats id=25 type=star entry_id=[id]]
+* PRO: Allow an entry id in the frm-stats shortcode. Ex [frm-stats id###25 entry_id100]. Display a star vote as stars for a single entry in a custom display with [frm-stats id###25 typestar entry_id=[id]]
 * PRO: Allow multiple star ratings for the same field on the same page
 * PRO: Fixed post options that would not deselect
 * PRO: Fixed issue causing the wrong conditional logic row to sometimes be removed
@@ -1125,18 +1035,18 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * PRO: Updated conditional logic for those who set up the logic before v1.6 and haven't clicked the update button in their forms
 * PRO: Corrected file upload naming for the various sizes of an upload with the same name as an existing upload
 
-= 1.06.01 =
+### [1.06.01](https://github.com/Strategy11/formidable-forms/releases/tag/v1.06.01)
 * Added option to customize the admin menu name
 * Added instructions to publish forms if no entries exist
 * Free only: Fixed form settings page to allow tabs to work
 * Free only: Updated styling to align multiple checkboxes/radio buttons when the label is aligned left
 * PRO: Fixed issue with the default value getting lost from a hidden field when updating from the form settings page
 * PRO: Fixed conditionally hidden fields that are already considered hidden if inside a collapsible section
-* PRO: Fixed graphs using x_axis=created_at and user_id=x
+* PRO: Fixed graphs using x_axis###created_at and user_idx
 * PRO: Fixed multiple paged forms with more than two pages
 * PRO: Validate HTML for checkbox taxonomies
 
-= 1.06 =
+### 1.06
 * User Interface improvements
 * Increased security and optimization
 * Moved the "automatic width" check box for drop-down select fields to free version
@@ -1155,17 +1065,17 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * PRO: Added option in WP 3.3 to use Tiny MCE as the rich text editor
 * PRO: Added "format" option to date fields. Example [25 format='Y-m-d']
 * PRO: Added star rating option to scale fields
-* PRO: Added star type to [frm-stats] shortcode to display the average in star format. Example [frm-stats id=5 type=star]
+* PRO: Added star type to [frm-stats] shortcode to display the average in star format. Example [frm-stats id###5 typestar]
 * PRO: Added option to format individual radio and checkbox fields in one or multiple rows
 * PRO: Added server-side validation for dates inserted into date fields
 * PRO: Allow multiple fields for the same taxonomy/category
 * PRO: Allow a taxonomy/category to be selected for data from entries fields. This makes cascading category fields possible.
 * PRO: Added [post_author_email] dynamic default value
 * PRO: Added a frm_notification_attachment hook
-* PRO: Added clickable and user_id options to the formresults shortcode. ex [formresults id=x clickable=1 user_id=current]
+* PRO: Added clickable and user_id options to the formresults shortcode. ex [formresults id###x clickable1 user_id=current]
 * PRO: Improved field calculations to extract a price from the end of an option
 * PRO: Added the option to specify how many decimal places to show, and what characters to use for the decimal and thousands separator. For example, to format USD:
-$[25 decimal=2 dec_point='.' thousands_sep=',']
+$[25 decimal###2 dec_point'.' thousands_sep=',']
 * PRO: Added a message before the user is redirected, along with a filter to change it (frm_redirect_msg).
 * PRO: Added a button to delete ALL entries in a form at the bottom of the entries page
 * PRO: Added a password field type
@@ -1193,13 +1103,13 @@ $[25 decimal=2 dec_point='.' thousands_sep=',']
 * PRO: Don't strip out desired backslashes
 * PRO: Updated to latest version of datepicker javascript
 
-= 1.05.05 =
+### [1.05.05](https://github.com/Strategy11/formidable-forms/releases/tag/v1.05.05)
 * Added Dutch translation (Eric Horstman)
 * Fixed "Customize Form HTML" link issues some users were having
 * PRO: Load jQuery UI javascript for datepicker
 * PRO: Fixed custom display "where" options to work with multiple where rows
 
-= 1.05.04 =
+### [1.05.04](https://github.com/Strategy11/formidable-forms/releases/tag/v1.05.04)
 * Bulk edit and add radio, select, and check box choices
 * Added option to turn off HTML5 use in front-end forms
 * Added option to turn off user tracking
@@ -1219,7 +1129,7 @@ $[25 decimal=2 dec_point='.' thousands_sep=',']
 * PRO: Fixed calendar to allow fields mapped to a post to be used as the date field
 * PRO: Fixed conditionally hidden field options to work with post category and post status fields
 * PRO: Fixed custom displays to work automatically with pages instead of just post and custom post types
-* PRO: Added functionality to frm-stats shortcode to work with posts and adds where options in key/id=value pairs. ex: [frm-stats id=x 25=hello] where 25 is the field ID and "Hello" is the value the other field in the form should have in order to display
+* PRO: Added functionality to frm-stats shortcode to work with posts and adds where options in key/id###value pairs. ex: [frm-stats idx 25=hello] where 25 is the field ID and "Hello" is the value the other field in the form should have in order to display
 * PRO: Updated datepicker and timepicker to latest versions
 * PRO: Fixed bug preventing images for saving correctly if the form is set to create a post and the upload field is not set as a post field
 * PRO: Added an "Insert Position" option to the custom display. This will prevent the custom display from being loaded multiple times per page, but will allow users to set when it shows up for themes like Thesis
@@ -1227,13 +1137,13 @@ $[25 decimal=2 dec_point='.' thousands_sep=',']
 * PRO: Added a limit to the number of entries that show in the entry drop-down in places like the custom display page to prevent memory errors
 * PRO: Fixed field options to work better with symbols like &reg; in graphs
 * PRO: Automatically open collapsible heading if there is an error message inside it
-* PRO: Added type=deviation to the frm-stats shortcode. Example: [frm-stats id=x type=deviation]
+* PRO: Added type###deviation to the frm-stats shortcode. Example: [frm-stats idx type=deviation]
 * PRO: Updated calculations to work with radio, scale, and drop-down fields
 * PRO: Fixed default values for check boxes
 * PRO: Added CSV export format option
 * PRO: Fixed scale field reports to show all options
 
-= 1.05.03 =
+### [1.05.03](https://github.com/Strategy11/formidable-forms/releases/tag/v1.05.03)
 * Updated user role options to work more reliably with WP 3.1
 * Added functionality for "Fit Select Boxes into SideBar" checkbox and field size in widget in free version
 * Moved reCaptcha error message to individual field options
@@ -1249,12 +1159,12 @@ $[25 decimal=2 dec_point='.' thousands_sep=',']
 * PRO: Updated file upload indicator to show up sooner
 * PRO: Added ajax delete to [deletelink] shortcode
 * PRO: Updated admin only fields to show for administrators on the front-end
-* PRO: Added more attributes to the [display-frm-data] shortcode: limit="5", page_size="5", order_by="rand" or field ID, order="DESC" or "ASC"
+* PRO: Added more attributes to the [display-frm-data] shortcode: limit###"5", page_size"5", order_by###"rand" or field ID, order"DESC" or "ASC"
 * PRO: Fixed custom display bulk delete
 * PRO: Updated WPMU copy features to work with WP 3.0+
 * PRO: Switched the email "add/or" drop-down to check boxes
 * PRO: Added box for message to be displayed if there are no entries for a custom display
-* PRO: Added ajax edit options with [frm-entry-edit-link id=x label=Edit cancel=Cancel class='add_classes' page_id= prefix='frm_edit_' form_id=>y]. Also works with [editlink location=front] in custom displays.
+* PRO: Added ajax edit options with [frm-entry-edit-link id###x labelEdit cancel###Cancel class'add_classes' page_id### prefix'frm_edit_' form_id###>y]. Also works with [editlink locationfront] in custom displays.
 * PRO: Moved styling options into a tab on the settings page
 * PRO: Added limited "data from entries" options to the custom display "where" row. Entry keys or IDs can be used
 * PRO: Added unique validation for fields set as post fields
@@ -1267,7 +1177,7 @@ $[25 decimal=2 dec_point='.' thousands_sep=',']
 * PRO: Added functionality to use taxonomy fields in where options in custom displays
 * PRO: Added option to use [get param=CUSTOM] in custom displays
 
-= 1.05.02 =
+### [1.05.02](https://github.com/Strategy11/formidable-forms/releases/tag/v1.05.02)
 * Fixed issue with PHP4 that was causing the field options to get cleared out and only show a "0" or "<" instead of the field
 * Prevent javascript from getting loaded twice
 * Updated stylesheets for better looking left aligned field labels. In the Pro version, setting the global labels to one location and setting a single field to another will keep the field description and error messages aligned.
@@ -1275,10 +1185,10 @@ $[25 decimal=2 dec_point='.' thousands_sep=',']
 * PRO: Show the linked image instead of the url when a file is linked in a "just show it" data from entries field
 * PRO: Added functionality for ordering by post fields in a custom display
 
-= 1.05.01 =
+### [1.05.01](https://github.com/Strategy11/formidable-forms/releases/tag/v1.05.01)  
 * PRO: Fix custom display settings for posts
 
-= 1.05.0 =
+### [1.05.0](https://github.com/Strategy11/formidable-forms/releases/tag/v1.05.0)
 * Moved a form widget from Pro into the free version
 * Updated some templates with fields aligned in a row
 * Moved error messages underneath input fields
@@ -1292,26 +1202,26 @@ $[25 decimal=2 dec_point='.' thousands_sep=',']
 * PRO: Added hierarchy to post categories
 * PRO: Added a loading indicator while files are uploading
 * PRO: Added a `[default-message]` shortcode for use in the email message. Now you can add to the default message without completely replacing it
-* PRO: Added default styling to the formresults shortcode, as well as additional shortcode options: `[formresults id=x style=1 no_entries="No Entries Found" fields="25,26,27"]`
+* PRO: Added default styling to the formresults shortcode, as well as additional shortcode options: `[formresults id###x style1 no_entries###"No Entries Found" fields"25,26,27"]`
 * PRO: Added localizations options to calendar
 * PRO: Fixed collapsible Section headings to work with updated HTML
 * PRO: Added functionality to admin search to check data from entries fields
 * PRO: Added start and end time options for time fields
-* PRO: Added 'type' to `[frm-graph]` shortcode to force 'pie' or 'bar': `[frm-graph id=x type=pie]`
+* PRO: Added 'type' to `[frm-graph]` shortcode to force 'pie' or 'bar': `[frm-graph id###x typepie]`
 * PRO: Added post_id option to the `[frm-search]` shortcode. This will set the action link for the search form. Ex: `[frm-search post_id=3]`
 * PRO: Fixed `[frm-search]` shortcode for use on dynamic custom displays. If searching on a detailed entry page, the search will return to the listing page.
 * PRO: Updated post fields to work in "data from entries" fields
 
-= 1.04.07 =
+### [1.04.07](https://github.com/Strategy11/formidable-forms/releases/tag/v1.04.07)
 * Minor bug fixes
 * PRO: Fixed bug preventing some hidden field values from being saved
 * PRO: Removed PHP warnings some users were seeing on the form entries page
 
-= 1.04.06 =
+### [1.04.06](https://github.com/Strategy11/formidable-forms/releases/tag/v1.04.06)
 * Additional back-end XHTML compliance
 * PRO: Fixed conditionally hidden fields bug some users were experiencing
 
-= 1.04.05 =
+### [1.04.05](https://github.com/Strategy11/formidable-forms/releases/tag/v1.04.05)
 * Added duplicate entry checks
 * Added a checkbox to mark fields required
 * Moved the duplicate field option into free version
