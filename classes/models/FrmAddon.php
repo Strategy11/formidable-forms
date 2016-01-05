@@ -212,7 +212,7 @@ class FrmAddon {
 			$license_data = $this_plugin->send_mothership_request( 'deactivate_license', $license );
 			if ( is_array( $license_data ) && $license_data['license'] == 'deactivated' ) {
 				$response['success'] = true;
-				$response['message'] = __( 'That license was removed successfully', 'helpdesk' );
+				$response['message'] = __( 'That license was removed successfully', 'formidable' );
 			} else {
 				$response['message'] = __( 'There was an error deactivating your license.', 'formidable' );
 			}

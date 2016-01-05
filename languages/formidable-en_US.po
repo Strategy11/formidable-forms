@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Formidable v2.0.19\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-12-20\n"
-"PO-Revision-Date: 2016-01-05 20:06:21+0000\n"
+"PO-Revision-Date: 2016-01-05 21:07:19+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -4177,12 +4177,12 @@ msgstr ""
 msgid "visitors who are not logged in"
 msgstr ""
 
-#: pro/classes/controllers/FrmProFieldsController.php:427
+#: pro/classes/controllers/FrmProFieldsController.php:426
 #@ formidable
 msgid "Option Label"
 msgstr ""
 
-#: pro/classes/controllers/FrmProFieldsController.php:428
+#: pro/classes/controllers/FrmProFieldsController.php:427
 #: pro/classes/controllers/FrmProFormsController.php:251
 #@ formidable
 msgid "Saved Value"
@@ -4652,7 +4652,7 @@ msgstr ""
 msgid "Entry updated date"
 msgstr ""
 
-#: pro/classes/controllers/FrmProFieldsController.php:512
+#: pro/classes/controllers/FrmProFieldsController.php:511
 #: pro/classes/views/frmpro-fields/field-values.php:10
 #@ formidable
 msgid "Anything"
@@ -4936,7 +4936,7 @@ msgid "Your License Key was invalid"
 msgstr ""
 
 #: classes/helpers/FrmFormsHelper.php:252
-#: classes/models/FrmDb.php:653
+#: classes/models/FrmDb.php:654
 #@ formidable
 msgid "Sending"
 msgstr ""
@@ -8162,7 +8162,7 @@ msgstr ""
 msgid "There are no matching fields. Please check your formresults shortcode to make sure you are using the correct form and field IDs."
 msgstr ""
 
-#: pro/classes/controllers/FrmProFieldsController.php:497
+#: pro/classes/controllers/FrmProFieldsController.php:496
 #: pro/classes/views/frmpro-fields/options-form-before.php:31
 #@ formidable
 msgid "Select a taxonomy on the Form Actions tab of the Form Settings page"
