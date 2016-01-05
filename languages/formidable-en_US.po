@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Formidable v2.0.19\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-12-20\n"
-"PO-Revision-Date: 2016-01-05 21:07:19+0000\n"
+"PO-Revision-Date: 2016-01-05 22:09:20+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -1861,10 +1861,9 @@ msgstr ""
 msgid "Margin"
 msgstr ""
 
-#: classes/models/FrmEDD_SL_Plugin_Updater.php:236
+#: classes/models/FrmEDD_SL_Plugin_Updater.php:242
 #: classes/views/styles/_field-colors.php:10
 #: classes/views/styles/_form-messages.php:7
-#@ edd
 #@ formidable
 msgid "Error"
 msgstr ""
@@ -4177,12 +4176,12 @@ msgstr ""
 msgid "visitors who are not logged in"
 msgstr ""
 
-#: pro/classes/controllers/FrmProFieldsController.php:426
+#: pro/classes/controllers/FrmProFieldsController.php:427
 #@ formidable
 msgid "Option Label"
 msgstr ""
 
-#: pro/classes/controllers/FrmProFieldsController.php:427
+#: pro/classes/controllers/FrmProFieldsController.php:428
 #: pro/classes/controllers/FrmProFormsController.php:251
 #@ formidable
 msgid "Saved Value"
@@ -4652,7 +4651,7 @@ msgstr ""
 msgid "Entry updated date"
 msgstr ""
 
-#: pro/classes/controllers/FrmProFieldsController.php:511
+#: pro/classes/controllers/FrmProFieldsController.php:512
 #: pro/classes/views/frmpro-fields/field-values.php:10
 #@ formidable
 msgid "Anything"
@@ -4929,7 +4928,7 @@ msgstr ""
 msgid "An update is available, but your license is %s."
 msgstr ""
 
-#: classes/models/FrmAddon.php:250
+#: classes/models/FrmAddon.php:253
 #: pro/classes/controllers/FrmUpdatesController.php:356
 #@ formidable
 msgid "Your License Key was invalid"
@@ -5305,7 +5304,7 @@ msgstr ""
 msgid "Views"
 msgstr ""
 
-#: classes/models/FrmAddon.php:267
+#: classes/models/FrmAddon.php:270
 #: pro/classes/controllers/FrmUpdatesController.php:352
 #, php-format
 #@ formidable
@@ -8069,39 +8068,39 @@ msgstr ""
 msgid "Your server is missing the simplexml_import_dom function"
 msgstr ""
 
-#: classes/models/FrmEDD_SL_Plugin_Updater.php:236
-#@ edd
+#: classes/models/FrmEDD_SL_Plugin_Updater.php:242
+#@ formidable
 msgid "You do not have permission to install plugin updates"
 msgstr ""
 
-#: classes/models/FrmAddon.php:159
+#: classes/models/FrmAddon.php:162
 #@ formidable
 msgid "Oops! You forgot to enter your license number."
 msgstr ""
 
-#: classes/models/FrmAddon.php:179
-#: classes/models/FrmAddon.php:188
+#: classes/models/FrmAddon.php:182
+#: classes/models/FrmAddon.php:191
 #@ formidable
 msgid "That license is invalid"
 msgstr ""
 
-#: classes/models/FrmAddon.php:215
-#@ helpdesk
+#: classes/models/FrmAddon.php:218
+#@ formidable
 msgid "That license was removed successfully"
 msgstr ""
 
-#: classes/models/FrmAddon.php:217
+#: classes/models/FrmAddon.php:220
 #@ formidable
 msgid "There was an error deactivating your license."
 msgstr ""
 
-#: classes/models/FrmAddon.php:252
+#: classes/models/FrmAddon.php:255
 #, php-format
 #@ formidable
 msgid "You had an error communicating with Formidable Pro's API. %1$sClick here%2$s for more information."
 msgstr ""
 
-#: classes/models/FrmAddon.php:257
+#: classes/models/FrmAddon.php:260
 #@ formidable
 msgid "You had an HTTP error connecting to Formidable Pro's API"
 msgstr ""
@@ -8162,7 +8161,7 @@ msgstr ""
 msgid "There are no matching fields. Please check your formresults shortcode to make sure you are using the correct form and field IDs."
 msgstr ""
 
-#: pro/classes/controllers/FrmProFieldsController.php:496
+#: pro/classes/controllers/FrmProFieldsController.php:497
 #: pro/classes/views/frmpro-fields/options-form-before.php:31
 #@ formidable
 msgid "Select a taxonomy on the Form Actions tab of the Form Settings page"
@@ -8208,18 +8207,18 @@ msgstr ""
 msgid "Compact"
 msgstr ""
 
-#: classes/models/FrmAddon.php:182
+#: classes/models/FrmAddon.php:185
 #@ formidable
 msgid "That license is expired"
 msgstr ""
 
-#: classes/models/FrmAddon.php:98
+#: classes/models/FrmAddon.php:101
 #, php-format
 #@ formidable
 msgid "Your %1$s license key is missing. Please add it on the %2$slicenses page%3$s."
 msgstr ""
 
-#: classes/models/FrmAddon.php:184
+#: classes/models/FrmAddon.php:187
 #@ formidable
 msgid "That license has been used too many times"
 msgstr ""
@@ -8342,12 +8341,12 @@ msgstr ""
 msgid "This site has been previously authorized to run Formidable Forms.<br/>%1$sInstall Formidable Pro%2$s or %3$sdeauthorize%4$s this site to continue running the free version and remove this message."
 msgstr ""
 
-#: classes/models/FrmAddon.php:176
+#: classes/models/FrmAddon.php:179
 #@ formidable
 msgid "Your license has been activated. Enjoy!"
 msgstr ""
 
-#: classes/models/FrmAddon.php:186
+#: classes/models/FrmAddon.php:189
 #@ formidable
 msgid "Oops! That is the wrong license number for this plugin."
 msgstr ""
