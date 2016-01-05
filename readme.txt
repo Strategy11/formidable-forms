@@ -3,8 +3,8 @@ Contributors: sswells, srwells, jamie.wahlin
 Donate link: http://formidablepro.com/donate
 Tags: admin, AJAX, captcha, contact, contact form, database, email, feedback, form, forms, javascript, jquery, page, plugin, poll, Post, spam, survey, template, widget, wpmu, form builder
 Requires at least: 3.6
-Tested up to: 4.3.1
-Stable tag: 2.0.17
+Tested up to: 4.4
+Stable tag: 2.0.19
 
 Beautiful forms in 60 seconds. The WordPress form builder that enables you to create forms with a simple drag-and-drop interface and in-place editing.
 
@@ -89,6 +89,29 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 [See more FAQs](http://formidablepro.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 2.0.19 =
+* Add CSV export to free version
+* Updating improvements
+* Add page with list of add-ons
+* Set up base for allowing affiliate links inside the free version
+* Deprecate the frm_csv_field_ids filter
+* **Pro Features:**
+* Add show_image=1 and add_link=1 to file upload field shortcode
+* Show draft, pending, and private posts for creator and admin in frm-entry-links shortcode
+* Make sure Number fields perform calc when shown
+* Fix graph bug
+* Fix Dynamic Field filtering in Views
+* Fix JavaScript error in repeating section
+* Fix showing errors in collapsible sections
+* Hide the end divider field when needed
+* Fix inline label for Dynamic dropdowns
+* Make LIKE logic case-insensitive in field ID shortcode
+* Make sure multiple file upload fields save on edit when all files are removed
+* Fix conditional logic issues with extra white space
+* Fix LIKE conditional logic issues with arrays and number values
+* Fix calcs with edit in-place
+* Include embedded fields in CSV export
+
 = 2.0.18 =
 * PHP 7 updates
 * Add frm_field_extra_html hook
