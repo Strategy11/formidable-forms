@@ -587,11 +587,6 @@ function frmFrontFormJS(){
 
 	/* Hide Field Functions */
 	function routeToHideFieldAndClearVal( hideFieldContainer, f ) {
-		// If field is already hidden, leave now
-		if ( fieldIsAlreadyHidden( f ) ) {
-			return;
-		}
-
 		if ( hideFieldContainer.length ) {
 			// Field is not type=hidden
 			hideFieldAndClearValue( hideFieldContainer, f );
@@ -602,18 +597,6 @@ function frmFrontFormJS(){
 			clearValueForInputs( inputs );
 		}
 		addToHideFields( f.hideContainerID, f.FormId );
-	}
-
-	function fieldIsAlreadyHidden( f ) {
-		var hidden = false;
-
-		var hiddenFields = getHiddenFields( f.FormId );
-
-		if ( hiddenFields.indexOf( f.hideContainerID ) > -1 ) {
-			hidden = true;
-		}
-
-		return hidden;
 	}
 
 	function hideFieldAndClearValue( container, f ) {
