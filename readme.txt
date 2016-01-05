@@ -91,14 +91,14 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 == Changelog ==
 = 2.0.19 =
 * Add CSV export to free version
-* Updating improvements
 * Add page with list of add-ons
 * Set up base for allowing affiliate links inside the free version
-* Deprecate the frm_csv_field_ids filter
 * **Pro Features:**
+* Updating improvements
 * Add show_image=1 and add_link=1 to file upload field shortcode
 * Show draft, pending, and private posts for creator and admin in frm-entry-links shortcode
 * Make sure Number fields perform calc when shown
+* Deprecate the frm_csv_field_ids filter
 * Fix graph bug
 * Fix Dynamic Field filtering in Views
 * Fix JavaScript error in repeating section
