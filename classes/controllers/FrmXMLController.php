@@ -345,9 +345,11 @@ class FrmXMLController {
 	* @return array $csv_fields
 	*/
 	private static function get_fields_for_csv_export( $form_id, $form ) {
+		// Phase frm_csv_field_ids out by 2.01.05
 		$csv_field_ids = apply_filters( 'frm_csv_field_ids', '', $form_id, array( 'form' => $form ) );
 
 		if ( $csv_field_ids ) {
+			 _deprecated_function( 'The frm_csv_field_ids filter', '2.0.19', 'the frm_csv_columns filter' );
 			$where = array( 'fi.type not' => FrmField::no_save_fields() );
 			$where[] = array( 'or' => 1, 'fi.form_id' => $form->id, 'fr.parent_form_id' => $form->id );
 			if ( ! is_array( $csv_field_ids ) ) {
