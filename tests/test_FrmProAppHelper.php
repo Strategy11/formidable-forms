@@ -137,6 +137,30 @@ class WP_Test_FrmProAppHelper extends FrmUnitTest {
 			'expected_where_val'	=> array(1,2,3)
 		);
 
+		// Dynamic field is equal to numeric string value
+		// If a numeric value is sent into prepare_dfe_text, it should be spit right back out because we
+		// are assuming it is an entry ID
+		$test_values[] = array(
+			'nickname'	=> 'dynamic field is equal to numeric value',
+			'where_field_key'	=> 'dynamic-field-num',
+			'where_val' => '10',
+			'where_is'	=> '=',
+			'form_key'	=> 'dynamic-field-num-form',
+			'expected_where_val'	=> '10'
+		);
+
+		// Dynamic field is equal to int
+		// If a int is sent into prepare_dfe_text, it should be spit right back out because we
+		// are assuming it is an entry ID
+		$test_values[] = array(
+			'nickname'	=> 'dynamic field is equal to int',
+			'where_field_key'	=> 'dynamic-field-num',
+			'where_val' => 10,
+			'where_is'	=> '=',
+			'form_key'	=> 'dynamic-field-num-form',
+			'expected_where_val'	=> 10
+		);
+
 		return $test_values;
 	}
 
