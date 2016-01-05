@@ -137,7 +137,6 @@ class FrmListHelper {
 	}
 
 	public function display_rows() {
-		$style = '';
 		foreach ( $this->items as $item ) {
 			echo "\n\t", $this->single_row( $item );
 		}

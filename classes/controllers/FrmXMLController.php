@@ -302,19 +302,7 @@ class FrmXMLController {
 		$form = FrmForm::getOne( $form_id );
 		$form_id = $form->id;
 
-		$where = array( 'fi.type not' => FrmField::no_save_fields() );
-		$where[] = array( 'or' => 1, 'fi.form_id' => $form->id, 'fr.parent_form_id' => $form->id );
-
-		$csv_fields = apply_filters( 'frm_csv_field_ids', '', $form_id, array( 'form' => $form ) );
-		if ( $csv_fields ) {
-			if ( ! is_array( $csv_fields ) ) {
-				$csv_fields = explode( ',', $csv_fields );
-			}
-			if ( ! empty($csv_fields) )	{
-				$where['fi.id'] = $csv_fields;
-			}
-		}
-		$form_cols = FrmField::getAll( $where, 'field_order' );
+		$form_cols = self::get_fields_for_csv_export( $form_id, $form );
 
 		$item_id = FrmAppHelper::get_param( 'item_id', 0, 'get', 'sanitize_text_field' );
 		if ( ! empty( $item_id ) ) {
@@ -345,6 +333,43 @@ class FrmXMLController {
 		}
 
 		wp_die();
+	}
+
+	/**
+	* Get the fields that should be included in the CSV export
+	*
+	* @since 2.0.19
+	*
+	* @param int $form_id
+	* @param object $form
+	* @return array $csv_fields
+	*/
+	private static function get_fields_for_csv_export( $form_id, $form ) {
+		// Phase frm_csv_field_ids out by 2.01.05
+		$csv_field_ids = apply_filters( 'frm_csv_field_ids', '', $form_id, array( 'form' => $form ) );
+
+		if ( $csv_field_ids ) {
+			 _deprecated_function( 'The frm_csv_field_ids filter', '2.0.19', 'the frm_csv_columns filter' );
+			$where = array( 'fi.type not' => FrmField::no_save_fields() );
+			$where[] = array( 'or' => 1, 'fi.form_id' => $form->id, 'fr.parent_form_id' => $form->id );
+			if ( ! is_array( $csv_field_ids ) ) {
+				$csv_field_ids = explode( ',', $csv_field_ids );
+			}
+			if ( ! empty( $csv_field_ids ) )	{
+				$where['fi.id'] = $csv_field_ids;
+			}
+			$csv_fields = FrmField::getAll( $where, 'field_order' );
+		} else {
+			$csv_fields = FrmField::get_all_for_form( $form_id, '', 'include', 'include' );
+			$no_export_fields = FrmField::no_save_fields();
+			foreach ( $csv_fields as $k => $f ) {
+				if ( in_array( $f->type, $no_export_fields ) ) {
+					unset( $csv_fields[ $k ] );
+				}
+			}
+		}
+
+		return $csv_fields;
 	}
 
 	public static function allow_mime( $mimes ) {

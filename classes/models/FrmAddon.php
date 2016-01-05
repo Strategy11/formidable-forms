@@ -69,7 +69,10 @@ class FrmAddon {
 				$api_data['item_id'] = $this->download_id;
 			}
 
-			new FrmEDD_SL_Plugin_Updater( $this->store_url, $this->plugin_file, $api_data );
+			$edd = new FrmEDD_SL_Plugin_Updater( $this->store_url, $this->plugin_file, $api_data );
+			if ( $this->plugin_folder == 'formidable/formidable.php' ) {
+				remove_filter( 'plugins_api', array( $edd, 'plugins_api_filter' ), 10, 3 );
+			}
 
 			add_filter( 'site_transient_update_plugins', array( &$this, 'clear_expired_download' ) );
 		}
@@ -212,7 +215,7 @@ class FrmAddon {
 			$license_data = $this_plugin->send_mothership_request( 'deactivate_license', $license );
 			if ( is_array( $license_data ) && $license_data['license'] == 'deactivated' ) {
 				$response['success'] = true;
-				$response['message'] = __( 'That license was removed successfully', 'helpdesk' );
+				$response['message'] = __( 'That license was removed successfully', 'formidable' );
 			} else {
 				$response['message'] = __( 'There was an error deactivating your license.', 'formidable' );
 			}

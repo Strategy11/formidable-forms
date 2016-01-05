@@ -1048,6 +1048,33 @@ Jam Band, Electronic, Electronica, JamTronica, EDM, Producer, Rock,  Jazz, Soul,
             <field_options><![CDATA[{"size":"","max":"10","label":"","blank":"This field cannot be blank.","required_indicator":"*","invalid":"Date is invalid","separate_value":0,"clear_on_focus":0,"default_blank":0,"classes":"","custom_html":"<div id=\"frm_field_[id]_container\" class=\"frm_form_field form-field [required_class][error_class]\">\n    <label for=\"field_[key]\" class=\"frm_primary_label\">[field_name]\n        <span class=\"frm_required\">[required_label]<\/span>\n    <\/label>\n    [input]\n    [if description]<div class=\"frm_description\">[description]<\/div>[\/if description]\n    [if error]<div class=\"frm_error\">[error]<\/div>[\/if error]\n<\/div>","slide":0,"form_select":"","show_hide":"show","any_all":"any","align":"block","hide_field":[],"hide_field_cond":["=="],"hide_opt":[],"star":0,"ftypes":[],"data_type":"select","restrict":0,"start_year":"2000","end_year":"2020","read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"step":1,"clock":12,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","calc_dec":"","dyn_default_value":"","multiple":0,"unique_msg":"","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":0}]]></field_options>
 		</field>
 	</form>
+	<form>
+		<id>1794</id>
+		<form_key><![CDATA[dynamic-field-num-form]]></form_key>
+		<name><![CDATA[Dynamic Fields - Pulling from Number type]]></name>
+		<description><![CDATA[]]></description>
+		<created_at>2016-01-05 19:47:12</created_at>
+		<logged_in>0</logged_in>
+		<is_template>0</is_template>
+		<default_template>0</default_template>
+		<editable>0</editable>
+		<options><![CDATA[{"submit_value":"Submit","success_action":"message","success_msg":"Your responses were successfully submitted. Thank you!","show_form":0,"akismet":"","no_save":0,"ajax_load":0,"form_class":"","custom_style":"1","before_html":"<legend class=\\\"frm_hidden\\\">[form_name]<\/legend>\r\n[if form_name]<h3>[form_name]<\/h3>[\/if form_name]\r\n[if form_description]<div class=\\\"frm_description\\\">[form_description]<\/div>[\/if form_description]","after_html":"","submit_html":"<div class=\\\"frm_submit\\\">\r\n[if back_button]<input type=\\\"button\\\" value=\\\"[back_label]\\\" name=\\\"frm_prev_page\\\" formnovalidate=\\\"formnovalidate\\\" class=\\\"frm_prev_page\\\" [back_hook] \/>[\/if back_button]\r\n<input type=\\\"submit\\\" value=\\\"[button_label]\\\" [button_action] \/>\r\n<img class=\\\"frm_ajax_loading\\\" src=\\\"[frmurl]\/images\/ajax_loader.gif\\\" alt=\\\"Sending\\\"\/>\r\n[if save_draft]<a href=\\\"#\\\" class=\\\"frm_save_draft\\\" [draft_hook]>[draft_label]<\/a>[\/if save_draft]\r\n<\/div>","edit_value":"Update","edit_msg":"Your submission was successfully saved.","edit_action":"message","edit_url":"","edit_page_id":"","logged_in_role":"","save_draft":0,"draft_msg":"Your draft has been saved.","editable_role":"","open_editable_role":"-1","copy":0,"single_entry":0,"single_entry_type":"user","success_page_id":"","success_url":"","ajax_submit":0,"cookie_expiration":"8000","prev_value":"Previous","submit_align":"","paypal_item_name":"","paypal_amount_field":"","paypal_amount":"","paypal_list":[],"paypal_stop_email":0,"paypal_type":"","repeat_num":1,"repeat_time":"M","retry":0,"trial":0,"trial_amount":"","trial_num":1,"trial_time":"M","change_field":[],"action_id":0,"business_email":"jamie@strategy11.com","currency":"USD","return_url":"http:\/\/localhost:8888\/features","cancel_url":"http:\/\/localhost:8888\/features"}]]></options>
+		<status><![CDATA[published]]></status>
+        <parent_form_id>0</parent_form_id>
+		<field>
+		    <id>27081</id>
+            <field_key><![CDATA[dynamic-field-num]]></field_key>
+            <name><![CDATA[Dynamic Field]]></name>
+            <description><![CDATA[]]></description>
+            <type><![CDATA[data]]></type>
+            <default_value><![CDATA[]]></default_value>
+            <field_order>1</field_order>
+            <form_id>1794</form_id>
+            <required></required>
+            <options><![CDATA[]]></options>
+            <field_options><![CDATA[{"size":"","max":"","label":"","blank":"","required_indicator":"*","invalid":"","separate_value":0,"clear_on_focus":0,"default_blank":0,"classes":"","custom_html":"<div id=\\\"frm_field_[id]_container\\\" class=\\\"frm_form_field form-field [required_class][error_class]\\\">\r\n    <label  class=\\\"frm_primary_label\\\">[field_name]\r\n        <span class=\\\"frm_required\\\">[required_label]<\/span>\r\n    <\/label>\r\n    <div class=\\\"frm_opt_container\\\">[input]<\/div>\r\n    [if description]<div class=\\\"frm_description\\\">[description]<\/div>[\/if description]\r\n    [if error]<div class=\\\"frm_error\\\">[error]<\/div>[\/if error]\r\n<\/div>","captcha_size":"","data_type":"select","slide":0,"form_select":"8113","show_hide":"show","any_all":"any","align":"block","hide_field":[],"hide_field_cond":["=="],"hide_opt":[],"star":0,"ftypes":[],"restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"step":1,"clock":12,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","calc_dec":"","dyn_default_value":"","multiple":0,"unique_msg":"This value must be unique.","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":0,"custom_field":"","post_field":"","taxonomy":"category","exclude_cat":0}]]></field_options>
+		</field>
+	</form>
 	<item>
 		<id>52455</id>
 		<item_key><![CDATA[i0xioc]]></item_key>
@@ -2813,6 +2840,46 @@ Test]]></meta_value>
 		<item_meta>
 		    <field_id>2841</field_id>
 		    <meta_value><![CDATA[1]]></meta_value>
+		</item_meta>
+	</item>
+	<item>
+		<id>316218</id>
+		<item_key><![CDATA[2bcuuu]]></item_key>
+		<name><![CDATA[2bcuuu]]></name>
+		<description><![CDATA[{"browser":"Mozilla\/5.0 (Macintosh; Intel Mac OS X 10.10; rv:43.0) Gecko\/20100101 Firefox\/43.0","referrer":"http:\/\/localhost:8888\/features\/wp-admin\/admin-ajax.php?action=frm_forms_preview&form=78urnf"}]]></description>
+		<created_at>2016-01-05 19:47:54</created_at>
+		<updated_at>2016-01-05 19:47:54</updated_at>
+		<form_id>1794</form_id>
+		<post_id>0</post_id>
+		<ip>::1</ip>
+		<is_draft>0</is_draft>
+		<user_id><![CDATA[admin]]></user_id>
+		<updated_by><![CDATA[admin]]></updated_by>
+		<parent_item_id>0</parent_item_id>
+
+		<item_meta>
+			<field_id>27081</field_id>
+		    <meta_value>60417</meta_value>
+		</item_meta>
+	</item>
+	<item>
+		<id>316219</id>
+		<item_key><![CDATA[2bcuuu2]]></item_key>
+		<name><![CDATA[2bcuuu2]]></name>
+		<description><![CDATA[{"browser":"Mozilla\/5.0 (Macintosh; Intel Mac OS X 10.10; rv:43.0) Gecko\/20100101 Firefox\/43.0","referrer":"http:\/\/localhost:8888\/features\/wp-admin\/admin-ajax.php?action=frm_forms_preview&form=78urnf"}]]></description>
+		<created_at>2016-01-05 19:47:54</created_at>
+		<updated_at>2016-01-05 19:47:54</updated_at>
+		<form_id>1794</form_id>
+		<post_id>0</post_id>
+		<ip>::1</ip>
+		<is_draft>0</is_draft>
+		<user_id><![CDATA[admin]]></user_id>
+		<updated_by><![CDATA[admin]]></updated_by>
+		<parent_item_id>0</parent_item_id>
+
+		<item_meta>
+			<field_id>27081</field_id>
+		    <meta_value>60422</meta_value>
 		</item_meta>
 	</item>
 	<view>

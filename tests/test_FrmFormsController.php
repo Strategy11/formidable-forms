@@ -38,6 +38,10 @@ class WP_Test_FrmFormsController extends FrmUnitTest {
 	* without ajax
 	*/
 	function test_form_update_no_ajax() {
+		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+			$this->markTestSkipped( 'Run with --filter test_form_update_no_ajax' );
+		}
+
 		$form_id = $this->factory->form->get_id_by_key( $this->contact_form_key );
 		$this->set_current_user_to_1();
 		self::_setup_post_values( $form_id );

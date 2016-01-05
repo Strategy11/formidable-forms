@@ -301,6 +301,7 @@ function frmFrontFormJS(){
 		logicRules.hiddenName = 'item_meta['+ logicRules.HideField +']';
 		logicRules.containerID = 'frm_field_'+ logicRules.FieldName +'_container';
 		logicRules.hideContainerID = 'frm_field_'+ logicRules.HideField +'_container';
+		logicRules.Value = logicRules.Value.trim();
 
 		// If the trigger field is a repeating field, only check single row of repeating section
 		if ( addingRow !== '' ) {
@@ -394,21 +395,23 @@ function frmFrontFormJS(){
 			}else{
 				fieldValue = '';
 			}
+
 			return fieldValue;
 		}
 
-		// If field is on another page
 		fieldValue = jQuery('input[name="'+ f.inputName +'"][type="hidden"]').val();
-		if ( typeof fieldValue !== 'undefined' ) {
-			return fieldValue;
-		}
 
-		if ( f.Type == 'radio' || f.Type === 'data-radio' ) {
+		if ( typeof fieldValue !== 'undefined' ) {
+			// If field is on another page, read-only, or visibility setting is hiding it
+
+		} else if ( f.Type == 'radio' || f.Type === 'data-radio' ) {
 			// If radio field on the current page
 			fieldValue = jQuery('input[name="'+ f.inputName +'"]:checked').val();
-		} else if ( f.Type === 'select' || f.Type === 'data-select' || f.Type === 'lookup' ) {
+
+		} else if ( f.Type === 'select' || f.Type === 'data-select' ) {
 			// If dropdown field on the current page
 			fieldValue = jQuery('select[name^="'+ f.inputName +'"]').val();
+
 		} else {
 			// If text field on the current page
 			fieldValue = jQuery('input[name="'+ f.inputName +'"]').val();
@@ -416,6 +419,10 @@ function frmFrontFormJS(){
 
 		if ( typeof fieldValue === 'undefined' ) {
 			fieldValue = '';
+		}
+
+		if ( typeof fieldValue === 'string' ) {
+			fieldValue = fieldValue.trim();
 		}
 
 		return fieldValue;
@@ -582,11 +589,6 @@ function frmFrontFormJS(){
 
 	/* Hide Field Functions */
 	function routeToHideFieldAndClearVal( hideFieldContainer, f ) {
-		// If field is already hidden, leave now
-		if ( fieldIsAlreadyHidden( f ) ) {
-			return;
-		}
-
 		if ( hideFieldContainer.length ) {
 			// Field is not type=hidden
 			hideFieldAndClearValue( hideFieldContainer, f );
@@ -597,18 +599,6 @@ function frmFrontFormJS(){
 			clearValueForInputs( inputs );
 		}
 		addToHideFields( f.hideContainerID, f.FormId );
-	}
-
-	function fieldIsAlreadyHidden( f ) {
-		var hidden = false;
-
-		var hiddenFields = getHiddenFields( f.FormId );
-
-		if ( hiddenFields.indexOf( f.hideContainerID ) > -1 ) {
-			hidden = true;
-		}
-
-		return hidden;
 	}
 
 	function hideFieldAndClearValue( container, f ) {
@@ -1217,17 +1207,41 @@ function frmFrontFormJS(){
 					/* If no value, then assume no match */
 					return false;
 				}
-				return d.toLowerCase().indexOf( c.toLowerCase() ) != -1;
+
+				d = prepareEnteredValueForLikeComparison( d );
+				c = prepareLogicValueForLikeComparison( c );
+
+				return d.indexOf( c ) != -1;
 			},
 			'not LIKE': function(c,d){
 				if(!d){
 					/* If no value, then assume no match */
 					return true;
 				}
-				return d.toLowerCase().indexOf( c.toLowerCase() ) == -1;
+
+				d = prepareEnteredValueForLikeComparison( d );
+				c = prepareLogicValueForLikeComparison( c );
+
+				return d.indexOf( c ) == -1;
 			}
 		};
 		return theOperators[op](a, b);
+	}
+
+	function prepareEnteredValueForLikeComparison( d ) {
+		if ( typeof d === 'string' ) {
+			d = d.toLowerCase();
+		} else if ( typeof d === 'number' ) {
+			d = d.toString();
+		}
+		return d;
+	}
+
+	function prepareLogicValueForLikeComparison( c ) {
+		if ( typeof c === 'string' ) {
+			c = c.toLowerCase();
+		}
+		return c;
 	}
 
 	function showField(funcInfo, field_id, rec){
