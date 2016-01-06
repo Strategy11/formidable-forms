@@ -132,6 +132,7 @@ function frmFrontFormJS(){
 		}
 
 		checkDependentField(field_id, null, jQuery(this), reset);
+		checkFieldsWatchingThis( field_id, jQuery(this) );
 		doCalculation(field_id, jQuery(this));
 		validateField( field_id, this );
 	}
@@ -201,8 +202,6 @@ function frmFrontFormJS(){
 	* reset = reset or persist
 	*/
 	function checkDependentField(field_id, rec, changedInput, reset){
-		checkFieldsWatchingThis( field_id, changedInput );
-
 		var rules = getRulesForField( field_id );
 		if ( typeof rules === 'undefined' ) {
 			return;
@@ -720,6 +719,7 @@ function frmFrontFormJS(){
 				}
 
 				setDefaultValue( jQuery( inputs[i] ) );
+				maybeSetLookupFieldValue( inputs[i], fieldAtts );
 				maybeDoCalcForSingleField( inputs[i] );
 			}
 		}
@@ -864,6 +864,21 @@ function frmFrontFormJS(){
 			repeatId = fieldElement.id.replace( 'field_' + triggerFieldArgs.fieldKey, '' );
 		}
 		return repeatId;
+	}
+
+	// Set the value in a regular field that is watching a lookup field when it is conditionally shown
+	function maybeSetLookupFieldValue( input, fieldAtts ) {
+		var fieldId = getFieldId( input, false );
+
+		if ( typeof __FRMLOOKUP  === 'undefined' || typeof __FRMLOOKUP[fieldId] === 'undefined' ) {
+			return;
+		}
+
+		var childFieldArgs = __FRMLOOKUP[fieldId];
+
+		if ( childFieldArgs.fieldType != 'lookup' ) {
+			updateSingleLookupField( childFieldArgs, input );
+		}
 	}
 
 	// Update the field options/value for a field ID that is watching a Lookup field
@@ -1054,8 +1069,6 @@ function frmFrontFormJS(){
 				},
 				success:function(newOptions){
 					replaceSelectLookupFieldOptions( childFieldArgs, childSelect, newOptions );
-				},
-				error:function(){
 				}
 			});
 		}
@@ -1101,11 +1114,19 @@ function frmFrontFormJS(){
 
 	// Get new value for a text field if all Lookup Field parents have a value
 	function maybeInsertTextLookupFieldValue( childFieldArgs, childInput ) {
+		if ( childElementIsConditionallyHidden( childFieldArgs, childInput ) ) {
+			return;
+		}
+
 		if ( childFieldArgs.parentVals === false  ) {
-			// If any parents have blank values, set the field value to blank
-			insertTextLookupFieldValue ( childFieldArgs, childInput, '' );
+			// If any parents have blank values, set the field value to the default value
+			var newValue = childInput.getAttribute('data-frmval');
+			if ( newValue === null ) {
+				newValue = '';
+			}
+			insertTextLookupFieldValue ( childFieldArgs, childInput, newValue );
 		} else {
-			// If all parents have values, check for an updated
+			// If all parents have values, check for a new value
 			jQuery.ajax({
 				type:'POST',
 				url:frm_js.ajax_url,
@@ -1114,19 +1135,45 @@ function frmFrontFormJS(){
 					parent_vals:childFieldArgs.parentVals, field_id:childFieldArgs.fieldId, nonce:frm_js.nonce
 				},
 				success:function(newValue){
-					maybeInsertNewTextLookupFieldValue( childFieldArgs, childInput, newValue );
-				},
-				error:function(){
+					if ( childInput.value != newValue ) {
+						insertTextLookupFieldValue( childFieldArgs, childInput, newValue );
+					}
 				}
 			});
 		}
 	}
 
-	// Insert a new text Lookup value if the value changed
-	function maybeInsertNewTextLookupFieldValue( childFieldArgs, childInput, newValue ) {
-		if ( childInput.value != newValue ) {
-			insertTextLookupFieldValue( childFieldArgs, childInput, newValue );
+	// Check if a field element is conditionally hidden (or in a section that is conditionally hidden)
+	function childElementIsConditionallyHidden( childFieldArgs, childElement ) {
+		var hidden = false;
+
+		// Get the field container
+		var fieldContainer = 'frm_field_' + childFieldArgs.fieldId;
+		if ( childFieldArgs.repeatId ) {
+			var sectionId = childElement.getAttribute( 'data-lookuprepeat' );
+			fieldContainer = fieldContainer + '-' + sectionId + '-' + childFieldArgs.repeatId;
 		}
+		fieldContainer = fieldContainer + '_container';
+
+		var hiddenFields = getHiddenFields( childFieldArgs.formId );
+
+		if ( hiddenFields.length < 1 ) {
+			// do nothing
+		} else if ( hiddenFields.indexOf( fieldContainer ) > -1 ) {
+			// If field is hidden with logic
+			hidden = true;
+		} else {
+			// Check if field is in a section and section is hidden
+			var helpers = getHelpers( childFieldArgs.formId );
+			if ( helpers && helpers[ childFieldArgs.fieldId ] !== null ) {
+				var sectionId = 'frm_field_' + helpers[ childFieldArgs.fieldId ] + '_container';
+				if ( hiddenFields.indexOf( sectionId ) > -1 ) {
+					hidden = true;
+				}
+			}
+		}
+
+		return hidden;
 	}
 
 	// Insert a new text field Lookup value
@@ -2479,6 +2526,7 @@ function frmFrontFormJS(){
 							checked.push(fieldID);
 							updateWatchingFieldById( fieldID, '-' + i );
 							checkDependentField(fieldID, null, fieldObject, reset);
+							checkFieldsWatchingThis( fieldID, fieldObject );
 							doCalculation(fieldID, fieldObject);
 							reset = 'persist';
 						}
@@ -2492,6 +2540,7 @@ function frmFrontFormJS(){
 					if ( jQuery.inArray(r.logic.check[f], checked ) == -1 ) {
 						if(jQuery(html).find('.frm_field_'+r.logic.check[f]+'_container').length < 1){
 							checkDependentField(r.logic.check[f], null, null, reset);
+							checkFieldsWatchingThis( r.logic.check[f], null );
 	                		reset = 'persist';
 						}
 					}
