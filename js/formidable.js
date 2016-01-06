@@ -1057,6 +1057,7 @@ function frmFrontFormJS(){
 			// If any parents have blank values, don't waste time looking for values
 			childSelect.options.length = 1;
 			childSelect.value = '';
+			maybeUpdateChosenOptions( childSelect )
 			triggerChange( jQuery(childSelect), childFieldArgs.fieldKey );
 		} else {
 			// If all parents have values, check for updated options
@@ -1071,6 +1072,13 @@ function frmFrontFormJS(){
 					replaceSelectLookupFieldOptions( childFieldArgs, childSelect, newOptions );
 				}
 			});
+		}
+	}
+
+	// Update chosen options if autocomplete is enabled
+	function maybeUpdateChosenOptions( childSelect ) {
+		if ( childSelect.className.indexOf( 'frm_chzn' ) > -1 && jQuery().chosen ) {
+			jQuery( childSelect ).trigger('chosen:updated');
 		}
 	}
 
@@ -1092,6 +1100,8 @@ function frmFrontFormJS(){
 		}
 
 		setLookupFieldVal( childSelect, origVal );
+
+		maybeUpdateChosenOptions( childSelect );
 
 		// Trigger a change if the new value is different from the old value
 		if ( childSelect.value != origVal ) {
