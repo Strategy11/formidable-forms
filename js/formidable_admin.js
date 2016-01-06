@@ -776,6 +776,22 @@ function frmAdminBuildJS(){
 		}
 	}
 
+	// Clear the Watch Fields option when Lookup field switches to "Text" option
+	function maybeClearWatchFields() {
+		if ( this.value == 'text' ) {
+			var fieldID = this.name.replace( 'field_options[data_type_', '' ).replace( ']', '' );
+
+			var lookupBlock = document.getElementById( 'frm_watch_lookup_block_' + fieldID );
+			if ( typeof lookupBlock != 'undefined' ) {
+				// Clear the Watch Fields option
+				lookupBlock.innerHTML = '';
+
+				// Hide the Watch Fields row
+				lookupBlock.parentNode.parentNode.style.display = 'none';
+			}
+		}
+	}
+
 	function clickVis(e){
 		clickAction(this);
 		if(!jQuery(e.target).is('.inplace_field, .frm_ipe_field_label, .frm_ipe_field_desc, .frm_ipe_field_conf_desc, .frm_ipe_field_option, .frm_ipe_field_option_key')){
@@ -2123,6 +2139,7 @@ function frmAdminBuildJS(){
 			$newFields.on('input', 'input[name^="field_options[remove_label_"]', function(){
 				updateRepeatText(this, 'remove');
 			});
+			$newFields.on('change', 'select[name^="field_options[data_type_"]', maybeClearWatchFields );
 
 			$newFields.on('click', '.frm_toggle_sep_values', toggleSepValues);
 			$newFields.on('click', '.frm_delete_field', clickDeleteField);
