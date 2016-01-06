@@ -782,7 +782,7 @@ function frmAdminBuildJS(){
 			var fieldID = this.name.replace( 'field_options[data_type_', '' ).replace( ']', '' );
 
 			var lookupBlock = document.getElementById( 'frm_watch_lookup_block_' + fieldID );
-			if ( typeof lookupBlock != 'undefined' ) {
+			if ( lookupBlock !== null ) {
 				// Clear the Watch Fields option
 				lookupBlock.innerHTML = '';
 
