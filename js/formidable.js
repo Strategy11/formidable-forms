@@ -984,6 +984,8 @@ function frmFrontFormJS(){
 				parentValue = getValueFromSelectLookup( currentParentArgs, childFieldArgs );
 			} else if ( currentParentArgs.lookupType == 'radio' ) {
 				parentValue = getValueFromRadioLookup( currentParentArgs, childFieldArgs );
+			} else if ( currentParentArgs.lookupType == 'text' ) {
+				parentValue = getValueFromSelectLookup( currentParentArgs, childFieldArgs );
 			}
 
 			// If any parents have blank values, don't waste time looking for values
