@@ -191,7 +191,6 @@ class FrmAppController {
 		if ( filter_input( INPUT_GET, 'frm_ignore_tour' ) && wp_verify_nonce( filter_input( INPUT_GET, 'nonce' ), 'frm-ignore-tour' ) ) {
 			update_user_meta( get_current_user_id(), 'frm_ignore_tour', true );
 		}
-
 	}
 
     public static function admin_js() {

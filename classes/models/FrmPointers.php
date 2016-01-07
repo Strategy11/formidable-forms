@@ -182,18 +182,26 @@ class FrmPointers {
 	 * @param string $page Admin page key.
 	 */
 	private function do_page_pointer( $page ) {
-		$selector = 'h2';
-
 		$pointer = call_user_func( array( $this, $this->admin_pages[ $page ] ) );
 
 		$opt_arr = array(
 			'content'      => $pointer['content'],
 			'position'     => array(
 				'edge'  => 'top',
-				'align' => ( is_rtl() ) ? 'left' : 'right',
+				'align' => ( is_rtl() ) ? 'right' : 'left',
 			),
 			'pointerWidth' => 450,
 		);
+
+		$selector = 'h2';
+		if ( isset( $pointer['selector'] ) ) {
+			$selector = $pointer['selector'];
+		}
+
+		if ( isset( $pointer['position'] ) ) {
+			$opt_arr['position'] = $pointer['position'];
+		}
+
 		if ( isset( $pointer['next_page'] ) ) {
 			if ( ! empty( $pointer['next_page'] ) ) {
 				$pointer['next_page'] = '-' . $pointer['next_page'];
@@ -209,7 +217,7 @@ class FrmPointers {
 			}
 			$this->button_array['button3'] = array(
 				'text'     => __( 'Previous', 'formidable' ),
-				'function' => 'window.location="' . esc_url_raw( admin_url( 'admin.php?page=formidable-' . $pointer['prev_page'] ) ) . '";',
+				'function' => 'window.location="' . esc_url_raw( admin_url( 'admin.php?page=formidable' . $pointer['prev_page'] ) ) . '";',
 			);
 		}
 		$this->print_scripts( $selector, $opt_arr );
@@ -250,6 +258,8 @@ class FrmPointers {
 			               . '<p>' . __( 'Each time one of your forms is submitted, an entry is created. You will find every form submission listed here so you will always have a backup if an email fails.', 'formidable' ) . '</p>',
 			'prev_page' => '',
 			'next_page' => 'styles',
+			'selector'  => '.wp-list-table',
+			'position'  => array( 'edge' => 'bottom', 'align' => 'center' ),
 		);
 	}
 
@@ -264,6 +274,8 @@ class FrmPointers {
 			               . '<p>' . __( 'Want to make changes to the way your forms look? Make all the changes you would like right here, and watch the sample form change before your eyes.', 'formidable' ) . '</p>',
 			'prev_page' => 'entries',
 			'next_page' => 'import',
+			'selector'  => '.general-style',
+			'position'  => array( 'edge' => 'left', 'align' => 'right' ),
 		);
 	}
 
@@ -278,6 +290,8 @@ class FrmPointers {
 			               . '<p>' . __( 'Import and export forms and styles when copying from one site to another or sharing with someone else. Your entries can be exported to a CSV as well. The Premium version also includes the option to import entries to your site from a CSV.', 'formidable' ) . '</p>',
 			'prev_page' => 'styles',
 			'next_page' => 'settings',
+			'selector'  => '.inside.with_frm_style',
+			'position'  => array( 'edge' => 'bottom', 'align' => 'top' ),
 		);
 	}
 
