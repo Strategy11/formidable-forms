@@ -2171,8 +2171,8 @@ Responsive Design
 		display:table-cell !important;
 	}
 
-	.wp-list-table.formidable_page_formidable-entries th.frm_hidden,
-	.wp-list-table.formidable_page_formidable-entries td.frm_hidden{
+	#form_entries_page .wp-list-table th.frm_hidden,
+	#form_entries_page .wp-list-table td.frm_hidden{
 		display:none !important;
 	}
 

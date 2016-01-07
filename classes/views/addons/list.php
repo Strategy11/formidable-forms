@@ -1,5 +1,5 @@
 <div class="wrap">
-	<h1><?php _e( 'Formidable AddOns', 'formidable' ) ?></h1>
+	<h2><?php _e( 'Formidable AddOns', 'formidable' ) ?></h2>
 
 	<div id="the-list" class="frm-addons">
 		<?php foreach ( $addons as $addon ) {
@@ -13,7 +13,7 @@
 				$installed = isset( $installed_addons[ $addon['info']['slug'] ] ) || is_dir( WP_PLUGIN_DIR . '/formidable-' . $addon['info']['slug'] );
 			}
 			$has_thumbnail = ! empty( $addon['info']['thumbnail'] );
-			$addon['info']['link'] = $addon['info']['link'] . $append_affiliate;
+			$addon['info']['link'] = FrmAppHelper::make_affiliate_url( $addon['info']['link'] );
 
 		?>
 			<div class="plugin-card <?php echo esc_attr( $has_thumbnail ? '' : 'frm-no-thumb') ?>">
