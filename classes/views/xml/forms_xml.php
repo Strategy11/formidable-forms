@@ -21,7 +21,7 @@ while ( $next_set = array_splice( $item_ids, 0, 20 ) ) {
 		<is_template><?php echo $form->is_template ?></is_template>
 		<default_template><?php echo $form->default_template ?></default_template>
 		<editable><?php echo $form->editable ?></editable>
-		<options><?php echo FrmXMLHelper::cdata($form->options) ?></options>
+		<options><?php echo FrmXMLHelper::prepare_form_options_for_export($form->options) ?></options>
 		<status><?php echo FrmXMLHelper::cdata($form->status) ?></status>
         <parent_form_id><?php echo $form->parent_form_id ?></parent_form_id>
 <?php
