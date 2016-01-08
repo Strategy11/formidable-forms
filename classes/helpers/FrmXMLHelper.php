@@ -395,8 +395,10 @@ class FrmXMLHelper {
 				FROM ' .
 					$wpdb->prefix . 'posts
 				WHERE
-					post_name=%s';
-			$query = $wpdb->prepare($raw_query, $form['options']['custom_style']);
+					post_name=%s AND
+					post_type=%s';
+			$post_type = 'frm_styles';
+			$query = $wpdb->prepare( $raw_query, $form['options']['custom_style'], $post_type );
 			$style_id = $wpdb->get_var( $query );
 			if ( $style_id ) {
 				$form['options']['custom_style'] = $style_id;
