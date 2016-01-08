@@ -340,8 +340,8 @@ if ( ! isset( $center_form ) ) {
     -moz-box-sizing:border-box;
     box-sizing:border-box;
     outline:none<?php echo esc_html( $important ) ?>;
-    font-weight:normal;
-    box-shadow:0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    font-weight:<?php echo esc_html( $field_weight ) ?>;
+    box-shadow:<?php echo esc_html( ( isset( $remove_box_shadow ) && $remove_box_shadow ) ? 'none' : '0 1px 1px rgba(0, 0, 0, 0.075) inset' )?>;
 }
 
 .<?php echo esc_html( $style_class ) ?> input[type=file]::-webkit-file-upload-button{
@@ -460,7 +460,11 @@ if ( ! isset( $center_form ) ) {
 .<?php echo esc_html( $style_class ) ?> .chosen-container-active .chosen-choices{
     background-color:#<?php echo esc_html( $bg_color_active . $important ) ?>;
     border-color:#<?php echo esc_html( $border_color_active . $important ) ?>;
+    <?php if ( isset( $remove_box_shadow_active ) && $remove_box_shadow_active ) { ?>
+    box-shadow:none;
+    <?php } else { ?>
     box-shadow:0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(<?php echo esc_html( FrmStylesHelper::hex2rgb( $border_color_active ) ) ?>, 0.6);
+    <?php } ?>
 }
 
 <?php

@@ -37,7 +37,7 @@ class FrmEntriesController {
 
 	public static function contextual_help( $help, $screen_id, $screen ) {
         // Only add to certain screens. add_help_tab was introduced in WordPress 3.3
-        if ( $screen_id != 'formidable_page_formidable-entries' || ! method_exists( $screen, 'add_help_tab' ) ) {
+        if ( ! method_exists( $screen, 'add_help_tab' ) ) {
             return $help;
         }
 
@@ -46,6 +46,7 @@ class FrmEntriesController {
 		if ( $page != 'formidable-entries' || ( ! empty( $action ) && $action != 'list' ) ) {
             return $help;
         }
+
 		unset( $action, $page );
 
         $screen->add_help_tab( array(
@@ -56,8 +57,8 @@ class FrmEntriesController {
 
         $screen->set_help_sidebar(
 			'<p><strong>' . esc_html__( 'For more information:', 'formidable' ) . '</strong></p>' .
-			'<p><a href="http://formidablepro.com/knowledgebase/manage-entries-from-the-back-end/' . FrmAppHelper::affiliate() . '" target="_blank">' . esc_html__( 'Documentation on Entries', 'formidable' ) . '</a></p>' .
-			'<p><a href="http://formidablepro.com/help-topics/' . FrmAppHelper::affiliate() . '" target="_blank">' . esc_html__( 'Support', 'formidable' ) . '</a></p>'
+			'<p><a href="' . esc_url( FrmAppHelper::make_affiliate_url( 'http://formidablepro.com/knowledgebase/manage-entries-from-the-back-end/' ) ) . '" target="_blank">' . esc_html__( 'Documentation on Entries', 'formidable' ) . '</a></p>' .
+			'<p><a href="'. esc_url( FrmAppHelper::make_affiliate_url( 'http://formidablepro.com/help-desk/' ) ) . '" target="_blank">' . esc_html__( 'Support', 'formidable' ) . '</a></p>'
     	);
 
         return $help;
@@ -129,8 +130,8 @@ class FrmEntriesController {
         }
 
 		if ( empty( $prev_value ) ) {
-            		$prev_value = get_metadata('user', $object_id, $meta_key, true);
-        }
+			$prev_value = get_metadata( 'user', $object_id, $meta_key, true );
+		}
 
         global $frm_vars;
         //add a check so we don't create a loop

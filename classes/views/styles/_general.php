@@ -45,7 +45,7 @@
 
 <div class="field-group clearfix frm-half">
 	<label><?php _e( 'Direction', 'formidable' ) ?></label>
-	<select name="<?php echo esc_attr( $frm_style->get_field_name('direction') ) ?>" id="frm_form_align">
+	<select name="<?php echo esc_attr( $frm_style->get_field_name('direction') ) ?>" id="frm_direction">
 		<option value="ltr" <?php selected($style->post_content['direction'], 'ltr') ?>><?php _e( 'Left to Right', 'formidable' ) ?></option>
 		<option value="rtl" <?php selected($style->post_content['direction'], 'rtl') ?>><?php _e( 'Right to Left', 'formidable' ) ?></option>
 	</select>

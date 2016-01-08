@@ -57,8 +57,13 @@ class FrmAppHelper {
         return get_option('blogname');
     }
 
-	public static function affiliate() {
-		return '';
+	public static function make_affiliate_url( $url ) {
+		$affiliate_id = apply_filters( 'frm_affiliate_link', '' );
+		$allowed_affiliates = array('Mojo');
+		if ( in_array( $affiliate_id, $allowed_affiliates ) ) {
+			$url .= '?aff=' . $affiliate_id;
+		}
+		return $url;
 	}
 
     /**

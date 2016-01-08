@@ -152,7 +152,44 @@ class FrmAppController {
 		$action = FrmAppHelper::simple_get( 'action', 'sanitize_title' );
 		if ( ! FrmAppHelper::doing_ajax() || $action == 'frm_import_choices' ) {
 			// don't continue during ajax calls
+			self::load_tour();
 			self::admin_js();
+		}
+	}
+
+	/**
+	 * See if we should start our tour.
+	 * @since 2.0.20
+	 */
+	private static function load_tour() {
+		$restart_tour = filter_input( INPUT_GET, 'frm_restart_tour' );
+		if ( $restart_tour ) {
+			delete_user_meta( get_current_user_id(), 'frm_ignore_tour' );
+		}
+		self::ignore_tour();
+
+		if ( ! self::has_ignored_tour() ) {
+			add_action( 'admin_enqueue_scripts', array( 'FrmPointers', 'get_instance' ) );
+		}
+	}
+
+	/**
+	 * Returns the value of the ignore tour.
+	 *
+	 * @return bool
+	 */
+	private static function has_ignored_tour() {
+		$user_meta = get_user_meta( get_current_user_id(), 'frm_ignore_tour' );
+
+		return ! empty( $user_meta );
+	}
+
+	/**
+	 * Listener for the ignore tour GET value. If this one is set, just set the user meta to true.
+	 */
+	private static function ignore_tour() {
+		if ( filter_input( INPUT_GET, 'frm_ignore_tour' ) && wp_verify_nonce( filter_input( INPUT_GET, 'nonce' ), 'frm-ignore-tour' ) ) {
+			update_user_meta( get_current_user_id(), 'frm_ignore_tour', true );
 		}
 	}
 

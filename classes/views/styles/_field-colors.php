@@ -44,6 +44,12 @@
             	</select>
             </div>
             <div class="clear"></div>
+			<p class="frm_no_bottom_margin">
+				<label>
+					<input type="checkbox" name="<?php echo esc_attr( $frm_style->get_field_name('remove_box_shadow') ) ?>" id="frm_remove_box_shadow" value="1" <?php checked($style->post_content['remove_box_shadow'], 1) ?> />
+					<?php _e( 'Remove box shadow', 'formidable' ) ?>
+				</label>
+			</p>
 		</div><!-- /.tabs-panel -->
 
 		<div id="tabs-panel-active-color" class="tabs-panel <?php
@@ -57,7 +63,13 @@
             	<label><?php _e( 'Border', 'formidable' ) ?></label>
             	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name('border_color_active') ) ?>" id="frm_border_color_active" class="hex" value="<?php echo esc_attr( $style->post_content['border_color_active'] ) ?>" />
             </div>
-            <div class="clear"></div>
+			<div class="clear"></div>
+			<p class="frm_no_bottom_margin">
+				<label>
+					<input type="checkbox" name="<?php echo esc_attr( $frm_style->get_field_name('remove_box_shadow_active') ) ?>" id="frm_remove_box_shadow_active" value="1" <?php checked($style->post_content['remove_box_shadow_active'], 1) ?> />
+					<?php _e( 'Remove box shadow', 'formidable' ) ?>
+				</label>
+			</p>
 		</div><!-- /.tabs-panel -->
 
 		<div id="tabs-panel-active-error" class="tabs-panel <?php
