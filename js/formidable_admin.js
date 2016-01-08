@@ -2287,8 +2287,6 @@ function frmAdminBuildJS(){
 
 					wrapper = target.parents('.accordion-section-content').first();
 
-					// upon changing tabs, we want to uncheck all checkboxes
-					jQuery('input', wrapper).removeAttr('checked');
 
 					jQuery('.tabs-panel-active', wrapper).removeClass('tabs-panel-active').addClass('tabs-panel-inactive');
 					jQuery('#' + panelId, wrapper).removeClass('tabs-panel-inactive').addClass('tabs-panel-active');
