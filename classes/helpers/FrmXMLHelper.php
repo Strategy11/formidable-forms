@@ -383,23 +383,20 @@ class FrmXMLHelper {
 	*
 	*/
 	private static function update_custom_style_setting_on_import( &$form ) {
-		if ( is_numeric ( $form['options']['custom_style'] ) ) {
+		if ( is_numeric( $form['options']['custom_style'] ) ) {
 			// Set to default
 			$form['options']['custom_style'] = 1;
 		} else {
 			// Replace the style name with the style ID on import
 			global $wpdb;
-			$raw_query =
-				'SELECT
-					ID
-				FROM ' .
-					$wpdb->prefix . 'posts
-				WHERE
-					post_name=%s AND
-					post_type=%s';
-			$post_type = 'frm_styles';
-			$query = $wpdb->prepare( $raw_query, $form['options']['custom_style'], $post_type );
-			$style_id = $wpdb->get_var( $query );
+			$table = $wpdb->prefix . 'posts';
+			$where = array(
+				'post_name' => $form['options']['custom_style'],
+				'post_type' => 'frm_styles'
+			);
+			$select = 'ID';
+			$style_id = FrmDb::get_var( $table, $where, $select );
+
 			if ( $style_id ) {
 				$form['options']['custom_style'] = $style_id;
 			} else {
@@ -728,19 +725,16 @@ class FrmXMLHelper {
 	 * @return string
 	 */
 	public static function prepare_form_options_for_export( $options ) {
-		$options = maybe_unserialize ( $options );
+		$options = maybe_unserialize( $options );
 		// Change custom_style to the post_name instead of ID
-		if ( isset( $options['custom_style'] ) && $options['custom_style'] !== 1 ) {
+		if ( isset( $options['custom_style'] ) && 1 !== $options['custom_style'] ) {
 			global $wpdb;
-			$raw_q =
-				'SELECT
-					post_name
-				FROM ' .
-					$wpdb->prefix . 'posts
-				WHERE
-					ID=%d';
-			$q = $wpdb->prepare( $raw_q, $options['custom_style'] );
-			$style_name = $wpdb->get_var( $q );
+			$table = $wpdb->prefix . 'posts';
+			$where = array( 'ID' => $options['custom_style'] );
+			$select = 'post_name';
+
+			$style_name = FrmDb::get_var( $table, $where, $select );
+
 			if ( $style_name ) {
 				$options['custom_style'] = $style_name;
 			} else {
