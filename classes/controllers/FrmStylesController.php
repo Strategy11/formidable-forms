@@ -317,6 +317,8 @@ class FrmStylesController {
         // setup meta boxes
         $meta_boxes = array(
             'general'           => __( 'General', 'formidable' ),
+            'form-title'        => __( 'Form Title', 'formidable' ),
+            'form-description'  => __( 'Form Description', 'formidable' ),
             'field-labels'      => __( 'Field Labels', 'formidable' ),
             'field-description' => __( 'Field Description', 'formidable' ),
             'field-colors'      => __( 'Field Colors', 'formidable' ),

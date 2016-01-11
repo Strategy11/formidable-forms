@@ -61,7 +61,8 @@ if ( ! isset( $center_form ) ) {
 }
 
 .<?php echo esc_html( $style_class ) ?>,
-.<?php echo esc_html( $style_class ) ?> form{
+.<?php echo esc_html( $style_class ) ?> form,
+.<?php echo esc_html( $style_class ) ?> .frm-show-form div.frm_description p {
     text-align:<?php echo esc_html( $form_align . $important ) ?>;
 }
 
@@ -78,9 +79,13 @@ if ( ! isset( $center_form ) ) {
     background-color:<?php echo esc_html( empty($fieldset_bg_color) ? 'transparent' : '#'. $fieldset_bg_color ); ?>;
 }
 
-.<?php echo esc_html( $style_class ) ?> .frm-show-form  > h3{
+.<?php echo esc_html( $style_class ) ?> legend + h3,
+.<?php echo esc_html( $style_class ) ?> h3.frm_form_title{
     font-size:<?php echo esc_html( $title_size . $important ) ?>;
     color:#<?php echo esc_html( $title_color . $important ) ?>;
+	font-family:<?php echo FrmAppHelper::kses( stripslashes( $font ) ) ?>;
+	margin-top:<?php echo esc_html( $title_margin_top . $important ) ?>;
+	margin-bottom:<?php echo esc_html( $title_margin_bottom . $important ) ?>;
 }
 
 .<?php echo esc_html( $style_class ) ?> .frm-show-form  .frm_section_heading h3{
@@ -189,6 +194,9 @@ if ( ! isset( $center_form ) ) {
 .<?php echo esc_html( $style_class ) ?> .frm-show-form div.frm_description p{
     font-size:<?php echo esc_html( $form_desc_size . $important ) ?>;
     color:#<?php echo esc_html( $form_desc_color . $important ) ?>;
+	margin-top:<?php echo esc_html( $form_desc_margin_top . $important ) ?>;
+	margin-bottom:<?php echo esc_html( $form_desc_margin_bottom . $important ) ?>;
+
 }
 
 
