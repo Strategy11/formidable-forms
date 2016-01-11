@@ -1744,6 +1744,32 @@ function frmAdminBuildJS(){
 		});
 	}
 
+	function fillLicenses(){
+		var emptyFields = jQuery('.frm_addon_license_key:visible');
+		if ( emptyFields.length < 1 ){
+			return false;
+		}
+
+		jQuery.ajax({
+			type:'POST',url:ajaxurl,dataType:'json',
+			data:{action:'frm_fill_licenses', nonce:frmGlobal.nonce},
+			success:function(json){
+				var i;
+				var licenses = json.licenses;
+				for ( i in licenses ) {
+				    if (licenses.hasOwnProperty(i)) {
+						var input = jQuery('#edd_'+ licenses[i].slug +'_license_key');
+						if ( typeof input !== null && input.is(':visible') ) {
+							input.val(licenses[i].key);
+							jQuery('input[name="edd_'+ licenses[i].slug +'_license_activate"]').click();
+						}
+				    }
+				}
+			}
+		});
+		return false;
+	}
+
 	/* Import/Export page */
 	function validateExport(e){
 		e.preventDefault();
@@ -2396,8 +2422,9 @@ function frmAdminBuildJS(){
 
 			// activate addon licenses
 			jQuery('.edd_frm_save_license').click(saveAddonLicense);
+			jQuery('.edd_frm_fill_license').click(fillLicenses);
 		},
-		
+
 		exportInit: function(){
 			jQuery(document.getElementById('frm_export_xml')).submit(validateExport);
 			jQuery('#frm_export_xml input, #frm_export_xml select').change(removeExportError);
