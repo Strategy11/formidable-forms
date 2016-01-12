@@ -83,11 +83,12 @@ class FrmAddonsController {
 
 		$response = wp_remote_post( $url, $arg_array );
 		$body = wp_remote_retrieve_body( $response );
+		$data = false;
 		if ( ! is_wp_error( $response ) && ! is_wp_error( $body ) ) {
 			$data = json_decode( $body, true );
 			set_transient( $transient['name'], $data, $transient['expires'] );
 		}
 
-		return false;
+		return $data;
 	}
 }
