@@ -205,9 +205,9 @@ class FrmAddon {
 	public static function deactivate() {
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
-		$license = stripslashes( sanitize_text_field( $_POST['license'] ) );
 		$plugin_slug = sanitize_text_field( $_POST['plugin'] );
 		$this_plugin = self::get_addon( $plugin_slug );
+		$license = $this_plugin->get_license();
 
 		$response = array( 'success' => false, 'message' => '' );
 		try {
