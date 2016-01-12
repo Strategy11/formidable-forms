@@ -59,7 +59,7 @@ class FrmAppHelper {
 
 	public static function make_affiliate_url( $url ) {
 		$affiliate_id = apply_filters( 'frm_affiliate_link', get_option('frm_aff') );
-		$allowed_affiliates = array('mojo');
+		$allowed_affiliates = array( 'mojo' );
 		if ( in_array( strtolower( $affiliate_id ), $allowed_affiliates ) ) {
 			$url .= '?aff=' . $affiliate_id;
 		}
