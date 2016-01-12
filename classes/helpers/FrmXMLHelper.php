@@ -91,7 +91,6 @@ class FrmXMLHelper {
                 'slug'          => (string) $t->term_slug,
                 'description'   => (string) $t->term_description,
 				'parent'        => empty( $parent ) ? 0 : $parent,
-                'slug'          => (string) $t->term_slug,
             ));
 
 			if ( $term && is_array( $term ) ) {
@@ -392,7 +391,7 @@ class FrmXMLHelper {
 			$table = $wpdb->prefix . 'posts';
 			$where = array(
 				'post_name' => $form['options']['custom_style'],
-				'post_type' => 'frm_styles'
+				'post_type' => 'frm_styles',
 			);
 			$select = 'ID';
 			$style_id = FrmDb::get_var( $table, $where, $select );

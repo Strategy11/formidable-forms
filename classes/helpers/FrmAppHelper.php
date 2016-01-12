@@ -1248,16 +1248,20 @@ class FrmAppHelper {
 			$now = new DateTime( '@' . $to );
 		}
 		$ago = new DateTime( '@' . $from );
-		$diff = $now->diff( $ago );
 
-		$diff->w = floor( $diff->d / 7 );
-		$diff->d -= $diff->w * 7;
+		// Get the time difference
+		$diff_object = $now->diff( $ago );
+		$diff = get_object_vars( $diff_object );
+
+		// Add week amount and update day amount
+		$diff['w'] = floor( $diff['d'] / 7 );
+		$diff['d'] -= $diff['w'] * 7;
 
 		$time_strings = self::get_time_strings();
 
 		foreach ( $time_strings as $k => $v ) {
-			if ( $diff->$k ) {
-				$time_strings[ $k ] = $diff->$k . ' ' . ( $diff->$k > 1 ? $v[1] : $v[0] );
+			if ( $diff[ $k ] ) {
+				$time_strings[ $k ] = $diff[ $k ] . ' ' . ( $diff[ $k ] > 1 ? $v[1] : $v[0] );
 			} else {
 				unset( $time_strings[ $k ] );
 			}
