@@ -79,7 +79,8 @@ class FrmStylesController {
 
 				foreach ( (array) $css as $css_key => $file ) {
 					if ( $register == 'register' ) {
-						wp_register_style( $css_key, $file, array(), $version );
+						$this_version = self::get_css_version( $css_key, $version );
+						wp_register_style( $css_key, $file, array(), $this_version );
 					}
 
 					if ( 'all' == $frm_settings->load_style || $register != 'register' ) {
@@ -118,6 +119,18 @@ class FrmStylesController {
 			$url = admin_url( 'admin-ajax.php' ) . '?action=frmpro_css';
 		}
 		$stylesheet_urls['formidable'] = $url;
+	}
+
+	private static function get_css_version( $css_key, $version ) {
+		if ( 'formidable' == $css_key ) {
+			$this_version = get_option( 'frm_last_style_update' );
+			if ( ! $this_version ) {
+				$this_version = $version;
+			}
+		} else {
+			$this_version = $version;
+		}
+		return $this_version;
 	}
 
 	private static function maybe_enqueue_jquery_css() {

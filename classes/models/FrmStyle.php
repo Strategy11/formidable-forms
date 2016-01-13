@@ -101,6 +101,7 @@ class FrmStyle {
      */
 	public function save_settings( $styles ) {
         $filename = FrmAppHelper::plugin_path() .'/css/custom_theme.css.php';
+		update_option( 'frm_last_style_update', time() );
 
         if ( ! is_file($filename) ) {
             return;
