@@ -3,6 +3,7 @@
 
 	<?php
 
+	$any_unauthorized = false;
 	foreach ( $plugins as $slug => $plugin ) {
 		if ( $slug == 'formidable_pro' ) {
 			continue;
@@ -11,6 +12,9 @@
 		$license = get_option( 'edd_'. $slug .'_license_key' );
 		$status  = get_option( 'edd_'. $slug .'_license_active' );
 		$activate = ( false !== $license && $status == 'valid' ) ? 'deactivate' : 'activate';
+		if ( $activate == 'activate' ) {
+			$any_unauthorized = true;
+		}
 		$icon_class = ( empty( $license ) ) ? 'frm_hidden' : '';
 		?>
 
@@ -23,7 +27,7 @@
 				<p class="frm_license_msg"></p>
 			</div>
 			<div class="edd_frm_unauthorized alignleft <?php echo esc_attr( $activate == 'deactivate' ) ? 'frm_hidden' : '' ?>">
-				<input id="edd_<?php echo esc_attr( $slug ) ?>_license_key" name="edd_<?php echo esc_attr( $slug ) ?>_license_key" type="text" class="regular-text" value="" />
+				<input id="edd_<?php echo esc_attr( $slug ) ?>_license_key" name="edd_<?php echo esc_attr( $slug ) ?>_license_key" type="text" class="regular-text frm_addon_license_key" value="" />
 				<span class="frm_icon_font frm_action_icon frm_error_icon edd_frm_status_icon <?php echo esc_attr( $icon_class ); ?>"></span>
 				<input type="button" class="button-secondary edd_frm_save_license" data-plugin="<?php echo esc_attr( $slug ) ?>" name="edd_<?php echo esc_attr( $slug ) ?>_license_activate" value="<?php esc_attr_e( 'Activate', 'formidable' ) ?>"/>
 				<p class="frm_license_msg"></p>
@@ -31,5 +35,8 @@
 
 		</div>
 	<?php } ?>
-
+	<?php if ( $any_unauthorized && FrmAppHelper::pro_is_installed() ) { ?>
+		<div class="clear"></div>
+		<p><a href="#" class="edd_frm_fill_license button-secondary"><?php _e( 'Autofill Licenses', 'formidable' ) ?></a></p>
+	<?php } ?>
 </div>

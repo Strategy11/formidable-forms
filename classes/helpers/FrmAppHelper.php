@@ -58,9 +58,9 @@ class FrmAppHelper {
     }
 
 	public static function make_affiliate_url( $url ) {
-		$affiliate_id = apply_filters( 'frm_affiliate_link', '' );
-		$allowed_affiliates = array('Mojo');
-		if ( in_array( $affiliate_id, $allowed_affiliates ) ) {
+		$affiliate_id = apply_filters( 'frm_affiliate_link', get_option('frm_aff') );
+		$allowed_affiliates = array( 'mojo' );
+		if ( in_array( strtolower( $affiliate_id ), $allowed_affiliates ) ) {
 			$url .= '?aff=' . $affiliate_id;
 		}
 		return $url;
@@ -1236,61 +1236,62 @@ class FrmAppHelper {
 		return date_i18n( $date_format, strtotime( $date ) );
 	}
 
-    /**
-     * @return string The time ago in words
-     */
-    public static function human_time_diff( $from, $to = '' ) {
-    	if ( empty($to) ) {
-    	    		$to = time();
-    	}
+	/**
+	 * Gets the time ago in words
+	 *
+	 * @param int $from in seconds
+	 * @param int|string $to in seconds
+	 * @return string $time_ago
+	 */
+	public static function human_time_diff( $from, $to = '' ) {
+		if ( empty( $to ) ) {
+			$now = new DateTime;
+		} else {
+			$now = new DateTime( '@' . $to );
+		}
+		$ago = new DateTime( '@' . $from );
 
-    	// Array of time period chunks
-    	$chunks = array(
-    		array( 60 * 60 * 24 * 365, __( 'year', 'formidable' ), __( 'years', 'formidable' ) ),
-    		array( 60 * 60 * 24 * 30, __( 'month', 'formidable' ), __( 'months', 'formidable' ) ),
-    		array( 60 * 60 * 24 * 7, __( 'week', 'formidable' ), __( 'weeks', 'formidable' ) ),
-    		array( 60 * 60 * 24, __( 'day', 'formidable' ), __( 'days', 'formidable' ) ),
-    		array( 60 * 60, __( 'hour', 'formidable' ), __( 'hours', 'formidable' ) ),
-    		array( 60, __( 'minute', 'formidable' ), __( 'minutes', 'formidable' ) ),
-    		array( 1, __( 'second', 'formidable' ), __( 'seconds', 'formidable' ) ),
-    	);
+		// Get the time difference
+		$diff_object = $now->diff( $ago );
+		$diff = get_object_vars( $diff_object );
 
-    	// Difference in seconds
-    	$diff = (int) ($to - $from);
+		// Add week amount and update day amount
+		$diff['w'] = floor( $diff['d'] / 7 );
+		$diff['d'] -= $diff['w'] * 7;
 
-    	// Something went wrong with date calculation and we ended up with a negative date.
-		if ( $diff < 1 ) {
-			return '0 ' . __( 'seconds', 'formidable' );
-    	}
+		$time_strings = self::get_time_strings();
 
-    	/**
-    	 * We only want to output one chunks of time here, eg:
-    	 * x years
-    	 * xx months
-    	 * so there's only one bit of calculation below:
-    	 */
+		foreach ( $time_strings as $k => $v ) {
+			if ( $diff[ $k ] ) {
+				$time_strings[ $k ] = $diff[ $k ] . ' ' . ( $diff[ $k ] > 1 ? $v[1] : $v[0] );
+			} else {
+				unset( $time_strings[ $k ] );
+			}
+		}
 
-        $count = 0;
+		$time_strings = array_slice( $time_strings, 0, 1 );
+		$time_ago_string = $time_strings ? implode( ', ', $time_strings ) : '0 ' . __( 'seconds', 'formidable' );
 
-    	//Step one: the first chunk
-		for ( $i = 0, $j = count( $chunks ); $i < $j; $i++ ) {
-    		$seconds = $chunks[ $i ][0];
+		return $time_ago_string;
+	}
 
-    		// Finding the biggest chunk (if the chunk fits, break)
-    		if ( ( $count = floor($diff / $seconds) ) != 0 ) {
-    		    			break;
-    		}
-    	}
-
-    	// Set output var
-    	$output = ( 1 == $count ) ? '1 '. $chunks[ $i ][1] : $count . ' ' . $chunks[ $i ][2];
-
-    	if ( ! (int) trim( $output ) ) {
-    		$output = '0 ' . __( 'seconds', 'formidable' );
-        }
-
-    	return $output;
-    }
+	/**
+	 * Get the translatable time strings
+	 *
+	 * @since 2.0.20
+	 * @return array
+	 */
+	private static function get_time_strings() {
+		return array(
+			'y' => array( __( 'year', 'formidable' ), __( 'years', 'formidable' ) ),
+			'm' => array( __( 'month', 'formidable' ), __( 'months', 'formidable' ) ),
+			'w' => array( __( 'week', 'formidable' ), __( 'weeks', 'formidable' ) ),
+			'd' => array( __( 'day', 'formidable' ), __( 'days', 'formidable' ) ),
+			'h' => array( __( 'hour', 'formidable' ), __( 'hours', 'formidable' ) ),
+			'i' => array( __( 'minute', 'formidable' ), __( 'minutes', 'formidable' ) ),
+			's' => array( __( 'second', 'formidable' ), __( 'seconds', 'formidable' ) )
+		);
+	}
 
     /**
      * Added for < WP 4.0 compatability

@@ -89,6 +89,16 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 [See more FAQs](http://formidablepro.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 2.0.20 =
+* Added more styling options: box-shadow, font-weight, Form Title, and Form Description
+* Fixed a couple issues with activating and deactivating licences
+* A few improvements for importing styles
+* Add a hook for approved theme authors to add affiliate links. If the free version is packaged with a theme, the theme author can get commissions on upgrades.
+* **Pro Features:** *
+* Added Parent entry ID to view filters
+* Added a button to autofill addon licenses
+* Improve accuracy of time_ago for leap years
+
 = 2.0.19 =
 * Add CSV export to free version
 * Add page with list of add-ons

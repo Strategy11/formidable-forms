@@ -13,6 +13,9 @@
 				$installed = isset( $installed_addons[ $addon['info']['slug'] ] ) || is_dir( WP_PLUGIN_DIR . '/formidable-' . $addon['info']['slug'] );
 			}
 			$has_thumbnail = ! empty( $addon['info']['thumbnail'] );
+			if ( $addon['info']['slug'] == 'formidable-pro' ) {
+				$addon['info']['link'] = $pro_link;
+			}
 			$addon['info']['link'] = FrmAppHelper::make_affiliate_url( $addon['info']['link'] );
 
 		?>

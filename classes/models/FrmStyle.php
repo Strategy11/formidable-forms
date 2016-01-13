@@ -101,6 +101,7 @@ class FrmStyle {
      */
 	public function save_settings( $styles ) {
         $filename = FrmAppHelper::plugin_path() .'/css/custom_theme.css.php';
+		update_option( 'frm_last_style_update', time() );
 
         if ( ! is_file($filename) ) {
             return;
@@ -371,8 +372,12 @@ class FrmStyle {
 
             'title_size'        => '20px',
             'title_color'       => '444444',
+			'title_margin_top'  => '10px',
+			'title_margin_bottom' => '10px',
             'form_desc_size'    => '14px',
             'form_desc_color'   => '666666',
+			'form_desc_margin_top' => '10px',
+			'form_desc_margin_bottom' => '25px',
 
             'font'              => '"Lucida Grande","Lucida Sans Unicode",Tahoma,sans-serif',
             'font_size'         => '14px',
