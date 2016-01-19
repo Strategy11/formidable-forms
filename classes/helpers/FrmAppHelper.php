@@ -5,7 +5,7 @@ if ( ! defined('ABSPATH') ) {
 
 class FrmAppHelper {
 	public static $db_version = 27; //version of the database we are moving to
-	public static $pro_db_version = 30;
+	public static $pro_db_version = 31;
 
 	/**
 	 * @since 2.0
@@ -61,7 +61,7 @@ class FrmAppHelper {
 		$affiliate_id = apply_filters( 'frm_affiliate_link', get_option('frm_aff') );
 		$allowed_affiliates = array( 'mojo' );
 		if ( in_array( strtolower( $affiliate_id ), $allowed_affiliates ) ) {
-			$url .= '?aff=' . $affiliate_id;
+			$url = add_query_arg( 'aff', $affiliate_id, $url );
 		}
 		return $url;
 	}

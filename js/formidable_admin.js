@@ -1342,16 +1342,6 @@ function frmAdminBuildJS(){
 	}
 	
 	/* View Functions */
-	function showLoc(){
-		var val = this.value;
-		var $cont = document.getElementById('post_select_container');
-		if(val == 'none'){
-			$cont.style.display = 'none';
-		}else{
-			$cont.style.display = '';
-		}
-	}
-
 	function showCount(){
 		var value = jQuery(this).val();
 
@@ -2272,9 +2262,6 @@ function frmAdminBuildJS(){
 
 			var $postForm = jQuery(document.getElementById('post'));
 			jQuery('input[name="show_count"]').change(showCount);
-			
-			$postForm.on('change', '#insert_loc', showLoc);
-			jQuery(document.getElementById('insert_loc')).change();
 			
 			jQuery(document.getElementById('form_id')).change(displayFormSelected);
 			
