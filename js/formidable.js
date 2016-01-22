@@ -2578,7 +2578,7 @@ function frmFrontFormJS(){
 			// In place edit
 			jQuery('.frm_edit_link_container').on('click', 'a.frm_inplace_edit', editEntry);
 			jQuery('.frm_edit_link_container').on('click', 'a.frm_cancel_edit', cancelEdit);
-			jQuery('.frm_ajax_delete').click(deleteEntry);
+			jQuery(document).on('click', '.frm_ajax_delete', deleteEntry);
 
 			// toggle collapsible entries shortcode
 			jQuery('.frm_month_heading, .frm_year_heading').click( function(){
