@@ -33,7 +33,8 @@ foreach ( $frm_field_selection as $field_key => $field_type ) { ?>
             </ul>
             <div class="clear"></div>
             <hr/>
-			<ul<?php echo apply_filters('frm_drag_field_class', '') ?> style="margin-top:2px;">
+			<ul class="<?php echo apply_filters( 'frm_drag_field_class', 'frm_disabled_fields' ) ?>" style="margin-top:2px;">
+				<li><?php FrmTipHelper::pro_tip( 'get_builder_tip' ); ?></li>
 <?php
 $col_class = 'frm_col_one';
 $no_allow_class = apply_filters( 'frm_noallow_class', 'frm_noallow' );

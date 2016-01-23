@@ -47,9 +47,11 @@
 			<h3 class="frm_first_h3"><?php _e( 'On Submit', 'formidable' ); ?>
 				<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Choose what will happen after the user submits this form.', 'formidable' );
 				if ( ! FrmAppHelper::pro_is_installed() ) {
-					esc_attr_e( ' Upgrade to Formidable Forms to get access to all options in the dropdown.', 'formidable' );
+					esc_attr_e( ' Upgrade to Formidable Pro to get access to all options in the dropdown.', 'formidable' );
 				} ?>" ></span>
             </h3>
+
+			<?php FrmTipHelper::pro_tip( 'get_form_settings_tip' ); ?>
 
             <!--On Submit Section-->
             <table class="form-table">
@@ -203,6 +205,7 @@
                 </div>
             </div>
             <?php FrmFormActionsController::list_actions($form, $values); ?>
+			<?php FrmTipHelper::pro_tip( 'get_form_action_tip' ); ?>
         </div>
 
         <div id="html_settings" class="tabs-panel <?php echo ($a == 'html_settings') ? ' frm_block' : ' frm_hidden'; ?>">
