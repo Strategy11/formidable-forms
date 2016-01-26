@@ -128,7 +128,7 @@
 		foreach ( $cond_shortcodes as $skey => $sname ) {
 	    ?>
 	    <li class="frm_col_<?php echo esc_attr( $col ) ?>">
-	        <a href="javascript:void(0)" class="frmbutton button frm_insert_code" data-code="if 125 <?php echo esc_attr($skey) ?>][/if 125"><?php echo esc_html( $sname ) ?></a>
+	        <a href="javascript:void(0)" class="frmbutton button frm_insert_code" data-code="if x <?php echo esc_attr($skey) ?>][/if x"><?php echo esc_html( $sname ) ?></a>
 	    </li>
 	    <?php
 	        $col = ( $col == 'one' ) ? 'two' : 'one';
