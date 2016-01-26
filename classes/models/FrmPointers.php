@@ -163,8 +163,9 @@ class FrmPointers {
 	 */
 	private function start_tour_pointer() {
 		$selector = 'li.toplevel_page_formidable';
+
 		$content  = '<h3>' . __( 'Congratulations!', 'formidable' ) . '</h3>'
-		            .'<p>' . sprintf( __( 'You&#8217;ve just installed new forms! Click &#8220;Start Tour&#8221; to view a quick introduction of this plugin&#8217;s core functionality.' ), 'formidable' ) . '</p>';
+		            .'<p>' . $this->opening_line() . ' ' . sprintf( __( 'Click &#8220;Start Tour&#8221; to view a quick introduction of this plugin&#8217;s core functionality.' ), 'formidable' ) . '</p>';
 		$opt_arr  = array(
 			'content'  => $content,
 			'position' => array( 'edge' => 'top', 'align' => 'center' ),
@@ -174,6 +175,15 @@ class FrmPointers {
 		$this->button_array['button2']['function'] = sprintf( 'document.location="%s";', admin_url( 'admin.php?page=formidable' ) );
 
 		$this->print_scripts( $selector, $opt_arr );
+	}
+
+	private function opening_line() {
+		$opening = __( 'You&#8217;ve just installed a new form builder plugin!', 'formidable' );
+		$affiliate = FrmAppHelper::get_affiliate();
+		if ( $affiliate == 'mojo' ) {
+			$opening = 'Your Forms plugin has been installed by MOJO Marketplace for your convenience.';
+		}
+		return $opening;
 	}
 
 	/**

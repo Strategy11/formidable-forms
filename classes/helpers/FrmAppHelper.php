@@ -58,12 +58,21 @@ class FrmAppHelper {
     }
 
 	public static function make_affiliate_url( $url ) {
-		$affiliate_id = apply_filters( 'frm_affiliate_link', get_option('frm_aff') );
-		$allowed_affiliates = array( 'mojo' );
-		if ( in_array( strtolower( $affiliate_id ), $allowed_affiliates ) ) {
+		$affiliate_id = self::get_affiliate();
+		if ( $affiliate_id ) {
 			$url = add_query_arg( 'aff', $affiliate_id, $url );
 		}
 		return $url;
+	}
+
+	public static function get_affiliate() {
+		$affiliate_id = apply_filters( 'frm_affiliate_link', get_option('frm_aff') );
+		$affiliate_id = strtolower( $affiliate_id );
+		$allowed_affiliates = array( 'mojo' );
+		if ( ! in_array( $affiliate_id, $allowed_affiliates ) ) {
+			$affiliate_id = false;
+		}
+		return $affiliate_id;
 	}
 
     /**

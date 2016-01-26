@@ -51,7 +51,7 @@
 				} ?>" ></span>
             </h3>
 
-			<?php FrmTipHelper::pro_tip( 'get_form_settings_tip' ); ?>
+			<?php FrmTipsHelper::pro_tip( 'get_form_settings_tip' ); ?>
 
             <!--On Submit Section-->
             <table class="form-table">
@@ -205,7 +205,7 @@
                 </div>
             </div>
             <?php FrmFormActionsController::list_actions($form, $values); ?>
-			<?php FrmTipHelper::pro_tip( 'get_form_action_tip' ); ?>
+			<?php FrmTipsHelper::pro_tip( 'get_form_action_tip' ); ?>
         </div>
 
         <div id="html_settings" class="tabs-panel <?php echo ($a == 'html_settings') ? ' frm_block' : ' frm_hidden'; ?>">

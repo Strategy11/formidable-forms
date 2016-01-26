@@ -25,7 +25,7 @@
 				<input type="submit" value="<?php esc_attr_e( 'Upload file and import', 'formidable' ) ?>" class="button-primary" />
             </p>
         </form>
-		<?php FrmTipHelper::pro_tip( 'get_import_tip' ); ?>
+		<?php FrmTipsHelper::pro_tip( 'get_import_tip' ); ?>
     </div>
     </div>
 

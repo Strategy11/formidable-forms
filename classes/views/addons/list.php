@@ -19,7 +19,7 @@
 			$addon['info']['link'] = FrmAppHelper::make_affiliate_url( $addon['info']['link'] );
 
 		?>
-			<div class="plugin-card <?php echo esc_attr( $has_thumbnail ? '' : 'frm-no-thumb') ?>">
+			<div class="plugin-card plugin-card-<?php echo esc_attr( $addon['info']['slug'] ) ?> <?php echo esc_attr( $has_thumbnail ? '' : 'frm-no-thumb' ) ?>">
 				<div class="plugin-card-top">
 					<div class="name column-name">
 						<h3>

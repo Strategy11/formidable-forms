@@ -26,7 +26,7 @@
             </div>
             <?php } ?>
 
-			<?php FrmTipHelper::pro_tip( 'get_entries_tip' ); ?>
+			<?php FrmTipsHelper::pro_tip( 'get_entries_tip' ); ?>
 
             <?php $wp_list_table->display(); ?>
 

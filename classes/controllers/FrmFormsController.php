@@ -3,7 +3,11 @@
 class FrmFormsController {
 
     public static function menu() {
-        add_submenu_page('formidable', 'Formidable | '. __( 'Forms', 'formidable' ), __( 'Forms', 'formidable' ), 'frm_view_forms', 'formidable', 'FrmFormsController::route' );
+		$menu_label = __( 'Forms', 'formidable' );
+		if ( ! FrmAppHelper::pro_is_installed() ) {
+			$menu_label .= ' (Lite)';
+		}
+		add_submenu_page('formidable', 'Formidable | '. $menu_label, $menu_label, 'frm_view_forms', 'formidable', 'FrmFormsController::route' );
 
 	    add_filter('get_user_option_managetoplevel_page_formidablecolumnshidden', 'FrmFormsController::hidden_columns' );
 

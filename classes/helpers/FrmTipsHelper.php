@@ -1,6 +1,6 @@
 <?php
 
-class FrmTipHelper {
+class FrmTipsHelper {
 
 	public static function pro_tip( $callback ) {
 		if ( FrmAppHelper::pro_is_installed() ) {

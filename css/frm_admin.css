@@ -280,6 +280,10 @@ form label.frm_primary_label input{font-size:12px;}
 	margin-top:10px;
 }
 
+.plugin-card.plugin-card-formidable-pro{
+	border:2px solid #0073aa;
+}
+
 .frm-no-thumb.plugin-card .name,
 .frm-no-thumb.plugin-card .desc{
 	margin-left:0;
