@@ -149,7 +149,7 @@ class FrmAddon {
 
 	private function has_been_cleared() {
 		$last_cleared = get_option( 'frm_last_cleared' );
-		return ( $last_cleared && $last_cleared < date( 'Y-m-d H:i:s', strtotime('-5 minutes') ) );
+		return ( $last_cleared && $last_cleared > date( 'Y-m-d H:i:s', strtotime('-5 minutes') ) );
 	}
 
 	private function cleared_plugins() {
