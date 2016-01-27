@@ -280,6 +280,17 @@ form label.frm_primary_label input{font-size:12px;}
 	margin-top:10px;
 }
 
+.widefat.frm_pricing thead th,
+.widefat.frm_pricing td{
+	text-align:center;
+}
+
+.widefat th.frm_table_break{
+	background-color:#999;
+	color:#fff;
+	text-align:center;
+}
+
 .plugin-card.plugin-card-formidable-pro{
 	border:2px solid #0073aa;
 }
