@@ -137,6 +137,12 @@ if ( ! isset( $center_form ) ) {
     display:block;
 }
 
+.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_html_container{
+    font-family:<?php echo FrmAppHelper::kses( stripslashes( $font ) ) ?>;
+	font-size:<?php echo esc_html( $form_desc_size . $important ) ?>;
+	color:#<?php echo esc_html( $form_desc_color . $important ) ?>;
+}
+
 .<?php echo esc_html( $style_class ) ?> .frm_icon_font{
     color:#<?php echo esc_html( $label_color . $important ) ?>;
 }

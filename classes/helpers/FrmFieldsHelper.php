@@ -374,6 +374,11 @@ DEFAULT_HTML;
 			$error_class .= ' frm_embed_form_container';
 		}
 
+		// Add class to HTML field
+		if ( $field['type'] == 'html' ) {
+			$error_class .= ' frm_html_container';
+		}
+
 		//Add classes to inline confirmation field (if it doesn't already have classes set)
 		if ( isset( $field['conf_field'] ) && $field['conf_field'] == 'inline' && ! $field['classes'] ) {
 			$error_class .= ' frm_first frm_half';
