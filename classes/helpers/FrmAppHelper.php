@@ -59,7 +59,7 @@ class FrmAppHelper {
 
 	public static function make_affiliate_url( $url ) {
 		$affiliate_id = self::get_affiliate();
-		if ( $affiliate_id ) {
+		if ( ! empty( $affiliate_id ) ) {
 			$url = add_query_arg( 'aff', $affiliate_id, $url );
 		}
 		return $url;

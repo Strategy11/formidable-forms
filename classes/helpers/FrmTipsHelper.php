@@ -2,12 +2,15 @@
 
 class FrmTipsHelper {
 
-	public static function pro_tip( $callback ) {
+	public static function pro_tip( $callback, $html = '' ) {
 		if ( FrmAppHelper::pro_is_installed() ) {
 			return;
 		}
 
 		$tip = self::$callback();
+		if ( $html == 'p' ) {
+			echo '<p>';
+		}
 		?>
 		<a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url( $tip['link'] ) ) ?>" target="_blank" class="frm_pro_tip">
 			<span><i class="frm_icon_font frm_check1_icon"></i>  Pro Tip:</span>
@@ -17,6 +20,9 @@ class FrmTipsHelper {
 			<?php } ?>
 		</a>
 		<?php
+		if ( $html == 'p' ) {
+			echo '</p>';
+		}
 	}
 
 	public static function get_builder_tip() {
