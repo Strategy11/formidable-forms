@@ -29,7 +29,7 @@ class FrmTipsHelper {
 		$tips = array(
 			array(
 				'link' => 'https://formidablepro.com/section-tip',
-				'tip'  => __( 'Long forms can still be beautiful and manageable with sections.', 'formidable' ),
+				'tip'  => __( 'Long forms can still be beautiful with sections.', 'formidable' ),
 				'call' => __( 'Upgrade to Pro.', 'formidable' ),
 			),
 			array(
@@ -39,8 +39,8 @@ class FrmTipsHelper {
 			),
 			array(
 				'link' => 'https://formidablepro.com/page-break-tip',
-				'tip'  => __( 'Increase conversions by showing fewer fields at a time with page breaks.', 'formidable' ),
-				'call' => __( 'Upgrade to Pro.', 'formidable' ),
+				'tip'  => __( 'Stop intimidating users with long forms.', 'formidable' ),
+				'call' => __( 'Use page breaks.', 'formidable' ),
 			),
 			array(
 				'link' => 'https://formidablepro.com/file-upload-tip',
@@ -77,7 +77,7 @@ class FrmTipsHelper {
 			),
 			array(
 				'link' => 'https://formidablepro.com/create-posts-tip',
-				'tip'  => __( 'Allow anyone to create a blog post right from your form.', 'formidable' ),
+				'tip'  => __( 'Allow anyone to create a blog post using your form.', 'formidable' ),
 				'call' => __( 'Upgrade to Pro.', 'formidable' ),
 			),
 			array(
@@ -120,11 +120,16 @@ class FrmTipsHelper {
 		$tips = array(
 			array(
 				'link' => 'https://formidablepro.com/manage-entries-tip',
-				'tip'  => __( 'Are you looking for a specific entry? Do you want to delete or edit your submissions?', 'formidable' ),
+				'tip'  => __( 'Do you want to edit or delete form submissions?', 'formidable' ),
 				'call' => __( 'Add entry management.', 'formidable' ),
 			),
+			array(
+				'link' => 'https://formidablepro.com/search-entries-tip',
+				'tip'  => __( 'Want to search submitted entries?', 'formidable' ),
+				'call' => __( 'Upgrade to Pro.', 'formidable' ),
+			),
 		);
-		return $tips[0];
+		return self::get_random_tip( $tips );
 	}
 
 	public static function get_import_tip() {
