@@ -382,6 +382,10 @@ class FrmXMLHelper {
 	*
 	*/
 	private static function update_custom_style_setting_on_import( &$form ) {
+		if ( ! isset( $form['options']['custom_style'] ) ) {
+			return;
+		}
+		
 		if ( is_numeric( $form['options']['custom_style'] ) ) {
 			// Set to default
 			$form['options']['custom_style'] = 1;
@@ -403,7 +407,6 @@ class FrmXMLHelper {
 				$form['options']['custom_style'] = 1;
 			}
 		}
-
 	}
 
 	public static function import_xml_views( $views, $imported ) {
