@@ -4,7 +4,7 @@ Donate link: http://formidablepro.com/donate
 Tags: contact form, contact, custom form, database, email, feedback, form, forms, poll, Post, captcha, spam, survey, template, widget, multisite, form builder, form creator, form manager
 Requires at least: 3.7
 Tested up to: 4.4
-Stable tag: 2.0.19
+Stable tag: 2.0.21
 
 Beautiful forms in 60 seconds. The WordPress form builder that enables you to create forms with a simple drag-and-drop interface and in-place editing.
 
@@ -89,6 +89,23 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 [See more FAQs](http://formidablepro.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 2.0.21 =
+* Add a timestamp to the css file instead of plugin version number to improve issues with styling caching
+* Add pro tips & upgrade calls
+* Fix bug with importing old forms with no custom style
+* **Pro Features:** *
+* Remove autoinsertion options from the view settings. Any views that were set to be inserted automatically will have their shortcodes saved onto that page.
+* Allow the delete link to work after an ajax load
+* Apply styling settings to HTML fields
+* Randomize entry key on CSV import
+* Make sure the old transient doesn't delay automatic update
+* Allow forced plugin update check if it hasn't been forced before
+* Fix CSV import form dropdown with only 1 item
+* Fix bug with importing data in embed form fields
+* Fix time_ago issue with blank value
+* Fix missing pro license message to link to global settings
+* Fix a fatal error when a non-Site Admin visits the Global settings page in multisite
+
 = 2.0.20 =
 * Added more styling options: box-shadow, font-weight, Form Title, and Form Description
 * Fixed a couple issues with activating and deactivating licences
