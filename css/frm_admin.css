@@ -357,6 +357,20 @@ form label.frm_primary_label input{font-size:12px;}
 	color:#EF7E59;
 }
 
+.frm_pro_tip .frm_check1_icon{
+	vertical-align: middle;
+}
+
+.frm_field_list .frm_pro_tip{
+	border:1px solid #EF7E59;
+	display:block;
+	padding:2px 5px 0;
+	background:#FBF0EC;
+	border-radius:4px;
+	text-align:center;
+	margin-top:-14px;
+}
+
 .nav-tab-wrapper .frm_pro_tip{
 	float:right;
 }
