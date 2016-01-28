@@ -172,7 +172,7 @@ class FrmCSVExportHelper{
 			$field_value = isset( self::$entry->metas[ $col->id ] ) ? self::$entry->metas[ $col->id ] : false;
 
 			$field_value = maybe_unserialize( $field_value );
-			$field_value = apply_filters( 'frm_csv_value', $field_value, array( 'field' => $col, 'entry' => self::$entry, 'separator' => self::$separator, ) );
+			$field_value = apply_filters( 'frm_csv_value', $field_value, array( 'field' => $col, 'entry' => self::$entry, 'separator' => self::$separator ) );
 
 			if ( isset( $col->field_options['separate_value'] ) && $col->field_options['separate_value'] ) {
 				$sep_value = FrmEntriesHelper::display_value( $field_value, $col, array(

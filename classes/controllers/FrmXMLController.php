@@ -51,7 +51,7 @@ class FrmXMLController {
     public static function form( $errors = array(), $message = '' ) {
 		$where = array(
 			'parent_form_id' => array( null, 0 ),
-			'status' => array( null, '', 'published' )
+			'status' => array( null, '', 'published' ),
 		);
 		$forms = FrmForm::getAll( $where, 'name' );
 
@@ -355,7 +355,7 @@ class FrmXMLController {
 			if ( ! is_array( $csv_field_ids ) ) {
 				$csv_field_ids = explode( ',', $csv_field_ids );
 			}
-			if ( ! empty( $csv_field_ids ) )	{
+			if ( ! empty( $csv_field_ids ) ) {
 				$where['fi.id'] = $csv_field_ids;
 			}
 			$csv_fields = FrmField::getAll( $where, 'field_order' );

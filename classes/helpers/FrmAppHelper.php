@@ -10,7 +10,7 @@ class FrmAppHelper {
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '2.0.21';
+	public static $plug_version = '2.0.21.1';
 
     /**
      * @since 1.07.02
@@ -876,8 +876,7 @@ class FrmAppHelper {
         }
 
 		if ( $user_id == 'current' ) {
-            $user_ID = get_current_user_id();
-            $user_id = $user_ID;
+			$user_id = get_current_user_id();
 		} else {
             if ( is_email($user_id) ) {
                 $user = get_user_by('email', $user_id);
@@ -1296,7 +1295,7 @@ class FrmAppHelper {
 			'd' => array( __( 'day', 'formidable' ), __( 'days', 'formidable' ) ),
 			'h' => array( __( 'hour', 'formidable' ), __( 'hours', 'formidable' ) ),
 			'i' => array( __( 'minute', 'formidable' ), __( 'minutes', 'formidable' ) ),
-			's' => array( __( 'second', 'formidable' ), __( 'seconds', 'formidable' ) )
+			's' => array( __( 'second', 'formidable' ), __( 'seconds', 'formidable' ) ),
 		);
 	}
 

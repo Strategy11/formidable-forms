@@ -275,7 +275,7 @@ class FrmAddon {
 		return $message;
 	}
 
-    public function manually_queue_update(){
+    public function manually_queue_update() {
         set_site_transient( 'update_plugins', null );
     }
 }

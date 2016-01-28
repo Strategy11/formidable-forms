@@ -12,6 +12,7 @@
 		<!-- WP VIP rules which are very restrictive and not all that applicable as FF is not on VIP -->
 		<exclude name="WordPress.VIP.DirectDatabaseQuery" />
 		<exclude name="WordPress.VIP.RestrictedVariables.user_meta"/>
+		<exclude name="WordPress.VIP.RestrictedFunctions.user_meta" />
 		<exclude name="WordPress.VIP.RestrictedFunctions.switch_to_blog"/>
 		<exclude name="WordPress.VIP.RestrictedFunctions.get_term_by"/>
 		<exclude name="WordPress.VIP.RestrictedFunctions.get_term_link"/>
@@ -38,6 +39,7 @@
 		<exclude name="WordPress.VIP.RestrictedFunctions.wp_get_post_terms" />
 		<exclude name="Generic.Files.LowercasedFilename.NotFound" />
 		<exclude name="WordPress.WP.PreparedSQL.NotPrepared" /><!-- This isn't allowing variables -->
+		<exclude name="WordPress.NamingConventions.ValidVariableName.NotSnakeCase" /><!-- Some WP globals break the rule -->
 
 		<!-- Demanding Yoda conditions is stupid. -->
 		<exclude name="WordPress.PHP.YodaConditions"/>

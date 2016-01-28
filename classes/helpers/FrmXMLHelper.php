@@ -385,7 +385,7 @@ class FrmXMLHelper {
 		if ( ! isset( $form['options']['custom_style'] ) ) {
 			return;
 		}
-		
+
 		if ( is_numeric( $form['options']['custom_style'] ) ) {
 			// Set to default
 			$form['options']['custom_style'] = 1;
