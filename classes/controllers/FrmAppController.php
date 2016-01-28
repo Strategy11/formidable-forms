@@ -91,6 +91,8 @@ class FrmAppController {
     }
 
     public static function pro_get_started_headline() {
+		self::maybe_show_upgrade_bar();
+
         // Don't display this error as we're upgrading the thing, or if the user shouldn't see the message
         if ( 'upgrade-plugin' == FrmAppHelper::simple_get( 'action', 'sanitize_title' ) || ! current_user_can( 'update_plugins' ) ) {
             return;
@@ -115,6 +117,26 @@ class FrmAppController {
 <?php
         }
     }
+
+	private static function maybe_show_upgrade_bar() {
+		$page = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
+		if ( strpos( $page, 'formidable' ) !== 0 ) {
+			return;
+		}
+
+		if ( FrmAppHelper::pro_is_installed() ) {
+			return;
+		}
+
+		$affiliate = FrmAppHelper::get_affiliate();
+		if ( ! empty( $affiliate ) ) {
+?>
+<div class="update-nag frm-update-to-pro">
+	Looking for more options to get professional results? <span>Take your forms to the next level.</span> <a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url('https://formidablepro.com') ) ?>" class="button">Upgrade to Pro</a>
+</div>
+<?php
+		}
+	}
 
 	/**
 	 * If there are CURL problems on this server, wp_remote_post won't work for installing
