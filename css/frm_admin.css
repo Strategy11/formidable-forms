@@ -307,6 +307,12 @@ form label.frm_primary_label input{font-size:12px;}
 	padding:7px 15px;
 }
 
+.frm_pro_heading{
+	position:absolute;
+	left:285px;
+	line-height: 2.3em !important;
+}
+
 .upgrade_to_pro .frm_check_icon{
 	color:#468847;
 }

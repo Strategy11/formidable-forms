@@ -1,5 +1,12 @@
-<div class="wrap">
-	<h2><?php _e( 'Upgrade to Pro', 'formidable' ) ?></h2>
+<div class="wrap upgrade_to_pro">
+	<h2 class="frm_pro_heading">Save time and make life easier. Upgrade to Pro.</h2>
+	<img src="<?php echo esc_url( FrmAppHelper::plugin_url() ) ?>/images/logo.png" alt="Upgrade to Pro" />
+
+	<div class="clear"></div>
+
+	<p>Enhance your basic Formidable forms with a plethora of Pro field types and features. Create advanced forms and data-driven applications in no time at all.</p>
+	<p>Are you collecting data offline? Streamline your business by using your forms to get online. Whether you need surveys, polls, client contracts, mortgage calculators, or directories, we've got you covered. Save time by allowing clients to return and make changes to their own submissions, or let them contribute content to your site. Generate more leads by adding headings and page breaks, only showing the fields you need, and letting your clients repeat a section of fields as many times as they need.</p>
+	<p>Projects that once seemed impossible are within your reach with Pro. That project you’ve been dreaming of pursuing? Chances are <strong>Formidable Pro can handle it</strong>.</p>
 
 	<table class="wp-list-table widefat fixed striped frm_pricing">
 		<thead>
@@ -62,7 +69,7 @@
 	<table class="wp-list-table widefat fixed striped">
 		<thead>
 			<tr>
-				<th></th>
+				<th style="width:60%"></th>
 				<th><h3>Lite</h3></th>
 				<th><h3>Pro</h3></th>
 			</tr>
