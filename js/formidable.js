@@ -412,7 +412,7 @@ function frmFrontFormJS(){
 
 		} else {
 			// If text field on the current page
-			fieldValue = jQuery('input[name="'+ f.inputName +'"]').val();
+			fieldValue = jQuery('input[name="'+ f.inputName +'"], textarea[name="'+ f.inputName +'"]').val();
 		}
 
 		if ( typeof fieldValue === 'undefined' ) {
