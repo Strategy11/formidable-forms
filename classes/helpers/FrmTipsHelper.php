@@ -47,6 +47,21 @@ class FrmTipsHelper {
 				'tip'  => __( 'Cut down on back-and-forth with clients.', 'formidable' ),
 				'call' => __( 'Allow file uploads in your form.', 'formidable' ),
 			),
+			array(
+				'link' => 'https://formidablepro.com/calculations-total-tip',
+				'tip'  => __( 'Need to calculate a total?', 'formidable' ),
+				'call' => __( 'Upgrade to Pro.', 'formidable' ),
+			),
+			array(
+				'link' => 'https://formidablepro.com/create-posts-tip',
+				'tip'  => __( 'Let users create blog posts with a form.', 'formidable' ),
+				'call' => __( 'Upgrade to Pro.', 'formidable' ),
+			),
+			array(
+				'link' => 'https://formidablepro.com/downloads/mailchimp/',
+				'tip'  => __( 'Grow your business with automated email follow-up.', 'formidable' ),
+				'call' => __( 'Send leads straight to MailChimp.', 'formidable' ),
+			),
 		);
 
 		return self::get_random_tip( $tips );
