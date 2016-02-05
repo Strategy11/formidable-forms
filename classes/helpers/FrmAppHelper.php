@@ -10,7 +10,7 @@ class FrmAppHelper {
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '2.0.21.1';
+	public static $plug_version = '2.0.22.1b1';
 
     /**
      * @since 1.07.02
@@ -911,8 +911,6 @@ class FrmAppHelper {
      * @param string $column
      */
     public static function get_unique_key( $name = '', $table_name, $column, $id = 0, $num_chars = 6 ) {
-        global $wpdb;
-
         $key = '';
 
         if ( ! empty( $name ) ) {
