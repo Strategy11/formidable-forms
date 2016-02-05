@@ -697,7 +697,7 @@ class FrmField {
 	}
 
 	public static function get_option_in_object( $field, $option ) {
-		return $field->field_options[ $option ];
+		return isset( $field->field_options[ $option ] ) ? $field->field_options[ $option ] : '';
 	}
 
 	/**

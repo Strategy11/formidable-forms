@@ -1,6 +1,6 @@
 <div class="wrap">
     <div class="frmicon icon32"><br/></div>
-    <h2><?php _e( 'Import/Export', 'formidable' ); ?></h2>
+    <h1><?php _e( 'Import/Export', 'formidable' ); ?></h1>
 
     <?php include(FrmAppHelper::plugin_path() .'/classes/views/shared/errors.php'); ?>
     <div id="poststuff" class="metabox-holder">
