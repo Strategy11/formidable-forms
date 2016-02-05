@@ -117,6 +117,9 @@ class FrmEntryFormat {
 
 		if ( $atts['format'] != 'text' ) {
 			$values[ $f->field_key ] = $val;
+			if ( isset( $prev_val ) && $prev_val != $val && $f->type != 'textarea' ) {
+				$values[ $f->field_key .'-value' ] = $prev_val;
+			}
 		} else {
 			$values[ $f->id ] = array( 'label' => $f->name, 'val' => $val );
 		}
