@@ -1,5 +1,5 @@
 <div class="wrap upgrade_to_pro">
-	<h2 class="frm_pro_heading">Save time and make life easier. Upgrade to Pro.</h2>
+	<h1 class="frm_pro_heading">Save time and make life easier. Upgrade to Pro.</h1>
 	<img src="<?php echo esc_url( FrmAppHelper::plugin_url() ) ?>/images/logo.png" alt="Upgrade to Pro" />
 
 	<div class="clear"></div>

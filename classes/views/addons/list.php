@@ -1,5 +1,5 @@
 <div class="wrap">
-	<h2><?php _e( 'Formidable AddOns', 'formidable' ) ?></h2>
+	<h1><?php _e( 'Formidable AddOns', 'formidable' ) ?></h1>
 
 	<div id="the-list" class="frm-addons">
 		<?php foreach ( $addons as $addon ) {
