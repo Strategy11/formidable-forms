@@ -10,7 +10,7 @@ class FrmAppHelper {
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '2.0.22.1b1';
+	public static $plug_version = '2.0.22b1';
 
     /**
      * @since 1.07.02
@@ -1770,10 +1770,10 @@ class FrmAppHelper {
 	}
 
     /**
+	 * echo the message on the plugins listing page
      * @since 1.07.10
      *
      * @param float $min_version The version the add-on requires
-     * @return echo The message on the plugins listing page
      */
 	public static function min_version_notice( $min_version ) {
         $frm_version = self::plugin_version();
