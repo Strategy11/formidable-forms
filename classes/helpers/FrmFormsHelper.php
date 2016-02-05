@@ -11,7 +11,7 @@ class FrmFormsHelper {
 	}
 
 	public static function get_direct_link( $key, $form = false ) {
-        $target_url = esc_url(admin_url('admin-ajax.php') . '?action=frm_forms_preview&form='. $key);
+		$target_url = esc_url( admin_url( 'admin-ajax.php?action=frm_forms_preview&form='. $key ) );
         $target_url = apply_filters('frm_direct_link', $target_url, $key, $form);
 
         return $target_url;
@@ -551,7 +551,7 @@ BEFORE_HTML;
         }
 
         if ( $form_id ) {
-			$val = '<a href="' . esc_url( admin_url( 'admin.php' ) . '?page=formidable&frm_action=edit&id=' . $form_id ) . '">' . ( '' == $name ? __( '(no title)' ) : FrmAppHelper::truncate( $name, 40 ) ) . '</a>';
+			$val = '<a href="' . esc_url( admin_url( 'admin.php?page=formidable&frm_action=edit&id=' . $form_id ) ) . '">' . ( '' == $name ? __( '(no title)' ) : FrmAppHelper::truncate( $name, 40 ) ) . '</a>';
 	    } else {
 	        $val = '';
 	    }

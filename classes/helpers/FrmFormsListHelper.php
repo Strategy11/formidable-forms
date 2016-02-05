@@ -263,7 +263,7 @@ class FrmFormsListHelper extends FrmListHelper {
 			            $val = '<i class="frm_icon_font frm_forbid_icon frm_bstooltip" title="'. esc_attr('Entries are not being saved', 'formidable' ) .'"></i>';
 			        } else {
 			            $text = FrmEntry::getRecordCount($item->id);
-                        $val = (current_user_can('frm_view_entries')) ? '<a href="'. esc_url(admin_url('admin.php') .'?page=formidable-entries&form='. $item->id ) .'">'. $text .'</a>' : $text;
+						$val = current_user_can('frm_view_entries') ? '<a href="'. esc_url( admin_url( 'admin.php?page=formidable-entries&form='. $item->id ) ) . '">' . $text . '</a>' : $text;
                         unset($text);
                     }
 			        break;

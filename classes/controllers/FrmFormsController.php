@@ -581,7 +581,7 @@ class FrmFormsController {
         }
 
         if ( $form->parent_form_id ) {
-            wp_die( sprintf(__( 'You are trying to edit a child form. Please edit from %1$shere%2$s', 'formidable' ), '<a href="'. esc_url(admin_url('admin.php') .'?page=formidable&frm_action=edit&id='. $form->parent_form_id) .'">', '</a>' ));
+			wp_die( sprintf( __( 'You are trying to edit a child form. Please edit from %1$shere%2$s', 'formidable' ), '<a href="'. esc_url( admin_url( 'admin.php?page=formidable&frm_action=edit&id='. $form->parent_form_id ) ) . '">', '</a>' ));
         }
 
 		$frm_field_selection = FrmField::field_selection();

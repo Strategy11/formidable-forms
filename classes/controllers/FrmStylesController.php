@@ -55,11 +55,11 @@ class FrmStylesController {
         $version = FrmAppHelper::plugin_version();
 		wp_enqueue_script( 'jquery-frm-themepicker', FrmAppHelper::plugin_url() . '/js/jquery/jquery-ui-themepicker.js', array( 'jquery' ), $version );
 
-        wp_enqueue_style('frm-custom-theme', admin_url('admin-ajax.php') .'?action=frmpro_css');
+		wp_enqueue_style( 'frm-custom-theme', admin_url('admin-ajax.php?action=frmpro_css' ) );
 
         $style = apply_filters('frm_style_head', false);
         if ( $style ) {
-            wp_enqueue_style('frm-single-custom-theme', admin_url('admin-ajax.php') .'?action=frmpro_load_css&flat=1&'. http_build_query($style->post_content));
+			wp_enqueue_style( 'frm-single-custom-theme', admin_url( 'admin-ajax.php?action=frmpro_load_css&flat=1' ) .'&'. http_build_query( $style->post_content ) );
         }
     }
 
@@ -116,7 +116,7 @@ class FrmStylesController {
 		if ( is_readable( $uploads['basedir'] . $saved_css_path ) ) {
 			$url = $uploads['baseurl'] . $saved_css_path;
 		} else {
-			$url = admin_url( 'admin-ajax.php' ) . '?action=frmpro_css';
+			$url = admin_url( 'admin-ajax.php?action=frmpro_css' );
 		}
 		$stylesheet_urls['formidable'] = $url;
 	}
@@ -180,7 +180,7 @@ class FrmStylesController {
                 $post_id = reset($id);
             }
             // include the CSS that includes this style
-			echo '<link href="' . esc_url( admin_url( 'admin-ajax.php' ) . '?action=frmpro_css' ) . '" type="text/css" rel="Stylesheet" class="frm-custom-theme" />';
+			echo '<link href="' . esc_url( admin_url( 'admin-ajax.php?action=frmpro_css' ) ) . '" type="text/css" rel="Stylesheet" class="frm-custom-theme" />';
             $message = __( 'Your styling settings have been saved.', 'formidable' );
         }
 

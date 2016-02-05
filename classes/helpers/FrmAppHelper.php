@@ -551,7 +551,7 @@ class FrmAppHelper {
 	public static function post_edit_link( $post_id ) {
         $post = get_post($post_id);
         if ( $post ) {
-            return '<a href="'. esc_url(admin_url('post.php') .'?post='. $post_id .'&action=edit') .'">'. self::truncate($post->post_title, 50) .'</a>';
+			return '<a href="'. esc_url( admin_url('post.php?post='. $post_id .'&action=edit') ) .'">'. self::truncate( $post->post_title, 50 ) .'</a>';
         }
         return '';
     }
