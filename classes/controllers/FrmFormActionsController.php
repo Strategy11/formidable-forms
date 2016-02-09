@@ -137,6 +137,7 @@ class FrmFormActionsController {
     }
 
     public static function add_form_action() {
+		FrmAppHelper::permission_check('frm_edit_forms');
         check_ajax_referer( 'frm_ajax', 'nonce' );
 
         global $frm_vars;
@@ -159,6 +160,7 @@ class FrmFormActionsController {
     }
 
     public static function fill_action() {
+		FrmAppHelper::permission_check('frm_edit_forms');
         check_ajax_referer( 'frm_ajax', 'nonce' );
 
         $action_key = absint( $_POST['action_id'] );

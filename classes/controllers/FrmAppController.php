@@ -380,19 +380,16 @@ class FrmAppController {
     }
 
     public static function uninstall() {
+		FrmAppHelper::permission_check('administrator');
         check_ajax_referer( 'frm_ajax', 'nonce' );
 
-        if ( current_user_can( 'administrator' ) ) {
-            $frmdb = new FrmDb();
-            $frmdb->uninstall();
+		$frmdb = new FrmDb();
+		$frmdb->uninstall();
 
-			//disable the plugin and redirect after uninstall so the tables don't get added right back
-			deactivate_plugins( FrmAppHelper::plugin_folder() . '/formidable.php', false, false );
-			echo esc_url_raw( admin_url( 'plugins.php?deactivate=true' ) );
-        } else {
-            $frm_settings = FrmAppHelper::get_settings();
-            wp_die( $frm_settings->admin_permission );
-        }
+		//disable the plugin and redirect after uninstall so the tables don't get added right back
+		deactivate_plugins( FrmAppHelper::plugin_folder() . '/formidable.php', false, false );
+		echo esc_url_raw( admin_url( 'plugins.php?deactivate=true' ) );
+
         wp_die();
     }
 
