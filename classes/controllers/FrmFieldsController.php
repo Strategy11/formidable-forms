@@ -3,6 +3,7 @@
 class FrmFieldsController {
 
     public static function load_field() {
+		FrmAppHelper::permission_check('frm_edit_forms');
         check_ajax_referer( 'frm_ajax', 'nonce' );
 
         $fields = $_POST['field'];
@@ -49,6 +50,7 @@ class FrmFieldsController {
     }
 
     public static function create() {
+		FrmAppHelper::permission_check('frm_edit_forms');
         check_ajax_referer( 'frm_ajax', 'nonce' );
 
 		$field_type = FrmAppHelper::get_post_param( 'field', '', 'sanitize_text_field' );
@@ -84,6 +86,7 @@ class FrmFieldsController {
     }
 
     public static function update_form_id() {
+		FrmAppHelper::permission_check('frm_edit_forms');
         check_ajax_referer( 'frm_ajax', 'nonce' );
 
 		$field_id = FrmAppHelper::get_post_param( 'field', 0, 'absint' );
@@ -100,6 +103,7 @@ class FrmFieldsController {
     }
 
 	public static function edit_name( $field = 'name', $id = '' ) {
+		FrmAppHelper::permission_check('frm_edit_forms');
         check_ajax_referer( 'frm_ajax', 'nonce' );
 
         if ( empty($field) ) {
@@ -127,6 +131,7 @@ class FrmFieldsController {
     }
 
     public static function update_ajax_option() {
+		FrmAppHelper::permission_check('frm_edit_forms');
         check_ajax_referer( 'frm_ajax', 'nonce' );
 
 		$field_id = FrmAppHelper::get_post_param( 'field', 0, 'absint' );
@@ -159,6 +164,7 @@ class FrmFieldsController {
     }
 
     public static function duplicate() {
+		FrmAppHelper::permission_check('frm_edit_forms');
         check_ajax_referer( 'frm_ajax', 'nonce' );
 
         global $wpdb;
@@ -208,6 +214,7 @@ class FrmFieldsController {
     }
 
     public static function destroy() {
+		FrmAppHelper::permission_check('frm_edit_forms');
         check_ajax_referer( 'frm_ajax', 'nonce' );
 
 		$field_id = FrmAppHelper::get_post_param( 'field_id', 0, 'absint' );
@@ -219,6 +226,7 @@ class FrmFieldsController {
 
     //Add Single Option or Other Option
     public static function add_option() {
+		FrmAppHelper::permission_check('frm_edit_forms');
         check_ajax_referer( 'frm_ajax', 'nonce' );
 
 		$id = FrmAppHelper::get_post_param( 'field_id', 0, 'absint' );
@@ -281,6 +289,7 @@ class FrmFieldsController {
     }
 
     public static function edit_option() {
+		FrmAppHelper::permission_check('frm_edit_forms');
         check_ajax_referer( 'frm_ajax', 'nonce' );
 
 		$element_id = FrmAppHelper::get_post_param( 'element_id', '', 'sanitize_title' );
@@ -299,7 +308,7 @@ class FrmFieldsController {
 
         $this_opt_id = end($ids);
 		$this_opt = (array) $field->options[ $this_opt_id ];
-        $other_opt = ( $this_opt_id && strpos( $this_opt_id, 'other') !== false ? true : false );
+		$other_opt = ( $this_opt_id && strpos( $this_opt_id, 'other') !== false );
 
         $label = isset($this_opt['label']) ? $this_opt['label'] : reset($this_opt);
         $value = isset($this_opt['value']) ? $this_opt['value'] : '';
@@ -324,6 +333,7 @@ class FrmFieldsController {
     }
 
     public static function delete_option() {
+		FrmAppHelper::permission_check('frm_edit_forms');
         check_ajax_referer( 'frm_ajax', 'nonce' );
 
 		$field_id = FrmAppHelper::get_post_param( 'field_id', 0, 'absint' );
@@ -366,9 +376,7 @@ class FrmFieldsController {
     }
 
     public static function import_choices() {
-        if ( ! current_user_can( 'frm_edit_forms' ) ) {
-            wp_die();
-        }
+        FrmAppHelper::permission_check( 'frm_edit_forms', 'hide' );
 
 		$field_id = absint( $_REQUEST['field_id'] );
 
@@ -413,6 +421,7 @@ class FrmFieldsController {
     }
 
     public static function import_options() {
+		FrmAppHelper::permission_check('frm_edit_forms');
         check_ajax_referer( 'frm_ajax', 'nonce' );
 
         if ( ! is_admin() || ! current_user_can('frm_edit_forms') ) {
@@ -474,7 +483,9 @@ class FrmFieldsController {
     }
 
     public static function update_order() {
+		FrmAppHelper::permission_check('frm_edit_forms');
         check_ajax_referer( 'frm_ajax', 'nonce' );
+
 		$fields = FrmAppHelper::get_post_param( 'frm_field_id' );
 		foreach ( (array) $fields as $position => $item ) {
 			FrmField::update( absint( $item ), array( 'field_order' => absint( $position ) ) );

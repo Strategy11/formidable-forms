@@ -157,6 +157,7 @@ class FrmAddon {
 	}
 
 	public static function activate() {
+		FrmAppHelper::permission_check('frm_change_settings');
 	 	check_ajax_referer( 'frm_ajax', 'nonce' );
 
 		if ( ! isset( $_POST['license'] ) || empty( $_POST['license'] ) ) {
@@ -204,6 +205,7 @@ class FrmAddon {
 	}
 
 	public static function deactivate() {
+		FrmAppHelper::permission_check('frm_change_settings');
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
 		$plugin_slug = sanitize_text_field( $_POST['plugin'] );
