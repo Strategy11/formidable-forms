@@ -759,10 +759,23 @@ class FrmXMLHelper {
             return $str;
         }
 
+		self::remove_invalid_characters_from_xml( $str );
+
 		// $str = ent2ncr(esc_html($str));
 		$str = '<![CDATA[' . str_replace( ']]>', ']]]]><![CDATA[>', $str ) . ']]>';
 
 		return $str;
+	}
+
+	/**
+	 * Remove <US> character (unit separator) from exported strings
+	 *
+	 * @since 2.0.22
+	 * @param string $str
+	 */
+	private static function remove_invalid_characters_from_xml( &$str ) {
+		// Remove <US> character
+		$str = str_replace( '\x1F', '', $str );
 	}
 
     public static function migrate_form_settings_to_actions( $form_options, $form_id, &$imported = array(), $switch = false ) {
