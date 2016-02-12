@@ -54,16 +54,6 @@ class FrmTipsHelper {
 				'tip'  => __( 'Need to calculate a total?', 'formidable' ),
 				'call' => __( 'Upgrade to Pro.', 'formidable' ),
 			),
-			array(
-				'link' => 'https://formidablepro.com/create-posts-tip',
-				'tip'  => __( 'Use this form for front-end posting.', 'formidable' ),
-				'call' => __( 'Upgrade to Pro.', 'formidable' ),
-			),
-			array(
-				'link' => 'https://formidablepro.com/downloads/mailchimp/',
-				'tip'  => __( 'Grow your business with automated email follow-up.', 'formidable' ),
-				'call' => __( 'Send leads straight to MailChimp.', 'formidable' ),
-			),
 		);
 		$tips = array_merge( $tips, self::get_form_settings_tip(), self::get_form_action_tip(), self::get_entries_tip() );
 
@@ -74,7 +64,7 @@ class FrmTipsHelper {
 		$tips = array(
 			array(
 				'link' => 'https://formidablepro.com/front-end-editing-tip',
-				'tip'  => __( 'A site with dynamic, maintainable, user-generated content is within reach.', 'formidable' ),
+				'tip'  => __( 'A site with dynamic, user-generated content is within reach.', 'formidable' ),
 				'call' => __( 'Add front-end editing.', 'formidable' ),
 			),
 			array(
@@ -95,7 +85,12 @@ class FrmTipsHelper {
 			),
 			array(
 				'link' => 'https://formidablepro.com/create-posts-tip',
-				'tip'  => __( 'Allow anyone to create blog posts using your form.', 'formidable' ),
+				'tip'  => __( 'Create blog posts or pages from the front-end.', 'formidable' ),
+				'call' => __( 'Upgrade to Pro.', 'formidable' ),
+			),
+			array(
+				'link' => 'https://formidablepro.com/front-end-posting-tip',
+				'tip'  => __( 'Make front-end posting easy.', 'formidable' ),
 				'call' => __( 'Upgrade to Pro.', 'formidable' ),
 			),
 			array(
