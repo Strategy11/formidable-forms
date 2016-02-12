@@ -45,6 +45,7 @@ class FrmAddonsController {
 		$plugin_order = array(
 			'formidable-pro', 'mailchimp', 'registration-lite',
 			'paypal-standard', 'bootstrap-modal', 'math-captcha',
+			'zapier',
 		);
 		$ordered_addons = array();
 		foreach ( $plugin_order as $plugin ) {

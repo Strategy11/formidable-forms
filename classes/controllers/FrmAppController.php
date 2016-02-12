@@ -130,9 +130,10 @@ class FrmAppController {
 
 		$affiliate = FrmAppHelper::get_affiliate();
 		if ( ! empty( $affiliate ) ) {
+			$tip = FrmTipsHelper::get_banner_tip();
 ?>
 <div class="update-nag frm-update-to-pro">
-	Looking for more options to get professional results? <span>Take your forms to the next level.</span> <a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url('https://formidablepro.com') ) ?>" class="button">Upgrade to Pro</a>
+	<?php echo FrmAppHelper::kses( $tip['tip'] ) ?> <span><?php echo FrmAppHelper::kses( $tip['call'] ) ?></span> <a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url('https://formidablepro.com?banner=1&tip='. absint( $tip['num'] ) ) ) ?>" class="button">Upgrade to Pro</a>
 </div>
 <?php
 		}

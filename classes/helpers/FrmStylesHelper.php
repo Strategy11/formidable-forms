@@ -92,7 +92,6 @@ class FrmStylesHelper {
 			<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-styles' ) ) ?>" class="nav-tab <?php echo ( '' == $active ) ? 'nav-tab-active' : '' ?>"><?php _e( 'Edit Styles', 'formidable' ) ?></a>
 			<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-styles&frm_action=manage' ) ) ?>" class="nav-tab <?php echo ( 'manage' == $active ) ? 'nav-tab-active' : '' ?>"><?php _e( 'Manage Form Styles', 'formidable' ) ?></a>
 			<a href="<?php echo esc_url( admin_url('admin.php?page=formidable-styles&frm_action=custom_css' ) ) ?>" class="nav-tab <?php echo ( 'custom_css' == $active ) ? 'nav-tab-active' : '' ?>"><?php _e( 'Custom CSS', 'formidable' ) ?></a>
-			<?php FrmTipsHelper::pro_tip( 'get_styling_tip' ); ?>
         </h2>
 <?php
     }

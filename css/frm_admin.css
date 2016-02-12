@@ -303,8 +303,14 @@ form label.frm_primary_label input{font-size:12px;}
 	margin:0 15px;
 	background-color:#d55a1e;
 	box-shadow: 0 1px 0 #BB3E01;
-	border:none;
+	border-color:transparent;
 	padding:7px 15px;
+}
+
+.update-nag.frm-update-to-pro a:hover{
+	background-color:#d55a1e;
+	color:#fff;
+	border:1px solid #BB3E01;
 }
 
 .frm_pro_heading{
@@ -367,13 +373,16 @@ form label.frm_primary_label input{font-size:12px;}
 	vertical-align: middle;
 }
 
-.frm_field_list .frm_pro_tip{
+.frm_pro_tip{
 	border:1px solid #EF7E59;
 	display:block;
 	padding:2px 5px 0;
 	background:#FBF0EC;
 	border-radius:4px;
 	text-align:center;
+}
+
+.frm_field_list .frm_pro_tip{
 	margin-top:-14px;
 }
 
@@ -385,7 +394,6 @@ form label.frm_primary_label input{font-size:12px;}
 	color:#666;
 }
 
-.update-nag.frm-update-to-pro a:hover,
 .frm_pro_tip:hover span{
 	color:#F0430E;
 }
