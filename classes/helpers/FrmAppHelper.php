@@ -909,8 +909,10 @@ class FrmAppHelper {
     /**
      * @param string $table_name
      * @param string $column
+	 * @param int $id
+	 * @param int $num_chars
      */
-    public static function get_unique_key( $name = '', $table_name, $column, $id = 0, $num_chars = 6 ) {
+    public static function get_unique_key( $name = '', $table_name, $column, $id = 0, $num_chars = 5 ) {
         $key = '';
 
         if ( ! empty( $name ) ) {
@@ -950,8 +952,6 @@ class FrmAppHelper {
         if ( ! $record ) {
             return false;
         }
-
-        global $frm_vars;
 
         if ( empty($post_values) ) {
             $post_values = stripslashes_deep($_POST);
