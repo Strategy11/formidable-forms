@@ -94,22 +94,22 @@ class FrmTipsHelper {
 				'call' => __( 'Upgrade to Pro.', 'formidable' ),
 			),
 			array(
-				'link' => 'https://formidablepro.com/downloads/mailchimp/',
+				'link' => 'https://formidablepro.com/mailchimp-tip',
 				'tip'  => __( 'Grow your business with automated email follow-up.', 'formidable' ),
 				'call' => __( 'Send leads straight to MailChimp.', 'formidable' ),
 			),
 			array(
-				'link' => 'https://formidablepro.com/downloads/paypal-standard/',
+				'link' => 'https://formidablepro.com/paypal-tip',
 				'tip'  => __( 'Save hours and increase revenue by collecting payments with every submission.', 'formidable' ),
 				'call' => __( 'Use PayPal with this form.', 'formidable' ),
 			),
 			array(
-				'link' => 'https://formidablepro.com/downloads/registration-lite/',
+				'link' => 'https://formidablepro.com/registration-tip',
 				'tip'  => __( 'Start building up your site membership.', 'formidable' ),
 				'call' => __( 'Automatically create user accounts.', 'formidable' ),
 			),
 			array(
-				'link' => 'https://formidablepro.com/downloads/twilio/',
+				'link' => 'https://formidablepro.com/twilio-tip',
 				'tip'  => __( 'Want a text when this form is submitted or when a payment is received?', 'formidable' ),
 				'call' => __( 'Use Twilio with this form.', 'formidable' ),
 			),
