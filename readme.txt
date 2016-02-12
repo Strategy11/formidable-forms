@@ -4,7 +4,7 @@ Donate link: http://formidablepro.com/donate
 Tags: contact form, contact, custom form, database, email, feedback, form, forms, poll, Post, captcha, spam, survey, template, widget, multisite, form builder, form creator, form manager
 Requires at least: 3.7
 Tested up to: 4.4
-Stable tag: 2.0.21
+Stable tag: 2.0.22
 
 Beautiful forms in 60 seconds. The WordPress form builder that enables you to create forms with a simple drag-and-drop interface and in-place editing.
 
@@ -89,6 +89,25 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 [See more FAQs](http://formidablepro.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 2.0.22 =
+* Add an upgrade banner when affiliate links are active
+* Add permission checks in addition to nonce for several actions for extra security
+* Don't allow javascript to be saved in field choices
+* Include the admin_url params inside the function to resolve a conflict with WPML
+* Prevent XML breaking with US character
+* Fix rand() error with float some users are seeing with PHP7
+* **Pro Features:** *
+* Add the option to automatically delete files when a file is replaced, and and entry is deleted
+* Allow a prefix and/or suffix along with the [auto_id] shortcode
+* Add is_draft shortcode for views. This allows [is_draft], [if is_draft equals="1"]-draft-[/if is_draft], and [if is_draft equals="0"]-complete-[/if is_draft]
+* Add frm_no_entries_message filter to adjust the output when there are no entries found
+* Add frm_search_for_dynamic_text hook for searching numeric values in Dynamic fields
+* Add the saved value into the array and json response. The entries fetched using FrmEntriesController::show_entry_shortcode were only returning the displayed value. This adds the saved value to the array as well. This covers user id, dynamic fields, radio, dropdown, and checkbox fields anytime the saved and displayed values are different.
+* Add filter on add/remove fields to allow translations
+* Default new number fields to use "any" step
+* Fix conditional logic dependent on a paragraph field
+* Fix date fields inside form loaded with in-place-edit
+
 = 2.0.21 =
 * Add a timestamp to the css file instead of plugin version number to improve issues with styling caching
 * Add pro tips & upgrade calls
