@@ -11,7 +11,7 @@
 		<input type="hidden" name="frm_action" value="save" />
         <textarea name="<?php echo esc_attr( $frm_style->get_field_name('custom_css') ) ?>" class="frm_hidden"><?php echo FrmAppHelper::esc_textarea( $style->post_content['custom_css'] ) ?></textarea>
 		<?php wp_nonce_field( 'frm_style_nonce', 'frm_style' ); ?>
-
+		<?php FrmTipsHelper::pro_tip( 'get_styling_tip', 'p' ); ?>
 	<div id="nav-menus-frame">
 	<div id="menu-settings-column" class="metabox-holder">
 		<div class="clear"></div>
