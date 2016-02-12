@@ -70,24 +70,24 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		// Check keys
 		$_GET['entry'] = $_GET['detail'] = 'thx9u15';
 
-		self::test_all_entries_view_with_entry_param( 'key' );
-		self::test_dynamic_view_with_entry_param( 'key' );
-		self::test_calendar_view_with_entry_param( 'key' );
-		self::test_single_view_with_entry_param( 'key' );
+		self::_test_all_entries_view_with_entry_param( 'key' );
+		self::_test_dynamic_view_with_entry_param( 'key' );
+		//self::_test_calendar_view_with_entry_param( 'key' );
+		//self::_test_single_view_with_entry_param( 'key' );
 		
 		$dynamic_view = get_page_by_title( 'Single Entry', OBJECT, 'frm_display' );
-		update_post_meta( $single_view->ID, 'frm_entry_id', 60417 );
+		update_post_meta( $dynamic_view->ID, 'frm_entry_id', 60417 );
 
 		// Check IDs
 		$_GET['entry'] = $_GET['detail'] = 60422;
 
-		$view = do_shortcode( '[display-frm-data id="dynamic-view"]' );
+		/*$view = do_shortcode( '[display-frm-data id="dynamic-view"]' );
 		
 		// Calendar
 		$view = do_shortcode( '[display-frm-data id="all-entries"]' );
 		
 		// Single
-		$view = do_shortcode( '[display-frm-data id="all-entries"]' );
+		$view = do_shortcode( '[display-frm-data id="all-entries"]' );*/
 	}
 
 	/**
@@ -273,7 +273,11 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 
 		$_GET['entry'] = FrmEntry::get_id_by_key( 'steph_entry_key' );
 
-		$d = self::get_default_args( $single_entry_view, array( 'Steph' ), array( 'Jamie', 'Steve' ) );
+		// This was for old functionality
+		//$d = self::get_default_args( $single_entry_view, array( 'Steph' ), array( 'Jamie', 'Steve' ) );
+
+		// This is for new functionality
+		$d = self::get_default_args( $single_entry_view, array( 'Jamie' ), array( 'Steph', 'Steve' ) );
 
 		self::run_get_display_data_tests( $d, 'single entry view with entry param set' );
 	}
@@ -291,7 +295,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 
 		$expected_content = array( '<a href="http://example.org/?p=' . $post_id . '">Jamie\'s Post</a>' );
 
-		$d = self::get_default_args( $post_view, $expected_content, array() );
+		$d = self::get_default_args( $post_view, $expected_content, array( '?entry=') );
 
 		self::run_get_display_data_tests( $d, 'detaillink for post listing view' );
 	}
@@ -301,6 +305,31 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_post_content_filtered_by_view(){
+		self::clear_get_values();
+		$post_view = self::get_view_by_key( 'create-a-post-view' );
+		$post_field_id = FrmField::get_id_by_key( 'yi6yvm' );
+		$regular_field_id = FrmField::get_id_by_key( 'knzfvv' );
+		$post_view->frm_dyncontent = 'This is my test content: [' . $post_field_id . '], [' . $regular_field_id . ']';
+		// Saved post content: Hello! My name is Jamie. - Jamie Wahlin
+
+		// Add entry key to extra_atts
+		$extra_atts = array( 'auto_id' => 'post-entry-1' );
+
+		// Set the global post to the correct post
+		global $post;
+		$entry = FrmEntry::getOne( 'post-entry-1' );
+		$post = get_post( $entry->post_id );
+
+		$d = self::get_default_args( $post_view, array( 'This is my test content', 'Jamie\'s Post', 'Hello! My name is Jamie.' ), array(), $extra_atts );
+		$d['entry_id'] = 'post-entry-1';
+		self::run_get_display_data_tests( $d, 'post with frm_display_id set' );
+	}
+
+	/**
+	 * Check if single post is affected by View filters
+	 * @covers FrmProDisplaysController::get_display_data
+	 */
+	function test_single_post_with_view_filter(){
 		self::clear_get_values();
 		$post_view = self::get_view_by_key( 'create-a-post-view' );
 		$post_view->frm_dyncontent = 'This is test content';
@@ -314,13 +343,64 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		$entry = FrmEntry::getOne( 'post-entry-1' );
 		$post = get_post( $entry->post_id );
 
-		$d = self::get_default_args( $post_view, array( 'This is test content' ), array( 'Jamie' ), $extra_atts );
-		$d['entry_id'] = 'post-entry-1';
-		self::run_get_display_data_tests( $d, 'post with frm_display_id set' );
-
 		// Add post ID filter - posts should not be affected by View filters
 		$_GET['test'] = 12345;
+		$d = self::get_default_args( $post_view, array( 'This is test content' ), array( 'Jamie' ), $extra_atts );
 		self::run_get_display_data_tests( $d, 'post with frm_display_id set and a filter' );
+	}
+
+
+	/**
+	 * Check if post listing View gets the correct content
+	 * @covers FrmProDisplaysController::get_display_data
+	 */
+	function test_post_listing_view_content(){
+		self::clear_get_values();
+		$post_view = self::get_view_by_key( 'create-a-post-view' );
+
+		// Check for the correct content
+		$d = self::get_default_args( $post_view, array( 'href', 'Jamie\'s Post', 'Dragon\'s Post'), array() );
+		self::run_get_display_data_tests( $d, 'post listing View' );
+	}
+
+	/**
+	 * Check if post listing View gets the correct content with a post ID filter
+	 * @covers FrmProDisplaysController::get_display_data
+	 */
+	function test_post_listing_view_with_post_id_filter(){
+		self::clear_get_values();
+		$post_view = self::get_view_by_key( 'create-a-post-view' );
+
+		// Set up the post ID filter
+		$entry = FrmEntry::getOne( 'post-entry-1' );
+		$_GET['test'] = $entry->post_id;
+
+		// Check for the correct content
+		$d = self::get_default_args( $post_view, array( 'href', 'Jamie\'s Post', 'ID: ' . $entry->post_id ), array() );
+		self::run_get_display_data_tests( $d, 'post listing View with post ID filter' );
+	}
+
+	/**
+	 * Check post listing View with field ID (post field) filter
+	 * @covers FrmProDisplaysController::get_display_data
+	 */
+	function test_post_listing_view_with_post_field_id_filter(){
+		self::clear_get_values();
+		$post_view = self::get_view_by_key( 'create-a-post-view' );
+
+		// Add filter "Post Title is like Jamie"
+		$filter_args = array(
+			array( 'type' => 'field',
+				'col' => 'yi6yvm',
+				'op' => 'LIKE',
+				'val' => 'Dragon',
+			),
+		);
+		self::add_filter_to_view( $post_view, $filter_args );
+
+		// Check for the correct content
+		$d = self::get_default_args( $post_view, array( 'href', 'Dragon\'s Post' ), array( 'Jamie' ) );
+		self::run_get_display_data_tests( $d, 'post listing View with post field ID filter' );
 	}
 
 	/**
@@ -403,7 +483,6 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 
 		// Add filter "Single Line Text is equal to [frm-field-value field_id=x entry=e_key]"
-		//$text_field_id = FrmField::get_id_by_key( '493ito' );
 		$filter_args = array(
 			array( 'type' => 'field',
 				'col' => '493ito',
@@ -437,9 +516,21 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		self::add_filter_to_view( $dynamic_view, $filter_args );
 		$this->set_current_user_to_1();
 
+		// Check listing page
 		$d = self::get_default_args( $dynamic_view, array( 'Jamie' ), array( 'Steph', 'Steve' ) );
-
 		self::run_get_display_data_tests( $d, 'view with user ID is equal to current user filter' );
+
+		// Check detail page - entry should show up
+		$_GET['detail'] = FrmEntry::get_id_by_key( 'jamie_entry_key' );
+		$d['display'] = self::reset_view( 'dynamic-view', $filter_args );
+		self::run_get_display_data_tests( $d, 'view with user ID is equal to current user filter on detail page' );
+
+		// Check detail page - entry should NOT show up
+		$_GET['detail'] = FrmEntry::get_id_by_key( 'steph_entry_key' );
+		$dynamic_view = self::reset_view( 'dynamic-view', $filter_args );
+		$d = self::get_default_args( $dynamic_view, array( 'No Entries Found' ), array( 'Steph' ) );
+		self::run_get_display_data_tests( $d, 'view with user ID is equal to current user filter on detail page (entry should NOT show)' );
+
 	}
 
 	/**
@@ -450,12 +541,26 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		self::clear_get_values();
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 
-		// Add user_id='current_user' parameter
 		$this->set_current_user_to_1();
-		$extra_atts = array( 'user_id' => 'current' );
-		$d = self::get_default_args( $dynamic_view, array( 'Jamie' ), array( 'Steph', 'Steve' ), $extra_atts );
 
+		// Add user_id='current' parameter
+		$extra_atts = array( 'user_id' => 'current' );
+
+		// Check listing page
+		$d = self::get_default_args( $dynamic_view, array( 'Jamie' ), array( 'Steph', 'Steve' ), $extra_atts );
 		self::run_get_display_data_tests( $d, 'view with user ID is equal to current user parameter' );
+
+		// Check detail page - entry should show up
+		$_GET['detail'] = FrmEntry::get_id_by_key( 'jamie_entry_key' );
+		$d['display'] = self::reset_view( 'dynamic-view' );
+		self::run_get_display_data_tests( $d, 'view with user_id=current param on detail page' );
+
+		// Check detail page - entry should NOT show up
+		$_GET['detail'] = FrmEntry::get_id_by_key( 'steph_entry_key' );
+		$dynamic_view = self::reset_view( 'dynamic-view' );
+		$d = self::get_default_args( $dynamic_view, array( 'No Entries Found' ), array( 'Steph' ), $extra_atts );
+		self::run_get_display_data_tests( $d, 'view with user_id=current param on detail page (entry should NOT show)' );
+
 	}
 
 	/**
@@ -471,13 +576,26 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		$this->set_current_user_to_1();
 
 		$extra_atts = array( 'user_id' => '2' );
-		$d = self::get_default_args( $dynamic_view, array( 'Steph' ), array( 'Jamie', 'Steve' ), $extra_atts );
 
+		// Check listing page
+		$d = self::get_default_args( $dynamic_view, array( 'Steph' ), array( 'Jamie', 'Steve' ), $extra_atts );
 		self::run_get_display_data_tests( $d, 'view with user ID is equal to 2 parameter' );
+
+		// Check detail page - entry should show up
+		$_GET['detail'] = FrmEntry::get_id_by_key( 'steph_entry_key' );
+		$d['display'] = self::reset_view( 'dynamic-view' );
+		self::run_get_display_data_tests( $d, 'view with user_id=2 param on detail page' );
+
+		// Check detail page - entry should NOT show up
+		$_GET['detail'] = FrmEntry::get_id_by_key( 'jamie_entry_key' );
+		$dynamic_view = self::reset_view( 'dynamic-view' );
+		$d = self::get_default_args( $dynamic_view, array( 'No Entries Found' ), array( 'Steph', 'Jamie' ), $extra_atts );
+		self::run_get_display_data_tests( $d, 'view with user_id=2 param on detail page (entry should NOT show)' );
 	}
 
 	/**
-	 * Tests user_id=2 parameter with userID equals 1 parameter set
+	 * Tests user_id=2 parameter with userID equals current filter set
+	 * user_id=2 parameter should override a "current user" filter
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_user_id_param_with_current_user_filter() {
@@ -497,13 +615,29 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 			),
 		);
 		self::add_filter_to_view( $dynamic_view, $filter_args );
-		$d = self::get_default_args( $dynamic_view, array( 'Steph' ), array( 'Jamie', 'Steve' ), $extra_atts );
 
+		// Check listing page
+		$d = self::get_default_args( $dynamic_view, array( 'Steph' ), array( 'Jamie', 'Steve' ), $extra_atts );
 		self::run_get_display_data_tests( $d, 'view with user ID is equal to 2 parameter and "UserID equals current" filter' );
+
+		// Check detail page - entry should show up
+		$_GET['detail'] = FrmEntry::get_id_by_key( 'steph_entry_key' );
+		$d['display'] = self::reset_view( 'dynamic-view', $filter_args );
+		self::run_get_display_data_tests( $d, 'view with user_id=2 param and userID equals current filter on detail page' );
+
+		// Check detail page - entry should NOT show up
+		$_GET['detail'] = FrmEntry::get_id_by_key( 'jamie_entry_key' );
+		$dynamic_view = self::reset_view( 'dynamic-view', $filter_args );
+		$d = self::get_default_args( $dynamic_view, array( 'No Entries Found' ), array( 'Steph', 'Jamie' ), $extra_atts );
+		self::run_get_display_data_tests( $d, 'view with user_id=2 and userID equals current filter on detail page (entry should NOT show)' );
+
 	}
 
 	/**
-	 * Tests user_id=2 parameter with userID equals 1 parameter set
+	 * Tests user_id=2 parameter with userID equals 1 filter set
+	 * user_id=2 should override userID equals 1 filter
+	 * Both the parameter and the filter will be used
+	 *
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_user_id_param_with_filter() {
@@ -523,9 +657,11 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 			),
 		);
 		self::add_filter_to_view( $dynamic_view, $filter_args );
-		$d = self::get_default_args( $dynamic_view, array( 'Steph' ), array( 'Jamie', 'Steve' ), $extra_atts );
 
+		// Test listing page
+		$d = self::get_default_args( $dynamic_view, array( 'Steph' ), array( 'Jamie', 'Steve' ), $extra_atts );
 		self::run_get_display_data_tests( $d, 'view with user ID is equal to 2 parameter and "UserID equals 1" filter' );
+
 	}
 
 	/**
@@ -548,9 +684,22 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		);
 		self::add_filter_to_view( $dynamic_view, $filter_args );
 
+		// Check listing page
 		$d = self::get_default_args( $dynamic_view, array( 'Jamie', 'Steph' ), array( 'Steve' ) );
-
 		self::run_get_display_data_tests( $d, 'entry ID is equal to list filter' );
+
+		// Check detail page - entry should show up
+		$_GET['detail'] = FrmEntry::get_id_by_key( 'jamie_entry_key' );
+		$dynamic_view = self::reset_view( 'dynamic-view', $filter_args );
+		$d = self::get_default_args( $dynamic_view, array( 'Jamie' ), array( 'Steve', 'Steph' ) );
+		self::run_get_display_data_tests( $d, 'view with entry ID equal to list filter on detail page' );
+
+		// Check detail page - entry should NOT show up
+		$_GET['detail'] = FrmEntry::get_id_by_key( 'steve_entry_key' );
+		$dynamic_view = self::reset_view( 'dynamic-view', $filter_args );
+		$d = self::get_default_args( $dynamic_view, array( 'No Entries Found' ), array() );
+		self::run_get_display_data_tests( $d, 'view with entry ID equal to list filter on detail page (entry should NOT show)' );
+
 	}
 
 	/**
@@ -628,10 +777,53 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	}
 
 	/**
+	 * Tests two field filters - detail page of View
+	 * @covers FrmProDisplaysController::get_display_data
+	 */
+	function test_two_field_filters_on_detail_page() {
+		self::clear_get_values();
+		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
+
+		$filter_args = array(
+			array( 'type' => 'field',
+				'col' => '493ito',
+				'op' => '!=',
+				'val' => 'Jamie',
+			),
+			array( 'type' => 'field',
+				'col' => '493ito',
+				'op' => 'LIKE',
+				'val' => 'Stev',
+			),
+		);
+		self::add_filter_to_view( $dynamic_view, $filter_args );
+
+		// Entry should show up
+		$_GET['detail'] = FrmEntry::get_id_by_key( 'steve_entry_key' );
+		$d = self::get_default_args( $dynamic_view, array( 'Steve' ), array( 'Jamie', 'Steph' ) );
+		self::run_get_display_data_tests( $d, 'two field filters on detail page of View' );
+
+		// No entries should show up
+		$_GET['detail'] = FrmEntry::get_id_by_key( 'jamie_entry_key' );
+		$dynamic_view = self::reset_view( 'dynamic-view', $filter_args );
+		$d = self::get_default_args( $dynamic_view, array( 'No Entries Found' ), array() );
+		self::run_get_display_data_tests( $d, 'two field filters on detail page of View (entry should not show)' );
+	}
+
+	function reset_view( $view_key, $filter_args = array() ) {
+		$view = self::get_view_by_key( $view_key );
+		if ( ! empty( $filter_args ) ) {
+			self::add_filter_to_view( $view, $filter_args );
+		}
+
+		return $view;
+	}
+
+	/**
 	 * Test created_at is equal to specific value
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
-	function test_created_at_filter() {
+	function test_created_at_filter_with_specific_date() {
 		self::clear_get_values();
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 
@@ -645,8 +837,73 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		self::add_filter_to_view( $dynamic_view, $filter_args );
 
 		$d = self::get_default_args( $dynamic_view, array( 'Jamie' ), array( 'Steve', 'Steph' ) );
+		self::run_get_display_data_tests( $d, 'created at filter' );
+
+		// Check detail page - should show entry
+		$_GET['detail'] = FrmEntry::get_id_by_key( 'jamie_entry_key' );
+		$dynamic_view = self::reset_view( 'dynamic-view', $filter_args );
+		$d = self::get_default_args( $dynamic_view, array( 'Jamie' ), array( 'Steve', 'Steph' ) );
+		self::run_get_display_data_tests( $d, 'created at filter on detail page' );
+
+		// Check detail page - should NOT show entry
+		$_GET['detail'] = FrmEntry::get_id_by_key( 'steph_entry_key' );
+		$dynamic_view = self::reset_view( 'dynamic-view', $filter_args );
+		$d = self::get_default_args( $dynamic_view, array( 'No Entries Found' ), array( 'Jamie', 'Steve', 'Steph' ) );
+		self::run_get_display_data_tests( $d, 'created at filter on detail page (should not show entry)' );
+	}
+
+	/**
+	 * Test created_at is less than NOW
+	 * @covers FrmProDisplaysController::get_display_data
+	 */
+	function test_created_at_filter_with_now() {
+		self::clear_get_values();
+		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
+
+		$filter_args = array(
+			array( 'type' => 'col',
+				'col' => 'created_at',
+				'op' => '<',
+				'val' => 'NOW',
+			),
+		);
+		self::add_filter_to_view( $dynamic_view, $filter_args );
+
+		$d = self::get_default_args( $dynamic_view, array( 'Jamie', 'Steve', 'Steph' ), array() );
 
 		self::run_get_display_data_tests( $d, 'created at filter' );
+	}
+
+	/**
+	 * Test created_at is greater than -1 day
+	 * @covers FrmProDisplaysController::get_display_data
+	 */
+	function test_created_at_filter_with_minus_one_day() {
+		self::clear_get_values();
+		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
+
+		// Update creation date on Steve's entry to NOW
+		global $wpdb;
+		$now = date( 'Y-m-d H:i:s' );
+		$entry_id = FrmEntry::get_id_by_key( 'steve_entry_key' );
+		$wpdb->update( $wpdb->prefix . 'frm_items', array( 'created_at' => $now ), array( 'id' => $entry_id ) );
+
+		$filter_args = array(
+			array( 'type' => 'col',
+				'col' => 'created_at',
+				'op' => '>',
+				'val' => '-1 day',
+			),
+		);
+		self::add_filter_to_view( $dynamic_view, $filter_args );
+
+		$d = self::get_default_args( $dynamic_view, array( 'Steve' ), array( 'Jamie', 'Steph' ) );
+
+		self::run_get_display_data_tests( $d, 'created at filter' );
+
+		// Set data back after testing
+		$original_date = '2015-05-13 19:40:11';
+		$wpdb->update( $wpdb->prefix . 'frm_items', array( 'created_at' => $original_date ), array( 'id' => $entry_id ) );
 	}
 
 	/**
@@ -672,8 +929,19 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		self::add_filter_to_view( $dynamic_view, $filter_args );
 
 		$d = self::get_default_args( $dynamic_view, array( 'Steve', 'Steph' ), array( 'Jamie' ) );
-
 		self::run_get_display_data_tests( $d, 'created_at with field ID filter' );
+
+		// Check detail page - should show entry
+		$_GET['detail'] = FrmEntry::get_id_by_key( 'steph_entry_key' );
+		$dynamic_view = self::reset_view( 'dynamic-view', $filter_args );
+		$d = self::get_default_args( $dynamic_view, array( 'Steph' ), array( 'Steve', 'Jamie' ) );
+		self::run_get_display_data_tests( $d, 'created at with field ID filter on detail page' );
+
+		// Check detail page - should NOT show entry
+		$_GET['detail'] = FrmEntry::get_id_by_key( 'jamie_entry_key' );
+		$dynamic_view = self::reset_view( 'dynamic-view', $filter_args );
+		$d = self::get_default_args( $dynamic_view, array( 'No Entries Found' ), array( 'Jamie', 'Steve', 'Steph' ) );
+		self::run_get_display_data_tests( $d, 'created at with field ID filter on detail page (should not show entry)' );
 	}
 
 	/**
@@ -682,7 +950,6 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 */
 	function test_entry_id_filter() {
 		self::clear_get_values();
-		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 
 		$filter_args = array(
 			array( 'type' => 'col',
@@ -691,11 +958,25 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 				'val' => FrmEntry::get_id_by_key( 'jamie_entry_key' ),
 			),
 		);
+
+		// Check listing page
+		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 		self::add_filter_to_view( $dynamic_view, $filter_args );
-
 		$d = self::get_default_args( $dynamic_view, array( 'Jamie' ), array( 'Steve', 'Steph' ) );
-
 		self::run_get_display_data_tests( $d, 'entry ID is equal to x filter' );
+
+		// Check detail page
+		$_GET['detail'] = FrmEntry::get_id_by_key( 'jamie_entry_key' );
+		$dynamic_view = self::reset_view( 'dynamic-view', $filter_args );
+		$d = self::get_default_args( $dynamic_view, array( 'Jamie' ), array( 'Steve', 'Steph' ) );
+		self::run_get_display_data_tests( $d, 'entry ID is equal to x filter on detail page' );
+
+		// Check detail page - entry should not be shown
+		$_GET['detail'] = FrmEntry::get_id_by_key( 'steph_entry_key' );
+		$dynamic_view = self::reset_view( 'dynamic-view', $filter_args );
+		$d = self::get_default_args( $dynamic_view, array( 'No Entries Found' ), array( 'Jamie', 'Steve', 'Steph' ) );
+		self::run_get_display_data_tests( $d, 'entry ID is equal to x filter on detail page (no entry should be shown)' );
+
 	}
 
 	/**
@@ -709,11 +990,35 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		$d = self::get_default_args( $dynamic_view, array( 'Jamie', 'href' ), array( 'Steve', 'Steph' ) );
 		$d['entry_id'] = FrmEntry::get_id_by_key( 'jamie_entry_key' );
 
+		// Basic entry_id=ID
 		self::run_get_display_data_tests( $d, 'entry_id=x parameter' );
 
 		// Test with entry key
 		$d['entry_id'] = 'jamie_entry_key';
+		$d['display'] = self::reset_view( 'dynamic-view' );
 		self::run_get_display_data_tests( $d, 'entry_id=entry_key parameter' );
+	}
+
+	/**
+	 * Test entry_id=key parameter
+	 * @covers FrmProDisplaysController::get_display_data
+	 */
+	function test_entry_id_parameter_with_key() {
+		self::clear_get_values();
+		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
+
+		$d = self::get_default_args( $dynamic_view, array( 'Jamie', 'href' ), array( 'Steve', 'Steph' ) );
+		$d['entry_id'] = 'jamie_entry_key';
+		self::run_get_display_data_tests( $d, 'entry_id=entry_key parameter' );
+	}
+
+	/**
+	 * Test entry_id=x parameter with field filter set
+	 * @covers FrmProDisplaysController::get_display_data
+	 */
+	function test_entry_id_param_with_field_filter() {
+		self::clear_get_values();
+		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 
 		// Test with an added filter - entry_id should override all other filters
 		$filter_args = array(
@@ -724,10 +1029,20 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 			),
 		);
 		self::add_filter_to_view( $dynamic_view, $filter_args );
-		$d = self::get_default_args( $dynamic_view, array( 'Jamie' ), array() );
+
+		$d = self::get_default_args( $dynamic_view, array( 'Jamie', 'href' ), array( 'Steve', 'Steph' ) );
 		$d['entry_id'] = FrmEntry::get_id_by_key( 'jamie_entry_key' );
 
 		self::run_get_display_data_tests( $d, 'entry_id=x parameter with filter set' );
+	}
+
+	/**
+	 * Test entry_id=x parameter with entry ID filter set
+	 * @covers FrmProDisplaysController::get_display_data
+	 */
+	function test_entry_id_param_with_entry_id_filter() {
+		self::clear_get_values();
+		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 
 		// Test with an entry ID filter - entry_id should override all other filters
 		$filter_args = array(
@@ -738,11 +1053,10 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 			),
 		);
 		self::add_filter_to_view( $dynamic_view, $filter_args );
-		$d = self::get_default_args( $dynamic_view, array( 'Jamie' ), array() );
+		$d = self::get_default_args( $dynamic_view, array( 'Jamie', 'href' ), array( 'Steve', 'Steph' ) );
 		$d['entry_id'] = FrmEntry::get_id_by_key( 'jamie_entry_key' );
 
 		self::run_get_display_data_tests( $d, 'entry_id=x parameter with entry ID filter set' );
-
 	}
 
 	/**
@@ -868,17 +1182,9 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	function test_drafts_in_view() {
 		self::clear_get_values();
 
-		// Create a draft entry in the all fields form
-		$jamie_entry_id = FrmEntry::get_id_by_key( 'jamie_entry_key' );
-		$new_id = FrmEntry::duplicate( $jamie_entry_id );
-		global $wpdb;
-		$wpdb->update( $wpdb->prefix . 'frm_items', array( 'is_draft' => 1 ), array( 'id' => $new_id ) );
-
-		// Change text field value
-		$field_id = FrmField::get_id_by_key( '493ito' );
-		$wpdb->update( $wpdb->prefix . 'frm_item_metas', array( 'meta_value' => 'Celeste' ), array( 'item_id' => $new_id, 'field_id' => $field_id ) );
-
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
+
+		self::maybe_create_draft_entry_in_all_fields_form( $dynamic_view->frm_form_id );
 
 		// No drafts should show by default
 		$d = self::get_default_args( $dynamic_view, array( 'Jamie', 'Steph', 'Steve', 'href' ), array( 'Celeste' ) );
@@ -886,18 +1192,182 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 
 		// Drafts and non-drafts should show with drafts=both
 		$extra_atts['drafts'] = 'both';
+		$dynamic_view = self::reset_view( 'dynamic-view' );
 		$d = self::get_default_args( $dynamic_view, array( 'Jamie', 'Steph', 'Steve', 'Celeste', 'href' ), array(), $extra_atts );
 		self::run_get_display_data_tests( $d, 'drafts=both parameter' );
 
 		// Only drafts should show with drafts=1
 		$extra_atts['drafts'] = '1';
+		$dynamic_view = self::reset_view( 'dynamic-view' );
 		$d = self::get_default_args( $dynamic_view, array( 'Celeste', 'href' ), array( 'Jamie', 'Steph', 'Steve' ), $extra_atts );
 		self::run_get_display_data_tests( $d, 'drafts=1 parameter' );
 
 		// No should show with drafts=0
 		$extra_atts['drafts'] = '0';
+		$dynamic_view = self::reset_view( 'dynamic-view' );
 		$d = self::get_default_args( $dynamic_view, array( 'Jamie', 'Steph', 'Steve', 'href' ), array( 'Celeste' ), $extra_atts );
 		self::run_get_display_data_tests( $d, 'drafts=0 parameter' );
+	}
+
+	/**
+	 * Test "Draft Status is equal to both"
+	 * @covers FrmProDisplaysController::get_display_data
+	 */
+	function test_draft_status_equals_both_filter() {
+		self::clear_get_values();
+
+		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
+
+		self::maybe_create_draft_entry_in_all_fields_form( $dynamic_view->frm_form_id );
+
+		// Drafts and non-drafts should show with drafts=both
+		$filter_args = array(
+			array( 'type' => 'col', 'col' => 'is_draft', 'op' => '=', 'val' => 'both' ),
+		);
+		self::add_filter_to_view( $dynamic_view, $filter_args );
+
+		$d = self::get_default_args( $dynamic_view, array( 'Jamie', 'Steph', 'Steve', 'Celeste', 'href' ), array() );
+		self::run_get_display_data_tests( $d, '"drafts is equal to both" filter' );
+	}
+
+	/**
+	 * Test "Draft Status is equal to complete entry"
+	 * @covers FrmProDisplaysController::get_display_data
+	 */
+	function test_draft_status_equal_to_complete_entry() {
+		self::clear_get_values();
+
+		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
+
+		self::maybe_create_draft_entry_in_all_fields_form( $dynamic_view->frm_form_id );
+
+		$filter_args = array(
+			array( 'type' => 'col', 'col' => 'is_draft', 'op' => '=', 'val' => '0' ),
+		);
+		self::add_filter_to_view( $dynamic_view, $filter_args );
+
+		// Only non-draft entries should show
+		$d = self::get_default_args( $dynamic_view, array( 'Jamie', 'Steph', 'Steve', 'href' ), array( 'Celeste' ) );
+		self::run_get_display_data_tests( $d, '"drafts is equal to complete entry" filter' );
+	}
+
+	/**
+	 * Test "Draft Status is equal to draft"
+	 * @covers FrmProDisplaysController::get_display_data
+	 */
+	function test_draft_status_equals_draft_filter() {
+		self::clear_get_values();
+
+		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
+
+		self::maybe_create_draft_entry_in_all_fields_form( $dynamic_view->frm_form_id );
+
+		// Only drafts should show with drafts=1
+		$filter_args = array(
+			array( 'type' => 'col', 'col' => 'is_draft', 'op' => '=', 'val' => '1' ),
+		);
+		self::add_filter_to_view( $dynamic_view, $filter_args );
+
+		$d = self::get_default_args( $dynamic_view, array( 'Celeste', 'href' ), array( 'Jamie', 'Steph', 'Steve' ) );
+		self::run_get_display_data_tests( $d, '"drafts is equal to both" filter' );
+	}
+
+
+	/**
+	 * Test "Draft Status is equal to complete entry" with drafts="both" param
+	 * drafts="both" should override draft filter
+	 * @covers FrmProDisplaysController::get_display_data
+	 */
+	function test_draft_status_equal_to_complete_entry_with_drafts_param() {
+		self::clear_get_values();
+
+		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
+
+		self::maybe_create_draft_entry_in_all_fields_form( $dynamic_view->frm_form_id );
+
+		// Drafts and non-drafts should show with drafts=both
+		$filter_args = array(
+			array( 'type' => 'col', 'col' => 'is_draft', 'op' => '=', 'val' => '0' ),
+		);
+		self::add_filter_to_view( $dynamic_view, $filter_args );
+
+		// All entries should be shown
+		$extra_atts['drafts'] = 'both';
+
+		$d = self::get_default_args( $dynamic_view, array( 'Jamie', 'Steph', 'Celeste', 'Steve', 'href' ), array(), $extra_atts );
+		self::run_get_display_data_tests( $d, '"drafts is equal to complete entry" filter with drafts=both param' );
+	}
+
+	/**
+	 * Test drafts on detail page of View
+	 * @covers FrmProDisplaysController::get_display_data
+	 */
+	function test_detail_page_of_view_with_drafts(){
+		self::clear_get_values();
+
+		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
+
+		$entry_id = self::maybe_create_draft_entry_in_all_fields_form( $dynamic_view->frm_form_id );
+
+		$_GET['detail'] = $entry_id;
+
+		// Add drafts=1 (string)
+		$dynamic_view = self::reset_view( 'dynamic-view' );
+		$d = self::get_default_args( $dynamic_view, array( 'Celeste' ), array( 'No Entries Found' ), array( 'drafts' => '1' ) );
+		self::run_get_display_data_tests( $d, 'drafts in detail page with drafts=1 (string)' );
+
+		// Add drafts=1 (int)
+		$dynamic_view = self::reset_view( 'dynamic-view' );
+		$d = self::get_default_args( $dynamic_view, array( 'Celeste' ), array( 'No Entries Found' ), array( 'drafts' => 1 ) );
+		self::run_get_display_data_tests( $d, 'drafts in detail page with drafts=1 (int)' );
+
+		// Add drafts=1 (bool)
+		$dynamic_view = self::reset_view( 'dynamic-view' );
+		$d = self::get_default_args( $dynamic_view, array( 'Celeste' ), array( 'No Entries Found' ), array( 'drafts' => true ) );
+		self::run_get_display_data_tests( $d, 'drafts in detail page with drafts=true' );
+
+		// Add drafts=both
+		$dynamic_view = self::reset_view( 'dynamic-view' );
+		$d = self::get_default_args( $dynamic_view, array( 'Celeste' ), array( 'No Entries Found' ), array( 'drafts' => 'both' ) );
+		self::run_get_display_data_tests( $d, 'drafts in detail page with drafts=both' );
+	}
+
+	/**
+	 * Test drafts on detail page of View
+	 * @covers FrmProDisplaysController::get_display_data
+	 */
+	function test_detail_page_of_view_with_no_drafts(){
+		self::clear_get_values();
+
+		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
+
+		$entry_id = self::maybe_create_draft_entry_in_all_fields_form( $dynamic_view->frm_form_id );
+
+		$_GET['detail'] = $entry_id;
+
+		// Make sure draft entry doesn't show up in detail page, by default
+		$d = self::get_default_args( $dynamic_view, array( 'No Entries Found' ), array( 'Celeste' ) );
+		self::run_get_display_data_tests( $d, 'no drafts in detail page by default' );
+
+		// Add drafts=0 (string)
+		$dynamic_view = self::reset_view( 'dynamic-view' );
+		$d = self::get_default_args( $dynamic_view, array( 'No Entries Found' ), array( 'Celeste' ), array( 'drafts' => '0' ) );
+		self::run_get_display_data_tests( $d, 'no drafts in detail page with drafts=0 string' );
+
+		// Add drafts=0 (int)
+		$dynamic_view = self::reset_view( 'dynamic-view' );
+		$d = self::get_default_args( $dynamic_view, array( 'No Entries Found' ), array( 'Celeste' ), array( 'drafts' => 0 ) );
+		self::run_get_display_data_tests( $d, 'no drafts in detail page with drafts=0 int' );
+
+		// Add drafts=false (bool)
+		$dynamic_view = self::reset_view( 'dynamic-view' );
+		$d = self::get_default_args( $dynamic_view, array( 'No Entries Found' ), array( 'Celeste' ), array( 'drafts' => false ) );
+		self::run_get_display_data_tests( $d, 'no drafts in detail page with drafts=false' );
+
+		// Add drafts=fake
+		$dynamic_view = self::reset_view( 'dynamic-view' );
+		$d = self::get_default_args( $dynamic_view, array( 'Celeste' ), array(), array( 'drafts' => 'fake' ) );
+		self::run_get_display_data_tests( $d, 'drafts in detail page with drafts=fake' );
 	}
 
 	/**
@@ -920,6 +1390,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		global $post;
 		$post = get_post( $dynamic_view->ID );
 		$extra_atts = array( 'drafts' => '1' );
+		$dynamic_view = self::reset_view( 'dynamic-view' );
 		$d = self::get_default_args( $dynamic_view, array( 'No Entries Found' ), array(), $extra_atts );
 		self::run_get_display_data_tests( $d, 'view with frm_search param and no drafts' );
 
@@ -932,20 +1403,22 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	function test_limit_with_view(){
 		self::clear_get_values();
 
+		// Check limit=1
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 		$dynamic_view->frm_limit = 1;
-
 		$d = self::get_default_args( $dynamic_view, array( 'Jamie' ), array( 'Steve', 'Steph' ) );
-
 		self::run_get_display_data_tests( $d, 'view with limit set' );
 
 		// See if limit param overrides limit setting
 		$extra_atts = array( 'limit' => 100 );
+		$dynamic_view = self::reset_view( 'dynamic-view' );
+		$dynamic_view->frm_limit = 1;
 		$d = self::get_default_args( $dynamic_view, array( 'Jamie', 'Steve', 'Steph' ), array(), $extra_atts );
 		self::run_get_display_data_tests( $d, 'view with limit set and limit param' );
 
 		// See if limit param works on its own
 		$extra_atts = array( 'limit' => 1 );
+		$dynamic_view = self::reset_view( 'dynamic-view' );
 		$dynamic_view->frm_limit = 100;
 		$d = self::get_default_args( $dynamic_view, array( 'Jamie' ), array( 'Steph', 'Steve' ), $extra_atts );
 		self::run_get_display_data_tests( $d, 'view with limit param' );
@@ -957,23 +1430,47 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * Test page size on a View
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
-	function test_page_size_with_view(){
+	function test_page_size_on_view(){
+		self::clear_get_values();
+
+		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
+
+		// Page size is equal to 1
+		$dynamic_view->frm_page_size = 1;
+		$d = self::get_default_args( $dynamic_view, array( 'Jamie', 'frm_pagination_cont' ), array( 'Steve', 'Steph' ) );
+		self::run_get_display_data_tests( $d, 'view with page size set' );
+
+		// Page size is equal to 2
+		$dynamic_view = self::reset_view( 'dynamic-view' );
+		$dynamic_view->frm_page_size = 2;
+		$d = self::get_default_args( $dynamic_view, array( 'Jamie', 'Steph', 'frm_pagination_cont' ), array( 'Steve' ) );
+		self::run_get_display_data_tests( $d, 'view with page size set' );
+
+		// Page size is equal to 3
+		$dynamic_view = self::reset_view( 'dynamic-view' );
+		$dynamic_view->frm_page_size = 3;
+		$d = self::get_default_args( $dynamic_view, array( 'Jamie', 'Steph', 'Steve' ), array( 'frm_pagination_cont') );
+		self::run_get_display_data_tests( $d, 'view with page size set' );
+	}
+
+	/**
+	 * Test page size on a View with a page_size parameter set
+	 * @covers FrmProDisplaysController::get_display_data
+	 */
+	function test_page_size_with_page_size_param(){
 		self::clear_get_values();
 
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 		$dynamic_view->frm_page_size = 1;
 
-		$d = self::get_default_args( $dynamic_view, array( 'Jamie' ), array( 'Steve', 'Steph' ) );
-
-		self::run_get_display_data_tests( $d, 'view with page size set' );
-
-		// See if page_size param overrides page size setting
+		// See if page_size param (100) overrides page size setting (1)
 		$extra_atts = array( 'page_size' => 100 );
 		$d = self::get_default_args( $dynamic_view, array( 'Jamie', 'Steve', 'Steph' ), array(), $extra_atts );
 		self::run_get_display_data_tests( $d, 'view with page size set and page_size param' );
 
-		// See if limit param works on its own
+		// See if page_size param (1) overrides page size setting(100)
 		$extra_atts = array( 'page_size' => 1 );
+		$dynamic_view = self::reset_view( 'dynamic-view' );
 		$dynamic_view->frm_page_size = 100;
 		$d = self::get_default_args( $dynamic_view, array( 'Jamie' ), array( 'Steph', 'Steve' ), $extra_atts );
 		self::run_get_display_data_tests( $d, 'view with page size param' );
@@ -981,19 +1478,32 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	}
 
 	/**
-	 * Test page 2 of a View
+	 * Test page 2 & 3 of a View
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_page_2_of_a_view(){
 		self::clear_get_values();
 
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
-		$dynamic_view->frm_page_size = 1;
 		$_GET['frm-page-'. $dynamic_view->ID] = 2;
 
+		// On page 2 with page size of 1
+		$dynamic_view->frm_page_size = 1;
 		$d = self::get_default_args( $dynamic_view, array( 'Steph', 'frm_pagination_cont' ), array( 'Jamie', 'Steve' ) );
+		self::run_get_display_data_tests( $d, 'view on page 2 with 1 entry showing' );
 
-		self::run_get_display_data_tests( $d, 'view on page 2' );
+		// On page 2 with page size of 2
+		$dynamic_view = self::reset_view( 'dynamic-view' );
+		$dynamic_view->frm_page_size = 2;
+		$d = self::get_default_args( $dynamic_view, array( 'Steve', 'frm_pagination_cont' ), array( 'Jamie', 'Steph' ) );
+		self::run_get_display_data_tests( $d, 'view on page 2 with 1 entry showing, 2 on first page' );
+
+		// On page 3 with page size of 2
+		$dynamic_view = self::reset_view( 'dynamic-view' );
+		$dynamic_view->frm_page_size = 2;
+		$_GET['frm-page-'. $dynamic_view->ID] = 3;
+		$d = self::get_default_args( $dynamic_view, array( 'frm_pagination_cont', 'frm_no_entries' ), array( 'Jamie', 'Steph', 'Steve' ) );
+		self::run_get_display_data_tests( $d, 'view on page 3 with no entries showing' );
 	}
 
 	/**
@@ -1003,13 +1513,94 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	function test_limit_with_page_size_on_view(){
 		self::clear_get_values();
 
+		// Test page_size of 5 and limit of 1
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 		$dynamic_view->frm_page_size = 5;
 		$dynamic_view->frm_limit = 1;
-
 		$d = self::get_default_args( $dynamic_view, array( 'Jamie' ), array( 'Steve', 'Steph' ) );
+		self::run_get_display_data_tests( $d, 'view with limit lower than page size' );
 
-		self::run_get_display_data_tests( $d, 'view with page size and limit set' );
+		// Test page size of 1 and limit of 5
+		$dynamic_view = self::reset_view( 'dynamic-view' );
+		$dynamic_view->frm_page_size = 1;
+		$dynamic_view->frm_limit = 5;
+		$d = self::get_default_args( $dynamic_view, array( 'Jamie' ), array( 'Steve', 'Steph' ) );
+		self::run_get_display_data_tests( $d, 'view with page size lower than limit' );
+	}
+
+	/**
+	 * Make sure calendar View has the calendar HTML
+	 * @covers FrmProDisplaysController::get_display_data
+	 */
+	function test_calendar_view_html(){
+		self::clear_get_values();
+
+		$calendar_view = self::get_view_by_key( 'calendar-view' );
+
+		$expected_strings = array( 'frmcal-' . $calendar_view->ID, 'frmcal-header', 'frmcal_date', 'frmcal-content' );
+		$no_strings = array( 'Jamie', 'Steph', 'Steve' );
+		$d = self::get_default_args( $calendar_view, $expected_strings, $no_strings );
+		self::run_get_display_data_tests( $d, 'basic calendar view' );
+	}
+
+	/**
+	 * Make sure calendar View pulls up the correct data depending on the month/year shown
+	 * @covers FrmProDisplaysController::get_display_data
+	 */
+	function test_calendar_view_content(){
+		self::clear_get_values();
+
+		$calendar_view = self::get_view_by_key( 'calendar-view' );
+
+		// Jamie's entry should be shown
+		$_GET['frmcal-month'] = '08';
+		$_GET['frmcal-year'] = '2015';
+
+		$expected_strings = array( 'frmcal-' . $calendar_view->ID, 'frmcal-header', 'frmcal_date', 'Jamie' );
+		$no_strings = array( 'Steph', 'Steve' );
+		$d = self::get_default_args( $calendar_view, $expected_strings, $no_strings );
+		self::run_get_display_data_tests( $d, 'basic calendar view' );
+	}
+
+	/**
+	 * Make sure calendar View pulls up the correct data depending on the month/year shown
+	 * @covers FrmProDisplaysController::get_display_data
+	 */
+	function test_calendar_view_content_no_entries_in_month(){
+		self::clear_get_values();
+
+		$calendar_view = self::get_view_by_key( 'calendar-view' );
+
+		// No entries should be shown on current page
+		$_GET['frmcal-month'] = '08';
+		$_GET['frmcal-year'] = '2010';
+
+		$expected_strings = array( 'frmcal-' . $calendar_view->ID, 'frmcal-header', 'frmcal_date' );
+		$no_strings = array( 'Jamie', 'Steph', 'Steve' );
+
+		$d = self::get_default_args( $calendar_view, $expected_strings, $no_strings );
+		self::run_get_display_data_tests( $d, 'basic calendar view with no entries on current page' );
+	}
+
+	/**
+	 * Make sure calendar View pulls up the correct data depending on the month/year shown
+	 * @covers FrmProDisplaysController::get_display_data
+	 */
+	function test_calendar_view_no_entries(){
+		self::clear_get_values();
+
+		$calendar_view = self::get_view_by_key( 'calendar-view' );
+
+		// Add filter "Entry ID is equal to 0"
+		$filter_args = array(
+			array( 'type' => 'col', 'col' => 'id', 'op' => '=', 'val' => '0' ),
+		);
+		self::add_filter_to_view( $calendar_view, $filter_args );
+
+		$expected_strings = array( 'No Entries Found' );
+		$no_strings = array( 'frmcal-' . $calendar_view->ID, 'frmcal-header', 'frmcal_date', 'Jamie', 'Steph', 'Steve' );
+		$d = self::get_default_args( $calendar_view, $expected_strings, $no_strings );
+		self::run_get_display_data_tests( $d, 'calendar view with no entries found' );
 	}
 
 	/**
@@ -1054,13 +1645,86 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		self::add_order_to_view( $dynamic_view, $order_row );
 
 		$d = self::get_default_args( $dynamic_view, array( 'Jamie', 'frm_pagination_cont' ), array( 'Steve', 'Steph' ) );
-
 		self::run_get_display_data_tests( $d, 'view with field ASC' );
+	}
 
-		// Add order param
+	/**
+	 * Test View order - field ID ascending
+	 * @covers FrmProDisplaysController::get_display_data
+	 */
+	function test_field_id_asc_with_order_param(){
+		self::clear_get_values();
+
+		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
+		$dynamic_view->frm_page_size = 1;
+
+		self::remove_view_order( $dynamic_view );
+		$order_row = array(
+			'type' => 'field',
+			'col' => '493ito',
+			'dir' => 'ASC',
+		);
+		self::add_order_to_view( $dynamic_view, $order_row );
+
+		// Add order param, should override order in View
 		$extra_atts = array( 'order_by' => 'id', 'order' => 'DESC' );
 		$d = self::get_default_args( $dynamic_view, array( 'Steve', 'frm_pagination_cont' ), array( 'Jamie', 'Steph' ), $extra_atts );
 		self::run_get_display_data_tests( $d, 'view with field ASC and order=id order_by=DESC params' );
+	}
+
+	/**
+	 * Test View order with parameters
+	 * @covers FrmProDisplaysController::get_display_data
+	 */
+	function test_order_parameters_in_view(){
+		self::clear_get_values();
+
+		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
+		$dynamic_view->frm_page_size = 1;
+
+		self::remove_view_order( $dynamic_view );
+
+		// Both order and order_by
+		$extra_atts = array( 'order_by' => 'id', 'order' => 'DESC' );
+		$d = self::get_default_args( $dynamic_view, array( 'Steve', 'frm_pagination_cont' ), array( 'Jamie', 'Steph' ), $extra_atts );
+		self::run_get_display_data_tests( $d, 'view with order_by=id order=DESC' );
+	}
+
+
+	/**
+	 * Test order=DESC with no order_by
+	 * @covers FrmProDisplaysController::get_display_data
+	 */
+	function test_incomplete_order_parameters_in_view(){
+		self::clear_get_values();
+
+		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
+		$dynamic_view->frm_page_size = 1;
+
+		self::remove_view_order( $dynamic_view );
+
+		// Only order - should be ignored completely
+		$extra_atts = array( 'order_by' => '', 'order' => 'DESC' );
+		$d = self::get_default_args( $dynamic_view, array( 'Jamie', 'frm_pagination_cont' ), array( 'Steve', 'Steph' ), $extra_atts );
+		self::run_get_display_data_tests( $d, 'view with no order_by and order=DESC' );
+	}
+
+	/**
+	 * Test order_by=id with no order
+	 * @covers FrmProDisplaysController::get_display_data
+	 */
+	function test_incomplete_order_parameters_in_view_2(){
+		self::clear_get_values();
+
+		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
+		$dynamic_view->frm_page_size = 1;
+
+		self::remove_view_order( $dynamic_view );
+
+		// Only order_by - should automatically set order to ASC if this is the case
+		$extra_atts = array( 'order_by' => 'id', 'order' => '' );
+		$d = self::get_default_args( $dynamic_view, array( 'Steve', 'frm_pagination_cont' ), array( 'Jamie', 'Steph' ), $extra_atts );
+		self::run_get_display_data_tests( $d, 'view with order_by=id and no order' );
 	}
 
 
@@ -1068,7 +1732,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * Make sure Before Content is shown on listing page
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
-	function test_before_content_in_view(){
+	function test_before_content_in_view_listing_page(){
 		self::clear_get_values();
 
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
@@ -1077,11 +1741,127 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		$d = self::get_default_args( $dynamic_view, array( 'Jamie', 'Before content' ), array() );
 
 		self::run_get_display_data_tests( $d, 'view with before content' );
+	}
+
+	/**
+	 * Make sure Before Content is shown on listing page
+	 * @covers FrmProDisplaysController::get_display_data
+	 */
+	function test_before_content_in_view_detail_page(){
+		self::clear_get_values();
+
+		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
+		$dynamic_view->frm_before_content = 'Before content';
 
 		// Before content should not show on detail page
 		$_GET['detail'] = FrmEntry::get_id_by_key( 'jamie_entry_key' );
 		$d = self::get_default_args( $dynamic_view, array( 'Jamie' ), array( 'Before content' ) );
 		self::run_get_display_data_tests( $d, 'view with before content on detail page' );
+	}
+
+	/**
+	 * Make sure Before Content is filtered with the frm_before_display_content hook
+	 * @covers FrmProDisplaysController::get_display_data
+	 */
+	function test_before_content_with_custom_filter(){
+		self::clear_get_values();
+
+		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
+		$dynamic_view->frm_before_content = 'Before Content: [sum_msyehy]';
+		add_filter( 'frm_before_display_content', 'dynamic_frm_stats', 10, 4 );
+
+		// Make sure before content includes the dynamic total
+		$field_id = FrmField::get_id_by_key( 'msyehy' );
+		$expected_total = (string) FrmProStatisticsController::stats_shortcode( array( 'id' => $field_id, 'type' => 'total' ) );
+		$d = self::get_default_args( $dynamic_view, array( 'Jamie', $expected_total ), array() );
+		self::run_get_display_data_tests( $d, 'view with before content and frm_before_display_content filter' );
+	}
+
+	/**
+	 * Make sure Before Content is filtered with the frm_before_display_content hook even when a page size is set
+	 * @covers FrmProDisplaysController::get_display_data
+	 */
+	function test_before_content_with_custom_filter_and_page_size(){
+		self::clear_get_values();
+
+		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
+		$dynamic_view->frm_before_content = 'Before Content: [sum_msyehy]';
+		add_filter( 'frm_before_display_content', 'dynamic_frm_stats', 10, 4 );
+
+		$field_id = FrmField::get_id_by_key( 'msyehy' );
+
+		// make sure before content includes dynamic total when a page size is set
+		$dynamic_view->frm_page_size = 1;
+		$expected_total = FrmProEntriesController::get_field_value_shortcode(array('field_id' => $field_id, 'entry' => 'jamie_entry_key' ) );
+		$d = self::get_default_args( $dynamic_view, array( 'Jamie', $expected_total ), array() );
+		self::run_get_display_data_tests( $d, 'view with before content and frm_before_display_content filter, page size set to 1' );
+	}
+
+	/**
+	 * Test [row_num] shortcode, added with frm_display_entry_content hook
+	 * @covers FrmProDisplaysController::get_display_data
+	 */
+	function test_row_num_custom_filter(){
+		self::clear_get_values();
+
+		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
+		$dynamic_view->post_content = 'Row: [row_num]' . $dynamic_view->post_content;
+		add_filter('frm_display_entry_content', 'frm_get_row_num', 20, 7);
+
+		// Check for row nums, no page size
+		$d = self::get_default_args( $dynamic_view, array( 'Jamie', 'Row: 1', 'Row: 2', 'Row: 3' ), array( 'Row: 4' ) );
+		self::run_get_display_data_tests( $d, 'view with row_num shortcode' );
+	}
+
+	/**
+	 * Test [row_num] shortcode, added with frm_display_entry_content hook, page size set
+	 * @covers FrmProDisplaysController::get_display_data
+	 */
+	function test_row_num_custom_filter_with_page_size(){
+		self::clear_get_values();
+
+		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
+		$dynamic_view->post_content = 'Row: [row_num]' . $dynamic_view->post_content;
+		add_filter('frm_display_entry_content', 'frm_get_row_num', 20, 7);
+
+		// Check for row nums, page size set
+		$dynamic_view->frm_page_size = 1;
+		$_GET['frm-page-'. $dynamic_view->ID] = 2;
+		$d = self::get_default_args( $dynamic_view, array( 'Row: 2', ), array( 'Row: 1', 'Row: 3' ) );
+		self::run_get_display_data_tests( $d, 'view with row_num shortcode and page size' );
+	}
+
+	/**
+	 * Test record_count and total_count with frm_display_entry_content hook
+	 * @covers FrmProDisplaysController::get_display_data
+	 */
+	function test_record_count_and_total_count_with_filter(){
+		self::clear_get_values();
+
+		add_filter('frm_display_entry_content', 'frm_get_current_entry_num_out_of_total', 20, 7);
+
+		// Check page 1, page size of 1
+		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
+		$dynamic_view->frm_page_size = 1;
+		$string = 'Viewing entry 1 to 1 (of 3 entries)';
+		$d = self::get_default_args( $dynamic_view, array( 'Jamie', $string ), array( 'Steph', 'Steve' ) );
+		self::run_get_display_data_tests( $d, 'view with record_count and total_count test' );
+
+		// Check page 2, page size of 1
+		$_GET['frm-page-'. $dynamic_view->ID] = 2;
+		$string = 'Viewing entry 2 to 2 (of 3 entries)';
+		$dynamic_view = self::reset_view( 'dynamic-view' );
+		$dynamic_view->frm_page_size = 1;
+		$d = self::get_default_args( $dynamic_view, array( 'Steph', $string ), array( 'Jamie', 'Steve' ) );
+		self::run_get_display_data_tests( $d, 'view with record_count and total_count test 2' );
+
+		// Check page 1 with a page size of 2
+		$_GET['frm-page-'. $dynamic_view->ID] = 1;
+		$dynamic_view = self::reset_view( 'dynamic-view' );
+		$dynamic_view->frm_page_size = 2;
+		$string = 'Viewing entry 1 to 2 (of 3 entries)';
+		$d = self::get_default_args( $dynamic_view, array( 'Jamie', 'Steph', $string ), array( 'Steve' ) );
+		self::run_get_display_data_tests( $d, 'view with record_count and total_count test 3' );
 	}
 
 	/**
@@ -1113,9 +1893,19 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		$d = self::get_default_args( $dynamic_view, array( 'Count: 3', 'Jamie' ), array() );
 
 		self::run_get_display_data_tests( $d, 'view with [entry_count] shortcode' );
+	}
 
-		// Add page size
+	/**
+	 * Test [entry_count] shortcode with page size
+	 * @covers FrmProDisplaysController::get_display_data
+	 */
+	function test_entry_count_shortcode_with_page_size(){
+		self::clear_get_values();
+
+		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
+		$dynamic_view->frm_before_content = 'Count: [entry_count]';
 		$dynamic_view->frm_page_size = 1;
+
 		$d = self::get_default_args( $dynamic_view, array( 'Count: 3', 'Jamie' ), array() );
 		self::run_get_display_data_tests( $d, 'view with [entry_count] shortcode and page size' );
 	}
@@ -1124,7 +1914,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * Make sure After Content is shown on listing page
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
-	function test_after_content_in_view(){
+	function test_after_content_on_listing_page(){
 		self::clear_get_values();
 
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
@@ -1133,11 +1923,60 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		$d = self::get_default_args( $dynamic_view, array( 'Jamie', 'After content' ), array() );
 
 		self::run_get_display_data_tests( $d, 'view with after content' );
+	}
+
+	/**
+	 * Make sure After Content is shown on listing page
+	 * @covers FrmProDisplaysController::get_display_data
+	 */
+	function test_after_content_on_detail_page(){
+		self::clear_get_values();
+
+		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
+		$dynamic_view->frm_after_content = 'After content';
 
 		// Before content should not show on detail page
 		$_GET['detail'] = FrmEntry::get_id_by_key( 'jamie_entry_key' );
 		$d = self::get_default_args( $dynamic_view, array( 'Jamie' ), array( 'After content' ) );
 		self::run_get_display_data_tests( $d, 'view with after content on detail page' );
+	}
+
+	/**
+	 * Make sure [sum_x] works in After Content
+	 * @covers FrmProDisplaysController::get_display_data
+	 */
+	function test_after_content_with_custom_filter(){
+		self::clear_get_values();
+
+		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
+		$dynamic_view->frm_after_content = 'After Content: [sum_msyehy]';
+		add_filter( 'frm_after_content', 'dynamic_frm_stats', 10, 4 );
+
+		// Make sure after content includes the dynamic total
+		$field_id = FrmField::get_id_by_key( 'msyehy' );
+		$expected_total = (string) FrmProStatisticsController::stats_shortcode( array( 'id' => $field_id, 'type' => 'total' ) );
+		$d = self::get_default_args( $dynamic_view, array( 'Jamie', $expected_total ), array() );
+		self::run_get_display_data_tests( $d, 'view with after content and frm_after_content filter' );
+	}
+
+	/**
+	 * Make sure [sum_x] works in After Content with page size
+	 * @covers FrmProDisplaysController::get_display_data
+	 */
+	function test_after_content_with_custom_filter_and_page_size(){
+		self::clear_get_values();
+
+		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
+		$dynamic_view->frm_after_content = 'After Content: [sum_msyehy]';
+		$dynamic_view->frm_page_size = 1;
+
+		add_filter( 'frm_after_content', 'dynamic_frm_stats', 10, 4 );
+
+		$field_id = FrmField::get_id_by_key( 'msyehy' );
+		$expected_total = FrmProEntriesController::get_field_value_shortcode(array('field_id' => $field_id, 'entry' => 'jamie_entry_key' ) );
+
+		$d = self::get_default_args( $dynamic_view, array( 'Jamie', $expected_total ), array() );
+		self::run_get_display_data_tests( $d, 'view with after content and frm_after_content filter, page size set to 1' );
 	}
 
 	/**
@@ -1155,6 +1994,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		self::run_get_display_data_tests( $d, 'view without filter=1' );
 
 		// Add filter=1
+		$dynamic_view = self::reset_view( 'dynamic-view' );
 		$extra_atts = array( 'filter' => 1 );
 		$d = self::get_default_args( $dynamic_view, array( 'Jamie', '<br />' ), array(), $extra_atts );
 		self::run_get_display_data_tests( $d, 'view without filter=1' );
@@ -1205,6 +2045,31 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 			'not_in_content' => $n,
 		);
 		return $d;
+	}
+
+	function maybe_create_draft_entry_in_all_fields_form( $form_id ) {
+		// Check if draft entry exists first
+		$where = array(
+			'form_id' => $form_id,
+			'is_draft' => '1',
+		);
+		$new_id = FrmDb::get_col( 'frm_items', $where, 'id' );
+
+		if ( ! $new_id ) {
+			// Duplicate an entry
+			$jamie_entry_id = FrmEntry::get_id_by_key( 'jamie_entry_key' );
+			$new_id = FrmEntry::duplicate( $jamie_entry_id );
+
+			// Switch it to a draft
+			global $wpdb;
+			$wpdb->update( $wpdb->prefix . 'frm_items', array( 'is_draft' => 1 ), array( 'id' => $new_id ) );
+
+			// Change text field value
+			$field_id = FrmField::get_id_by_key( '493ito' );
+			$wpdb->update( $wpdb->prefix . 'frm_item_metas', array( 'meta_value' => 'Celeste' ), array( 'item_id' => $new_id, 'field_id' => $field_id ) );
+		}
+
+		return $new_id;
 	}
 
 	function run_get_display_data_tests( $d, $test_name ) {
