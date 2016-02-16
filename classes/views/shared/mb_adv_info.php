@@ -146,7 +146,7 @@
 		foreach ( $adv_shortcodes as $skey => $sname ) {
 	    ?>
 	    <li class="frm_col_<?php echo esc_attr( $col ) ?>">
-	        <a href="javascript:void(0)" class="frmbutton button frm_insert_code <?php echo is_array( $sname ) ? 'frm_help' : ''; ?>" data-code="125 <?php echo esc_attr( $skey ) ?>" <?php echo is_array( $sname ) ? 'title="'. esc_attr( $sname['title'] ) .'"' : ''; ?>><?php echo is_array( $sname ) ? $sname['label'] : $sname; ?></a>
+	        <a href="javascript:void(0)" class="frmbutton button frm_insert_code <?php echo is_array( $sname ) ? 'frm_help' : ''; ?>" data-code="x <?php echo esc_attr( $skey ) ?>" <?php echo is_array( $sname ) ? 'title="'. esc_attr( $sname['title'] ) .'"' : ''; ?>><?php echo is_array( $sname ) ? $sname['label'] : $sname; ?></a>
 	    </li>
 	    <?php
 	        $col = ($col == 'one') ? 'two' : 'one';
