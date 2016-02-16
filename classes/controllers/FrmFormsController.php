@@ -9,11 +9,20 @@ class FrmFormsController {
 		}
 		add_submenu_page('formidable', 'Formidable | '. $menu_label, $menu_label, 'frm_view_forms', 'formidable', 'FrmFormsController::route' );
 
-	    add_filter('get_user_option_managetoplevel_page_formidablecolumnshidden', 'FrmFormsController::hidden_columns' );
-
-	    add_filter('manage_toplevel_page_formidable_columns', 'FrmFormsController::get_columns', 0 );
-		add_filter('manage_toplevel_page_formidable_sortable_columns', 'FrmFormsController::get_sortable_columns' );
+		self::maybe_load_listing_hooks();
     }
+
+	public static function maybe_load_listing_hooks() {
+		$action = FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
+		if ( ! empty( $action ) && $action != 'list' ) {
+			return;
+		}
+
+		add_filter('get_user_option_managetoplevel_page_formidablecolumnshidden', 'FrmFormsController::hidden_columns' );
+
+		add_filter('manage_toplevel_page_formidable_columns', 'FrmFormsController::get_columns', 0 );
+		add_filter('manage_toplevel_page_formidable_sortable_columns', 'FrmFormsController::get_sortable_columns' );
+	}
 
     public static function head() {
         wp_enqueue_script('formidable-editinplace');
