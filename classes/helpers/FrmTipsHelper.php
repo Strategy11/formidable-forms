@@ -54,6 +54,11 @@ class FrmTipsHelper {
 				'tip'  => __( 'Need to calculate a total?', 'formidable' ),
 				'call' => __( 'Upgrade to Pro.', 'formidable' ),
 			),
+			array(
+				'link' => 'https://formidablepro.com/prefill-fields',
+				'tip'  => __( 'Save time.', 'formidable' ),
+				'call' => __( 'Prefill fields with user info.', 'formidable' ),
+			),
 		);
 		$tips = array_merge( $tips, self::get_form_settings_tip(), self::get_form_action_tip(), self::get_entries_tip() );
 
