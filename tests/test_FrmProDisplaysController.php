@@ -159,6 +159,36 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	}
 
 	/**
+	 * Tests Dynamic View, listing page no filters, shortcode in content
+	 * @covers FrmProDisplaysController::get_display_data
+	 */
+	function test_no_filter_listing_view_with_shortcode() {
+		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
+		$this->set_current_user_to_1();
+		$dynamic_view->post_content .= 'user_id:[user_id]';
+		$expected_content = array( 'Jamie', 'Steph', 'Steve', 'user_id:1' );
+
+		$d = self::get_default_args( $dynamic_view, $expected_content, array() );
+
+		self::run_get_display_data_tests( $d, 'dynamic view with no filters and shortcode' );
+	}
+
+	/**
+	 * Tests Single Entry View, no filters, shortcode in content
+	 * @covers FrmProDisplaysController::get_display_data
+	 */
+	function test_no_filter_detail_view_with_shortcode() {
+		$dynamic_view = self::get_view_by_key( 'single-view' );
+		$this->set_current_user_to_1();
+		$dynamic_view->post_content .= 'user_id:[user_id]';
+		$expected_content = array( 'Jamie', 'user_id:1' );
+
+		$d = self::get_default_args( $dynamic_view, $expected_content, array() );
+
+		self::run_get_display_data_tests( $d, 'single entry view with no filters and shortcode' );
+	}
+
+	/**
 	 * Tests View with Entry ID = 0 filter
 	 * Meant to test what happens when frm_empty_msg is not set
 	 * @covers FrmProDisplaysController::get_display_data
@@ -302,9 +332,10 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 
 	/**
 	 * Check if post content is filtered by linked View content
+	 * Uses entry key
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
-	function test_post_content_filtered_by_view(){
+	function test_post_content_filtered_by_view_use_entry_key(){
 		self::clear_get_values();
 		$post_view = self::get_view_by_key( 'create-a-post-view' );
 		$post_field_id = FrmField::get_id_by_key( 'yi6yvm' );
@@ -312,17 +343,43 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		$post_view->frm_dyncontent = 'This is my test content: [' . $post_field_id . '], [' . $regular_field_id . ']';
 		// Saved post content: Hello! My name is Jamie. - Jamie Wahlin
 
-		// Add entry key to extra_atts
+		// Set the global post to the correct post
+		global $post;
+		$entry = FrmEntry::getOne( 'post-entry-1' );
+		$post = get_post( $entry->post_id );
+
+		// Add auto_id=entry key in extra_atts
 		$extra_atts = array( 'auto_id' => 'post-entry-1' );
+
+		$d = self::get_default_args( $post_view, array( 'This is my test content', 'Jamie\'s Post', 'Hello! My name is Jamie.' ), array(), $extra_atts );
+		$d['entry_id'] = 'post-entry-1';
+		self::run_get_display_data_tests( $d, 'post with frm_display_id set (passing entry key)' );
+	}
+
+	/**
+	 * Check if post content is filtered by linked View content
+	 * Uses entry ID
+	 * @covers FrmProDisplaysController::get_display_data
+	 */
+	function test_post_content_filtered_by_view_use_entry_id(){
+		self::clear_get_values();
+		$post_view = self::get_view_by_key( 'create-a-post-view' );
+		$post_field_id = FrmField::get_id_by_key( 'yi6yvm' );
+		$regular_field_id = FrmField::get_id_by_key( 'knzfvv' );
+		$post_view->frm_dyncontent = 'This is my test content: [' . $post_field_id . '], [' . $regular_field_id . ']';
+		// Saved post content: Hello! My name is Jamie. - Jamie Wahlin
 
 		// Set the global post to the correct post
 		global $post;
 		$entry = FrmEntry::getOne( 'post-entry-1' );
 		$post = get_post( $entry->post_id );
 
+		// Check auto_id=entry ID in extra atts
+		$extra_atts = array( 'auto_id' => $entry->id );
+
 		$d = self::get_default_args( $post_view, array( 'This is my test content', 'Jamie\'s Post', 'Hello! My name is Jamie.' ), array(), $extra_atts );
-		$d['entry_id'] = 'post-entry-1';
-		self::run_get_display_data_tests( $d, 'post with frm_display_id set' );
+		$d['entry_id'] = $entry->id;
+		self::run_get_display_data_tests( $d, 'post with frm_display_id set (passing entry ID)' );
 	}
 
 	/**
@@ -1109,6 +1166,50 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	}
 
 	/**
+	 * Test Post Title field is unique
+	 * @covers FrmProDisplaysController::get_display_data
+	 */
+	function test_unique_filter_on_post_title() {
+		self::clear_get_values();
+		$post_view = self::get_view_by_key( 'create-a-post-view' );
+
+		$filter_args = array(
+			array( 'type' => 'field',
+				'col' => 'yi6yvm',
+				'op' => 'group_by',
+				'val' => '',
+			),
+		);
+		self::add_filter_to_view( $post_view, $filter_args );
+
+		$d = self::get_default_args( $post_view, array( 'Jamie', 'Dragon' ), array() );
+
+		self::run_get_display_data_tests( $d, 'unique filter with post title' );
+	}
+
+	/**
+	 * Test user_id is unique
+	 * @covers FrmProDisplaysController::get_display_data
+	 */
+	function test_unique_filter_on_user_id() {
+		self::clear_get_values();
+		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
+
+		$filter_args = array(
+			array( 'type' => 'field',
+				'col' => 't1eqkj',
+				'op' => 'group_by',
+				'val' => '',
+			),
+		);
+		self::add_filter_to_view( $dynamic_view, $filter_args );
+
+		$d = self::get_default_args( $dynamic_view, array( 'Jamie', 'Steph', 'Steve' ), array() );
+
+		self::run_get_display_data_tests( $d, 'unique filter with user_id' );
+	}
+
+	/**
 	 * Test a detail page with filters set - entry should be displayed
 	 * Test is detail page content is shown (not listing page content)
 	 */
@@ -1597,9 +1698,8 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		);
 		self::add_filter_to_view( $calendar_view, $filter_args );
 
-		$expected_strings = array( 'No Entries Found' );
-		$no_strings = array( 'frmcal-' . $calendar_view->ID, 'frmcal-header', 'frmcal_date', 'Jamie', 'Steph', 'Steve' );
-		$d = self::get_default_args( $calendar_view, $expected_strings, $no_strings );
+		$expected_strings = array( 'frmcal-' . $calendar_view->ID, 'frmcal-header', 'frmcal_date', 'Jamie', 'Steph', 'Steve' );
+		$d = self::get_default_args( $calendar_view, $expected_strings, array( 'No Entries Found' ) );
 		self::run_get_display_data_tests( $d, 'calendar view with no entries found' );
 	}
 
@@ -1736,9 +1836,9 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		self::clear_get_values();
 
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
-		$dynamic_view->frm_before_content = 'Before content';
+		$dynamic_view->frm_before_content = 'Before content, user_id:[user_id], siteurl:[siteurl]';
 
-		$d = self::get_default_args( $dynamic_view, array( 'Jamie', 'Before content' ), array() );
+		$d = self::get_default_args( $dynamic_view, array( 'Jamie', 'Before content', 'user_id:1', 'siteurl:http://example.org' ), array() );
 
 		self::run_get_display_data_tests( $d, 'view with before content' );
 	}
@@ -1918,9 +2018,9 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		self::clear_get_values();
 
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
-		$dynamic_view->frm_after_content = 'After content';
+		$dynamic_view->frm_after_content = 'After content, user_id:[user_id], siteurl:[siteurl]';
 
-		$d = self::get_default_args( $dynamic_view, array( 'Jamie', 'After content' ), array() );
+		$d = self::get_default_args( $dynamic_view, array( 'Jamie', 'After content', 'user_id:1', 'siteurl:http://example.org' ), array() );
 
 		self::run_get_display_data_tests( $d, 'view with after content' );
 	}
