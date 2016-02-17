@@ -69,8 +69,8 @@
 				<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'reCAPTCHA is a free, accessible CAPTCHA service that helps to digitize books while blocking spam on your blog. reCAPTCHA asks commenters to retype two words scanned from a book to prove that they are a human. This verifies that they are not a spambot.', 'formidable' ) ?>" ></span>
 			</h3>
 
-            <p class="howto">
-				<?php sprintf( __( 'reCAPTCHA requires a Site and Private API key. Sign up for a <a href="%s" target="_blank">free reCAPTCHA key</a>.', 'formidable' ), 'https://www.google.com/recaptcha/' ); ?>
+			<p class="howto">
+				<?php echo sprintf( __( 'reCAPTCHA requires a Site and Private API key. Sign up for a %1$sfree reCAPTCHA key%2$s.', 'formidable' ), '<a href="' . esc_url( 'https://www.google.com/recaptcha/' ) . '" target="_blank">', '</a>' ); ?>
 			</p>
 
 			<p><label class="frm_left_label"><?php _e( 'Site Key', 'formidable' ) ?></label>
