@@ -69,13 +69,33 @@ class FrmEntryFormat {
 		return $content;
 	}
 
+	/**
+	 * Get the labels and value shortcodes for fields in the Default HTML email message
+	 *
+	 * @since 2.0.23
+	 * @param object $f
+	 * @param array $values
+	 */
+	private static function get_field_shortcodes_for_default_email( $f, &$values ) {
+		if ( $f->type == 'data' && $f->field_options['data_type'] == 'data' ) {
+			if ( empty( $f->field_options['hide_field'] ) || empty( $f->field_options['form_select'] ) ) {
+				return;
+			}
+
+			$field_id_string = reset( $f->field_options['hide_field'] ) . ' show=' . $f->field_options['form_select'];
+			$values[ $f->id ] = array( 'label' => '[' . $f->id . ' show=field_label]', 'val' => '[' . $field_id_string . ']' );
+		} else {
+			$values[ $f->id ] = array( 'label' => '[' . $f->id . ' show=field_label]', 'val' => '[' . $f->id . ']' );
+		}
+	}
+
 	public static function fill_entry_values( $atts, $f, array &$values ) {
 		if ( FrmField::is_no_save_field( $f->type ) ) {
 			return;
 		}
 
 		if ( $atts['default_email'] ) {
-			$values[ $f->id ] = array( 'label' => '[' . $f->id . ' show=field_label]', 'val' => '[' . $f->id . ']' );
+			self::get_field_shortcodes_for_default_email( $f, $values );
 			return;
 		}
 
