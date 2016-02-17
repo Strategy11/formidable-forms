@@ -70,7 +70,7 @@
 			</h3>
 
 			<p class="howto">
-				<?php echo sprintf( __( 'reCAPTCHA requires a Site and Private API key. Sign up for a %1$sfree reCAPTCHA key%2$s.', 'formidable' ), '<a href="' . esc_url( 'https://www.google.com/recaptcha/' ) . '" target="_blank">', '</a>' ); ?>
+				<?php echo wp_kses_post( sprintf( __( 'reCAPTCHA requires a Site and Private API key. Sign up for a %1$sfree reCAPTCHA key%2$s.', 'formidable' ), '<a href="' . esc_url( 'https://www.google.com/recaptcha/' ) . '" target="_blank">', '</a>' ) ); ?>
 			</p>
 
 			<p><label class="frm_left_label"><?php _e( 'Site Key', 'formidable' ) ?></label>
