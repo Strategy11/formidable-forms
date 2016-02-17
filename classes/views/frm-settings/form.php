@@ -44,7 +44,11 @@
                 </select>
             </p>
 
-            <p><label for="frm_use_html"><input type="checkbox" id="frm_use_html" name="frm_use_html" value="1" <?php checked($frm_settings->use_html, 1) ?>	> <?php _e( 'Use HTML5 in forms', 'formidable' ) ?></label>
+            <p>
+				<label for="frm_use_html">
+					<input type="checkbox" id="frm_use_html" name="frm_use_html" value="1" <?php checked($frm_settings->use_html, 1) ?>	> <?php _e( 'Use HTML5 in forms', 'formidable' ) ?>
+				</label>
+				<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'We recommend using HTML 5 for your forms. It adds some nifty options like placeholders, patterns, and autocomplete.', 'formidable' ) ?>"></span>
             </p>
 
             <?php do_action('frm_style_general_settings', $frm_settings); ?>
@@ -65,7 +69,9 @@
 				<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'reCAPTCHA is a free, accessible CAPTCHA service that helps to digitize books while blocking spam on your blog. reCAPTCHA asks commenters to retype two words scanned from a book to prove that they are a human. This verifies that they are not a spambot.', 'formidable' ) ?>" ></span>
 			</h3>
 
-            <p class="howto">reCAPTCHA requires an API key, consisting of a "site" and a "private" key. You can sign up for a <a href="https://www.google.com/recaptcha/" target="_blank">free reCAPTCHA key</a>.</p>
+            <p class="howto">
+				<?php sprintf( __( 'reCAPTCHA requires a Site and Private API key. Sign up for a <a href="%s" target="_blank">free reCAPTCHA key</a>.', 'formidable' ), 'https://www.google.com/recaptcha/' ); ?>
+			</p>
 
 			<p><label class="frm_left_label"><?php _e( 'Site Key', 'formidable' ) ?></label>
 			<input type="text" name="frm_pubkey" id="frm_pubkey" size="42" value="<?php echo esc_attr($frm_settings->pubkey) ?>" /></p>
@@ -125,7 +131,7 @@
 		</p>
 
 		<p>
-			<label class="frm_left_label"><?php _e( 'Default Submit Button', 'formidable' ); ?></label>
+			<label class="frm_left_label"><?php _e( 'Submit Button Text', 'formidable' ); ?></label>
 			<input type="text" value="<?php echo esc_attr( $frm_settings->submit_value ) ?>" id="frm_submit_value" name="frm_submit_value" class="frm_with_left_label" />
 		</p>
 
