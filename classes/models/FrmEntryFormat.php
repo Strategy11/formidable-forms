@@ -24,7 +24,7 @@ class FrmEntryFormat {
 
 		if ( ! $atts['entry'] || ! is_object( $atts['entry'] ) ) {
 			if ( ! $atts['id'] && ! $atts['default_email'] ) {
-				return;
+				return '';
 			}
 
 			if ( $atts['id'] ) {
@@ -156,6 +156,7 @@ class FrmEntryFormat {
 		if ( $plain_text && ! is_array( $val ) ) {
 			if ( strpos( $val, '<img' ) !== false ) {
 				$val = str_replace( array( '<img', 'src=', '/>', '"' ), '', $val );
+				$val = trim( $val );
 			}
 			$val = strip_tags( $val );
 		}
