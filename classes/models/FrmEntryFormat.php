@@ -324,7 +324,11 @@ class FrmEntryFormat {
 			$content[] = '<table cellspacing="0" style="font-size:'. $atts['font_size'] .';line-height:135%; border-bottom:'. $atts['border_width'] . ' solid #' . $atts['border_color'] . ';"><tbody>' . "\r\n";
 			$atts['bg_color'] = ' style="background-color:#'. $atts['bg_color'] .';"';
 			$bg_color_alt = ' style="background-color:#'. $atts['alt_bg_color'] .';"';
-			$row_style = 'style="text-align:' . ( $atts['direction'] == 'rtl' ? 'right' : 'left' ) .';color:#'. $atts['text_color'] . ';padding:7px 9px;border-top:' . $atts['border_width'] .' solid #' . $atts['border_color'] . '"';
+
+			$row_style_attributes = 'text-align:' . ( $atts['direction'] == 'rtl' ? 'right' : 'left' ) .';';
+			$row_style_attributes .= 'color:#'. $atts['text_color'] . ';padding:7px 9px;vertical-align:top;';
+			$row_style_attributes .= 'border-top:' . $atts['border_width'] .' solid #' . $atts['border_color'] . ';';
+			$row_style = 'style="' . $row_style_attributes . '"';
 		}
 
 		$odd = true;

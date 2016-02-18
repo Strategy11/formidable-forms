@@ -597,7 +597,7 @@ if ( ! $submit_style ) { ?>
     color:#<?php echo esc_html( $check_label_color . $important ) ?>;
     font-weight:<?php echo esc_html( $check_weight . $important ) ?>;
     display:inline;
-	white-space:prewrap;
+	white-space:pre-wrap;
 }
 
 .<?php echo esc_html( $style_class ) ?> .frm_blank_field input[type=text],

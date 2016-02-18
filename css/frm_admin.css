@@ -358,11 +358,6 @@ form label.frm_primary_label input{font-size:12px;}
 	height:50px;
 }
 
-.frm_pro_tip{
-	font-size:12px;
-	color:#666;
-}
-
 .frm_pro_tip a,
 .frm_pro_tip span,
 .frm_pro_tip .frm_check1_icon{
@@ -374,16 +369,19 @@ form label.frm_primary_label input{font-size:12px;}
 }
 
 .frm_pro_tip{
+	font-size:12px;
+	color:#666;
 	border:1px solid #EF7E59;
 	display:block;
-	padding:2px 5px 0;
+	padding:5px;
 	background:#FBF0EC;
 	border-radius:4px;
 	text-align:center;
 }
 
 .frm_field_list .frm_pro_tip{
-	margin-top:-14px;
+	margin-top:-10px;
+	margin-bottom:10px;
 }
 
 .nav-tab-wrapper .frm_pro_tip{
