@@ -1547,12 +1547,27 @@ function frmFrontFormJS(){
 	}
 
 	function checkRequiredField( field, errors ) {
+		if ( field.type == 'hidden' ) {
+			return errors;
+		}
+
 		var val = '';
+		var fieldID = '';
 		if ( field.type == 'checkbox' || field.type == 'radio' ) {
 			var checked = document.querySelector('input[name="'+field.name+'"]:checked');
 			if ( checked !== null ) {
 				val = checked.value;
 			}
+		} else if ( field.type == 'file' ) {
+			var fileID = jQuery(field).data('fid');
+			if ( typeof fileID === 'undefined' ) {
+				fileID = getFieldId( field, true );
+				fileID = fileID.replace('file', '');
+			}
+			if ( typeof errors[ fileID ] === 'undefined' ) {
+				val = getFileVals( fileID );
+			}
+			fieldID = fileID;
 		} else {
 			val = jQuery(field).val();
 			if ( typeof val !== 'string' ) {
@@ -1564,15 +1579,31 @@ function frmFrontFormJS(){
 					}
 				}
 			}
+			fieldID = getFieldId( field, true );
 		}
 
 		if ( val === '' ) {
-			var fieldID = getFieldId( field, true );
+			if ( fieldID === '' ) {
+				fieldID = getFieldId( field, true );
+			}
 			if ( !(fieldID in errors) ) {
 				errors[ fieldID ] = getFieldValidationMessage( field, 'data-reqmsg' );
 			}
 		}
+
 		return errors;
+	}
+
+	function getFileVals( fileID ) {
+		var val = '';
+		var fileFields = jQuery('input[name="file'+ fileID +'"], input[name="file'+ fileID +'[]"], input[name^="item_meta['+ fileID +']"]');
+		console.log(fileFields);
+		fileFields.each(function(){
+			if ( val === '' ) {
+				val = this.value;
+			}
+		});
+		return val;
 	}
 
 	function checkEmailField( field, errors, emailFields ) {
@@ -2121,7 +2152,7 @@ function frmFrontFormJS(){
 						}
 						fieldID = this.name.replace('item_meta[', '').split(']')[2].replace('[', '');
 						if ( jQuery.inArray(fieldID, checked ) == -1 ) {
-							if ( this.id == false ) {
+							if ( this.id === false ) {
 								return;
 							}
 							fieldObject = jQuery( '#' + this.id );
@@ -2644,9 +2675,15 @@ function frmFrontFormJS(){
 			jQuery('.form-field').removeClass('frm_blank_field');
 			jQuery('.form-field .frm_error').replaceWith('');
 
+			var jumped = 0;
 			for ( var key in jsErrors ) {
 				var $fieldCont = jQuery(object).find(jQuery('#frm_field_'+key+'_container'));
 				addFieldError( $fieldCont, key, jsErrors );
+
+				if ( jumped === 0 ) {
+					frmFrontForm.scrollMsg( key, object, true );
+					jumped = 1;
+				}
 			}
 		},
 
