@@ -234,7 +234,12 @@ class FrmFormActionsController {
 	}
 
 	public static function trigger_create_actions( $entry_id, $form_id, $args = array() ) {
-		self::trigger_actions( 'create', $form_id, $entry_id, 'all', $args );
+		$filter_args = $args;
+		$filter_args['entry_id'] = $entry_id;
+		$filter_args['form_id']  = $form_id;
+		$event = apply_filters( 'frm_trigger_create_action', 'create', $args );
+
+		self::trigger_actions( $event, $form_id, $entry_id, 'all', $args );
 	}
 
     /**
@@ -268,7 +273,7 @@ class FrmFormActionsController {
                 $entry = FrmEntry::getOne( $entry, true );
             }
 
-			if ( empty( $entry ) || $entry->is_draft ) {
+			if ( empty( $entry ) || ( $entry->is_draft && $event != 'draft' ) ) {
 				continue;
 			}
 

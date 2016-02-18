@@ -630,6 +630,7 @@ class FrmFormAction {
 
 	public static function trigger_labels() {
 		return apply_filters( 'frm_action_triggers', array(
+			'draft'  => __( 'Save Draft', 'formidable' ),
 			'create' => __( 'Create', 'formidable' ),
 			'update' => __( 'Update', 'formidable' ),
 			'delete' => __( 'Delete', 'formidable' ),
