@@ -127,8 +127,8 @@ class FrmTipsHelper {
 		$tips = array(
 			array(
 				'link' => 'https://formidablepro.com/visual-styling-tip',
-				'tip'  => __( 'Want your sidebar or footer form to look different from the rest?', 'formidable' ),
-				'call' => __( 'Use multiple stylesheets.', 'formidable' ),
+				'tip'  => __( 'Make your sidebar or footer form stand out.', 'formidable' ),
+				'call' => __( 'Use multiple style templates.', 'formidable' ),
 			),
 		);
 		return $tips;
@@ -138,7 +138,7 @@ class FrmTipsHelper {
 		$tips = array(
 			array(
 				'link' => 'https://formidablepro.com/manage-entries-tip',
-				'tip'  => __( 'Do you want to edit or delete form submissions?', 'formidable' ),
+				'tip'  => __( 'Want to edit or delete form submissions?', 'formidable' ),
 				'call' => __( 'Add entry management.', 'formidable' ),
 			),
 			array(

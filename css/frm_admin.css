@@ -199,6 +199,10 @@ div.frm_msg_padding{
     z-index:99999;
 }
 
+.frm-on-bottom{
+	z-index:-1;
+}
+
 .post-new-php.post-type-frm_display #poststuff {padding-top:10px;}
 .frm_forms.with_frm_style{max-width:100%;}
 label.frm_primary_label,
@@ -1452,7 +1456,8 @@ span.howto{display:inline;}
 
 .frm_prepop li a{
     background:#F5F5F5;
-    border:1px solid #EEEEEE;
+	border-width:1px;
+	border-style:solid;
     border-color:#EEEEEE #DEDEDE #DEDEDE #EEEEEE;
     display: block;
     font-weight: bold;
