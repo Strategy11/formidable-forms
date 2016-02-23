@@ -22,6 +22,10 @@ $defaults = $default_style->post_content;
     display:none;
 }
 
+.with_frm_style fieldset{
+	min-width:0;
+}
+
 legend.frm_hidden{
     display:none !important;
 }
@@ -1830,10 +1834,6 @@ html[xmlns] .frm_clearfix{
 
 	.frm_form_field .frm_repeat_grid .frm_form_field.frm_repeat_buttons.frm_fifth label.frm_primary_label{
 		display:none !important;
-	}
-
-	.with_frm_style fieldset{
-		min-width:0;
 	}
 }
 
