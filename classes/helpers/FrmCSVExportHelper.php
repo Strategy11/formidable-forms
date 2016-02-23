@@ -72,7 +72,9 @@ class FrmCSVExportHelper{
 	}
 
 	public static function get_csv_format() {
-		self::$to_encoding = FrmAppHelper::get_post_param( 'csv_format', 'UTF-8', 'sanitize_text_field' );
+		$csv_format = FrmAppHelper::get_post_param( 'csv_format', 'UTF-8', 'sanitize_text_field' );
+		$csv_format = apply_filters( 'frm_csv_format', $csv_format );
+		self::$to_encoding = $csv_format;
 	}
 
 	private static function prepare_csv_headings() {
