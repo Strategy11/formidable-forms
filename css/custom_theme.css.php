@@ -1831,6 +1831,10 @@ html[xmlns] .frm_clearfix{
 	.frm_form_field .frm_repeat_grid .frm_form_field.frm_repeat_buttons.frm_fifth label.frm_primary_label{
 		display:none !important;
 	}
+
+	.with_frm_style fieldset{
+		min-width:0;
+	}
 }
 
 @media only screen and (max-width: 500px) {
