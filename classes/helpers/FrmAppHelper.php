@@ -716,11 +716,12 @@ class FrmAppHelper {
     }
 
 	public static function check_selected( $values, $current ) {
-        $values = self::recursive_function_map( $values, 'trim' );
-        $current = trim($current);
+		$values = self::recursive_function_map( $values, 'trim' );
+		$values = self::recursive_function_map( $values, 'htmlspecialchars_decode' );
+		$current = htmlspecialchars_decode( trim( $current ) );
 
-        return ( is_array($values) && in_array($current, $values) ) || ( ! is_array($values) && $values == $current );
-    }
+		return ( is_array( $values ) && in_array( $current, $values ) ) || ( ! is_array( $values ) && $values == $current );
+	}
 
     /**
     * Check if current field option is an "other" option
