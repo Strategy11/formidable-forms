@@ -91,6 +91,12 @@ class FrmAppHelper {
         return $frm_settings;
     }
 
+	public static function get_menu_name() {
+		$frm_settings = FrmAppHelper::get_settings();
+		$menu_name = $frm_settings->menu;
+		return empty( $menu_name ) ? __( 'Forms', 'formidable' ) : $menu_name;
+	}
+
     /**
      * Show a message in place of pro features
      *

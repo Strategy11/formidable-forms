@@ -427,8 +427,10 @@ class FrmFormsController {
 	*/
 	public static function insert_form_button() {
 		if ( current_user_can('frm_view_forms') ) {
-			$frm_settings = FrmAppHelper::get_settings();
-			$content = '<a href="#TB_inline?width=50&height=50&inlineId=frm_insert_form" class="thickbox button add_media frm_insert_form" title="' . esc_attr__( 'Add forms and content', 'formidable' ) . '"><span class="frm-buttons-icon wp-media-buttons-icon"></span> '. $frm_settings->menu .'</a>';
+			$menu_name = FrmAppHelper::get_menu_name();
+			$content = '<a href="#TB_inline?width=50&height=50&inlineId=frm_insert_form" class="thickbox button add_media frm_insert_form" title="' . esc_attr__( 'Add forms and content', 'formidable' ) . '">
+				<span class="frm-buttons-icon wp-media-buttons-icon"></span> '.
+				$menu_name .'</a>';
 			echo wp_kses_post( $content );
 		}
 	}

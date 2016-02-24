@@ -8,10 +8,10 @@ class FrmEntriesController {
         add_submenu_page('formidable', 'Formidable | '. __( 'Entries', 'formidable' ), __( 'Entries', 'formidable' ), 'frm_view_entries', 'formidable-entries', 'FrmEntriesController::route' );
 
 		if ( ! in_array( FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' ), array( 'edit', 'show' ) ) ) {
-            $frm_settings = FrmAppHelper::get_settings();
-			add_filter( 'manage_' . sanitize_title( $frm_settings->menu ) . '_page_formidable-entries_columns', 'FrmEntriesController::manage_columns' );
-			add_filter( 'get_user_option_manage' . sanitize_title( $frm_settings->menu ) . '_page_formidable-entriescolumnshidden', 'FrmEntriesController::hidden_columns' );
-			add_filter( 'manage_' . sanitize_title( $frm_settings->menu ) . '_page_formidable-entries_sortable_columns', 'FrmEntriesController::sortable_columns' );
+			$menu_name = FrmAppHelper::get_menu_name();
+			add_filter( 'manage_' . sanitize_title( $menu_name ) . '_page_formidable-entries_columns', 'FrmEntriesController::manage_columns' );
+			add_filter( 'get_user_option_manage' . sanitize_title( $menu_name ) . '_page_formidable-entriescolumnshidden', 'FrmEntriesController::hidden_columns' );
+			add_filter( 'manage_' . sanitize_title( $menu_name ) . '_page_formidable-entries_sortable_columns', 'FrmEntriesController::sortable_columns' );
         }
     }
 
@@ -124,8 +124,9 @@ class FrmEntriesController {
     }
 
 	public static function check_hidden_cols( $check, $object_id, $meta_key, $meta_value, $prev_value ) {
-        $frm_settings = FrmAppHelper::get_settings();
-        if ( $meta_key != 'manage'.  sanitize_title($frm_settings->menu) .'_page_formidable-entriescolumnshidden' || $meta_value == $prev_value ) {
+		$menu_name = FrmAppHelper::get_menu_name();
+		$this_page_name = 'manage' .  sanitize_title( $menu_name ) . '_page_formidable-entriescolumnshidden';
+		if ( $meta_key != $this_page_name || $meta_value == $prev_value ) {
             return $check;
         }
 
@@ -142,10 +143,10 @@ class FrmEntriesController {
 
     //add hidden columns back from other forms
 	public static function update_hidden_cols( $meta_id, $object_id, $meta_key, $meta_value ) {
-        $frm_settings = FrmAppHelper::get_settings();
-
-        $sanitized = sanitize_title($frm_settings->menu);
-        if ( $meta_key != 'manage'.  $sanitized .'_page_formidable-entriescolumnshidden' ) {
+		$menu_name = FrmAppHelper::get_menu_name();
+		$sanitized = sanitize_title( $menu_name );
+		$this_page_name = 'manage'.  $sanitized .'_page_formidable-entriescolumnshidden';
+		if ( $meta_key != $this_page_name ) {
             return;
         }
 
@@ -186,7 +187,7 @@ class FrmEntriesController {
 
 		if ( $save ) {
             $user = wp_get_current_user();
-            update_user_option( $user->ID, 'manage'.  $sanitized .'_page_formidable-entriescolumnshidden', $meta_value, true );
+			update_user_option( $user->ID, $this_page_name, $meta_value, true );
         }
     }
 

@@ -8,8 +8,8 @@ class FrmAppController {
             return;
         }
 
-        $frm_settings = FrmAppHelper::get_settings();
-        add_menu_page( 'Formidable', $frm_settings->menu, 'frm_view_forms', 'formidable', 'FrmFormsController::route', FrmAppHelper::plugin_url() . '/images/form_16.png', self::get_menu_position() );
+		$menu_name = FrmAppHelper::get_menu_name();
+		add_menu_page( 'Formidable', $menu_name, 'frm_view_forms', 'formidable', 'FrmFormsController::route', FrmAppHelper::plugin_url() . '/images/form_16.png', self::get_menu_position() );
     }
 
 	private static function get_menu_position() {
