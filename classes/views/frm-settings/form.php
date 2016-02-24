@@ -74,10 +74,10 @@
 			</p>
 
 			<p><label class="frm_left_label"><?php _e( 'Site Key', 'formidable' ) ?></label>
-			<input type="text" name="frm_pubkey" id="frm_pubkey" size="42" value="<?php echo esc_attr($frm_settings->pubkey) ?>" /></p>
+			<input type="text" name="frm_pubkey" id="frm_pubkey" size="42" value="<?php echo esc_attr($frm_settings->pubkey) ?>" placeholder="<?php esc_attr_e( 'Optional', 'formidable' ) ?>" /></p>
 
 			<p><label class="frm_left_label"><?php _e( 'Private Key', 'formidable' ) ?></label>
-			<input type="text" name="frm_privkey" id="frm_privkey" size="42" value="<?php echo esc_attr($frm_settings->privkey) ?>" /></p>
+			<input type="text" name="frm_privkey" id="frm_privkey" size="42" value="<?php echo esc_attr($frm_settings->privkey) ?>" placeholder="<?php esc_attr_e( 'Optional', 'formidable' ) ?>" /></p>
 
 		    <p><label class="frm_left_label"><?php _e( 'reCAPTCHA Language', 'formidable' ) ?></label>
 			<select name="frm_re_lang" id="frm_re_lang">
