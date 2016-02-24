@@ -1482,7 +1482,6 @@ function frmFrontFormJS(){
 
 	function validateForm( object ) {
 		var errors = [];
-		return errors; // TODO: remove this line when ready to release
 
 		// Make sure required text field is filled in
 		var requiredFields = jQuery(object).find('.frm_required_field input, .frm_required_field select, .frm_required_field textarea');
@@ -1518,7 +1517,6 @@ function frmFrontFormJS(){
 
 	function validateField( fieldId, field ) {
 		var errors = [];
-		return errors; // TODO: remove this line when ready to release
 
 		var $fieldCont = jQuery(field).closest('.frm_form_field');
 		if ( $fieldCont.hasClass('.frm_required_field') ) {

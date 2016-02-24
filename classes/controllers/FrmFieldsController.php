@@ -551,7 +551,7 @@ class FrmFieldsController {
         self::add_html_size($field, $add_html);
         self::add_html_length($field, $add_html);
         self::add_html_placeholder($field, $add_html, $class);
-		//self::add_validation_messages( $field, $add_html ); uncomment this when the js validation is complete
+		self::add_validation_messages( $field, $add_html );
 
         $class = apply_filters('frm_field_classes', implode(' ', $class), $field);
 
