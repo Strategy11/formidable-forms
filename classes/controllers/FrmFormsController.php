@@ -1193,6 +1193,7 @@ class FrmFormsController {
 		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 		wp_register_script( 'formidable', FrmAppHelper::plugin_url() . "/js/formidable{$suffix}.js", array( 'jquery' ), $version, true );
 		wp_register_script( 'jquery-placeholder', FrmAppHelper::plugin_url() . '/js/jquery/jquery.placeholder.js', array( 'jquery' ), '2.0.7', true );
+		add_filter( 'script_loader_tag', 'FrmFormsController::defer_script_loading', 10, 2 );
 
 		if ( FrmAppHelper::is_admin() ) {
 			// don't load this in back-end
@@ -1211,6 +1212,13 @@ class FrmFormsController {
 			self::footer_js( 'header' );
 			$frm_vars['css_loaded'] = true;
 		}
+	}
+
+	public static function defer_script_loading( $tag, $handle ) {
+	    if ( 'recaptcha-api' == $handle && ! strpos( $tag, 'defer' ) ) {
+	        $tag = str_replace( ' src', ' defer="defer" async="async" src', $tag );
+		}
+	    return $tag;
 	}
 
 	public static function footer_js( $location = 'footer' ) {
