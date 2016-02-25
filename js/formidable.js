@@ -2815,6 +2815,13 @@ jQuery(document).ready(function($){
 	frmFrontForm.init();
 });
 
+function frmRecaptcha() {
+	var captchas = jQuery('.frm-g-recaptcha');
+	for ( var c = 0, cl = captchas.length; c < cl; c++ ) {
+		grecaptcha.render( captchas[c].id, {'sitekey' : captchas[c].getAttribute('data-sitekey')} );
+	}
+}
+
 function frmUpdateField(entry_id,field_id,value,message,num){
 	jQuery(document.getElementById('frm_update_field_'+entry_id+'_'+field_id)).html('<span class="frm-loading-img"></span>');
 	jQuery.ajax({

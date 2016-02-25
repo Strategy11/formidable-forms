@@ -480,9 +480,9 @@ DEFAULT_HTML;
         $frm_settings = FrmAppHelper::get_settings();
         $lang = apply_filters('frm_recaptcha_lang', $frm_settings->re_lang, $field);
 
-        $api_js_url = 'https://www.google.com/recaptcha/api.js';
+        $api_js_url = 'https://www.google.com/recaptcha/api.js?onload=frmRecaptcha&render=explicit';
         if ( $lang != 'en' ) {
-            $api_js_url .= '?hl='. $lang;
+            $api_js_url .= '&hl='. $lang;
         }
         $api_js_url = apply_filters('frm_recpatcha_js_url', $api_js_url);
 
@@ -490,7 +490,7 @@ DEFAULT_HTML;
         wp_enqueue_script('recaptcha-api');
 
 ?>
-<div id="field_<?php echo esc_attr( $field['field_key'] ) ?>" class="g-recaptcha" data-sitekey="<?php echo esc_attr( $frm_settings->pubkey ) ?>" data-size="<?php echo esc_attr( $field['captcha_size'] ) ?>"></div>
+<div id="field_<?php echo esc_attr( $field['field_key'] ) ?>" class="frm-g-recaptcha" data-sitekey="<?php echo esc_attr( $frm_settings->pubkey ) ?>" data-size="<?php echo esc_attr( $field['captcha_size'] ) ?>"></div>
 <?php
     }
 
