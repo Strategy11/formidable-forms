@@ -50,7 +50,7 @@ class FrmFormsHelper {
 		<?php } ?>
 		<?php foreach ( $forms as $form ) { ?>
 			<option value="<?php echo esc_attr( $form->id ); ?>" <?php selected( $field_value, $form->id ); ?>><?php
-				echo ( '' == $form->name ) ? esc_html__( '(no title)', 'formidable' ) : esc_html( FrmAppHelper::truncate( $form->name, 33 ) ) . ( $form->parent_form_id ? esc_html__( ' (child)', 'formidable' ) : '' ) ;
+				echo ( '' == $form->name ) ? esc_html__( '(no title)', 'formidable' ) : esc_html( FrmAppHelper::truncate( $form->name, 50 ) ) . ( $form->parent_form_id ? esc_html__( ' (child)', 'formidable' ) : '' ) ;
 			?></option>
 		<?php } ?>
         </select>
@@ -105,7 +105,7 @@ class FrmFormsHelper {
 			        $args['form'] = $form->id;
 				}
                 ?>
-				<li><a href="<?php echo esc_url( isset( $base ) ? add_query_arg( $args, $base ) : add_query_arg( $args ) ); ?>" tabindex="-1"><?php echo esc_html( empty( $form->name ) ? __( '(no title)') : FrmAppHelper::truncate( $form->name, 33 ) ); ?></a></li>
+				<li><a href="<?php echo esc_url( isset( $base ) ? add_query_arg( $args, $base ) : add_query_arg( $args ) ); ?>" tabindex="-1"><?php echo esc_html( empty( $form->name ) ? __( '(no title)') : FrmAppHelper::truncate( $form->name, 60 ) ); ?></a></li>
 			<?php
 				unset( $form );
 			} ?>
