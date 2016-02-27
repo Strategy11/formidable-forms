@@ -2673,15 +2673,22 @@ function frmFrontFormJS(){
 			jQuery('.form-field').removeClass('frm_blank_field');
 			jQuery('.form-field .frm_error').replaceWith('');
 
-			var jumped = 0;
+			var jumpPos = [];
+			jumpPos.fieldPos = 999999;
 			for ( var key in jsErrors ) {
 				var $fieldCont = jQuery(object).find(jQuery('#frm_field_'+key+'_container'));
 				addFieldError( $fieldCont, key, jsErrors );
 
-				if ( jumped === 0 ) {
-					frmFrontForm.scrollMsg( key, object, true );
-					jumped = 1;
+				var fieldOffset = $fieldCont.offset().top;
+				if ( fieldOffset < jumpPos.fieldPos ) {
+					jumpPos.fieldPos = fieldOffset;
+					jumpPos.key = key;
+					jumpPos.field = object;
 				}
+			}
+
+			if ( 999999 > jumpPos.fieldPos > 0 ) {
+				frmFrontForm.scrollMsg( jumpPos.key, jumpPos.field, true );
 			}
 		},
 
