@@ -1646,9 +1646,20 @@ function frmAdminBuildJS(){
 		var button = jQuery(this);
 		var pluginSlug = button.data('plugin');
 		var license = document.getElementById('edd_'+pluginSlug+'_license_key').value;
+		var wpmu = document.getElementById('proplug-wpmu');
+		if ( wpmu === null ) {
+			wpmu = 0;
+		} else {
+			if ( wpmu.checked ) {
+				wpmu = 1;
+			} else {
+				wpmu = 0;
+			}
+		}
+
 		jQuery.ajax({
 			type:'POST',url:ajaxurl,dataType:'json',
-			data:{action:'frm_addon_activate',license:license,plugin:pluginSlug,nonce:frmGlobal.nonce},
+			data:{action:'frm_addon_activate',license:license,plugin:pluginSlug,wpmu:wpmu,nonce:frmGlobal.nonce},
 			success:function(msg){
 				var messageBox = jQuery('.frm_pro_license_msg');
 				if ( msg.success === true ) {
