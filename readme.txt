@@ -89,6 +89,24 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 [See more FAQs](http://formidablepro.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 2.0.23 =
+* Add support for multiple reCaptchas on a page
+* Make sure the screen options for the form listings only shows when needed
+* Added frm_trigger_create_action hook to alter action triggering
+* Added frm_csv_format hook for changing the exported CSV format
+* Make sure a value is selected when it includes an &
+* **Pro Features:** *
+* Added stright up client-site validation
+* Allow actions to be triggered when a draft is saved
+* Allow free text in user id field filtering in views
+* Improved the unique filter in Views
+* Updated Chosen script to 1.5.1
+* Correctly check for multisite sitewide activation
+* Fixed the problem with the file upload attachment option not staying checked
+* Fixed filtering by entry ID and fields together in Views
+* Make sure the limit setting doesn't affect calendar Views
+* Make sure Dynamic List fields show up in default html email
+
 = 2.0.22 =
 * Add an upgrade banner when affiliate links are active
 * Add permission checks in addition to nonce for several actions for extra security
