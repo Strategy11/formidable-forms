@@ -1595,7 +1595,6 @@ function frmFrontFormJS(){
 	function getFileVals( fileID ) {
 		var val = '';
 		var fileFields = jQuery('input[name="file'+ fileID +'"], input[name="file'+ fileID +'[]"], input[name^="item_meta['+ fileID +']"]');
-		console.log(fileFields);
 		fileFields.each(function(){
 			if ( val === '' ) {
 				val = this.value;
