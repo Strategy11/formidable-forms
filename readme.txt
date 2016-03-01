@@ -96,7 +96,7 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * Added frm_csv_format hook for changing the exported CSV format
 * Make sure a value is selected when it includes an &
 * **Pro Features:** *
-* Added stright up client-site validation
+* Added straight up client-side validation
 * Allow actions to be triggered when a draft is saved
 * Allow free text in user id field filtering in views
 * Improved the unique filter in Views
