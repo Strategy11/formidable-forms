@@ -1552,10 +1552,10 @@ function frmFrontFormJS(){
 		var val = '';
 		var fieldID = '';
 		if ( field.type == 'checkbox' || field.type == 'radio' ) {
-			var checked = document.querySelector('input[name="'+field.name+'"]:checked');
-			if ( checked !== null ) {
-				val = checked.value;
-			}
+			var checkGroup = jQuery('input[name="'+field.name+'"]').closest('.frm_required_field').find('input:checked');
+			jQuery(checkGroup).each(function() {
+			    val = this.value;
+			});
 		} else if ( field.type == 'file' ) {
 			var fileID = jQuery(field).data('fid');
 			if ( typeof fileID === 'undefined' ) {
@@ -1567,6 +1567,12 @@ function frmFrontFormJS(){
 			}
 			fieldID = fileID;
 		} else {
+			var fieldClasses = field.className;
+			if ( fieldClasses.indexOf('frm_pos_none') !== -1 ) {
+				// skip hidden other fields
+				return errors;
+			}
+
 			val = jQuery(field).val();
 			if ( typeof val !== 'string' ) {
 				var tempVal = val;
@@ -1577,7 +1583,12 @@ function frmFrontFormJS(){
 					}
 				}
 			}
-			fieldID = getFieldId( field, true );
+
+			if ( fieldClasses.indexOf('frm_other_input') === -1 ) {
+				fieldID = getFieldId( field, true );
+			} else {
+				fieldID = getFieldId( field, false );
+			}
 		}
 
 		if ( val === '' ) {
@@ -2675,14 +2686,16 @@ function frmFrontFormJS(){
 			var jumpPos = [];
 			jumpPos.fieldPos = 999999;
 			for ( var key in jsErrors ) {
-				var $fieldCont = jQuery(object).find(jQuery('#frm_field_'+key+'_container'));
-				addFieldError( $fieldCont, key, jsErrors );
+				var $fieldCont = jQuery(object).find('#frm_field_'+key+'_container');
 
-				var fieldOffset = $fieldCont.offset().top;
-				if ( fieldOffset < jumpPos.fieldPos ) {
-					jumpPos.fieldPos = fieldOffset;
-					jumpPos.key = key;
-					jumpPos.field = object;
+				if ( $fieldCont.length ) {
+					addFieldError( $fieldCont, key, jsErrors );
+					var fieldOffset = $fieldCont.offset().top;
+					if ( fieldOffset < jumpPos.fieldPos ) {
+						jumpPos.fieldPos = fieldOffset;
+						jumpPos.key = key;
+						jumpPos.field = object;
+					}
 				}
 			}
 
