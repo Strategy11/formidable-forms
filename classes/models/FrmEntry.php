@@ -44,7 +44,7 @@ class FrmEntry {
 	public static function is_duplicate( $new_values, $values ) {
 		$duplicate_entry_time = 60;
 
-		if ( false == self::is_duplicate_check_needed( $new_values, $values, $duplicate_entry_time ) ) {
+		if ( false === self::is_duplicate_check_needed( $new_values, $values, $duplicate_entry_time ) ) {
 			return false;
 		}
 
@@ -113,14 +113,14 @@ class FrmEntry {
 			return false;
 		}
 
-		// If time for checking duplicates is set to an empty value, don't check for duplicates
-		$duplicate_entry_time = apply_filters( 'frm_time_to_check_duplicates', 60, $new_values );
-		if ( empty( $duplicate_entry_time ) ) {
+		// If repeating field entries are getting created, don't check for duplicates
+		if ( isset( $values['parent_form_id'] ) && $values['parent_form_id'] ) {
 			return false;
 		}
 
-		// If repeating field entries are getting created, don't check for duplicates
-		if ( isset( $values['parent_form_id'] ) && $values['parent_form_id'] ) {
+		// If time for checking duplicates is set to an empty value, don't check for duplicates
+		$duplicate_entry_time = apply_filters( 'frm_time_to_check_duplicates', 60, $new_values );
+		if ( empty( $duplicate_entry_time ) ) {
 			return false;
 		}
 
