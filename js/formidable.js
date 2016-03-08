@@ -1484,7 +1484,7 @@ function frmFrontFormJS(){
 		var errors = [];
 
 		// Make sure required text field is filled in
-		var requiredFields = jQuery(object).find('.frm_required_field input, .frm_required_field select, .frm_required_field textarea');
+		var requiredFields = jQuery(object).find('.frm_required_field input, .frm_required_field select, .frm_required_field textarea').filter(':visible');
 		if ( requiredFields.length ) {
 			for ( var r = 0, rl = requiredFields.length; r < rl; r++ ) {
 				// this won't work with radio/checkbox
@@ -1492,7 +1492,7 @@ function frmFrontFormJS(){
 			}
 		}
 
-		var emailFields = jQuery(object).find('input[type=email]');
+		var emailFields = jQuery(object).find('input[type=email]').filter(':visible');
 		var fields = jQuery(object).find('input,select,textarea');
 		if ( fields.length ) {
 			for ( var n = 0, nl = fields.length; n < nl; n++ ) {
