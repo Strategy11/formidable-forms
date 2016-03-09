@@ -335,7 +335,7 @@ if ( ! isset( $center_form ) ) {
 .<?php echo esc_html( $style_class ) ?> .chosen-container-multi .chosen-choices,
 .<?php echo esc_html( $style_class ) ?> .chosen-container-single .chosen-single{
     color:#<?php echo esc_html( $text_color . $important ) ?>;
-    background-color:#<?php echo esc_html( $bg_color . $important ); ?>;
+    background-color:<?php echo esc_html( ( empty($bg_color) ? 'transparent' : '#'. $bg_color ) . $important ); ?>;
 <?php if ( ! empty($important) ) {
     echo esc_html( 'background-image:none' . $important . ';' );
 }
@@ -360,7 +360,7 @@ if ( ! isset( $center_form ) ) {
 
 .<?php echo esc_html( $style_class ) ?> input[type=file]::-webkit-file-upload-button{
     color:#<?php echo esc_html( $text_color . $important ) ?>;
-    background-color:#<?php echo esc_html( $bg_color . $important ); ?>;
+    background-color:<?php echo esc_html( ( empty($bg_color) ? 'transparent' : '#'. $bg_color ) . $important ); ?>;
 	padding:<?php echo esc_html( $field_pad . $important ) ?>;
 	border-radius:<?php echo esc_html( $border_radius . $important ) ?>;
 	border-color:#<?php echo esc_html( $border_color . $important ) ?>;
@@ -438,7 +438,7 @@ if ( ! isset( $center_form ) ) {
 }
 
 .<?php echo esc_html( $style_class ) ?> .mceIframeContainer{
-    background-color:#<?php echo esc_html( $bg_color . $important ) ?>;
+    background-color:<?php echo esc_html( ( empty($bg_color) ? 'transparent' : '#'. $bg_color ) . $important ); ?>;
 }
 
 .<?php echo esc_html( $style_class ) ?> .auto_width input,
@@ -454,7 +454,7 @@ if ( ! isset( $center_form ) ) {
 .<?php echo esc_html( $style_class ) ?> input[readonly],
 .<?php echo esc_html( $style_class ) ?> select[readonly],
 .<?php echo esc_html( $style_class ) ?> textarea[readonly]{
-    background-color:#<?php echo esc_html( $bg_color_disabled . $important ) ?>;
+    background-color:<?php echo esc_html( ( empty($bg_color_disabled) ? 'transparent' : '#'. $bg_color_disabled ) . $important ); ?>;
     color:#<?php echo esc_html( $text_color_disabled . $important ) ?>;
     border-color:#<?php echo esc_html( $border_color_disabled . $important ) ?>;
 }
@@ -472,7 +472,7 @@ if ( ! isset( $center_form ) ) {
 .<?php echo esc_html( $style_class ) ?> .frm_focus_field input[type=search],
 .frm_form_fields_active_style,
 .<?php echo esc_html( $style_class ) ?> .chosen-container-active .chosen-choices{
-    background-color:#<?php echo esc_html( $bg_color_active . $important ) ?>;
+    background-color:<?php echo esc_html( ( empty($bg_color_active) ? 'transparent' : '#'. $bg_color_active ) . $important ); ?>;
     border-color:#<?php echo esc_html( $border_color_active . $important ) ?>;
     <?php if ( isset( $remove_box_shadow_active ) && $remove_box_shadow_active ) { ?>
     box-shadow:none;
@@ -612,7 +612,7 @@ if ( ! $submit_style ) { ?>
 .<?php echo esc_html( $style_class ) ?> .frm_blank_field .g-recaptcha iframe,
 .<?php echo esc_html( $style_class ) ?> .frm_blank_field .chosen-container-multi .chosen-choices{
     color:#<?php echo esc_html( $text_color_error . $important ) ?>;
-    background-color:#<?php echo esc_html( $bg_color_error ) ?>;
+    background-color:<?php echo esc_html( ( empty($bg_color_error) ? 'transparent' : '#'. $bg_color_error ) . $important ); ?>;
     border-color:#<?php echo esc_html( $border_color_error . $important ) ?>;
     border-width:<?php echo esc_html( $border_width_error . $important ) ?>;
     border-style:<?php echo esc_html( $border_style_error . $important ) ?>;
@@ -628,7 +628,7 @@ if ( ! $submit_style ) { ?>
 }
 
 .<?php echo esc_html( $style_class ) ?> .frm_error_style{
-    background-color:#<?php echo esc_html( $error_bg . $important ) ?>;
+    background-color:<?php echo esc_html( ( empty($error_bg) ? 'transparent' : '#'. $error_bg ) . $important ); ?>;
     border:1px solid #<?php echo esc_html( $error_border . $important ) ?>;
     color:#<?php echo esc_html( $error_text . $important ) ?>;
     font-size:<?php echo esc_html( $error_font_size . $important ) ?>;
@@ -639,7 +639,7 @@ if ( ! $submit_style ) { ?>
 .<?php echo esc_html( $style_class ) ?> .frm_message,
 .frm_success_style{
     border:1px solid #<?php echo esc_html( $success_border_color ) ?>;
-    background-color:#<?php echo esc_html( $success_bg_color ) ?>;
+    background-color:<?php echo esc_html( ( empty($success_bg_color) ? 'transparent' : '#'. $success_bg_color ) . $important ); ?>;
     color:#<?php echo esc_html( $success_text_color ) ?>;
 }
 
@@ -664,7 +664,7 @@ if ( ! $submit_style ) { ?>
 
 .form_results.<?php echo esc_html( $style_class ) ?> tr.frm_even,
 .frm-grid .frm_even{
-    background-color:#<?php echo esc_html( $bg_color . $important ) ?>;
+    background-color:<?php echo esc_html( ( empty($bg_color) ? 'transparent' : '#'. $bg_color ) . $important ); ?>;
 }
 
 .<?php echo esc_html( $style_class ) ?> #frm_loading .progress-striped .progress-bar{
@@ -672,7 +672,7 @@ if ( ! $submit_style ) { ?>
 }
 
 .<?php echo esc_html( $style_class ) ?> #frm_loading .progress-bar{
-    background-color:#<?php echo esc_html( $bg_color ) ?>;
+    background-color:<?php echo esc_html( ( empty($bg_color) ? 'transparent' : '#'. $bg_color ) . $important ); ?>;
 }
 
 .<?php echo esc_html( $style_class ) ?> .frm_grid,
@@ -684,21 +684,21 @@ if ( ! $submit_style ) { ?>
 .<?php echo esc_html( $style_class ) ?> .frm_grid.frm_blank_field,
 .<?php echo esc_html( $style_class ) ?> .frm_grid_first.frm_blank_field,
 .<?php echo esc_html( $style_class ) ?> .frm_grid_odd.frm_blank_field{
-    background-color:#<?php echo esc_html( $error_bg ) ?>;
+    background-color:<?php echo esc_html( ( empty($error_bg) ? 'transparent' : '#'. $error_bg ) . $important ); ?>;
     border-color:#<?php echo esc_html( $error_border ) ?>;
 }
 
 .<?php echo esc_html( $style_class ) ?> .frm_grid_first,
 .<?php echo esc_html( $style_class ) ?> .frm_grid_odd{
-    background-color:#<?php echo esc_html( $bg_color ) ?>;
+    background-color:<?php echo esc_html( ( empty($bg_color) ? 'transparent' : '#'. $bg_color ) . $important ); ?>;
 }
 
 .<?php echo esc_html( $style_class ) ?> .frm_grid{
-    background-color:#<?php echo esc_html( $bg_color_active ) ?>;
+    background-color:<?php echo esc_html( ( empty($bg_color_active) ? 'transparent' : '#'. $bg_color_active ) . $important ); ?>;
 }
 
 .<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_html_scroll_box{
-    background-color:#<?php echo esc_html( $bg_color . $important ) ?>;
+    background-color:<?php echo esc_html( ( empty($bg_color) ? 'transparent' : '#'. $bg_color ) . $important ); ?>;
     border-color:#<?php echo esc_html( $border_color . $important ) ?>;
     border-width:<?php echo esc_html( $field_border_width . $important ) ?>;
     border-style:<?php echo esc_html( $field_border_style . $important ) ?>;
