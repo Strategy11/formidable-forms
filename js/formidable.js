@@ -182,7 +182,11 @@ function frmFrontFormJS(){
 
 		if ( fullID === true ) {
 			// For use in the container div id
-			field_id = field_id +'-'+ nameParts[0] +'-'+ nameParts[1].replace('[', '');
+			if ( field_id === nameParts[0] ) {
+				field_id = field_id +'-'+ nameParts[1].replace('[', '');
+			} else {
+				field_id = field_id +'-'+ nameParts[0] +'-'+ nameParts[1].replace('[', '');
+			}
 		}
 
 		return field_id;

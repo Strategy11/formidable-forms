@@ -168,5 +168,6 @@ do_action('frm_field_input_html', $field);
         FrmFieldsHelper::display_recaptcha($field);
     }
 } else {
-    do_action('frm_form_fields', $field, $field_name, compact('errors', 'html_id'));
+	do_action( 'frm_form_fields', $field, $field_name, compact( 'errors', 'html_id' ) );
+	do_action( 'frm_form_field_' . $field['type'], $field, $field_name, compact( 'errors', 'html_id' ) );
 }
