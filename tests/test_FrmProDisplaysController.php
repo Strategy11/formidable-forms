@@ -1277,6 +1277,27 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	}
 
 	/**
+	 * Test Detail page of View with page size set
+	 * @covers FrmProDisplaysController::get_display_data
+	 */
+	function test_detail_page_with_low_page_size() {
+		self::clear_get_values();
+		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
+		$dynamic_view->frm_page_size = 1;
+
+		// Test Jamie entry
+		$_GET['detail'] = FrmEntry::get_id_by_key( 'jamie_entry_key' );
+		$d = self::get_default_args( $dynamic_view, array( 'Jamie' ), array( 'Steph', 'Steve' ) );
+		self::run_get_display_data_tests( $d, 'dynamic view on detail page with low page size 1' );
+
+		// Test Steve entry
+		$_GET['detail'] = FrmEntry::get_id_by_key( 'steve_entry_key' );
+		$dynamic_view = self::reset_view( 'dynamic-view' );
+		$d = self::get_default_args( $dynamic_view, array( 'Steve' ), array( 'Jamie', 'Steph' ) );
+		self::run_get_display_data_tests( $d, 'dynamic view on detail page with low page size 2' );
+	}
+
+	/**
 	 * Test drafts in Views
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
@@ -1645,6 +1666,26 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	}
 
 	/**
+	* Test the number of rows and days showing in a calendar
+	* @covers FrmProDisplaysController::get_display_data
+	*/
+	function test_number_of_days_in_calendar(){
+		self::clear_get_values();
+
+		$calendar_view = self::get_view_by_key( 'calendar-view' );
+
+		$content = FrmProDisplaysController::get_display_data( $calendar_view, '', false, array() );
+
+		// Number of rows
+		$row_count = substr_count( $content, '<tr' );
+		$this->assertTrue( $row_count > 3 && $row_count < 6, 'There are too many rows in a calendar View' );
+
+		// Number of day boxes
+		$day_count = substr_count( $content, '<td' );
+		$this->assertTrue( $day_count > 20 && $day_count < 43, 'There are too many days in a calendar View' );
+	}
+
+	/**
 	 * Make sure calendar View pulls up the correct data depending on the month/year shown
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
@@ -1684,7 +1725,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	}
 
 	/**
-	 * Make sure calendar View pulls up the correct data depending on the month/year shown
+	 * Make sure calendar View displays an empty calendar when there aren't any entries
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_calendar_view_no_entries(){
@@ -1698,7 +1739,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		);
 		self::add_filter_to_view( $calendar_view, $filter_args );
 
-		$expected_strings = array( 'frmcal-' . $calendar_view->ID, 'frmcal-header', 'frmcal_date', 'Jamie', 'Steph', 'Steve' );
+		$expected_strings = array( 'frmcal-' . $calendar_view->ID, 'frmcal-header', 'frmcal_date' );
 		$d = self::get_default_args( $calendar_view, $expected_strings, array( 'No Entries Found' ) );
 		self::run_get_display_data_tests( $d, 'calendar view with no entries found' );
 	}
@@ -2050,7 +2091,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 		$dynamic_view->frm_after_content = 'After Content: [sum_msyehy]';
-		add_filter( 'frm_after_content', 'dynamic_frm_stats', 10, 4 );
+		add_filter( 'frm_after_display_content', 'dynamic_frm_stats', 10, 4 );
 
 		// Make sure after content includes the dynamic total
 		$field_id = FrmField::get_id_by_key( 'msyehy' );
@@ -2070,7 +2111,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		$dynamic_view->frm_after_content = 'After Content: [sum_msyehy]';
 		$dynamic_view->frm_page_size = 1;
 
-		add_filter( 'frm_after_content', 'dynamic_frm_stats', 10, 4 );
+		add_filter( 'frm_after_display_content', 'dynamic_frm_stats', 10, 4 );
 
 		$field_id = FrmField::get_id_by_key( 'msyehy' );
 		$expected_total = FrmProEntriesController::get_field_value_shortcode(array('field_id' => $field_id, 'entry' => 'jamie_entry_key' ) );
