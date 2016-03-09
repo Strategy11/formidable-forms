@@ -67,6 +67,7 @@ class FrmStylesController {
 		global $frm_vars;
 
 		$register_css = ( $register == 'register' );
+		$force_in_admin = false;
 		if ( $register == 'admin' ) {
 			$force_in_admin = true;
 			$frm_vars['load_css'] = true;
