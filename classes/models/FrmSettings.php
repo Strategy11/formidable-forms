@@ -75,7 +75,7 @@ class FrmSettings{
      */
 	public function default_options() {
         return array(
-            'menu'      => __( 'Forms', 'formidable' ),
+            'menu'      => apply_filters( 'frm_default_menu', __( 'Forms', 'formidable' ) ),
             'mu_menu'   => 0,
             'preview_page_id' => 0,
             'use_html'  => true,
@@ -133,6 +133,11 @@ class FrmSettings{
             } else if ( ! isset($this->{$setting}) ) {
                 $this->{$setting} = $default;
             }
+
+			if ( $setting == 'menu' && empty( $this->{$setting} ) ) {
+				$this->{$setting} = $default;
+			}
+
             unset($setting, $default);
         }
     }

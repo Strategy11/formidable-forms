@@ -93,8 +93,7 @@ class FrmAppHelper {
 
 	public static function get_menu_name() {
 		$frm_settings = FrmAppHelper::get_settings();
-		$menu_name = $frm_settings->menu;
-		return empty( $menu_name ) ? __( 'Forms', 'formidable' ) : $menu_name;
+		return $frm_settings->menu;
 	}
 
     /**
