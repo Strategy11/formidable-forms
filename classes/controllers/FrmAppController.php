@@ -245,6 +245,7 @@ class FrmAppController {
 			FrmAppHelper::localize_script( 'admin' );
 
             wp_enqueue_style( 'formidable-admin' );
+			FrmStylesController::enqueue_css( 'admin' );
             add_thickbox();
 
             wp_register_script( 'formidable-editinplace', FrmAppHelper::plugin_url() . '/js/jquery/jquery.editinplace.packed.js', array( 'jquery' ), '2.3.0' );

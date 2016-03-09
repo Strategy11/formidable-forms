@@ -93,6 +93,7 @@ class FrmEntryValidate {
         self::validate_recaptcha($errors, $posted_field, $args);
 
         $errors = apply_filters('frm_validate_field_entry', $errors, $posted_field, $value, $args);
+		$errors = apply_filters( 'frm_validate_' . $posted_field->type . '_field_entry', $errors, $posted_field, $value, $args );
     }
 
 	public static function validate_url_field( &$errors, $field, &$value, $args ) {

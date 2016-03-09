@@ -45,6 +45,7 @@ class FrmField {
 			'password'  => __( 'Password', 'formidable' ),
 			'html'      => __( 'HTML', 'formidable' ),
 			'tag'       => __( 'Tags', 'formidable' ),
+			'credit_card' => __( 'Credit Card', 'formidable' ),
 			//'address' => 'Address' //Address line 1, Address line 2, City, State/Providence, Postal Code, Select Country
 			//'city_selector' => 'US State/County/City selector',
 			//'full_name' => 'First and Last Name',

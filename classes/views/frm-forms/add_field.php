@@ -120,7 +120,7 @@ if ( in_array( $field['type'], array( 'select', 'radio', 'checkbox' ) ) ) { ?>
             }
 
             if ( ! isset($field['post_field']) || $field['post_field'] != 'post_category' ) { ?>
-            <a href="<?php echo esc_url(admin_url('admin-ajax.php') .'?action=frm_import_choices&field_id='. $field['id'] .'&TB_iframe=1') ?>" title="<?php echo FrmAppHelper::truncate(esc_attr(strip_tags(str_replace('"', '&quot;', $field['name']))), 20) . ' '. __( 'Field Choices', 'formidable' ); ?>" class="thickbox frm_orange"><?php _e( 'Bulk Edit Options', 'formidable' ) ?></a>
+            <a href="<?php echo esc_url( admin_url( 'admin-ajax.php?action=frm_import_choices&field_id='. $field['id'] .'&TB_iframe=1') ) ?>" title="<?php echo esc_attr( FrmAppHelper::truncate( strip_tags( str_replace( '"', '&quot;', $field['name'] ) ), 20 ) . ' '. __( 'Field Choices', 'formidable' ) ); ?>" class="thickbox frm_orange"><?php _e( 'Bulk Edit Options', 'formidable' ) ?></a>
             <?php } ?>
         </div>
 <?php
@@ -257,7 +257,9 @@ if ( $display['options'] ) { ?>
                 </tr>
                 <?php
 				} ?>
-                <?php do_action('frm_field_options_form', $field, $display, $values);
+                <?php
+				do_action( 'frm_' . $field['type'] . '_field_options_form', $field, $display, $values );
+				do_action( 'frm_field_options_form', $field, $display, $values );
 
                 if ( $display['required'] || $display['invalid'] || $display['unique'] || $display['conf_field'] ) { ?>
 					<tr class="frm_validation_msg <?php echo ($display['invalid'] || $field['required'] || FrmField::is_option_true( $field, 'unique' ) || FrmField::is_option_true( $field, 'conf_field' ) ) ? '' : 'frm_hidden'; ?>">

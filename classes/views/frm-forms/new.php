@@ -15,7 +15,7 @@
 
         ?>
 
-        <div class="frm_form_builder<?php echo FrmFormsHelper::get_form_style_class($form); ?>">
+        <div class="frm_form_builder with_frm_style">
 
         <form method="post" id="frm_build_form">
             <input type="hidden" name="frm_action" value="create" />

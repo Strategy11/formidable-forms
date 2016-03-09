@@ -534,6 +534,7 @@ form label.frm_primary_label input{font-size:12px;}
 	border:solid 1px #dfdfdf;
 	line-height:normal;
 }
+.frm_multi_fields_container,
 .frm_form_fields:not(.frm_sample_form) input[type="text"]{
 	width:400px;
     height:auto;

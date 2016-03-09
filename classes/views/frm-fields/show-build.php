@@ -62,4 +62,5 @@
 <?php
 } else {
     do_action( 'frm_display_added_fields', $field );
+	do_action( 'frm_display_added_' . $field['type'] . '_field', $field );
 }
