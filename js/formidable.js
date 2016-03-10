@@ -1761,7 +1761,7 @@ function frmFrontFormJS(){
 									frmFrontForm.scrollMsg( key, object, true );
 									jump = '#frm_field_'+key+'_container';
 								}
-								var $recapcha = jQuery(object).find('#frm_field_'+key+'_container .g-recaptcha');
+								var $recapcha = jQuery(object).find('#frm_field_'+key+'_container .frm-g-recaptcha');
 								if ( $recapcha.length ) {
 									show_captcha = true;
 									grecaptcha.reset();
@@ -1775,7 +1775,7 @@ function frmFrontFormJS(){
 						}
 					}
 					if(show_captcha !== true){
-						jQuery(object).find('.g-recaptcha').closest('.frm_form_field').replaceWith('<input type="hidden" name="recaptcha_checked" value="'+ frm_js.nonce +'">');
+						jQuery(object).find('.frm-g-recaptcha').closest('.frm_form_field').replaceWith('<input type="hidden" name="recaptcha_checked" value="'+ frm_js.nonce +'">');
 					}
 					if(cont_submit){
 						object.submit();
