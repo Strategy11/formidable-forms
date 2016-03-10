@@ -607,6 +607,7 @@ if ( ! $submit_style ) { ?>
 .<?php echo esc_html( $style_class ) ?> .frm_blank_field input[type=number],
 .<?php echo esc_html( $style_class ) ?> .frm_blank_field input[type=email],
 .<?php echo esc_html( $style_class ) ?> .frm_blank_field textarea,
+.<?php echo esc_html( $style_class ) ?> .frm_blank_field .mce-edit-area iframe,
 .<?php echo esc_html( $style_class ) ?> .frm_blank_field select,
 .frm_form_fields_error_style,
 .<?php echo esc_html( $style_class ) ?> .frm_blank_field .frm-g-recaptcha iframe,

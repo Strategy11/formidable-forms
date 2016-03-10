@@ -1488,7 +1488,9 @@ function frmFrontFormJS(){
 		var errors = [];
 
 		// Make sure required text field is filled in
-		var requiredFields = jQuery(object).find('.frm_required_field input, .frm_required_field select, .frm_required_field textarea').filter(':visible');
+		var requiredFields = jQuery(object).find(
+			'.frm_required_field:visible input, .frm_required_field:visible select, .frm_required_field:visible textarea'
+		);
 		if ( requiredFields.length ) {
 			for ( var r = 0, rl = requiredFields.length; r < rl; r++ ) {
 				// this won't work with radio/checkbox
@@ -1629,8 +1631,9 @@ function frmFrontFormJS(){
 		var isConf = (fieldID.indexOf('conf_') === 0);
 		if ( emailAddress !== '' || isConf ) {
 			var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+			var invalidMsg = getFieldValidationMessage( field, 'data-invmsg' );
 			if ( emailAddress !== '' && re.test( emailAddress ) === false ) {
-				errors[ fieldID ] = '';
+				errors[ fieldID ] = invalidMsg;
 				if ( isConf ) {
 					errors[ fieldID.replace('conf_', '') ] = '';
 				}
@@ -1638,7 +1641,7 @@ function frmFrontFormJS(){
 				var confName = field.name.replace('conf_', '');
 				var match = emailFields.filter('[name="'+ confName +'"]').val();
 				if ( match !== emailAddress ) {
-					errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
+					errors[ fieldID ] = invalidMsg;
 					errors[ fieldID.replace('conf_', '') ] = '';
 				}
 			}
