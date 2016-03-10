@@ -1566,6 +1566,7 @@ function frmFrontFormJS(){
 				fileID = getFieldId( field, true );
 				fileID = fileID.replace('file', '');
 			}
+
 			if ( typeof errors[ fileID ] === 'undefined' ) {
 				val = getFileVals( fileID );
 			}
@@ -1706,7 +1707,7 @@ function frmFrontFormJS(){
 							},2000);
 						}
 					}
-					var $recapField = jQuery(object).find('.g-recaptcha');
+					var $recapField = jQuery(object).find('.frm-g-recaptcha');
 					if($recapField.length && (jQuery(object).find('.frm_next_page').length < 1 || jQuery(object).find('.frm_next_page').val() < 1)){
                         $recapField.closest('.frm_form_field').replaceWith('<input type="hidden" name="recaptcha_checked" value="'+ frm_js.nonce +'">');
 					}
@@ -2700,6 +2701,9 @@ function frmFrontFormJS(){
 						jumpPos.key = key;
 						jumpPos.field = object;
 					}
+				} else {
+					// we are unable to show the error, so remove it
+					delete jsErrors[ key ];
 				}
 			}
 
