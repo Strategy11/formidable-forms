@@ -615,10 +615,6 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
     overflow:hidden!important;
 }
 
-.with_frm_style .frm_form_field{
-    clear:both;
-}
-
 <?php include( dirname(__FILE__) . '/frm_grids.css' ); ?>
 
 /* Left and right label styling for non-Formidable styling - very basic, not responsive */
