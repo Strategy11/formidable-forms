@@ -68,7 +68,7 @@ class FrmStylesController {
 
 		$register_css = ( $register == 'register' );
 
-		if ( ( $frm_vars['load_css'] || $register_css ) && ( ! FrmAppHelper::is_admin() || $force_in_admin ) ) {
+		if ( ( $frm_vars['load_css'] || $register_css ) && ! FrmAppHelper::is_admin() ) {
 			$frm_settings = FrmAppHelper::get_settings();
 			if ( $frm_settings->load_style == 'none' ) {
 				return;
