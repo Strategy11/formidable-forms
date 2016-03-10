@@ -67,11 +67,6 @@ class FrmStylesController {
 		global $frm_vars;
 
 		$register_css = ( $register == 'register' );
-		$force_in_admin = false;
-		if ( $register == 'admin' ) {
-			$force_in_admin = true;
-			$frm_vars['load_css'] = true;
-		}
 
 		if ( ( $frm_vars['load_css'] || $register_css ) && ( ! FrmAppHelper::is_admin() || $force_in_admin ) ) {
 			$frm_settings = FrmAppHelper::get_settings();
@@ -85,7 +80,7 @@ class FrmStylesController {
 				$version = FrmAppHelper::plugin_version();
 
 				foreach ( (array) $css as $css_key => $file ) {
-					if ( $register_css || $register == 'admin' ) {
+					if ( $register_css ) {
 						$this_version = self::get_css_version( $css_key, $version );
 						wp_register_style( $css_key, $file, array(), $this_version );
 					}
