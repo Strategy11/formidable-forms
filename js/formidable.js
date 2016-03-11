@@ -1490,7 +1490,7 @@ function frmFrontFormJS(){
 		// Make sure required text field is filled in
 		var requiredFields = jQuery(object).find(
 			'.frm_required_field:visible input, .frm_required_field:visible select, .frm_required_field:visible textarea'
-		);
+		).filter(':not(.frm_optional)');
 		if ( requiredFields.length ) {
 			for ( var r = 0, rl = requiredFields.length; r < rl; r++ ) {
 				// this won't work with radio/checkbox
@@ -1525,7 +1525,7 @@ function frmFrontFormJS(){
 		var errors = [];
 
 		var $fieldCont = jQuery(field).closest('.frm_form_field');
-		if ( $fieldCont.hasClass('.frm_required_field') ) {
+		if ( $fieldCont.hasClass('.frm_required_field') && ! jQuery(field).hasClass('.frm_optional') ) {
 			errors = checkRequiredField( field, errors );
 		}
 
@@ -1540,13 +1540,11 @@ function frmFrontFormJS(){
 			}
 		}
 
+		removeFieldError( $fieldCont );
 		if (  Object.keys(errors).length > 0 ) {
 			for ( var key in errors ) {
-				removeFieldError( $fieldCont );
 				addFieldError( $fieldCont, key, errors );
 			}
-		} else {
-			removeFieldError( $fieldCont );
 		}
 	}
 
@@ -1700,6 +1698,7 @@ function frmFrontFormJS(){
 				if(errObj.indexOf('{') === 0){
 					errObj = jQuery.parseJSON(errObj);
 				}
+
 				if(errObj === '' || !errObj || errObj === '0' || (typeof(errObj) != 'object' && errObj.indexOf('<!DOCTYPE') === 0)){
 					var $loading = document.getElementById('frm_loading');
 					if($loading !== null){
@@ -2663,10 +2662,12 @@ function frmFrontFormJS(){
 
 			action = jQuery(object).find('input[name="frm_action"]').val();
 			jsErrors = [];
-			frmFrontForm.getAjaxFormErrors( object );
+			if ( jQuery(object).hasClass('frm_js_validate') ){
+				frmFrontForm.getAjaxFormErrors( object );
 
-			if ( Object.keys(jsErrors).length ) {
-				frmFrontForm.addAjaxFormErrors( object );
+				if ( Object.keys(jsErrors).length ) {
+					frmFrontForm.addAjaxFormErrors( object );
+				}
 			}
 
 			return jsErrors;
