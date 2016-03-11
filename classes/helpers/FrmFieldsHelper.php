@@ -1164,8 +1164,11 @@ DEFAULT_HTML;
 
 			if ( $display['default_blank'] ) {
 				self::show_default_blank_js( $field['default_blank'] );
+				echo '<input type="hidden" name="field_options[default_blank_'. esc_attr( $field['id'] ) .']" value="' . esc_attr( $field['default_blank'] ) .'" />';
 			}
+
 			self::show_onfocus_js( $field['clear_on_focus'] );
+			echo '<input type="hidden" name="field_options[clear_on_focus_'. esc_attr( $field['id'] ) .']" value="' . esc_attr( $field['default_blank'] ) .'" />';
 
 			echo '</span>';
 		}

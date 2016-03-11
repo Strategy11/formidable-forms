@@ -246,7 +246,13 @@ class FrmForm {
             }
 
             //updating the form
-			foreach ( array( 'size', 'max', 'label', 'invalid', 'blank', 'classes', 'captcha_size' ) as $opt ) {
+			$update_options = array(
+				'size', 'max', 'label', 'invalid', 'blank',
+				'classes', 'captcha_size', 'default_blank',
+				'clear_on_focus',
+			);
+			$update_options = apply_filters( 'frm_field_options_to_update', $update_options );
+			foreach ( $update_options as $opt ) {
 				$field->field_options[ $opt ] = isset( $values['field_options'][ $opt . '_' . $field_id ] ) ? trim( $values['field_options'][ $opt . '_' . $field_id ] ) : '';
             }
 

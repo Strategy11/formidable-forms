@@ -141,20 +141,11 @@ class FrmFieldsController {
 
 		$field = FrmField::getOne( $field_id );
 
-		foreach ( array( 'clear_on_focus', 'separate_value', 'default_blank' ) as $val ) {
-            if ( isset($_POST[ $val ]) ) {
-				// all three of these options are boolean
-				$new_val = FrmAppHelper::get_post_param( $val, 0, 'absint' );
-
-                if ( $val == 'separate_value' ) {
-					$new_val = FrmField::is_option_true( $field, $val ) ? 0 : 1;
-                }
-
-                $field->field_options[ $val ] = $new_val;
-                unset($new_val);
-            }
-            unset($val);
-        }
+		if ( isset( $_POST['separate_value'] ) ) {
+			$new_val = FrmField::is_option_true( $field, 'separate_value' ) ? 0 : 1;
+			$field->field_options['separate_value'] = $new_val;
+			unset($new_val);
+		}
 
         FrmField::update( $field_id, array(
             'field_options' => $field->field_options,
@@ -652,13 +643,19 @@ class FrmFieldsController {
 			return;
 		}
 
+		$default_value_array = is_array( $field['default_value'] );
         if ( ! FrmField::is_option_true( $field, 'clear_on_focus' ) ) {
-			if ( is_array( $field['default_value'] ) ) {
+			if ( $default_value_array ) {
 				$field['default_value'] = json_encode( $field['default_value'] );
 			}
 			$add_html['data-frmval'] = 'data-frmval="' . esc_attr( $field['default_value'] ) . '"';
             return;
         }
+
+		if ( $default_value_array ) {
+			// don't include a json placeholder
+			return;
+		}
 
         $frm_settings = FrmAppHelper::get_settings();
 

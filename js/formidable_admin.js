@@ -509,7 +509,7 @@ function frmAdminBuildJS(){
 				}
 			}
 
-			var $confDesc = jQuery('#frm_conf_field_'+field_id+'_container .frm_ipe_field_conf_desc');
+			var $confDesc = jQuery('.frm_ipe_field_conf_desc');
 			if($confDesc.text() == frm_admin_js.desc){
 				if ( field_type == 'email' ) {
 					$confDesc.text(frm_admin_js.confirm_email);
@@ -596,10 +596,7 @@ function frmAdminBuildJS(){
 		}
 		var field_id=jQuery(this).closest('li.form-field').data('fid');
 		jQuery(this).toggleClass('frm_inactive_icon').attr('title', t).tooltip('destroy').tooltip('show');
-		jQuery.ajax({
-            type:"POST",url:ajaxurl,
-            data:{action:'frm_update_ajax_option', field:field_id, clear_on_focus:switch_to, nonce:frmGlobal.nonce}
-        });
+		jQuery('input[name="field_options[clear_on_focus_'+ field_id +']"').val(switch_to);
 		return false;
 	}
 
@@ -610,12 +607,10 @@ function frmAdminBuildJS(){
 			switch_to = '1';
 			t = frm_admin_js.no_valid_default;
 		}
-		var field_id=jQuery(this).closest('li.form-field').data('fid');
-		jQuery(this).toggleClass('frm_inactive_icon').attr('title', t).tooltip('destroy').next('.tooltip').remove();jQuery(this).tooltip('show');
-		jQuery.ajax({
-			type:"POST",url:ajaxurl,
-			data:{action:'frm_update_ajax_option', field:field_id, default_blank:switch_to, nonce:frmGlobal.nonce}
-		});
+		var field_id = jQuery(this).closest('li.form-field').data('fid');
+		jQuery(this).toggleClass('frm_inactive_icon').attr('title', t).tooltip('destroy').next('.tooltip').remove();
+		jQuery(this).tooltip('show');
+		jQuery('input[name="field_options[default_blank_'+ field_id +']"').val(switch_to);
 		return false;
 	}
 

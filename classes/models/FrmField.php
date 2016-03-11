@@ -46,10 +46,7 @@ class FrmField {
 			'html'      => __( 'HTML', 'formidable' ),
 			'tag'       => __( 'Tags', 'formidable' ),
 			'credit_card' => __( 'Credit Card', 'formidable' ),
-			//'address' => 'Address' //Address line 1, Address line 2, City, State/Providence, Postal Code, Select Country
-			//'city_selector' => 'US State/County/City selector',
-			//'full_name' => 'First and Last Name',
-			//'quiz'    => 'Question and Answer' // for captcha alternative
+			'address'   => __( 'Address', 'formidable' ),
 		));
 	}
 
@@ -636,7 +633,9 @@ class FrmField {
 	 * @since 2.0.9
 	 */
 	public static function is_required( $field ) {
-		return $field['required'] != '0';
+		$required = ( $field['required'] != '0' );
+		$required = apply_filters( 'frm_is_field_required', $required, $field );
+		return $required;
 	}
 
 	/**
