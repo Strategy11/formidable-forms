@@ -790,21 +790,23 @@ DEFAULT_HTML;
 
                     $atts['entry_id'] = $entry->id;
                     $atts['entry_key'] = $entry->item_key;
-                    //$replace_with = apply_filters('frmpro_fields_replace_shortcodes', $replace_with, $tag, $atts, $field);
-
-                    if ( is_array($replace_with) ) {
-                        $replace_with = implode($sep, $replace_with);
-                    }
 
                     if ( isset($atts['show']) && $atts['show'] == 'field_label' ) {
                         $replace_with = $field->name;
                     } else if ( isset($atts['show']) && $atts['show'] == 'description' ) {
                         $replace_with = $field->description;
-                    } else if ( empty($replace_with) && $replace_with != '0' ) {
-                        $replace_with = '';
-                    } else {
-                        $replace_with = self::get_display_value($replace_with, $field, $atts);
-                    }
+					} else {
+						$string_value = $replace_with;
+						if ( is_array( $replace_with ) ) {
+							$string_value = implode( $sep, $replace_with );
+						}
+
+						if ( empty( $string_value ) && $string_value != '0' ) {
+							$replace_with = '';
+						} else {
+							$replace_with = self::get_display_value( $replace_with, $field, $atts );
+						}
+					}
 
                     unset($field);
                 break;
@@ -886,6 +888,7 @@ DEFAULT_HTML;
 	public static function get_display_value( $replace_with, $field, $atts = array() ) {
 		$atts['sep'] = isset( $atts['sep'] ) ? $atts['sep'] : ', ';
 
+		$replace_with = apply_filters( 'frm_get_' . $field->type . '_display_value', $replace_with, $field, $atts );
 		$replace_with = apply_filters( 'frm_get_display_value', $replace_with, $field, $atts );
 
         if ( $field->type == 'textarea' || $field->type == 'rte' ) {

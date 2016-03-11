@@ -180,6 +180,7 @@ class FrmEntriesHelper {
 
 	public static function prepare_display_value( $entry, $field, $atts ) {
 		$field_value = isset( $entry->metas[ $field->id ] ) ? $entry->metas[ $field->id ] : false;
+
         if ( FrmAppHelper::pro_is_installed() ) {
 			FrmProEntriesHelper::get_dynamic_list_values( $field, $entry, $field_value );
         }
@@ -268,6 +269,7 @@ class FrmEntriesHelper {
         }
 
         $value = apply_filters('frm_display_value_custom', maybe_unserialize($value), $field, $atts);
+		$value = apply_filters( 'frm_display_' . $field->type . '_value_custom', $value, compact( 'field', 'atts' ) );
 
         $new_value = '';
 
