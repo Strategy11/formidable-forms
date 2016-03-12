@@ -80,7 +80,7 @@ class FrmCSVExportHelper{
 	private static function prepare_csv_headings() {
 		$headings = array();
 		self::csv_headings( $headings );
-		$headings = apply_filters( 'frm_csv_columns', $headings, self::$form_id );
+		$headings = apply_filters( 'frm_csv_columns', $headings, self::$form_id, array( 'fields' => self::$fields ) );
 		self::$headings = $headings;
 
 		self::print_csv_row( $headings );
@@ -88,11 +88,14 @@ class FrmCSVExportHelper{
 
 	private static function csv_headings( &$headings ) {
 		foreach ( self::$fields as $col ) {
+			$field_headings = array();
 			if ( isset( $col->field_options['separate_value'] ) && $col->field_options['separate_value'] && ! in_array( $col->type, array( 'user_id', 'file', 'data', 'date' ) ) ) {
-				$headings[ $col->id . '_label' ] = strip_tags( $col->name . ' ' . __( '(label)', 'formidable' ) );
+				$field_headings[ $col->id . '_label' ] = strip_tags( $col->name . ' ' . __( '(label)', 'formidable' ) );
 			}
 
-			$headings[ $col->id ] = strip_tags( $col->name );
+			$field_headings[ $col->id ] = strip_tags( $col->name );
+			$field_headings = apply_filters( 'frm_csv_field_columns', $field_headings, array( 'field' => $col ) );
+			$headings += $field_headings;
 		}
 
 		if ( self::$comment_count ) {
@@ -174,6 +177,8 @@ class FrmCSVExportHelper{
 			$field_value = isset( self::$entry->metas[ $col->id ] ) ? self::$entry->metas[ $col->id ] : false;
 
 			$field_value = maybe_unserialize( $field_value );
+			self::add_array_values_to_columns( $row, compact( 'col', 'field_value' ) );
+
 			$field_value = apply_filters( 'frm_csv_value', $field_value, array( 'field' => $col, 'entry' => self::$entry, 'separator' => self::$separator ) );
 
 			if ( isset( $col->field_options['separate_value'] ) && $col->field_options['separate_value'] ) {
@@ -189,6 +194,20 @@ class FrmCSVExportHelper{
 			$row[ $col->id ] = $field_value;
 
 			unset( $col, $field_value );
+		}
+	}
+
+	/**
+	 * @since 2.0.23
+	 */
+	private static function add_array_values_to_columns( &$row, $atts ) {
+		if ( is_array( $atts['field_value'] ) ) {
+			foreach ( $atts['field_value'] as $key => $sub_value ) {
+				$column_key = $atts['col']->id .'_'. $key;
+				if ( ! is_numeric( $key ) && isset( self::$headings[ $column_key ] ) ) {
+					$row[ $column_key ] = $sub_value;
+				}
+			}
 		}
 	}
 
@@ -223,6 +242,7 @@ class FrmCSVExportHelper{
 			if ( self::$line_break != 'return' ) {
 				$val = str_replace( array( "\r\n", "\r", "\n" ), self::$line_break, $val );
 			}
+
 			echo '"' . $val . '"';
 			if ( $this_col != $col_count ) {
 				echo self::$column_separator;
