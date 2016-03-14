@@ -8,6 +8,7 @@ function frmFrontFormJS(){
 	var currentlyAddingRow = false;
 	var action = '';
 	var jsErrors = [];
+	var jumpPos = [];
 
 	function setNextPage(e){
 		/*jshint validthis:true */
@@ -1736,12 +1737,14 @@ function frmFrontFormJS(){
 					jQuery(object).find('.frm_ajax_loading').removeClass('frm_loading_now');
 
 					//show errors
-					var cont_submit=true;
+					var cont_submit = true;
 					jQuery('.form-field').removeClass('frm_blank_field');
 					jQuery('.form-field .frm_error').replaceWith('');
-					var jump = '';
+
+					jumpPos.fieldPos = 999999;
 					var show_captcha = false;
-                    var $fieldCont = null;
+					var $fieldCont = null;
+
 					for (var key in errObj){
 						$fieldCont = jQuery(object).find('#frm_field_'+key+'_container');
 
@@ -1757,28 +1760,32 @@ function frmFrontFormJS(){
 									frmTrigger.click();
 								}
 							}
+
 							if ( $fieldCont.is(':visible') ) {
+								addFieldError( $fieldCont, key, errObj );
+
 								cont_submit = false;
-								if ( jump === '' ) {
-									frmFrontForm.scrollMsg( key, object, true );
-									jump = '#frm_field_'+key+'_container';
-								}
+
+								updateOffsetIfFirst( object, $fieldCont, key );
+
 								var $recapcha = jQuery(object).find('#frm_field_'+key+'_container .frm-g-recaptcha');
 								if ( $recapcha.length ) {
 									show_captcha = true;
 									grecaptcha.reset();
 								}
-
-								addFieldError( $fieldCont, key, errObj );
 							}
 						}else if(key == 'redirect'){
 							window.location = errObj[key];
 							return;
 						}
 					}
+
+					scrollToFirstField();
+
 					if(show_captcha !== true){
 						jQuery(object).find('.frm-g-recaptcha').closest('.frm_form_field').replaceWith('<input type="hidden" name="recaptcha_checked" value="'+ frm_js.nonce +'">');
 					}
+
 					if(cont_submit){
 						object.submit();
 					}
@@ -1804,6 +1811,21 @@ function frmFrontFormJS(){
 	function removeFieldError( $fieldCont ) {
 		$fieldCont.removeClass('frm_blank_field');
 		$fieldCont.find('.frm_error').remove();
+	}
+
+	function updateOffsetIfFirst( object, $fieldCont, key ) {
+		var fieldOffset = $fieldCont.offset().top;
+		if ( fieldOffset < jumpPos.fieldPos ) {
+			jumpPos.fieldPos = fieldOffset;
+			jumpPos.key = key;
+			jumpPos.field = object;
+		}
+	}
+
+	function scrollToFirstField() {
+		if ( 999999 > jumpPos.fieldPos > 0 ) {
+			frmFrontForm.scrollMsg( jumpPos.key, jumpPos.field, true );
+		}
 	}
 
 	function clearDefault(){
@@ -2692,28 +2714,20 @@ function frmFrontFormJS(){
 			jQuery('.form-field').removeClass('frm_blank_field');
 			jQuery('.form-field .frm_error').replaceWith('');
 
-			var jumpPos = [];
 			jumpPos.fieldPos = 999999;
 			for ( var key in jsErrors ) {
 				var $fieldCont = jQuery(object).find('#frm_field_'+key+'_container');
 
 				if ( $fieldCont.length ) {
 					addFieldError( $fieldCont, key, jsErrors );
-					var fieldOffset = $fieldCont.offset().top;
-					if ( fieldOffset < jumpPos.fieldPos ) {
-						jumpPos.fieldPos = fieldOffset;
-						jumpPos.key = key;
-						jumpPos.field = object;
-					}
+					updateOffsetIfFirst( object, $fieldCont, key );
 				} else {
 					// we are unable to show the error, so remove it
 					delete jsErrors[ key ];
 				}
 			}
 
-			if ( 999999 > jumpPos.fieldPos > 0 ) {
-				frmFrontForm.scrollMsg( jumpPos.key, jumpPos.field, true );
-			}
+			scrollToFirstField();
 		},
 
 		checkFormErrors: function(object, action){
