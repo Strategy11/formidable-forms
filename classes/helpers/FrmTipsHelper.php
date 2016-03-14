@@ -73,6 +73,11 @@ class FrmTipsHelper {
 				'call' => __( 'Add front-end editing.', 'formidable' ),
 			),
 			array(
+				'link' => 'https://formidablepro.com/front-end-editing-b-tip',
+				'tip'  => __( 'A site with dynamic, user-generated content is within reach.', 'formidable' ),
+				'call' => __( 'Add front-end editing.', 'formidable' ),
+			),
+			array(
 				'link' => 'https://formidablepro.com/save-drafts-tip',
 				'tip'  => __( 'Have a long form that takes time to complete?', 'formidable' ),
 				'call' => __( 'Let logged-in users save a draft and return later.', 'formidable' ),
@@ -109,14 +114,34 @@ class FrmTipsHelper {
 				'call' => __( 'Use PayPal with this form.', 'formidable' ),
 			),
 			array(
+				'link' => 'https://formidablepro.com/paypal-increase-revenue-tip',
+				'tip'  => __( 'Increase revenue.', 'formidable' ),
+				'call' => __( 'Use PayPal with this form.', 'formidable' ),
+			),
+			array(
+				'link' => 'https://formidablepro.com/paypal-save-time-tip',
+				'tip'  => __( 'Get paid more quickly.', 'formidable' ),
+				'call' => __( 'Use Paypal with this form.', 'formidable' ),
+			),
+			array(
 				'link' => 'https://formidablepro.com/registration-tip',
-				'tip'  => __( 'Start building up your site membership.', 'formidable' ),
+				'tip'  => __( 'Boost your site membership.', 'formidable' ),
 				'call' => __( 'Automatically create user accounts.', 'formidable' ),
+			),
+			array(
+				'link' => 'https://formidablepro.com/registration-profile-editing-tip',
+				'tip'  => __( 'Make front-end profile editing possible.', 'formidable' ),
+				'call' => __( 'Add user registration.', 'formidable' ),
 			),
 			array(
 				'link' => 'https://formidablepro.com/twilio-tip',
 				'tip'  => __( 'Want a text when this form is submitted or when a payment is received?', 'formidable' ),
 				'call' => __( 'Use Twilio with this form.', 'formidable' ),
+			),
+			array(
+				'link' => 'https://formidablepro.com/twilio-send-tip',
+				'tip'  => __( 'Send a text when this form is submitted.', 'formidable' ),
+				'call' => __( 'Get Twilio.', 'formidable' ),
 			),
 		);
 
