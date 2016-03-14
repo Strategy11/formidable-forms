@@ -133,7 +133,9 @@ class FrmAppController {
 			$tip = FrmTipsHelper::get_banner_tip();
 ?>
 <div class="update-nag frm-update-to-pro">
-	<?php echo FrmAppHelper::kses( $tip['tip'] ) ?> <span><?php echo FrmAppHelper::kses( $tip['call'] ) ?></span> <a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url('https://formidablepro.com?banner=1&tip='. absint( $tip['num'] ) ) ) ?>" class="button">Upgrade to Pro</a>
+	<?php echo FrmAppHelper::kses( $tip['tip'] ) ?>
+	<span><?php echo FrmAppHelper::kses( $tip['call'] ) ?></span>
+	<a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url('https://formidablepro.com?banner=1&tip=' . absint( $tip['num'] ) ) ) ?>" class="button">Upgrade to Pro</a>
 </div>
 <?php
 		}

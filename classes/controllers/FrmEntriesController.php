@@ -5,7 +5,7 @@ class FrmEntriesController {
     public static function menu() {
 		FrmAppHelper::force_capability( 'frm_view_entries' );
 
-        add_submenu_page('formidable', 'Formidable | '. __( 'Entries', 'formidable' ), __( 'Entries', 'formidable' ), 'frm_view_entries', 'formidable-entries', 'FrmEntriesController::route' );
+        add_submenu_page('formidable', 'Formidable | ' . __( 'Entries', 'formidable' ), __( 'Entries', 'formidable' ), 'frm_view_entries', 'formidable-entries', 'FrmEntriesController::route' );
 
 		if ( ! in_array( FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' ), array( 'edit', 'show' ) ) ) {
 			$menu_name = FrmAppHelper::get_menu_name();
@@ -52,13 +52,13 @@ class FrmEntriesController {
         $screen->add_help_tab( array(
             'id'      => 'formidable-entries-tab',
             'title'   => __( 'Overview', 'formidable' ),
-			'content' => '<p>' . esc_html__( 'This screen provides access to all of your entries. You can customize the display of this screen to suit your workflow.', 'formidable' ) .'</p> <p>'. esc_html__( 'Hovering over a row in the entries list will display action links that allow you to manage your entry.', 'formidable' ) . '</p>',
+			'content' => '<p>' . esc_html__( 'This screen provides access to all of your entries. You can customize the display of this screen to suit your workflow.', 'formidable' ) . '</p> <p>' . esc_html__( 'Hovering over a row in the entries list will display action links that allow you to manage your entry.', 'formidable' ) . '</p>',
         ));
 
         $screen->set_help_sidebar(
 			'<p><strong>' . esc_html__( 'For more information:', 'formidable' ) . '</strong></p>' .
 			'<p><a href="' . esc_url( FrmAppHelper::make_affiliate_url( 'http://formidablepro.com/knowledgebase/manage-entries-from-the-back-end/' ) ) . '" target="_blank">' . esc_html__( 'Documentation on Entries', 'formidable' ) . '</a></p>' .
-			'<p><a href="'. esc_url( FrmAppHelper::make_affiliate_url( 'http://formidablepro.com/help-desk/' ) ) . '" target="_blank">' . esc_html__( 'Support', 'formidable' ) . '</a></p>'
+			'<p><a href="' . esc_url( FrmAppHelper::make_affiliate_url( 'http://formidablepro.com/help-desk/' ) ) . '" target="_blank">' . esc_html__( 'Support', 'formidable' ) . '</a></p>'
     	);
 
         return $help;
@@ -68,7 +68,7 @@ class FrmEntriesController {
         global $frm_vars, $wpdb;
 		$form_id = FrmForm::get_current_form_id();
 
-        $columns[ $form_id .'_id' ] = 'ID';
+		$columns[ $form_id . '_id' ] = 'ID';
 		$columns[ $form_id . '_item_key' ] = esc_html__( 'Entry Key', 'formidable' );
 
         if ( ! $form_id ) {
@@ -99,19 +99,19 @@ class FrmEntriesController {
             } else {
                 $col_id = $form_col->field_key;
                 if ( $form_col->form_id != $form_id ) {
-                    $col_id .= '-_-form'. $form_col->form_id;
+					$col_id .= '-_-form' . $form_col->form_id;
                 }
 
                 if ( isset($form_col->field_options['separate_value']) && $form_col->field_options['separate_value'] ) {
-                    $columns[ $form_id .'_frmsep_'. $col_id ] = FrmAppHelper::truncate( $form_col->name, 35 );
+					$columns[ $form_id . '_frmsep_' . $col_id ] = FrmAppHelper::truncate( $form_col->name, 35 );
                 }
-                $columns[ $form_id .'_'. $col_id ] = FrmAppHelper::truncate( $form_col->name, 35 );
+				$columns[ $form_id . '_' . $col_id ] = FrmAppHelper::truncate( $form_col->name, 35 );
             }
         }
 
-        $columns[ $form_id .'_created_at' ] = __( 'Entry creation date', 'formidable' );
-        $columns[ $form_id .'_updated_at' ] = __( 'Entry update date', 'formidable' );
-        $columns[ $form_id .'_ip' ] = 'IP';
+		$columns[ $form_id . '_created_at' ] = __( 'Entry creation date', 'formidable' );
+		$columns[ $form_id . '_updated_at' ] = __( 'Entry update date', 'formidable' );
+		$columns[ $form_id . '_ip' ] = 'IP';
 
         $frm_vars['cols'] = $columns;
 
@@ -125,7 +125,7 @@ class FrmEntriesController {
 
 	public static function check_hidden_cols( $check, $object_id, $meta_key, $meta_value, $prev_value ) {
 		$menu_name = FrmAppHelper::get_menu_name();
-		$this_page_name = 'manage' .  sanitize_title( $menu_name ) . '_page_formidable-entriescolumnshidden';
+		$this_page_name = 'manage' . sanitize_title( $menu_name ) . '_page_formidable-entriescolumnshidden';
 		if ( $meta_key != $this_page_name || $meta_value == $prev_value ) {
             return $check;
         }
@@ -145,7 +145,7 @@ class FrmEntriesController {
 	public static function update_hidden_cols( $meta_id, $object_id, $meta_key, $meta_value ) {
 		$menu_name = FrmAppHelper::get_menu_name();
 		$sanitized = sanitize_title( $menu_name );
-		$this_page_name = 'manage'.  $sanitized .'_page_formidable-entriescolumnshidden';
+		$this_page_name = 'manage' .  $sanitized . '_page_formidable-entriescolumnshidden';
 		if ( $meta_key != $this_page_name ) {
             return;
         }
@@ -262,10 +262,10 @@ class FrmEntriesController {
             $cols = $frm_vars['cols'];
             $cols = array_reverse($cols, true);
 
-            $result[] = $form_id .'_id';
+			$result[] = $form_id . '_id';
             $i--;
 
-            $result[] = $form_id .'_item_key';
+			$result[] = $form_id . '_item_key';
             $i--;
 
 			foreach ( $cols as $col_key => $col ) {
@@ -322,7 +322,7 @@ class FrmEntriesController {
             $message = __( 'Your import is complete', 'formidable' );
         }
 
-        require(FrmAppHelper::plugin_path() .'/classes/views/frm-entries/list.php');
+		require( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/list.php' );
     }
 
     /* Back End CRUD */
@@ -347,7 +347,7 @@ class FrmEntriesController {
 		$fields = FrmField::get_all_for_form( $entry->form_id, '', 'include' );
         $to_emails = array();
 
-        include(FrmAppHelper::plugin_path() .'/classes/views/frm-entries/show.php');
+		include( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/show.php' );
     }
 
     public static function destroy() {
@@ -562,6 +562,6 @@ class FrmEntriesController {
 			$browser = FrmEntryFormat::get_browser( $data['browser'] );
 		}
 
-        include(FrmAppHelper::plugin_path() .'/classes/views/frm-entries/sidebar-shared.php');
+		include( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/sidebar-shared.php' );
     }
 }

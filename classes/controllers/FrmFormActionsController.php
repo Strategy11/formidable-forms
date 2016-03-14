@@ -133,7 +133,7 @@ class FrmFormActionsController {
 
 	public static function action_control( $form_action, $form, $action_key, $action_control, $values ) {
         $action_control->_set($action_key);
-        include(FrmAppHelper::plugin_path() .'/classes/views/frm-form-actions/form_action.php');
+		include( FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/form_action.php' );
     }
 
     public static function add_form_action() {
@@ -155,7 +155,7 @@ class FrmFormActionsController {
         $values = array();
         $form = self::fields_to_values($form_id, $values);
 
-        include(FrmAppHelper::plugin_path() .'/classes/views/frm-form-actions/form_action.php');
+		include( FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/form_action.php' );
         wp_die();
     }
 
@@ -176,7 +176,7 @@ class FrmFormActionsController {
         $values = array();
         $form = self::fields_to_values($form_action->menu_order, $values);
 
-        include(FrmAppHelper::plugin_path() .'/classes/views/frm-form-actions/_action_inside.php');
+		include( FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/_action_inside.php' );
         wp_die();
     }
 
@@ -305,8 +305,8 @@ class FrmFormActionsController {
 
             foreach ( $action_priority as $action_id => $priority ) {
                 $action = $stored_actions[ $action_id ];
-                do_action('frm_trigger_'. $action->post_excerpt .'_action', $action, $entry, $form, $event);
-                do_action('frm_trigger_'. $action->post_excerpt .'_'. $event .'_action', $action, $entry, $form);
+				do_action( 'frm_trigger_' . $action->post_excerpt . '_action', $action, $entry, $form, $event );
+				do_action( 'frm_trigger_' . $action->post_excerpt . '_' . $event . '_action', $action, $entry, $form );
 
                 // If post is created, get updated $entry object
                 if ( $action->post_excerpt == 'wppost' && $event == 'create' ) {
