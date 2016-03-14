@@ -2726,16 +2726,15 @@ function frmFrontFormJS(){
         },
 
 		scrollMsg: function( id, object, animate ) {
-			var newPos = '';
+			var scrollObj = '';
 			if(typeof(object) == 'undefined'){
-				newPos = jQuery(document.getElementById('frm_form_'+id+'_container')).offset().top;
-			}else{
-				if ( typeof id == 'string' ) {
-					newPos = jQuery(object).find('#frm_field_'+id+'_container').offset().top;
-				} else {
-					newPos = id.offset().top;
-				}
+				scrollObj = jQuery(document.getElementById('frm_form_'+id+'_container'));
+			} else if ( typeof id == 'string' ) {
+				scrollObj = jQuery(object).find('#frm_field_'+id+'_container');
+			} else {
+				scrollObj = id;
 			}
+			var newPos = scrollObj.offset().top;
 
 			if(!newPos){
 				return;
