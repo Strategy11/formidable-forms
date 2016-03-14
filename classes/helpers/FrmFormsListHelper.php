@@ -296,7 +296,7 @@ class FrmFormsListHelper extends FrmListHelper {
 
 		    if ( current_user_can('frm_delete_forms') ) {
 				$trash_url = wp_nonce_url( '?page=formidable&form_status=trash&frm_action=destroy&id=' . $item->id, 'destroy_form_' . $item->id );
-				$actions['trash'] = '<a href="' . esc_url( $trash_url ) .'" class="submitdelete" onclick="return confirm(\'' . __( 'Are you sure you want to permanently delete that?', 'formidable' ) . '\')">' . __( 'Delete Permanently' ) . '</a>';
+				$actions['trash'] = '<a href="' . esc_url( $trash_url ) . '" class="submitdelete" onclick="return confirm(\'' . __( 'Are you sure you want to permanently delete that?', 'formidable' ) . '\')">' . __( 'Delete Permanently' ) . '</a>';
     		}
             return;
 		}
@@ -307,7 +307,7 @@ class FrmFormsListHelper extends FrmListHelper {
             }
 
 		    if ( $item->is_template ) {
-				$actions['frm_duplicate'] = '<a href="'. esc_url( wp_nonce_url( $duplicate_link ) ) . '">' . __( 'Create Form from Template', 'formidable' ) . '</a>';
+				$actions['frm_duplicate'] = '<a href="' . esc_url( wp_nonce_url( $duplicate_link ) ) . '">' . __( 'Create Form from Template', 'formidable' ) . '</a>';
             } else {
 				$actions['frm_settings'] = '<a href="' . esc_url( '?page=formidable&frm_action=settings&id=' . $item->id ) . '">' . __( 'Settings', 'formidable' ) . '</a>';
 

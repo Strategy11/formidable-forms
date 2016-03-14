@@ -33,7 +33,7 @@ class FrmFieldsController {
                 $field['value'] = '';
             }
 
-			$field_name = 'item_meta['. $field_id .']';
+			$field_name = 'item_meta[' . $field_id . ']';
             $html_id = FrmFieldsHelper::get_html_id($field);
 
             ob_start();

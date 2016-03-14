@@ -321,7 +321,7 @@ class FrmEntryFormat {
 
 			unset($default_settings);
 
-			$content[] = '<table cellspacing="0" style="font-size:' . $atts['font_size'] . ';line-height:135%; border-bottom:'. $atts['border_width'] . ' solid #' . $atts['border_color'] . ';"><tbody>' . "\r\n";
+			$content[] = '<table cellspacing="0" style="font-size:' . $atts['font_size'] . ';line-height:135%; border-bottom:' . $atts['border_width'] . ' solid #' . $atts['border_color'] . ';"><tbody>' . "\r\n";
 			$atts['bg_color'] = ' style="background-color:#' . $atts['bg_color'] . ';"';
 			$bg_color_alt = ' style="background-color:#' . $atts['alt_bg_color'] . ';"';
 

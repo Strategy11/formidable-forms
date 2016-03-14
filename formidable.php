@@ -72,4 +72,3 @@ FrmHooksController::trigger_load_hook();
 
 include_once( $frm_path . '/deprecated.php' );
 unset($frm_path);
-	

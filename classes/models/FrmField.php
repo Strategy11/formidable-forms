@@ -566,7 +566,7 @@ class FrmField {
         }
 
 		$query = 'SELECT fi.id  FROM ' . $wpdb->prefix . 'frm_fields fi ' .
-			'LEFT OUTER JOIN '. $wpdb->prefix . 'frm_forms fr ON fi.form_id=fr.id' .
+			'LEFT OUTER JOIN ' . $wpdb->prefix . 'frm_forms fr ON fi.form_id=fr.id' .
 			FrmAppHelper::prepend_and_or_where( ' WHERE ', $where ) . $order_by . $limit;
 
         $method = ( $limit == ' LIMIT 1' || $limit == 1 ) ? 'get_var' : 'get_col';

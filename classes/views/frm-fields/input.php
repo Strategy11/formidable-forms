@@ -3,7 +3,7 @@
 <?php } else if ( $field['type'] == 'textarea' ) { ?>
 <textarea name="<?php echo esc_attr( $field_name ) ?>" id="<?php echo esc_attr( $html_id ) ?>" <?php
 if ( $field['max'] ) {
-    echo 'rows="'. esc_attr( $field['max'] ) .'" ';
+	echo 'rows="' . esc_attr( $field['max'] ) . '" ';
 }
 do_action('frm_field_input_html', $field);
 ?>><?php echo FrmAppHelper::esc_textarea($field['value']) ?></textarea>

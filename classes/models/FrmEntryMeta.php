@@ -277,7 +277,7 @@ class FrmEntryMeta {
         self::get_ids_query($where, $order_by, $limit, $unique, $args, $query );
         $query = implode(' ', $query);
 
-		$cache_key = 'ids_' . maybe_serialize( $where ) . $order_by . 'l'. $limit . 'u'. $unique . maybe_serialize( $args );
+		$cache_key = 'ids_' . maybe_serialize( $where ) . $order_by . 'l' . $limit . 'u' . $unique . maybe_serialize( $args );
         $results = FrmAppHelper::check_cache($cache_key, 'frm_entry', $query, ($limit == ' LIMIT 1' ? 'get_var' : 'get_col'));
 
         return $results;

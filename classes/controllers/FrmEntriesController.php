@@ -145,7 +145,7 @@ class FrmEntriesController {
 	public static function update_hidden_cols( $meta_id, $object_id, $meta_key, $meta_value ) {
 		$menu_name = FrmAppHelper::get_menu_name();
 		$sanitized = sanitize_title( $menu_name );
-		$this_page_name = 'manage' .  $sanitized . '_page_formidable-entriescolumnshidden';
+		$this_page_name = 'manage' . $sanitized . '_page_formidable-entriescolumnshidden';
 		if ( $meta_key != $this_page_name ) {
             return;
         }
@@ -358,7 +358,7 @@ class FrmEntriesController {
         if ( isset($params['keep_post']) && $params['keep_post'] ) {
             //unlink entry from post
             global $wpdb;
-			$wpdb->update( $wpdb->prefix .'frm_items', array( 'post_id' => '' ), array( 'id' => $params['id'] ) );
+			$wpdb->update( $wpdb->prefix . 'frm_items', array( 'post_id' => '' ), array( 'id' => $params['id'] ) );
         }
 
         $message = '';
