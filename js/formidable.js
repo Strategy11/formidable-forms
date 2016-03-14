@@ -164,6 +164,11 @@ function frmFrontFormJS(){
 
 		// Check if 'this' is in a repeating section
 		if ( jQuery('input[name="item_meta['+ field_id +'][form]"]').length ) {
+			// If item_meta[370][0]
+			if ( nameParts.length === 2 && nameParts[1] == '[0' ) {
+				return 0;
+			}
+
 			// this is a repeatable section with name: item_meta[370][0][414]
 			field_id = nameParts[2].replace('[', '');
 			isRepeating = true;

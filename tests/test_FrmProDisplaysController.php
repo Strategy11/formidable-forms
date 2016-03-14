@@ -178,14 +178,159 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_no_filter_detail_view_with_shortcode() {
-		$dynamic_view = self::get_view_by_key( 'single-view' );
+		$single_view = self::get_view_by_key( 'single-entry' );
 		$this->set_current_user_to_1();
-		$dynamic_view->post_content .= 'user_id:[user_id]';
+		$single_view->post_content .= 'user_id:[user_id]';
 		$expected_content = array( 'Jamie', 'user_id:1' );
 
-		$d = self::get_default_args( $dynamic_view, $expected_content, array() );
+		$d = self::get_default_args( $single_view, $expected_content, array() );
 
 		self::run_get_display_data_tests( $d, 'single entry view with no filters and shortcode' );
+	}
+
+	/**
+	 * Set up a single entry View with an entry ID filter
+	 *
+	 * @param $filter_value
+	 * @return object
+	 */
+	function _set_up_single_view_with_filter( $filter_value ) {
+		$single_view = self::get_view_by_key( 'single-entry' );
+
+		// Add View filter
+		$filter_args = array(
+			array( 'type' => 'col',
+				'col' => 'id',
+				'op' => '=',
+				'val' => $filter_value,
+			),
+		);
+		self::add_filter_to_view( $single_view, $filter_args );
+
+		return $single_view;
+	}
+
+	/**
+	 * Tests Single Entry View with [get param=test] filter
+	 * Test parameter contains a valid entry ID
+	 * @covers FrmProDisplaysController::get_display_data
+	 */
+	function test_detail_view_with_get_param_test_filter() {
+		$single_view = self::_set_up_single_view_with_filter( '[get param=test]' );
+
+		// Set valid entry ID parameter
+		$_GET['test'] = FrmEntry::get_id_by_key( 'steph_entry_key' );
+
+		$expected_content = array( 'Name: Steph' );
+		$d = self::get_default_args( $single_view, $expected_content, array() );
+		self::run_get_display_data_tests( $d, 'single entry view with Entry ID equals get param=test filter' );
+	}
+
+	/**
+	 * Tests Single Entry View with [get param=test] filter
+	 * Test parameter contains an invalid entry ID
+	 * @covers FrmProDisplaysController::get_display_data
+	 */
+	function test_detail_view_with_get_param_test_filter_invalid_value() {
+		$single_view = self::_set_up_single_view_with_filter( '[get param=test]' );
+
+		// Set invalid entry ID parameter
+		$_GET['test'] = FrmEntry::get_id_by_key( 'i0xioc' );
+
+		$expected_content = array( 'No Entries Found' );
+		$d = self::get_default_args( $single_view, $expected_content, array() );
+		self::run_get_display_data_tests( $d, 'single entry view with Entry ID equals get param=test filter, invalid entry ID set in URL' );
+	}
+
+	/**
+	 * Tests Single Entry View with [get param=test] filter
+	 * Test parameter contains an entry key
+	 * @covers FrmProDisplaysController::get_display_data
+	 */
+	function test_detail_view_with_get_param_test_filter_entry_key() {
+		$single_view = self::_set_up_single_view_with_filter( '[get param=test]' );
+
+		// Set entry key parameter
+		$_GET['test'] = 'steph_entry_key';
+
+		$expected_content = array( 'No Entries Found' );
+		$d = self::get_default_args( $single_view, $expected_content, array() );
+		self::run_get_display_data_tests( $d, 'single entry view with Entry ID equals get param=test filter, invalid entry ID set in URL' );
+	}
+
+	/**
+	 * Tests Single Entry View with [get param=entry old_filter=1] filter
+	 * Entry parameter contains a valid entry ID
+	 * @covers FrmProDisplaysController::get_display_data
+	 */
+	function test_detail_view_with_get_param_entry_filter_valid_id() {
+		$single_view = self::_set_up_single_view_with_filter( '[get param=entry old_filter=1]' );
+
+		// Set valid entry ID parameter
+		$_GET['entry'] = FrmEntry::get_id_by_key( 'steph_entry_key' );
+
+		$expected_content = array( 'Name: Steph' );
+		$d = self::get_default_args( $single_view, $expected_content, array() );
+		self::run_get_display_data_tests( $d, 'single entry view with Entry ID equals get param=entry filter, valid entry ID set in URL' );
+	}
+
+	/**
+	 * Tests Single Entry View with [get param=entry old_filter=1] filter
+	 * Entry parameter contains an invalid entry ID
+	 * @covers FrmProDisplaysController::get_display_data
+	 */
+	function test_detail_view_with_get_param_entry_filter_invalid_id() {
+		$single_view = self::_set_up_single_view_with_filter( '[get param=entry old_filter=1]' );
+
+		// Set invalid entry ID parameter
+		$_GET['entry'] = FrmEntry::get_id_by_key( 'i0xioc' );
+
+		$expected_content = array( 'Name: Jamie' );
+		$d = self::get_default_args( $single_view, $expected_content, array() );
+		self::run_get_display_data_tests( $d, 'single entry view with Entry ID equals get param=entry old_filter=1 filter, invalid entry ID set in URL' );
+	}
+
+	/**
+	 * Tests Single Entry View with [get param=entry old_filter=1] filter
+	 * entry parameter contains entry key
+	 * @covers FrmProDisplaysController::get_display_data
+	 */
+	function test_detail_view_with_get_param_entry_filter_entry_key() {
+		$single_view = self::_set_up_single_view_with_filter( '[get param=entry old_filter=1]' );
+
+		// Set invalid entry ID parameter
+		$_GET['entry'] = 'steph_entry_key';
+
+		$expected_content = array( 'Name: Steph' );
+		$d = self::get_default_args( $single_view, $expected_content, array() );
+		self::run_get_display_data_tests( $d, 'single entry view with Entry ID equals get param=entry old_filter=1 filter, entry keys separated by comma' );
+	}
+
+	/**
+	 * Tests Single Entry View with [get param=entry old_filter=1] and [get param=test] filter
+	 * Both parameters contain valid IDs
+	 * @covers FrmProDisplaysController::get_display_data
+	 */
+	function test_detail_view_with_multiple_get_param_entry_filters() {
+		$single_view = self::_set_up_single_view_with_filter( '[get param=entry old_filter=1]' );
+
+		// Add second filter
+		$filter_args = array(
+			array( 'type' => 'col',
+				'col' => 'id',
+				'op' => '=',
+				'val' => '[get param=test]',
+			),
+		);
+		self::add_filter_to_view( $single_view, $filter_args );
+
+		// Set two different entry parameters
+		$_GET['entry'] = FrmEntry::get_id_by_key( 'steph_entry_key' );
+		$_GET['test'] = FrmEntry::get_id_by_key( 'steve_entry_key' );
+
+		$expected_content = array( 'No Entries Found' );
+		$d = self::get_default_args( $single_view, $expected_content, array() );
+		self::run_get_display_data_tests( $d, 'single entry view with two Entry ID filters' );
 	}
 
 	/**
