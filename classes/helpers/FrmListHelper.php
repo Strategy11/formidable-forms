@@ -358,7 +358,7 @@ class FrmListHelper {
 		foreach ( $this->_actions as $name => $title ) {
 			$class = 'edit' == $name ? ' class="hide-if-no-js"' : '';
 
-			echo "\t<option value='". esc_attr( $name ) ."'$class>$title</option>\n";
+			echo "\t<option value='" . esc_attr( $name ) . "'$class>$title</option>\n";
 		}
 
 		echo "</select>\n";

@@ -11,7 +11,7 @@ class FrmXMLHelper {
 				echo "\n" . $padding;
 				$tag = ( is_numeric( $ok ) ? 'key:' : '' ) . $ok;
 				echo '<' . $tag . '>';
-				self::get_xml_values( $ov, $padding .'    ' );
+				self::get_xml_values( $ov, $padding . '    ' );
 				if ( is_array( $ov ) ) {
 					echo "\n" . $padding;
 				}
@@ -299,7 +299,7 @@ class FrmXMLHelper {
 		        'hidden', 'password', 'tag', 'image',
 		    )) ) {
 		        if ( count($f['default_value']) === 1 ) {
-		            $f['default_value'] = '['. reset($f['default_value']) .']';
+					$f['default_value'] = '[' . reset( $f['default_value'] ) . ']';
 		        } else {
 		            $f['default_value'] = reset($f['default_value']);
 		        }
@@ -811,7 +811,7 @@ class FrmXMLHelper {
             'menu_order'    => $form_id,
             'post_status'   => 'publish',
             'post_content'  => array(),
-            'post_name'     => $form_id .'_wppost_1',
+			'post_name'     => $form_id . '_wppost_1',
         );
 
         $post_settings = array(
@@ -1040,7 +1040,7 @@ class FrmXMLHelper {
                 'email_to'      => $atts['email_to'],
                 'event'         => $atts['event'],
             ),
-            'post_name'         => $atts['form_id'] .'_email_'. $atts['email_key'],
+			'post_name'         => $atts['form_id'] . '_email_' . $atts['email_key'],
         );
 
         // Add more fields to the new notification
@@ -1061,7 +1061,7 @@ class FrmXMLHelper {
 
         // Set from
 		if ( ! empty( $atts['reply_to'] ) || ! empty( $atts['reply_to_name'] ) ) {
-            $new_notification['post_content']['from'] = ( empty($atts['reply_to_name']) ? '[sitename]' : $atts['reply_to_name'] ) .' <'. ( empty($atts['reply_to']) ? '[admin_email]' : $atts['reply_to'] ) .'>';
+			$new_notification['post_content']['from'] = ( empty( $atts['reply_to_name'] ) ? '[sitename]' : $atts['reply_to_name'] ) . ' <' . ( empty( $atts['reply_to'] ) ? '[admin_email]' : $atts['reply_to'] ) . '>';
         }
     }
 
@@ -1095,7 +1095,7 @@ class FrmXMLHelper {
                 }
             }
             if ( is_numeric($email_field) && ! empty($email_field) ) {
-                $email_field = '['. $email_field .']';
+				$email_field = '[' . $email_field . ']';
             }
 
             $notification = $form_options;
@@ -1107,7 +1107,7 @@ class FrmXMLHelper {
                     'plain_text'    => isset($notification['ar_plain_text']) ? $notification['ar_plain_text'] : 0,
                     'inc_user_info' => 0,
                 ),
-                'post_name'     => $form_id .'_email_'. count( $notifications ),
+				'post_name'     => $form_id . '_email_' . count( $notifications ),
             );
 
             $reply_to = isset($notification['ar_reply_to']) ? $notification['ar_reply_to'] : '';
@@ -1118,7 +1118,7 @@ class FrmXMLHelper {
 			}
 
 			if ( ! empty( $reply_to ) || ! empty( $reply_to_name ) ) {
-                $new_notification2['post_content']['from'] = ( empty($reply_to_name) ? '[sitename]' : $reply_to_name ) .' <'. ( empty($reply_to) ? '[admin_email]' : $reply_to ) .'>';
+				$new_notification2['post_content']['from'] = ( empty( $reply_to_name ) ? '[sitename]' : $reply_to_name ) . ' <' . ( empty( $reply_to ) ? '[admin_email]' : $reply_to ) . '>';
 			}
 
             $notifications[] = $new_notification2;

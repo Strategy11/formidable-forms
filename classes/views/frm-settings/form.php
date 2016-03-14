@@ -2,7 +2,7 @@
     <div class="frmicon icon32"><br/></div>
     <h1><?php _e( 'Global Settings', 'formidable' ); ?></h1>
 
-    <?php require(FrmAppHelper::plugin_path() .'/classes/views/shared/errors.php'); ?>
+	<?php require( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' ); ?>
 
     <div id="poststuff" class="metabox-holder">
     <div id="post-body">
@@ -17,7 +17,11 @@
 			<?php $a = FrmAppHelper::simple_get( 't', 'sanitize_title', 'general_settings' ); ?>
         	<li <?php echo ($a == 'general_settings') ? 'class="tabs active"' : '' ?>><a href="#general_settings" class="frm_cursor_pointer"><?php _e( 'General', 'formidable' ) ?></a></li>
 			<?php foreach ( $sections as $sec_name => $section ) { ?>
-                <li <?php echo ($a == $sec_name .'_settings') ? 'class="tabs active"' : '' ?>><a href="#<?php echo esc_attr( $sec_name ) ?>_settings"><?php echo isset($section['name']) ? $section['name'] : ucfirst($sec_name) ?></a></li>
+				<li <?php echo ( $a == $sec_name . '_settings' ) ? 'class="tabs active"' : '' ?>>
+					<a href="#<?php echo esc_attr( $sec_name ) ?>_settings">
+						<?php echo isset( $section['name'] ) ? $section['name'] : ucfirst( $sec_name ) ?>
+					</a>
+				</li>
             <?php } ?>
         </ul>
         </div>
@@ -156,9 +160,9 @@
 
         <?php
 		foreach ( $sections as $sec_name => $section ) {
-			if ( $a == $sec_name .'_settings' ) { ?>
-<style type="text/css">.<?php echo esc_attr( $sec_name ) ?>_settings{display:block;}</style><?php }?>
-            <div id="<?php echo esc_attr( $sec_name ) ?>_settings" class="<?php echo esc_attr( $sec_name ) ?>_settings tabs-panel <?php echo ( $a == $sec_name .'_settings' ) ? 'frm_block' : 'frm_hidden'; ?>"><?php
+			if ( $a == $sec_name . '_settings' ) { ?>
+<style type="text/css">.<?php echo esc_attr( $sec_name ) ?>_settings{display:block;}</style><?php } ?>
+			<div id="<?php echo esc_attr( $sec_name ) ?>_settings" class="<?php echo esc_attr( $sec_name ) ?>_settings tabs-panel <?php echo ( $a == $sec_name . '_settings' ) ? 'frm_block' : 'frm_hidden'; ?>"><?php
 				if ( isset( $section['class'] ) ) {
 					call_user_func( array( $section['class'], $section['function'] ) );
 				} else {

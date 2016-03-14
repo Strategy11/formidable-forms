@@ -186,7 +186,7 @@ legend.frm_hidden{
 
 <?php
 foreach ( $styles as $style ) {
-    include(dirname(__FILE__) .'/_single_theme.css.php');
+	include( dirname( __FILE__ ) . '/_single_theme.css.php' );
     unset($style);
 }
 ?>
@@ -1548,7 +1548,7 @@ html[xmlns] .frm_clearfix{
 	font-style:normal;
 }
 
-<?php include(FrmAppHelper::plugin_path() .'/css/font_icons.css'); ?>
+<?php include( FrmAppHelper::plugin_path() . '/css/font_icons.css' ); ?>
 
 /* Responsive */
 @media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min-resolution: 144dpi){

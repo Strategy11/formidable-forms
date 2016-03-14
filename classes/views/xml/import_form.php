@@ -2,7 +2,7 @@
     <div class="frmicon icon32"><br/></div>
     <h1><?php _e( 'Import/Export', 'formidable' ); ?></h1>
 
-    <?php include(FrmAppHelper::plugin_path() .'/classes/views/shared/errors.php'); ?>
+	<?php include( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' ); ?>
     <div id="poststuff" class="metabox-holder">
     <div id="post-body">
     <div id="post-body-content">
@@ -43,7 +43,9 @@
                     <td>
                         <select name="format">
 						<?php foreach ( $export_format as $t => $type ) { ?>
-                            <option value="<?php echo esc_attr( $t ) ?>" data-support="<?php echo esc_attr( $type['support'] ) ?>" <?php echo isset( $type['count'] ) ? 'data-count="'. esc_attr( $type['count'] ) .'"' : ''; ?>><?php echo isset( $type['name'] ) ? $type['name'] : $t ?></option>
+							<option value="<?php echo esc_attr( $t ) ?>" data-support="<?php echo esc_attr( $type['support'] ) ?>" <?php echo isset( $type['count'] ) ? 'data-count="' . esc_attr( $type['count'] ) . '"' : ''; ?>>
+								<?php echo isset( $type['name'] ) ? $type['name'] : $t ?>
+							</option>
                         <?php } ?>
                         </select>
 

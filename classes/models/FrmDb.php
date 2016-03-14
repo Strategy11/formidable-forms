@@ -60,12 +60,12 @@ class FrmDb {
 
         $charset_collate = '';
 		if ( ! empty( $wpdb->charset ) ) {
-			$charset_collate .= ' DEFAULT CHARACTER SET '. $wpdb->charset;
+			$charset_collate .= ' DEFAULT CHARACTER SET ' . $wpdb->charset;
 		}
 
-        if ( ! empty($wpdb->collate) ) {
-            $charset_collate .= ' COLLATE '. $wpdb->collate;
-        }
+		if ( ! empty( $wpdb->collate ) ) {
+			$charset_collate .= ' COLLATE ' . $wpdb->collate;
+		}
 
         return $charset_collate;
     }
@@ -75,7 +75,7 @@ class FrmDb {
         $sql = array();
 
         /* Create/Upgrade Fields Table */
-        $sql[] = 'CREATE TABLE '. $this->fields .' (
+		$sql[] = 'CREATE TABLE ' . $this->fields . ' (
                 id int(11) NOT NULL auto_increment,
 				field_key varchar(100) default NULL,
                 name text default NULL,
@@ -94,7 +94,7 @@ class FrmDb {
         )';
 
         /* Create/Upgrade Forms Table */
-        $sql[] = 'CREATE TABLE '. $this->forms .' (
+		$sql[] = 'CREATE TABLE ' . $this->forms . ' (
                 id int(11) NOT NULL auto_increment,
 				form_key varchar(100) default NULL,
                 name varchar(255) default NULL,
@@ -112,7 +112,7 @@ class FrmDb {
         )';
 
         /* Create/Upgrade Items Table */
-        $sql[] = 'CREATE TABLE '. $this->entries .' (
+		$sql[] = 'CREATE TABLE ' . $this->entries . ' (
                 id int(11) NOT NULL auto_increment,
 				item_key varchar(100) default NULL,
                 name varchar(255) default NULL,
@@ -135,7 +135,7 @@ class FrmDb {
         )';
 
         /* Create/Upgrade Meta Table */
-        $sql[] = 'CREATE TABLE '. $this->entry_metas .' (
+		$sql[] = 'CREATE TABLE ' . $this->entry_metas . ' (
                 id int(11) NOT NULL auto_increment,
                 meta_value longtext default NULL,
                 field_id int(11) NOT NULL,
@@ -148,7 +148,7 @@ class FrmDb {
 
         foreach ( $sql as $q ) {
 			if ( function_exists( 'dbDelta' ) ) {
-				dbDelta( $q . $charset_collate .';' );
+				dbDelta( $q . $charset_collate . ';' );
 			} else {
 				global $wpdb;
 				$wpdb->query( $q . $charset_collate );
@@ -164,7 +164,7 @@ class FrmDb {
 		$migrations = array( 4, 6, 11, 16, 17, 23, 25 );
         foreach ( $migrations as $migration ) {
             if ( $frm_db_version >= $migration && $old_db_version < $migration ) {
-                $function_name = 'migrate_to_'. $migration;
+				$function_name = 'migrate_to_' . $migration;
                 $this->$function_name();
             }
         }
@@ -235,7 +235,7 @@ class FrmDb {
             $where .= ' DATE_FORMAT(' . reset( $k ) . ', %s) ' . str_replace( reset( $k ), '', $key );
             $values[] = '%Y-%m-%d %H:%i:%s';
         } else {
-            $where .= ' '. $key;
+			$where .= ' ' . $key;
         }
 
 		$lowercase_key = explode( ' ', strtolower( $key ) );
@@ -257,7 +257,7 @@ class FrmDb {
 				}
 				$where .= ')';
 			} else if ( ! empty( $value ) ) {
-            	$where .= ' in ('. FrmAppHelper::prepare_array_values( $value, '%s' ) .')';
+				$where .= ' in (' . FrmAppHelper::prepare_array_values( $value, '%s' ) . ')';
 				$values = array_merge( $values, $value );
 			}
         } else if ( strpos( $lowercase_key, 'like' ) !== false ) {
@@ -322,8 +322,8 @@ class FrmDb {
 			$query .= $where . ' ' . implode( ' ', $args );
 		}
 
-        $cache_key = str_replace( array( ' ', ',' ), '_', trim( implode('_', FrmAppHelper::array_flatten( $where ) ) . implode( '_', $args ) . $field .'_'. $type, ' WHERE' ) );
-        $results = FrmAppHelper::check_cache( $cache_key, $group, $query, 'get_'. $type );
+		$cache_key = str_replace( array( ' ', ',' ), '_', trim( implode( '_', FrmAppHelper::array_flatten( $where ) ) . implode( '_', $args ) . $field . '_' . $type, ' WHERE' ) );
+		$results = FrmAppHelper::check_cache( $cache_key, $group, $query, 'get_' . $type );
         return $results;
     }
 
@@ -463,10 +463,10 @@ class FrmDb {
 
         global $wpdb, $wp_roles;
 
-        $wpdb->query( 'DROP TABLE IF EXISTS '. $this->fields );
-        $wpdb->query( 'DROP TABLE IF EXISTS '. $this->forms );
-        $wpdb->query( 'DROP TABLE IF EXISTS '. $this->entries );
-        $wpdb->query( 'DROP TABLE IF EXISTS '. $this->entry_metas );
+		$wpdb->query( 'DROP TABLE IF EXISTS ' . $this->fields );
+		$wpdb->query( 'DROP TABLE IF EXISTS ' . $this->forms );
+		$wpdb->query( 'DROP TABLE IF EXISTS ' . $this->entries );
+		$wpdb->query( 'DROP TABLE IF EXISTS ' . $this->entry_metas );
 
         delete_option('frm_options');
         delete_option('frm_db_version');
@@ -489,7 +489,7 @@ class FrmDb {
 		remove_action( 'before_delete_post', 'FrmProDisplaysController::before_delete_post' );
 		remove_action( 'deleted_post', 'FrmProEntriesController::delete_entry' );
 
-		$post_ids = $wpdb->get_col( $wpdb->prepare( 'SELECT ID FROM ' . $wpdb->posts .' WHERE post_type in (%s, %s, %s)', FrmFormActionsController::$action_post_type, FrmStylesController::$post_type, 'frm_display' ) );
+		$post_ids = $wpdb->get_col( $wpdb->prepare( 'SELECT ID FROM ' . $wpdb->posts . ' WHERE post_type in (%s, %s, %s)', FrmFormActionsController::$action_post_type, FrmStylesController::$post_type, 'frm_display' ) );
 		foreach ( $post_ids as $post_id ) {
 			// Delete's each post.
 			wp_delete_post( $post_id, true );
@@ -501,7 +501,7 @@ class FrmDb {
 		delete_transient( 'frm_options' );
 		delete_transient( 'frmpro_options' );
 
-		$wpdb->query( $wpdb->prepare( 'DELETE FROM '. $wpdb->options .' WHERE option_name LIKE %s OR option_name LIKE %s', '_transient_timeout_frm_form_fields_%', '_transient_frm_form_fields_%' ) );
+		$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->options . ' WHERE option_name LIKE %s OR option_name LIKE %s', '_transient_timeout_frm_form_fields_%', '_transient_frm_form_fields_%' ) );
 
         do_action('frm_after_uninstall');
         return true;
@@ -538,9 +538,9 @@ class FrmDb {
 	 */
 	private function migrate_to_23() {
 		global $wpdb;
-		$exists = $wpdb->get_row( 'SHOW COLUMNS FROM '. $this->forms .' LIKE "parent_form_id"' );
+		$exists = $wpdb->get_row( 'SHOW COLUMNS FROM ' . $this->forms . ' LIKE "parent_form_id"' );
 		if ( empty( $exists ) ) {
-			$wpdb->query( 'ALTER TABLE '. $this->forms .' ADD parent_form_id int(11) default 0' );
+			$wpdb->query( 'ALTER TABLE ' . $this->forms . ' ADD parent_form_id int(11) default 0' );
 		}
 	}
 
@@ -651,7 +651,7 @@ class FrmDb {
         $forms = FrmDb::get_results( $this->forms, array(), 'id, options');
 
         $sending = __( 'Sending', 'formidable' );
-        $img = FrmAppHelper::plugin_url() .'/images/ajax_loader.gif';
+		$img = FrmAppHelper::plugin_url() . '/images/ajax_loader.gif';
         $old_default_html = <<<DEFAULT_HTML
 <div class="frm_submit">
 [if back_button]<input type="submit" value="[back_label]" name="frm_prev_page" formnovalidate="formnovalidate" [back_hook] />[/if back_button]
@@ -673,7 +673,7 @@ DEFAULT_HTML;
                 $form->options['submit_html'] = $new_default_html;
 				$wpdb->update( $this->forms, array( 'options' => serialize( $form->options ) ), array( 'id' => $form->id ) );
 			} else if ( ! strpos( $form->options['submit_html'], 'save_draft' ) ) {
-                $form->options['submit_html'] = preg_replace('~\<\/div\>(?!.*\<\/div\>)~', $draft_link ."\r\n</div>", $form->options['submit_html']);
+				$form->options['submit_html'] = preg_replace( '~\<\/div\>(?!.*\<\/div\>)~', $draft_link . "\r\n</div>", $form->options['submit_html'] );
 				$wpdb->update( $this->forms, array( 'options' => serialize( $form->options ) ), array( 'id' => $form->id ) );
             }
             unset($form);

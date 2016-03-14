@@ -11,7 +11,7 @@ class FrmFormsHelper {
 	}
 
 	public static function get_direct_link( $key, $form = false ) {
-		$target_url = esc_url( admin_url( 'admin-ajax.php?action=frm_forms_preview&form='. $key ) );
+		$target_url = esc_url( admin_url( 'admin-ajax.php?action=frm_forms_preview&form=' . $key ) );
         $target_url = apply_filters('frm_direct_link', $target_url, $key, $form);
 
         return $target_url;
@@ -154,7 +154,7 @@ class FrmFormsHelper {
         }
 
         if ( ! isset( $values['form_key'] ) ) {
-            $values['form_key'] = ($post_values && isset($post_values['form_key'])) ? $post_values['form_key'] : FrmAppHelper::get_unique_key('', $wpdb->prefix .'frm_forms', 'form_key');
+			$values['form_key'] = ( $post_values && isset( $post_values['form_key'] ) ) ? $post_values['form_key'] : FrmAppHelper::get_unique_key( '', $wpdb->prefix . 'frm_forms', 'form_key' );
         }
 
         $values = self::fill_default_opts($values, false, $post_values);
@@ -577,14 +577,14 @@ BEFORE_HTML;
         );
 
         $current_page = isset( $_REQUEST['form_type'] ) ? $_REQUEST['form_type'] : '';
-        $base_url = '?page=formidable&form_type='. $current_page .'&id='. $id;
+		$base_url = '?page=formidable&form_type=' . $current_page . '&id=' . $id;
         if ( 'trash' == $status ) {
-			$link = '<a href="'. esc_url( wp_nonce_url( $base_url . '&frm_action=untrash', 'untrash_form_' . $id ) ) . '" class="submitdelete deletion">' . $labels['restore'][ $length ] . '</a>';
+			$link = '<a href="' . esc_url( wp_nonce_url( $base_url . '&frm_action=untrash', 'untrash_form_' . $id ) ) . '" class="submitdelete deletion">' . $labels['restore'][ $length ] . '</a>';
         } else if ( current_user_can('frm_delete_forms') ) {
             if ( EMPTY_TRASH_DAYS ) {
 				$link = '<a href="' . esc_url( wp_nonce_url( $base_url . '&frm_action=trash', 'trash_form_' . $id ) ) . '" class="submitdelete deletion">' . $labels['trash'][ $length ] . '</a>';
             } else {
-				$link = '<a href="' . esc_url( wp_nonce_url( $base_url .'&frm_action=destroy', 'destroy_form_' . $id ) ) . '" class="submitdelete deletion" onclick="return confirm(\'' . esc_attr( __( 'Are you sure you want to delete this form and all its entries?', 'formidable' ) ) . '\')">' . $labels['delete'][ $length ] . '</a>';
+				$link = '<a href="' . esc_url( wp_nonce_url( $base_url . '&frm_action=destroy', 'destroy_form_' . $id ) ) . '" class="submitdelete deletion" onclick="return confirm(\'' . esc_attr( __( 'Are you sure you want to delete this form and all its entries?', 'formidable' ) ) . '\')">' . $labels['delete'][ $length ] . '</a>';
             }
         }
 

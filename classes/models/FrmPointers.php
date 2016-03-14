@@ -165,7 +165,7 @@ class FrmPointers {
 		$selector = 'li.toplevel_page_formidable';
 
 		$content  = '<h3>' . __( 'Congratulations!', 'formidable' ) . '</h3>'
-		            .'<p>' . $this->opening_line() . ' ' . sprintf( __( 'Click &#8220;Start Tour&#8221; to view a quick introduction of this plugin&#8217;s core functionality.' ), 'formidable' ) . '</p>';
+					. '<p>' . $this->opening_line() . ' ' . sprintf( __( 'Click &#8220;Start Tour&#8221; to view a quick introduction of this plugin&#8217;s core functionality.' ), 'formidable' ) . '</p>';
 		$opt_arr  = array(
 			'content'  => $content,
 			'position' => array( 'edge' => 'top', 'align' => 'center' ),

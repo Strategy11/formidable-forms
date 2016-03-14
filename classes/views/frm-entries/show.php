@@ -66,7 +66,7 @@
                 <?php do_action('frm_after_show_entry', $entry); ?>
 
             </div>
-            <?php require(FrmAppHelper::plugin_path() .'/classes/views/frm-entries/sidebar-show.php'); ?>
+			<?php require( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/sidebar-show.php' ); ?>
             </div>
         </div>
     </div>

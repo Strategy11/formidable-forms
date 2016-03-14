@@ -17,7 +17,7 @@ class FrmEntryValidate {
         }
 
         if ( ! isset($values['item_key']) || $values['item_key'] == '' ) {
-            $_POST['item_key'] = $values['item_key'] = FrmAppHelper::get_unique_key('', $wpdb->prefix .'frm_items', 'item_key');
+			$_POST['item_key'] = $values['item_key'] = FrmAppHelper::get_unique_key( '', $wpdb->prefix . 'frm_items', 'item_key' );
         }
 
         $where = apply_filters('frm_posted_field_ids', array( 'fi.form_id' => $values['form_id'] ) );
@@ -105,7 +105,7 @@ class FrmEntryValidate {
             $value = '';
         } else {
             $value = esc_url_raw( $value );
-            $value = preg_match('/^(https?|ftps?|mailto|news|feed|telnet):/is', $value) ? $value : 'http://'. $value;
+			$value = preg_match( '/^(https?|ftps?|mailto|news|feed|telnet):/is', $value ) ? $value : 'http://' . $value;
         }
 
         //validate the url format

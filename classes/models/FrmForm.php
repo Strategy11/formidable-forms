@@ -12,7 +12,7 @@ class FrmForm {
         global $wpdb;
 
         $new_values = array(
-            'form_key'      => FrmAppHelper::get_unique_key($values['form_key'], $wpdb->prefix .'frm_forms', 'form_key'),
+			'form_key'      => FrmAppHelper::get_unique_key( $values['form_key'], $wpdb->prefix . 'frm_forms', 'form_key' ),
             'name'          => $values['name'],
             'description'   => $values['description'],
             'status'        => isset($values['status']) ? $values['status'] : 'draft',
@@ -37,7 +37,7 @@ class FrmForm {
         //if(isset($values['id']) && is_numeric($values['id']))
         //    $new_values['id'] = $values['id'];
 
-        $wpdb->insert( $wpdb->prefix .'frm_forms', $new_values );
+		$wpdb->insert( $wpdb->prefix . 'frm_forms', $new_values );
 
         $id = $wpdb->insert_id;
 
@@ -61,7 +61,7 @@ class FrmForm {
         $new_key = $copy_keys ? $values->form_key : '';
 
         $new_values = array(
-            'form_key'      => FrmAppHelper::get_unique_key($new_key, $wpdb->prefix .'frm_forms', 'form_key'),
+			'form_key'      => FrmAppHelper::get_unique_key( $new_key, $wpdb->prefix . 'frm_forms', 'form_key' ),
             'name'          => $values->name,
             'description'   => $values->description,
             'status'        => $template ? 'published' : 'draft',
@@ -85,7 +85,7 @@ class FrmForm {
             $new_values['options'] = serialize($new_values['options']);
         }
 
-        $query_results = $wpdb->insert( $wpdb->prefix .'frm_forms', $new_values );
+		$query_results = $wpdb->insert( $wpdb->prefix . 'frm_forms', $new_values );
 
         if ( $query_results ) {
 			// Clear form caching
@@ -128,7 +128,7 @@ class FrmForm {
         }
 
         if ( isset($values['form_key']) ) {
-            $values['form_key'] = FrmAppHelper::get_unique_key($values['form_key'], $wpdb->prefix .'frm_forms', 'form_key', $id);
+			$values['form_key'] = FrmAppHelper::get_unique_key( $values['form_key'], $wpdb->prefix . 'frm_forms', 'form_key', $id );
         }
 
         $form_fields = array( 'form_key', 'name', 'description', 'status', 'parent_form_id' );
@@ -146,7 +146,7 @@ class FrmForm {
         }
 
         if ( ! empty( $new_values ) ) {
-            $query_results = $wpdb->update( $wpdb->prefix .'frm_forms', $new_values, array( 'id' => $id ) );
+			$query_results = $wpdb->update( $wpdb->prefix . 'frm_forms', $new_values, array( 'id' => $id ) );
             if ( $query_results ) {
 				self::clear_form_cache();
             }
@@ -157,8 +157,8 @@ class FrmForm {
 
         $values = self::update_fields($id, $values);
 
-        do_action('frm_update_form', $id, $values);
-        do_action('frm_update_form_'. $id, $values);
+		do_action( 'frm_update_form', $id, $values );
+		do_action( 'frm_update_form_' . $id, $values );
 
         return $query_results;
     }
@@ -329,7 +329,7 @@ class FrmForm {
 
         global $wpdb;
         $query_results = $wpdb->update(
-            $wpdb->prefix .'frm_forms',
+			$wpdb->prefix . 'frm_forms',
 			array( 'status' => 'trash', 'options' => serialize( $options ) ),
 			array( 'id' => $id )
         );
@@ -360,9 +360,9 @@ class FrmForm {
         }
 
         // Disconnect the fields from this form
-        $wpdb->query($wpdb->prepare('DELETE fi FROM '. $wpdb->prefix .'frm_fields AS fi LEFT JOIN '. $wpdb->prefix .'frm_forms fr ON (fi.form_id = fr.id) WHERE fi.form_id=%d OR parent_form_id=%d', $id, $id));
+		$wpdb->query( $wpdb->prepare( 'DELETE fi FROM ' . $wpdb->prefix . 'frm_fields AS fi LEFT JOIN ' . $wpdb->prefix . 'frm_forms fr ON (fi.form_id = fr.id) WHERE fi.form_id=%d OR parent_form_id=%d', $id, $id ) );
 
-        $query_results = $wpdb->query($wpdb->prepare('DELETE FROM '. $wpdb->prefix .'frm_forms WHERE id=%d OR parent_form_id=%d', $id, $id));
+		$query_results = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'frm_forms WHERE id=%d OR parent_form_id=%d', $id, $id ) );
         if ( $query_results ) {
             // Delete all form actions linked to this form
             $action_control = FrmFormActionsController::get_form_actions( 'email' );
@@ -371,8 +371,8 @@ class FrmForm {
 			// Clear form caching
 			self::clear_form_cache();
 
-            do_action('frm_destroy_form', $id);
-            do_action('frm_destroy_form_'. $id);
+			do_action( 'frm_destroy_form', $id );
+			do_action( 'frm_destroy_form_' . $id );
         }
 
         return $query_results;
@@ -471,11 +471,11 @@ class FrmForm {
 
         if ( $blog_id && is_multisite() ) {
             global $wpmuBaseTablePrefix;
-            $prefix = $wpmuBaseTablePrefix ? $wpmuBaseTablePrefix . $blog_id .'_' : $wpdb->get_blog_prefix( $blog_id );
+			$prefix = $wpmuBaseTablePrefix ? $wpmuBaseTablePrefix . $blog_id . '_' : $wpdb->get_blog_prefix( $blog_id );
 
-            $table_name = $prefix .'frm_forms';
+			$table_name = $prefix . 'frm_forms';
         } else {
-            $table_name = $wpdb->prefix .'frm_forms';
+			$table_name = $wpdb->prefix . 'frm_forms';
             $cache = wp_cache_get($id, 'frm_form');
             if ( $cache ) {
                 if ( isset($cache->options) ) {

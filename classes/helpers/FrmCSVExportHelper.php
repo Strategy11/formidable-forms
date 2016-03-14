@@ -203,7 +203,7 @@ class FrmCSVExportHelper{
 	private static function add_array_values_to_columns( &$row, $atts ) {
 		if ( is_array( $atts['field_value'] ) ) {
 			foreach ( $atts['field_value'] as $key => $sub_value ) {
-				$column_key = $atts['col']->id .'_'. $key;
+				$column_key = $atts['col']->id . '_' . $key;
 				if ( ! is_numeric( $key ) && isset( self::$headings[ $column_key ] ) ) {
 					$row[ $column_key ] = $sub_value;
 				}

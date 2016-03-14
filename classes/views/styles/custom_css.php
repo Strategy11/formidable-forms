@@ -2,9 +2,9 @@
 <div class="wrap">
     <?php FrmStylesHelper::style_menu('custom_css'); ?>
 
-    <p><?php _e( 'You can add custom css here or in your theme style.css', 'formidable' ) ?></p>
+    <p><?php esc_html_e( 'You can add custom css here or in your theme style.css', 'formidable' ) ?></p>
 
-    <?php include(FrmAppHelper::plugin_path() .'/classes/views/shared/errors.php'); ?>
+	<?php include( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' ); ?>
 
 	<form method="post">
 	    <input type="hidden" name="ID" value="<?php echo esc_attr( $style->ID ) ?>" />

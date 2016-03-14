@@ -138,7 +138,7 @@ class FrmEntryFormat {
 		if ( $atts['format'] != 'text' ) {
 			$values[ $f->field_key ] = $val;
 			if ( isset( $prev_val ) && $prev_val != $val && $f->type != 'textarea' ) {
-				$values[ $f->field_key .'-value' ] = $prev_val;
+				$values[ $f->field_key . '-value' ] = $prev_val;
 			}
 		} else {
 			$values[ $f->id ] = array( 'label' => $f->name, 'val' => $val );
@@ -292,7 +292,7 @@ class FrmEntryFormat {
 			$version = '?';
 		}
 
-		return $bname .' '. $version .' / '. $platform;
+		return $bname . ' ' . $version . ' / ' . $platform;
 	}
 
 	public static function convert_entry_to_content( $values, $atts, array &$content ) {
@@ -321,13 +321,13 @@ class FrmEntryFormat {
 
 			unset($default_settings);
 
-			$content[] = '<table cellspacing="0" style="font-size:'. $atts['font_size'] .';line-height:135%; border-bottom:'. $atts['border_width'] . ' solid #' . $atts['border_color'] . ';"><tbody>' . "\r\n";
-			$atts['bg_color'] = ' style="background-color:#'. $atts['bg_color'] .';"';
-			$bg_color_alt = ' style="background-color:#'. $atts['alt_bg_color'] .';"';
+			$content[] = '<table cellspacing="0" style="font-size:' . $atts['font_size'] . ';line-height:135%; border-bottom:'. $atts['border_width'] . ' solid #' . $atts['border_color'] . ';"><tbody>' . "\r\n";
+			$atts['bg_color'] = ' style="background-color:#' . $atts['bg_color'] . ';"';
+			$bg_color_alt = ' style="background-color:#' . $atts['alt_bg_color'] . ';"';
 
-			$row_style_attributes = 'text-align:' . ( $atts['direction'] == 'rtl' ? 'right' : 'left' ) .';';
-			$row_style_attributes .= 'color:#'. $atts['text_color'] . ';padding:7px 9px;vertical-align:top;';
-			$row_style_attributes .= 'border-top:' . $atts['border_width'] .' solid #' . $atts['border_color'] . ';';
+			$row_style_attributes = 'text-align:' . ( $atts['direction'] == 'rtl' ? 'right' : 'left' ) . ';';
+			$row_style_attributes .= 'color:#' . $atts['text_color'] . ';padding:7px 9px;vertical-align:top;';
+			$row_style_attributes .= 'border-top:' . $atts['border_width'] . ' solid #' . $atts['border_color'] . ';';
 			$row_style = 'style="' . $row_style_attributes . '"';
 		}
 
@@ -335,9 +335,9 @@ class FrmEntryFormat {
 		foreach ( $values as $id => $value ) {
 			if ( $atts['plain_text'] ) {
 				if ( 'rtl' == $atts['direction'] ) {
-					$content[] = $value['val'] . ' :'. $value['label'] ."\r\n";
+					$content[] = $value['val'] . ' :' . $value['label'] . "\r\n";
 				} else {
-					$content[] = $value['label'] . ': '. $value['val'] ."\r\n";
+					$content[] = $value['label'] . ': ' . $value['val'] . "\r\n";
 				}
 				continue;
 			}
@@ -352,7 +352,7 @@ class FrmEntryFormat {
 			if ( 'rtl' == $atts['direction'] ) {
 				$content[] = '<td ' . $row_style . '>' . $value['val'] . '</td><th ' . $row_style . '>' . $value['label'] . '</th>';
 			} else {
-				$content[] = '<th ' . $row_style . '>' . $value['label'] . '</th><td '. $row_style . '>' . $value['val'] . '</td>';
+				$content[] = '<th ' . $row_style . '>' . $value['label'] . '</th><td ' . $row_style . '>' . $value['val'] . '</td>';
 			}
 			$content[] = '</tr>' . "\r\n";
 

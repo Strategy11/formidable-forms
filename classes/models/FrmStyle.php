@@ -100,7 +100,7 @@ class FrmStyle {
      * Create static css file
      */
 	public function save_settings( $styles ) {
-        $filename = FrmAppHelper::plugin_path() .'/css/custom_theme.css.php';
+		$filename = FrmAppHelper::plugin_path() . '/css/custom_theme.css.php';
 		update_option( 'frm_last_style_update', date('njGi') );
 
         if ( ! is_file($filename) ) {
@@ -109,12 +109,12 @@ class FrmStyle {
 
         $defaults = $this->get_defaults();
         $uploads = wp_upload_dir();
-        $target_path = $uploads['basedir'] .'/formidable';
-        $needed_dirs = array( $target_path, $target_path .'/css' );
+		$target_path = $uploads['basedir'] . '/formidable';
+		$needed_dirs = array( $target_path, $target_path . '/css' );
         $dirs_exist = true;
 
         $saving = true;
-        $css = '/* '. __( 'WARNING: Any changes made to this file will be lost when your Formidable settings are updated', 'formidable' ) .' */'. "\n";
+		$css = '/* ' . __( 'WARNING: Any changes made to this file will be lost when your Formidable settings are updated', 'formidable' ) . ' */' . "\n";
 
         ob_start();
         $frm_style = $this;
@@ -124,7 +124,7 @@ class FrmStyle {
 
         $access_type = get_filesystem_method();
         if ( $access_type === 'direct' ) {
-        	$creds = request_filesystem_credentials( site_url() .'/wp-admin/', '', false, false, array() );
+			$creds = request_filesystem_credentials( site_url() . '/wp-admin/', '', false, false, array() );
 		} else {
 			$creds = $this->get_ftp_creds( $access_type );
 		}
@@ -150,12 +150,12 @@ class FrmStyle {
                     }
             	}
 
-                $index_path = $target_path .'/index.php';
+				$index_path = $target_path . '/index.php';
                 $wp_filesystem->put_contents( $index_path, "<?php\n// Silence is golden.\n?>", $chmod_file );
 
                 // only write the file if the folders exist
                 if ( $dirs_exist ) {
-                    $css_file = $target_path .'/css/formidablepro.css';
+					$css_file = $target_path . '/css/formidablepro.css';
                     $wp_filesystem->put_contents( $css_file, $css, $chmod_file );
                 }
             }
@@ -263,7 +263,7 @@ class FrmStyle {
         if ( empty($temp_styles) ) {
             global $wpdb;
             // make sure there wasn't a conflict with the query
-            $query = $wpdb->prepare('SELECT * FROM '. $wpdb->posts .' WHERE post_type=%s AND post_status=%s ORDER BY post_title ASC LIMIT 99', FrmStylesController::$post_type, 'publish');
+			$query = $wpdb->prepare( 'SELECT * FROM ' . $wpdb->posts . ' WHERE post_type=%s AND post_status=%s ORDER BY post_title ASC LIMIT 99', FrmStylesController::$post_type, 'publish' );
             $temp_styles = FrmAppHelper::check_cache('frm_backup_style_check', 'frm_styles', $query, 'get_results');
 
             if ( empty($temp_styles) ) {
@@ -485,7 +485,7 @@ class FrmStyle {
     }
 
 	public function get_field_name( $field_name, $post_field = 'post_content' ) {
-		return 'frm_style_setting'. ( empty($post_field) ? '' : '['. $post_field .']' ) .'[' . $field_name . ']';
+		return 'frm_style_setting' . ( empty( $post_field ) ? '' : '[' . $post_field . ']' ) . '[' . $field_name . ']';
 	}
 
 	public static function get_bold_options() {

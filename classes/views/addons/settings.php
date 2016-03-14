@@ -9,8 +9,8 @@
 			continue;
 		}
 
-		$license = get_option( 'edd_'. $slug .'_license_key' );
-		$status  = get_option( 'edd_'. $slug .'_license_active' );
+		$license = get_option( 'edd_' . $slug . '_license_key' );
+		$status  = get_option( 'edd_' . $slug . '_license_active' );
 		$activate = ( false !== $license && $status == 'valid' ) ? 'deactivate' : 'activate';
 		if ( $activate == 'activate' ) {
 			$any_unauthorized = true;

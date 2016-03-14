@@ -4,7 +4,7 @@
         <?php do_action('frm_entry_inside_h2', $form); ?>
 	</h1>
 
-    <?php require(FrmAppHelper::plugin_path() .'/classes/views/shared/errors.php'); ?>
+	<?php require( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' ); ?>
 
     <form id="posts-filter" method="get">
         <div id="poststuff">

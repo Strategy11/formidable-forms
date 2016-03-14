@@ -32,7 +32,7 @@ class FrmAppHelper {
 
     public static function plugin_url() {
         //prevously FRM_URL constant
-        return plugins_url( '', self::plugin_path() .'/formidable.php' );
+		return plugins_url( '', self::plugin_path() . '/formidable.php' );
     }
 
 	public static function relative_plugin_url() {
@@ -411,9 +411,9 @@ class FrmAppHelper {
      */
     public static function trigger_hook_load( $type, $object = null ) {
         // only load the form hooks once
-        $hooks_loaded = apply_filters('frm_'. $type .'_hooks_loaded', false, $object);
+		$hooks_loaded = apply_filters( 'frm_' . $type . '_hooks_loaded', false, $object );
         if ( ! $hooks_loaded ) {
-            do_action('frm_load_'. $type .'_hooks');
+			do_action( 'frm_load_' . $type . '_hooks' );
         }
     }
 
@@ -556,7 +556,8 @@ class FrmAppHelper {
 	public static function post_edit_link( $post_id ) {
         $post = get_post($post_id);
         if ( $post ) {
-			return '<a href="'. esc_url( admin_url('post.php?post='. $post_id .'&action=edit') ) .'">'. self::truncate( $post->post_title, 50 ) .'</a>';
+			$post_url = admin_url( 'post.php?post=' . $post_id . '&action=edit' );
+			return '<a href="' . esc_url( $post_url ) . '">' . self::truncate( $post->post_title, 50 ) . '</a>';
         }
         return '';
     }
@@ -844,7 +845,7 @@ class FrmAppHelper {
      * @return string The base Google APIS url for the current version of jQuery UI
      */
     public static function jquery_ui_base_url() {
-        $url = 'http'. ( is_ssl() ? 's' : '' ) .'://ajax.googleapis.com/ajax/libs/jqueryui/'. self::script_version('jquery-ui-core');
+		$url = 'http' . ( is_ssl() ? 's' : '' ) . '://ajax.googleapis.com/ajax/libs/jqueryui/' . self::script_version('jquery-ui-core');
         $url = apply_filters('frm_jquery_ui_base_url', $url);
         return $url;
     }
@@ -932,7 +933,7 @@ class FrmAppHelper {
         }
 
 		if ( is_numeric($key) || in_array( $key, array( 'id', 'key', 'created-at', 'detaillink', 'editlink', 'siteurl', 'evenodd' ) ) ) {
-            $key = $key .'a';
+			$key = $key . 'a';
         }
 
 		$key_check = FrmDb::get_var( $table_name, array( $column => $key, 'ID !' => $id ), $column );
@@ -1011,7 +1012,7 @@ class FrmAppHelper {
             }
         }
 
-        $field_type = isset( $post_values['field_options'][ 'type_'. $field->id ] ) ? $post_values['field_options'][ 'type_'. $field->id ] : $field->type;
+		$field_type = isset( $post_values['field_options'][ 'type_' . $field->id ] ) ? $post_values['field_options'][ 'type_' . $field->id ] : $field->type;
         $new_value = isset( $post_values['item_meta'][ $field->id ] ) ? maybe_unserialize( $post_values['item_meta'][ $field->id ] ) : $meta_value;
 
         $field_array = array(
@@ -1048,7 +1049,7 @@ class FrmAppHelper {
         $opt_defaults = FrmFieldsHelper::get_default_field_opts($field_array['type'], $field, true);
 
         foreach ( $opt_defaults as $opt => $default_opt ) {
-            $field_array[ $opt ] = ( $post_values && isset( $post_values['field_options'][ $opt .'_'. $field->id ] ) ) ? maybe_unserialize( $post_values['field_options'][ $opt .'_'. $field->id ] ) : ( isset( $field->field_options[ $opt ] ) ? $field->field_options[ $opt ] : $default_opt );
+			$field_array[ $opt ] = ( $post_values && isset( $post_values['field_options'][ $opt . '_' . $field->id ] ) ) ? maybe_unserialize( $post_values['field_options'][ $opt . '_' . $field->id ] ) : ( isset( $field->field_options[ $opt ] ) ? $field->field_options[ $opt ] : $default_opt );
             if ( $opt == 'blank' && $field_array[ $opt ] == '' ) {
                 $field_array[ $opt ] = $args['frm_settings']->blank_msg;
             } else if ( $opt == 'invalid' && $field_array[ $opt ] == '' ) {
@@ -1114,8 +1115,8 @@ class FrmAppHelper {
         }
 
 		foreach ( array( 'before', 'after', 'submit' ) as $h ) {
-            if ( ! isset( $values[ $h .'_html' ] ) ) {
-                $values[ $h .'_html' ] = ( isset( $post_values['options'][ $h .'_html' ] ) ? $post_values['options'][ $h .'_html' ] : FrmFormsHelper::get_default_html( $h ) );
+			if ( ! isset( $values[ $h . '_html' ] ) ) {
+				$values[ $h . '_html' ] = ( isset( $post_values['options'][ $h . '_html' ] ) ? $post_values['options'][ $h . '_html' ] : FrmFormsHelper::get_default_html( $h ) );
             }
             unset($h);
         }
@@ -1356,7 +1357,7 @@ class FrmAppHelper {
 			self::esc_order_by( $order_by );
         }
 
-        return ' ORDER BY '. $order . ' '. $order_by;
+		return ' ORDER BY ' . $order . ' ' . $order_by;
     }
 
 	/**
@@ -1379,7 +1380,7 @@ class FrmAppHelper {
 
         $limit = trim(str_replace(' limit', '', strtolower($limit)));
         if ( is_numeric($limit) ) {
-            return ' LIMIT '. $limit;
+			return ' LIMIT ' . $limit;
         }
 
         $limit = explode(',', trim($limit));
@@ -1390,7 +1391,7 @@ class FrmAppHelper {
         }
 
         $limit = implode(',', $limit);
-        return ' LIMIT '. $limit;
+		return ' LIMIT ' . $limit;
     }
 
     /**
@@ -1540,7 +1541,7 @@ class FrmAppHelper {
             echo ' class="frm_help"';
         }
 
-        echo ' title="'. esc_attr( $tooltips[ $name ] );
+		echo ' title="' . esc_attr( $tooltips[ $name ] );
 
         if ( 'open' != $class ) {
             echo '"';
