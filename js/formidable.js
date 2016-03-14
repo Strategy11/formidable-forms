@@ -8,7 +8,6 @@ function frmFrontFormJS(){
 	var currentlyAddingRow = false;
 	var action = '';
 	var jsErrors = [];
-	var jumpPos = [];
 
 	function setNextPage(e){
 		/*jshint validthis:true */
@@ -1741,7 +1740,6 @@ function frmFrontFormJS(){
 					jQuery('.form-field').removeClass('frm_blank_field');
 					jQuery('.form-field .frm_error').replaceWith('');
 
-					jumpPos.fieldPos = 999999;
 					var show_captcha = false;
 					var $fieldCont = null;
 
@@ -1766,8 +1764,6 @@ function frmFrontFormJS(){
 
 								cont_submit = false;
 
-								updateOffsetIfFirst( object, $fieldCont, key );
-
 								var $recapcha = jQuery(object).find('#frm_field_'+key+'_container .frm-g-recaptcha');
 								if ( $recapcha.length ) {
 									show_captcha = true;
@@ -1780,7 +1776,7 @@ function frmFrontFormJS(){
 						}
 					}
 
-					scrollToFirstField();
+					scrollToFirstField( object );
 
 					if(show_captcha !== true){
 						jQuery(object).find('.frm-g-recaptcha').closest('.frm_form_field').replaceWith('<input type="hidden" name="recaptcha_checked" value="'+ frm_js.nonce +'">');
@@ -1813,18 +1809,10 @@ function frmFrontFormJS(){
 		$fieldCont.find('.frm_error').remove();
 	}
 
-	function updateOffsetIfFirst( object, $fieldCont, key ) {
-		var fieldOffset = $fieldCont.offset().top;
-		if ( fieldOffset < jumpPos.fieldPos ) {
-			jumpPos.fieldPos = fieldOffset;
-			jumpPos.key = key;
-			jumpPos.field = object;
-		}
-	}
-
-	function scrollToFirstField() {
-		if ( 999999 > jumpPos.fieldPos > 0 ) {
-			frmFrontForm.scrollMsg( jumpPos.key, jumpPos.field, true );
+	function scrollToFirstField( object ) {
+		var field = jQuery(object).find('.frm_blank_field:first');
+		if ( field.length ) {
+			frmFrontForm.scrollMsg( field, object, true );
 		}
 	}
 
@@ -2714,20 +2702,18 @@ function frmFrontFormJS(){
 			jQuery('.form-field').removeClass('frm_blank_field');
 			jQuery('.form-field .frm_error').replaceWith('');
 
-			jumpPos.fieldPos = 999999;
 			for ( var key in jsErrors ) {
 				var $fieldCont = jQuery(object).find('#frm_field_'+key+'_container');
 
 				if ( $fieldCont.length ) {
 					addFieldError( $fieldCont, key, jsErrors );
-					updateOffsetIfFirst( object, $fieldCont, key );
 				} else {
 					// we are unable to show the error, so remove it
 					delete jsErrors[ key ];
 				}
 			}
 
-			scrollToFirstField();
+			scrollToFirstField( object );
 		},
 
 		checkFormErrors: function(object, action){
@@ -2744,7 +2730,11 @@ function frmFrontFormJS(){
 			if(typeof(object) == 'undefined'){
 				newPos = jQuery(document.getElementById('frm_form_'+id+'_container')).offset().top;
 			}else{
-				newPos = jQuery(object).find('#frm_field_'+id+'_container').offset().top;
+				if ( typeof id == 'string' ) {
+					newPos = jQuery(object).find('#frm_field_'+id+'_container').offset().top;
+				} else {
+					newPos = id.offset().top;
+				}
 			}
 
 			if(!newPos){
