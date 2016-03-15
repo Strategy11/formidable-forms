@@ -42,9 +42,9 @@ class FrmEntry {
      * @return boolean
      */
 	public static function is_duplicate( $new_values, $values ) {
-		$duplicate_entry_time = 60;
+		$duplicate_entry_time = apply_filters( 'frm_time_to_check_duplicates', 60, $new_values );
 
-		if ( false === self::is_duplicate_check_needed( $new_values, $values, $duplicate_entry_time ) ) {
+		if ( false === self::is_duplicate_check_needed( $values, $duplicate_entry_time ) ) {
 			return false;
 		}
 
@@ -102,12 +102,16 @@ class FrmEntry {
 	 * Determine if an entry needs to be checked as a possible duplicate
 	 *
 	 * @since 2.0.23
-	 * @param array $new_values
 	 * @param array $values
 	 * @param int $duplicate_entry_time
 	 * @return bool
 	 */
-	private static function is_duplicate_check_needed( $new_values, $values, &$duplicate_entry_time ) {
+	private static function is_duplicate_check_needed( $values, $duplicate_entry_time ){
+		// If time for checking duplicates is set to an empty value, don't check for duplicates
+		if ( empty( $duplicate_entry_time ) ) {
+			return false;
+		}
+
 		// If CSV is importing, don't check for duplicates
 		if ( defined('WP_IMPORTING') && WP_IMPORTING ) {
 			return false;
@@ -115,12 +119,6 @@ class FrmEntry {
 
 		// If repeating field entries are getting created, don't check for duplicates
 		if ( isset( $values['parent_form_id'] ) && $values['parent_form_id'] ) {
-			return false;
-		}
-
-		// If time for checking duplicates is set to an empty value, don't check for duplicates
-		$duplicate_entry_time = apply_filters( 'frm_time_to_check_duplicates', 60, $new_values );
-		if ( empty( $duplicate_entry_time ) ) {
 			return false;
 		}
 
