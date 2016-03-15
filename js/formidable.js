@@ -1489,6 +1489,21 @@ function frmFrontFormJS(){
 		return jQuery(currentOpt).closest('.frm_other_container').find('.frm_other_input').val();
 	}
 
+	function shouldJSValidate( object ) {
+		var validate = jQuery(object).hasClass('frm_js_validate');
+		if ( validate ) {
+			var savingDraft = jQuery(object).find('.frm_saving_draft');
+			if ( savingDraft.length ) {
+				var isDraft = savingDraft.val();
+				if ( isDraft ) {
+					validate = false;
+				}
+			}
+		}
+
+		return validate;
+	}
+
 	function validateForm( object ) {
 		var errors = [];
 
@@ -2677,7 +2692,8 @@ function frmFrontFormJS(){
 
 			action = jQuery(object).find('input[name="frm_action"]').val();
 			jsErrors = [];
-			if ( jQuery(object).hasClass('frm_js_validate') ){
+
+			if ( shouldJSValidate( object ) ) {
 				frmFrontForm.getAjaxFormErrors( object );
 
 				if ( Object.keys(jsErrors).length ) {
