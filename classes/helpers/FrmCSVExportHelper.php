@@ -225,14 +225,11 @@ class FrmCSVExportHelper{
 	private static function print_csv_row( $rows ) {
 		$col_count = count( $rows );
 		$this_col = 0;
-		foreach ( $rows as $k => $row ) {
+
+		foreach ( self::$headings as $k => $heading ) {
 			$this_col++;
 
-			if ( ! isset( self::$headings[ $k ] ) ) {
-				// this column has been removed from the csv, so skip it
-				continue;
-			}
-
+			$row = isset( $rows[ $k ] ) ? $rows[ $k ] : '';
 			if ( is_array( $row ) ) {
 				// implode the repeated field values
 				$row = implode( self::$separator, FrmAppHelper::array_flatten( $row, 'reset' ) );
