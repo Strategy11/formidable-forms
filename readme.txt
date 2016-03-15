@@ -4,7 +4,7 @@ Donate link: http://formidablepro.com/donate
 Tags: contact form, contact, custom form, database, email, feedback, form, forms, poll, Post, captcha, spam, survey, template, widget, multisite, form builder, form creator, form manager
 Requires at least: 3.7
 Tested up to: 4.4
-Stable tag: 2.0.22
+Stable tag: 2.0.23
 
 Beautiful forms in 60 seconds. The WordPress form builder that enables you to create forms with a simple drag-and-drop interface and in-place editing.
 
@@ -92,20 +92,35 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 = 2.0.23 =
 * Add support for multiple reCaptchas on a page
 * Make sure the screen options for the form listings only shows when needed
+* Make sure a value is selected when it includes an &
+* Load grid CSS on the back-end entries and form builder pages
+* Allow transparent background color on fields and form
+* Don't update clear on click options until whole form is saved
+* Don't force an array to be a string before going through get_display_value function
 * Added frm_trigger_create_action hook to alter action triggering
 * Added frm_csv_format hook for changing the exported CSV format
-* Make sure a value is selected when it includes an &
+* Added frm_is_field_required hook for allowing a field to be conditionally required
+* Added frm_field_options_to_update hook for setting more field options to update
+* Added frm_display_FIELDTYPE_value_custom hook
+* Added frm_get_FIELDTYPE_display_value
+* Added frm_csv_field_columns hook. Once the columns are added, if a field value is an array, it will automatically fill added csv columns
 * **Pro Features:** *
 * Added straight up client-side validation
+* Added Credit card and Address field types. Enable the Credit card field with add_filter( 'frm_include_credit_card', '__return_true );
 * Allow actions to be triggered when a draft is saved
 * Allow free text in user id field filtering in views
 * Improved the unique filter in Views
+* Add Entry ID filter to all existing single entry Views instead of always checking for the entry param in the url
+* Allow "any" for the number step
 * Updated Chosen script to 1.5.1
 * Correctly check for multisite sitewide activation
 * Fixed the problem with the file upload attachment option not staying checked
 * Fixed filtering by entry ID and fields together in Views
-* Make sure the limit setting doesn't affect calendar Views
+* Make sure the limit setting doesn't affect calendar Views, and show empty calendar for Calendar views with no entries
+* Make sure closing shortcodes in After Content are filtered
 * Make sure Dynamic List fields show up in default html email
+* Make sure we are jumping to the first field in the form after validation instead of the field with the lowest id
+* Fix field ID issue in repeating sections across pages
 
 = 2.0.22 =
 * Add an upgrade banner when affiliate links are active
