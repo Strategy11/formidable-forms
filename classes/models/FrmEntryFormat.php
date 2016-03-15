@@ -79,7 +79,7 @@ class FrmEntryFormat {
 	private static function get_field_shortcodes_for_default_email( $f, &$values ) {
 		$field_shortcodes = array(
 			'label' => '[' . $f->id . ' show=field_label]',
-			'val' => '[' . $f->id . ']'
+			'val' => '[' . $f->id . ']',
 		);
 
 		$values[ $f->id ] = apply_filters( 'frm_field_shortcodes_for_default_html_email', $field_shortcodes, $f );
