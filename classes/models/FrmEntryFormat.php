@@ -77,16 +77,12 @@ class FrmEntryFormat {
 	 * @param array $values
 	 */
 	private static function get_field_shortcodes_for_default_email( $f, &$values ) {
-		if ( $f->type == 'data' && $f->field_options['data_type'] == 'data' ) {
-			if ( empty( $f->field_options['hide_field'] ) || empty( $f->field_options['form_select'] ) ) {
-				return;
-			}
+		$field_shortcodes = array(
+			'label' => '[' . $f->id . ' show=field_label]',
+			'val' => '[' . $f->id . ']'
+		);
 
-			$field_id_string = reset( $f->field_options['hide_field'] ) . ' show=' . $f->field_options['form_select'];
-			$values[ $f->id ] = array( 'label' => '[' . $f->id . ' show=field_label]', 'val' => '[' . $field_id_string . ']' );
-		} else {
-			$values[ $f->id ] = array( 'label' => '[' . $f->id . ' show=field_label]', 'val' => '[' . $f->id . ']' );
-		}
+		$values[ $f->id ] = apply_filters( 'frm_field_shortcodes_for_default_html_email', $field_shortcodes, $f );
 	}
 
 	public static function fill_entry_values( $atts, $f, array &$values ) {
