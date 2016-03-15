@@ -177,6 +177,7 @@ class FrmFieldsHelper {
 
 		$msg = FrmField::get_option( $field, $error );
 		$msg = ( $msg == $defaults[ $error ]['full'] || empty( $msg ) ) ? $defaults[ $error ]['part'] : $msg;
+		$msg = do_shortcode( $msg );
 		return $msg;
 	}
 
