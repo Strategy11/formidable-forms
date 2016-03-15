@@ -1752,14 +1752,19 @@ function frmAdminBuildJS(){
 			success:function(json){
 				var i;
 				var licenses = json.licenses;
+				var filledSomething = false;
 				for ( i in licenses ) {
 				    if (licenses.hasOwnProperty(i)) {
 						var input = jQuery('#edd_'+ licenses[i].slug +'_license_key');
 						if ( typeof input !== null && input.is(':visible') ) {
 							input.val(licenses[i].key);
 							jQuery('input[name="edd_'+ licenses[i].slug +'_license_activate"]').click();
+							filledSomething = true;
 						}
 				    }
+				}
+				if ( ! filledSomething ) {
+					jQuery('.edd_frm_fill_license').replaceWith(frm_admin_js.no_licenses);
 				}
 			}
 		});
