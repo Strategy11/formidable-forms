@@ -1492,16 +1492,41 @@ function frmFrontFormJS(){
 	function shouldJSValidate( object ) {
 		var validate = jQuery(object).hasClass('frm_js_validate');
 		if ( validate ) {
-			var savingDraft = jQuery(object).find('.frm_saving_draft');
-			if ( savingDraft.length ) {
-				var isDraft = savingDraft.val();
-				if ( isDraft ) {
-					validate = false;
-				}
+			if ( savingDraftEntry( object ) || goingToPrevPage( object ) ) {
+				validate = false;
 			}
 		}
 
 		return validate;
+	}
+
+	function savingDraftEntry( object ) {
+		var isDraft = false;
+		var savingDraft = jQuery(object).find('.frm_saving_draft');
+		if ( savingDraft.length ) {
+			isDraft = savingDraft.val();
+		}
+		return isDraft;
+	}
+
+	function goingToPrevPage( object ) {
+		var goingBack = false;
+		var nextPage = jQuery(object).find('.frm_next_page');
+		if ( nextPage.length && nextPage.val() ) {
+			var formID = jQuery(object).find('input[name="form_id"]').val();
+			var prevPage = jQuery(object).find('input[name="frm_page_order_'+ formID +'"]');
+			if ( prevPage.length ) {
+				prevPage = prevPage.val();
+			} else {
+				prevPage = 0;
+			}
+
+			if ( ! prevPage || ( nextPage.val() < prevPage ) ) {
+				goingBack = true;
+			}
+		}
+
+		return goingBack;
 	}
 
 	function validateForm( object ) {
