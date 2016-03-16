@@ -49,14 +49,18 @@ class FrmFieldsController {
         wp_die();
     }
 
+	/**
+	 * Create a new field with ajax
+	 */
     public static function create() {
 		FrmAppHelper::permission_check('frm_edit_forms');
         check_ajax_referer( 'frm_ajax', 'nonce' );
 
-		$field_type = FrmAppHelper::get_post_param( 'field', '', 'sanitize_text_field' );
+		$field_type = FrmAppHelper::get_post_param( 'field_type', '', 'sanitize_text_field' );
 		$form_id = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
+		$section_id = FrmAppHelper::get_post_param( 'section_id', 0, 'absint' );
 
-        $field = self::include_new_field($field_type, $form_id);
+		$field = self::include_new_field( $field_type, $form_id, $section_id );
 
         // this hook will allow for multiple fields to be added at once
         do_action('frm_after_field_created', $field, $form_id);
@@ -65,15 +69,23 @@ class FrmFieldsController {
     }
 
     /**
+     * Set up and create a new field
+     *
+     * @param string $field_type
      * @param integer $form_id
+     * @param int $section_id
+     * @return array
      */
-	public static function include_new_field( $field_type, $form_id ) {
+	public static function include_new_field( $field_type, $form_id, $section_id = 0 ) {
         $values = array();
         if ( FrmAppHelper::pro_is_installed() ) {
             $values['post_type'] = FrmProFormsHelper::post_type($form_id);
         }
 
-        $field_values = apply_filters('frm_before_field_created', FrmFieldsHelper::setup_new_vars($field_type, $form_id));
+		$field_values = FrmFieldsHelper::setup_new_vars( $field_type, $form_id );
+		$field_values['field_options']['in_section'] = $section_id;
+        $field_values = apply_filters( 'frm_before_field_created', $field_values );
+
         $field_id = FrmField::create( $field_values );
 
         if ( ! $field_id ) {
@@ -83,23 +95,6 @@ class FrmFieldsController {
         $field = self::include_single_field($field_id, $values, $form_id);
 
         return $field;
-    }
-
-    public static function update_form_id() {
-		FrmAppHelper::permission_check('frm_edit_forms');
-        check_ajax_referer( 'frm_ajax', 'nonce' );
-
-		$field_id = FrmAppHelper::get_post_param( 'field', 0, 'absint' );
-		$form_id = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
-
-        if ( ! $field_id || ! $form_id ) {
-            wp_die();
-        }
-
-		$updated = FrmField::update( $field_id, compact( 'form_id' ) );
-		echo absint( $updated );
-
-        wp_die();
     }
 
 	public static function edit_name( $field = 'name', $id = '' ) {

@@ -31,7 +31,7 @@ class WP_Test_FrmFieldsAjax extends FrmAjaxUnitTest {
 			'action'    => 'frm_insert_field',
             'nonce'     => wp_create_nonce('frm_ajax'),
 			'form_id'   => $this->form_id,
-            'field'     => 'text', //create text field
+            'field_type'     => 'text', //create text field
 		);
 
 		try {

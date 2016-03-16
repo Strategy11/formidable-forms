@@ -123,6 +123,7 @@ class FrmFieldsHelper {
             'required_indicator' => '*', 'invalid' => '', 'separate_value' => 0,
             'clear_on_focus' => 0, 'default_blank' => 0, 'classes' => '',
 			'custom_html' => '', 'captcha_size' => 'default',
+	        'in_section' => 0,
         );
 
 		if ( $limit ) {
