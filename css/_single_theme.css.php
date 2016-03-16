@@ -360,7 +360,7 @@ if ( ! isset( $center_form ) ) {
 
 .<?php echo esc_html( $style_class ) ?> input[type=file]::-webkit-file-upload-button{
     color:#<?php echo esc_html( $text_color . $important ) ?>;
-	background-color:<?php echo esc_html( ( empty( $bg_color ) ? 'transparent' : '# ' . $bg_color ) . $important ); ?>;
+	background-color:<?php echo esc_html( ( empty( $bg_color ) ? 'transparent' : '#' . $bg_color ) . $important ); ?>;
 	padding:<?php echo esc_html( $field_pad . $important ) ?>;
 	border-radius:<?php echo esc_html( $border_radius . $important ) ?>;
 	border-color:#<?php echo esc_html( $border_color . $important ) ?>;
