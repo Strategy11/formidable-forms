@@ -74,7 +74,7 @@ class FrmFieldsController {
      * @param string $field_type
      * @param integer $form_id
      * @param int $section_id
-     * @return array
+     * @return array|bool
      */
 	public static function include_new_field( $field_type, $form_id, $section_id = 0 ) {
         $values = array();
