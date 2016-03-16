@@ -106,7 +106,7 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * Added frm_csv_field_columns hook. Once the columns are added, if a field value is an array, it will automatically fill added csv columns
 * **Pro Features:** *
 * Added straight up client-side validation
-* Added Credit card and Address field types. Enable the Credit card field with add_filter( 'frm_include_credit_card', '__return_true );
+* Added Credit card and Address field types. Enable the Credit card field with add_filter( 'frm_include_credit_card', '__return_true' );
 * Allow actions to be triggered when a draft is saved
 * Allow free text in user id field filtering in views
 * Improved the unique filter in Views
