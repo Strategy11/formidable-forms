@@ -279,7 +279,7 @@ function frmAdminBuildJS(){
 
 	// Get the form ID where a field is dropped
 	function getFormIdForFieldPlacement( section ) {
-		var form_id = 0;
+		var form_id = '';
 
 		if ( typeof section[0] !== 'undefined' ) {
 			var sDivide = section.children('.start_divider');
