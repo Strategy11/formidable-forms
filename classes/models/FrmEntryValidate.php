@@ -232,6 +232,10 @@ class FrmEntryValidate {
         if ( isset( $response['success'] ) && ! $response['success'] ) {
             // What happens when the CAPTCHA was entered incorrectly
 			$errors[ 'field' . $args['id'] ] = ( ! isset( $field->field_options['invalid'] ) || $field->field_options['invalid'] == '' ) ? $frm_settings->re_msg : $field->field_options['invalid'];
+        } else if ( is_wp_error( $resp ) ) {
+			$error_string = $resp->get_error_message();
+			$errors[ 'field' . $args['id'] ] = __( 'There was a problem verifying your recaptcha', 'formidable' );
+			$errors[ 'field' . $args['id'] ] .= ' ' . $error_string;
         }
     }
 
