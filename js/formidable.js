@@ -146,6 +146,15 @@ function frmFrontFormJS(){
 		}
 
 		if ( fieldName === '' ) {
+			if ( field instanceof jQuery ) {
+				fieldName = field.data('name');
+			} else {
+				fieldName = field.getAttribute('data-name');
+			}
+
+			if ( fieldName !== '' ) {
+				return fieldName;
+			}
 			return 0;
 		}
 
@@ -1538,7 +1547,6 @@ function frmFrontFormJS(){
 		).filter(':not(.frm_optional)');
 		if ( requiredFields.length ) {
 			for ( var r = 0, rl = requiredFields.length; r < rl; r++ ) {
-				// this won't work with radio/checkbox
 				errors = checkRequiredField( requiredFields[r], errors );
 			}
 		}
@@ -1562,6 +1570,8 @@ function frmFrontFormJS(){
 				}
 			}
 		}
+
+		errors = validateRecaptcha( object, errors );
 
 		return errors;
 	}
@@ -1719,6 +1729,21 @@ function frmFrontFormJS(){
 		return errors;
 	}
 
+	function validateRecaptcha( form, errors ) {
+		var $recaptcha = jQuery(form).find('.frm-g-recaptcha');
+		if ( $recaptcha.length ) {
+			var recaptchaID = $recaptcha.data('rid');
+			var response = grecaptcha.getResponse( recaptchaID );
+
+			if ( response.length === 0 ) {
+				var fieldContainer = $recaptcha.closest('.frm_form_field');
+				var fieldID = fieldContainer.attr('id').replace('frm_field_', '').replace('_container', '');
+				errors[ fieldID ] = '';
+			}
+		}
+		return errors;
+	}
+
 	function getFieldValidationMessage( field, messageType ) {
 		var msg = field.getAttribute(messageType);
 		if ( msg === null ) {
@@ -1812,7 +1837,7 @@ function frmFrontFormJS(){
 								var $recapcha = jQuery(object).find('#frm_field_'+key+'_container .frm-g-recaptcha');
 								if ( $recapcha.length ) {
 									show_captcha = true;
-									grecaptcha.reset();
+									grecaptcha.reset( $recapcha.data('rid') );
 								}
 							}
 						}else if(key == 'redirect'){
@@ -2809,6 +2834,14 @@ function frmFrontFormJS(){
 			}
 		},
 
+		savingDraft: function(object){
+			return savingDraftEntry(object);
+		},
+
+		goingToPreviousPage: function(object){
+			return goingToPrevPage(object);
+		},
+
 		hideCondFields: function(ids){
 			ids = JSON.parse(ids);
 			var len = ids.length;
@@ -2898,7 +2931,8 @@ jQuery(document).ready(function($){
 function frmRecaptcha() {
 	var captchas = jQuery('.frm-g-recaptcha');
 	for ( var c = 0, cl = captchas.length; c < cl; c++ ) {
-		grecaptcha.render( captchas[c].id, {'sitekey' : captchas[c].getAttribute('data-sitekey')} );
+		var recaptchaID = grecaptcha.render( captchas[c].id, {'sitekey' : captchas[c].getAttribute('data-sitekey')} );
+		captchas[c].setAttribute('data-rid', recaptchaID);
 	}
 }
 
