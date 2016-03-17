@@ -1173,7 +1173,7 @@ DEFAULT_HTML;
 			}
 
 			self::show_onfocus_js( $field['clear_on_focus'] );
-			echo '<input type="hidden" name="field_options[clear_on_focus_' . esc_attr( $field['id'] ) . ']" value="' . esc_attr( $field['default_blank'] ) . '" />';
+			echo '<input type="hidden" name="field_options[clear_on_focus_' . esc_attr( $field['id'] ) . ']" value="' . esc_attr( $field['clear_on_focus'] ) . '" />';
 
 			echo '</span>';
 		}
