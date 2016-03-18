@@ -2286,6 +2286,127 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		self::run_get_display_data_tests( $d, 'view without filter=1' );
 	}
 
+	/**
+	 * Test non-Formidable shortcodes in Before Content, Content, and After Content
+	 * filter=1 is NOT used
+	 * All shortcodes in this test View should be processed excluding [formidable id=x]
+	 *
+	 * @covers FrmProDisplaysController::get_shortcode
+	 */
+	function test_shortcodes_in_all_parts_of_content_with_no_wp_filter() {
+		self:: make_sure_easy_tables_is_active();
+		self::clear_get_values();
+
+		$test_view = self::get_view_by_key( 'shortcode-checking' );
+		$content = FrmProDisplaysController::get_shortcode( array( 'id' => $test_view->ID ) );
+
+		// Check for contained values
+		$expected_values = self::get_standard_expected_values();
+		$expected_values[] = 'FormShortcodeBeforeContent: [formidable id=';// Make sure formidable id=x is NOT filtered in Before Content
+		$expected_values[] = 'Formshortcode:[formidable id="dynamic';// Make sure formidable id=x is NOT filtered in Content
+		foreach ( $expected_values as $e ) {
+			$this->assertContains( $e, $content, 'The View with all types of shortcodes (without filter=1) is not getting the expected content.' );
+		}
+
+		// Make sure certain strings aren't present
+		$form_id = FrmForm::getIdByKey( 'dynamic-field-num-form' );
+		$not_expected_values = array( 'id="frm_form_' . $form_id . '_container"' );
+		foreach ( $not_expected_values as $n ) {
+			$this->assertNotContains( $n, $content, 'The View with all types of shortcodes (without filter=1) is missing some expected content.' );
+		}
+
+		self::check_easy_table_html( $content );
+		self::check_counts_for_shortcodes( $content );
+
+		// Check Formshortcode:[formidable id=x] occurrences (should not be filtered)
+		$form_shortcode_count = substr_count( $content, 'Formshortcode:[formidable id="dynamic' );
+		$this->assertEquals( 3, $form_shortcode_count, 'The number of form shortcodes is not the expected value in a View.' );
+	}
+
+	/**
+	 * Test non-Formidable shortcodes in Before Content, Content, and After Content
+	 * Uses filter=1 so all shortcodes should be processed
+	 *
+	 * @covers FrmProDisplaysController::get_shortcode
+	 */
+	function test_shortcodes_in_all_parts_of_content_with_wp_filter() {
+		self:: make_sure_easy_tables_is_active();
+		self::clear_get_values();
+
+		$test_view = self::get_view_by_key( 'shortcode-checking' );
+		$content = FrmProDisplaysController::get_shortcode( array( 'id' => $test_view->ID, 'filter' => '1' ) );
+
+		// Check for contained values
+		$expected_values = self::get_standard_expected_values();
+		foreach ( $expected_values as $e ) {
+			$this->assertContains( $e, $content, 'The View with all types of shortcodes (with filter=1) is not getting the expected content.' );
+		}
+
+		// Check for "does not contain" values
+		$does_not_contain = array(
+			'FormShortcodeBeforeContent: [formidable id=',// Make sure formidable id=x is NOT filtered in Before Content
+			'Formshortcode::[formidable id=dynamic',
+		);
+		foreach ( $does_not_contain as $n ) {
+			$this->assertNotContains( $n, $content, 'The View with all types of shortcodes (with filter=1) is missing some expected content.' );
+		}
+
+		self::check_easy_table_html( $content );
+		self::check_counts_for_shortcodes( $content );
+
+		// Check Formshortcode:[formidable id=x] occurrences (should be filtered)
+		$form_id = FrmForm::getIdByKey( 'dynamic-field-num-form' );
+		$form_count = substr_count( $content, 'id="frm_form_' . $form_id . '_container"');
+		$this->assertEquals( 4, $form_count, 'The number of forms is not the expected value in a View.' );
+	}
+
+	function make_sure_easy_tables_is_active(){
+		$plugin = 'easy-table/easy-table.php';
+		$this->assertTrue( is_plugin_active( $plugin ), 'Easy table is not active.' );
+	}
+
+	function get_standard_expected_values(){
+		$expected_values = array(
+			'Site Name: Test Blog',// Make sure [sitename] is filtered in Before Content
+			'FrmFieldValueBeforeContent: Steve',// Make sure frm-field-value is filtered in Before Content
+			'<table',// Check if Easy Table Shortcode in Before Content is filtered
+			'<tbody',
+			'steph_entry_key',// Tests [key] shortcode
+			'steve_entry_key',// Make sure [key] shortcode is filtered on all rows
+			'jamie_entry_key',// Make sure [key] shortcode is filtered on all rows
+			'<td class="someclass"',// Check easy table shortcodes inside of Content
+			'StandardFieldID:Steph',// Check that field ID shortcode is filtered
+			'</tbody',
+			'/table>',
+		);
+
+		return $expected_values;
+	}
+
+	function check_easy_table_html( $content ) {
+		// Check th occurrences (from Easy Table)
+		$th_count = substr_count( $content, '<th ' );
+		$this->assertEquals( 5, $th_count, 'The number of table headers is not the expected value in View with Easy Table shortcodes.' );
+
+		// Check tr occurrences (from Easy Table)
+		$tr_count = substr_count( $content, '<tr' );
+		$this->assertEquals( 4, $tr_count, 'The number of table rows is not the expected value in View with Easy Table shortcodes.' );
+
+		// Check td occurrences (from Easy Table)
+		$td_count = substr_count( $content, '<td' );
+		$this->assertEquals( 15, $td_count, 'The number of table cells is not the expected value in View with Easy Table shortcodes.' );
+	}
+
+	function check_counts_for_shortcodes( $content ) {
+		// Check SiteName:[siteurl] occurrences (filtered)
+		$sitename_count = substr_count( $content, 'SiteName:Test Blog' );
+		$this->assertEquals( 3, $sitename_count, 'The number of SiteName is not the expected value in View.' );
+
+		// Check FrmFieldValue:[frm-field-value] occurrences (filtered)
+		$frmfieldvalue_count = substr_count( $content, 'FrmFieldValue:Steve' );
+		$this->assertEquals( 3, $frmfieldvalue_count, 'The number of FrmFieldValue:Steve occurrences is not the expected value in View.' );
+	}
+
 	function clear_get_values(){
 		$_GET = array();
 	}
