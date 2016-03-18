@@ -52,10 +52,10 @@ class WP_Test_FrmFieldsAjax extends FrmAjaxUnitTest {
     }
 
 	/**
-	 * @covers FrmFieldsController::update_form_id
+	 * @covers FrmProFieldsController::update_field_after_move
 	 */
-	function test_update_form_id() {
-		$action = 'frm_update_field_form_id';
+	function test_update_field_after_move() {
+		$action = 'frm_update_field_after_move';
 		$repeating_field =  $this->factory->field->get_object_by_id( 'repeating-section' );
 		$old_form_id = $repeating_field->form_id;
 		$new_form_id = $repeating_field->field_options['form_select'];
@@ -69,7 +69,7 @@ class WP_Test_FrmFieldsAjax extends FrmAjaxUnitTest {
 		);
 
 		try {
-			$this->_handleAjax( 'frm_update_field_form_id' );
+			$this->_handleAjax( 'frm_update_field_after_move' );
 		} catch ( WPAjaxDieContinueException $e ) {
 			unset( $e );
 		}
