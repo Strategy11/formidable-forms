@@ -58,9 +58,8 @@ class FrmFieldsController {
 
 		$field_type = FrmAppHelper::get_post_param( 'field_type', '', 'sanitize_text_field' );
 		$form_id = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
-		$section_id = FrmAppHelper::get_post_param( 'section_id', 0, 'absint' );
 
-		$field = self::include_new_field( $field_type, $form_id, $section_id );
+		$field = self::include_new_field( $field_type, $form_id );
 
         // this hook will allow for multiple fields to be added at once
         do_action('frm_after_field_created', $field, $form_id);
@@ -73,17 +72,15 @@ class FrmFieldsController {
      *
      * @param string $field_type
      * @param integer $form_id
-     * @param int $section_id
      * @return array|bool
      */
-	public static function include_new_field( $field_type, $form_id, $section_id = 0 ) {
+	public static function include_new_field( $field_type, $form_id ) {
         $values = array();
         if ( FrmAppHelper::pro_is_installed() ) {
             $values['post_type'] = FrmProFormsHelper::post_type($form_id);
         }
 
 		$field_values = FrmFieldsHelper::setup_new_vars( $field_type, $form_id );
-		$field_values['field_options']['in_section'] = $section_id;
         $field_values = apply_filters( 'frm_before_field_created', $field_values );
 
         $field_id = FrmField::create( $field_values );
