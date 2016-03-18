@@ -152,7 +152,7 @@ function frmFrontFormJS(){
 				fieldName = field.getAttribute('data-name');
 			}
 
-			if ( fieldName !== '' ) {
+			if ( fieldName !== '' && fieldName ) {
 				return fieldName;
 			}
 			return 0;
