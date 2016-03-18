@@ -221,7 +221,7 @@ function frmAdminBuildJS(){
 					jQuery('#'+switchto).show();
 				}
 
-				insertNewFieldByDragging( fieldHTMLId, formId, sectionId );
+				insertNewFieldByDragging( fieldHTMLId, formId, sectionId, opts );
 			},
 			change:function(event, ui){
 				// don't allow some field types inside section
@@ -332,7 +332,7 @@ function frmAdminBuildJS(){
 	}
 
 	// Add a new field by dragging and dropping it from the Fields sidebar
-	function insertNewFieldByDragging( fieldType, formId, sectionId ) {
+	function insertNewFieldByDragging( fieldType, formId, sectionId, opts ) {
 		jQuery('#new_fields .frmbutton.frm_t' + fieldType).replaceWith('<img class="frmbutton frmbutton_loadingnow" id="' + fieldType + '" src="' + frm_js.images_url + '/ajax_loader.gif" alt="' + frm_js.loading + '" />');
 		jQuery.ajax({
 			type: 'POST', url: ajaxurl,
