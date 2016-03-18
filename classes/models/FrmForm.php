@@ -246,18 +246,13 @@ class FrmForm {
             }
 
             //updating the form
-			$update_options = array(
-				'size', 'max', 'label', 'invalid', 'blank',
-				'classes', 'captcha_size', 'default_blank',
-				'clear_on_focus',
-			);
+			$update_options = FrmFieldsHelper::get_default_field_opts( $field->type, $field, true );
+			unset( $update_options['custom_html'] ); // don't check for POST html
 			$update_options = apply_filters( 'frm_field_options_to_update', $update_options );
-			foreach ( $update_options as $opt ) {
-				$field->field_options[ $opt ] = isset( $values['field_options'][ $opt . '_' . $field_id ] ) ? trim( $values['field_options'][ $opt . '_' . $field_id ] ) : '';
-            }
 
-			$field->field_options['required_indicator'] = isset( $values['field_options'][ 'required_indicator_' . $field_id ] ) ? trim( $values['field_options'][ 'required_indicator_' . $field_id ] ) : '*';
-			$field->field_options['separate_value'] = isset( $values['field_options'][ 'separate_value_' . $field_id ] ) ? trim( $values['field_options'][ 'separate_value_' . $field_id ] ) : 0;
+			foreach ( $update_options as $opt => $default ) {
+				$field->field_options[ $opt ] = isset( $values['field_options'][ $opt . '_' . $field_id ] ) ? trim( sanitize_text_field( $values['field_options'][ $opt . '_' . $field_id ] ) ) : $default;
+            }
 
             $field->field_options = apply_filters('frm_update_field_options', $field->field_options, $field, $values);
 			$default_value = maybe_serialize( $values['item_meta'][ $field_id ] );

@@ -2931,7 +2931,10 @@ jQuery(document).ready(function($){
 function frmRecaptcha() {
 	var captchas = jQuery('.frm-g-recaptcha');
 	for ( var c = 0, cl = captchas.length; c < cl; c++ ) {
-		var recaptchaID = grecaptcha.render( captchas[c].id, {'sitekey' : captchas[c].getAttribute('data-sitekey')} );
+		var recaptchaID = grecaptcha.render( captchas[c].id, {
+			'sitekey': captchas[c].getAttribute('data-sitekey'),
+			'theme': captchas[c].getAttribute('data-theme')
+		} );
 		captchas[c].setAttribute('data-rid', recaptchaID);
 	}
 }

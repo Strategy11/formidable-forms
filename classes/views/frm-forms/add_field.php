@@ -257,6 +257,17 @@ if ( $display['options'] ) { ?>
                     </select>
                     </td>
                 </tr>
+				<tr>
+					<td>
+						<label><?php _e( 'Color', 'formidable' ) ?></label>
+					</td>
+					<td>
+						<select name="field_options[captcha_theme_<?php echo esc_attr( $field['id'] ) ?>]">
+							<option value="light" <?php selected( $field['captcha_theme'], 'light' ); ?>><?php _e( 'Light', 'formidable' ) ?></option>
+							<option value="dark" <?php selected( $field['captcha_theme'], 'dark' ); ?>><?php _e( 'Dark', 'formidable' ) ?></option>
+						</select>
+					</td>
+				</tr>
                 <?php
 				} ?>
                 <?php
