@@ -259,7 +259,7 @@ if ( $display['options'] ) { ?>
                 </tr>
 				<tr>
 					<td>
-						<label><?php _e( 'Color', 'formidable' ) ?></label>
+						<label><?php _e( 'reCAPTCHA Color', 'formidable' ) ?></label>
 					</td>
 					<td>
 						<select name="field_options[captcha_theme_<?php echo esc_attr( $field['id'] ) ?>]">
