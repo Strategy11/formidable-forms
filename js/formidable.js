@@ -152,7 +152,7 @@ function frmFrontFormJS(){
 				fieldName = field.getAttribute('data-name');
 			}
 
-			if ( fieldName !== '' ) {
+			if ( fieldName !== '' && fieldName ) {
 				return fieldName;
 			}
 			return 0;
@@ -2933,6 +2933,7 @@ function frmRecaptcha() {
 	for ( var c = 0, cl = captchas.length; c < cl; c++ ) {
 		var recaptchaID = grecaptcha.render( captchas[c].id, {
 			'sitekey': captchas[c].getAttribute('data-sitekey'),
+			'size': captchas[c].getAttribute('data-size'),
 			'theme': captchas[c].getAttribute('data-theme')
 		} );
 		captchas[c].setAttribute('data-rid', recaptchaID);
