@@ -1292,7 +1292,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * Test Scale field is unique
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
-	function test_unique_filter() {
+	function test_unique_filter_on_scale_field() {
 		self::clear_get_values();
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 
@@ -1352,6 +1352,54 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		$d = self::get_default_args( $dynamic_view, array( 'Jamie', 'Steph', 'Steve' ), array() );
 
 		self::run_get_display_data_tests( $d, 'unique filter with user_id' );
+	}
+
+	/**
+	 * Test entry ID is unique
+	 * This filter should be ignored
+	 *
+	 * @covers FrmProDisplaysController::get_display_data
+	 */
+	function test_unique_filter_on_entry_id() {
+		self::clear_get_values();
+		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
+
+		$filter_args = array(
+			array( 'type' => 'col',
+				'col' => 'id',
+				'op' => 'group_by',
+				'val' => '',
+			),
+		);
+		self::add_filter_to_view( $dynamic_view, $filter_args );
+
+		$d = self::get_default_args( $dynamic_view, array( 'Jamie', 'Steph', 'Steve' ), array() );
+
+		self::run_get_display_data_tests( $d, 'unique filter with entry ID' );
+	}
+
+	/**
+	 * Test entry creation date is unique
+	 * This filter should be ignored
+	 *
+	 * @covers FrmProDisplaysController::get_display_data
+	 */
+	function test_unique_filter_on_entry_creation_date() {
+		self::clear_get_values();
+		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
+
+		$filter_args = array(
+			array( 'type' => 'col',
+				'col' => 'created_at',
+				'op' => 'group_by',
+				'val' => '',
+			),
+		);
+		self::add_filter_to_view( $dynamic_view, $filter_args );
+
+		$d = self::get_default_args( $dynamic_view, array( 'Jamie', 'Steph', 'Steve' ), array() );
+
+		self::run_get_display_data_tests( $d, 'unique filter with creation date' );
 	}
 
 	/**
