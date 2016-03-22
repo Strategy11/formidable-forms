@@ -26,6 +26,7 @@ class FrmSettings{
     public $privkey;
     public $re_lang;
     public $re_msg;
+	public $re_multi;
 
     public function __construct() {
         if ( ! defined('ABSPATH') ) {
