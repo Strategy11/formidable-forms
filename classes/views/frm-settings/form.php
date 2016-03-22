@@ -90,6 +90,14 @@
                 <?php } ?>
             </select></p>
 
+			<p>
+				<label class="frm_left_label"><?php _e( 'Multiple reCaptchas', 'formidable' ) ?></label>
+				<label for="frm_re_multi">
+					<input type="checkbox" name="frm_re_multi" id="frm_re_multi" value="1" <?php checked( $frm_settings->re_multi, 1 ) ?> />
+					<?php _e( 'Allow multiple reCaptchas to be used on a single page', 'formidable' ) ?>
+				</label>
+			</p>
+
 			<h3><?php _e( 'Default Messages', 'formidable' ); ?>
 				<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'You can override the success message and submit button settings on individual forms.', 'formidable' ) ?>"></span>
 			</h3>

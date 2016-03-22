@@ -634,18 +634,22 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
 .frm_form_field.frm_left_container textarea,
 .frm_form_field.frm_left_container .frm_opt_container,
 .frm_form_field.frm_left_container .frm-g-recaptcha,
+.frm_form_field.frm_left_container .g-recaptcha,
 .frm_form_field.frm_right_container input:not([type=radio]):not([type=checkbox]),
 .frm_form_field.frm_right_container:not(.frm_dynamic_select_container) select,
 .frm_form_field.frm_right_container textarea,
 .frm_form_field.frm_right_container .frm_opt_container,
-.frm_form_field.frm_right_container .frm-g-recaptcha{
+.frm_form_field.frm_right_container .frm-g-recaptcha,
+.frm_form_field.frm_right_container .g-recaptcha{
 	max-width:62%;
 }
 
 .frm_form_field.frm_left_container .frm_opt_container,
 .frm_form_field.frm_right_container .frm_opt_container,
 .frm_form_field.frm_left_container .frm-g-recaptcha,
-.frm_form_field.frm_right_container .frm-g-recaptcha{
+.frm_form_field.frm_right_container .frm-g-recaptcha,
+.frm_form_field.frm_left_container .g-recaptcha,
+.frm_form_field.frm_right_container .g-recaptcha{
 	display:inline-block;
 }
 
@@ -1632,7 +1636,8 @@ html[xmlns] .frm_clearfix{
 		position:static;
 	}
 
-	.with_frm_style .frm-g-recaptcha > div > div{
+	.with_frm_style .frm-g-recaptcha > div > div,
+	.with_frm_style .g-recaptcha > div > div{
 		width:inherit !important;
 		display:block;
 		overflow:hidden;
@@ -1643,6 +1648,7 @@ html[xmlns] .frm_clearfix{
 		-moz-box-shadow:2px 0px 4px -1px rgba(0,0,0,.08);
 	}
 
+	.with_frm_style .g-recaptcha iframe,
 	.with_frm_style .frm-g-recaptcha iframe{
 		width:100%;
 	}

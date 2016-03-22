@@ -250,7 +250,8 @@ form label.frm_primary_label input{font-size:12px;}
 .with_frm_style form .frm_blank_field input,
 .with_frm_style form .frm_blank_field textarea,
 .with_frm_style form .frm_blank_field select,
-.with_frm_style form .frm_blank_field .frm-g-recaptcha iframe{
+.with_frm_style form .frm_blank_field .frm-g-recaptcha iframe,
+.with_frm_style form .frm_blank_field .g-recaptcha iframe{
 	border-color:#B94A48;
 }
 .with_frm_style form .frm_blank_field label{color:#B94A48;}

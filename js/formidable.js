@@ -1779,7 +1779,7 @@ function frmFrontFormJS(){
 							},2000);
 						}
 					}
-					var $recapField = jQuery(object).find('.frm-g-recaptcha');
+					var $recapField = jQuery(object).find('.frm-g-recaptcha, .g-recaptcha');
 					if($recapField.length && (jQuery(object).find('.frm_next_page').length < 1 || jQuery(object).find('.frm_next_page').val() < 1)){
                         $recapField.closest('.frm_form_field').replaceWith('<input type="hidden" name="recaptcha_checked" value="'+ frm_js.nonce +'">');
 					}
@@ -1834,10 +1834,15 @@ function frmFrontFormJS(){
 
 								cont_submit = false;
 
-								var $recapcha = jQuery(object).find('#frm_field_'+key+'_container .frm-g-recaptcha');
-								if ( $recapcha.length ) {
+								var $recaptcha = jQuery(object).find('#frm_field_'+key+'_container .frm-g-recaptcha, #frm_field_'+key+'_container .g-recaptcha');
+								if ( $recaptcha.length ) {
 									show_captcha = true;
-									grecaptcha.reset( $recapcha.data('rid') );
+									var recaptchaID = $recaptcha.data('rid');
+									if ( recaptchaID ) {
+										grecaptcha.reset( recaptchaID );
+									} else {
+										grecaptcha.reset();
+									}
 								}
 							}
 						}else if(key == 'redirect'){
@@ -1849,7 +1854,7 @@ function frmFrontFormJS(){
 					scrollToFirstField( object );
 
 					if(show_captcha !== true){
-						jQuery(object).find('.frm-g-recaptcha').closest('.frm_form_field').replaceWith('<input type="hidden" name="recaptcha_checked" value="'+ frm_js.nonce +'">');
+						jQuery(object).find('.frm-g-recaptcha, .g-recaptcha').closest('.frm_form_field').replaceWith('<input type="hidden" name="recaptcha_checked" value="'+ frm_js.nonce +'">');
 					}
 
 					if(cont_submit){
@@ -1858,7 +1863,8 @@ function frmFrontFormJS(){
 				}
 			},
 			error:function(){
-				jQuery(object).find('input[type="submit"], input[type="button"]').removeAttr('disabled');object.submit();
+				jQuery(object).find('input[type="submit"], input[type="button"]').removeAttr('disabled');
+				object.submit();
 			}
 		});
 	}

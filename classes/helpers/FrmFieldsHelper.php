@@ -478,20 +478,28 @@ DEFAULT_HTML;
 	}
 
 	public static function display_recaptcha( $field ) {
-        $frm_settings = FrmAppHelper::get_settings();
-        $lang = apply_filters('frm_recaptcha_lang', $frm_settings->re_lang, $field);
+		$frm_settings = FrmAppHelper::get_settings();
+		$lang = apply_filters( 'frm_recaptcha_lang', $frm_settings->re_lang, $field );
 
-        $api_js_url = 'https://www.google.com/recaptcha/api.js?onload=frmRecaptcha&render=explicit';
+		$class_prefix = '';
+		$api_js_url = 'https://www.google.com/recaptcha/api.js?';
+
+		$allow_mutiple = $frm_settings->re_multi;
+		if ( $allow_mutiple ) {
+			$api_js_url .= '&onload=frmRecaptcha&render=explicit';
+			$class_prefix = 'frm-';
+		}
+
         if ( $lang != 'en' ) {
 			$api_js_url .= '&hl=' . $lang;
         }
-        $api_js_url = apply_filters('frm_recpatcha_js_url', $api_js_url);
+		$api_js_url = apply_filters( 'frm_recaptcha_js_url', $api_js_url );
 
-        wp_register_script('recaptcha-api', $api_js_url, '', true);
-        wp_enqueue_script('recaptcha-api');
+        wp_register_script( 'recaptcha-api', $api_js_url, '', true );
+        wp_enqueue_script( 'recaptcha-api' );
 
 ?>
-<div id="field_<?php echo esc_attr( $field['field_key'] ) ?>" class="frm-g-recaptcha" data-sitekey="<?php echo esc_attr( $frm_settings->pubkey ) ?>" data-size="<?php echo esc_attr( $field['captcha_size'] ) ?>" data-theme="<?php echo esc_attr( $field['captcha_theme'] ) ?>"></div>
+<div id="field_<?php echo esc_attr( $field['field_key'] ) ?>" class="<?php echo esc_attr( $class_prefix ) ?>g-recaptcha" data-sitekey="<?php echo esc_attr( $frm_settings->pubkey ) ?>" data-size="<?php echo esc_attr( $field['captcha_size'] ) ?>" data-theme="<?php echo esc_attr( $field['captcha_theme'] ) ?>"></div>
 <?php
     }
 

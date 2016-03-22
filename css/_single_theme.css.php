@@ -227,16 +227,20 @@ if ( ! isset( $center_form ) ) {
 .<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_left_container textarea,
 .<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_left_container .frm_opt_container,
 .<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_left_container .frm-g-recaptcha,
+.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_left_container .g-recaptcha,
 .<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_right_container input:not([type=radio]):not([type=checkbox]),
 .<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_right_container:not(.frm_dynamic_select_container) select,
 .<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_right_container textarea,
 .<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_right_container .frm_opt_container,
+.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_right_container .g-recaptcha,
 .<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_right_container .frm-g-recaptcha{
 	max-width:62%<?php echo esc_html( $important ) ?>;
 }
 
 .<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_left_container .frm_opt_container,
 .<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_right_container .frm_opt_container,
+.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_left_container .g-recaptcha,
+.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_right_container .g-recaptcha,
 .<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_left_container .frm-g-recaptcha,
 .<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_right_container .frm-g-recaptcha{
 	display:inline-block<?php echo esc_html( $important ) ?>;
@@ -611,6 +615,7 @@ if ( ! $submit_style ) { ?>
 .<?php echo esc_html( $style_class ) ?> .frm_blank_field select,
 .frm_form_fields_error_style,
 .<?php echo esc_html( $style_class ) ?> .frm_blank_field .frm-g-recaptcha iframe,
+.<?php echo esc_html( $style_class ) ?> .frm_blank_field .g-recaptcha iframe,
 .<?php echo esc_html( $style_class ) ?> .frm_blank_field .chosen-container-multi .chosen-choices{
     color:#<?php echo esc_html( $text_color_error . $important ) ?>;
 	background-color:<?php echo esc_html( ( empty( $bg_color_error ) ? 'transparent' : '#' . $bg_color_error ) . $important ); ?>;
@@ -896,11 +901,13 @@ if ( ! $submit_style ) { ?>
 	.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_half.frm_left_container textarea,
 	.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_half.frm_left_container .frm_opt_container,
 	.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_half.frm_left_container.frm-g-recaptcha,
+	.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_half.frm_left_container.g-recaptcha,
 	.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_half.frm_right_container input:not([type=radio]):not([type=checkbox]),
 	.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_half.frm_right_container select,
 	.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_half.frm_right_container textarea,
 	.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_half.frm_right_container .frm_opt_container,
-	.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_half.frm_right_container.frm-g-recaptcha{
+	.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_half.frm_right_container.frm-g-recaptcha,
+	.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_half.frm_right_container.g-recaptcha{
 		max-width:100%<?php echo esc_html( $important ) ?>;
 	}
 	.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_left_half.frm_left_container .frm_primary_label,
@@ -956,11 +963,13 @@ if ( ! $submit_style ) { ?>
 	.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_left_container textarea,
 	.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_left_container .frm_opt_container,
 	.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_left_container .frm-g-recaptcha,
+	.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_left_container .g-recaptcha,
 	.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_right_container input:not([type=radio]):not([type=checkbox]),
 	.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_right_container:not(.frm_dynamic_select_container) select,
 	.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_right_container textarea,
 	.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_right_container .frm_opt_container,
 	.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_right_container .frm-g-recaptcha,
+	.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_right_container .g-recaptcha,
 	.<?php echo esc_html( $style_class ) ?> .frm_left_container p.description,
 	.<?php echo esc_html( $style_class ) ?> .frm_left_container div.description,
 	.<?php echo esc_html( $style_class ) ?> .frm_left_container div.frm_description,

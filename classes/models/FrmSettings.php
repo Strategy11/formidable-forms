@@ -82,6 +82,8 @@ class FrmSettings{
             'jquery_css' => false,
             'accordion_js' => false,
 
+			're_multi'  => 0,
+
             'success_msg' => __( 'Your responses were successfully submitted. Thank you!', 'formidable' ),
             'blank_msg' => __( 'This field cannot be blank.', 'formidable' ),
             'unique_msg' => __( 'This value must be unique.', 'formidable' ),
