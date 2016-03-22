@@ -1832,14 +1832,16 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 		$dynamic_view->frm_page_size = 5;
 		$dynamic_view->frm_limit = 1;
-		$d = self::get_default_args( $dynamic_view, array( 'Jamie' ), array( 'Steve', 'Steph' ) );
+		$d = self::get_default_args( $dynamic_view, array( 'Jamie' ), array( 'Steve', 'Steph', 'frm_pagination' ) );
 		self::run_get_display_data_tests( $d, 'view with limit lower than page size' );
 
-		// Test page size of 1 and limit of 5
+		// Test page size of 1 and limit of 2
 		$dynamic_view = self::reset_view( 'dynamic-view' );
 		$dynamic_view->frm_page_size = 1;
-		$dynamic_view->frm_limit = 5;
-		$d = self::get_default_args( $dynamic_view, array( 'Jamie' ), array( 'Steve', 'Steph' ) );
+		$dynamic_view->frm_limit = 2;
+		$expected_values = array( 'Jamie', 'frm-page-' . $dynamic_view->ID . '=2' );
+		$values_that_should_not_be_present = array( 'frm-page-' . $dynamic_view->ID . '=3', 'Steve', 'Steph' );
+		$d = self::get_default_args( $dynamic_view, $expected_values, $values_that_should_not_be_present );
 		self::run_get_display_data_tests( $d, 'view with page size lower than limit' );
 	}
 
