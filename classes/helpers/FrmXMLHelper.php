@@ -278,6 +278,8 @@ class FrmXMLHelper {
 	* TODO: Cut down on params
 	*/
 	private static function import_xml_fields( $xml_fields, $form_id, $this_form, &$form_fields, &$imported ) {
+		$in_section = 0;
+
 		foreach ( $xml_fields as $field ) {
 		    $f = array(
 		        'id'            => (int) $field->id,
@@ -305,50 +307,63 @@ class FrmXMLHelper {
 		        }
 		    }
 
-		    $f = apply_filters('frm_duplicated_field', $f);
-
 			self::maybe_update_form_select( $f, $imported );
 
-		    if ( ! empty($this_form) ) {
-		        // check for field to edit by field id
+			if ( ! empty($this_form) ) {
+				// check for field to edit by field id
 				if ( isset( $form_fields[ $f['id'] ] ) ) {
-		            FrmField::update( $f['id'], $f );
-		            $imported['updated']['fields']++;
+					FrmField::update( $f['id'], $f );
+					$imported['updated']['fields']++;
 
 					unset( $form_fields[ $f['id'] ] );
 
-		            //unset old field key
+					//unset old field key
 					if ( isset( $form_fields[ $f['field_key'] ] ) ) {
 						unset( $form_fields[ $f['field_key'] ] );
 					}
 				} else if ( isset( $form_fields[ $f['field_key'] ] ) ) {
-		            // check for field to edit by field key
-		            unset($f['id']);
+					// check for field to edit by field key
+					unset($f['id']);
 
 					FrmField::update( $form_fields[ $f['field_key'] ], $f );
-		            $imported['updated']['fields']++;
+					$imported['updated']['fields']++;
 
 					unset( $form_fields[ $form_fields[ $f['field_key'] ] ] ); //unset old field id
 					unset( $form_fields[ $f['field_key'] ] ); //unset old field key
 				} else {
-					$new_id = FrmField::create( $f );
-					if ( $new_id == false ) {
-						continue;
-					}
-
-		            // if no matching field id or key in this form, create the field
-		            $imported['imported']['fields']++;
-		        }
-			} else {
-				$new_id = FrmField::create( $f );
-				if ( $new_id == false ) {
-					continue;
+					// if no matching field id or key in this form, create the field
+					self::maybe_update_in_section_variable( $in_section, $f );
+					self::create_imported_field( $f, $imported );
 				}
+			} else {
 
-	            $imported['imported']['fields']++;
-		    }
+				self::maybe_update_in_section_variable( $in_section, $f );
+				self::create_imported_field( $f, $imported );
+			}
+		}
+	}
 
-			unset($field, $new_id);
+	/**
+	 * Update the current in_section value
+	 *
+	 * @since 2.0.25
+	 * @param object $field
+	 * @param int $in_section
+	 */
+	private static function maybe_update_in_section_variable( &$in_section, &$f ) {
+		// If we're at the end of a section, switch $in_section is 0
+		if ( in_array( $f['type'], array( 'end_divider', 'break' ) ) ) {
+			$in_section = 0;
+		}
+
+		// Update the current field's in_section value
+		if ( ! isset( $f['field_options']['in_section'] ) ) {
+			$f['field_options']['in_section'] = $in_section;
+		}
+
+		// If we're starting a new section, switch $in_section to ID of divider
+		if ( $f['type'] == 'divider' ) {
+			$in_section = $f['id'];
 		}
 	}
 
@@ -371,6 +386,20 @@ class FrmXMLHelper {
 					$f['field_options']['form_select'] = $imported['forms'][ $form_select ];
 				}
 			}
+		}
+	}
+
+	/**
+	 * Create an imported field
+	 *
+	 * @since 2.0.24
+	 * @param array $f
+	 * @param array $imported
+	 */
+	private static function create_imported_field( $f, &$imported ) {
+		$new_id = FrmField::create( $f );
+		if ( $new_id != false ) {
+			$imported[ 'imported' ][ 'fields' ]++;
 		}
 	}
 
