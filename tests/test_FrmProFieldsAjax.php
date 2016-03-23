@@ -62,4 +62,31 @@ class WP_Test_FrmProFieldsAjax extends FrmAjaxUnitTest {
 
 		return $response;
 	}
+
+	/**
+	 * @covers FrmProFieldsController::update_field_after_move
+	 */
+	function test_update_field_after_move() {
+		$action = 'frm_update_field_after_move';
+		$repeating_field =  $this->factory->field->get_object_by_id( 'repeating-section' );
+		$old_form_id = $repeating_field->form_id;
+		$new_form_id = $repeating_field->field_options['form_select'];
+		$field = $this->factory->field->create_and_get( array( 'form_id' => $old_form_id ) );
+
+		$_POST = array(
+			'action'  => $action,
+			'field'   => $field->id,
+			'form_id' => $new_form_id,
+			'nonce'   => wp_create_nonce( 'frm_ajax' ),
+		);
+
+		try {
+			$this->_handleAjax( 'frm_update_field_after_move' );
+		} catch ( WPAjaxDieContinueException $e ) {
+			unset( $e );
+		}
+
+		$updated_field =  $this->factory->field->get_object_by_id( $field->id );
+		$this->assertEquals( $new_form_id, $updated_field->form_id );
+	}
 }
