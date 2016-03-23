@@ -399,7 +399,7 @@ class FrmXMLHelper {
 	private static function create_imported_field( $f, &$imported ) {
 		$new_id = FrmField::create( $f );
 		if ( $new_id != false ) {
-			$imported[ 'imported' ][ 'fields' ]++;
+			$imported['imported']['fields']++;
 		}
 	}
 
