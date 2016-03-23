@@ -392,7 +392,7 @@ class FrmXMLHelper {
 	/**
 	 * Create an imported field
 	 *
-	 * @since 2.0.24
+	 * @since 2.0.25
 	 * @param array $f
 	 * @param array $imported
 	 */
