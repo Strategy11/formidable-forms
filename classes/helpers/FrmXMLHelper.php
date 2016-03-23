@@ -347,8 +347,8 @@ class FrmXMLHelper {
 	 * Update the current in_section value
 	 *
 	 * @since 2.0.25
-	 * @param object $field
 	 * @param int $in_section
+	 * @param array $f
 	 */
 	private static function maybe_update_in_section_variable( &$in_section, &$f ) {
 		// If we're at the end of a section, switch $in_section is 0
