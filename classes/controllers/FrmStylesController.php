@@ -96,6 +96,8 @@ class FrmStylesController {
 				}
 			}
 			unset( $css );
+
+			add_filter( 'style_loader_tag', 'FrmStylesController::add_tags_to_css', 10, 2 );
 		}
 	}
 
@@ -140,6 +142,16 @@ class FrmStylesController {
 		if ( isset( $frm_vars['datepicker_loaded'] ) && ! empty( $frm_vars['datepicker_loaded'] ) ) {
 			FrmStylesHelper::enqueue_jquery_css();
 		}
+	}
+
+	public static function add_tags_to_css( $tag, $handle ) {
+		if ( ( 'formidable' == $handle || 'jquery-theme' == $handle ) && strpos( $tag, ' property=' ) === false ) {
+			$frm_settings = FrmAppHelper::get_settings();
+			if ( $frm_settings->use_html ) {
+				$tag = str_replace( ' type=', ' property="stylesheet" type=', $tag );
+			}
+		}
+		return $tag;
 	}
 
 	public static function new_style( $return = '' ) {
