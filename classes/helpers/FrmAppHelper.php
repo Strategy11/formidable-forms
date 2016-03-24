@@ -5,7 +5,7 @@ if ( ! defined('ABSPATH') ) {
 
 class FrmAppHelper {
 	public static $db_version = 29; //version of the database we are moving to
-	public static $pro_db_version = 32;
+	public static $pro_db_version = 33;
 
 	/**
 	 * @since 2.0
@@ -1153,7 +1153,7 @@ class FrmAppHelper {
 
 	public static function truncate( $str, $length, $minword = 3, $continue = '...' ) {
         if ( is_array( $str ) ) {
-            return;
+            return '';
 		}
 
         $length = (int) $length;
@@ -1679,7 +1679,7 @@ class FrmAppHelper {
      * @since 1.07.10
      *
      * @param string $post_type The name of the post type that may need to be highlighted
-     * @return echo The javascript to open and highlight the Formidable menu
+     * echo The javascript to open and highlight the Formidable menu
      */
 	public static function maybe_highlight_menu( $post_type ) {
         global $post, $pagenow;
