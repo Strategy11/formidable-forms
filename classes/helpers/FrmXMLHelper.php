@@ -307,6 +307,7 @@ class FrmXMLHelper {
 		        }
 		    }
 
+			self::maybe_update_in_section_variable( $in_section, $f );
 			self::maybe_update_form_select( $f, $imported );
 
 			if ( ! empty($this_form) ) {
@@ -332,12 +333,10 @@ class FrmXMLHelper {
 					unset( $form_fields[ $f['field_key'] ] ); //unset old field key
 				} else {
 					// if no matching field id or key in this form, create the field
-					self::maybe_update_in_section_variable( $in_section, $f );
 					self::create_imported_field( $f, $imported );
 				}
 			} else {
 
-				self::maybe_update_in_section_variable( $in_section, $f );
 				self::create_imported_field( $f, $imported );
 			}
 		}
@@ -352,7 +351,7 @@ class FrmXMLHelper {
 	 */
 	private static function maybe_update_in_section_variable( &$in_section, &$f ) {
 		// If we're at the end of a section, switch $in_section is 0
-		if ( in_array( $f['type'], array( 'end_divider', 'break' ) ) ) {
+		if ( in_array( $f['type'], array( 'end_divider', 'break', 'form' ) ) ) {
 			$in_section = 0;
 		}
 
@@ -400,6 +399,7 @@ class FrmXMLHelper {
 		$new_id = FrmField::create( $f );
 		if ( $new_id != false ) {
 			$imported['imported']['fields']++;
+			do_action( 'frm_after_field_is_imported', $f, $new_id );
 		}
 	}
 
