@@ -606,6 +606,14 @@ form label.frm_primary_label input{font-size:12px;}
 }
 .frm_form_fields div.star a, .frm_form_fields div.star a:hover, .frm_form_fields div.star a:visited{position:static;right:auto;}
 
+.edit_field_type_file ~ .edit_field_type_break .frm_hidden.frm_pro_tip{
+	display:block;
+	color:red;
+	border-color:red;
+	background-color: transparent;
+	margin-top:10px;
+}
+
 .frm_ext_sc{display:none;}
 .frm_long_input{width:95% !important;}
 

@@ -841,7 +841,7 @@ function frmAdminBuildJS(){
 
 				// Update data-formid on section field
 				var fieldListElement = document.getElementById( 'frm_field_id_' + field_id );
-				if ( id != '' ) {
+				if ( id !== '' ) {
 					fieldListElement.setAttribute('data-formid', id);
 				} else {
 					fieldListElement.setAttribute('data-formid', main_form_id);
