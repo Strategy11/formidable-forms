@@ -1694,7 +1694,7 @@ function frmFrontFormJS(){
 				var confName = field.name.replace('conf_', '');
 				var match = emailFields.filter('[name="'+ confName +'"]').val();
 				if ( match !== emailAddress ) {
-					errors[ fieldID ] = invalidMsg;
+					errors[ fieldID ] = '';
 					errors[ fieldID.replace('conf_', '') ] = '';
 				}
 			}
