@@ -479,7 +479,7 @@ class FrmXMLHelper {
 			$post_id = false;
             if ( $post['post_type'] == $form_action_type ) {
                 $action_control = FrmFormActionsController::get_form_actions( $post['post_excerpt'] );
-				if ( $action_control ) {
+				if ( $action_control && is_object( $action_control ) ) {
 					$post_id = $action_control->maybe_create_action( $post, $imported['form_status'] );
 				}
                 unset($action_control);
