@@ -662,7 +662,7 @@ function frmAdminBuildJS(){
 		}
 		var field_id=jQuery(this).closest('li.form-field').data('fid');
 		jQuery(this).toggleClass('frm_inactive_icon').attr('title', t).tooltip('destroy').tooltip('show');
-		jQuery('input[name="field_options[clear_on_focus_'+ field_id +']"').val(switch_to);
+		jQuery('input[name="field_options[clear_on_focus_'+ field_id +']"]').val(switch_to);
 		return false;
 	}
 
@@ -676,7 +676,7 @@ function frmAdminBuildJS(){
 		var field_id = jQuery(this).closest('li.form-field').data('fid');
 		jQuery(this).toggleClass('frm_inactive_icon').attr('title', t).tooltip('destroy').next('.tooltip').remove();
 		jQuery(this).tooltip('show');
-		jQuery('input[name="field_options[default_blank_'+ field_id +']"').val(switch_to);
+		jQuery('input[name="field_options[default_blank_'+ field_id +']"]').val(switch_to);
 		return false;
 	}
 
