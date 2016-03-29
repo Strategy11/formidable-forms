@@ -14,9 +14,6 @@ FrmFormsController::maybe_load_css( $form, $values['custom_style'], $frm_vars['l
 // Get conditionally hidden fields
 $frm_hide_fields = FrmAppHelper::get_post_param( 'frm_hide_fields_' . $form->id, '', 'sanitize_text_field' );
 
-// Get helpers
-$frm_helpers = apply_filters( 'frm_get_parent_child_field_helpers', '', $values['fields'], array( 'form_id' => $form->id ) );
-
 ?>
 <div class="frm_form_fields <?php echo esc_attr( apply_filters( 'frm_form_fields_class', '', $values ) ); ?>">
 <fieldset>
@@ -24,7 +21,6 @@ $frm_helpers = apply_filters( 'frm_get_parent_child_field_helpers', '', $values[
 <input type="hidden" name="frm_action" value="<?php echo esc_attr($form_action) ?>" />
 <input type="hidden" name="form_id" value="<?php echo esc_attr($form->id) ?>" />
 <input type="hidden" name="frm_hide_fields_<?php echo esc_attr( $form->id ) ?>" id="frm_hide_fields_<?php echo esc_attr( $form->id ) ?>" value="<?php echo esc_attr($frm_hide_fields) ?>" />
-<input type="hidden" name="frm_helpers_<?php echo esc_attr( $form->id ) ?>" id="frm_helpers_<?php echo esc_attr( $form->id ) ?>" value="<?php echo esc_attr( $frm_helpers ) ?>" />
 <input type="hidden" name="form_key" value="<?php echo esc_attr($form->form_key) ?>" />
 <input type="hidden" name="item_meta[0]" value="" />
 <?php wp_nonce_field( 'frm_submit_entry_nonce', 'frm_submit_entry_' . $form->id ); ?>

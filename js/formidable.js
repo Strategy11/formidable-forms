@@ -1085,58 +1085,83 @@ function frmFrontFormJS(){
 		// loop through each calculation this field is used in
 		for ( var i = 0, l = len; i < l; i++ ) {
 
-			// Stop calculation if total field is conditionally hidden
-			if ( fieldIsConditionallyHidden( all_calcs.calc[ keys[i] ], triggerField.attr('name') ) ) {
-				continue;
+			// Proceed with calculation if total field is not conditionally hidden
+			if ( isTotalFieldConditionallyHidden( all_calcs.calc[ keys[i] ], triggerField.attr('name') ) === false ) {
+				doSingleCalculation( all_calcs, keys[i], vals, triggerField );
 			}
-
-			doSingleCalculation( all_calcs, keys[i], vals, triggerField );
 		}
 	}
 
-	/**
-	* Check if field (or its HTML parent) is hidden with conditional logic
-	*/
-	function fieldIsConditionallyHidden( calcDetails, triggerFieldName ) {
-		var field_id = calcDetails.field_id;
-		var form_id = calcDetails.form_id;
-		var hiddenFields = document.getElementById( 'frm_hide_fields_' + form_id).value;
-		if ( hiddenFields ) {
-			hiddenFields = JSON.parse( hiddenFields );
+	// Check if a total field is conditionally hidden
+	function isTotalFieldConditionallyHidden( calcDetails, triggerFieldName ) {
+		var hidden = false;
+		var fieldId = calcDetails.field_id;
+		var formId = calcDetails.form_id;
+
+		// Check if there are any conditionally hidden fields
+		var hiddenFields = getHiddenFields( formId );
+		if ( hiddenFields.length < 1 ) {
+			return hidden;
+		}
+
+		if ( calcDetails.inSection == 0 && calcDetails.inEmbedForm == 0 ) {
+			// Field is not in a section or embedded form
+			hidden = isNonRepeatingFieldConditionallyHidden( fieldId, hiddenFields );
+
 		} else {
-			return false;
+			// Field is in a section or embedded form
+			var repeatArgs = getRepeatArgsFromFieldName( triggerFieldName );
+
+			if ( isNonRepeatingFieldConditionallyHidden( fieldId, hiddenFields ) ) {
+				// Check standard field
+				hidden = true;
+			} else if ( isRepeatingFieldConditionallyHidden( fieldId, repeatArgs, hiddenFields ) ){
+				// Check repeating field
+				hidden = true;
+			} else if ( calcDetails.inSection != 0 && calcDetails.inEmbedForm != 0 ) {
+				// Check section in embedded form
+				hidden = isRepeatingFieldConditionallyHidden( calcDetails.inSection, repeatArgs, hiddenFields );
+			} else if ( calcDetails.inSection != 0 ) {
+				// Check section
+				hidden = isNonRepeatingFieldConditionallyHidden( calcDetails.inSection, hiddenFields);
+			} else if ( calcDetails.inEmbedForm != 0 ) {
+				// Check embedded form
+				hidden = isNonRepeatingFieldConditionallyHidden( calcDetails.inEmbedForm, hiddenFields);
+			}
 		}
 
-		var checkFieldId = field_id;
-
-		// If triggerField is repeating, assume total field is also repeating
-		if ( isRepeatingFieldByName( triggerFieldName ) ) {
-			var triggerFieldParts = triggerFieldName.replace('item_meta', '').replace( /\[/g, '').split( ']' );
-			checkFieldId = field_id + '-' + triggerFieldParts[0] + '-' + triggerFieldParts[1];
-		}
-
-		// If total field is a conditionally hidden (could be repeating or non-repeating)
-		if ( hiddenFields.indexOf( 'frm_field_' + checkFieldId + '_container' ) > -1 ) {
-			return true;
-		}
-
-		// If field is inside of section/embedded form which is hidden with conditional logic
-		var helpers = getHelpers( form_id );
-		if ( helpers && helpers[ field_id ] !== null && hiddenFields.indexOf( 'frm_field_' + helpers[ field_id ] + '_container' ) > -1 ) {
-			return true;
-		}
-
-		return false;
+		return hidden;
 	}
 
-	function isRepeatingFieldByName( fieldName ) {
-		var isRepeating = false;
-		var fieldNameParts = fieldName.split( '[' );
-		if ( fieldNameParts.length >= 4 ) {
-			isRepeating = true;
+	// Check if a non-repeating field is conditionally hidden
+	function isNonRepeatingFieldConditionallyHidden( fieldId, hiddenFields ) {
+		var htmlID = 'frm_field_' + fieldId + '_container';
+		return ( hiddenFields.indexOf( htmlID ) > -1 );
+	}
+
+	// Check if a repeating field is conditionally hidden
+	function isRepeatingFieldConditionallyHidden( fieldId, repeatArgs, hiddenFields ) {
+		var hidden = false;
+
+		if ( repeatArgs.sectionId ) {
+			var fieldRepeatId = 'frm_field_' + fieldId + repeatArgs.sectionId + repeatArgs.repeatRow + '_container';
+			hidden = ( hiddenFields.indexOf( fieldRepeatId ) > -1 );
 		}
 
-		return isRepeating;
+		return hidden;
+	}
+
+	// Get the section ID and repeat row from a field name
+	function getRepeatArgsFromFieldName( fieldName ) {
+		var repeatArgs = {sectionId:"", repeatRow:""};
+
+		var inputNameParts = fieldName.split( '][' );
+		if ( inputNameParts.length >= 3 ) {
+			repeatArgs.sectionId = '-' + inputNameParts[0].replace('item_meta[', '');
+			repeatArgs.repeatRow = '-' + inputNameParts[1];
+		}
+
+		return repeatArgs;
 	}
 
 	function doSingleCalculation( all_calcs, field_key, vals, triggerField ) {
@@ -1284,6 +1309,11 @@ function frmFrontFormJS(){
 		}
 
 		return triggerField;
+	}
+
+	function isRepeatingFieldByName( fieldName ) {
+		var fieldNameParts = fieldName.split( '][' );
+		return fieldNameParts.length >= 3;
 	}
 
 	function getCalcFieldId( field, all_calcs, vals ) {
@@ -2441,17 +2471,6 @@ function frmFrontFormJS(){
 		}
 
 		return fieldName;
-	}
-
-	function getHelpers( form_id ) {
-		var helpers = document.getElementById( 'frm_helpers_' + form_id ).value;
-		if ( helpers ) {
-			helpers = JSON.parse( helpers );
-		} else {
-			helpers = [];
-		}
-
-		return helpers;
 	}
 
 	// Get the input name of a specific field in a given row of a repeating section
