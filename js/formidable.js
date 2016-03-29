@@ -2682,6 +2682,9 @@ function frmFrontFormJS(){
 
 	return{
 		init: function(){
+			jQuery(document).off('submit.formidable','.frm-show-form');
+			jQuery(document).on('submit.formidable','.frm-show-form', frmFrontForm.submitForm);
+
 			jQuery(document).on('click', '.frm_trigger', toggleSection);
 			var $blankField = jQuery('.frm_blank_field');
 			if ( $blankField.length ) {
