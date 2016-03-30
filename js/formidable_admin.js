@@ -566,13 +566,14 @@ function frmAdminBuildJS(){
 			var field_type = jQuery("select[name='field_options[type_"+field_id+"]']").val();
 			var $fieldDesc = jQuery(document.getElementById('field_description_'+field_id));
 			if($fieldDesc.text() == frm_admin_js.desc){
+				var newDesc = '';
 				if ( field_type == 'email' ) {
-					$fieldDesc.text(frm_admin_js.enter_email);
-					jQuery('input[name^="field_options[description_'+ field_id +']"]').val(frm_admin_js.enter_email);
+					newDesc = frm_admin_js.enter_email;
 				} else {
-					$fieldDesc.text(frm_admin_js.enter_password);
-					jQuery('input[name^="field_options[description_'+ field_id +']"]').val(frm_admin_js.enter_password);
+					newDesc = frm_admin_js.enter_password;
 				}
+				$fieldDesc.text(newDesc);
+				jQuery('input[name="field_options[description_'+ field_id +']"]').val(newDesc);
 			}
 
 			var $confDesc = jQuery('.frm_ipe_field_conf_desc');
