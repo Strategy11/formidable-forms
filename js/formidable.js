@@ -2362,7 +2362,7 @@ function frmFrontFormJS(){
 						}
 						fieldID = this.name.replace('item_meta[', '').split(']')[2].replace('[', '');
 						if ( jQuery.inArray(fieldID, checked ) == -1 ) {
-							if ( this.id === false ) {
+							if ( this.id === false || this.id === '' ) {
 								return;
 							}
 							fieldObject = jQuery( '#' + this.id );
