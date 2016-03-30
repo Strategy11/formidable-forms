@@ -568,10 +568,10 @@ function frmAdminBuildJS(){
 			if($fieldDesc.text() == frm_admin_js.desc){
 				if ( field_type == 'email' ) {
 					$fieldDesc.text(frm_admin_js.enter_email);
-					jQuery('#field_'+field_id+'_inner_container input[type=hidden]').val(frm_admin_js.enter_email);
+					jQuery('input[name^="field_options[description_'+ field_id +']"]').val(frm_admin_js.enter_email);
 				} else {
 					$fieldDesc.text(frm_admin_js.enter_password);
-					jQuery('#field_'+field_id+'_inner_container input[type=hidden]').val(frm_admin_js.enter_password);
+					jQuery('input[name^="field_options[description_'+ field_id +']"]').val(frm_admin_js.enter_password);
 				}
 			}
 
@@ -917,22 +917,22 @@ function frmAdminBuildJS(){
 	}
 
 	function setIPEDesc(){ 
-	jQuery(this).editInPlace({
-		default_text:frm_admin_js.desc,
-		field_type:'textarea',textarea_rows:2,
-		callback:function(x,text){
-			jQuery(this).next('input').val(text);
-			var new_text = text || frm_admin_js.desc;
-			return new_text;
-		},
-		postclose:function(){
-			if(jQuery(this).html() == frm_admin_js.desc){
-				jQuery(this).addClass('frm-show-click');
-			}else{
-				jQuery(this).removeClass('frm-show-click');
+		jQuery(this).editInPlace({
+			default_text:frm_admin_js.desc,
+			field_type:'textarea',textarea_rows:2,
+			callback:function(x,text){
+				jQuery(this).next('input').val(text);
+				var new_text = text || frm_admin_js.desc;
+				return new_text;
+			},
+			postclose:function(){
+				if(jQuery(this).html() == frm_admin_js.desc){
+					jQuery(this).addClass('frm-show-click');
+				}else{
+					jQuery(this).removeClass('frm-show-click');
+				}
 			}
-		}
-	});
+		});
 	}
 
 	function setIPEOpts(){
