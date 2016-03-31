@@ -42,6 +42,62 @@ function frmFrontFormJS(){
 			.toggleClass('ui-icon-triangle-1-s ui-icon-triangle-1-e');
 	}
 
+	function loadUniqueTimeFields() {
+		if ( typeof __frmUniqueTimes === 'undefined' ) {
+			return;
+		}
+
+		var timeFields = __frmUniqueTimes;
+		for ( var i = 0; i < timeFields.length; i++ ) {
+			jQuery( document.getElementById( timeFields[i].dateID ) ).change( maybeTriggerUniqueTime );
+		}
+	}
+
+	function maybeTriggerUniqueTime() {
+		/*jshint validthis:true */
+		var timeFields = __frmUniqueTimes;
+		for ( var i = 0; i < timeFields.length; i++ ) {
+			if ( timeFields[i].dateID == this.id ) {
+				frmFrontForm.removeUsedTimes( this, timeFields[i].timeID );
+			}
+		}
+	}
+
+	function loadDateFields() {
+		if ( typeof __frmDatepicker === 'undefined' ) {
+			return;
+		}
+
+		var dateFields = __frmDatepicker;
+		for ( var i = 0; i < dateFields.length; i++ ) {
+			jQuery(document).on('focusin', dateFields[i].triggerID, triggerDateField );
+		}
+
+		loadUniqueTimeFields();
+	}
+
+	function triggerDateField() {
+		/*jshint validthis:true */
+		var dateFields = __frmDatepicker;
+		var id = this.id;
+		var idParts = id.split('-');
+		var lastPart = idParts.pop();
+		var altID = 'input[id^="'+ idParts.join('-') +'"]';
+
+		jQuery.datepicker.setDefaults(jQuery.datepicker.regional['']);
+
+		for ( var i = 0; i < dateFields.length; i++ ) {
+			if ( dateFields[i].triggerID == '#' + id || dateFields[i].triggerID == altID ) {
+
+				var opts = dateFields[i].options;
+				jQuery(this).datepicker( jQuery.extend(
+					jQuery.datepicker.regional[ dateFields[i].locale ],
+					opts
+				) );
+			}
+		}
+	}
+
 	// Remove the frm_transparent class from a single file upload field when it changes
 	// Hide the old file when a new file is uploaded
 	function showFileUploadText(){
@@ -1065,6 +1121,29 @@ function frmFrontFormJS(){
 		return prev;
 	}
 
+	function loadCustomInputMasks() {
+		if ( typeof __frmMasks === 'undefined' ) {
+			return;
+		}
+
+		var maskFields = __frmMasks;
+		for ( var i = 0; i < maskFields.length; i++ ) {
+			jQuery( maskFields[i].trigger ).attr( 'data-frmmask', maskFields[i].mask );
+		}
+	}
+
+	function triggerCalc(){
+		if ( typeof __FRMCALC === 'undefined' ) {
+			// there are no calculations on this page
+			return;
+		}
+
+		var triggers = __FRMCALC.triggers;
+		if ( triggers ) {
+			jQuery(triggers.join()).trigger({type:'change',selfTriggered:true});
+		}
+	}
+
 	function doCalculation(field_id, triggerField){
 		if ( typeof __FRMCALC === 'undefined' ) {
 			// there are no calculations on this page
@@ -1085,58 +1164,83 @@ function frmFrontFormJS(){
 		// loop through each calculation this field is used in
 		for ( var i = 0, l = len; i < l; i++ ) {
 
-			// Stop calculation if total field is conditionally hidden
-			if ( fieldIsConditionallyHidden( all_calcs.calc[ keys[i] ], triggerField.attr('name') ) ) {
-				continue;
+			// Proceed with calculation if total field is not conditionally hidden
+			if ( isTotalFieldConditionallyHidden( all_calcs.calc[ keys[i] ], triggerField.attr('name') ) === false ) {
+				doSingleCalculation( all_calcs, keys[i], vals, triggerField );
 			}
-
-			doSingleCalculation( all_calcs, keys[i], vals, triggerField );
 		}
 	}
 
-	/**
-	* Check if field (or its HTML parent) is hidden with conditional logic
-	*/
-	function fieldIsConditionallyHidden( calcDetails, triggerFieldName ) {
-		var field_id = calcDetails.field_id;
-		var form_id = calcDetails.form_id;
-		var hiddenFields = document.getElementById( 'frm_hide_fields_' + form_id).value;
-		if ( hiddenFields ) {
-			hiddenFields = JSON.parse( hiddenFields );
+	// Check if a total field is conditionally hidden
+	function isTotalFieldConditionallyHidden( calcDetails, triggerFieldName ) {
+		var hidden = false;
+		var fieldId = calcDetails.field_id;
+		var formId = calcDetails.form_id;
+
+		// Check if there are any conditionally hidden fields
+		var hiddenFields = getHiddenFields( formId );
+		if ( hiddenFields.length < 1 ) {
+			return hidden;
+		}
+
+		if ( calcDetails.inSection === 0 && calcDetails.inEmbedForm === 0 ) {
+			// Field is not in a section or embedded form
+			hidden = isNonRepeatingFieldConditionallyHidden( fieldId, hiddenFields );
+
 		} else {
-			return false;
+			// Field is in a section or embedded form
+			var repeatArgs = getRepeatArgsFromFieldName( triggerFieldName );
+
+			if ( isNonRepeatingFieldConditionallyHidden( fieldId, hiddenFields ) ) {
+				// Check standard field
+				hidden = true;
+			} else if ( isRepeatingFieldConditionallyHidden( fieldId, repeatArgs, hiddenFields ) ){
+				// Check repeating field
+				hidden = true;
+			} else if ( calcDetails.inSection !== 0 && calcDetails.inEmbedForm !== 0 ) {
+				// Check section in embedded form
+				hidden = isRepeatingFieldConditionallyHidden( calcDetails.inSection, repeatArgs, hiddenFields );
+			} else if ( calcDetails.inSection !== 0 ) {
+				// Check section
+				hidden = isNonRepeatingFieldConditionallyHidden( calcDetails.inSection, hiddenFields);
+			} else if ( calcDetails.inEmbedForm !== 0 ) {
+				// Check embedded form
+				hidden = isNonRepeatingFieldConditionallyHidden( calcDetails.inEmbedForm, hiddenFields);
+			}
 		}
 
-		var checkFieldId = field_id;
-
-		// If triggerField is repeating, assume total field is also repeating
-		if ( isRepeatingFieldByName( triggerFieldName ) ) {
-			var triggerFieldParts = triggerFieldName.replace('item_meta', '').replace( /\[/g, '').split( ']' );
-			checkFieldId = field_id + '-' + triggerFieldParts[0] + '-' + triggerFieldParts[1];
-		}
-
-		// If total field is a conditionally hidden (could be repeating or non-repeating)
-		if ( hiddenFields.indexOf( 'frm_field_' + checkFieldId + '_container' ) > -1 ) {
-			return true;
-		}
-
-		// If field is inside of section/embedded form which is hidden with conditional logic
-		var helpers = getHelpers( form_id );
-		if ( helpers && helpers[ field_id ] !== null && hiddenFields.indexOf( 'frm_field_' + helpers[ field_id ] + '_container' ) > -1 ) {
-			return true;
-		}
-
-		return false;
+		return hidden;
 	}
 
-	function isRepeatingFieldByName( fieldName ) {
-		var isRepeating = false;
-		var fieldNameParts = fieldName.split( '[' );
-		if ( fieldNameParts.length >= 4 ) {
-			isRepeating = true;
+	// Check if a non-repeating field is conditionally hidden
+	function isNonRepeatingFieldConditionallyHidden( fieldId, hiddenFields ) {
+		var htmlID = 'frm_field_' + fieldId + '_container';
+		return ( hiddenFields.indexOf( htmlID ) > -1 );
+	}
+
+	// Check if a repeating field is conditionally hidden
+	function isRepeatingFieldConditionallyHidden( fieldId, repeatArgs, hiddenFields ) {
+		var hidden = false;
+
+		if ( repeatArgs.sectionId ) {
+			var fieldRepeatId = 'frm_field_' + fieldId + repeatArgs.sectionId + repeatArgs.repeatRow + '_container';
+			hidden = ( hiddenFields.indexOf( fieldRepeatId ) > -1 );
 		}
 
-		return isRepeating;
+		return hidden;
+	}
+
+	// Get the section ID and repeat row from a field name
+	function getRepeatArgsFromFieldName( fieldName ) {
+		var repeatArgs = {sectionId:"", repeatRow:""};
+
+		var inputNameParts = fieldName.split( '][' );
+		if ( inputNameParts.length >= 3 ) {
+			repeatArgs.sectionId = '-' + inputNameParts[0].replace('item_meta[', '');
+			repeatArgs.repeatRow = '-' + inputNameParts[1];
+		}
+
+		return repeatArgs;
 	}
 
 	function doSingleCalculation( all_calcs, field_key, vals, triggerField ) {
@@ -1284,6 +1388,11 @@ function frmFrontFormJS(){
 		}
 
 		return triggerField;
+	}
+
+	function isRepeatingFieldByName( fieldName ) {
+		var fieldNameParts = fieldName.split( '][' );
+		return fieldNameParts.length >= 3;
 	}
 
 	function getCalcFieldId( field, all_calcs, vals ) {
@@ -2253,7 +2362,7 @@ function frmFrontFormJS(){
 						}
 						fieldID = this.name.replace('item_meta[', '').split(']')[2].replace('[', '');
 						if ( jQuery.inArray(fieldID, checked ) == -1 ) {
-							if ( this.id === false ) {
+							if ( this.id === false || this.id === '' ) {
 								return;
 							}
 							fieldObject = jQuery( '#' + this.id );
@@ -2441,17 +2550,6 @@ function frmFrontFormJS(){
 		}
 
 		return fieldName;
-	}
-
-	function getHelpers( form_id ) {
-		var helpers = document.getElementById( 'frm_helpers_' + form_id ).value;
-		if ( helpers ) {
-			helpers = JSON.parse( helpers );
-		} else {
-			helpers = [];
-		}
-
-		return helpers;
 	}
 
 	// Get the input name of a specific field in a given row of a repeating section
@@ -2663,6 +2761,9 @@ function frmFrontFormJS(){
 
 	return{
 		init: function(){
+			jQuery(document).off('submit.formidable','.frm-show-form');
+			jQuery(document).on('submit.formidable','.frm-show-form', frmFrontForm.submitForm);
+
 			jQuery(document).on('click', '.frm_trigger', toggleSection);
 			var $blankField = jQuery('.frm_blank_field');
 			if ( $blankField.length ) {
@@ -2692,6 +2793,18 @@ function frmFrontFormJS(){
 			jQuery(document).on('focusin', 'input[data-frmmask]', function(){
 				jQuery(this).mask( jQuery(this).data('frmmask').toString() );
 			});
+
+			if ( typeof __frmChosen !== 'undefined' ) {
+				jQuery('.frm_chzn').chosen( __frmChosen );
+			}
+
+			if ( typeof __frmHideFields !== 'undefined' ) {
+				frmFrontForm.hideCondFields( __frmHideFields );
+			}
+
+			if ( typeof __frmCheckFields !== 'undefined' ) {
+				frmFrontForm.checkDependent( __frmCheckFields );
+			}
 
 			jQuery(document).on('change', '.frm-show-form input[name^="item_meta"], .frm-show-form select[name^="item_meta"], .frm-show-form textarea[name^="item_meta"]', maybeCheckDependent);
 			
@@ -2724,6 +2837,10 @@ function frmFrontFormJS(){
 				}
 			});
 
+			loadDateFields();
+			loadCustomInputMasks();
+			triggerCalc();
+
 			// Add fallbacks for the beloved IE8
 			addIndexOfFallbackForIE8();
 			addTrimFallbackForIE8();
@@ -2732,8 +2849,21 @@ function frmFrontFormJS(){
 		},
 
 		submitForm: function(e){
-			e.preventDefault();
 			var object = this;
+
+			var classList = object.classList;
+			if ( classList ) {
+				var isPro = classList.contains('frm_pro_form');
+				if ( ! isPro ) {
+					return;
+				}
+			}
+
+			if ( jQuery('body').hasClass('wp-admin') ) {
+				return;
+			}
+
+			e.preventDefault();
 			var errors = frmFrontForm.validateFormSubmit( object );
 
 			if ( Object.keys(errors).length === 0 ) {
@@ -2849,7 +2979,6 @@ function frmFrontFormJS(){
 		},
 
 		hideCondFields: function(ids){
-			ids = JSON.parse(ids);
 			var len = ids.length;
 			for ( var i = 0, l = len; i < l; i++ ) {
                 var container = document.getElementById('frm_field_'+ ids[i] +'_container');
@@ -2863,7 +2992,6 @@ function frmFrontFormJS(){
 		},
 
 		checkDependent: function(ids){
-			ids = JSON.parse(ids);
 			var len = ids.length;
             var reset = 'reset';
 			for ( var i = 0, l = len; i < l; i++ ) {
@@ -2886,7 +3014,7 @@ function frmFrontFormJS(){
 		},
 		
 		/* Time fields */
-		removeUsedTimes: function(obj, timeField){
+		removeUsedTimes: function( obj, timeField ) {
 			var e = jQuery(obj).parents('form:first').find('input[name="id"]');
 			jQuery.ajax({
 				type:'POST',
