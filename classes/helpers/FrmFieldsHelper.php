@@ -174,7 +174,7 @@ class FrmFieldsHelper {
 			'unique_msg' => array( 'full' => $default_settings['unique_msg'], 'part' => sprintf( __('%s must be unique', 'formidable' ), $field_name ) ),
 			'invalid'   => array( 'full' => __( 'This field is invalid', 'formidable' ), 'part' => sprintf( __('%s is invalid', 'formidable' ), $field_name ) ),
 			'blank'     => array( 'full' => $frm_settings->blank_msg, 'part' => $frm_settings->blank_msg ),
-			'conf_msg'  => array( 'full' => $conf_msg, 'part' => $conf_msg );
+			'conf_msg'  => array( 'full' => $conf_msg, 'part' => $conf_msg ),
 		);
 
 		$msg = FrmField::get_option( $field, $error );
