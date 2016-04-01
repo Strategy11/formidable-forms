@@ -10,7 +10,7 @@ class FrmAppHelper {
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '2.0.25';
+	public static $plug_version = '2.0.26b1';
 
     /**
      * @since 1.07.02
@@ -1682,7 +1682,7 @@ class FrmAppHelper {
      * echo The javascript to open and highlight the Formidable menu
      */
 	public static function maybe_highlight_menu( $post_type ) {
-        global $post, $pagenow;
+        global $post;
 
         if ( isset($_REQUEST['post_type']) && $_REQUEST['post_type'] != $post_type ) {
             return;
