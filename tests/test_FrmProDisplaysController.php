@@ -62,71 +62,6 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		$single_result = strpos( $single_view, 'Favorite colors' );
 		$this->assertTrue( $single_result !== false, 'Single entry View with old settings is not compatible with current version.');
 	}
-	
-	function _test_detail_param(){
-		// Dynamic
-		global $_GET;
-
-		// Check keys
-		$_GET['entry'] = $_GET['detail'] = 'thx9u15';
-
-		self::_test_all_entries_view_with_entry_param( 'key' );
-		self::_test_dynamic_view_with_entry_param( 'key' );
-		//self::_test_calendar_view_with_entry_param( 'key' );
-		//self::_test_single_view_with_entry_param( 'key' );
-		
-		$dynamic_view = get_page_by_title( 'Single Entry', OBJECT, 'frm_display' );
-		update_post_meta( $dynamic_view->ID, 'frm_entry_id', 60417 );
-
-		// Check IDs
-		$_GET['entry'] = $_GET['detail'] = 60422;
-
-		/*$view = do_shortcode( '[display-frm-data id="dynamic-view"]' );
-		
-		// Calendar
-		$view = do_shortcode( '[display-frm-data id="all-entries"]' );
-		
-		// Single
-		$view = do_shortcode( '[display-frm-data id="all-entries"]' );*/
-	}
-
-	/**
-	* Make sure all entries are still retrieved with All Entries View even if entry parameter is in the URL
-	*/
-	function _test_all_entries_view_with_entry_param( $detail_type ){
-		// Get all the entries in the form
-		$where['form_key'] = 'all_field_types';
-		$total_entries = count( FrmEntry::getAll( $where ) );
-
-		// Get the All Entries View Content
-		$all_entries_view = do_shortcode( '[display-frm-data id="all-entries"]' );
-		$entry_num = substr_count( $all_entries_view, 'All Entries' );
-
-		$this->assertTrue( $total_entries == $entry_num, 'All Entries View is affected by entry ' . $detail_type . ' parameter' );
-	}
-	
-	function _test_dynamic_view_with_entry_param( $detail_type ) {
-		if ( $detail_type == 'key' ) {
-			$col_key = 'display_key';
-		} else {
-			$col_key = 'id';
-		}
-
-		// Set the detail page slug to use the entry key or ID
-		$dynamic_view = get_page_by_title( 'Dynamic View', OBJECT, 'frm_display' );
-		update_post_meta( $dynamic_view->ID, 'frm_type', $col_key );
-
-		$dynamic_view_content = do_shortcode( '[display-frm-data id="dynamic-view"]' );
-
-		$is_showing_list_page = strpos( $dynamic_view_content, 'Listing Page' );
-		$this->assertTrue( $is_showing_list_page === false, 'Dynamic view with entry ' . $detail_type . ' parameter is showing listing page instead of detail page.' );
-
-		$number_of_entries = substr_count( $dynamic_view_content, 'Favorite dessert' );
-		$this->assertTrue( $number_of_entries == 1, 'Dynamic view with entry ' . $detail_type . 'parameter is showing more than one entry.');
-
-		$is_showing_correct_entry = strpos( $dynamic_view_content, 'Steph' );
-		$this->assertTrue( $is_showing_correct_entry !== false, 'Dynamic view with entry' . $detail_type . ' parameter is getting the wrong entry.');
-	}
 
 	/**
 	 * Test View with a password set
@@ -263,7 +198,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * Entry parameter contains a valid entry ID
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
-	function test_detail_view_with_get_param_entry_filter_valid_id() {
+	function test_detail_view_with_get_param_entry_old_filter_valid_id() {
 		$single_view = self::_set_up_single_view_with_filter( '[get param=entry old_filter=1]' );
 
 		// Set valid entry ID parameter
@@ -279,7 +214,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * Entry parameter contains an invalid entry ID
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
-	function test_detail_view_with_get_param_entry_filter_invalid_id() {
+	function test_detail_view_with_get_param_entry_old_filter_invalid_id() {
 		$single_view = self::_set_up_single_view_with_filter( '[get param=entry old_filter=1]' );
 
 		// Set invalid entry ID parameter
@@ -295,7 +230,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * entry parameter contains entry key
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
-	function test_detail_view_with_get_param_entry_filter_entry_key() {
+	function test_detail_view_with_get_param_entry_old_filter_entry_key() {
 		$single_view = self::_set_up_single_view_with_filter( '[get param=entry old_filter=1]' );
 
 		// Set invalid entry ID parameter
@@ -1817,7 +1752,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		$dynamic_view = self::reset_view( 'dynamic-view' );
 		$dynamic_view->frm_page_size = 2;
 		$_GET['frm-page-'. $dynamic_view->ID] = 3;
-		$d = self::get_default_args( $dynamic_view, array( 'frm_pagination_cont', 'frm_no_entries' ), array( 'Jamie', 'Steph', 'Steve' ) );
+		$d = self::get_default_args( $dynamic_view, array( 'frm_no_entries' ), array( 'Jamie', 'Steph', 'Steve' ) );
 		self::run_get_display_data_tests( $d, 'view on page 3 with no entries showing' );
 	}
 
@@ -2462,8 +2397,8 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	}
 
 	function get_view_by_key( $view_key ) {
-		$dynamic_view_id = FrmProDisplay::get_id_by_key( $view_key );
-		return FrmProDisplay::getOne( $dynamic_view_id, false, true );
+		$view_id = FrmProDisplay::get_id_by_key( $view_key );
+		return FrmProDisplay::getOne( $view_id, false, true );
 	}
 
 	function add_filter_to_view( &$dynamic_view, $filter_args ) {
@@ -2553,5 +2488,54 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		if ( $expected_count > 0 ) {
 			$this->assertTrue( $frm_vars['forms_loaded'][ $expected_count - 1 ] === true, 'frm_vars is not updated as expected with Views' );
 		}
+	}
+
+	/**
+	 * Test the query size for a View with no filters
+	 *
+	 * @covers FrmProDisplaysController::get_where_query_for_view_listing_page
+	 */
+	function test_query_size_for_no_filter_view() {
+		$view = self::get_view_by_key( 'dynamic-view' );
+		$atts = self::get_default_atts_for_view( $view );
+
+		// Test with no filters at all
+		$where = self::_do_private_return_method( 'get_where_query_for_view_listing_page', array( $view, $atts ) );
+
+		// There should be no it.id value set in $where clause
+		$this->assertFalse( isset( $where['it.id'] ), 'Entry IDs are being added to the where clause (adding unnecessary bulk).' );
+
+	}
+
+	/**
+	 * Test the query size for a View with no only the draft filter
+	 *
+	 * @covers FrmProDisplaysController::get_where_query_for_view_listing_page
+	 */
+	function test_query_size_for_draft_filter_view() {
+		$view = self::get_view_by_key( 'dynamic-view' );
+		$atts = self::get_default_atts_for_view( $view );
+
+		// Add single draft filter (is_draft = 0)
+		$filter_args = array( array( 'type' => 'col', 'col' => 'is_draft', 'op' => '=', 'val' => '0' ), );
+		self::add_filter_to_view( $view, $filter_args );
+
+		// Get where query
+		$where = self::_do_private_return_method( 'get_where_query_for_view_listing_page', array( $view, $atts ) );
+
+		// There should be no it.id value set in $where clause
+		$this->assertFalse( isset( $where['it.id'] ), 'Entry IDs are being added to the where clause with draft filter only (adding unnecessary bulk).' );
+	}
+
+	function get_default_atts_for_view( $view ) {
+		$args = array( array( 'entry_id' => '' ), $view );
+		return self::_do_private_return_method( 'get_atts_for_view', $args );
+	}
+
+	function _do_private_return_method( $method_name, $args ){
+		$class = new ReflectionClass( 'FrmProDisplaysController' );
+		$method = $class->getMethod( $method_name );
+		$method->setAccessible( true );
+		return $method->invokeArgs( null, $args );
 	}
 }
