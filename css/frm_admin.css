@@ -56,7 +56,7 @@ ul.frm_form_nav li.last > a{
 	color:#333;
 }
 .frm_form_nav .frm-dropdown-menu li {
-	float:none;	
+	float:none;
 }
 .frm_form_nav .frm-dropdown-menu a{
 	font-size:12px;
@@ -552,8 +552,8 @@ form label.frm_primary_label input{font-size:12px;}
 .frm_catlevel_2, .frm_catlevel_3, .frm_catlevel_4, .frm_catlevel_5{margin-left:18px;}
 .frm_form_fields input.auto_width, .frm_form_fields select.auto_width, .frm_form_fields textarea.auto_width{width:auto;}
 
-.frm_form_fields input:focus, .frm_form_fields select:focus, 
-.frm_form_fields textarea:focus, .frm_focus_field input{background-color:#fff;border-color:#ddd;}	
+.frm_form_fields input:focus, .frm_form_fields select:focus,
+.frm_form_fields textarea:focus, .frm_focus_field input{background-color:#fff;border-color:#ddd;}
 
 .frm_radio,
 .frm_checkbox{
@@ -656,7 +656,7 @@ label input[type="checkbox"], label input[type="radio"]{vertical-align:baseline;
 #wpbody-content #form_global_settings .frmicon.icon32 {background-position: -290px 0 !important;}
 
 .frm_postbox_icon {
-	margin: -6px 0 0 -10px; 
+	margin: -6px 0 0 -10px;
 
 }
 
@@ -788,8 +788,8 @@ textarea.inplace_field{
 .frm_ipe_field_key,
 .frm_field_key{
 	text-overflow:ellipsis;
-	white-space:nowrap; 
-	width:7em; 
+	white-space:nowrap;
+	width:7em;
 	overflow:hidden;
 	float:right;
 	background-color: #FFF !important;
@@ -799,8 +799,8 @@ textarea.inplace_field{
 	cursor:text;
 }
 .frm_ipe_field_key,
-.frm_field_key { 
-	float: none;   
+.frm_field_key {
+	float: none;
 	margin: 1px;
   	padding: 3px 5px;
 	width:14em;
@@ -816,7 +816,7 @@ textarea.inplace_field{
 	background-color:transparent !important;
 	border:none;
 	padding:0;
-	box-shadow:none;	
+	box-shadow:none;
 }
 .edit_field_type_break input.inplace_field,
 .edit_field_type_break input.inplace_field:focus{
@@ -886,7 +886,7 @@ table td, .form-table tr td{vertical-align:top;}
 
 .subform_section{
 	margin:25px;
-	
+
 }
 
 .subform_section,
@@ -929,7 +929,7 @@ table td, .form-table tr td{vertical-align:top;}
 	width:300px;
 }
 .frm_sorting .frm_rte textarea{
-	width:653px;background:#fff; margin:1px 0; border:1px solid #dfdfdf; border-top:none; 
+	width:653px;background:#fff; margin:1px 0; border:1px solid #dfdfdf; border-top:none;
 	-moz-border-radius:0; -webkit-border-radius:0; border-radius:0;
 	float:none !important;
 }
@@ -1058,17 +1058,17 @@ select.frm_cancelnew, input.frm_enternew{width:175px;}
 /*@-webkit-keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
 @-moz-keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
 @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }*/
- 
+
 .frm-fade-in {
     opacity:0;  /* make things invisible upon start */
     -webkit-animation:fadeIn ease-in 1;  /* call our keyframe named fadeIn, use animattion ease-in and repeat it only 1 time */
     -moz-animation:fadeIn ease-in 1;
     animation:fadeIn ease-in 1;
- 
+
     -webkit-animation-fill-mode:forwards;  /* this makes sure that after animation is done we remain at the last keyframe value (opacity: 1)*/
     -moz-animation-fill-mode:forwards;
     animation-fill-mode:forwards;
- 
+
     -webkit-animation-duration:0.5s;
     -moz-animation-duration:0.5s;
     animation-duration:0.5s;
@@ -1465,10 +1465,14 @@ span.howto{display:inline;}
     overflow:auto;
     border-right: 2px solid #DEDEDE;
     padding-right:10px;
+		padding-left:10px;
     margin:0;
 }
 .frm_prepop li{
     margin: 0 0 3px;
+}
+.frm_prepop:first-child {
+    margin-top: 2px;
 }
 
 .frm_prepop li a{
@@ -1500,7 +1504,7 @@ span.howto{display:inline;}
 .frm_form_fields div.star-rating-readonly a{cursor:default !important}
 .frm_form_fields div.star-rating{overflow:hidden !important}
 
-/* */ 
+/* */
 #frm_form_editor_container #frm_form_key_box{width:13em;max-width:30%}
 #frm_form_editor_container #frm_form_desc{width:70%;}
 #frm_form_editor_container .ui-widget-content{display:none; padding:15px;}
@@ -1796,7 +1800,7 @@ table td.frm_left_label{
 .frm_sorting li.ui-state-default.selected.edit_field_type_divider .divider_section_only,
 .frm_update_msg{
 	padding:5px;
-	background-color: #fbfdff; 
+	background-color: #fbfdff;
 	border:1px dashed #d0e9ff;
 }
 .start_divider.frm_sorting li.ui-state-default.frm_not_divider:hover {
@@ -1809,7 +1813,7 @@ table td.frm_left_label{
 .frm_38_trigger .frm_sorting > li.ui-state-default.edit_field_type_divider.selected .divider_section_only,
 .frm_38_trigger .frm_sorting > li.ui-state-default.edit_field_type_divider .divider_section_only:hover,
 .frm_38_trigger .frm_update_msg{
-	box-shadow:0 1px 1px rgba(0, 0, 0, 0.04);	
+	box-shadow:0 1px 1px rgba(0, 0, 0, 0.04);
 }
 
 .no_repeat_section .frm_sorting > li.ui-state-default.edit_field_type_end_divider:hover,
@@ -2183,19 +2187,19 @@ iframe#dyncontent_ifr{min-height:150px;}
   width: 17px;
   height: 17px;
   margin: -8px 0 0 -8px;
-  overflow: hidden; 
+  overflow: hidden;
   background: url(../images/styler/marker.png) no-repeat;
 }
-				
+
 /* ---------------------------------------------------------------
 Clearfix
 --------------------------------------------------------------- */
 span.clear{display:block;}
 .clearfix:after {
-    content: "."; 
-    display: block; 
-    height: 0; 
-    clear: both; 
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
     visibility: hidden;
 }
 
@@ -2251,7 +2255,7 @@ Responsive Design
 @media print,
   (-o-min-device-pixel-ratio: 5/4),
   (-webkit-min-device-pixel-ratio: 1.25),
-  (min-resolution: 120dpi)  { 
+  (min-resolution: 120dpi)  {
 		#wpbody-content .frmicon.icon32, .icon32-posts-frm_display {
 			background: url(../images/form_32_sprite-2x.png) no-repeat !important;
 			background-size: 325px 33px !important;
@@ -2317,8 +2321,8 @@ Responsive Design
 /* PRINT */
 @media print {
 #adminmenuwrap, #adminmenuback, #wphead, #button_bar, #submitdiv, .button-secondary,
-#screen-metas, #screen-meta-links, #footer, #wpfooter, .inner-sidebar, .frm_form_nav, .icon32, 
-.frm_flash_graph, .frm_no_print, object{visibility:hidden;display:none !important;}	
+#screen-metas, #screen-meta-links, #footer, #wpfooter, .inner-sidebar, .frm_form_nav, .icon32,
+.frm_flash_graph, .frm_no_print, object{visibility:hidden;display:none !important;}
 #poststuff #post-body.columns-2{margin-right:0;}
 .widget, .postbox, .stuffbox, .postbox h3{border-width:0 !important;border-color:#fff;}
 .postbox{background:#fff !important;border:none;position:static;}
