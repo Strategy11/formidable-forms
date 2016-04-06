@@ -1910,6 +1910,8 @@ function frmFrontFormJS(){
 					if(entryIdField.length){
 						jQuery(document.getElementById('frm_edit_'+ entryIdField.val())).find('a').addClass('frm_ajax_edited').click();
 					}
+
+					checkFieldsOnPage();
 				}else{
 					jQuery(object).find('input[type="submit"], input[type="button"]').removeAttr('disabled');
 					jQuery(object).find('.frm_ajax_loading').removeClass('frm_loading_now');
@@ -2486,6 +2488,24 @@ function frmFrontFormJS(){
 	}
 
 	/* General Helpers */
+	function checkFieldsOnPage(){
+		loadDateFields();
+		loadCustomInputMasks();
+		triggerCalc();
+
+		if ( typeof __frmChosen !== 'undefined' ) {
+			jQuery('.frm_chzn').chosen( __frmChosen );
+		}
+
+		if ( typeof __frmHideFields !== 'undefined' ) {
+			frmFrontForm.hideCondFields( __frmHideFields );
+		}
+
+		if ( typeof __frmCheckFields !== 'undefined' ) {
+			frmFrontForm.checkDependent( __frmCheckFields );
+		}
+	}
+
 	function fadeOut($remove){
 		$remove.fadeOut('slow', function(){
 			$remove.remove();
@@ -2794,18 +2814,6 @@ function frmFrontFormJS(){
 				jQuery(this).mask( jQuery(this).data('frmmask').toString() );
 			});
 
-			if ( typeof __frmChosen !== 'undefined' ) {
-				jQuery('.frm_chzn').chosen( __frmChosen );
-			}
-
-			if ( typeof __frmHideFields !== 'undefined' ) {
-				frmFrontForm.hideCondFields( __frmHideFields );
-			}
-
-			if ( typeof __frmCheckFields !== 'undefined' ) {
-				frmFrontForm.checkDependent( __frmCheckFields );
-			}
-
 			jQuery(document).on('change', '.frm-show-form input[name^="item_meta"], .frm-show-form select[name^="item_meta"], .frm-show-form textarea[name^="item_meta"]', maybeCheckDependent);
 			
 			jQuery(document).on('click', '.frm-show-form input[type="submit"], .frm-show-form input[name="frm_prev_page"], .frm-show-form .frm_save_draft', setNextPage);
@@ -2837,9 +2845,7 @@ function frmFrontFormJS(){
 				}
 			});
 
-			loadDateFields();
-			loadCustomInputMasks();
-			triggerCalc();
+			checkFieldsOnPage();
 
 			// Add fallbacks for the beloved IE8
 			addIndexOfFallbackForIE8();
