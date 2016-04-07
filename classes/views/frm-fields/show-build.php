@@ -1,8 +1,8 @@
 <?php if ( in_array( $display['type'], array( 'text', 'website', 'email', 'url' ) ) ) { ?>
-    <input type="text" name="<?php echo esc_attr( $field_name ) ?>" id="<?php echo esc_attr( $html_id ) ?>" value="<?php echo esc_attr( $field['default_value'] ); ?>" <?php echo ( FrmField::is_option_true( $field, 'size' ) ) ? esc_attr( 'style="width:'. $field['size'] . ( is_numeric($field['size']) ? 'px' : '') .';"' ) : ''; ?> class="dyn_default_value" />
+	<input type="text" name="<?php echo esc_attr( $field_name ) ?>" id="<?php echo esc_attr( $html_id ) ?>" value="<?php echo esc_attr( $field['default_value'] ); ?>" <?php echo ( FrmField::is_option_true( $field, 'size' ) ) ? esc_attr( 'style="width:' . $field['size'] . ( is_numeric( $field['size'] ) ? 'px' : '') . ';"' ) : ''; ?> class="dyn_default_value" />
 <?php } else if ( $field['type'] == 'textarea' ) { ?>
     <textarea name="<?php echo esc_attr( $field_name ) ?>" <?php
-    echo ( FrmField::is_option_true( $field, 'size' ) ) ? esc_attr( 'style="width:'. $field['size'] . ( is_numeric($field['size']) ? 'px' : '') .';"' ) : '';
+		echo ( FrmField::is_option_true( $field, 'size' ) ) ? esc_attr( 'style="width:' . $field['size'] . ( is_numeric( $field['size'] ) ? 'px' : '' ) . ';"' ) : '';
     ?> rows="<?php echo esc_attr( $field['max'] ); ?>" id="<?php echo esc_attr( $html_id ) ?>" class="dyn_default_value"><?php echo FrmAppHelper::esc_textarea(force_balance_tags($field['default_value'])); ?></textarea>
 
 <?php
@@ -14,7 +14,7 @@
     } else {
         do_action('frm_add_multiple_opts_labels', $field); ?>
         <ul id="frm_field_<?php echo esc_attr( $field['id'] ) ?>_opts" class="frm_sortable_field_opts frm_clear<?php echo (count($field['options']) > 10) ? ' frm_field_opts_list' : ''; ?>">
-        <?php include(FrmAppHelper::plugin_path() .'/classes/views/frm-fields/radio.php'); ?>
+			<?php include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/radio.php' ); ?>
         </ul>
     <?php
     }
@@ -38,6 +38,7 @@
         <span id="frm_clear_on_focus_<?php echo esc_attr( $field['id'] ) ?>" class="frm_clear_on_focus frm-show-click">
 		<?php FrmFieldsHelper::show_default_blank_js( $field['default_blank'] ); ?>
         </span>
+		<input type="hidden" name="field_options[default_blank_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['default_blank'] ) ?>" />
     <?php } ?>
     <div class="clear"></div>
     <div class="frm-show-click frm_small_top_margin">
@@ -62,4 +63,5 @@
 <?php
 } else {
     do_action( 'frm_display_added_fields', $field );
+	do_action( 'frm_display_added_' . $field['type'] . '_field', $field );
 }

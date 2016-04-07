@@ -4,7 +4,7 @@ Donate link: http://formidablepro.com/donate
 Tags: contact form, contact, custom form, database, email, feedback, form, forms, poll, Post, captcha, spam, survey, template, widget, multisite, form builder, form creator, form manager
 Requires at least: 3.7
 Tested up to: 4.4
-Stable tag: 2.0.19
+Stable tag: 2.0.25
 
 Beautiful forms in 60 seconds. The WordPress form builder that enables you to create forms with a simple drag-and-drop interface and in-place editing.
 
@@ -89,6 +89,104 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 [See more FAQs](http://formidablepro.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 2.0.25 =
+* Add an option to allow multiple recaptchas. This is off by default to avoid new conflicts.
+* Use the recaptcha size setting when displaying multiple recaptchas per page.
+* Add frm_after_field_is_imported and frm_prepare_single_field_for_duplication hooks
+* Add property="stylesheet" to the stylehsheets when HTML5 is enabled
+* **Pro Features:** *
+* Redirect to post when View detail page is linked to post
+* Make sure entry ID is unique filter does not get used
+* Make sure limit applies to a View's pagination
+* Add dynamic field to frm_data_sort hook
+* Add a message when the file upload field is included before a page break
+* Fix the issue with the frm_first class applying to the confirmation field
+* Remove the invalid email message used when the email confirmation doesn't match
+
+= 2.0.24 =
+* Add option to use the dark reCaptcha
+* Show a helpful error message when recaptcha communication fails
+* Fix the clear on focus setting to not switch to the default blank
+* **Pro Features:** *
+* Validate recaptcha during the javascript validation checks
+* Make sure required credit card fields are required
+* Add option to removes names from credit card fields to prevent the values from being posted to the server (most secure)
+* Don't require address fields when conditionally hidden
+* Exclude linked dynamic fields from calculation fields dropdown since they aren't functional
+* Improve third-party shortcode filtering in Views
+* Ignore View filters with no value selected for where field
+* Fix the file upload background color setting
+* Include a flag on the field to indicate if it is inside a section or not
+
+= 2.0.23 =
+* Add support for multiple reCaptchas on a page
+* Make sure the screen options for the form listings only shows when needed
+* Make sure a value is selected when it includes an &
+* Load grid CSS on the back-end entries and form builder pages
+* Allow transparent background color on fields and form
+* Don't update clear on click options until whole form is saved
+* Don't force an array to be a string before going through get_display_value function
+* Added frm_trigger_create_action hook to alter action triggering
+* Added frm_csv_format hook for changing the exported CSV format
+* Added frm_is_field_required hook for allowing a field to be conditionally required
+* Added frm_field_options_to_update hook for setting more field options to update
+* Added frm_display_FIELDTYPE_value_custom hook
+* Added frm_get_FIELDTYPE_display_value
+* Added frm_csv_field_columns hook. Once the columns are added, if a field value is an array, it will automatically fill added csv columns
+* **Pro Features:** *
+* Added straight up client-side validation
+* Added Credit card and Address field types. Enable the Credit card field with add_filter( 'frm_include_credit_card', '__return_true' );
+* Allow actions to be triggered when a draft is saved
+* Allow free text in user id field filtering in views
+* Improved the unique filter in Views
+* Add Entry ID filter to all existing single entry Views instead of always checking for the entry param in the url
+* Allow "any" for the number step
+* Updated Chosen script to 1.5.1
+* Correctly check for multisite sitewide activation
+* Fixed the problem with the file upload attachment option not staying checked
+* Fixed filtering by entry ID and fields together in Views
+* Make sure the limit setting doesn't affect calendar Views, and show empty calendar for Calendar views with no entries
+* Make sure closing shortcodes in After Content are filtered
+* Make sure Dynamic List fields show up in default html email
+* Make sure we are jumping to the first field in the form after validation instead of the field with the lowest id
+* Fix field ID issue in repeating sections across pages
+
+= 2.0.22 =
+* Add an upgrade banner when affiliate links are active
+* Add permission checks in addition to nonce for several actions for extra security
+* Don't allow javascript to be saved in field choices
+* Include the admin_url params inside the function to resolve a conflict with WPML
+* Prevent XML breaking with US character
+* Fix rand() error with float some users are seeing with PHP7
+* **Pro Features:** *
+* Add the option to automatically delete files when a file is replaced, and and entry is deleted
+* Allow a prefix and/or suffix along with the [auto_id] shortcode
+* Add is_draft shortcode for views. This allows [is_draft], [if is_draft equals="1"]-draft-[/if is_draft], and [if is_draft equals="0"]-complete-[/if is_draft]
+* Add frm_no_entries_message filter to adjust the output when there are no entries found
+* Add frm_search_for_dynamic_text hook for searching numeric values in Dynamic fields
+* Add the saved value into the array and json response. The entries fetched using FrmEntriesController::show_entry_shortcode were only returning the displayed value. This adds the saved value to the array as well. This covers user id, dynamic fields, radio, dropdown, and checkbox fields anytime the saved and displayed values are different.
+* Add filter on add/remove fields to allow translations
+* Default new number fields to use "any" step
+* Fix conditional logic dependent on a paragraph field
+* Fix date fields inside form loaded with in-place-edit
+
+= 2.0.21 =
+* Add a timestamp to the css file instead of plugin version number to improve issues with styling caching
+* Add pro tips & upgrade calls
+* Fix bug with importing old forms with no custom style
+* **Pro Features:** *
+* Remove autoinsertion options from the view settings. Any views that were set to be inserted automatically will have their shortcodes saved onto that page.
+* Allow the delete link to work after an ajax load
+* Apply styling settings to HTML fields
+* Randomize entry key on CSV import
+* Make sure the old transient doesn't delay automatic update
+* Allow forced plugin update check if it hasn't been forced before
+* Fix CSV import form dropdown with only 1 item
+* Fix bug with importing data in embed form fields
+* Fix time_ago issue with blank value
+* Fix missing pro license message to link to global settings
+* Fix a fatal error when a non-Site Admin visits the Global settings page in multisite
+
 = 2.0.20 =
 * Added more styling options: box-shadow, font-weight, Form Title, and Form Description
 * Fixed a couple issues with activating and deactivating licences

@@ -4,7 +4,7 @@
 
 	<p><?php printf(__( 'Easily change which template your forms are using by making changes below.', 'formidable' ), '<a href="?page=formidable-styles&frm_action=new_style">', '</a>'); ?></p>
 
-	<?php include(FrmAppHelper::plugin_path() .'/classes/views/shared/errors.php'); ?>
+	<?php include( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' ); ?>
 
 	<div id="menu-locations-wrap">
 	<form method="post">
@@ -33,7 +33,9 @@
 					    <input type="hidden" name="prev_style[<?php echo esc_attr( $form->id ) ?>]" value="<?php echo esc_attr( $this_style ) ?>" />
 					    <select name="style[<?php echo esc_attr( $form->id ) ?>]">
          		            <?php foreach ( $styles as $s ) { ?>
-         		            <option value="<?php echo esc_attr( $s->ID ) ?>" <?php selected( $s->ID, $this_style ) ?>><?php echo esc_html( $s->post_title . ( empty($s->menu_order) ? '' : ' ('. __( 'default', 'formidable' ) .')' ) ) ?></option>
+								<option value="<?php echo esc_attr( $s->ID ) ?>" <?php selected( $s->ID, $this_style ) ?>>
+									<?php echo esc_html( $s->post_title . ( empty( $s->menu_order ) ? '' : ' (' . __( 'default', 'formidable' ) . ')' ) ) ?>
+								</option>
          		            <?php } ?>
          		            <option value="" <?php selected(0, $this_style) ?>><?php _e( 'Styling disabled', 'formidable' ) ?></option>
          		        </select>

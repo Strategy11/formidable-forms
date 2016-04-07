@@ -3,6 +3,7 @@
 class FrmFieldsController {
 
     public static function load_field() {
+		FrmAppHelper::permission_check('frm_edit_forms');
         check_ajax_referer( 'frm_ajax', 'nonce' );
 
         $fields = $_POST['field'];
@@ -32,11 +33,11 @@ class FrmFieldsController {
                 $field['value'] = '';
             }
 
-            $field_name = 'item_meta['. $field_id .']';
+			$field_name = 'item_meta[' . $field_id . ']';
             $html_id = FrmFieldsHelper::get_html_id($field);
 
             ob_start();
-            include($path .'/classes/views/frm-forms/add_field.php');
+			include( $path . '/classes/views/frm-forms/add_field.php' );
             $field_html[ $field_id ] = ob_get_contents();
             ob_end_clean();
         }
@@ -48,13 +49,17 @@ class FrmFieldsController {
         wp_die();
     }
 
+	/**
+	 * Create a new field with ajax
+	 */
     public static function create() {
+		FrmAppHelper::permission_check('frm_edit_forms');
         check_ajax_referer( 'frm_ajax', 'nonce' );
 
-		$field_type = FrmAppHelper::get_post_param( 'field', '', 'sanitize_text_field' );
+		$field_type = FrmAppHelper::get_post_param( 'field_type', '', 'sanitize_text_field' );
 		$form_id = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
 
-        $field = self::include_new_field($field_type, $form_id);
+		$field = self::include_new_field( $field_type, $form_id );
 
         // this hook will allow for multiple fields to be added at once
         do_action('frm_after_field_created', $field, $form_id);
@@ -63,7 +68,11 @@ class FrmFieldsController {
     }
 
     /**
+     * Set up and create a new field
+     *
+     * @param string $field_type
      * @param integer $form_id
+     * @return array|bool
      */
 	public static function include_new_field( $field_type, $form_id ) {
         $values = array();
@@ -71,7 +80,9 @@ class FrmFieldsController {
             $values['post_type'] = FrmProFormsHelper::post_type($form_id);
         }
 
-        $field_values = apply_filters('frm_before_field_created', FrmFieldsHelper::setup_new_vars($field_type, $form_id));
+		$field_values = FrmFieldsHelper::setup_new_vars( $field_type, $form_id );
+        $field_values = apply_filters( 'frm_before_field_created', $field_values );
+
         $field_id = FrmField::create( $field_values );
 
         if ( ! $field_id ) {
@@ -83,23 +94,8 @@ class FrmFieldsController {
         return $field;
     }
 
-    public static function update_form_id() {
-        check_ajax_referer( 'frm_ajax', 'nonce' );
-
-		$field_id = FrmAppHelper::get_post_param( 'field', 0, 'absint' );
-		$form_id = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
-
-        if ( ! $field_id || ! $form_id ) {
-            wp_die();
-        }
-
-		$updated = FrmField::update( $field_id, compact( 'form_id' ) );
-		echo absint( $updated );
-
-        wp_die();
-    }
-
 	public static function edit_name( $field = 'name', $id = '' ) {
+		FrmAppHelper::permission_check('frm_edit_forms');
         check_ajax_referer( 'frm_ajax', 'nonce' );
 
         if ( empty($field) ) {
@@ -127,6 +123,7 @@ class FrmFieldsController {
     }
 
     public static function update_ajax_option() {
+		FrmAppHelper::permission_check('frm_edit_forms');
         check_ajax_referer( 'frm_ajax', 'nonce' );
 
 		$field_id = FrmAppHelper::get_post_param( 'field', 0, 'absint' );
@@ -136,20 +133,11 @@ class FrmFieldsController {
 
 		$field = FrmField::getOne( $field_id );
 
-		foreach ( array( 'clear_on_focus', 'separate_value', 'default_blank' ) as $val ) {
-            if ( isset($_POST[ $val ]) ) {
-				// all three of these options are boolean
-				$new_val = FrmAppHelper::get_post_param( $val, 0, 'absint' );
-
-                if ( $val == 'separate_value' ) {
-					$new_val = FrmField::is_option_true( $field, $val ) ? 0 : 1;
-                }
-
-                $field->field_options[ $val ] = $new_val;
-                unset($new_val);
-            }
-            unset($val);
-        }
+		if ( isset( $_POST['separate_value'] ) ) {
+			$new_val = FrmField::is_option_true( $field, 'separate_value' ) ? 0 : 1;
+			$field->field_options['separate_value'] = $new_val;
+			unset($new_val);
+		}
 
         FrmField::update( $field_id, array(
             'field_options' => $field->field_options,
@@ -159,6 +147,7 @@ class FrmFieldsController {
     }
 
     public static function duplicate() {
+		FrmAppHelper::permission_check('frm_edit_forms');
         check_ajax_referer( 'frm_ajax', 'nonce' );
 
         global $wpdb;
@@ -171,15 +160,17 @@ class FrmFieldsController {
             wp_die();
         }
 
-        do_action('frm_duplicate_field', $copy_field, $form_id);
-        do_action('frm_duplicate_field_'. $copy_field->type, $copy_field, $form_id);
+		do_action( 'frm_duplicate_field', $copy_field, $form_id );
+		do_action( 'frm_duplicate_field_' . $copy_field->type, $copy_field, $form_id );
 
-        $values = array( 'id' => $form_id );
+		$values = array();
         FrmFieldsHelper::fill_field( $values, $copy_field, $form_id );
 
-		$field_count = FrmDb::get_count( $wpdb->prefix .'frm_fields fi LEFT JOIN '. $wpdb->prefix .'frm_forms fr ON (fi.form_id = fr.id)', array( 'or' => 1, 'fr.id' => $form_id, 'fr.parent_form_id' => $form_id ) );
+		$field_count = FrmDb::get_count( $wpdb->prefix . 'frm_fields fi LEFT JOIN ' . $wpdb->prefix . 'frm_forms fr ON (fi.form_id = fr.id)', array( 'or' => 1, 'fr.id' => $form_id, 'fr.parent_form_id' => $form_id ) );
 
         $values['field_order'] = $field_count + 1;
+
+	    $values = apply_filters( 'frm_prepare_single_field_for_duplication', $values );
 
         if ( ! $field_id = FrmField::create($values) ) {
             wp_die();
@@ -195,19 +186,20 @@ class FrmFieldsController {
      */
     public static function include_single_field( $field_id, $values, $form_id = 0 ) {
         $field = FrmFieldsHelper::setup_edit_vars(FrmField::getOne($field_id));
-        $field_name = 'item_meta['. $field_id .']';
+		$field_name = 'item_meta[' . $field_id . ']';
         $html_id = FrmFieldsHelper::get_html_id($field);
         $id = $form_id ? $form_id : $field['form_id'];
         if ( $field['type'] == 'html' ) {
             $field['stop_filter'] = true;
         }
 
-        require(FrmAppHelper::plugin_path() .'/classes/views/frm-forms/add_field.php');
+		require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add_field.php' );
 
         return $field;
     }
 
     public static function destroy() {
+		FrmAppHelper::permission_check('frm_edit_forms');
         check_ajax_referer( 'frm_ajax', 'nonce' );
 
 		$field_id = FrmAppHelper::get_post_param( 'field_id', 0, 'absint' );
@@ -219,6 +211,7 @@ class FrmFieldsController {
 
     //Add Single Option or Other Option
     public static function add_option() {
+		FrmAppHelper::permission_check('frm_edit_forms');
         check_ajax_referer( 'frm_ajax', 'nonce' );
 
 		$id = FrmAppHelper::get_post_param( 'field_id', 0, 'absint' );
@@ -250,7 +243,7 @@ class FrmFieldsController {
             if ( $first_opt != '' ) {
                 $next_opt++;
             }
-            $opt = esc_html__( 'Option', 'formidable' ) .' '. $next_opt;
+			$opt = esc_html__( 'Option', 'formidable' ) . ' ' . $next_opt;
             unset($next_opt);
         }
         $field_val = $opt;
@@ -268,26 +261,27 @@ class FrmFieldsController {
             'field_key' => $field_data->field_key,
         );
 
-        $field_name = 'item_meta['. $id .']';
+		$field_name = 'item_meta[' . $id . ']';
         $html_id = FrmFieldsHelper::get_html_id($field);
         $checked = '';
 
         if ( 'other' == $opt_type ) {
-            require(FrmAppHelper::plugin_path() .'/pro/classes/views/frmpro-fields/other-option.php');
+			require( FrmAppHelper::plugin_path() . '/pro/classes/views/frmpro-fields/other-option.php' );
         } else {
-            require(FrmAppHelper::plugin_path() .'/classes/views/frm-fields/single-option.php');
+			require( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/single-option.php' );
         }
         wp_die();
     }
 
     public static function edit_option() {
+		FrmAppHelper::permission_check('frm_edit_forms');
         check_ajax_referer( 'frm_ajax', 'nonce' );
 
 		$element_id = FrmAppHelper::get_post_param( 'element_id', '', 'sanitize_title' );
 		$ids = explode( '-', $element_id );
 		$id = FrmAppHelper::get_post_param( 'field_id', 0, 'absint' );
 
-		$orig_update_value = $update_value = trim( FrmAppHelper::get_post_param( 'update_value' ) );
+		$orig_update_value = $update_value = trim( FrmAppHelper::get_post_param( 'update_value', '', 'wp_kses_post' ) );
 		if ( strpos( $element_id, 'key_' ) ) {
             $new_value = $update_value;
         } else {
@@ -299,7 +293,7 @@ class FrmFieldsController {
 
         $this_opt_id = end($ids);
 		$this_opt = (array) $field->options[ $this_opt_id ];
-        $other_opt = ( $this_opt_id && strpos( $this_opt_id, 'other') !== false ? true : false );
+		$other_opt = ( $this_opt_id && strpos( $this_opt_id, 'other') !== false );
 
         $label = isset($this_opt['label']) ? $this_opt['label'] : reset($this_opt);
         $value = isset($this_opt['value']) ? $this_opt['value'] : '';
@@ -324,6 +318,7 @@ class FrmFieldsController {
     }
 
     public static function delete_option() {
+		FrmAppHelper::permission_check('frm_edit_forms');
         check_ajax_referer( 'frm_ajax', 'nonce' );
 
 		$field_id = FrmAppHelper::get_post_param( 'field_id', 0, 'absint' );
@@ -366,9 +361,7 @@ class FrmFieldsController {
     }
 
     public static function import_choices() {
-        if ( ! current_user_can( 'frm_edit_forms' ) ) {
-            wp_die();
-        }
+        FrmAppHelper::permission_check( 'frm_edit_forms', 'hide' );
 
 		$field_id = absint( $_REQUEST['field_id'] );
 
@@ -405,14 +398,15 @@ class FrmFieldsController {
         $field = FrmField::getOne($field_id);
 
         wp_enqueue_script( 'utils' );
-        wp_enqueue_style( 'formidable-admin', FrmAppHelper::plugin_url(). '/css/frm_admin.css' );
+		wp_enqueue_style( 'formidable-admin', FrmAppHelper::plugin_url() . '/css/frm_admin.css' );
         FrmAppHelper::load_admin_wide_js();
 
-        include(FrmAppHelper::plugin_path() .'/classes/views/frm-fields/import_choices.php');
+		include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/import_choices.php' );
         wp_die();
     }
 
     public static function import_options() {
+		FrmAppHelper::permission_check('frm_edit_forms');
         check_ajax_referer( 'frm_ajax', 'nonce' );
 
         if ( ! is_admin() || ! current_user_can('frm_edit_forms') ) {
@@ -465,7 +459,7 @@ class FrmFieldsController {
         $html_id = FrmFieldsHelper::get_html_id( $field );
 
         if ( $field['type'] == 'radio' || $field['type'] == 'checkbox' ) {
-            require(FrmAppHelper::plugin_path() .'/classes/views/frm-fields/radio.php');
+			require( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/radio.php' );
         } else {
             FrmFieldsHelper::show_single_option($field);
         }
@@ -474,7 +468,9 @@ class FrmFieldsController {
     }
 
     public static function update_order() {
+		FrmAppHelper::permission_check('frm_edit_forms');
         check_ajax_referer( 'frm_ajax', 'nonce' );
+
 		$fields = FrmAppHelper::get_post_param( 'frm_field_id' );
 		foreach ( (array) $fields as $position => $item ) {
 			FrmField::update( absint( $item ), array( 'field_order' => absint( $position ) ) );
@@ -540,7 +536,7 @@ class FrmFieldsController {
         self::add_html_size($field, $add_html);
         self::add_html_length($field, $add_html);
         self::add_html_placeholder($field, $add_html, $class);
-		//self::add_validation_messages( $field, $add_html ); uncomment this when the js validation is complete
+		self::add_validation_messages( $field, $add_html );
 
         $class = apply_filters('frm_field_classes', implode(' ', $class), $field);
 
@@ -593,7 +589,7 @@ class FrmFieldsController {
 
         $important = apply_filters('frm_use_important_width', 1, $field);
         // Note: This inline styling must stay since we cannot realistically set a class for every possible field size
-        $add_html['style'] = 'style="width:'. esc_attr( $field['size'] ) . ( $important ? ' !important' : '' ) .'"';
+		$add_html['style'] = 'style="width:' . esc_attr( $field['size'] ) . ( $important ? ' !important' : '' ) . '"';
 
         self::add_html_cols($field, $add_html);
     }
@@ -642,23 +638,29 @@ class FrmFieldsController {
 			return;
 		}
 
+		$default_value_array = is_array( $field['default_value'] );
         if ( ! FrmField::is_option_true( $field, 'clear_on_focus' ) ) {
-			if ( is_array( $field['default_value'] ) ) {
+			if ( $default_value_array ) {
 				$field['default_value'] = json_encode( $field['default_value'] );
 			}
 			$add_html['data-frmval'] = 'data-frmval="' . esc_attr( $field['default_value'] ) . '"';
             return;
         }
 
+		if ( $default_value_array ) {
+			// don't include a json placeholder
+			return;
+		}
+
         $frm_settings = FrmAppHelper::get_settings();
 
 		if ( $frm_settings->use_html && ! in_array( $field['type'], array( 'select', 'radio', 'checkbox', 'hidden' ) ) ) {
             // use HMTL5 placeholder with js fallback
-            $add_html['placeholder'] = 'placeholder="'. esc_attr($field['default_value']) .'"';
+			$add_html['placeholder'] = 'placeholder="' . esc_attr( $field['default_value'] ) . '"';
             wp_enqueue_script('jquery-placeholder');
         } else if ( ! $frm_settings->use_html ) {
 			$val = str_replace( array( "\r\n", "\n" ), '\r', addslashes( str_replace( '&#039;', "'", esc_attr( $field['default_value'] ) ) ) );
-            $add_html['data-frmval'] = 'data-frmval="'. esc_attr($val) .'"';
+			$add_html['data-frmval'] = 'data-frmval="' . esc_attr( $val ) . '"';
             $class[] = 'frm_toggle_default';
 
             if ( $field['value'] == $field['default_value'] ) {
@@ -699,7 +701,7 @@ class FrmFieldsController {
             if ( is_numeric($k) && strpos($v, '=') ) {
                 $add_html[] = $v;
             } else if ( ! empty( $k ) && isset( $add_html[ $k ] ) ) {
-                $add_html[ $k ] = str_replace( $k .'="', $k .'="'. $v, $add_html[ $k ] );
+				$add_html[ $k ] = str_replace( $k . '="', $k . '="' . $v, $add_html[ $k ] );
             } else {
 				$add_html[ $k ] = $k . '="' . esc_attr( $v ) . '"';
             }

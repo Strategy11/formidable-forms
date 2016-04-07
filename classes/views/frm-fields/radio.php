@@ -13,9 +13,9 @@ foreach ( $field['options'] as $opt_key => $opt ) {
     $checked = ( $other_val || isset($field['value']) &&  (( ! is_array($field['value']) && $field['value'] == $field_val ) || (is_array($field['value']) && in_array($field_val, $field['value']) ) ) ) ? ' checked="checked"':'';
 
 	if ( FrmFieldsHelper::is_other_opt( $opt_key ) ) {
-        include(FrmAppHelper::plugin_path() .'/pro/classes/views/frmpro-fields/other-option.php');
+		include( FrmAppHelper::plugin_path() . '/pro/classes/views/frmpro-fields/other-option.php' );
     } else {
-        include(FrmAppHelper::plugin_path() .'/classes/views/frm-fields/single-option.php');
+		include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/single-option.php' );
     }
 
     unset($checked, $other_val);

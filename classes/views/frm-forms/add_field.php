@@ -9,7 +9,7 @@ $display = apply_filters('frm_display_field_options', array(
 	'max' => true, 'captcha_size' => false,
 ));
 
-$li_classes = 'form-field edit_form_item frm_field_box frm_top_container frm_not_divider edit_field_type_'. $display['type'];
+$li_classes = 'form-field edit_form_item frm_field_box frm_top_container frm_not_divider edit_field_type_' . $display['type'];
 $li_classes = apply_filters('frm_build_field_class', $li_classes, $field );
 
 if ( isset( $values ) && isset( $values['ajax_load'] ) && $values['ajax_load'] && isset( $count ) && $count > 10 && ! in_array( $field['type'], array( 'divider', 'end_divider' ) ) ) {
@@ -66,7 +66,7 @@ if ( $field['type'] == 'divider' ) { ?>
 <div id="field_<?php echo esc_attr( $field['id'] ) ?>_inner_container" class="frm_inner_field_container">
 <div class="frm_form_fields" data-ftype="<?php echo esc_attr( $display['type'] ) ?>">
 <?php
-include(FrmAppHelper::plugin_path() .'/classes/views/frm-fields/show-build.php');
+include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/show-build.php' );
 
 if ( $display['clear_on_focus'] ) {
 	FrmFieldsHelper::clear_on_focus_html( $field, $display );
@@ -106,7 +106,7 @@ if ( in_array( $field['type'], array( 'select', 'radio', 'checkbox' ) ) ) { ?>
     <div class="frm-show-click frm_small_top_margin"><?php
 
     if ( isset($field['post_field']) && $field['post_field'] == 'post_category' ) {
-        echo '<p class="howto">'. FrmFieldsHelper::get_term_link($field['taxonomy']) .'</p>';
+		echo '<p class="howto">' . FrmFieldsHelper::get_term_link( $field['taxonomy'] ) . '</p>';
 	} else if ( ! isset( $field['post_field'] ) || ! in_array( $field['post_field'], array( 'post_category' ) ) ) {
 ?>
         <div id="frm_add_field_<?php echo esc_attr( $field['id'] ); ?>">
@@ -120,7 +120,9 @@ if ( in_array( $field['type'], array( 'select', 'radio', 'checkbox' ) ) ) { ?>
             }
 
             if ( ! isset($field['post_field']) || $field['post_field'] != 'post_category' ) { ?>
-            <a href="<?php echo esc_url(admin_url('admin-ajax.php') .'?action=frm_import_choices&field_id='. $field['id'] .'&TB_iframe=1') ?>" title="<?php echo FrmAppHelper::truncate(esc_attr(strip_tags(str_replace('"', '&quot;', $field['name']))), 20) . ' '. __( 'Field Choices', 'formidable' ); ?>" class="thickbox frm_orange"><?php _e( 'Bulk Edit Options', 'formidable' ) ?></a>
+			<a href="<?php echo esc_url( admin_url( 'admin-ajax.php?action=frm_import_choices&field_id=' . $field['id'] . '&TB_iframe=1' ) ) ?>" title="<?php echo esc_attr( FrmAppHelper::truncate( strip_tags( str_replace( '"', '&quot;', $field['name'] ) ), 20 ) . ' ' . __( 'Field Choices', 'formidable' ) ); ?>" class="thickbox frm_orange">
+				<?php _e( 'Bulk Edit Options', 'formidable' ) ?>
+			</a>
             <?php } ?>
         </div>
 <?php
@@ -246,9 +248,22 @@ if ( $display['options'] ) { ?>
                     </select>
                     </td>
                 </tr>
+				<tr>
+					<td>
+						<label for="captcha_theme_<?php echo esc_attr( $field['field_key'] ) ?>"><?php _e( 'reCAPTCHA Color', 'formidable' ) ?></label>
+					</td>
+					<td>
+						<select name="field_options[captcha_theme_<?php echo esc_attr( $field['id'] ) ?>]" id="captcha_theme_<?php echo esc_attr( $field['field_key'] ) ?>">
+							<option value="light" <?php selected( $field['captcha_theme'], 'light' ); ?>><?php _e( 'Light', 'formidable' ) ?></option>
+							<option value="dark" <?php selected( $field['captcha_theme'], 'dark' ); ?>><?php _e( 'Dark', 'formidable' ) ?></option>
+						</select>
+					</td>
+				</tr>
                 <?php
 				} ?>
-                <?php do_action('frm_field_options_form', $field, $display, $values);
+                <?php
+				do_action( 'frm_' . $field['type'] . '_field_options_form', $field, $display, $values );
+				do_action( 'frm_field_options_form', $field, $display, $values );
 
                 if ( $display['required'] || $display['invalid'] || $display['unique'] || $display['conf_field'] ) { ?>
 					<tr class="frm_validation_msg <?php echo ($display['invalid'] || $field['required'] || FrmField::is_option_true( $field, 'unique' ) || FrmField::is_option_true( $field, 'conf_field' ) ) ? '' : 'frm_hidden'; ?>">

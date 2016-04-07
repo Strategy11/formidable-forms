@@ -3,7 +3,7 @@
 <?php } else if ( $field['type'] == 'textarea' ) { ?>
 <textarea name="<?php echo esc_attr( $field_name ) ?>" id="<?php echo esc_attr( $html_id ) ?>" <?php
 if ( $field['max'] ) {
-    echo 'rows="'. esc_attr( $field['max'] ) .'" ';
+	echo 'rows="' . esc_attr( $field['max'] ) . '" ';
 }
 do_action('frm_field_input_html', $field);
 ?>><?php echo FrmAppHelper::esc_textarea($field['value']) ?></textarea>
@@ -43,7 +43,7 @@ do_action('frm_field_input_html', $field);
 ?>/><?php
 
 			if ( ! isset( $atts ) || ! isset( $atts['label'] ) || $atts['label'] ) {
-                echo ' '. $opt .'</label>';
+				echo ' ' . $opt . '</label>';
             }
 
 			FrmFieldsHelper::include_other_input( array(
@@ -146,7 +146,7 @@ do_action('frm_field_input_html', $field);
             ?><input type="checkbox" name="<?php echo esc_attr( $field_name ) ?>[<?php echo ( $other_opt ? esc_attr( $opt_key ) : '' ) ?>]" id="<?php echo esc_attr( $html_id ) ?>-<?php echo esc_attr( $opt_key ) ?>" value="<?php echo esc_attr( $field_val ) ?>" <?php echo $checked ?> <?php do_action('frm_field_input_html', $field) ?> /><?php
 
             if ( ! isset( $atts ) || ! isset( $atts['label'] ) || $atts['label'] ) {
-                echo ' '. $opt .'</label>';
+				echo ' ' . $opt . '</label>';
             }
 
 			FrmFieldsHelper::include_other_input( array(
@@ -168,5 +168,6 @@ do_action('frm_field_input_html', $field);
         FrmFieldsHelper::display_recaptcha($field);
     }
 } else {
-    do_action('frm_form_fields', $field, $field_name, compact('errors', 'html_id'));
+	do_action( 'frm_form_fields', $field, $field_name, compact( 'errors', 'html_id' ) );
+	do_action( 'frm_form_field_' . $field['type'], $field, $field_name, compact( 'errors', 'html_id' ) );
 }

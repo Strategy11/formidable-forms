@@ -1,8 +1,8 @@
 <div class="wrap">
     <div class="frmicon icon32"><br/></div>
-    <h2><?php _e( 'Import/Export', 'formidable' ); ?></h2>
+    <h1><?php _e( 'Import/Export', 'formidable' ); ?></h1>
 
-    <?php include(FrmAppHelper::plugin_path() .'/classes/views/shared/errors.php'); ?>
+	<?php include( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' ); ?>
     <div id="poststuff" class="metabox-holder">
     <div id="post-body">
     <div id="post-body-content">
@@ -25,6 +25,7 @@
 				<input type="submit" value="<?php esc_attr_e( 'Upload file and import', 'formidable' ) ?>" class="button-primary" />
             </p>
         </form>
+		<?php FrmTipsHelper::pro_tip( 'get_import_tip' ); ?>
     </div>
     </div>
 
@@ -42,7 +43,9 @@
                     <td>
                         <select name="format">
 						<?php foreach ( $export_format as $t => $type ) { ?>
-                            <option value="<?php echo esc_attr( $t ) ?>" data-support="<?php echo esc_attr( $type['support'] ) ?>" <?php echo isset( $type['count'] ) ? 'data-count="'. esc_attr( $type['count'] ) .'"' : ''; ?>><?php echo isset( $type['name'] ) ? $type['name'] : $t ?></option>
+							<option value="<?php echo esc_attr( $t ) ?>" data-support="<?php echo esc_attr( $type['support'] ) ?>" <?php echo isset( $type['count'] ) ? 'data-count="' . esc_attr( $type['count'] ) . '"' : ''; ?>>
+								<?php echo isset( $type['name'] ) ? $type['name'] : $t ?>
+							</option>
                         <?php } ?>
                         </select>
 

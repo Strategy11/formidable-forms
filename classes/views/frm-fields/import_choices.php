@@ -39,10 +39,10 @@ foreach ( $field->options as $fkey => $fopt ) {
 		if ( $label != $value && FrmField::is_option_true( $field, 'separate_value' ) ) {
             echo "$label|$value\n";
 		} else {
-            echo $label ."\n";
+			echo $label . "\n";
         }
 	} else {
-        echo $fopt ."\n";
+		echo $fopt . "\n";
     }
 } ?>
 </textarea>

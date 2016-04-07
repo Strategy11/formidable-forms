@@ -1,8 +1,8 @@
 <div id="form_global_settings" class="wrap">
     <div class="frmicon icon32"><br/></div>
-    <h2><?php _e( 'Global Settings', 'formidable' ); ?></h2>
+    <h1><?php _e( 'Global Settings', 'formidable' ); ?></h1>
 
-    <?php require(FrmAppHelper::plugin_path() .'/classes/views/shared/errors.php'); ?>
+	<?php require( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' ); ?>
 
     <div id="poststuff" class="metabox-holder">
     <div id="post-body">
@@ -17,7 +17,11 @@
 			<?php $a = FrmAppHelper::simple_get( 't', 'sanitize_title', 'general_settings' ); ?>
         	<li <?php echo ($a == 'general_settings') ? 'class="tabs active"' : '' ?>><a href="#general_settings" class="frm_cursor_pointer"><?php _e( 'General', 'formidable' ) ?></a></li>
 			<?php foreach ( $sections as $sec_name => $section ) { ?>
-                <li <?php echo ($a == $sec_name .'_settings') ? 'class="tabs active"' : '' ?>><a href="#<?php echo esc_attr( $sec_name ) ?>_settings"><?php echo isset($section['name']) ? $section['name'] : ucfirst($sec_name) ?></a></li>
+				<li <?php echo ( $a == $sec_name . '_settings' ) ? 'class="tabs active"' : '' ?>>
+					<a href="#<?php echo esc_attr( $sec_name ) ?>_settings">
+						<?php echo isset( $section['name'] ) ? $section['name'] : ucfirst( $sec_name ) ?>
+					</a>
+				</li>
             <?php } ?>
         </ul>
         </div>
@@ -44,7 +48,11 @@
                 </select>
             </p>
 
-            <p><label for="frm_use_html"><input type="checkbox" id="frm_use_html" name="frm_use_html" value="1" <?php checked($frm_settings->use_html, 1) ?>	> <?php _e( 'Use HTML5 in forms', 'formidable' ) ?></label>
+            <p>
+				<label for="frm_use_html">
+					<input type="checkbox" id="frm_use_html" name="frm_use_html" value="1" <?php checked($frm_settings->use_html, 1) ?>	> <?php _e( 'Use HTML5 in forms', 'formidable' ) ?>
+				</label>
+				<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'We recommend using HTML 5 for your forms. It adds some nifty options like placeholders, patterns, and autocomplete.', 'formidable' ) ?>"></span>
             </p>
 
             <?php do_action('frm_style_general_settings', $frm_settings); ?>
@@ -65,13 +73,15 @@
 				<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'reCAPTCHA is a free, accessible CAPTCHA service that helps to digitize books while blocking spam on your blog. reCAPTCHA asks commenters to retype two words scanned from a book to prove that they are a human. This verifies that they are not a spambot.', 'formidable' ) ?>" ></span>
 			</h3>
 
-            <p class="howto">reCAPTCHA requires an API key, consisting of a "site" and a "private" key. You can sign up for a <a href="https://www.google.com/recaptcha/" target="_blank">free reCAPTCHA key</a>.</p>
+			<p class="howto">
+				<?php echo wp_kses_post( sprintf( __( 'reCAPTCHA requires a Site and Private API key. Sign up for a %1$sfree reCAPTCHA key%2$s.', 'formidable' ), '<a href="' . esc_url( 'https://www.google.com/recaptcha/' ) . '" target="_blank">', '</a>' ) ); ?>
+			</p>
 
 			<p><label class="frm_left_label"><?php _e( 'Site Key', 'formidable' ) ?></label>
-			<input type="text" name="frm_pubkey" id="frm_pubkey" size="42" value="<?php echo esc_attr($frm_settings->pubkey) ?>" /></p>
+			<input type="text" name="frm_pubkey" id="frm_pubkey" size="42" value="<?php echo esc_attr($frm_settings->pubkey) ?>" placeholder="<?php esc_attr_e( 'Optional', 'formidable' ) ?>" /></p>
 
 			<p><label class="frm_left_label"><?php _e( 'Private Key', 'formidable' ) ?></label>
-			<input type="text" name="frm_privkey" id="frm_privkey" size="42" value="<?php echo esc_attr($frm_settings->privkey) ?>" /></p>
+			<input type="text" name="frm_privkey" id="frm_privkey" size="42" value="<?php echo esc_attr($frm_settings->privkey) ?>" placeholder="<?php esc_attr_e( 'Optional', 'formidable' ) ?>" /></p>
 
 		    <p><label class="frm_left_label"><?php _e( 'reCAPTCHA Language', 'formidable' ) ?></label>
 			<select name="frm_re_lang" id="frm_re_lang">
@@ -79,6 +89,14 @@
 				<option value="<?php echo esc_attr($lang) ?>" <?php selected($frm_settings->re_lang, $lang) ?>><?php echo esc_html( $lang_name ) ?></option>
                 <?php } ?>
             </select></p>
+
+			<p>
+				<label class="frm_left_label"><?php _e( 'Multiple reCaptchas', 'formidable' ) ?></label>
+				<label for="frm_re_multi">
+					<input type="checkbox" name="frm_re_multi" id="frm_re_multi" value="1" <?php checked( $frm_settings->re_multi, 1 ) ?> />
+					<?php _e( 'Allow multiple reCaptchas to be used on a single page', 'formidable' ) ?>
+				</label>
+			</p>
 
 			<h3><?php _e( 'Default Messages', 'formidable' ); ?>
 				<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'You can override the success message and submit button settings on individual forms.', 'formidable' ) ?>"></span>
@@ -125,7 +143,7 @@
 		</p>
 
 		<p>
-			<label class="frm_left_label"><?php _e( 'Default Submit Button', 'formidable' ); ?></label>
+			<label class="frm_left_label"><?php _e( 'Submit Button Text', 'formidable' ); ?></label>
 			<input type="text" value="<?php echo esc_attr( $frm_settings->submit_value ) ?>" id="frm_submit_value" name="frm_submit_value" class="frm_with_left_label" />
 		</p>
 
@@ -150,9 +168,9 @@
 
         <?php
 		foreach ( $sections as $sec_name => $section ) {
-			if ( $a == $sec_name .'_settings' ) { ?>
-<style type="text/css">.<?php echo esc_attr( $sec_name ) ?>_settings{display:block;}</style><?php }?>
-            <div id="<?php echo esc_attr( $sec_name ) ?>_settings" class="<?php echo esc_attr( $sec_name ) ?>_settings tabs-panel <?php echo ( $a == $sec_name .'_settings' ) ? 'frm_block' : 'frm_hidden'; ?>"><?php
+			if ( $a == $sec_name . '_settings' ) { ?>
+<style type="text/css">.<?php echo esc_attr( $sec_name ) ?>_settings{display:block;}</style><?php } ?>
+			<div id="<?php echo esc_attr( $sec_name ) ?>_settings" class="<?php echo esc_attr( $sec_name ) ?>_settings tabs-panel <?php echo ( $a == $sec_name . '_settings' ) ? 'frm_block' : 'frm_hidden'; ?>"><?php
 				if ( isset( $section['class'] ) ) {
 					call_user_func( array( $section['class'], $section['function'] ) );
 				} else {

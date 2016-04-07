@@ -48,7 +48,7 @@ function frm_forms_autoloader( $class_name ) {
         $filepath .= '/models/';
     }
 
-    $filepath .= $class_name .'.php';
+	$filepath .= $class_name . '.php';
 
     if ( file_exists($filepath) ) {
         include($filepath);
@@ -65,10 +65,10 @@ spl_autoload_register('frm_forms_autoloader');
 
 $frm_path = dirname(__FILE__);
 if ( file_exists($frm_path . '/pro/formidable-pro.php') ) {
-    include($frm_path .'/pro/formidable-pro.php');
+	include( $frm_path . '/pro/formidable-pro.php' );
 }
 
 FrmHooksController::trigger_load_hook();
 
-include_once($frm_path .'/deprecated.php');
+include_once( $frm_path . '/deprecated.php' );
 unset($frm_path);

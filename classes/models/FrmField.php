@@ -58,7 +58,7 @@ class FrmField {
 
         $new_values = array();
         $key = isset($values['field_key']) ? $values['field_key'] : $values['name'];
-        $new_values['field_key'] = FrmAppHelper::get_unique_key($key, $wpdb->prefix .'frm_fields', 'field_key');
+		$new_values['field_key'] = FrmAppHelper::get_unique_key( $key, $wpdb->prefix . 'frm_fields', 'field_key' );
 
 		foreach ( array( 'name', 'description', 'type', 'default_value' ) as $col ) {
 			$new_values[ $col ] = $values[ $col ];
@@ -87,7 +87,7 @@ class FrmField {
         //if(isset($values['id']) and is_numeric($values['id']))
         //    $new_values['id'] = $values['id'];
 
-        $query_results = $wpdb->insert( $wpdb->prefix .'frm_fields', $new_values );
+		$query_results = $wpdb->insert( $wpdb->prefix . 'frm_fields', $new_values );
 		$new_id = 0;
 		if ( $query_results ) {
 			self::delete_form_transient( $new_values['form_id'] );
@@ -154,7 +154,7 @@ class FrmField {
 		$id = absint( $id );
 
 		if ( isset( $values['field_key'] ) ) {
-            $values['field_key'] = FrmAppHelper::get_unique_key($values['field_key'], $wpdb->prefix .'frm_fields', 'field_key', $id);
+			$values['field_key'] = FrmAppHelper::get_unique_key( $values['field_key'], $wpdb->prefix . 'frm_fields', 'field_key', $id );
 		}
 
         if ( isset($values['required']) ) {
@@ -170,7 +170,7 @@ class FrmField {
 			}
 		}
 
-        $query_results = $wpdb->update( $wpdb->prefix .'frm_fields', $values, array( 'id' => $id ) );
+		$query_results = $wpdb->update( $wpdb->prefix . 'frm_fields', $values, array( 'id' => $id ) );
 
         $form_id = 0;
 		if ( isset( $values['form_id'] ) ) {
@@ -225,13 +225,13 @@ class FrmField {
 
 	public static function delete_form_transient( $form_id ) {
 		$form_id = absint( $form_id );
-		delete_transient( 'frm_form_fields_'. $form_id .'excludeinclude' );
-		delete_transient( 'frm_form_fields_'. $form_id .'includeinclude' );
-		delete_transient( 'frm_form_fields_'. $form_id .'includeexclude' );
-		delete_transient( 'frm_form_fields_'. $form_id .'excludeexclude' );
+		delete_transient( 'frm_form_fields_' . $form_id . 'excludeinclude' );
+		delete_transient( 'frm_form_fields_' . $form_id . 'includeinclude' );
+		delete_transient( 'frm_form_fields_' . $form_id . 'includeexclude' );
+		delete_transient( 'frm_form_fields_' . $form_id . 'excludeexclude' );
 
 		global $wpdb;
-		$wpdb->query( $wpdb->prepare( 'DELETE FROM '. $wpdb->options .' WHERE option_name LIKE %s OR option_name LIKE %s OR option_name LIKE %s OR option_name LIKE %s', '_transient_timeout_frm_form_fields_' . $form_id .'ex%', '_transient_frm_form_fields_' . $form_id .'ex%', '_transient_timeout_frm_form_fields_' . $form_id .'in%', '_transient_frm_form_fields_' . $form_id .'in%' ) );
+		$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->options . ' WHERE option_name LIKE %s OR option_name LIKE %s OR option_name LIKE %s OR option_name LIKE %s', '_transient_timeout_frm_form_fields_' . $form_id . 'ex%', '_transient_frm_form_fields_' . $form_id . 'ex%', '_transient_timeout_frm_form_fields_' . $form_id . 'in%', '_transient_frm_form_fields_' . $form_id . 'in%' ) );
 
 		$cache_key = serialize( array( 'fi.form_id' => $form_id ) ) . 'field_orderlb';
         wp_cache_delete($cache_key, 'frm_field');
@@ -262,7 +262,7 @@ class FrmField {
         global $wpdb;
 
         $where = is_numeric($id) ? 'id=%d' : 'field_key=%s';
-        $query = $wpdb->prepare('SELECT * FROM '. $wpdb->prefix .'frm_fields WHERE '. $where, $id);
+		$query = $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'frm_fields WHERE ' . $where, $id );
 
         $results = FrmAppHelper::check_cache( $id, 'frm_field', $query, 'get_row', 0 );
 
@@ -420,7 +420,7 @@ class FrmField {
     }
 
 	public static function getAll( $where = array(), $order_by = '', $limit = '', $blog_id = false ) {
-        $cache_key = maybe_serialize($where) . $order_by .'l'. $limit .'b'. $blog_id;
+		$cache_key = maybe_serialize( $where ) . $order_by . 'l' . $limit . 'b' . $blog_id;
         if ( self::$use_cache ) {
             // make sure old cache doesn't get saved as a transient
             $results = wp_cache_get($cache_key, 'frm_field');
@@ -434,20 +434,20 @@ class FrmField {
         if ( $blog_id && is_multisite() ) {
             global $wpmuBaseTablePrefix;
             if ( $wpmuBaseTablePrefix ) {
-                $prefix = $wpmuBaseTablePrefix . $blog_id .'_';
+				$prefix = $wpmuBaseTablePrefix . $blog_id . '_';
             } else {
                 $prefix = $wpdb->get_blog_prefix( $blog_id );
             }
 
-            $table_name = $prefix .'frm_fields';
-            $form_table_name = $prefix .'frm_forms';
+			$table_name = $prefix . 'frm_fields';
+			$form_table_name = $prefix . 'frm_forms';
 		} else {
-            $table_name = $wpdb->prefix .'frm_fields';
-            $form_table_name = $wpdb->prefix .'frm_forms';
+			$table_name = $wpdb->prefix . 'frm_fields';
+			$form_table_name = $wpdb->prefix . 'frm_forms';
         }
 
 		if ( ! empty( $order_by ) && strpos( $order_by, 'ORDER BY' ) === false ) {
-            $order_by = ' ORDER BY '. $order_by;
+			$order_by = ' ORDER BY ' . $order_by;
 		}
 
         $limit = FrmAppHelper::esc_limit($limit);
@@ -565,15 +565,15 @@ class FrmField {
 		_deprecated_function( __FUNCTION__, '2.0' );
         global $wpdb;
         if ( ! empty($order_by) && ! strpos($order_by, 'ORDER BY') !== false ) {
-            $order_by = ' ORDER BY '. $order_by;
+			$order_by = ' ORDER BY ' . $order_by;
         }
 
-        $query = 'SELECT fi.id  FROM '. $wpdb->prefix .'frm_fields fi ' .
-                 'LEFT OUTER JOIN '. $wpdb->prefix .'frm_forms fr ON fi.form_id=fr.id' .
-                 FrmAppHelper::prepend_and_or_where(' WHERE ', $where) . $order_by . $limit;
+		$query = 'SELECT fi.id  FROM ' . $wpdb->prefix . 'frm_fields fi ' .
+			'LEFT OUTER JOIN ' . $wpdb->prefix . 'frm_forms fr ON fi.form_id=fr.id' .
+			FrmAppHelper::prepend_and_or_where( ' WHERE ', $where ) . $order_by . $limit;
 
         $method = ( $limit == ' LIMIT 1' || $limit == 1 ) ? 'get_var' : 'get_col';
-        $cache_key = 'getIds_'. maybe_serialize($where) . $order_by . $limit;
+		$cache_key = 'getIds_' . maybe_serialize( $where ) . $order_by . $limit;
         $results = FrmAppHelper::check_cache($cache_key, 'frm_field', $query, $method);
 
         return $results;
@@ -636,7 +636,9 @@ class FrmField {
 	 * @since 2.0.9
 	 */
 	public static function is_required( $field ) {
-		return $field['required'] != '0';
+		$required = ( $field['required'] != '0' );
+		$required = apply_filters( 'frm_is_field_required', $required, $field );
+		return $required;
 	}
 
 	/**
@@ -698,7 +700,7 @@ class FrmField {
 	}
 
 	public static function get_option_in_object( $field, $option ) {
-		return $field->field_options[ $option ];
+		return isset( $field->field_options[ $option ] ) ? $field->field_options[ $option ] : '';
 	}
 
 	/**

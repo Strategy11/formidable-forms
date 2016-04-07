@@ -17,7 +17,7 @@ class FrmEntryValidate {
         }
 
         if ( ! isset($values['item_key']) || $values['item_key'] == '' ) {
-            $_POST['item_key'] = $values['item_key'] = FrmAppHelper::get_unique_key('', $wpdb->prefix .'frm_items', 'item_key');
+			$_POST['item_key'] = $values['item_key'] = FrmAppHelper::get_unique_key( '', $wpdb->prefix . 'frm_items', 'item_key' );
         }
 
         $where = apply_filters('frm_posted_field_ids', array( 'fi.form_id' => $values['form_id'] ) );
@@ -93,6 +93,7 @@ class FrmEntryValidate {
         self::validate_recaptcha($errors, $posted_field, $args);
 
         $errors = apply_filters('frm_validate_field_entry', $errors, $posted_field, $value, $args);
+		$errors = apply_filters( 'frm_validate_' . $posted_field->type . '_field_entry', $errors, $posted_field, $value, $args );
     }
 
 	public static function validate_url_field( &$errors, $field, &$value, $args ) {
@@ -104,7 +105,7 @@ class FrmEntryValidate {
             $value = '';
         } else {
             $value = esc_url_raw( $value );
-            $value = preg_match('/^(https?|ftps?|mailto|news|feed|telnet):/is', $value) ? $value : 'http://'. $value;
+			$value = preg_match( '/^(https?|ftps?|mailto|news|feed|telnet):/is', $value ) ? $value : 'http://' . $value;
         }
 
         //validate the url format
@@ -231,6 +232,10 @@ class FrmEntryValidate {
         if ( isset( $response['success'] ) && ! $response['success'] ) {
             // What happens when the CAPTCHA was entered incorrectly
 			$errors[ 'field' . $args['id'] ] = ( ! isset( $field->field_options['invalid'] ) || $field->field_options['invalid'] == '' ) ? $frm_settings->re_msg : $field->field_options['invalid'];
+        } else if ( is_wp_error( $resp ) ) {
+			$error_string = $resp->get_error_message();
+			$errors[ 'field' . $args['id'] ] = __( 'There was a problem verifying your recaptcha', 'formidable' );
+			$errors[ 'field' . $args['id'] ] .= ' ' . $error_string;
         }
     }
 

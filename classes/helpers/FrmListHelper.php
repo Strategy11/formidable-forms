@@ -123,7 +123,7 @@ class FrmListHelper {
 		if ( empty( $this->modes ) ) {
 			$this->modes = array(
 				'list'    => __( 'List View' ),
-				'excerpt' => __( 'Excerpt View' )
+				'excerpt' => __( 'Excerpt View' ),
 			);
 		}
 	}
@@ -351,14 +351,14 @@ class FrmListHelper {
 			return;
 		}
 
-		echo "<label for='bulk-action-selector-" . esc_attr( $which ) . "' class='screen-reader-text'>" . esc_attr__( 'Select bulk action' ) . "</label>";
+		echo "<label for='bulk-action-selector-" . esc_attr( $which ) . "' class='screen-reader-text'>" . esc_attr__( 'Select bulk action' ) . '</label>';
 		echo "<select name='action" . esc_attr( $two ) . "' id='bulk-action-selector-" . esc_attr( $which ) . "'>\n";
 		echo "<option value='-1' selected='selected'>" . esc_attr__( 'Bulk Actions' ) . "</option>\n";
 
 		foreach ( $this->_actions as $name => $title ) {
 			$class = 'edit' == $name ? ' class="hide-if-no-js"' : '';
 
-			echo "\t<option value='". esc_attr( $name ) ."'$class>$title</option>\n";
+			echo "\t<option value='" . esc_attr( $name ) . "'$class>$title</option>\n";
 		}
 
 		echo "</select>\n";
@@ -442,8 +442,10 @@ class FrmListHelper {
 <?php
 			foreach ( $this->modes as $mode => $title ) {
 				$classes = array( 'view-' . $mode );
-				if ( $current_mode == $mode )
+				if ( $current_mode == $mode ) {
 					$classes[] = 'current';
+				}
+
 				printf(
 					"<a href='%s' class='%s' id='view-switch-$mode'><span class='screen-reader-text'>%s</span></a>\n",
 					esc_url( add_query_arg( 'mode', $mode ) ),
@@ -1079,7 +1081,7 @@ class FrmListHelper {
 			'screen' => array(
 				'id'   => $this->screen->id,
 				'base' => $this->screen->base,
-			)
+			),
 		);
 
 		printf( "<script type='text/javascript'>list_args = %s;</script>\n", wp_json_encode( $args ) );

@@ -56,7 +56,7 @@ ul.frm_form_nav li.last > a{
 	color:#333;
 }
 .frm_form_nav .frm-dropdown-menu li {
-	float:none;	
+	float:none;
 }
 .frm_form_nav .frm-dropdown-menu a{
 	font-size:12px;
@@ -199,6 +199,10 @@ div.frm_msg_padding{
     z-index:99999;
 }
 
+.frm-on-bottom{
+	z-index:-1;
+}
+
 .post-new-php.post-type-frm_display #poststuff {padding-top:10px;}
 .frm_forms.with_frm_style{max-width:100%;}
 label.frm_primary_label,
@@ -246,6 +250,7 @@ form label.frm_primary_label input{font-size:12px;}
 .with_frm_style form .frm_blank_field input,
 .with_frm_style form .frm_blank_field textarea,
 .with_frm_style form .frm_blank_field select,
+.with_frm_style form .frm_blank_field .frm-g-recaptcha iframe,
 .with_frm_style form .frm_blank_field .g-recaptcha iframe{
 	border-color:#B94A48;
 }
@@ -280,6 +285,64 @@ form label.frm_primary_label input{font-size:12px;}
 	margin-top:10px;
 }
 
+.update-nag.frm-update-to-pro{
+	display:block;
+	text-align:center;
+	border:1px solid #EE4210;
+	border-radius:4px;
+	background:#EF7E59;
+	color:#fff;
+	font-size:19px;
+	line-height:2.1em;
+	margin-top:30px;
+}
+
+.update-nag.frm-update-to-pro span{
+	font-weight:100;
+}
+
+.update-nag.frm-update-to-pro a{
+	color:#fff;
+	font-size:18px;
+	height:auto;
+	margin:0 15px;
+	background-color:#d55a1e;
+	box-shadow: 0 1px 0 #BB3E01;
+	border-color:transparent;
+	padding:7px 15px;
+}
+
+.update-nag.frm-update-to-pro a:hover{
+	background-color:#d55a1e;
+	color:#fff;
+	border:1px solid #BB3E01;
+}
+
+.frm_pro_heading{
+	position:absolute;
+	left:285px;
+	line-height: 2.3em !important;
+}
+
+.upgrade_to_pro .frm_check_icon{
+	color:#468847;
+}
+
+.widefat.frm_pricing thead th,
+.widefat.frm_pricing td{
+	text-align:center;
+}
+
+.widefat th.frm_table_break{
+	background-color:#999;
+	color:#fff;
+	text-align:center;
+}
+
+.plugin-card.plugin-card-formidable-pro{
+	border:2px solid #0073aa;
+}
+
 .frm-no-thumb.plugin-card .name,
 .frm-no-thumb.plugin-card .desc{
 	margin-left:0;
@@ -298,6 +361,44 @@ form label.frm_primary_label input{font-size:12px;}
 
 .frm_image_from_url{
 	height:50px;
+}
+
+.frm_pro_tip a,
+.frm_pro_tip span,
+.frm_pro_tip .frm_check1_icon{
+	color:#EF7E59;
+}
+
+.frm_pro_tip .frm_check1_icon{
+	vertical-align: middle;
+}
+
+.frm_pro_tip{
+	font-size:12px;
+	color:#666;
+	border:1px solid #EF7E59;
+	display:block;
+	padding:5px;
+	background:#FBF0EC;
+	border-radius:4px;
+	text-align:center;
+}
+
+.frm_field_list .frm_pro_tip{
+	margin-top:-10px;
+	margin-bottom:10px;
+}
+
+.nav-tab-wrapper .frm_pro_tip{
+	float:right;
+}
+
+.frm_pro_tip:hover{
+	color:#666;
+}
+
+.frm_pro_tip:hover span{
+	color:#F0430E;
 }
 
 /*Switch form dropdown*/
@@ -322,12 +423,14 @@ form label.frm_primary_label input{font-size:12px;}
 	list-style:none;
 	font-size:12px;
 	background-color:#ffffff;
-	border:1px solid #cccccc;
 	border:1px solid rgba(0, 0, 0, 0.15);
 	border-radius:4px;
 	-webkit-box-shadow:0 6px 12px rgba(0, 0, 0, 0.175);
 	box-shadow:0 6px 12px rgba(0, 0, 0, 0.175);
 	background-clip:padding-box;
+}
+#frm_bs_dropdown .frm-dropdown-menu{
+	width:400px;
 }
 .field_type_list .frm-dropdown-menu,
 .preview .frm-dropdown-menu{
@@ -432,6 +535,7 @@ form label.frm_primary_label input{font-size:12px;}
 	border:solid 1px #dfdfdf;
 	line-height:normal;
 }
+.frm_multi_fields_container,
 .frm_form_fields:not(.frm_sample_form) input[type="text"]{
 	width:400px;
     height:auto;
@@ -448,8 +552,8 @@ form label.frm_primary_label input{font-size:12px;}
 .frm_catlevel_2, .frm_catlevel_3, .frm_catlevel_4, .frm_catlevel_5{margin-left:18px;}
 .frm_form_fields input.auto_width, .frm_form_fields select.auto_width, .frm_form_fields textarea.auto_width{width:auto;}
 
-.frm_form_fields input:focus, .frm_form_fields select:focus, 
-.frm_form_fields textarea:focus, .frm_focus_field input{background-color:#fff;border-color:#ddd;}	
+.frm_form_fields input:focus, .frm_form_fields select:focus,
+.frm_form_fields textarea:focus, .frm_focus_field input{background-color:#fff;border-color:#ddd;}
 
 .frm_radio,
 .frm_checkbox{
@@ -502,6 +606,14 @@ form label.frm_primary_label input{font-size:12px;}
 }
 .frm_form_fields div.star a, .frm_form_fields div.star a:hover, .frm_form_fields div.star a:visited{position:static;right:auto;}
 
+.edit_field_type_file ~ .edit_field_type_break .frm_hidden.frm_pro_tip{
+	display:block;
+	color:red;
+	border-color:red;
+	background-color: transparent;
+	margin-top:10px;
+}
+
 .frm_ext_sc{display:none;}
 .frm_long_input{width:95% !important;}
 
@@ -544,7 +656,7 @@ label input[type="checkbox"], label input[type="radio"]{vertical-align:baseline;
 #wpbody-content #form_global_settings .frmicon.icon32 {background-position: -290px 0 !important;}
 
 .frm_postbox_icon {
-	margin: -6px 0 0 -10px; 
+	margin: -6px 0 0 -10px;
 
 }
 
@@ -676,19 +788,19 @@ textarea.inplace_field{
 .frm_ipe_field_key,
 .frm_field_key{
 	text-overflow:ellipsis;
-	white-space:nowrap; 
-	width:7em; 
+	white-space:nowrap;
+	width:7em;
 	overflow:hidden;
 	float:right;
 	background-color: #FFF !important;
 	padding-left: 4px;
-	box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.07) inset;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07) inset;
 	border: 1px solid #DDD;
 	cursor:text;
 }
 .frm_ipe_field_key,
-.frm_field_key { 
-	float: none;   
+.frm_field_key {
+	float: none;
 	margin: 1px;
   	padding: 3px 5px;
 	width:14em;
@@ -704,7 +816,7 @@ textarea.inplace_field{
 	background-color:transparent !important;
 	border:none;
 	padding:0;
-	box-shadow:none;	
+	box-shadow:none;
 }
 .edit_field_type_break input.inplace_field,
 .edit_field_type_break input.inplace_field:focus{
@@ -774,7 +886,7 @@ table td, .form-table tr td{vertical-align:top;}
 
 .subform_section{
 	margin:25px;
-	
+
 }
 
 .subform_section,
@@ -817,7 +929,7 @@ table td, .form-table tr td{vertical-align:top;}
 	width:300px;
 }
 .frm_sorting .frm_rte textarea{
-	width:653px;background:#fff; margin:1px 0; border:1px solid #dfdfdf; border-top:none; 
+	width:653px;background:#fff; margin:1px 0; border:1px solid #dfdfdf; border-top:none;
 	-moz-border-radius:0; -webkit-border-radius:0; border-radius:0;
 	float:none !important;
 }
@@ -902,7 +1014,7 @@ select.frm_cancelnew, input.frm_enternew{width:175px;}
 .categorydiv .frm_settings_form div.tabs-panel.general_settings{border-top:none;}
 .categorydiv .frm_settings_form div.tabs-panel.general_settings .submit{padding:0;}
 .categorydiv .frm_settings_form .frm_uninstall{padding-top:1.25em;}
-#contextual-help-columns div.tabs-panel.general_settings.frm_license_box{min-height:0px;border-bottom:none;}
+#contextual-help-columns div.tabs-panel.general_settings.frm_license_box{min-height:0;border-bottom:none;}
 .general_settings #frm_license_top{float:left;width:55%}
 .categorydiv div.tabs-panel.general_settings{max-height:none;}
 .frm_38_trigger .categorydiv div.tabs-panel.general_settings .postbox{margin-bottom:0;}
@@ -946,17 +1058,17 @@ select.frm_cancelnew, input.frm_enternew{width:175px;}
 /*@-webkit-keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
 @-moz-keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
 @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }*/
- 
+
 .frm-fade-in {
     opacity:0;  /* make things invisible upon start */
     -webkit-animation:fadeIn ease-in 1;  /* call our keyframe named fadeIn, use animattion ease-in and repeat it only 1 time */
     -moz-animation:fadeIn ease-in 1;
     animation:fadeIn ease-in 1;
- 
+
     -webkit-animation-fill-mode:forwards;  /* this makes sure that after animation is done we remain at the last keyframe value (opacity: 1)*/
     -moz-animation-fill-mode:forwards;
     animation-fill-mode:forwards;
- 
+
     -webkit-animation-duration:0.5s;
     -moz-animation-duration:0.5s;
     animation-duration:0.5s;
@@ -970,7 +1082,7 @@ select.frm_cancelnew, input.frm_enternew{width:175px;}
 
 /*Form Settings Tab*/
 .frm_form_settings .advanced_settings .form-table{margin-top:0;}
-.frm_form_settings .advanced_settings .form-table .frm_short_tr td{padding:0px 10px 10px;}
+.frm_form_settings .advanced_settings .form-table .frm_short_tr td{padding:0 10px 10px;}
 .frm_form_settings .advanced_settings .form-table td.td_select_padding{padding:8px 10px 0;}
 .frm_form_settings td.frm_175_width{width:175px;}
 .frm_form_settings #success_url{width:95%;}
@@ -1036,6 +1148,10 @@ select.frm_cancelnew, input.frm_enternew{width:175px;}
     line-height: 1.4em;
     padding: 0;
 }
+.frm_email_settings .widget:last-of-type{
+	margin-bottom:60px;
+}
+
 .frm_actions_list a{
 	color:#A0A0A0;
 }
@@ -1087,7 +1203,7 @@ label.frm_action_events{
 	height:auto;
 }
 .frm_email_icons, .frm_actions_list{
-    padding: 10px 0px 10px 15px;
+    padding: 10px 0 10px 15px;
 }
 .frm_actions_list a.frm_inactive_action:before{
 	color:#d6d6d6;
@@ -1349,15 +1465,20 @@ span.howto{display:inline;}
     overflow:auto;
     border-right: 2px solid #DEDEDE;
     padding-right:10px;
+		padding-left:10px;
     margin:0;
 }
 .frm_prepop li{
     margin: 0 0 3px;
 }
+.frm_prepop:first-child {
+    margin-top: 2px;
+}
 
 .frm_prepop li a{
     background:#F5F5F5;
-    border:1px solid #EEEEEE;
+	border-width:1px;
+	border-style:solid;
     border-color:#EEEEEE #DEDEDE #DEDEDE #EEEEEE;
     display: block;
     font-weight: bold;
@@ -1383,7 +1504,7 @@ span.howto{display:inline;}
 .frm_form_fields div.star-rating-readonly a{cursor:default !important}
 .frm_form_fields div.star-rating{overflow:hidden !important}
 
-/* */ 
+/* */
 #frm_form_editor_container #frm_form_key_box{width:13em;max-width:30%}
 #frm_form_editor_container #frm_form_desc{width:70%;}
 #frm_form_editor_container .ui-widget-content{display:none; padding:15px;}
@@ -1679,7 +1800,7 @@ table td.frm_left_label{
 .frm_sorting li.ui-state-default.selected.edit_field_type_divider .divider_section_only,
 .frm_update_msg{
 	padding:5px;
-	background-color: #fbfdff; 
+	background-color: #fbfdff;
 	border:1px dashed #d0e9ff;
 }
 .start_divider.frm_sorting li.ui-state-default.frm_not_divider:hover {
@@ -1692,7 +1813,7 @@ table td.frm_left_label{
 .frm_38_trigger .frm_sorting > li.ui-state-default.edit_field_type_divider.selected .divider_section_only,
 .frm_38_trigger .frm_sorting > li.ui-state-default.edit_field_type_divider .divider_section_only:hover,
 .frm_38_trigger .frm_update_msg{
-	box-shadow:0 1px 1px rgba(0, 0, 0, 0.04);	
+	box-shadow:0 1px 1px rgba(0, 0, 0, 0.04);
 }
 
 .no_repeat_section .frm_sorting > li.ui-state-default.edit_field_type_end_divider:hover,
@@ -1889,7 +2010,7 @@ iframe#dyncontent_ifr{min-height:150px;}
 }
 .frm_progress_bar {
   float: left;
-  width: 0%;
+  width: 0;
   height: 100%;
   font-size: 12px;
   line-height: 20px;
@@ -2066,19 +2187,19 @@ iframe#dyncontent_ifr{min-height:150px;}
   width: 17px;
   height: 17px;
   margin: -8px 0 0 -8px;
-  overflow: hidden; 
+  overflow: hidden;
   background: url(../images/styler/marker.png) no-repeat;
 }
-				
+
 /* ---------------------------------------------------------------
 Clearfix
 --------------------------------------------------------------- */
 span.clear{display:block;}
 .clearfix:after {
-    content: "."; 
-    display: block; 
-    height: 0; 
-    clear: both; 
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
     visibility: hidden;
 }
 
@@ -2134,7 +2255,7 @@ Responsive Design
 @media print,
   (-o-min-device-pixel-ratio: 5/4),
   (-webkit-min-device-pixel-ratio: 1.25),
-  (min-resolution: 120dpi)  { 
+  (min-resolution: 120dpi)  {
 		#wpbody-content .frmicon.icon32, .icon32-posts-frm_display {
 			background: url(../images/form_32_sprite-2x.png) no-repeat !important;
 			background-size: 325px 33px !important;
@@ -2200,10 +2321,10 @@ Responsive Design
 /* PRINT */
 @media print {
 #adminmenuwrap, #adminmenuback, #wphead, #button_bar, #submitdiv, .button-secondary,
-#screen-metas, #screen-meta-links, #footer, #wpfooter, .inner-sidebar, .frm_form_nav, .icon32, 
-.frm_flash_graph, .frm_no_print, object{visibility:hidden;display:none !important;}	
+#screen-metas, #screen-meta-links, #footer, #wpfooter, .inner-sidebar, .frm_form_nav, .icon32,
+.frm_flash_graph, .frm_no_print, object{visibility:hidden;display:none !important;}
 #poststuff #post-body.columns-2{margin-right:0;}
-.widget, .postbox, .stuffbox, .postbox h3{border-width:0px !important;border-color:#fff;}
+.widget, .postbox, .stuffbox, .postbox h3{border-width:0 !important;border-color:#fff;}
 .postbox{background:#fff !important;border:none;position:static;}
 .postbox h3{background:#fff !important;}
 #wpbody-content{float:none;}

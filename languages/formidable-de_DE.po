@@ -5392,7 +5392,7 @@ msgstr "Standardwert wird Formularvalidierung NICHT bestehen"
 #: classes/helpers/FrmFieldsHelper.php:1259
 #@ formidable
 msgid "Default value will pass form validation"
-msgstr "Standardwert wird Formularvalidierung nicht bestehen"
+msgstr "Standardwert wird Formularvalidierung bestehen"
 
 #: classes/controllers/FrmAppController.php:277
 #: classes/helpers/FrmFieldsHelper.php:1250

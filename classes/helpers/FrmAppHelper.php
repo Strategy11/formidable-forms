@@ -4,8 +4,8 @@ if ( ! defined('ABSPATH') ) {
 }
 
 class FrmAppHelper {
-	public static $db_version = 27; //version of the database we are moving to
-	public static $pro_db_version = 30;
+	public static $db_version = 29; //version of the database we are moving to
+	public static $pro_db_version = 33;
 
 	/**
 	 * @since 2.0
@@ -32,7 +32,7 @@ class FrmAppHelper {
 
     public static function plugin_url() {
         //prevously FRM_URL constant
-        return plugins_url( '', self::plugin_path() .'/formidable.php' );
+		return plugins_url( '', self::plugin_path() . '/formidable.php' );
     }
 
 	public static function relative_plugin_url() {
@@ -58,12 +58,21 @@ class FrmAppHelper {
     }
 
 	public static function make_affiliate_url( $url ) {
-		$affiliate_id = apply_filters( 'frm_affiliate_link', get_option('frm_aff') );
-		$allowed_affiliates = array( 'mojo' );
-		if ( in_array( strtolower( $affiliate_id ), $allowed_affiliates ) ) {
-			$url .= '?aff=' . $affiliate_id;
+		$affiliate_id = self::get_affiliate();
+		if ( ! empty( $affiliate_id ) ) {
+			$url = add_query_arg( 'aff', $affiliate_id, $url );
 		}
 		return $url;
+	}
+
+	public static function get_affiliate() {
+		$affiliate_id = apply_filters( 'frm_affiliate_link', get_option('frm_aff') );
+		$affiliate_id = strtolower( $affiliate_id );
+		$allowed_affiliates = array( 'mojo' );
+		if ( ! in_array( $affiliate_id, $allowed_affiliates ) ) {
+			$affiliate_id = false;
+		}
+		return $affiliate_id;
 	}
 
     /**
@@ -81,6 +90,11 @@ class FrmAppHelper {
         }
         return $frm_settings;
     }
+
+	public static function get_menu_name() {
+		$frm_settings = FrmAppHelper::get_settings();
+		return $frm_settings->menu;
+	}
 
     /**
      * Show a message in place of pro features
@@ -397,9 +411,9 @@ class FrmAppHelper {
      */
     public static function trigger_hook_load( $type, $object = null ) {
         // only load the form hooks once
-        $hooks_loaded = apply_filters('frm_'. $type .'_hooks_loaded', false, $object);
+		$hooks_loaded = apply_filters( 'frm_' . $type . '_hooks_loaded', false, $object );
         if ( ! $hooks_loaded ) {
-            do_action('frm_load_'. $type .'_hooks');
+			do_action( 'frm_load_' . $type . '_hooks' );
         }
     }
 
@@ -542,7 +556,8 @@ class FrmAppHelper {
 	public static function post_edit_link( $post_id ) {
         $post = get_post($post_id);
         if ( $post ) {
-            return '<a href="'. esc_url(admin_url('post.php') .'?post='. $post_id .'&action=edit') .'">'. self::truncate($post->post_title, 50) .'</a>';
+			$post_url = admin_url( 'post.php?post=' . $post_id . '&action=edit' );
+			return '<a href="' . esc_url( $post_url ) . '">' . self::truncate( $post->post_title, 50 ) . '</a>';
         }
         return '';
     }
@@ -701,11 +716,12 @@ class FrmAppHelper {
     }
 
 	public static function check_selected( $values, $current ) {
-        $values = self::recursive_function_map( $values, 'trim' );
-        $current = trim($current);
+		$values = self::recursive_function_map( $values, 'trim' );
+		$values = self::recursive_function_map( $values, 'htmlspecialchars_decode' );
+		$current = htmlspecialchars_decode( trim( $current ) );
 
-        return ( is_array($values) && in_array($current, $values) ) || ( ! is_array($values) && $values == $current );
-    }
+		return ( is_array( $values ) && in_array( $current, $values ) ) || ( ! is_array( $values ) && $values == $current );
+	}
 
     /**
     * Check if current field option is an "other" option
@@ -829,7 +845,7 @@ class FrmAppHelper {
      * @return string The base Google APIS url for the current version of jQuery UI
      */
     public static function jquery_ui_base_url() {
-        $url = 'http'. ( is_ssl() ? 's' : '' ) .'://ajax.googleapis.com/ajax/libs/jqueryui/'. self::script_version('jquery-ui-core');
+		$url = 'http' . ( is_ssl() ? 's' : '' ) . '://ajax.googleapis.com/ajax/libs/jqueryui/' . self::script_version('jquery-ui-core');
         $url = apply_filters('frm_jquery_ui_base_url', $url);
         return $url;
     }
@@ -867,8 +883,7 @@ class FrmAppHelper {
         }
 
 		if ( $user_id == 'current' ) {
-            $user_ID = get_current_user_id();
-            $user_id = $user_ID;
+			$user_id = get_current_user_id();
 		} else {
             if ( is_email($user_id) ) {
                 $user = get_user_by('email', $user_id);
@@ -901,10 +916,10 @@ class FrmAppHelper {
     /**
      * @param string $table_name
      * @param string $column
+	 * @param int $id
+	 * @param int $num_chars
      */
-    public static function get_unique_key( $name = '', $table_name, $column, $id = 0, $num_chars = 6 ) {
-        global $wpdb;
-
+    public static function get_unique_key( $name = '', $table_name, $column, $id = 0, $num_chars = 5 ) {
         $key = '';
 
         if ( ! empty( $name ) ) {
@@ -918,7 +933,7 @@ class FrmAppHelper {
         }
 
 		if ( is_numeric($key) || in_array( $key, array( 'id', 'key', 'created-at', 'detaillink', 'editlink', 'siteurl', 'evenodd' ) ) ) {
-            $key = $key .'a';
+			$key = $key . 'a';
         }
 
 		$key_check = FrmDb::get_var( $table_name, array( $column => $key, 'ID !' => $id ), $column );
@@ -944,8 +959,6 @@ class FrmAppHelper {
         if ( ! $record ) {
             return false;
         }
-
-        global $frm_vars;
 
         if ( empty($post_values) ) {
             $post_values = stripslashes_deep($_POST);
@@ -999,7 +1012,7 @@ class FrmAppHelper {
             }
         }
 
-        $field_type = isset( $post_values['field_options'][ 'type_'. $field->id ] ) ? $post_values['field_options'][ 'type_'. $field->id ] : $field->type;
+		$field_type = isset( $post_values['field_options'][ 'type_' . $field->id ] ) ? $post_values['field_options'][ 'type_' . $field->id ] : $field->type;
         $new_value = isset( $post_values['item_meta'][ $field->id ] ) ? maybe_unserialize( $post_values['item_meta'][ $field->id ] ) : $meta_value;
 
         $field_array = array(
@@ -1038,7 +1051,7 @@ class FrmAppHelper {
         $opt_defaults = FrmFieldsHelper::get_default_field_opts($field_array['type'], $field, true);
 
         foreach ( $opt_defaults as $opt => $default_opt ) {
-            $field_array[ $opt ] = ( $post_values && isset( $post_values['field_options'][ $opt .'_'. $field->id ] ) ) ? maybe_unserialize( $post_values['field_options'][ $opt .'_'. $field->id ] ) : ( isset( $field->field_options[ $opt ] ) ? $field->field_options[ $opt ] : $default_opt );
+			$field_array[ $opt ] = ( $post_values && isset( $post_values['field_options'][ $opt . '_' . $field->id ] ) ) ? maybe_unserialize( $post_values['field_options'][ $opt . '_' . $field->id ] ) : ( isset( $field->field_options[ $opt ] ) ? $field->field_options[ $opt ] : $default_opt );
             if ( $opt == 'blank' && $field_array[ $opt ] == '' ) {
                 $field_array[ $opt ] = $args['frm_settings']->blank_msg;
             } else if ( $opt == 'invalid' && $field_array[ $opt ] == '' ) {
@@ -1104,8 +1117,8 @@ class FrmAppHelper {
         }
 
 		foreach ( array( 'before', 'after', 'submit' ) as $h ) {
-            if ( ! isset( $values[ $h .'_html' ] ) ) {
-                $values[ $h .'_html' ] = ( isset( $post_values['options'][ $h .'_html' ] ) ? $post_values['options'][ $h .'_html' ] : FrmFormsHelper::get_default_html( $h ) );
+			if ( ! isset( $values[ $h . '_html' ] ) ) {
+				$values[ $h . '_html' ] = ( isset( $post_values['options'][ $h . '_html' ] ) ? $post_values['options'][ $h . '_html' ] : FrmFormsHelper::get_default_html( $h ) );
             }
             unset($h);
         }
@@ -1142,7 +1155,7 @@ class FrmAppHelper {
 
 	public static function truncate( $str, $length, $minword = 3, $continue = '...' ) {
         if ( is_array( $str ) ) {
-            return;
+            return '';
 		}
 
         $length = (int) $length;
@@ -1289,7 +1302,7 @@ class FrmAppHelper {
 			'd' => array( __( 'day', 'formidable' ), __( 'days', 'formidable' ) ),
 			'h' => array( __( 'hour', 'formidable' ), __( 'hours', 'formidable' ) ),
 			'i' => array( __( 'minute', 'formidable' ), __( 'minutes', 'formidable' ) ),
-			's' => array( __( 'second', 'formidable' ), __( 'seconds', 'formidable' ) )
+			's' => array( __( 'second', 'formidable' ), __( 'seconds', 'formidable' ) ),
 		);
 	}
 
@@ -1346,7 +1359,7 @@ class FrmAppHelper {
 			self::esc_order_by( $order_by );
         }
 
-        return ' ORDER BY '. $order . ' '. $order_by;
+		return ' ORDER BY ' . $order . ' ' . $order_by;
     }
 
 	/**
@@ -1369,7 +1382,7 @@ class FrmAppHelper {
 
         $limit = trim(str_replace(' limit', '', strtolower($limit)));
         if ( is_numeric($limit) ) {
-            return ' LIMIT '. $limit;
+			return ' LIMIT ' . $limit;
         }
 
         $limit = explode(',', trim($limit));
@@ -1380,7 +1393,7 @@ class FrmAppHelper {
         }
 
         $limit = implode(',', $limit);
-        return ' LIMIT '. $limit;
+		return ' LIMIT ' . $limit;
     }
 
     /**
@@ -1530,7 +1543,7 @@ class FrmAppHelper {
             echo ' class="frm_help"';
         }
 
-        echo ' title="'. esc_attr( $tooltips[ $name ] );
+		echo ' title="' . esc_attr( $tooltips[ $name ] );
 
         if ( 'open' != $class ) {
             echo '"';
@@ -1668,10 +1681,10 @@ class FrmAppHelper {
      * @since 1.07.10
      *
      * @param string $post_type The name of the post type that may need to be highlighted
-     * @return echo The javascript to open and highlight the Formidable menu
+     * echo The javascript to open and highlight the Formidable menu
      */
 	public static function maybe_highlight_menu( $post_type ) {
-        global $post, $pagenow;
+        global $post;
 
         if ( isset($_REQUEST['post_type']) && $_REQUEST['post_type'] != $post_type ) {
             return;
@@ -1761,15 +1774,16 @@ class FrmAppHelper {
 				'no_save_warning'   => __( 'Warning: There is no way to retrieve unsaved entries.', 'formidable' ),
 				'private'           => __( 'Private' ),
 				'jquery_ui_url'     => self::jquery_ui_base_url(),
+				'no_licenses'       => __( 'No new licenses were found', 'formidable' ),
 			) );
 		}
 	}
 
     /**
+	 * echo the message on the plugins listing page
      * @since 1.07.10
      *
      * @param float $min_version The version the add-on requires
-     * @return echo The message on the plugins listing page
      */
 	public static function min_version_notice( $min_version ) {
         $frm_version = self::plugin_version();

@@ -20,6 +20,7 @@ class WP_Test_FrmXMLHelper extends FrmUnitTest {
 		foreach ( $imported_fields as $f ) {
 			self::_check_imported_repeating_fields( $f, $fields_tested );
 			self::_check_imported_embed_form_fields( $f, $fields_tested );
+			self::_check_fields_in_section( $f );
 			// Check fields inside repeating section
 		}
 
@@ -57,6 +58,30 @@ class WP_Test_FrmXMLHelper extends FrmUnitTest {
 		$nested_form = FrmForm::getOne( $f->field_options['form_select'] );
 		$this->assertNotEmpty( $nested_form, 'The form_select in an imported repeating section is not updating correctly.');
 		$this->assertEquals( $expected_form_key, $nested_form->form_key, 'The form_select is not updating properly when a repeating section is imported.');
+	}
+
+	function _check_fields_in_section( $f ) {
+		$fields_in_sections = array(
+			'i79z0s' => 'flf4iy',
+			'mprllc' => 'flf4iy',
+			'72hika' => 'flf4iy',
+			'msyehy' => 'flf4iy',
+			'n0d580' => 'flf4iy',
+			'bm57jf' => 'flf4iy',
+			'f67hbu' => 'flf4iy',
+			'zwuclz' => 'flf4iy',
+			'qbrd2o' => 'flf4iy',
+			'repeating-text' => 'repeating-section',
+			'repeating-checkbox' => 'repeating-section',
+			'repeating-date' => 'repeating-section',
+		);
+
+		if ( isset( $fields_in_sections[ $f->field_key ] ) ) {
+			$expected_id = FrmField::get_id_by_key( $fields_in_sections[ $f->field_key ] );
+			$this->assertEquals( $expected_id, $f->field_options['in_section'], 'The in_section variable is not set correctly for the ' . $f->field_key . ' field in a section on import.' );
+		} else {
+			$this->assertEquals( 0, $f->field_options['in_section'], 'The in_section variable is not set correctly for the ' . $f->field_key . ' field outside of a section on import.' );
+		}
 	}
 
 	function test_imported_forms() {

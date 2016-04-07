@@ -60,7 +60,7 @@ class FrmFormsListHelper extends FrmListHelper {
             }
 	    }
 
-        $this->items = FrmForm::getAll($s_query, $orderby .' '. $order, $start .','. $per_page);
+		$this->items = FrmForm::getAll( $s_query, $orderby . ' ' . $order, $start . ',' . $per_page );
         $total_items = FrmDb::get_count( 'frm_forms', $s_query );
 
 		$this->set_pagination_args( array(
@@ -73,7 +73,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	    if ( 'template' == $this->status ) {
             _e( 'No Templates Found.', 'formidable' ) ?>
             <br/><br/><?php _e( 'To add a new template:', 'formidable' ) ?>
-            <ol><li><?php printf( __( 'Create a new %1$sform%2$s.', 'formidable' ), '<a href="'. esc_url( admin_url( 'admin?page=formidable&frm_action=new' ) ) . '"', '</a>' ) ?></li>
+			<ol><li><?php printf( __( 'Create a new %1$sform%2$s.', 'formidable' ), '<a href="' . esc_url( admin_url( 'admin?page=formidable&frm_action=new' ) ) . '"', '</a>' ) ?></li>
                 <li><?php printf(__( 'After your form is created, go to Formidable -> %1$sForms%2$s.', 'formidable' ), '<a href="?page=formidable">', '</a>') ?></li>
                 <li><?php _e( 'Place your mouse over the name of the form you just created, and click the "Create Template" link.', 'formidable' ) ?></li>
             </ol>
@@ -204,8 +204,8 @@ class FrmFormsListHelper extends FrmListHelper {
 
 		// Set up the hover actions for this user
 		$actions = array();
-        $edit_link = '?page=formidable&frm_action=edit&id='. $item->id;
-	    $duplicate_link = '?page=formidable&frm_action=duplicate&id='. $item->id;
+		$edit_link = '?page=formidable&frm_action=edit&id=' . $item->id;
+		$duplicate_link = '?page=formidable&frm_action=duplicate&id=' . $item->id;
 
         $this->get_actions($actions, $item, $edit_link, $duplicate_link);
 
@@ -224,7 +224,7 @@ class FrmFormsListHelper extends FrmListHelper {
 		}
 
 		foreach ( $columns as $column_name => $column_display_name ) {
-            $class = $column_name .' column-'. $column_name . ( ('name' == $column_name) ? ' post-title page-title column-title' : '' );
+			$class = $column_name . ' column-' . $column_name . ( 'name' == $column_name ? ' post-title page-title column-title' : '' );
 
 			$style = '';
 			if ( in_array( $column_name, $hidden ) ) {
@@ -237,7 +237,7 @@ class FrmFormsListHelper extends FrmListHelper {
 
 			switch ( $column_name ) {
 				case 'cb':
-					$r .= '<th scope="row" class="check-column">'. $checkbox .'</th>';
+					$r .= '<th scope="row" class="check-column">' . $checkbox . '</th>';
 					break;
 				case 'id':
 				case 'form_key':
@@ -253,17 +253,17 @@ class FrmFormsListHelper extends FrmListHelper {
 					$val = '<abbr title="' . esc_attr( date( 'Y/m/d g:i:s A', strtotime( $item->created_at ) ) ) . '">' . $date . '</abbr>';
 					break;
 				case 'shortcode':
-					$val = '<input type="text" readonly="readonly" class="frm_select_box" value="' . esc_attr( '[formidable id=' . $item->id .']' ) . '" /><br/>';
+					$val = '<input type="text" readonly="readonly" class="frm_select_box" value="' . esc_attr( '[formidable id=' . $item->id . ']' ) . '" /><br/>';
 				    if ( 'excerpt' == $mode ) {
 						$val .= '<input type="text" readonly="readonly" class="frm_select_box" value="' . esc_attr( '[formidable key=' . $item->form_key . ']' ) . '" />';
 				    }
 			        break;
 			    case 'entries':
 					if ( isset( $item->options['no_save'] ) && $item->options['no_save'] ) {
-			            $val = '<i class="frm_icon_font frm_forbid_icon frm_bstooltip" title="'. esc_attr('Entries are not being saved', 'formidable' ) .'"></i>';
+						$val = '<i class="frm_icon_font frm_forbid_icon frm_bstooltip" title="' . esc_attr('Entries are not being saved', 'formidable' ) . '"></i>';
 			        } else {
 			            $text = FrmEntry::getRecordCount($item->id);
-                        $val = (current_user_can('frm_view_entries')) ? '<a href="'. esc_url(admin_url('admin.php') .'?page=formidable-entries&form='. $item->id ) .'">'. $text .'</a>' : $text;
+						$val = current_user_can('frm_view_entries') ? '<a href="' . esc_url( admin_url( 'admin.php?page=formidable-entries&form=' . $item->id ) ) . '">' . $text . '</a>' : $text;
                         unset($text);
                     }
 			        break;
@@ -295,20 +295,21 @@ class FrmFormsListHelper extends FrmListHelper {
 			}
 
 		    if ( current_user_can('frm_delete_forms') ) {
-    		    $actions['trash'] = '<a href="' . esc_url(wp_nonce_url( '?page=formidable&form_status=trash&frm_action=destroy&id='. $item->id, 'destroy_form_'. $item->id )) .'" class="submitdelete"  onclick="return confirm(\''. __( 'Are you sure you want to permanently delete that?', 'formidable' ) .'\')">' . __( 'Delete Permanently' ) . '</a>';
+				$trash_url = wp_nonce_url( '?page=formidable&form_status=trash&frm_action=destroy&id=' . $item->id, 'destroy_form_' . $item->id );
+				$actions['trash'] = '<a href="' . esc_url( $trash_url ) . '" class="submitdelete" onclick="return confirm(\'' . __( 'Are you sure you want to permanently delete that?', 'formidable' ) . '\')">' . __( 'Delete Permanently' ) . '</a>';
     		}
             return;
 		}
 
 		if ( current_user_can('frm_edit_forms') ) {
             if ( ! $item->is_template || ! $item->default_template ) {
-		        $actions['frm_edit'] = '<a href="'. esc_url( $edit_link ) . '">'. __( 'Edit') .'</a>';
+				$actions['frm_edit'] = '<a href="' . esc_url( $edit_link ) . '">' . __( 'Edit' ) . '</a>';
             }
 
 		    if ( $item->is_template ) {
-				$actions['frm_duplicate'] = '<a href="'. esc_url( wp_nonce_url( $duplicate_link ) ) . '">' . __( 'Create Form from Template', 'formidable' ) . '</a>';
+				$actions['frm_duplicate'] = '<a href="' . esc_url( wp_nonce_url( $duplicate_link ) ) . '">' . __( 'Create Form from Template', 'formidable' ) . '</a>';
             } else {
-    		    $actions['frm_settings'] = '<a href="'. esc_url('?page=formidable&frm_action=settings&id='. $item->id ) . '">'. __( 'Settings', 'formidable' ) .'</a>';
+				$actions['frm_settings'] = '<a href="' . esc_url( '?page=formidable&frm_action=settings&id=' . $item->id ) . '">' . __( 'Settings', 'formidable' ) . '</a>';
 
     		    if ( FrmAppHelper::pro_is_installed() ) {
 					$actions['duplicate'] = '<a href="' . esc_url( wp_nonce_url( $duplicate_link ) ) . '">' . __( 'Duplicate', 'formidable' ) . '</a>';
@@ -358,7 +359,7 @@ class FrmFormsListHelper extends FrmListHelper {
      */
     private function add_draft_label( $item, &$val ) {
         if ( 'draft' == $item->status && 'draft' != $this->status ) {
-            $val .= ' - <span class="post-state">'. __( 'Draft', 'formidable' ) .'</span>';
+			$val .= ' - <span class="post-state">' . __( 'Draft', 'formidable' ) . '</span>';
         }
     }
 

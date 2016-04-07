@@ -66,6 +66,7 @@
 }
 #frm_shortcode_options.media-embed .setting span{float:left;}
 #frm_shortcode_options h4{margin:3px 0 0;}
+#frm_popup_content .media-toolbar-primary{width:33% !important;}
 #frm_popup_content .media-toolbar-secondary{width:60%;}
 #frm_complete_shortcode{margin-top:15px;width:100%;}
 .frm_box_line{border-bottom:1px solid #ddd;display:block;margin:15px 0 0;}

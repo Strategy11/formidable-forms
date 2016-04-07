@@ -3,7 +3,7 @@
 class FrmXMLController {
 
     public static function menu() {
-        add_submenu_page('formidable', 'Formidable | '. __( 'Import/Export', 'formidable' ), __( 'Import/Export', 'formidable' ), 'frm_edit_forms', 'formidable-import', 'FrmXMLController::route');
+		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Import/Export', 'formidable' ), __( 'Import/Export', 'formidable' ), 'frm_edit_forms', 'formidable-import', 'FrmXMLController::route' );
     }
 
     public static function add_default_templates() {
@@ -51,7 +51,7 @@ class FrmXMLController {
     public static function form( $errors = array(), $message = '' ) {
 		$where = array(
 			'parent_form_id' => array( null, 0 ),
-			'status' => array( null, '', 'published' )
+			'status' => array( null, '', 'published' ),
 		);
 		$forms = FrmForm::getAll( $where, 'name' );
 
@@ -64,7 +64,7 @@ class FrmXMLController {
 			'csv' => array( 'name' => 'CSV', 'support' => 'items', 'count' => 'single' ),
         ) );
 
-        include(FrmAppHelper::plugin_path() .'/classes/views/xml/import_form.php');
+		include( FrmAppHelper::plugin_path() . '/classes/views/xml/import_form.php' );
     }
 
     public static function import_xml() {
@@ -102,7 +102,7 @@ class FrmXMLController {
         $file_type = strtolower(pathinfo($_FILES['frm_import_file']['name'], PATHINFO_EXTENSION));
         if ( $file_type != 'xml' && isset( $export_format[ $file_type ] ) ) {
             // allow other file types to be imported
-            do_action('frm_before_import_'. $file_type );
+			do_action( 'frm_before_import_' . $file_type );
             return;
         }
         unset($file_type);
@@ -147,7 +147,7 @@ class FrmXMLController {
 		} if ( $format == 'csv' ) {
 			self::generate_csv( compact('ids') );
         } else {
-            do_action('frm_export_format_'. $format, compact('ids'));
+			do_action( 'frm_export_format_' . $format, compact('ids') );
         }
 
         wp_die();
@@ -168,8 +168,8 @@ class FrmXMLController {
 	    }
 
 	    $tables = array(
-	        'items'     => $wpdb->prefix .'frm_items',
-	        'forms'     => $wpdb->prefix .'frm_forms',
+			'items'     => $wpdb->prefix . 'frm_items',
+			'forms'     => $wpdb->prefix . 'frm_forms',
 	        'posts'     => $wpdb->posts,
 	        'styles'    => $wpdb->posts,
 	        'actions'   => $wpdb->posts,
@@ -201,20 +201,20 @@ class FrmXMLController {
 			$join = '';
             $table = $tables[ $tb_type ];
 
-            $select = $table .'.id';
+			$select = $table . '.id';
             $query_vars = array();
 
             switch ( $tb_type ) {
                 case 'forms':
                     //add forms
                     if ( $args['ids'] ) {
-						$where[] = array( 'or' => 1, $table . '.id' => $args['ids'], $table .'.parent_form_id' => $args['ids'] );
+						$where[] = array( 'or' => 1, $table . '.id' => $args['ids'], $table . '.parent_form_id' => $args['ids'] );
                 	} else {
 						$where[ $table . '.status !' ] = 'draft';
                 	}
                 break;
                 case 'actions':
-                    $select = $table .'.ID';
+					$select = $table . '.ID';
 					$where['post_type'] = FrmFormActionsController::$action_post_type;
                     if ( ! empty($args['ids']) ) {
 						$where['menu_order'] = $args['ids'];
@@ -238,7 +238,7 @@ class FrmXMLController {
                         }
                         unset( $form_id, $form_data );
                     }
-                    $select = $table .'.ID';
+					$select = $table . '.ID';
                     $where['post_type'] = 'frm_styles';
 
                     // Only export selected styles
@@ -247,7 +247,7 @@ class FrmXMLController {
                     }
                 break;
                 default:
-                    $select = $table .'.ID';
+					$select = $table . '.ID';
                     $join = ' INNER JOIN ' . $wpdb->postmeta . ' pm ON (pm.post_id=' . $table . '.ID)';
                     $where['pm.meta_key'] = 'frm_form_id';
 
@@ -264,7 +264,7 @@ class FrmXMLController {
         }
 
 		echo '<?xml version="1.0" encoding="' . esc_attr( get_bloginfo('charset') ) . "\" ?>\n";
-        include(FrmAppHelper::plugin_path() .'/classes/views/xml/xml.php');
+		include( FrmAppHelper::plugin_path() . '/classes/views/xml/xml.php' );
     }
 
 
@@ -323,7 +323,7 @@ class FrmXMLController {
 		 */
 		$query = apply_filters( 'frm_csv_where', $query, compact( 'form_id', 'search', 'fid', 'item_id' ) );
 
-		$entry_ids = FrmDb::get_col( $wpdb->prefix .'frm_items it', $query );
+		$entry_ids = FrmDb::get_col( $wpdb->prefix . 'frm_items it', $query );
 		unset( $query );
 
 		if ( empty( $entry_ids ) ) {
@@ -355,7 +355,7 @@ class FrmXMLController {
 			if ( ! is_array( $csv_field_ids ) ) {
 				$csv_field_ids = explode( ',', $csv_field_ids );
 			}
-			if ( ! empty( $csv_field_ids ) )	{
+			if ( ! empty( $csv_field_ids ) ) {
 				$where['fi.id'] = $csv_field_ids;
 			}
 			$csv_fields = FrmField::getAll( $where, 'field_order' );

@@ -133,10 +133,11 @@ class FrmFormActionsController {
 
 	public static function action_control( $form_action, $form, $action_key, $action_control, $values ) {
         $action_control->_set($action_key);
-        include(FrmAppHelper::plugin_path() .'/classes/views/frm-form-actions/form_action.php');
+		include( FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/form_action.php' );
     }
 
     public static function add_form_action() {
+		FrmAppHelper::permission_check('frm_edit_forms');
         check_ajax_referer( 'frm_ajax', 'nonce' );
 
         global $frm_vars;
@@ -154,11 +155,12 @@ class FrmFormActionsController {
         $values = array();
         $form = self::fields_to_values($form_id, $values);
 
-        include(FrmAppHelper::plugin_path() .'/classes/views/frm-form-actions/form_action.php');
+		include( FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/form_action.php' );
         wp_die();
     }
 
     public static function fill_action() {
+		FrmAppHelper::permission_check('frm_edit_forms');
         check_ajax_referer( 'frm_ajax', 'nonce' );
 
         $action_key = absint( $_POST['action_id'] );
@@ -174,7 +176,7 @@ class FrmFormActionsController {
         $values = array();
         $form = self::fields_to_values($form_action->menu_order, $values);
 
-        include(FrmAppHelper::plugin_path() .'/classes/views/frm-form-actions/_action_inside.php');
+		include( FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/_action_inside.php' );
         wp_die();
     }
 
@@ -232,7 +234,12 @@ class FrmFormActionsController {
 	}
 
 	public static function trigger_create_actions( $entry_id, $form_id, $args = array() ) {
-		self::trigger_actions( 'create', $form_id, $entry_id, 'all', $args );
+		$filter_args = $args;
+		$filter_args['entry_id'] = $entry_id;
+		$filter_args['form_id']  = $form_id;
+		$event = apply_filters( 'frm_trigger_create_action', 'create', $args );
+
+		self::trigger_actions( $event, $form_id, $entry_id, 'all', $args );
 	}
 
     /**
@@ -266,7 +273,7 @@ class FrmFormActionsController {
                 $entry = FrmEntry::getOne( $entry, true );
             }
 
-			if ( empty( $entry ) || $entry->is_draft ) {
+			if ( empty( $entry ) || ( $entry->is_draft && $event != 'draft' ) ) {
 				continue;
 			}
 
@@ -298,8 +305,8 @@ class FrmFormActionsController {
 
             foreach ( $action_priority as $action_id => $priority ) {
                 $action = $stored_actions[ $action_id ];
-                do_action('frm_trigger_'. $action->post_excerpt .'_action', $action, $entry, $form, $event);
-                do_action('frm_trigger_'. $action->post_excerpt .'_'. $event .'_action', $action, $entry, $form);
+				do_action( 'frm_trigger_' . $action->post_excerpt . '_action', $action, $entry, $form, $event );
+				do_action( 'frm_trigger_' . $action->post_excerpt . '_' . $event . '_action', $action, $entry, $form );
 
                 // If post is created, get updated $entry object
                 if ( $action->post_excerpt == 'wppost' && $event == 'create' ) {

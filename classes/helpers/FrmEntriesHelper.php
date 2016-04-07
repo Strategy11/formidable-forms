@@ -6,7 +6,6 @@ if ( ! defined('ABSPATH') ) {
 class FrmEntriesHelper {
 
     public static function setup_new_vars( $fields, $form = '', $reset = false, $args = array() ) {
-        global $frm_vars;
         $values = array();
 		foreach ( array( 'name' => '', 'description' => '', 'item_key' => '' ) as $var => $default ) {
             $values[ $var ] = FrmAppHelper::get_post_param( $var, $default );
@@ -33,6 +32,7 @@ class FrmEntriesHelper {
                 'field_order' => $field->field_order,
                 'form_id' => $field->form_id,
 				'parent_form_id' => isset( $args['parent_form_id'] ) ? $args['parent_form_id'] : $field->form_id,
+	            'reset_value' => $reset,
             );
 
             $opt_defaults = FrmFieldsHelper::get_default_field_opts($field_array['type'], $field, true);
@@ -200,6 +200,7 @@ class FrmEntriesHelper {
 
 	public static function prepare_display_value( $entry, $field, $atts ) {
 		$field_value = isset( $entry->metas[ $field->id ] ) ? $entry->metas[ $field->id ] : false;
+
         if ( FrmAppHelper::pro_is_installed() ) {
 			FrmProEntriesHelper::get_dynamic_list_values( $field, $entry, $field_value );
         }
@@ -288,6 +289,7 @@ class FrmEntriesHelper {
         }
 
         $value = apply_filters('frm_display_value_custom', maybe_unserialize($value), $field, $atts);
+		$value = apply_filters( 'frm_display_' . $field->type . '_value_custom', $value, compact( 'field', 'atts' ) );
 
         $new_value = '';
 
@@ -454,7 +456,7 @@ class FrmEntriesHelper {
 
 	public static function enqueue_scripts( $params ) {
 		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmFormsController::enqueue_scripts' );
-		return FrmFormsController::enqueue_scripts( $params );
+		FrmFormsController::enqueue_scripts( $params );
 	}
 
     // Add submitted values to a string for spam checking
@@ -503,7 +505,7 @@ class FrmEntriesHelper {
 
 	public static function convert_entry_to_content( $values, $atts, array &$content ) {
 		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmEntryFormat::convert_entry_to_content' );
-		return FrmEntryFormat::convert_entry_to_content( $values, $atts, $content );
+		FrmEntryFormat::convert_entry_to_content( $values, $atts, $content );
 	}
 
 	public static function get_browser( $u_agent ) {

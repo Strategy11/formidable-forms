@@ -11,7 +11,7 @@ class FrmXMLHelper {
 				echo "\n" . $padding;
 				$tag = ( is_numeric( $ok ) ? 'key:' : '' ) . $ok;
 				echo '<' . $tag . '>';
-				self::get_xml_values( $ov, $padding .'    ' );
+				self::get_xml_values( $ov, $padding . '    ' );
 				if ( is_array( $ov ) ) {
 					echo "\n" . $padding;
 				}
@@ -278,6 +278,8 @@ class FrmXMLHelper {
 	* TODO: Cut down on params
 	*/
 	private static function import_xml_fields( $xml_fields, $form_id, $this_form, &$form_fields, &$imported ) {
+		$in_section = 0;
+
 		foreach ( $xml_fields as $field ) {
 		    $f = array(
 		        'id'            => (int) $field->id,
@@ -299,56 +301,68 @@ class FrmXMLHelper {
 		        'hidden', 'password', 'tag', 'image',
 		    )) ) {
 		        if ( count($f['default_value']) === 1 ) {
-		            $f['default_value'] = '['. reset($f['default_value']) .']';
+					$f['default_value'] = '[' . reset( $f['default_value'] ) . ']';
 		        } else {
 		            $f['default_value'] = reset($f['default_value']);
 		        }
 		    }
 
-		    $f = apply_filters('frm_duplicated_field', $f);
-
+			self::maybe_update_in_section_variable( $in_section, $f );
 			self::maybe_update_form_select( $f, $imported );
 
-		    if ( ! empty($this_form) ) {
-		        // check for field to edit by field id
+			if ( ! empty($this_form) ) {
+				// check for field to edit by field id
 				if ( isset( $form_fields[ $f['id'] ] ) ) {
-		            FrmField::update( $f['id'], $f );
-		            $imported['updated']['fields']++;
+					FrmField::update( $f['id'], $f );
+					$imported['updated']['fields']++;
 
 					unset( $form_fields[ $f['id'] ] );
 
-		            //unset old field key
+					//unset old field key
 					if ( isset( $form_fields[ $f['field_key'] ] ) ) {
 						unset( $form_fields[ $f['field_key'] ] );
 					}
 				} else if ( isset( $form_fields[ $f['field_key'] ] ) ) {
-		            // check for field to edit by field key
-		            unset($f['id']);
+					// check for field to edit by field key
+					unset($f['id']);
 
 					FrmField::update( $form_fields[ $f['field_key'] ], $f );
-		            $imported['updated']['fields']++;
+					$imported['updated']['fields']++;
 
 					unset( $form_fields[ $form_fields[ $f['field_key'] ] ] ); //unset old field id
 					unset( $form_fields[ $f['field_key'] ] ); //unset old field key
 				} else {
-					$new_id = FrmField::create( $f );
-					if ( $new_id == false ) {
-						continue;
-					}
-
-		            // if no matching field id or key in this form, create the field
-		            $imported['imported']['fields']++;
-		        }
-			} else {
-				$new_id = FrmField::create( $f );
-				if ( $new_id == false ) {
-					continue;
+					// if no matching field id or key in this form, create the field
+					self::create_imported_field( $f, $imported );
 				}
+			} else {
 
-	            $imported['imported']['fields']++;
-		    }
+				self::create_imported_field( $f, $imported );
+			}
+		}
+	}
 
-			unset($field, $new_id);
+	/**
+	 * Update the current in_section value
+	 *
+	 * @since 2.0.25
+	 * @param int $in_section
+	 * @param array $f
+	 */
+	private static function maybe_update_in_section_variable( &$in_section, &$f ) {
+		// If we're at the end of a section, switch $in_section is 0
+		if ( in_array( $f['type'], array( 'end_divider', 'break', 'form' ) ) ) {
+			$in_section = 0;
+		}
+
+		// Update the current field's in_section value
+		if ( ! isset( $f['field_options']['in_section'] ) ) {
+			$f['field_options']['in_section'] = $in_section;
+		}
+
+		// If we're starting a new section, switch $in_section to ID of divider
+		if ( $f['type'] == 'divider' ) {
+			$in_section = $f['id'];
 		}
 	}
 
@@ -375,6 +389,21 @@ class FrmXMLHelper {
 	}
 
 	/**
+	 * Create an imported field
+	 *
+	 * @since 2.0.25
+	 * @param array $f
+	 * @param array $imported
+	 */
+	private static function create_imported_field( $f, &$imported ) {
+		$new_id = FrmField::create( $f );
+		if ( $new_id != false ) {
+			$imported['imported']['fields']++;
+			do_action( 'frm_after_field_is_imported', $f, $new_id );
+		}
+	}
+
+	/**
 	* Updates the custom style setting on import
 	*
 	* @since 2.0.19
@@ -382,6 +411,10 @@ class FrmXMLHelper {
 	*
 	*/
 	private static function update_custom_style_setting_on_import( &$form ) {
+		if ( ! isset( $form['options']['custom_style'] ) ) {
+			return;
+		}
+
 		if ( is_numeric( $form['options']['custom_style'] ) ) {
 			// Set to default
 			$form['options']['custom_style'] = 1;
@@ -403,7 +436,6 @@ class FrmXMLHelper {
 				$form['options']['custom_style'] = 1;
 			}
 		}
-
 	}
 
 	public static function import_xml_views( $views, $imported ) {
@@ -447,7 +479,7 @@ class FrmXMLHelper {
 			$post_id = false;
             if ( $post['post_type'] == $form_action_type ) {
                 $action_control = FrmFormActionsController::get_form_actions( $post['post_excerpt'] );
-				if ( $action_control ) {
+				if ( $action_control && is_object( $action_control ) ) {
 					$post_id = $action_control->maybe_create_action( $post, $imported['form_status'] );
 				}
                 unset($action_control);
@@ -756,10 +788,23 @@ class FrmXMLHelper {
             return $str;
         }
 
+		self::remove_invalid_characters_from_xml( $str );
+
 		// $str = ent2ncr(esc_html($str));
 		$str = '<![CDATA[' . str_replace( ']]>', ']]]]><![CDATA[>', $str ) . ']]>';
 
 		return $str;
+	}
+
+	/**
+	 * Remove <US> character (unit separator) from exported strings
+	 *
+	 * @since 2.0.22
+	 * @param string $str
+	 */
+	private static function remove_invalid_characters_from_xml( &$str ) {
+		// Remove <US> character
+		$str = str_replace( '\x1F', '', $str );
 	}
 
     public static function migrate_form_settings_to_actions( $form_options, $form_id, &$imported = array(), $switch = false ) {
@@ -795,7 +840,7 @@ class FrmXMLHelper {
             'menu_order'    => $form_id,
             'post_status'   => 'publish',
             'post_content'  => array(),
-            'post_name'     => $form_id .'_wppost_1',
+			'post_name'     => $form_id . '_wppost_1',
         );
 
         $post_settings = array(
@@ -1024,7 +1069,7 @@ class FrmXMLHelper {
                 'email_to'      => $atts['email_to'],
                 'event'         => $atts['event'],
             ),
-            'post_name'         => $atts['form_id'] .'_email_'. $atts['email_key'],
+			'post_name'         => $atts['form_id'] . '_email_' . $atts['email_key'],
         );
 
         // Add more fields to the new notification
@@ -1045,7 +1090,7 @@ class FrmXMLHelper {
 
         // Set from
 		if ( ! empty( $atts['reply_to'] ) || ! empty( $atts['reply_to_name'] ) ) {
-            $new_notification['post_content']['from'] = ( empty($atts['reply_to_name']) ? '[sitename]' : $atts['reply_to_name'] ) .' <'. ( empty($atts['reply_to']) ? '[admin_email]' : $atts['reply_to'] ) .'>';
+			$new_notification['post_content']['from'] = ( empty( $atts['reply_to_name'] ) ? '[sitename]' : $atts['reply_to_name'] ) . ' <' . ( empty( $atts['reply_to'] ) ? '[admin_email]' : $atts['reply_to'] ) . '>';
         }
     }
 
@@ -1079,7 +1124,7 @@ class FrmXMLHelper {
                 }
             }
             if ( is_numeric($email_field) && ! empty($email_field) ) {
-                $email_field = '['. $email_field .']';
+				$email_field = '[' . $email_field . ']';
             }
 
             $notification = $form_options;
@@ -1091,7 +1136,7 @@ class FrmXMLHelper {
                     'plain_text'    => isset($notification['ar_plain_text']) ? $notification['ar_plain_text'] : 0,
                     'inc_user_info' => 0,
                 ),
-                'post_name'     => $form_id .'_email_'. count( $notifications ),
+				'post_name'     => $form_id . '_email_' . count( $notifications ),
             );
 
             $reply_to = isset($notification['ar_reply_to']) ? $notification['ar_reply_to'] : '';
@@ -1102,7 +1147,7 @@ class FrmXMLHelper {
 			}
 
 			if ( ! empty( $reply_to ) || ! empty( $reply_to_name ) ) {
-                $new_notification2['post_content']['from'] = ( empty($reply_to_name) ? '[sitename]' : $reply_to_name ) .' <'. ( empty($reply_to) ? '[admin_email]' : $reply_to ) .'>';
+				$new_notification2['post_content']['from'] = ( empty( $reply_to_name ) ? '[sitename]' : $reply_to_name ) . ' <' . ( empty( $reply_to ) ? '[admin_email]' : $reply_to ) . '>';
 			}
 
             $notifications[] = $new_notification2;

@@ -1,5 +1,5 @@
 <div class="wrap">
-	<h2><?php _e( 'Formidable AddOns', 'formidable' ) ?></h2>
+	<h1><?php _e( 'Formidable AddOns', 'formidable' ) ?></h1>
 
 	<div id="the-list" class="frm-addons">
 		<?php foreach ( $addons as $addon ) {
@@ -19,7 +19,7 @@
 			$addon['info']['link'] = FrmAppHelper::make_affiliate_url( $addon['info']['link'] );
 
 		?>
-			<div class="plugin-card <?php echo esc_attr( $has_thumbnail ? '' : 'frm-no-thumb') ?>">
+			<div class="plugin-card plugin-card-<?php echo esc_attr( $addon['info']['slug'] ) ?> <?php echo esc_attr( $has_thumbnail ? '' : 'frm-no-thumb' ) ?>">
 				<div class="plugin-card-top">
 					<div class="name column-name">
 						<h3>

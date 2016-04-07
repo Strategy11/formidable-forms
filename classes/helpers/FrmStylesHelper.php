@@ -44,11 +44,11 @@ class FrmStylesHelper {
             $css_file = $theme_css;
         } else {
             $uploads = self::get_upload_base();
-            $file_path = '/formidable/css/'. $theme_css . '/jquery-ui.css';
+			$file_path = '/formidable/css/' . $theme_css . '/jquery-ui.css';
             if ( file_exists($uploads['basedir'] . $file_path) ) {
                 $css_file = $uploads['baseurl'] . $file_path;
             } else {
-                $css_file = FrmAppHelper::jquery_ui_base_url() .'/themes/'. $theme_css . '/jquery-ui.min.css';
+				$css_file = FrmAppHelper::jquery_ui_base_url() . '/themes/' . $theme_css . '/jquery-ui.min.css';
             }
         }
 
@@ -159,7 +159,7 @@ class FrmStylesHelper {
     	<select name="<?php echo esc_attr( $frm_style->get_field_name($name) ) ?>" id="frm_<?php echo esc_attr( $name ) ?>" class="frm_icon_font frm_multiselect hide-if-js">
             <?php foreach ( $icons as $key => $icon ) { ?>
 			<option value="<?php echo esc_attr( $key ) ?>" <?php selected( $style->post_content[ $name ], $key ) ?>>
-                <?php echo '&#xe'. $icon['+'] .'; &#xe'. $icon['-'] .';'; ?>
+				<?php echo '&#xe' . $icon['+'] . '; &#xe' . $icon['-'] . ';'; ?>
             </option>
             <?php } ?>
     	</select>
@@ -193,13 +193,13 @@ class FrmStylesHelper {
         $hex = str_replace('#', '', $hex);
 
         if ( strlen($hex) == 3 ) {
-            $r = hexdec( substr($hex,0,1).substr($hex,0,1) );
-            $g = hexdec( substr($hex,1,1).substr($hex,1,1) );
-            $b = hexdec( substr($hex,2,1).substr($hex,2,1) );
+			$r = hexdec( substr( $hex, 0, 1 ) . substr( $hex, 0, 1 ) );
+			$g = hexdec( substr( $hex, 1, 1 ) . substr( $hex, 1, 1 ) );
+			$b = hexdec( substr( $hex, 2, 1 ) . substr( $hex, 2, 1 ) );
         } else {
-            $r = hexdec( substr($hex,0,2) );
-            $g = hexdec( substr($hex,2,2) );
-            $b = hexdec( substr($hex,4,2) );
+			$r = hexdec( substr( $hex, 0, 2 ) );
+			$g = hexdec( substr( $hex, 2, 2 ) );
+			$b = hexdec( substr( $hex, 4, 2 ) );
         }
 		$rgb = array( $r, $g, $b );
         return implode(',', $rgb); // returns the rgb values separated by commas

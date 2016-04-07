@@ -9,9 +9,9 @@ if ( ! isset( $include_form_tag ) || $include_form_tag ) {
 <?php
 }
 
-include(FrmAppHelper::plugin_path() .'/classes/views/frm-entries/errors.php');
+include( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/errors.php' );
 $form_action = 'create';
-require(FrmAppHelper::plugin_path() .'/classes/views/frm-entries/form.php');
+require( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/form.php' );
 
 if ( ! isset( $include_form_tag ) || $include_form_tag ) {
 ?>

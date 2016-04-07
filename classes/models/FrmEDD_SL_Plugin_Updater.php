@@ -254,7 +254,7 @@ class FrmEDD_SL_Plugin_Updater {
 				'item_id'    => isset( $data['item_id'] ) ? $data['item_id'] : false,
 				'slug'       => $_REQUEST['slug'],
 				'author'     => $data['author'],
-				'url'        => home_url()
+				'url'        => home_url(),
 			);
 
 			$request = wp_remote_post( $this->api_url, array( 'timeout' => 15, 'sslverify' => false, 'body' => $api_params ) );
@@ -273,7 +273,7 @@ class FrmEDD_SL_Plugin_Updater {
 
 		}
 
-		if( ! empty( $version_info ) && isset( $version_info->sections['changelog'] ) ) {
+		if ( ! empty( $version_info ) && isset( $version_info->sections['changelog'] ) ) {
 			echo '<div style="background:#fff;padding:10px;">' . $version_info->sections['changelog'] . '</div>';
 		}
 

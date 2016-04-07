@@ -75,7 +75,7 @@ class FrmFormAction {
 
 		$this->id_base = strtolower($id_base);
 		$this->name = $name;
-		$this->option_name = 'frm_' . $this->id_base .'_action';
+		$this->option_name = 'frm_' . $this->id_base . '_action';
 
         $default_options = array(
             'classes'   => '',
@@ -109,7 +109,10 @@ class FrmFormAction {
 	 * @return string Name attribute for $field_name
 	 */
 	public function get_field_name( $field_name, $post_field = 'post_content' ) {
-		return $this->option_name . '[' . $this->number . ']'. ( empty($post_field) ? '' : '['. $post_field .']' ) .'[' . $field_name . ']';
+		$name = $this->option_name . '[' . $this->number . ']';
+		$name .= ( empty( $post_field ) ? '' : '[' . $post_field . ']' );
+		$name .= '[' . $field_name . ']';
+		return $name;
 	}
 
 	/**
@@ -121,7 +124,7 @@ class FrmFormAction {
 	 * @return string ID attribute for $field_name
 	 */
 	public function get_field_id( $field_name ) {
-		return $field_name .'_'. $this->number;
+		return $field_name . '_' . $this->number;
 	}
 
 	// Private Function. Don't worry about this.
@@ -153,7 +156,7 @@ class FrmFormAction {
             'ID'            => '',
             'post_status'   => 'publish',
             'post_type'     => FrmFormActionsController::$action_post_type,
-            'post_name'     => $this->form_id .'_'. $this->id_base .'_'. $this->number,
+			'post_name'     => $this->form_id . '_' . $this->id_base . '_' . $this->number,
             'menu_order'    => $this->form_id,
         );
         unset($post_content);
@@ -296,7 +299,7 @@ class FrmFormAction {
 			$old_instance = isset( $all_instances[ $number ] ) ? $all_instances[ $number ] : array();
 
  			$new_instance['post_type']  = FrmFormActionsController::$action_post_type;
-            $new_instance['post_name']    = $this->form_id .'_'. $this->id_base .'_'. $this->number;
+			$new_instance['post_name']  = $this->form_id . '_' . $this->id_base . '_' . $this->number;
             $new_instance['menu_order']   = $this->form_id;
             $new_instance['post_status']  = 'publish';
             $new_instance['post_date'] = isset( $old_instance->post_date ) ? $old_instance->post_date : '';
@@ -319,7 +322,7 @@ class FrmFormAction {
 			$instance = apply_filters( 'frm_action_update_callback', $instance, $new_instance, $old_instance, $this );
 
 			$instance['post_content'] = apply_filters('frm_before_save_action', $instance['post_content'], $instance, $new_instance, $old_instance, $this);
-            $instance['post_content'] = apply_filters('frm_before_save_'. $this->id_base .'_action', $new_instance['post_content'], $instance, $new_instance, $old_instance, $this);
+			$instance['post_content'] = apply_filters( 'frm_before_save_' . $this->id_base . '_action', $new_instance['post_content'], $instance, $new_instance, $old_instance, $this );
 
 			if ( false !== $instance ) {
 				$all_instances[ $number ] = $instance;
@@ -630,6 +633,7 @@ class FrmFormAction {
 
 	public static function trigger_labels() {
 		return apply_filters( 'frm_action_triggers', array(
+			'draft'  => __( 'Save Draft', 'formidable' ),
 			'create' => __( 'Create', 'formidable' ),
 			'update' => __( 'Update', 'formidable' ),
 			'delete' => __( 'Delete', 'formidable' ),

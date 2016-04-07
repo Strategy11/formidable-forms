@@ -31,7 +31,7 @@ class WP_Test_FrmFieldsAjax extends FrmAjaxUnitTest {
 			'action'    => 'frm_insert_field',
             'nonce'     => wp_create_nonce('frm_ajax'),
 			'form_id'   => $this->form_id,
-            'field'     => 'text', //create text field
+            'field_type'     => 'text', //create text field
 		);
 
 		try {
@@ -52,30 +52,154 @@ class WP_Test_FrmFieldsAjax extends FrmAjaxUnitTest {
     }
 
 	/**
-	 * @covers FrmFieldsController::update_form_id
+	 * Test duplicating a text field
+	 *
+	 * @covers FrmFieldsController::duplicate
 	 */
-	function test_update_form_id() {
-		$action = 'frm_update_field_form_id';
-		$repeating_field =  $this->factory->field->get_object_by_id( 'repeating-section' );
-		$old_form_id = $repeating_field->form_id;
-		$new_form_id = $repeating_field->field_options['form_select'];
-		$field = $this->factory->field->create_and_get( array( 'form_id' => $old_form_id ) );
+	function test_duplicating_text_field() {
+		wp_set_current_user( $this->user_id );
+		$this->assertTrue(is_numeric($this->form_id));
+
+		$text_field = self::get_field_by_key( '493ito' );
 
 		$_POST = array(
-			'action'  => $action,
-			'field'   => $field->id,
-			'form_id' => $new_form_id,
-			'nonce'   => wp_create_nonce( 'frm_ajax' ),
+			'action' => 'frm_duplicate_field',
+			'nonce' => wp_create_nonce('frm_ajax'),
+			'field_id' => $text_field->id,
+			'form_id' => $this->form_id,
 		);
 
 		try {
-			$this->_handleAjax( 'frm_update_field_form_id' );
+			$this->_handleAjax( 'frm_duplicate_field' );
 		} catch ( WPAjaxDieContinueException $e ) {
 			unset( $e );
 		}
 
-		$updated_field =  $this->factory->field->get_object_by_id( $field->id );
-		$this->assertEquals( $new_form_id, $updated_field->form_id );
+		global $wpdb;
+		$newest_field_id = $wpdb->insert_id;
+
+		self::check_if_field_id_is_created_correctly( $newest_field_id );
+
+		// make sure the field exists
+		$field = FrmField::getOne( $newest_field_id );
+		$this->assertTrue( is_object( $field ) );
+
+		self::check_in_section_variable( $field, 0 );
+	}
+
+	/**
+	 * Test duplicating a divider field (not repeating)
+	 *
+	 * @covers FrmFieldsController::duplicate
+	 * @covers FrmProFieldsController::duplicate_section
+	 */
+	function test_duplicating_divider_field() {
+		wp_set_current_user( $this->user_id );
+		$this->assertTrue(is_numeric($this->form_id));
+
+		$divider_field = self::get_field_by_key( 'flf4iy' );
+		$children = self::get_divider_children( $divider_field );
+
+		$_POST = array(
+			'action' => 'frm_duplicate_field',
+			'nonce' => wp_create_nonce('frm_ajax'),
+			'field_id' => $divider_field->id,
+			'form_id' => $this->form_id,
+			'children' => $children,
+		);
+
+		try {
+			$this->_handleAjax( 'frm_duplicate_field' );
+		} catch ( WPAjaxDieContinueException $e ) {
+			unset( $e );
+		}
+
+		self::check_duplicated_divider_and_children( $children );
+	}
+
+	// Get children from a divider field object
+	function get_divider_children( $divider_field ) {
+		$field_array = get_object_vars( $divider_field );
+
+		return FrmProField::get_children( $field_array );
+	}
+
+	// Check a duplicated divider and its children
+	function check_duplicated_divider_and_children( $original_children ) {
+		global $wpdb;
+		$newest_field_id = $wpdb->insert_id;
+
+		self::check_for_end_divider( $newest_field_id );
+
+		$divider_id = $newest_field_id - count( $original_children ) - 1;
+		self::check_duplicated_divider( $divider_id );
+
+		$num_children = count( $original_children );
+		for ( $i = 0; $i<$num_children; $i++ ) {
+
+			$get_field_id = $divider_id + $i + 1;
+
+			self::check_duplicated_field_values( $get_field_id, $original_children[ $i ], $divider_id );
+		}
+
+	}
+
+	// Check for an end divider (when a divider is duplicated)
+	function check_for_end_divider( $newest_field_id ) {
+		$last_field_added = FrmField::getOne( $newest_field_id );
+		$this->assertEquals( 'end_divider', $last_field_added->type, 'When a section is duplicated, the last field added should be an end divider' );
+	}
+
+	// Check for a start divider (when a divider is duplicated)
+	function check_duplicated_divider( $field_id ) {
+		$divider = FrmField::getOne( $field_id );
+
+		$this->assertEquals( 'divider', $divider->type, 'Duplicating divider not working as expected.' );
+
+		self::check_in_section_variable( $divider, 0 );
+	}
+
+	// Check fields inside of duplicated section
+	function check_duplicated_field_values( $get_field_id, $original_field_id, $new_divider_id ) {
+		$new_field = FrmField::getOne( $get_field_id );
+		$original_field = FrmField::getOne( $original_field_id );
+
+		// Check field type
+		$this->assertEquals( $original_field->type, $new_field->type, 'Field in section is not duplicated correctly.' );
+
+		// Check in_section variable
+		self::check_in_section_variable( $new_field, $new_divider_id );
+		$this->assertTrue( $new_field->field_options['in_section'] != 0, 'in section variable set to 0 when a section is duplicated.');
+	}
+
+	// Get a field object by key
+	function get_field_by_key( $field_key ){
+		$divider_field_id = FrmField::get_id_by_key( $field_key );
+		$field = FrmField::getOne( $divider_field_id );
+		self::check_field_prior_to_duplication( $field );
+
+		return $field;
+
+	}
+
+	// Check in_section variable prior to duplication
+	function check_field_prior_to_duplication( $field ) {
+		$this->assertTrue( isset( $field->field_options[ 'in_section' ] ), 'The in_section variable is not set correctly on import.' );
+	}
+
+	// Check if a field is created correctly
+	function check_if_field_id_is_created_correctly( $newest_field_id ) {
+		$this->assertTrue( is_numeric( $newest_field_id ) );
+		$this->assertNotEmpty( $newest_field_id );
+	}
+
+	// Check for a specific in section value
+	function check_in_section_variable( $field, $expected ) {
+		$message = 'The in_section variable is not set correctly when a ' . $field->type . ' field is duplicated.';
+		$this->assertTrue( isset( $field->field_options['in_section'] ), $message );
+
+		$message = 'The in_section variable is not set to the correct value when a ' . $field->type . ' field is duplicated.';
+		$this->assertEquals( $expected, $field->field_options['in_section'], $message );
 	}
 
 	/**

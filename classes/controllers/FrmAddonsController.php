@@ -3,22 +3,19 @@
 class FrmAddonsController {
 
 	public static function menu() {
-		add_submenu_page( 'formidable', 'Formidable | '. __( 'AddOns', 'formidable' ), __( 'AddOns', 'formidable' ), 'frm_view_forms', 'formidable-addons', 'FrmAddonsController::list_addons' );
+		add_submenu_page( 'formidable', 'Formidable | ' . __( 'AddOns', 'formidable' ), __( 'AddOns', 'formidable' ), 'frm_view_forms', 'formidable-addons', 'FrmAddonsController::list_addons' );
+
+		$affiliate = FrmAppHelper::get_affiliate();
+		if ( ! empty( $affiliate ) && ! FrmAppHelper::pro_is_installed() ) {
+			add_submenu_page( 'formidable', 'Formidable | ' . __( 'Upgrade to Pro', 'formidable' ), __( 'Upgrade to Pro', 'formidable' ), 'frm_view_forms', 'formidable-pro-upgrade', 'FrmAddonsController::upgrade_to_pro' );
+		}
 	}
 
 	public static function list_addons() {
 		$installed_addons = apply_filters( 'frm_installed_addons', array() );
 
-		$pro_link = 'http://formidablepro.com/pricing';
-		$addons = self::get_api_addons();
-		if ( ! is_array( $addons ) ) {
-			$addons = array(
-				array( 'url' => $pro_link, 'name' => 'Formidable Pro', 'slug' => 'formidable_pro' ),
-			);
-		} else {
-			$addons = $addons['products'];
-		}
-		$addons = array_reverse( $addons );
+		$pro_link = 'https://formidablepro.com/pricing';
+		$addons = self::get_ordered_addons( $pro_link );
 
 		$plugin_names = array(
 			'formidable-pro' => 'formidable/pro', 'wp-multilingual' => 'formidable-wpml',
@@ -27,6 +24,38 @@ class FrmAddonsController {
 		);
 
 		include( FrmAppHelper::plugin_path() . '/classes/views/addons/list.php' );
+	}
+
+	private static function get_ordered_addons( $pro_link = 'https://formidablepro.com/pricing' ) {
+		$addons = self::get_api_addons();
+		if ( ! is_array( $addons ) ) {
+			$addons = array(
+				'info' => array( 'link' => $pro_link, 'name' => 'Formidable Pro', 'slug' => 'formidable_pro' ),
+			);
+		} else {
+			$addons = $addons['products'];
+		}
+		$addons = array_reverse( $addons );
+
+		$keyed_addons = array();
+		foreach ( $addons as $addon ) {
+			$keyed_addons[ $addon['info']['slug'] ] = $addon;
+		}
+
+		$plugin_order = array(
+			'formidable-pro', 'mailchimp', 'registration-lite',
+			'paypal-standard', 'bootstrap-modal', 'math-captcha',
+			'zapier',
+		);
+		$ordered_addons = array();
+		foreach ( $plugin_order as $plugin ) {
+			if ( isset( $keyed_addons[ $plugin ] ) ) {
+				$ordered_addons[] = $keyed_addons[ $plugin ];
+				unset( $keyed_addons[ $plugin ] );
+			}
+		}
+		$addons = $ordered_addons + $keyed_addons;
+		return $addons;
 	}
 
 	public static function license_settings() {
@@ -57,12 +86,16 @@ class FrmAddonsController {
 	}
 
 	public static function get_licenses() {
+		FrmAppHelper::permission_check('frm_change_settings');
+		check_ajax_referer( 'frm_ajax', 'nonce' );
+
 		$license = get_option('frmpro-credentials');
 		if ( $license && is_array( $license ) && isset( $license['license'] ) ) {
-			$url = 'http://formidablepro.com/frm-edd-api/licenses?l='. urlencode( base64_encode( $license['license'] ) );
+			$url = 'http://formidablepro.com/frm-edd-api/licenses?l=' . urlencode( base64_encode( $license['license'] ) );
 			$licenses = self::send_api_request( $url, array( 'name' => 'frm_api_licence', 'expires' => 60 * 60 * 5 ) );
 			echo json_encode( $licenses );
 		}
+
 		wp_die();
 	}
 
@@ -90,5 +123,13 @@ class FrmAddonsController {
 		}
 
 		return $data;
+	}
+
+	public static function upgrade_to_pro() {
+		$addons = self::get_ordered_addons();
+		$pro = $addons[0];
+		$price_id = 0;
+
+		include( FrmAppHelper::plugin_path() . '/classes/views/addons/upgrade_to_pro.php' );
 	}
 }

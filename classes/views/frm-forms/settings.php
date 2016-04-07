@@ -6,15 +6,13 @@
 
 	<?php
 	// Add form messages
-	require(FrmAppHelper::plugin_path() .'/classes/views/shared/errors.php');
+	require( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' );
 	?>
 
     <div id="poststuff">
         <div id="post-body" class="metabox-holder columns-2">
         <div id="post-body-content">
-        <?php
-            FrmAppController::get_form_nav($id, true);
-        ?>
+        <?php FrmAppController::get_form_nav( $id, true ); ?>
 
 <form method="post" class="frm_form_settings">
     <input type="hidden" name="id" id="form_id" value="<?php echo (int) $id; ?>" />
@@ -39,15 +37,19 @@
 				} else {
 					$sec_anchor = $sec_name = $key;
 				} ?>
-                <li <?php echo ($a == $sec_anchor .'_settings') ? 'class="tabs active"' : '' ?>><a href="#<?php echo esc_attr( $sec_anchor ) ?>_settings"><?php echo ucfirst($sec_name) ?></a></li>
+				<li <?php echo ( $a == $sec_anchor . '_settings' ) ? 'class="tabs active"' : '' ?>>
+					<a href="#<?php echo esc_attr( $sec_anchor ) ?>_settings"><?php echo ucfirst( $sec_name ) ?></a>
+				</li>
             <?php } ?>
         </ul>
         </div>
         <div class="advanced_settings tabs-panel <?php echo ($a == 'advanced_settings') ? 'frm_block' : 'frm_hidden' ?>">
+			<?php FrmTipsHelper::pro_tip( 'get_form_settings_tip', 'p' ); ?>
+
 			<h3 class="frm_first_h3"><?php _e( 'On Submit', 'formidable' ); ?>
 				<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Choose what will happen after the user submits this form.', 'formidable' );
 				if ( ! FrmAppHelper::pro_is_installed() ) {
-					esc_attr_e( ' Upgrade to Formidable Forms to get access to all options in the dropdown.', 'formidable' );
+					esc_attr_e( ' Upgrade to Formidable Pro to get access to all options in the dropdown.', 'formidable' );
 				} ?>" ></span>
             </h3>
 
@@ -64,9 +66,15 @@
 								?>><?php _e( 'Show Page Content', 'formidable' ) ?></option>
                             <?php } else { ?>
                             <option value="redirect" disabled="disabled" <?php selected($values['success_action'], 'redirect');
-                            ?>><?php _e( 'Redirect to URL', 'formidable' ); echo ' '. __( '(Premium feature)', 'formidable' ); ?></option>
-                            <option value="page" disabled="disabled" <?php selected($values['success_action'], 'page');
-                            ?>><?php _e( 'Show Page Content', 'formidable' ); echo ' '. __( '(Premium feature)', 'formidable' ); ?></option>
+							?>>
+								<?php _e( 'Redirect to URL', 'formidable' ); ?>
+								<?php _e( '(Premium feature)', 'formidable' ); ?>
+							</option>
+							<option value="page" disabled="disabled" <?php selected($values['success_action'], 'page');
+                            ?>>
+								<?php _e( 'Show Page Content', 'formidable' ); ?>
+								<?php _e( '(Premium feature)', 'formidable' ); ?>
+							</option>
                             <?php } ?>
                         </select>
                     </td>
@@ -139,7 +147,9 @@
                     <td><select name="options[custom_style]" id="custom_style">
 						<option value="1" <?php selected( $values['custom_style'], 1 ) ?>><?php _e( 'Always use default', 'formidable' ) ?></option>
                         <?php foreach ( $styles as $s ) { ?>
-                        <option value="<?php echo esc_attr( $s->ID ) ?>" <?php selected( $s->ID, $values['custom_style'] ) ?>><?php echo esc_html( $s->post_title . ( empty( $s->menu_order ) ? '' : ' ('. __( 'default', 'formidable' ) .')' ) ) ?></option>
+						<option value="<?php echo esc_attr( $s->ID ) ?>" <?php selected( $s->ID, $values['custom_style'] ) ?>>
+							<?php echo esc_html( $s->post_title . ( empty( $s->menu_order ) ? '' : ' (' . __( 'default', 'formidable' ) . ')' ) ) ?>
+						</option>
                         <?php } ?>
 						<option value="0" <?php selected( $values['custom_style'], 0 ); selected( $values['custom_style'], '' ) ?>><?php _e( 'Do not use Formidable styling', 'formidable' ) ?></option>
                     </select></td>
@@ -177,6 +187,7 @@
 
 
         <div id="frm_notification_settings" class="frm_email_settings email_settings tabs-panel widgets-holder-wrap <?php echo ($a == 'email_settings') ? ' frm_block' : ' frm_hidden'; ?>">
+			<?php FrmTipsHelper::pro_tip( 'get_form_action_tip', 'p' ); ?>
             <div id="frm_email_addon_menu" class="manage-menus">
                 <h3><?php _e( 'Add New Action', 'formidable' ) ?></h3>
                 <ul class="frm_actions_list">
@@ -197,7 +208,7 @@
             </div>
             <div class="frm_no_actions">
                 <div class="inner_actions">
-                    <img src="<?php echo FrmAppHelper::plugin_url() .'/images/sketch_arrow1.png'; ?>" alt=""/>
+					<img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/sketch_arrow1.png' ); ?>" alt=""/>
                     <div class="clear"></div>
                     <?php _e( 'Click an action to add it to this form', 'formidable' ) ?>
                 </div>
@@ -243,7 +254,7 @@
 			} else {
 				$sec_anchor = $key;
 			} ?>
-            <div id="<?php echo esc_attr( $sec_anchor ) ?>_settings" class="tabs-panel <?php echo ($a == $sec_anchor .'_settings') ? ' frm_block' : ' frm_hidden'; ?>"><?php
+			<div id="<?php echo esc_attr( $sec_anchor ) ?>_settings" class="tabs-panel <?php echo ( $a == $sec_anchor . '_settings' ) ? ' frm_block' : ' frm_hidden'; ?>"><?php
 			if ( isset( $section['class'] ) ) {
 				call_user_func( array( $section['class'], $section['function'] ), $values );
 			} else {
@@ -267,7 +278,7 @@
 
 
     </div>
-    <?php require(FrmAppHelper::plugin_path() .'/classes/views/frm-forms/sidebar-settings.php'); ?>
+	<?php require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/sidebar-settings.php' ); ?>
     </div>
 </div>
 </div>

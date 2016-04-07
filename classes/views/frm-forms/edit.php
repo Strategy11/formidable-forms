@@ -21,7 +21,7 @@
 	}
 
     ?>
-    <div class="frm_form_builder<?php echo FrmFormsHelper::get_form_style_class($form); ?>">
+    <div class="frm_form_builder with_frm_style">
 
         <p class="frm_hidden frm-no-margin">
 			<input type="button" value="<?php esc_attr_e( 'Update', 'formidable' ) ?>" class="frm_submit_<?php echo ( isset( $values['ajax_load'] ) && $values['ajax_load'] ) ? '' : 'no_'; ?>ajax button-primary" />
@@ -33,7 +33,7 @@
         <input type="hidden" name="action" value="update" />
         <input type="hidden" name="id" id="form_id" value="<?php echo (int) $id; ?>" />
 
-        <?php require(FrmAppHelper::plugin_path() .'/classes/views/frm-forms/form.php'); ?>
+		<?php require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/form.php' ); ?>
 
         <p>
 			<input type="button" value="<?php esc_attr_e( 'Update', 'formidable' ) ?>" class="frm_submit_<?php echo ( isset( $values['ajax_load'] ) && $values['ajax_load'] ) ? '' : 'no_'; ?>ajax button-primary" />
@@ -42,7 +42,7 @@
     </form>
     </div>
     </div>
-    <?php require(FrmAppHelper::plugin_path() .'/classes/views/frm-forms/add_field_links.php'); ?>
+	<?php require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add_field_links.php' ); ?>
     </div>
     </div>
 </div>

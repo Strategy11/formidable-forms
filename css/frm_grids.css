@@ -1,0 +1,242 @@
+.with_frm_style .frm_form_field{
+    clear:both;
+}
+
+.frm_form_field.frm_right_half,
+.frm_form_field.frm_right_third,
+.frm_form_field.frm_right_two_thirds,
+.frm_form_field.frm_right_fourth,
+.frm_form_field.frm_right_fifth,
+.frm_form_field.frm_right_inline,
+.frm_form_field.frm_last_half,
+.frm_form_field.frm_last_third,
+.frm_form_field.frm_last_two_thirds,
+.frm_form_field.frm_last_fourth,
+.frm_form_field.frm_last_fifth,
+.frm_form_field.frm_last_sixth,
+.frm_form_field.frm_last_seventh,
+.frm_form_field.frm_last_eighth,
+.frm_form_field.frm_last_inline,
+.frm_form_field.frm_last,
+.frm_form_field.frm_half,
+.frm_submit.frm_half,
+.frm_form_field.frm_third,
+.frm_submit.frm_third,
+.frm_form_field.frm_two_thirds,
+.frm_form_field.frm_fourth,
+.frm_submit.frm_fourth,
+.frm_form_field.frm_three_fourths,
+.frm_form_field.frm_fifth,
+.frm_submit.frm_fifth,
+.frm_form_field.frm_two_fifths,
+.frm_form_field.frm_three_fifths,
+.frm_form_field.frm_four_fifths,
+.frm_form_field.frm_sixth,
+.frm_submit.frm_sixth,
+.frm_form_field.frm_seventh,
+.frm_submit.frm_seventh,
+.frm_form_field.frm_eighth,
+.frm_submit.frm_eighth,
+.frm_form_field.frm_inline,
+.frm_submit.frm_inline{
+    clear:none;
+    float:left;
+	margin-left:2.5%;
+}
+
+.frm_form_field.frm_left_half,
+.frm_form_field.frm_left_third,
+.frm_form_field.frm_left_two_thirds,
+.frm_form_field.frm_left_fourth,
+.frm_form_field.frm_left_fifth,
+.frm_form_field.frm_left_inline,
+.frm_form_field.frm_first_half,
+.frm_form_field.frm_first_third,
+.frm_form_field.frm_first_two_thirds,
+.frm_form_field.frm_first_fourth,
+.frm_form_field.frm_first_fifth,
+.frm_form_field.frm_first_sixth,
+.frm_form_field.frm_first_seventh,
+.frm_form_field.frm_first_eighth,
+.frm_form_field.frm_first_inline,
+.frm_form_field.frm_first{
+    clear:left;
+    float:left;
+	margin-left:0;
+}
+
+.frm_form_field.frm_alignright{
+	float:right !important;
+}
+
+.frm_form_field.frm_left_half,
+.frm_form_field.frm_right_half,
+.frm_form_field.frm_first_half,
+.frm_form_field.frm_last_half,
+.frm_form_field.frm_half,
+.frm_submit.frm_half{
+    width:48.75%;
+}
+
+.frm_form_field.frm_left_third,
+.frm_form_field.frm_third,
+.frm_submit.frm_third,
+.frm_form_field.frm_right_third,
+.frm_form_field.frm_first_third,
+.frm_form_field.frm_last_third{
+    width:31.66%;
+}
+
+.frm_form_field.frm_left_two_thirds,
+.frm_form_field.frm_right_two_thirds,
+.frm_form_field.frm_first_two_thirds,
+.frm_form_field.frm_last_two_thirds,
+.frm_form_field.frm_two_thirds{
+    width:65.82%;
+}
+
+.frm_form_field.frm_left_fourth,
+.frm_form_field.frm_fourth,
+.frm_submit.frm_fourth,
+.frm_form_field.frm_right_fourth,
+.frm_form_field.frm_first_fourth,
+.frm_form_field.frm_last_fourth{
+    width:23.12%;
+}
+
+.frm_form_field.frm_three_fourths{
+	width:74.36%;
+}
+
+.frm_form_field.frm_left_fifth,
+.frm_form_field.frm_fifth,
+.frm_submit.frm_fifth,
+.frm_form_field.frm_right_fifth,
+.frm_form_field.frm_first_fifth,
+.frm_form_field.frm_last_fifth{
+    width:18%;
+}
+
+.frm_form_field.frm_two_fifths {
+	width:38.5%;
+}
+
+.frm_form_field.frm_three_fifths {
+	width:59%;
+}
+
+.frm_form_field.frm_four_fifths {
+	width:79.5%;
+}
+
+.frm_form_field.frm_sixth,
+.frm_submit.frm_sixth,
+.frm_form_field.frm_first_sixth,
+.frm_form_field.frm_last_sixth{
+    width:14.58%;
+}
+
+.frm_form_field.frm_seventh,
+.frm_submit.frm_seventh,
+.frm_form_field.frm_first_seventh,
+.frm_form_field.frm_last_seventh{
+    width:12.14%;
+}
+
+.frm_form_field.frm_eighth,
+.frm_submit.frm_eighth,
+.frm_form_field.frm_first_eighth,
+.frm_form_field.frm_last_eighth{
+    width:10.31%;
+}
+
+.frm_form_field.frm_left_inline,
+.frm_form_field.frm_first_inline,
+.frm_form_field.frm_inline,
+.frm_submit.frm_inline,
+.frm_form_field.frm_right_inline,
+.frm_form_field.frm_last_inline{
+    width:auto;
+}
+
+
+
+.with_frm_style .frm_form_field.frm_first_half.frm_right_container div.frm_description,
+.with_frm_style .frm_form_field.frm_first_half.frm_right_container .frm_error,
+.with_frm_style .frm_form_field.frm_first_half .frm_right_container div.frm_description,
+.with_frm_style .frm_form_field.frm_first_half .frm_right_container .frm_error,
+.with_frm_style .frm_form_field.frm_last_half.frm_right_container div.frm_description,
+.with_frm_style .frm_form_field.frm_last_half.frm_right_container .frm_error,
+.with_frm_style .frm_form_field.frm_half.frm_right_container div.frm_description,
+.with_frm_style .frm_form_field.frm_half.frm_right_container .frm_error{
+	margin-right:33%;
+	padding-right:12px;
+}
+
+.with_frm_style .frm_form_field.frm_first_half.frm_left_container div.frm_description,
+.with_frm_style .frm_form_field.frm_first_half.frm_left_container .frm_error,
+.with_frm_style .frm_form_field.frm_first_half .frm_left_container div.frm_description,
+.with_frm_style .frm_form_field.frm_first_half .frm_left_container .frm_error,
+.with_frm_style .frm_form_field.frm_last_half.frm_left_container div.frm_description,
+.with_frm_style .frm_form_field.frm_last_half.frm_left_container .frm_error,
+.with_frm_style .frm_form_field.frm_half.frm_left_container div.frm_description,
+.with_frm_style .frm_form_field.frm_half.frm_left_container .frm_error{
+	margin-left:33%;
+	padding-left:12px;
+}
+
+.frm_full,
+.frm_full .wp-editor-wrap,
+.frm_full input:not([type='checkbox']):not([type='radio']):not([type='button']),
+.frm_full select,
+.frm_full textarea{
+    width:100% !important;
+}
+
+.frm_full .wp-editor-wrap input{
+    width:auto !important;
+}
+
+@media only screen and (max-width: 600px) {
+	.frm_form_field.frm_half,
+	.frm_submit.frm_half,
+    .frm_form_field.frm_left_half,
+    .frm_form_field.frm_right_half,
+    .frm_form_field.frm_first_half,
+    .frm_form_field.frm_last_half,
+    .frm_form_field.frm_first_third,
+    .frm_form_field.frm_third,
+	.frm_submit.frm_third,
+    .frm_form_field.frm_last_third,
+    .frm_form_field.frm_first_two_thirds,
+	.frm_form_field.frm_last_two_thirds,
+	.frm_form_field.frm_two_thirds,
+    .frm_form_field.frm_left_fourth,
+    .frm_form_field.frm_fourth,
+	.frm_submit.frm_fourth,
+    .frm_form_field.frm_right_fourth,
+    .frm_form_field.frm_first_fourth,
+	.frm_form_field.frm_last_fourth,
+	.frm_form_field.frm_three_fourths,
+	.frm_form_field.frm_fifth,
+	.frm_submit.frm_fifth,
+	.frm_form_field.frm_two_fifths,
+	.frm_form_field.frm_three_fifths,
+	.frm_form_field.frm_four_fifths,
+	.frm_form_field.frm_sixth,
+	.frm_submit.frm_sixth,
+	.frm_form_field.frm_seventh,
+	.frm_submit.frm_seventh,
+	.frm_form_field.frm_eighth,
+	.frm_submit.frm_eighth,
+    .frm_form_field.frm_first_inline,
+    .frm_form_field.frm_inline,
+	.frm_submit.frm_inline,
+    .frm_form_field.frm_last_inline{
+        width:100%;
+        margin-left:0;
+        margin-right:0;
+		clear:both;
+        float:none;
+    }
+}
