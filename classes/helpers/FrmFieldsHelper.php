@@ -924,7 +924,7 @@ DEFAULT_HTML;
             'image', 'file', 'date', 'phone', 'hidden', 'time',
             'user_id', 'tag', 'password',
         );
-		$multiple_input = array( 'radio', 'checkbox', 'select', 'scale' );
+		$multiple_input = array( 'radio', 'checkbox', 'select', 'scale', 'lookup' );
 		$other_type = array( 'divider', 'html', 'break' );
 
 		$field_selection = array_merge( FrmField::pro_field_selection(), FrmField::field_selection() );
@@ -940,6 +940,7 @@ DEFAULT_HTML;
             $field_types[ $type ] = $field_selection[ $type ];
         }
 
+		$field_types = apply_filters( 'frm_switch_field_types', $field_types, compact( 'type' ) );
         return $field_types;
     }
 
