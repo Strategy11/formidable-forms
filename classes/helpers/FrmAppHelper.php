@@ -327,7 +327,10 @@ class FrmAppHelper {
 	public static function sanitize_value( $sanitize, &$value ) {
 		if ( ! empty( $sanitize ) ) {
 			if ( is_array( $value ) ) {
-				$value = array_map( $sanitize, $value );
+				$temp_values = $value;
+				foreach ( $temp_values as $k => $v ) {
+					FrmAppHelper::sanitize_value( $sanitize, $value[ $k ] );
+				}
 			} else {
 				$value = call_user_func( $sanitize, $value );
 			}
@@ -968,7 +971,7 @@ class FrmAppHelper {
 
 		foreach ( array( 'name', 'description' ) as $var ) {
             $default_val = isset($record->{$var}) ? $record->{$var} : '';
-            $values[ $var ] = self::get_param( $var, $default_val );
+			$values[ $var ] = self::get_param( $var, $default_val, 'get', 'wp_kses_post' );
             unset($var, $default_val);
         }
 

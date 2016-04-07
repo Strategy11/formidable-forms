@@ -8,7 +8,7 @@ class FrmEntriesHelper {
     public static function setup_new_vars( $fields, $form = '', $reset = false, $args = array() ) {
         $values = array();
 		foreach ( array( 'name' => '', 'description' => '', 'item_key' => '' ) as $var => $default ) {
-            $values[ $var ] = FrmAppHelper::get_post_param( $var, $default );
+			$values[ $var ] = FrmAppHelper::get_post_param( $var, $default, 'wp_kses_post' );
         }
 
         $values['fields'] = array();
