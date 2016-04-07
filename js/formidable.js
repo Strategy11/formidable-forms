@@ -326,13 +326,13 @@ function frmFrontFormJS(){
 	/**
 	 * Get all the field divs that should be hidden or shown, regardless of whether they're on the current page
 	 *
-	 * @param depFieldArgs
-	 * @param {{isRepeating:bool}} depFieldArgs
-	 * @param {{fieldId:string}} depFieldArgs
-	 * @param {{inSection:string}} depFieldArgs
-	 * @param triggerFieldArgs
-	 * @param {{repeatingSection:string}} triggerFieldArgs
-	 * @param {{repeatRow:string}} triggerFieldArgs
+	 * @param {Object} depFieldArgs
+	 * @param {bool} depFieldArgs.isRepeating
+	 * @param {string} depFieldArgs.fieldId
+	 * @param {string} depFieldArgs.inSection
+	 * @param {object} triggerFieldArgs
+	 * @param {string} triggerFieldArgs.repeatingSection
+	 * @param {string} triggerFieldArgs.repeatRow
 	 * @returns {Array}
      */
 	function getAllFieldDivs( depFieldArgs, triggerFieldArgs ) {
@@ -346,7 +346,7 @@ function frmFrontFormJS(){
 				childFieldDivs.push( container );
 			} else {
 				// If trigger field is not repeating/embedded, get all repeating field divs
-				var containerFieldId = getContainerFieldId( depFieldArgs )
+				var containerFieldId = getContainerFieldId( depFieldArgs );
 				var fieldDiv = 'frm_field_' + depFieldArgs.fieldId + '-' + containerFieldId + '-';
 				var continueChecking = true;
 				var rowCount = 0;
@@ -373,12 +373,12 @@ function frmFrontFormJS(){
 	/**
 	 *
 	 * @param {Object} depFieldArgs
-	 * @param {{inSection:string}} depFieldArgs
-	 * @param {{inEmbedForm:string}} depFieldArgs
+	 * @param {string} depFieldArgs.inSection
+	 * @param {string} depFieldArgs.inEmbedForm
 	 * @returns {string}
      */
 	function getContainerFieldId( depFieldArgs ){
-		var containerFieldId = ''
+		var containerFieldId = '';
 		if ( depFieldArgs.inSection ) {
 			containerFieldId = depFieldArgs.inSection;
 		} else if ( depFieldArgs.inEmbedForm ) {
@@ -391,10 +391,10 @@ function frmFrontFormJS(){
 	/**
 	 *
 	 * @param depFieldArgs
-	 * @param {{isRepeating:bool}} depFieldArgs
-	 * @param {{inSection:string}} depFieldArgs
-	 * @param {{fieldId:string}} depFieldArgs
-	 * @param {{repeatRow:string}} depFieldArgs
+	 * @param {bool} depFieldArgs.isRepeating
+	 * @param {string} depFieldArgs.inSection
+	 * @param {string} depFieldArgs.fieldId
+	 * @param {string} depFieldArgs.repeatRow
 	 * @param childFieldDivId
      */
 	function addRepeatRow( depFieldArgs, childFieldDivId ) {
@@ -426,8 +426,8 @@ function frmFrontFormJS(){
 	}
 
 	/**
-	 * @param {array} logicCondition
-	 * @param {{fieldId:string}} logicCondition
+	 * @param {Array} logicCondition
+	 * @param {string} logicCondition.fieldId
 	 * @param depFieldArgs
 	 * @returns {*}
      */
@@ -445,10 +445,10 @@ function frmFrontFormJS(){
 	 * Get the value from any field
 	 *
 	 * @param logicFieldArgs
-	 * @param {{inputType:string}} logicFieldArgs
+	 * @param {string} logicFieldArgs.inputType
 	 * @param depFieldArgs
-	 * @param {{inSection:string}} depFieldArgs
-	 * @param {{repeatRow:string}} depFieldArgs
+	 * @param {string} depFieldArgs.inSection
+	 * @param {string} depFieldArgs.repeatRow
 	 * @returns {string}
      */
 	function getFieldValue( logicFieldArgs, depFieldArgs ){
@@ -469,11 +469,11 @@ function frmFrontFormJS(){
 	 * Get the value from a Text or Dropdown field
 	 *
 	 * @param logicFieldArgs
-	 * @param {{fieldKey:string}} logicFieldArgs
-	 * @param {{isRepeating:bool}} logicFieldArgs
-	 * @param {{isMultiSelect:bool}} logicFieldArgs
+	 * @param {string} logicFieldArgs.fieldKey
+	 * @param {bool} logicFieldArgs.isRepeating
+	 * @param {bool} logicFieldArgs.isMultiSelect
 	 * @param depFieldArgs
-	 * @param {{repeatRow:string}} depFieldArgs
+	 * @param {string} depFieldArgs.repeatRow
  	 */
 	function getValueFromTextOrDropdown( logicFieldArgs, depFieldArgs ) {
 		var logicFieldValue = '';
@@ -517,7 +517,7 @@ function frmFrontFormJS(){
 	 * Get the value from a Radio or Checkbox field trigger field
 	 *
 	 * @param {Object} logicFieldArgs
-	 * @param {{inputType:string}} logicFieldArgs
+	 * @param {string} logicFieldArgs.inputType
 	 * @param {Object} depFieldArgs
 	 * @returns {String|Array}
      */
@@ -537,15 +537,15 @@ function frmFrontFormJS(){
 	}
 
 	/**
-	 * Build a logid field's input name
+	 * Build a logic field's input name
 	 * Does not include full name for checkbox, address, or multi-select fields
 	 *
 	 * @param {object} logicFieldArgs
-	 * @param {{isRepeating:boolean}} logicFieldArgs
-	 * @param {{fieldId:string}} logicFieldArgs
+	 * @param {boolean} logicFieldArgs.isRepeating
+	 * @param {string} logicFieldArgs.fieldId
 	 * @param {object} depFieldArgs
-	 * @param {{inSection:string}} depFieldArgs
-	 * @param {{repeatRow:string}} depFieldArgs
+	 * @param {string} depFieldArgs.inSection
+	 * @param {string} depFieldArgs.repeatRow
 	 * @returns {string}
      */
 	function buildLogicFieldInputName( logicFieldArgs, depFieldArgs ) {
@@ -593,13 +593,13 @@ function frmFrontFormJS(){
 	 * Add values to the show_fields array
 	 *
 	 * @param {Array} logicCondition
-	 * @param {{operator:string}} logicCondition
-	 * @param {{value:string}} logicCondition
+	 * @param {operator:string} logicCondition.operator
+	 * @param {value:string} logicCondition.value
 	 * @param {String|Array} fieldValue
 	 * @param {Object} depFieldArgs
-	 * @param {{fieldType:string}} depFieldArgs
+	 * @param {string} depFieldArgs.fieldType
 	 * @param {Object} logicFieldArgs
-	 * @param {{fieldType:string}} logicFieldArgs
+	 * @param {fieldType:string} logicFieldArgs.fieldType
      * @returns {Boolean}
      */
 	function getLogicConditionOutcome( logicCondition, fieldValue, depFieldArgs, logicFieldArgs ) {
@@ -616,12 +616,12 @@ function frmFrontFormJS(){
 	}
 
 	/**
-	 * @param {array} logicCondition
-	 * @param {{operator:string}} logicCondition
-	 * @param {{value:string}} logicCondition
-	 * @param {string|array} fieldValue
+	 * @param {Array} logicCondition
+	 * @param {string} logicCondition.operator
+	 * @param {string} logicCondition.value
+	 * @param {string|Array} fieldValue
 	 * @param {object} depFieldArgs
-	 * @param {{dataLogic:array}} depFieldArgs
+	 * @param {Array} depFieldArgs.dataLogic
 	 * @returns {boolean}
      */
 	function getDynamicFieldLogicOutcome( logicCondition, fieldValue, depFieldArgs ) {
@@ -708,9 +708,9 @@ function frmFrontFormJS(){
 
 	/**
 	 *
-	 * @param depFieldArgs
-	 * @param {{containerId:string}} depFieldArgs
-	 * @param {{fieldType:string}} depFieldArgs
+	 * @param {Object} depFieldArgs
+	 * @param {string} depFieldArgs.containerId
+	 * @param {string} depFieldArgs.fieldType
 	 * @param logicOutcomes
      */
 	function routeToHideOrShowField( depFieldArgs, logicOutcomes ) {
@@ -738,8 +738,8 @@ function frmFrontFormJS(){
 
 	/**
 	 * @param {Object} depFieldArgs
-	 * @param {{anyAll:string}} depFieldArgs
-	 * @param {{showHide:string}} depFieldArgs
+	 * @param {string} depFieldArgs.anyAll
+	 * @param {string} depFieldArgs.showHide
 	 * @param {Array} logicOutcomes
 	 * @returns {string}
      */
@@ -773,9 +773,9 @@ function frmFrontFormJS(){
 	}
 
 	/**
-	 * @param {object} depFieldArgs
-	 * @param {{containerId:string}} depFieldArgs
-	 * @param {{formId:string}} depFieldArgs
+	 * @param {Object} depFieldArgs
+	 * @param {string} depFieldArgs.containerId
+	 * @param {string} depFieldArgs.formId
 	 * @param {bool} onCurrentPage
      */
 	function showFieldAndSetValue( depFieldArgs, onCurrentPage ){
@@ -797,9 +797,9 @@ function frmFrontFormJS(){
 	 * Set the value for all inputs inside of a field div on the current page
 	 *
 	 * @param {string} container
-	 * @param {object} depFieldArgs
-	 * @param {{fieldType:string}} depFieldArgs
-	 * @param {{formId:string}} depFieldArgs
+	 * @param {Object} depFieldArgs
+	 * @param {string} depFieldArgs.fieldType
+	 * @param {string} depFieldArgs.formId
  	 */
 	function setValuesInsideFieldOnPage( container, depFieldArgs ) {
 		var inputs = getInputsInFieldOnPage( container );
@@ -811,9 +811,9 @@ function frmFrontFormJS(){
 	/**
 	 * Set the value for all inputs inside of a field across a page
 	 *
-	 * @param {object} depFieldArgs
-	 * @param {{fieldType:string}} depFieldArgs
-	 * @param {{formId:string}} depFieldArgs
+	 * @param {Object} depFieldArgs
+	 * @param {string} depFieldArgs.fieldType
+	 * @param {string} depFieldArgs.formId
 	 */
 	function setValuesInsideFieldAcrossPage( depFieldArgs ) {
 		var inputs = getInputsInFieldAcrossPage( depFieldArgs );
@@ -828,8 +828,8 @@ function frmFrontFormJS(){
 	}
 
 	/**
-	 * @param {object} depFieldArgs
-	 * @param {{fieldType:string}} depFieldArgs
+	 * @param {Object} depFieldArgs
+	 * @param {string} depFieldArgs.fieldType
 	 * @returns {Array}
      */
 	function getInputsInFieldAcrossPage( depFieldArgs ){
@@ -849,10 +849,10 @@ function frmFrontFormJS(){
 	/**
 	 * Get the inputs for a non-repeating field that is type=hidden
 	 * @param {object} depFieldArgs
-	 * @param {{isRepeating:bool}} depFieldArgs
-	 * @param {{inSection:string}} depFieldArgs
-	 * @param {{repeatRow:string}} depFieldArgs
-	 * @param {{fieldId:string}} depFieldArgs
+	 * @param {bool} depFieldArgs.isRepeating
+	 * @param {string} depFieldArgs.inSection
+	 * @param {string} depFieldArgs.repeatRow
+	 * @param {string} depFieldArgs.fieldId
 	 * @returns {NodeList}
      */
 	function getHiddenInputs( depFieldArgs ) {
@@ -906,9 +906,9 @@ function frmFrontFormJS(){
 	}
 
 	/**
-	 * @param {object} depFieldArgs
-	 * @param {{containerId:string}} depFieldArgs
-	 * @param {{formId:string}} depFieldArgs
+	 * @param {Object} depFieldArgs
+	 * @param {string} depFieldArgs.containerId
+	 * @param {string} depFieldArgs.formId
 	 * @param onCurrentPage
      */
 	function hideFieldAndClearValue( depFieldArgs, onCurrentPage ){
@@ -945,8 +945,8 @@ function frmFrontFormJS(){
 	 * Get all the child inputs in a hidden section (across a page)
 	 *
 	 * @param {Object} depFieldArgs
-	 * @param {{fieldType:string}} depFieldArgs
-	 * @param {{fieldId:string}} depFieldArgs
+	 * @param {string} depFieldArgs.fieldType
+	 * @param {string} depFieldArgs.fieldId
  	 */
 	function getInputsInHiddenSection( depFieldArgs ) {
 		// If a section, get all inputs with data attribute
@@ -3478,17 +3478,6 @@ function frmFrontFormJS(){
 			for ( var i = 0, l = len; i < l; i++ ) {
 				fieldId = ids[i];
 				updateWatchingFieldById( fieldId, '', 'value changed' );
-			}
-		},
-
-		checkAllDependentLookupFields: function(ids){
-			ids = JSON.parse(ids);
-
-			var fieldId;
-			var len = ids.length;
-			for ( var i = 0, l = len; i < l; i++ ) {
-				fieldId = ids[i];
-				updateWatchingFieldById( fieldId, '' );
 			}
 		},
 
