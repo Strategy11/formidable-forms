@@ -346,25 +346,43 @@ function frmFrontFormJS(){
 				childFieldDivs.push( container );
 			} else {
 				// If trigger field is not repeating/embedded, get all repeating field divs
-				var containerFieldId = getContainerFieldId( depFieldArgs )
-				var fieldDiv = 'frm_field_' + depFieldArgs.fieldId + '-' + containerFieldId + '-';
-				var continueChecking = true;
-				var rowCount = 0;
-				var selector = '';
-
-				// Figure out how many rows are in the repeating section
-				while ( continueChecking === true ) {
-					rowCount++;
-					childFieldDivs.push( fieldDiv + rowCount + '_container' );
-
-					selector = 'item_meta[' + containerFieldId + '][' + rowCount + ']';
-					if ( document.querySelectorAll( '[name^="' + selector + ']').length < 1 ) {
-						continueChecking = false;
-					}
-				}
+				childFieldDivs = getAllRepeatingFieldDivs( depFieldArgs );
 			}
 		} else {
 			childFieldDivs.push( 'frm_field_' + depFieldArgs.fieldId + '_container' );
+		}
+
+		return childFieldDivs;
+	}
+
+	/**
+	 * Get all instances of a repeating field
+	 *
+	 * @since 2.0.26
+	 * @param {Object} depFieldArgs
+	 * @param {string} depFieldArgs.fieldId
+     */
+	function getAllRepeatingFieldDivs( depFieldArgs ) {
+		var childFieldDivs = [];
+		var containerFieldId = getContainerFieldId( depFieldArgs )
+		var fieldDiv = 'frm_field_' + depFieldArgs.fieldId + '-' + containerFieldId + '-';
+		var continueChecking = true;
+		var rowCount = 0;
+		var selector = '';
+
+		// Always add first row
+		childFieldDivs.push( fieldDiv + rowCount + '_container' );
+
+		// Figure out how many additional rows are in the repeating section
+		while ( continueChecking === true ) {
+			rowCount++;
+
+			selector = 'item_meta[' + containerFieldId + '][' + rowCount + ']';
+			if ( document.querySelectorAll( '[name^="' + selector + '"]').length > 0 ) {
+				childFieldDivs.push( fieldDiv + rowCount + '_container' );
+			} else {
+				continueChecking = false;
+			}
 		}
 
 		return childFieldDivs;
