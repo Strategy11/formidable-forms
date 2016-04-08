@@ -189,7 +189,7 @@ function frmFrontFormJS(){
 
 		checkFieldsWithConditionalLogicDependentOnThis( field_id, jQuery(this) );
 		var originalEvent = getOriginalEvent( e );
-		checkFieldsWatchingThis( field_id, jQuery(this), originalEvent );
+		checkFieldsWatchingLookup( field_id, jQuery(this), originalEvent );
 		doCalculation(field_id, jQuery(this));
 		validateField( field_id, this );
 	}
@@ -385,6 +385,7 @@ function frmFrontFormJS(){
 			}
 		}
 		// TODO: What if user creates a bunch of rows, removes rows, etc so it is not consecutive?
+		// TODO: Maybe use frm_field_x_container class to fetch all repeating fields if they're on the current page
 
 		// Check for rows that are being edited
 		var editingRows = document.getElementsByName( 'item_meta[' + containerFieldId + '][id][]' );
@@ -1190,7 +1191,7 @@ function frmFrontFormJS(){
 	 ******************************************************/
 
 	// Check all fields that are "watching" a lookup field that changed
-	function checkFieldsWatchingThis(field_id, changedInput, originalEvent ) {
+	function checkFieldsWatchingLookup(field_id, changedInput, originalEvent ) {
 		if ( typeof __FRMLOOKUP  === 'undefined' || typeof __FRMLOOKUP[field_id] === 'undefined' ) {
 			return;
 		}
@@ -1488,9 +1489,9 @@ function frmFrontFormJS(){
 
 	// Get new value for a text field if all Lookup Field parents have a value
 	function maybeInsertTextLookupFieldValue( childFieldArgs, childInput, originalEvent ) {
-		// TODO: Fix this
-		return;
-		if ( isFieldConditionallyHidden( childFieldArgs.fieldId, childFieldArgs.formId, childInput ) ) {
+		var containerId = getFieldDivId( childFieldArgs );
+		if ( isFieldConditionallyHidden( containerId, childFieldArgs.formId ) ) {
+			// TODO: What if field is in conditionally hidden section?
 			return;
 		}
 
@@ -1522,6 +1523,28 @@ function frmFrontFormJS(){
 				}
 			});
 		}
+	}
+
+	/**
+	 * Get the field div ID from a dependent Lookup field
+	 *
+	 * @since 2.01.0
+	 * @param {Object} childFieldArgs
+	 * @param {string} childFieldArgs.fieldId
+	 * @param {string} childFieldArgs.inSection
+	 * @param {string} childFieldArgs.repeatId
+	 * @returns {string}
+     */
+	function getFieldDivId( childFieldArgs ){
+		var divId = 'frm_field_' + childFieldArgs.fieldId;
+
+		if ( childFieldArgs.repeatId != '' ) {
+			divId += '-' + childFieldArgs.inSection + '-' + childFieldArgs.repeatId;
+		}
+
+		divId += '_container';
+
+		return divId;
 	}
 
 	// Insert a new text field Lookup value
@@ -2965,7 +2988,7 @@ function frmFrontFormJS(){
 							updateWatchingFieldById( fieldID, '-' + i, 'value changed' );
 							// TODO: maybe trigger a change instead of running these three functions
 							checkFieldsWithConditionalLogicDependentOnThis( fieldID, fieldObject );
-							checkFieldsWatchingThis( fieldID, fieldObject, 'value changed' );
+							checkFieldsWatchingLookup( fieldID, fieldObject, 'value changed' );
 							doCalculation(fieldID, fieldObject);
 							reset = 'persist';
 						}
