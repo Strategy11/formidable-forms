@@ -47,6 +47,7 @@ class FrmField {
 			'tag'       => __( 'Tags', 'formidable' ),
 			'credit_card' => __( 'Credit Card', 'formidable' ),
 			'address'   => __( 'Address', 'formidable' ),
+			'lookup'	=> __( 'Lookup', 'formidable' ),
 		));
 	}
 
