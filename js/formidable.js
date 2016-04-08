@@ -339,7 +339,7 @@ function frmFrontFormJS(){
 		var childFieldDivs = [];
 
 		if ( depFieldArgs.isRepeating ) {
-			if ( triggerFieldArgs.repeatingSection ) {
+			if ( triggerFieldArgs.repeatingSection != "" ) {
 				// If trigger field is repeating/embedded, use its section row in selector
 				var container = 'frm_field_' + depFieldArgs.fieldId + '-';
 				container += triggerFieldArgs.repeatingSection + '-' + triggerFieldArgs.repeatRow + '_container';
@@ -384,6 +384,15 @@ function frmFrontFormJS(){
 				continueChecking = false;
 			}
 		}
+		// TODO: What if user creates a bunch of rows, removes rows, etc so it is not consecutive?
+
+		// Check for rows that are being edited
+		var editingRows = document.getElementsByName( 'item_meta[' + containerFieldId + '][id][]' );
+		var rowId = '';
+		for ( var i=0, l= editingRows.length; i<l; i++ ) {
+			rowId = editingRows[i].value;
+			childFieldDivs.push( fieldDiv + 'i' + rowId + '_container' );
+		}
 
 		return childFieldDivs;
 	}
@@ -419,7 +428,7 @@ function frmFrontFormJS(){
 		if ( depFieldArgs.isRepeating ) {
 			var replace = 'frm_field_' + depFieldArgs.fieldId + '-' + depFieldArgs.inSection + '-';
 			depFieldArgs.repeatRow = childFieldDivId.replace( replace, '' );
-			depFieldArgs.repeatRow = depFieldArgs.repeatRow.replace( '_container' );
+			depFieldArgs.repeatRow = depFieldArgs.repeatRow.replace( '_container', '' );
 		} else {
 			depFieldArgs.repeatRow = '';
 		}
@@ -935,7 +944,6 @@ function frmFrontFormJS(){
 		}
 
 		if ( onCurrentPage ) {
-
 			hideFieldContainer( depFieldArgs.containerId );
 			clearInputsInFieldOnPage( depFieldArgs.containerId );
 		} else {
