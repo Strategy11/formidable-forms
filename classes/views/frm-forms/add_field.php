@@ -230,11 +230,11 @@ if ( $display['options'] ) { ?>
 				if ( $display['size'] ) {
 					if ( in_array( $field['type'], array( 'select', 'time', 'data' ) ) ) {
 						if ( ! isset( $values['custom_style'] ) || $values['custom_style'] ) {
-							include( FrmAppHelper::plugin_path() .'/classes/views/back-end-field-opts/automatic-width.php' );
+							include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end-field-opts/automatic-width.php' );
 						}
 					} else {
 						$display_max = $display['max'];
-						include( FrmAppHelper::plugin_path() .'/classes/views/back-end-field-opts/pixels-wide.php' );
+						include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end-field-opts/pixels-wide.php' );
 					}
 				}
 
