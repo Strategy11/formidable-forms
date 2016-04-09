@@ -338,6 +338,12 @@ class FrmEntriesController {
         }
 
         $entry = FrmEntry::getOne($id, true);
+		if ( ! $entry ) {
+			echo '<div id="form_show_entry_page" class="wrap">' .
+				__( 'You are trying to view an entry that does not exist.', 'formidable' ) .
+				'</div>';
+			return;
+		}
 
         $data = maybe_unserialize($entry->description);
 		if ( ! is_array( $data ) || ! isset( $data['referrer'] ) ) {
