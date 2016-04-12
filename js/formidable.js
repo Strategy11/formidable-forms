@@ -1047,7 +1047,7 @@ function frmFrontFormJS(){
 		clearValueForInputs( hideFieldInputs );
 	}
 
-	function addToHideFields( htmlFieldId, formId ) {
+	function addToHideFields( htmlFieldId, formId ) {//TODO: why is this run on submit?
 		// Get all currently hidden fields
 		var hiddenFields = getHiddenFields( formId );
 
@@ -1089,6 +1089,10 @@ function frmFrontFormJS(){
 		} else {
 			// Fetch the hidden fields from the frm_hide_fields_formId input
 			var frmHideFieldsInput = document.getElementById('frm_hide_fields_' + formId);
+			if ( frmHideFieldsInput === null ) {
+				return hiddenFields;
+			}
+
 			hiddenFields = frmHideFieldsInput.value;
 			if ( hiddenFields ) {
 				hiddenFields = JSON.parse( hiddenFields );
@@ -1312,7 +1316,7 @@ function frmFrontFormJS(){
 			childFieldElements.push( childField );
 
 		} else {
-			childFieldElements = document.querySelectorAll('*[id^="field_' + childFieldArgs.fieldKey + '"]');
+			childFieldElements = document.querySelectorAll('[id^="field_' + childFieldArgs.fieldKey + '"]');
 		}
 		return childFieldElements;
 	}
@@ -1513,8 +1517,11 @@ function frmFrontFormJS(){
 				type:'POST',
 				url:frm_js.ajax_url,
 				data:{
-					action:'frm_get_lookup_text_value', parent_fields:childFieldArgs.parents,
-					parent_vals:childFieldArgs.parentVals, field_id:childFieldArgs.fieldId, nonce:frm_js.nonce
+					action:'frm_get_lookup_text_value',
+					parent_fields:childFieldArgs.parents,
+					parent_vals:childFieldArgs.parentVals,
+					field_id:childFieldArgs.fieldId,
+					nonce:frm_js.nonce
 				},
 				success:function(newValue){
 					if ( childInput.value != newValue ) {
@@ -3105,6 +3112,7 @@ function frmFrontFormJS(){
 		loadCustomInputMasks();
 		loadChosen();
 		checkDynamicFields();
+		checkLookupFields()
 		triggerCalc();
 	}
 
@@ -3129,6 +3137,12 @@ function frmFrontFormJS(){
 	function checkDynamicFields() {
 		if (typeof __frmDepDynamicFields !== 'undefined') {
 			frmFrontForm.checkDependentDynamicFields(__frmDepDynamicFields);
+		}
+	}
+
+	function checkLookupFields() {
+		if (typeof __frmDepLookupFields !== 'undefined') {
+			frmFrontForm.checkDependentLookupFields(__frmDepLookupFields);
 		}
 	}
 
@@ -3519,7 +3533,7 @@ function frmFrontFormJS(){
 			}
 		},
 
-		checkAllDependentLookupFields: function(ids){
+		checkDependentLookupFields: function(ids){
 			ids = JSON.parse(ids);
 
 			var fieldId;
