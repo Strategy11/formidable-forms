@@ -39,6 +39,7 @@ class FrmField {
 			'image'     => __( 'Image URL', 'formidable' ),
 			'scale'     => __( 'Scale', 'formidable' ),
 			'data'      => __( 'Dynamic Field', 'formidable' ),
+			'lookup'	=> __( 'Lookup', 'formidable' ),
 			'form'      => __( 'Embed Form', 'formidable' ),
 			'hidden'    => __( 'Hidden Field', 'formidable' ),
 			'user_id'   => __( 'User ID (hidden)', 'formidable' ),
@@ -47,7 +48,6 @@ class FrmField {
 			'tag'       => __( 'Tags', 'formidable' ),
 			'credit_card' => __( 'Credit Card', 'formidable' ),
 			'address'   => __( 'Address', 'formidable' ),
-			'lookup'	=> __( 'Lookup', 'formidable' ),
 		));
 	}
 
