@@ -288,6 +288,7 @@ function frmFrontFormJS(){
 			|| typeof(changedInput) === 'undefined' ) {
 			return;
 		}
+		// TODO: check if cascading conditional logic works
 
 		var triggerFieldArgs = __FRMRULES[field_id];
 		var repeatArgs = getRepeatArgsFromFieldName( changedInput[0].name );
@@ -303,7 +304,6 @@ function frmFrontFormJS(){
 	 *
 	 * @param fieldId
 	 * @param triggerFieldRepeatArgs
-	 *
      */
 	function hideOrShowFieldById( fieldId, triggerFieldRepeatArgs ) {
 		var depFieldArgs = getRulesForSingleField( fieldId );
@@ -329,7 +329,6 @@ function frmFrontFormJS(){
 	 * @param {Object} depFieldArgs
 	 * @param {bool} depFieldArgs.isRepeating
 	 * @param {string} depFieldArgs.fieldId
-	 * @param {string} depFieldArgs.inSection
 	 * @param {object} triggerFieldArgs
 	 * @param {string} triggerFieldArgs.repeatingSection
 	 * @param {string} triggerFieldArgs.repeatRow
@@ -358,7 +357,7 @@ function frmFrontFormJS(){
 	/**
 	 * Get all instances of a repeating field
 	 *
-	 * @since 2.0.26
+	 * @since 2.01.0
 	 * @param {Object} depFieldArgs
 	 * @param {string} depFieldArgs.fieldId
      */
@@ -407,10 +406,10 @@ function frmFrontFormJS(){
      */
 	function getContainerFieldId( depFieldArgs ){
 		var containerFieldId = '';
-		if ( depFieldArgs.inSection ) {
-			containerFieldId = depFieldArgs.inSection;
-		} else if ( depFieldArgs.inEmbedForm ) {
+		if ( depFieldArgs.inEmbedForm != '0' ) {
 			containerFieldId = depFieldArgs.inEmbedForm;
+		} else if ( depFieldArgs.inSection != '0' ) {
+			containerFieldId = depFieldArgs.inSection;
 		}
 
 		return containerFieldId;
@@ -475,8 +474,6 @@ function frmFrontFormJS(){
 	 * @param logicFieldArgs
 	 * @param {string} logicFieldArgs.inputType
 	 * @param depFieldArgs
-	 * @param {string} depFieldArgs.inSection
-	 * @param {string} depFieldArgs.repeatRow
 	 * @returns {string}
      */
 	function getFieldValue( logicFieldArgs, depFieldArgs ){
@@ -913,7 +910,7 @@ function frmFrontFormJS(){
 				}
 
 				setDefaultValue( inputs[i] );
-				maybeSetLookupFieldValue( inputs[i] );
+				maybeSetWatchingFieldValue( inputs[i] );
 				maybeDoCalcForSingleField( inputs[i] );
 
 				prevInput = inputs[i];
@@ -1194,145 +1191,183 @@ function frmFrontFormJS(){
 	 * Lookup Field Functions
 	 ******************************************************/
 
-	// Check all fields that are "watching" a lookup field that changed
+	/**
+	 * Check all fields that are "watching" a lookup field that changed
+ 	 */
 	function checkFieldsWatchingLookup(field_id, changedInput, originalEvent ) {
-		if ( typeof __FRMLOOKUP  === 'undefined' || typeof __FRMLOOKUP[field_id] === 'undefined' ) {
+		if ( typeof __FRMLOOKUP  === 'undefined'
+			|| typeof __FRMLOOKUP[field_id] === 'undefined'
+			|| __FRMLOOKUP[field_id].dependents.length < 1
+			|| changedInput === null
+			|| typeof(changedInput) === 'undefined'
+		) {
 			return;
 		}
 
 		var triggerFieldArgs = __FRMLOOKUP[field_id];
 
-		if ( changedInput === null || typeof(changedInput) === 'undefined' || changedInput.is('[disabled]') ) {
-			return;
-		}
+		var parentRepeatArgs = getRepeatArgsFromFieldName( changedInput[0].name );
 
-		var parentRepeatId = maybeGetRepeatId( triggerFieldArgs, changedInput[0] );
-
-		var currentChildId;
 		for ( var i = 0, l = triggerFieldArgs.dependents.length; i < l; i++ ) {
-			currentChildId = triggerFieldArgs.dependents[ i ];
-			updateWatchingFieldById( currentChildId, parentRepeatId, originalEvent );
+			updateWatchingFieldById( triggerFieldArgs.dependents[ i ], parentRepeatArgs, originalEvent );
 		}
 	}
 
-	// Get the repeating row index from a field element (could be an input, select, or frm_opt_container div)
-	function maybeGetRepeatId( triggerFieldArgs, fieldElement ) {
-		var repeatId = '';
-		if ( triggerFieldArgs.lookupType == 'radio' ) {
-			if ( fieldElement.type == 'radio' || fieldElement.type == 'hidden' ) {
-				// If input[type=radio]
-				repeatId = fieldElement.getAttribute('data-lookupref').replace( 'frm_lookup_' + triggerFieldArgs.fieldKey, '' );
+	/**
+	 * Update all instances of a "watching" field
+	 *
+	 * @since 2.01.0
+	 * @param {string} field_id
+	 * @param {Object} parentRepeatArgs
+	 * @param {string} originalEvent
+     */
+	function updateWatchingFieldById(field_id, parentRepeatArgs, originalEvent ) {
+		var childFieldArgs = getLookupArgsForSingleField( field_id );
+
+		// If lookup field has no parents, no need to update this field
+		if ( childFieldArgs === false || childFieldArgs.parents.length < 1 ) {
+			return;
+		}
+
+		if ( childFieldArgs.fieldType == 'lookup' ) {
+			updateLookupFieldOptions( childFieldArgs );
+		} else {
+			// If the original event was NOT triggered from a direct value change to the Lookup field,
+			// do not update the text field value
+			if ( originalEvent === 'value changed' ) {
+				updateWatchingFieldValue( childFieldArgs, parentRepeatArgs );
+			}
+		}
+	}
+
+	function updateLookupFieldOptions( childFieldArgs ) {
+		var childFieldElements = getAllFieldDivsOnCurrentPage(childFieldArgs);
+
+		for ( var i = 0, l=childFieldElements.length; i<l; i++ ) {
+			addRepeatRow( childFieldArgs, childFieldElements[i].id );
+			updateSingleLookupField( childFieldArgs, childFieldElements[i] );
+		}
+	}
+
+	function updateWatchingFieldValue( childFieldArgs, parentRepeatArgs ) {
+		var childFieldElements = getAllTextFieldInputs( childFieldArgs, parentRepeatArgs );
+
+		for ( var i = 0, l=childFieldElements.length; i<l; i++ ) {
+			addRepeatRowForInput( childFieldElements[i].name, childFieldArgs );
+			updateSingleWatchingField( childFieldArgs, childFieldElements[i] );
+		}
+	}
+
+	/**
+	 * Get the Lookup Args for a field ID
+	 *
+	 * @param {string} field_id
+	 * @return {boolean|Object}
+     */
+	function getLookupArgsForSingleField( field_id ) {
+		if ( typeof __FRMLOOKUP  === 'undefined' || typeof __FRMLOOKUP[field_id] === 'undefined' ) {
+			return false;
+		}
+
+		return __FRMLOOKUP[field_id];
+	}
+
+	/**
+	 * Update a single Lookup field
+	 *
+	 * @since 2.01.0
+	 * @param {Object} childFieldArgs
+	 * @param {string} childFieldArgs.inputType
+	 * @param {object} childElement
+     */
+	function updateSingleLookupField( childFieldArgs, childElement ) {
+		childFieldArgs.parentVals = getParentLookupFieldVals( childFieldArgs );
+
+		if ( childFieldArgs.inputType == 'select' ) {
+			maybeReplaceSelectLookupFieldOptions( childFieldArgs, childElement );
+		} else if ( childFieldArgs.inputType == 'radio' ) {
+			replaceRadioLookupFieldOptions( childFieldArgs, childElement );
+		}
+	}
+
+	/**
+	 * Update a standard field that is "watching" a Lookup
+	 *
+	 * @since 2.01.0
+	 * @param {Object} childFieldArgs
+	 * @param {object} childElement
+	 */
+	function updateSingleWatchingField( childFieldArgs, childElement ) {
+		childFieldArgs.parentVals = getParentLookupFieldVals( childFieldArgs );
+
+		maybeInsertValueInFieldWatchingLookup( childFieldArgs, childElement );
+	}
+
+	/**
+	 * Get all the occurences of a specific Text field
+	 *
+	 * @since 2.01.0
+	 * @param {Object} childFieldArgs
+	 * @param {boolean} childFieldArgs.isRepeating
+	 * @param {string} childFieldArgs.fieldKey
+	 * @param {Object} parentRepeatArgs
+	 * @param {string} parentRepeatArgs.repeatingSection
+	 * @param {string} parentRepeatArgs.repeatRow
+	 * @return {NodeList}
+ 	 */
+	function getAllTextFieldInputs( childFieldArgs, parentRepeatArgs ) {
+		var selector = 'field_' + childFieldArgs.fieldKey;
+		if ( childFieldArgs.isRepeating ) {
+			if ( parentRepeatArgs.repeatingSection != "" ) {
+				// If trigger field is repeating/embedded, use its section row in selector
+				selector = '[id="' + selector + '-' + parentRepeatArgs.repeatRow + '"]';
 			} else {
-				// If div.frm_opt_container
-				repeatId = fieldElement.id.replace( 'frm_lookup_cont_' + triggerFieldArgs.fieldKey, '' );
+				// If trigger field is not repeating/embedded, get all repeating field inputs
+				selector = '[id^="' + selector + '-"]'
 			}
 		} else {
-			// If input or select
-			repeatId = fieldElement.id.replace( 'field_' + triggerFieldArgs.fieldKey, '' );
+			selector = '[id="' + selector + '"]';
 		}
-		return repeatId;
+
+		return document.querySelectorAll( selector );
 	}
 
 	// Set the value in a regular field that is watching a lookup field when it is conditionally shown
-	function maybeSetLookupFieldValue( input ) {
+	function maybeSetWatchingFieldValue( input ) {
 		var fieldId = getFieldId( input, false );
 
-		if ( typeof __FRMLOOKUP  === 'undefined' || typeof __FRMLOOKUP[fieldId] === 'undefined' ) {
-			return;
-		}
-
-		var childFieldArgs = __FRMLOOKUP[fieldId];
-
-		if ( childFieldArgs.fieldType != 'lookup' ) {
-			updateSingleLookupField( childFieldArgs, input, 'value changed' );
-		}
-	}
-
-	// Update the field options/value for a field ID that is watching a Lookup field
-	function updateWatchingFieldById(field_id, parentRepeatId, originalEvent ) {
-		if ( typeof __FRMLOOKUP  === 'undefined' || typeof __FRMLOOKUP[field_id] === 'undefined' ) {
-			return;
-		}
-
-		var childFieldArgs = __FRMLOOKUP[field_id];
+		var childFieldArgs = getLookupArgsForSingleField( fieldId );
 
 		// If lookup field has no parents, no need to update this field
-		if ( childFieldArgs.parents.length < 1 ) {
+		if ( childFieldArgs === false || childFieldArgs.fieldType == 'lookup' ) {
 			return;
 		}
 
-		var childFieldElements = [];
-		if ( childFieldArgs.lookupType == 'radio' ) {
-			childFieldElements = getAllRadioLookupFieldElements( childFieldArgs, parentRepeatId );
-
-		} else if ( childFieldArgs.lookupType == 'select' ) {
-			childFieldElements = getAllSelectLookupFieldElements( childFieldArgs, parentRepeatId );
-		} else {
-			childFieldElements = getAllTextFieldElements( childFieldArgs, parentRepeatId );
-		}
-
-		var childFieldNum = childFieldElements.length;
-		for ( var i = 0; i<childFieldNum; i++ ) {
-			updateSingleLookupField( childFieldArgs, childFieldElements[i], originalEvent );
-		}
+		updateSingleWatchingField( childFieldArgs, input, 'value changed' );
 	}
 
-	// Get all the opt container for all occurrences of a specific Radio Lookup field (current page only)
-	function getAllRadioLookupFieldElements( childFieldArgs, parentRepeatId ) {
-		var childFieldElements = [];
-		if ( parentRepeatId ) {
-			// If parent is in a repeating section, child must be repeating
-			var childField = document.getElementById( 'frm_lookup_cont_' + childFieldArgs.fieldKey + parentRepeatId );
-			childFieldElements.push( childField );
+	/**
+	 * Get all divs on the current page for a given field
+	 *
+	 * @since 2.01.0
+	 * @param {Object} childFieldArgs
+	 * @param {boolean} childFieldArgs.isRepeating
+	 * @param {string} childFieldArgs.fieldId
+	 * @returns {Array}
+     */
+	function getAllFieldDivsOnCurrentPage( childFieldArgs ) {
+		var childFieldDivs = [];
 
+		if ( childFieldArgs.isRepeating ) {
+			childFieldDivs = document.querySelectorAll( '.frm_field_' + childFieldArgs.fieldId + '_container' );
 		} else {
-			childFieldElements = document.querySelectorAll('*[id^="frm_lookup_cont_' + childFieldArgs.fieldKey + '"]');
-		}
-		return childFieldElements;
-	}
-
-	// Get all the occurrences of a specific Select Lookup field (on the current page only)
-	function getAllSelectLookupFieldElements( childFieldArgs, parentRepeatId ) {
-		var childFieldElements = [];
-		if ( parentRepeatId ) {
-			// If parent is in a repeating section, child must be repeating
-			var childField = document.getElementById( 'field_' + childFieldArgs.fieldKey + parentRepeatId );
-			if ( childField.tagName == 'SELECT' ) {
-				childFieldElements.push( childField );
+			var container = document.getElementById( 'frm_field_' + childFieldArgs.fieldId + '_container' );
+			if ( container !== null ) {
+				childFieldDivs.push( container );
 			}
-
-		} else {
-			childFieldElements = document.querySelectorAll('select[id^="field_' + childFieldArgs.fieldKey + '"]');
 		}
-		return childFieldElements;
-	}
 
-	// Get all the occurences of a specific Text field
-	function getAllTextFieldElements( childFieldArgs, parentRepeatId ) {
-		var childFieldElements = [];
-		if ( parentRepeatId ) {
-			// If parent is in a repeating section, child must be repeating
-			var childField = document.getElementById( 'field_' + childFieldArgs.fieldKey + parentRepeatId );
-			childFieldElements.push( childField );
-
-		} else {
-			childFieldElements = document.querySelectorAll('[id^="field_' + childFieldArgs.fieldKey + '"]');
-		}
-		return childFieldElements;
-	}
-
-	// Update the field options for an individual lookup field
-	function updateSingleLookupField( childFieldArgs, childElement, originalEvent ) {
-		childFieldArgs.repeatId = maybeGetRepeatId( childFieldArgs, childElement );
-		childFieldArgs.parentVals = getParentLookupFieldVals( childFieldArgs );
-
-		if ( childFieldArgs.lookupType == 'select' ) {
-			maybeReplaceSelectLookupFieldOptions( childFieldArgs, childElement );
-		} else if ( childFieldArgs.lookupType == 'radio' ) {
-			replaceRadioLookupFieldOptions( childFieldArgs, childElement );
-		} else {
-			maybeInsertTextLookupFieldValue( childFieldArgs, childElement, originalEvent );
-		}
+		return childFieldDivs;
 	}
 
 	// Get the field values from all parents
@@ -1340,20 +1375,11 @@ function frmFrontFormJS(){
 		var parentVals = [];
 		var parentIds = childFieldArgs.parents;
 
-		var currentParentArgs, currentParentId;
-		var l = parentIds.length;
+		var parentFieldArgs, currentParentId;
 		var parentValue = false;
-		for ( var i = 0; i < l; i++ ) {
-			currentParentId = parentIds[i];
-			currentParentArgs = __FRMLOOKUP[ currentParentId ];
-
-			if ( currentParentArgs.lookupType == 'select' ) {
-				parentValue = getValueFromSelectLookup( currentParentArgs, childFieldArgs );
-			} else if ( currentParentArgs.lookupType == 'radio' ) {
-				parentValue = getValueFromRadioLookup( currentParentArgs, childFieldArgs );
-			} else if ( currentParentArgs.lookupType == 'text' ) {
-				parentValue = getValueFromSelectLookup( currentParentArgs, childFieldArgs );
-			}
+		for ( var i = 0, l = parentIds.length; i < l; i++ ) {
+			parentFieldArgs = getLookupArgsForSingleField( parentIds[i] );
+			parentValue = getFieldValue( parentFieldArgs, childFieldArgs )
 
 			// If any parents have blank values, don't waste time looking for values
 			if ( parentValue === '' || parentValue === false ) {
@@ -1365,39 +1391,6 @@ function frmFrontFormJS(){
 		}
 
 		return parentVals;
-	}
-
-	// Get the value from a Dropdown Lookup field
-	function getValueFromSelectLookup( currentParentArgs, childFieldArgs ) {
-		var parentValue = false;
-
-		// If child is repeating, parent may be repeating as well
-		var parentSelect = document.getElementById( 'field_' + currentParentArgs.fieldKey + childFieldArgs.repeatId );
-
-		// If parent isn't repeating (but the child is)
-		if ( parentSelect === null && childFieldArgs.repeatId ) {
-			parentSelect = document.getElementById( 'field_' + currentParentArgs.fieldKey );
-		}
-
-		parentValue = parentSelect.value;
-
-		return parentValue;
-	}
-
-	// Get the value from a Radio Lookup field
-	function getValueFromRadioLookup( currentParentArgs, childFieldArgs ) {
-
-		// If child is repeating, parent may be repeating as well
-		var parentRadioInputs = document.querySelectorAll( '[data-lookupref="frm_lookup_' + currentParentArgs.fieldKey + childFieldArgs.repeatId + '"]' );
-
-		// If child is repeating, but the parent is not
-		if ( parentRadioInputs.length == 0 && childFieldArgs.repeatId ) {
-			parentRadioInputs = document.querySelectorAll( '[data-lookupref="frm_lookup_' + currentParentArgs.fieldKey + '"]' );
-		}
-
-		var parentValue = getValueFromRadioInputs( parentRadioInputs );
-
-		return parentValue;
 	}
 
 	// Get the value from array of radio inputs (could be type="hidden" or type="radio")
@@ -1415,30 +1408,49 @@ function frmFrontFormJS(){
 		return radioValue;
 	}
 
-	// Get new options for a Dropdown Lookup field if all parents have a value
-	function maybeReplaceSelectLookupFieldOptions( childFieldArgs, childSelect ) {
-		if ( childSelect.type == 'hidden' ) {
-			// Field is on a different page or is hidden with the visibility option
+	/**
+	 * Maybe replace the options in a Select Lookup field
+	 *
+	 * @since 2.01.0
+	 * @param {Object} childFieldArgs
+	 * @param {Array} childFieldArgs.parents
+	 * @param {Array} childFieldArgs.parentVals
+	 * @param {string} childFieldArgs.fieldId
+	 * @param {string} childFieldArgs.fieldKey
+	 * @param {object} childDiv
+	 */
+	function maybeReplaceSelectLookupFieldOptions( childFieldArgs, childDiv ) {
+		// Get select within childDiv
+		var childSelect = childDiv.getElementsByTagName( 'SELECT' )[0];
+		if ( childSelect === null ) {
 			return;
 		}
+
+		var currentValue = childSelect.value;
 
 		if ( childFieldArgs.parentVals === false  ) {
 			// If any parents have blank values, don't waste time looking for values
 			childSelect.options.length = 1;
-			childSelect.value = '';
-			maybeUpdateChosenOptions( childSelect )
-			triggerChange( jQuery(childSelect), childFieldArgs.fieldKey );
+
+			if ( currentValue != '' ) {
+				childSelect.value = '';
+				maybeUpdateChosenOptions(childSelect)
+				triggerChange(jQuery(childSelect), childFieldArgs.fieldKey);
+			}
 		} else {
 			// If all parents have values, check for updated options
 			jQuery.ajax({
 				type:'POST',
 				url:frm_js.ajax_url,
 				data:{
-					action:'frm_replace_lookup_field_options', parent_fields:childFieldArgs.parents,
-					parent_vals:childFieldArgs.parentVals, field_id:childFieldArgs.fieldId, nonce:frm_js.nonce
+					action:'frm_replace_lookup_field_options',
+					parent_fields:childFieldArgs.parents,
+					parent_vals:childFieldArgs.parentVals,
+					field_id:childFieldArgs.fieldId,
+					nonce:frm_js.nonce
 				},
 				success:function(newOptions){
-					replaceSelectLookupFieldOptions( childFieldArgs, childSelect, newOptions );
+					replaceSelectLookupFieldOptions( childFieldArgs.fieldKey, childSelect, newOptions );
 				}
 			});
 		}
@@ -1451,8 +1463,15 @@ function frmFrontFormJS(){
 		}
 	}
 
-	// Replace the options in a Lookup Field dropdown
-	function replaceSelectLookupFieldOptions( childFieldArgs, childSelect, newOptions ) {
+	/**
+	 * Replace the options in a Select Lookup field
+	 *
+	 * @since 2.01.0
+	 * @param {string} fieldKey
+	 * @param {object} childSelect
+	 * @param {Array} newOptions
+	 */
+	function replaceSelectLookupFieldOptions( fieldKey, childSelect, newOptions ) {
 		var origVal = childSelect.value;
 
 		newOptions = JSON.parse( newOptions );
@@ -1468,18 +1487,18 @@ function frmFrontFormJS(){
 			childSelect.options[i+1]=new Option(newOptions[i], newOptions[i], false, false);
 		}
 
-		setLookupFieldVal( childSelect, origVal );
+		setSelectLookupVal( childSelect, origVal );
 
 		maybeUpdateChosenOptions( childSelect );
 
 		// Trigger a change if the new value is different from the old value
 		if ( childSelect.value != origVal ) {
-			triggerChange( jQuery(childSelect), childFieldArgs.fieldKey );
+			triggerChange( jQuery(childSelect), fieldKey );
 		}
 	}
 
 	// Set the value in a refreshed Lookup Field
-	function setLookupFieldVal( childSelect, origVal ) {
+	function setSelectLookupVal( childSelect, origVal ) {
 		// Try setting the dropdown to the original value
 		childSelect.value = origVal;
 		if ( childSelect.value === '' ) {
@@ -1491,26 +1510,72 @@ function frmFrontFormJS(){
 		}
 	}
 
-	// Get new value for a text field if all Lookup Field parents have a value
-	function maybeInsertTextLookupFieldValue( childFieldArgs, childInput, originalEvent ) {
-		var containerId = getFieldDivId( childFieldArgs );
-		if ( isFieldConditionallyHidden( containerId, childFieldArgs.formId ) ) {
+	/**
+	 * Replace the options in a Radio Lookup field
+	 *
+	 * @since 2.01.0
+	 * @param {Object} childFieldArgs
+	 * @param {boolean} childFieldArgs.isRepeating
+	 * @param {string} childFieldArgs.inSection
+	 * @param {Array} childFieldArgs.parents
+	 * @param {Array} childFieldArgs.parentVals
+	 * @param {string} childFieldArgs.fieldId
+	 * @param {string} childFieldArgs.repeatRow
+	 * @param {string} childFieldArgs.fieldKey
+	 * @param
+	 */
+	function replaceRadioLookupFieldOptions( childFieldArgs, childDiv ) {
+		var repeatingFieldId = 0;
+		if ( childFieldArgs.isRepeating ) {
+			repeatingFieldId = childFieldArgs.inSection;
+		}
+		var radioInputs = childDiv.getElementsByTagName( 'input' );
+		var currentValue = getValueFromRadioInputs( radioInputs );
+
+		jQuery.ajax({
+			type:'POST',
+			url:frm_js.ajax_url,
+			data:{
+				action:'frm_replace_radio_lookup_options',
+				parent_fields:childFieldArgs.parents,
+				parent_vals:childFieldArgs.parentVals,
+				field_id:childFieldArgs.fieldId,
+				row_index:childFieldArgs.repeatRow,
+				current_value:currentValue,
+				nonce:frm_js.nonce
+			},
+			success:function(newHtml){
+				childDiv.innerHTML = newHtml;
+				triggerChange( jQuery( radioInputs[0] ), childFieldArgs.fieldKey );
+			}
+		});
+	}
+
+	/**
+	 * Get new value for a text field if all Lookup Field parents have a value
+	 *
+	 * @since 2.01.0
+	 * @param {Object} childFieldArgs
+	 * @param {string} childFieldArgs.formId
+	 * @param {Array} childFieldArgs.parents
+	 * @param {Array} childFieldArgs.parentVals
+	 * @param {string} childFieldArgs.fieldKey
+	 * @param {string} childFieldArgs.fieldId
+	 * @param {object} childInput
+     */
+	function maybeInsertValueInFieldWatchingLookup( childFieldArgs, childInput ) {
+		if ( isChildInputConditionallyHidden( childInput, childFieldArgs.formId ) ) {
 			// TODO: What if field is in conditionally hidden section?
 			return;
 		}
 
 		if ( childFieldArgs.parentVals === false  ) {
-			// If the original event was NOT triggered from a direct value change to the Lookup field,
-			// do not update the text fields watching that Lookup field
-			if ( originalEvent !== 'value changed' ) {
-				return;
-			}
 			// If any parents have blank values, set the field value to the default value
 			var newValue = childInput.getAttribute('data-frmval');
 			if ( newValue === null ) {
 				newValue = '';
 			}
-			insertTextLookupFieldValue ( childFieldArgs, childInput, newValue );
+			insertValueInFieldWatchingLookup( childFieldArgs, childInput, newValue );
 		} else {
 			// If all parents have values, check for a new value
 			jQuery.ajax({
@@ -1525,7 +1590,7 @@ function frmFrontFormJS(){
 				},
 				success:function(newValue){
 					if ( childInput.value != newValue ) {
-						insertTextLookupFieldValue( childFieldArgs, childInput, newValue );
+						insertValueInFieldWatchingLookup( childFieldArgs.fieldKey, childInput, newValue );
 					}
 				}
 			});
@@ -1533,66 +1598,33 @@ function frmFrontFormJS(){
 	}
 
 	/**
-	 * Get the field div ID from a dependent Lookup field
+	 * Insert a new text field Lookup value
 	 *
 	 * @since 2.01.0
-	 * @param {Object} childFieldArgs
-	 * @param {string} childFieldArgs.fieldId
-	 * @param {string} childFieldArgs.inSection
-	 * @param {string} childFieldArgs.repeatId
-	 * @returns {string}
-     */
-	function getFieldDivId( childFieldArgs ){
-		var divId = 'frm_field_' + childFieldArgs.fieldId;
-
-		if ( childFieldArgs.repeatId != '' ) {
-			divId += '-' + childFieldArgs.inSection + '-' + childFieldArgs.repeatId;
-		}
-
-		divId += '_container';
-
-		return divId;
-	}
-
-	// Insert a new text field Lookup value
-	function insertTextLookupFieldValue( childFieldArgs, childInput, newValue ) {
+	 * @param {string} fieldKey
+	 * @param {object} childInput
+	 * @param {string} newValue
+ 	 */
+	function insertValueInFieldWatchingLookup( fieldKey, childInput, newValue ) {
 		childInput.value = newValue;
-		triggerChange( jQuery( childInput ), childFieldArgs.fieldKey );
+		triggerChange( jQuery( childInput ), fieldKey );
 	}
 
-	// Replace the options in a Radio Lookup field
-	function replaceRadioLookupFieldOptions( childFieldArgs, radioCont ) {
-		var repeatingFieldId = getRepeatingFieldIdForRadioLookup( radioCont );
-		var radioInputs = radioCont.getElementsByTagName( 'input' );
-		var currentValue = getValueFromRadioInputs( radioInputs )
+	/**
+	 * Add the repeat Row to the child field args
+	 *
+	 * @since 2.01.0
+	 * @param {string} fieldName
+	 * @param {Object} childFieldArgs
+     */
+	function addRepeatRowForInput( fieldName, childFieldArgs ) {
+		var repeatArgs = getRepeatArgsFromFieldName( fieldName );
 
-		jQuery.ajax({
-			type:'POST',
-			url:frm_js.ajax_url,
-			data:{
-				action:'frm_replace_radio_lookup_options',
-				parent_fields:childFieldArgs.parents,
-				parent_vals:childFieldArgs.parentVals,
-				field_id:childFieldArgs.fieldId,
-				repeating_field_id:repeatingFieldId,
-				row_index:childFieldArgs.repeatId,
-				current_value:currentValue,
-				nonce:frm_js.nonce
-			},
-			success:function(newHtml){
-				radioCont.innerHTML = newHtml;
-				triggerChange( jQuery( radioInputs[0] ), childFieldArgs.fieldKey );
-			}
-		});
-	}
-
-	// Get the repeating section field ID for a Radio Lookup field
-	function getRepeatingFieldIdForRadioLookup( radioCont ) {
-		var repeatingFieldId = 0;
-		if ( radioCont.getAttribute( 'data-lookuprepeat' ) !== 'undefined' ) {
-			repeatingFieldId = radioCont.getAttribute( 'data-lookuprepeat' );
+		if ( repeatArgs.repeatRow != '' ) {
+			childFieldArgs.repeatRow = repeatArgs.repeatRow;
+		} else {
+			childFieldArgs.repeatRow = '';
 		}
-		return repeatingFieldId;
 	}
 
 	/*******************************************************
@@ -1609,15 +1641,10 @@ function frmFrontFormJS(){
 		var depFieldArgsCopy = cloneObjectForDynamicFields( depFieldArgs );
 
 		if ( depFieldArgsCopy.inputType == 'data' ) {
-			// TODO: Maybe make this work across pages
 			updateDynamicListData( depFieldArgsCopy );
 		} else {
 			updateDynamicFieldOptions( depFieldArgsCopy );
 		}
-	}
-
-	function getFieldElement( depFieldArgs ) {
-
 	}
 
 	// Clone the depFieldArgs object for use in ajax requests
@@ -1810,6 +1837,7 @@ function frmFrontFormJS(){
 			return hidden;
 		}
 
+		// TODO: check what type of variable inSection is
 		if ( calcDetails.inSection === 0 && calcDetails.inEmbedForm === 0 ) {
 			// Field is not in a section or embedded form
 			hidden = isNonRepeatingFieldConditionallyHidden( fieldId, hiddenFields );
@@ -2992,7 +3020,7 @@ function frmFrontFormJS(){
 							fieldObject = jQuery( '#' + this.id );
 							checked.push(fieldID);
 							hideOrShowFieldById( fieldID, repeatArgs );
-							updateWatchingFieldById( fieldID, '-' + i, 'value changed' );
+							updateWatchingFieldById( fieldID, repeatArgs, 'value changed' );
 							// TODO: maybe trigger a change instead of running these three functions
 							checkFieldsWithConditionalLogicDependentOnThis( fieldID, fieldObject );
 							checkFieldsWatchingLookup( fieldID, fieldObject, 'value changed' );
@@ -3534,13 +3562,12 @@ function frmFrontFormJS(){
 		},
 
 		checkDependentLookupFields: function(ids){
-			ids = JSON.parse(ids);
-
 			var fieldId;
-			var len = ids.length;
-			for ( var i = 0, l = len; i < l; i++ ) {
+			var repeatArgs = { repeatingSection: '', repeatRow: '' };
+			for ( var i = 0, l = ids.length; i < l; i++ ) {
 				fieldId = ids[i];
-				updateWatchingFieldById( fieldId, '', 'value changed' );
+				// TODO: should this really say value changed?
+				updateWatchingFieldById( fieldId, repeatArgs, 'value changed' );
 			}
 		},
 
