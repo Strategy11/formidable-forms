@@ -281,11 +281,11 @@ function frmFrontFormJS(){
 
 	// Check if a changed field has other fields depending on it
 	function checkFieldsWithConditionalLogicDependentOnThis( field_id, changedInput ){
-		if ( typeof __FRMRULES  === 'undefined'
-			|| typeof __FRMRULES[field_id] === 'undefined'
-			|| __FRMRULES[field_id].dependents.length < 1
-			|| changedInput === null
-			|| typeof(changedInput) === 'undefined' ) {
+		if ( typeof __FRMRULES  === 'undefined' ||
+			typeof __FRMRULES[field_id] === 'undefined' ||
+			__FRMRULES[field_id].dependents.length < 1 ||
+			changedInput === null ||
+			typeof(changedInput) === 'undefined' ) {
 			return;
 		}
 		// TODO: check if cascading conditional logic works
@@ -338,7 +338,7 @@ function frmFrontFormJS(){
 		var childFieldDivs = [];
 
 		if ( depFieldArgs.isRepeating ) {
-			if ( triggerFieldArgs.repeatingSection != "" ) {
+			if ( triggerFieldArgs.repeatingSection !== '' ) {
 				// If trigger field is repeating/embedded, use its section row in selector
 				var container = 'frm_field_' + depFieldArgs.fieldId + '-';
 				container += triggerFieldArgs.repeatingSection + '-' + triggerFieldArgs.repeatRow + '_container';
@@ -363,7 +363,7 @@ function frmFrontFormJS(){
      */
 	function getAllRepeatingFieldDivs( depFieldArgs ) {
 		var childFieldDivs = [];
-		var containerFieldId = getContainerFieldId( depFieldArgs )
+		var containerFieldId = getContainerFieldId( depFieldArgs );
 		var fieldDiv = 'frm_field_' + depFieldArgs.fieldId + '-' + containerFieldId + '-';
 		var continueChecking = true;
 		var rowCount = 0;
@@ -503,7 +503,7 @@ function frmFrontFormJS(){
 	function getValueFromTextOrDropdown( logicFieldArgs, depFieldArgs ) {
 		var logicFieldValue = '';
 
-		if ( logicFieldArgs.isMultiSelect == true ) {
+		if ( logicFieldArgs.isMultiSelect === true ) {
 			return getValueFromMultiSelectDropdown( logicFieldArgs, depFieldArgs );
 		}
 
@@ -597,7 +597,7 @@ function frmFrontFormJS(){
 			}
 		}
 
-		if ( checkedVals.length == 0 ) {
+		if ( checkedVals.length === 0 ) {
 			checkedVals = '';
 		}
 
@@ -961,7 +961,7 @@ function frmFrontFormJS(){
 	}
 
 	function clearInputsInFieldAcrossPage( depFieldArgs ) {
-		var inputs = getInputsInFieldAcrossPage( depFieldArgs )
+		var inputs = getInputsInFieldAcrossPage( depFieldArgs );
 		clearValueForInputs(inputs);
 	}
 
@@ -974,8 +974,9 @@ function frmFrontFormJS(){
  	 */
 	function getInputsInHiddenSection( depFieldArgs ) {
 		// If a section, get all inputs with data attribute
+		var inputs = [];
 		if ( depFieldArgs.fieldType == 'divider' ) {
-			var inputs = document.querySelectorAll( '[data-sectionid="' + depFieldArgs.fieldId + '"]' );
+			inputs = document.querySelectorAll( '[data-sectionid="' + depFieldArgs.fieldId + '"]' );
 		}
 
 		return inputs;
@@ -1136,8 +1137,8 @@ function frmFrontFormJS(){
 				} else {
 					radioInputs[i].value = defaultValue;
 				}
-			} else if (radioInputs[i].value == defaultValue
-				|| ( jQuery.isArray(defaultValue) && defaultValue.indexOf( radioInputs[i].value ) > -1 ) ) {
+			} else if (radioInputs[i].value == defaultValue ||
+				( jQuery.isArray(defaultValue) && defaultValue.indexOf( radioInputs[i].value ) > -1 ) ) {
 				// If input's value matches the default value, set checked to true
 
 				radioInputs[i].checked = true;
@@ -1195,11 +1196,11 @@ function frmFrontFormJS(){
 	 * Check all fields that are "watching" a lookup field that changed
  	 */
 	function checkFieldsWatchingLookup(field_id, changedInput, originalEvent ) {
-		if ( typeof __FRMLOOKUP  === 'undefined'
-			|| typeof __FRMLOOKUP[field_id] === 'undefined'
-			|| __FRMLOOKUP[field_id].dependents.length < 1
-			|| changedInput === null
-			|| typeof(changedInput) === 'undefined'
+		if ( typeof __FRMLOOKUP  === 'undefined' ||
+			typeof __FRMLOOKUP[field_id] === 'undefined' ||
+			__FRMLOOKUP[field_id].dependents.length < 1 ||
+			changedInput === null ||
+			typeof(changedInput) === 'undefined'
 		) {
 			return;
 		}
@@ -1318,12 +1319,12 @@ function frmFrontFormJS(){
 	function getAllTextFieldInputs( childFieldArgs, parentRepeatArgs ) {
 		var selector = 'field_' + childFieldArgs.fieldKey;
 		if ( childFieldArgs.isRepeating ) {
-			if ( parentRepeatArgs.repeatingSection != "" ) {
+			if ( parentRepeatArgs.repeatingSection !== '' ) {
 				// If trigger field is repeating/embedded, use its section row in selector
 				selector = '[id="' + selector + '-' + parentRepeatArgs.repeatRow + '"]';
 			} else {
 				// If trigger field is not repeating/embedded, get all repeating field inputs
-				selector = '[id^="' + selector + '-"]'
+				selector = '[id^="' + selector + '-"]';
 			}
 		} else {
 			selector = '[id="' + selector + '"]';
@@ -1379,7 +1380,7 @@ function frmFrontFormJS(){
 		var parentValue = false;
 		for ( var i = 0, l = parentIds.length; i < l; i++ ) {
 			parentFieldArgs = getLookupArgsForSingleField( parentIds[i] );
-			parentValue = getFieldValue( parentFieldArgs, childFieldArgs )
+			parentValue = getFieldValue( parentFieldArgs, childFieldArgs );
 
 			// If any parents have blank values, don't waste time looking for values
 			if ( parentValue === '' || parentValue === false ) {
@@ -1432,9 +1433,9 @@ function frmFrontFormJS(){
 			// If any parents have blank values, don't waste time looking for values
 			childSelect.options.length = 1;
 
-			if ( currentValue != '' ) {
+			if ( currentValue !== '' ) {
 				childSelect.value = '';
-				maybeUpdateChosenOptions(childSelect)
+				maybeUpdateChosenOptions(childSelect);
 				triggerChange(jQuery(childSelect), childFieldArgs.fieldKey);
 			}
 		} else {
@@ -1620,7 +1621,7 @@ function frmFrontFormJS(){
 	function addRepeatRowForInput( fieldName, childFieldArgs ) {
 		var repeatArgs = getRepeatArgsFromFieldName( fieldName );
 
-		if ( repeatArgs.repeatRow != '' ) {
+		if ( repeatArgs.repeatRow !== '' ) {
 			childFieldArgs.repeatRow = repeatArgs.repeatRow;
 		} else {
 			childFieldArgs.repeatRow = '';
@@ -1690,7 +1691,7 @@ function frmFrontFormJS(){
 				if ( html === '' || listVal === '' ) {
 					hideDynamicField( depFieldArgs );
 				} else {
-					showDynamicField( depFieldArgs, $fieldDiv, $listInputs )
+					showDynamicField( depFieldArgs, $fieldDiv, $listInputs );
 				}
 			}
 		});
@@ -1705,7 +1706,7 @@ function frmFrontFormJS(){
 		var prevVal = getPrevFieldValue( hiddenInput );
 		var defaultVal = hiddenInput.data('frmval');
 
-		addLoadingIcon( $optContainer )
+		addLoadingIcon( $optContainer );
 
 		jQuery.ajax({
 			type:'POST',
@@ -3002,7 +3003,7 @@ function frmFrontFormJS(){
 				var repeatArgs = {
 					repeatingSection: id.toString(),
 					repeatRow: i.toString(),
-				}
+				};
 
                 // hide fields with conditional logic
                 jQuery(html).find('input, select, textarea').each(function(){
@@ -3140,7 +3141,7 @@ function frmFrontFormJS(){
 		loadCustomInputMasks();
 		loadChosen();
 		checkDynamicFields();
-		checkLookupFields()
+		checkLookupFields();
 		triggerCalc();
 	}
 
