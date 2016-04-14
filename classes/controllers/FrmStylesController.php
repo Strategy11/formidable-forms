@@ -148,7 +148,7 @@ class FrmStylesController {
 		if ( ( 'formidable' == $handle || 'jquery-theme' == $handle ) && strpos( $tag, ' property=' ) === false ) {
 			$frm_settings = FrmAppHelper::get_settings();
 			if ( $frm_settings->use_html ) {
-				$tag = str_replace( ' type=', ' property="stylesheet" type=', $tag );
+				$tag = str_replace( ' type="', ' property="stylesheet" type="', $tag );
 			}
 		}
 		return $tag;
