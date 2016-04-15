@@ -206,6 +206,7 @@ class WP_Test_FrmFieldsAjax extends FrmAjaxUnitTest {
 	 * @covers FrmFieldsController::edit_name
 	 */
 	function test_edit_name() {
+		wp_set_current_user( $this->user_id );
 		$form = $this->factory->form->get_object_by_id( 'contact-with-email' );
 		$field = $this->factory->field->create_and_get( array('form_id' => $form->id ) );
         $this->assertNotEmpty( $field );

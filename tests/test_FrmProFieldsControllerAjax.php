@@ -427,7 +427,8 @@ class WP_Test_FrmProFieldsControllerAjax extends FrmAjaxUnitTest {
 			$this->assertTrue( strpos( $response, $substring ) !== false, 'The substring ' . $substring . ' didn\'t show up in the field in the ' . $test . ' test.' );
 		}
 	}
-			function _check_for_input_id_substring( $e, $response, $test ) {
+
+	function _check_for_input_id_substring( $e, $response, $test ) {
 		if ( strpos( $test, 'checkbox' ) !== false || strpos( $test, 'radio' ) !== false ) {
 			$substring = 'id="field_dynamic-state-' . $e . '"';
 		} else if ( strpos( $test, 'select' ) !== false ) {

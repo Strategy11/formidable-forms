@@ -1,9 +1,5 @@
 <?php
 
-FrmHooksController::trigger_load_hook( 'load_admin_hooks' );
-FrmHooksController::trigger_load_hook( 'load_ajax_hooks' );
-FrmHooksController::trigger_load_hook( 'load_form_hooks' );
-
 /**
  * @group ajax
  */
@@ -15,6 +11,10 @@ class FrmAjaxUnitTest extends WP_Ajax_UnitTestCase {
 	protected $contact_form_key = 'contact-with-email';
 
 	function setUp() {
+		FrmHooksController::trigger_load_hook( 'load_admin_hooks' );
+		FrmHooksController::trigger_load_hook( 'load_ajax_hooks' );
+		FrmHooksController::trigger_load_hook( 'load_form_hooks' );
+
 		parent::setUp();
 		FrmAppController::install();
 		$this->import_xml();
