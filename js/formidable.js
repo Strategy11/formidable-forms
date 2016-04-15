@@ -1,10 +1,5 @@
 function frmFrontFormJS(){
 	'use strict';
-	var show_fields = [];
-	var hide_later = {};
-	var globalHiddenFields = [];
-    var frm_checked_dep = [];
-	var addingRow = '';
 	var currentlyAddingRow = false;
 	var action = '';
 	var jsErrors = [];
@@ -612,7 +607,7 @@ function frmFrontFormJS(){
 	}
 
 	/**
-	 * Add values to the show_fields array
+	 * Check whether a particular conditional logic condition is true or false
 	 *
 	 * @param {Array} logicCondition
 	 * @param {operator:string} logicCondition.operator
@@ -1037,7 +1032,6 @@ function frmFrontFormJS(){
 	}
 
 	function clearHideFields() {
-		globalHiddenFields = [];
 		var hideFieldInputs = document.querySelectorAll( '[id^="frm_hide_fields_"]' );
 		clearValueForInputs( hideFieldInputs );
 	}
@@ -1052,9 +1046,6 @@ function frmFrontFormJS(){
 		} else {
 			// Add new conditionally hidden field to array
 			hiddenFields.push( htmlFieldId );
-
-			// Copy hiddenFields to global variable
-			globalHiddenFields[ 'form_' + formId ] = hiddenFields;
 
 			// Set the hiddenFields value in the frm_hide_field_formID input
 			hiddenFields = JSON.stringify( hiddenFields );
@@ -1078,25 +1069,20 @@ function frmFrontFormJS(){
 
 	function getHiddenFields( formId ) {
 		var hiddenFields = [];
-		if ( typeof( globalHiddenFields[ 'form_' + formId ] ) !== 'undefined' ) {
-			// If global value is already set, get it from there to save time
-			hiddenFields = globalHiddenFields[ 'form_' + formId ];
-		} else {
-			// Fetch the hidden fields from the frm_hide_fields_formId input
-			var frmHideFieldsInput = document.getElementById('frm_hide_fields_' + formId);
-			if ( frmHideFieldsInput === null ) {
-				return hiddenFields;
-			}
 
-			hiddenFields = frmHideFieldsInput.value;
-			if ( hiddenFields ) {
-				hiddenFields = JSON.parse( hiddenFields );
-			} else {
-				hiddenFields = [];
-			}
-			// Set the global HiddenFields variable
-			globalHiddenFields[ 'form_' + formId ] = hiddenFields;
+		// Fetch the hidden fields from the frm_hide_fields_formId input
+		var frmHideFieldsInput = document.getElementById('frm_hide_fields_' + formId);
+		if ( frmHideFieldsInput === null ) {
+			return hiddenFields;
 		}
+
+		hiddenFields = frmHideFieldsInput.value;
+		if ( hiddenFields ) {
+			hiddenFields = JSON.parse( hiddenFields );
+		} else {
+			hiddenFields = [];
+		}
+
 		return hiddenFields;
 	}
 
@@ -1174,9 +1160,6 @@ function frmFrontFormJS(){
 		if ( item_index > -1 ) {
 			// Remove field from the hiddenFields array
 			hiddenFields.splice(item_index, 1);
-
-			// Save the hiddenFields array as a global variable
-			globalHiddenFields[ 'form_' + formId ] = hiddenFields;
 
 			// Update frm_hide_fields_formId input
 			hiddenFields = JSON.stringify( hiddenFields );
@@ -3007,7 +2990,7 @@ function frmFrontFormJS(){
                 var checked = ['other'];
                 var fieldID, fieldObject;
                 var reset = 'reset';
-				addingRow = item.attr('id');
+
 				var repeatArgs = {
 					repeatingSection: id.toString(),
 					repeatRow: i.toString(),
@@ -3038,7 +3021,6 @@ function frmFrontFormJS(){
 						}
 					}
                 });
-				addingRow = '';
 
                 var star = jQuery(html).find('.star');
                 if ( star.length > 0 ) {
@@ -3063,7 +3045,9 @@ function frmFrontFormJS(){
 		return false;
 	}
 
-	/* In-place edit */
+	/*****************************************************
+	 * In-place edit
+	 ******************************************************/
 	function editEntry(){
 		/*jshint validthis:true */
 		var $edit = jQuery(this);
@@ -3089,6 +3073,7 @@ function frmFrontFormJS(){
 				$cont.children('.frm-loading-img').replaceWith(html);
 				$edit.removeClass('frm_inplace_edit').addClass('frm_cancel_edit');
 				$edit.html(cancel);
+				checkConditionalLogic( 'editInPlace' );
 				checkFieldsOnPage();
 			}
 		});
@@ -3167,9 +3152,9 @@ function frmFrontFormJS(){
 		}
 	}
 
-	function checkConditionalLogic() {
+	function checkConditionalLogic( event ) {
 		if (typeof __frmHideOrShowFields !== 'undefined') {
-			frmFrontForm.hideOrShowFields(__frmHideOrShowFields);
+			frmFrontForm.hideOrShowFields( __frmHideOrShowFields, event );
 		}
 	}
 
@@ -3405,7 +3390,7 @@ function frmFrontFormJS(){
 			});
 
 			checkFieldsOnPage();
-			checkConditionalLogic();
+			checkConditionalLogic( 'pageLoad' );
 
 			// Add fallbacks for the beloved IE8
 			addIndexOfFallbackForIE8();
@@ -3544,8 +3529,10 @@ function frmFrontFormJS(){
 			return goingToPrevPage(object);
 		},
 
-		hideOrShowFields: function(ids){
-			clearHideFields();
+		hideOrShowFields: function(ids, event ){
+			if ( 'pageLoad' === event ) {
+				clearHideFields();
+			}
 			var len = ids.length;
 			var repeatArgs = { repeatingSection: '', repeatRow: '' };
 			for ( var i = 0, l = len; i < l; i++ ) {
