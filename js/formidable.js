@@ -282,10 +282,10 @@ function frmFrontFormJS(){
 			typeof __FRMRULES[field_id] === 'undefined' ||
 			__FRMRULES[field_id].dependents.length < 1 ||
 			changedInput === null ||
-			typeof(changedInput) === 'undefined' ) {
+			typeof(changedInput) === 'undefined'
+		) {
 			return;
 		}
-		// TODO: check if cascading conditional logic works
 
 		var triggerFieldArgs = __FRMRULES[field_id];
 		var repeatArgs = getRepeatArgsFromFieldName( changedInput[0].name );
@@ -403,9 +403,9 @@ function frmFrontFormJS(){
      */
 	function getContainerFieldId( depFieldArgs ){
 		var containerFieldId = '';
-		if ( depFieldArgs.inEmbedForm != '0' ) {
+		if ( depFieldArgs.inEmbedForm !== '0' ) {
 			containerFieldId = depFieldArgs.inEmbedForm;
-		} else if ( depFieldArgs.inSection != '0' ) {
+		} else if ( depFieldArgs.inSection !== '0' ) {
 			containerFieldId = depFieldArgs.inSection;
 		}
 
@@ -1523,11 +1523,13 @@ function frmFrontFormJS(){
 	 * @param
 	 */
 	function replaceRadioLookupFieldOptions( childFieldArgs, childDiv ) {
+		var optContainer = childDiv.getElementsByClassName( 'frm_opt_container' )[0];
+
 		var repeatingFieldId = 0;
 		if ( childFieldArgs.isRepeating ) {
 			repeatingFieldId = childFieldArgs.inSection;
 		}
-		var radioInputs = childDiv.getElementsByTagName( 'input' );
+		var radioInputs = optContainer.getElementsByTagName( 'input' );
 		var currentValue = getValueFromRadioInputs( radioInputs );
 
 		jQuery.ajax({
@@ -1543,7 +1545,7 @@ function frmFrontFormJS(){
 				nonce:frm_js.nonce
 			},
 			success:function(newHtml){
-				childDiv.innerHTML = newHtml;
+				optContainer.innerHTML = newHtml;
 				triggerChange( jQuery( radioInputs[0] ), childFieldArgs.fieldKey );
 			}
 		});
@@ -1823,7 +1825,16 @@ function frmFrontFormJS(){
 		}
 	}
 
-	// Check if a total field is conditionally hidden
+	/**
+	 * Check if a total field is conditionally hidden
+	 * @param {Object} calcDetails
+	 * @param {string} calcDetails.field_id
+	 * @param {string} calcDetails.form_id
+	 * @param {string} calcDetails.inSection
+	 * @param {string} calcDetails.inEmbedForm
+	 * @param {string} triggerFieldName
+	 * @returns {boolean}
+     */
 	function isTotalFieldConditionallyHidden( calcDetails, triggerFieldName ) {
 		var hidden = false;
 		var fieldId = calcDetails.field_id;
@@ -1835,8 +1846,7 @@ function frmFrontFormJS(){
 			return hidden;
 		}
 
-		// TODO: check what type of variable inSection is
-		if ( calcDetails.inSection === 0 && calcDetails.inEmbedForm === 0 ) {
+		if ( calcDetails.inSection === '0' && calcDetails.inEmbedForm === '0' ) {
 			// Field is not in a section or embedded form
 			hidden = isNonRepeatingFieldConditionallyHidden( fieldId, hiddenFields );
 
@@ -1850,13 +1860,13 @@ function frmFrontFormJS(){
 			} else if ( isRepeatingFieldConditionallyHidden( fieldId, repeatArgs, hiddenFields ) ){
 				// Check repeating field
 				hidden = true;
-			} else if ( calcDetails.inSection !== 0 && calcDetails.inEmbedForm !== 0 ) {
+			} else if ( calcDetails.inSection !== '0' && calcDetails.inEmbedForm !== '0' ) {
 				// Check section in embedded form
 				hidden = isRepeatingFieldConditionallyHidden( calcDetails.inSection, repeatArgs, hiddenFields );
-			} else if ( calcDetails.inSection !== 0 ) {
+			} else if ( calcDetails.inSection !== '0' ) {
 				// Check section
 				hidden = isNonRepeatingFieldConditionallyHidden( calcDetails.inSection, hiddenFields);
-			} else if ( calcDetails.inEmbedForm !== 0 ) {
+			} else if ( calcDetails.inEmbedForm !== '0' ) {
 				// Check embedded form
 				hidden = isNonRepeatingFieldConditionallyHidden( calcDetails.inEmbedForm, hiddenFields);
 			}
@@ -1889,6 +1899,7 @@ function frmFrontFormJS(){
 		var thisFullCalc = thisCalc.calc;
 
 		var totalField = jQuery( document.getElementById('field_'+ field_key) );
+		// TODO: update this to work more like conditional logic
 		var fieldInfo = { 'triggerField': triggerField, 'inSection': false, 'thisFieldCall': 'input[id^="field_'+ field_key+'-"]' };
 		if ( totalField.length < 1 && typeof triggerField !== 'undefined' ) {
 			// check if the total field is inside of a repeating/embedded form
@@ -3564,7 +3575,6 @@ function frmFrontFormJS(){
 			var repeatArgs = { repeatingSection: '', repeatRow: '' };
 			for ( var i = 0, l = ids.length; i < l; i++ ) {
 				fieldId = ids[i];
-				// TODO: should this really say value changed?
 				updateWatchingFieldById( fieldId, repeatArgs, 'value changed' );
 			}
 		},
