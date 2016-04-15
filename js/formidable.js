@@ -70,6 +70,10 @@ function frmFrontFormJS(){
 
 	function triggerDateField() {
 		/*jshint validthis:true */
+		if ( this.className.indexOf('frm_custom_date') !== -1 ) {
+			return;
+		}
+
 		var dateFields = __frmDatepicker;
 		var id = this.id;
 		var idParts = id.split('-');
