@@ -381,8 +381,7 @@ function frmAdminBuildJS(){
 
 		// new field
 		if ( ui.item.hasClass('frmbutton') ) {
-			if ( ui.item.hasClass('frm_tbreak') || ui.item.hasClass('frm_tform') ||
-				ui.item.hasClass('frm_tdivider') || ui.item.hasClass('frm_tcaptcha') ) {
+			if ( ui.item.hasClass('frm_tbreak') || ui.item.hasClass('frm_tform') || ui.item.hasClass('frm_tdivider') ) {
 				return false;
 			}
 			return true;
@@ -819,7 +818,7 @@ function frmAdminBuildJS(){
 		var fieldSelect = document.getElementById( 'get_values_field_' + fieldID );
 		var fieldType = this.getAttribute('data-fieldtype');
 
-		if ( this.value == '' ) {
+		if ( this.value === '' ) {
 			fieldSelect.options.length = 1;
 		} else {
 			var formID = this.value;
