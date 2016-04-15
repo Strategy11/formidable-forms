@@ -7,7 +7,7 @@
 		<span class="howto"><?php _e( 'pixels wide', 'formidable' ) ?></span>
 		<?php
 		if ( $display_max ) {
-			include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end-field-opts/max.php' );
+			include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/max.php' );
 		}
 		?>
 	</td>
