@@ -33,6 +33,7 @@ class FrmEntriesHelper {
                 'form_id' => $field->form_id,
 				'parent_form_id' => isset( $args['parent_form_id'] ) ? $args['parent_form_id'] : $field->form_id,
 	            'reset_value' => $reset,
+				'in_embed_form' => isset( $args['in_embed_form'] ) ? $args['in_embed_form'] : '0',
             );
 
             $opt_defaults = FrmFieldsHelper::get_default_field_opts($field_array['type'], $field, true);

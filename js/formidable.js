@@ -352,17 +352,24 @@ function frmFrontFormJS(){
 	 * @since 2.01.0
 	 * @param {Object} depFieldArgs
 	 * @param {string} depFieldArgs.fieldId
+	 * @param {string} depFieldArgs.inEmbedForm
      */
 	function getAllRepeatingFieldDivs( depFieldArgs ) {
 		var childFieldDivs = [];
 		var containerFieldId = getContainerFieldId( depFieldArgs );
 		var fieldDiv = 'frm_field_' + depFieldArgs.fieldId + '-' + containerFieldId + '-';
-		var continueChecking = true;
 		var rowCount = 0;
-		var selector = '';
 
 		// Always add first row
 		childFieldDivs.push( fieldDiv + rowCount + '_container' );
+
+		// Don't check for more rows if in an embedded form
+		if ( depFieldArgs.inEmbedForm !== '0' ) {
+			return childFieldDivs;
+		}
+
+		var continueChecking = true;
+		var selector = '';
 
 		// Figure out how many additional rows are in the repeating section
 		while ( continueChecking === true ) {
@@ -411,16 +418,12 @@ function frmFrontFormJS(){
 	 *
 	 * @param depFieldArgs
 	 * @param {bool} depFieldArgs.isRepeating
-	 * @param {string} depFieldArgs.inSection
-	 * @param {string} depFieldArgs.fieldId
-	 * @param {string} depFieldArgs.repeatRow
 	 * @param childFieldDivId
      */
 	function addRepeatRow( depFieldArgs, childFieldDivId ) {
 		if ( depFieldArgs.isRepeating ) {
-			var replace = 'frm_field_' + depFieldArgs.fieldId + '-' + depFieldArgs.inSection + '-';
-			depFieldArgs.repeatRow = childFieldDivId.replace( replace, '' );
-			depFieldArgs.repeatRow = depFieldArgs.repeatRow.replace( '_container', '' );
+			var divParts = childFieldDivId.replace( '_container', '' ).split( '-' );
+			depFieldArgs.repeatRow = divParts[2];
 		} else {
 			depFieldArgs.repeatRow = '';
 		}
@@ -995,17 +998,15 @@ function frmFrontFormJS(){
 
 			if ( inputs[i].type == 'radio' || inputs[i].type == 'checkbox' ) {
 				inputs[i].checked = false;
-			} else if ( inputs[i].type == 'select' ) {
+			} else if ( inputs[i].tagName == 'SELECT' ) {
 				inputs[i].selectedIndex = '0';
-			} else {
-				inputs[i].value = '';
-			}
 
-			if ( inputs[i].tagName == 'SELECT' ) {
 				var autocomplete = document.getElementById( inputs[i].id + '_chosen' );
 				if ( autocomplete !== null ) {
 					jQuery(inputs[i]).trigger('chosen:updated');
 				}
+			} else {
+				inputs[i].value = '';
 			}
 
 			prevInput = inputs[i];
@@ -1102,7 +1103,11 @@ function frmFrontFormJS(){
 			} else {
 				input.value = defaultValue;
 			}
-			// TODO: Maybe don't trigger change if disabled?
+
+			if ( input.tagName == 'SELECT' ) {
+				maybeUpdateChosenOptions( input )
+			}
+
 			triggerChange( $input );
 		}
 	}
