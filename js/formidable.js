@@ -1775,7 +1775,7 @@ function frmFrontFormJS(){
 			$fieldDiv.show();
 		}
 
-		if( $fieldInputs.hasClass('frm_chzn') && jQuery().chosen){
+		if( $fieldInputs.hasClass('frm_chzn') ) {
 			loadChosen();
 		}
 
@@ -3046,10 +3046,8 @@ function frmFrontFormJS(){
                     jQuery('.star').rating();
                 }
 
-				if ( jQuery().chosen ) {
-                    // trigger autocomplete
-					loadChosen();
-				}
+				// trigger autocomplete
+				loadChosen();
 
 				if(typeof(frmThemeOverride_frmAddRow) == 'function'){
 					frmThemeOverride_frmAddRow(id, r);
@@ -3091,7 +3089,7 @@ function frmFrontFormJS(){
 				$cont.children('.frm-loading-img').replaceWith(html);
 				$edit.removeClass('frm_inplace_edit').addClass('frm_cancel_edit');
 				$edit.html(cancel);
-				loadChosen();
+				checkFieldsOnPage();
 			}
 		});
 		return false;
@@ -3160,11 +3158,13 @@ function frmFrontFormJS(){
 	}
 
 	function loadChosen() {
-		var opts = {allow_single_deselect:true};
-		if (typeof __frmChosen !== 'undefined') {
-			opts = '{' + __frmChosen + '}';
+		if ( jQuery().chosen ) {
+			var opts = {allow_single_deselect:true};
+			if ( typeof __frmChosen !== 'undefined' ) {
+				opts = '{' + __frmChosen + '}';
+			}
+			jQuery('.frm_chzn').chosen(opts);
 		}
-		jQuery('.frm_chzn').chosen(opts);
 	}
 
 	function checkConditionalLogic() {
