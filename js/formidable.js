@@ -64,15 +64,7 @@ function frmFrontFormJS(){
 	}
 
 	function loadDateFields() {
-		if ( typeof __frmDatepicker === 'undefined' ) {
-			return;
-		}
-
-		var dateFields = __frmDatepicker;
-		for ( var i = 0; i < dateFields.length; i++ ) {
-			jQuery(document).on('focusin', dateFields[i].triggerID, triggerDateField );
-		}
-
+		jQuery(document).on( 'focusin', '.frm_date', triggerDateField );
 		loadUniqueTimeFields();
 	}
 
@@ -86,16 +78,17 @@ function frmFrontFormJS(){
 
 		jQuery.datepicker.setDefaults(jQuery.datepicker.regional['']);
 
+		var opt_key = 0;
 		for ( var i = 0; i < dateFields.length; i++ ) {
 			if ( dateFields[i].triggerID == '#' + id || dateFields[i].triggerID == altID ) {
-
-				var opts = dateFields[i].options;
-				jQuery(this).datepicker( jQuery.extend(
-					jQuery.datepicker.regional[ dateFields[i].locale ],
-					opts
-				) );
+				opt_key = i;
 			}
 		}
+
+		jQuery(this).datepicker( jQuery.extend(
+			jQuery.datepicker.regional[ dateFields[ opt_key ].locale ],
+			dateFields[ opt_key ].options
+		) );
 	}
 
 	// Remove the frm_transparent class from a single file upload field when it changes
