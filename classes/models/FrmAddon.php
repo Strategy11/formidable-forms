@@ -181,16 +181,16 @@ class FrmAddon {
 					$response['message'] = __( 'Your license has been activated. Enjoy!', 'formidable' );
 					$response['success'] = true;
 				} else if ( $license_data['license'] == 'invalid' ) {
-					$response['message'] = __( 'That license is invalid', 'formidable' );
+					$response['message'] = __( 'That license key is invalid', 'formidable' );
 				}
 			} else if ( $license_data == 'expired' ) {
 				$response['message'] = __( 'That license is expired', 'formidable' );
 			} else if ( $license_data == 'no_activations_left' ) {
-				$response['message'] = __( 'That license has been used too many times', 'formidable' );
+				$response['message'] = __( 'That license has been used on too many sites', 'formidable' );
 			} else if ( $license_data == 'invalid_item_id' ) {
-				$response['message'] = __( 'Oops! That is the wrong license number for this plugin.', 'formidable' );
+				$response['message'] = __( 'Oops! That is the wrong license key for this plugin.', 'formidable' );
 			} else if ( $license_data == 'missing' ) {
-				$response['message'] = __( 'That license is invalid', 'formidable' );
+				$response['message'] = __( 'That license key is invalid', 'formidable' );
 			} else {
 				$response['message'] = FrmAppHelper::kses( $license_data, array( 'a' ) );
 			}
@@ -245,7 +245,7 @@ class FrmAddon {
 
 		$arg_array = array(
 			'body'      => $api_params,
-			'timeout'   => 15,
+			'timeout'   => 25,
 			'sslverify' => false,
 			'user-agent' => $this->plugin_slug . '/' . $this->version . '; ' . get_bloginfo( 'url' ),
 		);
@@ -256,9 +256,7 @@ class FrmAddon {
 		$message = __( 'Your License Key was invalid', 'formidable' );
 		if ( is_wp_error( $resp ) ) {
 			$message = sprintf( __( 'You had an error communicating with Formidable Pro\'s API. %1$sClick here%2$s for more information.', 'formidable' ), '<a href="http://formidablepro.com/knowledgebase/why-cant-i-activate-formidable-pro/" target="_blank">', '</a>');
-			if ( is_wp_error( $resp ) ) {
-				$message .= ' ' . $resp->get_error_message();
-			}
+			$message .= ' ' . $resp->get_error_message();
 		} else if ( $body == 'error' || is_wp_error( $body ) ) {
 			$message = __( 'You had an HTTP error connecting to Formidable Pro\'s API', 'formidable' );
 		} else {
