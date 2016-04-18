@@ -285,7 +285,6 @@ function frmFrontFormJS(){
 		var triggerFieldArgs = __FRMRULES[field_id];
 		var repeatArgs = getRepeatArgsFromFieldName( changedInput[0].name );
 
-		//TODO: make sure dependents are only added once
 		for ( var i = 0, l = triggerFieldArgs.dependents.length; i < l; i++ ) {
 			hideOrShowFieldById( triggerFieldArgs.dependents[ i ], repeatArgs );
 		}
@@ -324,6 +323,7 @@ function frmFrontFormJS(){
 	 * @param {object} triggerFieldArgs
 	 * @param {string} triggerFieldArgs.repeatingSection
 	 * @param {string} triggerFieldArgs.repeatRow
+	 * @param {string} depFieldArgs.inEmbedForm
 	 * @returns {Array}
      */
 	function getAllFieldDivs( depFieldArgs, triggerFieldArgs ) {
@@ -336,8 +336,12 @@ function frmFrontFormJS(){
 				container += triggerFieldArgs.repeatingSection + '-' + triggerFieldArgs.repeatRow + '_container';
 				childFieldDivs.push( container );
 			} else {
-				// If trigger field is not repeating/embedded, get all repeating field divs
-				childFieldDivs = getAllRepeatingFieldDivs( depFieldArgs );
+				// If trigger field is not repeating/embedded, get all repeating/embedded field divs
+				if ( depFieldArgs.inEmbedForm !== '0' ) {
+					childFieldDivs = getEmbeddedFieldDivs( depFieldArgs );
+				} else {
+					childFieldDivs = getAllRepeatingFieldDivs(depFieldArgs);
+				}
 			}
 		} else {
 			childFieldDivs.push( 'frm_field_' + depFieldArgs.fieldId + '_container' );
@@ -347,50 +351,81 @@ function frmFrontFormJS(){
 	}
 
 	/**
+	 * Get the field div for an embedded field
+	 *
+	 * @param {Object} depFieldArgs
+	 * @param {string} depFieldArgs.fieldId
+	 * @returns {Array}
+	 */
+	function getEmbeddedFieldDivs( depFieldArgs ) {
+		var containerFieldId = getContainerFieldId( depFieldArgs );
+		var fieldDiv = 'frm_field_' + depFieldArgs.fieldId + '-' + containerFieldId + '-';
+
+		var childFieldDivs = [ fieldDiv + '0_container' ]
+
+		return childFieldDivs;
+
+	}
+
+	/**
 	 * Get all instances of a repeating field
 	 *
 	 * @since 2.01.0
 	 * @param {Object} depFieldArgs
 	 * @param {string} depFieldArgs.fieldId
-	 * @param {string} depFieldArgs.inEmbedForm
      */
 	function getAllRepeatingFieldDivs( depFieldArgs ) {
 		var childFieldDivs = [];
 		var containerFieldId = getContainerFieldId( depFieldArgs );
+
+		// TODO: what if section is inside embedded form?
+
+		// Check if we're on the current page
+		var sectionOnPage = document.getElementById( 'frm_field_' + containerFieldId + '_container' );
+		if ( sectionOnPage !== null ) {
+			// On the current page
+			var childFields = document.querySelectorAll( '.frm_field_' + depFieldArgs.fieldId + '_container' );
+			for ( var i = 0, l=childFields.length; i<l; i++ ) {
+				childFieldDivs.push( childFields[i].id );
+			}
+		} else {
+			childFieldDivs = getRepeatingFieldDivsAcrossPage( depFieldArgs );
+		}
+
+		return childFieldDivs;
+	}
+
+	/**
+	 * Get the field divs for repeating fields across a page
+	 *
+	 * @param {Object} depFieldArgs
+	 * @param {string} depFieldArgs.fieldId
+	 * @param {string} depFieldArgs.inSectionKey
+	 * @returns {Array}
+	 * TODO: Maybe improve this by inserting hidden fields for each field in a repeating section, even if section is on pg 2
+	 */
+	function getRepeatingFieldDivsAcrossPage( depFieldArgs ) {
+		var childFieldDivs = [];
+		var containerFieldId = getContainerFieldId( depFieldArgs );
 		var fieldDiv = 'frm_field_' + depFieldArgs.fieldId + '-' + containerFieldId + '-';
-		var rowCount = 0;
 
-		// Always add first row
-		childFieldDivs.push( fieldDiv + rowCount + '_container' );
+		var allRows = document.querySelectorAll( '[id^="field_' + depFieldArgs.inSectionKey + '-rowid-"]' );
 
-		// Don't check for more rows if in an embedded form
-		if ( depFieldArgs.inEmbedForm !== '0' ) {
+		// If no rows have been added to the repeating section yet, assume just one row
+		if ( allRows.length < 1 ) {
+			childFieldDivs.push( fieldDiv + '0_container' );
 			return childFieldDivs;
 		}
 
-		var continueChecking = true;
-		var selector = '';
+		var currentIdParts = [];
+		for ( var i = 0, l = allRows.length; i<l; i++ ) {
+			currentIdParts = allRows[i].id.split( '-' );
 
-		// Figure out how many additional rows are in the repeating section
-		while ( continueChecking === true ) {
-			rowCount++;
-
-			selector = 'item_meta[' + containerFieldId + '][' + rowCount + ']';
-			if ( document.querySelectorAll( '[name^="' + selector + '"]').length > 0 ) {
-				childFieldDivs.push( fieldDiv + rowCount + '_container' );
-			} else {
-				continueChecking = false;
+			if ( currentIdParts.length != 3 ) {
+				continue;
 			}
-		}
-		// TODO: What if user creates a bunch of rows, removes rows, etc so it is not consecutive?
-		// TODO: Maybe use frm_field_x_container class to fetch all repeating fields if they're on the current page
 
-		// Check for rows that are being edited
-		var editingRows = document.getElementsByName( 'item_meta[' + containerFieldId + '][id][]' );
-		var rowId = '';
-		for ( var i=0, l= editingRows.length; i<l; i++ ) {
-			rowId = editingRows[i].value;
-			childFieldDivs.push( fieldDiv + 'i' + rowId + '_container' );
+			childFieldDivs.push(fieldDiv + currentIdParts[2] + '_container');
 		}
 
 		return childFieldDivs;

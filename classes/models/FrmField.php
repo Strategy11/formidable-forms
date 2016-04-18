@@ -721,4 +721,12 @@ class FrmField {
         $id = FrmDb::get_var( 'frm_fields', array( 'field_key' => sanitize_title( $key ) ) );
         return $id;
     }
+
+	/**
+	 * @param string $id
+	 * @return string
+	 */
+	public static function get_key_by_id( $id ) {
+		return FrmDb::get_var( 'frm_fields', array( 'id' => $id ), 'field_key' );
+	}
 }
