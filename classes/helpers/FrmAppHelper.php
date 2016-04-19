@@ -1038,7 +1038,7 @@ class FrmAppHelper {
 		// Track the original field's type
 		$field_array['original_type'] = isset( $field->field_options['original_type'] ) ? $field->field_options['original_type'] : $field->type;
 
-        $field_array = apply_filters('frm_setup_edit_fields_vars', $field_array, $field, $values['id']);
+        $field_array = apply_filters( 'frm_setup_edit_fields_vars', $field_array, $field, $values['id'], array() );
 
         if ( ! isset($field_array['unique']) || ! $field_array['unique'] ) {
             $field_array['unique_msg'] = '';

@@ -51,7 +51,7 @@ class FrmEntriesHelper {
                 $field_array['custom_html'] = FrmFieldsHelper::get_default_html($field->type);
             }
 
-            $field_array = apply_filters('frm_setup_new_fields_vars', $field_array, $field);
+            $field_array = apply_filters('frm_setup_new_fields_vars', $field_array, $field, $args );
             $field_array = array_merge( $field->field_options, $field_array );
 
             $values['fields'][] = $field_array;
