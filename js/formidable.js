@@ -361,7 +361,7 @@ function frmFrontFormJS(){
 		var containerFieldId = getContainerFieldId( depFieldArgs );
 		var fieldDiv = 'frm_field_' + depFieldArgs.fieldId + '-' + containerFieldId + '-';
 
-		var childFieldDivs = [ fieldDiv + '0_container' ]
+		var childFieldDivs = [ fieldDiv + '0_container' ];
 
 		return childFieldDivs;
 
@@ -1140,7 +1140,7 @@ function frmFrontFormJS(){
 			}
 
 			if ( input.tagName == 'SELECT' ) {
-				maybeUpdateChosenOptions( input )
+				maybeUpdateChosenOptions( input );
 			}
 
 			triggerChange( $input );
