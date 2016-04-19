@@ -1,10 +1,5 @@
 function frmFrontFormJS(){
 	'use strict';
-	var show_fields = [];
-	var hide_later = {};
-	var globalHiddenFields = [];
-    var frm_checked_dep = [];
-	var addingRow = '';
 	var currentlyAddingRow = false;
 	var action = '';
 	var jsErrors = [];
@@ -64,20 +59,16 @@ function frmFrontFormJS(){
 	}
 
 	function loadDateFields() {
-		if ( typeof __frmDatepicker === 'undefined' ) {
-			return;
-		}
-
-		var dateFields = __frmDatepicker;
-		for ( var i = 0; i < dateFields.length; i++ ) {
-			jQuery(document).on('focusin', dateFields[i].triggerID, triggerDateField );
-		}
-
+		jQuery(document).on( 'focusin', '.frm_date', triggerDateField );
 		loadUniqueTimeFields();
 	}
 
 	function triggerDateField() {
 		/*jshint validthis:true */
+		if ( this.className.indexOf('frm_custom_date') !== -1 ) {
+			return;
+		}
+
 		var dateFields = __frmDatepicker;
 		var id = this.id;
 		var idParts = id.split('-');
@@ -86,16 +77,17 @@ function frmFrontFormJS(){
 
 		jQuery.datepicker.setDefaults(jQuery.datepicker.regional['']);
 
+		var opt_key = 0;
 		for ( var i = 0; i < dateFields.length; i++ ) {
 			if ( dateFields[i].triggerID == '#' + id || dateFields[i].triggerID == altID ) {
-
-				var opts = dateFields[i].options;
-				jQuery(this).datepicker( jQuery.extend(
-					jQuery.datepicker.regional[ dateFields[i].locale ],
-					opts
-				) );
+				opt_key = i;
 			}
 		}
+
+		jQuery(this).datepicker( jQuery.extend(
+			jQuery.datepicker.regional[ dateFields[ opt_key ].locale ],
+			dateFields[ opt_key ].options
+		) );
 	}
 
 	// Remove the frm_transparent class from a single file upload field when it changes
@@ -174,7 +166,7 @@ function frmFrontFormJS(){
 	function maybeCheckDependent(e){
 		/*jshint validthis:true */
 
-		var field_id = getFieldId( this );
+		var field_id = getFieldId( this, false );
 		if ( ! field_id || typeof field_id === 'undefined' ) {
 			return;
 		}
@@ -187,9 +179,21 @@ function frmFrontFormJS(){
 			reset = 'persist';
 		}
 
-		checkDependentField(field_id, null, jQuery(this), reset);
+		checkFieldsWithConditionalLogicDependentOnThis( field_id, jQuery(this) );
+		var originalEvent = getOriginalEvent( e );
+		checkFieldsWatchingLookup( field_id, jQuery(this), originalEvent );
 		doCalculation(field_id, jQuery(this));
 		validateField( field_id, this );
+	}
+
+	function getOriginalEvent( e ) {
+		var originalEvent;
+		if ( typeof e.originalEvent !== 'undefined' ) {
+			originalEvent = 'value changed';
+		} else {
+			originalEvent = 'other';
+		}
+		return originalEvent;
 	}
 
 	/* Get the ID of the field that changed*/
@@ -215,6 +219,7 @@ function frmFrontFormJS(){
 		}
 
 		var nameParts = fieldName.replace('item_meta[', '').replace('[]', '').split(']');
+		//TODO: Fix this for checkboxes and address fields
 		if ( nameParts.length < 1 ) {
 			return 0;
 		}
@@ -262,649 +267,436 @@ function frmFrontFormJS(){
 		return field_id;
 	}
 
+	/*****************************************************
+	 Conditional Logic Functions
+	 ******************************************************/
 
-	/* Conditional Logic Functions */
+	// Check if a changed field has other fields depending on it
+	function checkFieldsWithConditionalLogicDependentOnThis( field_id, changedInput ){
+		if ( typeof __FRMRULES  === 'undefined' ||
+			typeof __FRMRULES[field_id] === 'undefined' ||
+			__FRMRULES[field_id].dependents.length < 1 ||
+			changedInput === null ||
+			typeof(changedInput) === 'undefined'
+		) {
+			return;
+		}
+
+		var triggerFieldArgs = __FRMRULES[field_id];
+		var repeatArgs = getRepeatArgsFromFieldName( changedInput[0].name );
+
+		for ( var i = 0, l = triggerFieldArgs.dependents.length; i < l; i++ ) {
+			hideOrShowFieldById( triggerFieldArgs.dependents[ i ], repeatArgs );
+		}
+	}
 
 	/**
-	*
-	* Check all the logic on each field that has conditional logic dependent on a given field ID
-	*
-	* field_id = the field ID that is triggering the changes
-	* rec = null or go (maybe remove this variable)
-	* changedInput = the input that changed or null on initial page load
-	* reset = reset or persist
-	*/
-	function checkDependentField(field_id, rec, changedInput, reset){
-		var rules = getRulesForField( field_id );
-		if ( typeof rules === 'undefined' ) {
+	 * Hide or show all instances of a field using the field ID
+	 *
+	 * @param fieldId
+	 * @param triggerFieldRepeatArgs
+     */
+	function hideOrShowFieldById( fieldId, triggerFieldRepeatArgs ) {
+		var depFieldArgs = getRulesForSingleField( fieldId );
+
+		if ( depFieldArgs === false || depFieldArgs.conditions.length < 1 ) {
+			// If field has no logic on it, stop now
 			return;
 		}
 
-		if ( typeof(rec) === 'undefined' || rec === null ) {
-			//stop recursion?
-			rec = 'go';
+		var childFieldDivs = getAllFieldDivs( depFieldArgs, triggerFieldRepeatArgs );
+
+		var childFieldNum = childFieldDivs.length;
+		for ( var i = 0; i<childFieldNum; i++ ) {
+			depFieldArgs.containerId = childFieldDivs[i];
+			addRepeatRow( depFieldArgs, childFieldDivs[i] );
+			hideOrShowSingleField( depFieldArgs );
 		}
+	}
 
-		if ( reset !== 'persist' ) {
-            show_fields = []; // reset this variable after each click
-        }
+	/**
+	 * Get all the field divs that should be hidden or shown, regardless of whether they're on the current page
+	 *
+	 * @param {Object} depFieldArgs
+	 * @param {bool} depFieldArgs.isRepeating
+	 * @param {string} depFieldArgs.fieldId
+	 * @param {object} triggerFieldArgs
+	 * @param {string} triggerFieldArgs.repeatingSection
+	 * @param {string} triggerFieldArgs.repeatRow
+	 * @param {string} depFieldArgs.inEmbedForm
+	 * @returns {Array}
+     */
+	function getAllFieldDivs( depFieldArgs, triggerFieldArgs ) {
+		var childFieldDivs = [];
 
-		var isRepeat = maybeSetRowId( changedInput );
-		var currentRuleIndex = {};
-		var hideField;
-
-		for ( var i = 0, len = rules.length; i < len; i++ ) {
-			hideField = rules[i].HideField;
-			setCurrentRuleIndex( hideField, currentRuleIndex );
-
-			if ( rules[i].FieldName === field_id ) {
-				// Field in logic is the same field that triggered the change
-				hideOrShowField( currentRuleIndex[ hideField ], rules[i], rec, changedInput);
+		if ( depFieldArgs.isRepeating ) {
+			if ( triggerFieldArgs.repeatingSection !== '' ) {
+				// If trigger field is repeating/embedded, use its section row in selector
+				var container = 'frm_field_' + depFieldArgs.fieldId + '-';
+				container += triggerFieldArgs.repeatingSection + '-' + triggerFieldArgs.repeatRow + '_container';
+				childFieldDivs.push( container );
 			} else {
-				// Field in logic is different from the field that triggered the change
-				hideOrShowField( currentRuleIndex[ hideField ], rules[i], rec);
-			}
-
-			if ( i === ( len - 1 ) ) {
-				hideFieldLater(rec);
-				if ( isRepeat ) {
-					addingRow = '';
+				// If trigger field is not repeating/embedded, get all repeating/embedded field divs
+				if ( depFieldArgs.inEmbedForm !== '0' ) {
+					childFieldDivs = getEmbeddedFieldDivs( depFieldArgs );
+				} else {
+					childFieldDivs = getAllRepeatingFieldDivs(depFieldArgs);
 				}
 			}
-		}
-	}
-
-	function setCurrentRuleIndex( hideField, currentRuleIndex ) {
-		if ( ! ( hideField in currentRuleIndex ) ) {
-			currentRuleIndex[ hideField ] = 0;
 		} else {
-			currentRuleIndex[ hideField ] += 1;
+			childFieldDivs.push( 'frm_field_' + depFieldArgs.fieldId + '_container' );
 		}
+
+		return childFieldDivs;
 	}
 
-	/*
-	* Check if changed field is a repeating field. If so, set addingRow to the HTML id of the repeating section div
-	*/
-	function maybeSetRowId( changedInput ) {
-		var isRepeat = false;
-		if ( addingRow === '' && typeof changedInput !== 'undefined' && changedInput !== null ) {
-			changedInput = maybeGetFirstElement( changedInput );
-			var repeatSecObj = changedInput.closest('.frm_repeat_sec, .frm_repeat_inline, .frm_repeat_grid');
-			if ( typeof repeatSecObj !== 'undefined' && typeof repeatSecObj.attr('id') !== 'undefined' ) {
-				addingRow = repeatSecObj.attr('id');
-				isRepeat = true;
+	/**
+	 * Get the field div for an embedded field
+	 *
+	 * @param {Object} depFieldArgs
+	 * @param {string} depFieldArgs.fieldId
+	 * @returns {Array}
+	 */
+	function getEmbeddedFieldDivs( depFieldArgs ) {
+		var containerFieldId = getContainerFieldId( depFieldArgs );
+		var fieldDiv = 'frm_field_' + depFieldArgs.fieldId + '-' + containerFieldId + '-';
+
+		var childFieldDivs = [ fieldDiv + '0_container' ]
+
+		return childFieldDivs;
+
+	}
+
+	/**
+	 * Get all instances of a repeating field
+	 *
+	 * @since 2.01.0
+	 * @param {Object} depFieldArgs
+	 * @param {string} depFieldArgs.fieldId
+     */
+	function getAllRepeatingFieldDivs( depFieldArgs ) {
+		var childFieldDivs = [];
+		var containerFieldId = getContainerFieldId( depFieldArgs );
+
+		// TODO: what if section is inside embedded form?
+
+		// Check if we're on the current page
+		var sectionOnPage = document.getElementById( 'frm_field_' + containerFieldId + '_container' );
+		if ( sectionOnPage !== null ) {
+			// On the current page
+			var childFields = document.querySelectorAll( '.frm_field_' + depFieldArgs.fieldId + '_container' );
+			for ( var i = 0, l=childFields.length; i<l; i++ ) {
+				childFieldDivs.push( childFields[i].id );
 			}
-		}
-		return isRepeat;
-	}
-
-	function getRulesForField( field_id ) {
-		if ( typeof __FRMRULES  === 'undefined' || typeof __FRMRULES[field_id] === 'undefined' ) {
-			return;
+		} else {
+			childFieldDivs = getRepeatingFieldDivsAcrossPage( depFieldArgs );
 		}
 
-		var rules = compileRules( __FRMRULES[field_id] );
-		return rules;
+		return childFieldDivs;
 	}
 
-	function compileRules( rules ) {
-		var this_opts = [];
-		for ( var i = 0, l = rules.length; i < l; i++ ) {
-            var rule = rules[i];
-            if ( typeof rule !== 'undefined' ) {
-                for ( var j = 0, rcl = rule.Conditions.length; j < rcl; j++ ) {
-					var c = rule.Conditions[j];
-					c.HideField = rule.Setting.FieldName;
-					c.MatchType = rule.MatchType;
-					c.Show = rule.Show;
-					c.FormId = rule.FormId;
-                    this_opts.push(c);
-                }
-            }
-        }
-		return this_opts;
-	}
+	/**
+	 * Get the field divs for repeating fields across a page
+	 *
+	 * @param {Object} depFieldArgs
+	 * @param {string} depFieldArgs.fieldId
+	 * @param {string} depFieldArgs.inSectionKey
+	 * @returns {Array}
+	 * TODO: Maybe improve this by inserting hidden fields for each field in a repeating section, even if section is on pg 2
+	 */
+	function getRepeatingFieldDivsAcrossPage( depFieldArgs ) {
+		var childFieldDivs = [];
+		var containerFieldId = getContainerFieldId( depFieldArgs );
+		var fieldDiv = 'frm_field_' + depFieldArgs.fieldId + '-' + containerFieldId + '-';
 
-	// Hide or show a field with conditional logic
-	// Track whether fields should hide or show in show_fields variable
-	function hideOrShowField(i, logicRules, rec, changedInput){
-		// Instantiate variables
-		logicRules.inputName = 'item_meta['+ logicRules.FieldName +']';
-		logicRules.hiddenName = 'item_meta['+ logicRules.HideField +']';
-		logicRules.containerID = 'frm_field_'+ logicRules.FieldName +'_container';
-		logicRules.hideContainerID = 'frm_field_'+ logicRules.HideField +'_container';
-		logicRules.Value = logicRules.Value.trim();
+		var allRows = document.querySelectorAll( '[id^="field_' + depFieldArgs.inSectionKey + '-rowid-"]' );
 
-		// If the trigger field is a repeating field, only check single row of repeating section
-		if ( addingRow !== '' ) {
-			checkRepeatingFieldInSingleRow( i, logicRules, rec, addingRow );
-			return;
+		// If no rows have been added to the repeating section yet, assume just one row
+		if ( allRows.length < 1 ) {
+			childFieldDivs.push( fieldDiv + '0_container' );
+			return childFieldDivs;
 		}
 
-		// Conditional logic is being checked on initial page load or the logic field being checked isn't the field that changed
-		if ( typeof changedInput === 'undefined' || changedInput === null ) {
-			changedInput = jQuery('input[name^="'+ logicRules.inputName +'"], textarea[name^="'+ logicRules.inputName +'"], select[name^="'+ logicRules.inputName +'"]');
+		var currentIdParts = [];
+		for ( var i = 0, l = allRows.length; i<l; i++ ) {
+			currentIdParts = allRows[i].id.split( '-' );
 
-			// Current logic field is repeating (which means hide/show field is repeating as well)
-			if ( changedInput.length < 1 ) {
-				checkLogicForTwoRepeatingFields( i, logicRules, rec );
-				return;
+			if ( currentIdParts.length != 3 ) {
+				continue;
 			}
+
+			childFieldDivs.push(fieldDiv + currentIdParts[2] + '_container');
 		}
 
-		// Get the value from the logic field (not repeating)
-		var fieldValue = getBasicEnteredValue( logicRules );
-
-		// If field to hide/show is a repeating field and the logic field is not repeating, loop through each one of the repeating fields with that field ID
-		if ( isRepeatingFieldById( logicRules.HideField ) ) {
-			checkLogicForRepeatingHideField( i, logicRules, fieldValue, rec );
-			return;
-		}
-
-		// By this point, only non-repeating fields should be getting checked so proceed normally
-		setEmptyKeyInShowFieldsArray( logicRules );
-		updateShowFields( i, logicRules, fieldValue );
-		hideFieldNow( i, logicRules, rec );
+		return childFieldDivs;
 	}
 
-	// Check conditional logic when the trigger field is repeating and the current logic field may or may not be repeating
-	// Hide/show field is repeating
-	function checkRepeatingFieldInSingleRow( i, logicRules, rec, repeatSecHtmlId ) {
-		// If logic field is a repeating field, update inputName accordingly
-		if ( isRepeatingFieldById( logicRules.FieldName ) ) {
-			logicRules.inputName = getRepeatingFieldName( logicRules.FieldName, repeatSecHtmlId );
-			logicRules.containerID = getRepeatingFieldHtmlId( logicRules.FieldName, repeatSecHtmlId );
+	/**
+	 *
+	 * @param {Object} depFieldArgs
+	 * @param {string} depFieldArgs.inSection
+	 * @param {string} depFieldArgs.inEmbedForm
+	 * @returns {string}
+     */
+	function getContainerFieldId( depFieldArgs ){
+		var containerFieldId = '';
+		if ( depFieldArgs.inEmbedForm !== '0' ) {
+			containerFieldId = depFieldArgs.inEmbedForm;
+		} else if ( depFieldArgs.inSection !== '0' ) {
+			containerFieldId = depFieldArgs.inSection;
 		}
-		// Updat hideContainerID for repeating fields
-		logicRules.hideContainerID = getRepeatingFieldHtmlId( logicRules.HideField, repeatSecHtmlId );
 
-		// Get the value in the logic field
-		var fieldValue = getBasicEnteredValue( logicRules );
-
-		setEmptyKeyInShowFieldsArray(logicRules);
-		updateShowFields( i, logicRules, fieldValue );
-		hideFieldNow(i, logicRules, rec);
+		return containerFieldId;
 	}
 
-	// If the trigger field is NOT repeating, but the current logic field and the show/hide field are repeating
-	function checkLogicForTwoRepeatingFields( i, logicRules, rec ) {
-		var allRepeatFields = document.getElementsByClassName('frm_field_' + logicRules.FieldName + '_container');
-		for ( var r = 0; r < allRepeatFields.length; r++ ) {
-			logicRules.inputName = getRepeatingFieldName( logicRules.FieldName, allRepeatFields[r].id );
-			logicRules.containerID = allRepeatFields[r].id;
-			logicRules.hideContainerID = allRepeatFields[r].id.replace( logicRules.FieldName, logicRules.HideField );
-
-			// Get the value in the logic field
-			var fieldValue = getBasicEnteredValue( logicRules );
-
-			setEmptyKeyInShowFieldsArray(logicRules);
-			updateShowFields( i, logicRules, fieldValue );
-			hideFieldNow(i, logicRules, rec);
-		}
-	 }
-
-	// If the hide/show field is repeating, loop through each field in column to check it
-	function checkLogicForRepeatingHideField( i, logicRules, fieldValue, rec ){
-		var allRepeatFields = document.getElementsByClassName('frm_field_' + logicRules.HideField + '_container');
-		for ( var r = 0; r < allRepeatFields.length; r++ ) {
-		    logicRules.hideContainerID = allRepeatFields[r].id;
-
-			setEmptyKeyInShowFieldsArray(logicRules);
-			updateShowFields( i, logicRules, fieldValue );
-			hideFieldNow(i, logicRules, rec);
+	/**
+	 *
+	 * @param depFieldArgs
+	 * @param {bool} depFieldArgs.isRepeating
+	 * @param childFieldDivId
+     */
+	function addRepeatRow( depFieldArgs, childFieldDivId ) {
+		if ( depFieldArgs.isRepeating ) {
+			var divParts = childFieldDivId.replace( '_container', '' ).split( '-' );
+			depFieldArgs.repeatRow = divParts[2];
+		} else {
+			depFieldArgs.repeatRow = '';
 		}
 	}
 
-	function getBasicEnteredValue( f ){
+	function hideOrShowSingleField( depFieldArgs ){
+		var logicOutcomes = [];
+		var len = depFieldArgs.conditions.length;
+		for ( var i = 0; i < len; i++ ) {
+			logicOutcomes.push( checkLogicCondition( depFieldArgs.conditions[ i ], depFieldArgs ) );
+		}
+
+		routeToHideOrShowField( depFieldArgs, logicOutcomes );
+	}
+
+	function getRulesForSingleField( fieldId ) {
+		if ( typeof __FRMRULES  === 'undefined' || typeof __FRMRULES[fieldId] === 'undefined' ) {
+			return false;
+		}
+
+		return __FRMRULES[fieldId];
+	}
+
+	/**
+	 * @param {Array} logicCondition
+	 * @param {string} logicCondition.fieldId
+	 * @param depFieldArgs
+	 * @returns {*}
+     */
+	function checkLogicCondition( logicCondition, depFieldArgs ) {
+		var fieldId = logicCondition.fieldId;
+
+		var logicFieldArgs = getRulesForSingleField( fieldId );
+
+		var fieldValue = getFieldValue( logicFieldArgs, depFieldArgs );
+
+		return getLogicConditionOutcome( logicCondition, fieldValue, depFieldArgs, logicFieldArgs );
+	}
+
+	/**
+	 * Get the value from any field
+	 *
+	 * @param logicFieldArgs
+	 * @param {string} logicFieldArgs.inputType
+	 * @param depFieldArgs
+	 * @returns {string}
+     */
+	function getFieldValue( logicFieldArgs, depFieldArgs ){
 		var fieldValue = '';
 
-		// If field is a checkbox field
-		if ( f.Type === 'checkbox' || f.Type === 'data-checkbox' ) {
-			var checkVals = getCheckedVal(f.containerID, f.inputName);
-
-			if ( checkVals.length ) {
-				fieldValue = checkVals;
-			}else{
-				fieldValue = '';
-			}
-
-			return fieldValue;
-		}
-
-		fieldValue = jQuery('input[name="'+ f.inputName +'"][type="hidden"]').val();
-
-		if ( typeof fieldValue !== 'undefined' ) {
-			// If field is on another page, read-only, or visibility setting is hiding it
-
-		} else if ( f.Type == 'radio' || f.Type === 'data-radio' ) {
-			// If radio field on the current page
-			fieldValue = jQuery('input[name="'+ f.inputName +'"]:checked').val();
-
-		} else if ( f.Type === 'select' || f.Type === 'data-select' ) {
-			// If dropdown field on the current page
-			fieldValue = jQuery('select[name^="'+ f.inputName +'"]').val();
-
+		if ( logicFieldArgs.inputType == 'radio' || logicFieldArgs.inputType == 'checkbox' ) {
+			fieldValue = getValueFromRadioOrCheckbox( logicFieldArgs, depFieldArgs );
 		} else {
-			// If text field on the current page
-			fieldValue = jQuery('input[name="'+ f.inputName +'"], textarea[name="'+ f.inputName +'"]').val();
+			fieldValue = getValueFromTextOrDropdown( logicFieldArgs, depFieldArgs );
 		}
 
+		fieldValue = cleanFinalFieldValue( fieldValue );
+
+		return fieldValue;
+	}
+
+	/**
+	 * Get the value from a Text or Dropdown field
+	 *
+	 * @param logicFieldArgs
+	 * @param {string} logicFieldArgs.fieldKey
+	 * @param {bool} logicFieldArgs.isRepeating
+	 * @param {bool} logicFieldArgs.isMultiSelect
+	 * @param depFieldArgs
+	 * @param {string} depFieldArgs.repeatRow
+ 	 */
+	function getValueFromTextOrDropdown( logicFieldArgs, depFieldArgs ) {
+		var logicFieldValue = '';
+
+		if ( logicFieldArgs.isMultiSelect === true ) {
+			return getValueFromMultiSelectDropdown( logicFieldArgs, depFieldArgs );
+		}
+
+		var fieldCall = 'field_' + logicFieldArgs.fieldKey;
+		if ( logicFieldArgs.isRepeating ) {
+			// If trigger field is repeating, dependent field is repeating too
+			fieldCall += '-' + depFieldArgs.repeatRow;
+		}
+
+		var logicFieldInput = document.getElementById( fieldCall );
+
+		if ( logicFieldInput !== null ) {
+			logicFieldValue = logicFieldInput.value;
+		}
+
+		return logicFieldValue;
+	}
+
+	function getValueFromMultiSelectDropdown( logicFieldArgs, depFieldArgs ) {
+		var inputName = buildLogicFieldInputName( logicFieldArgs, depFieldArgs );
+		var logicFieldInputs = document.querySelectorAll( '[name^="' + inputName + '"]' );
+		var selectedVals = [];
+
+		// TODO: What about if it's read-only?
+
+		if ( logicFieldInputs.length == 1 && logicFieldInputs[0].type != 'hidden' ) {
+			selectedVals = jQuery( '[name^="' + inputName + '"]' ).val();
+		} else {
+			selectedVals = getValuesFromCheckboxInputs( logicFieldInputs );
+		}
+
+		return selectedVals;
+	}
+
+	/**
+	 * Get the value from a Radio or Checkbox field trigger field
+	 *
+	 * @param {Object} logicFieldArgs
+	 * @param {string} logicFieldArgs.inputType
+	 * @param {Object} depFieldArgs
+	 * @returns {String|Array}
+     */
+	function getValueFromRadioOrCheckbox( logicFieldArgs, depFieldArgs ) {
+		var inputName = buildLogicFieldInputName( logicFieldArgs, depFieldArgs );
+
+		var logicFieldInputs = document.querySelectorAll( 'input[name^="' + inputName + '"]' );
+
+		var logicFieldValue;
+		if ( logicFieldArgs.inputType == 'checkbox' ) {
+			logicFieldValue = getValuesFromCheckboxInputs( logicFieldInputs );
+		} else {
+			logicFieldValue = getValueFromRadioInputs( logicFieldInputs );
+		}
+
+		return logicFieldValue;
+	}
+
+	/**
+	 * Build a logic field's input name
+	 * Does not include full name for checkbox, address, or multi-select fields
+	 *
+	 * @param {object} logicFieldArgs
+	 * @param {boolean} logicFieldArgs.isRepeating
+	 * @param {string} logicFieldArgs.fieldId
+	 * @param {object} depFieldArgs
+	 * @param {string} depFieldArgs.inSection
+	 * @param {string} depFieldArgs.repeatRow
+	 * @returns {string}
+     */
+	function buildLogicFieldInputName( logicFieldArgs, depFieldArgs ) {
+		var inputName = '';
+
+		if ( logicFieldArgs.isRepeating ) {
+			// If the trigger field is repeating, the child must be repeating as well
+			var sectionId = depFieldArgs.inSection;
+			var rowId = depFieldArgs.repeatRow;
+			inputName = 'item_meta[' + sectionId + '][' + rowId + '][' + logicFieldArgs.fieldId + ']';
+		} else {
+			inputName = 'item_meta[' + logicFieldArgs.fieldId + ']';
+		}
+
+		return inputName;
+	}
+
+	function getValuesFromCheckboxInputs( inputs ) {
+		var checkedVals = [];
+
+		for ( var i = 0, l=inputs.length; i<l; i++ ) {
+			if ( inputs[i].type == 'hidden' || inputs[i].checked ) {
+				checkedVals.push( inputs[i].value );
+			}
+		}
+
+		if ( checkedVals.length === 0 ) {
+			checkedVals = '';
+		}
+
+		return checkedVals;
+	}
+
+	function cleanFinalFieldValue( fieldValue ) {
 		if ( typeof fieldValue === 'undefined' ) {
 			fieldValue = '';
-		}
-
-		if ( typeof fieldValue === 'string' ) {
+		} else if ( typeof fieldValue === 'string' ) {
 			fieldValue = fieldValue.trim();
 		}
 
 		return fieldValue;
 	}
 
-	function setEmptyKeyInShowFieldsArray(f) {
-		if ( typeof show_fields[f.hideContainerID] === 'undefined' ) {
-			show_fields[f.hideContainerID] = [];
+	/**
+	 * Check whether a particular conditional logic condition is true or false
+	 *
+	 * @param {Array} logicCondition
+	 * @param {operator:string} logicCondition.operator
+	 * @param {value:string} logicCondition.value
+	 * @param {String|Array} fieldValue
+	 * @param {Object} depFieldArgs
+	 * @param {string} depFieldArgs.fieldType
+	 * @param {Object} logicFieldArgs
+	 * @param {fieldType:string} logicFieldArgs.fieldType
+     * @returns {Boolean}
+     */
+	function getLogicConditionOutcome( logicCondition, fieldValue, depFieldArgs, logicFieldArgs ) {
+		var outcome;
+
+		if ( depFieldArgs.fieldType == 'data' && logicFieldArgs.fieldType == 'data' ) {
+			// If dep field is Dynamic and logic field is Dynamic
+			outcome = getDynamicFieldLogicOutcome( logicCondition, fieldValue, depFieldArgs );
+		} else {
+			outcome = operators(logicCondition.operator, logicCondition.value, fieldValue);
 		}
+
+		return outcome;
 	}
 
-	// Add values to the show_fields array
-	function updateShowFields( i, logicRules, fieldValue ) {
-		if ( fieldValue === null || fieldValue === '' || fieldValue.length < 1 ) {
-			show_fields[logicRules.hideContainerID][i] = false;
-		} else {
-			show_fields[logicRules.hideContainerID][i] = {'funcName':'getDataOpts', 'f':logicRules, 'sel':fieldValue};
-		}
+	/**
+	 * @param {Array} logicCondition
+	 * @param {string} logicCondition.operator
+	 * @param {string} logicCondition.value
+	 * @param {string|Array} fieldValue
+	 * @param {object} depFieldArgs
+	 * @param {Array} depFieldArgs.dataLogic
+	 * @returns {boolean}
+     */
+	function getDynamicFieldLogicOutcome( logicCondition, fieldValue, depFieldArgs ) {
+		var outcome = false;
+		if ( logicCondition.value === '' ) {
+			// Logic: "Dynamic field is equal to/not equal to anything"
 
-		if ( logicRules.Type === 'checkbox' || (logicRules.Type === 'data-checkbox' && typeof logicRules.LinkedField === 'undefined') ) {
-
-			updateShowFieldsForCheckbox( i, logicRules, fieldValue );
-
-		} else if ( typeof logicRules.LinkedField !== 'undefined' && logicRules.Type.indexOf('data-') === 0 ) {
-
-			updateShowFieldsForDynamicField( i, logicRules, fieldValue );
-
-		}else if ( typeof logicRules.Value === 'undefined' && logicRules.Type.indexOf('data') === 0 ) {
-			if ( fieldValue === '' ) {
-				logicRules.Value = '1';
+			if ( fieldValue === '' || ( fieldValue.length == 1 && fieldValue[0] === '' ) ) {
+				outcome = false;
 			} else {
-				logicRules.Value = fieldValue;
-			}
-			show_fields[logicRules.hideContainerID][i] = operators(logicRules.Condition, logicRules.Value, fieldValue);
-			logicRules.Value = undefined;
-		} else {
-			show_fields[logicRules.hideContainerID][i] = operators(logicRules.Condition, logicRules.Value, fieldValue);
-		}
-	}
-
-	function updateShowFieldsForCheckbox( i, logicRules, fieldValue ) {
-		show_fields[logicRules.hideContainerID][i] = false;
-
-		var match = false;
-		if ( fieldValue !== '') {
-			if ( logicRules.Condition === '!=' ) {
-				show_fields[logicRules.hideContainerID][i] = true;
-			}
-			for ( var b = 0; b<fieldValue.length; b++ ) {
-				match = operators(logicRules.Condition, logicRules.Value, fieldValue[b]);
-				if ( logicRules.Condition === '!=' ) {
-					if ( show_fields[logicRules.hideContainerID][i] === true && match === false ) {
-						show_fields[logicRules.hideContainerID][i] = false;
-					}
-				} else if(show_fields[logicRules.hideContainerID][i] === false && match){
-					show_fields[logicRules.hideContainerID][i] = true;
-				}
+				outcome = true;
 			}
 		} else {
-			match = operators(logicRules.Condition, logicRules.Value, '');
-			if(show_fields[logicRules.hideContainerID][i] === false && match){
-				show_fields[logicRules.hideContainerID][i] = true;
-			}
+			// Logic: "Dynamic field is equal to/not equal to specific option"
+			outcome = operators( logicCondition.operator, logicCondition.value, fieldValue );
 		}
-	}
+		depFieldArgs.dataLogic = logicCondition;
+		depFieldArgs.dataLogic.actualValue = fieldValue;
 
-	function updateShowFieldsForDynamicField( i, logicRules, fieldValue ) {
-		if ( typeof logicRules.DataType === 'undefined' || logicRules.DataType === 'data' ) {
-			if ( fieldValue === '' ) {
-				hideAndClearDynamicField( logicRules, 'hide' );
-			} else if ( logicRules.Type === 'data-radio' ) {
-				if ( typeof logicRules.DataType === 'undefined' ) {
-					show_fields[logicRules.hideContainerID][i] = operators(logicRules.Condition, logicRules.Value, fieldValue);
-				} else {
-					show_fields[logicRules.hideContainerID][i] = {'funcName':'getData','f':logicRules,'sel':fieldValue};
-				}
-			} else if ( logicRules.Type === 'data-checkbox' || ( logicRules.Type === 'data-select' && isNotEmptyArray( fieldValue ) ) ) {
-				hideAndClearDynamicField( logicRules, 'show' );
-				show_fields[logicRules.hideContainerID][i] = true;
-				getData(logicRules, fieldValue, 0);
-			} else if ( logicRules.Type === 'data-select' ) {
-				show_fields[logicRules.hideContainerID][i] = {'funcName':'getData','f':logicRules,'sel':fieldValue};
-			}
-		}
-	}
-
-	function hideFieldNow(i, f, rec){
-		if ( f.MatchType === 'all' || show_fields[f.hideContainerID][i] === false ) {
-
-			if ( !( f.hideContainerID in hide_later ) ) {
-
-				hide_later[ f.hideContainerID ] = {
-					'show':f.Show,
-					'match':f.MatchType,
-					'FieldName':f.FieldName,
-					'HideField':f.HideField,
-					'hideContainerID':f.hideContainerID,
-					'FormId':f.FormId,
-					'DynamicInfoIndices':[]
-				};
-			}
-			maybeAddDynamicInfoIndex( f.hideContainerID, i );
-
-			return;
-		}
-
-
-		var hideFieldContainer = jQuery( document.getElementById(f.hideContainerID) );
-
-		if ( f.Show === 'show' ) {
-			if ( show_fields[f.hideContainerID][i] !== true ) {
-				showField(show_fields[f.hideContainerID][i], f.FieldName, rec);
-			} else {
-				// Show the field
-				routeToShowFieldAndSetVal( hideFieldContainer, f);
-			}
-		} else {
-			// Hide the field
-			routeToHideFieldAndClearVal( hideFieldContainer, f);
-		}
-	}
-
-	function maybeAddDynamicInfoIndex( hideContainerID, i ) {
-		var dynamicInfoIndex = false;
-
-		if ( show_fields[ hideContainerID ][ i ] !== false && show_fields[ hideContainerID ][ i ] !== true ) {
-			dynamicInfoIndex = i;
-		}
-
-		if ( dynamicInfoIndex !== false ) {
-			hide_later[ hideContainerID ].DynamicInfoIndices.push( dynamicInfoIndex );
-		}
-	}
-
-	function hideFieldLater(rec){
-		var hvalue;
-		for ( var key in hide_later) {
-			hvalue = hide_later[key];
-			delete hide_later[key];
-
-			if ( typeof hvalue === 'undefined' ) {
-				return;
-			}
-
-			var container = jQuery('#' + hvalue.hideContainerID);
-			var hideField = hvalue.show;
-			if ( ( hvalue.match === 'any' && (jQuery.inArray(true, show_fields[hvalue.hideContainerID]) === -1) ) ||
-			( hvalue.match === 'all' && (jQuery.inArray(false, show_fields[hvalue.hideContainerID]) > -1) ) ) {
-				if ( hvalue.show === 'show' ) {
-					hideField = 'hide';
-				} else {
-					hideField = 'show';
-				}
-			}
-
-			if ( hideField === 'show' ) {
-				routeToShowFieldAndSetVal( container, hvalue );
-				maybeGetDynamicFieldData( hvalue, rec );
-			} else {
-				routeToHideFieldAndClearVal( container, hvalue );
-			}
-		}
-	}
-
-	/* Hide Field Functions */
-	function routeToHideFieldAndClearVal( hideFieldContainer, f ) {
-		if ( hideFieldContainer.length ) {
-			// Field is not type=hidden
-			hideFieldAndClearValue( hideFieldContainer, f );
-		} else {
-			// Field is type=hidden
-			var fieldName = getFieldName( f.HideField, f.hideContainerID );
-			var inputs = jQuery( 'input[name^="' + fieldName + '"]' );
-			clearValueForInputs( inputs );
-		}
-		addToHideFields( f.hideContainerID, f.FormId );
-	}
-
-	function hideFieldAndClearValue( container, f ) {
-		container.hide();
-
-		var inputs = getInputsInContainer( container );
-		if ( inputs.length ){
-			clearValueForInputs( inputs );
-		}
-	}
-
-	function clearValueForInputs( inputs ) {
-		inputs.prop('checked', false).prop('selectedIndex', 0);
-		inputs.not(':checkbox, :radio, select').val('');
-		var i = false;
-		inputs.each(function(){
-			if ( this.tagName == 'SELECT' ) {
-				var autocomplete = document.getElementById( this.id + '_chosen' );
-				if ( autocomplete !== null ) {
-					jQuery(this).trigger('chosen:updated');
-				}
-			}
-
-			if ( i === false || ["checkbox","radio"].indexOf( this.type ) < 0 ) {
-				triggerChange( jQuery(this) );
-			}
-			i = true;
-		});
-	}
-
-	function addToHideFields( htmlFieldId, formId ) {
-		// Get all currently hidden fields
-		var hiddenFields = getHiddenFields( formId );
-
-		// If field id is already in the array, move on
-		if ( hiddenFields.indexOf( htmlFieldId ) > -1 ) {
-			return;
-		} else {
-			// Add new conditionally hidden field to array
-			hiddenFields.push( htmlFieldId );
-
-			// Copy hiddenFields to global variable
-			globalHiddenFields[ 'form_' + formId ] = hiddenFields;
-
-			// Set the hiddenFields value in the frm_hide_field_formID input
-			hiddenFields = JSON.stringify( hiddenFields );
-			var frmHideFieldsInput = document.getElementById('frm_hide_fields_' + formId);
-			frmHideFieldsInput.value = hiddenFields;
-		}
-	}
-
-	function getHiddenFields( formId ) {
-		var hiddenFields = [];
-		if ( typeof( globalHiddenFields[ 'form_' + formId ] ) !== 'undefined' ) {
-			// If global value is already set, get it from there to save time
-			hiddenFields = globalHiddenFields[ 'form_' + formId ];
-		} else {
-			// Fetch the hidden fields from the frm_hide_fields_formId input
-			var frmHideFieldsInput = document.getElementById('frm_hide_fields_' + formId);
-			hiddenFields = frmHideFieldsInput.value;
-			if ( hiddenFields ) {
-				hiddenFields = JSON.parse( hiddenFields );
-			} else {
-				hiddenFields = [];
-			}
-			// Set the global HiddenFields variable
-			globalHiddenFields[ 'form_' + formId ] = hiddenFields;
-		}
-		return hiddenFields;
-	}
-
-	function hideAndClearDynamicField(logicRules, hideOrShow){
-		var hiddenFields = getHiddenFields( logicRules.FormId );
-
-		if ( hiddenFields.indexOf( logicRules.hideContainerID ) === -1 ) {
-			var hideContainer = jQuery( document.getElementById( logicRules.hideContainerID ) );
-			if ( hideOrShow === 'hide' ) {
-				hideContainer.hide();
-				addToHideFields( logicRules.hideContainerID, logicRules.FormId );
-			}
-			hideContainer.find('.frm_opt_container').empty();
-		}
-    }
-
-	/* Show Field Functions */
-	function routeToShowFieldAndSetVal( hideFieldContainer, f ) {
-		var inSection = isAContainerField( hideFieldContainer );
-		var inputAtts = {inSection:inSection, formId:f.FormId};
-
-		removeFromHideFields( f.hideContainerID, f.FormId );
-		if ( hideFieldContainer.length ) {
-			// Field is not type=hidden
-			showFieldAndSetValue( hideFieldContainer, inputAtts );
-		} else {
-			// Set field value (don't show it)
-			var fieldName = getFieldName( f.HideField, f.hideContainerID );
-			var inputs = jQuery( 'input[name^="' + fieldName + '"]' );
-			setValForInputs( inputs, inputAtts );
-		}
-	}
-
-	function showFieldAndSetValue( container, inputAtts ) {
-		var inputs = getInputsInContainer( container );
-
-		setValForInputs( inputs, inputAtts );
-
-		container.show();
-	}
-
-	function setValForInputs( inputs, fieldAtts ){
-		if ( inputs.length ) {
-			fieldAtts.valSet = false;
-			fieldAtts.isHidden = false;
-
-			for ( var i = 0; i < inputs.length; i++ ) {
-
-				if ( skipThisInput( inputs, i, fieldAtts ) === true ) {
-					continue;
-				}
-
-				setDefaultValue( jQuery( inputs[i] ) );
-				maybeDoCalcForSingleField( inputs[i] );
-			}
-		}
-	}
-
-	function skipThisInput( inputs, i, fieldAtts ) {
-		var goToNextIteration = false;
-
-		if ( i === 0 || inputs[i-1].name != inputs[i].name ) {
-			// This field hasn't been checked yet
-
-			if ( fieldAtts.inSection && isInputConditionallyHidden( inputs[i], fieldAtts ) ) {
-				fieldAtts.isHidden = true;
-				fieldAtts.valSet = false;
-			} else {
-				fieldAtts.isHidden = false;
-				fieldAtts.valSet = isValueSet( inputs[i] );
-			}
-		}
-
-		if ( fieldAtts.valSet || fieldAtts.isHidden ) {
-			// If the value is already set or the field should remain hidden, move on
-			goToNextIteration = true;
-		}
-
-		return goToNextIteration;
-	}
-
-	// Check if a field already has a value set
-	// input is not a jQuery object
-	function isValueSet( input ) {
-		var valueSet = false;
-
-		if ( input.type == 'checkbox' || input.type == 'radio' ) {
-
-			var radioVals = document.getElementsByName( input.name );
-			var l = radioVals.length;
-			for ( var i=0; i<l; i++ ) {
-				if ( radioVals[i].checked ) {
-					valueSet = true;
-					break;
-				}
-			}
-		} else if ( input.value ) {
-			valueSet = true;
-		}
-
-		return valueSet;
-	}
-
-	function setDefaultValue( input ) {
-		var inputLength = input.length;
-
-		if ( inputLength ) {
-			for ( var i = 0, l = inputLength; i < l; i++ ) {
-				var field = jQuery(input[i]);
-				var defaultValue = field.data('frmval');
-				if ( typeof defaultValue !== 'undefined' ) {
-					if ( ! field.is(':checkbox, :radio') ) {
-						field.val( defaultValue );
-						triggerChange( field );
-					} else if ( field.val() == defaultValue || ( jQuery.isArray(defaultValue) && jQuery.inArray(field.val(), defaultValue) !== -1 ) ) {
-						field.prop('checked', true);
-						triggerChange( field );
-					}
-				}
-			}
-		}
-	}
-
-	function removeFromHideFields( htmlFieldId, formId ) {
-		// Get all currently hidden fields
-		var hiddenFields = getHiddenFields( formId );
-
-		// If field id is in the array, delete it
-		var item_index = hiddenFields.indexOf( htmlFieldId );
-		if ( item_index > -1 ) {
-			// Remove field from the hiddenFields array
-			hiddenFields.splice(item_index, 1);
-
-			// Save the hiddenFields array as a global variable
-			globalHiddenFields[ 'form_' + formId ] = hiddenFields;
-
-			// Update frm_hide_fields_formId input
-			hiddenFields = JSON.stringify( hiddenFields );
-			var frmHideFieldsInput = document.getElementById('frm_hide_fields_' + formId);
-			frmHideFieldsInput.value = hiddenFields;
-		}
-	}
-
-	// Check if dynamic data needs to be retrieved
-	function maybeGetDynamicFieldData( hvalue, rec ) {
-		if ( hvalue.DynamicInfoIndices.length > 0 ) {
-			var dynamicIndex;
-			var parentField;
-			for ( var t = 0; t < hvalue.DynamicInfoIndices.length; t++ ) {
-				dynamicIndex = hvalue.DynamicInfoIndices[ t ];
-				parentField = show_fields[ hvalue.hideContainerID ][ dynamicIndex ].f.FieldName;
-				showField( show_fields[ hvalue.hideContainerID ][ dynamicIndex ], parentField, rec );
-			}
-		}
-	}
-
-	function triggerChange( input, fieldKey ) {
-		if ( typeof fieldKey === 'undefined' ) {
-			fieldKey = 'dependent';
-		}
-
-		if ( input.length > 1 ) {
-			input = input.eq(0);
-		}
-
-		input.trigger({ type:'change', selfTriggered:true, frmTriggered:fieldKey });
+		return outcome;
 	}
 
 	function operators(op, a, b){
@@ -969,135 +761,1008 @@ function frmFrontFormJS(){
 		return c;
 	}
 
-	function showField(funcInfo, field_id, rec){
-		if ( funcInfo.funcName == 'getDataOpts' ) {
-			getDataOpts(funcInfo.f, funcInfo.sel, field_id, rec);
-		} else if ( funcInfo.funcName == 'getData' ) {
-			getData(funcInfo.f, funcInfo.sel, 0);
+	/**
+	 *
+	 * @param {Object} depFieldArgs
+	 * @param {string} depFieldArgs.containerId
+	 * @param {string} depFieldArgs.fieldType
+	 * @param logicOutcomes
+     */
+	function routeToHideOrShowField( depFieldArgs, logicOutcomes ) {
+		var action = getHideOrShowAction( depFieldArgs, logicOutcomes );
+
+		var onCurrentPage = isFieldDivOnPage( depFieldArgs.containerId );
+
+		if ( action == 'show' ) {
+			if ( depFieldArgs.fieldType == 'data' && depFieldArgs.hasOwnProperty('dataLogic') ) {
+				// Only update dynamic field options/value if it is dependent on another Dynamic field
+				updateDynamicField( depFieldArgs, onCurrentPage );
+			} else {
+				showFieldAndSetValue( depFieldArgs, onCurrentPage );
+			}
+		} else {
+			hideFieldAndClearValue( depFieldArgs, onCurrentPage );
 		}
 	}
 
-	function getData(f,selected,append){
-        var fcont = document.getElementById(f.hideContainerID);
-		var cont = jQuery(fcont).find('.frm_opt_container');
-		if ( cont.length === 0 ) {
-			return true;
+	function isFieldDivOnPage( containerId ) {
+		var fieldDiv = document.getElementById( containerId );
+
+		return fieldDiv !== null;
+	}
+
+	/**
+	 * @param {Object} depFieldArgs
+	 * @param {string} depFieldArgs.anyAll
+	 * @param {string} depFieldArgs.showHide
+	 * @param {Array} logicOutcomes
+	 * @returns {string}
+     */
+	function getHideOrShowAction( depFieldArgs, logicOutcomes ) {
+		if ( depFieldArgs.anyAll == 'any' ) {
+			// If any of the following match logic
+			if ( logicOutcomes.indexOf( true ) > -1 ) {
+				action = depFieldArgs.showHide;
+			} else {
+				action = reverseAction( depFieldArgs.showHide );
+			}
+		} else {
+			// If all of the following match logic
+			if ( logicOutcomes.indexOf( false ) > -1 ) {
+				action = reverseAction( depFieldArgs.showHide );
+			} else {
+				action = depFieldArgs.showHide;
+			}
 		}
 
-		if ( !append ) {
-			cont.html('<span class="frm-loading-img"></span>');
+		return action;
+	}
+
+	function reverseAction( action ) {
+		if ( action == 'show' ) {
+			action = 'hide';
+		} else {
+			action = 'show';
 		}
+		return action;
+	}
+
+	/**
+	 * @param {Object} depFieldArgs
+	 * @param {string} depFieldArgs.containerId
+	 * @param {string} depFieldArgs.formId
+	 * @param {bool} onCurrentPage
+     */
+	function showFieldAndSetValue( depFieldArgs, onCurrentPage ){
+		if ( isFieldCurrentlyShown( depFieldArgs.containerId, depFieldArgs.formId ) ) {
+			return;
+		}
+
+		removeFromHideFields(depFieldArgs.containerId, depFieldArgs.formId);
+		if ( onCurrentPage ) {
+			// Set value, then show field
+			setValuesInsideFieldOnPage(depFieldArgs.containerId, depFieldArgs);
+			showFieldContainer(depFieldArgs.containerId);
+		} else {
+			setValuesInsideFieldAcrossPage( depFieldArgs );
+		}
+	}
+
+	/**
+	 * Set the value for all inputs inside of a field div on the current page
+	 *
+	 * @param {string} container
+	 * @param {Object} depFieldArgs
+	 * @param {string} depFieldArgs.fieldType
+	 * @param {string} depFieldArgs.formId
+ 	 */
+	function setValuesInsideFieldOnPage( container, depFieldArgs ) {
+		var inputs = getInputsInFieldOnPage( container );
+		var inContainer = ( depFieldArgs.fieldType == 'divider' || depFieldArgs.fieldType == 'form' );
+
+		setValueForInputs( inputs, inContainer, depFieldArgs.formId );
+	}
+
+	/**
+	 * Set the value for all inputs inside of a field across a page
+	 *
+	 * @param {Object} depFieldArgs
+	 * @param {string} depFieldArgs.fieldType
+	 * @param {string} depFieldArgs.formId
+	 */
+	function setValuesInsideFieldAcrossPage( depFieldArgs ) {
+		var inputs = getInputsInFieldAcrossPage( depFieldArgs );
+		var inContainer = ( depFieldArgs.fieldType == 'divider' || depFieldArgs.fieldType == 'form' );
+
+		setValueForInputs( inputs, inContainer, depFieldArgs.formId );
+	}
+
+	function getInputsInFieldOnPage( containerId ) {
+		var container = document.getElementById( containerId );
+		return container.querySelectorAll('select[name^="item_meta"], textarea[name^="item_meta"], input[name^="item_meta"]');
+	}
+
+	/**
+	 * @param {Object} depFieldArgs
+	 * @param {string} depFieldArgs.fieldType
+	 * @returns {Array}
+     */
+	function getInputsInFieldAcrossPage( depFieldArgs ){
+		var inputs = [];
+
+		if ( depFieldArgs.fieldType == 'divider' ) {
+			inputs = getInputsInHiddenSection(depFieldArgs);
+		} else if ( depFieldArgs.fieldType == 'form' ) {
+			inputs = getInputsInHiddenEmbeddedForm(depFieldArgs);
+		} else {
+			inputs = getHiddenInputs( depFieldArgs );
+		}
+
+		return inputs;
+	}
+
+	/**
+	 * Get the inputs for a non-repeating field that is type=hidden
+	 * @param {object} depFieldArgs
+	 * @param {bool} depFieldArgs.isRepeating
+	 * @param {string} depFieldArgs.inSection
+	 * @param {string} depFieldArgs.repeatRow
+	 * @param {string} depFieldArgs.fieldId
+	 * @returns {NodeList}
+     */
+	function getHiddenInputs( depFieldArgs ) {
+		var name = '';
+		if ( depFieldArgs.isRepeating ) {
+			//item_meta[section-id][row-id][field-id]
+			name = 'item_meta[' + depFieldArgs.inSection +'][' + depFieldArgs.repeatRow + '][' + depFieldArgs.fieldId + ']';
+		} else {
+			// item_meta[field-id]
+			name = 'item_meta[' + depFieldArgs.fieldId + ']';
+		}
+		return document.querySelectorAll( '[name^="' + name + '"]' );
+	}
+
+	function setValueForInputs( inputs, inContainer, formId ) {
+		if ( inputs.length ) {
+
+			var prevInput;
+			var typeArray = ['checkbox','radio'];
+			for ( var i = 0; i < inputs.length; i++ ) {
+				// Don't loop through every input in a radio/checkbox field
+				// TODO: Improve this for checkboxes and address fields
+				if ( i > 0 && prevInput.name == inputs[i].name && typeArray.indexOf( prevInput.type ) > -1 ) {
+					continue;
+				}
+
+				// Don't set the value if the field is in a section and it's conditionally hidden
+				if ( inContainer && isChildInputConditionallyHidden( inputs[i], formId ) ) {
+					continue;
+				}
+
+				setDefaultValue( inputs[i] );
+				maybeSetWatchingFieldValue( inputs[i] );
+				maybeDoCalcForSingleField( inputs[i] );
+
+				prevInput = inputs[i];
+			}
+		}
+	}
+
+	// Check if a field input inside of a section or embedded form is conditionally hidden
+	function isChildInputConditionallyHidden( input, formId ) {
+		var fieldDivPart = getFieldId( input, true );
+		var fieldDivId = 'frm_field_' + fieldDivPart + '_container';
+
+		return isFieldConditionallyHidden( fieldDivId, formId );
+	}
+
+	function showFieldContainer( containerId ) {
+		jQuery( '#' + containerId ).show();
+	}
+
+	/**
+	 * @param {Object} depFieldArgs
+	 * @param {string} depFieldArgs.containerId
+	 * @param {string} depFieldArgs.formId
+	 * @param onCurrentPage
+     */
+	function hideFieldAndClearValue( depFieldArgs, onCurrentPage ){
+		if ( isFieldConditionallyHidden( depFieldArgs.containerId, depFieldArgs.formId ) ) {
+			return;
+		}
+
+		if ( onCurrentPage ) {
+			hideFieldContainer( depFieldArgs.containerId );
+			clearInputsInFieldOnPage( depFieldArgs.containerId );
+		} else {
+			clearInputsInFieldAcrossPage( depFieldArgs );
+		}
+
+		addToHideFields( depFieldArgs.containerId, depFieldArgs.formId );
+	}
+
+	function hideFieldContainer( containerId ) {
+		jQuery( '#' + containerId ).hide();
+	}
+
+	function clearInputsInFieldOnPage( containerId ) {
+		var inputs = getInputsInFieldOnPage( containerId );
+		clearValueForInputs( inputs );
+	}
+
+	function clearInputsInFieldAcrossPage( depFieldArgs ) {
+		var inputs = getInputsInFieldAcrossPage( depFieldArgs );
+		clearValueForInputs(inputs);
+	}
+
+	/**
+	 * Get all the child inputs in a hidden section (across a page)
+	 *
+	 * @param {Object} depFieldArgs
+	 * @param {string} depFieldArgs.fieldType
+	 * @param {string} depFieldArgs.fieldId
+ 	 */
+	function getInputsInHiddenSection( depFieldArgs ) {
+		// If a section, get all inputs with data attribute
+		var inputs = [];
+		if ( depFieldArgs.fieldType == 'divider' ) {
+			inputs = document.querySelectorAll( '[data-sectionid="' + depFieldArgs.fieldId + '"]' );
+		}
+
+		return inputs;
+	}
+
+	// Get all the child inputs in a hidden embedded form (across a page)
+	function getInputsInHiddenEmbeddedForm( depFieldArgs ) {
+		// TODO: maybe remove form and [0]?
+		// TODO: what if someone is using embeddedformfieldkey-moretext as their field key? Add data attribute for this
+		return document.querySelectorAll( '[id^="field_' + depFieldArgs.fieldKey + '-"]' );
+	}
+
+	function clearValueForInputs( inputs ) {
+		if ( inputs.length < 1 ){
+			return;
+		}
+
+		var prevInput;
+		for ( var i= 0, l=inputs.length; i<l; i++ ){
+			if ( i>0 && prevInput.name != inputs[i].name ) {
+				// Only trigger a change after all inputs in a field are cleared
+				triggerChange( jQuery(prevInput) );
+			}
+
+			if ( inputs[i].type == 'radio' || inputs[i].type == 'checkbox' ) {
+				inputs[i].checked = false;
+			} else if ( inputs[i].tagName == 'SELECT' ) {
+				inputs[i].selectedIndex = '0';
+
+				var autocomplete = document.getElementById( inputs[i].id + '_chosen' );
+				if ( autocomplete !== null ) {
+					jQuery(inputs[i]).trigger('chosen:updated');
+				}
+			} else {
+				inputs[i].value = '';
+			}
+
+			prevInput = inputs[i];
+		}
+
+		// trigger a change for the final input in the loop
+		triggerChange(jQuery(prevInput));
+	}
+
+	function isFieldCurrentlyShown( containerId, formId ){
+		return isFieldConditionallyHidden( containerId, formId ) === false;
+	}
+
+	function isFieldConditionallyHidden( containerId, formId ) {
+		var hidden = false;
+
+		var hiddenFields = getHiddenFields( formId );
+
+		if ( hiddenFields.indexOf( containerId ) > -1 ) {
+			hidden = true;
+		}
+
+		return hidden;
+	}
+
+	function clearHideFields() {
+		var hideFieldInputs = document.querySelectorAll( '[id^="frm_hide_fields_"]' );
+		clearValueForInputs( hideFieldInputs );
+	}
+
+	function addToHideFields( htmlFieldId, formId ) {//TODO: why is this run on submit?
+		// Get all currently hidden fields
+		var hiddenFields = getHiddenFields( formId );
+
+		if ( hiddenFields.indexOf( htmlFieldId ) > -1 ) {
+			// If field id is already in the array, move on
+
+		} else {
+			// Add new conditionally hidden field to array
+			hiddenFields.push( htmlFieldId );
+
+			// Set the hiddenFields value in the frm_hide_field_formID input
+			hiddenFields = JSON.stringify( hiddenFields );
+			var frmHideFieldsInput = document.getElementById('frm_hide_fields_' + formId);
+			frmHideFieldsInput.value = hiddenFields;
+		}
+	}
+
+	function getAllHiddenFields() {
+		var hiddenFields = [];
+		var hideFieldInputs = document.querySelectorAll('*[id^="frm_hide_fields_"]');
+		var formTotal = hideFieldInputs.length;
+		var formId;
+		for ( var i=0; i<formTotal; i++ ) {
+			formId = hideFieldInputs[ i].id.replace( 'frm_hide_fields_', '' );
+			hiddenFields = hiddenFields.concat( getHiddenFields( formId ) );
+		}
+
+		return hiddenFields;
+	}
+
+	function getHiddenFields( formId ) {
+		var hiddenFields = [];
+
+		// Fetch the hidden fields from the frm_hide_fields_formId input
+		var frmHideFieldsInput = document.getElementById('frm_hide_fields_' + formId);
+		if ( frmHideFieldsInput === null ) {
+			return hiddenFields;
+		}
+
+		hiddenFields = frmHideFieldsInput.value;
+		if ( hiddenFields ) {
+			hiddenFields = JSON.parse( hiddenFields );
+		} else {
+			hiddenFields = [];
+		}
+
+		return hiddenFields;
+	}
+
+	function setDefaultValue( input ) {
+		var $input = jQuery( input );
+		var defaultValue = $input.data('frmval');
+
+		if ( typeof defaultValue !== 'undefined' ) {
+
+			if ( input.type == 'checkbox' || input.type == 'radio' ) {
+				setCheckboxOrRadioDefaultValue( input.name, defaultValue );
+
+			} else if ( input.name.indexOf( '[]' ) > -1 ) {
+				// TODO: fix this for checkboxes, address, and multi-select fields
+				setHiddenCheckboxDefaultValue( input.name, defaultValue );
+
+			} else {
+				input.value = defaultValue;
+			}
+
+			if ( input.tagName == 'SELECT' ) {
+				maybeUpdateChosenOptions( input )
+			}
+
+			triggerChange( $input );
+		}
+	}
+
+	function setCheckboxOrRadioDefaultValue( inputName, defaultValue ) {
+		// Get all checkbox/radio inputs for this field
+		var radioInputs = document.getElementsByName( inputName );
+
+		// Loop through options and set the default value
+		for ( var i = 0, l = radioInputs.length; i < l; i++ ) {
+			if ( radioInputs[i].type == 'hidden' ) {
+				// If field is read-only and there is a hidden input
+				if ( jQuery.isArray(defaultValue) && defaultValue[i] !== null ) {
+					radioInputs[i].value = defaultValue[i];
+				} else {
+					radioInputs[i].value = defaultValue;
+				}
+			} else if (radioInputs[i].value == defaultValue ||
+				( jQuery.isArray(defaultValue) && defaultValue.indexOf( radioInputs[i].value ) > -1 ) ) {
+				// If input's value matches the default value, set checked to true
+
+				radioInputs[i].checked = true;
+				if ( radioInputs[i].type == 'radio') {
+					break;
+				}
+			}
+		}
+	}
+
+	// Set the default value for hidden checkbox or multi-select dropdown fields
+	function setHiddenCheckboxDefaultValue( inputName, defaultValue ){
+		// Get all the hidden inputs with the same name
+		var hiddenInputs = document.getElementsByName( inputName );
+
+		if ( jQuery.isArray(defaultValue) ) {
+			for ( var i = 0, l = defaultValue.length; i < l; i++ ) {
+				if ( i in hiddenInputs ) {
+					hiddenInputs[i].value = defaultValue[i];
+				} else {
+					// TODO: accommodate for when there are multiple default values but the user has removed some
+				}
+			}
+
+		} else {
+			hiddenInputs[0].value = defaultValue;
+		}
+	}
+
+	function removeFromHideFields( htmlFieldId, formId ) {
+		// Get all currently hidden fields
+		var hiddenFields = getHiddenFields( formId );
+
+		// If field id is in the array, delete it
+		var item_index = hiddenFields.indexOf( htmlFieldId );
+		if ( item_index > -1 ) {
+			// Remove field from the hiddenFields array
+			hiddenFields.splice(item_index, 1);
+
+			// Update frm_hide_fields_formId input
+			hiddenFields = JSON.stringify( hiddenFields );
+			var frmHideFieldsInput = document.getElementById('frm_hide_fields_' + formId);
+			frmHideFieldsInput.value = hiddenFields;
+		}
+	}
+
+	/*****************************************************
+	 * Lookup Field Functions
+	 ******************************************************/
+
+	/**
+	 * Check all fields that are "watching" a lookup field that changed
+ 	 */
+	function checkFieldsWatchingLookup(field_id, changedInput, originalEvent ) {
+		if ( typeof __FRMLOOKUP  === 'undefined' ||
+			typeof __FRMLOOKUP[field_id] === 'undefined' ||
+			__FRMLOOKUP[field_id].dependents.length < 1 ||
+			changedInput === null ||
+			typeof(changedInput) === 'undefined'
+		) {
+			return;
+		}
+
+		var triggerFieldArgs = __FRMLOOKUP[field_id];
+
+		var parentRepeatArgs = getRepeatArgsFromFieldName( changedInput[0].name );
+
+		for ( var i = 0, l = triggerFieldArgs.dependents.length; i < l; i++ ) {
+			updateWatchingFieldById( triggerFieldArgs.dependents[ i ], parentRepeatArgs, originalEvent );
+		}
+	}
+
+	/**
+	 * Update all instances of a "watching" field
+	 *
+	 * @since 2.01.0
+	 * @param {string} field_id
+	 * @param {Object} parentRepeatArgs
+	 * @param {string} originalEvent
+     */
+	function updateWatchingFieldById(field_id, parentRepeatArgs, originalEvent ) {
+		var childFieldArgs = getLookupArgsForSingleField( field_id );
+
+		// If lookup field has no parents, no need to update this field
+		if ( childFieldArgs === false || childFieldArgs.parents.length < 1 ) {
+			return;
+		}
+
+		if ( childFieldArgs.fieldType == 'lookup' ) {
+			updateLookupFieldOptions( childFieldArgs );
+		} else {
+			// If the original event was NOT triggered from a direct value change to the Lookup field,
+			// do not update the text field value
+			if ( originalEvent === 'value changed' ) {
+				updateWatchingFieldValue( childFieldArgs, parentRepeatArgs );
+			}
+		}
+	}
+
+	function updateLookupFieldOptions( childFieldArgs ) {
+		var childFieldElements = getAllFieldDivsOnCurrentPage(childFieldArgs);
+
+		for ( var i = 0, l=childFieldElements.length; i<l; i++ ) {
+			addRepeatRow( childFieldArgs, childFieldElements[i].id );
+			updateSingleLookupField( childFieldArgs, childFieldElements[i] );
+		}
+	}
+
+	function updateWatchingFieldValue( childFieldArgs, parentRepeatArgs ) {
+		var childFieldElements = getAllTextFieldInputs( childFieldArgs, parentRepeatArgs );
+
+		for ( var i = 0, l=childFieldElements.length; i<l; i++ ) {
+			addRepeatRowForInput( childFieldElements[i].name, childFieldArgs );
+			updateSingleWatchingField( childFieldArgs, childFieldElements[i] );
+		}
+	}
+
+	/**
+	 * Get the Lookup Args for a field ID
+	 *
+	 * @param {string} field_id
+	 * @return {boolean|Object}
+     */
+	function getLookupArgsForSingleField( field_id ) {
+		if ( typeof __FRMLOOKUP  === 'undefined' || typeof __FRMLOOKUP[field_id] === 'undefined' ) {
+			return false;
+		}
+
+		return __FRMLOOKUP[field_id];
+	}
+
+	/**
+	 * Update a single Lookup field
+	 *
+	 * @since 2.01.0
+	 * @param {Object} childFieldArgs
+	 * @param {string} childFieldArgs.inputType
+	 * @param {object} childElement
+     */
+	function updateSingleLookupField( childFieldArgs, childElement ) {
+		childFieldArgs.parentVals = getParentLookupFieldVals( childFieldArgs );
+
+		if ( childFieldArgs.inputType == 'select' ) {
+			maybeReplaceSelectLookupFieldOptions( childFieldArgs, childElement );
+		} else if ( childFieldArgs.inputType == 'radio' ) {
+			replaceRadioLookupFieldOptions( childFieldArgs, childElement );
+		}
+	}
+
+	/**
+	 * Update a standard field that is "watching" a Lookup
+	 *
+	 * @since 2.01.0
+	 * @param {Object} childFieldArgs
+	 * @param {object} childElement
+	 */
+	function updateSingleWatchingField( childFieldArgs, childElement ) {
+		childFieldArgs.parentVals = getParentLookupFieldVals( childFieldArgs );
+
+		maybeInsertValueInFieldWatchingLookup( childFieldArgs, childElement );
+	}
+
+	/**
+	 * Get all the occurences of a specific Text field
+	 *
+	 * @since 2.01.0
+	 * @param {Object} childFieldArgs
+	 * @param {boolean} childFieldArgs.isRepeating
+	 * @param {string} childFieldArgs.fieldKey
+	 * @param {Object} parentRepeatArgs
+	 * @param {string} parentRepeatArgs.repeatingSection
+	 * @param {string} parentRepeatArgs.repeatRow
+	 * @return {NodeList}
+ 	 */
+	function getAllTextFieldInputs( childFieldArgs, parentRepeatArgs ) {
+		var selector = 'field_' + childFieldArgs.fieldKey;
+		if ( childFieldArgs.isRepeating ) {
+			if ( parentRepeatArgs.repeatingSection !== '' ) {
+				// If trigger field is repeating/embedded, use its section row in selector
+				selector = '[id="' + selector + '-' + parentRepeatArgs.repeatRow + '"]';
+			} else {
+				// If trigger field is not repeating/embedded, get all repeating field inputs
+				selector = '[id^="' + selector + '-"]';
+			}
+		} else {
+			selector = '[id="' + selector + '"]';
+		}
+
+		return document.querySelectorAll( selector );
+	}
+
+	// Set the value in a regular field that is watching a lookup field when it is conditionally shown
+	function maybeSetWatchingFieldValue( input ) {
+		var fieldId = getFieldId( input, false );
+
+		var childFieldArgs = getLookupArgsForSingleField( fieldId );
+
+		// If lookup field has no parents, no need to update this field
+		if ( childFieldArgs === false || childFieldArgs.fieldType == 'lookup' ) {
+			return;
+		}
+
+		updateSingleWatchingField( childFieldArgs, input, 'value changed' );
+	}
+
+	/**
+	 * Get all divs on the current page for a given field
+	 *
+	 * @since 2.01.0
+	 * @param {Object} childFieldArgs
+	 * @param {boolean} childFieldArgs.isRepeating
+	 * @param {string} childFieldArgs.fieldId
+	 * @returns {Array}
+     */
+	function getAllFieldDivsOnCurrentPage( childFieldArgs ) {
+		var childFieldDivs = [];
+
+		if ( childFieldArgs.isRepeating ) {
+			childFieldDivs = document.querySelectorAll( '.frm_field_' + childFieldArgs.fieldId + '_container' );
+		} else {
+			var container = document.getElementById( 'frm_field_' + childFieldArgs.fieldId + '_container' );
+			if ( container !== null ) {
+				childFieldDivs.push( container );
+			}
+		}
+
+		return childFieldDivs;
+	}
+
+	// Get the field values from all parents
+	function getParentLookupFieldVals( childFieldArgs ) {
+		var parentVals = [];
+		var parentIds = childFieldArgs.parents;
+
+		var parentFieldArgs, currentParentId;
+		var parentValue = false;
+		for ( var i = 0, l = parentIds.length; i < l; i++ ) {
+			parentFieldArgs = getLookupArgsForSingleField( parentIds[i] );
+			parentValue = getFieldValue( parentFieldArgs, childFieldArgs );
+
+			// If any parents have blank values, don't waste time looking for values
+			if ( parentValue === '' || parentValue === false ) {
+				parentVals = false;
+				break;
+			}
+
+			parentVals[i] = parentValue;
+		}
+
+		return parentVals;
+	}
+
+	// Get the value from array of radio inputs (could be type="hidden" or type="radio")
+	function getValueFromRadioInputs( radioInputs ) {
+		var radioValue = false;
+
+		var l = radioInputs.length;
+		for ( var i = 0; i<l; i++ ) {
+			if ( radioInputs[i].type == 'hidden' || radioInputs[i].checked ) {
+				radioValue = radioInputs[i].value;
+				break;
+			}
+		}
+
+		return radioValue;
+	}
+
+	/**
+	 * Maybe replace the options in a Select Lookup field
+	 *
+	 * @since 2.01.0
+	 * @param {Object} childFieldArgs
+	 * @param {Array} childFieldArgs.parents
+	 * @param {Array} childFieldArgs.parentVals
+	 * @param {string} childFieldArgs.fieldId
+	 * @param {string} childFieldArgs.fieldKey
+	 * @param {object} childDiv
+	 */
+	function maybeReplaceSelectLookupFieldOptions( childFieldArgs, childDiv ) {
+		// Get select within childDiv
+		var childSelect = childDiv.getElementsByTagName( 'SELECT' )[0];
+		if ( childSelect === null ) {
+			return;
+		}
+
+		var currentValue = childSelect.value;
+
+		if ( childFieldArgs.parentVals === false  ) {
+			// If any parents have blank values, don't waste time looking for values
+			childSelect.options.length = 1;
+
+			if ( currentValue !== '' ) {
+				childSelect.value = '';
+				maybeUpdateChosenOptions(childSelect);
+				triggerChange(jQuery(childSelect), childFieldArgs.fieldKey);
+			}
+		} else {
+			// If all parents have values, check for updated options
+			jQuery.ajax({
+				type:'POST',
+				url:frm_js.ajax_url,
+				data:{
+					action:'frm_replace_lookup_field_options',
+					parent_fields:childFieldArgs.parents,
+					parent_vals:childFieldArgs.parentVals,
+					field_id:childFieldArgs.fieldId,
+					nonce:frm_js.nonce
+				},
+				success:function(newOptions){
+					replaceSelectLookupFieldOptions( childFieldArgs.fieldKey, childSelect, newOptions );
+				}
+			});
+		}
+	}
+
+	// Update chosen options if autocomplete is enabled
+	function maybeUpdateChosenOptions( childSelect ) {
+		if ( childSelect.className.indexOf( 'frm_chzn' ) > -1 && jQuery().chosen ) {
+			jQuery( childSelect ).trigger('chosen:updated');
+		}
+	}
+
+	/**
+	 * Replace the options in a Select Lookup field
+	 *
+	 * @since 2.01.0
+	 * @param {string} fieldKey
+	 * @param {object} childSelect
+	 * @param {Array} newOptions
+	 */
+	function replaceSelectLookupFieldOptions( fieldKey, childSelect, newOptions ) {
+		var origVal = childSelect.value;
+
+		newOptions = JSON.parse( newOptions );
+
+		// Remove old options
+		for ( var i = childSelect.options.length; i>0; i-- ) {
+			childSelect.remove(i);
+		}
+
+		// Add new options
+		var optsLength = newOptions.length;
+		for ( i = 0; i<optsLength; i++ ) {
+			childSelect.options[i+1]=new Option(newOptions[i], newOptions[i], false, false);
+		}
+
+		setSelectLookupVal( childSelect, origVal );
+
+		maybeUpdateChosenOptions( childSelect );
+
+		// Trigger a change if the new value is different from the old value
+		if ( childSelect.value != origVal ) {
+			triggerChange( jQuery(childSelect), fieldKey );
+		}
+	}
+
+	// Set the value in a refreshed Lookup Field
+	function setSelectLookupVal( childSelect, origVal ) {
+		// Try setting the dropdown to the original value
+		childSelect.value = origVal;
+		if ( childSelect.value === '' ) {
+			// If the original value is no longer present, try setting to default value
+			var defaultValue = childSelect.getAttribute('data-frmval');
+			if ( defaultValue !== null ) {
+				childSelect.value = defaultValue;
+			}
+		}
+	}
+
+	/**
+	 * Replace the options in a Radio Lookup field
+	 *
+	 * @since 2.01.0
+	 * @param {Object} childFieldArgs
+	 * @param {boolean} childFieldArgs.isRepeating
+	 * @param {string} childFieldArgs.inSection
+	 * @param {Array} childFieldArgs.parents
+	 * @param {Array} childFieldArgs.parentVals
+	 * @param {string} childFieldArgs.fieldId
+	 * @param {string} childFieldArgs.repeatRow
+	 * @param {string} childFieldArgs.fieldKey
+	 * @param
+	 */
+	function replaceRadioLookupFieldOptions( childFieldArgs, childDiv ) {
+		var optContainer = childDiv.getElementsByClassName( 'frm_opt_container' )[0];
+
+		var repeatingFieldId = 0;
+		if ( childFieldArgs.isRepeating ) {
+			repeatingFieldId = childFieldArgs.inSection;
+		}
+		var radioInputs = optContainer.getElementsByTagName( 'input' );
+		var currentValue = getValueFromRadioInputs( radioInputs );
+
+		jQuery.ajax({
+			type:'POST',
+			url:frm_js.ajax_url,
+			data:{
+				action:'frm_replace_radio_lookup_options',
+				parent_fields:childFieldArgs.parents,
+				parent_vals:childFieldArgs.parentVals,
+				field_id:childFieldArgs.fieldId,
+				row_index:childFieldArgs.repeatRow,
+				current_value:currentValue,
+				nonce:frm_js.nonce
+			},
+			success:function(newHtml){
+				optContainer.innerHTML = newHtml;
+				triggerChange( jQuery( radioInputs[0] ), childFieldArgs.fieldKey );
+			}
+		});
+	}
+
+	/**
+	 * Get new value for a text field if all Lookup Field parents have a value
+	 *
+	 * @since 2.01.0
+	 * @param {Object} childFieldArgs
+	 * @param {string} childFieldArgs.formId
+	 * @param {Array} childFieldArgs.parents
+	 * @param {Array} childFieldArgs.parentVals
+	 * @param {string} childFieldArgs.fieldKey
+	 * @param {string} childFieldArgs.fieldId
+	 * @param {object} childInput
+     */
+	function maybeInsertValueInFieldWatchingLookup( childFieldArgs, childInput ) {
+		if ( isChildInputConditionallyHidden( childInput, childFieldArgs.formId ) ) {
+			// TODO: What if field is in conditionally hidden section?
+			return;
+		}
+
+		if ( childFieldArgs.parentVals === false  ) {
+			// If any parents have blank values, set the field value to the default value
+			var newValue = childInput.getAttribute('data-frmval');
+			if ( newValue === null ) {
+				newValue = '';
+			}
+			insertValueInFieldWatchingLookup( childFieldArgs, childInput, newValue );
+		} else {
+			// If all parents have values, check for a new value
+			jQuery.ajax({
+				type:'POST',
+				url:frm_js.ajax_url,
+				data:{
+					action:'frm_get_lookup_text_value',
+					parent_fields:childFieldArgs.parents,
+					parent_vals:childFieldArgs.parentVals,
+					field_id:childFieldArgs.fieldId,
+					nonce:frm_js.nonce
+				},
+				success:function(newValue){
+					if ( childInput.value != newValue ) {
+						insertValueInFieldWatchingLookup( childFieldArgs.fieldKey, childInput, newValue );
+					}
+				}
+			});
+		}
+	}
+
+	/**
+	 * Insert a new text field Lookup value
+	 *
+	 * @since 2.01.0
+	 * @param {string} fieldKey
+	 * @param {object} childInput
+	 * @param {string} newValue
+ 	 */
+	function insertValueInFieldWatchingLookup( fieldKey, childInput, newValue ) {
+		childInput.value = newValue;
+		triggerChange( jQuery( childInput ), fieldKey );
+	}
+
+	/**
+	 * Add the repeat Row to the child field args
+	 *
+	 * @since 2.01.0
+	 * @param {string} fieldName
+	 * @param {Object} childFieldArgs
+     */
+	function addRepeatRowForInput( fieldName, childFieldArgs ) {
+		var repeatArgs = getRepeatArgsFromFieldName( fieldName );
+
+		if ( repeatArgs.repeatRow !== '' ) {
+			childFieldArgs.repeatRow = repeatArgs.repeatRow;
+		} else {
+			childFieldArgs.repeatRow = '';
+		}
+	}
+
+	/*******************************************************
+	 Dynamic Field Functions
+	 *******************************************************/
+
+	// Update a Dynamic field's data or options
+	function updateDynamicField( depFieldArgs, onCurrentPage ) {
+		// If field is not on current page, return
+		if ( ! onCurrentPage ) {
+			return;
+		}
+
+		var depFieldArgsCopy = cloneObjectForDynamicFields( depFieldArgs );
+
+		if ( depFieldArgsCopy.inputType == 'data' ) {
+			updateDynamicListData( depFieldArgsCopy );
+		} else {
+			updateDynamicFieldOptions( depFieldArgsCopy );
+		}
+	}
+
+	// Clone the depFieldArgs object for use in ajax requests
+	function cloneObjectForDynamicFields( depFieldArgs ){
+		var dataLogic = {
+			actualValue:depFieldArgs.dataLogic.actualValue,
+			fieldId:depFieldArgs.dataLogic.fieldId
+		};
+
+		var dynamicFieldArgs = {
+			fieldId:depFieldArgs.fieldId,
+			formId:depFieldArgs.formId,
+			containerId:depFieldArgs.containerId,
+			dataLogic:dataLogic,
+			children:'',
+			inputType:depFieldArgs.inputType
+		};
+
+		return dynamicFieldArgs;
+	}
+
+	// Update a Dynamic List field
+	function updateDynamicListData( depFieldArgs ){
+		var $fieldDiv = jQuery( '#' + depFieldArgs.containerId);
+		var $optContainer = $fieldDiv.find('.frm_opt_container');
+
+		addLoadingIcon( $optContainer );
 
 		jQuery.ajax({
 			type:'POST',url:frm_js.ajax_url,
 			data:{
-                action:'frm_fields_ajax_get_data', entry_id:selected,
-                field_id:f.LinkedField, current_field:f.HideField,
-                hide_id:f.hideContainerID, nonce:frm_js.nonce
-            },
+				action:'frm_fields_ajax_get_data',
+				entry_id:depFieldArgs.dataLogic.actualValue,
+				current_field:depFieldArgs.fieldId,
+				hide_id:depFieldArgs.containerId,
+				nonce:frm_js.nonce
+			},
 			success:function(html){
-				if ( append ) {
-					cont.append(html);
+				$optContainer.html(html);
+
+				var $listInputs = $optContainer.children( 'input' );
+				var listVal = $listInputs.val();
+				if ( html === '' || listVal === '' ) {
+					hideDynamicField( depFieldArgs );
 				} else {
-					cont.html(html);
+					showDynamicField( depFieldArgs, $fieldDiv, $listInputs );
 				}
-
-				var parentField = cont.children('input');
-				var val = parentField.val();
-				if ( ( html === '' && ! append ) || val === '' ) {
-					fcont.style.display = 'none';
-				} else {
-					fcont.style.display = '';
-				}
-
-				triggerChange( parentField );
-
-				return true;
 			}
 		});
 	}
 
-	function getDataOpts(f,selected,field_id,rec) {
-		//don't check the same field twice when more than a 2-level dependency, and parent is not on this page
-		if(rec == 'stop' && (jQuery.inArray(f.HideField, frm_checked_dep) > -1) && f.parentField && f.parentField.attr('type') == 'hidden'){
-			return;
-		}
+	// Update a Dynamic dropdown, radio, or checkbox
+	function updateDynamicFieldOptions( depFieldArgs, fieldElement ){
+		var $fieldDiv = jQuery( '#' + depFieldArgs.containerId );
+		var $optContainer = $fieldDiv.find('.frm_opt_container');
 
-		var hiddenInput = jQuery( '#' + f.hideContainerID ).find('select[name^="item_meta"], textarea[name^="item_meta"], input[name^="item_meta"]');
+		var hiddenInput = $fieldDiv.find('select[name^="item_meta"], textarea[name^="item_meta"], input[name^="item_meta"]');
+		var prevVal = getPrevFieldValue( hiddenInput );
+		var defaultVal = hiddenInput.data('frmval');
 
-		// Get the previously selected field value
-		var prev_val = getPrevFieldValue( hiddenInput );
-
-		// Get default value
-		var defaultValue = hiddenInput.data('frmval');
-
-        if(f.DataType == 'select'){
-			if((rec == 'stop' || jQuery('#'+ f.hideContainerID +' .frm-loading-img').length) && (jQuery.inArray(f.HideField, frm_checked_dep) > -1)){
-				return;
-			}
-		}
-
-		frm_checked_dep.push(f.HideField);
-
-        var fcont = document.getElementById(f.hideContainerID);
-
-		// If field is on a different page or hidden with visibility option, don't retrieve new options
-		if ( fcont === null ) {
-			return;
-		}
-
-		var $dataField = jQuery(fcont).find('.frm_opt_container');
-        if($dataField.length === 0 && hiddenInput.length ){
-		    checkDependentField(f.HideField, 'stop', hiddenInput);
-            return false;
-		}
-
-		if ( f.Value !== '' ) {
-			var match = operators(f.Condition, f.Value, selected);
-			if ( !match ) {
-				fcont.style.display = 'none';
-				$dataField.html('');
-				checkDependentField(f.HideField, 'stop', hiddenInput);
-				return false;
-			}
-		}
-
-		$dataField.html('<span class="frm-loading-img" style="visibility:visible;display:inline;"></span>');
-
-        // save the current f value for use after ajax
-        var hiddenName = f.hiddenName;
-        var dataType = f.DataType;
+		addLoadingIcon( $optContainer );
 
 		jQuery.ajax({
 			type:'POST',
-            url:frm_js.ajax_url,
+			url:frm_js.ajax_url,
 			data:{
-				action:'frm_fields_ajax_data_options', trigger_field_id:field_id,
-				entry_id:selected, linked_field_id:f.LinkedField, field_id:f.HideField,
-				default_value:defaultValue, container_id:f.hideContainerID, prev_val:prev_val,
+				action:'frm_fields_ajax_data_options',
+				trigger_field_id:depFieldArgs.dataLogic.fieldId,
+				entry_id:depFieldArgs.dataLogic.actualValue,
+				field_id:depFieldArgs.fieldId,
+				default_value:defaultVal,
+				container_id:depFieldArgs.containerId,
+				prev_val:prevVal,
 				nonce:frm_js.nonce
-            },
+			},
 			success:function(html){
-				$dataField.html(html);
-				var $dynamicFieldInputs = $dataField.find('select, input, textarea');
+				$optContainer.html(html);
+				var $dynamicFieldInputs = $optContainer.find('select, input, textarea');
 
 				if ( html === '' || ( $dynamicFieldInputs.length == 1 && $dynamicFieldInputs.attr('type') == 'hidden' ) ) {
-					// Hide the Dynamic field
-					fcont.style.display = 'none';
-				} else if ( f.MatchType != 'all' ) {
-					// Show the Dynamic field
-					fcont.style.display = '';
+					hideDynamicField( depFieldArgs );
+				} else {
+					showDynamicField( depFieldArgs, $fieldDiv, $dynamicFieldInputs );
 				}
-
-				if( $dynamicFieldInputs.hasClass('frm_chzn') && jQuery().chosen){
-					jQuery('.frm_chzn').chosen({allow_single_deselect:true});
-				}
-
-				triggerChange( $dynamicFieldInputs );
 			}
 		});
+
 	}
 
+	// Insert the loading icon
+	function addLoadingIcon( $optContainer ) {
+		$optContainer.html( '<span class="frm-loading-img"></span>' );
+	}
+
+	// Get the previous field value in a Dynamic field
 	function getPrevFieldValue( inputs ) {
 		var prev = [];
 		var thisVal = '';
@@ -1121,16 +1786,28 @@ function frmFrontFormJS(){
 		return prev;
 	}
 
-	function loadCustomInputMasks() {
-		if ( typeof __frmMasks === 'undefined' ) {
-			return;
+	// Hide and clear a Dynamic Field
+	function hideDynamicField( depFieldArgs ) {
+		hideFieldAndClearValue( depFieldArgs, true );
+	}
+
+	// Show Dynamic field
+	function showDynamicField( depFieldArgs, $fieldDiv, $fieldInputs ) {
+		if ( isFieldConditionallyHidden( depFieldArgs.containerId, depFieldArgs.formId ) ) {
+			removeFromHideFields( depFieldArgs.containerId, depFieldArgs.formId );
+			$fieldDiv.show();
 		}
 
-		var maskFields = __frmMasks;
-		for ( var i = 0; i < maskFields.length; i++ ) {
-			jQuery( maskFields[i].trigger ).attr( 'data-frmmask', maskFields[i].mask );
+		if( $fieldInputs.hasClass('frm_chzn') ) {
+			loadChosen();
 		}
+
+		triggerChange( $fieldInputs );
 	}
+
+	/*************************************************
+	 Calculations
+	 ************************************************/
 
 	function triggerCalc(){
 		if ( typeof __FRMCALC === 'undefined' ) {
@@ -1171,7 +1848,16 @@ function frmFrontFormJS(){
 		}
 	}
 
-	// Check if a total field is conditionally hidden
+	/**
+	 * Check if a total field is conditionally hidden
+	 * @param {Object} calcDetails
+	 * @param {string} calcDetails.field_id
+	 * @param {string} calcDetails.form_id
+	 * @param {string} calcDetails.inSection
+	 * @param {string} calcDetails.inEmbedForm
+	 * @param {string} triggerFieldName
+	 * @returns {boolean}
+     */
 	function isTotalFieldConditionallyHidden( calcDetails, triggerFieldName ) {
 		var hidden = false;
 		var fieldId = calcDetails.field_id;
@@ -1183,7 +1869,7 @@ function frmFrontFormJS(){
 			return hidden;
 		}
 
-		if ( calcDetails.inSection === 0 && calcDetails.inEmbedForm === 0 ) {
+		if ( calcDetails.inSection === '0' && calcDetails.inEmbedForm === '0' ) {
 			// Field is not in a section or embedded form
 			hidden = isNonRepeatingFieldConditionallyHidden( fieldId, hiddenFields );
 
@@ -1197,13 +1883,13 @@ function frmFrontFormJS(){
 			} else if ( isRepeatingFieldConditionallyHidden( fieldId, repeatArgs, hiddenFields ) ){
 				// Check repeating field
 				hidden = true;
-			} else if ( calcDetails.inSection !== 0 && calcDetails.inEmbedForm !== 0 ) {
+			} else if ( calcDetails.inSection !== '0' && calcDetails.inEmbedForm !== '0' ) {
 				// Check section in embedded form
 				hidden = isRepeatingFieldConditionallyHidden( calcDetails.inSection, repeatArgs, hiddenFields );
-			} else if ( calcDetails.inSection !== 0 ) {
+			} else if ( calcDetails.inSection !== '0' ) {
 				// Check section
 				hidden = isNonRepeatingFieldConditionallyHidden( calcDetails.inSection, hiddenFields);
-			} else if ( calcDetails.inEmbedForm !== 0 ) {
+			} else if ( calcDetails.inEmbedForm !== '0' ) {
 				// Check embedded form
 				hidden = isNonRepeatingFieldConditionallyHidden( calcDetails.inEmbedForm, hiddenFields);
 			}
@@ -1222,25 +1908,13 @@ function frmFrontFormJS(){
 	function isRepeatingFieldConditionallyHidden( fieldId, repeatArgs, hiddenFields ) {
 		var hidden = false;
 
-		if ( repeatArgs.sectionId ) {
-			var fieldRepeatId = 'frm_field_' + fieldId + repeatArgs.sectionId + repeatArgs.repeatRow + '_container';
+		if ( repeatArgs.repeatingSection ) {
+			var fieldRepeatId = 'frm_field_' + fieldId + '-' + repeatArgs.repeatingSection;
+			fieldRepeatId += '-' + repeatArgs.repeatRow + '_container';
 			hidden = ( hiddenFields.indexOf( fieldRepeatId ) > -1 );
 		}
 
 		return hidden;
-	}
-
-	// Get the section ID and repeat row from a field name
-	function getRepeatArgsFromFieldName( fieldName ) {
-		var repeatArgs = {sectionId:"", repeatRow:""};
-
-		var inputNameParts = fieldName.split( '][' );
-		if ( inputNameParts.length >= 3 ) {
-			repeatArgs.sectionId = '-' + inputNameParts[0].replace('item_meta[', '');
-			repeatArgs.repeatRow = '-' + inputNameParts[1];
-		}
-
-		return repeatArgs;
 	}
 
 	function doSingleCalculation( all_calcs, field_key, vals, triggerField ) {
@@ -1248,6 +1922,7 @@ function frmFrontFormJS(){
 		var thisFullCalc = thisCalc.calc;
 
 		var totalField = jQuery( document.getElementById('field_'+ field_key) );
+		// TODO: update this to work more like conditional logic
 		var fieldInfo = { 'triggerField': triggerField, 'inSection': false, 'thisFieldCall': 'input[id^="field_'+ field_key+'-"]' };
 		if ( totalField.length < 1 && typeof triggerField !== 'undefined' ) {
 			// check if the total field is inside of a repeating/embedded form
@@ -1910,6 +2585,8 @@ function frmFrontFormJS(){
 					if(entryIdField.length){
 						jQuery(document.getElementById('frm_edit_'+ entryIdField.val())).find('a').addClass('frm_ajax_edited').click();
 					}
+
+					checkFieldsOnPage();
 				}else{
 					jQuery(object).find('input[type="submit"], input[type="button"]').removeAttr('disabled');
 					jQuery(object).find('.frm_ajax_loading').removeClass('frm_loading_now');
@@ -2012,6 +2689,7 @@ function frmFrontFormJS(){
 	}
 	
 	function toggleDefault($thisField, e){
+		// TODO: Fix this for a default value that is a number or array
 		var v = $thisField.data('frmval').replace(/(\n|\r\n)/g, '\r');
 		if ( v === '' || typeof v == 'undefined' ) {
 			return false;
@@ -2332,9 +3010,11 @@ function frmFrontFormJS(){
 		var id = jQuery(this).data('parent');
 		var i = 0;
 		if ( jQuery('.frm_repeat_'+id).length > 0 ) {
-			i = 1 + parseInt(jQuery('.frm_repeat_'+ id +':last').attr('id').replace('frm_section_'+ id +'-', ''));
-			if ( typeof i == 'undefined' ) {
+			var lastRowIndex = jQuery('.frm_repeat_'+ id +':last').attr('id').replace('frm_section_'+ id +'-', '');
+			if ( lastRowIndex.indexOf( 'i' ) > -1 ) {
 				i = 1;
+			} else {
+				i = 1 + parseInt( lastRowIndex );
 			}
 		}
 
@@ -2350,7 +3030,11 @@ function frmFrontFormJS(){
                 var checked = ['other'];
                 var fieldID, fieldObject;
                 var reset = 'reset';
-				addingRow = item.attr('id');
+
+				var repeatArgs = {
+					repeatingSection: id.toString(),
+					repeatRow: i.toString(),
+				};
 
                 // hide fields with conditional logic
                 jQuery(html).find('input, select, textarea').each(function(){
@@ -2367,24 +3051,16 @@ function frmFrontFormJS(){
 							}
 							fieldObject = jQuery( '#' + this.id );
 							checked.push(fieldID);
-							checkDependentField(fieldID, null, fieldObject, reset);
+							hideOrShowFieldById( fieldID, repeatArgs );
+							updateWatchingFieldById( fieldID, repeatArgs, 'value changed' );
+							// TODO: maybe trigger a change instead of running these three functions
+							checkFieldsWithConditionalLogicDependentOnThis( fieldID, fieldObject );
+							checkFieldsWatchingLookup( fieldID, fieldObject, 'value changed' );
 							doCalculation(fieldID, fieldObject);
 							reset = 'persist';
 						}
 					}
                 });
-				addingRow = '';
-
-				// check logic on fields outside of this section
-				var checkLen = r.logic.check.length;
-				for ( var f = 0, l = checkLen; f < l; f++ ) {
-					if ( jQuery.inArray(r.logic.check[f], checked ) == -1 ) {
-						if(jQuery(html).find('.frm_field_'+r.logic.check[f]+'_container').length < 1){
-							checkDependentField(r.logic.check[f], null, null, reset);
-	                		reset = 'persist';
-						}
-					}
-				}
 
                 var star = jQuery(html).find('.star');
                 if ( star.length > 0 ) {
@@ -2392,11 +3068,8 @@ function frmFrontFormJS(){
                     jQuery('.star').rating();
                 }
 
-                var autocomplete = jQuery(html).find('.frm_chzn');
-				if ( autocomplete.length > 0 && jQuery().chosen ) {
-                    // trigger autocomplete
-					jQuery('.frm_chzn').chosen({allow_single_deselect:true});
-				}
+				// trigger autocomplete
+				loadChosen();
 
 				if(typeof(frmThemeOverride_frmAddRow) == 'function'){
 					frmThemeOverride_frmAddRow(id, r);
@@ -2412,7 +3085,9 @@ function frmFrontFormJS(){
 		return false;
 	}
 
-	/* In-place edit */
+	/*****************************************************
+	 * In-place edit
+	 ******************************************************/
 	function editEntry(){
 		/*jshint validthis:true */
 		var $edit = jQuery(this);
@@ -2438,6 +3113,8 @@ function frmFrontFormJS(){
 				$cont.children('.frm-loading-img').replaceWith(html);
 				$edit.removeClass('frm_inplace_edit').addClass('frm_cancel_edit');
 				$edit.html(cancel);
+				checkConditionalLogic( 'editInPlace' );
+				checkFieldsOnPage();
 			}
 		});
 		return false;
@@ -2485,7 +3162,90 @@ function frmFrontFormJS(){
 		return false;
 	}
 
-	/* General Helpers */
+	/**********************************************
+	 * General Helpers
+	 *********************************************/
+
+	function checkFieldsOnPage(){
+		checkPreviouslyHiddenFields();
+		loadDateFields();
+		loadCustomInputMasks();
+		loadChosen();
+		checkDynamicFields();
+		checkLookupFields();
+		triggerCalc();
+	}
+
+	function checkPreviouslyHiddenFields() {
+		if (typeof __frmHideFields !== 'undefined') {
+			frmFrontForm.hidePreviouslyHiddenFields();
+		}
+	}
+
+	function loadChosen() {
+		if ( jQuery().chosen ) {
+			var opts = {allow_single_deselect:true};
+			if ( typeof __frmChosen !== 'undefined' ) {
+				opts = '{' + __frmChosen + '}';
+			}
+			jQuery('.frm_chzn').chosen(opts);
+		}
+	}
+
+	function checkConditionalLogic( event ) {
+		if (typeof __frmHideOrShowFields !== 'undefined') {
+			frmFrontForm.hideOrShowFields( __frmHideOrShowFields, event );
+		}
+	}
+
+	function checkDynamicFields() {
+		if (typeof __frmDepDynamicFields !== 'undefined') {
+			frmFrontForm.checkDependentDynamicFields(__frmDepDynamicFields);
+		}
+	}
+
+	function checkLookupFields() {
+		if (typeof __frmDepLookupFields !== 'undefined') {
+			frmFrontForm.checkDependentLookupFields(__frmDepLookupFields);
+		}
+	}
+
+	function triggerChange( input, fieldKey ) {
+		if ( typeof fieldKey === 'undefined' ) {
+			fieldKey = 'dependent';
+		}
+
+		if ( input.length > 1 ) {
+			input = input.eq(0);
+		}
+
+		input.trigger({ type:'change', selfTriggered:true, frmTriggered:fieldKey });
+	}
+
+	function loadCustomInputMasks() {
+		if ( typeof __frmMasks === 'undefined' ) {
+			return;
+		}
+
+		var maskFields = __frmMasks;
+		for ( var i = 0; i < maskFields.length; i++ ) {
+			jQuery( maskFields[i].trigger ).attr( 'data-frmmask', maskFields[i].mask );
+		}
+	}
+
+	// Get the section ID and repeat row from a field name
+	function getRepeatArgsFromFieldName( fieldName ) {
+		var repeatArgs = {repeatingSection:"", repeatRow:""};
+
+		if ( typeof fieldName !== 'undefined' && isRepeatingFieldByName( fieldName ) ) {
+			var inputNameParts = fieldName.split( '][' );
+			repeatArgs.repeatingSection = inputNameParts[0].replace('item_meta[', '');
+			repeatArgs.repeatRow = inputNameParts[1];
+		}
+
+		return repeatArgs;
+	}
+
 	function fadeOut($remove){
 		$remove.fadeOut('slow', function(){
 			$remove.remove();
@@ -2509,14 +3269,6 @@ function frmFrontFormJS(){
 		return false;
 	}
 
-	function empty($obj) {
-		if ( $obj !== null ) {
-			while ( $obj.firstChild ) {
-				$obj.removeChild($obj.firstChild);
-			}
-		}
-	}
-
 	function objectSearch( array, value ) {
 		for( var prop in array ) {
 			if( array.hasOwnProperty( prop ) ) {
@@ -2528,142 +3280,14 @@ function frmFrontFormJS(){
 		return null;
 	}
 
-	function isNotEmptyArray( value ) {
-		return jQuery.isArray( value ) && ( value.length > 1 || value[0] !== '' );
-	}
-
 	function isNumeric( obj ) {
 		return !jQuery.isArray( obj ) && (obj - parseFloat( obj ) + 1) >= 0;
 	}
 
-	function getInputsInContainer( container ) {
-		return container.find('select[name^="item_meta"], textarea[name^="item_meta"], input[name^="item_meta"]');
-	}
+	/**********************************************
+	 * Fallback functions
+	 *********************************************/
 
-	// Get the beginning part of the name for a given field
-	function getFieldName( fieldId, fieldDivId ){
-		var fieldName = 'item_meta[' + fieldId + ']';
-
-		// If field is repeating
-		if ( isRepeatingFieldById( fieldId ) ) {
-			fieldName = getRepeatingFieldName( fieldId, fieldDivId );
-		}
-
-		return fieldName;
-	}
-
-	// Get the input name of a specific field in a given row of a repeating section
-	function getRepeatingFieldName( fieldId, parentHtmlId ) {
-		var repeatFieldName = '';
-		if ( parentHtmlId.indexOf( 'frm_section' ) > -1 ) {
-			// The HTML id provided is the frm_section HTML id
-			var repeatSecParts = parentHtmlId.replace( 'frm_section_', '' ).split( '-' );
-			repeatFieldName = 'item_meta[' + repeatSecParts[0] + '][' + repeatSecParts[1] + '][' + fieldId +']';
-		} else {
-			// The HTML id provided is the field div HTML id
-			var fieldDivParts = parentHtmlId.replace( 'frm_field_', '').replace( '_container', '').split('-');
-			repeatFieldName = 'item_meta[' + fieldDivParts[1] + '][' + fieldDivParts[2] + '][' + fieldId +']';
-		}
-
-		return repeatFieldName;
-	}
-
-	// Get the HTML id for a given repeating field
-	function getRepeatingFieldHtmlId( fieldId, repeatSecHtmlId ){
-		var repeatSecParts = repeatSecHtmlId.replace( 'frm_section_', '' ).split( '-' );
-		var repeatFieldHtmlId = 'frm_field_' + fieldId + '-' + repeatSecParts[0] + '-' + repeatSecParts[1] + '_container';
-		return repeatFieldHtmlId;
-	}
-
-	function maybeGetFirstElement( jQueryObj ) {
-        if ( jQueryObj.length > 1 ) {
-            jQueryObj = jQueryObj.eq(0);
-        }
-		return jQueryObj;
-	}
-
-	// Check if a given field is repeating
-	function isRepeatingFieldById( fieldId ){
-		// Check field div first
-		var fieldDiv = document.getElementById( 'frm_field_' + fieldId + '_container' );
-		if ( typeof fieldDiv !== 'undefined' && fieldDiv !== null ) {
-			return false;
-		}
-
-		// Check input next so type=hidden fields don't get marked as repeating
-		var fieldInput = jQuery( 'input[name^="item_meta[' + fieldId + ']"],select[name^="item_meta[' + fieldId + ']"], textarea[name^="item_meta[' + fieldId + ']"]' );
-		if ( fieldInput.length < 1 ) {
-			// TODO: Change this so Section (on diff page), HTML (on diff page), reCaptcha (on diff page), and page break fields don't return true
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	// Check if field is a section or embedded form
-	function isAContainerField( hideFieldContainer ) {
-		var inSection = false;
-		if ( hideFieldContainer.hasClass( 'frm_section_heading' ) || hideFieldContainer.hasClass( 'frm_embed_form_container' ) ) {
-			inSection = true;
-		}
-
-		return inSection;
-	}
-
-	function isInputConditionallyHidden( input, fieldAtts ) {
-		var isHidden = false;
-		if ( typeof input.name !== 'undefined' ) {
-			var containerHtmlId;
-			var nameParts = input.name.replace( /\]/g, '' ).split( '[' );
-			if ( nameParts.length < 4 ) {
-				if ( nameParts.length == 3 && nameParts[2] == 'form' ) {
-					return true;
-				}
-
-				// Non-repeating input
-				containerHtmlId = 'frm_field_' + nameParts[1] + '_container';
-
-			} else {
-				if ( nameParts[3] == 0 ) {
-					return true;
-				}
-
-				// Repeating or embedded form inputs
-				containerHtmlId = 'frm_field_' + nameParts[3] + '-' + nameParts[1] + '-' + nameParts[2] + '_container';
-			}
-
-			isHidden = isContainerConditionallyHidden( containerHtmlId, fieldAtts );
-
-		} else {
-			isHidden = true;
-		}
-
-		return isHidden;
-	}
-
-	function isContainerConditionallyHidden( containerHtmlId, fieldAtts ) {
-		var isHidden = false;
-		var hiddenFields;
-
-		if ( typeof fieldAtts.hiddenFields !== 'undefined' ) {
-			hiddenFields = fieldAtts.hiddenFields;
-		} else {
-			var frmHideFieldsInput = document.getElementById('frm_hide_fields_' + fieldAtts.formId);
-			hiddenFields = frmHideFieldsInput.value;
-			fieldAtts.hiddenFields = hiddenFields;
-		}
-
-		if ( hiddenFields ) {
-			hiddenFields = JSON.parse( hiddenFields );
-			if ( hiddenFields.indexOf( containerHtmlId ) > -1 ) {
-				isHidden = true;
-			}
-		}
-
-		return isHidden;
-	}
-
-	/* Fallback functions */
 	function addIndexOfFallbackForIE8() {
 		if ( !Array.prototype.indexOf ) {
 			Array.prototype.indexOf = function(elt /*, from*/) {
@@ -2739,26 +3363,6 @@ function frmFrontFormJS(){
 		}
 	}
 
-    /* Get checked values with IE8 fallback */
-    function getCheckedVal(containerID, inputName) {
-        var checkVals = [];
-        if ( typeof document.querySelector == 'undefined') {
-            var ieVals = jQuery('#'+ containerID +' input[type=checkbox]:checked, input[type=hidden][name^="'+ inputName +'"]');
-            ieVals.each(function(){
-                checkVals.push( this.value );
-            });
-        } else {
-            var checkboxes = document.querySelectorAll('#'+ containerID +' input[type=checkbox], input[type=hidden][name^="'+ inputName +'"]');
-            for ( var b = 0; b < checkboxes.length; b++ ) {
-                if (( checkboxes[b].type == 'checkbox' && checkboxes[b].checked ) || checkboxes[b].type == 'hidden' ){
-                    checkVals.push( checkboxes[b].value );
-                }
-            }
-        }
-
-        return checkVals;
-    }
-
 	return{
 		init: function(){
 			jQuery(document).off('submit.formidable','.frm-show-form');
@@ -2794,18 +3398,6 @@ function frmFrontFormJS(){
 				jQuery(this).mask( jQuery(this).data('frmmask').toString() );
 			});
 
-			if ( typeof __frmChosen !== 'undefined' ) {
-				jQuery('.frm_chzn').chosen( __frmChosen );
-			}
-
-			if ( typeof __frmHideFields !== 'undefined' ) {
-				frmFrontForm.hideCondFields( __frmHideFields );
-			}
-
-			if ( typeof __frmCheckFields !== 'undefined' ) {
-				frmFrontForm.checkDependent( __frmCheckFields );
-			}
-
 			jQuery(document).on('change', '.frm-show-form input[name^="item_meta"], .frm-show-form select[name^="item_meta"], .frm-show-form textarea[name^="item_meta"]', maybeCheckDependent);
 			
 			jQuery(document).on('click', '.frm-show-form input[type="submit"], .frm-show-form input[name="frm_prev_page"], .frm-show-form .frm_save_draft', setNextPage);
@@ -2837,9 +3429,8 @@ function frmFrontFormJS(){
 				}
 			});
 
-			loadDateFields();
-			loadCustomInputMasks();
-			triggerCalc();
+			checkFieldsOnPage();
+			checkConditionalLogic( 'pageLoad' );
 
 			// Add fallbacks for the beloved IE8
 			addIndexOfFallbackForIE8();
@@ -2978,25 +3569,42 @@ function frmFrontFormJS(){
 			return goingToPrevPage(object);
 		},
 
-		hideCondFields: function(ids){
+		hideOrShowFields: function(ids, event ){
+			if ( 'pageLoad' === event ) {
+				clearHideFields();
+			}
 			var len = ids.length;
+			var repeatArgs = { repeatingSection: '', repeatRow: '' };
 			for ( var i = 0, l = len; i < l; i++ ) {
-                var container = document.getElementById('frm_field_'+ ids[i] +'_container');
-                if ( container !== null ) {
-                    container.style.display = 'none';
-                } else {
-                    // repeating or embedded fields
-                    jQuery('.frm_field_'+ ids[i] +'_container').hide();
-                }
+				hideOrShowFieldById( ids[i], repeatArgs );
 			}
 		},
 
-		checkDependent: function(ids){
-			var len = ids.length;
-            var reset = 'reset';
+		hidePreviouslyHiddenFields: function(){
+			var hiddenFields = getAllHiddenFields();
+			var len = hiddenFields.length;
 			for ( var i = 0, l = len; i < l; i++ ) {
-				checkDependentField(ids[i], null, null, reset);
-                reset = 'persist';
+				var container = document.getElementById( hiddenFields[ i ] );
+				if ( container !== null ) {
+					container.style.display = 'none';
+				}
+			}
+		},
+
+		checkDependentDynamicFields: function(ids){
+			var len = ids.length;
+			var repeatArgs = { repeatingSection: '', repeatRow: '' };
+			for ( var i = 0, l = len; i < l; i++ ) {
+				hideOrShowFieldById( ids[i], repeatArgs );
+			}
+		},
+
+		checkDependentLookupFields: function(ids){
+			var fieldId;
+			var repeatArgs = { repeatingSection: '', repeatRow: '' };
+			for ( var i = 0, l = ids.length; i < l; i++ ) {
+				fieldId = ids[i];
+				updateWatchingFieldById( fieldId, repeatArgs, 'value changed' );
 			}
 		},
 

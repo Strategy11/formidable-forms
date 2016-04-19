@@ -8,7 +8,7 @@ class FrmEntriesHelper {
     public static function setup_new_vars( $fields, $form = '', $reset = false, $args = array() ) {
         $values = array();
 		foreach ( array( 'name' => '', 'description' => '', 'item_key' => '' ) as $var => $default ) {
-            $values[ $var ] = FrmAppHelper::get_post_param( $var, $default );
+			$values[ $var ] = FrmAppHelper::get_post_param( $var, $default, 'wp_kses_post' );
         }
 
         $values['fields'] = array();
@@ -17,7 +17,7 @@ class FrmEntriesHelper {
         }
 
         foreach ( (array) $fields as $field ) {
-            $new_value = self::get_field_value_for_new_entry( $field, $reset );
+            $new_value = self::get_field_value_for_new_entry( $field, $reset, $args );
 
             $field_array = array(
                 'id' => $field->id,
@@ -33,6 +33,7 @@ class FrmEntriesHelper {
                 'form_id' => $field->form_id,
 				'parent_form_id' => isset( $args['parent_form_id'] ) ? $args['parent_form_id'] : $field->form_id,
 	            'reset_value' => $reset,
+				'in_embed_form' => isset( $args['in_embed_form'] ) ? $args['in_embed_form'] : '0',
             );
 
             $opt_defaults = FrmFieldsHelper::get_default_field_opts($field_array['type'], $field, true);
@@ -86,9 +87,10 @@ class FrmEntriesHelper {
 	*
 	* @param object $field - this is passed by reference since it is an object
 	* @param boolean $reset
+	* @param array $args
 	* @return string|array $new_value
 	*/
-	private static function get_field_value_for_new_entry( $field, $reset ) {
+	private static function get_field_value_for_new_entry( $field, $reset, $args ) {
 		//If checkbox, multi-select dropdown, or checkbox data from entries field, the value should be an array
 		$return_array = FrmField::is_field_with_multiple_values( $field );
 
@@ -98,14 +100,10 @@ class FrmEntriesHelper {
 
 		$new_value = $field->default_value;
 
-		if ( ! $reset && $_POST && isset( $_POST['item_meta'][ $field->id ] ) ) {
-			// If value was posted, get it
-
-			$new_value = stripslashes_deep( $_POST['item_meta'][ $field->id ] );
-
+		if ( ! $reset && self::value_is_posted( $field, $args ) ) {
+			self::get_posted_value( $field, $new_value, $args );
 		} else if ( FrmField::is_option_true( $field, 'clear_on_focus' ) ) {
 			// If clear on focus is selected, the value should be blank (unless it was posted, of course)
-
 			$new_value = '';
 		}
 
@@ -114,6 +112,29 @@ class FrmEntriesHelper {
 		}
 
 		return $new_value;
+	}
+
+	/**
+	* Check if a field has a posted value
+	*
+	* @since 2.01.0
+	* @param object $field
+	* @param array $args
+	* @return boolean $value_is_posted
+	*/
+	public static function value_is_posted( $field, $args ) {
+		$value_is_posted = false;
+		if ( $_POST ) {
+			$repeating = isset( $args['repeating'] ) && $args['repeating'];
+			if ( $repeating ) {
+				if ( isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field->id ] ) ) {
+					$value_is_posted = true;
+				}
+			} else if ( isset( $_POST['item_meta'][ $field->id ] ) ) {
+				$value_is_posted = true;
+			}
+		}
+		return $value_is_posted;
 	}
 
 	public static function setup_edit_vars( $values, $record ) {

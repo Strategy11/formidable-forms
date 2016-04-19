@@ -396,6 +396,23 @@ class FrmFormAction {
         return $settings;
     }
 
+	/**
+	 * @param int $action_id
+	 */
+	public static function get_single_action_type( $action_id, $type ) {
+		$action_control = FrmFormActionsController::get_form_actions( $type );
+		return $action_control->get_single_action( $action_id );
+	}
+
+	/**
+	 * @param int $form_id
+	 * @return bool
+	 */
+	public static function form_has_action_type( $form_id, $type ) {
+		$payment_actions = self::get_action_for_form( $form_id, $type );
+		return ! empty( $payment_actions );
+	}
+
 	public function get_all( $form_id = false, $limit = 99 ) {
 	    if ( $form_id ) {
 	        $this->form_id = $form_id;

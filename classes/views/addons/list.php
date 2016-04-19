@@ -3,7 +3,7 @@
 
 	<div id="the-list" class="frm-addons">
 		<?php foreach ( $addons as $addon ) {
-			if ( empty( $addon['info']['excerpt'] ) ) {
+			if ( empty( $addon['info']['excerpt'] ) || empty( $addon['licensing']['enabled'] ) ) {
 				continue;
 			}
 

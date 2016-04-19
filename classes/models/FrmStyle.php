@@ -82,6 +82,8 @@ class FrmStyle {
 					$new_instance['post_content'][ $setting ] = str_replace( '#', '', $new_instance['post_content'][ $setting ] );
 				} else if ( in_array( $setting, array( 'submit_style', 'important_style', 'auto_width' ) ) && ! isset( $new_instance['post_content'][ $setting ] ) ) {
 					$new_instance['post_content'][ $setting ] = 0;
+                } else if ( $setting == 'font' ) {
+                	$new_instance['post_content'][ $setting ] = $this->force_balanced_quotation( $new_instance['post_content'][ $setting ] );
                 }
             }
 
@@ -496,5 +498,21 @@ class FrmStyle {
 			'bold' => __( 'bold', 'formidable' ),
 			800 => 800, 900 => 900,
 		);
+	}
+
+
+	/**
+	 * Don't let imbalanced font families ruin the whole stylesheet
+	 */
+	public function force_balanced_quotation( $value ) {
+		$balanced_characters = array( '"', "'" );
+		foreach ( $balanced_characters as $char ) {
+			$char_count = substr_count( $value, $char );
+			$is_balanced = $char_count % 2 == 0;
+			if ( ! $is_balanced ) {
+				$value .= $char;
+			}
+		}
+		return $value;
 	}
 }

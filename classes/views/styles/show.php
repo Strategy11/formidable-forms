@@ -71,6 +71,7 @@
                                 <input type="button" value="<?php esc_attr_e( 'Reset to Default', 'formidable' ) ?>" class="button-secondary frm_reset_style" />
 								<input type="submit" id="save_menu_header" class="button button-primary menu-save" value="<?php esc_attr_e( 'Save Style', 'formidable' ); ?>"  />
 							</div><!-- END .publishing-action -->
+							<div class="clear"></div>
 						</div><!-- END .major-publishing-actions -->
 					</div><!-- /#nav-menu-footer -->
 				</div><!-- /.menu-edit -->

@@ -4,48 +4,41 @@ sudo: false
 
 matrix:
   include:
-    - php: '7.0'
-      env: WP_VERSION=master WP_MULTISITE=0 PHPLINT=1
-    - php: '5.6'
-      env: WP_VERSION=master WP_MULTISITE=0 PHPLINT=1
-    - php: '5.2'
-      env: WP_VERSION=master WP_MULTISITE=1 PHPLINT=1
-    - php: '5.5'
-      env: WP_VERSION=master WP_MULTISITE=0
-    - php: '5.6'
-      env: WP_VERSION=4.2 WP_MULTISITE=0
-    - php: '5.6'
-      env: WP_VERSION=4.2 WP_MULTISITE=1
-    - php: '5.6'
-      env: WP_VERSION=4.1 WP_MULTISITE=0
-    - php: '5.6'
-      env: WP_VERSION=4.1 WP_MULTISITE=1
-    - php: '5.5'
-      env: WP_VERSION=4.1 WP_MULTISITE=0
-    - php: '5.5'
-      env: WP_VERSION=4.1 WP_MULTISITE=1
-    - php: '5.4'
-      env: WP_VERSION=4.1 WP_MULTISITE=0
-    - php: '5.4'
-      env: WP_VERSION=4.1 WP_MULTISITE=1
-    - php: '5.5'
-      env: WP_VERSION=4.0 WP_MULTISITE=1
-    - php: '5.3'
-      env: WP_VERSION=4.0 WP_MULTISITE=0
-    - php: '5.4'
-      env: WP_VERSION=3.8 WP_MULTISITE=0
-    - php: '5.3'
-      env: WP_VERSION=3.6 WP_MULTISITE=0
-    - php: '5.3'
-      env: WP_VERSION=3.6 WP_MULTISITE=1
-    - php: 'hhvm'
-      env: WP_VERSION=4.1 WP_MULTISITE=0
-    - php: 'hhvm'
-      env: WP_VERSION=4.1 WP_MULTISITE=1
+    - php: 7.0
+      env: WP_VERSION=master WP_MULTISITE=1 PHPLINT=1 PHPCS=1
+    - php: 5.2
+      env: WP_VERSION=4.5 WP_MULTISITE=1 PHPLINT=1
+    - php: 7.0
+      env: WP_VERSION=4.5
+    - php: 7.0
+      env: WP_VERSION=4.4
+    - php: 7.0
+      env: WP_VERSION=4.3
+    - php: 5.6
+      env: WP_VERSION=4.2
+    - php: 5.6
+      env: WP_VERSION=4.5
+    - php: 5.5
+      env: WP_VERSION=4.5
+    - php: 5.4
+      env: WP_VERSION=4.5
+    - php: 5.3
+      env: WP_VERSION=4.5
+    - php: 5.2
+      env: WP_VERSION=master
+    - php: 5.5
+      env: WP_VERSION=4.0
+    - php: 5.4
+      env: WP_VERSION=3.8
+    - php: 5.3
+      env: WP_VERSION=3.7
+    - php: hhvm
+      env: WP_VERSION=4.5
+
 
 before_script:
 - phpenv local 5.6
-- composer selfupdate --no-interaction
+- composer selfupdate 1.0.0 --no-interaction
 - composer install --no-interaction
 - phpenv local --unset
 - PLUGIN_SLUG=$(basename $(pwd))
@@ -67,8 +60,12 @@ before_script:
 - phpenv rehash
 
 script:
-- if [[ "$PHPLINT" == "1" ]]; then /tmp/wordpress/phpcs/scripts/phpcs -p -s -v -n . --standard=./codesniffer.xml --extensions=php; fi
+- if [[ "$PHPLINT" == "1" ]]; then find -L .  -path ./vendor -prune -o -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l; fi
+- if [[ "$PHPCS" == "1" ]]; then /tmp/wordpress/phpcs/scripts/phpcs -p -s -v -n . --standard=./phpcs.xml --extensions=php; fi
 - phpunit --group=ajax -c phpunit.xml
 - phpunit --group=entries -c phpunit.xml
 - phpunit --group=styles -c phpunit.xml
 - phpunit --exclude-group=ajax -c phpunit.xml
+
+notifications:
+  email: false

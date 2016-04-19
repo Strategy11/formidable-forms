@@ -30,7 +30,7 @@ class FrmFieldsHelper {
         }
 
         if ( isset( $setting ) && ! empty( $setting ) ) {
-            if ( 'data' == $type ) {
+            if ( in_array( $type, array( 'data', 'lookup' ) ) ) {
                 $values['field_options']['data_type'] = $setting;
             } else {
                 $values['field_options'][ $setting ] = 1;
@@ -169,10 +169,12 @@ class FrmFieldsHelper {
 		$default_settings = $frm_settings->default_options();
 		$field_name = is_array( $field ) ? $field['name'] : $field->name;
 
+		$conf_msg = __( 'The entered values do not match', 'formidable' );
 		$defaults = array(
 			'unique_msg' => array( 'full' => $default_settings['unique_msg'], 'part' => sprintf( __('%s must be unique', 'formidable' ), $field_name ) ),
 			'invalid'   => array( 'full' => __( 'This field is invalid', 'formidable' ), 'part' => sprintf( __('%s is invalid', 'formidable' ), $field_name ) ),
 			'blank'     => array( 'full' => $frm_settings->blank_msg, 'part' => $frm_settings->blank_msg ),
+			'conf_msg'  => array( 'full' => $conf_msg, 'part' => $conf_msg ),
 		);
 
 		$msg = FrmField::get_option( $field, $error );
@@ -922,7 +924,7 @@ DEFAULT_HTML;
             'image', 'file', 'date', 'phone', 'hidden', 'time',
             'user_id', 'tag', 'password',
         );
-		$multiple_input = array( 'radio', 'checkbox', 'select', 'scale' );
+		$multiple_input = array( 'radio', 'checkbox', 'select', 'scale', 'lookup' );
 		$other_type = array( 'divider', 'html', 'break' );
 
 		$field_selection = array_merge( FrmField::pro_field_selection(), FrmField::field_selection() );
@@ -938,6 +940,7 @@ DEFAULT_HTML;
             $field_types[ $type ] = $field_selection[ $type ];
         }
 
+		$field_types = apply_filters( 'frm_switch_field_types', $field_types, compact( 'type' ) );
         return $field_types;
     }
 

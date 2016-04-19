@@ -39,6 +39,7 @@ class FrmField {
 			'image'     => __( 'Image URL', 'formidable' ),
 			'scale'     => __( 'Scale', 'formidable' ),
 			'data'      => __( 'Dynamic Field', 'formidable' ),
+			'lookup'	=> __( 'Lookup', 'formidable' ),
 			'form'      => __( 'Embed Form', 'formidable' ),
 			'hidden'    => __( 'Hidden Field', 'formidable' ),
 			'user_id'   => __( 'User ID (hidden)', 'formidable' ),
@@ -720,4 +721,12 @@ class FrmField {
         $id = FrmDb::get_var( 'frm_fields', array( 'field_key' => sanitize_title( $key ) ) );
         return $id;
     }
+
+	/**
+	 * @param string $id
+	 * @return string
+	 */
+	public static function get_key_by_id( $id ) {
+		return FrmDb::get_var( 'frm_fields', array( 'id' => $id ), 'field_key' );
+	}
 }

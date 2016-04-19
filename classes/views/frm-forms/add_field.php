@@ -224,29 +224,20 @@ if ( $display['options'] ) { ?>
                         </select>
                         </td>
                     </tr>
-                <?php } ?>
-				<?php if ( $display['size'] ) { ?>
-                    <tr><td class="frm_150_width"><label><?php _e( 'Field Size', 'formidable' ) ?></label></td>
-                        <td>
-                        <?php
-						if ( in_array( $field['type'], array( 'select', 'time', 'data' ) ) ) {
-							if ( ! isset( $values['custom_style'] ) || $values['custom_style'] ) { ?>
-								<label for="size_<?php echo esc_attr( $field['id'] ) ?>">
-									<input type="checkbox" name="field_options[size_<?php echo esc_attr( $field['id'] ) ?>]" id="size_<?php echo esc_attr( $field['id'] ) ?>" value="1" <?php echo FrmField::is_option_true( $field, 'size' ) ? 'checked="checked"' : ''; ?> />
-									<?php _e( 'automatic width', 'formidable' ) ?>
-								</label>
-                            <?php
-                            }
-						} else { ?>
-                                <input type="text" name="field_options[size_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['size'] ); ?>" size="5" /> <span class="howto"><?php _e( 'pixels wide', 'formidable' ) ?></span>
-
-								<?php if ( $display['max'] ) { ?>
-                                <input type="text" name="field_options[max_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['max'] ); ?>" size="5" /> <span class="howto"><?php echo ( $field['type'] == 'textarea' || $field['type'] == 'rte' ) ? __( 'rows high', 'formidable' ) : __( 'characters maximum', 'formidable' ) ?></span>
-                        <?php	}
-                        } ?>
-                        </td>
-                    </tr>
                 <?php }
+
+				// Field Size
+				if ( $display['size'] ) {
+					if ( in_array( $field['type'], array( 'select', 'time', 'data' ) ) ) {
+						if ( ! isset( $values['custom_style'] ) || $values['custom_style'] ) {
+							include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/automatic-width.php' );
+						}
+					} else {
+						$display_max = $display['max'];
+						include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/pixels-wide.php' );
+					}
+				}
+
 				if ( $display['captcha_size'] ) { ?>
                 <tr><td><label><?php _e( 'Size', 'formidable' ) ?></label>
 					<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Set the size of the captcha field. The compact option is best if your form is in a small area.', 'formidable' ) ?>" ></span>

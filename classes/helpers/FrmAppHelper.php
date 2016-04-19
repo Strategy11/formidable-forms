@@ -5,12 +5,12 @@ if ( ! defined('ABSPATH') ) {
 
 class FrmAppHelper {
 	public static $db_version = 29; //version of the database we are moving to
-	public static $pro_db_version = 33;
+	public static $pro_db_version = 34;
 
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '2.0.25';
+	public static $plug_version = '2.01.0rc2';
 
     /**
      * @since 1.07.02
@@ -327,7 +327,10 @@ class FrmAppHelper {
 	public static function sanitize_value( $sanitize, &$value ) {
 		if ( ! empty( $sanitize ) ) {
 			if ( is_array( $value ) ) {
-				$value = array_map( $sanitize, $value );
+				$temp_values = $value;
+				foreach ( $temp_values as $k => $v ) {
+					FrmAppHelper::sanitize_value( $sanitize, $value[ $k ] );
+				}
 			} else {
 				$value = call_user_func( $sanitize, $value );
 			}
@@ -968,7 +971,7 @@ class FrmAppHelper {
 
 		foreach ( array( 'name', 'description' ) as $var ) {
             $default_val = isset($record->{$var}) ? $record->{$var} : '';
-            $values[ $var ] = self::get_param( $var, $default_val );
+			$values[ $var ] = self::get_param( $var, $default_val, 'get', 'wp_kses_post' );
             unset($var, $default_val);
         }
 
@@ -1032,6 +1035,8 @@ class FrmAppHelper {
 
         $args['field_type'] = $field_type;
         self::fill_field_opts($field, $field_array, $args);
+		// Track the original field's type
+		$field_array['original_type'] = isset( $field->field_options['original_type'] ) ? $field->field_options['original_type'] : $field->type;
 
         $field_array = apply_filters('frm_setup_edit_fields_vars', $field_array, $field, $values['id']);
 
@@ -1682,7 +1687,7 @@ class FrmAppHelper {
      * echo The javascript to open and highlight the Formidable menu
      */
 	public static function maybe_highlight_menu( $post_type ) {
-        global $post, $pagenow;
+        global $post;
 
         if ( isset($_REQUEST['post_type']) && $_REQUEST['post_type'] != $post_type ) {
             return;

@@ -325,7 +325,7 @@ class WP_Test_FrmProFieldsControllerAjax extends FrmAjaxUnitTest {
 		$parent_field_id = FrmField::get_id_by_key( 'dynamic-country' );
 		$args['parent_field'] = FrmField::getOne( $parent_field_id );
 		$values = array( 'hide_field' => array(), 'form_select' => $args['parent_field']->field_options['form_select'], 'restrict' => '' );
-		$args['parent_options'] = FrmProFieldsHelper::get_linked_options( $values, $args['field'], '');
+		$args['parent_options'] = FrmProDynamicFieldsController::get_independent_options( $values, $args['field'], '');
 
 		foreach ( $args['parent_options'] as $key => $opt ) {
 			if ( $opt == 'United States' ) {
@@ -427,7 +427,8 @@ class WP_Test_FrmProFieldsControllerAjax extends FrmAjaxUnitTest {
 			$this->assertTrue( strpos( $response, $substring ) !== false, 'The substring ' . $substring . ' didn\'t show up in the field in the ' . $test . ' test.' );
 		}
 	}
-			function _check_for_input_id_substring( $e, $response, $test ) {
+
+	function _check_for_input_id_substring( $e, $response, $test ) {
 		if ( strpos( $test, 'checkbox' ) !== false || strpos( $test, 'radio' ) !== false ) {
 			$substring = 'id="field_dynamic-state-' . $e . '"';
 		} else if ( strpos( $test, 'select' ) !== false ) {
