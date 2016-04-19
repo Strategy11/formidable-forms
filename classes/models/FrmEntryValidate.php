@@ -65,9 +65,7 @@ class FrmEntryValidate {
         // Check for values in "Other" fields
         FrmEntriesHelper::maybe_set_other_validation( $posted_field, $value, $args );
 
-        if ( isset($posted_field->field_options['default_blank']) && $posted_field->field_options['default_blank'] && $value == $posted_field->default_value ) {
-            $value = '';
-        }
+		self::maybe_clear_value_for_default_blank_setting( $posted_field, $value );
 
 		// Check for an array with only one value
 		// Don't reset values in "Other" fields because array keys need to be preserved
@@ -95,6 +93,12 @@ class FrmEntryValidate {
         $errors = apply_filters('frm_validate_field_entry', $errors, $posted_field, $value, $args);
 		$errors = apply_filters( 'frm_validate_' . $posted_field->type . '_field_entry', $errors, $posted_field, $value, $args );
     }
+
+	private static function maybe_clear_value_for_default_blank_setting( $field, &$value ) {
+		if ( FrmField::is_option_true_in_object( $field, 'default_blank' ) && $value == $field->default_value ) {
+			$value = '';
+		}
+	}
 
 	public static function validate_url_field( &$errors, $field, &$value, $args ) {
 		if ( $value == '' || ! in_array( $field->type, array( 'website', 'url', 'image' ) ) ) {
