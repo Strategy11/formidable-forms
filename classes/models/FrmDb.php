@@ -453,6 +453,13 @@ class FrmDb {
 				$args[ $k ] = $db_name . ' ' . $v;
             }
         }
+
+		// Make sure LIMIT is the last argument
+		if ( isset( $args['order_by'] ) && isset( $args['limit'] ) ) {
+			$temp_limit = $args['limit'];
+			unset( $args['limit'] );
+			$args['limit'] = $temp_limit;
+		}
     }
 
     public function uninstall() {

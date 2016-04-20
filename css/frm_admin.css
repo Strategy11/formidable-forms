@@ -1651,6 +1651,10 @@ ul.start_divider{
 	display:block;
 }
 
+tr.frm_options_heading td{
+	padding-bottom:0;
+}
+
 .frm_validation_msg p label{float:left;width:25%;max-width:100px;}
 .frm_sorting .form-field .widget .frm_validation_msg input{width:71%;}
 
