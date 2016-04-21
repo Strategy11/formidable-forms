@@ -90,58 +90,24 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 
 == Changelog ==
 = 2.01.0 =
+* Allow shortcodes for the submit button label
+* Increase the timeout for activating a license
+* Add a couple static functions to use in add-ons with form actions
+* Don't show templates on the addons page
+* Add frm_switch_field_types hook for specifying which fields can be switched to/from
+* Add Authorize, Stripe, WOO, and copy icons
+* Some back-end styling improvements
+* Additional bug fixes
+* **Pro Features:** *
 * Add new "Lookup" field type
 * Add "Lookup value" option to several field types
 * Add clear on focus and default blank option to Address fields
-* Add repeating field args to new and edit fields hooks
-* Reorganize some field options
-* Deprecate old show_responses function
-* Improve styling in bulk edit pop-up
-* Make sure LIMIT does not come before ORDER_BY in FrmDb queries
-* Make sure the added property="stylesheet" uses the correct quotation marks
-* Force balanced quotation marks on font setting
-* Increase the timeout for activating a license
-* Cut down on some folder name's length
-* Remove single entry View redirect to post
-* Make sure calendar always shows up in date fields
-* Allow recaptcha inside a section
-* Load date fields based on the input class
-* Trigger chosen more optimally
-* Set default value correctly in autocomplete dropdowns
-* Raised composer-php52 version
-* Allow calculations for in-place form
-* Escape the submit button text
-* Show a message instead of errors when trying to show an entry that doesn't exist
-* Add a couple static functions to use in add-ons with form actions
-* Don't show templates on the addons page
-* Force upload error to an array before checking errors
-* Use kses when sanitizing summary page
-* Add frm_switch_field_types hook for specifying which fields can be switched to/from
-* Add Authorize, Stripe, WOO, and copy icons
-* Add more string sanitizing
-* Sanitize values used on a summary page
-* Allow 4242 4242 4242 4242 as a valid cc number
-* Fix and rerun db migration for adding in_section variable
-* Fill address fields in the case something is missing
-* Fix showing/hiding repeating fields across pages
-* Improve conditional logic in repeating fields while editing
-* Improve some styling for WP 4.5
-* Make sure filtering by frm_cat still works in Views
-* Allow shortcodes for the submit button label
-* Improve post redirection
-* Cut down on View query size when no field filters are set
-* Improve checking for conditionally hidden fields
 * Move form submit js to js file
-* Fix JS error in Safari on form builder page
-* Prevent fatal error when importing an XML that includes an unavailable form action
-* Fix undefined index errors in Create Post action
-* Prevent trigger dropdown from being cut off in form actions
-* Fix js console warning with fields with no id
-* Prevent confirmation toggle from changing other hidden fields
-* Use get_error_msg function for conf_msg
-* Refactor conditional logic so all dependent fields are checked on initial load
-* Refactor conditional logic so after the initial load, dependent fields are only checked when a trigger field changes
-* Start separating edit entry vs. edit form code
+* Add repeating field args to new and edit fields hooks
+* Refactor conditional logic
+* Improve and limit post redirection
+* Cut down on View query size when no field filters are set
+* Additional bug fixes
 
 = 2.0.25 =
 * Add an option to allow multiple recaptchas. This is off by default to avoid new conflicts.
