@@ -1547,6 +1547,7 @@ function frmFrontFormJS(){
 	 */
 	function replaceRadioLookupFieldOptions( childFieldArgs, childDiv ) {
 		var optContainer = childDiv.getElementsByClassName( 'frm_opt_container' )[0];
+		addLoadingIconJS( optContainer );
 
 		var repeatingFieldId = 0;
 		if ( childFieldArgs.isRepeating ) {
@@ -1572,6 +1573,11 @@ function frmFrontFormJS(){
 				triggerChange( jQuery( radioInputs[0] ), childFieldArgs.fieldKey );
 			}
 		});
+	}
+
+	// Insert the loading icon
+	function addLoadingIconJS( optContainer ) {
+		optContainer.innerHTML = '<span class="frm-loading-img"></span>';
 	}
 
 	/**
