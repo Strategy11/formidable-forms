@@ -1536,25 +1536,20 @@ function frmFrontFormJS(){
 	 *
 	 * @since 2.01.0
 	 * @param {Object} childFieldArgs
-	 * @param {boolean} childFieldArgs.isRepeating
 	 * @param {string} childFieldArgs.inSection
 	 * @param {Array} childFieldArgs.parents
 	 * @param {Array} childFieldArgs.parentVals
 	 * @param {string} childFieldArgs.fieldId
 	 * @param {string} childFieldArgs.repeatRow
 	 * @param {string} childFieldArgs.fieldKey
-	 * @param
+	 * @param {object} childDiv
 	 */
 	function replaceRadioLookupFieldOptions( childFieldArgs, childDiv ) {
 		var optContainer = childDiv.getElementsByClassName( 'frm_opt_container' )[0];
-		addLoadingIconJS( optContainer );
-
-		var repeatingFieldId = 0;
-		if ( childFieldArgs.isRepeating ) {
-			repeatingFieldId = childFieldArgs.inSection;
-		}
 		var radioInputs = optContainer.getElementsByTagName( 'input' );
 		var currentValue = getValueFromRadioInputs( radioInputs );
+
+		addLoadingIconJS( optContainer );
 
 		jQuery.ajax({
 			type:'POST',
@@ -1570,9 +1565,59 @@ function frmFrontFormJS(){
 			},
 			success:function(newHtml){
 				optContainer.innerHTML = newHtml;
+
+				if ( radioInputs.length == 1 && radioInputs[0].value === '' ) {
+					maybeHideRadioLookup( childFieldArgs, childDiv );
+				} else {
+					maybeShowRadioLookup( childFieldArgs, childDiv );
+				}
+
 				triggerChange( jQuery( radioInputs[0] ), childFieldArgs.fieldKey );
 			}
 		});
+	}
+
+	/**
+	 * Hide a Radio Lookup field if it doesn't have any options
+	 *
+	 * @since 2.01.01
+	 * @param {Object} childFieldArgs
+	 * @param {string} childFieldArgs.formId
+	 * @param {object} childDiv
+	 */
+	function maybeHideRadioLookup( childFieldArgs, childDiv ) {
+		if ( isFieldConditionallyHidden( childDiv.id, childFieldArgs.formId ) ) {
+			return;
+		}
+
+		hideFieldContainer( childDiv.id );
+		addToHideFields( childDiv.id, childFieldArgs.formId );
+	}
+
+	/**
+	 * Show a radio Lookup field if it has options and conditional logic says it should be shown
+	 *
+	 * @since 2.01.01
+	 * @param {Object} childFieldArgs
+	 * @param {string} childFieldArgs.formId
+	 * @param {string} childFieldArgs.fieldId
+	 * @param {string} childFieldArgs.repeatRow
+	 * @param {object} childDiv
+	 */
+	function maybeShowRadioLookup( childFieldArgs, childDiv ) {
+		if ( isFieldCurrentlyShown( childDiv.id, childFieldArgs.formId ) ) {
+			return;
+		}
+
+		var logicArgs = getRulesForSingleField( childFieldArgs.fieldId );
+		if ( logicArgs === false || logicArgs.conditions.length < 1 ) {
+			removeFromHideFields( childDiv.id, childFieldArgs.formId);
+			showFieldContainer( childDiv.id );
+		} else {
+			logicArgs.containerId = childDiv.id;
+			logicArgs.repeatRow = childFieldArgs.repeatRow;
+			hideOrShowSingleField( logicArgs );
+		}
 	}
 
 	// Insert the loading icon
