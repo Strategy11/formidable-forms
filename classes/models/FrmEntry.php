@@ -449,11 +449,16 @@ class FrmEntry {
     }
 
     public static function getPageCount( $p_size, $where = '' ) {
-        if ( is_numeric($where) ) {
-            return ceil( (int) $where / (int) $p_size );
-        } else {
-            return ceil( (int) self::getRecordCount($where) / (int) $p_size );
-        }
+		$p_size = (int) $p_size;
+		$count = 1;
+		if ( $p_size ) {
+			if ( ! is_numeric( $where ) ) {
+				$where = self::getRecordCount( $where );
+			}
+			$count = ceil( (int) $where / $p_size );
+		}
+
+		return $count;
     }
 
 	/**
