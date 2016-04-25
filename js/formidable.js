@@ -3166,6 +3166,9 @@ function frmFrontFormJS(){
 				$edit.html(cancel);
 				checkConditionalLogic( 'editInPlace' );
 				checkFieldsOnPage();
+
+				//TODO: Find out why this extra binding is required
+				jQuery('#'+ prefix + entry_id).on('change', 'input[name^="item_meta"], select[name^="item_meta"], textarea[name^="item_meta"]', maybeCheckDependent);
 			}
 		});
 		return false;
