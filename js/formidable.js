@@ -65,7 +65,7 @@ function frmFrontFormJS(){
 
 	function triggerDateField() {
 		/*jshint validthis:true */
-		if ( this.className.indexOf('frm_custom_date') !== -1 ) {
+		if ( this.className.indexOf('frm_custom_date') !== -1 || typeof __frmDatepicker === 'undefined' ) {
 			return;
 		}
 
