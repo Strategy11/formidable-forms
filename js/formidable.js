@@ -1025,16 +1025,23 @@ function frmFrontFormJS(){
 		}
 
 		var prevInput;
+		var valueChanged = true;
 		for ( var i= 0, l=inputs.length; i<l; i++ ){
-			if ( i>0 && prevInput.name != inputs[i].name ) {
+			if ( i>0 && prevInput.name != inputs[i].name && valueChanged === true ) {
 				// Only trigger a change after all inputs in a field are cleared
 				triggerChange( jQuery(prevInput) );
 			}
 
+			valueChanged = true;
+
 			if ( inputs[i].type == 'radio' || inputs[i].type == 'checkbox' ) {
 				inputs[i].checked = false;
 			} else if ( inputs[i].tagName == 'SELECT' ) {
-				inputs[i].selectedIndex = '0';
+				if ( inputs[i].selectedIndex === 0 ) {
+					valueChanged = false;
+				} else {
+					inputs[i].selectedIndex = 0;
+				}
 
 				var autocomplete = document.getElementById( inputs[i].id + '_chosen' );
 				if ( autocomplete !== null ) {
@@ -1048,7 +1055,9 @@ function frmFrontFormJS(){
 		}
 
 		// trigger a change for the final input in the loop
-		triggerChange(jQuery(prevInput));
+		if ( valueChanged === true ) {
+			triggerChange(jQuery(prevInput));
+		}
 	}
 
 	function isFieldCurrentlyShown( containerId, formId ){
