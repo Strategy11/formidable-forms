@@ -1306,8 +1306,8 @@ function frmFrontFormJS(){
 
 		if ( childFieldArgs.inputType == 'select' ) {
 			maybeReplaceSelectLookupFieldOptions( childFieldArgs, childElement );
-		} else if ( childFieldArgs.inputType == 'radio' ) {
-			replaceRadioLookupFieldOptions( childFieldArgs, childElement );
+		} else if ( childFieldArgs.inputType == 'radio' || childFieldArgs.inputType == 'checkbox' ) {
+			maybeReplaceCbRadioLookupOptions( childFieldArgs, childElement );
 		}
 	}
 
@@ -1532,22 +1532,48 @@ function frmFrontFormJS(){
 	}
 
 	/**
-	 * Replace the options in a Radio Lookup field
+	 * Either hide checkbox/radio Lookup field or update its options
 	 *
-	 * @since 2.01.0
+	 * @since 2.01.01
 	 * @param {Object} childFieldArgs
-	 * @param {string} childFieldArgs.inSection
+	 * @param {object} childDiv
+     */
+	function maybeReplaceCbRadioLookupOptions( childFieldArgs, childDiv ) {
+		if ( childFieldArgs.parentVals === false  ) {
+			// If any parents have blank values, don't waste time looking for values
+
+			var inputs = childDiv.getElementsByTagName( 'input' );
+			maybeHideRadioLookup( childFieldArgs, childDiv );
+			clearValueForInputs( inputs);
+
+		} else {
+			replaceCbRadioLookupOptions( childFieldArgs, childDiv );
+		}
+	}
+
+	/**
+	 * Update the options in a checkbox/radio lookup field
+	 *
+	 * @since 2.01.01
+	 * @param {Object} childFieldArgs
+	 * @param {string} childFieldArgs.inputType
 	 * @param {Array} childFieldArgs.parents
 	 * @param {Array} childFieldArgs.parentVals
 	 * @param {string} childFieldArgs.fieldId
 	 * @param {string} childFieldArgs.repeatRow
 	 * @param {string} childFieldArgs.fieldKey
 	 * @param {object} childDiv
-	 */
-	function replaceRadioLookupFieldOptions( childFieldArgs, childDiv ) {
+     */
+	function replaceCbRadioLookupOptions( childFieldArgs, childDiv ) {
 		var optContainer = childDiv.getElementsByClassName( 'frm_opt_container' )[0];
-		var radioInputs = optContainer.getElementsByTagName( 'input' );
-		var currentValue = getValueFromRadioInputs( radioInputs );
+		var inputs = optContainer.getElementsByTagName( 'input' );
+
+		var currentValue = '';
+		if ( childFieldArgs.inputType == 'radio' ) {
+			currentValue = getValueFromRadioInputs( inputs );
+		} else {
+			currentValue = getValuesFromCheckboxInputs(inputs);
+		}
 
 		addLoadingIconJS( optContainer );
 
@@ -1555,7 +1581,7 @@ function frmFrontFormJS(){
 			type:'POST',
 			url:frm_js.ajax_url,
 			data:{
-				action:'frm_replace_radio_lookup_options',
+				action:'frm_replace_cb_radio_lookup_options',
 				parent_fields:childFieldArgs.parents,
 				parent_vals:childFieldArgs.parentVals,
 				field_id:childFieldArgs.fieldId,
@@ -1566,13 +1592,13 @@ function frmFrontFormJS(){
 			success:function(newHtml){
 				optContainer.innerHTML = newHtml;
 
-				if ( radioInputs.length == 1 && radioInputs[0].value === '' ) {
+				if ( inputs.length == 1 && inputs[0].value === '' ) {
 					maybeHideRadioLookup( childFieldArgs, childDiv );
 				} else {
 					maybeShowRadioLookup( childFieldArgs, childDiv );
 				}
 
-				triggerChange( jQuery( radioInputs[0] ), childFieldArgs.fieldKey );
+				triggerChange( jQuery( inputs[0] ), childFieldArgs.fieldKey );
 			}
 		});
 	}
