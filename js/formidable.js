@@ -1999,7 +1999,7 @@ function frmFrontFormJS(){
 
 		var total = parseFloat(eval(thisFullCalc));
 
-		if ( typeof total === 'undefined' ) {
+		if ( typeof total === 'undefined' || isNaN(total) ) {
 			total = 0;
 		}
 
