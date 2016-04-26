@@ -1982,6 +1982,10 @@ function frmFrontFormJS(){
 			totalField = getSiblingField( fieldInfo );
 		}
 
+		if ( totalField.length < 1 ) {
+			return;
+		}
+
 		// loop through the fields in this calculation
 		thisFullCalc = getValsForSingleCalc( thisCalc, thisFullCalc, all_calcs, vals, fieldInfo );
 
