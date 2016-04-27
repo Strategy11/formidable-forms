@@ -1742,21 +1742,32 @@ function frmFrontFormJS(){
 
 	// Update a Dynamic field's data or options
 	function updateDynamicField( depFieldArgs, onCurrentPage ) {
-		// If field is not on current page, return
-		if ( ! onCurrentPage ) {
-			return;
-		}
-
 		var depFieldArgsCopy = cloneObjectForDynamicFields( depFieldArgs );
 
 		if ( depFieldArgsCopy.inputType == 'data' ) {
-			updateDynamicListData( depFieldArgsCopy );
+			updateDynamicListData( depFieldArgsCopy, onCurrentPage );
 		} else {
-			updateDynamicFieldOptions( depFieldArgsCopy );
+			// Only update the options if field is on the current page
+			if ( onCurrentPage ) {
+				updateDynamicFieldOptions( depFieldArgsCopy );
+			}
 		}
 	}
 
-	// Clone the depFieldArgs object for use in ajax requests
+	/**
+	 * Clone the depFieldArgs object for use in ajax requests
+	 *
+	 * @since 2.01.0
+	 * @param {Object} depFieldArgs
+	 * @param {string|Array} depFieldArgs.dataLogic.actualValue
+	 * @param {string} depFieldArgs.fieldId
+	 * @param {string} depFieldArgs.fieldKey
+	 * @param {string} depFieldArgs.formId
+	 * @param {string} depFieldArgs.containerId
+	 * @param {string} depFieldArgs.repeatRow
+	 * @param {string} depFieldArgs.inputType
+	 * @return {Object} dynamicFieldArgs
+	 */
 	function cloneObjectForDynamicFields( depFieldArgs ){
 		var dataLogic = {
 			actualValue:depFieldArgs.dataLogic.actualValue,
@@ -1765,8 +1776,10 @@ function frmFrontFormJS(){
 
 		var dynamicFieldArgs = {
 			fieldId:depFieldArgs.fieldId,
+			fieldKey:depFieldArgs.fieldKey,
 			formId:depFieldArgs.formId,
 			containerId:depFieldArgs.containerId,
+			repeatRow:depFieldArgs.repeatRow,
 			dataLogic:dataLogic,
 			children:'',
 			inputType:depFieldArgs.inputType
@@ -1775,12 +1788,21 @@ function frmFrontFormJS(){
 		return dynamicFieldArgs;
 	}
 
-	// Update a Dynamic List field
-	function updateDynamicListData( depFieldArgs ){
-		var $fieldDiv = jQuery( '#' + depFieldArgs.containerId);
-		var $optContainer = $fieldDiv.find('.frm_opt_container');
-
-		addLoadingIcon( $optContainer );
+	/**
+	 * Update a Dynamic List field
+	 *
+	 * @since 2.01
+	 * @param {Object} depFieldArgs
+	 * @param {string} depFieldArgs.containerId
+	 * @param {string|Array} depFieldArgs.dataLogic.actualValue
+	 * @param {string} depFieldArgs.fieldId
+ 	 */
+	function updateDynamicListData( depFieldArgs, onCurrentPage ){
+		if ( onCurrentPage ) {
+			var $fieldDiv = jQuery( '#' + depFieldArgs.containerId);
+			var $optContainer = $fieldDiv.find('.frm_opt_container');
+			addLoadingIcon($optContainer);
+		}
 
 		jQuery.ajax({
 			type:'POST',url:frm_js.ajax_url,
@@ -1792,20 +1814,33 @@ function frmFrontFormJS(){
 				nonce:frm_js.nonce
 			},
 			success:function(html){
-				$optContainer.html(html);
+				if ( onCurrentPage ) {
 
-				var $listInputs = $optContainer.children( 'input' );
-				var listVal = $listInputs.val();
-				if ( html === '' || listVal === '' ) {
-					hideDynamicField( depFieldArgs );
+					$optContainer.html(html);
+					var $listInputs = $optContainer.children('input');
+					var listVal = $listInputs.val();
+					if (html === '' || listVal === '') {
+						hideDynamicField(depFieldArgs);
+					} else {
+						showDynamicField(depFieldArgs, $fieldDiv, $listInputs);
+					}
 				} else {
-					showDynamicField( depFieldArgs, $fieldDiv, $listInputs );
+					updateHiddenDynamicListField( depFieldArgs, html );
 				}
 			}
 		});
 	}
 
-	// Update a Dynamic dropdown, radio, or checkbox
+	/**
+	 * Update a Dynamic dropdown, radio, or checkbox options
+	 *
+	 * @since 2.01
+	 * @param {Object} depFieldArgs
+	 * @param {string} depFieldArgs.containerId
+	 * @param {string} depFieldArgs.dataLogic.fieldId
+	 * @param {string|Array} depFieldArgs.dataLogic.actualValue
+	 * @param {string} depFieldArgs.fieldId
+	 */
 	function updateDynamicFieldOptions( depFieldArgs, fieldElement ){
 		var $fieldDiv = jQuery( '#' + depFieldArgs.containerId );
 		var $optContainer = $fieldDiv.find('.frm_opt_container');
@@ -1841,6 +1876,35 @@ function frmFrontFormJS(){
 			}
 		});
 
+	}
+
+	/**
+	 * Update the value in a hidden Dynamic List field
+	 *
+	 * @since 2.01.01
+	 * @param {Object} depFieldArgs
+	 * @param {string} depFieldArgs.fieldKey
+	 * @param {string} depFieldArgs.repeatRow
+	 * @param {string} depFieldArgs.containerId
+	 * @param {string} depFieldArgs.formId
+     */
+	function updateHiddenDynamicListField( depFieldArgs, newValue ) {
+		// Get the Dynamic List input
+		var inputId = 'field_' + depFieldArgs.fieldKey;
+		if ( depFieldArgs.repeatRow !== '' ) {
+			inputId += '-' + depFieldArgs.repeatRow;
+		}
+		var listInput = document.getElementById(inputId);
+
+		// Set the new value
+		listInput.value = newValue;
+
+		// Remove field from hidden field list
+		if ( isFieldConditionallyHidden( depFieldArgs.containerId, depFieldArgs.formId ) ) {
+			removeFromHideFields( depFieldArgs.containerId, depFieldArgs.formId );
+		}
+
+		triggerChange( jQuery( listInput ) );
 	}
 
 	// Insert the loading icon
