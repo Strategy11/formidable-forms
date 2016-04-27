@@ -340,10 +340,11 @@ class FrmEntriesHelper {
 		$field_id = is_object( $field ) ? $field->id : $field;
 
         if ( empty($args['parent_field_id']) ) {
-            $value = isset( $_POST['item_meta'][ $field_id ] ) ? wp_kses_post( $_POST['item_meta'][ $field_id ] ) : '';
+            $value = isset( $_POST['item_meta'][ $field_id ] ) ? $_POST['item_meta'][ $field_id ] : '';
         } else {
-            $value = isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field_id ] ) ? wp_kses_post( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field_id ] ) : '';
+            $value = isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field_id ] ) ? $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field_id ] : '';
         }
+		FrmAppHelper::sanitize_value( 'wp_kses_post', $value );
 		$value = stripslashes_deep( $value );
     }
 
