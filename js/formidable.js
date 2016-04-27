@@ -3522,8 +3522,8 @@ function frmFrontFormJS(){
 				}
 			});
 
-			checkFieldsOnPage();
 			checkConditionalLogic( 'pageLoad' );
+			checkFieldsOnPage();
 
 			// Add fallbacks for the beloved IE8
 			addIndexOfFallbackForIE8();
