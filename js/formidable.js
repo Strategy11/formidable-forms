@@ -188,7 +188,7 @@ function frmFrontFormJS(){
 
 	function getOriginalEvent( e ) {
 		var originalEvent;
-		if ( typeof e.originalEvent !== 'undefined' ) {
+		if ( typeof e.originalEvent !== 'undefined' || e.currentTarget.className.indexOf( 'frm_chzn') > -1 ) {
 			originalEvent = 'value changed';
 		} else {
 			originalEvent = 'other';
