@@ -2740,6 +2740,11 @@ function frmFrontFormJS(){
 						jQuery(document.getElementById('frm_edit_'+ entryIdField.val())).find('a').addClass('frm_ajax_edited').click();
 					}
 
+					var formCompleted = jQuery(errObj).find('.frm_message');
+					if ( formCompleted.length ) {
+						// if the success message is showing, run the logic
+						checkConditionalLogic( 'pageLoad' );
+					}
 					checkFieldsOnPage();
 				}else{
 					jQuery(object).find('input[type="submit"], input[type="button"]').removeAttr('disabled');
