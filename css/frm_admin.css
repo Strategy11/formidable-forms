@@ -698,6 +698,11 @@ label input[type="checkbox"], label input[type="radio"]{vertical-align:baseline;
 .frmbutton.ui-sortable-helper .frm-dropdown-menu{
 	display:none;
 }
+
+.frmbutton.frm_tgateway{
+	display:none !important;
+}
+
 .frm_col_one, #postbox-container-1 .frm_field_list .button.frm_col_one{margin-right:10px;clear:both;}
 .frm_html_legend pre{display:inline;}
 .frm_code_list .frmkeys{display:none;}
