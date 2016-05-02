@@ -930,7 +930,7 @@ function frmFrontFormJS(){
 			for ( var i = 0; i < inputs.length; i++ ) {
 				// Don't loop through every input in a radio/checkbox field
 				// TODO: Improve this for checkboxes and address fields
-				if ( i > 0 && prevInput.name == inputs[i].name && typeArray.indexOf( prevInput.type ) > -1 ) {
+				if ( i > 0 && typeof prevInput !== 'undefined' && prevInput.name == inputs[i].name && typeArray.indexOf( prevInput.type ) > -1 ) {
 					continue;
 				}
 
