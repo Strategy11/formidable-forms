@@ -196,6 +196,7 @@ class FrmSettings{
         $this->pubkey = trim($params['frm_pubkey']);
         $this->privkey = $params['frm_privkey'];
         $this->re_lang = $params['frm_re_lang'];
+		$this->re_multi = isset( $params['frm_re_multi'] ) ? $params['frm_re_multi'] : 0;
 
         $this->load_style = $params['frm_load_style'];
         $this->preview_page_id = (int) $params['frm-preview-page-id'];
