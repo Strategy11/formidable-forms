@@ -3221,11 +3221,7 @@ function frmFrontFormJS(){
 					}
                 });
 
-                var star = jQuery(html).find('.star');
-                if ( star.length > 0 ) {
-                    // trigger star fields
-                    jQuery('.star').rating();
-                }
+				loadStars();
 
 				// trigger autocomplete
 				loadChosen();
@@ -3332,6 +3328,7 @@ function frmFrontFormJS(){
 		checkPreviouslyHiddenFields();
 		loadDateFields();
 		loadCustomInputMasks();
+		loadStars();
 		loadChosen();
 		checkDynamicFields();
 		checkLookupFields();
@@ -3351,6 +3348,16 @@ function frmFrontFormJS(){
 				opts = '{' + __frmChosen + '}';
 			}
 			jQuery('.frm_chzn').chosen(opts);
+		}
+	}
+
+	function loadStars() {
+		if ( jQuery().rating ) {
+			var star = jQuery('.star');
+			if ( star.length ) {
+				// trigger star fields
+				star.rating();
+			}
 		}
 	}
 
