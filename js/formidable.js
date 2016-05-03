@@ -2783,10 +2783,12 @@ function frmFrontFormJS(){
 								if ( $recaptcha.length ) {
 									show_captcha = true;
 									var recaptchaID = $recaptcha.data('rid');
-									if ( recaptchaID ) {
-										grecaptcha.reset( recaptchaID );
-									} else {
-										grecaptcha.reset();
+									if ( jQuery().grecaptcha ) {
+										if ( recaptchaID ) {
+											grecaptcha.reset( recaptchaID );
+										} else {
+											grecaptcha.reset();
+										}
 									}
 								}
 							}
