@@ -1133,11 +1133,12 @@ html[xmlns] .frm_clearfix{
 
 /* Start Chosen */
 .with_frm_style .chosen-container{
-    font-size:<?php echo $defaults['field_font_size'] ?>;
+    font-size:<?php echo esc_html( $defaults['field_font_size'] ) ?>;
     position:relative;
     display:inline-block;
     zoom:1;
     vertical-align:middle;
+	width:100% !important;
     -webkit-user-select:none;
     -moz-user-select:none;
     user-select:none;
