@@ -539,7 +539,7 @@ BEFORE_HTML;
 	}
 
 	public static function get_scroll_js( $form_id ) {
-        ?><script type="text/javascript">jQuery(document).ready(function(){frmFrontForm.scrollMsg(<?php echo (int) $form_id ?>);})</script><?php
+        ?><script type="text/javascript">document.addEventListener('DOMContentLoaded',function(){frmFrontForm.scrollMsg(<?php echo (int) $form_id ?>);})</script><?php
     }
 
 	public static function edit_form_link( $form_id ) {
