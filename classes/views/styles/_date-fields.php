@@ -18,6 +18,7 @@ foreach ( $theme_names as $k => $v ) {
 }
 
 $alt_img_name = array_merge($theme_names, $alt_img_name);
+$alt_img_name['-1'] = '';
 unset($theme_names);
 
 ?>
@@ -26,9 +27,13 @@ unset($theme_names);
 	<label><?php _e( 'Theme', 'formidable' ) ?></label>
 	<select name="<?php echo esc_attr( $frm_style->get_field_name('theme_selector') ) ?>">
 	    <?php foreach ( $jquery_themes as $theme_name => $theme_title ) { ?>
-        <option value="<?php echo esc_attr( $theme_name ) ?>" id="90_<?php echo esc_attr( $alt_img_name[ $theme_name ] ); ?>" <?php selected($theme_title, $style->post_content['theme_name']) ?>><?php echo esc_html( $theme_title ) ?></option>
+		<option value="<?php echo esc_attr( $theme_name ) ?>" id="90_<?php echo esc_attr( $alt_img_name[ $theme_name ] ); ?>" <?php selected( $theme_title, $style->post_content['theme_name'] ) ?>>
+			<?php echo esc_html( $theme_title ) ?>
+		</option>
         <?php } ?>
-        <option value="-1" <?php selected('-1', $style->post_content['theme_name']) ?>>&mdash; <?php _e( 'None', 'formidable' ) ?> &mdash;</option>
+		<option value="-1" <?php selected( '-1', $style->post_content['theme_css'] ) ?>>
+			&mdash; <?php _e( 'None', 'formidable' ) ?> &mdash;
+		</option>
 	</select>
 </div>
 
