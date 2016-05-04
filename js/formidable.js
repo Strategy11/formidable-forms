@@ -1843,13 +1843,12 @@ function frmFrontFormJS(){
 	 */
 	function updateDynamicFieldOptions( depFieldArgs, fieldElement ){
 		var $fieldDiv = jQuery( '#' + depFieldArgs.containerId );
-		var $optContainer = $fieldDiv.find('.frm_opt_container');
 
 		var hiddenInput = $fieldDiv.find('select[name^="item_meta"], textarea[name^="item_meta"], input[name^="item_meta"]');
 		var prevVal = getPrevFieldValue( hiddenInput );
 		var defaultVal = hiddenInput.data('frmval');
 
-		addLoadingIcon( $optContainer );
+		addLoadingIconTemp( $fieldDiv );
 
 		jQuery.ajax({
 			type:'POST',
@@ -1865,8 +1864,11 @@ function frmFrontFormJS(){
 				nonce:frm_js.nonce
 			},
 			success:function(html){
+				var $optContainer = $fieldDiv.find('.frm_opt_container');
 				$optContainer.html(html);
 				var $dynamicFieldInputs = $optContainer.find('select, input, textarea');
+
+				removeLoadingIconTemp( $fieldDiv );
 
 				if ( html === '' || ( $dynamicFieldInputs.length == 1 && $dynamicFieldInputs.attr('type') == 'hidden' ) ) {
 					hideDynamicField( depFieldArgs );
@@ -1911,6 +1913,32 @@ function frmFrontFormJS(){
 	function addLoadingIcon( $optContainer ) {
 		$optContainer.html( '<span class="frm-loading-img"></span>' );
 	}
+
+	// Insert the loading icon
+	function addLoadingIconTemp( $fieldDiv ) {
+		var currentHTML = $fieldDiv.html();
+
+		if ( currentHTML.indexOf( 'frm-loading-img' ) > -1 ) {
+			// Loading image already present
+		} else {
+			var loadingIcon = '<span class="frm-loading-img"></span>';
+			$fieldDiv.html( currentHTML + loadingIcon );
+
+			var $optContainer = $fieldDiv.find('.frm_opt_container');
+			$optContainer.hide();
+		}
+	}
+
+	function removeLoadingIconTemp( $fieldDiv ) {
+		var currentHTML = $fieldDiv.html();
+		currentHTML = currentHTML.replace( '<span class="frm-loading-img"></span>', '' );
+		$fieldDiv.html( currentHTML );
+
+		var $optContainer = $fieldDiv.find('.frm_opt_container');
+
+		$optContainer.show();
+	}
+
 
 	// Get the previous field value in a Dynamic field
 	function getPrevFieldValue( inputs ) {
