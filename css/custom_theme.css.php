@@ -646,10 +646,13 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
 
 .frm_form_field.frm_left_container .frm_opt_container,
 .frm_form_field.frm_right_container .frm_opt_container,
+.frm_form_field.frm_inline_container .frm_opt_container,
 .frm_form_field.frm_left_container .frm-g-recaptcha,
 .frm_form_field.frm_right_container .frm-g-recaptcha,
+.frm_form_field.frm_inline_container .frm-g-recaptcha,
 .frm_form_field.frm_left_container .g-recaptcha,
-.frm_form_field.frm_right_container .g-recaptcha{
+.frm_form_field.frm_right_container .g-recaptcha,
+.frm_form_field.frm_inline_container .g-recaptcha{
 	display:inline-block;
 }
 
