@@ -4,7 +4,7 @@ Donate link: http://formidablepro.com/donate
 Tags: contact form, contact, custom form, database, email, feedback, form, forms, poll, Post, captcha, spam, survey, template, widget, multisite, form builder, form creator, form manager
 Requires at least: 3.7
 Tested up to: 4.5
-Stable tag: 2.01.0
+Stable tag: 2.01.01
 
 Beautiful forms in 60 seconds. The WordPress form builder that enables you to create forms with a simple drag-and-drop interface and in-place editing.
 
@@ -89,6 +89,35 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 [See more FAQs](http://formidablepro.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 2.01.01 =
+* Use a different email regex to allow more characters, and longer TLDs
+* Only load custom styles on the styler. Don't include it on the manage styles, or custom css tabs. Bad custom css can make the page uneditable.
+* Fix issue preventing the option to Allow the multiple recaptchas to be turned off
+* Fixed issue with white space allowed in field options when bulk editing
+* Use javascript instead of jQuery to scroll after submit
+* Add missing styling to make inline labels work with checkbox/radio fields
+* **Pro Features:** *
+* Add checkbox option to Lookup fields
+* Hide empty radio/checkbox Lookup fields
+* Allow autocomplete Lookup fields to populate text fields
+* Add filter for setting field type used for logic 'frm_logic_FIELDTYPE_input_type'
+* Prevent duplicate submissions during in-place-edit or ajax-loaded forms
+* Make sure post fields show up correctly on edit
+* Always show the number range options in a number field
+* Fixed issue with dynamic list fields not saving a value when the visibility is set to administrator
+* check for __frmDatepicker before using it. This resolves issues when using a date field with custom code.
+* Strip slashes shown in an entry right after POSTing
+* If a field in calculation is missing, don't break the js
+* Prevent conditional loops with dropdown fields
+* Fixed issue with Dynamic fields not showing up when expected, and when editing 3+ level Dynamic fields
+* Remove the country field when the "other" address option is selected
+* Fixed issue with required Address field on conditionally hidden page. They were still required, even when skipped.
+* Fixed star fields on multi-paged ajax forms. Going back a page was showing radio buttons.
+* Fixed issue with small autocomplete field, when it is hidden on page load.
+* Fixed issue that allowed conditional fields to show right after hitting "save draft"
+* Fixed default values inside of conditional logic
+* Fixed issue preventing "none" from being selected for the date styling in the styles
+
 = 2.01.0 =
 * Allow shortcodes for the submit button label
 * Increase the timeout for activating a license
