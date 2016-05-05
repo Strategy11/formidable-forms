@@ -1012,6 +1012,12 @@ li.ui-state-default.selected .frm-show-click.frm_import_options select {
 }
 
 .frm_sorting span.ui-icon{width:16px;}
+
+#form_settings_page label,
+.frm_form_builder label{
+	font-weight:normal;
+}
+
 #form_settings_page .tabs-panel, .frm_settings_form .tabs-panel{max-height:none !important; min-height:260px !important;}
 #form_settings_page #post-body-content{min-width:650px;}
 #form_settings_page .frm_posttax_row select{max-width:35%;}
