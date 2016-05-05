@@ -4,13 +4,13 @@ if ( ! defined('ABSPATH') ) {
 }
 
 class FrmAppHelper {
-	public static $db_version = 29; //version of the database we are moving to
+	public static $db_version = 30; //version of the database we are moving to
 	public static $pro_db_version = 34;
 
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '2.01.01b2';
+	public static $plug_version = '2.01.01';
 
     /**
      * @since 1.07.02
