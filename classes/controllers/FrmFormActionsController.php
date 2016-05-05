@@ -265,7 +265,9 @@ class FrmFormActionsController {
 
         foreach ( $form_actions as $action ) {
 			$trigger_on_import = $importing && in_array( 'import', $action->post_content['event'] );
-			if ( ! in_array( $event, $action->post_content['event'] ) && ! $trigger_on_import ) {
+			$skip_this_action = ( ! in_array( $event, $action->post_content['event'] ) && ! $trigger_on_import );
+			$skip_this_action = apply_filters( 'frm_skip_form_action', $skip_this_action, compact( 'action', 'entry', 'form', 'event' ) );
+			if ( $skip_this_action ) {
                 continue;
             }
 
