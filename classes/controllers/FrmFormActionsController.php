@@ -283,7 +283,7 @@ class FrmFormActionsController {
 
 			if ( $child_entry ) {
 				// maybe trigger actions for sub forms
-				$trigger_children = apply_fiters( 'frm_use_embedded_form_actions', false, compact( 'form', 'entry' ) );
+				$trigger_children = apply_filters( 'frm_use_embedded_form_actions', false, compact( 'form', 'entry' ) );
 				if ( ! $trigger_children ) {
 					continue;
 				}
