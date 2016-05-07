@@ -650,13 +650,6 @@ label input[type="checkbox"], label input[type="radio"] {vertical-align:inherit;
 .frmcenter{text-align:center;}
 
 /*ICONS*/
-#wpbody-content .frmicon.icon32, .icon32-posts-frm_display{background: url(../images/form_32_sprite.png) no-repeat top left !important;}
-#wpbody-content #form_settings_page .icon32 {background-position: -56px 0 !important;}
-#wpbody-content #form_entries_page .icon32 {background-position:-114px 0 !important;}
-#wpbody-content #form_views_page .icon32, #wpbody-content .icon32-posts-frm_display {background-position: -173px 0 !important;}
-#wpbody-content #form_reports_page .icon32 {background-position: -230px 0 !important;}
-#wpbody-content #form_global_settings .frmicon.icon32 {background-position: -290px 0 !important;}
-
 .frm_postbox_icon {
 	margin: -6px 0 0 -10px;
 
@@ -2290,15 +2283,7 @@ Responsive Design
 	.field_type_list li{margin-right:4px;}
 	.frm_drag_inst{font-size: 40px;text-align:center;}
 }
-@media print,
-  (-o-min-device-pixel-ratio: 5/4),
-  (-webkit-min-device-pixel-ratio: 1.25),
-  (min-resolution: 120dpi)  {
-		#wpbody-content .frmicon.icon32, .icon32-posts-frm_display {
-			background: url(../images/form_32_sprite-2x.png) no-repeat !important;
-			background-size: 325px 33px !important;
-		}
-}
+
 @media only screen and (max-width: 782px){
     #form_settings_page .advanced_settings .form-table td, .form-table th{
         display:table-cell;
@@ -2359,8 +2344,11 @@ Responsive Design
 /* PRINT */
 @media print {
 #adminmenuwrap, #adminmenuback, #wphead, #button_bar, #submitdiv, .button-secondary,
-#screen-metas, #screen-meta-links, #footer, #wpfooter, .inner-sidebar, .frm_form_nav, .icon32,
-.frm_flash_graph, .frm_no_print, object{visibility:hidden;display:none !important;}
+#screen-metas, #screen-meta-links, #footer, #wpfooter, .inner-sidebar, .frm_form_nav,
+.frm_flash_graph, .frm_no_print, object{
+	visibility:hidden;
+	display:none !important;
+}
 #poststuff #post-body.columns-2{margin-right:0;}
 .widget, .postbox, .stuffbox, .postbox h3{border-width:0 !important;border-color:#fff;}
 .postbox{background:#fff !important;border:none;position:static;}

@@ -1,5 +1,4 @@
 <div id="form_entries_page" class="wrap">
-    <div class="frmicon icon32"><br/></div>
 	<h1><?php _e( 'Entries', 'formidable' ); ?>
         <?php do_action('frm_entry_inside_h2', $form); ?>
 	</h1>
