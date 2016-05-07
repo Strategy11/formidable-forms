@@ -29,7 +29,7 @@ ul.frm_form_nav > li{
 	border-right:0;
 	background-color:#EEE;
 }
-.frm_38_trigger .frm_form_nav a { background-color:#fff; }
+.frm_form_nav a { background-color:#fff; }
 .frm_form_nav a:active, .frm_form_nav a:focus{
 	outline:none;
 	-webkit-box-shadow:none;
@@ -634,8 +634,7 @@ img.frm_help{
 	float:left;
 }
 
-label input[type="checkbox"], label input[type="radio"]{vertical-align:baseline;}
-.frm_38_trigger label input[type="checkbox"], .frm_38_trigger label input[type="radio"] {vertical-align:inherit;}
+label input[type="checkbox"], label input[type="radio"] {vertical-align:inherit;}
 
 #editorcontainer #dyncontent{
 	margin:0; width:100%;
@@ -667,8 +666,8 @@ label input[type="checkbox"], label input[type="radio"]{vertical-align:baseline;
     height:34px;
 }
 .frm_form_builder a:hover{text-decoration:underline;}
-.frm_form_builder .frm_38_trigger .widget-title h4 {padding:10px 15px;}
-.frm_form_builder .frm_38_trigger .widget-top a.widget-action:after {padding: 7px 12px 0;}
+.frm_form_builder .widget-title h4 {padding:10px 15px;}
+.frm_form_builder .widget-top a.widget-action:after {padding: 7px 12px 0;}
 #postbox-container-1{width:270px;}
 #postbox-container-1 .nodrag a{cursor:pointer;}
 #postbox-container-1 .frm_field_list #frm-insert-fields{
@@ -889,8 +888,7 @@ table td, .form-table tr td{vertical-align:top;}
 }
 
 .frm_rte{background:url(../pro/images/rte.png) no-repeat; }
-.frm_rte .howto{margin:10px 0 45px 0;}
-.frm_38_trigger .frm_rte .howto{margin-bottom:39px;}
+.frm_rte .howto{margin:10px 0 39px 0;}
 
 .subform_section{
 	margin:25px;
@@ -937,11 +935,11 @@ table td, .form-table tr td{vertical-align:top;}
 	width:300px;
 }
 .frm_sorting .frm_rte textarea{
-	width:653px;background:#fff; margin:1px 0; border:1px solid #dfdfdf; border-top:none;
+	width:653px;background:#fff; margin:1px 0 0;
+	border:1px solid #dfdfdf; border-top:none;
 	-moz-border-radius:0; -webkit-border-radius:0; border-radius:0;
 	float:none !important;
 }
-.frm_38_trigger .frm_sorting .frm_rte textarea{margin-bottom:0;}
 
 .frm_full_rte textarea{width:98%; padding:0;}
 .frm_field_box{padding:5px;min-height:20px;}
@@ -1031,7 +1029,7 @@ select.frm_cancelnew, input.frm_enternew{width:175px;}
 #contextual-help-columns div.tabs-panel.general_settings.frm_license_box{min-height:0;border-bottom:none;}
 .general_settings #frm_license_top{float:left;width:55%}
 .categorydiv div.tabs-panel.general_settings{max-height:none;}
-.frm_38_trigger .categorydiv div.tabs-panel.general_settings .postbox{margin-bottom:0;}
+.categorydiv div.tabs-panel.general_settings .postbox{margin-bottom:0;}
 .tabs-panel{height:auto !important; min-height:260px;}
 .tabs-panel.panel_secondary{min-height:20px;margin-top:10px;margin-left:150px;}
 .edd_frm_license_row{
@@ -1395,8 +1393,13 @@ a.frm_action_icon:hover {text-decoration:none;}
 	content: '\e60b';
 }
 
-.frm_action_icon.frm_required_icon:before{content: '\e612'; font-size:7px; vertical-align:top; line-height: 2.1em; margin-right:3px;}
-.frm_38_trigger .frm_action_icon.frm_required_icon:before{font-size:8px;}
+.frm_action_icon.frm_required_icon:before{
+	content: '\e612';
+	font-size:8px;
+	vertical-align:top;
+	line-height: 2.1em;
+	margin-right:3px;
+}
 .frm_action_icon.frm_required_icon,
 .ui-state-default .frm_action_icon.frm_required_icon{
 	color:#000;
@@ -1442,7 +1445,7 @@ span.howto{display:inline;}
 }
 
 .tagchecklist .frm_exclude_cat_list span{display:inline;}
-.frm_38_trigger .tagchecklist span a:before{line-height:23px;text-align:start;}
+.tagchecklist span a:before{line-height:23px;text-align:start;}
 
 /* Entries Page */
 .frm_no_entries_form{
@@ -1669,8 +1672,8 @@ tr.frm_options_heading td{
 .frm_validation_msg p label{float:left;width:25%;max-width:100px;}
 .frm_sorting .form-field .widget .frm_validation_msg input{width:71%;}
 
-.frm_38_trigger .frm_sorting .widget-inside .form-table td p,
-.frm_38_trigger .frm_sorting .widget-inside .form-wrap label{
+.frm_sorting .widget-inside .form-table td p,
+.frm_sorting .widget-inside .form-wrap label{
 	padding:10px 0;
 }
 
@@ -1788,17 +1791,36 @@ table td.frm_left_label{
 #menu-management.frm-menu-boxes .menu-edit{margin-bottom:0;}
 #menu-management select{max-width:100%;}
 .general_settings .postbox .manage-menus{border-top:none;border-left:none;border-right:none;}
-.postbox .frm-help-tabs.inside, #poststuff .frm-help-tabs.inside{padding-left:0;padding-right:0;margin-top:0;margin-bottom:0;padding-bottom:12px;}
-.frm_38_trigger .postbox .frm-help-tabs.inside{padding-bottom:inherit;}
-.frm-help-tabs form > .submit, #contextual-help-columns > .submit{margin-left:154px;padding-left:5px;}
-.frm_38_trigger .frm-help-tabs form > .submit, .frm_38_trigger #contextual-help-columns > .submit{padding-left:0.9em;}
-.frm_38_trigger #poststuff .contextual-help-tabs .active, .frm_38_trigger #poststuff .contextual-help-tabs .active a, .frm_38_trigger #poststuff .contextual-help-tabs .active a:hover{background:#fafafa;}
+.postbox .frm-help-tabs.inside,
+#poststuff .frm-help-tabs.inside{
+	padding-left:0;padding-right:0;padding-bottom:12px;
+	margin-top:0;
+	margin-bottom:0;
+}
+.postbox .frm-help-tabs.inside{
+	padding-bottom:inherit;
+}
+.frm-help-tabs form > .submit,
+#contextual-help-columns > .submit{
+	margin-left:154px;
+	padding-left:0.9em;
+}
+#poststuff .contextual-help-tabs .active,
+#poststuff .contextual-help-tabs .active a,
+#poststuff .contextual-help-tabs .active a:hover{
+	background:#fafafa;
+}
 .wrap .contextual-help-tabs ul{min-height:260px;}
-.frm_38_trigger .postbox .menu-settings h3{border-bottom:none;}
+.postbox .menu-settings h3{
+	border-bottom:none;
+}
 #poststuff h3.frm_no_bg{background:none;cursor:default;}
 .frm-postbox-no-h3{padding-top:10px;}
-.postbox #contextual-help-back{border-right:none;right:0;}
-.frm_38_trigger .postbox #contextual-help-back{background:#fafafa;}
+.postbox #contextual-help-back{
+	border-right:none;
+	right:0;
+	background:#fafafa;
+}
 #contextual-help-columns div.tabs-panel{
 	background:transparent;
 	border-width:0;
@@ -1826,21 +1848,19 @@ table td.frm_left_label{
 	background:#FDFDFD;
 }
 
-.frm_38_trigger .frm_sorting > li.ui-state-default.frm_not_divider:hover,
-.frm_38_trigger .frm_sorting > li.ui-state-default.frm_not_divider.selected,
-.frm_38_trigger .frm_sorting > li.ui-state-default.edit_field_type_divider.selected .divider_section_only,
-.frm_38_trigger .frm_sorting > li.ui-state-default.edit_field_type_divider .divider_section_only:hover,
-.frm_38_trigger .frm_update_msg{
+.frm_sorting > li.ui-state-default.frm_not_divider:hover,
+.frm_sorting > li.ui-state-default.frm_not_divider.selected,
+.frm_sorting > li.ui-state-default.edit_field_type_divider.selected .divider_section_only,
+.frm_sorting > li.ui-state-default.edit_field_type_divider .divider_section_only:hover,
+.frm_update_msg{
 	box-shadow:0 1px 1px rgba(0, 0, 0, 0.04);
 }
 
-.no_repeat_section .frm_sorting > li.ui-state-default.edit_field_type_end_divider:hover,
-.frm_38_trigger .no_repeat_section .frm_sorting > li.ui-state-default.edit_field_type_end_divider:hover{
+.no_repeat_section .frm_sorting > li.ui-state-default.edit_field_type_end_divider:hover{
 	box-shadow:none;
 }
 
 .frm_sorting li.ui-state-default.frm_not_divider.selected,
-.frm_38_trigger .frm_sorting li.ui-state-default.frm_not_divider.selected,
 .frm_sorting li.ui-state-default.selected.edit_field_type_divider .divider_section_only{
 	background-color: #fbfdff;
 	border: 1px solid #5b9dd9;
