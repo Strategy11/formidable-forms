@@ -1050,7 +1050,7 @@ class FrmFormsController {
         }
 
         $form = FrmForm::getOne( $id );
-        if ( ! $form || $form->parent_form_id ) {
+        if ( ! $form || $form->parent_form_id || $form->status == 'trash' ) {
             return __( 'Please select a valid form', 'formidable' );
         }
 
