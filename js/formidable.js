@@ -1095,7 +1095,9 @@ function frmFrontFormJS(){
 			// Set the hiddenFields value in the frm_hide_field_formID input
 			hiddenFields = JSON.stringify( hiddenFields );
 			var frmHideFieldsInput = document.getElementById('frm_hide_fields_' + formId);
-			frmHideFieldsInput.value = hiddenFields;
+			if ( frmHideFieldsInput !== null ) {
+				frmHideFieldsInput.value = hiddenFields;
+			}
 		}
 	}
 
@@ -1194,8 +1196,7 @@ function frmFrontFormJS(){
 					// TODO: accommodate for when there are multiple default values but the user has removed some
 				}
 			}
-
-		} else {
+		} else if ( hiddenInputs[0] !== null ) {
 			hiddenInputs[0].value = defaultValue;
 		}
 	}
@@ -1868,7 +1869,7 @@ function frmFrontFormJS(){
 				$optContainer.html(html);
 				var $dynamicFieldInputs = $optContainer.find('select, input, textarea');
 
-				removeLoadingIconTemp( $fieldDiv );
+				removeLoadingIconTemp( $optContainer );
 
 				if ( html === '' || ( $dynamicFieldInputs.length == 1 && $dynamicFieldInputs.attr('type') == 'hidden' ) ) {
 					hideDynamicField( depFieldArgs );
@@ -1929,13 +1930,8 @@ function frmFrontFormJS(){
 		}
 	}
 
-	function removeLoadingIconTemp( $fieldDiv ) {
-		var currentHTML = $fieldDiv.html();
-		currentHTML = currentHTML.replace( '<span class="frm-loading-img"></span>', '' );
-		$fieldDiv.html( currentHTML );
-
-		var $optContainer = $fieldDiv.find('.frm_opt_container');
-
+	function removeLoadingIconTemp( $optContainer ) {
+		$optContainer.next( '.frm-loading-img' ).remove();
 		$optContainer.show();
 	}
 
