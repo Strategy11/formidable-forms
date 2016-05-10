@@ -1,5 +1,4 @@
 <div class="wrap">
-    <div class="frmicon icon32"><br/></div>
 	<h2 id="frm_form_page_header">
 <?php
 echo $params['template'] ? __( 'Templates', 'formidable' ) : __( 'Forms', 'formidable' );

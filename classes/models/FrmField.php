@@ -599,10 +599,24 @@ class FrmField {
 		}
 
 		if ( is_array( $field ) ) {
-			return $field['type'] == 'checkbox' || ( $field['type'] == 'data' && isset($field['data_type']) && $field['data_type'] == 'checkbox' ) || self::is_multiple_select( $field );
+
+			$is_multi_value_field = (
+				$field['type'] == 'checkbox' ||
+				$field['type'] == 'address' ||
+				( $field['type'] == 'data' && isset($field['data_type']) && $field['data_type'] == 'checkbox' ) ||
+				self::is_multiple_select( $field )
+			);
+
 		} else {
-			return $field->type == 'checkbox' || ( $field->type == 'data' && isset( $field->field_options['data_type'] ) && $field->field_options['data_type'] == 'checkbox' ) || self::is_multiple_select($field);
+			$is_multi_value_field = (
+				$field->type == 'checkbox' ||
+				$field->type == 'address' ||
+				( $field->type == 'data' && isset( $field->field_options['data_type'] ) && $field->field_options['data_type'] == 'checkbox' ) ||
+				self::is_multiple_select( $field )
+			);
 		}
+
+		return $is_multi_value_field;
 	}
 
 	/**

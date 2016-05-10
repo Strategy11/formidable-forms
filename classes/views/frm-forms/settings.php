@@ -1,5 +1,4 @@
 <div id="form_settings_page" class="wrap">
-    <div class="frmicon icon32"><br/></div>
     <h2><?php _e( 'Settings', 'formidable' ) ?>
         <a href="#" class="add-new-h2 frm_invisible"></a>
     </h2>

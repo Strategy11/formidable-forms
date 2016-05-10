@@ -65,7 +65,7 @@ function frmFrontFormJS(){
 
 	function triggerDateField() {
 		/*jshint validthis:true */
-		if ( this.className.indexOf('frm_custom_date') !== -1 ) {
+		if ( this.className.indexOf('frm_custom_date') !== -1 || typeof __frmDatepicker === 'undefined' ) {
 			return;
 		}
 
@@ -188,7 +188,7 @@ function frmFrontFormJS(){
 
 	function getOriginalEvent( e ) {
 		var originalEvent;
-		if ( typeof e.originalEvent !== 'undefined' ) {
+		if ( typeof e.originalEvent !== 'undefined' || e.currentTarget.className.indexOf( 'frm_chzn') > -1 ) {
 			originalEvent = 'value changed';
 		} else {
 			originalEvent = 'other';
@@ -361,7 +361,7 @@ function frmFrontFormJS(){
 		var containerFieldId = getContainerFieldId( depFieldArgs );
 		var fieldDiv = 'frm_field_' + depFieldArgs.fieldId + '-' + containerFieldId + '-';
 
-		var childFieldDivs = [ fieldDiv + '0_container' ]
+		var childFieldDivs = [ fieldDiv + '0_container' ];
 
 		return childFieldDivs;
 
@@ -930,7 +930,7 @@ function frmFrontFormJS(){
 			for ( var i = 0; i < inputs.length; i++ ) {
 				// Don't loop through every input in a radio/checkbox field
 				// TODO: Improve this for checkboxes and address fields
-				if ( i > 0 && prevInput.name == inputs[i].name && typeArray.indexOf( prevInput.type ) > -1 ) {
+				if ( i > 0 && typeof prevInput !== 'undefined' && prevInput.name == inputs[i].name && typeArray.indexOf( prevInput.type ) > -1 ) {
 					continue;
 				}
 
@@ -1025,16 +1025,23 @@ function frmFrontFormJS(){
 		}
 
 		var prevInput;
+		var valueChanged = true;
 		for ( var i= 0, l=inputs.length; i<l; i++ ){
-			if ( i>0 && prevInput.name != inputs[i].name ) {
+			if ( i>0 && prevInput.name != inputs[i].name && valueChanged === true ) {
 				// Only trigger a change after all inputs in a field are cleared
 				triggerChange( jQuery(prevInput) );
 			}
 
+			valueChanged = true;
+
 			if ( inputs[i].type == 'radio' || inputs[i].type == 'checkbox' ) {
 				inputs[i].checked = false;
 			} else if ( inputs[i].tagName == 'SELECT' ) {
-				inputs[i].selectedIndex = '0';
+				if ( inputs[i].selectedIndex === 0 ) {
+					valueChanged = false;
+				} else {
+					inputs[i].selectedIndex = 0;
+				}
 
 				var autocomplete = document.getElementById( inputs[i].id + '_chosen' );
 				if ( autocomplete !== null ) {
@@ -1048,7 +1055,9 @@ function frmFrontFormJS(){
 		}
 
 		// trigger a change for the final input in the loop
-		triggerChange(jQuery(prevInput));
+		if ( valueChanged === true ) {
+			triggerChange(jQuery(prevInput));
+		}
 	}
 
 	function isFieldCurrentlyShown( containerId, formId ){
@@ -1086,7 +1095,9 @@ function frmFrontFormJS(){
 			// Set the hiddenFields value in the frm_hide_field_formID input
 			hiddenFields = JSON.stringify( hiddenFields );
 			var frmHideFieldsInput = document.getElementById('frm_hide_fields_' + formId);
-			frmHideFieldsInput.value = hiddenFields;
+			if ( frmHideFieldsInput !== null ) {
+				frmHideFieldsInput.value = hiddenFields;
+			}
 		}
 	}
 
@@ -1140,7 +1151,7 @@ function frmFrontFormJS(){
 			}
 
 			if ( input.tagName == 'SELECT' ) {
-				maybeUpdateChosenOptions( input )
+				maybeUpdateChosenOptions( input );
 			}
 
 			triggerChange( $input );
@@ -1185,8 +1196,7 @@ function frmFrontFormJS(){
 					// TODO: accommodate for when there are multiple default values but the user has removed some
 				}
 			}
-
-		} else {
+		} else if ( hiddenInputs[0] !== null ) {
 			hiddenInputs[0].value = defaultValue;
 		}
 	}
@@ -1306,8 +1316,8 @@ function frmFrontFormJS(){
 
 		if ( childFieldArgs.inputType == 'select' ) {
 			maybeReplaceSelectLookupFieldOptions( childFieldArgs, childElement );
-		} else if ( childFieldArgs.inputType == 'radio' ) {
-			replaceRadioLookupFieldOptions( childFieldArgs, childElement );
+		} else if ( childFieldArgs.inputType == 'radio' || childFieldArgs.inputType == 'checkbox' ) {
+			maybeReplaceCbRadioLookupOptions( childFieldArgs, childElement );
 		}
 	}
 
@@ -1532,34 +1542,56 @@ function frmFrontFormJS(){
 	}
 
 	/**
-	 * Replace the options in a Radio Lookup field
+	 * Either hide checkbox/radio Lookup field or update its options
 	 *
-	 * @since 2.01.0
+	 * @since 2.01.01
 	 * @param {Object} childFieldArgs
-	 * @param {boolean} childFieldArgs.isRepeating
-	 * @param {string} childFieldArgs.inSection
+	 * @param {object} childDiv
+     */
+	function maybeReplaceCbRadioLookupOptions( childFieldArgs, childDiv ) {
+		if ( childFieldArgs.parentVals === false  ) {
+			// If any parents have blank values, don't waste time looking for values
+
+			var inputs = childDiv.getElementsByTagName( 'input' );
+			maybeHideRadioLookup( childFieldArgs, childDiv );
+			clearValueForInputs( inputs);
+
+		} else {
+			replaceCbRadioLookupOptions( childFieldArgs, childDiv );
+		}
+	}
+
+	/**
+	 * Update the options in a checkbox/radio lookup field
+	 *
+	 * @since 2.01.01
+	 * @param {Object} childFieldArgs
+	 * @param {string} childFieldArgs.inputType
 	 * @param {Array} childFieldArgs.parents
 	 * @param {Array} childFieldArgs.parentVals
 	 * @param {string} childFieldArgs.fieldId
 	 * @param {string} childFieldArgs.repeatRow
 	 * @param {string} childFieldArgs.fieldKey
-	 * @param
-	 */
-	function replaceRadioLookupFieldOptions( childFieldArgs, childDiv ) {
+	 * @param {object} childDiv
+     */
+	function replaceCbRadioLookupOptions( childFieldArgs, childDiv ) {
 		var optContainer = childDiv.getElementsByClassName( 'frm_opt_container' )[0];
+		var inputs = optContainer.getElementsByTagName( 'input' );
 
-		var repeatingFieldId = 0;
-		if ( childFieldArgs.isRepeating ) {
-			repeatingFieldId = childFieldArgs.inSection;
+		var currentValue = '';
+		if ( childFieldArgs.inputType == 'radio' ) {
+			currentValue = getValueFromRadioInputs( inputs );
+		} else {
+			currentValue = getValuesFromCheckboxInputs(inputs);
 		}
-		var radioInputs = optContainer.getElementsByTagName( 'input' );
-		var currentValue = getValueFromRadioInputs( radioInputs );
+
+		addLoadingIconJS( optContainer );
 
 		jQuery.ajax({
 			type:'POST',
 			url:frm_js.ajax_url,
 			data:{
-				action:'frm_replace_radio_lookup_options',
+				action:'frm_replace_cb_radio_lookup_options',
 				parent_fields:childFieldArgs.parents,
 				parent_vals:childFieldArgs.parentVals,
 				field_id:childFieldArgs.fieldId,
@@ -1569,9 +1601,64 @@ function frmFrontFormJS(){
 			},
 			success:function(newHtml){
 				optContainer.innerHTML = newHtml;
-				triggerChange( jQuery( radioInputs[0] ), childFieldArgs.fieldKey );
+
+				if ( inputs.length == 1 && inputs[0].value === '' ) {
+					maybeHideRadioLookup( childFieldArgs, childDiv );
+				} else {
+					maybeShowRadioLookup( childFieldArgs, childDiv );
+				}
+
+				triggerChange( jQuery( inputs[0] ), childFieldArgs.fieldKey );
 			}
 		});
+	}
+
+	/**
+	 * Hide a Radio Lookup field if it doesn't have any options
+	 *
+	 * @since 2.01.01
+	 * @param {Object} childFieldArgs
+	 * @param {string} childFieldArgs.formId
+	 * @param {object} childDiv
+	 */
+	function maybeHideRadioLookup( childFieldArgs, childDiv ) {
+		if ( isFieldConditionallyHidden( childDiv.id, childFieldArgs.formId ) ) {
+			return;
+		}
+
+		hideFieldContainer( childDiv.id );
+		addToHideFields( childDiv.id, childFieldArgs.formId );
+	}
+
+	/**
+	 * Show a radio Lookup field if it has options and conditional logic says it should be shown
+	 *
+	 * @since 2.01.01
+	 * @param {Object} childFieldArgs
+	 * @param {string} childFieldArgs.formId
+	 * @param {string} childFieldArgs.fieldId
+	 * @param {string} childFieldArgs.repeatRow
+	 * @param {object} childDiv
+	 */
+	function maybeShowRadioLookup( childFieldArgs, childDiv ) {
+		if ( isFieldCurrentlyShown( childDiv.id, childFieldArgs.formId ) ) {
+			return;
+		}
+
+		var logicArgs = getRulesForSingleField( childFieldArgs.fieldId );
+		if ( logicArgs === false || logicArgs.conditions.length < 1 ) {
+			removeFromHideFields( childDiv.id, childFieldArgs.formId);
+			showFieldContainer( childDiv.id );
+		} else {
+			logicArgs.containerId = childDiv.id;
+			logicArgs.repeatRow = childFieldArgs.repeatRow;
+			hideOrShowSingleField( logicArgs );
+		}
+	}
+
+	// Insert the loading icon
+	function addLoadingIconJS( optContainer ) {
+		optContainer.innerHTML = '<span class="frm-loading-img"></span>';
 	}
 
 	/**
@@ -1656,21 +1743,32 @@ function frmFrontFormJS(){
 
 	// Update a Dynamic field's data or options
 	function updateDynamicField( depFieldArgs, onCurrentPage ) {
-		// If field is not on current page, return
-		if ( ! onCurrentPage ) {
-			return;
-		}
-
 		var depFieldArgsCopy = cloneObjectForDynamicFields( depFieldArgs );
 
 		if ( depFieldArgsCopy.inputType == 'data' ) {
-			updateDynamicListData( depFieldArgsCopy );
+			updateDynamicListData( depFieldArgsCopy, onCurrentPage );
 		} else {
-			updateDynamicFieldOptions( depFieldArgsCopy );
+			// Only update the options if field is on the current page
+			if ( onCurrentPage ) {
+				updateDynamicFieldOptions( depFieldArgsCopy );
+			}
 		}
 	}
 
-	// Clone the depFieldArgs object for use in ajax requests
+	/**
+	 * Clone the depFieldArgs object for use in ajax requests
+	 *
+	 * @since 2.01.0
+	 * @param {Object} depFieldArgs
+	 * @param {string|Array} depFieldArgs.dataLogic.actualValue
+	 * @param {string} depFieldArgs.fieldId
+	 * @param {string} depFieldArgs.fieldKey
+	 * @param {string} depFieldArgs.formId
+	 * @param {string} depFieldArgs.containerId
+	 * @param {string} depFieldArgs.repeatRow
+	 * @param {string} depFieldArgs.inputType
+	 * @return {Object} dynamicFieldArgs
+	 */
 	function cloneObjectForDynamicFields( depFieldArgs ){
 		var dataLogic = {
 			actualValue:depFieldArgs.dataLogic.actualValue,
@@ -1679,8 +1777,10 @@ function frmFrontFormJS(){
 
 		var dynamicFieldArgs = {
 			fieldId:depFieldArgs.fieldId,
+			fieldKey:depFieldArgs.fieldKey,
 			formId:depFieldArgs.formId,
 			containerId:depFieldArgs.containerId,
+			repeatRow:depFieldArgs.repeatRow,
 			dataLogic:dataLogic,
 			children:'',
 			inputType:depFieldArgs.inputType
@@ -1689,12 +1789,21 @@ function frmFrontFormJS(){
 		return dynamicFieldArgs;
 	}
 
-	// Update a Dynamic List field
-	function updateDynamicListData( depFieldArgs ){
-		var $fieldDiv = jQuery( '#' + depFieldArgs.containerId);
-		var $optContainer = $fieldDiv.find('.frm_opt_container');
-
-		addLoadingIcon( $optContainer );
+	/**
+	 * Update a Dynamic List field
+	 *
+	 * @since 2.01
+	 * @param {Object} depFieldArgs
+	 * @param {string} depFieldArgs.containerId
+	 * @param {string|Array} depFieldArgs.dataLogic.actualValue
+	 * @param {string} depFieldArgs.fieldId
+ 	 */
+	function updateDynamicListData( depFieldArgs, onCurrentPage ){
+		if ( onCurrentPage ) {
+			var $fieldDiv = jQuery( '#' + depFieldArgs.containerId);
+			var $optContainer = $fieldDiv.find('.frm_opt_container');
+			addLoadingIcon($optContainer);
+		}
 
 		jQuery.ajax({
 			type:'POST',url:frm_js.ajax_url,
@@ -1706,29 +1815,41 @@ function frmFrontFormJS(){
 				nonce:frm_js.nonce
 			},
 			success:function(html){
-				$optContainer.html(html);
+				if ( onCurrentPage ) {
 
-				var $listInputs = $optContainer.children( 'input' );
-				var listVal = $listInputs.val();
-				if ( html === '' || listVal === '' ) {
-					hideDynamicField( depFieldArgs );
+					$optContainer.html(html);
+					var $listInputs = $optContainer.children('input');
+					var listVal = $listInputs.val();
+					if (html === '' || listVal === '') {
+						hideDynamicField(depFieldArgs);
+					} else {
+						showDynamicField(depFieldArgs, $fieldDiv, $listInputs);
+					}
 				} else {
-					showDynamicField( depFieldArgs, $fieldDiv, $listInputs );
+					updateHiddenDynamicListField( depFieldArgs, html );
 				}
 			}
 		});
 	}
 
-	// Update a Dynamic dropdown, radio, or checkbox
+	/**
+	 * Update a Dynamic dropdown, radio, or checkbox options
+	 *
+	 * @since 2.01
+	 * @param {Object} depFieldArgs
+	 * @param {string} depFieldArgs.containerId
+	 * @param {string} depFieldArgs.dataLogic.fieldId
+	 * @param {string|Array} depFieldArgs.dataLogic.actualValue
+	 * @param {string} depFieldArgs.fieldId
+	 */
 	function updateDynamicFieldOptions( depFieldArgs, fieldElement ){
 		var $fieldDiv = jQuery( '#' + depFieldArgs.containerId );
-		var $optContainer = $fieldDiv.find('.frm_opt_container');
 
 		var hiddenInput = $fieldDiv.find('select[name^="item_meta"], textarea[name^="item_meta"], input[name^="item_meta"]');
 		var prevVal = getPrevFieldValue( hiddenInput );
 		var defaultVal = hiddenInput.data('frmval');
 
-		addLoadingIcon( $optContainer );
+		addLoadingIconTemp( $fieldDiv );
 
 		jQuery.ajax({
 			type:'POST',
@@ -1744,8 +1865,11 @@ function frmFrontFormJS(){
 				nonce:frm_js.nonce
 			},
 			success:function(html){
+				var $optContainer = $fieldDiv.find('.frm_opt_container');
 				$optContainer.html(html);
 				var $dynamicFieldInputs = $optContainer.find('select, input, textarea');
+
+				removeLoadingIconTemp( $optContainer );
 
 				if ( html === '' || ( $dynamicFieldInputs.length == 1 && $dynamicFieldInputs.attr('type') == 'hidden' ) ) {
 					hideDynamicField( depFieldArgs );
@@ -1757,10 +1881,60 @@ function frmFrontFormJS(){
 
 	}
 
+	/**
+	 * Update the value in a hidden Dynamic List field
+	 *
+	 * @since 2.01.01
+	 * @param {Object} depFieldArgs
+	 * @param {string} depFieldArgs.fieldKey
+	 * @param {string} depFieldArgs.repeatRow
+	 * @param {string} depFieldArgs.containerId
+	 * @param {string} depFieldArgs.formId
+     */
+	function updateHiddenDynamicListField( depFieldArgs, newValue ) {
+		// Get the Dynamic List input
+		var inputId = 'field_' + depFieldArgs.fieldKey;
+		if ( depFieldArgs.repeatRow !== '' ) {
+			inputId += '-' + depFieldArgs.repeatRow;
+		}
+		var listInput = document.getElementById(inputId);
+
+		// Set the new value
+		listInput.value = newValue;
+
+		// Remove field from hidden field list
+		if ( isFieldConditionallyHidden( depFieldArgs.containerId, depFieldArgs.formId ) ) {
+			removeFromHideFields( depFieldArgs.containerId, depFieldArgs.formId );
+		}
+
+		triggerChange( jQuery( listInput ) );
+	}
+
 	// Insert the loading icon
 	function addLoadingIcon( $optContainer ) {
 		$optContainer.html( '<span class="frm-loading-img"></span>' );
 	}
+
+	// Insert the loading icon
+	function addLoadingIconTemp( $fieldDiv ) {
+		var currentHTML = $fieldDiv.html();
+
+		if ( currentHTML.indexOf( 'frm-loading-img' ) > -1 ) {
+			// Loading image already present
+		} else {
+			var loadingIcon = '<span class="frm-loading-img"></span>';
+			$fieldDiv.html( currentHTML + loadingIcon );
+
+			var $optContainer = $fieldDiv.find('.frm_opt_container');
+			$optContainer.hide();
+		}
+	}
+
+	function removeLoadingIconTemp( $optContainer ) {
+		$optContainer.next( '.frm-loading-img' ).remove();
+		$optContainer.show();
+	}
+
 
 	// Get the previous field value in a Dynamic field
 	function getPrevFieldValue( inputs ) {
@@ -1931,6 +2105,10 @@ function frmFrontFormJS(){
 			totalField = getSiblingField( fieldInfo );
 		}
 
+		if ( totalField.length < 1 ) {
+			return;
+		}
+
 		// loop through the fields in this calculation
 		thisFullCalc = getValsForSingleCalc( thisCalc, thisFullCalc, all_calcs, vals, fieldInfo );
 
@@ -1948,7 +2126,7 @@ function frmFrontFormJS(){
 
 		var total = parseFloat(eval(thisFullCalc));
 
-		if ( typeof total === 'undefined' ) {
+		if ( typeof total === 'undefined' || isNaN(total) ) {
 			total = 0;
 		}
 
@@ -2467,7 +2645,7 @@ function frmFrontFormJS(){
 
 		var isConf = (fieldID.indexOf('conf_') === 0);
 		if ( emailAddress !== '' || isConf ) {
-			var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+			var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i;
 			var invalidMsg = getFieldValidationMessage( field, 'data-invmsg' );
 			if ( emailAddress !== '' && re.test( emailAddress ) === false ) {
 				errors[ fieldID ] = invalidMsg;
@@ -2586,6 +2764,11 @@ function frmFrontFormJS(){
 						jQuery(document.getElementById('frm_edit_'+ entryIdField.val())).find('a').addClass('frm_ajax_edited').click();
 					}
 
+					var formCompleted = jQuery(errObj).find('.frm_message');
+					if ( formCompleted.length ) {
+						// if the success message is showing, run the logic
+						checkConditionalLogic( 'pageLoad' );
+					}
 					checkFieldsOnPage();
 				}else{
 					jQuery(object).find('input[type="submit"], input[type="button"]').removeAttr('disabled');
@@ -2624,10 +2807,12 @@ function frmFrontFormJS(){
 								if ( $recaptcha.length ) {
 									show_captcha = true;
 									var recaptchaID = $recaptcha.data('rid');
-									if ( recaptchaID ) {
-										grecaptcha.reset( recaptchaID );
-									} else {
-										grecaptcha.reset();
+									if ( jQuery().grecaptcha ) {
+										if ( recaptchaID ) {
+											grecaptcha.reset( recaptchaID );
+										} else {
+											grecaptcha.reset();
+										}
 									}
 								}
 							}
@@ -3062,11 +3247,7 @@ function frmFrontFormJS(){
 					}
                 });
 
-                var star = jQuery(html).find('.star');
-                if ( star.length > 0 ) {
-                    // trigger star fields
-                    jQuery('.star').rating();
-                }
+				loadStars();
 
 				// trigger autocomplete
 				loadChosen();
@@ -3115,6 +3296,9 @@ function frmFrontFormJS(){
 				$edit.html(cancel);
 				checkConditionalLogic( 'editInPlace' );
 				checkFieldsOnPage();
+
+				//TODO: Find out why this extra binding is required
+				jQuery('#'+ prefix + entry_id).on('change', 'input[name^="item_meta"], select[name^="item_meta"], textarea[name^="item_meta"]', maybeCheckDependent);
 			}
 		});
 		return false;
@@ -3170,6 +3354,7 @@ function frmFrontFormJS(){
 		checkPreviouslyHiddenFields();
 		loadDateFields();
 		loadCustomInputMasks();
+		loadStars();
 		loadChosen();
 		checkDynamicFields();
 		checkLookupFields();
@@ -3189,6 +3374,16 @@ function frmFrontFormJS(){
 				opts = '{' + __frmChosen + '}';
 			}
 			jQuery('.frm_chzn').chosen(opts);
+		}
+	}
+
+	function loadStars() {
+		if ( jQuery().rating ) {
+			var star = jQuery('.star');
+			if ( star.length ) {
+				// trigger star fields
+				star.rating();
+			}
 		}
 	}
 
@@ -3429,8 +3624,8 @@ function frmFrontFormJS(){
 				}
 			});
 
-			checkFieldsOnPage();
 			checkConditionalLogic( 'pageLoad' );
+			checkFieldsOnPage();
 
 			// Add fallbacks for the beloved IE8
 			addIndexOfFallbackForIE8();

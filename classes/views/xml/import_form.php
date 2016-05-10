@@ -1,5 +1,4 @@
 <div class="wrap">
-    <div class="frmicon icon32"><br/></div>
     <h1><?php _e( 'Import/Export', 'formidable' ); ?></h1>
 
 	<?php include( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' ); ?>

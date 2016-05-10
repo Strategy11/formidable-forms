@@ -309,6 +309,7 @@ class FrmXMLHelper {
 
 			self::maybe_update_in_section_variable( $in_section, $f );
 			self::maybe_update_form_select( $f, $imported );
+			self::maybe_update_get_values_form_setting( $imported, $f );
 
 			if ( ! empty($this_form) ) {
 				// check for field to edit by field id
@@ -384,6 +385,26 @@ class FrmXMLHelper {
 				if ( isset( $imported['forms'][ $form_select ] ) ) {
 					$f['field_options']['form_select'] = $imported['forms'][ $form_select ];
 				}
+			}
+		}
+	}
+
+	/**
+	 * Update the get_values_form setting if the form was imported
+	 *
+	 * @since 2.01.0
+	 * @param array $imported
+	 * @param array $f
+	 */
+	private static function maybe_update_get_values_form_setting( $imported, &$f ) {
+		if ( ! isset( $imported['forms'] ) ) {
+			return;
+		}
+
+		if ( FrmField::is_option_true_in_array( $f['field_options'], 'get_values_form' ) ) {
+			$old_form = $f['field_options']['get_values_form'];
+			if ( isset( $imported['forms'][ $old_form ] ) ) {
+				$f['field_options']['get_values_form'] = $imported['forms'][ $old_form ];
 			}
 		}
 	}

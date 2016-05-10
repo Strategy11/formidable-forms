@@ -4,13 +4,13 @@ if ( ! defined('ABSPATH') ) {
 }
 
 class FrmAppHelper {
-	public static $db_version = 29; //version of the database we are moving to
+	public static $db_version = 30; //version of the database we are moving to
 	public static $pro_db_version = 34;
 
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '2.01.0rc2';
+	public static $plug_version = '2.01.01';
 
     /**
      * @since 1.07.02
@@ -1038,7 +1038,7 @@ class FrmAppHelper {
 		// Track the original field's type
 		$field_array['original_type'] = isset( $field->field_options['original_type'] ) ? $field->field_options['original_type'] : $field->type;
 
-        $field_array = apply_filters('frm_setup_edit_fields_vars', $field_array, $field, $values['id']);
+        $field_array = apply_filters( 'frm_setup_edit_fields_vars', $field_array, $field, $values['id'], array() );
 
         if ( ! isset($field_array['unique']) || ! $field_array['unique'] ) {
             $field_array['unique_msg'] = '';

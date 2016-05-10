@@ -18,9 +18,13 @@ class FrmAddonsController {
 		$addons = self::get_ordered_addons( $pro_link );
 
 		$plugin_names = array(
-			'formidable-pro' => 'formidable/pro', 'wp-multilingual' => 'formidable-wpml',
-			'registration-lite' => 'formidable-registration', 'bootstrap-modal' => 'formidable-modal',
-			'paypal-standard' => 'formidable-paypal', 'formidable-api' => 'formidable-api',
+			'formidable-pro'    => 'formidable/pro',
+			'wp-multilingual'   => 'formidable-wpml',
+			'registration-lite' => 'formidable-registration',
+			'bootstrap-modal'   => 'formidable-modal',
+			'paypal-standard'   => 'formidable-paypal',
+			'formidable-api'    => 'formidable-api',
+			'authorize-net-aim' => 'formidable-authorize-net',
 		);
 
 		include( FrmAppHelper::plugin_path() . '/classes/views/addons/list.php' );
@@ -44,7 +48,8 @@ class FrmAddonsController {
 
 		$plugin_order = array(
 			'formidable-pro', 'mailchimp', 'registration-lite',
-			'paypal-standard', 'bootstrap-modal', 'math-captcha',
+			'paypal-standard', 'stripe', 'authorize-net-aim',
+			'bootstrap-modal', 'math-captcha',
 			'zapier',
 		);
 		$ordered_addons = array();

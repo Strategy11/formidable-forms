@@ -9,7 +9,7 @@ class FrmAppController {
         }
 
 		$menu_name = FrmAppHelper::get_menu_name();
-		add_menu_page( 'Formidable', $menu_name, 'frm_view_forms', 'formidable', 'FrmFormsController::route', FrmAppHelper::plugin_url() . '/images/form_16.png', self::get_menu_position() );
+		add_menu_page( 'Formidable', $menu_name, 'frm_view_forms', 'formidable', 'FrmFormsController::route', '', self::get_menu_position() );
     }
 
 	private static function get_menu_position() {
@@ -275,16 +275,6 @@ class FrmAppController {
         } else if ( $pagenow == 'widgets.php' ) {
             FrmAppHelper::load_admin_wide_js();
         }
-    }
-
-    public static function wp_admin_body_class( $classes ) {
-        global $wp_version;
-        //we need this class everywhere in the admin for the menu
-        if ( version_compare( $wp_version, '3.7.2', '>' ) ) {
-            $classes .= ' frm_38_trigger';
-        }
-
-        return $classes;
     }
 
     public static function load_lang() {

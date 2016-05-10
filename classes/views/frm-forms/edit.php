@@ -1,5 +1,4 @@
 <div class="wrap">
-    <div class="frmicon icon32"><br/></div>
     <h2><?php echo ( $form->is_template ? __( 'Templates', 'formidable' ) : __( 'Build', 'formidable' )); ?>
         <a href="?page=formidable&amp;frm_action=new" class="add-new-h2"><?php _e( 'Add New', 'formidable' ); ?></a>
     </h2>

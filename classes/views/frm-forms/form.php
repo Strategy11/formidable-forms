@@ -15,7 +15,7 @@
     </div>
 </div>
 
-<div <?php echo version_compare( $GLOBALS['wp_version'], '3.7.2', '>') ? 'class="postbox"' : ''; ?>>
+<div class="postbox">
     <div class="frm_no_fields <?php echo ( isset($values['fields']) && ! empty($values['fields']) ) ? 'frm_hidden' : ''; ?>">
 	    <div class="alignleft sketch1">
 			<img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/sketch_arrow1.png' ); ?>" alt="" />
@@ -48,7 +48,7 @@
 	    </div>
     	<div class="clear"></div>
     </div>
-<ul id="new_fields" class="frm_sorting <?php echo version_compare( $GLOBALS['wp_version'], '3.7.2', '>') ? 'inside' : ''; ?>">
+<ul id="new_fields" class="frm_sorting inside">
 <?php
 if ( isset($values['fields']) && ! empty($values['fields']) ) {
     $count = 0;

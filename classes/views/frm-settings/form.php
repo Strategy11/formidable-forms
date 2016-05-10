@@ -1,5 +1,4 @@
 <div id="form_global_settings" class="wrap">
-    <div class="frmicon icon32"><br/></div>
     <h1><?php _e( 'Global Settings', 'formidable' ); ?></h1>
 
 	<?php require( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' ); ?>
@@ -40,11 +39,11 @@
 
             <h3><?php _e( 'Styling & Scripts', 'formidable' ); ?></h3>
 
-            <p><label class="frm_left_label"><?php _e( 'Load Formidable styling', 'formidable' ) ?></label>
+            <p><label class="frm_left_label"><?php _e( 'Load form styling', 'formidable' ) ?></label>
                 <select id="frm_load_style" name="frm_load_style">
                 <option value="all" <?php selected($frm_settings->load_style, 'all') ?>><?php _e( 'on every page of your site', 'formidable' ) ?></option>
                 <option value="dynamic" <?php selected($frm_settings->load_style, 'dynamic') ?>><?php _e( 'only on applicable pages', 'formidable' ) ?></option>
-                <option value="none" <?php selected($frm_settings->load_style, 'none') ?>><?php _e( 'Don\'t use Formidable styling on any page', 'formidable' ) ?></option>
+                <option value="none" <?php selected($frm_settings->load_style, 'none') ?>><?php _e( 'Don\'t use form styling on any page', 'formidable' ) ?></option>
                 </select>
             </p>
 
