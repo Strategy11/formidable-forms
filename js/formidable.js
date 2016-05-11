@@ -130,20 +130,8 @@ function frmFrontFormJS(){
 				});
 
 				this.on('removedfile', function( file ) {
-					var deleteMedia = 0;
-					if ( uploadFields[i].uploadMultiple ) {
-						deleteMedia = jQuery(file.previewElement).find('input[name="'+ uploadFields[i].fieldName +'[]"]').val();
-					} else {
-						var hiddenInput = jQuery('input[name="'+ uploadFields[i].fieldName +'"]');
-						deleteMedia = hiddenInput.val();
-						hiddenInput.val('');
-					}
-					if ( deleteMedia ) {
-						// send the field id, media id, and entry id
-						// If entry id, check for editing permissions
-						// maybe files need to be in a temp location per date and field id?
-						// files in temp folder can be deleted without editing permissions
-						// When an entry is saved, the file is moved
+					if ( uploadFields[i].uploadMultiple !== true ) {
+						jQuery('input[name="'+ uploadFields[i].fieldName +'"]').val('');
 					}
 				});
 			}
