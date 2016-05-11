@@ -335,10 +335,6 @@ table.form_results.with_frm_style tr.frm_odd,
     padding:5px 0;
 }
 
-.with_frm_style .frm_file_names{
-    display:block;
-}
-
 .frm_collapse .ui-icon{
     display:inline-block;
 }

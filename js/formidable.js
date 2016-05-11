@@ -104,12 +104,20 @@ function frmFrontFormJS(){
 	function loadDropzone( i ) {
 		var uploadFields = __frmDropzone;
 		var field = jQuery( '#' + uploadFields[i].htmlID );
+		var max = uploadFields[i].maxFiles;
+		if ( typeof uploadFields[i].mockFiles !== 'undefined' ) {
+			var uploadedCount = uploadFields[i].mockFiles.length;
+			if ( max > 0 ) {
+				max = max - uploadedCount;
+			}
+		}
+
 		field.dropzone({
 			url:frm_js.ajax_url,
 			addRemoveLinks: true,
         	paramName: uploadFields[i].paramName,
 			maxFilesize: uploadFields[i].maxFilesize,
-			maxFiles: uploadFields[i].maxFiles,
+			maxFiles: max,
 			acceptedFiles: uploadFields[i].acceptedFiles,
 			uploadMultiple: uploadFields[i].uploadMultiple,
 			init: function() {
@@ -134,19 +142,27 @@ function frmFrontFormJS(){
 						jQuery('input[name="'+ uploadFields[i].fieldName +'"]').val('');
 					}
 				});
+				this.on('complete', function(file) {
+					if ( uploadFields[i].uploadMultiple && typeof file.mediaID !== 'undefined' ) {
+						jQuery(file.previewElement).append('<input name="'+ uploadFields[i].fieldName +'[]" type="hidden" value="'+ file.mediaID +'" />');
+					}
+				});
+				if ( typeof uploadFields[i].mockFiles !== 'undefined' ) {
+					for ( var f = 0; f < uploadFields[i].mockFiles.length; f++ ) {
+						var mockFile = {
+							name: uploadFields[i].mockFiles[f].name,
+							size: uploadFields[i].mockFiles[f].size,
+							mediaID: uploadFields[i].mockFiles[f].id,
+						};
+
+						this.emit('addedfile', mockFile);
+						this.emit('thumbnail', mockFile, uploadFields[i].mockFiles[f].url);
+						this.emit('complete', mockFile);
+					}
+					jQuery('#frm_uploaded_'+uploadFields[i].paramName).remove();
+				}
 			}
 		});
-	}
-
-	// Remove the frm_transparent class from a single file upload field when it changes
-	// Hide the old file when a new file is uploaded
-	function showFileUploadText(){
-		/*jshint validthis:true */
-		this.className = this.className.replace( 'frm_transparent', '');
-		var currentClass = this.parentNode.getElementsByTagName('a')[0].className;
-		if ( currentClass.indexOf('frm_clear_file_link') == -1 ) {
-			currentClass += ' frm_hidden';
-		}
 	}
 
 	/**
@@ -3161,47 +3177,6 @@ function frmFrontFormJS(){
 
         chart.draw(data, opts.options);
     }
-
-	/* File Fields */
-	function nextUpload(){
-		/*jshint validthis:true */
-		var obj = jQuery(this);
-		var id = obj.data('fid');
-		obj.wrap('<div class="frm_file_names frm_uploaded_files">');
-		var files = obj.get(0).files;
-		for ( var i = 0; i < files.length; i++ ) {
-			if ( 0 === i ) {
-				obj.after(files[i].name+' <a href="#" class="frm_clear_file_link">'+frm_js.remove+'</a>');
-			} else {
-				obj.after(files[i].name +'<br/>');
-			}
-		}
-
-        obj.hide();
-
-        var fileName = 'file'+ id;
-        var fname = obj.attr('name');
-        if ( fname != 'item_meta['+ id +'][]' ) {
-            // this is a repeatable field
-            var nameParts = fname.replace('item_meta[', '').replace('[]', '').split('][');
-            if ( nameParts.length == 3 ) {
-                fileName = fileName +'-'+ nameParts[1];
-            }
-        }
-
-        obj.closest('.frm_form_field').find('.frm_uploaded_files:last').after('<input name="'+ fname +'" data-fid="'+ id +'"class="frm_transparent frm_multiple_file" multiple="multiple" type="file" />');
-	}
-
-	function removeDiv(){
-		/*jshint validthis:true */
-		fadeOut(jQuery(this).parent('.frm_uploaded_files'));
-	}
-	
-	function clearFile(){
-		/*jshint validthis:true */
-		jQuery(this).parent('.frm_file_names').replaceWith('');
-		return false;
-	}
 	
 	/* Repeating Fields */
 	function removeRow(){
@@ -3634,10 +3609,6 @@ function frmFrontFormJS(){
 
 			jQuery(document.getElementById('frm_resend_email')).click(resendEmail);
 
-			jQuery(document).on('change', '.frm_multiple_file', nextUpload);
-			jQuery(document).on('click', '.frm_clear_file_link', clearFile);
-			jQuery(document).on('click', '.frm_remove_link', removeDiv);
-
 			jQuery(document).on('focusin', 'input[data-frmmask]', function(){
 				jQuery(this).mask( jQuery(this).data('frmmask').toString() );
 			});
@@ -3647,8 +3618,6 @@ function frmFrontFormJS(){
 			jQuery(document).on('click', '.frm-show-form input[type="submit"], .frm-show-form input[name="frm_prev_page"], .frm-show-form .frm_save_draft', setNextPage);
             
             jQuery(document).on('change', '.frm_other_container input[type="checkbox"], .frm_other_container input[type="radio"], .frm_other_container select', showOtherText);
-			
-			jQuery(document).on('change', 'input[type=file].frm_transparent', showFileUploadText);
 
 			jQuery(document).on('click', '.frm_remove_form_row', removeRow);
 			jQuery(document).on('click', '.frm_add_form_row', addRow);

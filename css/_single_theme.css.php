@@ -402,11 +402,6 @@ if ( ! isset( $center_form ) ) {
     color:transparent<?php echo esc_html( $important ) ?>;
 }
 
-.<?php echo esc_html( $style_class ) ?> .frm_file_names, .<?php echo esc_html( $style_class ) ?> .frm_uploaded_files .frm_remove_link{
-	font-family:<?php echo FrmAppHelper::kses( $font . $important ) ?>;
-	font-size:<?php echo esc_html( $field_font_size . $important ) ?>;
-}
-
 .<?php echo esc_html( $style_class ) ?> .frm_default,
 .<?php echo esc_html( $style_class ) ?> .placeholder,
 .<?php echo esc_html( $style_class ) ?> .chosen-container-multi .chosen-choices li.search-field .default,
