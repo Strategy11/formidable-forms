@@ -158,6 +158,7 @@ function frmFrontFormJS(){
 						this.emit('addedfile', mockFile);
 						this.emit('thumbnail', mockFile, uploadFields[i].mockFiles[f].url);
 						this.emit('complete', mockFile);
+						this.files.push(mockFile);
 					}
 					jQuery('#frm_uploaded_'+uploadFields[i].paramName).remove();
 				}

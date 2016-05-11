@@ -331,10 +331,6 @@ table.form_results.with_frm_style tr.frm_odd,
     background-color:#<?php echo $defaults['bg_color_active'] ?>;
 }
 
-.with_frm_style .frm_uploaded_files{
-    padding:5px 0;
-}
-
 .frm_collapse .ui-icon{
     display:inline-block;
 }
