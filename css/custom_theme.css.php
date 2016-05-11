@@ -1557,6 +1557,7 @@ html[xmlns] .frm_clearfix{
 }
 
 <?php include( FrmAppHelper::plugin_path() . '/css/font_icons.css' ); ?>
+<?php include( FrmAppHelper::plugin_path() . '/css/dropzone.css' ); ?>
 
 /* Responsive */
 @media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min-resolution: 144dpi){

@@ -90,6 +90,66 @@ function frmFrontFormJS(){
 		) );
 	}
 
+	function loadDropzones(){
+		if ( typeof __frmDropzone === 'undefined'  ) {
+			return;
+		}
+
+		var uploadFields = __frmDropzone;
+		for ( var i = 0; i < uploadFields.length; i++ ) {
+			loadDropzone( i );
+		}
+	}
+
+	function loadDropzone( i ) {
+		var uploadFields = __frmDropzone;
+		var field = jQuery( '#' + uploadFields[i].htmlID );
+		field.dropzone({
+			url:frm_js.ajax_url,
+			addRemoveLinks: true,
+        	paramName: uploadFields[i].paramName,
+			maxFilesize: uploadFields[i].maxFilesize,
+			maxFiles: uploadFields[i].maxFiles,
+			acceptedFiles: uploadFields[i].acceptedFiles,
+			uploadMultiple: uploadFields[i].uploadMultiple,
+			init: function() {
+				this.on('sending', function(file, xhr, formData) {
+					formData.append('action', 'frm_submit_dropzone' );
+					formData.append('field_id', uploadFields[i].fieldID );
+				});
+
+				this.on('success', function( file, response ) {
+					var mediaIDs = jQuery.parseJSON(response);
+					for ( var m = 0; m < mediaIDs.length; m++ ) {
+						if ( uploadFields[i].uploadMultiple ) {
+							jQuery(file.previewElement).append('<input name="'+ uploadFields[i].fieldName +'[]" type="hidden" value="'+ mediaIDs[m] +'" />');
+						} else {
+							jQuery('input[name="'+ uploadFields[i].fieldName +'"]').val( mediaIDs[m] );
+						}
+					}
+				});
+
+				this.on('removedfile', function( file ) {
+					var deleteMedia = 0;
+					if ( uploadFields[i].uploadMultiple ) {
+						deleteMedia = jQuery(file.previewElement).find('input[name="'+ uploadFields[i].fieldName +'[]"]').val();
+					} else {
+						var hiddenInput = jQuery('input[name="'+ uploadFields[i].fieldName +'"]');
+						deleteMedia = hiddenInput.val();
+						hiddenInput.val('');
+					}
+					if ( deleteMedia ) {
+						// send the field id, media id, and entry id
+						// If entry id, check for editing permissions
+						// maybe files need to be in a temp location per date and field id?
+						// files in temp folder can be deleted without editing permissions
+						// When an entry is saved, the file is moved
+					}
+				});
+			}
+		});
+	}
+
 	// Remove the frm_transparent class from a single file upload field when it changes
 	// Hide the old file when a new file is uploaded
 	function showFileUploadText(){
@@ -3359,6 +3419,7 @@ function frmFrontFormJS(){
 		checkDynamicFields();
 		checkLookupFields();
 		triggerCalc();
+		loadDropzones();
 	}
 
 	function checkPreviouslyHiddenFields() {

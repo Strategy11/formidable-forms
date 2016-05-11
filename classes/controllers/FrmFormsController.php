@@ -296,6 +296,7 @@ class FrmFormsController {
 			wp_register_script( 'jquery-frm-rating', FrmAppHelper::plugin_url() . '/pro/js/jquery.rating.min.js', array( 'jquery' ), '4.11', true );
 			wp_register_script( 'jquery-maskedinput', FrmAppHelper::plugin_url() . '/pro/js/jquery.maskedinput.min.js', array( 'jquery' ), '1.4', true );
 			wp_register_script( 'jquery-chosen', FrmAppHelper::plugin_url() . '/pro/js/chosen.jquery.min.js', array( 'jquery' ), '1.5.1', true );
+			wp_register_script( 'dropzone', FrmAppHelper::plugin_url() . '/pro/js/dropzone.js', array( 'jquery' ), '4.3.0', true );
 		}
 	}
 
