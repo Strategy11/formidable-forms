@@ -142,17 +142,25 @@ function frmFrontFormJS(){
 						jQuery('input[name="'+ uploadFields[i].fieldName +'"]').val('');
 					}
 				});
+
 				this.on('complete', function(file) {
 					if ( uploadFields[i].uploadMultiple && typeof file.mediaID !== 'undefined' ) {
 						jQuery(file.previewElement).append('<input name="'+ uploadFields[i].fieldName +'[]" type="hidden" value="'+ file.mediaID +'" />');
 					}
 				});
+
+				this.on('removedfile', function (file) {
+					jQuery(file.previewElement).remove();
+					var fileCount = this.files.length;
+					this.options.maxFiles = uploadFields[i].maxFiles - fileCount;
+				});
+
 				if ( typeof uploadFields[i].mockFiles !== 'undefined' ) {
 					for ( var f = 0; f < uploadFields[i].mockFiles.length; f++ ) {
 						var mockFile = {
 							name: uploadFields[i].mockFiles[f].name,
 							size: uploadFields[i].mockFiles[f].size,
-							mediaID: uploadFields[i].mockFiles[f].id,
+							mediaID: uploadFields[i].mockFiles[f].id
 						};
 
 						this.emit('addedfile', mockFile);
