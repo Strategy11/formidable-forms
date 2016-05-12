@@ -360,6 +360,7 @@ function frmAdminBuildJS(){
 				$thisField.find('.frm_ipe_field_label').mouseover().click();
 
 				updateFieldOrder();
+				initiateMultiselect();
 
 				var $thisSection = $thisField.find('ul.frm_sorting');
 				if ($thisSection.length) {
@@ -436,6 +437,8 @@ function frmAdminBuildJS(){
 						loadFields($nextSet.attr('id'));
 					}
 				}
+
+				initiateMultiselect();
 			}
 		});
 	}
@@ -468,6 +471,7 @@ function frmAdminBuildJS(){
 				section = '#'+match[1]+'.edit_field_type_divider ul.frm_sorting';
 				setupSortable(section);
 				toggleOneSectionHolder(jQuery(section));
+				initiateMultiselect();
 			}
 		});
 		return false;
@@ -2196,7 +2200,9 @@ function frmAdminBuildJS(){
 			jQuery('.frm_form_builder form:first').submit(function(){
 				jQuery('.inplace_field').blur();
 			});
-			
+
+			initiateMultiselect();
+
 			jQuery('.frm_ipe_form_key').editInPlace({
 				url:ajaxurl,params:"action=frm_form_key_in_place_edit&form_id="+this_form_id+'&nonce='+frmGlobal.nonce,
 				show_buttons:"true",value_required:"true",
