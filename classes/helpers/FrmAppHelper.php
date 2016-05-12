@@ -821,7 +821,7 @@ class FrmAppHelper {
 	public static function esc_textarea( $text ) {
 		$safe_text = str_replace( '&quot;', '"', $text );
 		$safe_text = htmlspecialchars( $safe_text, ENT_NOQUOTES );
-		$safe_text = str_replace( '&amp;', '&', $text );
+		$safe_text = str_replace( '&amp;', '&', $safe_text );
 		return apply_filters( 'esc_textarea', $safe_text, $text );
 	}
 
