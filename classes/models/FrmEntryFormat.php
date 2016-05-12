@@ -91,7 +91,9 @@ class FrmEntryFormat {
 		}
 
 		if ( $atts['default_email'] ) {
-			self::get_field_shortcodes_for_default_email( $f, $values );
+			if ( $f->type != 'password' ) {
+				self::get_field_shortcodes_for_default_email( $f, $values );
+			}
 			return;
 		}
 
