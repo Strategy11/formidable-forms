@@ -150,9 +150,11 @@ function frmFrontFormJS(){
 				});
 
 				this.on('removedfile', function (file) {
-					jQuery(file.previewElement).remove();
-					var fileCount = this.files.length;
-					this.options.maxFiles = uploadFields[i].maxFiles - fileCount;
+					if ( typeof file.mediaID !== 'undefined' ) {
+						jQuery(file.previewElement).remove();
+						var fileCount = this.files.length;
+						this.options.maxFiles = uploadFields[i].maxFiles - fileCount;
+					}
 				});
 
 				if ( typeof uploadFields[i].mockFiles !== 'undefined' ) {
