@@ -346,6 +346,7 @@
 }
 .frm_dropzone .dz-preview .dz-image img {
 	display: block;
+	margin:0 auto;
 }
 .frm_dropzone .dz-preview.dz-success .dz-success-mark {
 	-webkit-animation: passing-through 3s cubic-bezier(0.77, 0, 0.175, 1);
