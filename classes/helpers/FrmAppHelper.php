@@ -101,7 +101,7 @@ class FrmAppHelper {
      *
      * @since 2.0
      */
-	public static function update_message( $features, $class = '' ) {
+	public static function update_message() {
 		_deprecated_function( __FUNCTION__, '2.0.19' );
     }
 
@@ -818,11 +818,12 @@ class FrmAppHelper {
         return $return;
     }
 
-    public static function esc_textarea( $text ) {
-        $safe_text = str_replace('&quot;', '"', $text);
-        $safe_text = htmlspecialchars( $safe_text, ENT_NOQUOTES );
-    	return apply_filters( 'esc_textarea', $safe_text, $text );
-    }
+	public static function esc_textarea( $text ) {
+		$safe_text = str_replace( '&quot;', '"', $text );
+		$safe_text = htmlspecialchars( $safe_text, ENT_NOQUOTES );
+		$safe_text = str_replace( '&amp;', '&', $text );
+		return apply_filters( 'esc_textarea', $safe_text, $text );
+	}
 
     /**
      * Add auto paragraphs to text areas
