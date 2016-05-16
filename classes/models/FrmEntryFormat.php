@@ -91,7 +91,7 @@ class FrmEntryFormat {
 		}
 
 		if ( $atts['default_email'] ) {
-			if ( $f->type != 'password' ) {
+			if ( $f->type != 'password' && $f->type != 'credit_card' ) {
 				self::get_field_shortcodes_for_default_email( $f, $values );
 			}
 			return;
