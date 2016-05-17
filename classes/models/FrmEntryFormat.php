@@ -130,6 +130,8 @@ class FrmEntryFormat {
 
 		if ( is_array( $val ) && $atts['format'] == 'text' ) {
 			$val = implode( ', ', $val );
+		} else if ( $f->type == 'checkbox' ) {
+			$val = array_values( $val );
 		}
 
 		self::maybe_strip_html( $atts['plain_text'], $val );
