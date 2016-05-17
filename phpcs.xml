@@ -22,6 +22,7 @@
 		<exclude name="WordPress.VIP.RestrictedFunctions.get_term_by"/>
 		<exclude name="WordPress.VIP.RestrictedFunctions.get_term_link"/>
 		<exclude name="WordPress.VIP.RestrictedFunctions.term_exists" />
+		<exclude name="WordPress.VIP.RestrictedFunctions.wp_is_mobile" />
 
 		<!-- Temporary exclusions. Enable these when we have time to address them -->
 		<exclude name="PEAR.Functions.FunctionCallSignature.SpaceAfterOpenBracket" />
