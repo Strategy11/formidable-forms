@@ -495,7 +495,7 @@ class FrmAppHelper {
 
 		if ( is_callable( array( $wp_object_cache, '__get' ) ) ) {
 			$group_cache = $wp_object_cache->__get('cache');
-		} elseif ( $wp_object_cache->redis_status() ) {
+		} elseif ( is_callable( array( $wp_object_cache, 'redis_status' ) ) && $wp_object_cache->redis_status() ) {
 			// check if the object cache is overridden by Redis
 			$wp_object_cache->flush();
 			$group_cache = array();
