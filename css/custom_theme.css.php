@@ -176,9 +176,16 @@ legend.frm_hidden{
     text-align:center;
 }
 
-.with_frm_style.frm_center_submit .frm_submit input[type=submit], .with_frm_style.frm_center_submit .frm_submit input[type=button]{
+.with_frm_style.frm_center_submit .frm_submit input[type=submit],
+.with_frm_style.frm_center_submit .frm_submit input[type=button]{
     margin-bottom:8px !important;
 }
+
+.with_frm_style .frm_submit input[type=submit],
+.with_frm_style .frm_submit input[type=button]{
+	-webkit-appearance: none;
+}
+
 .with_frm_style.frm_center_submit .frm_submit .frm_ajax_loading{
     display: block;
     margin: 0 auto;
