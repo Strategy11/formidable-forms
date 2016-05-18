@@ -176,8 +176,11 @@ legend.frm_hidden{
     text-align:center;
 }
 
-.with_frm_style.frm_center_submit .frm_submit input[type=submit], .with_frm_style.frm_center_submit .frm_submit input[type=button]{
+.with_frm_style.frm_center_submit .frm_submit input[type=submit],
+.with_frm_style.frm_center_submit .frm_submit input[type=button]{
     margin-bottom:8px !important;
+	-webkit-appearance: none;
+	-webkit-border-radius: 0;
 }
 .with_frm_style.frm_center_submit .frm_submit .frm_ajax_loading{
     display: block;
