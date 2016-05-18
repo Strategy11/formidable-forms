@@ -2200,15 +2200,21 @@ function frmFrontFormJS(){
 			}
 		}
 
-		var total = parseFloat(eval(thisFullCalc));
+		var total = '';
 
-		if ( typeof total === 'undefined' || isNaN(total) ) {
-			total = 0;
-		}
+		if ( thisCalc.calc_type == 'text' ) {
+			total = thisFullCalc;
+		} else {
+			total = parseFloat(eval(thisFullCalc));
 
-		// Set decimal points
-		if ( isNumeric( dec ) ) {
-			total = total.toFixed(dec);
+			if ( typeof total === 'undefined' || isNaN(total) ) {
+				total = 0;
+			}
+
+			// Set decimal points
+			if ( isNumeric( dec ) ) {
+				total = total.toFixed(dec);
+			}
 		}
 
 		if ( totalField.val() != total ) {
@@ -2229,10 +2235,16 @@ function frmFrontFormJS(){
 			};
 
 			field = getCallForField( field, all_calcs );
-			vals = getCalcFieldId(field, all_calcs, vals);
-
-			if ( typeof vals[field.valKey] === 'undefined' || isNaN(vals[field.valKey]) ) {
-				vals[field.valKey] = 0;
+			if ( thisCalc.calc_type == 'text' ) {
+				vals = getTextCalcFieldId( field, vals );
+				if ( typeof vals[field.valKey] === 'undefined' ) {
+					vals[field.valKey] = '';
+				}
+			} else {
+				vals = getCalcFieldId(field, all_calcs, vals);
+				if ( typeof vals[field.valKey] === 'undefined' || isNaN(vals[field.valKey]) ) {
+					vals[field.valKey] = 0;
+				}
 			}
 
 			var findVar = '['+ field.thisFieldId +']';
@@ -2331,17 +2343,8 @@ function frmFrontFormJS(){
 
 		vals[field.valKey] = 0;
 
-		var calcField;
-		if ( field.inSection === false ) {
-			calcField = jQuery(field.thisFieldCall);
-		} else {
-			calcField = getSiblingField( field );
-			if ( calcField === null || typeof calcField === 'undefined' ) {
-				calcField = jQuery(field.thisFieldCall);
-			}
-		}
-
-		if ( calcField === null || typeof calcField === 'undefined' || calcField.length < 1 ) {
+		var calcField = getCalcField( field );
+		if ( calcField === false ) {
 			return vals;
 		}
 
@@ -2371,6 +2374,45 @@ function frmFrontFormJS(){
 
 		return vals;
     }
+
+	function getTextCalcFieldId( field, vals ) {
+		if ( typeof vals[field.valKey] !== 'undefined' && vals[field.valKey] !== '' ) {
+			return vals;
+		}
+
+		vals[field.valKey] = '';
+
+		var calcField = getCalcField( field );
+		if ( calcField === false ) {
+			return vals;
+		}
+
+		calcField.each(function(){
+			var thisVal = getOptionValue( field.thisField, this );
+			thisVal = thisVal.trim();
+			vals[field.valKey] += thisVal;
+		});
+
+		return vals;
+    }
+
+	function getCalcField( field ) {
+		var calcField;
+		if ( field.inSection === false ) {
+			calcField = jQuery(field.thisFieldCall);
+		} else {
+			calcField = getSiblingField( field );
+			if ( calcField === null || typeof calcField === 'undefined' ) {
+				calcField = jQuery(field.thisFieldCall);
+			}
+		}
+
+		if ( calcField === null || typeof calcField === 'undefined' || calcField.length < 1 ) {
+			calcField = false;
+		}
+
+		return calcField;
+	}
 
 	/**
 	* Get the value from a date field regardless of whether datepicker is defined for it
