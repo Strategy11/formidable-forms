@@ -2647,7 +2647,7 @@ function frm_remove_tag(html_tag){
 
 function frm_show_div(div,value,show_if,class_id){
 	if(value == show_if){
-		jQuery(class_id+div).fadeIn('slow'); 
+		jQuery(class_id+div).fadeIn('slow').css('visibility', 'visible');
 	}else{
 		jQuery(class_id+div).fadeOut('slow');
 	}

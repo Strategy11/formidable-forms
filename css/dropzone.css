@@ -453,22 +453,11 @@
 	transition: opacity 0.3s ease;
 	border-radius: 8px;
 	font-size: 13px;
-	top: 130px;
+	top: 29px;
 	left: -10px;
 	width: 140px;
 	background: #be2626;
 	background: linear-gradient(to bottom, #be2626, #a92222);
 	padding: 0.5em 1.2em;
 	color: white;
-}
-.frm_dropzone .dz-preview .dz-error-message:after {
-	content: '';
-	position: absolute;
-	top: -6px;
-	left: 64px;
-	width: 0;
-	height: 0;
-	border-left: 6px solid transparent;
-	border-right: 6px solid transparent;
-	border-bottom: 6px solid #be2626;
 }

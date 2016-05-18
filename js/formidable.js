@@ -124,6 +124,7 @@ function frmFrontFormJS(){
 				this.on('sending', function(file, xhr, formData) {
 					formData.append('action', 'frm_submit_dropzone' );
 					formData.append('field_id', uploadFields[i].fieldID );
+					formData.append('form_id', uploadFields[i].formID );
 				});
 
 				this.on('success', function( file, response ) {
