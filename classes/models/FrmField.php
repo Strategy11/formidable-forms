@@ -162,7 +162,7 @@ class FrmField {
 		self::preserve_phone_format_backslashes( $values );
 
 		if ( isset( $values['type'] ) ) {
-			$values = apply_filters( 'frm_clean_' . $values[ 'type' ] . '_field_options_before_update', $values );
+			$values = apply_filters( 'frm_clean_' . $values['type'] . '_field_options_before_update', $values );
 		}
 
 		// serialize array values
