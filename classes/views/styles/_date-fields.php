@@ -27,7 +27,7 @@ unset($theme_names);
 	<label><?php _e( 'Theme', 'formidable' ) ?></label>
 	<select name="<?php echo esc_attr( $frm_style->get_field_name('theme_selector') ) ?>">
 	    <?php foreach ( $jquery_themes as $theme_name => $theme_title ) { ?>
-		<option value="<?php echo esc_attr( $theme_name ) ?>" id="90_<?php echo esc_attr( $alt_img_name[ $theme_name ] ); ?>" <?php selected( $theme_title, $style->post_content['theme_name'] ) ?>>
+		<option value="<?php echo esc_attr( $theme_name ) ?>" id="90_<?php echo esc_attr( $alt_img_name[ $theme_name ] ); ?>" <?php selected( $theme_name, $style->post_content['theme_selector'] ) ?>>
 			<?php echo esc_html( $theme_title ) ?>
 		</option>
         <?php } ?>

@@ -553,6 +553,11 @@ class FrmXMLHelper {
 		    $post['menu_order'] = $imported['forms'][ (int) $post['menu_order'] ];
 		}
 
+		// Don't allow default styles to take over a site's default style
+		if ( 'frm_styles' == $post['post_type'] ) {
+			$post['menu_order'] = 0;
+		}
+
 		foreach ( $item->postmeta as $meta ) {
 		    self::populate_postmeta($post, $meta, $imported);
 			unset($meta);
