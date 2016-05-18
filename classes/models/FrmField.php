@@ -161,6 +161,8 @@ class FrmField {
 
 		self::preserve_phone_format_backslashes( $values );
 
+		$values = apply_filters( 'frm_clean_' . $values['type'] . '_field_options_before_update', $values );
+
 		// serialize array values
 		foreach ( array( 'default_value', 'field_options', 'options' ) as $opt ) {
 			if ( isset( $values[ $opt ] ) && is_array( $values[ $opt ] ) ) {
