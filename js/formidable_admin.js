@@ -2565,6 +2565,8 @@ function frmAdminBuildJS(){
 					css = frm_admin_js.jquery_ui_url +'/themes/'+themeVal+'/jquery-ui.css';
 					themeName = jQuery("select[name$='[theme_selector]'] option[value='"+themeVal+"']").text();
 				}
+				themeName = themeName.trim();
+
 				updateUICSS(css);
 				document.getElementById('frm_theme_css').value = themeVal;
 				document.getElementById('frm_theme_name').value = themeName;

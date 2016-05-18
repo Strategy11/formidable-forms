@@ -621,6 +621,9 @@ DEFAULT_HTML;
             return self::array_value_condition($observed_value, $cond, $hide_opt);
         }
 
+		$observed_value = str_replace( '&amp;', '&', $observed_value );
+		$hide_opt = str_replace( '&amp;', '&', $hide_opt );
+
         $m = false;
         if ( $cond == '==' ) {
             $m = $observed_value == $hide_opt;

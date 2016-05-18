@@ -91,7 +91,7 @@ class FrmEntryFormat {
 		}
 
 		if ( $atts['default_email'] ) {
-			if ( $f->type != 'password' ) {
+			if ( $f->type != 'password' && $f->type != 'credit_card' ) {
 				self::get_field_shortcodes_for_default_email( $f, $values );
 			}
 			return;
@@ -126,9 +126,12 @@ class FrmEntryFormat {
 		}
 
 		self::textarea_display_value( $f->type, $atts['plain_text'], $val );
+		$val = apply_filters( 'frm_display_' . $f->type . '_value_custom', $val, array( 'field' => $f, 'atts' => $atts ) );
 
 		if ( is_array( $val ) && $atts['format'] == 'text' ) {
 			$val = implode( ', ', $val );
+		} else if ( $f->type == 'checkbox' ) {
+			$val = array_values( $val );
 		}
 
 		self::maybe_strip_html( $atts['plain_text'], $val );
