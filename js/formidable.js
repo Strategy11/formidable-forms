@@ -2203,23 +2203,23 @@ function frmFrontFormJS(){
 		// loop through the fields in this calculation
 		thisFullCalc = getValsForSingleCalc( thisCalc, thisFullCalc, all_calcs, vals, fieldInfo );
 
-		// Set the number of decimal places
-		var dec = thisCalc.calc_dec;
-
-		// allow .toFixed for reverse compatability
-		if ( thisFullCalc.indexOf(').toFixed(') ) {
-		var calcParts = thisFullCalc.split(').toFixed(');
-			if ( isNumeric(calcParts[1]) ) {
-				dec = calcParts[1];
-				thisFullCalc = thisFullCalc.replace(').toFixed(' + dec, '');
-			}
-		}
-
 		var total = '';
 
 		if ( thisCalc.calc_type == 'text' ) {
 			total = thisFullCalc;
 		} else {
+			// Set the number of decimal places
+			var dec = thisCalc.calc_dec;
+
+			// allow .toFixed for reverse compatability
+			if ( thisFullCalc.indexOf(').toFixed(') ) {
+				var calcParts = thisFullCalc.split(').toFixed(');
+				if ( isNumeric(calcParts[1]) ) {
+					dec = calcParts[1];
+					thisFullCalc = thisFullCalc.replace(').toFixed(' + dec, '');
+				}
+			}
+
 			total = parseFloat(eval(thisFullCalc));
 
 			if ( typeof total === 'undefined' || isNaN(total) ) {
