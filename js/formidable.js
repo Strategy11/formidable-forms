@@ -1654,14 +1654,14 @@ function frmFrontFormJS(){
 		var optContainer = childDiv.getElementsByClassName( 'frm_opt_container' )[0];
 		var inputs = optContainer.getElementsByTagName( 'input' );
 
+		addLoadingIconJS( childDiv, optContainer );
+
 		var currentValue = '';
 		if ( childFieldArgs.inputType == 'radio' ) {
 			currentValue = getValueFromRadioInputs( inputs );
 		} else {
 			currentValue = getValuesFromCheckboxInputs(inputs);
 		}
-
-		addLoadingIconJS( optContainer );
 
 		jQuery.ajax({
 			type:'POST',
@@ -1677,6 +1677,8 @@ function frmFrontFormJS(){
 			},
 			success:function(newHtml){
 				optContainer.innerHTML = newHtml;
+
+				removeLoadingIconJS( childDiv, optContainer );
 
 				if ( inputs.length == 1 && inputs[0].value === '' ) {
 					maybeHideRadioLookup( childFieldArgs, childDiv );
@@ -1730,11 +1732,6 @@ function frmFrontFormJS(){
 			logicArgs.repeatRow = childFieldArgs.repeatRow;
 			hideOrShowSingleField( logicArgs );
 		}
-	}
-
-	// Insert the loading icon
-	function addLoadingIconJS( optContainer ) {
-		optContainer.innerHTML = '<span class="frm-loading-img"></span>';
 	}
 
 	/**
@@ -1877,8 +1874,7 @@ function frmFrontFormJS(){
 	function updateDynamicListData( depFieldArgs, onCurrentPage ){
 		if ( onCurrentPage ) {
 			var $fieldDiv = jQuery( '#' + depFieldArgs.containerId);
-			var $optContainer = $fieldDiv.find('.frm_opt_container');
-			addLoadingIcon($optContainer);
+			addLoadingIcon( $fieldDiv );
 		}
 
 		jQuery.ajax({
@@ -1892,10 +1888,13 @@ function frmFrontFormJS(){
 			},
 			success:function(html){
 				if ( onCurrentPage ) {
-
+					var $optContainer = $fieldDiv.find('.frm_opt_container');
 					$optContainer.html(html);
 					var $listInputs = $optContainer.children('input');
 					var listVal = $listInputs.val();
+
+					removeLoadingIcon( $optContainer );
+
 					if (html === '' || listVal === '') {
 						hideDynamicField(depFieldArgs);
 					} else {
@@ -1925,7 +1924,7 @@ function frmFrontFormJS(){
 		var prevVal = getPrevFieldValue( hiddenInput );
 		var defaultVal = hiddenInput.data('frmval');
 
-		addLoadingIconTemp( $fieldDiv );
+		addLoadingIcon( $fieldDiv );
 
 		jQuery.ajax({
 			type:'POST',
@@ -1945,7 +1944,7 @@ function frmFrontFormJS(){
 				$optContainer.html(html);
 				var $dynamicFieldInputs = $optContainer.find('select, input, textarea');
 
-				removeLoadingIconTemp( $optContainer );
+				removeLoadingIcon( $optContainer );
 
 				if ( html === '' || ( $dynamicFieldInputs.length == 1 && $dynamicFieldInputs.attr('type') == 'hidden' ) ) {
 					hideDynamicField( depFieldArgs );
@@ -1986,13 +1985,8 @@ function frmFrontFormJS(){
 		triggerChange( jQuery( listInput ) );
 	}
 
-	// Insert the loading icon
-	function addLoadingIcon( $optContainer ) {
-		$optContainer.html( '<span class="frm-loading-img"></span>' );
-	}
-
-	// Insert the loading icon
-	function addLoadingIconTemp( $fieldDiv ) {
+	// Add the loading icon with jQuery
+	function addLoadingIcon( $fieldDiv ) {
 		var currentHTML = $fieldDiv.html();
 
 		if ( currentHTML.indexOf( 'frm-loading-img' ) > -1 ) {
@@ -2006,11 +2000,36 @@ function frmFrontFormJS(){
 		}
 	}
 
-	function removeLoadingIconTemp( $optContainer ) {
+	// Add the loading icon with JavaScript
+	function addLoadingIconJS( fieldDiv, optContainer ) {
+		var currentHTML = fieldDiv.innerHTML;
+
+		if ( currentHTML.indexOf( 'frm-loading-img' ) > -1 ) {
+			// Loading image already present
+		} else {
+			optContainer.style.display = "none";
+
+			var loadingIcon = document.createElement('span');
+			loadingIcon.setAttribute("class", "frm-loading-img");
+			fieldDiv.insertBefore(loadingIcon, optContainer.nextSibling);
+		}
+	}
+
+	// Remove the loading icon with jQuery
+	function removeLoadingIcon( $optContainer ) {
 		$optContainer.next( '.frm-loading-img' ).remove();
 		$optContainer.show();
 	}
 
+	// Remove the loading icon with JavaScript
+	function removeLoadingIconJS( fieldDiv, optContainer ) {
+		var loadingIcon = fieldDiv.getElementsByClassName( 'frm-loading-img' )[0];
+		if ( loadingIcon !== null && loadingIcon !== undefined ) {
+			loadingIcon.parentNode.removeChild( loadingIcon );
+		}
+
+		optContainer.style.display = "block";
+	}
 
 	// Get the previous field value in a Dynamic field
 	function getPrevFieldValue( inputs ) {
