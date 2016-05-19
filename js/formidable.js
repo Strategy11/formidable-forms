@@ -2069,6 +2069,21 @@ function frmFrontFormJS(){
 		if ( triggers ) {
 			jQuery(triggers.join()).trigger({type:'change',selfTriggered:true});
 		}
+
+		triggerCalcWithoutFields();
+	}
+
+	function triggerCalcWithoutFields() {
+		var calcs = __FRMCALC.calc;
+
+		for ( var field_key in calcs ) {
+			if ( calcs[field_key].fields.length < 1 ) {
+				var totalField = jQuery( document.getElementById('field_'+ field_key) );
+				if ( totalField.length ) {
+					totalField.val( calcs[field_key].calc );
+				}
+			}
+		}
 	}
 
 	function doCalculation(field_id, triggerField){
