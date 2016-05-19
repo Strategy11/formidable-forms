@@ -130,11 +130,16 @@ function frmFrontFormJS(){
 				this.on('success', function( file, response ) {
 					var mediaIDs = jQuery.parseJSON(response);
 					for ( var m = 0; m < mediaIDs.length; m++ ) {
-						if ( uploadFields[i].uploadMultiple ) {
-							jQuery(file.previewElement).append('<input name="'+ uploadFields[i].fieldName +'[]" type="hidden" value="'+ mediaIDs[m] +'" />');
-						} else {
+						if ( uploadFields[i].uploadMultiple !== true ) {
 							jQuery('input[name="'+ uploadFields[i].fieldName +'"]').val( mediaIDs[m] );
 						}
+					}
+				});
+
+				this.on('successmultiple', function( files, response ) {
+					var mediaIDs = jQuery.parseJSON(response);
+					for ( var m = 0; m < files.length; m++ ) {
+						jQuery(files[m].previewElement).append('<input name="'+ uploadFields[i].fieldName +'[]" type="hidden" value="'+ mediaIDs[m] +'" />');
 					}
 				});
 
