@@ -2080,7 +2080,7 @@ function frmFrontFormJS(){
 			if ( calcs[field_key].fields.length < 1 ) {
 				var totalField = jQuery( document.getElementById('field_'+ field_key) );
 				if ( totalField.length ) {
-					totalField.val( calcs[field_key].calc );
+					doSingleCalculation( __FRMCALC, field_key, [] );
 				}
 			}
 		}
@@ -2259,6 +2259,9 @@ function frmFrontFormJS(){
 				vals = getCalcFieldId(field, all_calcs, vals);
 				if ( typeof vals[field.valKey] === 'undefined' || isNaN(vals[field.valKey]) ) {
 					vals[field.valKey] = 0;
+				}
+				if ( field.thisField.type == 'date' && vals[field.valKey] === 0 ) {
+					thisFullCalc = '';
 				}
 			}
 
