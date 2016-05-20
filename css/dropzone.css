@@ -461,3 +461,7 @@
 	padding: 0.5em 1.2em;
 	color: white;
 }
+
+.frm_dropzone .fallback input[type="file"]{
+	display:block;
+}

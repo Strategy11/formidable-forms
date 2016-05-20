@@ -121,6 +121,8 @@ function frmFrontFormJS(){
 			acceptedFiles: uploadFields[i].acceptedFiles,
 			uploadMultiple: uploadFields[i].uploadMultiple,
 			init: function() {
+				jQuery(this.element).find('.dz-message').html(frm_js.upload);
+
 				this.on('sending', function(file, xhr, formData) {
 					formData.append('action', 'frm_submit_dropzone' );
 					formData.append('field_id', uploadFields[i].fieldID );
@@ -149,13 +151,13 @@ function frmFrontFormJS(){
 					}
 				});
 
-				this.on('complete', function(file) {
+				this.on('complete', function( file ) {
 					if ( uploadFields[i].uploadMultiple && typeof file.mediaID !== 'undefined' ) {
 						jQuery(file.previewElement).append('<input name="'+ uploadFields[i].fieldName +'[]" type="hidden" value="'+ file.mediaID +'" />');
 					}
 				});
 
-				this.on('removedfile', function (file) {
+				this.on('removedfile', function( file ) {
 					if ( typeof file.mediaID !== 'undefined' ) {
 						jQuery(file.previewElement).remove();
 						var fileCount = this.files.length;
@@ -176,10 +178,19 @@ function frmFrontFormJS(){
 						this.emit('complete', mockFile);
 						this.files.push(mockFile);
 					}
-					jQuery('#frm_uploaded_'+uploadFields[i].paramName).remove();
 				}
 			}
 		});
+	}
+
+	function removeFile(){
+		/*jshint validthis:true */
+		var fieldName = jQuery(this).data('frm-remove');
+		fadeOut(jQuery(this).parent('.dz-preview'));
+		var singleField = jQuery('input[name="'+ fieldName +'"]');
+		if ( singleField.length ) {
+			singleField.val('');
+		}
 	}
 
 	/**
@@ -3701,6 +3712,8 @@ function frmFrontFormJS(){
 			jQuery('.frm_toggle_default').blur();
 
 			jQuery(document.getElementById('frm_resend_email')).click(resendEmail);
+
+			jQuery(document).on('click', '.frm_remove_link', removeFile);
 
 			jQuery(document).on('focusin', 'input[data-frmmask]', function(){
 				jQuery(this).mask( jQuery(this).data('frmmask').toString() );
