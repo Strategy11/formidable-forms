@@ -218,11 +218,11 @@
 
 .frm_dropzone.dz-clickable {
 	min-height: 150px;
-	border: 2px dashed #0087F7;
-	background: white;
+	border: 2px dashed #dfdfdf;
 	padding: 20px 20px;
 	border-radius:5px;
 	cursor: pointer;
+	margin-top:5px;
 }
 .frm_dropzone.dz-clickable * {
 	cursor: default;
@@ -246,6 +246,10 @@
 .frm_dropzone.dz-clickable .dz-message,
 .frm_dropzone.dz-clickable .dz-message * {
 	cursor: pointer;
+}
+#frm_form_editor_container .frm_dropzone.dz-clickable,
+#frm_form_editor_container .frm_dropzone.dz-clickable *{
+	cursor: default;
 }
 .frm_dropzone.dz-started .dz-message {
 	display: none;
