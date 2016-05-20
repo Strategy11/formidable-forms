@@ -227,10 +227,20 @@
 .frm_dropzone.dz-clickable * {
 	cursor: default;
 }
+.frm_dropzone.dz-clickable.frm_single_upload{
+	max-width: 200px;
+}
 .frm_dropzone .dz-message{
 	display:none;
+	font-size:20px;
+	text-align: center;
+	margin: .5em 0 1em;
 }
-.frm_dropzone.dz-clickable .dz-message{
+.frm_dropzone.dz-clickable.frm_single_upload .dz-message{
+	margin: 0 0 .5em 0;
+}
+.frm_dropzone.dz-clickable .dz-message,
+.frm_dropzone .frm_upload_icon{
 	display:block;
 }
 .frm_dropzone.dz-clickable .dz-message,
@@ -240,15 +250,17 @@
 .frm_dropzone.dz-started .dz-message {
 	display: none;
 }
-.frm_dropzone.dz-drag-hover {
-	border-style: solid;
-}
 .frm_dropzone.dz-drag-hover .dz-message {
 	opacity: 0.5;
 }
-.frm_dropzone .dz-message {
-	text-align: center;
-	margin: 2em 0;
+.frm_dropzone .frm_upload_icon:before{
+	font-size:40px;
+}
+.frm_dropzone .frm_small_text {
+	font-size:14px;
+}
+.frm_dropzone.dz-drag-hover {
+	border-style: solid;
 }
 .frm_dropzone .dz-preview {
 	position: relative;
