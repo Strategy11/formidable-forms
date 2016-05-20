@@ -1239,6 +1239,12 @@ function frmFrontFormJS(){
 				setHiddenCheckboxDefaultValue( input.name, defaultValue );
 
 			} else {
+				var addressType = input.getAttribute('autocompletetype');
+				if ( addressType !== null ) {
+					addressType = addressType.replace( 'address-', '' );
+					defaultValue = defaultValue[addressType];
+				}
+
 				input.value = defaultValue;
 			}
 
