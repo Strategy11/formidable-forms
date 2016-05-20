@@ -219,6 +219,7 @@
 .frm_dropzone.dz-clickable {
 	min-height: 150px;
 	border: 2px dashed #dfdfdf;
+	background:#ffffff;
 	padding: 20px 20px;
 	border-radius:5px;
 	cursor: pointer;
