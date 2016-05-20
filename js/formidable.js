@@ -121,8 +121,6 @@ function frmFrontFormJS(){
 			acceptedFiles: uploadFields[i].acceptedFiles,
 			uploadMultiple: uploadFields[i].uploadMultiple,
 			init: function() {
-				jQuery(this.element).find('.dz-message').html(frm_js.upload);
-
 				this.on('sending', function(file, xhr, formData) {
 					formData.append('action', 'frm_submit_dropzone' );
 					formData.append('field_id', uploadFields[i].fieldID );
