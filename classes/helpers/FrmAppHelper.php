@@ -1756,7 +1756,6 @@ class FrmAppHelper {
 			'offset'    => apply_filters( 'frm_scroll_offset', 4 ),
 			'nonce'     => wp_create_nonce( 'frm_ajax' ),
 			'id'        => __( 'ID', 'formidable' ),
-			'upload'    => __( 'Drop files here or click to upload.', 'formidable' ),
 		) );
 
 		if ( $location == 'admin' ) {

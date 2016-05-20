@@ -749,6 +749,20 @@ if ( ! $submit_style ) { ?>
     font-size:<?php echo esc_html( $submit_font_size . $important ) ?>;
 }
 
+/* Dropzone */
+.<?php echo esc_html( $style_class ) ?> .frm_dropzone{
+	border-color:#<?php echo esc_html( $border_color . $important ) ?>;
+	border-radius:<?php echo esc_html( $border_radius . $important ) ?>;
+	color:#<?php echo esc_html( $text_color . $important ) ?>;
+	background-color:<?php echo esc_html( ( empty( $bg_color ) ? 'transparent' : '#' . $bg_color ) . $important ); ?>;
+}
+
+.<?php echo esc_html( $style_class ) ?> .frm_blank_field .frm_dropzone{
+	border-color:#<?php echo esc_html( $border_color_error . $important ) ?>;
+	color:#<?php echo esc_html( $text_color_error . $important ) ?>;
+	background-color:<?php echo esc_html( ( empty( $bg_color_error ) ? 'transparent' : '#' . $bg_color_error ) . $important ); ?>;
+}
+
 /* RTL Grids */
 <?php if ( 'rtl' == $direction ) { ?>
 .<?php echo esc_html( $style_class ) ?> .frm_form_fields div.rating-cancel,
