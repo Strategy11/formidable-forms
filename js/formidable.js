@@ -700,17 +700,10 @@ function frmFrontFormJS(){
 	}
 
 	function operators(op, a, b){
-		if ( typeof b === 'undefined' ) {
-			b = '';
-		}
-		if(jQuery.isArray(b) && jQuery.inArray(a,b) > -1){
-			b = a;
-		}
-		if(String(a).search(/^\s*(\+|-)?((\d+(\.\d+)?)|(\.\d+))\s*$/) !== -1){
-			a = parseFloat(a);
-			b = parseFloat(b);
-		}
-		if ( String(a).indexOf('&quot;') != '-1' && operators(op, a.replace('&quot;', '"'), b) ) {
+		a = prepareLogicValueForComparison( a )
+		b = prepareEnteredValueForComparison( a, b );
+
+		if ( typeof a === 'string' && a.indexOf('&quot;') != '-1' && operators(op, a.replace('&quot;', '"'), b) ) {
 			return true;
 		}
 
@@ -725,8 +718,8 @@ function frmFrontFormJS(){
 					return false;
 				}
 
-				d = prepareEnteredValueForLikeComparison( d );
-				c = prepareLogicValueForLikeComparison( c );
+				d = prepareValueForLikeComparison( d );
+				c = prepareValueForLikeComparison( c );
 
 				return d.indexOf( c ) != -1;
 			},
@@ -736,8 +729,8 @@ function frmFrontFormJS(){
 					return true;
 				}
 
-				d = prepareEnteredValueForLikeComparison( d );
-				c = prepareLogicValueForLikeComparison( c );
+				d = prepareValueForLikeComparison( d );
+				c = prepareValueForLikeComparison( c );
 
 				return d.indexOf( c ) == -1;
 			}
@@ -745,20 +738,44 @@ function frmFrontFormJS(){
 		return theOperators[op](a, b);
 	}
 
-	function prepareEnteredValueForLikeComparison( d ) {
-		if ( typeof d === 'string' ) {
-			d = d.toLowerCase();
-		} else if ( typeof d === 'number' ) {
-			d = d.toString();
+	function prepareLogicValueForComparison( a ) {
+		if ( String(a).search(/^\s*(\+|-)?((\d+(\.\d+)?)|(\.\d+))\s*$/) !== -1 ) {
+			a = parseFloat(a);
+		} else if ( typeof a === 'string' ) {
+			a = a.trim();
 		}
-		return d;
+
+		return a;
 	}
 
-	function prepareLogicValueForLikeComparison( c ) {
-		if ( typeof c === 'string' ) {
-			c = c.toLowerCase();
+	function prepareEnteredValueForComparison( a, b ) {
+		if ( typeof b === 'undefined' ) {
+			b = '';
 		}
-		return c;
+
+		if ( jQuery.isArray(b) && jQuery.inArray(a, b) > -1 ) {
+			b = a;
+		}
+
+		if ( typeof a === 'number' && typeof b === 'string' ) {
+			b = parseFloat(b);
+		}
+
+		if ( typeof b === 'string' ) {
+			b = b.trim();
+		}
+
+		return b;
+	}
+
+
+	function prepareValueForLikeComparison( val ) {
+		if ( typeof val === 'string' ) {
+			val = val.toLowerCase();
+		} else if ( typeof val === 'number' ) {
+			val = val.toString();
+		}
+		return val;
 	}
 
 	/**
