@@ -224,6 +224,7 @@
 	border-radius:5px;
 	cursor: pointer;
 	margin-top:5px;
+	line-height:1.42857143;
 }
 .frm_dropzone.dz-clickable * {
 	cursor: default;
