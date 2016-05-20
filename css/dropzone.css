@@ -288,9 +288,6 @@
 .frm_dropzone .dz-preview.dz-file-preview .dz-details {
 	opacity: 1;
 }
-.frm_dropzone .dz-preview.dz-image-preview {
-	background: white;
-}
 .frm_dropzone .dz-preview.dz-image-preview .dz-details {
 	-webkit-transition: opacity 0.2s linear;
 	-moz-transition: opacity 0.2s linear;

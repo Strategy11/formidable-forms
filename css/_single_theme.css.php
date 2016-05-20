@@ -757,6 +757,11 @@ if ( ! $submit_style ) { ?>
 	background-color:<?php echo esc_html( ( empty( $bg_color ) ? 'transparent' : '#' . $bg_color ) . $important ); ?>;
 }
 
+.<?php echo esc_html( $style_class ) ?> .frm_dropzone .frm_upload_icon:before,
+.<?php echo esc_html( $style_class ) ?> .frm_dropzone .dz-remove{
+	color:#<?php echo esc_html( $text_color . $important ) ?>;
+}
+
 .<?php echo esc_html( $style_class ) ?> .frm_blank_field .frm_dropzone{
 	border-color:#<?php echo esc_html( $border_color_error . $important ) ?>;
 	color:#<?php echo esc_html( $text_color_error . $important ) ?>;
