@@ -700,7 +700,7 @@ function frmFrontFormJS(){
 	}
 
 	function operators(op, a, b){
-		a = prepareLogicValueForComparison( a )
+		a = prepareLogicValueForComparison( a );
 		b = prepareEnteredValueForComparison( a, b );
 
 		if ( typeof a === 'string' && a.indexOf('&quot;') != '-1' && operators(op, a.replace('&quot;', '"'), b) ) {
@@ -3753,8 +3753,8 @@ function frmFrontFormJS(){
 		},
 
         scrollToID: function(id){
-            var frm_pos = jQuery(document.getElementById(id).offset());
-            window.scrollTo(frm_pos.left, frm_pos.top);
+            var object = jQuery(document.getElementById(id));
+            frmFrontForm.scrollMsg( object, false );
         },
 
 		scrollMsg: function( id, object, animate ) {
