@@ -120,6 +120,10 @@ function frmFrontFormJS(){
 			maxFiles: max,
 			acceptedFiles: uploadFields[i].acceptedFiles,
 			uploadMultiple: uploadFields[i].uploadMultiple,
+			fallback: function() {
+				// Force ajax submit to turn off
+				jQuery(this.element).append('<input name="frm-dz-fallback" type="hidden" value="1" />');
+			},
 			init: function() {
 				this.on('sending', function(file, xhr, formData) {
 					formData.append('action', 'frm_submit_dropzone' );
@@ -2758,7 +2762,7 @@ function frmFrontFormJS(){
 	}
 
 	function checkRequiredField( field, errors ) {
-		if ( field.type == 'hidden' ) {
+		if ( field.type == 'hidden' && field.getAttribute('data-frmfile') != 1 ) {
 			return errors;
 		}
 
