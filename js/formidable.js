@@ -112,6 +112,10 @@ function frmFrontFormJS(){
 			}
 		}
 
+		var form = field.closest('form');
+		var submitButton = form.find('input[type="submit"], .frm_submit input[type="button"]');
+		var loading = form.find('.frm_ajax_loading');
+
 		field.dropzone({
 			url:frm_js.ajax_url,
 			addRemoveLinks: true,
@@ -157,6 +161,16 @@ function frmFrontFormJS(){
 					if ( uploadFields[i].uploadMultiple && typeof file.mediaID !== 'undefined' ) {
 						jQuery(file.previewElement).append( getHiddenUploadHTML( uploadFields[i], file.mediaID ) );
 					}
+				});
+
+				this.on('addedfile', function(){
+					loading.addClass('frm_loading_now');
+					submitButton.attr('disabled', 'disabled');
+				});
+
+				this.on('queuecomplete', function(){
+					loading.removeClass('frm_loading_now');
+					submitButton.removeAttr('disabled');
 				});
 
 				this.on('removedfile', function( file ) {
