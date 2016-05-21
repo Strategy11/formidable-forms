@@ -236,6 +236,7 @@ a.frm_save_draft{
     display:inline-block;
 }
 
+.frm_file_container .frm_file_link,
 .with_frm_style .frm_radio label .frm_file_container,
 .with_frm_style .frm_checkbox label .frm_file_container{
     display:inline-block;
