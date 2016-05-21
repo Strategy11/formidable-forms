@@ -143,7 +143,7 @@ function frmFrontFormJS(){
 				this.on('successmultiple', function( files, response ) {
 					var mediaIDs = jQuery.parseJSON(response);
 					for ( var m = 0; m < files.length; m++ ) {
-						jQuery(files[m].previewElement).append('<input name="'+ uploadFields[i].fieldName +'[]" type="hidden" value="'+ mediaIDs[m] +'" />');
+						jQuery(files[m].previewElement).append( getHiddenUploadHTML( uploadFields[i], mediaIDs[m] ) );
 					}
 				});
 
@@ -155,7 +155,7 @@ function frmFrontFormJS(){
 
 				this.on('complete', function( file ) {
 					if ( uploadFields[i].uploadMultiple && typeof file.mediaID !== 'undefined' ) {
-						jQuery(file.previewElement).append('<input name="'+ uploadFields[i].fieldName +'[]" type="hidden" value="'+ file.mediaID +'" />');
+						jQuery(file.previewElement).append( getHiddenUploadHTML( uploadFields[i], file.mediaID ) );
 					}
 				});
 
@@ -183,6 +183,10 @@ function frmFrontFormJS(){
 				}
 			}
 		});
+	}
+
+	function getHiddenUploadHTML( field, mediaID ) {
+		return '<input name="'+ field.fieldName +'[]" type="hidden" value="'+ mediaID +'" data-frmfile="'+ field.fieldID +'" />';
 	}
 
 	function removeFile(){
@@ -2762,7 +2766,8 @@ function frmFrontFormJS(){
 	}
 
 	function checkRequiredField( field, errors ) {
-		if ( field.type == 'hidden' && field.getAttribute('data-frmfile') != 1 ) {
+		var fileID = field.getAttribute('data-frmfile');
+		if ( field.type == 'hidden' && fileID === null ) {
 			return errors;
 		}
 
@@ -2773,8 +2778,7 @@ function frmFrontFormJS(){
 			jQuery(checkGroup).each(function() {
 			    val = this.value;
 			});
-		} else if ( field.type == 'file' ) {
-			var fileID = jQuery(field).data('fid');
+		} else if ( field.type == 'file' || fileID ) {
 			if ( typeof fileID === 'undefined' ) {
 				fileID = getFieldId( field, true );
 				fileID = fileID.replace('file', '');
