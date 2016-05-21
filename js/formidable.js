@@ -122,7 +122,7 @@ function frmFrontFormJS(){
 			uploadMultiple: uploadFields[i].uploadMultiple,
 			fallback: function() {
 				// Force ajax submit to turn off
-				jQuery(this.element).append('<input name="frm-dz-fallback" type="hidden" value="1" />');
+				jQuery(this.element).closest('form').removeClass('frm_ajax_submit');
 			},
 			init: function() {
 				this.on('sending', function(file, xhr, formData) {
@@ -2916,7 +2916,6 @@ function frmFrontFormJS(){
 
 	function getFormErrors(object, action){
 		jQuery(object).find('input[type="submit"], input[type="button"]').attr('disabled','disabled');
-		jQuery(object).find('.frm_ajax_loading').addClass('frm_loading_now');
 
 		if(typeof action == 'undefined'){
 			jQuery(object).find('input[name="frm_action"]').val();
@@ -2925,38 +2924,28 @@ function frmFrontFormJS(){
 		jQuery.ajax({
 			type:'POST',url:frm_js.ajax_url,
 			data:jQuery(object).serialize() +'&action=frm_entries_'+ action +'&nonce='+frm_js.nonce,
-			success:function(errObj){
-				errObj = errObj.replace(/^\s+|\s+$/g,'');
-				if(errObj.indexOf('{') === 0){
-					errObj = jQuery.parseJSON(errObj);
+			success:function(response){
+				response = response.replace(/^\s+|\s+$/g,'');
+				if ( response.indexOf('{') === 0 ) {
+					response = jQuery.parseJSON(response);
+				}else{
+					response = {'content':'', 'errors':{}, 'pass':false };
 				}
 
-				if(errObj === '' || !errObj || errObj === '0' || (typeof(errObj) != 'object' && errObj.indexOf('<!DOCTYPE') === 0)){
-					var $loading = document.getElementById('frm_loading');
-					if($loading !== null){
-						var file_val=jQuery(object).find('input[type=file]').val();
-						if(typeof(file_val) != 'undefined' && file_val !== ''){
-							setTimeout(function(){
-								jQuery($loading).fadeIn('slow');
-							},2000);
-						}
-					}
-					var $recapField = jQuery(object).find('.frm-g-recaptcha, .g-recaptcha');
-					if($recapField.length && (jQuery(object).find('.frm_next_page').length < 1 || jQuery(object).find('.frm_next_page').val() < 1)){
-                        $recapField.closest('.frm_form_field').replaceWith('<input type="hidden" name="recaptcha_checked" value="'+ frm_js.nonce +'">');
-					}
+				if ( typeof response.redirect != 'undefined' ) {
+					window.location = response.redirect;
+				} else if ( response.content !== '' ) {
+					// the form or success message was returned
 
-					object.submit();
-				}else if(typeof errObj != 'object'){
 					jQuery(object).find('.frm_ajax_loading').removeClass('frm_loading_now');
 					var formID = jQuery(object).find('input[name="form_id"]').val();
-					jQuery(object).closest( '#frm_form_'+ formID +'_container' ).replaceWith(errObj);
+					jQuery(object).closest( '#frm_form_'+ formID +'_container' ).replaceWith( response.content );
 					frmFrontForm.scrollMsg( formID );
 
 					if(typeof(frmThemeOverride_frmAfterSubmit) == 'function'){
 						var pageOrder = jQuery('input[name="frm_page_order_'+ formID +'"]').val();
-						var formReturned = jQuery(errObj).find('input[name="form_id"]').val();
-						frmThemeOverride_frmAfterSubmit(formReturned, pageOrder, errObj, object);
+						var formReturned = jQuery(response.content).find('input[name="form_id"]').val();
+						frmThemeOverride_frmAfterSubmit(formReturned, pageOrder, response.content, object);
 					}
 
 					var entryIdField = jQuery(object).find('input[name="id"]');
@@ -2964,25 +2953,26 @@ function frmFrontFormJS(){
 						jQuery(document.getElementById('frm_edit_'+ entryIdField.val())).find('a').addClass('frm_ajax_edited').click();
 					}
 
-					var formCompleted = jQuery(errObj).find('.frm_message');
+					var formCompleted = jQuery(response.content).find('.frm_message');
 					if ( formCompleted.length ) {
 						// if the success message is showing, run the logic
 						checkConditionalLogic( 'pageLoad' );
 					}
 					checkFieldsOnPage();
-				}else{
+				} else if ( Object.keys(response.errors).length ) {
+					// errors were returned
+
 					jQuery(object).find('input[type="submit"], input[type="button"]').removeAttr('disabled');
 					jQuery(object).find('.frm_ajax_loading').removeClass('frm_loading_now');
 
 					//show errors
 					var cont_submit = true;
-					jQuery('.form-field').removeClass('frm_blank_field');
-					jQuery('.form-field .frm_error').replaceWith('');
+					removeAllErrors();
 
 					var show_captcha = false;
 					var $fieldCont = null;
 
-					for (var key in errObj){
+					for ( var key in response.errors ) {
 						$fieldCont = jQuery(object).find('#frm_field_'+key+'_container');
 
 						if ( $fieldCont.length ) {
@@ -2999,7 +2989,7 @@ function frmFrontFormJS(){
 							}
 
 							if ( $fieldCont.is(':visible') ) {
-								addFieldError( $fieldCont, key, errObj );
+								addFieldError( $fieldCont, key, response.errors );
 
 								cont_submit = false;
 
@@ -3016,21 +3006,27 @@ function frmFrontFormJS(){
 									}
 								}
 							}
-						}else if(key == 'redirect'){
-							window.location = errObj[key];
-							return;
 						}
 					}
 
 					scrollToFirstField( object );
 
 					if(show_captcha !== true){
-						jQuery(object).find('.frm-g-recaptcha, .g-recaptcha').closest('.frm_form_field').replaceWith('<input type="hidden" name="recaptcha_checked" value="'+ frm_js.nonce +'">');
+						replaceCheckedRecaptcha( object, false );
 					}
 
 					if(cont_submit){
 						object.submit();
+					}else{
+						jQuery(object).prepend(response.error_message);
 					}
+				} else {
+					// there may have been a plugin conflict, or the form is not set to submit with ajax
+
+					showFileLoading( object );
+					replaceCheckedRecaptcha( object, true );
+
+					object.submit();
 				}
 			},
 			error:function(){
@@ -3056,10 +3052,41 @@ function frmFrontFormJS(){
 		$fieldCont.find('.frm_error').remove();
 	}
 
+	function removeAllErrors() {
+		jQuery('.form-field').removeClass('frm_blank_field');
+		jQuery('.form-field .frm_error').replaceWith('');
+		jQuery('.frm_error_style').remove();
+	}
+
 	function scrollToFirstField( object ) {
 		var field = jQuery(object).find('.frm_blank_field:first');
 		if ( field.length ) {
 			frmFrontForm.scrollMsg( field, object, true );
+		}
+	}
+
+	function showFileLoading( object ) {
+		var loading = document.getElementById('frm_loading');
+		if ( loading !== null ) {
+			var file_val = jQuery(object).find('input[type=file]').val();
+			if ( typeof file_val != 'undefined' && file_val !== '' ) {
+				setTimeout(function(){
+					jQuery(loading).fadeIn('slow');
+				},2000);
+			}
+		}
+	}
+
+	function replaceCheckedRecaptcha( object, checkPage ) {
+		var $recapField = jQuery(object).find('.frm-g-recaptcha, .g-recaptcha');
+		if($recapField.length ){
+			if ( checkPage ) {
+				var morePages = jQuery(object).find('.frm_next_page').length < 1 || jQuery(object).find('.frm_next_page').val() < 1;
+				if ( ! morePages ) {
+					return;
+				}
+			}
+			$recapField.closest('.frm_form_field').replaceWith('<input type="hidden" name="recaptcha_checked" value="'+ frm_js.nonce +'">');
 		}
 	}
 
@@ -3806,16 +3833,21 @@ function frmFrontFormJS(){
 			var errors = frmFrontForm.validateFormSubmit( object );
 
 			if ( Object.keys(errors).length === 0 ) {
-				frmFrontForm.checkFormErrors( object, action );
+				jQuery(object).find('.frm_ajax_loading').addClass('frm_loading_now');
+				if ( classList.contains('frm_ajax_submit') ) {
+					action = jQuery(object).find('input[name="frm_action"]').val();
+					frmFrontForm.checkFormErrors( object, action );
+				} else {
+					object.submit();
+				}
 			}
 		},
 
 		validateFormSubmit: function( object ){
-			if(jQuery(this).find('.wp-editor-wrap').length && typeof(tinyMCE) != 'undefined'){
+			if ( typeof tinyMCE != 'undefined' && jQuery(this).find('.wp-editor-wrap').length ) {
 				tinyMCE.triggerSave();
 			}
 
-			action = jQuery(object).find('input[name="frm_action"]').val();
 			jsErrors = [];
 
 			if ( shouldJSValidate( object ) ) {
@@ -3832,6 +3864,7 @@ function frmFrontFormJS(){
 		getAjaxFormErrors: function( object ) {
 			jsErrors = validateForm( object );
 			if ( typeof frmThemeOverride_jsErrors == 'function' ) {
+				action = jQuery(object).find('input[name="frm_action"]').val();
 				var customErrors = frmThemeOverride_jsErrors( action, object );
 				if ( Object.keys(customErrors).length  ) {
 					for ( var key in customErrors ) {
@@ -3844,9 +3877,7 @@ function frmFrontFormJS(){
 		},
 
 		addAjaxFormErrors: function( object ) {
-			// Remove all previous errors
-			jQuery('.form-field').removeClass('frm_blank_field');
-			jQuery('.form-field .frm_error').replaceWith('');
+			removeAllErrors();
 
 			for ( var key in jsErrors ) {
 				var $fieldCont = jQuery(object).find('#frm_field_'+key+'_container');

@@ -445,7 +445,7 @@ class FrmEntriesController {
             return;
         }
 
-        if ( $errors == '' ) {
+        if ( $errors == '' && ! $ajax ) {
 			$errors = FrmEntryValidate::validate( $_POST );
         }
 
