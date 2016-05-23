@@ -344,6 +344,7 @@ class FrmEntriesHelper {
         } else {
             $value = isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field_id ] ) ? $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field_id ] : '';
         }
+		FrmAppHelper::sanitize_value( 'wp_kses_post', $value );
 		$value = stripslashes_deep( $value );
     }
 
