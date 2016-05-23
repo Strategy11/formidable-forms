@@ -1081,6 +1081,8 @@ select.frm_cancelnew, input.frm_enternew{width:175px;}
 	animation-delay: 0.5s;
 }
 
+.frm_98_width{width:98%;}
+
 /*Form Settings Tab*/
 .frm_form_settings .advanced_settings .form-table{margin-top:0;}
 .frm_form_settings .advanced_settings .form-table .frm_short_tr td{padding:0 10px 10px;}
