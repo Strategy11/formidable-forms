@@ -646,8 +646,6 @@ class FrmFormAction {
 			$logic_value = reset( $logic_value );
 		}
 
-		$logic_value = wp_kses_post( $logic_value );
-
 		if ( $logic_value == 'current_user' ) {
 			$logic_value = get_current_user_id();
 		}
