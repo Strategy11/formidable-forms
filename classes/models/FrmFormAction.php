@@ -613,13 +613,7 @@ class FrmFormAction {
 				continue;
 			}
 
-			if ( is_array($condition['hide_opt']) ) {
-				$condition['hide_opt'] = reset($condition['hide_opt']);
-			}
-
-			if ( $condition['hide_opt'] == 'current_user' ) {
-				$condition['hide_opt'] = get_current_user_id();
-			}
+			self::prepare_logic_value( $condition['hide_opt'] );
 
 			$observed_value = self::get_value_from_entry( $entry, $condition['hide_field'] );
 
@@ -640,6 +634,23 @@ class FrmFormAction {
 
 		return $stop;
 	}
+
+	/**
+	 * Prepare the logic value for comparison against the entered value
+	 *
+	 * @since 2.01.02
+	 * @param array|string $logic_value
+	 */
+	private static function prepare_logic_value( &$logic_value ) {
+		if ( is_array( $logic_value ) ) {
+			$logic_value = reset( $logic_value );
+		}
+
+		if ( $logic_value == 'current_user' ) {
+			$logic_value = get_current_user_id();
+		}
+	}
+
 
 	/**
 	 * Get the value from a specific field and entry
