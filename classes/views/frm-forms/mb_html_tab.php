@@ -36,7 +36,7 @@
             'form_key' => __( 'Form Key', 'formidable' ), 'deletelink' => __( 'Delete Entry Link', 'formidable' ),
 		) as $skey => $sname ) { ?>
         <li class="frm_col_<?php echo esc_attr( $col ) ?>">
-    	    <a href="javascript:void(0)" class="show_before_html show_after_html frmbutton button frm_insert_code" data-code="<?php echo esc_attr($skey) ?>"><?php echo $sname; ?></a>
+    	    <a href="javascript:void(0)" class="show_before_html show_after_html frmbutton button frm_insert_code" data-code="<?php echo esc_attr($skey) ?>"><?php echo esc_html( $sname ); ?></a>
     	</li>
         <?php
             $col = ($col == 'one') ? 'two' : 'one';
@@ -44,7 +44,7 @@
 
         foreach ( array( 'button_label' => __( 'Button Label', 'formidable' ), 'button_action' => __( 'Button Hook', 'formidable' ) ) as $skey => $sname ) { ?>
         <li class="frm_col_<?php echo esc_attr( $col ) ?>">
-    	    <a href="javascript:void(0)" class="show_submit_html frmbutton button frm_insert_code" data-code="<?php echo esc_attr($skey) ?>"><?php echo $sname; ?></a>
+    	    <a href="javascript:void(0)" class="show_submit_html frmbutton button frm_insert_code" data-code="<?php echo esc_attr($skey) ?>"><?php echo esc_html( $sname ); ?></a>
     	</li>
         <?php
             $col = ($col == 'one') ? 'two' : 'one';

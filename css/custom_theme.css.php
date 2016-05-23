@@ -312,7 +312,7 @@ a.frm_save_draft{
     padding:5px;
     border-width:1px;
     border-style:solid;
-    border-color:#<?php echo $defaults['border_color'] ?>;
+    border-color:#<?php echo esc_html( $defaults['border_color'] ) ?>;
     border-top:none;
     border-left:none;
     border-right:none;
@@ -324,9 +324,9 @@ table.form_results.with_frm_style{
 
 table.form_results.with_frm_style tr td{
     text-align:left;
-    color:#<?php echo $defaults['text_color'] ?>;
+    color:#<?php echo esc_html( $defaults['text_color'] ) ?>;
     padding:7px 9px;
-    border-top:1px solid #<?php echo $defaults['border_color'] ?>;
+    border-top:1px solid #<?php echo esc_html( $defaults['border_color'] ) ?>;
 }
 
 table.form_results.with_frm_style tr.frm_even,
@@ -336,7 +336,7 @@ table.form_results.with_frm_style tr.frm_even,
 
 table.form_results.with_frm_style tr.frm_odd,
 .frm-grid .frm_odd{
-    background-color:#<?php echo $defaults['bg_color_active'] ?>;
+    background-color:#<?php echo esc_html( $defaults['bg_color_active'] ) ?>;
 }
 
 .frm_collapse .ui-icon{
@@ -407,12 +407,12 @@ table.form_results.with_frm_style tr.frm_odd,
 }
 
 #frm_loading .progress-striped .progress-bar{
-    background-image:linear-gradient(45deg, #<?php echo $defaults['border_color'] ?> 25%, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0) 50%, #<?php echo $defaults['border_color'] ?> 50%, #<?php echo $defaults['border_color'] ?> 75%, rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 0));
+    background-image:linear-gradient(45deg, #<?php echo esc_html( $defaults['border_color'] ) ?> 25%, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0) 50%, #<?php echo esc_html( $defaults['border_color'] ) ?> 50%, #<?php echo esc_html( $defaults['border_color'] ) ?> 75%, rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 0));
     background-size:40px 40px;
 }
 
 #frm_loading .progress-bar{
-    background-color:#<?php echo $defaults['bg_color'] ?>;
+    background-color:#<?php echo esc_html( $defaults['bg_color'] ) ?>;
     box-shadow:0 -1px 0 rgba(0, 0, 0, 0.15) inset;
     float:left;
     height:100%;
@@ -459,12 +459,12 @@ ul.frm_pagination > li.active a{
 .frmcal table.frmcal-calendar{
     border-collapse:collapse;
     margin-top:20px;
-    color:#<?php echo $defaults['text_color'] ?>;
+    color:#<?php echo esc_html( $defaults['text_color'] ) ?>;
 }
 
 .frmcal table.frmcal-calendar,
 .frmcal table.frmcal-calendar tbody tr td{
-    border:1px solid #<?php echo $defaults['border_color'] ?>;
+    border:1px solid #<?php echo esc_html( $defaults['border_color'] ) ?>;
 }
 
 .frmcal table.frmcal-calendar,
@@ -509,25 +509,25 @@ ul.frm_pagination > li.active a{
 }
 
 table.frmcal-calendar .frmcal_date{
-    background-color:#<?php echo $defaults['bg_color'] ?>;
+    background-color:#<?php echo esc_html( $defaults['bg_color'] ) ?>;
     padding:0 5px;
     text-align:right;
-    -moz-box-shadow:0 2px 5px #<?php echo $defaults['border_color'] ?>;
-    -webkit-box-shadow:0 2px 5px #<?php echo $defaults['border_color'] ?>;
-    box-shadow:0 2px 5px #<?php echo $defaults['border_color'] ?>;
-    -ms-filter:"progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=180, Color='#<?php echo $defaults['border_color'] ?>')";
-    filter:progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=180, Color='#<?php echo $defaults['border_color'] ?>');
+    -moz-box-shadow:0 2px 5px #<?php echo esc_html( $defaults['border_color'] ) ?>;
+    -webkit-box-shadow:0 2px 5px #<?php echo esc_html( $defaults['border_color'] ) ?>;
+    box-shadow:0 2px 5px #<?php echo esc_html( $defaults['border_color'] ) ?>;
+    -ms-filter:"progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=180, Color='#<?php echo esc_attr( $defaults['border_color'] ) ?>')";
+    filter:progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=180, Color='#<?php echo esc_attr( $defaults['border_color'] ) ?>');
 }
 
 table.frmcal-calendar .frmcal-today .frmcal_date{
-    background-color:#<?php echo $defaults['bg_color_active'] ?>;
+    background-color:#<?php echo esc_html( $defaults['bg_color_active'] ) ?>;
     padding:0 5px;
     text-align:right;
-    -moz-box-shadow:0 2px 5px #<?php echo $defaults['border_color_active'] ?>;
-    -webkit-box-shadow:0 2px 5px #<?php echo $defaults['border_color_active'] ?>;
-    box-shadow:0 2px 5px #<?php echo $defaults['border_color_active'] ?>;
-    -ms-filter:"progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=180, Color='#<?php echo $defaults['border_color_active'] ?>')";
-    filter:progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=180, Color='#<?php echo $defaults['border_color_active'] ?>');
+    -moz-box-shadow:0 2px 5px #<?php echo esc_html( $defaults['border_color_active'] ) ?>;
+    -webkit-box-shadow:0 2px 5px #<?php echo esc_html( $defaults['border_color_active'] ) ?>;
+    box-shadow:0 2px 5px #<?php echo esc_html( $defaults['border_color_active'] ) ?>;
+    -ms-filter:"progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=180, Color='#<?php echo esc_html( $defaults['border_color_active'] ) ?>')";
+    filter:progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=180, Color='#<?php echo esc_html( $defaults['border_color_active'] ) ?>');
 }
 
 .frmcal_num{
@@ -697,7 +697,7 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
     padding:5px;
     border-width:1px;
     border-style:solid;
-    border-color:#<?php echo $defaults['border_color'] ?>;
+    border-color:#<?php echo esc_html( $defaults['border_color'] ) ?>;
     border-left:none;
     border-right:none;
 }
@@ -730,11 +730,11 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
 
 .frm_grid_first,
 .frm_grid_odd{
-    background-color:#<?php echo $defaults['bg_color'] ?>;
+    background-color:#<?php echo esc_html( $defaults['bg_color'] ) ?>;
 }
 
 .frm_grid{
-    background-color:#<?php echo $defaults['bg_color_active'] ?>;
+    background-color:#<?php echo esc_html( $defaults['bg_color_active'] ) ?>;
 }
 
 .frm_grid .frm_primary_label,
@@ -975,17 +975,17 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
 .frm_form_field.frm_html_scroll_box{
     height:100px;
     overflow:auto;
-    background-color:#<?php echo $defaults['bg_color'] ?>;
-    border-color:#<?php echo $defaults['border_color'] ?>;
-    border-width:<?php echo $defaults['field_border_width'] ?>;
-    border-style:<?php echo $defaults['field_border_style'] ?>;
-    -moz-border-radius:<?php echo $defaults['border_radius'] ?>;
-    -webkit-border-radius:<?php echo $defaults['border_radius'] ?>;
-    border-radius:<?php echo $defaults['border_radius'] ?>;
-    width:<?php echo ($defaults['field_width'] == '' ? 'auto' : $defaults['field_width']) ?>;
+    background-color:#<?php echo esc_html( $defaults['bg_color'] ) ?>;
+    border-color:#<?php echo esc_html( $defaults['border_color'] ) ?>;
+    border-width:<?php echo esc_html( $defaults['field_border_width'] ) ?>;
+    border-style:<?php echo esc_html( $defaults['field_border_style'] ) ?>;
+    -moz-border-radius:<?php echo esc_html( $defaults['border_radius'] ) ?>;
+    -webkit-border-radius:<?php echo esc_html( $defaults['border_radius'] ) ?>;
+    border-radius:<?php echo esc_html( $defaults['border_radius'] ) ?>;
+    width:<?php echo esc_html( $defaults['field_width'] == '' ? 'auto' : $defaults['field_width'] ) ?>;
     max-width:100%;
-    font-size:<?php echo $defaults['field_font_size'] ?>;
-    padding:<?php echo $defaults['field_pad'] ?>;
+    font-size:<?php echo esc_html( $defaults['field_font_size'] ) ?>;
+    padding:<?php echo esc_html( $defaults['field_pad'] ) ?>;
     -webkit-box-sizing:border-box;
     -moz-box-sizing:border-box;
     box-sizing:border-box;

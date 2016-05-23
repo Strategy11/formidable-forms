@@ -6,7 +6,7 @@
 	<label><?php _e( 'Weight', 'formidable' ) ?></label>
 	<select name="<?php echo esc_attr( $frm_style->get_field_name('weight') ) ?>" id="frm_weight">
 		<?php foreach ( FrmStyle::get_bold_options() as $value => $name ) { ?>
-		<option value="<?php echo esc_attr( $value ) ?>" <?php selected( $style->post_content['weight'], $value ) ?>><?php echo $name ?></option>
+		<option value="<?php echo esc_attr( $value ) ?>" <?php selected( $style->post_content['weight'], $value ) ?>><?php echo esc_html( $name ) ?></option>
 		<?php } ?>
 	</select>
 </div>
@@ -19,7 +19,7 @@
 	<label><?php _e( 'Position', 'formidable' ) ?></label>
 	<select name="<?php echo esc_attr( $frm_style->get_field_name('position') ) ?>" id="frm_position">
 	    <?php foreach ( array( 'none' => __( 'top', 'formidable' ), 'left' => __( 'left', 'formidable' ), 'right' => __( 'right', 'formidable' ), 'no_label' => __( 'none', 'formidable' ) ) as $pos => $pos_label ) { ?>
-	        <option value="<?php echo esc_attr( $pos ) ?>" <?php selected($style->post_content['position'], $pos) ?>><?php echo $pos_label ?></option>
+	        <option value="<?php echo esc_attr( $pos ) ?>" <?php selected($style->post_content['position'], $pos) ?>><?php echo esc_html( $pos_label ) ?></option>
 	    <?php } ?>
 	</select>
 </div>
@@ -52,7 +52,7 @@
 	<label><?php _e( 'Weight', 'formidable' ) ?></label>
 	<select name="<?php echo esc_attr( $frm_style->get_field_name('required_weight') ) ?>" id="frm_required_weight">
 		<?php foreach ( FrmStyle::get_bold_options() as $value => $name ) { ?>
-		<option value="<?php echo esc_attr( $value ) ?>" <?php selected( $style->post_content['required_weight'], $value ) ?>><?php echo $name ?></option>
+		<option value="<?php echo esc_attr( $value ) ?>" <?php selected( $style->post_content['required_weight'], $value ) ?>><?php echo esc_html( $name ) ?></option>
 		<?php } ?>
 	</select>
 </div>

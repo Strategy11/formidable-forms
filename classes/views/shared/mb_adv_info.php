@@ -159,10 +159,10 @@
         <li class="frm_col_<?php echo esc_attr( $col ) ?>">
 	        <a href="javascript:void(0)" class="frmbutton button frm_insert_code" data-code="<?php echo esc_attr($file->id) ?> show_image=1"><?php _e( 'Show image', 'formidable' ) ?></a>
 	    </li>
-	    <li class="frm_col_<?php echo $col = (($col == 'one') ? 'two' : 'one') ?>">
+	    <li class="frm_col_<?php echo esc_attr( $col = ( $col == 'one' ? 'two' : 'one' ) ) ?>">
 	        <a href="javascript:void(0)" class="frmbutton button frm_insert_code" data-code="<?php echo esc_attr($file->id) ?> show=id"><?php _e( 'Image ID', 'formidable' ) ?></a>
 	    </li>
-	    <li class="frm_col_<?php echo $col = (($col == 'one') ? 'two' : 'one') ?>">
+	    <li class="frm_col_<?php echo esc_attr( $col = ( $col == 'one' ? 'two' : 'one' ) ) ?>">
 	        <a href="javascript:void(0)" class="frmbutton button frm_insert_code" data-code="<?php echo esc_attr($file->id) ?> show_filename=1"><?php _e( 'Image Name', 'formidable' ) ?></a>
 	    </li>
 	    <?php } ?>

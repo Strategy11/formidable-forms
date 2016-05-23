@@ -22,7 +22,7 @@
 	<label><?php _e( 'Weight', 'formidable' ) ?></label>
 	<select name="<?php echo esc_attr( $frm_style->get_field_name('check_weight') ) ?>" id="frm_check_weight">
 		<?php foreach ( FrmStyle::get_bold_options() as $value => $name ) { ?>
-		<option value="<?php echo esc_attr( $value ) ?>" <?php selected( $style->post_content['check_weight'], $value ) ?>><?php echo $name ?></option>
+		<option value="<?php echo esc_attr( $value ) ?>" <?php selected( $style->post_content['check_weight'], $value ) ?>><?php echo esc_html( $name ) ?></option>
 		<?php } ?>
 	</select>
 </div>

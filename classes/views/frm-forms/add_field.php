@@ -157,7 +157,10 @@ if ( $display['options'] ) { ?>
 
                 <?php
 				if ( $display['required'] ) { ?>
-                    <label for="frm_req_field_<?php echo esc_attr( $field['id'] ) ?>" class="frm_inline_label"><input type="checkbox" id="frm_req_field_<?php echo esc_attr( $field['id'] ) ?>" class="frm_req_field" name="field_options[required_<?php echo esc_attr( $field['id'] ) ?>]" value="1" <?php echo $field['required'] ? 'checked="checked"': ''; ?> /> <?php _e( 'Required', 'formidable' ) ?></label>
+					<label for="frm_req_field_<?php echo esc_attr( $field['id'] ) ?>" class="frm_inline_label">
+						<input type="checkbox" id="frm_req_field_<?php echo esc_attr( $field['id'] ) ?>" class="frm_req_field" name="field_options[required_<?php echo esc_attr( $field['id'] ) ?>]" value="1" <?php checked( $field['required'], 1 ) ?> />
+						<?php _e( 'Required', 'formidable' ) ?>
+					</label>
                 <?php
                 }
 
@@ -175,7 +178,10 @@ if ( $display['options'] ) { ?>
                         $field['read_only'] = false;
 					}
                 ?>
-                <label for="frm_read_only_field_<?php echo esc_attr( $field['id'] ) ?>" class="frm_inline_label frm_help" title="<?php esc_attr_e( 'Read Only: Show this field but do not allow the field value to be edited from the front-end.', 'formidable' ) ?>" ><input type="checkbox" id="frm_read_only_field_<?php echo esc_attr( $field['id'] ) ?>" name="field_options[read_only_<?php echo esc_attr( $field['id'] ) ?>]" value="1" <?php echo $field['read_only'] ? ' checked="checked"' : ''; ?>/> <?php _e( 'Read Only', 'formidable' ) ?></label>
+				<label for="frm_read_only_field_<?php echo esc_attr( $field['id'] ) ?>" class="frm_inline_label frm_help" title="<?php esc_attr_e( 'Read Only: Show this field but do not allow the field value to be edited from the front-end.', 'formidable' ) ?>" >
+					<input type="checkbox" id="frm_read_only_field_<?php echo esc_attr( $field['id'] ) ?>" name="field_options[read_only_<?php echo esc_attr( $field['id'] ) ?>]" value="1" <?php checked( $field['read_only'], 1 ) ?>/>
+					<?php _e( 'Read Only', 'formidable' ) ?>
+				</label>
                 <?php }
 
                 do_action('frm_field_options_form_top', $field, $display, $values);

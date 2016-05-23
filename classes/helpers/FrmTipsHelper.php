@@ -16,9 +16,9 @@ class FrmTipsHelper {
 		?>
 		<a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url( $tip['link'] ) ) ?>" target="_blank" class="frm_pro_tip">
 			<span><i class="frm_icon_font frm_check1_icon"></i>  Pro Tip:</span>
-			<?php echo $tip['tip'] ?>
+			<?php echo esc_html( $tip['tip'] ) ?>
 			<?php if ( isset( $tip['call'] ) ) { ?>
-				<span><?php echo $tip['call'] ?></span>
+				<span><?php echo esc_html( $tip['call'] ) ?></span>
 			<?php } ?>
 		</a>
 		<?php

@@ -23,18 +23,18 @@ while ( $next_posts = array_splice( $item_ids, 0, 20 ) ) {
 		<description></description>
 		<content><?php echo FrmXMLHelper::cdata( apply_filters( 'the_content_export', $post->post_content ) ); ?></content>
 		<excerpt><?php echo FrmXMLHelper::cdata( apply_filters( 'the_excerpt_export', $post->post_excerpt ) ); ?></excerpt>
-		<post_id><?php echo $post->ID; ?></post_id>
-		<post_date><?php echo $post->post_date; ?></post_date>
-		<post_date_gmt><?php echo $post->post_date_gmt; ?></post_date_gmt>
-		<comment_status><?php echo $post->comment_status; ?></comment_status>
-		<ping_status><?php echo $post->ping_status; ?></ping_status>
-		<post_name><?php echo $post->post_name; ?></post_name>
-		<status><?php echo $post->post_status; ?></status>
-		<post_parent><?php echo $post->post_parent; ?></post_parent>
-		<menu_order><?php echo $post->menu_order; ?></menu_order>
-		<post_type><?php echo $post->post_type; ?></post_type>
-		<post_password><?php echo $post->post_password; ?></post_password>
-		<is_sticky><?php echo $is_sticky; ?></is_sticky>
+		<post_id><?php echo esc_html( $post->ID ); ?></post_id>
+		<post_date><?php echo esc_html( $post->post_date ); ?></post_date>
+		<post_date_gmt><?php echo esc_html( $post->post_date_gmt ); ?></post_date_gmt>
+		<comment_status><?php echo esc_html( $post->comment_status ); ?></comment_status>
+		<ping_status><?php echo esc_html( $post->ping_status ); ?></ping_status>
+		<post_name><?php echo esc_html( $post->post_name ); ?></post_name>
+		<status><?php echo esc_html( $post->post_status ); ?></status>
+		<post_parent><?php echo esc_html( $post->post_parent ); ?></post_parent>
+		<menu_order><?php echo esc_html( $post->menu_order ); ?></menu_order>
+		<post_type><?php echo esc_html( $post->post_type ); ?></post_type>
+		<post_password><?php echo FrmXMLHelper::cdata( $post->post_password ); ?></post_password>
+		<is_sticky><?php echo esc_html( $is_sticky ); ?></is_sticky>
 <?php	if ( $post->post_type == 'attachment' ) : ?>
 		<attachment_url><?php echo wp_get_attachment_url( $post->ID ); ?></attachment_url>
 <?php 	endif; ?>
@@ -46,7 +46,7 @@ while ( $next_posts = array_splice( $item_ids, 0, 20 ) ) {
 			}
 		?>
 		<postmeta>
-			<meta_key><?php echo $meta->meta_key; ?></meta_key>
+			<meta_key><?php echo esc_html( $meta->meta_key ); ?></meta_key>
 			<meta_value><?php echo FrmXMLHelper::cdata( $meta->meta_value ); ?></meta_value>
 		</postmeta>
 <?php	endforeach;
@@ -80,13 +80,13 @@ foreach ( (array) $terms as $term ) {
 
     $frm_inc_tax[] = $term->term_id;
     $label = ($term->taxonomy == 'category' || $term->taxonomy == 'tag') ? $term->taxonomy : 'term'; ?>
-	<term><term_id><?php echo $term->term_id ?></term_id><term_taxonomy><?php echo $term->taxonomy; ?></term_taxonomy><?php
+	<term><term_id><?php echo esc_html( $term->term_id ) ?></term_id><term_taxonomy><?php echo esc_html( $term->taxonomy ); ?></term_taxonomy><?php
     if ( ! empty( $term->name ) ) {
         echo '<term_name>' . FrmXMLHelper::cdata( $term->name ) . '</term_name>';
     }
     if ( ! empty( $term->description ) ) {
     ?><term_description><?php echo FrmXMLHelper::cdata( $term->description ) ?></term_description><?php
     }
-    ?><term_slug><?php echo $term->slug; ?></term_slug></term>
+    ?><term_slug><?php echo esc_html( $term->slug ); ?></term_slug></term>
 <?php
 }
