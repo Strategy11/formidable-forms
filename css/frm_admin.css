@@ -129,6 +129,10 @@ input.frm_insert_in_template{
     visibility:hidden;
 }
 
+.frm_no_float{
+	float:none;
+}
+
 .frm_clear_none{
     clear:none;
 }
