@@ -2428,7 +2428,7 @@ function frmAdminBuildJS(){
 			if ( $navCont !== null ) {
 				var $titleDiv = document.getElementById('titlediv');
 				$titleDiv.insertBefore($navCont, $titleDiv.firstChild);
-				$navCont.style.display = '';
+				$navCont.style.display = 'block';
 			}
 
 			// move content tabs
