@@ -2153,12 +2153,13 @@ function frmFrontFormJS(){
 
 	function triggerCalcWithoutFields() {
 		var calcs = __FRMCALC.calc;
+		var vals = [];
 
 		for ( var field_key in calcs ) {
 			if ( calcs[field_key].fields.length < 1 ) {
 				var totalField = jQuery( document.getElementById('field_'+ field_key) );
 				if ( totalField.length ) {
-					doSingleCalculation( __FRMCALC, field_key, [] );
+					doSingleCalculation( __FRMCALC, field_key, vals );
 				}
 			}
 		}
@@ -2329,11 +2330,13 @@ function frmFrontFormJS(){
 
 			field = getCallForField( field, all_calcs );
 			if ( thisCalc.calc_type == 'text' ) {
+				field.valKey = 'text' + field.valKey;
 				vals = getTextCalcFieldId( field, vals );
 				if ( typeof vals[field.valKey] === 'undefined' ) {
 					vals[field.valKey] = '';
 				}
 			} else {
+				field.valKey = 'num' + field.valKey;
 				vals = getCalcFieldId(field, all_calcs, vals);
 				if ( typeof vals[field.valKey] === 'undefined' || isNaN(vals[field.valKey]) ) {
 					vals[field.valKey] = 0;
