@@ -484,6 +484,7 @@ if ( ! isset( $center_form ) ) {
 
 <?php
 if ( ! $submit_style ) { ?>
+.<?php echo esc_html( $style_class ) ?> .frm_compact .frm_dropzone.dz-clickable .dz-message,
 .<?php echo esc_html( $style_class ) ?> input[type=submit],
 .<?php echo esc_html( $style_class ) ?> .frm_submit input[type=button],
 .frm_form_submit_style,

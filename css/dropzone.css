@@ -485,3 +485,110 @@
 .frm_dropzone .fallback input[type=file]{
 	display:block;
 }
+
+/* Compact version */
+.frm_compact_text{
+	display:none;
+}
+
+.frm_compact .frm_dropzone.dz-clickable{
+	min-height:60px;
+	padding:5px;
+	border:none;
+	background-color:transparent;
+}
+
+.frm_compact .frm_dropzone.dz-clickable.frm_single_upload{
+	max-width:100%;
+}
+
+.frm_compact .frm_compact_text{
+	display:inline;
+}
+
+.frm_compact .frm_dropzone.dz-clickable.frm_single_upload .dz-message,
+.frm_compact .frm_dropzone.dz-clickable .dz-message{
+	font-size:16px;
+	border:1px solid #dfdfdf;
+	background:#fff;
+	display: inline-block;
+    width: auto;
+    height: auto;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+    padding: 6px 11px;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    -moz-box-shadow: 0 1px 1px #eeeeee;
+    -webkit-box-shadow: 0px 1px 1px #eeeeee;
+    box-shadow: 0 1px 1px #eeeeee;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=3, Direction=135, Color='#eeeeee')";
+    filter: progid:DXImageTransform.Microsoft.Shadow(Strength=3, Direction=135, Color='#eeeeee');
+    margin: 10px 0;
+    vertical-align: middle;
+}
+
+.frm_compact .frm_dropzone .frm_upload_icon:before{
+	font-size:25px;
+	padding-right:10px;
+	vertical-align: middle;
+}
+
+.frm_compact .frm_dropzone .frm_upload_icon{
+	display:inline;
+}
+
+.frm_compact .frm_dropzone .dz-preview{
+	min-height:20px;
+	max-width:175px;
+	margin:5px;
+}
+
+.frm_compact .frm_dropzone .frm_upload_text,
+.frm_compact .frm_dropzone .frm_small_text,
+.frm_compact .frm_dropzone .dz-preview .dz-image,
+.frm_compact .frm_dropzone .dz-preview .dz-details .dz-size{
+	display:none;
+}
+
+.frm_compact .frm_dropzone .dz-preview.dz-error .dz-error-message{
+	top: 0;
+	padding: 4px;
+	width: auto;
+	text-align: center;
+}
+
+.frm_compact .frm_dropzone .dz-preview .dz-success-mark,
+.frm_compact .frm_dropzone .dz-preview .dz-error-mark{
+	margin-left: -16px;
+    margin-top: 0;
+    top: 6px;
+}
+
+.frm_compact .frm_dropzone .dz-error .dz-remove{
+	display:none;
+}
+
+.frm_compact .frm_dropzone .dz-preview .dz-success-mark svg,
+.frm_compact .frm_dropzone .dz-preview .dz-error-mark svg{
+	height:35px;
+	width:35px;
+}
+
+.frm_compact .frm_dropzone .dz-preview .dz-details{
+	opacity:1;
+	position:relative;
+	padding:5px;
+}
+
+.frm_compact .frm_dropzone .dz-preview .dz-details .dz-filename {
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.frm_compact .frm_dropzone .dz-preview .dz-details .dz-filename span{
+	border:none;
+	background:transparent;
+}
