@@ -2939,11 +2939,16 @@ function frmFrontFormJS(){
 			type:'POST',url:frm_js.ajax_url,
 			data:jQuery(object).serialize() +'&action=frm_entries_'+ action +'&nonce='+frm_js.nonce,
 			success:function(response){
+				var defaultResponse = {'content':'', 'errors':{}, 'pass':false };
+				if ( response === null ) {
+					response = defaultResponse;
+				}
+
 				response = response.replace(/^\s+|\s+$/g,'');
 				if ( response.indexOf('{') === 0 ) {
 					response = jQuery.parseJSON(response);
 				}else{
-					response = {'content':'', 'errors':{}, 'pass':false };
+					response = defaultResponse;
 				}
 
 				if ( typeof response.redirect != 'undefined' ) {
