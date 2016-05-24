@@ -222,12 +222,6 @@ function frmAdminBuildJS(){
 					return;
 				}
 
-				var switchto = ui.item.data('switchto');
-				if(switchto){
-					ui.item.hide();
-					jQuery('#'+switchto).show();
-				}
-
 				insertNewFieldByDragging( fieldHTMLId, formId, sectionId, opts );
 			},
 			change:function(event, ui){
@@ -448,11 +442,6 @@ function frmAdminBuildJS(){
 		var field_type = $thisObj.closest('li').attr('id');
 		var form_id = this_form_id;
 		var $button = $thisObj.closest('.frmbutton');
-		var switchto = $button.data('switchto');
-		if(switchto){
-			$button.hide();
-			document.getElementById(switchto).style.display = '';
-		}
 		jQuery.ajax({
 			type:'POST',url:ajaxurl,
 			data:{
@@ -598,12 +587,12 @@ function frmAdminBuildJS(){
 		var fieldDescription = document.getElementById( 'field_description_' + field_id );
 		var hiddenDescName = 'field_options[description_' + field_id + ']';
 		var newValue = frm_admin_js['enter_' + fieldType];
-		maybeSetNewDescription( fieldDescription, hiddenDescName, newValue )
+		maybeSetNewDescription( fieldDescription, hiddenDescName, newValue );
 
 		var confFieldDescription = document.getElementById( 'conf_field_description_' + field_id );
 		var hiddenConfName = 'field_options[conf_desc_' + field_id + ']';
 		var newConfValue = frm_admin_js['confirm_' + fieldType];
-		maybeSetNewDescription( confFieldDescription, hiddenConfName, newConfValue )
+		maybeSetNewDescription( confFieldDescription, hiddenConfName, newConfValue );
 	}
 
 	function maybeSetNewDescription( descriptionDiv, hiddenName, newValue ) {

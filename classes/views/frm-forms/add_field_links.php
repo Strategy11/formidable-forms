@@ -45,16 +45,12 @@ foreach ( FrmField::pro_field_selection() as $field_key => $field_type ) {
 	if ( is_array( $field_type ) ) {
 		$field_label = $field_type['name'];
 
-		if ( isset( $field_type['switch_from'] ) ) { ?>
-				<li class="frmbutton button <?php echo esc_attr( $col_class . ' ' . $no_allow_class . ' frm_t' . $field_key ) ?>" id="<?php echo esc_attr( $field_key ) ?>" data-switchto="<?php echo esc_attr( $field_type['switch_from'] ) ?>" style="display:none !important;">
-					<?php echo apply_filters( 'frmpro_field_links', $field_label, $id, $field_key ) ?>
-				</li>
-<?php
+		if ( isset( $field_type['switch_from'] ) ) {
 			continue;
 		}
 
 ?>
-				<li class="frmbutton button <?php echo esc_attr( $col_class . ' ' . $no_allow_class . ' frm_t' . $field_key ) ?> dropdown" id="<?php echo esc_attr( $field_key ) ?>" <?php echo ( isset( $field_type['switch_to'] ) ) ? 'data-switchto="' . esc_attr( $field_type['switch_to'] ) . '"' : ''; ?>>
+				<li class="frmbutton button <?php echo esc_attr( $col_class . ' ' . $no_allow_class . ' frm_t' . $field_key ) ?> dropdown" id="<?php echo esc_attr( $field_key ) ?>">
 	                <a href="#" id="frm-<?php echo esc_attr( $field_key ) ?>Drop" class="frm-dropdown-toggle" data-toggle="dropdown"><?php echo esc_html( $field_label ) ?> <b class="caret"></b></a>
 
                     <ul class="frm-dropdown-menu" role="menu" aria-labelledby="frm-<?php echo esc_attr( $field_key ) ?>Drop">
