@@ -508,31 +508,20 @@
 
 .frm_compact .frm_dropzone.dz-clickable.frm_single_upload .dz-message,
 .frm_compact .frm_dropzone.dz-clickable .dz-message{
-	font-size:16px;
+	font-size:14px;
 	border:1px solid #dfdfdf;
 	background:#fff;
 	display: inline-block;
-    width: auto;
-    height: auto;
-    -moz-border-radius: 4px;
-    -webkit-border-radius: 4px;
-    border-radius: 4px;
-    padding: 6px 11px;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    -ms-box-sizing: border-box;
-    -moz-box-shadow: 0 1px 1px #eeeeee;
-    -webkit-box-shadow: 0px 1px 1px #eeeeee;
-    box-shadow: 0 1px 1px #eeeeee;
-    -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=3, Direction=135, Color='#eeeeee')";
-    filter: progid:DXImageTransform.Microsoft.Shadow(Strength=3, Direction=135, Color='#eeeeee');
-    margin: 10px 0;
-    vertical-align: middle;
+	border-radius: 4px;
+	padding: 6px 11px;
+	box-sizing: border-box;
+	box-shadow: 0 1px 1px #eeeeee;
+	vertical-align: middle;
 }
 
 .frm_compact .frm_dropzone .frm_upload_icon:before{
-	font-size:25px;
-	padding-right:10px;
+	font-size:22px;
+	padding-right:7px;
 	vertical-align: middle;
 }
 
