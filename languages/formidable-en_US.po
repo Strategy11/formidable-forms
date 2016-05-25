@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Formidable v2.01.02\n"
+"Project-Id-Version: Formidable v2.01.03\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-12-20\n"
-"PO-Revision-Date: 2016-05-23 20:39:15+0000\n"
+"PO-Revision-Date: 2016-05-25 20:48:30+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -388,7 +388,7 @@ msgstr ""
 msgid "or"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1771
+#: classes/helpers/FrmAppHelper.php:1773
 #: classes/views/frm-forms/_publish_box.php:75
 #: pro/classes/controllers/FrmProEddController.php:162
 #: pro/classes/controllers/FrmProEntriesController.php:2282
@@ -478,7 +478,7 @@ msgstr ""
 msgid "Display form description"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1758
+#: classes/helpers/FrmAppHelper.php:1760
 #: classes/helpers/FrmCSVExportHelper.php:116
 #: pro/classes/helpers/FrmProFieldsHelper.php:2946
 #: pro/classes/helpers/FrmProFieldsHelper.php:2962
@@ -573,7 +573,7 @@ msgid "Create"
 msgstr ""
 
 #: classes/controllers/FrmFieldsController.php:316
-#: classes/helpers/FrmAppHelper.php:1766
+#: classes/helpers/FrmAppHelper.php:1768
 #: classes/views/frm-fields/single-option.php:6
 #: classes/views/frm-fields/single-option.php:8
 #: pro/classes/views/frmpro-fields/other-option.php:10
@@ -647,7 +647,7 @@ msgstr ""
 msgid "Submit Button"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1764
+#: classes/helpers/FrmAppHelper.php:1766
 #@ formidable
 msgid "Are you sure you want to do this? Clicking OK will delete all forms, form data, and all other Formidable data. There is no Undo."
 msgstr ""
@@ -715,258 +715,258 @@ msgstr ""
 msgid "Duplicate Field"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1819
+#: classes/helpers/FrmAppHelper.php:1821
 #@ formidable
 msgid "English/Western"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1820
+#: classes/helpers/FrmAppHelper.php:1822
 #@ formidable
 msgid "Afrikaans"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1820
+#: classes/helpers/FrmAppHelper.php:1822
 #@ formidable
 msgid "Albanian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1821
+#: classes/helpers/FrmAppHelper.php:1823
 #@ formidable
 msgid "Arabic"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1821
+#: classes/helpers/FrmAppHelper.php:1823
 #@ formidable
 msgid "Armenian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1822
+#: classes/helpers/FrmAppHelper.php:1824
 #@ formidable
 msgid "Azerbaijani"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1822
+#: classes/helpers/FrmAppHelper.php:1824
 #@ formidable
 msgid "Basque"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1823
+#: classes/helpers/FrmAppHelper.php:1825
 #@ formidable
 msgid "Bosnian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1823
+#: classes/helpers/FrmAppHelper.php:1825
 #@ formidable
 msgid "Bulgarian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1824
+#: classes/helpers/FrmAppHelper.php:1826
 #@ formidable
 msgid "Catalan"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1824
+#: classes/helpers/FrmAppHelper.php:1826
 #@ formidable
 msgid "Chinese Hong Kong"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1825
+#: classes/helpers/FrmAppHelper.php:1827
 #@ formidable
 msgid "Chinese Simplified"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1825
+#: classes/helpers/FrmAppHelper.php:1827
 #@ formidable
 msgid "Chinese Traditional"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1826
+#: classes/helpers/FrmAppHelper.php:1828
 #@ formidable
 msgid "Croatian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1826
+#: classes/helpers/FrmAppHelper.php:1828
 #@ formidable
 msgid "Czech"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1827
+#: classes/helpers/FrmAppHelper.php:1829
 #@ formidable
 msgid "Danish"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1827
+#: classes/helpers/FrmAppHelper.php:1829
 #@ formidable
 msgid "Dutch"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1828
+#: classes/helpers/FrmAppHelper.php:1830
 #@ formidable
 msgid "English/UK"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1828
+#: classes/helpers/FrmAppHelper.php:1830
 #@ formidable
 msgid "Esperanto"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1829
+#: classes/helpers/FrmAppHelper.php:1831
 #@ formidable
 msgid "Estonian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1829
+#: classes/helpers/FrmAppHelper.php:1831
 #@ formidable
 msgid "Faroese"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1830
+#: classes/helpers/FrmAppHelper.php:1832
 #@ formidable
 msgid "Farsi/Persian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1831
+#: classes/helpers/FrmAppHelper.php:1833
 #@ formidable
 msgid "Finnish"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1831
+#: classes/helpers/FrmAppHelper.php:1833
 #@ formidable
 msgid "French"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1832
+#: classes/helpers/FrmAppHelper.php:1834
 #@ formidable
 msgid "French/Swiss"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1833
+#: classes/helpers/FrmAppHelper.php:1835
 #@ formidable
 msgid "German"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1834
+#: classes/helpers/FrmAppHelper.php:1836
 #@ formidable
 msgid "Greek"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1835
+#: classes/helpers/FrmAppHelper.php:1837
 #@ formidable
 msgid "Hebrew"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1836
+#: classes/helpers/FrmAppHelper.php:1838
 #@ formidable
 msgid "Hungarian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1837
+#: classes/helpers/FrmAppHelper.php:1839
 #@ formidable
 msgid "Icelandic"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1838
+#: classes/helpers/FrmAppHelper.php:1840
 #@ formidable
 msgid "Italian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1838
+#: classes/helpers/FrmAppHelper.php:1840
 #@ formidable
 msgid "Japanese"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1839
+#: classes/helpers/FrmAppHelper.php:1841
 #@ formidable
 msgid "Korean"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1839
+#: classes/helpers/FrmAppHelper.php:1841
 #@ formidable
 msgid "Latvian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1840
+#: classes/helpers/FrmAppHelper.php:1842
 #@ formidable
 msgid "Lithuanian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1840
+#: classes/helpers/FrmAppHelper.php:1842
 #@ formidable
 msgid "Malaysian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1841
+#: classes/helpers/FrmAppHelper.php:1843
 #@ formidable
 msgid "Norwegian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1841
+#: classes/helpers/FrmAppHelper.php:1843
 #@ formidable
 msgid "Polish"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1842
+#: classes/helpers/FrmAppHelper.php:1844
 #@ formidable
 msgid "Portuguese/Brazilian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1843
+#: classes/helpers/FrmAppHelper.php:1845
 #@ formidable
 msgid "Romanian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1844
+#: classes/helpers/FrmAppHelper.php:1846
 #@ formidable
 msgid "Russian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1844
-#: classes/helpers/FrmAppHelper.php:1845
+#: classes/helpers/FrmAppHelper.php:1846
+#: classes/helpers/FrmAppHelper.php:1847
 #@ formidable
 msgid "Serbian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1845
+#: classes/helpers/FrmAppHelper.php:1847
 #@ formidable
 msgid "Slovak"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1846
+#: classes/helpers/FrmAppHelper.php:1848
 #@ formidable
 msgid "Slovenian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1846
+#: classes/helpers/FrmAppHelper.php:1848
 #@ formidable
 msgid "Spanish"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1847
+#: classes/helpers/FrmAppHelper.php:1849
 #@ formidable
 msgid "Swedish"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1848
+#: classes/helpers/FrmAppHelper.php:1850
 #@ formidable
 msgid "Tamil"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1848
+#: classes/helpers/FrmAppHelper.php:1850
 #@ formidable
 msgid "Thai"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1849
+#: classes/helpers/FrmAppHelper.php:1851
 #@ formidable
 msgid "Turkish"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1850
+#: classes/helpers/FrmAppHelper.php:1852
 #@ formidable
 msgid "Ukranian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1850
+#: classes/helpers/FrmAppHelper.php:1852
 #@ formidable
 msgid "Vietnamese"
 msgstr ""
@@ -1908,12 +1908,12 @@ msgstr ""
 msgid "reCAPTCHA Language"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1819
+#: classes/helpers/FrmAppHelper.php:1821
 #@ formidable
 msgid "English"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1842
+#: classes/helpers/FrmAppHelper.php:1844
 #@ formidable
 msgid "Portuguese"
 msgstr ""
@@ -2302,7 +2302,7 @@ msgstr ""
 msgid "Post Meta"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1253
+#: classes/helpers/FrmAppHelper.php:1255
 #@ formidable
 msgid "at"
 msgstr ""
@@ -4180,7 +4180,7 @@ msgstr ""
 msgid "Use separate values"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1772
+#: classes/helpers/FrmAppHelper.php:1774
 #: classes/helpers/FrmFormsListHelper.php:271
 #: classes/views/frm-forms/add_field.php:218
 #: classes/views/frm-forms/add_field.php:247
@@ -4233,82 +4233,82 @@ msgstr ""
 msgid "Copied from Post"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1314
+#: classes/helpers/FrmAppHelper.php:1316
 #: pro/classes/controllers/FrmProDisplaysController.php:740
 #@ formidable
 msgid "year"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1314
+#: classes/helpers/FrmAppHelper.php:1316
 #: pro/classes/controllers/FrmProDisplaysController.php:740
 #@ formidable
 msgid "years"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1315
+#: classes/helpers/FrmAppHelper.php:1317
 #: pro/classes/controllers/FrmProDisplaysController.php:740
 #@ formidable
 msgid "month"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1315
+#: classes/helpers/FrmAppHelper.php:1317
 #: pro/classes/controllers/FrmProDisplaysController.php:740
 #@ formidable
 msgid "months"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1316
+#: classes/helpers/FrmAppHelper.php:1318
 #: pro/classes/controllers/FrmProDisplaysController.php:740
 #@ formidable
 msgid "week"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1316
+#: classes/helpers/FrmAppHelper.php:1318
 #: pro/classes/controllers/FrmProDisplaysController.php:740
 #@ formidable
 msgid "weeks"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1317
+#: classes/helpers/FrmAppHelper.php:1319
 #: pro/classes/controllers/FrmProDisplaysController.php:740
 #@ formidable
 msgid "day"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1317
+#: classes/helpers/FrmAppHelper.php:1319
 #: pro/classes/controllers/FrmProDisplaysController.php:740
 #@ formidable
 msgid "days"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1318
+#: classes/helpers/FrmAppHelper.php:1320
 #@ formidable
 msgid "hour"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1318
+#: classes/helpers/FrmAppHelper.php:1320
 #: pro/classes/views/frmpro-forms/add_form_options.php:35
 #@ formidable
 msgid "hours"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1319
+#: classes/helpers/FrmAppHelper.php:1321
 #@ formidable
 msgid "minute"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1319
+#: classes/helpers/FrmAppHelper.php:1321
 #@ formidable
 msgid "minutes"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1320
+#: classes/helpers/FrmAppHelper.php:1322
 #@ formidable
 msgid "second"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1301
-#: classes/helpers/FrmAppHelper.php:1320
+#: classes/helpers/FrmAppHelper.php:1303
+#: classes/helpers/FrmAppHelper.php:1322
 #@ formidable
 msgid "seconds"
 msgstr ""
@@ -4619,7 +4619,7 @@ msgstr ""
 msgid "Anything"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1755
+#: classes/helpers/FrmAppHelper.php:1757
 #: classes/views/styles/_sample_form.php:94
 #: pro/classes/helpers/FrmProFieldsHelper.php:678
 #: pro/classes/helpers/FrmProFormsHelper.php:331
@@ -5011,12 +5011,12 @@ msgstr ""
 msgid "If you have many checkbox or radio button options, you may add this class to allow your user to easily scroll through the options."
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1768
+#: classes/helpers/FrmAppHelper.php:1770
 #@ formidable
 msgid "Saving"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1769
+#: classes/helpers/FrmAppHelper.php:1771
 #@ formidable
 msgid "Saved"
 msgstr ""
@@ -5041,7 +5041,7 @@ msgstr ""
 msgid "Recommended for long forms."
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1789
+#: classes/helpers/FrmAppHelper.php:1791
 #@ formidable
 msgid "Warning: There is no way to retrieve unsaved entries."
 msgstr ""
@@ -5233,25 +5233,25 @@ msgstr ""
 msgid "Update Button Text"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1776
+#: classes/helpers/FrmAppHelper.php:1778
 #: classes/helpers/FrmFieldsHelper.php:1206
 #@ formidable
 msgid "Default value will NOT pass form validation"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1775
+#: classes/helpers/FrmAppHelper.php:1777
 #: classes/helpers/FrmFieldsHelper.php:1206
 #@ formidable
 msgid "Default value will pass form validation"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1773
+#: classes/helpers/FrmAppHelper.php:1775
 #: classes/helpers/FrmFieldsHelper.php:1197
 #@ formidable
 msgid "Clear default value when typing"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1774
+#: classes/helpers/FrmAppHelper.php:1776
 #: classes/helpers/FrmFieldsHelper.php:1197
 #@ formidable
 msgid "Do not clear default value when typing"
@@ -5426,7 +5426,7 @@ msgstr ""
 msgid "Click a button below to insert sample logic into your view"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1777
+#: classes/helpers/FrmAppHelper.php:1779
 #@ formidable
 msgid "Are you sure?"
 msgstr ""
@@ -5540,7 +5540,7 @@ msgstr ""
 msgid "last updated"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1076
+#: classes/helpers/FrmAppHelper.php:1078
 #: classes/helpers/FrmFieldsHelper.php:175
 #: pro/classes/controllers/FrmProFieldsController.php:1272
 #, php-format
@@ -5589,7 +5589,7 @@ msgstr ""
 msgid "Select the field(s) from your form that you would like to populate with your categories, tags, or other taxonomies."
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1787
+#: classes/helpers/FrmAppHelper.php:1789
 #@ formidable
 msgid "Import Complete"
 msgstr ""
@@ -5668,7 +5668,7 @@ msgstr[1] ""
 msgid "Nothing was imported or updated"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1548
+#: classes/helpers/FrmAppHelper.php:1550
 #, php-format
 #@ formidable
 msgid "If you leave the subject blank, the default will be used: %1$s Form submitted on %2$s"
@@ -5755,13 +5755,13 @@ msgstr ""
 msgid "Views with a \"Both (Dynamic)\" format will show here."
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1728
-#: classes/helpers/FrmAppHelper.php:1754
+#: classes/helpers/FrmAppHelper.php:1730
+#: classes/helpers/FrmAppHelper.php:1756
 #@ default
 msgid "Loading&hellip;"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1770
+#: classes/helpers/FrmAppHelper.php:1772
 #: classes/views/frm-forms/_publish_box.php:74
 #@ default
 msgid "OK"
@@ -5966,8 +5966,8 @@ msgstr ""
 msgid "This will add !important to many of the lines in the Formidable styling to make sure it will be used."
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1725
-#: classes/helpers/FrmAppHelper.php:1788
+#: classes/helpers/FrmAppHelper.php:1727
+#: classes/helpers/FrmAppHelper.php:1790
 #@ formidable
 msgid "Please wait while your site updates."
 msgstr ""
@@ -5977,7 +5977,7 @@ msgstr ""
 msgid "Abnormal HTML characters prevented your form from saving correctly"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1813
+#: classes/helpers/FrmAppHelper.php:1815
 #@ formidable
 msgid "You are running an outdated version of Formidable. This plugin may not work correctly if you do not update Formidable."
 msgstr ""
@@ -6003,7 +6003,7 @@ msgstr ""
 msgid "That CSV was not uploaded. Are CSV files allowed on your site?"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1765
+#: classes/helpers/FrmAppHelper.php:1767
 #: classes/views/frm-forms/add_field.php:81
 #: classes/views/frm-forms/add_field.php:94
 #: classes/views/frm-forms/form.php:13
@@ -6012,7 +6012,7 @@ msgstr ""
 msgid "(Click to add description)"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1767
+#: classes/helpers/FrmAppHelper.php:1769
 #: classes/views/frm-forms/add_field.php:63
 #: pro/classes/views/frmpro-fields/field-selection.php:12
 #: pro/classes/views/lookup-fields/back-end/watch-row.php:10
@@ -6020,29 +6020,29 @@ msgstr ""
 msgid "(no label)"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1782
+#: classes/helpers/FrmAppHelper.php:1784
 #: classes/helpers/FrmFieldsHelper.php:172
 #: pro/classes/helpers/FrmProFieldsHelper.php:680
 #@ formidable
 msgid "The entered values do not match"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1783
+#: classes/helpers/FrmAppHelper.php:1785
 #@ formidable
 msgid "Enter Email"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1784
+#: classes/helpers/FrmAppHelper.php:1786
 #@ formidable
 msgid "Confirm Email"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1785
+#: classes/helpers/FrmAppHelper.php:1787
 #@ formidable
 msgid "Enter Password"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1786
+#: classes/helpers/FrmAppHelper.php:1788
 #@ formidable
 msgid "Confirm Password"
 msgstr ""
@@ -6212,27 +6212,27 @@ msgstr ""
 msgid "South Sudan"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1542
+#: classes/helpers/FrmAppHelper.php:1544
 #@ formidable
 msgid "Give this action a label for easy reference."
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1543
+#: classes/helpers/FrmAppHelper.php:1545
 #@ formidable
 msgid "Add one or more recipient addresses separated by a \",\".  FORMAT: Name <name@email.com> or name@email.com.  [admin_email] is the address set in WP General Settings."
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1544
+#: classes/helpers/FrmAppHelper.php:1546
 #@ formidable
 msgid "Add CC addresses separated by a \",\".  FORMAT: Name <name@email.com> or name@email.com."
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1545
+#: classes/helpers/FrmAppHelper.php:1547
 #@ formidable
 msgid "Add BCC addresses separated by a \",\".  FORMAT: Name <name@email.com> or name@email.com."
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1547
+#: classes/helpers/FrmAppHelper.php:1549
 #@ formidable
 msgid "Enter the name and/or email address of the sender. FORMAT: John Bates <john@example.com> or john@example.com."
 msgstr ""
@@ -7436,57 +7436,57 @@ msgstr ""
 msgid "Users Submitted"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1546
+#: classes/helpers/FrmAppHelper.php:1548
 #@ formidable
 msgid "If you would like a different reply to address than the \"from\" address, add a single address here.  FORMAT: Name <name@email.com> or name@email.com."
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1778
+#: classes/helpers/FrmAppHelper.php:1780
 #@ formidable
 msgid "Are you sure you want to delete this field and all data associated with it?"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1779
+#: classes/helpers/FrmAppHelper.php:1781
 #@ formidable
 msgid "WARNING: This will delete all fields inside of the section as well."
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1830
+#: classes/helpers/FrmAppHelper.php:1832
 #@ formidable
 msgid "Filipino"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1832
+#: classes/helpers/FrmAppHelper.php:1834
 #@ formidable
 msgid "French/Canadian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1833
+#: classes/helpers/FrmAppHelper.php:1835
 #@ formidable
 msgid "German/Austria"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1834
+#: classes/helpers/FrmAppHelper.php:1836
 #@ formidable
 msgid "German/Switzerland"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1836
+#: classes/helpers/FrmAppHelper.php:1838
 #@ formidable
 msgid "Hindi"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1837
+#: classes/helpers/FrmAppHelper.php:1839
 #@ formidable
 msgid "Indonesian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1843
+#: classes/helpers/FrmAppHelper.php:1845
 #@ formidable
 msgid "Portuguese/Portugal"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1847
+#: classes/helpers/FrmAppHelper.php:1849
 #@ formidable
 msgid "Spanish/Latin America"
 msgstr ""
@@ -7620,12 +7620,12 @@ msgstr ""
 msgid "Pending"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1780
+#: classes/helpers/FrmAppHelper.php:1782
 #@ formidable
 msgid "Warning: If you have entries with multiple rows, all but the first row will be lost."
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1726
+#: classes/helpers/FrmAppHelper.php:1728
 #@ formidable
 msgid "Are you sure you want to deauthorize Formidable Forms on this site?"
 msgstr ""
@@ -7959,7 +7959,7 @@ msgstr ""
 msgid "Form Entries"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1790
+#: classes/helpers/FrmAppHelper.php:1792
 #@ default
 msgid "Private"
 msgstr ""
@@ -8832,7 +8832,7 @@ msgstr ""
 msgid "You are trying to view an entry that does not exist."
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1792
+#: classes/helpers/FrmAppHelper.php:1794
 #@ formidable
 msgid "No new licenses were found"
 msgstr ""
