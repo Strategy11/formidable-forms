@@ -89,6 +89,11 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 [See more FAQs](http://formidablepro.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+
+= 2.01.03 =
+* **Pro Features: ** *
+* Make sure HTML entities don't show in rich text fields
+
 = 2.01.02 =
 * Increased minimum required WordPress version to 3.8
 * Added frm_skip_form_action hook. This hook can be used to change whether the action is skipped or not
