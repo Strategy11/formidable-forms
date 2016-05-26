@@ -4,7 +4,7 @@ Donate link: http://formidablepro.com/donate
 Tags: contact form, contact, custom form, database, email, feedback, form, forms, poll, Post, captcha, spam, survey, template, widget, multisite, form builder, form creator, form manager
 Requires at least: 3.8
 Tested up to: 4.5.2
-Stable tag: 2.01.02
+Stable tag: 2.01.03
 
 Beautiful forms in 60 seconds. The WordPress form builder that enables you to create forms with a simple drag-and-drop interface and in-place editing.
 
@@ -89,6 +89,11 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 [See more FAQs](http://formidablepro.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+
+= 2.01.03 =
+* **Pro Features: ** *
+* Make sure HTML entities don't show in rich text fields
+
 = 2.01.02 =
 * Increased minimum required WordPress version to 3.8
 * Added frm_skip_form_action hook. This hook can be used to change whether the action is skipped or not
