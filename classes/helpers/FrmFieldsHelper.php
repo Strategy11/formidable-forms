@@ -899,7 +899,7 @@ DEFAULT_HTML;
     }
 
 	public static function get_display_value( $replace_with, $field, $atts = array() ) {
-		$atts['sep'] = isset( $atts['sep'] ) ? $atts['sep'] : ', ';
+		$sep = isset( $atts['sep'] ) ? $atts['sep'] : ', ';
 
 		$replace_with = apply_filters( 'frm_get_' . $field->type . '_display_value', $replace_with, $field, $atts );
 		$replace_with = apply_filters( 'frm_get_display_value', $replace_with, $field, $atts );
@@ -914,7 +914,7 @@ DEFAULT_HTML;
             }
 			unset( $autop );
 		} else if ( is_array( $replace_with ) ) {
-			$replace_with = implode( $atts['sep'], $replace_with );
+			$replace_with = implode( $sep, $replace_with );
 		}
 
 		return $replace_with;
