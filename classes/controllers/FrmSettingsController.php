@@ -74,9 +74,9 @@ class FrmSettingsController {
         $action = isset( $_REQUEST['frm_action'] ) ? 'frm_action' : 'action';
 		$action = FrmAppHelper::get_param( $action, '', 'get', 'sanitize_title' );
         if ( $action == 'process-form' ) {
-            return self::process_form( $stop_load );
+			self::process_form( $stop_load );
         } else if ( $stop_load != 'stop_load' ) {
-            return self::display_form();
+			self::display_form();
         }
     }
 }

@@ -208,7 +208,6 @@ class FrmSettings{
     }
 
 	private function update_roles( $params ) {
-        //update roles
         global $wp_roles;
 
         $frm_roles = FrmAppHelper::frm_capabilities();
@@ -216,19 +215,9 @@ class FrmSettings{
         foreach ( $frm_roles as $frm_role => $frm_role_description ) {
             $this->$frm_role = (array) ( isset( $params[ $frm_role ] ) ? $params[ $frm_role ] : 'administrator' );
 
-            if ( count($this->$frm_role) === 1 ) {
-                $set_role = reset($this->$frm_role);
-                switch ( $set_role ) {
-                    case 'subscriber':
-                        array_push($this->$frm_role, 'contributor');
-                    case 'contributor':
-                        array_push($this->$frm_role, 'author');
-                    case 'author':
-                        array_push($this->$frm_role, 'editor');
-                    case 'editor':
-                        array_push($this->$frm_role, 'administrator');
-                }
-                unset($set_role);
+            // Make sure administrators always have permissions
+            if ( ! in_array( 'administrator', $this->$frm_role ) ) {
+                $this->$frm_role[] = 'administrator';
             }
 
             foreach ( $roles as $role => $details ) {
@@ -237,7 +226,6 @@ class FrmSettings{
     			} else {
     			    $wp_roles->remove_cap( $role, $frm_role );
     			}
-    			unset($role, $details);
     		}
 		}
     }
