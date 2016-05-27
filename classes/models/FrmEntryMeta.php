@@ -174,11 +174,6 @@ class FrmEntryMeta {
         return $result;
     }
 
-	public static function get_entry_meta( $entry_id, $field_id ) {
-		_deprecated_function( __FUNCTION__, '2.0', 'FrmEntryMeta::get_entry_meta_by_field' );
-		return self::get_entry_meta_by_field( $entry_id, $field_id );
-	}
-
 	public static function get_entry_metas( $entry_id ) {
         _deprecated_function( __FUNCTION__, '1.07.10');
 

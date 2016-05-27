@@ -515,8 +515,4 @@ class FrmEntriesHelper {
 		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmEntryFormat::get_browser' );
 		return FrmEntryFormat::get_browser( $u_agent );
 	}
-
-	public static function entries_dropdown() {
-		_deprecated_function( __FUNCTION__, '1.07.09');
-	}
 }
