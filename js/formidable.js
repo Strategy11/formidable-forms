@@ -84,6 +84,10 @@ function frmFrontFormJS(){
 			}
 		}
 
+		if ( dateFields[ opt_key ].options.defaultDate !== '' ) {
+			dateFields[ opt_key ].options.defaultDate = new Date( dateFields[ opt_key ].options.defaultDate );
+		}
+
 		jQuery(this).datepicker( jQuery.extend(
 			jQuery.datepicker.regional[ dateFields[ opt_key ].locale ],
 			dateFields[ opt_key ].options
