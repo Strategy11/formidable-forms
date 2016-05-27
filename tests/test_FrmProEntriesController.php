@@ -31,24 +31,18 @@ class WP_Test_FrmProEntriesController extends FrmUnitTest {
 
         $output = $this->get_footer_output();
 
-		$expected_date_script = <<<EXPECTED
-$(document).on('focusin','#field_date14', function(){
-$.datepicker.setDefaults($.datepicker.regional['']);
-$(this).datepicker($.extend($.datepicker.regional[''],{dateFormat:'mm/dd/yy',changeMonth:true,changeYear:true,yearRange:'2000:2020',defaultDate:''}));
-});
-EXPECTED;
+		$expected_date_script = 'var frmDates=';
+
 		$expected_is_included = strpos( $output, $expected_date_script );
-		$this->assertTrue( $expected_is_included !== false, 'The date script is missing' );
+		$this->assertTrue( $expected_is_included !== false, 'The date script is missing in output: ' . $output );
 
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
 			$this->markTestSkipped( 'Run with --group entries' );
 		}
 
-		$expected_form_script = <<<SCRIPT
-$(document).on('submit.formidable','.frm-show-form',frmFrontForm.submitForm);
-SCRIPT;
+		$expected_form_script = '/wp-content/plugins/formidable/js/formidable.min.js';
 		$expected_is_included = strpos( $output, $expected_form_script );
-		$this->assertTrue( $expected_is_included !== false, 'The form script is missing' );
+		$this->assertTrue( $expected_is_included !== false, 'The form script is missing in output: ' . $output );
 	}
 
 	/**

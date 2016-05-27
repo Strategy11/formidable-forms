@@ -1808,11 +1808,11 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 
 		// Number of rows
 		$row_count = substr_count( $content, '<tr' );
-		$this->assertTrue( $row_count > 3 && $row_count < 6, 'There are too many rows in a calendar View' );
+		$this->assertTrue( $row_count > 3 && $row_count < 7, 'There are ' . $row_count . ' rows in a calendar View' );
 
 		// Number of day boxes
 		$day_count = substr_count( $content, '<td' );
-		$this->assertTrue( $day_count > 20 && $day_count < 43, 'There are too many days in a calendar View' );
+		$this->assertTrue( $day_count > 20 && $day_count < 43, 'There are ' . $day_count . ' days in a calendar View' );
 	}
 
 	/**
@@ -2279,7 +2279,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_shortcode
 	 */
 	function test_shortcodes_in_all_parts_of_content_with_no_wp_filter() {
-		self:: make_sure_easy_tables_is_active();
+		self::make_sure_easy_tables_is_active();
 		self::clear_get_values();
 
 		$test_view = self::get_view_by_key( 'shortcode-checking' );
@@ -2347,7 +2347,11 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 
 	function make_sure_easy_tables_is_active(){
 		$plugin = 'easy-table/easy-table.php';
-		$this->assertTrue( is_plugin_active( $plugin ), 'Easy table is not active.' );
+		$is_active = is_plugin_active( $plugin ) && class_exists('EasyTable');
+		if ( ! $is_active ) {
+			$this->markTestSkipped( 'Pro is not active' );
+		}
+		$this->assertTrue( $is_active, 'Easy table is not active.' );
 	}
 
 	function get_standard_expected_values(){
