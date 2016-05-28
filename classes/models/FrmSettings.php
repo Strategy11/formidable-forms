@@ -217,7 +217,7 @@ class FrmSettings{
 
             // Make sure administrators always have permissions
             if ( ! in_array( 'administrator', $this->$frm_role ) ) {
-                $this->$frm_role[] = 'administrator';
+				array_push( $this->$frm_role, 'administrator' );
             }
 
             foreach ( $roles as $role => $details ) {
