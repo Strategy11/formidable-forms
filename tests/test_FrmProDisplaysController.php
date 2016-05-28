@@ -1771,6 +1771,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		self::run_get_display_data_tests( $d, 'view with limit lower than page size' );
 
 		// Test page size of 1 and limit of 2
+		// Checks if pagination is correct
 		$dynamic_view = self::reset_view( 'dynamic-view' );
 		$dynamic_view->frm_page_size = 1;
 		$dynamic_view->frm_limit = 2;
@@ -1778,6 +1779,17 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		$values_that_should_not_be_present = array( 'frm-page-' . $dynamic_view->ID . '=3', 'Steve', 'Steph' );
 		$d = self::get_default_args( $dynamic_view, $expected_values, $values_that_should_not_be_present );
 		self::run_get_display_data_tests( $d, 'view with page size lower than limit' );
+
+		// Test page size of 1 and limit of 2
+		// Makes sure no entries are loaded on page 3
+		$dynamic_view = self::reset_view( 'dynamic-view' );
+		$dynamic_view->frm_page_size = 1;
+		$dynamic_view->frm_limit = 2;
+		$_GET['frm_page-' . $dynamic_view->ID ] = 3;
+		$expected_values = array( 'No Entries Found' );
+		$values_that_should_not_be_present = array( 'Jamie', 'Steve', 'Steph' );
+		$d = self::get_default_args( $dynamic_view, $expected_values, $values_that_should_not_be_present );
+		self::run_get_display_data_tests( $d, 'view with page size lower than limit (#2)' );
 	}
 
 	/**
