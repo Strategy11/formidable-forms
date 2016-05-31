@@ -2161,8 +2161,9 @@ function frmFrontFormJS(){
 
 		for ( var field_key in calcs ) {
 			if ( calcs[field_key].fields.length < 1 ) {
-				var totalField = jQuery( document.getElementById('field_'+ field_key) );
-				if ( totalField.length ) {
+				var totalField = document.getElementById( 'field_'+ field_key );
+				if ( totalField !== null && ! isChildInputConditionallyHidden( totalField, calcs[field_key].form_id ) ) {
+					// if field is not hidden, do calculation
 					doSingleCalculation( __FRMCALC, field_key, vals );
 				}
 			}
