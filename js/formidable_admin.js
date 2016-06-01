@@ -384,7 +384,7 @@ function frmAdminBuildJS(){
 
 		// moving an existing field
 		if ( ui.item.hasClass('edit_field_type_break') || ui.item.hasClass('edit_field_type_form') ||
-			ui.item.hasClass('edit_field_type_divider') || ui.item.hasClass('edit_field_type_captcha') ) {
+			ui.item.hasClass('edit_field_type_divider') ) {
 			return false;
 		}
 		return true;
