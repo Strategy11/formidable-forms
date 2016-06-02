@@ -1782,10 +1782,11 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 
 		// Test page size of 1 and limit of 2
 		// Makes sure no entries are loaded on page 3
+		self::clear_get_values();
 		$dynamic_view = self::reset_view( 'dynamic-view' );
 		$dynamic_view->frm_page_size = 1;
 		$dynamic_view->frm_limit = 2;
-		$_GET['frm_page-' . $dynamic_view->ID ] = 3;
+		$_GET['frm-page-' . $dynamic_view->ID ] = 3;
 		$expected_values = array( 'No Entries Found' );
 		$values_that_should_not_be_present = array( 'Jamie', 'Steve', 'Steph' );
 		$d = self::get_default_args( $dynamic_view, $expected_values, $values_that_should_not_be_present );
