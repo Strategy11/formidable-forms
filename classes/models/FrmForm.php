@@ -346,6 +346,7 @@ class FrmForm {
         if ( ! $form ) {
             return false;
         }
+		$id = $form->id;
 
         // Disconnect the entries from this form
 		$entries = FrmDb::get_col( $wpdb->prefix . 'frm_items', array( 'form_id' => $id ) );
