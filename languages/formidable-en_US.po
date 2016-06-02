@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Formidable v2.02\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-12-20\n"
-"PO-Revision-Date: 2016-06-02 17:07:48+0000\n"
+"PO-Revision-Date: 2016-06-02 21:55:05+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -9072,14 +9072,14 @@ msgstr ""
 #: pro/classes/views/frmpro-fields/front-end/file.php:67
 #@ formidable
 msgid "Drop a file here or click to upload"
-msgstr ""
+msgstr "Desliza un archivo hasta aquí o haz clic para cargar"
 
 #: pro/classes/views/frmpro-fields/back-end/field-file.php:6
 #: pro/classes/views/frmpro-fields/front-end/file.php:70
 #, php-format
 #@ formidable
 msgid "Maximum upload size: %sMB"
-msgstr ""
+msgstr "Tamaño máximo de archivo: %sMB"
 
 #: pro/classes/views/frmpro-fields/back-end/file-options.php:63
 #@ formidable
@@ -9105,7 +9105,7 @@ msgstr ""
 #: pro/classes/views/frmpro-fields/front-end/file.php:55
 #@ formidable
 msgid "Remove file"
-msgstr ""
+msgstr "Remover archivo"
 
 #: pro/classes/views/frmpro-fields/front-end/file.php:68
 #@ formidable
