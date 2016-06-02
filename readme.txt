@@ -4,7 +4,7 @@ Donate link: http://formidablepro.com/donate
 Tags: contact form, contact, custom form, database, email, feedback, form, forms, poll, Post, captcha, spam, survey, template, widget, multisite, form builder, form creator, form manager
 Requires at least: 3.8
 Tested up to: 4.5.2
-Stable tag: 2.01.03
+Stable tag: 2.02
 
 Beautiful forms in 60 seconds. The WordPress form builder that enables you to create forms with a simple drag-and-drop interface and in-place editing.
 
@@ -89,6 +89,40 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 [See more FAQs](http://formidablepro.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+
+= 2.02 =
+* Improve user role dropdowns in global settings
+* Remove some deprecated functions
+* More output escaping
+* Move file creation for stylesheet to its own file for an easier API
+* **Pro Features: ** *
+* Add drag and drop file uploading
+* Add options to set the file size and count limits
+* Merge the upload importer plugin into main plugin
+* Filter the media library so uploads in forms can only be viewed by those with permission to edit entries
+* Don't allow direct viewing of attachment pages
+* Add file protection options per form to prevent direct access to files
+* Add a prefix to the attachment slug to prevent the attachments from using top-level slugs that would be better used elsewhere
+* Process files during validation if javascript errors on the page, or if browser doesn't support the in-place file uploader
+* Include the error message at the top of the page when there are ajax validation errors
+* Add frm_image_html_array hook so we can tie in with modals soon
+* Add an option to use text calculations for combining values instead of requiring math operations
+* Add age shortcode for use in calculations. Use [age id=25] in a calculation, where 25 is the id of the date field.
+* If a calculation doesn't have any field triggers, trigger it on load
+* Fixed calculations using multiselect fields across page breaks
+* Fixed date calculations with an empty date field. The calculation will now wait until any date fields have been filled.
+* Only use ajax validation when ajax submit is turned on to prevent double validation checks
+* Allow recaptcha to be dragged into section
+* Fixed issue with html showing in rich text
+* Fixed filtering conditionals from parent form inside of a foreach loop
+* Change default sep for images displayed in View
+* Don't force links when displaying a non-image file
+* Make sure repeating fields watching Lookups keep custom value
+* Fix undefined index error with date field calendar style setting
+* Make sure page size and limit work together well in Views
+* Don't run date calculations until all dates are selected
+* Allow address field labels to be edited when field is initially added
+* Fix single row Lookup field checkboxes styling
 
 = 2.01.03 =
 * **Pro Features: ** *
