@@ -244,7 +244,7 @@ class FrmDb {
         if ( is_array( $value ) ) {
             // translate array of values to "in"
 			if ( strpos( $lowercase_key, 'like' ) !== false ) {
-				$where = rtrim( $where, $key );
+				$where = preg_replace('/' . $key . '$/', '', $where);
 				$where .= '(';
 				$start = true;
 				foreach ( $value as $v ) {
