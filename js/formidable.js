@@ -128,6 +128,10 @@ function frmFrontFormJS(){
 			maxFiles: max,
 			acceptedFiles: uploadFields[i].acceptedFiles,
 			uploadMultiple: uploadFields[i].uploadMultiple,
+			dictCancelUpload: uploadFields[i].cancel,
+			dictCancelUploadConfirmation: uploadFields[i].cancelConfirm,
+			dictRemoveFile: uploadFields[i].remove,
+			dictMaxFilesExceeded: uploadFields[i].maxFilesExceeded,
 			fallback: function() {
 				// Force ajax submit to turn off
 				jQuery(this.element).closest('form').removeClass('frm_ajax_submit');
