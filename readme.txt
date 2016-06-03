@@ -92,7 +92,11 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 = 2.02.01 =
 * **Pro Features: ** *
 * Add styling for uploader with left label
-* When searching by a specific field, search posts as well
+* Add styling for rich text field with left label
+* Make new file upload strings translatable
+* Fix default date issue in Firefox
+* Search post fields in admin entries tab
+* Allow searching by IP address in admin entries tab
 * Fixed showing default avatars if there is none selected in the form
 * Fixed issue with newly uploaded files getting dropped when there are validation errors while editing an entry
 * Fixed issue with showing the url of the icon instead of the uploaded file by default
