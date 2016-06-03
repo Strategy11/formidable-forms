@@ -166,8 +166,17 @@ function frmFrontFormJS(){
 				});
 
 				this.on('complete', function( file ) {
-					if ( uploadFields[i].uploadMultiple && typeof file.mediaID !== 'undefined' ) {
-						jQuery(file.previewElement).append( getHiddenUploadHTML( uploadFields[i], file.mediaID ) );
+					if ( typeof file.mediaID !== 'undefined' ) {
+						if ( uploadFields[i].uploadMultiple ) {
+							jQuery(file.previewElement).append( getHiddenUploadHTML( uploadFields[i], file.mediaID ) );
+						}
+
+						// Add download link to the file
+						var fileName = file.previewElement.querySelectorAll('[data-dz-name]');
+						for ( var _i = 0, _len = fileName.length; _i < _len; _i++ ) {
+							var node = fileName[_i];
+							node.innerHTML = '<a href="'+ file.url +'">'+ file.name +'</a>';
+						}
 					}
 				});
 
@@ -194,6 +203,7 @@ function frmFrontFormJS(){
 						var mockFile = {
 							name: uploadFields[i].mockFiles[f].name,
 							size: uploadFields[i].mockFiles[f].size,
+							url:uploadFields[i].mockFiles[f].file_url,
 							mediaID: uploadFields[i].mockFiles[f].id
 						};
 
