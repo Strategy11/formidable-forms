@@ -93,7 +93,7 @@ class FrmStyle {
 
  		}
 
- 		$this->save_settings($all_instances);
+ 		$this->save_settings();
 
  		return $action_ids;
  	}

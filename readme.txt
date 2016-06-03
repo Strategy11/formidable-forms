@@ -4,7 +4,7 @@ Donate link: http://formidablepro.com/donate
 Tags: contact form, contact, custom form, database, email, feedback, form, forms, poll, Post, captcha, spam, survey, template, widget, multisite, form builder, form creator, form manager
 Requires at least: 3.8
 Tested up to: 4.5.2
-Stable tag: 2.02
+Stable tag: 2.02.01
 
 Beautiful forms in 60 seconds. The WordPress form builder that enables you to create forms with a simple drag-and-drop interface and in-place editing.
 
@@ -89,6 +89,13 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 [See more FAQs](http://formidablepro.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 2.02.01 =
+* **Pro Features: ** *
+* Add styling for uploader with left label
+* When searching by a specific field, search posts as well
+* Fixed showing default avatars if there is none selected in the form
+* Fixed issue with newly uploaded files getting dropped when there are validation errors while editing an entry
+* Fixed issue with showing the url of the icon instead of the uploaded file by default
 
 = 2.02 =
 * Improve user role dropdowns in global settings
