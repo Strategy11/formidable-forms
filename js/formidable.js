@@ -719,6 +719,7 @@ function frmFrontFormJS(){
 	 * @param {boolean} logicFieldArgs.isRepeating
 	 * @param {string} logicFieldArgs.fieldId
 	 * @param {object} depFieldArgs
+	 * @param {string} depFieldArgs.inEmbedForm
 	 * @param {string} depFieldArgs.inSection
 	 * @param {string} depFieldArgs.repeatRow
 	 * @returns {string}
@@ -728,7 +729,12 @@ function frmFrontFormJS(){
 
 		if ( logicFieldArgs.isRepeating ) {
 			// If the trigger field is repeating, the child must be repeating as well
-			var sectionId = depFieldArgs.inSection;
+			var sectionId = '';
+			if ( depFieldArgs.inEmbedForm !== "0" ) {
+				sectionId = depFieldArgs.inEmbedForm;
+			} else {
+				sectionId = depFieldArgs.inSection;
+			}
 			var rowId = depFieldArgs.repeatRow;
 			inputName = 'item_meta[' + sectionId + '][' + rowId + '][' + logicFieldArgs.fieldId + ']';
 		} else {
