@@ -94,20 +94,32 @@ function frmFrontFormJS(){
 		) );
 	}
 
-	function loadDropzones(){
+	function loadDropzones( repeatRow ) {
 		if ( typeof __frmDropzone === 'undefined'  ) {
 			return;
 		}
 
 		var uploadFields = __frmDropzone;
 		for ( var i = 0; i < uploadFields.length; i++ ) {
-			loadDropzone( i );
+			loadDropzone( i, repeatRow );
 		}
 	}
 
-	function loadDropzone( i ) {
+	function loadDropzone( i, repeatRow ) {
 		var uploadFields = __frmDropzone;
-		var field = jQuery( '#' + uploadFields[i].htmlID );
+		var selector = '[id ^="'+ uploadFields[i].htmlID +'"][id $="_dropzone"]';
+
+		if ( typeof repeatRow !== 'undefined' ) {
+			selector = '#'+ uploadFields[i].htmlID + '-' + repeatRow +'_dropzone';
+			uploadFields[i].fieldName = uploadFields[i].fieldName.replace('[0]', '['+ repeatRow +']');
+			delete uploadFields[i].mockFiles;
+		}
+
+		var field = jQuery(selector);
+		if ( field.length < 1 || field.hasClass('dz-clickable') ) {
+			return;
+		}
+
 		var max = uploadFields[i].maxFiles;
 		if ( typeof uploadFields[i].mockFiles !== 'undefined' ) {
 			var uploadedCount = uploadFields[i].mockFiles.length;
@@ -123,10 +135,9 @@ function frmFrontFormJS(){
 		field.dropzone({
 			url:frm_js.ajax_url,
 			addRemoveLinks: true,
-        	paramName: uploadFields[i].paramName,
+			paramName: field.attr('id').replace('_dropzone', ''),
 			maxFilesize: uploadFields[i].maxFilesize,
 			maxFiles: max,
-			acceptedFiles: uploadFields[i].acceptedFiles,
 			uploadMultiple: uploadFields[i].uploadMultiple,
 			dictCancelUpload: uploadFields[i].cancel,
 			dictCancelUploadConfirmation: uploadFields[i].cancelConfirm,
@@ -3485,6 +3496,7 @@ function frmFrontFormJS(){
 					}
                 });
 
+				loadDropzones( repeatArgs.repeatRow );
 				loadStars();
 
 				// trigger autocomplete
@@ -3887,8 +3899,13 @@ function frmFrontFormJS(){
 			if ( Object.keys(errors).length === 0 ) {
 				jQuery(object).find('.frm_ajax_loading').addClass('frm_loading_now');
 				if ( classList.contains('frm_ajax_submit') ) {
-					action = jQuery(object).find('input[name="frm_action"]').val();
-					frmFrontForm.checkFormErrors( object, action );
+					var hasFileFields = jQuery(object).find('input[type="file"]').length;
+					if ( hasFileFields < 1 ) {
+						action = jQuery(object).find('input[name="frm_action"]').val();
+						frmFrontForm.checkFormErrors( object, action );
+					} else {
+						object.submit();
+					}
 				} else {
 					object.submit();
 				}
