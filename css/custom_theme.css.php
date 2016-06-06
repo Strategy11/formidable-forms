@@ -406,13 +406,15 @@ table.form_results.with_frm_style tr.frm_odd,
     animation:2s linear 0s normal none infinite progress-bar-stripes;
 }
 
+<?php if ( ! empty( $defaults['bg_color'] ) ) { ?>
 #frm_loading .progress-striped .progress-bar{
     background-image:linear-gradient(45deg, #<?php echo esc_html( $defaults['border_color'] ) ?> 25%, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0) 50%, #<?php echo esc_html( $defaults['border_color'] ) ?> 50%, #<?php echo esc_html( $defaults['border_color'] ) ?> 75%, rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 0));
     background-size:40px 40px;
 }
+<?php } ?>
 
 #frm_loading .progress-bar{
-    background-color:#<?php echo esc_html( $defaults['bg_color'] ) ?>;
+    background-color:<?php echo esc_html( empty( $defaults['bg_color'] ) ? 'transparent' : '#' . $defaults['bg_color'] ); ?>;
     box-shadow:0 -1px 0 rgba(0, 0, 0, 0.15) inset;
     float:left;
     height:100%;
@@ -509,7 +511,7 @@ ul.frm_pagination > li.active a{
 }
 
 table.frmcal-calendar .frmcal_date{
-    background-color:#<?php echo esc_html( $defaults['bg_color'] ) ?>;
+    background-color:<?php echo esc_html( empty( $defaults['bg_color'] ) ? 'transparent' : '#' . $defaults['bg_color'] ); ?>;
     padding:0 5px;
     text-align:right;
     -moz-box-shadow:0 2px 5px #<?php echo esc_html( $defaults['border_color'] ) ?>;

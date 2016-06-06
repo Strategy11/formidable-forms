@@ -514,11 +514,13 @@ if ( ! $submit_style ) { ?>
     -moz-box-sizing:border-box;
     box-sizing:border-box;
     -ms-box-sizing:border-box;
+	<?php if ( ! empty( $submit_shadow_color ) ) { ?>
     -moz-box-shadow:0 1px 1px #<?php echo esc_html( $submit_shadow_color ); ?>;
     -webkit-box-shadow:0px 1px 1px #<?php echo esc_html( $submit_shadow_color ); ?>;
     box-shadow:0 1px 1px #<?php echo esc_html( $submit_shadow_color ); ?>;
     -ms-filter:"progid:DXImageTransform.Microsoft.Shadow(Strength=3, Direction=135, Color='#<?php echo esc_html( $submit_shadow_color ); ?>')";
     filter:progid:DXImageTransform.Microsoft.Shadow(Strength=3, Direction=135, Color='#<?php echo esc_html( $submit_shadow_color ); ?>');
+	<?php } ?>
 	margin:<?php echo esc_html( $submit_margin ) ?>;
 	margin-left:0;
 	margin-right:0;
@@ -614,7 +616,8 @@ if ( ! $submit_style ) { ?>
 .frm_form_fields_error_style,
 .<?php echo esc_html( $style_class ) ?> .frm_blank_field .frm-g-recaptcha iframe,
 .<?php echo esc_html( $style_class ) ?> .frm_blank_field .g-recaptcha iframe,
-.<?php echo esc_html( $style_class ) ?> .frm_blank_field .chosen-container-multi .chosen-choices{
+.<?php echo esc_html( $style_class ) ?> .frm_blank_field .chosen-container-multi .chosen-choices,
+.<?php echo esc_html( $style_class ) ?> .frm_form_field :invalid{
     color:#<?php echo esc_html( $text_color_error . $important ) ?>;
 	background-color:<?php echo esc_html( ( empty( $bg_color_error ) ? 'transparent' : '#' . $bg_color_error ) . $important ); ?>;
     border-color:#<?php echo esc_html( $border_color_error . $important ) ?>;
@@ -744,7 +747,7 @@ if ( ! $submit_style ) { ?>
     background:#<?php echo esc_html( $submit_bg_color . $important ) ?>;
     border-width:<?php echo esc_html( $submit_border_width ) ?>;
     border-color:#<?php echo esc_html( $submit_border_color . $important ) ?>;
-	height:#<?php echo esc_html( $submit_height . $important ) ?>;
+	height:<?php echo esc_html( $submit_height . $important ) ?>;
 }
 .<?php echo esc_html( $style_class ) ?> .frm_button .frm_icon_font:before{
     font-size:<?php echo esc_html( $submit_font_size . $important ) ?>;
