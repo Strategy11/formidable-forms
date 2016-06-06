@@ -363,7 +363,7 @@ class FrmFormsController {
         }
 
         $current_page = isset( $_REQUEST['form_type'] ) ? $_REQUEST['form_type'] : '';
-		$message = sprintf( _n( '%1$s form moved to the Trash. %2$sUndo%3$s', '%1$s forms moved to the Trash. %2$sUndo%3$s', $count, 'formidable' ), $count, '<a href="' . esc_url( wp_nonce_url( '?page=formidable&frm_action=list&action=bulk_untrash&form_type=' . $current_page . '&item-action[]=' . implode( 'item-action[]=', $ids ), 'bulk-toplevel_page_formidable' ) ) . '">', '</a>' );
+		$message = sprintf( _n( '%1$s form moved to the Trash. %2$sUndo%3$s', '%1$s forms moved to the Trash. %2$sUndo%3$s', $count, 'formidable' ), $count, '<a href="' . esc_url( wp_nonce_url( '?page=formidable&frm_action=list&action=bulk_untrash&form_type=' . $current_page . '&item-action=' . implode( ',', $ids ), 'bulk-toplevel_page_formidable' ) ) . '">', '</a>' );
 
         return $message;
     }
