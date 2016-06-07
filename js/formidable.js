@@ -3879,8 +3879,10 @@ function frmFrontFormJS(){
 		},
 
 		submitForm: function(e){
-			var object = this;
+			frmFrontForm.submitFormManual( e, this );
+		},
 
+		submitFormManual: function(e, object){
 			var classList = object.classList;
 			if ( classList ) {
 				var isPro = classList.contains('frm_pro_form');
