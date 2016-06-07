@@ -229,6 +229,7 @@
 .frm_dropzone.dz-clickable * {
 	cursor: default;
 }
+
 .frm_dropzone.dz-clickable.frm_single_upload{
 	max-width: 200px;
 }
@@ -341,11 +342,16 @@
 .frm_dropzone .dz-preview .dz-details .dz-filename:not(:hover) span {
 	border: 1px solid transparent;
 }
-.frm_dropzone .dz-preview .dz-details .dz-filename span, .frm_dropzone .dz-preview .dz-details .dz-size span {
+.frm_dropzone .dz-preview .dz-details .dz-filename span,
+.frm_dropzone .dz-preview .dz-details .dz-size span {
 	background-color: rgba(255, 255, 255, 0.4);
 	padding: 0 0.4em;
 	border-radius: 3px;
 }
+.frm_dropzone .dz-preview .dz-details .dz-filename a{
+	cursor:pointer;
+}
+
 .frm_dropzone .dz-preview:hover .dz-image img {
 	-webkit-transform: scale(1.05, 1.05);
 	-moz-transform: scale(1.05, 1.05);
