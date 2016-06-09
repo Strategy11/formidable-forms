@@ -684,7 +684,7 @@ class FrmFieldsController {
 
 		if ( $field['type'] == 'tel' ) {
 			$format = FrmEntryValidate::phone_format( $field );
-			$format = substr( $format, 2, -2 );
+			$format = substr( $format, 2, -1 );
 			$key = 'pattern';
 			$add_html[ $key ] = $key . '="' . esc_attr( $format ) . '"';
 		}

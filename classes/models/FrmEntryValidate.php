@@ -175,30 +175,48 @@ class FrmEntryValidate {
 
 		$pattern = apply_filters( 'frm_phone_pattern', $pattern, $field );
 
-		//check if format is already a regular expression
+		// Create a regexp if format is not already a regexp
 		if ( strpos( $pattern, '^' ) !== 0 ) {
-			//if not, create a regular expression
-			$pattern = preg_replace( '/\d/', '\d', preg_quote( $pattern ) );
-			$pattern = str_replace( 'a', '[a-z]', $pattern );
-			$pattern = str_replace( 'A', '[A-Z]', $pattern );
-			$pattern = str_replace( '*', 'w', $pattern );
-			$pattern = str_replace( '/', '\/', $pattern );
-
-			if ( strpos( $pattern, '\?' ) !== false ) {
-				$parts = explode( '\?', $pattern );
-				$pattern = '';
-				foreach ( $parts as $part ) {
-					if ( empty( $pattern ) ) {
-						$pattern .= $part;
-					} else {
-						$pattern .= '(' . $part . ')?';
-					}
-				}
-			}
-			$pattern = '^' . $pattern . '$';
+			$pattern = self::create_regular_expression_from_format( $pattern );
 		}
 
 		$pattern = '/' . $pattern . '/';
+		return $pattern;
+	}
+
+	/**
+	 * Create a regular expression from a phone number format
+	 *
+	 * @since 2.02.02
+	 * @param string $pattern
+	 * @return string
+	 */
+	private static function create_regular_expression_from_format( $pattern ) {
+		$pattern = preg_quote( $pattern );
+
+		// Firefox doesn't like escaped dashes or colons
+		$pattern = str_replace( array( '\-', '\:' ), array( '-', ':' ), $pattern );
+
+		// Switch generic values out for their regular expression
+		$pattern = preg_replace( '/\d/', '\d', $pattern );
+		$pattern = str_replace( 'a', '[a-z]', $pattern );
+		$pattern = str_replace( 'A', '[A-Z]', $pattern );
+		$pattern = str_replace( '*', 'w', $pattern );
+		$pattern = str_replace( '/', '\/', $pattern );
+
+		if ( strpos( $pattern, '\?' ) !== false ) {
+			$parts = explode( '\?', $pattern );
+			$pattern = '';
+			foreach ( $parts as $part ) {
+				if ( empty( $pattern ) ) {
+					$pattern .= $part;
+				} else {
+					$pattern .= '(' . $part . ')?';
+				}
+			}
+		}
+		$pattern = '^' . $pattern . '$';
+
 		return $pattern;
 	}
 
