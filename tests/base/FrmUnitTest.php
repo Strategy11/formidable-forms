@@ -44,6 +44,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 
 		$this->do_tables_exist();
 		$this->import_xml();
+		$this->create_files();
 	}
 
 	function get_table_names() {
@@ -76,6 +77,46 @@ class FrmUnitTest extends WP_UnitTestCase {
         $form = FrmForm::getOne( 'contact-db12' );
         $this->assertEquals( $form->form_key, 'contact-db12' );
     }
+
+	function create_files() {
+		$single_file_upload_field = FrmField::getOne( 'mprllc' );
+		$multi_file_upload_field = FrmField::getOne( '72hika' );
+
+		$file_urls = array(
+			array(
+				'val' => 'https://s3.amazonaws.com/fp.strategy11.com/images/knowledgebase/global-settings_enter-license1.png',
+				'field' => $single_file_upload_field,
+				'entry' => 'jamie_entry_key',
+			),
+			array(
+				'val' => 'https://formidablepro.com/wp-content/uploads/formidable/formidablepro.real_estate_listings.2015-08-10.xml',
+				'field' => $single_file_upload_field,
+				'entry' => 'steph_entry_key',
+			),
+			array(
+				'val' => array(
+					'https://s3.amazonaws.com/fp.strategy11.com/images/knowledgebase/global-settings_enter-license1.png',
+					'https://s3.amazonaws.com/fp.strategy11.com/images/knowledgebase/create-a-form_add-new.png',
+					'https://formidablepro.com/wp-content/uploads/formidable/formidablepro.real_estate_listings.2015-08-10.xml',
+				),
+				'field' => $multi_file_upload_field,
+				'entry' => 'jamie_entry_key',
+			),
+		);
+
+		$_REQUEST['csv_files'] = 1;
+		foreach ( $file_urls as $values ) {
+			$media_id = FrmProFileImport::import_attachment( $values['val'], $values['field'] );
+
+			if ( ! is_array( $values['val'] ) ) {
+				$this->assertTrue( is_numeric( $media_id ), 'The following file is not importing correctly: ' . $values[ 'val' ] );
+			}
+
+			// Insert into entries
+			$entry_id = FrmEntry::get_id_by_key( $values['entry'] );
+			FrmEntryMeta::add_entry_meta( $entry_id, $values['field']->id, null, $media_id );
+		}
+	}
 
 	function get_all_fields_for_form_key( $form_key ) {
 		$field_totals = array( $this->all_fields_form_key => 44, $this->create_post_form_key => 10, $this->contact_form_key => 8, $this->repeat_sec_form_key => 3 );
