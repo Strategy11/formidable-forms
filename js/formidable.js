@@ -1644,6 +1644,10 @@ function frmFrontFormJS(){
 				triggerChange(jQuery(childSelect), childFieldArgs.fieldKey);
 			}
 		} else {
+			// Add Loading text
+			childSelect.options.length = 1;
+			childSelect.options[1]=new Option( frm_js.loading_text, '', false, false );
+
 			// If all parents have values, check for updated options
 			jQuery.ajax({
 				type:'POST',
