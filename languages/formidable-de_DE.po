@@ -8966,7 +8966,7 @@ msgstr ""
 # @ formidable
 #: pro/classes/views/frmpro-fields/front-end/file.php:68
 msgid "Choose File"
-msgstr ""
+msgstr "Datei wählen"
 
 # @ formidable
 #: pro/classes/views/frmpro-form-actions/post_options.php:137

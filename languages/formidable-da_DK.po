@@ -9012,7 +9012,7 @@ msgstr ""
 #: pro/classes/views/frmpro-fields/front-end/file.php:68
 #@ formidable
 msgid "Choose File"
-msgstr ""
+msgstr "Vælg fil"
 
 #: pro/classes/views/frmpro-form-actions/post_options.php:137
 #@ formidable
