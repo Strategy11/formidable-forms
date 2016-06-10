@@ -179,8 +179,22 @@ class WP_Test_FrmProFieldsHelper extends FrmUnitTest {
 		$atts = array();
 
 		$displayed_value = FrmProFieldsHelper::get_file_display_value( $media_ids, $atts );
-		$expected_value = implode( ' ', $media_ids );
+		$expected_value = implode( ', ', $media_ids );
 		$this->assertEquals( $expected_value, $displayed_value, 'Displayed image value that was modified with custom code is being overridden.');
+	}
+
+	/**
+	 * Checks [x] where x is a single file upload field ID displaying an image file
+	 * Tests what happens when value is empty
+	 * @covers FrmProFieldsHelper::get_file_display_value()
+	 */
+	function test_displayed_files_with_no_value() {
+		$media_ids = array( '', '<img src="hello.png" />' );
+		$atts = array();
+
+		$displayed_value = FrmProFieldsHelper::get_file_display_value( $media_ids, $atts );
+		$expected_value = '<img src="hello.png" />';
+		$this->assertEquals( $expected_value, $displayed_value, 'An empty image value is not displayed correctly.');
 	}
 
 	function get_file_att_combinations_for_testing() {
@@ -238,18 +252,102 @@ class WP_Test_FrmProFieldsHelper extends FrmUnitTest {
 
 	function run_tests_on_displayed_html( $media_ids, $displayed_value, $atts ) {
 		$media_ids = (array) $media_ids;
+		$sep = self::get_separator_for_displayed_files( $atts );
+		$expected_value = '';
 
+		foreach ( $media_ids as $media_id ) {
+			$expected_value .= self::get_expected_value_for_file( $media_id, $atts );
+			$expected_value .= $sep;
+		}
+
+		$expected_value = rtrim( $expected_value, $sep );
+
+		if ( count( $media_ids ) > 1 && ( isset( $atts['show_image'] ) || isset( $atts['html'] ) ) ) {
+			$expected_value = '<div class="frm_file_container">' . $expected_value . '</div>';
+		}
+
+		$atts_list = '';
+		foreach ( $atts as $parameter => $value ) {
+			$atts_list .= ' ' . $parameter . '=' . $value;
+		}
+
+		$msg = 'The displayed value is not correct for a file with the following atts: ' . $atts_list;
+		$this->assertEquals( $expected_value, $displayed_value, $msg );
+	}
+
+	function get_separator_for_displayed_files( $atts ) {
 		if ( isset( $atts['sep'] ) ) {
 			$sep = $atts['sep'];
 		} else {
 			if ( isset( $atts['show_image'] ) || isset( $atts['html'] ) ) {
 				$sep = ' ';
 			} else {
-				$sep = ',';
+				$sep = ', ';
 			}
 		}
 
+		return $sep;
+	}
+
+	function get_expected_value_for_file( $media_id, $atts ) {
+		$expected_value = '';
+
 		$size = isset( $atts['size'] ) ? $atts['size'] : 'thumbnail';
+		$image = wp_get_attachment_image_src( $media_id, $size );
+		self::simplify_atts( $image, $atts );
+		$is_non_image = empty( $image );
+
+		// Get default URL
+		if ( $is_non_image ) {
+			$default_url = wp_get_attachment_url( $media_id );
+		} else {
+			$default_url = $image[0];
+		}
+
+		// show=id
+		if ( isset( $atts['show'] ) && $atts['show'] == 'id' ) {
+			$expected_value = $media_id;
+		}
+
+		// show_filename=1
+		if ( isset( $atts['show_filename'] ) ) {
+			$attachment = get_post( $media_id );
+			$label = basename( $attachment->guid );
+			$expected_value .= $label;
+		}
+
+		// show_image=1
+		if ( isset( $atts['show_image'] ) ) {
+			//$expected_value = '<img src="' . esc_attr( $default_url ) . '" />' . $expected_value; old functionality
+			$expected_value = wp_get_attachment_image( $media_id, $size, $is_non_image );
+
+			// If show_filename=1 is included
+			if ( isset( $label ) ) {
+				$expected_value .= ' <span id="frm_media_' . absint( $media_id ) . '" class="frm_upload_label">' . $label . '</span>';
+			}
+		}
+
+		// add_link=1
+		if ( isset( $atts['add_link'] ) ) {
+			$full_url = wp_get_attachment_url( $media_id );
+
+			if ( ! $expected_value ) {
+				$expected_value = $default_url;
+			}
+
+			$expected_value = '<a href="' . $full_url . '" class="frm_file_link">' . $expected_value . '</a>';
+		}
+
+		// No atts
+		if ( ! $expected_value ) {
+			$expected_value = $default_url;
+		}
+
+		return $expected_value;
+	}
+
+	function simplify_atts( $image, &$atts ) {
+		$is_image = ! empty( $image );
 
 		if ( isset( $atts['show'] ) && $atts['show'] == 'label' ) {
 			$atts['show_filename'] = '1';
@@ -261,120 +359,16 @@ class WP_Test_FrmProFieldsHelper extends FrmUnitTest {
 			unset( $atts['links'] );
 		}
 
-		$expected_value = '';
-		$image_types = array();
-
-		foreach ( $media_ids as $media_id ) {
-			$image = wp_get_attachment_image_src( $media_id, $size );
-
-			if ( $image ) {
-				$image_types[] = 'image';
-				$expected_value .= self::get_expected_value_for_image_file( $media_id, $image, $atts );
-			} else {
-				$image_types[] = 'non-image';
-				$expected_value .= self::get_expected_value_for_non_image_file( $media_id, $image, $atts );
-			}
-
-			$expected_value .= $sep;
-		}
-
-		$expected_value = rtrim( $expected_value, $sep );
-
-		$atts_list = '';
-		foreach ( $atts as $parameter => $value ) {
-			$atts_list .= ' ' . $parameter . '=' . $value;
-		}
-
-		$msg = 'The displayed value is not correct for a file with the following atts: ' . $atts_list;
-		$this->assertEquals( $expected_value, $displayed_value, $msg );
-	}
-
-	function get_expected_value_for_image_file( $media_id, $image, $atts ) {
-		$expected_value = '';
-		$default_url = $image[0];
-		$size = isset( $atts['size'] ) ? $atts['size'] : 'thumbnail';
-
-		if ( isset( $atts['show'] ) && $atts['show'] == 'id' ) {
-			$expected_value = $media_id;
-		}
-
-		if ( isset( $atts['show_filename'] ) ) {
-			$attachment = get_post( $media_id );
-			$expected_value .= basename( $attachment->guid );
-		}
-
 		if ( isset( $atts['html'] ) ) {
 			if ( isset( $atts['show_filename'] ) ) {
-				// If show_filename=1 and html=1 is used, the image is not shown and a link is added to the filename
-				$atts['add_link'] = 1;
+				$atts['add_link'] = true;
 			} else {
-				$expected_value = wp_get_attachment_image( $media_id, $size, false );
+				$atts['show_image'] = true;
+				if ( ! $is_image ) {
+					$atts['add_link'] = true;
+				}
 			}
 		}
-
-		if ( isset( $atts['show_image'] ) ) {
-			$expected_value = wp_get_attachment_image( $media_id, $size, false );
-		}
-
-		if ( isset( $atts['add_link'] ) ) {
-			$full_url = wp_get_attachment_url( $media_id );
-
-			if ( ! $expected_value ) {
-				$expected_value = $default_url;
-			}
-
-			$expected_value = '<a href="' . $full_url . '" class="frm_file_link">' . $expected_value . '</a>';
-		}
-
-		if ( ! $expected_value ) {
-			$expected_value = $default_url;
-		}
-
-		return $expected_value;
 	}
 
-	function get_expected_value_for_non_image_file( $media_id, $image, $atts ) {
-		$expected_value = '';
-		$size = isset( $atts['size'] ) ? $atts['size'] : 'thumbnail';
-
-		$file_url = wp_get_attachment_url( $media_id );
-
-		if ( isset( $atts['show'] ) && $atts['show'] == 'id' ) {
-			$expected_value = $media_id;
-		}
-
-		if ( isset( $atts['show_filename'] ) ) {
-			$attachment = get_post( $media_id );
-			$expected_value = basename( $attachment->guid );
-		}
-
-		if ( isset( $atts['html'] ) ) {
-			if ( isset( $atts['show_filename'] ) ) {
-				// If show_filename=1 and html=1 is used, the image is not shown and a link is added to the filename
-				$atts['add_link'] = 1;
-			} else {
-				$expected_value = wp_get_attachment_link( $media_id, $size, false, true, false );
-				return $expected_value;
-			}
-		}
-
-		if ( isset( $atts['show_image'] ) ) {
-			$expected_value = wp_get_attachment_image( $media_id, $size, true );
-		}
-
-
-		if ( isset( $atts['add_link'] ) ) {
-			if ( ! $expected_value ) {
-				$expected_value = $file_url;
-			}
-
-			$expected_value = '<a href="' . $file_url . '">' . $expected_value . '</a>';
-		}
-
-		if ( ! $expected_value ) {
-			$expected_value = $file_url;
-		}
-
-		return $expected_value;
-	}
 }
