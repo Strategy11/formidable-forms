@@ -3549,6 +3549,9 @@ function frmFrontFormJS(){
 				$edit.removeClass('frm_inplace_edit').addClass('frm_cancel_edit');
 				$edit.html(cancel);
 				checkConditionalLogic( 'editInPlace' );
+
+				// Make sure fields just loaded are properly bound
+				jQuery(document).on('change', '.frm-show-form input[name^="item_meta"], .frm-show-form select[name^="item_meta"], .frm-show-form textarea[name^="item_meta"]', maybeCheckDependent);
 				checkFieldsOnPage();
 			}
 		});
@@ -3844,7 +3847,7 @@ function frmFrontFormJS(){
 			});
 
 			jQuery(document).on('change', '.frm-show-form input[name^="item_meta"], .frm-show-form select[name^="item_meta"], .frm-show-form textarea[name^="item_meta"]', maybeCheckDependent);
-			
+
 			jQuery(document).on('click', '.frm-show-form input[type="submit"], .frm-show-form input[name="frm_prev_page"], .frm-show-form .frm_save_draft', setNextPage);
             
             jQuery(document).on('change', '.frm_other_container input[type="checkbox"], .frm_other_container input[type="radio"], .frm_other_container select', showOtherText);
