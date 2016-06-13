@@ -52,7 +52,7 @@
         </div>
 
         <div class="field-group field-group-border clearfix">
-        	<label><?php _e( 'BG Color', 'formidable' ) ?></label>
+        	<label><?php _e( 'BG color', 'formidable' ) ?></label>
         	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name('submit_bg_color') ) ?>" id="frm_submit_bg_color" class="hex" value="<?php echo esc_attr( $style->post_content['submit_bg_color'] ) ?>" />
         </div>
 
@@ -98,7 +98,7 @@
 		echo ( 'button-hover' == $current_tab ? 'tabs-panel-active' : 'tabs-panel-inactive' );
 	?>">
 	    <div class="field-group clearfix">
-        	<label><?php _e( 'BG Color', 'formidable' ) ?></label>
+        	<label><?php _e( 'BG color', 'formidable' ) ?></label>
         	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name('submit_hover_bg_color') ) ?>" id="frm_submit_hover_bg_color" class="hex" value="<?php echo esc_attr( $style->post_content['submit_hover_bg_color'] ) ?>" />
         </div>
 
@@ -119,7 +119,7 @@
 		echo ( 'button-click' == $current_tab ? 'tabs-panel-active' : 'tabs-panel-inactive' );
 	?>">
 	    <div class="field-group clearfix">
-        	<label><?php _e( 'BG Color', 'formidable' ) ?></label>
+        	<label><?php _e( 'BG color', 'formidable' ) ?></label>
         	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name('submit_active_bg_color') ) ?>" id="frm_submit_active_bg_color" class="hex" value="<?php echo esc_attr( $style->post_content['submit_active_bg_color'] ) ?>" />
         </div>
 

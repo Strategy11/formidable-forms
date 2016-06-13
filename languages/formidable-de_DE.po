@@ -4346,6 +4346,11 @@ msgstr "Feld Farben"
 #: classes/views/styles/_field-colors.php:79
 #: classes/views/styles/_field-colors.php:112
 #: classes/views/styles/_section-fields.php:42
+#: classes/views/styles/_buttons.php:55
+#: classes/views/styles/_buttons.php:101
+#: classes/views/styles/_buttons.php:122
+#: classes/views/styles/_form-messages.php:15
+#: classes/views/styles/_form-messages.php:38
 msgid "BG color"
 msgstr "Hintergrundsfarbe"
 
@@ -4435,14 +4440,6 @@ msgstr ""
 #: pro/classes/controllers/FrmProFormsController.php:485
 msgid "Height"
 msgstr "Höhe"
-
-# @ formidable
-#: classes/views/styles/_buttons.php:55 classes/views/styles/_buttons.php:101
-#: classes/views/styles/_buttons.php:122
-#: classes/views/styles/_form-messages.php:15
-#: classes/views/styles/_form-messages.php:38
-msgid "BG Color"
-msgstr "Hintergrundsfarbe"
 
 # @ formidable
 #: classes/views/styles/_buttons.php:81

@@ -4198,6 +4198,11 @@ msgstr "Colores de campo"
 #: classes/views/styles/_field-colors.php:79
 #: classes/views/styles/_field-colors.php:112
 #: classes/views/styles/_section-fields.php:42
+#: classes/views/styles/_buttons.php:55
+#: classes/views/styles/_buttons.php:101
+#: classes/views/styles/_buttons.php:122
+#: classes/views/styles/_form-messages.php:15
+#: classes/views/styles/_form-messages.php:38
 #@ formidable
 msgid "BG color"
 msgstr "Color BG"
@@ -4286,15 +4291,6 @@ msgstr "Nota: Si está desactivado, no podrá ver el cambio entrar en vigor hast
 #@ formidable
 msgid "Height"
 msgstr "Altura"
-
-#: classes/views/styles/_buttons.php:55
-#: classes/views/styles/_buttons.php:101
-#: classes/views/styles/_buttons.php:122
-#: classes/views/styles/_form-messages.php:15
-#: classes/views/styles/_form-messages.php:38
-#@ formidable
-msgid "BG Color"
-msgstr "Color BG"
 
 #: classes/views/styles/_buttons.php:81
 #@ formidable

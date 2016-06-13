@@ -1817,6 +1817,11 @@ msgstr "Kolory pól"
 #: classes/views/styles/_field-colors.php:79
 #: classes/views/styles/_field-colors.php:112
 #: classes/views/styles/_section-fields.php:42
+#: classes/views/styles/_buttons.php:55
+#: classes/views/styles/_buttons.php:101
+#: classes/views/styles/_buttons.php:122
+#: classes/views/styles/_form-messages.php:15
+#: classes/views/styles/_form-messages.php:38
 #@ formidable
 msgid "BG color"
 msgstr "Kolor tła"
@@ -1854,15 +1859,6 @@ msgstr "Motyw"
 #@ formidable
 msgid "Height"
 msgstr "Wysokość"
-
-#: classes/views/styles/_buttons.php:55
-#: classes/views/styles/_buttons.php:101
-#: classes/views/styles/_buttons.php:122
-#: classes/views/styles/_form-messages.php:15
-#: classes/views/styles/_form-messages.php:38
-#@ formidable
-msgid "BG Color"
-msgstr "Kolor tła"
 
 #: classes/views/styles/_buttons.php:81
 #@ formidable
