@@ -20,6 +20,17 @@ function frmFrontFormJS(){
 			v = jQuery(f).find('.frm_next_page').attr('id').replace('frm_next_p_', '');
 		} else if ( thisName === 'frm_save_draft' || this.className.indexOf('frm_save_draft') !== -1 ) {
 			d = 1;
+		} else if ( this.className.indexOf('frm_page_skip') !== -1 ) {
+			var goingTo = $thisObj.data('page');
+			var form_id = jQuery(f).find('input[name="form_id"]').val();
+			var orderField = jQuery(f).find('input[name="frm_page_order_'+form_id+'"]');
+			if ( goingTo === '' ) {
+				orderField.remove();
+			} else {
+				orderField.val(goingTo);
+			}
+		} else if ( this.className.indexOf('frm_page_back') !== -1 ) {
+			v = $thisObj.data('page');
 		}
 
 		jQuery('.frm_next_page').val(v);
@@ -3848,7 +3859,7 @@ function frmFrontFormJS(){
 
 			jQuery(document).on('change', '.frm-show-form input[name^="item_meta"], .frm-show-form select[name^="item_meta"], .frm-show-form textarea[name^="item_meta"]', maybeCheckDependent);
 
-			jQuery(document).on('click', '.frm-show-form input[type="submit"], .frm-show-form input[name="frm_prev_page"], .frm-show-form .frm_save_draft', setNextPage);
+			jQuery(document).on('click', '.frm-show-form input[type="submit"], .frm-show-form input[name="frm_prev_page"], .frm_page_back, .frm_page_skip, .frm-show-form .frm_save_draft', setNextPage);
             
             jQuery(document).on('change', '.frm_other_container input[type="checkbox"], .frm_other_container input[type="radio"], .frm_other_container select', showOtherText);
 
