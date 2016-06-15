@@ -24,6 +24,7 @@ function frmFrontFormJS(){
 			var goingTo = $thisObj.data('page');
 			var form_id = jQuery(f).find('input[name="form_id"]').val();
 			var orderField = jQuery(f).find('input[name="frm_page_order_'+form_id+'"]');
+			jQuery(f).append('<input name="frm_last_page" type="hidden" value="'+ orderField.val() +'" />');
 			if ( goingTo === '' ) {
 				orderField.remove();
 			} else {
