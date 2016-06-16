@@ -1644,9 +1644,7 @@ function frmFrontFormJS(){
 				triggerChange(jQuery(childSelect), childFieldArgs.fieldKey);
 			}
 		} else {
-			// Add Loading text
-			childSelect.options.length = 1;
-			childSelect.options[1]=new Option( frm_js.loading_text, '', false, false );
+			addLoadingTextToLookup( childSelect );
 
 			// If all parents have values, check for updated options
 			jQuery.ajax({
@@ -1670,6 +1668,13 @@ function frmFrontFormJS(){
 	function maybeUpdateChosenOptions( childSelect ) {
 		if ( childSelect.className.indexOf( 'frm_chzn' ) > -1 && jQuery().chosen ) {
 			jQuery( childSelect ).trigger('chosen:updated');
+		}
+	}
+
+	function addLoadingTextToLookup( childSelect ) {
+		if ( ! childSelect.value ) {
+			childSelect.options.length = 1;
+			childSelect.options[1] = new Option(frm_js.loading_text, '', false, false);
 		}
 	}
 
