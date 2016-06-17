@@ -107,10 +107,10 @@ function frmFrontFormJS(){
 
 	function loadDropzone( i, repeatRow ) {
 		var uploadFields = __frmDropzone;
-		var selector = '[id ^="'+ uploadFields[i].htmlID +'"][id $="_dropzone"]';
+		var selector = '#'+ uploadFields[i].htmlID + '_dropzone';
 
-		if ( typeof repeatRow !== 'undefined' ) {
-			selector = '#'+ uploadFields[i].htmlID + '-' + repeatRow +'_dropzone';
+		if ( typeof repeatRow !== 'undefined' && selector.indexOf('-0_dropzone') !== -1 ) {
+			selector = selector.replace( '-0_dropzone', '-' + repeatRow +'_dropzone' );
 			uploadFields[i].fieldName = uploadFields[i].fieldName.replace('[0]', '['+ repeatRow +']');
 			delete uploadFields[i].mockFiles;
 		}
