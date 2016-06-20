@@ -1436,7 +1436,7 @@ function frmFrontFormJS(){
 		}
 
 		if ( childFieldArgs.fieldType == 'lookup' ) {
-			updateLookupFieldOptions( childFieldArgs );
+			updateLookupFieldOptions( childFieldArgs, parentRepeatArgs );
 		} else {
 			// If the original event was NOT triggered from a direct value change to the Lookup field,
 			// do not update the text field value
@@ -1446,13 +1446,40 @@ function frmFrontFormJS(){
 		}
 	}
 
-	function updateLookupFieldOptions( childFieldArgs ) {
-		var childFieldElements = getAllFieldDivsOnCurrentPage(childFieldArgs);
+	function updateLookupFieldOptions( childFieldArgs, parentRepeatArgs ) {
+		var childFieldElements = [];
+		if ( parentRepeatArgs.repeatRow !== '' ) {
+			childFieldElements = getRepeatingFieldDivOnCurrentPage( childFieldArgs, parentRepeatArgs );
+		} else {
+			childFieldElements = getAllFieldDivsOnCurrentPage(childFieldArgs);
+		}
 
 		for ( var i = 0, l=childFieldElements.length; i<l; i++ ) {
 			addRepeatRow( childFieldArgs, childFieldElements[i].id );
 			updateSingleLookupField( childFieldArgs, childFieldElements[i] );
 		}
+	}
+
+	/**
+	 * Get the div for a repeating field on the current page
+	 * @param {Object} childFieldArgs
+	 * @param {string} childFieldArgs.fieldId
+	 * @param {Object} parentRepeatArgs
+	 * @param {string} parentRepeatArgs.repeatingSection
+	 * @param {string} parentRepeatArgs.repeatRow
+	 * @returns {Array}
+     */
+	function getRepeatingFieldDivOnCurrentPage( childFieldArgs, parentRepeatArgs ) {
+		var childFieldDivs = [];
+
+		var selector = 'frm_field_' + childFieldArgs.fieldId + '-';
+		selector += parentRepeatArgs.repeatingSection + '-' + parentRepeatArgs.repeatRow + '_container';
+		var container = document.getElementById( selector );
+		if ( container !== null ) {
+			childFieldDivs.push( container );
+		}
+
+		return childFieldDivs;
 	}
 
 	function updateWatchingFieldValue( childFieldArgs, parentRepeatArgs ) {
