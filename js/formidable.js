@@ -108,10 +108,11 @@ function frmFrontFormJS(){
 	function loadDropzone( i, repeatRow ) {
 		var uploadFields = __frmDropzone;
 		var selector = '#'+ uploadFields[i].htmlID + '_dropzone';
+		var fieldName = uploadFields[i].fieldName;
 
 		if ( typeof repeatRow !== 'undefined' && selector.indexOf('-0_dropzone') !== -1 ) {
 			selector = selector.replace( '-0_dropzone', '-' + repeatRow +'_dropzone' );
-			uploadFields[i].fieldName = uploadFields[i].fieldName.replace('[0]', '['+ repeatRow +']');
+			fieldName = fieldName.replace('[0]', '['+ repeatRow +']');
 			delete uploadFields[i].mockFiles;
 		}
 
@@ -158,7 +159,7 @@ function frmFrontFormJS(){
 					var mediaIDs = jQuery.parseJSON(response);
 					for ( var m = 0; m < mediaIDs.length; m++ ) {
 						if ( uploadFields[i].uploadMultiple !== true ) {
-							jQuery('input[name="'+ uploadFields[i].fieldName +'"]').val( mediaIDs[m] );
+							jQuery('input[name="'+ fieldName +'"]').val( mediaIDs[m] );
 						}
 					}
 				});
@@ -172,7 +173,7 @@ function frmFrontFormJS(){
 
 				this.on('removedfile', function( file ) {
 					if ( uploadFields[i].uploadMultiple !== true ) {
-						jQuery('input[name="'+ uploadFields[i].fieldName +'"]').val('');
+						jQuery('input[name="'+ fieldName +'"]').val('');
 					}
 				});
 
