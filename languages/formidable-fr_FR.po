@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Formidable v2.02.02\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-12-20\n"
-"PO-Revision-Date: Tue Jun 14 2016 12:16:25 GMT-0600 (MDT)\n"
+"PO-Revision-Date: Mon Jun 20 2016 13:26:36 GMT-0600 (MDT)\n"
 "Last-Translator: Ima2 admin <test@test.com>\n"
 "Language-Team: \n"
 "Language: French (France)\n"
@@ -97,7 +97,7 @@ msgstr ""
 msgid "That credit card is expired"
 msgstr ""
 
-#: ../pro/classes/models/FrmProFileField.php:381
+#: ../pro/classes/models/FrmProFileField.php:393
 msgid "File upload failed"
 msgstr ""
 
@@ -780,7 +780,7 @@ msgstr "Style"
 #: pro/classes/controllers/FrmProEntriesController.php:2281 ..
 #: pro/classes/helpers/FrmProAppHelper.php:210 ..
 #: pro/classes/helpers/FrmProEntriesHelper.php:256 ..
-#: pro/classes/helpers/FrmProFieldsHelper.php:3181
+#: pro/classes/helpers/FrmProFieldsHelper.php:3183
 msgid "Edit"
 msgstr "Modifier"
 
@@ -1584,7 +1584,7 @@ msgid "Untitled"
 msgstr "Sans titre"
 
 #: ../classes/helpers/FrmFieldsHelper.php:146 ../classes/helpers/FrmFieldsHelper.
-#: php:175 ../pro/classes/models/FrmProFileField.php:277
+#: php:175 ../pro/classes/models/FrmProFileField.php:289
 msgid "This field is invalid"
 msgstr "Ce champ n'est pas valide"
 
@@ -3226,19 +3226,19 @@ msgstr "Paragraphe texte"
 
 #: ../classes/models/FrmField.php:14 ..
 #: pro/classes/controllers/FrmProLookupFieldsController.php:14 ..
-#: pro/classes/helpers/FrmProFieldsHelper.php:4500
+#: pro/classes/helpers/FrmProFieldsHelper.php:4674
 msgid "Checkboxes"
 msgstr "Case à cocher"
 
 #: ../classes/models/FrmField.php:15 ../classes/views/styles/_sample_form.php:56 .
 #: ./pro/classes/controllers/FrmProLookupFieldsController.php:13 ..
-#: pro/classes/helpers/FrmProFieldsHelper.php:4499
+#: pro/classes/helpers/FrmProFieldsHelper.php:4673
 msgid "Radio Buttons"
 msgstr "Boutons radio"
 
 #: ../classes/models/FrmField.php:16 ..
 #: pro/classes/controllers/FrmProLookupFieldsController.php:12 ..
-#: pro/classes/helpers/FrmProFieldsHelper.php:4498
+#: pro/classes/helpers/FrmProFieldsHelper.php:4672
 msgid "Dropdown"
 msgstr "Liste déroulante"
 
@@ -3259,7 +3259,7 @@ msgid "End Section"
 msgstr "Section de fin"
 
 #: ../classes/models/FrmField.php:31 ../pro/classes/helpers/FrmProFieldsHelper.
-#: php:4486
+#: php:4660
 msgid "Section"
 msgstr "Section"
 
@@ -3296,7 +3296,7 @@ msgid "Scale"
 msgstr "Échelle"
 
 #: ../classes/models/FrmField.php:41 ../pro/classes/helpers/FrmProFieldsHelper.
-#: php:4496
+#: php:4670
 msgid "Dynamic Field"
 msgstr "Champ dynamique"
 
@@ -5216,13 +5216,13 @@ msgid "Headings"
 msgstr "Rubriques"
 
 #: ../classes/views/styles/_section-fields.php:7 ..
-#: pro/classes/helpers/FrmProFieldsHelper.php:4489 ../pro/classes/views/frmpro-
+#: pro/classes/helpers/FrmProFieldsHelper.php:4663 ../pro/classes/views/frmpro-
 #: fields/options-form-top.php:11
 msgid "Collapsible"
 msgstr "Repliable"
 
 #: ../classes/views/styles/_section-fields.php:10 ..
-#: pro/classes/helpers/FrmProFieldsHelper.php:4490 ../pro/classes/views/frmpro-
+#: pro/classes/helpers/FrmProFieldsHelper.php:4664 ../pro/classes/views/frmpro-
 #: fields/options-form-top.php:20
 msgid "Repeatable"
 msgstr "Répétable"
@@ -6159,7 +6159,7 @@ msgid "Display format"
 msgstr "Format d'affichage"
 
 #: ../pro/classes/controllers/FrmProFormsController.php:546 ..
-#: pro/classes/helpers/FrmProFieldsHelper.php:4501
+#: pro/classes/helpers/FrmProFieldsHelper.php:4675
 msgid "List"
 msgstr "Liste"
 
@@ -6470,7 +6470,7 @@ msgstr "Ajouter une classe d'alternance 'pair ou 'impair'"
 msgid "Default Email Message"
 msgstr "Message email par défaut "
 
-#: ../pro/classes/helpers/FrmProFieldsHelper.php:4488
+#: ../pro/classes/helpers/FrmProFieldsHelper.php:4662
 msgid "Heading"
 msgstr "titre"
 
@@ -6522,31 +6522,36 @@ msgstr "Annuler l'envoi"
 msgid "Are you sure you want to cancel this upload?"
 msgstr "Êtes-vous sûr de vouloir annuler cet envoi ?"
 
+#: ../pro/classes/models/FrmProFileField.php:34 ../pro/classes/views/frmpro-
+#: fields/front-end/file.php:55
+msgid "Remove file"
+msgstr "Supprimer le fichier"
+
 #: ../pro/classes/models/FrmProFileField.php:35
 msgid "You can not upload any more files."
 msgstr "Vous ne pouvez plus envoyer d'autres fichiers."
 
-#: ../pro/classes/models/FrmProFileField.php:174
+#: ../pro/classes/models/FrmProFileField.php:186
 msgid "This file is too big"
 msgstr "Ce fichier est trop grand"
 
-#: ../pro/classes/models/FrmProFileField.php:185
+#: ../pro/classes/models/FrmProFileField.php:197
 #, php-format
 msgid "That file is too big. It must be less than %dMB."
 msgstr "Ce fichier est trop volumineux. Sa taille doit être inférieure à %dMo."
 
-#: ../pro/classes/models/FrmProFileField.php:215
+#: ../pro/classes/models/FrmProFileField.php:227
 #, php-format
 msgid "You have uploaded too many files. You may only include %d file(s)."
 msgstr ""
 "Vous avez télécharger trop de fichiers. Vous ne pouvez envoyer que %d "
 "fichier(s)."
 
-#: ../pro/classes/models/FrmProFileField.php:278
+#: ../pro/classes/models/FrmProFileField.php:290
 msgid "is invalid"
 msgstr "non valide"
 
-#: ../pro/classes/models/FrmProFileField.php:281
+#: ../pro/classes/models/FrmProFileField.php:293
 msgid "Sorry, this file type is not permitted."
 msgstr "Désolé, ce type de fichier n'est pas autorisé."
 
@@ -7052,6 +7057,17 @@ msgstr "Cette donnée est dynamique sur changement"
 #: pro/classes/views/frmpro-fields/back-end/field-data.php:47
 msgid "There are no options"
 msgstr "Il n'y a pas d'options"
+
+#: ../pro/classes/views/frmpro-fields/back-end/field-file.php:4 ..
+#: pro/classes/views/frmpro-fields/front-end/file.php:67
+msgid "Drop a file here or click to upload"
+msgstr "Déposer un fichier ici ou cliquer pour télécharger"
+
+#: ../pro/classes/views/frmpro-fields/back-end/field-file.php:6 ..
+#: pro/classes/views/frmpro-fields/front-end/file.php:70
+#, php-format
+msgid "Maximum upload size: %sMB"
+msgstr "Taille de téléchargement maximum : %sMo"
 
 #: ../pro/classes/views/frmpro-fields/back-end/field-form.php:3
 msgid "Select a form to import below"
@@ -7893,19 +7909,3 @@ msgstr "Afficher les entrées sous les catégories"
 #: ../pro/classes/widgets/FrmListEntries.php:279
 msgid "Entry Limit (leave blank to list all)"
 msgstr "Entrez la limite (laisser blanc pour tout voir)"
-
-#: ../pro/classes/models/FrmProFileField.php:34 ../pro/classes/views/frmpro-
-#: fields/front-end/file.php:55
-msgid "Remove file"
-msgstr "Supprimer le fichier"
-
-#: ../pro/classes/views/frmpro-fields/back-end/field-file.php:4 ..
-#: pro/classes/views/frmpro-fields/front-end/file.php:67
-msgid "Drop a file here or click to upload"
-msgstr "Déposer un fichier ici ou cliquer pour télécharger"
-
-#: ../pro/classes/views/frmpro-fields/back-end/field-file.php:6 ..
-#: pro/classes/views/frmpro-fields/front-end/file.php:70
-#, php-format
-msgid "Maximum upload size: %sMB"
-msgstr "Taille de téléchargement maximum : %sMo"

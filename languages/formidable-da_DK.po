@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Formidable v2.02.02\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-12-20\n"
-"PO-Revision-Date: Mon Jun 13 2016 17:17:35 GMT-0600 (MDT)\n"
+"PO-Revision-Date: Mon Jun 20 2016 13:25:29 GMT-0600 (MDT)\n"
 "Last-Translator: Ima2 admin <test@test.com>\n"
 "Language-Team: \n"
 "Language: Danish\n"
@@ -651,25 +651,30 @@ msgstr ""
 msgid "Are you sure you want to cancel this upload?"
 msgstr ""
 
+#: ../pro/classes/models/FrmProFileField.php:34 ../pro/classes/views/frmpro-
+#: fields/front-end/file.php:55
+msgid "Remove file"
+msgstr ""
+
 #: ../pro/classes/models/FrmProFileField.php:35
 msgid "You can not upload any more files."
 msgstr ""
 
-#: ../pro/classes/models/FrmProFileField.php:185
+#: ../pro/classes/models/FrmProFileField.php:197
 #, php-format
 msgid "That file is too big. It must be less than %dMB."
 msgstr ""
 
-#: ../pro/classes/models/FrmProFileField.php:215
+#: ../pro/classes/models/FrmProFileField.php:227
 #, php-format
 msgid "You have uploaded too many files. You may only include %d file(s)."
 msgstr ""
 
-#: ../pro/classes/models/FrmProFileField.php:281
+#: ../pro/classes/models/FrmProFileField.php:293
 msgid "Sorry, this file type is not permitted."
 msgstr ""
 
-#: ../pro/classes/models/FrmProFileField.php:381
+#: ../pro/classes/models/FrmProFileField.php:393
 msgid "File upload failed"
 msgstr ""
 
@@ -806,6 +811,17 @@ msgstr ""
 msgid "Dynamic Values"
 msgstr ""
 
+#: ../pro/classes/views/frmpro-fields/back-end/field-file.php:4 ..
+#: pro/classes/views/frmpro-fields/front-end/file.php:67
+msgid "Drop a file here or click to upload"
+msgstr ""
+
+#: ../pro/classes/views/frmpro-fields/back-end/field-file.php:6 ..
+#: pro/classes/views/frmpro-fields/front-end/file.php:70
+#, php-format
+msgid "Maximum upload size: %sMB"
+msgstr ""
+
 #: ../pro/classes/views/frmpro-fields/back-end/file-options.php:14
 msgid "Delete files"
 msgstr ""
@@ -925,22 +941,6 @@ msgstr ""
 msgid ""
 "Import files. If you are importing from another site, check this box to copy "
 "external files to this site."
-msgstr ""
-
-#: ../pro/classes/models/FrmProFileField.php:34 ../pro/classes/views/frmpro-
-#: fields/front-end/file.php:55
-msgid "Remove file"
-msgstr ""
-
-#: ../pro/classes/views/frmpro-fields/back-end/field-file.php:4 ..
-#: pro/classes/views/frmpro-fields/front-end/file.php:67
-msgid "Drop a file here or click to upload"
-msgstr ""
-
-#: ../pro/classes/views/frmpro-fields/back-end/field-file.php:6 ..
-#: pro/classes/views/frmpro-fields/front-end/file.php:70
-#, php-format
-msgid "Maximum upload size: %sMB"
 msgstr ""
 
 #: ../classes/controllers/FrmAddonsController.php:10 ..
@@ -1374,7 +1374,7 @@ msgstr "Style"
 #: pro/classes/controllers/FrmProEntriesController.php:2281 ..
 #: pro/classes/helpers/FrmProAppHelper.php:210 ..
 #: pro/classes/helpers/FrmProEntriesHelper.php:256 ..
-#: pro/classes/helpers/FrmProFieldsHelper.php:3181
+#: pro/classes/helpers/FrmProFieldsHelper.php:3183
 msgid "Edit"
 msgstr "Rediger"
 
@@ -2158,7 +2158,7 @@ msgid "Untitled"
 msgstr "Unavngivet"
 
 #: ../classes/helpers/FrmFieldsHelper.php:146 ../classes/helpers/FrmFieldsHelper.
-#: php:175 ../pro/classes/models/FrmProFileField.php:277
+#: php:175 ../pro/classes/models/FrmProFileField.php:289
 msgid "This field is invalid"
 msgstr "Dette felt er ugyldigt"
 
@@ -3525,19 +3525,19 @@ msgstr "Afsnitstekst"
 
 #: ../classes/models/FrmField.php:14 ..
 #: pro/classes/controllers/FrmProLookupFieldsController.php:14 ..
-#: pro/classes/helpers/FrmProFieldsHelper.php:4500
+#: pro/classes/helpers/FrmProFieldsHelper.php:4674
 msgid "Checkboxes"
 msgstr "Afkrydsningsfelter"
 
 #: ../classes/models/FrmField.php:15 ../classes/views/styles/_sample_form.php:56 .
 #: ./pro/classes/controllers/FrmProLookupFieldsController.php:13 ..
-#: pro/classes/helpers/FrmProFieldsHelper.php:4499
+#: pro/classes/helpers/FrmProFieldsHelper.php:4673
 msgid "Radio Buttons"
 msgstr "Radioknapper"
 
 #: ../classes/models/FrmField.php:16 ..
 #: pro/classes/controllers/FrmProLookupFieldsController.php:12 ..
-#: pro/classes/helpers/FrmProFieldsHelper.php:4498
+#: pro/classes/helpers/FrmProFieldsHelper.php:4672
 msgid "Dropdown"
 msgstr "Valg liste"
 
@@ -3558,7 +3558,7 @@ msgid "End Section"
 msgstr "Slut sektion"
 
 #: ../classes/models/FrmField.php:31 ../pro/classes/helpers/FrmProFieldsHelper.
-#: php:4486
+#: php:4660
 msgid "Section"
 msgstr "Sektion"
 
@@ -3595,7 +3595,7 @@ msgid "Scale"
 msgstr "Skaler"
 
 #: ../classes/models/FrmField.php:41 ../pro/classes/helpers/FrmProFieldsHelper.
-#: php:4496
+#: php:4670
 msgid "Dynamic Field"
 msgstr "Dynamisk felt"
 
@@ -5249,13 +5249,13 @@ msgid "Headings"
 msgstr "Overskrifter"
 
 #: ../classes/views/styles/_section-fields.php:7 ..
-#: pro/classes/helpers/FrmProFieldsHelper.php:4489 ../pro/classes/views/frmpro-
+#: pro/classes/helpers/FrmProFieldsHelper.php:4663 ../pro/classes/views/frmpro-
 #: fields/options-form-top.php:11
 msgid "Collapsible"
 msgstr "Sammenklappelig"
 
 #: ../classes/views/styles/_section-fields.php:10 ..
-#: pro/classes/helpers/FrmProFieldsHelper.php:4490 ../pro/classes/views/frmpro-
+#: pro/classes/helpers/FrmProFieldsHelper.php:4664 ../pro/classes/views/frmpro-
 #: fields/options-form-top.php:20
 msgid "Repeatable"
 msgstr "Gentagelig"
@@ -6141,7 +6141,7 @@ msgid "Display format"
 msgstr "Visnings format"
 
 #: ../pro/classes/controllers/FrmProFormsController.php:546 ..
-#: pro/classes/helpers/FrmProFieldsHelper.php:4501
+#: pro/classes/helpers/FrmProFieldsHelper.php:4675
 msgid "List"
 msgstr "Liste"
 
@@ -6444,7 +6444,7 @@ msgstr "Tilføj en roterende 'even' eller 'odd' classe"
 msgid "Default Email Message"
 msgstr "Standard e-mail besked"
 
-#: ../pro/classes/helpers/FrmProFieldsHelper.php:4488
+#: ../pro/classes/helpers/FrmProFieldsHelper.php:4662
 msgid "Heading"
 msgstr "Overskrift"
 
@@ -6486,11 +6486,11 @@ msgstr "Parameter værdi skal indtastes hvis indholdet er dynamisk"
 msgid "Detail Link cannot be blank if content is dynamic"
 msgstr "Detaljer link skal indtastes hvis indholdet er dynamisk"
 
-#: ../pro/classes/models/FrmProFileField.php:174
+#: ../pro/classes/models/FrmProFileField.php:186
 msgid "This file is too big"
 msgstr "Denne fil er for stor"
 
-#: ../pro/classes/models/FrmProFileField.php:278
+#: ../pro/classes/models/FrmProFileField.php:290
 msgid "is invalid"
 msgstr "er ugyldig"
 
