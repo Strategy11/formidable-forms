@@ -2362,7 +2362,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		$plugin = 'easy-table/easy-table.php';
 		$is_active = is_plugin_active( $plugin ) && class_exists('EasyTable');
 		if ( ! $is_active ) {
-			$this->markTestSkipped( 'Pro is not active' );
+			$this->markTestSkipped( 'Easy table is not active' );
 		}
 		$this->assertTrue( $is_active, 'Easy table is not active.' );
 	}
