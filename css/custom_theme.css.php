@@ -570,6 +570,7 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
     display:block;
     background:transparent;
     overflow:hidden;
+	clear:none;
 }
 
 .frm_form_fields div.rating-cancel a:before{
