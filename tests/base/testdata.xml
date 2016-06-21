@@ -601,7 +601,7 @@ Jam Band, Electronic, Electronica, JamTronica, EDM, Producer, Rock,  Jazz, Soul,
             <field_order>2</field_order>
             <form_id>698</form_id>
             <required></required>
-            <options><![CDATA[["Red","Green","Blue"]]]></options>
+            <options><![CDATA[["Red","Green","Blue","Purple"]]]></options>
             <field_options><![CDATA[{"size":"","max":"","label":"","blank":"This field cannot be blank.","required_indicator":"*","invalid":"","separate_value":0,"clear_on_focus":0,"default_blank":0,"classes":"","custom_html":"<div id=\"frm_field_[id]_container\" class=\"frm_form_field form-field [required_class][error_class]\">\n    <label  class=\"frm_primary_label\">[field_name]\n        <span class=\"frm_required\">[required_label]<\/span>\n    <\/label>\n    <div class=\"frm_opt_container\">[input]<\/div>\n    [if description]<div class=\"frm_description\">[description]<\/div>[\/if description]\n    [if error]<div class=\"frm_error\">[error]<\/div>[\/if error]\n<\/div>","slide":0,"form_select":"","show_hide":"show","any_all":"any","align":"block","hide_field":[],"hide_field_cond":["=="],"hide_opt":[],"star":0,"ftypes":[],"data_type":"select","restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"step":1,"clock":12,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","calc_dec":"","dyn_default_value":"","multiple":0,"unique_msg":"","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":"0"}]]></field_options>
 		</field>
 		<field>
@@ -627,7 +627,7 @@ Jam Band, Electronic, Electronica, JamTronica, EDM, Producer, Rock,  Jazz, Soul,
             <field_order>4</field_order>
             <form_id>698</form_id>
             <required></required>
-            <options><![CDATA[["","Ace Ventura","William Wells"]]]></options>
+            <options><![CDATA[["","William Wells","Ace Ventura"]]]></options>
             <field_options><![CDATA[{"size":"","max":"","label":"","blank":"This field cannot be blank.","required_indicator":"*","invalid":"","separate_value":0,"clear_on_focus":0,"default_blank":0,"classes":"","custom_html":"<div id=\"frm_field_[id]_container\" class=\"frm_form_field form-field [required_class][error_class]\">\n    <label for=\"field_[key]\" class=\"frm_primary_label\">[field_name]\n        <span class=\"frm_required\">[required_label]<\/span>\n    <\/label>\n    [input]\n    [if description]<div class=\"frm_description\">[description]<\/div>[\/if description]\n    [if error]<div class=\"frm_error\">[error]<\/div>[\/if error]\n<\/div>","slide":0,"form_select":"","show_hide":"show","any_all":"any","align":"block","hide_field":[],"hide_field_cond":["=="],"hide_opt":[],"star":0,"ftypes":[],"data_type":"select","restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"step":1,"clock":12,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","calc_dec":"","dyn_default_value":"","multiple":0,"unique_msg":"","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":"0"}]]></field_options>
 		</field>
 		<field>
@@ -2168,7 +2168,7 @@ Test]]></meta_value>
 		</item_meta>
 		<item_meta>
 		    <field_id>8101</field_id>
-		    <meta_value><![CDATA[["Green","Blue"]]]></meta_value>
+		    <meta_value><![CDATA[["Red","Green","Blue"]]]></meta_value>
 		</item_meta>
 		<item_meta>
 		    <field_id>8102</field_id>
