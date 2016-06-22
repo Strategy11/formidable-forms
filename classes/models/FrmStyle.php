@@ -312,6 +312,7 @@ class FrmStyle {
             'description_weight' => 'normal',
             'description_style' => 'normal',
             'description_align' => 'left',
+			'description_margin' => '0',
 
             'field_font_size'   => '14px',
             'field_height' 		=> '32px',

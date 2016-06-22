@@ -187,7 +187,7 @@ if ( ! isset( $center_form ) ) {
 .<?php echo esc_html( $style_class ) ?> div.frm_description,
 .<?php echo esc_html( $style_class ) ?> .frm-show-form > div.frm_description,
 .<?php echo esc_html( $style_class ) ?> .frm_error{
-    margin:0;
+    margin:<?php echo esc_html( $description_margin . $important ) ?>;
     padding:0;
     font-family:<?php echo FrmAppHelper::kses( $font . $important ) ?>;
     font-size:<?php echo esc_html( $description_font_size . $important ) ?>;
