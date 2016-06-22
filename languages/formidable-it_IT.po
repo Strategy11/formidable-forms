@@ -5424,7 +5424,7 @@ msgid ""
 "reCAPTCHA key%2$s."
 msgstr ""
 "reCAPTCHA richiede un sito e una chiavi API privata. Accedi per ricevere una "
-"chiave%2$s reCAPTCHA %1$s gratis."
+"%1$schiave reCAPTCHA gratis%2$s."
 
 #: ../classes/views/frm-settings/form.php:80
 msgid "Site Key"
