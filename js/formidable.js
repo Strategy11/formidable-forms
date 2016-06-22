@@ -1702,7 +1702,7 @@ function frmFrontFormJS(){
 	function addLoadingTextToLookup( childSelect ) {
 		if ( ! childSelect.value ) {
 			childSelect.options.length = 1;
-			childSelect.options[1] = new Option(frm_js.loading_text, '', false, false);
+			childSelect.options[1] = new Option(frm_js.loading, '', false, false);
 		}
 	}
 
