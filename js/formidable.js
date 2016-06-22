@@ -901,7 +901,7 @@ function frmFrontFormJS(){
 			b = '';
 		}
 
-		if ( jQuery.isArray(b) && jQuery.inArray(a, b) > -1 ) {
+		if ( jQuery.isArray(b) && jQuery.inArray( String(a), b) > -1 ) {
 			b = a;
 		}
 
