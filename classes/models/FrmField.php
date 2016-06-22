@@ -608,6 +608,7 @@ class FrmField {
 				$field['type'] == 'checkbox' ||
 				$field['type'] == 'address' ||
 				( $field['type'] == 'data' && isset($field['data_type']) && $field['data_type'] == 'checkbox' ) ||
+				( $field['type'] == 'lookup' && isset($field['data_type']) && $field['data_type'] == 'checkbox' ) ||
 				self::is_multiple_select( $field )
 			);
 
@@ -616,6 +617,7 @@ class FrmField {
 				$field->type == 'checkbox' ||
 				$field->type == 'address' ||
 				( $field->type == 'data' && isset( $field->field_options['data_type'] ) && $field->field_options['data_type'] == 'checkbox' ) ||
+				( $field->type == 'lookup' && isset( $field->field_options['data_type'] ) && $field->field_options['data_type'] == 'checkbox' ) ||
 				self::is_multiple_select( $field )
 			);
 		}
