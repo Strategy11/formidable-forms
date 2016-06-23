@@ -3923,9 +3923,9 @@ function frmFrontFormJS(){
 		},
 
 		submitFormManual: function(e, object){
-			var classList = object.classList;
+			var classList = object.className.trim().split(/\s+/gi);
 			if ( classList ) {
-				var isPro = classList.contains('frm_pro_form');
+				var isPro = classList.indexOf('frm_pro_form') > -1;
 				if ( ! isPro ) {
 					return;
 				}
@@ -3940,7 +3940,7 @@ function frmFrontFormJS(){
 
 			if ( Object.keys(errors).length === 0 ) {
 				jQuery(object).find('.frm_ajax_loading').addClass('frm_loading_now');
-				if ( classList.contains('frm_ajax_submit') ) {
+				if ( classList.indexOf('frm_ajax_submit') > -1 ) {
 					var hasFileFields = jQuery(object).find('input[type="file"]').length;
 					if ( hasFileFields < 1 ) {
 						action = jQuery(object).find('input[name="frm_action"]').val();
