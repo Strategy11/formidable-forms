@@ -2153,7 +2153,7 @@ function frmFrontFormJS(){
 
 	// Remove the loading icon with jQuery
 	function removeLoadingIcon( $optContainer ) {
-		$optContainer.next( '.frm-loading-img' ).remove();
+		$optContainer.parent().children( '.frm-loading-img').remove();
 		$optContainer.show();
 	}
 
@@ -2837,7 +2837,7 @@ function frmFrontFormJS(){
 		var errors = [];
 
 		var $fieldCont = jQuery(field).closest('.frm_form_field');
-		if ( $fieldCont.hasClass('.frm_required_field') && ! jQuery(field).hasClass('.frm_optional') ) {
+		if ( $fieldCont.hasClass('frm_required_field') && ! jQuery(field).hasClass('frm_optional') ) {
 			errors = checkRequiredField( field, errors );
 		}
 
