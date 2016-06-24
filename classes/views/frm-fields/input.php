@@ -91,7 +91,7 @@ do_action('frm_field_input_html', $field);
 				}
 			}
 			?>
-		<option value="<?php echo esc_attr($field_val) ?>" <?php echo $selected ? ' selected="selected"' : ''; ?><?php echo ( FrmFieldsHelper::is_other_opt( $opt_key ) ) ? ' class="frm_other_trigger"' : '';?>><?php echo ($opt == '') ? ' ' : $opt; ?></option>
+		<option value="<?php echo esc_attr($field_val) ?>" <?php echo $selected ? ' selected="selected"' : ''; ?><?php echo ( FrmFieldsHelper::is_other_opt( $opt_key ) ) ? ' class="frm_other_trigger"' : '';?>><?php echo esc_html( $opt == '' ? ' ' : $opt ); ?></option>
     <?php
     	} ?>
 </select>
