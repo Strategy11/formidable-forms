@@ -325,7 +325,13 @@ function frmFrontFormJS(){
 		var originalEvent = getOriginalEvent( e );
 		checkFieldsWatchingLookup( field_id, jQuery(this), originalEvent );
 		doCalculation(field_id, jQuery(this));
-		validateField( field_id, this );
+		maybeValidateChange( field_id, this );
+	}
+
+	function maybeValidateChange( field_id, field ) {
+		if ( jQuery(field).closest('form').hasClass('frm_js_validate') ) {
+			validateField( field_id, field );
+		}
 	}
 
 	function getOriginalEvent( e ) {
