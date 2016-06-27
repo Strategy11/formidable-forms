@@ -617,6 +617,7 @@ DEFAULT_HTML;
 			$hide_opt = rtrim( $hide_opt );
 		}
 
+		$observed_value = wp_kses_post( $observed_value );
 		$hide_opt = wp_kses_post( $hide_opt );
 
         if ( is_array($observed_value) ) {
