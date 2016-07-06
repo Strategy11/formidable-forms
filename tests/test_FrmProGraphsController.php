@@ -5,6 +5,9 @@
  */
 class WP_Test_FrmProGraphsController extends FrmUnitTest {
 
+	// TODO: Add tests for field with separate values
+	// TODO: id=x,y test
+
 	/**
 	 * Check [frm-graph id=x] where x is the ID of a single line text field
 	 * @covers FrmProGraphsController::graph_shortcode()
@@ -569,7 +572,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 
 		$graph_atts = array(
 			'id' => '493ito',
-			'ids' => 'uc580i ,4t3qo4',
+			'ids' => 'uc580i,4t3qo4',
 		);
 
 		$graph_html = FrmProGraphsController::graph_shortcode( $graph_atts );
@@ -880,7 +883,9 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		);
 
 		$graph_html = FrmProGraphsController::graph_shortcode( $graph_atts );
-		$expected_data = self::get_expected_data_for_dropdown( $graph_atts );
+
+		$expected_data = self::get_graph_defaults( 'Dropdown', $graph_atts );
+		$expected_data['rows'][0] = array( '05/13/2015', 3.0 );
 
 		self::run_graph_tests( $graph_html, $expected_data );
 	}
@@ -917,7 +922,12 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		);
 
 		$graph_html = FrmProGraphsController::graph_shortcode( $graph_atts );
-		$expected_data = self::get_expected_data_for_dropdown( $graph_atts );
+
+		$expected_data = self::get_graph_defaults( 'Dropdown', $graph_atts );
+		$expected_data['rows'] = array(
+			array( 'William Wells', 1.0 ),
+			array( 'Ace Ventura', 2.0 ),
+		);
 
 		self::run_graph_tests( $graph_html, $expected_data );
 	}
@@ -954,8 +964,10 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 
 		$graph_html = FrmProGraphsController::graph_shortcode( $graph_atts );
 
-		$expected_data = self::get_expected_data_for_dropdown( $graph_atts );
-		$expected_data['rows'] = array( array( '08/16/2015', 1.0 ) );
+		$expected_data = self::get_graph_defaults( 'Dropdown', $graph_atts );
+		$expected_data['rows'] = array(
+			array( '08/16/2015', 1.0 ),
+		);
 
 		self::run_graph_tests( $graph_html, $expected_data );
 	}
@@ -976,7 +988,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 
 		$graph_html = FrmProGraphsController::graph_shortcode( $graph_atts );
 
-		$expected_data = self::get_expected_data_for_dropdown( $graph_atts );
+		$expected_data = self::get_graph_defaults( 'Dropdown', $graph_atts );
 		$expected_data['rows'] = array( array( '08/16/2015', 1.0 ) );
 
 		self::run_graph_tests( $graph_html, $expected_data );
@@ -996,7 +1008,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 
 		$graph_html = FrmProGraphsController::graph_shortcode( $graph_atts );
 
-		$expected_data = self::get_expected_data_for_dropdown( $graph_atts );
+		$expected_data = self::get_graph_defaults( 'Dropdown', $graph_atts );
 		$expected_data['rows'] = array( array( '08/16/2015', 1.0 ) );
 
 		self::run_graph_tests( $graph_html, $expected_data );
@@ -1018,7 +1030,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 
 		$graph_html = FrmProGraphsController::graph_shortcode( $graph_atts );
 
-		$expected_data = self::get_expected_data_for_dropdown( $graph_atts );
+		$expected_data = self::get_graph_defaults( 'Dropdown', $graph_atts );
 		$expected_data['rows'] = array(
 			array( '07/08/2015', 1.0 ),
 			array( '08/16/2015', 1.0 ),
@@ -1042,7 +1054,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 
 		$graph_html = FrmProGraphsController::graph_shortcode( $graph_atts );
 
-		$expected_data = self::get_expected_data_for_dropdown( $graph_atts );
+		$expected_data = self::get_graph_defaults( 'Dropdown', $graph_atts );
 		$expected_data['rows'] = array(
 			array( '01/24/2015', 1.0 ),
 			array( '08/16/2015', 1.0 ),
@@ -1101,8 +1113,8 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		);
 
 		$graph_html = FrmProGraphsController::graph_shortcode( $graph_atts );
-		$expected_data = self::get_expected_data_for_dropdown( $graph_atts );
 
+		$expected_data = self::get_graph_defaults( 'Dropdown', $graph_atts );
 		$expected_data['rows'] = array(
 			array( '07/08/2015', 1.0 ),
 			array( '08/16/2015', 1.0 ),
@@ -1278,7 +1290,14 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		);
 
 		$graph_html = FrmProGraphsController::graph_shortcode( $graph_atts );
-		$expected_data = self::get_expected_data_for_number_field( $graph_atts );
+
+		$expected_data = self::get_graph_defaults( 'Number', $graph_atts );
+		$expected_data['rows'] = array(
+			array( '01/24/2015', 5.0 ),
+			array( '07/08/2015', 1.0 ),
+			array( '08/16/2015', 10.0 ),
+		);
+
 		self::run_graph_tests( $graph_html, $expected_data );
 	}
 
@@ -1297,7 +1316,18 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		);
 
 		$graph_html = FrmProGraphsController::graph_shortcode( $graph_atts );
-		$expected_data = self::get_expected_data_for_number_field( $graph_atts );
+
+		$expected_data = self::get_graph_defaults( 'Number', $graph_atts );
+		$expected_data['rows'] = array(
+			array( '01/24/2015', 5.0, 8.0 ),
+			array( '07/08/2015', 1.0, 8.0 ),
+			array( '08/16/2015', 10.0, 5.0 ),
+		);
+		$expected_data['cols'][2] = array(
+			'type' => 'number',
+			'name' => 'Scale',
+		);
+
 		self::run_graph_tests( $graph_html, $expected_data );
 	}
 
@@ -1315,7 +1345,21 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		);
 
 		$graph_html = FrmProGraphsController::graph_shortcode( $graph_atts );
-		$expected_data = self::get_expected_data_for_number_field( $graph_atts );
+
+		$expected_data = self::get_graph_defaults( 'Number', $graph_atts );
+		$expected_data['rows'] = array(
+			array(
+				0 => 'Number',
+				1 => 16.0,
+				'tooltip' => 'Number: 16',
+			),
+			array(
+				0 => 'Scale',
+				1 => 21.0,
+				'tooltip' => 'Scale: 21',
+			),
+		);
+
 		self::run_graph_tests( $graph_html, $expected_data );
 	}
 
@@ -1333,7 +1377,15 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		);
 
 		$graph_html = FrmProGraphsController::graph_shortcode( $graph_atts );
-		$expected_data = self::get_expected_data_for_dropdown( $graph_atts );
+
+		$expected_data = self::get_graph_defaults( 'Dropdown', $graph_atts );
+		$expected_data['rows'] = array(
+			array( '01/24/2015', 1.0, 1.0 ),
+			array( '07/08/2015', 1.0, 1.0 ),
+			array( '08/16/2015', 1.0, 1.0 ),
+		);
+		$expected_data['cols'][ 2 ] = array( 'type' => 'number', 'name' => 'Scale' );
+
 		self::run_graph_tests( $graph_html, $expected_data );
 	}
 
@@ -1373,7 +1425,18 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		);
 
 		$graph_html = FrmProGraphsController::graph_shortcode( $graph_atts );
-		$expected_data = self::get_expected_data_for_dropdown( $graph_atts );
+
+		$expected_data = self::get_graph_defaults( 'Dropdown', $graph_atts );
+		for ( $i = 20; $i <= 30; $i++ ) {
+			if ( $i == 24 ) {
+				$count = 1.0;
+			} else {
+				$count = 0.0;
+			}
+			$expected_data['rows'][] = array( '01/' . $i . '/2015', $count );
+		}
+		$expected_data['options']['hAxis']['showTextEvery'] = 2.0;
+
 		self::run_graph_tests( $graph_html, $expected_data );
 	}
 
@@ -1396,8 +1459,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 
 		$graph_html = FrmProGraphsController::graph_shortcode( $graph_atts );
 
-		$expected_data = self::get_expected_data_for_dropdown( $graph_atts );
-		$expected_data['rows'] = array();
+		$expected_data = self::get_graph_defaults( 'Dropdown', $graph_atts );
 		for ( $i = 20; $i <= 30; $i++ ) {
 			if ( $i == 24 ) {
 				$count = 1.0;
@@ -1407,6 +1469,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 			$expected_data['rows'][] = array( '01/' . $i . '/2015', $count, $count );
 		}
 		$expected_data['cols'][ 2 ] = array( 'type' => 'number', 'name' => 'Single Line Text' );
+		$expected_data['options']['hAxis']['showTextEvery'] = 2.0;
 
 		self::run_graph_tests( $graph_html, $expected_data );
 	}
@@ -1481,7 +1544,13 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		);
 
 		$graph_html = FrmProGraphsController::graph_shortcode( $graph_atts );
-		$expected_data = self::get_expected_data_for_dropdown( $graph_atts );
+
+		$expected_data = self::get_graph_defaults( 'Dropdown', $graph_atts );
+		$expected_data['rows'] = array(
+			array( 'Q1 2015', 1.0 ),
+			array( 'Q3 2015', 2.0 ),
+		);
+
 		self::run_graph_tests( $graph_html, $expected_data );
 	}
 
@@ -1500,7 +1569,15 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		);
 
 		$graph_html = FrmProGraphsController::graph_shortcode( $graph_atts );
-		$expected_data = self::get_expected_data_for_dropdown( $graph_atts );
+
+		$expected_data = self::get_graph_defaults( 'Dropdown', $graph_atts );
+		$expected_data['rows'] = array(
+			array( 'Red', 3.0 ),
+			array( 'Green', 2.0 ),
+			array( 'Blue', 2.0 ),
+		);
+		$expected_data['cols'][ 2 ] = array( 'type' => 'number', 'name' => 'Checkboxes - colors' );
+
 		self::run_graph_tests( $graph_html, $expected_data );
 	}
 
@@ -1518,7 +1595,13 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		);
 
 		$graph_html = FrmProGraphsController::graph_shortcode( $graph_atts );
-		$expected_data = self::get_expected_data_for_text_field( $graph_atts );
+
+		$expected_data = self::get_graph_defaults( 'Single Line Text', $graph_atts );
+		$expected_data['rows'] = array(
+			array( 'William Wells', 1.0 ),
+			array( 'Ace Ventura', 2.0 ),
+		);
+
 		self::run_graph_tests( $graph_html, $expected_data );
 	}
 
@@ -1537,7 +1620,10 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		);
 
 		$graph_html = FrmProGraphsController::graph_shortcode( $graph_atts );
-		$expected_data = self::get_expected_data_for_checkbox( $graph_atts );
+
+		$expected_data = self::get_graph_defaults( 'Checkboxes - colors', $graph_atts );
+		$expected_data['rows'][ 0 ] = array( 'Red', 3.0 );
+
 		self::run_graph_tests( $graph_html, $expected_data );
 	}
 
@@ -1595,12 +1681,6 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		self::run_graph_tests( $graph_html, $expected_data );
 	}
 
-
-	// TODO:
-	// decide whether modification of expected data should go in their own functions or in specific tests
-	// maybe always put 'rows' modifications in individual tests?
-
-
 	function get_expected_data_for_text_field( $graph_atts ) {
 		$expected_data = self::get_graph_defaults( 'Single Line Text', $graph_atts );
 
@@ -1622,12 +1702,6 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 					1 => 3.0,
 					'tooltip' => 'Radio Buttons - dessert: 3',
 				),
-			);
-		} else if ( isset( $graph_atts['x_axis'] ) && $graph_atts['x_axis'] == '54tffk' ) {
-			// x_axis=dropdown
-			$expected_data['rows'] = array(
-				array( 'William Wells', 1.0 ),
-				array( 'Ace Ventura', 2.0 ),
 			);
 		} else {
 			$expected_data['rows'] = array(
@@ -1658,49 +1732,11 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		$date_field_id = FrmField::get_id_by_key( 'f67hbu' );
 		$x_axis = isset( $graph_atts['x_axis'] ) ? $graph_atts['x_axis'] : '';
 
-		if ( $x_axis == 'uc580i' ) {
-			$expected_data['rows'][ 0 ] = array( 'Red', 3.0 );
-			$expected_data['rows'][ 1 ] = array( 'Green', 2.0 );
-			$expected_data['rows'][ 2 ] = array( 'Blue', 2.0 );
-			$expected_data['cols'][ 2 ] = array( 'type' => 'number', 'name' => 'Checkboxes - colors' );
-		} else if ( isset( $graph_atts['ids'] ) && $x_axis == 'f67hbu' && ! isset( $graph_atts['include_zero'] ) ) {
-			// ids
-			$expected_data['rows'][ 0 ] = array( '01/24/2015', 1.0, 1.0 );
-			$expected_data['rows'][ 1 ] = array( '07/08/2015', 1.0, 1.0 );
-			$expected_data['rows'][ 2 ] = array( '08/16/2015', 1.0, 1.0 );
-			$expected_data['cols'][ 2 ] = array( 'type' => 'number', 'name' => 'Scale' );
-		} else if ( isset( $graph_atts['include_zero'] ) && $x_axis == 'f67hbu' ) {
-			// include_zero
-			for ( $i = 20; $i <= 30; $i++ ) {
-				if ( $i == 24 ) {
-					$count = 1.0;
-				} else {
-					$count = 0.0;
-				}
-				$expected_data['rows'][] = array( '01/' . $i . '/2015', $count );
-			}
-			$expected_data['options']['hAxis']['showTextEvery'] = 2.0;
-		} else if ( isset( $graph_atts['group_by'] ) && $x_axis == 'f67hbu' ) {
-			// group_by
-
-			if ( $graph_atts['group_by'] == 'quarter' ) {
-				$expected_data['rows'][ 0 ] = array( 'Q1 2015', 1.0 );
-				$expected_data['rows'][ 1 ] = array( 'Q3 2015', 2.0 );
-			}
-		} else if ( $x_axis == 'f67hbu' || $x_axis == $date_field_id  ) {
+		if ( $x_axis == 'f67hbu' || $x_axis == $date_field_id  ) {
 			// x_axis=date-field
 			$expected_data['rows'][0] = array( '01/24/2015', 1.0 );
 			$expected_data['rows'][1] = array( '07/08/2015', 1.0 );
 			$expected_data['rows'][2] = array( '08/16/2015', 1.0 );
-		} else if ( $x_axis == 'created_at' ) {
-			// x_axis=created_at
-			$expected_data['rows'][0] = array( '05/13/2015', 3.0 );
-		} else if ( isset( $graph_atts['x_order'] ) ){
-			// x_order
-			$expected_data['rows'] = array(
-				array( 'William Wells', 1.0 ),
-				array( 'Ace Ventura', 2.0 ),
-			);
 		}
 
 		return $expected_data;
@@ -1710,34 +1746,11 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 	function get_expected_data_for_number_field( $graph_atts ) {
 		$expected_data = self::get_graph_defaults( 'Number', $graph_atts );
 
-		if ( isset( $graph_atts['ids'] ) && isset( $graph_atts['x_axis'] ) ) {
-			$expected_data['rows'][0] = array( '01/24/2015', 5.0, 8.0 );
-			$expected_data['rows'][1] = array( '07/08/2015', 1.0, 8.0 );
-			$expected_data['rows'][2] = array( '08/16/2015', 10.0, 5.0 );
-			$expected_data['cols'][2] = array(
-				'type' => 'number',
-				'name' => 'Scale',
-			);
-		} else if ( isset( $graph_atts['x_axis'] ) ) {
-			$expected_data['rows'][ 0 ] = array( '01/24/2015', 5.0 );
-			$expected_data['rows'][ 1 ] = array( '07/08/2015', 1.0 );
-			$expected_data['rows'][ 2 ] = array( '08/16/2015', 10.0 );
-		} else if ( isset( $graph_atts['ids'] ) ) {
-			$expected_data['rows'][0] = array(
-				0 => 'Number',
-				1 => 16.0,
-				'tooltip' => 'Number: 16',
-			);
-			$expected_data['rows'][1] = array(
-				0 => 'Scale',
-				1 => 21.0,
-				'tooltip' => 'Scale: 21',
-			);
-		} else {
-			$expected_data['rows'][0] = array( '1', 1.0 );
-			$expected_data['rows'][1] = array( '5', 1.0 );
-			$expected_data['rows'][2] = array( '10', 1.0 );
-		}
+		$expected_data['rows'] = array(
+			array( '1', 1.0 ),
+			array( '5', 1.0 ),
+			array( '10', 1.0 ),
+		);
 
 		return $expected_data;
 	}
@@ -1745,13 +1758,11 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 	function get_expected_data_for_checkbox( $graph_atts ) {
 		$expected_data = self::get_graph_defaults( 'Checkboxes - colors', $graph_atts );
 
-		if ( isset( $graph_atts['limit'] ) && $graph_atts['limit'] == 1 ) {
-			$expected_data['rows'][ 0 ] = array( 'Red', 3.0 );
-		} else {
-			$expected_data['rows'][ 0 ] = array( 'Blue', 2.0 );
-			$expected_data['rows'][ 1 ] = array( 'Green', 2.0 );
-			$expected_data['rows'][ 2 ] = array( 'Red', 3.0 );
-		}
+		$expected_data['rows'] = array(
+			array( 'Blue', 2.0 ),
+			array( 'Green', 2.0 ),
+			array( 'Red', 3.0 ),
+		);
 
 		return $expected_data;
 	}
