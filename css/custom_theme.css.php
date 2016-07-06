@@ -640,6 +640,7 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
 .frm_form_field.frm_left_container .frm_dropzone,
 .frm_form_field.frm_left_container .frm-g-recaptcha,
 .frm_form_field.frm_left_container .g-recaptcha,
+.frm_form_field.frm_left_container .chosen-container,
 .frm_form_field.frm_right_container input:not([type=radio]):not([type=checkbox]),
 .frm_form_field.frm_right_container:not(.frm_dynamic_select_container) select,
 .frm_form_field.frm_right_container textarea,
@@ -647,7 +648,8 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
 .frm_form_field.frm_right_container .frm_opt_container,
 .frm_form_field.frm_right_container .frm_dropzone,
 .frm_form_field.frm_right_container .frm-g-recaptcha,
-.frm_form_field.frm_right_container .g-recaptcha{
+.frm_form_field.frm_right_container .g-recaptcha,
+.frm_form_field.frm_right_container .chosen-container{
 	max-width:62%;
 }
 
@@ -1261,7 +1263,8 @@ html[xmlns] .frm_clearfix{
     -webkit-box-sizing:border-box;
     -moz-box-sizing:border-box;
     box-sizing:border-box;
-    width:100%;
+    width:100% !important;
+    max-width:100% !important;
     height:auto;
     background:white url('<?php echo FrmAppHelper::relative_plugin_url() ?>/pro/images/chosen-sprite.png') no-repeat 100% -20px;
     background:url('<?php echo FrmAppHelper::relative_plugin_url() ?>/pro/images/chosen-sprite.png') no-repeat 100% -20px;

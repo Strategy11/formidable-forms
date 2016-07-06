@@ -230,12 +230,14 @@ if ( ! isset( $center_form ) ) {
 .<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_left_container .frm_opt_container,
 .<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_left_container .frm-g-recaptcha,
 .<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_left_container .g-recaptcha,
+.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_left_container .chosen-container,
 .<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_right_container input:not([type=radio]):not([type=checkbox]),
 .<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_right_container:not(.frm_dynamic_select_container) select,
 .<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_right_container textarea,
 .<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_right_container .frm_opt_container,
 .<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_right_container .g-recaptcha,
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_right_container .frm-g-recaptcha{
+.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_right_container .frm-g-recaptcha,
+.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_right_container .chosen-container{
 	max-width:62%<?php echo esc_html( $important ) ?>;
 }
 
@@ -924,12 +926,14 @@ if ( ! $submit_style ) { ?>
 	.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_half.frm_left_container .frm_opt_container,
 	.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_half.frm_left_container.frm-g-recaptcha,
 	.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_half.frm_left_container.g-recaptcha,
+	.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_half.frm_left_container .chosen-container,
 	.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_half.frm_right_container input:not([type=radio]):not([type=checkbox]),
 	.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_half.frm_right_container select,
 	.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_half.frm_right_container textarea,
 	.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_half.frm_right_container .frm_opt_container,
 	.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_half.frm_right_container.frm-g-recaptcha,
-	.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_half.frm_right_container.g-recaptcha{
+	.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_half.frm_right_container.g-recaptcha,
+	.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_half.frm_right_container .chosen-container{
 		max-width:100%<?php echo esc_html( $important ) ?>;
 	}
 	.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_left_half.frm_left_container .frm_primary_label,
@@ -986,12 +990,14 @@ if ( ! $submit_style ) { ?>
 	.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_left_container .frm_opt_container,
 	.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_left_container .frm-g-recaptcha,
 	.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_left_container .g-recaptcha,
+	.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_left_container .chosen-container,
 	.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_right_container input:not([type=radio]):not([type=checkbox]),
 	.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_right_container:not(.frm_dynamic_select_container) select,
 	.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_right_container textarea,
 	.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_right_container .frm_opt_container,
 	.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_right_container .frm-g-recaptcha,
 	.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_right_container .g-recaptcha,
+	.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_right_container .chosen-container,
 	.<?php echo esc_html( $style_class ) ?> .frm_left_container p.description,
 	.<?php echo esc_html( $style_class ) ?> .frm_left_container div.description,
 	.<?php echo esc_html( $style_class ) ?> .frm_left_container div.frm_description,
