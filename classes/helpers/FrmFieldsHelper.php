@@ -928,7 +928,7 @@ DEFAULT_HTML;
             'user_id', 'tag', 'password',
         );
 		$multiple_input = array( 'radio', 'checkbox', 'select', 'scale', 'lookup' );
-		$other_type = array( 'divider', 'html', 'break' );
+		$other_type = array( 'html', 'break' );
 
 		$field_selection = array_merge( FrmField::pro_field_selection(), FrmField::field_selection() );
 
