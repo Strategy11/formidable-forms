@@ -2040,7 +2040,7 @@ function frmFrontFormJS(){
 					if (html === '' || listVal === '') {
 						hideDynamicField(depFieldArgs);
 					} else {
-						showDynamicField(depFieldArgs, $fieldDiv, $listInputs);
+						showDynamicField( depFieldArgs, $fieldDiv, $listInputs, true );
 					}
 				} else {
 					updateHiddenDynamicListField( depFieldArgs, html );
@@ -2062,9 +2062,9 @@ function frmFrontFormJS(){
 	function updateDynamicFieldOptions( depFieldArgs, fieldElement ){
 		var $fieldDiv = jQuery( '#' + depFieldArgs.containerId );
 
-		var hiddenInput = $fieldDiv.find('select[name^="item_meta"], textarea[name^="item_meta"], input[name^="item_meta"]');
-		var prevVal = getPrevFieldValue( hiddenInput );
-		var defaultVal = hiddenInput.data('frmval');
+		var $fieldInputs = $fieldDiv.find( 'select[name^="item_meta"], input[name^="item_meta"]' );
+		var prevValue = getFieldValueFromInputs( $fieldInputs );
+		var defaultVal = $fieldInputs.data('frmval');
 
 		addLoadingIcon( $fieldDiv );
 
@@ -2078,24 +2078,30 @@ function frmFrontFormJS(){
 				field_id:depFieldArgs.fieldId,
 				default_value:defaultVal,
 				container_id:depFieldArgs.containerId,
-				prev_val:prevVal,
+				prev_val:prevValue,
 				nonce:frm_js.nonce
 			},
 			success:function(html){
 				var $optContainer = $fieldDiv.find('.frm_opt_container');
 				$optContainer.html(html);
-				var $dynamicFieldInputs = $optContainer.find('select, input, textarea');
+				var $dynamicFieldInputs = $optContainer.find( 'select, input[type="checkbox"], input[type="radio"]' );
 
 				removeLoadingIcon( $optContainer );
 
-				if ( html === '' || ( $dynamicFieldInputs.length == 1 && $dynamicFieldInputs.attr('type') == 'hidden' ) ) {
+				if ( html === '' || $dynamicFieldInputs.length < 1 ) {
 					hideDynamicField( depFieldArgs );
 				} else {
-					showDynamicField( depFieldArgs, $fieldDiv, $dynamicFieldInputs );
+					var valueChanged = dynamicFieldValueChanged( depFieldArgs, $dynamicFieldInputs, prevValue );
+					showDynamicField( depFieldArgs, $fieldDiv, $dynamicFieldInputs, valueChanged );
 				}
 			}
 		});
 
+	}
+
+	function dynamicFieldValueChanged( depFieldArgs, $dynamicFieldInputs, prevValue ) {
+		var newValue = getFieldValueFromInputs( $dynamicFieldInputs );
+		return ( prevValue !== newValue );
 	}
 
 	/**
@@ -2173,28 +2179,28 @@ function frmFrontFormJS(){
 		optContainer.style.display = "block";
 	}
 
-	// Get the previous field value in a Dynamic field
-	function getPrevFieldValue( inputs ) {
-		var prev = [];
-		var thisVal = '';
-		inputs.each(function(){
-			thisVal = this.value;
+	// Get the field value from all the inputs
+	function getFieldValueFromInputs( $inputs ) {
+		var fieldValue = [];
+		var currentValue = '';
+		$inputs.each(function(){
+			currentValue = this.value;
 			if ( this.type === 'radio' || this.type === 'checkbox' ) {
 				if ( this.checked === true ) {
-					prev.push( thisVal );
+					fieldValue.push( currentValue );
 				}
 			} else {
-				if ( thisVal !== '' ) {
-					prev.push( thisVal );
+				if ( currentValue !== '' ) {
+					fieldValue.push( currentValue );
 				}
 			}
 		});
 
-		if ( prev.length === 0 ) {
-			prev = '';
+		if ( fieldValue.length === 0 ) {
+			fieldValue = '';
 		}
 
-		return prev;
+		return fieldValue;
 	}
 
 	// Hide and clear a Dynamic Field
@@ -2203,7 +2209,7 @@ function frmFrontFormJS(){
 	}
 
 	// Show Dynamic field
-	function showDynamicField( depFieldArgs, $fieldDiv, $fieldInputs ) {
+	function showDynamicField( depFieldArgs, $fieldDiv, $fieldInputs, valueChanged ) {
 		if ( isFieldConditionallyHidden( depFieldArgs.containerId, depFieldArgs.formId ) ) {
 			removeFromHideFields( depFieldArgs.containerId, depFieldArgs.formId );
 			$fieldDiv.show();
@@ -2213,7 +2219,9 @@ function frmFrontFormJS(){
 			loadChosen();
 		}
 
-		triggerChange( $fieldInputs );
+		if ( valueChanged === true ) {
+			triggerChange($fieldInputs);
+		}
 	}
 
 	/*************************************************
