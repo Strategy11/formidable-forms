@@ -709,6 +709,9 @@ function frmFrontFormJS(){
 
 		if ( logicFieldInputs.length == 1 && logicFieldInputs[0].type != 'hidden' ) {
 			selectedVals = jQuery( '[name^="' + inputName + '"]' ).val();
+			if ( selectedVals === null ) {
+				selectedVals = '';
+			}
 		} else {
 			selectedVals = getValuesFromCheckboxInputs( logicFieldInputs );
 		}
