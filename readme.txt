@@ -3,8 +3,8 @@ Contributors: sswells, srwells, jamie.wahlin
 Donate link: http://formidablepro.com/donate
 Tags: contact form, contact, custom form, database, email, feedback, form, forms, poll, Post, captcha, spam, survey, template, widget, multisite, form builder, form creator, form manager
 Requires at least: 3.8
-Tested up to: 4.5.2
-Stable tag: 2.02.03
+Tested up to: 4.5.3
+Stable tag: 2.02.04
 
 Beautiful forms in 60 seconds. The WordPress form builder that enables you to create forms with a simple drag-and-drop interface and in-place editing.
 
@@ -89,6 +89,30 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 [See more FAQs](http://formidablepro.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 2.02.04 =
+* Add field description margin option
+* Fixes for submitting forms in <IE10
+* **Pro Features** *
+* Prevent star styling conflict with some themes
+* Fix conditional logic dependent on numeric checkboxes
+* Allow arrays in Lookup checkbox field default value
+* Make sure Lookup fields load correctly with ajax in repeating section on form builder
+* Fix field errors showing on dependent Dynamic fields
+* Only validate on change when js validation is on
+* Make sure address field errors show up correctly
+* Include confirmation field classes for old HTML
+* Make repeating fields work with frm_date_field_js hook
+* Don't show long decimal for allowed file size
+* Fix conditional logic with ampersands
+* Fix left label with autocomplete dropdown
+* Don't allow switching between sections and HTML field types
+* Fix JS error when multi-select logic field has no options selected
+* Make sure WP errors are returned correctly in file upload field
+* Allow use of show_image, add_link, and show_filename with frm-field-value
+* Don't show date pop-up for read-only date field
+* Fix ordering by number fields mapped to a custom field
+
+
 = 2.02.03 =
 * Update translations
 * **Pro Features: ** *
