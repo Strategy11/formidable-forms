@@ -875,8 +875,8 @@ function frmFrontFormJS(){
 					return false;
 				}
 
-				d = prepareValueForLikeComparison( d );
-				c = prepareValueForLikeComparison( c );
+				c = prepareLogicValueForLikeComparison( c );
+				d = prepareEnteredValueForLikeComparison( c, d );
 
 				return d.indexOf( c ) != -1;
 			},
@@ -886,8 +886,8 @@ function frmFrontFormJS(){
 					return true;
 				}
 
-				d = prepareValueForLikeComparison( d );
-				c = prepareValueForLikeComparison( c );
+				c = prepareLogicValueForLikeComparison( c );
+				d = prepareEnteredValueForLikeComparison( c, d );
 
 				return d.indexOf( c ) == -1;
 			}
@@ -925,6 +925,26 @@ function frmFrontFormJS(){
 		return b;
 	}
 
+	function prepareLogicValueForLikeComparison( val ) {
+		return prepareValueForLikeComparison( val );
+	}
+
+	function prepareEnteredValueForLikeComparison( logicValue, enteredValue ) {
+		enteredValue = prepareValueForLikeComparison( enteredValue );
+
+		var currentValue = '';
+		if ( jQuery.isArray(enteredValue) ) {
+			for ( var i = 0, l = enteredValue.length; i<l; i++ ) {
+				currentValue = enteredValue[i].toLowerCase();
+				if ( currentValue.indexOf( logicValue ) > -1 ) {
+					enteredValue = logicValue;
+					break;
+				}
+			}
+		 }
+
+		return enteredValue;
+	}
 
 	function prepareValueForLikeComparison( val ) {
 		if ( typeof val === 'string' ) {
