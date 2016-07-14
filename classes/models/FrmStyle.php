@@ -31,6 +31,7 @@ class FrmStyle {
     }
 
 	public function save( $settings ) {
+		$this->clear_cache();
 		return FrmAppHelper::save_settings( $settings, 'frm_styles' );
     }
 
@@ -116,8 +117,7 @@ class FrmStyle {
 
         update_option('frmpro_css', $css);
 
-		$this->clear_cache();
-
+		FrmAppHelper::delete_cache_and_transient( 'frmpro_css' );
         set_transient('frmpro_css', $css);
 	}
 
@@ -146,7 +146,6 @@ class FrmStyle {
 
 		FrmAppHelper::delete_cache_and_transient( serialize( $default_post_atts ), 'frm_styles' );
 		FrmAppHelper::cache_delete_group( 'frm_styles' );
-		FrmAppHelper::delete_cache_and_transient( 'frmpro_css' );
 	}
 
 	public function destroy( $id ) {
