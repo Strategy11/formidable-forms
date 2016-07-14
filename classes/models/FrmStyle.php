@@ -31,7 +31,6 @@ class FrmStyle {
     }
 
 	public function save( $settings ) {
-		$this->clear_cache();
 		return FrmAppHelper::save_settings( $settings, 'frm_styles' );
     }
 
@@ -110,6 +109,8 @@ class FrmStyle {
             return;
         }
 
+		$this->clear_cache();
+
 		$css = $this->get_css_content( $filename );
 
 		$create_file = new FrmCreateFile( array( 'folder_name' => 'formidable/css', 'file_name' => 'formidablepro.css' ) );
@@ -117,7 +118,6 @@ class FrmStyle {
 
         update_option('frmpro_css', $css);
 
-		FrmAppHelper::delete_cache_and_transient( 'frmpro_css' );
         set_transient('frmpro_css', $css);
 	}
 
@@ -146,6 +146,7 @@ class FrmStyle {
 
 		FrmAppHelper::delete_cache_and_transient( serialize( $default_post_atts ), 'frm_styles' );
 		FrmAppHelper::cache_delete_group( 'frm_styles' );
+		FrmAppHelper::delete_cache_and_transient( 'frmpro_css' );
 	}
 
 	public function destroy( $id ) {
