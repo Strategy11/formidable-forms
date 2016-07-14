@@ -477,10 +477,10 @@ class FrmAppHelper {
      * @since 2.0
      * @param string $cache_key
      */
-	public static function delete_cache_and_transient( $cache_key ) {
-        delete_transient($cache_key);
-        wp_cache_delete($cache_key);
-    }
+	public static function delete_cache_and_transient( $cache_key, $group = 'default' ) {
+		delete_transient($cache_key);
+		wp_cache_delete( $cache_key, $group );
+	}
 
     /**
      * Delete all caching in a single group

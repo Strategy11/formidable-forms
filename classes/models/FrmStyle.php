@@ -116,7 +116,8 @@ class FrmStyle {
 
         update_option('frmpro_css', $css);
 
-        delete_transient('frmpro_css');
+		$this->clear_cache();
+
         set_transient('frmpro_css', $css);
 	}
 
@@ -132,6 +133,20 @@ class FrmStyle {
         ob_end_clean();
 
 		return $css;
+	}
+
+	private function clear_cache() {
+		$default_post_atts = array(
+			'post_type'   => FrmStylesController::$post_type,
+			'post_status' => 'publish',
+			'numberposts' => 99,
+			'orderby'     => 'title',
+			'order'       => 'ASC',
+		);
+
+		FrmAppHelper::delete_cache_and_transient( serialize( $default_post_atts ), 'frm_styles' );
+		FrmAppHelper::cache_delete_group( 'frm_styles' );
+		FrmAppHelper::delete_cache_and_transient( 'frmpro_css' );
 	}
 
 	public function destroy( $id ) {
