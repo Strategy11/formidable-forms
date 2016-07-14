@@ -104,7 +104,13 @@ class FrmEntriesHelper {
 			self::get_posted_value( $field, $new_value, $args );
 		} else if ( FrmField::is_option_true( $field, 'clear_on_focus' ) ) {
 			// If clear on focus is selected, the value should be blank (unless it was posted, of course)
-			$new_value = '';
+
+			// TODO: move to Pro
+			if ( 'address' == $field->type && isset( $new_value['country'] ) ) {
+				$new_value = array( 'country' => $new_value['country'] );
+			} else {
+				$new_value = '';
+			}
 		}
 
 		if ( ! is_array( $new_value ) ) {
