@@ -359,8 +359,8 @@ DEFAULT_HTML;
 	 * @param array $errors
 	 * @param string $html
 	 */
-    private static function add_field_div_classes( $field_id, $field, $errors, &$html ) {
-    	$classes = self::get_field_div_classes( $field_id, $field, $errors, $html );
+	private static function add_field_div_classes( $field_id, $field, $errors, &$html ) {
+		$classes = self::get_field_div_classes( $field_id, $field, $errors, $html );
 
 		if ( $field[ 'type' ] == 'html' && strpos( $html, '[error_class]' ) === false ) {
 			// there is no error_class shortcode for HTML fields
