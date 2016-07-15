@@ -362,7 +362,7 @@ DEFAULT_HTML;
 	private static function add_field_div_classes( $field_id, $field, $errors, &$html ) {
 		$classes = self::get_field_div_classes( $field_id, $field, $errors, $html );
 
-		if ( $field[ 'type' ] == 'html' && strpos( $html, '[error_class]' ) === false ) {
+		if ( $field['type'] == 'html' && strpos( $html, '[error_class]' ) === false ) {
 			// there is no error_class shortcode for HTML fields
 			$html = str_replace( 'class="frm_form_field', 'class="frm_form_field ' . $classes, $html );
 		}
