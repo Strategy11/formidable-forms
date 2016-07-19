@@ -289,10 +289,26 @@ class FrmDb {
 				$where .= '=';
 			}
 
-            $where .= is_numeric( $value ) ? ( strpos( $value, '.' ) !== false ? '%f' : '%d' ) : '%s';
+			self::add_query_placeholder( $key, $value, $where );
+
             $values[] = $value;
         }
     }
+
+	/**
+	 * Add %d, or %s to query
+	 *
+	 * @since 2.02.05
+	 * @param int|string $value
+	 * @param string $where
+	 */
+    private static function add_query_placeholder( $key, $value, &$where ) {
+		if ( is_numeric( $value ) && strpos( $key, 'meta_value' ) === false ) {
+			$where .= '%d';
+		} else {
+			$where .= '%s';
+		}
+	}
 
     /**
      * @param string $table
