@@ -1773,6 +1773,89 @@ function frmAdminBuildJS(){
     function collapseAllSections(){
         jQuery('.control-section.accordion-section.open').removeClass('open');
     }
+		
+		jQuery(document).ready(function () {
+
+	 document.getElementById("frm_field_height").addEventListener("blur", cssSquishCheck);
+	 document.getElementById("frm_field_font_size").addEventListener("blur", cssSquishCheck);
+	 document.getElementById("frm_field_pad").addEventListener("blur", cssSquishCheck);
+
+			function cssSquishCheck() {
+
+	      //get values
+				var size = document.getElementById("frm_field_font_size").value.replace(/\D/g, '');
+				var height = document.getElementById("frm_field_height").value.replace(/\D/g, '');
+				var paddingEntered = document.getElementById("frm_field_pad").value.split(" ");
+	      //create empty array for our comparisons
+				var paddingPractical = [];
+	      //clean retrieved values of "px"
+				for (i = 0; i < paddingEntered.length; i++) {
+					paddingEntered[i] = paddingEntered[i].replace(/\D/g, '');
+				}
+
+	      // fill the array with values as assumed by CSS rules
+				switch (paddingEntered.length) {
+				case 1:
+					console.log("length:" + 1);
+					paddingPractical.push(
+						paddingEntered[0],
+						paddingEntered[0],
+						paddingEntered[0],
+						paddingEntered[0]
+					);
+					break;
+				case 2:
+					paddingPractical.push(
+						paddingEntered[0],
+						paddingEntered[1],
+						paddingEntered[0],
+						paddingEntered[1]
+					);
+					console.log(paddingPractical);
+					break;
+				case 3:
+					paddingPractical.push(
+						paddingEntered[0],
+						paddingEntered[1],
+						paddingEntered[2],
+						paddingEntered[1]
+					);
+					break;
+				case 4:
+					console.log("length:" + 4);
+					paddingPractical.push(
+						paddingEntered[0],
+						paddingEntered[1],
+						paddingEntered[2],
+						paddingEntered[3]
+					);
+					break;
+				default:
+					console.log("Padding has a maximum of four entries");
+				}
+	      
+	      //In order to prevent the squish on Firefox, height must be >= to top pad, bottom pad, and size
+	      // An extra 3px is added as a buffer, as an exact value doesn't quite fit (something with font?)
+	      var areaSum = height-size-paddingPractical[0]-paddingPractical[2]-3;
+	      if(areaSum>=0){
+	        console.log("pass: "+areaSum);
+	      }else{
+	        alert('In certain browsers, text will not display correctly if height is not enough to contain text size and padding-top/bottom. Please double-check your values.');        
+	        console.log("fail: "+areaSum);
+	      }
+
+				
+	      console.log("Size:" + size + " Height:" + height + " PaddingEntered:" + paddingEntered + " paddingPractical:" + paddingPractical+" Calc:");
+	      console.log("height:"+height);
+	      console.log("size:"+size);
+	      console.log("top pad: "+paddingPractical[0]);
+	      console.log("bottom pad: "+paddingPractical[2]);
+	      console.log("margin of: "+areaSum);
+	      
+
+			}
+		});
+
 	
 	/* Global settings page */
 	function uninstallNow(){ 
