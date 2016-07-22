@@ -3272,19 +3272,15 @@ function frmFrontFormJS(){
 
     /* Google Tables */
 
-	function prepareGraphTypes( graphs, graphType ) {
+	function generateGoogleTables( graphs, graphType ) {
 		for ( var num = 0; num < graphs.length; num++ ) {
-			prepareGraphs( graphs[num], graphType );
+			prepareGoogleTable( graphs[num], graphType );
 		}
 	}
 
-	function prepareGraphs( opts, type ) {
+	function prepareGoogleTable( opts, type ) {
 		google.load('visualization', '1.0', {'packages':[type], 'callback': function(){
-			if ( type == 'table' ) {
-				compileGoogleTable( opts );
-			} else {
-				compileGraph( opts );
-			}
+			compileGoogleTable( opts );
 		}});
 	}
 
@@ -3389,6 +3385,38 @@ function frmFrontFormJS(){
         var chart = new google.visualization.Table(document.getElementById('frm_google_table_'+ opts.options.form_id));
         chart.draw( data, opts.graphOpts );
     }
+
+	/** Google Graphs **/
+
+	function generateGoogleGraphs( graphs ) {
+		for ( var i = 0, l=graphs.length; i < l; i++ ) {
+			prepareGoogleGraph( graphs[i] );
+		}
+	}
+
+	function prepareGoogleGraph( graphData ) {
+		google.load('visualization', '1.0', {'packages':[ graphData.package ], 'callback': function() {
+			generateGoogleGraph( graphData );
+		} } );
+	}
+
+	function generateGoogleGraph( graphData ) {
+		var data = new google.visualization.DataTable();
+		data = google.visualization.arrayToDataTable(graphData.data);
+
+		var chartDiv = document.getElementById('chart_'+ graphData.graph_id);
+		if ( chartDiv === null ) {
+			return;
+		}
+
+		var type = (graphData.type.charAt(0).toUpperCase() + graphData.type.slice(1));
+		if ( type !== 'Histogram' ) {
+			type += 'Chart';
+		}
+
+		var chart = new google.visualization[type]( chartDiv );
+		chart.draw(data, graphData.options);
+	}
 
     function getGraphType(field){
         var type = 'string';
@@ -4141,7 +4169,11 @@ function frmFrontFormJS(){
 				var packages = Object.keys( graphs );
 				//google.load('visualization', '1.0', {'packages':packages});
 				for ( var i = 0; i < packages.length; i++ ) {
-					prepareGraphTypes( graphs[ packages[i] ], packages[i] );
+					if ( packages[i] === 'graphs' ) {
+						generateGoogleGraphs( graphs[ packages[i] ] );
+					} else {
+						generateGoogleTables(graphs[packages[i]], packages[i]);
+					}
 				}
 			} else {
 				setTimeout( frmFrontForm.loadGoogle, 30 );

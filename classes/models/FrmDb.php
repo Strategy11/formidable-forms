@@ -478,6 +478,32 @@ class FrmDb {
 		}
     }
 
+	/**
+	 * Get the associative array results for the given columns, table, and where query
+	 *
+	 * @since 2.02.05
+	 * @param array $columns
+	 * @param array $table
+	 * @param array $where
+	 * @return mixed
+	 */
+	public static function get_associative_array_results( $columns, $table, $where ) {
+		$group = '';
+		self::get_group_and_table_name( $table, $group );
+
+		$query = 'SELECT ' . $columns . ' FROM ' . $table;
+		if ( is_array( $where ) || empty( $where ) ) {
+			self::get_where_clause_and_values( $where );
+			global $wpdb;
+			$query = $wpdb->prepare( $query . $where['where'], $where['values'] );
+		}
+
+		$cache_key = str_replace( array( ' ', ',' ), '_', trim( implode( '_', FrmAppHelper::array_flatten( $where ) ) . $columns . '_results_ARRAY_A' , ' WHERE' ) );
+		$results = FrmAppHelper::check_cache( $cache_key, $group, $query, 'get_associative_results' );
+
+		return $results;
+	}
+
     public function uninstall() {
 		if ( ! current_user_can( 'administrator' ) ) {
             $frm_settings = FrmAppHelper::get_settings();

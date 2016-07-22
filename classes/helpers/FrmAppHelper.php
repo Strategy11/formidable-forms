@@ -439,6 +439,9 @@ class FrmAppHelper {
 
         if ( 'get_posts' == $type ) {
             $results = get_posts($query);
+		} else if ( 'get_associative_results' == $type ) {
+			global $wpdb;
+			$results = $wpdb->get_results( $query, OBJECT_K );
         } else {
             global $wpdb;
             $results = $wpdb->{$type}($query);
