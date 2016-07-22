@@ -289,12 +289,10 @@ class FrmXMLController {
 			$fid = FrmAppHelper::get_param( 'fid', '', 'get', 'sanitize_text_field' );
 		}
 
-		if ( ! ini_get('safe_mode') ) {
-			set_time_limit(0); //Remove time limit to execute this function
-			$mem_limit = str_replace('M', '', ini_get('memory_limit'));
-			if ( (int) $mem_limit < 256 ) {
-				ini_set('memory_limit', '256M');
-			}
+		set_time_limit(0); //Remove time limit to execute this function
+		$mem_limit = str_replace('M', '', ini_get('memory_limit'));
+		if ( (int) $mem_limit < 256 ) {
+			ini_set('memory_limit', '256M');
 		}
 
 		global $wpdb;
