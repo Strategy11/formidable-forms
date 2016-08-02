@@ -323,20 +323,7 @@ class FrmDb {
         self::get_group_and_table_name( $table, $group );
 		self::convert_options_to_array( $args, '', $limit );
 
-		$query = 'SELECT ' . $field . ' FROM ' . $table;
-		if ( is_array( $where ) || empty( $where ) ) {
-			// only separate into array values and query string if is array
-        	self::get_where_clause_and_values( $where );
-			global $wpdb;
-			$query = $wpdb->prepare( $query . $where['where'] . ' ' . implode( ' ', $args ), $where['values'] );
-		} else {
-			/**
-			 * Allow the $where to be prepared before we recieve it here.
-			 * This is a fallback for reverse compatability, but is not recommended
-			 */
-			_deprecated_argument( 'where', '2.0', __( 'Use the query in an array format so it can be properly prepared.', 'formidable' ) );
-			$query .= $where . ' ' . implode( ' ', $args );
-		}
+		$query = self::generate_query_string_from_pieces( $field, $table, $where, $args );
 
 		$cache_key = str_replace( array( ' ', ',' ), '_', trim( implode( '_', FrmAppHelper::array_flatten( $where ) ) . implode( '_', $args ) . $field . '_' . $type, ' WHERE' ) );
 		$results = FrmAppHelper::check_cache( $cache_key, $group, $query, 'get_' . $type );
@@ -482,8 +469,8 @@ class FrmDb {
 	 * Get the associative array results for the given columns, table, and where query
 	 *
 	 * @since 2.02.05
-	 * @param array $columns
-	 * @param array $table
+	 * @param string $columns
+	 * @param string $table
 	 * @param array $where
 	 * @return mixed
 	 */
@@ -491,17 +478,42 @@ class FrmDb {
 		$group = '';
 		self::get_group_and_table_name( $table, $group );
 
-		$query = 'SELECT ' . $columns . ' FROM ' . $table;
-		if ( is_array( $where ) || empty( $where ) ) {
-			self::get_where_clause_and_values( $where );
-			global $wpdb;
-			$query = $wpdb->prepare( $query . $where['where'], $where['values'] );
-		}
+		$query = self::generate_query_string_from_pieces( $columns, $table, $where );
 
 		$cache_key = str_replace( array( ' ', ',' ), '_', trim( implode( '_', FrmAppHelper::array_flatten( $where ) ) . $columns . '_results_ARRAY_A' , ' WHERE' ) );
 		$results = FrmAppHelper::check_cache( $cache_key, $group, $query, 'get_associative_results' );
 
 		return $results;
+	}
+
+	/**
+	 * Combine the pieces of a query to form a full, prepared query
+	 *
+	 * @since 2.02.05
+	 *
+	 * @param string $columns
+	 * @param string $table
+	 * @param mixed $where
+	 * @param array $args
+	 * @return string
+	 */
+	private static function generate_query_string_from_pieces( $columns, $table, $where, $args = array() ) {
+		$query = 'SELECT ' . $columns . ' FROM ' . $table;
+
+		if ( is_array( $where ) || empty( $where ) ) {
+			self::get_where_clause_and_values( $where );
+			global $wpdb;
+			$query = $wpdb->prepare( $query . $where['where'] . ' ' . implode( ' ', $args ), $where['values'] );
+		} else {
+			/**
+			 * Allow the $where to be prepared before we recieve it here.
+			 * This is a fallback for reverse compatability, but is not recommended
+			 */
+			_deprecated_argument( 'where', '2.0', __( 'Use the query in an array format so it can be properly prepared.', 'formidable' ) );
+			$query .= $where . ' ' . implode( ' ', $args );
+		}
+
+		return $query;
 	}
 
     public function uninstall() {
