@@ -159,6 +159,7 @@ class FrmDb {
 
     /**
      * @param integer $frm_db_version
+	 * @param int $old_db_version
      */
 	private function migrate_data( $frm_db_version, $old_db_version ) {
 		$migrations = array( 4, 6, 11, 16, 17, 23, 25 );
@@ -172,6 +173,9 @@ class FrmDb {
 
     /**
      * Change array into format $wpdb->prepare can use
+	 *
+	 * @param array $args
+	 * @param string $starts_with
      */
     public static function get_where_clause_and_values( &$args, $starts_with = ' WHERE ' ) {
         if ( empty($args) ) {
@@ -192,8 +196,10 @@ class FrmDb {
     }
 
     /**
+	 * @param array $args
      * @param string $base_where
      * @param string $where
+	 * @param array $values
      */
     public static function parse_where_from_array( $args, $base_where, &$where, &$values ) {
         $condition = ' AND';
@@ -225,7 +231,9 @@ class FrmDb {
 
     /**
      * @param string $key
+	 * @param string|array $value
      * @param string $where
+	 * @param array $values
      */
     private static function interpret_array_to_sql( $key, $value, &$where, &$values ) {
 		$key = trim( $key );
@@ -299,6 +307,7 @@ class FrmDb {
 	 * Add %d, or %s to query
 	 *
 	 * @since 2.02.05
+	 * @param string $key
 	 * @param int|string $value
 	 * @param string $where
 	 */
@@ -312,6 +321,9 @@ class FrmDb {
 
     /**
      * @param string $table
+	 * @param array $where
+	 * @param array $args
+	 * @return int
      */
     public static function get_count( $table, $where = array(), $args = array() ) {
         $count = self::get_var( $table, $where, 'COUNT(*)', $args );
@@ -333,6 +345,10 @@ class FrmDb {
     /**
      * @param string $table
      * @param array $where
+	 * @param string $field
+	 * @param array $args
+	 * @param string $limit
+	 * @return mixed
      */
     public static function get_col( $table, $where = array(), $field = 'id', $args = array(), $limit = '' ) {
         return self::get_var( $table, $where, $field, $args, $limit, 'col' );
@@ -341,6 +357,10 @@ class FrmDb {
     /**
      * @since 2.0
      * @param string $table
+	 * @param array $where
+	 * @param string $fields
+	 * @param array $args
+	 * @return mixed
      */
     public static function get_row( $table, $where = array(), $fields = '*', $args = array() ) {
         $args['limit'] = 1;
@@ -348,22 +368,14 @@ class FrmDb {
     }
 
     /**
-     * @param string $table
-     */
-    public static function get_one_record( $table, $args = array(), $fields = '*', $order_by = '' ) {
-        _deprecated_function( __FUNCTION__, '2.0', 'FrmDb::get_row' );
-		return self::get_var( $table, $args, $fields, array( 'order_by' => $order_by, 'limit' => 1 ), '', 'row' );
-    }
-
-    public static function get_records( $table, $args = array(), $order_by = '', $limit = '', $fields = '*' ) {
-        _deprecated_function( __FUNCTION__, '2.0', 'FrmDb::get_results' );
-        return self::get_results( $table, $args, $fields, compact('order_by', 'limit') );
-    }
-
-    /**
      * Prepare a key/value array before DB call
+	 *
      * @since 2.0
      * @param string $table
+	 * @param array $where
+	 * @param string $fields
+	 * @param array $args
+	 * @return mixed
      */
     public static function get_results( $table, $where = array(), $fields = '*', $args = array() ) {
         return self::get_var( $table, $where, $fields, $args, '', 'results' );
@@ -373,6 +385,7 @@ class FrmDb {
 	 * Check for like, not like, in, not in, =, !=, >, <, <=, >=
 	 * Return a value to append to the where array key
 	 *
+	 * @param string $where_is
 	 * @return string
 	 */
 	public static function append_where_is( $where_is ) {
@@ -787,4 +800,14 @@ DEFAULT_HTML;
 			$wpdb->update( $this->entries, array( 'user_id' => $user_id->meta_value ), array( 'id' => $user_id->item_id ) );
         }
     }
+
+	public static function get_one_record( $table, $args = array(), $fields = '*', $order_by = '' ) {
+		_deprecated_function( __FUNCTION__, '2.0', 'FrmDb::get_row' );
+		return self::get_var( $table, $args, $fields, array( 'order_by' => $order_by, 'limit' => 1 ), '', 'row' );
+	}
+
+	public static function get_records( $table, $args = array(), $order_by = '', $limit = '', $fields = '*' ) {
+		_deprecated_function( __FUNCTION__, '2.0', 'FrmDb::get_results' );
+		return self::get_results( $table, $args, $fields, compact('order_by', 'limit') );
+	}
 }
