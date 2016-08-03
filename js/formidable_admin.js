@@ -1795,10 +1795,7 @@ function frmAdminBuildJS(){
 		// Check if there is enough space for text
 		var textSpace = height - size - paddingTop - paddingBottom - 3;
 		if ( textSpace < 0 ) {
-			var message = 'In certain browsers (i.e. Firefox) text will not display correctly if the field height is too small ';
-			message += 'relative to the field padding and text size. ';
-			message += 'Please increase your field height or decrease your field padding.';
-
+			var message = frm_admin_js.css_invalid_size;
 			alert( message );
 		}
 	}

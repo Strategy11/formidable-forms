@@ -1749,6 +1749,7 @@ class FrmAppHelper {
 				'default_conf'      => __( 'The entered values do not match', 'formidable' ),
 				'enter_email'       => __( 'Enter Email', 'formidable' ),
 				'confirm_email'     => __( 'Confirm Email', 'formidable' ),
+				'css_invalid_size'  => __( 'In certain browsers (i.e. Firefox) text will not display correctly if the field height is too small relative to the field padding and text size. Please increase your field height or decrease your field padding.', 'formidable' ),
 				'enter_password'    => __( 'Enter Password', 'formidable' ),
 				'confirm_password'  => __( 'Confirm Password', 'formidable' ),
 				'import_complete'   => __( 'Import Complete', 'formidable' ),
