@@ -1778,10 +1778,10 @@ function frmAdminBuildJS(){
 		var size = document.getElementById("frm_field_font_size").value.replace(/\D/g, '');
 		var height = document.getElementById("frm_field_height").value.replace(/\D/g, '');
 		var paddingEntered = document.getElementById("frm_field_pad").value.split(" ");
-
 		var paddingCount = paddingEntered.length;
+
+		// If too many or too few padding entries, leave now
 		if ( paddingCount == 0 || paddingCount > 4 ) {
-			// If too many or too few padding entries, leave now
 			return;
 		}
 
