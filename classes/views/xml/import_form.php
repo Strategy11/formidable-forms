@@ -88,6 +88,8 @@
 									echo ' ' . __( '(default template)', 'formidable' );
 								} else if ( $form->is_template ) {
 									echo ' ' . __( '(template)', 'formidable' );
+								} else if ( $form->parent_form_id ) {
+									echo ' ' . __( '(child)', 'formidable' );
 								}
                         ?></option>
                         <?php
