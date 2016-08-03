@@ -1774,7 +1774,7 @@ function frmAdminBuildJS(){
         jQuery('.control-section.accordion-section.open').removeClass('open');
     }
 
-    function textSquishCheck(){
+	function textSquishCheck(){
 		var size = document.getElementById("frm_field_font_size").value.replace(/\D/g, '');
 		var height = document.getElementById("frm_field_height").value.replace(/\D/g, '');
 		var paddingEntered = document.getElementById("frm_field_pad").value.split(" ");
