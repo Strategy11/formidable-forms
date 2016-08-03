@@ -1773,6 +1773,35 @@ function frmAdminBuildJS(){
     function collapseAllSections(){
         jQuery('.control-section.accordion-section.open').removeClass('open');
     }
+
+    function textSquishCheck(){
+		var size = document.getElementById("frm_field_font_size").value.replace(/\D/g, '');
+		var height = document.getElementById("frm_field_height").value.replace(/\D/g, '');
+		var paddingEntered = document.getElementById("frm_field_pad").value.split(" ");
+
+		var paddingCount = paddingEntered.length;
+		if ( paddingCount == 0 || paddingCount > 4 ) {
+			// If too many or too few padding entries, leave now
+			return;
+		}
+
+		// Get the top and bottom padding from entered values
+		var paddingTop = paddingEntered[0].replace(/\D/g, '');
+		var paddingBottom = paddingTop;
+		if ( paddingCount >= 3 ) {
+			paddingBottom = paddingEntered[2].replace(/\D/g, '');
+		}
+
+		// Check if there is enough space for text
+		var textSpace = height - size - paddingTop - paddingBottom - 3;
+		if ( textSpace < 0 ) {
+			var message = 'In certain browsers (i.e. Firefox) text will not display correctly if the field height is too small ';
+			message += 'relative to the field padding and text size. ';
+			message += 'Please increase your field height or decrease your field padding.';
+
+			alert( message );
+		}
+	}
 	
 	/* Global settings page */
 	function uninstallNow(){ 
@@ -2445,47 +2474,10 @@ function frmAdminBuildJS(){
 		
 		styleInit: function(){
             collapseAllSections();
-			
-			jQuery('#frm_field_font_size, #frm_field_height, #frm_field_pad').bind('blur',function(){
-				var size = document.getElementById("frm_field_font_size").value.replace(/\D/g, '');
-				var height = document.getElementById("frm_field_height").value.replace(/\D/g, '');
-				var paddingEntered = document.getElementById("frm_field_pad").value.split(" ");
-				var paddingPractical = [];
-				for (i = 0; i < paddingEntered.length; i++) {
-					paddingEntered[i] = paddingEntered[i].replace(/\D/g, '');
-				}
-				switch (paddingEntered.length) {
-					case 1:paddingPractical.push(
-						paddingEntered[0],
-						paddingEntered[0],
-						paddingEntered[0],
-						paddingEntered[0]);
-						break;
-					case 2:paddingPractical.push(
-						paddingEntered[0],
-						paddingEntered[1],
-						paddingEntered[0],
-						paddingEntered[1]);
-						break;
-					case 3:paddingPractical.push(
-						paddingEntered[0],
-						paddingEntered[1],
-						paddingEntered[2],
-						paddingEntered[1]);
-						break;
-					case 4:paddingPractical.push(
-						paddingEntered[0],
-						paddingEntered[1],
-						paddingEntered[2],
-						paddingEntered[3]);
-						break;
-					default:alert("Padding has a maximum of four entries");
-				}
-				var areaSum = height-size-paddingPractical[0]-paddingPractical[2]-3;
-				if(areaSum<0){
-					alert('In certain browsers, text will not display correctly if height is not enough to contain text size and padding-top/bottom. Please double-check your values.');
-				}
-			});
+
+			document.getElementById("frm_field_height").addEventListener("blur", textSquishCheck);
+			document.getElementById("frm_field_font_size").addEventListener("blur", textSquishCheck);
+			document.getElementById("frm_field_pad").addEventListener("blur", textSquishCheck);
 
             // update styling on change
             jQuery('#frm_styling_form .styling_settings').change(function(){
