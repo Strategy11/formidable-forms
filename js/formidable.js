@@ -3274,11 +3274,11 @@ function frmFrontFormJS(){
 
 	function generateGoogleTables( graphs, graphType ) {
 		for ( var num = 0; num < graphs.length; num++ ) {
-			prepareGoogleTable( graphs[num], graphType );
+			generateSingleGoogleTable( graphs[num], graphType );
 		}
 	}
 
-	function prepareGoogleTable( opts, type ) {
+	function generateSingleGoogleTable( opts, type ) {
 		google.load('visualization', '1.0', {'packages':[type], 'callback': function(){
 			compileGoogleTable( opts );
 		}});
@@ -3390,17 +3390,17 @@ function frmFrontFormJS(){
 
 	function generateGoogleGraphs( graphs ) {
 		for ( var i = 0, l=graphs.length; i < l; i++ ) {
-			prepareGoogleGraph( graphs[i] );
+			generateSingleGoogleGraph( graphs[i] );
 		}
 	}
 
-	function prepareGoogleGraph( graphData ) {
+	function generateSingleGoogleGraph( graphData ) {
 		google.load('visualization', '1.0', {'packages':[ graphData.package ], 'callback': function() {
-			generateGoogleGraph( graphData );
+			compileGoogleGraph( graphData );
 		} } );
 	}
 
-	function generateGoogleGraph( graphData ) {
+	function compileGoogleGraph( graphData ) {
 		var data = new google.visualization.DataTable();
 		data = google.visualization.arrayToDataTable(graphData.data);
 
@@ -3410,7 +3410,7 @@ function frmFrontFormJS(){
 		}
 
 		var type = (graphData.type.charAt(0).toUpperCase() + graphData.type.slice(1));
-		if ( type !== 'Histogram' ) {
+		if ( type !== 'Histogram' && type !== 'Table' ) {
 			type += 'Chart';
 		}
 
