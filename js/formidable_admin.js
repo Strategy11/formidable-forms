@@ -1775,13 +1775,13 @@ function frmAdminBuildJS(){
     }
 
 	function textSquishCheck(){
-		var size = document.getElementById("frm_field_font_size").value.replace(/\D/g, '');
-		var height = document.getElementById("frm_field_height").value.replace(/\D/g, '');
-		var paddingEntered = document.getElementById("frm_field_pad").value.split(" ");
+		var size = document.getElementById('frm_field_font_size').value.replace(/\D/g, '');
+		var height = document.getElementById('frm_field_height').value.replace(/\D/g, '');
+		var paddingEntered = document.getElementById('frm_field_pad').value.split(' ');
 		var paddingCount = paddingEntered.length;
 
 		// If too many or too few padding entries, leave now
-		if ( paddingCount == 0 || paddingCount > 4 ) {
+		if ( paddingCount === 0 || paddingCount > 4 ) {
 			return;
 		}
 
@@ -1795,8 +1795,7 @@ function frmAdminBuildJS(){
 		// Check if there is enough space for text
 		var textSpace = height - size - paddingTop - paddingBottom - 3;
 		if ( textSpace < 0 ) {
-			var message = frm_admin_js.css_invalid_size;
-			alert( message );
+			alert( frm_admin_js.css_invalid_size );
 		}
 	}
 	
