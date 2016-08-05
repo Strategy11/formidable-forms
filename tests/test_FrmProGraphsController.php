@@ -1188,6 +1188,29 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 	}
 
 	/**
+	 * Check [frm-graph id="dynamic-field"]
+	 * @covers FrmProGraphsController::graph_shortcode()
+	 */
+	function test_graph_shortcode_dynamic_field() {
+		self::clear_frm_vars();
+
+		$graph_atts = array(
+			'id' => 'dynamic-state',
+		);
+
+		$graph_html = FrmProGraphsController::graph_shortcode( $graph_atts );
+
+		$expected_data = self::get_graph_defaults( $graph_atts, 'Dynamic Field - level 2' );
+		$expected_data['data'] = array(
+			array( 'Dynamic Field - level 2', 'Submissions' ),
+			//array( '', 1 ),//TODO: This part fails due to the import. Fix the import!
+			array( 'California', 1 ),
+		);
+
+		self::run_graph_tests( $graph_html, $expected_data );
+	}
+
+	/**
 	 * Check [frm-graph id=x x_order=0]
 	 * @covers FrmProGraphsController::graph_shortcode()
 	 */
