@@ -395,7 +395,7 @@ class FrmField {
 	}
 
 	public static function include_sub_fields( &$results, $inc_embed, $type = 'all' ) {
-		if ( 'include' != $inc_embed ) {
+		if ( 'include' != $inc_embed || empty( $results ) ) {
             return;
         }
 
