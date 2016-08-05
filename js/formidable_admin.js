@@ -859,9 +859,14 @@ function frmAdminBuildJS(){
 		}
 
         // Do not stop propagation if opening TB_iframe
-        if ( e.target.className.indexOf('thickbox') <= -1 ) {
-            e.stopPropagation();
-        }
+		if ( e.target.className.indexOf('thickbox') == -1 ) {
+			e.stopPropagation();
+			var isButton = e.target.closest('.frm-btn-group');
+			if ( isButton !== null ) {
+				// allow bootstrap dropdown to open
+				jQuery(isButton).find('[data-toggle=dropdown]').dropdown('toggle');
+			}
+		}
 
 		clickAction(this);
 		if(!jQuery(e.target).is('.inplace_field, .frm_ipe_field_label, .frm_ipe_field_desc, .frm_ipe_field_conf_desc, .frm_ipe_field_option, .frm_ipe_field_option_key')){
