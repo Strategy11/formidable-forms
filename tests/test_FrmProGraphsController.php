@@ -81,6 +81,33 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 	}
 
 	/**
+	 * Test all graph types with userID field
+	 * @covers FrmProGraphsController::graph_shortcode()
+	 */
+	function test_graph_shortcode_user_id_with_all_types() {
+		self::clear_frm_vars();
+
+		$graph_atts = array( 'id' => 't1eqkj');
+		$all_types = self::get_graph_types_for_testing();
+		$graph_html = array();
+		$expected_data = array();
+
+		$count = 0;
+		foreach ( $all_types as $type ) {
+			$count++;
+
+			$graph_atts['type'] = $type;
+			$graph_html[] = FrmProGraphsController::graph_shortcode( $graph_atts );
+
+			$single_expected_data = self::get_expected_data_for_user_id_field( $graph_atts );
+			$single_expected_data['graph_id'] = str_replace( '1', $count, $single_expected_data['graph_id'] );
+			$expected_data[] = $single_expected_data;
+		}
+
+		self::run_graph_tests_for_multiple_graphs( $graph_html, $expected_data );
+	}
+
+	/**
 	 * Test all graph types with Number field
 	 * @covers FrmProGraphsController::graph_shortcode()
 	 */
@@ -760,7 +787,6 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 			'height' => '100',
 			'width' => '100%',
 			'truncate' => '3',
-			'truncate_label' => '3',// Fails
 		);
 
 		$graph_html = FrmProGraphsController::graph_shortcode( $graph_atts );
@@ -1087,7 +1113,6 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 			'grid_color' => '#FFFFFF',
 			'height' => '100',
 			'width' => '100%',
-			'truncate_label' => '3',// Fails?
 		);
 
 		$graph_html = FrmProGraphsController::graph_shortcode( $graph_atts );
@@ -1509,7 +1534,6 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 			'height' => '100',
 			'width' => '100%',
 			'truncate' => '3',
-			'truncate_label' => '3',// Fails
 		);
 
 		$graph_html = FrmProGraphsController::graph_shortcode( $graph_atts );
@@ -1956,6 +1980,19 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		return $expected_data;
 	}
 
+	function get_expected_data_for_user_id_field( $graph_atts ) {
+		$expected_data = self::get_graph_defaults( $graph_atts, 'User ID' );
+		$tooltip_label = self::get_expected_tooltip_label( $graph_atts );
+
+		$expected_data['data'] = array(
+			array( 'User ID', $tooltip_label ),
+			array( '', 2 ),
+			array( 'admin', 1 ),
+		);
+
+		return $expected_data;
+	}
+
 	function get_expected_tooltip_label( $graph_atts, $default = 'Submissions' ) {
 		if ( isset( $graph_atts['tooltip_label'] ) ) {
 			$tooltip_label = $graph_atts['tooltip_label'];
@@ -2006,12 +2043,21 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		$expected_data = self::get_graph_defaults( $graph_atts,'Number');
 		$tooltip_label = self::get_expected_tooltip_label( $graph_atts );
 
-		$expected_data['data'] = array(
-			array( 'Number', $tooltip_label ),
-			array( 1, 1 ),
-			array( 5, 1 ),
-			array( 10, 1 ),
-		);
+		if ( isset( $graph_atts['type'] ) && $graph_atts['type'] == 'pie' ) {
+			$expected_data['data'] = array(
+				array( 'Number', $tooltip_label ),
+				array( '1', 1 ),
+				array( '5', 1 ),
+				array( '10', 1 ),
+			);
+		} else {
+			$expected_data['data'] = array(
+				array( 'Number', $tooltip_label ),
+				array( 1, 1 ),
+				array( 5, 1 ),
+				array( 10, 1 ),
+			);
+		}
 
 		return $expected_data;
 	}
