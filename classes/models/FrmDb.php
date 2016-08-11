@@ -330,6 +330,15 @@ class FrmDb {
         return $count;
     }
 
+	/**
+	 * @param string $table
+	 * @param array $where
+	 * @param string $field
+	 * @param array $args
+	 * @param string $limit
+	 * @param string $type
+	 * @return array|null|string|object
+	 */
     public static function get_var( $table, $where = array(), $field = 'id', $args = array(), $limit = '', $type = 'var' ) {
         $group = '';
         self::get_group_and_table_name( $table, $group );
