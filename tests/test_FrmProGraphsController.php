@@ -1342,7 +1342,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 	 *****************************************************/
 
 	/**
-	 * Check [frm-graph id=x x_axis="date-field" x_greater_than="date" x_less_than="date"]
+	 * Check [frm-graph id="dropdown" x_axis="date-field" x_greater_than="date" x_less_than="date"]
 	 *
 	 * @covers FrmProGraphsController::graph_shortcode()
 	 */
@@ -1368,7 +1368,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 	}
 
 	/**
-	 * Check [frm-graph id=x x_axis="date-field" x_greater_than="date" x_less_than="date" include_zero="1"]
+	 * Check [frm-graph id="text-field" x_axis="date-field" x_greater_than="date" x_less_than="date" include_zero="1"]
 	 *
 	 * @covers FrmProGraphsController::graph_shortcode()
 	 */
@@ -1404,7 +1404,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 	}
 
 	/**
-	 * Check [frm-graph id=x x_axis="created_at"]
+	 * Check [frm-graph id="dropdown" x_axis="created_at"]
 	 * @covers FrmProGraphsController::graph_shortcode()
 	 */
 	function test_graph_shortcode_dropdown_field_with_x_axis_created_at() {
@@ -1428,7 +1428,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 	}
 
 	/**
-	 * Check [frm-graph id=x x_axis="date-field"]
+	 * Check [frm-graph id="dropdown" x_axis="date-field"]
 	 * @covers FrmProGraphsController::graph_shortcode()
 	 */
 	function test_graph_shortcode_dropdown_field_with_x_axis_date_field() {
@@ -1447,7 +1447,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 	}
 
 	/**
-	 * Check [frm-graph id=x x_axis="date-field-key"]
+	 * Check [frm-graph id="dropdown" x_axis="date-field-key"]
 	 * @covers FrmProGraphsController::graph_shortcode()
 	 */
 	function test_graph_shortcode_dropdown_field_with_x_axis_date_field_key() {
@@ -1465,7 +1465,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 	}
 
 	/**
-	 * Check [frm-graph id=x x_axis="date-field" user_id="1"]
+	 * Check [frm-graph id="dropdown" x_axis="date-field" user_id="1"]
 	 * @covers FrmProGraphsController::graph_shortcode()
 	 */
 	function test_graph_shortcode_dropdown_field_with_x_axis_date_field_filter_by_user_id() {
@@ -1488,7 +1488,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 	}
 
 	/**
-	 * Check [frm-graph id=x x_axis="date-field" user_id="current"]
+	 * Check [frm-graph id="dropdown" x_axis="date-field" user_id="current"]
 	 * @covers FrmProGraphsController::graph_shortcode()
 	 */
 	function test_graph_shortcode_dropdown_field_with_x_axis_date_field_filter_by_user_id_current() {
@@ -1513,7 +1513,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 	}
 
 	/**
-	 * Check [frm-graph id=x x_axis="date-field" entry_id="y"]
+	 * Check [frm-graph id="dropdown" x_axis="date-field" entry_id="y"]
 	 * @covers FrmProGraphsController::graph_shortcode()
 	 */
 	function test_graph_shortcode_dropdown_field_with_x_axis_date_field_filter_by_entry_id() {
@@ -1536,7 +1536,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 	}
 
 	/**
-	 * Check [frm-graph id=x x_axis="date-field" entry_id="y,z"]
+	 * Check [frm-graph id="dropdown" x_axis="date-field" entry_id="y,z"]
 	 * @covers FrmProGraphsController::graph_shortcode()
 	 */
 	function test_graph_shortcode_dropdown_field_with_x_axis_date_field_filter_by_entry_ids() {
@@ -1562,7 +1562,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 	}
 
 	/**
-	 * Check [frm-graph id=x x_axis="date-field" entry_id="y,z"]
+	 * Check [frm-graph id="dropdown" x_axis="date-field" entry_id="y,z"]
 	 * @covers FrmProGraphsController::graph_shortcode()
 	 */
 	function test_graph_shortcode_dropdown_field_with_x_axis_date_field_filter_by_checkbox() {
@@ -1587,7 +1587,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 	}
 
 	/**
-	 * Check [frm-graph id=x x_axis="date-field" start_date="-100 years"]
+	 * Check [frm-graph id="dropdown" x_axis="date-field" start_date="-100 years"]
 	 * @covers FrmProGraphsController::graph_shortcode()
 	 */
 	function test_graph_shortcode_dropdown_field_x_axis_date_field_with_start_date() {
@@ -1606,7 +1606,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 	}
 
 	/**
-	 * Check [frm-graph id=x x_axis="date-field" start_date="+100 years"]
+	 * Check [frm-graph id="dropdown" x_axis="date-field" start_date="+100 years"]
 	 * @covers FrmProGraphsController::graph_shortcode()
 	 */
 	function test_graph_shortcode_dropdown_field_x_axis_date_field_with_start_date_no_entries() {
@@ -1623,7 +1623,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 	}
 
 	/**
-	 * Check [frm-graph id=x x_axis="date-field" start_date="Y-m-d"]
+	 * Check [frm-graph id="dropdown" x_axis="date-field" start_date="Y-m-d"]
 	 * @covers FrmProGraphsController::graph_shortcode()
 	 */
 	function test_graph_shortcode_dropdown_field_x_axis_date_field_with_start_date_specific() {
@@ -1648,7 +1648,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 	}
 
 	/**
-	 * Check [frm-graph id=x x_axis="date-field" end_date="+100 years"]
+	 * Check [frm-graph id="dropdown" x_axis="date-field" end_date="+100 years"]
 	 * @covers FrmProGraphsController::graph_shortcode()
 	 */
 	function test_graph_shortcode_dropdown_field_x_axis_date_field_with_end_date() {
@@ -1667,7 +1667,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 	}
 
 	/**
-	 * Check [frm-graph id=x x_axis="date-field" end_date="-100 years"]
+	 * Check [frm-graph id="dropdown" x_axis="date-field" end_date="-100 years"]
 	 * @covers FrmProGraphsController::graph_shortcode()
 	 */
 	function test_graph_shortcode_dropdown_field_x_axis_date_field_with_end_date_no_entries() {
@@ -1684,7 +1684,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 	}
 
 	/**
-	 * Check [frm-graph id=x x_axis="date-field" start_date="2015-01-01" end_date="2016-01-01"]
+	 * Check [frm-graph id="dropdown" x_axis="date-field" start_date="2015-01-01" end_date="2016-01-01"]
 	 * @covers FrmProGraphsController::graph_shortcode()
 	 */
 	function test_graph_shortcode_dropdown_field_x_axis_date_field_with_start_and_end_date() {
@@ -1777,7 +1777,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 	}
 
 	/**
-	 * Check [frm-graph id=x data_type=total x_axis="date_field"]
+	 * Check [frm-graph id="number" data_type=total x_axis="date_field"]
 	 * @covers FrmProGraphsController::graph_shortcode()
 	 */
 	function test_graph_shortcode_data_type_total_and_x_axis() {
@@ -1794,9 +1794,9 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		$expected_data = self::get_graph_defaults( $graph_atts,'Number');
 		$expected_data['data'] = array(
 			array( 'Date', 'Number' ),
-			array( 'January 24, 2015', 5 ),
-			array( 'July 8, 2015', 1 ),
-			array( 'August 16, 2015', 10 ),
+			array( 'January 24, 2015', 5.0 ),
+			array( 'July 8, 2015', 1.0 ),
+			array( 'August 16, 2015', 10.0 ),
 		);
 
 		self::run_graph_tests( $graph_html, $expected_data );
@@ -1820,9 +1820,9 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		$expected_data = self::get_graph_defaults( $graph_atts);
 		$expected_data['data'] = array(
 			array( 'Date', 'Number', 'Scale' ),
-			array( 'January 24, 2015', 5, 8 ),
-			array( 'July 8, 2015', 1, 8 ),
-			array( 'August 16, 2015', 10, 5 ),
+			array( 'January 24, 2015', 5.0, 8.0 ),
+			array( 'July 8, 2015', 1.0, 8.0 ),
+			array( 'August 16, 2015', 10.0, 5.0 ),
 		);
 
 		self::run_graph_tests( $graph_html, $expected_data );
@@ -2097,9 +2097,9 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		$expected_data = self::get_graph_defaults(  $graph_atts, 'Single Line Text' );
 		$expected_data['data'] = array(
 			array( 'Number', 'Single Line Text' ),
-			array( 10, 1 ),
-			array( 1, 1 ),
-			array( 5, 1 ),
+			array( 1.0, 1 ),
+			array( 5.0, 1 ),
+			array( 10.0, 1 ),
 		);
 
 		self::run_graph_tests( $graph_html, $expected_data );
