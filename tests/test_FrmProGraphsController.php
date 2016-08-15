@@ -610,7 +610,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 	function test_graph_shortcode_single_field_filter_by_created_at_less_than() {
 		self::clear_frm_vars();
 
-		$graph_atts = array( 'id' => '493ito', 'created_at_less_than' => '2015-05-13' );
+		$graph_atts = array( 'id' => '493ito', 'created_at_less_than' => '2015-05-12' );
 
 		$graph_html = FrmProGraphsController::graph_shortcode( $graph_atts );
 
@@ -2174,7 +2174,6 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 			array( 'March 2015', 0 ),
 			array( 'April 2015', 0 ),
 			array( 'May 2015', 3 ),
-			array( 'June 2015', 0 ),
 		);
 
 		self::run_graph_tests( $graph_html, $expected_data );
@@ -2303,6 +2302,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 				'legend' => array(
 					'position' => 'none',
 				),
+				'tooltip' => array( 'isHtml' => true ),
 				'title' => self::get_expected_graph_title( $graph_atts, $field_name ),
 				'titleTextStyle' => array(
 					'bold' => false,
@@ -2391,25 +2391,6 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 	}
 
 	function get_expected_x_axis_title( $graph_atts, &$expected_data ) {
-
-		if ( isset( $graph_atts[ 'x_axis' ] ) ) {
-			$date_field_id = FrmField::get_id_by_key( 'f67hbu' );
-
-			if ( $graph_atts[ 'x_axis' ] == '54tffk' ) {
-				$expected_data[ 'options' ][ 'hAxis' ][ 'title' ] = 'Dropdown';
-			} else if ( $graph_atts[ 'x_axis' ] == 'f67hbu' || $graph_atts[ 'x_axis' ] == $date_field_id ) {
-				$expected_data[ 'options' ][ 'hAxis' ][ 'title' ] = 'Date';
-			} else if ( $graph_atts['x_axis'] == 'dynamic-country' ) {
-				$expected_data[ 'options' ][ 'hAxis' ][ 'title' ] = 'Dynamic Field - level 1';
-			} else if ( $graph_atts['x_axis'] == 'msyehy' ) {
-				$expected_data[ 'options' ][ 'hAxis' ][ 'title' ] = 'Number';
-			} else if ( $graph_atts[ 'x_axis' ] == 'created_at' ) {
-				$expected_data[ 'options' ][ 'hAxis' ][ 'title' ] = 'Creation Date';
-			}
-		} else if ( isset( $graph_atts['form'] ) ) {
-			$expected_data[ 'options' ][ 'hAxis' ][ 'title' ] = 'Creation Date';
-		}
-
 		if ( isset( $graph_atts['x_title'] ) ) {
 			$expected_data['options']['hAxis']['title'] = $graph_atts['x_title'];
 		}
