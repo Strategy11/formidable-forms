@@ -125,19 +125,20 @@ function frmAdminPopupJS(){
     }
 
     function getFieldSelection(){
-		var form_id = this.value;
-	    if(form_id){
-	        var thisId = this.id;
-	    	jQuery.ajax({
-				type:'POST',url:ajaxurl,
-	        	data:{action:'frm_get_field_selection',field_id:0,form_id:form_id, nonce:frmGlobal.nonce},
-	        	success:function(msg){
-	        	    msg = msg.replace('name="field_options[form_select_0]"', 'id="'+ thisId.replace('frm_form_', '') +'"');
-	        	    jQuery(document.getElementById(thisId+'_fields')).html(msg);
-	        	}
-	    	});
-	    }
-	}
+        var form_id = this.value;
+        if(form_id){
+            var thisId = this.id;
+            jQuery.ajax({
+                type:'POST',url:ajaxurl,
+                data:{action:'frm_get_field_selection',field_id:0,form_id:form_id,nonce:frmGlobal.nonce},
+                success:function(msg){
+                    var baseId = thisId.replace( '_form', '' );
+                    msg = msg.replace('name="field_options[form_select_0]"', 'id="frmsc_' + baseId + '_fields"');
+                    jQuery(document.getElementById(baseId+'_fields_container')).html(msg);
+                }
+            });
+        }
+    }
 
 	function toggleMenu(){
 		jQuery(document.getElementById('frm_popup_content')).find( '.media-menu' ).toggleClass( 'visible' );
