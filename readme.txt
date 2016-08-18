@@ -3,8 +3,8 @@ Contributors: sswells, srwells, jamie.wahlin
 Donate link: http://formidablepro.com/donate
 Tags: contact form, contact, custom form, database, email, feedback, form, forms, poll, Post, captcha, spam, survey, template, widget, multisite, form builder, form creator, form manager
 Requires at least: 3.8
-Tested up to: 4.5.3
-Stable tag: 2.02.04
+Tested up to: 4.6
+Stable tag: 2.02.05
 
 Beautiful forms in 60 seconds. The WordPress form builder that enables you to create forms with a simple drag-and-drop interface and in-place editing.
 
@@ -89,6 +89,25 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 [See more FAQs](http://formidablepro.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 2.02.05 =
+* Clear caching when updating styling settings
+* Add frm_field_div_classes hook
+* Remove deprecated safe_mode check
+* Warning added for invalid height/padding styling combination
+* **Pro Features** *
+* Added several new graph types and options
+* Prevent repeating field value duplication when saving drafts
+* Add migration to remove duplicated repeating section data
+* Show child forms in CSV export options
+* Allow 2 decimal places for max file size
+* Fix frm-stats y=""
+* Allow time fields to be used in calculations
+* Add a Country label option for Address fields
+* Remove a few graph filters
+* Make sure address fields display error messages
+* Make sure category fields keep value when saving a draft
+* Other bug fixes
+
 = 2.02.04 =
 * Add field description margin option
 * Fixes for submitting forms in <IE10
