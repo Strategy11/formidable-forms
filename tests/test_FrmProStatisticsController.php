@@ -310,7 +310,7 @@ class WP_Test_FrmProStatisticsController extends FrmUnitTest {
 	 * [frm-stats id="number-field-key" type="total" "2015-05-12"<created_at<"2015-06-01"]
 	 */
 	function test_stats_shortcode_total_with_deprecated_creation_date_filter() {
-		$shortcode = '[frm-stats id="msyehy" type="total" "2015-05-12"&lt;created_at&lt;"2015-06-01"]';
+		$shortcode = '[frm-stats id="msyehy" type="total" "2015-05-13"&lt;created_at&lt;"2015-06-01"]';
 		$actual_value = do_shortcode( $shortcode );
 		$expected_value = 6;
 
