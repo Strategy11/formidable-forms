@@ -57,14 +57,14 @@ class WP_Test_FrmProStatisticsController extends FrmUnitTest {
 		$shortcode = '[frm-stats id="msyehy" type="average"]';
 		$actual_value = do_shortcode( $shortcode );
 		//$expected_value = '5.33333333333'; default round used to be 100
-		$expected_value = 5;
+		$expected_value = 5.33;
 
 		$this->assertEquals( $expected_value, $actual_value, $shortcode . ' is not getting the correct value' );
 
 		$shortcode = '[frm-stats id="msyehy" type="mean"]';
 		$actual_value = do_shortcode( $shortcode );
 		//$expected_value = '5.33333333333'; default round used to be 100
-		$expected_value = 5;
+		$expected_value = 5.33;
 
 		$this->assertEquals( $expected_value, $actual_value, $shortcode . ' is not getting the correct value' );
 	}
@@ -260,10 +260,20 @@ class WP_Test_FrmProStatisticsController extends FrmUnitTest {
 	}
 
 	/**
+	 * [frm-stats id="number-field-key" type="total" dropdown="Ace Ventura" fake="test"]
+	 */
+	function test_stats_shortcode_total_with_dropdown_filter_and_fake_filter() {
+		$shortcode = '[frm-stats id="msyehy" type="total" 54tffk="Ace Ventura" fake="test"]';
+		$actual_value = do_shortcode( $shortcode );
+		$expected_value = 15;
+
+		$this->assertEquals( $expected_value, $actual_value, $shortcode . ' is not getting the correct value' );
+	}
+
+	/**
 	 * [frm-stats id="number-field-key" type="total" dropdown="Ace Ventura" entry_id="jamie_entry_key"]
 	 */
 	function test_stats_shortcode_total_with_dropdown_filter_and_entry_id() {
-		//$this->markTestSkipped( 'Fails before 2.02.06' );
 		$entry_id = FrmEntry::get_id_by_key( 'jamie_entry_key' );
 		$shortcode = '[frm-stats id="msyehy" type="total" 54tffk="Ace Ventura" entry_id="' . $entry_id . '"]';
 		$actual_value = do_shortcode( $shortcode );
