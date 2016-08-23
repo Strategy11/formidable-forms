@@ -2446,6 +2446,8 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		if ( isset( $graph_atts['type'] ) && $graph_atts['type'] != 'bar' ) {
 			if ( $graph_atts['type'] == 'hbar' ) {
 				$type = 'bar';
+			} else if ( $graph_atts['type'] == 'stepped_area' ) {
+				$type = 'steppedArea';
 			} else {
 				$type = $graph_atts['type'];
 			}
@@ -2490,7 +2492,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 			'line',
 			'column',
 			'area',
-			'steppedArea',
+			'stepped_area',
 			'SteppedArea',
 			'geo',
 			'bar',
