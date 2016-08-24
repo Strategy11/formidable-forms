@@ -939,7 +939,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		self::clear_frm_vars();
 
 		$graph_atts = array(
-			'id' => 'uc580i',
+			'fields' => 'uc580i',
 			'include_zero' => '1',
 		);
 
@@ -967,7 +967,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		self::clear_frm_vars();
 
 		$graph_atts = array(
-			'id' => 'uc580i',
+			'fields' => 'uc580i',
 			'limit' => '1',
 		);
 
@@ -977,6 +977,29 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		$expected_data['data'] = array(
 			array( 'Checkboxes - colors', 'Submissions' ),
 			array( 'Red', 3 ),
+		);
+
+		self::run_graph_tests( $graph_html, $expected_data );
+	}
+
+	/**
+	 * Check [frm-graph id="taxonomy-field"]
+	 *
+	 * @covers FrmProGraphsController::graph_shortcode()
+	 */
+	function test_graph_shortcode_with_taxonomy_field() {
+		self::clear_frm_vars();
+
+		$graph_atts = array(
+			'fields' => 'parent-dynamic-taxonomy',
+		);
+
+		$graph_html = FrmProGraphsController::graph_shortcode( $graph_atts );
+
+		$expected_data = self::get_graph_defaults( $graph_atts, 'Parent Dynamic Field' );
+		$expected_data['data'] = array(
+			array( 'Parent Dynamic Field', 'Submissions' ),
+			array( 'Uncategorized', 2 ),
 		);
 
 		self::run_graph_tests( $graph_html, $expected_data );

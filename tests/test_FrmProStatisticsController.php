@@ -361,4 +361,28 @@ class WP_Test_FrmProStatisticsController extends FrmUnitTest {
 
 		$this->assertEquals( $expected_value, $actual_value, $shortcode . ' is not getting the correct value' );
 	}
+
+	/**
+	 * Tests count with a checkbox field
+	 * [frm-stats id="checkbox-field" type="count"]
+	 */
+	function test_stats_shortcode_count_for_checkbox_field() {
+		$shortcode = '[frm-stats id="uc580i" type="count"]';
+		$actual_value = do_shortcode( $shortcode );
+		$expected_value = 3;
+
+		$this->assertEquals( $expected_value, $actual_value, $shortcode . ' is not getting the correct value' );
+	}
+
+	/**
+	 * Tests count with a checkbox field and a filter for that field
+	 * [frm-stats id="checkbox-field" type="count" checkbox-field="Blue"]
+	 */
+	function test_stats_shortcode_count_for_checkbox_field_with_filter() {
+		$shortcode = '[frm-stats id="uc580i" type="count" uc580i="Blue"]';
+		$actual_value = do_shortcode( $shortcode );
+		$expected_value = 2;
+
+		$this->assertEquals( $expected_value, $actual_value, $shortcode . ' is not getting the correct value' );
+	}
 }
