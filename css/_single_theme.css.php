@@ -241,6 +241,13 @@ if ( ! isset( $center_form ) ) {
 	max-width:62%<?php echo esc_html( $important ) ?>;
 }
 
+.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_left_container .frm_combo_inputs_container .frm_form_field input,
+.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_left_container .frm_combo_inputs_container .frm_form_field select,
+.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_right_container .frm_combo_inputs_container .frm_form_field input,
+.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_right_container .frm_combo_inputs_container .frm_form_field select{
+	max-width:100%<?php echo esc_html( $important ) ?>;
+}
+
 .<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_left_container .frm_opt_container,
 .<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_right_container .frm_opt_container,
 .<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_left_container .g-recaptcha,
@@ -250,25 +257,19 @@ if ( ! isset( $center_form ) ) {
 	display:inline-block<?php echo esc_html( $important ) ?>;
 }
 
-.<?php echo esc_html( $style_class ) ?> .frm_left_container p.description,
-.<?php echo esc_html( $style_class ) ?> .frm_left_container div.description,
-.<?php echo esc_html( $style_class ) ?> .frm_left_container div.frm_description,
-.<?php echo esc_html( $style_class ) ?> .frm_left_container .frm_error{
-    margin-left:<?php echo esc_html( $label_margin ) ?>px;
-	max-width:62%<?php echo esc_html( $important ) ?>;
-}
-
-.<?php echo esc_html( $style_class ) ?> .frm_right_container p.description,
-.<?php echo esc_html( $style_class ) ?> .frm_right_container div.description,
-.<?php echo esc_html( $style_class ) ?> .frm_right_container div.frm_description,
-.<?php echo esc_html( $style_class ) ?> .frm_right_container .frm_error{
-    margin-right:<?php echo esc_html( $label_margin ) ?>px<?php echo esc_html( $important ) ?>;
-	max-width:62%<?php echo esc_html( $important ) ?>;
-}
-
-.<?php echo esc_html( $style_class ) ?> .frm_left_container .attachment-thumbnail{
-	clear:both;
-	margin-left:<?php echo esc_html( $label_margin ) ?>px<?php echo esc_html( $important ) ?>;
+.<?php echo esc_html( $style_class ) ?> .frm_left_container > p.description::before,
+.<?php echo esc_html( $style_class ) ?> .frm_left_container > div.description::before,
+.<?php echo esc_html( $style_class ) ?> .frm_left_container > div.frm_description::before,
+.<?php echo esc_html( $style_class ) ?> .frm_left_container > .frm_error::before,
+.<?php echo esc_html( $style_class ) ?> .frm_right_container > p.description::after,
+.<?php echo esc_html( $style_class ) ?> .frm_right_container > div.description::after,
+.<?php echo esc_html( $style_class ) ?> .frm_right_container > div.frm_description::after,
+.<?php echo esc_html( $style_class ) ?> .frm_right_container > .frm_error::after{
+	content:''<?php echo esc_html( $important ) ?>;
+	display:inline-block<?php echo esc_html( $important ) ?>;
+	width:<?php echo esc_html( $width . $important ) ?>;
+	max-width:33%<?php echo esc_html( $important ) ?>;
+	margin-right:10px<?php echo esc_html( $important ) ?>;
 }
 
 .<?php echo esc_html( $style_class ) ?> .frm_left_container.frm_inline label.frm_primary_label{
@@ -899,26 +900,6 @@ if ( ! $submit_style ) { ?>
 /* End Chosen */
 
 /* Responsive CSS */
-<?php if ( $change_margin !== false ) { ?>
-@media only screen and (max-width: <?php echo esc_html( $change_margin ) ?>){
-	.<?php echo esc_html( $style_class ) ?> .frm_left_container p.description,
-	.<?php echo esc_html( $style_class ) ?> .frm_left_container div.description,
-	.<?php echo esc_html( $style_class ) ?> .frm_left_container div.frm_description,
-	.<?php echo esc_html( $style_class ) ?> .frm_left_container .frm_error,
-	.<?php echo esc_html( $style_class ) ?> .frm_left_container .attachment-thumbnail{
-		margin-left:33%<?php echo esc_html( $important ) ?>;
-		padding-left:10px<?php echo esc_html( $important ) ?>;
-	}
-	.<?php echo esc_html( $style_class ) ?> .frm_right_container p.description,
-	.<?php echo esc_html( $style_class ) ?> .frm_right_container div.description,
-	.<?php echo esc_html( $style_class ) ?> .frm_right_container div.frm_description,
-	.<?php echo esc_html( $style_class ) ?> .frm_right_container .frm_error{
-		margin-right:33%<?php echo esc_html( $important ) ?>;
-		padding-right:10px<?php echo esc_html( $important ) ?>;
-	}
-}
-<?php } ?>
-
 @media only screen and (max-width: 600px){
 	.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_half.frm_left_container input:not([type=radio]):not([type=checkbox]),
 	.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_half.frm_left_container select,
@@ -997,35 +978,29 @@ if ( ! $submit_style ) { ?>
 	.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_right_container .frm_opt_container,
 	.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_right_container .frm-g-recaptcha,
 	.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_right_container .g-recaptcha,
-	.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_right_container .chosen-container,
-	.<?php echo esc_html( $style_class ) ?> .frm_left_container p.description,
-	.<?php echo esc_html( $style_class ) ?> .frm_left_container div.description,
-	.<?php echo esc_html( $style_class ) ?> .frm_left_container div.frm_description,
-	.<?php echo esc_html( $style_class ) ?> .frm_left_container .frm_error,
-	.<?php echo esc_html( $style_class ) ?> .frm_left_container .attachment-thumbnail,
-	.<?php echo esc_html( $style_class ) ?> .frm_right_container p.description,
-	.<?php echo esc_html( $style_class ) ?> .frm_right_container div.description,
-	.<?php echo esc_html( $style_class ) ?> .frm_right_container div.frm_description,
-	.<?php echo esc_html( $style_class ) ?> .frm_right_container .frm_error{
+	.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_right_container .chosen-container{
 		max-width:100%<?php echo esc_html( $important ) ?>;
 	}
-	.<?php echo esc_html( $style_class ) ?> .frm_left_container p.description,
-	.<?php echo esc_html( $style_class ) ?> .frm_left_container div.description,
-	.<?php echo esc_html( $style_class ) ?> .frm_left_container div.frm_description,
-	.<?php echo esc_html( $style_class ) ?> .frm_left_container .frm_error,
-	.<?php echo esc_html( $style_class ) ?> .frm_left_container .attachment-thumbnail,
-	.<?php echo esc_html( $style_class ) ?> .frm_right_container p.description,
-	.<?php echo esc_html( $style_class ) ?> .frm_right_container div.description,
-	.<?php echo esc_html( $style_class ) ?> .frm_right_container div.frm_description,
-	.<?php echo esc_html( $style_class ) ?> .frm_right_container .frm_error,
+
+	.<?php echo esc_html( $style_class ) ?> .frm_left_container > p.description::before,
+	.<?php echo esc_html( $style_class ) ?> .frm_left_container > div.description::before,
+	.<?php echo esc_html( $style_class ) ?> .frm_left_container > div.frm_description::before,
+	.<?php echo esc_html( $style_class ) ?> .frm_left_container > .frm_error::before,
+	.<?php echo esc_html( $style_class ) ?> .frm_right_container > p.description::after,
+	.<?php echo esc_html( $style_class ) ?> .frm_right_container > div.description::after,
+	.<?php echo esc_html( $style_class ) ?> .frm_right_container > div.frm_description::after,
+	.<?php echo esc_html( $style_class ) ?> .frm_right_container > .frm_error::after{
+		display:none<?php echo esc_html( $important ) ?>;
+	}
+
 	.<?php echo esc_html( $style_class ) ?> .frm_left_container label.frm_primary_label,
 	.<?php echo esc_html( $style_class ) ?> .frm_right_container label.frm_primary_label{
 		width:100%<?php echo esc_html( $important ) ?>;
 		max-width:100%<?php echo esc_html( $important ) ?>;
-		margin-right:0px<?php echo esc_html( $important ) ?>;
-		margin-left:0px<?php echo esc_html( $important ) ?>;
-		padding-right:0px<?php echo esc_html( $important ) ?>;
-		padding-left:0px<?php echo esc_html( $important ) ?>;
+		margin-right:0<?php echo esc_html( $important ) ?>;
+		margin-left:0<?php echo esc_html( $important ) ?>;
+		padding-right:0<?php echo esc_html( $important ) ?>;
+		padding-left:0<?php echo esc_html( $important ) ?>;
 	}
 }
 /* End Responsive CSS*/

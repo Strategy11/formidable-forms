@@ -89,7 +89,7 @@ legend.frm_hidden{
 }
 
 .with_frm_style .frm_section_heading.frm_hide_section{
-	margin-top:0px !important;
+	margin-top:0 !important;
 }
 
 .with_frm_style .frm_hidden_container label.frm_primary_label,
@@ -641,6 +641,7 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
 .frm_form_field.frm_left_container .frm-g-recaptcha,
 .frm_form_field.frm_left_container .g-recaptcha,
 .frm_form_field.frm_left_container .chosen-container,
+.frm_form_field.frm_left_container .frm_combo_inputs_container,
 .frm_form_field.frm_right_container input:not([type=radio]):not([type=checkbox]),
 .frm_form_field.frm_right_container:not(.frm_dynamic_select_container) select,
 .frm_form_field.frm_right_container textarea,
@@ -649,13 +650,24 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
 .frm_form_field.frm_right_container .frm_dropzone,
 .frm_form_field.frm_right_container .frm-g-recaptcha,
 .frm_form_field.frm_right_container .g-recaptcha,
-.frm_form_field.frm_right_container .chosen-container{
+.frm_form_field.frm_right_container .chosen-container,
+.frm_form_field.frm_right_container .frm_combo_inputs_container{
 	max-width:62%;
+}
+
+.frm_form_field.frm_left_container .frm_combo_inputs_container input,
+.frm_form_field.frm_left_container .frm_combo_inputs_container select,
+.frm_form_field.frm_right_container .frm_combo_inputs_container input,
+.frm_form_field.frm_right_container .frm_combo_inputs_container select{
+    max-width:100%;
 }
 
 .frm_form_field.frm_left_container .frm_opt_container,
 .frm_form_field.frm_right_container .frm_opt_container,
 .frm_form_field.frm_inline_container .frm_opt_container,
+.frm_form_field.frm_left_container .frm_combo_inputs_container,
+.frm_form_field.frm_right_container .frm_combo_inputs_container,
+.frm_form_field.frm_inline_container .frm_combo_inputs_container,
 .frm_form_field.frm_left_container .wp-editor-wrap,
 .frm_form_field.frm_right_container .wp-editor-wrap,
 .frm_form_field.frm_inline_container .wp-editor-wrap,
@@ -669,14 +681,6 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
 .frm_form_field.frm_right_container .g-recaptcha,
 .frm_form_field.frm_inline_container .g-recaptcha{
 	display:inline-block;
-}
-
-.frm_left_container p.description,
-.frm_left_container div.description,
-.frm_left_container div.frm_description,
-.frm_left_container .frm_error{
-    margin-left:33%;
-	max-width:62%;
 }
 
 .frm_form_field.frm_left_half.frm_left_container .frm_primary_label,
@@ -1245,7 +1249,7 @@ html[xmlns] .frm_clearfix{
 }
 
 .with_frm_style .chosen-container-single .chosen-single div b{
-    background:url('<?php echo FrmAppHelper::relative_plugin_url() ?>/pro/images/chosen-sprite.png') no-repeat 0px 2px;
+    background:url('<?php echo FrmAppHelper::relative_plugin_url() ?>/pro/images/chosen-sprite.png') no-repeat 0 2px;
     display:block;
     width:100%;
     height:100%;
