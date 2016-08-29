@@ -376,7 +376,7 @@ function frmFrontFormJS(){
 		var field_id = nameParts[0];
 		var isRepeating = false;
 
-		if ( nameParts.length === 1 || nameParts[1] == '[form' || nameParts[1] == '[id' ) {
+		if ( nameParts.length === 1 || nameParts[1] == '[form' || nameParts[1] == '[row_ids' ) {
 			return field_id;
 		}
 
@@ -452,12 +452,12 @@ function frmFrontFormJS(){
 			return;
 		}
 
-		var childFieldDivs = getAllFieldDivs( depFieldArgs, triggerFieldRepeatArgs );
+		var childFieldDivIds = getAllFieldDivIds( depFieldArgs, triggerFieldRepeatArgs );
 
-		var childFieldNum = childFieldDivs.length;
+		var childFieldNum = childFieldDivIds.length;
 		for ( var i = 0; i<childFieldNum; i++ ) {
-			depFieldArgs.containerId = childFieldDivs[i];
-			addRepeatRow( depFieldArgs, childFieldDivs[i] );
+			depFieldArgs.containerId = childFieldDivIds[i];
+			addRepeatRow( depFieldArgs, childFieldDivIds[i] );
 			hideOrShowSingleField( depFieldArgs );
 		}
 	}
@@ -474,7 +474,7 @@ function frmFrontFormJS(){
 	 * @param {string} depFieldArgs.inEmbedForm
 	 * @returns {Array}
      */
-	function getAllFieldDivs( depFieldArgs, triggerFieldArgs ) {
+	function getAllFieldDivIds( depFieldArgs, triggerFieldArgs ) {
 		var childFieldDivs = [];
 
 		if ( depFieldArgs.isRepeating ) {
@@ -485,11 +485,7 @@ function frmFrontFormJS(){
 				childFieldDivs.push( container );
 			} else {
 				// If trigger field is not repeating/embedded, get all repeating/embedded field divs
-				if ( depFieldArgs.inEmbedForm !== '0' ) {
-					childFieldDivs = getEmbeddedFieldDivs( depFieldArgs );
-				} else {
-					childFieldDivs = getAllRepeatingFieldDivs(depFieldArgs);
-				}
+				childFieldDivs = getAllRepeatingFieldDivIds(depFieldArgs);
 			}
 		} else {
 			childFieldDivs.push( 'frm_field_' + depFieldArgs.fieldId + '_container' );
@@ -499,45 +495,39 @@ function frmFrontFormJS(){
 	}
 
 	/**
-	 * Get the field div for an embedded field
-	 *
-	 * @param {Object} depFieldArgs
-	 * @param {string} depFieldArgs.fieldId
-	 * @returns {Array}
-	 */
-	function getEmbeddedFieldDivs( depFieldArgs ) {
-		var containerFieldId = getContainerFieldId( depFieldArgs );
-		var fieldDiv = 'frm_field_' + depFieldArgs.fieldId + '-' + containerFieldId + '-';
-
-		var childFieldDivs = [ fieldDiv + '0_container' ];
-
-		return childFieldDivs;
-
-	}
-
-	/**
 	 * Get all instances of a repeating field
 	 *
 	 * @since 2.01.0
 	 * @param {Object} depFieldArgs
 	 * @param {string} depFieldArgs.fieldId
      */
-	function getAllRepeatingFieldDivs( depFieldArgs ) {
+	function getAllRepeatingFieldDivIds( depFieldArgs ) {
 		var childFieldDivs = [];
 		var containerFieldId = getContainerFieldId( depFieldArgs );
 
 		// TODO: what if section is inside embedded form?
 
-		// Check if we're on the current page
-		var sectionOnPage = document.getElementById( 'frm_field_' + containerFieldId + '_container' );
-		if ( sectionOnPage !== null ) {
-			// On the current page
-			var childFields = document.querySelectorAll( '.frm_field_' + depFieldArgs.fieldId + '_container' );
-			for ( var i = 0, l=childFields.length; i<l; i++ ) {
-				childFieldDivs.push( childFields[i].id );
-			}
+		if ( isFieldDivOnPage( 'frm_field_' + containerFieldId + '_container' ) ) {
+			childFieldDivs = getRepeatingFieldDivIdsOnCurrentPage( depFieldArgs.fieldId );
 		} else {
-			childFieldDivs = getRepeatingFieldDivsAcrossPage( depFieldArgs );
+			childFieldDivs = getRepeatingFieldDivIdsAcrossPage( depFieldArgs );
+		}
+
+		return childFieldDivs;
+	}
+
+	/**
+	 * Get all repeating field divs on the current page
+	 *
+	 * @since 2.02.06
+	 * @param string fieldId
+	 * @returns {Array}
+     */
+	function getRepeatingFieldDivIdsOnCurrentPage( fieldId ) {
+		var childFieldDivs = [];
+		var childFields = document.querySelectorAll( '.frm_field_' + fieldId + '_container' );
+		for ( var i = 0, l=childFields.length; i<l; i++ ) {
+			childFieldDivs.push( childFields[i].id );
 		}
 
 		return childFieldDivs;
@@ -548,32 +538,23 @@ function frmFrontFormJS(){
 	 *
 	 * @param {Object} depFieldArgs
 	 * @param {string} depFieldArgs.fieldId
-	 * @param {string} depFieldArgs.inSectionKey
 	 * @returns {Array}
-	 * TODO: Maybe improve this by inserting hidden fields for each field in a repeating section, even if section is on pg 2
 	 */
-	function getRepeatingFieldDivsAcrossPage( depFieldArgs ) {
+	function getRepeatingFieldDivIdsAcrossPage( depFieldArgs ) {
 		var childFieldDivs = [];
 		var containerFieldId = getContainerFieldId( depFieldArgs );
 		var fieldDiv = 'frm_field_' + depFieldArgs.fieldId + '-' + containerFieldId + '-';
 
-		var allRows = document.querySelectorAll( '[id^="field_' + depFieldArgs.inSectionKey + '-rowid-"]' );
+		var allRows = document.querySelectorAll( '[name="item_meta[' + containerFieldId + '][row_ids][]"]' );
 
-		// If no rows have been added to the repeating section yet, assume just one row
-		if ( allRows.length < 1 ) {
+        for ( var i = 0, l = allRows.length; i<l; i++ ) {
+            if ( allRows[i].value !== '' ) {
+                childFieldDivs.push(fieldDiv + allRows[i].value + '_container');
+            }
+        }
+
+        if ( childFieldDivs.length < 1 ) {
 			childFieldDivs.push( fieldDiv + '0_container' );
-			return childFieldDivs;
-		}
-
-		var currentIdParts = [];
-		for ( var i = 0, l = allRows.length; i<l; i++ ) {
-			currentIdParts = allRows[i].id.split( '-' );
-
-			if ( currentIdParts.length != 3 ) {
-				continue;
-			}
-
-			childFieldDivs.push(fieldDiv + currentIdParts[2] + '_container');
 		}
 
 		return childFieldDivs;
