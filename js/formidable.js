@@ -1089,7 +1089,8 @@ function frmFrontFormJS(){
 		var name = '';
 		if ( depFieldArgs.isRepeating ) {
 			//item_meta[section-id][row-id][field-id]
-			name = 'item_meta[' + depFieldArgs.inSection +'][' + depFieldArgs.repeatRow + '][' + depFieldArgs.fieldId + ']';
+			var containerFieldId = getContainerFieldId( depFieldArgs );
+			name = 'item_meta[' + containerFieldId +'][' + depFieldArgs.repeatRow + '][' + depFieldArgs.fieldId + ']';
 		} else {
 			// item_meta[field-id]
 			name = 'item_meta[' + depFieldArgs.fieldId + ']';
