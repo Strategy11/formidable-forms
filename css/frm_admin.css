@@ -671,8 +671,17 @@ label input[type="checkbox"], label input[type="radio"] {vertical-align:inherit;
 }
 #postbox-container-1 #taxonomy-linkcategory #frm-html-tags{display:none;max-height:none;padding-right:0;}
 #postbox-container-1 .frm_field_list #frm-insert-fields .button{
-	text-align:center;width:46%;float:left;padding-left:0;padding-right:0;font-size:11px !important; margin-bottom:6px;
-	border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px;
+	text-align:center;
+	width:46%;
+	float:left;
+	padding-left:0;
+	padding-right:0;
+	font-size:11px !important;
+	margin-bottom:6px;
+	border-radius:5px;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	position:relative;
 }
 .frm_field_list #frm-insert-fields .button a{
 	display:block;
