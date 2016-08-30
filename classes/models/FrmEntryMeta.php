@@ -13,7 +13,7 @@ class FrmEntryMeta {
 
         if ( FrmAppHelper::is_empty_value( $meta_value ) ) {
             // don't save blank fields
-            return;
+            return 0;
         }
 
         $new_values = array(

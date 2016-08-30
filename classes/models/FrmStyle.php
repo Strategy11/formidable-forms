@@ -109,6 +109,8 @@ class FrmStyle {
             return;
         }
 
+		$this->clear_cache();
+
 		$css = $this->get_css_content( $filename );
 
 		$create_file = new FrmCreateFile( array( 'folder_name' => 'formidable/css', 'file_name' => 'formidablepro.css' ) );
@@ -116,7 +118,6 @@ class FrmStyle {
 
         update_option('frmpro_css', $css);
 
-        delete_transient('frmpro_css');
         set_transient('frmpro_css', $css);
 	}
 
@@ -132,6 +133,20 @@ class FrmStyle {
         ob_end_clean();
 
 		return $css;
+	}
+
+	private function clear_cache() {
+		$default_post_atts = array(
+			'post_type'   => FrmStylesController::$post_type,
+			'post_status' => 'publish',
+			'numberposts' => 99,
+			'orderby'     => 'title',
+			'order'       => 'ASC',
+		);
+
+		FrmAppHelper::delete_cache_and_transient( serialize( $default_post_atts ), 'frm_styles' );
+		FrmAppHelper::cache_delete_group( 'frm_styles' );
+		FrmAppHelper::delete_cache_and_transient( 'frmpro_css' );
 	}
 
 	public function destroy( $id ) {
@@ -312,6 +327,7 @@ class FrmStyle {
             'description_weight' => 'normal',
             'description_style' => 'normal',
             'description_align' => 'left',
+			'description_margin' => '0',
 
             'field_font_size'   => '14px',
             'field_height' 		=> '32px',

@@ -612,7 +612,8 @@ class FrmFormsController {
 
         unset($end_section_values, $last_order, $open, $reset_fields);
 
-        $values = FrmAppHelper::setup_edit_vars($form, 'forms', $fields, true);
+		$args = array( 'parent_form_id' => $form->id );
+        $values = FrmAppHelper::setup_edit_vars( $form, 'forms', $fields, true, array(), $args );
 
         $edit_message = __( 'Form was Successfully Updated', 'formidable' );
         if ( $form->is_template && $message == $edit_message ) {

@@ -17,16 +17,20 @@
 		<option value="italic" <?php selected($style->post_content['description_style'], 'italic') ?>><?php _e( 'italic', 'formidable' ) ?></option>
 	</select>
 </div>
+
 <div class="field-group clearfix">
 	<label><?php _e( 'Size', 'formidable' ) ?></label>
 	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name('description_font_size') ) ?>" id="frm_description_font_size" value="<?php echo esc_attr( $style->post_content['description_font_size'] ) ?>"  size="3" />
 </div>
-
 <div class="field-group clearfix">
 	<label><?php _e( 'Align', 'formidable' ) ?></label>
 	<select name="<?php echo esc_attr( $frm_style->get_field_name('description_align') ) ?>" id="frm_description_align">
 		<option value="left" <?php selected($style->post_content['description_align'], 'left') ?>><?php _e( 'left', 'formidable' ) ?></option>
 		<option value="right" <?php selected($style->post_content['description_align'], 'right') ?>><?php _e( 'right', 'formidable' ) ?></option>
 	</select>
+</div>
+<div class="field-group clearfix">
+	<label><?php _e( 'Margin', 'formidable' ) ?></label>
+	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name('description_margin') ) ?>" id="frm_description_margin" value="<?php echo esc_attr( $style->post_content['description_margin'] ) ?>"  size="3" />
 </div>
 <div class="clear"></div>

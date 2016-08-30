@@ -278,14 +278,7 @@ DEFAULT_HTML;
         //replace [field_name]
         $html = str_replace('[field_name]', $field['name'], $html);
 
-        //replace [error_class]
-		$error_class = isset( $errors[ 'field' . $field_id ] ) ? ' frm_blank_field' : '';
-		self::get_more_field_classes( $error_class, $field, $field_id, $html );
-		if ( $field['type'] == 'html' && strpos( $html, '[error_class]' ) === false ) {
-			// there is no error_class shortcode to use for addign fields
-			$html = str_replace( 'class="frm_form_field', 'class="frm_form_field ' . $error_class, $html );
-		}
-        $html = str_replace('[error_class]', $error_class, $html);
+		self::add_field_div_classes( $field_id, $field, $errors, $html );
 
         //replace [entry_key]
         $entry_key = FrmAppHelper::simple_get( 'entry', 'sanitize_title' );
@@ -357,75 +350,55 @@ DEFAULT_HTML;
     }
 
 	/**
-	* Add more classes to certain fields (like confirmation fields, other fields, repeating fields, etc.)
-	*
-	* @since 2.0
-	* @param $error_class string, pass by reference
-	* @param $field array
-	* @param $field_id int
-	* @param $html string
-	*/
-	private static function get_more_field_classes( &$error_class, $field, $field_id, $html ) {
-		$error_class .= ' frm_' . $field['label'] . '_container';
-		if ( $field['id'] != $field_id ) {
-			// add a class for repeating/embedded fields
-			$error_class .= ' frm_field_' . $field['id'] . '_container';
+	 * Add classes to a field div
+	 *
+	 * @since 2.02.05
+	 *
+	 * @param string $field_id
+	 * @param array $field
+	 * @param array $errors
+	 * @param string $html
+	 */
+	private static function add_field_div_classes( $field_id, $field, $errors, &$html ) {
+		$classes = self::get_field_div_classes( $field_id, $field, $errors, $html );
+
+		if ( $field['type'] == 'html' && strpos( $html, '[error_class]' ) === false ) {
+			// there is no error_class shortcode for HTML fields
+			$html = str_replace( 'class="frm_form_field', 'class="frm_form_field ' . $classes, $html );
 		}
+		$html = str_replace( '[error_class]', $classes, $html );
+	}
 
-		// Add class to embedded form field
-		if ( $field['type'] == 'form' ) {
-			$error_class .= ' frm_embed_form_container';
-		}
+	/**
+	 * Get the classes for a field div
+	 *
+	 * @since 2.02.05
+	 *
+	 * @param string $field_id
+	 * @param array $field
+	 * @param array $errors
+	 * @param string $html
+	 * @return string $classes
+	 */
+	private static function get_field_div_classes( $field_id, $field, $errors, $html ) {
+		// Add error class
+		$classes = isset( $errors[ 'field' . $field_id ] ) ? ' frm_blank_field' : '';
 
-		// Add class to HTML field
-		if ( $field['type'] == 'html' ) {
-			$error_class .= ' frm_html_container';
-		}
+		// Add label position class
+		$classes .= ' frm_' . $field['label'] . '_container';
 
-		//Add classes to inline confirmation field (if it doesn't already have classes set)
-		if ( isset( $field['conf_field'] ) && $field['conf_field'] == 'inline' && ! $field['classes'] ) {
-			$error_class .= ' frm_first frm_half';
-		}
-
-		//Add class if field includes other option
-		if ( isset( $field['other'] ) && true == $field['other'] ) {
-			$error_class .= ' frm_other_container';
-		}
-
-		// Add class to Dynamic fields
-		if ( $field['type'] == 'data' ) {
-			$error_class .= ' frm_dynamic_' . $field['data_type'] . '_container';
-		}
-
-		// Add class to inline Scale field
-		if ( $field['type'] == 'scale' && $field['label'] == 'inline' ) {
-			$error_class .= ' frm_scale_container';
-		}
-
-		// If this is a Section
-		if ( $field['type'] == 'divider' ) {
-
-			// If the top margin needs to be removed from a section heading
-			if ( $field['label'] == 'none' ) {
-				$error_class .= ' frm_hide_section';
-			}
-
-			// If this is a repeating section that should be hidden with exclude_fields or fields shortcode, hide it
-			if ( $field['repeat'] ) {
-				global $frm_vars;
-				if ( isset( $frm_vars['show_fields'] ) && ! empty( $frm_vars['show_fields'] ) && ! in_array( $field['id'], $frm_vars['show_fields'] ) && ! in_array( $field['field_key'], $frm_vars['show_fields'] ) ) {
-					$error_class .= ' frm_hidden';
-				}
-			}
-		}
-
-		//insert custom CSS classes
+		// Add CSS layout classes
 		if ( ! empty( $field['classes'] ) ) {
 			if ( ! strpos( $html, 'frm_form_field ') ) {
-				$error_class .= ' frm_form_field';
+				$classes .= ' frm_form_field';
 			}
-			$error_class .= ' ' . $field['classes'];
+			$classes .= ' ' . $field['classes'];
 		}
+
+		// Get additional classes
+		$classes = apply_filters( 'frm_field_div_classes', $classes, $field, array( 'field_id' => $field_id ) );
+
+		return $classes;
 	}
 
     public static function remove_inline_conditions( $no_vars, $code, $replace_with, &$html ) {
@@ -617,6 +590,7 @@ DEFAULT_HTML;
 			$hide_opt = rtrim( $hide_opt );
 		}
 
+		$observed_value = wp_kses_post( $observed_value );
 		$hide_opt = wp_kses_post( $hide_opt );
 
         if ( is_array($observed_value) ) {
@@ -927,7 +901,7 @@ DEFAULT_HTML;
             'user_id', 'tag', 'password',
         );
 		$multiple_input = array( 'radio', 'checkbox', 'select', 'scale', 'lookup' );
-		$other_type = array( 'divider', 'html', 'break' );
+		$other_type = array( 'html', 'break' );
 
 		$field_selection = array_merge( FrmField::pro_field_selection(), FrmField::field_selection() );
 

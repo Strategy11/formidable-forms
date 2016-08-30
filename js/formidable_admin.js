@@ -859,9 +859,14 @@ function frmAdminBuildJS(){
 		}
 
         // Do not stop propagation if opening TB_iframe
-        if ( e.target.className.indexOf('thickbox') <= -1 ) {
-            e.stopPropagation();
-        }
+		if ( e.target.className.indexOf('thickbox') == -1 ) {
+			e.stopPropagation();
+			var isButton = e.target.closest('.frm-btn-group');
+			if ( isButton !== null ) {
+				// allow bootstrap dropdown to open
+				jQuery(isButton).find('[data-toggle=dropdown]').dropdown('toggle');
+			}
+		}
 
 		clickAction(this);
 		if(!jQuery(e.target).is('.inplace_field, .frm_ipe_field_label, .frm_ipe_field_desc, .frm_ipe_field_conf_desc, .frm_ipe_field_option, .frm_ipe_field_option_key')){
@@ -1773,6 +1778,31 @@ function frmAdminBuildJS(){
     function collapseAllSections(){
         jQuery('.control-section.accordion-section.open').removeClass('open');
     }
+
+	function textSquishCheck(){
+		var size = document.getElementById('frm_field_font_size').value.replace(/\D/g, '');
+		var height = document.getElementById('frm_field_height').value.replace(/\D/g, '');
+		var paddingEntered = document.getElementById('frm_field_pad').value.split(' ');
+		var paddingCount = paddingEntered.length;
+
+		// If too many or too few padding entries, leave now
+		if ( paddingCount === 0 || paddingCount > 4 ) {
+			return;
+		}
+
+		// Get the top and bottom padding from entered values
+		var paddingTop = paddingEntered[0].replace(/\D/g, '');
+		var paddingBottom = paddingTop;
+		if ( paddingCount >= 3 ) {
+			paddingBottom = paddingEntered[2].replace(/\D/g, '');
+		}
+
+		// Check if there is enough space for text
+		var textSpace = height - size - paddingTop - paddingBottom - 3;
+		if ( textSpace < 0 ) {
+			alert( frm_admin_js.css_invalid_size );
+		}
+	}
 	
 	/* Global settings page */
 	function uninstallNow(){ 
@@ -2445,6 +2475,10 @@ function frmAdminBuildJS(){
 		
 		styleInit: function(){
             collapseAllSections();
+
+			document.getElementById("frm_field_height").addEventListener("blur", textSquishCheck);
+			document.getElementById("frm_field_font_size").addEventListener("blur", textSquishCheck);
+			document.getElementById("frm_field_pad").addEventListener("blur", textSquishCheck);
 
             // update styling on change
             jQuery('#frm_styling_form .styling_settings').change(function(){

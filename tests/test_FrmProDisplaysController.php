@@ -968,7 +968,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 			array( 'type' => 'col',
 				'col' => 'created_at',
 				'op' => '=',
-				'val' => '2015-05-13 19:30:23',
+				'val' => '2015-05-12 19:30:23',
 			),
 		);
 		self::add_filter_to_view( $dynamic_view, $filter_args );
@@ -1060,18 +1060,18 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 			array( 'type' => 'field',
 				'col' => '493ito',
 				'op' => 'LIKE',
-				'val' => 'Ste',
+				'val' => 'Stev',
 			),
 		);
 		self::add_filter_to_view( $dynamic_view, $filter_args );
 
-		$d = self::get_default_args( $dynamic_view, array( 'Steve', 'Steph' ), array( 'Jamie' ) );
+		$d = self::get_default_args( $dynamic_view, array( 'Steve' ), array( 'Jamie', 'Steph' ) );
 		self::run_get_display_data_tests( $d, 'created_at with field ID filter' );
 
 		// Check detail page - should show entry
-		$_GET['detail'] = FrmEntry::get_id_by_key( 'steph_entry_key' );
+		$_GET['detail'] = FrmEntry::get_id_by_key( 'steve_entry_key' );
 		$dynamic_view = self::reset_view( 'dynamic-view', $filter_args );
-		$d = self::get_default_args( $dynamic_view, array( 'Steph' ), array( 'Steve', 'Jamie' ) );
+		$d = self::get_default_args( $dynamic_view, array( 'Steve' ), array( 'Steph', 'Jamie' ) );
 		self::run_get_display_data_tests( $d, 'created at with field ID filter on detail page' );
 
 		// Check detail page - should NOT show entry
@@ -2362,7 +2362,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		$plugin = 'easy-table/easy-table.php';
 		$is_active = is_plugin_active( $plugin ) && class_exists('EasyTable');
 		if ( ! $is_active ) {
-			$this->markTestSkipped( 'Pro is not active' );
+			$this->markTestSkipped( 'Easy table is not active' );
 		}
 		$this->assertTrue( $is_active, 'Easy table is not active.' );
 	}

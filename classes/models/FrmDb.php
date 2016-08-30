@@ -159,6 +159,7 @@ class FrmDb {
 
     /**
      * @param integer $frm_db_version
+	 * @param int $old_db_version
      */
 	private function migrate_data( $frm_db_version, $old_db_version ) {
 		$migrations = array( 4, 6, 11, 16, 17, 23, 25 );
@@ -172,6 +173,9 @@ class FrmDb {
 
     /**
      * Change array into format $wpdb->prepare can use
+	 *
+	 * @param array $args
+	 * @param string $starts_with
      */
     public static function get_where_clause_and_values( &$args, $starts_with = ' WHERE ' ) {
         if ( empty($args) ) {
@@ -192,8 +196,10 @@ class FrmDb {
     }
 
     /**
+	 * @param array $args
      * @param string $base_where
      * @param string $where
+	 * @param array $values
      */
     public static function parse_where_from_array( $args, $base_where, &$where, &$values ) {
         $condition = ' AND';
@@ -225,7 +231,9 @@ class FrmDb {
 
     /**
      * @param string $key
+	 * @param string|array $value
      * @param string $where
+	 * @param array $values
      */
     private static function interpret_array_to_sql( $key, $value, &$where, &$values ) {
 		$key = trim( $key );
@@ -289,38 +297,54 @@ class FrmDb {
 				$where .= '=';
 			}
 
-            $where .= is_numeric( $value ) ? ( strpos( $value, '.' ) !== false ? '%f' : '%d' ) : '%s';
+			self::add_query_placeholder( $key, $value, $where );
+
             $values[] = $value;
         }
     }
 
+	/**
+	 * Add %d, or %s to query
+	 *
+	 * @since 2.02.05
+	 * @param string $key
+	 * @param int|string $value
+	 * @param string $where
+	 */
+    private static function add_query_placeholder( $key, $value, &$where ) {
+		if ( is_numeric( $value ) && strpos( $key, 'meta_value' ) === false ) {
+			$where .= '%d';
+		} else {
+			$where .= '%s';
+		}
+	}
+
     /**
      * @param string $table
+	 * @param array $where
+	 * @param array $args
+	 * @return int
      */
     public static function get_count( $table, $where = array(), $args = array() ) {
         $count = self::get_var( $table, $where, 'COUNT(*)', $args );
         return $count;
     }
 
+	/**
+	 * @param string $table
+	 * @param array $where
+	 * @param string $field
+	 * @param array $args
+	 * @param string $limit
+	 * @param string $type
+	 * @return array|null|string|object
+	 */
     public static function get_var( $table, $where = array(), $field = 'id', $args = array(), $limit = '', $type = 'var' ) {
         $group = '';
         self::get_group_and_table_name( $table, $group );
 		self::convert_options_to_array( $args, '', $limit );
 
-		$query = 'SELECT ' . $field . ' FROM ' . $table;
-		if ( is_array( $where ) || empty( $where ) ) {
-			// only separate into array values and query string if is array
-        	self::get_where_clause_and_values( $where );
-			global $wpdb;
-			$query = $wpdb->prepare( $query . $where['where'] . ' ' . implode( ' ', $args ), $where['values'] );
-		} else {
-			/**
-			 * Allow the $where to be prepared before we recieve it here.
-			 * This is a fallback for reverse compatability, but is not recommended
-			 */
-			_deprecated_argument( 'where', '2.0', __( 'Use the query in an array format so it can be properly prepared.', 'formidable' ) );
-			$query .= $where . ' ' . implode( ' ', $args );
-		}
+		$query = self::generate_query_string_from_pieces( $field, $table, $where, $args );
 
 		$cache_key = str_replace( array( ' ', ',' ), '_', trim( implode( '_', FrmAppHelper::array_flatten( $where ) ) . implode( '_', $args ) . $field . '_' . $type, ' WHERE' ) );
 		$results = FrmAppHelper::check_cache( $cache_key, $group, $query, 'get_' . $type );
@@ -330,6 +354,10 @@ class FrmDb {
     /**
      * @param string $table
      * @param array $where
+	 * @param string $field
+	 * @param array $args
+	 * @param string $limit
+	 * @return mixed
      */
     public static function get_col( $table, $where = array(), $field = 'id', $args = array(), $limit = '' ) {
         return self::get_var( $table, $where, $field, $args, $limit, 'col' );
@@ -338,6 +366,10 @@ class FrmDb {
     /**
      * @since 2.0
      * @param string $table
+	 * @param array $where
+	 * @param string $fields
+	 * @param array $args
+	 * @return mixed
      */
     public static function get_row( $table, $where = array(), $fields = '*', $args = array() ) {
         $args['limit'] = 1;
@@ -345,22 +377,14 @@ class FrmDb {
     }
 
     /**
-     * @param string $table
-     */
-    public static function get_one_record( $table, $args = array(), $fields = '*', $order_by = '' ) {
-        _deprecated_function( __FUNCTION__, '2.0', 'FrmDb::get_row' );
-		return self::get_var( $table, $args, $fields, array( 'order_by' => $order_by, 'limit' => 1 ), '', 'row' );
-    }
-
-    public static function get_records( $table, $args = array(), $order_by = '', $limit = '', $fields = '*' ) {
-        _deprecated_function( __FUNCTION__, '2.0', 'FrmDb::get_results' );
-        return self::get_results( $table, $args, $fields, compact('order_by', 'limit') );
-    }
-
-    /**
      * Prepare a key/value array before DB call
+	 *
      * @since 2.0
      * @param string $table
+	 * @param array $where
+	 * @param string $fields
+	 * @param array $args
+	 * @return mixed
      */
     public static function get_results( $table, $where = array(), $fields = '*', $args = array() ) {
         return self::get_var( $table, $where, $fields, $args, '', 'results' );
@@ -370,6 +394,7 @@ class FrmDb {
 	 * Check for like, not like, in, not in, =, !=, >, <, <=, >=
 	 * Return a value to append to the where array key
 	 *
+	 * @param string $where_is
 	 * @return string
 	 */
 	public static function append_where_is( $where_is ) {
@@ -461,6 +486,57 @@ class FrmDb {
 			$args['limit'] = $temp_limit;
 		}
     }
+
+	/**
+	 * Get the associative array results for the given columns, table, and where query
+	 *
+	 * @since 2.02.05
+	 * @param string $columns
+	 * @param string $table
+	 * @param array $where
+	 * @return mixed
+	 */
+	public static function get_associative_array_results( $columns, $table, $where ) {
+		$group = '';
+		self::get_group_and_table_name( $table, $group );
+
+		$query = self::generate_query_string_from_pieces( $columns, $table, $where );
+
+		$cache_key = str_replace( array( ' ', ',' ), '_', trim( implode( '_', FrmAppHelper::array_flatten( $where ) ) . $columns . '_results_ARRAY_A' , ' WHERE' ) );
+		$results = FrmAppHelper::check_cache( $cache_key, $group, $query, 'get_associative_results' );
+
+		return $results;
+	}
+
+	/**
+	 * Combine the pieces of a query to form a full, prepared query
+	 *
+	 * @since 2.02.05
+	 *
+	 * @param string $columns
+	 * @param string $table
+	 * @param mixed $where
+	 * @param array $args
+	 * @return string
+	 */
+	private static function generate_query_string_from_pieces( $columns, $table, $where, $args = array() ) {
+		$query = 'SELECT ' . $columns . ' FROM ' . $table;
+
+		if ( is_array( $where ) || empty( $where ) ) {
+			self::get_where_clause_and_values( $where );
+			global $wpdb;
+			$query = $wpdb->prepare( $query . $where['where'] . ' ' . implode( ' ', $args ), $where['values'] );
+		} else {
+			/**
+			 * Allow the $where to be prepared before we recieve it here.
+			 * This is a fallback for reverse compatability, but is not recommended
+			 */
+			_deprecated_argument( 'where', '2.0', __( 'Use the query in an array format so it can be properly prepared.', 'formidable' ) );
+			$query .= $where . ' ' . implode( ' ', $args );
+		}
+
+		return $query;
+	}
 
     public function uninstall() {
 		if ( ! current_user_can( 'administrator' ) ) {
@@ -733,4 +809,14 @@ DEFAULT_HTML;
 			$wpdb->update( $this->entries, array( 'user_id' => $user_id->meta_value ), array( 'id' => $user_id->item_id ) );
         }
     }
+
+	public static function get_one_record( $table, $args = array(), $fields = '*', $order_by = '' ) {
+		_deprecated_function( __FUNCTION__, '2.0', 'FrmDb::get_row' );
+		return self::get_var( $table, $args, $fields, array( 'order_by' => $order_by, 'limit' => 1 ), '', 'row' );
+	}
+
+	public static function get_records( $table, $args = array(), $order_by = '', $limit = '', $fields = '*' ) {
+		_deprecated_function( __FUNCTION__, '2.0', 'FrmDb::get_results' );
+		return self::get_results( $table, $args, $fields, compact('order_by', 'limit') );
+	}
 }

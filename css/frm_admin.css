@@ -1502,6 +1502,7 @@ span.howto{display:inline;}
 /* Star Rating */
 .frm_form_fields div.rating-cancel, .frm_form_fields div.star-rating{
 	float:left;width:17px;height:17px;cursor:pointer;display:block;background:transparent;overflow:hidden;
+	clear:none;
 }
 .frm_form_fields div.rating-cancel{display:none !important;}
 .frm_form_fields div.rating-cancel a:before{font:16px/1 'dashicons';content:'\f460';color:#CDCDCD;}

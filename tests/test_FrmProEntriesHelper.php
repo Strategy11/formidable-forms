@@ -128,7 +128,7 @@ class WP_Test_FrmProEntriesHelper extends FrmUnitTest {
 	function test_general_entries_search_on_frm_items_created_at() {
 
 		// Search created at column. One matching entry should be found.
-		$search_string = '2015-05-13 19:30';
+		$search_string = '2015-05-12 19:30';
 		$items = self::generate_and_run_search_query( 'all_field_types', $search_string );
 		$msg = 'A general search for ' . $search_string . ' in entries table';
 		self::run_entries_found_tests( $msg, $items, 1, array( 'jamie_entry_key' ) );
@@ -145,7 +145,7 @@ class WP_Test_FrmProEntriesHelper extends FrmUnitTest {
 		$search_string = '2015-05-13 unrelated_string';
 		$items = self::generate_and_run_search_query( 'all_field_types', $search_string );
 		$msg = 'A general search for ' . $search_string . ' in entries table';
-		self::run_entries_found_tests( $msg, $items, 3, array( 'steph_entry_key', 'steve_entry_key', 'jamie_entry_key' ) );
+		self::run_entries_found_tests( $msg, $items, 3, array( 'steph_entry_key', 'steve_entry_key' ) );
 	}
 
 	/**
@@ -307,14 +307,14 @@ class WP_Test_FrmProEntriesHelper extends FrmUnitTest {
 	 */
 	function test_field_specific_search_on_creation_date() {
 
-		// Y-m-d. Three matching entries should be found.
+		// Y-m-d. Two matching entries should be found.
 		$search_string = '2015-05-13';
 		$items = self::generate_and_run_search_query( 'all_field_types', $search_string, 'created_at' );
 		$msg = 'A search for ' . $search_string . ' in creation date column';
-		self::run_entries_found_tests( $msg, $items, 3, array( 'jamie_entry_key', 'steph_entry_key', 'steve_entry_key' ) );
+		self::run_entries_found_tests( $msg, $items, 3, array( 'steph_entry_key', 'steve_entry_key' ) );
 
 		// Y-m-d H:i:s. One matching entry should be found.
-		$search_string = '2015-05-13 19:30';
+		$search_string = '2015-05-12 19:30';
 		$items = self::generate_and_run_search_query( 'all_field_types', $search_string, 'created_at' );
 		$msg = 'A search for ' . $search_string . ' in creation date column';
 		self::run_entries_found_tests( $msg, $items, 1, array( 'jamie_entry_key' ) );
@@ -327,11 +327,11 @@ class WP_Test_FrmProEntriesHelper extends FrmUnitTest {
 	function test_field_specific_search_on_creation_date_multiple_words() {
 		$this->markTestSkipped( 'Functionality not yet added.' );
 
-		// Y-m-d H:i:s. Three matching entries should be found.
+		// Y-m-d H:i:s. Two matching entries should be found.
 		$search_string = '2015-05-13 10:10:10';
 		$items = self::generate_and_run_search_query( 'all_field_types', $search_string, 'created_at' );
 		$msg = 'A search for ' . $search_string . ' in creation date column';
-		self::run_entries_found_tests( $msg, $items, 3, array( 'jamie_entry_key', 'steph_entry_key', 'steve_entry_key' ) );
+		self::run_entries_found_tests( $msg, $items, 3, array( 'steph_entry_key', 'steve_entry_key' ) );
 	}
 
 	function run_search_query( $where_clause, $form_id, $search_string ) {
