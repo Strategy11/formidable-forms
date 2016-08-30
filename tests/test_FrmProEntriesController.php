@@ -228,8 +228,8 @@ class WP_Test_FrmProEntriesController extends FrmUnitTest {
 	*/
 	function test_get_field_value_shortcode(){
 		$tests = array( 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13 );
-		$field_id = $this->factory->field->get_id_by_key( '493ito' );
-		$entry_id = $this->factory->entry->get_id_by_key( 'jamie_entry_key' );
+		$field_id = FrmField::get_id_by_key( '493ito' );
+		$entry_id = FrmEntry::get_id_by_key( 'jamie_entry_key' );
 
 		foreach ( $tests as $test ) {
 			$sc_atts = self::_setup_frm_field_value_sc_atts( $test, $field_id, $entry_id );
@@ -240,6 +240,33 @@ class WP_Test_FrmProEntriesController extends FrmUnitTest {
 
 			$this->assertEquals( $expected_result, $value, 'The frm-field-value shortcode is not retrieving the correct value with the following parameters: ' . $sc_atts_list );
 		}
+	}
+
+	/**
+	 * Test with a time field, no format set
+	 * @covers FrmProEntriesController::get_field_value_shortcode
+	 */
+	function test_get_field_value_shortcode_for_time_fields_no_format(){
+		$atts = array( 'field_id' => 'bm57jf' );
+
+		$value = FrmProEntriesController::get_field_value_shortcode( $atts );
+		$expected_value = '8:00 AM';
+		$this->assertEquals( $expected_value, $value, 'The frm-field-value shortcode is not retrieving the correct value with the following parameters: ' . implode( ',', $atts ) );
+	}
+
+	/**
+	 * Tests a time field with format:"gA"
+	 * @covers FrmProEntriesController::get_field_value_shortcode
+	 */
+	function test_get_field_value_shortcode_for_time_fields_with_format(){
+		$atts = array(
+			'field_id' => 'bm57jf',
+			'format' => 'gA',
+		);
+
+		$value = FrmProEntriesController::get_field_value_shortcode( $atts );
+		$expected_value = '8AM';
+		$this->assertEquals( $expected_value, $value, 'The frm-field-value shortcode is not retrieving the correct value with the following parameters: ' . implode( ',', $atts ) );
 	}
 
 	/**
