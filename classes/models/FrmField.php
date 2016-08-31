@@ -159,7 +159,7 @@ class FrmField {
             $values['required'] = (int) $values['required'];
         }
 
-		self::preserve_phone_format_backslashes( $values );
+		self::preserve_format_option_backslashes( $values );
 
 		if ( isset( $values['type'] ) ) {
 			$values = apply_filters( 'frm_clean_' . $values['type'] . '_field_options_before_update', $values );
@@ -202,7 +202,7 @@ class FrmField {
 	* @since 2.0.8
 	* @param $values array - pass by reference
 	*/
-	private static function preserve_phone_format_backslashes( &$values ) {
+	private static function preserve_format_option_backslashes( &$values ) {
 		if ( isset( $values['field_options']['format'] ) ) {
 			$values['field_options']['format'] = FrmAppHelper::preserve_backslashes( $values['field_options']['format'] );
 		}

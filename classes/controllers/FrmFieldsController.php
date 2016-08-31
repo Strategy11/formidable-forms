@@ -682,7 +682,7 @@ class FrmFieldsController {
 			$add_html['data-invmsg'] = 'data-invmsg="' . esc_attr( $invalid_message ) . '"';
 		}
 
-		if ( $field['type'] == 'tel' ) {
+		if ( $field['type'] == 'phone' || ( $field['type'] == 'text' && FrmField::is_option_true_in_array( $field, 'format' ) ) ) {
 			$format = FrmEntryValidate::phone_format( $field );
 			$format = substr( $format, 2, -1 );
 			$key = 'pattern';
