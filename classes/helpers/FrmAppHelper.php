@@ -177,7 +177,8 @@ class FrmAppHelper {
      * Check if value contains blank value or empty array
      *
      * @since 2.0
-     * @param $value - value to check
+     * @param mixed $value - value to check
+	 * @param string
      * @return boolean
      */
     public static function is_empty_value( $value, $empty = '' ) {
@@ -262,6 +263,7 @@ class FrmAppHelper {
 	 * @param string $param
 	 * @param mixed $default
 	 * @param string $sanitize
+	 * @return string|array
 	 */
 	public static function get_post_param( $param, $default = '', $sanitize = '' ) {
 		return self::get_simple_request( array( 'type' => 'post', 'param' => $param, 'default' => $default, 'sanitize' => $sanitize ) );
@@ -273,6 +275,7 @@ class FrmAppHelper {
 	 * @param string $param
 	 * @param string $sanitize
 	 * @param string $default
+	 * @return string|array
 	 */
 	public static function simple_get( $param, $sanitize = 'sanitize_text_field', $default = '' ) {
 		return self::get_simple_request( array( 'type' => 'get', 'param' => $param, 'default' => $default, 'sanitize' => $sanitize ) );
@@ -282,6 +285,8 @@ class FrmAppHelper {
 	 * Get a GET/POST/REQUEST value and sanitize it
 	 *
 	 * @since 2.0.6
+	 * @param array $args
+	 * @return string|array
 	 */
 	public static function get_simple_request( $args ) {
 		$defaults = array(
@@ -356,6 +361,9 @@ class FrmAppHelper {
 	/**
 	 * Sanitize the value, and allow some HTML
 	 * @since 2.0
+	 * @param string $value
+	 * @param array $allowed
+	 * @return string
 	 */
 	public static function kses( $value, $allowed = array() ) {
 		$html = array(

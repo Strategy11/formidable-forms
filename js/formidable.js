@@ -3400,93 +3400,25 @@ function frmFrontFormJS(){
 		chart.draw(data, graphData.options);
 	}
 
-    function getGraphType(field){
-        var type = 'string';
-        if ( field.type == 'number' ){
-            type = 'number';
-        } else if ( field.type == 'checkbox' || field.type == 'select' ) {
-            var optCount = field.options.length;
-            if ( field.type == 'select' && field.options[0] === '' ) {
-                if ( field.field_options.post_field == 'post_status' ) {
-                    optCount = 3;
-                } else {
-                    optCount = optCount - 1;
-                }
-            }
-            if ( optCount == 1 ) {
-                type = 'boolean';
-            }
-        }
-        return type;
-    }
-
-    function compileGraph(opts){
-        var data = new google.visualization.DataTable();
-        var useSepCol = false;
-		var useTooltip = false;
-
-        // add the rows
-        var rowCount = opts.rows.length;
-        if ( rowCount > 0 ) {
-            if ( opts.type == 'table' ) {
-                useSepCol = true;
-                var lastRow = opts.rows[rowCount - 1];
-                var count = lastRow[0] + 1;
-                data.addRows(count);
-
-                for ( var r = 0, len = rowCount; r < len; r++ ) {
-                    data.setCell( opts.rows[r] ); //data.setCell(0, 0, 'Mike');
-                }
-            }else{
-                var firstRow = opts.rows[0];
-                if ( typeof firstRow.tooltip != 'undefined' ) {
-                    useSepCol = true;
-					useTooltip = true;
-
-					// reset the tooltip key to numeric
-					for ( var row = 0, rc = rowCount; row < rc; row++ ) {
-						var tooltip = opts.rows[row].tooltip;
-						delete opts.rows[row].tooltip;
-
-						var rowArray = Object.keys(opts.rows[row]).map( function(k){
-							return opts.rows[row][k];
-						} );
-
-						opts.rows[row] = rowArray;
-						opts.rows[row].push(tooltip);
-					}
-                }
-            }
-        }
-
-        // add the columns
-        var colCount = opts.cols.length;
-        if ( useSepCol ) {
-            if ( colCount > 0 ) {
-                for ( var i = 0, l = colCount; i < l; i++ ) {
-                    var col = opts.cols[i];
-                    data.addColumn(col.type, col.name);
-                }
-            }
-			if ( useTooltip ) {
-				data.addColumn({type:'string',role:'tooltip'});
-				data.addRows(opts.rows);
+	function getGraphType(field){
+		var type = 'string';
+		if ( field.type == 'number' ){
+			type = 'number';
+		} else if ( field.type == 'checkbox' || field.type == 'select' ) {
+			var optCount = field.options.length;
+			if ( field.type == 'select' && field.options[0] === '' ) {
+				if ( field.field_options.post_field == 'post_status' ) {
+					optCount = 3;
+				} else {
+					optCount = optCount - 1;
+				}
 			}
-        } else {
-            var graphData = [];
-            graphData[0] = [];
-            for ( var c = 0, cur = colCount; c < cur; c++ ) {
-                graphData[0].push(opts.cols[c].name);
-            }
-            graphData = graphData.concat(opts.rows);
-            data = google.visualization.arrayToDataTable(graphData);
-        }
-
-        var type = (opts.type.charAt(0).toUpperCase() + opts.type.slice(1)) + 'Chart';
-        var chart = new google.visualization[type](document.getElementById('chart_'+ opts.graph_id));
-
-        chart.draw(data, opts.options);
-    }
+			if ( optCount == 1 ) {
+				type = 'boolean';
+			}
+		}
+		return type;
+	}
 	
 	/* Repeating Fields */
 	function removeRow(){
