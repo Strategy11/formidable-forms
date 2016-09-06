@@ -681,6 +681,8 @@ label input[type="checkbox"], label input[type="radio"] {vertical-align:inherit;
 	border-radius:5px;
 	-moz-border-radius:5px;
 	-webkit-border-radius:5px;
+}
+#postbox-container-1 .frm_field_list #frm-insert-fields .frmbutton.dropdown{
 	position:relative;
 }
 .frm_field_list #frm-insert-fields .button a{
