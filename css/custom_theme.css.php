@@ -259,7 +259,6 @@ a.frm_save_draft{
     margin-right:5px;
 	width:auto;
 	border:none;
-    vertical-align:baseline;
 }
 
 .with_frm_style :invalid,
