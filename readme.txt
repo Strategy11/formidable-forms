@@ -1,7 +1,6 @@
 === Formidable Forms ===
 Contributors: sswells, srwells, jamie.wahlin
-Donate link: http://formidablepro.com/donate
-Tags: contact form, contact, custom form, database, email, feedback, form, forms, poll, Post, captcha, spam, survey, template, widget, multisite, form builder, form creator, form manager
+Tags: contact form, contact, custom form, database, email, feedback, form, forms, poll, Post, captcha, spam, survey, template, widget, multisite, form builder, form creator, form manager,
 Requires at least: 3.8
 Tested up to: 4.6
 Stable tag: 2.02.06
