@@ -30,7 +30,7 @@ if ( ! FrmAppHelper::is_admin() ) {
     }
 }
 
-FrmFormsHelper::show_errors( compact( 'img', 'errors' ) );
+FrmFormsHelper::show_errors( compact( 'img', 'errors', 'form' ) );
 
 ?>
 </div>
