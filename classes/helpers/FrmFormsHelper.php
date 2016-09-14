@@ -126,7 +126,7 @@ class FrmFormsHelper {
 	 * @param array $args
 	 * @return string
 	 */
-    public static function get_invalid_error_message( $args ) {
+	public static function get_invalid_error_message( $args ) {
 		$frm_settings = FrmAppHelper::get_settings();
 
 		$invalid_msg = apply_filters( 'frm_invalid_error_message', $frm_settings->invalid_msg, $args );
