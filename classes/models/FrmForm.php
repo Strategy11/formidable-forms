@@ -225,7 +225,8 @@ class FrmForm {
                 continue;
             }
 
-			if ( isset( $values['options'] ) || isset( $values['field_options'][ 'custom_html_' . $field_id ] ) ) {
+			$is_settings_page = ( isset( $values['options'] ) || isset( $values['field_options'][ 'custom_html_' . $field_id ] ) );
+			if ( $is_settings_page ) {
                 //updating the settings page
 				if ( isset( $values['field_options'][ 'custom_html_' . $field_id ] ) ) {
 					$field->field_options['custom_html'] = isset( $values['field_options'][ 'custom_html_' . $field_id ] ) ? $values['field_options'][ 'custom_html_' . $field_id ] : ( isset( $field->field_options['custom_html'] ) ? $field->field_options['custom_html'] : FrmFieldsHelper::get_default_html( $field->type ) );
@@ -241,7 +242,7 @@ class FrmForm {
                 }
             }
 
-			if ( ( isset( $values['options'] ) || isset( $values['field_options'][ 'custom_html_' . $field_id ] ) ) && ! defined( 'WP_IMPORTING' ) ) {
+			if ( $is_settings_page && ! defined( 'WP_IMPORTING' ) ) {
                 continue;
             }
 
@@ -269,6 +270,7 @@ class FrmForm {
 
             FrmField::delete_form_transient($field->form_id);
         }
+		self::clear_form_cache();
 
         return $values;
     }
