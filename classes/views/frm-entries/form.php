@@ -18,6 +18,7 @@ $frm_hide_fields = FrmAppHelper::get_post_param( 'frm_hide_fields_' . $form->id,
 <div class="frm_form_fields <?php echo esc_attr( apply_filters( 'frm_form_fields_class', '', $values ) ); ?>">
 <fieldset>
 <?php echo FrmFormsHelper::replace_shortcodes( $values['before_html'], $form, $title, $description ); ?>
+<?php do_action( 'frm_after_title', compact('form') ) ?>
 <input type="hidden" name="frm_action" value="<?php echo esc_attr($form_action) ?>" />
 <input type="hidden" name="form_id" value="<?php echo esc_attr($form->id) ?>" />
 <input type="hidden" name="frm_hide_fields_<?php echo esc_attr( $form->id ) ?>" id="frm_hide_fields_<?php echo esc_attr( $form->id ) ?>" value="<?php echo esc_attr($frm_hide_fields) ?>" />
