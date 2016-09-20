@@ -1732,6 +1732,7 @@ class FrmAppHelper {
 			'offset'    => apply_filters( 'frm_scroll_offset', 4 ),
 			'nonce'     => wp_create_nonce( 'frm_ajax' ),
 			'id'        => __( 'ID', 'formidable' ),
+			'no_results' => __( 'No results match', 'formidable' ),
 		) );
 
 		if ( $location == 'admin' ) {
