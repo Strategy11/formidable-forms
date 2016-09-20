@@ -549,7 +549,7 @@
 }
 
 .frm_compact .frm_dropzone .dz-preview.dz-error .dz-error-message{
-	top: 0;
+	top: -40px;
 	padding: 4px;
 	width: auto;
 	text-align: center;
@@ -562,7 +562,7 @@
     top: 6px;
 }
 
-.frm_compact .frm_dropzone .dz-error .dz-remove{
+.frm_compact .frm_dropzone .dz-preview:hover .dz-error-mark{
 	display:none;
 }
 
