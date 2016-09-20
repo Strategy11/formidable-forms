@@ -119,6 +119,21 @@ class FrmFormsHelper {
         echo ($sort_col == $col && $sort_dir == 'desc') ? ' asc' : ' desc';
     }
 
+	/**
+	 * Get the invalid form error message
+	 *
+	 * @since 2.02.07
+	 * @param array $args
+	 * @return string
+	 */
+	public static function get_invalid_error_message( $args ) {
+		$frm_settings = FrmAppHelper::get_settings();
+
+		$invalid_msg = apply_filters( 'frm_invalid_error_message', $frm_settings->invalid_msg, $args );
+
+		return $invalid_msg;
+	}
+
 	public static function get_success_message( $atts ) {
 		$message = apply_filters( 'frm_content', $atts['message'], $atts['form'], $atts['entry_id'] );
 		$message = FrmAppHelper::use_wpautop( do_shortcode( $message ) );
@@ -494,11 +509,12 @@ BEFORE_HTML;
 	 * @since 2.0.6
 	 */
 	public static function show_errors( $args ) {
-		$frm_settings = FrmAppHelper::get_settings();
-		if ( empty( $frm_settings->invalid_msg ) ) {
+		$invalid_msg = self::get_invalid_error_message( $args );
+
+		if ( empty( $invalid_msg ) ) {
 			$show_img = false;
 		} else {
-			echo wp_kses_post( $frm_settings->invalid_msg );
+			echo wp_kses_post( $invalid_msg );
 			$show_img = true;
 		}
 

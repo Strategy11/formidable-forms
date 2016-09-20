@@ -179,10 +179,6 @@ class FrmPointers {
 
 	private function opening_line() {
 		$opening = __( 'You&#8217;ve just installed a new form builder plugin!', 'formidable' );
-		$affiliate = FrmAppHelper::get_affiliate();
-		if ( $affiliate == 'mojo' ) {
-			$opening = 'Your Forms plugin has been installed by MOJO Marketplace for your convenience.';
-		}
 		return $opening;
 	}
 

@@ -681,13 +681,6 @@ class FrmFieldsController {
 			$invalid_message = FrmFieldsHelper::get_error_msg( $field, 'invalid' );
 			$add_html['data-invmsg'] = 'data-invmsg="' . esc_attr( $invalid_message ) . '"';
 		}
-
-		if ( $field['type'] == 'tel' ) {
-			$format = FrmEntryValidate::phone_format( $field );
-			$format = substr( $format, 2, -1 );
-			$key = 'pattern';
-			$add_html[ $key ] = $key . '="' . esc_attr( $format ) . '"';
-		}
 	}
 
     private static function add_shortcodes_to_html( $field, array &$add_html ) {

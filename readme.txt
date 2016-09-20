@@ -1,10 +1,9 @@
 === Formidable Forms ===
 Contributors: sswells, srwells, jamie.wahlin
-Donate link: http://formidablepro.com/donate
-Tags: contact form, contact, custom form, database, email, feedback, form, forms, poll, Post, captcha, spam, survey, template, widget, multisite, form builder, form creator, form manager
+Tags: contact form, contact, custom form, database, email, feedback, form, forms, poll, Post, captcha, spam, survey, template, widget, multisite, form builder, form creator, form manager,
 Requires at least: 3.8
 Tested up to: 4.6
-Stable tag: 2.02.05
+Stable tag: 2.02.06
 
 Beautiful forms in 60 seconds. The WordPress form builder that enables you to create forms with a simple drag-and-drop interface and in-place editing.
 
@@ -89,6 +88,20 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 [See more FAQs](http://formidablepro.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 2.02.06 =
+* Prevent styling conflict with field buttons on form builder
+* **Pro Features** *
+* Add styling for left and right labels in combo fields
+* Fix PHP 5.2 error in graphs controller
+* Add taxonomy support to graphs and stats
+* A couple other graph fixes
+* Fix entry_id and created_at issue with stats
+* Fix lowercase text sorting in Lookup fields
+* Make sure conditional logic works on embedded form fields when editing
+* Fix conditional logic dependent on hidden embedded form field
+* Make sure time field displays correctly by default with frm-field-value shortcode
+* Add Format option to Text fields
+
 = 2.02.05 =
 * Clear caching when updating styling settings
 * Add frm_field_div_classes hook

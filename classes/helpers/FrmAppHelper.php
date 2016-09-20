@@ -10,7 +10,7 @@ class FrmAppHelper {
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '2.02.06b2';
+	public static $plug_version = '2.02.06';
 
     /**
      * @since 1.07.02
@@ -66,9 +66,10 @@ class FrmAppHelper {
 	}
 
 	public static function get_affiliate() {
+		return '';
 		$affiliate_id = apply_filters( 'frm_affiliate_link', get_option('frm_aff') );
 		$affiliate_id = strtolower( $affiliate_id );
-		$allowed_affiliates = array( 'mojo' );
+		$allowed_affiliates = array();
 		if ( ! in_array( $affiliate_id, $allowed_affiliates ) ) {
 			$affiliate_id = false;
 		}
@@ -177,7 +178,8 @@ class FrmAppHelper {
      * Check if value contains blank value or empty array
      *
      * @since 2.0
-     * @param $value - value to check
+     * @param mixed $value - value to check
+	 * @param string
      * @return boolean
      */
     public static function is_empty_value( $value, $empty = '' ) {
@@ -262,6 +264,7 @@ class FrmAppHelper {
 	 * @param string $param
 	 * @param mixed $default
 	 * @param string $sanitize
+	 * @return string|array
 	 */
 	public static function get_post_param( $param, $default = '', $sanitize = '' ) {
 		return self::get_simple_request( array( 'type' => 'post', 'param' => $param, 'default' => $default, 'sanitize' => $sanitize ) );
@@ -273,6 +276,7 @@ class FrmAppHelper {
 	 * @param string $param
 	 * @param string $sanitize
 	 * @param string $default
+	 * @return string|array
 	 */
 	public static function simple_get( $param, $sanitize = 'sanitize_text_field', $default = '' ) {
 		return self::get_simple_request( array( 'type' => 'get', 'param' => $param, 'default' => $default, 'sanitize' => $sanitize ) );
@@ -282,6 +286,8 @@ class FrmAppHelper {
 	 * Get a GET/POST/REQUEST value and sanitize it
 	 *
 	 * @since 2.0.6
+	 * @param array $args
+	 * @return string|array
 	 */
 	public static function get_simple_request( $args ) {
 		$defaults = array(
@@ -356,6 +362,9 @@ class FrmAppHelper {
 	/**
 	 * Sanitize the value, and allow some HTML
 	 * @since 2.0
+	 * @param string $value
+	 * @param array $allowed
+	 * @return string
 	 */
 	public static function kses( $value, $allowed = array() ) {
 		$html = array(
@@ -1723,6 +1732,7 @@ class FrmAppHelper {
 			'offset'    => apply_filters( 'frm_scroll_offset', 4 ),
 			'nonce'     => wp_create_nonce( 'frm_ajax' ),
 			'id'        => __( 'ID', 'formidable' ),
+			'no_results' => __( 'No results match', 'formidable' ),
 		) );
 
 		if ( $location == 'admin' ) {
