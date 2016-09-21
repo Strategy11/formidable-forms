@@ -261,11 +261,15 @@ class FrmFormActionsController {
 
         $stored_actions = $action_priority = array();
 
-		$importing = in_array( $event, array( 'create', 'update' ) ) && defined( 'WP_IMPORTING' ) && WP_IMPORTING;
+		if ( in_array( $event, array( 'create', 'update' ) ) && defined( 'WP_IMPORTING' ) && WP_IMPORTING ) {
+			$this_event = 'import';
+		} else {
+			$this_event = $event;
+		}
 
         foreach ( $form_actions as $action ) {
-			$trigger_on_import = $importing && in_array( 'import', $action->post_content['event'] );
-			$skip_this_action = ( ! in_array( $event, $action->post_content['event'] ) && ! $trigger_on_import );
+
+			$skip_this_action = ( ! in_array( $this_event, $action->post_content['event'] ) );
 			$skip_this_action = apply_filters( 'frm_skip_form_action', $skip_this_action, compact( 'action', 'entry', 'form', 'event' ) );
 			if ( $skip_this_action ) {
                 continue;
