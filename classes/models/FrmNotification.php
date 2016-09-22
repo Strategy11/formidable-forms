@@ -9,12 +9,6 @@ class FrmNotification {
     }
 
 	public static function trigger_email( $action, $entry, $form ) {
-		if ( defined( 'WP_IMPORTING' ) && WP_IMPORTING  ) {
-            return;
-        }
-
-        global $wpdb;
-
         $notification = $action->post_content;
         $email_key = $action->ID;
 
