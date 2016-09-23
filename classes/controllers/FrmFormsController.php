@@ -1192,7 +1192,7 @@ class FrmFormsController {
     }
 
 	/**
-	 * @since 2.0.7
+	 * @since 2.2.7
 	 */
 	public static function just_created_entry( $form_id ) {
 		global $frm_vars;
