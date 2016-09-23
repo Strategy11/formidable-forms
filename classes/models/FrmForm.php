@@ -292,13 +292,14 @@ class FrmForm {
         global $wpdb;
 
         if ( is_array($id) ) {
-			$where = array( 'id' => $id );
+			$where = array( 'id' => $id, 'parent_form_id' => $id, 'or' => 1 );
 			FrmDb::get_where_clause_and_values( $where );
 			array_unshift( $where['values'], $status );
 
 			$query_results = $wpdb->query( $wpdb->prepare( 'UPDATE ' . $wpdb->prefix . 'frm_forms SET status = %s ' . $where['where'], $where['values'] ) );
         } else {
 			$query_results = $wpdb->update( $wpdb->prefix . 'frm_forms', array( 'status' => $status ), array( 'id' => $id ) );
+			$wpdb->update( $wpdb->prefix . 'frm_forms', array( 'status' => $status ), array( 'parent_form_id' => $id ) );
         }
 
         if ( $query_results ) {
@@ -329,6 +330,12 @@ class FrmForm {
 			$wpdb->prefix . 'frm_forms',
 			array( 'status' => 'trash', 'options' => serialize( $options ) ),
 			array( 'id' => $id )
+        );
+
+        $wpdb->update(
+			$wpdb->prefix . 'frm_forms',
+			array( 'status' => 'trash', 'options' => serialize( $options ) ),
+			array( 'parent_form_id' => $id )
         );
 
         if ( $query_results ) {
