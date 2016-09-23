@@ -24,7 +24,7 @@ class FrmForm {
             'created_at'    => isset($values['created_at']) ? $values['created_at'] : current_time('mysql', 1),
         );
 
-        $options = array();
+		$options = isset( $values['options'] ) ? (array) $values['options'] : array();
 		FrmFormsHelper::fill_form_options( $options, $values );
 
         $options['before_html'] = isset($values['options']['before_html']) ? $values['options']['before_html'] : FrmFormsHelper::get_default_html('before');
@@ -171,7 +171,7 @@ class FrmForm {
             return $new_values;
         }
 
-        $options = array();
+		$options = isset( $values['options'] ) ? (array) $values['options'] : array();
 		FrmFormsHelper::fill_form_options( $options, $values );
 
         $options['custom_style'] = isset($values['options']['custom_style']) ? $values['options']['custom_style'] : 0;
@@ -292,13 +292,14 @@ class FrmForm {
         global $wpdb;
 
         if ( is_array($id) ) {
-			$where = array( 'id' => $id );
+			$where = array( 'id' => $id, 'parent_form_id' => $id, 'or' => 1 );
 			FrmDb::get_where_clause_and_values( $where );
 			array_unshift( $where['values'], $status );
 
 			$query_results = $wpdb->query( $wpdb->prepare( 'UPDATE ' . $wpdb->prefix . 'frm_forms SET status = %s ' . $where['where'], $where['values'] ) );
         } else {
 			$query_results = $wpdb->update( $wpdb->prefix . 'frm_forms', array( 'status' => $status ), array( 'id' => $id ) );
+			$wpdb->update( $wpdb->prefix . 'frm_forms', array( 'status' => $status ), array( 'parent_form_id' => $id ) );
         }
 
         if ( $query_results ) {
@@ -329,6 +330,12 @@ class FrmForm {
 			$wpdb->prefix . 'frm_forms',
 			array( 'status' => 'trash', 'options' => serialize( $options ) ),
 			array( 'id' => $id )
+        );
+
+        $wpdb->update(
+			$wpdb->prefix . 'frm_forms',
+			array( 'status' => 'trash', 'options' => serialize( $options ) ),
+			array( 'parent_form_id' => $id )
         );
 
         if ( $query_results ) {

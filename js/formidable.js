@@ -3435,19 +3435,25 @@ function frmFrontFormJS(){
 	/* Repeating Fields */
 	function removeRow(){
 		/*jshint validthis:true */
-		var id = 'frm_section_'+ jQuery(this).data('parent') +'-'+ jQuery(this).data('key');
+		var rowNum = jQuery(this).data('key');
+		var sectionID = jQuery(this).data('parent');
+		var id = 'frm_section_'+ sectionID +'-'+ rowNum;
 		var thisRow = jQuery(document.getElementById(id));
 		var fields = thisRow.find('input, select, textarea');
+		var formId = jQuery(this).closest('form').find('input[name="form_id"]').val();
 
 		thisRow.fadeOut('slow', function(){
 			thisRow.remove();
 
 			fields.each(function(){
 				/* update calculations when a row is removed */
+				var fieldID = getFieldId( this, false );
 				if ( this.type != 'file' ) {
-					var fieldID = getFieldId( this, false );
 					doCalculation(fieldID, jQuery(this));
 				}
+
+				var container = 'frm_field_' + fieldID + '-' + sectionID + '-' + rowNum + '_container';
+				removeFromHideFields( container, formId );
 			});
 
 			if(typeof(frmThemeOverride_frmRemoveRow) == 'function'){
@@ -3511,6 +3517,7 @@ function frmFrontFormJS(){
 							if ( this.id === false || this.id === '' ) {
 								return;
 							}
+
 							fieldObject = jQuery( '#' + this.id );
 							checked.push(fieldID);
 							hideOrShowFieldById( fieldID, repeatArgs );

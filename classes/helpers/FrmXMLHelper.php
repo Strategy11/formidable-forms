@@ -426,6 +426,7 @@ class FrmXMLHelper {
 
 	/**
 	* Updates the custom style setting on import
+	* Convert the post slug to an ID
 	*
 	* @since 2.0.19
 	* @param array $form
@@ -453,8 +454,32 @@ class FrmXMLHelper {
 			if ( $style_id ) {
 				$form['options']['custom_style'] = $style_id;
 			} else {
+				// save the old style to maybe update after styles import
+				$form['options']['old_style'] = $form['options']['custom_style'];
+
 				// Set to default
 				$form['options']['custom_style'] = 1;
+			}
+		}
+	}
+
+	/**
+	 * After styles are imported, check for any forms that were linked
+	 * and link them back up.
+	 *
+	 * @since 2.2.7
+	 */
+	private static function update_custom_style_setting_after_import( $form_id ) {
+		$form = FrmForm::getOne( $form_id );
+
+		if ( $form && isset( $form->options['old_style'] ) ) {
+			$form = (array) $form;
+			$saved_style = $form['options']['custom_style'];
+			$form['options']['custom_style'] = $form['options']['old_style'];
+			self::update_custom_style_setting_on_import( $form );
+			$has_changed = ( $form['options']['custom_style'] != $saved_style && $form['options']['custom_style'] != $form['options']['old_style'] );
+			if ( $has_changed ) {
+				FrmForm::update( $form['id'], $form );
 			}
 		}
 	}
@@ -699,10 +724,15 @@ class FrmXMLHelper {
     }
 
 	private static function maybe_update_stylesheet( $imported ) {
-		if ( ( isset( $imported['imported']['styles'] ) && ! empty( $imported['imported']['styles'] ) ) || ( isset( $imported['updated']['styles'] ) && ! empty( $imported['updated']['styles'] ) ) ) {
+		$new_styles = isset( $imported['imported']['styles'] ) && ! empty( $imported['imported']['styles'] );
+		$updated_styles = isset( $imported['updated']['styles'] ) && ! empty( $imported['updated']['styles'] );
+		if ( $new_styles || $updated_styles ) {
 			if ( is_admin() && function_exists( 'get_filesystem_method' ) ) {
 				$frm_style = new FrmStyle();
 				$frm_style->update( 'default' );
+			}
+			foreach ( $imported['forms'] as $form_id ) {
+				self::update_custom_style_setting_after_import( $form_id );
 			}
 		}
 	}
