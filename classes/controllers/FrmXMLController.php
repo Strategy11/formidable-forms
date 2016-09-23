@@ -227,13 +227,19 @@ class FrmXMLController {
                 break;
                 case 'styles':
                     // Loop through all exported forms and get their selected style IDs
+					$frm_style = new FrmStyle();
+					$default_style = $frm_style->get_default_style();
                     $form_ids = $args['ids'];
                     $style_ids = array();
                     foreach ( $form_ids as $form_id ) {
                         $form_data = FrmForm::getOne( $form_id );
                         // For forms that have not been updated while running 2.0, check if custom_style is set
                         if ( isset( $form_data->options['custom_style'] ) ) {
-                            $style_ids[] = $form_data->options['custom_style'];
+							if ( $form_data->options['custom_style'] == 1 ) {
+								$style_ids[] = $default_style->ID;
+							} else {
+								$style_ids[] = $form_data->options['custom_style'];
+							}
                         }
                         unset( $form_id, $form_data );
                     }
