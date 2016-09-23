@@ -155,16 +155,7 @@ class FrmXMLController {
 	public static function generate_xml( $type, $args = array() ) {
     	global $wpdb;
 
-	    $type = (array) $type;
-        if ( in_array( 'items', $type) && ! in_array( 'forms', $type) ) {
-            // make sure the form is included if there are entries
-            $type[] = 'forms';
-        }
-
-	    if ( in_array( 'forms', $type) ) {
-            // include actions with forms
-	        $type[] = 'actions';
-	    }
+	    self::prepare_types_array( $type );
 
 	    $tables = array(
 			'items'     => $wpdb->prefix . 'frm_items',
@@ -272,6 +263,18 @@ class FrmXMLController {
 		include( FrmAppHelper::plugin_path() . '/classes/views/xml/xml.php' );
     }
 
+	private static function prepare_types_array( &$type ) {
+		$type = (array) $type;
+		if ( in_array( 'items', $type) && ! in_array( 'forms', $type) ) {
+			// make sure the form is included if there are entries
+			$type[] = 'forms';
+		}
+
+		if ( in_array( 'forms', $type) ) {
+			// include actions with forms
+			$type[] = 'actions';
+		}
+	}
 
 	public static function generate_csv( $atts ) {
 		$form_ids = $atts['ids'];
