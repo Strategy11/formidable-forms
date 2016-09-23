@@ -24,7 +24,7 @@ class FrmForm {
             'created_at'    => isset($values['created_at']) ? $values['created_at'] : current_time('mysql', 1),
         );
 
-        $options = array();
+		$options = isset( $values['options'] ) ? (array) $values['options'] : array();
 		FrmFormsHelper::fill_form_options( $options, $values );
 
         $options['before_html'] = isset($values['options']['before_html']) ? $values['options']['before_html'] : FrmFormsHelper::get_default_html('before');
@@ -171,7 +171,7 @@ class FrmForm {
             return $new_values;
         }
 
-        $options = array();
+		$options = isset( $values['options'] ) ? (array) $values['options'] : array();
 		FrmFormsHelper::fill_form_options( $options, $values );
 
         $options['custom_style'] = isset($values['options']['custom_style']) ? $values['options']['custom_style'] : 0;
