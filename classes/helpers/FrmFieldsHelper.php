@@ -496,79 +496,6 @@ DEFAULT_HTML;
         }
     }
 
-	public static function dropdown_categories( $args ) {
-		$defaults = array( 'field' => false, 'name' => false, 'show_option_all' => ' ' );
-        $args = wp_parse_args($args, $defaults);
-
-        if ( ! $args['field'] ) {
-            return;
-        }
-
-        if ( ! $args['name'] ) {
-			$args['name'] = 'item_meta[' . $args['field']['id'] . ']';
-        }
-
-        $id = self::get_html_id($args['field']);
-        $class = $args['field']['type'];
-
-        $exclude = (is_array($args['field']['exclude_cat'])) ? implode(',', $args['field']['exclude_cat']) : $args['field']['exclude_cat'];
-        $exclude = apply_filters('frm_exclude_cats', $exclude, $args['field']);
-
-        if ( is_array($args['field']['value']) ) {
-            if ( ! empty($exclude) ) {
-                $args['field']['value'] = array_diff($args['field']['value'], explode(',', $exclude));
-            }
-            $selected = reset($args['field']['value']);
-        } else {
-            $selected = $args['field']['value'];
-        }
-
-        $tax_atts = array(
-            'show_option_all' => $args['show_option_all'], 'hierarchical' => 1, 'name' => $args['name'],
-            'id' => $id, 'exclude' => $exclude, 'class' => $class, 'selected' => $selected,
-            'hide_empty' => false, 'echo' => 0, 'orderby' => 'name',
-        );
-
-        $tax_atts = apply_filters('frm_dropdown_cat', $tax_atts, $args['field']);
-
-        if ( FrmAppHelper::pro_is_installed() ) {
-            $post_type = FrmProFormsHelper::post_type($args['field']['form_id']);
-            $tax_atts['taxonomy'] = FrmProAppHelper::get_custom_taxonomy($post_type, $args['field']);
-            if ( ! $tax_atts['taxonomy'] ) {
-                return;
-            }
-
-            // If field type is dropdown (not Dynamic), exclude children when parent is excluded
-            if ( $args['field']['type'] != 'data' && is_taxonomy_hierarchical($tax_atts['taxonomy']) ) {
-                $tax_atts['exclude_tree'] = $exclude;
-            }
-        }
-
-        $dropdown = wp_dropdown_categories($tax_atts);
-
-        $add_html = FrmFieldsController::input_html($args['field'], false);
-
-        if ( FrmAppHelper::pro_is_installed() ) {
-            $add_html .= FrmProFieldsController::input_html($args['field'], false);
-        }
-
-		$dropdown = str_replace( "<select name='" . esc_attr( $args['name'] ) . "' id='" . esc_attr( $id ) . "' class='" . esc_attr( $class ) . "'", "<select name='" . esc_attr( $args['name'] ) . "' id='" . esc_attr( $id ) . "' " . $add_html, $dropdown );
-
-        if ( is_array($args['field']['value']) ) {
-            $skip = true;
-            foreach ( $args['field']['value'] as $v ) {
-				if ( $skip ) {
-                    $skip = false;
-                    continue;
-                }
-				$dropdown = str_replace(' value="' . esc_attr( $v ) . '"', ' value="' . esc_attr( $v ) . '" selected="selected"', $dropdown );
-                unset($v);
-            }
-        }
-
-        return $dropdown;
-    }
-
 	public static function get_term_link( $tax_id ) {
         $tax = get_taxonomy($tax_id);
         if ( ! $tax ) {
@@ -1394,4 +1321,17 @@ DEFAULT_HTML;
 		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmField::maybe_get_field' );
 		FrmField::maybe_get_field( $field );
     }
+
+	public static function dropdown_categories( $args ) {
+		_deprecated_function( __FUNCTION__, '2.02.07', 'FrmProPost::get_category_dropdown' );
+
+		if ( FrmAppHelper::pro_is_installed() ) {
+			$args['location'] = 'front';
+			$dropdown = FrmProPost::get_category_dropdown( $args['field'], $args );
+		} else {
+			$dropdown = '';
+		}
+
+		return $dropdown;
+	}
 }
