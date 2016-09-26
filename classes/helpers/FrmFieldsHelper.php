@@ -452,6 +452,14 @@ DEFAULT_HTML;
 		}
 	}
 
+	public static function get_checkbox_id( $field, $opt_key ) {
+		$id = $field['id'];
+		if ( isset( $field['in_section'] ) && $field['in_section'] ) {
+			$id .= '-' . $field['in_section'];
+		}
+		return 'frm_checkbox_' . $id . '-' . $opt_key;
+	}
+
 	public static function display_recaptcha( $field ) {
 		$frm_settings = FrmAppHelper::get_settings();
 		$lang = apply_filters( 'frm_recaptcha_lang', $frm_settings->re_lang, $field );
