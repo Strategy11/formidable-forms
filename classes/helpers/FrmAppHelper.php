@@ -259,13 +259,6 @@ class FrmAppHelper {
         return $value;
     }
 
-	/**
-	 *
-	 * @param string $param
-	 * @param mixed $default
-	 * @param string $sanitize
-	 * @return string|array
-	 */
 	public static function get_post_param( $param, $default = '', $sanitize = '' ) {
 		return self::get_simple_request( array( 'type' => 'post', 'param' => $param, 'default' => $default, 'sanitize' => $sanitize ) );
 	}
@@ -507,20 +500,18 @@ class FrmAppHelper {
 
 		if ( is_callable( array( $wp_object_cache, '__get' ) ) ) {
 			$group_cache = $wp_object_cache->__get('cache');
-		} elseif ( is_callable( array( $wp_object_cache, 'redis_status' ) ) && $wp_object_cache->redis_status() ) {
-			// check if the object cache is overridden by Redis
-			$wp_object_cache->flush();
-			$group_cache = array();
-		} else {
-			// version < 4.0 fallback
-			$group_cache = $wp_object_cache->cache;
-		}
 
-		if ( isset( $group_cache[ $group ] ) ) {
-			foreach ( $group_cache[ $group ] as $k => $v ) {
-				wp_cache_delete( $k, $group );
+			if ( isset( $group_cache[ $group ] ) ) {
+				foreach ( $group_cache[ $group ] as $k => $v ) {
+					wp_cache_delete( $k, $group );
+				}
+				return true;
 			}
-			return true;
+		} else {
+			$wp_object_cache->flush();
+
+			// When using memcached: if ( property_exists( $wp_object_cache, 'mc' ) )
+			// When using redis: if ( is_callable( array( $wp_object_cache, 'redis_status' ) ) && $wp_object_cache->redis_status() )
 		}
 
     	return false;
