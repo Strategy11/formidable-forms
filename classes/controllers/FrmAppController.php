@@ -48,12 +48,14 @@ class FrmAppController {
             $form = $id = false;
         }
 
-		$nav_items = self::get_form_nav_items( $id );
+		$nav_items = self::get_form_nav_items( $form );
 
         include( FrmAppHelper::plugin_path() . '/classes/views/shared/form-nav.php' );
     }
 
-	private static function get_form_nav_items( $id ) {
+	private static function get_form_nav_items( $form ) {
+		$id = ( $form && $form->parent_form_id ) ? $form->parent_form_id : $form->id;
+
 		$nav_items = array(
 			array(
 				'link'    => admin_url( 'admin.php?page=formidable&frm_action=edit&id=' . absint( $id ) ),
@@ -78,7 +80,7 @@ class FrmAppController {
 			),
 		);
 
-		$nav_items = apply_filters( 'frm_form_nav_list', $nav_items, array( 'form_id' => $id ) );
+		$nav_items = apply_filters( 'frm_form_nav_list', $nav_items, array( 'form_id' => $id, 'form' => $form ) );
 		return $nav_items;
 	}
 
