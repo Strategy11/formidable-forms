@@ -4003,6 +4003,9 @@ function frmFrontFormJS(){
 			var scrollObj = '';
 			if(typeof(object) == 'undefined'){
 				scrollObj = jQuery(document.getElementById('frm_form_'+id+'_container'));
+				if(scrollObj.length < 1 ){
+					return;
+				}
 			} else if ( typeof id == 'string' ) {
 				scrollObj = jQuery(object).find('#frm_field_'+id+'_container');
 			} else {
