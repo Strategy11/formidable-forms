@@ -500,18 +500,22 @@ class FrmAppHelper {
 
 		if ( is_callable( array( $wp_object_cache, '__get' ) ) ) {
 			$group_cache = $wp_object_cache->__get('cache');
-
-			if ( isset( $group_cache[ $group ] ) ) {
-				foreach ( $group_cache[ $group ] as $k => $v ) {
-					wp_cache_delete( $k, $group );
-				}
-				return true;
-			}
-		} else {
+		} else if ( is_callable( array( $wp_object_cache, 'flush' ) ) ) {
 			$wp_object_cache->flush();
+			return true;
 
 			// When using memcached: if ( property_exists( $wp_object_cache, 'mc' ) )
 			// When using redis: if ( is_callable( array( $wp_object_cache, 'redis_status' ) ) && $wp_object_cache->redis_status() )
+		} else {
+			// version < 4.0 fallback
+			$group_cache = $wp_object_cache->cache;
+		}
+
+		if ( isset( $group_cache[ $group ] ) ) {
+			foreach ( $group_cache[ $group ] as $k => $v ) {
+				wp_cache_delete( $k, $group );
+			}
+			return true;
 		}
 
     	return false;
