@@ -1,5 +1,5 @@
 <?php if ( in_array( $display['type'], array( 'text', 'website', 'email', 'url' ) ) ) { ?>
-	<input type="text" name="<?php echo esc_attr( $field_name ) ?>" id="<?php echo esc_attr( $html_id ) ?>" value="<?php echo esc_attr( $field['default_value'] ); ?>" <?php echo ( FrmField::is_option_true( $field, 'size' ) ) ? esc_attr( 'style="width:' . $field['size'] . ( is_numeric( $field['size'] ) ? 'px' : '') . ';"' ) : ''; ?> class="dyn_default_value" />
+	<input type="text" name="<?php echo esc_attr( $field_name ) ?>" id="<?php echo esc_attr( $html_id ) ?>" value="<?php echo esc_attr( $field['default_value'] ); ?>" class="dyn_default_value" />
 <?php } else if ( $field['type'] == 'textarea' ) { ?>
     <textarea name="<?php echo esc_attr( $field_name ) ?>" <?php
 		echo ( FrmField::is_option_true( $field, 'size' ) ) ? esc_attr( 'style="width:' . $field['size'] . ( is_numeric( $field['size'] ) ? 'px' : '' ) . ';"' ) : '';
