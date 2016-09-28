@@ -167,7 +167,7 @@ function frmFrontFormJS(){
 				this.on('successmultiple', function( files, response ) {
 					var mediaIDs = jQuery.parseJSON(response);
 					for ( var m = 0; m < files.length; m++ ) {
-						jQuery(files[m].previewElement).append( getHiddenUploadHTML( uploadFields[i], mediaIDs[m] ) );
+						jQuery(files[m].previewElement).append( getHiddenUploadHTML( uploadFields[i], mediaIDs[m], fieldName ) );
 					}
 				});
 
@@ -180,7 +180,7 @@ function frmFrontFormJS(){
 				this.on('complete', function( file ) {
 					if ( typeof file.mediaID !== 'undefined' ) {
 						if ( uploadFields[i].uploadMultiple ) {
-							jQuery(file.previewElement).append( getHiddenUploadHTML( uploadFields[i], file.mediaID ) );
+							jQuery(file.previewElement).append( getHiddenUploadHTML( uploadFields[i], file.mediaID, fieldName ) );
 						}
 
 						// Add download link to the file
@@ -229,8 +229,8 @@ function frmFrontFormJS(){
 		});
 	}
 
-	function getHiddenUploadHTML( field, mediaID ) {
-		return '<input name="'+ field.fieldName +'[]" type="hidden" value="'+ mediaID +'" data-frmfile="'+ field.fieldID +'" />';
+	function getHiddenUploadHTML( field, mediaID, fieldName ) {
+		return '<input name="'+ fieldName +'[]" type="hidden" value="'+ mediaID +'" data-frmfile="'+ field.fieldID +'" />';
 	}
 
 	function removeFile(){
