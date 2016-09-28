@@ -559,7 +559,7 @@ class FrmForm {
 
     	$cache_key = 'frm_form_counts';
 
-    	$counts = wp_cache_get( $cache_key, 'counts' );
+    	$counts = wp_cache_get( $cache_key, 'frm_form' );
     	if ( false !== $counts ) {
     	    return $counts;
     	}
@@ -588,7 +588,7 @@ class FrmForm {
     	}
 
     	$counts = (object) $counts;
-		FrmAppHelper::set_cache( $cache_key, $counts, 'counts' );
+		FrmAppHelper::set_cache( $cache_key, $counts, 'frm_form' );
 
     	return $counts;
     }
