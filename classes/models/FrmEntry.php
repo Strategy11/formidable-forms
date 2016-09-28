@@ -317,7 +317,7 @@ class FrmEntry {
         }
         unset($metas);
 
-        wp_cache_set( $entry->id, $entry, 'frm_entry');
+		FrmAppHelper::set_cache( $entry->id, $entry, 'frm_entry' );
 
         return $entry;
     }
@@ -374,9 +374,7 @@ class FrmEntry {
             $entries = $wpdb->get_results($query, OBJECT_K);
             unset($query);
 
-			if ( ! FrmAppHelper::prevent_caching() ) {
-				wp_cache_set( $cache_key, $entries, 'frm_entry', 300 );
-			}
+			FrmAppHelper::set_cache( $cache_key, $entries, 'frm_entry' );
         }
 
         if ( ! $meta || ! $entries ) {
@@ -419,7 +417,7 @@ class FrmEntry {
 
 		if ( ! FrmAppHelper::prevent_caching() ) {
 			foreach ( $entries as $entry ) {
-				wp_cache_set( $entry->id, $entry, 'frm_entry' );
+				FrmAppHelper::set_cache( $entry->id, $entry, 'frm_entry' );
 				unset( $entry );
 			}
 		}
