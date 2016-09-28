@@ -527,7 +527,7 @@ class FrmAppHelper {
 
 			if ( isset( $group_cache[ $group ] ) ) {
 				foreach ( $group_cache[ $group ] as $k => $v ) {
-					$d = wp_cache_delete( $k, $group );
+					wp_cache_delete( $k, $group );
 				}
 			}
 		}
