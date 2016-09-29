@@ -379,7 +379,7 @@ class FrmEntryMeta {
         }
 
         $results = $wpdb->get_col($query, 0);
-        wp_cache_set($cache_key, $results, 'frm_entry', 300);
+		FrmAppHelper::set_cache( $cache_key, $results, 'frm_entry' );
 
         return $results;
     }

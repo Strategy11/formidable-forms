@@ -500,7 +500,7 @@ class FrmForm {
         $results = FrmDb::get_row( $table_name, $where );
 
         if ( isset($results->options) ) {
-            wp_cache_set($results->id, $results, 'frm_form');
+			FrmAppHelper::set_cache( $results->id, $results, 'frm_form' );
             $results->options = maybe_unserialize($results->options);
         }
         return stripslashes_deep($results);
@@ -522,7 +522,7 @@ class FrmForm {
 
 		if ( $results ) {
 			foreach ( $results as $result ) {
-				wp_cache_set( $result->id, $result, 'frm_form' );
+				FrmAppHelper::set_cache( $result->id, $result, 'frm_form' );
 				$result->options = maybe_unserialize( $result->options );
 			}
 		}
@@ -559,7 +559,7 @@ class FrmForm {
 
     	$cache_key = 'frm_form_counts';
 
-    	$counts = wp_cache_get( $cache_key, 'counts' );
+    	$counts = wp_cache_get( $cache_key, 'frm_form' );
     	if ( false !== $counts ) {
     	    return $counts;
     	}
@@ -588,7 +588,7 @@ class FrmForm {
     	}
 
     	$counts = (object) $counts;
-    	wp_cache_set( $cache_key, $counts, 'counts' );
+		FrmAppHelper::set_cache( $cache_key, $counts, 'frm_form' );
 
     	return $counts;
     }

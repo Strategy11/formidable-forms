@@ -290,6 +290,15 @@ form label.frm_primary_label input{font-size:12px;}
 	margin-top:10px;
 }
 
+.upgrade_to_pro{
+    background: #fff;
+    padding: 10px 25px 25px;
+}
+
+.upgrade_to_pro .error{
+	display:none;
+}
+
 .update-nag.frm-update-to-pro{
 	display:block;
 	text-align:center;
@@ -323,10 +332,8 @@ form label.frm_primary_label input{font-size:12px;}
 	border:1px solid #BB3E01;
 }
 
-.frm_pro_heading{
-	position:absolute;
-	left:285px;
-	line-height: 2.3em !important;
+.frm_pro_heading span{
+	margin-top:20px;
 }
 
 .upgrade_to_pro .frm_check_icon{

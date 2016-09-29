@@ -861,7 +861,7 @@ function frmAdminBuildJS(){
         // Do not stop propagation if opening TB_iframe
 		if ( e.target.className.indexOf('thickbox') == -1 ) {
 			e.stopPropagation();
-			var isButton = e.target.closest('.frm-btn-group');
+			var isButton = jQuery(e.target).closest('.frm-btn-group');
 			if ( isButton !== null ) {
 				// allow bootstrap dropdown to open
 				jQuery(isButton).find('[data-toggle=dropdown]').dropdown('toggle');

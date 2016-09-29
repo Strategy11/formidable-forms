@@ -179,7 +179,7 @@ function frmFrontFormJS(){
 				this.on('successmultiple', function( files, response ) {
 					var mediaIDs = jQuery.parseJSON(response);
 					for ( var m = 0; m < files.length; m++ ) {
-						jQuery(files[m].previewElement).append( getHiddenUploadHTML( uploadFields[i], mediaIDs[m] ) );
+						jQuery(files[m].previewElement).append( getHiddenUploadHTML( uploadFields[i], mediaIDs[m], fieldName ) );
 					}
 				});
 
@@ -192,7 +192,7 @@ function frmFrontFormJS(){
 				this.on('complete', function( file ) {
 					if ( typeof file.mediaID !== 'undefined' ) {
 						if ( uploadFields[i].uploadMultiple ) {
-							jQuery(file.previewElement).append( getHiddenUploadHTML( uploadFields[i], file.mediaID ) );
+							jQuery(file.previewElement).append( getHiddenUploadHTML( uploadFields[i], file.mediaID, fieldName ) );
 						}
 
 						// Add download link to the file
@@ -241,8 +241,8 @@ function frmFrontFormJS(){
 		});
 	}
 
-	function getHiddenUploadHTML( field, mediaID ) {
-		return '<input name="'+ field.fieldName +'[]" type="hidden" value="'+ mediaID +'" data-frmfile="'+ field.fieldID +'" />';
+	function getHiddenUploadHTML( field, mediaID, fieldName ) {
+		return '<input name="'+ fieldName +'[]" type="hidden" value="'+ mediaID +'" data-frmfile="'+ field.fieldID +'" />';
 	}
 
 	function removeFile(){
@@ -388,18 +388,19 @@ function frmFrontFormJS(){
 		var field_id = nameParts[0];
 		var isRepeating = false;
 
-		if ( nameParts.length === 1 || nameParts[1] == '[form' || nameParts[1] == '[row_ids' ) {
+		if ( nameParts.length === 1 ) {
 			return field_id;
 		}
 
+		if ( nameParts[1] === '[form' || nameParts[1] === '[row_ids' ) {
+			return 0;
+		}
+
+
 		// Check if 'this' is in a repeating section
 		if ( jQuery('input[name="item_meta['+ field_id +'][form]"]').length ) {
-			// If item_meta[370][0]
-			if ( nameParts.length === 2 && nameParts[1] == '[0' ) {
-				return 0;
-			}
 
-			// this is a repeatable section with name: item_meta[370][0][414]
+			// this is a repeatable section with name: item_meta[repeating-section-id][row-id][field-id]
 			field_id = nameParts[2].replace('[', '');
 			isRepeating = true;
 		}
@@ -2400,7 +2401,7 @@ function frmFrontFormJS(){
 			var dec = thisCalc.calc_dec;
 
 			// allow .toFixed for reverse compatability
-			if ( thisFullCalc.indexOf(').toFixed(') ) {
+			if ( thisFullCalc.indexOf(').toFixed(') > -1 ) {
 				var calcParts = thisFullCalc.split(').toFixed(');
 				if ( isNumeric(calcParts[1]) ) {
 					dec = calcParts[1];
@@ -4015,6 +4016,9 @@ function frmFrontFormJS(){
 			var scrollObj = '';
 			if(typeof(object) == 'undefined'){
 				scrollObj = jQuery(document.getElementById('frm_form_'+id+'_container'));
+				if(scrollObj.length < 1 ){
+					return;
+				}
 			} else if ( typeof id == 'string' ) {
 				scrollObj = jQuery(object).find('#frm_field_'+id+'_container');
 			} else {
