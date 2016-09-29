@@ -477,7 +477,7 @@ class FrmAppHelper {
 			$cached = array();
 		}
 
-		return (array) $cached;
+		return $cached;
 	}
 
     /**
