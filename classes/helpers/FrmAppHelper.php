@@ -473,9 +473,10 @@ class FrmAppHelper {
 
 	public static function get_group_cached_keys( $group ) {
 		$cached = wp_cache_get( 'cached_keys', $group );
-		if ( empty( $cached ) ) {
-			$cached = array( 'cached_keys' => 'cached_keys' );
+		if ( ! $cached ) {
+			$cached = array();
 		}
+
 		return (array) $cached;
 	}
 
@@ -524,6 +525,8 @@ class FrmAppHelper {
 			foreach ( $cached_keys as $key ) {
 				wp_cache_delete( $key, $group );
 			}
+
+			wp_cache_delete( 'cached_keys', $group );
 		}
 	}
 
