@@ -731,7 +731,6 @@ if ( ! $submit_style ) { ?>
     background-color:transparent<?php echo esc_html( $important ) ?>;
     border:none<?php echo esc_html( $important ) ?>;
     display:inline<?php echo esc_html( $important ) ?>;
-    width:auto<?php echo esc_html( $important ) ?>;
 	padding:0<?php echo esc_html( $important ) ?>;
 }
 
