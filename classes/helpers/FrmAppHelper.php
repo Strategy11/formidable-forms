@@ -473,10 +473,11 @@ class FrmAppHelper {
 
 	public static function get_group_cached_keys( $group ) {
 		$cached = wp_cache_get( 'cached_keys', $group );
-		if ( empty( $cached ) ) {
-			$cached = array( 'cached_keys' => 'cached_keys' );
+		if ( ! $cached ) {
+			$cached = array();
 		}
-		return (array) $cached;
+
+		return $cached;
 	}
 
     /**
@@ -521,15 +522,11 @@ class FrmAppHelper {
 		$cached_keys = self::get_group_cached_keys( $group );
 
 		if ( ! empty( $cached_keys ) ) {
-			$group_cache = array(
-				$group => $cached_keys,
-			);
-
-			if ( isset( $group_cache[ $group ] ) ) {
-				foreach ( $group_cache[ $group ] as $k => $v ) {
-					wp_cache_delete( $k, $group );
-				}
+			foreach ( $cached_keys as $key ) {
+				wp_cache_delete( $key, $group );
 			}
+
+			wp_cache_delete( 'cached_keys', $group );
 		}
 	}
 
