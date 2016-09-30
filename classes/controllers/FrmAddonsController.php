@@ -142,7 +142,7 @@ class FrmAddonsController {
 			'personal' => array( 'id' => 5, 'price' => '49.00', 'name' => 'Personal' ),
 			'professional' => array( 'id' => 6, 'price' => '99.00', 'name' => 'Professional' ),
 			'smallbusiness' => array( 'id' => 3, 'price' => '199.00', 'name' => 'Small Business' ),
-			'enterprise' => array ( 'id' => 4, 'price' => '399.00', 'name' => 'Enterprise' ),
+			'enterprise' => array( 'id' => 4, 'price' => '399.00', 'name' => 'Enterprise' ),
 		);
 
 		foreach ( $pro['pricing'] as $name => $price ) {
