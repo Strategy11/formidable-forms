@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Formidable v2.02.06\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-01 03:07+0000\n"
-"PO-Revision-Date: Thu Sep 01 2016 10:34:16 GMT-0700 (PDT)\n"
+"PO-Revision-Date: Fri Sep 30 2016 12:44:23 GMT-0700 (PDT)\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: Swedish\n"
@@ -6313,8 +6313,8 @@ msgstr "Denna fil är för stor"
 
 #: ../pro/classes/models/FrmProFileField.php:199
 #, php-format
-msgid "That file is too big. It must be less than %dMB."
-msgstr "Filen är för stor. Den måste vara mindre än %d MB."
+msgid "That file is too big. It must be less than %sMB."
+msgstr "Filen är för stor. Den måste vara mindre än %s MB."
 
 #: ../pro/classes/models/FrmProFileField.php:229
 #, php-format
