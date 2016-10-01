@@ -39,7 +39,7 @@
 </div>
 
 <div class="frm_form_field frm_section_heading form-field frm_first frm_half">
-    <h3 class="frm_pos_top frm_trigger active frm_section_spacing"><i class="frm_icon_font frm_arrow_icon frm_before_collapse"></i> <?php _e( 'Collapsible Section', 'formidable' ) ?> <i class="frm_icon_font frm_arrow_icon frm_after_collapse"></i></h3>
+    <h3 class="frm_pos_top frm_trigger active frm_section_spacing"><i class="frm_icon_font frm_arrow_icon frm_before_collapse"></i><?php _e( 'Collapsible Section', 'formidable' ) ?><i class="frm_icon_font frm_arrow_icon frm_after_collapse"></i></h3>
     <div class="frm_toggle_container">
 
 

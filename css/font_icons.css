@@ -40,6 +40,10 @@ a.frm_icon_font:hover{
 	outline:none;
 }
 
+.frm_trigger .frm_icon_font{
+	padding:0 5px;
+}
+
 .ab-icon.frm_dashicon_font:before{
 	content: "\f324";
 }
