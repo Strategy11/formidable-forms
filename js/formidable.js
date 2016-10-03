@@ -3036,8 +3036,6 @@ function frmFrontFormJS(){
 	}
 
 	function getFormErrors(object, action){
-		jQuery(object).find('input[type="submit"], input[type="button"]').attr('disabled','disabled');
-
 		if(typeof action == 'undefined'){
 			jQuery(object).find('input[name="frm_action"]').val();
 		}
@@ -3933,6 +3931,10 @@ function frmFrontFormJS(){
 
 			if ( Object.keys(errors).length === 0 ) {
 				jQuery(object).find('.frm_ajax_loading').addClass('frm_loading_now');
+
+				// Disable submit button
+				jQuery(object).find('input[type="submit"], input[type="button"]').attr('disabled','disabled');
+
 				if ( classList.indexOf('frm_ajax_submit') > -1 ) {
 					var hasFileFields = jQuery(object).find('input[type="file"]').length;
 					if ( hasFileFields < 1 ) {
