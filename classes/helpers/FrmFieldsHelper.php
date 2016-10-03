@@ -473,9 +473,9 @@ DEFAULT_HTML;
 			$class_prefix = 'frm-';
 		}
 
-        if ( $lang != 'en' ) {
+		if ( ! empty( $lang ) ) {
 			$api_js_url .= '&hl=' . $lang;
-        }
+		}
 		$api_js_url = apply_filters( 'frm_recaptcha_js_url', $api_js_url );
 
         wp_register_script( 'recaptcha-api', $api_js_url, '', true );
