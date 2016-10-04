@@ -1,6 +1,6 @@
 <?php
 
-class FrmSettings{
+class FrmSettings {
     public $option_name = 'frm_options';
     public $menu;
     public $mu_menu;
