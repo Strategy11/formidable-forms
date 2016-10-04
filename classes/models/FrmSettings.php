@@ -147,7 +147,7 @@ class FrmSettings{
 
     private function fill_recaptcha_settings() {
         $privkey = '';
-        $re_lang = 'en';
+		$re_lang = '';
 
         if ( ! isset($this->pubkey) ) {
             // get the options from the database

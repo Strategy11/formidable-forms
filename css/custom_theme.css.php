@@ -812,7 +812,6 @@ table.form_results.with_frm_style tr.frm_odd,
     -webkit-box-shadow:none;
     box-shadow:none !important;
     display:inline;
-    width:auto !important;
 	-moz-appearance:textfield;
 	padding:0;
 }

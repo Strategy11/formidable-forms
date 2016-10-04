@@ -2,8 +2,8 @@
 Contributors: sswells, srwells, jamie.wahlin
 Tags: contact form, contact, custom form, database, email, feedback, form, forms, poll, Post, captcha, spam, survey, template, widget, multisite, form builder, form creator, form manager,
 Requires at least: 3.8
-Tested up to: 4.6
-Stable tag: 2.02.06
+Tested up to: 4.6.1
+Stable tag: 2.02.07
 
 Beautiful forms in 60 seconds. The WordPress form builder that enables you to create forms with a simple drag-and-drop interface and in-place editing.
 
@@ -88,6 +88,46 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 [See more FAQs](http://formidablepro.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 2.02.07 =
+* Improve cache clearing in order to make Formidable compatible with persistent object caching
+* Add vertical-align:baseline to radio and checkboxes to prevent styling conflicts
+* Add hook for invalid form entry error message
+* Add form id to 'frm_include_meta_keys' hook
+* Fix IE11 and Edge form builder issues with editing field options
+* Allow localhost to pass URL validation
+* Remove frm_field_input_html calls for fields on form builder page
+* **Pro Features** *
+* Add option to send emails on import
+* Allow default style to export with form
+* Fix form importing with a style (make sure style is selected in form's settings)
+* Fix exporting Views without form
+* Fix adding subfield types in Chrome
+* Make sure "Remove" link still shows when frm_compact is used in file upload field
+* Make sure actions only trigger on import when import is selected
+* Check if transient timeout has been deleted to prevent expired update links
+* Fix conditional logic in a section after removing and re-adding a row
+* Make sure repeating section is cleared after a form is submitted
+* Move repeating section form to trash when parent is trashed
+* Make sure collapsible icon uses section color
+* Fix errors when "Show page content" is selected in form's settings
+* If repeating form entries page is accessed directly, go to parent's entries page
+* Fix editing entries with file upload in repeating section
+* Allow translation of more file upload messages and no results message in autocomplete dropdown
+* Fix donut graphs
+* Fix PHP 5.2 graph errors
+* Adjust lowercase value sorting in Lookup fields
+* Fix auto_id errors with WPML
+* Prevent multiple View filters from being added during migration
+* Fix Phone Number mask on ajax submission form
+* Fix exclude_fields option with editlink
+* Fix truncating in place so it doesn't cut words in half
+* Make sure autocomplete, multi-select, and read-only attributes are included for category dropdowns
+* Remove "Unique" option from userID fields
+* Fix hidden row_ids field name (in repeating section)
+* Make sure character limit, read-only, etc do not apply on form builder page
+* Make sure second and third level Lookup fields correctly limit options to the current user
+* Fix HTML validation errors for checkboxes in repeating fields
+
 = 2.02.06 =
 * Prevent styling conflict with field buttons on form builder
 * **Pro Features** *

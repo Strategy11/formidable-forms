@@ -85,6 +85,7 @@
 
 		    <p><label class="frm_left_label"><?php _e( 'reCAPTCHA Language', 'formidable' ) ?></label>
 			<select name="frm_re_lang" id="frm_re_lang">
+				<option value="" <?php selected( $frm_settings->re_lang, '' ) ?>><?php esc_html_e( 'Browser Default', 'formidable' ); ?></option>
 			    <?php foreach ( $captcha_lang as $lang => $lang_name ) { ?>
 				<option value="<?php echo esc_attr($lang) ?>" <?php selected($frm_settings->re_lang, $lang) ?>><?php echo esc_html( $lang_name ) ?></option>
                 <?php } ?>
