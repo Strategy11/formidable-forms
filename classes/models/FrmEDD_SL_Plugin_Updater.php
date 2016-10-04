@@ -12,14 +12,16 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Allows plugins to use their own update API.
  *
  * @author Pippin Williamson
- * @version 1.6.3
+ * @version 1.6.5
  */
 class FrmEDD_SL_Plugin_Updater {
-	private $api_url   = '';
-	private $api_data  = array();
-	private $name      = '';
-	private $slug      = '';
-	private $version   = '';
+
+	private $api_url     = '';
+	private $api_data    = array();
+	private $name        = '';
+	private $slug        = '';
+	private $version     = '';
+	private $wp_override = false;
 
 	/**
 	 * Class constructor.
@@ -34,11 +36,12 @@ class FrmEDD_SL_Plugin_Updater {
 	public function __construct( $_api_url, $_plugin_file, $_api_data = null ) {
 		global $frm_edd_plugin_data;
 
-		$this->api_url  = trailingslashit( $_api_url );
-		$this->api_data = $_api_data;
-		$this->name     = plugin_basename( $_plugin_file );
-		$this->slug     = basename( $_plugin_file, '.php' );
-		$this->version  = $_api_data['version'];
+		$this->api_url     = trailingslashit( $_api_url );
+		$this->api_data    = $_api_data;
+		$this->name        = plugin_basename( $_plugin_file );
+		$this->slug        = basename( $_plugin_file, '.php' );
+		$this->version     = $_api_data['version'];
+		$this->wp_override = isset( $_api_data['wp_override'] ) ? (bool) $_api_data['wp_override'] : false;
 
 		$frm_edd_plugin_data[ $this->slug ] = $this->api_data;
 
@@ -80,26 +83,27 @@ class FrmEDD_SL_Plugin_Updater {
 			$_transient_data = new stdClass;
 		}
 
-		if ( empty( $_transient_data->response ) || empty( $_transient_data->response[ $this->name ] ) ) {
+		if ( ! empty( $_transient_data->response ) && ! empty( $_transient_data->response[ $this->name ] ) && false === $this->wp_override ) {
+			return $_transient_data;
+		}
 
-			$version_info = $this->api_request( 'plugin_latest_version', array( 'slug' => $this->slug ) );
+		$version_info = $this->api_request( 'plugin_latest_version', array( 'slug' => $this->slug ) );
 
-			if ( false !== $version_info && is_object( $version_info ) && isset( $version_info->new_version ) ) {
+		if ( false !== $version_info && is_object( $version_info ) && isset( $version_info->new_version ) ) {
 
-				if ( version_compare( $this->version, $version_info->new_version, '<' ) ) {
+			if ( version_compare( $this->version, $version_info->new_version, '<' ) ) {
 
-					if ( empty( $version_info->plugin ) ) {
-						$version_info->plugin = $this->name;
-					}
-
-					$_transient_data->response[ $this->name ] = $version_info;
-
+				if ( empty( $version_info->plugin ) ) {
+					$version_info->plugin = $this->name;
 				}
 
-				$_transient_data->last_checked = time();
-				$_transient_data->checked[ $this->name ] = $this->version;
+				$_transient_data->response[ $this->name ] = $version_info;
 
 			}
+
+			$_transient_data->last_checked = time();
+			$_transient_data->checked[ $this->name ] = $this->version;
+
 		}
 
 		return $_transient_data;
@@ -147,7 +151,6 @@ class FrmEDD_SL_Plugin_Updater {
 		return $_data;
 	}
 
-
 	/**
 	 * Disable SSL verification in order to prevent download update failures
 	 *
@@ -184,7 +187,7 @@ class FrmEDD_SL_Plugin_Updater {
 			return;
 		}
 
-		if ( $this->api_url == home_url() ) {
+		if ( $this->api_url == trailingslashit( home_url() ) ) {
 			return false; // Don't allow a plugin to ping itself
 		}
 
