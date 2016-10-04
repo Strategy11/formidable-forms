@@ -861,15 +861,7 @@ table.form_results.with_frm_style tr.frm_odd,
 }
 
 .frm_clearfix{
-    display:inline-block;
-}
-
-html[xmlns] .frm_clearfix{
     display:block;
-}
-
-* html .frm_clearfix{
-    height:1%;
 }
 
 /* Login form */
@@ -941,6 +933,7 @@ html[xmlns] .frm_clearfix{
 }
 
 <?php include( FrmAppHelper::plugin_path() . '/css/font_icons.css' ); ?>
+<?php include( FrmAppHelper::plugin_path() . '/css/toggle.css' ); ?>
 <?php do_action( 'frm_include_front_css', compact( 'defaults' ) ) ?>
 
 /* Responsive */

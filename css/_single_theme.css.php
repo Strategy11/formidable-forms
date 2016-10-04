@@ -79,6 +79,7 @@ if ( ! isset( $center_form ) ) {
     margin:0;
     padding:<?php echo esc_html( $fieldset_padding . $important ) ?>;
 	background-color:<?php echo esc_html( empty( $fieldset_bg_color ) ? 'transparent' : '#' . $fieldset_bg_color ); ?>;
+	font-family:<?php echo FrmAppHelper::kses( $font ) ?>;
 }
 
 .<?php echo esc_html( $style_class ) ?> legend + h3,
@@ -140,8 +141,6 @@ if ( ! isset( $center_form ) ) {
 }
 
 .<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_html_container{
-    font-family:<?php echo FrmAppHelper::kses( $font ) ?>;
-	font-size:<?php echo esc_html( $form_desc_size . $important ) ?>;
 	color:#<?php echo esc_html( $form_desc_color . $important ) ?>;
 }
 
