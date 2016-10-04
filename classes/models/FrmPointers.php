@@ -329,7 +329,7 @@ class FrmPointers {
 			'content'   => '<h3>' . __( 'Addons', 'formidable' ) . '</h3>'
 			               . '<p>' . sprintf( __( 'The powerful functions of %1$s can be extended with %2$spremium plugins%3$s. You can read all about the Formidable Premium Plugins %2$shere%3$s.', 'formidable' ), 'Formidable', '<a target="_blank" href="' . esc_url( FrmAppHelper::make_affiliate_url( 'https://formidablepro.com/' ) ) . '">', '</a>' )
 						   . '</p>'
-			               . '<p><strong>' . __( 'Like this plugin?', 'formidable' ) . '</strong><br/>' . sprintf( __( 'So, we&#8217;ve come to the end of the tour. If you like the plugin, please %srate it 5 stars on WordPress.org%s!', 'formidable' ), '<a target="_blank" href="https://wordpress.org/plugins/formidable/">', '</a>' ) . '</p>'
+			               . '<p><strong>' . __( 'Like this plugin?', 'formidable' ) . '</strong><br/>' . sprintf( __( 'So, we&#8217;ve come to the end of the tour. If you like the plugin, please %1$srate it 5 stars on WordPress.org%2$s!', 'formidable' ), '<a target="_blank" href="https://wordpress.org/plugins/formidable/">', '</a>' ) . '</p>'
 			               . '<p>' . sprintf( __( 'Thank you for using our plugin and good luck with your forms!<br/><br/>Best,<br/>Team Formidable - %1$sformidablepro.com%2$s', 'formidable' ), '<a target="_blank" href="' . esc_url( FrmAppHelper::make_affiliate_url( 'https://formidablepro.com/' ) ) . '">', '</a>' ) . '</p>',
 			'prev_page' => 'settings',
 		);

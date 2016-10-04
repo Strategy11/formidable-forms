@@ -35,6 +35,8 @@
 		<exclude name="WordPress.Arrays.ArrayDeclaration.ValueNoNewline" />
 		<exclude name="WordPress.Arrays.ArrayDeclaration.IndexNoNewline" />
 		<exclude name="PEAR.Functions.FunctionCallSignature.Indent" />
+		<exclude name="Squiz.Commenting.LongConditionClosingComment.Missing" />
+		<exclude name="WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid" />
 
 		<!-- We should probably turn the below rules on, but these give issues with the current code base. -->
 		<exclude name="WordPress.Files.FileName.UnderscoresNotAllowed" />

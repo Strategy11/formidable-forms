@@ -37,7 +37,7 @@ class FrmCreateFile {
 			// only write the file if the folders exist
 			if ( $dirs_exist ) {
 				global $wp_filesystem;
-				
+
 				$new_file = $this->uploads['basedir'] . '/' . $this->folder_name . '/' . $this->file_name;
 				$wp_filesystem->put_contents( $new_file, $file_content, $this->chmod_file );
 			}

@@ -1,6 +1,7 @@
 <?php
 
-class FrmCSVExportHelper{
+class FrmCSVExportHelper {
+
 	protected static $separator        = ', ';
 	protected static $column_separator = ',';
 	protected static $line_break       = 'return';
