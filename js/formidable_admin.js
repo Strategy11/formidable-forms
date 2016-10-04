@@ -1487,7 +1487,18 @@ function frmAdminBuildJS(){
 		row.find('input.frm_enternew, select.frm_cancelnew').val('');
 		return false;
 	}
-	
+
+	function toggleFormOpts(){
+		var changedOpt = jQuery(this);
+		var val = changedOpt.val();
+		var toggleClass = changedOpt.data('toggleclass');
+		if ( val === '' ) {
+			jQuery('.'+toggleClass).hide();
+		} else {
+			jQuery('.'+toggleClass).show();
+		}
+	}
+
 	function submitSettings(){
 		preFormSave(this);
 		jQuery('.frm_form_settings').submit();
@@ -2296,6 +2307,7 @@ function frmAdminBuildJS(){
 			$formActions.on('click', '.frm_add_postmeta_row', addPostmetaRow);
 			$formActions.on('click', '.frm_add_posttax_row', addPosttaxRow);
 			$formActions.on('click', '.frm_toggle_cf_opts', toggleCfOpts);
+			jQuery('select[data-toggleclass]').change(toggleFormOpts);
 			jQuery('.frm_actions_list').on('click', '.frm_active_action', addFormAction);
 			initiateMultiselect();
 

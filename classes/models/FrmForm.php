@@ -746,4 +746,12 @@ class FrmForm {
 		$show = apply_filters( 'frm_show_submit_button', $show, $form );
 		return $show;
 	}
+
+	/**
+	 * @since 2.3
+	 */
+	public static function get_option( $atts ) {
+		$form = $atts['form'];
+		return isset( $form->options[ $atts['option'] ] ) ? $form->options[ $atts['option'] ] : $atts['default'];
+	}
 }
