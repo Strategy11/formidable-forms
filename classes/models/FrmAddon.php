@@ -53,6 +53,7 @@ class FrmAddon {
 
 	public function edd_plugin_updater() {
 
+		$this->is_license_revoked();
 		$license = $this->license;
 
 		if ( empty( $license ) ) {
@@ -89,6 +90,7 @@ class FrmAddon {
 	public function clear_license() {
 		delete_option( $this->option_name . 'active' );
 		delete_option( $this->option_name . 'key' );
+		delete_site_transient( $this->transient_key() );
 	}
 
 	public function set_active( $is_active ) {
@@ -163,6 +165,26 @@ class FrmAddon {
 		update_option( 'frm_last_cleared', date('Y-m-d H:i:s') );
 	}
 
+	private function is_license_revoked() {
+		if ( empty( $this->license ) || empty( $this->plugin_slug ) || isset( $_POST['license'] ) ) {
+			return;
+		}
+
+		$license_status = get_site_transient( $this->transient_key() );
+
+		if ( $license_status === false ) {
+			$response = $this->get_license_status();
+			set_site_transient( $this->transient_key(), $response, DAY_IN_SECONDS );
+			if ( $response['status'] == 'revoked' ) {
+				$this->clear_license();
+			}
+		}
+	}
+
+	private function transient_key() {
+		return 'frm_' . md5( sanitize_key( $this->license . '_' . $this->plugin_slug ) );
+	}
+
 	public static function activate() {
 		FrmAppHelper::permission_check('frm_change_settings');
 	 	check_ajax_referer( 'frm_ajax', 'nonce' );
@@ -175,40 +197,70 @@ class FrmAddon {
 		$plugin_slug = sanitize_text_field( $_POST['plugin'] );
 		$this_plugin = self::get_addon( $plugin_slug );
 		$this_plugin->set_license( $license );
+		$this_plugin->license = $license;
 
-		$response = array( 'success' => false, 'message' => '' );
-		try {
-			$license_data = $this_plugin->send_mothership_request( 'activate_license', $license );
+		$response = $this_plugin->get_license_status();
+		$response['message'] = '';
+		$response['success'] = false;
 
-			// $license_data->license will be either "valid" or "invalid"
-			$is_valid = 'invalid';
-			if ( is_array( $license_data ) ) {
-				if ( $license_data['license'] == 'valid' ) {
-					$is_valid = $license_data['license'];
-					$response['message'] = __( 'Your license has been activated. Enjoy!', 'formidable' );
-					$response['success'] = true;
-				} else if ( $license_data['license'] == 'invalid' ) {
-					$response['message'] = __( 'That license key is invalid', 'formidable' );
-				}
-			} else if ( $license_data == 'expired' ) {
-				$response['message'] = __( 'That license is expired', 'formidable' );
-			} else if ( $license_data == 'no_activations_left' ) {
-				$response['message'] = __( 'That license has been used on too many sites', 'formidable' );
-			} else if ( $license_data == 'invalid_item_id' ) {
-				$response['message'] = __( 'Oops! That is the wrong license key for this plugin.', 'formidable' );
-			} else if ( $license_data == 'missing' ) {
-				$response['message'] = __( 'That license key is invalid', 'formidable' );
+		if ( $response['error'] ) {
+			$response['message'] = $response['status'];
+		} else {
+			$messages = $this_plugin->get_messages();
+			if ( is_string( $response['status'] ) && isset( $messages[ $response['status'] ] ) ) {
+				$response['message'] = $messages[ $response['status'] ];
 			} else {
-				$response['message'] = FrmAppHelper::kses( $license_data, array( 'a' ) );
+				$response['message'] = FrmAppHelper::kses( $response['status'], array( 'a' ) );
 			}
 
+			$is_valid = false;
+			if ( $response['status'] == 'valid' ) {
+				$is_valid = 'valid';
+				$response['success'] = true;
+			}
 			$this_plugin->set_active( $is_valid );
-		} catch ( Exception $e ) {
-			$response['message'] = $e->getMessage();
 		}
 
 		echo json_encode( $response );
 		wp_die();
+	}
+
+	private function get_license_status() {
+		$response = array( 'status' => 'missing', 'error' => true );
+		if ( empty( $this->license ) ) {
+			$response['error'] = false;
+			return $response;
+		}
+
+		try {
+			$response['error'] = false;
+			$license_data = $this->send_mothership_request( 'activate_license' );
+
+			// $license_data->license will be either "valid" or "invalid"
+			if ( is_array( $license_data ) ) {
+				if ( in_array( $license_data['license'], array( 'valid', 'invalid' ) ) ) {
+					$response['status'] = $license_data['license'];
+				}
+			} else {
+				$response['status'] = $license_data;
+			}
+		} catch ( Exception $e ) {
+			$response['status'] = $e->getMessage();
+		}
+
+		return $response;
+	}
+
+	private function get_messages() {
+		return array(
+			'valid'   => __( 'Your license has been activated. Enjoy!', 'formidable' ),
+			'invalid' => __( 'That license key is invalid', 'formidable' ),
+			'expired' => __( 'That license is expired', 'formidable' ),
+			'revoked' => __( 'That license has been refunded', 'formidable' ),
+			'no_activations_left' => __( 'That license has been used on too many sites', 'formidable' ),
+			'invalid_item_id' => __( 'Oops! That is the wrong license key for this plugin.', 'formidable' ),
+			'missing' => __( 'That license key is invalid', 'formidable' ),
+		);
 	}
 
 	public static function deactivate() {
@@ -218,11 +270,12 @@ class FrmAddon {
 		$plugin_slug = sanitize_text_field( $_POST['plugin'] );
 		$this_plugin = self::get_addon( $plugin_slug );
 		$license = $this_plugin->get_license();
+		$this_plugin->license = $license;
 
 		$response = array( 'success' => false, 'message' => '' );
 		try {
 			// $license_data->license will be either "deactivated" or "failed"
-			$license_data = $this_plugin->send_mothership_request( 'deactivate_license', $license );
+			$license_data = $this_plugin->send_mothership_request( 'deactivate_license' );
 			if ( is_array( $license_data ) && $license_data['license'] == 'deactivated' ) {
 				$response['success'] = true;
 				$response['message'] = __( 'That license was removed successfully', 'formidable' );
@@ -239,10 +292,10 @@ class FrmAddon {
 		wp_die();
 	}
 
-	public function send_mothership_request( $action, $license ) {
+	public function send_mothership_request( $action ) {
 		$api_params = array(
 			'edd_action' => $action,
-			'license'    => $license,
+			'license'    => $this->license,
 			'item_name'  => urlencode( $this->plugin_name ),
 			'url'        => home_url(),
 		);
