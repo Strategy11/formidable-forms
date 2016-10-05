@@ -10,6 +10,7 @@ class FrmEntryFormat {
 			'border_width' => '', 'border_color' => '',
 			'bg_color' => '', 'alt_bg_color' => '',
 			'clickable' => false,
+			'exclude_fields' => '', 'include_fields' => '',
 		), $atts );
 
 		if ( $atts['format'] != 'text' ) {
@@ -43,7 +44,7 @@ class FrmEntryFormat {
 
 		$values = array();
 		foreach ( $atts['fields'] as $f ) {
-			if ( $f->type != 'password' && $f->type != 'credit_card' ) {
+			if ( ! self::skip_field( $atts, $f ) ) {
 				self::fill_entry_values( $atts, $f, $values );
 			}
 			unset($f);
@@ -69,6 +70,24 @@ class FrmEntryFormat {
 		}
 
 		return $content;
+	}
+
+	private static function skip_field( $atts, $field ) {
+		$skip = ( $field->type == 'password' || $field->type == 'credit_card' );
+		if ( ! $skip && ! empty( $atts['exclude_fields'] ) ) {
+			$skip = self::field_in_list( $field, $atts['exclude_fields'] );
+		}
+
+		if ( ! $skip && ! empty( $atts['include_fields'] ) ) {
+			$skip = ! self::field_in_list( $field, $atts['include_fields'] );
+		}
+
+		return $skip;
+	}
+
+	private static function field_in_list( $field, $list ) {
+		$list = array_map( 'trim', explode( ',', $list ) );
+		return ( in_array( $field->id, $list ) || in_array( $field->field_key, $list ) );
 	}
 
 	/**
