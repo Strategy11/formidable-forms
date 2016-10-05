@@ -1496,6 +1496,7 @@ function frmAdminBuildJS(){
 			jQuery('.'+toggleClass).hide();
 		} else {
 			jQuery('.'+toggleClass).show();
+			jQuery('.hide_'+toggleClass+'_'+val).hide();
 		}
 	}
 
