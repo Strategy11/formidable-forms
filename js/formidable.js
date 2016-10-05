@@ -41,7 +41,7 @@ function frmFrontFormJS(){
 			f.trigger('submit');
 		}
 	}
-	
+
 	function toggleSection(){
 		/*jshint validthis:true */
 		jQuery(this).parent().children('.frm_toggle_container').slideToggle('fast');
@@ -3077,6 +3077,7 @@ function frmFrontFormJS(){
 					var formID = jQuery(object).find('input[name="form_id"]').val();
 					jQuery(object).closest( '#frm_form_'+ formID +'_container' ).replaceWith( response.content );
 					frmFrontForm.scrollMsg( formID );
+					addUrlParam(response);
 
 					if(typeof(frmThemeOverride_frmAfterSubmit) == 'function'){
 						var pageOrder = jQuery('input[name="frm_page_order_'+ formID +'"]').val();
@@ -3170,6 +3171,36 @@ function frmFrontFormJS(){
 				object.submit();
 			}
 		});
+	}
+
+	function addUrlParam(response){
+		if ( typeof response.page != 'undefined' ) {
+			var url = addQueryVar('frm_page', response.page);
+			window.history.pushState({"html":response.html}, '', '?'+ url);
+		}
+	}
+
+	function addQueryVar(key, value) {
+		key = encodeURI(key);
+		value = encodeURI(value);
+
+		var kvp = document.location.search.substr(1).split('&');
+
+		var i=kvp.length; var x; while(i--) {
+			x = kvp[i].split('=');
+
+			if (x[0]==key) {
+				x[1] = value;
+				kvp[i] = x.join('=');
+				break;
+			}
+		}
+
+		if (i<0) {
+			kvp[kvp.length] = [key,value].join('=');
+		}
+
+		return kvp.join('&');
 	}
 
 	function addFieldError( $fieldCont, key, jsErrors ) {
