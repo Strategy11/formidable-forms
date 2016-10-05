@@ -206,6 +206,8 @@ class FrmXMLHelper {
             // Send pre 2.0 form options through function that creates actions
             self::migrate_form_settings_to_actions( $form['options'], $form_id, $imported, $switch = true );
 
+			do_action( 'frm_after_import_form', $form_id, $form );
+
 		    unset($form, $item);
 		}
 
