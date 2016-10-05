@@ -13,6 +13,9 @@ class FrmEntryFormat {
 			'exclude_fields' => '', 'include_fields' => '',
 		), $atts );
 
+		$atts['exclude_fields'] = array_map( 'trim', explode( ',', $atts['exclude_fields'] ) );
+		$atts['include_fields'] = array_map( 'trim', explode( ',', $atts['include_fields'] ) );
+
 		if ( $atts['format'] != 'text' ) {
 			//format options are text, array, or json
 			$atts['plain_text'] = true;
@@ -86,8 +89,7 @@ class FrmEntryFormat {
 	}
 
 	private static function field_in_list( $field, $list ) {
-		$list = array_map( 'trim', explode( ',', $list ) );
-		return ( in_array( $field->id, $list ) || in_array( $field->field_key, $list ) );
+		return ( in_array( $field->id, $list ) || in_array( $field->field_key, $list ) || in_array( $field->type, $list ) );
 	}
 
 	/**
@@ -107,7 +109,7 @@ class FrmEntryFormat {
 	}
 
 	public static function fill_entry_values( $atts, $f, array &$values ) {
-		if ( FrmField::is_no_save_field( $f->type ) ) {
+		if ( FrmField::is_no_save_field( $f->type ) && ! in_array( $f->type, $atts['include_fields'] ) ) {
 			return;
 		}
 
@@ -132,7 +134,9 @@ class FrmEntryFormat {
 			$meta = array( 'item_id' => $atts['id'], 'field_id' => $f->id, 'meta_value' => $prev_val, 'field_type' => $f->type );
 
 			//This filter applies to the default-message shortcode and frm-show-entry shortcode only
-			if ( isset( $atts['filter'] ) && $atts['filter'] == false ) {
+			if ( $f->type == 'html' ) {
+				$val = apply_filters( 'frm_content', $f->description, $atts['form_id'], $atts['entry'] );
+			} elseif ( isset( $atts['filter'] ) && $atts['filter'] == false ) {
 				$val = $prev_val;
 			} else {
 				$val = apply_filters( 'frm_email_value', $prev_val, (object) $meta, $atts['entry'] );
