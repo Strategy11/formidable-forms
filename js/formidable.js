@@ -3174,7 +3174,7 @@ function frmFrontFormJS(){
 	}
 
 	function addUrlParam(response){
-		if ( typeof response.page != 'undefined' ) {
+		if ( history.pushState && typeof response.page != 'undefined' ) {
 			var url = addQueryVar('frm_page', response.page);
 			window.history.pushState({"html":response.html}, '', '?'+ url);
 		}
