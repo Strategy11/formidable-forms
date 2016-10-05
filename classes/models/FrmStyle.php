@@ -77,6 +77,10 @@ class FrmStyle {
             $default_settings = $this->get_defaults();
 
             foreach ( $default_settings as $setting => $default ) {
+				if ( ! isset( $new_instance['post_content'][ $setting ] ) ) {
+					$new_instance['post_content'][ $setting ] = $default;
+				}
+
 				if ( strpos( $setting, 'color' ) !== false || in_array( $setting, array( 'error_bg', 'error_border', 'error_text' ) ) ) {
                     //if is a color
 					$new_instance['post_content'][ $setting ] = str_replace( '#', '', $new_instance['post_content'][ $setting ] );
@@ -412,6 +416,10 @@ class FrmStyle {
             'success_font_size' => '14px',
 
             'important_style'   => false,
+
+			'progress_bg_color'     => 'dddddd',
+			'progress_active_color' => '008ec2',
+			'progress_color'        => 'ffffff',
 
             'custom_css'        => '',
         );

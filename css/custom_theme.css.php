@@ -933,7 +933,7 @@ table.form_results.with_frm_style tr.frm_odd,
 
 <?php include( FrmAppHelper::plugin_path() . '/css/font_icons.css' ); ?>
 <?php include( FrmAppHelper::plugin_path() . '/css/toggle.css' ); ?>
-<?php do_action( 'frm_include_front_css', compact( 'defaults' ) ) ?>
+<?php do_action( 'frm_include_front_css', compact( 'defaults' ) ); ?>
 
 /* Responsive */
 @media only screen and (max-width: 900px) {

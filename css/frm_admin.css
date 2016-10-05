@@ -952,7 +952,7 @@ table td, .form-table tr td{vertical-align:top;}
 .frm_full_rte textarea{width:98%; padding:0;}
 .frm_field_box{padding:5px;min-height:20px;}
 
-.frm_indent_opt, td.frm_indent_opt{padding-left:47px;}
+.frm_indent_opt, td.frm_indent_opt{padding-left:25px;}
 
 .frm_charts object{background:transparent;}
 .frm_charts h2 {height:34px;}
