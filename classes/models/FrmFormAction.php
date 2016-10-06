@@ -589,7 +589,7 @@ class FrmFormAction {
 
             // update form options
 			$wpdb->update( $wpdb->prefix . 'frm_forms', array( 'options' => $form->options ), array( 'id' => $form->id ) );
-            wp_cache_delete( $form->id, 'frm_form');
+	        FrmForm::clear_form_cache();
         }
 
         return $post_id;
