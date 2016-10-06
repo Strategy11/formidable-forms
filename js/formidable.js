@@ -189,12 +189,6 @@ function frmFrontFormJS(){
 					}
 				});
 
-				this.on('removedfile', function( file ) {
-					if ( uploadFields[i].uploadMultiple !== true ) {
-						jQuery('input[name="'+ fieldName +'"]').val('');
-					}
-				});
-
 				this.on('complete', function( file ) {
 					if ( typeof file.mediaID !== 'undefined' ) {
 						if ( uploadFields[i].uploadMultiple ) {
@@ -221,7 +215,11 @@ function frmFrontFormJS(){
 				});
 
 				this.on('removedfile', function( file ) {
-					if ( typeof file.mediaID !== 'undefined' ) {
+					if ( file.accepted && uploadFields[i].uploadMultiple !== true ) {
+						jQuery('input[name="'+ fieldName +'"]').val('');
+					}
+
+					if ( file.accepted && typeof file.mediaID !== 'undefined' ) {
 						jQuery(file.previewElement).remove();
 						var fileCount = this.files.length;
 						this.options.maxFiles = uploadFields[i].maxFiles - fileCount;
@@ -1238,7 +1236,8 @@ function frmFrontFormJS(){
 					inputs[i].selectedIndex = 0;
 				}
 
-				var autocomplete = document.getElementById( inputs[i].id + '_chosen' );
+				var chosenId = inputs[i].id.replace(/[^\w]/g, '_'); // match what the script is doing
+				var autocomplete = document.getElementById( chosenId + '_chosen' );
 				if ( autocomplete !== null ) {
 					jQuery(inputs[i]).trigger('chosen:updated');
 				}
@@ -2089,6 +2088,7 @@ function frmFrontFormJS(){
 		var $fieldInputs = $fieldDiv.find( 'select[name^="item_meta"], input[name^="item_meta"]' );
 		var prevValue = getFieldValueFromInputs( $fieldInputs );
 		var defaultVal = $fieldInputs.data('frmval');
+		var editingEntry = $fieldDiv.closest('form').find('input[name="id"]').val();
 
 		addLoadingIcon( $fieldDiv );
 
@@ -2102,6 +2102,7 @@ function frmFrontFormJS(){
 				field_id:depFieldArgs.fieldId,
 				default_value:defaultVal,
 				container_id:depFieldArgs.containerId,
+				editing_entry:editingEntry,
 				prev_val:prevValue,
 				nonce:frm_js.nonce
 			},
