@@ -2077,6 +2077,7 @@ function frmFrontFormJS(){
 		var $fieldInputs = $fieldDiv.find( 'select[name^="item_meta"], input[name^="item_meta"]' );
 		var prevValue = getFieldValueFromInputs( $fieldInputs );
 		var defaultVal = $fieldInputs.data('frmval');
+		var editingEntry = $fieldDiv.closest('form').find('input[name="id"]').val();
 
 		addLoadingIcon( $fieldDiv );
 
@@ -2090,6 +2091,7 @@ function frmFrontFormJS(){
 				field_id:depFieldArgs.fieldId,
 				default_value:defaultVal,
 				container_id:depFieldArgs.containerId,
+				editing_entry:editingEntry,
 				prev_val:prevValue,
 				nonce:frm_js.nonce
 			},
