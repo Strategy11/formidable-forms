@@ -1224,7 +1224,8 @@ function frmFrontFormJS(){
 					inputs[i].selectedIndex = 0;
 				}
 
-				var autocomplete = document.getElementById( inputs[i].id + '_chosen' );
+				var chosenId = inputs[i].id.replace(/[^\w]/g, '_'); // match what the script is doing
+				var autocomplete = document.getElementById( chosenId + '_chosen' );
 				if ( autocomplete !== null ) {
 					jQuery(inputs[i]).trigger('chosen:updated');
 				}
