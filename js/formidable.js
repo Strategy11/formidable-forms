@@ -177,12 +177,6 @@ function frmFrontFormJS(){
 					}
 				});
 
-				this.on('removedfile', function( file ) {
-					if ( uploadFields[i].uploadMultiple !== true ) {
-						jQuery('input[name="'+ fieldName +'"]').val('');
-					}
-				});
-
 				this.on('complete', function( file ) {
 					if ( typeof file.mediaID !== 'undefined' ) {
 						if ( uploadFields[i].uploadMultiple ) {
@@ -209,7 +203,11 @@ function frmFrontFormJS(){
 				});
 
 				this.on('removedfile', function( file ) {
-					if ( typeof file.mediaID !== 'undefined' ) {
+					if ( file.accepted && uploadFields[i].uploadMultiple !== true ) {
+						jQuery('input[name="'+ fieldName +'"]').val('');
+					}
+
+					if ( file.accepted && typeof file.mediaID !== 'undefined' ) {
 						jQuery(file.previewElement).remove();
 						var fileCount = this.files.length;
 						this.options.maxFiles = uploadFields[i].maxFiles - fileCount;
