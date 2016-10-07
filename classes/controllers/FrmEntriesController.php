@@ -497,7 +497,11 @@ class FrmEntriesController {
 	}
 
     public static function &filter_email_value( $value, $meta, $entry, $atts = array() ) {
-        $field = FrmField::getOne($meta->field_id);
+		if ( isset( $atts['field'] ) ) {
+			$field = $atts['field'];
+		} else {
+			$field = FrmField::getOne( $meta->field_id );
+		}
         if ( ! $field ) {
             return $value;
         }
