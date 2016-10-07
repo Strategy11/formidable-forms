@@ -24,37 +24,38 @@ class FrmAppController {
     }
 
 	public static function get_form_nav( $form, $show_nav = false, $title = 'show' ) {
-        global $pagenow, $frm_vars;
-
 		$show_nav = FrmAppHelper::get_param( 'show_nav', $show_nav, 'get', 'absint' );
-        if ( empty( $show_nav ) ) {
+        if ( empty( $show_nav || ! $form ) ) {
             return;
         }
 
-		$current_page = isset( $_GET['page'] ) ? FrmAppHelper::simple_get( 'page', 'sanitize_title' ) : FrmAppHelper::simple_get( 'post_type', 'sanitize_title', 'None' );
+		FrmForm::maybe_get_form( $form );
+		if ( ! is_object( $form ) ) {
+			return;
+		}
+
+		$id = $form->id;
+		$current_page = self::get_current_page();
+		$nav_items = self::get_form_nav_items( $form );
+
+		include( FrmAppHelper::plugin_path() . '/classes/views/shared/form-nav.php' );
+	}
+
+	private static function get_current_page() {
+		global $pagenow;
+
+		$page = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
+		$post_type = FrmAppHelper::simple_get( 'post_type', 'sanitize_title', 'None' );
+		$current_page = isset( $_GET['page'] ) ? $page : $post_type;
 		if ( $pagenow == 'post.php' || $pagenow == 'post-new.php' ) {
 			$current_page = 'frm_display';
 		}
 
-        if ( $form ) {
-			FrmForm::maybe_get_form( $form );
-
-            if ( is_object( $form ) ) {
-                $id = $form->id;
-            }
-        }
-
-        if ( ! isset( $id ) ) {
-            $form = $id = false;
-        }
-
-		$nav_items = self::get_form_nav_items( $form );
-
-        include( FrmAppHelper::plugin_path() . '/classes/views/shared/form-nav.php' );
-    }
+		return $current_page;
+	}
 
 	private static function get_form_nav_items( $form ) {
-		$id = ( $form && $form->parent_form_id ) ? $form->parent_form_id : $form->id;
+		$id = $form->parent_form_id ? $form->parent_form_id : $form->id;
 
 		$nav_items = array(
 			array(
