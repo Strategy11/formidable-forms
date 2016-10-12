@@ -11,7 +11,7 @@ class FrmEntryFormat {
 			'bg_color' => '', 'alt_bg_color' => '',
 			'clickable' => false,
 			'exclude_fields' => '', 'include_fields' => '',
-			'include_extras' => '',
+			'include_extras' => 'section', 'inline_style' => 1,
 		), $atts );
 
 		$atts['exclude_fields'] = self::comma_list_to_array( $atts['exclude_fields'] );
@@ -43,7 +43,7 @@ class FrmEntryFormat {
 			$atts['id'] = $atts['entry']->id;
 		}
 
-		if ( ! $atts['fields'] || ! is_array($atts['fields']) ) {
+		if ( ! $atts['fields'] || ! is_array( $atts['fields'] ) ) {
 			$atts['fields'] = FrmField::get_all_for_form( $atts['form_id'], '', 'include' );
 		}
 
@@ -56,22 +56,15 @@ class FrmEntryFormat {
 		}
 
 		self::fill_entry_user_info( $atts, $values );
+		$values = apply_filters( 'frm_show_entry_array', $values, $atts );
 
 		if ( $atts['format'] == 'json' ) {
-			return json_encode($values);
+			$content = json_encode( $values );
 		} else if ( $atts['format'] == 'array' ) {
-			return $values;
-		}
-
-		$content = array();
-		self::convert_entry_to_content( $values, $atts, $content );
-
-		if ( 'text' == $atts['format'] ) {
-			$content = implode('', $content);
-		}
-
-		if ( $atts['clickable'] ) {
-			$content = make_clickable( $content );
+			$content = $values;
+		} else {
+			$content = array();
+			self::prepare_text_output( $values, $atts, $content );
 		}
 
 		return $content;
@@ -81,6 +74,7 @@ class FrmEntryFormat {
 		$array = array_map( 'strtolower', array_map( 'trim', explode( ',', $list ) ) );
 		$field_types = array(
 			'section' => 'divider',
+			'heading' => 'divider',
 			'page'    => 'break',
 		);
 		foreach ( $field_types as $label => $field_type ) {
@@ -120,18 +114,23 @@ class FrmEntryFormat {
 	 * @param object $f
 	 * @param array $values
 	 */
-	private static function get_field_shortcodes_for_default_email( $f, &$values ) {
+	public static function get_field_shortcodes_for_default_email( $f, &$values ) {
 		$field_shortcodes = array(
 			'label' => '[' . $f->id . ' show=field_label]',
-			'val' => '[' . $f->id . ']',
+			'val'   => '[' . $f->id . ']',
+			'type'  => $f->type,
 		);
 
 		$values[ $f->id ] = apply_filters( 'frm_field_shortcodes_for_default_html_email', $field_shortcodes, $f );
 	}
 
 	public static function fill_entry_values( $atts, $f, array &$values ) {
-		if ( FrmField::is_no_save_field( $f->type ) && ! in_array( $f->type, $atts['include_extras'] ) ) {
-			return;
+		$no_save_field = FrmField::is_no_save_field( $f->type );
+		if ( $no_save_field ) {
+			if ( ! in_array( $f->type, $atts['include_extras'] ) ) {
+				return;
+			}
+			$atts['include_blank'] = true;
 		}
 
 		if ( $atts['default_email'] ) {
@@ -139,31 +138,17 @@ class FrmEntryFormat {
 			return;
 		}
 
+		$atts['field'] = $f;
+
 		if ( $atts['entry'] && ! isset( $atts['entry']->metas[ $f->id ] ) ) {
 			// In case include_blank is set
 			$atts['entry']->metas[ $f->id ] = '';
-
-			if ( FrmAppHelper::pro_is_installed() ) {
-				FrmProEntryMeta::add_post_value_to_entry( $f, $atts['entry'] );
-				FrmProEntryMeta::add_repeating_value_to_entry( $f, $atts['entry'] );
-			}
+			$atts['entry'] = apply_filters( 'frm_prepare_entry_content', $atts['entry'], array( 'field' => $atts['field'] ) );
+			self::fill_values_from_entry( $atts, $values );
 		}
 
 		$val = '';
-		if ( $atts['entry'] ) {
-			$prev_val = maybe_unserialize( $atts['entry']->metas[ $f->id ] );
-			$meta = array( 'item_id' => $atts['id'], 'field_id' => $f->id, 'meta_value' => $prev_val, 'field_type' => $f->type );
-
-			//This filter applies to the default-message shortcode and frm-show-entry shortcode only
-			if ( in_array( $f->type, array( 'html', 'divider', 'break' ) ) ) {
-				$val = apply_filters( 'frm_content', $f->description, $atts['form_id'], $atts['entry'] );
-				$atts['include_blank'] = true;
-			} elseif ( isset( $atts['filter'] ) && $atts['filter'] == false ) {
-				$val = $prev_val;
-			} else {
-				$val = apply_filters( 'frm_email_value', $prev_val, (object) $meta, $atts['entry'] );
-			}
-		}
+		self::get_field_value( $atts, $val );
 
 		// Don't include blank values
 		if ( ! $atts['include_blank'] && FrmAppHelper::is_empty_value( $val ) ) {
@@ -190,6 +175,27 @@ class FrmEntryFormat {
 			}
 		} else {
 			$values[ $f->id ] = array( 'label' => $f->name, 'val' => $val, 'type' => $f->type );
+		}
+	}
+
+	public static function fill_values_from_entry( $atts, &$values ) {
+		$values = apply_filters( 'frm_prepare_entry_array', $values, $atts );
+	}
+
+	private static function get_field_value( $atts, &$val ) {
+		$f = $atts['field'];
+		if ( $atts['entry'] ) {
+			$prev_val = maybe_unserialize( $atts['entry']->metas[ $f->id ] );
+			$meta = array( 'item_id' => $atts['id'], 'field_id' => $f->id, 'meta_value' => $prev_val, 'field_type' => $f->type );
+
+			//This filter applies to the default-message shortcode and frm-show-entry shortcode only
+			if ( in_array( $f->type, array( 'html', 'divider', 'break' ) ) ) {
+				$val = apply_filters( 'frm_content', $f->description, $atts['form_id'], $atts['entry'] );
+			} elseif ( isset( $atts['filter'] ) && $atts['filter'] == false ) {
+				$val = $prev_val;
+			} else {
+				$val = apply_filters( 'frm_email_value', $prev_val, (object) $meta, $atts['entry'], compact( 'field' ) );
+			}
 		}
 	}
 
@@ -343,17 +349,31 @@ class FrmEntryFormat {
 		return $bname . ' ' . $version . ' / ' . $platform;
 	}
 
+	private static function prepare_text_output( $values, $atts, &$content ) {
+		self::convert_entry_to_content( $values, $atts, $content );
+
+		if ( 'text' == $atts['format'] ) {
+			$content = implode('', $content);
+		}
+
+		if ( $atts['clickable'] ) {
+			$content = make_clickable( $content );
+		}
+	}
+
 	public static function convert_entry_to_content( $values, $atts, array &$content ) {
 		if ( $atts['plain_text'] ) {
-			self::plain_text_content( $values, $content );
+			self::plain_text_content( $values, $atts, $content );
 		} else {
 			self::html_content( $values, $atts, $content );
 		}
 	}
 
-	private static function plain_text_content( $values, &$content ) {
+	private static function plain_text_content( $values, $atts, &$content ) {
 		foreach ( $values as $id => $value ) {
-			self::plain_text_row( $value, $content );
+			$atts['id'] = $id;
+			$atts['value'] = $value;
+			self::single_plain_text_row( $atts, $content );
 		}
 	}
 
@@ -365,13 +385,9 @@ class FrmEntryFormat {
 
 		$atts['odd'] = true;
 		foreach ( $values as $id => $value ) {
-			if ( $value['type'] == 'html' ) {
-				self::html_field_row( $value, $atts, $content );
-			} elseif ( $atts['default_email'] && is_numeric( $id ) ) {
-				self::default_email_row( $value, $atts, $content );
-			} else {
-				self::row_content( $value, $atts, $content );
-			}
+			$atts['id'] = $id;
+			$atts['value'] = $value;
+			self::single_html_row( $atts, $content );
 			$atts['odd'] = ! $atts['odd'];
 		}
 
@@ -400,70 +416,70 @@ class FrmEntryFormat {
 	}
 
 	private static function prepare_inline_styles( &$atts ) {
-		$inline_style = true;
-		if ( $inline_style ) {
+		if ( empty( $atts['inline_style'] ) ) {
+			$atts['table_style'] = $atts['bg_color'] = $atts['bg_color_alt'] = $atts['row_style'] = '';
+		} else {
 			$atts['table_style'] = ' style="' . esc_attr( 'font-size:' . $atts['font_size'] . ';line-height:135%; border-bottom:' . $atts['border_width'] . ' solid #' . $atts['border_color'] . ';' ) . '"';
 
 			$row_style_attributes = 'text-align:' . ( $atts['direction'] == 'rtl' ? 'right' : 'left' ) . ';';
 			$row_style_attributes .= 'color:#' . $atts['text_color'] . ';padding:7px 9px;vertical-align:top;';
 			$row_style_attributes .= 'border-top:' . $atts['border_width'] . ' solid #' . $atts['border_color'] . ';';
-			$atts['row_style'] = 'style="' . $row_style_attributes . '"';
+			$atts['row_style'] = ' style="' . $row_style_attributes . '"';
 
 			if ( $atts['default_email'] ) {
-				$atts['bg_color'] = $atts['bg_color_alt'] = 'style="[frm-alt-color]"';
+				$atts['bg_color'] = $atts['bg_color_alt'] = ' style="[frm-alt-color]"';
 			} else {
 				$atts['bg_color'] = ' style="background-color:#' . $atts['bg_color'] . ';"';
 				$atts['bg_color_alt'] = ' style="background-color:#' . $atts['alt_bg_color'] . ';"';
 			}
-		} else {
-			$atts['table_style'] = $atts['bg_color'] = $atts['bg_color_alt'] = $atts['row_style'] = '';
 		}
 	}
 
-	private static function plain_text_row( $value, &$content ) {
-		if ( $value['type'] == 'break' ) {
-			$content[] = "\r\n\r\n";
-		} elseif ( $value['type'] == 'divider' ) {
-			$content[] = "\r\n" . $value['label'] . "\r\n";
-		} elseif ( $value['type'] == 'html' ) {
-			$content[] = $value['val'] . "\r\n";
-		} elseif ( 'rtl' == $atts['direction'] ) {
-			$content[] = $value['val'] . ' :' . $value['label'] . "\r\n";
+	public static function single_plain_text_row( $atts, &$content ) {
+		$row = array();
+		if ( 'rtl' == $atts['direction'] ) {
+			$row[] = $atts['value']['val'] . ' :' . $atts['value']['label'] . "\r\n";
 		} else {
-			$content[] = $value['label'] . ': ' . $value['val'] . "\r\n";
+			$row[] = $atts['value']['label'] . ': ' . $atts['value']['val'] . "\r\n";
 		}
+		$row = apply_filters( 'frm_entry_plain_text_row', $row, $atts );
+		$content = array_merge( $content, $row );
 	}
 
-	private static function html_field_row( $value, $atts, &$content ) {
+	public static function single_html_row( $atts, &$content ) {
+		$row = array();
+		if ( $atts['default_email'] && is_numeric( $atts['id'] ) ) {
+			self::default_email_row( $atts, $row );
+		} else {
+			self::row_content( $atts, $row );
+		}
+		$row = apply_filters( 'frm_entry_html_row', $row, $atts );
+		$content = array_merge( $content, $row );
+	}
+
+	public static function html_field_row( $atts, &$content ) {
 		$content[] = '<tr ' . self::table_row_style( $atts ) . '>';
-		$content[] = '<td colspan="2" ' . $atts['row_style'] . '>' . $value['val'] . '</td>';
+		$content[] = '<td colspan="2" ' . $atts['row_style'] . '>' . $atts['value']['val'] . '</td>';
 		$content[] = '</tr>' . "\r\n";
 	}
 
-	private static function default_email_row( $value, $atts, &$content ) {
-		$content[] = '[if ' . $id . ']';
-		self::row_content( $value, $atts, $content );
-		$content[] = '[/if ' . $id . ']';
+	private static function default_email_row( $atts, &$content ) {
+		$content[] = '[if ' . $atts['id'] . ']';
+		self::row_content( $atts, $content );
+		$content[] = '[/if ' . $atts['id'] . ']' . "\r\n";
 	}
 
-	private static function row_content( $value, $atts, &$content ) {
+	private static function row_content( $atts, &$content ) {
 		$content[] = '<tr' . self::table_row_style( $atts ) . '>';
 
-		$value['val'] = str_replace( "\r\n", '<br/>', $value['val'] );
-		if ( $value['type'] == 'divider' ) {
-			$value['label'] = '<h3>' . $value['label'] . '</h3> '. $value['val'];
-			$value['val'] = '';
-		} elseif ( $value['type'] == 'break' ) {
-			$value['label'] = '<br/><br/>';
-			$value['val'] = '';
-		}
+		$atts['value']['val'] = str_replace( "\r\n", '<br/>', $atts['value']['val'] );
 
 		if ( 'rtl' == $atts['direction'] ) {
-			$first = $value['val'];
-			$second = $value['label'];
+			$first = $atts['value']['val'];
+			$second = $atts['value']['label'];
 		} else {
-			$first = $value['label'];
-			$second = $value['val'];
+			$first = $atts['value']['label'];
+			$second = $atts['value']['val'];
 		}
 
 		$content[] = '<td ' . $atts['row_style'] . '>' . $first . '</td>';
