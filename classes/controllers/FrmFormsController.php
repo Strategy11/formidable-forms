@@ -1156,7 +1156,7 @@ class FrmFormsController {
 
         $values = FrmEntriesHelper::setup_new_vars($fields, $form, true);
         $created = self::just_created_entry( $form->id );
-        $conf_method = apply_filters('frm_success_filter', 'message', $form, $form->options, 'create');
+        $conf_method = apply_filters('frm_success_filter', 'message', $form, 'create');
 
         if ( $created && is_numeric($created) && $conf_method != 'message' ) {
             do_action('frm_success_action', $conf_method, $form, $form->options, $created);

@@ -569,7 +569,7 @@ class FrmEntry {
 	* @return int
 	*/
 	private static function get_is_draft_value( $values ) {
-		return ( ( isset( $values['frm_saving_draft'] ) && $values['frm_saving_draft'] == 1 ) ||  ( isset( $values['is_draft'] ) && $values['is_draft'] == 1 ) ) ? 1 : 0;
+		return ( ( isset( $values['frm_saving_draft'] ) && $values['frm_saving_draft'] == 1 ) || ( isset( $values['is_draft'] ) && $values['is_draft'] == 1 ) ) ? 1 : 0;
 	}
 
 	/**
