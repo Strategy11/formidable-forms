@@ -465,6 +465,22 @@ if ( ! isset( $center_form ) ) {
     border-color:#<?php echo esc_html( $border_color_disabled . $important ) ?>;
 }
 
+.<?php echo esc_html( $style_class ) ?> input::placeholder{
+	color:#<?php echo esc_html( $text_color_disabled . $important ) ?>;
+}
+.<?php echo esc_html( $style_class ) ?> input::-webkit-input-placeholder{
+	color:#<?php echo esc_html( $text_color_disabled . $important ) ?>;
+}
+.<?php echo esc_html( $style_class ) ?> input::-moz-placeholder{
+	color:#<?php echo esc_html( $text_color_disabled . $important ) ?>;
+}
+.<?php echo esc_html( $style_class ) ?> input:-ms-input-placeholder{
+	color:#<?php echo esc_html( $text_color_disabled . $important ) ?>;
+}
+.<?php echo esc_html( $style_class ) ?> input:-moz-placeholder{
+	color:#<?php echo esc_html( $text_color_disabled . $important ) ?>;
+}
+
 
 .<?php echo esc_html( $style_class ) ?> .form-field input:not([type=file]):focus,
 .<?php echo esc_html( $style_class ) ?> select:focus,
