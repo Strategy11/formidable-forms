@@ -358,6 +358,11 @@ class FrmNotification {
 			'to_email' => $atts['to_email'], 'subject' => $atts['subject'],
 		) );
 
+		/**
+		 * Stop an email based on the message, subject, recipient,
+		 * or any information included in the email header
+		 * @since 2.2.8
+		 */
 		$continue_sending = apply_filters( 'frm_send_email', true, compact( 'message', 'subject', 'recipient', 'header' ) );
 
         if ( apply_filters('frm_encode_subject', 1, $atts['subject'] ) ) {
