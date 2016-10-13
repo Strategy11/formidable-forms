@@ -67,8 +67,13 @@ class FrmEntryMeta {
 		$prev_values = FrmDb::get_col( $wpdb->prefix . 'frm_item_metas', array( 'item_id' => $entry_id, 'field_id !' => 0 ), 'field_id' );
 
         foreach ( $values as $field_id => $meta_value ) {
-            // set the value for the file upload field and add new tags (in Pro version)
-			$meta_value = apply_filters( 'frm_prepare_data_before_db', $meta_value, $field_id, $entry_id );
+			$field = false;
+			if ( ! empty( $field_id ) ) {
+				$field = FrmField::getOne( $field_id );
+			}
+
+			// set the value for the file upload field and add new tags (in Pro version)
+			$meta_value = apply_filters( 'frm_prepare_data_before_db', $meta_value, $field_id, $entry_id, compact( 'field' ) );
 
 			if ( $prev_values && in_array($field_id, $prev_values) ) {
 

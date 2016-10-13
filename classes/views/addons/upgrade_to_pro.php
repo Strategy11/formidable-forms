@@ -9,7 +9,7 @@
 
 	<p>Enhance your basic Formidable forms with a plethora of Pro field types and features. Create advanced forms and data-driven applications in no time at all.</p>
 	<p>Are you collecting data offline? Streamline your business by using your forms to get online. Whether you need surveys, polls, client contracts, mortgage calculators, or directories, we've got you covered. Save time by allowing clients to return and make changes to their own submissions, or let them contribute content to your site. Generate more leads by adding headings and page breaks, only showing the fields you need, and letting your clients repeat a section of fields as many times as they need.</p>
-	<p>Projects that once seemed impossible are within your reach with Pro. That project you’ve been dreaming of pursuing? Chances are <strong>Formidable Pro can handle it</strong>.</p>
+	<p>Projects that once seemed impossible are within your reach with Pro. That project you’ve been dreaming of pursuing? Chances are <strong>Formidable Pro can handle it</strong>.</p><br/>
 
 	<table class="wp-list-table widefat fixed striped frm_pricing">
 		<thead>
@@ -65,6 +65,8 @@
 		</tbody>
 	</table>
 	<br/>
+
+	<?php do_action( 'frm_upgrade_page' ); ?>
 
 	<h2>Features</h2>
 	<table class="wp-list-table widefat fixed striped">
