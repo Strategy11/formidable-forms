@@ -122,7 +122,7 @@ class FrmFieldsHelper {
             'size' => '', 'max' => '', 'label' => '', 'blank' => '',
             'required_indicator' => '*', 'invalid' => '', 'separate_value' => 0,
             'clear_on_focus' => 0, 'default_blank' => 0, 'classes' => '',
-			'custom_html' => '', 'captcha_size' => 'default', 'captcha_theme' => 'light',
+			'custom_html' => '', 'captcha_size' => 'normal', 'captcha_theme' => 'light',
         );
 
 		if ( $limit ) {
@@ -480,6 +480,9 @@ DEFAULT_HTML;
 
         wp_register_script( 'recaptcha-api', $api_js_url, '', true );
         wp_enqueue_script( 'recaptcha-api' );
+
+		// for reverse compatability
+		$field['captcha_size'] = ( $field['captcha_size'] == 'default' ) ? 'normal' : $field['captcha_size'];
 
 ?>
 <div id="field_<?php echo esc_attr( $field['field_key'] ) ?>" class="<?php echo esc_attr( $class_prefix ) ?>g-recaptcha" data-sitekey="<?php echo esc_attr( $frm_settings->pubkey ) ?>" data-size="<?php echo esc_attr( $field['captcha_size'] ) ?>" data-theme="<?php echo esc_attr( $field['captcha_theme'] ) ?>"></div>
