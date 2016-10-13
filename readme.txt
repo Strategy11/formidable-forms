@@ -3,7 +3,7 @@ Contributors: sswells, srwells, jamie.wahlin
 Tags: contact form, contact, custom form, database, email, feedback, form, forms, poll, Post, captcha, spam, survey, template, widget, multisite, form builder, form creator, form manager,
 Requires at least: 3.8
 Tested up to: 4.6.1
-Stable tag: 2.02.07
+Stable tag: 2.02.08
 
 Beautiful forms in 60 seconds. The WordPress form builder that enables you to create forms with a simple drag-and-drop interface and in-place editing.
 
@@ -88,6 +88,30 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 [See more FAQs](http://formidablepro.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 2.02.08 =
+* Fix recaptcha error (change default to normal)
+* Prevent double submit clicks
+* Make sure recaptcha English language setting applies
+* Add placeholder color CSS
+* Add frm_after_import_form action hook
+* Add frm_send_email hook for stopping the email
+* Add frm_upgrade_page hook
+* Include field object in frm_prepare_data_before_db hook
+* Fix nav errors when trying to edit form that doesn't exist
+* Replace specific cache key deletion with group cache delete for more cache clearing fixes
+* **Pro Features** *
+* Added pretty URLs to views
+* Added month and year labels in credit card dropdowns
+* Show user options for admin when editing user-limited dynamic field
+* Added frm_load_dropzone hook for disabling dropzone
+* Added frm_dynamic_field_user hook for dynamic fields.
+* Load pro translations in plugin instead of allowing translations from wp.org to trump
+* Fix error when editing a multi-page form with blank repeating section on separate page
+* Add space next to collapsible section icons
+* Fix required file error when file is present
+* Fix clearing dependent autocomplete dropdown in repeating sections
+* Update EDD updater
+
 = 2.02.07 =
 * Improve cache clearing in order to make Formidable compatible with persistent object caching
 * Add vertical-align:baseline to radio and checkboxes to prevent styling conflicts
