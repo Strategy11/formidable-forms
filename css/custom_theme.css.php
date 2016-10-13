@@ -30,6 +30,14 @@ legend.frm_hidden{
     display:none !important;
 }
 
+.with_frm_style .frm_form_fields{
+	opacity:1;
+	transition: opacity 0.1s linear;
+}
+.with_frm_style .frm_doing_ajax{
+	opacity:.5;
+}
+
 .frm_transparent{
 	color:transparent;
 }

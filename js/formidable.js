@@ -3053,6 +3053,8 @@ function frmFrontFormJS(){
 			jQuery(object).find('input[name="frm_action"]').val();
 		}
 
+		var fieldset = jQuery(object).find('.frm_form_field');
+		fieldset.addClass('frm_doing_ajax');
 		jQuery.ajax({
 			type:'POST',url:frm_js.ajax_url,
 			data:jQuery(object).serialize() +'&action=frm_entries_'+ action +'&nonce='+frm_js.nonce,
@@ -3076,7 +3078,11 @@ function frmFrontFormJS(){
 
 					jQuery(object).find('.frm_ajax_loading').removeClass('frm_loading_now');
 					var formID = jQuery(object).find('input[name="form_id"]').val();
-					jQuery(object).closest( '#frm_form_'+ formID +'_container' ).replaceWith( response.content );
+					jQuery(object).find('.frm_form_field').fadeOut('slow', function(){
+						var formDiv = jQuery(object).closest( '#frm_form_'+ formID +'_container' );
+					    formDiv.replaceWith( response.content ).find('.frm_form_field').hide().fadeIn('slow');
+					});
+
 					frmFrontForm.scrollMsg( formID );
 					addUrlParam(response);
 
@@ -3147,6 +3153,7 @@ function frmFrontFormJS(){
 						}
 					}
 
+					fieldset.removeClass('frm_doing_ajax');
 					scrollToFirstField( object );
 
 					if(show_captcha !== true){
