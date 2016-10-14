@@ -19,6 +19,8 @@ class FrmDb {
     }
 
     public function upgrade( $old_db_version = false ) {
+	    do_action( 'frm_before_install' );
+
         global $wpdb;
         //$frm_db_version is the version of the database we're moving to
         $frm_db_version = FrmAppHelper::$db_version;
