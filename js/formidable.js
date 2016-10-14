@@ -3079,8 +3079,9 @@ function frmFrontFormJS(){
 					jQuery(object).find('.frm_ajax_loading').removeClass('frm_loading_now');
 					var formID = jQuery(object).find('input[name="form_id"]').val();
 					jQuery(object).find('.frm_form_field').fadeOut('slow', function(){
-						var formDiv = jQuery(object).closest( '#frm_form_'+ formID +'_container' );
-					    formDiv.replaceWith( response.content ).find('.frm_form_field').hide().fadeIn('slow');
+						response.content = response.content.replace(/ class="frm_form_field /g, 'class="frm_hidden frm_form_field ');
+						jQuery(object).closest( '#frm_form_'+ formID +'_container' ).replaceWith( response.content );
+						jQuery('#frm_form_'+ formID +'_container .frm_form_field').fadeIn('slow');
 					});
 
 					frmFrontForm.scrollMsg( formID );
