@@ -1746,7 +1746,6 @@ function frmAdminBuildJS(){
 	}
 
 	function toggleKeyID(switch_to, e){
-		console.log('toggle');
 		e.stopPropagation();
 		jQuery('.frm_code_list .frmids, .frm_code_list .frmkeys').hide();
 		jQuery('.frm_code_list .'+switch_to).show();
