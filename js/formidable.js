@@ -203,11 +203,11 @@ function frmFrontFormJS(){
 				});
 
 				this.on('removedfile', function( file ) {
-					if ( file.accepted && uploadFields[i].uploadMultiple !== true ) {
+					if ( file.accepted !== false && uploadFields[i].uploadMultiple !== true ) {
 						jQuery('input[name="'+ fieldName +'"]').val('');
 					}
 
-					if ( file.accepted && typeof file.mediaID !== 'undefined' ) {
+					if ( file.accepted !== false && typeof file.mediaID !== 'undefined' ) {
 						jQuery(file.previewElement).remove();
 						var fileCount = this.files.length;
 						this.options.maxFiles = uploadFields[i].maxFiles - fileCount;
