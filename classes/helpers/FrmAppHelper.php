@@ -1291,8 +1291,9 @@ class FrmAppHelper {
 			}
 		}
 
-		$time_strings = array_slice( $time_strings, 0, 1 );
-		$time_ago_string = $time_strings ? implode( ', ', $time_strings ) : '0 ' . __( 'seconds', 'formidable' );
+		$levels_deep = apply_filters( 'frm_time_ago_levels', 1, compact( 'time_strings', 'from', 'to' ) );
+		$time_strings = array_slice( $time_strings, 0, $levels_deep );
+		$time_ago_string = $time_strings ? implode( ' ', $time_strings ) : '0 ' . __( 'seconds', 'formidable' );
 
 		return $time_ago_string;
 	}
