@@ -1,4 +1,4 @@
-<div id="postbox-container-1" class="postbox-container">
+<div id="postbox-container-1" class="postbox-container frm_no_print">
 <div id="submitdiv" class="postbox">
     <h3 class="hndle"><span><?php _e( 'Entry Actions', 'formidable' ) ?></span></h3>
     <div class="inside">
