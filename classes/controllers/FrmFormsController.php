@@ -1169,7 +1169,7 @@ class FrmFormsController {
             $class = 'frm_message';
         } else {
             $message = $frm_settings->failed_msg;
-            $class = 'frm_error_style';
+            $class = FrmFormsHelper::form_error_class();
         }
 
 		$message = FrmFormsHelper::get_success_message( array(
