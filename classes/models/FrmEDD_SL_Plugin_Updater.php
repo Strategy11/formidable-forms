@@ -33,7 +33,7 @@ class FrmEDD_SL_Plugin_Updater {
 	 * @param string  $_plugin_file Path to the plugin file.
 	 * @param array   $_api_data    Optional data to send with API calls.
 	 */
-	public function __construct( $_api_url, $_plugin_file, $_api_data = null ) {
+	public function __construct( $_api_url, $_plugin_file, $_api_data = array() ) {
 		global $frm_edd_plugin_data;
 
 		$this->api_url     = trailingslashit( $_api_url );

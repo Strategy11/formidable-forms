@@ -136,7 +136,7 @@ class FrmForm {
         $new_values = self::set_update_options( array(), $values);
 
         foreach ( $values as $value_key => $value ) {
-            if ( in_array($value_key, $form_fields) ) {
+			if ( $value_key && in_array( $value_key, $form_fields ) ) {
 				$new_values[ $value_key ] = $value;
             }
         }

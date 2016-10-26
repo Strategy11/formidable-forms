@@ -19,7 +19,7 @@ if ( isset($errors) && is_array( $errors ) && ! empty( $errors ) ) {
 	if ( isset( $form ) && is_object( $form ) ) {
     	FrmFormsHelper::get_scroll_js( $form->id );
 	} ?>
-<div class="frm_error_style">
+<div class="<?php echo esc_attr( FrmFormsHelper::form_error_class() ) ?>">
 <?php
 $img = '';
 if ( ! FrmAppHelper::is_admin() ) {

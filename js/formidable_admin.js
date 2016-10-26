@@ -1801,8 +1801,10 @@ function frmAdminBuildJS(){
 					id = jQuery.trim(d);
 				}
 				c = c+' '+d;
+				c = c.replace('widefat', '');
 			}
 		}
+
 		jQuery('#frm-insert-fields-box,#frm-conditionals,#frm-adv-info-tab,#frm-html-tags,#frm-layout-classes,#frm-dynamic-values').removeClass().addClass('tabs-panel '+c);
 		var a=[
 			'content','wpbody-content','dyncontent','success_url',
@@ -1835,7 +1837,8 @@ function frmAdminBuildJS(){
 		}
 	}
 
-	function toggleKeyID(switch_to){
+	function toggleKeyID(switch_to, e){
+		e.stopPropagation();
 		jQuery('.frm_code_list .frmids, .frm_code_list .frmkeys').hide();
 		jQuery('.frm_code_list .'+switch_to).show();
 		jQuery('.frmids, .frmkeys').removeClass('current');
@@ -2511,8 +2514,8 @@ function frmAdminBuildJS(){
 				e.preventDefault();
 			});
 			
-			jQuery('a.frmids').click(function(){toggleKeyID('frmids');});
-			jQuery('a.frmkeys').click(function(){toggleKeyID('frmkeys');});
+			jQuery('.subsubsub a.frmids').click(function(e){toggleKeyID('frmids',e);});
+			jQuery('.subsubsub a.frmkeys').click(function(e){toggleKeyID('frmkeys',e);});
 
 			if(typeof(tinymce)=='object'){  
 				DOM=tinymce.DOM; 

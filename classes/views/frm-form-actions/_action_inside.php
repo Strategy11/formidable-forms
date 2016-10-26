@@ -44,7 +44,8 @@ if ( count( $action_control->action_options['event'] ) == 1 || $action_control->
 <?php
 }
 
-do_action( 'frm_additional_action_settings', $form_action, compact( 'form', 'action_control', 'action_key', 'values' ) );
+$pass_args = array( 'form' => $form, 'action_control' => $action_control, 'action_key' => $action_key, 'values' => $values );
+do_action( 'frm_additional_action_settings', $form_action, $pass_args );
 
 ?>
     <span class="alignright frm_action_id <?php echo empty( $form_action->ID ) ? 'frm_hidden' : ''; ?>"><?php printf( __( 'Action ID: %1$s', 'formidable' ), $form_action->ID); ?></span>

@@ -10,6 +10,13 @@ class FrmFormsHelper {
 		FrmForm::maybe_get_form( $form );
 	}
 
+	/**
+	 * @since 2.2.10
+	 */
+	public static function form_error_class() {
+		return apply_filters( 'frm_form_error_class', 'frm_error_style' );
+	}
+
 	public static function get_direct_link( $key, $form = false ) {
 		$target_url = esc_url( admin_url( 'admin-ajax.php?action=frm_forms_preview&form=' . $key ) );
         $target_url = apply_filters('frm_direct_link', $target_url, $key, $form);

@@ -3,7 +3,7 @@ Contributors: sswells, srwells, jamie.wahlin
 Tags: contact form, contact, custom form, database, email, feedback, form, forms, poll, Post, captcha, spam, survey, template, widget, multisite, form builder, form creator, form manager,
 Requires at least: 3.8
 Tested up to: 4.6.1
-Stable tag: 2.02.08
+Stable tag: 2.02.09
 
 Beautiful forms in 60 seconds. The WordPress form builder that enables you to create forms with a simple drag-and-drop interface and in-place editing.
 
@@ -88,6 +88,13 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 [See more FAQs](http://formidablepro.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 2.02.09 =
+* Add frm_before_install hook
+* Trigger a database update to flush permalinks
+* Fix PHP 5.4 syntax error
+* **Pro Features** *
+* Fix single post page content
+
 = 2.02.08 =
 * Fix recaptcha error (change default to normal)
 * Prevent double submit clicks
