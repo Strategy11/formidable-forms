@@ -349,7 +349,7 @@ class FrmFieldsController {
         $field['options'] = $opts;
 
         if ( $field['type'] == 'radio' || $field['type'] == 'checkbox' ) {
-			$field_name = 'item_meta[' . $id . ']';
+			$field_name = 'item_meta[' . $field['id'] . ']';
 
 			// Get html_id which will be used in single-option.php
 			$html_id = FrmFieldsHelper::get_html_id( $field );

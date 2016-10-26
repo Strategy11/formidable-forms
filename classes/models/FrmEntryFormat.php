@@ -170,8 +170,11 @@ class FrmEntryFormat {
 
 		if ( $atts['format'] != 'text' ) {
 			$values[ $f->field_key ] = $val;
-			if ( isset( $prev_val ) && $prev_val != $val && $f->type != 'textarea' ) {
-				$values[ $f->field_key . '-value' ] = $prev_val;
+			if ( $atts['entry'] && $f->type != 'textarea' ) {
+				$prev_val = maybe_unserialize( $atts['entry']->metas[ $f->id ] );
+				if ( $prev_val != $val ) {
+					$values[ $f->field_key . '-value' ] = $prev_val;
+				}
 			}
 		} else {
 			$values[ $f->id ] = array( 'label' => $f->name, 'val' => $val, 'type' => $f->type );
