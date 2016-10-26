@@ -1131,7 +1131,7 @@ class FrmAppHelper {
         }
 
 		if ( ! isset( $values['custom_style'] ) ) {
-			$values['custom_style'] = self::custom_style_value( $values, $post_values );
+			$values['custom_style'] = self::custom_style_value( $post_values );
 		}
 
 		foreach ( array( 'before', 'after', 'submit' ) as $h ) {
@@ -1145,7 +1145,7 @@ class FrmAppHelper {
 	/**
 	 * @since 2.2.10
 	 */
-	public static function custom_style_value( $values, $post_values ) {
+	public static function custom_style_value( $post_values ) {
 		if ( $post_values && isset( $post_values['options']['custom_style'] ) ) {
 			$custom_style = absint( $post_values['options']['custom_style'] );
 		} else {

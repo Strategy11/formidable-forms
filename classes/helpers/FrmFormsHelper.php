@@ -180,7 +180,7 @@ class FrmFormsHelper {
         }
 
 		$values = self::fill_default_opts( $values, false, $post_values );
-		$values['custom_style'] = FrmAppHelper::custom_style_value( $values, $post_values );
+		$values['custom_style'] = FrmAppHelper::custom_style_value( $post_values );
 
         return apply_filters('frm_setup_new_form_vars', $values);
     }
