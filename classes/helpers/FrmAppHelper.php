@@ -1144,6 +1144,8 @@ class FrmAppHelper {
 
 	/**
 	 * @since 2.2.10
+	 * @param array $post_values
+	 * @return boolean|int
 	 */
 	public static function custom_style_value( $post_values ) {
 		if ( $post_values && isset( $post_values['options']['custom_style'] ) ) {
