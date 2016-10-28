@@ -7,6 +7,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmAntiSpam {
 
 	private static function is_spam( $comment ) {
+		$url = $email = $author = $body = $comment; // TODO: get values from form
+		$options = array(
+			'time_check' => 1, 'bbcode_check' => 1,
+			'advanced_check' => 1, 'regexp_check' => 1,
+			'dnsbl_check' => 1,
+		);
+
 		$response = array( 'spam' => false );
 
 		/* Check if logged in */
@@ -15,11 +22,12 @@ class FrmAntiSpam {
 		}
 
 		/* Honeypot */
-		if ( ! empty($_POST['ab_spam__hidden_field']) ) {
+		if ( ! empty( $_POST['ab_spam__hidden_field'] ) ) {
 			$response['reason'] = 'css';
 			return $response;
 		}
 
+		$ip = FrmAppHelper::get_ip_address();
 		if ( empty( $ip ) ) {
 			$response['reason'] = 'empty';
 			return $response;
@@ -32,12 +40,12 @@ class FrmAntiSpam {
 		}
 
 		/* BBCode Spam */
-		if ( $options['bbcode_check'] && self::_is_bbcode_spam($body) ) {
+		if ( $options['bbcode_check'] && self::_is_bbcode_spam( $body ) ) {
 			$response['reason'] = 'bbcode';
 			return $response;
 		}
 
-		if ( $options['advanced_check'] && self::_is_fake_ip($ip) ) {
+		if ( $options['advanced_check'] && self::_is_fake_ip( $ip ) ) {
 			$response['reason'] = 'server';
 			return $response;
 		}
@@ -46,7 +54,7 @@ class FrmAntiSpam {
 		if ( $options['regexp_check'] ) {
 			$is_spam = self::_is_regexp_spam( array(
 				'ip'	 => $ip,
-				'host'	 => parse_url($url, PHP_URL_HOST),
+				'host'	 => parse_url( $url, PHP_URL_HOST ),
 				'body'	 => $body,
 				'email'	 => $email,
 				'author' => $author,
@@ -106,17 +114,16 @@ class FrmAntiSpam {
 			if ( $ip_by_host === $host_by_ip ) {
 				return false;
 			}
-
 		} else {
 			/* IPv4 / API */
 			if ( $host_by_ip === $client_ip ) {
 				return true;
 			}
 
-			$ip_by_host = gethostbyname($client_host);
+			$ip_by_host = gethostbyname( $client_host );
 		}
 
-		if ( strpos( $client_ip, self::_cut_ip($ip_by_host) ) === false ) {
+		if ( strpos( $client_ip, self::_cut_ip( $ip_by_host ) ) === false ) {
 			return true;
 		}
 
@@ -138,9 +145,23 @@ class FrmAntiSpam {
 		}
 	}
 
+	/**
+	 * Check for an IPv4 address
+	 *
+	 * @param   string   $ip  IP to validate
+	 * @return  integer       TRUE if IPv4
+	 */
+	private static function _is_ipv4( $ip ) {
+		if ( function_exists('filter_var') ) {
+			return filter_var( $ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 ) !== false;
+		} else {
+			return preg_match( '/^\d{1,3}(\.\d{1,3}){3,3}$/', $ip );
+		}
+	}
+
 	private static function _cut_ip( $ip, $cut_end = true ) {
-		$separator = ( self::_is_ipv4($ip) ? '.' : ':' );
-		$part = ( $cut_end ? strrchr( $ip, $separator) : strstr( $ip, $separator) );
+		$separator = ( self::_is_ipv4( $ip ) ? '.' : ':' );
+		$part = ( $cut_end ? strrchr( $ip, $separator ) : strstr( $ip, $separator ) );
 
 		return str_replace( $part, '', $ip );
 	}
@@ -152,7 +173,7 @@ class FrmAntiSpam {
 			'host',
 			'body',
 			'email',
-			'author'
+			'author',
 		);
 
 		/* Regexp */
@@ -160,15 +181,15 @@ class FrmAntiSpam {
 			0 => array(
 				'host'	=> '^(www\.)?\d+\w+\.com$',
 				'body'	=> '^\w+\s\d+$',
-				'email'	=> '@gmail.com$'
+				'email'	=> '@gmail.com$',
 			),
 			1 => array(
-				'body'	=> '\<\!.+?mfunc.+?\>'
+				'body'	=> '\<\!.+?mfunc.+?\>',
 			)
 		);
 
 		/* Spammy author */
-		if ( $quoted_author = preg_quote($comment['author'], '/') ) {
+		if ( $quoted_author = preg_quote( $comment['author'], '/' ) ) {
 			$patterns[] = array(
 				'body' => sprintf(
 					'<a.+?>%s<\/a>$',
@@ -201,30 +222,29 @@ class FrmAntiSpam {
 			return false;
 		}
 
-		foreach ($patterns as $pattern) {
+		foreach ( $patterns as $pattern ) {
 			$hits = array();
 
-			foreach ($pattern as $field => $regexp) {
-				/* Empty value? */
-				if ( empty($field) OR !in_array($field, $fields) OR empty($regexp) ) {
+			foreach ( $pattern as $field => $regexp ) {
+				$is_empty = ( empty( $field ) || ! in_array( $field, $fields ) || empty( $regexp ) );
+				if ( $is_empty ) {
 					continue;
 				}
 
 				/* Ignore non utf-8 chars */
-				$comment[$field] = ( function_exists('iconv') ? iconv('utf-8', 'utf-8//TRANSLIT', $comment[$field]) : $comment[$field] );
+				$comment[ $field ] = ( function_exists('iconv') ? iconv( 'utf-8', 'utf-8//TRANSLIT', $comment[ $field ] ) : $comment[ $field ] );
 
-				/* Empty value? */
-				if ( empty($comment[$field]) ) {
+				if ( empty( $comment[ $field ] ) ) {
 					continue;
 				}
 
 				/* Perform regex */
-				if ( @preg_match('/' .$regexp. '/isu', $comment[$field]) ) {
-					$hits[$field] = true;
+				if ( preg_match( '/' .$regexp. '/isu', $comment[ $field ] ) ) {
+					$hits[ $field ] = true;
 				}
 			}
 
-			if ( count($hits) === count($pattern) ) {
+			if ( count( $hits ) === count( $pattern ) ) {
 				return true;
 			}
 		}
@@ -233,7 +253,7 @@ class FrmAntiSpam {
 	}
 
 	private static function _is_dnsbl_spam( $ip ) {
-		/* Start request */
+
 		$response = wp_safe_remote_request(
 			esc_url_raw(
 				sprintf( 'http://www.stopforumspam.com/api?ip=%s&f=json', $ip ),
@@ -241,7 +261,6 @@ class FrmAntiSpam {
 			)
 		);
 
-		/* Response error? */
 		if ( is_wp_error( $response ) ) {
 			return false;
 		}
@@ -249,15 +268,13 @@ class FrmAntiSpam {
 		/* Get JSON */
 		$json = wp_remote_retrieve_body( $response );
 
-		/* Decode JSON */
 		$result = json_decode( $json );
 
-		/* Empty data */
 		if ( empty( $result->success ) ) {
 			return false;
 		}
 
-		/* Return status */
-		return (bool) $result->ip->appears;
+		$status = (bool) $result->ip->appears;
+		return $status;
 	}	
 }
