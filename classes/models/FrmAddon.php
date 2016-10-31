@@ -174,7 +174,7 @@ class FrmAddon {
 
 		if ( $license_status === false ) {
 			$response = $this->get_license_status();
-			set_site_transient( $this->transient_key(), $response, DAY_IN_SECONDS );
+			set_site_transient( $this->transient_key(), $response, 60 * 60 * 24 * 7 ); // check weekly
 			if ( $response['status'] == 'revoked' ) {
 				$this->clear_license();
 			}
