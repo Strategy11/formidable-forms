@@ -310,17 +310,28 @@ class FrmEntryValidate {
 		}
 
 		$content = strtolower( $content );
-		$content .= ' ' . FrmAppHelper::get_ip_address();
+		$content_without_html = wp_strip_all_tags( $content );
+		$ip = FrmAppHelper::get_ip_address();
+		$user_agent = FrmAppHelper::get_server_value( 'HTTP_USER_AGENT' );
+
     	$words = explode( "\n", $mod_keys );
 
     	foreach ( (array) $words as $word ) {
     		$word = trim( $word );
 
-    		if ( empty($word) ) {
-    			continue;
-    		}
+			if ( empty( $word ) ) {
+				continue;
+			}
 
-    		if ( preg_match('#' . preg_quote( $word, '#' ) . '#', $content) ) {
+			// Do some escaping magic so that '#' chars in the
+			// spam words don't break things:
+			$word = preg_quote( $word, '#' );
+
+			$pattern = "#$word#i";
+
+			$in_content = preg_match( $pattern, $content ) || preg_match( $pattern, $content_without_html );
+			$blacklist_user = preg_match( $pattern, $ip ) || preg_match( $pattern, $user_agent );
+			if ( $in_content || $blacklist_user ) {
     			return true;
     		}
     	}
