@@ -172,9 +172,9 @@ class FrmAddon {
 
 		$license_status = get_site_transient( $this->transient_key() );
 
-		if ( $license_status === false ) {
+		if ( $license_status === false && $this->test_transient() ) {
 			$response = $this->get_license_status();
-			set_site_transient( $this->transient_key(), $response, DAY_IN_SECONDS );
+			set_site_transient( $this->transient_key(), $response, 60 * 60 * 24 * 7 ); // check weekly
 			if ( $response['status'] == 'revoked' ) {
 				$this->clear_license();
 			}
@@ -183,6 +183,13 @@ class FrmAddon {
 
 	private function transient_key() {
 		return 'frm_' . md5( sanitize_key( $this->license . '_' . $this->plugin_slug ) );
+	}
+
+	private static function test_transient() {
+		$key = 'frm_test';
+		set_site_transient( $key, $key, 120 );
+		$transient = get_site_transient( $key );
+		return ( $transient ) ? true : false;
 	}
 
 	public static function activate() {
