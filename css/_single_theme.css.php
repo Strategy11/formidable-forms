@@ -503,6 +503,23 @@ if ( ! isset( $center_form ) ) {
     <?php } ?>
 }
 
+.<?php echo esc_html( $style_class ) ?> .frm_submit.frm_inline_submit::before {
+	content:"before";
+	font-family:<?php echo FrmAppHelper::kses( $font ) ?>;
+	font-size:<?php echo esc_html( $font_size . $important ) ?>;
+	color:#<?php echo esc_html( $label_color . $important ) ?>;
+	font-weight:<?php echo esc_html( $weight . $important ) ?>;
+	margin:0;
+	padding:<?php echo esc_html( $label_padding . $important ) ?>;
+	width:auto;
+	display:block;
+	visibility:hidden;
+}
+
+.<?php echo esc_html( $style_class ) ?> .frm_submit.frm_inline_submit input {
+	margin-top: 0 <?php echo esc_html( $important ) ?>;
+}
+
 <?php
 if ( ! $submit_style ) { ?>
 .<?php echo esc_html( $style_class ) ?> .frm_compact .frm_dropzone.dz-clickable .dz-message,
