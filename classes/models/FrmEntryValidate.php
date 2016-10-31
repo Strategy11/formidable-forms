@@ -309,6 +309,8 @@ class FrmEntryValidate {
 		    return false;
 		}
 
+		$content = strtolower( $content );
+		$content .= ' ' . FrmAppHelper::get_ip_address();
     	$words = explode( "\n", $mod_keys );
 
     	foreach ( (array) $words as $word ) {
