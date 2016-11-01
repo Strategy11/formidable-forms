@@ -3614,7 +3614,10 @@ function frmFrontFormJS(){
 				data:{action:'frm_entries_destroy', entry:entry_id, nonce:frm_js.nonce},
 				success:function(html){
 					if(html.replace(/^\s+|\s+$/g,'') == 'success'){
-						jQuery(document.getElementById(prefix+entry_id)).fadeOut('slow');
+						var container = jQuery(document.getElementById(prefix+entry_id));
+						container.fadeOut('slow', function(){
+							container.remove();
+						});
 						jQuery(document.getElementById('frm_delete_'+entry_id)).fadeOut('slow');
 					}else{
 						jQuery(document.getElementById('frm_delete_'+entry_id)).replaceWith(html);
