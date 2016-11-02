@@ -1078,9 +1078,6 @@ select.frm_cancelnew, input.frm_enternew{width:175px;}
 #frm_where_options{min-height:31px;}
 
 .tabs-panel.active .tabs-panel, .frm_settings_form .tabs-panel .tabs-panel{border:none;padding:0;} /*for add-on reverse compatability */
-/*@-webkit-keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
-@-moz-keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
-@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }*/
 
 .frm-fade-in {
     opacity:0;  /* make things invisible upon start */
@@ -1287,6 +1284,11 @@ label.frm_action_events{
     opacity:0.8;
     padding-top:10px;
 }
+
+.frm_logic_field_opts{
+	max-width:180px;
+}
+
 .frm_form_action_settings .frm_logic_row,
 .frm_form_action_settings .frm_posttax_row{
     margin:14px 0;
@@ -1878,10 +1880,10 @@ table td.frm_left_label{
 .frm_sorting li.ui-state-default.selected.edit_field_type_divider .divider_section_only{
 	background-color: #fbfdff;
 	border: 1px solid #5b9dd9;
-	    -webkit-box-shadow: 0 0 1px #96B0C7;;
-	    box-shadow: 0 0 1px #96B0C7;
-		-webkit-transition: 0.5s border-color ease-in-out;
-		    transition: .5s border-color ease-in-out;
+	-webkit-box-shadow: 0 0 1px #96B0C7;
+	box-shadow: 0 0 1px #96B0C7;
+	-webkit-transition: 0.5s border-color ease-in-out;
+	transition: .5s border-color ease-in-out;
 }
 .start_divider.frm_sorting li.ui-state-default.frm_not_divider.selected {
 	border:1px solid #E7E7E7;
