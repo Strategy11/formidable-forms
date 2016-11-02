@@ -179,14 +179,8 @@ class FrmFormsHelper {
 			$values['form_key'] = ( $post_values && isset( $post_values['form_key'] ) ) ? $post_values['form_key'] : FrmAppHelper::get_unique_key( '', $wpdb->prefix . 'frm_forms', 'form_key' );
         }
 
-        $values = self::fill_default_opts($values, false, $post_values);
-
-        if ( $post_values && isset($post_values['options']['custom_style']) ) {
-            $values['custom_style'] = $post_values['options']['custom_style'];
-        } else {
-            $frm_settings = FrmAppHelper::get_settings();
-            $values['custom_style'] = ( $frm_settings->load_style != 'none' );
-        }
+		$values = self::fill_default_opts( $values, false, $post_values );
+		$values['custom_style'] = FrmAppHelper::custom_style_value( $post_values );
 
         return apply_filters('frm_setup_new_form_vars', $values);
     }

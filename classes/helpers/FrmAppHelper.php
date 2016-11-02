@@ -10,7 +10,7 @@ class FrmAppHelper {
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '2.02.09';
+	public static $plug_version = '2.02.10';
 
     /**
      * @since 1.07.02
@@ -1130,10 +1130,9 @@ class FrmAppHelper {
             unset($opt, $defaut);
         }
 
-        if ( ! isset($values['custom_style']) ) {
-            $frm_settings = self::get_settings();
-			$values['custom_style'] = ( $post_values && isset( $post_values['options']['custom_style'] ) ) ? absint( $_POST['options']['custom_style'] ) : ( $frm_settings->load_style != 'none' );
-        }
+		if ( ! isset( $values['custom_style'] ) ) {
+			$values['custom_style'] = self::custom_style_value( $post_values );
+		}
 
 		foreach ( array( 'before', 'after', 'submit' ) as $h ) {
 			if ( ! isset( $values[ $h . '_html' ] ) ) {
@@ -1142,6 +1141,21 @@ class FrmAppHelper {
             unset($h);
         }
     }
+
+	/**
+	 * @since 2.2.10
+	 * @param array $post_values
+	 * @return boolean|int
+	 */
+	public static function custom_style_value( $post_values ) {
+		if ( $post_values && isset( $post_values['options']['custom_style'] ) ) {
+			$custom_style = absint( $post_values['options']['custom_style'] );
+		} else {
+			$frm_settings = FrmAppHelper::get_settings();
+			$custom_style = ( $frm_settings->load_style != 'none' );
+		}
+		return $custom_style;
+	}
 
 	public static function get_meta_value( $field_id, $entry ) {
 		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmEntryMeta::get_meta_value' );

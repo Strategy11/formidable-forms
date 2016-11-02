@@ -402,6 +402,7 @@ class FrmEntriesController {
             $wpdb->query( $wpdb->prepare( "DELETE em.* FROM {$wpdb->prefix}frm_item_metas as em INNER JOIN {$wpdb->prefix}frm_items as e on (em.item_id=e.id) and form_id=%d", $form_id ) );
             $results = $wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->prefix}frm_items WHERE form_id=%d", $form_id ) );
             if ( $results ) {
+				FrmEntry::clear_cache();
                 $message = __( 'Entries were Successfully Destroyed', 'formidable' );
             }
         } else {
