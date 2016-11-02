@@ -1495,11 +1495,14 @@ function frmAdminBuildJS(){
 	}
 	
 	function addPostmetaRow(){
-		var id=jQuery('input[name="id"]').val();
-		var key = jQuery(this).closest('.frm_form_action_settings').data('actionkey');
+		var id = jQuery('input[name="id"]').val();
+		var settings = jQuery(this).closest('.frm_form_action_settings');
+		var key = settings.data('actionkey');
 		var meta_name = 0;
+		var post_type = settings.find('.frm_post_type').val();
+
 		if(jQuery('.frm_postmeta_row').length){
-			var name=jQuery('.frm_postmeta_row:last').attr('id').replace('frm_postmeta_', '');
+			var name = jQuery('.frm_postmeta_row:last').attr('id').replace('frm_postmeta_', '');
 			if(jQuery.isNumeric(name)){
 				meta_name = 1 + parseInt(name);
 			}else{
@@ -1508,7 +1511,10 @@ function frmAdminBuildJS(){
 		}
 		jQuery.ajax({
 			type:'POST',url:ajaxurl,
-			data:{action:'frm_add_postmeta_row', form_id:id, meta_name:meta_name, action_key:key, nonce:frmGlobal.nonce},
+			data:{
+				action:'frm_add_postmeta_row', form_id:id, meta_name:meta_name,
+				post_type:post_type, action_key:key, nonce:frmGlobal.nonce
+			},
 			success:function(html){
 				document.getElementById('postcustomstuff').style.display = 'block';
 				jQuery(document.getElementById('frm_postmeta_rows')).append(html);
