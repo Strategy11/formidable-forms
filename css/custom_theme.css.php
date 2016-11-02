@@ -442,6 +442,13 @@ table.form_results.with_frm_style tr.frm_odd,
     padding:6px 12px;
 }
 
+select.frm_loading_lookup{
+    background-image: url(<?php echo FrmAppHelper::relative_plugin_url() ?>/images/ajax_loader.gif) !important;
+    background-position: 10px;
+    background-repeat: no-repeat;
+    color: transparent !important;
+}
+
 <?php include( dirname(__FILE__) . '/frm_grids.css' ); ?>
 
 /* Left and right label styling for non-Formidable styling - very basic, not responsive */
