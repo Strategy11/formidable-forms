@@ -1279,7 +1279,7 @@ class FrmAppHelper {
 	 * @param int|string $to in seconds
 	 * @return string $time_ago
 	 */
-	public static function human_time_diff( $from, $to = '' ) {
+	public static function human_time_diff( $from, $to = '', $levels = 1 ) {
 		if ( empty( $to ) ) {
 			$now = new DateTime;
 		} else {
@@ -1305,7 +1305,7 @@ class FrmAppHelper {
 			}
 		}
 
-		$levels_deep = apply_filters( 'frm_time_ago_levels', 1, compact( 'time_strings', 'from', 'to' ) );
+		$levels_deep = apply_filters( 'frm_time_ago_levels', $levels, compact( 'time_strings', 'from', 'to' ) );
 		$time_strings = array_slice( $time_strings, 0, $levels_deep );
 		$time_ago_string = $time_strings ? implode( ' ', $time_strings ) : '0 ' . __( 'seconds', 'formidable' );
 
