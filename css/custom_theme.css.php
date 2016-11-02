@@ -551,6 +551,13 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
     padding:6px 12px;
 }
 
+select.frm_loading_lookup{
+    background-image: url(<?php echo FrmAppHelper::relative_plugin_url() ?>/images/ajax_loader.gif) !important;
+    background-position: 10px;
+    background-repeat: no-repeat;
+    color: transparent !important;
+}
+
 #ui-datepicker-div{
     display:none;
     z-index:999999 !important;

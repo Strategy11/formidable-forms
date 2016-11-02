@@ -1689,7 +1689,7 @@ function frmFrontFormJS(){
 				triggerChange(jQuery(childSelect), childFieldArgs.fieldKey);
 			}
 		} else {
-			addLoadingTextToLookup( childSelect );
+			disableLookup( childSelect );
 
 			// If all parents have values, check for updated options
 			jQuery.ajax({
@@ -1716,11 +1716,26 @@ function frmFrontFormJS(){
 		}
 	}
 
-	function addLoadingTextToLookup( childSelect ) {
-		if ( ! childSelect.value ) {
-			childSelect.options.length = 1;
-			childSelect.options[1] = new Option(frm_js.loading, '', false, false);
-		}
+	/**
+	 * Disable a Select Lookup field and add loading image
+	 *
+	 * @since 2.02.11
+	 * @param {object} childSelect
+	 */
+	function disableLookup( childSelect ) {
+		childSelect.className = childSelect.className + ' frm_loading_lookup';
+		childSelect.disabled = true;
+	}
+
+	/**
+	 * Enable a Select Lookup field and remove loading image
+	 *
+	 * @since 2.02.11
+	 * @param {object} childSelect
+	 */
+	function enableLookup( childSelect ) {
+		childSelect.disabled = false;
+		childSelect.className = childSelect.className.replace( ' frm_loading_lookup', '' );
 	}
 
 	/**
@@ -1750,6 +1765,8 @@ function frmFrontFormJS(){
 		setSelectLookupVal( childSelect, origVal );
 
 		maybeUpdateChosenOptions( childSelect );
+
+		enableLookup( childSelect );
 
 		// Trigger a change if the new value is different from the old value
 		if ( childSelect.value != origVal ) {
