@@ -1384,7 +1384,7 @@ html[xmlns] .frm_clearfix{
 
 .with_frm_style .chosen-container-multi .chosen-choices li.search-field input[type="text"]{
     margin:1px 0;
-    padding:0;
+    padding:0 !important;
     height:25px;
     outline:0;
     border:0 !important;
