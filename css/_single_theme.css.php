@@ -75,7 +75,9 @@ if ( ! isset( $center_form ) ) {
 <?php } ?>
 
 .<?php echo esc_html( $style_class ) ?> fieldset{
-    border:<?php echo esc_html( $fieldset ) ?> solid #<?php echo esc_html( $fieldset_color . $important ) ?>;
+	border-size:<?php echo esc_html( $fieldset . $important ) ?>;
+	border-style:solid;
+	border-color:#<?php echo esc_html( $fieldset_color . $important ) ?>;
     margin:0;
     padding:<?php echo esc_html( $fieldset_padding . $important ) ?>;
 	background-color:<?php echo esc_html( empty( $fieldset_bg_color ) ? 'transparent' : '#' . $fieldset_bg_color ); ?>;
