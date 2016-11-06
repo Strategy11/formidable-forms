@@ -703,22 +703,38 @@ class FrmForm {
 		return $values;
 	}
 
-	public static function get_current_form_id() {
-		$form = self::get_current_form();
+	public static function get_current_form_id( $default_form = 'none' ) {
+		if ( 'first' == $default_form ) {
+			var_dump(debug_backtrace());
+			$form = self::get_current_form();
+		} else {
+			$form = self::maybe_get_current_form();
+		}
 		$form_id = $form ? $form->id : 0;
 
 		return $form_id;
 	}
 
-	public static function get_current_form( $form_id = 0 ) {
-		global $frm_vars, $wpdb;
+	public static function maybe_get_current_form( $form_id = 0 ) {
+		global $frm_vars;
 
 		if ( isset( $frm_vars['current_form'] ) && $frm_vars['current_form'] && ( ! $form_id || $form_id == $frm_vars['current_form']->id ) ) {
 			return $frm_vars['current_form'];
 		}
 
 		$form_id = FrmAppHelper::get_param( 'form', $form_id, 'get', 'absint' );
-		return self::set_current_form( $form_id );
+		if ( $form_id ) {
+			$form_id = self::set_current_form( $form_id );
+		}
+		return $form_id;
+	}
+
+	public static function get_current_form( $form_id = 0 ) {
+		$form = self::maybe_get_current_form( $form_id );
+		if ( is_numeric( $form ) ) {
+			 $form = self::set_current_form( $form );
+		}
+		return $form;
 	}
 
 	public static function set_current_form( $form_id ) {
