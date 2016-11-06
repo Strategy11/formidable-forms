@@ -1148,7 +1148,7 @@ class FrmAppHelper {
 	 * @return boolean|int
 	 */
 	public static function custom_style_value( $post_values ) {
-		if ( $post_values && isset( $post_values['options']['custom_style'] ) ) {
+		if ( ! empty( $post_values ) && isset( $post_values['options']['custom_style'] ) ) {
 			$custom_style = absint( $post_values['options']['custom_style'] );
 		} else {
 			$frm_settings = FrmAppHelper::get_settings();

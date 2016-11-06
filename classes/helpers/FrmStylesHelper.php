@@ -213,17 +213,18 @@ class FrmStylesHelper {
 		if ( self::previewing_style() ) {
 			if ( isset( $_GET['frm_style_setting'] ) ) {
 				$settings = $_GET['frm_style_setting']['post_content'];
-		    } else {
-		        $settings = $_GET;
-		    }
+			} else {
+				$settings = $_GET;
+			}
+			FrmAppHelper::sanitize_value( 'sanitize_text_field', $settings );
 
 			$style_name = FrmAppHelper::simple_get( 'style_name', 'sanitize_title' );
 			$settings['style_class'] = '';
 			if ( ! empty( $style_name ) ) {
 				$settings['style_class'] = $style_name . '.';
-		    }
+			}
 		} else {
-		    $settings = $style->post_content;
+			$settings = $style->post_content;
 			$settings['style_class'] = 'frm_style_' . $style->post_name . '.';
 		}
 

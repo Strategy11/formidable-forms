@@ -897,24 +897,24 @@ if ( ! $submit_style ) { ?>
 
 <?php if ( isset( $progress_color ) ) { ?>
 /* Progress Bars */
-.<?php echo esc_html( $style_class ) ?> .frm_forms .frm_page_bar input,
-.<?php echo esc_html( $style_class ) ?> .frm_forms .frm_page_bar input:disabled{
-	color: #<?php echo esc_html( $progress_color ) ?>;
-	background-color: #<?php echo esc_html( $progress_bg_color ) ?>;
-	border-color: #<?php echo esc_html( $progress_bg_color ) ?>;
+.<?php echo esc_html( $style_class ) ?> .frm_page_bar input,
+.<?php echo esc_html( $style_class ) ?> .frm_page_bar input:disabled{
+	color: #<?php echo esc_html( $progress_color . $important ) ?>;
+	background-color: #<?php echo esc_html( $progress_bg_color . $important ) ?>;
+	border-color: #<?php echo esc_html( $progress_bg_color . $important ) ?>;
 }
 
-.<?php echo esc_html( $style_class ) ?> .frm_forms .frm_progress_line input.frm_page_back{
-	background-color: #<?php echo esc_html( $progress_active_color ) ?>;
+.<?php echo esc_html( $style_class ) ?> .frm_progress_line input.frm_page_back{
+	background-color: #<?php echo esc_html( $progress_active_color . $important ) ?>;
 }
 
-.<?php echo esc_html( $style_class ) ?> .frm_forms .frm_page_bar .frm_current_page input[type="button"]{
-	background-color: #<?php echo esc_html( $progress_bg_color ) ?>;
-	border-color: #<?php echo esc_html( $progress_bg_color ) ?>;
+.<?php echo esc_html( $style_class ) ?> .frm_page_bar .frm_current_page input[type="button"]{
+	background-color: #<?php echo esc_html( $progress_bg_color . $important ) ?>;
+	border-color: #<?php echo esc_html( $progress_bg_color . $important ) ?>;
 }
 
 .<?php echo esc_html( $style_class ) ?> .frm_current_page .frm_rootline_title{
-	color:#<?php echo esc_html( $progress_active_color ) ?>;
+	color:#<?php echo esc_html( $progress_active_color . $important ) ?>;
 }
 
 .<?php echo esc_html( $style_class ) ?> .frm_rootline_title,
@@ -923,57 +923,65 @@ if ( ! $submit_style ) { ?>
 	color:#666;
 }
 
-.<?php echo esc_html( $style_class ) ?> .frm_forms .frm_progress_line input,
-.<?php echo esc_html( $style_class ) ?> .frm_forms .frm_progress_line input:disabled {
-	border-color: #<?php echo esc_html( $progress_bg_color ) ?>;
+.<?php echo esc_html( $style_class ) ?> .frm_progress_line input,
+.<?php echo esc_html( $style_class ) ?> .frm_progress_line input:disabled {
+	border-color: #<?php echo esc_html( $progress_bg_color . $important ) ?>;
 }
 
-.<?php echo esc_html( $style_class ) ?> .frm_forms .frm_progress_line.frm_show_lines input {
-	border-left-color: #<?php echo esc_html( $progress_color ) ?>;
-	border-right-color: #<?php echo esc_html( $progress_color ) ?>;
+.<?php echo esc_html( $style_class ) ?> .frm_progress_line.frm_show_lines input {
+	border-left-color: #<?php echo esc_html( $progress_color . $important ) ?>;
+	border-right-color: #<?php echo esc_html( $progress_color . $important ) ?>;
 }
 
-.<?php echo esc_html( $style_class ) ?> .frm_forms .frm_progress_line li:first-of-type input {
-	border-left-color: #<?php echo esc_html( $progress_active_color ) ?>;
+.<?php echo esc_html( $style_class ) ?> .frm_progress_line li:first-of-type input {
+	border-left-color: #<?php echo esc_html( $progress_active_color . $important ) ?>;
 }
 
-.<?php echo esc_html( $style_class ) ?> .frm_forms .frm_progress_line li:last-of-type input {
-	border-right-color: #<?php echo esc_html( $progress_active_color ) ?>;
+.<?php echo esc_html( $style_class ) ?> .frm_progress_line li:last-of-type input {
+	border-right-color: #<?php echo esc_html( $progress_active_color . $important ) ?>;
 }
 
-.<?php echo esc_html( $style_class ) ?> .frm_forms .frm_progress_line li:last-of-type input.frm_page_skip {
-	border-right-color: #<?php echo esc_html( $progress_color ) ?>;
+.<?php echo esc_html( $style_class ) ?> .frm_progress_line li:last-of-type input.frm_page_skip {
+	border-right-color: #<?php echo esc_html( $progress_color . $important ) ?>;
 }
 
-.<?php echo esc_html( $style_class ) ?> .frm_forms .frm_progress_line .frm_current_page input[type="button"] {
-	border-left-color: #<?php echo esc_html( $progress_color ) ?>;
+.<?php echo esc_html( $style_class ) ?> .frm_progress_line .frm_current_page input[type="button"] {
+	border-left-color: #<?php echo esc_html( $progress_color . $important ) ?>;
 }
 
-.<?php echo esc_html( $style_class ) ?> .frm_forms .frm_progress_line.frm_show_lines .frm_current_page input[type="button"] {
-	border-right-color: #<?php echo esc_html( $progress_color ) ?>;
+.<?php echo esc_html( $style_class ) ?> .frm_progress_line.frm_show_lines .frm_current_page input[type="button"] {
+	border-right-color: #<?php echo esc_html( $progress_color . $important ) ?>;
 }
 
-.<?php echo esc_html( $style_class ) ?> .frm_forms .frm_progress_line input.frm_page_back {
-	border-color: #<?php echo esc_html( $progress_active_color ) ?>;
+.<?php echo esc_html( $style_class ) ?> .frm_progress_line input.frm_page_back {
+	border-color: #<?php echo esc_html( $progress_active_color . $important ) ?>;
 }
 
-.<?php echo esc_html( $style_class ) ?> .frm_forms .frm_progress_line.frm_show_lines input.frm_page_back{
-	border-left-color: #<?php echo esc_html( $progress_active_color ) ?>;
-	border-right-color: #<?php echo esc_html( $progress_color ) ?>;
+.<?php echo esc_html( $style_class ) ?> .frm_progress_line.frm_show_lines input.frm_page_back{
+	border-left-color: #<?php echo esc_html( $progress_active_color . $important ) ?>;
+	border-right-color: #<?php echo esc_html( $progress_color . $important ) ?>;
 }
 
 .<?php echo esc_html( $style_class ) ?> .frm_rootline.frm_show_lines:before {
     border-color: #dfdfdf;
 }
 
-.<?php echo esc_html( $style_class ) ?> .frm_forms .frm_rootline input:focus {
-	border-color: #<?php echo esc_html( $progress_active_color ) ?>;
+.<?php echo esc_html( $style_class ) ?> .frm_rootline input:focus {
+	border-color: #<?php echo esc_html( $progress_active_color . $important ) ?>;
 }
 
-.<?php echo esc_html( $style_class ) ?> .frm_forms .frm_rootline .frm_current_page input[type="button"] {
+.<?php echo esc_html( $style_class ) ?> .frm_rootline .frm_current_page input[type="button"] {
 	border-color: #006799;
-	background-color:#<?php echo esc_html( $progress_active_color ) ?>;
-	color: #<?php echo esc_html( $progress_color ) ?>;
+	background-color:#<?php echo esc_html( $progress_active_color . $important ) ?>;
+	color: #<?php echo esc_html( $progress_color . $important ) ?>;
+}
+
+.<?php echo esc_html( $style_class ) ?> .frm_progress_line input,
+.<?php echo esc_html( $style_class ) ?> .frm_progress_line input:disabled,
+.<?php echo esc_html( $style_class ) ?> .frm_progress_line .frm_current_page input[type="button"],
+.<?php echo esc_html( $style_class ) ?> .frm_rootline.frm_no_numbers input,
+.<?php echo esc_html( $style_class ) ?> .frm_rootline.frm_no_numbers .frm_current_page input[type="button"] {
+	color: transparent !important;
 }
 <?php } ?>
 

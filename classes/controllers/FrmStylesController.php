@@ -333,6 +333,7 @@ class FrmStylesController {
 
         $frm_style = new FrmStyle();
         $defaults = $frm_style->get_defaults();
+		$style = '';
 
         // remove the # from the colors
         foreach ( $_GET['frm_style_setting']['post_content'] as $k => $v ) {
