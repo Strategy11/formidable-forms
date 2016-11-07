@@ -902,6 +902,13 @@ if ( ! $submit_style ) { ?>
 .<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_four_col .frm_checkbox{
     float:right;
 }
+
+.<?php echo esc_html( $style_class ) ?> .frm_catlevel_2,
+.<?php echo esc_html( $style_class ) ?> .frm_catlevel_3,
+.<?php echo esc_html( $style_class ) ?> .frm_catlevel_4,
+.<?php echo esc_html( $style_class ) ?> .frm_catlevel_5{
+	margin-right:18px;
+}
 <?php } ?>
 /* Start Chosen */
 .<?php echo esc_html( $style_class ) ?> .chosen-container{
