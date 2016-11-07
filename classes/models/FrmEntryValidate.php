@@ -271,15 +271,15 @@ class FrmEntryValidate {
             return;
         }
 
+    	if ( self::blacklist_check( $values ) ) {
+            $errors['spam'] = __( 'Your entry appears to be blacklist spam!', 'formidable' );
+    	}
+
         if ( self::is_akismet_spam( $values ) ) {
 			if ( self::is_akismet_enabled_for_user( $values['form_id'] ) ) {
 				$errors['spam'] = __( 'Your entry appears to be spam!', 'formidable' );
 			}
 	    }
-
-    	if ( self::blacklist_check( $values ) ) {
-            $errors['spam'] = __( 'Your entry appears to be spam!', 'formidable' );
-    	}
     }
 
 	private static function is_akismet_spam( $values ) {
@@ -298,97 +298,114 @@ class FrmEntryValidate {
         }
 
     	$mod_keys = trim( get_option( 'blacklist_keys' ) );
-
     	if ( empty( $mod_keys ) ) {
     		return false;
     	}
 
-    	$content = FrmEntriesHelper::entry_array_to_string($values);
-
-		if ( empty($content) ) {
-		    return false;
+		$content = FrmEntriesHelper::entry_array_to_string( $values );
+		if ( empty( $content ) ) {
+			return false;
 		}
 
-		$content = strtolower( $content );
-		$content_without_html = wp_strip_all_tags( $content );
 		$ip = FrmAppHelper::get_ip_address();
 		$user_agent = FrmAppHelper::get_server_value( 'HTTP_USER_AGENT' );
+		$user_info = self::get_spam_check_user_info( $values );
 
-    	$words = explode( "\n", $mod_keys );
-
-    	foreach ( (array) $words as $word ) {
-    		$word = trim( $word );
-
-			if ( empty( $word ) ) {
-				continue;
-			}
-
-			// Do some escaping magic so that '#' chars in the
-			// spam words don't break things:
-			$word = preg_quote( $word, '#' );
-
-			$pattern = "#$word#i";
-
-			$in_content = preg_match( $pattern, $content ) || preg_match( $pattern, $content_without_html );
-			$blacklist_user = preg_match( $pattern, $ip ) || preg_match( $pattern, $user_agent );
-			if ( $in_content || $blacklist_user ) {
-    			return true;
-    		}
-    	}
-
-    	return false;
+		return wp_blacklist_check( $user_info['comment_author'], $user_info['comment_author_email'], $user_info['comment_author_url'], $content, $ip, $user_agent );
     }
 
-    /**
-     * Check entries for spam
-     *
-     * @return boolean true if is spam
-     */
-    public static function akismet( $values ) {
-	    $content = FrmEntriesHelper::entry_array_to_string( $values );
-
+	/**
+	 * Check entries for Akismet spam
+	 *
+	 * @return boolean true if is spam
+	 */
+	public static function akismet( $values ) {
+		$content = FrmEntriesHelper::entry_array_to_string( $values );
 		if ( empty( $content ) ) {
-		    return false;
+			return false;
 		}
 
-        $datas = array();
-        self::parse_akismet_array( $datas, $content );
+		$datas = array( 'comment_type' => 'formidable', 'comment_content' => $content );
+		self::parse_akismet_array( $datas, $values );
 
-		$query_string = '';
-		foreach ( $datas as $key => $data ) {
-			$query_string .= $key . '=' . urlencode( stripslashes( $data ) ) . '&';
-			unset( $key, $data );
-		}
-
-        $response = Akismet::http_post($query_string, 'comment-check');
+		$query_string = _http_build_query( $datas, '', '&' );
+		$response = Akismet::http_post( $query_string, 'comment-check' );
 
 		return ( is_array( $response ) && $response[1] == 'true' );
-    }
+	}
 
-    /**
-     * @since 2.0
-     * @param string $content
-     */
-    private  static function parse_akismet_array( &$datas, $content ) {
-        $datas['blog'] = FrmAppHelper::site_url();
-        $datas['user_ip'] = preg_replace( '/[^0-9., ]/', '', FrmAppHelper::get_ip_address() );
+	/**
+	 * @since 2.0
+	 * @param string $content
+	 */
+	private  static function parse_akismet_array( &$datas, $values ) {
+		self::add_site_info_to_akismet( $datas );
+		self::add_user_info_to_akismet( $datas, $values );
+		self::add_server_values_to_akismet( $datas );
+	}
+
+	private static function add_site_info_to_akismet( &$datas ) {
+		$datas['blog'] = FrmAppHelper::site_url();
+		$datas['user_ip'] = preg_replace( '/[^0-9., ]/', '', FrmAppHelper::get_ip_address() );
 		$datas['user_agent'] = FrmAppHelper::get_server_value( 'HTTP_USER_AGENT' );
 		$datas['referrer'] = isset( $_SERVER['HTTP_REFERER'] ) ? FrmAppHelper::get_server_value( 'HTTP_REFERER' ) : false;
-        $datas['comment_type'] = 'formidable';
-        $datas['comment_content'] = $content;
+		$datas['blog_lang'] = get_locale();
+		$datas['blog_charset'] = get_option('blog_charset');
 
-        if ( $permalink = get_permalink() ) {
-            $datas['permalink'] = $permalink;
-        }
+		if ( akismet_test_mode() ) {
+			$datas['is_test'] = 'true';
+		}
+	}
 
-        foreach ( $_SERVER as $key => $value ) {
-			if ( ! in_array( $key, array( 'HTTP_COOKIE', 'HTTP_COOKIE2', 'PHP_AUTH_PW' ) ) && is_string( $value ) ) {
-				$datas[ $key ] = wp_strip_all_tags( $value );
-            } else {
-				$datas[ $key ] = '';
-            }
+	private static function add_user_info_to_akismet( &$datas, $values ) {
+		$user_info = self::get_spam_check_user_info( $values );
+		$datas = $datas + $user_info;
 
-            unset($key, $value);
-        }
-    }
+		if ( isset( $user_info['user_ID'] ) ) {
+			$datas['user_role'] = Akismet::get_user_roles( $user_info['user_ID'] );
+		}
+	}
+
+	private static function get_spam_check_user_info( $values ) {
+		$datas = array();
+
+		if ( is_user_logged_in() ) {
+			$user = wp_get_current_user();
+			$datas['user_ID'] = $datas['user_id'] = $user->ID;
+			$datas['comment_author'] = $user->display_name;
+			$datas['comment_author_email'] = $user->user_email;
+			$datas['comment_author_url'] = $user->user_url;
+		} else {
+			$datas['comment_author'] = '';
+			$datas['comment_author_email'] = '';
+			$datas['comment_author_url'] = '';
+
+			$values = array_filter( $values );
+			foreach ( $values as $value ) {
+				if ( ! is_array( $value ) ) {
+					if ( $datas['comment_author_email'] == '' && strpos( $value, '@' ) && is_email( $value ) ) {
+						$datas['comment_author_email'] = $value;
+					} elseif ( $datas['comment_author_url'] == '' && strpos( $value, 'http' ) === 0 ) {
+						$datas['comment_author_url'] = $value;
+					} elseif ( $datas['comment_author'] == '' && ! is_numeric( $value ) && strlen( $value ) < 200 ) {
+						$datas['comment_author'] = $value;
+					}
+				}
+			}
+		}
+
+		return $datas;
+	}
+
+	private static function add_server_values_to_akismet( &$datas ) {
+		foreach ( $_SERVER as $key => $value ) {
+			$include_value = is_string( $value ) && ! preg_match( "/^HTTP_COOKIE/", $key ) && preg_match( "/^(HTTP_|REMOTE_ADDR|REQUEST_URI|DOCUMENT_URI)/", $key );
+
+			// Send any potentially useful $_SERVER vars, but avoid sending junk we don't need.
+			if ( $include_value ) {
+				$datas[ $key ] = $value;
+			}
+			unset( $key, $value );
+		}
+	}
 }
