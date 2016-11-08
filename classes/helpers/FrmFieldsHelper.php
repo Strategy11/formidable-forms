@@ -342,12 +342,22 @@ DEFAULT_HTML;
 
 		self::remove_collapse_shortcode( $html );
 
-		if ( apply_filters( 'frm_do_html_shortcodes', true ) ) {
-			$html = do_shortcode( $html );
-		}
+		self::process_wp_shortcodes( $form, $html );
 
         return $html;
     }
+
+	/**
+	 * We're switching the default from true to false
+	 * since this filters shortcodes submitted in the entry
+	 * @since 2.02.11
+	 */
+	private static function process_wp_shortcodes( $form, &$html ) {
+		$default_shortcode_process = ( $form['created_at'] < '2016-11-20' );
+		if ( apply_filters( 'frm_do_html_shortcodes', $default_shortcode_process ) ) {
+			$html = do_shortcode( $html );
+		}
+	}
 
 	/**
 	 * Add classes to a field div

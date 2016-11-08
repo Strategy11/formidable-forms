@@ -152,6 +152,7 @@ function frmFrontFormJS(){
 			maxFilesize: uploadFields[i].maxFilesize,
 			maxFiles: max,
 			uploadMultiple: uploadFields[i].uploadMultiple,
+			hiddenInputContainer:'#'+ form.attr('id'),
 			dictDefaultMessage: uploadFields[i].defaultMessage,
 			dictFallbackMessage: uploadFields[i].fallbackMessage,
 			dictFallbackText: uploadFields[i].fallbackText,
