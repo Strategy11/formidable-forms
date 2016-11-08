@@ -124,7 +124,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 			unset($class);
 			$attributes .= ' data-colname="' . $column_display_name . '"';
 
-			$col_name = preg_replace( '/^(' . $this->params['form'] . '_)/', '', $column_name );
+			$form_id = $this->params['form'] ? $this->params['form'] : 0;
+			$col_name = preg_replace( '/^(' . $form_id . '_)/', '', $column_name );
 			$this->column_name = $col_name;
 
 			switch ( $col_name ) {
