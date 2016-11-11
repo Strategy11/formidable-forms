@@ -284,6 +284,18 @@ DEFAULT_HTML;
         $entry_key = FrmAppHelper::simple_get( 'entry', 'sanitize_title' );
         $html = str_replace('[entry_key]', $entry_key, $html);
 
+		if ( $form ) {
+			$form = (array) $form;
+
+			//replace [form_key]
+			$html = str_replace('[form_key]', $form['form_key'], $html);
+
+			//replace [form_name]
+			$html = str_replace('[form_name]', $form['name'], $html);
+		}
+
+		self::process_wp_shortcodes( $form, $html );
+
         //replace [input]
         preg_match_all("/\[(input|deletelink)\b(.*?)(?:(\/))?\]/s", $html, $shortcodes, PREG_PATTERN_ORDER);
         global $frm_vars;
@@ -317,15 +329,6 @@ DEFAULT_HTML;
             $html = str_replace( $shortcodes[0][ $short_key ], $replace_with, $html );
         }
 
-		if ( $form ) {
-            $form = (array) $form;
-
-            //replace [form_key]
-            $html = str_replace('[form_key]', $form['form_key'], $html);
-
-            //replace [form_name]
-            $html = str_replace('[form_name]', $form['name'], $html);
-        }
         $html .= "\n";
 
         //Return html if conf_field to prevent loop
@@ -342,19 +345,16 @@ DEFAULT_HTML;
 
 		self::remove_collapse_shortcode( $html );
 
-		self::process_wp_shortcodes( $form, $html );
-
         return $html;
     }
 
 	/**
-	 * We're switching the default from true to false
-	 * since this filters shortcodes submitted in the entry
+	 * This filters shortcodes in the field HTML
+	 *
 	 * @since 2.02.11
 	 */
 	private static function process_wp_shortcodes( $form, &$html ) {
-		$default_shortcode_process = ( $form['created_at'] < '2016-11-20' );
-		if ( apply_filters( 'frm_do_html_shortcodes', $default_shortcode_process ) ) {
+		if ( apply_filters( 'frm_do_html_shortcodes', true ) ) {
 			$html = do_shortcode( $html );
 		}
 	}
