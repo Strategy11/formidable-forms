@@ -294,7 +294,7 @@ DEFAULT_HTML;
 			$html = str_replace('[form_name]', $form['name'], $html);
 		}
 
-		self::process_wp_shortcodes( $form, $html );
+		self::process_wp_shortcodes( $html );
 
         //replace [input]
         preg_match_all("/\[(input|deletelink)\b(.*?)(?:(\/))?\]/s", $html, $shortcodes, PREG_PATTERN_ORDER);
@@ -353,7 +353,7 @@ DEFAULT_HTML;
 	 *
 	 * @since 2.02.11
 	 */
-	private static function process_wp_shortcodes( $form, &$html ) {
+	private static function process_wp_shortcodes( &$html ) {
 		if ( apply_filters( 'frm_do_html_shortcodes', true ) ) {
 			$html = do_shortcode( $html );
 		}
