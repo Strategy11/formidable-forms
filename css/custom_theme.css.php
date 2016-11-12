@@ -14,7 +14,8 @@ if ( ! isset($frm_style) ) {
 
 $styles = $frm_style->get_all();
 $default_style = $frm_style->get_default_style($styles);
-$defaults = $default_style->post_content;
+$defaults = FrmStylesHelper::get_settings_for_output( $default_style );
+
 ?>
 
 .frm_hidden,

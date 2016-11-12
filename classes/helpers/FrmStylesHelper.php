@@ -207,6 +207,35 @@ class FrmStylesHelper {
     }
 
 	/**
+	 * @param $hex string - The original color in hex format #ffffff
+	 * @param $steps integer - should be between -255 and 255. Negative = darker, positive = lighter
+	 * @since 2.3
+	 */
+	public static function adjust_brightness( $hex, $steps ) {
+		$steps = max( -255, min( 255, $steps ) );
+
+		// Normalize into a six character long hex string
+		$hex = str_replace( '#', '', $hex );
+		if ( strlen( $hex ) == 3 ) {
+			$hex = str_repeat( substr( $hex, 0, 1 ), 2 );
+			$hex .= str_repeat( substr( $hex, 1, 1 ), 2 );
+			$hex .= str_repeat( substr( $hex, 2, 1 ), 2 );
+		}
+
+		// Split into three parts: R, G and B
+		$color_parts = str_split( $hex, 2 );
+		$return = '#';
+
+		foreach ( $color_parts as $color ) {
+			$color   = hexdec( $color ); // Convert to decimal
+			$color   = max( 0,min( 255,$color + $steps ) ); // Adjust color
+			$return .= str_pad( dechex( $color ), 2, '0', STR_PAD_LEFT ); // Make two char hex code
+		}
+
+		return $return;
+	}
+
+	/**
 	 * @since 2.3
 	 */
 	public static function get_settings_for_output( $style ) {
@@ -265,13 +294,15 @@ class FrmStylesHelper {
 				'fieldset_color', 'fieldset_bg_color', 'bg_color',
 				'bg_color_disabled', 'bg_color_active', 'bg_color_error',
 				'section_bg_color', 'error_bg', 'success_bg_color',
+				'progress_bg_color', 'progress_active_bg_color',
 			),
 			'' => array(
 				'title_color', 'section_color', 'submit_text_color',
 				'label_color', 'check_label_color', 'form_desc_color',
 				'description_color', 'text_color', 'text_color_disabled',
 				'border_color', 'submit_bg_color', 'submit_border_color',
-				'error_text',
+				'error_text', 'progress_border_color', 'progress_color',
+				'progress_active_color',
 				'submit_hover_bg_color', 'submit_hover_border_color', 'submit_hover_color',
 				'submit_active_color', 'submit_active_border_color', 'submit_active_bg_color',
 			),

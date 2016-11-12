@@ -400,6 +400,7 @@ class FrmStylesController {
 
         $frm_style = new FrmStyle();
         $defaults = $frm_style->get_defaults();
+		$style = '';
 
 		include( FrmAppHelper::plugin_path() . '/css/_single_theme.css.php' );
         wp_die();

@@ -418,8 +418,12 @@ class FrmStyle {
             'important_style'   => false,
 
 			'progress_bg_color'     => 'dddddd',
-			'progress_active_color' => '008ec2',
+			'progress_active_color' => 'ffffff',
+			'progress_active_bg_color' => '008ec2',
 			'progress_color'        => 'ffffff',
+			'progress_border_color' => 'dfdfdf',
+			'progress_border_size'  => '2px',
+			'progress_size'         => '30px',
 
             'custom_css'        => '',
         );

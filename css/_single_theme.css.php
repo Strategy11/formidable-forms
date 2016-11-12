@@ -906,81 +906,92 @@ if ( ! $submit_style ) { ?>
 /* Progress Bars */
 .<?php echo esc_html( $style_class ) ?> .frm_page_bar input,
 .<?php echo esc_html( $style_class ) ?> .frm_page_bar input:disabled{
-	color: #<?php echo esc_html( $progress_color . $important ) ?>;
-	background-color: #<?php echo esc_html( $progress_bg_color . $important ) ?>;
-	border-color: #<?php echo esc_html( $progress_bg_color . $important ) ?>;
+	color: <?php echo esc_html( $progress_color . $important ) ?>;
+	background-color: <?php echo esc_html( $progress_bg_color . $important ) ?>;
+	border-color: <?php echo esc_html( $progress_border_color . $important ) ?>;
+	border-width: <?php echo esc_html( $progress_border_size . $important ) ?>;
 }
 
 .<?php echo esc_html( $style_class ) ?> .frm_progress_line input.frm_page_back{
-	background-color: #<?php echo esc_html( $progress_active_color . $important ) ?>;
+	background-color: <?php echo esc_html( $progress_active_bg_color . $important ) ?>;
 }
 
 .<?php echo esc_html( $style_class ) ?> .frm_page_bar .frm_current_page input[type="button"]{
-	background-color: #<?php echo esc_html( $progress_bg_color . $important ) ?>;
-	border-color: #<?php echo esc_html( $progress_bg_color . $important ) ?>;
+	background-color: <?php echo esc_html( $progress_bg_color . $important ) ?>;
+	border-color: <?php echo esc_html( $progress_border_color . $important ) ?>;
 }
 
 .<?php echo esc_html( $style_class ) ?> .frm_current_page .frm_rootline_title{
-	color:#<?php echo esc_html( $progress_active_color . $important ) ?>;
+	color: <?php echo esc_html( $progress_active_bg_color . $important ) ?>;
 }
 
 .<?php echo esc_html( $style_class ) ?> .frm_rootline_title,
 .<?php echo esc_html( $style_class ) ?> .frm_pages_complete
 .<?php echo esc_html( $style_class ) ?> .frm_percent_complete{
-	color:#666;
+	color: <?php echo esc_html( $description_color . $important ) ?>;
 }
 
 .<?php echo esc_html( $style_class ) ?> .frm_progress_line input,
 .<?php echo esc_html( $style_class ) ?> .frm_progress_line input:disabled {
-	border-color: #<?php echo esc_html( $progress_bg_color . $important ) ?>;
+	border-color: <?php echo esc_html( $progress_border_color . $important ) ?>;
 }
 
 .<?php echo esc_html( $style_class ) ?> .frm_progress_line.frm_show_lines input {
-	border-left-color: #<?php echo esc_html( $progress_color . $important ) ?>;
-	border-right-color: #<?php echo esc_html( $progress_color . $important ) ?>;
+	border-left-color: <?php echo esc_html( $progress_color . $important ) ?>;
+	border-right-color: <?php echo esc_html( $progress_color . $important ) ?>;
+	border-left-width: 1px <?php echo esc_html( $important ) ?>;
+	border-right-width: 1px <?php echo esc_html( $important ) ?>;
 }
 
 .<?php echo esc_html( $style_class ) ?> .frm_progress_line li:first-of-type input {
-	border-left-color: #<?php echo esc_html( $progress_active_color . $important ) ?>;
+	border-left-color: <?php echo esc_html( $progress_active_bg_color . $important ) ?>;
 }
 
 .<?php echo esc_html( $style_class ) ?> .frm_progress_line li:last-of-type input {
-	border-right-color: #<?php echo esc_html( $progress_active_color . $important ) ?>;
+	border-right-color: <?php echo esc_html( $progress_active_bg_color . $important ) ?>;
 }
 
 .<?php echo esc_html( $style_class ) ?> .frm_progress_line li:last-of-type input.frm_page_skip {
-	border-right-color: #<?php echo esc_html( $progress_color . $important ) ?>;
+	border-right-color: <?php echo esc_html( $progress_border_color . $important ) ?>;
 }
 
 .<?php echo esc_html( $style_class ) ?> .frm_progress_line .frm_current_page input[type="button"] {
-	border-left-color: #<?php echo esc_html( $progress_color . $important ) ?>;
+	border-left-color: <?php echo esc_html( $progress_border_color . $important ) ?>;
 }
 
 .<?php echo esc_html( $style_class ) ?> .frm_progress_line.frm_show_lines .frm_current_page input[type="button"] {
-	border-right-color: #<?php echo esc_html( $progress_color . $important ) ?>;
+	border-right-color: <?php echo esc_html( $progress_color . $important ) ?>;
 }
 
 .<?php echo esc_html( $style_class ) ?> .frm_progress_line input.frm_page_back {
-	border-color: #<?php echo esc_html( $progress_active_color . $important ) ?>;
+	border-color: <?php echo esc_html( $progress_active_bg_color . $important ) ?>;
 }
 
 .<?php echo esc_html( $style_class ) ?> .frm_progress_line.frm_show_lines input.frm_page_back{
-	border-left-color: #<?php echo esc_html( $progress_active_color . $important ) ?>;
-	border-right-color: #<?php echo esc_html( $progress_color . $important ) ?>;
+	border-left-color: <?php echo esc_html( $progress_active_bg_color . $important ) ?>;
+	border-right-color: <?php echo esc_html( $progress_color . $important ) ?>;
 }
 
 .<?php echo esc_html( $style_class ) ?> .frm_rootline.frm_show_lines:before {
-    border-color: #dfdfdf;
+    border-color: <?php echo esc_html( $progress_border_color . $important ) ?>;
+	border-top-width: <?php echo esc_html( $progress_border_size . $important ) ?>;
+    top: <?php echo esc_html( absint( $progress_size ) / 2 ) ?>px;
+}
+
+.<?php echo esc_html( $style_class ) ?> .frm_rootline input {
+	width: <?php echo esc_html( $progress_size . $important ) ?>;
+	height: <?php echo esc_html( $progress_size . $important ) ?>;
+	border-radius: <?php echo esc_html( $progress_size . $important ) ?>;
 }
 
 .<?php echo esc_html( $style_class ) ?> .frm_rootline input:focus {
-	border-color: #<?php echo esc_html( $progress_active_color . $important ) ?>;
+	border-color: <?php echo esc_html( $progress_active_bg_color . $important ) ?>;
 }
 
 .<?php echo esc_html( $style_class ) ?> .frm_rootline .frm_current_page input[type="button"] {
-	border-color: #006799;
-	background-color:#<?php echo esc_html( $progress_active_color . $important ) ?>;
-	color: #<?php echo esc_html( $progress_color . $important ) ?>;
+	border-color: <?php echo esc_html( FrmStylesHelper::adjust_brightness( $progress_active_bg_color, -20 ) . $important ); ?>;
+	background-color: <?php echo esc_html( $progress_active_bg_color . $important ) ?>;
+	color: <?php echo esc_html( $progress_active_color . $important ) ?>;
 }
 
 .<?php echo esc_html( $style_class ) ?> .frm_progress_line input,
