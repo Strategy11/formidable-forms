@@ -2609,10 +2609,20 @@ function frmFrontFormJS(){
 			return vals;
 		}
 
+		var count = 0;
+		var sep = '';
+
 		calcField.each(function(){
 			var thisVal = getOptionValue( field.thisField, this );
 			thisVal = thisVal.trim();
-			vals[field.valKey] += thisVal;
+
+			if ( count > 0 ) {
+				sep = ',';
+			}
+
+			vals[field.valKey] += sep + thisVal;
+
+			count++;
 		});
 
 		return vals;
