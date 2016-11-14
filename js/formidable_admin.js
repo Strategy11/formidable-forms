@@ -2836,10 +2836,10 @@ function frmImportCsv(formID){
 		type:"POST",url:ajaxurl,
 		data:'action=frm_import_csv&nonce='+frmGlobal.nonce+'&frm_skip_cookie=1'+urlVars,
     success:function(count){
-		var max = jQuery('.frm_progress_bar').attr('aria-valuemax');
+		var max = jQuery('.frm_admin_progress_bar').attr('aria-valuemax');
 		var imported = max - count;
 		var percent = (imported / max) * 100;
-		jQuery('.frm_progress_bar').css('width', percent +'%').attr('aria-valuenow', imported);
+		jQuery('.frm_admin_progress_bar').css('width', percent +'%').attr('aria-valuenow', imported);
 		
         if(parseInt(count) > 0){
 			jQuery('.frm_csv_remaining').html(count);
