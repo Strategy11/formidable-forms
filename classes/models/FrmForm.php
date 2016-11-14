@@ -280,7 +280,7 @@ class FrmForm {
 			'description' => '', 'options' => '',
 		);
 		foreach ( $field_cols as $col => $default ) {
-			$default = ( $default == '' ) ? $field->{$col} : $default;
+			$default = ( $default === '' ) ? $field->{$col} : $default;
 			$new_field[ $col ] = isset( $values['field_options'][ $col . '_' . $field->id ] ) ? $values['field_options'][ $col . '_' . $field->id ] : $default;
 		}
 	}
