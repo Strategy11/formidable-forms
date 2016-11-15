@@ -163,7 +163,7 @@ class FrmAppController {
 	 */
 	public static function needs_update() {
 		$db_version = (int) get_option( 'frm_db_version' );
-		$needs_upgrade = ( (int) $old_db_version < (int) FrmAppHelper::$db_version );
+		$needs_upgrade = ( (int) $db_version < (int) FrmAppHelper::$db_version );
 		if ( ! $needs_upgrade ) {
 			$needs_upgrade = apply_filters( 'frm_db_needs_upgrade', $needs_upgrade );
 		}
