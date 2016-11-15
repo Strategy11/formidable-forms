@@ -203,7 +203,6 @@ class FrmHooksController {
     }
 
 	public static function load_multisite_hooks() {
-		add_action( 'init', 'FrmAppController::front_head' );
 		add_action( 'wpmu_upgrade_site', 'FrmAppController::network_upgrade_site' );
 
         // drop tables when mu site is deleted

@@ -163,8 +163,11 @@ class FrmAppController {
 	 */
 	public static function needs_update() {
 		$db_version = (int) get_option( 'frm_db_version' );
-		$pro_db_version = FrmAppHelper::pro_is_installed() ? get_option( 'frmpro_db_version' ) : false;
-		return ( ( $db_version < FrmAppHelper::$db_version ) || ( FrmAppHelper::pro_is_installed() && (int) $pro_db_version < FrmAppHelper::$pro_db_version ) );
+		$needs_upgrade = ( (int) $old_db_version < (int) FrmAppHelper::$db_version );
+		if ( ! $needs_upgrade ) {
+			$needs_upgrade = apply_filters( 'frm_db_needs_upgrade', $needs_upgrade );
+		}
+		return $needs_upgrade;
 	}
 
 	/**
@@ -293,16 +296,15 @@ class FrmAppController {
     	return preg_replace_callback( $regex, 'FrmAppHelper::widget_text_filter_callback', $content );
     }
 
-    public static function front_head() {
-        if ( is_multisite() ) {
-            $old_db_version = get_option( 'frm_db_version' );
-            $pro_db_version = FrmAppHelper::pro_is_installed() ? get_option( 'frmpro_db_version' ) : false;
-            if ( ( (int) $old_db_version < (int) FrmAppHelper::$db_version ) ||
-                ( FrmAppHelper::pro_is_installed() && (int) $pro_db_version < (int) FrmAppHelper::$pro_db_version ) ) {
-                self::install( $old_db_version );
-            }
-        }
-    }
+	/**
+	 * Deprecated in favor of wpmu_upgrade_site
+	 */
+	public static function front_head() {
+		_deprecated_function( __FUNCTION__, '2.3' );
+		if ( is_multisite() && self::needs_update() ) {
+			self::install();
+		}
+	}
 
 	public static function localize_script( $location ) {
 		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmAppHelper::localize_script' );
