@@ -384,11 +384,11 @@ class FrmFieldsController {
             $type = $type_switch[ $type ];
         }
 
-		$frm_field_selection = FrmField::field_selection();
-        $types = array_keys($frm_field_selection);
-        if ( ! in_array($type, $types) && $type != 'captcha' ) {
-            $type = 'text';
-        }
+		$pro_fields = FrmField::pro_field_selection();
+		$types = array_keys( $pro_fields );
+		if ( in_array( $type, $types ) ) {
+			$type = 'text';
+		}
 
         return $type;
     }

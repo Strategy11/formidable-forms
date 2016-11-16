@@ -187,7 +187,7 @@ class FrmCSVExportHelper {
 					'type' => $col->type, 'post_id' => self::$entry->post_id, 'show_icon' => false,
 					'entry_id' => self::$entry->id, 'sep' => self::$separator,
 					'embedded_field_id' => ( isset( self::$entry->embedded_fields ) && isset( self::$entry->embedded_fields[ self::$entry->id ] ) ) ? 'form' . self::$entry->embedded_fields[ self::$entry->id ] : 0,
-					) );
+				) );
 				$row[ $col->id . '_label' ] = $sep_value;
 				unset( $sep_value );
 			}
