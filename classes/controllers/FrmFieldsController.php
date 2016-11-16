@@ -492,10 +492,10 @@ class FrmFieldsController {
         }
 
 		$pro_fields = FrmField::pro_field_selection();
-        $types = array_keys( $pro_fields );
-        if ( in_array( $type, $types ) ) {
-            $type = 'text';
-        }
+		$types = array_keys( $pro_fields );
+		if ( in_array( $type, $types ) ) {
+			$type = 'text';
+		}
 
         return $type;
     }

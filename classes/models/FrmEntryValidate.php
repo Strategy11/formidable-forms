@@ -336,7 +336,6 @@ class FrmEntryValidate {
 
 	/**
 	 * @since 2.0
-	 * @param string $content
 	 */
 	private  static function parse_akismet_array( &$datas, $values ) {
 		self::add_site_info_to_akismet( $datas );
