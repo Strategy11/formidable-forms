@@ -142,8 +142,6 @@ function frmFrontFormJS(){
 		}
 
 		var form = field.closest('form');
-		var submitButton = form.find('input[type="submit"], .frm_submit input[type="button"]');
-		var loading = form.find('.frm_ajax_loading');
 
 		field.dropzone({
 			url:frm_js.ajax_url,
@@ -206,13 +204,11 @@ function frmFrontFormJS(){
 				});
 
 				this.on('addedfile', function(){
-					loading.addClass('frm_loading_now');
-					submitButton.attr('disabled', 'disabled');
+					showSubmitLoading( form );
 				});
 
 				this.on('queuecomplete', function(){
-					loading.removeClass('frm_loading_now');
-					submitButton.removeAttr('disabled');
+					removeSubmitLoading( form, 'enable' );
 				});
 
 				this.on('removedfile', function( file ) {
@@ -3104,7 +3100,7 @@ function frmFrontFormJS(){
 				} else if ( response.content !== '' ) {
 					// the form or success message was returned
 
-					jQuery(object).find('.frm_ajax_loading').removeClass('frm_loading_now');
+					removeSubmitLoading( object );
 					var formID = jQuery(object).find('input[name="form_id"]').val();
 					jQuery(object).find('.frm_form_field').fadeOut('slow', function(){
 						response.content = response.content.replace(/ class="frm_form_field /g, 'class="frm_hidden frm_form_field ');
@@ -3135,8 +3131,7 @@ function frmFrontFormJS(){
 				} else if ( Object.keys(response.errors).length ) {
 					// errors were returned
 
-					jQuery(object).find('input[type="submit"], input[type="button"]').removeAttr('disabled');
-					jQuery(object).find('.frm_ajax_loading').removeClass('frm_loading_now');
+					removeSubmitLoading( object, 'enable' );
 
 					//show errors
 					var cont_submit = true;
@@ -3266,6 +3261,31 @@ function frmFrontFormJS(){
 		var field = jQuery(object).find('.frm_blank_field:first');
 		if ( field.length ) {
 			frmFrontForm.scrollMsg( field, object, true );
+		}
+	}
+
+	function showSubmitLoading( object ) {
+		var submit = jQuery(object).find('button.frm_button_submit');
+		if ( submit.length && !submit.hasClass('frm_loading_button') ) {
+			submit.addClass('frm_loading_button');
+			submit.attr('disabled', 'disabled');
+		}
+
+		// Disable submit button
+		jQuery(object).find('input[type="submit"], input[type="button"]').attr('disabled','disabled');
+	}
+
+	function removeSubmitLoading( object, enable ) {
+		var submit = jQuery(object).find('button.frm_loading_button');
+		if ( submit.length ) {
+			submit.removeClass('frm_loading_button');
+			if ( enable == 'enable' ) {
+				submit.removeAttr('disabled');
+			}
+		}
+
+		if ( enable == 'enable' ) {
+			jQuery(object).find('input[type="submit"], input[type="button"]').removeAttr('disabled');
 		}
 	}
 
@@ -3752,7 +3772,13 @@ function frmFrontFormJS(){
 	function checkConditionalLogic( event ) {
 		if (typeof __frmHideOrShowFields !== 'undefined') {
 			frmFrontForm.hideOrShowFields( __frmHideOrShowFields, event );
+		} else {
+			showForm();
 		}
+	}
+
+	function showForm() {
+		jQuery('.frm_pro_form').fadeIn('slow');
 	}
 
 	function checkDynamicFields() {
@@ -3922,6 +3948,7 @@ function frmFrontFormJS(){
 
 	return{
 		init: function(){
+			jQuery(document).on('click', '.frm_button_submit', function(){ jQuery(this).closest('form').submit(); });
 			jQuery(document).off('submit.formidable','.frm-show-form');
 			jQuery(document).on('submit.formidable','.frm-show-form', frmFrontForm.submitForm);
 
@@ -3955,7 +3982,7 @@ function frmFrontFormJS(){
 
 			jQuery(document).on('change', '.frm-show-form input[name^="item_meta"], .frm-show-form select[name^="item_meta"], .frm-show-form textarea[name^="item_meta"]', maybeCheckDependent);
 
-			jQuery(document).on('click', '.frm-show-form input[type="submit"], .frm-show-form input[name="frm_prev_page"], .frm_page_back, .frm_page_skip, .frm-show-form .frm_save_draft', setNextPage);
+			jQuery(document).on('click', '.frm-show-form input[type="submit"], .frm-show-form input[name="frm_prev_page"], .frm_page_back, .frm_page_skip, .frm-show-form .frm_save_draft, .frm_prev_page', setNextPage);
             
             jQuery(document).on('change', '.frm_other_container input[type="checkbox"], .frm_other_container input[type="radio"], .frm_other_container select', showOtherText);
 
@@ -4013,10 +4040,7 @@ function frmFrontFormJS(){
 			var errors = frmFrontForm.validateFormSubmit( object );
 
 			if ( Object.keys(errors).length === 0 ) {
-				jQuery(object).find('.frm_ajax_loading').addClass('frm_loading_now');
-
-				// Disable submit button
-				jQuery(object).find('input[type="submit"], input[type="button"]').attr('disabled','disabled');
+				showSubmitLoading( object );
 
 				if ( classList.indexOf('frm_ajax_submit') > -1 ) {
 					var hasFileFields = jQuery(object).find('input[type="file"]').length;
@@ -4148,6 +4172,9 @@ function frmFrontFormJS(){
 			var repeatArgs = { repeatingSection: '', repeatRow: '' };
 			for ( var i = 0, l = len; i < l; i++ ) {
 				hideOrShowFieldById( ids[i], repeatArgs );
+				if ( i == ( l - 1 ) ) {
+					showForm();
+				}
 			}
 		},
 

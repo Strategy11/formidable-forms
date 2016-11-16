@@ -66,13 +66,6 @@ if ( isset($frm_vars['collapse_div']) && $frm_vars['collapse_div'] ) {
 
 echo FrmFormsHelper::replace_shortcodes($values['after_html'], $form);
 
-
-if ( has_action('frm_entries_footer_scripts') ) { ?>
-<script type="text/javascript">
-<?php do_action('frm_entries_footer_scripts', $values['fields'], $form); ?>
-</script><?php
-}
-
 if ( FrmForm::show_submit( $form ) ) {
     unset($values['fields']);
     FrmFormsHelper::get_custom_submit($values['submit_html'], $form, $submit, $form_action, $values);
@@ -80,3 +73,8 @@ if ( FrmForm::show_submit( $form ) ) {
 ?>
 </fieldset>
 </div>
+<script type="text/javascript">document.getElementsByTagName('body')[0].className+=' js';<?php
+if ( has_action('frm_entries_footer_scripts') ) {
+	do_action( 'frm_entries_footer_scripts', $values['fields'], $form );
+}
+?></script>

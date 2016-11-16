@@ -186,18 +186,72 @@ legend.frm_hidden{
 }
 
 .with_frm_style.frm_center_submit .frm_submit input[type=submit],
-.with_frm_style.frm_center_submit .frm_submit input[type=button]{
+.with_frm_style.frm_center_submit .frm_submit input[type=button],
+.with_frm_style.frm_center_submit .frm_submit button{
     margin-bottom:8px !important;
 }
 
 .with_frm_style .frm_submit input[type=submit],
-.with_frm_style .frm_submit input[type=button]{
+.with_frm_style .frm_submit input[type=button],
+.with_frm_style .frm_submit button{
 	-webkit-appearance: none;
+	cursor: pointer;
 }
 
 .with_frm_style.frm_center_submit .frm_submit .frm_ajax_loading{
     display: block;
     margin: 0 auto;
+}
+
+.with_frm_style .frm_loading_button {
+    position: relative;
+    opacity: .8;
+    color: transparent !important;
+    text-shadow: none !important;
+}
+
+.with_frm_style .frm_loading_button:hover,
+.with_frm_style .frm_loading_button:active,
+.with_frm_style .frm_loading_button:focus {
+    cursor: default;
+    color: transparent;
+    outline: none !important;
+    box-shadow: none;
+}
+
+.with_frm_style .frm_loading_button:before {
+    content: '';
+    display: inline-block;
+
+    position: absolute;
+    background: transparent;
+    border: 1px solid #fff;
+    border-top-color: transparent;
+    border-left-color: transparent;
+    border-radius: 50%;
+
+    box-sizing: border-box;
+    <?php $loader_size = 20; ?>
+    top: 50%;
+    left: 50%;
+    margin-top: -<?php echo absint( $loader_size / 2 ) ?>px;
+    margin-left: -<?php echo absint( $loader_size / 2 ) ?>px;
+    width: <?php echo absint( $loader_size ) ?>px;
+    height: <?php echo absint( $loader_size ) ?>px;
+
+    -webkit-animation: spin 2s linear infinite;
+    -moz-animation:    spin 2s linear infinite;
+    -o-animation:      spin 2s linear infinite;
+    animation:         spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.js .frm_pro_form {
+    display:none;
 }
 
 <?php
@@ -210,10 +264,6 @@ foreach ( $styles as $style ) {
 .frm_ajax_loading{
     visibility:hidden;
 	width:auto;
-}
-
-.frm_ajax_loading.frm_loading_now{
-    visibility:visible !important;
 }
 
 .frm_form_submit_style{

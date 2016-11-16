@@ -487,6 +487,7 @@ if ( ! $submit_style ) { ?>
 .<?php echo esc_html( $style_class ) ?> .frm_compact .frm_dropzone.dz-clickable .dz-message,
 .<?php echo esc_html( $style_class ) ?> input[type=submit],
 .<?php echo esc_html( $style_class ) ?> .frm_submit input[type=button],
+.<?php echo esc_html( $style_class ) ?> button,
 .frm_form_submit_style,
 .<?php echo esc_html( $style_class ) ?>.frm_login_form input[type=submit]{
     width:<?php echo esc_html( ( $submit_width == '' ? 'auto' : $submit_width ) . $important ) ?>;
@@ -531,6 +532,7 @@ if ( ! $submit_style ) { ?>
 	if ( empty( $submit_bg_img ) ) {
 ?>.<?php echo esc_html( $style_class ) ?> input[type=submit]:hover,
 .<?php echo esc_html( $style_class ) ?> .frm_submit input[type=button]:hover,
+.<?php echo esc_html( $style_class ) ?> .frm_submit button:hover,
 .<?php echo esc_html( $style_class ) ?>.frm_login_form input[type=submit]:hover{
     background: <?php echo esc_html( $submit_hover_bg_color . $important ) ?>;
     border-color: <?php echo esc_html( $submit_hover_border_color . $important ) ?>;
@@ -543,13 +545,29 @@ if ( ! $submit_style ) { ?>
 
 .<?php echo esc_html( $style_class ) ?> input[type=submit]:focus,
 .<?php echo esc_html( $style_class ) ?> .frm_submit input[type=button]:focus,
+.<?php echo esc_html( $style_class ) ?> .frm_submit button:focus,
 .<?php echo esc_html( $style_class ) ?>.frm_login_form input[type=submit]:focus,
 .<?php echo esc_html( $style_class ) ?> input[type=submit]:active,
 .<?php echo esc_html( $style_class ) ?> .frm_submit input[type=button]:active,
+.<?php echo esc_html( $style_class ) ?> .frm_submit button:active,
 .<?php echo esc_html( $style_class ) ?>.frm_login_form input[type=submit]:active{
     background: <?php echo esc_html( $submit_active_bg_color . $important ) ?>;
     border-color: <?php echo esc_html( $submit_active_border_color . $important ) ?>;
     color: <?php echo esc_html( $submit_active_color . $important ) ?>;
+}
+
+.<?php echo esc_html( $style_class ) ?> button.frm_loading_button,
+.<?php echo esc_html( $style_class ) ?> button.frm_loading_button:hover,
+.<?php echo esc_html( $style_class ) ?> button.frm_loading_button:active,
+.<?php echo esc_html( $style_class ) ?> button.frm_loading_button:focus{
+	color: transparent <?php echo esc_html( $important ) ?>;
+}
+
+.<?php echo esc_html( $style_class ) ?> .frm_loading_button:before {
+	border-bottom-color: <?php echo esc_html( $submit_text_color . $important ) ?>;
+	border-right-color: <?php echo esc_html( $submit_text_color . $important ) ?>;
+	max-height:<?php echo esc_html( $submit_height ) ?>;
+	max-width:<?php echo esc_html( $submit_height ) ?>;
 }
 <?php
     }
