@@ -1257,19 +1257,23 @@ function frmAdminBuildJS(){
 	}
 	
 	function showEmailRow(){
-		var action_key = jQuery(this).closest('.frm_form_action_settings').data('actionkey');
-		var email_row = '#frm_'+ jQuery(this).data('emailrow') +'_row';
-		jQuery('#frm_form_action_' + action_key + ' ' + email_row).fadeIn('slow');
+		var actionKey = jQuery(this).closest('.frm_form_action_settings').data('actionkey');
+		var rowType = this.getAttribute( 'data-emailrow' );
+
+		jQuery('#frm_form_action_' + actionKey + ' .frm_' + rowType + '_row').fadeIn('slow');
 		jQuery(this).fadeOut('slow');
 	}
 
 	function hideEmailRow(){
 		var action_box = jQuery(this).closest('.frm_form_action_settings');
-		var email_row = '#frm_'+ jQuery(this).data('emailrow') +'_row';
-		var email_button = '.frm_'+ jQuery(this).data('emailrow') +'_button';
-		jQuery(action_box).find(email_button).fadeIn('slow');
-		jQuery(action_box).find(email_row).fadeOut('slow', function(){
-			jQuery(action_box).find(email_row + ' input').val('');
+		var rowType = this.getAttribute( 'data-emailrow' );
+
+		var emailRowSelector = '.frm_'+ rowType +'_row';
+		var emailButtonSelector = '.frm_'+ rowType +'_button';
+
+		jQuery(action_box).find(emailButtonSelector).fadeIn('slow');
+		jQuery(action_box).find(emailRowSelector).fadeOut('slow', function(){
+			jQuery(action_box).find(emailRowSelector + ' input').val('');
 		});
 	}
 
@@ -2043,7 +2047,7 @@ function frmAdminBuildJS(){
         jQuery('.frm_multiselect').multiselect({
             templates: {ul:'<ul class="multiselect-container frm-dropdown-menu"></ul>'},
 			buttonContainer: '<div class="btn-group frm-btn-group" />',
-			nonSelectedText:frm_admin_js['default']
+			nonSelectedText:frm_admin_js['default']// TODO: should be noneSelectedText
         });
     }
 

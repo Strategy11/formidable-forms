@@ -1274,12 +1274,17 @@ label.frm_action_events{
 #frm_notification_settings .frm_email_buttons{
     height: 22px;
     line-height: 20px;
-    float:right;
+}
+#frm_notification_settings .frm_cc_button{
+	float:left;
+}
+#frm_notification_settings .frm_bcc_button{
+	float:right;
 }
 #frm_notification_settings .frm_bcc_cc_container{
     width:96px;
 }
-#frm_notification_settings .frm_bcc_button, .submitdelete.frm_delete_wo_post{
+.submitdelete.frm_delete_wo_post{
     margin-left: 10px;
 }
 .frm_action_id{
