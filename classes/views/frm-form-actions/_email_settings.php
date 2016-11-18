@@ -5,15 +5,15 @@
     <td><input type="text" name="<?php echo esc_attr( $this->get_field_name('email_to') ) ?>" value="<?php echo esc_attr( $form_action->post_content['email_to'] ); ?>" class="frm_not_email_to frm_email_blur large-text <?php FrmAppHelper::maybe_add_tooltip('email_to', 'open') ?>" id="<?php echo esc_attr( $this->get_field_id('email_to') ) ?>" />
     </td>
     <td class="frm_bcc_cc_container">
-        <a href="javascript:void(0)" class="button frm_email_buttons frm_bcc_button <?php
-        echo ( ! empty($form_action->post_content['bcc'])  ? 'frm_hidden' : '' );
-        ?>" data-emailrow="bcc"><?php _e( 'BCC', 'formidable' ) ?></a>
         <a href="javascript:void(0)" class="button frm_email_buttons frm_cc_button <?php
         echo ( ! empty($form_action->post_content['cc'])  ? 'frm_hidden' : '' );
         ?>" data-emailrow="cc"><?php _e( 'CC', 'formidable' ) ?></a>
+	    <a href="javascript:void(0)" class="button frm_email_buttons frm_bcc_button <?php
+	    echo ( ! empty($form_action->post_content['bcc'])  ? 'frm_hidden' : '' );
+	    ?>" data-emailrow="bcc"><?php _e( 'BCC', 'formidable' ) ?></a>
     </td>
 </tr>
-<tr id="frm_cc_row" class="<?php echo empty( $form_action->post_content['cc'] )  ? 'frm_hidden' : ''; ?>" >
+<tr class="frm_cc_row<?php echo empty( $form_action->post_content['cc'] )  ? ' frm_hidden' : ''; ?>" >
     <th><label <?php FrmAppHelper::maybe_add_tooltip('cc') ?>><?php _e( 'CC', 'formidable' ) ?></label>
     </th>
     <td class="frm_right_addon">
@@ -22,7 +22,7 @@
     </td>
     <td></td>
 </tr>
-<tr id="frm_bcc_row" class="<?php echo empty( $form_action->post_content['bcc'] )  ? 'frm_hidden' : ''; ?>" >
+<tr class="frm_bcc_row<?php echo empty( $form_action->post_content['bcc'] )  ? ' frm_hidden' : ''; ?>" >
     <th><label <?php FrmAppHelper::maybe_add_tooltip('bcc') ?>><?php _e( 'BCC', 'formidable' ) ?></label>
     </th>
     <td class="frm_right_addon">
@@ -31,7 +31,7 @@
     </td>
     <td></td>
 </tr>
-<tr id="frm_reply_to_row" class="<?php echo empty( $form_action->post_content['reply_to'] )  ? 'frm_hidden' : ''; ?>">
+<tr class="frm_reply_to_row<?php echo empty( $form_action->post_content['reply_to'] )  ? ' frm_hidden' : ''; ?>">
     <th><label <?php FrmAppHelper::maybe_add_tooltip('reply_to') ?>><?php _e( 'Reply to', 'formidable' ) ?></label>
     </th>
     <td class="frm_right_addon">

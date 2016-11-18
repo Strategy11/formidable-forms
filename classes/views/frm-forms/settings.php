@@ -132,9 +132,7 @@
             </table>
 
             <!--Permissions Section-->
-            <table class="form-table">
-                <?php do_action('frm_add_form_perm_options', $values); ?>
-            </table>
+	        <?php do_action('frm_add_form_perm_options', $values); ?>
 
             <!--Styling & Buttons Section-->
 			<h3><?php _e( 'Styling & Buttons', 'formidable' ) ?>
