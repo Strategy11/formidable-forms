@@ -59,10 +59,16 @@ function frmAdminBuildJS(){
 		if(typeof(show) == 'undefined'){
 			show = '';
 		}
+		var hide=deleteButton.data('hidelast');
+		if(typeof(hide) == 'undefined'){
+			hide = '';
+		}
 
 		if(show !== ''){
-			if ( deleteButton.closest('.frm_add_remove').find('.frm_remove_tag').length > 1 )
+			if ( deleteButton.closest('.frm_add_remove').find('.frm_remove_tag').length > 1 ) {
 				show = '';
+				hide = '';
+			}
 		}else if(id.indexOf('frm_logic_') === 0 && deleteButton.closest('.frm_logic_rows').find('.frm_logic_row').length<2){
 			show='#'+deleteButton.closest('td').children('.frm_add_logic_link').attr('id');
 		}else if(id.indexOf('frm_postmeta_') === 0){
@@ -84,8 +90,13 @@ function frmAdminBuildJS(){
 		var $fadeEle = jQuery(document.getElementById(id));
 		$fadeEle.fadeOut('slow', function(){
 			$fadeEle.remove();
-			if(show !== ''){
-				jQuery(show+' a,'+show).fadeIn('slow');
+
+			if ( hide !== '' ) {
+				jQuery( hide ).hide();
+			}
+
+			if ( show !== '' ) {
+				jQuery( show+' a,'+show ).fadeIn( 'slow' );
 			}
 
 			var action = jQuery(this).closest('.frm_form_action_settings');

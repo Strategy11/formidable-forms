@@ -756,6 +756,37 @@ label input[type="checkbox"], label input[type="radio"] {vertical-align:inherit;
 	margin-right:1px;
 }
 
+table.frm_name_value {
+	background-color: #f9f9f9;
+	border: 1px solid #ddd;
+	border-spacing: 0;
+	margin: 0;
+	width: 100%;
+}
+
+table.frm_name_value thead th {
+	background-color: #f1f1f1;
+	padding: 5px 8px 8px;
+}
+
+table.frm_name_value tr {
+	vertical-align: top;
+}
+
+table.frm_name_value td.left,
+table.frm_name_value th.left {
+	width: 38%;
+}
+
+table.frm_name_value input,
+table.frm_name_value select,
+table.frm_name_value textarea {
+	margin: 8px;
+	width: 96%;
+	height:auto;
+	line-height:normal;
+}
+
 .frm_field_opts_list{
 	height:105px; margin-top:10px;
 	border:1px solid #ddd;
