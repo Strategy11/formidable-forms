@@ -49,30 +49,8 @@ function frmFrontFormJS(){
 			.toggleClass('ui-icon-triangle-1-s ui-icon-triangle-1-e');
 	}
 
-	function loadUniqueTimeFields() {
-		if ( typeof __frmUniqueTimes === 'undefined' ) {
-			return;
-		}
-
-		var timeFields = __frmUniqueTimes;
-		for ( var i = 0; i < timeFields.length; i++ ) {
-			jQuery( document.getElementById( timeFields[i].dateID ) ).change( maybeTriggerUniqueTime );
-		}
-	}
-
-	function maybeTriggerUniqueTime() {
-		/*jshint validthis:true */
-		var timeFields = __frmUniqueTimes;
-		for ( var i = 0; i < timeFields.length; i++ ) {
-			if ( timeFields[i].dateID == this.id ) {
-				frmFrontForm.removeUsedTimes( this, timeFields[i].timeID );
-			}
-		}
-	}
-
 	function loadDateFields() {
 		jQuery(document).on( 'focusin', '.frm_date', triggerDateField );
-		loadUniqueTimeFields();
 	}
 
 	function triggerDateField() {
@@ -4222,30 +4200,10 @@ function frmFrontFormJS(){
 				setTimeout( frmFrontForm.loadGoogle, 30 );
 			}
 		},
-		
-		/* Time fields */
+
 		removeUsedTimes: function( obj, timeField ) {
-			var e = jQuery(obj).parents('form:first').find('input[name="id"]');
-			jQuery.ajax({
-				type:'POST',
-				url:frm_js.ajax_url,
-				dataType:'json',
-				data:{
-					action:'frm_fields_ajax_time_options',
-					time_field:timeField, date_field:obj.id,
-					entry_id: (e ? e.val() : ''), date: jQuery(obj).val(),
-					nonce:frm_js.nonce
-				},
-				success:function(opts){
-					var $timeField = jQuery(document.getElementById(timeField));
-					$timeField.find('option').removeAttr('disabled');
-					if(opts && opts !== ''){
-						for(var opt in opts){
-							$timeField.find('option[value="'+opt+'"]').attr('disabled', 'disabled');
-						}
-					}
-				}
-			});
+			/* Time fields */
+			console.warn('DEPRECATED: function frmFrontForm.removeUsedTimes v2.03');
 		},
 		
 		escapeHtml: function(text){
