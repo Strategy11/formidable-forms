@@ -973,6 +973,12 @@ select.frm_loading_lookup{
     margin-right:4%;
 }
 
+.frm_form_field .frm_checkbox,
+.frm_form_field .frm_radio{
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
 .frm_form_field.frm_three_col .frm_radio,
 .frm_form_field.frm_three_col .frm_checkbox{
     width:30%;
