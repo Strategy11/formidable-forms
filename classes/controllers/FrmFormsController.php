@@ -1133,14 +1133,15 @@ class FrmFormsController {
 
         $user_ID = get_current_user_id();
 		$params = FrmForm::get_params( $form );
-        $message = $errors = '';
+		$message = '';
+		$errors = array();
 
         if ( $params['posted_form_id'] == $form->id && $_POST ) {
             $errors = isset( $frm_vars['created_entries'][ $form->id ] ) ? $frm_vars['created_entries'][ $form->id ]['errors'] : array();
         }
 
 		$include_form_tag = apply_filters( 'frm_include_form_tag', true, $form );
-        $fields = FrmFieldsHelper::get_form_fields( $form->id, ( isset( $errors ) && ! empty( $errors ) ) );
+		$fields = FrmFieldsHelper::get_form_fields( $form->id, $errors );
 
         if ( $params['action'] != 'create' || $params['posted_form_id'] != $form->id || ! $_POST ) {
             do_action('frm_display_form_action', $params, $fields, $form, $title, $description);
