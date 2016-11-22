@@ -73,8 +73,10 @@ if ( FrmForm::show_submit( $form ) ) {
 ?>
 </fieldset>
 </div>
-<script type="text/javascript">document.getElementsByTagName('body')[0].className+=' js';<?php
+<?php
 if ( has_action('frm_entries_footer_scripts') ) {
-	do_action( 'frm_entries_footer_scripts', $values['fields'], $form );
+?><script type="text/javascript"><?php
+do_action( 'frm_entries_footer_scripts', $values['fields'], $form );
+?></script><?php
 }
 ?></script>
