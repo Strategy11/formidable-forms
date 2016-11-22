@@ -2604,7 +2604,11 @@ function frmFrontFormJS(){
 
 			if ( count > 0 ) {
 				if ( field.thisField.type == 'time' ) {
-					sep = ':';
+					if ( count == 1 ) {
+						sep = ':';
+					} else if ( count == 2 ) {
+						sep = ' ';
+					}
 				} else {
 					sep = ', ';
 				}
