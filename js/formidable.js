@@ -2606,9 +2606,10 @@ function frmFrontFormJS(){
 				sep = ',';
 			}
 
-			vals[field.valKey] += sep + thisVal;
-
-			count++;
+			if ( thisVal !== '' ) {
+				vals[field.valKey] += sep + thisVal;
+				count++;
+			}
 		});
 
 		return vals;
