@@ -213,7 +213,7 @@ legend.frm_hidden{
 .with_frm_style .frm_loading_button:hover,
 .with_frm_style .frm_loading_button:active,
 .with_frm_style .frm_loading_button:focus {
-    cursor: default;
+    cursor: not-allowed;
     color: transparent;
     outline: none !important;
     box-shadow: none;
