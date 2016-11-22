@@ -2603,7 +2603,11 @@ function frmFrontFormJS(){
 			thisVal = thisVal.trim();
 
 			if ( count > 0 ) {
-				sep = ',';
+				if ( field.thisField.type == 'time' ) {
+					sep = ':';
+				} else {
+					sep = ', ';
+				}
 			}
 
 			if ( thisVal !== '' ) {
