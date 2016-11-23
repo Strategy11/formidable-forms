@@ -60,7 +60,7 @@ class FrmStylesController {
         wp_enqueue_script('jquery-ui-datepicker');
 
         $version = FrmAppHelper::plugin_version();
-		wp_enqueue_script( 'jquery-frm-themepicker', FrmAppHelper::plugin_url() . '/js/jquery/jquery-ui-themepicker.js', array( 'jquery' ), $version );
+		wp_enqueue_script( 'jquery-frm-themepicker', FrmAppHelper::plugin_url() . '/js/jquery/jquery-ui-themepicker.min.js', array( 'jquery' ), $version );
 
 		wp_enqueue_style( 'frm-custom-theme', admin_url('admin-ajax.php?action=frmpro_css' ) );
 
