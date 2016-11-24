@@ -555,6 +555,13 @@ BEFORE_HTML;
 		}
 	}
 
+	public static function maybe_get_scroll_js( $id ) {
+		$offset = apply_filters( 'frm_scroll_offset', 4 );
+		if ( $offset != -1 ) {
+			self::get_scroll_js( $id )
+		}
+	}
+
 	public static function get_scroll_js( $form_id ) {
         ?><script type="text/javascript">document.addEventListener('DOMContentLoaded',function(){frmFrontForm.scrollMsg(<?php echo (int) $form_id ?>);})</script><?php
     }

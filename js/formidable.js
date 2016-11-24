@@ -3094,7 +3094,9 @@ function frmFrontFormJS(){
 					jQuery(object).find('.frm_ajax_loading').removeClass('frm_loading_now');
 					var formID = jQuery(object).find('input[name="form_id"]').val();
 					jQuery(object).closest( '.frm_forms' ).replaceWith( response.content );
-					frmFrontForm.scrollMsg( formID );
+					if ( frm_js.offset != -1 ) {
+						frmFrontForm.scrollMsg( formID );
+					}
 
 					if(typeof(frmThemeOverride_frmAfterSubmit) == 'function'){
 						var pageOrder = jQuery('input[name="frm_page_order_'+ formID +'"]').val();
