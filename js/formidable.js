@@ -3095,7 +3095,7 @@ function frmFrontFormJS(){
 					var formID = jQuery(object).find('input[name="form_id"]').val();
 					jQuery(object).closest( '.frm_forms' ).replaceWith( response.content );
 					if ( frm_js.offset != -1 ) {
-						frmFrontForm.scrollMsg( formID );
+						frmFrontForm.scrollMsg( formID, jQuery(object) );
 					}
 
 					if(typeof(frmThemeOverride_frmAfterSubmit) == 'function'){
