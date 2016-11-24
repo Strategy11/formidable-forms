@@ -558,7 +558,7 @@ BEFORE_HTML;
 	public static function maybe_get_scroll_js( $id ) {
 		$offset = apply_filters( 'frm_scroll_offset', 4 );
 		if ( $offset != -1 ) {
-			self::get_scroll_js( $id )
+			self::get_scroll_js( $id );
 		}
 	}
 
