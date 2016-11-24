@@ -3093,7 +3093,7 @@ function frmFrontFormJS(){
 
 					jQuery(object).find('.frm_ajax_loading').removeClass('frm_loading_now');
 					var formID = jQuery(object).find('input[name="form_id"]').val();
-					jQuery(object).closest( '#frm_form_'+ formID +'_container' ).replaceWith( response.content );
+					jQuery(object).closest( '.frm_forms' ).replaceWith( response.content );
 					frmFrontForm.scrollMsg( formID );
 
 					if(typeof(frmThemeOverride_frmAfterSubmit) == 'function'){
