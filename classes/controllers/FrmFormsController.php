@@ -56,22 +56,37 @@ class FrmFormsController {
 		$action = empty( $values ) ? FrmAppHelper::get_param( $action, '', 'get', 'sanitize_title' ) : $values[ $action ];
 
 		if ( $action == 'create' ) {
-            return self::create($values);
+			self::create($values);
+			return;
 		} else if ( $action == 'new' ) {
 			$frm_field_selection = FrmField::field_selection();
             $values = FrmFormsHelper::setup_new_vars($values);
             $id = FrmForm::create( $values );
             $form = FrmForm::getOne($id);
 
-            // add default email notification
-            $action_control = FrmFormActionsController::get_form_actions( 'email' );
-            $action_control->create($form->id);
+			self::create_default_email_action( $form );
 
 			$all_templates = FrmForm::getAll( array( 'is_template' => 1 ), 'name' );
 
             $values['id'] = $id;
 			require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/new.php' );
         }
+    }
+
+	/**
+	 * Create the default email action
+	 *
+	 * @since 2.02.11
+	 *
+	 * @param object $form
+	 */
+    private static function create_default_email_action( $form ) {
+    	$create_email = apply_filters( 'frm_create_default_email_action', true, $form );
+
+	    if ( $create_email ) {
+		    $action_control = FrmFormActionsController::get_form_actions( 'email' );
+		    $action_control->create( $form->id );
+	    }
     }
 
 	public static function create( $values = array() ) {
