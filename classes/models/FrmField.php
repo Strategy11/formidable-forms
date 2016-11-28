@@ -238,7 +238,7 @@ class FrmField {
 		FrmAppHelper::cache_delete_group( 'frm_field' );
 
         $form = FrmForm::getOne($form_id);
-        if ( $form && $form->parent_form_id ) {
+        if ( $form && $form->parent_form_id && $form->parent_form_id != $form_id ) {
             self::delete_form_transient( $form->parent_form_id );
         }
     }
