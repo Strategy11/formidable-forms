@@ -52,15 +52,6 @@ class FrmEntriesHelper {
             }
 
             $field_array = apply_filters('frm_setup_new_fields_vars', $field_array, $field, $args );
-
-	        /*if ( $field_array['type'] == 'user_id' && current_user_can('administrator') ){
-		        $field_array['type'] = 'select';
-		        $field_array['options'] = FrmProFieldsHelper::get_user_options();
-		        $field_array['use_key'] = true;
-		        $field_array['custom_html'] = FrmFieldsHelper::get_default_html('select');
-	        }*/
-
-
             $field_array = array_merge( $field->field_options, $field_array );
 
             $values['fields'][] = $field_array;
