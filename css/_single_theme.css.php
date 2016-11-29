@@ -686,8 +686,12 @@ if ( ! $submit_style ) { ?>
 .frm_success_style{
     border:1px solid #<?php echo esc_html( $success_border_color ) ?>;
 	background-color:<?php echo esc_html( ( empty( $success_bg_color ) ? 'transparent' : '#' . $success_bg_color ) . $important ); ?>;
-    color:#<?php echo esc_html( $success_text_color ) ?>;
+    color:#<?php echo esc_html( $success_text_color . $important ) ?>;
 	border-radius:<?php echo esc_html( $border_radius . $important ) ?>;
+}
+
+.<?php echo esc_html( $style_class ) ?> .frm_message p{
+	color:#<?php echo esc_html( $success_text_color . $important ) ?>;
 }
 
 .<?php echo esc_html( $style_class ) ?> .frm_message{
