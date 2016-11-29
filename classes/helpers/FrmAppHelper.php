@@ -473,7 +473,7 @@ class FrmAppHelper {
 
 	public static function get_group_cached_keys( $group ) {
 		$cached = wp_cache_get( 'cached_keys', $group );
-		if ( ! $cached ) {
+		if ( ! $cached || ! is_array( $cached ) ) {
 			$cached = array();
 		}
 

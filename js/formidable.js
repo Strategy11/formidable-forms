@@ -3093,11 +3093,13 @@ function frmFrontFormJS(){
 					var formID = jQuery(object).find('input[name="form_id"]').val();
 					jQuery(object).find('.frm_form_field').fadeOut('slow', function(){
 						response.content = response.content.replace(/ class="frm_form_field /g, 'class="frm_hidden frm_form_field ');
-						jQuery(object).closest( '#frm_form_'+ formID +'_container' ).replaceWith( response.content );
+						jQuery(object).closest( '.frm_forms' ).replaceWith( response.content );
 						jQuery('#frm_form_'+ formID +'_container .frm_form_field').fadeIn('slow');
 					});
 
-					frmFrontForm.scrollMsg( formID );
+					if ( frm_js.offset != -1 ) {
+						frmFrontForm.scrollMsg( formID, jQuery(object) );
+					}
 					addUrlParam(response);
 
 					if(typeof(frmThemeOverride_frmAfterSubmit) == 'function'){
