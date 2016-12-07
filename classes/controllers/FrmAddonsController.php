@@ -154,7 +154,7 @@ class FrmAddonsController {
 
 			$addon['installed'] = is_dir( $file );
 			$addon['activate_url'] = '';
-			if ( $installed && ! empty( $activate_url ) ) {
+			if ( $addon['installed'] && ! empty( $activate_url ) ) {
 				if ( file_exists( $file . '/' . $base_file . '.php' ) ) {
 					$file_name = $base_file . '/' . $base_file . '.php';
 					if ( ! is_plugin_active( $file_name ) ) {
