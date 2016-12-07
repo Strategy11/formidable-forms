@@ -53,7 +53,7 @@ class FrmAddon {
 
 	public function edd_plugin_updater() {
 
-		//$this->is_license_revoked();
+		$this->is_license_revoked();
 		$license = $this->license;
 
 		if ( empty( $license ) ) {
