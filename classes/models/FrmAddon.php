@@ -53,7 +53,7 @@ class FrmAddon {
 
 	public function edd_plugin_updater() {
 
-		$this->is_license_revoked();
+		//$this->is_license_revoked();
 		$license = $this->license;
 
 		if ( empty( $license ) ) {
@@ -303,11 +303,12 @@ class FrmAddon {
 		$api_params = array(
 			'edd_action' => $action,
 			'license'    => $this->license,
-			'item_name'  => urlencode( $this->plugin_name ),
 			'url'        => home_url(),
 		);
 		if ( is_numeric( $this->download_id ) ) {
 			$api_params['item_id'] = absint( $this->download_id );
+		} else {
+			$api_params['item_name'] = urlencode( $this->plugin_name );
 		}
 
 		$arg_array = array(
