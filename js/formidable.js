@@ -772,7 +772,7 @@ function frmFrontFormJS(){
 		}
 
 		if ( checkedVals.length === 0 ) {
-			checkedVals = '';
+			checkedVals = false;
 		}
 
 		return checkedVals;
@@ -1834,6 +1834,8 @@ function frmFrontFormJS(){
 			currentValue = getValuesFromCheckboxInputs(inputs);
 		}
 
+		var defaultValue = jQuery( inputs[0] ).data( 'frmval' );
+
 		jQuery.ajax({
 			type:'POST',
 			url:frm_js.ajax_url,
@@ -1844,6 +1846,7 @@ function frmFrontFormJS(){
 				field_id:childFieldArgs.fieldId,
 				row_index:childFieldArgs.repeatRow,
 				current_value:currentValue,
+				default_value:defaultValue,
 				nonce:frm_js.nonce
 			},
 			success:function(newHtml){
@@ -1855,11 +1858,42 @@ function frmFrontFormJS(){
 					maybeHideRadioLookup( childFieldArgs, childDiv );
 				} else {
 					maybeShowRadioLookup( childFieldArgs, childDiv );
+					maybeSetDefaultCbRadioValue( childFieldArgs, inputs, defaultValue );
 				}
 
 				triggerChange( jQuery( inputs[0] ), childFieldArgs.fieldKey );
 			}
 		});
+	}
+
+	/**
+	 * Select the defatul value in a radio/checkbox field if no value is selected
+	 *
+	 * @since 2.02.11
+	 *
+	 * @param {Object} inputs
+	 * @param {Object} childFieldArgs
+	 * @param {string} childFieldArgs.inputType
+	 * @param {(string|Array)} defaultValue
+     */
+	function maybeSetDefaultCbRadioValue( childFieldArgs, inputs, defaultValue ) {
+		if ( defaultValue === undefined ) {
+			return;
+		}
+
+		var currentValue = false;
+		if ( childFieldArgs.inputType == 'radio' ) {
+			currentValue = getValueFromRadioInputs( inputs );
+		} else {
+			currentValue = getValuesFromCheckboxInputs(inputs);
+		}
+
+		if ( currentValue !== false || inputs.length < 1 ) {
+			return;
+		}
+
+		var inputName = inputs[0].name;
+		setCheckboxOrRadioDefaultValue( inputName, defaultValue )
 	}
 
 	/**
