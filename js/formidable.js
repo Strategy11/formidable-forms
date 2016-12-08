@@ -2617,7 +2617,7 @@ function frmFrontFormJS(){
 			thisVal = thisVal.trim();
 
 			if ( count > 0 ) {
-				sep = ',';
+				sep = ', ';
 			}
 
 			if ( thisVal !== '' ) {
