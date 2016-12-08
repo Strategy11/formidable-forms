@@ -94,6 +94,7 @@ if ( ! isset( $center_form ) ) {
     padding:<?php echo esc_html( $section_pad . $important ) ?>;
     margin:0<?php echo esc_html( $important ) ?>;
     font-size:<?php echo esc_html( $section_font_size . $important ) ?>;
+	font-family:<?php echo FrmAppHelper::kses( $font ) ?>;
     font-weight:<?php echo esc_html( $section_weight . $important ) ?>;
     color:#<?php echo esc_html( $section_color . $important ) ?>;
     border:none<?php echo esc_html( $important ) ?>;
