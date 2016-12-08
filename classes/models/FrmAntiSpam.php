@@ -97,7 +97,7 @@ class FrmAntiSpam {
 	private static function _is_bbcode_spam( $body ) {
 		return (bool) preg_match( '/\[url[=\]].*\[\/url\]/is', $body );
 	}
-	
+
 	private static function _is_fake_ip( $client_ip, $client_host = false ) {
 		/* Remote Host */
 		$host_by_ip = gethostbyaddr( $client_ip );
@@ -185,38 +185,26 @@ class FrmAntiSpam {
 			),
 			1 => array(
 				'body'	=> '\<\!.+?mfunc.+?\>',
-			)
+			),
 		);
 
 		/* Spammy author */
 		if ( $quoted_author = preg_quote( $comment['author'], '/' ) ) {
 			$patterns[] = array(
-				'body' => sprintf(
-					'<a.+?>%s<\/a>$',
-					$quoted_author
-				)
+				'body' => sprintf( '<a.+?>%s<\/a>$', $quoted_author ),
 			);
 			$patterns[] = array(
-				'body' => sprintf(
-					'%s https?:.+?$',
-					$quoted_author
-				)
+				'body' => sprintf( '%s https?:.+?$', $quoted_author ),
 			);
 			$patterns[] = array(
 				'email'	 => '@gmail.com$',
 				'author' => '^[a-z0-9-\.]+\.[a-z]{2,6}$',
-				'host'	 => sprintf(
-					'^%s$',
-					$quoted_author
-				)
+				'host'	 => sprintf( '^%s$', $quoted_author ),
 			);
 		}
 
 		/* Hook */
-		$patterns = apply_filters(
-			'antispam_bee_patterns',
-			$patterns
-		);
+		$patterns = apply_filters( 'antispam_bee_patterns', $patterns );
 
 		if ( ! $patterns ) {
 			return false;
@@ -239,7 +227,7 @@ class FrmAntiSpam {
 				}
 
 				/* Perform regex */
-				if ( preg_match( '/' .$regexp. '/isu', $comment[ $field ] ) ) {
+				if ( preg_match( '/' . $regexp . '/isu', $comment[ $field ] ) ) {
 					$hits[ $field ] = true;
 				}
 			}
@@ -276,5 +264,5 @@ class FrmAntiSpam {
 
 		$status = (bool) $result->ip->appears;
 		return $status;
-	}	
+	}
 }

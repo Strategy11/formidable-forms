@@ -398,7 +398,7 @@ class FrmEntryValidate {
 
 	private static function add_server_values_to_akismet( &$datas ) {
 		foreach ( $_SERVER as $key => $value ) {
-			$include_value = is_string( $value ) && ! preg_match( "/^HTTP_COOKIE/", $key ) && preg_match( "/^(HTTP_|REMOTE_ADDR|REQUEST_URI|DOCUMENT_URI)/", $key );
+			$include_value = is_string( $value ) && ! preg_match( '/^HTTP_COOKIE/', $key ) && preg_match( '/^(HTTP_|REMOTE_ADDR|REQUEST_URI|DOCUMENT_URI)/', $key );
 
 			// Send any potentially useful $_SERVER vars, but avoid sending junk we don't need.
 			if ( $include_value ) {
