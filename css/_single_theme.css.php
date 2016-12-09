@@ -504,7 +504,8 @@ if ( ! isset( $center_form ) ) {
     <?php } ?>
 }
 
-.<?php echo esc_html( $style_class ) ?> .frm_submit.frm_inline_submit::before {
+.<?php echo esc_html( $style_class ) ?> .frm_submit.frm_inline_submit::before,
+.<?php echo esc_html( $style_class ) ?>.frm_inline_form .frm_submit::before{
 	content:"before";
 	font-family:<?php echo FrmAppHelper::kses( $font ) ?>;
 	font-size:<?php echo esc_html( $font_size . $important ) ?>;
@@ -517,7 +518,10 @@ if ( ! isset( $center_form ) ) {
 	visibility:hidden;
 }
 
-.<?php echo esc_html( $style_class ) ?> .frm_submit.frm_inline_submit input {
+.<?php echo esc_html( $style_class ) ?> .frm_submit.frm_inline_submit input,
+.<?php echo esc_html( $style_class ) ?> .frm_submit.frm_inline_submit button,
+.<?php echo esc_html( $style_class ) ?>.frm_inline_form .frm_submit input,
+.<?php echo esc_html( $style_class ) ?>.frm_inline_form .frm_submit button {
 	margin-top: 0 <?php echo esc_html( $important ) ?>;
 }
 
