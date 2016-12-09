@@ -937,6 +937,7 @@ if ( ! $submit_style ) { ?>
 .<?php echo esc_html( $style_class ) ?> .frm_page_bar .frm_current_page input[type="button"]{
 	background-color: <?php echo esc_html( $progress_bg_color . $important ) ?>;
 	border-color: <?php echo esc_html( $progress_border_color . $important ) ?>;
+	opacity:1<?php echo esc_html( $important ) ?>;
 }
 
 .<?php echo esc_html( $style_class ) ?> .frm_current_page .frm_rootline_title{
@@ -944,7 +945,7 @@ if ( ! $submit_style ) { ?>
 }
 
 .<?php echo esc_html( $style_class ) ?> .frm_rootline_title,
-.<?php echo esc_html( $style_class ) ?> .frm_pages_complete
+.<?php echo esc_html( $style_class ) ?> .frm_pages_complete,
 .<?php echo esc_html( $style_class ) ?> .frm_percent_complete{
 	color: <?php echo esc_html( $description_color . $important ) ?>;
 }
@@ -996,10 +997,12 @@ if ( ! $submit_style ) { ?>
     top: <?php echo esc_html( absint( $progress_size ) / 2 ) ?>px;
 }
 
-.<?php echo esc_html( $style_class ) ?> .frm_rootline input {
+.<?php echo esc_html( $style_class ) ?> .frm_rootline input,
+.<?php echo esc_html( $style_class ) ?> .frm_rootline input:hover {
 	width: <?php echo esc_html( $progress_size . $important ) ?>;
 	height: <?php echo esc_html( $progress_size . $important ) ?>;
 	border-radius: <?php echo esc_html( $progress_size . $important ) ?>;
+	padding: 0<?php echo esc_html( $important ) ?>;
 }
 
 .<?php echo esc_html( $style_class ) ?> .frm_rootline input:focus {
