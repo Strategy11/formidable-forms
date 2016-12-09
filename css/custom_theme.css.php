@@ -140,6 +140,10 @@ legend.frm_hidden{
     border:none;
 }
 
+.with_frm_style textarea{
+    height:auto;
+}
+
 .with_frm_style .auto_width #loginform input,
 .with_frm_style .auto_width input,
 .with_frm_style input.auto_width,
@@ -1046,6 +1050,7 @@ select.frm_loading_lookup{
     font-weight:bold;
     -moz-box-shadow:none;
     -webkit-box-shadow:none;
+    width:auto !important;
     box-shadow:none !important;
     display:inline;
 	-moz-appearance:textfield;
