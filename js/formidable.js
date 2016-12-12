@@ -1726,6 +1726,7 @@ function frmFrontFormJS(){
 	function disableLookup( childSelect ) {
 		childSelect.className = childSelect.className + ' frm_loading_lookup';
 		childSelect.disabled = true;
+		maybeUpdateChosenOptions( childSelect );
 	}
 
 	/**
@@ -1765,9 +1766,9 @@ function frmFrontFormJS(){
 
 		setSelectLookupVal( childSelect, origVal );
 
-		maybeUpdateChosenOptions( childSelect );
-
 		enableLookup( childSelect );
+
+		maybeUpdateChosenOptions( childSelect );
 
 		// Trigger a change if the new value is different from the old value
 		if ( childSelect.value != origVal ) {
