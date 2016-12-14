@@ -3,7 +3,7 @@ Contributors: sswells, srwells, jamie.wahlin
 Tags: contact form, custom form, form, form builder, forms, email, poll, survey, template, form creator, form manager,
 Requires at least: 3.8
 Tested up to: 4.7
-Stable tag: 2.02.11
+Stable tag: 2.02.12
 
 WordPress form builder for completely customizable forms with simple drag-and-drop interface. Offers unlimited email notifications and instant styling previews.
 
