@@ -22,10 +22,11 @@ select.frm_icon_font{
 }
 
 .frm_icon_font,
-a.frm_icon_font
+a.frm_icon_font,
 .frm_icon_font:hover,
 a.frm_icon_font:hover{
 	text-decoration:none !important;
+	box-shadow:none;
 }
 
 .frm_icon_font:focus,

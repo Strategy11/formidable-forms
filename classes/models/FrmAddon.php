@@ -170,11 +170,12 @@ class FrmAddon {
 			return;
 		}
 
-		$license_status = get_site_transient( $this->transient_key() );
+		$last_checked = get_site_option( $this->transient_key() );
+		$seven_days_ago = date( 'Y-m-d H:i:s', strtotime('-7 days') );
 
-		if ( $license_status === false && $this->test_transient() ) {
+		if ( ! $last_checked || $last_checked < $seven_days_ago ) {
+			update_site_option( $this->transient_key(), date( 'Y-m-d H:i:s' ) ); // check weekly
 			$response = $this->get_license_status();
-			set_site_transient( $this->transient_key(), $response, 60 * 60 * 24 * 7 ); // check weekly
 			if ( $response['status'] == 'revoked' ) {
 				$this->clear_license();
 			}
@@ -183,13 +184,6 @@ class FrmAddon {
 
 	private function transient_key() {
 		return 'frm_' . md5( sanitize_key( $this->license . '_' . $this->plugin_slug ) );
-	}
-
-	private static function test_transient() {
-		$key = 'frm_test';
-		set_site_transient( $key, $key, 120 );
-		$transient = get_site_transient( $key );
-		return ( $transient ) ? true : false;
 	}
 
 	public static function activate() {
@@ -303,11 +297,12 @@ class FrmAddon {
 		$api_params = array(
 			'edd_action' => $action,
 			'license'    => $this->license,
-			'item_name'  => urlencode( $this->plugin_name ),
 			'url'        => home_url(),
 		);
 		if ( is_numeric( $this->download_id ) ) {
 			$api_params['item_id'] = absint( $this->download_id );
+		} else {
+			$api_params['item_name'] = urlencode( $this->plugin_name );
 		}
 
 		$arg_array = array(

@@ -189,8 +189,8 @@ class FrmEntriesHelper {
         preg_match_all("/\[(default-message|default_message)\b(.*?)(?:(\/))?\]/s", $message, $shortcodes, PREG_PATTERN_ORDER);
 
         foreach ( $shortcodes[0] as $short_key => $tag ) {
-            $add_atts = shortcode_parse_atts( $shortcodes[2][ $short_key ] );
-            if ( $add_atts ) {
+			$add_atts = FrmShortcodeHelper::get_shortcode_attribute_array( $shortcodes[2][ $short_key ] );
+			if ( ! empty( $add_atts ) ) {
                 $this_atts = array_merge($atts, $add_atts);
             } else {
                 $this_atts = $atts;

@@ -302,7 +302,7 @@ DEFAULT_HTML;
         $frm_settings = FrmAppHelper::get_settings();
 
         foreach ( $shortcodes[0] as $short_key => $tag ) {
-            $atts = shortcode_parse_atts( $shortcodes[2][ $short_key ] );
+            $atts = FrmShortcodeHelper::get_shortcode_attribute_array( $shortcodes[2][ $short_key ] );
 			$tag = self::get_shortcode_tag( $shortcodes, $short_key, array( 'conditional' => false, 'conditional_check' => false ) );
 
             $replace_with = '';
@@ -655,7 +655,7 @@ DEFAULT_HTML;
         );
 
         foreach ( $shortcodes[0] as $short_key => $tag ) {
-            $atts = shortcode_parse_atts( $shortcodes[3][ $short_key ] );
+            $atts = FrmShortcodeHelper::get_shortcode_attribute_array( $shortcodes[3][ $short_key ] );
 
             if ( ! empty( $shortcodes[3][ $short_key ] ) ) {
 				$tag = str_replace( array( '[', ']' ), '', $shortcodes[0][ $short_key ] );

@@ -57,6 +57,7 @@ $arrow_icons = FrmStylesHelper::arrow_icons();
     padding:<?php echo esc_html( $section_pad . $important ) ?>;
     margin:0<?php echo esc_html( $important ) ?>;
     font-size:<?php echo esc_html( $section_font_size . $important ) ?>;
+	font-family:<?php echo FrmAppHelper::kses( $font ) ?>;
     font-weight:<?php echo esc_html( $section_weight . $important ) ?>;
     color:<?php echo esc_html( $section_color . $important ) ?>;
     border:none<?php echo esc_html( $important ) ?>;
@@ -478,7 +479,8 @@ $arrow_icons = FrmStylesHelper::arrow_icons();
 	visibility:hidden;
 }
 
-.<?php echo esc_html( $style_class ) ?> .frm_submit.frm_inline_submit input {
+.<?php echo esc_html( $style_class ) ?> .frm_submit.frm_inline_submit input,
+.<?php echo esc_html( $style_class ) ?> .frm_submit.frm_inline_submit button {
 	margin-top: 0 <?php echo esc_html( $important ) ?>;
 }
 
@@ -666,8 +668,12 @@ if ( ! $submit_style ) { ?>
 .frm_success_style{
     border:1px solid #<?php echo esc_html( $success_border_color ) ?>;
 	background-color:<?php echo esc_html( $success_bg_color . $important ); ?>;
-    color:#<?php echo esc_html( $success_text_color ) ?>;
+	color:#<?php echo esc_html( $success_text_color . $important ) ?>;
 	border-radius:<?php echo esc_html( $border_radius . $important ) ?>;
+}
+
+.<?php echo esc_html( $style_class ) ?> .frm_message p{
+	color:#<?php echo esc_html( $success_text_color . $important ) ?>;
 }
 
 .<?php echo esc_html( $style_class ) ?> .frm_message{
@@ -744,6 +750,7 @@ if ( ! $submit_style ) { ?>
     background-color:transparent<?php echo esc_html( $important ) ?>;
     border:none<?php echo esc_html( $important ) ?>;
     display:inline<?php echo esc_html( $important ) ?>;
+	width:auto<?php echo esc_html( $important ) ?>;
 	padding:0<?php echo esc_html( $important ) ?>;
 }
 

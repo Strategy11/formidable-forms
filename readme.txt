@@ -1,20 +1,20 @@
 === Formidable Forms ===
 Contributors: sswells, srwells, jamie.wahlin
-Tags: contact form, contact, custom form, database, email, feedback, form, forms, poll, Post, captcha, spam, survey, template, widget, multisite, form builder, form creator, form manager,
+Tags: contact form, custom form, form, form builder, forms, email, poll, survey, template, form creator, form manager,
 Requires at least: 3.8
-Tested up to: 4.6.1
-Stable tag: 2.02.10
+Tested up to: 4.7
+Stable tag: 2.02.12
 
-Beautiful forms in 60 seconds. The WordPress form builder that enables you to create forms with a simple drag-and-drop interface and in-place editing.
+WordPress form builder for completely customizable forms with simple drag-and-drop interface. Offers unlimited email notifications and instant styling previews.
 
 == Description ==
-Build WordPress forms the fast and simple way with a simple drag-and-drop interface (and a visual form styler in version 2.0). Create custom Formidable forms or generate them from a template with this stunning WordPress form plugin.
+Build WordPress forms the fast and simple way. Create custom Formidable forms or generate them from a template with this flexible WordPress form plugin. From the smallest sidebar opt-in form to large job application forms, Formidable Forms is built to do it all. Formidable Forms has a visual form styler and no knowledge of HTML or CSS is necessary to create professional looking forms. However, Formidable Forms are completely customizable with custom HTML or CSS. Users can set their style for reuse with a single templated style.
 
 [View Documentation](http://formidablepro.com/knowledgebase/ "View Documentation")
 [Contribute on Github](https://github.com/Strategy11/formidable-forms "Contribute on Github")
 
 = Features =
-* Create forms with 7 field types: text, email, url, paragraph text, radio, checkbox, and dropdown
+* Create forms with 8 field types: text, email, url, paragraph text, radio, checkbox, dropdown, and ReCaptcha
 * Create forms from existing templates or add your own. A contact form template is included.
 * Send unlimited email notifications
 * Create a single styling template using our visual form styler
@@ -88,6 +88,61 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 [See more FAQs](http://formidablepro.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 2.02.12 =
+* Fixed: PHP 7.1 illegal string offset warnings addressed.
+* **Pro Version** *
+* New: Add frm_order_lookup_options hook to adjust the order of options in a Lookup field.
+* Fixed: JavaScript errors were occurring when illegal file type was uploaded and Woocommerce was active.
+* Fixed: Make sure PDF files display correctly with show_image=1 in WP 4.7.
+* Fixed: Scroll error when switching pages with Ajax submit.
+* Fixed: Make sure dependent autocomplete Lookup fields aren't disabled permanently.
+* Fixed: Make sure GET variables set in View shortcodes work correctly.
+
+= 2.02.11 =
+* New: Added frm_create_default_email_action hook to prevent default email action creation.
+* New: Added frm_inline_submit CSS Layout Class.
+* Improved: Include IP for checking comment blacklist.
+* Improved: Load minified themepicker js and placeholder js when possible.
+* Improved: Better spam checking with Akismet.
+* Improved: Update placeholder JS for old browsers to v2.3.1.
+* Fixed: Don’t force fields created by a add-on to a text field when Pro is not installed.
+* Fixed: Style success message text color now applies to nested paragraph tags.
+* Fixed: Prevent PHP warning messages some sites are seeing during cache key retrieval.
+* Fixed: -1 offset in frm_scroll_offset hook now stops auto-scrolling.
+* Fixed: Invalid Portuguese translation for field is invalid message.
+* Fixed: A few HTML errors on form Settings page are resolved.
+* Fixed: Set default margin on checkbox and radio divs. This resolves conflicts with Bootstrap styling and frm_two_col and frm_three_col classes.
+* Fixed: If same form is published multiple times on the same page, make sure success message shows with the right occurrence of the form. Auto-scroll to the correct form as well.
+* **Pro Version** *
+* New: Add time_ago=2 and time_ago=3 to created_at shortcode options. The number used here will determine how many time levels are shown, e.g. time_ago=1 will show “2 years”, time_ago=2 will show “2 years 3 months”, time_ago=3 will show "2 years 3 months 15 days”.
+* New: Allow time comparisons with NOW, e.g. [if x less_than="NOW"]Show this content[/if x]
+* New: Added author_link parameter to userID shortcode options. [25 show=author_link] will include a link to the WordPress author page.
+* New: Added frm_allow_date_mismatch hook to improve validation for certain date formats. This may be needed if you are using a custom format in your date fields that include non-English text.
+* New: Added greater than or equal to and less than or equal to filter to stats and graphs.
+* Improved: Added comma between values in text calculation when multiple values come from the same field.
+* Improved: RTL indented sub-category styling for checkboxes and radio buttons.
+* Improved: Include the hidden Dropzone field inside the form instead of in the footer.
+* Improved: Remove entry div from the page after fadeout when deleting an entry.
+* Improved: Order post type dropdown in Create Post action by post key.
+* Improved: Allow repeating fields to be selected in a field's Lookup population options.
+* Improved: Repeating entry keys are now randomly generated.
+* Improved: Allow dynamic default value shortcodes in calculation box.
+* Fixed: Do not filter shortcodes submitted in entry when editing the entry. Process external shortcodes before replacing [input].
+* Fixed: The default value is now set correctly in dependent Lookup radio and checkbox fields.
+* Fixed: Style font now applies to section headings.
+* Fixed: Unnecessary urlencode removed from $_GET variable. Allows searching with + symbol in query string now.
+* Fixed: Endless loop prevented when new child form is given same ID as parent from XML.
+* Fixed: Allow updating of read-only dropdown in back-end Entries.
+* Fixed: Lookup field options wouldn't update while dropdown was open in Chrome on Windows. Dropdown is now disabled until options are completely loaded.
+* Fixed: Ensure that autocomplete text shows in dropdown when theme styling is overridden in Style.
+* Fixed: UserID field now autopopulates correctly when creating an entry in the WordPress dashboard.
+* Fixed: Errors on entries page when file didn't exist.
+* Fixed: The include_zero parameter in graphs caused errors with certain WordPress date formats. This now works with any date format.
+* Fixed: Using "hours" in a Creation Date View filter would result in erroneous results.
+* Fixed: Data was duplicated in the frm_item_metas and post meta or taxonomies table. It is now only present in the post meta or taxonomies table.
+* Fixed: Do not force html=1 on file upload field in frm-field-value shortcode.
+* Fixed: Prevent errors when a hidden field or text field is used for post status.
+
 = 2.02.10 =
 * Add frm_form_error_class hook
 * Fix db error when updating title in some forms
