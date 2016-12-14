@@ -254,7 +254,7 @@ legend.frm_hidden{
     100% { transform: rotate(360deg); }
 }
 
-.js .frm_pro_form {
+.js .frm_pro_form:not(.frm_no_hide) {
     display:none;
 }
 

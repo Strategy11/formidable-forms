@@ -3127,7 +3127,8 @@ function frmFrontFormJS(){
 					removeSubmitLoading( object );
 					var formID = jQuery(object).find('input[name="form_id"]').val();
 					jQuery(object).find('.frm_form_field').fadeOut('slow', function(){
-						response.content = response.content.replace(/ class="frm_form_field /g, 'class="frm_hidden frm_form_field ');
+						response.content = response.content.replace(/ class="frm_form_field /g, ' class="frm_hidden frm_form_field ');
+						response.content = response.content.replace(/ frm_pro_form /g, ' frm_pro_form frm_no_hide ');
 						jQuery(object).closest( '.frm_forms' ).replaceWith( response.content );
 						jQuery('#frm_form_'+ formID +'_container .frm_form_field').fadeIn('slow');
 					});
