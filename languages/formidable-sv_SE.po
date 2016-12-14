@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Formidable v2.02.10\n"
+"Project-Id-Version: Formidable v2.02.12\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-01 03:07+0000\n"
-"PO-Revision-Date: Fri Dec 09 2016 12:30:55 GMT-0800 (PST)\n"
+"PO-Revision-Date: Tue Dec 13 2016 17:00:11 GMT-0800 (PST)\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: Swedish\n"
@@ -689,7 +689,7 @@ msgid "Add/Edit Views"
 msgstr "Lägga till/redigera vyer"
 
 #: ../classes/helpers/FrmAppHelper.php:1080 ../classes/helpers/FrmFieldsHelper.
-#: php:175 ../pro/classes/controllers/FrmProFieldsController.php:1523
+#: php:175 ../pro/classes/controllers/FrmProFieldsController.php:1524
 #, php-format
 msgid "%s is invalid"
 msgstr "%s är ogiltigt"
@@ -2977,19 +2977,19 @@ msgstr "Textstycke"
 
 #: ../classes/models/FrmField.php:14 ..
 #: pro/classes/controllers/FrmProLookupFieldsController.php:14 ..
-#: pro/classes/helpers/FrmProFieldsHelper.php:3611
+#: pro/classes/helpers/FrmProFieldsHelper.php:3610
 msgid "Checkboxes"
 msgstr "Kryssrutor"
 
 #: ../classes/models/FrmField.php:15 ../classes/views/styles/_sample_form.php:56 .
 #: ./pro/classes/controllers/FrmProLookupFieldsController.php:13 ..
-#: pro/classes/helpers/FrmProFieldsHelper.php:3610
+#: pro/classes/helpers/FrmProFieldsHelper.php:3609
 msgid "Radio Buttons"
 msgstr "Radioknappar"
 
 #: ../classes/models/FrmField.php:16 ..
 #: pro/classes/controllers/FrmProLookupFieldsController.php:12 ..
-#: pro/classes/helpers/FrmProFieldsHelper.php:3609
+#: pro/classes/helpers/FrmProFieldsHelper.php:3608
 msgid "Dropdown"
 msgstr "Rullgardinsmeny"
 
@@ -3010,7 +3010,7 @@ msgid "End Section"
 msgstr "Slut på sektion"
 
 #: ../classes/models/FrmField.php:31 ../pro/classes/helpers/FrmProFieldsHelper.
-#: php:3597
+#: php:3596
 msgid "Section"
 msgstr "Sektion"
 
@@ -3047,7 +3047,7 @@ msgid "Scale"
 msgstr "Skala"
 
 #: ../classes/models/FrmField.php:41 ../pro/classes/helpers/FrmProFieldsHelper.
-#: php:3607
+#: php:3606
 msgid "Dynamic Field"
 msgstr "Dynamiskt fält"
 
@@ -4957,13 +4957,13 @@ msgid "Headings"
 msgstr "Rubriker"
 
 #: ../classes/views/styles/_section-fields.php:7 ..
-#: pro/classes/helpers/FrmProFieldsHelper.php:3600 ../pro/classes/views/frmpro-
+#: pro/classes/helpers/FrmProFieldsHelper.php:3599 ../pro/classes/views/frmpro-
 #: fields/options-form-top.php:11
 msgid "Collapsible"
 msgstr "Hopfällbar"
 
 #: ../classes/views/styles/_section-fields.php:10 ..
-#: pro/classes/helpers/FrmProFieldsHelper.php:3601 ../pro/classes/views/frmpro-
+#: pro/classes/helpers/FrmProFieldsHelper.php:3600 ../pro/classes/views/frmpro-
 #: fields/options-form-top.php:20
 msgid "Repeatable"
 msgstr "Upprepning"
@@ -5943,7 +5943,7 @@ msgid "Display format"
 msgstr "Visningsformat"
 
 #: ../pro/classes/controllers/FrmProFormsController.php:507 ..
-#: pro/classes/helpers/FrmProFieldsHelper.php:3612
+#: pro/classes/helpers/FrmProFieldsHelper.php:3611
 msgid "List"
 msgstr "Lista"
 
@@ -6283,7 +6283,7 @@ msgstr "Lägg till en roterande klass för 'even' eller 'odd'"
 msgid "Default Email Message"
 msgstr "E-postmeddelande standard"
 
-#: ../pro/classes/helpers/FrmProFieldsHelper.php:3599
+#: ../pro/classes/helpers/FrmProFieldsHelper.php:3598
 msgid "Heading"
 msgstr "Rubrik"
 
