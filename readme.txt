@@ -10,7 +10,7 @@ WordPress form builder for completely customizable forms with simple drag-and-dr
 == Description ==
 Build WordPress forms the fast and simple way. Create custom Formidable forms or generate them from a template with this flexible WordPress form plugin. From the smallest sidebar opt-in form to large job application forms, Formidable Forms is built to do it all. Formidable Forms has a visual form styler and no knowledge of HTML or CSS is necessary to create professional looking forms. However, Formidable Forms are completely customizable with custom HTML or CSS. Users can set their style for reuse with a single templated style.
 
-[View Documentation](http://formidablepro.com/knowledgebase/ "View Documentation")
+[View WordPress Form Builder Documentation](https://formidableforms.com/knowledgebase/ "View WordPress Form Builder Documentation")
 [Contribute on Github](https://github.com/Strategy11/formidable-forms "Contribute on Github")
 
 = Features =
@@ -46,7 +46,7 @@ Build WordPress forms the fast and simple way. Create custom Formidable forms or
 * Import our pre-built form/view demo templates as a starting point or a final product
 * Support for all Formidable features. If you have questions or need guidance on how to set up your application, we are happy to help. We want to make you look fabulous for your clients, and allow you to take on big jobs.
 
-Learn more at: http://formidablepro.com
+Learn more at: https://formidableforms.com
 
 == Installation ==
 1. Go to your Plugins -> Add New page in your WordPress admin
@@ -85,7 +85,7 @@ A. The field and form names and descriptions are all changed with in-place edit.
 
 A. Try clearing your browser cache. As plugin modifications are made, frequent javascript and stylesheet changes are also made. However, the previous versions may be cached so you aren't using the modified files. After clearing your cache and you're still having issues, please let us know.
 
-[See more FAQs](http://formidablepro.com/formidable-faqs/ "Formidable Form FAQs")
+[See more FAQs](https://formidableforms.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
 = 2.02.12 =
@@ -658,7 +658,7 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * Fix error with no posted values in embedded forms
 * Escape CSV cells with ' if they start with = (this is to prevent a vulnerability in Excel)
 * Prevent array keys from being appended to user meta vals
-* Switch autoupdating to EDD at formidablepro.com
+* Switch autoupdating to EDD at formidableforms.com
 * Prevent frm_display_id from switching when View is updated
 * Fix multi-file upload display for embedded forms
 * Allow text value to autopopulate dynamic fields
@@ -1573,7 +1573,7 @@ A. Try clearing your browser cache. As plugin modifications are made, frequent j
 * PRO: Added entry key and entry ID to the where options in custom displays
 * PRO: Added HTML classes on the search form, so if themes include styling for the WP search form, it will be applied to the [frm-search] as well
 * PRO: Allow multiple data from entries fields to be searched using the frm-search shortcode instead of only one
-* PRO: Fixed update checking to not cause a slow down if the formidablepro.com server is down
+* PRO: Fixed update checking to not cause a slow down if the formidableforms.com server is down
 * PRO: Updated the user_id parameter for the display-frm-data shortcode to be used even if there's no user ID field selected in the where options for that custom display
 * PRO: Added DOING_AJAX flags for WPML compatibility
 * PRO: Added time_ago=1 option for displaying dates. Ex: [created-at time_ago=1] or [25 time_ago=1]
