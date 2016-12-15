@@ -530,6 +530,10 @@ if ( ! $submit_style ) { ?>
     vertical-align:middle;
 }
 
+.<?php echo esc_html( $style_class ) ?> .frm_compact .frm_dropzone.dz-clickable .dz-message{
+	margin:0;
+}
+
 <?php
 	if ( empty( $submit_bg_img ) ) {
 ?>.<?php echo esc_html( $style_class ) ?> input[type=submit]:hover,
