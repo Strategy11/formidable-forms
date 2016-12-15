@@ -3292,27 +3292,20 @@ function frmFrontFormJS(){
 	}
 
 	function showSubmitLoading( object ) {
-		var submit = jQuery(object).find('button.frm_button_submit');
-		if ( submit.length && !submit.hasClass('frm_loading_button') ) {
-			submit.addClass('frm_loading_button');
-			submit.attr('disabled', 'disabled');
+		if ( object.className.indexOf('frm_loading_form') === -1 ) {
+			object.className += ' frm_loading_form';
 		}
 
 		// Disable submit button
-		jQuery(object).find('input[type="submit"], input[type="button"]').attr('disabled','disabled');
+		jQuery(object).find('input[type="submit"], input[type="button"], button[type="submit"]').attr('disabled','disabled');
 	}
 
 	function removeSubmitLoading( object, enable ) {
-		var submit = jQuery(object).find('button.frm_loading_button');
-		if ( submit.length ) {
-			submit.removeClass('frm_loading_button');
-			if ( enable == 'enable' ) {
-				submit.removeAttr('disabled');
-			}
-		}
+		var formClass = object.className;
+		object.className = object.className.replace(new RegExp('(?:^|\\s)'+ 'frm_loading_form' + '(?:\\s|$)'), ' ');
 
 		if ( enable == 'enable' ) {
-			jQuery(object).find('input[type="submit"], input[type="button"]').removeAttr('disabled');
+			jQuery(object).find('input[type="submit"], input[type="button"], button[type="submit"]').removeAttr('disabled');
 		}
 	}
 

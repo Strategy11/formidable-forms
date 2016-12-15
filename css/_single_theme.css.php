@@ -558,14 +558,14 @@ if ( ! $submit_style ) { ?>
     color: <?php echo esc_html( $submit_active_color . $important ) ?>;
 }
 
-.<?php echo esc_html( $style_class ) ?> button.frm_loading_button,
-.<?php echo esc_html( $style_class ) ?> button.frm_loading_button:hover,
-.<?php echo esc_html( $style_class ) ?> button.frm_loading_button:active,
-.<?php echo esc_html( $style_class ) ?> button.frm_loading_button:focus{
+.<?php echo esc_html( $style_class ) ?> .frm_loading_form .frm_button_submit,
+.<?php echo esc_html( $style_class ) ?> .frm_loading_form .frm_button_submit:hover,
+.<?php echo esc_html( $style_class ) ?> .frm_loading_form .frm_button_submit:active,
+.<?php echo esc_html( $style_class ) ?> .frm_loading_form .frm_button_submit:focus{
 	color: transparent <?php echo esc_html( $important ) ?>;
 }
 
-.<?php echo esc_html( $style_class ) ?> .frm_loading_button:before {
+.<?php echo esc_html( $style_class ) ?> .frm_loading_form .frm_button_submit:before {
 	border-bottom-color: <?php echo esc_html( $submit_text_color . $important ) ?>;
 	border-right-color: <?php echo esc_html( $submit_text_color . $important ) ?>;
 	max-height:<?php echo esc_html( $submit_height ) ?>;

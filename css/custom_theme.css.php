@@ -207,23 +207,23 @@ legend.frm_hidden{
     margin: 0 auto;
 }
 
-.with_frm_style .frm_loading_button {
+.with_frm_style .frm_loading_form .frm_button_submit {
     position: relative;
     opacity: .8;
     color: transparent !important;
     text-shadow: none !important;
 }
 
-.with_frm_style .frm_loading_button:hover,
-.with_frm_style .frm_loading_button:active,
-.with_frm_style .frm_loading_button:focus {
+.with_frm_style .frm_loading_form .frm_button_submit:hover,
+.with_frm_style .frm_loading_form .frm_button_submit:active,
+.with_frm_style .frm_loading_form .frm_button_submit:focus {
     cursor: not-allowed;
     color: transparent;
     outline: none !important;
     box-shadow: none;
 }
 
-.with_frm_style .frm_loading_button:before {
+.with_frm_style .frm_loading_form .frm_button_submit:before {
     content: '';
     display: inline-block;
 
