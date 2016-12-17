@@ -9,7 +9,7 @@ Author: Strategy11
 Text Domain: formidable
 */
 
-/*  Copyright 2010  Strategy11  (email : support@strategy11.com)
+/*  Copyright 2010  Formidable Forms
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License, version 2, as
