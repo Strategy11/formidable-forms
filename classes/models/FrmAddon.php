@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class FrmAddon {
-	public $store_url = 'https://formidablepro.com';
+	public $store_url = 'https://formidableforms.com';
 	public $download_id;
 	public $plugin_file;
 	public $plugin_folder;
@@ -317,10 +317,10 @@ class FrmAddon {
 
 		$message = __( 'Your License Key was invalid', 'formidable' );
 		if ( is_wp_error( $resp ) ) {
-			$message = sprintf( __( 'You had an error communicating with Formidable Pro\'s API. %1$sClick here%2$s for more information.', 'formidable' ), '<a href="http://formidablepro.com/knowledgebase/why-cant-i-activate-formidable-pro/" target="_blank">', '</a>');
+			$message = sprintf( __( 'You had an error communicating with the Formidable API. %1$sClick here%2$s for more information.', 'formidable' ), '<a href="https://formidableforms.com/knowledgebase/why-cant-i-activate-formidable-pro/" target="_blank">', '</a>');
 			$message .= ' ' . $resp->get_error_message();
 		} else if ( $body == 'error' || is_wp_error( $body ) ) {
-			$message = __( 'You had an HTTP error connecting to Formidable Pro\'s API', 'formidable' );
+			$message = __( 'You had an HTTP error connecting to the Formidable API', 'formidable' );
 		} else {
 			$json_res = json_decode( $body, true );
 			if ( null !== $json_res ) {

@@ -16,7 +16,7 @@ class FrmAddonsController {
 		$addons = self::get_api_addons();
 		self::prepare_addons( $addons );
 
-		$site_url = 'https://formidablepro.com/';
+		$site_url = 'https://formidableforms.com/';
 
 		include( FrmAppHelper::plugin_path() . '/classes/views/addons/list.php' );
 	}
@@ -185,7 +185,7 @@ class FrmAddonsController {
 
 		$license = get_option('frmpro-credentials');
 		if ( $license && is_array( $license ) && isset( $license['license'] ) ) {
-			$url = 'http://formidablepro.com/frm-edd-api/licenses?l=' . urlencode( base64_encode( $license['license'] ) );
+			$url = 'https://formidableforms.com/frm-edd-api/licenses?l=' . urlencode( base64_encode( $license['license'] ) );
 			$licenses = self::send_api_request( $url, array( 'name' => 'frm_api_licence', 'expires' => 60 * 60 * 5 ) );
 			echo json_encode( $licenses );
 		}

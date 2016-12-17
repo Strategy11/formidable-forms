@@ -89,7 +89,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 				'entry' => 'jamie_entry_key',
 			),
 			array(
-				'val' => 'https://formidablepro.com/wp-content/uploads/formidable/formidablepro.real_estate_listings.2015-08-10.xml',
+				'val' => 'https://formidableforms.com/wp-content/uploads/formidable/formidablepro.real_estate_listings.2015-08-10.xml',
 				'field' => $single_file_upload_field,
 				'entry' => 'steph_entry_key',
 			),
@@ -97,7 +97,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 				'val' => array(
 					'https://s3.amazonaws.com/fp.strategy11.com/images/knowledgebase/global-settings_enter-license1.png',
 					'https://s3.amazonaws.com/fp.strategy11.com/images/knowledgebase/create-a-form_add-new.png',
-					'https://formidablepro.com/wp-content/uploads/formidable/formidablepro.real_estate_listings.2015-08-10.xml',
+					'https://formidableforms.com/wp-content/uploads/formidable/formidablepro.real_estate_listings.2015-08-10.xml',
 				),
 				'field' => $multi_file_upload_field,
 				'entry' => 'jamie_entry_key',
