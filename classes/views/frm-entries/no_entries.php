@@ -7,7 +7,7 @@ if ( $form && isset($form->options['no_save']) && $form->options['no_save'] ) { 
 } else if ( $form ) {
 ?>
 <div class="frm_no_entries_header"><?php printf(__( 'No Entries for form: %s', 'formidable' ), $form->name); ?></div>
-<p class="frm_no_entries_text"><?php printf( __( 'For instructions on publishing your form see %1$sthis page%2$s <br/> or click "%3$sAdd New%4$s" above to add an entry from here (Requires License)', 'formidable' ), '<a href="https://formidablepro.com/knowledgebase/publish-your-forms/" target="_blank">', '</a>', '<a href="' . esc_url( admin_url('admin.php?page=formidable-entries&frm_action=new&form=' . $form->id ) ) . '">', '</a>' ); ?></p>
+<p class="frm_no_entries_text"><?php printf( __( 'For instructions on publishing your form see %1$sthe docs%2$s or click "%3$sAdd New%4$s" above to add an entry from here (Requires License)', 'formidable' ), '<a href="https://formidableforms.com/knowledgebase/publish-your-forms/" target="_blank">', '</a> <br/>', '<a href="' . esc_url( admin_url('admin.php?page=formidable-entries&frm_action=new&form=' . $form->id ) ) . '">', '</a>' ); ?></p>
 <?php
 } else {
 ?>

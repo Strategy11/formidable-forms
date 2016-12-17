@@ -105,7 +105,7 @@ class FrmAppController {
             FrmAppHelper::load_admin_wide_js();
 
             // user is authorized, but running free version
-            $inst_install_url = 'https://formidablepro.com/knowledgebase/install-formidable-forms/';
+            $inst_install_url = 'https://formidableforms.com/knowledgebase/install-formidable-forms/';
         ?>
 <div class="error" class="frm_previous_install">
 		<?php
@@ -138,7 +138,7 @@ class FrmAppController {
 <div class="update-nag frm-update-to-pro">
 	<?php echo FrmAppHelper::kses( $tip['tip'] ) ?>
 	<span><?php echo FrmAppHelper::kses( $tip['call'] ) ?></span>
-	<a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url('https://formidablepro.com?banner=1&tip=' . absint( $tip['num'] ) ) ) ?>" class="button">Upgrade to Pro</a>
+	<a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url('https://formidableforms.com?banner=1&tip=' . absint( $tip['num'] ) ) ) ?>" class="button">Upgrade to Pro</a>
 </div>
 <?php
 		}
