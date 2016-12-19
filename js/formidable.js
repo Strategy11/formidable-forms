@@ -1690,6 +1690,7 @@ function frmFrontFormJS(){
 				triggerChange(jQuery(childSelect), childFieldArgs.fieldKey);
 			}
 		} else {
+			childFieldArgs.isReadOnly = childSelect.disabled;
 			disableLookup( childSelect );
 
 			// If all parents have values, check for updated options
@@ -1704,7 +1705,7 @@ function frmFrontFormJS(){
 					nonce:frm_js.nonce
 				},
 				success:function(newOptions){
-					replaceSelectLookupFieldOptions( childFieldArgs.fieldKey, childSelect, newOptions );
+					replaceSelectLookupFieldOptions( childFieldArgs, childSelect, newOptions );
 				}
 			});
 		}
@@ -1734,9 +1735,12 @@ function frmFrontFormJS(){
 	 *
 	 * @since 2.02.11
 	 * @param {object} childSelect
+	 * @pparam {boolean} isReadOnly
 	 */
-	function enableLookup( childSelect ) {
-		childSelect.disabled = false;
+	function enableLookup( childSelect, isReadOnly ) {
+		if ( isReadOnly === false ) {
+			childSelect.disabled = false;
+		}
 		childSelect.className = childSelect.className.replace( ' frm_loading_lookup', '' );
 	}
 
@@ -1744,11 +1748,13 @@ function frmFrontFormJS(){
 	 * Replace the options in a Select Lookup field
 	 *
 	 * @since 2.01.0
-	 * @param {string} fieldKey
+	 * @param {Object} fieldArgs
+	 * @param {string} fieldArgs.fieldKey
+	 * @param {boolean} fieldArgs.isReadOnly
 	 * @param {object} childSelect
 	 * @param {Array} newOptions
 	 */
-	function replaceSelectLookupFieldOptions( fieldKey, childSelect, newOptions ) {
+	function replaceSelectLookupFieldOptions( fieldArgs, childSelect, newOptions ) {
 		var origVal = childSelect.value;
 
 		newOptions = JSON.parse( newOptions );
@@ -1766,13 +1772,13 @@ function frmFrontFormJS(){
 
 		setSelectLookupVal( childSelect, origVal );
 
-		enableLookup( childSelect );
+		enableLookup( childSelect, fieldArgs.isReadOnly );
 
 		maybeUpdateChosenOptions( childSelect );
 
 		// Trigger a change if the new value is different from the old value
 		if ( childSelect.value != origVal ) {
-			triggerChange( jQuery(childSelect), fieldKey );
+			triggerChange( jQuery(childSelect), fieldArgs.fieldKey );
 		}
 	}
 
@@ -1794,6 +1800,7 @@ function frmFrontFormJS(){
 	 *
 	 * @since 2.01.01
 	 * @param {Object} childFieldArgs
+	 * @param {Array} childFieldArgs.parentVals
 	 * @param {object} childDiv
      */
 	function maybeReplaceCbRadioLookupOptions( childFieldArgs, childDiv ) {
