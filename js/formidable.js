@@ -3134,11 +3134,11 @@ function frmFrontFormJS(){
 					// the form or success message was returned
 
 					jQuery(object).find('.frm_ajax_loading').removeClass('frm_loading_now');
-					var formID = jQuery(object).find('input[name="form_id"]').val();
-					jQuery(object).closest( '.frm_forms' ).replaceWith( response.content );
 					if ( frm_js.offset != -1 ) {
 						frmFrontForm.scrollMsg( jQuery(object), false );
 					}
+					var formID = jQuery(object).find('input[name="form_id"]').val();
+					jQuery(object).closest( '.frm_forms' ).replaceWith( response.content );
 
 					if(typeof(frmThemeOverride_frmAfterSubmit) == 'function'){
 						var pageOrder = jQuery('input[name="frm_page_order_'+ formID +'"]').val();
@@ -4097,8 +4097,9 @@ function frmFrontFormJS(){
 			} else {
 				scrollObj = id;
 			}
+
 			var newPos = scrollObj.offset().top;
-			if ( !newPos && newPos !== 0 ){
+			if ( !newPos ){
 				return;
 			}
 			newPos = newPos-frm_js.offset;
