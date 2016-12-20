@@ -132,6 +132,11 @@ function frmFrontFormJS(){
 		var form = field.closest('form');
 		var submitButton = form.find('input[type="submit"], .frm_submit input[type="button"]');
 		var loading = form.find('.frm_ajax_loading');
+		var formID = '#'+ form.attr('id');
+		if ( formID == '#undefined' ) {
+			// use a class if there is not id for WooCommerce
+			formID = 'form.' + form.attr('class').replace(' ', '.');
+		}
 
 		field.dropzone({
 			url:frm_js.ajax_url,
@@ -140,7 +145,7 @@ function frmFrontFormJS(){
 			maxFilesize: uploadFields[i].maxFilesize,
 			maxFiles: max,
 			uploadMultiple: uploadFields[i].uploadMultiple,
-			hiddenInputContainer:'#'+ form.attr('id'),
+			hiddenInputContainer:formID,
 			dictDefaultMessage: uploadFields[i].defaultMessage,
 			dictFallbackMessage: uploadFields[i].fallbackMessage,
 			dictFallbackText: uploadFields[i].fallbackText,
