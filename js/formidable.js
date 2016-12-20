@@ -122,6 +122,11 @@ function frmFrontFormJS(){
 		}
 
 		var form = field.closest('form');
+		var formID = '#'+ form.attr('id');
+		if ( formID == '#undefined' ) {
+			// use a class if there is not id for WooCommerce
+			formID = 'form.' + form.attr('class').replace(' ', '.');
+		}
 
 		field.dropzone({
 			url:frm_js.ajax_url,
@@ -130,7 +135,7 @@ function frmFrontFormJS(){
 			maxFilesize: uploadFields[i].maxFilesize,
 			maxFiles: max,
 			uploadMultiple: uploadFields[i].uploadMultiple,
-			hiddenInputContainer:'#'+ form.attr('id'),
+			hiddenInputContainer:formID,
 			dictDefaultMessage: uploadFields[i].defaultMessage,
 			dictFallbackMessage: uploadFields[i].fallbackMessage,
 			dictFallbackText: uploadFields[i].fallbackText,
@@ -1678,6 +1683,7 @@ function frmFrontFormJS(){
 				triggerChange(jQuery(childSelect), childFieldArgs.fieldKey);
 			}
 		} else {
+			childFieldArgs.isReadOnly = childSelect.disabled;
 			disableLookup( childSelect );
 
 			// If all parents have values, check for updated options
@@ -1692,7 +1698,7 @@ function frmFrontFormJS(){
 					nonce:frm_js.nonce
 				},
 				success:function(newOptions){
-					replaceSelectLookupFieldOptions( childFieldArgs.fieldKey, childSelect, newOptions );
+					replaceSelectLookupFieldOptions( childFieldArgs, childSelect, newOptions );
 				}
 			});
 		}
@@ -1722,9 +1728,12 @@ function frmFrontFormJS(){
 	 *
 	 * @since 2.02.11
 	 * @param {object} childSelect
+	 * @pparam {boolean} isReadOnly
 	 */
-	function enableLookup( childSelect ) {
-		childSelect.disabled = false;
+	function enableLookup( childSelect, isReadOnly ) {
+		if ( isReadOnly === false ) {
+			childSelect.disabled = false;
+		}
 		childSelect.className = childSelect.className.replace( ' frm_loading_lookup', '' );
 	}
 
@@ -1732,11 +1741,13 @@ function frmFrontFormJS(){
 	 * Replace the options in a Select Lookup field
 	 *
 	 * @since 2.01.0
-	 * @param {string} fieldKey
+	 * @param {Object} fieldArgs
+	 * @param {string} fieldArgs.fieldKey
+	 * @param {boolean} fieldArgs.isReadOnly
 	 * @param {object} childSelect
 	 * @param {Array} newOptions
 	 */
-	function replaceSelectLookupFieldOptions( fieldKey, childSelect, newOptions ) {
+	function replaceSelectLookupFieldOptions( fieldArgs, childSelect, newOptions ) {
 		var origVal = childSelect.value;
 
 		newOptions = JSON.parse( newOptions );
@@ -1754,13 +1765,13 @@ function frmFrontFormJS(){
 
 		setSelectLookupVal( childSelect, origVal );
 
-		enableLookup( childSelect );
+		enableLookup( childSelect, fieldArgs.isReadOnly );
 
 		maybeUpdateChosenOptions( childSelect );
 
 		// Trigger a change if the new value is different from the old value
 		if ( childSelect.value != origVal ) {
-			triggerChange( jQuery(childSelect), fieldKey );
+			triggerChange( jQuery(childSelect), fieldArgs.fieldKey );
 		}
 	}
 
@@ -1782,6 +1793,7 @@ function frmFrontFormJS(){
 	 *
 	 * @since 2.01.01
 	 * @param {Object} childFieldArgs
+	 * @param {Array} childFieldArgs.parentVals
 	 * @param {object} childDiv
      */
 	function maybeReplaceCbRadioLookupOptions( childFieldArgs, childDiv ) {
@@ -3125,6 +3137,9 @@ function frmFrontFormJS(){
 					// the form or success message was returned
 
 					removeSubmitLoading( object );
+					if ( frm_js.offset != -1 ) {
+						frmFrontForm.scrollMsg( jQuery(object), false );
+					}
 					var formID = jQuery(object).find('input[name="form_id"]').val();
 					jQuery(object).find('.frm_form_field').fadeOut('slow', function(){
 						response.content = response.content.replace(/ class="frm_form_field /g, ' class="frm_hidden frm_form_field ');
@@ -3133,9 +3148,6 @@ function frmFrontFormJS(){
 						jQuery('#frm_form_'+ formID +'_container .frm_form_field').fadeIn('slow');
 					});
 
-					if ( frm_js.offset != -1 ) {
-						frmFrontForm.scrollMsg( jQuery(object), false );
-					}
 					addUrlParam(response);
 
 					if(typeof(frmThemeOverride_frmAfterSubmit) == 'function'){
@@ -4147,9 +4159,9 @@ function frmFrontFormJS(){
 			} else {
 				scrollObj = id;
 			}
-			var newPos = scrollObj.offset().top;
 
-			if(!newPos){
+			var newPos = scrollObj.offset().top;
+			if ( !newPos ){
 				return;
 			}
 			newPos = newPos-frm_js.offset;
