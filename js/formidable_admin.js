@@ -679,14 +679,16 @@ function frmAdminBuildJS(){
 
 	function defaultBlank(){
 		var switch_to = '0';
-		var t = frm_admin_js.valid_default;
+		var tooltip_message = frm_admin_js.valid_default;
 		if(this.className.indexOf('frm_inactive_icon') !== -1){
 			switch_to = '1';
-			t = frm_admin_js.no_valid_default;
+			tooltip_message = frm_admin_js.no_valid_default;
 		}
-		var field_id = jQuery(this).closest('li.form-field').data('fid');
-		jQuery(this).toggleClass('frm_inactive_icon').attr('title', t).tooltip('destroy').next('.tooltip').remove();
-		jQuery(this).tooltip('show');
+		var icon = jQuery(this);
+		var field_id = icon.closest('li.form-field').data('fid');
+		icon.toggleClass('frm_inactive_icon').attr('title', tooltip_message);
+		icon.tooltip('destroy').tooltip('show');
+		icon.attr('data-original-title', tooltip_message);
 		jQuery('input[name="field_options[default_blank_'+ field_id +']"]').val(switch_to);
 		return false;
 	}
