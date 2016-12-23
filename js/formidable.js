@@ -3005,6 +3005,11 @@ function frmFrontFormJS(){
 			} else {
 				fieldID = getFieldId( field, false );
 			}
+
+			if ( fieldClasses.indexOf('frm_time_select') !== -1 ) {
+				// set id for time field
+				fieldID = fieldID.replace('-H', '').replace('-m', '');
+			}
 		}
 
 		if ( val === '' ) {
