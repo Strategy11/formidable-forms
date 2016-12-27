@@ -664,23 +664,16 @@ function frmAdminBuildJS(){
 		return false;
 	}
 
-	function toggleClearOnFocus(){
-		toggleDefaultValueIcon( 'clear_on_focus', this );
-	}
-
-	function toggleDefaultBlank(){
-		toggleDefaultValueIcon( 'default_blank', this );
-	}
-
 	/**
 	 * Toggle a default value icon
 	 *
 	 * @since 2.02.13
 	 *
-	 * @param {string} type
-	 * @param {Object} icon
+	 * @param {Object} event
+	 * @param {string} event.data.iconType
 	 */
-	function toggleDefaultValueIcon( type, icon ) {
+	function toggleDefaultValueIcon( event ) {
+		var type = event.data.iconType;
 		var messages = getTooltipMessages( type );
 		if ( ! ( 'active' in messages ) ) {
 			return;
@@ -688,12 +681,12 @@ function frmAdminBuildJS(){
 
 		var switch_to = '0';
 		var tooltipMessage = messages.active;
-		if ( icon.className.indexOf( 'frm_inactive_icon' ) !== -1 ) {
+		if ( this.className.indexOf( 'frm_inactive_icon' ) !== -1 ) {
 			switch_to = '1';
 			tooltipMessage = messages.inactive;
 		}
 
-		var $icon = jQuery(icon);
+		var $icon = jQuery(this);
 
 		$icon.toggleClass( 'frm_inactive_icon' );
 
@@ -2318,8 +2311,8 @@ function frmAdminBuildJS(){
 			$newFields.on('click', 'input.frm_req_field', markRequired);
 			$newFields.on('click', 'a.frm_req_field', clickRequired);
 			$newFields.on('click', '.frm_mark_unique', markUnique);
-			$newFields.on('click', '.frm_reload_icon', toggleClearOnFocus);
-			$newFields.on('click', '.frm_error_icon', toggleDefaultBlank);
+			$newFields.on('click', '.frm_reload_icon', { iconType: 'clear_on_focus' }, toggleDefaultValueIcon);
+			$newFields.on('click', '.frm_error_icon', { iconType: 'default_blank' }, toggleDefaultValueIcon);
 
 			$newFields.on('click', '.frm_repeat_field', toggleRepeat);
 			$newFields.on('change', '.frm_repeat_format', toggleRepeatButtons);
