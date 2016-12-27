@@ -664,33 +664,77 @@ function frmAdminBuildJS(){
 		return false;
 	}
 
-	function clearOnFocus(){
-		var switch_to = '0';
-		var t = frm_admin_js.no_clear_default;
-		if(this.className.indexOf('frm_inactive_icon') !== -1){
-			switch_to = '1';
-			t = frm_admin_js.clear_default;
-		}
-		var field_id=jQuery(this).closest('li.form-field').data('fid');
-		jQuery(this).toggleClass('frm_inactive_icon').attr('title', t).tooltip('destroy').tooltip('show');
-		jQuery('input[name="field_options[clear_on_focus_'+ field_id +']"]').val(switch_to);
-		return false;
+	function toggleClearOnFocus(){
+		toggleDefaultValueIcon( 'clear_on_focus', this );
 	}
 
-	function defaultBlank(){
-		var switch_to = '0';
-		var tooltip_message = frm_admin_js.valid_default;
-		if(this.className.indexOf('frm_inactive_icon') !== -1){
-			switch_to = '1';
-			tooltip_message = frm_admin_js.no_valid_default;
+	function toggleDefaultBlank(){
+		toggleDefaultValueIcon( 'default_blank', this );
+	}
+
+	/**
+	 * Toggle a default value icon
+	 *
+	 * @since 2.02.13
+	 *
+	 * @param {string} type
+	 * @param {Object} icon
+	 */
+	function toggleDefaultValueIcon( type, icon ) {
+		var messages = getTooltipMessages( type );
+		if ( ! ( 'active' in messages ) ) {
+			return;
 		}
-		var icon = jQuery(this);
-		var field_id = icon.closest('li.form-field').data('fid');
-		icon.toggleClass('frm_inactive_icon').attr('title', tooltip_message);
-		icon.tooltip('destroy').tooltip('show');
-		icon.attr('data-original-title', tooltip_message);
-		jQuery('input[name="field_options[default_blank_'+ field_id +']"]').val(switch_to);
-		return false;
+
+		var switch_to = '0';
+		var tooltipMessage = messages.active;
+		if ( icon.className.indexOf( 'frm_inactive_icon' ) !== -1 ) {
+			switch_to = '1';
+			tooltipMessage = messages.inactive;
+		}
+
+		var $icon = jQuery(icon);
+
+		$icon.toggleClass( 'frm_inactive_icon' );
+
+		changeBootstrapTooltipText( $icon, tooltipMessage );
+
+		var field_id = $icon.closest( 'li.form-field') .data( 'fid' );
+		jQuery('input[name="field_options[' + type + '_'+ field_id + ']"]').val( switch_to );
+	}
+
+	/**
+	 * Get the tooltip messages for a specific icon
+	 *
+	 * @since 2.02.13
+	 * @param {string} type
+	 * @returns {Object}
+	 */
+	function getTooltipMessages( type ) {
+		var messages = {};
+
+		if( type === 'clear_on_focus' ) {
+			messages.active = frm_admin_js.no_clear_default;
+			messages.inactive = frm_admin_js.clear_default;
+		} else if ( type === 'default_blank' ) {
+			messages.active = frm_admin_js.valid_default;
+			messages.inactive = frm_admin_js.no_valid_default;
+		}
+
+		return messages;
+	}
+
+	/**
+	 * Change the text on a Bootstrap tooltip
+	 *
+	 * @since 2.02.13
+	 * @param {Object} $element
+	 * @param {string} newText
+     */
+	function changeBootstrapTooltipText( $element, newText ) {
+		$element.attr('title', newText );
+		$element.tooltip('fixTitle');
+		$element.tooltip('show');
 	}
 
 	function deleteFieldOption(){
@@ -2274,8 +2318,8 @@ function frmAdminBuildJS(){
 			$newFields.on('click', 'input.frm_req_field', markRequired);
 			$newFields.on('click', 'a.frm_req_field', clickRequired);
 			$newFields.on('click', '.frm_mark_unique', markUnique);
-			$newFields.on('click', '.frm_reload_icon', clearOnFocus);
-			$newFields.on('click', '.frm_error_icon', defaultBlank);
+			$newFields.on('click', '.frm_reload_icon', toggleClearOnFocus);
+			$newFields.on('click', '.frm_error_icon', toggleDefaultBlank);
 
 			$newFields.on('click', '.frm_repeat_field', toggleRepeat);
 			$newFields.on('change', '.frm_repeat_format', toggleRepeatButtons);
