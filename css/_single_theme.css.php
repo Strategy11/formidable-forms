@@ -465,6 +465,9 @@ if ( ! isset( $center_form ) ) {
     color:#<?php echo esc_html( $text_color_disabled . $important ) ?>;
     border-color:#<?php echo esc_html( $border_color_disabled . $important ) ?>;
 }
+.<?php echo esc_html( $style_class ) ?> input[type=number][readonly=readonly]{
+	-moz-appearance: textfield;
+}
 
 .<?php echo esc_html( $style_class ) ?> input::placeholder{
 	color:#<?php echo esc_html( $text_color_disabled . $important ) ?>;
