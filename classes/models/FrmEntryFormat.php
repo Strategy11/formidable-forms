@@ -140,12 +140,7 @@ class FrmEntryFormat {
 
 		$atts['field'] = $f;
 
-		if ( $atts['entry'] && ! isset( $atts['entry']->metas[ $f->id ] ) ) {
-			// In case include_blank is set
-			$atts['entry']->metas[ $f->id ] = '';
-			$atts['entry'] = apply_filters( 'frm_prepare_entry_content', $atts['entry'], array( 'field' => $atts['field'] ) );
-			self::fill_values_from_entry( $atts, $values );
-		}
+		self::fill_missing_fields( $atts, $values );
 
 		$val = '';
 		self::get_field_value( $atts, $val );
@@ -178,6 +173,15 @@ class FrmEntryFormat {
 			}
 		} else {
 			$values[ $f->id ] = array( 'label' => $f->name, 'val' => $val, 'type' => $f->type );
+		}
+	}
+
+	private static function fill_missing_fields( $atts, &$values ) {
+		if ( $atts['entry'] && ! isset( $atts['entry']->metas[ $atts['field']->id ] ) ) {
+			// In case include_blank is set
+			$atts['entry']->metas[ $atts['field']->id ] = '';
+			$atts['entry'] = apply_filters( 'frm_prepare_entry_content', $atts['entry'], array( 'field' => $atts['field'] ) );
+			self::fill_values_from_entry( $atts, $values );
 		}
 	}
 

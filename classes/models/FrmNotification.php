@@ -77,10 +77,11 @@ class FrmNotification {
         $to_emails = array_unique( (array) $to_emails );
 
         $prev_mail_body = $mail_body = $notification['email_message'];
-        $mail_body = FrmEntriesHelper::replace_default_message($mail_body, array(
-            'id' => $entry->id, 'entry' => $entry, 'plain_text' => $plain_text,
-            'user_info' => (isset($notification['inc_user_info']) ? $notification['inc_user_info'] : false),
-        ) );
+		$pass_entry = clone $entry; // make a copy to prevent changes by reference
+		$mail_body = FrmEntriesHelper::replace_default_message( $mail_body, array(
+			'id' => $entry->id, 'entry' => $pass_entry, 'plain_text' => $plain_text,
+			'user_info' => ( isset( $notification['inc_user_info'] ) ? $notification['inc_user_info'] : false ),
+		) );
 
         // Add the user info if it isn't already included
         if ( $notification['inc_user_info'] && $prev_mail_body == $mail_body ) {
