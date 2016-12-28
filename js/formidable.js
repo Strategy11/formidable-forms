@@ -4080,7 +4080,9 @@ function frmFrontFormJS(){
 				showSubmitLoading( object );
 
 				if ( classList.indexOf('frm_ajax_submit') > -1 ) {
-					var hasFileFields = jQuery(object).find('input[type="file"]').length;
+					var hasFileFields = jQuery(object).find('input[type="file"]').filter(function () {
+						return !!this.value;
+					}).length;
 					if ( hasFileFields < 1 ) {
 						action = jQuery(object).find('input[name="frm_action"]').val();
 						frmFrontForm.checkFormErrors( object, action );

@@ -426,6 +426,9 @@ $arrow_icons = FrmStylesHelper::arrow_icons();
     color: <?php echo esc_html( $text_color_disabled . $important ) ?>;
     border-color:#<?php echo esc_html( $border_color_disabled . $important ) ?>;
 }
+.<?php echo esc_html( $style_class ) ?> input[type=number][readonly=readonly]{
+	-moz-appearance: textfield;
+}
 
 /* These do not work if they are combined */
 .<?php echo esc_html( $style_class ) ?> input::placeholder{
