@@ -5,7 +5,7 @@ Requires at least: 3.8
 Tested up to: 4.7
 Stable tag: 2.02.12
 
-WordPress form builder for completely customizable forms with a simple drag-and-drop interface. Easily create unlimited forms with instant styling previews and multiple email notifications.
+The best WordPress form plugin. Simple drag & drop form building, visual form styling, and unlimited email notifications. 
 
 == Description ==
 = WordPress Form Builder Plugin =
