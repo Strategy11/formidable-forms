@@ -4,7 +4,9 @@ Tags: form, contact form, form builder, custom form, forms, form maker, form cre
 Requires at least: 3.8
 Tested up to: 4.7
 Stable tag: 2.02.12
+
 The best WordPress form plugin. Simple drag & drop form building, visual form styling, and unlimited email notifications. 
+
 == Description ==
 = WordPress Form Builder Plugin =
 Formidable Forms is a flexible and free WordPress form plugin. Easily create contact forms, polls and surveys, or lead generation forms. Start with pre-built form templates or create totally custom forms. From the smallest sidebar opt-in form to large job application forms, Formidable is built to do it all.
