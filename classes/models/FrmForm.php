@@ -191,7 +191,7 @@ class FrmForm {
      */
 	public static function update_fields( $id, $values ) {
 
-        if ( ! isset($values['options']) && ! isset($values['item_meta']) && ! isset($values['field_options']) ) {
+        if ( ! isset($values['item_meta']) && ! isset($values['field_options']) ) {
             return $values;
         }
 
