@@ -537,6 +537,7 @@ table.frmcal-calendar .frmcal-today .frmcal_date{
     filter:progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=180, Color='#<?php echo esc_html( $defaults['border_color_active'] ) ?>');
 }
 
+.frmcal_day_name,
 .frmcal_num{
     display:inline;
 }
