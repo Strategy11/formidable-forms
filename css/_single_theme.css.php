@@ -140,10 +140,19 @@ if ( ! isset( $center_form ) ) {
     display:block;
 }
 
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_html_container{
-    font-family:<?php echo FrmAppHelper::kses( $font ) ?>;
-	font-size:<?php echo esc_html( $form_desc_size . $important ) ?>;
+.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_html_container,
+.<?php echo esc_html( $style_class ) ?> .frm_form_field .frm_show_it{
+    font-family:<?php echo FrmAppHelper::kses( $font . $important ) ?>;
 	color:#<?php echo esc_html( $form_desc_color . $important ) ?>;
+}
+
+.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_html_container {
+	font-size:<?php echo esc_html( $form_desc_size . $important ) ?>;
+}
+
+.<?php echo esc_html( $style_class ) ?> .frm_form_field .frm_show_it {
+	font-size:<?php echo esc_html( $field_font_size . $important ) ?>;
+	font-weight:<?php echo esc_html( $field_weight ) ?>;
 }
 
 .<?php echo esc_html( $style_class ) ?> .frm_icon_font{
