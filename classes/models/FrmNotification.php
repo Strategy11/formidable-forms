@@ -375,6 +375,7 @@ class FrmNotification {
 
 		self::remove_buddypress_filters();
 
+		$sent = '';
 		if ( is_array( $atts['to_email'] ) && $atts['single_recipient'] ) {
 			foreach ( $atts['to_email'] as $recipient ) {
 				$sent = self::send_single_email( $recipient, $atts, $header );
