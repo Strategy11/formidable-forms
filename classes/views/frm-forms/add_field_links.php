@@ -83,7 +83,8 @@ foreach ( FrmField::pro_field_selection() as $field_key => $field_type ) {
     	<?php do_action('frm_extra_form_instructions'); ?>
 
     	<div id="frm-layout-classes" class="tabs-panel">
-			<p class="howto"><?php _e( 'Add classes in the "CSS layout classes" field option', 'formidable' ) ?></p>
+			<p class="howto"><?php _e( '1. Click inside the "CSS layout classes" field option in any field.', 'formidable' ) ?><br/>
+			<?php _e( '2. This box will activate and you can click to insert classes.', 'formidable' ) ?></p>
     	    <ul class="frm_code_list">
     	    <?php $classes = array(
                     'frm_first'     => array(
