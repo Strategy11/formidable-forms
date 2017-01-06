@@ -1066,9 +1066,11 @@ function frmAdminBuildJS(){
 		jQuery(this).editInPlace({
 			default_text:frm_admin_js.blank,
 			callback:function(d,text){
-				jQuery(this).next('input').val(text);
+				var input = jQuery(this).next('input');
+				input.val(text);
 				var new_text = text || frm_admin_js.blank;
 				checkUniqueOpt(id,text);
+				maybeSetSavedVal(id, fieldId, text, input);
 				return new_text;
 			},
 			postclose:function(){
@@ -1124,6 +1126,18 @@ function frmAdminBuildJS(){
 					alert('Saved values cannot be identical.');
 				}
 			});
+		}
+	}
+
+	function maybeSetSavedVal(id, fieldId, text, input){
+		var isDisplayVal = id.indexOf('field_key_') !== 0;
+		if ( isDisplayVal ){
+			var separateVals = document.getElementById('separate_value_'+fieldId).checked;
+			if ( !separateVals ){
+				var cont = input.next('.frm_option_key');
+				cont.find('label').html(text);
+				cont.find('input').val(text);
+			}
 		}
 	}
 
