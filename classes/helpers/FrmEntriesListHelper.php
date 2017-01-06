@@ -67,6 +67,16 @@ class FrmEntriesListHelper extends FrmListHelper {
 		// Searching is a pro feature
 	}
 
+	protected function extra_tablenav( $which ) {
+		$form_id = FrmAppHelper::simple_get( 'form', 'absint' );
+		if ( $which == 'top' && empty( $form_id ) ) {
+			echo '<div class="alignleft actions">';
+			echo FrmFormsHelper::forms_dropdown( 'form', $form_id, array( 'blank' => __( 'View all forms', 'formidable' ) ) );
+			submit_button( __( 'Filter' ), 'filter_action', '', false, array( 'id' => "post-query-submit" ) );
+			echo '</div>';
+		}
+	}
+
 	/**
 	* Gets the name of the primary column in the Entries screen
 	*
