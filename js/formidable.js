@@ -3141,7 +3141,7 @@ function frmFrontFormJS(){
 				} else if ( response.content !== '' ) {
 					// the form or success message was returned
 
-					removeSubmitLoading( object );
+					removeSubmitLoading( jQuery(object) );
 					if ( frm_js.offset != -1 ) {
 						frmFrontForm.scrollMsg( jQuery(object), false );
 					}
@@ -3175,7 +3175,7 @@ function frmFrontFormJS(){
 				} else if ( Object.keys(response.errors).length ) {
 					// errors were returned
 
-					removeSubmitLoading( object, 'enable' );
+					removeSubmitLoading( jQuery(object), 'enable' );
 
 					//show errors
 					var cont_submit = true;
@@ -3309,20 +3309,19 @@ function frmFrontFormJS(){
 	}
 
 	function showSubmitLoading( object ) {
-		if ( object.className.indexOf('frm_loading_form') === -1 ) {
-			object.className += ' frm_loading_form';
+		if ( !object.hasClass('frm_loading_form') ) {
+			object.addClass('frm_loading_form');
 		}
 
 		// Disable submit button
-		jQuery(object).find('input[type="submit"], input[type="button"], button[type="submit"]').attr('disabled','disabled');
+		object.find('input[type="submit"], input[type="button"], button[type="submit"]').attr('disabled','disabled');
 	}
 
 	function removeSubmitLoading( object, enable ) {
-		var formClass = object.className;
-		object.className = object.className.replace(new RegExp('(?:^|\\s)'+ 'frm_loading_form' + '(?:\\s|$)'), ' ');
+		object.removeClass('frm_loading_form');
 
 		if ( enable == 'enable' ) {
-			jQuery(object).find('input[type="submit"], input[type="button"], button[type="submit"]').removeAttr('disabled');
+			object.find('input[type="submit"], input[type="button"], button[type="submit"]').removeAttr('disabled');
 		}
 	}
 
@@ -4077,7 +4076,7 @@ function frmFrontFormJS(){
 			var errors = frmFrontForm.validateFormSubmit( object );
 
 			if ( Object.keys(errors).length === 0 ) {
-				showSubmitLoading( object );
+				showSubmitLoading( jQuery(object) );
 
 				if ( classList.indexOf('frm_ajax_submit') > -1 ) {
 					var hasFileFields = jQuery(object).find('input[type="file"]').filter(function () {
