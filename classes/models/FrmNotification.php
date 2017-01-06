@@ -126,6 +126,12 @@ class FrmNotification {
             }
         }
 
+		/**
+		 * Send a separate email for email address in the "to" section
+		 * @since 2.2.13
+		 */
+		$send_single_recipient = apply_filters( 'frm_send_separate_emails', false, compact( 'action', 'entry', 'form' ) );
+
         // Send the email now
         $sent_to = self::send_email( array(
             'to_email'      => $to_emails,
@@ -137,6 +143,7 @@ class FrmNotification {
             'attachments'   => $attachments,
             'cc'            => $cc,
             'bcc'           => $bcc,
+			'single_recipient' => $send_single_recipient,
         ) );
 
         return $sent_to;
@@ -308,13 +315,13 @@ class FrmNotification {
             'plain_text'    => true,
             'reply_to'      => $admin_email,
             'attachments'   => array(),
+			'single_recipient' => false,
         );
         $atts = wp_parse_args($atts, $defaults);
 
         // Put To, BCC, CC, Reply To, and From fields in the correct format
         self::format_email_fields( $atts, $admin_email );
 
-        $recipient      = $atts['to_email']; //recipient
         $header         = array();
         $header[]       = 'From: ' . $atts['from'];
 
@@ -338,66 +345,94 @@ class FrmNotification {
 		}
 
         $content_type   = $atts['plain_text'] ? 'text/plain' : 'text/html';
-        $charset        = get_option('blog_charset');
+		$atts['charset'] = get_option('blog_charset');
 
 		$header[]       = 'Reply-To: ' . $atts['reply_to'];
-		$header[]       = 'Content-Type: ' . $content_type . '; charset="' . esc_attr( $charset ) . '"';
-        $atts['subject'] = wp_specialchars_decode(strip_tags(stripslashes($atts['subject'])), ENT_QUOTES );
+		$header[]       = 'Content-Type: ' . $content_type . '; charset="' . esc_attr( $atts['charset'] ) . '"';
+		$atts['subject'] = wp_specialchars_decode( strip_tags( stripslashes( $atts['subject'] ) ), ENT_QUOTES );
 
-        $message        = do_shortcode($atts['message']);
+		$atts['message'] = do_shortcode( $atts['message'] );
 
         if ( $atts['plain_text'] ) {
-            //$message    = wordwrap($message, 70, "\r\n"); //in case any lines are longer than 70 chars
-            $message    = wp_specialchars_decode(strip_tags($message), ENT_QUOTES );
+			$atts['message'] = wp_specialchars_decode( strip_tags( $atts['message'] ), ENT_QUOTES );
         } else {
 			// remove line breaks in HTML emails to prevent conflicts with Mandrill
         	add_filter( 'mandrill_nl2br', 'FrmNotification::remove_mandrill_br' );
         }
-		$message = apply_filters( 'frm_email_message', $message, $atts );
-
-        $header         = apply_filters('frm_email_header', $header, array(
-			'to_email' => $atts['to_email'], 'subject' => $atts['subject'],
-		) );
+		$atts['message'] = apply_filters( 'frm_email_message', $atts['message'], $atts );
 
 		/**
 		 * Stop an email based on the message, subject, recipient,
 		 * or any information included in the email header
 		 * @since 2.2.8
 		 */
-		$continue_sending = apply_filters( 'frm_send_email', true, compact( 'message', 'subject', 'recipient', 'header' ) );
+		$continue_sending = apply_filters( 'frm_send_email', true, array(
+			'message' => $atts['message'], 'subject' => $atts['subject'],
+			'recipient' => $atts['to_email'], 'header' => $header,
+		) );
 		if ( ! $continue_sending ) {
 			return;
 		}
 
-        if ( apply_filters('frm_encode_subject', 1, $atts['subject'] ) ) {
-			$atts['subject'] = '=?' . $charset . '?B?' . base64_encode( $atts['subject'] ) . '?=';
-        }
+		self::remove_buddypress_filters();
 
-        remove_filter('wp_mail_from', 'bp_core_email_from_address_filter' );
-        remove_filter('wp_mail_from_name', 'bp_core_email_from_name_filter');
-
-        $sent = wp_mail($recipient, $atts['subject'], $message, $header, $atts['attachments']);
-        if ( ! $sent ) {
-			$header = 'From: ' . $atts['from'] . "\r\n";
-            $recipient = implode(',', (array) $recipient);
-            $sent = mail($recipient, $atts['subject'], $message, $header);
-        }
+		$sent = '';
+		if ( is_array( $atts['to_email'] ) && $atts['single_recipient'] ) {
+			foreach ( $atts['to_email'] as $recipient ) {
+				$sent = self::send_single_email( $recipient, $atts, $header );
+			}
+		} else {
+			$sent = self::send_single_email( $atts['to_email'], $atts, $header );
+		}
 
 		// remove the filter now so other emails can still use it
 		remove_filter( 'mandrill_nl2br', 'FrmNotification::remove_mandrill_br' );
 
-        do_action('frm_notification', $recipient, $atts['subject'], $message);
-
         if ( $sent ) {
-			$sent_to = array_merge( (array) $atts['to_email'], (array) $atts['cc'], (array) $atts['bcc'] );
-            $sent_to = array_filter( $sent_to );
-            if ( apply_filters('frm_echo_emails', false) ) {
-                $temp = str_replace('<', '&lt;', $sent_to);
-				echo ' ' . FrmAppHelper::kses( implode(', ', (array) $temp ) );
-            }
-            return $sent_to;
+			return self::return_emails_sent( $atts );
         }
     }
+
+	private static function send_single_email( $recipient, $atts, $header ) {
+		$header = apply_filters( 'frm_email_header', $header, array(
+			'to_email' => $recipient, 'subject' => $atts['subject'],
+		) );
+
+		self::encode_subject( $atts['charset'], $atts['subject'] );
+
+		$sent = wp_mail( $recipient, $atts['subject'], $atts['message'], $header, $atts['attachments'] );
+		if ( ! $sent ) {
+			$header = 'From: ' . $atts['from'] . "\r\n";
+			$recipient = implode( ',', (array) $recipient );
+			$sent = mail( $recipient, $atts['subject'], $atts['message'], $header );
+		}
+
+		do_action( 'frm_notification', $recipient, $atts['subject'], $atts['message'] );
+
+		return $sent;
+	}
+
+	private static function encode_subject( $charset, &$subject ) {
+		if ( apply_filters('frm_encode_subject', 1, $subject ) ) {
+			$subject = '=?' . $charset . '?B?' . base64_encode( $subject ) . '?=';
+		}
+	}
+
+	private static function remove_buddypress_filters() {
+		remove_filter( 'wp_mail_from', 'bp_core_email_from_address_filter' );
+		remove_filter( 'wp_mail_from_name', 'bp_core_email_from_name_filter' );
+	}
+
+	private static function return_emails_sent( $atts ) {
+		$sent_to = array_merge( (array) $atts['to_email'], (array) $atts['cc'], (array) $atts['bcc'] );
+		$sent_to = array_filter( $sent_to );
+
+		if ( apply_filters( 'frm_echo_emails', false ) ) {
+			$temp = str_replace( '<', '&lt;', $sent_to );
+			echo ' ' . FrmAppHelper::kses( implode(', ', (array) $temp ) );
+		}
+		return $sent_to;
+	}
 
 	/**
 	 * This function should only be fired when Mandrill is sending an HTML email
