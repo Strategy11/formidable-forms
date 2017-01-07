@@ -119,6 +119,7 @@ legend.frm_hidden{
 
 .with_frm_style .frm_scale input{
     display:block;
+	margin:0;
 }
 
 .with_frm_style input[type=number][readonly]{
@@ -131,7 +132,7 @@ legend.frm_hidden{
 }
 
 .with_frm_style select{
-	white-space:nowrap;
+	white-space:pre-wrap;
 }
 
 .with_frm_style .frm_catlevel_2,
