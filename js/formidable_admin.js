@@ -1141,6 +1141,34 @@ function frmAdminBuildJS(){
 		}
 	}
 
+	function setScaleValues() {
+		var isMin = this.id.indexOf('minnum') !== -1;
+		var fieldID = this.id.replace('scale_maxnum_', '').replace('scale_minnum_', '');
+		var min = this.value;
+		var max = this.value;
+		if ( isMin ) {
+			max = document.getElementById('scale_maxnum_'+ fieldID).value;
+		} else {
+			min = document.getElementById('scale_minnum_'+ fieldID).value;
+		}
+
+		updateScaleValues( min, max, fieldID );
+	}
+
+	function updateScaleValues( min, max, fieldID ) {
+		var container = jQuery('#field_'+ fieldID +'_inner_container .frm_form_fields');
+		container.html('');
+
+		if ( min >= max ) {
+			max = min + 1;
+		}
+
+		for ( var i = min; i<=max; i++ ) {
+			container.append('<div class="frm_scale"><label><input type="hidden" name="field_options[options_'+ fieldID +']['+ i +']" value="'+ i +'"> <input type="radio" name="item_meta['+ fieldID +']" value="'+ i +'"> '+ i +' </label></div>');
+		}
+		container.append('<div class="clear"></div>');
+	}
+
 	function getFieldValues(){
 		var val = this.value;
 		if ( val ) {
@@ -2423,6 +2451,7 @@ function frmAdminBuildJS(){
 			$newFields.on('change', '.autopopulate_value', hideOrShowAutopopulateValue);
 			$newFields.on('change', '.frm_get_values_form', updateGetValueFieldSelection);
 			$newFields.on('change', '.frm_logic_field_opts', getFieldValues );
+			$newFields.on('change', '.scale_maxnum, .scale_minnum', setScaleValues);
 
 			jQuery(document.getElementById('frm-insert-fields')).on('click', '.frm_add_field', addFieldClick);
 			$newFields.on('click', '.frm_duplicate_icon', duplicateField);
