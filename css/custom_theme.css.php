@@ -112,6 +112,10 @@ legend.frm_hidden{
     display:block;
 }
 
+.with_frm_style input[type=number][readonly]{
+    -moz-appearance: textfield;
+}
+
 .with_frm_style select[multiple="multiple"]{
     height:auto;
     line-height:normal;
