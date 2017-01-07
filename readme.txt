@@ -3,7 +3,7 @@ Contributors: sswells, srwells, jamie.wahlin
 Tags: form, contact form, form builder, custom form, forms, form maker, form creator
 Requires at least: 3.8
 Tested up to: 4.7
-Stable tag: 2.02.12
+Stable tag: 2.02.13
 
 The best WordPress form plugin. Simple drag & drop form building, visual form styling, and unlimited email notifications. 
 
@@ -97,6 +97,30 @@ A. The field and form names and descriptions are all changed with in-place edit.
 [See more FAQs](https://formidableforms.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 2.02.13 =
+* New: Add frm_send_separate_emails filter. If there are multiple emails in the "to" box, this hook will send one email per address.
+* Fixed: Prevent field option reset when a style is included with the imported form
+* **Pro Version** *
+* New: Add dynamic Lookup population options to paragraph fields
+* New: Allow no_link=1 for [25 truncate=20 no_link=1]. By default, when a value is truncated in a view, it shows a link to show more content. This shortcode option can remove the link.
+* New: Add does_not_contain filter to stats shortcode
+* New: Add frm_filter_view hook for modifying View object
+* New: Add frm_graph_default_colors hook
+* Tweak: Replace all formidablepro.com links with formidableforms.com
+* Improved: Remove arrows on read-only HTML5 number field
+* Improved: Apply Formidable styling to Dynamic List fields
+* Improved: Allow Lookup fields with repeating section values to filter based on parent value
+* Improved: Arrows on read-only number field removed from Firefox
+* Fixed: Do not enable read-only dependent Lookup fields
+* Fixed: Form scrolls correctly on page turn
+* Fixed: JavaScript errors caused by file upload field in Woocommerce form
+* Fixed: Allow ajax submit if there are no file fields on the page with a value
+* Fixed: Correctly import address values into Address field
+* Fixed: [created_at] conditionals take timezone into account
+* Fixed: Do not urlencode GET variables that are set in form shortcode
+* Fixed: Prevent WordPress auto paragraphs from adding unwanted paragraph tags in calendar View headings
+* Fixed: Removed repeating fields from non-repeating field logic
+
 = 2.02.12 =
 * Fixed: PHP 7.1 illegal string offset warnings addressed.
 * **Pro Version** *
