@@ -2782,7 +2782,7 @@ function frmAdminBuildJS(){
 				});
 			});
 			
-			jQuery(document.getElementById('datepicker_sample')).datepicker();
+			jQuery('.frm_pro_form #datepicker_sample').datepicker();
 			
 			jQuery(document.getElementById('frm_position')).change(setPosClass);
 			
