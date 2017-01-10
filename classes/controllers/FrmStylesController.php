@@ -361,8 +361,6 @@ class FrmStylesController {
             'field-colors'      => __( 'Field Colors', 'formidable' ),
             'field-sizes'       => __( 'Field Settings', 'formidable' ),
             'check-box-radio-fields' => __( 'Check Box & Radio Fields', 'formidable' ),
-            'section-fields'    => __( 'Section Fields', 'formidable' ),
-            'date-fields'       => __( 'Date Fields', 'formidable' ),
             'buttons'           => __( 'Buttons', 'formidable' ),
             'form-messages'     => __( 'Form Messages', 'formidable' ),
         );
