@@ -1014,7 +1014,6 @@ select.frm_loading_lookup{
 }
 
 <?php include( FrmAppHelper::plugin_path() . '/css/font_icons.css' ); ?>
-<?php include( FrmAppHelper::plugin_path() . '/css/toggle.css' ); ?>
 <?php do_action( 'frm_include_front_css', compact( 'defaults' ) ); ?>
 
 /* Responsive */
