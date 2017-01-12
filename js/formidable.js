@@ -2090,6 +2090,7 @@ function frmFrontFormJS(){
 				entry_id:depFieldArgs.dataLogic.actualValue,
 				current_field:depFieldArgs.fieldId,
 				hide_id:depFieldArgs.containerId,
+				on_current_page:onCurrentPage,
 				nonce:frm_js.nonce
 			},
 			success:function(html){
