@@ -497,62 +497,12 @@ class FrmEntriesController {
 		return FrmEntryFormat::show_entry( $atts );
 	}
 
-    public static function &filter_email_value( $value, $meta, $entry, $atts = array() ) {
-        $field = FrmField::getOne($meta->field_id);
-        if ( ! $field ) {
-            return $value;
-        }
-
-        $value = self::filter_display_value($value, $field, $atts);
-        return $value;
-    }
-
-	public static function &filter_shortcode_value( $value, $tag, $atts, $field ) {
+	public static function filter_shortcode_value( $value, $tag, $atts, $field ) {
         $plain_text = add_filter('frm_plain_text_email', true);
 		FrmEntryFormat::textarea_display_value( $field->type, $plain_text, $value );
 
         if ( isset($atts['show']) && $atts['show'] == 'value' ) {
             return $value;
-        }
-
-        return self::filter_display_value($value, $field, $atts);
-    }
-
-    public static function &filter_display_value( $value, $field, $atts = array() ) {
-        $saved_value = ( isset($atts['saved_value']) && $atts['saved_value'] ) ? true : false;
-		if ( ! in_array( $field->type, array( 'radio', 'checkbox', 'radio', 'select' ) )
-		     || ! FrmField::is_option_true( $field, 'separate_value' )
-		     || $saved_value || $value === false ) {
-            return $value;
-        }
-
-        $f_values = $f_labels = array();
-
-        foreach ( $field->options as $opt_key => $opt ) {
-            if ( ! is_array($opt) ) {
-                continue;
-            }
-
-            $f_labels[ $opt_key ] = isset( $opt['label'] ) ? $opt['label'] : reset($opt);
-            $f_values[ $opt_key ] = isset( $opt['value'] ) ? $opt['value'] : $f_labels[ $opt_key ];
-            if ( $f_labels[ $opt_key ] == $f_values[ $opt_key ] ) {
-                unset( $f_values[ $opt_key ], $f_labels[ $opt_key ] );
-            }
-            unset($opt_key, $opt);
-        }
-
-        if ( ! empty($f_values) ) {
-            foreach ( (array) $value as $v_key => $val ) {
-                if ( in_array($val, $f_values) ) {
-                    $opt = array_search($val, $f_values);
-                    if ( is_array($value) ) {
-                        $value[ $v_key ] = $f_labels[ $opt ];
-                    } else {
-                        $value = $f_labels[ $opt ];
-                    }
-                }
-                unset($v_key, $val);
-            }
         }
 
         return $value;
@@ -573,4 +523,28 @@ class FrmEntriesController {
 
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/sidebar-shared.php' );
     }
+
+	/***********************************************************************
+	 * Deprecated Functions
+	 ************************************************************************/
+
+	/**
+	 * @deprecated 2.02.14
+	 *
+	 * @return mixed
+	 */
+	public static function filter_email_value( $value ) {
+		_deprecated_function( __FUNCTION__, '2.02.14', 'FrmProEntriesController::filter_value_in_single_entry_table' );
+		return $value;
+	}
+
+	/**
+	 * @deprecated 2.02.14
+	 *
+	 * @return mixed
+	 */
+	public static function filter_display_value( $value ) {
+		_deprecated_function( __FUNCTION__, '2.02.14', 'FrmProEntriesController::filter_display_value' );
+		return $value;
+	}
 }
