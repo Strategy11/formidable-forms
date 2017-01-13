@@ -2991,7 +2991,9 @@ function frmFrontFormJS(){
 			}
 
 			val = jQuery(field).val();
-			if ( typeof val !== 'string' ) {
+			if ( val === null ) {
+				val = '';
+			} else if ( typeof val !== 'string' ) {
 				var tempVal = val;
 				val = '';
 				for ( var i = 0; i < tempVal.length; i++ ) {
