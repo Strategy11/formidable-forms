@@ -1205,7 +1205,7 @@ select.frm_cancelnew, input.frm_enternew{width:175px;}
     padding: 0;
 }
 .frm_email_settings .widget:last-of-type{
-	margin-bottom:130px;
+	margin-bottom: 130px;
 }
 
 .frm_actions_list a{
