@@ -1193,7 +1193,7 @@ function frmAdminBuildJS(){
 					input.type = 'text';
 				}
 				input.name = optionName;
-				input.id = optionID;
+				input.id = optionID +'_'+ metaKey;
 				fill.appendChild(input);
 
 				if ( showSelect ) {
