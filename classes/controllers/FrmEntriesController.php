@@ -105,7 +105,9 @@ class FrmEntriesController {
                 if ( isset($form_col->field_options['separate_value']) && $form_col->field_options['separate_value'] ) {
 					$columns[ $form_id . '_frmsep_' . $col_id ] = FrmAppHelper::truncate( $form_col->name, 35 );
                 }
-				$columns[ $form_id . '_' . $col_id ] = FrmAppHelper::truncate( $form_col->name, 35 );
+                else {
+	                $columns[ $form_id . '_' . $col_id ] = FrmAppHelper::truncate( $form_col->name, 35 );
+                }
             }
         }
 
