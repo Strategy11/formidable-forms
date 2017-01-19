@@ -77,7 +77,7 @@ class FrmNotification {
 
         $to_emails = array_unique( (array) $to_emails );
 
-        $prev_mail_body = $notification['email_message'];
+		$prev_mail_body = $notification['email_message'];
 		$pass_entry = clone $entry; // make a copy to prevent changes by reference
 		$mail_body = FrmEntriesHelper::replace_default_message( $prev_mail_body, array(
 			'id' => $entry->id, 'entry' => $pass_entry, 'plain_text' => $plain_text,
