@@ -10,11 +10,8 @@
         </td>
     </tr>
 </table>
-<?php $action_control->form($form_action, compact('form', 'action_key', 'values')); ?>
+<?php $action_control->form($form_action, compact('form', 'action_key', 'values'));
 
-<table class="form-table frm-no-margin">
-    <tr><td>
-<?php
 if ( ! isset( $action_control->action_options['event'] ) ) {
 	$events = 'create';
 }
@@ -31,24 +28,18 @@ if ( count( $action_control->action_options['event'] ) == 1 || $action_control->
 } else {
 ?>
 	<h3><?php _e( 'Action Triggers', 'formidable' ); ?></h3>
-	<table class="form-control">
-		<tbody>
-		<tr>
-			<td>
-				<label class="frm_left_label"><?php _e( 'Trigger this action after', 'formidable' ) ?></label>
-				<select name="<?php echo esc_attr( $action_control->get_field_name('event') ) ?>[]" multiple="multiple" class="frm_multiselect" id="<?php echo esc_attr( $action_control->get_field_id('event') ) ?>">
-<?php
+	<p>
+		<label class="frm_left_label"><?php _e( 'Trigger this action after', 'formidable' ) ?></label>
+		<select name="<?php echo esc_attr( $action_control->get_field_name('event') ) ?>[]" multiple="multiple" class="frm_multiselect" id="<?php echo esc_attr( $action_control->get_field_id('event') ) ?>">
+	<?php
 
 	$event_labels = FrmFormAction::trigger_labels();
 	foreach ( $action_control->action_options['event'] as $event ) { ?>
 		<option value="<?php echo esc_attr( $event ) ?>" <?php echo in_array( $event, (array) $form_action->post_content['event'] ) ? ' selected="selected"' : ''; ?> ><?php echo isset( $event_labels[ $event ] ) ? $event_labels[ $event ] : $event; ?></option>
 <?php
-	}
-?>		        </select>
-			</td>
-		</tr>
-		</tbody>
-	</table>
+	}?>
+		</select>
+	</p>
 <?php
 }
 
@@ -56,6 +47,5 @@ $pass_args = array( 'form' => $form, 'action_control' => $action_control, 'actio
 do_action( 'frm_additional_action_settings', $form_action, $pass_args );
 
 ?>
-    <span class="alignright frm_action_id <?php echo empty( $form_action->ID ) ? 'frm_hidden' : ''; ?>"><?php printf( __( 'Action ID: %1$s', 'formidable' ), $form_action->ID); ?></span>
-    </td></tr>
-</table>
+<span class="alignright frm_action_id <?php echo empty( $form_action->ID ) ? 'frm_hidden' : ''; ?>"><?php printf( __( 'Action ID: %1$s', 'formidable' ), $form_action->ID); ?></span>
+<div style="clear:both;"></div>
