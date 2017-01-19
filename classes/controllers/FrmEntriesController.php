@@ -157,7 +157,7 @@ class FrmEntriesController {
 
         foreach ( $meta_value as $mk => $mv ) {
             //remove blank values
-            if ( empty( $mv )  ) {
+            if ( empty( $mv ) ) {
                 unset( $meta_value[ $mk ] );
             }
         }

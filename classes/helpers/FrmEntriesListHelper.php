@@ -60,7 +60,9 @@ class FrmEntriesListHelper extends FrmListHelper {
             return;
         }
 
-        $form_id = $form = $this->params['form'];
+		$form_id = $this->params['form'];
+		$form = $this->params['form'];
+
         if ( $form_id ) {
             $form = FrmForm::getOne($form_id);
         }

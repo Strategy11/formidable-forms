@@ -1028,7 +1028,8 @@ DEFAULT_HTML;
 	 * @since 2.0.6
 	 */
 	private static function set_other_value( $args, &$other_args ) {
-		$parent = $pointer = '';
+		$parent = '';
+		$pointer = '';
 
 		// Check for parent ID and pointer
 		$temp_array = explode( '[', $args['field_name'] );

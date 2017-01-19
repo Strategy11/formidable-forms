@@ -172,9 +172,10 @@ class FrmFieldsController {
 
 	    $values = apply_filters( 'frm_prepare_single_field_for_duplication', $values );
 
-        if ( ! $field_id = FrmField::create($values) ) {
-            wp_die();
-        }
+		$field_id = FrmField::create( $values );
+		if ( ! $field_id ) {
+			wp_die();
+		}
 
         self::include_single_field($field_id, $values);
 
@@ -281,7 +282,8 @@ class FrmFieldsController {
 		$ids = explode( '-', $element_id );
 		$id = FrmAppHelper::get_post_param( 'field_id', 0, 'absint' );
 
-		$orig_update_value = $update_value = trim( FrmAppHelper::get_post_param( 'update_value', '', 'wp_kses_post' ) );
+		$orig_update_value = trim( FrmAppHelper::get_post_param( 'update_value', '', 'wp_kses_post' ) );
+		$update_value = $orig_update_value;
 		if ( strpos( $element_id, 'key_' ) ) {
             $new_value = $update_value;
         } else {
@@ -377,7 +379,8 @@ class FrmFieldsController {
             register_admin_color_schemes();
         }
 
-        $hook_suffix = $admin_body_class = '';
+		$hook_suffix = '';
+		$admin_body_class = '';
 
         if ( get_user_setting( 'mfold' ) == 'f' ) {
         	$admin_body_class .= ' folded';

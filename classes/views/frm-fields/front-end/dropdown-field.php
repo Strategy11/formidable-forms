@@ -14,7 +14,8 @@ if ( isset($field['post_field']) && $field['post_field'] == 'post_category' && F
 		<select name="<?php echo esc_attr( $field_name ) ?>" id="<?php echo esc_attr( $html_id ) ?>" <?php do_action('frm_field_input_html', $field) ?>>
 	<?php   }
 
-	$other_opt = $other_checked = false;
+	$other_opt = false;
+	$other_checked = false;
 	foreach ( $field['options'] as $opt_key => $opt ) {
 		$field_val = apply_filters( 'frm_field_value_saved', $opt, $opt_key, $field );
 		$opt = apply_filters( 'frm_field_label_seen', $opt, $opt_key, $field );

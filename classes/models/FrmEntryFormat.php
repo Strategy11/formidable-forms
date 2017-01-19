@@ -301,7 +301,8 @@ class FrmEntryFormat {
 	public static function convert_entry_to_content( $values, $atts, array &$content ) {
 
 		if ( $atts['plain_text'] ) {
-			$bg_color_alt = $row_style = '';
+			$bg_color_alt = '';
+			$row_style = '';
 		} else {
 			$default_settings = apply_filters( 'frm_show_entry_styles', array(
 				'border_color' => 'dddddd',

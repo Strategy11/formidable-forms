@@ -1148,7 +1148,8 @@ class FrmFormsController {
 
         $user_ID = get_current_user_id();
 		$params = FrmForm::get_params( $form );
-        $message = $errors = '';
+		$message = '';
+		$errors = '';
 
         if ( $params['posted_form_id'] == $form->id && $_POST ) {
             $errors = isset( $frm_vars['created_entries'][ $form->id ] ) ? $frm_vars['created_entries'][ $form->id ]['errors'] : array();

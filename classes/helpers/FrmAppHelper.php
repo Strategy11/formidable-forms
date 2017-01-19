@@ -963,7 +963,7 @@ class FrmAppHelper {
 				$alt_post_name = substr( $key, 0, 200 - ( strlen( $suffix ) + 1 ) ) . $suffix;
 				$key_check = FrmDb::get_var( $table_name, array( $column => $alt_post_name, 'ID !' => $id ), $column );
 				$suffix++;
-			} while ($key_check || is_numeric($key_check));
+			} while ( $key_check || is_numeric( $key_check ) );
 			$key = $alt_post_name;
         }
         return $key;

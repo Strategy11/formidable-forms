@@ -240,7 +240,7 @@ class FrmDb {
     private static function interpret_array_to_sql( $key, $value, &$where, &$values ) {
 		$key = trim( $key );
 
-        if ( strpos( $key, 'created_at' ) !== false || strpos( $key, 'updated_at' ) !== false  ) {
+		if ( strpos( $key, 'created_at' ) !== false || strpos( $key, 'updated_at' ) !== false ) {
             $k = explode(' ', $key);
             $where .= ' DATE_FORMAT(' . reset( $k ) . ', %s) ' . str_replace( reset( $k ), '', $key );
             $values[] = '%Y-%m-%d %H:%i:%s';
@@ -276,7 +276,8 @@ class FrmDb {
 			 * If the key is like% then skip the first % for starts with
 			 * If the key is %like then skip the last % for ends with
 			 */
-			$start = $end = '%';
+			$start = '%';
+			$end = '%';
 			if ( $lowercase_key == 'like%' ) {
 				$start = '';
 				$where = rtrim( $where, '%' );
