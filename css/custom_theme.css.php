@@ -212,6 +212,11 @@ legend.frm_hidden{
     margin: 0 auto;
 }
 
+.with_frm_style .frm_loading_form .frm_ajax_loading{
+	/* keep this for reverse compatibility for old HTML */
+	visibility:visible !important;
+}
+
 .with_frm_style .frm_loading_form .frm_button_submit {
     position: relative;
     opacity: .8;
