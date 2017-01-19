@@ -35,7 +35,7 @@ function frm_forms_autoloader( $class_name ) {
     }
 
     $filepath = dirname(__FILE__);
-	if ( preg_match( '/^FrmPro.+$/', $class_name ) || 'FrmUpdatesController' == $class_name ) {
+	if ( preg_match( '/^FrmPro.+$/', $class_name ) ) {
         $filepath .= '/pro';
     }
     $filepath .= '/classes';
