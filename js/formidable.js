@@ -3734,11 +3734,11 @@ function frmFrontFormJS(){
 			if ( typeof __frmChosen !== 'undefined' ) {
 				opts = '{' + __frmChosen + '}';
 			}
-            if(typeof chosenContainer !== 'undefined' ){
-                jQuery("#"+chosenContainer).find('.frm_chzn').chosen(opts);
-            } else {
-                jQuery('.frm_chzn').chosen(opts);
-            }
+			if (typeof chosenContainer !== 'undefined') {
+				jQuery("#" + chosenContainer).find('.frm_chzn').chosen(opts);
+			} else {
+				jQuery('.frm_chzn').chosen(opts);
+			}
 		}
 	}
 
