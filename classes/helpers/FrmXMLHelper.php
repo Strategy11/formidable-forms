@@ -137,7 +137,7 @@ class FrmXMLHelper {
 			$form_fields = false;
 			if ( ! empty( $this_form ) ) {
 				$form_id = $this_form->id;
-				$old_id = $this_form->id
+				$old_id = $this_form->id;
 				self::update_form( $this_form, $form, $imported );
 
 				$form_fields = self::get_form_fields( $form_id );
