@@ -171,8 +171,7 @@ class FrmSettings {
     }
 
     public function validate( $params, $errors ) {
-        $errors = apply_filters( 'frm_validate_settings', $errors, $params );
-        return $errors;
+        return apply_filters( 'frm_validate_settings', $errors, $params );
     }
 
 	public function update( $params ) {
