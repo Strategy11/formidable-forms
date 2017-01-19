@@ -29,7 +29,7 @@ function frmFrontFormJS(){
 			f.trigger('submit');
 		}
 	}
-	
+
 	function toggleSection(){
 		/*jshint validthis:true */
 		jQuery(this).parent().children('.frm_toggle_container').slideToggle('fast');
@@ -308,7 +308,7 @@ function frmFrontFormJS(){
         // Checkboxes
         } else if ( type === 'checkbox' ) {
             if ( this.checked ) {
-                jQuery(this).closest('.frm_checkbox').children('.frm_other_input').removeClass('frm_pos_none'); 
+                jQuery(this).closest('.frm_checkbox').children('.frm_other_input').removeClass('frm_pos_none');
             } else {
                 jQuery(this).closest('.frm_checkbox').children('.frm_other_input').addClass('frm_pos_none').val('');
             }
@@ -3302,7 +3302,7 @@ function frmFrontFormJS(){
 		/*jshint validthis:true */
 		toggleDefault(jQuery(this), 'replace');
 	}
-	
+
 	function toggleDefault($thisField, e){
 		// TODO: Fix this for a default value that is a number or array
 		var v = $thisField.data('frmval').replace(/(\n|\r\n)/g, '\r');
@@ -3310,7 +3310,7 @@ function frmFrontFormJS(){
 			return false;
 		}
 		var thisVal = $thisField.val().replace(/(\n|\r\n)/g, '\r');
-		
+
 		if ( 'replace' == e ) {
 			if ( thisVal === '' ) {
 				$thisField.addClass('frm_default').val(v);
@@ -3503,7 +3503,7 @@ function frmFrontFormJS(){
 		}
 		return type;
 	}
-	
+
 	/* Repeating Fields */
 	function removeRow(){
 		/*jshint validthis:true */
@@ -3655,7 +3655,7 @@ function frmFrontFormJS(){
 
 				// Make sure fields just loaded are properly bound
 				jQuery(document).on('change', '.frm-show-form input[name^="item_meta"], .frm-show-form select[name^="item_meta"], .frm-show-form textarea[name^="item_meta"]', maybeCheckDependent);
-				checkFieldsOnPage();
+				checkFieldsOnPage(prefix+entry_id);
 			}
 		});
 		return false;
@@ -3710,12 +3710,12 @@ function frmFrontFormJS(){
 	 * General Helpers
 	 *********************************************/
 
-	function checkFieldsOnPage(){
+	function checkFieldsOnPage(chosenContainer){
 		checkPreviouslyHiddenFields();
 		loadDateFields();
 		loadCustomInputMasks();
 		loadStars();
-		loadChosen();
+		loadChosen(chosenContainer);
 		checkDynamicFields();
 		checkLookupFields();
 		triggerCalc();
@@ -3728,13 +3728,17 @@ function frmFrontFormJS(){
 		}
 	}
 
-	function loadChosen() {
+	function loadChosen(chosenContainer) {
 		if ( jQuery().chosen ) {
 			var opts = {allow_single_deselect:true,no_results_text:frm_js.no_results};
 			if ( typeof __frmChosen !== 'undefined' ) {
 				opts = '{' + __frmChosen + '}';
 			}
-			jQuery('.frm_chzn').chosen(opts);
+			if (typeof chosenContainer !== 'undefined') {
+				jQuery("#" + chosenContainer).find('.frm_chzn').chosen(opts);
+			} else {
+				jQuery('.frm_chzn').chosen(opts);
+			}
 		}
 	}
 
@@ -3939,7 +3943,7 @@ function frmFrontFormJS(){
 					}
 				});
 			}
-			
+
 			jQuery(document).on('focus', '.frm_toggle_default', clearDefault);
 			jQuery(document).on('blur', '.frm_toggle_default', replaceDefault);
 			jQuery('.frm_toggle_default').blur();
@@ -3955,7 +3959,7 @@ function frmFrontFormJS(){
 			jQuery(document).on('change', '.frm-show-form input[name^="item_meta"], .frm-show-form select[name^="item_meta"], .frm-show-form textarea[name^="item_meta"]', maybeCheckDependent);
 
 			jQuery(document).on('click', '.frm-show-form input[type="submit"], .frm-show-form input[name="frm_prev_page"], .frm-show-form .frm_save_draft', setNextPage);
-            
+
             jQuery(document).on('change', '.frm_other_container input[type="checkbox"], .frm_other_container input[type="radio"], .frm_other_container select', showOtherText);
 
 			jQuery(document).on('click', '.frm_remove_form_row', removeRow);
@@ -4196,7 +4200,7 @@ function frmFrontFormJS(){
 				setTimeout( frmFrontForm.loadGoogle, 30 );
 			}
 		},
-		
+
 		/* Time fields */
 		removeUsedTimes: function( obj, timeField ) {
 			var e = jQuery(obj).parents('form:first').find('input[name="id"]');
@@ -4221,7 +4225,7 @@ function frmFrontFormJS(){
 				}
 			});
 		},
-		
+
 		escapeHtml: function(text){
 			return text
 				.replace(/&/g, '&amp;')
@@ -4230,11 +4234,11 @@ function frmFrontFormJS(){
 				.replace(/"/g, '&quot;')
 				.replace(/'/g, '&#039;');
 		},
-		
+
 		invisible: function(classes) {
 			jQuery(classes).css('visibility', 'hidden');
 		},
-		
+
 		visible: function(classes) {
 			jQuery(classes).css('visibility', 'visible');
 		}
@@ -4295,7 +4299,7 @@ function frmCancelEdit(entry_id,prefix,label,post_id,form_id,hclass){
 	var $edit = jQuery(document.getElementById('frm_edit_'+entry_id));
 	var $link = $edit.find('a');
 	var cancel = $link.html();
-	
+
 	if(!$link.hasClass('frm_ajax_edited')){
 		var $cont = jQuery(document.getElementById(prefix+entry_id));
 		$cont.children('.frm_forms').replaceWith('');
@@ -4315,18 +4319,18 @@ function frmDeleteEntry(entry_id,prefix){
 				jQuery(document.getElementById(prefix+entry_id)).fadeOut('slow');
 			else
 				jQuery(document.getElementById('frm_delete_'+entry_id)).replaceWith(html);
-			
+
 		}
 	});
 }
 
 function frmOnSubmit(e){
-	console.warn('DEPRECATED: function frmOnSubmit in v2.0 use frmFrontForm.submitForm'); 
+	console.warn('DEPRECATED: function frmOnSubmit in v2.0 use frmFrontForm.submitForm');
 	frmFrontForm.submitForm(e, this);
 }
 
 function frm_resend_email(entry_id,form_id){
-	console.warn('DEPRECATED: function frm_resend_email in v2.0'); 
+	console.warn('DEPRECATED: function frm_resend_email in v2.0');
 	$link = jQuery(document.getElementById('frm_resend_email'));
 	$link.append('<span class="spinner" style="display:inline"></span>');
 	jQuery.ajax({
