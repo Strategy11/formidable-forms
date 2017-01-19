@@ -103,7 +103,8 @@ class FrmForm {
     }
 
 	public static function after_duplicate( $form_id, $values ) {
-        $new_opts = $values['options'] = maybe_unserialize($values['options']);
+		$new_opts = maybe_unserialize( $values['options'] );
+		$values['options'] = $new_opts;
 
         if ( isset($new_opts['success_msg']) ) {
             $new_opts['success_msg'] = FrmFieldsHelper::switch_field_ids($new_opts['success_msg']);
@@ -759,8 +760,9 @@ class FrmForm {
 
 		$frm_vars['forms_loaded'][] = $small_form;
 
-		if ( $this_load && empty($global_load) ) {
-			$global_load = $frm_vars['load_css'] = true;
+		if ( $this_load && empty( $global_load ) ) {
+			$global_load = true;
+			$frm_vars['load_css'] = true;
 		}
 
 		return ( ( ! isset($frm_vars['css_loaded']) || ! $frm_vars['css_loaded'] ) && $global_load );

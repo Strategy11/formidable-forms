@@ -205,7 +205,8 @@ class FrmStyle {
             if ( empty($temp_styles) ) {
                 // create a new style if there are none
          		$new = $this->get_new();
-         		$new->post_title = $new->post_name = __( 'Formidable Style', 'formidable' );
+				$new->post_title = __( 'Formidable Style', 'formidable' );
+				$new->post_name = $new->post_title;
          		$new->menu_order = 1;
          		$new = $this->save( (array) $new);
          		$this->update('default');

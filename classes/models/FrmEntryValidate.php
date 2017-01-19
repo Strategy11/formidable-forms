@@ -16,9 +16,10 @@ class FrmEntryValidate {
             $errors['form'] = __( 'You do not have permission to do that', 'formidable' );
         }
 
-        if ( ! isset($values['item_key']) || $values['item_key'] == '' ) {
-			$_POST['item_key'] = $values['item_key'] = FrmAppHelper::get_unique_key( '', $wpdb->prefix . 'frm_items', 'item_key' );
-        }
+		if ( ! isset( $values['item_key'] ) || $values['item_key'] == '' ) {
+			$values['item_key'] = FrmAppHelper::get_unique_key( '', $wpdb->prefix . 'frm_items', 'item_key' );
+			$_POST['item_key'] = $values['item_key'];
+		}
 
         $where = apply_filters('frm_posted_field_ids', array( 'fi.form_id' => $values['form_id'] ) );
 		// Don't get subfields
@@ -370,7 +371,8 @@ class FrmEntryValidate {
 
 		if ( is_user_logged_in() ) {
 			$user = wp_get_current_user();
-			$datas['user_ID'] = $datas['user_id'] = $user->ID;
+			$datas['user_ID'] = $user->ID;
+			$datas['user_id'] = $user->ID;
 			$datas['comment_author'] = $user->display_name;
 			$datas['comment_author_email'] = $user->user_email;
 			$datas['comment_author_url'] = $user->user_url;

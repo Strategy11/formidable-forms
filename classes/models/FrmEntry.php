@@ -134,9 +134,11 @@ class FrmEntry {
 		$new_values['item_key'] = FrmAppHelper::get_unique_key( '', $wpdb->prefix . 'frm_items', 'item_key' );
         $new_values['name'] = $values->name;
         $new_values['is_draft'] = $values->is_draft;
-        $new_values['user_id'] = $new_values['updated_by'] = (int) $values->user_id;
+		$new_values['user_id'] = (int) $values->user_id;
+		$new_values['updated_by'] = (int) $values->user_id;
         $new_values['form_id'] = $values->form_id ? (int) $values->form_id: null;
-        $new_values['created_at'] = $new_values['updated_at'] = current_time('mysql', 1);
+		$new_values['created_at'] = current_time( 'mysql', 1 );
+		$new_values['updated_at'] = $new_values['created_at'];
 
 		$query_results = $wpdb->insert( $wpdb->prefix . 'frm_items', $new_values );
         if ( ! $query_results ) {

@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class FrmFormsListHelper extends FrmListHelper {
-    var $status = '';
+	public $status = '';
 
 	public function __construct( $args ) {
 		$this->status = isset( $_REQUEST['form_type'] ) ? $_REQUEST['form_type'] : '';

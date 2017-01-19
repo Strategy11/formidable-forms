@@ -329,7 +329,8 @@ BEFORE_HTML;
 		}
 
 		$end_section_values = apply_filters( 'frm_before_field_created', FrmFieldsHelper::setup_new_vars( 'end_divider', $form->id ) );
-		$open = $prev_order = false;
+		$open = false;
+		$prev_order = false;
 		$add_order = 0;
 		$last_field = false;
         foreach ( $fields as $field ) {

@@ -172,9 +172,10 @@ class FrmFieldsController {
 
 	    $values = apply_filters( 'frm_prepare_single_field_for_duplication', $values );
 
-        if ( ! $field_id = FrmField::create($values) ) {
-            wp_die();
-        }
+		$field_id = FrmField::create( $values );
+		if ( ! $field_id ) {
+			wp_die();
+		}
 
         self::include_single_field($field_id, $values);
 
@@ -271,7 +272,8 @@ class FrmFieldsController {
             register_admin_color_schemes();
         }
 
-        $hook_suffix = $admin_body_class = '';
+		$hook_suffix = '';
+		$admin_body_class = '';
 
         if ( get_user_setting( 'mfold' ) == 'f' ) {
         	$admin_body_class .= ' folded';

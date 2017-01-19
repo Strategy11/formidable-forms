@@ -133,9 +133,11 @@ class FrmXMLHelper {
 
 	        $this_form = self::maybe_get_form( $form );
 
-			$old_id = $form_fields = false;
+			$old_id = false;
+			$form_fields = false;
 			if ( ! empty( $this_form ) ) {
-				$form_id = $old_id = $this_form->id;
+				$form_id = $this_form->id;
+				$old_id = $this_form->id;
 				self::update_form( $this_form, $form, $imported );
 
 				$form_fields = self::get_form_fields( $form_id );
@@ -159,7 +161,7 @@ class FrmXMLHelper {
 			$imported['forms'][ (int) $item->id ] = $form_id;
 
             // Send pre 2.0 form options through function that creates actions
-            self::migrate_form_settings_to_actions( $form['options'], $form_id, $imported, $switch = true );
+            self::migrate_form_settings_to_actions( $form['options'], $form_id, $imported, true );
 
 			do_action( 'frm_after_import_form', $form_id, $form );
 
@@ -1039,7 +1041,7 @@ class FrmXMLHelper {
         // Migrate autoresponders
         self::migrate_autoresponder_to_action( $form_options, $form_id, $notifications );
 
-        if (  empty( $notifications ) ) {
+        if ( empty( $notifications ) ) {
             return;
         }
 
