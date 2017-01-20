@@ -132,7 +132,7 @@ class FrmForm {
 			$values['form_key'] = FrmAppHelper::get_unique_key( $values['form_key'], $wpdb->prefix . 'frm_forms', 'form_key', $id );
         }
 
-        $form_fields = array( 'form_key', 'name', 'description', 'status', 'parent_form_id' );
+		$form_fields = array( 'form_key', 'name', 'description', 'status', 'parent_form_id' );
 
         $new_values = self::set_update_options( array(), $values);
 
@@ -258,16 +258,15 @@ class FrmForm {
 
             $field->field_options = apply_filters('frm_update_field_options', $field->field_options, $field, $values);
 			$default_value = maybe_serialize( $values['item_meta'][ $field_id ] );
-			$field_key = isset( $values['field_options'][ 'field_key_' . $field_id ] ) ? $values['field_options'][ 'field_key_' . $field_id ] : $field->field_key;
-			$required = isset( $values['field_options'][ 'required_' . $field_id ] ) ? $values['field_options'][ 'required_' . $field_id ] : false;
-			$field_type = isset( $values['field_options'][ 'type_' . $field_id ] ) ? $values['field_options'][ 'type_' . $field_id ] : $field->type;
-			$field_description = isset( $values['field_options'][ 'description_' . $field_id ] ) ? $values['field_options'][ 'description_' . $field_id ] : $field->description;
 
-            FrmField::update($field_id, array(
-                'field_key' => $field_key, 'type' => $field_type,
-                'default_value' => $default_value, 'field_options' => $field->field_options,
-                'description' => $field_description, 'required' => $required,
-            ) );
+			$new_field = array(
+				'field_options' => $field->field_options,
+				'default_value' => $default_value,
+			);
+
+			self::prepare_field_update_values( $field, $values, $new_field );
+
+			FrmField::update( $field_id, $new_field );
 
             FrmField::delete_form_transient($field->form_id);
         }
@@ -275,6 +274,17 @@ class FrmForm {
 
         return $values;
     }
+
+	private static function prepare_field_update_values( $field, $values, &$new_field ) {
+		$field_cols = array(
+			'field_key' => '', 'required' => false, 'type' => '',
+			'description' => '', 'options' => '',
+		);
+		foreach ( $field_cols as $col => $default ) {
+			$default = ( $default === '' ) ? $field->{$col} : $default;
+			$new_field[ $col ] = isset( $values['field_options'][ $col . '_' . $field->id ] ) ? $values['field_options'][ $col . '_' . $field->id ] : $default;
+		}
+	}
 
     /**
      * @param string $status
@@ -694,22 +704,37 @@ class FrmForm {
 		return $values;
 	}
 
-	public static function get_current_form_id() {
-		$form = self::get_current_form();
+	public static function get_current_form_id( $default_form = 'none' ) {
+		if ( 'first' == $default_form ) {
+			$form = self::get_current_form();
+		} else {
+			$form = self::maybe_get_current_form();
+		}
 		$form_id = $form ? $form->id : 0;
 
 		return $form_id;
 	}
 
-	public static function get_current_form( $form_id = 0 ) {
-		global $frm_vars, $wpdb;
+	public static function maybe_get_current_form( $form_id = 0 ) {
+		global $frm_vars;
 
 		if ( isset( $frm_vars['current_form'] ) && $frm_vars['current_form'] && ( ! $form_id || $form_id == $frm_vars['current_form']->id ) ) {
 			return $frm_vars['current_form'];
 		}
 
 		$form_id = FrmAppHelper::get_param( 'form', $form_id, 'get', 'absint' );
-		return self::set_current_form( $form_id );
+		if ( $form_id ) {
+			$form_id = self::set_current_form( $form_id );
+		}
+		return $form_id;
+	}
+
+	public static function get_current_form( $form_id = 0 ) {
+		$form = self::maybe_get_current_form( $form_id );
+		if ( is_numeric( $form ) ) {
+			 $form = self::set_current_form( $form );
+		}
+		return $form;
 	}
 
 	public static function set_current_form( $form_id ) {
@@ -747,5 +772,13 @@ class FrmForm {
 		$show = ( ! $form->is_template && $form->status == 'published' && ! FrmAppHelper::is_admin() );
 		$show = apply_filters( 'frm_show_submit_button', $show, $form );
 		return $show;
+	}
+
+	/**
+	 * @since 2.3
+	 */
+	public static function get_option( $atts ) {
+		$form = $atts['form'];
+		return isset( $form->options[ $atts['option'] ] ) ? $form->options[ $atts['option'] ] : $atts['default'];
 	}
 }

@@ -4,13 +4,13 @@ if ( ! defined('ABSPATH') ) {
 }
 
 class FrmAppHelper {
-	public static $db_version = 35; //version of the database we are moving to
-	public static $pro_db_version = 37;
+	public static $db_version = 41; //version of the database we are moving to
+	public static $pro_db_version = 37; //deprecated
 
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '2.02.14b1';
+	public static $plug_version = '2.03';
 
     /**
      * @since 1.07.02
@@ -864,7 +864,7 @@ class FrmAppHelper {
      * @return string The base Google APIS url for the current version of jQuery UI
      */
     public static function jquery_ui_base_url() {
-		$url = 'http' . ( is_ssl() ? 's' : '' ) . '://ajax.googleapis.com/ajax/libs/jqueryui/' . self::script_version('jquery-ui-core');
+		$url = 'http' . ( is_ssl() ? 's' : '' ) . '://ajax.googleapis.com/ajax/libs/jqueryui/' . self::script_version('jquery-ui-core', '1.11.4');
         $url = apply_filters('frm_jquery_ui_base_url', $url);
         return $url;
     }
@@ -1148,7 +1148,7 @@ class FrmAppHelper {
 	 * @return boolean|int
 	 */
 	public static function custom_style_value( $post_values ) {
-		if ( $post_values && isset( $post_values['options']['custom_style'] ) ) {
+		if ( ! empty( $post_values ) && isset( $post_values['options']['custom_style'] ) ) {
 			$custom_style = absint( $post_values['options']['custom_style'] );
 		} else {
 			$frm_settings = FrmAppHelper::get_settings();

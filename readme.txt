@@ -3,7 +3,7 @@ Contributors: sswells, srwells, jamie.wahlin
 Tags: form, contact form, form builder, custom form, forms, form maker, form creator
 Requires at least: 3.8
 Tested up to: 4.7
-Stable tag: 2.02.13
+Stable tag: 2.03
 
 The best WordPress form plugin. Simple drag & drop form building, visual form styling, and unlimited email notifications. 
 
@@ -97,6 +97,38 @@ A. The field and form names and descriptions are all changed with in-place edit.
 [See more FAQs](https://formidableforms.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 2.03 =
+* New: Add a combined list of all entries on the Formidable -> Entries page instead of defaulting to the first form
+* New: Replace submit input with button for new forms. This allows us to show the loading indicator on top of the button instead of outside. This applies to new forms only. Existing forms will need the submit button HTML adjusted to see this new styling. But we decided it was best for reverse compatability if we don't change it automatically
+* New: Add frm_after_title hook for inserting content between the title and form fields
+* Enhancement: Speed up adding and editing field options and conditional logic in the form builder
+* Enhancement: Don't save the field options until the whole form is saved
+* Tweak: Pass error array in frm_get_paged_fields instead of true/false. If you are using the frm_get_paged_fields hook, it's possible your code may need to be adjusted.
+* Fix: styling issue when select field moves when changing between a blank and not blank option
+* Fix: Make sure "Activate" button for add-ons is specific to subsite in multisite network
+* Removed: pro fields and styling options from the visual styler, extra pro version css, and registering pro scripts. We don't need unused options.
+* **Pro Version** *
+* New: Add multi page progress bars and rootline to jump to different pages
+* New: Add a page number parameter to the url when the form page changes
+* New: Auto-save drafts on page turn when drafts are enabled
+* New: Add save button to back-end entries. This allows an entry to be saved from any page when editing.
+* New: Break out repeating sections in the email and frm-single-entry shortcode. Now they repeat instead of separate with commas.
+* New: Add options for email content/single entry shortcode: include_extras="section,page,html", include_fields="10,15", exclude_fields="10,15"
+* New: Change the time field to multiple dropdowns that always save in hh:mm format. This allows for secondary sorting by time fields in views. Using h:i A for the time format in a shortcode will be forced to g:i A.
+* Enhancement: Switch the unique time functionality from front-end disabling to back-end validation
+* Enhancement: Hide form on page load and fade it in to prevent conditional fields flashing
+* Enhancement: Order the post type dropdown by post key instead of defaulting to the order of post type creation
+* Enhancement: Make the custom field options more helpful by including custom fields only for the selected post type
+* Enhancement: Add .frm_loading_form class on the form tag while the form is processing
+* Enhancement: Show the dropzone error message all the time instead of only on hover
+* Tweak: Use css to make the conditional logic field options shorter instead of truncating in the form builder
+* Tweak: Use function to convert field object to array during in_section migration.
+* Tweak: Avoid errors after Lookup field is deleted and other fields watched that Lookup field.
+* Fix: Do not delete values in frm_item_metas table for all fields selected in Create Post action (such as the conditional logic).
+* Fix: Show the correct option label for a blank value. Previously option label for "0" saved value was displaying.
+* Fix: Compact file upload field wasn't aligned with other fields in the row
+* Fix: Evaluate date strings the same way in view filters and inline conditions for date fields
+
 = 2.02.13 =
 * New: Add frm_send_separate_emails filter. If there are multiple emails in the "to" box, this hook will send one email per address.
 * Fixed: Prevent field option reset when a style is included with the imported form
