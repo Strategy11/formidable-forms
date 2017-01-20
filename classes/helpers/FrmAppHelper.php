@@ -864,7 +864,7 @@ class FrmAppHelper {
      * @return string The base Google APIS url for the current version of jQuery UI
      */
     public static function jquery_ui_base_url() {
-		$url = 'http' . ( is_ssl() ? 's' : '' ) . '://ajax.googleapis.com/ajax/libs/jqueryui/' . self::script_version('jquery-ui-core', '1.11.4');
+		$url = 'http' . ( is_ssl() ? 's' : '' ) . '://ajax.googleapis.com/ajax/libs/jqueryui/' . self::script_version( 'jquery-ui-core', '1.11.4' );
         $url = apply_filters('frm_jquery_ui_base_url', $url);
         return $url;
     }
@@ -872,25 +872,24 @@ class FrmAppHelper {
     /**
      * @param string $handle
      */
-	public static function script_version( $handle ) {
-        global $wp_scripts;
-    	if ( ! $wp_scripts ) {
-    	    return false;
-    	}
+	public static function script_version( $handle, $default = 0 ) {
+		global $wp_scripts;
+		if ( ! $wp_scripts ) {
+			return $default;
+		}
 
-        $ver = 0;
+		$ver = $default;
+		if ( ! isset( $wp_scripts->registered[ $handle ] ) ) {
+			return $ver;
+		}
 
-        if ( ! isset( $wp_scripts->registered[ $handle ] ) ) {
-            return $ver;
-        }
+		$query = $wp_scripts->registered[ $handle ];
+		if ( is_object( $query ) ) {
+			$ver = $query->ver;
+		}
 
-        $query = $wp_scripts->registered[ $handle ];
-    	if ( is_object( $query ) ) {
-    	    $ver = $query->ver;
-    	}
-
-    	return $ver;
-    }
+		return $ver;
+	}
 
 	public static function js_redirect( $url ) {
 		return '<script type="text/javascript">window.location="' . esc_url_raw( $url ) . '"</script>';
