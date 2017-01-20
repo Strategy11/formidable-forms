@@ -265,7 +265,6 @@ class FrmFormsHelper {
      */
 	public static function get_default_html( $loc ) {
 		if ( $loc == 'submit' ) {
-            $sending = __( 'Sending', 'formidable' );
             $draft_link = self::get_draft_link();
             $default_html = <<<SUBMIT_HTML
 <div class="frm_submit">
