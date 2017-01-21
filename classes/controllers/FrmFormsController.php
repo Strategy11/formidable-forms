@@ -1048,11 +1048,11 @@ class FrmFormsController {
 
         return self::show_form(
             $shortcode_atts['id'], $shortcode_atts['key'], $shortcode_atts['title'],
-            $shortcode_atts['description'], $atts
+            $shortcode_atts['description'], $atts, $frm_vars
         );
     }
 
-    public static function show_form( $id = '', $key = '', $title = false, $description = false, $atts = array() ) {
+    public static function show_form( $id = '', $key = '', $title = false, $description = false, $atts = array(), $frm_vars = array() ) {
         if ( empty( $id ) ) {
             $id = $key;
         }
@@ -1061,6 +1061,13 @@ class FrmFormsController {
         if ( ! $form ) {
             return __( 'Please select a valid form', 'formidable' );
         }
+	
+	    if ( ! empty( $frm_vars ) && ! empty( $form ) && ! empty( $form->options ) ) {
+		    if ( !empty( $frm_vars["inplace_edit"] ) ) {
+			    $form->options["js_validate"] = '1';
+			    $form->options["ajax_submit"] = '1';
+		    }
+	    }
 
 		add_action( 'frm_load_form_hooks', 'FrmHooksController::trigger_load_form_hooks' );
         FrmAppHelper::trigger_hook_load( 'form', $form );
