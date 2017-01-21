@@ -259,7 +259,8 @@ class FrmFormActionsController {
             $link_settings = array( $type => $link_settings );
         }
 
-        $stored_actions = $action_priority = array();
+		$stored_actions = array();
+		$action_priority = array();
 
 		if ( in_array( $event, array( 'create', 'update' ) ) && defined( 'WP_IMPORTING' ) && WP_IMPORTING ) {
 			$this_event = 'import';

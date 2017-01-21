@@ -1093,6 +1093,7 @@ select.frm_cancelnew, input.frm_enternew{width:175px;}
 #general-style #frm_gen_font_box{padding-right:0;width:100%;}
 #date-fields-style #frm_show_cal{width:90px;height:80px;margin-right:6px;}
 #frm_styling_form #frm_delete_style{padding-right:10px;}
+.frm_pro_form .frm_lite_style{display:none;}
 
 /* Import/Export */
 .csv_opts #frm_csv_col_sep{width:45px;}
@@ -1109,9 +1110,6 @@ select.frm_cancelnew, input.frm_enternew{width:175px;}
 #frm_where_options{min-height:31px;}
 
 .tabs-panel.active .tabs-panel, .frm_settings_form .tabs-panel .tabs-panel{border:none;padding:0;} /*for add-on reverse compatability */
-/*@-webkit-keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
-@-moz-keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
-@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }*/
 
 .frm-fade-in {
     opacity:0;  /* make things invisible upon start */
@@ -1323,6 +1321,11 @@ label.frm_action_events{
     opacity:0.8;
     padding-top:10px;
 }
+
+.frm_logic_field_opts{
+	max-width:180px;
+}
+
 .frm_form_action_settings .frm_logic_row,
 .frm_form_action_settings .frm_posttax_row{
     margin:14px 0;
@@ -1914,10 +1917,10 @@ table td.frm_left_label{
 .frm_sorting li.ui-state-default.selected.edit_field_type_divider .divider_section_only{
 	background-color: #fbfdff;
 	border: 1px solid #5b9dd9;
-	    -webkit-box-shadow: 0 0 1px #96B0C7;;
-	    box-shadow: 0 0 1px #96B0C7;
-		-webkit-transition: 0.5s border-color ease-in-out;
-		    transition: .5s border-color ease-in-out;
+	-webkit-box-shadow: 0 0 1px #96B0C7;
+	box-shadow: 0 0 1px #96B0C7;
+	-webkit-transition: 0.5s border-color ease-in-out;
+	transition: .5s border-color ease-in-out;
 }
 .start_divider.frm_sorting li.ui-state-default.frm_not_divider.selected {
 	border:1px solid #E7E7E7;
@@ -2087,7 +2090,20 @@ iframe#dyncontent_ifr{min-height:150px;}
 .tooltip.bottom-left .tooltip-arrow{top:0;left:5px;border-width:0 5px 5px;border-bottom-color:#6D6D6D;}
 .tooltip.bottom-right .tooltip-arrow{top:0;right:5px;border-width:0 5px 5px;border-bottom-color:#6D6D6D;}
 
-.frm_progress {
+.frm_clearfix:after{
+    content:".";
+    display:block;
+    clear:both;
+    visibility:hidden;
+    line-height:0;
+    height:0;
+}
+
+.frm_clearfix{
+    display:block;
+}
+
+.frm_admin_progress {
   overflow: hidden;
   height: 20px;
   margin-bottom: 20px;
@@ -2096,7 +2112,7 @@ iframe#dyncontent_ifr{min-height:150px;}
   -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
 }
-.frm_progress_bar {
+.frm_admin_progress_bar {
   float: left;
   width: 0;
   height: 100%;

@@ -133,9 +133,11 @@ class FrmXMLHelper {
 
 	        $this_form = self::maybe_get_form( $form );
 
-			$old_id = $form_fields = false;
+			$old_id = false;
+			$form_fields = false;
 			if ( ! empty( $this_form ) ) {
-				$form_id = $old_id = $this_form->id;
+				$form_id = $this_form->id;
+				$old_id = $this_form->id;
 				self::update_form( $this_form, $form, $imported );
 
 				$form_fields = self::get_form_fields( $form_id );
@@ -159,7 +161,7 @@ class FrmXMLHelper {
 			$imported['forms'][ (int) $item->id ] = $form_id;
 
             // Send pre 2.0 form options through function that creates actions
-            self::migrate_form_settings_to_actions( $form['options'], $form_id, $imported, $switch = true );
+            self::migrate_form_settings_to_actions( $form['options'], $form_id, $imported, true );
 
 			do_action( 'frm_after_import_form', $form_id, $form );
 
@@ -558,10 +560,12 @@ class FrmXMLHelper {
             } else if ( $post['post_type'] == 'frm_styles' ) {
                 // Properly encode post content before inserting the post
                 $post['post_content'] = FrmAppHelper::maybe_json_decode( $post['post_content'] );
+				$custom_css = isset( $post['post_content']['custom_css'] ) ? $post['post_content']['custom_css'] : '';
                 $post['post_content'] = FrmAppHelper::prepare_and_encode( $post['post_content'] );
 
                 // Create/update post now
                 $post_id = wp_insert_post( $post );
+				self::maybe_update_custom_css( $custom_css );
             } else {
                 // Create/update post now
                 $post_id = wp_insert_post( $post );
@@ -748,6 +752,23 @@ class FrmXMLHelper {
             unset($k, $v);
         }
     }
+
+	/**
+	 * If a template includes custom css, let's include it.
+	 * The custom css is included on the default style.
+	 *
+	 * @since 2.03
+	 */
+	private static function maybe_update_custom_css( $custom_css ) {
+		if ( empty( $custom_css ) ) {
+			return;
+		}
+
+		$frm_style = new FrmStyle();
+		$default_style = $frm_style->get_default_style();
+		$default_style->post_content['custom_css'] .= "\r\n\r\n" . $custom_css;
+		$frm_style->save( $default_style );
+	}
 
 	private static function maybe_update_stylesheet( $imported ) {
 		$new_styles = isset( $imported['imported']['styles'] ) && ! empty( $imported['imported']['styles'] );
@@ -1020,7 +1041,7 @@ class FrmXMLHelper {
         // Migrate autoresponders
         self::migrate_autoresponder_to_action( $form_options, $form_id, $notifications );
 
-        if (  empty( $notifications ) ) {
+        if ( empty( $notifications ) ) {
             return;
         }
 

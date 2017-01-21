@@ -16,10 +16,24 @@ function frmFrontFormJS(){
 		var v = '';
 		var d = '';
 		var thisName = this.name;
+
 		if ( thisName === 'frm_prev_page' || this.className.indexOf('frm_prev_page') !== -1 ) {
 			v = jQuery(f).find('.frm_next_page').attr('id').replace('frm_next_p_', '');
 		} else if ( thisName === 'frm_save_draft' || this.className.indexOf('frm_save_draft') !== -1 ) {
 			d = 1;
+		} else if ( this.className.indexOf('frm_page_skip') !== -1 ) {
+			var goingTo = $thisObj.data('page');
+			var form_id = jQuery(f).find('input[name="form_id"]').val();
+			var orderField = jQuery(f).find('input[name="frm_page_order_'+form_id+'"]');
+			jQuery(f).append('<input name="frm_last_page" type="hidden" value="'+ orderField.val() +'" />');
+
+			if ( goingTo === '' ) {
+				orderField.remove();
+			} else {
+				orderField.val(goingTo);
+			}
+		} else if ( this.className.indexOf('frm_page_back') !== -1 ) {
+			v = $thisObj.data('page');
 		}
 
 		jQuery('.frm_next_page').val(v);
@@ -29,7 +43,7 @@ function frmFrontFormJS(){
 			f.trigger('submit');
 		}
 	}
-	
+
 	function toggleSection(){
 		/*jshint validthis:true */
 		jQuery(this).parent().children('.frm_toggle_container').slideToggle('fast');
@@ -37,30 +51,8 @@ function frmFrontFormJS(){
 			.toggleClass('ui-icon-triangle-1-s ui-icon-triangle-1-e');
 	}
 
-	function loadUniqueTimeFields() {
-		if ( typeof __frmUniqueTimes === 'undefined' ) {
-			return;
-		}
-
-		var timeFields = __frmUniqueTimes;
-		for ( var i = 0; i < timeFields.length; i++ ) {
-			jQuery( document.getElementById( timeFields[i].dateID ) ).change( maybeTriggerUniqueTime );
-		}
-	}
-
-	function maybeTriggerUniqueTime() {
-		/*jshint validthis:true */
-		var timeFields = __frmUniqueTimes;
-		for ( var i = 0; i < timeFields.length; i++ ) {
-			if ( timeFields[i].dateID == this.id ) {
-				frmFrontForm.removeUsedTimes( this, timeFields[i].timeID );
-			}
-		}
-	}
-
 	function loadDateFields() {
 		jQuery(document).on( 'focusin', '.frm_date', triggerDateField );
-		loadUniqueTimeFields();
 	}
 
 	function triggerDateField() {
@@ -130,8 +122,6 @@ function frmFrontFormJS(){
 		}
 
 		var form = field.closest('form');
-		var submitButton = form.find('input[type="submit"], .frm_submit input[type="button"]');
-		var loading = form.find('.frm_ajax_loading');
 		var formID = '#'+ form.attr('id');
 		if ( formID == '#undefined' ) {
 			// use a class if there is not id for WooCommerce
@@ -199,13 +189,11 @@ function frmFrontFormJS(){
 				});
 
 				this.on('addedfile', function(){
-					loading.addClass('frm_loading_now');
-					submitButton.attr('disabled', 'disabled');
+					showSubmitLoading( form );
 				});
 
 				this.on('queuecomplete', function(){
-					loading.removeClass('frm_loading_now');
-					submitButton.removeAttr('disabled');
+					removeSubmitLoading( form, 'enable' );
 				});
 
 				this.on('removedfile', function( file ) {
@@ -2102,6 +2090,7 @@ function frmFrontFormJS(){
 				entry_id:depFieldArgs.dataLogic.actualValue,
 				current_field:depFieldArgs.fieldId,
 				hide_id:depFieldArgs.containerId,
+				on_current_page:onCurrentPage,
 				nonce:frm_js.nonce
 			},
 			success:function(html){
@@ -2664,7 +2653,15 @@ function frmFrontFormJS(){
 			thisVal = thisVal.trim();
 
 			if ( count > 0 ) {
-				sep = ', ';
+				if ( field.thisField.type == 'time' ) {
+					if ( count == 1 ) {
+						sep = ':';
+					} else if ( count == 2 ) {
+						sep = ' ';
+					}
+				} else {
+					sep = ', ';
+				}
 			}
 
 			if ( thisVal !== '' ) {
@@ -2994,7 +2991,9 @@ function frmFrontFormJS(){
 			}
 
 			val = jQuery(field).val();
-			if ( typeof val !== 'string' ) {
+			if ( val === null ) {
+				val = '';
+			} else if ( typeof val !== 'string' ) {
 				var tempVal = val;
 				val = '';
 				for ( var i = 0; i < tempVal.length; i++ ) {
@@ -3008,6 +3007,11 @@ function frmFrontFormJS(){
 				fieldID = getFieldId( field, true );
 			} else {
 				fieldID = getFieldId( field, false );
+			}
+
+			if ( fieldClasses.indexOf('frm_time_select') !== -1 ) {
+				// set id for time field
+				fieldID = fieldID.replace('-H', '').replace('-m', '');
 			}
 		}
 
@@ -3117,6 +3121,8 @@ function frmFrontFormJS(){
 			jQuery(object).find('input[name="frm_action"]').val();
 		}
 
+		var fieldset = jQuery(object).find('.frm_form_field');
+		fieldset.addClass('frm_doing_ajax');
 		jQuery.ajax({
 			type:'POST',url:frm_js.ajax_url,
 			data:jQuery(object).serialize() +'&action=frm_entries_'+ action +'&nonce='+frm_js.nonce,
@@ -3138,12 +3144,19 @@ function frmFrontFormJS(){
 				} else if ( response.content !== '' ) {
 					// the form or success message was returned
 
-					jQuery(object).find('.frm_ajax_loading').removeClass('frm_loading_now');
+					removeSubmitLoading( jQuery(object) );
 					if ( frm_js.offset != -1 ) {
 						frmFrontForm.scrollMsg( jQuery(object), false );
 					}
 					var formID = jQuery(object).find('input[name="form_id"]').val();
-					jQuery(object).closest( '.frm_forms' ).replaceWith( response.content );
+					jQuery(object).find('.frm_form_field').fadeOut('slow', function(){
+						response.content = response.content.replace(/ class="frm_form_field /g, ' class="frm_hidden frm_form_field ');
+						response.content = response.content.replace(/ frm_pro_form /g, ' frm_pro_form frm_no_hide ');
+						jQuery(object).closest( '.frm_forms' ).replaceWith( response.content );
+						jQuery('#frm_form_'+ formID +'_container .frm_form_field').fadeIn('slow');
+					});
+
+					addUrlParam(response);
 
 					if(typeof(frmThemeOverride_frmAfterSubmit) == 'function'){
 						var pageOrder = jQuery('input[name="frm_page_order_'+ formID +'"]').val();
@@ -3165,8 +3178,7 @@ function frmFrontFormJS(){
 				} else if ( Object.keys(response.errors).length ) {
 					// errors were returned
 
-					jQuery(object).find('input[type="submit"], input[type="button"]').removeAttr('disabled');
-					jQuery(object).find('.frm_ajax_loading').removeClass('frm_loading_now');
+					removeSubmitLoading( jQuery(object), 'enable' );
 
 					//show errors
 					var cont_submit = true;
@@ -3212,6 +3224,7 @@ function frmFrontFormJS(){
 						}
 					}
 
+					fieldset.removeClass('frm_doing_ajax');
 					scrollToFirstField( object );
 
 					if(show_captcha !== true){
@@ -3237,6 +3250,36 @@ function frmFrontFormJS(){
 				object.submit();
 			}
 		});
+	}
+
+	function addUrlParam(response){
+		if ( history.pushState && typeof response.page != 'undefined' ) {
+			var url = addQueryVar('frm_page', response.page);
+			window.history.pushState({"html":response.html}, '', '?'+ url);
+		}
+	}
+
+	function addQueryVar(key, value) {
+		key = encodeURI(key);
+		value = encodeURI(value);
+
+		var kvp = document.location.search.substr(1).split('&');
+
+		var i=kvp.length; var x; while(i--) {
+			x = kvp[i].split('=');
+
+			if (x[0]==key) {
+				x[1] = value;
+				kvp[i] = x.join('=');
+				break;
+			}
+		}
+
+		if (i<0) {
+			kvp[kvp.length] = [key,value].join('=');
+		}
+
+		return kvp.join('&');
 	}
 
 	function addFieldError( $fieldCont, key, jsErrors ) {
@@ -3265,6 +3308,23 @@ function frmFrontFormJS(){
 		var field = jQuery(object).find('.frm_blank_field:first');
 		if ( field.length ) {
 			frmFrontForm.scrollMsg( field, object, true );
+		}
+	}
+
+	function showSubmitLoading( object ) {
+		if ( !object.hasClass('frm_loading_form') ) {
+			object.addClass('frm_loading_form');
+		}
+
+		// Disable submit button
+		object.find('input[type="submit"], input[type="button"], button[type="submit"]').attr('disabled','disabled');
+	}
+
+	function removeSubmitLoading( object, enable ) {
+		object.removeClass('frm_loading_form');
+
+		if ( enable == 'enable' ) {
+			object.find('input[type="submit"], input[type="button"], button[type="submit"]').removeAttr('disabled');
 		}
 	}
 
@@ -3751,7 +3811,13 @@ function frmFrontFormJS(){
 	function checkConditionalLogic( event ) {
 		if (typeof __frmHideOrShowFields !== 'undefined') {
 			frmFrontForm.hideOrShowFields( __frmHideOrShowFields, event );
+		} else {
+			showForm();
 		}
+	}
+
+	function showForm() {
+		jQuery('.frm_pro_form').fadeIn('slow');
 	}
 
 	function checkDynamicFields() {
@@ -3921,6 +3987,7 @@ function frmFrontFormJS(){
 
 	return{
 		init: function(){
+			jQuery(document).on('click', '.frm_button_submit', function(){ jQuery(this).closest('form').submit(); });
 			jQuery(document).off('submit.formidable','.frm-show-form');
 			jQuery(document).on('submit.formidable','.frm-show-form', frmFrontForm.submitForm);
 
@@ -3954,7 +4021,7 @@ function frmFrontFormJS(){
 
 			jQuery(document).on('change', '.frm-show-form input[name^="item_meta"], .frm-show-form select[name^="item_meta"], .frm-show-form textarea[name^="item_meta"]', maybeCheckDependent);
 
-			jQuery(document).on('click', '.frm-show-form input[type="submit"], .frm-show-form input[name="frm_prev_page"], .frm-show-form .frm_save_draft', setNextPage);
+			jQuery(document).on('click', '.frm-show-form input[type="submit"], .frm-show-form input[name="frm_prev_page"], .frm_page_back, .frm_page_skip, .frm-show-form .frm_save_draft, .frm_prev_page, .frm_button_submit', setNextPage);
             
             jQuery(document).on('change', '.frm_other_container input[type="checkbox"], .frm_other_container input[type="radio"], .frm_other_container select', showOtherText);
 
@@ -4012,10 +4079,7 @@ function frmFrontFormJS(){
 			var errors = frmFrontForm.validateFormSubmit( object );
 
 			if ( Object.keys(errors).length === 0 ) {
-				jQuery(object).find('.frm_ajax_loading').addClass('frm_loading_now');
-
-				// Disable submit button
-				jQuery(object).find('input[type="submit"], input[type="button"]').attr('disabled','disabled');
+				showSubmitLoading( jQuery(object) );
 
 				if ( classList.indexOf('frm_ajax_submit') > -1 ) {
 					var hasFileFields = jQuery(object).find('input[type="file"]').filter(function () {
@@ -4149,6 +4213,9 @@ function frmFrontFormJS(){
 			var repeatArgs = { repeatingSection: '', repeatRow: '' };
 			for ( var i = 0, l = len; i < l; i++ ) {
 				hideOrShowFieldById( ids[i], repeatArgs );
+				if ( i == ( l - 1 ) ) {
+					showForm();
+				}
 			}
 		},
 
@@ -4196,30 +4263,10 @@ function frmFrontFormJS(){
 				setTimeout( frmFrontForm.loadGoogle, 30 );
 			}
 		},
-		
-		/* Time fields */
+
 		removeUsedTimes: function( obj, timeField ) {
-			var e = jQuery(obj).parents('form:first').find('input[name="id"]');
-			jQuery.ajax({
-				type:'POST',
-				url:frm_js.ajax_url,
-				dataType:'json',
-				data:{
-					action:'frm_fields_ajax_time_options',
-					time_field:timeField, date_field:obj.id,
-					entry_id: (e ? e.val() : ''), date: jQuery(obj).val(),
-					nonce:frm_js.nonce
-				},
-				success:function(opts){
-					var $timeField = jQuery(document.getElementById(timeField));
-					$timeField.find('option').removeAttr('disabled');
-					if(opts && opts !== ''){
-						for(var opt in opts){
-							$timeField.find('option[value="'+opt+'"]').attr('disabled', 'disabled');
-						}
-					}
-				}
-			});
+			/* Time fields */
+			console.warn('DEPRECATED: function frmFrontForm.removeUsedTimes v2.03');
 		},
 		
 		escapeHtml: function(text){
