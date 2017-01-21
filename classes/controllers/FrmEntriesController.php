@@ -513,10 +513,6 @@ class FrmEntriesController {
         $plain_text = add_filter('frm_plain_text_email', true);
 		FrmEntryFormat::textarea_display_value( $field->type, $plain_text, $value );
 
-        if ( isset($atts['show']) && $atts['show'] == 'value' ) {
-            return $value;
-        }
-
         return $value;
     }
 
