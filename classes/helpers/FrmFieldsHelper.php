@@ -183,11 +183,11 @@ class FrmFieldsHelper {
 		return $msg;
 	}
 
-    public static function get_form_fields( $form_id, $error = false ) {
-        $fields = FrmField::get_all_for_form($form_id);
-        $fields = apply_filters('frm_get_paged_fields', $fields, $form_id, $error);
-        return $fields;
-    }
+	public static function get_form_fields( $form_id, $error = array() ) {
+		$fields = FrmField::get_all_for_form( $form_id );
+		$fields = apply_filters( 'frm_get_paged_fields', $fields, $form_id, $error );
+		return $fields;
+	}
 
 	public static function get_default_html( $type = 'text' ) {
 		if ( apply_filters( 'frm_normal_field_type_html', true, $type ) ) {
@@ -1028,7 +1028,8 @@ DEFAULT_HTML;
 	 * @since 2.0.6
 	 */
 	private static function set_other_value( $args, &$other_args ) {
-		$parent = $pointer = '';
+		$parent = '';
+		$pointer = '';
 
 		// Check for parent ID and pointer
 		$temp_array = explode( '[', $args['field_name'] );

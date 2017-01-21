@@ -172,9 +172,10 @@ class FrmFieldsController {
 
 	    $values = apply_filters( 'frm_prepare_single_field_for_duplication', $values );
 
-        if ( ! $field_id = FrmField::create($values) ) {
-            wp_die();
-        }
+		$field_id = FrmField::create( $values );
+		if ( ! $field_id ) {
+			wp_die();
+		}
 
         self::include_single_field($field_id, $values);
 
@@ -216,57 +217,30 @@ class FrmFieldsController {
 
 		$id = FrmAppHelper::get_post_param( 'field_id', 0, 'absint' );
 		$opt_type = FrmAppHelper::get_post_param( 'opt_type', '', 'sanitize_text_field' );
+		$opt_key = FrmAppHelper::get_post_param( 'opt_key', 0, 'absint' );
 
-        //Get the field
         $field = FrmField::getOne($id);
 
-		if ( ! empty( $field->options ) ) {
-			$keys = array_keys( $field->options );
-            $last = str_replace( 'other_', '', end( $keys ) );
-        } else {
-            $last = 0;
-        }
-        $opt_key = $last + 1;
-
         if ( 'other' == $opt_type ) {
-			$opt = esc_html__( 'Other', 'formidable' );
+			$opt = __( 'Other', 'formidable' );
             $other_val = '';
             $opt_key = 'other_' . $opt_key;
-
-            //Update value of "other" in DB
-            $field_options = maybe_unserialize( $field->field_options );
-            $field_options['other'] = 1;
-            FrmField::update( $id, array( 'field_options' => maybe_serialize( $field_options ) ) );
         } else {
-			$first_opt = reset( $field->options );
-			$next_opt = count( $field->options );
-            if ( $first_opt != '' ) {
-                $next_opt++;
-            }
-			$opt = esc_html__( 'Option', 'formidable' ) . ' ' . $next_opt;
-            unset($next_opt);
+			$opt = __( 'New Option', 'formidable' );
         }
         $field_val = $opt;
-		$field->options[ $opt_key ] = $opt;
-
-        //Update options in DB
-		FrmField::update( $id, array( 'options' => $field->options ) );
 
         $field_data = $field;
-        $field = array(
-            'type'  => $field_data->type,
-            'id'    => $id,
-            'separate_value' => isset($field_data->field_options['separate_value']) ? $field_data->field_options['separate_value'] : 0,
-            'form_id' => $field_data->form_id,
-            'field_key' => $field_data->field_key,
-        );
+		$field = (array) $field;
+		$field['separate_value'] = isset( $field_data->field_options['separate_value'] ) ? $field_data->field_options['separate_value'] : 0;
+		unset( $field_data );
 
 		$field_name = 'item_meta[' . $id . ']';
-        $html_id = FrmFieldsHelper::get_html_id($field);
+		$html_id = FrmFieldsHelper::get_html_id( $field );
         $checked = '';
 
         if ( 'other' == $opt_type ) {
-			require( FrmAppHelper::plugin_path() . '/pro/classes/views/frmpro-fields/other-option.php' );
+			include( FrmAppHelper::plugin_path() . '/pro/classes/views/frmpro-fields/other-option.php' );
         } else {
 			require( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/single-option.php' );
         }
@@ -274,90 +248,11 @@ class FrmFieldsController {
     }
 
     public static function edit_option() {
-		FrmAppHelper::permission_check('frm_edit_forms');
-        check_ajax_referer( 'frm_ajax', 'nonce' );
-
-		$element_id = FrmAppHelper::get_post_param( 'element_id', '', 'sanitize_title' );
-		$ids = explode( '-', $element_id );
-		$id = FrmAppHelper::get_post_param( 'field_id', 0, 'absint' );
-
-		$orig_update_value = $update_value = trim( FrmAppHelper::get_post_param( 'update_value', '', 'wp_kses_post' ) );
-		if ( strpos( $element_id, 'key_' ) ) {
-            $new_value = $update_value;
-        } else {
-            $new_label = $update_value;
-        }
-
-        $field = FrmField::getOne($id);
-        $separate_values = FrmField::is_option_true( $field, 'separate_value' );
-
-        $this_opt_id = end($ids);
-		$this_opt = (array) $field->options[ $this_opt_id ];
-		$other_opt = ( $this_opt_id && strpos( $this_opt_id, 'other') !== false );
-
-        $label = isset($this_opt['label']) ? $this_opt['label'] : reset($this_opt);
-        $value = isset($this_opt['value']) ? $this_opt['value'] : '';
-
-        if ( ! isset( $new_label ) ) {
-            $new_label = $label;
-        }
-
-        if ( isset($new_value) || isset($value) ) {
-            $update_value = isset($new_value) ? $new_value : $value;
-        }
-
-		if ( $update_value != $new_label && $other_opt === false && $separate_values ) {
-			$field->options[ $this_opt_id ] = array( 'value' => $update_value, 'label' => $new_label );
-        } else {
-			$field->options[ $this_opt_id ] = $orig_update_value;
-        }
-
-		FrmField::update( $field->id, array( 'options' => $field->options ) );
-		echo ( $orig_update_value == '' ) ? esc_html__( '(Blank)', 'formidable' ) : stripslashes( $orig_update_value );
-        wp_die();
+		_deprecated_function( __FUNCTION__, '2.3' );
     }
 
     public static function delete_option() {
-		FrmAppHelper::permission_check('frm_edit_forms');
-        check_ajax_referer( 'frm_ajax', 'nonce' );
-
-		$field_id = FrmAppHelper::get_post_param( 'field_id', 0, 'absint' );
-		$field = FrmField::getOne( $field_id );
-		// Opt key will NOT be numeric for "Other" options
-		$opt_key = FrmAppHelper::get_post_param( 'opt_key', 0, 'sanitize_title' );
-
-		$options = $field->options;
-        unset( $options[ $opt_key ] );
-        $response = array( 'other' => true );
-
-        //If the deleted option is an "other" option
-		if ( FrmFieldsHelper::is_other_opt( $opt_key ) ) {
-            //Assume all other options are gone, unless proven otherwise
-            $other = false;
-
-            //Check if all other options are really gone
-            foreach ( $options as $o_key => $o_val ) {
-                //If there is still an other option in the field, set other to true
-				if ( FrmFieldsHelper::is_other_opt( $o_key ) ) {
-                    $other = true;
-                    break;
-                }
-                unset( $o_key, $o_val );
-            }
-
-            //If all other options are gone
-            if ( false === $other ) {
-                $field_options = maybe_unserialize( $field->field_options );
-                $field_options['other'] = 0;
-				FrmField::update( $field_id, array( 'field_options' => maybe_serialize( $field_options ) ) );
-                $response = array( 'other' => false );
-            }
-        }
-        echo json_encode( $response );
-
-		FrmField::update( $field_id, array( 'options' => maybe_serialize( $options ) ) );
-
-        wp_die();
+		_deprecated_function( __FUNCTION__, '2.3' );
     }
 
     public static function import_choices() {
@@ -377,7 +272,8 @@ class FrmFieldsController {
             register_admin_color_schemes();
         }
 
-        $hook_suffix = $admin_body_class = '';
+		$hook_suffix = '';
+		$admin_body_class = '';
 
         if ( get_user_setting( 'mfold' ) == 'f' ) {
         	$admin_body_class .= ' folded';
@@ -452,15 +348,14 @@ class FrmFieldsController {
             }
         }
 
-        FrmField::update( $field_id, array( 'options' => maybe_serialize( $opts ) ) );
-
         $field['options'] = $opts;
-        $field_name = $field['name'];
-
-        // Get html_id which will be used in single-option.php
-        $html_id = FrmFieldsHelper::get_html_id( $field );
 
         if ( $field['type'] == 'radio' || $field['type'] == 'checkbox' ) {
+			$field_name = 'item_meta[' . $field['id'] . ']';
+
+			// Get html_id which will be used in single-option.php
+			$html_id = FrmFieldsHelper::get_html_id( $field );
+
 			require( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/radio.php' );
         } else {
             FrmFieldsHelper::show_single_option($field);

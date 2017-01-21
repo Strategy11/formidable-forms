@@ -3,7 +3,7 @@
  * @since 2.02.12
  */
 
-class FrmShortcodeHelper{
+class FrmShortcodeHelper {
 
 	/**
 	 * Get the shortcode attributes in key/value pairs from a string

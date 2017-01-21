@@ -327,7 +327,9 @@ class FrmListHelper {
 	 */
 	protected function bulk_actions( $which = '' ) {
 		if ( is_null( $this->_actions ) ) {
-			$no_new_actions = $this->_actions = $this->get_bulk_actions();
+			$no_new_actions = $this->get_bulk_actions();
+			$this->_actions = $no_new_actions;
+
 			/**
 			 * Filter the list table Bulk Actions drop-down.
 			 *
@@ -541,7 +543,10 @@ class FrmListHelper {
 		$total_pages_before = '<span class="paging-input">';
 		$total_pages_after  = '</span>';
 
-		$disable_first = $disable_last = $disable_prev = $disable_next = false;
+		$disable_first = false;
+		$disable_last = false;
+		$disable_prev = false;
+		$disable_next = false;
 
  		if ( $current == 1 ) {
 			$disable_first = true;

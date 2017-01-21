@@ -30,7 +30,8 @@ class FrmNotification {
 
         //Get all values in entry in order to get User ID field ID
         $values = FrmEntryMeta::getAll( array( 'it.field_id !' => 0, 'it.item_id' => $entry->id ), ' ORDER BY fi.field_order' );
-        $user_id_field = $user_id_key = '';
+		$user_id_field = '';
+		$user_id_key = '';
         foreach ( $values as $value ) {
             if ( $value->field_type == 'user_id' ) {
                 $user_id_field = $value->field_id;
@@ -76,11 +77,12 @@ class FrmNotification {
 
         $to_emails = array_unique( (array) $to_emails );
 
-        $prev_mail_body = $mail_body = $notification['email_message'];
-        $mail_body = FrmEntriesHelper::replace_default_message($mail_body, array(
-            'id' => $entry->id, 'entry' => $entry, 'plain_text' => $plain_text,
-            'user_info' => (isset($notification['inc_user_info']) ? $notification['inc_user_info'] : false),
-        ) );
+		$prev_mail_body = $notification['email_message'];
+		$pass_entry = clone $entry; // make a copy to prevent changes by reference
+		$mail_body = FrmEntriesHelper::replace_default_message( $prev_mail_body, array(
+			'id' => $entry->id, 'entry' => $pass_entry, 'plain_text' => $plain_text,
+			'user_info' => ( isset( $notification['inc_user_info'] ) ? $notification['inc_user_info'] : false ),
+		) );
 
         // Add the user info if it isn't already included
         if ( $notification['inc_user_info'] && $prev_mail_body == $mail_body ) {

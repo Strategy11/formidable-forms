@@ -6,30 +6,24 @@ class FrmEntriesListHelper extends FrmListHelper {
 	protected $field;
 
 	public function prepare_items() {
-        global $wpdb, $per_page;
+        global $per_page;
 
 		$per_page = $this->get_items_per_page( 'formidable_page_formidable_entries_per_page' );
-
         $form_id = $this->params['form'];
-        if ( ! $form_id ) {
-            $this->items = array();
-    		$this->set_pagination_args( array(
-    			'total_items' => 0,
-				'per_page' => $per_page,
-    		) );
-            return;
-        }
 
 		$default_orderby = 'id';
 		$default_order = 'DESC';
+		$s_query = array();
 
-	    $s_query = array( 'it.form_id' => $form_id );
+		if ( $form_id ) {
+			$s_query['it.form_id'] = $form_id;
+		}
 
 		$s = isset( $_REQUEST['s'] ) ? stripslashes($_REQUEST['s']) : '';
 
 	    if ( $s != '' && FrmAppHelper::pro_is_installed() ) {
 	        $fid = isset( $_REQUEST['fid'] ) ? sanitize_title( $_REQUEST['fid'] ) : '';
-	        $s_query = FrmProEntriesHelper::get_search_str( $s_query, $s, $form_id, $fid);
+	        $s_query = FrmProEntriesHelper::get_search_str( $s_query, $s, $form_id, $fid );
 	    }
 
         $orderby = isset( $_REQUEST['orderby'] ) ? sanitize_title( $_REQUEST['orderby'] ) : $default_orderby;
@@ -60,7 +54,9 @@ class FrmEntriesListHelper extends FrmListHelper {
             return;
         }
 
-        $form_id = $form = $this->params['form'];
+		$form_id = $this->params['form'];
+		$form = $this->params['form'];
+
         if ( $form_id ) {
             $form = FrmForm::getOne($form_id);
         }
@@ -71,6 +67,16 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 	public function search_box( $text, $input_id ) {
 		// Searching is a pro feature
+	}
+
+	protected function extra_tablenav( $which ) {
+		$form_id = FrmAppHelper::simple_get( 'form', 'absint' );
+		if ( $which == 'top' && empty( $form_id ) ) {
+			echo '<div class="alignleft actions">';
+			echo FrmFormsHelper::forms_dropdown( 'form', $form_id, array( 'blank' => __( 'View all forms', 'formidable' ) ) );
+			submit_button( __( 'Filter' ), 'filter_action', '', false, array( 'id' => "post-query-submit" ) );
+			echo '</div>';
+		}
 	}
 
 	/**
@@ -130,7 +136,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 			unset($class);
 			$attributes .= ' data-colname="' . $column_display_name . '"';
 
-			$col_name = preg_replace( '/^(' . $this->params['form'] . '_)/', '', $column_name );
+			$form_id = $this->params['form'] ? $this->params['form'] : 0;
+			$col_name = preg_replace( '/^(' . $form_id . '_)/', '', $column_name );
 			$this->column_name = $col_name;
 
 			switch ( $col_name ) {
