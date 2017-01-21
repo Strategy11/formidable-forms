@@ -65,49 +65,19 @@ class FrmEntriesController {
     }
 
 	public static function manage_columns( $columns ) {
-        global $frm_vars, $wpdb;
+        global $frm_vars;
 		$form_id = FrmForm::get_current_form_id();
 
 		$columns[ $form_id . '_id' ] = 'ID';
 		$columns[ $form_id . '_item_key' ] = esc_html__( 'Entry Key', 'formidable' );
 
-        if ( ! $form_id ) {
-            return $columns;
-        }
-
-        $form_cols = FrmField::get_all_for_form($form_id, '', 'include');
-
-        foreach ( $form_cols as $form_col ) {
-			if ( FrmField::is_no_save_field( $form_col->type ) ) {
-                continue;
-            }
-
-            if ( $form_col->type == 'form' && isset( $form_col->field_options['form_select'] ) && ! empty( $form_col->field_options['form_select'] ) ) {
-				$sub_form_cols = FrmField::get_all_for_form( $form_col->field_options['form_select'] );
-
-                if ( $sub_form_cols ) {
-                    foreach ( $sub_form_cols as $k => $sub_form_col ) {
-						if ( FrmField::is_no_save_field( $sub_form_col->type ) ) {
-                            unset( $sub_form_cols[ $k ] );
-                            continue;
-                        }
-						$columns[ $form_id . '_' . $sub_form_col->field_key . '-_-' . $form_col->id ] = FrmAppHelper::truncate( do_shortcode($sub_form_col->name), 35 );
-                        unset($sub_form_col);
-                    }
-                }
-                unset($sub_form_cols);
-            } else {
-                $col_id = $form_col->field_key;
-                if ( $form_col->form_id != $form_id ) {
-					$col_id .= '-_-form' . $form_col->form_id;
-                }
-
-                if ( isset($form_col->field_options['separate_value']) && $form_col->field_options['separate_value'] ) {
-					$columns[ $form_id . '_frmsep_' . $col_id ] = FrmAppHelper::truncate( do_shortcode($form_col->name), 35 );
-                }
-				$columns[ $form_id . '_' . $col_id ] = FrmAppHelper::truncate( do_shortcode($form_col->name), 35 );
-            }
-        }
+		if ( $form_id ) {
+			self::get_columns_for_form( $form_id, $columns );
+		} else {
+			$columns[ $form_id . '_form_id' ] = __( 'Form', 'formidable' );
+			$columns[ $form_id . '_name' ] = __( 'Entry Name', 'formidable' );
+			$columns[ $form_id . '_user_id' ] = __( 'Created By', 'formidable' );
+		}
 
 		$columns[ $form_id . '_created_at' ] = __( 'Entry creation date', 'formidable' );
 		$columns[ $form_id . '_updated_at' ] = __( 'Entry update date', 'formidable' );
@@ -122,6 +92,42 @@ class FrmEntriesController {
 
         return $columns;
     }
+
+	private static function get_columns_for_form( $form_id, &$columns ) {
+		$form_cols = FrmField::get_all_for_form( $form_id, '', 'include' );
+
+		foreach ( $form_cols as $form_col ) {
+			if ( FrmField::is_no_save_field( $form_col->type ) ) {
+				continue;
+			}
+
+			if ( $form_col->type == 'form' && isset( $form_col->field_options['form_select'] ) && ! empty( $form_col->field_options['form_select'] ) ) {
+				$sub_form_cols = FrmField::get_all_for_form( $form_col->field_options['form_select'] );
+
+				if ( $sub_form_cols ) {
+					foreach ( $sub_form_cols as $k => $sub_form_col ) {
+						if ( FrmField::is_no_save_field( $sub_form_col->type ) ) {
+							unset( $sub_form_cols[ $k ] );
+							continue;
+						}
+						$columns[ $form_id . '_' . $sub_form_col->field_key . '-_-' . $form_col->id ] = FrmAppHelper::truncate( do_shortcode($sub_form_col->name), 35 );
+						unset($sub_form_col);
+					}
+				}
+				unset($sub_form_cols);
+			} else {
+				$col_id = $form_col->field_key;
+				if ( $form_col->form_id != $form_id ) {
+					$col_id .= '-_-form' . $form_col->form_id;
+				}
+
+				if ( isset($form_col->field_options['separate_value']) && $form_col->field_options['separate_value'] ) {
+					$columns[ $form_id . '_frmsep_' . $col_id ] = FrmAppHelper::truncate( do_shortcode($form_col->name), 35 );
+				}
+				$columns[ $form_id . '_' . $col_id ] = FrmAppHelper::truncate( do_shortcode($form_col->name), 35 );
+			}
+		}
+	}
 
 	public static function check_hidden_cols( $check, $object_id, $meta_key, $meta_value, $prev_value ) {
 		$menu_name = FrmAppHelper::get_menu_name();
@@ -157,7 +163,7 @@ class FrmEntriesController {
 
         foreach ( $meta_value as $mk => $mv ) {
             //remove blank values
-            if ( empty( $mv )  ) {
+            if ( empty( $mv ) ) {
                 unset( $meta_value[ $mk ] );
             }
         }
@@ -256,14 +262,17 @@ class FrmEntriesController {
             $frm_vars['current_form']->options = maybe_unserialize($frm_vars['current_form']->options);
         }
 
-        if ( isset($frm_vars['current_form']) && $frm_vars['current_form'] && isset($frm_vars['current_form']->options['hidden_cols']) && ! empty($frm_vars['current_form']->options['hidden_cols']) ) {
+		$has_custom_hidden_columns = ( isset( $frm_vars['current_form'] ) && $frm_vars['current_form'] && isset( $frm_vars['current_form']->options['hidden_cols'] ) && ! empty( $frm_vars['current_form']->options['hidden_cols'] ) );
+		if ( $has_custom_hidden_columns ) {
             $result = $frm_vars['current_form']->options['hidden_cols'];
         } else {
             $cols = $frm_vars['cols'];
             $cols = array_reverse($cols, true);
 
-			$result[] = $form_id . '_id';
-            $i--;
+			if ( $form_id ) {
+				$result[] = $form_id . '_id';
+				$i--;
+			}
 
 			$result[] = $form_id . '_item_key';
             $i--;
@@ -284,19 +293,14 @@ class FrmEntriesController {
 	public static function display_list( $message = '', $errors = array() ) {
         global $wpdb, $frm_vars;
 
-		$form = FrmForm::get_current_form();
+		$form = FrmForm::maybe_get_current_form();
 		$params = FrmForm::get_admin_params( $form );
 
         if ( $form ) {
             $params['form'] = $form->id;
             $frm_vars['current_form'] = $form;
 
-	        if ( 'trash' == $form->status ) {
-	            $delete_timestamp = time() - ( DAY_IN_SECONDS * EMPTY_TRASH_DAYS );
-	            $time_to_delete = FrmAppHelper::human_time_diff( $delete_timestamp, ( isset( $form->options['trash_time'] ) ? ( $form->options['trash_time'] ) : time() ) );
-	            $errors['trash'] = sprintf( __( 'This form is in the trash and is scheduled to be deleted permanently in %s along with any entries.', 'formidable' ), $time_to_delete );
-	            unset( $time_to_delete, $delete_timestamp );
-	        }
+			self::get_delete_form_time( $form, $errors );
 		}
 
         $table_class = apply_filters( 'frm_entries_list_class', 'FrmEntriesListHelper' );
@@ -324,6 +328,14 @@ class FrmEntriesController {
 
 		require( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/list.php' );
     }
+
+	private static function get_delete_form_time( $form, &$errors ) {
+		if ( 'trash' == $form->status ) {
+			$delete_timestamp = time() - ( DAY_IN_SECONDS * EMPTY_TRASH_DAYS );
+			$time_to_delete = FrmAppHelper::human_time_diff( $delete_timestamp, ( isset( $form->options['trash_time'] ) ? ( $form->options['trash_time'] ) : time() ) );
+			$errors['trash'] = sprintf( __( 'This form is in the trash and is scheduled to be deleted permanently in %s along with any entries.', 'formidable' ), $time_to_delete );
+		}
+	}
 
     /* Back End CRUD */
 	public static function show( $id = 0 ) {

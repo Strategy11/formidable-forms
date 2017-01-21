@@ -334,6 +334,7 @@ class FrmStylesController {
 
         $frm_style = new FrmStyle();
         $defaults = $frm_style->get_defaults();
+		$style = '';
 
         // remove the # from the colors
         foreach ( $_GET['frm_style_setting']['post_content'] as $k => $v ) {
@@ -360,11 +361,15 @@ class FrmStylesController {
             'field-colors'      => __( 'Field Colors', 'formidable' ),
             'field-sizes'       => __( 'Field Settings', 'formidable' ),
             'check-box-radio-fields' => __( 'Check Box & Radio Fields', 'formidable' ),
-            'section-fields'    => __( 'Section Fields', 'formidable' ),
-            'date-fields'       => __( 'Date Fields', 'formidable' ),
             'buttons'           => __( 'Buttons', 'formidable' ),
             'form-messages'     => __( 'Form Messages', 'formidable' ),
         );
+
+		/**
+		 * Add custom boxes to the styling settings
+		 * @since 2.3
+		 */
+		$meta_boxes = apply_filters( 'frm_style_boxes', $meta_boxes );
 
         foreach ( $meta_boxes as $nicename => $name ) {
 			add_meta_box( $nicename . '-style', $name, 'FrmStylesController::include_style_section', self::$screen, 'side', 'default', $nicename );
@@ -375,7 +380,18 @@ class FrmStylesController {
 	public static function include_style_section( $atts, $sec ) {
         extract($atts);
 		$current_tab = FrmAppHelper::simple_get( 'page-tab', 'sanitize_title', 'default' );
-		include( FrmAppHelper::plugin_path() . '/classes/views/styles/_' . $sec['args'] . '.php' );
+		$file_name = FrmAppHelper::plugin_path() . '/classes/views/styles/_' . $sec['args'] . '.php';
+
+		/**
+		 * Set the location of custom styling settings right before
+		 * loading onto the page. If your style box was named "progress",
+		 * this hook name will be frm_style_settings_progress.
+		 *
+		 * @since 2.3
+		 */
+		$file_name = apply_filters( 'frm_style_settings_' . $sec['args'], $file_name );
+
+		include( $file_name );
     }
 
     public static function load_css() {
@@ -383,6 +399,7 @@ class FrmStylesController {
 
         $frm_style = new FrmStyle();
         $defaults = $frm_style->get_defaults();
+		$style = '';
 
 		include( FrmAppHelper::plugin_path() . '/css/_single_theme.css.php' );
         wp_die();

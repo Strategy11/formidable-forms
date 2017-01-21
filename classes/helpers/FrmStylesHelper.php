@@ -205,4 +205,139 @@ class FrmStylesHelper {
         return implode(',', $rgb); // returns the rgb values separated by commas
         //return $rgb; // returns an array with the rgb values
     }
+
+	/**
+	 * @param $hex string - The original color in hex format #ffffff
+	 * @param $steps integer - should be between -255 and 255. Negative = darker, positive = lighter
+	 * @since 2.3
+	 */
+	public static function adjust_brightness( $hex, $steps ) {
+		$steps = max( -255, min( 255, $steps ) );
+
+		// Normalize into a six character long hex string
+		$hex = str_replace( '#', '', $hex );
+		if ( strlen( $hex ) == 3 ) {
+			$hex = str_repeat( substr( $hex, 0, 1 ), 2 );
+			$hex .= str_repeat( substr( $hex, 1, 1 ), 2 );
+			$hex .= str_repeat( substr( $hex, 2, 1 ), 2 );
+		}
+
+		// Split into three parts: R, G and B
+		$color_parts = str_split( $hex, 2 );
+		$return = '#';
+
+		foreach ( $color_parts as $color ) {
+			$color   = hexdec( $color ); // Convert to decimal
+			$color   = max( 0,min( 255,$color + $steps ) ); // Adjust color
+			$return .= str_pad( dechex( $color ), 2, '0', STR_PAD_LEFT ); // Make two char hex code
+		}
+
+		return $return;
+	}
+
+	/**
+	 * @since 2.3
+	 */
+	public static function get_settings_for_output( $style ) {
+		if ( self::previewing_style() ) {
+			if ( isset( $_GET['frm_style_setting'] ) ) {
+				$settings = $_GET['frm_style_setting']['post_content'];
+			} else {
+				$settings = $_GET;
+			}
+			FrmAppHelper::sanitize_value( 'sanitize_text_field', $settings );
+
+			$style_name = FrmAppHelper::simple_get( 'style_name', 'sanitize_title' );
+			$settings['style_class'] = '';
+			if ( ! empty( $style_name ) ) {
+				$settings['style_class'] = $style_name . '.';
+			}
+		} else {
+			$settings = $style->post_content;
+			$settings['style_class'] = 'frm_style_' . $style->post_name . '.';
+		}
+
+		$settings['style_class'] .= 'with_frm_style';
+		$settings['font'] = stripslashes( $settings['font'] );
+		$settings['change_margin'] = self::description_margin_for_screensize( $settings['width'] );
+
+		$checkbox_opts = array( 'important_style', 'auto_width', 'submit_style', 'collapse_icon', 'center_form' );
+		foreach ( $checkbox_opts as $opt ) {
+			if ( ! isset( $settings[ $opt ] ) ) {
+				$settings[ $opt ] = 0;
+			}
+		}
+
+		self::prepare_color_output( $settings );
+
+		return $settings;
+	}
+
+	/**
+	 * @since 2.3
+	 */
+	private static function prepare_color_output( &$settings ) {
+		$colors = self::allow_color_override();
+		foreach ( $colors as $css => $opts ) {
+			foreach ( $opts as $opt ) {
+				self::get_color_output( $css, $settings[ $opt ] );
+			}
+		}
+	}
+
+	/**
+	 * @since 2.3
+	 */
+	private static function allow_color_override() {
+		return array(
+			'transparent' => array(
+				'fieldset_color', 'fieldset_bg_color', 'bg_color',
+				'bg_color_disabled', 'bg_color_active', 'bg_color_error',
+				'section_bg_color', 'error_bg', 'success_bg_color',
+				'progress_bg_color', 'progress_active_bg_color',
+			),
+			'' => array(
+				'title_color', 'section_color', 'submit_text_color',
+				'label_color', 'check_label_color', 'form_desc_color',
+				'description_color', 'text_color', 'text_color_disabled',
+				'border_color', 'submit_bg_color', 'submit_border_color',
+				'error_text', 'progress_border_color', 'progress_color',
+				'progress_active_color',
+				'submit_hover_bg_color', 'submit_hover_border_color', 'submit_hover_color',
+				'submit_active_color', 'submit_active_border_color', 'submit_active_bg_color',
+			),
+		);
+	}
+
+	/**
+	 * @since 2.3
+	 */
+	private static function get_color_output( $default, &$color ) {
+		$color = ( trim( $color ) == '' ) ? $default : '#' . $color;
+	}
+
+	/**
+	 * If left/right label is over a certain size,
+	 * adjust the field description margin at a different screen size
+	 * @since 2.3
+	 */
+	private static function description_margin_for_screensize( $width ) {
+		$temp_label_width = str_replace( 'px', '', $width );
+		$change_margin = false;
+		if ( $temp_label_width >= 230 ) {
+			$change_margin = '800px';
+		} else if ( $width >= 215 ) {
+			$change_margin = '700px';
+		} else if ( $width >= 180 ) {
+			$change_margin = '650px';
+		}
+		return $change_margin;
+	}
+
+	/**
+	 * @since 2.3
+	 */
+	public static function previewing_style() {
+		return isset( $_GET['frm_style_setting'] ) || isset( $_GET['flat'] );
+	}
 }

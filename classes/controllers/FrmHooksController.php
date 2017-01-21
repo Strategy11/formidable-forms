@@ -151,8 +151,6 @@ class FrmHooksController {
         add_action( 'wp_ajax_frm_duplicate_field', 'FrmFieldsController::duplicate' );
         add_action( 'wp_ajax_frm_delete_field', 'FrmFieldsController::destroy' );
         add_action( 'wp_ajax_frm_add_field_option', 'FrmFieldsController::add_option' );
-        add_action( 'wp_ajax_frm_field_option_ipe', 'FrmFieldsController::edit_option' );
-        add_action( 'wp_ajax_frm_delete_field_option', 'FrmFieldsController::delete_option' );
         add_action( 'wp_ajax_frm_import_choices', 'FrmFieldsController::import_choices' );
         add_action( 'wp_ajax_frm_import_options', 'FrmFieldsController::import_options' );
         add_action( 'wp_ajax_frm_update_field_order', 'FrmFieldsController::update_order' );
@@ -204,7 +202,6 @@ class FrmHooksController {
     }
 
 	public static function load_multisite_hooks() {
-		add_action( 'init', 'FrmAppController::front_head' );
 		add_action( 'wpmu_upgrade_site', 'FrmAppController::network_upgrade_site' );
 
         // drop tables when mu site is deleted

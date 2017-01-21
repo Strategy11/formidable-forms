@@ -7,7 +7,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmAntiSpam {
 
 	private static function is_spam( $comment ) {
-		$url = $email = $author = $body = $comment; // TODO: get values from form
+		$url = $comment; // TODO: get values from form
+		$email = $comment;
+		$author = $comment;
+		$body = $comment;
+
 		$options = array(
 			'time_check' => 1, 'bbcode_check' => 1,
 			'advanced_check' => 1, 'regexp_check' => 1,
@@ -189,7 +193,8 @@ class FrmAntiSpam {
 		);
 
 		/* Spammy author */
-		if ( $quoted_author = preg_quote( $comment['author'], '/' ) ) {
+		$quoted_author = preg_quote( $comment['author'], '/' );
+		if ( $quoted_author ) {
 			$patterns[] = array(
 				'body' => sprintf( '<a.+?>%s<\/a>$', $quoted_author ),
 			);
