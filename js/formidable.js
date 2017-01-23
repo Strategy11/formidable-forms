@@ -4086,7 +4086,6 @@ function frmFrontFormJS(){
 						return !!this.value;
 					}).length;
 					if ( hasFileFields < 1 ) {
-						tinyMCE.triggerSave();
 						action = jQuery(object).find('input[name="frm_action"]').val();
 						frmFrontForm.checkFormErrors( object, action );
 					} else {
@@ -4099,7 +4098,7 @@ function frmFrontFormJS(){
 		},
 
 		validateFormSubmit: function( object ){
-			if ( typeof tinyMCE != 'undefined' && jQuery(this).find('.wp-editor-wrap').length ) {
+			if ( typeof tinyMCE != 'undefined' && jQuery(object).find('.wp-editor-wrap').length ) {
 				tinyMCE.triggerSave();
 			}
 
