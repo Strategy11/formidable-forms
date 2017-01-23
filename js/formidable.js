@@ -3170,10 +3170,8 @@ function frmFrontFormJS(){
 						frmFrontForm.scrollMsg( jQuery(object), false );
 					}
 					var formID = jQuery(object).find('input[name="form_id"]').val();
-					jQuery(object).find('.frm_form_field').fadeOut('slow', function(){
-						response.content = response.content.replace(/ frm_pro_form /g, ' frm_pro_form frm_no_hide ');
-						jQuery(object).closest( '.frm_forms' ).replaceWith( response.content );
-					});
+					response.content = response.content.replace(/ frm_pro_form /g, ' frm_pro_form frm_no_hide ');
+					jQuery(object).closest( '.frm_forms' ).replaceWith( response.content );
 
 					addUrlParam(response);
 
