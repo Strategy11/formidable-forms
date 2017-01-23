@@ -673,10 +673,31 @@ function frmFrontFormJS(){
 
 		var logicFieldInput = document.getElementById( fieldCall );
 
-		if ( logicFieldInput !== null ) {
+		if ( logicFieldInput === null ) {
+			logicFieldValue = parseTimeValue( logicFieldArgs, fieldCall );
+		} else {
 			logicFieldValue = logicFieldInput.value;
 		}
 
+		return logicFieldValue;
+	}
+
+	function parseTimeValue( logicFieldArgs, fieldCall ) {
+		var logicFieldValue = '';
+		if ( logicFieldArgs.fieldType == 'time' ) {
+			var hour = document.getElementById( fieldCall +'_H' );
+			if ( hour !== null ) {
+				var minute = document.getElementById( fieldCall +'_m' );
+				logicFieldValue = hour.value + ':' + minute.value;
+
+				var pm = document.getElementById( fieldCall +'_A' );
+				if ( logicFieldValue == ':' ) {
+					logicFieldValue = '';
+				} else if ( pm !== null ) {
+					logicFieldValue += ' ' + pm.value;
+				}
+			}
+		}
 		return logicFieldValue;
 	}
 
