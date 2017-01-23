@@ -500,7 +500,7 @@ if ( ! $submit_style ) { ?>
 .<?php echo esc_html( $style_class ) ?> .frm_compact .frm_dropzone.dz-clickable .dz-message,
 .<?php echo esc_html( $style_class ) ?> input[type=submit],
 .<?php echo esc_html( $style_class ) ?> .frm_submit input[type=button],
-.<?php echo esc_html( $style_class ) ?> button,
+.<?php echo esc_html( $style_class ) ?> .frm_submit button,
 .frm_form_submit_style,
 .<?php echo esc_html( $style_class ) ?>.frm_login_form input[type=submit]{
     width:<?php echo esc_html( ( $submit_width == '' ? 'auto' : $submit_width ) . $important ) ?>;
