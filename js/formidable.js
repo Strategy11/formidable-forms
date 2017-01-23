@@ -4086,6 +4086,7 @@ function frmFrontFormJS(){
 						return !!this.value;
 					}).length;
 					if ( hasFileFields < 1 ) {
+						tinyMCE.triggerSave();
 						action = jQuery(object).find('input[name="frm_action"]').val();
 						frmFrontForm.checkFormErrors( object, action );
 					} else {

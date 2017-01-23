@@ -79,4 +79,4 @@ if ( has_action('frm_entries_footer_scripts') ) {
 do_action( 'frm_entries_footer_scripts', $values['fields'], $form );
 ?></script><?php
 }
-?></script>
+?>
