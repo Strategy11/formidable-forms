@@ -386,7 +386,7 @@ a.frm_save_draft{
     padding:5px;
     border-width:1px;
     border-style:solid;
-    border-color:#<?php echo esc_html( $defaults['border_color'] ) ?>;
+    border-color:<?php echo esc_html( $defaults['border_color'] ) ?>;
     border-top:none;
     border-left:none;
     border-right:none;
@@ -398,9 +398,9 @@ table.form_results.with_frm_style{
 
 table.form_results.with_frm_style tr td{
     text-align:left;
-    color:#<?php echo esc_html( $defaults['text_color'] ) ?>;
+    color:<?php echo esc_html( $defaults['text_color'] ) ?>;
     padding:7px 9px;
-    border-top:1px solid #<?php echo esc_html( $defaults['border_color'] ) ?>;
+    border-top:1px solid <?php echo esc_html( $defaults['border_color'] ) ?>;
 }
 
 table.form_results.with_frm_style tr.frm_even,
@@ -410,7 +410,7 @@ table.form_results.with_frm_style tr.frm_even,
 
 table.form_results.with_frm_style tr.frm_odd,
 .frm-grid .frm_odd{
-    background-color:#<?php echo esc_html( $defaults['bg_color_active'] ) ?>;
+    background-color:<?php echo esc_html( $defaults['bg_color_active'] ) ?>;
 }
 
 .frm_collapse .ui-icon{
@@ -482,13 +482,13 @@ table.form_results.with_frm_style tr.frm_odd,
 
 <?php if ( ! empty( $defaults['bg_color'] ) ) { ?>
 #frm_loading .progress-striped .progress-bar{
-    background-image:linear-gradient(45deg, #<?php echo esc_html( $defaults['border_color'] ) ?> 25%, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0) 50%, #<?php echo esc_html( $defaults['border_color'] ) ?> 50%, #<?php echo esc_html( $defaults['border_color'] ) ?> 75%, rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 0));
+    background-image:linear-gradient(45deg, <?php echo esc_html( $defaults['border_color'] ) ?> 25%, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0) 50%, <?php echo esc_html( $defaults['border_color'] ) ?> 50%, <?php echo esc_html( $defaults['border_color'] ) ?> 75%, rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 0));
     background-size:40px 40px;
 }
 <?php } ?>
 
 #frm_loading .progress-bar{
-    background-color:<?php echo esc_html( empty( $defaults['bg_color'] ) ? 'transparent' : '#' . $defaults['bg_color'] ); ?>;
+    background-color:<?php echo esc_html( empty( $defaults['bg_color'] ) ? 'transparent' : $defaults['bg_color'] ); ?>;
     box-shadow:0 -1px 0 rgba(0, 0, 0, 0.15) inset;
     float:left;
     height:100%;
@@ -608,7 +608,7 @@ select.frm_loading_lookup{
     padding:5px;
     border-width:1px;
     border-style:solid;
-    border-color:#<?php echo esc_html( $defaults['border_color'] ) ?>;
+    border-color:<?php echo esc_html( $defaults['border_color'] ) ?>;
     border-left:none;
     border-right:none;
 }
@@ -641,11 +641,11 @@ select.frm_loading_lookup{
 
 .frm_grid_first,
 .frm_grid_odd{
-    background-color:#<?php echo esc_html( $defaults['bg_color'] ) ?>;
+    background-color:<?php echo esc_html( $defaults['bg_color'] ) ?>;
 }
 
 .frm_grid{
-    background-color:#<?php echo esc_html( $defaults['bg_color_active'] ) ?>;
+    background-color:<?php echo esc_html( $defaults['bg_color_active'] ) ?>;
 }
 
 .frm_grid .frm_primary_label,
@@ -858,8 +858,8 @@ select.frm_loading_lookup{
 .frm_form_field.frm_html_scroll_box{
     height:100px;
     overflow:auto;
-    background-color:#<?php echo esc_html( $defaults['bg_color'] ) ?>;
-    border-color:#<?php echo esc_html( $defaults['border_color'] ) ?>;
+    background-color:<?php echo esc_html( $defaults['bg_color'] ) ?>;
+    border-color:<?php echo esc_html( $defaults['border_color'] ) ?>;
     border-width:<?php echo esc_html( $defaults['field_border_width'] ) ?>;
     border-style:<?php echo esc_html( $defaults['field_border_style'] ) ?>;
     -moz-border-radius:<?php echo esc_html( $defaults['border_radius'] ) ?>;
