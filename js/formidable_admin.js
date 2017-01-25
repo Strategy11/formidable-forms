@@ -1732,6 +1732,7 @@ function frmAdminBuildJS(){
 			data:{action:'frm_get_cd_tags_box',form_id:form_id, nonce:frmGlobal.nonce},
 			success:function(html){
 				jQuery('#frm_adv_info .categorydiv').html(html);
+				frmAdminBuild.panelViewSwitchIdKey();
 			}
 		});
 
@@ -2623,8 +2624,7 @@ function frmAdminBuildJS(){
 				e.preventDefault();
 			});
 			
-			jQuery('.subsubsub a.frmids').click(function(e){toggleKeyID('frmids',e);});
-			jQuery('.subsubsub a.frmkeys').click(function(e){toggleKeyID('frmkeys',e);});
+			this.panelViewSwitchIdKey();
 
 			if(typeof(tinymce)=='object'){  
 				DOM=tinymce.DOM; 
@@ -2646,7 +2646,12 @@ function frmAdminBuildJS(){
 			}
 
 		},
-		
+
+		panelViewSwitchIdKey:function(){
+			jQuery('.subsubsub a.frmids').click(function(e){toggleKeyID('frmids',e);});
+			jQuery('.subsubsub a.frmkeys').click(function(e){toggleKeyID('frmkeys',e);});
+		},
+
 		viewInit: function(){
 			// add form nav
 			var $navCont = document.getElementById('frm_nav_container');
