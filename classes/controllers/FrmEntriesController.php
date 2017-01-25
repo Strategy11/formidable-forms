@@ -102,7 +102,7 @@ class FrmEntriesController {
 					$col_id .= '-_-form' . $form_col->form_id;
                 }
 
-                if ( isset($form_col->field_options['separate_value']) && $form_col->field_options['separate_value'] && empty($form_col->field_options["post_field"]) ) {
+                if ( isset($form_col->field_options['separate_value']) && $form_col->field_options['separate_value'] && empty($form_col->field_options['post_field']) ) {
 					$columns[ $form_id . '_frmsep_' . $col_id ] = FrmAppHelper::truncate( $form_col->name, 35 );
                 }
 				$columns[ $form_id . '_' . $col_id ] = FrmAppHelper::truncate( $form_col->name, 35 );
