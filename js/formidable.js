@@ -4341,6 +4341,8 @@ jQuery(document).ready(function($){
 	frmFrontForm.init();
 });
 
+document.documentElement.className += ' js';
+
 function frmRecaptcha() {
 	var captchas = jQuery('.frm-g-recaptcha');
 	for ( var c = 0, cl = captchas.length; c < cl; c++ ) {
