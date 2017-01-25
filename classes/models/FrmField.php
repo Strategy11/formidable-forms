@@ -3,6 +3,25 @@ if ( ! defined('ABSPATH') ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
+/**
+ * Class FrmField
+ *
+ * General function to handle fields
+ *
+ * @property int id
+ * @property string field_key
+ * @property string name
+ * @property string description
+ * @property string type
+ * @property string default_value
+ * @property string options
+ * @property string field_order
+ * @property string required
+ * @property array field_options
+ * @property string form_id
+ * @property string created_at
+ * @property string form_name
+ */
 class FrmField {
     static $use_cache = true;
 	static $transient_size = 200;
