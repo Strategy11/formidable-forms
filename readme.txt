@@ -3,7 +3,7 @@ Contributors: sswells, srwells, jamie.wahlin
 Tags: form, contact form, form builder, custom form, forms, form maker, form creator
 Requires at least: 3.8
 Tested up to: 4.7
-Stable tag: 2.03
+Stable tag: 2.03.01
 
 The best WordPress form plugin. Simple drag & drop form building, visual form styling, and unlimited email notifications. 
 
@@ -97,6 +97,24 @@ A. The field and form names and descriptions are all changed with in-place edit.
 [See more FAQs](https://formidableforms.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 2.03.01 =
+* Fix: Some colors were not being used correctly in the styling settings
+* **Pro Version** *
+* New: Added an option to use the old time field with one dropdown
+* Fix: Syntax error on entry submit in older versions of PHP
+* Fix: [25 show=value] was returning the displayed value instead of the saved value
+* Fix: Conditional fields were showing after ajax save or ajax page turn
+* Fix: Save Rich Text value when form is submitted with button and ajax
+* Fix: Prevent button styling from applying to buttons inside a rich text field
+* Fix: Only include one column on the entries listing page for post status
+* Fix: Fields with conditional logic depending on time fields weren't showing correctly
+* Fix: PM was always saving as AM in time fields
+* Fix: Time fields sometimes had no minute options depending on the start time and minute step settings
+* Fix: Lookup Checkboxes were not saving in embedded forms
+* Fix: Removed the section descriptions and duplicate section headings in default email message
+* Fix: Prevent double submissions with ajax submit enabled with redirect after submit
+* Fix: Default Emails were coming through empty if the form only had embedded forms
+
 = 2.03 =
 * New: Add a combined list of all entries on the Formidable -> Entries page instead of defaulting to the first form
 * New: Replace submit input with button for new forms. This allows us to show the loading indicator on top of the button instead of outside. This applies to new forms only. Existing forms will need the submit button HTML adjusted to see this new styling. But we decided it was best for reverse compatability if we don't change it automatically
@@ -128,6 +146,7 @@ A. The field and form names and descriptions are all changed with in-place edit.
 * Fix: Show the correct option label for a blank value. Previously option label for "0" saved value was displaying.
 * Fix: Compact file upload field wasn't aligned with other fields in the row
 * Fix: Evaluate date strings the same way in view filters and inline conditions for date fields
+* Removed: Old auto updating code. If you are running addons you haven't updated since before November 2015, they will no longer auto update.
 
 = 2.02.13 =
 * New: Add frm_send_separate_emails filter. If there are multiple emails in the "to" box, this hook will send one email per address.
