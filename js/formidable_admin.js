@@ -2097,26 +2097,6 @@ function frmAdminBuildJS(){
         jQuery('.frm_multiselect').multiselect({
             templates: {ul:'<ul class="multiselect-container frm-dropdown-menu"></ul>'},
 			buttonContainer: '<div class="btn-group frm-btn-group" />',
-	        onDropdownShow: function (event) {
-		        var action = jQuery(event.currentTarget.closest('.frm_form_action_settings'));
-		        if (action.length) {
-			        action.addClass('frm_form_action_settings_btn_group_open');
-			        jQuery(event.currentTarget).addClass('frm_form_action_settings_btn_group_open');
-			        jQuery(".frm_form_settings").click(function () {
-				        if (jQuery(".multiselect-container.frm-dropdown-menu").is(":visible")) {
-					        jQuery(event.currentTarget).removeClass('frm_form_action_settings_btn_group_open open');
-					        action.removeClass('frm_form_action_settings_btn_group_open');
-				        }
-			        });
-		        }
-	        },
-	        onDropdownHide: function (event) {
-		        var action = jQuery(event.currentTarget.closest('.frm_form_action_settings'));
-		        if (action.length) {
-			        action.removeClass('frm_form_action_settings_btn_group_open');
-			        jQuery(event.currentTarget).removeClass('frm_form_action_settings_btn_group_open');
-		        }
-	        },
 			nonSelectedText:frm_admin_js['default']// TODO: should be noneSelectedText
         });
     }
