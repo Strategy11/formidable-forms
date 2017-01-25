@@ -288,8 +288,6 @@ class FrmFormsController {
             $wp->register_globals();
         }
 
-		self::register_pro_scripts();
-
 		header( 'Content-Type: text/html; charset=' . get_option( 'blog_charset' ) );
 
 		$key = FrmAppHelper::simple_get( 'form', 'sanitize_title' );
@@ -307,11 +305,9 @@ class FrmFormsController {
     }
 
 	public static function register_pro_scripts() {
+		_deprecated_function( __FUNCTION__, '2.03', 'FrmProEntriesController::register_scripts' );
 		if ( FrmAppHelper::pro_is_installed() ) {
-			wp_register_script( 'jquery-frm-rating', FrmAppHelper::plugin_url() . '/pro/js/jquery.rating.min.js', array( 'jquery' ), '4.11', true );
-			wp_register_script( 'jquery-maskedinput', FrmAppHelper::plugin_url() . '/pro/js/jquery.maskedinput.min.js', array( 'jquery' ), '1.4', true );
-			wp_register_script( 'jquery-chosen', FrmAppHelper::plugin_url() . '/pro/js/chosen.jquery.min.js', array( 'jquery' ), '1.5.1', true );
-			wp_register_script( 'dropzone', FrmAppHelper::plugin_url() . '/pro/js/dropzone.js', array( 'jquery' ), '4.3.0', true );
+			FrmProEntriesController::register_scripts();
 		}
 	}
 
@@ -1149,14 +1145,14 @@ class FrmFormsController {
         $user_ID = get_current_user_id();
 		$params = FrmForm::get_params( $form );
 		$message = '';
-		$errors = '';
+		$errors = array();
 
         if ( $params['posted_form_id'] == $form->id && $_POST ) {
             $errors = isset( $frm_vars['created_entries'][ $form->id ] ) ? $frm_vars['created_entries'][ $form->id ]['errors'] : array();
         }
 
 		$include_form_tag = apply_filters( 'frm_include_form_tag', true, $form );
-        $fields = FrmFieldsHelper::get_form_fields( $form->id, ( isset( $errors ) && ! empty( $errors ) ) );
+		$fields = FrmFieldsHelper::get_form_fields( $form->id, $errors );
 
         if ( $params['action'] != 'create' || $params['posted_form_id'] != $form->id || ! $_POST ) {
             do_action('frm_display_form_action', $params, $fields, $form, $title, $description);
@@ -1180,7 +1176,7 @@ class FrmFormsController {
 
         $values = FrmEntriesHelper::setup_new_vars($fields, $form, true);
         $created = self::just_created_entry( $form->id );
-        $conf_method = apply_filters('frm_success_filter', 'message', $form, $form->options, 'create');
+        $conf_method = apply_filters('frm_success_filter', 'message', $form, 'create');
 
         if ( $created && is_numeric($created) && $conf_method != 'message' ) {
             do_action('frm_success_action', $conf_method, $form, $form->options, $created);

@@ -71,7 +71,7 @@ class FrmAddonsController {
 			),
 			'autoresponder' => array(
 				'title'   => 'Form Action Automation',
-				'docs'    => 'formidable-autoresponder/',
+				'docs'    => 'schedule-autoresponder/',
 				'excerpt' => 'Schedule email notifications, SMS messages, and API actions.',
 			),
 			'modal' => array(
