@@ -30,7 +30,7 @@
                             } else {
                         ?>
                         <tr>
-                            <th scope="row"><?php echo esc_html( $field->name ) ?>:</th>
+                            <th scope="row"><?php echo esc_html( do_shortcode($field->name)  ) ?>:</th>
                             <td>
                             <?php
 							$embedded_field_id = ( $entry->form_id != $field->form_id ) ? 'form' . $field->form_id : 0;

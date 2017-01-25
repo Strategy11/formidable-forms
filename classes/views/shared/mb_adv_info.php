@@ -37,7 +37,7 @@
 
 				FrmAppHelper::insert_opt_html( array(
 					'id' => $f->id, 'key' => $f->field_key,
-					'name' => $f->name, 'type' => $f->type,
+					'name' => do_shortcode($f->name), 'type' => $f->type,
 				) );
 
 				if ( $f->type == 'data' ) {
@@ -50,7 +50,7 @@
                             $ldfe = '';
 							if ( $linked_fields ) {
 								foreach ( $linked_fields as $linked_field ) {
-                                    FrmAppHelper::insert_opt_html( array( 'id' => $f->id . ' show=' . $linked_field->id, 'key' => $f->field_key . ' show=' . $linked_field->field_key, 'name' => $linked_field->name, 'type' => $linked_field->type ) );
+                                    FrmAppHelper::insert_opt_html( array( 'id' => $f->id . ' show=' . $linked_field->id, 'key' => $f->field_key . ' show=' . $linked_field->field_key, 'name' => do_shortcode($linked_field->name), 'type' => $linked_field->type ) );
 
                                     $ldfe = $linked_field->id;
                                     unset($linked_field);
@@ -107,7 +107,7 @@
                 <li>
                     <a href="javascript:void(0)" class="frmids alignright frm_insert_code" data-code="if <?php echo esc_attr( $f->id ) ?>]<?php esc_attr_e( 'Conditional text here', 'formidable' ) ?>[/if <?php echo esc_attr( $f->id ) ?>">[if <?php echo (int) $f->id ?>]</a>
                 	<a href="javascript:void(0)" class="frmkeys alignright frm_insert_code" data-code="if <?php echo esc_attr( $f->field_key ) ?>]something[/if <?php echo esc_attr( $f->field_key ) ?>">[if <?php echo FrmAppHelper::truncate($f->field_key, 10) ?>]</a>
-                	<a href="javascript:void(0)" class="frm_insert_code" data-code="<?php echo esc_attr($f->id) ?>"><?php echo FrmAppHelper::truncate($f->name, 60) ?></a>
+                	<a href="javascript:void(0)" class="frm_insert_code" data-code="<?php echo esc_attr($f->id) ?>"><?php echo FrmAppHelper::truncate(do_shortcode($f->name), 60) ?></a>
                 </li>
                 <?php
 
