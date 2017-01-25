@@ -264,10 +264,6 @@ legend.frm_hidden{
     100% { transform: rotate(360deg); }
 }
 
-.js .frm_pro_form:not(.frm_no_hide) {
-    display:none;
-}
-
 <?php
 foreach ( $styles as $style ) {
 	include( dirname( __FILE__ ) . '/_single_theme.css.php' );
