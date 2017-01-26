@@ -122,8 +122,8 @@ class FrmEntriesController {
 				}
 				
 				$has_separate_value = ! FrmField::is_option_empty( $form_col, 'separate_value' );
-				$is_not_post_status = FrmField::is_option_empty( $form_col, 'post_field' );
-				if ( $has_separate_value && ( ! $is_not_post_status && $form_col->field_options['post_field'] != 'post_status' ) ) {
+				$is_post_status     = FrmField::is_option_true( $form_col, 'post_field' ) && $form_col->field_options['post_field'] == 'post_status';
+				if ( $has_separate_value && ! $is_post_status ) {
 					$columns[ $form_id . '_frmsep_' . $col_id ] = FrmAppHelper::truncate( $form_col->name, 35 );
 				}
 				$columns[ $form_id . '_' . $col_id ] = FrmAppHelper::truncate( $form_col->name, 35 );
