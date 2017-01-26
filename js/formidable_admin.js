@@ -2102,7 +2102,7 @@ function frmAdminBuildJS(){
 		        if (action.length) {
 			        jQuery(".frm_form_settings").click(function () {
 				        if (jQuery(".multiselect-container.frm-dropdown-menu").is(":visible")) {
-					        jQuery(event.currentTarget).removeClass('frm_form_action_settings_btn_group_open open');
+					        jQuery(event.currentTarget).removeClass('open');
 				        }
 			        });
 		        }
