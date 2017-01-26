@@ -2648,8 +2648,13 @@ function frmAdminBuildJS(){
 		},
 
 		panelViewSwitchIdKey:function(){
-			jQuery('.subsubsub a.frmids').click(function(e){toggleKeyID('frmids',e);});
-			jQuery('.subsubsub a.frmkeys').click(function(e){toggleKeyID('frmkeys',e);});
+			var frm_adv_info = jQuery('#frm_adv_info');
+			frm_adv_info.on('click', '.subsubsub a.frmids', function (e) {
+				toggleKeyID('frmids', e);
+			});
+			frm_adv_info.on('click', '.subsubsub a.frmkeys', function (e) {
+				toggleKeyID('frmkeys', e);
+			});
 		},
 
 		viewInit: function(){
