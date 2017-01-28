@@ -1873,7 +1873,7 @@ function frmFrontFormJS(){
 				parent_fields:childFieldArgs.parents,
 				parent_vals:childFieldArgs.parentVals,
 				field_id:childFieldArgs.fieldId,
-				container_field_id:getContainerFieldID( childFieldArgs ),
+				container_field_id:getContainerFieldId( childFieldArgs ),
 				row_index:childFieldArgs.repeatRow,
 				current_value:currentValue,
 				default_value:defaultValue,
@@ -1894,29 +1894,6 @@ function frmFrontFormJS(){
 				triggerChange( jQuery( inputs[0] ), childFieldArgs.fieldKey );
 			}
 		});
-	}
-
-	/**
-	 * Get the ID of the container field, if there is one
-	 *
-	 * @since 2.03.01
-	 *
-	 * @param {Object} childFieldArgs
-	 * @param {string} childFieldArgs.inSection
-	 * @param {string} childFieldArgs.inEmbedForm
-	 *
-	 * @returns {string}
-     */
-	function getContainerFieldID( childFieldArgs ) {
-		var sectionFieldID = '';
-
-		if ( childFieldArgs.inSection !== '0' ) {
-			sectionFieldID = childFieldArgs.inSection;
-		} else if ( childFieldArgs.inEmbedForm !== '0' ) {
-			sectionFieldID = childFieldArgs.inEmbedForm;
-		}
-
-		return sectionFieldID;
 	}
 
 	/**
