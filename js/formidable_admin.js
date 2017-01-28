@@ -2623,8 +2623,8 @@ function frmAdminBuildJS(){
 				e.preventDefault();
 			});
 
-			jQuery('#frm_adv_info').on('click', '.subsubsub a.frmids', function (e) {toggleKeyID('frmids', e);});
-			jQuery('#frm_adv_info').on('click', '.subsubsub a.frmkeys', function (e) {toggleKeyID('frmkeys', e);});
+			jQuery('#frm_adv_info').on('click', '.subsubsub a.frmids', function(e){toggleKeyID('frmids',e);});
+			jQuery('#frm_adv_info').on('click', '.subsubsub a.frmkeys', function(e){toggleKeyID('frmkeys',e);});
 
 			if(typeof(tinymce)=='object'){  
 				DOM=tinymce.DOM; 
