@@ -17,6 +17,10 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 		if ( $form_id ) {
 			$s_query['it.form_id'] = $form_id;
+			$join_form_in_query = false;
+		} else {
+			$s_query['fr.parent_form_id'] = 0;
+			$join_form_in_query = true;
 		}
 
 		$s = isset( $_REQUEST['s'] ) ? stripslashes($_REQUEST['s']) : '';
@@ -38,7 +42,7 @@ class FrmEntriesListHelper extends FrmListHelper {
         $page = $this->get_pagenum();
 		$start = (int) isset( $_REQUEST['start'] ) ? absint( $_REQUEST['start'] ) : ( ( $page - 1 ) * $per_page );
 
-		$this->items = FrmEntry::getAll( $s_query, $order, ' LIMIT ' . $start . ',' . $per_page, true, false );
+		$this->items = FrmEntry::getAll( $s_query, $order, ' LIMIT ' . $start . ',' . $per_page, true, $join_form_in_query );
         $total_items = FrmEntry::getRecordCount($s_query);
 
 		$this->set_pagination_args( array(
