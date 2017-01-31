@@ -2622,9 +2622,9 @@ function frmAdminBuildJS(){
 			jQuery('#postbox-container-1').on('mousedown', '#frm_adv_info a, .frm_field_list a', function(e){
 				e.preventDefault();
 			});
-			
-			jQuery('.subsubsub a.frmids').click(function(e){toggleKeyID('frmids',e);});
-			jQuery('.subsubsub a.frmkeys').click(function(e){toggleKeyID('frmkeys',e);});
+
+			jQuery('#frm_adv_info').on('click', '.subsubsub a.frmids', function(e){toggleKeyID('frmids',e);});
+			jQuery('#frm_adv_info').on('click', '.subsubsub a.frmkeys', function(e){toggleKeyID('frmkeys',e);});
 
 			if(typeof(tinymce)=='object'){  
 				DOM=tinymce.DOM; 
@@ -2646,7 +2646,7 @@ function frmAdminBuildJS(){
 			}
 
 		},
-		
+
 		viewInit: function(){
 			// add form nav
 			var $navCont = document.getElementById('frm_nav_container');
