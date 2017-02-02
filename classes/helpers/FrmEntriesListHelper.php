@@ -143,6 +143,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 			$form_id = $this->params['form'] ? $this->params['form'] : 0;
 			$col_name = preg_replace( '/^(' . $form_id . '_)/', '', $column_name );
 			$this->column_name = $col_name;
+			$val = '';
 
 			switch ( $col_name ) {
 				case 'cb':
@@ -183,7 +184,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 				break;
 			}
 
-			if ( isset( $val ) ) {
+			if ( $col_name != 'cb' ) {
 			    $r .= "<td $attributes>";
 				if ( $column_name == $action_col ) {
 					$edit_link = '?page=formidable-entries&frm_action=edit&id=' . $item->id;
