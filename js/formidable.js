@@ -2545,7 +2545,7 @@ function frmFrontFormJS(){
 			totalField = getSiblingField( fieldInfo );
 		}
 
-		if ( totalField.length < 1 ) {
+		if ( totalField === null || totalField.length < 1 ) {
 			return;
 		}
 
@@ -2568,6 +2568,8 @@ function frmFrontFormJS(){
 					thisFullCalc = thisFullCalc.replace(').toFixed(' + dec, '');
 				}
 			}
+
+			thisFullCalc = trimNumericCalculation( thisFullCalc );
 
 			total = parseFloat(eval(thisFullCalc));
 
@@ -2621,6 +2623,21 @@ function frmFrontFormJS(){
 			thisFullCalc = thisFullCalc.replace(new RegExp(findVar, 'g'), vals[field.valKey]);
 		}
 		return thisFullCalc;
+	}
+
+	/**
+	 * Trim non-numeric characters from the end of a numeric calculation
+	 *
+	 * @since 2.03.02
+	 * @param {String} numericCalc
+	 * @returns {String}
+	 */
+	function trimNumericCalculation( numericCalc ) {
+		if ( isNaN( numericCalc.charAt( numericCalc.length - 1 ) ) ) {
+			numericCalc = numericCalc.substr( 0, numericCalc.length - 1 );
+		}
+
+		return numericCalc;
 	}
 
 	function getCallForField( field, all_calcs ) {
