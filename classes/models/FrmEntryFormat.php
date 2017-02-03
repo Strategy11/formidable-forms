@@ -11,7 +11,7 @@ class FrmEntryFormat {
 			'bg_color' => '', 'alt_bg_color' => '',
 			'clickable' => false,
 			'exclude_fields' => '', 'include_fields' => '',
-			'include_extras' => 'section', 'inline_style' => 1,
+			'include_extras' => '', 'inline_style' => 1,
 		), $atts );
 
 		$atts['exclude_fields'] = self::comma_list_to_array( $atts['exclude_fields'] );
