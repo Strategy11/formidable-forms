@@ -3,6 +3,7 @@ function frmFrontFormJS(){
 	var currentlyAddingRow = false;
 	var action = '';
 	var jsErrors = [];
+	var lookupsLoading = 0;// TODO: switch to processesRunning and make it work with file upload fields
 
 	function setNextPage(e){
 		/*jshint validthis:true */
@@ -1690,6 +1691,7 @@ function frmFrontFormJS(){
 	 * @param {Array} childFieldArgs.parentVals
 	 * @param {string} childFieldArgs.fieldId
 	 * @param {string} childFieldArgs.fieldKey
+	 * @param {string} childFieldArgs.formId
 	 * @param {object} childDiv
 	 */
 	function maybeReplaceSelectLookupFieldOptions( childFieldArgs, childDiv ) {
@@ -1713,6 +1715,7 @@ function frmFrontFormJS(){
 		} else {
 			childFieldArgs.isReadOnly = childSelect.disabled;
 			disableLookup( childSelect );
+			disableFormPreLookup( childFieldArgs.formId );
 
 			// If all parents have values, check for updated options
 			jQuery.ajax({
@@ -1727,6 +1730,7 @@ function frmFrontFormJS(){
 				},
 				success:function(newOptions){
 					replaceSelectLookupFieldOptions( childFieldArgs, childSelect, newOptions );
+					enableFormAfterLookup( childFieldArgs.formId );
 				}
 			});
 		}
@@ -1749,6 +1753,75 @@ function frmFrontFormJS(){
 		childSelect.className = childSelect.className + ' frm_loading_lookup';
 		childSelect.disabled = true;
 		maybeUpdateChosenOptions( childSelect );
+	}
+
+	/**
+	 * Disable a form prior to a Lookup field's Ajax request
+	 *
+	 * @since 2.03.02
+	 * @param {String} formId
+     */
+	function disableFormPreLookup( formId ) {
+		lookupsLoading++;
+
+		if ( lookupsLoading <= 1 ) {
+
+			var form = getFormById( formId );
+			if ( form !== null ) {
+				showSubmitLoading( jQuery( form ) );
+			}
+		}
+	}
+
+	/**
+	 * Enable a form if all Lookup field requests are completed
+	 *
+	 * @since 2.03.02
+	 * @param {String} formId
+	 */
+	function enableFormAfterLookup( formId ) {
+		lookupsLoading--;
+
+		if ( lookupsLoading <= 0 ) {
+
+			var form = getFormById( formId );
+			if ( form !== null ) {
+				removeSubmitLoading(jQuery(form), 'enable');
+			}
+		}
+	}
+
+	/**
+	 * Get a form element by the ID number
+	 *
+	 * @since 2.03.02
+	 * @param {string} formId
+	 * @returns {Element}
+     */
+	function getFormById( formId ) {
+		return document.querySelector( '#frm_form_' + formId + '_container form');
+	}
+
+	/**
+	 * Disable the submit button for a given jQuery form object
+	 *
+	 * @since 2.03.02
+	 *
+	 * @param {object} $form
+     */
+	function disableSubmitButton( $form ) {
+		$form.find('input[type="submit"], input[type="button"], button[type="submit"]').attr('disabled','disabled');
+	}
+
+	/**
+	 * Enable the submit button for a given jQuery form object
+	 *
+	 * @since 2.03.02
+	 *
+	 * @param {object} $form
+     */
+	function enableSubmitButton( $form ) {
+		$form.find( 'input[type="submit"], input[type="button"], button[type="submit"]' ).removeAttr( 'disabled' );
 	}
 
 	/**
@@ -1848,6 +1921,7 @@ function frmFrontFormJS(){
 	 * @param {string} childFieldArgs.fieldId
 	 * @param {string} childFieldArgs.repeatRow
 	 * @param {string} childFieldArgs.fieldKey
+	 * @param {string} childFieldArgs.formId
 	 * @param {object} childDiv
      */
 	function replaceCbRadioLookupOptions( childFieldArgs, childDiv ) {
@@ -1864,6 +1938,7 @@ function frmFrontFormJS(){
 		}
 
 		var defaultValue = jQuery( inputs[0] ).data( 'frmval' );
+		disableFormPreLookup( childFieldArgs.formId );
 
 		jQuery.ajax({
 			type:'POST',
@@ -1892,6 +1967,8 @@ function frmFrontFormJS(){
 				}
 
 				triggerChange( jQuery( inputs[0] ), childFieldArgs.fieldKey );
+
+				enableFormAfterLookup( childFieldArgs.formId );
 			}
 		});
 	}
@@ -1996,6 +2073,9 @@ function frmFrontFormJS(){
 			insertValueInFieldWatchingLookup( childFieldArgs, childInput, newValue );
 		} else {
 			// If all parents have values, check for a new value
+
+			disableFormPreLookup( childFieldArgs.formId );;
+
 			jQuery.ajax({
 				type:'POST',
 				url:frm_js.ajax_url,
@@ -2010,6 +2090,8 @@ function frmFrontFormJS(){
 					if ( childInput.value != newValue ) {
 						insertValueInFieldWatchingLookup( childFieldArgs.fieldKey, childInput, newValue );
 					}
+
+					enableFormAfterLookup( childFieldArgs.formId );
 				}
 			});
 		}
@@ -3341,15 +3423,14 @@ function frmFrontFormJS(){
 			object.addClass('frm_loading_form');
 		}
 
-		// Disable submit button
-		object.find('input[type="submit"], input[type="button"], button[type="submit"]').attr('disabled','disabled');
+		disableSubmitButton( object )
 	}
 
 	function removeSubmitLoading( object, enable ) {
 		object.removeClass('frm_loading_form');
 
 		if ( enable == 'enable' ) {
-			object.find('input[type="submit"], input[type="button"], button[type="submit"]').removeAttr('disabled');
+			enableSubmitButton( object );
 		}
 	}
 
