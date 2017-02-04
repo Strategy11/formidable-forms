@@ -2243,6 +2243,16 @@ function frmAdminBuildJS(){
         jQuery('.frm_multiselect').multiselect({
             templates: {ul:'<ul class="multiselect-container frm-dropdown-menu"></ul>'},
 			buttonContainer: '<div class="btn-group frm-btn-group" />',
+	        onDropdownShow: function (event) {
+		        var action = jQuery(event.currentTarget.closest('.frm_form_action_settings'));
+		        if (action.length) {
+			        jQuery(".frm_form_settings").click(function () {
+				        if (jQuery(".multiselect-container.frm-dropdown-menu").is(":visible")) {
+					        jQuery(event.currentTarget).removeClass('open');
+				        }
+			        });
+		        }
+	        },
 			nonSelectedText:frm_admin_js['default']// TODO: should be noneSelectedText
         });
     }
