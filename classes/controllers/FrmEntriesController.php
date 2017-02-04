@@ -91,7 +91,7 @@ class FrmEntriesController {
                             unset( $sub_form_cols[ $k ] );
                             continue;
                         }
-						$columns[ $form_id . '_' . $sub_form_col->field_key . '-_-' . $form_col->id ] = FrmAppHelper::truncate( $sub_form_col->name, 35 );
+						$columns[ $form_id . '_' . $sub_form_col->field_key . '-_-' . $form_col->id ] = FrmAppHelper::truncate( do_shortcode($sub_form_col->name), 35 );
                         unset($sub_form_col);
                     }
                 }
@@ -103,9 +103,9 @@ class FrmEntriesController {
                 }
 
                 if ( isset($form_col->field_options['separate_value']) && $form_col->field_options['separate_value'] ) {
-					$columns[ $form_id . '_frmsep_' . $col_id ] = FrmAppHelper::truncate( $form_col->name, 35 );
+					$columns[ $form_id . '_frmsep_' . $col_id ] = FrmAppHelper::truncate( do_shortcode($form_col->name), 35 );
                 }
-				$columns[ $form_id . '_' . $col_id ] = FrmAppHelper::truncate( $form_col->name, 35 );
+				$columns[ $form_id . '_' . $col_id ] = FrmAppHelper::truncate( do_shortcode($form_col->name), 35 );
             }
         }
 
