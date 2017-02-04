@@ -1206,6 +1206,10 @@ select.frm_cancelnew, input.frm_enternew{width:175px;}
 	margin-bottom:20px;
 }
 
+.frm_form_action_settings_btn_group_open{
+	position: static !important;
+}
+
 .frm_actions_list a{
 	color:#A0A0A0;
 }
