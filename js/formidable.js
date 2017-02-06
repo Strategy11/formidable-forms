@@ -65,7 +65,6 @@ function frmFrontFormJS(){
 		var dateFields = __frmDatepicker;
 		var id = this.id;
 		var idParts = id.split('-');
-		var lastPart = idParts.pop();
 		var altID = 'input[id^="'+ idParts.join('-') +'"]';
 
 		jQuery.datepicker.setDefaults(jQuery.datepicker.regional['']);
@@ -1649,7 +1648,7 @@ function frmFrontFormJS(){
 		var parentVals = [];
 		var parentIds = childFieldArgs.parents;
 
-		var parentFieldArgs, currentParentId;
+		var parentFieldArgs;
 		var parentValue = false;
 		for ( var i = 0, l = parentIds.length; i < l; i++ ) {
 			parentFieldArgs = getLookupArgsForSingleField( parentIds[i] );
@@ -2000,7 +1999,7 @@ function frmFrontFormJS(){
 		}
 
 		var inputName = inputs[0].name;
-		setCheckboxOrRadioDefaultValue( inputName, defaultValue )
+		setCheckboxOrRadioDefaultValue( inputName, defaultValue );
 	}
 
 	/**
@@ -2074,7 +2073,7 @@ function frmFrontFormJS(){
 		} else {
 			// If all parents have values, check for a new value
 
-			disableFormPreLookup( childFieldArgs.formId );;
+			disableFormPreLookup( childFieldArgs.formId );
 
 			jQuery.ajax({
 				type:'POST',
@@ -3440,7 +3439,7 @@ function frmFrontFormJS(){
 			object.addClass('frm_loading_form');
 		}
 
-		disableSubmitButton( object )
+		disableSubmitButton( object );
 	}
 
 	function removeSubmitLoading( object, enable ) {
