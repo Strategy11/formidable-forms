@@ -1089,7 +1089,7 @@ function frmAdminBuildJS(){
 	function fillDropdownOpts(field, sourceID, includeBlank){
 		if ( field !== null ) {
 			removeDropdownOpts(field);
-			var opts = jQuery('input[name^="field_options[options_'+sourceID+'"][name$="[value]"');
+			var opts = jQuery('input[name^="field_options[options_'+sourceID+'"][name$="[value]"]');
 			var l = opts.length;
 			jQuery.each(opts, function() {
 				var labelName = this.name.replace('[value]', '[label]');
