@@ -4109,7 +4109,6 @@ function frmFrontFormJS(){
 
 	return{
 		init: function(){
-			jQuery(document).on('click', '.frm_button_submit', function(){ jQuery(this).closest('form').submit(); });
 			jQuery(document).off('submit.formidable','.frm-show-form');
 			jQuery(document).on('submit.formidable','.frm-show-form', frmFrontForm.submitForm);
 
