@@ -8,6 +8,7 @@ class FrmSettings {
     public $use_html;
     public $jquery_css;
     public $accordion_js;
+	public $fade_form;
 
     public $success_msg;
     public $blank_msg;
@@ -82,6 +83,7 @@ class FrmSettings {
             'use_html'  => true,
             'jquery_css' => false,
             'accordion_js' => false,
+			'fade_form' => false,
 
 			're_multi'  => 0,
 
@@ -201,9 +203,9 @@ class FrmSettings {
         $this->preview_page_id = (int) $params['frm-preview-page-id'];
 
         $this->use_html = isset($params['frm_use_html']) ? $params['frm_use_html'] : 0;
-        //$this->custom_style = isset($params['frm_custom_style']) ? $params['frm_custom_style'] : 0;
 		$this->jquery_css = isset( $params['frm_jquery_css'] ) ? absint( $params['frm_jquery_css'] ) : 0;
 		$this->accordion_js = isset( $params['frm_accordion_js'] ) ? absint( $params['frm_accordion_js'] ) : 0;
+		$this->fade_form = isset( $params['frm_fade_form'] ) ? absint( $params['frm_fade_form'] ) : 0;
     }
 
 	private function update_roles( $params ) {
