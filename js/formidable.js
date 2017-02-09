@@ -3837,7 +3837,7 @@ function frmFrontFormJS(){
 
 				// Make sure fields just loaded are properly bound
 				jQuery(document).on('change', '.frm-show-form input[name^="item_meta"], .frm-show-form select[name^="item_meta"], .frm-show-form textarea[name^="item_meta"]', maybeCheckDependent);
-				checkFieldsOnPage();
+				checkFieldsOnPage( prefix + entry_id );
 			}
 		});
 		return false;
@@ -3892,12 +3892,12 @@ function frmFrontFormJS(){
 	 * General Helpers
 	 *********************************************/
 
-	function checkFieldsOnPage(){
+	function checkFieldsOnPage( chosenContainer ){
 		checkPreviouslyHiddenFields();
 		loadDateFields();
 		loadCustomInputMasks();
 		loadStars();
-		loadChosen();
+		loadChosen( chosenContainer );
 		checkDynamicFields();
 		checkLookupFields();
 		triggerCalc();
@@ -3910,13 +3910,18 @@ function frmFrontFormJS(){
 		}
 	}
 
-	function loadChosen() {
+	function loadChosen( chosenContainer ) {
 		if ( jQuery().chosen ) {
 			var opts = {allow_single_deselect:true,no_results_text:frm_js.no_results};
 			if ( typeof __frmChosen !== 'undefined' ) {
 				opts = '{' + __frmChosen + '}';
 			}
-			jQuery('.frm_chzn').chosen(opts);
+
+			if ( typeof chosenContainer !== 'undefined' ) {
+				jQuery( "#" + chosenContainer ).find( '.frm_chzn' ).chosen( opts );
+			} else {
+				jQuery( '.frm_chzn' ).chosen( opts );
+			}
 		}
 	}
 
