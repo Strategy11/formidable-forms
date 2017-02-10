@@ -2632,7 +2632,8 @@ function frmFrontFormJS(){
 	 * @returns {String}
 	 */
 	function trimNumericCalculation( numericCalc ) {
-		if ( isNaN( numericCalc.charAt( numericCalc.length - 1 ) ) ) {
+		var lastChar = numericCalc.charAt( numericCalc.length - 1 );
+		if ( lastChar === '+' || lastChar === '-' ) {
 			numericCalc = numericCalc.substr( 0, numericCalc.length - 1 );
 		}
 
