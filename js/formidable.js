@@ -1712,7 +1712,6 @@ function frmFrontFormJS(){
 				triggerChange(jQuery(childSelect), childFieldArgs.fieldKey);
 			}
 		} else {
-			childFieldArgs.isReadOnly = childSelect.disabled;
 			disableLookup( childSelect );
 			disableFormPreLookup( childFieldArgs.formId );
 
