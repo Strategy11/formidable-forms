@@ -150,18 +150,7 @@ class FrmEntryFormat {
 			return;
 		}
 
-		self::textarea_display_value( $f->type, $atts['plain_text'], $val );
-		$val = apply_filters( 'frm_display_' . $f->type . '_value_custom', $val, array( 'field' => $f, 'atts' => $atts ) );
-
-		if ( is_array( $val ) ) {
-			if ( $atts['format'] == 'text' ) {
-				$val = implode( ', ', $val );
-			} else if ( $f->type == 'checkbox' ) {
-				$val = array_values( $val );
-			}
-		}
-
-		self::maybe_strip_html( $atts['plain_text'], $val );
+		self::prepare_field_output( $atts, $val );
 
 		if ( $atts['format'] != 'text' ) {
 			$values[ $f->field_key ] = $val;
@@ -216,6 +205,19 @@ class FrmEntryFormat {
 		}
 	}
 
+	/**
+	 * @since 2.03.02
+	 */
+	public static function prepare_field_output( $atts, &$val ) {
+		self::textarea_display_value( $atts['field']->type, $atts['plain_text'], $val );
+		$val = apply_filters( 'frm_display_' . $atts['field']->type . '_value_custom', $val, array(
+			'field' => $atts['field'], 'atts' => $atts,
+		) );
+
+		self::flatten_array_value( $atts, $val );
+		self::maybe_strip_html( $atts['plain_text'], $val );
+	}
+
     /**
      * Replace returns with HTML line breaks for display
      * @since 2.0.9
@@ -223,6 +225,19 @@ class FrmEntryFormat {
 	public static function textarea_display_value( $type, $plain_text, &$value ) {
 		if ( $type == 'textarea' && ! $plain_text ) {
 			$value = str_replace( array( "\r\n", "\r", "\n" ), ' <br/>', $value );
+		}
+	}
+
+	/**
+	 * @since 2.03.02
+	 */
+	private static function flatten_array_value( $atts, &$val ) {
+		if ( is_array( $val ) ) {
+			if ( $atts['format'] == 'text' ) {
+				$val = implode( ', ', $val );
+			} else if ( $f->type == 'checkbox' ) {
+				$val = array_values( $val );
+			}
 		}
 	}
 
