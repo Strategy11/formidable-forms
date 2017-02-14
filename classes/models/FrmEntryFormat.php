@@ -235,7 +235,7 @@ class FrmEntryFormat {
 		if ( is_array( $val ) ) {
 			if ( $atts['format'] == 'text' ) {
 				$val = implode( ', ', $val );
-			} else if ( $f->type == 'checkbox' ) {
+			} else if ( $atts['field']->type == 'checkbox' ) {
 				$val = array_values( $val );
 			}
 		}
