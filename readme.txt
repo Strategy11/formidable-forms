@@ -3,7 +3,7 @@ Contributors: sswells, srwells, jamie.wahlin
 Tags: form, contact form, form builder, custom form, forms, form maker, form creator
 Requires at least: 3.8
 Tested up to: 4.7.1
-Stable tag: 2.03.01
+Stable tag: 2.03.02
 
 The best WordPress form plugin. Simple drag & drop form building, visual form styling, and unlimited email notifications. 
 
@@ -97,6 +97,30 @@ A. The field and form names and descriptions are all changed with in-place edit.
 [See more FAQs](https://formidableforms.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 2.03.02 =
+* New: Add an option on the Global settings page to fade in forms with conditional logic. This fixes issues on sites with javascript errors causing the form to never show.
+* Tweak: don't show the section headings in email by default
+* Tweak: Force Ajax submit when editing entry inline
+* Enhancement: Add time range validation when submitting the form based on settings for each time field
+* Fix: prevent duplicate submissions
+* Fix: javascript error in Safari in form builder
+* Fix: Prevent null values from leaving a white space on the entries listing page
+* Fix: Form shortcode parameters were also affecting the forms in a widget
+* Fix: Prevent action trigger options from getting cut off at the bottom of the page
+* Fix: Entries on listing page were showing a php warning for entries submitted by logged out users
+* Fix: Prevent form submission while Lookups are loading options
+* Fix: Prevent two common calculation errors
+* Fix: Hide the child entries in repeating fields on the page that lists all entries
+* Fix: After selecting a form in the view settings, it wasn't possible to show the field keys in the sidebar
+* Fix: Lookup Checkboxes weren't saving in embedded form
+* Fix: Lookup fields weren't getting enabled if change triggered repeatedly
+* Fix: Time fields with missing settings were showing php warnings on the page
+* Fix: Make rootline look nice in Edge
+* Fix: Autosave values with the non-ajax autosave on page turn
+* Fix: Prevent multipage forms from submitting on the first page when redirecting after submit
+* Fix: "Array" was showing in the default emails for checkbox fields inside a repeating section
+* Fix: Prevent autocomplete dropdown from showing twice when editing in place
+
 = 2.03.01 =
 * Fix: Some colors were not being used correctly in the styling settings
 * **Pro Version** *
