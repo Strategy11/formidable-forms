@@ -8,7 +8,31 @@ class FrmNotification {
         add_action('frm_trigger_email_action', 'FrmNotification::trigger_email', 10, 3);
     }
 
-	public static function trigger_email( $action, $entry, $form ) {
+    public static function trigger_email( $action, $entry, $form ) {
+    	$email = new FrmEmail( $action, $entry, $form );
+
+	    if ( ! $email->has_recipients() ) {
+		    return '';
+	    }
+
+	    // Send the email now
+	    $sent_to = self::send_email( array(
+		    'to_email'      => $email->get_to(),
+		    'subject'       => $email->get_subject(),
+		    'message'       => $email->get_message(),
+		    'from'          => $email->get_from(),
+		    'plain_text'    => $email->get_is_plain_text(),
+		    'reply_to'      => $email->get_reply_to(),
+		    'attachments'   => $email->get_attachments(),
+		    'cc'            => $email->get_cc(),
+		    'bcc'           => $email->get_bcc(),
+		    'single_recipient' => $email->get_is_single_recipient(),
+	    ) );
+
+	    return $sent_to;
+    }
+
+	public static function trigger_email2( $action, $entry, $form ) {
         $notification = $action->post_content;
         $email_key = $action->ID;
 
@@ -46,9 +70,11 @@ class FrmNotification {
             //Don't allow empty From
 			if ( $f == 'from' && empty( $notification[ $f ] ) ) {
 				$notification[ $f ] = '[admin_email]';
+				$notification[ $f ] = FrmFieldsHelper::basic_replace_shortcodes( $notification[ $f ], $form, $entry );
 			} else if ( in_array( $f, array( 'email_to', 'cc', 'bcc', 'reply_to', 'from' ) ) ) {
-				//Remove brackets
-                //Add a space in case there isn't one
+				$notification[ $f ] = FrmFieldsHelper::basic_replace_shortcodes( $notification[ $f ], $form, $entry );
+
+				//Remove brackets and add a space in case there isn't one
 				$notification[ $f ] = str_replace( '<', ' ', $notification[ $f ] );
 				$notification[ $f ] = str_replace( array( '"', '>' ), '', $notification[ $f ] );
 
@@ -58,9 +84,9 @@ class FrmNotification {
                     $user_email = $user_data->user_email;
 					$notification[ $f ] = str_replace( array( '[' . $user_id_field . ']', '[' . $user_id_key . ']' ), $user_email, $notification[ $f ] );
                 }
-            }
-
-			$notification[ $f ] = FrmFieldsHelper::basic_replace_shortcodes( $notification[ $f ], $form, $entry );
+            } else {
+				$notification[ $f ] = FrmFieldsHelper::basic_replace_shortcodes( $notification[ $f ], $form, $entry );
+			}
         }
 
         //Put recipients, cc, and bcc into an array if they aren't empty
