@@ -3,7 +3,7 @@ Contributors: sswells, srwells, jamie.wahlin
 Tags: form, contact form, form builder, custom form, forms, form maker, form creator
 Requires at least: 3.8
 Tested up to: 4.7.1
-Stable tag: 2.03.02
+Stable tag: 2.03.03
 
 The best WordPress form plugin. Simple drag & drop form building, visual form styling, and unlimited email notifications. 
 
@@ -97,6 +97,10 @@ A. The field and form names and descriptions are all changed with in-place edit.
 [See more FAQs](https://formidableforms.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 2.03.03 =
+* Fix: Update the minified JS to match the non-minified version. This fixes issues with calculations.
+* Fix: Allow the first form action label to be clickable
+
 = 2.03.02 =
 * New: Add an option on the Global settings page to fade in forms with conditional logic. This fixes issues on sites with javascript errors causing the form to never show.
 * Tweak: don't show the section headings in email by default
