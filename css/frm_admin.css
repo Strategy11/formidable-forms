@@ -1761,7 +1761,17 @@ tr.frm_options_heading td{
 	-moz-transition: opacity .15s ease-in-out;
 	-webkit-transition: opacity .15s ease-in-out;
 	transition: opacity .15s ease-in-out;
+	opacity:0;
+	*visibility:hidden;
+	z-index:-1;
 }
+
+.frm_no_actions:last-child{
+	opacity:100;
+	*visibility:visible;
+	z-index:0;
+}
+
 .frm_no_actions .inner_actions{
 	margin-left: 195px;
 }
