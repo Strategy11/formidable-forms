@@ -31,10 +31,4 @@ $form_action = apply_filters( 'frm_form_' . $form_action->post_excerpt . '_actio
         <?php
         } ?>
     </div>
-<style type="text/css">
-.frm_no_actions{
-    opacity:0;
-    *visibility:hidden;
-}
-</style>
 </div>

@@ -361,6 +361,8 @@ class FrmFormAction {
             return array();
         }
 
+		$limit = apply_filters( 'frm_form_action_limit', $limit, compact( 'type', 'form_id' ) );
+
         if ( 'all' != $type ) {
             return $action_controls->get_all( $form_id, $limit );
         }
