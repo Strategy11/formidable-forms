@@ -2104,6 +2104,7 @@ function frmFrontFormJS(){
 	 * @param {string} newValue
  	 */
 	function insertValueInFieldWatchingLookup( fieldKey, childInput, newValue ) {
+		newValue = newValue.replace( /&amp;/g, '&' );
 		childInput.value = newValue;
 		triggerChange( jQuery( childInput ), fieldKey );
 	}
