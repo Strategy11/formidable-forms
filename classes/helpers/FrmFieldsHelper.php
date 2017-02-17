@@ -875,17 +875,17 @@ DEFAULT_HTML;
         }
     }
 
-    /**
-    * Check if current field option is an "other" option
-    *
-    * @since 2.0.6
-    *
-    * @param string $opt_key
-    * @return boolean Returns true if current field option is an "Other" option
-    */
-    public static function is_other_opt( $opt_key ) {
-        return $opt_key && strpos( $opt_key, 'other' ) !== false;
-    }
+	/**
+	 * Check if current field option is an "other" option
+	 *
+	 * @since 2.0.6
+	 *
+	 * @param string $opt_key
+	 * @return boolean Returns true if current field option is an "Other" option
+	 */
+	public static function is_other_opt( $opt_key ) {
+		return $opt_key && strpos( $opt_key, 'other_' ) === 0;
+	}
 
     /**
     * Get value that belongs in "Other" text box

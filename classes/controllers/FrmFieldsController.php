@@ -338,9 +338,9 @@ class FrmFieldsController {
         if ( isset( $field['field_options']['other'] ) && $field['field_options']['other'] == true ) {
             $other_array = array();
             foreach ( $field['options'] as $opt_key => $opt ) {
-                if ( $opt_key && strpos( $opt_key, 'other' ) !== false ) {
-                    $other_array[ $opt_key ] = $opt;
-                }
+				if ( FrmFieldsHelper::is_other_opt( $opt_key ) ) {
+					$other_array[ $opt_key ] = $opt;
+				}
                 unset($opt_key, $opt);
             }
             if ( ! empty($other_array) ) {
