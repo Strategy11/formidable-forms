@@ -144,6 +144,14 @@ class FrmUnitTest extends WP_UnitTestCase {
 		}
 	}
 
+	function set_current_user_to_username( $login ) {
+		$user = get_user_by( 'login', $login );
+
+		if ( $user ) {
+			wp_set_current_user( $user->ID );
+		}
+	}
+
     function set_as_user_role( $role ) {
         // create user
 		$user = $this->factory->user->create_and_get( array( 'role' => $role ) );
