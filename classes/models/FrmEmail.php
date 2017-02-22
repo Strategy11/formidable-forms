@@ -17,7 +17,7 @@ class FrmEmail {
 
 	private $is_plain_text = false;
 	private $is_single_recipient = false;
-	private $include_user_info = false;// TODO: maybe remove?
+	private $include_user_info = false;
 
 	private $charset = '';
 	private $content_type = 'text/html';
@@ -109,17 +109,6 @@ class FrmEmail {
 	}
 
 	/**
-	 * Get the to addresses
-	 *
-	 * @since 2.03.04
-	 *
-	 * @return array
-	 */
-	public function get_to() {
-		return $this->to;
-	}
-
-	/**
 	 * Set the CC addresses
 	 *
 	 * @since 2.03.04
@@ -127,7 +116,7 @@ class FrmEmail {
 	 * @param array $user_id_args
 	 */
 	private function set_cc( $user_id_args ) {
-		$this->cc = $this->prepare_additional_recipients( 'cc', $user_id_args );
+		$this->cc = $this->prepare_additional_recipients( $this->settings['cc'], $user_id_args );
 	}
 
 	/**
@@ -138,7 +127,7 @@ class FrmEmail {
 	 * @param array $user_id_args
 	 */
 	private function set_bcc( $user_id_args ) {
-		$this->bcc = $this->prepare_additional_recipients( 'bcc', $user_id_args );
+		$this->bcc = $this->prepare_additional_recipients( $this->settings['bcc'], $user_id_args );
 	}
 
 	/**
@@ -146,13 +135,13 @@ class FrmEmail {
 	 *
 	 * @since 2.03.04
 	 *
-	 * @param string $setting
+	 * @param string $recipients
 	 * @param array $user_id_args
 	 *
 	 * @return array
 	 */
-	private function prepare_additional_recipients( $setting, $user_id_args ) {
-		$recipients = $this->prepare_email_setting( $this->settings[ $setting ], $user_id_args );
+	private function prepare_additional_recipients( $recipients, $user_id_args ) {
+		$recipients = $this->prepare_email_setting( $recipients, $user_id_args );
 		$recipients = $this->explode_emails( $recipients );
 
 		$recipients = array_unique( (array) $recipients );
@@ -186,52 +175,14 @@ class FrmEmail {
 	 * @param array $user_id_args
 	 */
 	private function set_reply_to( $user_id_args ) {
-		$this->reply_to = $this->prepare_email_setting( $this->settings[ 'reply_to' ], $user_id_args );
-		$this->reply_to = $this->format_reply_to( $this->reply_to );
-	}
+		$this->reply_to = trim( $this->settings['reply_to'] );
 
-	/**
-	 * Set the charset
-	 *
-	 * @since 2.03.04
-	 */
-	private function set_charset() {
-		$this->charset = get_option( 'blog_charset' );
-	}
-
-	/**
-	 * Set the content type
-	 *
-	 * @since 2.03.04
-	 */
-	private function set_content_type() {
-		if ( $this->is_plain_text ) {
-			$this->content_type = 'text/plain';
-		}
-	}
-
-	/**
-	 * Set the subject
-	 *
-	 * @since 2.03.04
-	 */
-	private function set_subject() {
-		if ( empty( $this->settings[ 'email_subject' ] ) ) {
-			$this->subject = sprintf( __( '%1$s Form submitted on %2$s', 'formidable' ), $this->form->name, '[sitename]' );
+		if ( empty( $this->reply_to ) ) {
+			$this->reply_to = $this->from;
 		} else {
-			$this->subject = $this->settings[ 'email_subject' ];
+			$this->reply_to = $this->prepare_email_setting( $this->settings[ 'reply_to' ], $user_id_args );
+			$this->reply_to = $this->format_reply_to( $this->reply_to );
 		}
-
-		$this->subject = FrmFieldsHelper::basic_replace_shortcodes( $this->subject, $this->form, $this->entry );
-
-		$args          = array(
-			'form'      => $this->form,
-			'entry'     => $this->entry,
-			'email_key' => $this->email_key,
-		);
-		$this->subject = apply_filters( 'frm_email_subject', $this->subject, $args );
-
-		$this->subject = wp_specialchars_decode( strip_tags( stripslashes( $this->subject ) ), ENT_QUOTES );
 	}
 
 	/**
@@ -281,6 +232,50 @@ class FrmEmail {
 		 * @since 2.2.13
 		 */
 		$this->is_single_recipient = apply_filters( 'frm_send_separate_emails', false, $args );
+	}
+
+	/**
+	 * Set the charset
+	 *
+	 * @since 2.03.04
+	 */
+	private function set_charset() {
+		$this->charset = get_option( 'blog_charset' );
+	}
+
+	/**
+	 * Set the content type
+	 *
+	 * @since 2.03.04
+	 */
+	private function set_content_type() {
+		if ( $this->is_plain_text ) {
+			$this->content_type = 'text/plain';
+		}
+	}
+
+	/**
+	 * Set the subject
+	 *
+	 * @since 2.03.04
+	 */
+	private function set_subject() {
+		if ( empty( $this->settings[ 'email_subject' ] ) ) {
+			$this->subject = sprintf( __( '%1$s Form submitted on %2$s', 'formidable' ), $this->form->name, '[sitename]' );
+		} else {
+			$this->subject = $this->settings[ 'email_subject' ];
+		}
+
+		$this->subject = FrmFieldsHelper::basic_replace_shortcodes( $this->subject, $this->form, $this->entry );
+
+		$args          = array(
+			'form'      => $this->form,
+			'entry'     => $this->entry,
+			'email_key' => $this->email_key,
+		);
+		$this->subject = apply_filters( 'frm_email_subject', $this->subject, $args );
+
+		$this->subject = wp_specialchars_decode( strip_tags( stripslashes( $this->subject ) ), ENT_QUOTES );
 	}
 
 	/**
@@ -442,8 +437,15 @@ class FrmEmail {
 	 */
 	private function package_header() {
 		$header   = array();
-		$header[] = 'CC: ' . implode( ',', $this->cc );
-		$header[] = 'BCC: ' . implode( ',', $this->bcc );
+
+		if ( ! empty( $this->cc ) ) {
+			$header[] = 'CC: ' . implode( ',', $this->cc );
+		}
+
+		if ( ! empty( $this->bcc ) ) {
+			$header[] = 'BCC: ' . implode( ',', $this->bcc );
+		}
+
 		$header[] = 'From: ' . $this->from;
 		$header[] = 'Reply-To: ' . $this->reply_to;
 		$header[] = 'Content-Type: ' . $this->content_type . '; charset="' . esc_attr( $this->charset ) . '"';
@@ -539,18 +541,16 @@ class FrmEmail {
 				$parts = explode( ' ', $val );
 				$email = end( $parts );
 
-				// TODO: what if there are more than 2 parts?
 				if ( is_email( $email ) ) {
 					// If inputted correctly, $email should be an email
 					$name = trim( str_replace( $email, '', $val ) );
 				} else {
-					// In case someone just puts a name in any other email field
+					// If user enters a name without an email
 					unset( $recipients[ $key ] );
 					continue;
 				}
 			}
 
-			// Set up formatted value
 			$recipients[ $key ] = $name . ' <' . $email . '>';
 		}
 
@@ -558,8 +558,7 @@ class FrmEmail {
 	}
 
 	/**
-	 * TODO: DIE?
-	 * Format the
+	 * Format the From header
 	 *
 	 * @param string $from
 	 *

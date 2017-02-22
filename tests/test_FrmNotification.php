@@ -87,7 +87,9 @@ class WP_Test_FrmNotification extends FrmUnitTest {
 
 		$this->assertSame( $expected['to'], $mock_email['to'][0] );
 		$this->assertSame( $expected['cc'], $mock_email['cc'] );
+		$this->assertNotContains( 'Cc:', $mock_email['header'] );
 		$this->assertSame( $expected['bcc'], $mock_email['bcc'] );
+		$this->assertNotContains( 'Bcc:', $mock_email['header'] );
 		$this->assertContains( 'From: ' . $expected['from'], $mock_email['header'] );
 		$this->assertContains( 'Reply-To: ' . $expected['reply_to'], $mock_email['header'] );
 		$this->assertSame( $expected['subject'], $mock_email['subject'] );
