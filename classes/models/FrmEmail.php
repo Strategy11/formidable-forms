@@ -195,9 +195,6 @@ class FrmEmail {
 		if ( $this->settings[ 'plain_text' ] ) {
 			$this->is_plain_text = true;
 		}
-
-		add_filter( 'frm_plain_text_email', ( $this->is_plain_text ? '__return_true' : '__return_false' ) );
-
 	}
 
 	/**

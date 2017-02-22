@@ -497,9 +497,8 @@ class FrmEntriesHelper {
 		FrmEntryFormat::flatten_multi_file_upload( $field, $val );
 	}
 
-	public static function textarea_display_value( &$value, $type, $plain_text ) {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmEntryFormat::textarea_display_value' );
-		FrmEntryFormat::textarea_display_value( $type, $plain_text, $value );
+	public static function textarea_display_value() {
+		_deprecated_function( __FUNCTION__, '2.0.9', 'custom code' );
 	}
 
 	public static function fill_entry_user_info( $atts, array &$values ) {

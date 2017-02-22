@@ -55,7 +55,6 @@ class FrmHooksController {
         add_action( 'wp_loaded', 'FrmEntriesController::process_entry', 10, 0 );
         add_filter( 'frm_redirect_url', 'FrmEntriesController::delete_entry_before_redirect', 50, 3 );
         add_action( 'frm_after_entry_processed', 'FrmEntriesController::delete_entry_after_save', 100 );
-        add_filter( 'frmpro_fields_replace_shortcodes', 'FrmEntriesController::filter_shortcode_value', 10, 4 );
 
         // Form Actions Controller
         add_action( 'init', 'FrmFormActionsController::register_post_types', 1 );

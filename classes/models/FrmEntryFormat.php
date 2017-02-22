@@ -209,23 +209,12 @@ class FrmEntryFormat {
 	 * @since 2.03.02
 	 */
 	public static function prepare_field_output( $atts, &$val ) {
-		self::textarea_display_value( $atts['field']->type, $atts['plain_text'], $val );
 		$val = apply_filters( 'frm_display_' . $atts['field']->type . '_value_custom', $val, array(
 			'field' => $atts['field'], 'atts' => $atts,
 		) );
 
 		self::flatten_array_value( $atts, $val );
 		self::maybe_strip_html( $atts['plain_text'], $val );
-	}
-
-    /**
-     * Replace returns with HTML line breaks for display
-     * @since 2.0.9
-     */
-	public static function textarea_display_value( $type, $plain_text, &$value ) {
-		if ( $type == 'textarea' && ! $plain_text ) {
-			$value = str_replace( array( "\r\n", "\r", "\n" ), ' <br/>', $value );
-		}
 	}
 
 	/**
@@ -515,5 +504,12 @@ class FrmEntryFormat {
 
 	private static function table_row_style( $atts ) {
 		return ( $atts['odd'] ? $atts['bg_color'] : $atts['bg_color_alt'] );
+	}
+
+	/**
+	 * @deprecated 2.03.04
+	 */
+	public static function textarea_display_value() {
+		_deprecated_function( __FUNCTION__, '2.03.04', 'custom code' );
 	}
 }
