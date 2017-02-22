@@ -1705,12 +1705,13 @@ function frmFrontFormJS(){
 		if ( childFieldArgs.parentVals === false  ) {
 			// If any parents have blank values, don't waste time looking for values
 			childSelect.options.length = 1;
+			childSelect.value = '';
+			maybeUpdateChosenOptions(childSelect);
 
 			if ( currentValue !== '' ) {
-				childSelect.value = '';
-				maybeUpdateChosenOptions(childSelect);
 				triggerChange(jQuery(childSelect), childFieldArgs.fieldKey);
 			}
+
 		} else {
 			disableLookup( childSelect );
 			disableFormPreLookup( childFieldArgs.formId );
