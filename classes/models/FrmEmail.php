@@ -711,7 +711,7 @@ class FrmEmail {
 	private function add_mandrill_filter() {
 		if ( ! $this->is_plain_text ) {
 			// remove line breaks in HTML emails to prevent conflicts with Mandrill
-			add_filter( 'mandrill_nl2br', 'FrmEmailController::remove_mandrill_br' );
+			add_filter( 'mandrill_nl2br', 'FrmNotification::remove_mandrill_br' );
 		}
 	}
 
@@ -722,7 +722,7 @@ class FrmEmail {
 	 */
 	private function remove_mandrill_filter() {
 		// remove mandrill filter now so other emails can still use it
-		remove_filter( 'mandrill_nl2br', 'FrmEmailController::remove_mandrill_br' );
+		remove_filter( 'mandrill_nl2br', 'FrmNotification::remove_mandrill_br' );
 	}
 
 	/**
