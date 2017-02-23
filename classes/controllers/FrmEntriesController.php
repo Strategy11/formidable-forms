@@ -511,13 +511,6 @@ class FrmEntriesController {
 		return FrmEntryFormat::show_entry( $atts );
 	}
 
-	public static function filter_shortcode_value( $value, $tag, $atts, $field ) {
-        $plain_text = add_filter('frm_plain_text_email', true);
-		FrmEntryFormat::textarea_display_value( $field->type, $plain_text, $value );
-
-        return $value;
-    }
-
 	public static function get_params( $form = null ) {
 		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmForm::get_params' );
 		return FrmForm::get_params( $form );
@@ -555,6 +548,16 @@ class FrmEntriesController {
 	 */
 	public static function filter_display_value( $value ) {
 		_deprecated_function( __FUNCTION__, '2.02.14', 'FrmProEntriesController::filter_display_value' );
+		return $value;
+	}
+
+	/**
+	 * @deprecated 2.03.04
+	 *
+	 * @return mixed
+	 */
+	public static function filter_shortcode_value( $value ) {
+		_deprecated_function( __FUNCTION__, '2.03.04', 'custom code' );
 		return $value;
 	}
 }
