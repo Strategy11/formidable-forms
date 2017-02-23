@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @since 2.03.03
+ * @since 2.03.04
  */
 class FrmEmailHelper {
 
