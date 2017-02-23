@@ -884,7 +884,7 @@ class FrmAppHelper {
 		}
 
 		$query = $wp_scripts->registered[ $handle ];
-		if ( is_object( $query ) ) {
+		if ( is_object( $query ) && $query->ver !== '' ) {
 			$ver = $query->ver;
 		}
 
