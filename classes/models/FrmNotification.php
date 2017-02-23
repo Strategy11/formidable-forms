@@ -7,7 +7,7 @@ class FrmNotification {
 			die( 'You are not allowed to call this page directly.' );
 		}
 
-		add_action( 'frm_trigger_email_action', 'FrmNotification::trigger_email', 10, 3 );
+		self::hook_emails_to_action();
 	}
 
 	/**
@@ -38,6 +38,15 @@ class FrmNotification {
 	 */
 	public static function stop_emails() {
 		remove_action( 'frm_trigger_email_action', 'FrmNotification::trigger_email', 10 );
+	}
+
+	/**
+	 * Hook the trigger_email function to frm_trigger_email_action action
+	 *
+	 * @since 2.03.04
+	 */
+	public static function hook_emails_to_action() {
+		add_action( 'frm_trigger_email_action', 'FrmNotification::trigger_email', 10, 3 );
 	}
 
 	/**
