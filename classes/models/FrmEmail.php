@@ -27,13 +27,13 @@ class FrmEmail {
 	private $form;
 
 	/**
-	 * FrmEmail constructor.
+	 * FrmEmail constructor
 	 *
 	 * @param object $action
 	 * @param object $entry
 	 * @param object $form
 	 */
-	function __construct( $action, $entry, $form ) {
+	public function __construct( $action, $entry, $form ) {
 		$this->set_email_key( $action );
 		$this->entry    = $entry;
 		$this->form     = $form;
@@ -82,13 +82,14 @@ class FrmEmail {
 	 * @param array $user_id_args
 	 */
 	private function set_to( $user_id_args ) {
-		$to = $this->prepare_email_setting( $this->settings[ 'email_to' ], $user_id_args );
+		$to = $this->prepare_email_setting( $this->settings['email_to'], $user_id_args );
 		$to = $this->explode_emails( $to );
 
-		$values = FrmEntryMeta::getAll( array(
+		$where = array(
 			'it.field_id !' => 0,
-			'it.item_id'    => $this->entry->id
-		), ' ORDER BY fi.field_order' );
+			'it.item_id'    => $this->entry->id,
+		);
+		$values = FrmEntryMeta::getAll( $where, ' ORDER BY fi.field_order' );
 		$args   = array(
 			'email_key' => $this->email_key,
 			'entry'     => $this->entry,
@@ -157,10 +158,10 @@ class FrmEmail {
 	 * @param array $user_id_args
 	 */
 	private function set_from( $user_id_args ) {
-		if ( empty( $this->settings[ 'from' ] ) ) {
+		if ( empty( $this->settings['from'] ) ) {
 			$from = get_option( 'admin_email' );
 		} else {
-			$from = $this->prepare_email_setting( $this->settings[ 'from' ], $user_id_args );
+			$from = $this->prepare_email_setting( $this->settings['from'], $user_id_args );
 		}
 
 		$this->from = $this->format_from( $from );
@@ -179,7 +180,7 @@ class FrmEmail {
 		if ( empty( $this->reply_to ) ) {
 			$this->reply_to = $this->from;
 		} else {
-			$this->reply_to = $this->prepare_email_setting( $this->settings[ 'reply_to' ], $user_id_args );
+			$this->reply_to = $this->prepare_email_setting( $this->settings['reply_to'], $user_id_args );
 			$this->reply_to = $this->format_reply_to( $this->reply_to );
 		}
 	}
@@ -191,7 +192,7 @@ class FrmEmail {
 	 * @since 2.03.04
 	 */
 	private function set_is_plain_text() {
-		if ( $this->settings[ 'plain_text' ] ) {
+		if ( $this->settings['plain_text'] ) {
 			$this->is_plain_text = true;
 		}
 	}
@@ -203,8 +204,8 @@ class FrmEmail {
 	 * @since 2.03.04
 	 */
 	private function set_include_user_info() {
-		if ( isset( $this->settings[ 'inc_user_info' ] ) ) {
-			$this->include_user_info = $this->settings[ 'inc_user_info' ];
+		if ( isset( $this->settings['inc_user_info'] ) ) {
+			$this->include_user_info = $this->settings['inc_user_info'];
 		}
 	}
 
@@ -256,10 +257,10 @@ class FrmEmail {
 	 * @since 2.03.04
 	 */
 	private function set_subject() {
-		if ( empty( $this->settings[ 'email_subject' ] ) ) {
+		if ( empty( $this->settings['email_subject'] ) ) {
 			$this->subject = sprintf( __( '%1$s Form submitted on %2$s', 'formidable' ), $this->form->name, '[sitename]' );
 		} else {
-			$this->subject = $this->settings[ 'email_subject' ];
+			$this->subject = $this->settings['email_subject'];
 		}
 
 		$this->subject = FrmFieldsHelper::basic_replace_shortcodes( $this->subject, $this->form, $this->entry );
@@ -280,7 +281,7 @@ class FrmEmail {
 	 * @since 2.03.04
 	 */
 	private function set_message() {
-		$this->message = FrmFieldsHelper::basic_replace_shortcodes( $this->settings[ 'email_message' ], $this->form, $this->entry );
+		$this->message = FrmFieldsHelper::basic_replace_shortcodes( $this->settings['email_message'], $this->form, $this->entry );
 
 		$prev_mail_body = $this->message;
 		$pass_entry     = clone $this->entry; // make a copy to prevent changes by reference
@@ -296,8 +297,8 @@ class FrmEmail {
 			$data = maybe_unserialize( $this->entry->description );
 			$mail_body .= "\r\n\r\n" . __( 'User Information', 'formidable' ) . "\r\n";
 			$mail_body .= __( 'IP Address', 'formidable' ) . ': ' . $this->entry->ip . "\r\n";
-			$mail_body .= __( 'User-Agent (Browser/OS)', 'formidable' ) . ': ' . FrmEntryFormat::get_browser( $data[ 'browser' ] ) . "\r\n";
-			$mail_body .= __( 'Referrer', 'formidable' ) . ': ' . $data[ 'referrer' ] . "\r\n";
+			$mail_body .= __( 'User-Agent (Browser/OS)', 'formidable' ) . ': ' . FrmEntryFormat::get_browser( $data['browser'] ) . "\r\n";
+			$mail_body .= __( 'Referrer', 'formidable' ) . ': ' . $data['referrer'] . "\r\n";
 		}
 
 		$this->message = $mail_body;
@@ -464,9 +465,9 @@ class FrmEmail {
 			'field_key' => '',
 		);
 
-		$user_id_args[ 'field_id' ] = FrmEmailHelper::get_user_id_field_for_form( $form_id );
-		if ( $user_id_args[ 'field_id' ] ) {
-			$user_id_args[ 'field_key' ] = FrmField::get_key_by_id( $user_id_args[ 'field_id' ] );
+		$user_id_args['field_id'] = FrmEmailHelper::get_user_id_field_for_form( $form_id );
+		if ( $user_id_args['field_id'] ) {
+			$user_id_args['field_key'] = FrmField::get_key_by_id( $user_id_args['field_id'] );
 		}
 
 		return $user_id_args;
@@ -483,10 +484,10 @@ class FrmEmail {
 	 * @return string
 	 */
 	private function prepare_email_setting( $value, $user_id_args ) {
-		if ( strpos( $value, '[' . $user_id_args[ 'field_id' ] . ']' ) !== false ) {
-			$value = str_replace( '[' . $user_id_args[ 'field_id' ] . ']', '[' . $user_id_args[ 'field_id' ] . ' show="user_email"]', $value );
-		} else if ( strpos( $value, '[' . $user_id_args[ 'field_key' ] . ']' ) !== false ) {
-			$value = str_replace( '[' . $user_id_args[ 'field_key' ] . ']', '[' . $user_id_args[ 'field_key' ] . ' show="user_email"]', $value );
+		if ( strpos( $value, '[' . $user_id_args['field_id'] . ']' ) !== false ) {
+			$value = str_replace( '[' . $user_id_args['field_id'] . ']', '[' . $user_id_args['field_id'] . ' show="user_email"]', $value );
+		} else if ( strpos( $value, '[' . $user_id_args['field_key'] . ']' ) !== false ) {
+			$value = str_replace( '[' . $user_id_args['field_key'] . ']', '[' . $user_id_args['field_key'] . ' show="user_email"]', $value );
 		}
 
 		$value = FrmFieldsHelper::basic_replace_shortcodes( $value, $this->form, $this->entry );
