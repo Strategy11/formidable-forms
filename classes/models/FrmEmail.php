@@ -44,7 +44,6 @@ class FrmEmail {
 		$this->set_cc( $user_id_args );
 		$this->set_bcc( $user_id_args );
 
-		// Stop now if there aren't any recipients
 		if ( ! $this->has_recipients() ) {
 			return;
 		}
@@ -539,7 +538,7 @@ class FrmEmail {
 				$email = end( $parts );
 
 				if ( is_email( $email ) ) {
-					// If inputted correctly, $email should be an email
+					// If user enters a name and email
 					$name = trim( str_replace( $email, '', $val ) );
 				} else {
 					// If user enters a name without an email
@@ -584,7 +583,6 @@ class FrmEmail {
 			$from_email = 'wordpress@' . $sitename;
 		}
 
-		// Set up formatted value
 		$from = $from_name . ' <' . $from_email . '>';
 
 		return $from;
@@ -627,10 +625,9 @@ class FrmEmail {
 		$end   = end( $parts );
 
 		if ( is_email( $end ) ) {
-			// If inputted correctly, $end should be an email
 			$name = trim( str_replace( $end, '', $sender ) );
 		} else {
-			// In case someone just puts a name in the From or Reply To field
+			// Only a name was entered in the From or Reply To field
 			$name = $sender;
 			$end  = get_option( 'admin_email' );
 		}
@@ -705,13 +702,13 @@ class FrmEmail {
 
 	/**
 	 * Add Mandrill line break filter
+	 * Remove line breaks in HTML emails to prevent conflicts with Mandrill
 	 *
 	 * @since 2.03.04
 	 */
 	private function add_mandrill_filter() {
 		if ( ! $this->is_plain_text ) {
-			// remove line breaks in HTML emails to prevent conflicts with Mandrill
-			add_filter( 'mandrill_nl2br', 'FrmNotification::remove_mandrill_br' );
+			add_filter( 'mandrill_nl2br', 'FrmEmailHelper::remove_mandrill_br' );
 		}
 	}
 
@@ -721,8 +718,7 @@ class FrmEmail {
 	 * @since 2.03.04
 	 */
 	private function remove_mandrill_filter() {
-		// remove mandrill filter now so other emails can still use it
-		remove_filter( 'mandrill_nl2br', 'FrmNotification::remove_mandrill_br' );
+		remove_filter( 'mandrill_nl2br', 'FrmEmailHelper::remove_mandrill_br' );
 	}
 
 	/**

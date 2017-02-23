@@ -68,11 +68,11 @@ class FrmNotification {
 	}
 
 	/**
-	 * This function should only be fired when Mandrill is sending an HTML email
-	 * This will make sure Mandrill doesn't mess with our HTML emails
+	 * @deprecated 2.03.04
 	 */
 	public static function remove_mandrill_br() {
-		return false;
+		_deprecated_function( __FUNCTION__, '2.03.04', 'FrmEmailHelper::remove_mandrill_br' );
+		return FrmEmailHelper::remove_mandrill_br();
 	}
 
 	/**
