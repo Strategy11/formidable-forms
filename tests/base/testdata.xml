@@ -249,6 +249,19 @@
             <options><![CDATA[]]></options>
             <field_options><![CDATA[{"size":"","max":"","label":"","blank":"This field cannot be blank.","required_indicator":"*","invalid":"","separate_value":0,"clear_on_focus":0,"default_blank":0,"classes":"","custom_html":"<div id=\\\"frm_field_[id]_container\\\" class=\\\"frm_form_field form-field [required_class][error_class]\\\">\r\n    <label  class=\\\"frm_primary_label\\\">[field_name]\r\n        <span class=\\\"frm_required\\\">[required_label]<\/span>\r\n    <\/label>\r\n    <div class=\\\"frm_opt_container\\\">[input]<\/div>\r\n    [if description]<div class=\\\"frm_description\\\">[description]<\/div>[\/if description]\r\n    [if error]<div class=\\\"frm_error\\\">[error]<\/div>[\/if error]\r\n<\/div>","data_type":"checkbox","slide":0,"form_select":"taxonomy","show_hide":"show","any_all":"any","align":"block","hide_field":["3379"],"hide_field_cond":["=="],"hide_opt":[""],"star":0,"ftypes":[],"restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"step":1,"clock":12,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","calc_dec":"","dyn_default_value":"","multiple":0,"unique_msg":"","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":0,"custom_field":"","post_field":"post_category","taxonomy":"category","exclude_cat":["294","511","513","18","19","313","298","27","189","13","24","25","299","315","1","3","4","300"]}]]></field_options>
 		</field>
+        <field>
+            <id>9820</id>
+            <field_key><![CDATA[post-status-dropdown]]></field_key>
+            <name><![CDATA[Post Status]]></name>
+            <description><![CDATA[]]></description>
+            <type><![CDATA[select]]></type>
+            <default_value><![CDATA[]]></default_value>
+            <field_order>11</field_order>
+            <form_id>182</form_id>
+            <required>0</required>
+            <options><![CDATA[{"draft":{"label":"Draft","value":"draft"},"private":{"label":"Private","value":"private"},"publish":{"label":"Published","value":"publish"},"pending":{"label":"Pending","value":"pending"}}]]></options>
+            <field_options><![CDATA[{"size":"","max":"","label":"","blank":"This field cannot be blank.","required_indicator":"*","invalid":"","separate_value":"1","clear_on_focus":0,"default_blank":"0","classes":"","custom_html":"<div id=\"frm_field_[id]_container\" class=\"frm_form_field form-field [required_class][error_class]\">\r\n    <label for=\"field_[key]\" class=\"frm_primary_label\">[field_name]\r\n        <span class=\"frm_required\">[required_label]<\/span>\r\n    <\/label>\r\n    [input]\r\n    [if description]<div class=\"frm_description\">[description]<\/div>[\/if description]\r\n    [if error]<div class=\"frm_error\">[error]<\/div>[\/if error]\r\n<\/div>","post_field":"post_status","slide":0,"form_select":"","show_hide":"show","any_all":"any","align":"block","hide_field":[],"hide_field_cond":["=="],"hide_opt":[],"star":0,"ftypes":[],"data_type":"select","restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"step":1,"clock":12,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","dyn_default_value":"","multiple":0,"unique_msg":"","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":"0","custom_field":"","taxonomy":"category","exclude_cat":0,"calc_dec":"","captcha_size":"normal","delete":false,"in_section":"0","captcha_theme":"light","autopopulate_value":false,"get_values_form":"","get_values_field":"","watch_lookup":[""],"get_most_recent_value":"","lookup_filter_current_user":false,"calc_type":"","single_time":0}]]></field_options>
+        </field>
 	</form>
 	<term><term_id>294</term_id><term_taxonomy>category</term_taxonomy><term_name><![CDATA[Altered Thurzdaze]]></term_name><term_slug>altered-thurzdaze</term_slug></term>
 	<term><term_id>513</term_id><term_taxonomy>category</term_taxonomy><term_name><![CDATA[Altered child 2]]></term_name><term_slug>altered-child-2</term_slug><term_parent>altered-thurzdaze</term_parent></term>
@@ -981,14 +994,27 @@ Jam Band, Electronic, Electronica, JamTronica, EDM, Producer, Rock,  Jazz, Soul,
             <options><![CDATA[]]></options>
             <field_options><![CDATA[{"size":"","max":"","label":"","blank":"","required_indicator":"*","invalid":"","separate_value":0,"clear_on_focus":0,"default_blank":0,"classes":"","custom_html":"","format":"both","slide":0,"form_select":"","show_hide":"show","any_all":"any","align":"block","hide_field":[],"hide_field_cond":["=="],"hide_opt":[],"star":0,"ftypes":[],"data_type":"select","restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"step":1,"clock":12,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","calc_dec":"","dyn_default_value":"","multiple":0,"unique_msg":"This value must be unique.","autocom":0,"repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":0}]]></field_options>
 		</field>
-		<field>
+        <field>
+            <id>8139</id>
+            <field_key><![CDATA[lookup-country]]></field_key>
+            <name><![CDATA[Lookup Field - level 1]]></name>
+            <description><![CDATA[]]></description>
+            <type><![CDATA[lookup]]></type>
+            <default_value><![CDATA[]]></default_value>
+            <field_order>35</field_order>
+            <form_id>698</form_id>
+            <required></required>
+            <options><![CDATA[]]></options>
+            <field_options><![CDATA[{"size":"","max":"","label":"","blank":"This field cannot be blank.","required_indicator":"*","invalid":"","separate_value":0,"clear_on_focus":0,"default_blank":"0","classes":"frm_first frm_half","custom_html":"<div id=\"frm_field_[id]_container\" class=\"frm_form_field form-field [required_class][error_class]\">\r\n    <label for=\"field_[key]\" class=\"frm_primary_label\">[field_name]\r\n        <span class=\"frm_required\">[required_label]<\/span>\r\n    <\/label>\r\n    [input]\r\n    [if description]<div class=\"frm_description\">[description]<\/div>[\/if description]\r\n    [if error]<div class=\"frm_error\">[error]<\/div>[\/if error]\r\n<\/div>","captcha_size":"normal","captcha_theme":"light","data_type":"select","in_section":"0","slide":0,"form_select":"","show_hide":"show","any_all":"any","align":"block","hide_field":[],"hide_field_cond":["=="],"hide_opt":[],"star":0,"ftypes":[],"restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"delete":false,"step":1,"clock":12,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","calc_dec":"","dyn_default_value":"[get param=test]","multiple":0,"unique_msg":"","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":0,"watch_lookup":[],"get_values_form":"638","get_values_field":"6811","lookup_filter_current_user":false,"lookup_placeholder_text":"","lookup_option_order":"ascending","custom_field":"","post_field":"","taxonomy":"category","exclude_cat":0,"btsp":"","calc_type":"","single_time":0}]]></field_options>
+		</field>
+        <field>
 		    <id>8106</id>
             <field_key><![CDATA[d0c84r]]></field_key>
             <name><![CDATA[reCAPTCHA]]></name>
             <description><![CDATA[]]></description>
             <type><![CDATA[captcha]]></type>
             <default_value>1</default_value>
-            <field_order>35</field_order>
+            <field_order>36</field_order>
             <form_id>698</form_id>
             <required></required>
             <options><![CDATA[]]></options>
