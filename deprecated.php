@@ -13,7 +13,7 @@ global $frm_entry;
 global $frm_entry_meta;
 
 $frmdb              = new FrmDb();
-$frm_field          = new FrmField();
+$frm_field          = new FrmFieldDeprecated();
 $frm_form           = new FrmForm();
 $frm_entry          = new FrmEntry();
 $frm_entry_meta     = new FrmEntryMeta();
