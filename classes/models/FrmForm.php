@@ -427,9 +427,7 @@ class FrmForm {
     /**
      * @return string form name
      */
-    public static function &getName( $id ) {
-        global $wpdb;
-
+    public static function getName( $id ) {
         $form = FrmAppHelper::check_cache($id, 'frm_form');
         if ( $form ) {
             $r = stripslashes($form->name);
@@ -447,7 +445,7 @@ class FrmForm {
      * @param string $key
      * @return int form id
      */
-	public static function &getIdByKey( $key ) {
+	public static function getIdByKey( $key ) {
         $id = FrmDb::get_var( 'frm_forms', array( 'form_key' => sanitize_title( $key ) ) );
         return $id;
     }
@@ -456,7 +454,7 @@ class FrmForm {
      * @param int $id
      * @return string form key
      */
-	public static function &getKeyById( $id ) {
+	public static function getKeyById( $id ) {
         $id = (int) $id;
         $cache = FrmAppHelper::check_cache($id, 'frm_form');
         if ( $cache ) {
@@ -565,7 +563,7 @@ class FrmForm {
     /**
      * @return int count of forms
      */
-    public static function &get_count() {
+    public static function get_count() {
     	global $wpdb;
 
     	$cache_key = 'frm_form_counts';

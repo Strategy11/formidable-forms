@@ -812,14 +812,4 @@ DEFAULT_HTML;
 			$wpdb->update( $this->entries, array( 'user_id' => $user_id->meta_value ), array( 'id' => $user_id->item_id ) );
         }
     }
-
-	public static function get_one_record( $table, $args = array(), $fields = '*', $order_by = '' ) {
-		_deprecated_function( __FUNCTION__, '2.0', 'FrmDb::get_row' );
-		return self::get_var( $table, $args, $fields, array( 'order_by' => $order_by, 'limit' => 1 ), '', 'row' );
-	}
-
-	public static function get_records( $table, $args = array(), $order_by = '', $limit = '', $fields = '*' ) {
-		_deprecated_function( __FUNCTION__, '2.0', 'FrmDb::get_results' );
-		return self::get_results( $table, $args, $fields, compact('order_by', 'limit') );
-	}
 }
