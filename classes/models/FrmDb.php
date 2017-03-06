@@ -78,7 +78,7 @@ class FrmDb {
 
         /* Create/Upgrade Fields Table */
 		$sql[] = 'CREATE TABLE ' . $this->fields . ' (
-                id int(11) NOT NULL auto_increment,
+				id BIGINT(20) NOT NULL auto_increment,
 				field_key varchar(100) default NULL,
                 name text default NULL,
                 description longtext default NULL,
@@ -115,17 +115,17 @@ class FrmDb {
 
         /* Create/Upgrade Items Table */
 		$sql[] = 'CREATE TABLE ' . $this->entries . ' (
-                id int(11) NOT NULL auto_increment,
+				id BIGINT(20) NOT NULL auto_increment,
 				item_key varchar(100) default NULL,
                 name varchar(255) default NULL,
                 description text default NULL,
                 ip text default NULL,
-                form_id int(11) default NULL,
-                post_id int(11) default NULL,
-                user_id int(11) default NULL,
-                parent_item_id int(11) default 0,
-                is_draft tinyint(1) default 0,
-                updated_by int(11) default NULL,
+				form_id BIGINT(20) default NULL,
+				post_id BIGINT(20) default NULL,
+				user_id BIGINT(20) default NULL,
+				parent_item_id BIGINT(20) default 0,
+				is_draft tinyint(1) default 0,
+				updated_by BIGINT(20) default NULL,
                 created_at datetime NOT NULL,
                 updated_at datetime NOT NULL,
                 PRIMARY KEY  (id),
@@ -138,10 +138,10 @@ class FrmDb {
 
         /* Create/Upgrade Meta Table */
 		$sql[] = 'CREATE TABLE ' . $this->entry_metas . ' (
-                id int(11) NOT NULL auto_increment,
-                meta_value longtext default NULL,
-                field_id int(11) NOT NULL,
-                item_id int(11) NOT NULL,
+				id BIGINT(20) NOT NULL auto_increment,
+				meta_value longtext default NULL,
+				field_id BIGINT(20) NOT NULL,
+				item_id BIGINT(20) NOT NULL,
                 created_at datetime NOT NULL,
                 PRIMARY KEY  (id),
                 KEY field_id (field_id),
