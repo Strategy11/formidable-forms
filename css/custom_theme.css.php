@@ -326,7 +326,7 @@ a.frm_save_draft{
 .with_frm_style .frm_radio input[type=radio],
 .with_frm_style .frm_checkbox input[type=checkbox]{
 	display:inline-block;
-    margin-right:5px;
+	margin-right:5px;
 	width:auto;
 	border:none;
 	vertical-align:baseline;
