@@ -215,7 +215,7 @@ class FrmAddon {
 			}
 
 			$is_valid = false;
-			if ( $response['status'] == 'valid' || $response['status'] == 'expired' ) {
+			if ( $response['status'] == 'valid' ) {
 				$is_valid = 'valid';
 				$response['success'] = true;
 			}
