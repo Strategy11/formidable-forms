@@ -92,7 +92,9 @@ class WP_Test_FrmNotification extends FrmUnitTest {
 		$this->assertNotContains( 'Bcc:', $mock_email['header'] );
 		$this->assertContains( 'From: ' . $expected['from'], $mock_email['header'] );
 		$this->assertContains( 'Reply-To: ' . $expected['reply_to'], $mock_email['header'] );
-		$this->assertSame( $expected['subject'], $mock_email['subject'] );
+		if ( isset( $mock_email['subject'] ) ) {
+			$this->assertSame( $expected[ 'subject' ], $mock_email[ 'subject' ] );
+		}
 		$this->assertSame( $expected['body'], $mock_email['body'] );
 		$this->assertContains( $expected['content_type'], $mock_email['header'] );
 	}
@@ -168,7 +170,9 @@ class WP_Test_FrmNotification extends FrmUnitTest {
 		$this->assertEquals( $expected['bcc'], $mock_email['bcc'], 'BCC not set correctly when conditional statement with quotes' );
 		$this->assertContains( 'From: ' . $expected['from'], $mock_email['header'] );
 		$this->assertContains( 'Reply-To: ' . $expected['reply_to'], $mock_email['header'] );
-		$this->assertSame( $expected['subject'], $mock_email['subject'] );
+		if ( isset( $mock_email['subject'] ) ) {
+			$this->assertSame( $expected[ 'subject' ], $mock_email[ 'subject' ] );
+		}
 		$this->assertSame( $expected['body'], $mock_email['body'], 'A plain text email body does not have the expected content.' );
 		$this->assertContains( $expected['content_type'], $mock_email['header'] );
 	}
@@ -254,7 +258,9 @@ class WP_Test_FrmNotification extends FrmUnitTest {
 		$this->assertEquals( $expected['bcc'], $mock_email['bcc'], 'BCC not set correctly' );
 		$this->assertContains( 'From: ' . $expected['from'], $mock_email['header'] );
 		$this->assertContains( 'Reply-To: ' . $expected['reply_to'], $mock_email['header'] );
-		$this->assertSame( $expected['subject'], $mock_email['subject'] );
+		if ( isset( $mock_email['subject'] ) ) {
+			$this->assertSame( $expected[ 'subject' ], $mock_email[ 'subject' ] );
+		}
 		$this->assertSame( $expected['body'], $mock_email['body'], 'Mail body does not have the expected content.' );
 		$this->assertContains( $expected['content_type'], $mock_email['header'] );
 	}
@@ -329,7 +335,9 @@ class WP_Test_FrmNotification extends FrmUnitTest {
 		$this->assertEquals( $expected['bcc'], $mock_email['bcc'], 'BCC not set correctly when conditional statement with quotes' );
 		$this->assertContains( 'From: ' . $expected['from'], $mock_email['header'] );
 		$this->assertContains( 'Reply-To: ' . $expected['reply_to'], $mock_email['header'] );
-		$this->assertSame( $expected['subject'], $mock_email['subject'] );
+		if ( isset( $mock_email['subject'] ) ) {
+			$this->assertSame( $expected[ 'subject' ], $mock_email[ 'subject' ] );
+		}
 		$this->assertSame( $expected['body'], $mock_email['body'], 'A plain text email body does not have the expected content.' );
 		$this->assertContains( $expected['content_type'], $mock_email['header'] );
 	}
@@ -404,7 +412,9 @@ class WP_Test_FrmNotification extends FrmUnitTest {
 		$this->assertEquals( $expected['bcc'], $mock_email['bcc'], 'BCC not set correctly when conditional statement with quotes' );
 		$this->assertContains( 'From: ' . $expected['from'], $mock_email['header'] );
 		$this->assertContains( 'Reply-To: ' . $expected['reply_to'], $mock_email['header'] );
-		$this->assertSame( $expected['subject'], $mock_email['subject'] );
+		if ( isset( $mock_email['subject'] ) ) {
+			$this->assertSame( $expected[ 'subject' ], $mock_email[ 'subject' ] );
+		}
 		$this->assertSame( $expected['body'], $mock_email['body'], 'A plain text email body does not have the expected content.' );
 		$this->assertContains( $expected['content_type'], $mock_email['header'] );
 	}
