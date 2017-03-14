@@ -2,8 +2,8 @@
 Contributors: sswells, srwells, jamie.wahlin
 Tags: form, contact form, form builder, custom form, forms, form maker, form creator
 Requires at least: 3.8
-Tested up to: 4.7.1
-Stable tag: 2.03.03
+Tested up to: 4.7.3
+Stable tag: 2.03.04
 
 The best WordPress form plugin. Simple drag & drop form building, visual form styling, and unlimited email notifications. 
 
@@ -97,20 +97,40 @@ A. The field and form names and descriptions are all changed with in-place edit.
 [See more FAQs](https://formidableforms.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 2.03.04 =
+* Fix: Check if an option is "other" a little more reliably. Instead of checking for 'other' anywhere in the option key, check for other_ at the beginning.
+* Fix: Correctly use default version number for jquery ui URL if query string is not included
+* Fix: Increase room for ids in the database. Increase from 11 to 20 to match the WordPress DB fields
+* Fix: Resolve a conflict with themes adding display:block; as the default for all input elements that is causing checkboxes and radio buttons to look bad
+* Code: Email code refactoring
+* **Pro Version** *
+* Fix: text calculations using a single dropdown time field
+* Fix: issue with duplicate headings after a repeating section in the default email message and the frm-show-entry shortcode
+* Fix: Prevent blank lines when headings are excluded in the default email message and the frm-show-entry shortcode
+* Fix: Remove the non-functional search box from the Formidable -> Entries page for all forms
+* Fix: invalid HTML when displaying paragraph field text in a Dynamic List field
+* Fix: Prevent a php error message when showing an empty table from the formresults shortcode
+* Fix: & was converting to &amp; in Lookup fields pulling from Single Line Text
+* Fix: Remove fields within section from section's logic options to help prevent logic loops
+* Fix: Time field conditional statements weren't showing content when they should
+* Fix: Time Field validation was having trouble when the start or end settings didn't include the leading zero (7:30 instead of 07:30)
+* Fix: Unique time fields were causing errors on submit
+
 = 2.03.03 =
 * Fix: Update the minified JS to match the non-minified version. This fixes issues with calculations.
 * Fix: Allow the first form action label to be clickable
 
 = 2.03.02 =
-* New: Add an option on the Global settings page to fade in forms with conditional logic. This fixes issues on sites with javascript errors causing the form to never show.
-* Tweak: don't show the section headings in email by default
-* Tweak: Force Ajax submit when editing entry inline
-* Enhancement: Add time range validation when submitting the form based on settings for each time field
-* Fix: prevent duplicate submissions
 * Fix: javascript error in Safari in form builder
 * Fix: Prevent null values from leaving a white space on the entries listing page
 * Fix: Form shortcode parameters were also affecting the forms in a widget
 * Fix: Prevent action trigger options from getting cut off at the bottom of the page
+* **Pro Version** *
+* New: Add an option on the Global settings page to fade in forms with conditional logic. This fixes issues on sites with javascript errors causing the form to never show.
+* Tweak: don't show the section headings in email by default
+* Tweak: Force Ajax submit when editing entry inline
+* Enhancement: Add time range validation when submitting the form based on settings for each time field
+* Fix: prevent duplicate submissions with ajax submit
 * Fix: Entries on listing page were showing a php warning for entries submitted by logged out users
 * Fix: Prevent form submission while Lookups are loading options
 * Fix: Prevent two common calculation errors
