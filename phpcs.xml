@@ -48,6 +48,8 @@
 		<exclude name="Generic.Files.LowercasedFilename.NotFound" />
 		<exclude name="WordPress.WP.PreparedSQL.NotPrepared" /><!-- This isn't allowing variables -->
 		<exclude name="WordPress.NamingConventions.ValidVariableName.NotSnakeCase" /><!-- Some WP globals break the rule -->
+		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase" />
+		<exclude name="WordPress.Files.FileName.InvalidClassFileName" />
 
 		<!-- Demanding Yoda conditions is stupid. -->
 		<exclude name="WordPress.PHP.YodaConditions"/>
