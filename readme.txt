@@ -98,6 +98,7 @@ A. The field and form names and descriptions are all changed with in-place edit.
 
 == Changelog ==
 = 2.03.04 =
+* Fix: Allow quotes within shortcodes in email settings
 * Fix: Check if an option is "other" a little more reliably. Instead of checking for 'other' anywhere in the option key, check for other_ at the beginning.
 * Fix: Correctly use default version number for jquery ui URL if query string is not included
 * Fix: Increase room for ids in the database. Increase from 11 to 20 to match the WordPress DB fields
@@ -110,7 +111,7 @@ A. The field and form names and descriptions are all changed with in-place edit.
 * Fix: Remove the non-functional search box from the Formidable -> Entries page for all forms
 * Fix: invalid HTML when displaying paragraph field text in a Dynamic List field
 * Fix: Prevent a php error message when showing an empty table from the formresults shortcode
-* Fix: & was converting to &amp; in Lookup fields pulling from Single Line Text
+* Fix: & was converting to &amp; in fields watching Lookups
 * Fix: Remove fields within section from section's logic options to help prevent logic loops
 * Fix: Time field conditional statements weren't showing content when they should
 * Fix: Time Field validation was having trouble when the start or end settings didn't include the leading zero (7:30 instead of 07:30)
