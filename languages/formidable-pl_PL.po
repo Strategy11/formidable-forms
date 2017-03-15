@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Formidable v2.03.02\n"
+"Project-Id-Version: Formidable v2.03.04\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-01 03:07+0000\n"
-"PO-Revision-Date: Wed Feb 15 2017 11:29:13 GMT-0800 (PST)\n"
+"PO-Revision-Date: Wed Mar 15 2017 15:47:42 GMT-0700 (PDT)\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: Polish\n"
@@ -1048,8 +1048,8 @@ msgstr ""
 msgid "You do not have permission to install plugin updates"
 msgstr ""
 
-#: ../classes/models/FrmEntryFormat.php:310 ../classes/models/FrmEntryFormat.php:
-#: 311
+#: ../classes/models/FrmEntryFormat.php:299 ../classes/models/FrmEntryFormat.php:
+#: 300
 msgid "Unknown"
 msgstr ""
 
@@ -1104,7 +1104,7 @@ msgstr ""
 msgid "There are no options for this action."
 msgstr ""
 
-#: ../classes/models/FrmFormAction.php:686 ../classes/views/frm-
+#: ../classes/models/FrmFormAction.php:688 ../classes/views/frm-
 #: forms/_publish_box.php:9 ../pro/classes/controllers/FrmProFormsController.php:
 #: 233
 msgid "Save Draft"
@@ -2320,16 +2320,16 @@ msgid ""
 "make sure you are using the correct form and field IDs."
 msgstr ""
 
-#: ../pro/classes/controllers/FrmProEntriesController.php:2614
+#: ../pro/classes/controllers/FrmProEntriesController.php:2618
 msgid "You are missing options in your shortcode. field_id is required."
 msgstr ""
 
-#: ../pro/classes/controllers/FrmProEntriesController.php:3023
+#: ../pro/classes/controllers/FrmProEntriesController.php:3027
 #, php-format
 msgid "Resent to %s"
 msgstr ""
 
-#: ../pro/classes/controllers/FrmProEntriesController.php:3028
+#: ../pro/classes/controllers/FrmProEntriesController.php:3032
 msgid "Resent to No one! You do not have permission"
 msgstr ""
 
@@ -4096,8 +4096,8 @@ msgid "Form"
 msgstr "Formularz"
 
 #: ../classes/controllers/FrmEntriesController.php:82 ..
-#: pro/classes/helpers/FrmProEntriesListHelper.php:59 ..
-#: pro/classes/helpers/FrmProEntriesListHelper.php:70 ..
+#: pro/classes/helpers/FrmProEntriesListHelper.php:61 ..
+#: pro/classes/helpers/FrmProEntriesListHelper.php:72 ..
 #: pro/classes/helpers/FrmProFieldsHelper.php:2556 ..
 #: pro/classes/views/displays/_calendar_options.php:4 ..
 #: pro/classes/views/displays/_calendar_options.php:16 ..
@@ -4200,8 +4200,8 @@ msgstr "Format daty"
 
 #: ../classes/controllers/FrmFormsController.php:715 ../classes/views/frm-
 #: entries/sidebar-shared.php:23 ../pro/classes/controllers/FrmProFormsController.
-#: php:573 ../pro/classes/helpers/FrmProEntriesListHelper.php:60 ..
-#: pro/classes/helpers/FrmProEntriesListHelper.php:71 ..
+#: php:573 ../pro/classes/helpers/FrmProEntriesListHelper.php:62 ..
+#: pro/classes/helpers/FrmProEntriesListHelper.php:73 ..
 #: pro/classes/helpers/FrmProFieldsHelper.php:2552 ..
 #: pro/classes/views/displays/order_row.php:3 ..
 #: pro/classes/views/displays/where_row.php:6 ..
@@ -4264,8 +4264,8 @@ msgstr "Styl"
 #: entries/sidebar-shared.php:12 ../classes/views/frm-forms/_publish_box.php:67 ..
 #: pro/classes/controllers/FrmProDisplaysController.php:38 ..
 #: pro/classes/controllers/FrmProEntriesController.php:1660 ..
-#: pro/classes/controllers/FrmProEntriesController.php:1866 ..
-#: pro/classes/controllers/FrmProEntriesController.php:2386 ..
+#: pro/classes/controllers/FrmProEntriesController.php:1870 ..
+#: pro/classes/controllers/FrmProEntriesController.php:2390 ..
 #: pro/classes/helpers/FrmProAppHelper.php:224 ..
 #: pro/classes/helpers/FrmProEntriesHelper.php:256 ..
 #: pro/classes/models/FrmProContent.php:241
@@ -4431,7 +4431,7 @@ msgstr "(Pusty)"
 
 #: ../classes/helpers/FrmAppHelper.php:1766 ../classes/views/frm-
 #: forms/_publish_box.php:75 ../pro/classes/controllers/FrmProEddController.php:
-#: 167 ../pro/classes/controllers/FrmProEntriesController.php:2386 ..
+#: 167 ../pro/classes/controllers/FrmProEntriesController.php:2390 ..
 #: pro/classes/views/frmpro-entries/sidebar-new.php:14 ..
 #: pro/classes/views/frmpro-entries/sidebar-new.php:14 ..
 #: pro/classes/views/frmpro-form-actions/_custom_field_row.php:31
@@ -4709,11 +4709,11 @@ msgstr "Jesteś pewny, że chcesz to usunąć?"
 
 #: ../classes/helpers/FrmEntriesListHelper.php:213 ..
 #: classes/helpers/FrmFormsHelper.php:604 ../classes/helpers/FrmFormsListHelper.
-#: php:104 ../classes/models/FrmFormAction.php:689 ../classes/views/frm-
+#: php:104 ../classes/models/FrmFormAction.php:691 ../classes/views/frm-
 #: entries/sidebar-show.php:22 ../classes/views/frm-entries/sidebar-show.php:23 ..
-#: pro/classes/controllers/FrmProEntriesController.php:1880 ..
-#: pro/classes/controllers/FrmProEntriesController.php:2125 ..
-#: pro/classes/controllers/FrmProEntriesController.php:2535 ..
+#: pro/classes/controllers/FrmProEntriesController.php:1884 ..
+#: pro/classes/controllers/FrmProEntriesController.php:2129 ..
+#: pro/classes/controllers/FrmProEntriesController.php:2539 ..
 #: pro/classes/helpers/FrmProEntriesListHelper.php:6 ../pro/classes/views/frmpro-
 #: entries/sidebar-edit.php:27 ../pro/classes/views/frmpro-entries/sidebar-edit.
 #: php:27
@@ -5835,21 +5835,30 @@ msgstr "Tworzenie wpisów"
 msgid "Error"
 msgstr "Błąd"
 
-#: ../classes/models/FrmEntryFormat.php:277 ../classes/models/FrmNotification.php:
-#: 91 ../classes/views/frm-entries/sidebar-shared.php:56 ..
+#: ../classes/models/FrmEmail.php:261
+#, php-format
+msgid "%1$s Form submitted on %2$s"
+msgstr "%1$s Formularz wysłano dnia %2$s"
+
+#: ../classes/models/FrmEmail.php:298 ../classes/views/frm-entries/sidebar-shared.
+#: php:53
+msgid "User Information"
+msgstr "Informacje o użytkowniku"
+
+#: ../classes/models/FrmEmail.php:299 ../classes/models/FrmEntryFormat.php:266 ..
+#: classes/views/frm-entries/sidebar-shared.php:56 ..
 #: pro/classes/controllers/FrmProFormsController.php:86 ..
 #: pro/classes/views/frmpro-forms/add_form_options.php:30 ..
 #: pro/classes/views/xml/map_csv_fields.php:54
 msgid "IP Address"
 msgstr "Adres IP"
 
-#: ../classes/models/FrmEntryFormat.php:279 ../classes/models/FrmNotification.php:
-#: 92
+#: ../classes/models/FrmEmail.php:300 ../classes/models/FrmEntryFormat.php:268
 msgid "User-Agent (Browser/OS)"
 msgstr "Przeglądarka i system"
 
-#: ../classes/models/FrmEntryFormat.php:282 ../classes/models/FrmNotification.php:
-#: 93 ../classes/views/frm-entries/sidebar-shared.php:69
+#: ../classes/models/FrmEmail.php:301 ../classes/models/FrmEntryFormat.php:271 ..
+#: classes/views/frm-entries/sidebar-shared.php:69
 msgid "Referrer"
 msgstr "Witryna odsyłająca"
 
@@ -5961,36 +5970,26 @@ msgstr "Karta kredytowa"
 msgid "Address"
 msgstr "Adres"
 
-#: ../classes/models/FrmFormAction.php:687 ../classes/views/frm-
+#: ../classes/models/FrmFormAction.php:689 ../classes/views/frm-
 #: forms/add_field_links.php:6 ../classes/views/frm-forms/new.php:27 ..
 #: pro/classes/controllers/FrmProFormActionsController.php:35
 msgid "Create"
 msgstr "Utwórz"
 
-#: ../classes/models/FrmFormAction.php:688 ../classes/views/frm-
+#: ../classes/models/FrmFormAction.php:690 ../classes/views/frm-
 #: forms/_publish_box.php:99 ../classes/views/frm-forms/_publish_box.php:101 ..
 #: classes/views/frm-forms/add_field_links.php:6 ../classes/views/frm-forms/edit.
 #: php:26 ../classes/views/frm-forms/edit.php:38 ../classes/views/frm-
 #: forms/settings.php:273 ../pro/classes/controllers/FrmProEntriesController.php:
-#: 2482 ../pro/classes/controllers/FrmProEntriesController.php:3040 ..
+#: 2486 ../pro/classes/controllers/FrmProEntriesController.php:3044 ..
 #: pro/classes/models/FrmProSettings.php:19
 msgid "Update"
 msgstr "Aktualizuj"
 
-#: ../classes/models/FrmFormAction.php:690 ../classes/views/xml/import_form.php:
+#: ../classes/models/FrmFormAction.php:692 ../classes/views/xml/import_form.php:
 #: 10 ../pro/classes/views/xml/map_csv_fields.php:64
 msgid "Import"
 msgstr "Import"
-
-#: ../classes/models/FrmNotification.php:17
-#, php-format
-msgid "%1$s Form submitted on %2$s"
-msgstr "%1$s Formularz wysłano dnia %2$s"
-
-#: ../classes/models/FrmNotification.php:90 ../classes/views/frm-entries/sidebar-
-#: shared.php:53
-msgid "User Information"
-msgstr "Informacje o użytkowniku"
 
 #: ../classes/models/FrmPointers.php:103
 msgid "Close"
@@ -6085,10 +6084,10 @@ msgid "Get Started"
 msgstr "Zacznij budowanie strony"
 
 #: ../classes/views/frm-entries/list.php:18 ../classes/views/frm-forms/list.php:
-#: 21 ../pro/classes/controllers/FrmProEntriesController.php:2018 ..
+#: 21 ../pro/classes/controllers/FrmProEntriesController.php:2022 ..
 #: pro/classes/controllers/FrmProFormsController.php:368 ..
 #: pro/classes/controllers/FrmProFormsController.php:427 ..
-#: pro/classes/helpers/FrmProEntriesListHelper.php:67
+#: pro/classes/helpers/FrmProEntriesListHelper.php:69
 msgid "Search"
 msgstr "Szukaj"
 
@@ -6116,9 +6115,9 @@ msgstr "Działania na wpisie"
 
 #: ../classes/views/frm-entries/sidebar-show.php:22 ..
 #: pro/classes/controllers/FrmProEntriesController.php:1687 ..
-#: pro/classes/controllers/FrmProEntriesController.php:2068 ..
-#: pro/classes/controllers/FrmProEntriesController.php:2142 ..
-#: pro/classes/controllers/FrmProEntriesController.php:2536
+#: pro/classes/controllers/FrmProEntriesController.php:2072 ..
+#: pro/classes/controllers/FrmProEntriesController.php:2146 ..
+#: pro/classes/controllers/FrmProEntriesController.php:2540
 msgid "Are you sure you want to delete that entry?"
 msgstr "Jesteś pewny, że chcesz usunąć ten wpis?"
 
@@ -6923,12 +6922,12 @@ msgstr "Utwórz wpis w formularzu"
 msgid "Copied from Post"
 msgstr "Skopiowane z wpisu"
 
-#: ../pro/classes/controllers/FrmProEntriesController.php:2574 ..
-#: pro/classes/controllers/FrmProEntriesController.php:2945
+#: ../pro/classes/controllers/FrmProEntriesController.php:2578 ..
+#: pro/classes/controllers/FrmProEntriesController.php:2949
 msgid "Your entry was successfully deleted"
 msgstr "Twój wpis został usunięty"
 
-#: ../pro/classes/controllers/FrmProEntriesController.php:2961
+#: ../pro/classes/controllers/FrmProEntriesController.php:2965
 msgid "There was an error deleting that entry"
 msgstr "W trakcie usuwania tego wpisu wystąpił błąd"
 
@@ -7078,8 +7077,8 @@ msgstr "Usuń WSZYSTKIE wpisy"
 msgid "Export to CSV"
 msgstr "Eksportuj do CSV"
 
-#: ../pro/classes/helpers/FrmProEntriesListHelper.php:58 ..
-#: pro/classes/helpers/FrmProEntriesListHelper.php:69
+#: ../pro/classes/helpers/FrmProEntriesListHelper.php:60 ..
+#: pro/classes/helpers/FrmProEntriesListHelper.php:71
 msgid "All Fields"
 msgstr "Wszystkie pola"
 
