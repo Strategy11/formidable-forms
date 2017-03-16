@@ -3666,6 +3666,7 @@ function frmFrontFormJS(){
 
 		var chart = new google.visualization[type]( chartDiv );
 		chart.draw(data, graphData.options);
+		jQuery(document).trigger( 'frmDrawChart', [ chart, 'chart_' + graphData.graph_id, data ] );
 	}
 
 	function getGraphType(field){
