@@ -1,8 +1,10 @@
 <?php
 /**
  * @group pro-views
- * @since 2.03.04
+ * @since 2.03.05
  */
+
+// TODO: move and rename file
 
 class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 
@@ -14,7 +16,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	 * Checks the HTML for the field value part of a field's conditional dropdown
 	 * Testing a Single Line Text field as the logic field type
 	 *
-	 * @since 2.03.04
+	 * @since 2.03.05
 	 *
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
@@ -63,7 +65,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	 *
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
-	public function test_field_logic_row_checkbox_field_values_with_selected_Value(){
+	public function test_field_logic_row_checkbox_field_values_with_selected_value(){
 		list( $logic_field, $field, $field_id, $row_key ) = $this->initialize_field_logic_variables( 'uc580i', '493ito' );
 
 		// Set selected value
@@ -91,7 +93,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	 * Checks the HTML for the field value part of a field's conditional dropdown
 	 * Testing a Dropdown field as the logic field type
 	 *
-	 * @since 2.03.04
+	 * @since 2.03.05
 	 *
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
@@ -126,7 +128,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 		$dropdown = $this->get_field_logic_dropdown( $logic_field, $field_id, $field, $row_key );
 
 		$opening_tag = '<select name="field_options[hide_opt_' . $field_id . '][]">';
-		$first_option = '<option value=""> </option>';
+		$first_option = '<option value=""></option>';
 		$current_user_option = '<option value="current_user" >Current User</option>';
 		$last_option = '<option value="1" >admin</option>';
 		$closing_tag = '</select>';
@@ -145,7 +147,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	 * Checks the HTML for the field value part of a field's conditional dropdown
 	 * Testing a level 1 Dynamic Dropdown field as the logic field type
 	 *
-	 * @since 2.03.04
+	 * @since 2.03.05
 	 *
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
@@ -172,7 +174,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	 * Checks the HTML for the field value part of a field's conditional dropdown
 	 * Testing a Lookup Dropdown field as the logic field type
 	 *
-	 * @since 2.03.04
+	 * @since 2.03.05
 	 *
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
@@ -191,7 +193,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	 * Checks the HTML for the field value part of a field's conditional dropdown
 	 * Testing a post status dropdown field as the logic field type
 	 *
-	 * @since 2.03.04
+	 * @since 2.03.05
 	 *
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
@@ -225,7 +227,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	 * Checks the HTML for the field value part of a field's conditional dropdown
 	 * Testing a post category field as the logic field type
 	 *
-	 * @since 2.03.04
+	 * @since 2.03.05
 	 *
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
@@ -251,7 +253,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	/**
 	 * Check the free text field in a field's new logic row
 	 *
-	 * @since 2.03.04
+	 * @since 2.03.05
 	 *
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
@@ -277,7 +279,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 		$dropdown = $this->get_field_logic_dropdown_ajax_field( $field_id, $logic_field, $logic_field_type );
 
 		$opening_tag = '<select name="field_options[hide_opt_' . $field_id . '][]">';
-		$first_option = '<option value=""> </option>';
+		$first_option = '<option value=""></option>';
 		$current_user_option = '<option value="current_user" >Current User</option>';
 		$last_option = '<option value="1" >admin</option>';
 		$closing_tag = '</select>';
@@ -320,7 +322,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	/**
 	 * Check the free text field in an action's new logic row
 	 *
-	 * @since 2.03.04
+	 * @since 2.03.05
 	 *
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
@@ -337,7 +339,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	/**
 	 * Check the field value box, for a text field, in an action's new logic row
 	 *
-	 * @since 2.03.04
+	 * @since 2.03.05
 	 *
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
@@ -354,7 +356,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	/**
 	 * Check the field value box, for a text field, in an action's logic row
 	 *
-	 * @since 2.03.04
+	 * @since 2.03.05
 	 *
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
@@ -371,7 +373,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	/**
 	 * Check the field value box, for a Checkbox field, in an action's logic row
 	 *
-	 * @since 2.03.04
+	 * @since 2.03.05
 	 *
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
@@ -396,7 +398,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	/**
 	 * Check the field value box, for a Dropdown field, in an action's logic row
 	 *
-	 * @since 2.03.04
+	 * @since 2.03.05
 	 *
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
@@ -423,7 +425,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	/**
 	 * Check the field value box, for a UserID field, in an action's logic row
 	 *
-	 * @since 2.03.04
+	 * @since 2.03.05
 	 *
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
@@ -433,7 +435,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 		$dropdown = $this->get_action_logic_dropdown( $field_name, $meta_name, $new_field, '' );
 
 		$opening_tag = '<select name="' . $field_name . '">';
-		$first_option = '<option value=""> </option>';
+		$first_option = '<option value=""></option>';
 		$current_user_option = '<option value="current_user" >Current User</option>';
 		$last_option = '<option value="1" >admin</option>';
 		$closing_tag = '</select>';
@@ -450,7 +452,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	/**
 	 * Check the field value box, for a Dynamic field, in an action's logic row
 	 *
-	 * @since 2.03.04
+	 * @since 2.03.05
 	 *
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
@@ -475,7 +477,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	/**
 	 * Check the field value box, for a Lookup field, in an action's logic row
 	 *
-	 * @since 2.03.04
+	 * @since 2.03.05
 	 *
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
@@ -492,7 +494,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	/**
 	 * Check the field value box, for a Post Status field, in an action's logic row
 	 *
-	 * @since 2.03.04
+	 * @since 2.03.05
 	 *
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
@@ -525,7 +527,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	/**
 	 * Check the field value box, for a Post Category field, in an action's logic row
 	 *
-	 * @since 2.03.04
+	 * @since 2.03.05
 	 *
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
@@ -550,7 +552,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	/**
 	 * Check the field value dropdown, for a Hidden Field, in a Mailchimp action's Group settings
 	 *
-	 * @since 2.03.04
+	 * @since 2.03.05
 	 *
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
@@ -567,7 +569,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	/**
 	 * Check the field value dropdown, for a Dropdown Field, in a Mailchimp action's Group settings
 	 *
-	 * @since 2.03.04
+	 * @since 2.03.05
 	 *
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
@@ -593,7 +595,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	 * Check the field value dropdown, for a Dropdown Field with a selected value, in a Mailchimp action's Group settings
 	 *
 	 *
-	 * @since 2.03.04
+	 * @since 2.03.05
 	 *
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
@@ -620,7 +622,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	/**
 	 * Check the field value dropdown, for a Checkbox Field, in a Mailchimp action's Group settings
 	 *
-	 * @since 2.03.04
+	 * @since 2.03.05
 	 *
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
@@ -645,7 +647,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	/**
 	 * Check the field value dropdown, for a Dynamic Field, in a Mailchimp action's Group settings
 	 *
-	 * @since 2.03.04
+	 * @since 2.03.05
 	 *
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
@@ -670,7 +672,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	/**
 	 * Initialize the variables used for a field's conditional logic field value dropdown
 	 *
-	 * @since 2.03.04
+	 * @since 2.03.05
 	 *
 	 * @param $logic_field_key
 	 * @param $edit_field_key
@@ -697,7 +699,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	 * Initialize the variables used for the field values dropdown when field is selected
 	 * in another field's conditional logic and field values are loaded with Ajax
 	 *
-	 * @since 2.03.04
+	 * @since 2.03.05
 	 *
 	 * @param string $logic_field_key
 	 * @param string $edit_field_key
@@ -836,7 +838,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	/**
 	 * Get the logic text field when there is no logic field selected yet
 	 *
-	 * @since 2.03.04
+	 * @since 2.03.05
 	 *
 	 * @param $val
 	 * @param $meta_name
