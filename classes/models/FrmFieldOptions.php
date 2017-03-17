@@ -81,7 +81,7 @@ class FrmFieldOptions {
 	 * @param string $first_option
 	 * @param string $selected_value
 	 */
-	protected function display_field_value_dropdown_selector( $html_name, $first_option, $selected_value ) {
+	protected function display_field_value_dropdown_selector( $html_name, $selected_value, $first_option ) {
 		echo '<select name="' . esc_attr( $html_name ) . '">';
 		echo '<option value="">' . esc_attr( $first_option ) . '</option>';
 
