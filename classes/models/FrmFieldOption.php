@@ -9,7 +9,7 @@ class FrmFieldOption {
 	 * @var FrmFieldSettings
 	 * @since 2.03.05
 	 */
-	private $field_settings = null;
+	protected $field_settings = null;
 	protected $saved_value = '';
 	protected $option_label = '';
 
