@@ -65,7 +65,13 @@ function frmFrontFormJS(){
 		var dateFields = __frmDatepicker;
 		var id = this.id;
 		var idParts = id.split('-');
-		var altID = 'input[id^="'+ idParts.join('-') +'"]';
+		var altID = '';
+
+		if ( isRepeatingFieldByName( this.name ) ) {
+			altID = 'input[id^="'+ idParts[0] +'"]';
+		} else {
+			altID = 'input[id^="'+ idParts.join('-') +'"]';
+		}
 
 		jQuery.datepicker.setDefaults(jQuery.datepicker.regional['']);
 
@@ -73,6 +79,7 @@ function frmFrontFormJS(){
 		for ( var i = 0; i < dateFields.length; i++ ) {
 			if ( dateFields[i].triggerID == '#' + id || dateFields[i].triggerID == altID ) {
 				opt_key = i;
+				break;
 			}
 		}
 
