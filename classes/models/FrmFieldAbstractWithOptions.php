@@ -34,10 +34,10 @@ abstract class FrmFieldAbstractWithOptions extends FrmFieldAbstract {
 	 *
 	 * @param string $html_name
 	 * @param string $selected_value
-	 * @param string $first_option
+	 * @param string $source
 	 */
-	public function display_field_value_selector( $html_name, $selected_value, $first_option = '' ) {
-		$this->options->display_field_value_selector( $html_name, $selected_value, $first_option );
+	public function display_field_value_selector( $html_name, $selected_value, $source ) {
+		$this->options->display_field_value_selector( $html_name, $selected_value, '' );
 	}
 
 }

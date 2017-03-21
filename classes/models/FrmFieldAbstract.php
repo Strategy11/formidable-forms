@@ -193,9 +193,9 @@ abstract class FrmFieldAbstract {
 	 *
 	 * @param string $html_name
 	 * @param string $selected_value
-	 * @param string $first_option
+	 * @param string $source
 	 */
-	public function display_field_value_selector( $html_name, $selected_value, $first_option = '' ) {
+	public function display_field_value_selector( $html_name, $selected_value, $source ) {
 		FrmFieldsHelper::print_field_value_text_box( $html_name, $selected_value );
 	}
 }

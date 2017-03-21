@@ -36,6 +36,28 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 
 	/**
 	 * Checks the HTML for the field value part of a field's conditional dropdown
+	 * Testing a Paragraph field as the logic field type
+	 *
+	 * @since 2.03.05
+	 *
+	 * @covers formidable/pro/views/frmpro-fields/field-values.php
+	 */
+	public function test_field_logic_row_paragraph_field_values(){
+		list( $logic_field, $field, $field_id, $row_key ) = $this->initialize_field_logic_variables( 'p3eiuk', 'uc580i' );
+
+		// Set selected value
+		$field['hide_opt'][ $row_key ] = $selected_value = 'Show me';
+
+		$dropdown = $this->get_field_logic_dropdown( $logic_field, $field_id, $field, $row_key );
+
+		$expected = '<input type="text" name="field_options[hide_opt_' . $field_id . '][]" value="' . $selected_value . '" />';
+
+		$this->assertSame( trim( $expected ), trim( $dropdown ) );
+
+	}
+
+	/**
+	 * Checks the HTML for the field value part of a field's conditional dropdown
 	 * Testing a Checkbox field as the logic field type
 	 *
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
@@ -56,6 +78,75 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 		$this->assertContains( $first_option, $dropdown );
 		$this->assertContains( $last_option, $dropdown );
 		$this->assertSame( $option_number, substr_count( $dropdown, '<option' ) );
+
+	}
+
+	/**
+	 * Checks the HTML for the field value part of a field's conditional dropdown
+	 * Testing a Radio Button field as the logic field type
+	 *
+	 * @covers formidable/pro/views/frmpro-fields/field-values.php
+	 */
+	public function test_field_logic_row_radio_button_field_values(){
+		list( $logic_field, $field, $field_id, $row_key ) = $this->initialize_field_logic_variables( '4t3qo4', '493ito' );
+
+		$dropdown = $this->get_field_logic_dropdown( $logic_field, $field_id, $field, $row_key );
+
+		$opening_tag = '<select name="field_options[hide_opt_' . $field_id . '][]">';
+		$first_option = '<option value=""></option>';
+		$last_option = '<option value="Pie">Pie</option>';
+		$closing_tag = '</select>';
+		$option_number = 4;
+
+		$this->assertContains( $opening_tag, $dropdown );
+		$this->assertContains( $closing_tag, $dropdown );
+		$this->assertContains( $first_option, $dropdown );
+		$this->assertContains( $last_option, $dropdown );
+		$this->assertSame( $option_number, substr_count( $dropdown, '<option' ) );
+
+	}
+
+	/**
+	 * Checks the HTML for the field value part of a field's conditional dropdown
+	 * Testing an Email field as the logic field type
+	 *
+	 * @since 2.03.05
+	 *
+	 * @covers formidable/pro/views/frmpro-fields/field-values.php
+	 */
+	public function test_field_logic_row_email_field_values(){
+		list( $logic_field, $field, $field_id, $row_key ) = $this->initialize_field_logic_variables( 'endbcl', 'uc580i' );
+
+		// Set selected value
+		$field['hide_opt'][ $row_key ] = $selected_value = 'test@mail.com';
+
+		$dropdown = $this->get_field_logic_dropdown( $logic_field, $field_id, $field, $row_key );
+
+		$expected = '<input type="text" name="field_options[hide_opt_' . $field_id . '][]" value="' . $selected_value . '" />';
+
+		$this->assertSame( trim( $expected ), trim( $dropdown ) );
+
+	}
+
+	/**
+	 * Checks the HTML for the field value part of a field's conditional dropdown
+	 * Testing an Email field as the logic field type
+	 *
+	 * @since 2.03.05
+	 *
+	 * @covers formidable/pro/views/frmpro-fields/field-values.php
+	 */
+	public function test_field_logic_row_url_field_values(){
+		list( $logic_field, $field, $field_id, $row_key ) = $this->initialize_field_logic_variables( 'itvv5a', 'uc580i' );
+
+		// Set selected value
+		$field['hide_opt'][ $row_key ] = $selected_value = 'test.com';
+
+		$dropdown = $this->get_field_logic_dropdown( $logic_field, $field_id, $field, $row_key );
+
+		$expected = '<input type="text" name="field_options[hide_opt_' . $field_id . '][]" value="' . $selected_value . '" />';
+
+		$this->assertSame( trim( $expected ), trim( $dropdown ) );
 
 	}
 
@@ -157,7 +248,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 		$dropdown = $this->get_field_logic_dropdown( $logic_field, $field_id, $field, $row_key );
 
 		$opening_tag = '<select name="field_options[hide_opt_' . $field_id . '][]">';
-		$first_option = '<option value="">Anything</option>';
+		$first_option = '<option value=""></option>';
 		$last_option = '>Brazil</option>';
 		$closing_tag = '</select>';
 		$option_number = 3;
@@ -248,6 +339,37 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 		$this->assertContains( $middle_option, $dropdown );
 		//$this->assertSame( $option_number, substr_count( $dropdown, '<option' ) );
 
+	}
+
+	/**
+	 * Checks the HTML for the field value part of a field's conditional dropdown
+	 * Testing a post category field as the logic field type
+	 *
+	 * @since 2.03.05
+	 *
+	 * @covers formidable/pro/views/frmpro-fields/field-values.php
+	 */
+	public function test_field_logic_row_post_category_field_values_with_selected_value(){
+		list( $logic_field, $field, $field_id, $row_key ) = $this->initialize_field_logic_variables( 'parent-dynamic-taxonomy', '493ito' );
+
+		// Set selected value
+		$field['hide_opt'][ $row_key ] = $selected_value = '1';
+
+		$dropdown = $this->get_field_logic_dropdown( $logic_field, $field_id, $field, $row_key );
+
+		$opening_tag = '<select  name=\'field_options[hide_opt_' . $field_id . '][]\'  >';
+		$first_option = '<option value=""> </option>';
+		$middle_option = 'Live Music</option>';
+		$selected_option = '<option class="level-0" value="1" selected="selected">Uncategorized</option>';
+		$closing_tag = '</select>';
+		//$option_number = 3; TODO: figure out why the options include child categories
+
+		$this->assertContains( $opening_tag, $dropdown );
+		$this->assertContains( $closing_tag, $dropdown );
+		$this->assertContains( $first_option, $dropdown );
+		$this->assertContains( $middle_option, $dropdown );
+		$this->assertContains( $selected_option, $dropdown );
+		//$this->assertSame( $option_number, substr_count( $dropdown, '<option' ) );
 	}
 
 	/**
