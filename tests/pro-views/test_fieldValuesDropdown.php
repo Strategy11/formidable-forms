@@ -207,7 +207,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 		$opening_tag = '<select name="field_options[hide_opt_' . $field_id . '][]">';
 		$first_option = '<option value=""></option>';
 		$draft_option = '<option value="draft">Draft</option>';
-		$pending_option = '<option value="pending">Pending Review</option>';
+		$pending_option = '<option value="pending">Pending</option>';
 		$private_option = '<option value="private">Private</option>';
 		$publish_option = '<option value="publish">Published</option>';
 		$closing_tag = '</select>';
