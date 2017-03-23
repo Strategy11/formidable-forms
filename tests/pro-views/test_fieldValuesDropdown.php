@@ -14,36 +14,26 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 
 	/**
 	 * Checks the HTML for the field value part of a field's conditional dropdown
-	 * Testing a Single Line Text field as the logic field type
+	 * Test fields with text boxes
 	 *
 	 * @since 2.03.05
 	 *
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
-	public function test_field_logic_row_text_field_values(){
-		list( $logic_field, $field, $field_id, $row_key ) = $this->initialize_field_logic_variables( '493ito', 'uc580i' );
-
-		// Set selected value
-		$field['hide_opt'][ $row_key ] = $selected_value = 'Show me';
-
-		$dropdown = $this->get_field_logic_dropdown( $logic_field, $field_id, $field, $row_key );
-
-		$expected = '<input type="text" name="field_options[hide_opt_' . $field_id . '][]" value="' . $selected_value . '" />';
-
-		$this->assertSame( trim( $expected ), trim( $dropdown ) );
-
+	public function test_field_logic_for_fields_with_text_box() {
+		foreach ( self::fields_with_text_box() as $field_key ) {
+			self::test_single_field_with_text_box( $field_key );
+		}
 	}
 
 	/**
 	 * Checks the HTML for the field value part of a field's conditional dropdown
-	 * Testing a Paragraph field as the logic field type
-	 *
-	 * @since 2.03.05
+	 * Test single field text boxes
 	 *
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
-	public function test_field_logic_row_paragraph_field_values(){
-		list( $logic_field, $field, $field_id, $row_key ) = $this->initialize_field_logic_variables( 'p3eiuk', 'uc580i' );
+	private function test_single_field_with_text_box( $field_key ) {
+		list( $logic_field, $field, $field_id, $row_key ) = $this->initialize_field_logic_variables( $field_key, 'uc580i' );
 
 		// Set selected value
 		$field['hide_opt'][ $row_key ] = $selected_value = 'Show me';
@@ -53,7 +43,6 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 		$expected = '<input type="text" name="field_options[hide_opt_' . $field_id . '][]" value="' . $selected_value . '" />';
 
 		$this->assertSame( trim( $expected ), trim( $dropdown ) );
-
 	}
 
 	/**
@@ -103,50 +92,6 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 		$this->assertContains( $first_option, $dropdown );
 		$this->assertContains( $last_option, $dropdown );
 		$this->assertSame( $option_number, substr_count( $dropdown, '<option' ) );
-
-	}
-
-	/**
-	 * Checks the HTML for the field value part of a field's conditional dropdown
-	 * Testing an Email field as the logic field type
-	 *
-	 * @since 2.03.05
-	 *
-	 * @covers formidable/pro/views/frmpro-fields/field-values.php
-	 */
-	public function test_field_logic_row_email_field_values(){
-		list( $logic_field, $field, $field_id, $row_key ) = $this->initialize_field_logic_variables( 'endbcl', 'uc580i' );
-
-		// Set selected value
-		$field['hide_opt'][ $row_key ] = $selected_value = 'test@mail.com';
-
-		$dropdown = $this->get_field_logic_dropdown( $logic_field, $field_id, $field, $row_key );
-
-		$expected = '<input type="text" name="field_options[hide_opt_' . $field_id . '][]" value="' . $selected_value . '" />';
-
-		$this->assertSame( trim( $expected ), trim( $dropdown ) );
-
-	}
-
-	/**
-	 * Checks the HTML for the field value part of a field's conditional dropdown
-	 * Testing an Email field as the logic field type
-	 *
-	 * @since 2.03.05
-	 *
-	 * @covers formidable/pro/views/frmpro-fields/field-values.php
-	 */
-	public function test_field_logic_row_url_field_values(){
-		list( $logic_field, $field, $field_id, $row_key ) = $this->initialize_field_logic_variables( 'itvv5a', 'uc580i' );
-
-		// Set selected value
-		$field['hide_opt'][ $row_key ] = $selected_value = 'test.com';
-
-		$dropdown = $this->get_field_logic_dropdown( $logic_field, $field_id, $field, $row_key );
-
-		$expected = '<input type="text" name="field_options[hide_opt_' . $field_id . '][]" value="' . $selected_value . '" />';
-
-		$this->assertSame( trim( $expected ), trim( $dropdown ) );
 
 	}
 
@@ -209,6 +154,32 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 
 	/**
 	 * Checks the HTML for the field value part of a field's conditional dropdown
+	 * Testing a Scale field as the logic field type
+	 *
+	 * @covers formidable/pro/views/frmpro-fields/field-values.php
+	 */
+	public function test_field_logic_row_scale_field_values(){
+		list( $logic_field, $field, $field_id, $row_key ) = $this->initialize_field_logic_variables( 'qbrd2o', '493ito' );
+
+		$dropdown = $this->get_field_logic_dropdown( $logic_field, $field_id, $field, $row_key );
+
+		$opening_tag = '<select name="field_options[hide_opt_' . $field_id . '][]">';
+		$first_option = '<option value=""></option>';
+		$last_option = '<option value="10">10</option>';
+		$closing_tag = '</select>';
+		$option_number = 11;
+
+		$this->assertContains( $opening_tag, $dropdown );
+		$this->assertContains( $closing_tag, $dropdown );
+		$this->assertContains( $first_option, $dropdown );
+		$this->assertContains( $last_option, $dropdown );
+		$this->assertSame( $option_number, substr_count( $dropdown, '<option' ) );
+
+	}
+
+
+	/**
+	 * Checks the HTML for the field value part of a field's conditional dropdown
 	 * Testing a UserID field as the logic field type
 	 *
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
@@ -258,25 +229,6 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 		$this->assertContains( $first_option, $dropdown );
 		$this->assertContains( $last_option, $dropdown );
 		$this->assertSame( $option_number, substr_count( $dropdown, '<option' ) );
-
-	}
-
-	/**
-	 * Checks the HTML for the field value part of a field's conditional dropdown
-	 * Testing a Lookup Dropdown field as the logic field type
-	 *
-	 * @since 2.03.05
-	 *
-	 * @covers formidable/pro/views/frmpro-fields/field-values.php
-	 */
-	public function test_field_logic_row_lookup_field_values(){
-		list( $logic_field, $field, $field_id, $row_key ) = $this->initialize_field_logic_variables( 'lookup-country', '493ito' );
-
-		$dropdown = $this->get_field_logic_dropdown( $logic_field, $field_id, $field, $row_key );
-
-		$expected = '<input type="text" name="field_options[hide_opt_' . $field_id . '][]" value="" />';
-
-		$this->assertSame( trim( $expected ), trim( $dropdown ) );
 
 	}
 
@@ -493,6 +445,38 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	}
 
 	/**
+	 * Check the field value box for all fields with text boxes in an action's logic row
+	 *
+	 * @since 2.03.05
+	 *
+	 * @covers formidable/pro/views/frmpro-fields/field-values.php
+	 */
+	public function test_action_logic_for_fields_with_text_box() {
+		foreach ( self::fields_with_text_box() as $field_key ) {
+			self::test_action_logic_row_text_box( $field_key );
+		}
+	}
+
+
+	/**
+	 * Check the field value box in an action's logic row
+	 *
+	 * @since 2.03.05
+	 *
+	 * @covers formidable/pro/views/frmpro-fields/field-values.php
+	 */
+	private function test_action_logic_row_text_box( $field_key ) {
+		list( $field_name, $meta_name, $new_field ) = $this->initialize_action_logic_variables( $field_key );
+
+		$dropdown = $this->get_action_logic_dropdown( $field_name, $meta_name, $new_field, 'Test' );
+
+		$expected = '<input type="text" name="' . $field_name . '" value="Test" />';
+
+		$this->assertSame( trim( $expected ), trim( $dropdown ) );
+	}
+
+
+	/**
 	 * Check the field value box, for a Checkbox field, in an action's logic row
 	 *
 	 * @since 2.03.05
@@ -630,7 +614,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 		$opening_tag = '<select name="' . $field_name . '">';
 		$first_option = '<option value=""></option>';
 		$draft_option = '<option value="draft">Draft</option>';
-		$pending_option = '<option value="pending">Pending Review</option>';
+		$pending_option = '<option value="pending">Pending</option>';
 		$private_option = '<option value="private">Private</option>';
 		$publish_option = '<option value="publish">Published</option>';
 		$closing_tag = '</select>';
@@ -1054,5 +1038,23 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 		unset( $_GET['frm_action'] );
 
 		return $dropdown;
+	}
+
+	private function fields_with_text_box() {
+		return array(
+			'text' => '493ito',
+			'textarea' => 'p3eiuk',
+			'email' => 'endbcl',
+			'url' => 'itvv5a',
+			'number' => 'msyehy',
+			'phone' => 'n0d580',
+			'date' => 'f67hbu',
+			'time' => 'bm57jf',
+			'image' => 'zwuclz',
+			'lookup' => 'lookup-country',
+			'hidden' => 'rkax03',
+			'password' => '9r61y8',
+			'tags' => 'ppr2eo',
+		);
 	}
 }
