@@ -6,13 +6,26 @@
 class FrmFieldOptions {
 
 	/**
-	 * @var FrmFieldAbstractWithOptions
+	 * @var int
 	 * @since 2.03.05
 	 */
-	protected $field = null;
+	protected $field_id = 0;
+
+	/**
+	 * @var int
+	 * @since 2.03.05
+	 */
+	protected $form_id = 0;
+
+	/**
+	 * @var string
+	 * @since 2.03.05
+	 */
+	private $serialized_options = '';
 
 	/**
 	 * @var FrmFieldSettings
+	 * @since 2.03.05
 	 */
 	protected $field_settings = null;
 
@@ -28,7 +41,9 @@ class FrmFieldOptions {
 	 * @param FrmFieldAbstract $field
 	 */
 	public function __construct( $field ) {
-		$this->field = $field;
+		$this->field_id = $field->get_id();
+		$this->form_id = $field->get_form_id();
+		$this->serialized_options = $field->get_db_row()->options;
 		$this->field_settings = $field->get_settings();
 		$this->set_options();
 	}
@@ -39,8 +54,7 @@ class FrmFieldOptions {
 	 * @since 2.03.05
 	 */
 	protected function set_options() {
-		$serialized_options = $this->field->get_db_row()->options;
-		$this->options      = maybe_unserialize( $serialized_options );
+		$this->options = maybe_unserialize( $this->serialized_options );
 	}
 
 	/**
