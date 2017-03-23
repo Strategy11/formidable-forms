@@ -42,6 +42,12 @@ abstract class FrmFieldAbstract {
 	protected $settings = null;
 
 	/**
+	 * @var FrmFieldOptions
+	 * @since 2.03.05
+	 */
+	protected $options = null;
+
+	/**
 	 * @var object
 	 * @since 2.03.05
 	 */
@@ -69,6 +75,7 @@ abstract class FrmFieldAbstract {
 		$this->set_type();
 		$this->set_form_id();
 		$this->set_settings();
+		$this->set_options();
 	}
 
 	/**
@@ -186,6 +193,15 @@ abstract class FrmFieldAbstract {
 	}
 
 	/**
+	 * Set the options property
+	 *
+	 * @since 2.03.05
+	 */
+	protected function set_options() {
+		$this->options = new FrmFieldOptions( $this );
+	}
+
+	/**
 	 * Display the field value selector
 	 * Used in field conditional logic, action conditional logic, MailChimp action, etc.
 	 *
@@ -196,6 +212,6 @@ abstract class FrmFieldAbstract {
 	 * @param string $source
 	 */
 	public function display_field_value_selector( $html_name, $selected_value, $source ) {
-		FrmFieldsHelper::print_field_value_text_box( $html_name, $selected_value );
+		$this->options->display_field_value_selector( $html_name, $selected_value, '' );
 	}
 }

@@ -3,7 +3,7 @@
 /**
  * @since 2.03.05
  */
-class FrmFieldCheckbox extends FrmFieldAbstractWithOptions {
+class FrmFieldCheckbox extends FrmFieldAbstract {
 
 	/**
 	 * @var string

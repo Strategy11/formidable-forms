@@ -3,7 +3,7 @@
 /**
  * @since 2.03.05
  */
-class FrmFieldDropdown extends FrmFieldAbstractWithOptions {
+class FrmFieldDropdown extends FrmFieldAbstract {
 
 	/**
 	 * @var string

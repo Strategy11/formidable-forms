@@ -3,7 +3,7 @@
 /**
  * @since 2.03.05
  */
-class FrmFieldRadio extends FrmFieldAbstractWithOptions {
+class FrmFieldRadio extends FrmFieldAbstract {
 
 	/**
 	 * @var string
