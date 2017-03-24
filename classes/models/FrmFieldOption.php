@@ -10,11 +10,21 @@ class FrmFieldOption {
 	 * @since 2.03.05
 	 */
 	protected $field_settings = null;
+
+	/**
+	 * @var string
+	 * @since 2.03.05
+	 */
 	protected $saved_value = '';
+
+	/**
+	 * @var string
+	 * @since 2.03.05
+	 */
 	protected $option_label = '';
 
 	/**
-	 * @var FrmFieldAbstract
+	 * @var FrmFieldSettings
 	 */
 	protected $field = null;
 
@@ -54,6 +64,5 @@ class FrmFieldOption {
 		echo '>';
 		echo FrmAppHelper::truncate( $this->option_label, $truncate ) . '</option>';
 	}
-
 
 }

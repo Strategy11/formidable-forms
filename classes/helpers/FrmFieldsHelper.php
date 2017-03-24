@@ -1305,19 +1305,6 @@ DEFAULT_HTML;
     }
 
 	/**
-	 * Print the field value text box
-	 * Used in field conditional logic, action conditional logic, MailChimp settings, etc.
-	 *
-	 * @since 2.03.05
-	 *
-	 * @param string $html_name
-	 * @param string $value
-	 */
-    public static function print_field_value_text_box( $html_name, $value ) {
-	    echo '<input type="text" name="' . esc_attr( $html_name ) . '" value="' . esc_attr( $value ) . '" />';
-    }
-
-	/**
 	 * Convert a field object to a flat array
 	 *
 	 * @since 2.03.05

@@ -5,6 +5,10 @@
  */
 class FrmFieldSettings {
 
+	/**
+	 * @var array
+	 * @since 2.03.05
+	 */
 	protected $field_options = array();
 
 	/**
