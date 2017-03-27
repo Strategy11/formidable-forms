@@ -6,10 +6,18 @@
 class FrmFieldOption {
 
 	/**
-	 * @var FrmFieldSettings
+	 * @var string|int
+	 *
 	 * @since 2.03.05
 	 */
-	protected $field_settings = null;
+	protected $option_key;
+
+	/**
+	 * @var string|array
+	 *
+	 * @since 2.03.05
+	 */
+	protected $option;
 
 	/**
 	 * @var string
@@ -23,30 +31,33 @@ class FrmFieldOption {
 	 */
 	protected $option_label = '';
 
-	/**
-	 * @var FrmFieldSettings
-	 */
-	protected $field = null;
-
-	public function __construct( $field_settings, $option_key, $option ) {
-		$this->field_settings = $field_settings;
-		$this->set_option_label( $option );
-		$this->saved_value = $this->option_label;
+	public function __construct( $option_key, $option, $args = array() ) {
+		$this->option_key = $option_key;
+		$this->option = $option;
+		$this->set_option_label();
+		$this->set_saved_value();
 	}
 
 	/**
 	 * Set the option label
 	 *
 	 * @since 2.03.05
-	 *
-	 * @param array|string $option
 	 */
-	private function set_option_label( $option ) {
-		if ( is_array( $option ) ) {
-			$this->option_label = ( isset( $option['label'] ) ? $option['label'] : reset( $option ) );
+	private function set_option_label() {
+		if ( is_array( $this->option ) ) {
+			$this->option_label = ( isset( $this->option['label'] ) ? $this->option['label'] : reset( $this->option ) );
 		} else {
-			$this->option_label = $option;
+			$this->option_label = $this->option;
 		}
+	}
+
+	/**
+	 * Set the saved value
+	 *
+	 * @since 2.03.05
+	 */
+	protected function set_saved_value() {
+		$this->saved_value = $this->option_label;
 	}
 
 	/**

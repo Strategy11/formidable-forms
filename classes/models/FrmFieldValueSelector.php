@@ -16,7 +16,14 @@ class FrmFieldValueSelector {
 	protected $field_id = 0;
 
 	/**
-	 * @var FrmFieldSettings
+	 * @var string
+	 *
+	 * @since 2.03.05
+	 */
+	protected $field_key = '';
+
+	/**
+	 * @var null
 	 *
 	 * @since 2.03.05
 	 */
@@ -81,6 +88,7 @@ class FrmFieldValueSelector {
 		}
 
 		$this->set_db_row();
+		$this->set_field_key();
 		$this->set_field_settings();
 		$this->set_options();
 	}
@@ -99,12 +107,21 @@ class FrmFieldValueSelector {
 	}
 
 	/**
+	 * Set the field_key property
+	 *
+	 * @since 2.03.05
+	 */
+	private function set_field_key() {
+		$this->field_key = $this->db_row->field_key;
+	}
+
+	/**
 	 * Set the field_settings property
 	 *
 	 * @since 2.03.05
 	 */
 	protected function set_field_settings() {
-		$this->field_settings = new FrmFieldSettings( maybe_unserialize( $this->db_row->field_options ) );
+		// Leave as null for free version
 	}
 
 	/**
@@ -233,6 +250,6 @@ class FrmFieldValueSelector {
 	 * @return FrmFieldOption
 	 */
 	protected function get_single_field_option( $key, $value ) {
-		return new FrmFieldOption( $this->field_settings, $key, $value );
+		return new FrmFieldOption( $key, $value );
 	}
 }
