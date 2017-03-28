@@ -77,7 +77,7 @@ class FrmSettings {
      */
 	public function default_options() {
         return array(
-            'menu'      => apply_filters( 'frm_default_menu', __( 'Forms', 'formidable' ) ),
+            'menu'      => apply_filters( 'frm_default_menu', 'Formidable' ),
             'mu_menu'   => 0,
             'preview_page_id' => 0,
             'use_html'  => true,
