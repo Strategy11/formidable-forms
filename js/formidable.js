@@ -159,9 +159,15 @@ function frmFrontFormJS(){
 			},
 			init: function() {
 				this.on('sending', function(file, xhr, formData) {
-					formData.append('action', 'frm_submit_dropzone' );
-					formData.append('field_id', uploadFields[i].fieldID );
-					formData.append('form_id', uploadFields[i].formID );
+					if ( isSpam() ) {
+						this.removeFile(file);
+						alert('Oops. That file looks like Spam.');
+						return false;
+					} else {
+						formData.append('action', 'frm_submit_dropzone' );
+						formData.append('field_id', uploadFields[i].fieldID );
+						formData.append('form_id', uploadFields[i].formID );
+					}
 				});
 
 				this.on('success', function( file, response ) {
@@ -232,6 +238,15 @@ function frmFrontFormJS(){
 				}
 			}
 		});
+	}
+
+	function isSpam() {
+		var val = document.getElementById('frm_verify').value;
+		if ( val !== '' ) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	function getHiddenUploadHTML( field, mediaID, fieldName ) {
