@@ -272,7 +272,7 @@ class FrmEntryValidate {
             return;
         }
 
-		if ( self::is_honeypot_spam() ) {
+		if ( self::is_honeypot_spam() || self::is_spam_bot() ) {
 			$errors['spam'] = __( 'Your entry appears to be spam!', 'formidable' );
 		}
 
@@ -290,6 +290,11 @@ class FrmEntryValidate {
 	private static function is_honeypot_spam() {
 		$honeypot_value = FrmAppHelper::get_param( 'frm_verify', '', 'get', 'sanitize_text_field' );
 		return ( $honeypot_value !== '' );
+	}
+
+	private static function is_spam_bot() {
+		$ip = FrmAppHelper::get_ip_address();
+		return empty( $ip );
 	}
 
 	private static function is_akismet_spam( $values ) {

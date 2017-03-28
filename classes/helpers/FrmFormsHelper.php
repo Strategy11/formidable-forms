@@ -450,6 +450,20 @@ BEFORE_HTML;
         return $submit;
     }
 
+	/**
+	 * If the Formidable styling isn't being loaded,
+	 * use inline styling to hide the element
+	 * @since 2.03.05
+	 */
+	public static function maybe_hide_inline() {
+		$frm_settings = FrmAppHelper::get_settings();
+		if ( $frm_settings->load_style == 'none' ) {
+			echo ' style="display:none;"';
+		} elseif ( $frm_settings->load_style == 'dynamic' ) {
+			FrmStylesController::enqueue_style();
+		}
+	}
+
 	public static function get_form_style_class( $form = false ) {
         $style = self::get_form_style($form);
         $class = ' with_frm_style';
