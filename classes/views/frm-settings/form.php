@@ -151,11 +151,10 @@
         <?php do_action('frm_settings_form', $frm_settings); ?>
 
         <?php if ( ! FrmAppHelper::pro_is_installed() ) { ?>
-        <div class="clear"></div>
-        <h3><?php _e( 'Miscellaneous', 'formidable' ) ?></h3>
-		<?php } else { ?>
+			<div class="clear"></div>
+			<h3><?php _e( 'Miscellaneous', 'formidable' ) ?></h3>
 			<input type="hidden" name="frm_menu" id="frm_menu" value="<?php echo esc_attr( $frm_settings->menu ) ?>" />
-			<input type="hidden" name="frm_mu_menu" id="frm_mu_menu" value="<?php checked( $frm_settings->mu_menu ) ?>" />
+			<input type="hidden" name="frm_mu_menu" id="frm_mu_menu" value="<?php echo esc_attr( $frm_settings->mu_menu ) ?>" />
 		<?php } ?>
 
         <p><label class="frm_left_label"><?php _e( 'Preview Page', 'formidable' ); ?></label>
