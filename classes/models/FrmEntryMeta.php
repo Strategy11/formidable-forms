@@ -180,13 +180,6 @@ class FrmEntryMeta {
         return $result;
     }
 
-	public static function get_entry_metas( $entry_id ) {
-        _deprecated_function( __FUNCTION__, '1.07.10');
-
-        global $wpdb;
-		return FrmDb::get_col( $wpdb->prefix . 'frm_item_metas', array( 'item_id' => $entry_id ), 'meta_value' );
-    }
-
     public static function get_entry_metas_for_field( $field_id, $order = '', $limit = '', $args = array() ) {
 		$defaults = array( 'value' => false, 'unique' => false, 'stripslashes' => true, 'is_draft' => false );
         $args = wp_parse_args( $args, $defaults );

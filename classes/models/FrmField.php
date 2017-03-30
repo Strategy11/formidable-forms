@@ -4,6 +4,7 @@ if ( ! defined('ABSPATH') ) {
 }
 
 class FrmField {
+
     static $use_cache = true;
 	static $transient_size = 200;
 
@@ -93,7 +94,7 @@ class FrmField {
 		}
 
 		if ( ! $return ) {
-			return;
+			return false;
 		}
 
 		if ( $query_results ) {
@@ -254,7 +255,7 @@ class FrmField {
 
 	public static function getOne( $id ) {
 		if ( empty( $id ) ) {
-			return;
+			return null;
 		}
 
         global $wpdb;
@@ -284,7 +285,7 @@ class FrmField {
      * @param int|string The field id or key
 	 * @param mixed $col The name of the column in the fields database table
      */
-    public static function &get_type( $id, $col = 'type' ) {
+    public static function get_type( $id, $col = 'type' ) {
         $field = FrmAppHelper::check_cache( $id, 'frm_field' );
         if ( $field ) {
             $type = $field->{$col};
@@ -558,24 +559,6 @@ class FrmField {
 			$next++;
 		}
 	}
-
-	public static function getIds( $where = '', $order_by = '', $limit = '' ) {
-		_deprecated_function( __FUNCTION__, '2.0' );
-        global $wpdb;
-        if ( ! empty($order_by) && ! strpos($order_by, 'ORDER BY') !== false ) {
-			$order_by = ' ORDER BY ' . $order_by;
-        }
-
-		$query = 'SELECT fi.id  FROM ' . $wpdb->prefix . 'frm_fields fi ' .
-			'LEFT OUTER JOIN ' . $wpdb->prefix . 'frm_forms fr ON fi.form_id=fr.id' .
-			FrmAppHelper::prepend_and_or_where( ' WHERE ', $where ) . $order_by . $limit;
-
-        $method = ( $limit == ' LIMIT 1' || $limit == 1 ) ? 'get_var' : 'get_col';
-		$cache_key = 'getIds_' . maybe_serialize( $where ) . $order_by . $limit;
-        $results = FrmAppHelper::check_cache($cache_key, 'frm_field', $query, $method);
-
-        return $results;
-    }
 
 	public static function is_no_save_field( $type ) {
 		return in_array( $type, self::no_save_fields() );

@@ -255,8 +255,7 @@ class WP_Test_FrmProFieldsControllerAjax extends FrmAjaxUnitTest {
 		$this->assertEquals( $child_ids, $rep_meta_values, 'When switching from non-repeating to repeating, created entry IDs do not match IDs saved in repeating section field frm_item_metas.');
 
 		// Check if the item_id for child field frm_item_metas was updated to match new child entry IDs
-		$new_child_metas = FrmDb::get_col( $wpdb->prefix . 'frm_item_metas m LEFT JOIN ' . $wpdb->prefix . 'frm_items it ON it.id=m.item_id', array( 'field_id' => $args['children'] ), 'm.item_id', array( 'order_by' => 'it.created_at ASC' ) );
-		$new_child_metas = array_unique( $new_child_metas );
+		$new_child_metas = FrmDb::get_col( $wpdb->prefix . 'frm_item_metas m LEFT JOIN ' . $wpdb->prefix . 'frm_items it ON it.id=m.item_id', array( 'field_id' => $args['children'] ), 'DISTINCT m.item_id', array( 'order_by' => 'it.created_at ASC' ) );
 		$this->assertEquals( $child_ids, $new_child_metas, 'When switching from non-repeating to repeating, the item_id is not updated on frm_item_metas for child fields' );
 	}
 	/**
@@ -530,4 +529,307 @@ class WP_Test_FrmProFieldsControllerAjax extends FrmAjaxUnitTest {
 		$random_key = array_rand( $state_array );
 		$args['prev_val'] = array( $state_array[ $random_key ] );
 	}
+
+	/**
+	 * @covers FrmProFieldsController::get_field_values()
+	 *
+	 * @since 2.03.05
+	 */
+	function test_get_field_values_for_form_action_logic() {
+		$field_id = FrmField::get_id_by_key( '493ito' );
+		$name = 'frm_form_action[12][post_content][conditions][][hide_opt]';
+
+		$_POST = array(
+			'action' => 'frm_get_field_values',
+			'field_id' => $field_id,
+			'current_field' => '12',// action ID
+			'name' => $name,
+			't' => '',
+			'form_action' => 'update_settings',
+			'nonce'     => wp_create_nonce('frm_ajax'),
+		);
+
+		try {
+			$this->_handleAjax( 'frm_get_field_values' );
+		} catch ( WPAjaxDieContinueException $e ) {
+			unset( $e );
+		}
+
+		$expected = '<input type="text" name="' . $name . '" value="" />';
+		$response = $this->_last_response;
+		$this->assertEquals( $expected, $response );
+	}
+
+	/**
+	 * Check the value selector returned, with Ajax, for a paragraph field logic row
+	 *
+	 * @covers FrmProFieldsController::get_field_values()
+	 *
+	 * field_id is the ID of the logic field
+	 * current_field is the ID of the source field (the field being edited)
+	 * name is the value selector name. It is always blank in this situation
+	 * t is the source field type
+	 * form_action is update or create
+	 *
+	 */
+	function test_get_paragraph_field_values_for_field_logic() {
+		$logic_field_id = FrmField::get_id_by_key( 'p3eiuk' );
+		$source_field_id = FrmField::get_id_by_key( '493ito' );
+
+		$this->set_post_values_for_field_logic_value_selector( $logic_field_id, $source_field_id, 'text', 'create' );
+
+		try {
+			$this->_handleAjax( 'frm_get_field_values' );
+		} catch ( WPAjaxDieContinueException $e ) {
+			unset( $e );
+		}
+
+		$expected = '<input type="text" name="field_options[hide_opt_' . $source_field_id . '][]" value="" />';
+		$response = $this->_last_response;
+		$this->assertEquals( $expected, $response );
+
+	}
+
+	/**
+	 * Check the value selector returned, with Ajax, for a time field logic row
+	 *
+	 * @covers FrmProFieldsController::get_field_values()
+	 *
+	 * field_id is the ID of the logic field
+	 * current_field is the ID of the source field (the field being edited)
+	 * name is the value selector name. It is always blank in this situation
+	 * t is the source field type
+	 * form_action is update or create
+	 *
+	 */
+	function test_get_time_field_values_for_field_logic() {
+		$logic_field_id = FrmField::get_id_by_key( 'bm57jf' );
+		$source_field_id = FrmField::get_id_by_key( '493ito' );
+
+		$this->set_post_values_for_field_logic_value_selector( $logic_field_id, $source_field_id );
+
+		try {
+			$this->_handleAjax( 'frm_get_field_values' );
+		} catch ( WPAjaxDieContinueException $e ) {
+			unset( $e );
+		}
+
+		$expected = '<input type="text" name="field_options[hide_opt_' . $source_field_id . '][]" value="" />';
+		$response = $this->_last_response;
+		$this->assertEquals( $expected, $response );
+
+	}
+
+	/**
+	 * Check the value selector returned, with Ajax, for a Lookup field logic row
+	 *
+	 * @covers FrmProFieldsController::get_field_values()
+	 *
+	 * field_id is the ID of the logic field
+	 * current_field is the ID of the source field (the field being edited)
+	 * name is the value selector name. It is always blank in this situation
+	 * t is the source field type
+	 * form_action is update or create
+	 *
+	 */
+	function test_get_lookup_field_values_for_field_logic() {
+		$logic_field_id = FrmField::get_id_by_key( 'lookup-country' );
+		$source_field_id = FrmField::get_id_by_key( '493ito' );
+
+		$this->set_post_values_for_field_logic_value_selector( $logic_field_id, $source_field_id );
+
+		try {
+			$this->_handleAjax( 'frm_get_field_values' );
+		} catch ( WPAjaxDieContinueException $e ) {
+			unset( $e );
+		}
+
+		$expected = '<input type="text" name="field_options[hide_opt_' . $source_field_id . '][]" value="" />';
+		$response = $this->_last_response;
+		$this->assertEquals( $expected, $response );
+
+	}
+
+	/**
+	 * Check the value selector returned, with Ajax, for a scale field logic row
+	 *
+	 * @covers FrmProFieldsController::get_field_values()
+	 *
+	 * field_id is the ID of the logic field
+	 * current_field is the ID of the source field (the field being edited)
+	 * name is the value selector name. It is always blank in this situation
+	 * t is the source field type
+	 * form_action is update or create
+	 *
+	 */
+	function test_get_scale_field_values_for_field_logic() {
+		$logic_field_id = FrmField::get_id_by_key( 'qbrd2o' );
+		$source_field_id = FrmField::get_id_by_key( '493ito' );
+
+		$this->set_post_values_for_field_logic_value_selector( $logic_field_id, $source_field_id );
+
+		try {
+			$this->_handleAjax( 'frm_get_field_values' );
+		} catch ( WPAjaxDieContinueException $e ) {
+			unset( $e );
+		}
+
+		$dropdown = $this->_last_response;
+
+		$opening_tag = '<select name="field_options[hide_opt_' . $source_field_id . '][]">';
+		$first_option = '<option value=""></option>';
+		$last_option = '<option value="10">10</option>';
+		$closing_tag = '</select>';
+		$option_number = 11;
+
+		$this->assertContains( $opening_tag, $dropdown );
+		$this->assertContains( $closing_tag, $dropdown );
+		$this->assertContains( $first_option, $dropdown );
+		$this->assertContains( $last_option, $dropdown );
+		$this->assertSame( $option_number, substr_count( $dropdown, '<option' ) );
+
+	}
+
+	/**
+	 * Check the value selector returned, with Ajax, for a Dynamic field logic row
+	 *
+	 * @covers FrmProFieldsController::get_field_values()
+	 *
+	 * field_id is the ID of the logic field
+	 * current_field is the ID of the source field (the field being edited)
+	 * name is the value selector name. It is always blank in this situation
+	 * t is the source field type
+	 * form_action is update or create
+	 *
+	 */
+	function test_get_dynamic_field_values_for_field_logic() {
+		$logic_field_id = FrmField::get_id_by_key( 'dynamic-country' );
+		$source_field_id = FrmField::get_id_by_key( '493ito' );
+
+		$this->set_post_values_for_field_logic_value_selector( $logic_field_id, $source_field_id );
+
+		try {
+			$this->_handleAjax( 'frm_get_field_values' );
+		} catch ( WPAjaxDieContinueException $e ) {
+			unset( $e );
+		}
+
+		$dropdown = $this->_last_response;
+
+		$opening_tag = '<select name="field_options[hide_opt_' . $source_field_id . '][]">';
+		$first_option = '<option value=""></option>';
+		$last_option = '>Brazil</option>';
+		$closing_tag = '</select>';
+		$option_number = 3;
+
+		$this->assertContains( $opening_tag, $dropdown );
+		$this->assertContains( $closing_tag, $dropdown );
+		$this->assertContains( $first_option, $dropdown );
+		$this->assertContains( $last_option, $dropdown );
+		$this->assertSame( $option_number, substr_count( $dropdown, '<option' ) );
+
+	}
+
+	/**
+	 * Check the value selector returned, with Ajax, for a Dynamic field logic row
+	 *
+	 * @covers FrmProFieldsController::get_field_values()
+	 *
+	 * field_id is the ID of the logic field
+	 * current_field is the ID of the source field (the field being edited)
+	 * name is the value selector name. It is always blank in this situation
+	 * t is the source field type
+	 * form_action is update or create
+	 *
+	 */
+	function test_get_dynamic_field_values_for_dynamic_field_logic() {
+		$logic_field_id = FrmField::get_id_by_key( 'dynamic-country' );
+		$source_field_id = FrmField::get_id_by_key( 'dynamic-state' );
+
+		$this->set_post_values_for_field_logic_value_selector( $logic_field_id, $source_field_id, 'data' );
+
+		try {
+			$this->_handleAjax( 'frm_get_field_values' );
+		} catch ( WPAjaxDieContinueException $e ) {
+			unset( $e );
+		}
+
+		$dropdown = $this->_last_response;
+
+		$opening_tag = '<select name="field_options[hide_opt_' . $source_field_id . '][]">';
+		$first_option = '<option value="">Anything</option>';
+		$last_option = '>Brazil</option>';
+		$closing_tag = '</select>';
+		$option_number = 3;
+
+		$this->assertContains( $opening_tag, $dropdown );
+		$this->assertContains( $closing_tag, $dropdown );
+		$this->assertContains( $first_option, $dropdown );
+		$this->assertContains( $last_option, $dropdown );
+		$this->assertSame( $option_number, substr_count( $dropdown, '<option' ) );
+
+	}
+
+	/**
+	 * Check the value selector returned, with Ajax, for a UserID field logic row
+	 *
+	 * @covers FrmProFieldsController::get_field_values()
+	 *
+	 * field_id is the ID of the logic field
+	 * current_field is the ID of the source field (the field being edited)
+	 * name is the value selector name. It is always blank in this situation
+	 * t is the source field type
+	 * form_action is update or create
+	 *
+	 */
+	function test_get_user_id_field_values_for_field_logic() {
+		$logic_field_id = FrmField::get_id_by_key( 't1eqkj' );
+		$source_field_id = FrmField::get_id_by_key( '493ito' );
+
+		$this->set_post_values_for_field_logic_value_selector( $logic_field_id, $source_field_id );
+
+		try {
+			$this->_handleAjax( 'frm_get_field_values' );
+		} catch ( WPAjaxDieContinueException $e ) {
+			unset( $e );
+		}
+
+		$dropdown = $this->_last_response;
+
+		$opening_tag = '<select name="field_options[hide_opt_' . $source_field_id . '][]">';
+		$first_option = '<option value=""></option>';
+		$current_user_option = '<option value="current_user" >Current User</option>';
+		$last_option = '<option value="1" >admin</option>';
+		$closing_tag = '</select>';
+
+		$this->assertContains( $opening_tag, $dropdown );
+		$this->assertContains( $closing_tag, $dropdown );
+		$this->assertContains( $first_option, $dropdown );
+		$this->assertContains( $current_user_option, $dropdown );
+		$this->assertContains( $last_option, $dropdown );
+
+	}
+
+	/**
+	 * Set the $_POST variable for a field logic value selector
+	 *
+	 * @since 2.03.05
+	 *
+	 * @param string $logic_field_id
+	 * @param string $source_field_id
+	 * @param string $source_type
+	 * @param string $action
+	 */
+	private function set_post_values_for_field_logic_value_selector( $logic_field_id, $source_field_id, $source_type = 'text', $action = 'update' ) {
+		$_POST = array(
+			'action' => 'frm_get_field_values',
+			'field_id' => $logic_field_id,
+			'current_field' => $source_field_id,
+			'name' => '',
+			't' => $source_type,
+			'form_action' => $action,
+			'nonce'     => wp_create_nonce( 'frm_ajax' ),
+		);
+	}
+
 }

@@ -1304,6 +1304,35 @@ DEFAULT_HTML;
 		$prepop = apply_filters( 'frm_bulk_field_choices', $prepop );
     }
 
+	/**
+	 * Display a field value selector
+	 *
+	 * @since 2.03.05
+	 *
+	 * @param int $selector_field_id
+	 * @param array $selector_args
+	 */
+    public static function display_field_value_selector( $selector_field_id, $selector_args ) {
+	    $field_value_selector = FrmFieldFactory::create_field_value_selector( $selector_field_id, $selector_args );
+	    $field_value_selector->display();
+    }
+
+	/**
+	 * Convert a field object to a flat array
+	 *
+	 * @since 2.03.05
+	 *
+	 * @param object $field
+	 *
+	 * @return array
+	 */
+	public static function convert_field_object_to_flat_array( $field ) {
+		$field_options = $field->field_options;
+		$field_array = get_object_vars( $field );
+		unset( $field_array['field_options'] );
+		return $field_array + $field_options;
+	}
+
 	public static function field_selection() {
 		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmField::field_selection' );
 		return FrmField::field_selection();
