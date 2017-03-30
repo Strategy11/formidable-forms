@@ -1305,6 +1305,19 @@ DEFAULT_HTML;
     }
 
 	/**
+	 * Display a field value selector
+	 *
+	 * @since 2.03.05
+	 *
+	 * @param int $selector_field_id
+	 * @param array $selector_args
+	 */
+    public static function display_field_value_selector( $selector_field_id, $selector_args ) {
+	    $field_value_selector = FrmFieldFactory::create_field_value_selector( $selector_field_id, $selector_args );
+	    $field_value_selector->display();
+    }
+
+	/**
 	 * Convert a field object to a flat array
 	 *
 	 * @since 2.03.05
