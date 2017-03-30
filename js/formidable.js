@@ -1245,6 +1245,11 @@ function frmFrontFormJS(){
 		var prevInput;
 		var valueChanged = true;
 		for ( var i= 0, l=inputs.length; i<l; i++ ){
+			if ( inputs[i].className.indexOf( 'frm_dnc' ) > -1 ) {
+				prevInput = inputs[i];
+				continue;
+			}
+
 			if ( i>0 && prevInput.name != inputs[i].name && valueChanged === true ) {
 				// Only trigger a change after all inputs in a field are cleared
 				triggerChange( jQuery(prevInput) );
