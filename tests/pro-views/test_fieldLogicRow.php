@@ -43,9 +43,8 @@ class test_fieldLogicRow extends FrmUnitTest {
 
 		$logic_row = $this->get_logic_row( $field_id, 'uc580i', 'Red' );
 
-		$name = 'frm_form_action[1234][post_content][conditions][0][hide_opt]';
-		$opening_tag = '<select name="' . $name . '">';
-		$second_option = '<option value="Red">Red</option>';
+		$opening_tag = '<select name="field_options[hide_opt_' . $field_id . '][]">';
+		$second_option = '<option value="Red" selected=\'selected\'>Red</option>';
 		$last_option = '<option value="Purple">Purple</option>';
 		$closing_tag = '</select>';
 
