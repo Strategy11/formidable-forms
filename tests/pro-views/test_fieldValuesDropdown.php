@@ -279,7 +279,11 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 
 		$dropdown = $this->get_field_logic_dropdown( $logic_field, $field_id, $field, $row_key );
 
-		$opening_tag = '<select  name=\'field_options[hide_opt_' . $field_id . '][]\'  >';
+		if ( $this->category_dropdown_has_two_spaces() ) {
+			$opening_tag = '<select  name=\'field_options[hide_opt_' . $field_id . '][]\'  >';
+		} else {
+			$opening_tag = '<select name=\'field_options[hide_opt_' . $field_id . '][]\'  >';
+		}
 		$first_option = '<option value=""> </option>';
 		$middle_option = 'Live Music</option>';
 		$closing_tag = '</select>';
@@ -309,7 +313,11 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 
 		$dropdown = $this->get_field_logic_dropdown( $logic_field, $field_id, $field, $row_key );
 
-		$opening_tag = '<select  name=\'field_options[hide_opt_' . $field_id . '][]\'  >';
+		if ( $this->category_dropdown_has_two_spaces() ) {
+			$opening_tag = '<select  name=\'field_options[hide_opt_' . $field_id . '][]\'  >';
+		} else {
+			$opening_tag = '<select name=\'field_options[hide_opt_' . $field_id . '][]\'  >';
+		}
 		$first_option = '<option value=""> </option>';
 		$middle_option = 'Live Music</option>';
 		$selected_option = '<option class="level-0" value="1" selected="selected">Uncategorized</option>';
@@ -642,7 +650,11 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 
 		$dropdown = $this->get_action_logic_dropdown( $field_name, $meta_name, $new_field, '' );
 
-		$opening_tag = '<select  name=\'' . $field_name . '\'  >';
+		if ( $this->category_dropdown_has_two_spaces() ) {
+			$opening_tag = '<select  name=\'' . $field_name . '\'  >';
+		} else {
+			$opening_tag = '<select name=\'' . $field_name . '\'  >';
+		}
 		$first_option = '<option value=""> </option>';
 		$middle_option = 'Live Music</option>';
 		$closing_tag = '</select>';
@@ -1251,5 +1263,14 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 			'password' => '9r61y8',
 			'tags' => 'ppr2eo',
 		);
+	}
+
+	private function wp_version_number() {
+		include(  get_home_path()). '/wp-includes/version.php';
+		return $wp_db_version;
+	}
+
+	private function category_dropdown_has_two_spaces() {
+		return $this->wp_version_number() > 36180;
 	}
 }
