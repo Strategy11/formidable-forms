@@ -104,6 +104,10 @@ class FrmFieldValueSelector {
 		);
 
 		$this->db_row = FrmDb::get_row( 'frm_fields', $where );
+
+		if ( ! is_object( $this->db_row ) ) {
+			$this->db_row = null;
+		}
 	}
 
 	/**
@@ -179,7 +183,7 @@ class FrmFieldValueSelector {
 	 *
 	 * @return bool
 	 */
-	final function has_options() {
+	final protected function has_options() {
 		return ! empty( $this->options );
 	}
 
@@ -190,7 +194,7 @@ class FrmFieldValueSelector {
 	 *
 	 * @return bool
 	 */
-	final function has_field() {
+	final protected function has_field() {
 		return $this->field_id !== 0;
 	}
 
