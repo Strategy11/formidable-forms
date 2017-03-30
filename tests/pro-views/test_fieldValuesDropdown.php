@@ -883,6 +883,8 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	}
 
 	/**
+	 * This code is intended to match the deprecated code in field-values.php
+	 *
 	 * @param object $new_field - logic field
 	 * @param int|string $current_field_id - field ID that we are editing
 	 * @param array $field - field we are editing
@@ -893,8 +895,37 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	 * @return string
 	 */
 	private function get_field_logic_dropdown( $new_field, $current_field_id, $field, $meta_name ) {
+		// Get selector field ID
+		if ( ! isset( $new_field ) || ! $new_field ) {
+			$selector_field_id = 0;
+		} else {
+			$selector_field_id = (int) $new_field->id;
+		}
+
+		$selector_args = array();
+
+		// Get field name
+		if ( isset( $field_name ) ) {
+			$selector_args[ 'html_name' ] = $field_name;
+		} else if ( isset( $current_field_id ) ) {
+			$selector_args['html_name'] = 'field_options[hide_opt_' . $current_field_id . '][]';
+		} else {
+			return '';
+		}
+
+		// Get value
+		if ( isset( $val ) ) {
+			$selector_args['value' ] = $val;
+		} else {
+			$selector_args['value'] = ( isset( $field ) && isset( $field['hide_opt'][$meta_name] ) ) ? $field['hide_opt'][$meta_name] : '';
+		}
+
+		// Get source
+		$is_settings_page = ( FrmAppHelper::simple_get( 'frm_action' ) == 'settings' );
+		$selector_args['source'] = ( $is_settings_page ) ? 'form_actions' : ( isset( $field_type ) ? $field_type : 'unknown' );
+
 		ob_start();
-		require( FrmAppHelper::plugin_path() .'/pro/classes/views/frmpro-fields/field-values.php' );
+		FrmFieldsHelper::display_field_value_selector( $selector_field_id, $selector_args );
 		$dropdown = ob_get_contents();
 		ob_end_clean();
 
@@ -903,6 +934,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 
 	/**
 	 * Get a field's logic values dropdown when loaded with ajax
+	 * This code is intended to match the deprecated code in field-values.php
 	 *
 	 * @param $current_field_id
 	 * @param $new_field
@@ -911,11 +943,33 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	 * @return string
 	 */
 	private function get_field_logic_dropdown_ajax_field( $current_field_id, $new_field, $field_type ) {
-		$anything = 'Anything';
-		$is_settings_page = false;
+		// Get selector field ID
+		if ( ! isset( $new_field ) || ! $new_field ) {
+			$selector_field_id = 0;
+		} else {
+			$selector_field_id = (int) $new_field->id;
+		}
+
+		$selector_args = array();
+
+		// Get field name
+		if ( isset( $field_name ) ) {
+			$selector_args[ 'html_name' ] = $field_name;
+		} else if ( isset( $current_field_id ) ) {
+			$selector_args['html_name'] = 'field_options[hide_opt_' . $current_field_id . '][]';
+		} else {
+			return '';
+		}
+
+		// Get value
+		$selector_args['value'] = '';
+
+		// Get source
+		$is_settings_page = ( FrmAppHelper::simple_get( 'frm_action' ) == 'settings' );
+		$selector_args['source'] = ( $is_settings_page ) ? 'form_actions' : ( isset( $field_type ) ? $field_type : 'unknown' );
 
 		ob_start();
-		require( FrmAppHelper::plugin_path() .'/pro/classes/views/frmpro-fields/field-values.php' );
+		FrmFieldsHelper::display_field_value_selector( $selector_field_id, $selector_args );
 		$dropdown = ob_get_contents();
 		ob_end_clean();
 
@@ -923,6 +977,8 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	}
 
 	/**
+	 * This code is intended to match the deprecated code in field-values.php
+	 *
 	 * @param int|string $current_field_id - field ID that we are editing
 	 * @param array $field - field we are editing
 	 * @param int $meta_name - index of the logic row
@@ -933,8 +989,37 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	 * @return string
 	 */
 	private function get_field_logic_dropdown_no_logic_field( $current_field_id, $field, $meta_name ) {
+		// Get selector field ID
+		if ( ! isset( $new_field ) || ! $new_field ) {
+			$selector_field_id = 0;
+		} else {
+			$selector_field_id = (int) $new_field->id;
+		}
+
+		$selector_args = array();
+
+		// Get field name
+		if ( isset( $field_name ) ) {
+			$selector_args[ 'html_name' ] = $field_name;
+		} else if ( isset( $current_field_id ) ) {
+			$selector_args['html_name'] = 'field_options[hide_opt_' . $current_field_id . '][]';
+		} else {
+			return '';
+		}
+
+		// Get value
+		if ( isset( $val ) ) {
+			$selector_args['value' ] = $val;
+		} else {
+			$selector_args['value'] = ( isset( $field ) && isset( $field['hide_opt'][$meta_name] ) ) ? $field['hide_opt'][$meta_name] : '';
+		}
+
+		// Get source
+		$is_settings_page = ( FrmAppHelper::simple_get( 'frm_action' ) == 'settings' );
+		$selector_args['source'] = ( $is_settings_page ) ? 'form_actions' : ( isset( $field_type ) ? $field_type : 'unknown' );
+
 		ob_start();
-		require( FrmAppHelper::plugin_path() .'/pro/classes/views/frmpro-fields/field-values.php' );
+		FrmFieldsHelper::display_field_value_selector( $selector_field_id, $selector_args );
 		$dropdown = ob_get_contents();
 		ob_end_clean();
 
@@ -943,6 +1028,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 
 	/**
 	 * Get the logic text field when there is no logic field selected yet
+	 * This code is intended to match the deprecated code in field-values.php
 	 *
 	 * @since 2.03.05
 	 *
@@ -956,8 +1042,37 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	private function get_action_logic_dropdown_no_logic_field( $val, $meta_name, $field, $field_name ) {
 		$_GET['frm_action'] = 'settings';
 
+		// Get selector field ID
+		if ( ! isset( $new_field ) || ! $new_field ) {
+			$selector_field_id = 0;
+		} else {
+			$selector_field_id = (int) $new_field->id;
+		}
+
+		$selector_args = array();
+
+		// Get field name
+		if ( isset( $field_name ) ) {
+			$selector_args[ 'html_name' ] = $field_name;
+		} else if ( isset( $current_field_id ) ) {
+			$selector_args['html_name'] = 'field_options[hide_opt_' . $current_field_id . '][]';
+		} else {
+			return '';
+		}
+
+		// Get value
+		if ( isset( $val ) ) {
+			$selector_args['value' ] = $val;
+		} else {
+			$selector_args['value'] = ( isset( $field ) && isset( $field['hide_opt'][$meta_name] ) ) ? $field['hide_opt'][$meta_name] : '';
+		}
+
+		// Get source
+		$is_settings_page = ( FrmAppHelper::simple_get( 'frm_action' ) == 'settings' );
+		$selector_args['source'] = ( $is_settings_page ) ? 'form_actions' : ( isset( $field_type ) ? $field_type : 'unknown' );
+
 		ob_start();
-		require( FrmAppHelper::plugin_path() .'/pro/classes/views/frmpro-fields/field-values.php' );
+		FrmFieldsHelper::display_field_value_selector( $selector_field_id, $selector_args );
 		$dropdown = ob_get_contents();
 		ob_end_clean();
 
@@ -968,6 +1083,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 
 	/**
 	 * Get an action's logic values dropdown when loaded with ajax
+	 * This code is intended to match the deprecated code in field-values.php
 	 *
 	 * @param $new_field
 	 * @param $current_field_id
@@ -977,11 +1093,34 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	 */
 	private function get_action_logic_dropdown_ajax_field( $new_field, $current_field_id, $field_name ) {
 		$_GET['frm_action'] = 'settings';
-		$anything = '';
-		$is_settings_page = true;
+
+		// Get selector field ID
+		if ( ! isset( $new_field ) || ! $new_field ) {
+			$selector_field_id = 0;
+		} else {
+			$selector_field_id = (int) $new_field->id;
+		}
+
+		$selector_args = array();
+
+		// Get field name
+		if ( isset( $field_name ) ) {
+			$selector_args[ 'html_name' ] = $field_name;
+		} else if ( isset( $current_field_id ) ) {
+			$selector_args['html_name'] = 'field_options[hide_opt_' . $current_field_id . '][]';
+		} else {
+			return '';
+		}
+
+		// Get value
+		$selector_args['value'] = '';
+
+		// Get source
+		$is_settings_page = ( FrmAppHelper::simple_get( 'frm_action' ) == 'settings' );
+		$selector_args['source'] = ( $is_settings_page ) ? 'form_actions' : ( isset( $field_type ) ? $field_type : 'unknown' );
 
 		ob_start();
-		require( FrmAppHelper::plugin_path() .'/pro/classes/views/frmpro-fields/field-values.php' );
+		FrmFieldsHelper::display_field_value_selector( $selector_field_id, $selector_args );
 		$dropdown = ob_get_contents();
 		ob_end_clean();
 
@@ -992,6 +1131,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 
 	/**
 	 * Get the field value dropdown for an action's conditional logic
+	 * This code is intended to match the deprecated code in field-values.php
 	 *
 	 * The following variables are passed in: $field, $field_name, $meta_name, $new_field, and $val
 	 *
@@ -1006,8 +1146,37 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 		$_GET['frm_action'] = 'settings';
 		$field = array( 'hide_opt' => array( $meta_name => $val ) );
 
+		// Get selector field ID
+		if ( ! isset( $new_field ) || ! $new_field ) {
+			$selector_field_id = 0;
+		} else {
+			$selector_field_id = (int) $new_field->id;
+		}
+
+		$selector_args = array();
+
+		// Get field name
+		if ( isset( $field_name ) ) {
+			$selector_args[ 'html_name' ] = $field_name;
+		} else if ( isset( $current_field_id ) ) {
+			$selector_args['html_name'] = 'field_options[hide_opt_' . $current_field_id . '][]';
+		} else {
+			return '';
+		}
+
+		// Get value
+		if ( isset( $val ) ) {
+			$selector_args['value' ] = $val;
+		} else {
+			$selector_args['value'] = ( isset( $field ) && isset( $field['hide_opt'][$meta_name] ) ) ? $field['hide_opt'][$meta_name] : '';
+		}
+
+		// Get source
+		$is_settings_page = ( FrmAppHelper::simple_get( 'frm_action' ) == 'settings' );
+		$selector_args['source'] = ( $is_settings_page ) ? 'form_actions' : ( isset( $field_type ) ? $field_type : 'unknown' );
+
 		ob_start();
-		require( FrmAppHelper::plugin_path() .'/pro/classes/views/frmpro-fields/field-values.php' );
+		FrmFieldsHelper::display_field_value_selector( $selector_field_id, $selector_args );
 		$dropdown = ob_get_contents();
 		ob_end_clean();
 
@@ -1018,6 +1187,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 
 	/**
 	 * Get a field value dropdown for a MailChimp action
+	 * This code is intended to match the deprecated code in field-values.php
 	 *
 	 * The following variables are passed in: $field_name, $new_field, and $val
 	 *
@@ -1030,8 +1200,33 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	private function get_mailchimp_field_value_dropdown( $field_name, $new_field, $val ) {
 		$_GET['frm_action'] = 'settings';
 
+		// Get selector field ID
+		if ( ! isset( $new_field ) || ! $new_field ) {
+			$selector_field_id = 0;
+		} else {
+			$selector_field_id = (int) $new_field->id;
+		}
+
+		$selector_args = array();
+
+		// Get field name
+		if ( isset( $field_name ) ) {
+			$selector_args[ 'html_name' ] = $field_name;
+		} else if ( isset( $current_field_id ) ) {
+			$selector_args['html_name'] = 'field_options[hide_opt_' . $current_field_id . '][]';
+		} else {
+			return '';
+		}
+
+		// Get value
+		$selector_args['value' ] = $val;
+
+		// Get source
+		$is_settings_page = ( FrmAppHelper::simple_get( 'frm_action' ) == 'settings' );
+		$selector_args['source'] = ( $is_settings_page ) ? 'form_actions' : ( isset( $field_type ) ? $field_type : 'unknown' );
+
 		ob_start();
-		require( FrmAppHelper::plugin_path() .'/pro/classes/views/frmpro-fields/field-values.php' );
+		FrmFieldsHelper::display_field_value_selector( $selector_field_id, $selector_args );
 		$dropdown = ob_get_contents();
 		ob_end_clean();
 
