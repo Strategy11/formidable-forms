@@ -2128,6 +2128,148 @@ Testing]]></meta_value>
 		    <meta_value><![CDATA[[60418,60419,60420]]]></meta_value>
 		</item_meta>
 	</item>
+    <item>
+        <id>60428</id>
+        <item_key><![CDATA[9fj2093jf]]></item_key>
+        <name><![CDATA[Jamie]]></name>
+        <description><![CDATA[{"browser":"Mozilla\/5.0 (Macintosh; Intel Mac OS X 10.10; rv:37.0) Gecko\/20100101 Firefox\/37.0","referrer":"http:\/\/localhost:8888\/features\/wp-admin\/admin-ajax.php?action=frm_forms_preview&form=boymfd"}]]></description>
+        <created_at>2015-05-13 19:39:23</created_at>
+        <updated_at>2015-05-13 19:39:23</updated_at>
+        <form_id>697</form_id>
+        <post_id>0</post_id>
+        <ip>::1</ip>
+        <is_draft>0</is_draft>
+        <user_id><![CDATA[admin]]></user_id>
+        <updated_by><![CDATA[admin]]></updated_by>
+        <parent_item_id>60429</parent_item_id>
+
+        <item_meta>
+            <field_id>8089</field_id>
+            <meta_value><![CDATA[Embedded name]]></meta_value>
+        </item_meta>
+        <item_meta>
+            <field_id>8090</field_id>
+            <meta_value><![CDATA[test]]></meta_value>
+        </item_meta>
+        <item_meta>
+            <field_id>8091</field_id>
+            <meta_value><![CDATA[test@mail.com]]></meta_value>
+        </item_meta>
+        <item_meta>
+            <field_id>8093</field_id>
+            <meta_value><![CDATA[test]]></meta_value>
+        </item_meta>
+        <item_meta>
+            <field_id>8094</field_id>
+            <meta_value><![CDATA[test]]></meta_value>
+        </item_meta>
+        <item_meta>
+            <field_id>8095</field_id>
+            <meta_value><![CDATA[2015-05-21]]></meta_value>
+        </item_meta>
+    </item>
+    <item>
+        <id>60429</id>
+        <item_key><![CDATA[jamie_entry_key_2]]></item_key>
+        <name><![CDATA[Jamie]]></name>
+        <description><![CDATA[{"browser":"Mozilla\/5.0 (Macintosh; Intel Mac OS X 10.10; rv:37.0) Gecko\/20100101 Firefox\/37.0","referrer":"http:\/\/localhost:8888\/features\/wp-admin\/admin-ajax.php?action=frm_forms_preview&form=boymfd"}]]></description>
+        <created_at>2015-05-13 19:39:23</created_at>
+        <updated_at>2015-05-13 19:39:23</updated_at>
+        <form_id>698</form_id>
+        <post_id>0</post_id>
+        <ip>::1</ip>
+        <is_draft>0</is_draft>
+        <user_id><![CDATA[admin]]></user_id>
+        <updated_by><![CDATA[admin]]></updated_by>
+        <parent_item_id>0</parent_item_id>
+
+        <item_meta>
+            <field_id>8099</field_id>
+            <meta_value><![CDATA[Jwahlin]]></meta_value>
+        </item_meta>
+        <item_meta>
+            <field_id>8100</field_id>
+            <meta_value><![CDATA[Jamie
+Rebecca
+Wahlin]]></meta_value>
+        </item_meta>
+        <item_meta>
+            <field_id>8101</field_id>
+            <meta_value><![CDATA[["Red","Green"]]]></meta_value>
+        </item_meta>
+        <item_meta>
+            <field_id>8102</field_id>
+            <meta_value><![CDATA[cookies]]></meta_value>
+        </item_meta>
+        <item_meta>
+            <field_id>8103</field_id>
+            <meta_value><![CDATA[Ace Ventura]]></meta_value>
+        </item_meta>
+        <item_meta>
+            <field_id>8104</field_id>
+            <meta_value><![CDATA[jamie@mail.com]]></meta_value>
+        </item_meta>
+        <item_meta>
+            <field_id>8105</field_id>
+            <meta_value><![CDATA[http://www.jamie.com]]></meta_value>
+        </item_meta>
+        <item_meta>
+            <field_id>8110</field_id>
+            <meta_value><![CDATA[<strong>Bolded text</strong>]]></meta_value>
+        </item_meta>
+        <item_meta>
+            <field_id>8113</field_id>
+            <meta_value>10</meta_value>
+        </item_meta>
+        <item_meta>
+            <field_id>8114</field_id>
+            <meta_value>1231231234</meta_value>
+        </item_meta>
+        <item_meta>
+            <field_id>8116</field_id>
+            <meta_value><![CDATA[12:30 AM]]></meta_value>
+        </item_meta>
+        <item_meta>
+            <field_id>8115</field_id>
+            <meta_value><![CDATA[2015-08-16]]></meta_value>
+        </item_meta>
+        <item_meta>
+            <field_id>8117</field_id>
+            <meta_value><![CDATA[http://www.test.com]]></meta_value>
+        </item_meta>
+        <item_meta>
+            <field_id>8118</field_id>
+            <meta_value>5</meta_value>
+        </item_meta>
+        <item_meta>
+            <field_id>8119</field_id>
+            <meta_value>59014</meta_value>
+        </item_meta>
+        <item_meta>
+            <field_id>8123</field_id>
+            <meta_value><![CDATA[[60428]]]></meta_value>
+        </item_meta>
+        <item_meta>
+            <field_id>8125</field_id>
+            <meta_value>1</meta_value>
+        </item_meta>
+        <item_meta>
+            <field_id>8126</field_id>
+            <meta_value><![CDATA[admin]]></meta_value>
+        </item_meta>
+        <item_meta>
+            <field_id>8128</field_id>
+            <meta_value><![CDATA[Jame]]></meta_value>
+        </item_meta>
+        <item_meta>
+            <field_id>8129</field_id>
+            <meta_value><![CDATA[{"width":"398","height":"150"}]]></meta_value>
+        </item_meta>
+        <item_meta>
+            <field_id>8130</field_id>
+            <meta_value><![CDATA[[60413,60414,60415]]]></meta_value>
+        </item_meta>
+    </item>
 	<item>
 		<id>60426</id>
 		<item_key><![CDATA[n889ea4]]></item_key>
@@ -2336,6 +2478,33 @@ Test]]></meta_value>
             <meta_value><![CDATA[1]]></meta_value>
         </item_meta>
     </item>
+    <item>
+        <id>12347</id>
+        <item_key><![CDATA[post-entry-3]]></item_key>
+        <name><![CDATA[Post Entry]]></name>
+        <description><![CDATA[{"browser":"Mozilla\/5.0 (Macintosh; Intel Mac OS X 10_10_0) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/41.0.2272.118 Safari\/537.36","referrer":"http:\/\/frc.harmonyed.com\/?page_id=1151&preview=true"}]]></description>
+        <created_at>2015-11-14 11:15:54</created_at>
+        <updated_at>2015-11-14 11:15:54</updated_at>
+        <form_id>182</form_id>
+        <post_id>9337</post_id>
+        <ip>::1</ip>
+        <is_draft>0</is_draft>
+        <user_id><![CDATA[admin]]></user_id>
+        <updated_by><![CDATA[]]></updated_by>
+        <parent_item_id>0</parent_item_id>
+        <item_meta>
+            <field_id>2838</field_id>
+            <meta_value><![CDATA[This is a similar post to a previous one. The title is intended to be a duplicate.]]></meta_value>
+        </item_meta>
+        <item_meta>
+            <field_id>2840</field_id>
+            <meta_value><![CDATA[Jamie Wahlin]]></meta_value>
+        </item_meta>
+        <item_meta>
+            <field_id>2841</field_id>
+            <meta_value><![CDATA[1]]></meta_value>
+        </item_meta>
+    </item>
 	<item>
 		<id>316218</id>
 		<item_key><![CDATA[2bcuuu]]></item_key>
@@ -2424,6 +2593,40 @@ Test]]></meta_value>
         <comment_status>open</comment_status>
         <ping_status>closed</ping_status>
         <post_name>dragons_post</post_name>
+        <status>publish</status>
+        <post_parent>0</post_parent>
+        <menu_order>0</menu_order>
+        <post_type>post</post_type>
+        <post_password></post_password>
+        <is_sticky>0</is_sticky>
+        <postmeta>
+            <meta_key>frm_display_id</meta_key>
+            <meta_value>7840</meta_value>
+        </postmeta>
+        <postmeta>
+            <meta_key>_edit_last</meta_key>
+            <meta_value>1</meta_value>
+        </postmeta>
+        <postmeta>
+            <meta_key>_edit_lock</meta_key>
+            <meta_value><![CDATA[1447445678:1]]></meta_value>
+        </postmeta>
+        <category domain="category" nicename="uncategorized"><![CDATA[Uncategorized]]></category>
+    </view>
+    <view>
+        <title>Jamie\'s Post</title>
+        <link></link>
+        <post_author><![CDATA[admin]]></post_author>
+        <description></description>
+        <content><![CDATA[This is a similar post to a previous one. The title is intended to be a duplicate.
+]]></content>
+        <excerpt><![CDATA[]]></excerpt>
+        <post_id>9337</post_id>
+        <post_date>2015-11-14 11:15:54</post_date>
+        <post_date_gmt>2015-11-14 19:15:54</post_date_gmt>
+        <comment_status>open</comment_status>
+        <ping_status>closed</ping_status>
+        <post_name>jamies_post-2</post_name>
         <status>publish</status>
         <post_parent>0</post_parent>
         <menu_order>0</menu_order>

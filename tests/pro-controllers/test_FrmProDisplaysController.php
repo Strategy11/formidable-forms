@@ -1224,10 +1224,10 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	}
 
 	/**
-	 * Test Scale field is unique
+	 * Test Scale field is unique (get oldest entries)
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
-	function test_unique_filter_on_scale_field() {
+	function test_unique_oldest_filter_on_scale_field() {
 		self::clear_get_values();
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 
@@ -1246,10 +1246,32 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	}
 
 	/**
-	 * Test Post Title field is unique
+	 * Test Scale field is unique (get newest entries)
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
-	function test_unique_filter_on_post_title() {
+	function test_unique_newest_filter_on_scale_field() {
+		self::clear_get_values();
+		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
+
+		$filter_args = array(
+			array( 'type' => 'field',
+			       'col' => 'qbrd2o',
+			       'op' => 'group_by_newest',
+			       'val' => '',
+			),
+		);
+		self::add_filter_to_view( $dynamic_view, $filter_args );
+
+		$d = self::get_default_args( $dynamic_view, array( 'Jwahlin', 'Steve' ), array( 'Steph' ) );
+
+		self::run_get_display_data_tests( $d, 'unique filter' );
+	}
+
+	/**
+	 * Test Post Title field is unique (get oldest entries)
+	 * @covers FrmProDisplaysController::get_display_data
+	 */
+	function test_unique_oldest_filter_on_post_title() {
 		self::clear_get_values();
 		$post_view = self::get_view_by_key( 'create-a-post-view' );
 
@@ -1262,16 +1284,48 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		);
 		self::add_filter_to_view( $post_view, $filter_args );
 
-		$d = self::get_default_args( $post_view, array( 'Jamie', 'Dragon' ), array() );
+		// Get post ID
+		global $wpdb;
+		$query = "SELECT ID from " . $wpdb->prefix . "posts WHERE post_name='jamies_post'";
+		$jamie_post_id = $wpdb->get_var( $query );
+
+		$d = self::get_default_args( $post_view, array( 'Jamie\'s Post', '?p=' . $jamie_post_id, 'Dragon' ), array() );
 
 		self::run_get_display_data_tests( $d, 'unique filter with post title' );
 	}
 
 	/**
-	 * Test user_id is unique
+	 * Test Post Title field is unique (get newest entries)
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
-	function test_unique_filter_on_user_id() {
+	function test_unique_newest_filter_on_post_title() {
+		self::clear_get_values();
+		$post_view = self::get_view_by_key( 'create-a-post-view' );
+
+		$filter_args = array(
+			array( 'type' => 'field',
+			       'col' => 'yi6yvm',
+			       'op' => 'group_by_newest',
+			       'val' => '',
+			),
+		);
+		self::add_filter_to_view( $post_view, $filter_args );
+
+		// Get post ID
+		global $wpdb;
+		$query = "SELECT ID from " . $wpdb->prefix . "posts WHERE post_name='jamies_post-2'";
+		$jamie_post_id = $wpdb->get_var( $query );
+
+		$d = self::get_default_args( $post_view, array( 'Jamie\'s Post', '?p=' . $jamie_post_id, 'Dragon' ), array() );
+
+		self::run_get_display_data_tests( $d, 'unique filter with post title' );
+	}
+
+	/**
+	 * Test user_id is unique (get oldest entries)
+	 * @covers FrmProDisplaysController::get_display_data
+	 */
+	function test_unique_oldest_filter_on_user_id() {
 		self::clear_get_values();
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 
@@ -1290,12 +1344,35 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	}
 
 	/**
-	 * Test entry ID is unique
+	 * Test user_id is unique (get newest entries)
+	 * @covers FrmProDisplaysController::get_display_data
+	 */
+	function test_unique_newest_filter_on_user_id() {
+		self::clear_get_values();
+		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
+
+		$filter_args = array(
+			array( 'type' => 'field',
+			       'col' => 't1eqkj',
+			       'op' => 'group_by_newest',
+			       'val' => '',
+			),
+		);
+		self::add_filter_to_view( $dynamic_view, $filter_args );
+
+		$d = self::get_default_args( $dynamic_view, array( 'Jwahlin', 'Steph', 'Steve' ), array() );
+
+		self::run_get_display_data_tests( $d, 'unique filter with user_id' );
+	}
+
+
+	/**
+	 * Test entry ID is unique (get oldest entries)
 	 * This filter should be ignored
 	 *
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
-	function test_unique_filter_on_entry_id() {
+	function test_unique_oldest_filter_on_entry_id() {
 		self::clear_get_values();
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 
@@ -1314,12 +1391,12 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	}
 
 	/**
-	 * Test entry creation date is unique
+	 * Test entry creation date is unique (get oldest entries)
 	 * This filter should be ignored
 	 *
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
-	function test_unique_filter_on_entry_creation_date() {
+	function test_unique_oldest_filter_on_entry_creation_date() {
 		self::clear_get_values();
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 
@@ -1693,13 +1770,13 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		// Page size is equal to 2
 		$dynamic_view = self::reset_view( 'dynamic-view' );
 		$dynamic_view->frm_page_size = 2;
-		$d = self::get_default_args( $dynamic_view, array( 'Jamie', 'Steph', 'frm_pagination_cont' ), array( 'Steve' ) );
+		$d = self::get_default_args( $dynamic_view, array( 'Jamie', 'Jwahlin', 'frm_pagination_cont' ), array( 'Steph', 'Steve' ) );
 		self::run_get_display_data_tests( $d, 'view with page size set' );
 
-		// Page size is equal to 3
+		// Page size is equal to 4
 		$dynamic_view = self::reset_view( 'dynamic-view' );
-		$dynamic_view->frm_page_size = 3;
-		$d = self::get_default_args( $dynamic_view, array( 'Jamie', 'Steph', 'Steve' ), array( 'frm_pagination_cont') );
+		$dynamic_view->frm_page_size = 4;
+		$d = self::get_default_args( $dynamic_view, array( 'Jamie', 'Jwahlin', 'Steph', 'Steve' ), array( 'frm_pagination_cont') );
 		self::run_get_display_data_tests( $d, 'view with page size set' );
 	}
 
@@ -1739,20 +1816,20 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 
 		// On page 2 with page size of 1
 		$dynamic_view->frm_page_size = 1;
-		$d = self::get_default_args( $dynamic_view, array( 'Steph', 'frm_pagination_cont' ), array( 'Jamie', 'Steve' ) );
-		self::run_get_display_data_tests( $d, 'view on page 2 with 1 entry showing' );
+		$d = self::get_default_args( $dynamic_view, array( 'Jwahlin', 'frm_pagination_cont' ), array( 'Steph', 'Jamie', 'Steve' ) );
+		self::run_get_display_data_tests( $d, 'view on page 2 with page size of 1' );
 
 		// On page 2 with page size of 2
 		$dynamic_view = self::reset_view( 'dynamic-view' );
 		$dynamic_view->frm_page_size = 2;
-		$d = self::get_default_args( $dynamic_view, array( 'Steve', 'frm_pagination_cont' ), array( 'Jamie', 'Steph' ) );
-		self::run_get_display_data_tests( $d, 'view on page 2 with 1 entry showing, 2 on first page' );
+		$d = self::get_default_args( $dynamic_view, array( 'Steph', 'Steve', 'frm_pagination_cont' ), array( 'Jamie', 'Jwahlin' ) );
+		self::run_get_display_data_tests( $d, 'view on page 2 with a page size of 2' );
 
 		// On page 3 with page size of 2
 		$dynamic_view = self::reset_view( 'dynamic-view' );
 		$dynamic_view->frm_page_size = 2;
 		$_GET['frm-page-'. $dynamic_view->ID] = 3;
-		$d = self::get_default_args( $dynamic_view, array( 'frm_no_entries' ), array( 'Jamie', 'Steph', 'Steve' ) );
+		$d = self::get_default_args( $dynamic_view, array( 'frm_no_entries' ), array( 'Jamie', 'Jwahlin', 'Steph', 'Steve' ) );
 		self::run_get_display_data_tests( $d, 'view on page 3 with no entries showing' );
 	}
 
@@ -2093,7 +2170,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		add_filter('frm_display_entry_content', 'frm_get_row_num', 20, 7);
 
 		// Check for row nums, no page size
-		$d = self::get_default_args( $dynamic_view, array( 'Jamie', 'Row: 1', 'Row: 2', 'Row: 3' ), array( 'Row: 4' ) );
+		$d = self::get_default_args( $dynamic_view, array( 'Jamie', 'Row: 1', 'Row: 2', 'Row: 3', 'Row: 4' ), array( 'Row: 5' ) );
 		self::run_get_display_data_tests( $d, 'view with row_num shortcode' );
 	}
 
@@ -2127,24 +2204,24 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		// Check page 1, page size of 1
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 		$dynamic_view->frm_page_size = 1;
-		$string = 'Viewing entry 1 to 1 (of 3 entries)';
-		$d = self::get_default_args( $dynamic_view, array( 'Jamie', $string ), array( 'Steph', 'Steve' ) );
+		$string = 'Viewing entry 1 to 1 (of 4 entries)';
+		$d = self::get_default_args( $dynamic_view, array( 'Jamie', $string ), array( 'Jwahlin', 'Steph', 'Steve' ) );
 		self::run_get_display_data_tests( $d, 'view with record_count and total_count test' );
 
 		// Check page 2, page size of 1
 		$_GET['frm-page-'. $dynamic_view->ID] = 2;
-		$string = 'Viewing entry 2 to 2 (of 3 entries)';
+		$string = 'Viewing entry 2 to 2 (of 4 entries)';
 		$dynamic_view = self::reset_view( 'dynamic-view' );
 		$dynamic_view->frm_page_size = 1;
-		$d = self::get_default_args( $dynamic_view, array( 'Steph', $string ), array( 'Jamie', 'Steve' ) );
+		$d = self::get_default_args( $dynamic_view, array( 'Jwahlin', $string ), array( 'Jamie', 'Steph', 'Steve' ) );
 		self::run_get_display_data_tests( $d, 'view with record_count and total_count test 2' );
 
 		// Check page 1 with a page size of 2
 		$_GET['frm-page-'. $dynamic_view->ID] = 1;
 		$dynamic_view = self::reset_view( 'dynamic-view' );
 		$dynamic_view->frm_page_size = 2;
-		$string = 'Viewing entry 1 to 2 (of 3 entries)';
-		$d = self::get_default_args( $dynamic_view, array( 'Jamie', 'Steph', $string ), array( 'Steve' ) );
+		$string = 'Viewing entry 1 to 2 (of 4 entries)';
+		$d = self::get_default_args( $dynamic_view, array( 'Jamie', 'Jwahlin', $string ), array( 'Steph', 'Steve' ) );
 		self::run_get_display_data_tests( $d, 'view with record_count and total_count test 3' );
 	}
 
@@ -2174,7 +2251,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 		$dynamic_view->frm_before_content = 'Count: [entry_count]';
 
-		$d = self::get_default_args( $dynamic_view, array( 'Count: 3', 'Jamie' ), array() );
+		$d = self::get_default_args( $dynamic_view, array( 'Count: 4', 'Jamie' ), array() );
 
 		self::run_get_display_data_tests( $d, 'view with [entry_count] shortcode' );
 	}
@@ -2190,7 +2267,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		$dynamic_view->frm_before_content = 'Count: [entry_count]';
 		$dynamic_view->frm_page_size = 1;
 
-		$d = self::get_default_args( $dynamic_view, array( 'Count: 3', 'Jamie' ), array() );
+		$d = self::get_default_args( $dynamic_view, array( 'Count: 4', 'Jamie' ), array() );
 		self::run_get_display_data_tests( $d, 'view with [entry_count] shortcode and page size' );
 	}
 
