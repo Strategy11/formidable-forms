@@ -1809,7 +1809,7 @@ function frmAdminBuildJS(){
 	function hideWhereOptions(){
 		var value = this.value;
 		var where_key = jQuery(this).closest('.frm_where_row').attr('id').replace('frm_where_field_', '');
-		if(value == 'group_by'){
+		if( value === 'group_by' || value === 'group_by_newest' ){
 			document.getElementById('where_field_options_'+where_key).style.display = 'none';
 		}else{
 			document.getElementById('where_field_options_'+where_key).style.display = 'inline-block';
