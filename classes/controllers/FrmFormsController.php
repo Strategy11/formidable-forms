@@ -568,27 +568,7 @@ class FrmFormsController {
 	}
 
 	public static function hidden_columns( $result ) {
-        $return = false;
-        foreach ( (array) $result as $r ) {
-            if ( ! empty( $r ) ) {
-                $return = true;
-                break;
-            }
-        }
-
-        if ( $return ) {
-            return $result;
-		}
-
-        $type = isset( $_REQUEST['form_type'] ) ? $_REQUEST['form_type'] : '';
-
-        $result[] = 'created_at';
-        if ( $type == 'template' ) {
-            $result[] = 'id';
-            $result[] = 'form_key';
-        }
-
-        return $result;
+		return $result;
     }
 
 	public static function save_per_page( $save, $option, $value ) {
