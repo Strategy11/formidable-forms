@@ -4,6 +4,7 @@ function frmFrontFormJS(){
 	var action = '';
 	var jsErrors = [];
 	var lookupsLoading = 0;// TODO: switch to processesRunning and make it work with file upload fields
+	var lookupQueues = {};
 
 	function setNextPage(e){
 		/*jshint validthis:true */
@@ -1600,6 +1601,13 @@ function frmFrontFormJS(){
 	function updateSingleWatchingField( childFieldArgs, childElement ) {
 		childFieldArgs.parentVals = getParentLookupFieldVals( childFieldArgs );
 
+		if ( currentLookupHasQueue( childElement.id ) ) {
+			addLookupToQueueOfTwo( childFieldArgs, childElement );
+			return;
+		}
+
+		addLookupToQueueOfTwo( childFieldArgs, childElement );
+
 		maybeInsertValueInFieldWatchingLookup( childFieldArgs, childElement );
 	}
 
@@ -2087,6 +2095,7 @@ function frmFrontFormJS(){
 	function maybeInsertValueInFieldWatchingLookup( childFieldArgs, childInput ) {
 		if ( isChildInputConditionallyHidden( childInput, childFieldArgs.formId ) ) {
 			// TODO: What if field is in conditionally hidden section?
+			checkQueueAfterLookupCompleted( childInput.id );
 			return;
 		}
 
@@ -2097,6 +2106,7 @@ function frmFrontFormJS(){
 				newValue = '';
 			}
 			insertValueInFieldWatchingLookup( childFieldArgs, childInput, newValue );
+			checkQueueAfterLookupCompleted( childInput.id );
 		} else {
 			// If all parents have values, check for a new value
 
@@ -2113,15 +2123,89 @@ function frmFrontFormJS(){
 					nonce:frm_js.nonce
 				},
 				success:function(newValue){
-					if ( childInput.value != newValue ) {
+					if ( ! isChildInputConditionallyHidden( childInput, childFieldArgs.formId ) && childInput.value != newValue ) {
 						insertValueInFieldWatchingLookup( childFieldArgs.fieldKey, childInput, newValue );
 					}
 
 					enableFormAfterLookup( childFieldArgs.formId );
+					checkQueueAfterLookupCompleted( childInput.id );
 				}
 			});
 		}
 	}
+
+	/**
+	 * Check if the current Lookup watcher field has a queue
+	 *
+	 * @since 2.03.05
+	 *
+	 * @param {string} elementId
+	 * @returns {boolean}
+     */
+	function currentLookupHasQueue( elementId ) {
+		return ( elementId in lookupQueues && lookupQueues[elementId].length > 0 );
+	}
+
+	/**
+	 * Add the current Lookup watcher to a queue of size two
+	 *
+	 * @since 2.03.05
+	 *
+	 * @param {Object} childFieldArgs
+	 * @param {Object} childInput
+     */
+	function addLookupToQueueOfTwo( childFieldArgs, childInput ) {
+		var elementId = childInput.id;
+
+		if ( elementId in lookupQueues ) {
+			if ( lookupQueues[elementId].length >= 2 ) {
+				lookupQueues[elementId] = lookupQueues[elementId].slice( 0, 1 );
+			}
+		} else {
+			lookupQueues[elementId] = [];
+		}
+
+		lookupQueues[elementId].push( { 'childFieldArgs':childFieldArgs, 'childInput':childInput } );
+	}
+
+	/**
+	 * Check the lookupQueue after a value lookup is completed
+	 *
+	 * @since 2.03.05
+	 *
+	 * @param {string} elementId
+     */
+	function checkQueueAfterLookupCompleted( elementId ) {
+		removeLookupFromQueue( elementId );
+		doNextItemInLookupQueue( elementId );
+	}
+
+	/**
+	 * Remove a Lookup from the queue
+	 *
+	 * @since 2.03.05
+	 *
+	 * @param {string} elementId
+	 */
+	function removeLookupFromQueue( elementId ) {
+		lookupQueues[elementId].shift();
+	}
+
+	/**
+	 * Check the current Lookup queue
+	 *
+	 * @since 2.03.05
+	 *
+	 * @param {string} elementId
+	 */
+	function doNextItemInLookupQueue( elementId ) {
+		if ( currentLookupHasQueue( elementId ) ) {
+			var childFieldArgs = lookupQueues[elementId][0].childFieldArgs;
+			var childInput = lookupQueues[elementId][0].childInput;
+			maybeInsertValueInFieldWatchingLookup( childFieldArgs, childInput );
+		}
+	}
+
 
 	/**
 	 * Insert a new text field Lookup value
