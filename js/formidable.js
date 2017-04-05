@@ -2015,7 +2015,7 @@ function frmFrontFormJS(){
 	 * @since 2.03.05
 	 *
 	 * @param {Object} $fieldDiv
-     */
+	 */
 	function triggerLookupOptionsLoaded( $fieldDiv ) {
 		$fieldDiv.trigger( 'frm_lookup_options_loaded' );
 	}
