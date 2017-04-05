@@ -1764,6 +1764,7 @@ function frmFrontFormJS(){
 				},
 				success:function(newOptions){
 					replaceSelectLookupFieldOptions( childFieldArgs, childSelect, newOptions );
+					triggerLookupOptionsLoaded( jQuery( childDiv ) );
 					enableFormAfterLookup( childFieldArgs.formId );
 				}
 			});
@@ -2001,10 +2002,22 @@ function frmFrontFormJS(){
 				}
 
 				triggerChange( jQuery( inputs[0] ), childFieldArgs.fieldKey );
+				triggerLookupOptionsLoaded( jQuery( childDiv ) );
 
 				enableFormAfterLookup( childFieldArgs.formId );
 			}
 		});
+	}
+
+	/**
+	 * Trigger the frm_lookup_options_loaded event on the field div
+	 *
+	 * @since 2.03.05
+	 *
+	 * @param {Object} $fieldDiv
+     */
+	function triggerLookupOptionsLoaded( $fieldDiv ) {
+		$fieldDiv.trigger( 'frm_lookup_options_loaded' );
 	}
 
 	/**
