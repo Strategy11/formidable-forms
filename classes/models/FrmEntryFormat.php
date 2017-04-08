@@ -190,7 +190,8 @@ class FrmEntryFormat {
 			} elseif ( isset( $atts['filter'] ) && $atts['filter'] == false ) {
 				$val = $prev_val;
 			} else {
-				$val = apply_filters( 'frm_email_value', $prev_val, (object) $meta, $atts['entry'], compact( 'field' ) );
+				$email_value_atts = array( 'field' => $f, 'format' => $atts['format'] );
+				$val = apply_filters( 'frm_email_value', $prev_val, (object) $meta, $atts['entry'], $email_value_atts );
 			}
 		}
 	}
