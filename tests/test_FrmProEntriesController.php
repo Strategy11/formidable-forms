@@ -104,7 +104,7 @@ class WP_Test_FrmProEntriesController extends FrmUnitTest {
 
 	function _set_and_check_expectations( &$args ) {
 		if ( $args['form_key'] == $this->all_fields_form_key ) {
-			$expected_entry_count = 3;
+			$expected_entry_count = 4;
 		} else {
 			$expected_entry_count = 0;
 		}

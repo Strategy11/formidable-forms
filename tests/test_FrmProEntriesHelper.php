@@ -17,7 +17,7 @@ class WP_Test_FrmProEntriesHelper extends FrmUnitTest {
 		$search_string = 'Wahlin';
 		$items = self::run_search_query( $where_clause, $form_id, $search_string );
 		$msg = 'A general search for ' . $search_string . ' in entry metas table';
-		self::run_entries_found_tests( $msg, $items, 1, array( 'jamie_entry_key' ) );
+		self::run_entries_found_tests( $msg, $items, 2, array( 'jamie_entry_key' ) );
 
 		// Single word is searched. Two matching entries should be found.
 		$search_string = 'Ventura';
@@ -44,7 +44,7 @@ class WP_Test_FrmProEntriesHelper extends FrmUnitTest {
 		$search_string = 'Wahlin http://www.stephtest.com';
 		$items = self::run_search_query( $where_clause, $form_id, $search_string );
 		$msg = 'A general search for ' . $search_string . ' in entry metas table';
-		self::run_entries_found_tests( $msg, $items, 2, array( 'jamie_entry_key', 'steph_entry_key' ) );
+		self::run_entries_found_tests( $msg, $items, 3, array( 'jamie_entry_key', 'steph_entry_key' ) );
 
 		// Multiple words are searched. One matching entry should be found.
 		$search_string = 'Rebecca Wahlin';
@@ -80,7 +80,7 @@ class WP_Test_FrmProEntriesHelper extends FrmUnitTest {
 		$search_string = "Jamie's";
 		$items = self::generate_and_run_search_query( 'create-a-post', $search_string );
 		$msg = 'A general search for ' . $search_string . ' in posts table';
-		self::run_entries_found_tests( $msg, $items, 1, array( 'post-entry-1' ) );
+		self::run_entries_found_tests( $msg, $items, 2, array( 'post-entry-1' ) );
 	}
 
 	/**
@@ -106,19 +106,19 @@ class WP_Test_FrmProEntriesHelper extends FrmUnitTest {
 		$search_string = 'jamie_entry_key';
 		$items = self::run_search_query( $where_clause, $form_id, $search_string );
 		$msg = 'A general search for ' . $search_string . ' in entries table';
-		self::run_entries_found_tests( $msg, $items, 1, array( 'jamie_entry_key' ) );
+		self::run_entries_found_tests( $msg, $items, 2, array( 'jamie_entry_key' ) );
 
 		// Single word is searched. Three matching entries should be found.
 		$search_string = '_entry_key';
 		$items = self::run_search_query( $where_clause, $form_id, $search_string );
 		$msg = 'A general search for ' . $search_string . ' in entries table';
-		self::run_entries_found_tests( $msg, $items, 3, array( 'steph_entry_key', 'steve_entry_key', 'jamie_entry_key' ) );
+		self::run_entries_found_tests( $msg, $items, 4, array( 'steph_entry_key', 'steve_entry_key', 'jamie_entry_key' ) );
 
 		// Multiple words are searched. Two matching entries should be found.
 		$search_string = 'jamie_entry_key steph_entry_key';
 		$items = self::run_search_query( $where_clause, $form_id, $search_string );
 		$msg = 'A general search for ' . $search_string . ' in entries table';
-		self::run_entries_found_tests( $msg, $items, 2, array( 'jamie_entry_key', 'steph_entry_key' ) );
+		self::run_entries_found_tests( $msg, $items, 3, array( 'jamie_entry_key', 'steph_entry_key' ) );
 	}
 
 	/**
@@ -156,7 +156,7 @@ class WP_Test_FrmProEntriesHelper extends FrmUnitTest {
 		$search_string = 'admin';
 		$items = self::generate_and_run_search_query( 'all_field_types', $search_string );
 		$msg = 'A general search for ' . $search_string . ' in entries table';
-		self::run_entries_found_tests( $msg, $items, 3, array( 'steph_entry_key', 'steve_entry_key', 'jamie_entry_key' ) );
+		self::run_entries_found_tests( $msg, $items, 4, array( 'steph_entry_key', 'steve_entry_key', 'jamie_entry_key' ) );
 	}
 
 	/**
@@ -177,7 +177,7 @@ class WP_Test_FrmProEntriesHelper extends FrmUnitTest {
 		$field_key = 'p3eiuk';
 		$items = self::generate_and_run_field_specific_query( 'all_field_types', $field_key, $search_string );
 		$msg = 'A search for ' . $search_string . ' in field ' . $field_key;
-		self::run_entries_found_tests( $msg, $items, 1, array( 'jamie_entry_key' ) );
+		self::run_entries_found_tests( $msg, $items, 2, array( 'jamie_entry_key' ) );
 
 		// Single word. No matching entries should be found.
 		$search_string = 'TextThatWillNotBeFound';
@@ -227,13 +227,13 @@ class WP_Test_FrmProEntriesHelper extends FrmUnitTest {
 		$search_string = 'admin';
 		$items = self::generate_and_run_search_query( 'all_field_types', $search_string, 'user_id' );
 		$msg = 'A search for ' . $search_string . ' in UserID field';
-		self::run_entries_found_tests( $msg, $items, 1, array( 'jamie_entry_key' ) );
+		self::run_entries_found_tests( $msg, $items, 2, array( 'jamie_entry_key', 'jamie_entry_key_2' ) );
 
 		// UserID number. Three matching entries should be found.
 		$search_string = '1';
 		$items = self::generate_and_run_search_query( 'all_field_types', $search_string, 'user_id' );
 		$msg = 'A search for ' . $search_string . ' in UserID field';
-		self::run_entries_found_tests( $msg, $items, 1, array( 'jamie_entry_key' ) );
+		self::run_entries_found_tests( $msg, $items, 2, array( 'jamie_entry_key', 'jamie_entry_key_2' ) );
 
 		// UserID number. No matching entries should be found.
 		$search_string = '7';
@@ -253,7 +253,7 @@ class WP_Test_FrmProEntriesHelper extends FrmUnitTest {
 		$field_key = 'yi6yvm';
 		$items = self::generate_and_run_field_specific_query( 'create-a-post', $field_key, $search_string );
 		$msg = 'A search for ' . $search_string . ' in post title field ' . $field_key;
-		self::run_entries_found_tests( $msg, $items, 1, array( 'post-entry-1' ) );
+		self::run_entries_found_tests( $msg, $items, 2, array( 'post-entry-1' ) );
 
 		// Single word. No entries should be found.
 		$search_string = 'TextThatShouldNotBeFound';
@@ -311,7 +311,7 @@ class WP_Test_FrmProEntriesHelper extends FrmUnitTest {
 		$search_string = '2015-05-13';
 		$items = self::generate_and_run_search_query( 'all_field_types', $search_string, 'created_at' );
 		$msg = 'A search for ' . $search_string . ' in creation date column';
-		self::run_entries_found_tests( $msg, $items, 3, array( 'steph_entry_key', 'steve_entry_key' ) );
+		self::run_entries_found_tests( $msg, $items, 3, array( 'steph_entry_key', 'steve_entry_key', 'jamie_entry_key_2' ) );
 
 		// Y-m-d H:i:s. One matching entry should be found.
 		$search_string = '2015-05-12 19:30';

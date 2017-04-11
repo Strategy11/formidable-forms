@@ -119,7 +119,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 	}
 
 	function get_all_fields_for_form_key( $form_key ) {
-		$field_totals = array( $this->all_fields_form_key => 44, $this->create_post_form_key => 10, $this->contact_form_key => 8, $this->repeat_sec_form_key => 3 );
+		$field_totals = array( $this->all_fields_form_key => 45, $this->create_post_form_key => 10, $this->contact_form_key => 8, $this->repeat_sec_form_key => 3 );
 		$expected_field_num = isset( $field_totals[ $form_key ] ) ? $field_totals[ $form_key ] : 0;
 
 		$form_id = $this->factory->form->get_id_by_key( $form_key );

@@ -67,13 +67,6 @@ class FrmAppHelper {
 
 	public static function get_affiliate() {
 		return '';
-		$affiliate_id = apply_filters( 'frm_affiliate_link', get_option('frm_aff') );
-		$affiliate_id = strtolower( $affiliate_id );
-		$allowed_affiliates = array();
-		if ( ! in_array( $affiliate_id, $allowed_affiliates ) ) {
-			$affiliate_id = false;
-		}
-		return $affiliate_id;
 	}
 
     /**

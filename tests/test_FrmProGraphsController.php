@@ -1819,7 +1819,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 			array( 'Date', 'Number' ),
 			array( 'January 24, 2015', 5.0 ),
 			array( 'July 8, 2015', 1.0 ),
-			array( 'August 16, 2015', 10.0 ),
+			array( 'August 16, 2015', 20.0 ),
 		);
 
 		self::run_graph_tests( $graph_html, $expected_data );
@@ -1845,7 +1845,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 			array( 'Date', 'Number', 'Scale' ),
 			array( 'January 24, 2015', 5.0, 8.0 ),
 			array( 'July 8, 2015', 1.0, 8.0 ),
-			array( 'August 16, 2015', 10.0, 5.0 ),
+			array( 'August 16, 2015', 20.0, 10.0 ),
 		);
 
 		self::run_graph_tests( $graph_html, $expected_data );
@@ -1870,7 +1870,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 			array( 'Date', 'Dropdown', 'Scale' ),
 			array( 'January 24, 2015', 1, 1 ),
 			array( 'July 8, 2015', 1, 1 ),
-			array( 'August 16, 2015', 1, 1 ),
+			array( 'August 16, 2015', 2, 2 ),
 		);
 
 		self::run_graph_tests( $graph_html, $expected_data );
@@ -1964,7 +1964,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 			array( 'Date', 'Dropdown' ),
 			array( 'January 2015', 1 ),
 			array( 'July 2015', 1 ),
-			array( 'August 2015', 1 ),
+			array( 'August 2015', 2 ),
 		);
 
 		self::run_graph_tests( $graph_html, $expected_data );
@@ -1994,7 +1994,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 			array( 'Date', 'Dropdown' ),
 			array( 'June 2015', 0 ),
 			array( 'July 2015', 1 ),
-			array( 'August 2015', 1 ),
+			array( 'August 2015', 2 ),
 		);
 
 		self::run_graph_tests( $graph_html, $expected_data );
@@ -2020,7 +2020,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		$expected_data['data'] = array(
 			array( 'Date', 'Dropdown' ),
 			array( 'Q1 2015', 1 ),
-			array( 'Q3 2015', 2 ),
+			array( 'Q3 2015', 3 ),
 		);
 
 		self::run_graph_tests( $graph_html, $expected_data );
@@ -2071,7 +2071,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		$expected_data = self::get_graph_defaults(  $graph_atts, 'Single Line Text' );
 		$expected_data['data'] = array(
 			array( 'Dynamic Field - level 1', 'Single Line Text' ),
-			array( 'United States', 3 ),
+			array( 'United States', 4 ),
 		);
 
 		self::run_graph_tests( $graph_html, $expected_data );
@@ -2095,7 +2095,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		$expected_data = self::get_graph_defaults(  $graph_atts, 'Single Line Text' );
 		$expected_data['data'] = array(
 			array( 'Dropdown', 'Single Line Text' ),
-			array( 'Ace Ventura', 2 ),
+			array( 'Ace Ventura', 3 ),
 			array( 'William Wells', 1 ),
 		);
 
@@ -2122,7 +2122,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 			array( 'Number', 'Single Line Text' ),
 			array( 1.0, 1 ),
 			array( 5.0, 1 ),
-			array( 10.0, 1 ),
+			array( 10.0, 2 ),
 		);
 
 		self::run_graph_tests( $graph_html, $expected_data );
@@ -2160,7 +2160,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 			if ( $i == 12 ) {
 				$count = 1;
 			} else if ( $i == 13 ) {
-				$count = 2;
+				$count = 3;
 			} else {
 				$count = 0;
 			}
@@ -2196,7 +2196,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 			array( 'February 2015', 0 ),
 			array( 'March 2015', 0 ),
 			array( 'April 2015', 0 ),
-			array( 'May 2015', 3 ),
+			array( 'May 2015', 4 ),
 		);
 
 		self::run_graph_tests( $graph_html, $expected_data );
@@ -2282,7 +2282,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 				array( 'Date', $tooltip_label ),
 				array( 'January 24, 2015', 1 ),
 				array( 'July 8, 2015', 1 ),
-				array( 'August 16, 2015', 1 ),
+				array( 'August 16, 2015', 2 ),
 			);
 		}
 

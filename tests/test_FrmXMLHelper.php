@@ -182,7 +182,7 @@ class WP_Test_FrmXMLHelper extends FrmUnitTest {
 
 		$expected_numbers = array(
 			'forms' => 2,
-			'fields' => 36,
+			'fields' => 37,
 		);
 
 		foreach ( $expected_numbers as $type => $e_number ) {

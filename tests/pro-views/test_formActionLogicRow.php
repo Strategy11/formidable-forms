@@ -34,7 +34,7 @@ class test_formActionLogicRow extends FrmUnitTest {
 	 */
 	public function test_action_logic_row_text_box_fields_selected() {
 		foreach ( self::fields_with_text_box() as $field_key ) {
-			self::test_action_logic_row_text_box_field_selected( $field_key );
+			self::check_action_logic_row_text_box_field_selected( $field_key );
 		}
 	}
 
@@ -44,7 +44,7 @@ class test_formActionLogicRow extends FrmUnitTest {
 	 *
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
-	private function test_action_logic_row_text_box_field_selected( $field_key ) {
+	private function check_action_logic_row_text_box_field_selected( $field_key ) {
 		$logic_row = $this->get_logic_row( $field_key, 'Show me' );
 
 		$name = 'frm_form_action[1234][post_content][conditions][0][hide_opt]';

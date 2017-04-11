@@ -37,11 +37,11 @@ class WP_Test_FrmNotification extends FrmUnitTest {
 		$this->assertNotEmpty( $entry );
 
 		foreach ( $actions as $action ) {
-			self::test_email_one( $action, $entry, $form );
-			self::test_email_two( $action, $entry, $form );
-			self::test_email_three( $action, $entry, $form );
-			self::test_email_four( $action, $entry, $form );
-			self::test_email_five( $action, $entry, $form );
+			self::check_email_one( $action, $entry, $form );
+			self::check_email_two( $action, $entry, $form );
+			self::check_email_three( $action, $entry, $form );
+			self::check_email_four( $action, $entry, $form );
+			self::check_email_five( $action, $entry, $form );
 		}
 	}
 
@@ -61,7 +61,7 @@ class WP_Test_FrmNotification extends FrmUnitTest {
 	 * @param $entry
 	 * @param $form
 	 */
-	private function test_email_one( $action, $entry, $form ) {
+	private function check_email_one( $action, $entry, $form ) {
 		$pass_entry = clone $entry;
 
 		$expected = array(
@@ -116,7 +116,7 @@ class WP_Test_FrmNotification extends FrmUnitTest {
 	 * @param $entry
 	 * @param $form
 	 */
-	private function test_email_two( $action, $entry, $form ) {
+	private function check_email_two( $action, $entry, $form ) {
 		$entry_clone = clone $entry;
 		$action_clone = clone $action;
 		$expected = array();
@@ -195,7 +195,7 @@ class WP_Test_FrmNotification extends FrmUnitTest {
 	 * @param $entry
 	 * @param $form
 	 */
-	private function test_email_three( $action, $entry, $form ) {
+	private function check_email_three( $action, $entry, $form ) {
 		$entry_clone = clone $entry;
 		$action_clone = clone $action;
 		$expected = array();
@@ -282,7 +282,7 @@ class WP_Test_FrmNotification extends FrmUnitTest {
 	 * @param $entry
 	 * @param $form
 	 */
-	private function test_email_four( $action, $entry, $form ) {
+	private function check_email_four( $action, $entry, $form ) {
 		$entry_clone = clone $entry;
 		$action_clone = clone $action;
 		$expected = array();
@@ -359,7 +359,7 @@ class WP_Test_FrmNotification extends FrmUnitTest {
 	 * @param $entry
 	 * @param $form
 	 */
-	private function test_email_five( $action, $entry, $form ) {
+	private function check_email_five( $action, $entry, $form ) {
 		$entry_clone = clone $entry;
 		$action_clone = clone $action;
 		$expected = array();

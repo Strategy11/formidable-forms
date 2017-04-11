@@ -25,11 +25,11 @@ class test_fieldLogicRow extends FrmUnitTest {
 		$field_id = FrmField::get_id_by_key( '493ito' );
 
 		foreach ( $this->fields_with_text_box() as $logic_field_key ) {
-			$this->test_single_text_box_logic_field_selected( $field_id, $logic_field_key );
+			$this->check_single_text_box_logic_field_selected( $field_id, $logic_field_key );
 		}
 	}
 
-	private function test_single_text_box_logic_field_selected( $field_id, $logic_field_key ) {
+	private function check_single_text_box_logic_field_selected( $field_id, $logic_field_key ) {
 		$logic_row = $this->get_logic_row( $field_id, $logic_field_key, 'Show me' );
 
 		$expected = '<input type="text" name="field_options[hide_opt_' . $field_id . '][]" value="Show me" />';

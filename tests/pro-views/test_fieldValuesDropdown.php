@@ -22,7 +22,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	 */
 	public function test_field_logic_for_fields_with_text_box() {
 		foreach ( self::fields_with_text_box() as $field_key ) {
-			self::test_single_field_with_text_box( $field_key );
+			self::check_single_field_with_text_box( $field_key );
 		}
 	}
 
@@ -32,7 +32,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	 *
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
-	private function test_single_field_with_text_box( $field_key ) {
+	private function check_single_field_with_text_box( $field_key ) {
 		list( $logic_field, $field, $field_id, $row_key ) = $this->initialize_field_logic_variables( $field_key, 'uc580i' );
 
 		// Set selected value
@@ -461,7 +461,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	 */
 	public function test_action_logic_for_fields_with_text_box() {
 		foreach ( self::fields_with_text_box() as $field_key ) {
-			self::test_action_logic_row_text_box( $field_key );
+			self::check_action_logic_row_text_box( $field_key );
 		}
 	}
 
@@ -473,7 +473,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	 *
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
-	private function test_action_logic_row_text_box( $field_key ) {
+	private function check_action_logic_row_text_box( $field_key ) {
 		list( $field_name, $meta_name, $new_field ) = $this->initialize_action_logic_variables( $field_key );
 
 		$dropdown = $this->get_action_logic_dropdown( $field_name, $meta_name, $new_field, 'Test' );
