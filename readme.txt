@@ -97,6 +97,28 @@ A. The field and form names and descriptions are all changed with in-place edit.
 [See more FAQs](https://formidableforms.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 2.03.05 =
+* New: Add Honeypot spam protection
+* Enhancement: Add frm_form_attributes hook.
+* Enhancement: Make field value dropdown code available in free version
+* Enhancement: Add deprecated notice for old globals such as $frm_form, $frm_entry, $frm_entry_meta, and $frmdb
+* Fix: Set default menu name to Formidable
+* Fix: Allow Date column to be toggled on form listing page
+* **Pro Version** *
+* New: Add Honeypot spam protection on file uploads.
+* New: Add option to get oldest or newest unique values in Views.
+* New: Add custom frmDrawChart event for customizing graphs.
+* Enhancement: Delete temporary files after 6 hours.
+* Enhancement: Add more comparison types for Lookup field queries. Affects frm_set_comparison_type_for_lookup hook options.
+* Enhancement: Add frm_pro_value_selector_options hook for customizing options available in field value dropdown.
+* Enhancement: Trigger frmLookupOptionsLoaded event when options are loaded in Lookup field.
+* Fix: Separate multiple files with comma for Zapier.
+* Fix: Start and end date not applying to repeating date fields.
+* Fix: Do not clear hidden form field in conditionally hidden Repeatable Section.
+* Fix: Create queue for fields watching Lookups so the value set is always the correct value.
+* Fix: If a field doesn't have separate values, simplify the options array to include only the key and displayed value.
+* Fix: Delete child entries when Repeatable Section is conditionally hidden and entry is updated.
+
 = 2.03.04 =
 * Fix: Allow quotes within shortcodes in email settings
 * Fix: Check if an option is "other" a little more reliably. Instead of checking for 'other' anywhere in the option key, check for other_ at the beginning.
