@@ -3,7 +3,7 @@ Contributors: formidableforms, sswells, srwells, jamie.wahlin
 Tags: form, contact form, form builder, custom form, forms, form maker, form creator
 Requires at least: 3.8
 Tested up to: 4.7.3
-Stable tag: 2.03.04
+Stable tag: 2.03.05
 
 The best WordPress form plugin. Simple drag & drop form building, visual form styling, and unlimited email notifications. 
 
