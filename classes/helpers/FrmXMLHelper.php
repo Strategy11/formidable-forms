@@ -588,9 +588,11 @@ class FrmXMLHelper {
                 $imported['imported'][ $this_type ]++;
             }
 
-            unset($post);
-
 			$imported['posts'][ (int) $old_id ] = $post_id;
+
+	        do_action( 'frm_after_import_view', $post_id, $post );
+
+	        unset( $post );
 		}
 
 		self::maybe_update_stylesheet( $imported );
