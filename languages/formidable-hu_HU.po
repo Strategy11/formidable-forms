@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Formidable v2.03.05\n"
+"Project-Id-Version: Formidable v2.03.06\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-01 03:07+0000\n"
-"PO-Revision-Date: Tue Apr 11 2017 15:10:55 GMT-0700 (PDT)\n"
+"PO-Revision-Date: Wed Apr 12 2017 13:23:07 GMT-0700 (PDT)\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: Hungarian\n"
@@ -575,7 +575,7 @@ msgid "Add/Edit Views"
 msgstr ""
 
 #: ../classes/helpers/FrmAppHelper.php:1072 ../classes/helpers/FrmFieldsHelper.
-#: php:175 ../pro/classes/controllers/FrmProFieldsController.php:1514
+#: php:175 ../pro/classes/controllers/FrmProFieldsController.php:1515
 #, php-format
 msgid "%s is invalid"
 msgstr ""
