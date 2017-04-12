@@ -168,6 +168,7 @@ function frmFrontFormJS(){
 						formData.append('action', 'frm_submit_dropzone' );
 						formData.append('field_id', uploadFields[i].fieldID );
 						formData.append('form_id', uploadFields[i].formID );
+						formData.append('nonce', frm_js.nonce );
 					}
 				});
 
