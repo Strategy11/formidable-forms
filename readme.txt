@@ -3,7 +3,7 @@ Contributors: formidableforms, sswells, srwells, jamie.wahlin
 Tags: form, contact form, form builder, custom form, forms, form maker, form creator
 Requires at least: 3.8
 Tested up to: 4.7.3
-Stable tag: 2.03.05
+Stable tag: 2.03.06
 
 The best WordPress form plugin. Simple drag & drop form building, visual form styling, and unlimited email notifications. 
 
@@ -97,6 +97,13 @@ A. The field and form names and descriptions are all changed with in-place edit.
 [See more FAQs](https://formidableforms.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+
+= 2.03.06 =
+* **Pro Version** *
+* Fix: Add nonce check for uploads
+* Fix: Decrease maximum number of orphaned files that can be deleted at one time
+* Fix: Carry page titles across on import
+
 = 2.03.05 =
 * New: Add Honeypot spam protection
 * Enhancement: Add frm_form_attributes hook.
