@@ -19,7 +19,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 			$s_query['it.form_id'] = $form_id;
 			$join_form_in_query = false;
 		} else {
-			$s_query['fr.parent_form_id'] = 0;
+			$s_query[] = array( 'or' => 1, 'parent_form_id' => null, 'parent_form_id <' => 1 );
 			$join_form_in_query = true;
 		}
 
