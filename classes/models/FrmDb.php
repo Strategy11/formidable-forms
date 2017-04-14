@@ -349,9 +349,33 @@ class FrmDb {
 
 		$query = self::generate_query_string_from_pieces( $field, $table, $where, $args );
 
-		$cache_key = str_replace( array( ' ', ',' ), '_', trim( implode( '_', FrmAppHelper::array_flatten( $where ) ) . implode( '_', $args ) . $field . '_' . $type, ' WHERE' ) );
+	    $cache_key = self::generate_cache_key( $where, $args, $field, $type );
 		$results = FrmAppHelper::check_cache( $cache_key, $group, $query, 'get_' . $type );
         return $results;
+    }
+
+	/**
+	 * Generate a cache key from the where query, field, type, and other arguments
+	 *
+	 * @since 2.03.07
+	 *
+	 * @param array $where
+	 * @param array $args
+	 * @param string $field
+	 * @param string $type
+	 *
+	 * @return string
+	 */
+    private static function generate_cache_key( $where, $args, $field, $type ) {
+	    $cache_key = '';
+	    $where = FrmAppHelper::array_flatten( $where );
+	    foreach ( $where as $key => $value ) {
+			$cache_key .= $key . '_' . $value;
+	    }
+	    $cache_key .= implode( '_', $args ) . $field . '_' . $type;
+	    $cache_key = str_replace( array( ' ', ',' ), '_', $cache_key );
+
+	    return $cache_key;
     }
 
     /**
