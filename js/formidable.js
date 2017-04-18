@@ -244,11 +244,21 @@ function frmFrontFormJS(){
 
 	function isSpam() {
 		var val = document.getElementById('frm_verify').value;
-		if ( val !== '' ) {
+		if ( val !== '' || isHeadless() ) {
 			return true;
 		} else {
 			return false;
 		}
+	}
+
+	function isHeadless() {
+		return (
+			window._phantom || window.callPhantom || //phantomjs
+			window.__phantomas || //PhantomJS-based web perf metrics
+			window.Buffer || //nodejs
+			window.emit || //couchjs
+			window.spawn  //rhino
+		);
 	}
 
 	function getHiddenUploadHTML( field, mediaID, fieldName ) {
