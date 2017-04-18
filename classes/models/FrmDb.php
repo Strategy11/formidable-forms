@@ -349,7 +349,7 @@ class FrmDb {
 
 		$query = self::generate_query_string_from_pieces( $field, $table, $where, $args );
 
-	    $cache_key = self::generate_cache_key( $where, $args, $field, $type );
+		$cache_key = self::generate_cache_key( $where, $args, $field, $type );
 		$results = FrmAppHelper::check_cache( $cache_key, $group, $query, 'get_' . $type );
         return $results;
     }
@@ -366,17 +366,17 @@ class FrmDb {
 	 *
 	 * @return string
 	 */
-    private static function generate_cache_key( $where, $args, $field, $type ) {
-	    $cache_key = '';
-	    $where = FrmAppHelper::array_flatten( $where );
-	    foreach ( $where as $key => $value ) {
+	private static function generate_cache_key( $where, $args, $field, $type ) {
+		$cache_key = '';
+		$where = FrmAppHelper::array_flatten( $where );
+		foreach ( $where as $key => $value ) {
 			$cache_key .= $key . '_' . $value;
-	    }
-	    $cache_key .= implode( '_', $args ) . $field . '_' . $type;
-	    $cache_key = str_replace( array( ' ', ',' ), '_', $cache_key );
+		}
+		$cache_key .= implode( '_', $args ) . $field . '_' . $type;
+		$cache_key = str_replace( array( ' ', ',' ), '_', $cache_key );
 
-	    return $cache_key;
-    }
+		return $cache_key;
+	}
 
     /**
      * @param string $table
