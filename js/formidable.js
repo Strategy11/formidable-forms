@@ -160,7 +160,8 @@ function frmFrontFormJS(){
 			},
 			init: function() {
 				this.on('sending', function(file, xhr, formData) {
-					if ( isSpam() ) {
+
+					if ( isSpam( uploadFields[i].htmlID ) ) {
 						this.removeFile(file);
 						alert('Oops. That file looks like Spam.');
 						return false;
@@ -242,12 +243,31 @@ function frmFrontFormJS(){
 		});
 	}
 
-	function isSpam() {
+	function isSpam( htmlID ) {
 		var val = document.getElementById('frm_verify').value;
-		if ( val !== '' || isHeadless() ) {
+		if ( val !== '' || isHeadless() || ! hasFileUploadInteractionOccurred( htmlID ) ) {
 			return true;
 		} else {
 			return false;
+		}
+	}
+
+	function fileUploadInteraction() {
+		if ( this.id !== undefined ) {
+			var getId = this.id.replace( '_dropzone', 'CanUpload' );
+			var hiddenField = document.getElementById( getId );
+			if ( hiddenField !== null ) {
+				hiddenField.value = 'yes';
+			}
+		}
+	}
+
+	function hasFileUploadInteractionOccurred( htmlID ){
+		var checkField = document.getElementById( htmlID + 'CanUpload' );
+		if ( checkField === null || checkField.value !== 'yes' ) {
+			return false;
+		} else {
+			return true;
 		}
 	}
 
@@ -4295,6 +4315,7 @@ function frmFrontFormJS(){
 			});
 
 			jQuery(document).on('change', '.frm-show-form input[name^="item_meta"], .frm-show-form select[name^="item_meta"], .frm-show-form textarea[name^="item_meta"]', maybeCheckDependent);
+			jQuery(document).on('click', '.dz-clickable', fileUploadInteraction );
 
 			jQuery(document).on('click', '.frm-show-form input[type="submit"], .frm-show-form input[name="frm_prev_page"], .frm_page_back, .frm_page_skip, .frm-show-form .frm_save_draft, .frm_prev_page, .frm_button_submit', setNextPage);
             
