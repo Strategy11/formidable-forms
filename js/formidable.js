@@ -3429,12 +3429,8 @@ function frmFrontFormJS(){
 						jQuery(document.getElementById('frm_edit_'+ entryIdField.val())).find('a').addClass('frm_ajax_edited').click();
 					}
 
-					var formCompleted = jQuery(response.content).find('.frm_message');
-					if ( formCompleted.length ) {
-						// if the success message is showing, run the logic
-						checkConditionalLogic( 'pageLoad' );
-					}
-					checkFieldsOnPage();
+					afterFormSubmitted( object, response );
+
 				} else if ( Object.keys(response.errors).length ) {
 					// errors were returned
 
@@ -3483,6 +3479,8 @@ function frmFrontFormJS(){
 							}
 						}
 					}
+
+					jQuery(document).trigger( 'frmFormErrors', [ object, response ] );
 
 					fieldset.removeClass('frm_doing_ajax');
 					scrollToFirstField( object );
@@ -3540,6 +3538,19 @@ function frmFrontFormJS(){
 		}
 
 		return kvp.join('&');
+	}
+
+	function afterFormSubmitted( object, response ) {
+		var formCompleted = jQuery(response.content).find('.frm_message');
+		if ( formCompleted.length ) {
+			jQuery(document).trigger( 'frmFormComplete', [ object, response ] );
+
+			// if the success message is showing, run the logic
+			checkConditionalLogic( 'pageLoad' );
+		} else {
+			jQuery(document).trigger( 'frmPageChanged', [ object, response ] );
+		}
+		checkFieldsOnPage();
 	}
 
 	function addFieldError( $fieldCont, key, jsErrors ) {
