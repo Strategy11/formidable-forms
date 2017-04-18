@@ -530,10 +530,8 @@ if ( ! $submit_style ) { ?>
     -ms-box-sizing:border-box;
 	<?php if ( ! empty( $submit_shadow_color ) ) { ?>
     -moz-box-shadow:0 1px 1px #<?php echo esc_html( $submit_shadow_color ); ?>;
-    -webkit-box-shadow:0px 1px 1px #<?php echo esc_html( $submit_shadow_color ); ?>;
+    -webkit-box-shadow:0 1px 1px #<?php echo esc_html( $submit_shadow_color ); ?>;
     box-shadow:0 1px 1px #<?php echo esc_html( $submit_shadow_color ); ?>;
-    -ms-filter:"progid:DXImageTransform.Microsoft.Shadow(Strength=3, Direction=135, Color='#<?php echo esc_html( $submit_shadow_color ); ?>')";
-    filter:progid:DXImageTransform.Microsoft.Shadow(Strength=3, Direction=135, Color='#<?php echo esc_html( $submit_shadow_color ); ?>');
 	<?php } ?>
 	margin:<?php echo esc_html( $submit_margin ) ?>;
 	margin-left:0;
