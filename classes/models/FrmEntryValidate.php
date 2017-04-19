@@ -2,8 +2,6 @@
 
 class FrmEntryValidate {
     public static function validate( $values, $exclude = false ) {
-        global $wpdb;
-
         FrmEntry::sanitize_entry_post( $values );
         $errors = array();
 
@@ -16,36 +14,60 @@ class FrmEntryValidate {
             $errors['form'] = __( 'You do not have permission to do that', 'formidable' );
         }
 
+		self::set_item_key( $values );
+
+		$posted_fields = self::get_fields_to_validate( $values, $exclude );
+
+		// Pass exclude value to validate_field function so it can be used for repeating sections
+		$args = array( 'exclude' => $exclude );
+
+		$check_later = array();
+		foreach ( $posted_fields as $posted_field ) {
+			if ( $posted_field->type == 'file' ) {
+				$check_later[] = $posted_field;
+			} else {
+				self::validate_field( $posted_field, $errors, $values, $args );
+			}
+			unset( $posted_field );
+		}
+
+		// check for spam
+		self::spam_check( $exclude, $values, $errors );
+		if ( ! empty( $errors ) ) {
+			return $errors;
+		}
+
+		foreach ( $check_later as $posted_field ) {
+			self::validate_field( $posted_field, $errors, $values, $args );
+			unset( $posted_field );
+		}
+
+		$errors = apply_filters( 'frm_validate_entry', $errors, $values, compact('exclude') );
+
+		return $errors;
+	}
+
+	private static function set_item_key( &$values ) {
 		if ( ! isset( $values['item_key'] ) || $values['item_key'] == '' ) {
+			global $wpdb;
 			$values['item_key'] = FrmAppHelper::get_unique_key( '', $wpdb->prefix . 'frm_items', 'item_key' );
 			$_POST['item_key'] = $values['item_key'];
 		}
+	}
 
-        $where = apply_filters('frm_posted_field_ids', array( 'fi.form_id' => $values['form_id'] ) );
+	private static function get_fields_to_validate( $values, $exclude ) {
+		$where = apply_filters( 'frm_posted_field_ids', array( 'fi.form_id' => $values['form_id'] ) );
+
 		// Don't get subfields
 		$where['fr.parent_form_id'] = array( null, 0 );
+
 		// Don't get excluded fields (like file upload fields in the ajax validation)
 		if ( ! empty( $exclude ) ) {
 			$where['fi.type not'] = $exclude;
 		}
 
-        $posted_fields = FrmField::getAll($where, 'field_order');
-
-        // Pass exclude value to validate_field function so it can be used for repeating sections
-        $args = array( 'exclude' => $exclude );
-
-        foreach ( $posted_fields as $posted_field ) {
-            self::validate_field($posted_field, $errors, $values, $args);
-            unset($posted_field);
-        }
-
-        // check for spam
-        self::spam_check( $exclude, $values, $errors );
-
-        $errors = apply_filters( 'frm_validate_entry', $errors, $values, compact('exclude') );
-
-        return $errors;
-    }
+		return FrmField::getAll( $where, 'field_order' );
+	}
 
     public static function validate_field( $posted_field, &$errors, $values, $args = array() ) {
         $defaults = array(
