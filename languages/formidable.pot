@@ -2,10 +2,10 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Formidable v2.03.06\n"
+"Project-Id-Version: Formidable v2.03.07\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-01 03:07+0000\n"
-"POT-Revision-Date: Wed Apr 12 2017 13:20:21 GMT-0700 (PDT)\n"
+"POT-Revision-Date: Fri Apr 21 2017 15:05:50 GMT-0700 (PDT)\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -482,9 +482,9 @@ msgstr ""
 #: /classes/helpers/FrmFormsListHelper.php:306 ../classes/views/frm-
 #: entries/sidebar-shared.php:12 ../classes/views/frm-forms/_publish_box.php:67 ..
 #: /pro/classes/controllers/FrmProDisplaysController.php:38 ..
-#: /pro/classes/controllers/FrmProEntriesController.php:1660 ..
-#: /pro/classes/controllers/FrmProEntriesController.php:1870 ..
-#: /pro/classes/controllers/FrmProEntriesController.php:2390 ..
+#: /pro/classes/controllers/FrmProEntriesController.php:1668 ..
+#: /pro/classes/controllers/FrmProEntriesController.php:1878 ..
+#: /pro/classes/controllers/FrmProEntriesController.php:2398 ..
 #: /pro/classes/helpers/FrmProAppHelper.php:224 ..
 #: /pro/classes/helpers/FrmProEntriesHelper.php:256 ..
 #: /pro/classes/models/FrmProContent.php:241
@@ -810,7 +810,7 @@ msgstr ""
 
 #: ../classes/helpers/FrmAppHelper.php:1759 ../classes/views/frm-
 #: forms/_publish_box.php:75 ../pro/classes/controllers/FrmProEddController.php:
-#: 167 ../pro/classes/controllers/FrmProEntriesController.php:2390 ..
+#: 167 ../pro/classes/controllers/FrmProEntriesController.php:2398 ..
 #: /pro/classes/views/frmpro-entries/sidebar-new.php:14 ..
 #: /pro/classes/views/frmpro-entries/sidebar-new.php:14 ..
 #: /pro/classes/views/frmpro-form-actions/_custom_field_row.php:31
@@ -1192,7 +1192,7 @@ msgstr ""
 #: ../classes/helpers/FrmCSVExportHelper.php:115 ..
 #: /classes/helpers/FrmFormsHelper.php:639 ../classes/helpers/FrmFormsListHelper.
 #: php:362 ../classes/views/frm-forms/_publish_box.php:72 ..
-#: /pro/classes/controllers/FrmProEntriesController.php:1650 ..
+#: /pro/classes/controllers/FrmProEntriesController.php:1658 ..
 #: /pro/classes/views/displays/where_options.php:14
 msgid "Draft"
 msgstr ""
@@ -1203,7 +1203,7 @@ msgid "IP"
 msgstr ""
 
 #: ../classes/helpers/FrmEntriesListHelper.php:57 ..
-#: /pro/classes/controllers/FrmProEntriesController.php:1686 ..
+#: /pro/classes/controllers/FrmProEntriesController.php:1694 ..
 #: /pro/classes/helpers/FrmProDisplaysHelper.php:59
 msgid "No Entries Found"
 msgstr ""
@@ -1243,9 +1243,9 @@ msgstr ""
 #: /classes/helpers/FrmFormsHelper.php:618 ../classes/helpers/FrmFormsListHelper.
 #: php:104 ../classes/models/FrmFormAction.php:691 ../classes/views/frm-
 #: entries/sidebar-show.php:22 ../classes/views/frm-entries/sidebar-show.php:23 ..
-#: /pro/classes/controllers/FrmProEntriesController.php:1884 ..
-#: /pro/classes/controllers/FrmProEntriesController.php:2129 ..
-#: /pro/classes/controllers/FrmProEntriesController.php:2539 ..
+#: /pro/classes/controllers/FrmProEntriesController.php:1892 ..
+#: /pro/classes/controllers/FrmProEntriesController.php:2137 ..
+#: /pro/classes/controllers/FrmProEntriesController.php:2547 ..
 #: /pro/classes/helpers/FrmProEntriesListHelper.php:6 ../pro/classes/views/frmpro-
 #: entries/sidebar-edit.php:27 ../pro/classes/views/frmpro-entries/sidebar-edit.
 #: php:27
@@ -2389,7 +2389,7 @@ msgstr ""
 #: ../classes/helpers/FrmFormsListHelper.php:315 ..
 #: /pro/classes/controllers/FrmProDisplaysController.php:112 ..
 #: /pro/classes/controllers/FrmProDisplaysController.php:112 ..
-#: /pro/classes/controllers/FrmProEntriesController.php:1665 ..
+#: /pro/classes/controllers/FrmProEntriesController.php:1673 ..
 #: /pro/classes/helpers/FrmProEntriesHelper.php:245
 msgid "Duplicate"
 msgstr ""
@@ -2675,79 +2675,79 @@ msgstr ""
 msgid "Your server is missing the simplexml_import_dom function"
 msgstr ""
 
-#: ../classes/helpers/FrmXMLHelper.php:803
+#: ../classes/helpers/FrmXMLHelper.php:805
 msgid "Imported"
 msgstr ""
 
-#: ../classes/helpers/FrmXMLHelper.php:804
+#: ../classes/helpers/FrmXMLHelper.php:806
 msgid "Updated"
 msgstr ""
 
-#: ../classes/helpers/FrmXMLHelper.php:829
+#: ../classes/helpers/FrmXMLHelper.php:831
 msgid "Nothing was imported or updated"
 msgstr ""
 
-#: ../classes/helpers/FrmXMLHelper.php:841
+#: ../classes/helpers/FrmXMLHelper.php:843
 #, php-format
 msgid "%1$s Form"
 msgid_plural "%1$s Forms"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../classes/helpers/FrmXMLHelper.php:842
+#: ../classes/helpers/FrmXMLHelper.php:844
 #, php-format
 msgid "%1$s Field"
 msgid_plural "%1$s Fields"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../classes/helpers/FrmXMLHelper.php:843
+#: ../classes/helpers/FrmXMLHelper.php:845
 #, php-format
 msgid "%1$s Entry"
 msgid_plural "%1$s Entries"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../classes/helpers/FrmXMLHelper.php:844
+#: ../classes/helpers/FrmXMLHelper.php:846
 #, php-format
 msgid "%1$s View"
 msgid_plural "%1$s Views"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../classes/helpers/FrmXMLHelper.php:845
+#: ../classes/helpers/FrmXMLHelper.php:847
 #, php-format
 msgid "%1$s Post"
 msgid_plural "%1$s Posts"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../classes/helpers/FrmXMLHelper.php:846
+#: ../classes/helpers/FrmXMLHelper.php:848
 #, php-format
 msgid "%1$s Style"
 msgid_plural "%1$s Styles"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../classes/helpers/FrmXMLHelper.php:847
+#: ../classes/helpers/FrmXMLHelper.php:849
 #, php-format
 msgid "%1$s Term"
 msgid_plural "%1$s Terms"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../classes/helpers/FrmXMLHelper.php:848
+#: ../classes/helpers/FrmXMLHelper.php:850
 #, php-format
 msgid "%1$s Form Action"
 msgid_plural "%1$s Form Actions"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../classes/helpers/FrmXMLHelper.php:942
+#: ../classes/helpers/FrmXMLHelper.php:944
 msgid "Create Posts"
 msgstr ""
 
-#: ../classes/helpers/FrmXMLHelper.php:1051 ../classes/views/frm-form-
+#: ../classes/helpers/FrmXMLHelper.php:1053 ../classes/views/frm-form-
 #: actions/email_action.php:16
 msgid "Email Notification"
 msgstr ""
@@ -2815,11 +2815,11 @@ msgstr ""
 msgid "There was a %1$s error: %2$s"
 msgstr ""
 
-#: ../classes/models/FrmDb.php:537
+#: ../classes/models/FrmDb.php:561
 msgid "Use the query in an array format so it can be properly prepared."
 msgstr ""
 
-#: ../classes/models/FrmDb.php:739
+#: ../classes/models/FrmDb.php:763
 msgid "Sending"
 msgstr ""
 
@@ -2865,36 +2865,36 @@ msgstr ""
 msgid "Unknown"
 msgstr ""
 
-#: ../classes/models/FrmEntryValidate.php:11
+#: ../classes/models/FrmEntryValidate.php:9
 msgid "There was a problem with your submission. Please try again."
 msgstr ""
 
-#: ../classes/models/FrmEntryValidate.php:16 ../classes/models/FrmSettings.php:97
+#: ../classes/models/FrmEntryValidate.php:14 ../classes/models/FrmSettings.php:97
 msgid "You do not have permission to do that"
 msgstr ""
 
-#: ../classes/models/FrmEntryValidate.php:149
+#: ../classes/models/FrmEntryValidate.php:171
 msgid "Please select a higher number"
 msgstr ""
 
-#: ../classes/models/FrmEntryValidate.php:151
+#: ../classes/models/FrmEntryValidate.php:173
 msgid "Please select a lower number"
 msgstr ""
 
-#: ../classes/models/FrmEntryValidate.php:238
+#: ../classes/models/FrmEntryValidate.php:260
 msgid "The captcha is missing from this form"
 msgstr ""
 
-#: ../classes/models/FrmEntryValidate.php:258
+#: ../classes/models/FrmEntryValidate.php:280
 msgid "There was a problem verifying your recaptcha"
 msgstr ""
 
-#: ../classes/models/FrmEntryValidate.php:276 ../classes/models/FrmEntryValidate.
-#: php:285
+#: ../classes/models/FrmEntryValidate.php:298 ../classes/models/FrmEntryValidate.
+#: php:307
 msgid "Your entry appears to be spam!"
 msgstr ""
 
-#: ../classes/models/FrmEntryValidate.php:280
+#: ../classes/models/FrmEntryValidate.php:302
 msgid "Your entry appears to be blacklist spam!"
 msgstr ""
 
@@ -2909,20 +2909,20 @@ msgstr ""
 
 #: ../classes/models/FrmField.php:15 ..
 #: /pro/classes/controllers/FrmProLookupFieldsController.php:14 ..
-#: /pro/classes/helpers/FrmProFieldsHelper.php:3676
+#: /pro/classes/helpers/FrmProFieldsHelper.php:3698
 msgid "Checkboxes"
 msgstr ""
 
 #: ../classes/models/FrmField.php:16 ../classes/views/styles/_sample_form.php:58 .
 #: ./pro/classes/controllers/FrmProLookupFieldsController.php:13 ..
-#: /pro/classes/helpers/FrmProFieldsHelper.php:3675 ..
+#: /pro/classes/helpers/FrmProFieldsHelper.php:3697 ..
 #: /pro/classes/views/styles/_sample_form.php:14
 msgid "Radio Buttons"
 msgstr ""
 
 #: ../classes/models/FrmField.php:17 ..
 #: /pro/classes/controllers/FrmProLookupFieldsController.php:12 ..
-#: /pro/classes/helpers/FrmProFieldsHelper.php:3674
+#: /pro/classes/helpers/FrmProFieldsHelper.php:3696
 msgid "Dropdown"
 msgstr ""
 
@@ -2943,7 +2943,7 @@ msgid "End Section"
 msgstr ""
 
 #: ../classes/models/FrmField.php:32 ../pro/classes/helpers/FrmProFieldsHelper.
-#: php:3662
+#: php:3684
 msgid "Section"
 msgstr ""
 
@@ -2980,7 +2980,7 @@ msgid "Scale"
 msgstr ""
 
 #: ../classes/models/FrmField.php:42 ../pro/classes/helpers/FrmProFieldsHelper.
-#: php:3672
+#: php:3694
 msgid "Dynamic Field"
 msgstr ""
 
@@ -3042,7 +3042,7 @@ msgstr ""
 #: /classes/views/frm-forms/add_field_links.php:6 ../classes/views/frm-forms/edit.
 #: php:26 ../classes/views/frm-forms/edit.php:38 ../classes/views/frm-
 #: forms/settings.php:273 ../pro/classes/controllers/FrmProEntriesController.php:
-#: 2486 ../pro/classes/controllers/FrmProEntriesController.php:3044 ..
+#: 2494 ../pro/classes/controllers/FrmProEntriesController.php:3052 ..
 #: /pro/classes/models/FrmProSettings.php:19
 msgid "Update"
 msgstr ""
@@ -3080,7 +3080,7 @@ msgstr ""
 
 #: ../classes/models/FrmPointers.php:225 ..
 #: /pro/classes/controllers/FrmProFormsController.php:214 ..
-#: /pro/classes/helpers/FrmProFormsHelper.php:374
+#: /pro/classes/helpers/FrmProFormsHelper.php:391
 msgid "Previous"
 msgstr ""
 
@@ -3295,7 +3295,7 @@ msgid "You did not add any fields to your form. %1$sGo back%2$s and add some."
 msgstr ""
 
 #: ../classes/views/frm-entries/list.php:18 ../classes/views/frm-forms/list.php:
-#: 21 ../pro/classes/controllers/FrmProEntriesController.php:2022 ..
+#: 21 ../pro/classes/controllers/FrmProEntriesController.php:2030 ..
 #: /pro/classes/controllers/FrmProFormsController.php:369 ..
 #: /pro/classes/controllers/FrmProFormsController.php:428 ..
 #: /pro/classes/helpers/FrmProEntriesListHelper.php:69
@@ -3345,7 +3345,7 @@ msgid "Entry Details"
 msgstr ""
 
 #: ../classes/views/frm-entries/sidebar-shared.php:8 ..
-#: /pro/classes/controllers/FrmProEntriesController.php:1649
+#: /pro/classes/controllers/FrmProEntriesController.php:1657
 msgid "Post"
 msgstr ""
 
@@ -3372,10 +3372,10 @@ msgid "Print"
 msgstr ""
 
 #: ../classes/views/frm-entries/sidebar-show.php:22 ..
-#: /pro/classes/controllers/FrmProEntriesController.php:1687 ..
-#: /pro/classes/controllers/FrmProEntriesController.php:2072 ..
-#: /pro/classes/controllers/FrmProEntriesController.php:2146 ..
-#: /pro/classes/controllers/FrmProEntriesController.php:2540
+#: /pro/classes/controllers/FrmProEntriesController.php:1695 ..
+#: /pro/classes/controllers/FrmProEntriesController.php:2080 ..
+#: /pro/classes/controllers/FrmProEntriesController.php:2154 ..
+#: /pro/classes/controllers/FrmProEntriesController.php:2548
 msgid "Are you sure you want to delete that entry?"
 msgstr ""
 
@@ -5150,35 +5150,35 @@ msgid "Copied from Post"
 msgstr ""
 
 #: ../pro/classes/controllers/FrmProEntriesController.php:1367 ..
-#: /pro/classes/controllers/FrmProEntriesController.php:1390
+#: /pro/classes/controllers/FrmProEntriesController.php:1395
 msgid "You are trying to access an entry that does not exist."
 msgstr ""
 
-#: ../pro/classes/controllers/FrmProEntriesController.php:1702
+#: ../pro/classes/controllers/FrmProEntriesController.php:1710
 msgid ""
 "There are no matching fields. Please check your formresults shortcode to "
 "make sure you are using the correct form and field IDs."
 msgstr ""
 
-#: ../pro/classes/controllers/FrmProEntriesController.php:2578 ..
-#: /pro/classes/controllers/FrmProEntriesController.php:2949
+#: ../pro/classes/controllers/FrmProEntriesController.php:2586 ..
+#: /pro/classes/controllers/FrmProEntriesController.php:2957
 msgid "Your entry was successfully deleted"
 msgstr ""
 
-#: ../pro/classes/controllers/FrmProEntriesController.php:2618
+#: ../pro/classes/controllers/FrmProEntriesController.php:2626
 msgid "You are missing options in your shortcode. field_id is required."
 msgstr ""
 
-#: ../pro/classes/controllers/FrmProEntriesController.php:2965
+#: ../pro/classes/controllers/FrmProEntriesController.php:2973
 msgid "There was an error deleting that entry"
 msgstr ""
 
-#: ../pro/classes/controllers/FrmProEntriesController.php:3027
+#: ../pro/classes/controllers/FrmProEntriesController.php:3035
 #, php-format
 msgid "Resent to %s"
 msgstr ""
 
-#: ../pro/classes/controllers/FrmProEntriesController.php:3032
+#: ../pro/classes/controllers/FrmProEntriesController.php:3040
 msgid "Resent to No one! You do not have permission"
 msgstr ""
 
@@ -5686,7 +5686,7 @@ msgid "Display format"
 msgstr ""
 
 #: ../pro/classes/controllers/FrmProFormsController.php:535 ..
-#: /pro/classes/helpers/FrmProFieldsHelper.php:3677
+#: /pro/classes/helpers/FrmProFieldsHelper.php:3699
 msgid "List"
 msgstr ""
 
@@ -5836,22 +5836,22 @@ msgstr ""
 msgid "Monthly Entries"
 msgstr ""
 
-#: ../pro/classes/controllers/FrmProLookupFieldsController.php:154
+#: ../pro/classes/controllers/FrmProLookupFieldsController.php:159
 msgid "Search values from"
 msgstr ""
 
-#: ../pro/classes/controllers/FrmProLookupFieldsController.php:156
+#: ../pro/classes/controllers/FrmProLookupFieldsController.php:161
 msgid "Get options from"
 msgstr ""
 
-#: ../pro/classes/controllers/FrmProLookupFieldsController.php:310 ..
+#: ../pro/classes/controllers/FrmProLookupFieldsController.php:315 ..
 #: /pro/classes/views/frmpro-fields/field-selection.php:2 ..
 #: /pro/classes/views/frmpro-form-actions/_custom_field_row.php:38 ..
 #: /pro/classes/views/lookup-fields/back-end/watch-row.php:3
 msgid "&mdash; Select Field &mdash;"
 msgstr ""
 
-#: ../pro/classes/controllers/FrmProLookupFieldsController.php:429
+#: ../pro/classes/controllers/FrmProLookupFieldsController.php:434
 msgid "No options available: please check this field's options"
 msgstr ""
 
@@ -6036,23 +6036,23 @@ msgstr ""
 msgid "Default Email Message"
 msgstr ""
 
-#: ../pro/classes/helpers/FrmProFieldsHelper.php:3664
+#: ../pro/classes/helpers/FrmProFieldsHelper.php:3686
 msgid "Heading"
 msgstr ""
 
-#: ../pro/classes/helpers/FrmProFieldsHelper.php:3665 ../pro/classes/views/frmpro-
+#: ../pro/classes/helpers/FrmProFieldsHelper.php:3687 ../pro/classes/views/frmpro-
 #: fields/options-form-top.php:11 ../pro/classes/views/styles/_section-fields.php:7
 msgid "Collapsible"
 msgstr ""
 
-#: ../pro/classes/helpers/FrmProFieldsHelper.php:3666 ../pro/classes/views/frmpro-
+#: ../pro/classes/helpers/FrmProFieldsHelper.php:3688 ../pro/classes/views/frmpro-
 #: fields/options-form-top.php:20 ../pro/classes/views/styles/_section-fields.php:
 #: 10
 msgid "Repeatable"
 msgstr ""
 
-#: ../pro/classes/helpers/FrmProFormsHelper.php:370 ..
-#: /pro/classes/helpers/FrmProFormsHelper.php:613
+#: ../pro/classes/helpers/FrmProFormsHelper.php:387 ..
+#: /pro/classes/helpers/FrmProFormsHelper.php:630
 msgid "Your draft has been saved."
 msgstr ""
 
