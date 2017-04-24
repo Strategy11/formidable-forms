@@ -286,6 +286,7 @@ function frmFrontFormJS(){
 	 *
 	 * @param {object} uploadField
 	 * @param {string} uploadField.htmlID
+	 * @param {string} uploadField.fieldID
 	 * @returns {boolean}
 	 */
 	function precedingRequiredFieldsCompleted( uploadField ) {
@@ -312,7 +313,7 @@ function frmFrontFormJS(){
 					break;
 				}
 
-				if ( requiredFields[r].className.indexOf( 'frm_optional' ) > -1 ) {
+				if ( requiredFields[r].className.indexOf( 'frm_optional' ) > -1 || requiredFields[r].getAttribute( 'data-frmfile' ) === uploadField.fieldID ) {
 					continue;
 				}
 
