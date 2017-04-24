@@ -161,7 +161,11 @@ function frmFrontFormJS(){
 			init: function() {
 				this.on('sending', function(file, xhr, formData) {
 
-					if ( isSpam() ) {
+					if ( ! precedingRequiredFieldsCompleted( uploadFields[i] ) ) {
+						this.removeFile(file);
+						alert('Please complete the preceding required fields before uploading a file.');
+						return false;
+					} else if ( isSpam() ) {
 						this.removeFile(file);
 						alert('Oops. That file looks like Spam.');
 						return false;
@@ -244,12 +248,24 @@ function frmFrontFormJS(){
 	}
 
 	function isSpam() {
-		var val = document.getElementById('frm_verify').value;
-		if ( val !== '' || isHeadless() ) {
+		if ( isHoneypotSpam() || isHeadless() ) {
 			return true;
 		} else {
 			return false;
 		}
+	}
+
+	/**
+	 * Check if submission is Honeypot spam
+	 *
+	 * @since 2.03.08
+	 *
+	 * @returns {boolean}
+     */
+	function isHoneypotSpam() {
+		var val = document.getElementById('frm_verify').value;
+
+		return val !== '';
 	}
 
 	function isHeadless() {
@@ -260,6 +276,58 @@ function frmFrontFormJS(){
 			window.emit || //couchjs
 			window.spawn  //rhino
 		);
+	}
+
+	/**
+	 * Check that preceding required fields are completed
+	 * TODO: maybe convert to JavaScript for increased speed
+	 *
+	 * @since 2.03.08
+	 *
+	 * @param {object} uploadField
+	 * @param {string} uploadField.htmlID
+	 * @returns {boolean}
+     */
+	function precedingRequiredFieldsCompleted( uploadField ) {
+		var fileSelector = uploadField.htmlID + '_dropzone';
+		var dropzoneDiv = jQuery( '#' + fileSelector );
+		var form = dropzoneDiv.closest( 'form' );
+
+		if ( form.length < 1 ) {
+			return false;
+		}
+
+		var requiredFields = jQuery(form).find(
+			'.frm_required_field:visible input, .frm_required_field:visible select, .frm_required_field:visible textarea, #' + fileSelector
+		);
+
+		if ( requiredFields.length < 1 ) {
+			return true;
+		} else {
+			var fieldsComplete = true;
+			var errors = [];
+
+			for ( var r = 0, rl = requiredFields.length; r < rl; r++ ) {
+				if ( requiredFields[r].id === fileSelector ) {
+					break;
+				}
+
+				if ( requiredFields[r].className.indexOf( 'frm_optional' ) > -1 ) {
+					continue;
+				}
+
+				errors = checkRequiredField( requiredFields[r], errors );
+
+				if ( errors.length < 1 ) {
+					fieldsComplete = true;
+				} else {
+					fieldsComplete = false;
+					break;
+				}
+			}
+		}
+
+		return fieldsComplete;
 	}
 
 	function getHiddenUploadHTML( field, mediaID, fieldName ) {
