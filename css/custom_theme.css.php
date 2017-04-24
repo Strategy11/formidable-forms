@@ -932,6 +932,10 @@ select.frm_loading_lookup{
     margin-right:4px;
 }
 
+.frm_form_field.frm_label_justify label.frm_primary_label{
+	text-align:justify !important;
+}
+
 .frm_form_field.frm_capitalize input,
 .frm_form_field.frm_capitalize select,
 .frm_form_field.frm_capitalize .frm_opt_container label{
