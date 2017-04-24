@@ -313,7 +313,7 @@ function frmFrontFormJS(){
 					break;
 				}
 
-				if ( requiredFields[r].className.indexOf( 'frm_optional' ) > -1 || requiredFields[r].getAttribute( 'data-frmfile' ) === uploadField.fieldID ) {
+				if ( requiredFields[r].className.indexOf( 'frm_optional' ) > -1 || requiredFields[r].getAttribute( 'data-frmfile' ) !== null ) {
 					continue;
 				}
 
