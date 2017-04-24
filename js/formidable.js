@@ -261,7 +261,7 @@ function frmFrontFormJS(){
 	 * @since 2.03.08
 	 *
 	 * @returns {boolean}
-     */
+	 */
 	function isHoneypotSpam() {
 		var val = document.getElementById('frm_verify').value;
 
@@ -287,7 +287,7 @@ function frmFrontFormJS(){
 	 * @param {object} uploadField
 	 * @param {string} uploadField.htmlID
 	 * @returns {boolean}
-     */
+	 */
 	function precedingRequiredFieldsCompleted( uploadField ) {
 		var fileSelector = uploadField.htmlID + '_dropzone';
 		var dropzoneDiv = jQuery( '#' + fileSelector );
