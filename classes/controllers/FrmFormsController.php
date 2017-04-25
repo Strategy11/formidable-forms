@@ -638,6 +638,8 @@ class FrmFormsController {
             wp_die(__( 'That template cannot be edited', 'formidable' ));
         }
 
+        self::clean_submit_html( $values );
+
         $action_controls = FrmFormActionsController::get_form_actions();
 
         $sections = apply_filters('frm_add_form_settings_section', array(), $values);
@@ -646,6 +648,19 @@ class FrmFormsController {
         $styles = apply_filters('frm_get_style_opts', array());
 
 		require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/settings.php' );
+    }
+
+	/**
+	 * Replace old Submit Button href with new href to avoid errors in Chrome
+	 *
+	 * @since 2.03.08
+	 *
+	 * @param array $values
+	 */
+    private static function clean_submit_html( &$values ) {
+    	if ( isset( $values['submit_html'] ) ) {
+		    $values['submit_html'] = str_replace( 'javascript:void(0)', '#', $values['submit_html'] );
+	    }
     }
 
     public static function mb_tags_box( $form_id, $class = '' ) {
