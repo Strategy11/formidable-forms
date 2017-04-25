@@ -925,6 +925,11 @@ if ( ! $submit_style ) { ?>
     font-size:<?php echo esc_html( $field_font_size . $important ) ?>;
 }
 
+.<?php echo esc_html( $style_class ) ?> .chosen-container .chosen-results li,
+.<?php echo esc_html( $style_class ) ?> .chosen-container .chosen-results li span{
+	color:<?php echo esc_html( $text_color . $important ) ?>;
+}
+
 .<?php echo esc_html( $style_class ) ?> .chosen-container-single .chosen-single{
     height:<?php echo esc_html( ( $field_height == 'auto' || $field_height == '' ) ? '25px' : $field_height ) ?>;
     line-height:1.3<?php echo esc_html( $important ) ?>;
