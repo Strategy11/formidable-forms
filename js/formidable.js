@@ -3494,11 +3494,6 @@ function frmFrontFormJS(){
 						frmThemeOverride_frmAfterSubmit(formReturned, pageOrder, response.content, object);
 					}
 
-					var entryIdField = jQuery(object).find('input[name="id"]');
-					if(entryIdField.length){
-						jQuery(document.getElementById('frm_edit_'+ entryIdField.val())).find('a').addClass('frm_ajax_edited').click();
-					}
-
 					afterFormSubmitted( object, response );
 
 				} else if ( Object.keys(response.errors).length ) {
@@ -3617,6 +3612,7 @@ function frmFrontFormJS(){
 
 			// if the success message is showing, run the logic
 			checkConditionalLogic( 'pageLoad' );
+			doEditInPlaceCleanUp( object );
 		} else {
 			jQuery(document).trigger( 'frmPageChanged', [ object, response ] );
 		}
@@ -4064,19 +4060,29 @@ function frmFrontFormJS(){
 
 	function cancelEdit(){
 		/*jshint validthis:true */
-		var $edit = jQuery(this);
-		var entry_id = $edit.data('entryid');
-		var prefix = $edit.data('prefix');
-		var label = $edit.data('edit');
 
-		if(!$edit.hasClass('frm_ajax_edited')){
-			var $cont = jQuery(document.getElementById(prefix+entry_id));
-			$cont.children('.frm_forms').replaceWith('');
-			$cont.children('.frm_orig_content').fadeIn('slow').removeClass('frm_orig_content');
-		}
-		$edit.removeClass('frm_cancel_edit').addClass('frm_inplace_edit');
-		$edit.html(label);
-		return false;
+		var $cancelLink = jQuery(this);
+		var prefix = $cancelLink.data('prefix');
+		var entry_id = $cancelLink.data('entryid');
+
+		var $cont = jQuery(document.getElementById(prefix+entry_id));
+		$cont.children('.frm_forms').replaceWith('');
+		$cont.children('.frm_orig_content').fadeIn('slow').removeClass('frm_orig_content');
+
+		switchCancelToEdit( $cancelLink );
+	}
+
+	/**
+	 * Switch a Cancel Link back to Edit
+	 *
+	 * @since 2.03.08
+	 *
+	 * @param {object} $link
+     */
+	function switchCancelToEdit( $link ) {
+		var label = $link.data('edit');
+		$link.removeClass('frm_cancel_edit').addClass('frm_inplace_edit');
+		$link.html(label);
 	}
 
 	function deleteEntry(){
@@ -4105,6 +4111,37 @@ function frmFrontFormJS(){
 			});
 		}
 		return false;
+	}
+
+	/**
+	 * Switch Cancel link back to Edit link after entry is updated in-place
+	 *
+	 * @since 2.03.08
+	 *
+	 * @param {object} form
+     */
+	function doEditInPlaceCleanUp( form ) {
+		var entryIdField = jQuery( form ).find( 'input[name="id"]' );
+
+		if ( entryIdField.length ) {
+			var link = document.getElementById( 'frm_edit_' + entryIdField.val() );
+
+			if ( isCancelLink( link ) ) {
+				switchCancelToEdit( jQuery( link ) );
+			}
+		}
+	}
+
+	/**
+	 * Check if a link is a cancel link
+	 *
+	 * @since 2.03.08
+	 *
+	 * @param {object} link
+	 * @returns {boolean}
+     */
+	function isCancelLink( link ) {
+		return ( link !== null && link.className.indexOf( 'frm_cancel_edit' ) > -1 );
 	}
 
 	/**********************************************
@@ -4663,37 +4700,6 @@ function frmUpdateField(entry_id,field_id,value,message,num){
 			}
 		}
 	});
-}
-
-function frmEditEntry(entry_id,prefix,post_id,form_id,cancel,hclass){
-	console.warn('DEPRECATED: function frmEditEntry in v2.0.13 use frmFrontForm.editEntry');
-	var $edit = jQuery(document.getElementById('frm_edit_'+entry_id));
-	var label = $edit.html();
-	var $cont = jQuery(document.getElementById(prefix+entry_id));
-	var orig = $cont.html();
-	$cont.html('<span class="frm-loading-img" id="'+prefix+entry_id+'"></span><div class="frm_orig_content" style="display:none">'+orig+'</div>');
-	jQuery.ajax({
-		type:'POST',url:frm_js.ajax_url,dataType:'html',
-		data:{action:'frm_entries_edit_entry_ajax', post_id:post_id, entry_id:entry_id, id:form_id, nonce:frm_js.nonce},
-		success:function(html){
-			$cont.children('.frm-loading-img').replaceWith(html);
-			$edit.replaceWith('<span id="frm_edit_'+entry_id+'"><a onclick="frmCancelEdit('+entry_id+',\''+prefix+'\',\''+ frmFrontForm.escapeHtml(label) +'\','+post_id+','+form_id+',\''+hclass+'\')" class="'+hclass+'">'+cancel+'</a></span>');
-		}
-	});
-}
-
-function frmCancelEdit(entry_id,prefix,label,post_id,form_id,hclass){
-	console.warn('DEPRECATED: function frmCancelEdit in v2.0.13 use frmFrontForm.cancelEdit');
-	var $edit = jQuery(document.getElementById('frm_edit_'+entry_id));
-	var $link = $edit.find('a');
-	var cancel = $link.html();
-	
-	if(!$link.hasClass('frm_ajax_edited')){
-		var $cont = jQuery(document.getElementById(prefix+entry_id));
-		$cont.children('.frm_forms').replaceWith('');
-		$cont.children('.frm_orig_content').fadeIn('slow').removeClass('frm_orig_content');
-	}
-	$edit.replaceWith('<a id="frm_edit_'+entry_id+'" class="frm_edit_link '+hclass+'" href="javascript:frmEditEntry('+entry_id+',\''+prefix+'\','+post_id+','+form_id+',\''+ frmFrontForm.escapeHtml(cancel) +'\',\''+hclass+'\')">'+label+'</a>');
 }
 
 function frmDeleteEntry(entry_id,prefix){
