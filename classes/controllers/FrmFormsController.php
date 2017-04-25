@@ -638,7 +638,7 @@ class FrmFormsController {
             wp_die(__( 'That template cannot be edited', 'formidable' ));
         }
 
-        self::clean_submit_html( $values );
+		self::clean_submit_html( $values );
 
         $action_controls = FrmFormActionsController::get_form_actions();
 
@@ -657,11 +657,11 @@ class FrmFormsController {
 	 *
 	 * @param array $values
 	 */
-    private static function clean_submit_html( &$values ) {
-    	if ( isset( $values['submit_html'] ) ) {
-		    $values['submit_html'] = str_replace( 'javascript:void(0)', '#', $values['submit_html'] );
-	    }
-    }
+	private static function clean_submit_html( &$values ) {
+		if ( isset( $values['submit_html'] ) ) {
+			$values['submit_html'] = str_replace( 'javascript:void(0)', '#', $values['submit_html'] );
+		}
+	}
 
     public static function mb_tags_box( $form_id, $class = '' ) {
         $fields = FrmField::get_all_for_form($form_id, '', 'include');
