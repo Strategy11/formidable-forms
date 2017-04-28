@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- generator="WordPress/4.7.4" created="2017-04-27 05:00" -->
+
+<channel>
+    <title>Bug fixer</title>
+    <pubDate>Thu, 27 Apr 2017 05:00:50 +0000</pubDate>
+
+    <form>
+        <id>14</id>
+        <form_key><![CDATA[zw7ba]]></form_key>
+        <name><![CDATA[Conference sign up -- with editing]]></name>
+        <description><![CDATA[]]></description>
+        <created_at>2017-04-26 21:19:43</created_at>
+        <logged_in>0</logged_in>
+        <is_template>0</is_template>
+        <default_template>0</default_template>
+        <editable>1</editable>
+        <options><![CDATA[{"success_action":"message","success_url":"","success_page_id":"","logged_in_role":"","single_entry_type":"user","cookie_expiration":"8000","editable_role":"","open_editable_role":"administrator","edit_action":"message","edit_url":"","edit_page_id":"","protect_files":"0","rootline":"","rootline_titles":{"0":"Page 1","203":"Next","204":"Next"},"custom_style":"hello-world","submit_value":"Submit","edit_value":"Update","prev_value":"Previous","submit_align":"","success_msg":"Your responses were successfully submitted. Thank you!","edit_msg":"Your submission was successfully saved.","draft_msg":"Your draft has been saved.","form_class":"","before_html":"<legend class=\\\"frm_hidden\\\">[form_name]<\/legend>\r\n[if form_name]<h3 class=\\\"frm_form_title\\\">[form_name]<\/h3>[\/if form_name]\r\n[if form_description]<div class=\\\"frm_description\\\">[form_description]<\/div>[\/if form_description]","after_html":"","submit_html":"<div class=\\\"frm_submit\\\">\r\n[if back_button]<button type=\\\"submit\\\" name=\\\"frm_prev_page\\\" formnovalidate=\\\"formnovalidate\\\" class=\\\"frm_prev_page\\\" [back_hook]>[back_label]<\/button>[\/if back_button]\r\n<button class=\\\"frm_button_submit\\\" type=\\\"submit\\\"  [button_action]>[button_label]<\/button>\r\n[if save_draft]<a href=\\\"#\\\" class=\\\"frm_save_draft\\\" [draft_hook]>[draft_label]<\/a>[\/if save_draft]\r\n<\/div>","show_form":0,"akismet":"","no_save":0,"ajax_load":0,"save_draft":0,"copy":0,"single_entry":0,"ajax_submit":0,"js_validate":0,"rootline_titles_on":0,"rootline_lines_off":0,"rootline_numbers_off":0}]]></options>
+        <status><![CDATA[published]]></status>
+        <parent_form_id>0</parent_form_id>
+        <field>
+            <id>2199</id>
+            <field_key><![CDATA[tlc8n]]></field_key>
+            <name><![CDATA[Name]]></name>
+            <description><![CDATA[]]></description>
+            <type><![CDATA[text]]></type>
+            <default_value><![CDATA[]]></default_value>
+            <field_order>0</field_order>
+            <form_id>14</form_id>
+            <required>0</required>
+            <options><![CDATA[]]></options>
+            <field_options><![CDATA[{"size":"","max":"","label":"","blank":"This field cannot be blank.","required_indicator":"*","invalid":"","separate_value":0,"clear_on_focus":"0","default_blank":"0","classes":"","custom_html":"<div id=\"frm_field_[id]_container\" class=\"frm_form_field form-field [required_class][error_class]\">\r\n    <label for=\"field_[key]\" class=\"frm_primary_label\">[field_name]\r\n        <span class=\"frm_required\">[required_label]<\/span>\r\n    <\/label>\r\n    [input]\r\n    [if description]<div class=\"frm_description\">[description]<\/div>[\/if description]\r\n    [if error]<div class=\"frm_error\">[error]<\/div>[\/if error]\r\n<\/div>","captcha_size":"normal","captcha_theme":"light","in_section":"0","slide":0,"form_select":"","show_hide":"show","any_all":"any","align":"block","hide_field":[],"hide_field_cond":["=="],"hide_opt":[],"star":0,"ftypes":[],"data_type":"select","restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"delete":false,"step":1,"clock":12,"single_time":0,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","calc_dec":"","calc_type":"","dyn_default_value":"","multiple":0,"unique_msg":"","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":0,"autopopulate_value":false,"get_values_form":"","get_values_field":"","watch_lookup":[""],"get_most_recent_value":"","lookup_filter_current_user":false,"custom_field":"","post_field":"","taxonomy":"category","exclude_cat":0}]]></field_options>
+        </field>
+        <field>
+            <id>2202</id>
+            <field_key><![CDATA[nawtu]]></field_key>
+            <name><![CDATA[Email Address]]></name>
+            <description><![CDATA[]]></description>
+            <type><![CDATA[email]]></type>
+            <default_value><![CDATA[]]></default_value>
+            <field_order>1</field_order>
+            <form_id>14</form_id>
+            <required>0</required>
+            <options><![CDATA[]]></options>
+            <field_options><![CDATA[{"size":"","max":"","label":"","blank":"This field cannot be blank.","required_indicator":"*","invalid":"Email Address is invalid","separate_value":0,"clear_on_focus":"0","default_blank":"0","classes":"","custom_html":"<div id=\"frm_field_[id]_container\" class=\"frm_form_field form-field [required_class][error_class]\">\r\n    <label for=\"field_[key]\" class=\"frm_primary_label\">[field_name]\r\n        <span class=\"frm_required\">[required_label]<\/span>\r\n    <\/label>\r\n    [input]\r\n    [if description]<div class=\"frm_description\">[description]<\/div>[\/if description]\r\n    [if error]<div class=\"frm_error\">[error]<\/div>[\/if error]\r\n<\/div>","captcha_size":"normal","captcha_theme":"light","in_section":"0","slide":0,"form_select":"","show_hide":"show","any_all":"any","align":"block","hide_field":[],"hide_field_cond":["=="],"hide_opt":[],"star":0,"ftypes":[],"data_type":"select","restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"delete":false,"step":1,"clock":12,"single_time":0,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","calc_dec":"","calc_type":"","dyn_default_value":"","multiple":0,"unique_msg":"","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":0,"autopopulate_value":false,"get_values_form":"","get_values_field":"","watch_lookup":[""],"get_most_recent_value":"","lookup_filter_current_user":false,"custom_field":"","post_field":"","taxonomy":"category","exclude_cat":0}]]></field_options>
+        </field>
+        <field>
+            <id>2200</id>
+            <field_key><![CDATA[3oaqb]]></field_key>
+            <name><![CDATA[Sessions attending]]></name>
+            <description><![CDATA[]]></description>
+            <type><![CDATA[checkbox]]></type>
+            <default_value><![CDATA[]]></default_value>
+            <field_order>2</field_order>
+            <form_id>14</form_id>
+            <required>0</required>
+            <options><![CDATA[[{"label":"Thursday","value":"Thursday"},{"label":"Friday","value":"Friday"},{"label":"Saturday","value":"Saturday"},{"label":"Sunday","value":"Sunday"},{"label":"Monday","value":"Monday"}]]]></options>
+            <field_options><![CDATA[{"size":"","max":"","label":"","blank":"This field cannot be blank.","required_indicator":"*","invalid":"","separate_value":0,"clear_on_focus":0,"default_blank":0,"classes":"","custom_html":"<div id=\"frm_field_[id]_container\" class=\"frm_form_field form-field [required_class][error_class]\">\r\n    <label  class=\"frm_primary_label\">[field_name]\r\n        <span class=\"frm_required\">[required_label]<\/span>\r\n    <\/label>\r\n    <div class=\"frm_opt_container\">[input]<\/div>\r\n    [if description]<div class=\"frm_description\">[description]<\/div>[\/if description]\r\n    [if error]<div class=\"frm_error\">[error]<\/div>[\/if error]\r\n<\/div>","captcha_size":"normal","captcha_theme":"light","in_section":"0","slide":0,"form_select":"","show_hide":"show","any_all":"any","align":"block","hide_field":[],"hide_field_cond":["=="],"hide_opt":[],"star":0,"ftypes":[],"data_type":"select","restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"delete":false,"step":1,"clock":12,"single_time":0,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","calc_dec":"","calc_type":"","dyn_default_value":"","multiple":0,"unique_msg":"","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":"0","custom_field":"","post_field":"","taxonomy":"category","exclude_cat":0}]]></field_options>
+        </field>
+        <field>
+            <id>2212</id>
+            <field_key><![CDATA[rsvp]]></field_key>
+            <name><![CDATA[RSVP for after party]]></name>
+            <description><![CDATA[Don't know yet]]></description>
+            <type><![CDATA[select]]></type>
+            <default_value><![CDATA[]]></default_value>
+            <field_order>3</field_order>
+            <form_id>14</form_id>
+            <required>0</required>
+            <options><![CDATA[[{"label":"","value":""},{"label":"Yes","value":"Yes"},{"label":"Don't know","value":"Don't know"},{"label":"No","value":"No"}]]]></options>
+            <field_options><![CDATA[{"size":"","max":"","label":"","blank":"This field cannot be blank.","required_indicator":"*","invalid":"","separate_value":0,"clear_on_focus":0,"default_blank":"0","classes":"","custom_html":"<div id=\"frm_field_[id]_container\" class=\"frm_form_field form-field [required_class][error_class]\">\r\n    <label for=\"field_[key]\" class=\"frm_primary_label\">[field_name]\r\n        <span class=\"frm_required\">[required_label]<\/span>\r\n    <\/label>\r\n    [input]\r\n    [if description]<div class=\"frm_description\">[description]<\/div>[\/if description]\r\n    [if error]<div class=\"frm_error\">[error]<\/div>[\/if error]\r\n<\/div>","captcha_size":"normal","captcha_theme":"light","in_section":"0","slide":0,"form_select":"","show_hide":"show","any_all":"any","align":"block","hide_field":[],"hide_field_cond":["=="],"hide_opt":[],"star":0,"ftypes":[],"data_type":"select","restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"delete":false,"step":1,"clock":12,"single_time":0,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","calc_dec":"","calc_type":"","dyn_default_value":"","multiple":0,"unique_msg":"","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":"0","autopopulate_value":false,"get_values_form":"","get_values_field":"","watch_lookup":[""],"get_most_recent_value":"","lookup_filter_current_user":false}]]></field_options>
+        </field>
+        <field>
+            <id>2201</id>
+            <field_key><![CDATA[qz4ol]]></field_key>
+            <name><![CDATA[Role]]></name>
+            <description><![CDATA[]]></description>
+            <type><![CDATA[radio]]></type>
+            <default_value><![CDATA[]]></default_value>
+            <field_order>4</field_order>
+            <form_id>14</form_id>
+            <required>0</required>
+            <options><![CDATA[[{"label":"attendee","value":"attendee"},{"label":"speaker","value":"speaker"},{"label":"sponsor","value":"sponsor"},{"label":"organizer","value":"organizer"},{"label":"volunteer","value":"volunteer"}]]]></options>
+            <field_options><![CDATA[{"size":"","max":"","label":"","blank":"This field cannot be blank.","required_indicator":"*","invalid":"","separate_value":0,"clear_on_focus":0,"default_blank":0,"classes":"","custom_html":"<div id=\"frm_field_[id]_container\" class=\"frm_form_field form-field [required_class][error_class]\">\r\n    <label  class=\"frm_primary_label\">[field_name]\r\n        <span class=\"frm_required\">[required_label]<\/span>\r\n    <\/label>\r\n    <div class=\"frm_opt_container\">[input]<\/div>\r\n    [if description]<div class=\"frm_description\">[description]<\/div>[\/if description]\r\n    [if error]<div class=\"frm_error\">[error]<\/div>[\/if error]\r\n<\/div>","captcha_size":"normal","captcha_theme":"light","in_section":"0","slide":0,"form_select":"","show_hide":"show","any_all":"any","align":"block","hide_field":[],"hide_field_cond":["=="],"hide_opt":[],"star":0,"ftypes":[],"data_type":"select","restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"delete":false,"step":1,"clock":12,"single_time":0,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","calc_dec":"","calc_type":"","dyn_default_value":"","multiple":0,"unique_msg":"","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":"0","custom_field":"","post_field":"","taxonomy":"category","exclude_cat":0}]]></field_options>
+        </field>
+        <field>
+            <id>2204</id>
+            <field_key><![CDATA[ml7ca]]></field_key>
+            <name><![CDATA[Next]]></name>
+            <description><![CDATA[]]></description>
+            <type><![CDATA[break]]></type>
+            <default_value><![CDATA[]]></default_value>
+            <field_order>5</field_order>
+            <form_id>14</form_id>
+            <required>0</required>
+            <options><![CDATA[]]></options>
+            <field_options><![CDATA[{"size":"","max":"","label":"","blank":"","required_indicator":"*","invalid":"","separate_value":0,"clear_on_focus":0,"default_blank":0,"classes":"","custom_html":"","captcha_size":"normal","captcha_theme":"light","in_section":"0","slide":0,"form_select":"","show_hide":"hide","any_all":"any","align":"block","hide_field":[],"hide_field_cond":["=="],"hide_opt":[],"star":0,"ftypes":[],"data_type":"select","restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"delete":false,"step":1,"clock":12,"single_time":0,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","calc_dec":"","calc_type":"","dyn_default_value":"","multiple":0,"unique_msg":"This value must be unique.","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":0}]]></field_options>
+        </field>
+        <field>
+            <id>2209</id>
+            <field_key><![CDATA[d928e]]></field_key>
+            <name><![CDATA[Joining us for meals?]]></name>
+            <description><![CDATA[]]></description>
+            <type><![CDATA[radio]]></type>
+            <default_value><![CDATA[]]></default_value>
+            <field_order>6</field_order>
+            <form_id>14</form_id>
+            <required>0</required>
+            <options><![CDATA[[{"label":"Yes","value":"Yes"},{"label":"No","value":"No"}]]]></options>
+            <field_options><![CDATA[{"size":"","max":"","label":"","blank":"This field cannot be blank.","required_indicator":"*","invalid":"","separate_value":0,"clear_on_focus":0,"default_blank":0,"classes":"","custom_html":"<div id=\"frm_field_[id]_container\" class=\"frm_form_field form-field [required_class][error_class]\">\r\n    <label  class=\"frm_primary_label\">[field_name]\r\n        <span class=\"frm_required\">[required_label]<\/span>\r\n    <\/label>\r\n    <div class=\"frm_opt_container\">[input]<\/div>\r\n    [if description]<div class=\"frm_description\">[description]<\/div>[\/if description]\r\n    [if error]<div class=\"frm_error\">[error]<\/div>[\/if error]\r\n<\/div>","captcha_size":"normal","captcha_theme":"light","in_section":"0","slide":0,"form_select":"","show_hide":"show","any_all":"any","align":"block","hide_field":[],"hide_field_cond":["=="],"hide_opt":[],"star":0,"ftypes":[],"data_type":"select","restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"delete":false,"step":1,"clock":12,"single_time":0,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","calc_dec":"","calc_type":"","dyn_default_value":"","multiple":0,"unique_msg":"","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":"0","custom_field":"","post_field":"","taxonomy":"category","exclude_cat":0}]]></field_options>
+        </field>
+        <field>
+            <id>2205</id>
+            <field_key><![CDATA[4p75t]]></field_key>
+            <name><![CDATA[Meal preferences?]]></name>
+            <description><![CDATA[]]></description>
+            <type><![CDATA[divider]]></type>
+            <default_value><![CDATA[]]></default_value>
+            <field_order>7</field_order>
+            <form_id>14</form_id>
+            <required>0</required>
+            <options><![CDATA[]]></options>
+            <field_options><![CDATA[{"size":"","max":"","label":"top","blank":"","required_indicator":"*","invalid":"","separate_value":0,"clear_on_focus":0,"default_blank":0,"classes":"","custom_html":"<div id=\"frm_field_[id]_container\" class=\"frm_form_field frm_section_heading form-field[error_class]\">\r\n<h3 class=\"frm_pos_[label_position][collapse_class]\">[field_name]<\/h3>\r\n[if description]<div class=\"frm_description\">[description]<\/div>[\/if description]\r\n[collapse_this]\r\n<\/div>","captcha_size":"normal","captcha_theme":"light","slide":0,"form_select":"","show_hide":"show","any_all":"any","align":"block","hide_field":["209"],"hide_field_cond":["=="],"hide_opt":["Yes"],"star":0,"ftypes":[],"data_type":"select","restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"delete":false,"step":1,"clock":12,"single_time":0,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","calc_dec":"","calc_type":"","dyn_default_value":"","multiple":0,"unique_msg":"This value must be unique.","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":0,"in_section":"0","custom_field":"","post_field":"","taxonomy":"category","exclude_cat":0}]]></field_options>
+        </field>
+        <field>
+            <id>2208</id>
+            <field_key><![CDATA[95ks4]]></field_key>
+            <name><![CDATA[Dietary requirements]]></name>
+            <description><![CDATA[]]></description>
+            <type><![CDATA[checkbox]]></type>
+            <default_value><![CDATA[]]></default_value>
+            <field_order>8</field_order>
+            <form_id>14</form_id>
+            <required>0</required>
+            <options><![CDATA[[{"label":"low-carb\/paleo","value":"low-carb\/paleo"},{"label":"gluten-free","value":"gluten-free"},{"label":"vegetarian","value":"vegetarian"},{"label":"vegan","value":"vegan"},{"label":"kosher","value":"kosher"}]]]></options>
+            <field_options><![CDATA[{"size":"","max":"","label":"","blank":"This field cannot be blank.","required_indicator":"*","invalid":"","separate_value":0,"clear_on_focus":0,"default_blank":0,"classes":"","custom_html":"<div id=\"frm_field_[id]_container\" class=\"frm_form_field form-field [required_class][error_class]\">\r\n    <label  class=\"frm_primary_label\">[field_name]\r\n        <span class=\"frm_required\">[required_label]<\/span>\r\n    <\/label>\r\n    <div class=\"frm_opt_container\">[input]<\/div>\r\n    [if description]<div class=\"frm_description\">[description]<\/div>[\/if description]\r\n    [if error]<div class=\"frm_error\">[error]<\/div>[\/if error]\r\n<\/div>","captcha_size":"normal","captcha_theme":"light","in_section":"205","slide":0,"form_select":"","show_hide":"show","any_all":"any","align":"block","hide_field":[],"hide_field_cond":["=="],"hide_opt":[],"star":0,"ftypes":[],"data_type":"select","restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"delete":false,"step":1,"clock":12,"single_time":0,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","calc_dec":"","calc_type":"","dyn_default_value":"","multiple":0,"unique_msg":"","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":"0","custom_field":"","post_field":"","taxonomy":"category","exclude_cat":0}]]></field_options>
+        </field>
+        <field>
+            <id>2210</id>
+            <field_key><![CDATA[x4oyp]]></field_key>
+            <name><![CDATA[Seating]]></name>
+            <description><![CDATA[]]></description>
+            <type><![CDATA[radio]]></type>
+            <default_value><![CDATA[]]></default_value>
+            <field_order>9</field_order>
+            <form_id>14</form_id>
+            <required>0</required>
+            <options><![CDATA[[{"label":"assigned tables (especially good for first-time attendees)","value":"assigned tables (especially good for first-time attendees)"},{"label":"open","value":"open"}]]]></options>
+            <field_options><![CDATA[{"size":"","max":"","label":"","blank":"This field cannot be blank.","required_indicator":"*","invalid":"","separate_value":0,"clear_on_focus":0,"default_blank":0,"classes":"","custom_html":"<div id=\"frm_field_[id]_container\" class=\"frm_form_field form-field [required_class][error_class]\">\r\n    <label  class=\"frm_primary_label\">[field_name]\r\n        <span class=\"frm_required\">[required_label]<\/span>\r\n    <\/label>\r\n    <div class=\"frm_opt_container\">[input]<\/div>\r\n    [if description]<div class=\"frm_description\">[description]<\/div>[\/if description]\r\n    [if error]<div class=\"frm_error\">[error]<\/div>[\/if error]\r\n<\/div>","captcha_size":"normal","captcha_theme":"light","in_section":"205","slide":0,"form_select":"","show_hide":"show","any_all":"any","align":"block","hide_field":[],"hide_field_cond":["=="],"hide_opt":[],"star":0,"ftypes":[],"data_type":"select","restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"delete":false,"step":1,"clock":12,"single_time":0,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","calc_dec":"","calc_type":"","dyn_default_value":"","multiple":0,"unique_msg":"","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":"0","custom_field":"","post_field":"","taxonomy":"category","exclude_cat":0}]]></field_options>
+        </field>
+        <field>
+            <id>2206</id>
+            <field_key><![CDATA[ihd2o]]></field_key>
+            <name><![CDATA[End Section]]></name>
+            <description><![CDATA[]]></description>
+            <type><![CDATA[end_divider]]></type>
+            <default_value><![CDATA[]]></default_value>
+            <field_order>10</field_order>
+            <form_id>14</form_id>
+            <required>0</required>
+            <options><![CDATA[]]></options>
+            <field_options><![CDATA[{"size":"","max":"","label":"","blank":"","required_indicator":"*","invalid":"","separate_value":0,"clear_on_focus":0,"default_blank":0,"classes":"","custom_html":"","captcha_size":"normal","captcha_theme":"light","format":"both","slide":0,"form_select":"","show_hide":"show","any_all":"any","align":"block","hide_field":[],"hide_field_cond":["=="],"hide_opt":[],"star":0,"ftypes":[],"data_type":"select","restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"delete":false,"step":1,"clock":12,"single_time":0,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","calc_dec":"","calc_type":"","dyn_default_value":"","multiple":0,"unique_msg":"This value must be unique.","autocom":0,"repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":0,"in_section":"0"}]]></field_options>
+        </field>
+    </form>
+    <item>
+        <id>2228</id>
+        <item_key><![CDATA[steve_conference]]></item_key>
+        <name><![CDATA[Steve]]></name>
+        <description><![CDATA[{"browser":"Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/57.0.2987.133 Safari\/537.36","referrer":"http:\/\/bug-fixer.dev\/wp-admin\/admin.php?page=formidable-entries&frm_action=new&form=14"}]]></description>
+        <created_at>2017-04-26 21:35:36</created_at>
+        <updated_at>2017-04-27 05:00:19</updated_at>
+        <form_id>14</form_id>
+        <post_id>0</post_id>
+        <ip>127.0.0.1</ip>
+        <is_draft>0</is_draft>
+        <user_id><![CDATA[Laura]]></user_id>
+        <updated_by><![CDATA[Laura]]></updated_by>
+        <parent_item_id>0</parent_item_id>
+
+        <item_meta>
+            <field_id>2199</field_id>
+            <meta_value><![CDATA[Steve]]></meta_value>
+        </item_meta>
+        <item_meta>
+            <field_id>2202</field_id>
+            <meta_value><![CDATA[steve@formidablepro.com]]></meta_value>
+        </item_meta>
+        <item_meta>
+            <field_id>2200</field_id>
+            <meta_value><![CDATA[["Thursday","Friday"]]]></meta_value>
+        </item_meta>
+        <item_meta>
+            <field_id>2201</field_id>
+            <meta_value><![CDATA[speaker]]></meta_value>
+        </item_meta>
+        <item_meta>
+            <field_id>2209</field_id>
+            <meta_value><![CDATA[No]]></meta_value>
+        </item_meta>
+        <item_meta>
+            <field_id>2212</field_id>
+            <meta_value><![CDATA[No]]></meta_value>
+        </item_meta>
+    </item>
+    <item>
+        <id>2229</id>
+        <item_key><![CDATA[steph_conference]]></item_key>
+        <name><![CDATA[Steph]]></name>
+        <description><![CDATA[{"browser":"Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/57.0.2987.133 Safari\/537.36","referrer":"http:\/\/bug-fixer.dev\/wp-admin\/admin.php?page=formidable-entries&frm_action=new&form=14"}]]></description>
+        <created_at>2017-04-26 21:36:14</created_at>
+        <updated_at>2017-04-27 04:59:48</updated_at>
+        <form_id>14</form_id>
+        <post_id>0</post_id>
+        <ip>127.0.0.1</ip>
+        <is_draft>0</is_draft>
+        <user_id><![CDATA[Laura]]></user_id>
+        <updated_by><![CDATA[Laura]]></updated_by>
+        <parent_item_id>0</parent_item_id>
+
+        <item_meta>
+            <field_id>2199</field_id>
+            <meta_value><![CDATA[Steph]]></meta_value>
+        </item_meta>
+        <item_meta>
+            <field_id>2202</field_id>
+            <meta_value><![CDATA[steph@formidablepro.com]]></meta_value>
+        </item_meta>
+        <item_meta>
+            <field_id>2200</field_id>
+            <meta_value><![CDATA[["Thursday","Friday","Saturday","Sunday","Monday"]]]></meta_value>
+        </item_meta>
+        <item_meta>
+            <field_id>2201</field_id>
+            <meta_value><![CDATA[speaker]]></meta_value>
+        </item_meta>
+        <item_meta>
+            <field_id>2209</field_id>
+            <meta_value><![CDATA[Yes]]></meta_value>
+        </item_meta>
+        <item_meta>
+            <field_id>2210</field_id>
+            <meta_value><![CDATA[open]]></meta_value>
+        </item_meta>
+        <item_meta>
+            <field_id>2212</field_id>
+            <meta_value><![CDATA[Yes]]></meta_value>
+        </item_meta>
+    </item>
+    <item>
+        <id>2230</id>
+        <item_key><![CDATA[jamie_conference]]></item_key>
+        <name><![CDATA[Jamie]]></name>
+        <description><![CDATA[{"browser":"Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/57.0.2987.133 Safari\/537.36","referrer":"http:\/\/bug-fixer.dev\/wp-admin\/admin.php?page=formidable-entries&frm_action=new&form=14"}]]></description>
+        <created_at>2017-04-26 21:36:50</created_at>
+        <updated_at>2017-04-27 04:59:14</updated_at>
+        <form_id>14</form_id>
+        <post_id>0</post_id>
+        <ip>127.0.0.1</ip>
+        <is_draft>0</is_draft>
+        <user_id><![CDATA[Laura]]></user_id>
+        <updated_by><![CDATA[Laura]]></updated_by>
+        <parent_item_id>0</parent_item_id>
+
+        <item_meta>
+            <field_id>2199</field_id>
+            <meta_value><![CDATA[Jamie]]></meta_value>
+        </item_meta>
+        <item_meta>
+            <field_id>2202</field_id>
+            <meta_value><![CDATA[jamie@formidablepro.com]]></meta_value>
+        </item_meta>
+        <item_meta>
+            <field_id>2200</field_id>
+            <meta_value><![CDATA[["Sunday","Monday"]]]></meta_value>
+        </item_meta>
+        <item_meta>
+            <field_id>2201</field_id>
+            <meta_value><![CDATA[organizer]]></meta_value>
+        </item_meta>
+        <item_meta>
+            <field_id>2209</field_id>
+            <meta_value><![CDATA[Yes]]></meta_value>
+        </item_meta>
+        <item_meta>
+            <field_id>2208</field_id>
+            <meta_value><![CDATA[["low-carb\/paleo","gluten-free"]]]></meta_value>
+        </item_meta>
+        <item_meta>
+            <field_id>2210</field_id>
+            <meta_value><![CDATA[assigned tables (especially good for first-time attendees)]]></meta_value>
+        </item_meta>
+        <item_meta>
+            <field_id>2212</field_id>
+            <meta_value><![CDATA[Yes]]></meta_value>
+        </item_meta>
+    </item>
+    <item>
+        <id>231</id>
+        <item_key><![CDATA[laura_conference]]></item_key>
+        <name><![CDATA[Laura]]></name>
+        <description><![CDATA[{"browser":"Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/57.0.2987.133 Safari\/537.36","referrer":"http:\/\/bug-fixer.dev\/wp-admin\/admin.php?page=formidable-entries&frm_action=new&form=14"}]]></description>
+        <created_at>2017-04-26 22:08:00</created_at>
+        <updated_at>2017-04-27 04:57:45</updated_at>
+        <form_id>14</form_id>
+        <post_id>0</post_id>
+        <ip>127.0.0.1</ip>
+        <is_draft>0</is_draft>
+        <user_id><![CDATA[Laura]]></user_id>
+        <updated_by><![CDATA[Laura]]></updated_by>
+        <parent_item_id>0</parent_item_id>
+
+        <item_meta>
+            <field_id>2199</field_id>
+            <meta_value><![CDATA[Laura]]></meta_value>
+        </item_meta>
+        <item_meta>
+            <field_id>2202</field_id>
+            <meta_value><![CDATA[laura@formidablepro.com]]></meta_value>
+        </item_meta>
+        <item_meta>
+            <field_id>2200</field_id>
+            <meta_value><![CDATA[["Thursday","Friday","Monday"]]]></meta_value>
+        </item_meta>
+        <item_meta>
+            <field_id>2201</field_id>
+            <meta_value><![CDATA[volunteer]]></meta_value>
+        </item_meta>
+        <item_meta>
+            <field_id>2209</field_id>
+            <meta_value><![CDATA[Yes]]></meta_value>
+        </item_meta>
+        <item_meta>
+            <field_id>2208</field_id>
+            <meta_value><![CDATA[kosher]]></meta_value>
+        </item_meta>
+        <item_meta>
+            <field_id>2210</field_id>
+            <meta_value><![CDATA[assigned tables (especially good for first-time attendees)]]></meta_value>
+        </item_meta>
+        <item_meta>
+            <field_id>2212</field_id>
+            <meta_value><![CDATA[Yes]]></meta_value>
+        </item_meta>
+    </item>
+    <view>
+        <title>Email Notification</title>
+        <link></link>
+        <post_author><![CDATA[Laura]]></post_author>
+        <description></description>
+        <content><![CDATA[{"email_to":"[admin_email]","cc":"","bcc":"","reply_to":"","from":"[sitename] <[admin_email]>","email_subject":"","email_message":"[default-message]","event":["create"],"conditions":{"send_stop":"send","any_all":"any"}}]]></content>
+        <excerpt><![CDATA[email]]></excerpt>
+        <post_id>47</post_id>
+        <post_date>2017-04-26 21:19:43</post_date>
+        <post_date_gmt>2017-04-26 21:19:43</post_date_gmt>
+        <comment_status>closed</comment_status>
+        <ping_status>closed</ping_status>
+        <post_name>14_email_47</post_name>
+        <status>publish</status>
+        <post_parent>0</post_parent>
+        <menu_order>14</menu_order>
+        <post_type>frm_form_actions</post_type>
+        <post_password><![CDATA[]]></post_password>
+        <is_sticky>0</is_sticky>
+        <postmeta>
+            <meta_key>_wp_old_slug</meta_key>
+            <meta_value><![CDATA[14_email_]]></meta_value>
+        </postmeta>
+    </view>
+</channel>
