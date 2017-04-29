@@ -1282,7 +1282,7 @@ Jam Band, Electronic, Electronica, JamTronica, EDM, Producer, Rock,  Jazz, Soul,
 		</item_meta>
 	</item>
 	<item>
-		<id>59016</id>
+		<id>59018</id>
 		<item_key><![CDATA[sao_paulo_entry]]></item_key>
 		<name><![CDATA[Sao Paulo]]></name>
 		<description><![CDATA[{"browser":"Mozilla\/5.0 (Macintosh; Intel Mac OS X 10.10; rv:37.0) Gecko\/20100101 Firefox\/37.0","referrer":"http:\/\/localhost:8888\/features\/wp-admin\/admin-ajax.php?action=frm_forms_preview&form=et3q4r"}]]></description>
@@ -1932,7 +1932,7 @@ Wahlin]]></meta_value>
 		</item_meta>
 		<item_meta>
 		    <field_id>8113</field_id>
-		    <meta_value>10</meta_value>
+		    <meta_value>11</meta_value>
 		</item_meta>
 		<item_meta>
 		    <field_id>8114</field_id>
@@ -2219,7 +2219,7 @@ Wahlin]]></meta_value>
         </item_meta>
         <item_meta>
             <field_id>8113</field_id>
-            <meta_value>10</meta_value>
+            <meta_value>0</meta_value>
         </item_meta>
         <item_meta>
             <field_id>8114</field_id>

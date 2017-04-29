@@ -7,6 +7,8 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	function setUp() {
 		parent::setUp();
 
+		$this->clear_get_values();
+
 		// Set current userID to 1 so UserID filter will work in Views
 		$this->set_current_user_to_1();
 	}
@@ -328,7 +330,6 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_dynamic_view_on_detail_page() {
-		self::clear_get_values();
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 
 		$_GET['detail'] = FrmEntry::get_id_by_key( 'jamie_entry_key' );
@@ -361,7 +362,6 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_dynamic_view_not_detail_page() {
-		self::clear_get_values();
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 
 		// Red herring
@@ -378,7 +378,6 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_single_view_with_entry_param() {
-		self::clear_get_values();
 		$single_entry_view = self::get_view_by_key( 'single-entry' );
 
 		$_GET['entry'] = FrmEntry::get_id_by_key( 'steph_entry_key' );
@@ -397,7 +396,6 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_detaillink_for_post_listing_view(){
-		self::clear_get_values();
 		$post_view = self::get_view_by_key( 'create-a-post-view' );
 
 		$entry = FrmEntry::getOne( 'post-entry-1' );
@@ -416,7 +414,6 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_post_content_filtered_by_view_use_entry_key(){
-		self::clear_get_values();
 		$post_view = self::get_view_by_key( 'create-a-post-view' );
 		$post_field_id = FrmField::get_id_by_key( 'yi6yvm' );
 		$regular_field_id = FrmField::get_id_by_key( 'knzfvv' );
@@ -442,7 +439,6 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_post_content_filtered_by_view_use_entry_id(){
-		self::clear_get_values();
 		$post_view = self::get_view_by_key( 'create-a-post-view' );
 		$post_field_id = FrmField::get_id_by_key( 'yi6yvm' );
 		$regular_field_id = FrmField::get_id_by_key( 'knzfvv' );
@@ -467,7 +463,6 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_single_post_with_view_filter(){
-		self::clear_get_values();
 		$post_view = self::get_view_by_key( 'create-a-post-view' );
 		$post_view->frm_dyncontent = 'This is test content';
 		// Saved post content: Hello! My name is Jamie. - Jamie Wahlin
@@ -492,7 +487,6 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_post_listing_view_content(){
-		self::clear_get_values();
 		$post_view = self::get_view_by_key( 'create-a-post-view' );
 
 		// Check for the correct content
@@ -505,7 +499,6 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_post_listing_view_with_post_id_filter(){
-		self::clear_get_values();
 		$post_view = self::get_view_by_key( 'create-a-post-view' );
 
 		// Set up the post ID filter
@@ -522,7 +515,6 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_post_listing_view_with_post_field_id_filter(){
-		self::clear_get_values();
 		$post_view = self::get_view_by_key( 'create-a-post-view' );
 
 		// Add filter "Post Title is like Jamie"
@@ -546,7 +538,6 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_empty_get_param_filter() {
-		self::clear_get_values();
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 
 		// Add filter "Single Line Text is equal to [get param=test]"
@@ -570,7 +561,6 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_view_with_get_param_filter() {
-		self::clear_get_values();
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 
 		// Add filter "Single Line Text is equal to [get param=test]"
@@ -593,7 +583,6 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_view_with_basic_field_filter() {
-		self::clear_get_values();
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 
 		// Add filter "Single Line Text is equal to Jamie"
@@ -616,7 +605,6 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_view_with_shortcode_in_filter() {
-		self::clear_get_values();
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 
 		// Add filter "Single Line Text is equal to [frm-field-value field_id=x entry=e_key]"
@@ -639,7 +627,6 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_user_id_is_equal_to_current_user_filter() {
-		self::clear_get_values();
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 
 		// Add filter "UserID is equal to current user"
@@ -675,7 +662,6 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_user_id_is_equal_to_current_user_param() {
-		self::clear_get_values();
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 
 		$this->set_current_user_to_1();
@@ -705,7 +691,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_user_id_is_equal_to_specific_user_param() {
-		self::clear_get_values();
+		
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 
 		// Create new user and set the current user to 1
@@ -736,7 +722,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_user_id_param_with_current_user_filter() {
-		self::clear_get_values();
+		
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 
 		// Create new user and set the current user to 1
@@ -778,7 +764,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_user_id_param_with_filter() {
-		self::clear_get_values();
+		
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 
 		// Create new user and set the current user to 1
@@ -806,7 +792,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_entry_id_equal_to_list() {
-		self::clear_get_values();
+		
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 
 		$entry_list = FrmEntry::get_id_by_key( 'jamie_entry_key' );
@@ -844,7 +830,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_entry_id_not_equal_to_list_filter() {
-		self::clear_get_values();
+		
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 
 		$entry_list = FrmEntry::get_id_by_key( 'jamie_entry_key' );
@@ -869,7 +855,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_field_not_equal_to_value_filter() {
-		self::clear_get_values();
+		
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 
 		$filter_args = array(
@@ -891,7 +877,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_two_field_filters() {
-		self::clear_get_values();
+		
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 
 		$filter_args = array(
@@ -918,7 +904,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_two_field_filters_on_detail_page() {
-		self::clear_get_values();
+		
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 
 		$filter_args = array(
@@ -961,7 +947,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_created_at_filter_with_specific_date() {
-		self::clear_get_values();
+		
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 
 		$filter_args = array(
@@ -994,7 +980,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_created_at_filter_with_now() {
-		self::clear_get_values();
+		
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 
 		$filter_args = array(
@@ -1016,7 +1002,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_created_at_filter_with_minus_one_day() {
-		self::clear_get_values();
+		
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 
 		// Update creation date on Steve's entry to NOW
@@ -1048,7 +1034,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_created_at_with_field_id_filter() {
-		self::clear_get_values();
+		
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 
 		$filter_args = array(
@@ -1086,7 +1072,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_entry_id_filter() {
-		self::clear_get_values();
+		
 
 		$filter_args = array(
 			array( 'type' => 'col',
@@ -1121,7 +1107,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_entry_id_parameter() {
-		self::clear_get_values();
+		
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 
 		$d = self::get_default_args( $dynamic_view, array( 'Jamie', 'href' ), array( 'Steve', 'Steph' ) );
@@ -1141,7 +1127,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_entry_id_parameter_with_key() {
-		self::clear_get_values();
+		
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 
 		$d = self::get_default_args( $dynamic_view, array( 'Jamie', 'href' ), array( 'Steve', 'Steph' ) );
@@ -1154,7 +1140,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_entry_id_param_with_field_filter() {
-		self::clear_get_values();
+		
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 
 		// Test with an added filter - entry_id should override all other filters
@@ -1178,7 +1164,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_entry_id_param_with_entry_id_filter() {
-		self::clear_get_values();
+		
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 
 		// Test with an entry ID filter - entry_id should override all other filters
@@ -1201,7 +1187,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_entry_id_with_field_id_filter() {
-		self::clear_get_values();
+		
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 
 		$filter_args = array(
@@ -1228,7 +1214,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_unique_oldest_filter_on_scale_field() {
-		self::clear_get_values();
+		
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 
 		$filter_args = array(
@@ -1250,7 +1236,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_unique_newest_filter_on_scale_field() {
-		self::clear_get_values();
+		
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 
 		$filter_args = array(
@@ -1272,7 +1258,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_unique_oldest_filter_on_post_title() {
-		self::clear_get_values();
+		
 		$post_view = self::get_view_by_key( 'create-a-post-view' );
 
 		$filter_args = array(
@@ -1299,7 +1285,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_unique_newest_filter_on_post_title() {
-		self::clear_get_values();
+		
 		$post_view = self::get_view_by_key( 'create-a-post-view' );
 
 		$filter_args = array(
@@ -1326,7 +1312,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_unique_oldest_filter_on_user_id() {
-		self::clear_get_values();
+		
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 
 		$filter_args = array(
@@ -1348,7 +1334,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_unique_newest_filter_on_user_id() {
-		self::clear_get_values();
+		
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 
 		$filter_args = array(
@@ -1373,7 +1359,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_unique_oldest_filter_on_entry_id() {
-		self::clear_get_values();
+		
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 
 		$filter_args = array(
@@ -1397,7 +1383,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_unique_oldest_filter_on_entry_creation_date() {
-		self::clear_get_values();
+		
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 
 		$filter_args = array(
@@ -1419,7 +1405,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * Test is detail page content is shown (not listing page content)
 	 */
 	function test_detail_page_with_filters() {
-		self::clear_get_values();
+		
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 		$_GET['detail'] = FrmEntry::get_id_by_key( 'jamie_entry_key' );
 
@@ -1446,7 +1432,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * Test a detail page with filters set - entry should NOT be displayed
 	 */
 	function test_detail_page_with_filters_no_match() {
-		self::clear_get_values();
+		
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 		$_GET['detail'] = FrmEntry::get_id_by_key( 'jamie_entry_key' );
 
@@ -1469,7 +1455,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_detail_page_with_page_size_set() {
-		self::clear_get_values();
+		
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 		$dynamic_view->frm_page_size = 100;
 		$dynamic_view->frm_limit = 100;
@@ -1486,7 +1472,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_detail_page_with_low_page_size() {
-		self::clear_get_values();
+		
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 		$dynamic_view->frm_page_size = 1;
 
@@ -1507,7 +1493,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_drafts_in_view() {
-		self::clear_get_values();
+		
 
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 
@@ -1541,7 +1527,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_draft_status_equals_both_filter() {
-		self::clear_get_values();
+		
 
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 
@@ -1562,7 +1548,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_draft_status_equal_to_complete_entry() {
-		self::clear_get_values();
+		
 
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 
@@ -1583,7 +1569,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_draft_status_equals_draft_filter() {
-		self::clear_get_values();
+		
 
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 
@@ -1606,7 +1592,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_draft_status_equal_to_complete_entry_with_drafts_param() {
-		self::clear_get_values();
+		
 
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 
@@ -1630,7 +1616,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_detail_page_of_view_with_drafts(){
-		self::clear_get_values();
+		
 
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 
@@ -1664,7 +1650,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_detail_page_of_view_with_no_drafts(){
-		self::clear_get_values();
+		
 
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 
@@ -1702,7 +1688,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_frm_search_with_view(){
-		self::clear_get_values();
+		
 
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 
@@ -1728,7 +1714,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_limit_with_view(){
-		self::clear_get_values();
+		
 
 		// Check limit=1
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
@@ -1758,7 +1744,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_page_size_on_view(){
-		self::clear_get_values();
+		
 
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 
@@ -1785,7 +1771,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_page_size_with_page_size_param(){
-		self::clear_get_values();
+		
 
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 		$dynamic_view->frm_page_size = 1;
@@ -1809,7 +1795,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_page_2_of_a_view(){
-		self::clear_get_values();
+		
 
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 		$_GET['frm-page-'. $dynamic_view->ID] = 2;
@@ -1838,7 +1824,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_limit_with_page_size_on_view(){
-		self::clear_get_values();
+		
 
 		// Test page_size of 5 and limit of 1
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
@@ -1859,7 +1845,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 
 		// Test page size of 1 and limit of 2
 		// Makes sure no entries are loaded on page 3
-		self::clear_get_values();
+		$this->clear_get_values();
 		$dynamic_view = self::reset_view( 'dynamic-view' );
 		$dynamic_view->frm_page_size = 1;
 		$dynamic_view->frm_limit = 2;
@@ -1875,7 +1861,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_calendar_view_html(){
-		self::clear_get_values();
+		
 
 		$calendar_view = self::get_view_by_key( 'calendar-view' );
 
@@ -1890,7 +1876,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	* @covers FrmProDisplaysController::get_display_data
 	*/
 	function test_number_of_days_in_calendar(){
-		self::clear_get_values();
+		
 
 		$calendar_view = self::get_view_by_key( 'calendar-view' );
 
@@ -1910,7 +1896,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_calendar_view_content(){
-		self::clear_get_values();
+		
 
 		$calendar_view = self::get_view_by_key( 'calendar-view' );
 
@@ -1929,7 +1915,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_calendar_view_content_no_entries_in_month(){
-		self::clear_get_values();
+		
 
 		$calendar_view = self::get_view_by_key( 'calendar-view' );
 
@@ -1949,7 +1935,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_calendar_view_no_entries(){
-		self::clear_get_values();
+		
 
 		$calendar_view = self::get_view_by_key( 'calendar-view' );
 
@@ -1969,7 +1955,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_entry_id_desc_order_in_view(){
-		self::clear_get_values();
+		
 
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 		$dynamic_view->frm_page_size = 1;
@@ -1992,7 +1978,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_field_id_asc_order_in_view(){
-		self::clear_get_values();
+		
 
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 		$dynamic_view->frm_page_size = 1;
@@ -2014,7 +2000,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_field_id_asc_with_order_param(){
-		self::clear_get_values();
+		
 
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 		$dynamic_view->frm_page_size = 1;
@@ -2038,7 +2024,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_order_parameters_in_view(){
-		self::clear_get_values();
+		
 
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 		$dynamic_view->frm_page_size = 1;
@@ -2057,7 +2043,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_incomplete_order_parameters_in_view(){
-		self::clear_get_values();
+		
 
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 		$dynamic_view->frm_page_size = 1;
@@ -2075,7 +2061,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_incomplete_order_parameters_in_view_2(){
-		self::clear_get_values();
+		
 
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 		$dynamic_view->frm_page_size = 1;
@@ -2094,7 +2080,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_before_content_in_view_listing_page(){
-		self::clear_get_values();
+		
 
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 		$dynamic_view->frm_before_content = 'Before content, user_id:[user_id], siteurl:[siteurl]';
@@ -2109,7 +2095,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_before_content_in_view_detail_page(){
-		self::clear_get_values();
+		
 
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 		$dynamic_view->frm_before_content = 'Before content';
@@ -2125,7 +2111,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_before_content_with_custom_filter(){
-		self::clear_get_values();
+		
 
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 		$dynamic_view->frm_before_content = 'Before Content: [sum_msyehy]';
@@ -2143,7 +2129,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_before_content_with_custom_filter_and_page_size(){
-		self::clear_get_values();
+		
 
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 		$dynamic_view->frm_before_content = 'Before Content: [sum_msyehy]';
@@ -2163,7 +2149,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_row_num_custom_filter(){
-		self::clear_get_values();
+		
 
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 		$dynamic_view->post_content = 'Row: [row_num]' . $dynamic_view->post_content;
@@ -2179,7 +2165,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_row_num_custom_filter_with_page_size(){
-		self::clear_get_values();
+		
 
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 		$dynamic_view->post_content = 'Row: [row_num]' . $dynamic_view->post_content;
@@ -2197,7 +2183,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_record_count_and_total_count_with_filter(){
-		self::clear_get_values();
+		
 
 		add_filter('frm_display_entry_content', 'frm_get_current_entry_num_out_of_total', 20, 7);
 
@@ -2230,7 +2216,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_evenodd_shortcode_in_view(){
-		self::clear_get_values();
+		
 
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 		$dynamic_view->post_content .= '[evenodd]';
@@ -2246,7 +2232,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_entry_count_shortcode_in_view(){
-		self::clear_get_values();
+		
 
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 		$dynamic_view->frm_before_content = 'Count: [entry_count]';
@@ -2261,7 +2247,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_entry_count_shortcode_with_page_size(){
-		self::clear_get_values();
+		
 
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 		$dynamic_view->frm_before_content = 'Count: [entry_count]';
@@ -2276,7 +2262,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_after_content_on_listing_page(){
-		self::clear_get_values();
+		
 
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 		$dynamic_view->frm_after_content = 'After content, user_id:[user_id], siteurl:[siteurl]';
@@ -2291,7 +2277,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_after_content_on_detail_page(){
-		self::clear_get_values();
+		
 
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 		$dynamic_view->frm_after_content = 'After content';
@@ -2307,7 +2293,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_after_content_with_custom_filter(){
-		self::clear_get_values();
+		
 
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 		$dynamic_view->frm_after_content = 'After Content: [sum_msyehy]';
@@ -2325,7 +2311,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_after_content_with_custom_filter_and_page_size(){
-		self::clear_get_values();
+		
 
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 		$dynamic_view->frm_after_content = 'After Content: [sum_msyehy]';
@@ -2345,7 +2331,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_filtering_in_view(){
-		self::clear_get_values();
+		
 
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 
@@ -2369,8 +2355,11 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_shortcode
 	 */
 	function test_shortcodes_in_all_parts_of_content_with_no_wp_filter() {
-		self::make_sure_easy_tables_is_active();
-		self::clear_get_values();
+		if ( ! $this->is_easy_tables_active() ) {
+			$this->markTestSkipped( 'Easy table is not active' );
+		}
+
+		
 
 		$test_view = self::get_view_by_key( 'shortcode-checking' );
 		$content = FrmProDisplaysController::get_shortcode( array( 'id' => $test_view->ID ) );
@@ -2405,8 +2394,10 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_shortcode
 	 */
 	function test_shortcodes_in_all_parts_of_content_with_wp_filter() {
-		self:: make_sure_easy_tables_is_active();
-		self::clear_get_values();
+		if ( ! $this->is_easy_tables_active() ) {
+			$this->markTestSkipped( 'Easy table is not active' );
+		}
+		
 
 		$test_view = self::get_view_by_key( 'shortcode-checking' );
 		$content = FrmProDisplaysController::get_shortcode( array( 'id' => $test_view->ID, 'filter' => '1' ) );
@@ -2435,13 +2426,9 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		$this->assertEquals( 4, $form_count, 'The number of forms is not the expected value in a View.' );
 	}
 
-	function make_sure_easy_tables_is_active(){
+	private function is_easy_tables_active() {
 		$plugin = 'easy-table/easy-table.php';
-		$is_active = is_plugin_active( $plugin ) && class_exists('EasyTable');
-		if ( ! $is_active ) {
-			$this->markTestSkipped( 'Easy table is not active' );
-		}
-		$this->assertTrue( $is_active, 'Easy table is not active.' );
+		return is_plugin_active( $plugin ) && class_exists('EasyTable');
 	}
 
 	function get_standard_expected_values(){

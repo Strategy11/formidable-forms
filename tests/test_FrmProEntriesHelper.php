@@ -2,6 +2,7 @@
 
 /**
  * @group entries
+ * @group searching-entries
  */
 class WP_Test_FrmProEntriesHelper extends FrmUnitTest {
 
@@ -13,17 +14,17 @@ class WP_Test_FrmProEntriesHelper extends FrmUnitTest {
 		$form_id = FrmForm::getIdByKey( 'all_field_types' );
 		$where_clause = array( 'it.form_id' => $form_id );
 
-		// Single word is searched, matching entry should be returned
+		// Single word is searched, matching entries should be returned
 		$search_string = 'Wahlin';
 		$items = self::run_search_query( $where_clause, $form_id, $search_string );
 		$msg = 'A general search for ' . $search_string . ' in entry metas table';
-		self::run_entries_found_tests( $msg, $items, 2, array( 'jamie_entry_key' ) );
+		self::run_entries_found_tests( $msg, $items, 2, array( 'jamie_entry_key', 'jamie_entry_key_2' ) );
 
-		// Single word is searched. Two matching entries should be found.
+		// Single word is searched. Three matching entries should be found.
 		$search_string = 'Ventura';
 		$items = self::run_search_query( $where_clause, $form_id, $search_string );
 		$msg = 'A general search for ' . $search_string . ' in entry metas table';
-		self::run_entries_found_tests( $msg, $items, 2, array( 'steve_entry_key', 'jamie_entry_key' ) );
+		self::run_entries_found_tests( $msg, $items, 3, array( 'steve_entry_key', 'jamie_entry_key', 'jamie_entry_key_2' ) );
 
 		// Single word is searched, no matching entry should be found
 		$search_string = 'StringThatWillNotBeFound';
@@ -44,13 +45,13 @@ class WP_Test_FrmProEntriesHelper extends FrmUnitTest {
 		$search_string = 'Wahlin http://www.stephtest.com';
 		$items = self::run_search_query( $where_clause, $form_id, $search_string );
 		$msg = 'A general search for ' . $search_string . ' in entry metas table';
-		self::run_entries_found_tests( $msg, $items, 3, array( 'jamie_entry_key', 'steph_entry_key' ) );
+		self::run_entries_found_tests( $msg, $items, 3, array( 'jamie_entry_key', 'steph_entry_key', 'jamie_entry_key_2' ) );
 
 		// Multiple words are searched. One matching entry should be found.
 		$search_string = 'Rebecca Wahlin';
 		$items = self::run_search_query( $where_clause, $form_id, $search_string );
 		$msg = 'A general search for ' . $search_string . ' in entry metas table';
-		self::run_entries_found_tests( $msg, $items, 1, array( 'jamie_entry_key' ) );
+		self::run_entries_found_tests( $msg, $items, 2, array( 'jamie_entry_key', 'jamie_entry_key_2' ) );
 
 		// Multiple words are searched. No matching entries should be found.
 		$search_string = 'StringOne StringTwo';
@@ -61,15 +62,16 @@ class WP_Test_FrmProEntriesHelper extends FrmUnitTest {
 
 	/**
 	 * Test general searches that should return entries based on the frm_item_metas table values
+	 * This could fail if entry ID for California matches any other strings, like "2015"
+	 *
 	 * @covers FrmProEntriesHelper::get_search_str()
 	 */
 	function test_general_entries_search_on_dynamic_field_values() {
-
-		// Single word is searched. Two matching entries should be found.
-		$search_string = 'California';
+		// Single word is searched. One matching entry should be found.
+		$search_string = 'Utah';
 		$items = self::generate_and_run_search_query( 'all_field_types', $search_string );
 		$msg = 'A general search for ' . $search_string . ' in entry metas table';
-		self::run_entries_found_tests( $msg, $items, 2, array( 'steph_entry_key', 'steve_entry_key' ) );
+		self::run_entries_found_tests( $msg, $items, 1, array( 'steph_entry_key' ) );
 	}
 
 	/**
@@ -80,7 +82,7 @@ class WP_Test_FrmProEntriesHelper extends FrmUnitTest {
 		$search_string = "Jamie's";
 		$items = self::generate_and_run_search_query( 'create-a-post', $search_string );
 		$msg = 'A general search for ' . $search_string . ' in posts table';
-		self::run_entries_found_tests( $msg, $items, 2, array( 'post-entry-1' ) );
+		self::run_entries_found_tests( $msg, $items, 2, array( 'post-entry-1', 'post-entry-3' ) );
 	}
 
 	/**
@@ -106,19 +108,19 @@ class WP_Test_FrmProEntriesHelper extends FrmUnitTest {
 		$search_string = 'jamie_entry_key';
 		$items = self::run_search_query( $where_clause, $form_id, $search_string );
 		$msg = 'A general search for ' . $search_string . ' in entries table';
-		self::run_entries_found_tests( $msg, $items, 2, array( 'jamie_entry_key' ) );
+		self::run_entries_found_tests( $msg, $items, 2, array( 'jamie_entry_key', 'jamie_entry_key_2' ) );
 
 		// Single word is searched. Three matching entries should be found.
 		$search_string = '_entry_key';
 		$items = self::run_search_query( $where_clause, $form_id, $search_string );
 		$msg = 'A general search for ' . $search_string . ' in entries table';
-		self::run_entries_found_tests( $msg, $items, 4, array( 'steph_entry_key', 'steve_entry_key', 'jamie_entry_key' ) );
+		self::run_entries_found_tests( $msg, $items, 4, array( 'steph_entry_key', 'steve_entry_key', 'jamie_entry_key', 'jamie_entry_key_2' ) );
 
 		// Multiple words are searched. Two matching entries should be found.
 		$search_string = 'jamie_entry_key steph_entry_key';
 		$items = self::run_search_query( $where_clause, $form_id, $search_string );
 		$msg = 'A general search for ' . $search_string . ' in entries table';
-		self::run_entries_found_tests( $msg, $items, 3, array( 'jamie_entry_key', 'steph_entry_key' ) );
+		self::run_entries_found_tests( $msg, $items, 3, array( 'jamie_entry_key', 'steph_entry_key', 'jamie_entry_key_2' ) );
 	}
 
 	/**
@@ -128,7 +130,7 @@ class WP_Test_FrmProEntriesHelper extends FrmUnitTest {
 	function test_general_entries_search_on_frm_items_created_at() {
 
 		// Search created at column. One matching entry should be found.
-		$search_string = '2015-05-12 19:30';
+		$search_string = '2015-05-12';
 		$items = self::generate_and_run_search_query( 'all_field_types', $search_string );
 		$msg = 'A general search for ' . $search_string . ' in entries table';
 		self::run_entries_found_tests( $msg, $items, 1, array( 'jamie_entry_key' ) );
@@ -156,7 +158,7 @@ class WP_Test_FrmProEntriesHelper extends FrmUnitTest {
 		$search_string = 'admin';
 		$items = self::generate_and_run_search_query( 'all_field_types', $search_string );
 		$msg = 'A general search for ' . $search_string . ' in entries table';
-		self::run_entries_found_tests( $msg, $items, 4, array( 'steph_entry_key', 'steve_entry_key', 'jamie_entry_key' ) );
+		self::run_entries_found_tests( $msg, $items, 4, array( 'steph_entry_key', 'steve_entry_key', 'jamie_entry_key', 'jamie_entry_key_2' ) );
 	}
 
 	/**
@@ -172,12 +174,12 @@ class WP_Test_FrmProEntriesHelper extends FrmUnitTest {
 		$msg = 'A search for ' . $search_string . ' in field ' . $field_key;
 		self::run_entries_found_tests( $msg, $items, 1, array( 'jamie_entry_key' ) );
 
-		// Multiple words. One matching entry should be found.
+		// Multiple words. Two matching entries should be found.
 		$search_string = 'Jamie Rebecca Wahlin';
 		$field_key = 'p3eiuk';
 		$items = self::generate_and_run_field_specific_query( 'all_field_types', $field_key, $search_string );
 		$msg = 'A search for ' . $search_string . ' in field ' . $field_key;
-		self::run_entries_found_tests( $msg, $items, 2, array( 'jamie_entry_key' ) );
+		self::run_entries_found_tests( $msg, $items, 2, array( 'jamie_entry_key', 'jamie_entry_key_2' ) );
 
 		// Single word. No matching entries should be found.
 		$search_string = 'TextThatWillNotBeFound';
@@ -248,12 +250,12 @@ class WP_Test_FrmProEntriesHelper extends FrmUnitTest {
 	 */
 	function test_field_specific_search_on_post_title() {
 
-		// Single word. One matching entry should be found.
+		// Single word. Two matching entries should be found.
 		$search_string = "Jamie's";
 		$field_key = 'yi6yvm';
 		$items = self::generate_and_run_field_specific_query( 'create-a-post', $field_key, $search_string );
 		$msg = 'A search for ' . $search_string . ' in post title field ' . $field_key;
-		self::run_entries_found_tests( $msg, $items, 2, array( 'post-entry-1' ) );
+		self::run_entries_found_tests( $msg, $items, 2, array( 'post-entry-1', 'post-entry-3' ) );
 
 		// Single word. No entries should be found.
 		$search_string = 'TextThatShouldNotBeFound';

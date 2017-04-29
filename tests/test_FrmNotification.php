@@ -37,11 +37,11 @@ class WP_Test_FrmNotification extends FrmUnitTest {
 		$this->assertNotEmpty( $entry );
 
 		foreach ( $actions as $action ) {
-			self::check_email_one( $action, $entry, $form );
-			self::check_email_two( $action, $entry, $form );
-			self::check_email_three( $action, $entry, $form );
-			self::check_email_four( $action, $entry, $form );
-			self::check_email_five( $action, $entry, $form );
+			$this->check_email_one( $action, $entry, $form );
+			$this->check_email_two( $action, $entry, $form );
+			$this->check_email_three( $action, $entry, $form );
+			$this->check_email_four( $action, $entry, $form );
+			$this->check_email_five( $action, $entry, $form );
 		}
 	}
 
