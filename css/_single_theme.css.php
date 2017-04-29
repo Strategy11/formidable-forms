@@ -302,6 +302,10 @@ $arrow_icons = FrmStylesHelper::arrow_icons();
     margin-bottom:0<?php echo esc_html( $important ) ?>;
 }
 
+.<?php echo esc_html( $style_class ) ?> textarea{
+	vertical-align:top;
+}
+
 .<?php echo esc_html( $style_class ) ?> input[type=text],
 .<?php echo esc_html( $style_class ) ?> input[type=password],
 .<?php echo esc_html( $style_class ) ?> input[type=email],
