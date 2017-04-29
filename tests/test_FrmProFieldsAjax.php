@@ -67,8 +67,11 @@ class WP_Test_FrmProFieldsAjax extends FrmAjaxUnitTest {
 	 * @covers FrmProFieldsController::update_field_after_move
 	 */
 	function test_update_field_after_move() {
+		$this->set_as_user_role( 'administrator' );
+
 		$action = 'frm_update_field_after_move';
-		$repeating_field =  $this->factory->field->get_object_by_id( 'repeating-section' );
+
+		$repeating_field = FrmField::getOne( 'repeating-section' );
 		$old_form_id = $repeating_field->form_id;
 		$new_form_id = $repeating_field->field_options['form_select'];
 		$field = $this->factory->field->create_and_get( array( 'form_id' => $old_form_id ) );
@@ -77,13 +80,14 @@ class WP_Test_FrmProFieldsAjax extends FrmAjaxUnitTest {
 			'action'  => $action,
 			'field'   => $field->id,
 			'form_id' => $new_form_id,
+			'section_id' => $repeating_field->id,
 			'nonce'   => wp_create_nonce( 'frm_ajax' ),
 		);
 
 		try {
 			$this->_handleAjax( 'frm_update_field_after_move' );
-		} catch ( WPAjaxDieContinueException $e ) {
-			unset( $e );
+		} catch ( WPAjaxDieStopException $e ) {
+			// We expected this, do nothing
 		}
 
 		$updated_field =  $this->factory->field->get_object_by_id( $field->id );
