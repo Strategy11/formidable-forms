@@ -11,7 +11,7 @@ class WP_Test_FrmAppController extends FrmUnitTest {
 
 	public function test_menu() {
 		$this->set_admin_screen();
-		$this->set_as_user_role( 'administrator' );
+		$this->set_user_by_role( 'administrator' );
 
 		$this->markTestIncomplete( 'Needs work' );
 
@@ -26,7 +26,7 @@ class WP_Test_FrmAppController extends FrmUnitTest {
 	}
 
 	public function test_block_menu() {
-		$this->set_as_user_role( 'subscriber' );
+		$this->set_user_by_role( 'subscriber' );
 		$this->assertFalse( current_user_can( 'frm_view_forms' ) );
 
 		$this->check_menu( 'block' );

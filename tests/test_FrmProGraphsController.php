@@ -478,7 +478,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		$expected_data = self::get_graph_defaults( $graph_atts, 'Single Line Text' );
 		$expected_data['data'] = array(
 			array( 'Single Line Text', 'Submissions' ),
-			//array( 'Steph', 1 ), This part fails due to incorrect import. Fix the import!
+			array( 'Steph', 1 ),
 			array( 'Steve', 1 ),
 		);
 
@@ -872,8 +872,8 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		$expected_data = self::get_graph_defaults( $graph_atts, 'Dynamic Field - level 2' );
 		$expected_data['data'] = array(
 			array( 'Dynamic Field - level 2', 'Submissions' ),
-			//array( '', 1 ),//TODO: This part fails due to the import. Fix the import!
-			array( 'California', 1 ),
+			array( 'California', 2 ),
+			array( 'Utah', 1 ),
 		);
 
 		self::run_graph_tests( $graph_html, $expected_data );
@@ -2606,8 +2606,6 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		);
 
 		$actual_data = $frm_vars['google_graphs']['graphs'][ $count ];
-		//print_r( $actual_data );
-		//print_r( $expected_data );
 
 		self::compare_actual_to_expected_graph_values( $expected_data, $actual_data );
 

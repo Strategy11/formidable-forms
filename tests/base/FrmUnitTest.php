@@ -28,6 +28,8 @@ class FrmUnitTest extends WP_UnitTestCase {
 		if ( strpos( $current_class_name, 'FrmPro' ) && ! $this->is_pro_active ) {
 			$this->markTestSkipped( 'Pro is not active' );
 		}
+
+		$this->create_users();
 	}
 
 	/**
@@ -132,16 +134,10 @@ class FrmUnitTest extends WP_UnitTestCase {
 	}
 
 	/**
-	* Set the global current user to 1
+	* Set the current user to 1
 	*/
 	function set_current_user_to_1( ) {
-		$user_id = 1;
-		$user = $this->factory->user->get_object_by_id( $user_id );
-		if ( $user == false ) {
-			$user_id = $this->set_as_user_role( 'admin' );
-		} else {
-			wp_set_current_user( $user_id );
-		}
+		$this->set_user_by_role( 'administrator' );
 	}
 
 	function set_current_user_to_username( $login ) {
@@ -152,19 +148,42 @@ class FrmUnitTest extends WP_UnitTestCase {
 		}
 	}
 
-    function set_as_user_role( $role ) {
-        // create user
-		$user = $this->factory->user->create_and_get( array( 'role' => $role ) );
-		$this->assertTrue( $user->exists(), 'Problem getting user' );
+	/**
+	 * Get a user by the specified role and set them as the current user
+	 *
+	 * @param string $role
+	 *
+	 * @return WP_User
+	 */
+    function set_user_by_role( $role ) {
+	    $user = $this->get_user_by_role( $role );
+	    wp_set_current_user( $user->ID );
 
-		// log in as user
-		wp_set_current_user( $user->ID );
-		$this->assertTrue( current_user_can( $role ), 'Failed setting the current user role' );
+	    $this->assertTrue( current_user_can( $role ), 'Failed setting the current user role' );
 
-		FrmAppHelper::maybe_add_permissions();
+	    FrmAppHelper::maybe_add_permissions();
 
 		return $user->ID;
     }
+
+	/**
+	 * Get a user of a specific role
+	 *
+	 * @param string $role
+	 *
+	 * @return WP_User
+	 */
+	public function get_user_by_role( $role ) {
+		$users = get_users( array( 'role' => $role, 'number' => 1 ) );
+		if ( empty( $users ) ) {
+			$this->fail( 'No users with this role currently exist.' );
+			$user = null;
+		} else {
+			$user = reset( $users );
+		}
+
+		return $user;
+	}
 
 	function go_to_new_post() {
 		$new_post = $this->factory->post->create_and_get();
@@ -365,5 +384,41 @@ class FrmUnitTest extends WP_UnitTestCase {
 		fclose( $fw );
 
 		return $path;
+	}
+
+	/**
+	 * Create an administrator, editor, and subscriber
+	 *
+	 * @since 2.0
+	 */
+	private function create_users() {
+
+		$admin_args = array(
+			'user_login'  =>  'admin',
+			'user_email' => 'admin@mail.com',
+			'user_pass' => 'admin',
+			'role' => 'administrator',
+		);
+		$admin = self::factory()->user->create_object( $admin_args );
+		$this->assertNotEmpty( $admin );
+
+		$editor_args = array(
+			'user_login'  =>  'editor',
+			'user_email' => 'editor@mail.com',
+			'user_pass' => 'editor',
+			'role' => 'editor',
+		);
+		$editor = self::factory()->user->create_object( $editor_args );
+		$this->assertNotEmpty( $editor );
+
+		$subscriber_args = array(
+			'user_login'  =>  'subscriber',
+			'user_email' => 'subscriber@mail.com',
+			'user_pass' => 'subscriber',
+			'role' => 'subscriber',
+		);
+		$subscriber = self::factory()->user->create_object( $subscriber_args );
+		$this->assertNotEmpty( $subscriber );
+
 	}
 }

@@ -2384,7 +2384,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 
 		// Check Formshortcode:[formidable id=x] occurrences (should not be filtered)
 		$form_shortcode_count = substr_count( $content, 'Formshortcode:[formidable id="dynamic' );
-		$this->assertEquals( 3, $form_shortcode_count, 'The number of form shortcodes is not the expected value in a View.' );
+		$this->assertEquals( 4, $form_shortcode_count, 'The number of form shortcodes is not the expected value in a View.' );
 	}
 
 	/**
@@ -2423,7 +2423,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		// Check Formshortcode:[formidable id=x] occurrences (should be filtered)
 		$form_id = FrmForm::getIdByKey( 'dynamic-field-num-form' );
 		$form_count = substr_count( $content, 'id="frm_form_' . $form_id . '_container"');
-		$this->assertEquals( 4, $form_count, 'The number of forms is not the expected value in a View.' );
+		$this->assertEquals( 5, $form_count, 'The number of forms is not the expected value in a View.' );
 	}
 
 	private function is_easy_tables_active() {
@@ -2456,21 +2456,21 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 
 		// Check tr occurrences (from Easy Table)
 		$tr_count = substr_count( $content, '<tr' );
-		$this->assertEquals( 4, $tr_count, 'The number of table rows is not the expected value in View with Easy Table shortcodes.' );
+		$this->assertEquals( 5, $tr_count, 'The number of table rows is not the expected value in View with Easy Table shortcodes.' );
 
 		// Check td occurrences (from Easy Table)
 		$td_count = substr_count( $content, '<td' );
-		$this->assertEquals( 15, $td_count, 'The number of table cells is not the expected value in View with Easy Table shortcodes.' );
+		$this->assertEquals( 20, $td_count, 'The number of table cells is not the expected value in View with Easy Table shortcodes.' );
 	}
 
 	function check_counts_for_shortcodes( $content ) {
 		// Check SiteName:[siteurl] occurrences (filtered)
 		$sitename_count = substr_count( $content, 'SiteName:Test Blog' );
-		$this->assertEquals( 3, $sitename_count, 'The number of SiteName is not the expected value in View.' );
+		$this->assertEquals( 4, $sitename_count, 'The number of SiteName is not the expected value in View.' );
 
 		// Check FrmFieldValue:[frm-field-value] occurrences (filtered)
 		$frmfieldvalue_count = substr_count( $content, 'FrmFieldValue:Steve' );
-		$this->assertEquals( 3, $frmfieldvalue_count, 'The number of FrmFieldValue:Steve occurrences is not the expected value in View.' );
+		$this->assertEquals( 4, $frmfieldvalue_count, 'The number of FrmFieldValue:Steve occurrences is not the expected value in View.' );
 	}
 
 	function clear_get_values(){

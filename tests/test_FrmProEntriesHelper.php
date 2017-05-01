@@ -193,30 +193,50 @@ class WP_Test_FrmProEntriesHelper extends FrmUnitTest {
 	 * Test a Dynamic field-specific search that should return entries based on the frm_item_metas table
 	 * @covers FrmProEntriesHelper::get_search_str()
 	 */
-	function test_field_specific_search_on_dynamic_field() {
+	function test_field_specific_search_on_dynamic_field_california() {
 
-		// Single word. Two matching entries should technically be found, but there is an issue with importing
-		// array values into Dynamic checkbox fields
+		// Single word. Two matching entries should be found
 		$search_string = 'California';
 		$field_key = 'dynamic-state';
 		$items = self::generate_and_run_field_specific_query( 'all_field_types', $field_key, $search_string );
 		$msg = 'A search for ' . $search_string . ' in Dynamic field ' . $field_key;
-		self::run_entries_found_tests( $msg, $items, 1, array( 'steve_entry_key' ) );
+		self::run_entries_found_tests( $msg, $items, 2, array( 'steve_entry_key', 'steph_entry_key' ) );
 
-		// Entry ID. Two matching entries should technically be found, but there is an issue with importing
-		// array values into Dynamic checkbox fields
+		// Entry ID. Two matching entries should be found
 		$search_string = FrmEntry::get_id_by_key( 'cali_entry' );
 		$field_key = 'dynamic-state';
 		$items = self::generate_and_run_field_specific_query( 'all_field_types', $field_key, $search_string );
 		$msg = 'A search for ' . $search_string . ' in Dynamic field ' . $field_key;
-		self::run_entries_found_tests( $msg, $items, 1, array( 'steve_entry_key' ) );
+		self::run_entries_found_tests( $msg, $items, 2, array( 'steve_entry_key', 'steph_entry_key' ) );
+	}
 
-		// Single word. No entries should be found.
+	/**
+	 * Test a Dynamic field-specific search that should return entries based on the frm_item_metas table
+	 * @covers FrmProEntriesHelper::get_search_str()
+	 */
+	function test_field_specific_search_on_dynamic_field_utah() {
+
+		// Single word. One matching entry should be found
 		$search_string = 'Utah';
 		$field_key = 'dynamic-state';
 		$items = self::generate_and_run_field_specific_query( 'all_field_types', $field_key, $search_string );
 		$msg = 'A search for ' . $search_string . ' in Dynamic field ' . $field_key;
+		self::run_entries_found_tests( $msg, $items, 1, array( 'steph_entry_key' ) );
+
+	}
+
+	/**
+	 * Test a Dynamic field-specific search that should NOT return entries based on the frm_item_metas table
+	 * @covers FrmProEntriesHelper::get_search_str()
+	 */
+	function test_field_specific_search_on_dynamic_field_no_matches() {
+
+		$search_string = 'Sao Paulo';
+		$field_key = 'dynamic-state';
+		$items = self::generate_and_run_field_specific_query( 'all_field_types', $field_key, $search_string );
+		$msg = 'A search for ' . $search_string . ' in Dynamic field ' . $field_key;
 		self::run_entries_not_found_tests( $msg, $items );
+
 	}
 
 	/**
