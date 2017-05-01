@@ -194,7 +194,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 		$current_user_option = '<option value="current_user" >Current User</option>';
 		$last_option = '<option value="1" >admin</option>';
 		$closing_tag = '</select>';
-		$option_number = 3;
+		$option_number = 5;
 
 		$this->assertContains( $opening_tag, $dropdown );
 		$this->assertContains( $closing_tag, $dropdown );
@@ -365,7 +365,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 		$current_user_option = '<option value="current_user" >Current User</option>';
 		$last_option = '<option value="1" >admin</option>';
 		$closing_tag = '</select>';
-		$option_number = 3;
+		$option_number = 5;
 
 		$this->assertContains( $opening_tag, $dropdown );
 		$this->assertContains( $closing_tag, $dropdown );
@@ -553,7 +553,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 		$current_user_option = '<option value="current_user" >Current User</option>';
 		$last_option = '<option value="1" >admin</option>';
 		$closing_tag = '</select>';
-		$option_number = 3;
+		$option_number = 5;
 
 		$this->assertContains( $opening_tag, $dropdown );
 		$this->assertContains( $closing_tag, $dropdown );

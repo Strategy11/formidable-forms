@@ -3,6 +3,7 @@
  * @group app
  */
 class WP_Test_FrmAppHelper extends FrmUnitTest {
+
 	/**
 	 * @covers FrmAppHelper::plugin_version
 	 */
@@ -209,11 +210,11 @@ class WP_Test_FrmAppHelper extends FrmUnitTest {
 	 * @covers FrmAppHelper::maybe_add_permissions
 	 */
     function test_maybe_add_permissions() {
-		$this->set_as_user_role( 'subscriber' );
+		$this->set_user_by_role( 'subscriber' );
 		$this->assertFalse( current_user_can( 'frm_view_forms' ), 'Subscriber can frm_view_forms' );
 		$this->assertFalse( current_user_can( 'frm_edit_forms' ), 'Subscriber can frm_edit_forms' );
 
-		$this->set_as_user_role( 'administrator' );
+		$this->set_user_by_role( 'administrator' );
         $frm_roles = FrmAppHelper::frm_capabilities();
         foreach ( $frm_roles as $frm_role => $frm_role_description ) {
 			$this->assertTrue( current_user_can( $frm_role ), 'Admin cannot ' . $frm_role );

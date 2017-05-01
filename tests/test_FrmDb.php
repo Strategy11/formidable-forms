@@ -85,7 +85,7 @@ class WP_Test_FrmDb extends FrmUnitTest {
 	 * @covers FrmDb::uninstall
 	 */
 	public function test_uninstall() {
-		$this->set_as_user_role( 'administrator' );
+		$this->set_user_by_role( 'administrator' );
 
 		$frmdb = new FrmDb();
 		$uninstalled = $frmdb->uninstall();

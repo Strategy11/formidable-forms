@@ -32,14 +32,17 @@ class WP_Test_FrmProFormsHelper extends FrmUnitTest {
 	}
 
 	function allow_submit_with_user_id() {
+		$this->set_user_by_role( 'subscriber' );
+
 		$form = $this->form;
 		$form->options['single_entry_type'] = 'user';
 		$this->assertTrue( FrmProFormsHelper::user_can_submit_form( $form ), 'This user should be able to submit a form' );
 
-		$this->set_as_user_role( 'subscriber' );
-		$entry_data = $this->factory->field->generate_entry_array( $form );
-		$entry_by_current_user = $this->factory->entry->create( $entry_data );
+		// User creates entry
+		$entry_data = $this->factory->field->generate_entry_array( $this->form );
+		$entry = $this->factory->entry->create_and_get( $entry_data );
 
+		// Now user should not be able to submit an entry
 		$this->assertFalse( FrmProFormsHelper::user_can_submit_form( $form ), 'This user already submitted a form' );
 
 		$form->editable = 1;

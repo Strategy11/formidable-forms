@@ -14,8 +14,8 @@ class WP_Test_FrmProFieldsControllerAjax extends FrmAjaxUnitTest {
 	}
 
 	/**
-	* @covers FrmProFieldsController::toggle_repeat
-	*/
+	 * @covers FrmProFieldsController::toggle_repeat
+	 */
 	function test_toggle_repeat(){
 		/*
 		1. Start with repeating, switch to regular

@@ -86,11 +86,10 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 
 	/**
 	 * Test all graph types with userID field
-	 * @covers FrmProGraphsController::graph_shortcode()
+	 *
+	 * @covers FrmProGraphsController::graph_shortcode
 	 */
 	function test_graph_shortcode_user_id_with_all_types() {
-		self::clear_frm_vars();
-
 		$graph_atts = array( 'id' => 't1eqkj');
 		$all_types = self::get_graph_types_for_testing();
 		$graph_html = array();
@@ -113,11 +112,10 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 
 	/**
 	 * Test all graph types with Number field
-	 * @covers FrmProGraphsController::graph_shortcode()
+	 *
+	 * @covers FrmProGraphsController::graph_shortcode
 	 */
 	function test_graph_shortcode_number_field_with_all_types() {
-		self::clear_frm_vars();
-
 		$graph_atts = array( 'id' => 'msyehy' );
 		$all_types = self::get_graph_types_for_testing();
 		$graph_html = array();
@@ -140,7 +138,8 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 
 	/**
 	 * Check [frm-graph id=x type=geo] where x is a single line text field
-	 * @covers FrmProGraphsController::graph_shortcode()
+	 *
+	 * @covers FrmProGraphsController::graph_shortcode
 	 */
 	function test_graph_shortcode_single_line_text_with_type_geo() {
 		self::clear_frm_vars();
@@ -166,9 +165,11 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		$graph_html = FrmProGraphsController::graph_shortcode( $graph_atts );
 
 		$expected_data = self::get_graph_defaults( $graph_atts, 'Single Line Text' );
+
 		$expected_data['data'] = array(
 			array( 'Single Line Text', 'Submissions' ),
 			array( 'Jamie', 1 ),
+			array( 'Jwahlin', 1 ),
 		);
 
 		self::run_graph_tests( $graph_html, $expected_data );
@@ -189,6 +190,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		$expected_data['data'] = array(
 			array( 'Single Line Text', 'Submissions' ),
 			array( 'Jamie', 1 ),
+			array( 'Jwahlin', 1 ),
 		);
 
 		self::run_graph_tests( $graph_html, $expected_data );
@@ -264,7 +266,8 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 
 	/**
 	 * Check [frm-graph id=x y="value"] where x is a single line text field
-	 * @covers FrmProGraphsController::graph_shortcode()
+	 *
+	 * @covers FrmProGraphsController::graph_shortcode
 	 */
 	function test_graph_shortcode_single_field_filter_by_dropdown_id() {
 		self::clear_frm_vars();
@@ -278,6 +281,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		$expected_data['data'] = array(
 			array( 'Single Line Text', 'Submissions' ),
 			array( 'Jamie', 1 ),
+			array( 'Jwahlin', 1 ),
 			array( 'Steve', 1 ),
 		);
 
@@ -361,7 +365,8 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 
 	/**
 	 * Check [frm-graph id=x y="value"] where x is a single line text field
-	 * @covers FrmProGraphsController::graph_shortcode()
+	 *
+	 * @covers FrmProGraphsController::graph_shortcode
 	 */
 	function test_graph_shortcode_single_field_filter_by_dropdown_key() {
 		self::clear_frm_vars();
@@ -373,6 +378,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		$expected_data['data'] = array(
 			array( 'Single Line Text', 'Submissions' ),
 			array( 'Jamie', 1 ),
+			array( 'Jwahlin', 1 ),
 			array( 'Steve', 1 ),
 		);
 
@@ -472,7 +478,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		$expected_data = self::get_graph_defaults( $graph_atts, 'Single Line Text' );
 		$expected_data['data'] = array(
 			array( 'Single Line Text', 'Submissions' ),
-			//array( 'Steph', 1 ), This part fails due to incorrect import. Fix the import!
+			array( 'Steph', 1 ),
 			array( 'Steve', 1 ),
 		);
 
@@ -502,7 +508,8 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 
 	/**
 	 * Check [frm-graph id=x y_less_than="value"] where y is a number field
-	 * @covers FrmProGraphsController::graph_shortcode()
+	 *
+	 * @covers FrmProGraphsController::graph_shortcode
 	 */
 	function test_graph_shortcode_single_field_filter_by_number_less_than() {
 		self::clear_frm_vars();
@@ -514,6 +521,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		$expected_data = self::get_graph_defaults( $graph_atts, 'Single Line Text' );
 		$expected_data['data'] = array(
 			array( 'Single Line Text', 'Submissions' ),
+			array( 'Jwahlin', 1 ),
 			array( 'Steph', 1 ),
 		);
 
@@ -522,7 +530,8 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 
 	/**
 	 * Check [frm-graph id=x y_greater_than="value"] where y is a date field
-	 * @covers FrmProGraphsController::graph_shortcode()
+	 *
+	 * @covers FrmProGraphsController::graph_shortcode
 	 */
 	function test_graph_shortcode_single_field_filter_by_date_greater_than() {
 		self::clear_frm_vars();
@@ -535,6 +544,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		$expected_data['data'] = array(
 			array( 'Single Line Text', 'Submissions' ),
 			array( 'Jamie', 1 ),
+			array( 'Jwahlin', 1 ),
 			array( 'Steph', 1 ),
 		);
 
@@ -584,7 +594,8 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 
 	/**
 	 * Check [frm-graph id=x created_at_greater_than="value"]
-	 * @covers FrmProGraphsController::graph_shortcode()
+	 *
+	 * @covers FrmProGraphsController::graph_shortcode
 	 */
 	function test_graph_shortcode_single_field_filter_by_created_at_greater_than() {
 		self::clear_frm_vars();
@@ -596,6 +607,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		$expected_data = self::get_graph_defaults( $graph_atts, 'Single Line Text' );
 		$expected_data['data'] = array(
 			array( 'Single Line Text', 'Submissions' ),
+			array( 'Jwahlin', 1 ),
 			array( 'Steph', 1 ),
 			array( 'Steve', 1 ),
 		);
@@ -625,7 +637,8 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 
 	/**
 	 * Check [frm-graph id=x y="value"] where x is a single line text field
-	 * @covers FrmProGraphsController::graph_shortcode()
+	 *
+	 * @covers FrmProGraphsController::graph_shortcode
 	 */
 	function test_graph_shortcode_single_field_filter_by_checkbox_field() {
 		self::clear_frm_vars();
@@ -637,6 +650,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		$expected_data['data'] = array(
 			array( 'Single Line Text', 'Submissions' ),
 			array( 'Jamie', 1 ),
+			array( 'Jwahlin', 1 ),
 			array( 'Steve', 1 ),
 		);
 
@@ -682,7 +696,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 	 * Check [frm-graph id=x start_date="-100 years"] where x is a single line text field
 	 * For backward compatibility
 	 *
-	 * @covers FrmProGraphsController::graph_shortcode()
+	 * @covers FrmProGraphsController::graph_shortcode
 	 */
 	function test_graph_shortcode_single_field_with_specific_start_date() {
 		self::clear_frm_vars();
@@ -693,6 +707,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		$expected_data = self::get_graph_defaults(  $graph_atts, 'Single Line Text' );
 		$expected_data['data'] = array(
 			array( 'Single Line Text', 'Submissions' ),
+			array( 'Jwahlin', 1 ),
 			array( 'Steph', 1 ),
 			array( 'Steve', 1 ),
 		);
@@ -857,8 +872,8 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		$expected_data = self::get_graph_defaults( $graph_atts, 'Dynamic Field - level 2' );
 		$expected_data['data'] = array(
 			array( 'Dynamic Field - level 2', 'Submissions' ),
-			//array( '', 1 ),//TODO: This part fails due to the import. Fix the import!
-			array( 'California', 1 ),
+			array( 'California', 2 ),
+			array( 'Utah', 1 ),
 		);
 
 		self::run_graph_tests( $graph_html, $expected_data );
@@ -866,7 +881,8 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 
 	/**
 	 * Check [frm-graph id=x x_order=0]
-	 * @covers FrmProGraphsController::graph_shortcode()
+	 *
+	 * @covers FrmProGraphsController::graph_shortcode
 	 */
 	function test_graph_shortcode_dropdown_field_with_x_order() {
 		self::clear_frm_vars();
@@ -882,7 +898,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		$expected_data['data'] = array(
 			array( 'Dropdown', 'Submissions' ),
 			array( 'William Wells', 1 ),
-			array( 'Ace Ventura', 2 ),
+			array( 'Ace Ventura', 3 ),
 		);
 
 		self::run_graph_tests( $graph_html, $expected_data );
@@ -890,7 +906,8 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 
 	/**
 	 * Check [frm-graph id=x x_order="desc"]
-	 * @covers FrmProGraphsController::graph_shortcode()
+	 *
+	 * @covers FrmProGraphsController::graph_shortcode
 	 */
 	function test_graph_shortcode_dropdown_field_with_x_order_desc() {
 		self::clear_frm_vars();
@@ -905,7 +922,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		$expected_data = self::get_graph_defaults(  $graph_atts, 'Dropdown' );
 		$expected_data['data'] = array(
 			array( 'Dropdown', 'Submissions' ),
-			array( 'Ace Ventura', 2 ),
+			array( 'Ace Ventura', 3 ),
 			array( 'William Wells', 1 ),
 		);
 
@@ -932,7 +949,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 	/**
 	 * Check [frm-graph id="checkbox" include_zero="1"]
 	 *
-	 * @covers FrmProGraphsController::graph_shortcode()
+	 * @covers FrmProGraphsController::graph_shortcode
 	 */
 	function test_graph_shortcode_include_zero() {
 
@@ -949,8 +966,8 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		$expected_data['data'] = array(
 			array( 'Checkboxes - colors', 'Submissions' ),
 			array( 'Blue', 2 ),
-			array( 'Green', 2 ),
-			array( 'Red', 3 ),
+			array( 'Green', 3 ),
+			array( 'Red', 4 ),
 			//array( 'Purple', 0 ),// TODO: Should show blank option (Purple)
 		);
 
@@ -976,7 +993,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		$expected_data = self::get_graph_defaults( $graph_atts, 'Checkboxes - colors' );
 		$expected_data['data'] = array(
 			array( 'Checkboxes - colors', 'Submissions' ),
-			array( 'Red', 3 ),
+			array( 'Red', 4 ),
 		);
 
 		self::run_graph_tests( $graph_html, $expected_data );
@@ -999,7 +1016,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		$expected_data = self::get_graph_defaults( $graph_atts, 'Parent Dynamic Field' );
 		$expected_data['data'] = array(
 			array( 'Parent Dynamic Field', 'Submissions' ),
-			array( 'Uncategorized', 2 ),
+			array( 'Uncategorized', 3 ),
 		);
 
 		self::run_graph_tests( $graph_html, $expected_data );
@@ -1217,9 +1234,9 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		$expected_data = self::get_graph_defaults(  $graph_atts );
 		$expected_data['data'] = array(
 			array( 'Fields', 'Submissions' ),
-			array( 'Single Line Text', 1 ),
-			array( 'Checkboxes - colors', 1 ),
-			array( 'Radio Buttons - dessert', 1 ),
+			array( 'Single Line Text', 2 ),
+			array( 'Checkboxes - colors', 2 ),
+			array( 'Radio Buttons - dessert', 2 ),
 		);
 		self::add_column_colors( $graph_atts, $expected_data['data'] );
 
@@ -1303,9 +1320,9 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		$expected_data = self::get_graph_defaults(  $graph_atts );
 		$expected_data['data'] = array(
 			array( 'Fields', 'Submissions' ),
-			array( 'Single Line Text', 2 ),
-			array( 'Checkboxes - colors', 2 ),
-			array( 'Radio Buttons - dessert', 2 ),
+			array( 'Single Line Text', 3 ),
+			array( 'Checkboxes - colors', 3 ),
+			array( 'Radio Buttons - dessert', 3 ),
 		);
 
 		self::add_column_colors( $graph_atts, $expected_data['data'] );
@@ -1335,7 +1352,8 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 
 	/**
 	 * Check [frm-graph id=x ids=y data_type=total]
-	 * @covers FrmProGraphsController::graph_shortcode()
+	 *
+	 * @covers FrmProGraphsController::graph_shortcode
 	 */
 	function test_graph_shortcode_data_type_total_multiple_ids() {
 		self::clear_frm_vars();
@@ -1351,8 +1369,8 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		$expected_data = self::get_graph_defaults( $graph_atts);
 		$expected_data['data'] = array(
 			array( 'Fields', 'Total' ),
-			array( 'Number', 16 ),
-			array( 'Scale', 21 ),
+			array( 'Number', 17 ),
+			array( 'Scale', 26 ),
 		);
 
 		self::add_column_colors( $graph_atts, $expected_data['data'] );
@@ -1444,7 +1462,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		$expected_data['data'] = array(
 			array( 'Creation Date', 'Dropdown' ),
 			array( 'May 12, 2015', 1 ),
-			array( 'May 13, 2015', 2 ),
+			array( 'May 13, 2015', 3 ),
 		);
 
 		self::run_graph_tests( $graph_html, $expected_data );
@@ -1504,7 +1522,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		$expected_data = self::get_graph_defaults(  $graph_atts, 'Dropdown' );
 		$expected_data['data'] = array(
 			array( 'Date', 'Dropdown' ),
-			array( 'August 16, 2015', 1 ),
+			array( 'August 16, 2015', 2 ),
 		);
 
 		self::run_graph_tests( $graph_html, $expected_data );
@@ -1529,7 +1547,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		$expected_data = self::get_graph_defaults(  $graph_atts, 'Dropdown' );
 		$expected_data['data'] = array(
 			array( 'Date', 'Dropdown' ),
-			array( 'August 16, 2015', 1 ),
+			array( 'August 16, 2015', 2 ),
 		);
 
 		self::run_graph_tests( $graph_html, $expected_data );
@@ -1603,7 +1621,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		$expected_data['data'] = array(
 			array( 'Date', 'Dropdown' ),
 			array( 'January 24, 2015', 1 ),
-			array( 'August 16, 2015', 1 ),
+			array( 'August 16, 2015', 2 ),
 		);
 
 		self::run_graph_tests( $graph_html, $expected_data );
@@ -1664,7 +1682,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		$expected_data['data'] = array(
 			array( 'Date', 'Dropdown' ),
 			array( 'July 8, 2015', 1 ),
-			array( 'August 16, 2015', 1 ),
+			array( 'August 16, 2015', 2 ),
 		);
 
 		self::run_graph_tests( $graph_html, $expected_data );
@@ -1801,7 +1819,8 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 
 	/**
 	 * Check [frm-graph id="number" data_type=total x_axis="date_field"]
-	 * @covers FrmProGraphsController::graph_shortcode()
+	 *
+	 * @covers FrmProGraphsController::graph_shortcode
 	 */
 	function test_graph_shortcode_data_type_total_and_x_axis() {
 		self::clear_frm_vars();
@@ -1819,7 +1838,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 			array( 'Date', 'Number' ),
 			array( 'January 24, 2015', 5.0 ),
 			array( 'July 8, 2015', 1.0 ),
-			array( 'August 16, 2015', 20.0 ),
+			array( 'August 16, 2015', 11.0 ),
 		);
 
 		self::run_graph_tests( $graph_html, $expected_data );
@@ -1827,7 +1846,8 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 
 	/**
 	 * Check [frm-graph id=x ids=y data_type=total x_axis="date_field"]
-	 * @covers FrmProGraphsController::graph_shortcode()
+	 *
+	 * @covers FrmProGraphsController::graph_shortcode
 	 */
 	function test_graph_shortcode_data_type_total_multiple_ids_and_x_axis() {
 		self::clear_frm_vars();
@@ -1845,7 +1865,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 			array( 'Date', 'Number', 'Scale' ),
 			array( 'January 24, 2015', 5.0, 8.0 ),
 			array( 'July 8, 2015', 1.0, 8.0 ),
-			array( 'August 16, 2015', 20.0, 10.0 ),
+			array( 'August 16, 2015', 11.0, 10.0 ),
 		);
 
 		self::run_graph_tests( $graph_html, $expected_data );
@@ -1879,7 +1899,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 	/**
 	 * Check [frm-graph id=x include_zero="1" x_axis="date-field"]
 	 *
-	 * @covers FrmProGraphsController::graph_shortcode()
+	 * @covers FrmProGraphsController::graph_shortcode
 	 */
 	function test_graph_shortcode_include_zero_with_x_axis() {
 		self::clear_frm_vars();
@@ -2105,7 +2125,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 	/**
 	 * Check [frm-graph id=x x_axis="number"]
 	 *
-	 * @covers FrmProGraphsController::graph_shortcode()
+	 * @covers FrmProGraphsController::graph_shortcode
 	 */
 	function test_graph_shortcode_x_axis_number() {
 		self::clear_frm_vars();
@@ -2120,9 +2140,10 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		$expected_data = self::get_graph_defaults(  $graph_atts, 'Single Line Text' );
 		$expected_data['data'] = array(
 			array( 'Number', 'Single Line Text' ),
+			array( 0.0, 1 ),
 			array( 1.0, 1 ),
 			array( 5.0, 1 ),
-			array( 10.0, 2 ),
+			array( 11.0, 1 ),
 		);
 
 		self::run_graph_tests( $graph_html, $expected_data );
@@ -2214,16 +2235,19 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		if ( ( isset( $graph_atts['ids'] ) && $graph_atts['ids'] == 'uc580i,4t3qo4' ) ||
 			( isset( $graph_atts['fields'] ) && $graph_atts['fields'] == '493ito,uc580i,4t3qo4' ) ) {
 
+			$total_submissions = 4;
+
 			$expected_data['data'] = array(
 				array( 'Fields', $tooltip_label ),
-				array( 'Single Line Text', 3 ),
-				array( 'Checkboxes - colors', 3 ),
-				array( 'Radio Buttons - dessert', 3 ),
+				array( 'Single Line Text', $total_submissions ),
+				array( 'Checkboxes - colors', $total_submissions ),
+				array( 'Radio Buttons - dessert', $total_submissions ),
 			);
 		} else {
 			$expected_data['data'] = array(
 				array( 'Single Line Text', $tooltip_label ),
 				array( 'Jamie', 1 ),
+				array( 'Jwahlin', 1 ),
 				array( 'Steph', 1 ),
 				array(  'Steve', 1 ),
 			);
@@ -2238,7 +2262,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 
 		$expected_data['data'] = array(
 			array( 'User ID', $tooltip_label ),
-			array( 'admin', 1 ),
+			array( 'admin', 2 ),
 		);
 
 		return $expected_data;
@@ -2294,20 +2318,20 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		$expected_data = self::get_graph_defaults( $graph_atts,'Number');
 		$tooltip_label = self::get_expected_tooltip_label( $graph_atts );
 
+		$number_data = array( 0, 1, 5, 11 );
+
+		$expected_data['data'] = array(
+			array( 'Number', $tooltip_label ),
+		);
+
 		if ( isset( $graph_atts['type'] ) && $graph_atts['type'] == 'pie' ) {
-			$expected_data['data'] = array(
-				array( 'Number', $tooltip_label ),
-				array( '1', 1 ),
-				array( '5', 1 ),
-				array( '10', 1 ),
-			);
+			foreach ( $number_data as $value ) {
+				$expected_data['data'][] = array( (string) $value, 1 );
+			}
 		} else {
-			$expected_data['data'] = array(
-				array( 'Number', $tooltip_label ),
-				array( 1, 1 ),
-				array( 5, 1 ),
-				array( 10, 1 ),
-			);
+			foreach ( $number_data as $value ) {
+				$expected_data['data'][] = array( $value, 1 );
+			}
 		}
 
 		return $expected_data;
@@ -2582,8 +2606,6 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		);
 
 		$actual_data = $frm_vars['google_graphs']['graphs'][ $count ];
-		//print_r( $actual_data );
-		//print_r( $expected_data );
 
 		self::compare_actual_to_expected_graph_values( $expected_data, $actual_data );
 
