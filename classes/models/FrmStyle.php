@@ -13,8 +13,7 @@ class FrmStyle {
     public function get_new() {
 		$this->id = 0;
 
-		//coerce to int, to prevent PHP 7.1 error saying floats aren't permitted as argument to rand()
-        $max_slug_value = (int)pow(36, 6);
+        $max_slug_value =  2147483647;
         $min_slug_value = 37; // we want to have at least 2 characters in the slug
         $key = base_convert( rand($min_slug_value, $max_slug_value), 10, 36 );
 
