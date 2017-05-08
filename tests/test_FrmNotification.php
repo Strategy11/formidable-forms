@@ -38,7 +38,7 @@ class WP_Test_FrmNotification extends FrmUnitTest {
 
 		foreach ( $actions as $action ) {
 			$this->check_email_one( $action, $entry, $form );
-			$this->check_email_two( $action, $entry, $form );
+			$this->_check_email_two( $action, $entry, $form );
 			$this->check_email_three( $action, $entry, $form );
 			$this->check_email_four( $action, $entry, $form );
 			$this->check_email_five( $action, $entry, $form );
@@ -116,7 +116,7 @@ class WP_Test_FrmNotification extends FrmUnitTest {
 	 * @param $entry
 	 * @param $form
 	 */
-	private function check_email_two( $action, $entry, $form ) {
+	private function _check_email_two( $action, $entry, $form ) {
 		$entry_clone = clone $entry;
 		$action_clone = clone $action;
 		$expected = array();

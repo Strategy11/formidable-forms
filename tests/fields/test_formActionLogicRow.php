@@ -55,17 +55,17 @@ class test_formActionLogicRow extends FrmUnitTest {
 
 	private function fields_with_text_box() {
 		return array(
-			'text' => '493ito',
+			'text' => 'text-field',
 			'textarea' => 'p3eiuk',
 			'email' => 'endbcl',
 			'url' => 'itvv5a',
 			'number' => 'msyehy',
 			'phone' => 'n0d580',
-			'date' => 'f67hbu',
-			'time' => 'bm57jf',
+			'date' => 'date-field',
+			'time' => 'time-field',
 			'image' => 'zwuclz',
 			'lookup' => 'lookup-country',
-			'hidden' => 'rkax03',
+			'hidden' => 'hidden-field',
 			'password' => '9r61y8',
 			'tags' => 'ppr2eo',
 		);

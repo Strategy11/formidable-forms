@@ -22,7 +22,7 @@ class WP_Test_FrmProStatisticsController extends FrmUnitTest {
 
 	function test_stats_shortcode_count() {
 		$forms_to_test = array(
-			$this->all_fields_form_key  => array( '493ito', 'p3eiuk', 'uc580i', '4t3qo4', '54tffk', 'endbcl', 'repeating-text' ),
+			$this->all_fields_form_key  => array( 'text-field', 'p3eiuk', 'uc580i', '4t3qo4', '54tffk', 'endbcl', 'repeating-text' ),
 			//$this->create_post_form_key => array( 'yi6yvm' ),
 		);
 
@@ -357,10 +357,10 @@ class WP_Test_FrmProStatisticsController extends FrmUnitTest {
 	}
 
 	/**
-	 * [frm-stats id="number-field-key" type="total" "2015-01-01"<f67hbu<"2015-08-01"]
+	 * [frm-stats id="number-field-key" type="total" "2015-01-01"<date-field<"2015-08-01"]
 	 */
 	function test_stats_shortcode_total_with_deprecated_date_range_filter() {
-		$shortcode = '[frm-stats id="msyehy" type="total" "2015-01-01"&lt;f67hbu&lt;"2015-08-01"]';
+		$shortcode = '[frm-stats id="msyehy" type="total" "2015-01-01"&lt;date-field&lt;"2015-08-01"]';
 		$actual_value = do_shortcode( $shortcode );
 		$expected_value = 6;
 
@@ -368,10 +368,10 @@ class WP_Test_FrmProStatisticsController extends FrmUnitTest {
 	}
 
 	/**
-	 * [frm-stats id="number-field-key" type="total" f67hbu_greater_than="2015-01-01" f67hbu_less_than="2015-08-01"]
+	 * [frm-stats id="number-field-key" type="total" date-field_greater_than="2015-01-01" date-field_less_than="2015-08-01"]
 	 */
 	function test_stats_shortcode_total_with_new_date_range_filter() {
-		$shortcode = '[frm-stats id="msyehy" type="total" f67hbu_greater_than="2015-01-01" f67hbu_less_than="2015-08-01"]';
+		$shortcode = '[frm-stats id="msyehy" type="total" date-field_greater_than="2015-01-01" date-field_less_than="2015-08-01"]';
 		$actual_value = do_shortcode( $shortcode );
 		$expected_value = 6;
 

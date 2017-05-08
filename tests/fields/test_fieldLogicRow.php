@@ -12,7 +12,7 @@ class test_fieldLogicRow extends FrmUnitTest {
 	}
 
 	public function test_field_logic_row_no_field_selected() {
-		$field_id = FrmField::get_id_by_key( '493ito' );
+		$field_id = FrmField::get_id_by_key( 'text-field' );
 
 		$logic_row = $this->get_logic_row( $field_id );
 
@@ -22,7 +22,7 @@ class test_fieldLogicRow extends FrmUnitTest {
 	}
 
 	public function test_field_logic_row_text_box_logic_fields_selected() {
-		$field_id = FrmField::get_id_by_key( '493ito' );
+		$field_id = FrmField::get_id_by_key( 'text-field' );
 
 		foreach ( $this->fields_with_text_box() as $logic_field_key ) {
 			$this->check_single_text_box_logic_field_selected( $field_id, $logic_field_key );
@@ -39,7 +39,7 @@ class test_fieldLogicRow extends FrmUnitTest {
 	}
 
 	public function test_field_logic_row_checkbox_field_selected() {
-		$field_id = FrmField::get_id_by_key( '493ito' );
+		$field_id = FrmField::get_id_by_key( 'text-field' );
 
 		$logic_row = $this->get_logic_row( $field_id, 'uc580i', 'Red' );
 
@@ -84,17 +84,17 @@ class test_fieldLogicRow extends FrmUnitTest {
 
 	private function fields_with_text_box() {
 		return array(
-			'text' => '493ito',
+			'text' => 'text-field',
 			'textarea' => 'p3eiuk',
 			'email' => 'endbcl',
 			'url' => 'itvv5a',
 			'number' => 'msyehy',
 			'phone' => 'n0d580',
-			'date' => 'f67hbu',
-			'time' => 'bm57jf',
+			'date' => 'date-field',
+			'time' => 'time-field',
 			'image' => 'zwuclz',
 			'lookup' => 'lookup-country',
-			'hidden' => 'rkax03',
+			'hidden' => 'hidden-field',
 			'password' => '9r61y8',
 			'tags' => 'ppr2eo',
 		);

@@ -70,7 +70,7 @@ class WP_Test_FrmProEntriesController extends FrmUnitTest {
 		self::_set_and_check_expectations( $args );
 
 		if ( $form_key == $this->all_fields_form_key ) {
-			$fields = '493ito,p3eiuk,uc580i,4t3qo4,e9ul34,repeating-text';
+			$fields = 'text-field,p3eiuk,uc580i,4t3qo4,e9ul34,repeating-text';
 		} else {
 			$fields = 'yi6yvm';
 		}
@@ -228,7 +228,7 @@ class WP_Test_FrmProEntriesController extends FrmUnitTest {
 	*/
 	function test_get_field_value_shortcode(){
 		$tests = array( 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13 );
-		$field_id = FrmField::get_id_by_key( '493ito' );
+		$field_id = FrmField::get_id_by_key( 'text-field' );
 		$entry_id = FrmEntry::get_id_by_key( 'jamie_entry_key' );
 
 		foreach ( $tests as $test ) {
@@ -247,7 +247,7 @@ class WP_Test_FrmProEntriesController extends FrmUnitTest {
 	 * @covers FrmProEntriesController::get_field_value_shortcode
 	 */
 	function test_get_field_value_shortcode_for_time_fields_no_format(){
-		$atts = array( 'field_id' => 'bm57jf' );
+		$atts = array( 'field_id' => 'time-field' );
 
 		$value = FrmProEntriesController::get_field_value_shortcode( $atts );
 		$expected_value = '8:00 AM';
@@ -260,7 +260,7 @@ class WP_Test_FrmProEntriesController extends FrmUnitTest {
 	 */
 	function test_get_field_value_shortcode_for_time_fields_with_format(){
 		$atts = array(
-			'field_id' => 'bm57jf',
+			'field_id' => 'time-field',
 			'format' => 'gA',
 		);
 
@@ -296,7 +296,7 @@ class WP_Test_FrmProEntriesController extends FrmUnitTest {
 
 		// Use field key for tests 9 - 12
 		if ( $test > 8 && $test < 13 ) {
-			$field_id = '493ito';
+			$field_id = 'text-field';
 		}
 		$sc_atts = array(
 			'field_id' => $field_id
@@ -362,7 +362,7 @@ class WP_Test_FrmProEntriesController extends FrmUnitTest {
 	*/
 	function test_get_frm_field_value_entry(){
 		$tests = array( 1, 2, 3, 4, 5, 6, 7, 8, 9 );
-		$field = FrmField::getOne( '493ito' );
+		$field = FrmField::getOne( 'text-field' );
 		$entry_id = $this->factory->entry->get_id_by_key( 'jamie_entry_key' );
 
 		foreach ( $tests as $test ) {

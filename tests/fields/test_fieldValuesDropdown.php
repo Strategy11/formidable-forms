@@ -52,7 +52,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
 	public function test_field_logic_row_checkbox_field_values(){
-		list( $logic_field, $field, $field_id, $row_key ) = $this->initialize_field_logic_variables( 'uc580i', '493ito' );
+		list( $logic_field, $field, $field_id, $row_key ) = $this->initialize_field_logic_variables( 'uc580i', 'text-field' );
 
 		$dropdown = $this->get_field_logic_dropdown( $logic_field, $field_id, $field, $row_key );
 
@@ -77,7 +77,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
 	public function test_field_logic_row_radio_button_field_values(){
-		list( $logic_field, $field, $field_id, $row_key ) = $this->initialize_field_logic_variables( '4t3qo4', '493ito' );
+		list( $logic_field, $field, $field_id, $row_key ) = $this->initialize_field_logic_variables( '4t3qo4', 'text-field' );
 
 		$dropdown = $this->get_field_logic_dropdown( $logic_field, $field_id, $field, $row_key );
 
@@ -102,7 +102,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
 	public function test_field_logic_row_checkbox_field_values_with_selected_value(){
-		list( $logic_field, $field, $field_id, $row_key ) = $this->initialize_field_logic_variables( 'uc580i', '493ito' );
+		list( $logic_field, $field, $field_id, $row_key ) = $this->initialize_field_logic_variables( 'uc580i', 'text-field' );
 
 		// Set selected value
 		$field['hide_opt'][ $row_key ] = 'Blue';
@@ -134,7 +134,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
 	public function test_field_logic_row_dropdown_field_values(){
-		list( $logic_field, $field, $field_id, $row_key ) = $this->initialize_field_logic_variables( '54tffk', '493ito' );
+		list( $logic_field, $field, $field_id, $row_key ) = $this->initialize_field_logic_variables( '54tffk', 'text-field' );
 
 		$dropdown = $this->get_field_logic_dropdown( $logic_field, $field_id, $field, $row_key );
 
@@ -159,7 +159,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
 	public function test_field_logic_row_scale_field_values(){
-		list( $logic_field, $field, $field_id, $row_key ) = $this->initialize_field_logic_variables( 'qbrd2o', '493ito' );
+		list( $logic_field, $field, $field_id, $row_key ) = $this->initialize_field_logic_variables( 'qbrd2o', 'text-field' );
 
 		$dropdown = $this->get_field_logic_dropdown( $logic_field, $field_id, $field, $row_key );
 
@@ -185,7 +185,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
 	public function test_field_logic_row_user_id_field_values(){
-		list( $logic_field, $field, $field_id, $row_key ) = $this->initialize_field_logic_variables( 't1eqkj', '493ito' );
+		list( $logic_field, $field, $field_id, $row_key ) = $this->initialize_field_logic_variables( 'user-id-field', 'text-field' );
 
 		$dropdown = $this->get_field_logic_dropdown( $logic_field, $field_id, $field, $row_key );
 
@@ -214,7 +214,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
 	public function test_field_logic_row_dynamic_field_values(){
-		list( $logic_field, $field, $field_id, $row_key ) = $this->initialize_field_logic_variables( 'dynamic-country', '493ito' );
+		list( $logic_field, $field, $field_id, $row_key ) = $this->initialize_field_logic_variables( 'dynamic-country', 'text-field' );
 
 		$dropdown = $this->get_field_logic_dropdown( $logic_field, $field_id, $field, $row_key );
 
@@ -243,7 +243,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	public function test_field_logic_row_post_status_field_values(){
 		$this->set_current_user_to_1();
 
-		list( $logic_field, $field, $field_id, $row_key ) = $this->initialize_field_logic_variables( 'post-status-dropdown', '493ito' );
+		list( $logic_field, $field, $field_id, $row_key ) = $this->initialize_field_logic_variables( 'post-status-dropdown', 'text-field' );
 
 		$dropdown = $this->get_field_logic_dropdown( $logic_field, $field_id, $field, $row_key );
 
@@ -275,7 +275,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
 	public function test_field_logic_row_post_category_field_values(){
-		list( $logic_field, $field, $field_id, $row_key ) = $this->initialize_field_logic_variables( 'parent-dynamic-taxonomy', '493ito' );
+		list( $logic_field, $field, $field_id, $row_key ) = $this->initialize_field_logic_variables( 'parent-dynamic-taxonomy', 'text-field' );
 
 		$dropdown = $this->get_field_logic_dropdown( $logic_field, $field_id, $field, $row_key );
 
@@ -306,7 +306,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
 	public function test_field_logic_row_post_category_field_values_with_selected_value(){
-		list( $logic_field, $field, $field_id, $row_key ) = $this->initialize_field_logic_variables( 'parent-dynamic-taxonomy', '493ito' );
+		list( $logic_field, $field, $field_id, $row_key ) = $this->initialize_field_logic_variables( 'parent-dynamic-taxonomy', 'text-field' );
 
 		// Set selected value
 		$field['hide_opt'][ $row_key ] = $selected_value = '1';
@@ -356,7 +356,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
 	public function test_field_logic_row_user_id_field_values_ajax(){
-		list( $field_id, $logic_field, $logic_field_type ) = $this->initialize_field_logic_variables_ajax_field( 't1eqkj', '493ito' );
+		list( $field_id, $logic_field, $logic_field_type ) = $this->initialize_field_logic_variables_ajax_field( 'user-id-field', 'text-field' );
 
 		$dropdown = $this->get_field_logic_dropdown_ajax_field( $field_id, $logic_field, $logic_field_type );
 
@@ -383,7 +383,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
 	public function test_field_logic_row_dynamic_field_values_ajax(){
-		list( $field_id, $logic_field, $logic_field_type ) = $this->initialize_field_logic_variables_ajax_field( 'dynamic-country', '493ito' );
+		list( $field_id, $logic_field, $logic_field_type ) = $this->initialize_field_logic_variables_ajax_field( 'dynamic-country', 'text-field' );
 
 		$dropdown = $this->get_field_logic_dropdown_ajax_field( $field_id, $logic_field, $logic_field_type );
 
@@ -426,7 +426,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
 	public function test_action_logic_row_text_field_value_ajax() {
-		list( $new_field, $current_field_id, $field_name ) = $this->initialize_action_logic_variables_ajax_field( '493ito' );
+		list( $new_field, $current_field_id, $field_name ) = $this->initialize_action_logic_variables_ajax_field( 'text-field' );
 
 		$dropdown = $this->get_action_logic_dropdown_ajax_field( $new_field, $current_field_id, $field_name );
 
@@ -443,7 +443,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
 	public function test_action_logic_row_text_field_values() {
-		list( $field_name, $meta_name, $new_field ) = $this->initialize_action_logic_variables( '493ito' );
+		list( $field_name, $meta_name, $new_field ) = $this->initialize_action_logic_variables( 'text-field' );
 
 		$dropdown = $this->get_action_logic_dropdown( $field_name, $meta_name, $new_field, 'Test' );
 
@@ -544,7 +544,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
 	public function test_action_logic_row_user_id_field_values() {
-		list( $field_name, $meta_name, $new_field ) = $this->initialize_action_logic_variables( 't1eqkj' );
+		list( $field_name, $meta_name, $new_field ) = $this->initialize_action_logic_variables( 'user-id-field' );
 
 		$dropdown = $this->get_action_logic_dropdown( $field_name, $meta_name, $new_field, '' );
 
@@ -675,7 +675,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
 	public function test_mailchimp_hidden_field_values() {
-		list( $html_name, $field ) = $this->initialize_mailchimp_field_value_variables( 'rkax03' );
+		list( $html_name, $field ) = $this->initialize_mailchimp_field_value_variables( 'hidden-field' );
 
 		$dropdown = $this->get_mailchimp_field_value_dropdown( $html_name, $field, '' );
 
@@ -1249,17 +1249,17 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 
 	private function fields_with_text_box() {
 		return array(
-			'text' => '493ito',
+			'text' => 'text-field',
 			'textarea' => 'p3eiuk',
 			'email' => 'endbcl',
 			'url' => 'itvv5a',
 			'number' => 'msyehy',
 			'phone' => 'n0d580',
-			'date' => 'f67hbu',
-			'time' => 'bm57jf',
+			'date' => 'date-field',
+			'time' => 'time-field',
 			'image' => 'zwuclz',
 			'lookup' => 'lookup-country',
-			'hidden' => 'rkax03',
+			'hidden' => 'hidden-field',
 			'password' => '9r61y8',
 			'tags' => 'ppr2eo',
 		);

@@ -536,7 +536,7 @@ class WP_Test_FrmProFieldsControllerAjax extends FrmAjaxUnitTest {
 	 * @since 2.03.05
 	 */
 	function test_get_field_values_for_form_action_logic() {
-		$field_id = FrmField::get_id_by_key( '493ito' );
+		$field_id = FrmField::get_id_by_key( 'text-field' );
 		$name = 'frm_form_action[12][post_content][conditions][][hide_opt]';
 
 		$_POST = array(
@@ -574,7 +574,7 @@ class WP_Test_FrmProFieldsControllerAjax extends FrmAjaxUnitTest {
 	 */
 	function test_get_paragraph_field_values_for_field_logic() {
 		$logic_field_id = FrmField::get_id_by_key( 'p3eiuk' );
-		$source_field_id = FrmField::get_id_by_key( '493ito' );
+		$source_field_id = FrmField::get_id_by_key( 'text-field' );
 
 		$this->set_post_values_for_field_logic_value_selector( $logic_field_id, $source_field_id, 'text', 'create' );
 
@@ -603,8 +603,8 @@ class WP_Test_FrmProFieldsControllerAjax extends FrmAjaxUnitTest {
 	 *
 	 */
 	function test_get_time_field_values_for_field_logic() {
-		$logic_field_id = FrmField::get_id_by_key( 'bm57jf' );
-		$source_field_id = FrmField::get_id_by_key( '493ito' );
+		$logic_field_id = FrmField::get_id_by_key( 'time-field' );
+		$source_field_id = FrmField::get_id_by_key( 'text-field' );
 
 		$this->set_post_values_for_field_logic_value_selector( $logic_field_id, $source_field_id );
 
@@ -634,7 +634,7 @@ class WP_Test_FrmProFieldsControllerAjax extends FrmAjaxUnitTest {
 	 */
 	function test_get_lookup_field_values_for_field_logic() {
 		$logic_field_id = FrmField::get_id_by_key( 'lookup-country' );
-		$source_field_id = FrmField::get_id_by_key( '493ito' );
+		$source_field_id = FrmField::get_id_by_key( 'text-field' );
 
 		$this->set_post_values_for_field_logic_value_selector( $logic_field_id, $source_field_id );
 
@@ -664,7 +664,7 @@ class WP_Test_FrmProFieldsControllerAjax extends FrmAjaxUnitTest {
 	 */
 	function test_get_scale_field_values_for_field_logic() {
 		$logic_field_id = FrmField::get_id_by_key( 'qbrd2o' );
-		$source_field_id = FrmField::get_id_by_key( '493ito' );
+		$source_field_id = FrmField::get_id_by_key( 'text-field' );
 
 		$this->set_post_values_for_field_logic_value_selector( $logic_field_id, $source_field_id );
 
@@ -704,7 +704,7 @@ class WP_Test_FrmProFieldsControllerAjax extends FrmAjaxUnitTest {
 	 */
 	function test_get_dynamic_field_values_for_field_logic() {
 		$logic_field_id = FrmField::get_id_by_key( 'dynamic-country' );
-		$source_field_id = FrmField::get_id_by_key( '493ito' );
+		$source_field_id = FrmField::get_id_by_key( 'text-field' );
 
 		$this->set_post_values_for_field_logic_value_selector( $logic_field_id, $source_field_id );
 
@@ -783,8 +783,8 @@ class WP_Test_FrmProFieldsControllerAjax extends FrmAjaxUnitTest {
 	 *
 	 */
 	function test_get_user_id_field_values_for_field_logic() {
-		$logic_field_id = FrmField::get_id_by_key( 't1eqkj' );
-		$source_field_id = FrmField::get_id_by_key( '493ito' );
+		$logic_field_id = FrmField::get_id_by_key( 'user-id-field' );
+		$source_field_id = FrmField::get_id_by_key( 'text-field' );
 
 		$this->set_post_values_for_field_logic_value_selector( $logic_field_id, $source_field_id );
 

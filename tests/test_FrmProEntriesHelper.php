@@ -169,7 +169,7 @@ class WP_Test_FrmProEntriesHelper extends FrmUnitTest {
 
 		// Single word. One matching entry should be found.
 		$search_string = 'Jamie';
-		$field_key = '493ito';
+		$field_key = 'text-field';
 		$items = self::generate_and_run_field_specific_query( 'all_field_types', $field_key, $search_string );
 		$msg = 'A search for ' . $search_string . ' in field ' . $field_key;
 		self::run_entries_found_tests( $msg, $items, 1, array( 'jamie_entry_key' ) );
@@ -183,7 +183,7 @@ class WP_Test_FrmProEntriesHelper extends FrmUnitTest {
 
 		// Single word. No matching entries should be found.
 		$search_string = 'TextThatWillNotBeFound';
-		$field_key = '493ito';
+		$field_key = 'text-field';
 		$items = self::generate_and_run_field_specific_query( 'all_field_types', $field_key, $search_string );
 		$msg = 'A search for ' . $search_string . ' in field ' . $field_key;
 		self::run_entries_not_found_tests( $msg, $items );

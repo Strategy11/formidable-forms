@@ -46,8 +46,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 
 		$this->do_tables_exist();
 		$this->import_xml();
-		//TODO -- uncomment this.  It's part of the normal test suite.
-		//$this->create_files();
+		$this->create_files();
 	}
 
 	function get_table_names() {
@@ -112,7 +111,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 			$media_id = FrmProFileImport::import_attachment( $values['val'], $values['field'] );
 
 			if ( ! is_array( $values['val'] ) ) {
-				//$this->assertTrue( is_numeric( $media_id ), 'The following file is not importing correctly: ' . $values[ 'val' ] );
+				$this->assertTrue( is_numeric( $media_id ), 'The following file is not importing correctly: ' . $values[ 'val' ] );
 			}
 
 			// Insert into entries

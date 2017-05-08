@@ -60,7 +60,7 @@ class WP_Test_FrmFieldsAjax extends FrmAjaxUnitTest {
 		wp_set_current_user( $this->user_id );
 		$this->assertTrue(is_numeric($this->form_id));
 
-		$text_field = self::get_field_by_key( '493ito' );
+		$text_field = self::get_field_by_key( 'text-field' );
 
 		$_POST = array(
 			'action' => 'frm_duplicate_field',

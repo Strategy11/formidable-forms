@@ -543,7 +543,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		// Add filter "Single Line Text is equal to [get param=test]"
 		$filter_args = array(
 			array( 'type' => 'field',
-				'col' => '493ito',
+				'col' => 'text-field',
 				'op' => '=',
 				'val' => '[get param=test]',
 			),
@@ -566,7 +566,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		// Add filter "Single Line Text is equal to [get param=test]"
 		$filter_args = array(
 			array( 'type' => 'field',
-				'col' => '493ito',
+				'col' => 'text-field',
 				'op' => '=',
 				'val' => '[get param=test]',
 			),
@@ -588,7 +588,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		// Add filter "Single Line Text is equal to Jamie"
 		$filter_args = array(
 			array( 'type' => 'field',
-				'col' => '493ito',
+				'col' => 'text-field',
 				'op' => '=',
 				'val' => 'Jamie',
 			),
@@ -610,9 +610,9 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		// Add filter "Single Line Text is equal to [frm-field-value field_id=x entry=e_key]"
 		$filter_args = array(
 			array( 'type' => 'field',
-				'col' => '493ito',
+				'col' => 'text-field',
 				'op' => '=',
-				'val' => '[frm-field-value field_id="493ito" entry="jamie_entry_key"]',
+				'val' => '[frm-field-value field_id="text-field" entry="jamie_entry_key"]',
 			),
 		);
 		self::add_filter_to_view( $dynamic_view, $filter_args );
@@ -632,7 +632,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		// Add filter "UserID is equal to current user"
 		$filter_args = array(
 			array( 'type' => 'field',
-				'col' => 't1eqkj',
+				'col' => 'user-id-field',
 				'op' => '=',
 				'val' => 'current_user',
 			),
@@ -732,7 +732,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		$extra_atts = array( 'user_id' => '2' );
 		$filter_args = array(
 			array( 'type' => 'field',
-				'col' => 't1eqkj',
+				'col' => 'user-id-field',
 				'op' => '=',
 				'val' => 'current_user',
 			),
@@ -774,7 +774,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		$extra_atts = array( 'user_id' => '2' );
 		$filter_args = array(
 			array( 'type' => 'field',
-				'col' => 't1eqkj',
+				'col' => 'user-id-field',
 				'op' => '=',
 				'val' => '1',
 			),
@@ -860,7 +860,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 
 		$filter_args = array(
 			array( 'type' => 'field',
-				'col' => '493ito',
+				'col' => 'text-field',
 				'op' => '!=',
 				'val' => 'Jamie',
 			),
@@ -882,12 +882,12 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 
 		$filter_args = array(
 			array( 'type' => 'field',
-				'col' => '493ito',
+				'col' => 'text-field',
 				'op' => '!=',
 				'val' => 'Jamie',
 			),
 			array( 'type' => 'field',
-				'col' => '493ito',
+				'col' => 'text-field',
 				'op' => 'LIKE',
 				'val' => 'Stev',
 			),
@@ -909,12 +909,12 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 
 		$filter_args = array(
 			array( 'type' => 'field',
-				'col' => '493ito',
+				'col' => 'text-field',
 				'op' => '!=',
 				'val' => 'Jamie',
 			),
 			array( 'type' => 'field',
-				'col' => '493ito',
+				'col' => 'text-field',
 				'op' => 'LIKE',
 				'val' => 'Stev',
 			),
@@ -1044,7 +1044,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 				'val' => '2015-05-13',
 			),
 			array( 'type' => 'field',
-				'col' => '493ito',
+				'col' => 'text-field',
 				'op' => 'LIKE',
 				'val' => 'Stev',
 			),
@@ -1146,7 +1146,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		// Test with an added filter - entry_id should override all other filters
 		$filter_args = array(
 			array( 'type' => 'field',
-				'col' => '493ito',
+				'col' => 'text-field',
 				'op' => '=',
 				'val' => 'Steve',
 			),
@@ -1197,7 +1197,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 				'val' => FrmEntry::get_id_by_key( 'jamie_entry_key' ) . ',' . FrmEntry::get_id_by_key( 'steph_entry_key' ),
 			),
 			array( 'type' => 'field',
-				'col' => '493ito',
+				'col' => 'text-field',
 				'op' => '=',
 				'val' => 'Steve',
 			),
@@ -1317,7 +1317,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 
 		$filter_args = array(
 			array( 'type' => 'field',
-				'col' => 't1eqkj',
+				'col' => 'user-id-field',
 				'op' => 'group_by',
 				'val' => '',
 			),
@@ -1339,7 +1339,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 
 		$filter_args = array(
 			array( 'type' => 'field',
-			       'col' => 't1eqkj',
+			       'col' => 'user-id-field',
 			       'op' => 'group_by_newest',
 			       'val' => '',
 			),
@@ -1411,7 +1411,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 
 		$filter_args = array(
 			array( 'type' => 'field',
-				'col' => '493ito',
+				'col' => 'text-field',
 				'op' => 'LIKE',
 				'val' => 'e',
 			),
@@ -1438,7 +1438,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 
 		$filter_args = array(
 			array( 'type' => 'field',
-				'col' => '493ito',
+				'col' => 'text-field',
 				'op' => 'LIKE',
 				'val' => 'Ste',
 			),
@@ -1986,7 +1986,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		self::remove_view_order( $dynamic_view );
 		$order_row = array(
 			'type' => 'field',
-			'col' => '493ito',
+			'col' => 'text-field',
 			'dir' => 'ASC',
 		);
 		self::add_order_to_view( $dynamic_view, $order_row );
@@ -2008,7 +2008,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		self::remove_view_order( $dynamic_view );
 		$order_row = array(
 			'type' => 'field',
-			'col' => '493ito',
+			'col' => 'text-field',
 			'dir' => 'ASC',
 		);
 		self::add_order_to_view( $dynamic_view, $order_row );
@@ -2538,7 +2538,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 			$wpdb->update( $wpdb->prefix . 'frm_items', array( 'is_draft' => 1 ), array( 'id' => $new_id ) );
 
 			// Change text field value
-			$field_id = FrmField::get_id_by_key( '493ito' );
+			$field_id = FrmField::get_id_by_key( 'text-field' );
 			$wpdb->update( $wpdb->prefix . 'frm_item_metas', array( 'meta_value' => 'Celeste' ), array( 'item_id' => $new_id, 'field_id' => $field_id ) );
 		}
 
