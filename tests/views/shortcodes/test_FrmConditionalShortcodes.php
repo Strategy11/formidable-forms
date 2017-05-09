@@ -1177,6 +1177,34 @@ class WP_Test_Conditional_Shortcodes extends FrmUnitTest {
 		$this->assert_conditional_is_false( $content );
 	}
 
+	/**
+	 * Test [if x not_like="J"]...[/if x] where x is a Text field
+	 *
+	 * @since 2.03.08
+	 *
+	 * @covers FrmProContent::check_conditional_shortcode
+	 *
+	 * @group not-like-conditional
+	 */
+	public function test_value_not_like_substring_case_difference() {
+		$field = FrmField::getOne( 'text-field' );
+
+		$field_value = 'Jamie';
+		$compare_type = 'not_like';
+		$compare_to = 'j';
+
+		$opening_tag = '[if ' .  $field->id . ' ' . $compare_type . '="' . $compare_to . '"]';
+		$content = 'Before ' . $opening_tag . 'Show me[/if ' . $field->id . '] After';
+
+		$atts = $this->package_atts_for_jamie_entry( $compare_type, $compare_to, $opening_tag );
+		$tag = $field->id;
+		$args = array( 'field' => $field );
+
+		FrmProContent::check_conditional_shortcode( $content, $field_value, $atts, $tag, 'if', $args );
+
+		$this->assert_conditional_is_true( $content );
+	}
+
 
 	/**
 	 * Test [if x like="Uncategorized"]...[/if x] where x is a Category field

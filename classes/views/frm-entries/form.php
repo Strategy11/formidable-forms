@@ -70,7 +70,7 @@ echo FrmFormsHelper::replace_shortcodes($values['after_html'], $form);
 if ( FrmForm::show_submit( $form ) ) {
 
 	$copy_values = $values;
-	unset ( $copy_values['fields'] );
+	unset( $copy_values['fields'] );
 
 	FrmFormsHelper::get_custom_submit( $copy_values['submit_html'], $form, $submit, $form_action, $copy_values );
 }
