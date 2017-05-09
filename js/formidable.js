@@ -3475,6 +3475,7 @@ function frmFrontFormJS(){
 				}
 
 				if ( typeof response.redirect != 'undefined' ) {
+					jQuery(document).trigger( 'frmBeforeFormRedirect', [ object, response ] );
 					window.location = response.redirect;
 				} else if ( response.content !== '' ) {
 					// the form or success message was returned
@@ -3929,6 +3930,8 @@ function frmFrontFormJS(){
 			if(typeof(frmThemeOverride_frmRemoveRow) == 'function'){
 				frmThemeOverride_frmRemoveRow(id, thisRow);
 			}
+
+			jQuery(document).trigger( 'frmAfterRemoveRow' );
 		});
 
 		return false;
@@ -4010,6 +4013,8 @@ function frmFrontFormJS(){
 				if(typeof(frmThemeOverride_frmAddRow) == 'function'){
 					frmThemeOverride_frmAddRow(id, r);
 				}
+
+				jQuery(document).trigger( 'frmAfterAddRow' );
 
 				currentlyAddingRow = false;
 			},
