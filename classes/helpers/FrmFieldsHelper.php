@@ -655,6 +655,10 @@ DEFAULT_HTML;
         );
 
         foreach ( $shortcodes[0] as $short_key => $tag ) {
+			if ( empty( $tag ) ) {
+				continue;
+			}
+
             $atts = FrmShortcodeHelper::get_shortcode_attribute_array( $shortcodes[3][ $short_key ] );
 
             if ( ! empty( $shortcodes[3][ $short_key ] ) ) {
