@@ -2789,7 +2789,7 @@ function frmFrontFormJS(){
 			}
 		}
 
-		if ( totalField.val() != total ) {
+		if ( totalField.val() !== total ) {
 			totalField.val(total);
 			triggerChange( totalField, field_key );
 		}
