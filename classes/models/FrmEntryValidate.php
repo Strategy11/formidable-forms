@@ -19,19 +19,19 @@ class FrmEntryValidate {
 		$posted_fields = self::get_fields_to_validate( $values, $exclude );
 
 		// Pass exclude value to validate_field function so it can be used for repeating sections
-	    $args = array( 'exclude' => $exclude );
+		$args = array( 'exclude' => $exclude );
 
-	    self::spam_check( $exclude, $values, $errors );
-	    if ( ! empty( $errors ) ) {
-		    return $errors;
-	    }
+		self::spam_check( $exclude, $values, $errors );
+		if ( ! empty( $errors ) ) {
+			return $errors;
+		}
 
-	    foreach ( $posted_fields as $posted_field ) {
-		    self::validate_field( $posted_field, $errors, $values, $args );
-		    unset( $posted_field );
-	    }
+		foreach ( $posted_fields as $posted_field ) {
+			self::validate_field( $posted_field, $errors, $values, $args );
+			unset( $posted_field );
+		}
 
-	    $errors = apply_filters( 'frm_validate_entry', $errors, $values, compact( 'exclude' ) );
+		$errors = apply_filters( 'frm_validate_entry', $errors, $values, compact( 'exclude' ) );
 
 		return $errors;
 	}
