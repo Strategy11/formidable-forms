@@ -738,7 +738,7 @@ class WP_Test_Conditional_Shortcodes extends FrmUnitTest {
 	 *
 	 * @covers FrmProContent::conditional_replace_with_value
 	 *
-	 * @group dynamic-field-conditional-fail
+	 * @group dynamic-field-conditional
 	 */
 	public function test_dynamic_field_show_info_field_equals_value_true() {
 		// TODO: make this work with field keys

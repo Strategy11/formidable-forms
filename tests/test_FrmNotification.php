@@ -37,11 +37,11 @@ class WP_Test_FrmNotification extends FrmUnitTest {
 		$this->assertNotEmpty( $entry );
 
 		foreach ( $actions as $action ) {
-			$this->check_email_one( $action, $entry, $form );
-			$this->_check_email_two( $action, $entry, $form );
-			$this->check_email_three( $action, $entry, $form );
-			$this->check_email_four( $action, $entry, $form );
-			$this->check_email_five( $action, $entry, $form );
+			$this->check_first_email( $action, $entry, $form );
+			$this->check_second_email( $action, $entry, $form );
+			$this->check_third_email( $action, $entry, $form );
+			$this->check_fourth_email( $action, $entry, $form );
+			$this->check_fifth_email( $action, $entry, $form );
 		}
 	}
 
@@ -61,7 +61,7 @@ class WP_Test_FrmNotification extends FrmUnitTest {
 	 * @param $entry
 	 * @param $form
 	 */
-	private function check_email_one( $action, $entry, $form ) {
+	private function check_first_email( $action, $entry, $form ) {
 		$pass_entry = clone $entry;
 
 		$expected = array(
@@ -116,7 +116,7 @@ class WP_Test_FrmNotification extends FrmUnitTest {
 	 * @param $entry
 	 * @param $form
 	 */
-	private function _check_email_two( $action, $entry, $form ) {
+	private function check_second_email( $action, $entry, $form ) {
 		$entry_clone = clone $entry;
 		$action_clone = clone $action;
 		$expected = array();
@@ -186,16 +186,16 @@ class WP_Test_FrmNotification extends FrmUnitTest {
 	 * Reply_to: "Reply To" <[userIDkey]>
 	 * From: "Name"
 	 * Subject: Set to "New Subject" with filter
-	 * Message: [default-message]// TODO: change from here down
+	 * Message: [default-message]
 	 * Inc_user_info: true
 	 * Plain_text: false
-	 * Attachments: // TODO
+	 * Attachments:
 	 *
 	 * @param $action
 	 * @param $entry
 	 * @param $form
 	 */
-	private function check_email_three( $action, $entry, $form ) {
+	private function check_third_email( $action, $entry, $form ) {
 		$entry_clone = clone $entry;
 		$action_clone = clone $action;
 		$expected = array();
@@ -282,7 +282,7 @@ class WP_Test_FrmNotification extends FrmUnitTest {
 	 * @param $entry
 	 * @param $form
 	 */
-	private function check_email_four( $action, $entry, $form ) {
+	private function check_fourth_email( $action, $entry, $form ) {
 		$entry_clone = clone $entry;
 		$action_clone = clone $action;
 		$expected = array();
@@ -359,7 +359,7 @@ class WP_Test_FrmNotification extends FrmUnitTest {
 	 * @param $entry
 	 * @param $form
 	 */
-	private function check_email_five( $action, $entry, $form ) {
+	private function check_fifth_email( $action, $entry, $form ) {
 		$entry_clone = clone $entry;
 		$action_clone = clone $action;
 		$expected = array();
