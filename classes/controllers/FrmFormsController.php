@@ -655,10 +655,10 @@ class FrmFormsController {
 	 *
 	 * @since 2.03.08
 	 *
-	 * @param array $values
+	 * @param array|boolean $values
 	 */
 	private static function clean_submit_html( &$values ) {
-		if ( isset( $values['submit_html'] ) ) {
+		if ( is_array( $values ) && isset( $values['submit_html'] ) ) {
 			$values['submit_html'] = str_replace( 'javascript:void(0)', '#', $values['submit_html'] );
 		}
 	}
