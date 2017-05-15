@@ -162,7 +162,7 @@ function frmFrontFormJS(){
 			init: function() {
 				this.on('sending', function(file, xhr, formData) {
 
-					if ( ! precedingRequiredFieldsCompleted( uploadFields[i] ) ) {
+					if ( ! anyPrecedingRequiredFieldsCompleted( uploadFields[i] ) ) {
 						this.removeFile(file);
 						alert('Please complete the preceding required fields before uploading a file.');
 						return false;
@@ -280,8 +280,7 @@ function frmFrontFormJS(){
 	}
 
 	/**
-	 * Check that preceding required fields are completed
-	 * TODO: maybe convert to JavaScript for increased speed
+	 * Check that at least one preceding required field is complete
 	 *
 	 * @since 2.03.08
 	 *
@@ -290,7 +289,7 @@ function frmFrontFormJS(){
 	 * @param {string} uploadField.fieldID
 	 * @returns {boolean}
 	 */
-	function precedingRequiredFieldsCompleted( uploadField ) {
+	function anyPrecedingRequiredFieldsCompleted( uploadField ) {
 		var fileSelector = uploadField.htmlID + '_dropzone';
 		var dropzoneDiv = jQuery( '#' + fileSelector );
 		var form = dropzoneDiv.closest( 'form' );
@@ -307,7 +306,6 @@ function frmFrontFormJS(){
 			return true;
 		} else {
 			var fieldsComplete = true;
-			var errors = [];
 
 			for ( var r = 0, rl = requiredFields.length; r < rl; r++ ) {
 				if ( requiredFields[r].id === fileSelector ) {
@@ -318,13 +316,11 @@ function frmFrontFormJS(){
 					continue;
 				}
 
-				errors = checkRequiredField( requiredFields[r], errors );
-
-				if ( errors.length < 1 ) {
+				if ( checkRequiredField( requiredFields[r], [] ).length < 1 ) {
 					fieldsComplete = true;
+					break;
 				} else {
 					fieldsComplete = false;
-					break;
 				}
 			}
 		}
