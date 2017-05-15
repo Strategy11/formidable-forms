@@ -217,23 +217,17 @@ function frmAdminBuildJS(){
 
 				closeOpenDropdown( ui.item );
 
-				// Get the current field or button's HTML ID
-				var fieldHTMLId = ui.item.attr('id');
-				if ( typeof  fieldHTMLId == 'undefined' ) {
+				if ( typeof ui.item.attr('id') == 'undefined' ) {
 					return;
+				} else if ( ui.item.attr('id').indexOf('frm_field_id') > -1 ) {
+					// An existing field was dragged and dropped into, out of, or between sections
+					updateFieldAfterMovingBetweenSections(ui.item);
+					return;
+				} else {
+					// A new field was dragged into the form
+					insertNewFieldByDragging(this, ui.item, opts);
 				}
 
-				var section = getSectionForFieldPlacement( this, ui.item );
-				var formId = getFormIdForFieldPlacement( section );
-				var sectionId = getSectionIdForFieldPlacement( section );
-
-				// An existing field was dragged and dropped into, out of, or between sections
-				if ( fieldHTMLId.indexOf( 'frm_field_id') !== -1 ) {
-					updateFieldAfterMovingBetweenSections( fieldHTMLId, formId, sectionId );
-					return;
-				}
-
-				insertNewFieldByDragging( fieldHTMLId, formId, sectionId, opts );
 			},
 			change:function(event, ui){
 				// don't allow some field types inside section
@@ -275,12 +269,7 @@ function frmAdminBuildJS(){
 	}
 
 	// Get the section where a field is dropped
-	function getSectionForFieldPlacement( selectedItem, uiItem ){
-		var currentItem = jQuery(selectedItem).data().uiSortable.currentItem;
-		if ( typeof currentItem == 'undefined' ) {
-			currentItem = uiItem;
-		}
-
+	function getSectionForFieldPlacement( currentItem ){
 		var section = '';
 		if ( typeof currentItem !== 'undefined' ) {
 			section = currentItem.closest('.edit_field_type_divider');
@@ -318,9 +307,16 @@ function frmAdminBuildJS(){
 		return sectionId;
 	}
 
-	// Update a field after it is dragged and dropped into, out of, or between sections
-	function updateFieldAfterMovingBetweenSections( fieldHTMLId, formId, sectionId ) {
-		var fieldId = fieldHTMLId.replace('frm_field_id_', '');
+	/**
+	 * Update a field after it is dragged and dropped into, out of, or between sections
+	 *
+	 * @param {object} currentItem
+	 */
+	function updateFieldAfterMovingBetweenSections( currentItem ) {
+		var fieldId = currentItem.attr('id').replace('frm_field_id_', '');
+		var section = getSectionForFieldPlacement( currentItem );
+		var formId = getFormIdForFieldPlacement( section );
+		var sectionId = getSectionIdForFieldPlacement( section );
 
 		jQuery.ajax({
 			type: 'POST', url: ajaxurl,
@@ -343,8 +339,21 @@ function frmAdminBuildJS(){
 		document.getElementById( 'frm_in_section_' + fieldId ).value = sectionId;
 	}
 
-	// Add a new field by dragging and dropping it from the Fields sidebar
-	function insertNewFieldByDragging( fieldType, formId, sectionId, opts ) {
+	/**
+	 * Add a new field by dragging and dropping it from the Fields sidebar
+	 *
+	 * @param {object} selectedItem
+	 * @param {object} fieldButton
+	 * @param {object} opts
+     */
+	function insertNewFieldByDragging( selectedItem, fieldButton, opts ) {
+		var fieldType = fieldButton.attr('id');
+		var currentItem = jQuery(selectedItem).data().uiSortable.currentItem;
+		var section = getSectionForFieldPlacement( currentItem );
+		var formId = getFormIdForFieldPlacement( section );
+		var sectionId = getSectionIdForFieldPlacement( section );
+
+
 		jQuery('#new_fields .frmbutton.frm_t' + fieldType).replaceWith('<img class="frmbutton frmbutton_loadingnow" id="' + fieldType + '" src="' + frm_js.images_url + '/ajax_loader.gif" alt="' + frm_js.loading + '" />');
 		jQuery.ajax({
 			type: 'POST', url: ajaxurl,
