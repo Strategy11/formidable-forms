@@ -416,42 +416,6 @@ class FrmAppController {
         wp_die();
     }
 
-	/**
-	 * Add a filter to shorten the EDD filename for Formidable plugin, and add-on, updates
-	 *
-	 * @since 2.03.08
-	 *
-	 * @param boolean $return
-	 * @param string $package
-	 *
-	 * @return boolean
-	 */
-	public static function add_shorten_edd_filename_filter( $return, $package ) {
-		if ( strpos( $package, '/edd-sl/package_download/' ) !== false && strpos( $package, 'formidableforms.com' ) !== false ) {
-			add_filter( 'wp_unique_filename', 'FrmAppController::shorten_edd_filename', 10, 2 );
-		}
-
-		return $return;
-	}
-
-	/**
-	 * Shorten the EDD filename for automatic updates
-	 * Decreases size of file path so file path limit is not hit on Windows servers
-	 *
-	 * @since 2.03.08
-	 *
-	 * @param string $filename
-	 * @param string $ext
-	 *
-	 * @return string
-	 */
-	public static function shorten_edd_filename( $filename, $ext ) {
-		$filename = substr( $filename, 0, 50 ) . $ext;
-		remove_filter( 'wp_unique_filename', 'shorten_edd_filename', 10 );
-
-		return $filename;
-	}
-
     public static function get_form_shortcode( $atts ) {
         _deprecated_function( __FUNCTION__, '1.07.05', 'FrmFormsController::get_form_shortcode()' );
         return FrmFormsController::get_form_shortcode( $atts );
