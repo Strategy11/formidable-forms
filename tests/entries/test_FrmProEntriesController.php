@@ -40,7 +40,8 @@ class WP_Test_FrmProEntriesController extends FrmUnitTest {
 			$this->markTestSkipped( 'Run with --group entries' );
 		}
 
-		$expected_form_script = '/wp-content/plugins/formidable/js/formidable.min.js';
+		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+		$expected_form_script = "/wp-content/plugins/formidable/js/formidable{$suffix}.js";
 		$expected_is_included = strpos( $output, $expected_form_script );
 		$this->assertTrue( $expected_is_included !== false, 'The form script is missing in output: ' . $output );
 	}
