@@ -97,7 +97,7 @@ class WP_Test_FrmFieldsAjax extends FrmAjaxUnitTest {
 		wp_set_current_user( $this->user_id );
 		$this->assertTrue(is_numeric($this->form_id));
 
-		$divider_field = self::get_field_by_key( 'flf4iy' );
+		$divider_field = self::get_field_by_key( 'pro-fields-divider' );
 		$children = self::get_divider_children( $divider_field );
 
 		$_POST = array(

@@ -22,7 +22,7 @@ class WP_Test_FrmProStatisticsController extends FrmUnitTest {
 
 	function test_stats_shortcode_count() {
 		$forms_to_test = array(
-			$this->all_fields_form_key  => array( 'text-field', 'p3eiuk', 'uc580i', '4t3qo4', '54tffk', 'endbcl', 'repeating-text' ),
+			$this->all_fields_form_key  => array( 'text-field', 'p3eiuk', 'uc580i', 'radio-button-field', 'dropdown-field', 'email-field', 'repeating-text' ),
 			//$this->create_post_form_key => array( 'yi6yvm' ),
 		);
 
@@ -280,7 +280,7 @@ class WP_Test_FrmProStatisticsController extends FrmUnitTest {
 	 * [frm-stats id="dropdown-field-key" type="count" value="Ace Ventura"]
 	 */
 	function test_stats_shortcode_count_with_value() {
-		$shortcode = '[frm-stats id="54tffk" type="count" value="Ace Ventura"]';
+		$shortcode = '[frm-stats id="dropdown-field" type="count" value="Ace Ventura"]';
 		$actual_value = do_shortcode( $shortcode );
 		$expected_value = 3;
 
@@ -314,7 +314,7 @@ class WP_Test_FrmProStatisticsController extends FrmUnitTest {
 	 * [frm-stats id="number-field-key" type="total" dropdown="Ace Ventura"]
 	 */
 	function test_stats_shortcode_total_with_dropdown_filter() {
-		$shortcode = '[frm-stats id="msyehy" type="total" 54tffk="Ace Ventura"]';
+		$shortcode = '[frm-stats id="msyehy" type="total" dropdown-field="Ace Ventura"]';
 		$actual_value = do_shortcode( $shortcode );
 		$expected_value = 16;
 
@@ -325,7 +325,7 @@ class WP_Test_FrmProStatisticsController extends FrmUnitTest {
 	 * [frm-stats id="number-field-key" type="total" dropdown="Ace Ventura" fake="test"]
 	 */
 	function test_stats_shortcode_total_with_dropdown_filter_and_fake_filter() {
-		$shortcode = '[frm-stats id="msyehy" type="total" 54tffk="Ace Ventura" fake="test"]';
+		$shortcode = '[frm-stats id="msyehy" type="total" dropdown-field="Ace Ventura" fake="test"]';
 		$actual_value = do_shortcode( $shortcode );
 		$expected_value = 16;
 
@@ -337,7 +337,7 @@ class WP_Test_FrmProStatisticsController extends FrmUnitTest {
 	 */
 	function test_stats_shortcode_total_with_dropdown_filter_and_entry_id() {
 		$entry_id = FrmEntry::get_id_by_key( 'jamie_entry_key' );
-		$shortcode = '[frm-stats id="msyehy" type="total" 54tffk="Ace Ventura" entry_id="' . $entry_id . '"]';
+		$shortcode = '[frm-stats id="msyehy" type="total" dropdown-field="Ace Ventura" entry_id="' . $entry_id . '"]';
 		$actual_value = do_shortcode( $shortcode );
 		$expected_value = $this->msyehy_data['jamie_entry_key'];
 
@@ -349,7 +349,7 @@ class WP_Test_FrmProStatisticsController extends FrmUnitTest {
 	 */
 	function test_stats_shortcode_total_with_dropdown_filter_and_entry_key() {
 		//$this->markTestSkipped( 'Fails before 2.02.06' );
-		$shortcode = '[frm-stats id="msyehy" type="total" 54tffk="Ace Ventura" entry_id="jamie_entry_key"]';
+		$shortcode = '[frm-stats id="msyehy" type="total" dropdown-field="Ace Ventura" entry_id="jamie_entry_key"]';
 		$actual_value = do_shortcode( $shortcode );
 		$expected_value = $this->msyehy_data['jamie_entry_key'];
 

@@ -123,8 +123,8 @@ class WP_Test_FrmNotification extends FrmUnitTest {
 		$admin_email = get_option('admin_email');
 
 		// To
-		$user_field_id = FrmField::get_id_by_key( 'user14' );
-		$this->assertNotFalse( $user_field_id, 'The UserID field is not retrieved with key user14.' );
+		$user_field_id = FrmField::get_id_by_key( 'contact-user-id' );
+		$this->assertNotFalse( $user_field_id, 'The UserID field is not retrieved with key contact-user-id.' );
 		$this->assertArrayHasKey( $user_field_id, $entry_clone->metas, 'The UserID value is empty. A user may not have been set when the entry was created.' );
 		$action_clone->post_content['email_to'] = 'Name [' . $user_field_id . '], Name2<jamie@test.com>, [admin_email]';
 		$user = wp_get_current_user();
@@ -135,7 +135,7 @@ class WP_Test_FrmNotification extends FrmUnitTest {
 		$expected['cc'] = array( array( 'test@mail.com', 'Jamie Wahlin' ) );
 
 		// BCC
-		$name_id = FrmField::get_id_by_key( 'qh4icy3' );
+		$name_id = FrmField::get_id_by_key( 'contact-name' );
 		$entry_clone->metas[ $name_id ] = 'Jamie Wahlin';
 		$action_clone->post_content['bcc'] = '[if ' . $name_id . ' equals="Jamie Wahlin"]jw@test.com[/if ' . $name_id . ']';
 		$expected['bcc'] = array( array( 'jw@test.com', '' ) );
@@ -201,8 +201,8 @@ class WP_Test_FrmNotification extends FrmUnitTest {
 		$expected = array();
 
 		// To
-		$user_field_id = FrmField::get_id_by_key( 'user14' );
-		$this->assertNotFalse( $user_field_id, 'The UserID field is not retrieved with key user14.' );
+		$user_field_id = FrmField::get_id_by_key( 'contact-user-id' );
+		$this->assertNotFalse( $user_field_id, 'The UserID field is not retrieved with key contact-user-id.' );
 		$this->assertArrayHasKey( $user_field_id, $entry_clone->metas, 'The UserID value is empty. A user may not have been set when the entry was created.' );
 		$action_clone->post_content['email_to'] = 'Name test1@mail.com, Name2<test2@mail.com>';
 		$user = wp_get_current_user();
@@ -215,7 +215,7 @@ class WP_Test_FrmNotification extends FrmUnitTest {
 		$expected['cc'] = array( array( 'testcc1@mail.com', 'Jamie Wahlin' ), array( $user->user_email, $user->display_name ) );
 
 		// BCC
-		$name_id = FrmField::get_id_by_key( 'qh4icy3' );
+		$name_id = FrmField::get_id_by_key( 'contact-name' );
 		$entry_clone->metas[ $name_id ] = 'Jamie Wahlin';
 		$action_clone->post_content['bcc'] = '[if ' . $name_id . ' equals="Jamie Wahlin"]testbcc1@mail.com[/if ' . $name_id . '], "Tester test" testbcc2@mail.com';
 		$expected['bcc'] = array( array( 'testbcc1@mail.com', '' ), array( 'testbcc2@mail.com', 'Tester test' ) );
@@ -230,7 +230,7 @@ class WP_Test_FrmNotification extends FrmUnitTest {
 		$expected['from'] = 'Name <' . get_option('admin_email') . '>';
 
 		// Reply to
-		$action_clone->post_content['reply_to'] = '"Reply To" <[user14]>';
+		$action_clone->post_content['reply_to'] = '"Reply To" <[contact-user-id]>';
 		$expected['reply_to'] = 'Reply To <' . $user->user_email . '>';
 
 		// Body - set inc_user_info to true
@@ -378,7 +378,7 @@ class WP_Test_FrmNotification extends FrmUnitTest {
 		$expected['bcc'] = array();
 
 		// Subject
-		$name_id = FrmField::get_id_by_key( 'qh4icy3' );
+		$name_id = FrmField::get_id_by_key( 'contact-name' );
 		$entry_clone->metas[ $name_id ] = 'Jamie Wahlin';
 		$action_clone->post_content['email_subject'] = 'Submission from [' . $name_id . ']';
 		$expected['subject'] = self::prepare_subject( 'Submission from Jamie Wahlin' );

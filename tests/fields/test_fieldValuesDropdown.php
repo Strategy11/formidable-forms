@@ -77,7 +77,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
 	public function test_field_logic_row_radio_button_field_values(){
-		list( $logic_field, $field, $field_id, $row_key ) = $this->initialize_field_logic_variables( '4t3qo4', 'text-field' );
+		list( $logic_field, $field, $field_id, $row_key ) = $this->initialize_field_logic_variables( 'radio-button-field', 'text-field' );
 
 		$dropdown = $this->get_field_logic_dropdown( $logic_field, $field_id, $field, $row_key );
 
@@ -134,7 +134,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
 	public function test_field_logic_row_dropdown_field_values(){
-		list( $logic_field, $field, $field_id, $row_key ) = $this->initialize_field_logic_variables( '54tffk', 'text-field' );
+		list( $logic_field, $field, $field_id, $row_key ) = $this->initialize_field_logic_variables( 'dropdown-field', 'text-field' );
 
 		$dropdown = $this->get_field_logic_dropdown( $logic_field, $field_id, $field, $row_key );
 
@@ -692,7 +692,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
 	public function test_mailchimp_dropdown_field_values() {
-		list( $html_name, $field ) = $this->initialize_mailchimp_field_value_variables( '54tffk' );
+		list( $html_name, $field ) = $this->initialize_mailchimp_field_value_variables( 'dropdown-field' );
 
 		$dropdown = $this->get_mailchimp_field_value_dropdown( $html_name, $field, '' );
 
@@ -718,7 +718,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
 	public function test_mailchimp_dropdown_field_values_selected_option() {
-		list( $html_name, $field ) = $this->initialize_mailchimp_field_value_variables( '54tffk' );
+		list( $html_name, $field ) = $this->initialize_mailchimp_field_value_variables( 'dropdown-field' );
 
 		$dropdown = $this->get_mailchimp_field_value_dropdown( $html_name, $field, 'William Wells' );
 
@@ -1251,8 +1251,8 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 		return array(
 			'text' => 'text-field',
 			'textarea' => 'p3eiuk',
-			'email' => 'endbcl',
-			'url' => 'itvv5a',
+			'email' => 'email-field',
+			'url' => 'website-field',
 			'number' => 'msyehy',
 			'phone' => 'n0d580',
 			'date' => 'date-field',
@@ -1261,7 +1261,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 			'lookup' => 'lookup-country',
 			'hidden' => 'hidden-field',
 			'password' => '9r61y8',
-			'tags' => 'ppr2eo',
+			'tags' => 'tags-field',
 		);
 	}
 

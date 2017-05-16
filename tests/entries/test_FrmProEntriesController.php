@@ -71,7 +71,7 @@ class WP_Test_FrmProEntriesController extends FrmUnitTest {
 		self::_set_and_check_expectations( $args );
 
 		if ( $form_key == $this->all_fields_form_key ) {
-			$fields = 'text-field,p3eiuk,uc580i,4t3qo4,e9ul34,repeating-text';
+			$fields = 'text-field,p3eiuk,uc580i,radio-button-field,embed-form-field,repeating-text';
 		} else {
 			$fields = 'yi6yvm';
 		}
@@ -146,8 +146,8 @@ class WP_Test_FrmProEntriesController extends FrmUnitTest {
 			// Set the expected number of columns
 			if ( $pname == 'fields' ) {
 				$args['field_count'] = count( explode( ',', $pval ) );
-				// e9ul34 is an embed form field
-				if ( strpos( $pval, 'e9ul34' ) !== false ) {
+				// embed-form-field is an embed form field
+				if ( strpos( $pval, 'embed-form-field' ) !== false ) {
 					$args['field_count']+= $embed_form_field_count - 1;
 				}
 			} else if ( $pname == 'cols' ) {

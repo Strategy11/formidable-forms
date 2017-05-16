@@ -6,8 +6,13 @@ class FrmUnitTest extends WP_UnitTestCase {
 	protected $form_id = 0;
 	protected $field_ids = array();
 	protected $user_id = 0;
+
 	protected $contact_form_key = 'contact-with-email';
+	protected $contact_form_field_count = 10;
+
 	protected $all_fields_form_key = 'all_field_types';
+	protected $all_field_types_count = 47;
+
 	protected $repeat_sec_form_key = 'rep_sec_form';
 	protected $create_post_form_key = 'create-a-post';
 	protected $is_pro_active = false;
@@ -121,7 +126,12 @@ class FrmUnitTest extends WP_UnitTestCase {
 	}
 
 	function get_all_fields_for_form_key( $form_key ) {
-		$field_totals = array( $this->all_fields_form_key => 45, $this->create_post_form_key => 10, $this->contact_form_key => 8, $this->repeat_sec_form_key => 3 );
+		$field_totals = array(
+			$this->all_fields_form_key => $this->all_field_types_count,
+			$this->create_post_form_key => 10,
+			$this->contact_form_key => $this->contact_form_field_count,
+			$this->repeat_sec_form_key => 3
+		);
 		$expected_field_num = isset( $field_totals[ $form_key ] ) ? $field_totals[ $form_key ] : 0;
 
 		$form_id = $this->factory->form->get_id_by_key( $form_key );

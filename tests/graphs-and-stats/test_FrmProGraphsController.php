@@ -272,7 +272,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 	function test_graph_shortcode_single_field_filter_by_dropdown_id() {
 		self::clear_frm_vars();
 
-		$dropdown_id = FrmField::get_id_by_key( '54tffk' );
+		$dropdown_id = FrmField::get_id_by_key( 'dropdown-field' );
 		$graph_atts = array( 'id' => 'text-field', $dropdown_id => 'Ace Ventura' );
 
 		$graph_html = FrmProGraphsController::graph_shortcode( $graph_atts );
@@ -295,7 +295,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 	function test_graph_shortcode_single_field_filter_by_dropdown_id_not_value() {
 		self::clear_frm_vars();
 
-		$dropdown_id = FrmField::get_id_by_key( '54tffk' );
+		$dropdown_id = FrmField::get_id_by_key( 'dropdown-field' );
 		$graph_atts = array( 'id' => 'text-field', $dropdown_id . '_not_equal' => 'Ace Ventura' );
 
 		$graph_html = FrmProGraphsController::graph_shortcode( $graph_atts );
@@ -318,7 +318,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 	function test_graph_shortcode_single_field_filter_by_dropdown_id_not_value_bc() {
 		self::clear_frm_vars();
 
-		$dropdown_id = FrmField::get_id_by_key( '54tffk' );
+		$dropdown_id = FrmField::get_id_by_key( 'dropdown-field' );
 		$graph_atts = array( 'id' => 'text-field' );
 		$graph_atts[] = $dropdown_id . '!="Ace Ventura"';
 
@@ -340,7 +340,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 	function test_graph_shortcode_single_field_filter_by_dropdown_id_blank() {
 		self::clear_frm_vars();
 
-		$dropdown_id = FrmField::get_id_by_key( '54tffk' );
+		$dropdown_id = FrmField::get_id_by_key( 'dropdown-field' );
 		$graph_atts = array( 'id' => 'text-field', $dropdown_id => '' );
 
 		$graph_html = FrmProGraphsController::graph_shortcode( $graph_atts );
@@ -354,7 +354,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 	function test_graph_shortcode_single_field_filter_by_dropdown_id_not_blank() {
 		self::clear_frm_vars();
 
-		$dropdown_id = FrmField::get_id_by_key( '54tffk' );
+		$dropdown_id = FrmField::get_id_by_key( 'dropdown-field' );
 		$graph_atts = array( 'id' => 'text-field', $dropdown_id . '_not_equal' => '' );
 
 		$graph_html = FrmProGraphsController::graph_shortcode( $graph_atts );
@@ -370,7 +370,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 	 */
 	function test_graph_shortcode_single_field_filter_by_dropdown_key() {
 		self::clear_frm_vars();
-		$graph_atts = array( 'id' => 'text-field', '54tffk' => 'Ace Ventura' );
+		$graph_atts = array( 'id' => 'text-field', 'dropdown-field' => 'Ace Ventura' );
 
 		$graph_html = FrmProGraphsController::graph_shortcode( $graph_atts );
 
@@ -392,7 +392,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 	function test_graph_shortcode_single_field_filter_by_dropdown_key_not_blank() {
 		self::clear_frm_vars();
 
-		$graph_atts = array( 'id' => 'text-field', '54tffk_not_equal' => '' );
+		$graph_atts = array( 'id' => 'text-field', 'dropdown-field_not_equal' => '' );
 
 		$graph_html = FrmProGraphsController::graph_shortcode( $graph_atts );
 		$expected_data = self::get_expected_data_for_text_field( $graph_atts );
@@ -410,7 +410,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		self::clear_frm_vars();
 
 		$graph_atts = array( 'id' => 'text-field' );
-		$graph_atts[] = '54tffk!=""';
+		$graph_atts[] = 'dropdown-field!=""';
 
 		$graph_html = FrmProGraphsController::graph_shortcode( $graph_atts );
 		$expected_data = self::get_expected_data_for_text_field( $graph_atts );
@@ -425,7 +425,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 	function test_graph_shortcode_single_field_filter_by_multiple_fields() {
 		self::clear_frm_vars();
 
-		$dropdown_id = FrmField::get_id_by_key( '54tffk' );
+		$dropdown_id = FrmField::get_id_by_key( 'dropdown-field' );
 		$graph_atts = array(
 			'fields' => 'text-field',
 			$dropdown_id => 'Ace Ventura',
@@ -888,7 +888,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		self::clear_frm_vars();
 
 		$graph_atts = array(
-			'id' => '54tffk',
+			'id' => 'dropdown-field',
 			'x_order' => '0',
 		);
 
@@ -913,7 +913,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		self::clear_frm_vars();
 
 		$graph_atts = array(
-			'id' => '54tffk',
+			'id' => 'dropdown-field',
 			'x_order' => 'desc',
 		);
 
@@ -1034,7 +1034,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		self::clear_frm_vars();
 
 		$graph_atts = array(
-			'fields' => 'text-field,uc580i,4t3qo4',
+			'fields' => 'text-field,uc580i,radio-button-field',
 			'start_date' => '+100 years',
 		);
 
@@ -1063,7 +1063,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		self::clear_frm_vars();
 
 		$graph_atts = array(
-			'fields' => 'text-field,uc580i,4t3qo4',
+			'fields' => 'text-field,uc580i,radio-button-field',
 			'end_date' => '+100 years',
 		);
 
@@ -1084,7 +1084,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		self::clear_frm_vars();
 
 		$graph_atts = array(
-			'fields' => 'text-field,uc580i,4t3qo4',
+			'fields' => 'text-field,uc580i,radio-button-field',
 			'end_date' => '-100 years',
 		);
 
@@ -1113,7 +1113,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		self::clear_frm_vars();
 
 		$graph_atts = array(
-			'fields' => 'text-field,uc580i,4t3qo4',
+			'fields' => 'text-field,uc580i,radio-button-field',
 			'title' => 'Jamie\'s Graph',
 			'title_font' => 'Arial',
 			'title_size' => '50px',
@@ -1136,7 +1136,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		self::clear_frm_vars();
 
 		$graph_atts = array(
-			'fields' => 'text-field,uc580i,4t3qo4',
+			'fields' => 'text-field,uc580i,radio-button-field',
 			'tooltip_label' => 'Leads',
 			'colors' => '#EF8C08,#21759B,#1C9E05',
 			'bg_color' => '#000000',
@@ -1162,7 +1162,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		self::clear_frm_vars();
 
 		$graph_atts = array(
-			'fields' => 'text-field,uc580i,4t3qo4',
+			'fields' => 'text-field,uc580i,radio-button-field',
 			'min' => '1',
 			'max' => '2',
 			'is3d' => '1',
@@ -1189,7 +1189,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 
 		$graph_atts = array(
 			'id' => 'text-field',
-			'ids' => 'uc580i,4t3qo4',
+			'ids' => 'uc580i,radio-button-field',
 		);
 
 		$graph_html = FrmProGraphsController::graph_shortcode( $graph_atts );
@@ -1207,7 +1207,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		self::clear_frm_vars();
 
 		$graph_atts = array(
-			'fields' => 'text-field,uc580i,4t3qo4',
+			'fields' => 'text-field,uc580i,radio-button-field',
 		);
 
 		$graph_html = FrmProGraphsController::graph_shortcode( $graph_atts );
@@ -1225,7 +1225,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		self::clear_frm_vars();
 
 		$graph_atts = array(
-			'fields' => 'text-field,uc580i,4t3qo4',
+			'fields' => 'text-field,uc580i,radio-button-field',
 			'user_id' => '1',
 		);
 
@@ -1251,7 +1251,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		self::clear_frm_vars();
 
 		$field_key_two = 'uc580i';
-		$field_key_three = '4t3qo4';
+		$field_key_three = 'radio-button-field';
 		$entry_id = FrmEntry::get_id_by_key( 'jamie_entry_key' );
 		$graph_atts = array(
 			'id' => 'text-field',
@@ -1283,7 +1283,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		$entry_id_one = FrmEntry::get_id_by_key( 'jamie_entry_key' );
 		$entry_id_two = FrmEntry::get_id_by_key( 'steph_entry_key' );
 		$graph_atts = array(
-			'fields' => 'text-field,uc580i,4t3qo4',
+			'fields' => 'text-field,uc580i,radio-button-field',
 			'entry' => $entry_id_one . ',' . $entry_id_two,
 		);
 
@@ -1309,9 +1309,9 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 	function test_graph_shortcode_multiple_fields_filter_by_dropdown_id() {
 		self::clear_frm_vars();
 
-		$dropdown_id = FrmField::get_id_by_key( '54tffk' );
+		$dropdown_id = FrmField::get_id_by_key( 'dropdown-field' );
 		$graph_atts = array(
-			'fields' => 'text-field,uc580i,4t3qo4',
+			'fields' => 'text-field,uc580i,radio-button-field',
 			$dropdown_id => 'Ace Ventura',
 		);
 
@@ -1338,7 +1338,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		self::clear_frm_vars();
 
 		$graph_atts = array(
-			'fields' => 'text-field,uc580i,4t3qo4',
+			'fields' => 'text-field,uc580i,radio-button-field',
 			'start_date' => '-100 years',
 		);
 
@@ -1391,7 +1391,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		self::clear_frm_vars();
 
 		$graph_atts = array(
-			'id' => '54tffk',
+			'id' => 'dropdown-field',
 			'x_axis' => 'date-field',
 			'date-field_greater_than' => '2015-02-02',
 			'date-field_less_than' => '2015-08-01',
@@ -1452,7 +1452,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		self::clear_frm_vars();
 
 		$graph_atts = array(
-			'id' => '54tffk',
+			'id' => 'dropdown-field',
 			'x_axis' => 'created_at',
 		);
 
@@ -1477,7 +1477,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 
 		$x_axis_id = FrmField::get_id_by_key( 'date-field' );
 		$graph_atts = array(
-			'id' => '54tffk',
+			'id' => 'dropdown-field',
 			'x_axis' => $x_axis_id,
 		);
 
@@ -1495,7 +1495,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		self::clear_frm_vars();
 
 		$graph_atts = array(
-			'id' => '54tffk',
+			'id' => 'dropdown-field',
 			'x_axis' => 'date-field',
 		);
 
@@ -1512,7 +1512,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 	function test_graph_shortcode_dropdown_field_with_x_axis_date_field_filter_by_user_id() {
 		self::clear_frm_vars();
 		$graph_atts = array(
-			'id' => '54tffk',
+			'id' => 'dropdown-field',
 			'x_axis' => 'date-field',
 			'user_id' => '1',
 		);
@@ -1535,7 +1535,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 	function test_graph_shortcode_dropdown_field_with_x_axis_date_field_filter_by_user_id_current() {
 		self::clear_frm_vars();
 		$graph_atts = array(
-			'id' => '54tffk',
+			'id' => 'dropdown-field',
 			'x_axis' => 'date-field',
 			'user_id' => 'current',
 		);
@@ -1560,7 +1560,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 	function test_graph_shortcode_dropdown_field_with_x_axis_date_field_filter_by_entry_id() {
 		self::clear_frm_vars();
 		$graph_atts = array(
-			'id' => '54tffk',
+			'id' => 'dropdown-field',
 			'x_axis' => 'date-field',
 			'entry_id' => FrmEntry::get_id_by_key( 'jamie_entry_key'),
 		);
@@ -1585,7 +1585,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		$entry_one = FrmEntry::get_id_by_key( 'jamie_entry_key');
 		$entry_two = FrmEntry::get_id_by_key( 'steph_entry_key');
 		$graph_atts = array(
-			'id' => '54tffk',
+			'id' => 'dropdown-field',
 			'x_axis' => 'date-field',
 			'entry_id' => $entry_one . ',' . $entry_two,
 		);
@@ -1610,7 +1610,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		self::clear_frm_vars();
 
 		$graph_atts = array(
-			'id' => '54tffk',
+			'id' => 'dropdown-field',
 			'x_axis' => 'date-field',
 			'uc580i' => 'Green',
 		);
@@ -1635,7 +1635,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		self::clear_frm_vars();
 
 		$graph_atts = array(
-			'id' => '54tffk',
+			'id' => 'dropdown-field',
 			'x_axis' => 'date-field',
 			'start_date' => '-100 years',
 		);
@@ -1654,7 +1654,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		self::clear_frm_vars();
 
 		$graph_atts = array(
-			'id' => '54tffk',
+			'id' => 'dropdown-field',
 			'x_axis' => 'date-field',
 			'start_date' => '+100 years',
 		);
@@ -1671,7 +1671,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		self::clear_frm_vars();
 
 		$graph_atts = array(
-			'id' => '54tffk',
+			'id' => 'dropdown-field',
 			'x_axis' => 'date-field',
 			'start_date' => '2015-06-01',
 		);
@@ -1696,7 +1696,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		self::clear_frm_vars();
 
 		$graph_atts = array(
-			'id' => '54tffk',
+			'id' => 'dropdown-field',
 			'x_axis' => 'date-field',
 			'end_date' => '+100 years',
 		);
@@ -1715,7 +1715,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		self::clear_frm_vars();
 
 		$graph_atts = array(
-			'id' => '54tffk',
+			'id' => 'dropdown-field',
 			'x_axis' => 'date-field',
 			'end_date' => '-100 years',
 		);
@@ -1732,7 +1732,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		self::clear_frm_vars();
 
 		$graph_atts = array(
-			'id' => '54tffk',
+			'id' => 'dropdown-field',
 			'x_axis' => 'date-field',
 			'start_date' => '2015-01-01',
 			'end_date' => '2016-01-01',
@@ -1753,7 +1753,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 
 		$graph_atts = array
 		(
-			'id' => '54tffk',
+			'id' => 'dropdown-field',
 			'x_axis' => 'date-field',
 			'title' => 'Jamie\'s Graph',
 			'title_font' => 'Arial',
@@ -1777,7 +1777,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 
 		$graph_atts = array
 		(
-			'id' => '54tffk',
+			'id' => 'dropdown-field',
 			'x_axis' => 'date-field',
 			'tooltip_label' => 'Leads',
 			'colors' => '#EF8C08,#21759B,#1C9E05',
@@ -1803,7 +1803,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		self::clear_frm_vars();
 
 		$graph_atts = array(
-			'id' => '54tffk',
+			'id' => 'dropdown-field',
 			'x_axis' => 'date-field',
 			'min' => '1',
 			'max' => '2',
@@ -1879,7 +1879,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		self::clear_frm_vars();
 
 		$graph_atts = array(
-			'fields' => '54tffk,qbrd2o',
+			'fields' => 'dropdown-field,qbrd2o',
 			'x_axis' => 'date-field',
 		);
 
@@ -1905,7 +1905,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		self::clear_frm_vars();
 
 		$graph_atts = array(
-			'id' => '54tffk',
+			'id' => 'dropdown-field',
 			'x_axis' => 'date-field',
 			'include_zero' => '1',
 			'start_date' => '2015-01-20',
@@ -1938,7 +1938,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		self::clear_frm_vars();
 
 		$graph_atts = array(
-			'fields' => '54tffk,text-field',
+			'fields' => 'dropdown-field,text-field',
 			'x_axis' => 'date-field',
 			'include_zero' => '1',
 			'start_date' => '2015-01-20',
@@ -1972,7 +1972,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		self::clear_frm_vars();
 
 		$graph_atts = array(
-			'id' => '54tffk',
+			'id' => 'dropdown-field',
 			'x_axis' => 'date-field',
 			'group_by' => 'month',
 		);
@@ -1999,7 +1999,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		self::clear_frm_vars();
 
 		$graph_atts = array(
-			'id' => '54tffk',
+			'id' => 'dropdown-field',
 			'x_axis' => 'date-field',
 			'group_by' => 'month',
 			'include_zero' => '1',
@@ -2029,7 +2029,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		self::clear_frm_vars();
 
 		$graph_atts = array(
-			'id' => '54tffk',
+			'id' => 'dropdown-field',
 			'x_axis' => 'date-field',
 			'group_by' => 'quarter',
 		);
@@ -2056,7 +2056,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		self::clear_frm_vars();
 
 		$graph_atts = array(
-			'id' => '54tffk',
+			'id' => 'dropdown-field',
 			'x_axis' => 'uc580i',
 		);
 
@@ -2107,7 +2107,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 
 		$graph_atts = array(
 			'id' => 'text-field',
-			'x_axis' => '54tffk',
+			'x_axis' => 'dropdown-field',
 		);
 
 		$graph_html = FrmProGraphsController::graph_shortcode( $graph_atts );
@@ -2232,8 +2232,8 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		$expected_data = self::get_graph_defaults( $graph_atts, 'Single Line Text' );
 		$tooltip_label = self::get_expected_tooltip_label( $graph_atts );
 
-		if ( ( isset( $graph_atts['ids'] ) && $graph_atts['ids'] == 'uc580i,4t3qo4' ) ||
-			( isset( $graph_atts['fields'] ) && $graph_atts['fields'] == 'text-field,uc580i,4t3qo4' ) ) {
+		if ( ( isset( $graph_atts['ids'] ) && $graph_atts['ids'] == 'uc580i,radio-button-field' ) ||
+			( isset( $graph_atts['fields'] ) && $graph_atts['fields'] == 'text-field,uc580i,radio-button-field' ) ) {
 
 			$total_submissions = 4;
 

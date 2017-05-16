@@ -86,8 +86,8 @@ class test_fieldLogicRow extends FrmUnitTest {
 		return array(
 			'text' => 'text-field',
 			'textarea' => 'p3eiuk',
-			'email' => 'endbcl',
-			'url' => 'itvv5a',
+			'email' => 'email-field',
+			'url' => 'website-field',
 			'number' => 'msyehy',
 			'phone' => 'n0d580',
 			'date' => 'date-field',
@@ -96,7 +96,7 @@ class test_fieldLogicRow extends FrmUnitTest {
 			'lookup' => 'lookup-country',
 			'hidden' => 'hidden-field',
 			'password' => '9r61y8',
-			'tags' => 'ppr2eo',
+			'tags' => 'tags-field',
 		);
 	}
 }

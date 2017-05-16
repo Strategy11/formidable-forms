@@ -462,7 +462,7 @@ Jam Band, Electronic, Electronica, JamTronica, EDM, Producer, Rock,  Jazz, Soul,
         <parent_form_id>0</parent_form_id>
 		<field>
 		    <id>8089</id>
-            <field_key><![CDATA[qh4icy3]]></field_key>
+            <field_key><![CDATA[contact-name]]></field_key>
             <name><![CDATA[Name]]></name>
             <description><![CDATA[First]]></description>
             <type><![CDATA[text]]></type>
@@ -475,7 +475,7 @@ Jam Band, Electronic, Electronica, JamTronica, EDM, Producer, Rock,  Jazz, Soul,
 		</field>
 		<field>
 		    <id>8090</id>
-            <field_key><![CDATA[ocfup13]]></field_key>
+            <field_key><![CDATA[contact-last-name]]></field_key>
             <name><![CDATA[Last]]></name>
             <description><![CDATA[Last]]></description>
             <type><![CDATA[text]]></type>
@@ -488,7 +488,7 @@ Jam Band, Electronic, Electronica, JamTronica, EDM, Producer, Rock,  Jazz, Soul,
 		</field>
 		<field>
 		    <id>8091</id>
-            <field_key><![CDATA[29yf4d3]]></field_key>
+            <field_key><![CDATA[contact-email]]></field_key>
             <name><![CDATA[Email]]></name>
             <description><![CDATA[]]></description>
             <type><![CDATA[email]]></type>
@@ -501,7 +501,7 @@ Jam Band, Electronic, Electronica, JamTronica, EDM, Producer, Rock,  Jazz, Soul,
 		</field>
 		<field>
 		    <id>8092</id>
-            <field_key><![CDATA[itt5me3]]></field_key>
+            <field_key><![CDATA[contact-website]]></field_key>
             <name><![CDATA[Website]]></name>
             <description><![CDATA[]]></description>
             <type><![CDATA[url]]></type>
@@ -512,14 +512,27 @@ Jam Band, Electronic, Electronica, JamTronica, EDM, Producer, Rock,  Jazz, Soul,
             <options><![CDATA[]]></options>
             <field_options><![CDATA[{"blank":"This field cannot be blank.","invalid":"Please enter a valid website","classes":"frm_full","size":"","max":"","label":"","required_indicator":"*","separate_value":0,"slide":0,"form_select":"","show_hide":"show","any_all":"any","align":"block","hide_field":[],"hide_field_cond":["=="],"hide_opt":[],"star":0,"ftypes":[],"data_type":"select","restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"step":1,"clock":12,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","calc_dec":"","dyn_default_value":"","multiple":0,"unique_msg":"","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":0}]]></field_options>
 		</field>
+        <field>
+            <id>8097</id>
+            <field_key><![CDATA[email-information-section]]></field_key>
+            <name><![CDATA[Email Information]]></name>
+            <description><![CDATA[]]></description>
+            <type><![CDATA[divider]]></type>
+            <default_value><![CDATA[]]></default_value>
+            <field_order>5</field_order>
+            <form_id>697</form_id>
+            <required></required>
+            <options><![CDATA[]]></options>
+            <field_options><![CDATA[{"size":"","max":"","label":"top","blank":"","required_indicator":"*","invalid":"","separate_value":0,"clear_on_focus":0,"default_blank":0,"classes":"","custom_html":"<div id=\"frm_field_[id]_container\" class=\"frm_form_field frm_section_heading form-field[error_class]\">\n<h3 class=\"frm_pos_[label_position][collapse_class]\">[field_name]<\/h3>\n[if description]<div class=\"frm_description\">[description]<\/div>[\/if description]\n[collapse_this]\n<\/div>","slide":0,"form_select":"","show_hide":"show","any_all":"any","align":"block","hide_field":[],"hide_field_cond":["=="],"hide_opt":[],"star":0,"ftypes":[],"data_type":"select","restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"step":1,"clock":12,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","calc_dec":"","dyn_default_value":"","multiple":0,"unique_msg":"This value must be unique.","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":0}]]></field_options>
+        </field>
 		<field>
 		    <id>8093</id>
-            <field_key><![CDATA[e6lis63]]></field_key>
+            <field_key><![CDATA[contact-subject]]></field_key>
             <name><![CDATA[Subject]]></name>
             <description><![CDATA[]]></description>
             <type><![CDATA[text]]></type>
             <default_value><![CDATA[]]></default_value>
-            <field_order>5</field_order>
+            <field_order>6</field_order>
             <form_id>697</form_id>
             <required>1</required>
             <options><![CDATA[]]></options>
@@ -527,25 +540,37 @@ Jam Band, Electronic, Electronica, JamTronica, EDM, Producer, Rock,  Jazz, Soul,
 		</field>
 		<field>
 		    <id>8094</id>
-            <field_key><![CDATA[9jv0r13]]></field_key>
+            <field_key><![CDATA[contact-message]]></field_key>
             <name><![CDATA[Message]]></name>
             <description><![CDATA[]]></description>
             <type><![CDATA[textarea]]></type>
             <default_value><![CDATA[]]></default_value>
-            <field_order>6</field_order>
+            <field_order>7</field_order>
             <form_id>697</form_id>
             <required>1</required>
             <options><![CDATA[]]></options>
             <field_options><![CDATA[{"max":"5","blank":"This field cannot be blank.","classes":"frm_full","size":"","label":"","invalid":"","required_indicator":"*","separate_value":0,"slide":0,"form_select":"","show_hide":"show","any_all":"any","align":"block","hide_field":[],"hide_field_cond":["=="],"hide_opt":[],"star":0,"ftypes":[],"data_type":"select","restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"step":1,"clock":12,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","calc_dec":"","dyn_default_value":"","multiple":0,"unique_msg":"","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":0}]]></field_options>
 		</field>
+        <field>
+            <id>8098</id>
+            <field_key><![CDATA[email-information-end-section]]></field_key>
+            <name><![CDATA[End Section]]></name>
+            <description><![CDATA[]]></description>
+            <type><![CDATA[end_divider]]></type>
+            <default_value><![CDATA[]]></default_value>
+            <field_order>8</field_order>
+            <form_id>697</form_id>
+            <options><![CDATA[]]></options>
+            <field_options><![CDATA[{"size":"","max":"","label":"","blank":"","required_indicator":"*","invalid":"","separate_value":0,"clear_on_focus":0,"default_blank":0,"classes":"","custom_html":"","format":"both","slide":0,"form_select":"","show_hide":"show","any_all":"any","align":"block","hide_field":[],"hide_field_cond":["=="],"hide_opt":[],"star":0,"ftypes":[],"data_type":"select","restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"step":1,"clock":12,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","calc_dec":"","dyn_default_value":"","multiple":0,"unique_msg":"This value must be unique.","autocom":0,"repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":0}]]></field_options>
+        </field>
 		<field>
 		    <id>8095</id>
-            <field_key><![CDATA[date14]]></field_key>
+            <field_key><![CDATA[contact-date]]></field_key>
             <name><![CDATA[Date]]></name>
             <description><![CDATA[]]></description>
             <type><![CDATA[date]]></type>
             <default_value><![CDATA[]]></default_value>
-            <field_order>7</field_order>
+            <field_order>9</field_order>
             <form_id>697</form_id>
             <required>1</required>
             <options><![CDATA[]]></options>
@@ -553,12 +578,12 @@ Jam Band, Electronic, Electronica, JamTronica, EDM, Producer, Rock,  Jazz, Soul,
 		</field>
 		<field>
 		    <id>8096</id>
-            <field_key><![CDATA[user14]]></field_key>
+            <field_key><![CDATA[contact-user-id]]></field_key>
             <name><![CDATA[User ID]]></name>
             <description><![CDATA[]]></description>
             <type><![CDATA[user_id]]></type>
             <default_value><![CDATA[]]></default_value>
-            <field_order>8</field_order>
+            <field_order>10</field_order>
             <form_id>697</form_id>
             <required>0</required>
             <options><![CDATA[]]></options>
@@ -619,7 +644,7 @@ Jam Band, Electronic, Electronica, JamTronica, EDM, Producer, Rock,  Jazz, Soul,
 		</field>
 		<field>
 		    <id>8102</id>
-            <field_key><![CDATA[4t3qo4]]></field_key>
+            <field_key><![CDATA[radio-button-field]]></field_key>
             <name><![CDATA[Radio Buttons - dessert]]></name>
             <description><![CDATA[]]></description>
             <type><![CDATA[radio]]></type>
@@ -632,7 +657,7 @@ Jam Band, Electronic, Electronica, JamTronica, EDM, Producer, Rock,  Jazz, Soul,
 		</field>
 		<field>
 		    <id>8103</id>
-            <field_key><![CDATA[54tffk]]></field_key>
+            <field_key><![CDATA[dropdown-field]]></field_key>
             <name><![CDATA[Dropdown]]></name>
             <description><![CDATA[]]></description>
             <type><![CDATA[select]]></type>
@@ -645,7 +670,7 @@ Jam Band, Electronic, Electronica, JamTronica, EDM, Producer, Rock,  Jazz, Soul,
 		</field>
 		<field>
 		    <id>8104</id>
-            <field_key><![CDATA[endbcl]]></field_key>
+            <field_key><![CDATA[email-field]]></field_key>
             <name><![CDATA[Email Address]]></name>
             <description><![CDATA[]]></description>
             <type><![CDATA[email]]></type>
@@ -658,7 +683,7 @@ Jam Band, Electronic, Electronica, JamTronica, EDM, Producer, Rock,  Jazz, Soul,
 		</field>
 		<field>
 		    <id>8105</id>
-            <field_key><![CDATA[itvv5a]]></field_key>
+            <field_key><![CDATA[website-field]]></field_key>
             <name><![CDATA[Website/URL]]></name>
             <description><![CDATA[]]></description>
             <type><![CDATA[url]]></type>
@@ -684,7 +709,7 @@ Jam Band, Electronic, Electronica, JamTronica, EDM, Producer, Rock,  Jazz, Soul,
 		</field>
 		<field>
 		    <id>8107</id>
-            <field_key><![CDATA[flf4iy]]></field_key>
+            <field_key><![CDATA[pro-fields-divider]]></field_key>
             <name><![CDATA[Pro Fields]]></name>
             <description><![CDATA[]]></description>
             <type><![CDATA[divider]]></type>
@@ -693,7 +718,7 @@ Jam Band, Electronic, Electronica, JamTronica, EDM, Producer, Rock,  Jazz, Soul,
             <form_id>698</form_id>
             <required></required>
             <options><![CDATA[]]></options>
-            <field_options><![CDATA[{"size":"","max":"","label":"top","blank":"","required_indicator":"*","invalid":"","separate_value":0,"clear_on_focus":0,"default_blank":0,"classes":"","custom_html":"<div id=\"frm_field_[id]_container\" class=\"frm_form_field frm_section_heading form-field[error_class]\">\n<h3 class=\"frm_pos_[label_position][collapse_class]\">[field_name]<\/h3>\n[if description]<div class=\"frm_description\">[description]<\/div>[\/if description]\n[collapse_this]\n<\/div>","slide":0,"form_select":"","show_hide":"show","any_all":"any","align":"block","hide_field":[],"hide_field_cond":["=="],"hide_opt":[],"star":0,"ftypes":[],"data_type":"select","restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"step":1,"clock":12,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","calc_dec":"","dyn_default_value":"","multiple":0,"unique_msg":"This value must be unique.","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":0}]]></field_options>
+            <field_options><![CDATA[{"size":"","max":"","label":"top","blank":"","required_indicator":"*","invalid":"","separate_value":0,"clear_on_focus":0,"default_blank":0,"classes":"","custom_html":"<div id=\"frm_field_[id]_container\" class=\"frm_form_field frm_section_heading form-field[error_class]\">\n<h3 class=\"frm_pos_[label_position][collapse_class]\">[field_name]<\/h3>\n[if description]<div class=\"frm_description\">[description]<\/div>[\/if description]\n[collapse_this]\n<\/div>","slide":0,"form_select":"","show_hide":"hide","any_all":"any","align":"block","hide_field":["8099"],"hide_field_cond":["=="],"hide_opt":["Hide Fields"],"star":0,"ftypes":[],"data_type":"select","restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"step":1,"clock":12,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","calc_dec":"","dyn_default_value":"","multiple":0,"unique_msg":"This value must be unique.","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":0}]]></field_options>
 		</field>
 		<field>
 		    <id>8110</id>
@@ -879,7 +904,7 @@ Jam Band, Electronic, Electronica, JamTronica, EDM, Producer, Rock,  Jazz, Soul,
 		</field>
 		<field>
 		    <id>8123</id>
-            <field_key><![CDATA[e9ul34]]></field_key>
+            <field_key><![CDATA[embed-form-field]]></field_key>
             <name><![CDATA[Embed Form]]></name>
             <description><![CDATA[]]></description>
             <type><![CDATA[form]]></type>
@@ -933,7 +958,7 @@ Jam Band, Electronic, Electronica, JamTronica, EDM, Producer, Rock,  Jazz, Soul,
 		    <id>8127</id>
             <field_key><![CDATA[khyzws]]></field_key>
             <name><![CDATA[HTML]]></name>
-            <description><![CDATA[]]></description>
+            <description><![CDATA[Lorem ipsum.]]></description>
             <type><![CDATA[html]]></type>
             <default_value><![CDATA[]]></default_value>
             <field_order>27</field_order>
@@ -944,7 +969,7 @@ Jam Band, Electronic, Electronica, JamTronica, EDM, Producer, Rock,  Jazz, Soul,
 		</field>
 		<field>
 		    <id>8128</id>
-            <field_key><![CDATA[ppr2eo]]></field_key>
+            <field_key><![CDATA[tags-field]]></field_key>
             <name><![CDATA[Tags]]></name>
             <description><![CDATA[]]></description>
             <type><![CDATA[tag]]></type>
@@ -953,7 +978,7 @@ Jam Band, Electronic, Electronica, JamTronica, EDM, Producer, Rock,  Jazz, Soul,
             <form_id>698</form_id>
             <required></required>
             <options><![CDATA[]]></options>
-            <field_options><![CDATA[{"size":"","max":"","label":"","blank":"This field cannot be blank.","required_indicator":"*","invalid":"","separate_value":0,"clear_on_focus":0,"default_blank":0,"classes":"","custom_html":"<div id=\"frm_field_[id]_container\" class=\"frm_form_field form-field [required_class][error_class]\">\n    <label for=\"field_[key]\" class=\"frm_primary_label\">[field_name]\n        <span class=\"frm_required\">[required_label]<\/span>\n    <\/label>\n    [input]\n    [if description]<div class=\"frm_description\">[description]<\/div>[\/if description]\n    [if error]<div class=\"frm_error\">[error]<\/div>[\/if error]\n<\/div>","slide":0,"form_select":"","show_hide":"show","any_all":"any","align":"block","hide_field":[],"hide_field_cond":["=="],"hide_opt":[],"star":0,"ftypes":[],"data_type":"select","restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"step":1,"clock":12,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","calc_dec":"","dyn_default_value":"","multiple":0,"unique_msg":"This value must be unique.","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":0}]]></field_options>
+            <field_options><![CDATA[{"size":"","max":"","label":"","blank":"This field cannot be blank.","required_indicator":"*","invalid":"","separate_value":0,"clear_on_focus":0,"default_blank":0,"classes":"","custom_html":"<div id=\"frm_field_[id]_container\" class=\"frm_form_field form-field [required_class][error_class]\">\n    <label for=\"field_[key]\" class=\"frm_primary_label\">[field_name]\n        <span class=\"frm_required\">[required_label]<\/span>\n    <\/label>\n    [input]\n    [if description]<div class=\"frm_description\">[description]<\/div>[\/if description]\n    [if error]<div class=\"frm_error\">[error]<\/div>[\/if error]\n<\/div>","slide":0,"form_select":"","show_hide":"hide","any_all":"any","align":"block","hide_field":["8099"],"hide_field_cond":["=="],"hide_opt":["Hide Fields"],"star":0,"ftypes":[],"data_type":"select","restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"step":1,"clock":12,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","calc_dec":"","dyn_default_value":"","multiple":0,"unique_msg":"This value must be unique.","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":0}]]></field_options>
 		</field>
 		<field>
 		    <id>8129</id>

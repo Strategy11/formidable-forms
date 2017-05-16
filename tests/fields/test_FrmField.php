@@ -19,7 +19,7 @@ class WP_Test_FrmField extends FrmUnitTest {
 	*/
 	function test_getAll() {
 		$forms = array(
-			$this->contact_form_key => 8,
+			$this->contact_form_key => $this->contact_form_field_count,
 			$this->all_fields_form_key => 34,
 		);
 
@@ -36,10 +36,10 @@ class WP_Test_FrmField extends FrmUnitTest {
 	 */
 	function test_get_all_for_form() {
 		$forms = array(
-			'basic_test' => array( 'form_key' => $this->contact_form_key, 'count' => 8 ),
+			'basic_test' => array( 'form_key' => $this->contact_form_key, 'count' => $this->contact_form_field_count ),
 			'repeat' => array( 'form_key' => $this->all_fields_form_key, 'count' => 34 + 3 ),
 			'no_repeat_or_embed' => array( 'form_key' => $this->all_fields_form_key, 'count' => 34 ),
-			'repeat_and_embed' => array( 'form_key' => $this->all_fields_form_key, 'count' => 34 + 3 + 8 )
+			'repeat_and_embed' => array( 'form_key' => $this->all_fields_form_key, 'count' => 34 + 3 + $this->contact_form_field_count )
 		);
 
 		foreach ( $forms as $test => $args ) {
