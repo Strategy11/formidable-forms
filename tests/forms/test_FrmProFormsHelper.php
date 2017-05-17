@@ -5,24 +5,26 @@
  */
 class WP_Test_FrmProFormsHelper extends FrmUnitTest {
 
+	private $contact_form = null;
+
 	/**
 	 * @covers FrmProFormsHelper::user_can_submit_form
 	 */
 	function test_user_can_submit_form() {
-		$this->form = $this->factory->form->create_and_get();
-		$this->assertNotEmpty( $this->form, 'The form was not created or fetched' );
+		$this->contact_form = $this->factory->form->create_and_get();
+		$this->assertNotEmpty( $this->contact_form, 'The form was not created or fetched' );
 
-		$this->form->options['single_entry'] = 1;
-		$this->form->options['single_entry_type'] = 'user';
-		$this->assertTrue( FrmProFormsHelper::user_can_submit_form( $this->form ), 'The user should be able to submit an entry' );
+		$this->contact_form->options['single_entry']      = 1;
+		$this->contact_form->options['single_entry_type'] = 'user';
+		$this->assertTrue( FrmProFormsHelper::user_can_submit_form( $this->contact_form ), 'The user should be able to submit an entry' );
 
-		$this->form->options['single_entry_type'] = 'ip';
-		$this->assertTrue( FrmProFormsHelper::user_can_submit_form( $this->form ), 'This IP should be able to submit an entry' );
+		$this->contact_form->options['single_entry_type'] = 'ip';
+		$this->assertTrue( FrmProFormsHelper::user_can_submit_form( $this->contact_form ), 'This IP should be able to submit an entry' );
 
-		$this->form->options['single_entry_type'] = 'cookie';
-		$this->assertTrue( FrmProFormsHelper::user_can_submit_form( $this->form ), 'There is no cookie, so they should be able to submit an entry' );
+		$this->contact_form->options['single_entry_type'] = 'cookie';
+		$this->assertTrue( FrmProFormsHelper::user_can_submit_form( $this->contact_form ), 'There is no cookie, so they should be able to submit an entry' );
 
-		$entry_data = $this->factory->field->generate_entry_array( $this->form );
+		$entry_data = $this->factory->field->generate_entry_array( $this->contact_form );
 		$entry = $this->factory->entry->create_and_get( $entry_data );
 
 		self::allow_submit_with_user_id();
@@ -34,12 +36,12 @@ class WP_Test_FrmProFormsHelper extends FrmUnitTest {
 	function allow_submit_with_user_id() {
 		$this->set_user_by_role( 'subscriber' );
 
-		$form = $this->form;
+		$form = $this->contact_form;
 		$form->options['single_entry_type'] = 'user';
 		$this->assertTrue( FrmProFormsHelper::user_can_submit_form( $form ), 'This user should be able to submit a form' );
 
 		// User creates entry
-		$entry_data = $this->factory->field->generate_entry_array( $this->form );
+		$entry_data = $this->factory->field->generate_entry_array( $this->contact_form );
 		$entry = $this->factory->entry->create_and_get( $entry_data );
 
 		// Now user should not be able to submit an entry
@@ -50,20 +52,20 @@ class WP_Test_FrmProFormsHelper extends FrmUnitTest {
 	}
 
 	function allow_submit_with_ip() {
-		$form = $this->form;
+		$form = $this->contact_form;
 		$form->options['single_entry_type'] = 'ip';
 		$this->assertFalse( FrmProFormsHelper::user_can_submit_form( $form ), 'This IP already submitted an entry' );
 	}
 
 	function allow_submit_with_cookie( $entry_id ) {
-		$form = $this->form;
+		$form = $this->contact_form;
 		FrmProEntriesController::set_cookie( $entry_id, $form->id );
 		$this->assertTrue( isset( $_COOKIE[ 'frm_form' . $form->id . '_' . COOKIEHASH ] ), 'The cookie was not created' );
 		$this->assertFalse( FrmProFormsHelper::user_can_submit_form( $form ) );
 	}
 
 	function allow_save_draft_entry() {
-		$form = $this->form;
+		$form = $this->contact_form;
 		$form->options['single_entry_type'] = 'user';
 		$form->options['save_draft'] = 1;
 		$form->editable = 0;

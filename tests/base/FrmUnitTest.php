@@ -2,9 +2,6 @@
 
 class FrmUnitTest extends WP_UnitTestCase {
 
-	protected $form;
-	protected $form_id = 0;
-	protected $field_ids = array();
 	protected $user_id = 0;
 
 	protected $contact_form_key = 'contact-with-email';
@@ -15,6 +12,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 
 	protected $repeat_sec_form_key = 'rep_sec_form';
 	protected $create_post_form_key = 'create-a-post';
+
 	protected $is_pro_active = false;
 
 	/**

@@ -74,6 +74,8 @@ class WP_Test_FrmXMLHelper extends FrmUnitTest {
 			'repeating-text' => 'repeating-section',
 			'repeating-checkbox' => 'repeating-section',
 			'repeating-date' => 'repeating-section',
+			'contact-subject' => 'email-information-section',
+			'contact-message' => 'email-information-section',
 		);
 
 		if ( isset( $fields_in_sections[ $f->field_key ] ) ) {
