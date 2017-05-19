@@ -731,6 +731,7 @@ class FrmFormsController {
 			$entry_shortcodes['editlink location="front" label="Edit" page_id=x'] = __( 'Edit Entry Link', 'formidable' );
 			$entry_shortcodes['evenodd'] = __( 'Even/Odd', 'formidable' );
 			$entry_shortcodes['entry_count'] = __( 'Entry Count', 'formidable' );
+			$entry_shortcodes['event_date format="Y-m-d"'] = __( 'Calendar Date', 'formidable' );
 		}
 
 		/**
