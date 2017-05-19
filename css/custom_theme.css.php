@@ -826,8 +826,8 @@ select.frm_loading_lookup{
 
 .frm_form_field .frm_checkbox,
 .frm_form_field .frm_radio{
-    margin-top: 0;
-    margin-bottom: 0;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
 }
 
 .frm_form_field.frm_three_col .frm_radio,
