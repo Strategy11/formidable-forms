@@ -568,7 +568,7 @@ class FrmFormsController {
 	}
 
 	public static function hidden_columns( $hidden_columns ) {
-		$type = isset( $_REQUEST[ 'form_type' ] ) ? $_REQUEST[ 'form_type' ] : '';
+		$type = isset( $_REQUEST['form_type'] ) ? $_REQUEST['form_type'] : '';
 
 		if ( $type === 'template' ) {
 			$hidden_columns[] = 'id';
