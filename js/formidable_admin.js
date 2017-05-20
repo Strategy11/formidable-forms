@@ -1406,36 +1406,71 @@ function frmAdminBuildJS(){
 		});
 	}
 
-	function clickAction(obj){
-		var $thisobj = jQuery(obj);
-		if(obj.className.indexOf('selected') !== -1){
-			return;
-		}
-		if(obj.className.indexOf('edit_field_type_end_divider') !== -1 && $thisobj.closest('.edit_field_type_divider').hasClass('no_repeat_section')){
-			return;
-		}
-		var curOffset = $thisobj.offset().top;
+    function showOrHideDefaultValIcons(vis, $thisobj) {
+        if (vis) {
+            $thisobj.find('.frm_default_val_icons').show().css('visibility', 'visible');
+        }
+        else {
+            $thisobj.find('.frm_default_val_icons').hide().css('visibility', 'hidden');
+        }
+    }
 
-		if(obj.className.indexOf('edit_field_type_divider') !== -1){
-			$thisobj.find('.frm_default_val_icons').hide().css('visibility', 'hidden');
-		}else{
-			var i = $thisobj.find('input[name^="item_meta"], select[name^="item_meta"], textarea[name^="item_meta"]')[0];
-			if(jQuery(i).val()){
-				$thisobj.find('.frm_default_val_icons').show().css('visibility', 'visible');
-			}else{
-				$thisobj.find('.frm_default_val_icons').hide().css('visibility', 'hidden');
-			}
-		}
+    function maybeShowDefaultValIcons($thisobj){
+        var vis = false;
+        var inputList = $thisobj.find('input[name^="item_meta"], select[name^="item_meta"], textarea[name^="item_meta"]');
+        jQuery(inputList).each(function (index) {
+            if (jQuery(this).val()) {
+                vis = true;
+            }
+        });
+        showOrHideDefaultValIcons(vis, $thisobj);
+    }
 
-		jQuery('li.ui-state-default.selected').removeClass('selected');
-		$thisobj.addClass('selected');
+    function maybeShowDefaultValIconsApproach2($thisobj){
+        var vis = false;
+        if ($thisobj.find('.frm_multi_fields_container').length > 0) {
+            var inputList = $thisobj.find('input[name^="item_meta"], select[name^="item_meta"], textarea[name^="item_meta"]');
+            jQuery(inputList).each(function (index) {
+                if (jQuery(this).val()) {
+                    vis = true;
+                }
+            });
+        }
+        else {
+            var i = $thisobj.find('input[name^="item_meta"], select[name^="item_meta"], textarea[name^="item_meta"]')[0];
+            if (jQuery(i).val()) {
+                vis = true;
+            }
+        }
+        showOrHideDefaultValIcons(vis, $thisobj);
+    }
 
-		var newOffset = $thisobj.offset().top;
-		if(newOffset != curOffset){
-			var curTop = document.documentElement.scrollTop || document.body.scrollTop; // body for Safari;
-			jQuery(window).scrollTop(curTop - (curOffset-newOffset));
-		}
-	}
+    function clickAction(obj) {
+        var $thisobj = jQuery(obj);
+        if (obj.className.indexOf('selected') !== -1) {
+            return;
+        }
+        if (obj.className.indexOf('edit_field_type_end_divider') !== -1 && $thisobj.closest('.edit_field_type_divider').hasClass('no_repeat_section')) {
+            return;
+        }
+        var curOffset = $thisobj.offset().top;
+
+        if (obj.className.indexOf('edit_field_type_divider') !== -1) {
+            $thisobj.find('.frm_default_val_icons').hide().css('visibility', 'hidden');
+        } else {
+            maybeShowDefaultValIcons($thisobj);
+            //maybeShowDefaultValIconsApproach2($thisobj);
+        }
+
+        jQuery('li.ui-state-default.selected').removeClass('selected');
+        $thisobj.addClass('selected');
+
+        var newOffset = $thisobj.offset().top;
+        if (newOffset != curOffset) {
+            var curTop = document.documentElement.scrollTop || document.body.scrollTop; // body for Safari;
+            jQuery(window).scrollTop(curTop - (curOffset - newOffset));
+        }
+    }
 	
 	function showEmailRow(){
 		var actionKey = jQuery(this).closest('.frm_form_action_settings').data('actionkey');
