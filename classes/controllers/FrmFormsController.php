@@ -568,8 +568,15 @@ class FrmFormsController {
 	}
 
 	public static function hidden_columns( $result ) {
+		$type = isset( $_REQUEST[ 'form_type' ] ) ? $_REQUEST[ 'form_type' ] : '';
+
+		if ( $type === 'template' ) {
+			$result[] = 'id';
+			$result[] = 'form_key';
+		}
+
 		return $result;
-    }
+	}
 
 	public static function save_per_page( $save, $option, $value ) {
         if ( $option == 'formidable_page_formidable_per_page' ) {
