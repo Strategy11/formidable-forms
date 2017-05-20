@@ -567,15 +567,15 @@ class FrmFormsController {
 		);
 	}
 
-	public static function hidden_columns( $result ) {
+	public static function hidden_columns( $hidden_columns ) {
 		$type = isset( $_REQUEST[ 'form_type' ] ) ? $_REQUEST[ 'form_type' ] : '';
 
 		if ( $type === 'template' ) {
-			$result[] = 'id';
-			$result[] = 'form_key';
+			$hidden_columns[] = 'id';
+			$hidden_columns[] = 'form_key';
 		}
 
-		return $result;
+		return $hidden_columns;
 	}
 
 	public static function save_per_page( $save, $option, $value ) {
