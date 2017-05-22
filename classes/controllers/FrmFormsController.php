@@ -567,9 +567,16 @@ class FrmFormsController {
 		);
 	}
 
-	public static function hidden_columns( $result ) {
-		return $result;
-    }
+	public static function hidden_columns( $hidden_columns ) {
+		$type = isset( $_REQUEST['form_type'] ) ? $_REQUEST['form_type'] : '';
+
+		if ( $type === 'template' ) {
+			$hidden_columns[] = 'id';
+			$hidden_columns[] = 'form_key';
+		}
+
+		return $hidden_columns;
+	}
 
 	public static function save_per_page( $save, $option, $value ) {
         if ( $option == 'formidable_page_formidable_per_page' ) {
