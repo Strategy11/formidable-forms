@@ -3629,12 +3629,12 @@ function frmFrontFormJS(){
 	}
 
 	function removeFieldError( $fieldCont ) {
-		$fieldCont.removeClass('frm_blank_field');
+		$fieldCont.removeClass('frm_blank_field has-error');
 		$fieldCont.find('.frm_error').remove();
 	}
 
 	function removeAllErrors() {
-		jQuery('.form-field').removeClass('frm_blank_field');
+		jQuery('.form-field').removeClass('frm_blank_field has-error');
 		jQuery('.form-field .frm_error').replaceWith('');
 		jQuery('.frm_error_style').remove();
 	}
