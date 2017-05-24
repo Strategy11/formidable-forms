@@ -176,6 +176,9 @@ class FrmEntriesListHelper extends FrmListHelper {
 				    $user = get_userdata($item->user_id);
 				    $val = $user ? $user->user_login : '';
 				    break;
+				case 'parent_item_id':
+					$val = $item->parent_item_id;
+					break;
 				default:
 					$val = apply_filters( 'frm_entries_' . $col_name . '_column', false, compact( 'item' ) );
 					if ( $val === false ) {
