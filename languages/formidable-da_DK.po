@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Formidable v2.03.08\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-01 03:07+0000\n"
-"PO-Revision-Date: Thu May 25 2017 12:41:07 GMT-0700 (PDT)\n"
+"PO-Revision-Date: Fri May 26 2017 13:08:52 GMT-0700 (PDT)\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: Danish\n"
@@ -348,11 +348,11 @@ msgstr ""
 msgid "You do not have permission to install plugin updates"
 msgstr ""
 
-#: ../classes/models/FrmEntryValidate.php:269
+#: ../classes/models/FrmEntryValidate.php:274
 msgid "There was a problem verifying your recaptcha"
 msgstr ""
 
-#: ../classes/models/FrmEntryValidate.php:291
+#: ../classes/models/FrmEntryValidate.php:296
 msgid "Your entry appears to be blacklist spam!"
 msgstr ""
 
@@ -3819,20 +3819,20 @@ msgstr "Der opstod et problem med indsendelsen af data. Prøv venligst igen."
 msgid "You do not have permission to do that"
 msgstr "Du har ikke de nødvendige rettigheder"
 
-#: ../classes/models/FrmEntryValidate.php:160
+#: ../classes/models/FrmEntryValidate.php:165
 msgid "Please select a higher number"
 msgstr "Vælg venligst et højere nummer"
 
-#: ../classes/models/FrmEntryValidate.php:162
+#: ../classes/models/FrmEntryValidate.php:167
 msgid "Please select a lower number"
 msgstr "Vælg venligst et lavere nummer"
 
-#: ../classes/models/FrmEntryValidate.php:249
+#: ../classes/models/FrmEntryValidate.php:254
 msgid "The captcha is missing from this form"
 msgstr "Captcha mangler i denne formular"
 
-#: ../classes/models/FrmEntryValidate.php:287 ../classes/models/FrmEntryValidate.
-#: php:296
+#: ../classes/models/FrmEntryValidate.php:292 ../classes/models/FrmEntryValidate.
+#: php:301
 msgid "Your entry appears to be spam!"
 msgstr "Dine data ser ud til at være spam!"
 
