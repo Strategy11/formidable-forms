@@ -3,7 +3,7 @@ Contributors: formidableforms, sswells, srwells, jamie.wahlin
 Tags: form, contact form, form builder, custom form, forms, form maker, form creator
 Requires at least: 3.8
 Tested up to: 4.7.5
-Stable tag: 2.03.08
+Stable tag: 2.03.09
 
 The best WordPress form plugin. Simple drag & drop form building, visual form styling, and unlimited email notifications. 
 
@@ -97,6 +97,11 @@ A. The field and form names and descriptions are all changed with in-place edit.
 [See more FAQs](https://formidableforms.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+
+= 2.03.09 =
+* New: Add frmStartFormLoading and frmEndFormLoading jQuery events.
+* **Pro Version** *
+* Fix: Do not clear field values when previous page is conditionally hidden.
 
 = 2.03.08 =
 * New: Add frm_label_justify CSS layout class to justify text in long labels
