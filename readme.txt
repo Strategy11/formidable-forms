@@ -101,7 +101,9 @@ A. The field and form names and descriptions are all changed with in-place edit.
 = 2.03.09 =
 * New: Add frmStartFormLoading and frmEndFormLoading jQuery events.
 * **Pro Version** *
+* New: Add frm_set_and_or_for_lookup filter to allow for filtering lookups that match every value.
 * Fix: Do not clear field values when previous page is conditionally hidden.
+* Fix: Don't include combo field description html with empty description.
 
 = 2.03.08 =
 * New: Add frm_label_justify CSS layout class to justify text in long labels
