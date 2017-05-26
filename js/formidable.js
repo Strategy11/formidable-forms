@@ -3646,19 +3646,23 @@ function frmFrontFormJS(){
 		}
 	}
 
-	function showSubmitLoading( object ) {
-		if ( !object.hasClass('frm_loading_form') ) {
-			object.addClass('frm_loading_form');
+	function showSubmitLoading( $object ) {
+		if ( !$object.hasClass('frm_loading_form') ) {
+			$object.addClass('frm_loading_form');
+
+			$object.trigger( 'frmStartFormLoading' );
 		}
 
-		disableSubmitButton( object );
+		disableSubmitButton( $object );
 	}
 
-	function removeSubmitLoading( object, enable ) {
-		object.removeClass('frm_loading_form');
+	function removeSubmitLoading( $object, enable ) {
+		$object.removeClass('frm_loading_form');
+
+		$object.trigger( 'frmEndFormLoading' );
 
 		if ( enable == 'enable' ) {
-			enableSubmitButton( object );
+			enableSubmitButton( $object );
 		}
 	}
 
