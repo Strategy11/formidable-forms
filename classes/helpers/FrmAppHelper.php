@@ -1744,6 +1744,8 @@ class FrmAppHelper {
 			'nonce'     => wp_create_nonce( 'frm_ajax' ),
 			'id'        => __( 'ID', 'formidable' ),
 			'no_results' => __( 'No results match', 'formidable' ),
+			'file_spam' => __( 'That file looks like Spam.', 'formidable' ),
+			'empty_fields' => __( 'Please complete the preceding required fields before uploading a file.', 'formidable' ),
 		) );
 
 		if ( $location == 'admin' ) {

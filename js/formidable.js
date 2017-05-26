@@ -164,11 +164,11 @@ function frmFrontFormJS(){
 
 					if ( ! anyPrecedingRequiredFieldsCompleted( uploadFields[i] ) ) {
 						this.removeFile(file);
-						alert('Please complete the preceding required fields before uploading a file.');
+						alert(frm_js.empty_fields);
 						return false;
 					} else if ( isSpam() ) {
 						this.removeFile(file);
-						alert('Oops. That file looks like Spam.');
+						alert(frm_js.file_spam);
 						return false;
 					} else {
 						formData.append('action', 'frm_submit_dropzone' );
