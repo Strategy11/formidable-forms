@@ -9,7 +9,7 @@ The best WordPress form plugin with simple drag & drop form building, visual for
 
 == Description ==
 = WordPress Form Builder Plugin =
-Formidable Forms is a flexible and free WordPress form plugin. Easily create contact forms, polls and surveys, or lead generation forms. Start with pre-built form templates or create totally custom forms. From the smallest sidebar opt-in form to large job application forms, Formidable is built to do it all.
+Formidable Forms is a flexible and free WordPress form plugin. Easily create contact forms, polls and surveys, or lead generation forms. Start with pre-built form templates or create totally custom forms. From the smallest sidebar opt-in form to large job application forms, Formidable Forms is built to do it all.
 
 Create professional contact forms without any code. Use the built-in visual styler to instantly customize the look and feel of your forms. Additionally,  changing the form layout is simple with included layout classes. If you need more advanced customizations, you have complete access to edit the form HTML and CSS.
 
