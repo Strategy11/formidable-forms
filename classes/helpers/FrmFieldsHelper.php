@@ -840,7 +840,11 @@ DEFAULT_HTML;
             }
 			unset( $autop );
 		} else if ( is_array( $replace_with ) ) {
-			$replace_with = implode( $sep, $replace_with );
+			if ( $atts['show'] && isset( $replace_with[ $atts['show'] ] ) ) {
+				$replace_with = $replace_with[ $atts['show'] ];
+			} else {
+				$replace_with = implode( $sep, $replace_with );
+			}
 		}
 
 		return $replace_with;
