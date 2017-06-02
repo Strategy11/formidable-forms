@@ -543,7 +543,7 @@ class FrmEntry {
 		$new_values = array(
 			'item_key'  => FrmAppHelper::get_unique_key( $values['item_key'], $wpdb->prefix . 'frm_items', 'item_key' ),
 			'name'      => FrmAppHelper::truncate( $item_name, 255, 1, '' ),
-			'ip'        => FrmAppHelper::get_ip_address(),
+			'ip'        => self::get_ip( $values ),
 			'is_draft'  => self::get_is_draft_value( $values ),
 			'form_id'   => self::get_form_id( $values ),
 			'post_id'   => self::get_post_id( $values ),
@@ -561,6 +561,22 @@ class FrmEntry {
 		$new_values['updated_by'] = isset($values['updated_by']) ? $values['updated_by'] : $new_values['user_id'];
 
 		return $new_values;
+	}
+
+	/**
+	 * Get the ip for a new entry.
+	 * Allow the import to override the value.
+	 *
+	 * @since 2.03.10
+	 * @param array $values
+	 * @return string
+	 */
+	private static function get_ip( $values ) {
+		$ip = FrmAppHelper::get_ip_address();
+		if ( defined('WP_IMPORTING') && WP_IMPORTING ) {
+			$ip = isset( $values['ip'] ) ? $values['ip'] : $ip;
+		}
+		return $ip;
 	}
 
 	/**
