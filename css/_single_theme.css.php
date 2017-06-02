@@ -781,9 +781,15 @@ if ( ! $submit_style ) { ?>
 	padding:0<?php echo esc_html( $important ) ?>;
 }
 
-.<?php echo esc_html( $style_class ) ?> .frm_text_block input,
-.<?php echo esc_html( $style_class ) ?> .frm_text_block label.frm_primary_label{
-    margin-left:-20px;
+.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_text_block .frm_checkbox label,
+.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_text_block .frm_radio label{
+	padding-left:20px;
+	display:block;
+}
+
+.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_text_block .frm_checkbox input[type=checkbox],
+.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_text_block .frm_radio input[type=radio]{
+	margin-left:-20px;
 }
 
 .<?php echo esc_html( $style_class ) ?> .frm_button{

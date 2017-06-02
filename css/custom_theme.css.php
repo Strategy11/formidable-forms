@@ -920,20 +920,6 @@ select.frm_loading_lookup{
     box-shadow:none;
 }
 
-.frm_text_block{
-    margin-left:20px;
-}
-
-.frm_text_block input,
-.frm_text_block label.frm_primary_label{
-    margin-left:-20px;
-}
-
-.frm_text_block .frm_checkbox input[type=checkbox],
-.frm_text_block .frm_radio input[type=radio]{
-    margin-right:4px;
-}
-
 .frm_form_field.frm_label_justify label.frm_primary_label{
 	text-align:justify !important;
 }
