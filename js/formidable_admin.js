@@ -487,13 +487,14 @@ function frmAdminBuildJS(){
 	}
 
 	function duplicateField(){
-		var field_id = jQuery(this).closest('li').data('fid');
+		var thisField = jQuery(this).closest('li');
+		var field_id = thisField.data('fid');
 		var children = fieldsInSection(field_id);
 		jQuery.ajax({
 			type:'POST',url:ajaxurl,
 			data:{action:'frm_duplicate_field', field_id:field_id, form_id:this_form_id, children:children, nonce:frmGlobal.nonce},
 			success:function(msg){
-				jQuery(document.getElementById('new_fields')).append(msg);
+				thisField.after(msg);
 			}
 		});
 		return false;
