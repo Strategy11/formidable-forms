@@ -677,6 +677,15 @@ function frmAdminBuildJS(){
 		});
 	}
 
+	function toggleMultiselect() {
+		var dropdown = jQuery(this).closest('li').find('.frm_form_fields select');
+		if( this.checked ){
+			dropdown.attr('multiple', 'multiple');
+		}else{
+			dropdown.removeAttr('multiple');
+		}
+	}
+
 	function showDefaults(n,fval){
 		var defaults = jQuery('#frm_clear_on_focus_'+n+',#frm_clear_on_focus_'+n+' a, #frm_clear_on_focus_'+n+'_conf,#frm_clear_on_focus_'+n+'_conf a');
 		if(fval){
@@ -2493,6 +2502,7 @@ function frmAdminBuildJS(){
 			$newFields.on('change', 'select[name^="field_options[data_type_"]', maybeClearWatchFields );
 
 			$newFields.on('click', '.frm_toggle_sep_values', toggleSepValues);
+			$newFields.on('click', '.frm_multiselect_opt', toggleMultiselect);
 			$newFields.on('click', '.frm_delete_field', clickDeleteField);
 			$newFields.on('click', '.frm_single_option .frm_delete_icon', deleteFieldOption);
             $newFields.on('click', '.frm_add_opt', addFieldOption);
