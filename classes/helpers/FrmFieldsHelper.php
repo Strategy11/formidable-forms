@@ -51,6 +51,7 @@ class FrmFieldsHelper {
         } else if ( $type == 'captcha' ) {
             $frm_settings = FrmAppHelper::get_settings();
             $values['invalid'] = $frm_settings->re_msg;
+			$values['field_options']['label'] = 'none';
         } else if ( 'url' == $type ) {
             $values['name'] = __( 'Website', 'formidable' );
         }
@@ -495,7 +496,11 @@ DEFAULT_HTML;
 		$field['captcha_size'] = ( $field['captcha_size'] == 'default' ) ? 'normal' : $field['captcha_size'];
 
 ?>
-<div id="field_<?php echo esc_attr( $field['field_key'] ) ?>" class="<?php echo esc_attr( $class_prefix ) ?>g-recaptcha" data-sitekey="<?php echo esc_attr( $frm_settings->pubkey ) ?>" data-size="<?php echo esc_attr( $field['captcha_size'] ) ?>" data-theme="<?php echo esc_attr( $field['captcha_theme'] ) ?>"></div>
+<div id="field_<?php echo esc_attr( $field['field_key'] ) ?>" class="<?php echo esc_attr( $class_prefix ) ?>g-recaptcha" data-sitekey="<?php echo esc_attr( $frm_settings->pubkey ) ?>" data-size="<?php echo esc_attr( $field['captcha_size'] ) ?>" data-theme="<?php echo esc_attr( $field['captcha_theme'] ) ?>" <?php
+	if ( $field['captcha_size'] == 'invisible' && ! $allow_mutiple ) {
+		echo 'data-callback="frmAfterRecaptcha"';
+	}
+?>></div>
 <?php
     }
 
