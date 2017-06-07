@@ -3424,6 +3424,31 @@ function frmFrontFormJS(){
 		return errors;
 	}
 
+	function hasInvisibleRecaptcha( object ) {
+		if ( goingToPrevPage( object ) ) {
+			return false;
+		}
+
+		var recaptcha = jQuery(object).find('.frm-g-recaptcha[data-size="invisible"], .g-recaptcha[data-size="invisible"]');
+		if ( recaptcha.length ) {
+			var recaptchaID = recaptcha.data('rid');
+			var alreadyChecked = grecaptcha.getResponse( recaptchaID );
+			if ( alreadyChecked.length === 0 ) {
+				return recaptcha;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
+
+	function executeInvisibleRecaptcha( invisibleRecaptcha ) {
+		var recaptchaID = invisibleRecaptcha.data('rid');
+		grecaptcha.reset( recaptchaID );
+		grecaptcha.execute( recaptchaID );
+	}
+
 	function validateRecaptcha( form, errors ) {
 		var $recaptcha = jQuery(form).find('.frm-g-recaptcha');
 		if ( $recaptcha.length ) {
@@ -4471,13 +4496,25 @@ function frmFrontFormJS(){
 			addKeysFallbackForIE8();
 		},
 
+		afterSingleRecaptcha: function(token){
+			var object = jQuery('.frm-show-form .g-recaptcha').closest('form')[0];
+			frmFrontForm.submitFormNow( object );
+		},
+
+		afterRecaptcha: function(token, formID){
+			var object = jQuery('#frm_form_'+ formID +'_container form')[0];
+			frmFrontForm.submitFormNow( object );
+		},
+
 		submitForm: function(e){
 			frmFrontForm.submitFormManual( e, this );
 		},
 
 		submitFormManual: function(e, object){
+			var invisibleRecaptcha = hasInvisibleRecaptcha(object);
+
 			var classList = object.className.trim().split(/\s+/gi);
-			if ( classList ) {
+			if ( classList && invisibleRecaptcha.length < 1 ) {
 				var isPro = classList.indexOf('frm_pro_form') > -1;
 				if ( ! isPro ) {
 					return;
@@ -4489,24 +4526,35 @@ function frmFrontFormJS(){
 			}
 
 			e.preventDefault();
-			var errors = frmFrontForm.validateFormSubmit( object );
 
-			if ( Object.keys(errors).length === 0 ) {
-				showSubmitLoading( jQuery(object) );
+			if ( invisibleRecaptcha.length ) {
+				executeInvisibleRecaptcha( invisibleRecaptcha );
+			} else {
 
-				if ( classList.indexOf('frm_ajax_submit') > -1 ) {
-					var hasFileFields = jQuery(object).find('input[type="file"]').filter(function () {
-						return !!this.value;
-					}).length;
-					if ( hasFileFields < 1 ) {
-						action = jQuery(object).find('input[name="frm_action"]').val();
-						frmFrontForm.checkFormErrors( object, action );
-					} else {
-						object.submit();
-					}
+				var errors = frmFrontForm.validateFormSubmit( object );
+
+				if ( Object.keys(errors).length === 0 ) {
+					showSubmitLoading( jQuery(object) );
+
+					frmFrontForm.submitFormNow( object, classList );
+				}
+			}
+		},
+
+		submitFormNow: function(object) {
+			var classList = object.className.trim().split(/\s+/gi);
+			if ( classList.indexOf('frm_ajax_submit') > -1 ) {
+				var hasFileFields = jQuery(object).find('input[type="file"]').filter(function () {
+					return !!this.value;
+				}).length;
+				if ( hasFileFields < 1 ) {
+					action = jQuery(object).find('input[name="frm_action"]').val();
+					frmFrontForm.checkFormErrors( object, action );
 				} else {
 					object.submit();
 				}
+			} else {
+				object.submit();
 			}
 		},
 
@@ -4728,13 +4776,26 @@ jQuery(document).ready(function($){
 function frmRecaptcha() {
 	var captchas = jQuery('.frm-g-recaptcha');
 	for ( var c = 0, cl = captchas.length; c < cl; c++ ) {
-		var recaptchaID = grecaptcha.render( captchas[c].id, {
+		var size = captchas[c].getAttribute('data-size');
+		var params = {
 			'sitekey': captchas[c].getAttribute('data-sitekey'),
-			'size': captchas[c].getAttribute('data-size'),
+			'size': size,
 			'theme': captchas[c].getAttribute('data-theme')
-		} );
+		};
+		if ( size == 'invisible' ) {
+			var formID = jQuery(captchas[c]).closest('form').find('input[name="form_id"]').val();
+			params.callback = function(token) {
+				frmFrontForm.afterRecaptcha(token, formID)
+			};
+		}
+		var recaptchaID = grecaptcha.render( captchas[c].id, params );
+
 		captchas[c].setAttribute('data-rid', recaptchaID);
 	}
+}
+
+function frmAfterRecaptcha(token){
+	frmFrontForm.afterSingleRecaptcha(token);
 }
 
 function frmUpdateField(entry_id,field_id,value,message,num){
