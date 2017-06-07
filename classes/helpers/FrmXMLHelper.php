@@ -309,7 +309,7 @@ class FrmXMLHelper {
 
 		    if ( is_array($f['default_value']) && in_array($f['type'], array(
 		        'text', 'email', 'url', 'textarea',
-		        'number','phone', 'date', 'time',
+		        'number','phone', 'date',
 		        'hidden', 'password', 'tag', 'image',
 		    )) ) {
 		        if ( count($f['default_value']) === 1 ) {
