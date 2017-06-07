@@ -166,7 +166,7 @@ function frmFrontFormJS(){
 						this.removeFile(file);
 						alert(frm_js.empty_fields);
 						return false;
-					} else if ( isSpam() ) {
+					} else if ( isSpam( formID ) ) {
 						this.removeFile(file);
 						alert(frm_js.file_spam);
 						return false;
@@ -248,8 +248,8 @@ function frmFrontFormJS(){
 		});
 	}
 
-	function isSpam() {
-		if ( isHoneypotSpam() || isHeadless() ) {
+	function isSpam( formID ) {
+		if ( isHoneypotSpam( formID ) || isHeadless() ) {
 			return true;
 		} else {
 			return false;
@@ -263,8 +263,8 @@ function frmFrontFormJS(){
 	 *
 	 * @returns {boolean}
 	 */
-	function isHoneypotSpam() {
-		var val = document.getElementById('frm_verify').value;
+	function isHoneypotSpam( formID ) {
+		var val = document.getElementById('frm_verify_'+formID).value;
 
 		return val !== '';
 	}

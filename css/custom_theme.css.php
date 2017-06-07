@@ -23,7 +23,7 @@ $defaults = FrmStylesHelper::get_settings_for_output( $default_style );
     display:none;
 }
 
-#frm_verify{
+form input.frm_verify{
 	display:none !important;
 }
 
