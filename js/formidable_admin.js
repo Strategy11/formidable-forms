@@ -1928,7 +1928,7 @@ function frmAdminBuildJS(){
 					id = jQuery.trim(d);
 				}
 				c = c+' '+d;
-				c = c.replace('widefat', '');
+				c = c.replace('widefat', '').replace('frm_with_left_label', '');
 			}
 		}
 
