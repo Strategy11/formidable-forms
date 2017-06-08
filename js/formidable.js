@@ -424,7 +424,9 @@ function frmFrontFormJS(){
 		var originalEvent = getOriginalEvent( e );
 		checkFieldsWatchingLookup( field_id, jQuery(this), originalEvent );
 		doCalculation(field_id, jQuery(this));
-		maybeValidateChange( field_id, this );
+		if ( e.selfTriggered !== true ) {
+			maybeValidateChange( field_id, this );
+		}
 	}
 
 	function maybeValidateChange( field_id, field ) {
