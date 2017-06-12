@@ -8,12 +8,7 @@ class FrmShowForm extends WP_Widget {
 	}
 
 	public function widget( $args, $instance ) {
-        if ( empty($instance['title']) ) {
-            $title = FrmForm::getName( $instance['form'] );
-        } else {
-            $title = $instance['title'];
-        }
-        $title = apply_filters('widget_title', $title);
+        $title = apply_filters( 'widget_title', empty( $instance['title'] ) ? '' : $instance['title'], $instance, $this->id_base );
 
 		echo $args['before_widget'];
 
