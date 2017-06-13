@@ -116,7 +116,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 	 * @covers FrmProGraphsController::graph_shortcode
 	 */
 	function test_graph_shortcode_number_field_with_all_types() {
-		$graph_atts = array( 'id' => 'msyehy' );
+		$graph_atts = array( 'id' => 'number-field' );
 		$all_types = self::get_graph_types_for_testing();
 		$graph_html = array();
 		$expected_data = array();
@@ -429,7 +429,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		$graph_atts = array(
 			'fields' => 'text-field',
 			$dropdown_id => 'Ace Ventura',
-			'msyehy_greater_than' => '6'
+			'number-field_greater_than' => '6'
 		);
 
 		$graph_html = FrmProGraphsController::graph_shortcode( $graph_atts );
@@ -492,7 +492,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 	function test_graph_shortcode_single_field_filter_by_number_greater_than() {
 		self::clear_frm_vars();
 
-		$graph_atts = array( 'id' => 'text-field', 'msyehy_greater_than' => '1' );
+		$graph_atts = array( 'id' => 'text-field', 'number-field_greater_than' => '1' );
 
 		$graph_html = FrmProGraphsController::graph_shortcode( $graph_atts );
 
@@ -514,7 +514,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 	function test_graph_shortcode_single_field_filter_by_number_less_than() {
 		self::clear_frm_vars();
 
-		$graph_atts = array( 'id' => 'text-field', 'msyehy_less_than' => '5' );
+		$graph_atts = array( 'id' => 'text-field', 'number-field_less_than' => '5' );
 
 		$graph_html = FrmProGraphsController::graph_shortcode( $graph_atts );
 
@@ -937,7 +937,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		self::clear_frm_vars();
 
 		$graph_atts = array(
-			'id' => 'msyehy',
+			'id' => 'number-field',
 			'data_type' => 'total',
 		);
 
@@ -1359,7 +1359,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		self::clear_frm_vars();
 
 		$graph_atts = array(
-			'id' => 'msyehy',
+			'id' => 'number-field',
 			'ids' => 'qbrd2o',
 			'data_type' => 'total',
 		);
@@ -1826,7 +1826,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		self::clear_frm_vars();
 
 		$graph_atts = array(
-			'id' => 'msyehy',
+			'id' => 'number-field',
 			'data_type' => 'total',
 			'x_axis' => 'date-field',
 		);
@@ -1853,7 +1853,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		self::clear_frm_vars();
 
 		$graph_atts = array(
-			'fields' => 'msyehy,qbrd2o',
+			'fields' => 'number-field,qbrd2o',
 			'data_type' => 'total',
 			'x_axis' => 'date-field',
 		);
@@ -2132,7 +2132,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 
 		$graph_atts = array(
 			'fields' => 'text-field',
-			'x_axis' => 'msyehy',
+			'x_axis' => 'number-field',
 		);
 
 		$graph_html = FrmProGraphsController::graph_shortcode( $graph_atts );

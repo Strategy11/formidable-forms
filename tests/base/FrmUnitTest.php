@@ -84,8 +84,8 @@ class FrmUnitTest extends WP_UnitTestCase {
     }
 
 	function create_files() {
-		$single_file_upload_field = FrmField::getOne( 'mprllc' );
-		$multi_file_upload_field = FrmField::getOne( '72hika' );
+		$single_file_upload_field = FrmField::getOne( 'single-file-upload-field' );
+		$multi_file_upload_field = FrmField::getOne( 'multi-file-upload-field' );
 
 		$file_urls = array(
 			array(

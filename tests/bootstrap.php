@@ -44,11 +44,11 @@ function dynamic_frm_stats($content, $display, $show, $atts){
 	if ( $display->ID == $view_id ){//Change 1066 to the ID of your View
 		$entries = $atts['entry_ids'];
 		$total = 0;
-		$field_id = FrmField::get_id_by_key( 'msyehy' );
+		$field_id = FrmField::get_id_by_key( 'number-field' );
 		foreach($entries as $entry){
 			$total += FrmProEntriesController::get_field_value_shortcode(array( 'field_id' => $field_id, 'entry' => $entry ) );
 		}
-		$content = str_replace('[sum_msyehy]', $total, $content);
+		$content = str_replace('[sum_number-field]', $total, $content);
 	}
 	return $content;
 }

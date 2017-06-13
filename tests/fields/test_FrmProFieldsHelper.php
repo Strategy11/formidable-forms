@@ -25,7 +25,7 @@ class WP_Test_FrmProFieldsHelper extends FrmUnitTest {
 	 */
 	function test_displayed_image_file_in_view() {
 		$att_combinations = self::get_file_att_combinations_for_testing();
-		$media_ids = self::get_media_ids_from_database( 'mprllc', 'jamie_entry_key' );
+		$media_ids = self::get_media_ids_from_database( 'single-file-upload-field', 'jamie_entry_key' );
 
 		foreach ( $att_combinations as $atts ) {
 			$displayed_value = FrmProFieldsHelper::get_file_display_value( $media_ids, $atts );
@@ -41,7 +41,7 @@ class WP_Test_FrmProFieldsHelper extends FrmUnitTest {
 	 */
 	function test_displayed_files_in_view() {
 		$att_combinations = self::get_file_att_combinations_for_testing();
-		$media_ids = self::get_media_ids_from_database( '72hika', 'jamie_entry_key' );
+		$media_ids = self::get_media_ids_from_database( 'multi-file-upload-field', 'jamie_entry_key' );
 
 		foreach ( $att_combinations as $atts ) {
 			$displayed_value = FrmProFieldsHelper::get_file_display_value( $media_ids, $atts );
@@ -55,7 +55,7 @@ class WP_Test_FrmProFieldsHelper extends FrmUnitTest {
 	 */
 	function test_displayed_non_image_file_in_view() {
 		$att_combinations = self::get_file_att_combinations_for_testing();
-		$media_ids = self::get_media_ids_from_database( 'mprllc', 'steph_entry_key' );
+		$media_ids = self::get_media_ids_from_database( 'single-file-upload-field', 'steph_entry_key' );
 
 		foreach ( $att_combinations as $atts ) {
 			$displayed_value = FrmProFieldsHelper::get_file_display_value( $media_ids, $atts );

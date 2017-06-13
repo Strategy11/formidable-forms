@@ -2114,11 +2114,11 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		
 
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
-		$dynamic_view->frm_before_content = 'Before Content: [sum_msyehy]';
+		$dynamic_view->frm_before_content = 'Before Content: [sum_number-field]';
 		add_filter( 'frm_before_display_content', 'dynamic_frm_stats', 10, 4 );
 
 		// Make sure before content includes the dynamic total
-		$field_id = FrmField::get_id_by_key( 'msyehy' );
+		$field_id = FrmField::get_id_by_key( 'number-field' );
 		$expected_total = (string) FrmProStatisticsController::stats_shortcode( array( 'id' => $field_id, 'type' => 'total' ) );
 		$d = self::get_default_args( $dynamic_view, array( 'Jamie', $expected_total ), array() );
 		self::run_get_display_data_tests( $d, 'view with before content and frm_before_display_content filter' );
@@ -2132,10 +2132,10 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		
 
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
-		$dynamic_view->frm_before_content = 'Before Content: [sum_msyehy]';
+		$dynamic_view->frm_before_content = 'Before Content: [sum_number-field]';
 		add_filter( 'frm_before_display_content', 'dynamic_frm_stats', 10, 4 );
 
-		$field_id = FrmField::get_id_by_key( 'msyehy' );
+		$field_id = FrmField::get_id_by_key( 'number-field' );
 
 		// make sure before content includes dynamic total when a page size is set
 		$dynamic_view->frm_page_size = 1;
@@ -2296,11 +2296,11 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		
 
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
-		$dynamic_view->frm_after_content = 'After Content: [sum_msyehy]';
+		$dynamic_view->frm_after_content = 'After Content: [sum_number-field]';
 		add_filter( 'frm_after_display_content', 'dynamic_frm_stats', 10, 4 );
 
 		// Make sure after content includes the dynamic total
-		$field_id = FrmField::get_id_by_key( 'msyehy' );
+		$field_id = FrmField::get_id_by_key( 'number-field' );
 		$expected_total = (string) FrmProStatisticsController::stats_shortcode( array( 'id' => $field_id, 'type' => 'total' ) );
 		$d = self::get_default_args( $dynamic_view, array( 'Jamie', $expected_total ), array() );
 		self::run_get_display_data_tests( $d, 'view with after content and frm_after_content filter' );
@@ -2314,12 +2314,12 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		
 
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
-		$dynamic_view->frm_after_content = 'After Content: [sum_msyehy]';
+		$dynamic_view->frm_after_content = 'After Content: [sum_number-field]';
 		$dynamic_view->frm_page_size = 1;
 
 		add_filter( 'frm_after_display_content', 'dynamic_frm_stats', 10, 4 );
 
-		$field_id = FrmField::get_id_by_key( 'msyehy' );
+		$field_id = FrmField::get_id_by_key( 'number-field' );
 		$expected_total = FrmProEntriesController::get_field_value_shortcode(array('field_id' => $field_id, 'entry' => 'jamie_entry_key' ) );
 
 		$d = self::get_default_args( $dynamic_view, array( 'Jamie', $expected_total ), array() );

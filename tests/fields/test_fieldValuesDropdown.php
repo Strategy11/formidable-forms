@@ -1253,7 +1253,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 			'textarea' => 'p3eiuk',
 			'email' => 'email-field',
 			'url' => 'website-field',
-			'number' => 'msyehy',
+			'number' => 'number-field',
 			'phone' => 'n0d580',
 			'date' => 'date-field',
 			'time' => 'time-field',

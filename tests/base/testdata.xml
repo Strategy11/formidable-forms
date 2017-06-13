@@ -722,7 +722,7 @@ Jam Band, Electronic, Electronica, JamTronica, EDM, Producer, Rock,  Jazz, Soul,
 		</field>
 		<field>
 		    <id>8110</id>
-            <field_key><![CDATA[i79z0s]]></field_key>
+            <field_key><![CDATA[rich-text-field]]></field_key>
             <name><![CDATA[Rich Text]]></name>
             <description><![CDATA[]]></description>
             <type><![CDATA[rte]]></type>
@@ -735,7 +735,7 @@ Jam Band, Electronic, Electronica, JamTronica, EDM, Producer, Rock,  Jazz, Soul,
 		</field>
 		<field>
 		    <id>8111</id>
-            <field_key><![CDATA[mprllc]]></field_key>
+            <field_key><![CDATA[single-file-upload-field]]></field_key>
             <name><![CDATA[Single File Upload]]></name>
             <description><![CDATA[]]></description>
             <type><![CDATA[file]]></type>
@@ -748,7 +748,7 @@ Jam Band, Electronic, Electronica, JamTronica, EDM, Producer, Rock,  Jazz, Soul,
 		</field>
 		<field>
 		    <id>8112</id>
-            <field_key><![CDATA[72hika]]></field_key>
+            <field_key><![CDATA[multi-file-upload-field]]></field_key>
             <name><![CDATA[Multiple File Upload]]></name>
             <description><![CDATA[]]></description>
             <type><![CDATA[file]]></type>
@@ -761,7 +761,7 @@ Jam Band, Electronic, Electronica, JamTronica, EDM, Producer, Rock,  Jazz, Soul,
 		</field>
 		<field>
 		    <id>8113</id>
-            <field_key><![CDATA[msyehy]]></field_key>
+            <field_key><![CDATA[number-field]]></field_key>
             <name><![CDATA[Number]]></name>
             <description><![CDATA[]]></description>
             <type><![CDATA[number]]></type>

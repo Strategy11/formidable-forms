@@ -19,7 +19,7 @@ class WP_Test_Conditional_Shortcodes extends FrmUnitTest {
 	 * @group zero-conditional
 	 */
 	public function test_zero_greater_than_negative_value() {
-		$field = FrmField::getOne( 'msyehy' );
+		$field = FrmField::getOne( 'number-field' );
 
 		$field_value = '0';
 		$compare_type = 'greater_than';
@@ -48,7 +48,7 @@ class WP_Test_Conditional_Shortcodes extends FrmUnitTest {
 	 * @group zero-conditional
 	 */
 	public function test_zero_equals_zero() {
-		$field = FrmField::getOne( 'msyehy' );
+		$field = FrmField::getOne( 'number-field' );
 
 		$field_value = '0';
 		$compare_type = 'equals';
@@ -78,7 +78,7 @@ class WP_Test_Conditional_Shortcodes extends FrmUnitTest {
 	 * @group zero-conditional
 	 */
 	public function test_zero_not_equal_zero() {
-		$field = FrmField::getOne( 'msyehy' );
+		$field = FrmField::getOne( 'number-field' );
 
 		$field_value = '0';
 		$compare_type = 'not_equal';
@@ -107,7 +107,7 @@ class WP_Test_Conditional_Shortcodes extends FrmUnitTest {
 	 * @group zero-conditional
 	 */
 	public function test_zero_equals_blank() {
-		$field = FrmField::getOne( 'msyehy' );
+		$field = FrmField::getOne( 'number-field' );
 
 		$field_value = '0';
 		$compare_type = 'equals';
@@ -136,7 +136,7 @@ class WP_Test_Conditional_Shortcodes extends FrmUnitTest {
 	 * @group zero-conditional
 	 */
 	public function test_zero() {
-		$field = FrmField::getOne( 'msyehy' );
+		$field = FrmField::getOne( 'number-field' );
 
 		$field_value = '0';
 
@@ -163,7 +163,7 @@ class WP_Test_Conditional_Shortcodes extends FrmUnitTest {
 	 * @group zero-conditional
 	 */
 	public function test_zero_less_than_1() {
-		$field = FrmField::getOne( 'msyehy' );
+		$field = FrmField::getOne( 'number-field' );
 
 		$field_value = '0';
 		$compare_type = 'less_than';
@@ -192,7 +192,7 @@ class WP_Test_Conditional_Shortcodes extends FrmUnitTest {
 	 * @group zero-conditional
 	 */
 	public function test_zero_greater_than_1() {
-		$field = FrmField::getOne( 'msyehy' );
+		$field = FrmField::getOne( 'number-field' );
 
 		$field_value = '0';
 		$compare_type = 'greater_than';
@@ -221,7 +221,7 @@ class WP_Test_Conditional_Shortcodes extends FrmUnitTest {
 	 * @group zero-conditional
 	 */
 	public function test_one_greater_than_negative_value() {
-		$field = FrmField::getOne( 'msyehy' );
+		$field = FrmField::getOne( 'number-field' );
 
 		$field_value = '1';
 		$compare_type = 'greater_than';
@@ -248,7 +248,7 @@ class WP_Test_Conditional_Shortcodes extends FrmUnitTest {
 	 * @covers FrmProContent::check_conditional_shortcode
 	 */
 	public function test_one_equals_one() {
-		$field = FrmField::getOne( 'msyehy' );
+		$field = FrmField::getOne( 'number-field' );
 
 		$field_value = '1';
 		$compare_type = 'equals';
@@ -275,7 +275,7 @@ class WP_Test_Conditional_Shortcodes extends FrmUnitTest {
 	 * @covers FrmProContent::check_conditional_shortcode
 	 */
 	public function test_one_equals_zero() {
-		$field = FrmField::getOne( 'msyehy' );
+		$field = FrmField::getOne( 'number-field' );
 
 		$field_value = '1';
 		$compare_type = 'equals';
@@ -302,7 +302,7 @@ class WP_Test_Conditional_Shortcodes extends FrmUnitTest {
 	 * @covers FrmProContent::check_conditional_shortcode
 	 */
 	public function test_one_like_zero() {
-		$field = FrmField::getOne( 'msyehy' );
+		$field = FrmField::getOne( 'number-field' );
 
 		$field_value = '1';
 		$compare_type = 'like';
@@ -329,7 +329,7 @@ class WP_Test_Conditional_Shortcodes extends FrmUnitTest {
 	 * @covers FrmProContent::check_conditional_shortcode
 	 */
 	public function test_one_not_equal_to_zero() {
-		$field = FrmField::getOne( 'msyehy' );
+		$field = FrmField::getOne( 'number-field' );
 
 		$field_value = '1';
 		$compare_type = 'not_equal';
@@ -356,7 +356,7 @@ class WP_Test_Conditional_Shortcodes extends FrmUnitTest {
 	 * @covers FrmProContent::conditional_replace_with_value
 	 */
 	public function test_one() {
-		$field = FrmField::getOne( 'msyehy' );
+		$field = FrmField::getOne( 'number-field' );
 
 		$field_value = '1';
 
@@ -381,7 +381,7 @@ class WP_Test_Conditional_Shortcodes extends FrmUnitTest {
 	 * @covers FrmProContent::check_conditional_shortcode
 	 */
 	public function test_one_less_than_two() {
-		$field = FrmField::getOne( 'msyehy' );
+		$field = FrmField::getOne( 'number-field' );
 
 		$field_value = '1';
 		$compare_type = 'less_than';
@@ -408,7 +408,7 @@ class WP_Test_Conditional_Shortcodes extends FrmUnitTest {
 	 * @covers FrmProContent::conditional_replace_with_value
 	 */
 	public function test_one_greater_than_zero() {
-		$field = FrmField::getOne( 'msyehy' );
+		$field = FrmField::getOne( 'number-field' );
 
 		$field_value = '1';
 		$compare_type = 'greater_than';
@@ -435,7 +435,7 @@ class WP_Test_Conditional_Shortcodes extends FrmUnitTest {
 	 * @covers FrmProContent::check_conditional_shortcode
 	 */
 	public function test_one_less_than_zero() {
-		$field = FrmField::getOne( 'msyehy' );
+		$field = FrmField::getOne( 'number-field' );
 
 		$field_value = '1';
 		$compare_type = 'less_than';
@@ -461,7 +461,7 @@ class WP_Test_Conditional_Shortcodes extends FrmUnitTest {
 	 * @covers FrmProContent::conditional_replace_with_value
 	 */
 	public function test_five_greater_than_one() {
-		$field = FrmField::getOne( 'msyehy' );
+		$field = FrmField::getOne( 'number-field' );
 
 		$field_value = '5';
 		$compare_type = 'greater_than';
@@ -488,7 +488,7 @@ class WP_Test_Conditional_Shortcodes extends FrmUnitTest {
 	 * @covers FrmProContent::check_conditional_shortcode
 	 */
 	public function test_five_less_than_one() {
-		$field = FrmField::getOne( 'msyehy' );
+		$field = FrmField::getOne( 'number-field' );
 
 		$field_value = '5';
 		$compare_type = 'less_than';
