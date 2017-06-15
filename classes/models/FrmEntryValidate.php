@@ -26,14 +26,8 @@ class FrmEntryValidate {
 			unset( $posted_field );
 		}
 
-		if ( ! empty( $errors ) ) {
-			return $errors;
-		}
-
-		self::spam_check( $exclude, $values, $errors );
-
-		if ( ! empty( $errors ) ) {
-			return $errors;
+		if ( empty( $errors ) ) {
+			self::spam_check( $exclude, $values, $errors );
 		}
 
 		$errors = apply_filters( 'frm_validate_entry', $errors, $values, compact( 'exclude' ) );
