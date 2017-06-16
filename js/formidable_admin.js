@@ -1406,43 +1406,31 @@ function frmAdminBuildJS(){
 		});
 	}
 
-    function showOrHideDefaultValIcons(vis, $thisobj) {
-        if (vis) {
-            $thisobj.find('.frm_default_val_icons').show().css('visibility', 'visible');
+    function showOrHideDefaultValIcons(showDefaultValIcons, $field) {
+        if (showDefaultValIcons) {
+            $field.find('.frm_default_val_icons').show().css('visibility', 'visible');
         }
         else {
-            $thisobj.find('.frm_default_val_icons').hide().css('visibility', 'hidden');
+            $field.find('.frm_default_val_icons').hide().css('visibility', 'hidden');
         }
     }
 
-    function maybeShowDefaultValIcons($thisobj){
-        var vis = false;
-        var inputList = $thisobj.find('input[name^="item_meta"], select[name^="item_meta"], textarea[name^="item_meta"]');
+
+    function maybeShowDefaultValIcons($field) {
+        var showDefaultValIcons = false;
+        var isMultiField = $field.find('.frm_multi_fields_container').length > 0;
+        var inputList = $field.find('input[name^="item_meta"], select[name^="item_meta"], textarea[name^="item_meta"]');
         jQuery(inputList).each(function (index) {
             if (jQuery(this).val()) {
-                vis = true;
+                showDefaultValIcons = true;
+                return false;
+            }
+            if (!isMultiField) {
+                return false;
             }
         });
-        showOrHideDefaultValIcons(vis, $thisobj);
-    }
 
-    function maybeShowDefaultValIconsApproach2($thisobj){
-        var vis = false;
-        if ($thisobj.find('.frm_multi_fields_container').length > 0) {
-            var inputList = $thisobj.find('input[name^="item_meta"], select[name^="item_meta"], textarea[name^="item_meta"]');
-            jQuery(inputList).each(function (index) {
-                if (jQuery(this).val()) {
-                    vis = true;
-                }
-            });
-        }
-        else {
-            var i = $thisobj.find('input[name^="item_meta"], select[name^="item_meta"], textarea[name^="item_meta"]')[0];
-            if (jQuery(i).val()) {
-                vis = true;
-            }
-        }
-        showOrHideDefaultValIcons(vis, $thisobj);
+        showOrHideDefaultValIcons(showDefaultValIcons, $field);
     }
 
     function clickAction(obj) {
@@ -1459,7 +1447,6 @@ function frmAdminBuildJS(){
             $thisobj.find('.frm_default_val_icons').hide().css('visibility', 'hidden');
         } else {
             maybeShowDefaultValIcons($thisobj);
-            //maybeShowDefaultValIconsApproach2($thisobj);
         }
 
         jQuery('li.ui-state-default.selected').removeClass('selected');
