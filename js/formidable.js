@@ -166,7 +166,7 @@ function frmFrontFormJS(){
 						this.removeFile(file);
 						alert(frm_js.empty_fields);
 						return false;
-					} else if ( isSpam( uploadFields[i].formID ) ) {
+					} else if ( isSpam( uploadFields[i].parentFormID ) ) {
 						this.removeFile(file);
 						alert(frm_js.file_spam);
 						return false;
