@@ -166,8 +166,6 @@ class FrmFieldsController {
 		$values = array();
         FrmFieldsHelper::fill_field( $values, $copy_field, $form_id );
 
-	    $values = apply_filters( 'frm_prepare_single_field_for_duplication', $values );
-
 		$field_id = FrmField::create( $values );
 		if ( ! $field_id ) {
 			wp_die();
