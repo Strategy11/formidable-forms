@@ -162,7 +162,7 @@ function frmFrontFormJS(){
 			init: function() {
 				this.on('sending', function(file, xhr, formData) {
 
-					if ( ! anyPrecedingRequiredFieldsCompleted( uploadFields[i] ) ) {
+					if ( ! anyPrecedingRequiredFieldsCompleted( uploadFields[i], selector ) ) {
 						this.removeFile(file);
 						alert(frm_js.empty_fields);
 						return false;
@@ -289,9 +289,8 @@ function frmFrontFormJS(){
 	 * @param {string} uploadField.fieldID
 	 * @returns {boolean}
 	 */
-	function anyPrecedingRequiredFieldsCompleted( uploadField ) {
-		var fileSelector = uploadField.htmlID + '_dropzone';
-		var dropzoneDiv = jQuery( '#' + fileSelector );
+	function anyPrecedingRequiredFieldsCompleted( uploadField, fileSelector ) {
+		var dropzoneDiv = jQuery( fileSelector );
 		var form = dropzoneDiv.closest( 'form' );
 
 		if ( form.length < 1 ) {
@@ -299,7 +298,7 @@ function frmFrontFormJS(){
 		}
 
 		var requiredFields = jQuery(form).find(
-			'.frm_required_field:visible input, .frm_required_field:visible select, .frm_required_field:visible textarea, #' + fileSelector
+			'.frm_required_field:visible input, .frm_required_field:visible select, .frm_required_field:visible textarea, ' + fileSelector
 		);
 
 		if ( requiredFields.length < 1 ) {
@@ -308,7 +307,7 @@ function frmFrontFormJS(){
 			var fieldsComplete = true;
 
 			for ( var r = 0, rl = requiredFields.length; r < rl; r++ ) {
-				if ( requiredFields[r].id === fileSelector ) {
+				if ( '#' + requiredFields[r].id === fileSelector ) {
 					break;
 				}
 
