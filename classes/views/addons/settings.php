@@ -35,7 +35,7 @@
 
 		</div>
 	<?php } ?>
-	<?php if ( $any_unauthorized && FrmAppHelper::pro_is_installed() ) { ?>
+	<?php if ( $any_unauthorized && $allow_autofill ) { ?>
 		<div class="clear"></div>
 		<p><a href="#" class="edd_frm_fill_license button-secondary"><?php _e( 'Autofill Licenses', 'formidable' ) ?></a></p>
 	<?php } ?>
