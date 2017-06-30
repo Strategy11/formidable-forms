@@ -2788,7 +2788,7 @@ function frmFrontFormJS(){
 
 		if ( totalField.val() !== total ) {
 			totalField.val(total);
-			if ( totalField.attr('name') != triggerField.attr('name') ) {
+			if ( triggerField === null || totalField.attr('name') != triggerField.attr('name') ) {
 				triggerChange( totalField, field_key );
 			}
 		}
