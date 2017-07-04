@@ -250,7 +250,7 @@ A. The field and form names and descriptions are all changed with in-place edit.
 
 = 2.03 =
 * New: Add a combined list of all entries on the Formidable -> Entries page instead of defaulting to the first form
-* New: Replace submit input with button for new forms. This allows us to show the loading indicator on top of the button instead of outside. This applies to new forms only. Existing forms will need the submit button HTML adjusted to see this new styling. But we decided it was best for reverse compatability if we don't change it automatically
+* New: Replace submit input with button for new forms. This allows us to show the loading indicator on top of the button instead of outside. This applies to new forms only. Existing forms will need the submit button HTML adjusted to see this new styling. But we decided it was best for reverse compatibility if we don't change it automatically
 * New: Add frm_after_title hook for inserting content between the title and form fields
 * Enhancement: Speed up adding and editing field options and conditional logic in the form builder
 * Enhancement: Don't save the field options until the whole form is saved
@@ -370,7 +370,7 @@ A. The field and form names and descriptions are all changed with in-place edit.
 * Add frm_time_ago_levels hook for drilling down time_ago
 * Fix adding new file after removal when editing
 * In multi-site, only copy forms if copy form setting is checked
-* Make sure detaillink works if View is on home page
+* Make sure detail link works if View is on home page
 
 = 2.02.09 =
 * Add frm_before_install hook
