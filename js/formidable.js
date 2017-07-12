@@ -4137,7 +4137,10 @@ function frmFrontFormJS(){
 						container.fadeOut('slow', function(){
 							container.remove();
 						});
+
 						jQuery(document.getElementById('frm_delete_'+entry_id)).fadeOut('slow');
+						jQuery( document ).trigger( 'frmEntryDeleted', [ entry_id ] );
+
 					}else{
 						jQuery(document.getElementById('frm_delete_'+entry_id)).replaceWith(html);
 					}
