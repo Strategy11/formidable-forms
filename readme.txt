@@ -5,7 +5,7 @@ Requires at least: 3.8
 Tested up to: 4.8
 Stable tag: 2.03.10
 
-The best WordPress form plugin with simple drag and drop form building, a form styling generator, and unlimited email notifications.
+The best WordPress form plugin with simple drag and drop form building, a form style generator, and unlimited email notifications.
 
 == Description ==
 = WordPress Form Builder Plugin =
@@ -81,7 +81,7 @@ Learn more at [Formidable Forms](https://formidableforms.com/ "Formidable Forms"
 2. Search for 'Formidable'
 3. Click the 'Install Now' button
 4. Activate the plugin through the 'Plugins' menu
-5. Go to the Formidable menu
+5. Go to the Formidable Forms menu
 6. Click the 'Add New' button to create a new form
 7. Insert your forms on a page, post, or widget using a shortcode [formidable id=x], Alternatively use `<?php echo FrmFormsController::show_form(2, $key = '', $title=true, $description=true); ?>` in your template
 
@@ -90,22 +90,30 @@ Learn more at [Formidable Forms](https://formidableforms.com/ "Formidable Forms"
 2. Form builder page
 3. Field Options and CSS Layout Classes
 4. Field Options for checkbox fields
-5. Entry Management page
-6. Form Widget
+5. Manage form entries from the back end
+6. Add a form into your sidebar with a widget
 
 == Frequently Asked Questions ==
-= Q. Why am I not I getting any emails? =
+= Q. How do I get started with my first contact form? =
+
+A. The fastest way to build a contact form is to use our contact form template. After you activate Formidable Forms, go to the Formidable -> Forms page and click "add new". Choose the "Contact Us" template and click "Load Template". Now Save your form. 
+
+Next, go to edit the page where you would like to publish your form. Click the "Formidable" button to open the shortcode builder. Choose your form and insert it into your page. Save your page, and you're done.
+
+Get more detail on [using the contact form template](https://formidableforms.com/wordpress-contact-form-template-to-unique/ "using the contact form template") in our blog.
+
+= Q. My form is not sending emails. Why not? =
 
 A. Try the following steps:
 
-   1. Double check to make sure your email address is present and correct in the "Emails" tab on the form "Settings" page
-   2. Make sure you are receiving other emails from your site (ie comment notifications, forgot password...)
+   1. Double check to make sure your email address is present and correct in your Email form action on the form "Settings" page. The [admin_email] shortcode uses the email address from your WordPress Settings -> General page.
+   2. Make sure you are receiving other emails from your site (ie comment notifications, forgot password...). If these emails don't work on your site, form emails will not work either.
    3. Check your SPAM box
-   4. Try a different email address.
-   5. Install WP Mail SMPT or another similar plugin and configure the SMTP settings
-   6. If none of these steps fix the problem, let us know and we'll try to help you find the bottleneck.
+   4. Try a different email address in your form settings.
+   5. Install Postman SMPT or another similar plugin and configure the SMTP settings.
+   6. If none of these steps fix the problem with your form emails, and other site emails are not going out, please contact your web host. You can also [read more about WordPress emails](https://formidableforms.com/wordpress-not-sending-emails-smtp/ "read more about WordPress emails") in our blog.
 
-= Q. How do I edit the field name? =
+= Q. How do I edit the field names in my forms? =
 
 A. The field and form names and descriptions are all changed with in-place edit. Just click on the text you would like to change, and it will turn into a text field.
 
