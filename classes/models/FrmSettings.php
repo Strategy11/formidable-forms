@@ -173,7 +173,7 @@ class FrmSettings {
         }
 
 		if ( ! isset( $this->re_type ) ) {
-			$this->re_type = $re_type;
+			$this->re_type = '';
 		}
     }
 
