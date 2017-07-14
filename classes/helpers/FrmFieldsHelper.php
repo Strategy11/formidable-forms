@@ -492,8 +492,9 @@ DEFAULT_HTML;
         wp_register_script( 'recaptcha-api', $api_js_url, '', true );
         wp_enqueue_script( 'recaptcha-api' );
 
-		// for reverse compatability
+		// for reverse compatibility
 		$field['captcha_size'] = ( $field['captcha_size'] == 'default' ) ? 'normal' : $field['captcha_size'];
+		$field['captcha_size'] = ( $frm_settings->re_type == 'invisible' ) ? 'invisible' : $field['captcha_size'];
 
 ?>
 <div id="field_<?php echo esc_attr( $field['field_key'] ) ?>" class="<?php echo esc_attr( $class_prefix ) ?>g-recaptcha" data-sitekey="<?php echo esc_attr( $frm_settings->pubkey ) ?>" data-size="<?php echo esc_attr( $field['captcha_size'] ) ?>" data-theme="<?php echo esc_attr( $field['captcha_theme'] ) ?>" <?php

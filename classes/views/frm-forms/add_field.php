@@ -245,7 +245,7 @@ if ( $display['options'] ) { ?>
 					}
 				}
 
-				if ( $display['captcha_size'] ) { ?>
+				if ( $display['captcha_size'] && $frm_settings->re_type != 'invisible' ) { ?>
                 <tr><td><label><?php _e( 'ReCaptcha Type', 'formidable' ) ?></label>
 					<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Set the size of the captcha field. The compact option is best if your form is in a small area.', 'formidable' ) ?>" ></span>
                     </td>
@@ -256,9 +256,6 @@ if ( $display['options'] ) { ?>
 						</option>
 						<option value="compact" <?php selected( $field['captcha_size'], 'compact' ); ?>>
 							<?php _e( 'Compact', 'formidable' ) ?>
-						</option>
-						<option value="invisible" <?php selected( $field['captcha_size'], 'invisible' ); ?>>
-							<?php _e( 'Invisible', 'formidable' ) ?>
 						</option>
                     </select>
                     </td>
