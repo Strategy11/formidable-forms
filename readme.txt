@@ -15,7 +15,7 @@ Create professional contact forms without any code. Use the built-in form style 
 
 [View form builder Documentation](https://formidableforms.com/knowledgebase/ "View form builder Documentation")
 
-= Features =
+= Form Features =
 * Create unlimited forms with all the essential field types: single line text, email, URL, paragraph text, radio, checkbox, dropdown, and reCaptcha.
 * Create forms from pre-built templates or add your own template. A free contact form template is included.
 * Send unlimited form email notifications and autoresponders.
@@ -34,7 +34,7 @@ Create professional contact forms without any code. Use the built-in form style 
 
 Formidable Forms Pro is a premium upgrade that adds multi-page forms, conditional logic, payment integrations and data management. Not only can you collect data in your forms, but you can also display it on the front-end of your site. Add the ability to input, display, edit and filter data on the front end without any additional plugins. Formidable Forms is a powerful solution for purchase forms, member directories, user registration, and more.
 
-= Pro Features =
+= Pro Form Features =
 * Over 30 field types: page breaks, section headings, repeating field groups, file uploads, rich text, number, phone number, date, time, scale, dynamic fields populated from other forms, hidden fields, user ID fields, password, HTML, tags, address, and more.
 * Multi-Page forms: Create beautiful paged forms with rootline and progress indicators. Use conditional logic on page breaks for branching forms.
 * Conditional logic: show or hide fields in your form based on user selections or the role of the user.
