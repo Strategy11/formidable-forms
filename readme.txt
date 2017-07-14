@@ -1,6 +1,6 @@
 === Formidable Forms - Form Builder for WordPress ===
 Contributors: formidableforms, sswells, srwells, jamie.wahlin
-Tags: form, contact form, form builder, custom form, forms, form maker, form creator
+Tags: contact form, form builder, custom form, forms, form, form maker, form creator
 Requires at least: 3.8
 Tested up to: 4.8
 Stable tag: 2.03.10
@@ -15,7 +15,7 @@ Create professional contact forms without any code. Use the built-in form style 
 
 [View form builder Documentation](https://formidableforms.com/knowledgebase/ "View form builder Documentation")
 
-= Form Features =
+= Form Feature List =
 * Create unlimited forms with all the essential field types: single line text, email, URL, paragraph text, radio, checkbox, dropdown, and reCaptcha.
 * Create forms from pre-built templates or add your own template. A free contact form template is included.
 * Send unlimited form email notifications and autoresponders.
