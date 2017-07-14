@@ -164,7 +164,8 @@ class FrmFieldsController {
 		do_action( 'frm_duplicate_field_' . $copy_field->type, $copy_field, $form_id );
 
 		$values = array();
-        FrmFieldsHelper::fill_field( $values, $copy_field, $form_id );
+		FrmFieldsHelper::fill_field( $values, $copy_field, $form_id );
+		$values = apply_filters( 'frm_prepare_single_field_for_duplication', $values );
 
 		$field_id = FrmField::create( $values );
 		if ( ! $field_id ) {
