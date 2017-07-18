@@ -567,9 +567,16 @@ class FrmFormsController {
 		);
 	}
 
-	public static function hidden_columns( $result ) {
-		return $result;
-    }
+	public static function hidden_columns( $hidden_columns ) {
+		$type = isset( $_REQUEST['form_type'] ) ? $_REQUEST['form_type'] : '';
+
+		if ( $type === 'template' ) {
+			$hidden_columns[] = 'id';
+			$hidden_columns[] = 'form_key';
+		}
+
+		return $hidden_columns;
+	}
 
 	public static function save_per_page( $save, $option, $value ) {
         if ( $option == 'formidable_page_formidable_per_page' ) {
@@ -731,6 +738,7 @@ class FrmFormsController {
 			$entry_shortcodes['editlink location="front" label="Edit" page_id=x'] = __( 'Edit Entry Link', 'formidable' );
 			$entry_shortcodes['evenodd'] = __( 'Even/Odd', 'formidable' );
 			$entry_shortcodes['entry_count'] = __( 'Entry Count', 'formidable' );
+			$entry_shortcodes['event_date format="Y-m-d"'] = __( 'Calendar Date', 'formidable' );
 		}
 
 		/**

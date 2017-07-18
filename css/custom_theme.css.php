@@ -18,12 +18,13 @@ $defaults = FrmStylesHelper::get_settings_for_output( $default_style );
 
 ?>
 
+.frm_form_field .grecaptcha-badge,
 .frm_hidden,
 .with_frm_style .frm_button.frm_hidden{
     display:none;
 }
 
-#frm_verify{
+form input.frm_verify{
 	display:none !important;
 }
 
@@ -825,9 +826,11 @@ select.frm_loading_lookup{
 }
 
 .frm_form_field .frm_checkbox,
-.frm_form_field .frm_radio{
-    margin-top: 0;
-    margin-bottom: 0;
+.frm_form_field .frm_checkbox + .frm_checkbox,
+.frm_form_field .frm_radio,
+.frm_form_field .frm_radio + .frm_radio{
+	margin-top: 0;
+	margin-bottom: 0;
 }
 
 .frm_form_field.frm_three_col .frm_radio,
@@ -916,20 +919,6 @@ select.frm_loading_lookup{
     -moz-box-shadow:none;
     -webkit-box-shadow:none;
     box-shadow:none;
-}
-
-.frm_text_block{
-    margin-left:20px;
-}
-
-.frm_text_block input,
-.frm_text_block label.frm_primary_label{
-    margin-left:-20px;
-}
-
-.frm_text_block .frm_checkbox input[type=checkbox],
-.frm_text_block .frm_radio input[type=radio]{
-    margin-right:4px;
 }
 
 .frm_form_field.frm_label_justify label.frm_primary_label{

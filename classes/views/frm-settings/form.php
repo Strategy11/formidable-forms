@@ -83,6 +83,16 @@
 			<p><label class="frm_left_label"><?php _e( 'Secret Key', 'formidable' ) ?></label>
 			<input type="text" name="frm_privkey" id="frm_privkey" size="42" value="<?php echo esc_attr($frm_settings->privkey) ?>" placeholder="<?php esc_attr_e( 'Optional', 'formidable' ) ?>" /></p>
 
+		    <p><label class="frm_left_label"><?php _e( 'reCAPTCHA Type', 'formidable' ) ?></label>
+			<select name="frm_re_type" id="frm_re_type">
+				<option value="" <?php selected( $frm_settings->re_type, '' ) ?>>
+					<?php esc_html_e( 'Checkbox (V2)', 'formidable' ); ?>
+				</option>
+				<option value="invisible" <?php selected( $frm_settings->re_type, 'invisible' ) ?>>
+					<?php esc_html_e( 'Invisible', 'formidable' ); ?>
+				</option>
+            </select></p>
+
 		    <p><label class="frm_left_label"><?php _e( 'reCAPTCHA Language', 'formidable' ) ?></label>
 			<select name="frm_re_lang" id="frm_re_lang">
 				<option value="" <?php selected( $frm_settings->re_lang, '' ) ?>><?php esc_html_e( 'Browser Default', 'formidable' ); ?></option>

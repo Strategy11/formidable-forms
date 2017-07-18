@@ -402,6 +402,9 @@ class FrmFormAction {
 	 * @param int $action_id
 	 */
 	public static function get_single_action_type( $action_id, $type ) {
+		if ( ! $type ) {
+			return false;
+		}
 		$action_control = FrmFormActionsController::get_form_actions( $type );
 		return $action_control->get_single_action( $action_id );
 	}

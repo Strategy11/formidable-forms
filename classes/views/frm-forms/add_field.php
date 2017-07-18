@@ -245,13 +245,18 @@ if ( $display['options'] ) { ?>
 					}
 				}
 
-				if ( $display['captcha_size'] ) { ?>
-                <tr><td><label><?php _e( 'Size', 'formidable' ) ?></label>
+				if ( $display['captcha_size'] && $frm_settings->re_type != 'invisible' ) { ?>
+                <tr><td><label><?php _e( 'ReCaptcha Type', 'formidable' ) ?></label>
 					<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Set the size of the captcha field. The compact option is best if your form is in a small area.', 'formidable' ) ?>" ></span>
                     </td>
-                    <td><select name="field_options[captcha_size_<?php echo esc_attr( $field['id'] ) ?>]">
-                        <option value="normal"<?php selected($field['captcha_size'], 'normal'); ?>><?php _e( 'Normal', 'formidable' ) ?></option>
-                        <option value="compact"<?php selected($field['captcha_size'], 'compact'); ?>><?php _e( 'Compact', 'formidable' ) ?></option>
+                    <td>
+					<select name="field_options[captcha_size_<?php echo esc_attr( $field['id'] ) ?>]">
+						<option value="normal" <?php selected( $field['captcha_size'], 'normal' ); ?>>
+							<?php _e( 'Normal', 'formidable' ) ?>
+						</option>
+						<option value="compact" <?php selected( $field['captcha_size'], 'compact' ); ?>>
+							<?php _e( 'Compact', 'formidable' ) ?>
+						</option>
                     </select>
                     </td>
                 </tr>

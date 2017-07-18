@@ -28,7 +28,26 @@ class FrmAddonsController {
 			return;
 		}
 
+		$allow_autofill = self::allow_autofill();
+
 		include( FrmAppHelper::plugin_path() . '/classes/views/addons/settings.php' );
+	}
+
+	/**
+	 * Don't allow subsite addon licenses to be fetched
+	 * unless the current user has super admin permissions
+	 *
+	 * @since 2.03.10
+	 */
+	private static function allow_autofill() {
+		$allow_autofill = FrmAppHelper::pro_is_installed();
+		if ( $allow_autofill && is_multisite() ) {
+			$sitewide_activated = get_site_option( 'frmpro-wpmu-sitewide' );
+			if ( $sitewide_activated ) {
+				$allow_autofill = current_user_can( 'setup_network' );
+			}
+		}
+		return $allow_autofill;
 	}
 
 	private static function get_api_addons() {
@@ -180,10 +199,17 @@ class FrmAddonsController {
 	}
 
 	public static function get_licenses() {
-		FrmAppHelper::permission_check('frm_change_settings');
+		$allow_autofill = self::allow_autofill();
+		$required_role = $allow_autofill ? 'setup_network' : 'frm_change_settings';
+		FrmAppHelper::permission_check( $required_role );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
-		$license = get_option('frmpro-credentials');
+		if ( is_multisite() && get_site_option( 'frmpro-wpmu-sitewide' ) ) {
+			$license = get_site_option( 'frmpro-credentials' );
+		} else {
+			$license = get_option( 'frmpro-credentials' );
+		}
+
 		if ( $license && is_array( $license ) && isset( $license['license'] ) ) {
 			$url = 'https://formidableforms.com/frm-edd-api/licenses?l=' . urlencode( base64_encode( $license['license'] ) );
 			$licenses = self::send_api_request( $url, array( 'name' => 'frm_api_licence', 'expires' => 60 * 60 * 5 ) );

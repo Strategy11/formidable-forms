@@ -26,6 +26,7 @@ class FrmSettings {
     public $pubkey;
     public $privkey;
     public $re_lang;
+	public $re_type;
     public $re_msg;
 	public $re_multi;
 
@@ -170,6 +171,10 @@ class FrmSettings {
         if ( ! isset($this->re_lang) ) {
             $this->re_lang = $re_lang;
         }
+
+		if ( ! isset( $this->re_type ) ) {
+			$this->re_type = '';
+		}
     }
 
     public function validate( $params, $errors ) {
@@ -196,6 +201,7 @@ class FrmSettings {
 
         $this->pubkey = trim($params['frm_pubkey']);
         $this->privkey = $params['frm_privkey'];
+		$this->re_type = $params['frm_re_type'];
         $this->re_lang = $params['frm_re_lang'];
 		$this->re_multi = isset( $params['frm_re_multi'] ) ? $params['frm_re_multi'] : 0;
 

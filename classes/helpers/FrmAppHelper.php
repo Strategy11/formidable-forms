@@ -4,13 +4,13 @@ if ( ! defined('ABSPATH') ) {
 }
 
 class FrmAppHelper {
-	public static $db_version = 43; //version of the database we are moving to
+	public static $db_version = 44; //version of the database we are moving to
 	public static $pro_db_version = 37; //deprecated
 
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '2.03.08b2';
+	public static $plug_version = '2.03.10';
 
     /**
      * @since 1.07.02
@@ -1744,6 +1744,8 @@ class FrmAppHelper {
 			'nonce'     => wp_create_nonce( 'frm_ajax' ),
 			'id'        => __( 'ID', 'formidable' ),
 			'no_results' => __( 'No results match', 'formidable' ),
+			'file_spam' => __( 'That file looks like Spam.', 'formidable' ),
+			'empty_fields' => __( 'Please complete the preceding required fields before uploading a file.', 'formidable' ),
 		) );
 
 		if ( $location == 'admin' ) {

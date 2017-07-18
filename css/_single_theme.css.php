@@ -447,19 +447,24 @@ $arrow_icons = FrmStylesHelper::arrow_icons();
 }
 
 /* These do not work if they are combined */
-.<?php echo esc_html( $style_class ) ?> input::placeholder{
+.<?php echo esc_html( $style_class ) ?> input::placeholder,
+.<?php echo esc_html( $style_class ) ?> textarea::placeholder{
 	color: <?php echo esc_html( $text_color_disabled . $important ) ?>;
 }
-.<?php echo esc_html( $style_class ) ?> input::-webkit-input-placeholder{
+.<?php echo esc_html( $style_class ) ?> input::-webkit-input-placeholder,
+.<?php echo esc_html( $style_class ) ?> textarea::-webkit-input-placeholder{
 	color: <?php echo esc_html( $text_color_disabled . $important ) ?>;
 }
-.<?php echo esc_html( $style_class ) ?> input::-moz-placeholder{
+.<?php echo esc_html( $style_class ) ?> input::-moz-placeholder,
+.<?php echo esc_html( $style_class ) ?> textarea::-moz-placeholder{
 	color: <?php echo esc_html( $text_color_disabled . $important ) ?>;
 }
-.<?php echo esc_html( $style_class ) ?> input:-ms-input-placeholder{
+.<?php echo esc_html( $style_class ) ?> input:-ms-input-placeholder,
+<?php echo esc_html( $style_class ) ?> textarea:-ms-input-placeholder{
 	color: <?php echo esc_html( $text_color_disabled . $important ) ?>;
 }
-.<?php echo esc_html( $style_class ) ?> input:-moz-placeholder{
+.<?php echo esc_html( $style_class ) ?> input:-moz-placeholder,
+.<?php echo esc_html( $style_class ) ?> textarea:-moz-placeholder{
 	color: <?php echo esc_html( $text_color_disabled . $important ) ?>;
 }
 
@@ -781,9 +786,15 @@ if ( ! $submit_style ) { ?>
 	padding:0<?php echo esc_html( $important ) ?>;
 }
 
-.<?php echo esc_html( $style_class ) ?> .frm_text_block input,
-.<?php echo esc_html( $style_class ) ?> .frm_text_block label.frm_primary_label{
-    margin-left:-20px;
+.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_text_block .frm_checkbox label,
+.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_text_block .frm_radio label{
+	padding-left:20px;
+	display:block;
+}
+
+.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_text_block .frm_checkbox input[type=checkbox],
+.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_text_block .frm_radio input[type=radio]{
+	margin-left:-20px;
 }
 
 .<?php echo esc_html( $style_class ) ?> .frm_button{

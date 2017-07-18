@@ -1,61 +1,76 @@
 === Formidable Forms - Form Builder for WordPress ===
 Contributors: formidableforms, sswells, srwells, jamie.wahlin
-Tags: form, contact form, form builder, custom form, forms, form maker, form creator
+Tags: contact form, form builder, custom form, forms, form, form maker, form creator
 Requires at least: 3.8
-Tested up to: 4.7.4
-Stable tag: 2.03.07
+Tested up to: 4.8
+Stable tag: 2.03.10
 
-The best WordPress form plugin. Simple drag & drop form building, visual form styling, and unlimited email notifications. 
+The best WordPress form plugin with simple drag and drop form building, a form style generator, and unlimited email notifications.
 
 == Description ==
 = WordPress Form Builder Plugin =
-Formidable Forms is a flexible and free WordPress form plugin. Easily create contact forms, polls and surveys, or lead generation forms. Start with pre-built form templates or create totally custom forms. From the smallest sidebar opt-in form to large job application forms, Formidable is built to do it all.
+Formidable Forms is a flexible and free WordPress form plugin. Easily create contact forms, polls and surveys, or lead generation forms. Start with pre-built form templates or create totally custom forms. From the smallest sidebar opt-in form to large job application forms, Formidable Forms is built to do it all. Learn more about Formidable Forms at [FormidableForms.com](https://formidableforms.com/ "FormidableForms.com")
 
-Create professional contact forms without any code. Use the built-in visual styler to instantly customize the look and feel of your forms. Additionally,  changing the form layout is simple with included layout classes. If you need more advanced customizations, you have complete access to edit the form HTML and CSS.
+Create professional contact forms without any code. Use the built-in form style generator to instantly customize the look and feel of your forms. Additionally, changing the form layout is simple with included layout classes. If you need more advanced customizations, you have complete access to edit the form HTML and CSS.
 
 [View form builder Documentation](https://formidableforms.com/knowledgebase/ "View form builder Documentation")
 
-= Features =
+= Form Feature List =
 * Create unlimited forms with all the essential field types: single line text, email, URL, paragraph text, radio, checkbox, dropdown, and reCaptcha.
-* Create forms from pre-built templates or add your own. A free contact form template is included.
-* Send unlimited email notifications.
-* Create a single styling template using the visual form styler.
+* Create forms from pre-built templates or add your own template. A free contact form template is included.
+* Send unlimited form email notifications and autoresponders.
+* Create a single form styling template using the visual form styler.
 * View form submissions from the back-end.
 * Import and export Formidable forms and templates.
 * Send forms to the trash.
 * Publish forms with an easy-to-use shortcode UI.
 * Customize the form’s success message and submit button text.
-* Use our ready-made CSS classes (or your own custom CSS classes) to arrange your fields.
+* Use our ready-made CSS classes (or your own custom CSS classes) to arrange your form fields.
 * Create multi-column forms easily.
-* Integrate with the one-click reCAPTCHA and Akismet for Spam control.
+* Integrate with the one-click reCAPTCHA and Akismet for Spam control in your contact forms.
 * Use placeholder default values in form fields that clear when clicked.
-* Direct links available for previews and emailing surveys with and without integration with your theme.
-* Change the name on the ‘Forms’ admin menu to anything you would like for white labeling.
-* Every submission is saved to your database. Even if an email fails, you won’t lose anything.
+* Direct links available for form previews and emailing surveys with and without integration with your theme.
+* Every submission is saved to your WordPress database. Even if a form email notification fails, you won’t lose anything.
 
-Formidable Forms Pro is a premium upgrade that adds multi-page forms, conditional logic, payment integrations and data management. Not only can you collect data, but you can also display it on the front-end of your site. Add the ability to input, display, edit and filter data on the front end without any additional plugins. Formidable Forms is a powerful solution for purchase forms, member directories, user registration, and more.
+Formidable Forms Pro is a premium upgrade that adds multi-page forms, conditional logic, payment integrations and data management. Not only can you collect data in your forms, but you can also display it on the front-end of your site. Add the ability to input, display, edit and filter data on the front end without any additional plugins. Formidable Forms is a powerful solution for purchase forms, member directories, user registration, and more.
 
-= Pro Features =
+= Pro Form Features =
 * Over 30 field types: page breaks, section headings, repeating field groups, file uploads, rich text, number, phone number, date, time, scale, dynamic fields populated from other forms, hidden fields, user ID fields, password, HTML, tags, address, and more.
 * Multi-Page forms: Create beautiful paged forms with rootline and progress indicators. Use conditional logic on page breaks for branching forms.
 * Conditional logic: show or hide fields in your form based on user selections or the role of the user.
-* Email routing: conditionally send multiple email notifications based on values in your form.
+* Email routing: conditionally send multiple autoresponder emails and notifications based on values in your form.
 * Calculations: create basic and complex calculations, even combine text from multiple fields.
-* Styling Templates: Create multiple styling templates and assign them to any of your forms. Need Bootstrap form styling? We’ve got you covered.
+* Form styling templates: Create multiple form styling templates and assign them to any of your forms. Need Bootstrap form styling? We’ve got you covered.
 * Entry management: Flexibly and powerfully display, edit, and delete entries from anywhere on your site, and specify who has permission to do so.
 * Views: unique to Formidable Forms is the core ability to display data in custom format.
-* Graphs and stats based on your submitted data.
+* Graphs and stats based on the data submitted in your forms.
 * Create and edit WordPress posts, pages, and even custom post types from front-end forms.
-* Front-end editing: allow users to edit their entries and posts from the front-end of your site.
+* Front end editing: allow users to edit their entries and posts from the front-end of your site.
 * Saved Drafts: logged-in users can save form progress and return later.
-* Vast add-on library: user registration, form action automation, signature, a form API, and integration with other services like PayPal, Stripe, Authorize.net, MailChimp, Aweber, Highrise, Twilio for SMS, WPML, Polylang, Bootstrap, and Zapier.
 * Form permission settings: limit form visibility based on user role.
-* Conditionally redirect after submission.
+* Conditionally redirect after form submission.
 * Prefill or prepopulate forms with user meta.
-* Export and import entries with CSV.
-* Limit number of entries per user, IP, or cookie.
+* Export and import form entries with CSV.
+* Limit number of form entries per user, IP, or cookie.
 * Import our pre-built form/view demo templates as a starting point or a final product.
 * World Class Support: if you have questions or need guidance on how to set up your application, we are happy to help. Our goal with Formidable Forms is to help you take on bigger projects, earn more clients, and grow your business.
+
+= Form add-on library =
+* [User registration](https://formidableforms.com/downloads/user-registration/ "User registration"). Register users and create subdomains when using WordPress multisite.
+* [Form action automation](https://formidableforms.com/downloads/autoresponder/ "Form action automation"). Schedule email notifications, SMS messages, and API actions.
+* [Signatures](https://formidableforms.com/downloads/signature/ "Signatures"). Add a signature field to your form. The user may write their signature with a trackpad/mouse or just type it.
+* [Formidable Forms API](https://formidableforms.com/downloads/formidable-api/ "Formidable Forms API"). Send entry results to any other site that has a Rest API. This includes the option of sending entries from one Formidable site to another.
+* [PayPal](https://formidableforms.com/downloads/paypal-standard/ "PayPal"). Automate your business by collecting instant payments from your clients. Collect information, calculate a total, and send clients on to PayPal.
+* [Stripe](https://formidableforms.com/downloads/stripe/ "Stripe"). Any Formidable forms on your site can accept credit card payments without users ever leaving your site.
+* [Authorize.net AIM](https://formidableforms.com/downloads/authorize-net-aim/ "Authorize.net AIM"). Accept one-time payments directly on your site, using Authorize.net AIM.
+* [MailChimp](https://formidableforms.com/downloads/mailchimp/ "MailChimp"). Add leads to a MailChimp mailing list when they submit forms and update their information along with the entry.
+* [Aweber](https://formidableforms.com/downloads/aweber/ "Aweber"). Subscribe users to an AWeber mailing list when they submit a form. AWeber is a powerful email marketing service.
+* [Highrise](https://formidableforms.com/downloads/highrise/ "Higrise"). Add your leads to your Highrise CRM account any time a Formidable form is submitted.
+* [Twilio for SMS](https://formidableforms.com/downloads/twilio/ "Twilio for SMS"). Allow users to text their votes for polls created by Formidable Forms, or send SMS notifications when form entries are submitted or updated.
+* [WPML](https://formidableforms.com/downloads/wp-multilingual/ "WPML"). Translate your forms into multiple languages using the Formidable-integrated WPML plugin.
+* [Polylang](https://formidableforms.com/downloads/polylang/ "Polylang"). Create bilingual or multilingual forms with help from Polylang.
+* [Bootstrap Form Styles](https://formidableforms.com/downloads/bootstrap/ "Bootstrap Form Styles"). Instantly add Bootstrap styling to all your Formidable forms.
+* [Zapier](https://formidableforms.com/downloads/zapier/ "Zapier"). Connect with hundreds of different applications through Zapier. Insert a new row in a Google docs spreadsheet, post on Twitter, or add a new Dropbox file with your form.
 
 Learn more at [Formidable Forms](https://formidableforms.com/ "Formidable Forms")
 
@@ -66,7 +81,7 @@ Learn more at [Formidable Forms](https://formidableforms.com/ "Formidable Forms"
 2. Search for 'Formidable'
 3. Click the 'Install Now' button
 4. Activate the plugin through the 'Plugins' menu
-5. Go to the Formidable menu
+5. Go to the Formidable Forms menu
 6. Click the 'Add New' button to create a new form
 7. Insert your forms on a page, post, or widget using a shortcode [formidable id=x], Alternatively use `<?php echo FrmFormsController::show_form(2, $key = '', $title=true, $description=true); ?>` in your template
 
@@ -75,28 +90,95 @@ Learn more at [Formidable Forms](https://formidableforms.com/ "Formidable Forms"
 2. Form builder page
 3. Field Options and CSS Layout Classes
 4. Field Options for checkbox fields
-5. Entry Management page
-6. Form Widget
+5. Manage form entries from the back end
+6. Add a form into your sidebar with a widget
 
 == Frequently Asked Questions ==
-= Q. Why am I not I getting any emails? =
+= Q. How do I get started with my first contact form? =
+
+A. The fastest way to build a contact form is to use our contact form template. After you activate Formidable Forms, go to the Formidable -> Forms page and click "add new". Choose the "Contact Us" template and click "Load Template". Now Save your form. 
+
+Next, go to edit the page where you would like to publish your form. Click the "Formidable" button to open the shortcode builder. Choose your form and insert it into your page. Save your page, and you're done.
+
+Get more detail on [using the contact form template](https://formidableforms.com/wordpress-contact-form-template-to-unique/ "using the contact form template") in our blog.
+
+= Q. My form is not sending emails. Why not? =
 
 A. Try the following steps:
 
-   1. Double check to make sure your email address is present and correct in the "Emails" tab on the form "Settings" page
-   2. Make sure you are receiving other emails from your site (ie comment notifications, forgot password...)
+   1. Double check to make sure your email address is present and correct in your Email form action on the form "Settings" page. The [admin_email] shortcode uses the email address from your WordPress Settings -> General page.
+   2. Make sure you are receiving other emails from your site (ie comment notifications, forgot password...). If these emails don't work on your site, form emails will not work either.
    3. Check your SPAM box
-   4. Try a different email address.
-   5. Install WP Mail SMPT or another similar plugin and configure the SMTP settings
-   6. If none of these steps fix the problem, let us know and we'll try to help you find the bottleneck.
+   4. Try a different email address in your form settings.
+   5. Install Postman SMPT or another similar plugin and configure the SMTP settings.
+   6. If none of these steps fix the problem with your form emails, and other site emails are not going out, please contact your web host. You can also [read more about WordPress emails](https://formidableforms.com/wordpress-not-sending-emails-smtp/ "read more about WordPress emails") in our blog.
 
-= Q. How do I edit the field name? =
+= Q. How do I edit the field names in my forms? =
 
 A. The field and form names and descriptions are all changed with in-place edit. Just click on the text you would like to change, and it will turn into a text field.
 
 [See more FAQs](https://formidableforms.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 2.03.10 =
+* New: Add invisible recaptcha
+* New: Add frm_form_div_attributes action
+* Enhancement: Replace is_super_admin calls per WordPress recommendations
+* Enhancement: Add duplicated field right below original instead of at the end of the form
+* Fix: When importing entries, save IP from the imported CSV
+* Fix: Fix duplicate frm_verify ID error in forms
+* Fix: Fix squished customization panel showing up when clicking into some field settings
+* Fix: Run frm_validate_entry when there are errors
+* **Pro Version** *
+* New: Add format option to Text Lookup fields
+* Enhancement: Make file upload errors translatable
+* Enhancement: Pull translations based on the user locale in the WordPress profile
+* Enhancement: Allow show=city in frm-field-value shortcode
+* Fix: Update dropdown on form builder immediately when multi-select dropdown setting is changed
+* Fix: Don’t check JavaScript validation on page load
+* Fix: Don’t force placeholders in combo fields
+* Fix: Attach files from repeating sections to emails when the option is checked
+* Fix: Update rewrite endpoints when the view parameter changes to prevent 404s
+* Fix: Assume equals=1 when is_draft shortcode is missing the equals parameter
+* Fix: Import data correctly into Lookup Checkbox fields
+
+= 2.03.09 =
+* New: Add frmStartFormLoading and frmEndFormLoading jQuery events.
+* **Pro Version** *
+* New: Add frm_set_and_or_for_lookup filter to allow for filtering lookups that match every value.
+* Fix: Do not clear field values when previous page is conditionally hidden.
+* Fix: Don't include combo field description html with empty description.
+
+= 2.03.08 =
+* New: Add frm_label_justify CSS layout class to justify text in long labels
+* Fix: Prevent XSS errors in Chrome when saving a form on the back-end
+* Fix: Remove extra space between textarea and description.
+* Fix: Resolve errors in frm_entries_footer_scripts action call.
+* Fix: Decrease size of file path for automatic updates to avoid hitting file path limits on Windows servers.
+* Fix: Improve checkbox and radio styling with Bootstrap active.
+* Fix: Remove Bootstrap error class with js validation.
+* **Pro Version** *
+* New: Add unique date/time validation back into plugin.
+* New: Add custom jQuery events that fire before form redirect (frmBeforeFormRedirect) and after deleting/adding a row (frmAfterRemoveRow/frmAfterAddRow).
+* New: Add frm_full_upload CSS Layout Class.
+* Enhancement: Remove deprecated safe_mode references.
+* Enhancement: Allow descriptions to be set in all sub fields.
+* Enhancement: Display a 0 in numeric calculations rather than a blank value.
+* Enhancement: Add [event_date] shortcode in View sidebar.
+* Enhancement: Check required fields before uploading file.
+* Enhancement: Add Parent Entry ID column to entry listing page.
+* Enhancement: Allow Formidable shortcodes as auto_id prefix or suffix.
+* Fix: Improve styling for Other text box in horizontal radio or checkbox field
+* Fix: Switch Cancel Link back to Edit after entry is updated in-place.
+* Fix: Allow quotes in update link value.
+* Fix: Prevent other option from showing when using [input opt=1].
+* Fix: Skip content shortcode checks that have already been run.
+* Fix: Do not treat 0 value as empty in conditional shortcode.
+* Fix: Calculate median properly for stats.
+* Fix: Do not rely on field order to check if a field is conditionally hidden.
+* Fix: Include the html to set a dynamic field to multiple on the form builder page.
+* Fix: Get form and section ID correctly when existing field is dragged into a section.
+* Fix: Do not replace values in fields watching Lookups on edit.
 
 = 2.03.07 =
 * New: Add frm_after_import_view hook.
@@ -212,7 +294,7 @@ A. The field and form names and descriptions are all changed with in-place edit.
 
 = 2.03 =
 * New: Add a combined list of all entries on the Formidable -> Entries page instead of defaulting to the first form
-* New: Replace submit input with button for new forms. This allows us to show the loading indicator on top of the button instead of outside. This applies to new forms only. Existing forms will need the submit button HTML adjusted to see this new styling. But we decided it was best for reverse compatability if we don't change it automatically
+* New: Replace submit input with button for new forms. This allows us to show the loading indicator on top of the button instead of outside. This applies to new forms only. Existing forms will need the submit button HTML adjusted to see this new styling. But we decided it was best for reverse compatibility if we don't change it automatically
 * New: Add frm_after_title hook for inserting content between the title and form fields
 * Enhancement: Speed up adding and editing field options and conditional logic in the form builder
 * Enhancement: Don't save the field options until the whole form is saved

@@ -51,6 +51,7 @@ class FrmFieldsHelper {
         } else if ( $type == 'captcha' ) {
             $frm_settings = FrmAppHelper::get_settings();
             $values['invalid'] = $frm_settings->re_msg;
+			$values['field_options']['label'] = 'none';
         } else if ( 'url' == $type ) {
             $values['name'] = __( 'Website', 'formidable' );
         }
@@ -491,11 +492,16 @@ DEFAULT_HTML;
         wp_register_script( 'recaptcha-api', $api_js_url, '', true );
         wp_enqueue_script( 'recaptcha-api' );
 
-		// for reverse compatability
+		// for reverse compatibility
 		$field['captcha_size'] = ( $field['captcha_size'] == 'default' ) ? 'normal' : $field['captcha_size'];
+		$field['captcha_size'] = ( $frm_settings->re_type == 'invisible' ) ? 'invisible' : $field['captcha_size'];
 
 ?>
-<div id="field_<?php echo esc_attr( $field['field_key'] ) ?>" class="<?php echo esc_attr( $class_prefix ) ?>g-recaptcha" data-sitekey="<?php echo esc_attr( $frm_settings->pubkey ) ?>" data-size="<?php echo esc_attr( $field['captcha_size'] ) ?>" data-theme="<?php echo esc_attr( $field['captcha_theme'] ) ?>"></div>
+<div id="field_<?php echo esc_attr( $field['field_key'] ) ?>" class="<?php echo esc_attr( $class_prefix ) ?>g-recaptcha" data-sitekey="<?php echo esc_attr( $frm_settings->pubkey ) ?>" data-size="<?php echo esc_attr( $field['captcha_size'] ) ?>" data-theme="<?php echo esc_attr( $field['captcha_theme'] ) ?>" <?php
+	if ( $field['captcha_size'] == 'invisible' && ! $allow_mutiple ) {
+		echo 'data-callback="frmAfterRecaptcha"';
+	}
+?>></div>
 <?php
     }
 
@@ -840,7 +846,11 @@ DEFAULT_HTML;
             }
 			unset( $autop );
 		} else if ( is_array( $replace_with ) ) {
-			$replace_with = implode( $sep, $replace_with );
+			if ( $atts['show'] && isset( $replace_with[ $atts['show'] ] ) ) {
+				$replace_with = $replace_with[ $atts['show'] ];
+			} else {
+				$replace_with = implode( $sep, $replace_with );
+			}
 		}
 
 		return $replace_with;

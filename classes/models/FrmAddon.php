@@ -91,10 +91,12 @@ class FrmAddon {
 		delete_option( $this->option_name . 'active' );
 		delete_option( $this->option_name . 'key' );
 		delete_site_transient( $this->transient_key() );
+		delete_transient('frm_api_licence');
 	}
 
 	public function set_active( $is_active ) {
 		update_option( $this->option_name . 'active', $is_active );
+		delete_transient('frm_api_licence');
 	}
 
 	public function show_license_message( $file, $plugin ) {

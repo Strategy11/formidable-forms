@@ -164,13 +164,8 @@ class FrmFieldsController {
 		do_action( 'frm_duplicate_field_' . $copy_field->type, $copy_field, $form_id );
 
 		$values = array();
-        FrmFieldsHelper::fill_field( $values, $copy_field, $form_id );
-
-		$field_count = FrmDb::get_count( $wpdb->prefix . 'frm_fields fi LEFT JOIN ' . $wpdb->prefix . 'frm_forms fr ON (fi.form_id = fr.id)', array( 'or' => 1, 'fr.id' => $form_id, 'fr.parent_form_id' => $form_id ) );
-
-        $values['field_order'] = $field_count + 1;
-
-	    $values = apply_filters( 'frm_prepare_single_field_for_duplication', $values );
+		FrmFieldsHelper::fill_field( $values, $copy_field, $form_id );
+		$values = apply_filters( 'frm_prepare_single_field_for_duplication', $values );
 
 		$field_id = FrmField::create( $values );
 		if ( ! $field_id ) {

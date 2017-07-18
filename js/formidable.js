@@ -162,13 +162,13 @@ function frmFrontFormJS(){
 			init: function() {
 				this.on('sending', function(file, xhr, formData) {
 
-					if ( ! anyPrecedingRequiredFieldsCompleted( uploadFields[i] ) ) {
+					if ( ! anyPrecedingRequiredFieldsCompleted( uploadFields[i], selector ) ) {
 						this.removeFile(file);
-						alert('Please complete the preceding required fields before uploading a file.');
+						alert(frm_js.empty_fields);
 						return false;
-					} else if ( isSpam() ) {
+					} else if ( isSpam( uploadFields[i].parentFormID ) ) {
 						this.removeFile(file);
-						alert('Oops. That file looks like Spam.');
+						alert(frm_js.file_spam);
 						return false;
 					} else {
 						formData.append('action', 'frm_submit_dropzone' );
@@ -248,8 +248,8 @@ function frmFrontFormJS(){
 		});
 	}
 
-	function isSpam() {
-		if ( isHoneypotSpam() || isHeadless() ) {
+	function isSpam( formID ) {
+		if ( isHoneypotSpam( formID ) || isHeadless() ) {
 			return true;
 		} else {
 			return false;
@@ -263,8 +263,8 @@ function frmFrontFormJS(){
 	 *
 	 * @returns {boolean}
 	 */
-	function isHoneypotSpam() {
-		var val = document.getElementById('frm_verify').value;
+	function isHoneypotSpam( formID ) {
+		var val = document.getElementById('frm_verify_'+formID).value;
 
 		return val !== '';
 	}
@@ -289,9 +289,8 @@ function frmFrontFormJS(){
 	 * @param {string} uploadField.fieldID
 	 * @returns {boolean}
 	 */
-	function anyPrecedingRequiredFieldsCompleted( uploadField ) {
-		var fileSelector = uploadField.htmlID + '_dropzone';
-		var dropzoneDiv = jQuery( '#' + fileSelector );
+	function anyPrecedingRequiredFieldsCompleted( uploadField, fileSelector ) {
+		var dropzoneDiv = jQuery( fileSelector );
 		var form = dropzoneDiv.closest( 'form' );
 
 		if ( form.length < 1 ) {
@@ -299,7 +298,7 @@ function frmFrontFormJS(){
 		}
 
 		var requiredFields = jQuery(form).find(
-			'.frm_required_field:visible input, .frm_required_field:visible select, .frm_required_field:visible textarea, #' + fileSelector
+			'.frm_required_field:visible input, .frm_required_field:visible select, .frm_required_field:visible textarea, ' + fileSelector
 		);
 
 		if ( requiredFields.length < 1 ) {
@@ -308,7 +307,7 @@ function frmFrontFormJS(){
 			var fieldsComplete = true;
 
 			for ( var r = 0, rl = requiredFields.length; r < rl; r++ ) {
-				if ( requiredFields[r].id === fileSelector ) {
+				if ( '#' + requiredFields[r].id === fileSelector ) {
 					break;
 				}
 
@@ -424,7 +423,9 @@ function frmFrontFormJS(){
 		var originalEvent = getOriginalEvent( e );
 		checkFieldsWatchingLookup( field_id, jQuery(this), originalEvent );
 		doCalculation(field_id, jQuery(this));
-		maybeValidateChange( field_id, this );
+		if ( e.selfTriggered !== true ) {
+			maybeValidateChange( field_id, this );
+		}
 	}
 
 	function maybeValidateChange( field_id, field ) {
@@ -2785,9 +2786,11 @@ function frmFrontFormJS(){
 			}
 		}
 
-		if ( totalField.val() != total ) {
+		if ( totalField.val() !== total ) {
 			totalField.val(total);
-			triggerChange( totalField, field_key );
+			if ( triggerField === null || totalField.attr('name') != triggerField.attr('name') ) {
+				triggerChange( totalField, field_key );
+			}
 		}
 	}
 
@@ -3424,6 +3427,31 @@ function frmFrontFormJS(){
 		return errors;
 	}
 
+	function hasInvisibleRecaptcha( object ) {
+		if ( goingToPrevPage( object ) ) {
+			return false;
+		}
+
+		var recaptcha = jQuery(object).find('.frm-g-recaptcha[data-size="invisible"], .g-recaptcha[data-size="invisible"]');
+		if ( recaptcha.length ) {
+			var recaptchaID = recaptcha.data('rid');
+			var alreadyChecked = grecaptcha.getResponse( recaptchaID );
+			if ( alreadyChecked.length === 0 ) {
+				return recaptcha;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
+
+	function executeInvisibleRecaptcha( invisibleRecaptcha ) {
+		var recaptchaID = invisibleRecaptcha.data('rid');
+		grecaptcha.reset( recaptchaID );
+		grecaptcha.execute( recaptchaID );
+	}
+
 	function validateRecaptcha( form, errors ) {
 		var $recaptcha = jQuery(form).find('.frm-g-recaptcha');
 		if ( $recaptcha.length ) {
@@ -3629,12 +3657,12 @@ function frmFrontFormJS(){
 	}
 
 	function removeFieldError( $fieldCont ) {
-		$fieldCont.removeClass('frm_blank_field');
+		$fieldCont.removeClass('frm_blank_field has-error');
 		$fieldCont.find('.frm_error').remove();
 	}
 
 	function removeAllErrors() {
-		jQuery('.form-field').removeClass('frm_blank_field');
+		jQuery('.form-field').removeClass('frm_blank_field has-error');
 		jQuery('.form-field .frm_error').replaceWith('');
 		jQuery('.frm_error_style').remove();
 	}
@@ -3646,19 +3674,23 @@ function frmFrontFormJS(){
 		}
 	}
 
-	function showSubmitLoading( object ) {
-		if ( !object.hasClass('frm_loading_form') ) {
-			object.addClass('frm_loading_form');
+	function showSubmitLoading( $object ) {
+		if ( !$object.hasClass('frm_loading_form') ) {
+			$object.addClass('frm_loading_form');
+
+			$object.trigger( 'frmStartFormLoading' );
 		}
 
-		disableSubmitButton( object );
+		disableSubmitButton( $object );
 	}
 
-	function removeSubmitLoading( object, enable ) {
-		object.removeClass('frm_loading_form');
+	function removeSubmitLoading( $object, enable ) {
+		$object.removeClass('frm_loading_form');
+
+		$object.trigger( 'frmEndFormLoading' );
 
 		if ( enable == 'enable' ) {
-			enableSubmitButton( object );
+			enableSubmitButton( $object );
 		}
 	}
 
@@ -4105,7 +4137,10 @@ function frmFrontFormJS(){
 						container.fadeOut('slow', function(){
 							container.remove();
 						});
+
 						jQuery(document.getElementById('frm_delete_'+entry_id)).fadeOut('slow');
+						jQuery( document ).trigger( 'frmEntryDeleted', [ entry_id ] );
+
 					}else{
 						jQuery(document.getElementById('frm_delete_'+entry_id)).replaceWith(html);
 					}
@@ -4467,13 +4502,25 @@ function frmFrontFormJS(){
 			addKeysFallbackForIE8();
 		},
 
+		afterSingleRecaptcha: function(token){
+			var object = jQuery('.frm-show-form .g-recaptcha').closest('form')[0];
+			frmFrontForm.submitFormNow( object );
+		},
+
+		afterRecaptcha: function(token, formID){
+			var object = jQuery('#frm_form_'+ formID +'_container form')[0];
+			frmFrontForm.submitFormNow( object );
+		},
+
 		submitForm: function(e){
 			frmFrontForm.submitFormManual( e, this );
 		},
 
 		submitFormManual: function(e, object){
+			var invisibleRecaptcha = hasInvisibleRecaptcha(object);
+
 			var classList = object.className.trim().split(/\s+/gi);
-			if ( classList ) {
+			if ( classList && invisibleRecaptcha.length < 1 ) {
 				var isPro = classList.indexOf('frm_pro_form') > -1;
 				if ( ! isPro ) {
 					return;
@@ -4485,24 +4532,35 @@ function frmFrontFormJS(){
 			}
 
 			e.preventDefault();
-			var errors = frmFrontForm.validateFormSubmit( object );
 
-			if ( Object.keys(errors).length === 0 ) {
-				showSubmitLoading( jQuery(object) );
+			if ( invisibleRecaptcha.length ) {
+				executeInvisibleRecaptcha( invisibleRecaptcha );
+			} else {
 
-				if ( classList.indexOf('frm_ajax_submit') > -1 ) {
-					var hasFileFields = jQuery(object).find('input[type="file"]').filter(function () {
-						return !!this.value;
-					}).length;
-					if ( hasFileFields < 1 ) {
-						action = jQuery(object).find('input[name="frm_action"]').val();
-						frmFrontForm.checkFormErrors( object, action );
-					} else {
-						object.submit();
-					}
+				var errors = frmFrontForm.validateFormSubmit( object );
+
+				if ( Object.keys(errors).length === 0 ) {
+					showSubmitLoading( jQuery(object) );
+
+					frmFrontForm.submitFormNow( object, classList );
+				}
+			}
+		},
+
+		submitFormNow: function(object) {
+			var classList = object.className.trim().split(/\s+/gi);
+			if ( classList.indexOf('frm_ajax_submit') > -1 ) {
+				var hasFileFields = jQuery(object).find('input[type="file"]').filter(function () {
+					return !!this.value;
+				}).length;
+				if ( hasFileFields < 1 ) {
+					action = jQuery(object).find('input[name="frm_action"]').val();
+					frmFrontForm.checkFormErrors( object, action );
 				} else {
 					object.submit();
 				}
+			} else {
+				object.submit();
 			}
 		},
 
@@ -4724,13 +4782,26 @@ jQuery(document).ready(function($){
 function frmRecaptcha() {
 	var captchas = jQuery('.frm-g-recaptcha');
 	for ( var c = 0, cl = captchas.length; c < cl; c++ ) {
-		var recaptchaID = grecaptcha.render( captchas[c].id, {
+		var size = captchas[c].getAttribute('data-size');
+		var params = {
 			'sitekey': captchas[c].getAttribute('data-sitekey'),
-			'size': captchas[c].getAttribute('data-size'),
+			'size': size,
 			'theme': captchas[c].getAttribute('data-theme')
-		} );
+		};
+		if ( size == 'invisible' ) {
+			var formID = jQuery(captchas[c]).closest('form').find('input[name="form_id"]').val();
+			params.callback = function(token) {
+				frmFrontForm.afterRecaptcha(token, formID)
+			};
+		}
+		var recaptchaID = grecaptcha.render( captchas[c].id, params );
+
 		captchas[c].setAttribute('data-rid', recaptchaID);
 	}
+}
+
+function frmAfterRecaptcha(token){
+	frmFrontForm.afterSingleRecaptcha(token);
 }
 
 function frmUpdateField(entry_id,field_id,value,message,num){

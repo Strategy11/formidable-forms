@@ -1,5 +1,5 @@
 <div class="general_settings metabox-holder tabs-panel frm_license_box <?php echo ($a == 'general_settings') ? 'frm_block' : 'frm_hidden'; ?>">
-<?php if ( ! is_multisite() || is_super_admin() ) { ?>
+<?php if ( ! is_multisite() || current_user_can( 'setup_network' ) ) { ?>
     <div class="postbox">
         <div class="inside">
 			<p class="alignright"><?php printf( __( '%1$sClick here%2$s to get it now', 'formidable' ), '<a href="' . esc_url( FrmAppHelper::make_affiliate_url( 'https://formidableforms.com' ) ) . '">', '</a>' ) ?> &#187;</p>

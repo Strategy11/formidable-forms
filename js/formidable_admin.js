@@ -487,13 +487,14 @@ function frmAdminBuildJS(){
 	}
 
 	function duplicateField(){
-		var field_id = jQuery(this).closest('li').data('fid');
+		var thisField = jQuery(this).closest('li');
+		var field_id = thisField.data('fid');
 		var children = fieldsInSection(field_id);
 		jQuery.ajax({
 			type:'POST',url:ajaxurl,
 			data:{action:'frm_duplicate_field', field_id:field_id, form_id:this_form_id, children:children, nonce:frmGlobal.nonce},
 			success:function(msg){
-				jQuery(document.getElementById('new_fields')).append(msg);
+				thisField.after(msg);
 			}
 		});
 		return false;
@@ -674,6 +675,15 @@ function frmAdminBuildJS(){
 			type:'POST',url:ajaxurl,
 			data:{action:'frm_update_ajax_option', field:field_id, separate_value:'1', nonce:frmGlobal.nonce}
 		});
+	}
+
+	function toggleMultiselect() {
+		var dropdown = jQuery(this).closest('li').find('.frm_form_fields select');
+		if( this.checked ){
+			dropdown.attr('multiple', 'multiple');
+		}else{
+			dropdown.removeAttr('multiple');
+		}
 	}
 
 	function showDefaults(n,fval){
@@ -1918,7 +1928,7 @@ function frmAdminBuildJS(){
 					id = jQuery.trim(d);
 				}
 				c = c+' '+d;
-				c = c.replace('widefat', '');
+				c = c.replace('widefat', '').replace('frm_with_left_label', '');
 			}
 		}
 
@@ -2492,6 +2502,7 @@ function frmAdminBuildJS(){
 			$newFields.on('change', 'select[name^="field_options[data_type_"]', maybeClearWatchFields );
 
 			$newFields.on('click', '.frm_toggle_sep_values', toggleSepValues);
+			$newFields.on('click', '.frm_multiselect_opt', toggleMultiselect);
 			$newFields.on('click', '.frm_delete_field', clickDeleteField);
 			$newFields.on('click', '.frm_single_option .frm_delete_icon', deleteFieldOption);
             $newFields.on('click', '.frm_add_opt', addFieldOption);
