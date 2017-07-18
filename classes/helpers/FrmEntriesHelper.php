@@ -487,37 +487,4 @@ class FrmEntriesHelper {
 		return $content;
     }
 
-	public static function fill_entry_values( $atts, $f, array &$values ) {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmEntryFormat::fill_entry_values' );
-		FrmEntryFormat::fill_entry_values( $atts, $f, $values );
-	}
-
-	public static function flatten_multi_file_upload( &$val, $field ) {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmEntryFormat::flatten_multi_file_upload' );
-		FrmEntryFormat::flatten_multi_file_upload( $field, $val );
-	}
-
-	public static function textarea_display_value() {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'custom code' );
-	}
-
-	public static function fill_entry_user_info( $atts, array &$values ) {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmEntryFormat::fill_entry_user_info' );
-		FrmEntryFormat::fill_entry_user_info( $atts, $values );
-	}
-
-	public static function get_entry_description_data( $atts ) {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmEntryFormat::get_entry_description_data' );
-		return FrmEntryFormat::get_entry_description_data( $atts );
-	}
-
-	public static function convert_entry_to_content( $values, $atts, array &$content ) {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmEntryFormat::convert_entry_to_content' );
-		FrmEntryFormat::convert_entry_to_content( $values, $atts, $content );
-	}
-
-	public static function get_browser( $u_agent ) {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmEntryFormat::get_browser' );
-		return FrmEntryFormat::get_browser( $u_agent );
-	}
 }

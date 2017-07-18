@@ -8,7 +8,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 	protected $contact_form_field_count = 10;
 
 	protected $all_fields_form_key = 'all_field_types';
-	protected $all_field_types_count = 47;
+	protected $all_field_types_count = 48;
 
 	protected $repeat_sec_form_key = 'rep_sec_form';
 	protected $create_post_form_key = 'create-a-post';
@@ -111,15 +111,17 @@ class FrmUnitTest extends WP_UnitTestCase {
 
 		$_REQUEST['csv_files'] = 1;
 		foreach ( $file_urls as $values ) {
-			$media_id = FrmProFileImport::import_attachment( $values['val'], $values['field'] );
+			$media_ids = FrmProFileImport::import_attachment( $values['val'], $values['field'] );
 
-			if ( ! is_array( $values['val'] ) ) {
-				$this->assertTrue( is_numeric( $media_id ), 'The following file is not importing correctly: ' . $values[ 'val' ] );
+			if ( is_array( $values['val']) ) {
+				$media_ids = explode(',', $media_ids );
+			} else {
+				$this->assertTrue( is_numeric( $media_ids ), 'The following file is not importing correctly: ' . $values[ 'val' ] );
 			}
 
 			// Insert into entries
 			$entry_id = FrmEntry::get_id_by_key( $values['entry'] );
-			FrmEntryMeta::add_entry_meta( $entry_id, $values['field']->id, null, $media_id );
+			FrmEntryMeta::add_entry_meta( $entry_id, $values['field']->id, null, $media_ids );
 		}
 	}
 

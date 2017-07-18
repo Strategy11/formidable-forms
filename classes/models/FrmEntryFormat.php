@@ -1,111 +1,774 @@
 <?php
 
 class FrmEntryFormat {
-	public static function show_entry( $atts ) {
-		$atts = shortcode_atts( array(
-			'id' => false, 'entry' => false, 'fields' => false, 'plain_text' => false,
-			'user_info' => false, 'include_blank' => false, 'default_email' => false,
-			'form_id' => false, 'format' => 'text', 'direction' => 'ltr',
-			'font_size' => '', 'text_color' => '',
-			'border_width' => '', 'border_color' => '',
-			'bg_color' => '', 'alt_bg_color' => '',
-			'clickable' => false,
-			'exclude_fields' => '', 'include_fields' => '',
-			'include_extras' => '', 'inline_style' => 1,
-		), $atts );
 
-		$atts['exclude_fields'] = self::comma_list_to_array( $atts['exclude_fields'] );
-		$atts['include_fields'] = self::comma_list_to_array( $atts['include_fields'] );
-		$atts['include_extras'] = self::comma_list_to_array( $atts['include_extras'] );
+	/**
+	 * @var stdClass
+	 * @since 2.03.11
+	 */
+	protected $entry = null;
 
-		if ( $atts['format'] != 'text' ) {
-			//format options are text, array, or json
-			$atts['plain_text'] = true;
+	/**
+	 * @var FrmEntryValues
+	 * @since 2.03.11
+	 */
+	protected $entry_values = null;
+
+	/**
+	 * @var bool
+	 * @since 2.03.11
+	 */
+	protected $is_plain_text = false;
+
+	/**
+	 * @var bool
+	 * @since 2.03.11
+	 */
+	protected $include_user_info = false;
+
+	/**
+	 * @var bool
+	 * @since 2.03.11
+	 */
+	protected $include_blank = false;
+
+	/**
+	 * @var string
+	 * @since 2.03.11
+	 */
+	protected $format = 'text';
+
+	/**
+	 * @var string
+	 * @since 2.03.11
+	 */
+	protected $direction = 'ltr';
+
+	/**
+	 * @var array
+	 * @since 2.03.11
+	 */
+	protected $style_settings = array();
+
+	/**
+	 * @var bool
+	 * @since 2.03.11
+	 */
+	protected $use_inline_style = true;
+
+	/**
+	 * @var bool
+	 * @since 2.03.11
+	 */
+	protected $is_clickable = false;
+
+	/**
+	 * @var array
+	 * @since 2.03.11
+	 */
+	protected $include_extras = array();
+
+	/**
+	 * @var bool
+	 * @since 2.03.11
+	 */
+	protected $odd = false;
+
+	/**
+	 * @var string
+	 * @since 2.03.11
+	 */
+	protected $table_style = '';
+
+	/**
+	 * @var string
+	 * @since 2.03.11
+	 */
+	protected $td_style = '';
+
+	/**
+	 * @var array
+	 * @since 2.03.11
+	 */
+	protected $skip_fields = array( 'captcha' );
+
+	/**
+	 * FrmEntryFormat constructor
+	 *
+	 * @since 2.03.11
+	 *
+	 * @param $atts
+	 */
+	public function __construct( $atts ) {
+		$this->set_entry( $atts );
+
+		if ( $this->entry === null || $this->entry === false ) {
+			return;
 		}
 
-		if ( is_object( $atts['entry'] ) && ! isset( $atts['entry']->metas ) ) {
-			// if the entry does not include metas, force it again
-			$atts['entry'] = false;
-		}
+		$this->set_entry_values( $atts );
 
-		if ( ! $atts['entry'] || ! is_object( $atts['entry'] ) ) {
-			if ( ! $atts['id'] && ! $atts['default_email'] ) {
-				return '';
+		$this->set_format( $atts );
+		$this->set_is_plain_text( $atts );
+		$this->set_include_blank( $atts );
+		$this->set_direction( $atts );
+		$this->set_include_user_info( $atts );
+
+		if ( $this->format === 'text' && $this->is_plain_text === false ) {
+			$this->set_style_settings( $atts );
+			$this->set_use_inline_style( $atts );
+			$this->set_table_style();
+			$this->set_td_style();
+			$this->set_is_clickable( $atts );
+		}
+	}
+
+	/**
+	 * Set the entry property
+	 *
+	 * @since 2.03.11
+	 *
+	 * @param array $atts
+	 */
+	protected function set_entry( $atts ) {
+		if ( is_object( $atts['entry'] ) ) {
+
+			if ( isset( $atts['entry']->metas ) ) {
+				$this->entry = $atts[ 'entry' ];
+			} else {
+				$this->entry = FrmEntry::getOne( $atts['entry']->id, true );
 			}
 
-			if ( $atts['id'] ) {
-				$atts['entry'] = FrmEntry::getOne( $atts['id'], true );
+		} else if ( $atts['id'] ) {
+			$this->entry = FrmEntry::getOne( $atts['id'], true );
+		}
+	}
+
+	/**
+	 * Get the entry property
+	 *
+	 * @since 2.03.11
+	 */
+	protected function get_entry() {
+		return $this->entry;
+	}
+
+	/**
+	 * Set the entry values property
+	 *
+	 * @since 2.03.11
+	 *
+	 * @param array $atts
+	 */
+	protected function set_entry_values( $atts ) {
+		$this->entry_values = new FrmEntryValues( $this->entry->id, $atts );
+	}
+
+	/**
+	 * Set the format property
+	 *
+	 * @since 2.03.11
+	 *
+	 * @param array $atts
+	 */
+	protected function set_format( $atts ) {
+		if ( isset( $atts['format'] ) && in_array( $atts['format'], array( 'text', 'json', 'array' ) ) ) {
+			$this->format = $atts['format'];
+		}
+	}
+
+	/**
+	 * Set the is_plain_text property
+	 *
+	 * @since 2.03.11
+	 *
+	 * @param array $atts
+	 */
+	protected function set_is_plain_text( $atts ) {
+		if ( isset( $atts['plain_text'] ) && $atts['plain_text'] ) {
+			$this->is_plain_text = true;
+		} else if ( $this->format !== 'text' ) {
+			$this->is_plain_text = true;
+		}
+	}
+
+	/**
+	 * Set the include_blank property
+	 *
+	 * @since 2.03.11
+	 *
+	 * @param array $atts
+	 */
+	protected function set_include_blank( $atts ) {
+		if ( isset( $atts['include_blank'] ) && $atts['include_blank'] ) {
+			$this->include_blank = true;
+		}
+	}
+
+	/**
+	 * Set the direction property
+	 *
+	 * @since 2.03.11
+	 *
+	 * @param array $atts
+	 */
+	protected function set_direction( $atts ) {
+		if ( isset( $atts['direction'] ) && $atts['direction'] === 'rtl' ) {
+			$this->direction = 'rtl';
+		}
+	}
+
+	/**
+	 * Set the include_user_info property
+	 *
+	 * @since 2.03.11
+	 *
+	 * @param array $atts
+	 */
+	protected function set_include_user_info( $atts ) {
+		if ( isset( $atts['user_info'] ) && $atts['user_info'] ) {
+			$this->include_user_info = true;
+		}
+	}
+
+	/**
+	 * Set the style_settings property
+	 *
+	 * @since 2.03.11
+	 *
+	 * @param array $atts
+	 */
+	protected function set_style_settings( $atts ) {
+		$this->style_settings = self::generate_style_settings();
+
+		foreach ( $this->style_settings as $key => $setting ) {
+			if ( isset( $atts[ $key ] ) && $atts[ $key ] !== '' ) {
+				$this->style_settings[ $key ] = str_replace( '#', '', $atts[ $key ] );
 			}
 		}
+	}
 
-		if ( $atts['entry'] ) {
-			$atts['form_id'] = $atts['entry']->form_id;
-			$atts['id'] = $atts['entry']->id;
+	/**
+	 * Set the use_inline_style property
+	 *
+	 * @since 2.03.11
+	 *
+	 * @param array $atts
+	 */
+	protected function set_use_inline_style( $atts ) {
+		if ( isset( $atts['inline_style'] ) && ! $atts['inline_style'] ) {
+			$this->use_inline_style = false;
 		}
+	}
 
-		if ( ! $atts['fields'] || ! is_array( $atts['fields'] ) ) {
-			$atts['fields'] = FrmField::get_all_for_form( $atts['form_id'], '', 'include' );
+	/**
+	 * Set the table_style property
+	 *
+	 * @since 2.03.11
+	 */
+	protected function set_table_style() {
+		if ( $this->use_inline_style === true ) {
+			$this->table_style = self::generate_table_style( $this->style_settings );
 		}
+	}
 
-		$values = array();
-		foreach ( $atts['fields'] as $f ) {
-			if ( ! self::skip_field( $atts, $f ) ) {
-				self::fill_entry_values( $atts, $f, $values );
-			}
-			unset($f);
+	/**
+	 * Set the td_style property
+	 *
+	 * @since 2.03.11
+	 */
+	protected function set_td_style() {
+		if ( $this->use_inline_style === true ) {
+			$this->td_style = self::generate_td_style( $this->style_settings, $this->direction );
 		}
+	}
 
-		self::fill_entry_user_info( $atts, $values );
-		$values = apply_filters( 'frm_show_entry_array', $values, $atts );
+	/**
+	 * Set the is_clickable property
+	 *
+	 * @since 2.03.11
+	 *
+	 * @param array $atts
+	 */
+	protected function set_is_clickable( $atts ) {
+		if ( isset( $atts['clickable'] ) && $atts['clickable'] ) {
+			$this->is_clickable = true;
+		}
+	}
 
-		if ( $atts['format'] == 'json' ) {
-			$content = json_encode( $values );
-		} else if ( $atts['format'] == 'array' ) {
-			$content = $values;
+	/**
+	 * Package and return the formatted entry values
+	 *
+	 * @since 2.03.11
+	 *
+	 * @return array|string
+	 */
+	public function formatted_entry_values() {
+		if ( $this->format == 'json' ) {
+			$content = json_encode( $this->prepare_array_output() );
+
+		} else if ( $this->format == 'array' ) {
+			$content = $this->prepare_array_output();
+
 		} else {
-			$content = array();
-			self::prepare_text_output( $values, $atts, $content );
+			$content = $this->prepare_text_output();
+
 		}
 
 		return $content;
 	}
 
-	private static function comma_list_to_array( $list ) {
-		$array = array_map( 'strtolower', array_map( 'trim', explode( ',', $list ) ) );
-		$field_types = array(
-			'section' => 'divider',
-			'heading' => 'divider',
-			'page'    => 'break',
-		);
-		foreach ( $field_types as $label => $field_type ) {
-			if ( in_array( $label, $array ) ) {
-				$array[] = $field_type;
+	/**
+	 * Flatten an array
+	 *
+	 * @since 2.03.11
+	 *
+	 * @param array|string $value
+	 */
+	protected function flatten_array( &$value ) {
+		if ( is_array( $value ) ) {
+			$value = implode( ', ', $value );
+		}
+	}
+
+	/**
+	 * Strip HTML if from email value if plain text is selected
+	 *
+	 * @since 2.0.21
+	 *
+	 * @param mixed $value
+	 */
+	protected function strip_html( &$value ) {
+		if ( $this->is_plain_text && ! is_array( $value ) ) {
+			if ( strpos( $value, '<img' ) !== false ) {
+				$value = str_replace( array( '<img', 'src=', '/>', '"' ), '', $value );
+				$value = trim( $value );
+			}
+			$value = strip_tags( $value );
+		}
+	}
+
+	/**
+	 * Prepare the text output
+	 *
+	 * @since 2.03.11
+	 *
+	 * @return string
+	 */
+	protected function prepare_text_output() {
+		if ( $this->is_plain_text ) {
+			$content = $this->plain_text_content();
+		} else {
+			$content = $this->html_content();
+		}
+
+		return $content;
+	}
+
+	/**
+	 * Prepare the array output
+	 *
+	 * @since 2.03.11
+	 *
+	 * @return array
+	 */
+	protected function prepare_array_output() {
+		$array_output = array();
+
+		$this->push_field_values_to_array( $this->entry_values->get_field_values(), $array_output );
+
+		return $array_output;
+	}
+
+	/**
+	 * Push field values to array content
+	 *
+	 * @since 2.03.11
+	 *
+	 * @param array $field_values
+	 * @param array $output
+	 */
+	protected function push_field_values_to_array( $field_values, &$output ) {
+		foreach ( $field_values as $field_info ) {
+			$this->push_single_field_to_array( $field_info, $output );
+		}
+	}
+
+	/**
+	 * Push a single field to the array content
+	 *
+	 * @since 2.03.11
+	 *
+	 * @param array $field_info
+	 * @param array $output
+	 */
+	protected function push_single_field_to_array( $field_info, &$output ) {
+		$field_key = $field_info['field_key'];
+
+		if ( $this->include_field_in_content( $field_info ) ) {
+
+			$displayed_value = $this->filter_display_value( $field_info['displayed_value'] );
+
+			$output[ $field_key ] = $displayed_value;
+
+			if ( $displayed_value !== $field_info['saved_value'] ) {
+				$output[ $field_key . '-value' ] = $field_info['saved_value'];
 			}
 		}
-		return $array;
 	}
 
-	private static function skip_field( $atts, $field ) {
-		$skip = ( $field->type == 'password' || $field->type == 'credit_card' );
-
-		if ( $skip && ! empty( $atts['include_extras'] ) ) {
-			$skip = ! in_array( $field->type, $atts['include_extras'] );
+	/**
+	 * Filter the displayed value
+	 *
+	 * @since 2.03.11
+	 *
+	 * @param mixed $value
+	 *
+	 * @return mixed|string
+	 */
+	private function filter_display_value( $value ) {
+		if ( $this->is_plain_text && ! is_array( $value ) ) {
+			if ( strpos( $value, '<img' ) !== false ) {
+				$value = str_replace( array( '<img', 'src=', '/>', '"' ), '', $value );
+				$value = trim( $value );
+			}
+			$value = strip_tags( $value );
 		}
 
-		if ( ! $skip && ! empty( $atts['exclude_fields'] ) ) {
-			$skip = self::field_in_list( $field, $atts['exclude_fields'] );
-		}
-
-		if ( $skip && ! empty( $atts['include_fields'] ) ) {
-			$skip = ! self::field_in_list( $field, $atts['include_fields'] );
-		}
-
-		return $skip;
+		return $value;
 	}
 
-	private static function field_in_list( $field, $list ) {
-		return ( in_array( $field->id, $list ) || in_array( $field->field_key, $list ) );
+	/**
+	 * Return the formatted plain text content
+	 *
+	 * @since 2.03.11
+	 *
+	 * @return string
+	 */
+	protected function plain_text_content() {
+		$content = '';
+
+		foreach ( $this->entry_values->get_field_values() as $field_id => $field_information ) {
+			$this->add_field_value_to_plain_text_content( $field_information, $content );
+		}
+
+		$this->add_user_info_to_plain_text_content( $content );
+
+		return $content;
 	}
+
+	/**
+	 * Return the formatted HTML entry content
+	 *
+	 * @since 2.03.11
+	 *
+	 * @return string
+	 */
+	protected function html_content() {
+		$content = '<table cellspacing="0"' . $this->table_style . '><tbody>' . "\r\n";
+
+		$this->odd = true;
+
+		foreach ( $this->entry_values->get_field_values() as $field_id => $field_info ) {
+			$this->add_field_value_to_html_table( $field_info, $content );
+		}
+
+		$this->add_user_info_to_html_table( $content );
+
+		$content .= '</tbody></table>';
+
+		if ( $this->is_clickable ) {
+			$content = make_clickable( $content );
+		}
+
+		return $content;
+	}
+
+	/**
+	 * Add a field value to plain text content
+	 *
+	 * @since 2.03.11
+	 *
+	 * @param array $field_info
+	 * @param array $content
+	 */
+	protected function add_field_value_to_plain_text_content( $field_info, &$content ) {
+		if ( ! $this->include_field_in_content( $field_info ) ) {
+			return;
+		}
+
+		$this->add_plain_text_row( $field_info['label'], $field_info['displayed_value'], $content );
+	}
+
+	/**
+	 * Add a row of values to the plain text content
+	 *
+	 * @since 2.03.11
+	 *
+	 * @param string $label
+	 * @param mixed $display_value
+	 * @param string $content
+	 */
+	protected function add_plain_text_row( $label, $display_value, &$content ) {
+		$this->prepare_display_value_for_plain_text_content( $display_value );
+
+		if ( 'rtl' == $this->direction ) {
+			$content .= $display_value . ' :' . $label . "\r\n";
+		} else {
+			$content .= $label . ': ' . $display_value . "\r\n";
+		}
+	}
+
+	/**
+	 * Add a field value to the HTML table content
+	 *
+	 * @since 2.03.11
+	 *
+	 * @param array $field_info
+	 * @param string $content
+	 */
+	protected function add_field_value_to_html_table( $field_info, &$content ) {
+		if ( ! $this->include_field_in_content( $field_info ) ) {
+			return;
+		}
+
+		$display_value = $this->prepare_display_value_for_html_table( $field_info['displayed_value'], $field_info['type'] );
+		$this->add_html_row( $field_info['label'], $display_value, $content );
+	}
+
+	/**
+	 * Add user info to an HTML table
+	 *
+	 * @since 2.03.11
+	 *
+	 * @param string $content
+	 */
+	protected function add_user_info_to_html_table( &$content ) {
+		if ( $this->include_user_info ) {
+
+			foreach ( $this->entry_values->get_user_info() as $user_info ) {
+				$value = $this->prepare_display_value_for_html_table( $user_info['value'] );
+
+				$this->add_html_row( $user_info['label'], $value, $content );
+			}
+
+		}
+	}
+
+	/**
+	 * Add user info to plain text content
+	 *
+	 * @since 2.03.11
+	 *
+	 * @param string $content
+	 */
+	protected function add_user_info_to_plain_text_content( &$content ) {
+		if ( $this->include_user_info ) {
+
+			foreach ( $this->entry_values->get_user_info() as $user_info ) {
+				$this->add_plain_text_row( $user_info['label'], $user_info['value'], $content );
+			}
+
+		}
+	}
+
+	/**
+	 * Check if a field should be included in the content
+	 *
+	 * @since 2.03.11
+	 *
+	 * @param array $field_info
+	 *
+	 * @return bool
+	 */
+	protected function include_field_in_content( $field_info ) {
+		$include = true;
+
+		if ( $this->is_extra_field( $field_info ) ) {
+
+			$include = $this->is_extra_field_included( $field_info );
+
+		} else if ( $field_info['displayed_value'] === '' || empty( $field_info['displayed_value'] ) ) {
+
+			if ( ! $this->include_blank ) {
+				$include = false;
+			}
+		}
+
+		return $include;
+	}
+
+	/**
+	 * Check if a field is normally a skipped type
+	 *
+	 * @since 2.03.11
+	 *
+	 * @param array $field_info
+	 *
+	 * @return bool
+	 */
+	protected function is_extra_field( $field_info ) {
+		return in_array( $field_info['type'], $this->skip_fields );
+	}
+
+	/**
+	 * Check if an extra field is included
+	 *
+	 * @since 2.03.11
+	 *
+	 * @param array $field_info
+	 *
+	 * @return bool
+	 */
+	protected function is_extra_field_included( $field_info ) {
+		return in_array( $field_info['type'], $this->include_extras );
+	}
+
+	/**
+	 * Add a row in an HTML table
+	 *
+	 * @since 2.03.11
+	 *
+	 * @param string $label
+	 * @param mixed $display_value
+	 * @param string $content
+	 */
+	protected function add_html_row( $label, $display_value, &$content ) {
+		$content .= '<tr ' . $this->tr_style() . '>';
+
+		if ( 'rtl' == $this->direction ) {
+			$first = $display_value;
+			$second = $label;
+		} else {
+			$first = $label;
+			$second = $display_value;
+		}
+
+		$content .= '<td' . $this->td_style . '>' . $first . '</td>';
+		$content .= '<td' . $this->td_style . '>' . $second . '</td>';
+
+		$content .= '</tr>' . "\r\n";
+
+		$this->odd = ! $this->odd;
+	}
+
+	/**
+	 * Prepare a field's display value for an HTML table
+	 *
+	 * @since 2.03.11
+	 *
+	 * @param mixed $display_value
+	 * @param string $field_type
+	 *
+	 * @return mixed|string
+	 */
+	protected function prepare_display_value_for_html_table( $display_value, $field_type = '' ) {
+		$this->flatten_array( $display_value );
+		$display_value = str_replace( "\r\n", '<br/>', $display_value );
+
+		return $display_value;
+	}
+
+	/**
+	 * Prepare a field's display value for plain text content
+	 *
+	 * @since 2.03.11
+	 *
+	 * @param mixed $display_value
+	 */
+	protected function prepare_display_value_for_plain_text_content( &$display_value ) {
+		$this->flatten_array( $display_value );
+		$this->strip_html( $display_value );
+	}
+
+	/**
+	 * Get the table row style
+	 *
+	 * @since 2.03.11
+	 *
+	 * @return string
+	 */
+	private function tr_style() {
+		if ( $this->use_inline_style ) {
+			$tr_style = 'style="background-color:#' . $this->table_row_background_color() . ';"';
+		} else {
+			$tr_style = '';
+		}
+
+		return $tr_style;
+	}
+
+	/**
+	 * Get the table row background color
+	 *
+	 * @since 2.03.11
+	 *
+	 * @return string
+	 */
+	protected function table_row_background_color() {
+		return ( $this->odd ? $this->style_settings['bg_color'] : $this->style_settings['alt_bg_color'] );
+	}
+
+	// TODO: Maybe deprecate and move to controller
+	public static function show_entry( $atts ) {
+		// TODO: maybe set defaults in relevant classes
+		$defaults = array(
+			'id'             => false,
+			'entry'          => false,
+			'fields'         => false,
+			'plain_text'     => false,
+			'user_info'      => false,
+			'include_blank'  => false,
+			'default_email'  => false,
+			'form_id'        => false,
+			'format'         => 'text',
+			'direction'      => 'ltr',
+			'font_size'      => '',
+			'text_color'     => '',
+			'border_width'   => '',
+			'border_color'   => '',
+			'bg_color'       => '',
+			'alt_bg_color'   => '',
+			'clickable'      => false,
+			'exclude_fields' => '',
+			'include_fields' => '',
+			'include_extras' => '',
+			'inline_style'   => 1,
+		);
+
+		$atts = shortcode_atts( $defaults, $atts );
+		// TODO: handle these atts differently?
+
+		if ( $atts['default_email'] ) {
+			$default_html_generator = FrmEntryFactory::create_html_generator_instance( $atts['form_id'], $atts['format'] );
+			return $default_html_generator->content();
+		}
+
+		if ( $atts['format'] != 'text' ) {
+			$atts['plain_text'] = true;
+		}
+
+		if ( is_array( $atts['fields'] ) && ! empty( $atts['fields'] ) && ! $atts['include_fields'] ) {
+			$atts['include_fields'] = '';
+			foreach ( $atts['fields'] as $included_field ) {
+				$atts['include_fields'] .= $included_field->id . ',';
+			}
+
+			$atts['include_fields'] = rtrim( $atts['include_fields'], ',' );
+		}
+
+		$entry_data = FrmEntryFactory::create_entry_format_instance( $atts );
+
+		if ( $entry_data->get_entry() === null || $entry_data->get_entry() === false ) {
+			return '';
+		}
+
+		$formatted_entry = $entry_data->formatted_entry_values();
+
+		return $formatted_entry;
+	}
+
+	// TODO: deprecate or delete most functions below this point
 
 	/**
 	 * Get the labels and value shortcodes for fields in the Default HTML email message
@@ -115,6 +778,7 @@ class FrmEntryFormat {
 	 * @param array $values
 	 */
 	public static function get_field_shortcodes_for_default_email( $f, &$values ) {
+		// TODO: deprecate?
 		$field_shortcodes = array(
 			'label' => '[' . $f->id . ' show=field_label]',
 			'val'   => '[' . $f->id . ']',
@@ -124,6 +788,7 @@ class FrmEntryFormat {
 		$values[ $f->id ] = apply_filters( 'frm_field_shortcodes_for_default_html_email', $field_shortcodes, $f );
 	}
 
+	// TODO: deprecate this
 	public static function fill_entry_values( $atts, $f, array &$values ) {
 		$no_save_field = FrmField::is_no_save_field( $f->type );
 		if ( $no_save_field ) {
@@ -197,16 +862,6 @@ class FrmEntryFormat {
 	}
 
 	/**
-	* Flatten multi-dimensional array for multi-file upload fields
-	* @since 2.0.9
-	*/
-	public static function flatten_multi_file_upload( $field, &$val ) {
-		if ( $field->type == 'file' && FrmField::is_option_true( $field, 'multiple' ) ) {
-			$val = FrmAppHelper::array_flatten( $val );
-		}
-	}
-
-	/**
 	 * @since 2.03.02
 	 */
 	public static function prepare_field_output( $atts, &$val ) {
@@ -246,54 +901,6 @@ class FrmEntryFormat {
 			}
 			$val = strip_tags( $val );
 		}
-	}
-
-	public static function fill_entry_user_info( $atts, array &$values ) {
-		if ( ! $atts['user_info'] || empty( $atts['entry'] ) ) {
-			return;
-		}
-
-		$data  = self::get_entry_description_data( $atts );
-
-		if ( $atts['default_email'] ) {
-			$atts['entry']->ip = '[ip]';
-		}
-
-		if ( $atts['format'] != 'text' ) {
-			$values['ip'] = $atts['entry']->ip;
-			$values['browser'] = self::get_browser( $data['browser'] );
-			$values['referrer'] = $data['referrer'];
-		} else {
-			$values['ip'] = array( 'label' => __( 'IP Address', 'formidable' ), 'val' => $atts['entry']->ip );
-			$values['browser'] = array(
-				'label' => __( 'User-Agent (Browser/OS)', 'formidable' ),
-				'val'   => self::get_browser( $data['browser'] ),
-			);
-			$values['referrer'] = array( 'label' => __( 'Referrer', 'formidable' ), 'val' => $data['referrer'] );
-		}
-	}
-
-	/**
-	 * @param array $atts - include (object) entry, (boolean) default_email
-	 * @since 2.0.9
-	 */
-	public static function get_entry_description_data( $atts ) {
-		$default_data = array(
-			'browser' => '',
-			'referrer' => '',
-		);
-		$data = $default_data;
-
-		if ( isset( $atts['entry']->description ) ) {
-			$data = (array) maybe_unserialize( $atts['entry']->description );
-		} else if ( $atts['default_email'] ) {
-			$data = array(
-				'browser'  => '[browser]',
-				'referrer' => '[referrer]',
-			);
-		}
-
-		return array_merge( $default_data, $data );
 	}
 
 	public static function get_browser( $u_agent ) {
@@ -364,53 +971,26 @@ class FrmEntryFormat {
 		return $bname . ' ' . $version . ' / ' . $platform;
 	}
 
-	private static function prepare_text_output( $values, $atts, &$content ) {
-		self::convert_entry_to_content( $values, $atts, $content );
+	// TODO: maybe move to helper class
+	public static function generate_td_style( $style_settings, $direction = 'ltr' ) {
+		$td_style_attributes = 'text-align:' . ( $direction == 'rtl' ? 'right' : 'left' ) . ';';
+		$td_style_attributes .= 'color:#' . $style_settings[ 'text_color' ] . ';padding:7px 9px;vertical-align:top;';
+		$td_style_attributes .= 'border-top:' . $style_settings[ 'border_width' ] . ' solid #' . $style_settings[ 'border_color' ] . ';';
 
-		if ( 'text' == $atts['format'] ) {
-			$content = implode('', $content);
-		}
-
-		if ( $atts['clickable'] ) {
-			$content = make_clickable( $content );
-		}
+		return ' style="' . $td_style_attributes . '"';
 	}
 
-	public static function convert_entry_to_content( $values, $atts, array &$content ) {
-		if ( $atts['plain_text'] ) {
-			self::plain_text_content( $values, $atts, $content );
-		} else {
-			self::html_content( $values, $atts, $content );
-		}
+	// TODO: maybe move to helper class
+	public static function generate_table_style( $style_settings ) {
+		$table_style = ' style="' . esc_attr( 'font-size:' . $style_settings[ 'font_size' ] . ';line-height:135%;' );
+		$table_style .= esc_attr( 'border-bottom:' . $style_settings[ 'border_width' ] . ' solid #' . $style_settings[ 'border_color' ] . ';' ) . '"';
+
+		return $table_style;
 	}
 
-	private static function plain_text_content( $values, $atts, &$content ) {
-		foreach ( $values as $id => $value ) {
-			$atts['id'] = $id;
-			$atts['value'] = $value;
-			self::single_plain_text_row( $atts, $content );
-		}
-	}
-
-	private static function html_content( $values, $atts, &$content ) {
-		self::setup_defaults( $atts );
-		self::prepare_inline_styles( $atts );
-
-		$content[] = '<table cellspacing="0" ' . $atts['table_style'] . '><tbody>' . "\r\n";
-
-		$atts['odd'] = true;
-		foreach ( $values as $id => $value ) {
-			$atts['id'] = $id;
-			$atts['value'] = $value;
-			self::single_html_row( $atts, $content );
-			$atts['odd'] = ! $atts['odd'];
-		}
-
-		$content[] = '</tbody></table>';
-	}
-
-	private static function setup_defaults( &$atts ) {
-		$default_settings = apply_filters( 'frm_show_entry_styles', array(
+	// TODO: move to helper?
+	public static function generate_style_settings() {
+		return apply_filters( 'frm_show_entry_styles', array(
 			'border_color' => 'dddddd',
 			'bg_color'     => 'f7f7f7',
 			'text_color'   => '444444',
@@ -418,93 +998,6 @@ class FrmEntryFormat {
 			'border_width' => '1px',
 			'alt_bg_color' => 'ffffff',
 		) );
-
-		// merge defaults, global settings, and shortcode options
-		foreach ( $default_settings as $key => $setting ) {
-			if ( $atts[ $key ] != '' ) {
-				continue;
-			}
-
-			$atts[ $key ] = $setting;
-			unset( $key, $setting );
-		}
-	}
-
-	private static function prepare_inline_styles( &$atts ) {
-		if ( empty( $atts['inline_style'] ) ) {
-			$atts['table_style'] = $atts['bg_color'] = $atts['bg_color_alt'] = $atts['row_style'] = '';
-		} else {
-			$atts['table_style'] = ' style="' . esc_attr( 'font-size:' . $atts['font_size'] . ';line-height:135%; border-bottom:' . $atts['border_width'] . ' solid #' . $atts['border_color'] . ';' ) . '"';
-
-			$row_style_attributes = 'text-align:' . ( $atts['direction'] == 'rtl' ? 'right' : 'left' ) . ';';
-			$row_style_attributes .= 'color:#' . $atts['text_color'] . ';padding:7px 9px;vertical-align:top;';
-			$row_style_attributes .= 'border-top:' . $atts['border_width'] . ' solid #' . $atts['border_color'] . ';';
-			$atts['row_style'] = ' style="' . $row_style_attributes . '"';
-
-			if ( $atts['default_email'] ) {
-				$atts['bg_color'] = $atts['bg_color_alt'] = ' style="[frm-alt-color]"';
-			} else {
-				$atts['bg_color'] = ' style="background-color:#' . $atts['bg_color'] . ';"';
-				$atts['bg_color_alt'] = ' style="background-color:#' . $atts['alt_bg_color'] . ';"';
-			}
-		}
-	}
-
-	public static function single_plain_text_row( $atts, &$content ) {
-		$row = array();
-		if ( 'rtl' == $atts['direction'] ) {
-			$row[] = $atts['value']['val'] . ' :' . $atts['value']['label'] . "\r\n";
-		} else {
-			$row[] = $atts['value']['label'] . ': ' . $atts['value']['val'] . "\r\n";
-		}
-		$row = apply_filters( 'frm_entry_plain_text_row', $row, $atts );
-		$content = array_merge( $content, $row );
-	}
-
-	public static function single_html_row( $atts, &$content ) {
-		$row = array();
-		if ( $atts['default_email'] && is_numeric( $atts['id'] ) ) {
-			self::default_email_row( $atts, $row );
-		} else {
-			self::row_content( $atts, $row );
-		}
-		$row = apply_filters( 'frm_entry_html_row', $row, $atts );
-		$content = array_merge( $content, $row );
-	}
-
-	public static function html_field_row( $atts, &$content ) {
-		$content[] = '<tr ' . self::table_row_style( $atts ) . '>';
-		$content[] = '<td colspan="2" ' . $atts['row_style'] . '>' . $atts['value']['val'] . '</td>';
-		$content[] = '</tr>' . "\r\n";
-	}
-
-	private static function default_email_row( $atts, &$content ) {
-		$content[] = '[if ' . $atts['id'] . ']';
-		self::row_content( $atts, $content );
-		$content[] = '[/if ' . $atts['id'] . ']' . "\r\n";
-	}
-
-	private static function row_content( $atts, &$content ) {
-		$content[] = '<tr' . self::table_row_style( $atts ) . '>';
-
-		$atts['value']['val'] = str_replace( "\r\n", '<br/>', $atts['value']['val'] );
-
-		if ( 'rtl' == $atts['direction'] ) {
-			$first = $atts['value']['val'];
-			$second = $atts['value']['label'];
-		} else {
-			$first = $atts['value']['label'];
-			$second = $atts['value']['val'];
-		}
-
-		$content[] = '<td ' . $atts['row_style'] . '>' . $first . '</td>';
-		$content[] = '<td ' . $atts['row_style'] . '>' . $second . '</td>';
-
-		$content[] = '</tr>' . "\r\n";
-	}
-
-	private static function table_row_style( $atts ) {
-		return ( $atts['odd'] ? $atts['bg_color'] : $atts['bg_color_alt'] );
 	}
 
 	/**
@@ -512,5 +1005,56 @@ class FrmEntryFormat {
 	 */
 	public static function textarea_display_value() {
 		_deprecated_function( __FUNCTION__, '2.03.04', 'custom code' );
+	}
+
+	/**
+	 * @deprecated 2.03.11
+	 */
+	public static function single_html_row( $atts, &$content ) {
+		_deprecated_function( __FUNCTION__, '2.03.11', 'custom code' );
+	}
+
+	/**
+	 * @deprecated 2.03.11
+	 *
+	 * @param stdClass $field
+	 * @param array|string $val
+	 */
+	public static function flatten_multi_file_upload( $field, &$val ) {
+		if ( $field->type == 'file' && FrmField::is_option_true( $field, 'multiple' ) ) {
+			$val = FrmAppHelper::array_flatten( $val );
+		}
+
+		_deprecated_function( __FUNCTION__, '2.03.11', 'custom code' );
+	}
+
+	/**
+	 * @deprecated 2.03.11
+	 */
+	public static function fill_entry_user_info() {
+		_deprecated_function( __FUNCTION__, '2.03.11', 'custom code' );
+	}
+
+	/**
+	 * @deprecated 2.03.11
+	 */
+	public static function get_entry_description_data() {
+		_deprecated_function( __FUNCTION__, '2.03.11', 'custom code' );
+
+		return array();
+	}
+
+	/**
+	 * @deprecated 2.03.11
+	 */
+	public static function single_plain_text_row() {
+		_deprecated_function( __FUNCTION__, '2.03.11', 'custom code' );
+	}
+
+	/**
+	 * @deprecated 2.03.11
+	 */
+	public static function html_field_row() {
+		_deprecated_function( __FUNCTION__, '2.03.11', 'custom code' );
 	}
 }

@@ -44,6 +44,8 @@ function frm_forms_autoloader( $class_name ) {
         $filepath .= '/helpers/';
 	} else if ( preg_match( '/^.+Controller$/', $class_name ) ) {
         $filepath .= '/controllers/';
+	} else if ( preg_match( '/^.+Factory$/', $class_name ) ) {
+		$filepath .= '/factories/';
     } else {
         $filepath .= '/models/';
     }

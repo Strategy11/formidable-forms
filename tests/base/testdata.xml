@@ -1045,6 +1045,19 @@ Jam Band, Electronic, Electronica, JamTronica, EDM, Producer, Rock,  Jazz, Soul,
             <options><![CDATA[]]></options>
             <field_options><![CDATA[{"size":"","max":"","label":"","blank":"","required_indicator":"*","invalid":"The reCAPTCHA was not entered correctly","separate_value":0,"clear_on_focus":0,"default_blank":0,"classes":"","custom_html":"<div id=\"frm_field_[id]_container\" class=\"frm_form_field form-field [required_class][error_class]\">\n    <label for=\"field_[key]\" class=\"frm_primary_label\">[field_name]\n        <span class=\"frm_required\">[required_label]<\/span>\n    <\/label>\n    [input]\n    [if description]<div class=\"frm_description\">[description]<\/div>[\/if description]\n    [if error]<div class=\"frm_error\">[error]<\/div>[\/if error]\n<\/div>","slide":0,"form_select":"","show_hide":"show","any_all":"any","align":"block","hide_field":[],"hide_field_cond":["=="],"hide_opt":[],"star":0,"ftypes":[],"data_type":"select","restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"step":1,"clock":12,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","calc_dec":"","dyn_default_value":"","multiple":0,"unique_msg":"This value must be unique.","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":0}]]></field_options>
 		</field>
+        <field>
+            <id>8135</id>
+            <field_key><![CDATA[cb-sep-values]]></field_key>
+            <name><![CDATA[Checkboxes - separate values]]></name>
+            <description><![CDATA[]]></description>
+            <type><![CDATA[checkbox]]></type>
+            <default_value><![CDATA[]]></default_value>
+            <field_order>37</field_order>
+            <form_id>698</form_id>
+            <required></required>
+            <options><![CDATA[[{"label":"Option 1","value":"Red"},{"label":"Option 2","value":"Orange"},{"label":"Option 3","value":"Yellow"}]]]></options>
+            <field_options><![CDATA[{"size":"","max":"","label":"","blank":"This field cannot be blank.","required_indicator":"*","invalid":"","separate_value":"1","clear_on_focus":0,"default_blank":0,"classes":"","slide":0,"form_select":"","show_hide":"show","any_all":"any","align":"block","hide_field":[],"hide_field_cond":["=="],"hide_opt":[],"star":0,"ftypes":[],"data_type":"select","restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"step":1,"clock":12,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","calc_dec":"","dyn_default_value":"","multiple":0,"unique_msg":"","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":"0"}]]></field_options>
+        </field>
 	</form>
 	<form>
 		<id>699</id>
@@ -2091,6 +2104,10 @@ Wahlin]]></meta_value>
 		    <field_id>8130</field_id>
 		    <meta_value><![CDATA[[60413,60414,60415]]]></meta_value>
 		</item_meta>
+        <item_meta>
+            <field_id>8135</field_id>
+            <meta_value><![CDATA[["Red","Orange"]]]></meta_value>
+        </item_meta>
 	</item>
 	<item>
 		<id>60421</id>
