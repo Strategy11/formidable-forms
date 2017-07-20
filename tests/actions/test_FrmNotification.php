@@ -1,8 +1,7 @@
 <?php
 
 /**
- * @group notification
- * TODO: test attachments
+ * @group emails
  */
 class WP_Test_FrmNotification extends FrmUnitTest {
 
@@ -62,7 +61,7 @@ class WP_Test_FrmNotification extends FrmUnitTest {
 			'from' => FrmAppHelper::site_name() . ' <' . get_option('admin_email') . '>',
 			'reply_to' => get_option('admin_email'),
 			'subject' => self::prepare_subject( $this->contact_form->name . ' Form submitted on ' . FrmAppHelper::site_name() ),
-			'body' =>  FrmEntryFormat::show_entry( array( 'id' => $this->entry->id, 'entry' => $pass_entry ) ),
+			'body' =>  FrmEntriesController::show_entry_shortcode( array( 'id' => $this->entry->id, 'entry' => $pass_entry ) ),
 			'content_type' => 'Content-Type: text/html; charset=UTF-8',
 		);
 
@@ -130,7 +129,7 @@ class WP_Test_FrmNotification extends FrmUnitTest {
 
 		// Body - set plain text to true
 		$this->email_action->post_content['plain_text'] = true;
-		$expected['body'] = FrmEntryFormat::show_entry( array( 'id' => $entry_clone->id, 'entry' => $entry_clone, 'plain_text' => true ) );
+		$expected['body'] = FrmEntriesController::show_entry_shortcode( array( 'id' => $entry_clone->id, 'entry' => $entry_clone, 'plain_text' => true ) );
 
 		// Content type
 		$expected['content_type'] = 'Content-Type: text/plain; charset=UTF-8';
@@ -201,7 +200,7 @@ class WP_Test_FrmNotification extends FrmUnitTest {
 
 		// Body - set inc_user_info to true
 		$this->email_action->post_content['inc_user_info'] = true;
-		$expected['body'] = FrmEntryFormat::show_entry( array( 'id' => $entry_clone->id, 'entry' => $entry_clone, 'user_info' => true ) );
+		$expected['body'] = FrmEntriesController::show_entry_shortcode( array( 'id' => $entry_clone->id, 'entry' => $entry_clone, 'user_info' => true ) );
 
 		// Content type
 		$expected['content_type'] = 'Content-Type: text/html; charset=UTF-8';
@@ -268,7 +267,7 @@ class WP_Test_FrmNotification extends FrmUnitTest {
 
 		// Body - set plain text to true
 		$this->email_action->post_content['plain_text'] = true;
-		$expected['body'] = FrmEntryFormat::show_entry( array( 'id' => $entry_clone->id, 'entry' => $entry_clone, 'plain_text' => true ) );
+		$expected['body'] = FrmEntriesController::show_entry_shortcode( array( 'id' => $entry_clone->id, 'entry' => $entry_clone, 'plain_text' => true ) );
 
 		// Content type
 		$expected['content_type'] = 'Content-Type: text/plain; charset=UTF-8';
@@ -343,7 +342,7 @@ class WP_Test_FrmNotification extends FrmUnitTest {
 
 		// Body - set plain text to true
 		$this->email_action->post_content['plain_text'] = true;
-		$expected['body'] = FrmEntryFormat::show_entry( array( 'id' => $entry_clone->id, 'entry' => $entry_clone, 'plain_text' => true ) );
+		$expected['body'] = FrmEntriesController::show_entry_shortcode( array( 'id' => $entry_clone->id, 'entry' => $entry_clone, 'plain_text' => true ) );
 
 		// Content type
 		$expected['content_type'] = 'Content-Type: text/plain; charset=UTF-8';

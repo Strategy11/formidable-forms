@@ -149,7 +149,7 @@ class FrmEntryFormat {
 	 *
 	 * @since 2.03.11
 	 */
-	protected function get_entry() {
+	public function get_entry() {
 		return $this->entry;
 	}
 
@@ -389,8 +389,8 @@ class FrmEntryFormat {
 	 * @param array $output
 	 */
 	protected function push_field_values_to_array( $field_values, &$output ) {
-		foreach ( $field_values as $field_info ) {
-			$this->push_single_field_to_array( $field_info, $output );
+		foreach ( $field_values as $field_value ) {
+			$this->push_single_field_to_array( $field_value, $output );
 		}
 	}
 
@@ -399,20 +399,19 @@ class FrmEntryFormat {
 	 *
 	 * @since 2.03.11
 	 *
-	 * @param array $field_info
+	 * @param FrmFieldValue $field_value
 	 * @param array $output
 	 */
-	protected function push_single_field_to_array( $field_info, &$output ) {
-		$field_key = $field_info['field_key'];
+	protected function push_single_field_to_array( $field_value, &$output ) {
+		if ( $this->include_field_in_content( $field_value ) ) {
 
-		if ( $this->include_field_in_content( $field_info ) ) {
+			// TODO: maybe do filtering in FrmFieldValue instead
+			$displayed_value = $this->filter_display_value( $field_value->get_displayed_value() );
 
-			$displayed_value = $this->filter_display_value( $field_info['displayed_value'] );
+			$output[ $field_value->get_field_key() ] = $displayed_value;
 
-			$output[ $field_key ] = $displayed_value;
-
-			if ( $displayed_value !== $field_info['saved_value'] ) {
-				$output[ $field_key . '-value' ] = $field_info['saved_value'];
+			if ( $displayed_value !== $field_value->get_saved_value() ) {
+				$output[ $field_value->get_field_key() . '-value' ] = $field_value->get_saved_value();
 			}
 		}
 	}
@@ -448,8 +447,8 @@ class FrmEntryFormat {
 	protected function plain_text_content() {
 		$content = '';
 
-		foreach ( $this->entry_values->get_field_values() as $field_id => $field_information ) {
-			$this->add_field_value_to_plain_text_content( $field_information, $content );
+		foreach ( $this->entry_values->get_field_values() as $field_id => $field_value ) {
+			$this->add_field_value_to_plain_text_content( $field_value, $content );
 		}
 
 		$this->add_user_info_to_plain_text_content( $content );
@@ -469,8 +468,8 @@ class FrmEntryFormat {
 
 		$this->odd = true;
 
-		foreach ( $this->entry_values->get_field_values() as $field_id => $field_info ) {
-			$this->add_field_value_to_html_table( $field_info, $content );
+		foreach ( $this->entry_values->get_field_values() as $field_id => $field_value ) {
+			$this->add_field_value_to_html_table( $field_value, $content );
 		}
 
 		$this->add_user_info_to_html_table( $content );
@@ -489,15 +488,15 @@ class FrmEntryFormat {
 	 *
 	 * @since 2.03.11
 	 *
-	 * @param array $field_info
+	 * @param FrmFieldValue $field_value
 	 * @param array $content
 	 */
-	protected function add_field_value_to_plain_text_content( $field_info, &$content ) {
-		if ( ! $this->include_field_in_content( $field_info ) ) {
+	protected function add_field_value_to_plain_text_content( $field_value, &$content ) {
+		if ( ! $this->include_field_in_content( $field_value ) ) {
 			return;
 		}
 
-		$this->add_plain_text_row( $field_info['label'], $field_info['displayed_value'], $content );
+		$this->add_plain_text_row( $field_value->get_field_label(), $field_value->get_displayed_value(), $content );
 	}
 
 	/**
@@ -510,6 +509,7 @@ class FrmEntryFormat {
 	 * @param string $content
 	 */
 	protected function add_plain_text_row( $label, $display_value, &$content ) {
+		// TODO: move to pro field value?
 		$this->prepare_display_value_for_plain_text_content( $display_value );
 
 		if ( 'rtl' == $this->direction ) {
@@ -524,16 +524,17 @@ class FrmEntryFormat {
 	 *
 	 * @since 2.03.11
 	 *
-	 * @param array $field_info
+	 * @param FrmFieldValue $field_value
 	 * @param string $content
 	 */
-	protected function add_field_value_to_html_table( $field_info, &$content ) {
-		if ( ! $this->include_field_in_content( $field_info ) ) {
+	protected function add_field_value_to_html_table( $field_value, &$content ) {
+		if ( ! $this->include_field_in_content( $field_value ) ) {
 			return;
 		}
 
-		$display_value = $this->prepare_display_value_for_html_table( $field_info['displayed_value'], $field_info['type'] );
-		$this->add_html_row( $field_info['label'], $display_value, $content );
+		// TODO: add display value prep to ProFieldValue?
+		$display_value = $this->prepare_display_value_for_html_table( $field_value->get_displayed_value(), $field_value->get_field_type() );
+		$this->add_html_row( $field_value->get_field_label(), $display_value, $content );
 	}
 
 	/**
@@ -551,7 +552,6 @@ class FrmEntryFormat {
 
 				$this->add_html_row( $user_info['label'], $value, $content );
 			}
-
 		}
 	}
 
@@ -577,18 +577,18 @@ class FrmEntryFormat {
 	 *
 	 * @since 2.03.11
 	 *
-	 * @param array $field_info
+	 * @param FrmFieldValue $field_value
 	 *
 	 * @return bool
 	 */
-	protected function include_field_in_content( $field_info ) {
+	protected function include_field_in_content( $field_value ) {
 		$include = true;
 
-		if ( $this->is_extra_field( $field_info ) ) {
+		if ( $this->is_extra_field( $field_value ) ) {
 
-			$include = $this->is_extra_field_included( $field_info );
+			$include = $this->is_extra_field_included( $field_value );
 
-		} else if ( $field_info['displayed_value'] === '' || empty( $field_info['displayed_value'] ) ) {
+		} else if ( $field_value->get_displayed_value() === '' || empty( $field_value->get_displayed_value() ) ) {
 
 			if ( ! $this->include_blank ) {
 				$include = false;
@@ -603,12 +603,12 @@ class FrmEntryFormat {
 	 *
 	 * @since 2.03.11
 	 *
-	 * @param array $field_info
+	 * @param FrmFieldValue $field_value
 	 *
 	 * @return bool
 	 */
-	protected function is_extra_field( $field_info ) {
-		return in_array( $field_info['type'], $this->skip_fields );
+	protected function is_extra_field( $field_value ) {
+		return in_array( $field_value->get_field_type(), $this->skip_fields );
 	}
 
 	/**
@@ -616,12 +616,12 @@ class FrmEntryFormat {
 	 *
 	 * @since 2.03.11
 	 *
-	 * @param array $field_info
+	 * @param FrmFieldValue $field_value
 	 *
 	 * @return bool
 	 */
-	protected function is_extra_field_included( $field_info ) {
-		return in_array( $field_info['type'], $this->include_extras );
+	protected function is_extra_field_included( $field_value ) {
+		return in_array( $field_value->get_field_type(), $this->include_extras );
 	}
 
 	/**
@@ -709,267 +709,11 @@ class FrmEntryFormat {
 		return ( $this->odd ? $this->style_settings['bg_color'] : $this->style_settings['alt_bg_color'] );
 	}
 
-	// TODO: Maybe deprecate and move to controller
-	public static function show_entry( $atts ) {
-		// TODO: maybe set defaults in relevant classes
-		$defaults = array(
-			'id'             => false,
-			'entry'          => false,
-			'fields'         => false,
-			'plain_text'     => false,
-			'user_info'      => false,
-			'include_blank'  => false,
-			'default_email'  => false,
-			'form_id'        => false,
-			'format'         => 'text',
-			'direction'      => 'ltr',
-			'font_size'      => '',
-			'text_color'     => '',
-			'border_width'   => '',
-			'border_color'   => '',
-			'bg_color'       => '',
-			'alt_bg_color'   => '',
-			'clickable'      => false,
-			'exclude_fields' => '',
-			'include_fields' => '',
-			'include_extras' => '',
-			'inline_style'   => 1,
-		);
-
-		$atts = shortcode_atts( $defaults, $atts );
-		// TODO: handle these atts differently?
-
-		if ( $atts['default_email'] ) {
-			$default_html_generator = FrmEntryFactory::create_html_generator_instance( $atts['form_id'], $atts['format'] );
-			return $default_html_generator->content();
-		}
-
-		if ( $atts['format'] != 'text' ) {
-			$atts['plain_text'] = true;
-		}
-
-		if ( is_array( $atts['fields'] ) && ! empty( $atts['fields'] ) && ! $atts['include_fields'] ) {
-			$atts['include_fields'] = '';
-			foreach ( $atts['fields'] as $included_field ) {
-				$atts['include_fields'] .= $included_field->id . ',';
-			}
-
-			$atts['include_fields'] = rtrim( $atts['include_fields'], ',' );
-		}
-
-		$entry_data = FrmEntryFactory::create_entry_format_instance( $atts );
-
-		if ( $entry_data->get_entry() === null || $entry_data->get_entry() === false ) {
-			return '';
-		}
-
-		$formatted_entry = $entry_data->formatted_entry_values();
-
-		return $formatted_entry;
-	}
 
 	// TODO: deprecate or delete most functions below this point
 
-	/**
-	 * Get the labels and value shortcodes for fields in the Default HTML email message
-	 *
-	 * @since 2.0.23
-	 * @param object $f
-	 * @param array $values
-	 */
-	public static function get_field_shortcodes_for_default_email( $f, &$values ) {
-		// TODO: deprecate?
-		$field_shortcodes = array(
-			'label' => '[' . $f->id . ' show=field_label]',
-			'val'   => '[' . $f->id . ']',
-			'type'  => $f->type,
-		);
 
-		$values[ $f->id ] = apply_filters( 'frm_field_shortcodes_for_default_html_email', $field_shortcodes, $f );
-	}
 
-	// TODO: deprecate this
-	public static function fill_entry_values( $atts, $f, array &$values ) {
-		$no_save_field = FrmField::is_no_save_field( $f->type );
-		if ( $no_save_field ) {
-			if ( ! in_array( $f->type, $atts['include_extras'] ) ) {
-				return;
-			}
-			$atts['include_blank'] = true;
-		}
-
-		if ( $atts['default_email'] ) {
-			self::get_field_shortcodes_for_default_email( $f, $values );
-			return;
-		}
-
-		$atts['field'] = $f;
-
-		self::fill_missing_fields( $atts, $values );
-
-		$val = '';
-		self::get_field_value( $atts, $val );
-
-		// Don't include blank values
-		if ( ! $atts['include_blank'] && FrmAppHelper::is_empty_value( $val ) ) {
-			return;
-		}
-
-		self::prepare_field_output( $atts, $val );
-
-		if ( $atts['format'] != 'text' ) {
-			$values[ $f->field_key ] = $val;
-			if ( $atts['entry'] && $f->type != 'textarea' ) {
-				$prev_val = maybe_unserialize( $atts['entry']->metas[ $f->id ] );
-				if ( $prev_val != $val ) {
-					$values[ $f->field_key . '-value' ] = $prev_val;
-				}
-			}
-		} else {
-			$values[ $f->id ] = array( 'label' => $f->name, 'val' => $val, 'type' => $f->type );
-		}
-	}
-
-	private static function fill_missing_fields( $atts, &$values ) {
-		if ( $atts['entry'] && ! isset( $atts['entry']->metas[ $atts['field']->id ] ) ) {
-			// In case include_blank is set
-			$atts['entry']->metas[ $atts['field']->id ] = '';
-			$atts['entry'] = apply_filters( 'frm_prepare_entry_content', $atts['entry'], array( 'field' => $atts['field'] ) );
-			self::fill_values_from_entry( $atts, $values );
-		}
-	}
-
-	public static function fill_values_from_entry( $atts, &$values ) {
-		$values = apply_filters( 'frm_prepare_entry_array', $values, $atts );
-	}
-
-	private static function get_field_value( $atts, &$val ) {
-		$f = $atts['field'];
-		if ( $atts['entry'] ) {
-			$prev_val = maybe_unserialize( $atts['entry']->metas[ $f->id ] );
-			$meta = array( 'item_id' => $atts['id'], 'field_id' => $f->id, 'meta_value' => $prev_val, 'field_type' => $f->type );
-
-			//This filter applies to the default-message shortcode and frm-show-entry shortcode only
-			if ( in_array( $f->type, array( 'html', 'divider', 'break' ) ) ) {
-				$val = apply_filters( 'frm_content', $f->description, $atts['form_id'], $atts['entry'] );
-			} elseif ( isset( $atts['filter'] ) && $atts['filter'] == false ) {
-				$val = $prev_val;
-			} else {
-				$email_value_atts = array( 'field' => $f, 'format' => $atts['format'] );
-				$val = apply_filters( 'frm_email_value', $prev_val, (object) $meta, $atts['entry'], $email_value_atts );
-			}
-		}
-	}
-
-	/**
-	 * @since 2.03.02
-	 */
-	public static function prepare_field_output( $atts, &$val ) {
-		$val = apply_filters( 'frm_display_' . $atts['field']->type . '_value_custom', $val, array(
-			'field' => $atts['field'], 'atts' => $atts,
-		) );
-
-		self::flatten_array_value( $atts, $val );
-		self::maybe_strip_html( $atts['plain_text'], $val );
-	}
-
-	/**
-	 * @since 2.03.02
-	 */
-	private static function flatten_array_value( $atts, &$val ) {
-		if ( is_array( $val ) ) {
-			if ( $atts['format'] == 'text' ) {
-				$val = implode( ', ', $val );
-			} else if ( $atts['field']->type == 'checkbox' ) {
-				$val = array_values( $val );
-			}
-		}
-	}
-
-	/**
-	 * Strip HTML if from email value if plain text is selected
-	 *
-	 * @since 2.0.21
-	 * @param boolean $plain_text
-	 * @param mixed $val
-	 */
-	private static function maybe_strip_html( $plain_text, &$val ) {
-		if ( $plain_text && ! is_array( $val ) ) {
-			if ( strpos( $val, '<img' ) !== false ) {
-				$val = str_replace( array( '<img', 'src=', '/>', '"' ), '', $val );
-				$val = trim( $val );
-			}
-			$val = strip_tags( $val );
-		}
-	}
-
-	public static function get_browser( $u_agent ) {
-		$bname = __( 'Unknown', 'formidable' );
-		$platform = __( 'Unknown', 'formidable' );
-		$ub = '';
-
-		// Get the operating system
-		if ( preg_match( '/windows|win32/i', $u_agent ) ) {
-			$platform = 'Windows';
-		} else if ( preg_match( '/android/i', $u_agent ) ) {
-			$platform = 'Android';
-		} else if ( preg_match( '/linux/i', $u_agent ) ) {
-			$platform = 'Linux';
-		} else if ( preg_match( '/macintosh|mac os x/i', $u_agent ) ) {
-			$platform = 'OS X';
-		}
-
-		$agent_options = array(
-			'Chrome'   => 'Google Chrome',
-			'Safari'   => 'Apple Safari',
-			'Opera'    => 'Opera',
-			'Netscape' => 'Netscape',
-			'Firefox'  => 'Mozilla Firefox',
-		);
-
-		// Next get the name of the useragent yes seperately and for good reason
-		if ( strpos( $u_agent, 'MSIE' ) !== false && strpos( $u_agent, 'Opera' ) === false ) {
-			$bname = 'Internet Explorer';
-			$ub = 'MSIE';
-		} else {
-			foreach ( $agent_options as $agent_key => $agent_name ) {
-				if ( strpos( $u_agent, $agent_key ) !== false ) {
-					$bname = $agent_name;
-					$ub = $agent_key;
-					break;
-				}
-			}
-		}
-
-		// finally get the correct version number
-		$known = array( 'Version', $ub, 'other' );
-		$pattern = '#(?<browser>' . join( '|', $known ) . ')[/ ]+(?<version>[0-9.|a-zA-Z.]*)#';
-		preg_match_all( $pattern, $u_agent, $matches ); // get the matching numbers
-
-		// see how many we have
-		$i = count($matches['browser']);
-
-		if ( $i > 1 ) {
-			//we will have two since we are not using 'other' argument yet
-			//see if version is before or after the name
-			if ( strripos( $u_agent, 'Version' ) < strripos( $u_agent, $ub ) ) {
-				$version = $matches['version'][0];
-			} else {
-				$version = $matches['version'][1];
-			}
-		} else if ( $i === 1 ) {
-			$version = $matches['version'][0];
-		} else {
-			$version = '';
-		}
-
-		// check if we have a number
-		if ( $version == '' ) {
-			$version = '?';
-		}
-
-		return $bname . ' ' . $version . ' / ' . $platform;
-	}
 
 	// TODO: maybe move to helper class
 	public static function generate_td_style( $style_settings, $direction = 'ltr' ) {
@@ -999,6 +743,10 @@ class FrmEntryFormat {
 			'alt_bg_color' => 'ffffff',
 		) );
 	}
+
+	/***********************************************************************
+	 * Deprecated Functions
+	 ************************************************************************/
 
 	/**
 	 * @deprecated 2.03.04
@@ -1056,5 +804,183 @@ class FrmEntryFormat {
 	 */
 	public static function html_field_row() {
 		_deprecated_function( __FUNCTION__, '2.03.11', 'custom code' );
+	}
+
+	/**
+	 * @deprecated 2.03.11
+	 */
+	public static function fill_entry_values( $atts, $f, array &$values ) {
+		_deprecated_function( __FUNCTION__, '2.03.11', 'instance of FrmEntryValues or FrmProEntryValues' );
+
+		$no_save_field = FrmField::is_no_save_field( $f->type );
+		if ( $no_save_field ) {
+			if ( ! in_array( $f->type, $atts['include_extras'] ) ) {
+				return;
+			}
+			$atts['include_blank'] = true;
+		}
+
+		if ( $atts['default_email'] ) {
+			self::get_field_shortcodes_for_default_email( $f, $values );
+			return;
+		}
+
+		$atts['field'] = $f;
+
+		self::fill_missing_fields( $atts, $values );
+
+		$val = '';
+		self::get_field_value( $atts, $val );
+
+		// Don't include blank values
+		if ( ! $atts['include_blank'] && FrmAppHelper::is_empty_value( $val ) ) {
+			return;
+		}
+
+		self::prepare_field_output( $atts, $val );
+
+		if ( $atts['format'] != 'text' ) {
+			$values[ $f->field_key ] = $val;
+			if ( $atts['entry'] && $f->type != 'textarea' ) {
+				$prev_val = maybe_unserialize( $atts['entry']->metas[ $f->id ] );
+				if ( $prev_val != $val ) {
+					$values[ $f->field_key . '-value' ] = $prev_val;
+				}
+			}
+		} else {
+			$values[ $f->id ] = array( 'label' => $f->name, 'val' => $val, 'type' => $f->type );
+		}
+	}
+
+	/**
+	 * @deprecated 2.03.11
+	 */
+	private static function fill_missing_fields( $atts, &$values ) {
+		_deprecated_function( __FUNCTION__, '2.03.11', 'instance of FrmEntryValues or FrmProEntryValues' );
+
+		if ( $atts['entry'] && ! isset( $atts['entry']->metas[ $atts['field']->id ] ) ) {
+			// In case include_blank is set
+			$atts['entry']->metas[ $atts['field']->id ] = '';
+			$atts['entry'] = apply_filters( 'frm_prepare_entry_content', $atts['entry'], array( 'field' => $atts['field'] ) );
+			self::fill_values_from_entry( $atts, $values );
+		}
+	}
+
+	/**
+	 * @deprecated 2.03.11
+	 */
+	public static function fill_values_from_entry( $atts, &$values ) {
+		_deprecated_function( __FUNCTION__, '2.03.11', 'instance of FrmEntryValues or FrmProEntryValues' );
+
+		$values = apply_filters( 'frm_prepare_entry_array', $values, $atts );
+	}
+
+	/**
+	 * @deprecated 2.03.11
+	 */
+	public static function get_field_shortcodes_for_default_email( $f, &$values ) {
+		// TODO: adjust this message
+		_deprecated_function( __FUNCTION__, '2.03.11', 'instance of FrmEntryValues or FrmProEntryValues' );
+
+		$field_shortcodes = array(
+			'label' => '[' . $f->id . ' show=field_label]',
+			'val'   => '[' . $f->id . ']',
+			'type'  => $f->type,
+		);
+
+		$values[ $f->id ] = apply_filters( 'frm_field_shortcodes_for_default_html_email', $field_shortcodes, $f );
+	}
+
+	/**
+	 * @deprecated 2.03.11
+	 */
+	private static function get_field_value( $atts, &$val ) {
+		_deprecated_function( __FUNCTION__, '2.03.11', 'instance of FrmEntryValues or FrmProEntryValues' );
+
+		$f = $atts['field'];
+		if ( $atts['entry'] ) {
+			$prev_val = maybe_unserialize( $atts['entry']->metas[ $f->id ] );
+			$meta = array( 'item_id' => $atts['id'], 'field_id' => $f->id, 'meta_value' => $prev_val, 'field_type' => $f->type );
+
+			//This filter applies to the default-message shortcode and frm-show-entry shortcode only
+			if ( in_array( $f->type, array( 'html', 'divider', 'break' ) ) ) {
+				$val = apply_filters( 'frm_content', $f->description, $atts['form_id'], $atts['entry'] );
+			} elseif ( isset( $atts['filter'] ) && $atts['filter'] == false ) {
+				$val = $prev_val;
+			} else {
+				$email_value_atts = array( 'field' => $f, 'format' => $atts['format'] );
+				$val = apply_filters( 'frm_email_value', $prev_val, (object) $meta, $atts['entry'], $email_value_atts );
+			}
+		}
+	}
+
+	/**
+	 * @since 2.03.02
+	 *
+	 * @deprecated 2.03.11
+	 */
+	public static function prepare_field_output( $atts, &$val ) {
+		_deprecated_function( __FUNCTION__, '2.03.11', 'instance of FrmEntryValues or FrmProEntryValues' );
+
+		$val = apply_filters( 'frm_display_' . $atts['field']->type . '_value_custom', $val, array(
+			'field' => $atts['field'], 'atts' => $atts,
+		) );
+
+		self::flatten_array_value( $atts, $val );
+		self::maybe_strip_html( $atts['plain_text'], $val );
+	}
+
+	/**
+	 * @since 2.03.02
+	 *
+	 * @deprecated 2.03.11
+	 */
+	private static function flatten_array_value( $atts, &$val ) {
+		_deprecated_function( __FUNCTION__, '2.03.11', 'instance of FrmEntryValues or FrmProEntryValues' );
+
+		if ( is_array( $val ) ) {
+			if ( $atts['format'] == 'text' ) {
+				$val = implode( ', ', $val );
+			} else if ( $atts['field']->type == 'checkbox' ) {
+				$val = array_values( $val );
+			}
+		}
+	}
+
+	/**
+	 * Strip HTML if from email value if plain text is selected
+	 *
+	 * @since 2.0.21
+	 * @param boolean $plain_text
+	 * @param mixed $val
+	 *
+	 * @deprecated 2.03.11
+	 */
+	private static function maybe_strip_html( $plain_text, &$val ) {
+		_deprecated_function( __FUNCTION__, '2.03.11', 'instance of FrmEntryValues or FrmProEntryValues' );
+
+		if ( $plain_text && ! is_array( $val ) ) {
+			if ( strpos( $val, '<img' ) !== false ) {
+				$val = str_replace( array( '<img', 'src=', '/>', '"' ), '', $val );
+				$val = trim( $val );
+			}
+			$val = strip_tags( $val );
+		}
+	}
+
+	/**
+	 * @deprecated 2.03.11
+	 */
+	public static function get_browser( $u_agent ) {
+		_deprecated_function( __FUNCTION__, '2.03.11', 'FrmEntriesHelper::get_browser' );
+		return FrmEntriesHelper::get_browser( $u_agent );
+	}
+
+	/**
+	 * @deprecated 2.03.11
+	 */
+	public static function show_entry( $atts ) {
+		_deprecated_function( __FUNCTION__, '2.03.11', 'FrmEntriesController::show_entry_shortcode' );
+		return FrmEntriesController::show_entry_shortcode( $atts );
 	}
 }

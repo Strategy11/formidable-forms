@@ -196,7 +196,7 @@ class FrmEntriesHelper {
                 $this_atts = $atts;
             }
 
-			$default = FrmEntryFormat::show_entry( $this_atts );
+			$default = FrmEntriesController::show_entry_shortcode( $this_atts );
 
             // Add the default message
             $message = str_replace( $shortcodes[0][ $short_key ], $default, $message );
@@ -486,5 +486,82 @@ class FrmEntriesHelper {
 
 		return $content;
     }
+
+	/**
+	 * Get the browser from the user agent
+	 *
+	 * @since 2.03.11
+	 *
+	 * @param string $u_agent
+	 *
+	 * @return string
+	 */
+	public static function get_browser( $u_agent ) {
+		$bname = __( 'Unknown', 'formidable' );
+		$platform = __( 'Unknown', 'formidable' );
+		$ub = '';
+
+		// Get the operating system
+		if ( preg_match( '/windows|win32/i', $u_agent ) ) {
+			$platform = 'Windows';
+		} else if ( preg_match( '/android/i', $u_agent ) ) {
+			$platform = 'Android';
+		} else if ( preg_match( '/linux/i', $u_agent ) ) {
+			$platform = 'Linux';
+		} else if ( preg_match( '/macintosh|mac os x/i', $u_agent ) ) {
+			$platform = 'OS X';
+		}
+
+		$agent_options = array(
+			'Chrome'   => 'Google Chrome',
+			'Safari'   => 'Apple Safari',
+			'Opera'    => 'Opera',
+			'Netscape' => 'Netscape',
+			'Firefox'  => 'Mozilla Firefox',
+		);
+
+		// Next get the name of the useragent yes seperately and for good reason
+		if ( strpos( $u_agent, 'MSIE' ) !== false && strpos( $u_agent, 'Opera' ) === false ) {
+			$bname = 'Internet Explorer';
+			$ub = 'MSIE';
+		} else {
+			foreach ( $agent_options as $agent_key => $agent_name ) {
+				if ( strpos( $u_agent, $agent_key ) !== false ) {
+					$bname = $agent_name;
+					$ub = $agent_key;
+					break;
+				}
+			}
+		}
+
+		// finally get the correct version number
+		$known = array( 'Version', $ub, 'other' );
+		$pattern = '#(?<browser>' . join( '|', $known ) . ')[/ ]+(?<version>[0-9.|a-zA-Z.]*)#';
+		preg_match_all( $pattern, $u_agent, $matches ); // get the matching numbers
+
+		// see how many we have
+		$i = count($matches['browser']);
+
+		if ( $i > 1 ) {
+			//we will have two since we are not using 'other' argument yet
+			//see if version is before or after the name
+			if ( strripos( $u_agent, 'Version' ) < strripos( $u_agent, $ub ) ) {
+				$version = $matches['version'][0];
+			} else {
+				$version = $matches['version'][1];
+			}
+		} else if ( $i === 1 ) {
+			$version = $matches['version'][0];
+		} else {
+			$version = '';
+		}
+
+		// check if we have a number
+		if ( $version == '' ) {
+			$version = '?';
+		}
+
+		return $bname . ' ' . $version . ' / ' . $platform;
+	}
 
 }

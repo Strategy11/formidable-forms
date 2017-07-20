@@ -507,8 +507,65 @@ class FrmEntriesController {
         }
     }
 
+	/**
+	 * @param $atts
+	 *
+	 * @return array|string
+	 */
 	public static function show_entry_shortcode( $atts ) {
-		return FrmEntryFormat::show_entry( $atts );
+		$defaults = array(
+			'id'             => false,
+			'entry'          => false,
+			'fields'         => false,
+			'plain_text'     => false,
+			'user_info'      => false,
+			'include_blank'  => false,
+			'default_email'  => false,
+			'form_id'        => false,
+			'format'         => 'text',
+			'direction'      => 'ltr',
+			'font_size'      => '',
+			'text_color'     => '',
+			'border_width'   => '',
+			'border_color'   => '',
+			'bg_color'       => '',
+			'alt_bg_color'   => '',
+			'clickable'      => false,
+			'exclude_fields' => '',
+			'include_fields' => '',
+			'include_extras' => '',
+			'inline_style'   => 1,
+		);
+
+		$atts = shortcode_atts( $defaults, $atts );
+
+		if ( $atts['default_email'] ) {
+			$default_html_generator = FrmEntryFactory::create_html_generator_instance( $atts['form_id'], $atts['format'] );
+			return $default_html_generator->content();
+		}
+
+		if ( $atts['format'] != 'text' ) {
+			$atts['plain_text'] = true;
+		}
+
+		if ( is_array( $atts['fields'] ) && ! empty( $atts['fields'] ) && ! $atts['include_fields'] ) {
+			$atts['include_fields'] = '';
+			foreach ( $atts['fields'] as $included_field ) {
+				$atts['include_fields'] .= $included_field->id . ',';
+			}
+
+			$atts['include_fields'] = rtrim( $atts['include_fields'], ',' );
+		}
+
+		$entry_data = FrmEntryFactory::create_entry_format_instance( $atts );
+
+		if ( $entry_data->get_entry() === null || $entry_data->get_entry() === false ) {
+			return '';
+		}
+
+		$formatted_entry = $entry_data->formatted_entry_values();
+
+		return $formatted_entry;
 	}
 
 	public static function get_params( $form = null ) {
@@ -521,7 +578,7 @@ class FrmEntriesController {
         $date_format = get_option('date_format');
         $time_format = get_option('time_format');
 		if ( isset( $data['browser'] ) ) {
-			$browser = FrmEntryFormat::get_browser( $data['browser'] );
+			$browser = FrmEntriesHelper::get_browser( $data['browser'] );
 		}
 
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/sidebar-shared.php' );

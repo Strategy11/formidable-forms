@@ -13,9 +13,12 @@ class FrmEntryValues {
 
 	/**
 	 * @var array
-	 * TODO: create class for individual fields instead of using array
 	 */
 	protected $fields = array();
+
+	/**
+	 * @var FrmFieldValue[]
+	 */
 	protected $field_values = array();
 	protected $user_info = array();
 	protected $include_fields = array();
@@ -167,7 +170,7 @@ class FrmEntryValues {
 
 		$browser = array(
 			'label' => __( 'User-Agent (Browser/OS)', 'formidable' ),
-			'value'   => FrmEntryFormat::get_browser( $entry_description['browser'] ),
+			'value'   => FrmEntriesHelper::get_browser( $entry_description['browser'] ),
 		);
 
 		$referrer = array(
@@ -236,94 +239,6 @@ class FrmEntryValues {
 	 * @param stdClass $field
 	 */
 	protected function add_field_values( $field ) {
-		$saved_value = $this->get_field_saved_value( $field );
-
-		$displayed_value = $this->get_field_displayed_value( $field, $saved_value );
-
-		$this->field_values[ $field->id ] = array(
-			'label' => $field->name,
-			'field_key' => $field->field_key,
-			'type' => $field->type,
-			'has_child_entries' => false,
-			'is_empty_container' => false,
-			'saved_value' => $saved_value,
-			'displayed_value' => $displayed_value,
-		);
-	}
-
-	/**
-	 * Get a field's displayed value
-	 *
-	 * @since 2.03.11
-	 *
-	 * @param stdClass $field
-	 * @param mixed $saved_value
-	 *
-	 * @return mixed|string|void
-	 */
-	protected function get_field_displayed_value( $field, $saved_value ) {
-		$displayed_value = $saved_value;
-
-		// Deprecated frm_email_value hook
-		$meta = array(
-			'item_id' => $this->entry->id,
-			'field_id' => $field->id,
-			'meta_value' => $saved_value,
-			'field_type' => $field->type
-		);
-		$displayed_value = apply_filters( 'frm_email_value', $displayed_value, (object) $meta, $this->entry, array(
-			'field'  => $field,
-		) );
-		if ( has_filter( 'frm_email_value' ) ) {
-			_deprecated_function( 'The frm_email_value filter', '2.03.11', 'the frm_display_{fieldtype}_value_custom filter' );
-		}
-
-		// frm_display_{fieldtype}_value_custom hook
-		$displayed_value = apply_filters( 'frm_display_' . $field->type . '_value_custom', $displayed_value, array(
-			'field' => $field,
-		) );
-
-		return $displayed_value;
-	}
-
-	/**
-	 * Get a field's saved value
-	 *
-	 * @since 2.03.11
-	 *
-	 * @param stdClass $field
-	 *
-	 * @return mixed|string
-	 */
-	protected function get_field_saved_value( $field ) {
-		if ( isset( $this->entry->metas[ $field->id ] ) ) {
-			$saved_value = $this->entry->metas[ $field->id ];
-		} else {
-			$saved_value = '';
-		}
-
-		return $this->clean_saved_value( $saved_value );
-	}
-
-	/**
-	 * Clean a field's saved value
-	 *
-	 * @since 2.03.11
-	 *
-	 * @param mixed $saved_value
-	 *
-	 * @return mixed|string
-	 */
-	protected function clean_saved_value( $saved_value ) {
-		if ( $saved_value !== '' ) {
-
-			$saved_value = maybe_unserialize( $saved_value );
-
-			if ( is_array( $saved_value ) && empty( $saved_value ) ) {
-				$saved_value = '';
-			}
-		}
-
-		return $saved_value;
+		$this->field_values[ $field->id ] = new FrmFieldValue( $field, $this->entry );
 	}
 }

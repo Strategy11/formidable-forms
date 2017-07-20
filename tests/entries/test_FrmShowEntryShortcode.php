@@ -10,9 +10,14 @@
  */
 class test_FrmShowEntryShortcode extends FrmUnitTest {
 
-	// TODO: 1) UML diagram. 2) Assess overall organization. 3) Add PHP docs.
+	// TODO:
+	// 1) UML diagram.
+	// 2) Assess overall organization.
+	// 3) Add PHP docs.
+	// 4) Check all TODO items
+	// 5) Deprecate necessary functions and hooks
 
-	// TODO: try including a field from inside a repeating section. It's currently not possible to display a single field from inside a repeating section
+	// TODO: try including a field from inside a repeating section. It's not yet possible to display a single field from inside a repeating section
 	// TODO: try including a field from inside an embedded form
 	// TODO: write test for each bug that I'm fixing
 	// TODO: section with no fields in it
@@ -31,11 +36,9 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests no entry or id passed
 	 *
-	 * @covers FrmEntryFormat::show_entry
+	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
 	 * @since 2.03.11
-	 *
-	 * @group pass
 	 */
 	public function test_no_entry_or_id_passed() {
 		$atts = array(
@@ -52,11 +55,9 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests no id passed
 	 *
-	 * @covers FrmEntryFormat::show_entry
+	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
 	 * @since 2.03.11
-	 *
-	 * @group failure
 	 */
 	public function test_no_id_passed() {
 		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
@@ -76,11 +77,9 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests fake id passed
 	 *
-	 * @covers FrmEntryFormat::show_entry
+	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
 	 * @since 2.03.11
-	 *
-	 * @group pass
 	 */
 	public function test_fake_id_passed() {
 		$atts = array(
@@ -98,11 +97,9 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests no entry passed
 	 *
-	 * @covers FrmEntryFormat::show_entry
+	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
 	 * @since 2.03.11
-	 *
-	 * @group failure
 	 */
 	public function test_no_entry_passed() {
 		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
@@ -124,11 +121,9 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests no meta passed
 	 *
-	 * @covers FrmEntryFormat::show_entry
+	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
 	 * @since 2.03.11
-	 *
-	 * @group failure
 	 */
 	public function test_no_meta_passed() {
 		$entry = FrmEntry::getOne( 'jamie_entry_key' );
@@ -152,13 +147,11 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests [default-message]
 	 *
-	 * @covers FrmEntryFormat::show_entry
+	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
 	 * @since 2.03.11
 	 *
 	 * @group basic-show-entry-for-email
-	 *
-	 * @group failure
 	 */
 	public function test_basic_default_message_parameters_all_field_types() {
 		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
@@ -179,12 +172,11 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests [default-message]
 	 *
-	 * @covers FrmEntryFormat::show_entry
+	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
 	 * @since 2.03.11
 	 *
 	 * @group show-entry-for-post-entry-email
-	 * @group pass
 	 */
 	public function test_basic_default_message_parameters_create_post_form() {
 		$entry = FrmEntry::getOne( 'post-entry-1', true );
@@ -205,7 +197,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests [default-message include_extras="section, page, html"]
 	 *
-	 * @covers FrmEntryFormat::show_entry
+	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
 	 * @since 2.03.11
 	 *
@@ -231,7 +223,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests [default-message include_fields="x,y,z"]
 	 *
-	 * @covers FrmEntryFormat::show_entry
+	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
 	 * @since 2.03.11
 	 *
@@ -264,7 +256,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests [default-message include_fields="x,y"]
 	 *
-	 * @covers FrmEntryFormat::show_entry
+	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
 	 * @since 2.03.11
 	 */
@@ -295,7 +287,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests [default-message include_fields="x,y,z"]
 	 *
-	 * @covers FrmEntryFormat::show_entry
+	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
 	 * @since 2.03.11
 	 * @group failure
@@ -327,7 +319,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests [default-message fields="x,y,z"]
 	 *
-	 * @covers FrmEntryFormat::show_entry
+	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
 	 * @since 2.03.11
 	 * @group failure
@@ -359,7 +351,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests [default-message fields="x,y,z"]
 	 *
-	 * @covers FrmEntryFormat::show_entry
+	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
 	 * @since 2.03.11
 	 * @group pass
@@ -388,7 +380,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests [default-message exclude_fields="x,y,z"]
 	 *
-	 * @covers FrmEntryFormat::show_entry
+	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
 	 * @since 2.03.11
 	 * @group failure
@@ -420,7 +412,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests [default-message exclude_fields="x,y,z"]
 	 *
-	 * @covers FrmEntryFormat::show_entry
+	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
 	 * @since 2.03.11
 	 * @group failure
@@ -452,7 +444,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests [default-message include_fields="x,y,z"]
 	 *
-	 * @covers FrmEntryFormat::show_entry
+	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
 	 * @since 2.03.11
 	 * @group failure
@@ -485,12 +477,12 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests [default-message include_extras="section"]
 	 *
-	 * @covers FrmEntryFormat::show_entry
+	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
 	 * @since 2.03.11
 	 *
 	 * @group show-entry-shortcode-conditional-section
-	 * @group failure
+	 * @group current
 	 */
 	public function test_default_message_with_conditionally_hidden_sections() {
 		$entry = FrmEntry::getOne( 'jamie_entry_key' );
@@ -548,7 +540,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests [default-message font_size, text_color, border_width, border_color, bg_color]
 	 *
-	 * @covers FrmEntryFormat::show_entry
+	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
 	 * @since 2.03.11
 	 * @group failure
@@ -582,7 +574,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests [default-message clickable=1]
 	 *
-	 * @covers FrmEntryFormat::show_entry
+	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
 	 * @since 2.03.11
 	 * @group failure
@@ -607,7 +599,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests [default-message inline_style=1]
 	 *
-	 * @covers FrmEntryFormat::show_entry
+	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
 	 * @since 2.03.11
 	 * @group failure
@@ -635,7 +627,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests [default-message user_info=1]
 	 *
-	 * @covers FrmEntryFormat::show_entry
+	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
 	 * @since 2.03.11
 	 * @group failure
@@ -659,10 +651,9 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests [default-message plain_text=1]
 	 *
-	 * @covers FrmEntryFormat::show_entry
+	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
 	 * @since 2.03.11
-	 * @group failure
 	 */
 	public function test_default_message_with_plain_text() {
 		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
@@ -675,10 +666,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		);
 
 		$content = $this->get_formatted_content( $atts );
-
-		$expected_content = $this->expected_html_content( $atts );
-		$expected_content = str_replace( '</td><td', ': </td><td', $expected_content );
-		$expected_content = strip_tags( $expected_content );
+		$expected_content = $this->expected_plain_text_content( $atts );
 
 		$this->assertSame( $expected_content, $content );
 	}
@@ -686,10 +674,9 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests [default-message plain_text=1 include_extras="page,section,html"]
 	 *
-	 * @covers FrmEntryFormat::show_entry
+	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
 	 * @since 2.03.11
-	 * @group failure
 	 */
 	public function test_default_message_with_plain_text_and_include_extras() {
 		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
@@ -711,7 +698,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests [default-message direction=rtl]
 	 *
-	 * @covers FrmEntryFormat::show_entry
+	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
 	 * @since 2.03.11
 	 * @group pass
@@ -743,7 +730,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests Default HTML for emails
 	 *
-	 * @covers FrmEntryFormat::show_entry
+	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
 	 * @since 2.03.11
 	 * @group failure
@@ -768,14 +755,12 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests the way an API action gets entry data
 	 *
-	 * @covers FrmEntryFormat::show_entry
+	 * @covers FrmEntriesController::show_entry_shortcode
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
 	 * @since 2.03.11
 	 *
 	 * @group show-entry-array-format
-	 * @group failure
-	 * @group current2
 	 */
 	public function test_array_format_for_api() {
 		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
@@ -796,16 +781,14 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests the way an API action gets entry data
 	 *
-	 * @covers FrmEntryFormat::show_entry
+	 * @covers FrmEntriesController::show_entry_shortcode
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
 	 * @since 2.03.11
 	 *
 	 * @group show-entry-array-format
-	 * @group failure
 	 */
 	public function test_array_format_for_api_post_entry() {
-		// Pick up on fixing this
 		$entry = FrmEntry::getOne( 'post-entry-1', true );
 
 		$atts = array(
@@ -824,7 +807,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests the json format
 	 *
-	 * @covers FrmEntryFormat::show_entry
+	 * @covers FrmEntriesController::show_entry_shortcode
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
 	 * @since 2.03.11
@@ -851,7 +834,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests the way an API action gets the default HTML
 	 *
-	 * @covers FrmEntryFormat::show_entry
+	 * @covers FrmEntriesController::show_entry_shortcode
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
 	 * @since 2.03.11
@@ -878,7 +861,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests the way an API action gets entry data
 	 *
-	 * @covers FrmEntryFormat::show_entry
+	 * @covers FrmEntriesController::show_entry_shortcode
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
 	 * @since 2.03.11
@@ -907,7 +890,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests the way Zapier gets entry data
 	 *
-	 * @covers FrmEntryFormat::show_entry
+	 * @covers FrmEntriesController::show_entry_shortcode
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
 	 * @since 2.03.11
@@ -933,7 +916,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	}
 
 	private function get_formatted_content( $atts, $type = 'html' ) {
-		$content = FrmEntryFormat::show_entry( $atts );
+		$content = FrmEntriesController::show_entry_shortcode( $atts );
 
 		return $content;
 	}
@@ -1172,10 +1155,10 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 			$html = '<tr ' . $this->tr_style . '><td' . $this->td_style . '>Multiple File Upload</td><td' . $this->td_style . '>';
 
 			foreach ( $multi_file_urls as $multi_file_url ) {
-				$html .= '<a href="' . $multi_file_url . '" rel="nofollow">' . $multi_file_url . '</a><br/>' . "\r\n";
+				$html .= '<a href="' . $multi_file_url . '" rel="nofollow">' . $multi_file_url . '</a><br/><br/>';
 			}
 
-			$html = rtrim( $html, '<br/><br/>' );
+			$html = preg_replace('/<br\/><br\/>$/', '', $html);
 			$html .= '</td></tr>';
 			$html .= "\r\n";
 		} else {
@@ -1368,6 +1351,9 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		$file_field_id = FrmField::get_id_by_key( 'single-file-upload-field' );
 		$single_file_url = wp_get_attachment_url( $atts['entry']->metas[ $file_field_id ] );
 		$content .= "Single File Upload: " . $single_file_url . "\r\n";
+
+		$multiple_file_urls = $this->get_multi_file_urls( $atts['entry'] );
+		$content .= "Multiple File Upload: " . implode( ', ', $multiple_file_urls ) . "\r\n";
 
 		$content .= "Number: 11\r\n";
 		$content .= "Phone Number: 1231231234\r\n";
@@ -1567,6 +1553,8 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		$where = array( 'meta_value' => 'United States', 'field_id' => FrmField::get_id_by_key( '2atiqt' ) );
 		$dynamic_country_id = FrmDb::get_var( 'frm_item_metas', $where, 'item_id' );
 
+		// TODO: do I need field label?
+
 
 		$expected = array(
 			'text-field' => 'Jamie',
@@ -1651,21 +1639,21 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	private function expected_post_array( $entry, $atts ) {
 		$expected = array(
 			'yi6yvm' => 'Jamie\'s Post',
-			'knzfvv' => 'Hello! My name is Jamie',
+			'knzfvv' => 'Hello! My name is Jamie.',
 			'8j2k9i' => '',
 			'37pxx2' => 'Jamie Wahlin',
 			'ml8awj' => 'admin',
 			'ml8awj-value' => '1',
 			'rs4jgc' => '',
-			'izzcad' => '<a href="http://example.org/?cat=1" title="View all posts filed under Uncategorized">Uncategorized</a>',
+			'izzcad' => 'Uncategorized',
 			'izzcad-value' => array( 1 ),
-			// TODO: pick up on displayed value for categories
-			'parent-dynamic-taxonomy' => '<a href="http://example.org/?cat=1" title="View all posts filed under Uncategorized">Uncategorized</a>',
+			// TODO: pick up on displayed value for categories. Should categories by in array?
+			'parent-dynamic-taxonomy' => 'Uncategorized',
 			'parent-dynamic-taxonomy-value' => array( 1 ),
 			'child-dynamic-taxonomy' => '',
 			'grandchild-dynamic-taxonomy' => '',
-			'post-status-dropdown-value' => 'publish',
 			'post-status-dropdown' => 'Published',
+			'post-status-dropdown-value' => 'publish',
 		);
 
 		return $expected;

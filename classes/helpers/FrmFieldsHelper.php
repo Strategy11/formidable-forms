@@ -687,7 +687,7 @@ DEFAULT_HTML;
                 case 'user_agent':
                 case 'user-agent':
                     $entry->description = maybe_unserialize($entry->description);
-					$replace_with = FrmEntryFormat::get_browser( $entry->description['browser'] );
+					$replace_with = FrmEntriesHelper::get_browser( $entry->description['browser'] );
                 break;
 
                 case 'created_at':

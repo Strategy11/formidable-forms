@@ -107,6 +107,37 @@ class FrmUnitTest extends WP_UnitTestCase {
 				'field' => $multi_file_upload_field,
 				'entry' => 'jamie_entry_key',
 			),
+			array(
+				'val' => 'https://formidableforms.com/wp-content/uploads/formidable/formidablepro.real_estate_listings.2015-08-10.xml',
+				'field' => FrmField::getOne( 'file_upload_single' ),
+				'entry' => 'many_files_key',
+			),
+			array(
+				'val' => array(
+					'https://cdn.formidableforms.com/wp-content/uploads/2016/11/goal-form.png',
+					'https://cdn.formidableforms.com/wp-content/uploads/2016/11/goal-progress.png',
+					'https://cdn.formidableforms.com/wp-content/uploads/2016/09/new-graph-types1.png',
+				),
+				'field' => FrmField::getOne( 'file_upload_multiple' ),
+				'entry' => 'many_files_key',
+			),
+			array(
+				'val' => array(
+					'https://cdn.formidableforms.com/wp-content/uploads/2017/07/user-registration-multisite.jpeg',
+					'https://cdn.formidableforms.com/wp-content/uploads/2017/07/lost-password-form.png',
+					'https://cdn.formidableforms.com/wp-content/uploads/2017/07/login-form.png',
+				),
+				'field' => FrmField::getOne( 'file_upload_multiple_repeating' ),
+				'entry' => 'file-repeat-child-one',
+			),
+			array(
+				'val' => array(
+					'https://cdn.formidableforms.com/wp-content/uploads/2016/11/normal-section-job-history-1.png',
+					'https://cdn.formidableforms.com/wp-content/uploads/2016/11/repeating-section-job-history-1.png',
+				),
+				'field' => FrmField::getOne( 'file_upload_multiple_repeating' ),
+				'entry' => 'file-repeat-child-two',
+			),
 		);
 
 		$_REQUEST['csv_files'] = 1;
@@ -278,6 +309,7 @@ class FrmUnitTest extends WP_UnitTestCase {
         return array(
         	dirname( __FILE__ ) . '/testdata.xml',
 	        dirname( __FILE__ ) . '/editform.xml',
+			dirname( __FILE__ ) . '/file-upload.xml',
         );
     }
 
