@@ -414,7 +414,7 @@ A. The field and form names and descriptions are all changed with in-place edit.
 * Add frm_time_ago_levels hook for drilling down time_ago
 * Fix adding new file after removal when editing
 * In multi-site, only copy forms if copy form setting is checked
-* Make sure detaillink works if View is on home page
+* Make sure detail link works if View is on home page
 
 = 2.02.09 =
 * Add frm_before_install hook
