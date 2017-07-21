@@ -80,11 +80,58 @@ class FrmAddon {
 	}
 
 	public function get_license() {
-		return trim( get_option( $this->option_name . 'key' ) );
+		$license = trim( get_option( $this->option_name . 'key' ) );
+		if ( empty( $license ) ) {
+			$license = $this->activate_defined_license();
+		}
+		return $license;
+	}
+
+	/**
+	 * Activate the license in wp-config.php
+	 * @since 2.03.11
+	 */
+	public function activate_defined_license() {
+		$license = $this->get_defined_license();
+		if ( ! empty( $license ) && ! $this->is_active() && $this->is_time_to_auto_activate() ) {
+			$response = $this->activate_license( $license );
+			$this->set_auto_activate_time();
+			if ( ! $response['success'] ) {
+				$license = '';
+			}
+		}
+		return $license;
+	}
+
+	/**
+	 * Check the wp-config.php for the license key
+	 * @since 2.03.11
+	 */
+	public function get_defined_license() {
+		$consant_name = 'FRM_' . strtoupper( $this->plugin_slug ) . '_LICENSE';
+		return defined( $consant_name ) ? constant( $consant_name ) : false;
 	}
 
 	public function set_license( $license ) {
 		update_option( $this->option_name . 'key', $license );
+	}
+
+	/**
+	 * If the license is in the config, limit the frequency of checks.
+	 * The license may be entered incorrectly, so we don't want to check on every page load.
+	 * @since 2.03.11
+	 */
+	private function is_time_to_auto_activate() {
+		$last_try = get_option( $this->option_name .'last_activate' );
+		return ( ! $last_try || $last_try < strtotime('-1 day') );
+	}
+
+	private function set_auto_activate_time() {
+		update_option( $this->option_name . 'last_activate', time() );
+	}
+
+	public function is_active() {
+		return get_option( $this->option_name . 'active' );
 	}
 
 	public function clear_license() {
@@ -199,17 +246,24 @@ class FrmAddon {
 		$license = stripslashes( sanitize_text_field( $_POST['license'] ) );
 		$plugin_slug = sanitize_text_field( $_POST['plugin'] );
 		$this_plugin = self::get_addon( $plugin_slug );
-		$this_plugin->set_license( $license );
-		$this_plugin->license = $license;
+		$response = $this_plugin->activate_license( $license );
 
-		$response = $this_plugin->get_license_status();
+		echo json_encode( $response );
+		wp_die();
+	}
+
+	private function activate_license( $license ) {
+		$this->set_license( $license );
+		$this->license = $license;
+
+		$response = $this->get_license_status();
 		$response['message'] = '';
 		$response['success'] = false;
 
 		if ( $response['error'] ) {
 			$response['message'] = $response['status'];
 		} else {
-			$messages = $this_plugin->get_messages();
+			$messages = $this->get_messages();
 			if ( is_string( $response['status'] ) && isset( $messages[ $response['status'] ] ) ) {
 				$response['message'] = $messages[ $response['status'] ];
 			} else {
@@ -221,11 +275,10 @@ class FrmAddon {
 				$is_valid = 'valid';
 				$response['success'] = true;
 			}
-			$this_plugin->set_active( $is_valid );
+			$this->set_active( $is_valid );
 		}
 
-		echo json_encode( $response );
-		wp_die();
+		return $response;
 	}
 
 	private function get_license_status() {
