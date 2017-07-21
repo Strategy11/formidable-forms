@@ -100,26 +100,26 @@ class FrmEntryFormat {
 	 * @param $atts
 	 */
 	public function __construct( $atts ) {
-		$this->set_entry( $atts );
+		$this->init_entry( $atts );
 
 		if ( $this->entry === null || $this->entry === false ) {
 			return;
 		}
 
-		$this->set_entry_values( $atts );
+		$this->init_entry_values( $atts );
 
-		$this->set_format( $atts );
-		$this->set_is_plain_text( $atts );
-		$this->set_include_blank( $atts );
-		$this->set_direction( $atts );
-		$this->set_include_user_info( $atts );
+		$this->init_format( $atts );
+		$this->init_is_plain_text( $atts );
+		$this->init_include_blank( $atts );
+		$this->init_direction( $atts );
+		$this->init_include_user_info( $atts );
 
 		if ( $this->format === 'text' && $this->is_plain_text === false ) {
-			$this->set_style_settings( $atts );
-			$this->set_use_inline_style( $atts );
-			$this->set_table_style();
-			$this->set_td_style();
-			$this->set_is_clickable( $atts );
+			$this->init_style_settings( $atts );
+			$this->init_use_inline_style( $atts );
+			$this->init_table_style();
+			$this->init_td_style();
+			$this->init_is_clickable( $atts );
 		}
 	}
 
@@ -130,7 +130,7 @@ class FrmEntryFormat {
 	 *
 	 * @param array $atts
 	 */
-	protected function set_entry( $atts ) {
+	protected function init_entry( $atts ) {
 		if ( is_object( $atts['entry'] ) ) {
 
 			if ( isset( $atts['entry']->metas ) ) {
@@ -160,7 +160,7 @@ class FrmEntryFormat {
 	 *
 	 * @param array $atts
 	 */
-	protected function set_entry_values( $atts ) {
+	protected function init_entry_values( $atts ) {
 		$this->entry_values = new FrmEntryValues( $this->entry->id, $atts );
 	}
 
@@ -171,7 +171,7 @@ class FrmEntryFormat {
 	 *
 	 * @param array $atts
 	 */
-	protected function set_format( $atts ) {
+	protected function init_format( $atts ) {
 		if ( isset( $atts['format'] ) && in_array( $atts['format'], array( 'text', 'json', 'array' ) ) ) {
 			$this->format = $atts['format'];
 		}
@@ -184,7 +184,7 @@ class FrmEntryFormat {
 	 *
 	 * @param array $atts
 	 */
-	protected function set_is_plain_text( $atts ) {
+	protected function init_is_plain_text( $atts ) {
 		if ( isset( $atts['plain_text'] ) && $atts['plain_text'] ) {
 			$this->is_plain_text = true;
 		} else if ( $this->format !== 'text' ) {
@@ -199,7 +199,7 @@ class FrmEntryFormat {
 	 *
 	 * @param array $atts
 	 */
-	protected function set_include_blank( $atts ) {
+	protected function init_include_blank( $atts ) {
 		if ( isset( $atts['include_blank'] ) && $atts['include_blank'] ) {
 			$this->include_blank = true;
 		}
@@ -212,7 +212,7 @@ class FrmEntryFormat {
 	 *
 	 * @param array $atts
 	 */
-	protected function set_direction( $atts ) {
+	protected function init_direction( $atts ) {
 		if ( isset( $atts['direction'] ) && $atts['direction'] === 'rtl' ) {
 			$this->direction = 'rtl';
 		}
@@ -225,7 +225,7 @@ class FrmEntryFormat {
 	 *
 	 * @param array $atts
 	 */
-	protected function set_include_user_info( $atts ) {
+	protected function init_include_user_info( $atts ) {
 		if ( isset( $atts['user_info'] ) && $atts['user_info'] ) {
 			$this->include_user_info = true;
 		}
@@ -238,7 +238,7 @@ class FrmEntryFormat {
 	 *
 	 * @param array $atts
 	 */
-	protected function set_style_settings( $atts ) {
+	protected function init_style_settings( $atts ) {
 		$this->style_settings = self::generate_style_settings();
 
 		foreach ( $this->style_settings as $key => $setting ) {
@@ -255,7 +255,7 @@ class FrmEntryFormat {
 	 *
 	 * @param array $atts
 	 */
-	protected function set_use_inline_style( $atts ) {
+	protected function init_use_inline_style( $atts ) {
 		if ( isset( $atts['inline_style'] ) && ! $atts['inline_style'] ) {
 			$this->use_inline_style = false;
 		}
@@ -266,7 +266,7 @@ class FrmEntryFormat {
 	 *
 	 * @since 2.03.11
 	 */
-	protected function set_table_style() {
+	protected function init_table_style() {
 		if ( $this->use_inline_style === true ) {
 			$this->table_style = self::generate_table_style( $this->style_settings );
 		}
@@ -277,7 +277,7 @@ class FrmEntryFormat {
 	 *
 	 * @since 2.03.11
 	 */
-	protected function set_td_style() {
+	protected function init_td_style() {
 		if ( $this->use_inline_style === true ) {
 			$this->td_style = self::generate_td_style( $this->style_settings, $this->direction );
 		}
@@ -290,7 +290,7 @@ class FrmEntryFormat {
 	 *
 	 * @param array $atts
 	 */
-	protected function set_is_clickable( $atts ) {
+	protected function init_is_clickable( $atts ) {
 		if ( isset( $atts['clickable'] ) && $atts['clickable'] ) {
 			$this->is_clickable = true;
 		}
@@ -425,7 +425,7 @@ class FrmEntryFormat {
 	 *
 	 * @return mixed|string
 	 */
-	private function filter_display_value( $value ) {
+	protected function filter_display_value( $value ) {
 		if ( $this->is_plain_text && ! is_array( $value ) ) {
 			if ( strpos( $value, '<img' ) !== false ) {
 				$value = str_replace( array( '<img', 'src=', '/>', '"' ), '', $value );
@@ -568,7 +568,6 @@ class FrmEntryFormat {
 			foreach ( $this->entry_values->get_user_info() as $user_info ) {
 				$this->add_plain_text_row( $user_info['label'], $user_info['value'], $content );
 			}
-
 		}
 	}
 
@@ -708,12 +707,6 @@ class FrmEntryFormat {
 	protected function table_row_background_color() {
 		return ( $this->odd ? $this->style_settings['bg_color'] : $this->style_settings['alt_bg_color'] );
 	}
-
-
-	// TODO: deprecate or delete most functions below this point
-
-
-
 
 	// TODO: maybe move to helper class
 	public static function generate_td_style( $style_settings, $direction = 'ltr' ) {

@@ -22,13 +22,6 @@ class FrmFieldValue {
 	/**
 	 * @since 2.03.11
 	 *
-	 * @var array
-	 */
-	protected $entry_meta = array();
-
-	/**
-	 * @since 2.03.11
-	 *
 	 * @var mixed
 	 */
 	protected $saved_value = '';
@@ -54,7 +47,6 @@ class FrmFieldValue {
 
 		$this->field = $field;
 		$this->entry = $entry;
-		$this->entry_meta = $entry->metas;
 		$this->init_saved_value();
 		$this->init_displayed_value( $atts );
 	}

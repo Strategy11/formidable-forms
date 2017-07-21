@@ -33,18 +33,18 @@ class FrmEntryValues {
 	 * @param array $atts
 	 */
 	public function __construct( $entry_id, $atts ) {
-		$this->set_entry( $entry_id );
+		$this->init_entry( $entry_id );
 
 		if ( $this->entry === null || $this->entry === false ) {
 			return;
 		}
 
-		$this->set_form_id();
-		$this->set_include_fields( $atts );
-		$this->set_exclude_fields( $atts );
-		$this->set_fields();
-		$this->set_field_values();
-		$this->set_user_info();
+		$this->init_form_id();
+		$this->init_include_fields( $atts );
+		$this->init_exclude_fields( $atts );
+		$this->init_fields();
+		$this->init_field_values();
+		$this->init_user_info();
 	}
 
 	/**
@@ -54,7 +54,7 @@ class FrmEntryValues {
 	 *
 	 * @param int|string $entry_id
 	 */
-	protected function set_entry( $entry_id ) {
+	protected function init_entry( $entry_id ) {
 		$this->entry = FrmEntry::getOne( $entry_id, true );
 	}
 
@@ -63,7 +63,7 @@ class FrmEntryValues {
 	 *
 	 * @since 2.03.11
 	 */
-	protected function set_form_id() {
+	protected function init_form_id() {
 		$this->form_id = $this->entry->form_id;
 	}
 
@@ -74,7 +74,7 @@ class FrmEntryValues {
 	 *
 	 * @param array $atts
 	 */
-	protected function set_include_fields( $atts ) {
+	protected function init_include_fields( $atts ) {
 		$this->include_fields = $this->prepare_array_property( 'include_fields', $atts );
 	}
 
@@ -85,7 +85,7 @@ class FrmEntryValues {
 	 *
 	 * @param array $atts
 	 */
-	protected function set_exclude_fields( $atts ) {
+	protected function init_exclude_fields( $atts ) {
 		$this->exclude_fields = $this->prepare_array_property( 'exclude_fields', $atts );
 	}
 
@@ -120,7 +120,7 @@ class FrmEntryValues {
 	 *
 	 * @since 2.03.11
 	 */
-	protected function set_fields() {
+	protected function init_fields() {
 		$this->fields = FrmField::get_all_for_form( $this->form_id, '', 'exclude', 'exclude' );
 	}
 
@@ -129,7 +129,7 @@ class FrmEntryValues {
 	 *
 	 * @since 2.03.11
 	 */
-	protected function set_field_values() {
+	protected function init_field_values() {
 		foreach ( $this->fields as $field ) {
 			if ( $this->is_field_included( $field ) ) {
 				$this->add_field_values( $field );
@@ -153,7 +153,7 @@ class FrmEntryValues {
 	 *
 	 * @since 2.03.11
 	 */
-	protected function set_user_info() {
+	protected function init_user_info() {
 		if ( isset( $this->entry->description ) ) {
 			$entry_description = (array) maybe_unserialize( $this->entry->description );
 		} else {

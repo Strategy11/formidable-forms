@@ -226,8 +226,6 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
 	 * @since 2.03.11
-	 *
-	 * @group failure
 	 */
 	public function test_default_message_with_specific_field_ids_included() {
 		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
@@ -290,7 +288,6 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
 	 * @since 2.03.11
-	 * @group failure
 	 */
 	public function test_default_message_with_specific_field_keys_included() {
 		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
@@ -322,7 +319,6 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
 	 * @since 2.03.11
-	 * @group failure
 	 */
 	public function test_default_message_with_old_fields_parameter() {
 		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
@@ -354,7 +350,6 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
 	 * @since 2.03.11
-	 * @group pass
 	 */
 	public function test_default_message_with_old_fields_parameter_single_field() {
 		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
@@ -383,7 +378,6 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
 	 * @since 2.03.11
-	 * @group failure
 	 */
 	public function test_default_message_with_specific_field_ids_excluded() {
 		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
@@ -415,7 +409,6 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
 	 * @since 2.03.11
-	 * @group failure
 	 */
 	public function test_default_message_with_specific_field_keys_excluded() {
 		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
@@ -447,7 +440,6 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
 	 * @since 2.03.11
-	 * @group failure
 	 */
 	public function test_default_message_with_specific_field_ids_included_and_include_extras() {
 		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
@@ -482,7 +474,6 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * @since 2.03.11
 	 *
 	 * @group show-entry-shortcode-conditional-section
-	 * @group current
 	 */
 	public function test_default_message_with_conditionally_hidden_sections() {
 		$entry = FrmEntry::getOne( 'jamie_entry_key' );
@@ -543,7 +534,6 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
 	 * @since 2.03.11
-	 * @group failure
 	 */
 	public function test_default_message_with_styling_changes() {
 		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
@@ -577,7 +567,6 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
 	 * @since 2.03.11
-	 * @group failure
 	 */
 	public function test_default_message_with_clickable() {
 		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
@@ -602,7 +591,6 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
 	 * @since 2.03.11
-	 * @group failure
 	 */
 	public function test_default_message_with_inline_style_off() {
 		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
@@ -630,7 +618,6 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
 	 * @since 2.03.11
-	 * @group failure
 	 */
 	public function test_default_message_with_user_info() {
 		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
@@ -701,7 +688,6 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
 	 * @since 2.03.11
-	 * @group pass
 	 */
 	public function test_default_message_with_rtl_direction() {
 		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
@@ -733,7 +719,6 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
 	 * @since 2.03.11
-	 * @group failure
 	 */
 	public function test_default_html_for_email() {
 		// TODO: add is_visible shortcode for sections and maybe page breaks? Or maybe just use [if x]
@@ -755,7 +740,6 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests the way an API action gets entry data
 	 *
-	 * @covers FrmEntriesController::show_entry_shortcode
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
 	 * @since 2.03.11
@@ -782,7 +766,6 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * Tests the way an API action gets entry data
 	 *
 	 * @covers FrmEntriesController::show_entry_shortcode
-	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
 	 * @since 2.03.11
 	 *
@@ -808,12 +791,10 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * Tests the json format
 	 *
 	 * @covers FrmEntriesController::show_entry_shortcode
-	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
 	 * @since 2.03.11
 	 *
 	 * @group show-entry-json-format
-	 * @group failure
 	 */
 	public function test_json_format() {
 		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
@@ -835,12 +816,10 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * Tests the way an API action gets the default HTML
 	 *
 	 * @covers FrmEntriesController::show_entry_shortcode
-	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
 	 * @since 2.03.11
 	 *
 	 * @group show-entry-array-format
-	 * @group pass
 	 */
 	public function test_default_array_for_api() {
 		$form_id = FrmForm::getIdByKey( 'all_field_types' );
@@ -862,12 +841,10 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * Tests the way an API action gets entry data
 	 *
 	 * @covers FrmEntriesController::show_entry_shortcode
-	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
 	 * @since 2.03.11
 	 *
 	 * @group show-entry-array-format
-	 * @group failure
 	 */
 	public function test_api_entry_retrieval() {
 		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
@@ -891,12 +868,10 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * Tests the way Zapier gets entry data
 	 *
 	 * @covers FrmEntriesController::show_entry_shortcode
-	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
 	 * @since 2.03.11
 	 *
 	 * @group show-entry-array-format
-	 * @group failure
 	 */
 	public function test_array_format_for_zapier() {
 		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
@@ -1620,6 +1595,10 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 					'repeating-date-value' => '2015-06-19',
 				),
 			),
+			'repeating-text' => array( 'First', 'Second', 'Third' ),
+			'repeating-checkbox' => array( array( 'Option 1', 'Option 2' ), array( 'Option 1', 'Option 2' ), array( 'Option 2') ),
+			'repeating-date' => array( 'May 27, 2015', 'May 29, 2015', 'June 19, 2015' ),
+			'repeating-date-value' => array( '2015-05-27', '2015-05-29', '2015-06-19' ),
 			'lookup-country' => '',
 			'cb-sep-values' => array( 'Option 1', 'Option 2' ),
 			'cb-sep-values-value' => array( 'Red', 'Orange' ),
