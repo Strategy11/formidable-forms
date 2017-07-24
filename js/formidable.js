@@ -3013,7 +3013,7 @@ function frmFrontFormJS(){
 			calcField = jQuery(field.thisFieldCall);
 		} else {
 			calcField = getSiblingField( field );
-			if ( calcField === null || typeof calcField === 'undefined' ) {
+			if ( calcField === null || typeof calcField === 'undefined' || calcField.length < 1  ) {
 				calcField = jQuery(field.thisFieldCall);
 			}
 		}
