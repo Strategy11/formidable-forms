@@ -17,6 +17,7 @@ Create a professional WordPress contact form without any code. Additionally, cha
 
 = All the features you need for beautiful WordPress Forms =
 Create unlimited forms with all the essential field types.
+
 * Single line text (for names, phone numbers, addresses, and more)
 * Email
 * Website/URL
@@ -31,6 +32,7 @@ Create forms in seconds with [pre-built form templates](https://formidableforms.
 
 = Customize your WordPress forms =
 Whether you start from scratch or from a form template, your forms can be customized however you would like.
+
 * Send **unlimited form email notifications and autoresponders**.
 * Use **placeholder default values** in form fields that clear when clicked.
 * Use our ready-made CSS classes (or your own custom CSS classes) to arrange your form fields and create **multi-column forms**
@@ -55,7 +57,7 @@ https://www.youtube.com/watch?v=d2IPmicn2x8
 = Pro Form Builder Plugin Features =
 Formidable Forms Pro is an upgrade that adds even more power to your WordPress forms. Multi-page forms, conditional logic, payment integrations, data management, and boat loads more. Not only can you collect data in your forms, but you can also display it on the front-end of your site. Add the ability to input, display, edit and filter data on the front end without any additional plugins. Formidable Forms is a powerful solution for purchase forms, member directories, user registration forms, and more.
 
-* Over 30 field types: Page breaks, section headings, repeating field groups, file uploads, rich text, number, phone number, date, time, scale, dynamic fields populated from other forms, hidden fields, user ID fields, password, HTML, tags, address, and more.
+* **Over 30 field types**: Page breaks, section headings, repeating field groups, file uploads, rich text, number, phone number, date, time, scale, dynamic fields populated from other forms, hidden fields, user ID fields, password, HTML, tags, address, and more.
 * <a href="https://formidableforms.com/features/wordpress-multi-step-form/">Multi-Step forms with progress bar</a>: Create beautiful paged forms with rootline and progress indicators. Use conditional logic on page breaks for branching forms.
 * <a href="https://formidableforms.com/features/wordpress-multi-step-form/">Conditional logic for smart forms</a>: Show or hide fields in your form based on user selections or the role of the user.
 * Email routing: Conditionally send multiple autoresponder emails and notifications based on values in your form.
