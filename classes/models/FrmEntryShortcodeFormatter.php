@@ -3,7 +3,7 @@
 /**
  * @since 2.03.11
  */
-class FrmDefaultHTMLGenerator {
+class FrmEntryShortcodeFormatter {
 
 	/**
 	 * @var int
@@ -30,30 +30,10 @@ class FrmDefaultHTMLGenerator {
 	protected $format = 'text';
 
 	/**
-	 * @var array
+	 * @var FrmTableHTMLHelper
 	 * @since 2.03.11
 	 */
-	protected $style_settings = array();
-
-	/**
-	 * @var string
-	 * @since 2.03.11
-	 */
-	protected $table_style = '';
-
-	/**
-	 * @var string
-	 * @since 2.03.11
-	 */
-	protected $tr_style = ' style="[frm-alt-color]"';
-
-
-	/**
-	 * @var string
-	 * @since 2.03.11
-	 */
-	protected $td_style = '';
-
+	protected $table_helper = null;
 	/**
 	 * @var array
 	 * @since 2.03.11
@@ -65,18 +45,16 @@ class FrmDefaultHTMLGenerator {
 			return;
 		}
 
-		$this->set_form_id( $form_id );
-		$this->set_fields();
-		$this->set_format( $format );
+		$this->init_form_id( $form_id );
+		$this->init_fields();
+		$this->init_format( $format );
 
 		if ( empty( $this->fields ) ) {
 			return;
 		}
 
 		if ( $this->format == 'text' ) {
-			$this->set_style_settings();
-			$this->set_table_style();
-			$this->set_td_style();
+			$this->init_table_helper();
 		}
 	}
 
@@ -86,7 +64,7 @@ class FrmDefaultHTMLGenerator {
 	 * @since 2.03.11
 	 * @param $form_id
 	 */
-	private function set_form_id( $form_id ) {
+	private function init_form_id( $form_id ) {
 		$this->form_id = (int) $form_id;
 	}
 
@@ -95,7 +73,7 @@ class FrmDefaultHTMLGenerator {
 	 *
 	 * @since 2.03.11
 	 */
-	private function set_fields() {
+	private function init_fields() {
 		$this->fields = FrmField::get_all_for_form( $this->form_id, '', 'exclude', 'exclude' );
 	}
 
@@ -106,37 +84,19 @@ class FrmDefaultHTMLGenerator {
 	 *
 	 * @param string|mixed $format
 	 */
-	private function set_format( $format ) {
+	private function init_format( $format ) {
 		if ( is_string( $format ) && $format !== '' ) {
 			$this->format = $format;
 		}
 	}
 
 	/**
-	 * Set the style_settings property
+	 * Set the table_helper property
 	 *
 	 * @since 2.03.11
 	 */
-	private function set_style_settings() {
-		$this->style_settings = FrmEntryFormat::generate_style_settings();
-	}
-
-	/**
-	 * Set the table_style property
-	 *
-	 * @since 2.03.11
-	 */
-	private function set_table_style() {
-		$this->table_style = FrmEntryFormat::generate_table_style( $this->style_settings );
-	}
-
-	/**
-	 * Set the td_style property
-	 *
-	 * @since 2.03.11
-	 */
-	private function set_td_style() {
-		$this->td_style = FrmEntryFormat::generate_td_style( $this->style_settings );
+	protected function init_table_helper() {
+		$this->table_helper = new FrmTableHTMLHelper( 'shortcode' );
 	}
 
 	/**
@@ -145,7 +105,9 @@ class FrmDefaultHTMLGenerator {
 	 * @since 2.03.11
 	 */
 	public function content() {
-		if ( $this->format == 'array' ) {
+		if ( $this->form_id === 0 ) {
+			$content = '';
+		} else if ( $this->format == 'array' ) {
 			$content = $this->array();
 		} else {
 			$content = $this->text();
@@ -181,13 +143,13 @@ class FrmDefaultHTMLGenerator {
 			return '';
 		}
 
-		$content = '<table cellspacing="0"' . $this->table_style . '><tbody>' . "\r\n";;
+		$content = $this->table_helper->generate_table_header();
 
 		foreach ( $this->fields as $field ) {
 			$content .= $this->generate_field_html( $field );
 		}
 
-		$content .= '</tbody></table>';
+		$content .= $this->table_helper->generate_table_footer();
 
 		return $content;
 	}
@@ -222,22 +184,7 @@ class FrmDefaultHTMLGenerator {
 	 * @return string
 	 */
 	protected function generate_single_row( $field, $value = null ) {
-		$row = '[if ' . $field->id . ']';
-		$row .= '<tr' . $this->tr_style . '>';
-
-		$label = '[' . $field->id . ' show=field_label]';
-
-		if ( $value === null ) {
-			$value = '[' . $field->id . ']';
-		}
-
-		$row .= '<td' . $this->td_style . '>' . $label . '</td>';
-		$row .= '<td' . $this->td_style . '>' . $value . '</td>';
-
-		$row .= '</tr>';
-		$row .= '[/if ' . $field->id . ']' . "\r\n";
-
-		return $row;
+		return $this->table_helper->generate_two_cell_shortcode_row( $field, $value );
 	}
 
 	/**

@@ -540,10 +540,31 @@ class FrmEntriesController {
 		$atts = shortcode_atts( $defaults, $atts );
 
 		if ( $atts['default_email'] ) {
-			$default_html_generator = FrmEntryFactory::create_html_generator_instance( $atts['form_id'], $atts['format'] );
-			return $default_html_generator->content();
+			$entry_shortcode_formatter = FrmEntryFactory::entry_shortcode_formatter_instance( $atts['form_id'], $atts['format'] );
+			$formatted_entry = $entry_shortcode_formatter->content();
+		} else {
+
+			self::prepare_atts_for_entry_formatter( $atts );
+			$entry_data = FrmEntryFactory::entry_format_instance( $atts );
+
+			if ( $entry_data->get_entry() === null || $entry_data->get_entry() === false ) {
+				return '';
+			}
+
+			$formatted_entry = $entry_data->formatted_entry_values();
 		}
 
+		return $formatted_entry;
+	}
+
+	/**
+	 * Prepare the $atts array for the entry formatter
+	 *
+	 * @since 2.03.11
+	 *
+	 * @param array $atts
+	 */
+	private static function prepare_atts_for_entry_formatter( &$atts ) {
 		if ( $atts['format'] != 'text' ) {
 			$atts['plain_text'] = true;
 		}
@@ -556,16 +577,6 @@ class FrmEntriesController {
 
 			$atts['include_fields'] = rtrim( $atts['include_fields'], ',' );
 		}
-
-		$entry_data = FrmEntryFactory::create_entry_format_instance( $atts );
-
-		if ( $entry_data->get_entry() === null || $entry_data->get_entry() === false ) {
-			return '';
-		}
-
-		$formatted_entry = $entry_data->formatted_entry_values();
-
-		return $formatted_entry;
 	}
 
 	public static function get_params( $form = null ) {

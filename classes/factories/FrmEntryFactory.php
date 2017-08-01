@@ -14,8 +14,8 @@ class FrmEntryFactory {
 	 *
 	 * @return FrmEntryFormat|FrmProEntryFormat
 	 */
-	public static function create_entry_format_instance( $atts ) {
-		$entry_format = apply_filters( 'frm_create_entry_format_instance', null, $atts );
+	public static function entry_format_instance( $atts ) {
+		$entry_format = apply_filters( 'frm_entry_format_instance', null, $atts );
 
 		if ( ! is_object( $entry_format ) ) {
 			$entry_format = new FrmEntryFormat( $atts );
@@ -32,13 +32,13 @@ class FrmEntryFactory {
 	 * @param int|string $form_id
 	 * @param string $format
 	 *
-	 * @return FrmDefaultHTMLGenerator|FrmProDefaultHTMLGenerator
+	 * @return FrmEntryShortcodeFormatter|FrmProEntryShortcodeFormatter
 	 */
-	public static function create_html_generator_instance( $form_id, $format ) {
-		$html_generator = apply_filters( 'frm_create_html_generator_instance', null, $form_id, $format );
+	public static function entry_shortcode_formatter_instance( $form_id, $format ) {
+		$html_generator = apply_filters( 'frm_entry_shortcode_formatter_instance', null, $form_id, $format );
 
 		if ( ! is_object( $html_generator ) ) {
-			$html_generator = new FrmDefaultHTMLGenerator( $form_id, $format );
+			$html_generator = new FrmEntryShortcodeFormatter( $form_id, $format );
 		}
 
 		return $html_generator;

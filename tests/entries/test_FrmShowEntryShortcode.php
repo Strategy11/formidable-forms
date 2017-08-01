@@ -24,7 +24,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	// TODO: add is_visible for default HTML
 
 	private $text_field_id = '';
-	private $tr_style = 'style="background-color:#ffffff;"';
+	private $tr_style = ' style="background-color:#ffffff;"';
 	private $td_style = ' style="text-align:left;color:#555555;padding:7px 9px;vertical-align:top;border-top:1px solid #cccccc;"';
 
 	public function setUp() {
@@ -586,7 +586,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	}
 
 	/**
-	 * Tests [default-message inline_style=1]
+	 * Tests [default-message inline_style=0]
 	 *
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
@@ -1025,7 +1025,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	}
 
 	private function text_field_html( $atts ) {
-		$html = '<tr ' . $this->tr_style . '>';
+		$html = '<tr' . $this->tr_style . '>';
 
 		if ( isset( $atts['direction'] ) && $atts['direction'] == 'rtl' ) {
 			$html .= '<td' . $this->td_style . '>' . $atts['entry']->metas[ $this->text_field_id ] . '</td>';
@@ -1041,21 +1041,21 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	}
 
 	private function paragraph_to_website_html( $atts ) {
-		$html = '<tr ' . $this->tr_style . '><td' . $this->td_style . '>Paragraph Text</td><td' . $this->td_style . '>';
+		$html = '<tr' . $this->tr_style . '><td' . $this->td_style . '>Paragraph Text</td><td' . $this->td_style . '>';
 		$html .= "Jamie\nRebecca\nWahlin</td></tr>\r\n";
-		$html .= '<tr ' . $this->tr_style . '><td' . $this->td_style . '>Checkboxes - colors</td><td' . $this->td_style . '>Red, Green</td></tr>' . "\r\n";
-		$html .= '<tr ' . $this->tr_style . '><td' . $this->td_style . '>Radio Buttons - dessert</td><td' . $this->td_style . '>cookies</td></tr>' . "\r\n";
-		$html .= '<tr ' . $this->tr_style . '><td' . $this->td_style . '>Dropdown</td><td' . $this->td_style . '>Ace Ventura</td></tr>' . "\r\n";
+		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Checkboxes - colors</td><td' . $this->td_style . '>Red, Green</td></tr>' . "\r\n";
+		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Radio Buttons - dessert</td><td' . $this->td_style . '>cookies</td></tr>' . "\r\n";
+		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Dropdown</td><td' . $this->td_style . '>Ace Ventura</td></tr>' . "\r\n";
 
 		if ( isset( $atts['clickable'] ) && $atts['clickable'] ) {
-			$html .= '<tr ' . $this->tr_style . '><td' . $this->td_style . '>Email Address</td><td' . $this->td_style . '>';
+			$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Email Address</td><td' . $this->td_style . '>';
 			$html .= '<a href="mailto:jamie@mail.com">jamie@mail.com</a></td></tr>' . "\r\n";
 
-			$html .= '<tr ' . $this->tr_style . '><td' . $this->td_style . '>Website/URL</td><td' . $this->td_style . '>';
+			$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Website/URL</td><td' . $this->td_style . '>';
 			$html .= '<a href="http://www.jamie.com" rel="nofollow">http://www.jamie.com</a></td></tr>' . "\r\n";
 		} else {
-			$html .= '<tr ' . $this->tr_style . '><td' . $this->td_style . '>Email Address</td><td' . $this->td_style . '>jamie@mail.com</td></tr>' . "\r\n";
-			$html .= '<tr ' . $this->tr_style . '><td' . $this->td_style . '>Website/URL</td><td' . $this->td_style . '>http://www.jamie.com</td></tr>' . "\r\n";
+			$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Email Address</td><td' . $this->td_style . '>jamie@mail.com</td></tr>' . "\r\n";
+			$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Website/URL</td><td' . $this->td_style . '>http://www.jamie.com</td></tr>' . "\r\n";
 		}
 
 		return $html;
@@ -1063,7 +1063,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 
 	private function page_break_html( $atts ) {
 		if ( isset( $atts['include_extras'] ) && strpos( $atts['include_extras'], 'page' ) !== false ) {
-			$html = '<tr ' . $this->tr_style . '><td colspan="2"' . $this->td_style . '><br/><br/></td></tr>' . "\r\n";
+			$html = '<tr' . $this->tr_style . '><td colspan="2"' . $this->td_style . '><br/><br/></td></tr>' . "\r\n";
 
 		} else {
 			$html = '';
@@ -1085,7 +1085,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 
 	private function pro_fields_divider_heading( $atts ) {
 		if ( isset( $atts['include_extras'] ) && strpos( $atts['include_extras'], 'section' ) !== false ) {
-			$html = '<tr ' . $this->tr_style . '><td colspan="2"' . $this->td_style . '><h3>Pro Fields</h3></td></tr>' . "\r\n";
+			$html = '<tr' . $this->tr_style . '><td colspan="2"' . $this->td_style . '><h3>Pro Fields</h3></td></tr>' . "\r\n";
 		} else {
 			$html = '';
 		}
@@ -1104,7 +1104,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	}
 
 	private function rich_text_html() {
-		return '<tr ' . $this->tr_style . '><td' . $this->td_style . '>Rich Text</td><td' . $this->td_style . '><strong>Bolded text</strong></td></tr>' . "\r\n";
+		return '<tr' . $this->tr_style . '><td' . $this->td_style . '>Rich Text</td><td' . $this->td_style . '><strong>Bolded text</strong></td></tr>' . "\r\n";
 	}
 
 	private function single_file_upload_html( $atts ) {
@@ -1112,11 +1112,11 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		$single_file_url = wp_get_attachment_url( $atts['entry']->metas[ $file_field_id ] );
 
 		if ( isset( $atts['clickable'] ) && $atts['clickable'] ) {
-			$html = '<tr ' . $this->tr_style . '><td' . $this->td_style . '>Single File Upload</td><td' . $this->td_style . '>';
+			$html = '<tr' . $this->tr_style . '><td' . $this->td_style . '>Single File Upload</td><td' . $this->td_style . '>';
 			$html .= '<a href="' . $single_file_url . '" rel="nofollow">' . $single_file_url . '</a></td></tr>';
 			$html .= "\r\n";
 		} else {
-			$html = '<tr ' . $this->tr_style . '><td' . $this->td_style . '>Single File Upload</td><td' . $this->td_style . '>' . $single_file_url . '</td></tr>';
+			$html = '<tr' . $this->tr_style . '><td' . $this->td_style . '>Single File Upload</td><td' . $this->td_style . '>' . $single_file_url . '</td></tr>';
 			$html .= "\r\n";
 		}
 
@@ -1127,7 +1127,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		$multi_file_urls = $this->get_multi_file_urls( $atts['entry'] );
 
 		if ( isset( $atts['clickable'] ) && $atts['clickable'] ) {
-			$html = '<tr ' . $this->tr_style . '><td' . $this->td_style . '>Multiple File Upload</td><td' . $this->td_style . '>';
+			$html = '<tr' . $this->tr_style . '><td' . $this->td_style . '>Multiple File Upload</td><td' . $this->td_style . '>';
 
 			foreach ( $multi_file_urls as $multi_file_url ) {
 				$html .= '<a href="' . $multi_file_url . '" rel="nofollow">' . $multi_file_url . '</a><br/><br/>';
@@ -1137,7 +1137,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 			$html .= '</td></tr>';
 			$html .= "\r\n";
 		} else {
-			$html = '<tr ' . $this->tr_style . '><td' . $this->td_style . '>Multiple File Upload</td><td' . $this->td_style . '>';
+			$html = '<tr' . $this->tr_style . '><td' . $this->td_style . '>Multiple File Upload</td><td' . $this->td_style . '>';
 
 			$formatted_urls = implode( '<br/><br/>', $multi_file_urls );
 
@@ -1160,32 +1160,32 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	}
 
 	private function number_to_scale_field_html( $atts ) {
-		$html = '<tr ' . $this->tr_style . '><td' . $this->td_style . '>Number</td><td' . $this->td_style . '>11</td></tr>' . "\r\n";
-		$html .= '<tr ' . $this->tr_style . '><td' . $this->td_style . '>Phone Number</td><td' . $this->td_style . '>1231231234</td></tr>' . "\r\n";
-		$html .= '<tr ' . $this->tr_style . '><td' . $this->td_style . '>Time</td><td' . $this->td_style . '>12:30 AM</td></tr>' . "\r\n";
-		$html .= '<tr ' . $this->tr_style . '><td' . $this->td_style . '>Date</td><td' . $this->td_style . '>August 16, 2015</td></tr>' . "\r\n";
+		$html = '<tr' . $this->tr_style . '><td' . $this->td_style . '>Number</td><td' . $this->td_style . '>11</td></tr>' . "\r\n";
+		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Phone Number</td><td' . $this->td_style . '>1231231234</td></tr>' . "\r\n";
+		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Time</td><td' . $this->td_style . '>12:30 AM</td></tr>' . "\r\n";
+		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Date</td><td' . $this->td_style . '>August 16, 2015</td></tr>' . "\r\n";
 
 		if ( isset( $atts['clickable'] ) && $atts['clickable'] ) {
-			$html .= '<tr ' . $this->tr_style . '><td' . $this->td_style . '>Image URL</td><td' . $this->td_style . '>';
+			$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Image URL</td><td' . $this->td_style . '>';
 			$html .= '<a href="http://www.test.com" rel="nofollow">http://www.test.com</a></td></tr>' . "\r\n";
 		} else {
-			$html .= '<tr ' . $this->tr_style . '><td' . $this->td_style . '>Image URL</td><td' . $this->td_style . '>http://www.test.com</td></tr>' . "\r\n";
+			$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Image URL</td><td' . $this->td_style . '>http://www.test.com</td></tr>' . "\r\n";
 		}
 
-		$html .= '<tr ' . $this->tr_style . '><td' . $this->td_style . '>Scale</td><td' . $this->td_style . '>5</td></tr>' . "\r\n";
+		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Scale</td><td' . $this->td_style . '>5</td></tr>' . "\r\n";
 
 		return $html;
 	}
 
 	private function dynamic_field_html() {
-		return '<tr ' . $this->tr_style . '><td' . $this->td_style . '>Dynamic Field - level 1</td><td' . $this->td_style . '>United States</td></tr>' . "\r\n";
+		return '<tr' . $this->tr_style . '><td' . $this->td_style . '>Dynamic Field - level 1</td><td' . $this->td_style . '>United States</td></tr>' . "\r\n";
 	}
 
 
 
 	private function html_field_html( $atts ) {
 		if ( isset( $atts['include_extras'] ) && strpos( $atts['include_extras'], 'html' ) !== false ) {
-			$html = '<tr ' . $this->tr_style . '><td colspan="2"' . $this->td_style . '>Lorem ipsum.</td></tr>' . "\r\n";
+			$html = '<tr' . $this->tr_style . '><td colspan="2"' . $this->td_style . '>Lorem ipsum.</td></tr>' . "\r\n";
 
 		} else {
 			$html = '';
@@ -1196,7 +1196,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 
 	private function repeating_section_header( $atts ) {
 		if ( isset( $atts['include_extras'] ) && strpos( $atts['include_extras'], 'section' ) !== false ) {
-			$html = '<tr ' . $this->tr_style . '><td colspan="2"' . $this->td_style . '><h3>Repeating Section</h3></td></tr>' . "\r\n";
+			$html = '<tr' . $this->tr_style . '><td colspan="2"' . $this->td_style . '><h3>Repeating Section</h3></td></tr>' . "\r\n";
 		} else {
 			$html = '';
 		}
@@ -1205,14 +1205,14 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	}
 
 	private function user_id_html() {
-		return '<tr ' . $this->tr_style . '><td' . $this->td_style . '>User ID</td><td' . $this->td_style . '>admin</td></tr>' . "\r\n";
+		return '<tr' . $this->tr_style . '><td' . $this->td_style . '>User ID</td><td' . $this->td_style . '>admin</td></tr>' . "\r\n";
 	}
 
 	private function tags_html( $atts ) {
 		if ( $atts['entry']->metas[ $this->text_field_id ] == 'Hide Fields' ) {
 			$html = '';
 		} else {
-			$html = '<tr ' . $this->tr_style . '><td' . $this->td_style . '>Tags</td><td' . $this->td_style . '>Jame</td></tr>' . "\r\n";
+			$html = '<tr' . $this->tr_style . '><td' . $this->td_style . '>Tags</td><td' . $this->td_style . '>Jame</td></tr>' . "\r\n";
 
 		}
 
@@ -1220,63 +1220,63 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	}
 
 	private function signature_html() {
-		return '<tr ' . $this->tr_style . '><td' . $this->td_style . '>Signature</td><td' . $this->td_style . '>398, 150</td></tr>' . "\r\n";
+		return '<tr' . $this->tr_style . '><td' . $this->td_style . '>Signature</td><td' . $this->td_style . '>398, 150</td></tr>' . "\r\n";
 	}
 
 	private function embedded_form_html( $atts ) {
-		$html = '<tr ' . $this->tr_style . '><td' . $this->td_style . '>Name</td><td' . $this->td_style . '>Embedded name</td></tr>' . "\r\n";
-		$html .= '<tr ' . $this->tr_style . '><td' . $this->td_style . '>Last</td><td' . $this->td_style . '>test</td></tr>' . "\r\n";
+		$html = '<tr' . $this->tr_style . '><td' . $this->td_style . '>Name</td><td' . $this->td_style . '>Embedded name</td></tr>' . "\r\n";
+		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Last</td><td' . $this->td_style . '>test</td></tr>' . "\r\n";
 
 		if ( isset( $atts['clickable'] ) && $atts['clickable'] ) {
-			$html .= '<tr ' . $this->tr_style . '><td' . $this->td_style . '>Email</td><td' . $this->td_style . '>';
+			$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Email</td><td' . $this->td_style . '>';
 			$html .= '<a href="mailto:test@mail.com">test@mail.com</a></td></tr>' . "\r\n";
 
 		} else {
-			$html .= '<tr ' . $this->tr_style . '><td' . $this->td_style . '>Email</td><td' . $this->td_style . '>test@mail.com</td></tr>' . "\r\n";
+			$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Email</td><td' . $this->td_style . '>test@mail.com</td></tr>' . "\r\n";
 		}
 
 		if ( isset( $atts['include_extras'] ) && strpos( $atts['include_extras'], 'section' ) !== false ) {
-			$html .= '<tr ' . $this->tr_style . '><td colspan="2"' . $this->td_style . '><h3>Email Information</h3></td></tr>' . "\r\n";
+			$html .= '<tr' . $this->tr_style . '><td colspan="2"' . $this->td_style . '><h3>Email Information</h3></td></tr>' . "\r\n";
 		}
 
-		$html .= '<tr ' . $this->tr_style . '><td' . $this->td_style . '>Subject</td><td' . $this->td_style . '>test</td></tr>' . "\r\n";
-		$html .= '<tr ' . $this->tr_style . '><td' . $this->td_style . '>Message</td><td' . $this->td_style . '>test</td></tr>' . "\r\n";
-		$html .= '<tr ' . $this->tr_style . '><td' . $this->td_style . '>Date</td><td' . $this->td_style . '>May 21, 2015</td></tr>' . "\r\n";
+		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Subject</td><td' . $this->td_style . '>test</td></tr>' . "\r\n";
+		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Message</td><td' . $this->td_style . '>test</td></tr>' . "\r\n";
+		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Date</td><td' . $this->td_style . '>May 21, 2015</td></tr>' . "\r\n";
 
 		return $html;
 	}
 
 	private function repeating_field_html() {
-		$html = '<tr ' . $this->tr_style . '><td' . $this->td_style . '>Single Line Text</td><td' . $this->td_style . '>First</td></tr>' . "\r\n";
-		$html .= '<tr ' . $this->tr_style . '><td' . $this->td_style . '>Checkboxes</td><td' . $this->td_style . '>Option 1, Option 2</td></tr>' . "\r\n";
-		$html .= '<tr ' . $this->tr_style . '><td' . $this->td_style . '>Date</td><td' . $this->td_style . '>May 27, 2015</td></tr>' . "\r\n";
-		$html .= '<tr ' . $this->tr_style . '><td' . $this->td_style . '>Single Line Text</td><td' . $this->td_style . '>Second</td></tr>'. "\r\n";
-		$html .= '<tr ' . $this->tr_style . '><td' . $this->td_style . '>Checkboxes</td><td' . $this->td_style . '>Option 1, Option 2</td></tr>' . "\r\n";
-		$html .= '<tr ' . $this->tr_style . '><td' . $this->td_style . '>Date</td><td' . $this->td_style . '>May 29, 2015</td></tr>' . "\r\n";
-		$html .= '<tr ' . $this->tr_style . '><td' . $this->td_style . '>Single Line Text</td><td' . $this->td_style . '>Third</td></tr>' . "\r\n";
-		$html .= '<tr ' . $this->tr_style . '><td' . $this->td_style . '>Checkboxes</td><td' . $this->td_style . '>Option 2</td></tr>' . "\r\n";
-		$html .= '<tr ' . $this->tr_style . '><td' . $this->td_style . '>Date</td><td' . $this->td_style . '>June 19, 2015</td></tr>' . "\r\n";
+		$html = '<tr' . $this->tr_style . '><td' . $this->td_style . '>Single Line Text</td><td' . $this->td_style . '>First</td></tr>' . "\r\n";
+		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Checkboxes</td><td' . $this->td_style . '>Option 1, Option 2</td></tr>' . "\r\n";
+		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Date</td><td' . $this->td_style . '>May 27, 2015</td></tr>' . "\r\n";
+		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Single Line Text</td><td' . $this->td_style . '>Second</td></tr>'. "\r\n";
+		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Checkboxes</td><td' . $this->td_style . '>Option 1, Option 2</td></tr>' . "\r\n";
+		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Date</td><td' . $this->td_style . '>May 29, 2015</td></tr>' . "\r\n";
+		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Single Line Text</td><td' . $this->td_style . '>Third</td></tr>' . "\r\n";
+		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Checkboxes</td><td' . $this->td_style . '>Option 2</td></tr>' . "\r\n";
+		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Date</td><td' . $this->td_style . '>June 19, 2015</td></tr>' . "\r\n";
 
 		return $html;
 	}
 
 	private function repeating_text_field_html() {
-		$html = '<tr ' . $this->tr_style . '><td' . $this->td_style . '>Single Line Text</td><td' . $this->td_style . '>First</td></tr>' . "\r\n";
-		$html .= '<tr ' . $this->tr_style . '><td' . $this->td_style . '>Single Line Text</td><td' . $this->td_style . '>Second</td></tr>'. "\r\n";
-		$html .= '<tr ' . $this->tr_style . '><td' . $this->td_style . '>Single Line Text</td><td' . $this->td_style . '>Third</td></tr>' . "\r\n";
+		$html = '<tr' . $this->tr_style . '><td' . $this->td_style . '>Single Line Text</td><td' . $this->td_style . '>First</td></tr>' . "\r\n";
+		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Single Line Text</td><td' . $this->td_style . '>Second</td></tr>'. "\r\n";
+		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Single Line Text</td><td' . $this->td_style . '>Third</td></tr>' . "\r\n";
 
 		return $html;
 	}
 
 	private function separate_values_checkbox_html() {
-		return '<tr ' . $this->tr_style . '><td' . $this->td_style . '>Checkboxes - separate values</td><td' . $this->td_style . '>Option 1, Option 2</td></tr>' . "\r\n";
+		return '<tr' . $this->tr_style . '><td' . $this->td_style . '>Checkboxes - separate values</td><td' . $this->td_style . '>Option 1, Option 2</td></tr>' . "\r\n";
 	}
 
 	private function user_info_html( $atts ) {
 		if ( isset( $atts['user_info'] ) && $atts['user_info'] == true ) {
-			$html = '<tr ' . $this->tr_style . '><td' . $this->td_style . '>IP Address</td><td' . $this->td_style . '>127.0.0.1</td></tr>' . "\r\n";
-			$html .= '<tr ' . $this->tr_style . '><td' . $this->td_style . '>User-Agent (Browser/OS)</td><td' . $this->td_style . '>Mozilla Firefox 37.0 / OS X</td></tr>' . "\r\n";
-			$html .= '<tr ' . $this->tr_style . '><td' . $this->td_style . '>Referrer</td><td' . $this->td_style . '>http://localhost:8888/features/wp-admin/admin-ajax.php?action=frm_forms_preview&form=boymfd</td></tr>' . "\r\n";
+			$html = '<tr' . $this->tr_style . '><td' . $this->td_style . '>IP Address</td><td' . $this->td_style . '>127.0.0.1</td></tr>' . "\r\n";
+			$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>User-Agent (Browser/OS)</td><td' . $this->td_style . '>Mozilla Firefox 37.0 / OS X</td></tr>' . "\r\n";
+			$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Referrer</td><td' . $this->td_style . '>http://localhost:8888/features/wp-admin/admin-ajax.php?action=frm_forms_preview&form=boymfd</td></tr>' . "\r\n";
 		} else {
 			$html = '';
 		}
@@ -1451,13 +1451,13 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 
 	private function expected_html_content_for_post_entry( $atts ) {
 		$table = $this->table_header( $atts );
-		$table .= '<tr ' . $this->tr_style . '><td' . $this->td_style . '>Title</td><td' . $this->td_style . '>Jamie\'s Post</td></tr>' . "\r\n";
-		$table .= '<tr ' . $this->tr_style . '><td' . $this->td_style . '>Content</td><td' . $this->td_style . '>Hello! My name is Jamie.</td></tr>' . "\r\n";
-		$table .= '<tr ' . $this->tr_style . '><td' . $this->td_style . '>Author</td><td' . $this->td_style . '>Jamie Wahlin</td></tr>' . "\r\n";
-		$table .= '<tr ' . $this->tr_style . '><td' . $this->td_style . '>User ID</td><td' . $this->td_style . '>admin</td></tr>' . "\r\n";
-		$table .= '<tr ' . $this->tr_style . '><td' . $this->td_style . '>Category</td><td' . $this->td_style . '><a href="http://example.org/?cat=1" title="View all posts filed under Uncategorized">Uncategorized</a></td></tr>' . "\r\n";
-		$table .= '<tr ' . $this->tr_style . '><td' . $this->td_style . '>Parent Dynamic Field</td><td' . $this->td_style . '><a href="http://example.org/?cat=1" title="View all posts filed under Uncategorized">Uncategorized</a></td></tr>' . "\r\n";
-		$table .= '<tr ' . $this->tr_style . '><td' . $this->td_style . '>Post Status</td><td' . $this->td_style . '>Published</td></tr>' . "\r\n";
+		$table .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Title</td><td' . $this->td_style . '>Jamie\'s Post</td></tr>' . "\r\n";
+		$table .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Content</td><td' . $this->td_style . '>Hello! My name is Jamie.</td></tr>' . "\r\n";
+		$table .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Author</td><td' . $this->td_style . '>Jamie Wahlin</td></tr>' . "\r\n";
+		$table .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>User ID</td><td' . $this->td_style . '>admin</td></tr>' . "\r\n";
+		$table .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Category</td><td' . $this->td_style . '><a href="http://example.org/?cat=1" title="View all posts filed under Uncategorized">Uncategorized</a></td></tr>' . "\r\n";
+		$table .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Parent Dynamic Field</td><td' . $this->td_style . '><a href="http://example.org/?cat=1" title="View all posts filed under Uncategorized">Uncategorized</a></td></tr>' . "\r\n";
+		$table .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Post Status</td><td' . $this->td_style . '>Published</td></tr>' . "\r\n";
 		$table .= $this->table_footer();
 
 		return $table;
@@ -1478,7 +1478,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 					$html .= '<td colspan="2"' . $this->td_style . '>';
 					$html .= '<h3>[' . $field->id . ' show=description]</h3>';
 					$html .= '</td>';
-					$html .= '</tr>[/if ' . $field->id . ']' . "\r\n";;
+					$html .= '</tr>' . "\r\n" . '[/if ' . $field->id . ']' . "\r\n";
 
 					if ( FrmField::is_repeating_field( $field ) ) {
 						$in_repeating_section = $field->id;
@@ -1490,7 +1490,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 				} else if ( $field->type == 'break' ) {
 					$html .= '[if ' . $field->id . ']<tr style="[frm-alt-color]">';
 					$html .= '<td colspan="2"' . $this->td_style . '><br/><br/></td>';
-					$html .= '</tr>[/if ' . $field->id . ']' . "\r\n";;
+					$html .= '</tr>' . "\r\n" . '[/if ' . $field->id . ']' . "\r\n";
 				}
 
 				continue;
@@ -1506,7 +1506,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 			} else {
 				$html .= '<td' . $this->td_style . '>[' . $field->id . ']</td>';
 			}
-			$html .= '</tr>[/if ' . $field->id . ']' . "\r\n";;
+			$html .= '</tr>' . "\r\n" . '[/if ' . $field->id . ']' . "\r\n";;
 		}
 
 		$html .= $this->table_footer();

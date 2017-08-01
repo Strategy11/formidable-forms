@@ -45,16 +45,10 @@ class FrmEntryFormat {
 	protected $direction = 'ltr';
 
 	/**
-	 * @var array
+	 * @var FrmTableHTMLHelper
 	 * @since 2.03.11
 	 */
-	protected $style_settings = array();
-
-	/**
-	 * @var bool
-	 * @since 2.03.11
-	 */
-	protected $use_inline_style = true;
+	protected $table_helper = null;
 
 	/**
 	 * @var bool
@@ -67,24 +61,6 @@ class FrmEntryFormat {
 	 * @since 2.03.11
 	 */
 	protected $include_extras = array();
-
-	/**
-	 * @var bool
-	 * @since 2.03.11
-	 */
-	protected $odd = false;
-
-	/**
-	 * @var string
-	 * @since 2.03.11
-	 */
-	protected $table_style = '';
-
-	/**
-	 * @var string
-	 * @since 2.03.11
-	 */
-	protected $td_style = '';
 
 	/**
 	 * @var array
@@ -115,10 +91,7 @@ class FrmEntryFormat {
 		$this->init_include_user_info( $atts );
 
 		if ( $this->format === 'text' && $this->is_plain_text === false ) {
-			$this->init_style_settings( $atts );
-			$this->init_use_inline_style( $atts );
-			$this->init_table_style();
-			$this->init_td_style();
+			$this->init_table_helper( $atts );
 			$this->init_is_clickable( $atts );
 		}
 	}
@@ -232,55 +205,14 @@ class FrmEntryFormat {
 	}
 
 	/**
-	 * Set the style_settings property
+	 * Set the table_helper property
 	 *
 	 * @since 2.03.11
 	 *
 	 * @param array $atts
 	 */
-	protected function init_style_settings( $atts ) {
-		$this->style_settings = self::generate_style_settings();
-
-		foreach ( $this->style_settings as $key => $setting ) {
-			if ( isset( $atts[ $key ] ) && $atts[ $key ] !== '' ) {
-				$this->style_settings[ $key ] = str_replace( '#', '', $atts[ $key ] );
-			}
-		}
-	}
-
-	/**
-	 * Set the use_inline_style property
-	 *
-	 * @since 2.03.11
-	 *
-	 * @param array $atts
-	 */
-	protected function init_use_inline_style( $atts ) {
-		if ( isset( $atts['inline_style'] ) && ! $atts['inline_style'] ) {
-			$this->use_inline_style = false;
-		}
-	}
-
-	/**
-	 * Set the table_style property
-	 *
-	 * @since 2.03.11
-	 */
-	protected function init_table_style() {
-		if ( $this->use_inline_style === true ) {
-			$this->table_style = self::generate_table_style( $this->style_settings );
-		}
-	}
-
-	/**
-	 * Set the td_style property
-	 *
-	 * @since 2.03.11
-	 */
-	protected function init_td_style() {
-		if ( $this->use_inline_style === true ) {
-			$this->td_style = self::generate_td_style( $this->style_settings, $this->direction );
-		}
+	protected function init_table_helper( $atts ) {
+		$this->table_helper = new FrmTableHTMLHelper( 'entry', $atts );
 	}
 
 	/**
@@ -464,9 +396,7 @@ class FrmEntryFormat {
 	 * @return string
 	 */
 	protected function html_content() {
-		$content = '<table cellspacing="0"' . $this->table_style . '><tbody>' . "\r\n";
-
-		$this->odd = true;
+		$content = $this->table_helper->generate_table_header();
 
 		foreach ( $this->entry_values->get_field_values() as $field_id => $field_value ) {
 			$this->add_field_value_to_html_table( $field_value, $content );
@@ -474,7 +404,7 @@ class FrmEntryFormat {
 
 		$this->add_user_info_to_html_table( $content );
 
-		$content .= '</tbody></table>';
+		$content .= $this->table_helper->generate_table_footer();
 
 		if ( $this->is_clickable ) {
 			$content = make_clickable( $content );
@@ -633,22 +563,7 @@ class FrmEntryFormat {
 	 * @param string $content
 	 */
 	protected function add_html_row( $label, $display_value, &$content ) {
-		$content .= '<tr ' . $this->tr_style() . '>';
-
-		if ( 'rtl' == $this->direction ) {
-			$first = $display_value;
-			$second = $label;
-		} else {
-			$first = $label;
-			$second = $display_value;
-		}
-
-		$content .= '<td' . $this->td_style . '>' . $first . '</td>';
-		$content .= '<td' . $this->td_style . '>' . $second . '</td>';
-
-		$content .= '</tr>' . "\r\n";
-
-		$this->odd = ! $this->odd;
+		$content .= $this->table_helper->generate_two_cell_table_row( $label, $display_value );
 	}
 
 	/**
@@ -678,63 +593,6 @@ class FrmEntryFormat {
 	protected function prepare_display_value_for_plain_text_content( &$display_value ) {
 		$this->flatten_array( $display_value );
 		$this->strip_html( $display_value );
-	}
-
-	/**
-	 * Get the table row style
-	 *
-	 * @since 2.03.11
-	 *
-	 * @return string
-	 */
-	private function tr_style() {
-		if ( $this->use_inline_style ) {
-			$tr_style = 'style="background-color:#' . $this->table_row_background_color() . ';"';
-		} else {
-			$tr_style = '';
-		}
-
-		return $tr_style;
-	}
-
-	/**
-	 * Get the table row background color
-	 *
-	 * @since 2.03.11
-	 *
-	 * @return string
-	 */
-	protected function table_row_background_color() {
-		return ( $this->odd ? $this->style_settings['bg_color'] : $this->style_settings['alt_bg_color'] );
-	}
-
-	// TODO: maybe move to helper class
-	public static function generate_td_style( $style_settings, $direction = 'ltr' ) {
-		$td_style_attributes = 'text-align:' . ( $direction == 'rtl' ? 'right' : 'left' ) . ';';
-		$td_style_attributes .= 'color:#' . $style_settings[ 'text_color' ] . ';padding:7px 9px;vertical-align:top;';
-		$td_style_attributes .= 'border-top:' . $style_settings[ 'border_width' ] . ' solid #' . $style_settings[ 'border_color' ] . ';';
-
-		return ' style="' . $td_style_attributes . '"';
-	}
-
-	// TODO: maybe move to helper class
-	public static function generate_table_style( $style_settings ) {
-		$table_style = ' style="' . esc_attr( 'font-size:' . $style_settings[ 'font_size' ] . ';line-height:135%;' );
-		$table_style .= esc_attr( 'border-bottom:' . $style_settings[ 'border_width' ] . ' solid #' . $style_settings[ 'border_color' ] . ';' ) . '"';
-
-		return $table_style;
-	}
-
-	// TODO: move to helper?
-	public static function generate_style_settings() {
-		return apply_filters( 'frm_show_entry_styles', array(
-			'border_color' => 'dddddd',
-			'bg_color'     => 'f7f7f7',
-			'text_color'   => '444444',
-			'font_size'    => '12px',
-			'border_width' => '1px',
-			'alt_bg_color' => 'ffffff',
-		) );
 	}
 
 	/***********************************************************************
