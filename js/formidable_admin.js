@@ -2264,7 +2264,7 @@ function frmAdminBuildJS(){
 			buttonContainer: '<div class="btn-group frm-btn-group" />',
 			nonSelectedText:frm_admin_js['default'],// TODO: should be noneSelectedText
 			onDropdownShown: function( event ) {
-				var action = jQuery( event.currentTarget.closest( '.frm_form_action_settings' ) );
+				var action = jQuery( event.currentTarget.closest( '.frm_form_action_settings, #new_fields' ) );
 				if ( action.length ) {
 					jQuery( '#wpcontent' ).click(function () {
 						if ( jQuery( '.multiselect-container.frm-dropdown-menu' ).is( ':visible' ) ) {

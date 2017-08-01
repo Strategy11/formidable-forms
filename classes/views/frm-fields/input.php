@@ -21,7 +21,7 @@ do_action('frm_field_input_html', $field);
 		do_action( 'frm_after_checkbox', array( 'field' => $field, 'field_name' => $field_name, 'type' => $field['type'] ) );
     } else if ( is_array($field['options']) ) {
         foreach ( $field['options'] as $opt_key => $opt ) {
-			if ( isset( $atts ) && isset( $atts['opt'] ) && ( $atts['opt'] != $opt_key ) ) {
+			if ( isset( $atts ) && isset( $atts['opt'] ) && ( $atts['opt'] !== $opt_key ) ) {
                 continue;
             }
 
