@@ -15,7 +15,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	// TODO: try including a field from inside an embedded form
 	// TODO: write test for each bug that I'm fixing
 	// TODO: section with no fields in it
-	// TODO: add is_visible for default HTML
+	// TODO: add is_visible for default HTML or just if [if x]
 
 	private $text_field_id = '';
 	private $tr_style = ' style="background-color:#ffffff;"';

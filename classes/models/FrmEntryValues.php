@@ -75,6 +75,22 @@ class FrmEntryValues {
 	 * @param array $atts
 	 */
 	protected function init_include_fields( $atts ) {
+
+		// For reverse compatibility with the fields parameter
+		if ( ! isset( $atts['include_fields'] ) || empty( $atts['include_fields'] ) ) {
+
+			if ( isset( $atts['fields'] ) && ! empty( $atts['fields'] ) ) {
+
+				$atts['include_fields'] = '';
+				foreach ( $atts['fields'] as $included_field ) {
+					$atts['include_fields'] .= $included_field->id . ',';
+				}
+
+				$atts['include_fields'] = rtrim( $atts['include_fields'], ',' );
+			}
+
+		}
+
 		$this->include_fields = $this->prepare_array_property( 'include_fields', $atts );
 	}
 

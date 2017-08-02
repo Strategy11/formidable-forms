@@ -5,6 +5,8 @@
  */
 class FrmFieldValue {
 
+	// TODO: should init_displayed_value or format_displayed_value take care of applying $atts to displayed_value?
+
 	/**
 	 * @since 2.03.11
 	 *
@@ -76,7 +78,7 @@ class FrmFieldValue {
 	protected function init_displayed_value( $atts ) {
 		$this->displayed_value = $this->saved_value;
 
-		$this->filter_displayed_value();
+		$this->filter_displayed_value( $atts );
 	}
 
 	/**
@@ -130,7 +132,7 @@ class FrmFieldValue {
 	 *
 	 * @since 2.03.11
 	 */
-	protected function filter_displayed_value() {
+	protected function filter_displayed_value( $atts ) {
 		// Deprecated frm_email_value hook
 		$meta = array(
 			'item_id' => $this->entry->id,
@@ -149,6 +151,16 @@ class FrmFieldValue {
 		$this->displayed_value = apply_filters( 'frm_display_' . $this->field->type . '_value_custom', $this->displayed_value, array(
 			'field' => $this->field,
 		) );
+
+		// TODO: maybe make is_plain_text a property or make displayed value an object of its own
+		// TODO: put into function
+		/*if ( isset( $atts['plain_text'] ) && $atts['plain_text'] ) {
+			if ( strpos( $this->displayed_value, '<img' ) !== false ) {
+				$this->displayed_value = str_replace( array( '<img', 'src=', '/>', '"' ), '', $this->displayed_value );
+				$this->displayed_value = trim( $this->displayed_value );
+			}
+			$this->displayed_value = strip_tags( $this->displayed_value );
+		}*/
 	}
 
 	/**

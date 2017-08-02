@@ -540,39 +540,18 @@ class FrmEntriesController {
 		$atts = shortcode_atts( $defaults, $atts );
 
 		if ( $atts['default_email'] ) {
+
 			$entry_shortcode_formatter = FrmEntryFactory::entry_shortcode_formatter_instance( $atts['form_id'], $atts['format'] );
 			$formatted_entry = $entry_shortcode_formatter->content();
+
 		} else {
 
-			self::prepare_atts_for_entry_formatter( $atts );
 			$entry_formatter = FrmEntryFactory::entry_formatter_instance( $atts );
 			$formatted_entry = $entry_formatter->formatted_entry_values();
+
 		}
 
 		return $formatted_entry;
-	}
-
-	/**
-	 * Prepare the $atts array for the entry formatter
-	 *
-	 * @since 2.03.11
-	 *
-	 * @param array $atts
-	 */
-	private static function prepare_atts_for_entry_formatter( &$atts ) {
-		// TODO: Move to entry formatter class?
-		if ( $atts['format'] != 'text' ) {
-			$atts['plain_text'] = true;
-		}
-
-		if ( is_array( $atts['fields'] ) && ! empty( $atts['fields'] ) && ! $atts['include_fields'] ) {
-			$atts['include_fields'] = '';
-			foreach ( $atts['fields'] as $included_field ) {
-				$atts['include_fields'] .= $included_field->id . ',';
-			}
-
-			$atts['include_fields'] = rtrim( $atts['include_fields'], ',' );
-		}
 	}
 
 	public static function get_params( $form = null ) {
