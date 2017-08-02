@@ -43,6 +43,10 @@ class FrmDb {
 
             /**** ADD/UPDATE DEFAULT TEMPLATES ****/
             FrmXMLController::add_default_templates();
+
+			if ( ! $old_db_version ) {
+				$this->maybe_create_contact_form();
+			}
         }
 
         do_action('frm_after_install');
@@ -158,6 +162,20 @@ class FrmDb {
             unset($q);
         }
     }
+
+	private function maybe_create_contact_form() {
+		$template_id = FrmForm::getIdByKey( 'contact' );
+		if ( $template_id ) {
+			$form_id = FrmForm::duplicate( $template_id, false, true );
+			if ( $form_id ) {
+				$values = array(
+					'status'   => 'published',
+					'form_key' => 'contact-form',
+				);
+				FrmForm::update( $form_id, $values );
+			}
+		}
+	}
 
     /**
      * @param integer $frm_db_version

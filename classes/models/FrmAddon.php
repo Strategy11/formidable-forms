@@ -240,7 +240,10 @@ class FrmAddon {
 	 	check_ajax_referer( 'frm_ajax', 'nonce' );
 
 		if ( ! isset( $_POST['license'] ) || empty( $_POST['license'] ) ) {
-			wp_die( __( 'Oops! You forgot to enter your license number.', 'formidable' ) );
+			wp_die( json_encode( array(
+				'message' => __( 'Oops! You forgot to enter your license number.', 'formidable' ),
+				'success' => false,
+			) ) );
 		}
 
 		$license = stripslashes( sanitize_text_field( $_POST['license'] ) );

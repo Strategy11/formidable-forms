@@ -155,7 +155,7 @@ function frmAdminBuildJS(){
 		if(typeof t == 'undefined'){
 			return;
 		}
-		
+
 		var c = t.replace('#', '.');
 		var pro=jQuery('#taxonomy-linkcategory .frm-category-tabs li').length > 2;
 		link.closest('li').addClass('tabs active').siblings('li').removeClass('tabs active');
@@ -176,6 +176,12 @@ function frmAdminBuildJS(){
 						document.getElementById('frm_html_tab').style.display = 'none';
 					}
 					jQuery(document.getElementById('frm_insert_fields_tab')).click();
+				}
+			}else {
+				/* global settings */
+				var ajax = link.data('frmajax');
+				if ( typeof ajax !== 'undefined' && ajax == '1' ) {
+					loadSettingsTab(t);
 				}
 			}
 		}
@@ -2027,6 +2033,24 @@ function frmAdminBuildJS(){
 	}
 	
 	/* Global settings page */
+	function loadSettingsTab( anchor ) {
+		var holder = anchor.replace('#','');
+		var holderContainer = jQuery('.frm_'+ holder +'_ajax');
+		if ( holderContainer.length ) {
+			jQuery.ajax({
+				type:'POST',url:ajaxurl,
+				data:{
+					'action':'frm_settings_tab',
+					'tab':holder.replace('_settings',''),
+					'nonce':frmGlobal.nonce
+				},
+				success:function(html){
+					holderContainer.replaceWith(html);
+				}
+			});
+		}
+	}
+
 	function uninstallNow(){ 
 		if(confirm(frm_admin_js.confirm_uninstall)){
 			jQuery('.frm_uninstall .spinner').show();
@@ -2138,7 +2162,7 @@ function frmAdminBuildJS(){
 				if ( msg.message !== '' ){
 					setTimeout(function(){
 						messageBox.html('');
-					},5000);
+					},15000);
 				}
 			}
 		});
@@ -2849,8 +2873,9 @@ function frmAdminBuildJS(){
             initiateMultiselect();
 
 			// activate addon licenses
-			jQuery('.edd_frm_save_license').click(saveAddonLicense);
-			jQuery('.edd_frm_fill_license').click(fillLicenses);
+			var licenseTab = document.getElementById('licenses_settings');
+			jQuery(licenseTab).on('click', '.edd_frm_save_license', saveAddonLicense);
+			jQuery(licenseTab).on('click', '.edd_frm_fill_license', fillLicenses);
 		},
 
 		exportInit: function(){

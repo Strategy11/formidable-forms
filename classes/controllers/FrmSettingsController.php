@@ -23,19 +23,46 @@ class FrmSettingsController {
         $uploads = wp_upload_dir();
         $target_path = $uploads['basedir'] . '/formidable/css';
 
+		$sections = self::get_settings_tabs();
+
+		$captcha_lang = FrmAppHelper::locales( 'captcha' );
+
+		require( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/form.php' );
+	}
+
+	private static function get_settings_tabs() {
 		$sections = array();
 		if ( apply_filters( 'frm_include_addon_page', false ) ) {
 			$sections['licenses'] = array(
 				'class' => 'FrmAddonsController', 'function' => 'license_settings',
 				'name' => __( 'Plugin Licenses', 'formidable' ),
+				'ajax' => true,
 			);
 		}
-        $sections = apply_filters( 'frm_add_settings_section', $sections );
+		$sections = apply_filters( 'frm_add_settings_section', $sections );
 
-        $captcha_lang = FrmAppHelper::locales( 'captcha' );
+		return $sections;
+	}
 
-        require( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/form.php' );
-    }
+	public static function load_settings_tab() {
+		FrmAppHelper::permission_check('frm_change_settings');
+		check_ajax_referer( 'frm_ajax', 'nonce' );
+
+		$section = FrmAppHelper::get_post_param( 'tab', '', 'sanitize_text_field' );
+		$sections = self::get_settings_tabs();
+		if ( ! isset( $sections[ $section ] ) ) {
+			wp_die();
+		}
+
+		$section = $sections[ $section ];
+
+		if ( isset( $section['class'] ) ) {
+			call_user_func( array( $section['class'], $section['function'] ) );
+		} else {
+			call_user_func( ( isset( $section['function'] ) ? $section['function'] : $section ) );
+		}
+		wp_die();
+	}
 
     public static function process_form( $stop_load = false ) {
         global $frm_vars;

@@ -14,10 +14,12 @@
         <div class="contextual-help-tabs">
         <ul class="frm-category-tabs">
 			<?php $a = FrmAppHelper::simple_get( 't', 'sanitize_title', 'general_settings' ); ?>
-        	<li <?php echo ($a == 'general_settings') ? 'class="tabs active"' : '' ?>><a href="#general_settings" class="frm_cursor_pointer"><?php _e( 'General', 'formidable' ) ?></a></li>
+        	<li <?php echo ( $a == 'general_settings' ) ? 'class="tabs active"' : '' ?>>
+				<a href="#general_settings" class="frm_cursor_pointer"><?php _e( 'General', 'formidable' ) ?></a>
+			</li>
 			<?php foreach ( $sections as $sec_name => $section ) { ?>
 				<li <?php echo ( $a == $sec_name . '_settings' ) ? 'class="tabs active"' : '' ?>>
-					<a href="#<?php echo esc_attr( $sec_name ) ?>_settings">
+					<a href="#<?php echo esc_attr( $sec_name ) ?>_settings" data-frmajax="<?php echo esc_attr( isset( $section['ajax'] ) ? $section['ajax'] : '' ) ?>">
 						<?php echo isset( $section['name'] ) ? $section['name'] : ucfirst( $sec_name ) ?>
 					</a>
 				</li>
@@ -178,10 +180,17 @@
 			if ( $a == $sec_name . '_settings' ) { ?>
 <style type="text/css">.<?php echo esc_attr( $sec_name ) ?>_settings{display:block;}</style><?php } ?>
 			<div id="<?php echo esc_attr( $sec_name ) ?>_settings" class="<?php echo esc_attr( $sec_name ) ?>_settings tabs-panel <?php echo ( $a == $sec_name . '_settings' ) ? 'frm_block' : 'frm_hidden'; ?>"><?php
-				if ( isset( $section['class'] ) ) {
-					call_user_func( array( $section['class'], $section['function'] ) );
+				if ( isset( $section['ajax'] ) ) {
+					?>
+					<div class="frm_ajax_settings_tab frm_<?php echo esc_attr( $sec_name ) ?>_settings_ajax">
+						<span class="spinner"></span>
+					</div><?php
 				} else {
-					call_user_func( ( isset( $section['function'] ) ? $section['function'] : $section ) );
+					if ( isset( $section['class'] ) ) {
+						call_user_func( array( $section['class'], $section['function'] ) );
+					} else {
+						call_user_func( ( isset( $section['function'] ) ? $section['function'] : $section ) );
+					}
                 } ?>
             </div>
         <?php
