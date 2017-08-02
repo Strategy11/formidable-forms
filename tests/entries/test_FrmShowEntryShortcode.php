@@ -10,13 +10,7 @@
  */
 class test_FrmShowEntryShortcode extends FrmUnitTest {
 
-	// TODO:
-	// 1) UML diagram.
-	// 2) Assess overall organization.
-	// 3) Add PHP docs.
-	// 4) Check all TODO items
-	// 5) Deprecate necessary functions and hooks
-
+	// TODO: Deprecate necessary functions and hooks
 	// TODO: try including a field from inside a repeating section. It's not yet possible to display a single field from inside a repeating section
 	// TODO: try including a field from inside an embedded form
 	// TODO: write test for each bug that I'm fixing

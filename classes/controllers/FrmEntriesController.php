@@ -545,13 +545,8 @@ class FrmEntriesController {
 		} else {
 
 			self::prepare_atts_for_entry_formatter( $atts );
-			$entry_data = FrmEntryFactory::entry_format_instance( $atts );
-
-			if ( $entry_data->get_entry() === null || $entry_data->get_entry() === false ) {
-				return '';
-			}
-
-			$formatted_entry = $entry_data->formatted_entry_values();
+			$entry_formatter = FrmEntryFactory::entry_formatter_instance( $atts );
+			$formatted_entry = $entry_formatter->formatted_entry_values();
 		}
 
 		return $formatted_entry;
@@ -565,6 +560,7 @@ class FrmEntriesController {
 	 * @param array $atts
 	 */
 	private static function prepare_atts_for_entry_formatter( &$atts ) {
+		// TODO: Move to entry formatter class?
 		if ( $atts['format'] != 'text' ) {
 			$atts['plain_text'] = true;
 		}

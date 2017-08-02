@@ -6,26 +6,26 @@
 class FrmEntryFactory {
 
 	/**
-	 * Create an entry format instance
+	 * Create an instance of the FrmEntryFormatter class
 	 *
 	 * @since 2.03.11
 	 *
 	 * @param array $atts
 	 *
-	 * @return FrmEntryFormat|FrmProEntryFormat
+	 * @return FrmEntryFormatter|FrmProEntryFormatter
 	 */
-	public static function entry_format_instance( $atts ) {
-		$entry_format = apply_filters( 'frm_entry_format_instance', null, $atts );
+	public static function entry_formatter_instance( $atts ) {
+		$entry_formatter = apply_filters( 'frm_entry_formatter_instance', null, $atts );
 
-		if ( ! is_object( $entry_format ) ) {
-			$entry_format = new FrmEntryFormat( $atts );
+		if ( ! is_object( $entry_formatter ) ) {
+			$entry_formatter = new FrmEntryFormatter( $atts );
 		}
 
-		return $entry_format;
+		return $entry_formatter;
 	}
 
 	/**
-	 * Create an HTML generator instance
+	 * Create an intsance of the FrmEntryShortcodeFormatter class
 	 *
 	 * @since 2.03.11
 	 *
