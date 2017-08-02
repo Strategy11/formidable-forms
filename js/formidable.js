@@ -3962,81 +3962,142 @@ function frmFrontFormJS(){
 			jQuery(document).trigger( 'frmAfterRemoveRow' );
 		});
 
+		showAddButton(sectionID);
+
 		return false;
 	}
 
-	function addRow(){
-		/*jshint validthis:true */
+	//Determine if Section has a row format (grid or inline).
+    function sectionHasRowFormat($section) {
 
-		// If row is currently being added, leave now
-		if ( currentlyAddingRow === true ) {
-			return false;
-		}
+		return $section.hasClass('frm_repeat_grid') || $section.hasClass('frm_repeat_inline');
 
-		// Indicate that a row is being added (so double clicking Add button doesn't cause problems)
-		currentlyAddingRow = true;
+    }
 
-		var id = jQuery(this).data('parent');
-		var i = 0;
-		if ( jQuery('.frm_repeat_'+id).length > 0 ) {
-			var lastRowIndex = jQuery('.frm_repeat_'+ id +':last').attr('id').replace('frm_section_'+ id +'-', '');
-			if ( lastRowIndex.indexOf( 'i' ) > -1 ) {
-				i = 1;
-			} else {
-				i = 1 + parseInt( lastRowIndex );
-			}
-		}
+
+    function hideAddButton(sectionID) {
+
+        var $section = jQuery('#frm_section_' + sectionID + '-0'),
+            $add_buttons = jQuery('#frm_field_' + sectionID + '_container .frm_add_form_row.frm_button');
+
+        if (sectionHasRowFormat($section)) {
+
+            $add_buttons.css({
+                'visibility': 'hidden',
+                'opacity': '0',
+                'transition': 'visibility 0s linear 300ms, opacity 300ms'
+            });
+
+        } else {
+
+            $add_buttons.addClass('frm_hide_add_button');
+
+        }
+    }
+
+    function showAddButton(sectionID) {
+
+        var $section = jQuery('#frm_section_' + sectionID + '-0'),
+            $add_buttons = jQuery('#frm_field_' + sectionID + '_container .frm_add_form_row.frm_button');
+
+        if (sectionHasRowFormat($section)) {
+
+            $add_buttons.css({
+                'visibility': 'visible',
+                'opacity': '1',
+                'transition': 'visibility 0s linear 0s, opacity 300ms'
+            });
+
+        } else {
+
+            $add_buttons.removeClass('frm_hide_add_button');
+
+        }
+
+    }
+
+    function addRow() {
+        /*jshint validthis:true */
+
+        // If row is currently being added, leave now
+        if (currentlyAddingRow === true) {
+            return false;
+        }
+
+        // Indicate that a row is being added (so double clicking Add button doesn't cause problems)
+        currentlyAddingRow = true;
+
+        var id = jQuery(this).data('parent');
+        var i = 0;
+
+        var numberOfSections = jQuery('.frm_repeat_' + id).length;
+
+        if (numberOfSections > 0) {
+            var lastRowIndex = jQuery('.frm_repeat_' + id + ':last').attr('id').replace('frm_section_' + id + '-', '');
+            if (lastRowIndex.indexOf('i') > -1) {
+                i = 1;
+            } else {
+                i = 1 + parseInt(lastRowIndex);
+            }
+        }
 
 		jQuery.ajax({
 			type:'POST',url:frm_js.ajax_url,
 			dataType: 'json',
-			data:{action:'frm_add_form_row', field_id:id, i:i, nonce:frm_js.nonce},
+			data:{action:'frm_add_form_row', field_id:id, i:i, numberOfSections: numberOfSections, nonce:frm_js.nonce},
 			success:function(r){
-				var html = r.html;
-				var item = jQuery(html).hide().fadeIn('slow');
-				jQuery('.frm_repeat_'+ id +':last').after(item);
+				//only process row if row actually added
+				if (r.html) {
+					var html = r.html;
+					var item = jQuery(html).hide().fadeIn('slow');
+					jQuery('.frm_repeat_' + id + ':last').after(item);
 
-                var checked = ['other'];
-                var fieldID, fieldObject;
-                var reset = 'reset';
-
-				var repeatArgs = {
-					repeatingSection: id.toString(),
-					repeatRow: i.toString(),
-				};
-
-                // hide fields with conditional logic
-                jQuery(html).find('input, select, textarea').each(function(){
-					if ( this.type != 'file' ) {
-
-						// Readonly dropdown fields won't have a name attribute
-						if ( this.name === '' ) {
-							return true;
-						}
-						fieldID = this.name.replace('item_meta[', '').split(']')[2].replace('[', '');
-						if ( jQuery.inArray(fieldID, checked ) == -1 ) {
-							if ( this.id === false || this.id === '' ) {
-								return;
-							}
-
-							fieldObject = jQuery( '#' + this.id );
-							checked.push(fieldID);
-							hideOrShowFieldById( fieldID, repeatArgs );
-							updateWatchingFieldById( fieldID, repeatArgs, 'value changed' );
-							// TODO: maybe trigger a change instead of running these three functions
-							checkFieldsWithConditionalLogicDependentOnThis( fieldID, fieldObject );
-							checkFieldsWatchingLookup( fieldID, fieldObject, 'value changed' );
-							doCalculation(fieldID, fieldObject);
-							reset = 'persist';
-						}
+					if (r.hide_add_buttons){
+						hideAddButton(id);
 					}
-                });
 
-				loadDropzones( repeatArgs.repeatRow );
-				loadStars();
+					var checked = ['other'];
+					var fieldID, fieldObject;
+					var reset = 'reset';
 
-				// trigger autocomplete
-				loadChosen();
+					 var repeatArgs = {
+						repeatingSection: id.toString(),
+						repeatRow: i.toString(),
+					};
+
+					// hide fields with conditional logic
+					jQuery(html).find('input, select, textarea').each(function () {
+						if (this.type != 'file') {
+
+							// Readonly dropdown fields won't have a name attribute
+							if (this.name === '') {
+								return true;
+							}
+							fieldID = this.name.replace('item_meta[', '').split(']')[2].replace('[', '');
+							if (jQuery.inArray(fieldID, checked) == -1) {
+								if (this.id === false || this.id === '') {
+									return;
+								}
+
+								fieldObject = jQuery('#' + this.id);
+								checked.push(fieldID);
+								hideOrShowFieldById(fieldID, repeatArgs);
+								updateWatchingFieldById(fieldID, repeatArgs, 'value changed');
+								// TODO: maybe trigger a change instead of running these three functions
+								checkFieldsWithConditionalLogicDependentOnThis(fieldID, fieldObject);
+								checkFieldsWatchingLookup(fieldID, fieldObject, 'value changed');
+								doCalculation(fieldID, fieldObject);
+								reset = 'persist';
+							}
+						}
+					});
+
+					loadDropzones(repeatArgs.repeatRow);
+					loadStars();
+
+					// trigger autocomplete
+					loadChosen();
+				}
 
 				if(typeof(frmThemeOverride_frmAddRow) == 'function'){
 					frmThemeOverride_frmAddRow(id, r);
@@ -4137,10 +4198,8 @@ function frmFrontFormJS(){
 						container.fadeOut('slow', function(){
 							container.remove();
 						});
-
 						jQuery(document.getElementById('frm_delete_'+entry_id)).fadeOut('slow');
 						jQuery( document ).trigger( 'frmEntryDeleted', [ entry_id ] );
-
 					}else{
 						jQuery(document.getElementById('frm_delete_'+entry_id)).replaceWith(html);
 					}
