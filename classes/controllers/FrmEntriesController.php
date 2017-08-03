@@ -547,7 +547,7 @@ class FrmEntriesController {
 		} else {
 
 			$entry_formatter = FrmEntryFactory::entry_formatter_instance( $atts );
-			$formatted_entry = $entry_formatter->formatted_entry_values();
+			$formatted_entry = $entry_formatter->get_formatted_entry_values();
 
 		}
 

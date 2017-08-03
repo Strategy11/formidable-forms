@@ -86,14 +86,13 @@ class FrmEntryFormatter {
 		}
 
 		$this->init_entry_values( $atts );
-
-		$this->init_format( $atts );
 		$this->init_is_plain_text( $atts );
+		$this->init_format( $atts );
 		$this->init_include_blank( $atts );
 		$this->init_direction( $atts );
 		$this->init_include_user_info( $atts );
 
-		if ( $this->format === 'text' && $this->is_plain_text === false ) {
+		if ( $this->format === 'table' ) {
 			$this->init_table_helper( $atts );
 			$this->init_is_clickable( $atts );
 		}
@@ -121,15 +120,6 @@ class FrmEntryFormatter {
 	}
 
 	/**
-	 * Get the entry property
-	 *
-	 * @since 2.03.11
-	 */
-	public function get_entry() {
-		return $this->entry;
-	}
-
-	/**
 	 * Set the entry values property
 	 *
 	 * @since 2.03.11
@@ -148,8 +138,21 @@ class FrmEntryFormatter {
 	 * @param array $atts
 	 */
 	protected function init_format( $atts ) {
-		if ( isset( $atts['format'] ) && in_array( $atts['format'], array( 'text', 'json', 'array' ) ) ) {
-			$this->format = $atts['format'];
+		if ( $atts['format'] === 'array' ) {
+
+			$this->format = 'array';
+
+		} else if ( $atts['format'] === 'json' ) {
+
+			$this->format = 'json';
+
+		} else if ( $atts['format'] === 'text' ) {
+
+			if ( $this->is_plain_text === true ) {
+				$this->format = 'plain_text_block';
+			} else {
+				$this->format = 'table';
+			}
 		}
 	}
 
@@ -163,7 +166,7 @@ class FrmEntryFormatter {
 	protected function init_is_plain_text( $atts ) {
 		if ( isset( $atts['plain_text'] ) && $atts['plain_text'] ) {
 			$this->is_plain_text = true;
-		} else if ( $this->format !== 'text' ) {
+		} else if ( $atts['format'] !== 'text' ) {
 			$this->is_plain_text = true;
 		}
 	}
@@ -238,20 +241,25 @@ class FrmEntryFormatter {
 	 *
 	 * @return array|string
 	 */
-	public function formatted_entry_values() {
-		if ( $this->get_entry() === null || $this->get_entry() === false ) {
+	public function get_formatted_entry_values() {
+		if ( $this->entry === null || $this->entry === false ) {
 			return '';
 		}
 
-		if ( $this->format == 'json' ) {
-			$content = json_encode( $this->prepare_array_output() );
+		if ( $this->format === 'json' ) {
+			$content = json_encode( $this->prepare_array() );
 
-		} else if ( $this->format == 'array' ) {
-			$content = $this->prepare_array_output();
+		} else if ( $this->format === 'array' ) {
+			$content = $this->prepare_array();
+
+		} else if ( $this->format === 'table' ) {
+			$content = $this->prepare_html_table();
+
+		} else if ( $this->format === 'plain_text_block' ) {
+			$content = $this->prepare_plain_text_block();
 
 		} else {
-			$content = $this->prepare_text_output();
-
+			$content = '';
 		}
 
 		return $content;
@@ -288,18 +296,45 @@ class FrmEntryFormatter {
 	}
 
 	/**
-	 * Prepare the text output
+	 * Return the formatted HTML table with entry values
 	 *
 	 * @since 2.03.11
 	 *
 	 * @return string
 	 */
-	protected function prepare_text_output() {
-		if ( $this->is_plain_text ) {
-			$content = $this->plain_text_content();
-		} else {
-			$content = $this->html_content();
+	protected function prepare_html_table() {
+		$content = $this->table_helper->generate_table_header();
+
+		foreach ( $this->entry_values->get_field_values() as $field_id => $field_value ) {
+			$this->add_field_value_to_html_table( $field_value, $content );
 		}
+
+		$this->add_user_info_to_html_table( $content );
+
+		$content .= $this->table_helper->generate_table_footer();
+
+		if ( $this->is_clickable ) {
+			$content = make_clickable( $content );
+		}
+
+		return $content;
+	}
+
+	/**
+	 * Return the formatted plain text content
+	 *
+	 * @since 2.03.11
+	 *
+	 * @return string
+	 */
+	protected function prepare_plain_text_block() {
+		$content = '';
+
+		foreach ( $this->entry_values->get_field_values() as $field_id => $field_value ) {
+			$this->add_field_value_to_plain_text_content( $field_value, $content );
+		}
+
+		$this->add_user_info_to_plain_text_content( $content );
 
 		return $content;
 	}
@@ -311,7 +346,7 @@ class FrmEntryFormatter {
 	 *
 	 * @return array
 	 */
-	protected function prepare_array_output() {
+	protected function prepare_array() {
 		$array_output = array();
 
 		$this->push_field_values_to_array( $this->entry_values->get_field_values(), $array_output );
@@ -374,50 +409,6 @@ class FrmEntryFormatter {
 		}
 
 		return $value;
-	}
-
-	/**
-	 * Return the formatted plain text content
-	 *
-	 * @since 2.03.11
-	 *
-	 * @return string
-	 */
-	protected function plain_text_content() {
-		$content = '';
-
-		foreach ( $this->entry_values->get_field_values() as $field_id => $field_value ) {
-			$this->add_field_value_to_plain_text_content( $field_value, $content );
-		}
-
-		$this->add_user_info_to_plain_text_content( $content );
-
-		return $content;
-	}
-
-	/**
-	 * Return the formatted HTML entry content
-	 *
-	 * @since 2.03.11
-	 *
-	 * @return string
-	 */
-	protected function html_content() {
-		$content = $this->table_helper->generate_table_header();
-
-		foreach ( $this->entry_values->get_field_values() as $field_id => $field_value ) {
-			$this->add_field_value_to_html_table( $field_value, $content );
-		}
-
-		$this->add_user_info_to_html_table( $content );
-
-		$content .= $this->table_helper->generate_table_footer();
-
-		if ( $this->is_clickable ) {
-			$content = make_clickable( $content );
-		}
-
-		return $content;
 	}
 
 	/**
