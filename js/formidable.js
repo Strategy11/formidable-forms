@@ -4460,7 +4460,7 @@ function frmFrontFormJS(){
 			jQuery(document).on('click', '.frm_remove_link', removeFile);
 
 			jQuery(document).on('focusin', 'input[data-frmmask]', function(){
-				jQuery(this).mask( jQuery(this).data('frmmask').toString() );
+				jQuery(this).mask( jQuery(this).data('frmmask').toString(), { autoclear: false } );
 			});
 
 			jQuery(document).on('change', '.frm-show-form input[name^="item_meta"], .frm-show-form select[name^="item_meta"], .frm-show-form textarea[name^="item_meta"]', maybeCheckDependent);
