@@ -309,10 +309,7 @@ class FrmEmail {
 			$this->message = wp_specialchars_decode( strip_tags( $this->message ), ENT_QUOTES );
 		}
 
-		$package_atts = $this->package_atts();
-		$package_atts['form'] = $this->form;
-		$package_atts['entry'] = $this->entry;
-		$this->message = apply_filters( 'frm_email_message', $this->message, $package_atts );
+		$this->message = apply_filters( 'frm_email_message', $this->message, $this->package_atts() );
 	}
 
 	/**
@@ -694,6 +691,8 @@ class FrmEmail {
 			'message'     => $this->message,
 			'attachments' => $this->attachments,
 			'plain_text'  => $this->is_plain_text,
+			'form'        => $this->form,
+			'entry'       => $this->entry,
 		);
 	}
 
