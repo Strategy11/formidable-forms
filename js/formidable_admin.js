@@ -2980,14 +2980,13 @@ if(f){
 
 function frmCheckRepeatLimit(repeatLimit){
 
-    if ( repeatLimit.value > 1 ){
-        return;
-    }
+	if ( repeatLimit.value >= 2 ) {
+		return;
+	}
 
-    alert("Please enter an integer greater than 1 for the Repeat Limit.");
+	alert("Please enter a number greater than 2 for the Repeat Limit.");
 
-    jQuery(repeatLimit).val("");
-
+	jQuery(repeatLimit).val("");
 }
 
 function frmImportCsv(formID){
