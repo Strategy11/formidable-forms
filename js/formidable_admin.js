@@ -2978,6 +2978,18 @@ if(f){
 }
 }
 
+function frmCheckRepeatLimit(repeatLimit){
+
+    if ( repeatLimit.value > 1 ){
+        return;
+    }
+
+    alert("Please enter an integer greater than 1 for the Repeat Limit.");
+
+    jQuery(repeatLimit).val("");
+
+}
+
 function frmImportCsv(formID){
 	var urlVars = '';
 	if(typeof __FRMURLVARS != 'undefined'){
