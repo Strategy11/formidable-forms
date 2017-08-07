@@ -37,24 +37,7 @@ class FrmFieldsHelper {
             }
         }
 
-        if ( $type == 'radio' || $type == 'checkbox' ) {
-            $values['options'] = serialize( array(
-                __( 'Option 1', 'formidable' ),
-                __( 'Option 2', 'formidable' ),
-            ) );
-        } else if ( $type == 'select' ) {
-            $values['options'] = serialize( array(
-                '', __( 'Option 1', 'formidable' ),
-            ) );
-        } else if ( $type == 'textarea' ) {
-            $values['field_options']['max'] = '5';
-        } else if ( $type == 'captcha' ) {
-            $frm_settings = FrmAppHelper::get_settings();
-            $values['invalid'] = $frm_settings->re_msg;
-			$values['field_options']['label'] = 'none';
-        } else if ( 'url' == $type ) {
-            $values['name'] = __( 'Website', 'formidable' );
-        }
+		self::get_options_for_field_type( $type, $values );
 
 		$fields = FrmField::field_selection();
         $fields = array_merge($fields, FrmField::pro_field_selection());
@@ -67,6 +50,31 @@ class FrmFieldsHelper {
 
         return $values;
     }
+
+	private static function get_options_for_field_type( $type, &$values ) {
+		if ( $type == 'radio' || $type == 'checkbox' ) {
+			$values['options'] = serialize( array(
+				__( 'Option 1', 'formidable' ),
+				__( 'Option 2', 'formidable' ),
+			) );
+		} else if ( $type == 'select' ) {
+			$values['options'] = serialize( array(
+				'', __( 'Option 1', 'formidable' ),
+			) );
+		} else if ( $type == 'textarea' ) {
+			$values['field_options']['max'] = '5';
+		} else if ( $type == 'captcha' ) {
+			$frm_settings = FrmAppHelper::get_settings();
+			$values['invalid'] = $frm_settings->re_msg;
+			$values['field_options']['label'] = 'none';
+		} else if ( 'url' == $type ) {
+			$values['name'] = __( 'Website', 'formidable' );
+		} else if ( 'number' == $type ) {
+			$values['field_options']['minnum'] = 0;
+			$values['field_options']['maxnum'] = 9999;
+			$values['field_options']['step'] = 'any';
+		}
+	}
 
 	public static function get_html_id( $field, $plus = '' ) {
 		return apply_filters( 'frm_field_html_id', 'field_' . $field['field_key'] . $plus, $field );
@@ -124,6 +132,7 @@ class FrmFieldsHelper {
             'required_indicator' => '*', 'invalid' => '', 'separate_value' => 0,
             'clear_on_focus' => 0, 'default_blank' => 0, 'classes' => '',
 			'custom_html' => '', 'captcha_size' => 'normal', 'captcha_theme' => 'light',
+			'minnum' => 1, 'maxnum' => 10, 'step' => 1,
         );
 
 		if ( $limit ) {

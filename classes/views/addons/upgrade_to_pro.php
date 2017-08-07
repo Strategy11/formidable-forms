@@ -105,7 +105,7 @@
 				<td><i class="frm_icon_font frm_check_icon"></i></td>
 			</tr>
 			<tr>
-				<th>Include Section headings, page breaks, rich text, number, phone number, date, time, scale, dynamic fields populated from other forms, hidden fields, user ID fields, password, HTML, and tags fields</th>
+				<th>Include Section headings, page breaks, rich text, date, time, scale, dynamic fields populated from other forms, hidden fields, user ID fields, password, HTML, and tags fields</th>
 				<td><i class="frm_icon_font frm_cancel1_icon"></i></td>
 				<td><i class="frm_icon_font frm_check_icon"></i></td>
 			</tr>

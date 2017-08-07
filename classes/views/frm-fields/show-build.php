@@ -1,4 +1,4 @@
-<?php if ( in_array( $display['type'], array( 'text', 'website', 'email', 'url' ) ) ) { ?>
+<?php if ( in_array( $display['type'], array( 'text', 'website', 'email', 'url', 'phone', 'number' ) ) ) { ?>
 	<input type="text" name="<?php echo esc_attr( $field_name ) ?>" id="<?php echo esc_attr( $html_id ) ?>" value="<?php echo esc_attr( $field['default_value'] ); ?>" class="dyn_default_value" />
 <?php } else if ( $field['type'] == 'textarea' ) { ?>
     <textarea name="<?php echo esc_attr( $field_name ) ?>" <?php

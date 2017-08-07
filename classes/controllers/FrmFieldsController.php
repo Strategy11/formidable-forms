@@ -412,6 +412,8 @@ class FrmFieldsController {
             case 'url':
             case 'website':
             case 'email':
+			case 'number':
+			case 'phone':
                 $display['size'] = true;
                 $display['clear_on_focus'] = true;
                 $display['invalid'] = true;

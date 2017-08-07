@@ -16,6 +16,8 @@ class FrmField {
 			'radio'     => __( 'Radio Buttons', 'formidable' ),
 			'select'    => __( 'Dropdown', 'formidable' ),
 			'email'     => __( 'Email Address', 'formidable' ),
+			'number'    => __( 'Number', 'formidable' ),
+			'phone'     => __( 'Phone Number', 'formidable' ),
 			'url'       => __( 'Website/URL', 'formidable' ),
 			'captcha'   => __( 'reCAPTCHA', 'formidable' ),
 		));
@@ -33,8 +35,6 @@ class FrmField {
 			'break'     => __( 'Page Break', 'formidable' ),
 			'file'      => __( 'File Upload', 'formidable' ),
 			'rte'       => __( 'Rich Text', 'formidable' ),
-			'number'    => __( 'Number', 'formidable' ),
-			'phone'     => __( 'Phone Number', 'formidable' ),
 			'date'      => __( 'Date', 'formidable' ),
 			'time'      => __( 'Time', 'formidable' ),
 			'image'     => __( 'Image URL', 'formidable' ),
