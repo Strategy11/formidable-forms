@@ -56,7 +56,6 @@ class FrmAddonsController {
 				'title'   => 'Formidable Pro',
 				'link'    => 'pricing/',
 				'docs'    => '',
-				'file'    => 'formidable/pro',
 				'excerpt' => 'Enhance your basic Formidable forms with a plethora of Pro field types and features. Create advanced forms and data-driven applications in minutes.',
 			),
 			'mailchimp' => array(

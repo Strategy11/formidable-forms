@@ -101,7 +101,7 @@ class FrmAppController {
             return;
         }
 
-		if ( get_site_option( 'frmpro-authorized' ) && ! file_exists( FrmAppHelper::plugin_path() . '/pro/formidable-pro.php' ) ) {
+		if ( get_site_option( 'frmpro-authorized' ) && ! is_callable('load_formidable_pro') ) {
             FrmAppHelper::load_admin_wide_js();
 
             // user is authorized, but running free version
