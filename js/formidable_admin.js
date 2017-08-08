@@ -2517,6 +2517,7 @@ function frmAdminBuildJS(){
 
 			$newFields.on('click', '.frm_repeat_field', toggleRepeat);
 			$newFields.on('change', '.frm_repeat_format', toggleRepeatButtons);
+			$newFields.on('change', '.frm_repeat_limit', checkRepeatLimit);
 			$newFields.on('input', 'input[name^="field_options[add_label_"]', function(){
 				updateRepeatText(this, 'add');
 			});
@@ -2978,15 +2979,25 @@ if(f){
 }
 }
 
-function frmCheckRepeatLimit(repeatLimit){
+function checkRepeatLimit() {
 
-	if ( repeatLimit.value >= 2 ) {
+	var repeatLimit = parseInt( this.value );
+
+	if ( repeatLimit >= 2 && repeatLimit <= 1000 ) {
+
+		if (repeatLimit !== this.value){
+
+			jQuery(this).val(repeatLimit);
+			alert("The Repeat Limit should be an integer.  No worries!  We've adjusted " + this.value + " to " + repeatLimit + ".");
+
+		}
+
 		return;
 	}
 
-	alert("Please enter a number greater than 2 for the Repeat Limit.");
+	alert("Please enter an integer greater than 2 for the Repeat Limit.");
 
-	jQuery(repeatLimit).val("");
+	jQuery(this).val("");
 }
 
 function frmImportCsv(formID){

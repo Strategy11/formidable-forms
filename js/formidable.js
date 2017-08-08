@@ -3967,54 +3967,17 @@ function frmFrontFormJS(){
 		return false;
 	}
 
-	//Determine if Section has a row format (grid or inline).
-    function sectionHasRowFormat($section) {
+	function hideAddButton(sectionID) {
 
-		return $section.hasClass('frm_repeat_grid') || $section.hasClass('frm_repeat_inline');
+		jQuery('#frm_field_' + sectionID + '_container .frm_add_form_row.frm_button').addClass('frm_hide_add_button');
 
-    }
+	}
 
+	function showAddButton(sectionID) {
 
-    function hideAddButton(sectionID) {
+		jQuery('#frm_field_' + sectionID + '_container .frm_add_form_row.frm_button').removeClass('frm_hide_add_button');
 
-        var $section = jQuery('#frm_section_' + sectionID + '-0'),
-            $add_buttons = jQuery('#frm_field_' + sectionID + '_container .frm_add_form_row.frm_button');
-
-        if (sectionHasRowFormat($section)) {
-
-            $add_buttons.css({
-                'visibility': 'hidden',
-                'opacity': '0',
-                'transition': 'visibility 0s linear 300ms, opacity 300ms'
-            });
-
-        } else {
-
-            $add_buttons.addClass('frm_hide_add_button');
-
-        }
-    }
-
-    function showAddButton(sectionID) {
-
-        var $section = jQuery('#frm_section_' + sectionID + '-0'),
-            $add_buttons = jQuery('#frm_field_' + sectionID + '_container .frm_add_form_row.frm_button');
-
-        if (sectionHasRowFormat($section)) {
-
-            $add_buttons.css({
-                'visibility': 'visible',
-                'opacity': '1',
-                'transition': 'visibility 0s linear 0s, opacity 300ms'
-            });
-
-        } else {
-
-            $add_buttons.removeClass('frm_hide_add_button');
-
-        }
-
-    }
+	}
 
     function addRow() {
         /*jshint validthis:true */
