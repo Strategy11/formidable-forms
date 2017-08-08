@@ -2788,7 +2788,7 @@ function frmFrontFormJS(){
 
 		if ( totalField.val() !== total ) {
 			totalField.val(total);
-			if ( triggerField === null || totalField.attr('name') != triggerField.attr('name') ) {
+			if ( triggerField === null || typeof triggerField === 'undefined' || totalField.attr('name') != triggerField.attr('name') ) {
 				triggerChange( totalField, field_key );
 			}
 		}
@@ -4460,7 +4460,7 @@ function frmFrontFormJS(){
 			jQuery(document).on('click', '.frm_remove_link', removeFile);
 
 			jQuery(document).on('focusin', 'input[data-frmmask]', function(){
-				jQuery(this).mask( jQuery(this).data('frmmask').toString() );
+				jQuery(this).mask( jQuery(this).data('frmmask').toString(), { autoclear: false } );
 			});
 
 			jQuery(document).on('change', '.frm-show-form input[name^="item_meta"], .frm-show-form select[name^="item_meta"], .frm-show-form textarea[name^="item_meta"]', maybeCheckDependent);
