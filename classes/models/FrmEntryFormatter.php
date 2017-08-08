@@ -276,7 +276,7 @@ class FrmEntryFormatter {
 		$content = $this->table_generator->generate_table_header();
 
 		foreach ( $this->entry_values->get_field_values() as $field_id => $field_value ) {
-			$this->add_field_value_to_html_table( $field_value, $content );
+			$this->add_field_value_to_content( $field_value, $content );
 		}
 
 		$this->add_user_info_to_html_table( $content );
@@ -301,7 +301,7 @@ class FrmEntryFormatter {
 		$content = '';
 
 		foreach ( $this->entry_values->get_field_values() as $field_id => $field_value ) {
-			$this->add_field_value_to_plain_text_content( $field_value, $content );
+			$this->add_field_value_to_content( $field_value, $content );
 		}
 
 		$this->add_user_info_to_plain_text_content( $content );
@@ -359,22 +359,6 @@ class FrmEntryFormatter {
 	}
 
 	/**
-	 * Add a field value to plain text content
-	 *
-	 * @since 2.03.11
-	 *
-	 * @param FrmFieldValue $field_value
-	 * @param array $content
-	 */
-	protected function add_field_value_to_plain_text_content( $field_value, &$content ) {
-		if ( ! $this->include_field_in_content( $field_value ) ) {
-			return;
-		}
-
-		$this->add_plain_text_row( $field_value->get_field_label(), $field_value->get_displayed_value(), $content );
-	}
-
-	/**
 	 * Add a row of values to the plain text content
 	 *
 	 * @since 2.03.11
@@ -394,20 +378,41 @@ class FrmEntryFormatter {
 	}
 
 	/**
-	 * Add a field value to the HTML table content
+	 * Add a field value to the HTML table or plain text content
 	 *
 	 * @since 2.03.11
 	 *
 	 * @param FrmFieldValue $field_value
 	 * @param string $content
 	 */
-	protected function add_field_value_to_html_table( $field_value, &$content ) {
+	protected function add_field_value_to_content( $field_value, &$content ) {
 		if ( ! $this->include_field_in_content( $field_value ) ) {
 			return;
 		}
 
-		$display_value = $this->prepare_display_value_for_html_table( $field_value->get_displayed_value(), $field_value->get_field_type() );
-		$this->add_html_row( $field_value->get_field_label(), $display_value, $content );
+		if ( $this->format === 'plain_text_block' ) {
+			$this->add_plain_text_row( $field_value->get_field_label(), $field_value->get_displayed_value(), $content );
+		} else if ( $this->format === 'table' ) {
+			$value_args = $this->package_value_args( $field_value );
+			$this->add_html_row( $value_args, $content );
+		}
+	}
+
+	/**
+	 * Package the value arguments for an HTML row
+	 *
+	 * @since 2.03.11
+	 *
+	 * @param FrmFieldValue $field_value
+	 *
+	 * @return array
+	 */
+	protected function package_value_args( $field_value ) {
+		return array(
+			'label'       => $field_value->get_field_label(),
+			'value'       => $field_value->get_displayed_value(),
+			'field_type'  => $field_value->get_field_type(),
+		);
 	}
 
 	/**
@@ -421,9 +426,14 @@ class FrmEntryFormatter {
 		if ( $this->include_user_info ) {
 
 			foreach ( $this->entry_values->get_user_info() as $user_info ) {
-				$value = $this->prepare_display_value_for_html_table( $user_info['value'] );
 
-				$this->add_html_row( $user_info['label'], $value, $content );
+				$value_args = array(
+					'label' => $user_info['label'],
+					'value' => $user_info['value'],
+					'field_type'  => 'none',
+				);
+
+				$this->add_html_row( $value_args, $content );
 			}
 		}
 	}
@@ -501,12 +511,18 @@ class FrmEntryFormatter {
 	 *
 	 * @since 2.03.11
 	 *
-	 * @param string $label
-	 * @param mixed $display_value
+	 * @param array $value_args
+	 * 		$value_args = [
+	 * 			'label'      => (string) The label. Required
+	 *			'value'      => (mixed) The value to add. Required
+	 *			'field_type' => (string) The field type. Blank string if not a field.
+	 * 		]
 	 * @param string $content
 	 */
-	protected function add_html_row( $label, $display_value, &$content ) {
-		$content .= $this->table_generator->generate_two_cell_table_row( $label, $display_value );
+	protected function add_html_row( $value_args, &$content ) {
+		$display_value = $this->prepare_display_value_for_html_table( $value_args['value'], $value_args['field_type'] );
+
+		$content .= $this->table_generator->generate_two_cell_table_row( $value_args['label'], $display_value );
 	}
 
 	/**
