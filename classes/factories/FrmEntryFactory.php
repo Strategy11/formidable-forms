@@ -15,9 +15,9 @@ class FrmEntryFactory {
 	 * @return FrmEntryFormatter|FrmProEntryFormatter
 	 */
 	public static function entry_formatter_instance( $atts ) {
-		$entry_formatter = apply_filters( 'frm_entry_formatter_instance', null, $atts );
-
-		if ( ! is_object( $entry_formatter ) ) {
+		if ( FrmAppHelper::pro_is_installed() ) {
+			$entry_formatter = new FrmProEntryFormatter( $atts );
+		} else {
 			$entry_formatter = new FrmEntryFormatter( $atts );
 		}
 
@@ -35,13 +35,12 @@ class FrmEntryFactory {
 	 * @return FrmEntryShortcodeFormatter|FrmProEntryShortcodeFormatter
 	 */
 	public static function entry_shortcode_formatter_instance( $form_id, $format ) {
-		$html_generator = apply_filters( 'frm_entry_shortcode_formatter_instance', null, $form_id, $format );
-
-		if ( ! is_object( $html_generator ) ) {
-			$html_generator = new FrmEntryShortcodeFormatter( $form_id, $format );
+		if ( FrmAppHelper::pro_is_installed() ) {
+			$shortcode_formatter = new FrmProEntryShortcodeFormatter( $form_id, $format );
+		} else {
+			$shortcode_formatter = new FrmEntryShortcodeFormatter( $form_id, $format );
 		}
 
-		return $html_generator;
+		return $shortcode_formatter;
 	}
-
 }
