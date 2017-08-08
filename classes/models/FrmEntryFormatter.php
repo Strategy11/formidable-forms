@@ -127,6 +127,7 @@ class FrmEntryFormatter {
 	 * @param array $atts
 	 */
 	protected function init_entry_values( $atts ) {
+		$atts['source'] = 'entry_formatter';
 		$this->entry_values = new FrmEntryValues( $this->entry->id, $atts );
 	}
 
