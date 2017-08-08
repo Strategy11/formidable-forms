@@ -30,10 +30,10 @@ class FrmEntryShortcodeFormatter {
 	protected $format = 'text';
 
 	/**
-	 * @var FrmTableHTMLHelper
+	 * @var FrmTableHTMLGenerator
 	 * @since 2.03.11
 	 */
-	protected $table_helper = null;
+	protected $table_generator = null;
 	/**
 	 * @var array
 	 * @since 2.03.11
@@ -54,7 +54,7 @@ class FrmEntryShortcodeFormatter {
 		}
 
 		if ( $this->format == 'text' ) {
-			$this->init_table_helper();
+			$this->init_table_generator();
 		}
 	}
 
@@ -91,12 +91,12 @@ class FrmEntryShortcodeFormatter {
 	}
 
 	/**
-	 * Set the table_helper property
+	 * Set the table_generator property
 	 *
 	 * @since 2.03.11
 	 */
-	protected function init_table_helper() {
-		$this->table_helper = new FrmTableHTMLHelper( 'shortcode' );
+	protected function init_table_generator() {
+		$this->table_generator = new FrmTableHTMLGenerator( 'shortcode' );
 	}
 
 	/**
@@ -143,13 +143,13 @@ class FrmEntryShortcodeFormatter {
 			return '';
 		}
 
-		$content = $this->table_helper->generate_table_header();
+		$content = $this->table_generator->generate_table_header();
 
 		foreach ( $this->fields as $field ) {
 			$content .= $this->generate_field_html( $field );
 		}
 
-		$content .= $this->table_helper->generate_table_footer();
+		$content .= $this->table_generator->generate_table_footer();
 
 		return $content;
 	}
@@ -184,7 +184,7 @@ class FrmEntryShortcodeFormatter {
 	 * @return string
 	 */
 	protected function generate_single_row( $field, $value = null ) {
-		return $this->table_helper->generate_two_cell_shortcode_row( $field, $value );
+		return $this->table_generator->generate_two_cell_shortcode_row( $field, $value );
 	}
 
 	/**

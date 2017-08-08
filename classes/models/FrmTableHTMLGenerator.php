@@ -3,7 +3,7 @@
 /**
  * @since 2.03.11
  */
-class FrmTableHTMLHelper {
+class FrmTableHTMLGenerator {
 
 	/**
 	 * @var string
@@ -49,7 +49,7 @@ class FrmTableHTMLHelper {
 
 
 	/**
-	 * FrmTableHTMLHelper constructor.
+	 * FrmTableHTMLGenerator constructor.
 	 *
 	 * @param array $atts
 	 */

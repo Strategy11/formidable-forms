@@ -9,6 +9,10 @@ class FrmEntryValues {
 	 * @var stdClass
 	 */
 	protected $entry = null;
+
+	/**
+	 * @var int
+	 */
 	protected $form_id;
 
 	/**
@@ -20,8 +24,20 @@ class FrmEntryValues {
 	 * @var FrmFieldValue[]
 	 */
 	protected $field_values = array();
+
+	/**
+	 * @var array
+	 */
 	protected $user_info = array();
+
+	/**
+	 * @var array
+	 */
 	protected $include_fields = array();
+
+	/**
+	 * @var array
+	 */
 	protected $exclude_fields = array();
 
 	/**
@@ -32,7 +48,7 @@ class FrmEntryValues {
 	 * @param int|string $entry_id
 	 * @param array $atts
 	 */
-	public function __construct( $entry_id, $atts ) {
+	public function __construct( $entry_id, $atts = array() ) {
 		$this->init_entry( $entry_id );
 
 		if ( $this->entry === null || $this->entry === false ) {
@@ -64,7 +80,7 @@ class FrmEntryValues {
 	 * @since 2.03.11
 	 */
 	protected function init_form_id() {
-		$this->form_id = $this->entry->form_id;
+		$this->form_id = (int) $this->entry->form_id;
 	}
 
 	/**

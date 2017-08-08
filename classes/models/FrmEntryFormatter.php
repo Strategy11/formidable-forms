@@ -48,10 +48,10 @@ class FrmEntryFormatter {
 	protected $direction = 'ltr';
 
 	/**
-	 * @var FrmTableHTMLHelper
+	 * @var FrmTableHTMLGenerator
 	 * @since 2.03.11
 	 */
-	protected $table_helper = null;
+	protected $table_generator = null;
 
 	/**
 	 * @var bool
@@ -85,15 +85,15 @@ class FrmEntryFormatter {
 			return;
 		}
 
-		$this->init_entry_values( $atts );
 		$this->init_is_plain_text( $atts );
 		$this->init_format( $atts );
 		$this->init_include_blank( $atts );
 		$this->init_direction( $atts );
 		$this->init_include_user_info( $atts );
+		$this->init_entry_values( $atts );
 
 		if ( $this->format === 'table' ) {
-			$this->init_table_helper( $atts );
+			$this->init_table_generator( $atts );
 			$this->init_is_clickable( $atts );
 		}
 	}
@@ -211,14 +211,14 @@ class FrmEntryFormatter {
 	}
 
 	/**
-	 * Set the table_helper property
+	 * Set the table_generator property
 	 *
 	 * @since 2.03.11
 	 *
 	 * @param array $atts
 	 */
-	protected function init_table_helper( $atts ) {
-		$this->table_helper = new FrmTableHTMLHelper( 'entry', $atts );
+	protected function init_table_generator( $atts ) {
+		$this->table_generator = new FrmTableHTMLGenerator( 'entry', $atts );
 	}
 
 	/**
@@ -266,36 +266,6 @@ class FrmEntryFormatter {
 	}
 
 	/**
-	 * Flatten an array
-	 *
-	 * @since 2.03.11
-	 *
-	 * @param array|string $value
-	 */
-	protected function flatten_array( &$value ) {
-		if ( is_array( $value ) ) {
-			$value = implode( ', ', $value );
-		}
-	}
-
-	/**
-	 * Strip HTML if from email value if plain text is selected
-	 *
-	 * @since 2.0.21
-	 *
-	 * @param mixed $value
-	 */
-	protected function strip_html( &$value ) {
-		if ( $this->is_plain_text && ! is_array( $value ) ) {
-			if ( strpos( $value, '<img' ) !== false ) {
-				$value = str_replace( array( '<img', 'src=', '/>', '"' ), '', $value );
-				$value = trim( $value );
-			}
-			$value = strip_tags( $value );
-		}
-	}
-
-	/**
 	 * Return the formatted HTML table with entry values
 	 *
 	 * @since 2.03.11
@@ -303,7 +273,7 @@ class FrmEntryFormatter {
 	 * @return string
 	 */
 	protected function prepare_html_table() {
-		$content = $this->table_helper->generate_table_header();
+		$content = $this->table_generator->generate_table_header();
 
 		foreach ( $this->entry_values->get_field_values() as $field_id => $field_value ) {
 			$this->add_field_value_to_html_table( $field_value, $content );
@@ -311,7 +281,7 @@ class FrmEntryFormatter {
 
 		$this->add_user_info_to_html_table( $content );
 
-		$content .= $this->table_helper->generate_table_footer();
+		$content .= $this->table_generator->generate_table_footer();
 
 		if ( $this->is_clickable ) {
 			$content = make_clickable( $content );
@@ -379,36 +349,13 @@ class FrmEntryFormatter {
 	protected function push_single_field_to_array( $field_value, &$output ) {
 		if ( $this->include_field_in_content( $field_value ) ) {
 
-			// TODO: maybe do filtering in FrmFieldValue instead
-			$displayed_value = $this->filter_display_value( $field_value->get_displayed_value() );
-
+			$displayed_value = $this->prepare_display_value_for_array( $field_value->get_displayed_value() );
 			$output[ $field_value->get_field_key() ] = $displayed_value;
 
 			if ( $displayed_value !== $field_value->get_saved_value() ) {
 				$output[ $field_value->get_field_key() . '-value' ] = $field_value->get_saved_value();
 			}
 		}
-	}
-
-	/**
-	 * Filter the displayed value
-	 *
-	 * @since 2.03.11
-	 *
-	 * @param mixed $value
-	 *
-	 * @return mixed|string
-	 */
-	protected function filter_display_value( $value ) {
-		if ( $this->is_plain_text && ! is_array( $value ) ) {
-			if ( strpos( $value, '<img' ) !== false ) {
-				$value = str_replace( array( '<img', 'src=', '/>', '"' ), '', $value );
-				$value = trim( $value );
-			}
-			$value = strip_tags( $value );
-		}
-
-		return $value;
 	}
 
 	/**
@@ -437,8 +384,7 @@ class FrmEntryFormatter {
 	 * @param string $content
 	 */
 	protected function add_plain_text_row( $label, $display_value, &$content ) {
-		// TODO: move to pro field value?
-		$this->prepare_display_value_for_plain_text_content( $display_value );
+		$display_value = $this->prepare_display_value_for_plain_text_content( $display_value );
 
 		if ( 'rtl' == $this->direction ) {
 			$content .= $display_value . ' :' . $label . "\r\n";
@@ -460,7 +406,6 @@ class FrmEntryFormatter {
 			return;
 		}
 
-		// TODO: add display value prep to ProFieldValue?
 		$display_value = $this->prepare_display_value_for_html_table( $field_value->get_displayed_value(), $field_value->get_field_type() );
 		$this->add_html_row( $field_value->get_field_label(), $display_value, $content );
 	}
@@ -561,8 +506,22 @@ class FrmEntryFormatter {
 	 * @param string $content
 	 */
 	protected function add_html_row( $label, $display_value, &$content ) {
-		$content .= $this->table_helper->generate_two_cell_table_row( $label, $display_value );
+		$content .= $this->table_generator->generate_two_cell_table_row( $label, $display_value );
 	}
+
+	/**
+	 * Prepare the displayed value for an array
+	 *
+	 * @since 2.03.11
+	 *
+	 * @param mixed $value
+	 *
+	 * @return mixed|string
+	 */
+	protected function prepare_display_value_for_array( $value ) {
+		return $this->strip_html( $value );
+	}
+
 
 	/**
 	 * Prepare a field's display value for an HTML table
@@ -575,7 +534,7 @@ class FrmEntryFormatter {
 	 * @return mixed|string
 	 */
 	protected function prepare_display_value_for_html_table( $display_value, $field_type = '' ) {
-		$this->flatten_array( $display_value );
+		$display_value = $this->flatten_array( $display_value );
 		$display_value = str_replace( "\r\n", '<br/>', $display_value );
 
 		return $display_value;
@@ -587,10 +546,60 @@ class FrmEntryFormatter {
 	 * @since 2.03.11
 	 *
 	 * @param mixed $display_value
+	 *
+	 * @return string|int
 	 */
-	protected function prepare_display_value_for_plain_text_content( &$display_value ) {
-		$this->flatten_array( $display_value );
-		$this->strip_html( $display_value );
+	protected function prepare_display_value_for_plain_text_content( $display_value ) {
+		$display_value = $this->flatten_array( $display_value );
+		$display_value = $this->strip_html( $display_value );
+
+		return $display_value;
+	}
+
+	/**
+	 * Flatten an array
+	 *
+	 * @since 2.03.11
+	 *
+	 * @param array|string|int $value
+	 *
+	 * @return string|int
+	 */
+	protected function flatten_array( $value ) {
+		if ( is_array( $value ) ) {
+			$value = implode( ', ', $value );
+		}
+
+		return $value;
+	}
+
+	/**
+	 * Strip HTML if from email value if plain text is selected
+	 *
+	 * @since 2.0.21
+	 *
+	 * @param mixed $value
+	 *
+	 * @return mixed
+	 */
+	protected function strip_html( $value ) {
+
+		if ( $this->is_plain_text ) {
+
+			if ( is_array( $value ) ) {
+				foreach ( $value as $key => $single_value ) {
+					$value[ $key ] = $this->strip_html( $single_value );
+				}
+			} else if ( $this->is_plain_text && ! is_array( $value ) ) {
+				if ( strpos( $value, '<img' ) !== false ) {
+					$value = str_replace( array( '<img', 'src=', '/>', '"' ), '', $value );
+					$value = trim( $value );
+				}
+				$value = strip_tags( $value );
+			}
+		}
+
+		return $value;
 	}
 
 }
