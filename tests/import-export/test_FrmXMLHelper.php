@@ -62,10 +62,10 @@ class WP_Test_FrmXMLHelper extends FrmUnitTest {
 
 	function _check_fields_in_section( $f ) {
 		$fields_in_sections = array(
-			'i79z0s' => 'pro-fields-divider',
-			'mprllc' => 'pro-fields-divider',
-			'72hika' => 'pro-fields-divider',
-			'msyehy' => 'pro-fields-divider',
+			'rich-text-field' => 'pro-fields-divider',
+			'single-file-upload-field' => 'pro-fields-divider',
+			'multi-file-upload-field' => 'pro-fields-divider',
+			'number-field' => 'pro-fields-divider',
 			'n0d580' => 'pro-fields-divider',
 			'time-field' => 'pro-fields-divider',
 			'date-field' => 'pro-fields-divider',

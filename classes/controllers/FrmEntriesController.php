@@ -507,8 +507,51 @@ class FrmEntriesController {
         }
     }
 
+	/**
+	 * @param $atts
+	 *
+	 * @return array|string
+	 */
 	public static function show_entry_shortcode( $atts ) {
-		return FrmEntryFormat::show_entry( $atts );
+		$defaults = array(
+			'id'             => false,
+			'entry'          => false,
+			'fields'         => false,
+			'plain_text'     => false,
+			'user_info'      => false,
+			'include_blank'  => false,
+			'default_email'  => false,
+			'form_id'        => false,
+			'format'         => 'text',
+			'direction'      => 'ltr',
+			'font_size'      => '',
+			'text_color'     => '',
+			'border_width'   => '',
+			'border_color'   => '',
+			'bg_color'       => '',
+			'alt_bg_color'   => '',
+			'clickable'      => false,
+			'exclude_fields' => '',
+			'include_fields' => '',
+			'include_extras' => '',
+			'inline_style'   => 1,
+		);
+
+		$atts = shortcode_atts( $defaults, $atts );
+
+		if ( $atts['default_email'] ) {
+
+			$entry_shortcode_formatter = FrmEntryFactory::entry_shortcode_formatter_instance( $atts['form_id'], $atts['format'] );
+			$formatted_entry = $entry_shortcode_formatter->content();
+
+		} else {
+
+			$entry_formatter = FrmEntryFactory::entry_formatter_instance( $atts );
+			$formatted_entry = $entry_formatter->get_formatted_entry_values();
+
+		}
+
+		return $formatted_entry;
 	}
 
 	public static function get_params( $form = null ) {
@@ -521,7 +564,7 @@ class FrmEntriesController {
         $date_format = get_option('date_format');
         $time_format = get_option('time_format');
 		if ( isset( $data['browser'] ) ) {
-			$browser = FrmEntryFormat::get_browser( $data['browser'] );
+			$browser = FrmEntriesHelper::get_browser( $data['browser'] );
 		}
 
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/sidebar-shared.php' );

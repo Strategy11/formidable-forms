@@ -722,7 +722,7 @@ Jam Band, Electronic, Electronica, JamTronica, EDM, Producer, Rock,  Jazz, Soul,
 		</field>
 		<field>
 		    <id>8110</id>
-            <field_key><![CDATA[i79z0s]]></field_key>
+            <field_key><![CDATA[rich-text-field]]></field_key>
             <name><![CDATA[Rich Text]]></name>
             <description><![CDATA[]]></description>
             <type><![CDATA[rte]]></type>
@@ -735,7 +735,7 @@ Jam Band, Electronic, Electronica, JamTronica, EDM, Producer, Rock,  Jazz, Soul,
 		</field>
 		<field>
 		    <id>8111</id>
-            <field_key><![CDATA[mprllc]]></field_key>
+            <field_key><![CDATA[single-file-upload-field]]></field_key>
             <name><![CDATA[Single File Upload]]></name>
             <description><![CDATA[]]></description>
             <type><![CDATA[file]]></type>
@@ -748,7 +748,7 @@ Jam Band, Electronic, Electronica, JamTronica, EDM, Producer, Rock,  Jazz, Soul,
 		</field>
 		<field>
 		    <id>8112</id>
-            <field_key><![CDATA[72hika]]></field_key>
+            <field_key><![CDATA[multi-file-upload-field]]></field_key>
             <name><![CDATA[Multiple File Upload]]></name>
             <description><![CDATA[]]></description>
             <type><![CDATA[file]]></type>
@@ -761,7 +761,7 @@ Jam Band, Electronic, Electronica, JamTronica, EDM, Producer, Rock,  Jazz, Soul,
 		</field>
 		<field>
 		    <id>8113</id>
-            <field_key><![CDATA[msyehy]]></field_key>
+            <field_key><![CDATA[number-field]]></field_key>
             <name><![CDATA[Number]]></name>
             <description><![CDATA[]]></description>
             <type><![CDATA[number]]></type>
@@ -1045,6 +1045,19 @@ Jam Band, Electronic, Electronica, JamTronica, EDM, Producer, Rock,  Jazz, Soul,
             <options><![CDATA[]]></options>
             <field_options><![CDATA[{"size":"","max":"","label":"","blank":"","required_indicator":"*","invalid":"The reCAPTCHA was not entered correctly","separate_value":0,"clear_on_focus":0,"default_blank":0,"classes":"","custom_html":"<div id=\"frm_field_[id]_container\" class=\"frm_form_field form-field [required_class][error_class]\">\n    <label for=\"field_[key]\" class=\"frm_primary_label\">[field_name]\n        <span class=\"frm_required\">[required_label]<\/span>\n    <\/label>\n    [input]\n    [if description]<div class=\"frm_description\">[description]<\/div>[\/if description]\n    [if error]<div class=\"frm_error\">[error]<\/div>[\/if error]\n<\/div>","slide":0,"form_select":"","show_hide":"show","any_all":"any","align":"block","hide_field":[],"hide_field_cond":["=="],"hide_opt":[],"star":0,"ftypes":[],"data_type":"select","restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"step":1,"clock":12,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","calc_dec":"","dyn_default_value":"","multiple":0,"unique_msg":"This value must be unique.","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":0}]]></field_options>
 		</field>
+        <field>
+            <id>8135</id>
+            <field_key><![CDATA[cb-sep-values]]></field_key>
+            <name><![CDATA[Checkboxes - separate values]]></name>
+            <description><![CDATA[]]></description>
+            <type><![CDATA[checkbox]]></type>
+            <default_value><![CDATA[]]></default_value>
+            <field_order>37</field_order>
+            <form_id>698</form_id>
+            <required></required>
+            <options><![CDATA[[{"label":"Option 1","value":"Red"},{"label":"Option 2","value":"Orange"},{"label":"Option 3","value":"Yellow"}]]]></options>
+            <field_options><![CDATA[{"size":"","max":"","label":"","blank":"This field cannot be blank.","required_indicator":"*","invalid":"","separate_value":"1","clear_on_focus":0,"default_blank":0,"classes":"","slide":0,"form_select":"","show_hide":"show","any_all":"any","align":"block","hide_field":[],"hide_field_cond":["=="],"hide_opt":[],"star":0,"ftypes":[],"data_type":"select","restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"step":1,"clock":12,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","calc_dec":"","dyn_default_value":"","multiple":0,"unique_msg":"","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":"0"}]]></field_options>
+        </field>
 	</form>
 	<form>
 		<id>699</id>
@@ -1126,118 +1139,6 @@ Jam Band, Electronic, Electronica, JamTronica, EDM, Producer, Rock,  Jazz, Soul,
             <field_options><![CDATA[{"size":"","max":"","label":"","blank":"","required_indicator":"*","invalid":"","separate_value":0,"clear_on_focus":0,"default_blank":0,"classes":"","custom_html":"<div id=\\\"frm_field_[id]_container\\\" class=\\\"frm_form_field form-field [required_class][error_class]\\\">\r\n    <label  class=\\\"frm_primary_label\\\">[field_name]\r\n        <span class=\\\"frm_required\\\">[required_label]<\/span>\r\n    <\/label>\r\n    <div class=\\\"frm_opt_container\\\">[input]<\/div>\r\n    [if description]<div class=\\\"frm_description\\\">[description]<\/div>[\/if description]\r\n    [if error]<div class=\\\"frm_error\\\">[error]<\/div>[\/if error]\r\n<\/div>","captcha_size":"","data_type":"select","slide":0,"form_select":"8113","show_hide":"show","any_all":"any","align":"block","hide_field":[],"hide_field_cond":["=="],"hide_opt":[],"star":0,"ftypes":[],"restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"step":1,"clock":12,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","calc_dec":"","dyn_default_value":"","multiple":0,"unique_msg":"This value must be unique.","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":0,"custom_field":"","post_field":"","taxonomy":"category","exclude_cat":0}]]></field_options>
 		</field>
 	</form>
-	<item>
-		<id>52455</id>
-		<item_key><![CDATA[i0xioc]]></item_key>
-		<name><![CDATA[Leisa]]></name>
-		<description><![CDATA[{"browser":"Mozilla\/5.0 (Macintosh; Intel Mac OS X 10_10_0) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/41.0.2272.118 Safari\/537.36","referrer":"http:\/\/frc.harmonyed.com\/?page_id=1151&preview=true"}]]></description>
-		<created_at>2015-04-13 13:06:15</created_at>
-		<updated_at>2015-04-13 13:06:15</updated_at>
-		<form_id>558</form_id>
-		<post_id>0</post_id>
-		<ip>::1</ip>
-		<is_draft>0</is_draft>
-		<user_id><![CDATA[admin]]></user_id>
-		<updated_by><![CDATA[]]></updated_by>
-        <parent_item_id>5</parent_item_id>
-
-		<item_meta>
-		    <field_id>4036</field_id>
-		    <meta_value><![CDATA[Test Student]]></meta_value>
-		</item_meta>
-		<item_meta>
-		    <field_id>4037</field_id>
-		    <meta_value><![CDATA[Test Student last Name]]></meta_value>
-		</item_meta>
-		<item_meta>
-		    <field_id>4038</field_id>
-		    <meta_value><![CDATA[2005-04-13]]></meta_value>
-		</item_meta>
-		<item_meta>
-		    <field_id>4040</field_id>
-		    <meta_value><![CDATA[5th Grade]]></meta_value>
-		</item_meta>
-		<item_meta>
-		    <field_id>4041</field_id>
-		    <meta_value><![CDATA[Yes]]></meta_value>
-		</item_meta>
-		<item_meta>
-		    <field_id>4042</field_id>
-		    <meta_value><![CDATA[Male]]></meta_value>
-		</item_meta>
-		<item_meta>
-		    <field_id>4043</field_id>
-		    <meta_value><![CDATA[Provo eSchool]]></meta_value>
-		</item_meta>
-		<item_meta>
-		    <field_id>4047</field_id>
-		    <meta_value><![CDATA[["Independent Learning Only (K-12)"]]]></meta_value>
-		</item_meta>
-		<item_meta>
-		    <field_id>4048</field_id>
-		    <meta_value><![CDATA[["Exceptional Scholar Program (ESP)"]]]></meta_value>
-		</item_meta>
-		<item_meta>
-		    <field_id>4049</field_id>
-		    <meta_value><![CDATA[Yes]]></meta_value>
-		</item_meta>
-	</item>
-	<item>
-		<id>52456</id>
-		<item_key><![CDATA[q6wkas]]></item_key>
-		<name><![CDATA[Leisa]]></name>
-		<description><![CDATA[{"browser":"Mozilla\/5.0 (Macintosh; Intel Mac OS X 10_10_0) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/41.0.2272.118 Safari\/537.36","referrer":"http:\/\/frc.harmonyed.com\/?page_id=1151&preview=true"}]]></description>
-		<created_at>2015-04-13 04:07:35</created_at>
-		<updated_at>2015-04-13 04:07:35</updated_at>
-		<form_id>558</form_id>
-		<post_id>0</post_id>
-		<ip>::1</ip>
-		<is_draft>0</is_draft>
-		<user_id><![CDATA[admin]]></user_id>
-		<updated_by><![CDATA[]]></updated_by>
-        <parent_item_id>3</parent_item_id>
-
-		<item_meta>
-		    <field_id>4036</field_id>
-		    <meta_value><![CDATA[Test Student]]></meta_value>
-		</item_meta>
-		<item_meta>
-		    <field_id>4037</field_id>
-		    <meta_value><![CDATA[Test Student last Name]]></meta_value>
-		</item_meta>
-		<item_meta>
-		    <field_id>4038</field_id>
-		    <meta_value><![CDATA[2005-04-13]]></meta_value>
-		</item_meta>
-		<item_meta>
-		    <field_id>4040</field_id>
-		    <meta_value><![CDATA[5th Grade]]></meta_value>
-		</item_meta>
-		<item_meta>
-		    <field_id>4041</field_id>
-		    <meta_value><![CDATA[Yes]]></meta_value>
-		</item_meta>
-		<item_meta>
-		    <field_id>4042</field_id>
-		    <meta_value><![CDATA[Male]]></meta_value>
-		</item_meta>
-		<item_meta>
-		    <field_id>4043</field_id>
-		    <meta_value><![CDATA[Provo eSchool]]></meta_value>
-		</item_meta>
-		<item_meta>
-		    <field_id>4047</field_id>
-		    <meta_value><![CDATA[["Independent Learning Only (K-12)"]]]></meta_value>
-		</item_meta>
-		<item_meta>
-		    <field_id>4048</field_id>
-		    <meta_value><![CDATA[["Exceptional Scholar Program (ESP)"]]]></meta_value>
-		</item_meta>
-		<item_meta>
-		    <field_id>4049</field_id>
-		    <meta_value><![CDATA[Yes]]></meta_value>
-		</item_meta>
-	</item>
 	<item>
 		<id>59014</id>
 		<item_key><![CDATA[phhvdw]]></item_key>
@@ -2091,6 +1992,10 @@ Wahlin]]></meta_value>
 		    <field_id>8130</field_id>
 		    <meta_value><![CDATA[[60413,60414,60415]]]></meta_value>
 		</item_meta>
+        <item_meta>
+            <field_id>8135</field_id>
+            <meta_value><![CDATA[["Red","Orange"]]]></meta_value>
+        </item_meta>
 	</item>
 	<item>
 		<id>60421</id>

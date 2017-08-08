@@ -10,13 +10,13 @@ class WP_Test_FrmProStatisticsController extends FrmUnitTest {
 	 * Ordered by creation date
 	 * Entry keys are indexes
 	 */
-	private $msyehy_data = array(
+	private $number_field_data = array(
 		'jamie_entry_key' => 11,
 		'steph_entry_key' => 1,
 		'jamie_entry_key_2' => 0,
 		'steve_entry_key' => 5,
 	);
-	private $median_msyehy = 3;
+	private $median_number_field = 3;
 
 	private $qbrd2o_data = array( 5, 8, 5, 8 );
 
@@ -47,10 +47,10 @@ class WP_Test_FrmProStatisticsController extends FrmUnitTest {
 	 * [frm-stats id=x]
 	 */
 	public function test_stats_shortcode_default_type() {
-		$field_id = FrmField::get_id_by_key( 'msyehy' );
+		$field_id = FrmField::get_id_by_key( 'number-field' );
 		$shortcode = '[frm-stats id=' . $field_id . ']';
 		$actual_value = do_shortcode( $shortcode );
-		$expected_value = array_sum( $this->msyehy_data );
+		$expected_value = array_sum( $this->number_field_data );
 
 		$this->assertEquals( $expected_value, $actual_value, $shortcode . ' is not getting the correct value' );
 	}
@@ -59,9 +59,9 @@ class WP_Test_FrmProStatisticsController extends FrmUnitTest {
 	 * [frm-stats id="Number-field-key" type="total"]
 	 */
 	public function test_stats_shortcode_total() {
-		$shortcode = '[frm-stats id="msyehy" type="total"]';
+		$shortcode = '[frm-stats id="number-field" type="total"]';
 		$actual_value = do_shortcode( $shortcode );
-		$expected_value = array_sum( $this->msyehy_data );
+		$expected_value = array_sum( $this->number_field_data );
 
 		$this->assertEquals( $expected_value, $actual_value, $shortcode . ' is not getting the correct value' );
 	}
@@ -70,14 +70,14 @@ class WP_Test_FrmProStatisticsController extends FrmUnitTest {
 	 * [frm-stats id="Number-field-key" type="average"]
 	 */
 	public function test_stats_shortcode_average() {
-		$shortcode = '[frm-stats id="msyehy" type="average"]';
+		$shortcode = '[frm-stats id="number-field" type="average"]';
 		$actual_value = do_shortcode( $shortcode );
-		$expected_value = array_sum( $this->msyehy_data )/count( $this->msyehy_data );
+		$expected_value = array_sum( $this->number_field_data )/count( $this->number_field_data );
 		$expected_value = number_format( $expected_value, 2 );
 
 		$this->assertEquals( $expected_value, $actual_value, $shortcode . ' is not getting the correct value' );
 
-		$shortcode = '[frm-stats id="msyehy" type="mean"]';
+		$shortcode = '[frm-stats id="number-field" type="mean"]';
 		$actual_value = do_shortcode( $shortcode );
 
 		$this->assertEquals( $expected_value, $actual_value, $shortcode . ' is not getting the correct value' );
@@ -89,9 +89,9 @@ class WP_Test_FrmProStatisticsController extends FrmUnitTest {
 	 * [frm-stats id="Number-field-key" type="median"]
 	 */
 	function test_stats_shortcode_median() {
-		$shortcode = '[frm-stats id="msyehy" type="median"]';
+		$shortcode = '[frm-stats id="number-field" type="median"]';
 		$actual_value = do_shortcode( $shortcode );
-		$expected_value = (string) $this->median_msyehy;
+		$expected_value = (string) $this->median_number_field;
 
 		$this->assertSame( $expected_value, $actual_value, $shortcode . ' is not getting the correct value' );
 	}
@@ -127,9 +127,9 @@ class WP_Test_FrmProStatisticsController extends FrmUnitTest {
 	 * [frm-stats id="Number-field-key" type="maximum"]
 	 */
 	function test_stats_shortcode_maximum() {
-		$shortcode = '[frm-stats id="msyehy" type="maximum"]';
+		$shortcode = '[frm-stats id="number-field" type="maximum"]';
 		$actual_value = do_shortcode( $shortcode );
-		$expected_value = max( $this->msyehy_data );
+		$expected_value = max( $this->number_field_data );
 
 		$this->assertEquals( $expected_value, $actual_value, $shortcode . ' is not getting the correct value' );
 	}
@@ -138,9 +138,9 @@ class WP_Test_FrmProStatisticsController extends FrmUnitTest {
 	 * [frm-stats id="Number-field-key" type="minimum"]
 	 */
 	function test_stats_shortcode_minimum() {
-		$shortcode = '[frm-stats id="msyehy" type="minimum"]';
+		$shortcode = '[frm-stats id="number-field" type="minimum"]';
 		$actual_value = do_shortcode( $shortcode );
-		$expected_value = min( $this->msyehy_data );
+		$expected_value = min( $this->number_field_data );
 
 		$this->assertEquals( $expected_value, $actual_value, $shortcode . ' is not getting the correct value' );
 	}
@@ -149,9 +149,9 @@ class WP_Test_FrmProStatisticsController extends FrmUnitTest {
 	 * [frm-stats id="Number-field-key" type="unique"]
 	 */
 	function test_stats_shortcode_unique() {
-		$shortcode = '[frm-stats id="msyehy" type="unique"]';
+		$shortcode = '[frm-stats id="number-field" type="unique"]';
 		$actual_value = do_shortcode( $shortcode );
-		$expected_value = array_count_values( $this->msyehy_data );
+		$expected_value = array_count_values( $this->number_field_data );
 		$expected_value = count( $expected_value );
 
 		$this->assertEquals( $expected_value, $actual_value, $shortcode . ' is not getting the correct value' );
@@ -161,9 +161,9 @@ class WP_Test_FrmProStatisticsController extends FrmUnitTest {
 	 * [frm-stats id="Number-field-key" type="total" user_id="1"]
 	 */
 	function test_stats_shortcode_total_with_user_id() {
-		$shortcode = '[frm-stats id="msyehy" type="total" user_id="1"]';
+		$shortcode = '[frm-stats id="number-field" type="total" user_id="1"]';
 		$actual_value = do_shortcode( $shortcode );
-		$expected_value = $this->msyehy_data['jamie_entry_key'] + $this->msyehy_data['jamie_entry_key_2'];
+		$expected_value = $this->number_field_data['jamie_entry_key'] + $this->number_field_data['jamie_entry_key_2'];
 
 		$this->assertEquals( $expected_value, $actual_value, $shortcode . ' is not getting the correct value' );
 	}
@@ -172,11 +172,11 @@ class WP_Test_FrmProStatisticsController extends FrmUnitTest {
 	 * [frm-stats id="Number-field-key" type="total" user_id="1"]
 	 */
 	function test_stats_shortcode_count_with_user_id() {
-		$shortcode = '[frm-stats id="msyehy" type="count" user_id="1"]';
+		$shortcode = '[frm-stats id="number-field" type="count" user_id="1"]';
 		$actual_value = do_shortcode( $shortcode );
 
 		$expected_value = 0;
-		foreach ( $this->msyehy_data as $entry_key => $value ) {
+		foreach ( $this->number_field_data as $entry_key => $value ) {
 			if ( strpos( $entry_key, 'jamie' ) !== false ) {
 				$expected_value++;
 			}
@@ -189,9 +189,9 @@ class WP_Test_FrmProStatisticsController extends FrmUnitTest {
 	 * [frm-stats id="Number-field-key" type="total" round="2"]
 	 */
 	function test_stats_shortcode_total_with_round() {
-		$shortcode = '[frm-stats id="msyehy" type="total" round="2"]';
+		$shortcode = '[frm-stats id="number-field" type="total" round="2"]';
 		$actual_value = do_shortcode( $shortcode );
-		$expected_value = array_sum( $this->msyehy_data );
+		$expected_value = array_sum( $this->number_field_data );
 		$expected_value = number_format( $expected_value, 2 );
 
 		$this->assertEquals( $expected_value, $actual_value, $shortcode . ' is not getting the correct value' );
@@ -201,9 +201,9 @@ class WP_Test_FrmProStatisticsController extends FrmUnitTest {
 	 * [frm-stats id="Number-field-key" type="total" decimal="2"]
 	 */
 	function test_stats_shortcode_total_with_decimals() {
-		$shortcode = '[frm-stats id="msyehy" type="total" decimal="2"]';
+		$shortcode = '[frm-stats id="number-field" type="total" decimal="2"]';
 		$actual_value = do_shortcode( $shortcode );
-		$expected_value = array_sum( $this->msyehy_data );
+		$expected_value = array_sum( $this->number_field_data );
 		$expected_value = number_format( $expected_value, 2 );
 
 		$this->assertEquals( $expected_value, $actual_value, $shortcode . ' is not getting the correct value' );
@@ -213,9 +213,9 @@ class WP_Test_FrmProStatisticsController extends FrmUnitTest {
 	 * [frm-stats id="Number-field-key" type="average" round="2"]
 	 */
 	function test_stats_shortcode_average_with_round() {
-		$shortcode = '[frm-stats id="msyehy" type="average" round="2"]';
+		$shortcode = '[frm-stats id="number-field" type="average" round="2"]';
 		$actual_value = do_shortcode( $shortcode );
-		$expected_value = array_sum( $this->msyehy_data )/count( $this->msyehy_data );
+		$expected_value = array_sum( $this->number_field_data )/count( $this->number_field_data );
 		$expected_value = number_format( $expected_value, 2 );
 
 		$this->assertEquals( $expected_value, $actual_value, $shortcode . ' is not getting the correct value' );
@@ -226,9 +226,9 @@ class WP_Test_FrmProStatisticsController extends FrmUnitTest {
 	 */
 	function test_stats_shortcode_average_with_decimal() {
 		//$this->markTestSkipped( 'Fails before 2.02.06' );
-		$shortcode = '[frm-stats id="msyehy" type="average" decimal="3"]';
+		$shortcode = '[frm-stats id="number-field" type="average" decimal="3"]';
 		$actual_value = do_shortcode( $shortcode );
-		$expected_value = array_sum( $this->msyehy_data )/count( $this->msyehy_data );
+		$expected_value = array_sum( $this->number_field_data )/count( $this->number_field_data );
 		$expected_value = number_format( $expected_value, 3 );
 
 		$this->assertEquals( $expected_value, $actual_value, $shortcode . ' is not getting the correct value' );
@@ -241,11 +241,11 @@ class WP_Test_FrmProStatisticsController extends FrmUnitTest {
 	 */
 	function test_stats_shortcode_total_with_limit() {
 		$limit = 2;
-		$shortcode = '[frm-stats id="msyehy" type="total" limit="' . $limit . '"]';
+		$shortcode = '[frm-stats id="number-field" type="total" limit="' . $limit . '"]';
 		$actual_value = do_shortcode( $shortcode );
 
 		$expected_value = $count = 0;
-		$reverse_array = array_reverse( $this->msyehy_data );
+		$reverse_array = array_reverse( $this->number_field_data );
 		foreach ( $reverse_array as $value ) {
 			$expected_value += $value;
 
@@ -262,11 +262,11 @@ class WP_Test_FrmProStatisticsController extends FrmUnitTest {
 	 * [frm-stats id="Number-field-key" type="total" value="5"]
 	 */
 	function test_stats_shortcode_total_with_value() {
-		$shortcode = '[frm-stats id="msyehy" type="total" value="5"]';
+		$shortcode = '[frm-stats id="number-field" type="total" value="5"]';
 		$actual_value = do_shortcode( $shortcode );
 
 		$expected_value = 0;
-		foreach ( $this->msyehy_data as $value ) {
+		foreach ( $this->number_field_data as $value ) {
 			if ( $value === 5 ) {
 				$expected_value += $value;
 			}
@@ -292,9 +292,9 @@ class WP_Test_FrmProStatisticsController extends FrmUnitTest {
 	 */
 	function test_stats_shortcode_total_with_entry_id() {
 		$entry_id = FrmEntry::get_id_by_key( 'jamie_entry_key' );
-		$shortcode = '[frm-stats id="msyehy" type="total" entry_id="' . $entry_id . '"]';
+		$shortcode = '[frm-stats id="number-field" type="total" entry_id="' . $entry_id . '"]';
 		$actual_value = do_shortcode( $shortcode );
-		$expected_value = $this->msyehy_data['jamie_entry_key'];
+		$expected_value = $this->number_field_data['jamie_entry_key'];
 
 		$this->assertEquals( $expected_value, $actual_value, $shortcode . ' is not getting the correct value' );
 	}
@@ -303,9 +303,9 @@ class WP_Test_FrmProStatisticsController extends FrmUnitTest {
 	 * [frm-stats id="number-field-key" type="total" entry_id="key"]
 	 */
 	function test_stats_shortcode_total_with_entry_key() {
-		$shortcode = '[frm-stats id="msyehy" type="total" entry_id="jamie_entry_key"]';
+		$shortcode = '[frm-stats id="number-field" type="total" entry_id="jamie_entry_key"]';
 		$actual_value = do_shortcode( $shortcode );
-		$expected_value = $this->msyehy_data['jamie_entry_key'];
+		$expected_value = $this->number_field_data['jamie_entry_key'];
 
 		$this->assertEquals( $expected_value, $actual_value, $shortcode . ' is not getting the correct value' );
 	}
@@ -314,7 +314,7 @@ class WP_Test_FrmProStatisticsController extends FrmUnitTest {
 	 * [frm-stats id="number-field-key" type="total" dropdown="Ace Ventura"]
 	 */
 	function test_stats_shortcode_total_with_dropdown_filter() {
-		$shortcode = '[frm-stats id="msyehy" type="total" dropdown-field="Ace Ventura"]';
+		$shortcode = '[frm-stats id="number-field" type="total" dropdown-field="Ace Ventura"]';
 		$actual_value = do_shortcode( $shortcode );
 		$expected_value = 16;
 
@@ -325,7 +325,7 @@ class WP_Test_FrmProStatisticsController extends FrmUnitTest {
 	 * [frm-stats id="number-field-key" type="total" dropdown="Ace Ventura" fake="test"]
 	 */
 	function test_stats_shortcode_total_with_dropdown_filter_and_fake_filter() {
-		$shortcode = '[frm-stats id="msyehy" type="total" dropdown-field="Ace Ventura" fake="test"]';
+		$shortcode = '[frm-stats id="number-field" type="total" dropdown-field="Ace Ventura" fake="test"]';
 		$actual_value = do_shortcode( $shortcode );
 		$expected_value = 16;
 
@@ -337,9 +337,9 @@ class WP_Test_FrmProStatisticsController extends FrmUnitTest {
 	 */
 	function test_stats_shortcode_total_with_dropdown_filter_and_entry_id() {
 		$entry_id = FrmEntry::get_id_by_key( 'jamie_entry_key' );
-		$shortcode = '[frm-stats id="msyehy" type="total" dropdown-field="Ace Ventura" entry_id="' . $entry_id . '"]';
+		$shortcode = '[frm-stats id="number-field" type="total" dropdown-field="Ace Ventura" entry_id="' . $entry_id . '"]';
 		$actual_value = do_shortcode( $shortcode );
-		$expected_value = $this->msyehy_data['jamie_entry_key'];
+		$expected_value = $this->number_field_data['jamie_entry_key'];
 
 		$this->assertEquals( $expected_value, $actual_value, $shortcode . ' is not getting the correct value' );
 	}
@@ -349,9 +349,9 @@ class WP_Test_FrmProStatisticsController extends FrmUnitTest {
 	 */
 	function test_stats_shortcode_total_with_dropdown_filter_and_entry_key() {
 		//$this->markTestSkipped( 'Fails before 2.02.06' );
-		$shortcode = '[frm-stats id="msyehy" type="total" dropdown-field="Ace Ventura" entry_id="jamie_entry_key"]';
+		$shortcode = '[frm-stats id="number-field" type="total" dropdown-field="Ace Ventura" entry_id="jamie_entry_key"]';
 		$actual_value = do_shortcode( $shortcode );
-		$expected_value = $this->msyehy_data['jamie_entry_key'];
+		$expected_value = $this->number_field_data['jamie_entry_key'];
 
 		$this->assertEquals( $expected_value, $actual_value, $shortcode . ' is not getting the correct value' );
 	}
@@ -360,7 +360,7 @@ class WP_Test_FrmProStatisticsController extends FrmUnitTest {
 	 * [frm-stats id="number-field-key" type="total" "2015-01-01"<date-field<"2015-08-01"]
 	 */
 	function test_stats_shortcode_total_with_deprecated_date_range_filter() {
-		$shortcode = '[frm-stats id="msyehy" type="total" "2015-01-01"&lt;date-field&lt;"2015-08-01"]';
+		$shortcode = '[frm-stats id="number-field" type="total" "2015-01-01"&lt;date-field&lt;"2015-08-01"]';
 		$actual_value = do_shortcode( $shortcode );
 		$expected_value = 6;
 
@@ -371,7 +371,7 @@ class WP_Test_FrmProStatisticsController extends FrmUnitTest {
 	 * [frm-stats id="number-field-key" type="total" date-field_greater_than="2015-01-01" date-field_less_than="2015-08-01"]
 	 */
 	function test_stats_shortcode_total_with_new_date_range_filter() {
-		$shortcode = '[frm-stats id="msyehy" type="total" date-field_greater_than="2015-01-01" date-field_less_than="2015-08-01"]';
+		$shortcode = '[frm-stats id="number-field" type="total" date-field_greater_than="2015-01-01" date-field_less_than="2015-08-01"]';
 		$actual_value = do_shortcode( $shortcode );
 		$expected_value = 6;
 
@@ -382,7 +382,7 @@ class WP_Test_FrmProStatisticsController extends FrmUnitTest {
 	 * [frm-stats id="number-field-key" type="total" "2015-05-12"<created_at<"2015-06-01"]
 	 */
 	function test_stats_shortcode_total_with_deprecated_creation_date_filter() {
-		$shortcode = '[frm-stats id="msyehy" type="total" "2015-05-13"&lt;created_at&lt;"2015-06-01"]';
+		$shortcode = '[frm-stats id="number-field" type="total" "2015-05-13"&lt;created_at&lt;"2015-06-01"]';
 		$actual_value = do_shortcode( $shortcode );
 		$expected_value = 6;
 
@@ -393,7 +393,7 @@ class WP_Test_FrmProStatisticsController extends FrmUnitTest {
 	 * [frm-stats id="number-field-key" type="total" created_at_greater_than="2015-05-12" created_at_less_than="2015-06-01"]
 	 */
 	function test_stats_shortcode_total_with_creation_date_filter() {
-		$shortcode = '[frm-stats id="msyehy" type="total" created_at_greater_than="2015-05-13" created_at_less_than="2015-06-01"]';
+		$shortcode = '[frm-stats id="number-field" type="total" created_at_greater_than="2015-05-13" created_at_less_than="2015-06-01"]';
 		$actual_value = do_shortcode( $shortcode );
 		$expected_value = 6;
 

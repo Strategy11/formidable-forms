@@ -196,7 +196,7 @@ class FrmEntriesHelper {
                 $this_atts = $atts;
             }
 
-			$default = FrmEntryFormat::show_entry( $this_atts );
+			$default = FrmEntriesController::show_entry_shortcode( $this_atts );
 
             // Add the default message
             $message = str_replace( $shortcodes[0][ $short_key ], $default, $message );
@@ -487,37 +487,81 @@ class FrmEntriesHelper {
 		return $content;
     }
 
-	public static function fill_entry_values( $atts, $f, array &$values ) {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmEntryFormat::fill_entry_values' );
-		FrmEntryFormat::fill_entry_values( $atts, $f, $values );
-	}
-
-	public static function flatten_multi_file_upload( &$val, $field ) {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmEntryFormat::flatten_multi_file_upload' );
-		FrmEntryFormat::flatten_multi_file_upload( $field, $val );
-	}
-
-	public static function textarea_display_value() {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'custom code' );
-	}
-
-	public static function fill_entry_user_info( $atts, array &$values ) {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmEntryFormat::fill_entry_user_info' );
-		FrmEntryFormat::fill_entry_user_info( $atts, $values );
-	}
-
-	public static function get_entry_description_data( $atts ) {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmEntryFormat::get_entry_description_data' );
-		return FrmEntryFormat::get_entry_description_data( $atts );
-	}
-
-	public static function convert_entry_to_content( $values, $atts, array &$content ) {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmEntryFormat::convert_entry_to_content' );
-		FrmEntryFormat::convert_entry_to_content( $values, $atts, $content );
-	}
-
+	/**
+	 * Get the browser from the user agent
+	 *
+	 * @since 2.03.11
+	 *
+	 * @param string $u_agent
+	 *
+	 * @return string
+	 */
 	public static function get_browser( $u_agent ) {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmEntryFormat::get_browser' );
-		return FrmEntryFormat::get_browser( $u_agent );
+		$bname = __( 'Unknown', 'formidable' );
+		$platform = __( 'Unknown', 'formidable' );
+		$ub = '';
+
+		// Get the operating system
+		if ( preg_match( '/windows|win32/i', $u_agent ) ) {
+			$platform = 'Windows';
+		} else if ( preg_match( '/android/i', $u_agent ) ) {
+			$platform = 'Android';
+		} else if ( preg_match( '/linux/i', $u_agent ) ) {
+			$platform = 'Linux';
+		} else if ( preg_match( '/macintosh|mac os x/i', $u_agent ) ) {
+			$platform = 'OS X';
+		}
+
+		$agent_options = array(
+			'Chrome'   => 'Google Chrome',
+			'Safari'   => 'Apple Safari',
+			'Opera'    => 'Opera',
+			'Netscape' => 'Netscape',
+			'Firefox'  => 'Mozilla Firefox',
+		);
+
+		// Next get the name of the useragent yes seperately and for good reason
+		if ( strpos( $u_agent, 'MSIE' ) !== false && strpos( $u_agent, 'Opera' ) === false ) {
+			$bname = 'Internet Explorer';
+			$ub = 'MSIE';
+		} else {
+			foreach ( $agent_options as $agent_key => $agent_name ) {
+				if ( strpos( $u_agent, $agent_key ) !== false ) {
+					$bname = $agent_name;
+					$ub = $agent_key;
+					break;
+				}
+			}
+		}
+
+		// finally get the correct version number
+		$known = array( 'Version', $ub, 'other' );
+		$pattern = '#(?<browser>' . join( '|', $known ) . ')[/ ]+(?<version>[0-9.|a-zA-Z.]*)#';
+		preg_match_all( $pattern, $u_agent, $matches ); // get the matching numbers
+
+		// see how many we have
+		$i = count($matches['browser']);
+
+		if ( $i > 1 ) {
+			//we will have two since we are not using 'other' argument yet
+			//see if version is before or after the name
+			if ( strripos( $u_agent, 'Version' ) < strripos( $u_agent, $ub ) ) {
+				$version = $matches['version'][0];
+			} else {
+				$version = $matches['version'][1];
+			}
+		} else if ( $i === 1 ) {
+			$version = $matches['version'][0];
+		} else {
+			$version = '';
+		}
+
+		// check if we have a number
+		if ( $version == '' ) {
+			$version = '?';
+		}
+
+		return $bname . ' ' . $version . ' / ' . $platform;
 	}
+
 }

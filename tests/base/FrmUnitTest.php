@@ -2,19 +2,17 @@
 
 class FrmUnitTest extends WP_UnitTestCase {
 
-	protected $form;
-	protected $form_id = 0;
-	protected $field_ids = array();
 	protected $user_id = 0;
 
 	protected $contact_form_key = 'contact-with-email';
 	protected $contact_form_field_count = 10;
 
 	protected $all_fields_form_key = 'all_field_types';
-	protected $all_field_types_count = 47;
+	protected $all_field_types_count = 48;
 
 	protected $repeat_sec_form_key = 'rep_sec_form';
 	protected $create_post_form_key = 'create-a-post';
+
 	protected $is_pro_active = false;
 
 	/**
@@ -86,8 +84,8 @@ class FrmUnitTest extends WP_UnitTestCase {
     }
 
 	function create_files() {
-		$single_file_upload_field = FrmField::getOne( 'mprllc' );
-		$multi_file_upload_field = FrmField::getOne( '72hika' );
+		$single_file_upload_field = FrmField::getOne( 'single-file-upload-field' );
+		$multi_file_upload_field = FrmField::getOne( 'multi-file-upload-field' );
 
 		$file_urls = array(
 			array(
@@ -109,19 +107,52 @@ class FrmUnitTest extends WP_UnitTestCase {
 				'field' => $multi_file_upload_field,
 				'entry' => 'jamie_entry_key',
 			),
+			array(
+				'val' => 'https://formidableforms.com/wp-content/uploads/formidable/formidablepro.real_estate_listings.2015-08-10.xml',
+				'field' => FrmField::getOne( 'file_upload_single' ),
+				'entry' => 'many_files_key',
+			),
+			array(
+				'val' => array(
+					'https://cdn.formidableforms.com/wp-content/uploads/2016/11/goal-form.png',
+					'https://cdn.formidableforms.com/wp-content/uploads/2016/11/goal-progress.png',
+					'https://cdn.formidableforms.com/wp-content/uploads/2016/09/new-graph-types1.png',
+				),
+				'field' => FrmField::getOne( 'file_upload_multiple' ),
+				'entry' => 'many_files_key',
+			),
+			array(
+				'val' => array(
+					'https://cdn.formidableforms.com/wp-content/uploads/2017/07/user-registration-multisite.jpeg',
+					'https://cdn.formidableforms.com/wp-content/uploads/2017/07/lost-password-form.png',
+					'https://cdn.formidableforms.com/wp-content/uploads/2017/07/login-form.png',
+				),
+				'field' => FrmField::getOne( 'file_upload_multiple_repeating' ),
+				'entry' => 'file-repeat-child-one',
+			),
+			array(
+				'val' => array(
+					'https://cdn.formidableforms.com/wp-content/uploads/2016/11/normal-section-job-history-1.png',
+					'https://cdn.formidableforms.com/wp-content/uploads/2016/11/repeating-section-job-history-1.png',
+				),
+				'field' => FrmField::getOne( 'file_upload_multiple_repeating' ),
+				'entry' => 'file-repeat-child-two',
+			),
 		);
 
 		$_REQUEST['csv_files'] = 1;
 		foreach ( $file_urls as $values ) {
-			$media_id = FrmProFileImport::import_attachment( $values['val'], $values['field'] );
+			$media_ids = FrmProFileImport::import_attachment( $values['val'], $values['field'] );
 
-			if ( ! is_array( $values['val'] ) ) {
-				$this->assertTrue( is_numeric( $media_id ), 'The following file is not importing correctly: ' . $values[ 'val' ] );
+			if ( is_array( $values['val']) ) {
+				$media_ids = explode(',', $media_ids );
+			} else {
+				$this->assertTrue( is_numeric( $media_ids ), 'The following file is not importing correctly: ' . $values[ 'val' ] );
 			}
 
 			// Insert into entries
 			$entry_id = FrmEntry::get_id_by_key( $values['entry'] );
-			FrmEntryMeta::add_entry_meta( $entry_id, $values['field']->id, null, $media_id );
+			FrmEntryMeta::add_entry_meta( $entry_id, $values['field']->id, null, $media_ids );
 		}
 	}
 
@@ -278,6 +309,7 @@ class FrmUnitTest extends WP_UnitTestCase {
         return array(
         	dirname( __FILE__ ) . '/testdata.xml',
 	        dirname( __FILE__ ) . '/editform.xml',
+			dirname( __FILE__ ) . '/file-upload.xml',
         );
     }
 

@@ -60,6 +60,8 @@ function frm_forms_load_class( $class_name, $filepath ) {
         $filepath .= '/helpers/';
 	} else if ( preg_match( '/^.+Controller$/', $class_name ) ) {
         $filepath .= '/controllers/';
+	} else if ( preg_match( '/^.+Factory$/', $class_name ) ) {
+		$filepath .= '/factories/';
     } else {
         $filepath .= '/models/';
     }

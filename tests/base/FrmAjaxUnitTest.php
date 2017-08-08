@@ -4,7 +4,7 @@
  * @group ajax
  */
 class FrmAjaxUnitTest extends WP_Ajax_UnitTestCase {
-	protected $form_id = 0;
+
 	protected $field_id = 0;
 	protected $user_id = 0;
 	protected $is_pro_active = false;

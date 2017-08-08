@@ -761,7 +761,7 @@ class FrmFormsController {
     public static function get_email_html() {
 		FrmAppHelper::permission_check('frm_view_forms');
         check_ajax_referer( 'frm_ajax', 'nonce' );
-		echo FrmEntryFormat::show_entry( array(
+		echo FrmEntriesController::show_entry_shortcode( array(
 			'form_id'       => FrmAppHelper::get_post_param( 'form_id', '', 'absint' ),
 	        'default_email' => true,
 			'plain_text'    => FrmAppHelper::get_post_param( 'plain_text', '', 'absint' ),

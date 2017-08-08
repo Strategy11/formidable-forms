@@ -4,6 +4,8 @@
  * @group ajax
  */
 class WP_Test_FrmFieldsAjax extends FrmAjaxUnitTest {
+
+	private $form_id = 0;
 	
 	public function setUp() {
 		parent::setUp();
