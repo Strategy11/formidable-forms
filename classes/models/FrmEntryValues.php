@@ -41,6 +41,13 @@ class FrmEntryValues {
 	protected $exclude_fields = array();
 
 	/**
+	 * @since 2.03.11
+	 *
+	 * @var string
+	 */
+	protected $source = '';
+
+	/**
 	 * FrmEntryValues constructor
 	 *
 	 * @since 2.03.11
@@ -61,6 +68,7 @@ class FrmEntryValues {
 		$this->init_fields();
 		$this->init_field_values();
 		$this->init_user_info();
+		$this->init_source( $atts );
 	}
 
 	/**
@@ -119,6 +127,21 @@ class FrmEntryValues {
 	 */
 	protected function init_exclude_fields( $atts ) {
 		$this->exclude_fields = $this->prepare_array_property( 'exclude_fields', $atts );
+	}
+
+	/**
+	 * Initialize the source property
+	 *
+	 * @since 2.03.11
+	 *
+	 * @param array $atts
+	 */
+	protected function init_source( $atts ) {
+		if ( isset( $atts['source'] ) && is_string( $atts['source'] ) && $atts['source'] !== '' ) {
+			$this->source = (string) $atts['source'];
+		} else {
+			$this->source = 'general';
+		}
 	}
 
 	/**
@@ -271,6 +294,6 @@ class FrmEntryValues {
 	 * @param stdClass $field
 	 */
 	protected function add_field_values( $field ) {
-		$this->field_values[ $field->id ] = new FrmFieldValue( $field, $this->entry );
+		$this->field_values[ $field->id ] = new FrmFieldValue( $field, $this->entry, array( 'source' => $this->source ) );
 	}
 }

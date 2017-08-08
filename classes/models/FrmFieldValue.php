@@ -22,6 +22,13 @@ class FrmFieldValue {
 	/**
 	 * @since 2.03.11
 	 *
+	 * @var string
+	 */
+	protected $source = '';
+
+	/**
+	 * @since 2.03.11
+	 *
 	 * @var mixed
 	 */
 	protected $saved_value = '';
@@ -38,16 +45,33 @@ class FrmFieldValue {
 	 *
 	 * @param stdClass $field
 	 * @param stdClass $entry
+	 * @param array $atts
 	 */
-	public function __construct( $field, $entry ) {
+	public function __construct( $field, $entry, $atts = array() ) {
 		if ( ! is_object( $field ) || ! is_object( $entry ) || ! isset( $entry->metas ) ) {
 			return;
 		}
 
 		$this->field = $field;
 		$this->entry = $entry;
+		$this->init_source( $atts );
 		$this->init_saved_value();
 		$this->init_displayed_value();
+	}
+
+	/**
+	 * Initialize the source property
+	 *
+	 * @since 2.03.11
+	 *
+	 * @param array $atts
+	 */
+	protected function init_source( $atts ) {
+		if ( isset( $atts['source'] ) && is_string( $atts['source'] ) && $atts['source'] !== '' ) {
+			$this->source = (string) $atts['source'];
+		} else {
+			$this->source = 'general';
+		}
 	}
 
 	/**
@@ -127,18 +151,21 @@ class FrmFieldValue {
 	 * @since 2.03.11
 	 */
 	protected function filter_displayed_value() {
-		// Deprecated frm_email_value hook - TODO: make sure this only applies to show-entry-shortcode
-		$meta = array(
-			'item_id' => $this->entry->id,
-			'field_id' => $this->field->id,
-			'meta_value' => $this->saved_value,
-			'field_type' => $this->field->type
-		);
-		$this->displayed_value = apply_filters( 'frm_email_value', $this->displayed_value, (object) $meta, $this->entry, array(
-			'field'  => $this->field,
-		) );
-		if ( has_filter( 'frm_email_value' ) ) {
-			_deprecated_function( 'The frm_email_value filter', '2.03.11', 'the frm_display_{fieldtype}_value_custom filter' );
+
+		if ( $this->source === 'entry_formatter' ) {
+			// Deprecated frm_email_value hook
+			$meta                  = array(
+				'item_id'    => $this->entry->id,
+				'field_id'   => $this->field->id,
+				'meta_value' => $this->saved_value,
+				'field_type' => $this->field->type
+			);
+			$this->displayed_value = apply_filters( 'frm_email_value', $this->displayed_value, (object) $meta, $this->entry, array(
+				'field' => $this->field,
+			) );
+			if ( has_filter( 'frm_email_value' ) ) {
+				_deprecated_function( 'The frm_email_value filter', '2.03.11', 'the frm_display_{fieldtype}_value_custom filter' );
+			}
 		}
 
 		// frm_display_{fieldtype}_value_custom hook

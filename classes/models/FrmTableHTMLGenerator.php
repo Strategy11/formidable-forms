@@ -51,6 +51,7 @@ class FrmTableHTMLGenerator {
 	/**
 	 * FrmTableHTMLGenerator constructor.
 	 *
+	 * @param string $type
 	 * @param array $atts
 	 */
 	public function __construct( $type, $atts = array() ) {
