@@ -20,6 +20,9 @@
     }
 } else if ( $field['type'] == 'select' ) {
 	include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/dropdown-field.php' );
+} else if ( in_array( $field['type'], array( 'html', 'user_id', 'hidden' ) ) ) {
+	$type = str_replace( '_', '-', $field['type'] );
+	include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-' . $type . '.php' );
 } else if ( $field['type'] == 'captcha' ) {
 	if ( empty($frm_settings->pubkey) ) { ?>
     <div class="howto frm_no_captcha_text"><?php printf(__( 'Your captcha will not appear on your form until you %1$sset up%2$s the Site and Secret Keys', 'formidable' ), '<a href="?page=formidable-settings">', '</a>') ?></div>

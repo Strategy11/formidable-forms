@@ -279,6 +279,8 @@ if ( $display['options'] ) { ?>
 
 				if ( $field['type'] == 'number' ) {
 					include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/number-range.php' );
+				} else if ( $field['type'] == 'html' ) {
+					include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/html-content.php' );
 				}
 
                 if ( $display['required'] || $display['invalid'] || $display['unique'] || $display['conf_field'] ) { ?>

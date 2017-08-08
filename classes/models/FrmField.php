@@ -19,6 +19,9 @@ class FrmField {
 			'number'    => __( 'Number', 'formidable' ),
 			'phone'     => __( 'Phone Number', 'formidable' ),
 			'url'       => __( 'Website/URL', 'formidable' ),
+			'html'      => __( 'HTML', 'formidable' ),
+			'hidden'    => __( 'Hidden Field', 'formidable' ),
+			'user_id'   => __( 'User ID (hidden)', 'formidable' ),
 			'captcha'   => __( 'reCAPTCHA', 'formidable' ),
 		));
 
@@ -42,10 +45,7 @@ class FrmField {
 			'data'      => __( 'Dynamic Field', 'formidable' ),
 			'lookup'	=> __( 'Lookup', 'formidable' ),
 			'form'      => __( 'Embed Form', 'formidable' ),
-			'hidden'    => __( 'Hidden Field', 'formidable' ),
-			'user_id'   => __( 'User ID (hidden)', 'formidable' ),
 			'password'  => __( 'Password', 'formidable' ),
-			'html'      => __( 'HTML', 'formidable' ),
 			'tag'       => __( 'Tags', 'formidable' ),
 			'credit_card' => __( 'Credit Card', 'formidable' ),
 			'address'   => __( 'Address', 'formidable' ),

@@ -417,6 +417,14 @@ class FrmFieldsController {
                 $display['size'] = true;
                 $display['clear_on_focus'] = true;
                 $display['invalid'] = true;
+			break;
+			case 'user_id':
+			case 'html':
+			case 'hidden':
+				$display['default_blank'] = false;
+				$display['required'] = false;
+				$display['description'] = false;
+				$display['label_position'] = false;
         }
 
         return $display;

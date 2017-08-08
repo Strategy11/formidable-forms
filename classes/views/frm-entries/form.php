@@ -30,14 +30,7 @@ $frm_hide_fields = FrmAppHelper::get_post_param( 'frm_hide_fields_' . $form->id,
 <?php if ( isset( $id ) ) { ?><input type="hidden" name="id" value="<?php echo esc_attr( $id ) ?>" /><?php }
 
 if ( $values['fields'] ) {
-	foreach ( $values['fields'] as $field ) {
-		if ( apply_filters( 'frm_show_normal_field_type', true, $field['type'] ) ) {
-			echo FrmFieldsHelper::replace_shortcodes( $field['custom_html'], $field, $errors, $form );
-		} else {
-			do_action( 'frm_show_other_field_type', $field, $form, array( 'action' => $form_action ) );
-		}
-    	do_action('frm_get_field_scripts', $field, $form, $form->id);
-	}
+	FrmFieldsHelper::show_fields( $values['fields'], $errors, $form, $form_action );
 }
 
 $frm_settings = FrmAppHelper::get_settings();

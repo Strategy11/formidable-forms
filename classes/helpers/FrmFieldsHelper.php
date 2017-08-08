@@ -71,7 +71,7 @@ class FrmFieldsHelper {
 			$values['name'] = __( 'Website', 'formidable' );
 		} else if ( 'number' == $type ) {
 			$values['field_options']['minnum'] = 0;
-			$values['field_options']['maxnum'] = 9999;
+			$values['field_options']['maxnum'] = 9999999;
 			$values['field_options']['step'] = 'any';
 		}
 	}
@@ -200,14 +200,31 @@ class FrmFieldsHelper {
 	}
 
 	public static function get_default_html( $type = 'text' ) {
-		if ( apply_filters( 'frm_normal_field_type_html', true, $type ) ) {
-			$input = ( in_array( $type, array( 'radio', 'checkbox', 'data' ) ) ) ? '<div class="frm_opt_container">[input]</div>' : '[input]';
-            $for = '';
-			if ( ! in_array( $type, array( 'radio', 'checkbox', 'data', 'scale' ) ) ) {
-                $for = 'for="field_[key]"';
-            }
+		if ( $type == 'html' ) {
+			$default_html = self::get_html_field_html();
+		} else if ( in_array( $type, array( 'hidden', 'user_id' ) ) ) {
+			$default_html = '';
+		} else if ( apply_filters( 'frm_normal_field_type_html', true, $type ) ) {
+			$default_html = self::get_normal_field_html( $type );
+		} else {
+			$default_html = apply_filters( 'frm_other_custom_html', '', $type );
+		}
 
-            $default_html = <<<DEFAULT_HTML
+		return apply_filters('frm_custom_html', $default_html, $type);
+	}
+
+	private static function get_html_field_html() {
+		return '<div id="frm_field_[id]_container" class="frm_form_field form-field">[description]</div>';
+	}
+
+	private static function get_normal_field_html( $type ) {
+		$input = ( in_array( $type, array( 'radio', 'checkbox', 'data' ) ) ) ? '<div class="frm_opt_container">[input]</div>' : '[input]';
+		$for = '';
+		if ( ! in_array( $type, array( 'radio', 'checkbox', 'data', 'scale' ) ) ) {
+			$for = 'for="field_[key]"';
+		}
+
+		$default_html = <<<DEFAULT_HTML
 <div id="frm_field_[id]_container" class="frm_form_field form-field [required_class][error_class]">
     <label $for class="frm_primary_label">[field_name]
         <span class="frm_required">[required_label]</span>
@@ -217,26 +234,55 @@ class FrmFieldsHelper {
     [if error]<div class="frm_error">[error]</div>[/if error]
 </div>
 DEFAULT_HTML;
-        } else {
-			$default_html = apply_filters('frm_other_custom_html', '', $type);
-        }
+		return $default_html;
+	}
 
-        return apply_filters('frm_custom_html', $default_html, $type);
-    }
+	public static function show_fields( $fields, $errors, $form, $form_action ) {
+		foreach ( $fields as $field ) {
+			if ( $field['type'] == 'user_id' ) {
+				self::show_hidden_user_id( $field );
+			} else if ( apply_filters( 'frm_show_normal_field_type', true, $field['type'] ) ) {
+				if ( $field['type'] == 'hidden' ) {
+					self::show_hidden_field( $field );
+				} else {
+					self::show_field( $field, $errors, $form );
+				}
+			} else {
+				do_action( 'frm_show_other_field_type', $field, $form, array( 'action' => $form_action ) );
+			}
+			do_action('frm_get_field_scripts', $field, $form, $form->id);
+		}
+	}
+
+	private static function show_hidden_user_id( $field ) {
+		$args = self::fill_display_field_values( $field );
+
+		$user_ID = get_current_user_id();
+		$user_ID = ( $user_ID ? $user_ID : '' );
+		$posted_value = ( FrmAppHelper::is_admin() && $_POST && isset( $_POST['item_meta'][ $field['id'] ] ) );
+		$updating = ( isset( $args['action'] ) && $args['action'] == 'update' );
+		$value = ( is_numeric( $field['value'] ) || $posted_value || $updating ) ? $field['value'] : $user_ID;
+
+		echo '<input type="hidden" name="' . esc_attr( $args['field_name'] ) . '" id="' . esc_attr( $args['html_id'] ) . '" value="' . esc_attr( $value ) . '" data-frmval="' . esc_attr( $value ) . '"/>'."\n";
+	}
+
+	private static function show_hidden_field( $field ) {
+		$args = self::fill_display_field_values( $field );
+
+		echo '<input type="hidden" name="' . esc_attr( $args['field_name'] ) . '" id="' . esc_attr( $args['html_id'] ) . '" value="' . esc_attr( $field['value'] ) . '" ' . do_action( 'frm_field_input_html', $field ) . ' />';
+	}
+
+	private static function show_field( $field, $errors, $form ) {
+		echo self::replace_shortcodes( $field['custom_html'], $field, $errors, $form );
+	}
 
 	public static function replace_shortcodes( $html, $field, $errors = array(), $form = false, $args = array() ) {
         $html = apply_filters('frm_before_replace_shortcodes', $html, $field, $errors, $form);
 
-        $defaults = array(
-			'field_name'    => 'item_meta[' . $field['id'] . ']',
-			'field_id'      => $field['id'],
-            'field_plus_id' => '',
-            'section_id'    => '',
-        );
-        $args = wp_parse_args($args, $defaults);
+        $args = self::fill_display_field_values( $field, $args );
         $field_name = $args['field_name'];
         $field_id = $args['field_id'];
-        $html_id = self::get_html_id($field, $args['field_plus_id']);
+        $html_id = $args['html_id'];
 
         if ( FrmField::is_multiple_select($field) ) {
             $field_name .= '[]';
@@ -248,7 +294,7 @@ DEFAULT_HTML;
         // Remove the for attribute for captcha
         if ( $field['type'] == 'captcha' ) {
             $html = str_replace(' for="field_[key]"', '', $html);
-        }
+		}
 
         // set the label for
         $html = str_replace('field_[key]', $html_id, $html);
@@ -353,10 +399,33 @@ DEFAULT_HTML;
             $html = apply_filters('frm_replace_shortcodes', $html, $field, array( 'errors' => $errors, 'form' => $form ));
         }
 
+		self::filter_html_field_shortcodes( $field, $html );
 		self::remove_collapse_shortcode( $html );
 
         return $html;
     }
+
+	private static function fill_display_field_values( $field, $args = array() ) {
+		$defaults = array(
+			'field_name'    => 'item_meta[' . $field['id'] . ']',
+			'field_id'      => $field['id'],
+			'field_plus_id' => '',
+			'section_id'    => '',
+		);
+		$args = wp_parse_args( $args, $defaults );
+		$args['html_id'] = self::get_html_id( $field, $args['field_plus_id'] );
+		return $args;
+	}
+
+	private static function filter_html_field_shortcodes( $field, &$html ) {
+		if ( $field['type'] == 'html' ) {
+			if ( apply_filters( 'frm_use_wpautop', true ) ) {
+				$html = wpautop( $html );
+			}
+			$html = apply_filters( 'frm_get_default_value', $html, (object) $field, false );
+			$html = do_shortcode( $html );
+		}
+	}
 
 	/**
 	 * This filters shortcodes in the field HTML
@@ -413,6 +482,11 @@ DEFAULT_HTML;
 				$classes .= ' frm_form_field';
 			}
 			$classes .= ' ' . $field['classes'];
+		}
+
+		// Add class to HTML field
+		if ( $field['type'] == 'html' ) {
+			$classes .= ' frm_html_container';
 		}
 
 		// Get additional classes

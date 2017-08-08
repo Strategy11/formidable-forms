@@ -1,4 +1,4 @@
-<?php if ( in_array( $field['type'], array( 'email', 'url', 'text' ) ) ) { ?>
+<?php if ( in_array( $field['type'], array( 'email', 'url', 'text', 'number' ) ) ) { ?>
 <input type="<?php echo ( $frm_settings->use_html || $field['type'] == 'password' ) ? $field['type'] : 'text'; ?>" id="<?php echo esc_attr( $html_id ) ?>" name="<?php echo esc_attr( $field_name ) ?>" value="<?php echo esc_attr( $field['value'] ) ?>" <?php do_action('frm_field_input_html', $field) ?>/>
 <?php } else if ( $field['type'] == 'textarea' ) { ?>
 <textarea name="<?php echo esc_attr( $field_name ) ?>" id="<?php echo esc_attr( $html_id ) ?>" <?php
@@ -119,6 +119,10 @@ do_action('frm_field_input_html', $field);
 <?php
         }
     }
+} else if ( $field['type'] == 'phone' ) {
+?>
+<input type="<?php echo ( $frm_settings->use_html ) ? 'tel' : 'text'; ?>" id="<?php echo esc_attr( $html_id ) ?>" name="<?php echo esc_attr( $field_name ) ?>" value="<?php echo esc_attr( $field['value'] ) ?>" <?php do_action( 'frm_field_input_html', $field ) ?>/>
+<?php
 } else if ( $field['type'] == 'captcha' && ! FrmAppHelper::is_admin() ) {
     $frm_settings = FrmAppHelper::get_settings();
     if ( ! empty($frm_settings->pubkey) ) {

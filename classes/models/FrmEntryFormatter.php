@@ -69,7 +69,7 @@ class FrmEntryFormatter {
 	 * @var array
 	 * @since 2.03.11
 	 */
-	protected $skip_fields = array( 'captcha' );
+	protected $skip_fields = array( 'captcha', 'html' );
 
 	/**
 	 * FrmEntryFormat constructor
@@ -391,6 +391,18 @@ class FrmEntryFormatter {
 			return;
 		}
 
+		$this->add_standard_row( $field_value, $content );
+	}
+
+	/**
+	 * Add a standard row to plain text or html table content
+	 *
+	 * @since 2.03.11
+	 *
+	 * @param FrmProFieldValue $field_value
+	 * @param string $content
+	 */
+	private function add_standard_row( $field_value, &$content ) {
 		if ( $this->format === 'plain_text_block' ) {
 			$this->add_plain_text_row( $field_value->get_field_label(), $field_value->get_displayed_value(), $content );
 		} else if ( $this->format === 'table' ) {
