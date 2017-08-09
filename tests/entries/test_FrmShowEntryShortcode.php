@@ -10,12 +10,13 @@
  */
 class test_FrmShowEntryShortcode extends FrmUnitTest {
 
-	// TODO: Deprecate necessary functions and hooks
 	// TODO: try including a field from inside a repeating section. It's not yet possible to display a single field from inside a repeating section
 	// TODO: try including a field from inside an embedded form
+	// TODO: exclude a field from inside a repeating section
 	// TODO: write test for each bug that I'm fixing
 	// TODO: section with no fields in it
 	// TODO: add is_visible for default HTML or just if [if x]
+	// TODO: what about conditional page breaks?
 
 	private $text_field_id = '';
 	private $tr_style = ' style="background-color:#ffffff;"';
@@ -523,6 +524,114 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	}
 
 	/**
+	 * Tests [default-message include_extras="section"]
+	 * This tests the situation where an entry was submitted and a repeating section was left blank
+	 * The repeating section may have child entries, but those entries have no values
+	 *
+	 * @covers FrmEntriesController::show_entry_shortcode
+	 *
+	 * @since 2.03.11
+	 */
+	public function test_default_message_with_no_values_in_repeating_section() {
+		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
+		$repeating_section = FrmField::get_id_by_key( 'repeating-section' );
+
+		foreach ( $entry->metas[ $repeating_section ] as $child_id ) {
+			// Delete all meta with an item_id of $entry->id
+			global $wpdb;
+			$wpdb->delete( $wpdb->prefix . 'frm_item_metas', array( 'item_id' => $child_id ) );
+		}
+
+		$atts = array(
+			'id' => $entry->id,
+			'entry' => $entry,
+			'plain_text' => false,
+			'user_info' => false,
+			'include_extras' => 'section',
+		);
+
+		$content = $this->get_formatted_content( $atts );
+
+		$atts['is_repeat_empty'] = true;
+		$expected_content = $this->expected_html_content( $atts );
+
+		$this->assertSame( $expected_content, $content );
+	}
+
+	/**
+	 * Tests [default-message include_extras="section" include_blank="1"]
+	 * This tests the situation where an entry was submitted and a repeating section was left blank
+	 * The repeating section may have child entries, but those entries have no values
+	 *
+	 * @covers FrmEntriesController::show_entry_shortcode
+	 *
+	 * @since 2.03.11
+	 * @group current
+	 */
+	public function test_default_message_with_no_values_in_repeating_section_include_blank() {
+		$this->markTestSkipped( 'Make this pass for second beta' );
+		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
+		$repeating_section = FrmField::get_id_by_key( 'repeating-section' );
+
+		foreach ( $entry->metas[ $repeating_section ] as $child_id ) {
+			// Delete all meta with an item_id of $entry->id
+			global $wpdb;
+			$wpdb->delete( $wpdb->prefix . 'frm_item_metas', array( 'item_id' => $child_id ) );
+		}
+
+		$atts = array(
+			'id' => $entry->id,
+			'entry' => $entry,
+			'plain_text' => false,
+			'user_info' => false,
+			'include_extras' => 'section',
+			'include_blank' => true,
+		);
+
+		$content = $this->get_formatted_content( $atts );
+
+		$atts['is_repeat_empty'] = true;
+		$expected_content = $this->expected_html_content( $atts );
+
+		$this->assertSame( $expected_content, $content );
+	}
+
+	/**
+	 * Tests array for API
+	 * This tests the situation where an entry was submitted and a repeating section was left blank
+	 * The repeating section may have child entries, but those entries have no values
+	 *
+	 * @covers FrmEntriesController::show_entry_shortcode
+	 *
+	 * @since 2.03.11
+	 */
+	public function test_array_with_no_values_in_repeating_section() {
+		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
+
+		$repeating_section = FrmField::get_id_by_key( 'repeating-section' );
+
+		foreach ( $entry->metas[ $repeating_section ] as $child_id ) {
+			// Delete all meta with an item_id of $entry->id
+			global $wpdb;
+			$wpdb->delete( $wpdb->prefix . 'frm_item_metas', array( 'item_id' => $child_id ) );
+		}
+
+		$atts = array(
+			'id' => $entry->id,
+			'format' => 'array',
+			'user_info' => false,
+			'include_blank' => true,
+		);
+
+		$data_array = FrmEntriesController::show_entry_shortcode( $atts );
+
+		$atts['is_repeat_empty'] = true;
+		$expected_array = $this->expected_array( $entry, $atts );
+
+		$this->assertSame( $expected_array, $data_array );
+	}
+
+	/**
 	 * Tests [default-message font_size, text_color, border_width, border_color, bg_color]
 	 *
 	 * @covers FrmEntriesController::show_entry_shortcode
@@ -923,7 +1032,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		$table .= $this->tags_html( $atts );
 		$table .= $this->signature_html();
 		$table .= $this->repeating_section_header( $atts );
-		$table .= $this->repeating_field_html();
+		$table .= $this->repeating_field_html( $atts );
 		$table .= $this->separate_values_checkbox_html();
 		$table .= $this->user_info_html( $atts );
 
@@ -949,7 +1058,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 
 		if ( isset( $include_fields['repeating-section'] ) ) {
 			$table .= $this->repeating_section_header( $atts );
-			$table .= $this->repeating_field_html();
+			$table .= $this->repeating_field_html( $atts );
 		}
 
 		if ( isset( $include_fields['repeating-text'] ) ) {
@@ -987,7 +1096,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 
 		if ( ! isset( $exclude_fields['repeating-section'] ) ) {
 			$table .= $this->repeating_section_header( $atts );
-			$table .= $this->repeating_field_html();
+			$table .= $this->repeating_field_html( $atts );
 		}
 
 		$table .= $this->separate_values_checkbox_html();
@@ -1189,6 +1298,10 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	}
 
 	private function repeating_section_header( $atts ) {
+		if ( isset( $atts['is_repeat_empty'] ) && $atts['is_repeat_empty'] && ! isset( $atts['include_blank'] ) ) {
+			return '';
+		}
+
 		if ( isset( $atts['include_extras'] ) && strpos( $atts['include_extras'], 'section' ) !== false ) {
 			$html = '<tr' . $this->tr_style . '><td colspan="2"' . $this->td_style . '><h3>Repeating Section</h3></td></tr>' . "\r\n";
 		} else {
@@ -1240,7 +1353,11 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		return $html;
 	}
 
-	private function repeating_field_html() {
+	private function repeating_field_html( $atts ) {
+		if ( isset( $atts['is_repeat_empty'] ) && $atts['is_repeat_empty'] && ! isset( $atts['include_blank'] ) ) {
+			return '';
+		}
+
 		$html = '<tr' . $this->tr_style . '><td' . $this->td_style . '>Single Line Text</td><td' . $this->td_style . '>First</td></tr>' . "\r\n";
 		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Checkboxes</td><td' . $this->td_style . '>Option 1, Option 2</td></tr>' . "\r\n";
 		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Date</td><td' . $this->td_style . '>May 27, 2015</td></tr>' . "\r\n";
@@ -1598,6 +1715,8 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 			'cb-sep-values-value' => array( 'Red', 'Orange' ),
 		);
 
+		$this->remove_repeating_fields( $atts, $expected );
+
 		if ( ! isset( $atts['include_blank'] ) || $atts['include_blank'] == false ) {
 			foreach ( $expected as $field_key => $value ) {
 				if ( $value == '' || empty( $value ) ) {
@@ -1607,6 +1726,23 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		}
 
 		return $expected;
+	}
+	
+	private function remove_repeating_fields( $atts, &$expected ) {
+		if ( isset( $atts['is_repeat_empty'] ) && $atts['is_repeat_empty'] ) {
+
+			$child_values = array(
+				'repeating-text' => '',
+				'repeating-checkbox' => '',
+				'repeating-date' => '',
+			);
+
+			$expected['repeating-section'] = array( $child_values, $child_values, $child_values );
+			$expected['repeating-text'] = array( '', '', '' );
+			$expected['repeating-checkbox'] = array( '', '', '' );
+			$expected['repeating-date'] = array( '', '', '' );
+			unset( $expected['repeating-date-value'] );
+		}
 	}
 
 	private function expected_post_array( $entry, $atts ) {
