@@ -64,6 +64,9 @@ function frm_forms_load_class( $class_name, $filepath ) {
 		$filepath .= '/factories/';
     } else {
         $filepath .= '/models/';
+		if ( ! file_exists( $filepath . $class_name . '.php' ) ) {
+			$filepath .= 'fields/';
+		}
     }
 
 	$filepath .= $class_name . '.php';

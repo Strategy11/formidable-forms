@@ -391,43 +391,9 @@ class FrmFieldsController {
     }
 
 	public static function display_field_options( $display ) {
-		switch ( $display['type'] ) {
-            case 'captcha':
-                $display['required'] = false;
-                $display['invalid'] = true;
-                $display['default_blank'] = false;
-				$display['captcha_size'] = true;
-            break;
-            case 'radio':
-                $display['default_blank'] = false;
-            break;
-            case 'text':
-            case 'textarea':
-                $display['size'] = true;
-                $display['clear_on_focus'] = true;
-            break;
-            case 'select':
-                $display['size'] = true;
-            break;
-            case 'url':
-            case 'website':
-            case 'email':
-			case 'number':
-			case 'phone':
-                $display['size'] = true;
-                $display['clear_on_focus'] = true;
-                $display['invalid'] = true;
-			break;
-			case 'user_id':
-			case 'html':
-			case 'hidden':
-				$display['default_blank'] = false;
-				$display['required'] = false;
-				$display['description'] = false;
-				$display['label_position'] = false;
-        }
-
-        return $display;
+		$field = FrmFieldFactory::get_field_type( $display['type'] );
+		$settings = $field->display_field_settings();
+		return array_merge( $display, $settings );
     }
 
     public static function input_html( $field, $echo = true ) {

@@ -229,7 +229,7 @@
                     <?php
 					if ( isset( $values['fields'] ) ) {
 						foreach ( $values['fields'] as $field ) {
-							if ( apply_filters( 'frm_show_custom_html', true, $field['type'] ) ) { ?>
+							if ( FrmFieldFactory::field_has_html( $field['type'] ) ) { ?>
                                 <p><label><?php echo esc_html( $field['name'] ) ?></label>
                                 <textarea name="field_options[custom_html_<?php echo esc_attr( $field['id'] ) ?>]" rows="7" id="custom_html_<?php echo esc_attr( $field['id'] ) ?>" class="field_custom_html frm_long_input"><?php echo FrmAppHelper::esc_textarea($field['custom_html']) ?></textarea></p>
                             <?php }

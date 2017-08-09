@@ -200,41 +200,15 @@ class FrmFieldsHelper {
 	}
 
 	public static function get_default_html( $type = 'text' ) {
-		if ( $type == 'html' ) {
-			$default_html = self::get_html_field_html();
-		} else if ( in_array( $type, array( 'hidden', 'user_id' ) ) ) {
-			$default_html = '';
-		} else if ( apply_filters( 'frm_normal_field_type_html', true, $type ) ) {
-			$default_html = self::get_normal_field_html( $type );
-		} else {
+		$field = FrmFieldFactory::get_field_type( $type );
+		$default_html = $field->default_html();
+
+		// these hooks are here for reverse compatibility since 3.0
+		if ( ! apply_filters( 'frm_normal_field_type_html', true, $type ) ) {
 			$default_html = apply_filters( 'frm_other_custom_html', '', $type );
 		}
 
 		return apply_filters('frm_custom_html', $default_html, $type);
-	}
-
-	private static function get_html_field_html() {
-		return '<div id="frm_field_[id]_container" class="frm_form_field form-field">[description]</div>';
-	}
-
-	private static function get_normal_field_html( $type ) {
-		$input = ( in_array( $type, array( 'radio', 'checkbox', 'data' ) ) ) ? '<div class="frm_opt_container">[input]</div>' : '[input]';
-		$for = '';
-		if ( ! in_array( $type, array( 'radio', 'checkbox', 'data', 'scale' ) ) ) {
-			$for = 'for="field_[key]"';
-		}
-
-		$default_html = <<<DEFAULT_HTML
-<div id="frm_field_[id]_container" class="frm_form_field form-field [required_class][error_class]">
-    <label $for class="frm_primary_label">[field_name]
-        <span class="frm_required">[required_label]</span>
-    </label>
-    $input
-    [if description]<div class="frm_description">[description]</div>[/if description]
-    [if error]<div class="frm_error">[error]</div>[/if error]
-</div>
-DEFAULT_HTML;
-		return $default_html;
 	}
 
 	public static function show_fields( $fields, $errors, $form, $form_action ) {
