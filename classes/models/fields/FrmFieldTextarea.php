@@ -14,7 +14,13 @@ class FrmFieldTextarea extends FrmFieldType {
 	protected function field_settings_for_type() {
 		return array(
 			'size'           => true,
-            'clear_on_focus' => true,
+			'clear_on_focus' => true,
+		);
+	}
+
+	protected function extra_field_opts() {
+		return array(
+			'max' => '5',
 		);
 	}
 }

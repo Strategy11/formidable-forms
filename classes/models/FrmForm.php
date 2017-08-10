@@ -248,7 +248,7 @@ class FrmForm {
             }
 
             //updating the form
-			$update_options = FrmFieldsHelper::get_default_field_opts( $field->type, $field, true );
+			$update_options = FrmFieldsHelper::get_default_field_options( $field->type );
 			unset( $update_options['custom_html'] ); // don't check for POST html
 			$update_options = apply_filters( 'frm_field_options_to_update', $update_options );
 

@@ -36,7 +36,7 @@ class FrmEntriesHelper {
 				'in_embed_form' => isset( $args['in_embed_form'] ) ? $args['in_embed_form'] : '0',
             );
 
-            $opt_defaults = FrmFieldsHelper::get_default_field_opts($field_array['type'], $field, true);
+			$opt_defaults = FrmFieldsHelper::get_default_field_options( $field_array['type'] );
             $opt_defaults['required_indicator'] = '';
 			$opt_defaults['original_type'] = $field->type;
 

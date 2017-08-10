@@ -16,4 +16,13 @@ class FrmFieldSelect extends FrmFieldType {
 			'size' => true,
 		);
 	}
+
+	protected function new_field_settings() {
+		return array(
+			'options' => serialize( array(
+				'',
+				__( 'Option 1', 'formidable' ),
+			) ),
+		);
+	}
 }

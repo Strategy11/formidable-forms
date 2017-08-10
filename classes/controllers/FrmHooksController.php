@@ -99,9 +99,6 @@ class FrmHooksController {
         add_filter( 'update_user_metadata', 'FrmEntriesController::check_hidden_cols', 10, 5 );
         add_action( 'updated_user_meta', 'FrmEntriesController::update_hidden_cols', 10, 4 );
 
-        // Fields Controller
-        add_filter( 'frm_display_field_options', 'FrmFieldsController::display_field_options' );
-
         // Form Actions Controller
         if ( FrmAppHelper::is_admin_page( 'formidable' ) ) {
             add_action( 'frm_before_update_form_settings', 'FrmFormActionsController::update_settings' );

@@ -51,15 +51,12 @@
 <ul id="new_fields" class="frm_sorting inside">
 <?php
 if ( isset($values['fields']) && ! empty($values['fields']) ) {
-    $count = 0;
-    foreach ( $values['fields'] as $field ) {
-        $count++;
-		$field_name = 'item_meta[' . $field['id'] . ']';
-        $html_id = FrmFieldsHelper::get_html_id($field);
-		require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add_field.php' );
-        unset($field, $field_name);
-    }
-    unset($count);
+	$values['count'] = 0;
+	foreach ( $values['fields'] as $field ) {
+		$values['count']++;
+		FrmFieldsController::load_single_field( $field, $values );
+		unset( $field );
+	}
 } ?>
 </ul>
 </div>

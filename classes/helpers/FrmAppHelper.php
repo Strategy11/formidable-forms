@@ -1059,7 +1059,7 @@ class FrmAppHelper {
 
 	private static function fill_field_opts( $field, array &$field_array, $args ) {
         $post_values = $args['post_values'];
-        $opt_defaults = FrmFieldsHelper::get_default_field_opts($field_array['type'], $field, true);
+        $opt_defaults = FrmFieldsHelper::get_default_field_options( $field_array['type'] );
 
         foreach ( $opt_defaults as $opt => $default_opt ) {
 			$field_array[ $opt ] = ( $post_values && isset( $post_values['field_options'][ $opt . '_' . $field->id ] ) ) ? maybe_unserialize( $post_values['field_options'][ $opt . '_' . $field->id ] ) : ( isset( $field->field_options[ $opt ] ) ? $field->field_options[ $opt ] : $default_opt );

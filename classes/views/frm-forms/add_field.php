@@ -1,42 +1,6 @@
 <?php
 
-$display = apply_filters('frm_display_field_options', array(
-    'type' => $field['type'], 'field_data' => $field,
-    'required' => true, 'unique' => false, 'read_only' => false,
-    'description' => true, 'options' => true, 'label_position' => true,
-    'invalid' => false, 'size' => false, 'clear_on_focus' => false,
-    'default_blank' => true, 'css' => true, 'conf_field' => false,
-	'max' => true, 'captcha_size' => false,
-));
-
-$li_classes = 'form-field edit_form_item frm_field_box frm_top_container frm_not_divider edit_field_type_' . $display['type'];
-$li_classes = apply_filters('frm_build_field_class', $li_classes, $field );
-
-if ( isset( $values ) && isset( $values['ajax_load'] ) && $values['ajax_load'] && isset( $count ) && $count > 10 && ! in_array( $field['type'], array( 'divider', 'end_divider' ) ) ) {
-?>
-<li id="frm_field_id_<?php echo esc_attr( $field['id'] ); ?>" class="<?php echo esc_attr( $li_classes ) ?> frm_field_loading" data-fid="<?php echo esc_attr( $field['id'] ) ?>" data-formid="<?php echo esc_attr( 'divider' == $field['type'] ? $field['form_select'] : $field['form_id'] ); ?>" data-ftype="<?php echo esc_attr( $display['type'] ) ?>">
-<img src="<?php echo FrmAppHelper::plugin_url() ?>/images/ajax_loader.gif" alt="<?php esc_attr_e( 'Loading', 'formidable' ) ?>" />
-<span class="frm_hidden_fdata frm_hidden"><?php echo htmlspecialchars(json_encode($field)) ?></span>
-</li>
-<?php
-   return;
-}
-
-$frm_settings = FrmAppHelper::get_settings();
-
-if ( ! isset( $frm_all_field_selection ) ) {
-    if ( isset($frm_field_selection) && isset($pro_field_selection) ) {
-        $frm_all_field_selection = array_merge($frm_field_selection, $pro_field_selection);
-    } else {
-		$pro_field_selection = FrmField::pro_field_selection();
-		$frm_all_field_selection = array_merge( FrmField::field_selection(), $pro_field_selection );
-    }
-}
-
-$disabled_fields = FrmAppHelper::pro_is_installed() ? array() : $pro_field_selection;
-
-
-if ( ! isset( $ajax ) ) {
+if ( ! isset( $values['doing_ajax'] ) ) {
     $li_classes .= ' ui-state-default widgets-holder-wrap'; ?>
 <li id="frm_field_id_<?php echo esc_attr( $field['id'] ); ?>" class="<?php echo esc_attr( $li_classes ) ?>" data-fid="<?php echo esc_attr( $field['id'] ) ?>" data-formid="<?php echo ( 'divider' == $field['type'] ) ? esc_attr( $field['form_select'] ) : esc_attr( $field['form_id'] ); ?>" data-ftype="<?php echo esc_attr( $display['type'] ) ?>">
 <?php
@@ -272,8 +236,12 @@ if ( $display['options'] ) { ?>
 					</td>
 				</tr>
                 <?php
-				} ?>
-                <?php
+				}
+
+				if ( $display['format'] ) {
+					FrmFieldsController::show_format_option( $field );
+				}
+
 				do_action( 'frm_' . $field['type'] . '_field_options_form', $field, $display, $values );
 				do_action( 'frm_field_options_form', $field, $display, $values );
 
@@ -343,9 +311,7 @@ if ( $field['type'] == 'divider' ) { ?>
 <?php
 }
 
-if ( ! isset( $ajax ) && $field['type'] != 'divider' ) { ?>
+if ( ! isset( $values['doing_ajax'] ) && $field['type'] != 'divider' ) { ?>
 </li>
 <?php
 }
-
-unset($display);

@@ -83,7 +83,7 @@ DEFAULT_HTML;
 		$default_settings = $this->default_field_settings();
 		$field_type_settings = $this->field_settings_for_type();
 		return array_merge( $default_settings, $field_type_settings );
-    }
+	}
 
 	private function default_field_settings() {
 		return array(
@@ -102,6 +102,7 @@ DEFAULT_HTML;
 			'conf_field'   => false,
 			'max'          => true,
 			'captcha_size' => false,
+			'format'       => false,
 		);
 	}
 
@@ -120,5 +121,67 @@ DEFAULT_HTML;
 			'description'    => false,
 			'label_position' => false,
 		);
+	}
+
+	public function get_new_field_defaults() {
+		$frm_settings = FrmAppHelper::get_settings();
+		$field = array(
+			'name'          => $this->get_field_name(),
+			'description'   => '',
+			'type'          => $this->type,
+			'options'       => '',
+			'default_value' => '',
+			'required'      => false,
+			'blank'         => $frm_settings->blank_msg,
+			'unique_msg'    => $frm_settings->unique_msg,
+			'invalid'       => __( 'This field is invalid', 'formidable' ),
+			'field_options' => $this->get_default_field_options(),
+		);
+
+		$field_options = $this->new_field_settings();
+		return array_merge( $field, $field_options );
+	}
+
+	protected function get_field_name() {
+		$name = __( 'Untitled', 'formidable' );
+
+		$fields = FrmField::field_selection();
+		$fields = array_merge( $fields, FrmField::pro_field_selection() );
+
+		if ( isset( $fields[ $this->type ] ) ) {
+			$name = is_array( $fields[ $this->type ] ) ? $fields[ $this->type ]['name'] : $fields[ $this->type ];
+		}
+
+		return $name;
+	}
+
+	protected function new_field_settings() {
+		return array();
+	}
+
+	public function get_default_field_options() {
+		$opts = array(
+			'size'    => '',
+			'max'     => '',
+			'label'   => '',
+			'blank'   => '',
+			'required_indicator' => '*',
+			'invalid' => '',
+			'separate_value' => 0,
+			'clear_on_focus' => 0,
+			'default_blank' => 0,
+			'classes' => '',
+			'custom_html' => '',
+			'minnum'  => 1,
+			'maxnum'  => 10,
+			'step'    => 1,
+			'format'  => '',
+		);
+		$field_opts = $this->extra_field_opts();
+		return array_merge( $opts, $field_opts );
+	}
+
+	protected function extra_field_opts() {
+		return array();
 	}
 }

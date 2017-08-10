@@ -14,8 +14,16 @@ class FrmFieldNumber extends FrmFieldType {
 	protected function field_settings_for_type() {
 		return array(
 			'size'           => true,
-            'clear_on_focus' => true,
-            'invalid'        => true,
+			'clear_on_focus' => true,
+			'invalid'        => true,
+		);
+	}
+
+	protected function extra_field_opts() {
+		return array(
+			'minnum' => 0,
+			'maxnum' => 9999999,
+			'step'   => 'any',
 		);
 	}
 }

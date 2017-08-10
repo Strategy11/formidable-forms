@@ -11,70 +11,26 @@ class FrmFieldsHelper {
             list($type, $setting) = explode('|', $type);
         }
 
-        $defaults = self::get_default_field_opts($type, $form_id);
-        $defaults['field_options']['custom_html'] = self::get_default_html($type);
+		$values = self::get_default_field( $type );
 
-        $values = array();
+		global $wpdb;
+		$field_count = FrmDb::get_var( 'frm_fields', array( 'form_id' => $form_id ), 'field_order', array( 'order_by' => 'field_order DESC' ) );
 
-        foreach ( $defaults as $var => $default ) {
-            if ( $var == 'field_options' ) {
-                $values['field_options'] = array();
-                foreach ( $default as $opt_var => $opt_default ) {
-                    $values['field_options'][ $opt_var ] = $opt_default;
-                    unset($opt_var, $opt_default);
-                }
-            } else {
-                $values[ $var ] = $default;
-            }
-            unset($var, $default);
-        }
+		$values['field_key'] = FrmAppHelper::get_unique_key( '', $wpdb->prefix . 'frm_fields', 'field_key' );
+		$values['form_id'] = $form_id;
+		$values['field_order'] = $field_count + 1;
+		$values['field_options']['custom_html'] = self::get_default_html( $type );
 
-        if ( isset( $setting ) && ! empty( $setting ) ) {
-            if ( in_array( $type, array( 'data', 'lookup' ) ) ) {
-                $values['field_options']['data_type'] = $setting;
-            } else {
-                $values['field_options'][ $setting ] = 1;
-            }
-        }
-
-		self::get_options_for_field_type( $type, $values );
-
-		$fields = FrmField::field_selection();
-        $fields = array_merge($fields, FrmField::pro_field_selection());
-
-        if ( isset( $fields[ $type ] ) ) {
-            $values['name'] = is_array( $fields[ $type ] ) ? $fields[ $type ]['name'] : $fields[ $type ];
-        }
-
-        unset($fields);
+		if ( isset( $setting ) && ! empty( $setting ) ) {
+			if ( in_array( $type, array( 'data', 'lookup' ) ) ) {
+				$values['field_options']['data_type'] = $setting;
+			} else {
+				$values['field_options'][ $setting ] = 1;
+			}
+		}
 
         return $values;
     }
-
-	private static function get_options_for_field_type( $type, &$values ) {
-		if ( $type == 'radio' || $type == 'checkbox' ) {
-			$values['options'] = serialize( array(
-				__( 'Option 1', 'formidable' ),
-				__( 'Option 2', 'formidable' ),
-			) );
-		} else if ( $type == 'select' ) {
-			$values['options'] = serialize( array(
-				'', __( 'Option 1', 'formidable' ),
-			) );
-		} else if ( $type == 'textarea' ) {
-			$values['field_options']['max'] = '5';
-		} else if ( $type == 'captcha' ) {
-			$frm_settings = FrmAppHelper::get_settings();
-			$values['invalid'] = $frm_settings->re_msg;
-			$values['field_options']['label'] = 'none';
-		} else if ( 'url' == $type ) {
-			$values['name'] = __( 'Website', 'formidable' );
-		} else if ( 'number' == $type ) {
-			$values['field_options']['minnum'] = 0;
-			$values['field_options']['maxnum'] = 9999999;
-			$values['field_options']['step'] = 'any';
-		}
-	}
 
 	public static function get_html_id( $field, $plus = '' ) {
 		return apply_filters( 'frm_field_html_id', 'field_' . $field['field_key'] . $plus, $field );
@@ -109,12 +65,7 @@ class FrmFieldsHelper {
         $values['options'] = $record->options;
         $values['field_options'] = $record->field_options;
 
-        $defaults = self::get_default_field_opts($values['type'], $record, true);
-
-		if ( $values['type'] == 'captcha' ) {
-            $frm_settings = FrmAppHelper::get_settings();
-            $defaults['invalid'] = $frm_settings->re_msg;
-        }
+		$defaults = self::get_default_field_options( $values['type'] );
 
 		foreach ( $defaults as $opt => $default ) {
             $values[ $opt ] = isset( $record->field_options[ $opt ] ) ? $record->field_options[ $opt ] : $default;
@@ -127,36 +78,31 @@ class FrmFieldsHelper {
     }
 
     public static function get_default_field_opts( $type, $field, $limit = false ) {
-        $field_options = array(
-            'size' => '', 'max' => '', 'label' => '', 'blank' => '',
-            'required_indicator' => '*', 'invalid' => '', 'separate_value' => 0,
-            'clear_on_focus' => 0, 'default_blank' => 0, 'classes' => '',
-			'custom_html' => '', 'captcha_size' => 'normal', 'captcha_theme' => 'light',
-			'minnum' => 1, 'maxnum' => 10, 'step' => 1,
-        );
-
+		_deprecated_function( __FUNCTION__, '3.0', 'FrmFieldHelper::get_default_field_options or FrmFieldHelper::get_default_field' );
 		if ( $limit ) {
-            return $field_options;
+			$field_options = self::get_default_field_options( $type );
+		} else {
+			$field_options = self::get_default_field( $type );
 		}
 
-        global $wpdb;
-
-        $form_id = (is_numeric($field)) ? $field : $field->form_id;
-
-		$key = is_numeric( $field ) ? FrmAppHelper::get_unique_key( '', $wpdb->prefix . 'frm_fields', 'field_key' ) : $field->field_key;
-
-        $field_count = FrmDb::get_var( 'frm_fields', array( 'form_id' => $form_id ), 'field_order', array( 'order_by' => 'field_order DESC' ) );
-
-        $frm_settings = FrmAppHelper::get_settings();
-        return array(
-            'name' => __( 'Untitled', 'formidable' ), 'description' => '',
-			'field_key' => $key, 'type' => $type, 'options' => '', 'default_value' => '',
-			'field_order' => $field_count + 1, 'required' => false,
-            'blank' => $frm_settings->blank_msg, 'unique_msg' => $frm_settings->unique_msg,
-            'invalid' => __( 'This field is invalid', 'formidable' ), 'form_id' => $form_id,
-			'field_options' => $field_options,
-        );
+		return $field_options;
     }
+
+	/**
+	 * @since 3.0
+	 */
+	public static function get_default_field_options( $type ) {
+		$field_type = FrmFieldFactory::get_field_type( $type );
+		return $field_type->get_default_field_options();
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	public static function get_default_field( $type ) {
+		$field_type = FrmFieldFactory::get_field_type( $type );
+		return $field_type->get_new_field_defaults();
+	}
 
     public static function fill_field( &$values, $field, $form_id, $new_key = '' ) {
         global $wpdb;
@@ -195,8 +141,7 @@ class FrmFieldsHelper {
 
 	public static function get_form_fields( $form_id, $error = array() ) {
 		$fields = FrmField::get_all_for_form( $form_id );
-		$fields = apply_filters( 'frm_get_paged_fields', $fields, $form_id, $error );
-		return $fields;
+		return apply_filters( 'frm_get_paged_fields', $fields, $form_id, $error );
 	}
 
 	public static function get_default_html( $type = 'text' ) {

@@ -11,4 +11,12 @@ class FrmFieldRadio extends FrmFieldMultiple {
 	 */
 	protected $type = 'radio';
 
+	protected function new_field_settings() {
+		return array(
+			'options' => serialize( array(
+				__( 'Option 1', 'formidable' ),
+				__( 'Option 2', 'formidable' ),
+			) ),
+		);
+	}
 }

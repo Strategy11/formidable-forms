@@ -14,8 +14,9 @@ class FrmFieldPhone extends FrmFieldType {
 	protected function field_settings_for_type() {
 		return array(
 			'size'           => true,
-            'clear_on_focus' => true,
-            'invalid'        => true,
+			'clear_on_focus' => true,
+			'invalid'        => true,
+			'format'         => true,
 		);
 	}
 }
