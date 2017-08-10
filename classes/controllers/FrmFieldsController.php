@@ -456,6 +456,7 @@ class FrmFieldsController {
 		FrmFormsHelper::add_html_attr( $class, 'class', $add_html );
 
         self::add_shortcodes_to_html($field, $add_html);
+		self::add_pattern_attribute( $field, $add_html );
 
 		$add_html = apply_filters( 'frm_field_extra_html', $add_html, $field );
 		$add_html = ' ' . implode( ' ', $add_html ) . '  ';
@@ -609,6 +610,23 @@ class FrmFieldsController {
             unset($k, $v);
         }
     }
+
+	/**
+	 * Add pattern attribute
+	 *
+	 * @since 3.0
+	 * @param array $field
+	 * @param string $add_html
+	 */
+	private static function add_pattern_attribute( $field, array &$add_html ) {
+		$has_format = FrmField::is_option_true_in_array( $field, 'format' );
+		$format_field = $field['type'] == 'text' || ( $field['type'] == 'lookup' && $field['data_type'] == 'text' );
+		if ( $field['type'] == 'phone' || ( $has_format && $format_field ) ) {
+			$format = FrmEntryValidate::phone_format( $field );
+			$format = substr( $format, 2, -1 );
+			$add_html['pattern'] = 'pattern="' . esc_attr( $format ) . '"';
+		}
+	}
 
     public static function check_value( $opt, $opt_key, $field ) {
         if ( is_array( $opt ) ) {

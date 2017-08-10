@@ -33,56 +33,40 @@ class FrmFieldFactory {
 	 * @since 3.0
 	 */
 	public static function get_field_type( $field_type ) {
-		switch ( $field_type ) {
-			case 'text':
-				$field = new FrmFieldText();
-			break;
-			case 'textarea':
-				$field = new FrmFieldTextarea();
-			break;
-			case 'select':
-				$field = new FrmFieldSelect();
-			break;
-			case 'radio':
-				$field = new FrmFieldRadio();
-			break;
-			case 'checkbox':
-				$field = new FrmFieldCheckbox();
-			break;
-			case 'number':
-				$field = new FrmFieldNumber();
-			break;
-			case 'phone':
-				$field = new FrmFieldPhone();
-			break;
-			case 'url':
-			case 'website':
-				$field = new FrmFieldUrl();
-			break;
-			case 'email':
-				$field = new FrmFieldEmail();
-			break;
-			case 'user_id':
-				$field = new FrmFieldUserID();
-			break;
-			case 'html':
-				$field = new FrmFieldHTML();
-			break;
-			case 'hidden':
-				$field = new FrmFieldHidden();
-			break;
-			case 'captcha':
-				$field = new FrmFieldCaptcha();
-			break;
-			default:
-				$field = apply_filters( 'frm_default_html_object_' . $field_type, null );
-		}
-
-		if ( ! is_object( $field ) ) {
+		$class = self::get_field_type_class( $field_type );
+		if ( empty( $class ) ) {
 			$field = new FrmFieldType( $field_type );
+		} else {
+			$field = new $class();
 		}
 
 		return $field;
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	private static function get_field_type_class( $field_type ) {
+		$type_classes = array(
+			'text'     => 'FrmFieldText',
+			'textarea' => 'FrmFieldTextarea',
+			'select'   => 'FrmFieldSelect',
+			'radio'    => 'FrmFieldRadio',
+			'checkbox' => 'FrmFieldCheckbox',
+			'number'   => 'FrmFieldNumber',
+			'phone'    => 'FrmFieldPhone',
+			'url'      => 'FrmFieldUrl',
+			'website'  => 'FrmFieldUrl',
+			'email'    => 'FrmFieldEmail',
+			'user_id'  => 'FrmFieldUserID',
+			'html'     => 'FrmFieldHTML',
+			'hidden'   => 'FrmFieldHidden',
+			'captcha'  => 'FrmFieldCaptcha',
+		);
+
+		$class = isset( $type_classes[ $field_type ] ) ? $type_classes[ $field_type ] : '';
+		$class = apply_filters( 'frm_get_field_type_class', $class, $field_type );
+		return $class;
 	}
 
 	/**
