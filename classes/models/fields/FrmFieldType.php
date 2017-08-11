@@ -3,7 +3,7 @@
 /**
  * @since 3.0
  */
-class FrmFieldType {
+abstract class FrmFieldType {
 
 	/**
 	 * @var string
@@ -31,6 +31,12 @@ class FrmFieldType {
 	 * @since 3.0
 	 */
 	protected $has_html = true;
+
+	public function __construct( $type = '' ) {
+		if ( $type ) {
+			$this->type = $type;
+		}
+	}
 
 	public function __get( $key ) {
 		$value = '';
