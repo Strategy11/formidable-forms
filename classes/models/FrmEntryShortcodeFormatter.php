@@ -108,7 +108,7 @@ class FrmEntryShortcodeFormatter {
 		if ( $this->form_id === 0 ) {
 			$content = '';
 		} else if ( $this->format == 'array' ) {
-			$content = $this->array();
+			$content = $this->to_array();
 		} else {
 			$content = $this->text();
 		}
@@ -121,7 +121,7 @@ class FrmEntryShortcodeFormatter {
 	 *
 	 * @since 2.03.11
 	 */
-	private function array() {
+	private function to_array() {
 		if ( ! $this->form_id || empty( $this->fields ) ) {
 			return '';
 		}

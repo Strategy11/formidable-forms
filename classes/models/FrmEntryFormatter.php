@@ -478,12 +478,13 @@ class FrmEntryFormatter {
 	 */
 	protected function include_field_in_content( $field_value ) {
 		$include = true;
+		$displayed_value = $field_value->get_displayed_value();
 
 		if ( $this->is_extra_field( $field_value ) ) {
 
 			$include = $this->is_extra_field_included( $field_value );
 
-		} else if ( $field_value->get_displayed_value() === '' || empty( $field_value->get_displayed_value() ) ) {
+		} else if ( $displayed_value === '' || empty( $displayed_value ) ) {
 
 			if ( ! $this->include_blank ) {
 				$include = false;
