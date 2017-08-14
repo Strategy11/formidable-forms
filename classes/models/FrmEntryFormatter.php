@@ -109,11 +109,10 @@ class FrmEntryFormatter {
 		if ( is_object( $atts['entry'] ) ) {
 
 			if ( isset( $atts['entry']->metas ) ) {
-				$this->entry = $atts[ 'entry' ];
+				$this->entry = $atts['entry'];
 			} else {
 				$this->entry = FrmEntry::getOne( $atts['entry']->id, true );
 			}
-
 		} else if ( $atts['id'] ) {
 			$this->entry = FrmEntry::getOne( $atts['id'], true );
 		}

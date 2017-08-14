@@ -158,7 +158,7 @@ class FrmFieldValue {
 				'item_id'    => $this->entry->id,
 				'field_id'   => $this->field->id,
 				'meta_value' => $this->saved_value,
-				'field_type' => $this->field->type
+				'field_type' => $this->field->type,
 			);
 			$this->displayed_value = apply_filters( 'frm_email_value', $this->displayed_value, (object) $meta, $this->entry, array(
 				'field' => $this->field,

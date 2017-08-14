@@ -112,7 +112,6 @@ class FrmEntryValues {
 
 				$atts['include_fields'] = rtrim( $atts['include_fields'], ',' );
 			}
-
 		}
 
 		$this->include_fields = $this->prepare_array_property( 'include_fields', $atts );
@@ -162,7 +161,6 @@ class FrmEntryValues {
 			} else {
 				$property = explode( ',', $atts[ $index ] );
 			}
-
 		} else {
 			$property = array();
 		}
@@ -220,7 +218,7 @@ class FrmEntryValues {
 
 		$ip = array(
 			'label' => __( 'IP Address', 'formidable' ),
-			'value' => $this->entry->ip
+			'value' => $this->entry->ip,
 		);
 
 		$browser = array(
@@ -230,7 +228,7 @@ class FrmEntryValues {
 
 		$referrer = array(
 			'label' => __( 'Referrer', 'formidable' ),
-			'value' => $entry_description['referrer']
+			'value' => $entry_description['referrer'],
 		);
 
 		$this->user_info = array(
