@@ -268,7 +268,7 @@ class FrmFieldsController {
 		$html_id = FrmFieldsHelper::get_html_id( $field );
         $checked = '';
 
-        if ( 'other' == $opt_type ) {
+		if ( 'other' == $opt_type && FrmAppHelper::pro_is_installed() ) {
 			include( FrmAppHelper::plugin_path() . '/pro/classes/views/frmpro-fields/other-option.php' );
         } else {
 			require( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/single-option.php' );

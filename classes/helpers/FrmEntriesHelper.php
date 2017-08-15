@@ -300,7 +300,11 @@ class FrmEntriesHelper {
 
         $new_value = '';
 
-        if ( is_array($value) && $atts['type'] != 'file' ) {
+		if ( $field->type == 'user_id' ) {
+			$value = FrmFieldsHelper::get_user_id_display_value( $value );
+		}
+
+		if ( is_array( $value ) && $atts['type'] != 'file' ) {
             foreach ( $value as $val ) {
                 if ( is_array($val) ) {
 					//TODO: add options for display (li or ,)

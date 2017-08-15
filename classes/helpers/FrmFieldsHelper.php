@@ -518,7 +518,9 @@ class FrmFieldsHelper {
 			if ( self::is_other_opt( $opt_key ) ) {
                 // Get string for Other text field, if needed
 				$other_val = self::get_other_val( compact( 'opt_key', 'field' ) );
-				require( FrmAppHelper::plugin_path() . '/pro/classes/views/frmpro-fields/other-option.php' );
+				if ( FrmAppHelper::pro_is_installed() ) {
+					require( FrmAppHelper::plugin_path() . '/pro/classes/views/frmpro-fields/other-option.php' );
+				}
             } else {
 				require( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/single-option.php' );
             }
@@ -847,6 +849,8 @@ class FrmFieldsHelper {
                 $replace_with = wpautop($replace_with);
             }
 			unset( $autop );
+		} else if ( $field->type == 'user_id' ) {
+			$replace_with = self::get_user_id_display_value( $replace_with );
 		} else if ( is_array( $replace_with ) ) {
 			if ( $atts['show'] && isset( $replace_with[ $atts['show'] ] ) ) {
 				$replace_with = $replace_with[ $atts['show'] ];
@@ -856,6 +860,28 @@ class FrmFieldsHelper {
 		}
 
 		return $replace_with;
+	}
+
+	/**
+	 * Show the user display name instead of id
+	 * @since 3.0
+	 */
+	public static function get_user_id_display_value( $user_id ) {
+		if ( FrmAppHelper::pro_is_installed() ) {
+			return $user_id;
+		}
+
+		$user = get_userdata( $user_id );
+		$info = '';
+
+		if ( $user ) {
+			$info = isset( $user->display_name ) ? $user->display_name : '';
+			if ( empty( $info ) ) {
+				$info = $user->user_login;
+			}
+		}
+
+		return $info;
 	}
 
 	public static function get_field_types( $type ) {

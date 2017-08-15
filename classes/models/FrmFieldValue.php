@@ -60,6 +60,21 @@ class FrmFieldValue {
 	}
 
 	/**
+	 * Get any property
+	 *
+	 * @since 3.0
+	 */
+	public function __get( $key ) {
+		$function_name = 'get_' . $key;
+		if ( is_callable( $this, $function_name ) ) {
+			$value = $this->{$function_name};
+		} else if ( property_exists( $this, $key ) ) {
+			$value = $this->{$key};
+		}
+		return $value;
+	}
+
+	/**
 	 * Initialize the source property
 	 *
 	 * @since 2.03.11
@@ -97,16 +112,8 @@ class FrmFieldValue {
 	protected function init_displayed_value() {
 		$this->displayed_value = $this->saved_value;
 
+		$this->generate_displayed_value_for_field_type();
 		$this->filter_displayed_value();
-	}
-
-	/**
-	 * Get the saved_value property
-	 *
-	 * @since 2.03.11
-	 */
-	public function get_saved_value() {
-		return $this->saved_value;
 	}
 
 	/**
@@ -137,12 +144,27 @@ class FrmFieldValue {
 	}
 
 	/**
+	 * Get the saved_value property
+	 *
+	 * @since 2.03.11
+	 */
+	public function get_saved_value() {
+		return $this->saved_value;
+	}
+
+	/**
 	 * Get the displayed_value property
 	 *
 	 * @since 2.03.11
 	 */
 	public function get_displayed_value() {
 		return $this->displayed_value;
+	}
+
+	protected function generate_displayed_value_for_field_type() {
+		if ( $this->field->type == 'user_id' ) {
+			$this->displayed_value = FrmFieldsHelper::get_user_id_display_value( $this->displayed_value );
+		}
 	}
 
 	/**
