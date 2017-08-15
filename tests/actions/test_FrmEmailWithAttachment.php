@@ -144,5 +144,4 @@ class test_FrmEmailWithAttachment extends FrmUnitTest {
 
 		}
 	}
-
 }

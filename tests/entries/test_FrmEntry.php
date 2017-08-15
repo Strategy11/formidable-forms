@@ -11,12 +11,12 @@ class WP_Test_FrmEntry extends FrmUnitTest {
 	function test_is_duplicate() {
 		$form = $this->factory->form->get_object_by_id( $this->contact_form_key );
 		$entry_data = $this->factory->field->generate_entry_array( $form );
-		$entry = FrmEntry::create( $entry_data );
+		$entry = $this->factory->entry->create_object( $entry_data );
 
 		$this->assertNotEmpty( $entry );
 		$this->assertTrue( is_numeric( $entry ) );
 
-		$entry = FrmEntry::create( $entry_data );
+		$entry = $this->factory->entry->create_object( $entry_data );
 		$this->assertEmpty( $entry, 'Failed to detect duplicate entry' );
 	}
 
@@ -36,7 +36,12 @@ class WP_Test_FrmEntry extends FrmUnitTest {
 	 * @covers FrmEntry::package_entry_to_update
 	 */
 	function test_package_entry_to_update(){
+		if ( ! $this->is_pro_active ) {
+			$this->markTestSkipped( 'Pro is not active' );
+		}
+
 		$entry = FrmEntry::getOne( 'post-entry-1', true );
+		$this->assertNotEmpty( $entry, 'Entry not found: post-entry-1' );
 		$values = self::_setup_test_update_values( $entry );
 
 		$new_values = self::_do_private_package_entry_to_update_function( $entry->id, $values );

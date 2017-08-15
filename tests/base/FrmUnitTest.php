@@ -49,7 +49,9 @@ class FrmUnitTest extends WP_UnitTestCase {
 
 		$this->do_tables_exist();
 		$this->import_xml();
-		$this->create_files();
+		if ( $this->is_pro_active ) {
+			$this->create_files();
+		}
 	}
 
 	function get_table_names() {
@@ -444,7 +446,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 			'user_pass' => 'admin',
 			'role' => 'administrator',
 		);
-		$admin = self::factory()->user->create_object( $admin_args );
+		$admin = $this->factory->user->create_object( $admin_args );
 		$this->assertNotEmpty( $admin );
 
 		$editor_args = array(
@@ -453,7 +455,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 			'user_pass' => 'editor',
 			'role' => 'editor',
 		);
-		$editor = self::factory()->user->create_object( $editor_args );
+		$editor = $this->factory->user->create_object( $editor_args );
 		$this->assertNotEmpty( $editor );
 
 		$subscriber_args = array(
@@ -462,7 +464,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 			'user_pass' => 'subscriber',
 			'role' => 'subscriber',
 		);
-		$subscriber = self::factory()->user->create_object( $subscriber_args );
+		$subscriber = $this->factory->user->create_object( $subscriber_args );
 		$this->assertNotEmpty( $subscriber );
 
 	}
