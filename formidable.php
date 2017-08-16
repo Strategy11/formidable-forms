@@ -64,7 +64,7 @@ function frm_forms_load_class( $class_name, $filepath ) {
 		$filepath .= '/factories/';
     } else {
         $filepath .= '/models/';
-		if ( ! file_exists( $filepath . $class_name . '.php' ) ) {
+		if ( strpos( $class_name, 'FrmField' ) === 0 && ! file_exists( $filepath . $class_name . '.php' ) ) {
 			$filepath .= 'fields/';
 		}
     }
@@ -72,6 +72,6 @@ function frm_forms_load_class( $class_name, $filepath ) {
 	$filepath .= $class_name . '.php';
 
     if ( file_exists( $filepath ) ) {
-        include( $filepath );
+        require( $filepath );
     }
 }
