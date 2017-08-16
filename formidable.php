@@ -73,10 +73,5 @@ function frm_forms_load_class( $class_name, $filepath ) {
 
     if ( file_exists( $filepath ) ) {
         require( $filepath );
-        if ( ! class_exists( $class_name, false ) ) {
-            throw new Exception('Frm Class ' . $class_name . ' not found in '. $filepath);
-        }
-    } else {
-    	throw new Exception('File not found: '. $filepath);
     }
 }
