@@ -72,6 +72,7 @@ function frm_forms_load_class( $class_name, $filepath ) {
 	$filepath .= $class_name . '.php';
 
     if ( file_exists( $filepath ) ) {
+		error_log('load '. $class_name);
         require( $filepath );
     }
 }
