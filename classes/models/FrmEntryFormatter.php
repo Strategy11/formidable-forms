@@ -473,7 +473,7 @@ class FrmEntryFormatter {
 		} else {
 			$displayed_value = $field_value->get_displayed_value();
 
-			if ( $displayed_value === '' || empty( $displayed_value ) ) {
+			if ( $displayed_value === '' || ( is_array( $displayed_value ) && empty( $displayed_value ) ) ) {
 
 				if ( ! $this->include_blank ) {
 					$include = false;
