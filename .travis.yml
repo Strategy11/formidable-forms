@@ -61,10 +61,10 @@ before_script:
 
 script:
 - if [[ "$PHPLINT" == "1" ]]; then find -L .  -path ./vendor -prune -o -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l; fi
-- if [[ "$PHPUNIT" == "1" ]]; then phpunit --group=ajax --exclude-group=pro -c phpunit.xml
-- if [[ "$PHPUNIT" == "1" ]]; then phpunit --group=entries --exclude-group=pro -c phpunit.xml
-- if [[ "$PHPUNIT" == "1" ]]; then phpunit --group=styles --exclude-group=pro -c phpunit.xml
-- if [[ "$PHPUNIT" == "1" ]]; then phpunit --exclude-group=ajax,pro,entries,styles,emails -c phpunit.xml
+- if [[ "$PHPUNIT" == "1" ]]; then phpunit --group=ajax --exclude-group=pro -c phpunit.xml; fi
+- if [[ "$PHPUNIT" == "1" ]]; then phpunit --group=entries --exclude-group=pro -c phpunit.xml; fi
+- if [[ "$PHPUNIT" == "1" ]]; then phpunit --group=styles --exclude-group=pro -c phpunit.xml; fi
+- if [[ "$PHPUNIT" == "1" ]]; then phpunit --exclude-group=ajax,pro,entries,styles,emails -c phpunit.xml; fi
 
 notifications:
   email: false
