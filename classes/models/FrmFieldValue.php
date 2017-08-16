@@ -15,9 +15,9 @@ class FrmFieldValue {
 	/**
 	 * @since 2.03.11
 	 *
-	 * @var stdClass
+	 * @var int
 	 */
-	protected $entry = null;
+	protected $entry_id = 0;
 
 	/**
 	 * @since 2.03.11
@@ -52,26 +52,11 @@ class FrmFieldValue {
 			return;
 		}
 
+		$this->entry_id = $entry->id;
 		$this->field = $field;
-		$this->entry = $entry;
 		$this->init_source( $atts );
-		$this->init_saved_value();
-		$this->init_displayed_value();
-	}
-
-	/**
-	 * Get any property
-	 *
-	 * @since 3.0
-	 */
-	public function __get( $key ) {
-		$function_name = 'get_' . $key;
-		if ( is_callable( $this, $function_name ) ) {
-			$value = $this->{$function_name};
-		} else if ( property_exists( $this, $key ) ) {
-			$value = $this->{$key};
-		}
-		return $value;
+		$this->init_saved_value( $entry );
+		$this->init_displayed_value( $entry );
 	}
 
 	/**
@@ -93,10 +78,12 @@ class FrmFieldValue {
 	 * Initialize the saved_value property
 	 *
 	 * @since 2.03.11
+	 *
+	 * @param stdClass $entry
 	 */
-	protected function init_saved_value() {
-		if ( isset( $this->entry->metas[ $this->field->id ] ) ) {
-			$this->saved_value = $this->entry->metas[ $this->field->id ];
+	protected function init_saved_value( $entry ) {
+		if ( isset( $entry->metas[ $this->field->id ] ) ) {
+			$this->saved_value = $entry->metas[ $this->field->id ];
 		} else {
 			$this->saved_value = '';
 		}
@@ -108,12 +95,14 @@ class FrmFieldValue {
 	 * Initialize a field's displayed value
 	 *
 	 * @since 2.03.11
+	 *
+	 * @param stdClass $entry
 	 */
-	protected function init_displayed_value() {
+	protected function init_displayed_value( $entry ) {
 		$this->displayed_value = $this->saved_value;
 
 		$this->generate_displayed_value_for_field_type();
-		$this->filter_displayed_value();
+		$this->filter_displayed_value( $entry );
 	}
 
 	/**
@@ -161,6 +150,13 @@ class FrmFieldValue {
 		return $this->displayed_value;
 	}
 
+	/**
+	 * Get the displayed value for different field types
+	 *
+	 * @since 2.03.11
+	 *
+	 * @return mixed
+	 */
 	protected function generate_displayed_value_for_field_type() {
 		if ( $this->field->type == 'user_id' ) {
 			$this->displayed_value = FrmFieldsHelper::get_user_id_display_value( $this->displayed_value );
@@ -171,18 +167,20 @@ class FrmFieldValue {
 	 * Filter the displayed_value property
 	 *
 	 * @since 2.03.11
+	 *
+	 * @param stdClass $entry
 	 */
-	protected function filter_displayed_value() {
+	protected function filter_displayed_value( $entry ) {
 
 		if ( $this->source === 'entry_formatter' ) {
 			// Deprecated frm_email_value hook
 			$meta                  = array(
-				'item_id'    => $this->entry->id,
+				'item_id'    => $entry->id,
 				'field_id'   => $this->field->id,
 				'meta_value' => $this->saved_value,
-				'field_type' => $this->field->type
+				'field_type' => $this->field->type,
 			);
-			$this->displayed_value = apply_filters( 'frm_email_value', $this->displayed_value, (object) $meta, $this->entry, array(
+			$this->displayed_value = apply_filters( 'frm_email_value', $this->displayed_value, (object) $meta, $entry, array(
 				'field' => $this->field,
 			) );
 			if ( has_filter( 'frm_email_value' ) ) {
