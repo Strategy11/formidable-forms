@@ -5,9 +5,9 @@ sudo: false
 matrix:
   include:
     - php: 7.0
-      env: WP_VERSION=master WP_MULTISITE=1 PHPLINT=1
+      env: WP_VERSION=master WP_MULTISITE=1 PHPLINT=1 PHPUNIT=1
     - php: 5.2
-      env: WP_VERSION=4.7 WP_MULTISITE=1 PHPLINT=1
+      env: WP_VERSION=4.7 WP_MULTISITE=1 PHPLINT=1 PHPUNIT=1
     - php: 7.0
       env: WP_VERSION=4.7
       dist: trusty
@@ -40,6 +40,7 @@ matrix:
 install:
 - phpenv local 5.6
 - composer selfupdate 1.0.0 --no-interaction
+- if [[ ${TRAVIS_PHP_VERSION:0:1} == "7" ]]; then composer require --dev phpunit/phpunit ^5.7; fi
 - composer install --no-interaction
 - phpenv local --unset
 
@@ -55,16 +56,15 @@ before_script:
 - sed -i "s/yourusernamehere/travis/" wp-tests-config.php
 - sed -i "s/yourpasswordhere//" wp-tests-config.php
 - mysql -e "CREATE DATABASE wordpress_tests;" -uroot
-- git clone https://github.com/squizlabs/PHP_CodeSniffer.git phpcs
 - cd "/tmp/wordpress/src/wp-content/plugins/$PLUGIN_SLUG"
 - phpenv rehash
 
 script:
 - if [[ "$PHPLINT" == "1" ]]; then find -L .  -path ./vendor -prune -o -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l; fi
-- phpunit --group=ajax --exclude-group=pro -c phpunit.xml
-- phpunit --group=entries --exclude-group=pro -c phpunit.xml
-- phpunit --group=styles --exclude-group=pro -c phpunit.xml
-- phpunit --exclude-group=ajax,pro,entries,styles,emails -c phpunit.xml
+- if [[ "$PHPUNIT" == "1" ]]; then phpunit --group=ajax --exclude-group=pro -c phpunit.xml
+- if [[ "$PHPUNIT" == "1" ]]; then phpunit --group=entries --exclude-group=pro -c phpunit.xml
+- if [[ "$PHPUNIT" == "1" ]]; then phpunit --group=styles --exclude-group=pro -c phpunit.xml
+- if [[ "$PHPUNIT" == "1" ]]; then phpunit --exclude-group=ajax,pro,entries,styles,emails -c phpunit.xml
 
 notifications:
   email: false
