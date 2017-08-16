@@ -419,7 +419,7 @@ class FrmEntryFormatter {
 	 *
 	 * @since 3.0
 	 *
-	 * @param FrmProFieldValue $field_value
+	 * @param FrmFieldValue $field_value
 	 * @param string $content
 	 */
 	protected function add_row_for_extra_field( $field_value, &$content ) {
@@ -442,7 +442,7 @@ class FrmEntryFormatter {
 	 * @param FrmFieldValue $field_value
 	 * @param string $content
 	 */
-	private function add_row_for_standard_field( $field_value, &$content ) {
+	protected function add_row_for_standard_field( $field_value, &$content ) {
 		if ( ! $this->include_field_in_content( $field_value ) ) {
 			return;
 		}
@@ -482,7 +482,7 @@ class FrmEntryFormatter {
 	 * @param FrmFieldValue $field_value
 	 * @param string $content
 	 */
-	private function add_plain_text_row_for_included_extra( $field_value, &$content ) {
+	protected function add_plain_text_row_for_included_extra( $field_value, &$content ) {
 		$this->prepare_plain_text_display_value_for_extra_fields( $field_value, $display_value );
 
 		if ( in_array( $field_value->get_field_type(), array( 'break', 'divider', 'html' ) ) ) {
@@ -514,7 +514,7 @@ class FrmEntryFormatter {
 	 * @param string $display_value
 	 * @param string $content
 	 */
-	private function add_single_value_plain_text_row( $display_value, &$content ) {
+	protected function add_single_value_plain_text_row( $display_value, &$content ) {
 		$content .= $this->prepare_display_value_for_plain_text_content( $display_value );
 	}
 
@@ -538,7 +538,7 @@ class FrmEntryFormatter {
 	 * @param FrmFieldValue $field_value
 	 * @param mixed $display_value
 	 */
-	private function prepare_plain_text_display_value_for_extra_fields( $field_value, &$display_value ) {
+	protected function prepare_plain_text_display_value_for_extra_fields( $field_value, &$display_value ) {
 		$display_value = $field_value->get_displayed_value() . "\r\n";
 	}
 
@@ -550,7 +550,7 @@ class FrmEntryFormatter {
 	 * @param FrmProFieldValue $field_value
 	 * @param string $content
 	 */
-	private function add_standard_row( $field_value, &$content ) {
+	protected function add_standard_row( $field_value, &$content ) {
 		if ( $this->format === 'plain_text_block' ) {
 			$this->add_plain_text_row( $field_value->get_field_label(), $field_value->get_displayed_value(), $content );
 		} else if ( $this->format === 'table' ) {
