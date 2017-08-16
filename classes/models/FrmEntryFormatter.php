@@ -72,6 +72,12 @@ class FrmEntryFormatter {
 	protected $skip_fields = array( 'captcha', 'html' );
 
 	/**
+	 * @var array
+	 * @since 3.0
+	 */
+	protected $single_cell_fields = array( 'html' );
+
+	/**
 	 * FrmEntryFormat constructor
 	 *
 	 * @since 2.03.11
@@ -91,6 +97,7 @@ class FrmEntryFormatter {
 		$this->init_direction( $atts );
 		$this->init_include_user_info( $atts );
 		$this->init_entry_values( $atts );
+		$this->init_include_extras( $atts );
 
 		if ( $this->format === 'table' ) {
 			$this->init_table_generator( $atts );
@@ -207,6 +214,19 @@ class FrmEntryFormatter {
 	protected function init_include_user_info( $atts ) {
 		if ( isset( $atts['user_info'] ) && $atts['user_info'] ) {
 			$this->include_user_info = true;
+		}
+	}
+
+	/**
+	 * Set the include_extras property
+	 *
+	 * @since 3.0
+	 *
+	 * @param array $atts
+	 */
+	protected function init_include_extras( $atts ) {
+		if ( isset( $atts['include_extras'] ) && $atts['include_extras'] ) {
+			$this->include_extras = array_map( 'strtolower', array_map( 'trim', explode( ',', $atts['include_extras'] ) ) );
 		}
 	}
 
@@ -386,11 +406,140 @@ class FrmEntryFormatter {
 	 * @param string $content
 	 */
 	protected function add_field_value_to_content( $field_value, &$content ) {
+		if ( $this->is_extra_field( $field_value ) ) {
+			$this->add_row_for_extra_field( $field_value, $content );
+
+		} else {
+			$this->add_row_for_standard_field( $field_value, $content );
+		}
+	}
+
+	/**
+	 * Add an extra field to plain text or html table content
+	 *
+	 * @since 3.0
+	 *
+	 * @param FrmProFieldValue $field_value
+	 * @param string $content
+	 */
+	protected function add_row_for_extra_field( $field_value, &$content ) {
 		if ( ! $this->include_field_in_content( $field_value ) ) {
 			return;
 		}
 
-		$this->add_standard_row( $field_value, $content );
+		if ( $this->format === 'plain_text_block' ) {
+			$this->add_plain_text_row_for_included_extra( $field_value, $content );
+		} else if ( $this->format === 'table' ) {
+			$this->add_html_row_for_included_extra( $field_value, $content );
+		}
+	}
+
+	/**
+	 * Add a standard row to plain text or html table content
+	 *
+	 * @since 3.0
+	 *
+	 * @param FrmFieldValue $field_value
+	 * @param string $content
+	 */
+	private function add_row_for_standard_field( $field_value, &$content ) {
+		if ( ! $this->include_field_in_content( $field_value ) ) {
+			return;
+		}
+
+		if ( $this->format === 'plain_text_block' ) {
+			$this->add_plain_text_row( $field_value->get_field_label(), $field_value->get_displayed_value(), $content );
+		} else if ( $this->format === 'table' ) {
+			$value_args = $this->package_value_args( $field_value );
+			$this->add_html_row( $value_args, $content );
+		}
+	}
+
+	/**
+	 * Add a row to table for included extra
+	 *
+	 * @since 3.0
+	 *
+	 * @param FrmFieldValue $field_value
+	 * @param string $content
+	 */
+	protected function add_html_row_for_included_extra( $field_value, &$content ) {
+		$this->prepare_html_display_value_for_extra_fields( $field_value, $display_value );
+
+		if ( in_array( $field_value->get_field_type(), $this->single_cell_fields ) ) {
+			$this->add_single_cell_html_row( $display_value, $content );
+		} else {
+			$value_args = $this->package_value_args( $field_value );
+			$this->add_html_row( $value_args, $content );
+		}
+	}
+
+	/**
+	 * Add a plain text row for included extra
+	 *
+	 * @since 3.0
+	 *
+	 * @param FrmFieldValue $field_value
+	 * @param string $content
+	 */
+	private function add_plain_text_row_for_included_extra( $field_value, &$content ) {
+		$this->prepare_plain_text_display_value_for_extra_fields( $field_value, $display_value );
+
+		if ( in_array( $field_value->get_field_type(), array( 'break', 'divider', 'html' ) ) ) {
+			$this->add_single_value_plain_text_row( $display_value, $content );
+		} else {
+			$this->add_plain_text_row( $field_value->get_field_label(), $display_value, $content );
+		}
+	}
+
+	/**
+	 * Add a single cell row to an HTML table
+	 *
+	 * @since 3.0
+	 *
+	 * @param string $display_value
+	 * @param string $content
+	 */
+	protected function add_single_cell_html_row( $display_value, &$content ) {
+		$display_value = $this->prepare_display_value_for_html_table( $display_value );
+
+		$content .= $this->table_generator->generate_single_cell_table_row( $display_value );
+	}
+
+	/**
+	 * Add a single value plain text row
+	 *
+	 * @since 3.0
+	 *
+	 * @param string $display_value
+	 * @param string $content
+	 */
+	private function add_single_value_plain_text_row( $display_value, &$content ) {
+		$content .= $this->prepare_display_value_for_plain_text_content( $display_value );
+	}
+
+	/**
+	 * Prepare the display value for extra fields an HTML table
+	 *
+	 * @since 3.0
+	 *
+	 * @param FrmFieldValue $field_value
+	 * @param mixed $display_value
+	 */
+	protected function prepare_html_display_value_for_extra_fields( $field_value, &$display_value ) {
+		$display_value = $field_value->get_displayed_value();
+	}
+
+	/**
+	 * Prepare a plain text value for extra fields
+	 *
+	 * @since 3.0
+	 *
+	 * @param FrmFieldValue $field_value
+	 * @param mixed $display_value
+	 */
+	private function prepare_plain_text_display_value_for_extra_fields( $field_value, &$display_value ) {
+		$display_value = $field_value->get_displayed_value() . "\r\n";
 	}
 
 	/**

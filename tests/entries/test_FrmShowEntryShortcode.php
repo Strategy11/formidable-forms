@@ -417,7 +417,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		$entry = $this->get_entry_for_test();
 
 		$include_fields = array(
-			'text-field' => FrmField::getOne( 'text-field' ),
+			'text-field' => FrmField::getOne( $this->text_field_id ),
 		);
 
 		$atts = array(
@@ -879,7 +879,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		$entry = $this->get_entry_for_test();
 
 		$include_fields = array(
-			'text-field' => FrmField::getOne( 'text-field' ),
+			'text-field' => FrmField::getOne( $this->text_field_id ),
 		);
 
 		$atts = array(
@@ -909,7 +909,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	public function test_default_html_for_email() {
 		// TODO: add is_visible shortcode for sections and maybe page breaks? Or maybe just use [if x]
 
-		$form_id = FrmForm::getIdByKey( 'all_field_types' );
+		$form_id = FrmForm::getIdByKey( $this->form_key );
 
 		$atts = array(
 			'form_id' => $form_id,
@@ -1012,7 +1012,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * @group show-entry-array-format
 	 */
 	public function test_default_array_for_api() {
-		$form_id = FrmForm::getIdByKey( 'all_field_types' );
+		$form_id = FrmForm::getIdByKey( $this->form_key );
 
 		$atts = array(
 			'form_id' => $form_id,
@@ -1176,33 +1176,40 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 
 	private function expected_content_for_exclude_fields( $atts, $exclude_fields ) {
 
+		$field_keys = $this->get_field_keys_for_type();
 		$table = $this->table_header( $atts );
 
-		if ( ! isset( $exclude_fields['text-field'] ) ) {
+		if ( ! isset( $exclude_fields[ $this->text_field_key ] ) ) {
 			$table .= $this->text_field_html( $atts );
 		}
 
 		$table .= $this->paragraph_to_website_html( $atts );
 		$table .= $this->pro_fields_divider_html( $atts );
-		$table .= $this->dynamic_field_html();
 
-		if ( ! isset( $exclude_fields['embed-form-field'] ) ) {
+		if ( $this->is_pro_active ) {
+			$table .= $this->dynamic_field_html();
+		}
+
+		if ( isset( $field_keys['embed-form-field'] ) && ! isset( $exclude_fields['embed-form-field'] ) ) {
 			$table .= $this->embedded_form_html( $atts );
 		}
 
-		if ( ! isset( $exclude_fields['user-id-field'] ) ) {
+		if ( isset( $field_keys['user-id-field'] ) && ! isset( $exclude_fields[ $field_keys['user-id-field'] ] ) ) {
 			$table .= $this->user_id_html();
 		}
 
-		$table .= $this->tags_html( $atts );
-		$table .= $this->signature_html();
+		if ( $this->is_pro_active ) {
+			$table .= $this->tags_html( $atts );
+			$table .= $this->signature_html();
 
-		if ( ! isset( $exclude_fields['repeating-section'] ) ) {
-			$table .= $this->repeating_section_header( $atts );
-			$table .= $this->repeating_field_html( $atts );
+			if ( ! isset( $exclude_fields['repeating-section'] ) ) {
+				$table .= $this->repeating_section_header( $atts );
+				$table .= $this->repeating_field_html( $atts );
+			}
+
+			$table .= $this->separate_values_checkbox_html();
 		}
 
-		$table .= $this->separate_values_checkbox_html();
 		$table .= $this->user_info_html( $atts );
 		$table .= $this->table_footer();
 
@@ -1760,22 +1767,24 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 
 	private function expected_array( $entry, $atts ) {
 
-		if ( $this->is_pro_active ) {
-			// Single file upload field
-			$file_field_id = FrmField::get_id_by_key( 'single-file-upload-field' );
-			$single_file_url = wp_get_attachment_url( $entry->metas[ $file_field_id ] );
-
-			// Multi file upload field
-			$multi_file_field_id = FrmField::get_id_by_key( 'multi-file-upload-field' );
-			$multi_file_urls = $this->get_multi_file_urls( $entry );
-
-			// Dynamic Country
-			$where = array( 'meta_value' => 'United States', 'field_id' => FrmField::get_id_by_key( '2atiqt' ) );
-			$dynamic_country_id = FrmDb::get_var( 'frm_item_metas', $where, 'item_id' );
-		} else {
-			$single_file_url = $multi_file_urls = $dynamic_country_id = '';
-			$file_field_id = $multi_file_field_id = $this->text_field_id;
+		if ( $this->form_key == 'free_field_types' ) {
+			$expected = $this->get_free_expected_array();
+			$this->remove_blank_fields( $atts, $expected );
+			return $expected;
 		}
+
+		// Single file upload field
+		$file_field_id = FrmField::get_id_by_key( 'single-file-upload-field' );
+		$single_file_url = wp_get_attachment_url( $entry->metas[ $file_field_id ] );
+
+		// Multi file upload field
+		$multi_file_field_id = FrmField::get_id_by_key( 'multi-file-upload-field' );
+		$multi_file_urls = $this->get_multi_file_urls( $entry );
+
+		// Dynamic Country
+		$where = array( 'meta_value' => 'United States', 'field_id' => FrmField::get_id_by_key( '2atiqt' ) );
+		$dynamic_country_id = FrmDb::get_var( 'frm_item_metas', $where, 'item_id' );
+
 		// TODO: do I need field label?
 
 		$expected = array(
@@ -1850,17 +1859,15 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		);
 
 		$this->remove_repeating_fields( $atts, $expected );
+		$this->remove_blank_fields( $atts, $expected );
 
-		if ( ! isset( $atts['include_blank'] ) || $atts['include_blank'] == false ) {
-			foreach ( $expected as $field_key => $value ) {
-				if ( $value == '' || empty( $value ) ) {
-					unset( $expected[ $field_key ] );
-				}
-			}
-		}
+		return $expected;
+	}
 
-		$this->remove_pro_fields_for_free( $expected );
-
+	private function get_free_expected_array() {
+		$expected = $this->expected_free_meta();
+		$expected['free-user-id-field-value'] = $expected['free-user-id-field'];
+		$expected['free-user-id-field'] = 'admin';
 		return $expected;
 	}
 
@@ -1881,25 +1888,13 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		}
 	}
 
-	private function remove_pro_fields_for_free( &$expected ) {
-		if ( $this->is_pro_active ) {
-			return;
-		}
-
-		$remove_fields = array(
-			'single-file-upload-field', 'single-file-upload-field-value',
-			'multi-file-upload-field', 'multi-file-upload-field-value',
-			'dynamic-country', 'dynamic-country-value',
-			'ggo4ez', 'repeating-section', 'repeating-text',
-			'repeating-checkbox', 'repeating-date', 'repeating-date-value',
-			'lookup-country', 'contact-name', 'contact-last-name',
-			'contact-email', 'contact-website', 'contact-subject',
-			'contact-message', 'contact-date', 'contact-date-value',
-			'contact-user-id',
-		);
-
-		foreach ( $remove_fields as $remove_field ) {
-			unset( $expected[ $remove_field ] );
+	private function remove_blank_fields( $atts, &$expected ) {
+		if ( ! isset( $atts['include_blank'] ) || $atts['include_blank'] == false ) {
+			foreach ( $expected as $field_key => $value ) {
+				if ( $value == '' || empty( $value ) ) {
+					unset( $expected[ $field_key ] );
+				}
+			}
 		}
 	}
 

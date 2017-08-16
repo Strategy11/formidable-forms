@@ -82,7 +82,9 @@ class FrmFieldValue {
 	 * @param stdClass $entry
 	 */
 	protected function init_saved_value( $entry ) {
-		if ( isset( $entry->metas[ $this->field->id ] ) ) {
+		if ( $this->field->type === 'html' ) {
+			$this->saved_value = $this->field->description;
+		} else if ( isset( $entry->metas[ $this->field->id ] ) ) {
 			$this->saved_value = $entry->metas[ $this->field->id ];
 		} else {
 			$this->saved_value = '';

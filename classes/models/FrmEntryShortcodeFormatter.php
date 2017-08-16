@@ -15,7 +15,13 @@ class FrmEntryShortcodeFormatter {
 	 * @var array
 	 * @since 2.03.11
 	 */
-	protected $skip_fields = array( 'captcha' );
+	protected $skip_fields = array( 'captcha', 'html' );
+
+	/**
+	 * @var array
+	 * @since 3.0
+	 */
+	protected $single_cell_fields = array( 'html' );
 
 	/**
 	 * @var array
