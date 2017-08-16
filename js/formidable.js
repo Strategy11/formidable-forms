@@ -3,7 +3,7 @@ function frmFrontFormJS(){
 	var currentlyAddingRow = false;
 	var action = '';
 	var jsErrors = [];
-	var lookupsLoading = 0;// TODO: switch to processesRunning and make it work with file upload fields
+	var processesRunning = 0;
 	var lookupQueues = {};
 
 	function setNextPage(e){
@@ -195,6 +195,9 @@ function frmFrontFormJS(){
 				});
 
 				this.on('complete', function( file ) {
+					processesRunning--;
+					removeSubmitLoading(form, 'enable');
+
 					if ( typeof file.mediaID !== 'undefined' ) {
 						if ( uploadFields[i].uploadMultiple ) {
 							jQuery(file.previewElement).append( getHiddenUploadHTML( uploadFields[i], file.mediaID, fieldName ) );
@@ -210,11 +213,9 @@ function frmFrontFormJS(){
 				});
 
 				this.on('addedfile', function(){
+					processesRunning++;
 					showSubmitLoading( form );
-				});
 
-				this.on('queuecomplete', function(){
-					removeSubmitLoading( form, 'enable' );
 				});
 
 				this.on('removedfile', function( file ) {
@@ -1876,9 +1877,9 @@ function frmFrontFormJS(){
 	 * @param {String} formId
      */
 	function disableFormPreLookup( formId ) {
-		lookupsLoading++;
+		processesRunning++;
 
-		if ( lookupsLoading <= 1 ) {
+		if ( processesRunning === 1 ) {
 
 			var form = getFormById( formId );
 			if ( form !== null ) {
@@ -1894,9 +1895,9 @@ function frmFrontFormJS(){
 	 * @param {String} formId
 	 */
 	function enableFormAfterLookup( formId ) {
-		lookupsLoading--;
+		processesRunning--;
 
-		if ( lookupsLoading <= 0 ) {
+		if ( processesRunning <= 0 ) {
 
 			var form = getFormById( formId );
 			if ( form !== null ) {
@@ -3685,6 +3686,10 @@ function frmFrontFormJS(){
 	}
 
 	function removeSubmitLoading( $object, enable ) {
+		if ( processesRunning > 0 ) {
+			return;
+		}
+
 		$object.removeClass('frm_loading_form');
 
 		$object.trigger( 'frmEndFormLoading' );
