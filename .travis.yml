@@ -5,7 +5,7 @@ sudo: false
 matrix:
   include:
     - php: 7.0
-      env: WP_VERSION=master WP_MULTISITE=1 PHPLINT=1 PHPCS=1
+      env: WP_VERSION=master WP_MULTISITE=1 PHPLINT=1
     - php: 5.2
       env: WP_VERSION=4.7 WP_MULTISITE=1 PHPLINT=1
     - php: 7.0
@@ -58,11 +58,10 @@ before_script:
 
 script:
 - if [[ "$PHPLINT" == "1" ]]; then find -L .  -path ./vendor -prune -o -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l; fi
-- if [[ "$PHPCS" == "1" ]]; then /tmp/wordpress/phpcs/scripts/phpcs -p -s -v -n . --standard=./phpcs.xml --extensions=php; fi
-- phpunit --group=ajax -c phpunit.xml
-- phpunit --group=entries -c phpunit.xml
-- phpunit --group=styles -c phpunit.xml
-- phpunit --exclude-group=ajax -c phpunit.xml
+- phpunit --group=ajax --exclude-group=pro -c phpunit.xml
+- phpunit --group=entries --exclude-group=pro -c phpunit.xml
+- phpunit --group=styles --exclude-group=pro -c phpunit.xml
+- phpunit --exclude-group=ajax,pro,entries,styles,emails -c phpunit.xml
 
 notifications:
   email: false

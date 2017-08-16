@@ -1,6 +1,7 @@
 <?php
 /**
  * @group app
+ * @group pro
  */
 class WP_Test_FrmProAppHelper extends FrmUnitTest {
 	/**

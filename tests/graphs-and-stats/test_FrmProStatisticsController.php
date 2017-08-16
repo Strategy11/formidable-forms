@@ -2,6 +2,7 @@
 
 /**
  * @group stats
+ * @group pro
  */
 class WP_Test_FrmProStatisticsController extends FrmUnitTest {
 

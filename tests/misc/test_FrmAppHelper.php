@@ -221,5 +221,4 @@ class WP_Test_FrmAppHelper extends FrmUnitTest {
 			$this->assertTrue( current_user_can( $frm_role ), 'Admin cannot ' . $frm_role );
         }
     }
-
 }

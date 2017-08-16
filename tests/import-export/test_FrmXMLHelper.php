@@ -5,6 +5,10 @@
 class WP_Test_FrmXMLHelper extends FrmUnitTest {
 
 	function test_imported_repeating_section_form() {
+		if ( ! $this->is_pro_active ) {
+			$this->markTestSkipped( 'Pro is not active' );
+		}
+
 		$expected_parent_id = FrmForm::getIdByKey( $this->all_fields_form_key );
 		$repeating_section_form_id = FrmForm::getIdByKey( $this->repeat_sec_form_key );
 		$repeating_section_form = FrmForm::getOne( $repeating_section_form_id );
@@ -61,6 +65,10 @@ class WP_Test_FrmXMLHelper extends FrmUnitTest {
 	}
 
 	function _check_fields_in_section( $f ) {
+		if ( ! $this->is_pro_active ) {
+			return;
+		}
+
 		$fields_in_sections = array(
 			'rich-text-field' => 'pro-fields-divider',
 			'single-file-upload-field' => 'pro-fields-divider',
@@ -93,6 +101,10 @@ class WP_Test_FrmXMLHelper extends FrmUnitTest {
 	}
 
 	function _check_parent_form_id( $imported_forms ) {
+		if ( ! $this->is_pro_active ) {
+			return;
+		}
+
 		$child_form_key = 'rep_sec_form';
 		$expected_parent_id = FrmForm::getIdByKey( $this->all_fields_form_key );
 
@@ -183,8 +195,8 @@ class WP_Test_FrmXMLHelper extends FrmUnitTest {
 		}
 
 		$expected_numbers = array(
-			'forms' => 2,
-			'fields' => 37,
+			'forms'  => $this->is_pro_active ? 2 : 1,
+			'fields' => $this->is_pro_active ? 37 : 35,
 		);
 
 		foreach ( $expected_numbers as $type => $e_number ) {

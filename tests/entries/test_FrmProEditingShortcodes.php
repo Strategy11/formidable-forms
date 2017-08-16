@@ -308,5 +308,4 @@ class WP_Test_FrmProEditingShortcodes extends FrmUnitTest {
 		return $expected_link;
 
 	}
-
 }

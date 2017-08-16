@@ -850,7 +850,7 @@ class FrmFieldsHelper {
             }
 			unset( $autop );
 		} else if ( $field->type == 'user_id' ) {
-			$replace_with = self::get_user_id_display_value( $replace_with );
+			$replace_with = self::get_user_id_display_value( $replace_with, $atts );
 		} else if ( is_array( $replace_with ) ) {
 			if ( $atts['show'] && isset( $replace_with[ $atts['show'] ] ) ) {
 				$replace_with = $replace_with[ $atts['show'] ];
@@ -866,7 +866,7 @@ class FrmFieldsHelper {
 	 * Show the user display name instead of id
 	 * @since 3.0
 	 */
-	public static function get_user_id_display_value( $user_id ) {
+	public static function get_user_id_display_value( $user_id, $atts = array() ) {
 		if ( FrmAppHelper::pro_is_installed() ) {
 			return $user_id;
 		}
@@ -875,13 +875,37 @@ class FrmFieldsHelper {
 		$info = '';
 
 		if ( $user ) {
-			$info = isset( $user->display_name ) ? $user->display_name : '';
+			$user_info = self::prepare_user_info_attribute( $atts );
+			$info = isset( $user->$user_info ) ? $user->$user_info : $user->display_name;
 			if ( empty( $info ) ) {
 				$info = $user->user_login;
 			}
 		}
 
 		return $info;
+	}
+
+	/**
+	 * Generate the user info attribute for displaying
+	 * a value from the user ID
+	 *
+	 * @since 3.0
+	 * @param $atts
+	 *
+	 * @return string
+	 */
+	private static function prepare_user_info_attribute( $atts ) {
+		if ( isset( $atts['show'] ) ) {
+			if ( $atts['show'] === 'id' ) {
+				$user_info = 'ID';
+			} else {
+				$user_info = $atts['show'];
+			}
+		} else {
+			$user_info = 'display_name';
+		}
+
+		return $user_info;
 	}
 
 	public static function get_field_types( $type ) {

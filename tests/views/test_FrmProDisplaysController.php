@@ -2,6 +2,7 @@
 
 /**
  * @group views
+ * @group pro
  */
 class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	function setUp() {

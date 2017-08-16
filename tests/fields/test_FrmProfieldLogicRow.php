@@ -1,11 +1,13 @@
 <?php
 
 /**
+ * @group pro
  * @group pro-views
+ *
  * @since 2.03.05
  * @covers formidable/pro/views/frmpro-fields/field-values.php
  */
-class test_fieldLogicRow extends FrmUnitTest {
+class test_FrmProfieldLogicRow extends FrmUnitTest {
 
 	public function test_class_is_tested() {
 		$this->assertTrue( true );

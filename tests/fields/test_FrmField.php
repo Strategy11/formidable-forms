@@ -36,11 +36,27 @@ class WP_Test_FrmField extends FrmUnitTest {
 	 */
 	function test_get_all_for_form() {
 		$forms = array(
-			'basic_test' => array( 'form_key' => $this->contact_form_key, 'count' => $this->contact_form_field_count ),
-			'repeat' => array( 'form_key' => $this->all_fields_form_key, 'count' => 35 + 3 ),
-			'no_repeat_or_embed' => array( 'form_key' => $this->all_fields_form_key, 'count' => 35 ),
-			'repeat_and_embed' => array( 'form_key' => $this->all_fields_form_key, 'count' => 35 + 3 + $this->contact_form_field_count )
+			'basic_test' => array(
+				'form_key' => $this->contact_form_key,
+				'count' => $this->contact_form_field_count,
+			),
+			'no_repeat_or_embed' => array(
+				'form_key' => $this->all_fields_form_key,
+				'count' => 35,
+			),
 		);
+
+		if ( $this->is_pro_active ) {
+			$forms['repeat_and_embed'] = array(
+				'form_key' => $this->all_fields_form_key,
+				'count' => 35 + 3 + $this->contact_form_field_count,
+			);
+
+			$forms['repeat'] = array(
+				'form_key' => $this->all_fields_form_key,
+				'count' => 35 + 3,
+			);
+		}
 
 		foreach ( $forms as $test => $args ) {
 			$form_id = FrmForm::getIdByKey( $args['form_key'] );
@@ -54,7 +70,7 @@ class WP_Test_FrmField extends FrmUnitTest {
 			}
 
 			$this->assertNotEmpty( $fields );
-			$this->assertEquals( $args['count'], count( $fields ), 'An incorrect number of fields are retrieved with FrmField::get_all_for_form.' );
+			$this->assertEquals( $args['count'], count( $fields ), 'An incorrect number of fields are retrieved with FrmField::get_all_for_form for ' . $test . '.' );
 		}
 	}
 }

@@ -15,5 +15,4 @@ class WP_Test_FrmFormActionsController extends FrmUnitTest {
 		$action_post_type = FrmFormActionsController::$action_post_type;
 		$this->assertTrue( in_array( $action_post_type, $post_types ), 'The ' . $action_post_type . ' is missing' );
 	}
-
 }

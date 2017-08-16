@@ -2,6 +2,7 @@
 
 /**
  * @group entries
+ * @group pro
  */
 class WP_Test_FrmProEntriesController extends FrmUnitTest {
 

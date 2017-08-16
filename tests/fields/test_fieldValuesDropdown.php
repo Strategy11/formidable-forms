@@ -1,6 +1,7 @@
 <?php
 /**
  * @group pro-views
+ * @group pro
  * @since 2.03.05
  */
 
@@ -806,7 +807,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 		}
 
 		$field_object = FrmField::getOne( $edit_field_key );
-		$current_field = FrmProFieldsHelper::convert_field_object_to_flat_array( $field_object );
+		$current_field = FrmFieldsHelper::convert_field_object_to_flat_array( $field_object );
 		$current_field_id = $field_object->id;
 		$meta_name = 0;
 

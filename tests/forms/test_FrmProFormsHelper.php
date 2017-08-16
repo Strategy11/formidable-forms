@@ -2,6 +2,7 @@
 
 /**
  * @group forms
+ * @group pro
  */
 class WP_Test_FrmProFormsHelper extends FrmUnitTest {
 

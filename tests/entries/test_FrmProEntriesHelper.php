@@ -3,6 +3,7 @@
 /**
  * @group entries
  * @group searching-entries
+ * @group pro
  */
 class WP_Test_FrmProEntriesHelper extends FrmUnitTest {
 

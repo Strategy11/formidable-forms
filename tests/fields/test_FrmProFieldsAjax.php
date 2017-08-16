@@ -2,6 +2,7 @@
 
 /**
  * @group ajax
+ * @group pro
  */
 class WP_Test_FrmProFieldsAjax extends FrmAjaxUnitTest {
 

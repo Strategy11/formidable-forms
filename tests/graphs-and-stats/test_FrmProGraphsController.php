@@ -2,6 +2,7 @@
 
 /**
  * @group graphs
+ * @group pro
  */
 class WP_Test_FrmProGraphsController extends FrmUnitTest {
 

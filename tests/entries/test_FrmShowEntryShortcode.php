@@ -29,11 +29,11 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 
 		$this->text_field_key = $this->is_pro_active ? 'text-field' : 'free-text-field';
 		$this->text_field_id = FrmField::get_id_by_key( $this->text_field_key );
-		$this->form_key = $this->is_pro_active ? 'all_field_types' : 'free_field_types';
+		$this->form_key = $this->is_pro_active ? $this->all_fields_form_key : 'free_field_types';
 	}
 
 	private function get_field_keys_for_type() {
-		if ( $this->form_key == 'all_field_types' ) {
+		if ( $this->form_key == $this->all_fields_form_key ) {
 			$field_keys = array(
 				'text-field'        => 'text-field',
 				'user-id-field'     => 'user-id-field',

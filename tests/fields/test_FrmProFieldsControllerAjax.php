@@ -2,6 +2,7 @@
 
 /**
  * @group ajax
+ * @group pro
  */
 class WP_Test_FrmProFieldsControllerAjax extends FrmAjaxUnitTest {
 
@@ -831,5 +832,4 @@ class WP_Test_FrmProFieldsControllerAjax extends FrmAjaxUnitTest {
 			'nonce'     => wp_create_nonce( 'frm_ajax' ),
 		);
 	}
-
 }
