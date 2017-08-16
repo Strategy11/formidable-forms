@@ -419,7 +419,7 @@ class FrmEntryFormatter {
 	 *
 	 * @since 3.0
 	 *
-	 * @param FrmProFieldValue $field_value
+	 * @param FrmFieldValue $field_value
 	 * @param string $content
 	 */
 	protected function add_row_for_extra_field( $field_value, &$content ) {
