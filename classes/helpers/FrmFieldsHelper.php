@@ -145,31 +145,6 @@ class FrmFieldsHelper {
 	}
 
 	public static function get_default_html( $type = 'text' ) {
-		$filepath = FrmAppHelper::plugin_path() . '/classes';
-		$class_name = 'FrmFieldFactory';
-		if ( preg_match( '/^.+Helper$/', $class_name ) ) {
-			$filepath .= '/helpers/';
-		} else if ( preg_match( '/^.+Controller$/', $class_name ) ) {
-			$filepath .= '/controllers/';
-		} else if ( preg_match( '/^.+Factory$/', $class_name ) ) {
-			$filepath .= '/factories/';
-		} else {
-			$filepath .= '/models/';
-			if ( strpos( $class_name, 'FrmField' ) === 0 && ! file_exists( $filepath . $class_name . '.php' ) ) {
-				$filepath .= 'fields/';
-			}
-		}
-
-		$filepath .= $class_name . '.php';
-
-		if ( file_exists( $filepath ) ) {
-			require_once( $filepath );
-			if ( ! class_exists( $class_name, false ) ) {
-				throw new Exception('Frm Class ' . $class_name . ' not found in '. $filepath);
-			}
-		} else {
-			throw new Exception('File not found: '. $filepath);
-		}
 		$field = FrmFieldFactory::get_field_type( $type );
 		$default_html = $field->default_html();
 
