@@ -150,10 +150,6 @@ class WP_Test_FrmProFieldsHelper extends FrmUnitTest {
 		$this->assertNotEquals( '', $meta_value, 'Media ids are not set or retrieved correctly for entry ' . $entry_key . ' and field ' . $field_key );
 		$media_ids = maybe_unserialize( $meta_value );
 
-		if ( strpos( $media_ids, ',' ) !== false ) {
-			$media_ids = explode( ',', $media_ids);
-		}
-
 		return $media_ids;
 	}
 
