@@ -2,8 +2,8 @@
 Contributors: formidableforms, sswells, srwells, jamie.wahlin
 Tags: contact form, form builder, custom form, forms, form, form maker, form creator
 Requires at least: 3.8
-Tested up to: 4.8
-Stable tag: 2.03.10
+Tested up to: 4.8.1
+Stable tag: 2.03.11
 
 The best WordPress form plugin for contact forms, surveys and more. Make forms a breeze with a drag and drop form builder and form style generator.
 
@@ -142,6 +142,36 @@ The field and form names and descriptions are all changed with in-place edit. Ju
 [See more FAQs](https://formidableforms.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 2.03.11 =
+* New: Add FrmEntryValues and FrmFieldValue classes, which should be widely reusable.
+* New: Add ready-to-use contact form.
+* Enhancement: Load global form settings tabs with AJAX.
+* Enhancement: Add form and entry to frm_email_message filter.
+* Fix: Include_fields parameter applies in show entry shortcode.
+* Fix: Fields not duplicated in show entry shortcode.
+* Fix: Changed blank title processing to match WordPress core widgets.
+* Fix: File type selection box closes on click.
+* Fix: Remove autoclear from masks.
+* **Pro Version Forms**
+* New: Add FrmProEntryValues and FrmProFieldValue classes, which should be widely reusable.
+* New: Add frm_validate_file and frm_response_after_upload hooks.
+* Enhancement: Allow license key to be defined in wp-config
+* Fix: If a field is in a section in an embedded form, it can now be included in the default email message.
+* Fix: Entry array passed to API and Zapier includes repeating fields with their own value arrays.
+* Fix: Section headings now show in email only if there are values submitted inside the section.
+* Fix: Calculation error occurred when calculation contained fields inside and outside repeating section.
+* Fix: Make sure [input opt=1] works with other options in radio fields.
+* Fix: Prevent JS error for calc with no trigger field.
+* Fix: Show loading icon when updating a field with update link.
+* Fix: Allow 3 in the title of a collapsible section
+* Fix: Only use get_user_locale in admin area.
+* Fix: Keep Lookup option with special characters selected when editing entry.
+* Fix: Prevent fields from throwing errors when they're in a hidden section.
+* Fix: Fix array to string conversion error in post status View filter.
+* Fix: Submit button cannot be clicked while Lookup fields are processing.
+* Fix: Filter fields autopopulated by lookup based on parent settings.
+* Fix: Don't set cookie during API request.
+
 = 2.03.10 =
 * New: Add <a href="https://formidableforms.com/wordpress-anti-spam-invisible-recaptcha/">invisible recaptcha to your WordPress forms</a>
 * New: Add frm_form_div_attributes action hook
