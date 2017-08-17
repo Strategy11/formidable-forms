@@ -65,8 +65,9 @@ class WP_Test_FrmForm extends FrmUnitTest {
 
 	function _check_if_form_select_updates( $old_form_id, $new_form_id ) {
 		// Get all repeating sections in both forms
-		$old_repeating_sections = FrmField::get_all_types_in_form( $old_form_id, 'divider' );
-		$new_repeating_sections = FrmField::get_all_types_in_form( $new_form_id, 'divider' );
+		$old_repeating_sections = array_values( FrmField::get_all_types_in_form( $old_form_id, 'divider' ) );
+		$new_repeating_sections = array_values( FrmField::get_all_types_in_form( $new_form_id, 'divider' ) );
+
 		if ( ! $old_repeating_sections ) {
 			return;
 		}
