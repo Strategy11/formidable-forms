@@ -94,6 +94,9 @@ class WP_Test_FrmXMLHelper extends FrmUnitTest {
 		}
 	}
 
+	/**
+	 * Check the parent id column on imported forms
+	 */
 	function test_imported_forms() {
 		$imported_forms = FrmForm::getAll();
 
@@ -105,13 +108,19 @@ class WP_Test_FrmXMLHelper extends FrmUnitTest {
 			return;
 		}
 
-		$child_form_key = 'rep_sec_form';
-		$expected_parent_id = FrmForm::getIdByKey( $this->all_fields_form_key );
-
 		foreach ( $imported_forms as $form ) {
-			if ( $form->form_key == $child_form_key ) {
-				$this->assertTrue( $form->parent_form_id != 0, 'Parent form ID was removed when ' . $child_form_key . ' form was imported.' );
-				$this->assertEquals( $expected_parent_id, $form->parent_form_id, 'The parent form was not updated correctly when the ' . $child_form_key . ' form was imported.' );
+			if ( $form->form_key == 'rep_sec_form' || $form->form_key == 'repeating-file-uploads' ) {
+
+				$this->assertTrue( $form->parent_form_id != 0, 'Parent form ID was removed when ' . $form->form_key . ' form was imported.' );
+
+				if ( $form->form_key == 'repeating-file-uploads' ) {
+					$expected_parent_id = FrmForm::getIdByKey( 'file-upload' );
+				} else {
+					$expected_parent_id = FrmForm::getIdByKey( $this->all_fields_form_key );
+				}
+
+				$this->assertEquals( $expected_parent_id, $form->parent_form_id, 'The parent form was not updated correctly when the ' . $form->form_key . ' form was imported.' );
+
 			} else {
 				$this->assertEquals( 0, $form->parent_form_id, 'Parent form ID was added to ' . $form->form_key . ' on import.' );
 			}
@@ -119,6 +128,9 @@ class WP_Test_FrmXMLHelper extends FrmUnitTest {
 
 	}
 
+	/**
+	 * Run an XML import that updates existing fields and forms
+	 */
 	function test_xml_import_to_update_fields_and_forms() {
 		$args = self::_get_xml_update_args();
 		$path = self::_generate_xml_for_all_fields_form( $args );
@@ -196,7 +208,7 @@ class WP_Test_FrmXMLHelper extends FrmUnitTest {
 
 		$expected_numbers = array(
 			'forms'  => $this->is_pro_active ? 2 : 1,
-			'fields' => $this->is_pro_active ? 37 : 35,
+			'fields' => $this->is_pro_active ? $this->all_field_types_count - $this->contact_form_field_count : 35,
 		);
 
 		foreach ( $expected_numbers as $type => $e_number ) {
