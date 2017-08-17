@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Formidable v2.03.10\n"
+"Project-Id-Version: Formidable v2.03.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-01 03:07+0000\n"
-"PO-Revision-Date: Fri Jul 14 2017 15:22:28 GMT-0700 (PDT)\n"
+"PO-Revision-Date: Wed Aug 16 2017 17:00:12 GMT-0700 (PDT)\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: German\n"
@@ -58,7 +58,7 @@ msgstr ""
 msgid "Calendar Date"
 msgstr ""
 
-#: ../classes/controllers/FrmSettingsController.php:30 ..
+#: ../classes/controllers/FrmSettingsController.php:38 ..
 #: classes/models/FrmPointers.php:314 ../classes/views/addons/settings.php:2
 msgid "Plugin Licenses"
 msgstr ""
@@ -262,27 +262,27 @@ msgstr ""
 msgid "Your server is missing the simplexml_import_dom function"
 msgstr ""
 
-#: ../classes/models/FrmAddon.php:105
+#: ../classes/models/FrmAddon.php:152
 #, php-format
 msgid "Your %1$s license key is missing. Please add it on the %2$slicenses page%3$s."
 msgstr ""
 
-#: ../classes/models/FrmAddon.php:196
+#: ../classes/models/FrmAddon.php:244
 msgid "Oops! You forgot to enter your license number."
 msgstr ""
 
-#: ../classes/models/FrmAddon.php:322
+#: ../classes/models/FrmAddon.php:378
 #, php-format
 msgid ""
 "You had an error communicating with the Formidable API. %1$sClick here%2$s "
 "for more information."
 msgstr ""
 
-#: ../classes/models/FrmAddon.php:325
+#: ../classes/models/FrmAddon.php:381
 msgid "You had an HTTP error connecting to the Formidable API"
 msgstr ""
 
-#: ../classes/models/FrmDb.php:561
+#: ../classes/models/FrmDb.php:579
 msgid "Use the query in an array format so it can be properly prepared."
 msgstr ""
 
@@ -460,59 +460,66 @@ msgstr ""
 msgid "(Premium feature)"
 msgstr ""
 
-#: ../classes/views/frm-settings/form.php:42
+#: ../classes/views/frm-settings/form.php:44
 msgid "Load form styling"
 msgstr ""
 
-#: ../classes/views/frm-settings/form.php:46
+#: ../classes/views/frm-settings/form.php:48
 msgid "Don't use form styling on any page"
 msgstr ""
 
-#: ../classes/views/frm-settings/form.php:54
+#: ../classes/views/frm-settings/form.php:56
 msgid ""
 "We recommend using HTML 5 for your forms. It adds some nifty options like "
 "placeholders, patterns, and autocomplete."
 msgstr ""
 
-#: ../classes/views/frm-settings/form.php:77
+#: ../classes/views/frm-settings/form.php:79
 #, php-format
 msgid ""
 "reCAPTCHA requires a Site and Private API key. Sign up for a %1$sfree "
 "reCAPTCHA key%2$s."
 msgstr ""
 
-#: ../classes/views/frm-settings/form.php:83
+#: ../classes/views/frm-settings/form.php:85
 msgid "Secret Key"
 msgstr ""
 
-#: ../classes/views/frm-settings/form.php:86
+#: ../classes/views/frm-settings/form.php:88
 msgid "reCAPTCHA Type"
 msgstr ""
 
-#: ../classes/views/frm-settings/form.php:89
+#: ../classes/views/frm-settings/form.php:91
 msgid "Checkbox (V2)"
 msgstr ""
 
-#: ../classes/views/frm-settings/form.php:92
+#: ../classes/views/frm-settings/form.php:94
 msgid "Invisible"
 msgstr ""
 
-#: ../classes/views/frm-settings/form.php:98
+#: ../classes/views/frm-settings/form.php:100
 msgid "Browser Default"
 msgstr ""
 
-#: ../classes/views/frm-settings/form.php:105
+#: ../classes/views/frm-settings/form.php:107
 msgid "Multiple reCaptchas"
 msgstr ""
 
-#: ../classes/views/frm-settings/form.php:108
+#: ../classes/views/frm-settings/form.php:110
 msgid "Allow multiple reCaptchas to be used on a single page"
 msgstr ""
 
-#: ../classes/views/frm-settings/license_box.php:6
+#: ../classes/views/frm-settings/license_box.php:5
 msgid ""
-"Ready to take your forms to the next level?<br/>Formidable Forms will help "
-"you create views, manage data, and get reports."
+"Get 15 more field types, including multiple file upload fields and cascading "
+"lookup fields. PLUS multi-page forms, calculations, repeatable sections, "
+"confirmation fields, conditional logic, front-end editing, views, data "
+"management, and graph & stat reporting."
+msgstr ""
+
+#: ../classes/views/frm-settings/license_box.php:6
+#, php-format
+msgid "%1$sClick here%2$s to go Pro."
 msgstr ""
 
 #: ../classes/views/styles/_field-colors.php:50 ../classes/views/styles/_field-
@@ -534,20 +541,20 @@ msgstr ""
 msgid "(child)"
 msgstr ""
 
-#: ../pro/classes/controllers/FrmProEddController.php:91
+#: ../pro/classes/controllers/FrmProEddController.php:99
 #, php-format
 msgid ""
 "Your %1$s license key is missing. Please add it on the %2$sGlobal Settings "
 "page%3$s."
 msgstr ""
 
-#: ../pro/classes/controllers/FrmProEntriesController.php:1711
+#: ../pro/classes/controllers/FrmProEntriesController.php:1686
 msgid ""
 "There are no matching fields. Please check your formresults shortcode to "
 "make sure you are using the correct form and field IDs."
 msgstr ""
 
-#: ../pro/classes/controllers/FrmProEntriesController.php:2503
+#: ../pro/classes/controllers/FrmProEntriesController.php:2478
 msgid "You are missing options in your shortcode. A field_id is required."
 msgstr ""
 
@@ -762,7 +769,7 @@ msgid ""
 "before loading it in the visual tab."
 msgstr ""
 
-#: ../pro/classes/views/displays/where_options.php:13
+#: ../pro/classes/views/displays/where_options.php:18
 msgid "Draft or complete entry"
 msgstr ""
 
@@ -1067,7 +1074,7 @@ msgstr "Support"
 #: ../classes/controllers/FrmEntriesController.php:72 ..
 #: classes/controllers/FrmFormsController.php:718 ../classes/views/frm-
 #: entries/form.php:46 ../classes/views/frm-entries/sidebar-shared.php:29 ..
-#: pro/classes/helpers/FrmProFieldsHelper.php:2633 ..
+#: pro/classes/helpers/FrmProFieldsHelper.php:2634 ..
 #: pro/classes/views/xml/map_csv_fields.php:57 ..
 #: pro/classes/views/xml/map_csv_fields.php:57
 msgid "Entry Key"
@@ -1075,7 +1082,7 @@ msgstr "Eingabe Schlüssel"
 
 #: ../classes/controllers/FrmEntriesController.php:77 ..
 #: classes/controllers/FrmFormsController.php:460 ../classes/views/frm-
-#: forms/_publish_box.php:47 ../classes/widgets/FrmShowForm.php:50 ..
+#: forms/_publish_box.php:47 ../classes/widgets/FrmShowForm.php:45 ..
 #: pro/classes/controllers/FrmProDisplaysController.php:137
 msgid "Form"
 msgstr "Formular"
@@ -1088,7 +1095,7 @@ msgstr "Erstellt durch"
 #: ../classes/controllers/FrmEntriesController.php:82 ..
 #: pro/classes/helpers/FrmProEntriesListHelper.php:61 ..
 #: pro/classes/helpers/FrmProEntriesListHelper.php:72 ..
-#: pro/classes/helpers/FrmProFieldsHelper.php:2636 ..
+#: pro/classes/helpers/FrmProFieldsHelper.php:2637 ..
 #: pro/classes/views/displays/_calendar_options.php:4 ..
 #: pro/classes/views/displays/_calendar_options.php:16 ..
 #: pro/classes/views/displays/order_row.php:4 ..
@@ -1097,7 +1104,7 @@ msgid "Entry creation date"
 msgstr "Eintrags-Erstellungsdatum"
 
 #: ../classes/controllers/FrmEntriesController.php:83 ..
-#: pro/classes/helpers/FrmProFieldsHelper.php:2637 ..
+#: pro/classes/helpers/FrmProFieldsHelper.php:2638 ..
 #: pro/classes/views/displays/_calendar_options.php:5 ..
 #: pro/classes/views/displays/_calendar_options.php:17 ..
 #: pro/classes/views/displays/order_row.php:5
@@ -1222,8 +1229,8 @@ msgstr "Typ"
 #: classes/controllers/FrmFormsController.php:549 ..
 #: classes/helpers/FrmCSVExportHelper.php:118 ..
 #: pro/classes/controllers/FrmProDisplaysController.php:142 ..
-#: pro/classes/helpers/FrmProFieldsHelper.php:2654 ..
-#: pro/classes/helpers/FrmProFieldsHelper.php:2670 ..
+#: pro/classes/helpers/FrmProFieldsHelper.php:2655 ..
+#: pro/classes/helpers/FrmProFieldsHelper.php:2671 ..
 #: pro/classes/views/displays/mb_advanced.php:88
 msgid "Key"
 msgstr "Schlüssel"
@@ -1293,7 +1300,7 @@ msgstr "Absätze oder Zeilenumbrüche nicht automatisch hinzufügen"
 #: entries/sidebar-shared.php:23 ../pro/classes/controllers/FrmProFormsController.
 #: php:574 ../pro/classes/helpers/FrmProEntriesListHelper.php:62 ..
 #: pro/classes/helpers/FrmProEntriesListHelper.php:73 ..
-#: pro/classes/helpers/FrmProFieldsHelper.php:2632 ..
+#: pro/classes/helpers/FrmProFieldsHelper.php:2633 ..
 #: pro/classes/views/displays/order_row.php:3 ..
 #: pro/classes/views/displays/where_row.php:6 ..
 #: pro/classes/views/xml/map_csv_fields.php:56 ..
@@ -1303,14 +1310,14 @@ msgstr "Eintrags-ID"
 
 #: ../classes/controllers/FrmFormsController.php:719 ..
 #: pro/classes/controllers/FrmProFormsController.php:82 ..
-#: pro/classes/helpers/FrmProFieldsHelper.php:2634 ..
+#: pro/classes/helpers/FrmProFieldsHelper.php:2635 ..
 #: pro/classes/views/displays/where_row.php:8 ..
 #: pro/classes/views/xml/map_csv_fields.php:49
 msgid "Post ID"
 msgstr "Beitrags ID"
 
 #: ../classes/controllers/FrmFormsController.php:720 ..
-#: pro/classes/helpers/FrmProFieldsHelper.php:2635
+#: pro/classes/helpers/FrmProFieldsHelper.php:2636
 msgid "User IP"
 msgstr "Benutzer IP"
 
@@ -1323,12 +1330,12 @@ msgid "Entry updated"
 msgstr "Eintrag aktualisiert"
 
 #: ../classes/controllers/FrmFormsController.php:724 ..
-#: pro/classes/helpers/FrmProFieldsHelper.php:2692
+#: pro/classes/helpers/FrmProFieldsHelper.php:2693
 msgid "Site URL"
 msgstr "Seiten URL"
 
 #: ../classes/controllers/FrmFormsController.php:725 ..
-#: pro/classes/helpers/FrmProFieldsHelper.php:2693
+#: pro/classes/helpers/FrmProFieldsHelper.php:2694
 msgid "Site Name"
 msgstr "Webseiten Name"
 
@@ -1398,8 +1405,8 @@ msgstr "Bitte ein gültiges Formular wählen"
 msgid "Global Settings"
 msgstr "Globale Einstellungen"
 
-#: ../classes/controllers/FrmSettingsController.php:60 ..
-#: classes/controllers/FrmSettingsController.php:63
+#: ../classes/controllers/FrmSettingsController.php:87 ..
+#: classes/controllers/FrmSettingsController.php:90
 msgid "Settings Saved"
 msgstr "Einstellungen gespeichert"
 
@@ -1423,9 +1430,9 @@ msgstr "Style"
 #: classes/helpers/FrmFormsListHelper.php:306 ../classes/views/frm-
 #: entries/sidebar-shared.php:12 ../classes/views/frm-forms/_publish_box.php:67 ..
 #: pro/classes/controllers/FrmProDisplaysController.php:38 ..
-#: pro/classes/controllers/FrmProEntriesController.php:1669 ..
-#: pro/classes/controllers/FrmProEntriesController.php:1879 ..
-#: pro/classes/controllers/FrmProEntriesController.php:2399 ..
+#: pro/classes/controllers/FrmProEntriesController.php:1644 ..
+#: pro/classes/controllers/FrmProEntriesController.php:1854 ..
+#: pro/classes/controllers/FrmProEntriesController.php:2374 ..
 #: pro/classes/helpers/FrmProAppHelper.php:228 ..
 #: pro/classes/helpers/FrmProEntriesHelper.php:256 ..
 #: pro/classes/models/FrmProContent.php:248
@@ -1451,7 +1458,7 @@ msgstr "Ihre Formular Stile wurden gespeichert."
 
 #: ../classes/controllers/FrmStylesController.php:356 ..
 #: classes/models/FrmPointers.php:312 ../classes/views/frm-forms/settings.php:29
-#: ../classes/views/frm-settings/form.php:17
+#: ../classes/views/frm-settings/form.php:18
 msgid "General"
 msgstr "Allgemein"
 
@@ -1707,8 +1714,8 @@ msgid "Remove"
 msgstr "Entferne"
 
 #: ../classes/helpers/FrmAppHelper.php:1745 ../classes/helpers/FrmCSVExportHelper.
-#: php:117 ../pro/classes/helpers/FrmProFieldsHelper.php:2653 ..
-#: pro/classes/helpers/FrmProFieldsHelper.php:2669 ..
+#: php:117 ../pro/classes/helpers/FrmProFieldsHelper.php:2654 ..
+#: pro/classes/helpers/FrmProFieldsHelper.php:2670 ..
 #: pro/classes/views/displays/mb_advanced.php:87 ../pro/classes/views/frmpro-
 #: entries/table.php:5
 msgid "ID"
@@ -1760,7 +1767,7 @@ msgstr "OK"
 
 #: ../classes/helpers/FrmAppHelper.php:1761 ../classes/views/frm-
 #: forms/_publish_box.php:75 ../pro/classes/controllers/FrmProEddController.php:
-#: 167 ../pro/classes/controllers/FrmProEntriesController.php:2399 ..
+#: 185 ../pro/classes/controllers/FrmProEntriesController.php:2374 ..
 #: pro/classes/views/frmpro-entries/sidebar-new.php:14 ..
 #: pro/classes/views/frmpro-entries/sidebar-new.php:14 ..
 #: pro/classes/views/frmpro-form-actions/_custom_field_row.php:31
@@ -2133,8 +2140,8 @@ msgstr "Aktualisiert durch"
 #: ../classes/helpers/FrmCSVExportHelper.php:115 ..
 #: classes/helpers/FrmFormsHelper.php:639 ../classes/helpers/FrmFormsListHelper.
 #: php:362 ../classes/views/frm-forms/_publish_box.php:72 ..
-#: pro/classes/controllers/FrmProEntriesController.php:1658 ..
-#: pro/classes/views/displays/where_options.php:14
+#: pro/classes/controllers/FrmProEntriesController.php:1633 ..
+#: pro/classes/views/displays/where_options.php:19
 msgid "Draft"
 msgstr "Entwurf"
 
@@ -2143,8 +2150,13 @@ msgstr "Entwurf"
 msgid "IP"
 msgstr "IP Adresse"
 
+#: ../classes/helpers/FrmEntriesHelper.php:500 ..
+#: classes/helpers/FrmEntriesHelper.php:501
+msgid "Unknown"
+msgstr "Unbekannt"
+
 #: ../classes/helpers/FrmEntriesListHelper.php:57 ..
-#: pro/classes/controllers/FrmProEntriesController.php:1695 ..
+#: pro/classes/controllers/FrmProEntriesController.php:1670 ..
 #: pro/classes/helpers/FrmProDisplaysHelper.php:59
 msgid "No Entries Found"
 msgstr "Keine Einträge gefunden"
@@ -2180,9 +2192,9 @@ msgstr "Sind Sie sicher, dass Sie das löschen möchten?"
 #: classes/helpers/FrmFormsHelper.php:618 ../classes/helpers/FrmFormsListHelper.
 #: php:104 ../classes/models/FrmFormAction.php:694 ../classes/views/frm-
 #: entries/sidebar-show.php:22 ../classes/views/frm-entries/sidebar-show.php:23 ..
-#: pro/classes/controllers/FrmProEntriesController.php:1893 ..
-#: pro/classes/controllers/FrmProEntriesController.php:2138 ..
-#: pro/classes/controllers/FrmProEntriesController.php:2549 ..
+#: pro/classes/controllers/FrmProEntriesController.php:1868 ..
+#: pro/classes/controllers/FrmProEntriesController.php:2113 ..
+#: pro/classes/controllers/FrmProEntriesController.php:2524 ..
 #: pro/classes/helpers/FrmProEntriesListHelper.php:6 ../pro/classes/views/frmpro-
 #: entries/sidebar-edit.php:27 ../pro/classes/views/frmpro-entries/sidebar-edit.
 #: php:27
@@ -2213,7 +2225,7 @@ msgid "Untitled"
 msgstr "Unbenannt"
 
 #: ../classes/helpers/FrmFieldsHelper.php:147 ../classes/helpers/FrmFieldsHelper.
-#: php:176 ../pro/classes/models/FrmProFileField.php:364
+#: php:176 ../pro/classes/models/FrmProFileField.php:365
 msgid "This field is invalid"
 msgstr "Das Feld ist ungültig"
 
@@ -3318,7 +3330,7 @@ msgstr "Ein Formular aus einer Vorlage erstellen"
 #: ../classes/helpers/FrmFormsListHelper.php:315 ..
 #: pro/classes/controllers/FrmProDisplaysController.php:112 ..
 #: pro/classes/controllers/FrmProDisplaysController.php:112 ..
-#: pro/classes/controllers/FrmProEntriesController.php:1674 ..
+#: pro/classes/controllers/FrmProEntriesController.php:1649 ..
 #: pro/classes/helpers/FrmProEntriesHelper.php:245
 msgid "Duplicate"
 msgstr "Duplizieren"
@@ -3529,50 +3541,50 @@ msgstr "Erstelle Artikel"
 msgid "Email Notification"
 msgstr "E-Mail Benachrichtigung"
 
-#: ../classes/models/FrmAddon.php:259
+#: ../classes/models/FrmAddon.php:315
 msgid "Your license has been activated. Enjoy!"
 msgstr "Ihre Lizenz wurde aktiviert. Viel Spaß!"
 
-#: ../classes/models/FrmAddon.php:260 ../classes/models/FrmAddon.php:265
+#: ../classes/models/FrmAddon.php:316 ../classes/models/FrmAddon.php:321
 msgid "That license key is invalid"
 msgstr "Der Lizenzschlüssel ist ungültig"
 
-#: ../classes/models/FrmAddon.php:261
+#: ../classes/models/FrmAddon.php:317
 msgid "That license is expired"
 msgstr "Der Lizenzschlüssel ist abgelaufen"
 
-#: ../classes/models/FrmAddon.php:262
+#: ../classes/models/FrmAddon.php:318
 msgid "That license has been refunded"
 msgstr "Diese Lizenz wurde erstattet"
 
-#: ../classes/models/FrmAddon.php:263
+#: ../classes/models/FrmAddon.php:319
 msgid "That license has been used on too many sites"
 msgstr "Dieser Lizenzschlüssel wurde auf zu vielen Seiten verwendet"
 
-#: ../classes/models/FrmAddon.php:264
+#: ../classes/models/FrmAddon.php:320
 msgid "Oops! That is the wrong license key for this plugin."
 msgstr "Der Lizenzschlüssel gehört nicht zu diesem Plugin"
 
-#: ../classes/models/FrmAddon.php:284
+#: ../classes/models/FrmAddon.php:340
 msgid "That license was removed successfully"
 msgstr "Der Lizenzschlüssel wurde erfolgreich entfernt"
 
-#: ../classes/models/FrmAddon.php:286
+#: ../classes/models/FrmAddon.php:342
 msgid "There was an error deactivating your license."
 msgstr "Bei der Deaktivierung des Lizenzschlüssels ist ein Fehler aufgetreten."
 
-#: ../classes/models/FrmAddon.php:320 ..
+#: ../classes/models/FrmAddon.php:376 ..
 #: pro/classes/controllers/FrmUpdatesController.php:349
 msgid "Your License Key was invalid"
 msgstr "Ihr Lizenzschlüssel war ungültig"
 
-#: ../classes/models/FrmAddon.php:335 ..
+#: ../classes/models/FrmAddon.php:391 ..
 #: pro/classes/controllers/FrmUpdatesController.php:345
 #, php-format
 msgid "There was a %1$s error: %2$s"
 msgstr "Es gab einen %1$s Fehler: %2$s"
 
-#: ../classes/models/FrmDb.php:763
+#: ../classes/models/FrmDb.php:781
 msgid "Sending"
 msgstr "Wird gesendet"
 
@@ -3596,7 +3608,7 @@ msgstr "%1$s Formular eingereicht am %2$s"
 msgid "User Information"
 msgstr "Benutzer Informationen"
 
-#: ../classes/models/FrmEmail.php:299 ../classes/models/FrmEntryFormat.php:267 ..
+#: ../classes/models/FrmEmail.php:299 ../classes/models/FrmEntryValues.php:220 ..
 #: classes/views/frm-entries/sidebar-shared.php:56 ..
 #: pro/classes/controllers/FrmProFormsController.php:86 ..
 #: pro/classes/views/frmpro-forms/add_form_options.php:30 ..
@@ -3604,19 +3616,14 @@ msgstr "Benutzer Informationen"
 msgid "IP Address"
 msgstr "IP Adresse"
 
-#: ../classes/models/FrmEmail.php:300 ../classes/models/FrmEntryFormat.php:269
+#: ../classes/models/FrmEmail.php:300 ../classes/models/FrmEntryValues.php:225
 msgid "User-Agent (Browser/OS)"
 msgstr "User-Agent (Browser/OS)"
 
-#: ../classes/models/FrmEmail.php:301 ../classes/models/FrmEntryFormat.php:272 ..
+#: ../classes/models/FrmEmail.php:301 ../classes/models/FrmEntryValues.php:230 ..
 #: classes/views/frm-entries/sidebar-shared.php:69
 msgid "Referrer"
 msgstr "Empfehlende Seite"
-
-#: ../classes/models/FrmEntryFormat.php:300 ../classes/models/FrmEntryFormat.php:
-#: 301
-msgid "Unknown"
-msgstr "Unbekannt"
 
 #: ../classes/models/FrmEntryValidate.php:9
 msgid "There was a problem with your submission. Please try again."
@@ -3658,20 +3665,20 @@ msgstr "Textabsatz"
 
 #: ../classes/models/FrmField.php:15 ..
 #: pro/classes/controllers/FrmProLookupFieldsController.php:14 ..
-#: pro/classes/helpers/FrmProFieldsHelper.php:3778
+#: pro/classes/helpers/FrmProFieldsHelper.php:3779
 msgid "Checkboxes"
 msgstr "Checkboxen"
 
 #: ../classes/models/FrmField.php:16 ../classes/views/styles/_sample_form.php:58 .
 #: ./pro/classes/controllers/FrmProLookupFieldsController.php:13 ..
-#: pro/classes/helpers/FrmProFieldsHelper.php:3777 ..
+#: pro/classes/helpers/FrmProFieldsHelper.php:3778 ..
 #: pro/classes/views/styles/_sample_form.php:14
 msgid "Radio Buttons"
 msgstr "Radio Buttons"
 
 #: ../classes/models/FrmField.php:17 ..
 #: pro/classes/controllers/FrmProLookupFieldsController.php:12 ..
-#: pro/classes/helpers/FrmProFieldsHelper.php:3776
+#: pro/classes/helpers/FrmProFieldsHelper.php:3777
 msgid "Dropdown"
 msgstr "Dropdown"
 
@@ -3683,7 +3690,7 @@ msgstr "Email Adresse"
 msgid "Website/URL"
 msgstr "Webseite/URL"
 
-#: ../classes/models/FrmField.php:20 ../classes/views/frm-settings/form.php:72
+#: ../classes/models/FrmField.php:20 ../classes/views/frm-settings/form.php:74
 msgid "reCAPTCHA"
 msgstr "reCAPTCHA"
 
@@ -3692,7 +3699,7 @@ msgid "End Section"
 msgstr "Endabschnitt"
 
 #: ../classes/models/FrmField.php:32 ../pro/classes/helpers/FrmProFieldsHelper.
-#: php:3764
+#: php:3765
 msgid "Section"
 msgstr "Abschnitt"
 
@@ -3729,7 +3736,7 @@ msgid "Scale"
 msgstr "Maß, Messbereich"
 
 #: ../classes/models/FrmField.php:42 ../pro/classes/helpers/FrmProFieldsHelper.
-#: php:3774
+#: php:3775
 msgid "Dynamic Field"
 msgstr "Dynamischer Inhalt"
 
@@ -3786,7 +3793,7 @@ msgstr "Erstellen"
 #: classes/views/frm-forms/add_field_links.php:6 ../classes/views/frm-forms/edit.
 #: php:26 ../classes/views/frm-forms/edit.php:38 ../classes/views/frm-
 #: forms/settings.php:273 ../pro/classes/controllers/FrmProEntriesController.php:
-#: 2495 ../pro/classes/controllers/FrmProEntriesController.php:3054 ..
+#: 2470 ../pro/classes/controllers/FrmProEntriesController.php:3029 ..
 #: pro/classes/models/FrmProSettings.php:18
 msgid "Update"
 msgstr "Update"
@@ -3960,7 +3967,7 @@ msgstr ""
 "zurück%2$s und fügen Sie welche hinzu."
 
 #: ../classes/views/frm-entries/list.php:18 ../classes/views/frm-forms/list.php:
-#: 21 ../pro/classes/controllers/FrmProEntriesController.php:2031 ..
+#: 21 ../pro/classes/controllers/FrmProEntriesController.php:2006 ..
 #: pro/classes/controllers/FrmProFormsController.php:369 ..
 #: pro/classes/controllers/FrmProFormsController.php:428 ..
 #: pro/classes/helpers/FrmProEntriesListHelper.php:69
@@ -3999,7 +4006,7 @@ msgid "Entry"
 msgstr "Eintrag"
 
 #: ../classes/views/frm-entries/show.php:57 ..
-#: pro/classes/controllers/FrmProEntriesController.php:1659
+#: pro/classes/controllers/FrmProEntriesController.php:1634
 msgid "Parent Entry ID"
 msgstr "Übergeordnete ID"
 
@@ -4008,7 +4015,7 @@ msgid "Entry Details"
 msgstr "Details zum Eintrag"
 
 #: ../classes/views/frm-entries/sidebar-shared.php:8 ..
-#: pro/classes/controllers/FrmProEntriesController.php:1657
+#: pro/classes/controllers/FrmProEntriesController.php:1632
 msgid "Post"
 msgstr "Artikel"
 
@@ -4035,10 +4042,10 @@ msgid "Print"
 msgstr "Drucken"
 
 #: ../classes/views/frm-entries/sidebar-show.php:22 ..
-#: pro/classes/controllers/FrmProEntriesController.php:1696 ..
-#: pro/classes/controllers/FrmProEntriesController.php:2081 ..
-#: pro/classes/controllers/FrmProEntriesController.php:2155 ..
-#: pro/classes/controllers/FrmProEntriesController.php:2550
+#: pro/classes/controllers/FrmProEntriesController.php:1671 ..
+#: pro/classes/controllers/FrmProEntriesController.php:2056 ..
+#: pro/classes/controllers/FrmProEntriesController.php:2130 ..
+#: pro/classes/controllers/FrmProEntriesController.php:2525
 msgid "Are you sure you want to delete that entry?"
 msgstr "Sind Sie sicher, dass Sie den Eintrag löschen wollen?"
 
@@ -4743,7 +4750,7 @@ msgid "Do not use Formidable styling"
 msgstr "Formidable Stile nicht verwenden"
 
 #: ../classes/views/frm-forms/settings.php:156 ../classes/views/frm-settings/form.
-#: php:157
+#: php:159
 msgid "Submit Button Text"
 msgstr "Senden Button Text"
 
@@ -4756,7 +4763,7 @@ msgid "Set up your confirmation messages."
 msgstr "Bestätigungsmitteilungen einstellen"
 
 #: ../classes/views/frm-forms/settings.php:178 ../classes/views/frm-settings/form.
-#: php:165 ../pro/classes/views/settings/form.php:32
+#: php:167 ../pro/classes/views/settings/form.php:32
 msgid "Miscellaneous"
 msgstr "Verschiedenes"
 
@@ -4788,32 +4795,32 @@ msgstr "Senden Button"
 msgid "Select a form:"
 msgstr "Formular auswählen:"
 
-#: ../classes/views/frm-settings/form.php:37 ../classes/views/frm-settings/form.
-#: php:195
+#: ../classes/views/frm-settings/form.php:39 ../classes/views/frm-settings/form.
+#: php:204
 msgid "Update Options"
 msgstr "Einstellungen aktualisieren"
 
-#: ../classes/views/frm-settings/form.php:40
+#: ../classes/views/frm-settings/form.php:42
 msgid "Styling & Scripts"
 msgstr "Stile & Skripte"
 
-#: ../classes/views/frm-settings/form.php:44
+#: ../classes/views/frm-settings/form.php:46
 msgid "on every page of your site"
 msgstr "auf jeder Seite Ihrer Webseite"
 
-#: ../classes/views/frm-settings/form.php:45
+#: ../classes/views/frm-settings/form.php:47
 msgid "only on applicable pages"
 msgstr "nur auf geeigneten Seiten"
 
-#: ../classes/views/frm-settings/form.php:52
+#: ../classes/views/frm-settings/form.php:54
 msgid "Use HTML5 in forms"
 msgstr "Verwende HTML5 in Formularen"
 
-#: ../classes/views/frm-settings/form.php:59
+#: ../classes/views/frm-settings/form.php:61
 msgid "User Permissions"
 msgstr "Benutzerrechte"
 
-#: ../classes/views/frm-settings/form.php:60
+#: ../classes/views/frm-settings/form.php:62
 msgid ""
 "Select users that are allowed access to Formidable. Without access to View "
 "Forms, users will be unable to see the Formidable menu."
@@ -4822,7 +4829,7 @@ msgstr ""
 "Ohne das Recht formulare anzusehen, können diese Benutzer kein Formidable "
 "Menü sehen."
 
-#: ../classes/views/frm-settings/form.php:73
+#: ../classes/views/frm-settings/form.php:75
 msgid ""
 "reCAPTCHA is a free, accessible CAPTCHA service that helps to digitize books "
 "while blocking spam on your blog. reCAPTCHA asks commenters to retype two "
@@ -4834,24 +4841,24 @@ msgstr ""
 "zur Überprüfung ihres Mensch- Seins, zwei Worte, die aus einem Buch gescannt "
 "wurden, einzugeben."
 
-#: ../classes/views/frm-settings/form.php:80
+#: ../classes/views/frm-settings/form.php:82
 msgid "Site Key"
 msgstr "Seitenschlüssel"
 
-#: ../classes/views/frm-settings/form.php:81 ../classes/views/frm-settings/form.
-#: php:84
+#: ../classes/views/frm-settings/form.php:83 ../classes/views/frm-settings/form.
+#: php:86
 msgid "Optional"
 msgstr "Optional"
 
-#: ../classes/views/frm-settings/form.php:96
+#: ../classes/views/frm-settings/form.php:98
 msgid "reCAPTCHA Language"
 msgstr "reCAPTCHA Sprache"
 
-#: ../classes/views/frm-settings/form.php:112
+#: ../classes/views/frm-settings/form.php:114
 msgid "Default Messages"
 msgstr "Standardnachrichten"
 
-#: ../classes/views/frm-settings/form.php:113
+#: ../classes/views/frm-settings/form.php:115
 msgid ""
 "You can override the success message and submit button settings on "
 "individual forms."
@@ -4859,11 +4866,11 @@ msgstr ""
 "Sie können die Erfolgs- Mitteilung und die Senden- Button Einstelllungen "
 "überschreiben."
 
-#: ../classes/views/frm-settings/form.php:117
+#: ../classes/views/frm-settings/form.php:119
 msgid "Failed/Duplicate Entry"
 msgstr "Gescheitert/Doppelter Eintrag"
 
-#: ../classes/views/frm-settings/form.php:118
+#: ../classes/views/frm-settings/form.php:120
 msgid ""
 "The message seen when a form is submitted and passes validation, but "
 "something goes wrong."
@@ -4871,29 +4878,29 @@ msgstr ""
 "Die Nachricht, welche angezeigt wird, wenn das Formular übermittelt wird und "
 "die Überprüfung der Daten erfolgreich ist, jedoch irgendetwas schief läuft."
 
-#: ../classes/views/frm-settings/form.php:124
+#: ../classes/views/frm-settings/form.php:126
 msgid "Blank Field"
 msgstr "Leeres Feld"
 
-#: ../classes/views/frm-settings/form.php:125
+#: ../classes/views/frm-settings/form.php:127
 msgid "The message seen when a required field is left blank."
 msgstr "Die bei einem leeren Feld angezeigte Nachricht."
 
-#: ../classes/views/frm-settings/form.php:131
+#: ../classes/views/frm-settings/form.php:133
 msgid "Incorrect Field"
 msgstr "Inkorrektes Feld."
 
-#: ../classes/views/frm-settings/form.php:132
+#: ../classes/views/frm-settings/form.php:134
 msgid "The message seen when a field response is either incorrect or missing."
 msgstr ""
 "Die Nachricht die angezeigt wird, wenn eine Feld- Antwort entweder falsch "
 "order fehlend ist."
 
-#: ../classes/views/frm-settings/form.php:139
+#: ../classes/views/frm-settings/form.php:141
 msgid "Unique Value"
 msgstr "Einmaliger Wert"
 
-#: ../classes/views/frm-settings/form.php:140
+#: ../classes/views/frm-settings/form.php:142
 msgid ""
 "The message seen when a user selects a value in a unique field that has "
 "already been used."
@@ -4901,29 +4908,24 @@ msgstr ""
 "Die dargestellte Nachricht, wenn ein User ein Wert in einem einmaligen Feld "
 "auswählt, wenn der Wert schon genutzt wurde."
 
-#: ../classes/views/frm-settings/form.php:150
+#: ../classes/views/frm-settings/form.php:152
 msgid "Success Message"
 msgstr "Erfolgsmitteilung"
 
-#: ../classes/views/frm-settings/form.php:151
+#: ../classes/views/frm-settings/form.php:153
 msgid "The default message seen after a form is submitted."
 msgstr "Die Standardnachricht, die nach Ausfüllen des Formulares zu sehen ist."
 
-#: ../classes/views/frm-settings/form.php:170
+#: ../classes/views/frm-settings/form.php:172
 msgid "Preview Page"
 msgstr "Seitenvorschau"
 
-#: ../classes/views/frm-settings/form.php:191
+#: ../classes/views/frm-settings/form.php:200
 msgid "Uninstall Formidable"
 msgstr "Formidable Deinstallieren"
 
-#: ../classes/views/frm-settings/license_box.php:5
-#, php-format
-msgid "%1$sClick here%2$s to get it now"
-msgstr "%1$sHier klicken%2$s , um es jetzt zu erhalten"
-
-#: ../classes/views/frm-settings/license_box.php:8 ..
-#: pro/classes/controllers/FrmProEddController.php:124
+#: ../classes/views/frm-settings/license_box.php:9 ..
+#: pro/classes/controllers/FrmProEddController.php:133
 msgid "Click here"
 msgstr "Klicken Sie hier"
 
@@ -4964,7 +4966,7 @@ msgid "Fields from your form"
 msgstr "Felder aus Ihrem Formular"
 
 #: ../classes/views/shared/mb_adv_info.php:68 ..
-#: pro/classes/helpers/FrmProFieldsHelper.php:2681
+#: pro/classes/helpers/FrmProFieldsHelper.php:2682
 msgid "Helpers"
 msgstr "Helfer"
 
@@ -5490,12 +5492,12 @@ msgstr "Zeige ein Formidable Formular an"
 msgid "Formidable Form"
 msgstr "Formidable Formular"
 
-#: ../classes/widgets/FrmShowForm.php:47 ../pro/classes/widgets/FrmListEntries.
+#: ../classes/widgets/FrmShowForm.php:42 ../pro/classes/widgets/FrmListEntries.
 #: php:208
 msgid "Title"
 msgstr "Titel"
 
-#: ../classes/widgets/FrmShowForm.php:60
+#: ../classes/widgets/FrmShowForm.php:55
 msgid "Show Description"
 msgstr "Beschreibung anzeigen"
 
@@ -5644,37 +5646,37 @@ msgstr "jährlich"
 msgid "There are no views with that ID"
 msgstr "Es gibt keine Ansichten mit dieser ID"
 
-#: ../pro/classes/controllers/FrmProEddController.php:130
+#: ../pro/classes/controllers/FrmProEddController.php:141
 msgid "Formidable Pro is Installed"
 msgstr "Formidable Pro ist installiert"
 
-#: ../pro/classes/controllers/FrmProEddController.php:131
+#: ../pro/classes/controllers/FrmProEddController.php:145
 msgid "Enter new license"
 msgstr "Geben Sie eine neue Lizenz ein"
 
-#: ../pro/classes/controllers/FrmProEddController.php:132
+#: ../pro/classes/controllers/FrmProEddController.php:148
 msgid "Deauthorize this site"
 msgstr "Deauthorisiere diese Website"
 
-#: ../pro/classes/controllers/FrmProEddController.php:137
+#: ../pro/classes/controllers/FrmProEddController.php:155
 msgid "Account"
 msgstr "Benutzerkonto"
 
-#: ../pro/classes/controllers/FrmProEddController.php:154
+#: ../pro/classes/controllers/FrmProEddController.php:172
 msgid "Enter your license number here"
 msgstr "Lizenznummer hier einfügen"
 
-#: ../pro/classes/controllers/FrmProEddController.php:159
+#: ../pro/classes/controllers/FrmProEddController.php:177
 msgid "Use this license to enable Formidable Pro site-wide"
 msgstr ""
 "Verwenden Sie diese Lizenz, um Formidable Pro auf der gesamten Webseite zu "
 "erlauben"
 
-#: ../pro/classes/controllers/FrmProEddController.php:163
+#: ../pro/classes/controllers/FrmProEddController.php:181
 msgid "Save License"
 msgstr "Speichere die Lizenz"
 
-#: ../pro/classes/controllers/FrmProEddController.php:165
+#: ../pro/classes/controllers/FrmProEddController.php:183
 msgid "or"
 msgstr "oder"
 
@@ -5732,25 +5734,25 @@ msgstr "Kopiert von einem Artikel"
 msgid "You are trying to access an entry that does not exist."
 msgstr "Sie versuchen auf einen Eintrag zuzugreifen der nicht existiert."
 
-#: ../pro/classes/controllers/FrmProEntriesController.php:2588 ..
-#: pro/classes/controllers/FrmProEntriesController.php:2959
+#: ../pro/classes/controllers/FrmProEntriesController.php:2563 ..
+#: pro/classes/controllers/FrmProEntriesController.php:2934
 msgid "Your entry was successfully deleted"
 msgstr "Ihr Eintrag wurde erfolgreich gelöscht"
 
-#: ../pro/classes/controllers/FrmProEntriesController.php:2628
+#: ../pro/classes/controllers/FrmProEntriesController.php:2603
 msgid "You are missing options in your shortcode. field_id is required."
 msgstr "In Ihrem Shortcode fehlen Angaben. field_id ist erforderlich."
 
-#: ../pro/classes/controllers/FrmProEntriesController.php:2975
+#: ../pro/classes/controllers/FrmProEntriesController.php:2950
 msgid "There was an error deleting that entry"
 msgstr "Es gab einen Fehler beim Löschen des Eintrages"
 
-#: ../pro/classes/controllers/FrmProEntriesController.php:3037
+#: ../pro/classes/controllers/FrmProEntriesController.php:3012
 #, php-format
 msgid "Resent to %s"
 msgstr "Erneut an %s versendet"
 
-#: ../pro/classes/controllers/FrmProEntriesController.php:3042
+#: ../pro/classes/controllers/FrmProEntriesController.php:3017
 msgid "Resent to No one! You do not have permission"
 msgstr "Nicht erneut versendet, da Ihnen die Berechtigung fehlt"
 
@@ -6249,7 +6251,7 @@ msgid "Display format"
 msgstr "Anzeigeformat"
 
 #: ../pro/classes/controllers/FrmProFormsController.php:535 ..
-#: pro/classes/helpers/FrmProFieldsHelper.php:3779
+#: pro/classes/helpers/FrmProFieldsHelper.php:3780
 msgid "List"
 msgstr "Liste"
 
@@ -6435,7 +6437,7 @@ msgstr "Exportiere als CSV"
 msgid "All Fields"
 msgstr "Alle Felder"
 
-#: ../pro/classes/helpers/FrmProEntryMetaHelper.php:239
+#: ../pro/classes/helpers/FrmProEntryMetaHelper.php:174
 #, php-format
 msgid "View all posts filed under %s"
 msgstr "Alle Artikel ansehen, welche unter %s eingeordnet sind"
@@ -6448,61 +6450,61 @@ msgstr "Keine Kategorien"
 msgid "Confirm"
 msgstr "Bestätigen"
 
-#: ../pro/classes/helpers/FrmProFieldsHelper.php:2357
+#: ../pro/classes/helpers/FrmProFieldsHelper.php:2358
 msgid "Edit Uploaded File"
 msgstr "Hochgeladene Datei editieren"
 
-#: ../pro/classes/helpers/FrmProFieldsHelper.php:2630 ../pro/classes/views/frmpro-
+#: ../pro/classes/helpers/FrmProFieldsHelper.php:2631 ../pro/classes/views/frmpro-
 #: fields/back-end/calculations.php:18
 msgid "Select a value to insert into the box below"
 msgstr "Wählen Sie einen Wert für die Eingabe in die Box darunter aus"
 
-#: ../pro/classes/helpers/FrmProFieldsHelper.php:2639
+#: ../pro/classes/helpers/FrmProFieldsHelper.php:2640
 msgid "Form Fields"
 msgstr "Formular Felder"
 
-#: ../pro/classes/helpers/FrmProFieldsHelper.php:2656
+#: ../pro/classes/helpers/FrmProFieldsHelper.php:2657
 msgid "Thumbnail"
 msgstr "Thumbnail"
 
-#: ../pro/classes/helpers/FrmProFieldsHelper.php:2657
+#: ../pro/classes/helpers/FrmProFieldsHelper.php:2658
 msgid "Medium"
 msgstr "Mittel"
 
-#: ../pro/classes/helpers/FrmProFieldsHelper.php:2658
+#: ../pro/classes/helpers/FrmProFieldsHelper.php:2659
 msgid "Large"
 msgstr "Groß"
 
-#: ../pro/classes/helpers/FrmProFieldsHelper.php:2659
+#: ../pro/classes/helpers/FrmProFieldsHelper.php:2660
 msgid "Full Size"
 msgstr "Volle Größe"
 
-#: ../pro/classes/helpers/FrmProFieldsHelper.php:2682
+#: ../pro/classes/helpers/FrmProFieldsHelper.php:2683
 msgid "Admin link to edit the entry"
 msgstr "Admin Link zum Eintrag"
 
-#: ../pro/classes/helpers/FrmProFieldsHelper.php:2684
+#: ../pro/classes/helpers/FrmProFieldsHelper.php:2685
 msgid "Link to view single page if showing dynamic entries"
 msgstr "Link zu einzelner Seite, wenn Dynamische Einträge gezeigt werden"
 
-#: ../pro/classes/helpers/FrmProFieldsHelper.php:2688
+#: ../pro/classes/helpers/FrmProFieldsHelper.php:2689
 msgid "Add a rotating 'even' or 'odd' class"
 msgstr "Fügen Sie eine wechselnde 'even' or 'odd' Klasse hinzu"
 
-#: ../pro/classes/helpers/FrmProFieldsHelper.php:2690
+#: ../pro/classes/helpers/FrmProFieldsHelper.php:2691
 msgid "Default Email Message"
 msgstr "Standard Email Nachricht"
 
-#: ../pro/classes/helpers/FrmProFieldsHelper.php:3766
+#: ../pro/classes/helpers/FrmProFieldsHelper.php:3767
 msgid "Heading"
 msgstr "Kopfzeile"
 
-#: ../pro/classes/helpers/FrmProFieldsHelper.php:3767 ../pro/classes/views/frmpro-
+#: ../pro/classes/helpers/FrmProFieldsHelper.php:3768 ../pro/classes/views/frmpro-
 #: fields/options-form-top.php:11 ../pro/classes/views/styles/_section-fields.php:7
 msgid "Collapsible"
 msgstr "zusammenklappbar"
 
-#: ../pro/classes/helpers/FrmProFieldsHelper.php:3768 ../pro/classes/views/frmpro-
+#: ../pro/classes/helpers/FrmProFieldsHelper.php:3769 ../pro/classes/views/frmpro-
 #: fields/options-form-top.php:20 ../pro/classes/views/styles/_section-fields.php:
 #: 10
 msgid "Repeatable"
@@ -6563,8 +6565,8 @@ msgid "Your browser does not support drag and drop file uploads."
 msgstr "Dein Browser unterstützt kein Dateiupload per \"drag and drop\""
 
 #: ../pro/classes/models/FrmProFileField.php:42 ..
-#: pro/classes/models/FrmProFileField.php:256 ..
-#: pro/classes/models/FrmProFileField.php:267
+#: pro/classes/models/FrmProFileField.php:257 ..
+#: pro/classes/models/FrmProFileField.php:268
 #, php-format
 msgid "That file is too big. It must be less than %sMB."
 msgstr "Die Datei ist zu groß. Sie muss kleiner als %s MB sein."
@@ -6579,20 +6581,20 @@ msgid "Remove file"
 msgstr "Datei entfernen"
 
 #: ../pro/classes/models/FrmProFileField.php:48 ..
-#: pro/classes/models/FrmProFileField.php:297
+#: pro/classes/models/FrmProFileField.php:298
 #, php-format
 msgid "You have uploaded too many files. You may only include %d file(s)."
 msgstr "Es können nur %d Datei(en) hochgeladen werden"
 
-#: ../pro/classes/models/FrmProFileField.php:365
+#: ../pro/classes/models/FrmProFileField.php:366
 msgid "is invalid"
 msgstr "ist ungültig"
 
-#: ../pro/classes/models/FrmProFileField.php:368
+#: ../pro/classes/models/FrmProFileField.php:369
 msgid "Sorry, this file type is not permitted."
 msgstr "Dieser Dateityp ist nicht erlaubt."
 
-#: ../pro/classes/models/FrmProFileField.php:466
+#: ../pro/classes/models/FrmProFileField.php:469
 msgid "File upload failed"
 msgstr "Die Datei konnte nicht hochgeladen werden"
 
@@ -6859,11 +6861,11 @@ msgstr "Zufällig"
 msgid "Save to get ID"
 msgstr "Speichern um die ID zu erhalten"
 
-#: ../pro/classes/views/displays/where_options.php:15
+#: ../pro/classes/views/displays/where_options.php:20
 msgid "Complete entry"
 msgstr "Eintrag vervollständigen"
 
-#: ../pro/classes/views/displays/where_options.php:20
+#: ../pro/classes/views/displays/where_options.php:25
 msgid "Date options: 'NOW' or a date in yyyy-mm-dd format."
 msgstr "Datums- Optinen: 'HEUTE' oder ein Datum im JJJJ-MM-TT Format."
 
