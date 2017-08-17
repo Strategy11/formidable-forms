@@ -69,13 +69,13 @@ class FrmEntryFormatter {
 	 * @var array
 	 * @since 2.03.11
 	 */
-	protected $skip_fields = array( 'captcha', 'html' );
+	protected $skip_fields = array();
 
 	/**
 	 * @var array
 	 * @since 3.0
 	 */
-	protected $single_cell_fields = array( 'html' );
+	protected $single_cell_fields = array();
 
 	/**
 	 * FrmEntryFormat constructor
@@ -97,7 +97,9 @@ class FrmEntryFormatter {
 		$this->init_direction( $atts );
 		$this->init_include_user_info( $atts );
 		$this->init_entry_values( $atts );
+		$this->init_skip_fields();
 		$this->init_include_extras( $atts );
+		$this->init_single_cell_fields();
 
 		if ( $this->format === 'table' ) {
 			$this->init_table_generator( $atts );
@@ -218,6 +220,15 @@ class FrmEntryFormatter {
 	}
 
 	/**
+	 * Initialize the skip_fields property
+	 *
+	 * @since 3.0
+	 */
+	protected function init_skip_fields() {
+		$this->skip_fields = array( 'captcha', 'html' );
+	}
+
+	/**
 	 * Set the include_extras property
 	 *
 	 * @since 3.0
@@ -228,6 +239,15 @@ class FrmEntryFormatter {
 		if ( isset( $atts['include_extras'] ) && $atts['include_extras'] ) {
 			$this->include_extras = array_map( 'strtolower', array_map( 'trim', explode( ',', $atts['include_extras'] ) ) );
 		}
+	}
+
+	/**
+	 * Initialize the single_cell_fields property
+	 *
+	 * @since 3.0
+	 */
+	protected function init_single_cell_fields() {
+		$this->single_cell_fields = array( 'html' );
 	}
 
 	/**
@@ -485,7 +505,7 @@ class FrmEntryFormatter {
 	protected function add_plain_text_row_for_included_extra( $field_value, &$content ) {
 		$this->prepare_plain_text_display_value_for_extra_fields( $field_value, $display_value );
 
-		if ( in_array( $field_value->get_field_type(), array( 'break', 'divider', 'html' ) ) ) {
+		if ( in_array( $field_value->get_field_type(), $this->single_cell_fields ) ) {
 			$this->add_single_value_plain_text_row( $display_value, $content );
 		} else {
 			$this->add_plain_text_row( $field_value->get_field_label(), $display_value, $content );
