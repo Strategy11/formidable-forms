@@ -171,6 +171,7 @@ The field and form names and descriptions are all changed with in-place edit. Ju
 * Fix: Submit button cannot be clicked while Lookup fields are processing.
 * Fix: Filter fields autopopulated by lookup based on parent settings.
 * Fix: Don't set cookie during API request.
+* Fix: Fix entry ID greater than and less than filters.
 
 = 2.03.10 =
 * New: Add <a href="https://formidableforms.com/wordpress-anti-spam-invisible-recaptcha/">invisible recaptcha to your WordPress forms</a>
