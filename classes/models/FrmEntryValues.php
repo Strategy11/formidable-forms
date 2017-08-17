@@ -63,12 +63,12 @@ class FrmEntryValues {
 		}
 
 		$this->init_form_id();
+		$this->init_source( $atts );
 		$this->init_include_fields( $atts );
 		$this->init_exclude_fields( $atts );
 		$this->init_fields();
 		$this->init_field_values();
 		$this->init_user_info();
-		$this->init_source( $atts );
 	}
 
 	/**
