@@ -470,15 +470,16 @@ class FrmEntryFormatter {
 
 			$include = $this->is_extra_field_included( $field_value );
 
-		} else {
-			$displayed_value = $field_value->get_displayed_value();
+		} else if ( $field_value->get_displayed_value() === '' || empty( $field_value->get_displayed_value() ) ) {
+			//} else {
+			//$displayed_value = $field_value->get_displayed_value();
 
-			if ( $displayed_value === '' || ( is_array( $displayed_value ) && empty( $displayed_value ) ) ) {
+			//if ( $displayed_value === '' || ( is_array( $displayed_value ) && empty( $displayed_value ) ) ) {
 
 				if ( ! $this->include_blank ) {
 					$include = false;
 				}
-			}
+			//}
 		}
 
 		return $include;
