@@ -21,6 +21,14 @@ Text Domain: formidable
     GNU General Public License for more details.
 */
 
+// if __autoload is active, put it on the spl_autoload stack
+if ( is_array( spl_autoload_functions() ) && in_array( '__autoload', spl_autoload_functions() ) ) {
+    spl_autoload_register('__autoload');
+}
+
+// Add the autoloader
+spl_autoload_register('frm_forms_autoloader');
+
 add_action( 'plugins_loaded', 'load_formidable_forms', 0 );
 function load_formidable_forms() {
 	global $frm_vars;
@@ -29,14 +37,6 @@ function load_formidable_forms() {
     	'created_entries'   => array(),
     	'pro_is_authorized' => false,
 	);
-
-	// if __autoload is active, put it on the spl_autoload stack
-	if ( is_array( spl_autoload_functions() ) && in_array( '__autoload', spl_autoload_functions() ) ) {
-	    spl_autoload_register('__autoload');
-	}
-
-	// Add the autoloader
-	spl_autoload_register('frm_forms_autoloader');
 
 	$frm_path = dirname(__FILE__);
 	if ( file_exists($frm_path . '/pro/formidable-pro.php') ) {
