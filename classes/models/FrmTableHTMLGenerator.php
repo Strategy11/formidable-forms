@@ -1,49 +1,49 @@
 <?php
 
 /**
- * @since 2.03.11
+ * @since 2.04
  */
 class FrmTableHTMLGenerator {
 
 	/**
 	 * @var string
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	private $type = '';
 
 	/**
 	 * @var array
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	private $style_settings = array();
 
 	/**
 	 * @var bool
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	private $use_inline_style = true;
 
 	/**
 	 * @var string
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	private $direction = 'ltr';
 
 	/**
 	 * @var bool
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	private $odd = true;
 
 	/**
 	 * @var string
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	private $table_style = '';
 
 	/**
 	 * @var string
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	private $td_style = '';
 
@@ -68,7 +68,7 @@ class FrmTableHTMLGenerator {
 	/**
 	 * Set the style_settings property
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @param array $atts
 	 */
@@ -92,7 +92,7 @@ class FrmTableHTMLGenerator {
 	/**
 	 * Set the use_inline_style property
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @param array $atts
 	 */
@@ -105,7 +105,7 @@ class FrmTableHTMLGenerator {
 	/**
 	 * Set the direction property
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @param array $atts
 	 */
@@ -118,7 +118,7 @@ class FrmTableHTMLGenerator {
 	/**
 	 * Set the table_style property
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	private function init_table_style() {
 		if ( $this->use_inline_style === true ) {
@@ -132,7 +132,7 @@ class FrmTableHTMLGenerator {
 	/**
 	 * Set the td_style property
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	private function init_td_style() {
 		if ( $this->use_inline_style === true ) {
@@ -148,7 +148,7 @@ class FrmTableHTMLGenerator {
 	/**
 	 * Get the table row background color
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @return string
 	 */
@@ -159,7 +159,7 @@ class FrmTableHTMLGenerator {
 	/**
 	 * Get the table row style
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @return string
 	 */
@@ -179,7 +179,7 @@ class FrmTableHTMLGenerator {
 	/**
 	 * Switch the odd property from true to false or false to true
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	private function switch_odd() {
 		if ( $this->type !== 'shortcode' ) {
@@ -190,7 +190,7 @@ class FrmTableHTMLGenerator {
 	/**
 	 * Generate a table header
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @return string
 	 */
@@ -201,7 +201,7 @@ class FrmTableHTMLGenerator {
 	/**
 	 * Generate a table footer
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @return string
 	 */
@@ -212,7 +212,7 @@ class FrmTableHTMLGenerator {
 	/**
 	 * Generate a two cell row for an HTML table
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @param string $label
 	 * @param string $value
@@ -243,7 +243,7 @@ class FrmTableHTMLGenerator {
 	/**
 	 * Generate a single cell row for an HTML table
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @param string $value
 	 *
@@ -263,7 +263,7 @@ class FrmTableHTMLGenerator {
 	/**
 	 * Generate a two cell row of shortcodes for an HTML table
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @param stdClass $field
 	 * @param mixed $value
@@ -289,7 +289,7 @@ class FrmTableHTMLGenerator {
 	/**
 	 * Generate a sinle cell row of shortcodes for an HTML table
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @param stdClass $field
 	 * @param mixed $value

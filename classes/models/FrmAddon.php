@@ -89,7 +89,7 @@ class FrmAddon {
 
 	/**
 	 * Activate the license in wp-config.php
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	public function activate_defined_license() {
 		$license = $this->get_defined_license();
@@ -105,7 +105,7 @@ class FrmAddon {
 
 	/**
 	 * Check the wp-config.php for the license key
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	public function get_defined_license() {
 		$consant_name = 'FRM_' . strtoupper( $this->plugin_slug ) . '_LICENSE';
@@ -119,7 +119,7 @@ class FrmAddon {
 	/**
 	 * If the license is in the config, limit the frequency of checks.
 	 * The license may be entered incorrectly, so we don't want to check on every page load.
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	private function is_time_to_auto_activate() {
 		$last_try = get_option( $this->option_name .'last_activate' );

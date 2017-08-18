@@ -1,42 +1,42 @@
 <?php
 
 /**
- * @since 2.03.11
+ * @since 2.04
  */
 class FrmEntryShortcodeFormatter {
 
 	/**
 	 * @var int
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	protected $form_id = 0;
 
 	/**
 	 * @var array
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	protected $skip_fields = array( 'captcha' );
 
 	/**
 	 * @var array
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	protected $fields = array();
 
 	/**
 	 * @var string
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	protected $format = 'text';
 
 	/**
 	 * @var FrmTableHTMLGenerator
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	protected $table_generator = null;
 	/**
 	 * @var array
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	protected $array_content = array();
 
@@ -61,7 +61,7 @@ class FrmEntryShortcodeFormatter {
 	/**
 	 * Set the form_id property
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 * @param $form_id
 	 */
 	private function init_form_id( $form_id ) {
@@ -71,7 +71,7 @@ class FrmEntryShortcodeFormatter {
 	/**
 	 * Set the fields property
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	private function init_fields() {
 		$this->fields = FrmField::get_all_for_form( $this->form_id, '', 'exclude', 'exclude' );
@@ -80,7 +80,7 @@ class FrmEntryShortcodeFormatter {
 	/**
 	 * Set the format property
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @param string|mixed $format
 	 */
@@ -93,7 +93,7 @@ class FrmEntryShortcodeFormatter {
 	/**
 	 * Set the table_generator property
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	protected function init_table_generator() {
 		$this->table_generator = new FrmTableHTMLGenerator( 'shortcode' );
@@ -102,7 +102,7 @@ class FrmEntryShortcodeFormatter {
 	/**
 	 * Return the default HTML for an entry
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	public function content() {
 		if ( $this->form_id === 0 ) {
@@ -119,7 +119,7 @@ class FrmEntryShortcodeFormatter {
 	/**
 	 * Return the default HTML array
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	private function get_array() {
 		if ( ! $this->form_id || empty( $this->fields ) ) {
@@ -136,7 +136,7 @@ class FrmEntryShortcodeFormatter {
 	/**
 	 * Return the default HTML for an email message
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	private function text() {
 		if ( ! $this->form_id || empty( $this->fields ) ) {
@@ -157,7 +157,7 @@ class FrmEntryShortcodeFormatter {
 	/**
 	 * Generate a field's HTML for the default HTML
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @param stdClass $field
 	 *
@@ -176,7 +176,7 @@ class FrmEntryShortcodeFormatter {
 	/**
 	 * Generate a single table row
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @param stdClass $field
 	 * @param null|string $value
@@ -190,7 +190,7 @@ class FrmEntryShortcodeFormatter {
 	/**
 	 * Generate a field's array for the default HTML array
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @param stdClass $field
 	 */
@@ -205,7 +205,7 @@ class FrmEntryShortcodeFormatter {
 	/**
 	 * Generate a single field's array
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @param stdClass $field
 	 * @param string $value
