@@ -207,6 +207,10 @@ class FrmFieldValueSelector {
 	 * @since 2.03.05
 	 */
 	public function display() {
+		if ( is_null( $this->db_row ) ) {
+			return;
+		}
+
 		if ( $this->has_options() ) {
 			$this->display_dropdown();
 		} else {
