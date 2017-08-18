@@ -357,8 +357,6 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	 * @since 2.04
 	 *
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
-	 *
-	 * @group current
 	 */
 	public function test_field_logic_row_non_existent_field_id() {
 		$current_field = FrmField::getOne( 'uc580i' );
