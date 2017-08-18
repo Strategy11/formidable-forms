@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @since 2.03.11
+ * @since 2.04
  */
 class FrmEntryValues {
 
@@ -41,7 +41,7 @@ class FrmEntryValues {
 	protected $exclude_fields = array();
 
 	/**
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @var string
 	 */
@@ -50,7 +50,7 @@ class FrmEntryValues {
 	/**
 	 * FrmEntryValues constructor
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @param int|string $entry_id
 	 * @param array $atts
@@ -63,18 +63,18 @@ class FrmEntryValues {
 		}
 
 		$this->init_form_id();
+		$this->init_source( $atts );
 		$this->init_include_fields( $atts );
 		$this->init_exclude_fields( $atts );
 		$this->init_fields();
 		$this->init_field_values();
 		$this->init_user_info();
-		$this->init_source( $atts );
 	}
 
 	/**
 	 * Set the entry property
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @param int|string $entry_id
 	 */
@@ -85,7 +85,7 @@ class FrmEntryValues {
 	/**
 	 * Set the form_id property
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	protected function init_form_id() {
 		$this->form_id = (int) $this->entry->form_id;
@@ -94,7 +94,7 @@ class FrmEntryValues {
 	/**
 	 * Set the include_fields property
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @param array $atts
 	 */
@@ -120,7 +120,7 @@ class FrmEntryValues {
 	/**
 	 * Set the exclude_fields property
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @param array $atts
 	 */
@@ -131,7 +131,7 @@ class FrmEntryValues {
 	/**
 	 * Initialize the source property
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @param array $atts
 	 */
@@ -146,7 +146,7 @@ class FrmEntryValues {
 	/**
 	 * Prepare an array property value, such as include_fields and exclude_fields
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @param string $index
 	 * @param array $atts
@@ -171,7 +171,7 @@ class FrmEntryValues {
 	/**
 	 * Set the fields property
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	protected function init_fields() {
 		$this->fields = FrmField::get_all_for_form( $this->form_id, '', 'exclude', 'exclude' );
@@ -180,7 +180,7 @@ class FrmEntryValues {
 	/**
 	 * Set the field_values property
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	protected function init_field_values() {
 		foreach ( $this->fields as $field ) {
@@ -193,7 +193,7 @@ class FrmEntryValues {
 	/**
 	 * Get the field_values property
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @return array
 	 */
@@ -204,7 +204,7 @@ class FrmEntryValues {
 	/**
 	 * Set the user_info property
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	protected function init_user_info() {
 		if ( isset( $this->entry->description ) ) {
@@ -241,7 +241,7 @@ class FrmEntryValues {
 	/**
 	 * Get the user_info property
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @return array
 	 */
@@ -252,7 +252,7 @@ class FrmEntryValues {
 	/**
 	 * Check if a field should be included in the values
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @param stdClass $field
 	 *
@@ -273,7 +273,7 @@ class FrmEntryValues {
 	/**
 	 * Check if a field is in the include fields or exclude fields array
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @param stdClass $field
 	 * @param array $array
@@ -287,7 +287,7 @@ class FrmEntryValues {
 	/**
 	 * Add a field's values to the field_values property
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @param stdClass $field
 	 */

@@ -494,7 +494,7 @@ class FrmEntriesHelper {
 	/**
 	 * Get the browser from the user agent
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @param string $u_agent
 	 *

@@ -173,7 +173,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		$single_view = self::_set_up_single_view_with_filter( '[get param=test]' );
 
 		// Set invalid entry ID parameter
-		$_GET['test'] = FrmEntry::get_id_by_key( 'i0xioc' );
+		$_GET['test'] = FrmEntry::get_id_by_key( 'phhvdw' );
 
 		$expected_content = array( 'No Entries Found' );
 		$d = self::get_default_args( $single_view, $expected_content, array() );

@@ -1,40 +1,40 @@
 <?php
 
 /**
- * @since 2.03.11
+ * @since 2.04
  */
 class FrmFieldValue {
 
 	/**
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @var stdClass
 	 */
 	protected $field = null;
 
 	/**
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @var int
 	 */
 	protected $entry_id = 0;
 
 	/**
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @var string
 	 */
 	protected $source = '';
 
 	/**
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @var mixed
 	 */
 	protected $saved_value = '';
 
 	/**
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @var mixed
 	 */
@@ -62,7 +62,7 @@ class FrmFieldValue {
 	/**
 	 * Initialize the source property
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @param array $atts
 	 */
@@ -110,7 +110,7 @@ class FrmFieldValue {
 	/**
 	 * Get the field property's label
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	public function get_field_label() {
 		return $this->field->name;
@@ -119,7 +119,7 @@ class FrmFieldValue {
 	/**
 	 * Get the field property's key
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	public function get_field_key() {
 		return $this->field->field_key;
@@ -128,7 +128,7 @@ class FrmFieldValue {
 	/**
 	 * Get the field property's type
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	public function get_field_type() {
 		return $this->field->type;
@@ -146,7 +146,7 @@ class FrmFieldValue {
 	/**
 	 * Get the displayed_value property
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	public function get_displayed_value() {
 		return $this->displayed_value;
@@ -186,20 +186,20 @@ class FrmFieldValue {
 				'field' => $this->field,
 			) );
 			if ( has_filter( 'frm_email_value' ) ) {
-				_deprecated_function( 'The frm_email_value filter', '2.03.11', 'the frm_display_{fieldtype}_value_custom filter' );
+				_deprecated_function( 'The frm_email_value filter', '2.04', 'the frm_display_{fieldtype}_value_custom filter' );
 			}
 		}
 
 		// frm_display_{fieldtype}_value_custom hook
 		$this->displayed_value = apply_filters( 'frm_display_' . $this->field->type . '_value_custom', $this->displayed_value, array(
-			'field' => $this->field,
+			'field' => $this->field, 'entry' => $this->entry,
 		) );
 	}
 
 	/**
 	 * Clean a field's saved value
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	protected function clean_saved_value() {
 		if ( $this->saved_value !== '' ) {

@@ -63,7 +63,7 @@ class WP_Test_FrmProEntriesHelper extends FrmUnitTest {
 
 	/**
 	 * Test general searches that should return entries based on the frm_item_metas table values
-	 * This could fail if entry ID for California matches any other strings, like "2015"
+	 * This could fail if entry ID for Utah matches any other strings, like "2015"
 	 *
 	 * @covers FrmProEntriesHelper::get_search_str()
 	 */

@@ -14,14 +14,14 @@ class FrmEntryFormat {
 	}
 
 	/**
-	 * @deprecated 2.03.11
+	 * @deprecated 2.04
 	 */
 	public static function single_html_row( $atts, &$content ) {
-		_deprecated_function( __FUNCTION__, '2.03.11', 'custom code' );
+		_deprecated_function( __FUNCTION__, '2.04', 'custom code' );
 	}
 
 	/**
-	 * @deprecated 2.03.11
+	 * @deprecated 2.04
 	 *
 	 * @param stdClass $field
 	 * @param array|string $val
@@ -31,44 +31,44 @@ class FrmEntryFormat {
 			$val = FrmAppHelper::array_flatten( $val );
 		}
 
-		_deprecated_function( __FUNCTION__, '2.03.11', 'custom code' );
+		_deprecated_function( __FUNCTION__, '2.04', 'custom code' );
 	}
 
 	/**
-	 * @deprecated 2.03.11
+	 * @deprecated 2.04
 	 */
 	public static function fill_entry_user_info() {
-		_deprecated_function( __FUNCTION__, '2.03.11', 'custom code' );
+		_deprecated_function( __FUNCTION__, '2.04', 'custom code' );
 	}
 
 	/**
-	 * @deprecated 2.03.11
+	 * @deprecated 2.04
 	 */
 	public static function get_entry_description_data() {
-		_deprecated_function( __FUNCTION__, '2.03.11', 'custom code' );
+		_deprecated_function( __FUNCTION__, '2.04', 'custom code' );
 
 		return array();
 	}
 
 	/**
-	 * @deprecated 2.03.11
+	 * @deprecated 2.04
 	 */
 	public static function single_plain_text_row() {
-		_deprecated_function( __FUNCTION__, '2.03.11', 'custom code' );
+		_deprecated_function( __FUNCTION__, '2.04', 'custom code' );
 	}
 
 	/**
-	 * @deprecated 2.03.11
+	 * @deprecated 2.04
 	 */
 	public static function html_field_row() {
-		_deprecated_function( __FUNCTION__, '2.03.11', 'custom code' );
+		_deprecated_function( __FUNCTION__, '2.04', 'custom code' );
 	}
 
 	/**
-	 * @deprecated 2.03.11
+	 * @deprecated 2.04
 	 */
 	public static function fill_entry_values( $atts, $f, array &$values ) {
-		_deprecated_function( __FUNCTION__, '2.03.11', 'instance of FrmEntryValues or FrmProEntryValues' );
+		_deprecated_function( __FUNCTION__, '2.04', 'instance of FrmEntryValues or FrmProEntryValues' );
 
 		$no_save_field = FrmField::is_no_save_field( $f->type );
 		if ( $no_save_field ) {
@@ -111,10 +111,10 @@ class FrmEntryFormat {
 	}
 
 	/**
-	 * @deprecated 2.03.11
+	 * @deprecated 2.04
 	 */
 	private static function fill_missing_fields( $atts, &$values ) {
-		_deprecated_function( __FUNCTION__, '2.03.11', 'instance of FrmEntryValues or FrmProEntryValues' );
+		_deprecated_function( __FUNCTION__, '2.04', 'instance of FrmEntryValues or FrmProEntryValues' );
 
 		if ( $atts['entry'] && ! isset( $atts['entry']->metas[ $atts['field']->id ] ) ) {
 			// In case include_blank is set
@@ -125,20 +125,20 @@ class FrmEntryFormat {
 	}
 
 	/**
-	 * @deprecated 2.03.11
+	 * @deprecated 2.04
 	 */
 	public static function fill_values_from_entry( $atts, &$values ) {
-		_deprecated_function( __FUNCTION__, '2.03.11', 'instance of FrmEntryValues or FrmProEntryValues' );
+		_deprecated_function( __FUNCTION__, '2.04', 'instance of FrmEntryValues or FrmProEntryValues' );
 
 		$values = apply_filters( 'frm_prepare_entry_array', $values, $atts );
 	}
 
 	/**
-	 * @deprecated 2.03.11
+	 * @deprecated 2.04
 	 */
 	public static function get_field_shortcodes_for_default_email( $f, &$values ) {
 		// TODO: adjust this message
-		_deprecated_function( __FUNCTION__, '2.03.11', 'instance of FrmEntryValues or FrmProEntryValues' );
+		_deprecated_function( __FUNCTION__, '2.04', 'instance of FrmEntryValues or FrmProEntryValues' );
 
 		$field_shortcodes = array(
 			'label' => '[' . $f->id . ' show=field_label]',
@@ -150,10 +150,10 @@ class FrmEntryFormat {
 	}
 
 	/**
-	 * @deprecated 2.03.11
+	 * @deprecated 2.04
 	 */
 	private static function get_field_value( $atts, &$val ) {
-		_deprecated_function( __FUNCTION__, '2.03.11', 'instance of FrmEntryValues or FrmProEntryValues' );
+		_deprecated_function( __FUNCTION__, '2.04', 'instance of FrmEntryValues or FrmProEntryValues' );
 
 		$f = $atts['field'];
 		if ( $atts['entry'] ) {
@@ -175,10 +175,10 @@ class FrmEntryFormat {
 	/**
 	 * @since 2.03.02
 	 *
-	 * @deprecated 2.03.11
+	 * @deprecated 2.04
 	 */
 	public static function prepare_field_output( $atts, &$val ) {
-		_deprecated_function( __FUNCTION__, '2.03.11', 'instance of FrmEntryValues or FrmProEntryValues' );
+		_deprecated_function( __FUNCTION__, '2.04', 'instance of FrmEntryValues or FrmProEntryValues' );
 
 		$val = apply_filters( 'frm_display_' . $atts['field']->type . '_value_custom', $val, array(
 			'field' => $atts['field'], 'atts' => $atts,
@@ -191,10 +191,10 @@ class FrmEntryFormat {
 	/**
 	 * @since 2.03.02
 	 *
-	 * @deprecated 2.03.11
+	 * @deprecated 2.04
 	 */
 	private static function flatten_array_value( $atts, &$val ) {
-		_deprecated_function( __FUNCTION__, '2.03.11', 'instance of FrmEntryValues or FrmProEntryValues' );
+		_deprecated_function( __FUNCTION__, '2.04', 'instance of FrmEntryValues or FrmProEntryValues' );
 
 		if ( is_array( $val ) ) {
 			if ( $atts['format'] == 'text' ) {
@@ -212,10 +212,10 @@ class FrmEntryFormat {
 	 * @param boolean $plain_text
 	 * @param mixed $val
 	 *
-	 * @deprecated 2.03.11
+	 * @deprecated 2.04
 	 */
 	private static function maybe_strip_html( $plain_text, &$val ) {
-		_deprecated_function( __FUNCTION__, '2.03.11', 'instance of FrmEntryValues or FrmProEntryValues' );
+		_deprecated_function( __FUNCTION__, '2.04', 'instance of FrmEntryValues or FrmProEntryValues' );
 
 		if ( $plain_text && ! is_array( $val ) ) {
 			if ( strpos( $val, '<img' ) !== false ) {
@@ -227,25 +227,25 @@ class FrmEntryFormat {
 	}
 
 	/**
-	 * @deprecated 2.03.11
+	 * @deprecated 2.04
 	 */
 	public static function get_browser( $u_agent ) {
-		_deprecated_function( __FUNCTION__, '2.03.11', 'FrmEntriesHelper::get_browser' );
+		_deprecated_function( __FUNCTION__, '2.04', 'FrmEntriesHelper::get_browser' );
 		return FrmEntriesHelper::get_browser( $u_agent );
 	}
 
 	/**
-	 * @deprecated 2.03.11
+	 * @deprecated 2.04
 	 */
 	public static function show_entry( $atts ) {
-		_deprecated_function( __FUNCTION__, '2.03.11', 'FrmEntriesController::show_entry_shortcode' );
+		_deprecated_function( __FUNCTION__, '2.04', 'FrmEntriesController::show_entry_shortcode' );
 		return FrmEntriesController::show_entry_shortcode( $atts );
 	}
 
 	/**
-	 * @deprecated 2.03.11
+	 * @deprecated 2.04
 	 */
 	public static function convert_entry_to_content() {
-		_deprecated_function( __FUNCTION__, '2.03.11', 'FrmEntriesController::show_entry_shortcode' );
+		_deprecated_function( __FUNCTION__, '2.04', 'FrmEntriesController::show_entry_shortcode' );
 	}
 }

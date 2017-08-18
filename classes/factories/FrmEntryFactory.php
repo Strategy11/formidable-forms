@@ -1,14 +1,14 @@
 <?php
 
 /**
- * @since 2.03.11
+ * @since 2.04
  */
 class FrmEntryFactory {
 
 	/**
 	 * Create an instance of the FrmEntryFormatter class
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @param array $atts
 	 *
@@ -27,7 +27,7 @@ class FrmEntryFactory {
 	/**
 	 * Create an intsance of the FrmEntryShortcodeFormatter class
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @param int|string $form_id
 	 * @param string $format

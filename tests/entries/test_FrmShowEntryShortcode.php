@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @since 2.03.11
+ * @since 2.04
  *
  * @group shortcodes
  * @group entries
@@ -65,7 +65,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 *
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	public function test_no_entry_or_id_passed() {
 		$atts = array(
@@ -84,7 +84,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 *
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	public function test_no_id_passed() {
 		$entry = $this->get_entry_for_test();
@@ -106,7 +106,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 *
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	public function test_fake_id_passed() {
 		$atts = array(
@@ -126,7 +126,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 *
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	public function test_no_entry_passed() {
 		$entry = $this->get_entry_for_test();
@@ -150,7 +150,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 *
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	public function test_no_meta_passed() {
 		$entry = $this->get_entry_for_test( false );
@@ -176,7 +176,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 *
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @group basic-show-entry-for-email
 	 */
@@ -201,7 +201,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 *
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @group show-entry-for-post-entry-email
 	 */
@@ -230,7 +230,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 *
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @group show-entry-shortcode-include-extras
 	 */
@@ -260,7 +260,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 *
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	public function test_default_message_with_specific_field_ids_included() {
 		$entry = $this->get_entry_for_test();
@@ -324,7 +324,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 *
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	public function test_default_message_with_repeating_field_id_included() {
 		$this->markTestSkipped( 'Functionality not added yet.' );
@@ -359,7 +359,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 *
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	public function test_default_message_with_specific_field_keys_included() {
 		$entry = $this->get_entry_for_test();
@@ -385,7 +385,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 *
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	public function test_default_message_with_old_fields_parameter() {
 		$entry = $this->get_entry_for_test();
@@ -411,7 +411,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 *
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	public function test_default_message_with_old_fields_parameter_single_field() {
 		$entry = $this->get_entry_for_test();
@@ -439,7 +439,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 *
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	public function test_default_message_with_specific_field_ids_excluded() {
 		$entry = $this->get_entry_for_test();
@@ -465,7 +465,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 *
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	public function test_default_message_with_specific_field_keys_excluded() {
 		$entry = $this->get_entry_for_test();
@@ -491,7 +491,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 *
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	public function test_default_message_with_specific_field_ids_included_and_include_extras() {
 		$entry = $this->get_entry_for_test();
@@ -521,7 +521,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 *
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @group show-entry-shortcode-conditional-section
 	 */
@@ -591,7 +591,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 *
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	public function test_default_message_with_no_values_in_repeating_section() {
 		if ( ! $this->is_pro_active ) {
@@ -633,7 +633,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 *
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 * @group current
 	 */
 	public function test_default_message_with_no_values_in_repeating_section_include_blank() {
@@ -678,7 +678,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 *
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	public function test_array_with_no_values_in_repeating_section() {
 		if ( ! $this->is_pro_active ) {
@@ -715,7 +715,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 *
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	public function test_default_message_with_styling_changes() {
 		$entry = $this->get_entry_for_test();
@@ -748,7 +748,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 *
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	public function test_default_message_with_clickable() {
 		$entry = $this->get_entry_for_test();
@@ -772,7 +772,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 *
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	public function test_default_message_with_inline_style_off() {
 		$entry = $this->get_entry_for_test();
@@ -799,7 +799,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 *
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	public function test_default_message_with_user_info() {
 		$entry = $this->get_entry_for_test();
@@ -822,7 +822,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 *
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	public function test_default_message_with_plain_text() {
 		$entry = $this->get_entry_for_test();
@@ -845,7 +845,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 *
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	public function test_default_message_with_plain_text_and_include_extras() {
 		$entry = $this->get_entry_for_test();
@@ -873,7 +873,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 *
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	public function test_default_message_with_rtl_direction() {
 		$entry = $this->get_entry_for_test();
@@ -904,7 +904,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 *
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	public function test_default_html_for_email() {
 		// TODO: add is_visible shortcode for sections and maybe page breaks? Or maybe just use [if x]
@@ -928,7 +928,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 *
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @group show-entry-array-format
 	 */
@@ -953,7 +953,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 *
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @group show-entry-array-format
 	 */
@@ -982,7 +982,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 *
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @group show-entry-json-format
 	 */
@@ -1007,7 +1007,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 *
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @group show-entry-array-format
 	 */
@@ -1032,7 +1032,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 *
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @group show-entry-array-format
 	 */
@@ -1059,7 +1059,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 *
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @group show-entry-array-format
 	 */

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @since 2.03.11
+ * @since 2.04
  *
  * @group emails
  * @group email-attachment
@@ -35,7 +35,7 @@ class test_FrmProEmailWithAttachment extends FrmUnitTest {
 	/**
 	 * Tests attachments from a single file upload field
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 * @covers FrmProNotification::add_attachments
 	 */
 	public function test_single_file_upload_attachment() {
@@ -51,7 +51,7 @@ class test_FrmProEmailWithAttachment extends FrmUnitTest {
 	/**
 	 * Tests attachments from a multi file upload field
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 * @covers FrmProNotification::add_attachments
 	 */
 	public function test_multi_file_upload_attachment() {
@@ -67,7 +67,7 @@ class test_FrmProEmailWithAttachment extends FrmUnitTest {
 	/**
 	 * Tests attachments from a repeating multi file upload field
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 * @covers FrmProNotification::add_attachments
 	 * @group repeating-multi-file-upload-attachment
 	 */

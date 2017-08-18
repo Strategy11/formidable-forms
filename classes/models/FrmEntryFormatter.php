@@ -1,73 +1,73 @@
 <?php
 
 /**
- * @since 2.03.11
+ * @since 2.04
  */
 class FrmEntryFormatter {
 
 	/**
 	 * @var stdClass
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	protected $entry = null;
 
 	/**
 	 * @var FrmEntryValues
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	protected $entry_values = null;
 
 	/**
 	 * @var bool
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	protected $is_plain_text = false;
 
 	/**
 	 * @var bool
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	protected $include_user_info = false;
 
 	/**
 	 * @var bool
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	protected $include_blank = false;
 
 	/**
 	 * @var string
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	protected $format = 'text';
 
 	/**
 	 * @var string
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	protected $direction = 'ltr';
 
 	/**
 	 * @var FrmTableHTMLGenerator
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	protected $table_generator = null;
 
 	/**
 	 * @var bool
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	protected $is_clickable = false;
 
 	/**
 	 * @var array
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	protected $include_extras = array();
 
 	/**
 	 * @var array
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	protected $skip_fields = array();
 
@@ -80,7 +80,7 @@ class FrmEntryFormatter {
 	/**
 	 * FrmEntryFormat constructor
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @param $atts
 	 */
@@ -110,7 +110,7 @@ class FrmEntryFormatter {
 	/**
 	 * Set the entry property
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @param array $atts
 	 */
@@ -130,7 +130,7 @@ class FrmEntryFormatter {
 	/**
 	 * Set the entry values property
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @param array $atts
 	 */
@@ -142,7 +142,7 @@ class FrmEntryFormatter {
 	/**
 	 * Set the format property
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @param array $atts
 	 */
@@ -168,7 +168,7 @@ class FrmEntryFormatter {
 	/**
 	 * Set the is_plain_text property
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @param array $atts
 	 */
@@ -183,7 +183,7 @@ class FrmEntryFormatter {
 	/**
 	 * Set the include_blank property
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @param array $atts
 	 */
@@ -196,7 +196,7 @@ class FrmEntryFormatter {
 	/**
 	 * Set the direction property
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @param array $atts
 	 */
@@ -209,7 +209,7 @@ class FrmEntryFormatter {
 	/**
 	 * Set the include_user_info property
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @param array $atts
 	 */
@@ -253,7 +253,7 @@ class FrmEntryFormatter {
 	/**
 	 * Set the table_generator property
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @param array $atts
 	 */
@@ -264,7 +264,7 @@ class FrmEntryFormatter {
 	/**
 	 * Set the is_clickable property
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @param array $atts
 	 */
@@ -277,7 +277,7 @@ class FrmEntryFormatter {
 	/**
 	 * Package and return the formatted entry values
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @return array|string
 	 */
@@ -308,7 +308,7 @@ class FrmEntryFormatter {
 	/**
 	 * Return the formatted HTML table with entry values
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @return string
 	 */
@@ -333,7 +333,7 @@ class FrmEntryFormatter {
 	/**
 	 * Return the formatted plain text content
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @return string
 	 */
@@ -352,7 +352,7 @@ class FrmEntryFormatter {
 	/**
 	 * Prepare the array output
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @return array
 	 */
@@ -367,7 +367,7 @@ class FrmEntryFormatter {
 	/**
 	 * Push field values to array content
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @param array $field_values
 	 * @param array $output
@@ -381,7 +381,7 @@ class FrmEntryFormatter {
 	/**
 	 * Push a single field to the array content
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @param FrmFieldValue $field_value
 	 * @param array $output
@@ -401,7 +401,7 @@ class FrmEntryFormatter {
 	/**
 	 * Add a row of values to the plain text content
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @param string $label
 	 * @param mixed $display_value
@@ -420,7 +420,7 @@ class FrmEntryFormatter {
 	/**
 	 * Add a field value to the HTML table or plain text content
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @param FrmFieldValue $field_value
 	 * @param string $content
@@ -582,7 +582,7 @@ class FrmEntryFormatter {
 	/**
 	 * Package the value arguments for an HTML row
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @param FrmFieldValue $field_value
 	 *
@@ -599,7 +599,7 @@ class FrmEntryFormatter {
 	/**
 	 * Add user info to an HTML table
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @param string $content
 	 */
@@ -622,7 +622,7 @@ class FrmEntryFormatter {
 	/**
 	 * Add user info to plain text content
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @param string $content
 	 */
@@ -638,7 +638,7 @@ class FrmEntryFormatter {
 	/**
 	 * Check if a field should be included in the content
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @param FrmFieldValue $field_value
 	 *
@@ -668,7 +668,7 @@ class FrmEntryFormatter {
 	/**
 	 * Check if a field is normally a skipped type
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @param FrmFieldValue $field_value
 	 *
@@ -681,7 +681,7 @@ class FrmEntryFormatter {
 	/**
 	 * Check if an extra field is included
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @param FrmFieldValue $field_value
 	 *
@@ -694,7 +694,7 @@ class FrmEntryFormatter {
 	/**
 	 * Add a row in an HTML table
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @param array $value_args
 	 * 		$value_args = [
@@ -713,7 +713,7 @@ class FrmEntryFormatter {
 	/**
 	 * Prepare the displayed value for an array
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @param mixed $value
 	 *
@@ -727,7 +727,7 @@ class FrmEntryFormatter {
 	/**
 	 * Prepare a field's display value for an HTML table
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @param mixed $display_value
 	 * @param string $field_type
@@ -744,7 +744,7 @@ class FrmEntryFormatter {
 	/**
 	 * Prepare a field's display value for plain text content
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @param mixed $display_value
 	 *
@@ -760,7 +760,7 @@ class FrmEntryFormatter {
 	/**
 	 * Flatten an array
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @param array|string|int $value
 	 *

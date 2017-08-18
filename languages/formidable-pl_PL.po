@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Formidable v2.03.11\n"
+"Project-Id-Version: Formidable v2.04\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-01 03:07+0000\n"
 "PO-Revision-Date: Wed Aug 16 2017 17:01:21 GMT-0700 (PDT)\n"
