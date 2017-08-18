@@ -350,6 +350,36 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	}
 
 	/**
+	 * Check the value selector when non-existent field ID is passed in
+	 * This may occur after an import
+	 *
+	 * @since 2.04
+	 *
+	 * @covers formidable/pro/views/frmpro-fields/field-values.php
+	 *
+	 * @group current
+	 */
+	public function test_field_logic_row_non_existent_field_id() {
+		$current_field = FrmField::getOne( 'uc580i' );
+
+		$selector_field_id = 999999999;
+		$selector_args = array(
+			'value' => '',
+			'html_name' => 'field_options[hide_opt_' . $current_field->id . '][]',
+			'source' => $current_field->type,
+		);
+
+		ob_start();
+		FrmFieldsHelper::display_field_value_selector( $selector_field_id, $selector_args );
+		$dropdown = ob_get_contents();
+		ob_end_clean();
+
+		$expected = '<input type="text" name="field_options[hide_opt_' . $current_field->id . '][]" value="" />';
+
+		$this->assertSame( trim( $expected ), trim( $dropdown ) );
+	}
+
+	/**
 	 * Checks the HTML for the field value part of a field's conditional dropdown when loaded with Ajax
 	 * Testing a UserID field as the logic field type
 	 *
