@@ -77,7 +77,7 @@ class FrmFieldValue {
 	/**
 	 * Initialize the saved_value property
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @param stdClass $entry
 	 */
@@ -96,7 +96,7 @@ class FrmFieldValue {
 	/**
 	 * Initialize a field's displayed value
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @param stdClass $entry
 	 */
@@ -137,7 +137,7 @@ class FrmFieldValue {
 	/**
 	 * Get the saved_value property
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 */
 	public function get_saved_value() {
 		return $this->saved_value;
@@ -155,7 +155,7 @@ class FrmFieldValue {
 	/**
 	 * Get the displayed value for different field types
 	 *
-	 * @since 2.03.11
+	 * @since 3.0
 	 *
 	 * @return mixed
 	 */
@@ -168,7 +168,7 @@ class FrmFieldValue {
 	/**
 	 * Filter the displayed_value property
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @param stdClass $entry
 	 */
@@ -192,7 +192,7 @@ class FrmFieldValue {
 
 		// frm_display_{fieldtype}_value_custom hook
 		$this->displayed_value = apply_filters( 'frm_display_' . $this->field->type . '_value_custom', $this->displayed_value, array(
-			'field' => $this->field, 'entry' => $this->entry,
+			'field' => $this->field, 'entry' => $entry,
 		) );
 	}
 
