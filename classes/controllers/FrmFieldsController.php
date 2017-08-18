@@ -250,30 +250,22 @@ class FrmFieldsController {
 
         $field = FrmField::getOne($id);
 
-        if ( 'other' == $opt_type ) {
+		if ( 'other' == $opt_type ) {
 			$opt = __( 'Other', 'formidable' );
-            $other_val = '';
-            $opt_key = 'other_' . $opt_key;
-        } else {
+			$opt_key = 'other_' . $opt_key;
+		} else {
 			$opt = __( 'New Option', 'formidable' );
-        }
-        $field_val = $opt;
+		}
 
-        $field_data = $field;
+		$field_data = $field;
 		$field = (array) $field;
 		$field['separate_value'] = isset( $field_data->field_options['separate_value'] ) ? $field_data->field_options['separate_value'] : 0;
 		unset( $field_data );
 
-		$field_name = 'item_meta[' . $id . ']';
-		$html_id = FrmFieldsHelper::get_html_id( $field );
-        $checked = '';
+		$field['options'] = array( $opt_key => $opt );
+		FrmFieldsHelper::show_single_option( $field );
 
-		if ( 'other' == $opt_type && FrmAppHelper::pro_is_installed() ) {
-			include( FrmAppHelper::plugin_path() . '/pro/classes/views/frmpro-fields/other-option.php' );
-        } else {
-			require( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/single-option.php' );
-        }
-        wp_die();
+		wp_die();
     }
 
     public static function edit_option() {
@@ -379,16 +371,7 @@ class FrmFieldsController {
 
         $field['options'] = $opts;
 
-        if ( $field['type'] == 'radio' || $field['type'] == 'checkbox' ) {
-			$field_name = 'item_meta[' . $field['id'] . ']';
-
-			// Get html_id which will be used in single-option.php
-			$html_id = FrmFieldsHelper::get_html_id( $field );
-
-			require( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/radio.php' );
-        } else {
-            FrmFieldsHelper::show_single_option($field);
-        }
+		FrmFieldsHelper::show_single_option( $field );
 
         wp_die();
     }
@@ -640,8 +623,8 @@ class FrmFieldsController {
     }
 
 	public static function check_label( $opt ) {
-        if ( is_array($opt) ) {
-            $opt = (isset($opt['label']) ? $opt['label'] : reset($opt));
+        if ( is_array( $opt ) ) {
+            $opt = ( isset( $opt['label'] ) ? $opt['label'] : reset( $opt ) );
         }
 
         return $opt;

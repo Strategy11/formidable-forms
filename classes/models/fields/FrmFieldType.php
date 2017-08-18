@@ -91,7 +91,7 @@ DEFAULT_HTML;
 		return array_merge( $default_settings, $field_type_settings );
 	}
 
-	private function default_field_settings() {
+	protected function default_field_settings() {
 		return array(
 			'type'         => $this->type,
 			'required'     => true,

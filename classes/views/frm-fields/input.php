@@ -25,8 +25,9 @@ do_action('frm_field_input_html', $field);
                 continue;
             }
 
-            $field_val = apply_filters('frm_field_value_saved', $opt, $opt_key, $field);
-            $opt = apply_filters('frm_field_label_seen', $opt, $opt_key, $field); ?>
+			$field_val = FrmFieldsHelper::get_value_from_array( $opt, $opt_key, $field );
+			$opt = FrmFieldsHelper::get_label_from_array( $opt, $opt_key, $field );
+			?>
 			<div class="<?php echo esc_attr( apply_filters( 'frm_radio_class', 'frm_radio', $field, $field_val ) ) ?>"><?php
 
 			if ( ! isset( $atts ) || ! isset( $atts['label'] ) || $atts['label'] ) {
@@ -85,8 +86,9 @@ do_action('frm_field_input_html', $field);
                 continue;
             }
 
-            $field_val = apply_filters('frm_field_value_saved', $opt, $opt_key, $field);
-            $opt = apply_filters('frm_field_label_seen', $opt, $opt_key, $field);
+			$field_val = FrmFieldsHelper::get_value_from_array( $opt, $opt_key, $field );
+			$opt = FrmFieldsHelper::get_label_from_array( $opt, $opt_key, $field );
+
             $checked = FrmAppHelper::check_selected($checked_values, $field_val) ? ' checked="checked"' : '';
 
             // Check if other opt, and get values for other field if needed

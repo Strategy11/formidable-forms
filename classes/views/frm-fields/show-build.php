@@ -14,7 +14,7 @@
     } else {
         do_action('frm_add_multiple_opts_labels', $field); ?>
         <ul id="frm_field_<?php echo esc_attr( $field['id'] ) ?>_opts" class="frm_sortable_field_opts frm_clear<?php echo (count($field['options']) > 10) ? ' frm_field_opts_list' : ''; ?>">
-			<?php include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/radio.php' ); ?>
+			<?php FrmFieldsHelper::show_single_option( $field ); ?>
         </ul>
     <?php
     }

@@ -8,8 +8,8 @@ if ( isset($field['post_field']) && $field['post_field'] == 'post_category' && F
 	echo FrmField::is_option_true( $field, 'size' ) ? 'class="auto_width"' : '';
 	echo FrmField::is_option_true( $field, 'multiple' ) ? ' multiple="multiple"' : ''; ?> >
 		<?php foreach ( $field['options'] as $opt_key => $opt ) {
-			$field_val = apply_filters('frm_field_value_saved', $opt, $opt_key, $field);
-			$opt = apply_filters('frm_field_label_seen', $opt, $opt_key, $field);
+			$field_val = FrmFieldsHelper::get_value_from_array( $opt, $opt_key, $field );
+			$opt = FrmFieldsHelper::get_label_from_array( $opt, $opt_key, $field );
 			$selected = ( $field['default_value'] == $field_val || FrmFieldsHelper::get_other_val( array( 'opt_key', 'field' ) ) ) ? ' selected="selected"' : ''; ?>
 			<option value="<?php echo esc_attr( $field_val ) ?>"<?php echo $selected ?>><?php echo esc_html( $opt ) ?> </option>
 		<?php } ?>

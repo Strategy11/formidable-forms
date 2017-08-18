@@ -508,24 +508,44 @@ class FrmFieldsHelper {
     }
 
 	public static function show_single_option( $field ) {
+		if ( ! is_array( $field['options'] ) ) {
+			return;
+		}
+
         $field_name = $field['name'];
         $html_id = self::get_html_id($field);
-        foreach ( $field['options'] as $opt_key => $opt ) {
-            $field_val = apply_filters('frm_field_value_saved', $opt, $opt_key, $field);
-            $opt = apply_filters('frm_field_label_seen', $opt, $opt_key, $field);
 
-            // If this is an "Other" option, get the HTML for it
+		foreach ( $field['options'] as $opt_key => $opt ) {
+		    $field_val = self::get_value_from_array( $opt, $opt_key, $field );
+		    $opt = self::get_label_from_array( $opt, $opt_key, $field );
+
+			// Get string for Other text field, if needed
+			$other_val = self::get_other_val( compact( 'opt_key', 'field' ) );
+
+			$checked = ( $other_val || isset( $field['value'] ) && ( ( ! is_array( $field['value'] ) && $field['value'] == $field_val ) || ( is_array($field['value'] ) && in_array( $field_val, $field['value'] ) ) ) ) ? ' checked="checked"':'';
+
+		    // If this is an "Other" option, get the HTML for it
 			if ( self::is_other_opt( $opt_key ) ) {
-                // Get string for Other text field, if needed
-				$other_val = self::get_other_val( compact( 'opt_key', 'field' ) );
 				if ( FrmAppHelper::pro_is_installed() ) {
-					require( FrmAppHelper::plugin_path() . '/pro/classes/views/frmpro-fields/other-option.php' );
+					require( FrmProAppHelper::plugin_path() . '/classes/views/frmpro-fields/other-option.php' );
 				}
-            } else {
+		    } else {
 				require( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/single-option.php' );
-            }
-        }
+		    }
+
+			unset( $checked, $other_val );
+		}
     }
+
+	public static function get_value_from_array( $opt, $opt_key, $field ) {
+		$opt = apply_filters( 'frm_field_value_saved', $opt, $opt_key, $field );
+		return FrmFieldsController::check_value( $opt, $opt_key, $field );
+	}
+
+	public static function get_label_from_array( $opt, $opt_key, $field ) {
+		$opt = apply_filters( 'frm_field_label_seen', $opt, $opt_key, $field );
+		return FrmFieldsController::check_label( $opt );
+	}
 
 	public static function get_term_link( $tax_id ) {
         $tax = get_taxonomy($tax_id);
