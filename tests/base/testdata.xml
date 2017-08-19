@@ -591,20 +591,6 @@ Jam Band, Electronic, Electronica, JamTronica, EDM, Producer, Rock,  Jazz, Soul,
 		</field>
 	</form>
 	<form>
-		<id>69</id>
-		<form_key><![CDATA[rep_sec_form]]></form_key>
-		<name><![CDATA[]]></name>
-		<description><![CDATA[]]></description>
-		<created_at>2015-05-13 19:16:52</created_at>
-		<logged_in>0</logged_in>
-		<is_template>0</is_template>
-		<default_template>0</default_template>
-		<editable>0</editable>
-		<options><![CDATA[{"submit_value":"Submit","success_action":"message","success_msg":"Your responses were successfully submitted. Thank you!","show_form":0,"akismet":"","no_save":0,"ajax_load":0,"form_class":"","custom_style":1,"before_html":"<legend class=\"frm_hidden\">[form_name]<\/legend>\n[if form_name]<h3>[form_name]<\/h3>[\/if form_name]\n[if form_description]<div class=\"frm_description\">[form_description]<\/div>[\/if form_description]","after_html":"","submit_html":"<div class=\"frm_submit\">\n[if back_button]<input type=\"button\" value=\"[back_label]\" name=\"frm_prev_page\" formnovalidate=\"formnovalidate\" class=\"frm_prev_page\" [back_hook] \/>[\/if back_button]\n<input type=\"submit\" value=\"[button_label]\" [button_action] \/>\n<img class=\"frm_ajax_loading\" src=\"[frmurl]\/images\/ajax_loader.gif\" alt=\"Sending\"\/>\n[if save_draft]<a href=\"#\" class=\"frm_save_draft\" [draft_hook]>[draft_label]<\/a>[\/if save_draft]\n<\/div>","edit_value":"Update","edit_msg":"Your submission was successfully saved.","edit_action":"message","edit_url":"","edit_page_id":0,"logged_in_role":"","save_draft":0,"draft_msg":"Your draft has been saved.","editable_role":"","open_editable_role":"-1","copy":0,"single_entry":0,"single_entry_type":"user","success_page_id":"","success_url":"","ajax_submit":0,"cookie_expiration":8000,"prev_value":"Previous","submit_align":"","paypal":0,"paypal_item_name":"","paypal_amount_field":"","paypal_amount":"","paypal_list":[],"paypal_stop_email":0,"paypal_type":""}]]></options>
-		<status><![CDATA[draft]]></status>
-        <parent_form_id>76</parent_form_id>
-	</form>
-	<form>
 		<id>76</id>
 		<form_key><![CDATA[free_field_types]]></form_key>
 		<name><![CDATA[Free field types]]></name>

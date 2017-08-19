@@ -13,51 +13,22 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	// TODO: try including a field from inside a repeating section. It's not yet possible to display a single field from inside a repeating section
 	// TODO: try including a field from inside an embedded form
 	// TODO: exclude a field from inside a repeating section
-	// TODO: write test for each bug that I'm fixing
 	// TODO: section with no fields in it
 	// TODO: add is_visible for default HTML or just if [if x]
 	// TODO: what about conditional page breaks?
+	// TODO: figure out if this was important: $filter_value = ( ! isset( $atts['filter'] ) || $atts['filter'] !== false );
+	// TODO: ***add test for value of 0 and include_blank=false***, using jamie_entry_key_2
+	// TODO: add test for section with no values in it, plain text
+	// TODO: unit test for frm_email_value hook
 
-	private $text_field_key = '';
 	private $text_field_id = '';
-	private $form_key = '';
 	private $tr_style = ' style="background-color:#ffffff;"';
 	private $td_style = ' style="text-align:left;color:#555555;padding:7px 9px;vertical-align:top;border-top:1px solid #cccccc;"';
 
 	public function setUp() {
 		parent::setUp();
 
-		$this->text_field_key = $this->is_pro_active ? 'text-field' : 'free-text-field';
-		$this->text_field_id = FrmField::get_id_by_key( $this->text_field_key );
-		$this->form_key = $this->is_pro_active ? $this->all_fields_form_key : 'free_field_types';
-	}
-
-	private function get_field_keys_for_type() {
-		if ( $this->form_key == $this->all_fields_form_key ) {
-			$field_keys = array(
-				'text-field'        => 'text-field',
-				'user-id-field'     => 'user-id-field',
-				'repeating-section' => 'repeating-section',
-				'embed-form-field'  => 'embed-form-field',
-				'rich-text-field'   => 'rich-text-field',
-				'number-field'      => 'number-field',
-				'scale-field'       => 'qbrd2o',
-				'time-field'        => 'time-field',
-				'date-field'        => 'date-field',
-				'tags-field'        => 'tags-field',
-				'phone-number-field' => 'n0d580',
-			);
-		} else {
-			$field_keys = array(
-				'text-field'        => 'free-text-field',
-				'user-id-field'     => 'free-user-id-field',
-				'number-field'      => 'free-number-field',
-				'phone-number-field' => 'free-phone-field',
-				'paragraph-field'   => 'free-paragraph-field',
-			);
-		}
-
-		return $field_keys;
+		$this->text_field_id = FrmField::get_id_by_key( 'text-field' );
 	}
 
 	/**
@@ -87,7 +58,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * @since 2.04
 	 */
 	public function test_no_id_passed() {
-		$entry = $this->get_entry_for_test();
+		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
 
 		$atts = array(
 			'entry' => $entry,
@@ -129,7 +100,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * @since 2.04
 	 */
 	public function test_no_entry_passed() {
-		$entry = $this->get_entry_for_test();
+		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
 
 		$atts = array(
 			'id' => $entry->id,
@@ -153,7 +124,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * @since 2.04
 	 */
 	public function test_no_meta_passed() {
-		$entry = $this->get_entry_for_test( false );
+		$entry = FrmEntry::getOne( 'jamie_entry_key' );
 
 		$atts = array(
 			'id' => $entry->id,
@@ -164,7 +135,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 
 		$content = $this->get_formatted_content( $atts );
 
-		$meta_entry = $this->get_entry_for_test();
+		$meta_entry = FrmEntry::getOne( 'jamie_entry_key', true );
 		$atts['entry'] = $meta_entry;
 		$expected_content = $this->expected_html_content( $atts );
 
@@ -181,7 +152,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * @group basic-show-entry-for-email
 	 */
 	public function test_basic_default_message_parameters_all_field_types() {
-		$entry = $this->get_entry_for_test();
+		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
 
 		$atts = array(
 			'id' => $entry->id,
@@ -206,10 +177,6 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * @group show-entry-for-post-entry-email
 	 */
 	public function test_basic_default_message_parameters_create_post_form() {
-		if ( ! $this->is_pro_active ) {
-			$this->markTestSkipped( 'Pro is not active' );
-		}
-
 		$entry = FrmEntry::getOne( 'post-entry-1', true );
 
 		$atts = array(
@@ -235,19 +202,15 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * @group show-entry-shortcode-include-extras
 	 */
 	public function test_default_message_with_extras_included() {
-		$entry = $this->get_entry_for_test();
+		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
 
 		$atts = array(
 			'id' => $entry->id,
 			'entry' => $entry,
 			'plain_text' => false,
 			'user_info' => false,
-			'include_extras' => 'html',
+			'include_extras' => 'section, page, html',
 		);
-
-		if ( $this->pro_is_active ) {
-			$atts['include_extras'] = 'section, page, html';
-		}
 
 		$content = $this->get_formatted_content( $atts );
 		$expected_content = $this->expected_html_content( $atts );
@@ -263,9 +226,14 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * @since 2.04
 	 */
 	public function test_default_message_with_specific_field_ids_included() {
-		$entry = $this->get_entry_for_test();
+		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
 
-		$include_fields = $this->get_included_field_ids();
+		$include_fields = array(
+			'text-field' => FrmField::get_id_by_key( 'text-field' ),
+			'repeating-section' => FrmField::get_id_by_key( 'repeating-section' ),
+			'embed-form-field' => FrmField::get_id_by_key( 'embed-form-field' ),
+			'user-id-field' => FrmField::get_id_by_key( 'user-id-field' ),
+		);
 
 		$atts = array(
 			'id' => $entry->id,
@@ -281,44 +249,6 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		$this->assertSame( $expected_content, $content );
 	}
 
-	private function get_included_field_ids() {
-		$field_keys = $this->get_included_field_keys();
-
-		$include_fields = array();
-		foreach ( $field_keys as $key => $field_key ) {
-			$include_fields[ $key ] = FrmField::get_id_by_key( $field_key );
-		}
-
-		return $include_fields;
-	}
-
-	private function get_included_fields() {
-		$field_keys = $this->get_included_field_keys();
-
-		$include_fields = array();
-		foreach ( $field_keys as $key => $field_key ) {
-			$include_fields[ $key ] = FrmField::getOne( $field_key );
-		}
-
-		return $include_fields;
-	}
-
-	private function get_included_field_keys() {
-		$field_keys = $this->get_field_keys_for_type();
-
-		$include_fields = array(
-			'text-field' => $field_keys['text-field'],
-			'user-id-field' => $field_keys['user-id-field'],
-		);
-
-		if ( $this->is_pro_active ) {
-			$include_fields['repeating-section'] = $field_keys['repeating-section'];
-			$include_fields['embed-form-field'] = $field_keys['embed-form-field'];
-		}
-
-		return $include_fields;
-	}
-
 	/**
 	 * Tests [default-message include_fields="x,y"]
 	 *
@@ -328,17 +258,13 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 */
 	public function test_default_message_with_repeating_field_id_included() {
 		$this->markTestSkipped( 'Functionality not added yet.' );
-		$entry = $this->get_entry_for_test();
+		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
 
-		$field_keys = $this->get_field_keys_for_type();
 		$include_fields = array(
-			'text-field' => $this->text_field_id,
-			'user-id-field' => FrmField::get_id_by_key( $field_keys['user-id-field'] ),
+			'text-field' => FrmField::get_id_by_key( 'text-field' ),
+			'repeating-text' => FrmField::get_id_by_key( 'repeating-text' ),
+			'user-id-field' => FrmField::get_id_by_key( 'user-id-field' ),
 		);
-
-		if ( isset( $field_keys['repeating-text'] ) ) {
-			$include_fields['repeating-text'] = FrmField::get_id_by_key( $field_keys['repeating-text'] );
-		}
 
 		$atts = array(
 			'id' => $entry->id,
@@ -362,9 +288,14 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * @since 2.04
 	 */
 	public function test_default_message_with_specific_field_keys_included() {
-		$entry = $this->get_entry_for_test();
+		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
 
-		$include_fields = $this->get_included_field_keys();
+		$include_fields = array(
+			'text-field' => 'text-field',
+			'repeating-section' => 'repeating-section',
+			'embed-form-field' => 'embed-form-field',
+			'user-id-field' => 'user-id-field',
+		);
 
 		$atts = array(
 			'id' => $entry->id,
@@ -388,9 +319,14 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * @since 2.04
 	 */
 	public function test_default_message_with_old_fields_parameter() {
-		$entry = $this->get_entry_for_test();
+		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
 
-		$include_fields = $this->get_included_fields();
+		$include_fields = array(
+			'text-field' => FrmField::getOne( 'text-field' ),
+			'repeating-section' => FrmField::getOne( 'repeating-section' ),
+			'embed-form-field' => FrmField::getOne( 'embed-form-field' ),
+			'user-id-field' => FrmField::getOne( 'user-id-field' ),
+		);
 
 		$atts = array(
 			'id' => $entry->id,
@@ -414,10 +350,10 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * @since 2.04
 	 */
 	public function test_default_message_with_old_fields_parameter_single_field() {
-		$entry = $this->get_entry_for_test();
+		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
 
 		$include_fields = array(
-			'text-field' => FrmField::getOne( $this->text_field_id ),
+			'text-field' => FrmField::getOne( 'text-field' ),
 		);
 
 		$atts = array(
@@ -442,9 +378,14 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * @since 2.04
 	 */
 	public function test_default_message_with_specific_field_ids_excluded() {
-		$entry = $this->get_entry_for_test();
+		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
 
-		$exclude_fields = $this->get_included_field_ids();
+		$exclude_fields = array(
+			'text-field' => FrmField::get_id_by_key( 'text-field' ),
+			'repeating-section' => FrmField::get_id_by_key( 'repeating-section' ),
+			'embed-form-field' => FrmField::get_id_by_key( 'embed-form-field' ),
+			'user-id-field' => FrmField::get_id_by_key( 'user-id-field' ),
+		);
 
 		$atts = array(
 			'id' => $entry->id,
@@ -468,9 +409,14 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * @since 2.04
 	 */
 	public function test_default_message_with_specific_field_keys_excluded() {
-		$entry = $this->get_entry_for_test();
+		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
 
-		$exclude_fields = $this->get_included_field_keys();
+		$exclude_fields = array(
+			'text-field' => 'text-field',
+			'repeating-section' => 'repeating-section',
+			'embed-form-field' => 'embed-form-field',
+			'user-id-field' => 'user-id-field',
+		);
 
 		$atts = array(
 			'id' => $entry->id,
@@ -494,21 +440,23 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * @since 2.04
 	 */
 	public function test_default_message_with_specific_field_ids_included_and_include_extras() {
-		$entry = $this->get_entry_for_test();
+		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
 
-		$include_fields = $this->get_included_field_ids();
+		$include_fields = array(
+			'text-field' => FrmField::get_id_by_key( 'text-field' ),
+			'repeating-section' => FrmField::get_id_by_key( 'repeating-section' ),
+			'embed-form-field' => FrmField::get_id_by_key( 'embed-form-field' ),
+			'user-id-field' => FrmField::get_id_by_key( 'user-id-field' ),
+		);
 
 		$atts = array(
 			'id' => $entry->id,
 			'entry' => $entry,
 			'plain_text' => false,
 			'user_info' => false,
+			'include_extras' => 'section',
 			'include_fields' => implode( ',', $include_fields ),
 		);
-
-		if ( $this->pro_is_active ) {
-			$atts['include_extras'] = 'section';
-		}
 
 		$content = $this->get_formatted_content( $atts );
 		$expected_content = $this->expected_content_for_include_fields( $atts, $include_fields );
@@ -526,62 +474,89 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * @group show-entry-shortcode-conditional-section
 	 */
 	public function test_default_message_with_conditionally_hidden_sections() {
-		if ( ! $this->is_pro_active ) {
-			$this->markTestSkipped( 'Pro is not active' );
-		}
-
-		$entry = $this->get_entry_for_test( false );
-
-		// Update conditional logic field
-		FrmEntryMeta::update_entry_meta( $entry->id, $this->text_field_id, null, 'Hide Fields' );
-
-		$field_keys = $this->get_field_keys_for_type();
-
-		// Clear all conditionally hidden fields
-		$rich_text_field_id = FrmField::get_id_by_key( $field_keys['rich-text-field'] );
-		FrmEntryMeta::delete_entry_meta( $entry->id, $rich_text_field_id );
-
-		$single_file_field_id = FrmField::get_id_by_key( 'single-file-upload-field' );
-		FrmEntryMeta::delete_entry_meta( $entry->id, $single_file_field_id );
-
-		$multi_file_field_id = FrmField::get_id_by_key( 'multi-file-upload-field' );
-		FrmEntryMeta::delete_entry_meta( $entry->id, $multi_file_field_id );
-
-		$number_field_id = FrmField::get_id_by_key( $field_keys['number-field'] );
-		FrmEntryMeta::delete_entry_meta( $entry->id, $number_field_id );
-
-		$phone_number_field_id = FrmField::get_id_by_key( $field_keys['phone-number-field'] );
-		FrmEntryMeta::delete_entry_meta( $entry->id, $phone_number_field_id );
-
-		$time_field_id = FrmField::get_id_by_key( $field_keys['time-field'] );
-		FrmEntryMeta::delete_entry_meta( $entry->id, $time_field_id );
-
-		$date_field_id = FrmField::get_id_by_key( $field_keys['date-field'] );
-		FrmEntryMeta::delete_entry_meta( $entry->id, $date_field_id );
-
-		$image_url_field_id = FrmField::get_id_by_key( 'zwuclz' );
-		FrmEntryMeta::delete_entry_meta( $entry->id, $image_url_field_id );
-
-		$scale_field_id = FrmField::get_id_by_key( $field_keys['scale-field'] );
-		FrmEntryMeta::delete_entry_meta( $entry->id, $scale_field_id );
-
-		$tags_field_id = FrmField::get_id_by_key( $field_keys['tags-field'] );
-		FrmEntryMeta::delete_entry_meta( $entry->id, $tags_field_id );
-
-		$entry = $this->get_entry_for_test();
+		$this->hide_and_clear_section();
+		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
 
 		$atts = array(
 			'id' => $entry->id,
 			'entry' => $entry,
 			'plain_text' => false,
 			'user_info' => false,
-			'include_extras' => 'section'
+			'include_extras' => 'section',
 		);
 
 		$content = $this->get_formatted_content( $atts );
 		$expected_content = $this->expected_html_content( $atts );
 
 		$this->assertSame( $expected_content, $content );
+	}
+
+	/**
+	 * Tests [default-message plain_text=1 include_extras="section"]
+	 *
+	 * @covers FrmEntriesController::show_entry_shortcode
+	 *
+	 * @since 3.0
+	 *
+	 * @group show-entry-shortcode-conditional-section
+	 */
+	public function test_plain_text_content_with_conditionally_hidden_sections() {
+		$this->hide_and_clear_section();
+		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
+
+		$atts = array(
+			'id' => $entry->id,
+			'entry' => $entry,
+			'plain_text' => true,
+			'user_info' => false,
+			'include_extras' => 'section'
+		);
+
+		$content = $this->get_formatted_content( $atts );
+		$expected_content = $this->expected_plain_text_content( $atts );
+
+		$this->assertSame( $expected_content, $content );
+	}
+
+	/**
+	 * Hide section and clear values in it
+	 */
+	private function hide_and_clear_section() {
+		$entry_id = FrmEntry::get_id_by_key( 'jamie_entry_key' );
+
+		// Update conditional logic field
+		FrmEntryMeta::update_entry_meta( $entry_id, $this->text_field_id, null, 'Hide Fields' );
+
+		// Clear all conditionally hidden fields
+		$rich_text_field_id = FrmField::get_id_by_key( 'rich-text-field' );
+		FrmEntryMeta::delete_entry_meta( $entry_id, $rich_text_field_id );
+
+		$single_file_field_id = FrmField::get_id_by_key( 'single-file-upload-field' );
+		FrmEntryMeta::delete_entry_meta( $entry_id, $single_file_field_id );
+
+		$multi_file_field_id = FrmField::get_id_by_key( 'multi-file-upload-field' );
+		FrmEntryMeta::delete_entry_meta( $entry_id, $multi_file_field_id );
+
+		$number_field_id = FrmField::get_id_by_key( 'number-field' );
+		FrmEntryMeta::delete_entry_meta( $entry_id, $number_field_id );
+
+		$phone_number_field_id = FrmField::get_id_by_key( 'n0d580' );
+		FrmEntryMeta::delete_entry_meta( $entry_id, $phone_number_field_id );
+
+		$time_field_id = FrmField::get_id_by_key( 'time-field' );
+		FrmEntryMeta::delete_entry_meta( $entry_id, $time_field_id );
+
+		$date_field_id = FrmField::get_id_by_key( 'date-field' );
+		FrmEntryMeta::delete_entry_meta( $entry_id, $date_field_id );
+
+		$image_url_field_id = FrmField::get_id_by_key( 'zwuclz' );
+		FrmEntryMeta::delete_entry_meta( $entry_id, $image_url_field_id );
+
+		$scale_field_id = FrmField::get_id_by_key( 'qbrd2o' );
+		FrmEntryMeta::delete_entry_meta( $entry_id, $scale_field_id );
+
+		$tags_field_id = FrmField::get_id_by_key( 'tags-field' );
+		FrmEntryMeta::delete_entry_meta( $entry_id, $tags_field_id );
 	}
 
 	/**
@@ -594,11 +569,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * @since 2.04
 	 */
 	public function test_default_message_with_no_values_in_repeating_section() {
-		if ( ! $this->is_pro_active ) {
-			$this->markTestSkipped( 'Pro is not active' );
-		}
-
-		$entry = $this->get_entry_for_test();
+		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
 		$repeating_section = FrmField::get_id_by_key( 'repeating-section' );
 
 		foreach ( $entry->metas[ $repeating_section ] as $child_id ) {
@@ -612,11 +583,8 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 			'entry' => $entry,
 			'plain_text' => false,
 			'user_info' => false,
+			'include_extras' => 'section',
 		);
-
-		if ( $this->pro_is_active ) {
-			$atts['include_extras'] = 'section';
-		}
 
 		$content = $this->get_formatted_content( $atts );
 
@@ -636,12 +604,8 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * @since 2.04
 	 */
 	public function test_default_message_with_no_values_in_repeating_section_include_blank() {
-		if ( ! $this->is_pro_active ) {
-			$this->markTestSkipped( 'Pro is not active' );
-		}
-
 		$this->markTestSkipped( 'Make this pass for second beta' );
-		$entry = $this->get_entry_for_test();
+		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
 		$repeating_section = FrmField::get_id_by_key( 'repeating-section' );
 
 		foreach ( $entry->metas[ $repeating_section ] as $child_id ) {
@@ -655,12 +619,9 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 			'entry' => $entry,
 			'plain_text' => false,
 			'user_info' => false,
+			'include_extras' => 'section',
 			'include_blank' => true,
 		);
-
-		if ( $this->pro_is_active ) {
-			$atts['include_extras'] = 'section';
-		}
 
 		$content = $this->get_formatted_content( $atts );
 
@@ -680,11 +641,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * @since 2.04
 	 */
 	public function test_array_with_no_values_in_repeating_section() {
-		if ( ! $this->is_pro_active ) {
-			$this->markTestSkipped( 'Pro is not active' );
-		}
-
-		$entry = $this->get_entry_for_test();
+		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
 
 		$repeating_section = FrmField::get_id_by_key( 'repeating-section' );
 
@@ -717,7 +674,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * @since 2.04
 	 */
 	public function test_default_message_with_styling_changes() {
-		$entry = $this->get_entry_for_test();
+		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
 
 		$atts = array(
 			'id' => $entry->id,
@@ -750,7 +707,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * @since 2.04
 	 */
 	public function test_default_message_with_clickable() {
-		$entry = $this->get_entry_for_test();
+		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
 
 		$atts = array(
 			'id' => $entry->id,
@@ -774,7 +731,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * @since 2.04
 	 */
 	public function test_default_message_with_inline_style_off() {
-		$entry = $this->get_entry_for_test();
+		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
 
 		$atts = array(
 			'id' => $entry->id,
@@ -801,7 +758,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * @since 2.04
 	 */
 	public function test_default_message_with_user_info() {
-		$entry = $this->get_entry_for_test();
+		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
 
 		$atts = array(
 			'id' => $entry->id,
@@ -824,7 +781,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * @since 2.04
 	 */
 	public function test_default_message_with_plain_text() {
-		$entry = $this->get_entry_for_test();
+		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
 
 		$atts = array(
 			'id' => $entry->id,
@@ -847,21 +804,17 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * @since 2.04
 	 */
 	public function test_default_message_with_plain_text_and_include_extras() {
-		$entry = $this->get_entry_for_test();
+		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
 
 		$atts = array(
 			'id' => $entry->id,
 			'entry' => $entry,
 			'plain_text' => true,
 			'user_info' => false,
-			'include_extras' => 'html',
+			'include_extras' => 'page,section,html',
 		);
 
-		if ( $this->pro_is_active ) {
-			$atts['include_extras'] = 'page,section,html';
-		}
-
-		$content = $this->get_formatted_content( $atts );
+		$content = $this->get_formatted_content( $atts, 'plain_text' );
 		$expected_content = $this->expected_plain_text_content( $atts );
 
 		$this->assertSameStrings( $expected_content, $content );
@@ -875,10 +828,10 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * @since 2.04
 	 */
 	public function test_default_message_with_rtl_direction() {
-		$entry = $this->get_entry_for_test();
+		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
 
 		$include_fields = array(
-			'text-field' => FrmField::getOne( $this->text_field_id ),
+			'text-field' => FrmField::getOne( 'text-field' ),
 		);
 
 		$atts = array(
@@ -908,7 +861,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	public function test_default_html_for_email() {
 		// TODO: add is_visible shortcode for sections and maybe page breaks? Or maybe just use [if x]
 
-		$form_id = FrmForm::getIdByKey( $this->form_key );
+		$form_id = FrmForm::getIdByKey( 'all_field_types' );
 
 		$atts = array(
 			'form_id' => $form_id,
@@ -932,7 +885,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * @group show-entry-array-format
 	 */
 	public function test_array_format_for_api() {
-		$entry = $this->get_entry_for_test();
+		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
 
 		$atts = array(
 			'id' => $entry->id,
@@ -957,10 +910,6 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * @group show-entry-array-format
 	 */
 	public function test_array_format_for_api_post_entry() {
-		if ( ! $this->is_pro_active ) {
-			$this->markTestSkipped( 'Pro is not active' );
-		}
-
 		$entry = FrmEntry::getOne( 'post-entry-1', true );
 
 		$atts = array(
@@ -986,7 +935,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * @group show-entry-json-format
 	 */
 	public function test_json_format() {
-		$entry = $this->get_entry_for_test();
+		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
 
 		$atts = array(
 			'id' => $entry->id,
@@ -1011,7 +960,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * @group show-entry-array-format
 	 */
 	public function test_default_array_for_api() {
-		$form_id = FrmForm::getIdByKey( $this->form_key );
+		$form_id = FrmForm::getIdByKey( 'all_field_types' );
 
 		$atts = array(
 			'form_id' => $form_id,
@@ -1036,7 +985,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * @group show-entry-array-format
 	 */
 	public function test_api_entry_retrieval() {
-		$entry = $this->get_entry_for_test();
+		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
 
 		$atts = array(
 			'id' => $entry->id,
@@ -1063,7 +1012,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * @group show-entry-array-format
 	 */
 	public function test_array_format_for_zapier() {
-		$entry = $this->get_entry_for_test();
+		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
 
 		$atts = array(
 			'id' => $entry->id,
@@ -1079,7 +1028,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		$this->assertSame( $expected_array, $data_array );
 	}
 
-	private function get_formatted_content( $atts ) {
+	private function get_formatted_content( $atts, $type = 'html' ) {
 		$content = FrmEntriesController::show_entry_shortcode( $atts );
 
 		return $content;
@@ -1090,23 +1039,15 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		$content .= $this->paragraph_to_website_plain_text();
 		$content .= $this->page_break_plain_text( $atts );
 		$content .= $this->pro_fields_divider_plain_text( $atts );
-
-		if ( $this->is_pro_active ) {
-			$content .= $this->dynamic_field_plain_text();
-			$content .= $this->embedded_form_plain_text( $atts );
-		}
-
+		$content .= $this->dynamic_field_plain_text();
+		$content .= $this->embedded_form_plain_text( $atts );
 		$content .= $this->user_id_plain_text();
 		$content .= $this->html_field_plain_text( $atts );
-
-		if ( $this->is_pro_active ) {
-			$content .= $this->tags_plain_text( $atts );
-			$content .= $this->signature_plain_text();
-			$content .= $this->repeating_section_header_plain_text( $atts );
-			$content .= $this->repeating_field_plain_text();
-			$content .= $this->separate_values_checkbox_plain_text();
-		}
-
+		$content .= $this->tags_plain_text( $atts );
+		$content .= $this->signature_plain_text();
+		$content .= $this->repeating_section_header_plain_text( $atts );
+		$content .= $this->repeating_field_plain_text();
+		$content .= $this->separate_values_checkbox_plain_text();
 		$content .= $this->user_info_plain_text( $atts );
 
 		return $content;
@@ -1119,23 +1060,15 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		$table .= $this->paragraph_to_website_html( $atts );
 		$table .= $this->page_break_html( $atts );
 		$table .= $this->pro_fields_divider_html( $atts );
-
-		if ( $this->is_pro_active ) {
-			$table .= $this->dynamic_field_html();
-			$table .= $this->embedded_form_html( $atts );
-		}
-
+		$table .= $this->dynamic_field_html();
+		$table .= $this->embedded_form_html( $atts );
 		$table .= $this->user_id_html();
 		$table .= $this->html_field_html( $atts );
-
-		if ( $this->is_pro_active ) {
-			$table .= $this->tags_html( $atts );
-			$table .= $this->signature_html();
-			$table .= $this->repeating_section_header( $atts );
-			$table .= $this->repeating_field_html( $atts );
-			$table .= $this->separate_values_checkbox_html();
-		}
-
+		$table .= $this->tags_html( $atts );
+		$table .= $this->signature_html();
+		$table .= $this->repeating_section_header( $atts );
+		$table .= $this->repeating_field_html( $atts );
+		$table .= $this->separate_values_checkbox_html();
 		$table .= $this->user_info_html( $atts );
 
 		$table .= $this->table_footer();
@@ -1175,40 +1108,33 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 
 	private function expected_content_for_exclude_fields( $atts, $exclude_fields ) {
 
-		$field_keys = $this->get_field_keys_for_type();
 		$table = $this->table_header( $atts );
 
-		if ( ! isset( $exclude_fields[ $this->text_field_key ] ) ) {
+		if ( ! isset( $exclude_fields['text-field'] ) ) {
 			$table .= $this->text_field_html( $atts );
 		}
 
 		$table .= $this->paragraph_to_website_html( $atts );
 		$table .= $this->pro_fields_divider_html( $atts );
+		$table .= $this->dynamic_field_html();
 
-		if ( $this->is_pro_active ) {
-			$table .= $this->dynamic_field_html();
-		}
-
-		if ( isset( $field_keys['embed-form-field'] ) && ! isset( $exclude_fields['embed-form-field'] ) ) {
+		if ( ! isset( $exclude_fields['embed-form-field'] ) ) {
 			$table .= $this->embedded_form_html( $atts );
 		}
 
-		if ( isset( $field_keys['user-id-field'] ) && ! isset( $exclude_fields[ $field_keys['user-id-field'] ] ) ) {
+		if ( ! isset( $exclude_fields['user-id-field'] ) ) {
 			$table .= $this->user_id_html();
 		}
 
-		if ( $this->is_pro_active ) {
-			$table .= $this->tags_html( $atts );
-			$table .= $this->signature_html();
+		$table .= $this->tags_html( $atts );
+		$table .= $this->signature_html();
 
-			if ( ! isset( $exclude_fields['repeating-section'] ) ) {
-				$table .= $this->repeating_section_header( $atts );
-				$table .= $this->repeating_field_html( $atts );
-			}
-
-			$table .= $this->separate_values_checkbox_html();
+		if ( ! isset( $exclude_fields['repeating-section'] ) ) {
+			$table .= $this->repeating_section_header( $atts );
+			$table .= $this->repeating_field_html( $atts );
 		}
 
+		$table .= $this->separate_values_checkbox_html();
 		$table .= $this->user_info_html( $atts );
 		$table .= $this->table_footer();
 
@@ -1307,13 +1233,9 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 
 
 	private function fields_within_pro_fields_divider( $atts ) {
-		$html = '';
-		if ( $this->is_pro_active ) {
-			$html .= $this->rich_text_html();
-			$html .= $this->single_file_upload_html( $atts );
-			$html .= $this->multi_file_upload_html( $atts );
-		}
-
+		$html = $this->rich_text_html();
+		$html .= $this->single_file_upload_html( $atts );
+		$html .= $this->multi_file_upload_html( $atts );
 		$html .= $this->number_to_scale_field_html( $atts );
 
 		return $html;
@@ -1324,10 +1246,6 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	}
 
 	private function single_file_upload_html( $atts ) {
-		if ( ! $this->is_pro_active ) {
-			return '';
-		}
-
 		$file_field_id = FrmField::get_id_by_key( 'single-file-upload-field' );
 		$single_file_url = wp_get_attachment_url( $atts['entry']->metas[ $file_field_id ] );
 
@@ -1344,10 +1262,6 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	}
 
 	private function multi_file_upload_html( $atts ) {
-		if ( ! $this->is_pro_active ) {
-			return '';
-		}
-
 		$multi_file_urls = $this->get_multi_file_urls( $atts['entry'] );
 
 		if ( isset( $atts['clickable'] ) && $atts['clickable'] ) {
@@ -1373,10 +1287,6 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	}
 
 	private function get_multi_file_urls( $entry ) {
-		if ( ! $this->is_pro_active ) {
-			return array();
-		}
-
 		$file_field_id = FrmField::get_id_by_key( 'multi-file-upload-field' );
 
 		$multi_file_urls = array();
@@ -1390,20 +1300,17 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	private function number_to_scale_field_html( $atts ) {
 		$html = '<tr' . $this->tr_style . '><td' . $this->td_style . '>Number</td><td' . $this->td_style . '>11</td></tr>' . "\r\n";
 		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Phone Number</td><td' . $this->td_style . '>1231231234</td></tr>' . "\r\n";
+		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Time</td><td' . $this->td_style . '>12:30 AM</td></tr>' . "\r\n";
+		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Date</td><td' . $this->td_style . '>August 16, 2015</td></tr>' . "\r\n";
 
-		if ( $this->is_pro_active ) {
-			$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Time</td><td' . $this->td_style . '>12:30 AM</td></tr>' . "\r\n";
-			$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Date</td><td' . $this->td_style . '>August 16, 2015</td></tr>' . "\r\n";
-
-			if ( isset( $atts['clickable'] ) && $atts['clickable'] ) {
-				$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Image URL</td><td' . $this->td_style . '>';
-				$html .= '<a href="http://www.test.com" rel="nofollow">http://www.test.com</a></td></tr>' . "\r\n";
-			} else {
-				$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Image URL</td><td' . $this->td_style . '>http://www.test.com</td></tr>' . "\r\n";
-			}
-
-			$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Scale</td><td' . $this->td_style . '>5</td></tr>' . "\r\n";
+		if ( isset( $atts['clickable'] ) && $atts['clickable'] ) {
+			$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Image URL</td><td' . $this->td_style . '>';
+			$html .= '<a href="http://www.test.com" rel="nofollow">http://www.test.com</a></td></tr>' . "\r\n";
+		} else {
+			$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Image URL</td><td' . $this->td_style . '>http://www.test.com</td></tr>' . "\r\n";
 		}
+
+		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Scale</td><td' . $this->td_style . '>5</td></tr>' . "\r\n";
 
 		return $html;
 	}
@@ -1411,6 +1318,8 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	private function dynamic_field_html() {
 		return '<tr' . $this->tr_style . '><td' . $this->td_style . '>Dynamic Field - level 1</td><td' . $this->td_style . '>United States</td></tr>' . "\r\n";
 	}
+
+
 
 	private function html_field_html( $atts ) {
 		if ( isset( $atts['include_extras'] ) && strpos( $atts['include_extras'], 'html' ) !== false ) {
@@ -1457,10 +1366,6 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	}
 
 	private function embedded_form_html( $atts ) {
-		if ( ! $this->is_pro_active ) {
-			return;
-		}
-
 		$html = '<tr' . $this->tr_style . '><td' . $this->td_style . '>Name</td><td' . $this->td_style . '>Embedded name</td></tr>' . "\r\n";
 		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Last</td><td' . $this->td_style . '>test</td></tr>' . "\r\n";
 
@@ -1562,26 +1467,21 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 			$content .= "\r\nPro Fields\r\n";
 		}
 
-		if ( $this->is_pro_active ) {
-			$content .= "Rich Text: Bolded text\r\n";
+		$content .= "Rich Text: Bolded text\r\n";
 
-			$file_field_id = FrmField::get_id_by_key( 'single-file-upload-field' );
-			$single_file_url = wp_get_attachment_url( $atts['entry']->metas[ $file_field_id ] );
-			$content .= "Single File Upload: " . $single_file_url . "\r\n";
+		$file_field_id = FrmField::get_id_by_key( 'single-file-upload-field' );
+		$single_file_url = wp_get_attachment_url( $atts['entry']->metas[ $file_field_id ] );
+		$content .= "Single File Upload: " . $single_file_url . "\r\n";
 
-			$multiple_file_urls = $this->get_multi_file_urls( $atts['entry'] );
-			$content .= "Multiple File Upload: " . implode( ', ', $multiple_file_urls ) . "\r\n";
-		}
+		$multiple_file_urls = $this->get_multi_file_urls( $atts['entry'] );
+		$content .= "Multiple File Upload: " . implode( ', ', $multiple_file_urls ) . "\r\n";
 
 		$content .= "Number: 11\r\n";
 		$content .= "Phone Number: 1231231234\r\n";
-
-		if ( $this->is_pro_active ) {
-			$content .= "Time: 12:30 AM\r\n";
-			$content .= "Date: August 16, 2015\r\n";
-			$content .= "Image URL: http://www.test.com\r\n";
-			$content .= "Scale: 5\r\n";
-		}
+		$content .= "Time: 12:30 AM\r\n";
+		$content .= "Date: August 16, 2015\r\n";
+		$content .= "Image URL: http://www.test.com\r\n";
+		$content .= "Scale: 5\r\n";
 
 		return $content;
 	}
@@ -1718,10 +1618,6 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		foreach ( $fields as $field ) {
 
 			if ( in_array( $field->type, array( 'html', 'form', 'divider', 'break', 'end_divider', 'password', 'captcha' ) ) ) {
-				if ( ! $this->is_pro_installed ) {
-					continue;
-				}
-
 				if ( $field->type == 'divider' ) {
 
 					$html .= '[if ' . $field->id . ']<tr style="[frm-alt-color]">';
@@ -1766,12 +1662,6 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 
 	private function expected_array( $entry, $atts ) {
 
-		if ( $this->form_key == 'free_field_types' ) {
-			$expected = $this->get_free_expected_array();
-			$this->remove_blank_fields( $atts, $expected );
-			return $expected;
-		}
-
 		// Single file upload field
 		$file_field_id = FrmField::get_id_by_key( 'single-file-upload-field' );
 		$single_file_url = wp_get_attachment_url( $entry->metas[ $file_field_id ] );
@@ -1786,8 +1676,11 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 
 		// TODO: do I need field label?
 
+
 		$expected = array(
-    		'uc580i' => array ( 'Red', 'Green' ),
+			'text-field' => 'Jamie',
+			'p3eiuk' => "Jamie\nRebecca\nWahlin",
+			'uc580i' => array ( 'Red', 'Green' ),
 			'radio-button-field' => 'cookies',
 			'dropdown-field' => 'Ace Ventura',
 			'email-field' => 'jamie@mail.com',
@@ -1858,15 +1751,15 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		);
 
 		$this->remove_repeating_fields( $atts, $expected );
-		$this->remove_blank_fields( $atts, $expected );
 
-		return $expected;
-	}
+		if ( ! isset( $atts['include_blank'] ) || $atts['include_blank'] == false ) {
+			foreach ( $expected as $field_key => $value ) {
+				if ( $value == '' || empty( $value ) ) {
+					unset( $expected[ $field_key ] );
+				}
+			}
+		}
 
-	private function get_free_expected_array() {
-		$expected = $this->expected_free_meta();
-		$expected['free-user-id-field-value'] = $expected['free-user-id-field'];
-		$expected['free-user-id-field'] = 'admin';
 		return $expected;
 	}
 
@@ -1887,16 +1780,6 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		}
 	}
 
-	private function remove_blank_fields( $atts, &$expected ) {
-		if ( ! isset( $atts['include_blank'] ) || $atts['include_blank'] == false ) {
-			foreach ( $expected as $field_key => $value ) {
-				if ( $value == '' || empty( $value ) ) {
-					unset( $expected[ $field_key ] );
-				}
-			}
-		}
-	}
-
 	private function expected_post_array( $entry, $atts ) {
 		$expected = array(
 			'yi6yvm' => 'Jamie\'s Post',
@@ -1908,7 +1791,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 			'rs4jgc' => '',
 			'izzcad' => 'Uncategorized',
 			'izzcad-value' => array( 1 ),
-			// TODO: pick up on displayed value for categories. Should categories by in array?
+			// TODO: displayed value for categories. Should categories by in array?
 			'parent-dynamic-taxonomy' => 'Uncategorized',
 			'parent-dynamic-taxonomy-value' => array( 1 ),
 			'child-dynamic-taxonomy' => '',
@@ -1973,56 +1856,5 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		}
 
 		$this->assertSame($expected, $actual, implode("\n", $message));
-	}
-
-	private function get_entry_for_test( $include_meta = true ) {
-		$entry = FrmEntry::getOne( 'jamie_entry_key', $include_meta );
-		if ( $entry ) {
-			// if pro is not installed, the entries wouldn't have been imported
-			return $entry;
-		}
-
-		$new_entry = array(
-			'form_id'  => FrmForm::getIdByKey( 'free_field_types' ),
-			'item_key' => 'jamie_entry_key',
-			'description' => array(
-				'browser' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:37.0) Gecko/20100101 Firefox/37.0',
-				'referrer' => 'http://localhost:8888/features/wp-admin/admin-ajax.php?action=frm_forms_preview&form=boymfd',
-			),
-			'created_at'  => '2015-05-12 19:30:23',
-			'item_meta' => $this->expected_free_meta(),
-		);
-
-		// switch field keys to ids
-		$meta = array();
-		foreach ( $new_entry['item_meta'] as $key => $value ) {
-			$id = $key;
-			if ( ! is_numeric( $key ) ) {
-				$id = FrmField::get_id_by_key( $key );
-			}
-			$meta[ $id ] = $value;
-		}
-		$new_entry['item_meta'] = $meta;
-
-		$entry_id = $this->factory->entry->create_object( $new_entry );
-		$entry = FrmEntry::getOne( $entry_id, $include_meta );
-
-		return $entry;
-	}
-
-	private function expected_free_meta() {
-		return array(
-			'free-text-field' => 'Jamie Wahlin',
-			'free-paragraph-field' => "Jamie\nRebecca\nWahlin",
-			'free-checkboxes' => array ( 'Red', 'Green' ),
-			'free-radio-button-field' => 'cookies',
-			'free-dropdown-field' => 'Ace Ventura',
-			'free-email-field' => 'jamie@mail.com',
-			'free-website-field' => 'http://www.jamie.com',
-			'free-number-field' => '11',
-			'free-phone-field' => '1231231234',
-			'free-hidden-field' => '',
-			'free-user-id-field' => '1',
-		);
 	}
 }

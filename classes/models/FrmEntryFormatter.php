@@ -96,10 +96,10 @@ class FrmEntryFormatter {
 		$this->init_include_blank( $atts );
 		$this->init_direction( $atts );
 		$this->init_include_user_info( $atts );
-		$this->init_entry_values( $atts );
 		$this->init_skip_fields();
 		$this->init_include_extras( $atts );
 		$this->init_single_cell_fields();
+		$this->init_entry_values( $atts );
 
 		if ( $this->format === 'table' ) {
 			$this->init_table_generator( $atts );
@@ -565,7 +565,7 @@ class FrmEntryFormatter {
 	/**
 	 * Add a standard row to plain text or html table content
 	 *
-	 * @since 2.03.11
+	 * @since 2.04
 	 *
 	 * @param FrmProFieldValue $field_value
 	 * @param string $content
@@ -651,15 +651,9 @@ class FrmEntryFormatter {
 
 			$include = $this->is_extra_field_included( $field_value );
 
-		} else {
-			$displayed_value = $field_value->get_displayed_value();
+		} else if ( FrmAppHelper::is_empty_value( $field_value->get_displayed_value() ) && ! $this->include_blank ) {
 
-			if ( $displayed_value === '' || ( is_array( $displayed_value ) && empty( $displayed_value ) ) ) {
-
-				if ( ! $this->include_blank ) {
-					$include = false;
-				}
-			}
+			$include = false;
 		}
 
 		return $include;

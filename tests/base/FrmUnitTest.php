@@ -20,13 +20,15 @@ class FrmUnitTest extends WP_UnitTestCase {
 	 */
 	function setUp() {
 		parent::setUp();
+
+		$this->is_pro_active = FrmAppHelper::pro_is_installed();
+
 		$this->frm_install();
 
 		$this->factory->form = new Form_Factory( $this );
 		$this->factory->field = new Field_Factory( $this );
 		$this->factory->entry = new Entry_Factory( $this );
 
-		$this->is_pro_active = FrmAppHelper::pro_is_installed();
 		$current_class_name = get_class( $this );
 		if ( strpos( $current_class_name, 'FrmPro' ) && ! $this->is_pro_active ) {
 			$this->markTestSkipped( 'Pro is not active' );
