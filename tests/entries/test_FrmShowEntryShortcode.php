@@ -634,7 +634,6 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
 	 * @since 2.04
-	 * @group current
 	 */
 	public function test_default_message_with_no_values_in_repeating_section_include_blank() {
 		if ( ! $this->is_pro_active ) {
