@@ -872,7 +872,7 @@ class FrmFieldsHelper {
 		} else if ( $field->type == 'user_id' ) {
 			$replace_with = self::get_user_id_display_value( $replace_with, $atts );
 		} else if ( is_array( $replace_with ) ) {
-			if ( $atts['show'] && isset( $replace_with[ $atts['show'] ] ) ) {
+			if ( isset( $atts['show'] ) && $atts['show'] && isset( $replace_with[ $atts['show'] ] ) ) {
 				$replace_with = $replace_with[ $atts['show'] ];
 			} else {
 				$replace_with = implode( $sep, $replace_with );

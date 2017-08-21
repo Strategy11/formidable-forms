@@ -12,7 +12,6 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 
 	// TODO: try including a field from inside a repeating section. It's not yet possible to display a single field from inside a repeating section
 	// TODO: try including a field from inside an embedded form
-	// TODO: exclude a field from inside a repeating section
 	// TODO: section with no fields in it
 	// TODO: add is_visible for default HTML or just if [if x]
 	// TODO: what about conditional page breaks?
@@ -276,6 +275,36 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 
 		$content = $this->get_formatted_content( $atts );
 		$expected_content = $this->expected_content_for_include_fields( $atts, $include_fields );
+
+		$this->assertSame( $expected_content, $content );
+	}
+
+	/**
+	 * Tests [default-message exclude_fields="x,y"]
+	 *
+	 * @covers FrmEntriesController::show_entry_shortcode
+	 *
+	 * @since 2.04.02
+	 */
+	public function test_default_message_with_repeating_field_id_excluded() {
+		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
+
+		$exclude_fields = array(
+			'text-field' => FrmField::get_id_by_key( 'text-field' ),
+			'repeating-text' => FrmField::get_id_by_key( 'repeating-text' ),
+			'user-id-field' => FrmField::get_id_by_key( 'user-id-field' ),
+		);
+
+		$atts = array(
+			'id' => $entry->id,
+			'entry' => $entry,
+			'plain_text' => false,
+			'user_info' => false,
+			'exclude_fields' => implode( ',', $exclude_fields ),
+		);
+
+		$content = $this->get_formatted_content( $atts );
+		$expected_content = $this->expected_content_for_exclude_fields( $atts, $exclude_fields );
 
 		$this->assertSame( $expected_content, $content );
 	}
@@ -1131,7 +1160,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 
 		if ( ! isset( $exclude_fields['repeating-section'] ) ) {
 			$table .= $this->repeating_section_header( $atts );
-			$table .= $this->repeating_field_html( $atts );
+			$table .= $this->repeating_field_html( $atts, $exclude_fields );
 		}
 
 		$table .= $this->separate_values_checkbox_html();
@@ -1388,18 +1417,28 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		return $html;
 	}
 
-	private function repeating_field_html( $atts ) {
+	private function repeating_field_html( $atts, $exclude_fields = array() ) {
 		if ( isset( $atts['is_repeat_empty'] ) && $atts['is_repeat_empty'] && ! isset( $atts['include_blank'] ) ) {
 			return '';
 		}
 
-		$html = '<tr' . $this->tr_style . '><td' . $this->td_style . '>Single Line Text</td><td' . $this->td_style . '>First</td></tr>' . "\r\n";
+		$html = '';
+
+		if ( ! isset( $exclude_fields['repeating-text'] ) ) {
+			$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Single Line Text</td><td' . $this->td_style . '>First</td></tr>' . "\r\n";
+		}
 		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Checkboxes</td><td' . $this->td_style . '>Option 1, Option 2</td></tr>' . "\r\n";
 		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Date</td><td' . $this->td_style . '>May 27, 2015</td></tr>' . "\r\n";
-		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Single Line Text</td><td' . $this->td_style . '>Second</td></tr>'. "\r\n";
+
+		if ( ! isset( $exclude_fields['repeating-text'] ) ) {
+			$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Single Line Text</td><td' . $this->td_style . '>Second</td></tr>' . "\r\n";
+		}
 		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Checkboxes</td><td' . $this->td_style . '>Option 1, Option 2</td></tr>' . "\r\n";
 		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Date</td><td' . $this->td_style . '>May 29, 2015</td></tr>' . "\r\n";
-		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Single Line Text</td><td' . $this->td_style . '>Third</td></tr>' . "\r\n";
+
+		if ( ! isset( $exclude_fields['repeating-text'] ) ) {
+			$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Single Line Text</td><td' . $this->td_style . '>Third</td></tr>' . "\r\n";
+		}
 		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Checkboxes</td><td' . $this->td_style . '>Option 2</td></tr>' . "\r\n";
 		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Date</td><td' . $this->td_style . '>June 19, 2015</td></tr>' . "\r\n";
 

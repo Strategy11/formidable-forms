@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Formidable v2.04\n"
+"Project-Id-Version: Formidable v2.04.01\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-01 03:07+0000\n"
-"PO-Revision-Date: Wed Aug 16 2017 17:00:47 GMT-0700 (PDT)\n"
+"PO-Revision-Date: Mon Aug 21 2017 12:35:51 GMT-0700 (PDT)\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: Hungarian\n"
@@ -1072,14 +1072,6 @@ msgstr ""
 
 #: ../classes/helpers/FrmCSVExportHelper.php:114
 msgid "Updated By"
-msgstr ""
-
-#: ../classes/helpers/FrmCSVExportHelper.php:115 ..
-#: classes/helpers/FrmFormsHelper.php:639 ../classes/helpers/FrmFormsListHelper.
-#: php:362 ../classes/views/frm-forms/_publish_box.php:72 ..
-#: pro/classes/controllers/FrmProEntriesController.php:1633 ..
-#: pro/classes/views/displays/where_options.php:19
-msgid "Draft"
 msgstr ""
 
 #: ../classes/helpers/FrmEntriesHelper.php:500 ..
@@ -4570,11 +4562,6 @@ msgstr ""
 msgid "View Title"
 msgstr ""
 
-#: ../pro/classes/controllers/FrmProDisplaysController.php:136 ..
-#: pro/classes/controllers/FrmProDisplaysController.php:286
-msgid "Description"
-msgstr ""
-
 #: ../pro/classes/controllers/FrmProDisplaysController.php:139 ..
 #: pro/classes/controllers/FrmProDisplaysController.php:285 ..
 #: pro/classes/views/displays/mb_dyncontent.php:23 ../pro/classes/views/frmpro-
@@ -4840,12 +4827,6 @@ msgstr ""
 #: ../pro/classes/controllers/FrmProFormsController.php:78 ..
 #: pro/classes/controllers/FrmProFormsController.php:302
 msgid "Last Name"
-msgstr ""
-
-#: ../pro/classes/controllers/FrmProFormsController.php:79 ..
-#: pro/classes/controllers/FrmProFormsController.php:300 ..
-#: pro/classes/models/FrmProField.php:35 ../pro/classes/models/FrmProForm.php:276
-msgid "User ID"
 msgstr ""
 
 #: ../pro/classes/controllers/FrmProFormsController.php:80
@@ -5417,15 +5398,6 @@ msgstr ""
 msgid "No options available: please check this field's options"
 msgstr ""
 
-#: ../pro/classes/controllers/FrmProNestedFormsController.php:686 ..
-#: pro/classes/helpers/FrmProFieldsHelper.php:694 ..
-#: pro/classes/views/displays/mb_advanced.php:33 ..
-#: pro/classes/views/displays/mb_advanced.php:53 ../pro/classes/views/frmpro-
-#: form-actions/post_options.php:180 ../pro/classes/views/frmpro-form-
-#: actions/post_options.php:210 ../pro/classes/views/styles/_sample_form.php:30
-msgid "Add"
-msgstr ""
-
 #: ../pro/classes/controllers/FrmProStatisticsController.php:19
 msgid "You must include a valid field id or key in your stats shortcode."
 msgstr ""
@@ -5710,10 +5682,6 @@ msgstr ""
 
 #: ../pro/classes/models/FrmProSettings.php:17
 msgid "Your submission was successfully saved."
-msgstr ""
-
-#: ../pro/classes/models/FrmProSettings.php:19
-msgid "You have already submitted that form"
 msgstr ""
 
 #: ../pro/classes/views/combo-fields/addresses/back-end-field-opts.php:3
@@ -6095,10 +6063,6 @@ msgstr ""
 
 #: ../pro/classes/views/frmpro-entries/show.php:31
 msgid "Comment/Note"
-msgstr ""
-
-#: ../pro/classes/views/frmpro-entries/sidebar-edit.php:35
-msgid "Save"
 msgstr ""
 
 #: ../pro/classes/views/frmpro-entries/sidebar-new.php:8
@@ -6560,15 +6524,6 @@ msgstr ""
 
 #: ../pro/classes/views/frmpro-fields/options-form-top.php:18
 msgid "Repeatable: This section can be repeated when viewing your form."
-msgstr ""
-
-#: ../pro/classes/views/frmpro-form-actions/_custom_field_row.php:4 ..
-#: pro/classes/views/frmpro-form-actions/post_options.php:190
-msgid "Name"
-msgstr ""
-
-#: ../pro/classes/views/frmpro-form-actions/_custom_field_row.php:30
-msgid "Enter new"
 msgstr ""
 
 #: ../pro/classes/views/frmpro-form-actions/_custom_field_row.php:36 ..
@@ -7244,10 +7199,6 @@ msgstr ""
 msgid "Views with a \"Both (Dynamic)\" format will show here."
 msgstr ""
 
-#: ../pro/classes/widgets/FrmListEntries.php:223
-msgid "Page"
-msgstr ""
-
 #: ../pro/classes/widgets/FrmListEntries.php:234
 msgid "Title Field"
 msgstr ""
@@ -7396,6 +7347,14 @@ msgstr "Időbélyeg"
 #: ../classes/helpers/FrmCSVExportHelper.php:112
 msgid "Last Updated"
 msgstr "Legutóbbi frissítés"
+
+#: ../classes/helpers/FrmCSVExportHelper.php:115 ..
+#: classes/helpers/FrmFormsHelper.php:639 ../classes/helpers/FrmFormsListHelper.
+#: php:362 ../classes/views/frm-forms/_publish_box.php:72 ..
+#: pro/classes/controllers/FrmProEntriesController.php:1633 ..
+#: pro/classes/views/displays/where_options.php:19
+msgid "Draft"
+msgstr "Vázlat"
 
 #: ../classes/helpers/FrmCSVExportHelper.php:116 ..
 #: pro/classes/views/displays/where_row.php:15
@@ -7570,7 +7529,7 @@ msgstr "Cégnév"
 #: 2470 ../pro/classes/controllers/FrmProEntriesController.php:3029 ..
 #: pro/classes/models/FrmProSettings.php:18
 msgid "Update"
-msgstr "Frissítés"
+msgstr "Frisítés"
 
 #: ../classes/models/FrmPointers.php:103
 msgid "Close"
@@ -7738,9 +7697,29 @@ msgstr "Hónap"
 msgid "Year"
 msgstr "Év"
 
+#: ../pro/classes/controllers/FrmProDisplaysController.php:136 ..
+#: pro/classes/controllers/FrmProDisplaysController.php:286
+msgid "Description"
+msgstr "Leírás"
+
+#: ../pro/classes/controllers/FrmProFormsController.php:79 ..
+#: pro/classes/controllers/FrmProFormsController.php:300 ..
+#: pro/classes/models/FrmProField.php:35 ../pro/classes/models/FrmProForm.php:276
+msgid "User ID"
+msgstr "Felhasználó azonosító"
+
 #: ../pro/classes/controllers/FrmProFormsController.php:474
 msgid "Table"
 msgstr "Táblázat"
+
+#: ../pro/classes/controllers/FrmProNestedFormsController.php:686 ..
+#: pro/classes/helpers/FrmProFieldsHelper.php:694 ..
+#: pro/classes/views/displays/mb_advanced.php:33 ..
+#: pro/classes/views/displays/mb_advanced.php:53 ../pro/classes/views/frmpro-
+#: form-actions/post_options.php:180 ../pro/classes/views/frmpro-form-
+#: actions/post_options.php:210 ../pro/classes/views/styles/_sample_form.php:30
+msgid "Add"
+msgstr "Hozzáadás"
 
 #: ../pro/classes/models/FrmProDisplay.php:231
 msgid "Name cannot be blank"
@@ -7781,6 +7760,14 @@ msgstr "Túl sok fájl került feltöltésre. Maximum %d darab fájl tölthető 
 msgid "Sorry, this file type is not permitted."
 msgstr "Sajnáljuk, de ez a fájlformátum nem engedélyezett."
 
+#: ../pro/classes/models/FrmProSettings.php:19
+msgid "You have already submitted that form"
+msgstr "Már bekűldte ezt az űrlapot"
+
+#: ../pro/classes/views/frmpro-entries/sidebar-edit.php:35
+msgid "Save"
+msgstr "Mentés"
+
 #: ../pro/classes/views/frmpro-fields/back-end/field-file.php:4 ..
 #: pro/classes/views/frmpro-fields/front-end/file.php:67
 msgid "Drop a file here or click to upload"
@@ -7796,6 +7783,19 @@ msgstr "A maximális fájlméret: %sMB"
 msgid "Choose File"
 msgstr "Tallózás"
 
+#: ../pro/classes/views/frmpro-form-actions/_custom_field_row.php:4 ..
+#: pro/classes/views/frmpro-form-actions/post_options.php:190
+msgid "Name"
+msgstr "Név"
+
+#: ../pro/classes/views/frmpro-form-actions/_custom_field_row.php:30
+msgid "Enter new"
+msgstr "Új hozzáadása"
+
 #: ../pro/classes/views/styles/_date-fields.php:7
 msgid "Theme"
 msgstr "Sablon"
+
+#: ../pro/classes/widgets/FrmListEntries.php:223
+msgid "Page"
+msgstr "Oldal"
