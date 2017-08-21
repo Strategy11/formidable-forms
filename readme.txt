@@ -3,7 +3,7 @@ Contributors: formidableforms, sswells, srwells, jamie.wahlin
 Tags: contact form, form builder, custom form, forms, form, form maker, form creator
 Requires at least: 3.8
 Tested up to: 4.8.1
-Stable tag: 2.04
+Stable tag: 2.04.01
 
 The best WordPress form plugin for contact forms, surveys and more. Make forms a breeze with a drag and drop form builder and form style generator.
 
@@ -142,6 +142,11 @@ The field and form names and descriptions are all changed with in-place edit. Ju
 [See more FAQs](https://formidableforms.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 2.04.01 =
+* Fix: Prevent php warning when 'show' attr is missing.
+* **Pro Version Forms** *
+* Fix: Prevent get_post_field() call on null.
+
 = 2.04 =
 * New: Add FrmEntryValues and FrmFieldValue classes, which should be widely reusable.
 * New: Add ready-to-use contact form. Use it anywhere with [formidable id=contact-form]. It will only be created on new installs.
