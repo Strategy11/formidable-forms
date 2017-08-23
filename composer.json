@@ -23,6 +23,7 @@
 	"autoload": {
 		"classmap": [
 			"classes/controllers/",
+			"classes/factories/",
             "classes/helpers/",
 			"classes/models/",
             "classes/widgets/",
