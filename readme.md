@@ -1,6 +1,6 @@
 # [Formidable Forms](https://formidableforms.com) #
 
-![Plugin Version](https://img.shields.io/wordpress/plugin/v/formidable.svg?maxAge=2592000) ![Total Downloads](https://img.shields.io/wordpress/plugin/dt/formidable.svg?maxAge=2592000) ![Plugin Rating](https://img.shields.io/wordpress/plugin/r/formidable.svg?maxAge=2592000) ![WordPress Compatibility](https://img.shields.io/wordpress/v/formidable.svg?maxAge=2592000) ![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Strategy11/formidable-forms/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Strategy11/formidable-forms/?branch=master)
+![Plugin Version](https://img.shields.io/wordpress/plugin/v/formidable.svg?maxAge=2592000) ![Total Downloads](https://img.shields.io/wordpress/plugin/dt/formidable.svg?maxAge=2592000) ![Plugin Rating](https://img.shields.io/wordpress/plugin/r/formidable.svg?maxAge=2592000) ![WordPress Compatibility](https://img.shields.io/wordpress/v/formidable.svg?maxAge=2592000) [![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/Strategy11/formidable-forms.svg?maxAge=2592000)](https://scrutinizer-ci.com/g/Strategy11/formidable-forms/?branch=master)
 
 The best WordPress form plugin for contact forms, surveys and more. Make forms a breeze with a drag and drop form builder and form style generator.
 
