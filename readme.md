@@ -4,7 +4,7 @@
 
 The best WordPress form plugin for contact forms, surveys and more. Make forms a breeze with a drag and drop form builder and form style generator.
 
-BrowserStack helps us make your forms work great in every browser.
+[BrowserStack](https://www.browserstack.com/ "BrowserStack") helps us make your forms work great in every browser.
 ![BrowserStack](https://d98b8t1nnulk5.cloudfront.net/production/images/layout/logo-header.png)
 
 ## What makes Formidable Forms the best WordPress form builder?
