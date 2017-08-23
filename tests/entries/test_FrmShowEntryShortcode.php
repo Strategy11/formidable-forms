@@ -521,6 +521,42 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	}
 
 	/**
+	 * Tests [default-message include_extras="section"]
+	 *
+	 * @covers FrmEntriesController::show_entry_shortcode
+	 *
+	 * @since 2.04
+	 *
+	 * @group show-entry-shortcode-conditional-section
+	 */
+	public function test_default_message_with_conditionally_hidden_sections_and_include_fields() {
+		$this->hide_and_clear_section();
+		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
+
+		$include_fields = array(
+			'text-field' => FrmField::get_id_by_key( 'text-field' ),
+			'repeating-section' => FrmField::get_id_by_key( 'repeating-section' ),
+			'embed-form-field' => FrmField::get_id_by_key( 'embed-form-field' ),
+			'user-id-field' => FrmField::get_id_by_key( 'user-id-field' ),
+			'pro-fields-divider' => FrmField::get_id_by_key( 'pro-fields-divider' ),
+		);
+
+		$atts = array(
+			'id' => $entry->id,
+			'entry' => $entry,
+			'plain_text' => false,
+			'user_info' => false,
+			'include_extras' => 'section',
+			'include_fields' => implode( ',', $include_fields ),
+		);
+
+		$content = $this->get_formatted_content( $atts );
+		$expected_content = $this->expected_content_for_include_fields( $atts, $include_fields );
+
+		$this->assertSame( $expected_content, $content );
+	}
+
+	/**
 	 * Tests [default-message plain_text=1 include_extras="section"]
 	 *
 	 * @covers FrmEntriesController::show_entry_shortcode
