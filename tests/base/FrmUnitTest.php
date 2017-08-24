@@ -312,6 +312,7 @@ class FrmUnitTest extends WP_UnitTestCase {
     static function install_data() {
         return array(
         	dirname( __FILE__ ) . '/testdata.xml',
+			dirname( __FILE__ ) . '/free-form.xml',
 	        dirname( __FILE__ ) . '/editform.xml',
 			dirname( __FILE__ ) . '/file-upload.xml',
         );
