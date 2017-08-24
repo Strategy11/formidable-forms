@@ -24,8 +24,6 @@ class test_FrmProShowEntryShortcode extends test_FrmShowEntryShortcode {
 	// TODO: unit test for frm_email_value hook
 
 	private $text_field_id = '';
-	protected $tr_style = ' style="background-color:#ffffff;"';
-	protected $td_style = ' style="text-align:left;color:#555555;padding:7px 9px;vertical-align:top;border-top:1px solid #cccccc;"';
 
 	public function setUp() {
 		parent::setUp();

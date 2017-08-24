@@ -263,25 +263,7 @@
             <field_options><![CDATA[{"size":"","max":"","label":"","blank":"This field cannot be blank.","required_indicator":"*","invalid":"","separate_value":"1","clear_on_focus":0,"default_blank":"0","classes":"","custom_html":"<div id=\"frm_field_[id]_container\" class=\"frm_form_field form-field [required_class][error_class]\">\r\n    <label for=\"field_[key]\" class=\"frm_primary_label\">[field_name]\r\n        <span class=\"frm_required\">[required_label]<\/span>\r\n    <\/label>\r\n    [input]\r\n    [if description]<div class=\"frm_description\">[description]<\/div>[\/if description]\r\n    [if error]<div class=\"frm_error\">[error]<\/div>[\/if error]\r\n<\/div>","post_field":"post_status","slide":0,"form_select":"","show_hide":"show","any_all":"any","align":"block","hide_field":[],"hide_field_cond":["=="],"hide_opt":[],"star":0,"ftypes":[],"data_type":"select","restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"step":1,"clock":12,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","dyn_default_value":"","multiple":0,"unique_msg":"","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":"0","custom_field":"","taxonomy":"category","exclude_cat":0,"calc_dec":"","captcha_size":"normal","delete":false,"in_section":"0","captcha_theme":"light","autopopulate_value":false,"get_values_form":"","get_values_field":"","watch_lookup":[""],"get_most_recent_value":"","lookup_filter_current_user":false,"calc_type":"","single_time":0}]]></field_options>
         </field>
 	</form>
-	<term><term_id>294</term_id><term_taxonomy>category</term_taxonomy><term_name><![CDATA[Altered Thurzdaze]]></term_name><term_slug>altered-thurzdaze</term_slug></term>
-	<term><term_id>513</term_id><term_taxonomy>category</term_taxonomy><term_name><![CDATA[Altered child 2]]></term_name><term_slug>altered-child-2</term_slug><term_parent>altered-thurzdaze</term_parent></term>
-	<term><term_id>514</term_id><term_taxonomy>category</term_taxonomy><term_name><![CDATA[Altered 2 sub child]]></term_name><term_slug>altered-2-sub-child</term_slug><term_parent>altered-child-2</term_parent></term>
-	<term><term_id>511</term_id><term_taxonomy>category</term_taxonomy><term_name><![CDATA[Altered Child]]></term_name><term_slug>altered-child</term_slug><term_parent>altered-thurzdaze</term_parent></term>
-	<term><term_id>512</term_id><term_taxonomy>category</term_taxonomy><term_name><![CDATA[Altered sub child]]></term_name><term_slug>altered-sub-child</term_slug><term_parent>altered-child</term_parent></term>
-	<term><term_id>18</term_id><term_taxonomy>category</term_taxonomy><term_name><![CDATA[Car Park NB]]></term_name><term_slug>car-park-nb</term_slug></term>
-	<term><term_id>3</term_id><term_taxonomy>category</term_taxonomy><term_name><![CDATA[Child]]></term_name><term_slug>child</term_slug><term_parent>uncategorized</term_parent></term>
-	<term><term_id>19</term_id><term_taxonomy>category</term_taxonomy><term_name><![CDATA[Estate Info]]></term_name><term_slug>geninfo</term_slug></term>
-	<term><term_id>313</term_id><term_taxonomy>category</term_taxonomy><term_name><![CDATA[Euchre]]></term_name><term_slug>euchre</term_slug></term>
-	<term><term_id>298</term_id><term_taxonomy>category</term_taxonomy><term_name><![CDATA[Live Music]]></term_name><term_description><![CDATA[Live music / bands]]></term_description><term_slug>live_music</term_slug></term>
-	<term><term_id>27</term_id><term_taxonomy>category</term_taxonomy><term_name><![CDATA[Main Genre]]></term_name><term_slug>main-genre</term_slug></term>
-	<term><term_id>189</term_id><term_taxonomy>category</term_taxonomy><term_name><![CDATA[Musician Directory]]></term_name><term_description><![CDATA[Directory of musicians, bands, and artists that have visited the Mousetrap Bar &amp; Grill. 
-
-Click the Listen Tab to check out the latest streaming media. 
-
-Jam Band, Electronic, Electronica, JamTronica, EDM, Producer, Rock,  Jazz, Soul,  Bluegrass, Americana, Folk, Improv, Hip Hop, Acoustic, Comedy, Trivia, Streaming.]]></term_description><term_slug>musician-directory</term_slug></term>
-	<term><term_id>299</term_id><term_taxonomy>category</term_taxonomy><term_name><![CDATA[Tonight at the Mousetrap]]></term_name><term_slug>tonight-at-the-mousetrap</term_slug></term>
-	<term><term_id>315</term_id><term_taxonomy>category</term_taxonomy><term_name><![CDATA[Tuesday Jazz/Soul Night]]></term_name><term_slug>tuesday-jazzsoul-night</term_slug></term>
-	<view>
+    <view>
 		<title>Create Posts</title>
 		<link></link>
 		<post_author><![CDATA[admin]]></post_author>
