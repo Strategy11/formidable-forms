@@ -854,52 +854,55 @@ class FrmFieldsHelper {
         return $new_value;
     }
 
-	public static function get_display_value( $replace_with, $field, $atts = array() ) {
-		$sep = isset( $atts['sep'] ) ? $atts['sep'] : ', ';
+	public static function get_display_value( $value, $field, $atts = array() ) {
 
-		$replace_with = apply_filters( 'frm_get_' . $field->type . '_display_value', $replace_with, $field, $atts );
-		$replace_with = apply_filters( 'frm_get_display_value', $replace_with, $field, $atts );
+		$value = apply_filters( 'frm_get_' . $field->type . '_display_value', $value, $field, $atts );
+		$value = apply_filters( 'frm_get_display_value', $value, $field, $atts );
 
-        if ( $field->type == 'textarea' || $field->type == 'rte' ) {
-            $autop = isset($atts['wpautop']) ? $atts['wpautop'] : true;
-            if ( apply_filters('frm_use_wpautop', $autop) ) {
-                if ( is_array($replace_with) ) {
-                    $replace_with = implode("\n", $replace_with);
-                }
-                $replace_with = wpautop($replace_with);
-            }
-			unset( $autop );
-		} else if ( $field->type == 'user_id' ) {
-			$replace_with = self::get_user_id_display_value( $replace_with, $atts );
-		} else if ( is_array( $replace_with ) ) {
-			if ( isset( $atts['show'] ) && $atts['show'] && isset( $replace_with[ $atts['show'] ] ) ) {
-				$replace_with = $replace_with[ $atts['show'] ];
-			} else {
-				$replace_with = implode( $sep, $replace_with );
-			}
-		}
-
-		return $replace_with;
+		return self::get_unfiltered_display_value( compact( 'value', 'field', 'atts' ) );
 	}
 
 	/**
-	 * Show the user display name instead of id
+	 * @param $atts array Includes value, field, and atts
+	 */
+	public static function get_unfiltered_display_value( $atts ) {
+		$value = $atts['value'];
+		$args = isset( $atts['atts'] ) ? $atts['atts'] : array();
+
+		$field_obj = FrmFieldFactory::get_field_object( $atts['field'] );
+		return $field_obj->get_display_value( $value, $atts );
+	}
+
+	/**
+	 * Get a value from the user profile from the user ID
 	 * @since 3.0
 	 */
-	public static function get_user_id_display_value( $user_id, $atts = array() ) {
-		if ( FrmAppHelper::pro_is_installed() ) {
-			return $user_id;
-		}
+	public static function get_user_display_name( $user_id, $user_info = 'display_name', $args = array() ) {
+		$defaults = array(
+			'blank' => false, 'link' => false, 'size' => 96
+		);
 
-		$user = get_userdata( $user_id );
+		$args = wp_parse_args($args, $defaults);
+
+		$user = get_userdata($user_id);
 		$info = '';
 
 		if ( $user ) {
-			$user_info = self::prepare_user_info_attribute( $atts );
-			$info = isset( $user->$user_info ) ? $user->$user_info : $user->display_name;
-			if ( empty( $info ) ) {
+			if ( $user_info == 'avatar' ) {
+				$info = get_avatar( $user_id, $args['size'] );
+			} elseif ( $user_info == 'author_link' ) {
+				$info = get_author_posts_url( $user_id );
+			} else {
+				$info = isset($user->$user_info) ? $user->$user_info : '';
+			}
+
+			if ( empty($info) && ! $args['blank'] ) {
 				$info = $user->user_login;
 			}
+		}
+
+		if ( $args['link'] ) {
+			$info = '<a href="' .  esc_url( admin_url('user-edit.php?user_id=' . $user_id ) ) . '">' . $info . '</a>';
 		}
 
 		return $info;

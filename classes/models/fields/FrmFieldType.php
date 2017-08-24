@@ -6,6 +6,12 @@
 abstract class FrmFieldType {
 
 	/**
+	 * @var object
+	 * @since 3.0
+	 */
+	protected $field;
+
+	/**
 	 * @var string
 	 * @since 3.0
 	 */
@@ -32,10 +38,9 @@ abstract class FrmFieldType {
 	 */
 	protected $has_html = true;
 
-	public function __construct( $type = '' ) {
-		if ( $type ) {
-			$this->type = $type;
-		}
+	public function __construct( $field = 0, $type = '' ) {
+		$this->field = $field;
+		$this->set_type( $type );
 	}
 
 	public function __get( $key ) {
@@ -44,6 +49,23 @@ abstract class FrmFieldType {
 			$value = $this->{$key};
 		}
 		return $value;
+	}
+
+	private function set_type( $type ) {
+		if ( empty( $this->type ) ) {
+			$this->type = $this->get_field_column('type');
+			if ( empty( $this->type ) && ! empty( $type ) ) {
+				$this->type = $type;
+			}
+		}
+	}
+
+	private function get_field_column( $column ) {
+		$field_val = '';
+		if ( is_object( $this->field ) ) {
+			$field_val = $this->field->{$column};
+		}
+		return $field_val;
 	}
 
 	public function default_html() {
@@ -132,7 +154,7 @@ DEFAULT_HTML;
 	public function get_new_field_defaults() {
 		$frm_settings = FrmAppHelper::get_settings();
 		$field = array(
-			'name'          => $this->get_field_name(),
+			'name'          => $this->get_new_field_name(),
 			'description'   => '',
 			'type'          => $this->type,
 			'options'       => '',
@@ -148,7 +170,7 @@ DEFAULT_HTML;
 		return array_merge( $field, $field_options );
 	}
 
-	protected function get_field_name() {
+	protected function get_new_field_name() {
 		$name = __( 'Untitled', 'formidable' );
 
 		$fields = FrmField::field_selection();
@@ -189,5 +211,33 @@ DEFAULT_HTML;
 
 	protected function extra_field_opts() {
 		return array();
+	}
+
+	public function get_display_value( $value, $atts = array() ) {
+		$value = $this->prepare_display_value( $value, $atts );
+
+		if ( is_array( $value ) ) {
+			if ( isset( $atts['show'] ) && $atts['show'] && isset( $value[ $atts['show'] ] ) ) {
+				$value = $value[ $atts['show'] ];
+			} else {
+				$sep = isset( $atts['sep'] ) ? $atts['sep'] : ', ';
+				$value = implode( $sep, $value );
+			}
+		}
+		return $value;
+	}
+
+	protected function prepare_display_value( $value, $atts ) {
+		return $value;
+	}
+
+	protected function run_wpautop( $atts, &$value ) {
+		$autop = isset( $atts['wpautop'] ) ? $atts['wpautop'] : true;
+		if ( apply_filters( 'frm_use_wpautop', $autop ) ) {
+			if ( is_array( $value ) ) {
+				$value = implode( "\n", $value );
+			}
+			$value = wpautop( $value );
+		}
 	}
 }

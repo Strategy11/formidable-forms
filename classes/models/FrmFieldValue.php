@@ -160,9 +160,8 @@ class FrmFieldValue {
 	 * @return mixed
 	 */
 	protected function generate_displayed_value_for_field_type() {
-		if ( $this->field->type == 'user_id' ) {
-			$this->displayed_value = FrmFieldsHelper::get_user_id_display_value( $this->displayed_value );
-		}
+		$field_obj = FrmFieldFactory::get_field_object( $this->field );
+		$this->displayed_value = $field_obj->get_display_value( $this->displayed_value );
 	}
 
 	/**

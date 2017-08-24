@@ -301,7 +301,7 @@ class FrmEntriesHelper {
         $new_value = '';
 
 		if ( $field->type == 'user_id' ) {
-			$value = FrmFieldsHelper::get_user_id_display_value( $value );
+			$value = FrmFieldsHelper::get_unfiltered_display_value( compect( 'value', 'field', 'atts' ) );
 		}
 
 		if ( is_array( $value ) && $atts['type'] != 'file' ) {

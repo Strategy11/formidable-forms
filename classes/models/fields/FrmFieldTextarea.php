@@ -23,4 +23,8 @@ class FrmFieldTextarea extends FrmFieldType {
 			'max' => '5',
 		);
 	}
+
+	protected function prepare_display_value( $value, $atts ) {
+		return $this->run_wpautop( $atts, $value );
+	}
 }

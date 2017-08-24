@@ -29,15 +29,22 @@ class FrmFieldFactory {
 		return $selector;
 	}
 
+	public static function get_field_object( $field ) {
+		if ( ! is_object( $field ) ) {
+			$field = FrmField::getOne( $field );
+		}
+		return self::get_field_type( $field->type, $field );
+	}
+
 	/**
 	 * @since 3.0
 	 */
-	public static function get_field_type( $field_type ) {
+	public static function get_field_type( $field_type, $field = 0 ) {
 		$class = self::get_field_type_class( $field_type );
 		if ( empty( $class ) ) {
-			$field = new FrmFieldText( $field_type );
+			$field = new FrmFieldText( $field, $field_type );
 		} else {
-			$field = new $class();
+			$field = new $class( $field );
 		}
 
 		return $field;
