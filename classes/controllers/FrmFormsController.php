@@ -1139,80 +1139,55 @@ class FrmFormsController {
 	}
 
 	public static function get_form_contents( $form, $title, $description, $atts ) {
-        global $frm_vars;
-
-        $frm_settings = FrmAppHelper::get_settings();
-
-        $submit = isset($form->options['submit_value']) ? $form->options['submit_value'] : $frm_settings->submit_value;
-
-        $user_ID = get_current_user_id();
 		$params = FrmForm::get_params( $form );
-		$message = '';
-		$errors = array();
-
-        if ( $params['posted_form_id'] == $form->id && $_POST ) {
-            $errors = isset( $frm_vars['created_entries'][ $form->id ] ) ? $frm_vars['created_entries'][ $form->id ]['errors'] : array();
-        }
-
-		$include_form_tag = apply_filters( 'frm_include_form_tag', true, $form );
+		$errors = self::get_saved_errors( $form, $params );
 		$fields = FrmFieldsHelper::get_form_fields( $form->id, $errors );
+		$reset = false;
+		$pass_args = compact( 'form', 'fields', 'errors', 'title', 'description', 'reset' );
 
-        if ( $params['action'] != 'create' || $params['posted_form_id'] != $form->id || ! $_POST ) {
-            do_action('frm_display_form_action', $params, $fields, $form, $title, $description);
-            if ( apply_filters('frm_continue_to_new', true, $form->id, $params['action']) ) {
-                $values = FrmEntriesHelper::setup_new_vars($fields, $form);
-				include( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/new.php' );
-            }
-            return;
-        }
+		$handle_process_here = $params['action'] == 'create' && $params['posted_form_id'] == $form->id && $_POST;
 
-        if ( ! empty($errors) ) {
-            $values = $fields ? FrmEntriesHelper::setup_new_vars($fields, $form) : array();
-			include( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/new.php' );
-            return;
-        }
+		if ( ! $handle_process_here ) {
+			do_action( 'frm_display_form_action', $params, $fields, $form, $title, $description );
+			if ( apply_filters( 'frm_continue_to_new', true, $form->id, $params['action'] ) ) {
+				self::show_form_after_submit( $pass_args );
+			}
+		} elseif ( ! empty( $errors ) ) {
+			self::show_form_after_submit( $pass_args );
 
-        do_action('frm_validate_form_creation', $params, $fields, $form, $title, $description);
-        if ( ! apply_filters('frm_continue_to_create', true, $form->id) ) {
-            return;
-        }
+		} else {
 
-        $values = FrmEntriesHelper::setup_new_vars($fields, $form, true);
-        $created = self::just_created_entry( $form->id );
-        $conf_method = apply_filters('frm_success_filter', 'message', $form, 'create');
+			do_action( 'frm_validate_form_creation', $params, $fields, $form, $title, $description );
 
-        if ( $created && is_numeric($created) && $conf_method != 'message' ) {
-            do_action('frm_success_action', $conf_method, $form, $form->options, $created);
-			do_action( 'frm_after_entry_processed', array( 'entry_id' => $created, 'form' => $form ) );
-            return;
-        }
+			if ( apply_filters( 'frm_continue_to_create', true, $form->id ) ) {
+				$entry_id = self::just_created_entry( $form->id );
 
-        if ( $created && is_numeric($created) ) {
-            $message = isset($form->options['success_msg']) ? $form->options['success_msg'] : $frm_settings->success_msg;
-            $class = 'frm_message';
-        } else {
-            $message = $frm_settings->failed_msg;
-            $class = FrmFormsHelper::form_error_class();
-        }
+				$conf_method = apply_filters( 'frm_success_filter', 'message', $form, 'create' );
+				if ( $entry_id && is_numeric( $entry_id ) && $conf_method != 'message' ) {
+					self::run_success_action( compact( 'entry_id', 'form', 'conf_method' ) );
+				} else {
+					$pass_args['reset'] = true;
+					$pass_args['entry_id'] = $entry_id;
+					self::show_message_after_save( $pass_args );
+				}
+			}
+		}
+	}
 
-		$message = FrmFormsHelper::get_success_message( array(
-			'message' => $message, 'form' => $form,
-			'entry_id' => $created, 'class' => $class,
-		) );
-        $message = apply_filters('frm_main_feedback', $message, $form, $created);
+	/**
+	 * If the form was processed earlier (init), get the generated errors
+	 * @since 2.04.02
+	 */
+	private static function get_saved_errors( $form, $params ) {
+		global $frm_vars;
 
-        if ( ! isset($form->options['show_form']) || $form->options['show_form'] ) {
-			require( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/new.php' );
-        } else {
-            global $frm_vars;
-			self::maybe_load_css( $form, $values['custom_style'], $frm_vars['load_css'] );
-
-			$include_extra_container = 'frm_forms' . FrmFormsHelper::get_form_style_class( $values );
-			include( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/errors.php' );
-        }
-
-		do_action( 'frm_after_entry_processed', array( 'entry_id' => $created, 'form' => $form ) );
-    }
+		if ( $params['posted_form_id'] == $form->id && $_POST && isset( $frm_vars['created_entries'][ $form->id ] ) ) {
+			$errors = $frm_vars['created_entries'][ $form->id ]['errors'];
+		} else {
+			$errors = array();
+		}
+		return $errors;
+	}
 
 	/**
 	 * @since 2.2.7
@@ -1220,6 +1195,110 @@ class FrmFormsController {
 	public static function just_created_entry( $form_id ) {
 		global $frm_vars;
 		return ( isset( $frm_vars['created_entries'] ) && isset( $frm_vars['created_entries'][ $form_id ] ) && isset( $frm_vars['created_entries'][ $form_id ]['entry_id'] ) ) ? $frm_vars['created_entries'][ $form_id ]['entry_id'] : 0;
+	}
+
+	/**
+	 * Used when the success action is not 'message'
+	 * @since 2.04.02
+	 */
+	public static function run_success_action( $args ) {
+		do_action( 'frm_success_action', $args['conf_method'], $args['form'], $args['form']->options, $args['entry_id'] );
+		do_action( 'frm_after_entry_processed', array( 'entry_id' => $args['entry_id'], 'form' => $args['form'] ) );
+	}
+
+	/**
+	 * Prepare to show the success message and empty form after submit
+	 * @since 2.04.02
+	 */
+	public static function show_message_after_save( $atts ) {
+		$atts['message'] = self::prepare_submit_message( $atts['form'], $atts['entry_id'] );
+
+		if ( ! isset( $atts['form']->options['show_form'] ) || $atts['form']->options['show_form'] ) {
+			self::show_form_after_submit( $atts );
+		} else {
+			self::show_lone_success_messsage( $atts );
+		}
+	}
+
+	/**
+	 * Show an empty form
+	 * @since 2.04.02
+	 */
+	private static function show_form_after_submit( $args ) {
+		self::fill_atts_for_form_display( $args );
+
+		$errors = $args['errors'];
+		$message = $args['message'];
+		$form = $args['form'];
+		$title = $args['title'];
+		$description = $args['description'];
+
+		if ( empty( $args['fields'] ) ) {
+			$values = array();
+		} else {
+			$values = FrmEntriesHelper::setup_new_vars( $args['fields'], $form, $args['reset'] );
+		}
+		unset( $args );
+
+		$include_form_tag = apply_filters( 'frm_include_form_tag', true, $form );
+
+		$frm_settings = FrmAppHelper::get_settings();
+		$submit = isset( $form->options['submit_value'] ) ? $form->options['submit_value'] : $frm_settings->submit_value;
+
+		include( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/new.php' );
+	}
+
+	/**
+	 * Get all the values needed on the new.php entry page
+	 * @since 2.04.02
+	 */
+	private static function fill_atts_for_form_display( &$args ) {
+		$defaults = array(
+			'errors'  => array(),
+			'message' => '',
+			'fields'  => array(),
+			'form'    => array(),
+			'title'   => true,
+			'description' => false,
+			'reset'   => false,
+		);
+		$args = wp_parse_args( $args, $defaults );
+	}
+
+	/**
+	 * Show the success message without the form
+	 * @since 2.04.02
+	 */
+	private static function show_lone_success_messsage( $atts ) {
+		global $frm_vars;
+		$values = FrmEntriesHelper::setup_new_vars( $atts['fields'], $atts['form'], true );
+		self::maybe_load_css( $atts['form'], $values['custom_style'], $frm_vars['load_css'] );
+
+		$include_extra_container = 'frm_forms' . FrmFormsHelper::get_form_style_class( $values );
+		$errors = array();
+		$form = $atts['form'];
+		$message = $atts['message'];
+
+		include( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/errors.php' );
+	}
+
+	/**
+	 * Prepare the success message before it's shown
+	 * @since 2.04.02
+	 */
+	private static function prepare_submit_message( $form, $entry_id ) {
+		$frm_settings = FrmAppHelper::get_settings();
+
+		if ( $entry_id && is_numeric( $entry_id ) ) {
+			$message = isset( $form->options['success_msg'] ) ? $form->options['success_msg'] : $frm_settings->success_msg;
+			$class = 'frm_message';
+		} else {
+			$message = $frm_settings->failed_msg;
+			$class = FrmFormsHelper::form_error_class();
+		}
+
+		$message = FrmFormsHelper::get_success_message( compact( 'message', 'form', 'entry_id', 'class' ) );
+		return apply_filters( 'frm_main_feedback', $message, $form, $entry_id );
 	}
 
 	public static function front_head() {
