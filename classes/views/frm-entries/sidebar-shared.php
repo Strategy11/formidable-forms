@@ -34,7 +34,7 @@
         <?php if ( $entry->user_id ) { ?>
         <div class="misc-pub-section">
             <span class="dashicons dashicons-admin-users wp-media-buttons-icon"></span>
-			<?php printf( __( 'Created by: %1$s', 'formidable' ), FrmFieldsHelper::get_user_display_name( $entry->user_id, 'display_name', array( 'link' => true ) ); ?>
+			<?php printf( __( 'Created by: %1$s', 'formidable' ), FrmFieldsHelper::get_user_display_name( $entry->user_id, 'display_name', array( 'link' => true ) ) ); ?>
         </div>
         <?php } ?>
 

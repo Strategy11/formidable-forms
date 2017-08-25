@@ -869,6 +869,10 @@ class FrmFieldsHelper {
 		$value = $atts['value'];
 		$args = isset( $atts['atts'] ) ? $atts['atts'] : array();
 
+		if ( is_array( $atts['field'] ) ) {
+			$atts['field'] = $atts['field']['id'];
+		}
+
 		$field_obj = FrmFieldFactory::get_field_object( $atts['field'] );
 		return $field_obj->get_display_value( $value, $atts );
 	}

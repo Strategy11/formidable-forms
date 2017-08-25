@@ -214,6 +214,7 @@ DEFAULT_HTML;
 	}
 
 	public function get_display_value( $value, $atts = array() ) {
+		$this->fill_default_atts( $atts );
 		$value = $this->prepare_display_value( $value, $atts );
 
 		if ( is_array( $value ) ) {
@@ -225,6 +226,13 @@ DEFAULT_HTML;
 			}
 		}
 		return $value;
+	}
+
+	protected function fill_default_atts( &$atts ) {
+		$defaults = array(
+			'sep' => ', ',
+		);
+		$atts = wp_parse_args( $atts, $defaults );
 	}
 
 	protected function prepare_display_value( $value, $atts ) {

@@ -408,7 +408,11 @@ class FrmFieldsController {
     }
 
 	public static function display_field_options( $field ) {
-		$field_info = FrmFieldFactory::get_field_type( $field['type'] );
+		if ( isset( $field['id'] ) && $field['id'] ) {
+			$field_info = FrmFieldFactory::get_field_object( $field['id'] );
+		} else {
+			$field_info = FrmFieldFactory::get_field_type( $field['type'] );
+		}
 		$settings = $field_info->display_field_settings();
 		$settings['field_data'] = $field;
 		return apply_filters( 'frm_display_field_options', $settings );
