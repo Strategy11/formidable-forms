@@ -2981,14 +2981,14 @@ if(f){
 
 function checkRepeatLimit() {
 
-	var repeatLimit = parseInt( this.value );
+	var repeatLimit = parseInt( this.value, 10 );
 
 	if ( repeatLimit >= 2 && repeatLimit <= 1000 ) {
 
-		if (repeatLimit !== this.value){
+		if (repeatLimit < this.value){
 
+			alert("The Repeat Limit should be an integer.  No worries!  We'll adjust the repeat limit to "  + repeatLimit + ".");
 			jQuery(this).val(repeatLimit);
-			alert("The Repeat Limit should be an integer.  No worries!  We've adjusted " + this.value + " to " + repeatLimit + ".");
 
 		}
 
