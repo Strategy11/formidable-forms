@@ -1170,6 +1170,7 @@ class FrmFormsController {
 					$pass_args['entry_id'] = $entry_id;
 					self::show_message_after_save( $pass_args );
 				}
+				do_action( 'frm_after_entry_processed', array( 'entry_id' => $entry_id, 'form' => $form ) );
 			}
 		}
 	}
@@ -1203,7 +1204,6 @@ class FrmFormsController {
 	 */
 	public static function run_success_action( $args ) {
 		do_action( 'frm_success_action', $args['conf_method'], $args['form'], $args['form']->options, $args['entry_id'] );
-		do_action( 'frm_after_entry_processed', array( 'entry_id' => $args['entry_id'], 'form' => $args['form'] ) );
 	}
 
 	/**
