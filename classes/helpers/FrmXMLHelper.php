@@ -746,7 +746,8 @@ class FrmXMLHelper {
                 $v = FrmAppHelper::get_user_id_param($v);
             } else if ( '_thumbnail_id' == $k && FrmAppHelper::pro_is_installed() ) {
                 //change the attachment ID
-                $v = FrmProXMLHelper::get_file_id($v);
+				$field_obj = FrmFieldFactory::get_field_type( 'file' );
+				$v = $field_obj->get_file_id( $v );
             }
 
             update_post_meta($post_id, $k, $v);

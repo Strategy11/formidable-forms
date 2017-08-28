@@ -36,7 +36,7 @@ class FrmFieldUserID extends FrmFieldType {
 	 *
 	 * @return string
 	 */
-	private static function prepare_user_info_attribute( $atts ) {
+	private function prepare_user_info_attribute( $atts ) {
 		if ( isset( $atts['show'] ) ) {
 			if ( $atts['show'] === 'id' ) {
 				$user_info = 'ID';
@@ -48,5 +48,9 @@ class FrmFieldUserID extends FrmFieldType {
 		}
 
 		return $user_info;
+	}
+
+	protected function prepare_import_value( $value, $atts ) {
+		return FrmAppHelper::get_user_id_param( trim( $value ) );
 	}
 }
