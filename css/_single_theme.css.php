@@ -192,8 +192,6 @@ $arrow_icons = FrmStylesHelper::arrow_icons();
 	margin-right:10px<?php echo esc_html( $important ) ?>;
 }
 
-
-
 .<?php echo esc_html( $style_class ) ?> .frm_right_container label.frm_primary_label{
 	display:inline<?php echo esc_html( $important ) ?>;
 	width:<?php echo esc_html( $width . $important ); ?>;
