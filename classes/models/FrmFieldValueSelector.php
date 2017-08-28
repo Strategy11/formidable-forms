@@ -220,7 +220,7 @@ class FrmFieldValueSelector {
 	 * @since 2.03.05
 	 */
 	public function display_text_box() {
-		echo '<input type="text" name="' . esc_attr( $this->html_name ) . '" value="' . esc_attr( $this->value ) . '" />';
+		echo '<input type="text" name="' . esc_attr( $this->html_name ) . '" value="' . esc_attr( trim( $this->value ) ) . '" />';
 	}
 
 	/**
