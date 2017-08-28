@@ -1430,7 +1430,10 @@ function frmAdminBuildJS(){
 		if(obj.className.indexOf('edit_field_type_end_divider') !== -1 && $thisobj.closest('.edit_field_type_divider').hasClass('no_repeat_section')){
 			return;
 		}
+
+		// get offsets before anything changes
 		var curOffset = $thisobj.offset().top;
+		var newOffset = $thisobj.offset().top;
 
 		if(obj.className.indexOf('edit_field_type_divider') !== -1){
 			$thisobj.find('.frm_default_val_icons').hide().css('visibility', 'hidden');
@@ -1446,7 +1449,6 @@ function frmAdminBuildJS(){
 		jQuery('li.ui-state-default.selected').removeClass('selected');
 		$thisobj.addClass('selected');
 
-		var newOffset = $thisobj.offset().top;
 		if(newOffset != curOffset){
 			var curTop = document.documentElement.scrollTop || document.body.scrollTop; // body for Safari;
 			jQuery(window).scrollTop(curTop - (curOffset-newOffset));
