@@ -298,30 +298,7 @@ class FrmEntriesHelper {
         $value = apply_filters('frm_display_value_custom', maybe_unserialize($value), $field, $atts);
 		$value = apply_filters( 'frm_display_' . $field->type . '_value_custom', $value, compact( 'field', 'atts' ) );
 
-        $new_value = '';
-
-		if ( $field->type == 'user_id' ) {
-			$value = FrmFieldsHelper::get_unfiltered_display_value( compact( 'value', 'field', 'atts' ) );
-		}
-
-		if ( is_array( $value ) && $atts['type'] != 'file' ) {
-            foreach ( $value as $val ) {
-                if ( is_array($val) ) {
-					//TODO: add options for display (li or ,)
-                    $new_value .= implode($atts['sep'], $val);
-                    if ( $atts['type'] != 'data' ) {
-                        $new_value .= '<br/>';
-                    }
-                }
-                unset($val);
-            }
-        }
-
-        if ( ! empty($new_value) ) {
-            $value = $new_value;
-        } else if ( is_array($value) && $atts['type'] != 'file' && ! $atts['return_array'] ) {
-            $value = implode($atts['sep'], $value);
-        }
+		$value = FrmFieldsHelper::get_unfiltered_display_value( compact( 'value', 'field', 'atts' ) );
 
         if ( $atts['truncate'] && $atts['type'] != 'image' ) {
             $value = FrmAppHelper::truncate($value, 50);
@@ -331,7 +308,7 @@ class FrmEntriesHelper {
 			$value = wp_kses_post( $value );
 		}
 
-        return apply_filters('frm_display_value', $value, $field, $atts);
+		return apply_filters( 'frm_display_value', $value, $field, $atts );
     }
 
 	public static function set_posted_value( $field, $value, $args ) {

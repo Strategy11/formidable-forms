@@ -220,7 +220,7 @@ DEFAULT_HTML;
 		if ( is_array( $value ) ) {
 			if ( isset( $atts['show'] ) && $atts['show'] && isset( $value[ $atts['show'] ] ) ) {
 				$value = $value[ $atts['show'] ];
-			} else {
+			} elseif ( ! isset( $atts['return_array'] ) || ! $atts['return_array'] ) {
 				$sep = isset( $atts['sep'] ) ? $atts['sep'] : ', ';
 				$value = implode( $sep, $value );
 			}
@@ -239,6 +239,54 @@ DEFAULT_HTML;
 		return $value;
 	}
 
+	public function get_import_value( $value, $atts = array() ) {
+		return $this->prepare_import_value( $value, $atts );
+	}
+
+	protected function prepare_import_value( $value, $atts ) {
+		return $value;
+	}
+
+	/**
+	* Get the new child IDs for a repeating field's or embedded form's meta_value
+	*
+	* @since 2.0.16
+	* @param array $meta_value
+	* @param object $field
+	* @param array $saved_entries
+	* @return array $meta_value
+	*/
+	protected function get_new_child_ids( $value, $atts ) {
+		$saved_entried = $atts['ids'];
+		$new_value = array();
+		foreach ( (array) $value as $old_child_id ) {
+			if ( isset( $saved_entries[ $old_child_id ] ) ) {
+				$new_value[] = $saved_entries[ $old_child_id ];
+			}
+		}
+
+		return $new_value;
+	}
+
+	protected function get_multi_opts_for_import( $value ) {
+
+		if ( ! $this->field || empty( $value ) || in_array( $value, (array) $this->field->options ) ) {
+			return $value;
+		}
+
+		$checked = is_array( $value ) ? $value : maybe_unserialize( $value );
+
+		if ( ! is_array( $checked ) ) {
+			$checked = explode( ',', $checked );
+		}
+
+		if ( ! empty( $checked ) && count( $checked ) > 1 ) {
+			$value = array_map( 'trim', $checked );
+		}
+
+		return $value;
+	}
+
 	protected function run_wpautop( $atts, &$value ) {
 		$autop = isset( $atts['wpautop'] ) ? $atts['wpautop'] : true;
 		if ( apply_filters( 'frm_use_wpautop', $autop ) ) {
@@ -246,6 +294,14 @@ DEFAULT_HTML;
 				$value = implode( "\n", $value );
 			}
 			$value = wpautop( $value );
+		}
+	}
+
+	protected function fill_values( &$value, $defaults ) {
+		if ( empty( $value ) ) {
+			$value = $defaults;
+		} else {
+			$value = array_merge( $defaults, (array) $value );
 		}
 	}
 }
