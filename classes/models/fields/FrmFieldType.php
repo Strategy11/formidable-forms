@@ -60,7 +60,7 @@ abstract class FrmFieldType {
 		}
 	}
 
-	private function get_field_column( $column ) {
+	protected function get_field_column( $column ) {
 		$field_val = '';
 		if ( is_object( $this->field ) ) {
 			$field_val = $this->field->{$column};
@@ -206,7 +206,19 @@ DEFAULT_HTML;
 			'format'  => '',
 		);
 		$field_opts = $this->extra_field_opts();
-		return array_merge( $opts, $field_opts );
+		$opts = array_merge( $opts, $field_opts );
+
+		$opts = apply_filters( 'frm_default_field_options', $opts, array( 'field' => $this->field, 'type' => $this->type ) );
+
+		if ( $this->field ) {
+			if ( has_filter( 'frm_default_field_opts' ) || has_filter( 'frm_default_'. $this->type .'_field_opts' ) ) {
+				$values = FrmFieldsHelper::field_object_to_array( $field );
+				$opts = apply_filters( 'frm_default_field_opts', $opts, $values, $this->field );
+				$opts = apply_filters( 'frm_default_' . $this->type . '_field_opts', $opts, $values, $this->field );
+			}
+		}
+
+		return $opts;
 	}
 
 	protected function extra_field_opts() {

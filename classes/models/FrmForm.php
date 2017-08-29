@@ -248,12 +248,15 @@ class FrmForm {
             }
 
             //updating the form
-			$update_options = FrmFieldsHelper::get_default_field_options( $field->type );
+			$update_options = FrmFieldsHelper::get_default_field_options_from_field( $field );
 			unset( $update_options['custom_html'] ); // don't check for POST html
 			$update_options = apply_filters( 'frm_field_options_to_update', $update_options );
 
 			foreach ( $update_options as $opt => $default ) {
-				$field->field_options[ $opt ] = isset( $values['field_options'][ $opt . '_' . $field_id ] ) ? trim( sanitize_text_field( $values['field_options'][ $opt . '_' . $field_id ] ) ) : $default;
+				$field->field_options[ $opt ] = isset( $values['field_options'][ $opt . '_' . $field_id ] ) ? $values['field_options'][ $opt . '_' . $field_id ] : $default;
+				if ( is_string( $field->field_options[ $opt ] ) ) {
+					$field->field_options[ $opt ] = trim( sanitize_text_field( $field->field_options[ $opt ] ) );
+				}
             }
 
             $field->field_options = apply_filters('frm_update_field_options', $field->field_options, $field, $values);

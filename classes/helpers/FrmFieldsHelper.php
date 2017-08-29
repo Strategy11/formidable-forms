@@ -36,46 +36,35 @@ class FrmFieldsHelper {
 		return apply_filters( 'frm_field_html_id', 'field_' . $field['field_key'] . $plus, $field );
     }
 
-    public static function setup_edit_vars( $record, $doing_ajax = false ) {
-		$values = array( 'id' => $record->id, 'form_id' => $record->form_id );
-		$defaults = array(
-			'name'          => $record->name,
-			'description'   => $record->description,
-			'field_key'     => $record->field_key,
-			'type'          => $record->type,
-			'default_value' => $record->default_value,
-			'field_order'   => $record->field_order,
-			'required'      => $record->required,
-		);
-
-		if ( $doing_ajax ) {
-            $values = $values + $defaults;
-            $values['form_name'] = '';
-		} else {
-			foreach ( $defaults as $var => $default ) {
-                $values[ $var ] = FrmAppHelper::get_param( $var, $default, 'get', 'htmlspecialchars' );
-                unset($var, $default);
-            }
-
-			$values['form_name'] = $record->form_id ? FrmForm::getName( $record->form_id ) : '';
-        }
-
-		unset( $defaults );
-
-        $values['options'] = $record->options;
-        $values['field_options'] = $record->field_options;
-
-		$defaults = self::get_default_field_options( $values['type'] );
-
-		foreach ( $defaults as $opt => $default ) {
-            $values[ $opt ] = isset( $record->field_options[ $opt ] ) ? $record->field_options[ $opt ] : $default;
-            unset($opt, $default);
-        }
-
-        $values['custom_html'] = (isset($record->field_options['custom_html'])) ? $record->field_options['custom_html'] : self::get_default_html($record->type);
-
+    public static function setup_edit_vars( $field, $doing_ajax = false ) {
+		$values = self::field_object_to_array( $field, $doing_ajax );
 		return apply_filters( 'frm_setup_edit_field_vars', $values, array( 'doing_ajax' => $doing_ajax ) );
     }
+
+	public static function field_object_to_array( $field, $doing_ajax = false ) {
+		$values = (array) $field;
+		$values['form_name'] = '';
+
+		if ( ! $doing_ajax ) {
+			$field_values = array( 'name', 'description', 'field_key', 'type', 'default_value', 'field_order', 'required' );
+			foreach ( $field_values as $var ) {
+				$values[ $var ] = FrmAppHelper::get_param( $var, $values[ $var ], 'get', 'htmlspecialchars' );
+				unset( $var );
+			}
+
+			$values['form_name'] = $field->form_id ? FrmForm::getName( $field->form_id ) : '';
+		}
+
+		$defaults = self::get_default_field_options_from_field( $field );
+		foreach ( $defaults as $opt => $default ) {
+			$values[ $opt ] = isset( $field->field_options[ $opt ] ) ? $field->field_options[ $opt ] : $default;
+			unset( $opt, $default );
+		}
+
+		$values['custom_html'] = ( isset( $field->field_options['custom_html'] ) ) ? $field->field_options['custom_html'] : self::get_default_html( $field->type );
+
+		return $values;
+	}
 
     public static function get_default_field_opts( $type, $field, $limit = false ) {
 		_deprecated_function( __FUNCTION__, '3.0', 'FrmFieldHelper::get_default_field_options or FrmFieldHelper::get_default_field' );
@@ -93,6 +82,17 @@ class FrmFieldsHelper {
 	 */
 	public static function get_default_field_options( $type ) {
 		$field_type = FrmFieldFactory::get_field_type( $type );
+		return $field_type->get_default_field_options();
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	public static function get_default_field_options_from_field( $field ) {
+		if ( isset( $field->field_options['original_type'] ) && $field->type != $field->field_options['original_type'] ) {
+			$field->type = $field->field_options['original_type'];
+		}
+		$field_type = FrmFieldFactory::get_field_object( $field );
 		return $field_type->get_default_field_options();
 	}
 
@@ -188,7 +188,12 @@ class FrmFieldsHelper {
 	private static function show_hidden_field( $field ) {
 		$args = self::fill_display_field_values( $field );
 
-		echo '<input type="hidden" name="' . esc_attr( $args['field_name'] ) . '" id="' . esc_attr( $args['html_id'] ) . '" value="' . esc_attr( $field['value'] ) . '" ' . do_action( 'frm_field_input_html', $field ) . ' />';
+		ob_start();
+		do_action( 'frm_field_input_html', $field );
+		$input_html = ob_get_contents();
+		ob_end_clean();
+
+		echo '<input type="hidden" name="' . esc_attr( $args['field_name'] ) . '" id="' . esc_attr( $args['html_id'] ) . '" value="' . esc_attr( $field['value'] ) . '" ' . $input_html . ' />';
 	}
 
 	private static function show_field( $field, $errors, $form ) {
