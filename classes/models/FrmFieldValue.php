@@ -22,13 +22,6 @@ class FrmFieldValue {
 	/**
 	 * @since 2.04
 	 *
-	 * @var string
-	 */
-	protected $source = '';
-
-	/**
-	 * @since 2.04
-	 *
 	 * @var mixed
 	 */
 	protected $saved_value = '';
@@ -38,40 +31,22 @@ class FrmFieldValue {
 	 *
 	 * @var mixed
 	 */
-	protected $displayed_value = '';
+	protected $displayed_value = 'frm_not_prepared';
 
 	/**
 	 * FrmFieldValue constructor.
 	 *
 	 * @param stdClass $field
 	 * @param stdClass $entry
-	 * @param array $atts
 	 */
-	public function __construct( $field, $entry, $atts = array() ) {
+	public function __construct( $field, $entry ) {
 		if ( ! is_object( $field ) || ! is_object( $entry ) || ! isset( $entry->metas ) ) {
 			return;
 		}
 
 		$this->entry_id = $entry->id;
 		$this->field = $field;
-		$this->init_source( $atts );
 		$this->init_saved_value( $entry );
-		$this->init_displayed_value( $entry );
-	}
-
-	/**
-	 * Initialize the source property
-	 *
-	 * @since 2.04
-	 *
-	 * @param array $atts
-	 */
-	protected function init_source( $atts ) {
-		if ( isset( $atts['source'] ) && is_string( $atts['source'] ) && $atts['source'] !== '' ) {
-			$this->source = (string) $atts['source'];
-		} else {
-			$this->source = 'general';
-		}
 	}
 
 	/**
@@ -94,17 +69,15 @@ class FrmFieldValue {
 	}
 
 	/**
-	 * Initialize a field's displayed value
+	 * Prepare the display value
 	 *
-	 * @since 2.04
+	 * @since 2.05
 	 *
-	 * @param stdClass $entry
+	 * @param array $atts
 	 */
-	protected function init_displayed_value( $entry ) {
-		$this->displayed_value = $this->saved_value;
-
-		$this->generate_displayed_value_for_field_type();
-		$this->filter_displayed_value( $entry );
+	public function prepare_displayed_value( $atts = array() ) {
+		$this->generate_displayed_value_for_field_type( $atts );
+		$this->filter_displayed_value( $atts );
 	}
 
 	/**
@@ -149,6 +122,10 @@ class FrmFieldValue {
 	 * @since 2.04
 	 */
 	public function get_displayed_value() {
+		if ( $this->displayed_value === 'frm_not_prepared' ) {
+			return __( 'The display value has not been prepared. Please use the prepare_display_value() method before calling get_displayed_value().' , 'formidable' );
+		}
+
 		return $this->displayed_value;
 	}
 
@@ -157,11 +134,13 @@ class FrmFieldValue {
 	 *
 	 * @since 3.0
 	 *
+	 * @param array $atts
+	 *
 	 * @return mixed
 	 */
-	protected function generate_displayed_value_for_field_type() {
+	protected function generate_displayed_value_for_field_type( $atts ) {
 		$field_obj = FrmFieldFactory::get_field_object( $this->field );
-		$this->displayed_value = $field_obj->get_display_value( $this->displayed_value );
+		$this->displayed_value = $field_obj->get_display_value( $this->saved_value, $atts );
 	}
 
 	/**
@@ -169,11 +148,13 @@ class FrmFieldValue {
 	 *
 	 * @since 2.04
 	 *
-	 * @param stdClass $entry
+	 * @param array $atts
 	 */
-	protected function filter_displayed_value( $entry ) {
+	protected function filter_displayed_value( $atts ) {
+		$entry = FrmEntry::getOne( $this->entry_id, true );
 
-		if ( $this->source === 'entry_formatter' ) {
+		// TODO: maybe change from 'source' to 'run_filters' = 'email'
+		if ( isset( $atts['source'] ) && $atts['source'] === 'entry_formatter' ) {
 			// Deprecated frm_email_value hook
 			$meta                  = array(
 				'item_id'    => $entry->id,

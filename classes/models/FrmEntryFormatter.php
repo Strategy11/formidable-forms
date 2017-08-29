@@ -135,8 +135,30 @@ class FrmEntryFormatter {
 	 * @param array $atts
 	 */
 	protected function init_entry_values( $atts ) {
-		$atts['source'] = 'entry_formatter';
-		$this->entry_values = new FrmEntryValues( $this->entry->id, $atts );
+		$entry_atts = $this->prepare_entry_attributes( $atts );
+		$this->entry_values = new FrmEntryValues( $this->entry->id, $entry_atts );
+	}
+
+	/**
+	 * Prepare attributes array for FrmEntryValues constructor
+	 *
+	 * @since 2.05
+	 *
+	 * @param array $atts
+	 *
+	 * @return array
+	 */
+	protected function prepare_entry_attributes( $atts ) {
+		$entry_atts = array();
+
+		$conditionally_add = array( 'include_fields', 'fields', 'exclude_fields' );
+		foreach ( $conditionally_add as $index ) {
+			if ( isset( $atts[ $index ] ) ) {
+				$entry_atts[ $index ] = $atts[ $index ];
+			}
+		}
+
+		return $entry_atts;
 	}
 
 	/**
@@ -315,10 +337,7 @@ class FrmEntryFormatter {
 	protected function prepare_html_table() {
 		$content = $this->table_generator->generate_table_header();
 
-		foreach ( $this->entry_values->get_field_values() as $field_id => $field_value ) {
-			$this->add_field_value_to_content( $field_value, $content );
-		}
-
+		$this->add_field_values_to_content( $content );
 		$this->add_user_info_to_html_table( $content );
 
 		$content .= $this->table_generator->generate_table_footer();
@@ -331,6 +350,29 @@ class FrmEntryFormatter {
 	}
 
 	/**
+	 * Add field values to table or plain text content
+	 *
+	 * @since 2.05
+	 *
+	 * @param string $content
+	 */
+	protected function add_field_values_to_content( &$content ) {
+		$field_value_atts = array(
+			'source' => 'entry_formatter',
+			'wpautop' => false,
+		);
+
+		foreach ( $this->entry_values->get_field_values() as $field_id => $field_value ) {
+
+			/**
+			 * @var FrmFieldValue $field_value
+			 */
+			$field_value->prepare_displayed_value( $field_value_atts );
+			$this->add_field_value_to_content( $field_value, $content );
+		}
+	}
+
+	/**
 	 * Return the formatted plain text content
 	 *
 	 * @since 2.04
@@ -340,10 +382,7 @@ class FrmEntryFormatter {
 	protected function prepare_plain_text_block() {
 		$content = '';
 
-		foreach ( $this->entry_values->get_field_values() as $field_id => $field_value ) {
-			$this->add_field_value_to_content( $field_value, $content );
-		}
-
+		$this->add_field_values_to_content( $content );
 		$this->add_user_info_to_plain_text_content( $content );
 
 		return $content;
@@ -373,7 +412,17 @@ class FrmEntryFormatter {
 	 * @param array $output
 	 */
 	protected function push_field_values_to_array( $field_values, &$output ) {
+		$field_value_atts = array(
+			'source' => 'entry_formatter',
+			'wpautop' => false,
+			'return_array' => true,
+		);
+
 		foreach ( $field_values as $field_value ) {
+			/**
+			 * @var FrmFieldValue $field_value
+			 */
+			$field_value->prepare_displayed_value( $field_value_atts );
 			$this->push_single_field_to_array( $field_value, $output );
 		}
 	}
@@ -521,6 +570,7 @@ class FrmEntryFormatter {
 	 * @param string $content
 	 */
 	protected function add_single_cell_html_row( $display_value, &$content ) {
+		// TODO: maybe move to FrmFieldValue
 		$display_value = $this->prepare_display_value_for_html_table( $display_value );
 
 		$content .= $this->table_generator->generate_single_cell_table_row( $display_value );
@@ -647,13 +697,10 @@ class FrmEntryFormatter {
 	protected function include_field_in_content( $field_value ) {
 		$include = true;
 
-		if ( $this->is_extra_field( $field_value ) ) {
-
-			$include = $this->is_extra_field_included( $field_value );
-
-		} else if ( FrmAppHelper::is_empty_value( $field_value->get_displayed_value() ) && ! $this->include_blank ) {
-
+		if ( FrmAppHelper::is_empty_value( $field_value->get_displayed_value() ) && ! $this->include_blank ) {
 			$include = false;
+		} else if ( $this->is_extra_field( $field_value ) ) {
+			$include = $this->is_extra_field_included( $field_value );
 		}
 
 		return $include;
