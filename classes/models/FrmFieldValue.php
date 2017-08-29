@@ -76,6 +76,7 @@ class FrmFieldValue {
 	 * @param array $atts
 	 */
 	public function prepare_displayed_value( $atts = array() ) {
+		$this->displayed_value = $this->saved_value;
 		$this->generate_displayed_value_for_field_type( $atts );
 		$this->filter_displayed_value( $atts );
 	}
@@ -139,8 +140,10 @@ class FrmFieldValue {
 	 * @return mixed
 	 */
 	protected function generate_displayed_value_for_field_type( $atts ) {
-		$field_obj = FrmFieldFactory::get_field_object( $this->field );
-		$this->displayed_value = $field_obj->get_display_value( $this->saved_value, $atts );
+		if ( ! FrmAppHelper::is_empty_value( $this->displayed_value, '' ) ) {
+			$field_obj = FrmFieldFactory::get_field_object( $this->field );
+			$this->displayed_value = $field_obj->get_display_value( $this->displayed_value, $atts );
+		}
 	}
 
 	/**
