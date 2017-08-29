@@ -934,6 +934,10 @@ if ( ! $submit_style ) { ?>
 .<?php echo esc_html( $style_class ) ?> .frm_catlevel_5{
 	margin-right:18px;
 }
+
+.<?php echo esc_html( $style_class ) ?> div > .frm_time_select{
+	margin-right:5px;
+}
 <?php } ?>
 /* Start Chosen */
 .<?php echo esc_html( $style_class ) ?> .chosen-container{
