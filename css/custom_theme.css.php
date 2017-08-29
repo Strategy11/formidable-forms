@@ -526,6 +526,11 @@ select.frm_loading_lookup{
 	margin-right:10px;
 }
 
+.with_frm_style .frm_conf_field.frm_left_container label.frm_primary_label{
+	display:inline;
+	visibility:hidden;
+}
+
 .frm_form_field.frm_left_container input:not([type=radio]):not([type=checkbox]),
 .frm_form_field.frm_left_container:not(.frm_dynamic_select_container) select,
 .frm_form_field.frm_left_container textarea,

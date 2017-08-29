@@ -333,7 +333,7 @@ class FrmDb {
 	 * @param string $where
 	 */
     private static function add_query_placeholder( $key, $value, &$where ) {
-		if ( is_numeric( $value ) && strpos( $key, 'meta_value' ) === false ) {
+		if ( is_numeric( $value ) && ( strpos( $key, 'meta_value' ) === false || strpos( $key, '+0' ) !== false ) ) {
 			$where .= '%d';
 		} else {
 			$where .= '%s';

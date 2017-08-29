@@ -570,7 +570,7 @@ class FrmFieldsHelper {
 	public static function value_meets_condition( $observed_value, $cond, $hide_opt ) {
 		// Remove white space from hide_opt
 		if ( ! is_array( $hide_opt ) ) {
-			$hide_opt = rtrim( $hide_opt );
+			$hide_opt = trim( $hide_opt );
 		}
 
 		$observed_value = wp_kses_post( $observed_value );
