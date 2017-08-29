@@ -530,7 +530,7 @@ class test_FrmProShowEntryShortcode extends test_FrmShowEntryShortcode {
 
 	private function paragraph_to_website_html( $atts ) {
 		$html = '<tr' . $this->tr_style . '><td' . $this->td_style . '>Paragraph Text</td><td' . $this->td_style . '>';
-		$html .= "Jamie\nRebecca\nWahlin</td></tr>\r\n";
+		$html .= "Jamie<br/>Rebecca<br/>Wahlin</td></tr>\r\n";
 		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Checkboxes - colors</td><td' . $this->td_style . '>Red, Green</td></tr>' . "\r\n";
 		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Radio Buttons - dessert</td><td' . $this->td_style . '>cookies</td></tr>' . "\r\n";
 		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Dropdown</td><td' . $this->td_style . '>Ace Ventura</td></tr>' . "\r\n";

@@ -1894,9 +1894,7 @@
 		</item_meta>
 		<item_meta>
 		    <field_id>8100</field_id>
-		    <meta_value><![CDATA[Jamie
-Rebecca
-Wahlin]]></meta_value>
+		    <meta_value>Jamie&#xD;&#xA;Rebecca&#xD;&#xA;Wahlin</meta_value>
 		</item_meta>
 		<item_meta>
 		    <field_id>8101</field_id>
