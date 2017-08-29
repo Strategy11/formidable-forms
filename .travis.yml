@@ -6,8 +6,10 @@ matrix:
   include:
     - php: 7.0
       env: WP_VERSION=master WP_MULTISITE=1 PHPLINT=1 PHPUNIT=1
+      dist: precise
     - php: 5.2.17
       env: WP_VERSION=4.7 WP_MULTISITE=1 PHPLINT=1 PHPUNIT=1
+      dist: precise
     - php: 7.0
       env: WP_VERSION=4.7
       dist: trusty
