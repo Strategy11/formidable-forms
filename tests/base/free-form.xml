@@ -185,4 +185,21 @@
             <field_options><![CDATA[{"size":"","max":"","label":"","blank":"","required_indicator":"*","invalid":"The reCAPTCHA was not entered correctly","separate_value":0,"clear_on_focus":0,"default_blank":0,"classes":"","custom_html":"<div id=\"frm_field_[id]_container\" class=\"frm_form_field form-field [required_class][error_class]\">\n    <label for=\"field_[key]\" class=\"frm_primary_label\">[field_name]\n        <span class=\"frm_required\">[required_label]<\/span>\n    <\/label>\n    [input]\n    [if description]<div class=\"frm_description\">[description]<\/div>[\/if description]\n    [if error]<div class=\"frm_error\">[error]<\/div>[\/if error]\n<\/div>","slide":0,"form_select":"","show_hide":"show","any_all":"any","align":"block","hide_field":[],"hide_field_cond":["=="],"hide_opt":[],"star":0,"ftypes":[],"data_type":"select","restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":1,"maxnum":10,"step":1,"clock":12,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","calc_dec":"","dyn_default_value":"","multiple":0,"unique_msg":"This value must be unique.","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":0,"in_section":0,"captcha_size":"normal","captcha_theme":"light"}]]></field_options>
         </field>
     </form>
+    <view>
+        <title>Email Notification</title>
+        <post_author><![CDATA[admin]]></post_author>
+        <content><![CDATA[{"email_to":"admin@example.org","cc":"","bcc":"","reply_to":"[free-email-field]","from":"[sitename] <[admin_email]>","email_subject":"","email_message":"[default-message]","event":["create"],"conditions":{"send_stop":"send","any_all":"any"}}]]></content>
+        <excerpt><![CDATA[email]]></excerpt>
+        <post_id>836</post_id>
+        <post_date>2017-04-06 17:18:12</post_date>
+        <post_date_gmt>2017-04-06 17:18:12</post_date_gmt>
+        <comment_status>open</comment_status>
+        <ping_status>open</ping_status>
+        <post_name>76_email_1</post_name>
+        <status>publish</status>
+        <post_parent>0</post_parent>
+        <menu_order>76</menu_order>
+        <post_type>frm_form_actions</post_type>
+        <is_sticky>0</is_sticky>
+    </view>
 </channel>
