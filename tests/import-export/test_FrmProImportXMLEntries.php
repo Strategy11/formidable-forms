@@ -3,7 +3,7 @@
  * @group xml
  * @group pro
  */
-class WP_Test_FrmProXMLHelper extends FrmUnitTest {
+class WP_Test_FrmProImportXMLEntries extends FrmUnitTest {
 
 	/**
 	* @covers FrmProXMLHelper::import_xml_entries
