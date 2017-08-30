@@ -49,36 +49,46 @@ class WP_Test_FrmDb extends FrmUnitTest {
 
 		update_option( 'frm_db_version', 12 );
 
-		$form = FrmForm::getOne( 'contact-db12' );
-		$this->assertNotEmpty( $form );
-		$this->assertTrue( is_numeric( $form->id ) );
-		$notification = array( 0 => array(
-			'email_to' => 'emailto@test.com', 'also_email_to' => array(1,2),
-			'reply_to' => 'replyto@test.com', 'reply_to_name' => 'Reply to me',
-			'cust_reply_to' => '', 'cust_reply_to_name' => '', 'plain_text' => 1,
-			'email_message' => 'This is my email message. [default-message]',
-			'email_subject' => 'The subject', 'update_email' => 2, 'inc_user_info' => 1,
-		) );
-		$form->options['notification'] = $notification;
+		// Create new contact-db12 form on site
+		$form_values = array(
+			'form_key' => 'contact-db12-copy',
+			'name'     => 'Contact DB12 Copy',
+			'description' => '',
+			'status'      => 'published',
+			'options'     => array(
+				'custom_style'  => '1',
+				'notification' => array(
+					'email_to' => 'emailto@test.com,tester@mail.com',
+					'reply_to' => 'replyto@test.com',
+					'reply_to_name' => 'Reply to me',
+					'cust_reply_to' => '',
+					'cust_reply_to_name' => '',
+					'plain_text' => 1,
+					'inc_user_info' => 1,
+					'email_message' => 'This is my email message. [default-message]',
+					'email_subject' => 'The subject',
+					'update_email' => 2,
+				),
+			),
+		);
 
-		global $wpdb;
-		$updated = $wpdb->update( $wpdb->prefix . 'frm_forms', array( 'options' => maybe_serialize( $form->options ) ), array( 'id' => $form->id ) );
-		FrmForm::clear_form_cache();
-		$this->assertEquals( $updated, 1 );
-
-		$form = FrmForm::getOne( 'contact-db12' );
-
-		$this->assertNotEmpty( $form->options, 'The form settings are empty' );
-		$this->assertTrue( isset( $form->options['notification'] ), 'The old notification settings are missing' );
-		$this->assertEquals( $form->options['notification'][0]['email_to'], 'emailto@test.com' );
+		FrmForm::create( $form_values );
 
 		// migrate data
 		FrmAppController::install();
 
+		$form = FrmForm::getOne( 'contact-db12-copy' );
+
 		$form_actions = FrmFormAction::get_action_for_form( $form->id, 'email' );
+
+		$this->assertTrue( ! isset( $form->options['notification'] ), 'The migrated notification settings are not cleared from form.' );
+
+		$this->assertEquals( 1, count( $form_actions ), 'Old form settings are not converted to email action.' );
 		foreach ( $form_actions as $action ) {
 			$this->assertTrue( strpos( $action->post_content['email_to'], 'emailto@test.com' ) !== false );
 		}
+
+
 	}
 
 	/**

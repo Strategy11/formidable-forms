@@ -12,7 +12,7 @@
 		<is_template>1</is_template>
 		<default_template>1</default_template>
 		<editable>0</editable>
-		<options><![CDATA[{"custom_style":1,"notification":[{"email_to":"emailto@test.com","also_email_to":[{1,2}],"reply_to":"replyto@test.com","reply_to_name":"Reply to me","cust_reply_to":"","cust_reply_to_name":"","plain_text":1,"inc_user_info":1,"email_message":"This is my email message. [default-message]","email_subject":"The subject","update_email":2}]}]]></options>
+		<options><![CDATA[{"custom_style":1,"notification":[{"email_to":"emailto@test.com,[admin_email]","reply_to":"replyto@test.com","reply_to_name":"Reply to me","cust_reply_to":"","cust_reply_to_name":"","plain_text":1,"inc_user_info":1,"email_message":"This is my email message. [default-message]","email_subject":"The subject","update_email":2}]}]]></options>
 		<status><![CDATA[published]]></status>
 		<field>
 		    <id>1</id>

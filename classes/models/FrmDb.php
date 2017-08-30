@@ -724,8 +724,6 @@ class FrmDb {
      * Migrate post and email notification settings into actions
      */
     private function migrate_to_16() {
-        global $wpdb;
-
         $forms = FrmDb::get_results( $this->forms, array(), 'id, options, is_template, default_template' );
 
         /**

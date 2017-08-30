@@ -1079,7 +1079,27 @@ class FrmXMLHelper {
             }
             unset($new_notification);
         }
+
+		self::remove_deprecated_notification_settings( $form_id, $form_options );
     }
+
+	/**
+	 * Remove deprecated notification settings after migration
+	 *
+	 * @since 2.05
+	 *
+	 * @param int|string $form_id
+	 * @param array $form_options
+	 */
+    private static function remove_deprecated_notification_settings( $form_id, $form_options ) {
+		$delete_settings = array( 'notification', 'autoresponder', 'email_to' );
+		foreach ( $delete_settings as $index ) {
+			if ( isset( $form_options[ $index ] ) ) {
+				unset( $form_options[ $index ] );
+			}
+		}
+		FrmForm::update( $form_id, array( 'options' => $form_options ) );
+	}
 
     private static function migrate_notifications_to_action( $form_options, $form_id, &$notifications ) {
         if ( ! isset( $form_options['notification'] ) && isset( $form_options['email_to'] ) && ! empty( $form_options['email_to'] ) ) {
