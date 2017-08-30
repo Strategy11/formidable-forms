@@ -7,7 +7,7 @@ matrix:
     - php: 7.0
       env: WP_VERSION=master WP_MULTISITE=1 PHPLINT=1 PHPUNIT=1
       dist: precise
-    - php: 5.2.17
+    - php: 5.4
       env: WP_VERSION=4.7 WP_MULTISITE=1 PHPLINT=1 PHPUNIT=1
       dist: precise
     - php: 7.0
@@ -27,10 +27,6 @@ matrix:
       env: WP_VERSION=4.7
     - php: 5.4
       env: WP_VERSION=4.7
-    - php: 5.3
-      env: WP_VERSION=4.7
-    - php: 5.2
-      env: WP_VERSION=master
     - php: 5.5
       env: WP_VERSION=4.0
     - php: 5.4
