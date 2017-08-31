@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @since 2.04
+ * @since 2.05
  *
  * @group shortcodes
  * @group entries
@@ -965,10 +965,22 @@ class test_FrmProShowEntryShortcode extends test_FrmShowEntryShortcode {
 		return $table;
 	}
 
-	protected function get_expected_default_html( $atts ) {
+	/**
+	 * Get the expected default HTML or plain text shortcodes
+	 *
+	 * @param string $type
+	 * @param array $atts
+	 *
+	 * @return string
+	 */
+	protected function get_expected_default_shortcodes( $type, $atts ) {
+		$content = '';
+
 		$fields = FrmField::get_all_for_form( $atts['form_id'], '', 'include' );
 
-		$html = $this->table_header( $atts );
+		if ( $type === 'html' ) {
+			$content = $this->table_header( $atts );
+		}
 
 		$in_repeating_section = 0;
 		foreach ( $fields as $field ) {
@@ -976,42 +988,77 @@ class test_FrmProShowEntryShortcode extends test_FrmShowEntryShortcode {
 			if ( in_array( $field->type, array( 'html', 'form', 'divider', 'break', 'end_divider', 'password', 'captcha' ) ) ) {
 				if ( $field->type == 'divider' ) {
 
-					$html .= '[if ' . $field->id . ']<tr style="[frm-alt-color]">';
-					$html .= '<td colspan="2"' . $this->td_style . '>';
-					$html .= '<h3>[' . $field->id . ' show=description]</h3>';
-					$html .= '</td>';
-					$html .= '</tr>' . "\r\n" . '[/if ' . $field->id . ']' . "\r\n";
+					$content .= '[if ' . $field->id . ']';
+					$content .= $this->table_row_start_tags( $type, $field );
+
+					if ( $type === 'html' ) {
+						$content .= '<h3>[' . $field->id . ' show=description]</h3>';
+					} else {
+						$content .= '[' . $field->id . ' show=description]';
+					}
+
+					$content .= $this->table_row_end_tags( $type );
+					$content .= "\r\n" . '[/if ' . $field->id . ']';
+					$content .= $this->after_table_row_tags( $type );
 
 					if ( FrmField::is_repeating_field( $field ) ) {
 						$in_repeating_section = $field->id;
-						$html .= '[foreach ' . $field->id . ']';
+						$content .= '[foreach ' . $field->id . ']';
 					}
 				} else if ( $in_repeating_section > 0 && $field->type == 'end_divider' ) {
-					$html .= '[/foreach ' . $in_repeating_section . ']';
+					$content .= '[/foreach ' . $in_repeating_section . ']';
 					$in_repeating_section = 0;
 				} else if ( $field->type == 'break' ) {
-					$html .= '[if ' . $field->id . ']<tr style="[frm-alt-color]">';
-					$html .= '<td colspan="2"' . $this->td_style . '><br/><br/></td>';
-					$html .= '</tr>' . "\r\n" . '[/if ' . $field->id . ']' . "\r\n";
+					if ( $type === 'plain' ) {
+						continue;
+					}
+
+					$content .= '[if ' . $field->id . ']';
+					$content .= $this->table_row_start_tags( $type, $field );
+					$content .= '<br/><br/>';
+					$content .= $this->table_row_end_tags( $type );
+					$content .= "\r\n" . '[/if ' . $field->id . ']';
+					$content .= $this->after_table_row_tags( $type );
 				}
 
 				continue;
 			}
 
-			$html .= '[if ' . $field->id . ']<tr style="[frm-alt-color]">';
-			$html .= '<td' . $this->td_style . '>[' . $field->id . ' show=field_label]</td>';
+			$content .= '[if ' . $field->id . ']';
+			$content .= $this->table_row_start_tags( $type, $field );
+			$content .= '[' . $field->id . ' show=field_label]';
+			$content .= $this->cell_separator( $type );
 
 			if ( $field->type == 'data' && $field->field_options['data_type'] == 'data' ) {
-				$html .= '<td' . $this->td_style . '>';
-				$html .= '[' . $field->field_options['hide_field'][0] . ' show=' . $field->field_options['form_select'] . ']';
-				$html .= '</td>';
+				$content .= '[' . $field->field_options['hide_field'][0] . ' show=' . $field->field_options['form_select'] . ']';
 			} else {
-				$html .= '<td' . $this->td_style . '>[' . $field->id . ']</td>';
+				$content .= '[' . $field->id . ']';
 			}
-			$html .= '</tr>' . "\r\n" . '[/if ' . $field->id . ']' . "\r\n";;
+
+			$content .= $this->table_row_end_tags( $type );
+			$content .= "\r\n" . '[/if ' . $field->id . ']';
+			$content .= $this->after_table_row_tags( $type );
 		}
 
-		$html .= $this->table_footer();
+		if ( $type === 'html' ) {
+			$content .= $this->table_footer();
+		}
+
+		return $content;
+	}
+
+	protected function table_row_start_tags( $type, $field ) {
+		if ( $type === 'html' ) {
+			$html = '<tr style="[frm-alt-color]">';
+
+			if ( $field->type === 'divider' || $field->type === 'break' ) {
+				$html .= '<td colspan="2"' . $this->td_style . '>';
+			} else {
+				$html .= '<td' . $this->td_style . '>';
+			}
+		} else {
+			$html = '';
+		}
 
 		return $html;
 	}

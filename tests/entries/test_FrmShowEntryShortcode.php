@@ -1,11 +1,11 @@
 <?php
 
 /**
- * @since 3.0
+ * @since 2.04
  *
  * @group shortcodes
  * @group entries
- * @group show-entry-shortcode-free
+ * @group show-entry-shortcode
  * @group free
  * TODO: DRY
  *
@@ -543,7 +543,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * @since 2.04
 	 */
 	public function test_default_plain_for_email() {
-		$form_id = FrmForm::getIdByKey( 'all_field_types' );
+		$form_id = $this->get_form_id_for_test();
 
 		$atts = array(
 			'form_id' => $form_id,
@@ -964,11 +964,43 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		return $this->expected_html_content( $atts );
 	}
 
+	/**
+	 * Get the expected default HTML shortcodes
+	 *
+	 * @param array $atts
+	 *
+	 * @return string
+	 */
 	protected function get_expected_default_html( $atts ) {
-		$fields = FrmField::get_all_for_form( $atts['form_id'], '', 'include' );
+		return $this->get_expected_default_shortcodes( 'html', $atts );
+	}
+
+	/**
+	 * Get the expected default plain text shortcodes
+	 *
+	 * @param array $atts
+	 *
+	 * @return string
+	 */
+	protected function get_expected_default_plain( $atts ) {
+		return $this->get_expected_default_shortcodes( 'plain', $atts );
+	}
+
+	/**
+	 * Get the expected default HTML or plain text shortcodes
+	 *
+	 * @param string $type
+	 * @param array $atts
+	 *
+	 * @return string
+	 */
+	protected function get_expected_default_shortcodes( $type, $atts ) {
+		$content = '';
+
+		$fields = FrmField::get_all_for_form( $atts[ 'form_id' ], '', 'include' );
 
 		if ( $type === 'html' ) {
-			$content = $this->table_header( $atts );
+			$content .= $this->table_header( $atts );
 		}
 
 		foreach ( $fields as $field ) {
@@ -977,27 +1009,58 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 				continue;
 			}
 
-			$html .= '[if ' . $field->id . ']<tr style="[frm-alt-color]">';
-			$html .= '<td' . $this->td_style . '>[' . $field->id . ' show=field_label]</td>';
-			$html .= '<td' . $this->td_style . '>[' . $field->id . ']</td>';
-			$html .= '</tr>' . "\r\n" . '[/if ' . $field->id . ']' . "\r\n";;
+			$content .= '[if ' . $field->id . ']';
+			$content .= $this->table_row_start_tags( $type, $field );
+			$content .= '[' . $field->id . ' show=field_label]';
+			$content .= $this->cell_separator( $type );
+			$content .= '[' . $field->id . ']';
+			$content .= $this->table_row_end_tags( $type );
+			$content .= "\r\n" . '[/if ' . $field->id . ']';
+			$content .= $this->after_table_row_tags( $type );
 		}
 
-	private function table_row_end_tags( $type ) {
-		$html = '';
-
 		if ( $type === 'html' ) {
-			$html .= '</td></tr>';
+			$content .= $this->table_footer();
+		}
+
+		return $content;
+	}
+
+	protected function table_row_start_tags( $type, $field ) {
+		if ( $type === 'html' ) {
+			$html = '<tr style="[frm-alt-color]"><td' . $this->td_style . '>';
+		} else {
+			$html = '';
 		}
 
 		return $html;
 	}
 
-	private function after_table_row_tags( $type ) {
-		$html = '';
-
+	protected function cell_separator( $type ) {
 		if ( $type === 'html' ) {
-			$html .= "\r\n";
+			$html = '</td><td' . $this->td_style . '>';
+		} else {
+			$html = ': ';
+		}
+
+		return $html;
+	}
+
+	protected function table_row_end_tags( $type ) {
+		if ( $type === 'html' ) {
+			$html = '</td></tr>';
+		} else {
+			$html = '';
+		}
+
+		return $html;
+	}
+
+	protected function after_table_row_tags( $type ) {
+		if ( $type === 'html' ) {
+			$html = "\r\n";
+		} else {
+			$html = '';
 		}
 
 		return $html;
