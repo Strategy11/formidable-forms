@@ -1431,9 +1431,17 @@ function frmAdminBuildJS(){
 			return;
 		}
 
+		var selected = jQuery('li.ui-state-default.selected');
+
 		// get offsets before anything changes
 		var curOffset = $thisobj.offset().top;
-		var newOffset = $thisobj.offset().top;
+		var preTop = document.documentElement.scrollTop || document.body.scrollTop; // body for Safari;
+		var selectedOffset = 0;
+		var selectedHeight = 0;
+		if ( selected.length )	{
+			selectedOffset = selected.offset().top;
+			selectedHeight = selected.height();
+		}
 
 		if(obj.className.indexOf('edit_field_type_divider') !== -1){
 			$thisobj.find('.frm_default_val_icons').hide().css('visibility', 'hidden');
@@ -1446,12 +1454,17 @@ function frmAdminBuildJS(){
 			}
 		}
 
-		jQuery('li.ui-state-default.selected').removeClass('selected');
+		selected.removeClass('selected');
 		$thisobj.addClass('selected');
+		var newOffset = $thisobj.offset().top;
 
-		if(newOffset != curOffset){
+		if(selected.length && newOffset != curOffset){
 			var curTop = document.documentElement.scrollTop || document.body.scrollTop; // body for Safari;
-			jQuery(window).scrollTop(curTop - (curOffset-newOffset));
+			var selectedBottom = selectedOffset + selectedHeight;
+
+			if ( preTop < selectedBottom ) {
+				jQuery(window).scrollTop(curTop - (curOffset-newOffset));
+			}
 		}
 	}
 	

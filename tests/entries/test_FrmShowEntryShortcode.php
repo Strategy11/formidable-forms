@@ -536,6 +536,28 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	}
 
 	/**
+	 * Tests Default HTML for emails
+	 *
+	 * @covers FrmEntriesController::show_entry_shortcode
+	 *
+	 * @since 2.04
+	 */
+	public function test_default_plain_for_email() {
+		$form_id = FrmForm::getIdByKey( 'all_field_types' );
+
+		$atts = array(
+			'form_id' => $form_id,
+			'default_email' => true,
+			'plain_text' => true,
+		);
+
+		$content = $this->get_formatted_content( $atts );
+		$expected_content = $this->get_expected_default_plain( $atts );
+
+		$this->assertSame( $expected_content, $content );
+	}
+
+	/**
 	 * Tests the way an API action gets entry data
 	 *
 	 * @covers FrmEntriesController::show_entry_shortcode
@@ -945,7 +967,9 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	protected function get_expected_default_html( $atts ) {
 		$fields = FrmField::get_all_for_form( $atts['form_id'], '', 'include' );
 
-		$html = $this->table_header( $atts );
+		if ( $type === 'html' ) {
+			$content = $this->table_header( $atts );
+		}
 
 		foreach ( $fields as $field ) {
 
@@ -959,7 +983,22 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 			$html .= '</tr>' . "\r\n" . '[/if ' . $field->id . ']' . "\r\n";;
 		}
 
-		$html .= $this->table_footer();
+	private function table_row_end_tags( $type ) {
+		$html = '';
+
+		if ( $type === 'html' ) {
+			$html .= '</td></tr>';
+		}
+
+		return $html;
+	}
+
+	private function after_table_row_tags( $type ) {
+		$html = '';
+
+		if ( $type === 'html' ) {
+			$html .= "\r\n";
+		}
 
 		return $html;
 	}
