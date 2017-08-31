@@ -30,15 +30,15 @@ class FrmEntryFactory {
 	 * @since 2.04
 	 *
 	 * @param int|string $form_id
-	 * @param string $format
+	 * @param array $atts
 	 *
 	 * @return FrmEntryShortcodeFormatter|FrmProEntryShortcodeFormatter
 	 */
-	public static function entry_shortcode_formatter_instance( $form_id, $format ) {
+	public static function entry_shortcode_formatter_instance( $form_id, $atts ) {
 		if ( FrmAppHelper::pro_is_installed() ) {
-			$shortcode_formatter = new FrmProEntryShortcodeFormatter( $form_id, $format );
+			$shortcode_formatter = new FrmProEntryShortcodeFormatter( $form_id, $atts );
 		} else {
-			$shortcode_formatter = new FrmEntryShortcodeFormatter( $form_id, $format );
+			$shortcode_formatter = new FrmEntryShortcodeFormatter( $form_id, $atts );
 		}
 
 		return $shortcode_formatter;

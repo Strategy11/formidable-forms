@@ -540,8 +540,8 @@ class FrmEntriesController {
 		$atts = shortcode_atts( $defaults, $atts );
 
 		if ( $atts['default_email'] ) {
-
-			$entry_shortcode_formatter = FrmEntryFactory::entry_shortcode_formatter_instance( $atts['form_id'], $atts['format'] );
+			$shortcode_atts = array( 'format' => $atts['format'], 'plain_text' => $atts['plain_text'] );
+			$entry_shortcode_formatter = FrmEntryFactory::entry_shortcode_formatter_instance( $atts['form_id'], $shortcode_atts );
 			$formatted_entry = $entry_shortcode_formatter->content();
 
 		} else {
