@@ -113,17 +113,10 @@ class FrmEntryShortcodeFormatter {
 	 * @param array $atts
 	 */
 	protected function init_format( $atts ) {
-		if ( ! isset( $atts['format'] ) ) {
-			$this->format = 'table';
-		} else if ( $atts['format'] == 'array' ) {
-			$this->format = 'array';
-		} else if ( $atts['format'] == 'text' ) {
-
-			if ( $this->is_plain_text === true ) {
-				$this->format = 'plain_text_block';
-			} else {
-				$this->format = 'table';
-			}
+		if ( isset( $atts['format'] ) && is_string( $atts['format'] ) && $atts['format'] !== '' ) {
+			$this->format = $atts['format'];
+		} else {
+			$this->format = 'text';
 		}
 	}
 
@@ -307,7 +300,7 @@ class FrmEntryShortcodeFormatter {
 	 * @return bool
 	 */
 	protected function is_plain_text_format() {
-		return $this->format === 'plain_text_block';
+		return ( $this->format === 'text' && $this->is_plain_text === true );
 	}
 
 	/**
@@ -318,7 +311,7 @@ class FrmEntryShortcodeFormatter {
 	 * @return bool
 	 */
 	protected function is_table_format() {
-		return $this->format === 'table';
+		return ( $this->format === 'text' && $this->is_plain_text === false );
 	}
 
 }
