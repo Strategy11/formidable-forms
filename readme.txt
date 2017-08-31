@@ -3,6 +3,7 @@ Contributors: formidableforms, sswells, srwells, jamie.wahlin
 Tags: contact form, form builder, custom form, forms, form, form maker, form creator
 Requires at least: 3.8
 Tested up to: 4.8.1
+Requires PHP: 5.2
 Stable tag: 2.04.01
 
 The best WordPress form plugin for contact forms, surveys and more. Make forms a breeze with a drag and drop form builder and form style generator.
