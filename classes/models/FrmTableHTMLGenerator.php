@@ -84,7 +84,11 @@ class FrmTableHTMLGenerator {
 
 		foreach ( $this->style_settings as $key => $setting ) {
 			if ( isset( $atts[ $key ] ) && $atts[ $key ] !== '' ) {
-				$this->style_settings[ $key ] = str_replace( '#', '', $atts[ $key ] );
+				if ( $this->is_color_setting( $key ) ) {
+					$this->style_settings[ $key ] = $this->get_color_markup( $atts[ $key ] );
+					continue;
+				}
+				$this->style_settings[ $key ] = $atts[ $key ];
 			}
 		}
 	}
@@ -124,7 +128,7 @@ class FrmTableHTMLGenerator {
 		if ( $this->use_inline_style === true ) {
 
 			$this->table_style = ' style="' . esc_attr( 'font-size:' . $this->style_settings['font_size'] . ';line-height:135%;' );
-			$this->table_style .= esc_attr( 'border-bottom:' . $this->style_settings['border_width'] . ' solid #' . $this->style_settings['border_color'] . ';' ) . '"';
+			$this->table_style .= esc_attr( 'border-bottom:' . $this->style_settings['border_width'] . ' solid ' . $this->style_settings['border_color'] . ';' ) . '"';
 
 		}
 	}
@@ -138,11 +142,44 @@ class FrmTableHTMLGenerator {
 		if ( $this->use_inline_style === true ) {
 
 			$td_style_attributes = 'text-align:' . ( $this->direction == 'rtl' ? 'right' : 'left' ) . ';';
-			$td_style_attributes .= 'color:#' . $this->style_settings['text_color'] . ';padding:7px 9px;vertical-align:top;';
-			$td_style_attributes .= 'border-top:' . $this->style_settings['border_width'] . ' solid #' . $this->style_settings[ 'border_color' ] . ';';
+			$td_style_attributes .= 'color:' . $this->style_settings['text_color'] . ';padding:7px 9px;vertical-align:top;';
+			$td_style_attributes .= 'border-top:' . $this->style_settings['border_width'] . ' solid ' . $this->style_settings[ 'border_color' ] . ';';
 
 			$this->td_style = ' style="' . $td_style_attributes . '"';
 		}
+	}
+
+	/**
+	 * Determine if setting is for a color, e.g. text color, background color, or border color
+	 *
+	 * @param $setting_key name of setting
+	 *
+	 * @since 2.04
+	 *
+	 * @return boolean true if the setting is for a color
+	 */
+	private function is_color_setting ( $setting_key ) {
+		return strpos( $setting_key, 'color' ) !== false;
+	}
+
+	/**
+	 * Get color markup from color setting value
+	 *
+	 * @param $color_setting_text value of a color setting, with format #FFFFF, FFFFFF, or white.
+	 *
+	 * @since 2.04
+	 *
+	 * @return string color text formatted for HTML style attribute
+	 */
+	private function get_color_markup( $color_setting_text ) {
+
+		$color_setting_text = trim( $color_setting_text );
+		//check if each character in string is valid hex digit
+		if ( ctype_xdigit( $color_setting_text ) ) {
+			return '#' . $color_setting_text;
+		}
+
+		return $color_setting_text;
 	}
 
 	/**
@@ -168,7 +205,7 @@ class FrmTableHTMLGenerator {
 		if ( $this->type === 'shortcode' ) {
 			$tr_style = ' style="[frm-alt-color]"';
 		} else if ( $this->use_inline_style ) {
-			$tr_style = ' style="background-color:#' . $this->table_row_background_color() . ';"';
+			$tr_style = ' style="background-color:' . $this->table_row_background_color() . ';"';
 		} else {
 			$tr_style = '';
 		}
