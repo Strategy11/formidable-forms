@@ -42,9 +42,9 @@ class WP_Test_FrmDb extends FrmUnitTest {
 	}
 
 	/**
-	 * @covers FrmDb::migrate_to_17
+	 * @covers FrmDb::migrate_to_16
 	 */
-	function test_migrate_from_12_to_17() {
+	function test_migrate_from_12_to_current() {
 		$this->frm_install();
 
 		update_option( 'frm_db_version', 12 );

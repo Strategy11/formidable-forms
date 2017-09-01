@@ -679,7 +679,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	protected function get_test_entry( $include_meta ) {
 		$new_entry = array(
 			'form_id'  => FrmForm::getIdByKey( 'free_field_types' ),
-			'item_key' => 'jamie_entry_key',
+			'item_key' => 'free_entry_key',
 			'description' => array(
 				'browser' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:37.0) Gecko/20100101 Firefox/37.0',
 				'referrer' => 'http://localhost:8888/features/wp-admin/admin-ajax.php?action=frm_forms_preview&form=boymfd',

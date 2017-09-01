@@ -20,7 +20,7 @@ class WP_Test_FrmField extends FrmUnitTest {
 	function test_getAll() {
 		$forms = array(
 			$this->contact_form_key => $this->contact_form_field_count,
-			$this->all_fields_form_key => 35,
+			$this->all_fields_form_key => $this->all_field_types_count - $this->contact_form_field_count - 3,
 		);
 
 		foreach ( $forms as $form_key => $expected_count ) {
@@ -42,19 +42,19 @@ class WP_Test_FrmField extends FrmUnitTest {
 			),
 			'no_repeat_or_embed' => array(
 				'form_key' => $this->all_fields_form_key,
-				'count' => 35,
+				'count' => $this->all_field_types_count - $this->contact_form_field_count - 3,
 			),
 		);
 
 		if ( $this->is_pro_active ) {
 			$forms['repeat_and_embed'] = array(
 				'form_key' => $this->all_fields_form_key,
-				'count' => 35 + 3 + $this->contact_form_field_count,
+				'count' => $this->all_field_types_count,
 			);
 
 			$forms['repeat'] = array(
 				'form_key' => $this->all_fields_form_key,
-				'count' => 35 + 3,
+				'count' => $this->all_field_types_count - $this->contact_form_field_count,
 			);
 		}
 

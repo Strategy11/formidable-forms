@@ -10,21 +10,36 @@ class test_FrmProFieldShortcodes extends test_FrmFieldShortcodes {
 	// TODO: add fields from embedded form and repeating section
 	// TODO: post fields
 
-	protected $test_form;
-	protected $test_entry;
+	protected function get_field_value( $field_key ) {
+		$field_id = FrmField::get_id_by_key( $field_key );
+		$value = $this->test_entry->metas[ $field_id ];
 
-	public function setUp() {
-		parent::setUp();
+		if ( is_array( $value ) ) {
+			$value = implode( ', ', $value );
+		}
 
-		$this->test_form = $this->get_form_for_test();
-		$this->test_entry = $this->get_entry_for_test();
+		return $value;
 	}
 
-	/**
-	 * @group current
-	 */
-	public function test_single_field_id_shortcodes() {
-		$field_values = array(
+	protected function get_single_file_upload_value() {
+		$file_field_id = FrmField::get_id_by_key( 'single-file-upload-field' );
+
+		return $this->get_file_url( $this->test_entry->metas[ $file_field_id ], 'thumbnail' );
+	}
+
+	protected function get_multi_file_upload_value() {
+		$file_field_id = FrmField::get_id_by_key( 'multi-file-upload-field' );
+		$file_urls = array();
+
+		foreach ( $this->test_entry->metas[ $file_field_id ] as $media_id ) {
+			$file_urls[] = $this->get_file_url( $media_id, 'thumbnail' );
+		}
+
+		return implode( ', ', $file_urls );
+	}
+
+	protected function get_expected_field_values() {
+		return array(
 			'text-field'               => 'Jamie',
 			'p3eiuk'                   => "<p>Jamie<br />\nRebecca<br />\nWahlin</p>\n",//paragraph
 			'uc580i'                   => 'Red, Green',//checkbox
@@ -66,42 +81,6 @@ class test_FrmProFieldShortcodes extends test_FrmFieldShortcodes {
 			'address-field'            => '123 Main St. #5, Anytown, OR, 12345, United States',
 			'credit-card-field'        => 'xxxxxxxxxxxx4242, 03, 2018',
 		);
-
-		foreach ( $field_values as $field_key => $expected_value ) {
-			$shortcode = '[' . FrmField::get_id_by_key( $field_key ) . ']';
-
-			$actual_value = $this->get_actual_value( $shortcode );
-
-			$this->assertSame( $expected_value, $actual_value, 'The [' . $field_key . '] shortcode is not returning the expected value.' );
-		}
-	}
-
-	protected function get_field_value( $field_key ) {
-		$field_id = FrmField::get_id_by_key( $field_key );
-		$value = $this->test_entry->metas[ $field_id ];
-
-		if ( is_array( $value ) ) {
-			$value = implode( ', ', $value );
-		}
-
-		return $value;
-	}
-
-	protected function get_single_file_upload_value() {
-		$file_field_id = FrmField::get_id_by_key( 'single-file-upload-field' );
-
-		return $this->get_file_url( $this->test_entry->metas[ $file_field_id ], 'thumbnail' );
-	}
-
-	protected function get_multi_file_upload_value() {
-		$file_field_id = FrmField::get_id_by_key( 'multi-file-upload-field' );
-		$file_urls = array();
-
-		foreach ( $this->test_entry->metas[ $file_field_id ] as $media_id ) {
-			$file_urls[] = $this->get_file_url( $media_id, 'thumbnail' );
-		}
-
-		return implode( ', ', $file_urls );
 	}
 
 	protected function get_file_url( $id, $size ) {
@@ -125,9 +104,4 @@ class test_FrmProFieldShortcodes extends test_FrmFieldShortcodes {
 	protected function get_entry_for_test() {
 		return FrmEntry::getOne( 'jamie_entry_key', true );
 	}
-
-	protected function get_actual_value( $value ) {
-		return apply_filters('frm_content', $value, $this->test_form, $this->test_entry );
-	}
-
 }
