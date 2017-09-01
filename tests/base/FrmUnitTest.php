@@ -8,7 +8,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 	protected $contact_form_field_count = 10;
 
 	protected $all_fields_form_key = 'all_field_types';
-	protected $all_field_types_count = 48;
+	protected $all_field_types_count = 50;
 
 	protected $repeat_sec_form_key = 'rep_sec_form';
 	protected $create_post_form_key = 'create-a-post';
