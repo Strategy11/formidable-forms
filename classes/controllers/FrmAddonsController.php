@@ -139,10 +139,6 @@ class FrmAddonsController {
 				'title'   => 'Polylang',
 				'excerpt' => 'Create bilingual or multilingual forms with help from Polylang.',
 			),
-			'math-captcha' => array(
-				'title'   => 'Math Captcha',
-				'excerpt' => 'Require users to perform a simple calculation before submitting a form to prevent spam. This add-on extends BestWebSoft\'s Captcha plugin.',
-			),
 			'locations' => array(
 				'title'   => 'Locations',
 				'excerpt' => 'Populate fields with Countries, States/Provinces, U.S. Counties, and U.S. Cities. This data can then be used in dependent Data from Entries fields.',
@@ -252,14 +248,12 @@ class FrmAddonsController {
 	}
 
 	private static function prepare_pro_info() {
-		$pro_pricing = array(
-			'personal'      => array( 'id' => 5, 'price' => '49.00', 'name' => 'Personal' ),
-			'professional'  => array( 'id' => 6, 'price' => '99.00', 'name' => 'Professional' ),
-			'smallbusiness' => array( 'id' => 3, 'price' => '199.00', 'name' => 'Small Business' ),
-			'enterprise'    => array( 'id' => 4, 'price' => '399.00', 'name' => 'Enterprise' ),
+		return array(
+			'personal'      => array( 'id' => 2, 'download' => 19367654, 'price' => '49.00', 'name' => 'Personal' ),
+			'professional'  => array( 'id' => 0, 'download' => 19367001, 'price' => '99.00', 'name' => 'Professional' ),
+			'smallbusiness' => array( 'id' => 0, 'download' => 19366995, 'price' => '199.00', 'name' => 'Small Business' ),
+			'enterprise'    => array( 'id' => 0, 'download' => 19366992, 'price' => '399.00', 'name' => 'Enterprise' ),
 		);
-
-		return $pro_pricing;
 	}
 
 	/**
