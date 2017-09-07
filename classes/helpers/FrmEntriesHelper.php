@@ -17,6 +17,7 @@ class FrmEntriesHelper {
         }
 
         foreach ( (array) $fields as $field ) {
+			self::prepare_field_default_value( $field );
             $new_value = self::get_field_value_for_new_entry( $field, $reset, $args );
 
             $field_array = array(
@@ -80,6 +81,18 @@ class FrmEntriesHelper {
     }
 
 	/**
+	 * @since 2.04.02
+	 */
+	private static function prepare_field_default_value( &$field ) {
+		//If checkbox, multi-select dropdown, or checkbox data from entries field, the value should be an array
+		$return_array = FrmField::is_field_with_multiple_values( $field );
+
+		// Do any shortcodes in default value and allow customization of default value
+		$field->default_value = apply_filters( 'frm_get_default_value', $field->default_value, $field, true, $return_array );
+		// Calls FrmProFieldsHelper::get_default_value
+	}
+
+	/**
 	* Set the value for each field
 	* This function is used when the form is first loaded and on all page turns *for a new entry*
 	*
@@ -91,13 +104,6 @@ class FrmEntriesHelper {
 	* @return string|array $new_value
 	*/
 	private static function get_field_value_for_new_entry( $field, $reset, $args ) {
-		//If checkbox, multi-select dropdown, or checkbox data from entries field, the value should be an array
-		$return_array = FrmField::is_field_with_multiple_values( $field );
-
-		// Do any shortcodes in default value and allow customization of default value
-		$field->default_value = apply_filters('frm_get_default_value', $field->default_value, $field, true, $return_array);
-		// Calls FrmProFieldsHelper::get_default_value
-
 		$new_value = $field->default_value;
 
 		if ( ! $reset && self::value_is_posted( $field, $args ) ) {
