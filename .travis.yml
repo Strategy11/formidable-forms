@@ -5,13 +5,13 @@ sudo: false
 matrix:
   include:
     - php: 7.1
-      env: WP_VERSION=master WP_MULTISITE=1 PHPLINT=1 PHPUNIT=1
+      env: WP_VERSION=master WP_MULTISITE=1 PHPLINT=1
       dist: precise
     - php: 5.6
-      env: WP_VERSION=master WP_MULTISITE=1 PHPLINT=1 PHPUNIT=1
+      env: WP_VERSION=master WP_MULTISITE=1 PHPLINT=1
       dist: precise
     - php: 5.2.17
-      env: WP_VERSION=4.7 WP_MULTISITE=1 PHPLINT=1 PHPUNIT=1
+      env: WP_VERSION=4.7 WP_MULTISITE=1 PHPLINT=1
       dist: precise
     - php: 7.0
       env: WP_VERSION=4.7
@@ -68,11 +68,11 @@ before_script:
 
 script:
 - if [[ "$PHPLINT" == "1" ]]; then find -L .  -path ./vendor -prune -o -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l; fi
-- if [[ "$PHPUNIT" == "1" ]]; then phpunit --group=ajax --exclude-group=pro -c phpunit.xml; fi
-- if [[ "$PHPUNIT" == "1" ]]; then phpunit --group=entries --exclude-group=pro -c phpunit.xml; fi
-- if [[ "$PHPUNIT" == "1" ]]; then phpunit --group=styles --exclude-group=pro -c phpunit.xml; fi
-- if [[ "$PHPUNIT" == "1" ]]; then phpunit --group=emails --exclude-group=pro -c phpunit.xml; fi
-- if [[ "$PHPUNIT" == "1" ]]; then phpunit --exclude-group=ajax,pro,entries,styles,emails -c phpunit.xml; fi
+- phpunit --group=ajax --exclude-group=pro -c phpunit.xml
+- phpunit --group=entries --exclude-group=pro -c phpunit.xml
+- phpunit --group=styles --exclude-group=pro -c phpunit.xml
+- phpunit --group=emails --exclude-group=pro -c phpunit.xml
+- phpunit --exclude-group=ajax,pro,entries,styles,emails -c phpunit.xml
 
 notifications:
   email: false
