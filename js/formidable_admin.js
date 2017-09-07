@@ -2011,11 +2011,11 @@ function frmAdminBuildJS(){
 	function setPosClass(){
 		var value = this.value;
 		if(value == 'none'){
-			value='top';
+			value = 'top';
 		} else if ( value == 'no_label' ) {
 			value = 'none';
 		}
-		jQuery('.frm_pos_container').removeClass('frm_top_container frm_left_container frm_right_container frm_none_container').addClass('frm_'+value+'_container');
+		jQuery('.frm_pos_container').removeClass('frm_top_container frm_left_container frm_right_container frm_none_container frm_inside_container').addClass('frm_'+value+'_container');
 	}
 
     function collapseAllSections(){

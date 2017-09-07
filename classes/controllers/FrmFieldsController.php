@@ -520,40 +520,87 @@ class FrmFieldsController {
     }
 
 	private static function add_html_placeholder( $field, array &$add_html, array &$class ) {
-		if ( empty( $field['default_value'] ) || FrmAppHelper::is_admin_page( 'formidable' ) ) {
+		if ( FrmAppHelper::is_admin_page( 'formidable' ) ) {
 			return;
 		}
 
-		$default_value_array = is_array( $field['default_value'] );
-        if ( ! FrmField::is_option_true( $field, 'clear_on_focus' ) ) {
-			if ( $default_value_array ) {
+		if ( $field['default_value'] != '' && ! FrmField::is_option_true( $field, 'clear_on_focus' ) ) {
+			if ( is_array( $field['default_value'] ) ) {
 				$field['default_value'] = json_encode( $field['default_value'] );
+				$add_html['data-frmval'] = 'data-frmval="' . esc_attr( $field['default_value'] ) . '"';
+			} else {
+				self::add_frmval_to_input( $field, $add_html );
 			}
-			$add_html['data-frmval'] = 'data-frmval="' . esc_attr( $field['default_value'] ) . '"';
-            return;
-        }
+			$field['default_value'] = '';
+		}
 
-		if ( $default_value_array ) {
+		$field['default_value'] = self::prepare_default_value( $field );
+		if ( $field['default_value'] == '' || is_array( $field['default_value'] ) ) {
 			// don't include a json placeholder
 			return;
 		}
 
-        $frm_settings = FrmAppHelper::get_settings();
+		$frm_settings = FrmAppHelper::get_settings();
 
-		if ( $frm_settings->use_html && ! in_array( $field['type'], array( 'select', 'radio', 'checkbox', 'hidden' ) ) ) {
-            // use HMTL5 placeholder with js fallback
+		if ( $frm_settings->use_html ) {
+			self::add_placeholder_to_input( $field, $add_html );
+		} else {
+			self::add_frmval_to_input( $field, $add_html );
+
+			$class[] = 'frm_toggle_default';
+
+			if ( $field['value'] == $field['default_value'] ) {
+				$class[] = 'frm_default';
+			}
+		}
+	}
+
+	private static function prepare_default_value( $field ) {
+		$is_placeholder_field = FrmFieldsHelper::is_placeholder_field_type( $field['type'] );
+		$is_combo_field = in_array( $field['type'], array( 'address', 'credit_card' ) );
+
+		$default_value = $field['default_value'];
+		if ( empty( $default_value ) ) {
+			if ( $is_placeholder_field && ! $is_combo_field ) {
+				$default_value = self::get_default_value_from_name( $field );
+			}
+		}
+
+		return $default_value;
+	}
+
+	/**
+	 * If the label position is "inside",
+	 * get the label to use as the placeholder
+	 *
+	 * @since 2.04.02
+	 */
+	public static function get_default_value_from_name( $field ) {
+		$position = FrmStylesController::get_style_val( 'position', $field['form_id'] );
+		if ( $position == 'inside' ) {
+			$default_value = $field['name'];
+		} else {
+			$default_value = '';
+		}
+		return $default_value;
+	}
+
+	/**
+	 * use HMTL5 placeholder with js fallback
+	 */
+	private static function add_placeholder_to_input( $field, &$add_html ) {
+		if ( FrmFieldsHelper::is_placeholder_field_type( $field['type'] ) ) {
 			$add_html['placeholder'] = 'placeholder="' . esc_attr( $field['default_value'] ) . '"';
-            wp_enqueue_script('jquery-placeholder');
-        } else if ( ! $frm_settings->use_html ) {
-			$val = str_replace( array( "\r\n", "\n" ), '\r', addslashes( str_replace( '&#039;', "'", esc_attr( $field['default_value'] ) ) ) );
-			$add_html['data-frmval'] = 'data-frmval="' . esc_attr( $val ) . '"';
-            $class[] = 'frm_toggle_default';
+			wp_enqueue_script('jquery-placeholder');
+		}
+	}
 
-            if ( $field['value'] == $field['default_value'] ) {
-                $class[] = 'frm_default';
-            }
-        }
-    }
+	private static function add_frmval_to_input( $field, &$add_html ) {
+		$val = str_replace( array( "\r\n", "\n" ), '\r', addslashes( str_replace( '&#039;', "'", esc_attr( $field['default_value'] ) ) ) );
+		if ( $val != '' ) {
+			$add_html['data-frmval'] = 'data-frmval="' . esc_attr( $val ) . '"';
+		}
+	}
 
 	private static function add_validation_messages( $field, array &$add_html ) {
 		if ( FrmField::is_required( $field ) ) {

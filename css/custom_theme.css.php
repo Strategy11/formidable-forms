@@ -112,6 +112,16 @@ legend.frm_hidden{
     visibility:hidden;
 }
 
+.with_frm_style .frm_inside_container label.frm_primary_label{
+	opacity:0;
+	transition: opacity 0.1s linear;
+}
+
+.with_frm_style .frm_inside_container label.frm_visible,
+.frm_visible{
+	opacity:1;
+}
+
 .with_frm_style .frm_description{
 	clear:both;
 }
