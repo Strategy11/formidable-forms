@@ -3955,14 +3955,14 @@ function frmFrontFormJS(){
 				removeFromHideFields( container, formId );
 			});
 
+			showAddButton(sectionID);
+
 			if(typeof(frmThemeOverride_frmRemoveRow) == 'function'){
 				frmThemeOverride_frmRemoveRow(id, thisRow);
 			}
 
 			jQuery(document).trigger( 'frmAfterRemoveRow' );
 		});
-
-		showAddButton(sectionID);
 
 		return false;
 	}

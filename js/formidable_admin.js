@@ -2981,23 +2981,13 @@ if(f){
 
 function checkRepeatLimit() {
 
-	var repeatLimit = parseInt( this.value, 10 );
-
-	if ( repeatLimit >= 2 && repeatLimit <= 1000 ) {
-
-		if (repeatLimit < this.value){
-
-			alert("The Repeat Limit should be an integer.  No worries!  We'll adjust the repeat limit to "  + repeatLimit + ".");
-			jQuery(this).val(repeatLimit);
-
-		}
-
+	if (this.value >= 2 && repeatLimit <= 200) {
 		return;
 	}
 
 	alert("Please enter an integer greater than 2 for the Repeat Limit.");
 
-	jQuery(this).val("");
+	this.value = "";
 }
 
 function frmImportCsv(formID){

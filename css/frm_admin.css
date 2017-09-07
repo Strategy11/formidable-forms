@@ -1677,6 +1677,10 @@ span.howto{display:inline;}
 	display:none;
 }
 
+.frm_add_form_row.frm_hide_add_button {
+	display: none;
+}
+
 .frm_button{
     text-decoration:none;
     border:1px solid #eee;
