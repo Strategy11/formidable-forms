@@ -581,25 +581,21 @@ class FrmField {
 			return false;
 		}
 
-		if ( is_array( $field ) ) {
+		$field_type = is_array( $field ) ? $field['type'] : $field->type;
+		$data_type = self::get_option( $field, 'data_type' );
+		$original_type = self::get_option( $field, 'original_type' );
 
-			$is_multi_value_field = (
-				$field['type'] == 'checkbox' ||
-				$field['type'] == 'address' ||
-				( $field['type'] == 'data' && isset($field['data_type']) && $field['data_type'] == 'checkbox' ) ||
-				( $field['type'] == 'lookup' && isset($field['data_type']) && $field['data_type'] == 'checkbox' ) ||
-				self::is_multiple_select( $field )
-			);
-
-		} else {
-			$is_multi_value_field = (
-				$field->type == 'checkbox' ||
-				$field->type == 'address' ||
-				( $field->type == 'data' && isset( $field->field_options['data_type'] ) && $field->field_options['data_type'] == 'checkbox' ) ||
-				( $field->type == 'lookup' && isset( $field->field_options['data_type'] ) && $field->field_options['data_type'] == 'checkbox' ) ||
-				self::is_multiple_select( $field )
-			);
+		if ( ! empty( $original_type ) && $original_type != $field_type ) {
+			$field_type = $original_type; // check the original type for arrays
 		}
+
+		$is_multi_value_field = (
+			$field_type == 'checkbox' ||
+			$field_type == 'address' ||
+			( $field_type == 'data' && $data_type == 'checkbox' ) ||
+			( $field_type == 'lookup' && $data_type == 'checkbox' ) ||
+			self::is_multiple_select( $field )
+		);
 
 		return $is_multi_value_field;
 	}
@@ -611,11 +607,10 @@ class FrmField {
 	 * @return boolean
 	 */
 	public static function is_multiple_select( $field ) {
-		if ( is_array( $field ) ) {
-			return self::is_option_true( $field, 'multiple' ) && ( ( $field['type'] == 'select' || ( $field['type'] == 'data' && isset( $field['data_type'] ) && $field['data_type'] == 'select') ) );
-		} else {
-			return self::is_option_true( $field, 'multiple' ) && ( ( $field->type == 'select' || ( $field->type == 'data' && isset($field->field_options['data_type'] ) && $field->field_options['data_type'] == 'select') ) );
-		}
+		$field_type = is_array( $field ) ? $field['type'] : $field->type;
+		$data_type = self::get_option( $field, 'data_type' );
+
+		return self::is_option_true( $field, 'multiple' ) && ( ( $field_type == 'select' || ( $field_type == 'data' && $data_type == 'select') ) );
 	}
 
 	/**

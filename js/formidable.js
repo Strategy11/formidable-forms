@@ -404,6 +404,18 @@ function frmFrontFormJS(){
         }
 	}
 
+	function maybeShowLabel(e){
+		/*jshint validthis:true */
+		const $field = jQuery(this);
+		const $label = $field.closest('.frm_inside_container').find('label.frm_primary_label');
+
+		if ( $field.val().length > 0 ) {
+			$label.addClass('frm_visible');
+		} else {
+			$label.removeClass('frm_visible');
+		}
+	}
+
 	function maybeCheckDependent(e){
 		/*jshint validthis:true */
 
@@ -4469,6 +4481,7 @@ function frmFrontFormJS(){
 			});
 
 			jQuery(document).on('change', '.frm-show-form input[name^="item_meta"], .frm-show-form select[name^="item_meta"], .frm-show-form textarea[name^="item_meta"]', maybeCheckDependent);
+			jQuery(document).on('change keyup', '.frm-show-form .frm_inside_container input, .frm-show-form .frm_inside_container select, .frm-show-form .frm_inside_container textarea', maybeShowLabel);
 
 			jQuery(document).on('click', '.frm-show-form input[type="submit"], .frm-show-form input[name="frm_prev_page"], .frm_page_back, .frm_page_skip, .frm-show-form .frm_save_draft, .frm_prev_page, .frm_button_submit', setNextPage);
             

@@ -19,7 +19,7 @@
 				<th>
 					<h3><?php echo esc_attr( ucfirst( $price_info['name'] ) ) ?></h3>
 					<h4>$<?php echo esc_attr( $price_info['price'] ) ?></h4>
-					<a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url( 'https://formidableforms.com/checkout?edd_action=add_to_cart&download_id=93790' ) ) ?>&amp;edd_options[price_id]=<?php echo absint( $price_info['id'] ) ?>" class="button-primary" target="_blank">
+					<a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url( 'https://formidableforms.com/checkout?edd_action=add_to_cart' ) ) ?>&amp;download_id=<?php echo absint( $price_info['download'] ) ?>&amp;edd_options[price_id]=<?php echo absint( $price_info['id'] ) ?>" class="button-primary" target="_blank">
 						<?php _e( 'Get Started', 'formidable' ) ?>
 					</a>
 				</th>

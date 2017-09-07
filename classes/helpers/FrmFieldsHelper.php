@@ -251,9 +251,8 @@ class FrmFieldsHelper {
         $html = str_replace('[required_class]', $required_class, $html);
 
         //replace [label_position]
-        $field['label'] = apply_filters('frm_html_label_position', $field['label'], $field, $form);
-        $field['label'] = ( $field['label'] && $field['label'] != '' ) ? $field['label'] : 'top';
-		$html = str_replace( '[label_position]', ( ( in_array( $field['type'], array( 'divider', 'end_divider', 'break' ) ) ) ? $field['label'] : ' frm_primary_label' ), $html );
+		$field['label'] = self::label_position( $field['label'], $field, $form );
+		self::add_class_to_label( $field, $html );
 
         //replace [field_name]
         $html = str_replace('[field_name]', $field['name'], $html);
@@ -348,6 +347,52 @@ class FrmFieldsHelper {
 			}
 			$html = apply_filters( 'frm_get_default_value', $html, (object) $field, false );
 			$html = do_shortcode( $html );
+		}
+	}
+
+	/**
+	 * Get the class to use for the label position
+	 * @since 2.04.02
+	 */
+	private static function &label_position( $position, $field, $form ) {
+		if ( $position && $position != '' ) {
+			return $position;
+		}
+
+		$position = FrmStylesController::get_style_val( 'position', $form );
+		if ( $position == 'none' ) {
+			$position = 'top';
+		} elseif ( $position == 'no_label' ) {
+			$position = 'none';
+		} elseif ( $position == 'inside' && ! self::is_placeholder_field_type( $field['type'] ) ) {
+			$position = 'top';
+		}
+
+		$position = apply_filters( 'frm_html_label_position', $position, $field, $form );
+		$position = ( ! empty( $position ) ) ? $position : 'top';
+
+		return $position;
+	}
+
+	/**
+	 * Check if this field type allows placeholders
+	 * @since 2.04.02
+	 */
+	public static function is_placeholder_field_type( $type ) {
+		return ! in_array( $type, array( 'select', 'radio', 'checkbox', 'hidden' ) );
+	}
+
+	/**
+	 * Add the label position class into the HTML
+	 * If the label position is inside, add a class to show the label if the field has a value.
+	 *
+	 * @since 2.04.02
+	 */
+	private static function add_class_to_label( $field, &$html ) {
+		$label_class = in_array( $field['type'], array( 'divider', 'end_divider', 'break' ) ) ? $field['label'] : ' frm_primary_label';
+		$html = str_replace( '[label_position]', $label_class, $html );
+		if ( $field['label'] == 'inside' && $field['value'] != '' ) {
+			$html = str_replace( 'frm_primary_label', 'frm_primary_label frm_visible', $html );
 		}
 	}
 
