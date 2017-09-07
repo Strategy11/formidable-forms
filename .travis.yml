@@ -36,7 +36,7 @@ matrix:
     - php: 5.4
       env: WP_VERSION=3.8
     - php: 5.3
-      env: WP_VERSION=3.8
+      env: WP_VERSION=3.8 PHPUNIT=0
       dist: precise
     - php: nightly
       env: WP_VERSION=master
@@ -65,11 +65,11 @@ before_script:
 
 script:
 - if [[ "$PHPLINT" == "1" ]]; then find -L .  -path ./vendor -prune -o -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l; fi
-- phpunit --group=ajax --exclude-group=pro -c phpunit.xml
-- phpunit --group=entries --exclude-group=pro -c phpunit.xml
-- phpunit --group=styles --exclude-group=pro -c phpunit.xml
-- phpunit --group=emails --exclude-group=pro -c phpunit.xml
-- phpunit --exclude-group=ajax,pro,entries,styles,emails -c phpunit.xml
+- if [[ "$PHPUNIT" != "0" ]]; then phpunit --group=ajax --exclude-group=pro -c phpunit.xml; fi
+- if [[ "$PHPUNIT" != "0" ]]; then phpunit --group=entries --exclude-group=pro -c phpunit.xml; fi
+- if [[ "$PHPUNIT" != "0" ]]; then phpunit --group=styles --exclude-group=pro -c phpunit.xml; fi
+- if [[ "$PHPUNIT" != "0" ]]; then phpunit --group=emails --exclude-group=pro -c phpunit.xml; fi
+- if [[ "$PHPUNIT" != "0" ]]; then phpunit --exclude-group=ajax,pro,entries,styles,emails -c phpunit.xml; fi
 
 notifications:
   email: false
