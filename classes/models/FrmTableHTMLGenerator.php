@@ -84,12 +84,11 @@ class FrmTableHTMLGenerator {
 
 		foreach ( $this->style_settings as $key => $setting ) {
 			if ( isset( $atts[ $key ] ) && $atts[ $key ] !== '' ) {
+				$this->style_settings[ $key ] = $atts[ $key ];
+			}
 
-				if ( $this->is_color_setting( $key ) ) {
-					$this->style_settings[ $key ] = $this->get_color_markup( $atts[ $key ] );
-				} else {
-					$this->style_settings[ $key ] = $atts[ $key ];
-				}
+			if ( $this->is_color_setting( $key ) ) {
+				$this->style_settings[ $key ] = $this->get_color_markup( $this->style_settings[ $key ] );
 			}
 		}
 	}
