@@ -164,6 +164,11 @@ class FrmField {
 
 		if ( isset( $values['type'] ) ) {
 			$values = apply_filters( 'frm_clean_' . $values['type'] . '_field_options_before_update', $values );
+
+			if ( $values['type'] == 'hidden' && isset( $values['field_options'] ) && isset( $values['field_options']['clear_on_focus'] ) ) {
+				// don't keep the old placeholder setting for hidden fields
+				$values['field_options']['clear_on_focus'] = 0;
+			}
 		}
 
 		// serialize array values
