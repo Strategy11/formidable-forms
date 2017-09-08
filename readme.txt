@@ -56,7 +56,7 @@ Plus, don't lose your leads by accidentally deleting a form. **Send forms to the
 https://www.youtube.com/watch?v=d2IPmicn2x8
 
 = Pro Form Builder Plugin Features =
-Formidable Forms Pro is an upgrade that adds even more power to your WordPress forms. Multi-page forms, conditional logic, payment integrations, data management, and boat loads more. Not only can you collect data in your forms, but you can also display it on the front-end of your site. Add the ability to input, display, edit and filter data on the front end without any additional plugins. Formidable Forms is a powerful solution for purchase forms, member directories, user registration forms, and more.
+Formidable Forms Pro is an upgrade that adds even more power to your WordPress forms. Multi-page forms, conditional logic, payment integrations, data management, front-end post submissions, front-end editing, and boat loads more. Not only can you collect data in your forms, but you can also display it on the front-end of your site. Add the ability to input, display, edit and filter data on the front end without any additional plugins. Formidable Forms is a powerful solution for purchase forms, member directories, user registration forms, and more.
 
 * **Over 30 field types**: Page breaks, section headings, repeating field groups, file uploads, rich text, number, phone number, date, time, scale, dynamic fields populated from other forms, hidden fields, user ID fields, password, HTML, tags, address, and more.
 * <a href="https://formidableforms.com/features/wordpress-multi-step-form/">Multi-Step forms with progress bar</a>: Create beautiful paged forms with rootline and progress indicators. Use conditional logic on page breaks for branching forms.
