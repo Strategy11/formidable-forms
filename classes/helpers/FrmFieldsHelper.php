@@ -534,7 +534,7 @@ DEFAULT_HTML;
 		}
 		$api_js_url = apply_filters( 'frm_recaptcha_js_url', $api_js_url );
 
-        wp_register_script( 'recaptcha-api', $api_js_url, '', true );
+        wp_register_script( 'recaptcha-api', $api_js_url, array( 'formidable' ), true );
         wp_enqueue_script( 'recaptcha-api' );
 
 		// for reverse compatibility
