@@ -751,12 +751,15 @@ class FrmFormsController {
 		return $entry_shortcodes;
 	}
 
-    // Insert the form class setting into the form
+	// Insert the form class setting and maybe the admin-viewing class into the form
 	public static function form_classes( $form ) {
-        if ( isset($form->options['form_class']) ) {
+		if ( isset($form->options['form_class']) ) {
 			echo esc_attr( sanitize_text_field( $form->options['form_class'] ) );
-        }
-    }
+		}
+		if ( current_user_can( 'activate_plugins' ) ) {
+			echo ' frm-admin-viewing ';
+		}
+	}
 
     public static function get_email_html() {
 		FrmAppHelper::permission_check('frm_view_forms');

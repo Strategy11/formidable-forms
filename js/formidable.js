@@ -2735,28 +2735,21 @@ function frmFrontFormJS(){
 		return hidden;
 	}
 
-	function create_calculations_error_message(err, field_key, thisFullCalc ){
+	function maybeShowCalculationsErrorAlert(err, field_key, thisFullCalc) {
 
-		var urlParams = new URLSearchParams(window.location.search);
-		var action = urlParams.get('action');
-		var alert_message = '';
+		var alertMessage = '';
 
-		if (action ==="frm_forms_preview"){
-			alert_message += 'Oops!\n\n';
-			alert_message += 'There\'s an error in this calculation in field ' + field_key + '\n';
-			alert_message += thisFullCalc + '\n\n';
-			if (err.message){
-				alert_message += 'The error message is: ' + err.message +  '\n\n';
-			}
-			alert_message += 'The error will prevent the form from working properly.\n\n';
-			alert_message += 'No worries!  These are generally easy to fix.';
-		}
-		else {
-			alert_message += 'A form on this page has a small error which is preventing it from working properly.\n\n';
-			alert_message += 'Would you please notify the site owner?  Thank you!';
+		if ((!jQuery('form').hasClass('frm-admin-viewing'))) {
+			return;
 		}
 
-		return alert_message;
+		alertMessage += 'Oops! There\'s an error in the calculation in field ' + field_key + ':\n\n';
+		alertMessage += thisFullCalc + '\n\n';
+		if (err.message) {
+			alertMessage += 'The error message is: ' + err.message + '\n\n';
+		}
+		alertMessage += 'No worries!  These are generally easy to fix.';
+		alert(alertMessage);
 	}
 
 	function doSingleCalculation( all_calcs, field_key, vals, triggerField ) {
@@ -2800,25 +2793,19 @@ function frmFrontFormJS(){
 			thisFullCalc = trimNumericCalculation( thisFullCalc );
 
 			try {
-
 				total = parseFloat(eval(thisFullCalc));
-
 			}
 
-			catch (err){
-
-				alert( create_calculations_error_message( err, field_key, thisFullCalc ) );
-
-				totalField.closest('form').css({'border':'1px #B94A48 solid', 'padding':'5px'}).find('.frm_submit button, .frm_submit input[type=submit]').hide();
-
+			catch(err) {
+				maybeShowCalculationsErrorAlert(err, field_key, thisFullCalc);
 			}
 
-			if ( typeof total === 'undefined' || isNaN(total) ) {
+			if (typeof total === 'undefined' || isNaN(total)) {
 				total = 0;
 			}
 
 			// Set decimal points
-			if ( isNumeric( dec ) ) {
+			if (isNumeric(dec)) {
 				total = total.toFixed(dec);
 			}
 		}

@@ -505,6 +505,54 @@ function frmAdminBuildJS(){
 		});
 		return false;
 	}
+
+	function checkMatchingParens(formula){
+
+		var stack = [],
+			formula_array = formula.split(''),
+			length = formula_array.length,
+			opening = ["{", "[", "(" ],
+			closing = {
+				"}": "{",
+				")": "(",
+				"]": "[",
+			},
+			unmatchedClosing=[],
+			msg='',
+			i, next, top;
+
+		for (i=0; i<length; i++){
+			if (opening.includes(formula_array[i])){
+				stack.push(formula_array[i]);
+				continue;
+			}
+			if (closing.hasOwnProperty(formula_array[i])){
+				top = stack.pop();
+				if (top !== closing[formula_array[i]] ){
+					unmatchedClosing.push(formula_array[i])
+				}
+			}
+		}
+
+		if (stack.length > 0 || unmatchedClosing.length > 0){
+			msg = 'has unmatched ';
+			msg += stack.length > 0 ? 'opening ' + stack.join(' '):'';
+			msg +=(stack.length > 0 && unmatchedClosing.length > 0)? 'and ': '';
+			msg += unmatchedClosing.length > 0 ? 'closing ' + unmatchedClosing.join(' '):'';
+			return msg;
+		}
+
+		return 'valid';
+	}
+
+	function checkCalculationFromUser(){
+		var formula = this.value;
+		var checkMessage = checkMatchingParens(formula);
+
+		if (checkMessage != 'valid'){
+			alert("Your formula \n\n" + formula + "\n\n" + checkMessage );
+		}
+	}
 	
 	function popCalcFields(v){
 		var p;
@@ -2511,6 +2559,7 @@ function frmAdminBuildJS(){
 			jQuery(document.getElementById('frm-insert-fields')).on('click', '.frm_add_field', addFieldClick);
 			$newFields.on('click', '.frm_duplicate_icon', duplicateField);
 			$newFields.on('click', '.use_calc', popCalcFields);
+			$newFields.on('change', 'input[id^="frm_calc"]', checkCalculationFromUser);
 			$newFields.on('click', 'input.frm_req_field', markRequired);
 			$newFields.on('click', 'a.frm_req_field', clickRequired);
 			$newFields.on('click', '.frm_mark_unique', markUnique);
