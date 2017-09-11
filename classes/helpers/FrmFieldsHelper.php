@@ -584,13 +584,8 @@ DEFAULT_HTML;
     }
 
 	public static function value_meets_condition( $observed_value, $cond, $hide_opt ) {
-		// Remove white space from hide_opt
-		if ( ! is_array( $hide_opt ) ) {
-			$hide_opt = trim( $hide_opt );
-		}
-
-		$observed_value = wp_kses_post( $observed_value );
-		$hide_opt = wp_kses_post( $hide_opt );
+		$hide_opt = self::get_value_for_comparision( $hide_opt );
+		$observed_value = self::get_value_for_comparision( $observed_value );
 
         if ( is_array($observed_value) ) {
             return self::array_value_condition($observed_value, $cond, $hide_opt);
@@ -615,6 +610,19 @@ DEFAULT_HTML;
         }
         return $m;
     }
+
+	/**
+	 * Trim and sanitize the values
+	 * @since 2.04.02
+	 */
+	private static function get_value_for_comparision( $value ) {
+		// Remove white space from hide_opt
+		if ( ! is_array( $value ) ) {
+			$value = trim( $value );
+		}
+
+		return wp_kses_post( $value );
+	}
 
 	public static function array_value_condition( $observed_value, $cond, $hide_opt ) {
         $m = false;
