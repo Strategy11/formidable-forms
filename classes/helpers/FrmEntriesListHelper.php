@@ -30,6 +30,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 	        $s_query = FrmProEntriesHelper::get_search_str( $s_query, $s, $form_id, $fid );
 	    }
 
+		$s_query = apply_filters( 'frm_entries_list_query', $s_query, compact( 'form_id' ) );
+
         $orderby = isset( $_REQUEST['orderby'] ) ? sanitize_title( $_REQUEST['orderby'] ) : $default_orderby;
         if ( strpos($orderby, 'meta') !== false ) {
             $order_field_type = FrmField::get_type( str_replace( 'meta_', '', $orderby ) );
