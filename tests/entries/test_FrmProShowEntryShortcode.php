@@ -7,7 +7,6 @@
  * @group entries
  * @group show-entry-shortcode
  * @group pro
- * TODO: DRY
  *
  */
 include( 'test_FrmShowEntryShortcode.php' );
@@ -23,13 +22,7 @@ class test_FrmProShowEntryShortcode extends test_FrmShowEntryShortcode {
 	// TODO: add test for section with no values in it, plain text
 	// TODO: unit test for frm_email_value hook
 
-	private $text_field_id = '';
-
-	public function setUp() {
-		parent::setUp();
-
-		$this->text_field_id = FrmField::get_id_by_key( 'text-field' );
-	}
+	protected $extra_fields = array( 'html', 'divider', 'break' );
 
 	/**
 	 * Tests [default-message]
@@ -82,7 +75,12 @@ class test_FrmProShowEntryShortcode extends test_FrmShowEntryShortcode {
 		);
 
 		$content = $this->get_formatted_content( $atts );
-		$expected_content = $this->expected_content_for_include_fields( $atts );
+
+		$expected_content = $this->table_header( $atts );
+		$expected_content .= $this->text_field_html( $atts );
+		$expected_content .= $this->user_id_html( $atts );
+		$expected_content .= $this->repeating_field_html( $atts );
+		$expected_content .= $this->table_footer();
 
 		$this->assertSame( $expected_content, $content );
 	}
@@ -112,7 +110,7 @@ class test_FrmProShowEntryShortcode extends test_FrmShowEntryShortcode {
 		);
 
 		$content = $this->get_formatted_content( $atts );
-		$expected_content = $this->expected_content_for_exclude_fields( $atts );
+		$expected_content = $this->expected_html_content( $atts );
 
 		$this->assertSame( $expected_content, $content );
 	}
@@ -130,6 +128,8 @@ class test_FrmProShowEntryShortcode extends test_FrmShowEntryShortcode {
 		$this->hide_and_clear_section();
 		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
 
+		$this->include_extras = array( 'divider' );
+
 		$atts = array(
 			'id' => $entry->id,
 			'entry' => $entry,
@@ -139,7 +139,23 @@ class test_FrmProShowEntryShortcode extends test_FrmShowEntryShortcode {
 		);
 
 		$content = $this->get_formatted_content( $atts );
-		$expected_content = $this->expected_html_content( $atts );
+
+		$expected_content = $this->table_header( $atts );
+
+		$expected_content .= $this->text_field_html( $atts );
+		$expected_content .= $this->paragraph_to_website_html( $atts );
+		$expected_content .= $this->dynamic_country_html( $atts );
+		$expected_content .= $this->dynamic_state_html( $atts );
+		$expected_content .= $this->embedded_form_html( $atts );
+		$expected_content .= $this->hidden_field_html( $atts );
+		$expected_content .= $this->user_id_html( $atts );
+		$expected_content .= $this->signature_html( $atts );
+		$expected_content .= $this->repeating_section_header( $atts );
+		$expected_content .= $this->repeating_field_html( $atts );
+		$expected_content .= $this->lookup_to_address_html( $atts );
+		$expected_content .= $this->user_info_html( $atts );
+
+		$expected_content .= $this->table_footer();
 
 		$this->assertSame( $expected_content, $content );
 	}
@@ -165,6 +181,8 @@ class test_FrmProShowEntryShortcode extends test_FrmShowEntryShortcode {
 			'pro-fields-divider' => FrmField::get_id_by_key( 'pro-fields-divider' ),
 		);
 
+		$this->include_extras = array( 'divider' );
+
 		$atts = array(
 			'id' => $entry->id,
 			'entry' => $entry,
@@ -175,7 +193,14 @@ class test_FrmProShowEntryShortcode extends test_FrmShowEntryShortcode {
 		);
 
 		$content = $this->get_formatted_content( $atts );
-		$expected_content = $this->expected_content_for_include_fields( $atts );
+
+		$expected_content = $this->table_header( $atts );
+		$expected_content .= $this->text_field_html( $atts );
+		$expected_content .= $this->embedded_form_html( $atts );
+		$expected_content .= $this->user_id_html( $atts );
+		$expected_content .= $this->repeating_section_header( $atts );
+		$expected_content .= $this->repeating_field_html( $atts );
+		$expected_content .= $this->table_footer();
 
 		$this->assertSame( $expected_content, $content );
 	}
@@ -185,13 +210,15 @@ class test_FrmProShowEntryShortcode extends test_FrmShowEntryShortcode {
 	 *
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
-	 * @since 3.0
+	 * @since 2.04.02
 	 *
 	 * @group show-entry-shortcode-conditional-section
 	 */
 	public function test_plain_text_content_with_conditionally_hidden_sections() {
 		$this->hide_and_clear_section();
 		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
+
+		$this->include_extras = array( 'divider' );
 
 		$atts = array(
 			'id' => $entry->id,
@@ -202,50 +229,22 @@ class test_FrmProShowEntryShortcode extends test_FrmShowEntryShortcode {
 		);
 
 		$content = $this->get_formatted_content( $atts );
-		$expected_content = $this->expected_plain_text_content( $atts );
+
+		$expected_content = $this->text_field_plain_text( $atts );
+		$expected_content .= $this->paragraph_to_website_plain_text();
+		$expected_content .= $this->dynamic_country_plain_text( $atts );
+		$expected_content .= $this->dynamic_state_plain_text( $atts );
+		$expected_content .= $this->embedded_form_plain_text( $atts );
+		$expected_content .= $this->hidden_field_plain_text( $atts );
+		$expected_content .= $this->user_id_plain_text( $atts );
+		$expected_content .= $this->signature_plain_text( $atts );
+		$expected_content .= $this->repeating_section_header_plain_text( $atts );
+		$expected_content .= $this->repeating_field_plain_text();
+		$expected_content .= $this->lookup_to_address_plain_text( $atts );
+		$expected_content .= $this->user_info_plain_text( $atts );
+
 
 		$this->assertSame( $expected_content, $content );
-	}
-
-	/**
-	 * Hide section and clear values in it
-	 */
-	private function hide_and_clear_section() {
-		$entry_id = FrmEntry::get_id_by_key( 'jamie_entry_key' );
-
-		// Update conditional logic field
-		FrmEntryMeta::update_entry_meta( $entry_id, $this->text_field_id, null, 'Hide Fields' );
-
-		// Clear all conditionally hidden fields
-		$rich_text_field_id = FrmField::get_id_by_key( 'rich-text-field' );
-		FrmEntryMeta::delete_entry_meta( $entry_id, $rich_text_field_id );
-
-		$single_file_field_id = FrmField::get_id_by_key( 'single-file-upload-field' );
-		FrmEntryMeta::delete_entry_meta( $entry_id, $single_file_field_id );
-
-		$multi_file_field_id = FrmField::get_id_by_key( 'multi-file-upload-field' );
-		FrmEntryMeta::delete_entry_meta( $entry_id, $multi_file_field_id );
-
-		$number_field_id = FrmField::get_id_by_key( 'number-field' );
-		FrmEntryMeta::delete_entry_meta( $entry_id, $number_field_id );
-
-		$phone_number_field_id = FrmField::get_id_by_key( 'n0d580' );
-		FrmEntryMeta::delete_entry_meta( $entry_id, $phone_number_field_id );
-
-		$time_field_id = FrmField::get_id_by_key( 'time-field' );
-		FrmEntryMeta::delete_entry_meta( $entry_id, $time_field_id );
-
-		$date_field_id = FrmField::get_id_by_key( 'date-field' );
-		FrmEntryMeta::delete_entry_meta( $entry_id, $date_field_id );
-
-		$image_url_field_id = FrmField::get_id_by_key( 'zwuclz' );
-		FrmEntryMeta::delete_entry_meta( $entry_id, $image_url_field_id );
-
-		$scale_field_id = FrmField::get_id_by_key( 'qbrd2o' );
-		FrmEntryMeta::delete_entry_meta( $entry_id, $scale_field_id );
-
-		$tags_field_id = FrmField::get_id_by_key( 'tags-field' );
-		FrmEntryMeta::delete_entry_meta( $entry_id, $tags_field_id );
 	}
 
 	/**
@@ -267,6 +266,8 @@ class test_FrmProShowEntryShortcode extends test_FrmShowEntryShortcode {
 			$wpdb->delete( $wpdb->prefix . 'frm_item_metas', array( 'item_id' => $child_id ) );
 		}
 
+		$this->include_extras = array( 'divider' );
+
 		$atts = array(
 			'id' => $entry->id,
 			'entry' => $entry,
@@ -277,8 +278,24 @@ class test_FrmProShowEntryShortcode extends test_FrmShowEntryShortcode {
 
 		$content = $this->get_formatted_content( $atts );
 
-		$atts['is_repeat_empty'] = true;
-		$expected_content = $this->expected_html_content( $atts );
+		$expected_content = $this->table_header( $atts );
+
+		$expected_content .= $this->text_field_html( $atts );
+		$expected_content .= $this->paragraph_to_website_html( $atts );
+		$expected_content .= $this->page_break_html( $atts );
+		$expected_content .= $this->pro_fields_divider_html( $atts );
+		$expected_content .= $this->dynamic_country_html( $atts );
+		$expected_content .= $this->dynamic_state_html( $atts );
+		$expected_content .= $this->embedded_form_html( $atts );
+		$expected_content .= $this->hidden_field_html( $atts );
+		$expected_content .= $this->user_id_html( $atts );
+		$expected_content .= $this->html_field_html( $atts );
+		$expected_content .= $this->tags_html( $atts );
+		$expected_content .= $this->signature_html( $atts );
+		$expected_content .= $this->lookup_to_address_html( $atts );
+		$expected_content .= $this->user_info_html( $atts );
+
+		$expected_content .= $this->table_footer();
 
 		$this->assertSame( $expected_content, $content );
 	}
@@ -303,6 +320,8 @@ class test_FrmProShowEntryShortcode extends test_FrmShowEntryShortcode {
 			$wpdb->delete( $wpdb->prefix . 'frm_item_metas', array( 'item_id' => $child_id ) );
 		}
 
+		$this->include_extras = array( 'divider' );
+
 		$atts = array(
 			'id' => $entry->id,
 			'entry' => $entry,
@@ -314,8 +333,26 @@ class test_FrmProShowEntryShortcode extends test_FrmShowEntryShortcode {
 
 		$content = $this->get_formatted_content( $atts );
 
-		$atts['is_repeat_empty'] = true;
-		$expected_content = $this->expected_html_content( $atts );
+		$expected_content = $this->table_header( $atts );
+
+		$expected_content .= $this->text_field_html( $atts );
+		$expected_content .= $this->paragraph_to_website_html( $atts );
+		$expected_content .= $this->page_break_html( $atts );
+		$expected_content .= $this->pro_fields_divider_html( $atts );
+		$expected_content .= $this->dynamic_country_html( $atts );
+		$expected_content .= $this->dynamic_state_html( $atts );
+		$expected_content .= $this->embedded_form_html( $atts );
+		$expected_content .= $this->hidden_field_html( $atts );
+		$expected_content .= $this->user_id_html( $atts );
+		$expected_content .= $this->html_field_html( $atts );
+		$expected_content .= $this->tags_html( $atts );
+		$expected_content .= $this->signature_html( $atts );
+		$expected_content .= $this->repeating_section_header( $atts );
+		//$expected_content .= $this->repeating_field_html( $atts );
+		$expected_content .= $this->lookup_to_address_html( $atts );
+		$expected_content .= $this->user_info_html( $atts );
+
+		$expected_content .= $this->table_footer();
 
 		$this->assertSame( $expected_content, $content );
 	}
@@ -404,20 +441,64 @@ class test_FrmProShowEntryShortcode extends test_FrmShowEntryShortcode {
 		$this->assertSame( $expected_array, $data_array );
 	}
 
+	/**
+	 * Hide section and clear values in it
+	 */
+	private function hide_and_clear_section() {
+		$entry_id = FrmEntry::get_id_by_key( 'jamie_entry_key' );
+
+		// Update conditional logic field
+		$text_field_id = FrmField::get_id_by_key( 'text-field' );
+		FrmEntryMeta::update_entry_meta( $entry_id, $text_field_id, null, 'Hide Fields' );
+
+		// Clear all conditionally hidden fields
+		$rich_text_field_id = FrmField::get_id_by_key( 'rich-text-field' );
+		FrmEntryMeta::delete_entry_meta( $entry_id, $rich_text_field_id );
+
+		$single_file_field_id = FrmField::get_id_by_key( 'single-file-upload-field' );
+		FrmEntryMeta::delete_entry_meta( $entry_id, $single_file_field_id );
+
+		$multi_file_field_id = FrmField::get_id_by_key( 'multi-file-upload-field' );
+		FrmEntryMeta::delete_entry_meta( $entry_id, $multi_file_field_id );
+
+		$number_field_id = FrmField::get_id_by_key( 'number-field' );
+		FrmEntryMeta::delete_entry_meta( $entry_id, $number_field_id );
+
+		$phone_number_field_id = FrmField::get_id_by_key( 'phone-number' );
+		FrmEntryMeta::delete_entry_meta( $entry_id, $phone_number_field_id );
+
+		$time_field_id = FrmField::get_id_by_key( 'time-field' );
+		FrmEntryMeta::delete_entry_meta( $entry_id, $time_field_id );
+
+		$date_field_id = FrmField::get_id_by_key( 'date-field' );
+		FrmEntryMeta::delete_entry_meta( $entry_id, $date_field_id );
+
+		$image_url_field_id = FrmField::get_id_by_key( 'image-url' );
+		FrmEntryMeta::delete_entry_meta( $entry_id, $image_url_field_id );
+
+		$scale_field_id = FrmField::get_id_by_key( 'scale-field' );
+		FrmEntryMeta::delete_entry_meta( $entry_id, $scale_field_id );
+
+		$tags_field_id = FrmField::get_id_by_key( 'tags-field' );
+		FrmEntryMeta::delete_entry_meta( $entry_id, $tags_field_id );
+	}
+
 	protected function expected_plain_text_content( $atts ) {
 		$content = $this->text_field_plain_text( $atts );
 		$content .= $this->paragraph_to_website_plain_text();
 		$content .= $this->page_break_plain_text( $atts );
 		$content .= $this->pro_fields_divider_plain_text( $atts );
-		$content .= $this->dynamic_field_plain_text();
+		$content .= $this->dynamic_country_plain_text( $atts );
+		$content .= $this->dynamic_state_plain_text( $atts );
 		$content .= $this->embedded_form_plain_text( $atts );
-		$content .= $this->user_id_plain_text();
+		$content .= $this->hidden_field_plain_text( $atts );
+		$content .= $this->user_id_plain_text( $atts );
 		$content .= $this->html_field_plain_text( $atts );
 		$content .= $this->tags_plain_text( $atts );
-		$content .= $this->signature_plain_text();
+		$content .= $this->signature_plain_text( $atts );
 		$content .= $this->repeating_section_header_plain_text( $atts );
 		$content .= $this->repeating_field_plain_text();
-		$content .= $this->separate_values_checkbox_plain_text();
+		$content .= $this->lookup_to_address_plain_text( $atts );
 		$content .= $this->user_info_plain_text( $atts );
 
 		return $content;
@@ -430,15 +511,18 @@ class test_FrmProShowEntryShortcode extends test_FrmShowEntryShortcode {
 		$table .= $this->paragraph_to_website_html( $atts );
 		$table .= $this->page_break_html( $atts );
 		$table .= $this->pro_fields_divider_html( $atts );
-		$table .= $this->dynamic_field_html();
+		$table .= $this->dynamic_country_html( $atts );
+		$table .= $this->dynamic_state_html( $atts );
+		// TODO: Dynamic field list?
 		$table .= $this->embedded_form_html( $atts );
-		$table .= $this->user_id_html();
+		$table .= $this->hidden_field_html( $atts );
+		$table .= $this->user_id_html( $atts );
 		$table .= $this->html_field_html( $atts );
 		$table .= $this->tags_html( $atts );
-		$table .= $this->signature_html();
+		$table .= $this->signature_html( $atts );
 		$table .= $this->repeating_section_header( $atts );
 		$table .= $this->repeating_field_html( $atts );
-		$table .= $this->separate_values_checkbox_html();
+		$table .= $this->lookup_to_address_html( $atts );
 		$table .= $this->user_info_html( $atts );
 
 		$table .= $this->table_footer();
@@ -446,125 +530,42 @@ class test_FrmProShowEntryShortcode extends test_FrmShowEntryShortcode {
 		return $table;
 	}
 
-	protected function expected_content_for_include_fields( $atts ) {
-		$table = $this->table_header( $atts );
-
-		if ( isset( $this->include_fields['text-field'] ) ) {
-			$table .= $this->text_field_html( $atts );
-		}
-
-		if ( isset( $this->include_fields['embed-form-field'] ) ) {
-			$table .= $this->embedded_form_html( $atts );
-		}
-
-		if ( isset( $this->include_fields['user-id-field'] ) ) {
-			$table .= $this->user_id_html();
-		}
-
-		if ( isset( $this->include_fields['repeating-section'] ) ) {
-			$table .= $this->repeating_section_header( $atts );
-			$table .= $this->repeating_field_html( $atts );
-		}
-
-		if ( isset( $this->include_fields['repeating-text'] ) ) {
-			$table .= $this->repeating_text_field_html();
-		}
-		$table .= $this->user_info_html( $atts );
-		$table .= $this->table_footer();
-
-		return $table;
-	}
-
-	protected function expected_content_for_exclude_fields( $atts ) {
-
-		$table = $this->table_header( $atts );
-
-		if ( ! isset( $exclude_fields['text-field'] ) ) {
-			$table .= $this->text_field_html( $atts );
-		}
-
-		$table .= $this->paragraph_to_website_html( $atts );
-		$table .= $this->pro_fields_divider_html( $atts );
-		$table .= $this->dynamic_field_html();
-
-		if ( ! isset( $exclude_fields['embed-form-field'] ) ) {
-			$table .= $this->embedded_form_html( $atts );
-		}
-
-		if ( ! isset( $exclude_fields['user-id-field'] ) ) {
-			$table .= $this->user_id_html();
-		}
-
-		$table .= $this->tags_html( $atts );
-		$table .= $this->signature_html();
-
-		if ( ! isset( $exclude_fields['repeating-section'] ) ) {
-			$table .= $this->repeating_section_header( $atts );
-			$table .= $this->repeating_field_html( $atts, $exclude_fields );
-		}
-
-		$table .= $this->separate_values_checkbox_html();
-		$table .= $this->user_info_html( $atts );
-		$table .= $this->table_footer();
-
-		return $table;
-	}
-
-	private function text_field_html( $atts ) {
-		//TODO: parent::two_cell_field_row( );
-
-		$html = '<tr' . $this->tr_style . '>';
-
-		if ( isset( $atts['direction'] ) && $atts['direction'] == 'rtl' ) {
-			$html .= '<td' . $this->td_style . '>' . $atts['entry']->metas[ $this->text_field_id ] . '</td>';
-			$html .= '<td' . $this->td_style . '>Single Line Text</td>';
-		} else {
-			$html .= '<td' . $this->td_style . '>Single Line Text</td>';
-			$html .= '<td' . $this->td_style . '>' . $atts['entry']->metas[ $this->text_field_id ] . '</td>';
-		}
-
-		$html .= '</tr>' . "\r\n";
-
-		return $html;
+	protected function text_field_html( $atts ) {
+		return $this->two_cell_table_row( 'text-field', $atts );
 	}
 
 	private function paragraph_to_website_html( $atts ) {
-		$html = '<tr' . $this->tr_style . '><td' . $this->td_style . '>Paragraph Text</td><td' . $this->td_style . '>';
-		$html .= "Jamie<br/>Rebecca<br/>Wahlin</td></tr>\r\n";
-		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Checkboxes - colors</td><td' . $this->td_style . '>Red, Green</td></tr>' . "\r\n";
-		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Radio Buttons - dessert</td><td' . $this->td_style . '>cookies</td></tr>' . "\r\n";
-		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Dropdown</td><td' . $this->td_style . '>Ace Ventura</td></tr>' . "\r\n";
+		$table = $this->two_cell_table_row( 'paragraph-field', $atts );
+		$table .= $this->two_cell_table_row( 'checkbox-colors', $atts );
+		$table .= $this->two_cell_table_row( 'radio-button-field', $atts );
+		$table .= $this->two_cell_table_row( 'dropdown-field', $atts );
+		$table .= $this->two_cell_table_row( 'email-field', $atts );
+		$table .= $this->two_cell_table_row( 'website-field', $atts );
 
-		if ( isset( $atts['clickable'] ) && $atts['clickable'] ) {
-			$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Email Address</td><td' . $this->td_style . '>';
-			$html .= '<a href="mailto:jamie@mail.com">jamie@mail.com</a></td></tr>' . "\r\n";
-
-			$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Website/URL</td><td' . $this->td_style . '>';
-			$html .= '<a href="http://www.jamie.com" rel="nofollow">http://www.jamie.com</a></td></tr>' . "\r\n";
-		} else {
-			$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Email Address</td><td' . $this->td_style . '>jamie@mail.com</td></tr>' . "\r\n";
-			$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Website/URL</td><td' . $this->td_style . '>http://www.jamie.com</td></tr>' . "\r\n";
-		}
-
-		return $html;
+		return $table;
 	}
 
 	private function page_break_html( $atts ) {
-		if ( isset( $atts['include_extras'] ) && strpos( $atts['include_extras'], 'page' ) !== false ) {
-			$html = '<tr' . $this->tr_style . '><td colspan="2"' . $this->td_style . '><br/><br/></td></tr>' . "\r\n";
+		return $this->one_cell_table_row( 'page-break', $atts );
+	}
 
-		} else {
-			$html = '';
-		}
+	private function hidden_field_html( $atts ) {
+		return $this->two_cell_table_row( 'hidden-field', $atts );
+	}
 
-		return $html;
+	private function user_id_html( $atts ) {
+		return $this->two_cell_table_row( 'user-id-field', $atts );
+	}
+
+	private function lookup_to_address_html( $atts ) {
+		$table = $this->two_cell_table_row( 'lookup-country', $atts );
+		$table .= $this->two_cell_table_row( 'cb-sep-values', $atts );
+		$table .= $this->two_cell_table_row( 'address-field', $atts );
+
+		return $table;
 	}
 
 	private function pro_fields_divider_html( $atts ) {
-		if ( $atts['entry']->metas[ $this->text_field_id ] == 'Hide Fields' ) {
-			return '';
-		}
-
 		$html = $this->pro_fields_divider_heading( $atts );
 		$html .= $this->fields_within_pro_fields_divider( $atts );
 
@@ -572,66 +573,19 @@ class test_FrmProShowEntryShortcode extends test_FrmShowEntryShortcode {
 	}
 
 	private function pro_fields_divider_heading( $atts ) {
-		if ( isset( $atts['include_extras'] ) && strpos( $atts['include_extras'], 'section' ) !== false ) {
-			$html = '<tr' . $this->tr_style . '><td colspan="2"' . $this->td_style . '><h3>Pro Fields</h3></td></tr>' . "\r\n";
-		} else {
-			$html = '';
-		}
-
-		return $html;
+		return $this->one_cell_table_row( 'pro-fields-divider', $atts );
 	}
-
 
 	private function fields_within_pro_fields_divider( $atts ) {
-		$html = $this->rich_text_html();
-		$html .= $this->single_file_upload_html( $atts );
-		$html .= $this->multi_file_upload_html( $atts );
-		$html .= $this->number_to_scale_field_html( $atts );
-
-		return $html;
-	}
-
-	private function rich_text_html() {
-		return '<tr' . $this->tr_style . '><td' . $this->td_style . '>Rich Text</td><td' . $this->td_style . '><strong>Bolded text</strong></td></tr>' . "\r\n";
-	}
-
-	private function single_file_upload_html( $atts ) {
-		$file_field_id = FrmField::get_id_by_key( 'single-file-upload-field' );
-		$single_file_url = wp_get_attachment_url( $atts['entry']->metas[ $file_field_id ] );
-
-		if ( isset( $atts['clickable'] ) && $atts['clickable'] ) {
-			$html = '<tr' . $this->tr_style . '><td' . $this->td_style . '>Single File Upload</td><td' . $this->td_style . '>';
-			$html .= '<a href="' . $single_file_url . '" rel="nofollow">' . $single_file_url . '</a></td></tr>';
-			$html .= "\r\n";
-		} else {
-			$html = '<tr' . $this->tr_style . '><td' . $this->td_style . '>Single File Upload</td><td' . $this->td_style . '>' . $single_file_url . '</td></tr>';
-			$html .= "\r\n";
-		}
-
-		return $html;
-	}
-
-	private function multi_file_upload_html( $atts ) {
-		$multi_file_urls = $this->get_multi_file_urls( $atts['entry'] );
-
-		if ( isset( $atts['clickable'] ) && $atts['clickable'] ) {
-			$html = '<tr' . $this->tr_style . '><td' . $this->td_style . '>Multiple File Upload</td><td' . $this->td_style . '>';
-
-			foreach ( $multi_file_urls as $multi_file_url ) {
-				$html .= '<a href="' . $multi_file_url . '" rel="nofollow">' . $multi_file_url . '</a><br/><br/>';
-			}
-
-			$html = preg_replace('/<br\/><br\/>$/', '', $html);
-			$html .= '</td></tr>';
-			$html .= "\r\n";
-		} else {
-			$html = '<tr' . $this->tr_style . '><td' . $this->td_style . '>Multiple File Upload</td><td' . $this->td_style . '>';
-
-			$formatted_urls = implode( '<br/><br/>', $multi_file_urls );
-
-			$html .= $formatted_urls . '</td></tr>';
-			$html .= "\r\n";
-		}
+		$html = $this->two_cell_table_row( 'rich-text-field', $atts );
+		$html .= $this->two_cell_table_row( 'single-file-upload-field', $atts );
+		$html .= $this->two_cell_table_row( 'multi-file-upload-field', $atts );
+		$html .= $this->two_cell_table_row( 'number-field', $atts );
+		$html .= $this->two_cell_table_row( 'phone-number', $atts );
+		$html .= $this->two_cell_table_row( 'time-field', $atts );
+		$html .= $this->two_cell_table_row( 'date-field', $atts );
+		$html .= $this->two_cell_table_row( 'image-url', $atts );
+		$html .= $this->two_cell_table_row( 'scale-field', $atts );
 
 		return $html;
 	}
@@ -647,135 +601,279 @@ class test_FrmProShowEntryShortcode extends test_FrmShowEntryShortcode {
 		return $multi_file_urls;
 	}
 
-	private function number_to_scale_field_html( $atts ) {
-		$html = '<tr' . $this->tr_style . '><td' . $this->td_style . '>Number</td><td' . $this->td_style . '>11</td></tr>' . "\r\n";
-		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Phone Number</td><td' . $this->td_style . '>1231231234</td></tr>' . "\r\n";
-		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Time</td><td' . $this->td_style . '>12:30 AM</td></tr>' . "\r\n";
-		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Date</td><td' . $this->td_style . '>August 16, 2015</td></tr>' . "\r\n";
-
-		if ( isset( $atts['clickable'] ) && $atts['clickable'] ) {
-			$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Image URL</td><td' . $this->td_style . '>';
-			$html .= '<a href="http://www.test.com" rel="nofollow">http://www.test.com</a></td></tr>' . "\r\n";
-		} else {
-			$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Image URL</td><td' . $this->td_style . '>http://www.test.com</td></tr>' . "\r\n";
-		}
-
-		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Scale</td><td' . $this->td_style . '>5</td></tr>' . "\r\n";
-
-		return $html;
+	private function dynamic_country_html( $atts ) {
+		return $this->two_cell_table_row( 'dynamic-country', $atts );
 	}
 
-	private function dynamic_field_html() {
-		return '<tr' . $this->tr_style . '><td' . $this->td_style . '>Dynamic Field - level 1</td><td' . $this->td_style . '>United States</td></tr>' . "\r\n";
+	private function dynamic_state_html( $atts ) {
+		return $this->two_cell_table_row( 'dynamic-state', $atts );
 	}
-
-
 
 	private function html_field_html( $atts ) {
-		if ( isset( $atts['include_extras'] ) && strpos( $atts['include_extras'], 'html' ) !== false ) {
-			$html = '<tr' . $this->tr_style . '><td colspan="2"' . $this->td_style . '>Lorem ipsum.</td></tr>' . "\r\n";
-
-		} else {
-			$html = '';
-		}
-
-		return $html;
+		return $this->one_cell_table_row( 'html-field', $atts );
 	}
 
 	private function repeating_section_header( $atts ) {
-		if ( isset( $atts['is_repeat_empty'] ) && $atts['is_repeat_empty'] && ! isset( $atts['include_blank'] ) ) {
-			return '';
-		}
-
-		if ( isset( $atts['include_extras'] ) && strpos( $atts['include_extras'], 'section' ) !== false ) {
-			$html = '<tr' . $this->tr_style . '><td colspan="2"' . $this->td_style . '><h3>Repeating Section</h3></td></tr>' . "\r\n";
-		} else {
-			$html = '';
-		}
-
-		return $html;
-	}
-
-	private function user_id_html() {
-		return '<tr' . $this->tr_style . '><td' . $this->td_style . '>User ID</td><td' . $this->td_style . '>admin</td></tr>' . "\r\n";
+		return $this->one_cell_table_row( 'repeating-section', $atts );
 	}
 
 	private function tags_html( $atts ) {
-		if ( $atts['entry']->metas[ $this->text_field_id ] == 'Hide Fields' ) {
-			$html = '';
-		} else {
-			$html = '<tr' . $this->tr_style . '><td' . $this->td_style . '>Tags</td><td' . $this->td_style . '>Jame</td></tr>' . "\r\n";
-
-		}
-
-		return $html;
+		return $this->two_cell_table_row( 'tags-field', $atts );
 	}
 
-	private function signature_html() {
-		return '<tr' . $this->tr_style . '><td' . $this->td_style . '>Signature</td><td' . $this->td_style . '>398, 150</td></tr>' . "\r\n";
+	private function signature_html( $atts ) {
+		return $this->two_cell_table_row( 'signature-field', $atts );
 	}
 
 	private function embedded_form_html( $atts ) {
-		$html = '<tr' . $this->tr_style . '><td' . $this->td_style . '>Name</td><td' . $this->td_style . '>Embedded name</td></tr>' . "\r\n";
-		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Last</td><td' . $this->td_style . '>test</td></tr>' . "\r\n";
+		$content = '';
+		foreach ( $this->fields_in_embedded_form() as $field_key ) {
 
-		if ( isset( $atts['clickable'] ) && $atts['clickable'] ) {
-			$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Email</td><td' . $this->td_style . '>';
-			$html .= '<a href="mailto:test@mail.com">test@mail.com</a></td></tr>' . "\r\n";
-
-		} else {
-			$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Email</td><td' . $this->td_style . '>test@mail.com</td></tr>' . "\r\n";
+			if ( $field_key === 'email-information-section' ) {
+				$content .= $this->one_cell_table_row( $field_key, $atts );
+			} else {
+				$content .= $this->two_cell_table_row( $field_key, $atts );
+			}
 		}
 
-		if ( isset( $atts['include_extras'] ) && strpos( $atts['include_extras'], 'section' ) !== false ) {
-			$html .= '<tr' . $this->tr_style . '><td colspan="2"' . $this->td_style . '><h3>Email Information</h3></td></tr>' . "\r\n";
-		}
-
-		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Subject</td><td' . $this->td_style . '>test</td></tr>' . "\r\n";
-		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Message</td><td' . $this->td_style . '>test</td></tr>' . "\r\n";
-		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Date</td><td' . $this->td_style . '>May 21, 2015</td></tr>' . "\r\n";
-
-		return $html;
+		return $content;
 	}
 
-	private function repeating_field_html( $atts, $exclude_fields = array() ) {
-		if ( isset( $atts['is_repeat_empty'] ) && $atts['is_repeat_empty'] && ! isset( $atts['include_blank'] ) ) {
-			return '';
-		}
-
+	private function repeating_field_html( $atts ) {
 		$html = '';
 
-		if ( ! isset( $exclude_fields['repeating-text'] ) ) {
-			$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Single Line Text</td><td' . $this->td_style . '>First</td></tr>' . "\r\n";
+		if ( isset( $this->exclude_fields['repeating-section'] ) || ( ! empty( $this->include_fields ) && ! isset( $this->include_fields['repeating-section'] ) ) ) {
+			return $html;
 		}
-		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Checkboxes</td><td' . $this->td_style . '>Option 1, Option 2</td></tr>' . "\r\n";
-		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Date</td><td' . $this->td_style . '>May 27, 2015</td></tr>' . "\r\n";
 
-		if ( ! isset( $exclude_fields['repeating-text'] ) ) {
-			$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Single Line Text</td><td' . $this->td_style . '>Second</td></tr>' . "\r\n";
+		if ( ! isset( $this->exclude_fields['repeating-text'] ) ) {
+			$html .= $this->two_cell_table_row_for_value( 'Single Line Text', 'First', $atts );
 		}
-		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Checkboxes</td><td' . $this->td_style . '>Option 1, Option 2</td></tr>' . "\r\n";
-		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Date</td><td' . $this->td_style . '>May 29, 2015</td></tr>' . "\r\n";
+		$html .= $this->two_cell_table_row_for_value( 'Checkboxes', 'Option 1, Option 2', $atts );
+		$html .= $this->two_cell_table_row_for_value( 'Date', 'May 27, 2015', $atts );
 
-		if ( ! isset( $exclude_fields['repeating-text'] ) ) {
-			$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Single Line Text</td><td' . $this->td_style . '>Third</td></tr>' . "\r\n";
+		if ( ! isset( $this->exclude_fields['repeating-text'] ) ) {
+			$html .= $this->two_cell_table_row_for_value( 'Single Line Text', 'Second', $atts );
 		}
-		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Checkboxes</td><td' . $this->td_style . '>Option 2</td></tr>' . "\r\n";
-		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Date</td><td' . $this->td_style . '>June 19, 2015</td></tr>' . "\r\n";
+		$html .= $this->two_cell_table_row_for_value( 'Checkboxes', 'Option 1, Option 2', $atts );
+		$html .= $this->two_cell_table_row_for_value( 'Date', 'May 29, 2015', $atts );
+
+		if ( ! isset( $this->exclude_fields['repeating-text'] ) ) {
+			$html .= $this->two_cell_table_row_for_value( 'Single Line Text', 'Third', $atts );
+		}
+		$html .= $this->two_cell_table_row_for_value( 'Checkboxes', 'Option 2', $atts );
+		$html .= $this->two_cell_table_row_for_value( 'Date', 'June 19, 2015', $atts );
 
 		return $html;
 	}
 
-	private function repeating_text_field_html() {
-		$html = '<tr' . $this->tr_style . '><td' . $this->td_style . '>Single Line Text</td><td' . $this->td_style . '>First</td></tr>' . "\r\n";
-		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Single Line Text</td><td' . $this->td_style . '>Second</td></tr>'. "\r\n";
-		$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Single Line Text</td><td' . $this->td_style . '>Third</td></tr>' . "\r\n";
+	/**
+	 * @param stdClass $entry
+	 * @param stdClass $field
+	 * @param array $atts
+	 *
+	 * @return mixed|string
+	 */
+	protected function get_field_html_value( $entry, $field, $atts ) {
 
-		return $html;
+		switch ( $field->field_key) {
+			case 'paragraph-field':
+				$value = "Jamie<br/>Rebecca<br/>Wahlin";
+				break;
+
+			case 'pro-fields-divider':
+				$value = '<h3>Pro Fields</h3>';
+				break;
+
+			case 'email-information-section':
+				$value = '<h3>Email Information</h3>';
+				break;
+
+			case 'rich-text-field':
+				$value = '<strong>Bolded text</strong>';
+				break;
+
+			case 'page-break':
+				$value = '<br/><br/>';
+				break;
+
+			case 'repeating-section':
+				$value = '<h3>Repeating Section</h3>';
+				break;
+
+			case 'address-field':
+				$value = '123 Main St. #5 <br/>Anytown, OR <br/>12345 <br/>United States';
+				break;
+
+			case 'single-file-upload-field':
+				$file_field_id = FrmField::get_id_by_key( 'single-file-upload-field' );
+				$single_file_url = wp_get_attachment_url( $atts['entry']->metas[ $file_field_id ] );
+
+				if ( isset( $atts['clickable'] ) && $atts['clickable'] ) {
+					$value = '<a href="' . $single_file_url . '" rel="nofollow">' . $single_file_url . '</a>';
+				} else {
+					$value = $single_file_url;
+				}
+			break;
+
+			case 'multi-file-upload-field':
+				$multi_file_urls = $this->get_multi_file_urls( $atts['entry'] );
+
+				if ( isset( $atts['clickable'] ) && $atts['clickable'] ) {
+
+					$value = '';
+					foreach ( $multi_file_urls as $multi_file_url ) {
+						$value .= '<a href="' . $multi_file_url . '" rel="nofollow">' . $multi_file_url . '</a><br/><br/>';
+					}
+
+					$value = preg_replace('/<br\/><br\/>$/', '', $value );
+				} else {
+					$value = implode( '<br/><br/>', $multi_file_urls );
+				}
+				break;
+
+
+			default:
+				$value = parent::get_field_html_value( $entry, $field, $atts );
+		}
+
+		return $value;
+
 	}
 
-	private function separate_values_checkbox_html() {
-		return '<tr' . $this->tr_style . '><td' . $this->td_style . '>Checkboxes - separate values</td><td' . $this->td_style . '>Option 1, Option 2</td></tr>' . "\r\n";
+	protected function get_field_value( $entry, $field, $atts ) {
+		switch ( $field->field_key) {
+			case 'html-field':
+				$value = "Lorem ipsum.";
+				break;
+
+			case 'email-field':
+				if ( isset( $atts[ 'clickable' ] ) && $atts[ 'clickable' ] ) {
+
+					$value = '<a href="mailto:jamie@mail.com">jamie@mail.com</a>';
+				} else {
+					$value = 'jamie@mail.com';
+				}
+				break;
+
+			case 'website-field':
+				if ( isset( $atts[ 'clickable' ] ) && $atts[ 'clickable' ] ) {
+					$value = '<a href="http://www.jamie.com" rel="nofollow">http://www.jamie.com</a>';
+				} else {
+					$value = 'http://www.jamie.com';
+				}
+				break;
+
+			case 'tags-field':
+				$value = 'Jame';
+				break;
+
+			case 'cb-sep-values':
+				$value = 'Option 1, Option 2';
+				break;
+
+			case 'user-id-field':
+				$value = 'admin';
+				break;
+
+			case 'dynamic-country':
+				$value = 'United States';
+				break;
+
+			case 'dynamic-state':
+				$value = 'California, Utah';
+				break;
+
+			case 'time-field':
+				$value = '12:30 AM';
+				break;
+
+			case 'date-field':
+				$value = 'August 16, 2015';
+				break;
+
+			case 'image-url':
+				if ( isset( $atts['clickable'] ) && $atts['clickable'] ) {
+					$value = '<a href="http://www.test.com" rel="nofollow">http://www.test.com</a>';
+				} else {
+					$value = 'http://www.test.com';
+				}
+				break;
+
+			case 'contact-name':
+				$value = 'Embedded name';
+				break;
+
+			case 'contact-last-name':
+				$value = 'test';
+				break;
+
+			case 'contact-email':
+				if ( isset( $atts[ 'clickable' ] ) && $atts[ 'clickable' ] ) {
+					$value = '<a href="mailto:test@mail.com">test@mail.com</a>';
+				} else {
+					$value = 'test@mail.com';
+				}
+				break;
+
+			case 'contact-subject':
+				$value = 'test';
+				break;
+
+			case 'contact-message':
+				$value = 'test';
+				break;
+
+			case 'contact-date':
+				$value = 'May 21, 2015';
+				break;
+
+			case 'signature-field':
+				$value = '398, 150';
+				break;
+
+			default:
+				$value = parent::get_field_value( $entry, $field, $atts );
+		}
+
+		return $value;
+	}
+
+	/**
+	 * @param stdClass $entry
+	 * @param stdClass $field
+	 * @param array $atts
+	 *
+	 * @return mixed|string
+	 */
+	protected function get_field_plain_text_value( $entry, $field, $atts ) {
+
+		switch ( $field->field_key) {
+			case 'page-break':
+				$value = "\r\n";
+				break;
+
+			case 'html-field':
+				$value = "Lorem ipsum.";
+				break;
+
+			case 'repeating-section':
+				$value = "\r\nRepeating Section";
+				break;
+
+			case 'email-information-section':
+				$value = "\r\nEmail Information";
+				break;
+
+			case 'address-field':
+				$value = '123 Main St. #5 Anytown, OR 12345 United States';
+				break;
+
+			default:
+				$value = parent::get_field_plain_text_value( $entry, $field, $atts );
+		}
+
+		return $value;
 	}
 
 	private function user_info_html( $atts ) {
@@ -791,19 +889,11 @@ class test_FrmProShowEntryShortcode extends test_FrmShowEntryShortcode {
 	}
 
 	private function text_field_plain_text( $atts ) {
-		if ( isset( $atts['direction'] ) && $atts['direction'] == 'rtl' ) {
-			$content = $atts['entry']->metas[ $this->text_field_id ] . ': Single Line Text';
-		} else {
-			$content = 'Single Line Text: ' . $atts['entry']->metas[ $this->text_field_id ];
-		}
-
-		$content .= "\r\n";
-
-		return $content;
+		return $this->label_and_value_plain_text_row( 'text-field', $atts );
 	}
 
 	private function paragraph_to_website_plain_text() {
-		$content = "Paragraph Text: Jamie\nRebecca\nWahlin\r\n";
+		$content = "Paragraph Text: Jamie\r\nRebecca\r\nWahlin\r\n";
 		$content .= "Checkboxes - colors: Red, Green\r\n";
 		$content .= "Radio Buttons - dessert: cookies\r\n";
 		$content .= "Dropdown: Ace Ventura\r\n";
@@ -814,12 +904,8 @@ class test_FrmProShowEntryShortcode extends test_FrmShowEntryShortcode {
 	}
 
 	private function pro_fields_divider_plain_text( $atts ) {
-		if ( $atts['entry']->metas[ $this->text_field_id ] == 'Hide Fields' ) {
-			return '';
-		}
-
 		$content = '';
-		if ( isset( $atts['include_extras'] ) && strpos( $atts['include_extras'], 'section' ) !== false ) {
+		if ( in_array( 'divider', $this->include_extras ) ) {
 			$content .= "\r\nPro Fields\r\n";
 		}
 
@@ -832,10 +918,10 @@ class test_FrmProShowEntryShortcode extends test_FrmShowEntryShortcode {
 		$multiple_file_urls = $this->get_multi_file_urls( $atts['entry'] );
 		$content .= "Multiple File Upload: " . implode( ', ', $multiple_file_urls ) . "\r\n";
 
-		$content .= "Number: 11\r\n";
-		$content .= "Phone Number: 1231231234\r\n";
-		$content .= "Time: 12:30 AM\r\n";
-		$content .= "Date: August 16, 2015\r\n";
+		$content .= $this->label_and_value_plain_text_row( 'number-field', $atts );
+		$content .= $this->label_and_value_plain_text_row( 'phone-number', $atts );
+		$content .= $this->label_and_value_plain_text_row( 'time-field', $atts );
+		$content .= $this->label_and_value_plain_text_row( 'date-field', $atts );
 		$content .= "Image URL: http://www.test.com\r\n";
 		$content .= "Scale: 5\r\n";
 
@@ -844,79 +930,53 @@ class test_FrmProShowEntryShortcode extends test_FrmShowEntryShortcode {
 
 
 	private function page_break_plain_text( $atts ) {
-		if ( isset( $atts['include_extras'] ) && strpos( $atts['include_extras'], 'page' ) !== false ) {
-			$html = "\r\n\r\n";
-
-		} else {
-			$html = '';
-		}
-
-		return $html;
+		return $this->single_value_plain_text_row( 'page-break', $atts );
 	}
 
 	private function html_field_plain_text( $atts ) {
-		if ( isset( $atts['include_extras'] ) && strpos( $atts['include_extras'], 'html' ) !== false ) {
-			$html = "Lorem ipsum.\r\n";
-		} else {
-			$html = '';
-		}
-
-		return $html;
+		return $this->single_value_plain_text_row( 'html-field', $atts );
 	}
 
-	private function dynamic_field_plain_text() {
-		return "Dynamic Field - level 1: United States\r\n";
+	private function dynamic_country_plain_text( $atts ) {
+		return $this->label_and_value_plain_text_row( 'dynamic-country', $atts );
+	}
+
+	private function dynamic_state_plain_text( $atts ) {
+		return $this->label_and_value_plain_text_row( 'dynamic-state', $atts );
 	}
 
 	private function embedded_form_plain_text( $atts ) {
-		$content = "Name: Embedded name\r\n";
-		$content .= "Last: test\r\n";
+		$content = '';
+		foreach ( $this->fields_in_embedded_form() as $field_key ) {
 
-		if ( isset( $atts['clickable'] ) && $atts['clickable'] ) {
-			$content .= "Email: test@mail.com</a>\r\n";
-
-		} else {
-			$content .= "Email: test@mail.com\r\n";
+			if ( $field_key === 'email-information-section' ) {
+				$content .= $this->single_value_plain_text_row( $field_key, $atts );
+			} else {
+				$content .= $this->label_and_value_plain_text_row( $field_key, $atts );
+			}
 		}
-
-		if ( isset( $atts['include_extras'] ) && strpos( $atts['include_extras'], 'section' ) !== false ) {
-			$content .= "\r\nEmail Information\r\n";
-		}
-
-		$content .= "Subject: test\r\n";
-		$content .= "Message: test\r\n";
-		$content .= "Date: May 21, 2015\r\n";
 
 		return $content;
 	}
 
 	private function repeating_section_header_plain_text( $atts ) {
-		if ( isset( $atts['include_extras'] ) && strpos( $atts['include_extras'], 'section' ) !== false ) {
-			$content = "\r\nRepeating Section\r\n";
-		} else {
-			$content = '';
-		}
-
-		return $content;
+		return $this->single_value_plain_text_row( 'repeating-section', $atts );
 	}
 
-	private function user_id_plain_text() {
-		return "User ID: admin\r\n";
+	private function hidden_field_plain_text( $atts ) {
+		return $this->label_and_value_plain_text_row( 'hidden-field', $atts );
+	}
+
+	private function user_id_plain_text( $atts ) {
+		return $this->label_and_value_plain_text_row( 'user-id-field', $atts );
 	}
 
 	private function tags_plain_text( $atts ) {
-		if ( $atts['entry']->metas[ $this->text_field_id ] == 'Hide Fields' ) {
-			$content = '';
-		} else {
-			$content = "Tags: Jame\r\n";
-
-		}
-
-		return $content;
+		return $this->label_and_value_plain_text_row( 'tags-field', $atts );
 	}
 
-	private function signature_plain_text() {
-		return "Signature: 398, 150\r\n";
+	private function signature_plain_text( $atts ) {
+		return $this->label_and_value_plain_text_row( 'signature-field', $atts );
 	}
 
 	private function repeating_field_plain_text() {
@@ -933,8 +993,10 @@ class test_FrmProShowEntryShortcode extends test_FrmShowEntryShortcode {
 		return $content;
 	}
 
-	private function separate_values_checkbox_plain_text() {
-		$content = "Checkboxes - separate values: Option 1, Option 2\r\n";
+	private function lookup_to_address_plain_text( $atts ) {
+		$content = $this->label_and_value_plain_text_row( 'lookup-country', $atts );
+		$content .= $this->label_and_value_plain_text_row( 'cb-sep-values', $atts );
+		$content .= $this->label_and_value_plain_text_row( 'address-field', $atts );
 
 		return $content;
 	}
@@ -985,7 +1047,7 @@ class test_FrmProShowEntryShortcode extends test_FrmShowEntryShortcode {
 		$in_repeating_section = 0;
 		foreach ( $fields as $field ) {
 
-			if ( in_array( $field->type, array( 'html', 'form', 'divider', 'break', 'end_divider', 'password', 'captcha' ) ) ) {
+			if ( in_array( $field->type, array( 'html', 'form', 'divider', 'break', 'end_divider', 'password', 'captcha', 'credit_card' ) ) ) {
 				if ( $field->type == 'divider' ) {
 
 					$content .= '[if ' . $field->id . ']';
@@ -1077,13 +1139,13 @@ class test_FrmProShowEntryShortcode extends test_FrmShowEntryShortcode {
 		$where = array( 'meta_value' => 'United States', 'field_id' => FrmField::get_id_by_key( '2atiqt' ) );
 		$dynamic_country_id = FrmDb::get_var( 'frm_item_metas', $where, 'item_id' );
 
-		// TODO: do I need field label?
-
+		// Dynamic State Field ID
+		$dynamic_state_id = FrmField::get_id_by_key( 'dynamic-state' );
 
 		$expected = array(
 			'text-field' => 'Jamie',
-			'p3eiuk' => "Jamie\nRebecca\nWahlin",
-			'uc580i' => array ( 'Red', 'Green' ),
+			'paragraph-field' => "Jamie\r\nRebecca\r\nWahlin",
+			'checkbox-colors' => array ( 'Red', 'Green' ),
 			'radio-button-field' => 'cookies',
 			'dropdown-field' => 'Ace Ventura',
 			'email-field' => 'jamie@mail.com',
@@ -1092,19 +1154,20 @@ class test_FrmProShowEntryShortcode extends test_FrmShowEntryShortcode {
 			'rich-text-field-value' => '<strong>Bolded text</strong>',
 			'single-file-upload-field' => $single_file_url,
 			'single-file-upload-field-value' => $entry->metas[ $file_field_id ],
-			'multi-file-upload-field' => $multi_file_urls,// TODO: check purpose of extra space in FrmProEntryMetaHelper
+			'multi-file-upload-field' => $multi_file_urls,
 			'multi-file-upload-field-value' => $entry->metas[ $multi_file_field_id ],
 			'number-field' => '11',
-			'n0d580' => '1231231234',
+			'phone-number' => '1231231234',
 			'time-field' => '12:30 AM',
 			'time-field-value' => '00:30',
 			'date-field' => 'August 16, 2015',
 			'date-field-value' => '2015-08-16',
-			'zwuclz' => 'http://www.test.com',
-			'qbrd2o' => '5',
+			'image-url' => 'http://www.test.com',
+			'scale-field' => '5',
 			'dynamic-country' => 'United States',
 			'dynamic-country-value' => $dynamic_country_id,
-			'dynamic-state' => '',
+			'dynamic-state' => array ( 'California', 'Utah' ),
+			'dynamic-state-value' => $entry->metas[ $dynamic_state_id ],
 			'dynamic-city' => '',
 			'qfn4lg' => '',
 			'contact-name' => 'Embedded name',
@@ -1116,11 +1179,11 @@ class test_FrmProShowEntryShortcode extends test_FrmShowEntryShortcode {
 			'contact-date' => 'May 21, 2015',
 			'contact-date-value' => '2015-05-21',
 			'contact-user-id' => '',
-			'hidden-field' => '',
+			'hidden-field' => 'Hidden value',
 			'user-id-field' => 'admin',
 			'user-id-field-value' => '1',
 			'tags-field' => 'Jame',
-			'ggo4ez' => array(
+			'signature-field' => array(
 				'width' => '398',
 				'height' => '150',
 			),
@@ -1148,9 +1211,17 @@ class test_FrmProShowEntryShortcode extends test_FrmShowEntryShortcode {
 			'repeating-checkbox' => array( array( 'Option 1', 'Option 2' ), array( 'Option 1', 'Option 2' ), array( 'Option 2') ),
 			'repeating-date' => array( 'May 27, 2015', 'May 29, 2015', 'June 19, 2015' ),
 			'repeating-date-value' => array( '2015-05-27', '2015-05-29', '2015-06-19' ),
-			'lookup-country' => '',
+			'lookup-country' => array( 'United States'),
 			'cb-sep-values' => array( 'Option 1', 'Option 2' ),
 			'cb-sep-values-value' => array( 'Red', 'Orange' ),
+			'address-field' => '123 Main St. #5 Anytown, OR 12345 United States',
+			'address-field-value' => array (
+				'line1' => '123 Main St. #5',
+				'city' => 'Anytown',
+				'state' => 'OR',
+				'zip' => '12345',
+				'country' => 'United States',
+    		),
 		);
 
 		$this->remove_repeating_fields( $atts, $expected );
@@ -1213,7 +1284,7 @@ class test_FrmProShowEntryShortcode extends test_FrmShowEntryShortcode {
 
 		foreach ( $fields as $field ) {
 
-			if ( in_array( $field->type, array( 'html', 'form', 'divider', 'break', 'end_divider', 'password', 'captcha' ) ) ) {
+			if ( in_array( $field->type, array( 'html', 'form', 'divider', 'break', 'end_divider', 'password', 'captcha', 'credit_card' ) ) ) {
 				if ( FrmField::is_repeating_field( $field ) ) {
 					// TODO: do something different for repeating sections?
 				}
@@ -1270,5 +1341,73 @@ class test_FrmProShowEntryShortcode extends test_FrmShowEntryShortcode {
 
 	protected function get_form_id_for_test() {
 		return FrmForm::getIdByKey( 'all_field_types' );
+	}
+
+	protected function one_cell_table_row( $field_key, $atts ) {
+		$field = FrmField::getOne( $field_key );
+		$field_value = $this->get_field_html_value( $atts['entry'], $field, $atts );
+
+		if ( ! $this->is_field_included( $atts, $field, $field_value ) ) {
+			return '';
+		}
+
+		$html = '<tr' . $this->tr_style . '>';
+		$html .= '<td colspan="2"' . $this->td_style . '>' . $field_value . '</td>';
+		$html .= '</tr>' . "\r\n";
+
+		return $html;
+	}
+
+	protected function is_self_or_parent_in_array( $field_key, $array ) {
+		if ( in_array( $field_key, array_keys( $array ) ) ) {
+			$in_array = true;
+		} else if ( in_array( $field_key, $this->fields_in_pro_divider() ) && in_array( 'pro-fields-divider', array_keys( $array ) ) ) {
+			$in_array = true;
+		} else if ( in_array( $field_key, $this->fields_in_repeating_section() ) && in_array( 'repeating-section', array_keys( $array ) ) ) {
+			$in_array = true;
+		} else if ( in_array( $field_key, $this->fields_in_embedded_form() ) && in_array( 'embed-form-field', array_keys( $array ) ) ) {
+			$in_array = true;
+		} else {
+			$in_array = false;
+		}
+
+		return $in_array;
+
+	}
+
+	private function fields_in_repeating_section() {
+		return array(
+			'repeating-text',
+			'repeating-checkbox',
+			'repeating-date',
+		);
+	}
+
+	private function fields_in_embedded_form() {
+		return array(
+			'contact-name',
+			'contact-last-name',
+			'contact-email',
+			'contact-website',
+			'email-information-section',
+			'contact-subject',
+			'contact-message',
+			'contact-date',
+			'contact-user-id',
+		);
+	}
+
+	private function fields_in_pro_divider() {
+		return array(
+			'rich-text-field',
+			'single-file-upload-field',
+			'multi-file-upload-field',
+			'number-field',
+			'phone-number',
+			'time-field',
+			'date-field',
+			'image-url',
+			'scale-field',
+			);
 	}
 }

@@ -41,8 +41,8 @@ class test_FrmProFieldShortcodes extends test_FrmFieldShortcodes {
 	protected function get_expected_field_values() {
 		return array(
 			'text-field'               => 'Jamie',
-			'p3eiuk'                   => "<p>Jamie<br />\nRebecca<br />\nWahlin</p>\n",//paragraph
-			'uc580i'                   => 'Red, Green',//checkbox
+			'paragraph-field'                   => "<p>Jamie<br />\nRebecca<br />\nWahlin</p>\n",//paragraph
+			'checkbox-colors'                   => 'Red, Green',//checkbox
 			'radio-button-field'       => 'cookies',
 			'dropdown-field'           => 'Ace Ventura',
 			'email-field'              => 'jamie@mail.com',
@@ -54,11 +54,11 @@ class test_FrmProFieldShortcodes extends test_FrmFieldShortcodes {
 			'single-file-upload-field' => $this->get_single_file_upload_value(),
 			'multi-file-upload-field'  => $this->get_multi_file_upload_value(),
 			'number-field'             => '11',
-			'n0d580'                   => '1231231234',//phone number
+			'phone-number'                   => '1231231234',//phone number
 			'time-field'               => '12:30 AM',
 			'date-field'               => 'August 16, 2015',
-			'zwuclz'                   => 'http://www.test.com',//image url
-			'qbrd2o'                   => '5',//scale
+			'image-url'                   => 'http://www.test.com',//image url
+			'scale-field'                   => '5',//scale
 			'ex97jv'                   => '',//end section
 			'dynamic-country'          => 'United States',
 			'dynamic-state'            => 'California, Utah',
@@ -71,7 +71,7 @@ class test_FrmProFieldShortcodes extends test_FrmFieldShortcodes {
 			'hidden-field'             => 'Hidden value',
 			'user-id-field'            => 'admin',
 			'9r61y8'                   => 'admin',//password
-			'khyzws'                   => '',//html
+			'html-field'                   => '',//html
 			'tags-field'               => 'Jame',//tags
 			'repeating-section'        => $this->get_field_value( 'repeating-section' ),
 			'repeating-text'           => 'First, Second, Third',

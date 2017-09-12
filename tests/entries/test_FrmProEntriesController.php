@@ -72,7 +72,7 @@ class WP_Test_FrmProEntriesController extends FrmUnitTest {
 		self::_set_and_check_expectations( $args );
 
 		if ( $form_key == $this->all_fields_form_key ) {
-			$fields = 'text-field,p3eiuk,uc580i,radio-button-field,embed-form-field,repeating-text';
+			$fields = 'text-field,paragraph-field,checkbox-colors,radio-button-field,embed-form-field,repeating-text';
 		} else {
 			$fields = 'yi6yvm';
 		}

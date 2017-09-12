@@ -1086,12 +1086,12 @@ class FrmXMLHelper {
 	/**
 	 * Remove deprecated notification settings after migration
 	 *
-	 * @since 2.05
+	 * @since 2.04.02
 	 *
 	 * @param int|string $form_id
 	 * @param array $form_options
 	 */
-    private static function remove_deprecated_notification_settings( $form_id, $form_options ) {
+	private static function remove_deprecated_notification_settings( $form_id, $form_options ) {
 		$delete_settings = array( 'notification', 'autoresponder', 'email_to' );
 		foreach ( $delete_settings as $index ) {
 			if ( isset( $form_options[ $index ] ) ) {

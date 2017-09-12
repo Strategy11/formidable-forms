@@ -600,7 +600,7 @@
 		</field>
 		<field>
 		    <id>8100</id>
-            <field_key><![CDATA[p3eiuk]]></field_key>
+            <field_key><![CDATA[paragraph-field]]></field_key>
             <name><![CDATA[Paragraph Text]]></name>
             <description><![CDATA[]]></description>
             <type><![CDATA[textarea]]></type>
@@ -613,7 +613,7 @@
 		</field>
 		<field>
 		    <id>8101</id>
-            <field_key><![CDATA[uc580i]]></field_key>
+            <field_key><![CDATA[checkbox-colors]]></field_key>
             <name><![CDATA[Checkboxes - colors]]></name>
             <description><![CDATA[]]></description>
             <type><![CDATA[checkbox]]></type>
@@ -678,7 +678,7 @@
 		</field>
 		<field>
 		    <id>8109</id>
-            <field_key><![CDATA[d7hsn1]]></field_key>
+            <field_key><![CDATA[page-break]]></field_key>
             <name><![CDATA[Next]]></name>
             <description><![CDATA[]]></description>
             <type><![CDATA[break]]></type>
@@ -756,7 +756,7 @@
 		</field>
 		<field>
 		    <id>8114</id>
-            <field_key><![CDATA[n0d580]]></field_key>
+            <field_key><![CDATA[phone-number]]></field_key>
             <name><![CDATA[Phone Number]]></name>
             <description><![CDATA[]]></description>
             <type><![CDATA[phone]]></type>
@@ -795,7 +795,7 @@
 		</field>
 		<field>
 		    <id>8117</id>
-            <field_key><![CDATA[zwuclz]]></field_key>
+            <field_key><![CDATA[image-url]]></field_key>
             <name><![CDATA[Image URL]]></name>
             <description><![CDATA[]]></description>
             <type><![CDATA[image]]></type>
@@ -808,7 +808,7 @@
 		</field>
 		<field>
 		    <id>8118</id>
-            <field_key><![CDATA[qbrd2o]]></field_key>
+            <field_key><![CDATA[scale-field]]></field_key>
             <name><![CDATA[Scale]]></name>
             <description><![CDATA[]]></description>
             <type><![CDATA[scale]]></type>
@@ -938,7 +938,7 @@
 		</field>
 		<field>
 		    <id>8127</id>
-            <field_key><![CDATA[khyzws]]></field_key>
+            <field_key><![CDATA[html-field]]></field_key>
             <name><![CDATA[HTML]]></name>
             <description><![CDATA[Lorem ipsum.]]></description>
             <type><![CDATA[html]]></type>
@@ -964,7 +964,7 @@
 		</field>
 		<field>
 		    <id>8129</id>
-            <field_key><![CDATA[ggo4ez]]></field_key>
+            <field_key><![CDATA[signature-field]]></field_key>
             <name><![CDATA[Signature]]></name>
             <description><![CDATA[]]></description>
             <type><![CDATA[signature]]></type>

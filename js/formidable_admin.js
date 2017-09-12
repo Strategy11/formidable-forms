@@ -480,13 +480,7 @@ function frmAdminBuildJS(){
 			success:function(msg){
 				jQuery('.frm_no_fields').hide();
 				$newFields.append(msg);
-				var regex = /id="(\S+)"/;
-				var match=regex.exec(msg);
-				jQuery('#'+match[1]+' .frm_ipe_field_label').mouseover().click();
-				section = '#'+match[1]+'.edit_field_type_divider ul.frm_sorting';
-				setupSortable(section);
-				toggleOneSectionHolder(jQuery(section));
-				initiateMultiselect();
+				afterAddField( msg, true );
 			}
 		});
 		return false;
@@ -501,11 +495,25 @@ function frmAdminBuildJS(){
 			data:{action:'frm_duplicate_field', field_id:field_id, form_id:this_form_id, children:children, nonce:frmGlobal.nonce},
 			success:function(msg){
 				thisField.after(msg);
+				updateFieldOrder();
+				afterAddField( msg, false );
 			}
 		});
 		return false;
 	}
-	
+
+	function afterAddField( msg, addFocus ){
+		var regex = /id="(\S+)"/;
+		var match = regex.exec(msg);
+		section = '#'+match[1]+'.edit_field_type_divider ul.frm_sorting';
+		setupSortable(section);
+		if ( addFocus ) {
+			jQuery('#'+match[1]+' .frm_ipe_field_label').mouseover().click();
+			toggleOneSectionHolder(jQuery(section));
+		}
+		initiateMultiselect();
+	}
+
 	function popCalcFields(v){
 		var p;
 		if(!v.type){

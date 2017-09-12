@@ -854,7 +854,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * Tests "Entry ID is greater than x"
 	 * @covers FrmProDisplaysController::get_display_data
 	 *
-	 * @since 3.0
+	 * @since 2.04.02
 	 */
 	function test_entry_greater_than_id() {
 
@@ -1243,7 +1243,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 
 		$filter_args = array(
 			array( 'type' => 'field',
-				'col' => 'qbrd2o',
+				'col' => 'scale-field',
 				'op' => 'group_by',
 				'val' => '',
 			),
@@ -1265,7 +1265,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 
 		$filter_args = array(
 			array( 'type' => 'field',
-			       'col' => 'qbrd2o',
+			       'col' => 'scale-field',
 			       'op' => 'group_by_newest',
 			       'val' => '',
 			),
@@ -1440,7 +1440,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 				'val' => 'e',
 			),
 			array( 'type' => 'field',
-				'col' => 'qbrd2o',
+				'col' => 'scale-field',
 				'op' => '>',
 				'val' => '3',
 			),

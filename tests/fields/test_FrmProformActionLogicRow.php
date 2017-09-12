@@ -57,14 +57,14 @@ class test_FrmProformActionLogicRow extends FrmUnitTest {
 	private function fields_with_text_box() {
 		return array(
 			'text' => 'text-field',
-			'textarea' => 'p3eiuk',
+			'textarea' => 'paragraph-field',
 			'email' => 'email-field',
 			'url' => 'website-field',
 			'number' => 'number-field',
-			'phone' => 'n0d580',
+			'phone' => 'phone-number',
 			'date' => 'date-field',
 			'time' => 'time-field',
-			'image' => 'zwuclz',
+			'image' => 'image-url',
 			'lookup' => 'lookup-country',
 			'hidden' => 'hidden-field',
 			'password' => '9r61y8',
@@ -80,7 +80,7 @@ class test_FrmProformActionLogicRow extends FrmUnitTest {
 	 * @covers formidable/pro/views/frmpro-forms/_logic_row.php
 	 */
 	public function test_action_logic_row_checkbox_field_selected() {
-		$logic_row = $this->get_logic_row( 'uc580i', '' );
+		$logic_row = $this->get_logic_row( 'checkbox-colors', '' );
 
 		$name = 'frm_form_action[1234][post_content][conditions][0][hide_opt]';
 		$opening_tag = '<select name="' . $name . '">';
@@ -102,7 +102,7 @@ class test_FrmProformActionLogicRow extends FrmUnitTest {
 	 * @covers formidable/pro/views/frmpro-forms/_logic_row.php
 	 */
 	public function test_action_logic_row_checkbox_field_value_selected() {
-		$logic_row = $this->get_logic_row( 'uc580i', 'Red' );
+		$logic_row = $this->get_logic_row( 'checkbox-colors', 'Red' );
 
 		$name = 'frm_form_action[1234][post_content][conditions][0][hide_opt]';
 

@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @group database
+ */
 class WP_Test_FrmDb extends FrmUnitTest {
 
 	/**
@@ -7,7 +10,6 @@ class WP_Test_FrmDb extends FrmUnitTest {
 	 * @todo Check if style was created
 	 */
     public function test_upgrade( ) {
-        global $wpdb;
 		$frmdb = new FrmDb();
 		$frmdb->upgrade( 25 );
 
