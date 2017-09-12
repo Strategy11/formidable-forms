@@ -2,6 +2,7 @@
 
 /**
  * @group fields
+ * @group pro
  */
 class WP_Test_FrmProFieldsHelper extends FrmUnitTest {
 
@@ -273,5 +274,4 @@ class WP_Test_FrmProFieldsHelper extends FrmUnitTest {
 			}
 		}
 	}
-
 }

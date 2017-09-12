@@ -29,9 +29,11 @@ class WP_Test_FrmForm extends FrmUnitTest {
 		$new_actions = FrmFormAction::get_action_for_form( $id );
 		$this->assertEquals( count( $original_actions ), count( $new_actions ) );
 
-		// For repeating sections
-		self::_check_if_child_forms_duplicate( $form->id, $id );
-		self::_check_if_form_select_updates( $form->id, $id );
+		if ( $this->is_pro_active ) {
+			// For repeating sections
+			self::_check_if_child_forms_duplicate( $form->id, $id );
+			self::_check_if_form_select_updates( $form->id, $id );
+		}
 	}
 
 	function _check_if_child_forms_duplicate( $old_form_id, $new_form_id ) {
@@ -104,5 +106,4 @@ class WP_Test_FrmForm extends FrmUnitTest {
 			$this->assertEmpty( $subforms_exist, 'Failed to delete child forms for parent form ' . $form->form_key );
 		}
 	}
-	
 }

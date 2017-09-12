@@ -20,13 +20,15 @@ class FrmUnitTest extends WP_UnitTestCase {
 	 */
 	function setUp() {
 		parent::setUp();
+
+		$this->is_pro_active = FrmAppHelper::pro_is_installed();
+
 		$this->frm_install();
 
 		$this->factory->form = new Form_Factory( $this );
 		$this->factory->field = new Field_Factory( $this );
 		$this->factory->entry = new Entry_Factory( $this );
 
-		$this->is_pro_active = FrmAppHelper::pro_is_installed();
 		$current_class_name = get_class( $this );
 		if ( strpos( $current_class_name, 'FrmPro' ) && ! $this->is_pro_active ) {
 			$this->markTestSkipped( 'Pro is not active' );
@@ -49,7 +51,9 @@ class FrmUnitTest extends WP_UnitTestCase {
 
 		$this->do_tables_exist();
 		$this->import_xml();
-		$this->create_files();
+		if ( $this->is_pro_active ) {
+			$this->create_files();
+		}
 	}
 
 	function get_table_names() {
@@ -158,7 +162,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 
 	function get_all_fields_for_form_key( $form_key ) {
 		$field_totals = array(
-			$this->all_fields_form_key => $this->all_field_types_count,
+			$this->all_fields_form_key => $this->is_pro_active ? $this->all_field_types_count : ( $this->all_field_types_count - 3 ),
 			$this->create_post_form_key => 10,
 			$this->contact_form_key => $this->contact_form_field_count,
 			$this->repeat_sec_form_key => 3
@@ -308,6 +312,7 @@ class FrmUnitTest extends WP_UnitTestCase {
     static function install_data() {
         return array(
         	dirname( __FILE__ ) . '/testdata.xml',
+			dirname( __FILE__ ) . '/free-form.xml',
 	        dirname( __FILE__ ) . '/editform.xml',
 			dirname( __FILE__ ) . '/file-upload.xml',
         );
@@ -444,7 +449,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 			'user_pass' => 'admin',
 			'role' => 'administrator',
 		);
-		$admin = self::factory()->user->create_object( $admin_args );
+		$admin = $this->factory->user->create_object( $admin_args );
 		$this->assertNotEmpty( $admin );
 
 		$editor_args = array(
@@ -453,7 +458,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 			'user_pass' => 'editor',
 			'role' => 'editor',
 		);
-		$editor = self::factory()->user->create_object( $editor_args );
+		$editor = $this->factory->user->create_object( $editor_args );
 		$this->assertNotEmpty( $editor );
 
 		$subscriber_args = array(
@@ -462,7 +467,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 			'user_pass' => 'subscriber',
 			'role' => 'subscriber',
 		);
-		$subscriber = self::factory()->user->create_object( $subscriber_args );
+		$subscriber = $this->factory->user->create_object( $subscriber_args );
 		$this->assertNotEmpty( $subscriber );
 
 	}

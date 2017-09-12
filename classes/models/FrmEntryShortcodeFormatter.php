@@ -277,8 +277,6 @@ class FrmEntryShortcodeFormatter {
 	 *
 	 * @param stdClass $field
 	 * @param string $value
-	 *
-	 * @return array
 	 */
 	protected function add_single_field_array( $field, $value ) {
 		$array = array(
@@ -288,8 +286,6 @@ class FrmEntryShortcodeFormatter {
 		);
 
 		$this->array_content[ $field->id ] = apply_filters( 'frm_field_shortcodes_for_default_html_email', $array, $field );
-
-		return $array;
 	}
 
 	/**
