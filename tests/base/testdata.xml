@@ -208,7 +208,7 @@
             <form_id>182</form_id>
             <required></required>
             <options><![CDATA[["Option 1","Option 2"]]]></options>
-            <field_options><![CDATA[{"size":"","max":"","label":"","blank":"This field cannot be blank.","required_indicator":"*","invalid":"","separate_value":0,"clear_on_focus":0,"default_blank":0,"classes":"","custom_html":"<div id=\\\"frm_field_[id]_container\\\" class=\\\"frm_form_field form-field [required_class][error_class]\\\">\r\n    <label  class=\\\"frm_primary_label\\\">[field_name]\r\n        <span class=\\\"frm_required\\\">[required_label]<\/span>\r\n    <\/label>\r\n    <div class=\\\"frm_opt_container\\\">[input]<\/div>\r\n    [if description]<div class=\\\"frm_description\\\">[description]<\/div>[\/if description]\r\n    [if error]<div class=\\\"frm_error\\\">[error]<\/div>[\/if error]\r\n<\/div>","taxonomy":"category","post_field":"post_category","exclude_cat":["3","4"],"slide":0,"form_select":"","show_hide":"show","any_all":"any","align":"block","hide_field":[],"hide_field_cond":["=="],"hide_opt":[],"star":0,"ftypes":[],"data_type":"select","restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"step":1,"clock":12,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","dyn_default_value":"","multiple":0,"unique_msg":"","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":0,"custom_field":"","calc_dec":""}]]></field_options>
+            <field_options><![CDATA[{"size":"","max":"","label":"","blank":"This field cannot be blank.","required_indicator":"*","invalid":"","separate_value":0,"clear_on_focus":0,"default_blank":0,"classes":"","custom_html":"<div id=\\\"frm_field_[id]_container\\\" class=\\\"frm_form_field form-field [required_class][error_class]\\\">\r\n    <label  class=\\\"frm_primary_label\\\">[field_name]\r\n        <span class=\\\"frm_required\\\">[required_label]<\/span>\r\n    <\/label>\r\n    <div class=\\\"frm_opt_container\\\">[input]<\/div>\r\n    [if description]<div class=\\\"frm_description\\\">[description]<\/div>[\/if description]\r\n    [if error]<div class=\\\"frm_error\\\">[error]<\/div>[\/if error]\r\n<\/div>","taxonomy":"category","post_field":"post_category","exclude_cat":"","slide":0,"form_select":"","show_hide":"show","any_all":"any","align":"block","hide_field":[],"hide_field_cond":["=="],"hide_opt":[],"star":0,"ftypes":[],"data_type":"select","restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"step":1,"clock":12,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","dyn_default_value":"","multiple":0,"unique_msg":"","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":0,"custom_field":"","calc_dec":""}]]></field_options>
 		</field>
 		<field>
 		    <id>3378</id>
@@ -221,7 +221,7 @@
             <form_id>182</form_id>
             <required></required>
             <options><![CDATA[]]></options>
-            <field_options><![CDATA[{"size":"","max":"","label":"","blank":"This field cannot be blank.","required_indicator":"*","invalid":"","separate_value":0,"clear_on_focus":0,"default_blank":0,"classes":"","custom_html":"<div id=\\\"frm_field_[id]_container\\\" class=\\\"frm_form_field form-field [required_class][error_class]\\\">\r\n    <label  class=\\\"frm_primary_label\\\">[field_name]\r\n        <span class=\\\"frm_required\\\">[required_label]<\/span>\r\n    <\/label>\r\n    <div class=\\\"frm_opt_container\\\">[input]<\/div>\r\n    [if description]<div class=\\\"frm_description\\\">[description]<\/div>[\/if description]\r\n    [if error]<div class=\\\"frm_error\\\">[error]<\/div>[\/if error]\r\n<\/div>","data_type":"checkbox","slide":0,"form_select":"taxonomy","show_hide":"show","any_all":"any","align":"block","hide_field":[],"hide_field_cond":["=="],"hide_opt":[],"star":0,"ftypes":[],"restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"step":1,"clock":12,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","dyn_default_value":"","multiple":0,"unique_msg":"","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":0,"custom_field":"","post_field":"post_category","taxonomy":"category","exclude_cat":["511","512","513","514","3","4"],"calc_dec":""}]]></field_options>
+            <field_options><![CDATA[{"size":"","max":"","label":"","blank":"This field cannot be blank.","required_indicator":"*","invalid":"","separate_value":0,"clear_on_focus":0,"default_blank":0,"classes":"","custom_html":"<div id=\\\"frm_field_[id]_container\\\" class=\\\"frm_form_field form-field [required_class][error_class]\\\">\r\n    <label  class=\\\"frm_primary_label\\\">[field_name]\r\n        <span class=\\\"frm_required\\\">[required_label]<\/span>\r\n    <\/label>\r\n    <div class=\\\"frm_opt_container\\\">[input]<\/div>\r\n    [if description]<div class=\\\"frm_description\\\">[description]<\/div>[\/if description]\r\n    [if error]<div class=\\\"frm_error\\\">[error]<\/div>[\/if error]\r\n<\/div>","data_type":"checkbox","slide":0,"form_select":"taxonomy","show_hide":"show","any_all":"any","align":"block","hide_field":[],"hide_field_cond":["=="],"hide_opt":[],"star":0,"ftypes":[],"restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"step":1,"clock":12,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","dyn_default_value":"","multiple":0,"unique_msg":"","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":0,"custom_field":"","post_field":"post_category","taxonomy":"category","exclude_cat":["4","5","6","7","8"],"calc_dec":""}]]></field_options>
 		</field>
 		<field>
 		    <id>3379</id>
@@ -234,7 +234,7 @@
             <form_id>182</form_id>
             <required></required>
             <options><![CDATA[]]></options>
-            <field_options><![CDATA[{"size":"","max":"","label":"","blank":"This field cannot be blank.","required_indicator":"*","invalid":"","separate_value":0,"clear_on_focus":0,"default_blank":0,"classes":"","custom_html":"<div id=\\\"frm_field_[id]_container\\\" class=\\\"frm_form_field form-field [required_class][error_class]\\\">\r\n    <label  class=\\\"frm_primary_label\\\">[field_name]\r\n        <span class=\\\"frm_required\\\">[required_label]<\/span>\r\n    <\/label>\r\n    <div class=\\\"frm_opt_container\\\">[input]<\/div>\r\n    [if description]<div class=\\\"frm_description\\\">[description]<\/div>[\/if description]\r\n    [if error]<div class=\\\"frm_error\\\">[error]<\/div>[\/if error]\r\n<\/div>","data_type":"select","slide":0,"form_select":"taxonomy","show_hide":"show","any_all":"any","align":"block","hide_field":["3378"],"hide_field_cond":["=="],"hide_opt":[""],"star":0,"ftypes":[],"restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"step":1,"clock":12,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","dyn_default_value":"","multiple":0,"unique_msg":"","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":0,"custom_field":"","post_field":"post_category","taxonomy":"category","exclude_cat":["294","512","514","18","19","313","298","27","189","13","24","25","299","315","1","300"],"calc_dec":""}]]></field_options>
+            <field_options><![CDATA[{"size":"","max":"","label":"","blank":"This field cannot be blank.","required_indicator":"*","invalid":"","separate_value":0,"clear_on_focus":0,"default_blank":0,"classes":"","custom_html":"<div id=\\\"frm_field_[id]_container\\\" class=\\\"frm_form_field form-field [required_class][error_class]\\\">\r\n    <label  class=\\\"frm_primary_label\\\">[field_name]\r\n        <span class=\\\"frm_required\\\">[required_label]<\/span>\r\n    <\/label>\r\n    <div class=\\\"frm_opt_container\\\">[input]<\/div>\r\n    [if description]<div class=\\\"frm_description\\\">[description]<\/div>[\/if description]\r\n    [if error]<div class=\\\"frm_error\\\">[error]<\/div>[\/if error]\r\n<\/div>","data_type":"select","slide":0,"form_select":"taxonomy","show_hide":"show","any_all":"any","align":"block","hide_field":["3378"],"hide_field_cond":["=="],"hide_opt":[""],"star":0,"ftypes":[],"restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"step":1,"clock":12,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","dyn_default_value":"","multiple":0,"unique_msg":"","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":0,"custom_field":"","post_field":"post_category","taxonomy":"category","exclude_cat":["1","2","3","5","7","8"],"calc_dec":""}]]></field_options>
 		</field>
 		<field>
 		    <id>9819</id>
@@ -247,7 +247,7 @@
             <form_id>182</form_id>
             <required></required>
             <options><![CDATA[]]></options>
-            <field_options><![CDATA[{"size":"","max":"","label":"","blank":"This field cannot be blank.","required_indicator":"*","invalid":"","separate_value":0,"clear_on_focus":0,"default_blank":0,"classes":"","custom_html":"<div id=\\\"frm_field_[id]_container\\\" class=\\\"frm_form_field form-field [required_class][error_class]\\\">\r\n    <label  class=\\\"frm_primary_label\\\">[field_name]\r\n        <span class=\\\"frm_required\\\">[required_label]<\/span>\r\n    <\/label>\r\n    <div class=\\\"frm_opt_container\\\">[input]<\/div>\r\n    [if description]<div class=\\\"frm_description\\\">[description]<\/div>[\/if description]\r\n    [if error]<div class=\\\"frm_error\\\">[error]<\/div>[\/if error]\r\n<\/div>","data_type":"checkbox","slide":0,"form_select":"taxonomy","show_hide":"show","any_all":"any","align":"block","hide_field":["3379"],"hide_field_cond":["=="],"hide_opt":[""],"star":0,"ftypes":[],"restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"step":1,"clock":12,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","calc_dec":"","dyn_default_value":"","multiple":0,"unique_msg":"","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":0,"custom_field":"","post_field":"post_category","taxonomy":"category","exclude_cat":["294","511","513","18","19","313","298","27","189","13","24","25","299","315","1","3","4","300"]}]]></field_options>
+            <field_options><![CDATA[{"size":"","max":"","label":"","blank":"This field cannot be blank.","required_indicator":"*","invalid":"","separate_value":0,"clear_on_focus":0,"default_blank":0,"classes":"","custom_html":"<div id=\\\"frm_field_[id]_container\\\" class=\\\"frm_form_field form-field [required_class][error_class]\\\">\r\n    <label  class=\\\"frm_primary_label\\\">[field_name]\r\n        <span class=\\\"frm_required\\\">[required_label]<\/span>\r\n    <\/label>\r\n    <div class=\\\"frm_opt_container\\\">[input]<\/div>\r\n    [if description]<div class=\\\"frm_description\\\">[description]<\/div>[\/if description]\r\n    [if error]<div class=\\\"frm_error\\\">[error]<\/div>[\/if error]\r\n<\/div>","data_type":"checkbox","slide":0,"form_select":"taxonomy","show_hide":"show","any_all":"any","align":"block","hide_field":["3379"],"hide_field_cond":["=="],"hide_opt":[""],"star":0,"ftypes":[],"restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"step":1,"clock":12,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","calc_dec":"","dyn_default_value":"","multiple":0,"unique_msg":"","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":0,"custom_field":"","post_field":"post_category","taxonomy":"category","exclude_cat":["1","2","3","4","6"]}]]></field_options>
 		</field>
         <field>
             <id>9820</id>
@@ -268,7 +268,7 @@
 		<link></link>
 		<post_author><![CDATA[admin]]></post_author>
 		<description></description>
-		<content><![CDATA[{"post_type":"post","post_title":"2837","post_content":"","display_id":"7840","post_excerpt":"","post_password":"","post_name":"","post_date":"","post_status":"","post_category":{"category0":{"meta_name":"category","field_id":"3378","show_exclude":"1","exclude_cat":["511","512","513","514","3","4"]},"category1":{"meta_name":"category","field_id":"3379","show_exclude":"1","exclude_cat":["294","512","514","18","19","313","298","27","189","13","24","25","299","315","1","300"]},"category2":{"meta_name":"category","field_id":"2843","show_exclude":"1","exclude_cat":["3","4"]},"category3":{"meta_name":"category","field_id":"9819","show_exclude":"1","exclude_cat":["294","511","513","18","19","313","298","27","189","13","24","25","299","315","1","3","4","300"]}},"post_custom_fields":{"_thumbnail_id":{"meta_name":"_thumbnail_id","field_id":"2839"}},"event":["create","update"],"conditions":{"send_stop":"send","any_all":"any"}}]]></content>
+		<content><![CDATA[{"post_type":"post","post_title":"2837","post_content":"","display_id":"7840","post_excerpt":"","post_password":"","post_name":"","post_date":"","post_status":"","post_category":{"category0":{"meta_name":"category","field_id":"3378","show_exclude":"1","exclude_cat":["4","5","6","7","8"]},"category1":{"meta_name":"category","field_id":"3379","show_exclude":"1","exclude_cat":["1","2","3","5","7","8"]},"category2":{"meta_name":"category","field_id":"2843","show_exclude":"1","exclude_cat":""},"category3":{"meta_name":"category","field_id":"9819","show_exclude":"1","exclude_cat":["1","2","3","4","6"]}},"post_custom_fields":{"_thumbnail_id":{"meta_name":"_thumbnail_id","field_id":"2839"}},"event":["create","update"],"conditions":{"send_stop":"send","any_all":"any"}}]]></content>
 		<excerpt><![CDATA[wppost]]></excerpt>
 		<post_id>3088</post_id>
 		<post_date>2014-12-05 15:55:34</post_date>
@@ -3183,4 +3183,51 @@ Favorite dessert: [8102]]]></meta_value>
 		<post_password></post_password>
 		<is_sticky>0</is_sticky>
 	</view>
+    <term>
+        <term_id>2</term_id>
+        <term_taxonomy>category</term_taxonomy>
+        <term_name><![CDATA[Utah]]></term_name>
+        <term_slug>utah</term_slug>
+    </term>
+    <term>
+        <term_id>3</term_id>
+        <term_taxonomy>category</term_taxonomy>
+        <term_name><![CDATA[Oregon]]></term_name>
+        <term_slug>oregon</term_slug>
+    </term>
+    <term>
+        <term_id>4</term_id>
+        <term_taxonomy>category</term_taxonomy>
+        <term_name><![CDATA[Multnomah County]]></term_name>
+        <term_slug>multnomah-county</term_slug>
+        <term_parent>oregon</term_parent>
+    </term>
+    <term>
+        <term_id>5</term_id>
+        <term_taxonomy>category</term_taxonomy>
+        <term_name><![CDATA[Portland]]></term_name>
+        <term_slug>portland</term_slug>
+        <term_parent>multnomah-county</term_parent>
+    </term>
+    <term>
+        <term_id>6</term_id>
+        <term_taxonomy>category</term_taxonomy>
+        <term_name><![CDATA[Salt Lake County]]></term_name>
+        <term_slug>salt-lake-county</term_slug>
+        <term_parent>utah</term_parent>
+    </term>
+    <term>
+        <term_id>7</term_id>
+        <term_taxonomy>category</term_taxonomy>
+        <term_name><![CDATA[Riverton]]></term_name>
+        <term_slug>riverton</term_slug>
+        <term_parent>salt-lake-county</term_parent>
+    </term>
+    <term>
+        <term_id>8</term_id>
+        <term_taxonomy>category</term_taxonomy>
+        <term_name><![CDATA[Salt Lake]]></term_name>
+        <term_slug>salt-lake</term_slug>
+        <term_parent>salt-lake-county</term_parent>
+    </term>
 </channel>
