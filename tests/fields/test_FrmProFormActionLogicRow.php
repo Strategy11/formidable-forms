@@ -2,9 +2,10 @@
 
 /**
  * @group pro
- * @group pro-views
+ * @group fields
+ * @group action-logic
  */
-class test_FrmProformActionLogicRow extends FrmUnitTest {
+class test_FrmProFormActionLogicRow extends FrmUnitTest {
 
 	public function test_class_is_tested() {
 		$this->assertTrue( true );

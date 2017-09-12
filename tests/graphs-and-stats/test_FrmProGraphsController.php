@@ -3,6 +3,7 @@
 /**
  * @group graphs
  * @group pro
+ * @group graphs-and-stats
  */
 class WP_Test_FrmProGraphsController extends FrmUnitTest {
 
@@ -479,6 +480,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		$expected_data = self::get_graph_defaults( $graph_atts, 'Single Line Text' );
 		$expected_data['data'] = array(
 			array( 'Single Line Text', 'Submissions' ),
+			array( 'Jamie', 1 ),
 			array( 'Steph', 1 ),
 			array( 'Steve', 1 ),
 		);
@@ -873,8 +875,8 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 		$expected_data = self::get_graph_defaults( $graph_atts, 'Dynamic Field - level 2' );
 		$expected_data['data'] = array(
 			array( 'Dynamic Field - level 2', 'Submissions' ),
-			array( 'California', 2 ),
-			array( 'Utah', 1 ),
+			array( 'California', 3 ),
+			array( 'Utah', 2 ),
 		);
 
 		self::run_graph_tests( $graph_html, $expected_data );

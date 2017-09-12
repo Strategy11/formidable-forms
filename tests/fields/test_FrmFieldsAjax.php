@@ -2,10 +2,11 @@
 
 /**
  * @group ajax
+ * @group free
  */
 class WP_Test_FrmFieldsAjax extends FrmAjaxUnitTest {
 
-	private $form_id = 0;
+	protected $form_id = 0;
 	
 	public function setUp() {
 		parent::setUp();
@@ -16,10 +17,6 @@ class WP_Test_FrmFieldsAjax extends FrmAjaxUnitTest {
 		$form = $this->factory->form->create_and_get();
 		$this->assertNotEmpty( $form );
 		$this->form_id = $form->id;
-	}
-
-	public function _test_load_field() {
-		
 	}
 
 	/**
@@ -58,7 +55,7 @@ class WP_Test_FrmFieldsAjax extends FrmAjaxUnitTest {
 	 *
 	 * @covers FrmFieldsController::duplicate
 	 */
-	function test_duplicating_text_field() {
+	public function test_duplicating_text_field() {
 		wp_set_current_user( $this->user_id );
 		$this->assertTrue(is_numeric($this->form_id));
 
@@ -90,7 +87,7 @@ class WP_Test_FrmFieldsAjax extends FrmAjaxUnitTest {
 	}
 
 	// Get a field object by key
-	function get_field_by_key( $field_key ){
+	protected function get_field_by_key( $field_key ){
 		$divider_field_id = FrmField::get_id_by_key( $field_key );
 		$field = FrmField::getOne( $divider_field_id );
 		self::check_field_prior_to_duplication( $field );
@@ -100,18 +97,18 @@ class WP_Test_FrmFieldsAjax extends FrmAjaxUnitTest {
 	}
 
 	// Check in_section variable prior to duplication
-	function check_field_prior_to_duplication( $field ) {
+	protected function check_field_prior_to_duplication( $field ) {
 		$this->assertTrue( isset( $field->field_options[ 'in_section' ] ), 'The in_section variable is not set correctly on import.' );
 	}
 
 	// Check if a field is created correctly
-	function check_if_field_id_is_created_correctly( $newest_field_id ) {
+	protected function check_if_field_id_is_created_correctly( $newest_field_id ) {
 		$this->assertTrue( is_numeric( $newest_field_id ) );
 		$this->assertNotEmpty( $newest_field_id );
 	}
 
 	// Check for a specific in section value
-	function check_in_section_variable( $field, $expected ) {
+	protected function check_in_section_variable( $field, $expected ) {
 		$message = 'The in_section variable is not set correctly when a ' . $field->type . ' field is duplicated.';
 		$this->assertTrue( isset( $field->field_options['in_section'] ), $message );
 
@@ -122,7 +119,7 @@ class WP_Test_FrmFieldsAjax extends FrmAjaxUnitTest {
 	/**
 	 * @covers FrmFieldsController::edit_name
 	 */
-	function test_edit_name() {
+	public function test_edit_name() {
 		wp_set_current_user( $this->user_id );
 		$form = $this->factory->form->get_object_by_id( 'contact-with-email' );
 		$field = $this->factory->field->create_and_get( array('form_id' => $form->id ) );

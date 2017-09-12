@@ -1,6 +1,7 @@
 <?php
 /**
- * @group pro-views
+ * @group fields
+ * @group field-dropdown
  * @group pro
  * @since 2.03.05
  */
@@ -286,9 +287,9 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 			$opening_tag = '<select name=\'field_options[hide_opt_' . $field_id . '][]\'  >';
 		}
 		$first_option = '<option value=""> </option>';
-		$middle_option = 'Live Music</option>';
+		$middle_option = 'Utah</option>';
 		$closing_tag = '</select>';
-		//$option_number = 3; TODO: figure out why the options include child categories
+		//$option_number = 2;
 
 		$this->assertContains( $opening_tag, $dropdown );
 		$this->assertContains( $closing_tag, $dropdown );
@@ -320,16 +321,16 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 			$opening_tag = '<select name=\'field_options[hide_opt_' . $field_id . '][]\'  >';
 		}
 		$first_option = '<option value=""> </option>';
-		$middle_option = 'Live Music</option>';
 		$selected_option = '<option class="level-0" value="1" selected="selected">Uncategorized</option>';
+		$middle_option = 'Utah</option>';
 		$closing_tag = '</select>';
-		//$option_number = 3; TODO: figure out why the options include child categories
+		//$option_number = 2;
 
 		$this->assertContains( $opening_tag, $dropdown );
 		$this->assertContains( $closing_tag, $dropdown );
 		$this->assertContains( $first_option, $dropdown );
-		$this->assertContains( $middle_option, $dropdown );
 		$this->assertContains( $selected_option, $dropdown );
+		$this->assertContains( $middle_option, $dropdown );
 		//$this->assertSame( $option_number, substr_count( $dropdown, '<option' ) );
 	}
 
@@ -685,9 +686,9 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 			$opening_tag = '<select name=\'' . $field_name . '\'  >';
 		}
 		$first_option = '<option value=""> </option>';
-		$middle_option = 'Live Music</option>';
+		$middle_option = 'Utah</option>';
 		$closing_tag = '</select>';
-		//$option_number = 3; TODO: figure out why the options include child categories
+		//$option_number = 2;
 
 		$this->assertContains( $opening_tag, $dropdown );
 		$this->assertContains( $closing_tag, $dropdown );

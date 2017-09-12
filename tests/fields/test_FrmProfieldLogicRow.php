@@ -2,7 +2,8 @@
 
 /**
  * @group pro
- * @group pro-views
+ * @group fields
+ * @group field-logic
  *
  * @since 2.03.05
  * @covers formidable/pro/views/frmpro-fields/field-values.php
