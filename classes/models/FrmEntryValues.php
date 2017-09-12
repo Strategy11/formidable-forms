@@ -262,7 +262,7 @@ class FrmEntryValues {
 		if ( ! empty( $this->include_fields ) ) {
 			$is_included = $this->is_field_in_array( $field, $this->include_fields );
 		} else if ( ! empty( $this->exclude_fields ) ) {
-			$is_included = ! $this->is_field_in_array( $field, $this->include_fields );
+			$is_included = ! $this->is_field_in_array( $field, $this->exclude_fields );
 		} else {
 			$is_included = true;
 		}
