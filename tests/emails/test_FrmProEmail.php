@@ -7,10 +7,9 @@ class WP_Test_FrmProEmail extends WP_Test_FrmEmail {
 
 	protected $email_form_key = 'contact-with-email';
 	protected $name_field_key = 'contact-name';
+	protected $email_field_key = 'contact-email';
 
 	public function setUp() {
-		parent::setUp();
-
 		$user_factory = new WP_UnitTest_Factory_For_User();
 		$args = array(
 			'user_login' => 'email_user',
@@ -19,6 +18,8 @@ class WP_Test_FrmProEmail extends WP_Test_FrmEmail {
 		);
 		$user_factory->create_object( $args );
 		$this->set_current_user_to_username( 'email_user' );
+
+		parent::setUp();
 	}
 
 	/**

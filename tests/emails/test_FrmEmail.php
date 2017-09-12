@@ -17,6 +17,11 @@ class WP_Test_FrmEmail extends FrmUnitTest {
 	protected $name_field_key = 'free-text-field';
 
 	/**
+	 * @var string
+	 */
+	protected $email_field_key = 'free-email-field';
+
+	/**
 	 * @var stdClass
 	 */
 	protected $contact_form = null;
@@ -165,7 +170,7 @@ class WP_Test_FrmEmail extends FrmUnitTest {
 		$expected = array();
 
 		$name_id = FrmField::get_id_by_key( $this->name_field_key );
-		$email_id = FrmField::get_id_by_key( 'free-email-field' );
+		$email_id = FrmField::get_id_by_key( $this->email_field_key );
 
 		// Adjust entry values
 		$entry_clone->metas[ $name_id ] = 'Test Testerson';
@@ -195,7 +200,7 @@ class WP_Test_FrmEmail extends FrmUnitTest {
 		$expected['from'] = 'Name <' . get_option('admin_email') . '>';
 
 		// Reply to
-		$this->email_action->post_content['reply_to'] = '"Reply To" <[free-email-field]>';
+		$this->email_action->post_content['reply_to'] = '"Reply To" <[' . $this->email_field_key . ']>';
 		$expected['reply_to'] = 'Reply To <tester@mail.com>';
 
 		// Body - set inc_user_info to true
