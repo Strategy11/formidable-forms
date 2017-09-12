@@ -1026,7 +1026,6 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_created_at_filter_with_minus_one_day() {
-		
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 
 		// Update creation date on Steve's entry to NOW
@@ -1047,10 +1046,6 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		$d = self::get_default_args( $dynamic_view, array( 'Steve' ), array( 'Jamie', 'Steph' ) );
 
 		self::run_get_display_data_tests( $d, 'created at filter' );
-
-		// Set data back after testing
-		$original_date = '2015-05-13 19:40:11';
-		$wpdb->update( $wpdb->prefix . 'frm_items', array( 'created_at' => $original_date ), array( 'id' => $entry_id ) );
 	}
 
 	/**
