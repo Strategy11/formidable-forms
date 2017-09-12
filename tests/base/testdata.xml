@@ -2754,7 +2754,7 @@ Test]]></meta_value>
 		<link></link>
 		<post_author><![CDATA[admin]]></post_author>
 		<description></description>
-		<content><![CDATA[All Entries: [8099]
+		<content><![CDATA[All Entries: [text-field]
 [8100]
 <hr />]]></content>
 		<excerpt><![CDATA[]]></excerpt>
@@ -2820,7 +2820,7 @@ Test]]></meta_value>
 		<link></link>
 		<post_author><![CDATA[admin]]></post_author>
 		<description></description>
-		<content><![CDATA[All Entries: [8099]
+		<content><![CDATA[All Entries: [text-field]
 [8100]
 <hr />]]></content>
 		<excerpt><![CDATA[]]></excerpt>
@@ -2886,7 +2886,7 @@ Test]]></meta_value>
 		<link></link>
 		<post_author><![CDATA[admin]]></post_author>
 		<description></description>
-		<content><![CDATA[Name: [8099]
+		<content><![CDATA[Name: [text-field]
 Favorite colors: [8101]
 <hr />]]></content>
 		<excerpt><![CDATA[]]></excerpt>
@@ -2948,7 +2948,7 @@ Favorite colors: [8101]
 		<link></link>
 		<post_author><![CDATA[admin]]></post_author>
 		<description></description>
-		<content><![CDATA[Listing Page: <a href="[detaillink]">[8099]</a>
+		<content><![CDATA[Listing Page: <a href="[detaillink]">[text-field]</a>
 ]]></content>
 		<excerpt><![CDATA[]]></excerpt>
 		<post_id>6773</post_id>
@@ -2977,7 +2977,7 @@ Favorite colors: [8101]
 		</postmeta>
 		<postmeta>
 			<meta_key>frm_dyncontent</meta_key>
-			<meta_value><![CDATA[Name: [8099]
+			<meta_value><![CDATA[Name: [text-field]
 Details: [8100]
 Favorite dessert: [8102]]]></meta_value>
 		</postmeta>
@@ -3011,7 +3011,7 @@ Favorite dessert: [8102]]]></meta_value>
 		<link></link>
 		<post_author><![CDATA[admin]]></post_author>
 		<description></description>
-		<content><![CDATA[<a href="[detaillink]">[8099]</a>]]></content>
+		<content><![CDATA[<a href="[detaillink]">[text-field]</a>]]></content>
 		<excerpt><![CDATA[]]></excerpt>
 		<post_id>6775</post_id>
 		<post_date>2015-05-13 13:54:41</post_date>
@@ -3039,7 +3039,7 @@ Favorite dessert: [8102]]]></meta_value>
 		</postmeta>
 		<postmeta>
 			<meta_key>frm_dyncontent</meta_key>
-			<meta_value><![CDATA[[8099]
+			<meta_value><![CDATA[[text-field]
 [8100]
 [8101]
 [8102]]]></meta_value>
@@ -3074,7 +3074,7 @@ Favorite dessert: [8102]]]></meta_value>
         <link></link>
         <post_author><![CDATA[admin]]></post_author>
         <description></description>
-        <content><![CDATA[[key],StandardFieldID:[8099][attr class="someclass"],SiteName:[sitename],FrmFieldValue:[frm-field-value field_id=text-field],Formshortcode:[formidable id=dynamic-field-num-form]
+        <content><![CDATA[[key],StandardFieldID:[text-field][attr class="someclass"],SiteName:[sitename],FrmFieldValue:[frm-field-value field_id=text-field],Formshortcode:[formidable id=dynamic-field-num-form]
 
 ]]></content>
         <excerpt><![CDATA[]]></excerpt>
