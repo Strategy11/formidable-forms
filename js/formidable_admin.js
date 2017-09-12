@@ -501,6 +501,7 @@ function frmAdminBuildJS(){
 			data:{action:'frm_duplicate_field', field_id:field_id, form_id:this_form_id, children:children, nonce:frmGlobal.nonce},
 			success:function(msg){
 				thisField.after(msg);
+				updateFieldOrder();
 			}
 		});
 		return false;
