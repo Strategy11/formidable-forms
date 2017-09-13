@@ -21,6 +21,9 @@ class FrmUnitTest extends WP_UnitTestCase {
 	function setUp() {
 		parent::setUp();
 
+		delete_option('frm_options');
+		delete_option('frm_db_version');
+
 		$this->is_pro_active = FrmAppHelper::pro_is_installed();
 
 		$this->frm_install();
