@@ -988,6 +988,17 @@ function frmAdminBuildJS(){
 		}
 	}
 
+	function checkRepeatLimit() {
+
+		if (this.value >= 2 && repeatLimit <= 200) {
+			return;
+		}
+
+		alert("Please enter an integer greater than 2 for the Repeat Limit.");
+
+		this.value = "";
+	}
+
 	function updateRepeatText(obj, addRemove){
 		var $thisField = jQuery(obj).closest('.frm_field_box');
 		$thisField.find('.frm_'+ addRemove +'_form_row .frm_repeat_label').text(obj.value);
@@ -2977,17 +2988,6 @@ if(f){
 		} 
     });
 }
-}
-
-function checkRepeatLimit() {
-
-	if (this.value >= 2 && repeatLimit <= 200) {
-		return;
-	}
-
-	alert("Please enter an integer greater than 2 for the Repeat Limit.");
-
-	this.value = "";
 }
 
 function frmImportCsv(formID){
