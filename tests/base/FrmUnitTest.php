@@ -21,6 +21,13 @@ class FrmUnitTest extends WP_UnitTestCase {
 	function setUp() {
 		parent::setUp();
 
+		global $wp_version;
+		if ( $wp_version <= 4.6 ) {
+			// Prior to WP 4.7, the Formidable tables were deleted on tearDown and not restored with setUp
+			delete_option('frm_options');
+			delete_option('frm_db_version');
+		}
+
 		$this->is_pro_active = FrmAppHelper::pro_is_installed();
 
 		$this->frm_install();
