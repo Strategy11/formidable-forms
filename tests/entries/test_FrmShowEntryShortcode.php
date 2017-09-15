@@ -696,6 +696,15 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 
 		$entry_id = $this->factory->entry->create_object( $new_entry );
 
+
+		global $wp_version;
+		if ( $wp_version <= 4.0 ) {
+			// Prior to WP 4.0, the IP address was not set the same way in tests
+			global $wpdb;
+			$wpdb->update( $wpdb->prefix . 'frm_items', array( 'ip' => '127.0.0.1' ), array( 'id' => $entry_id ) );
+			FrmEntry::clear_cache();
+		}
+
 		return FrmEntry::getOne( $entry_id, $include_meta );
 	}
 
