@@ -29,9 +29,6 @@ matrix:
       env: WP_VERSION=4.0
     - php: 5.4
       env: WP_VERSION=4.7
-    - php: 5.3
-      env: WP_VERSION=3.8 PHPUNIT=0
-      dist: precise
     - php: nightly
       env: WP_VERSION=master
 
