@@ -693,7 +693,7 @@ class FrmField {
 	}
 
 	public static function get_option_in_array( $field, $option ) {
-		return $field[ $option ];
+		return isset( $field[ $option ] ) ? $field[ $option ] : '';
 	}
 
 	public static function get_option_in_object( $field, $option ) {

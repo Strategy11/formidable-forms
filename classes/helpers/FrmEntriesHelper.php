@@ -301,10 +301,13 @@ class FrmEntriesHelper {
             return $value;
         }
 
-        $value = apply_filters('frm_display_value_custom', maybe_unserialize($value), $field, $atts);
+		$unfiltered_value = maybe_unserialize( $value );
+		$value = apply_filters('frm_display_value_custom', $unfiltered_value, $field, $atts);
 		$value = apply_filters( 'frm_display_' . $field->type . '_value_custom', $value, compact( 'field', 'atts' ) );
 
-		$value = FrmFieldsHelper::get_unfiltered_display_value( compact( 'value', 'field', 'atts' ) );
+		if ( $value == $unfiltered_value ) {
+			$value = FrmFieldsHelper::get_unfiltered_display_value( compact( 'value', 'field', 'atts' ) );
+		}
 
         if ( $atts['truncate'] && $atts['type'] != 'image' ) {
             $value = FrmAppHelper::truncate($value, 50);
