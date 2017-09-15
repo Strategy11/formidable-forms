@@ -21,14 +21,6 @@ Text Domain: formidable
     GNU General Public License for more details.
 */
 
-// if __autoload is active, put it on the spl_autoload stack
-if ( is_array( spl_autoload_functions() ) && in_array( '__autoload', spl_autoload_functions() ) ) {
-    spl_autoload_register('__autoload');
-}
-
-// Add the autoloader
-spl_autoload_register('frm_forms_autoloader');
-
 add_action( 'plugins_loaded', 'load_formidable_forms', 0 );
 function load_formidable_forms() {
 	global $frm_vars;
@@ -37,6 +29,8 @@ function load_formidable_forms() {
     	'created_entries'   => array(),
     	'pro_is_authorized' => false,
 	);
+
+	require_once( dirname( __FILE__ ) . '/classes/controllers/FrmHooksController.php' );
 
 	$frm_path = dirname(__FILE__);
 	if ( file_exists($frm_path . '/pro/formidable-pro.php') ) {
@@ -49,11 +43,19 @@ function load_formidable_forms() {
 	include_once( $frm_path . '/deprecated.php' );
 }
 
+// if __autoload is active, put it on the spl_autoload stack
+if ( is_array( spl_autoload_functions() ) && in_array( '__autoload', spl_autoload_functions() ) ) {
+    spl_autoload_register('__autoload');
+}
+
+// Add the autoloader
+spl_autoload_register('frm_forms_autoloader');
+
 function frm_forms_autoloader( $class_name ) {
     // Only load Frm classes here
 	if ( ! preg_match( '/^Frm.+$/', $class_name ) || preg_match( '/^FrmPro.+$/', $class_name ) ) {
         return;
     }
 
-	FrmAppHelper::autoloader( $class_name, dirname( __FILE__ ) );
+	FrmHooksController::autoloader( $class_name, dirname( __FILE__ ) );
 }
