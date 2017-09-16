@@ -4007,7 +4007,12 @@ function frmFrontFormJS(){
 		jQuery.ajax({
 			type:'POST',url:frm_js.ajax_url,
 			dataType: 'json',
-			data:{action:'frm_add_form_row', field_id:id, i:i, numberOfSections: numberOfSections, nonce:frm_js.nonce},
+			data:{
+				action:'frm_add_form_row',
+				field_id:id, i:i,
+				numberOfSections:numberOfSections,
+				nonce:frm_js.nonce
+			},
 			success:function(r){
 				//only process row if row actually added
 				if (r.html) {
@@ -4015,7 +4020,7 @@ function frmFrontFormJS(){
 					var item = jQuery(html).hide().fadeIn('slow');
 					jQuery('.frm_repeat_' + id + ':last').after(item);
 
-					if (r.hide_add_buttons){
+					if (r.is_repeat_limit_reached) {
 						hideAddButton(id);
 					}
 
