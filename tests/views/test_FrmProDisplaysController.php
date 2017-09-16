@@ -854,7 +854,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * Tests "Entry ID is greater than x"
 	 * @covers FrmProDisplaysController::get_display_data
 	 *
-	 * @since 2.04.02
+	 * @since 2.05
 	 */
 	function test_entry_greater_than_id() {
 

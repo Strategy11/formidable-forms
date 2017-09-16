@@ -90,7 +90,7 @@ class test_FrmProShowEntryShortcode extends test_FrmShowEntryShortcode {
 	 *
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
-	 * @since 2.04.02
+	 * @since 2.05
 	 */
 	public function test_default_message_with_repeating_field_id_excluded() {
 		$entry = FrmEntry::getOne( 'jamie_entry_key', true );
@@ -210,7 +210,7 @@ class test_FrmProShowEntryShortcode extends test_FrmShowEntryShortcode {
 	 *
 	 * @covers FrmEntriesController::show_entry_shortcode
 	 *
-	 * @since 2.04.02
+	 * @since 2.05
 	 *
 	 * @group show-entry-shortcode-conditional-section
 	 */
