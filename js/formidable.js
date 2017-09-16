@@ -4009,7 +4009,8 @@ function frmFrontFormJS(){
 			dataType: 'json',
 			data:{
 				action:'frm_add_form_row',
-				field_id:id, i:i,
+				field_id:id,
+				i:i,
 				numberOfSections:numberOfSections,
 				nonce:frm_js.nonce
 			},
