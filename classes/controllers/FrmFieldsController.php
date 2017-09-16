@@ -573,7 +573,7 @@ class FrmFieldsController {
 	 * If the label position is "inside",
 	 * get the label to use as the placeholder
 	 *
-	 * @since 2.04.02
+	 * @since 2.05
 	 */
 	public static function get_default_value_from_name( $field ) {
 		$position = FrmStylesController::get_style_val( 'position', $field['form_id'] );

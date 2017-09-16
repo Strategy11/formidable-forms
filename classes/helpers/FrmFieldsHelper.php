@@ -350,7 +350,7 @@ DEFAULT_HTML;
 
 	/**
 	 * Get the class to use for the label position
-	 * @since 2.04.02
+	 * @since 2.05
 	 */
 	private static function &label_position( $position, $field, $form ) {
 		if ( $position && $position != '' ) {
@@ -374,7 +374,7 @@ DEFAULT_HTML;
 
 	/**
 	 * Check if this field type allows placeholders
-	 * @since 2.04.02
+	 * @since 2.05
 	 */
 	public static function is_placeholder_field_type( $type ) {
 		return ! in_array( $type, array( 'select', 'radio', 'checkbox', 'hidden' ) );
@@ -384,7 +384,7 @@ DEFAULT_HTML;
 	 * Add the label position class into the HTML
 	 * If the label position is inside, add a class to show the label if the field has a value.
 	 *
-	 * @since 2.04.02
+	 * @since 2.05
 	 */
 	private static function add_class_to_label( $field, &$html ) {
 		$label_class = in_array( $field['type'], array( 'divider', 'end_divider', 'break' ) ) ? $field['label'] : ' frm_primary_label';
@@ -613,7 +613,7 @@ DEFAULT_HTML;
 
 	/**
 	 * Trim and sanitize the values
-	 * @since 2.04.02
+	 * @since 2.05
 	 */
 	private static function get_value_for_comparision( $value ) {
 		// Remove white space from hide_opt

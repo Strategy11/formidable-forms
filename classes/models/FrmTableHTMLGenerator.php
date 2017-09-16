@@ -154,7 +154,7 @@ class FrmTableHTMLGenerator {
 	 *
 	 * @param string $setting_key name of setting
 	 *
-	 * @since 2.04.02
+	 * @since 2.05
 	 *
 	 * @return boolean
 	 */
@@ -167,7 +167,7 @@ class FrmTableHTMLGenerator {
 	 *
 	 * @param string $color_markup value of a color setting, with format #FFFFF, FFFFFF, or white.
 	 *
-	 * @since 2.04.02
+	 * @since 2.05
 	 *
 	 * @return string
 	 */
