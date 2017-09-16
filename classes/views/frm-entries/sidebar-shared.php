@@ -52,10 +52,12 @@
 <div class="postbox">
     <h3 class="hndle"><span><?php _e( 'User Information', 'formidable' ) ?></span></h3>
     <div class="inside">
-        <div class="misc-pub-section">
-            <?php _e( 'IP Address', 'formidable' ) ?>:
+		<?php if ( ! empty( $entry->ip ) ) { ?>
+		<div class="misc-pub-section">
+			<?php _e( 'IP Address', 'formidable' ) ?>:
 			<b><?php echo sanitize_text_field( $entry->ip ); ?></b>
-        </div>
+		</div>
+		<?php } ?>
 
         <?php if ( isset( $browser ) ) { ?>
         <div class="misc-pub-section">

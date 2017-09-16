@@ -90,6 +90,14 @@ class FrmAppHelper {
 		return $frm_settings->menu;
 	}
 
+	/**
+	 * @since 2.02.04
+	 */
+	public static function ips_saved() {
+		$frm_settings = self::get_settings();
+		return ! $frm_settings->no_ips;
+	}
+
     /**
      * Show a message in place of pro features
      *

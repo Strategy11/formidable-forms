@@ -173,6 +173,15 @@
         <?php FrmAppHelper::wp_pages_dropdown('frm-preview-page-id', $frm_settings->preview_page_id ) ?>
         </p>
 
+		<p>
+			<label class="frm_left_label"><?php _e( 'IP storage', 'formidable' ); ?></label>
+			<label for="frm_no_ips">
+				<input type="checkbox" name="frm_no_ips" id="frm_no_ips" value="1" <?php checked( $frm_settings->no_ips, 1 ) ?> />
+				<?php _e( 'Do not store IPs with form submissions. Check this box if you are in the UK.', 'formidable' ) ?>
+			</label>
+
+		</p>
+
     </div>
 
         <?php
