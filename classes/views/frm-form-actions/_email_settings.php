@@ -56,7 +56,7 @@
 
         <h4><?php _e( 'Options', 'formidable' ) ?> </h4>
 		<label for="<?php echo esc_attr( $this->get_field_id('inc_user_info') ) ?>"><input type="checkbox" name="<?php echo esc_attr( $this->get_field_name('inc_user_info') ) ?>" class="frm_not_inc_user_info" id="<?php echo esc_attr( $this->get_field_id('inc_user_info') ) ?>" value="1" <?php checked( $form_action->post_content['inc_user_info'], 1 ); ?> />
-			<?php if ( FrmAppHelper::save_ips() ) { ?>
+			<?php if ( FrmAppHelper::ips_saved() ) { ?>
 				<?php _e( 'Append IP Address, Browser, and Referring URL to message', 'formidable' ) ?>
 			<?php } else { ?>
 				<?php _e( 'Append Browser and Referring URL to message', 'formidable' ) ?>
