@@ -996,6 +996,17 @@ function frmAdminBuildJS(){
 		}
 	}
 
+	function checkRepeatLimit() {
+
+		if (this.value >= 2 && this.value <= 200) {
+			return;
+		}
+
+		alert("Please enter a Repeat Limit that's greater than or equal to two.");
+
+		this.value = "";
+	}
+
 	function updateRepeatText(obj, addRemove){
 		var $thisField = jQuery(obj).closest('.frm_field_box');
 		$thisField.find('.frm_'+ addRemove +'_form_row .frm_repeat_label').text(obj.value);
@@ -2540,6 +2551,7 @@ function frmAdminBuildJS(){
 
 			$newFields.on('click', '.frm_repeat_field', toggleRepeat);
 			$newFields.on('change', '.frm_repeat_format', toggleRepeatButtons);
+			$newFields.on('change', '.frm_repeat_limit', checkRepeatLimit);
 			$newFields.on('input', 'input[name^="field_options[add_label_"]', function(){
 				updateRepeatText(this, 'add');
 			});
