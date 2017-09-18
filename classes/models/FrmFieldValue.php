@@ -119,6 +119,15 @@ class FrmFieldValue {
 	}
 
 	/**
+	 * Get the field property's id
+	 *
+	 * @since 2.05
+	 */
+	public function get_field_id() {
+		return $this->field->id;
+	}
+
+	/**
 	 * Get the field property's key
 	 *
 	 * @since 2.04
