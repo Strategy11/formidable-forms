@@ -1419,7 +1419,7 @@ function frmAdminBuildJS(){
 	function showOrHideDefaultValIcons(showDefaultValIcons, $innerField) {
 		var $defaultValueIcons = $innerField.find('.frm_default_val_icons');
 
-        if (showDefaultValIcons) {
+		if (showDefaultValIcons) {
 			$defaultValueIcons.css('visibility', 'visible').fadeIn('slow');
 		}
 		else {
@@ -1428,7 +1428,7 @@ function frmAdminBuildJS(){
 	}
 
 	function maybeShowDefaultValIcons(fieldId) {
-        var $fieldInner = jQuery(document.getElementById('field_' + fieldId + '_inner_container'));
+		var $fieldInner = jQuery(document.getElementById('field_' + fieldId + '_inner_container'));
 		var showDefaultValIcons = false;
 		var isComboField = $fieldInner.find('.frm_multi_fields_container').length > 0;
 		var inputList = $fieldInner.find('input[name^="item_meta"], select[name^="item_meta"], textarea[name^="item_meta"]');
