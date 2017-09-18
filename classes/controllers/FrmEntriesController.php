@@ -529,6 +529,7 @@ class FrmEntriesController {
 			'default_email'  => false,
 			'form_id'        => false,
 			'format'         => 'text',
+			'array_key'      => 'key',
 			'direction'      => 'ltr',
 			'font_size'      => '',
 			'text_color'     => '',
