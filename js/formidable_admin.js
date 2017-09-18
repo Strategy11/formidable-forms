@@ -692,16 +692,6 @@ function frmAdminBuildJS(){
 		}
 	}
 
-	function showDefaults(n,fval){
-		var defaults = jQuery('#frm_clear_on_focus_'+n+',#frm_clear_on_focus_'+n+' a, #frm_clear_on_focus_'+n+'_conf,#frm_clear_on_focus_'+n+'_conf a');
-		if(fval){
-			defaults.css('visibility','visible').fadeIn('slow');
-		}else{
-			defaults.css('visibility','visible').fadeOut('slow');
-		}
-		return false;
-	}
-
 	/**
 	 * Toggle a default value icon
 	 *
@@ -1042,13 +1032,17 @@ function frmAdminBuildJS(){
 
     function triggerDefaults(){
         var n = this.name;
-        if( typeof n == 'undefined'){
+        if( typeof n === 'undefined'){
             return false;
-        }
+        } else if ( this.type === 'text'  && this.value.length > 1 ) {
+        	// Don't waste time checking if icons should hide or show if value has more than one character
+        	return false;
+		}
         n = n.replace('[other]', '');
         var end = n.indexOf(']');
-        n = n.substring(10, end);
-        showDefaults(n, jQuery(this).val());
+        var fieldId = n.substring(10, end);
+
+        maybeShowDefaultValIcons(fieldId);
     }
 	
 	function blurField(e){
@@ -1422,31 +1416,36 @@ function frmAdminBuildJS(){
 		});
 	}
 
-	function showOrHideDefaultValIcons(showDefaultValIcons, $field) {
-		if (showDefaultValIcons) {
-			$field.find('.frm_default_val_icons').show().css('visibility', 'visible');
+	function showOrHideDefaultValIcons(showDefaultValIcons, $innerField) {
+		var $defaultValueIcons = $innerField.find('.frm_default_val_icons');
+
+        if (showDefaultValIcons) {
+			$defaultValueIcons.css('visibility', 'visible').fadeIn('slow');
 		}
 		else {
-			$field.find('.frm_default_val_icons').hide().css('visibility', 'hidden');
+			$defaultValueIcons.css('visibility', 'hidden').fadeOut('slow');
 		}
 	}
 
-
-	function maybeShowDefaultValIcons($field) {
+	function maybeShowDefaultValIcons(fieldId) {
+        var $fieldInner = jQuery(document.getElementById('field_' + fieldId + '_inner_container'));
 		var showDefaultValIcons = false;
-		var isComboField = $field.find('.frm_multi_fields_container').length > 0;
-		var inputList = $field.find('input[name^="item_meta"], select[name^="item_meta"], textarea[name^="item_meta"]');
+		var isComboField = $fieldInner.find('.frm_multi_fields_container').length > 0;
+		var inputList = $fieldInner.find('input[name^="item_meta"], select[name^="item_meta"], textarea[name^="item_meta"]');
+
 		jQuery(inputList).each(function (index) {
+
 			if (jQuery(this).val()) {
 				showDefaultValIcons = true;
 				return false;
 			}
+
 			if (!isComboField) {
 				return false;
 			}
 		});
 
-		showOrHideDefaultValIcons(showDefaultValIcons, $field);
+		showOrHideDefaultValIcons(showDefaultValIcons, $fieldInner);
 	}
 
 	function clickAction(obj){
@@ -1473,7 +1472,7 @@ function frmAdminBuildJS(){
 		if(obj.className.indexOf('edit_field_type_divider') !== -1){
 			$thisobj.find('.frm_default_val_icons').hide().css('visibility', 'hidden');
 		}else{
-			maybeShowDefaultValIcons($thisobj);
+			maybeShowDefaultValIcons($thisobj.data('fid'));
 		}
 
 		selected.removeClass('selected');
