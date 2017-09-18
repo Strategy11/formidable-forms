@@ -4520,6 +4520,25 @@ function frmFrontFormJS(){
 			addKeysFallbackForIE8();
 		},
 
+		renderRecaptcha: function( c, captchas ) {
+			var size = captchas[c].getAttribute('data-size');
+			var params = {
+				'sitekey': captchas[c].getAttribute('data-sitekey'),
+				'size': size,
+				'theme': captchas[c].getAttribute('data-theme')
+			};
+			if ( size == 'invisible' ) {
+				var formID = jQuery(captchas[c]).closest('form').find('input[name="form_id"]').val();
+				params.callback = function(token) {
+					frmFrontForm.afterRecaptcha(token, formID)
+				};
+			}
+
+			var recaptchaID = grecaptcha.render( captchas[c].id, params );
+
+			captchas[c].setAttribute('data-rid', recaptchaID);
+		},
+
 		afterSingleRecaptcha: function(token){
 			var object = jQuery('.frm-show-form .g-recaptcha').closest('form')[0];
 			frmFrontForm.submitFormNow( object );
@@ -4800,21 +4819,7 @@ jQuery(document).ready(function($){
 function frmRecaptcha() {
 	var captchas = jQuery('.frm-g-recaptcha');
 	for ( var c = 0, cl = captchas.length; c < cl; c++ ) {
-		var size = captchas[c].getAttribute('data-size');
-		var params = {
-			'sitekey': captchas[c].getAttribute('data-sitekey'),
-			'size': size,
-			'theme': captchas[c].getAttribute('data-theme')
-		};
-		if ( size == 'invisible' ) {
-			var formID = jQuery(captchas[c]).closest('form').find('input[name="form_id"]').val();
-			params.callback = function(token) {
-				frmFrontForm.afterRecaptcha(token, formID)
-			};
-		}
-		var recaptchaID = grecaptcha.render( captchas[c].id, params );
-
-		captchas[c].setAttribute('data-rid', recaptchaID);
+		frmFrontForm.renderRecaptcha( c, captchas );
 	}
 }
 
