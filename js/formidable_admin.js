@@ -994,7 +994,7 @@ function frmAdminBuildJS(){
 			return;
 		}
 
-		alert("Please enter an integer that's two or greater for the Repeat Limit.");
+		alert("Please enter a Repeat Limit that's greater than or equal to two.");
 
 		this.value = "";
 	}
