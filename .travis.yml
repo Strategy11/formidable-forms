@@ -61,6 +61,3 @@ script:
 - if [[ "$PHPUNIT" != "0" ]]; then phpunit --group=styles --exclude-group=pro -c phpunit.xml; fi
 - if [[ "$PHPUNIT" != "0" ]]; then phpunit --group=emails --exclude-group=pro -c phpunit.xml; fi
 - if [[ "$PHPUNIT" != "0" ]]; then phpunit --exclude-group=ajax,pro,entries,styles,emails -c phpunit.xml; fi
-
-notifications:
-  email: false
