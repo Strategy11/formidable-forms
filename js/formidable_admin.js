@@ -990,11 +990,11 @@ function frmAdminBuildJS(){
 
 	function checkRepeatLimit() {
 
-		if (this.value >= 2 && repeatLimit <= 200) {
+		if (this.value >= 2 && this.value <= 200) {
 			return;
 		}
 
-		alert("Please enter an integer greater than 2 for the Repeat Limit.");
+		alert("Please enter an integer that's two or greater for the Repeat Limit.");
 
 		this.value = "";
 	}
