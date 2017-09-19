@@ -18,7 +18,7 @@
 				<a href="#general_settings" class="frm_cursor_pointer"><?php _e( 'General', 'formidable' ) ?></a>
 			</li>
 			<?php foreach ( $sections as $sec_name => $section ) { ?>
-				<li <?php echo ( $a == $sec_name . '_settings' ) ? 'class="tabs active"' : '' ?>>
+				<li <?php echo ( $a == $sec_name . '_settings' ) ? 'class="tabs active starttab"' : '' ?>>
 					<a href="#<?php echo esc_attr( $sec_name ) ?>_settings" data-frmajax="<?php echo esc_attr( isset( $section['ajax'] ) ? $section['ajax'] : '' ) ?>">
 						<?php echo isset( $section['name'] ) ? $section['name'] : ucfirst( $sec_name ) ?>
 					</a>
