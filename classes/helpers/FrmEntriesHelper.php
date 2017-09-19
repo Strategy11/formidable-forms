@@ -81,7 +81,7 @@ class FrmEntriesHelper {
     }
 
 	/**
-	 * @since 2.04.02
+	 * @since 2.05
 	 */
 	private static function prepare_field_default_value( &$field ) {
 		//If checkbox, multi-select dropdown, or checkbox data from entries field, the value should be an array

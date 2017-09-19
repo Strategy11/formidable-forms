@@ -55,7 +55,13 @@
         <textarea name="<?php echo esc_attr( $this->get_field_name('email_message') ) ?>" class="frm_not_email_message large-text" id="<?php echo esc_attr( $this->get_field_id('email_message') ) ?>" cols="50" rows="5"><?php echo FrmAppHelper::esc_textarea($form_action->post_content['email_message']) ?></textarea></p>
 
         <h4><?php _e( 'Options', 'formidable' ) ?> </h4>
-            <label for="<?php echo esc_attr( $this->get_field_id('inc_user_info') ) ?>"><input type="checkbox" name="<?php echo esc_attr( $this->get_field_name('inc_user_info') ) ?>" class="frm_not_inc_user_info" id="<?php echo esc_attr( $this->get_field_id('inc_user_info') ) ?>" value="1" <?php checked( $form_action->post_content['inc_user_info'], 1 ); ?> /> <?php _e( 'Append IP Address, Browser, and Referring URL to message', 'formidable' ) ?></label>
+		<label for="<?php echo esc_attr( $this->get_field_id('inc_user_info') ) ?>"><input type="checkbox" name="<?php echo esc_attr( $this->get_field_name('inc_user_info') ) ?>" class="frm_not_inc_user_info" id="<?php echo esc_attr( $this->get_field_id('inc_user_info') ) ?>" value="1" <?php checked( $form_action->post_content['inc_user_info'], 1 ); ?> />
+			<?php if ( FrmAppHelper::ips_saved() ) { ?>
+				<?php _e( 'Append IP Address, Browser, and Referring URL to message', 'formidable' ) ?>
+			<?php } else { ?>
+				<?php _e( 'Append Browser and Referring URL to message', 'formidable' ) ?>
+			<?php } ?>
+		</label>
 
         <p><label for="<?php echo esc_attr( $this->get_field_id('plain_text') ) ?>"><input type="checkbox" name="<?php echo esc_attr( $this->get_field_name('plain_text') ) ?>" id="<?php echo esc_attr( $this->get_field_id('plain_text') ) ?>" value="1" <?php checked( $form_action->post_content['plain_text'], 1 ); ?> /> <?php _e( 'Send Emails in Plain Text', 'formidable' ) ?></label></p>
     </td>

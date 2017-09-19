@@ -576,6 +576,10 @@ class FrmEntry {
 	 * @return string
 	 */
 	private static function get_ip( $values ) {
+		if ( ! FrmAppHelper::ips_saved() ) {
+			return '';
+		}
+
 		$ip = FrmAppHelper::get_ip_address();
 		if ( defined('WP_IMPORTING') && WP_IMPORTING ) {
 			$ip = self::get_entry_value( $values, 'ip', $ip );

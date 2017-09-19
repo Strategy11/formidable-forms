@@ -10,7 +10,7 @@ class FrmAppHelper {
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '2.04.02b1';
+	public static $plug_version = '2.05b1';
 
     /**
      * @since 1.07.02
@@ -88,6 +88,14 @@ class FrmAppHelper {
 	public static function get_menu_name() {
 		$frm_settings = FrmAppHelper::get_settings();
 		return $frm_settings->menu;
+	}
+
+	/**
+	 * @since 2.02.04
+	 */
+	public static function ips_saved() {
+		$frm_settings = self::get_settings();
+		return ! $frm_settings->no_ips;
 	}
 
     /**

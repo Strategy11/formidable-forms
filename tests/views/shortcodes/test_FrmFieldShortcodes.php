@@ -20,7 +20,7 @@ class test_FrmFieldShortcodes extends FrmUnitTest {
 	/**
 	 * Test the [x] shortcode, where x is a field ID
 	 *
-	 * @since 2.04.02
+	 * @since 2.05
 	 */
 	public function test_single_field_id_shortcodes() {
 		$field_values = $this->get_expected_field_values();

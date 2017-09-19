@@ -1086,7 +1086,7 @@ class FrmXMLHelper {
 	/**
 	 * Remove deprecated notification settings after migration
 	 *
-	 * @since 2.04.02
+	 * @since 2.05
 	 *
 	 * @param int|string $form_id
 	 * @param array $form_options

@@ -157,8 +157,8 @@ function frmAdminBuildJS(){
 		}
 
 		var c = t.replace('#', '.');
-		var pro=jQuery('#taxonomy-linkcategory .frm-category-tabs li').length > 2;
-		link.closest('li').addClass('tabs active').siblings('li').removeClass('tabs active');
+		var pro = jQuery('#taxonomy-linkcategory .frm-category-tabs li').length > 2;
+		link.closest('li').addClass('tabs active').siblings('li').removeClass('tabs active starttab');
 		if(link.closest('div').find('.tabs-panel').length){
 			link.closest('div').children('.tabs-panel').not(t).not(c).hide();
 		}else{
@@ -994,6 +994,17 @@ function frmAdminBuildJS(){
 			$thisField.find('.frm_repeat_text').hide();
 			$thisField.find('.repeat_icon_links a').removeClass('frm_button');
 		}
+	}
+
+	function checkRepeatLimit() {
+
+		if (this.value >= 2 && this.value <= 200) {
+			return;
+		}
+
+		alert("Please enter a Repeat Limit that's greater than or equal to two.");
+
+		this.value = "";
 	}
 
 	function updateRepeatText(obj, addRemove){
@@ -2437,7 +2448,8 @@ function frmAdminBuildJS(){
 				clickTab(this);
 				return false;
 			});
-			
+			jQuery('.starttab a').trigger('click');
+
 			// submit the search for with dropdown
 			jQuery('#frm-fid-search-menu a').click(function(){
 				var val = this.id.replace('fid-', '');
@@ -2540,6 +2552,7 @@ function frmAdminBuildJS(){
 
 			$newFields.on('click', '.frm_repeat_field', toggleRepeat);
 			$newFields.on('change', '.frm_repeat_format', toggleRepeatButtons);
+			$newFields.on('change', '.frm_repeat_limit', checkRepeatLimit);
 			$newFields.on('input', 'input[name^="field_options[add_label_"]', function(){
 				updateRepeatText(this, 'add');
 			});
@@ -2742,11 +2755,10 @@ function frmAdminBuildJS(){
             // click tabs after panel is replaced with ajax
             jQuery('#side-sortables').on('click', '.frm_doing_ajax.categorydiv .category-tabs a', clickTabsAfterAjax);
 
-			var $postForm = jQuery(document.getElementById('post'));
 			jQuery('input[name="show_count"]').change(showCount);
-			
+
 			jQuery(document.getElementById('form_id')).change(displayFormSelected);
-			
+
 			var $addRemove = jQuery('.frm_add_remove');
 			$addRemove.on('click', '.frm_add_order_row', addOrderRow);
 			$addRemove.on('click', '.frm_add_where_row', addWhereRow);

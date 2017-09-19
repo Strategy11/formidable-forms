@@ -296,7 +296,7 @@ class FrmEmail {
 		if ( $this->include_user_info && $prev_mail_body == $mail_body ) {
 			$data = maybe_unserialize( $this->entry->description );
 			$mail_body .= "\r\n\r\n" . __( 'User Information', 'formidable' ) . "\r\n";
-			$mail_body .= __( 'IP Address', 'formidable' ) . ': ' . $this->entry->ip . "\r\n";
+			$this->maybe_add_ip( $mail_body );
 			$mail_body .= __( 'User-Agent (Browser/OS)', 'formidable' ) . ': ' . FrmEntriesHelper::get_browser( $data['browser'] ) . "\r\n";
 			$mail_body .= __( 'Referrer', 'formidable' ) . ': ' . $data['referrer'] . "\r\n";
 		}
@@ -310,6 +310,12 @@ class FrmEmail {
 		}
 
 		$this->message = apply_filters( 'frm_email_message', $this->message, $this->package_atts() );
+	}
+
+	private function maybe_add_ip( &$mail_body ) {
+		if ( ! empty( $this->entry->ip ) ) {
+			$mail_body .= __( 'IP Address', 'formidable' ) . ': ' . $this->entry->ip . "\r\n";
+		}
 	}
 
 	/**

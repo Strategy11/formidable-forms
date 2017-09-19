@@ -18,7 +18,7 @@
 				<a href="#general_settings" class="frm_cursor_pointer"><?php _e( 'General', 'formidable' ) ?></a>
 			</li>
 			<?php foreach ( $sections as $sec_name => $section ) { ?>
-				<li <?php echo ( $a == $sec_name . '_settings' ) ? 'class="tabs active"' : '' ?>>
+				<li <?php echo ( $a == $sec_name . '_settings' ) ? 'class="tabs active starttab"' : '' ?>>
 					<a href="#<?php echo esc_attr( $sec_name ) ?>_settings" data-frmajax="<?php echo esc_attr( isset( $section['ajax'] ) ? $section['ajax'] : '' ) ?>">
 						<?php echo isset( $section['name'] ) ? $section['name'] : ucfirst( $sec_name ) ?>
 					</a>
@@ -172,6 +172,15 @@
         <p><label class="frm_left_label"><?php _e( 'Preview Page', 'formidable' ); ?></label>
         <?php FrmAppHelper::wp_pages_dropdown('frm-preview-page-id', $frm_settings->preview_page_id ) ?>
         </p>
+
+		<p>
+			<label class="frm_left_label"><?php _e( 'IP storage', 'formidable' ); ?></label>
+			<label for="frm_no_ips">
+				<input type="checkbox" name="frm_no_ips" id="frm_no_ips" value="1" <?php checked( $frm_settings->no_ips, 1 ) ?> />
+				<?php _e( 'Do not store IPs with form submissions. Check this box if you are in the UK.', 'formidable' ) ?>
+			</label>
+
+		</p>
 
     </div>
 

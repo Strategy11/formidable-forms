@@ -31,7 +31,7 @@ class FrmEntryShortcodeFormatter {
 
 	/**
 	 * @var bool
-	 * @since 2.04.02
+	 * @since 2.05
 	 */
 	protected $is_plain_text = false;
 
@@ -101,7 +101,7 @@ class FrmEntryShortcodeFormatter {
 	/**
 	 * Initialize the is_plain_text property
 	 *
-	 * @since 2.04.02
+	 * @since 2.05
 	 *
 	 * @param array $atts
 	 */
@@ -194,7 +194,7 @@ class FrmEntryShortcodeFormatter {
 	/**
 	 * Generate the content for all fields
 	 *
-	 * @since 2.04.02
+	 * @since 2.05
 	 *
 	 * @return string
 	 */
@@ -297,7 +297,7 @@ class FrmEntryShortcodeFormatter {
 	/**
 	 * Check if the format is default plain text
 	 *
-	 * @since 2.04.02
+	 * @since 2.05
 	 *
 	 * @return bool
 	 */
@@ -308,7 +308,7 @@ class FrmEntryShortcodeFormatter {
 	/**
 	 * Check if the format is default HTML
 	 *
-	 * @since 2.04.02
+	 * @since 2.05
 	 *
 	 * @return bool
 	 */

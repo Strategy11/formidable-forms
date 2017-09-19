@@ -97,7 +97,7 @@ class FrmStylesHelper {
     }
 
 	/**
-	 * @since 2.04.02
+	 * @since 2.05
 	 */
 	public static function get_css_label_positions() {
 		return array(
