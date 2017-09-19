@@ -17,6 +17,12 @@ class FrmFieldRadio extends FrmFieldType {
 	 */
 	protected $has_for_label = true;
 
+	/**
+	 * @var bool
+	 * @since 3.0
+	 */
+	protected $holds_email_values = true;
+
 	protected function input_html() {
 		return $this->multiple_input_html();
 	}

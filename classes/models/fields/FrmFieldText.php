@@ -11,6 +11,12 @@ class FrmFieldText extends FrmFieldType {
 	 */
 	protected $type = 'text';
 
+	/**
+	 * @var bool
+	 * @since 3.0
+	 */
+	protected $holds_email_values = true;
+
 	protected function field_settings_for_type() {
 		return array(
 			'size'           => true,

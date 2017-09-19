@@ -38,6 +38,13 @@ abstract class FrmFieldType {
 	 */
 	protected $has_html = true;
 
+	/**
+	 * Could this field hold email values?
+	 * @var bool
+	 * @since 3.0
+	 */
+	protected $holds_email_values = false;
+
 	public function __construct( $field = 0, $type = '' ) {
 		$this->field = $field;
 		$this->set_type( $type );

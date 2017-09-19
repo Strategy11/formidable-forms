@@ -23,6 +23,12 @@ class FrmFieldUserID extends FrmFieldType {
 	 */
 	protected $has_html = false;
 
+	/**
+	 * @var bool
+	 * @since 3.0
+	 */
+	protected $holds_email_values = true;
+
 	protected function prepare_display_value( $value, $atts ) {
 		$user_info = $this->prepare_user_info_attribute( $atts );
 		return FrmFieldsHelper::get_user_display_name( $value, $user_info, $atts );

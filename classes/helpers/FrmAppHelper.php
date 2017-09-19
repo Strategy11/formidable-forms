@@ -1163,10 +1163,11 @@ class FrmAppHelper {
 	}
 
 	public static function insert_opt_html( $args ) {
-        $class = '';
-        if ( in_array( $args['type'], array( 'email', 'user_id', 'hidden', 'select', 'radio', 'checkbox', 'phone', 'text' ) ) ) {
-            $class .= 'show_frm_not_email_to';
-        }
+		$class = '';
+		$possible_email_field = FrmFieldFactory::field_has_property( $args['type'], 'holds_email_values' );
+		if ( $possible_email_field ) {
+			$class .= 'show_frm_not_email_to';
+		}
     ?>
 <li>
     <a href="javascript:void(0)" class="frmids frm_insert_code alignright <?php echo esc_attr($class) ?>" data-code="<?php echo esc_attr($args['id']) ?>" >[<?php echo esc_attr( $args['id'] ) ?>]</a>

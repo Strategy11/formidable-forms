@@ -23,4 +23,9 @@ class FrmFieldHidden extends FrmFieldType {
 	 */
 	protected $has_html = false;
 
+	/**
+	 * @var bool
+	 * @since 3.0
+	 */
+	protected $holds_email_values = true;
 }
