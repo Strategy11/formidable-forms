@@ -28,4 +28,8 @@ class FrmFieldHidden extends FrmFieldType {
 	 * @since 3.0
 	 */
 	protected $holds_email_values = true;
+
+	protected function include_form_builder_file() {
+		return FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-hidden.php';
+	}
 }

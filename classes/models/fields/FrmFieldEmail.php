@@ -10,6 +10,7 @@ class FrmFieldEmail extends FrmFieldType {
 	 * @since 3.0
 	 */
 	protected $type = 'email';
+	protected $display_type = 'text';
 
 	/**
 	 * @var bool

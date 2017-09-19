@@ -18,6 +18,13 @@ abstract class FrmFieldType {
 	protected $type;
 
 	/**
+	 * The type of field input to show on the form builder
+	 * @var string
+	 * @since 3.0
+	 */
+	protected $display_type;
+
+	/**
 	 * Does the html for this field label need to include "for"?
 	 * @var bool
 	 * @since 3.0
@@ -48,6 +55,7 @@ abstract class FrmFieldType {
 	public function __construct( $field = 0, $type = '' ) {
 		$this->field = $field;
 		$this->set_type( $type );
+		$this->set_display_type();
 	}
 
 	public function __get( $key ) {
@@ -67,6 +75,12 @@ abstract class FrmFieldType {
 		}
 	}
 
+	private function set_display_type() {
+		if ( empty( $this->display_type ) && ! empty( $this->type ) ) {
+			$this->display_type = $this->type;
+		}
+	}
+
 	protected function get_field_column( $column ) {
 		$field_val = '';
 		if ( is_object( $this->field ) ) {
@@ -74,6 +88,8 @@ abstract class FrmFieldType {
 		}
 		return $field_val;
 	}
+
+	/** Field HTML **/
 
 	public function default_html() {
 		if ( ! $this->has_html ) {
@@ -113,6 +129,45 @@ DEFAULT_HTML;
 		}
 		return $for;
 	}
+
+	/** Form builder **/
+
+	public function show_on_form_builder( $name = '' ) {
+		$field = FrmFieldsHelper::setup_edit_vars( $this->field );
+		$include_file = $this->include_form_builder_file();
+
+		if ( ! empty( $include_file ) ) {
+			$field_name = $this->html_name( $name );
+			$html_id = $this->html_id();
+			$display = $this->display_field_settings();
+			include( $include_file );
+		} elseif ( $this->display_type == 'text' ) {
+			echo $this->builder_text_field();
+		} else {
+			do_action( 'frm_display_added_fields', $field );
+			do_action( 'frm_display_added_' . $this->type . '_field', $field );
+		}
+	}
+
+	/**
+	 * @return string The file path to include on the form builder
+	 */
+	protected function include_form_builder_file() {
+		return '';
+	}
+
+	protected function builder_text_field() {
+		return '<input type="text" name="' . esc_attr( $this->html_name() ) . '" id="' . esc_attr( $this->html_id() ) . '" value="' . esc_attr( $this->get_field_column('default_value') ) . '" class="dyn_default_value" />';
+	}
+
+	protected function html_name( $name = '' ) {
+		$prefix = empty( $name ) ? 'item_meta' : $name;
+		return $prefix . '[' . $this->get_field_column('id') . ']';
+	}
+
+	protected function html_id( $plus = '' ) {
+		return apply_filters( 'frm_field_get_html_id', 'field_' . $this->get_field_column('field_key') . $plus, $this->field );
+    }
 
 	public function display_field_settings() {
 		$default_settings = $this->default_field_settings();
@@ -157,6 +212,8 @@ DEFAULT_HTML;
 			'label_position' => false,
 		);
 	}
+
+	/** New field **/
 
 	public function get_new_field_defaults() {
 		$frm_settings = FrmAppHelper::get_settings();
@@ -257,6 +314,8 @@ DEFAULT_HTML;
 	protected function prepare_display_value( $value, $atts ) {
 		return $value;
 	}
+
+	/** Importing **/
 
 	public function get_import_value( $value, $atts = array() ) {
 		return $this->prepare_import_value( $value, $atts );

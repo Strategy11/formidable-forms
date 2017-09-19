@@ -224,6 +224,8 @@ class FrmFieldsController {
 			$frm_all_field_selection = array_merge( FrmField::field_selection(), $pro_field_selection );
 			$disabled_fields = FrmAppHelper::pro_is_installed() ? array() : $pro_field_selection;
 
+			$field_obj = FrmFieldFactory::get_field_object( $field['id'] ); // TODO: 3.0 send field object
+
 			require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add_field.php' );
 		}
 	}

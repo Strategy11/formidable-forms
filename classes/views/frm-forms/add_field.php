@@ -30,7 +30,8 @@ if ( $field['type'] == 'divider' ) { ?>
 <div id="field_<?php echo esc_attr( $field['id'] ) ?>_inner_container" class="frm_inner_field_container">
 <div class="frm_form_fields" data-ftype="<?php echo esc_attr( $display['type'] ) ?>">
 <?php
-include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/show-build.php' );
+
+$field_obj->show_on_form_builder();
 
 if ( $display['clear_on_focus'] ) {
 	FrmFieldsHelper::clear_on_focus_html( $field, $display );

@@ -17,6 +17,10 @@ class FrmFieldSelect extends FrmFieldType {
 	 */
 	protected $holds_email_values = true;
 
+	protected function include_form_builder_file() {
+		return FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/dropdown-field.php';
+	}
+
 	protected function field_settings_for_type() {
 		return array(
 			'size' => true,

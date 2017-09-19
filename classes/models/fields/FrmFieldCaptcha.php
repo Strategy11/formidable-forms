@@ -11,6 +11,10 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 */
 	protected $type = 'captcha';
 
+	protected function include_form_builder_file() {
+		return FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-captcha.php';
+	}
+
 	protected function field_settings_for_type() {
 		return array(
 			'required'      => false,

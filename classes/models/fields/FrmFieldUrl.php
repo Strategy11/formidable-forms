@@ -10,6 +10,7 @@ class FrmFieldUrl extends FrmFieldType {
 	 * @since 3.0
 	 */
 	protected $type = 'url';
+	protected $display_type = 'text';
 
 	protected function field_settings_for_type() {
 		return array(

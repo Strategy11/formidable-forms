@@ -10,6 +10,7 @@ class FrmFieldNumber extends FrmFieldType {
 	 * @since 3.0
 	 */
 	protected $type = 'number';
+	protected $display_type = 'text';
 
 	protected function field_settings_for_type() {
 		$settings = array(

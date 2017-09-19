@@ -27,6 +27,10 @@ class FrmFieldRadio extends FrmFieldType {
 		return $this->multiple_input_html();
 	}
 
+	protected function include_form_builder_file() {
+		return FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-multiple.php';
+	}
+
 	protected function field_settings_for_type() {
 		return array(
 			'default_blank' => false,
