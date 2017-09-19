@@ -255,6 +255,15 @@ class FrmEntryFormatter {
 		}
 	}
 
+	/**
+	 * Get the field key or ID, depending on array_key property
+	 *
+	 * @since 2.05
+	 *
+	 * @param FrmFieldValue $field_value
+	 *
+	 * @return string|int
+	 */
 	protected function get_key_or_id( $field_value ) {
 		return $this->array_key == 'key' ? $field_value->get_field_key() : $field_value->get_field_id();
 	}
