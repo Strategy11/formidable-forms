@@ -702,7 +702,7 @@ class test_FrmProShowEntryShortcode extends test_FrmShowEntryShortcode {
 				break;
 
 			case 'address-field':
-				$value = '123 Main St. #5 <br/>Anytown, OR <br/>12345 <br/>United States';
+				$value = '123 Main St. #5 <br/>Anytown, OR 12345 <br/>United States';
 				break;
 
 			case 'single-file-upload-field':
