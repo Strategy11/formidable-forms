@@ -1416,22 +1416,36 @@ function frmAdminBuildJS(){
 		});
 	}
 
+	/**
+	 * Show or hide the default value icons of a field
+	 *
+	 * @since 2.04.02
+	 *
+	 * @param {boolean} showDefaultValIcons
+	 * @param {object} $innerField
+	 */
 	function showOrHideDefaultValIcons(showDefaultValIcons, $innerField) {
 		var $defaultValueIcons = $innerField.find('.frm_default_val_icons');
 
 		if (showDefaultValIcons) {
 			$defaultValueIcons.css('visibility', 'visible').fadeIn('slow');
-		}
-		else {
+		} else {
 			$defaultValueIcons.css('visibility', 'hidden').fadeOut('slow');
 		}
 	}
 
+	/**
+	 * Determine if a field has default content and display the default value icons if it does
+	 *
+	 * @since 2.04.02
+	 *
+	 * @param {number} fieldId
+	 */
 	function maybeShowDefaultValIcons(fieldId) {
-		var $fieldInner = jQuery(document.getElementById('field_' + fieldId + '_inner_container'));
+		var $fieldInner = jQuery(document.getElementById('frm_field_id_' + fieldId));
 		var showDefaultValIcons = false;
-		var isComboField = $fieldInner.find('.frm_multi_fields_container').length > 0;
-		var inputList = $fieldInner.find('input[name^="item_meta"], select[name^="item_meta"], textarea[name^="item_meta"]');
+		var isComboOrConfirmationField = $fieldInner.find('.frm_multi_fields_container, .frm_inner_conf_container').length > 0;
+		var inputList = $fieldInner.find('input[name^="item_meta"], input[id^="conf_field"], select[name^="item_meta"], textarea[name^="item_meta"]');
 
 		jQuery(inputList).each(function (index) {
 
@@ -1440,9 +1454,10 @@ function frmAdminBuildJS(){
 				return false;
 			}
 
-			if (!isComboField) {
+			if (!isComboOrConfirmationField) {
 				return false;
 			}
+
 		});
 
 		showOrHideDefaultValIcons(showDefaultValIcons, $fieldInner);
