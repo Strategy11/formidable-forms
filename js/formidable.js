@@ -3122,9 +3122,14 @@ function frmFrontFormJS(){
 			var re = new RegExp(field_id+"((e)?\\d+(-\\d+)?)?$", "g");
 
 			fields = fields.filter(function() {
-				if ( this.id ) {
-					return this.id.match(re);
-				} else{
+				var id = this.id;
+				if ( ! id ) {
+					id = this.parentElement.id;
+				}
+
+				if ( id ) {
+					return id.match(re);
+				} else {
 					return true;
 				}
 			});
