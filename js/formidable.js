@@ -3118,11 +3118,15 @@ function frmFrontFormJS(){
 	*/
 	function filterCalcFields( fields, field ) {
 		if ( fields.length ) {
-			var field_id = field.thisFieldCall.split('[id')[1].replace(/"|'|\^|=|]|:checked|,input/g, '');
+			var field_id = field.thisFieldCall.split('[id')[1].replace(/"|'|\^|=|]|:checked|,input| option:selected/g, '');
 			var re = new RegExp(field_id+"((e)?\\d+(-\\d+)?)?$", "g");
 
 			fields = fields.filter(function() {
-				return this.id.match(re);
+				if ( this.id ) {
+					return this.id.match(re);
+				} else{
+					return true;
+				}
 			});
 		}
 		return fields;
