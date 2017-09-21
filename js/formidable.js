@@ -3118,8 +3118,14 @@ function frmFrontFormJS(){
 	*/
 	function filterCalcFields( fields, field ) {
 		if ( fields.length ) {
-			var field_id = field.thisFieldCall.split('[id')[1].replace(/"|'|\^|=|]|:checked|,input| option:selected/g, '');
-			var re = new RegExp(field_id+"((e)?\\d+(-\\d+)?)?$", "g");
+			var field_id = field.thisFieldCall.split('[id')[1].replace(/"|'|\^|=|]|:checked|,input| option:selected|,textarea/g, '');
+			var expectedField = new RegExp("^field_[a-zA-Z0-9]*(-)?$", 'g');
+			if ( ! field_id.match( expectedField ) ) {
+				// failsafe if the field_id isn't what we expect
+				return fields;
+			}
+
+			var re = new RegExp('^'+field_id+"((e)?\\d+(-\\d+)?)?$", 'g');
 
 			fields = fields.filter(function() {
 				var id = this.id;
