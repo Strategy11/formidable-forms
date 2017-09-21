@@ -3104,8 +3104,10 @@ function frmFrontFormJS(){
 			var siblingFieldCall = field.thisFieldCall.replace('[id=', '[id^=');
 
 			return container.find(siblingFieldCall);
+		} else {
+			// the trigger is not in the repeating section
+			return jQuery(field.thisFieldCall);
 		}
-		return null;
 	}
 
 	function getOptionValue( thisField, currentOpt ) {
