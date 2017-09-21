@@ -3099,15 +3099,33 @@ function frmFrontFormJS(){
 			return null;
 		}
 
+		var fields = null;
 		var container = field.triggerField.closest('.frm_repeat_sec, .frm_repeat_inline, .frm_repeat_grid');
 		if ( container.length ) {
 			var siblingFieldCall = field.thisFieldCall.replace('[id=', '[id^=');
-
-			return container.find(siblingFieldCall);
+			fields = container.find(siblingFieldCall);
 		} else {
 			// the trigger is not in the repeating section
-			return jQuery(field.thisFieldCall);
+			fields = jQuery(field.thisFieldCall);
 		}
+
+		return filterCalcFields( fields, field );
+	}
+
+	/* When fields have similar keys like first-name and first-name-again,
+	* first-name-again is fetched when it shouldn't be.
+	* This function filters out fetched fields that shouldn't be included.
+	*/
+	function filterCalcFields( fields, field ) {
+		if ( fields.length ) {
+			var field_id = field.thisFieldCall.split('[id')[1].replace(/"|'|\^|=|]|:checked|,input/g, '');
+			var re = new RegExp(field_id+"((e)?\\d+(-\\d+)?)?$", "g");
+
+			fields = fields.filter(function() {
+				return this.id.match(re);
+			});
+		}
+		return fields;
 	}
 
 	function getOptionValue( thisField, currentOpt ) {
