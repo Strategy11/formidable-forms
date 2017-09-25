@@ -3109,37 +3109,6 @@ function frmFrontFormJS(){
 			fields = jQuery(field.thisFieldCall);
 		}
 
-		return filterCalcFields( fields, field );
-	}
-
-	/* When fields have similar keys like first-name and first-name-again,
-	* first-name-again is fetched when it shouldn't be.
-	* This function filters out fetched fields that shouldn't be included.
-	*/
-	function filterCalcFields( fields, field ) {
-		if ( fields.length ) {
-			var field_id = field.thisFieldCall.split('[id')[1].replace(/"|'|\^|=|]|:checked|,input| option:selected|,textarea/g, '');
-			var expectedField = new RegExp("^field_[a-zA-Z0-9]*(-)?$", 'g');
-			if ( ! field_id.match( expectedField ) ) {
-				// failsafe if the field_id isn't what we expect
-				return fields;
-			}
-
-			var re = new RegExp('^'+field_id+"((e)?\\d+(-\\d+)?)?$", 'g');
-
-			fields = fields.filter(function() {
-				var id = this.id;
-				if ( ! id ) {
-					id = this.parentElement.id;
-				}
-
-				if ( id ) {
-					return id.match(re);
-				} else {
-					return true;
-				}
-			});
-		}
 		return fields;
 	}
 
