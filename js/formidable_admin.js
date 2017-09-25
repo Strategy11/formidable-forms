@@ -997,14 +997,11 @@ function frmAdminBuildJS(){
 	}
 
 	function checkRepeatLimit() {
-
-		if (this.value >= 2 && this.value <= 200) {
-			return;
+		var val = this.value;
+		if ( val < 2 || val > 200) {
+			alert(frm_admin_js.repeat_limit_min);
+			this.value = '';
 		}
-
-		alert("Please enter a Repeat Limit that's greater than or equal to two.");
-
-		this.value = "";
 	}
 
 	function updateRepeatText(obj, addRemove){
