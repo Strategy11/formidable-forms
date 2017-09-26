@@ -2,7 +2,7 @@
 Contributors: formidableforms, sswells, srwells, jamie.wahlin
 Tags: contact form, form builder, custom form, forms, form, form maker, form creator
 Requires at least: 4.0
-Tested up to: 4.8.1
+Tested up to: 4.8.2
 Requires PHP: 5.2
 Stable tag: 2.05
 
