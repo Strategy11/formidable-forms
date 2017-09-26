@@ -117,7 +117,8 @@ class FrmFormsController {
             $form = FrmForm::getOne( $id );
             $fields = FrmField::get_all_for_form($id);
 
-            $values = FrmAppHelper::setup_edit_vars($form, 'forms', $fields, true);
+			$values = FrmAppHelper::setup_edit_vars($form, 'forms', '', true);
+			$values['fields'] = $fields;
 			$all_templates = FrmForm::getAll( array( 'is_template' => 1 ), 'name' );
 
 			require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/new.php' );
@@ -611,7 +612,8 @@ class FrmFormsController {
         unset($end_section_values, $last_order, $open, $reset_fields);
 
 		$args = array( 'parent_form_id' => $form->id );
-        $values = FrmAppHelper::setup_edit_vars( $form, 'forms', $fields, true, array(), $args );
+		$values = FrmAppHelper::setup_edit_vars( $form, 'forms', '', true, array(), $args );
+		$values['fields'] = $fields;
 
         $edit_message = __( 'Form was Successfully Updated', 'formidable' );
         if ( $form->is_template && $message == $edit_message ) {

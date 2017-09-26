@@ -123,7 +123,8 @@ class FrmAppHelper {
         global $pagenow;
 		$get_page = self::simple_get( 'page', 'sanitize_title' );
         if ( $pagenow ) {
-			return $pagenow == 'admin.php' && $get_page == $page;
+			// allow this to be true during ajax load i.e. ajax form builder loading
+			return ( $pagenow == 'admin.php' || $pagenow == 'admin-ajax.php' ) && $get_page == $page;
         }
 
 		return is_admin() && $get_page == $page;
@@ -992,19 +993,10 @@ class FrmAppHelper {
         }
 
         $values['description'] = self::use_wpautop($values['description']);
-        $frm_settings = self::get_settings();
-        $is_form_builder = self::is_admin_page('formidable' );
-
-        foreach ( (array) $fields as $field ) {
-            // Make sure to filter default values (for placeholder text), but not on the form builder page
-            if ( ! $is_form_builder ) {
-                $field->default_value = apply_filters('frm_get_default_value', $field->default_value, $field, true );
-            }
-			$parent_form_id = isset( $args['parent_form_id'] ) ? $args['parent_form_id'] : $field->form_id;
-			self::fill_field_defaults($field, $record, $values, compact('default', 'post_values', 'frm_settings', 'parent_form_id' ) );
-        }
 
         self::fill_form_opts($record, $table, $post_values, $values);
+
+		self::prepare_field_arrays( $fields, $record, $values, $args );
 
         if ( $table == 'entries' ) {
             $values = FrmEntriesHelper::setup_edit_vars( $values, $record );
@@ -1014,6 +1006,16 @@ class FrmAppHelper {
 
         return $values;
     }
+
+	private static function prepare_field_arrays( $fields, $record, array &$values, $args ) {
+		if ( ! empty( $fields ) ) {
+			foreach ( (array) $fields as $field ) {
+				$field->default_value = apply_filters('frm_get_default_value', $field->default_value, $field, true );
+				$parent_form_id = isset( $args['parent_form_id'] ) ? $args['parent_form_id'] : $field->form_id;
+				self::fill_field_defaults( $field, $record, $values, compact( 'default', 'post_values', 'frm_settings', 'parent_form_id' ) );
+			}
+		}
+	}
 
 	private static function fill_field_defaults( $field, $record, array &$values, $args ) {
         $post_values = $args['post_values'];
@@ -1066,6 +1068,7 @@ class FrmAppHelper {
     }
 
 	private static function fill_field_opts( $field, array &$field_array, $args ) {
+		//_deprecated_function( __METHOD__, '3.0', 'FmFieldsHelper::fill_default_field_opts' );
         $post_values = $args['post_values'];
         $opt_defaults = FrmFieldsHelper::get_default_field_options_from_field( $field );
 

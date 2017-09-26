@@ -11,10 +11,16 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 */
 	protected $type = 'captcha';
 
+	/**
+	 * @return string
+	 */
 	protected function include_form_builder_file() {
 		return FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-captcha.php';
 	}
 
+	/**
+	 * @return array
+	 */
 	protected function field_settings_for_type() {
 		return array(
 			'required'      => false,
@@ -24,6 +30,9 @@ class FrmFieldCaptcha extends FrmFieldType {
 		);
 	}
 
+	/**
+	 * @return array
+	 */
 	protected function new_field_settings() {
 		$frm_settings = FrmAppHelper::get_settings();
 		return array(
@@ -31,6 +40,9 @@ class FrmFieldCaptcha extends FrmFieldType {
 		);
 	}
 
+	/**
+	 * @return array
+	 */
 	protected function extra_field_opts() {
 		return array(
 			'label'         => 'none',

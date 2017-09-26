@@ -29,10 +29,19 @@ class FrmFieldUserID extends FrmFieldType {
 	 */
 	protected $holds_email_values = true;
 
+	/**
+	 * @return string
+	 */
 	protected function include_form_builder_file() {
 		return FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-user-id.php';
 	}
 
+	/**
+	 * @param $value
+	 * @param $atts array
+	 *
+	 * @return false|mixed|string
+	 */
 	protected function prepare_display_value( $value, $atts ) {
 		$user_info = $this->prepare_user_info_attribute( $atts );
 		return FrmFieldsHelper::get_user_display_name( $value, $user_info, $atts );
@@ -60,6 +69,12 @@ class FrmFieldUserID extends FrmFieldType {
 		return $user_info;
 	}
 
+	/**
+	 * @param $value
+	 * @param $atts
+	 *
+	 * @return int
+	 */
 	protected function prepare_import_value( $value, $atts ) {
 		return FrmAppHelper::get_user_id_param( trim( $value ) );
 	}

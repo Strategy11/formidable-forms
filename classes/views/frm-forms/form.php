@@ -50,7 +50,7 @@
     </div>
 <ul id="new_fields" class="frm_sorting inside">
 <?php
-if ( isset($values['fields']) && ! empty($values['fields']) ) {
+if ( isset( $values['fields'] ) && ! empty( $values['fields'] ) ) {
 	$values['count'] = 0;
 	foreach ( $values['fields'] as $field ) {
 		$values['count']++;

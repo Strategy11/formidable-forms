@@ -58,6 +58,11 @@ abstract class FrmFieldType {
 		$this->set_display_type();
 	}
 
+	/**
+	 * @param $key
+	 *
+	 * @return string
+	 */
 	public function __get( $key ) {
 		$value = '';
 		if ( property_exists( $this, $key ) ) {
@@ -66,7 +71,10 @@ abstract class FrmFieldType {
 		return $value;
 	}
 
-	private function set_type( $type ) {
+	/**
+	 * @param $type string
+	 */
+	protected function set_type( $type ) {
 		if ( empty( $this->type ) ) {
 			$this->type = $this->get_field_column('type');
 			if ( empty( $this->type ) && ! empty( $type ) ) {
@@ -75,12 +83,17 @@ abstract class FrmFieldType {
 		}
 	}
 
-	private function set_display_type() {
+	protected function set_display_type() {
 		if ( empty( $this->display_type ) && ! empty( $this->type ) ) {
 			$this->display_type = $this->type;
 		}
 	}
 
+	/**
+	 * @param $column
+	 *
+	 * @return string|array
+	 */
 	protected function get_field_column( $column ) {
 		$field_val = '';
 		if ( is_object( $this->field ) ) {
@@ -225,13 +238,35 @@ DEFAULT_HTML;
 			'default_value' => '',
 			'required'      => false,
 			'blank'         => $frm_settings->blank_msg,
-			'unique_msg'    => $frm_settings->unique_msg,
-			'invalid'       => __( 'This field is invalid', 'formidable' ),
+			'unique_msg'    => $this->default_unique_msg(),
+			'invalid'       => $this->default_invalid_msg(),
 			'field_options' => $this->get_default_field_options(),
 		);
 
 		$field_options = $this->new_field_settings();
 		return array_merge( $field, $field_options );
+	}
+
+	protected function default_unique_msg() {
+		if ( is_object( $this->field ) && ! FrmField::is_option_true( $this->field, 'unique' ) ) {
+			$message = '';
+		} else {
+			$frm_settings = FrmAppHelper::get_settings();
+			$message = $frm_settings->unique_msg;
+		}
+
+		return $message;
+	}
+
+	protected function default_invalid_msg() {
+		$field_name = $this->get_field_column('name');
+		if ( $field_name == '' ) {
+			$invalid = __( 'This field is invalid', 'formidable' );
+		} else {
+			$invalid = sprintf( __( '%s is invalid', 'formidable' ), $field_name );
+		}
+
+		return $invalid;
 	}
 
 	protected function get_new_field_name() {
@@ -275,8 +310,8 @@ DEFAULT_HTML;
 		$opts = apply_filters( 'frm_default_field_options', $opts, array( 'field' => $this->field, 'type' => $this->type ) );
 
 		if ( $this->field ) {
-			if ( has_filter( 'frm_default_field_opts' ) || has_filter( 'frm_default_'. $this->type .'_field_opts' ) ) {
-				$values = FrmFieldsHelper::field_object_to_array( $field );
+			if ( has_filter( 'frm_default_field_opts' ) || has_filter( 'frm_default_' . $this->type . '_field_opts' ) ) {
+				$values = FrmFieldsHelper::field_object_to_array( $this->field );
 				$opts = apply_filters( 'frm_default_field_opts', $opts, $values, $this->field );
 				$opts = apply_filters( 'frm_default_' . $this->type . '_field_opts', $opts, $values, $this->field );
 			}
@@ -326,16 +361,20 @@ DEFAULT_HTML;
 	}
 
 	/**
-	* Get the new child IDs for a repeating field's or embedded form's meta_value
-	*
-	* @since 2.0.16
-	* @param array $meta_value
-	* @param object $field
-	* @param array $saved_entries
-	* @return array $meta_value
-	*/
+	 * Get the new child IDs for a repeating field's or embedded form's meta_value
+	 *
+	 * @since 3.0
+	 *
+	 * @param $value
+	 * @param $atts
+	 * @internal param array $meta_value
+	 * @internal param object $field
+	 * @internal param array $saved_entries
+	 *
+	 * @return array $new_value
+	 */
 	protected function get_new_child_ids( $value, $atts ) {
-		$saved_entried = $atts['ids'];
+		$saved_entries = $atts['ids'];
 		$new_value = array();
 		foreach ( (array) $value as $old_child_id ) {
 			if ( isset( $saved_entries[ $old_child_id ] ) ) {
@@ -346,6 +385,11 @@ DEFAULT_HTML;
 		return $new_value;
 	}
 
+	/**
+	 * @param $value
+	 *
+	 * @return array
+	 */
 	protected function get_multi_opts_for_import( $value ) {
 
 		if ( ! $this->field || empty( $value ) || in_array( $value, (array) $this->field->options ) ) {
@@ -365,6 +409,10 @@ DEFAULT_HTML;
 		return $value;
 	}
 
+	/**
+	 * @param $atts
+	 * @param $value
+	 */
 	protected function run_wpautop( $atts, &$value ) {
 		$autop = isset( $atts['wpautop'] ) ? $atts['wpautop'] : true;
 		if ( apply_filters( 'frm_use_wpautop', $autop ) ) {
@@ -375,6 +423,10 @@ DEFAULT_HTML;
 		}
 	}
 
+	/**
+	 * @param $value
+	 * @param $defaults
+	 */
 	protected function fill_values( &$value, $defaults ) {
 		if ( empty( $value ) ) {
 			$value = $defaults;

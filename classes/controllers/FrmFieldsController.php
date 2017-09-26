@@ -21,23 +21,23 @@ class FrmFieldsController {
         $field_html = array();
 
         foreach ( $fields as $field ) {
-            $field = htmlspecialchars_decode( nl2br( $field ) );
-            $field = json_decode( $field, true );
-            if ( ! isset( $field['id'] ) ) {
-                // this field may have already been loaded
-                continue;
-            }
+			$field = htmlspecialchars_decode( nl2br( $field ) );
+			$field = json_decode( $field );
+			if ( ! isset( $field->id ) || ! is_numeric( $field->id ) ) {
+				// this field may have already been loaded
+				continue;
+			}
 
-            $field_id = absint( $field['id'] );
+			if ( ! isset( $field->value ) ) {
+				$field->value = '';
+			}
+			$field->field_options = json_decode( json_encode( $field->field_options), true );
+			$field->options = json_decode( json_encode( $field->options ), true );
 
-            if ( ! isset( $field['value'] ) ) {
-                $field['value'] = '';
-            }
-
-            ob_start();
+			ob_start();
 			self::load_single_field( $field, $values );
-            $field_html[ $field_id ] = ob_get_contents();
-            ob_end_clean();
+			$field_html[ absint( $field->id ) ] = ob_get_contents();
+			ob_end_clean();
         }
 
         echo json_encode( $field_html );
@@ -195,25 +195,25 @@ class FrmFieldsController {
 	/**
 	 * @since 3.0
 	 */
-	public static function load_single_field( $field, $values, $form_id = 0 ) {
-		if ( is_numeric( $field ) ) {
-			$field = self::get_field_array_from_id( $field );
+	public static function load_single_field( $field_object, $values, $form_id = 0 ) {
+		if ( is_numeric( $field_object ) ) {
+			$field_object = FrmField::getOne( $field_object );
+		} elseif ( is_array( $field_object ) ) {
+			$field = $field_object;
+			$field_object = FrmField::getOne( $field['id'] );
 		}
 
-		$field_name = 'item_meta[' . $field['id'] . ']';
-		$html_id = FrmFieldsHelper::get_html_id( $field );
-		$id = $form_id ? $form_id : $field['form_id'];
-		if ( $field['type'] == 'html' ) {
-			$field['stop_filter'] = true;
+		if ( ! isset( $field ) && is_object( $field_object ) ) {
+			$field = FrmFieldsHelper::setup_edit_vars( $field_object );
 		}
 
-		$display = self::display_field_options( $field );
+		$display = self::display_field_options( $field_object );
 
 		$li_classes = 'form-field edit_form_item frm_field_box frm_top_container frm_not_divider edit_field_type_' . $display['type'];
 		$li_classes = apply_filters( 'frm_build_field_class', $li_classes, $field );
 
 		$ajax_loading = isset( $values['ajax_load'] ) && $values['ajax_load'];
-		$ajax_this_field = isset( $values['count'] ) && $values['count'] > 10 && ! in_array( $field['type'], array( 'divider', 'end_divider' ) );
+		$ajax_this_field = isset( $values['count'] ) && $values['count'] > 10 && ! in_array( $field_object->type, array( 'divider', 'end_divider' ) );
 
 		if ( $ajax_loading && $ajax_this_field ) {
 			include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/ajax-field-placeholder.php' );
@@ -224,7 +224,7 @@ class FrmFieldsController {
 			$frm_all_field_selection = array_merge( FrmField::field_selection(), $pro_field_selection );
 			$disabled_fields = FrmAppHelper::pro_is_installed() ? array() : $pro_field_selection;
 
-			$field_obj = FrmFieldFactory::get_field_object( $field['id'] ); // TODO: 3.0 send field object
+			$field_obj = FrmFieldFactory::get_field_object( $field_object );
 
 			require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add_field.php' );
 		}
@@ -410,7 +410,9 @@ class FrmFieldsController {
     }
 
 	public static function display_field_options( $field ) {
-		if ( isset( $field['id'] ) && $field['id'] ) {
+		if ( is_object( $field ) ) {
+			$field_info = FrmFieldFactory::get_field_object( $field );
+		} elseif ( isset( $field['id'] ) && $field['id'] ) {
 			$field_info = FrmFieldFactory::get_field_object( $field['id'] );
 		} else {
 			$field_info = FrmFieldFactory::get_field_type( $field['type'] );

@@ -55,22 +55,41 @@ class FrmFieldsHelper {
 			$values['form_name'] = $field->form_id ? FrmForm::getName( $field->form_id ) : '';
 		}
 
-		$defaults = self::get_default_field_options_from_field( $field );
-		foreach ( $defaults as $opt => $default ) {
-			$values[ $opt ] = isset( $field->field_options[ $opt ] ) ? $field->field_options[ $opt ] : $default;
-			unset( $opt, $default );
-		}
+		self::fill_field_array( $field, $values );
 
 		$values['custom_html'] = ( isset( $field->field_options['custom_html'] ) ) ? $field->field_options['custom_html'] : self::get_default_html( $field->type );
 
 		return $values;
 	}
 
+	private static function fill_field_array( $field, array &$field_array ) {
+		$field_array['options'] = $field->options;
+		$field_array['value'] = $field->default_value;
+
+		self::fill_default_field_opts( $field, $field_array );
+
+		$field_array['original_type'] = $field->type;
+		$field_array = apply_filters( 'frm_setup_edit_fields_vars', $field_array, $field );
+
+		$field_array = array_merge( $field->field_options, $field_array );
+	}
+
+	private static function fill_default_field_opts( $field, array &$values ) {
+		$defaults = self::get_default_field_options_from_field( $field );
+
+		foreach ( $defaults as $opt => $default ) {
+			$current_opt = isset( $field->field_options[ $opt ] ) ? $field->field_options[ $opt ] : $default;
+			$values[ $opt ] = ( $_POST && isset( $_POST['field_options'][ $opt . '_' . $field->id ] ) ) ? stripslashes_deep( maybe_unserialize( $_POST['field_options'][ $opt . '_' . $field->id ] ) ) : $current_opt;
+			unset( $opt, $default );
+		}
+	}
+
     public static function get_default_field_opts( $type, $field, $limit = false ) {
-		_deprecated_function( __FUNCTION__, '3.0', 'FrmFieldHelper::get_default_field_options or FrmFieldHelper::get_default_field' );
 		if ( $limit ) {
+			_deprecated_function( __FUNCTION__, '3.0', 'FrmFieldHelper::get_default_field_options' );
 			$field_options = self::get_default_field_options( $type );
 		} else {
+			_deprecated_function( __FUNCTION__, '3.0', 'FrmFieldHelper::get_default_field' );
 			$field_options = self::get_default_field( $type );
 		}
 
