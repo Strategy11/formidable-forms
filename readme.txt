@@ -12,7 +12,7 @@ The best WordPress form plugin for contact forms, surveys and more. Make forms a
 = WordPress Form Builder Plugin =
 Formidable Forms is a flexible and free WordPress form plugin. Easily create contact forms, polls and surveys, lead generation forms, email forms, and any other forms you imagine. Start with a pre-built contact form template or create totally custom forms. From the smallest sidebar opt-in form to large job application forms, Formidable Forms is built to do it all. Learn more about Formidable Forms at [FormidableForms.com](https://formidableforms.com/ "FormidableForms.com")
 
-Create a professional WordPress contact form without any code. Additionally, changing the form layout is simple with included layout classes. If you need more advanced customizations, you have complete access to edit the form HTML and CSS.
+Create a professional WordPress contact form without any code. Get mobile-friendly responsive forms that look great on any screen size. Additionally, changing the form layout is simple with included layout classes. If you need more advanced customizations, you have complete access to change the form HTML and CSS.
 
 [View form builder Documentation](https://formidableforms.com/knowledgebase/ "View form builder Documentation")
 
@@ -164,7 +164,7 @@ The field and form names and descriptions are all changed with in-place edit. Ju
 * New: Add frm_before_entries_table hook to display extar content on the Formidable -> Entries page.
 * New: Add frm_lookup_is_current_user_filter_needed filter to allow the options in a lookup field to be conditionally limited.
 * Enhancement: Allow repeating fields to be excluded from show entry shortcode.
-* Enhancement: Improve field calculations that include fields inside and outside a repeating section
+* Enhancement: Improve calculated fields that include fields both inside and outside a repeating section
 * Enhancement: Add RTL form support for time fields.
 * Enhancement: Conditionally allow int, rather than string, comparison in Lookup fields.
 * Enhancement: Add frm_main_feedback hook to messages shown after draft and edit.
@@ -179,7 +179,7 @@ The field and form names and descriptions are all changed with in-place edit. Ju
 * Fix: Prevent Hidden fields from retaining "Clear default value when typing" setting when the field type changes.
 * Fix: Prevent errors when searching Dynamic fields with frm-search bar.
 * Fix: Do not send update emails when a draft is converted to an entry.
-* Fix: Do not show editable entry after submitting a draft.
+* Fix: Do not show editable entry after submitting a draft, even though users can save and continue partial submissions.
 * Fix: Ensure the setting to not save credit card values is respected for draft entries too.
 * Fix: Do not show full address if [x show="line_2"] is empty.
 * Fix: Fix undefined index error for section ID shortcode.
@@ -422,7 +422,7 @@ The field and form names and descriptions are all changed with in-place edit. Ju
 * Tweak: Use css to make the conditional logic field options shorter instead of truncating in the form builder
 * Tweak: Use function to convert field object to array during in_section migration.
 * Tweak: Avoid errors after Lookup field is deleted and other fields watched that Lookup field.
-* Fix: Do not delete values in frm_item_metas table for all fields selected in Create Post action (such as the conditional logic).
+* Fix: Do not delete values in frm_item_metas table for all fields selected in create front-end Post action (such as the conditional logic).
 * Fix: Show the correct option label for a blank value. Previously option label for "0" saved value was displaying.
 * Fix: Compact file upload field wasn't aligned with other fields in the row
 * Fix: Evaluate date strings the same way in view filters and inline conditions for date fields
@@ -1612,7 +1612,7 @@ The field and form names and descriptions are all changed with in-place edit. Ju
 * Added frm_text_block and frm_clearfix styling classes
 * Added force_balance_tags on the in-place-editing fields on the form builder page to prevent issues with adding bad HTML
 * PRO: Switch field IDs in email settings in duplicated form
-* PRO: Added option to save drafts
+* PRO: Added option to save drafts in forms. Users can save and continue partial subissions on the front-end.
 * PRO: Added phone format option, including an input mask if format is not a regular expression
 * PRO: Added exclude_fields to the form shortcode. Ex [formidable id=2 exclude_fields="25,26"]
 * PRO: Added styling reset button on styling page
@@ -1987,7 +1987,7 @@ The field and form names and descriptions are all changed with in-place edit. Ju
 = 1.06.01 =
 * Added option to customize the admin menu name
 * Added instructions to publish forms if no entries exist
-* Free only: Fixed form settings page to allow tabs to work
+* Free only: Fixed form maker settings page to allow tabs to work
 * Free only: Updated styling to align multiple checkboxes/radio buttons when the label is aligned left
 * PRO: Fixed issue with the default value getting lost from a hidden field when updating from the form settings page
 * PRO: Fixed conditionally hidden fields that are already considered hidden if inside a collapsible section
@@ -1996,9 +1996,9 @@ The field and form names and descriptions are all changed with in-place edit. Ju
 * PRO: Validate HTML for checkbox taxonomies
 
 = 1.06 =
-* User Interface improvements
-* Increased security and optimization
-* Moved the "automatic width" check box for drop-down select fields to free version
+* User Interface improvements to form builder
+* Increased security, spped, and optimization
+* Moved the "automatic width" check box for drop-down select fields to free form builder plugin
 * Moved email "From/Reply to" options to free WordPress form builder plugin
 * Fixed form preview page for form templates
 * Added German translation  (Andre Lisbert)
@@ -2008,7 +2008,7 @@ The field and form names and descriptions are all changed with in-place edit. Ju
 * Updated bulk edit options to change the dropdown in the form builder at the time the options are submitted
 * Fixed default values set to clear on click to work with values that include hard returns
 * Free only: Fixed hidden label CSS
-* PRO: Extended the conditional field logic
+* PRO: Extended the conditional field smart logic
 * PRO: Added graphs for fields over time, and other customizing options: x_axis, x_start, x_end, min, max, grid_color, show_key, and include_zero
 * PRO: Moved post creation settings from individual fields to the forms settings page
 * PRO: Added option in WP 3.3 to use Tiny MCE as the rich text editor
@@ -2030,7 +2030,7 @@ $[25 decimal=2 dec_point='.' thousands_sep=',']
 * PRO: Added a password field type
 * PRO: Conditionally remove HTML5 validation of form if default values are present
 * PRO: Added like parameter for inline conditions in custom displays. Example: [if 25 like="hello"]That field said hello[/if 25]
-* PRO: Allow fields set as custom post fields to be used for sorting custom displays
+* PRO: Allow contact form fields set as custom post fields to be used for sorting custom displays
 * PRO: Updated import to create the posts at the time of import
 * PRO: Unattach images from a post if they are replaced
 * PRO: Leave the date format in yyyy-dd-mm format in the CSV export
@@ -2047,24 +2047,24 @@ $[25 decimal=2 dec_point='.' thousands_sep=',']
 * PRO: Fixed bug preventing a newly created post from getting assigned to the user selected in the user ID dropdown if the selected user was not the user submitting the entry or was created with the registration add-on in the same form
 * PRO: Fixed bug preventing Data from entries "just show it" fields from showing a value in admin listing and view entry pages
 * PRO: Fixed bug causing the options to be empty if the data from entries options are limited to the current user and the form they are pulled from are creating posts
-* PRO: Fixed empty results in the [formresults] table for forms that create posts
-* PRO: When a blog is deleted in WP multi-site, delete database table rows related to copying forms from that blog
+* PRO: Fixed empty results in the [formresults] table for contact forms that create posts
+* PRO: When a blog is deleted in WP multi-site, delete database table rows related to copying contact forms from that blog
 * PRO: Don't strip out desired backslashes 
-* PRO: Updated to latest version of datepicker javascript
+* PRO: Updated to latest version of form datepicker javascript
 
 = 1.05.05 =
 * Added Dutch translation (Eric Horstman)
 * Fixed "Customize Form HTML" link issues some users were having
-* PRO: Load jQuery UI javascript for datepicker
+* PRO: Load jQuery UI javascript for form datepicker
 * PRO: Fixed custom display "where" options to work with multiple where rows
 
 = 1.05.04 =
 * Bulk edit and add radio, select, and check box choices
-* Added option to turn off HTML5 use in front-end forms
-* Added option to turn off user tracking
-* Scroll field choices in the form edit page if radio, check box, or select fields have more than 10 choices
+* Added option to turn off HTML5 use in front-end contact forms
+* Added option to turn off contact form user tracking
+* Scroll form field choices in the form edit page if radio, check box, or select fields have more than 10 choices
 * Free only: Removed export template link since the functionality behind it is only in Pro version
-* PRO: Added CSV entry import
+* PRO: Added CSV form entry import
 * PRO: Added file icons when editing an entry with a non-image file type attached
 * PRO: Added functionality for time fields set as unique so time options will be removed after a date is selected
 * PRO: Check wp_query if no matching GET or POST variable in the get shortcode
@@ -2072,20 +2072,20 @@ $[25 decimal=2 dec_point='.' thousands_sep=',']
 * PRO: Added functionality for a where option to be set to a taxonomy name ie [get param=tag]
 * PRO: Added functionality for a taxonomy to work with equals and not_equal in custom displays
 * PRO: Removed ajax error checking on the captcha field to fix the incorrect response messages
-* PRO: Fixed dependent data from entries fields to show the selected values on validation error and on edit
+* PRO: Fixed dependent data from entries form fields to show the selected values on validation error and on edit
 * PRO: Added `[frm-entry-update-field]` shortcode to update a single field in an entry with an ajax link
-* PRO: Added global styling option to set newly-added select fields to an automatic width
+* PRO: Added global styling option to set newly-added select form fields to an automatic width
 * PRO: Fixed calendar to allow fields mapped to a post to be used as the date field
 * PRO: Fixed conditionally hidden field options to work with post category and post status fields
-* PRO: Fixed custom displays to work automatically with pages instead of just post and custom post types
+* PRO: Fixed custom displays to work automatically with pages instead of just post and custom post types (CPTs)
 * PRO: Added functionality to frm-stats shortcode to work with posts and adds where options in key/id=value pairs. ex: [frm-stats id=x 25=hello] where 25 is the field ID and "Hello" is the value the other field in the form should have in order to display
-* PRO: Updated datepicker and timepicker to latest versions
-* PRO: Fixed bug preventing images for saving correctly if the form is set to create a post and the upload field is not set as a post field
+* PRO: Updated form datepicker and timepicker to latest versions
+* PRO: Fixed bug preventing images from saving correctly if the form is set to create a post and the upload field is not set as a post field
 * PRO: Added an "Insert Position" option to the custom display. This will prevent the custom display from being loaded multiple times per page, but will allow users to set when it shows up for themes like Thesis
 * PRO: Fixed number field to work with decimals and when ordering descending
 * PRO: Added a limit to the number of entries that show in the entry drop-down in places like the custom display page to prevent memory errors
 * PRO: Fixed field options to work better with symbols like &reg; in graphs
-* PRO: Automatically open collapsible heading if there is an error message inside it
+* PRO: Automatically open collapsible heading if there is a form error message inside it
 * PRO: Added type=deviation to the frm-stats shortcode. Example: [frm-stats id=x type=deviation]
 * PRO: Updated calculations to work with radio, scale, and drop-down fields
 * PRO: Fixed default values for check boxes
@@ -2094,32 +2094,32 @@ $[25 decimal=2 dec_point='.' thousands_sep=',']
 
 = 1.05.03 =
 * Updated user role options to work more reliably with WP 3.1
-* Added functionality for "Fit Select Boxes into SideBar" checkbox and field size in widget in free version
+* Added functionality for "Fit Select Boxes into SideBar" checkbox and field size in the free contact form widget
 * Moved reCaptcha error message to individual field options
 * Updated referring URL and added tracking throughout the visit
 * PRO: Added "clickable" option for use in custom displays to make email addresses and URLs into links. ex `[25 clickable=1]`
 * PRO: Added option to select the taxonomy type
-* PRO: Updated form styling to work better in IE
+* PRO: Updated contact form styling to work better in IE
 * PRO: Updated emails to work with Data from entries checkbox fields
 * PRO: Updated dependent Data from entries fields to work with checkboxes
 * PRO: Adjusted [date] and [time] values to adjust for WordPress timezone settings
 * PRO: Updated the way conditionally hidden fields save in the admin to prevent lingering dependencies
-* PRO: Fixed link to duplicate entries
+* PRO: Fixed link to duplicate entries in form maker
 * PRO: Updated file upload indicator to show up sooner
 * PRO: Added ajax delete to [deletelink] shortcode
-* PRO: Updated admin only fields to show for administrators on the front-end
+* PRO: Updated admin only fields to show for administrators on front-end forms
 * PRO: Added more attributes to the [display-frm-data] shortcode: limit="5", page_size="5", order_by="rand" or field ID, order="DESC" or "ASC"
 * PRO: Fixed custom display bulk delete
-* PRO: Updated WPMU copy features to work with WP 3.0+
-* PRO: Switched the email "add/or" drop-down to check boxes
+* PRO: Updated WPMU/multisite form copy features to work with WP 3.0+
+* PRO: Switched the email form "add/or" drop-down to check boxes
 * PRO: Added box for message to be displayed if there are no entries for a custom display
 * PRO: Added ajax edit options with [frm-entry-edit-link id=x label=Edit cancel=Cancel class='add_classes' page_id= prefix='frm_edit_' form_id=>y]. Also works with [editlink location=front] in custom displays.
 * PRO: Moved styling options into a tab on the settings page
 * PRO: Added limited "data from entries" options to the custom display "where" row. Entry keys or IDs can be used
 * PRO: Added unique validation for fields set as post fields
 * PRO: Removed error messages for required fields hidden via the shortcode options
-* PRO: Only return [deletelink] if user can delete the entry
-* PRO: Added order options to calendar displays
+* PRO: Only return [deletelink] if user has permission to delete the form entry
+* PRO: Added order options to WordPress event calendars
 * PRO: Updated custom display ordering to order correctly when using a 12 hour time field
 * PRO: Added taxonomy options to the "Tags" field
 * PRO: Added HTML escaping to text fields to allow HTML entities to remain as entities when editing
@@ -2135,11 +2135,11 @@ $[25 decimal=2 dec_point='.' thousands_sep=',']
 * PRO: Added functionality for ordering by post fields in a custom display
 
 = 1.05.01 = 
-* PRO: Fix custom display settings for posts
+* PRO: Fix custom display settings for posts/custom posts
 
 = 1.05.0 =
-* Moved a form widget from Pro into the free version
-* Updated some templates with fields aligned in a row. First and last name are on one line in the contact form template.
+* Moved a contact form widget from Pro to the free version
+* Updated some form templates with fields aligned in a row. First and last name are on one line in the contact form template.
 * Moved error messages underneath input fields
 * Added option to display labels "hidden" instead of just none. This makes aligning fields in a row with only one label easier
 * Additional XHTML compliance for multiple forms on one 
@@ -2147,13 +2147,13 @@ $[25 decimal=2 dec_point='.' thousands_sep=',']
 * Corrected the label position styling in the regular version
 * A little UI clean up
 * Added hook for recaptcha customizations
-* PRO: Added custom post type support
+* PRO: Added front-end custom post type support. Create front-end CPT posts. Most field types will integrate out-of-the-box with the Advanced Custom Fields (ACF) WordPress plugin.
 * PRO: Added hierarchy to post categories
 * PRO: Added a loading indicator while files are uploading
 * PRO: Added a `[default-message]` shortcode for use in the email message. Now you can add to the default message without completely replacing it 
 * PRO: Added default styling to the formresults shortcode, as well as additional shortcode options: `[formresults id=x style=1 no_entries="No Entries Found" fields="25,26,27"]`
 * PRO: Added localizations options to calendar
-* PRO: Fixed collapsible Section headings to work with updated HTML
+* PRO: Fixed collapsible Section headings to work with updated form builder HTML
 * PRO: Added functionality to admin search to check data from entries fields
 * PRO: Added start and end time options for time fields
 * PRO: Added 'type' to `[frm-graph]` shortcode to force 'pie' or 'bar': `[frm-graph id=x type=pie]`
@@ -2166,17 +2166,17 @@ $[25 decimal=2 dec_point='.' thousands_sep=',']
 * PRO: Fixed conditionally hidden fields bug some users were experiencing
 
 = 1.04.05 =
-* Added duplicate entry checks
-* Added a checkbox to mark fields required
-* Moved the duplicate field option into the free form builder version
-* Show the success message even if the form isn't displayed with it
+* Added duplicate entry checks for form submissions
+* Added a checkbox on form creator to mark form fields required
+* Moved the duplicate form field option into the free form builder
+* Show the contact form success message even if the form isn't displayed with it
 * Added option to not use dynamic stylesheet loading
-* PRO: Added option to resend email notification and autoresponse
+* PRO: Added option to resend form email notification and autoresponders
 * PRO: Fixes for editing forms with unique fields
-* PRO: Fixes for editing multi-paged forms with validation errors
-* PRO: Fixes for multiple multi-paged form on the same page
+* PRO: Fixes for editing multi-page forms with validation errors
+* PRO: Fixes for multiple multi-step forms on the same page
 * PRO: Added linked fields into the field drop-downs for inserting shortcodes and sending emails
-* PRO: Added field calculations
+* PRO: Added powerful calculated fields in forms
 * PRO: Allow hidden fields to be edited from the WordPress admin
 * PRO: Allow sections of fields to be hidden conditionally with the Section Header fields
 * PRO: Added user_id option to the `[frm-graph]` shortcode
