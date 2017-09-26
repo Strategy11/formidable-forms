@@ -4,7 +4,7 @@ Tags: contact form, form builder, custom form, forms, form, form maker, form cre
 Requires at least: 4.0
 Tested up to: 4.8.1
 Requires PHP: 5.2
-Stable tag: 2.04.01
+Stable tag: 2.05
 
 The best WordPress form plugin for contact forms, surveys and more. Make forms a breeze with a drag and drop form builder and form style generator.
 
@@ -143,9 +143,53 @@ The field and form names and descriptions are all changed with in-place edit. Ju
 [See more FAQs](https://formidableforms.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 2.05 =
+* New: Add option to not save IP address with entries for GPLD compliant forms
+* New: Add a new label position option: Inside. This option automatically uses the field labels as placeholders.
+* Enhancement: Prevent jumping when selecting field to edit on form builder.
+* Enhancement: Trigger frm_after_entry_processed hook after save when the action is set to show a message. This affects deleting entries automatically.
+* Enhancement: Allow text colors like "red" in frm-show-entry.
+* Enhancement: Increase minimum WP version requirement to 4.0.
+* Enhancement: Add array_key option to entry shortcode to set whether an ID or key is used when an array is returned.
+* Fix: Restore Default Plain button for filling email content.
+* Fix: Set dependency on reCaptcha script to ensure it loads after the Formidable script when defer fails.
+* Fix: Add frm_entries_list_query hook to filter queries on the Formidable -> Entries page.
+* Fix: Improve field duplication on form builder.
+* Fix: Remove deprecated notification settings on import.
+* Fix: Allow multiple invisible recaptchas to work on the same page.
+* Fix: Make sure licenses tab loads if navigating to it directly.
+* **Pro Version Forms**
+* New: Add Repeat Limit option to Repeatable Sections.
+* New: Add target="_blank" option to file upload shortcodes with new_page=1 param.
+* New: Add frm_before_entries_table hook to display extar content on the Formidable -> Entries page.
+* New: Add frm_lookup_is_current_user_filter_needed filter to allow the options in a lookup field to be conditionally limited.
+* Enhancement: Allow repeating fields to be excluded from show entry shortcode.
+* Enhancement: Improve field calculations that include fields inside and outside a repeating section
+* Enhancement: Add RTL form support for time fields.
+* Enhancement: Conditionally allow int, rather than string, comparison in Lookup fields.
+* Enhancement: Add frm_main_feedback hook to messages shown after draft and edit.
+* Enhancement: Display zip code on the same line with city and state when an address is displayed.
+* Enhancement: Improve searching Dynamic field values on Entries tab
+* Fix: Improve compatibiliy with page builders and membership plugins. Don't run the_content filter on the View content. Instead, filter the content by calling those functions directly.
+* Fix: Delete temporary files after no less than 3 hours, regardless of time zone.
+* Fix: Append the media meta_query rather than replacing it. This resolves a conflict with files in WooCommerce.
+* Fix: Trim logic and actual value in conditional logic comparison.
+* Fix: Improve layout of confirmation field with a left label.
+* Fix: Allow a default value for checkbox fields on any form page.
+* Fix: Prevent Hidden fields from retaining "Clear default value when typing" setting when the field type changes.
+* Fix: Prevent errors when searching Dynamic fields with frm-search bar.
+* Fix: Do not send update emails when a draft is converted to an entry.
+* Fix: Do not show editable entry after submitting a draft.
+* Fix: Ensure the setting to not save credit card values is respected for draft entries too.
+* Fix: Do not show full address if [x show="line_2"] is empty.
+* Fix: Fix undefined index error for section ID shortcode.
+* Fix: Prevent jQuery from being loaded an extra time with edit in-place.
+* Fix: Correctly validate required field in embedded form on multi-page form.
+* Fix: Error messages were appearing in some server configurations when credit card numbers includes spaces.
+
 = 2.04.01 =
 * Fix: Prevent php warning when 'show' attr is missing.
-* **Pro Version Forms** *
+* **Pro Version Forms**
 * Fix: Prevent get_post_field() call on null.
 
 = 2.04 =
