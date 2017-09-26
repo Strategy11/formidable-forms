@@ -409,7 +409,7 @@ class FrmXMLHelper {
 
 		if ( $f['type'] == 'form' || ( $f['type'] == 'divider' && FrmField::is_option_true( $f['field_options'], 'repeat' ) ) ) {
 			if ( FrmField::is_option_true( $f['field_options'], 'form_select' ) ) {
-				$form_select = $f['field_options']['form_select'];
+				$form_select = (int) $f['field_options']['form_select'];
 				if ( isset( $imported['forms'][ $form_select ] ) ) {
 					$f['field_options']['form_select'] = $imported['forms'][ $form_select ];
 				}

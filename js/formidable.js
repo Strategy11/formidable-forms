@@ -3099,13 +3099,17 @@ function frmFrontFormJS(){
 			return null;
 		}
 
+		var fields = null;
 		var container = field.triggerField.closest('.frm_repeat_sec, .frm_repeat_inline, .frm_repeat_grid');
 		if ( container.length ) {
 			var siblingFieldCall = field.thisFieldCall.replace('[id=', '[id^=');
-
-			return container.find(siblingFieldCall);
+			fields = container.find(siblingFieldCall);
+		} else {
+			// the trigger is not in the repeating section
+			fields = jQuery(field.thisFieldCall);
 		}
-		return null;
+
+		return fields;
 	}
 
 	function getOptionValue( thisField, currentOpt ) {

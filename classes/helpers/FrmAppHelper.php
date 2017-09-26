@@ -1793,6 +1793,7 @@ class FrmAppHelper {
 				'private'           => __( 'Private' ),
 				'jquery_ui_url'     => self::jquery_ui_base_url(),
 				'no_licenses'       => __( 'No new licenses were found', 'formidable' ),
+				'repeat_limit_min'  => __( 'Please enter a Repeat Limit that is greater than 1.', 'formidable' ),
 			) );
 		}
 	}
