@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Formidable v2.04\n"
+"Project-Id-Version: Formidable v2.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-01 03:07+0000\n"
-"PO-Revision-Date: Wed Aug 16 2017 17:00:16 GMT-0700 (PDT)\n"
+"PO-Revision-Date: Tue Sep 26 2017 16:08:46 GMT-0600 (MDT)\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: French (France)\n"
@@ -34,27 +34,39 @@ msgstr ""
 msgid "Calendar Date"
 msgstr ""
 
-#: ../classes/helpers/FrmAppHelper.php:1746
+#: ../classes/helpers/FrmAppHelper.php:1754
 msgid "No results match"
 msgstr ""
 
-#: ../classes/helpers/FrmAppHelper.php:1747
+#: ../classes/helpers/FrmAppHelper.php:1755
 msgid "That file looks like Spam."
 msgstr ""
 
-#: ../classes/helpers/FrmAppHelper.php:1748
+#: ../classes/helpers/FrmAppHelper.php:1756
 msgid "Please complete the preceding required fields before uploading a file."
 msgstr ""
 
-#: ../classes/helpers/FrmAppHelper.php:1775
+#: ../classes/helpers/FrmAppHelper.php:1783
 msgid ""
 "In certain browsers (e.g. Firefox) text will not display correctly if the "
 "field height is too small relative to the field padding and text size. "
 "Please increase your field height or decrease your field padding."
 msgstr ""
 
-#: ../classes/helpers/FrmEntriesListHelper.php:81
+#: ../classes/helpers/FrmAppHelper.php:1792
+msgid "Please enter a Repeat Limit that is greater than 1."
+msgstr ""
+
+#: ../classes/helpers/FrmEntriesListHelper.php:83
 msgid "Filter"
+msgstr ""
+
+#: ../classes/helpers/FrmStylesHelper.php:108
+msgid "inside"
+msgstr ""
+
+#: ../classes/helpers/FrmStylesHelper.php:120
+msgid "Placeholder inside the field"
 msgstr ""
 
 #: ../classes/models/FrmAddon.php:318
@@ -84,11 +96,15 @@ msgstr ""
 msgid "Action Triggers"
 msgstr ""
 
-#: ../classes/views/frm-forms/add_field.php:249
+#: ../classes/views/frm-form-actions/_email_settings.php:62
+msgid "Append Browser and Referring URL to message"
+msgstr ""
+
+#: ../classes/views/frm-forms/add_field.php:252
 msgid "ReCaptcha Type"
 msgstr ""
 
-#: ../classes/views/frm-forms/add_field.php:255
+#: ../classes/views/frm-forms/add_field.php:258
 msgid "Normal"
 msgstr ""
 
@@ -118,6 +134,14 @@ msgstr ""
 
 #: ../classes/views/frm-settings/form.php:100
 msgid "Browser Default"
+msgstr ""
+
+#: ../classes/views/frm-settings/form.php:177
+msgid "IP storage"
+msgstr ""
+
+#: ../classes/views/frm-settings/form.php:180
+msgid "Do not store IPs with form submissions. Check this box if you are in the UK."
 msgstr ""
 
 #: ../classes/views/frm-settings/license_box.php:5
@@ -152,65 +176,65 @@ msgid ""
 "page%3$s."
 msgstr ""
 
-#: ../pro/classes/controllers/FrmProEntriesController.php:1686
+#: ../pro/classes/controllers/FrmProEntriesController.php:1729
 msgid ""
 "There are no matching fields. Please check your formresults shortcode to "
 "make sure you are using the correct form and field IDs."
 msgstr ""
 
-#: ../pro/classes/controllers/FrmProEntriesController.php:2478
+#: ../pro/classes/controllers/FrmProEntriesController.php:2521
 msgid "You are missing options in your shortcode. A field_id is required."
 msgstr ""
 
-#: ../pro/classes/controllers/FrmProFieldsController.php:726 ..
+#: ../pro/classes/controllers/FrmProFieldsController.php:720 ..
 #: pro/classes/views/frmpro-fields/options-form-before.php:31
 msgid "Select a taxonomy on the Form Actions tab of the Form Settings page"
 msgstr ""
 
-#: ../pro/classes/controllers/FrmProFieldsController.php:1160 ..
-#: pro/classes/controllers/FrmProFieldsController.php:1166
+#: ../pro/classes/controllers/FrmProFieldsController.php:1154 ..
+#: pro/classes/controllers/FrmProFieldsController.php:1160
 msgid "Show form uploads"
 msgstr ""
 
-#: ../pro/classes/controllers/FrmProFieldsController.php:1165
+#: ../pro/classes/controllers/FrmProFieldsController.php:1159
 msgid "Hide form uploads"
 msgstr ""
 
-#: ../pro/classes/controllers/FrmProFormsController.php:307
+#: ../pro/classes/controllers/FrmProFormsController.php:316
 msgid "Author Link"
 msgstr ""
 
-#: ../pro/classes/controllers/FrmProFormsController.php:449
+#: ../pro/classes/controllers/FrmProFormsController.php:458
 msgid "Select a form and field:"
 msgstr ""
 
-#: ../pro/classes/controllers/FrmProFormsController.php:468
+#: ../pro/classes/controllers/FrmProFormsController.php:477
 msgid "Horizontal Bar"
 msgstr ""
 
-#: ../pro/classes/controllers/FrmProFormsController.php:472
+#: ../pro/classes/controllers/FrmProFormsController.php:481
 msgid "Scatter"
 msgstr ""
 
-#: ../pro/classes/controllers/FrmProFormsController.php:473
+#: ../pro/classes/controllers/FrmProFormsController.php:482
 msgid "Histogram"
 msgstr ""
 
-#: ../pro/classes/controllers/FrmProFormsController.php:474
+#: ../pro/classes/controllers/FrmProFormsController.php:483
 msgid "Table"
 msgstr ""
 
-#: ../pro/classes/controllers/FrmProFormsController.php:476
+#: ../pro/classes/controllers/FrmProFormsController.php:485
 msgid "Geographical Map"
 msgstr ""
 
-#: ../pro/classes/controllers/FrmProFormsController.php:497
+#: ../pro/classes/controllers/FrmProFormsController.php:506
 msgid ""
 "When using dates for the x_axis parameter, you can include dates with a zero "
 "value."
 msgstr ""
 
-#: ../pro/classes/controllers/FrmProFormsController.php:498
+#: ../pro/classes/controllers/FrmProFormsController.php:507
 msgid "Include a legend with the graph"
 msgstr ""
 
@@ -331,6 +355,12 @@ msgstr ""
 
 #: ../pro/classes/views/frmpro-fields/back-end/field-time.php:2
 msgid "Use FrmProTimeField::show_time_field"
+msgstr ""
+
+#: ../pro/classes/views/frmpro-fields/back-end/repeat-options.php:15
+msgid ""
+"The maximum number of times the end user is allowed to duplicate this "
+"section of fields in one entry"
 msgstr ""
 
 #: ../pro/classes/views/frmpro-fields/field-values.php:3
@@ -550,7 +580,7 @@ msgstr "Support"
 #: ../classes/controllers/FrmEntriesController.php:72 ..
 #: classes/controllers/FrmFormsController.php:718 ../classes/views/frm-
 #: entries/form.php:46 ../classes/views/frm-entries/sidebar-shared.php:29 ..
-#: pro/classes/helpers/FrmProFieldsHelper.php:2634 ..
+#: pro/classes/helpers/FrmProFieldsHelper.php:2671 ..
 #: pro/classes/views/xml/map_csv_fields.php:57 ..
 #: pro/classes/views/xml/map_csv_fields.php:57
 msgid "Entry Key"
@@ -571,7 +601,7 @@ msgstr "Créé par"
 #: ../classes/controllers/FrmEntriesController.php:82 ..
 #: pro/classes/helpers/FrmProEntriesListHelper.php:61 ..
 #: pro/classes/helpers/FrmProEntriesListHelper.php:72 ..
-#: pro/classes/helpers/FrmProFieldsHelper.php:2637 ..
+#: pro/classes/helpers/FrmProFieldsHelper.php:2674 ..
 #: pro/classes/views/displays/_calendar_options.php:4 ..
 #: pro/classes/views/displays/_calendar_options.php:16 ..
 #: pro/classes/views/displays/order_row.php:4 ..
@@ -580,18 +610,18 @@ msgid "Entry creation date"
 msgstr "Date de création de l'entrée"
 
 #: ../classes/controllers/FrmEntriesController.php:83 ..
-#: pro/classes/helpers/FrmProFieldsHelper.php:2638 ..
+#: pro/classes/helpers/FrmProFieldsHelper.php:2675 ..
 #: pro/classes/views/displays/_calendar_options.php:5 ..
 #: pro/classes/views/displays/_calendar_options.php:17 ..
 #: pro/classes/views/displays/order_row.php:5
 msgid "Entry update date"
 msgstr "Date de mise à jour de l'entrée"
 
-#: ../classes/controllers/FrmEntriesController.php:328
+#: ../classes/controllers/FrmEntriesController.php:334
 msgid "Your import is complete"
 msgstr "Votre importation est terminée"
 
-#: ../classes/controllers/FrmEntriesController.php:338
+#: ../classes/controllers/FrmEntriesController.php:344
 #, php-format
 msgid ""
 "This form is in the trash and is scheduled to be deleted permanently in %s "
@@ -600,20 +630,20 @@ msgstr ""
 "Ce formulaire est à la poubelle et est planifié pour être définitivement "
 "supprimé en %s avec toutes les entrées."
 
-#: ../classes/controllers/FrmEntriesController.php:357
+#: ../classes/controllers/FrmEntriesController.php:363
 msgid "You are trying to view an entry that does not exist."
 msgstr "Vous essayez de visualiser une entrée qui n’existe pas."
 
-#: ../classes/controllers/FrmEntriesController.php:386
+#: ../classes/controllers/FrmEntriesController.php:392
 msgid "Entry was Successfully Destroyed"
 msgstr "Entrée supprimée avec succès"
 
-#: ../classes/controllers/FrmEntriesController.php:420
+#: ../classes/controllers/FrmEntriesController.php:426
 msgid "Entries were Successfully Destroyed"
 msgstr "Entrées supprimées avec succès"
 
-#: ../classes/controllers/FrmEntriesController.php:423 ..
-#: pro/classes/controllers/FrmProEntriesController.php:392
+#: ../classes/controllers/FrmEntriesController.php:429 ..
+#: pro/classes/controllers/FrmProEntriesController.php:411
 msgid "No entries were specified"
 msgstr "Aucune entrée spécifiée"
 
@@ -713,8 +743,8 @@ msgstr "Type"
 #: classes/controllers/FrmFormsController.php:549 ..
 #: classes/helpers/FrmCSVExportHelper.php:118 ..
 #: pro/classes/controllers/FrmProDisplaysController.php:142 ..
-#: pro/classes/helpers/FrmProFieldsHelper.php:2655 ..
-#: pro/classes/helpers/FrmProFieldsHelper.php:2671 ..
+#: pro/classes/helpers/FrmProFieldsHelper.php:2692 ..
+#: pro/classes/helpers/FrmProFieldsHelper.php:2708 ..
 #: pro/classes/views/displays/mb_advanced.php:88
 msgid "Key"
 msgstr "Clé"
@@ -782,9 +812,9 @@ msgstr "N'ajouter automatiquement aucun saut de paragraphe ou de ligne"
 
 #: ../classes/controllers/FrmFormsController.php:717 ../classes/views/frm-
 #: entries/sidebar-shared.php:23 ../pro/classes/controllers/FrmProFormsController.
-#: php:574 ../pro/classes/helpers/FrmProEntriesListHelper.php:62 ..
+#: php:583 ../pro/classes/helpers/FrmProEntriesListHelper.php:62 ..
 #: pro/classes/helpers/FrmProEntriesListHelper.php:73 ..
-#: pro/classes/helpers/FrmProFieldsHelper.php:2633 ..
+#: pro/classes/helpers/FrmProFieldsHelper.php:2670 ..
 #: pro/classes/views/displays/order_row.php:3 ..
 #: pro/classes/views/displays/where_row.php:6 ..
 #: pro/classes/views/xml/map_csv_fields.php:56 ..
@@ -794,14 +824,14 @@ msgstr "ID de l'entrée"
 
 #: ../classes/controllers/FrmFormsController.php:719 ..
 #: pro/classes/controllers/FrmProFormsController.php:82 ..
-#: pro/classes/helpers/FrmProFieldsHelper.php:2635 ..
+#: pro/classes/helpers/FrmProFieldsHelper.php:2672 ..
 #: pro/classes/views/displays/where_row.php:8 ..
 #: pro/classes/views/xml/map_csv_fields.php:49
 msgid "Post ID"
 msgstr "ID d'article"
 
 #: ../classes/controllers/FrmFormsController.php:720 ..
-#: pro/classes/helpers/FrmProFieldsHelper.php:2636
+#: pro/classes/helpers/FrmProFieldsHelper.php:2673
 msgid "User IP"
 msgstr "IP Utilisateur"
 
@@ -814,12 +844,12 @@ msgid "Entry updated"
 msgstr "Entrée mise à jour"
 
 #: ../classes/controllers/FrmFormsController.php:724 ..
-#: pro/classes/helpers/FrmProFieldsHelper.php:2693
+#: pro/classes/helpers/FrmProFieldsHelper.php:2730
 msgid "Site URL"
 msgstr "URL de site"
 
 #: ../classes/controllers/FrmFormsController.php:725 ..
-#: pro/classes/helpers/FrmProFieldsHelper.php:2694
+#: pro/classes/helpers/FrmProFieldsHelper.php:2731
 msgid "Site Name"
 msgstr "Nom du site"
 
@@ -874,7 +904,7 @@ msgstr "Éditer les formulaires"
 #: php:24 ../classes/views/shared/form-nav.php:20 ../classes/views/styles/manage.
 #: php:31 ../classes/views/xml/import_form.php:85 ..
 #: pro/classes/controllers/FrmProDisplaysController.php:101 ..
-#: pro/classes/controllers/FrmProFormsController.php:454 ..
+#: pro/classes/controllers/FrmProFormsController.php:463 ..
 #: pro/classes/views/xml/csv_opts.php:13
 msgid "(no title)"
 msgstr "(sans titre)"
@@ -921,12 +951,12 @@ msgstr "Style"
 #: classes/helpers/FrmFormsListHelper.php:306 ../classes/views/frm-
 #: entries/sidebar-shared.php:12 ../classes/views/frm-forms/_publish_box.php:67 ..
 #: pro/classes/controllers/FrmProDisplaysController.php:38 ..
-#: pro/classes/controllers/FrmProEntriesController.php:1644 ..
-#: pro/classes/controllers/FrmProEntriesController.php:1854 ..
-#: pro/classes/controllers/FrmProEntriesController.php:2374 ..
+#: pro/classes/controllers/FrmProEntriesController.php:1687 ..
+#: pro/classes/controllers/FrmProEntriesController.php:1897 ..
+#: pro/classes/controllers/FrmProEntriesController.php:2417 ..
 #: pro/classes/helpers/FrmProAppHelper.php:228 ..
 #: pro/classes/helpers/FrmProEntriesHelper.php:256 ..
-#: pro/classes/models/FrmProContent.php:248
+#: pro/classes/models/FrmProContent.php:251
 msgid "Edit"
 msgstr "Modifier"
 
@@ -1019,127 +1049,127 @@ msgstr "Veuillez sélectionner un formulaire"
 msgid "There are no entries for that form."
 msgstr "Il n’y a aucune entrée pour ce formulaire."
 
-#: ../classes/helpers/FrmAppHelper.php:603
+#: ../classes/helpers/FrmAppHelper.php:611
 msgid "View Forms and Templates"
 msgstr "Voir les formulaires et les modèles"
 
-#: ../classes/helpers/FrmAppHelper.php:604
+#: ../classes/helpers/FrmAppHelper.php:612
 msgid "Add/Edit Forms and Templates"
 msgstr "Ajout/Edition de formulaires et Modèles"
 
-#: ../classes/helpers/FrmAppHelper.php:605
+#: ../classes/helpers/FrmAppHelper.php:613
 msgid "Delete Forms and Templates"
 msgstr "Supprimer les formulaires et modèles"
 
-#: ../classes/helpers/FrmAppHelper.php:606
+#: ../classes/helpers/FrmAppHelper.php:614
 msgid "Access this Settings Page"
 msgstr "Accédez à cette page de configuration"
 
-#: ../classes/helpers/FrmAppHelper.php:607
+#: ../classes/helpers/FrmAppHelper.php:615
 msgid "View Entries from Admin Area"
 msgstr "Voir les entrées de la Zone d'administration"
 
-#: ../classes/helpers/FrmAppHelper.php:608
+#: ../classes/helpers/FrmAppHelper.php:616
 msgid "Delete Entries from Admin Area"
 msgstr "Supprimer les entrées de la Zone d'administration"
 
-#: ../classes/helpers/FrmAppHelper.php:615
+#: ../classes/helpers/FrmAppHelper.php:623
 msgid "Add Entries from Admin Area"
 msgstr "Ajouter des données de la zone d'administration:"
 
-#: ../classes/helpers/FrmAppHelper.php:616
+#: ../classes/helpers/FrmAppHelper.php:624
 msgid "Edit Entries from Admin Area"
 msgstr "Modifier les entrées de la Zone d'administration"
 
-#: ../classes/helpers/FrmAppHelper.php:617
+#: ../classes/helpers/FrmAppHelper.php:625
 msgid "View Reports"
 msgstr "Voir les rapports"
 
-#: ../classes/helpers/FrmAppHelper.php:618
+#: ../classes/helpers/FrmAppHelper.php:626
 msgid "Add/Edit Views"
 msgstr "Ajout/édition des vues"
 
-#: ../classes/helpers/FrmAppHelper.php:1072 ../classes/helpers/FrmFieldsHelper.
-#: php:176 ../pro/classes/controllers/FrmProFieldsController.php:1489
+#: ../classes/helpers/FrmAppHelper.php:1080 ../classes/helpers/FrmFieldsHelper.
+#: php:176 ../pro/classes/controllers/FrmProFieldsController.php:1487
 #, php-format
 msgid "%s is invalid"
 msgstr "%s est non valide"
 
-#: ../classes/helpers/FrmAppHelper.php:1253
+#: ../classes/helpers/FrmAppHelper.php:1261
 msgid "at"
 msgstr "à"
 
-#: ../classes/helpers/FrmAppHelper.php:1302 ../classes/helpers/FrmAppHelper.php:
-#: 1321
+#: ../classes/helpers/FrmAppHelper.php:1310 ../classes/helpers/FrmAppHelper.php:
+#: 1329
 msgid "seconds"
 msgstr "secondes"
 
-#: ../classes/helpers/FrmAppHelper.php:1315 ..
-#: pro/classes/controllers/FrmProDisplaysController.php:742
+#: ../classes/helpers/FrmAppHelper.php:1323 ..
+#: pro/classes/controllers/FrmProDisplaysController.php:741
 msgid "year"
 msgstr "année"
 
-#: ../classes/helpers/FrmAppHelper.php:1315 ..
-#: pro/classes/controllers/FrmProDisplaysController.php:742
+#: ../classes/helpers/FrmAppHelper.php:1323 ..
+#: pro/classes/controllers/FrmProDisplaysController.php:741
 msgid "years"
 msgstr "années"
 
-#: ../classes/helpers/FrmAppHelper.php:1316 ..
-#: pro/classes/controllers/FrmProDisplaysController.php:742
+#: ../classes/helpers/FrmAppHelper.php:1324 ..
+#: pro/classes/controllers/FrmProDisplaysController.php:741
 msgid "month"
 msgstr "mois"
 
-#: ../classes/helpers/FrmAppHelper.php:1316 ..
-#: pro/classes/controllers/FrmProDisplaysController.php:742
+#: ../classes/helpers/FrmAppHelper.php:1324 ..
+#: pro/classes/controllers/FrmProDisplaysController.php:741
 msgid "months"
 msgstr "mois"
 
-#: ../classes/helpers/FrmAppHelper.php:1317 ..
-#: pro/classes/controllers/FrmProDisplaysController.php:742
+#: ../classes/helpers/FrmAppHelper.php:1325 ..
+#: pro/classes/controllers/FrmProDisplaysController.php:741
 msgid "week"
 msgstr "semaine"
 
-#: ../classes/helpers/FrmAppHelper.php:1317 ..
-#: pro/classes/controllers/FrmProDisplaysController.php:742
+#: ../classes/helpers/FrmAppHelper.php:1325 ..
+#: pro/classes/controllers/FrmProDisplaysController.php:741
 msgid "weeks"
 msgstr "semaines"
 
-#: ../classes/helpers/FrmAppHelper.php:1318 ..
-#: pro/classes/controllers/FrmProDisplaysController.php:742
+#: ../classes/helpers/FrmAppHelper.php:1326 ..
+#: pro/classes/controllers/FrmProDisplaysController.php:741
 msgid "day"
 msgstr "jour"
 
-#: ../classes/helpers/FrmAppHelper.php:1318 ..
-#: pro/classes/controllers/FrmProDisplaysController.php:742
+#: ../classes/helpers/FrmAppHelper.php:1326 ..
+#: pro/classes/controllers/FrmProDisplaysController.php:741
 msgid "days"
 msgstr "jours"
 
-#: ../classes/helpers/FrmAppHelper.php:1319
+#: ../classes/helpers/FrmAppHelper.php:1327
 msgid "hour"
 msgstr "heure"
 
-#: ../classes/helpers/FrmAppHelper.php:1319 ../pro/classes/views/frmpro-
-#: forms/add_form_options.php:39
+#: ../classes/helpers/FrmAppHelper.php:1327 ../pro/classes/views/frmpro-
+#: forms/add_form_options.php:41
 msgid "hours"
 msgstr "heures"
 
-#: ../classes/helpers/FrmAppHelper.php:1320
+#: ../classes/helpers/FrmAppHelper.php:1328
 msgid "minute"
 msgstr "minute"
 
-#: ../classes/helpers/FrmAppHelper.php:1320
+#: ../classes/helpers/FrmAppHelper.php:1328
 msgid "minutes"
 msgstr "minutes"
 
-#: ../classes/helpers/FrmAppHelper.php:1321
+#: ../classes/helpers/FrmAppHelper.php:1329
 msgid "second"
 msgstr "seconde"
 
-#: ../classes/helpers/FrmAppHelper.php:1529
+#: ../classes/helpers/FrmAppHelper.php:1537
 msgid "Give this action a label for easy reference."
 msgstr "Donnez à cette action une étiquette facile à memoriser."
 
-#: ../classes/helpers/FrmAppHelper.php:1530
+#: ../classes/helpers/FrmAppHelper.php:1538
 msgid ""
 "Add one or more recipient addresses separated by a \",\".  FORMAT: Name "
 "<name@email.com> or name@email.com.  [admin_email] is the address set in WP "
@@ -1149,7 +1179,7 @@ msgstr ""
 "FORMAT: Nom <name@email.com> ou name@email.com. [admin_email] est l'adresse "
 "indiquée dans les paramètres généraux WP."
 
-#: ../classes/helpers/FrmAppHelper.php:1531
+#: ../classes/helpers/FrmAppHelper.php:1539
 msgid ""
 "Add CC addresses separated by a \",\".  FORMAT: Name <name@email.com> or "
 "name@email.com."
@@ -1157,7 +1187,7 @@ msgstr ""
 "Ajoutez les adresses CC séparés par un \",\". FORMAT: Nom <name@email.com> ou "
 "name@email.com."
 
-#: ../classes/helpers/FrmAppHelper.php:1532
+#: ../classes/helpers/FrmAppHelper.php:1540
 msgid ""
 "Add BCC addresses separated by a \",\".  FORMAT: Name <name@email.com> or "
 "name@email.com."
@@ -1165,7 +1195,7 @@ msgstr ""
 "Ajoutez les adresses BCC séparés par un \",\". FORMAT: Nom <name@email.com> ou "
 "name@email.com."
 
-#: ../classes/helpers/FrmAppHelper.php:1533
+#: ../classes/helpers/FrmAppHelper.php:1541
 msgid ""
 "If you would like a different reply to address than the \"from\" address, add "
 "a single address here.  FORMAT: Name <name@email.com> or name@email.com."
@@ -1174,7 +1204,7 @@ msgstr ""
 "ajouter une seule adresse ici. FORMAT: Nom <name@email.com> ou name@email."
 "com."
 
-#: ../classes/helpers/FrmAppHelper.php:1534
+#: ../classes/helpers/FrmAppHelper.php:1542
 msgid ""
 "Enter the name and/or email address of the sender. FORMAT: John Bates "
 "<john@example.com> or john@example.com."
@@ -1182,7 +1212,7 @@ msgstr ""
 "Entrez le nom et/ou adresse e-mail de l'expéditeur. FORMAT: John Bates "
 "<john@example.com> ou john@example.com."
 
-#: ../classes/helpers/FrmAppHelper.php:1535
+#: ../classes/helpers/FrmAppHelper.php:1543
 #, php-format
 msgid ""
 "If you leave the subject blank, the default will be used: %1$s Form "
@@ -1191,36 +1221,36 @@ msgstr ""
 "Si vous laissez l'objet vide, la valeur par défaut sera utilisée:%1$s "
 "Formulaire de %2$s"
 
-#: ../classes/helpers/FrmAppHelper.php:1712 ../classes/helpers/FrmAppHelper.php:
-#: 1779
+#: ../classes/helpers/FrmAppHelper.php:1720 ../classes/helpers/FrmAppHelper.php:
+#: 1787
 msgid "Please wait while your site updates."
 msgstr "Veuillez patienter pendant que votre site se met à jour."
 
-#: ../classes/helpers/FrmAppHelper.php:1713
+#: ../classes/helpers/FrmAppHelper.php:1721
 msgid "Are you sure you want to deauthorize Formidable Forms on this site?"
 msgstr "Êtes-vous sûr de vouloir retirer l'autorisation Formidable Forms de ce site?"
 
-#: ../classes/helpers/FrmAppHelper.php:1715 ../classes/helpers/FrmAppHelper.php:
-#: 1741
+#: ../classes/helpers/FrmAppHelper.php:1723 ../classes/helpers/FrmAppHelper.php:
+#: 1749
 msgid "Loading&hellip;"
 msgstr "Chargement&hellip;"
 
-#: ../classes/helpers/FrmAppHelper.php:1742 ..
-#: pro/classes/controllers/FrmProNestedFormsController.php:687 ..
+#: ../classes/helpers/FrmAppHelper.php:1750 ..
+#: pro/classes/controllers/FrmProNestedFormsController.php:777 ..
 #: pro/classes/helpers/FrmProFieldsHelper.php:694 ..
 #: pro/classes/views/styles/_sample_form.php:29
 msgid "Remove"
 msgstr "Supprimer"
 
-#: ../classes/helpers/FrmAppHelper.php:1745 ../classes/helpers/FrmCSVExportHelper.
-#: php:117 ../pro/classes/helpers/FrmProFieldsHelper.php:2654 ..
-#: pro/classes/helpers/FrmProFieldsHelper.php:2670 ..
+#: ../classes/helpers/FrmAppHelper.php:1753 ../classes/helpers/FrmCSVExportHelper.
+#: php:117 ../pro/classes/helpers/FrmProFieldsHelper.php:2691 ..
+#: pro/classes/helpers/FrmProFieldsHelper.php:2707 ..
 #: pro/classes/views/displays/mb_advanced.php:87 ../pro/classes/views/frmpro-
 #: entries/table.php:5
 msgid "ID"
 msgstr "ID"
 
-#: ../classes/helpers/FrmAppHelper.php:1754
+#: ../classes/helpers/FrmAppHelper.php:1762
 msgid ""
 "Are you sure you want to do this? Clicking OK will delete all forms, form "
 "data, and all other Formidable data. There is no Undo."
@@ -1229,91 +1259,91 @@ msgstr ""
 "formulaires, les données de formulaire et toutes les autres données de "
 "Formidable. Il n'y a pas d'annulation possible."
 
-#: ../classes/helpers/FrmAppHelper.php:1755 ../classes/views/frm-forms/add_field.
+#: ../classes/helpers/FrmAppHelper.php:1763 ../classes/views/frm-forms/add_field.
 #: php:81 ../classes/views/frm-forms/add_field.php:94 ../classes/views/frm-
 #: forms/form.php:13 ../pro/classes/views/combo-fields/inplace-sub-label.php:2
 msgid "(Click to add description)"
 msgstr "(Cliquez pour ajouter une description)"
 
-#: ../classes/helpers/FrmAppHelper.php:1756 ../classes/views/frm-fields/single-
+#: ../classes/helpers/FrmAppHelper.php:1764 ../classes/views/frm-fields/single-
 #: option.php:7 ../classes/views/frm-fields/single-option.php:11 ..
 #: pro/classes/views/frmpro-fields/other-option.php:10
 msgid "(Blank)"
 msgstr "(Vide)"
 
-#: ../classes/helpers/FrmAppHelper.php:1757 ../classes/views/frm-forms/add_field.
+#: ../classes/helpers/FrmAppHelper.php:1765 ../classes/views/frm-forms/add_field.
 #: php:63 ../pro/classes/views/frmpro-fields/field-selection.php:12 ..
 #: pro/classes/views/lookup-fields/back-end/watch-row.php:10
 msgid "(no label)"
 msgstr "(sans étiquette)"
 
-#: ../classes/helpers/FrmAppHelper.php:1758
+#: ../classes/helpers/FrmAppHelper.php:1766
 msgid "Saving"
 msgstr "Enregistrement"
 
-#: ../classes/helpers/FrmAppHelper.php:1759
+#: ../classes/helpers/FrmAppHelper.php:1767
 msgid "Saved"
 msgstr "Enregistré"
 
-#: ../classes/helpers/FrmAppHelper.php:1760 ../classes/views/frm-
+#: ../classes/helpers/FrmAppHelper.php:1768 ../classes/views/frm-
 #: forms/_publish_box.php:74
 msgid "OK"
 msgstr "OK"
 
-#: ../classes/helpers/FrmAppHelper.php:1761 ../classes/views/frm-
+#: ../classes/helpers/FrmAppHelper.php:1769 ../classes/views/frm-
 #: forms/_publish_box.php:75 ../pro/classes/controllers/FrmProEddController.php:
-#: 185 ../pro/classes/controllers/FrmProEntriesController.php:2374 ..
+#: 185 ../pro/classes/controllers/FrmProEntriesController.php:2417 ..
 #: pro/classes/views/frmpro-entries/sidebar-new.php:14 ..
 #: pro/classes/views/frmpro-entries/sidebar-new.php:14 ..
 #: pro/classes/views/frmpro-form-actions/_custom_field_row.php:31
 msgid "Cancel"
 msgstr "Annuler"
 
-#: ../classes/helpers/FrmAppHelper.php:1762 ../classes/helpers/FrmFormsListHelper.
-#: php:271 ../classes/views/frm-forms/add_field.php:224 ..
+#: ../classes/helpers/FrmAppHelper.php:1770 ../classes/helpers/FrmFormsListHelper.
+#: php:271 ../classes/views/frm-forms/add_field.php:227 ..
 #: classes/views/styles/_buttons.php:12 ../classes/views/styles/_field-colors.
-#: php:4 ../pro/classes/controllers/FrmProFormsController.php:416 ..
+#: php:4 ../pro/classes/controllers/FrmProFormsController.php:425 ..
 #: pro/classes/views/frmpro-forms/add_form_button_options.php:27
 msgid "Default"
 msgstr "Défaut"
 
-#: ../classes/helpers/FrmAppHelper.php:1763 ../classes/helpers/FrmFieldsHelper.
-#: php:1134
+#: ../classes/helpers/FrmAppHelper.php:1771 ../classes/helpers/FrmFieldsHelper.
+#: php:1187
 msgid "Clear default value when typing"
 msgstr "Effacer la valeur par défaut lors de la saisie"
 
-#: ../classes/helpers/FrmAppHelper.php:1764 ../classes/helpers/FrmFieldsHelper.
-#: php:1134
+#: ../classes/helpers/FrmAppHelper.php:1772 ../classes/helpers/FrmFieldsHelper.
+#: php:1187
 msgid "Do not clear default value when typing"
 msgstr "Ne pas effacer la valeur par défaut lors de la saisie"
 
-#: ../classes/helpers/FrmAppHelper.php:1765 ../classes/helpers/FrmFieldsHelper.
-#: php:1143
+#: ../classes/helpers/FrmAppHelper.php:1773 ../classes/helpers/FrmFieldsHelper.
+#: php:1196
 msgid "Default value will pass form validation"
 msgstr "La valeur par défaut passe la validation de formulaire"
 
-#: ../classes/helpers/FrmAppHelper.php:1766 ../classes/helpers/FrmFieldsHelper.
-#: php:1143
+#: ../classes/helpers/FrmAppHelper.php:1774 ../classes/helpers/FrmFieldsHelper.
+#: php:1196
 msgid "Default value will NOT pass form validation"
 msgstr "La valeur pas défaut NE passera PAS la validation de formulaire"
 
-#: ../classes/helpers/FrmAppHelper.php:1767
+#: ../classes/helpers/FrmAppHelper.php:1775
 msgid "Are you sure?"
 msgstr "En êtes-vous sûr ?"
 
-#: ../classes/helpers/FrmAppHelper.php:1768
+#: ../classes/helpers/FrmAppHelper.php:1776
 msgid "Are you sure you want to delete this field and all data associated with it?"
 msgstr ""
 "Êtes-vous sûr de vouloir supprimer ce champ et toutes les données qui lui "
 "sont associés?"
 
-#: ../classes/helpers/FrmAppHelper.php:1769
+#: ../classes/helpers/FrmAppHelper.php:1777
 msgid "WARNING: This will delete all fields inside of the section as well."
 msgstr ""
 "ATTENTION : Cette opération va supprimer tous les champs à l'intérieur de la "
 "section."
 
-#: ../classes/helpers/FrmAppHelper.php:1770
+#: ../classes/helpers/FrmAppHelper.php:1778
 msgid ""
 "Warning: If you have entries with multiple rows, all but the first row will "
 "be lost."
@@ -1321,44 +1351,44 @@ msgstr ""
 "ATTENTION : Si vous avez des entrées avec plusieurs lignes, tout sauf la "
 "première ligne seront perdues."
 
-#: ../classes/helpers/FrmAppHelper.php:1772 ../classes/helpers/FrmFieldsHelper.
+#: ../classes/helpers/FrmAppHelper.php:1780 ../classes/helpers/FrmFieldsHelper.
 #: php:173 ../pro/classes/helpers/FrmProFieldsHelper.php:696
 msgid "The entered values do not match"
 msgstr "Les valeurs saisies ne correspondent pas"
 
-#: ../classes/helpers/FrmAppHelper.php:1773
+#: ../classes/helpers/FrmAppHelper.php:1781
 msgid "Enter Email"
 msgstr "Saisissez votre email"
 
-#: ../classes/helpers/FrmAppHelper.php:1774
+#: ../classes/helpers/FrmAppHelper.php:1782
 msgid "Confirm Email"
 msgstr "Confirmez votre email"
 
-#: ../classes/helpers/FrmAppHelper.php:1776
+#: ../classes/helpers/FrmAppHelper.php:1784
 msgid "Enter Password"
 msgstr "Entrez le mot de passe"
 
-#: ../classes/helpers/FrmAppHelper.php:1777
+#: ../classes/helpers/FrmAppHelper.php:1785
 msgid "Confirm Password"
 msgstr "Confirmez le mot de passe"
 
-#: ../classes/helpers/FrmAppHelper.php:1778
+#: ../classes/helpers/FrmAppHelper.php:1786
 msgid "Import Complete"
 msgstr "Importation terminée"
 
-#: ../classes/helpers/FrmAppHelper.php:1780
+#: ../classes/helpers/FrmAppHelper.php:1788
 msgid "Warning: There is no way to retrieve unsaved entries."
 msgstr "ATTENTION : Il n'est pas possible de récupérer les entrées non enregistrées."
 
-#: ../classes/helpers/FrmAppHelper.php:1781
+#: ../classes/helpers/FrmAppHelper.php:1789
 msgid "Private"
 msgstr "Privé"
 
-#: ../classes/helpers/FrmAppHelper.php:1783
+#: ../classes/helpers/FrmAppHelper.php:1791
 msgid "No new licenses were found"
 msgstr "Aucune nouvelles licences n’ont été trouvées"
 
-#: ../classes/helpers/FrmAppHelper.php:1804
+#: ../classes/helpers/FrmAppHelper.php:1813
 msgid ""
 "You are running an outdated version of Formidable. This plugin may not work "
 "correctly if you do not update Formidable."
@@ -1366,250 +1396,250 @@ msgstr ""
 "Vous utilisez une ancienne version de Formidable. Ce plugin ne fonctionne "
 "pas correctement si vous ne mettez pas à jour Formidable."
 
-#: ../classes/helpers/FrmAppHelper.php:1810
+#: ../classes/helpers/FrmAppHelper.php:1819
 msgid "English"
 msgstr "Anglais"
 
-#: ../classes/helpers/FrmAppHelper.php:1810
+#: ../classes/helpers/FrmAppHelper.php:1819
 msgid "English/Western"
 msgstr "Anglais/US"
 
-#: ../classes/helpers/FrmAppHelper.php:1811
+#: ../classes/helpers/FrmAppHelper.php:1820
 msgid "Afrikaans"
 msgstr "Afganistan"
 
-#: ../classes/helpers/FrmAppHelper.php:1811
+#: ../classes/helpers/FrmAppHelper.php:1820
 msgid "Albanian"
 msgstr "Albanais"
 
-#: ../classes/helpers/FrmAppHelper.php:1812
+#: ../classes/helpers/FrmAppHelper.php:1821
 msgid "Arabic"
 msgstr "Arabe"
 
-#: ../classes/helpers/FrmAppHelper.php:1812
+#: ../classes/helpers/FrmAppHelper.php:1821
 msgid "Armenian"
 msgstr "Arménien"
 
-#: ../classes/helpers/FrmAppHelper.php:1813
+#: ../classes/helpers/FrmAppHelper.php:1822
 msgid "Azerbaijani"
 msgstr "Azerbaïdjan"
 
-#: ../classes/helpers/FrmAppHelper.php:1813
+#: ../classes/helpers/FrmAppHelper.php:1822
 msgid "Basque"
 msgstr "Basque"
 
-#: ../classes/helpers/FrmAppHelper.php:1814
+#: ../classes/helpers/FrmAppHelper.php:1823
 msgid "Bosnian"
 msgstr "Bosnie"
 
-#: ../classes/helpers/FrmAppHelper.php:1814
+#: ../classes/helpers/FrmAppHelper.php:1823
 msgid "Bulgarian"
 msgstr "Bulgare"
 
-#: ../classes/helpers/FrmAppHelper.php:1815
+#: ../classes/helpers/FrmAppHelper.php:1824
 msgid "Catalan"
 msgstr "Catalan"
 
-#: ../classes/helpers/FrmAppHelper.php:1815
+#: ../classes/helpers/FrmAppHelper.php:1824
 msgid "Chinese Hong Kong"
 msgstr "Chinois Hong Kong"
 
-#: ../classes/helpers/FrmAppHelper.php:1816
+#: ../classes/helpers/FrmAppHelper.php:1825
 msgid "Chinese Simplified"
 msgstr "Chinois simplifilé"
 
-#: ../classes/helpers/FrmAppHelper.php:1816
+#: ../classes/helpers/FrmAppHelper.php:1825
 msgid "Chinese Traditional"
 msgstr "Chinous traditionnel"
 
-#: ../classes/helpers/FrmAppHelper.php:1817
+#: ../classes/helpers/FrmAppHelper.php:1826
 msgid "Croatian"
 msgstr "Croate"
 
-#: ../classes/helpers/FrmAppHelper.php:1817
+#: ../classes/helpers/FrmAppHelper.php:1826
 msgid "Czech"
 msgstr "Tchèque"
 
-#: ../classes/helpers/FrmAppHelper.php:1818
+#: ../classes/helpers/FrmAppHelper.php:1827
 msgid "Danish"
 msgstr "Danois"
 
-#: ../classes/helpers/FrmAppHelper.php:1818
+#: ../classes/helpers/FrmAppHelper.php:1827
 msgid "Dutch"
 msgstr "Neérlandais"
 
-#: ../classes/helpers/FrmAppHelper.php:1819
+#: ../classes/helpers/FrmAppHelper.php:1828
 msgid "English/UK"
 msgstr "Anglais/UK"
 
-#: ../classes/helpers/FrmAppHelper.php:1819
+#: ../classes/helpers/FrmAppHelper.php:1828
 msgid "Esperanto"
 msgstr "Esperanto"
 
-#: ../classes/helpers/FrmAppHelper.php:1820
+#: ../classes/helpers/FrmAppHelper.php:1829
 msgid "Estonian"
 msgstr "Estonie"
 
-#: ../classes/helpers/FrmAppHelper.php:1820
+#: ../classes/helpers/FrmAppHelper.php:1829
 msgid "Faroese"
 msgstr "Îles de Féroé"
 
-#: ../classes/helpers/FrmAppHelper.php:1821
+#: ../classes/helpers/FrmAppHelper.php:1830
 msgid "Farsi/Persian"
 msgstr "Farsi/Persan"
 
-#: ../classes/helpers/FrmAppHelper.php:1821
+#: ../classes/helpers/FrmAppHelper.php:1830
 msgid "Filipino"
 msgstr "Philippin"
 
-#: ../classes/helpers/FrmAppHelper.php:1822
+#: ../classes/helpers/FrmAppHelper.php:1831
 msgid "Finnish"
 msgstr "Finlandais"
 
-#: ../classes/helpers/FrmAppHelper.php:1822
+#: ../classes/helpers/FrmAppHelper.php:1831
 msgid "French"
 msgstr "Français"
 
-#: ../classes/helpers/FrmAppHelper.php:1823
+#: ../classes/helpers/FrmAppHelper.php:1832
 msgid "French/Canadian"
 msgstr "Français/Canada"
 
-#: ../classes/helpers/FrmAppHelper.php:1823
+#: ../classes/helpers/FrmAppHelper.php:1832
 msgid "French/Swiss"
 msgstr "Français/Suisse"
 
-#: ../classes/helpers/FrmAppHelper.php:1824
+#: ../classes/helpers/FrmAppHelper.php:1833
 msgid "German"
 msgstr "Allemand"
 
-#: ../classes/helpers/FrmAppHelper.php:1824
+#: ../classes/helpers/FrmAppHelper.php:1833
 msgid "German/Austria"
 msgstr "Allemand/Autriche"
 
-#: ../classes/helpers/FrmAppHelper.php:1825
+#: ../classes/helpers/FrmAppHelper.php:1834
 msgid "German/Switzerland"
 msgstr "Allemand/Suisse"
 
-#: ../classes/helpers/FrmAppHelper.php:1825
+#: ../classes/helpers/FrmAppHelper.php:1834
 msgid "Greek"
 msgstr "Grecque"
 
-#: ../classes/helpers/FrmAppHelper.php:1826 ../classes/helpers/FrmAppHelper.php:
-#: 1826
+#: ../classes/helpers/FrmAppHelper.php:1835 ../classes/helpers/FrmAppHelper.php:
+#: 1835
 msgid "Hebrew"
 msgstr "Hébreu"
 
-#: ../classes/helpers/FrmAppHelper.php:1827
+#: ../classes/helpers/FrmAppHelper.php:1836
 msgid "Hindi"
 msgstr "Hindi"
 
-#: ../classes/helpers/FrmAppHelper.php:1827
+#: ../classes/helpers/FrmAppHelper.php:1836
 msgid "Hungarian"
 msgstr "Hongrois"
 
-#: ../classes/helpers/FrmAppHelper.php:1828
+#: ../classes/helpers/FrmAppHelper.php:1837
 msgid "Icelandic"
 msgstr "Islandais"
 
-#: ../classes/helpers/FrmAppHelper.php:1828
+#: ../classes/helpers/FrmAppHelper.php:1837
 msgid "Indonesian"
 msgstr "Indonésien"
 
-#: ../classes/helpers/FrmAppHelper.php:1829
+#: ../classes/helpers/FrmAppHelper.php:1838
 msgid "Italian"
 msgstr "Italien"
 
-#: ../classes/helpers/FrmAppHelper.php:1829
+#: ../classes/helpers/FrmAppHelper.php:1838
 msgid "Japanese"
 msgstr "Japonais"
 
-#: ../classes/helpers/FrmAppHelper.php:1830
+#: ../classes/helpers/FrmAppHelper.php:1839
 msgid "Korean"
 msgstr "Coréen"
 
-#: ../classes/helpers/FrmAppHelper.php:1830
+#: ../classes/helpers/FrmAppHelper.php:1839
 msgid "Latvian"
 msgstr "Letton"
 
-#: ../classes/helpers/FrmAppHelper.php:1831
+#: ../classes/helpers/FrmAppHelper.php:1840
 msgid "Lithuanian"
 msgstr "Lituanien"
 
-#: ../classes/helpers/FrmAppHelper.php:1831
+#: ../classes/helpers/FrmAppHelper.php:1840
 msgid "Malaysian"
 msgstr "Malaisie"
 
-#: ../classes/helpers/FrmAppHelper.php:1832
+#: ../classes/helpers/FrmAppHelper.php:1841
 msgid "Norwegian"
 msgstr "Norvégien"
 
-#: ../classes/helpers/FrmAppHelper.php:1832
+#: ../classes/helpers/FrmAppHelper.php:1841
 msgid "Polish"
 msgstr "Polonais"
 
-#: ../classes/helpers/FrmAppHelper.php:1833
+#: ../classes/helpers/FrmAppHelper.php:1842
 msgid "Portuguese"
 msgstr "Portugais"
 
-#: ../classes/helpers/FrmAppHelper.php:1833
+#: ../classes/helpers/FrmAppHelper.php:1842
 msgid "Portuguese/Brazilian"
 msgstr "Portugais/Brésil"
 
-#: ../classes/helpers/FrmAppHelper.php:1834
+#: ../classes/helpers/FrmAppHelper.php:1843
 msgid "Portuguese/Portugal"
 msgstr "Portugais/Portugal"
 
-#: ../classes/helpers/FrmAppHelper.php:1834
+#: ../classes/helpers/FrmAppHelper.php:1843
 msgid "Romanian"
 msgstr "Roumain"
 
-#: ../classes/helpers/FrmAppHelper.php:1835
+#: ../classes/helpers/FrmAppHelper.php:1844
 msgid "Russian"
 msgstr "Russe"
 
-#: ../classes/helpers/FrmAppHelper.php:1835 ../classes/helpers/FrmAppHelper.php:
-#: 1836
+#: ../classes/helpers/FrmAppHelper.php:1844 ../classes/helpers/FrmAppHelper.php:
+#: 1845
 msgid "Serbian"
 msgstr "Serbe"
 
-#: ../classes/helpers/FrmAppHelper.php:1836
+#: ../classes/helpers/FrmAppHelper.php:1845
 msgid "Slovak"
 msgstr "Slovaque"
 
-#: ../classes/helpers/FrmAppHelper.php:1837
+#: ../classes/helpers/FrmAppHelper.php:1846
 msgid "Slovenian"
 msgstr "Slovène"
 
-#: ../classes/helpers/FrmAppHelper.php:1837
+#: ../classes/helpers/FrmAppHelper.php:1846
 msgid "Spanish"
 msgstr "Espagnol"
 
-#: ../classes/helpers/FrmAppHelper.php:1838
+#: ../classes/helpers/FrmAppHelper.php:1847
 msgid "Spanish/Latin America"
 msgstr "Espagnol/Amérique latine"
 
-#: ../classes/helpers/FrmAppHelper.php:1838
+#: ../classes/helpers/FrmAppHelper.php:1847
 msgid "Swedish"
 msgstr "Suèdois"
 
-#: ../classes/helpers/FrmAppHelper.php:1839
+#: ../classes/helpers/FrmAppHelper.php:1848
 msgid "Tamil"
 msgstr "Tamil"
 
-#: ../classes/helpers/FrmAppHelper.php:1839
+#: ../classes/helpers/FrmAppHelper.php:1848
 msgid "Thai"
 msgstr "Thaï"
 
-#: ../classes/helpers/FrmAppHelper.php:1840 ../classes/helpers/FrmAppHelper.php:
-#: 1840
+#: ../classes/helpers/FrmAppHelper.php:1849 ../classes/helpers/FrmAppHelper.php:
+#: 1849
 msgid "Turkish"
 msgstr "Turque"
 
-#: ../classes/helpers/FrmAppHelper.php:1841
+#: ../classes/helpers/FrmAppHelper.php:1850
 msgid "Ukranian"
 msgstr "Ukrainien"
 
-#: ../classes/helpers/FrmAppHelper.php:1841
+#: ../classes/helpers/FrmAppHelper.php:1850
 msgid "Vietnamese"
 msgstr "Vietnamien"
 
@@ -1645,7 +1675,7 @@ msgstr "Mis à jour par"
 #: ../classes/helpers/FrmCSVExportHelper.php:115 ..
 #: classes/helpers/FrmFormsHelper.php:639 ../classes/helpers/FrmFormsListHelper.
 #: php:362 ../classes/views/frm-forms/_publish_box.php:72 ..
-#: pro/classes/controllers/FrmProEntriesController.php:1633 ..
+#: pro/classes/controllers/FrmProEntriesController.php:1676 ..
 #: pro/classes/views/displays/where_options.php:19
 msgid "Draft"
 msgstr "Brouillon"
@@ -1655,51 +1685,51 @@ msgstr "Brouillon"
 msgid "IP"
 msgstr "IP"
 
-#: ../classes/helpers/FrmEntriesHelper.php:500 ..
-#: classes/helpers/FrmEntriesHelper.php:501
+#: ../classes/helpers/FrmEntriesHelper.php:506 ..
+#: classes/helpers/FrmEntriesHelper.php:507
 msgid "Unknown"
 msgstr "Inconnu"
 
-#: ../classes/helpers/FrmEntriesListHelper.php:57 ..
-#: pro/classes/controllers/FrmProEntriesController.php:1670 ..
+#: ../classes/helpers/FrmEntriesListHelper.php:59 ..
+#: pro/classes/controllers/FrmProEntriesController.php:1713 ..
 #: pro/classes/helpers/FrmProDisplaysHelper.php:59
 msgid "No Entries Found"
 msgstr "Aucune entrée trouvée"
 
-#: ../classes/helpers/FrmEntriesListHelper.php:80 ..
+#: ../classes/helpers/FrmEntriesListHelper.php:82 ..
 #: pro/classes/controllers/FrmProDisplaysController.php:63
 msgid "View all forms"
 msgstr "Voir tous les formulaires"
 
-#: ../classes/helpers/FrmEntriesListHelper.php:167
+#: ../classes/helpers/FrmEntriesListHelper.php:169
 msgid "No"
 msgstr "Non"
 
-#: ../classes/helpers/FrmEntriesListHelper.php:167
+#: ../classes/helpers/FrmEntriesListHelper.php:169
 msgid "Yes"
 msgstr "Oui"
 
-#: ../classes/helpers/FrmEntriesListHelper.php:212 ../classes/views/frm-
+#: ../classes/helpers/FrmEntriesListHelper.php:214 ../classes/views/frm-
 #: entries/sidebar-shared.php:15 ..
 #: pro/classes/controllers/FrmProDisplaysController.php:36 ..
 #: pro/classes/controllers/FrmProDisplaysController.php:37 ..
-#: pro/classes/controllers/FrmProFormsController.php:367 ..
+#: pro/classes/controllers/FrmProFormsController.php:376 ..
 #: pro/classes/views/displays/submitbox_actions.php:2 ..
 #: pro/classes/views/frmpro-entries/sidebar-edit.php:13
 msgid "View"
 msgstr "Voir"
 
-#: ../classes/helpers/FrmEntriesListHelper.php:216
+#: ../classes/helpers/FrmEntriesListHelper.php:218
 msgid "Are you sure you want to delete that?"
 msgstr "Êtes-vous sûr de vouloir supprimer cela ?"
 
-#: ../classes/helpers/FrmEntriesListHelper.php:216 ..
+#: ../classes/helpers/FrmEntriesListHelper.php:218 ..
 #: classes/helpers/FrmFormsHelper.php:618 ../classes/helpers/FrmFormsListHelper.
 #: php:104 ../classes/models/FrmFormAction.php:694 ../classes/views/frm-
 #: entries/sidebar-show.php:22 ../classes/views/frm-entries/sidebar-show.php:23 ..
-#: pro/classes/controllers/FrmProEntriesController.php:1868 ..
-#: pro/classes/controllers/FrmProEntriesController.php:2113 ..
-#: pro/classes/controllers/FrmProEntriesController.php:2524 ..
+#: pro/classes/controllers/FrmProEntriesController.php:1911 ..
+#: pro/classes/controllers/FrmProEntriesController.php:2156 ..
+#: pro/classes/controllers/FrmProEntriesController.php:2567 ..
 #: pro/classes/helpers/FrmProEntriesListHelper.php:6 ../pro/classes/views/frmpro-
 #: entries/sidebar-edit.php:27 ../pro/classes/views/frmpro-entries/sidebar-edit.
 #: php:27
@@ -1730,7 +1760,7 @@ msgid "Untitled"
 msgstr "Sans titre"
 
 #: ../classes/helpers/FrmFieldsHelper.php:147 ../classes/helpers/FrmFieldsHelper.
-#: php:176 ../pro/classes/models/FrmProFileField.php:365
+#: php:176 ../pro/classes/models/FrmProFileField.php:372
 msgid "This field is invalid"
 msgstr "Ce champ n'est pas valide"
 
@@ -1739,980 +1769,980 @@ msgstr "Ce champ n'est pas valide"
 msgid "%s must be unique"
 msgstr "%s doit être unique"
 
-#: ../classes/helpers/FrmFieldsHelper.php:533
+#: ../classes/helpers/FrmFieldsHelper.php:578
 #, php-format
 msgid "Please add options from the WordPress \"%1$s\" page"
 msgstr "S'il vous plaît ajouter des options de WordPress \"%1$s\" à la page"
 
-#: ../classes/helpers/FrmFieldsHelper.php:534
+#: ../classes/helpers/FrmFieldsHelper.php:579
 msgid "Categories"
 msgstr "Catégories"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1208
+#: ../classes/helpers/FrmFieldsHelper.php:1261
 msgid "Afghanistan"
 msgstr "Afghanistan"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1208
+#: ../classes/helpers/FrmFieldsHelper.php:1261
 msgid "Albania"
 msgstr "Albanie"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1208
+#: ../classes/helpers/FrmFieldsHelper.php:1261
 msgid "Algeria"
 msgstr "Algérie"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1209
+#: ../classes/helpers/FrmFieldsHelper.php:1262
 msgid "American Samoa"
 msgstr "Îles Samoa américaines"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1209
+#: ../classes/helpers/FrmFieldsHelper.php:1262
 msgid "Andorra"
 msgstr "Andore"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1209
+#: ../classes/helpers/FrmFieldsHelper.php:1262
 msgid "Angola"
 msgstr "Angolie"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1210
+#: ../classes/helpers/FrmFieldsHelper.php:1263
 msgid "Anguilla"
 msgstr "Anguilla"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1210
+#: ../classes/helpers/FrmFieldsHelper.php:1263
 msgid "Antarctica"
 msgstr "Antartique"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1210
+#: ../classes/helpers/FrmFieldsHelper.php:1263
 msgid "Antigua and Barbuda"
 msgstr "Antigua-et-Barbuda"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1211
+#: ../classes/helpers/FrmFieldsHelper.php:1264
 msgid "Argentina"
 msgstr "Argentine"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1211
+#: ../classes/helpers/FrmFieldsHelper.php:1264
 msgid "Armenia"
 msgstr "Arménie"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1211
+#: ../classes/helpers/FrmFieldsHelper.php:1264
 msgid "Aruba"
 msgstr "Aruba"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1212
+#: ../classes/helpers/FrmFieldsHelper.php:1265
 msgid "Australia"
 msgstr "Australie"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1212
+#: ../classes/helpers/FrmFieldsHelper.php:1265
 msgid "Austria"
 msgstr "Autriche"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1212
+#: ../classes/helpers/FrmFieldsHelper.php:1265
 msgid "Azerbaijan"
 msgstr "Azerbaïdjan"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1213
+#: ../classes/helpers/FrmFieldsHelper.php:1266
 msgid "Bahamas"
 msgstr "Bahamas"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1213
+#: ../classes/helpers/FrmFieldsHelper.php:1266
 msgid "Bahrain"
 msgstr "Bahreïn"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1213
+#: ../classes/helpers/FrmFieldsHelper.php:1266
 msgid "Bangladesh"
 msgstr "Bengladesh"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1214
+#: ../classes/helpers/FrmFieldsHelper.php:1267
 msgid "Barbados"
 msgstr "Barbade (la)"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1214
+#: ../classes/helpers/FrmFieldsHelper.php:1267
 msgid "Belarus"
 msgstr "Belarus"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1214
+#: ../classes/helpers/FrmFieldsHelper.php:1267
 msgid "Belgium"
 msgstr "Belgique"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1215
+#: ../classes/helpers/FrmFieldsHelper.php:1268
 msgid "Belize"
 msgstr "Belize"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1215
+#: ../classes/helpers/FrmFieldsHelper.php:1268
 msgid "Benin"
 msgstr "Benin"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1215
+#: ../classes/helpers/FrmFieldsHelper.php:1268
 msgid "Bermuda"
 msgstr "Bermude"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1216
+#: ../classes/helpers/FrmFieldsHelper.php:1269
 msgid "Bhutan"
 msgstr "Bhoutan"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1216
+#: ../classes/helpers/FrmFieldsHelper.php:1269
 msgid "Bolivia"
 msgstr "Bolivie"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1216
+#: ../classes/helpers/FrmFieldsHelper.php:1269
 msgid "Bosnia and Herzegovina"
 msgstr "Bosnie-Herzégovine"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1217
+#: ../classes/helpers/FrmFieldsHelper.php:1270
 msgid "Botswana"
 msgstr "Botswana"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1217
+#: ../classes/helpers/FrmFieldsHelper.php:1270
 msgid "Brazil"
 msgstr "Brésil"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1217
+#: ../classes/helpers/FrmFieldsHelper.php:1270
 msgid "Brunei"
 msgstr "Brunei"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1218
+#: ../classes/helpers/FrmFieldsHelper.php:1271
 msgid "Bulgaria"
 msgstr "Bulgarie"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1218
+#: ../classes/helpers/FrmFieldsHelper.php:1271
 msgid "Burkina Faso"
 msgstr "Burkina Faso"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1218
+#: ../classes/helpers/FrmFieldsHelper.php:1271
 msgid "Burundi"
 msgstr "Burundi"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1219
+#: ../classes/helpers/FrmFieldsHelper.php:1272
 msgid "Cambodia"
 msgstr "Cambodge"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1219
+#: ../classes/helpers/FrmFieldsHelper.php:1272
 msgid "Cameroon"
 msgstr "Cameroun"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1219
+#: ../classes/helpers/FrmFieldsHelper.php:1272
 msgid "Canada"
 msgstr "Canada"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1220
+#: ../classes/helpers/FrmFieldsHelper.php:1273
 msgid "Cape Verde"
 msgstr "Cap vert"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1220
+#: ../classes/helpers/FrmFieldsHelper.php:1273
 msgid "Cayman Islands"
 msgstr "Îles Caïmans"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1220
+#: ../classes/helpers/FrmFieldsHelper.php:1273
 msgid "Central African Republic"
 msgstr "République centrafricaine"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1221
+#: ../classes/helpers/FrmFieldsHelper.php:1274
 msgid "Chad"
 msgstr "Tchad"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1221
+#: ../classes/helpers/FrmFieldsHelper.php:1274
 msgid "Chile"
 msgstr "Chili"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1221
+#: ../classes/helpers/FrmFieldsHelper.php:1274
 msgid "China"
 msgstr "Chine"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1222
+#: ../classes/helpers/FrmFieldsHelper.php:1275
 msgid "Colombia"
 msgstr "Colombie"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1222
+#: ../classes/helpers/FrmFieldsHelper.php:1275
 msgid "Comoros"
 msgstr "Comores"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1222
+#: ../classes/helpers/FrmFieldsHelper.php:1275
 msgid "Congo"
 msgstr "Congo"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1223
+#: ../classes/helpers/FrmFieldsHelper.php:1276
 msgid "Costa Rica"
 msgstr "Costa Rica"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1223
+#: ../classes/helpers/FrmFieldsHelper.php:1276
 msgid "C&ocirc;te d'Ivoire"
 msgstr "Côte d'Ivoire"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1223
+#: ../classes/helpers/FrmFieldsHelper.php:1276
 msgid "Croatia"
 msgstr "Croatie"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1224
+#: ../classes/helpers/FrmFieldsHelper.php:1277
 msgid "Cuba"
 msgstr "Cuba"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1224
+#: ../classes/helpers/FrmFieldsHelper.php:1277
 msgid "Cyprus"
 msgstr "Chypre"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1224
+#: ../classes/helpers/FrmFieldsHelper.php:1277
 msgid "Czech Republic"
 msgstr "République Tchèque"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1225
+#: ../classes/helpers/FrmFieldsHelper.php:1278
 msgid "Denmark"
 msgstr "Danemark"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1225
+#: ../classes/helpers/FrmFieldsHelper.php:1278
 msgid "Djibouti"
 msgstr "Djibouti"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1225
+#: ../classes/helpers/FrmFieldsHelper.php:1278
 msgid "Dominica"
 msgstr "Dominique"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1226
+#: ../classes/helpers/FrmFieldsHelper.php:1279
 msgid "Dominican Republic"
 msgstr "République dominicaine"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1226
+#: ../classes/helpers/FrmFieldsHelper.php:1279
 msgid "East Timor"
 msgstr "Timor oriental"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1226
+#: ../classes/helpers/FrmFieldsHelper.php:1279
 msgid "Ecuador"
 msgstr "Équateur"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1227
+#: ../classes/helpers/FrmFieldsHelper.php:1280
 msgid "Egypt"
 msgstr "Égypte"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1227
+#: ../classes/helpers/FrmFieldsHelper.php:1280
 msgid "El Salvador"
 msgstr "Salvador (le)"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1227
+#: ../classes/helpers/FrmFieldsHelper.php:1280
 msgid "Equatorial Guinea"
 msgstr "Guinée Équatoriale"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1228
+#: ../classes/helpers/FrmFieldsHelper.php:1281
 msgid "Eritrea"
 msgstr "Érythrée (l')"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1228
+#: ../classes/helpers/FrmFieldsHelper.php:1281
 msgid "Estonia"
 msgstr "Estonie"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1228
+#: ../classes/helpers/FrmFieldsHelper.php:1281
 msgid "Ethiopia"
 msgstr "Éthiopie"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1229
+#: ../classes/helpers/FrmFieldsHelper.php:1282
 msgid "Fiji"
 msgstr "Fidji"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1229
+#: ../classes/helpers/FrmFieldsHelper.php:1282
 msgid "Finland"
 msgstr "Finlande"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1229
+#: ../classes/helpers/FrmFieldsHelper.php:1282
 msgid "France"
 msgstr "France"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1230
+#: ../classes/helpers/FrmFieldsHelper.php:1283
 msgid "French Guiana"
 msgstr "Guyane Française"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1230
+#: ../classes/helpers/FrmFieldsHelper.php:1283
 msgid "French Polynesia"
 msgstr "Polynésie Française"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1230
+#: ../classes/helpers/FrmFieldsHelper.php:1283
 msgid "Gabon"
 msgstr "Gabon"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1231
+#: ../classes/helpers/FrmFieldsHelper.php:1284
 msgid "Gambia"
 msgstr "Gambie"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1231
+#: ../classes/helpers/FrmFieldsHelper.php:1284
 msgid "Georgia"
 msgstr "Géorgie"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1231
+#: ../classes/helpers/FrmFieldsHelper.php:1284
 msgid "Germany"
 msgstr "Allemagne"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1232
+#: ../classes/helpers/FrmFieldsHelper.php:1285
 msgid "Ghana"
 msgstr "Ghana"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1232
+#: ../classes/helpers/FrmFieldsHelper.php:1285
 msgid "Gibraltar"
 msgstr "Gibraltar"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1232
+#: ../classes/helpers/FrmFieldsHelper.php:1285
 msgid "Greece"
 msgstr "Grèce"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1233
+#: ../classes/helpers/FrmFieldsHelper.php:1286
 msgid "Greenland"
 msgstr "Groenland"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1233
+#: ../classes/helpers/FrmFieldsHelper.php:1286
 msgid "Grenada"
 msgstr "Grenade"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1233
+#: ../classes/helpers/FrmFieldsHelper.php:1286
 msgid "Guam"
 msgstr "Guam"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1234
+#: ../classes/helpers/FrmFieldsHelper.php:1287
 msgid "Guatemala"
 msgstr "Guatemala"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1234
+#: ../classes/helpers/FrmFieldsHelper.php:1287
 msgid "Guinea"
 msgstr "Guinée"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1234
+#: ../classes/helpers/FrmFieldsHelper.php:1287
 msgid "Guinea-Bissau"
 msgstr "Guinée Bissau"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1235
+#: ../classes/helpers/FrmFieldsHelper.php:1288
 msgid "Guyana"
 msgstr "Guyane"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1235
+#: ../classes/helpers/FrmFieldsHelper.php:1288
 msgid "Haiti"
 msgstr "Haïti"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1235
+#: ../classes/helpers/FrmFieldsHelper.php:1288
 msgid "Honduras"
 msgstr "Honduras"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1236
+#: ../classes/helpers/FrmFieldsHelper.php:1289
 msgid "Hong Kong"
 msgstr "Hong Kong"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1236
+#: ../classes/helpers/FrmFieldsHelper.php:1289
 msgid "Hungary"
 msgstr "Hongrie"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1236
+#: ../classes/helpers/FrmFieldsHelper.php:1289
 msgid "Iceland"
 msgstr "Islande"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1237
+#: ../classes/helpers/FrmFieldsHelper.php:1290
 msgid "India"
 msgstr "Inde"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1237
+#: ../classes/helpers/FrmFieldsHelper.php:1290
 msgid "Indonesia"
 msgstr "Indonésie"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1237
+#: ../classes/helpers/FrmFieldsHelper.php:1290
 msgid "Iran"
 msgstr "Iran"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1238
+#: ../classes/helpers/FrmFieldsHelper.php:1291
 msgid "Iraq"
 msgstr "Iraq"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1238
+#: ../classes/helpers/FrmFieldsHelper.php:1291
 msgid "Ireland"
 msgstr "Irlande"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1238
+#: ../classes/helpers/FrmFieldsHelper.php:1291
 msgid "Israel"
 msgstr "Israël"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1239
+#: ../classes/helpers/FrmFieldsHelper.php:1292
 msgid "Italy"
 msgstr "Italie"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1239
+#: ../classes/helpers/FrmFieldsHelper.php:1292
 msgid "Jamaica"
 msgstr "Jamaïque"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1239
+#: ../classes/helpers/FrmFieldsHelper.php:1292
 msgid "Japan"
 msgstr "Japon"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1240
+#: ../classes/helpers/FrmFieldsHelper.php:1293
 msgid "Jordan"
 msgstr "Jordanie"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1240
+#: ../classes/helpers/FrmFieldsHelper.php:1293
 msgid "Kazakhstan"
 msgstr "Kazakhstan"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1240
+#: ../classes/helpers/FrmFieldsHelper.php:1293
 msgid "Kenya"
 msgstr "Kenya"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1241
+#: ../classes/helpers/FrmFieldsHelper.php:1294
 msgid "Kiribati"
 msgstr "Kiribati"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1241
+#: ../classes/helpers/FrmFieldsHelper.php:1294
 msgid "North Korea"
 msgstr "Corée du Nord"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1241
+#: ../classes/helpers/FrmFieldsHelper.php:1294
 msgid "South Korea"
 msgstr "Corée du Sud"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1242
+#: ../classes/helpers/FrmFieldsHelper.php:1295
 msgid "Kuwait"
 msgstr "Koweït"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1242
+#: ../classes/helpers/FrmFieldsHelper.php:1295
 msgid "Kyrgyzstan"
 msgstr "Kirghizistan"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1242
+#: ../classes/helpers/FrmFieldsHelper.php:1295
 msgid "Laos"
 msgstr "Laos"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1243
+#: ../classes/helpers/FrmFieldsHelper.php:1296
 msgid "Latvia"
 msgstr "Lettonie"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1243
+#: ../classes/helpers/FrmFieldsHelper.php:1296
 msgid "Lebanon"
 msgstr "Liban"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1243
+#: ../classes/helpers/FrmFieldsHelper.php:1296
 msgid "Lesotho"
 msgstr "Lesotho"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1244
+#: ../classes/helpers/FrmFieldsHelper.php:1297
 msgid "Liberia"
 msgstr "Libéria"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1244
+#: ../classes/helpers/FrmFieldsHelper.php:1297
 msgid "Libya"
 msgstr "Libye"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1244
+#: ../classes/helpers/FrmFieldsHelper.php:1297
 msgid "Liechtenstein"
 msgstr "Liechtenstein"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1245
+#: ../classes/helpers/FrmFieldsHelper.php:1298
 msgid "Lithuania"
 msgstr "Lituanie"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1245
+#: ../classes/helpers/FrmFieldsHelper.php:1298
 msgid "Luxembourg"
 msgstr "Luxembourg"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1245
+#: ../classes/helpers/FrmFieldsHelper.php:1298
 msgid "Macedonia"
 msgstr "Macédoine"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1246
+#: ../classes/helpers/FrmFieldsHelper.php:1299
 msgid "Madagascar"
 msgstr "Madagascar"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1246
+#: ../classes/helpers/FrmFieldsHelper.php:1299
 msgid "Malawi"
 msgstr "Malawi"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1246
+#: ../classes/helpers/FrmFieldsHelper.php:1299
 msgid "Malaysia"
 msgstr "Malaisie"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1247
+#: ../classes/helpers/FrmFieldsHelper.php:1300
 msgid "Maldives"
 msgstr "Maldives"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1247
+#: ../classes/helpers/FrmFieldsHelper.php:1300
 msgid "Mali"
 msgstr "Mali"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1247
+#: ../classes/helpers/FrmFieldsHelper.php:1300
 msgid "Malta"
 msgstr "Malte"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1248
+#: ../classes/helpers/FrmFieldsHelper.php:1301
 msgid "Marshall Islands"
 msgstr "Îles Marshall"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1248
+#: ../classes/helpers/FrmFieldsHelper.php:1301
 msgid "Mauritania"
 msgstr "Mauritanie"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1248
+#: ../classes/helpers/FrmFieldsHelper.php:1301
 msgid "Mauritius"
 msgstr "Île Maurice"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1249
+#: ../classes/helpers/FrmFieldsHelper.php:1302
 msgid "Mexico"
 msgstr "Mexique"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1249
+#: ../classes/helpers/FrmFieldsHelper.php:1302
 msgid "Micronesia"
 msgstr "Micronésie"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1249
+#: ../classes/helpers/FrmFieldsHelper.php:1302
 msgid "Moldova"
 msgstr "Moldavie"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1250
+#: ../classes/helpers/FrmFieldsHelper.php:1303
 msgid "Monaco"
 msgstr "Monaco"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1250
+#: ../classes/helpers/FrmFieldsHelper.php:1303
 msgid "Mongolia"
 msgstr "Mongolie"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1250
+#: ../classes/helpers/FrmFieldsHelper.php:1303
 msgid "Montenegro"
 msgstr "Monténégro"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1251
+#: ../classes/helpers/FrmFieldsHelper.php:1304
 msgid "Montserrat"
 msgstr "Montserrat"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1251
+#: ../classes/helpers/FrmFieldsHelper.php:1304
 msgid "Morocco"
 msgstr "Maroc"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1251
+#: ../classes/helpers/FrmFieldsHelper.php:1304
 msgid "Mozambique"
 msgstr "Mozambique"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1252
+#: ../classes/helpers/FrmFieldsHelper.php:1305
 msgid "Myanmar"
 msgstr "Myanmar"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1252
+#: ../classes/helpers/FrmFieldsHelper.php:1305
 msgid "Namibia"
 msgstr "Namibie"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1252
+#: ../classes/helpers/FrmFieldsHelper.php:1305
 msgid "Nauru"
 msgstr "Nauru"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1253
+#: ../classes/helpers/FrmFieldsHelper.php:1306
 msgid "Nepal"
 msgstr "Nepal"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1253
+#: ../classes/helpers/FrmFieldsHelper.php:1306
 msgid "Netherlands"
 msgstr "Pays-Bas"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1253
+#: ../classes/helpers/FrmFieldsHelper.php:1306
 msgid "New Zealand"
 msgstr "Nouvelle Zélande"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1254
+#: ../classes/helpers/FrmFieldsHelper.php:1307
 msgid "Nicaragua"
 msgstr "Nicaragua"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1254
+#: ../classes/helpers/FrmFieldsHelper.php:1307
 msgid "Niger"
 msgstr "Niger"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1254
+#: ../classes/helpers/FrmFieldsHelper.php:1307
 msgid "Nigeria"
 msgstr "Nigéria"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1255
+#: ../classes/helpers/FrmFieldsHelper.php:1308
 msgid "Norway"
 msgstr "Norvège"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1255
+#: ../classes/helpers/FrmFieldsHelper.php:1308
 msgid "Northern Mariana Islands"
 msgstr "Îles Mariannes du Nord"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1255
+#: ../classes/helpers/FrmFieldsHelper.php:1308
 msgid "Oman"
 msgstr "Oman"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1256
+#: ../classes/helpers/FrmFieldsHelper.php:1309
 msgid "Pakistan"
 msgstr "Pakistan"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1256
+#: ../classes/helpers/FrmFieldsHelper.php:1309
 msgid "Palau"
 msgstr "Palau"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1256
+#: ../classes/helpers/FrmFieldsHelper.php:1309
 msgid "Palestine"
 msgstr "Palestine"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1257
+#: ../classes/helpers/FrmFieldsHelper.php:1310
 msgid "Panama"
 msgstr "Panama"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1257
+#: ../classes/helpers/FrmFieldsHelper.php:1310
 msgid "Papua New Guinea"
 msgstr "Papouasie-Nouvelle-Guinée"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1257
+#: ../classes/helpers/FrmFieldsHelper.php:1310
 msgid "Paraguay"
 msgstr "Paraguay"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1258
+#: ../classes/helpers/FrmFieldsHelper.php:1311
 msgid "Peru"
 msgstr "Pérou"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1258
+#: ../classes/helpers/FrmFieldsHelper.php:1311
 msgid "Philippines"
 msgstr "Philippines"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1258
+#: ../classes/helpers/FrmFieldsHelper.php:1311
 msgid "Poland"
 msgstr "Pologne"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1259
+#: ../classes/helpers/FrmFieldsHelper.php:1312
 msgid "Portugal"
 msgstr "Portugal"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1259
+#: ../classes/helpers/FrmFieldsHelper.php:1312
 msgid "Puerto Rico"
 msgstr "Puerto Rico"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1259
+#: ../classes/helpers/FrmFieldsHelper.php:1312
 msgid "Qatar"
 msgstr "Qatar"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1260
+#: ../classes/helpers/FrmFieldsHelper.php:1313
 msgid "Romania"
 msgstr "Roumanie"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1260
+#: ../classes/helpers/FrmFieldsHelper.php:1313
 msgid "Russia"
 msgstr "Russie"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1260
+#: ../classes/helpers/FrmFieldsHelper.php:1313
 msgid "Rwanda"
 msgstr "Rwanda"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1261
+#: ../classes/helpers/FrmFieldsHelper.php:1314
 msgid "Saint Kitts and Nevis"
 msgstr "Saint-Christophe-et-Niévès"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1261
+#: ../classes/helpers/FrmFieldsHelper.php:1314
 msgid "Saint Lucia"
 msgstr "Sante Lucie"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1262
+#: ../classes/helpers/FrmFieldsHelper.php:1315
 msgid "Saint Vincent and the Grenadines"
 msgstr "Saint Vincent et les Grenadines"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1262
+#: ../classes/helpers/FrmFieldsHelper.php:1315
 msgid "Samoa"
 msgstr "Samoa"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1263
+#: ../classes/helpers/FrmFieldsHelper.php:1316
 msgid "San Marino"
 msgstr "Saint-Marin"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1263
+#: ../classes/helpers/FrmFieldsHelper.php:1316
 msgid "Sao Tome and Principe"
 msgstr "Sao Tomé-et-Principe"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1263
+#: ../classes/helpers/FrmFieldsHelper.php:1316
 msgid "Saudi Arabia"
 msgstr "Arabie Saoudite"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1264
+#: ../classes/helpers/FrmFieldsHelper.php:1317
 msgid "Senegal"
 msgstr "Sénégal"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1264
+#: ../classes/helpers/FrmFieldsHelper.php:1317
 msgid "Serbia and Montenegro"
 msgstr "Serbie et Monténégro"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1264
+#: ../classes/helpers/FrmFieldsHelper.php:1317
 msgid "Seychelles"
 msgstr "Seychelles"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1265
+#: ../classes/helpers/FrmFieldsHelper.php:1318
 msgid "Sierra Leone"
 msgstr "Sierra Leone"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1265
+#: ../classes/helpers/FrmFieldsHelper.php:1318
 msgid "Singapore"
 msgstr "Singapour"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1265
+#: ../classes/helpers/FrmFieldsHelper.php:1318
 msgid "Slovakia"
 msgstr "Slovaquie"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1266
+#: ../classes/helpers/FrmFieldsHelper.php:1319
 msgid "Slovenia"
 msgstr "Slovénie"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1266
+#: ../classes/helpers/FrmFieldsHelper.php:1319
 msgid "Solomon Islands"
 msgstr "Îles Salomon"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1266
+#: ../classes/helpers/FrmFieldsHelper.php:1319
 msgid "Somalia"
 msgstr "Somalie"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1267
+#: ../classes/helpers/FrmFieldsHelper.php:1320
 msgid "South Africa"
 msgstr "Afrique du Sud"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1267
+#: ../classes/helpers/FrmFieldsHelper.php:1320
 msgid "South Sudan"
 msgstr "Soudan du Sud"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1268
+#: ../classes/helpers/FrmFieldsHelper.php:1321
 msgid "Spain"
 msgstr "Espagne"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1268
+#: ../classes/helpers/FrmFieldsHelper.php:1321
 msgid "Sri Lanka"
 msgstr "Sri Lanka"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1269
+#: ../classes/helpers/FrmFieldsHelper.php:1322
 msgid "Sudan"
 msgstr "Soudan"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1269
+#: ../classes/helpers/FrmFieldsHelper.php:1322
 msgid "Suriname"
 msgstr "Surinam"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1269
+#: ../classes/helpers/FrmFieldsHelper.php:1322
 msgid "Swaziland"
 msgstr "Swaziland"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1270
+#: ../classes/helpers/FrmFieldsHelper.php:1323
 msgid "Sweden"
 msgstr "Suède"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1270
+#: ../classes/helpers/FrmFieldsHelper.php:1323
 msgid "Switzerland"
 msgstr "Suisse"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1270
+#: ../classes/helpers/FrmFieldsHelper.php:1323
 msgid "Syria"
 msgstr "Syrie"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1271
+#: ../classes/helpers/FrmFieldsHelper.php:1324
 msgid "Taiwan"
 msgstr "Taïwan"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1271
+#: ../classes/helpers/FrmFieldsHelper.php:1324
 msgid "Tajikistan"
 msgstr "Tadjikistan"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1271
+#: ../classes/helpers/FrmFieldsHelper.php:1324
 msgid "Tanzania"
 msgstr "Tanzanie"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1272
+#: ../classes/helpers/FrmFieldsHelper.php:1325
 msgid "Thailand"
 msgstr "Thaïlande"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1272
+#: ../classes/helpers/FrmFieldsHelper.php:1325
 msgid "Togo"
 msgstr "Togo"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1272
+#: ../classes/helpers/FrmFieldsHelper.php:1325
 msgid "Tonga"
 msgstr "Tonga"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1273
+#: ../classes/helpers/FrmFieldsHelper.php:1326
 msgid "Trinidad and Tobago"
 msgstr "Trinité et Tobago"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1273
+#: ../classes/helpers/FrmFieldsHelper.php:1326
 msgid "Tunisia"
 msgstr "Tunisie"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1273
+#: ../classes/helpers/FrmFieldsHelper.php:1326
 msgid "Turkey"
 msgstr "Turquie"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1274
+#: ../classes/helpers/FrmFieldsHelper.php:1327
 msgid "Turkmenistan"
 msgstr "Turkménistan"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1274
+#: ../classes/helpers/FrmFieldsHelper.php:1327
 msgid "Tuvalu"
 msgstr "Tuvalu"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1274
+#: ../classes/helpers/FrmFieldsHelper.php:1327
 msgid "Uganda"
 msgstr "Ouganda"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1275
+#: ../classes/helpers/FrmFieldsHelper.php:1328
 msgid "Ukraine"
 msgstr "Ukraine"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1275
+#: ../classes/helpers/FrmFieldsHelper.php:1328
 msgid "United Arab Emirates"
 msgstr "Émirats Arabes Unis"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1275
+#: ../classes/helpers/FrmFieldsHelper.php:1328
 msgid "United Kingdom"
 msgstr "Royaume-Uni"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1276 ../pro/classes/views/combo-
+#: ../classes/helpers/FrmFieldsHelper.php:1329 ../pro/classes/views/combo-
 #: fields/addresses/back-end-field-opts.php:8
 msgid "United States"
 msgstr "États-Unis"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1276
+#: ../classes/helpers/FrmFieldsHelper.php:1329
 msgid "Uruguay"
 msgstr "Uruguay"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1276
+#: ../classes/helpers/FrmFieldsHelper.php:1329
 msgid "Uzbekistan"
 msgstr "Ouzbékistan"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1277
+#: ../classes/helpers/FrmFieldsHelper.php:1330
 msgid "Vanuatu"
 msgstr "Vanuatu"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1277
+#: ../classes/helpers/FrmFieldsHelper.php:1330
 msgid "Vatican City"
 msgstr "Cité du Vatican"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1277
+#: ../classes/helpers/FrmFieldsHelper.php:1330
 msgid "Venezuela"
 msgstr "Vénézuela"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1278
+#: ../classes/helpers/FrmFieldsHelper.php:1331
 msgid "Vietnam"
 msgstr "Vietnam"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1278
+#: ../classes/helpers/FrmFieldsHelper.php:1331
 msgid "Virgin Islands, British"
 msgstr "Îles Vierges britanniques"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1279
+#: ../classes/helpers/FrmFieldsHelper.php:1332
 msgid "Virgin Islands, U.S."
 msgstr "Îles Vierges des États-Unis"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1279
+#: ../classes/helpers/FrmFieldsHelper.php:1332
 msgid "Yemen"
 msgstr "Yémen"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1279
+#: ../classes/helpers/FrmFieldsHelper.php:1332
 msgid "Zambia"
 msgstr "Zambie"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1280
+#: ../classes/helpers/FrmFieldsHelper.php:1333
 msgid "Zimbabwe"
 msgstr "Zimbabwe"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1285
+#: ../classes/helpers/FrmFieldsHelper.php:1338
 msgid "Countries"
 msgstr "Pays"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1290
+#: ../classes/helpers/FrmFieldsHelper.php:1343
 msgid "U.S. State Abbreviations"
 msgstr "Abréviations américaines"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1294
+#: ../classes/helpers/FrmFieldsHelper.php:1347
 msgid "U.S. States"
 msgstr "États américains"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1297
+#: ../classes/helpers/FrmFieldsHelper.php:1350
 msgid "Age"
 msgstr "Âge"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1298
+#: ../classes/helpers/FrmFieldsHelper.php:1351
 msgid "Under 18"
 msgstr "Moins de 18"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1298
+#: ../classes/helpers/FrmFieldsHelper.php:1351
 msgid "18-24"
 msgstr "18-24"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1298
+#: ../classes/helpers/FrmFieldsHelper.php:1351
 msgid "25-34"
 msgstr "25-34"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1299
+#: ../classes/helpers/FrmFieldsHelper.php:1352
 msgid "35-44"
 msgstr "35-44"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1299
+#: ../classes/helpers/FrmFieldsHelper.php:1352
 msgid "45-54"
 msgstr "45-54"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1299
+#: ../classes/helpers/FrmFieldsHelper.php:1352
 msgid "55-64"
 msgstr "55-64"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1300
+#: ../classes/helpers/FrmFieldsHelper.php:1353
 msgid "65 or Above"
 msgstr "Plus de 65"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1300
+#: ../classes/helpers/FrmFieldsHelper.php:1353
 msgid "Prefer Not to Answer"
 msgstr "Je préfère ne pas répondre"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1303
+#: ../classes/helpers/FrmFieldsHelper.php:1356
 msgid "Satisfaction"
 msgstr "Satisfaction"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1304
+#: ../classes/helpers/FrmFieldsHelper.php:1357
 msgid "Very Satisfied"
 msgstr "Très satisfait"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1304
+#: ../classes/helpers/FrmFieldsHelper.php:1357
 msgid "Satisfied"
 msgstr "Satisfait"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1304 ../classes/helpers/FrmFieldsHelper.
-#: php:1309 ../classes/helpers/FrmFieldsHelper.php:1314
+#: ../classes/helpers/FrmFieldsHelper.php:1357 ../classes/helpers/FrmFieldsHelper.
+#: php:1362 ../classes/helpers/FrmFieldsHelper.php:1367
 msgid "Neutral"
 msgstr "Neutre"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1305
+#: ../classes/helpers/FrmFieldsHelper.php:1358
 msgid "Unsatisfied"
 msgstr "Insatisfait"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1305
+#: ../classes/helpers/FrmFieldsHelper.php:1358
 msgid "Very Unsatisfied"
 msgstr "Très insatisfait"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1305 ../classes/helpers/FrmFieldsHelper.
-#: php:1310 ../classes/helpers/FrmFieldsHelper.php:1315 ..
+#: ../classes/helpers/FrmFieldsHelper.php:1358 ../classes/helpers/FrmFieldsHelper.
+#: php:1363 ../classes/helpers/FrmFieldsHelper.php:1368 ..
 #: pro/classes/controllers/FrmProDisplaysController.php:190
 msgid "N/A"
 msgstr "N/A"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1308
+#: ../classes/helpers/FrmFieldsHelper.php:1361
 msgid "Importance"
 msgstr "Importance"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1309
+#: ../classes/helpers/FrmFieldsHelper.php:1362
 msgid "Very Important"
 msgstr "Très important"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1309
+#: ../classes/helpers/FrmFieldsHelper.php:1362
 msgid "Important"
 msgstr "Important"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1310
+#: ../classes/helpers/FrmFieldsHelper.php:1363
 msgid "Somewhat Important"
 msgstr "Assez important"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1310
+#: ../classes/helpers/FrmFieldsHelper.php:1363
 msgid "Not at all Important"
 msgstr "Pas du tout important"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1313
+#: ../classes/helpers/FrmFieldsHelper.php:1366
 msgid "Agreement"
 msgstr "Accord"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1314
+#: ../classes/helpers/FrmFieldsHelper.php:1367
 msgid "Strongly Agree"
 msgstr "Entièrement d'accord"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1314
+#: ../classes/helpers/FrmFieldsHelper.php:1367
 msgid "Agree"
 msgstr "D'accord"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1315
+#: ../classes/helpers/FrmFieldsHelper.php:1368
 msgid "Disagree"
 msgstr "Pas d'accord"
 
-#: ../classes/helpers/FrmFieldsHelper.php:1315
+#: ../classes/helpers/FrmFieldsHelper.php:1368
 msgid "Strongly Disagree"
 msgstr "Absolument pas d'accord"
 
@@ -2847,7 +2877,7 @@ msgstr "Créer un formulaire à partir du modèle"
 #: ../classes/helpers/FrmFormsListHelper.php:315 ..
 #: pro/classes/controllers/FrmProDisplaysController.php:112 ..
 #: pro/classes/controllers/FrmProDisplaysController.php:112 ..
-#: pro/classes/controllers/FrmProEntriesController.php:1649 ..
+#: pro/classes/controllers/FrmProEntriesController.php:1692 ..
 #: pro/classes/helpers/FrmProEntriesHelper.php:245
 msgid "Duplicate"
 msgstr "Dupliquer"
@@ -2936,6 +2966,57 @@ msgstr "Gérer les styles des formulaires"
 #: ../classes/helpers/FrmStylesHelper.php:94
 msgid "Custom CSS"
 msgstr "CSS personnalisé"
+
+#: ../classes/helpers/FrmStylesHelper.php:104 ..
+#: pro/classes/views/styles/_section-fields.php:76
+msgid "top"
+msgstr "en haut"
+
+#: ../classes/helpers/FrmStylesHelper.php:105 ../classes/views/styles/_field-
+#: description.php:28 ../classes/views/styles/_field-labels.php:30 ..
+#: classes/views/styles/_general.php:10 ../pro/classes/views/styles/_section-
+#: fields.php:78
+msgid "left"
+msgstr "Gauche"
+
+#: ../classes/helpers/FrmStylesHelper.php:106 ../classes/views/styles/_field-
+#: description.php:29 ../classes/views/styles/_field-labels.php:31 ..
+#: classes/views/styles/_general.php:11 ../pro/classes/views/styles/_section-
+#: fields.php:79
+msgid "right"
+msgstr "Droite"
+
+#: ../classes/helpers/FrmStylesHelper.php:107
+msgid "none"
+msgstr "aucun"
+
+#: ../classes/helpers/FrmStylesHelper.php:114
+msgid "Top"
+msgstr "En haut"
+
+#: ../classes/helpers/FrmStylesHelper.php:115
+msgid "Left"
+msgstr "À gauche"
+
+#: ../classes/helpers/FrmStylesHelper.php:116 ../classes/views/frm-
+#: forms/add_field_links.php:104
+msgid "Right"
+msgstr "À droite"
+
+#: ../classes/helpers/FrmStylesHelper.php:117
+msgid "Inline (left without a set width)"
+msgstr "En ligne (à gauche sans largeur définie)"
+
+#: ../classes/helpers/FrmStylesHelper.php:118 ../pro/classes/views/frmpro-
+#: fields/back-end/confirmation.php:5 ../pro/classes/views/frmpro-form-
+#: actions/post_options.php:109 ../pro/classes/views/frmpro-form-
+#: actions/post_options.php:119 ../pro/classes/views/styles/_date-fields.php:15
+msgid "None"
+msgstr "Aucune"
+
+#: ../classes/helpers/FrmStylesHelper.php:119
+msgid "Hidden (but leave the space)"
+msgstr "Cachée (mais laisser l'espace)"
 
 #: ../classes/helpers/FrmTipsHelper.php:39
 msgid "Long forms can still be beautiful with sections."
@@ -3304,28 +3385,28 @@ msgstr "%1$s Formulaire soumis le %2$s"
 msgid "User Information"
 msgstr "Informations sur l'utilisateur"
 
-#: ../classes/models/FrmEmail.php:299 ../classes/models/FrmEntryValues.php:220 ..
-#: classes/views/frm-entries/sidebar-shared.php:56 ..
-#: pro/classes/controllers/FrmProFormsController.php:86 ..
-#: pro/classes/views/frmpro-forms/add_form_options.php:30 ..
-#: pro/classes/views/xml/map_csv_fields.php:54
-msgid "IP Address"
-msgstr "Adresse IP"
-
 #: ../classes/models/FrmEmail.php:300 ../classes/models/FrmEntryValues.php:225
 msgid "User-Agent (Browser/OS)"
 msgstr "User-Agent (Navigateur/OS)"
 
 #: ../classes/models/FrmEmail.php:301 ../classes/models/FrmEntryValues.php:230 ..
-#: classes/views/frm-entries/sidebar-shared.php:69
+#: classes/views/frm-entries/sidebar-shared.php:71
 msgid "Referrer"
 msgstr "Référent"
+
+#: ../classes/models/FrmEmail.php:317 ../classes/models/FrmEntryValues.php:220 ..
+#: classes/views/frm-entries/sidebar-shared.php:57 ..
+#: pro/classes/controllers/FrmProFormsController.php:86 ..
+#: pro/classes/views/frmpro-forms/add_form_options.php:31 ..
+#: pro/classes/views/xml/map_csv_fields.php:54
+msgid "IP Address"
+msgstr "Adresse IP"
 
 #: ../classes/models/FrmEntryValidate.php:9
 msgid "There was a problem with your submission. Please try again."
 msgstr "Il y a eu un problème avec votre envoi. Veuillez ré-essayez."
 
-#: ../classes/models/FrmEntryValidate.php:14 ../classes/models/FrmSettings.php:98
+#: ../classes/models/FrmEntryValidate.php:14 ../classes/models/FrmSettings.php:100
 msgid "You do not have permission to do that"
 msgstr "Vous n'avez pas la permission de faire cela"
 
@@ -3361,20 +3442,20 @@ msgstr "Paragraphe texte"
 
 #: ../classes/models/FrmField.php:15 ..
 #: pro/classes/controllers/FrmProLookupFieldsController.php:14 ..
-#: pro/classes/helpers/FrmProFieldsHelper.php:3779
+#: pro/classes/helpers/FrmProFieldsHelper.php:3825
 msgid "Checkboxes"
 msgstr "Case à cocher"
 
 #: ../classes/models/FrmField.php:16 ../classes/views/styles/_sample_form.php:58 .
 #: ./pro/classes/controllers/FrmProLookupFieldsController.php:13 ..
-#: pro/classes/helpers/FrmProFieldsHelper.php:3778 ..
+#: pro/classes/helpers/FrmProFieldsHelper.php:3824 ..
 #: pro/classes/views/styles/_sample_form.php:14
 msgid "Radio Buttons"
 msgstr "Boutons radio"
 
 #: ../classes/models/FrmField.php:17 ..
 #: pro/classes/controllers/FrmProLookupFieldsController.php:12 ..
-#: pro/classes/helpers/FrmProFieldsHelper.php:3777
+#: pro/classes/helpers/FrmProFieldsHelper.php:3823
 msgid "Dropdown"
 msgstr "Liste déroulante"
 
@@ -3395,7 +3476,7 @@ msgid "End Section"
 msgstr "Section de fin"
 
 #: ../classes/models/FrmField.php:32 ../pro/classes/helpers/FrmProFieldsHelper.
-#: php:3765
+#: php:3811
 msgid "Section"
 msgstr "Section"
 
@@ -3432,7 +3513,7 @@ msgid "Scale"
 msgstr "Échelle"
 
 #: ../classes/models/FrmField.php:42 ../pro/classes/helpers/FrmProFieldsHelper.
-#: php:3775
+#: php:3821
 msgid "Dynamic Field"
 msgstr "Champ dynamique"
 
@@ -3479,7 +3560,7 @@ msgstr "Il n'y a pas d'options pour cette action."
 
 #: ../classes/models/FrmFormAction.php:691 ../classes/views/frm-
 #: forms/_publish_box.php:9 ../pro/classes/controllers/FrmProFormsController.php:
-#: 233
+#: 242
 msgid "Save Draft"
 msgstr "Sauvegarder le brouillon"
 
@@ -3494,7 +3575,7 @@ msgstr "Créer"
 #: classes/views/frm-forms/add_field_links.php:6 ../classes/views/frm-forms/edit.
 #: php:26 ../classes/views/frm-forms/edit.php:38 ../classes/views/frm-
 #: forms/settings.php:273 ../pro/classes/controllers/FrmProEntriesController.php:
-#: 2470 ../pro/classes/controllers/FrmProEntriesController.php:3029 ..
+#: 2513 ../pro/classes/controllers/FrmProEntriesController.php:3074 ..
 #: pro/classes/models/FrmProSettings.php:18
 msgid "Update"
 msgstr "Mise à jour"
@@ -3533,7 +3614,7 @@ msgid "Next"
 msgstr "Suivant"
 
 #: ../classes/models/FrmPointers.php:225 ..
-#: pro/classes/controllers/FrmProFormsController.php:214 ..
+#: pro/classes/controllers/FrmProFormsController.php:223 ..
 #: pro/classes/helpers/FrmProFormsHelper.php:393
 msgid "Previous"
 msgstr "Précédent"
@@ -3561,7 +3642,7 @@ msgstr ""
 
 #: ../classes/models/FrmPointers.php:247 ..
 #: pro/classes/controllers/FrmProFormsController.php:74 ..
-#: pro/classes/controllers/FrmProFormsController.php:305
+#: pro/classes/controllers/FrmProFormsController.php:314
 msgid "Email"
 msgstr "Email"
 
@@ -3659,38 +3740,38 @@ msgstr ""
 "Merci d’utiliser notre extension et profitez bien de vos formulaires !"
 "<br/><br/>A bientôt,<br/>L’équipe de Formidable - %1$sformidableforms.com%2$s"
 
-#: ../classes/models/FrmSettings.php:91
+#: ../classes/models/FrmSettings.php:93
 msgid "Your responses were successfully submitted. Thank you!"
 msgstr "Vos réponses ont été soumises avec succès. Merci !"
 
-#: ../classes/models/FrmSettings.php:92
+#: ../classes/models/FrmSettings.php:94
 msgid "This field cannot be blank."
 msgstr "Ce champ ne peut pas être vide"
 
-#: ../classes/models/FrmSettings.php:93
+#: ../classes/models/FrmSettings.php:95
 msgid "This value must be unique."
 msgstr "Ce champ doit être unique"
 
-#: ../classes/models/FrmSettings.php:94
+#: ../classes/models/FrmSettings.php:96
 msgid "There was a problem with your submission. Errors are marked below."
 msgstr ""
 "Il y a eu un problème avec votre soumission. Les erreurs sont signalées ci-"
 "dessous."
 
-#: ../classes/models/FrmSettings.php:95
+#: ../classes/models/FrmSettings.php:97
 msgid "We're sorry. It looks like you've  already submitted that."
 msgstr "Nous sommes désolés. Il semble que vous avez déjà envoyé cela"
 
-#: ../classes/models/FrmSettings.php:96 ../classes/views/styles/_sample_form.php:
+#: ../classes/models/FrmSettings.php:98 ../classes/views/styles/_sample_form.php:
 #: 76 ../pro/classes/views/frmpro-entries/show.php:34
 msgid "Submit"
 msgstr "Envoyer"
 
-#: ../classes/models/FrmSettings.php:97
+#: ../classes/models/FrmSettings.php:99
 msgid "You do not have permission to view this form."
 msgstr "Vous n'avez pas la permission de voir ce formulaire."
 
-#: ../classes/models/FrmSettings.php:164
+#: ../classes/models/FrmSettings.php:167
 msgid "The reCAPTCHA was not entered correctly"
 msgstr "Le reCAPTCHA n'est pas entré correctement"
 
@@ -3780,9 +3861,9 @@ msgstr ""
 "ajoutez en"
 
 #: ../classes/views/frm-entries/list.php:18 ../classes/views/frm-forms/list.php:
-#: 21 ../pro/classes/controllers/FrmProEntriesController.php:2006 ..
-#: pro/classes/controllers/FrmProFormsController.php:369 ..
-#: pro/classes/controllers/FrmProFormsController.php:428 ..
+#: 21 ../pro/classes/controllers/FrmProEntriesController.php:2049 ..
+#: pro/classes/controllers/FrmProFormsController.php:378 ..
+#: pro/classes/controllers/FrmProFormsController.php:437 ..
 #: pro/classes/helpers/FrmProEntriesListHelper.php:69
 msgid "Search"
 msgstr "Recherche"
@@ -3825,7 +3906,7 @@ msgid "Entry"
 msgstr "Entrée"
 
 #: ../classes/views/frm-entries/show.php:57 ..
-#: pro/classes/controllers/FrmProEntriesController.php:1634
+#: pro/classes/controllers/FrmProEntriesController.php:1677
 msgid "Parent Entry ID"
 msgstr "ID de l'entrée parente"
 
@@ -3834,7 +3915,7 @@ msgid "Entry Details"
 msgstr "Détails d'entrée"
 
 #: ../classes/views/frm-entries/sidebar-shared.php:8 ..
-#: pro/classes/controllers/FrmProEntriesController.php:1632
+#: pro/classes/controllers/FrmProEntriesController.php:1675
 msgid "Post"
 msgstr "Article"
 
@@ -3848,7 +3929,7 @@ msgstr "Crée par: %1$s"
 msgid "Updated by: %1$s"
 msgstr "Mis à jour par: %1$s"
 
-#: ../classes/views/frm-entries/sidebar-shared.php:62
+#: ../classes/views/frm-entries/sidebar-shared.php:64
 msgid "Browser/OS"
 msgstr "Navigateur/OS"
 
@@ -3861,10 +3942,10 @@ msgid "Print"
 msgstr "Imprimer"
 
 #: ../classes/views/frm-entries/sidebar-show.php:22 ..
-#: pro/classes/controllers/FrmProEntriesController.php:1671 ..
-#: pro/classes/controllers/FrmProEntriesController.php:2056 ..
-#: pro/classes/controllers/FrmProEntriesController.php:2130 ..
-#: pro/classes/controllers/FrmProEntriesController.php:2525
+#: pro/classes/controllers/FrmProEntriesController.php:1714 ..
+#: pro/classes/controllers/FrmProEntriesController.php:2099 ..
+#: pro/classes/controllers/FrmProEntriesController.php:2173 ..
+#: pro/classes/controllers/FrmProEntriesController.php:2568
 msgid "Are you sure you want to delete that entry?"
 msgstr "Êtes vous sûr de vouloir supprimer cette entrée ?"
 
@@ -3974,11 +4055,11 @@ msgstr "Message"
 msgid "Options"
 msgstr "Options"
 
-#: ../classes/views/frm-form-actions/_email_settings.php:58
+#: ../classes/views/frm-form-actions/_email_settings.php:60
 msgid "Append IP Address, Browser, and Referring URL to message"
 msgstr "Ajoutez l'adresse IP, navigateur, et l'URL de référent au message"
 
-#: ../classes/views/frm-form-actions/_email_settings.php:60
+#: ../classes/views/frm-form-actions/_email_settings.php:66
 msgid "Send Emails in Plain Text"
 msgstr "Envoyer les e-mails au format texte"
 
@@ -4095,7 +4176,7 @@ msgid "Field Type"
 msgstr "Type de champ"
 
 #: ../classes/views/frm-forms/add_field.php:162 ../classes/views/frm-
-#: forms/add_field.php:289
+#: forms/add_field.php:292
 msgid "Required"
 msgstr "Requis"
 
@@ -4109,7 +4190,7 @@ msgstr ""
 "le même nom."
 
 #: ../classes/views/frm-forms/add_field.php:172 ../classes/views/frm-
-#: forms/add_field.php:304
+#: forms/add_field.php:307
 msgid "Unique"
 msgstr "Unique"
 
@@ -4153,40 +4234,12 @@ msgstr ""
 "Ajouter une classe CSS pour le champ. Utilisez nos classes prédéfinies pour "
 "aligner plusieurs champs dans une seule ligne."
 
-#: ../classes/views/frm-forms/add_field.php:222 ../classes/views/frm-
+#: ../classes/views/frm-forms/add_field.php:223 ../classes/views/frm-
 #: forms/mb_html_tab.php:10
 msgid "Label Position"
 msgstr "Position de l'étiquette"
 
-#: ../classes/views/frm-forms/add_field.php:225
-msgid "Top"
-msgstr "En haut"
-
-#: ../classes/views/frm-forms/add_field.php:226
-msgid "Left"
-msgstr "À gauche"
-
-#: ../classes/views/frm-forms/add_field.php:227 ../classes/views/frm-
-#: forms/add_field_links.php:104
-msgid "Right"
-msgstr "À droite"
-
-#: ../classes/views/frm-forms/add_field.php:228
-msgid "Inline (left without a set width)"
-msgstr "En ligne (à gauche sans largeur définie)"
-
-#: ../classes/views/frm-forms/add_field.php:229 ../pro/classes/views/frmpro-
-#: fields/back-end/confirmation.php:5 ../pro/classes/views/frmpro-form-
-#: actions/post_options.php:109 ../pro/classes/views/frmpro-form-
-#: actions/post_options.php:119 ../pro/classes/views/styles/_date-fields.php:15
-msgid "None"
-msgstr "Aucune"
-
-#: ../classes/views/frm-forms/add_field.php:230
-msgid "Hidden (but leave the space)"
-msgstr "Cachée (mais laisser l'espace)"
-
-#: ../classes/views/frm-forms/add_field.php:250
+#: ../classes/views/frm-forms/add_field.php:253
 msgid ""
 "Set the size of the captcha field. The compact option is best if your form "
 "is in a small area."
@@ -4194,35 +4247,35 @@ msgstr ""
 "Ajustez les dimensions du champ Captcha. L’option Compacte est préférable "
 "lorsque l’espace est restreint."
 
-#: ../classes/views/frm-forms/add_field.php:258
+#: ../classes/views/frm-forms/add_field.php:261
 msgid "Compact"
 msgstr "Compact"
 
-#: ../classes/views/frm-forms/add_field.php:265
+#: ../classes/views/frm-forms/add_field.php:268
 msgid "reCAPTCHA Color"
 msgstr "Couleur du reCAPTCHA"
 
-#: ../classes/views/frm-forms/add_field.php:269
+#: ../classes/views/frm-forms/add_field.php:272
 msgid "Light"
 msgstr "Clair"
 
-#: ../classes/views/frm-forms/add_field.php:270
+#: ../classes/views/frm-forms/add_field.php:273
 msgid "Dark"
 msgstr "Foncé"
 
-#: ../classes/views/frm-forms/add_field.php:284
+#: ../classes/views/frm-forms/add_field.php:287
 msgid "Validation"
 msgstr "Validation"
 
-#: ../classes/views/frm-forms/add_field.php:296
+#: ../classes/views/frm-forms/add_field.php:299
 msgid "Invalid Format"
 msgstr "Format invalide"
 
-#: ../classes/views/frm-forms/add_field.php:312
+#: ../classes/views/frm-forms/add_field.php:315
 msgid "Confirmation"
 msgstr "Confirmation"
 
-#: ../classes/views/frm-forms/add_field.php:331
+#: ../classes/views/frm-forms/add_field.php:334
 msgid "Drag fields from your form or the sidebar into this section"
 msgstr ""
 "Faites glisser les champs de votre formulaire ou la barre latérale dans "
@@ -4547,17 +4600,17 @@ msgid " Upgrade to Formidable Pro to get access to all options in the dropdown."
 msgstr "Passez à Formidable Pro pour accéder à toutes les options du menu déroulant."
 
 #: ../classes/views/frm-forms/settings.php:61 ../pro/classes/views/frmpro-
-#: forms/add_form_options.php:93
+#: forms/add_form_options.php:95
 msgid "Show Message"
 msgstr "Afficher un message"
 
 #: ../classes/views/frm-forms/settings.php:64 ../classes/views/frm-forms/settings.
-#: php:70 ../pro/classes/views/frmpro-forms/add_form_options.php:94
+#: php:70 ../pro/classes/views/frmpro-forms/add_form_options.php:96
 msgid "Redirect to URL"
 msgstr "URL de redirection"
 
 #: ../classes/views/frm-forms/settings.php:66 ../classes/views/frm-forms/settings.
-#: php:75 ../pro/classes/views/frmpro-forms/add_form_options.php:95
+#: php:75 ../pro/classes/views/frmpro-forms/add_form_options.php:97
 msgid "Show Page Content"
 msgstr "Afficher le contenu de la page"
 
@@ -4567,7 +4620,7 @@ msgid "(Premium feature)"
 msgstr "(Fonction Premium)"
 
 #: ../classes/views/frm-forms/settings.php:91 ../pro/classes/views/frmpro-
-#: forms/add_form_options.php:103
+#: forms/add_form_options.php:105
 msgid "Use Content from Page"
 msgstr "Utiliser le contenu de la page"
 
@@ -4685,7 +4738,7 @@ msgid "Select a form:"
 msgstr "Sélectionner un formulaire :"
 
 #: ../classes/views/frm-settings/form.php:39 ../classes/views/frm-settings/form.
-#: php:204
+#: php:213
 msgid "Update Options"
 msgstr "Mettre à jour les options"
 
@@ -4842,7 +4895,7 @@ msgstr "Le message par défaut vu après un formulaire soumis."
 msgid "Preview Page"
 msgstr "Page d'aperçu"
 
-#: ../classes/views/frm-settings/form.php:200
+#: ../classes/views/frm-settings/form.php:209
 msgid "Uninstall Formidable"
 msgstr "Désinstaller Formidable"
 
@@ -4888,7 +4941,7 @@ msgid "Fields from your form"
 msgstr "Champs de votre formulaire"
 
 #: ../classes/views/shared/mb_adv_info.php:68 ..
-#: pro/classes/helpers/FrmProFieldsHelper.php:2682
+#: pro/classes/helpers/FrmProFieldsHelper.php:2719
 msgid "Helpers"
 msgstr "Aides"
 
@@ -4971,12 +5024,12 @@ msgstr "Taille"
 
 #: ../classes/views/styles/_buttons.php:31 ../classes/views/styles/_field-labels.
 #: php:36 ../classes/views/styles/_field-sizes.php:12 ..
-#: pro/classes/controllers/FrmProFormsController.php:488
+#: pro/classes/controllers/FrmProFormsController.php:497
 msgid "Width"
 msgstr "Largeur"
 
 #: ../classes/views/styles/_buttons.php:36 ../classes/views/styles/_field-sizes.
-#: php:7 ../pro/classes/controllers/FrmProFormsController.php:487
+#: php:7 ../pro/classes/controllers/FrmProFormsController.php:496
 msgid "Height"
 msgstr "Hauteur"
 
@@ -5114,32 +5167,9 @@ msgstr "italique"
 msgid "Align"
 msgstr "Alignement"
 
-#: ../classes/views/styles/_field-description.php:28 ..
-#: classes/views/styles/_field-labels.php:21 ../classes/views/styles/_field-
-#: labels.php:30 ../classes/views/styles/_general.php:10 ..
-#: pro/classes/views/styles/_section-fields.php:78
-msgid "left"
-msgstr "Gauche"
-
-#: ../classes/views/styles/_field-description.php:29 ..
-#: classes/views/styles/_field-labels.php:21 ../classes/views/styles/_field-
-#: labels.php:31 ../classes/views/styles/_general.php:11 ..
-#: pro/classes/views/styles/_section-fields.php:79
-msgid "right"
-msgstr "Droite"
-
 #: ../classes/views/styles/_field-labels.php:19
 msgid "Position"
 msgstr "Position"
-
-#: ../classes/views/styles/_field-labels.php:21 ..
-#: pro/classes/views/styles/_section-fields.php:76
-msgid "top"
-msgstr "en haut"
-
-#: ../classes/views/styles/_field-labels.php:21
-msgid "none"
-msgstr "aucun"
 
 #: ../classes/views/styles/_field-labels.php:46
 msgid "Required Indicator"
@@ -5440,28 +5470,28 @@ msgstr "Titre"
 msgid "Show Description"
 msgstr "Voir la description"
 
-#: ../pro/classes/controllers/FrmProAddressesController.php:140
+#: ../pro/classes/controllers/FrmProAddressesController.php:139
 msgid "Line 1"
 msgstr "Ligne 1"
 
-#: ../pro/classes/controllers/FrmProAddressesController.php:141
+#: ../pro/classes/controllers/FrmProAddressesController.php:140
 msgid "Line 2"
 msgstr "Ligne 2"
 
-#: ../pro/classes/controllers/FrmProAddressesController.php:142 ..
-#: pro/classes/controllers/FrmProAddressesController.php:168
+#: ../pro/classes/controllers/FrmProAddressesController.php:141 ..
+#: pro/classes/controllers/FrmProAddressesController.php:167
 msgid "Country"
 msgstr "Pays"
 
-#: ../pro/classes/controllers/FrmProAddressesController.php:165
+#: ../pro/classes/controllers/FrmProAddressesController.php:164
 msgid "City"
 msgstr "Ville"
 
-#: ../pro/classes/controllers/FrmProAddressesController.php:166
+#: ../pro/classes/controllers/FrmProAddressesController.php:165
 msgid "State/Province"
 msgstr "Département"
 
-#: ../pro/classes/controllers/FrmProAddressesController.php:167
+#: ../pro/classes/controllers/FrmProAddressesController.php:166
 msgid "Zip/Postal"
 msgstr "Code Postal"
 
@@ -5557,23 +5587,23 @@ msgstr "Paramètres de base"
 msgid "Advanced Settings"
 msgstr "Paramètres avancés"
 
-#: ../pro/classes/controllers/FrmProDisplaysController.php:742
+#: ../pro/classes/controllers/FrmProDisplaysController.php:741
 msgid "daily"
 msgstr "journalier"
 
-#: ../pro/classes/controllers/FrmProDisplaysController.php:742
+#: ../pro/classes/controllers/FrmProDisplaysController.php:741
 msgid "weekly"
 msgstr "hebdomadaire"
 
-#: ../pro/classes/controllers/FrmProDisplaysController.php:742
+#: ../pro/classes/controllers/FrmProDisplaysController.php:741
 msgid "monthly"
 msgstr "mensuel"
 
-#: ../pro/classes/controllers/FrmProDisplaysController.php:742
+#: ../pro/classes/controllers/FrmProDisplaysController.php:741
 msgid "yearly"
 msgstr "annuel"
 
-#: ../pro/classes/controllers/FrmProDisplaysController.php:861
+#: ../pro/classes/controllers/FrmProDisplaysController.php:860
 msgid "There are no views with that ID"
 msgstr "Il n'y a pas de vues avec cet ID"
 
@@ -5611,88 +5641,88 @@ msgstr "Sauvegarder la licence"
 msgid "or"
 msgstr "ou"
 
-#: ../pro/classes/controllers/FrmProEntriesController.php:303
+#: ../pro/classes/controllers/FrmProEntriesController.php:322
 msgid "Draft was Successfully Created"
 msgstr "Le brouillon a été créé avec succès"
 
-#: ../pro/classes/controllers/FrmProEntriesController.php:305
+#: ../pro/classes/controllers/FrmProEntriesController.php:324
 msgid "Entry was Successfully Created"
 msgstr "Entrée crée avec succès"
 
-#: ../pro/classes/controllers/FrmProEntriesController.php:340
+#: ../pro/classes/controllers/FrmProEntriesController.php:359
 msgid "Draft was Successfully Updated"
 msgstr "Brouillon a ét mis à jour avec succès"
 
-#: ../pro/classes/controllers/FrmProEntriesController.php:342
+#: ../pro/classes/controllers/FrmProEntriesController.php:361
 msgid "Entry was Successfully Updated"
 msgstr "Entrée mise a jour avec succès"
 
-#: ../pro/classes/controllers/FrmProEntriesController.php:345
+#: ../pro/classes/controllers/FrmProEntriesController.php:364
 msgid "Back to Entries"
 msgstr "Revenir aux entrées"
 
-#: ../pro/classes/controllers/FrmProEntriesController.php:363
+#: ../pro/classes/controllers/FrmProEntriesController.php:382
 msgid "Entry was Successfully Duplicated"
 msgstr "Entrée dupliquée avec succès"
 
-#: ../pro/classes/controllers/FrmProEntriesController.php:365
+#: ../pro/classes/controllers/FrmProEntriesController.php:384
 msgid "There was a problem duplicating that entry"
 msgstr "Il y a eu un problème pour dupliquer cette entrée"
 
-#: ../pro/classes/controllers/FrmProEntriesController.php:419
+#: ../pro/classes/controllers/FrmProEntriesController.php:438
 msgid "No form was found"
 msgstr "Aucun formulaire trouvé"
 
-#: ../pro/classes/controllers/FrmProEntriesController.php:1167
+#: ../pro/classes/controllers/FrmProEntriesController.php:1210
 msgid "Please wait while you are redirected."
 msgstr "Merci de patienter pendant que vous êtes redirigé"
 
-#: ../pro/classes/controllers/FrmProEntriesController.php:1170
+#: ../pro/classes/controllers/FrmProEntriesController.php:1213
 #, php-format
 msgid "%1$sClick here%2$s if you are not automatically redirected."
 msgstr "%1$sCliquez ici%2$s Si vous n'êtes pas redirigé automatiquement."
 
-#: ../pro/classes/controllers/FrmProEntriesController.php:1274
+#: ../pro/classes/controllers/FrmProEntriesController.php:1317
 msgid "Create Entry in Form"
 msgstr "Crée une entrée dans le formulaire"
 
-#: ../pro/classes/controllers/FrmProEntriesController.php:1317
+#: ../pro/classes/controllers/FrmProEntriesController.php:1360
 msgid "Copied from Post"
 msgstr "Copié à partir de l'artiicle"
 
-#: ../pro/classes/controllers/FrmProEntriesController.php:1367 ..
-#: pro/classes/controllers/FrmProEntriesController.php:1395
+#: ../pro/classes/controllers/FrmProEntriesController.php:1410 ..
+#: pro/classes/controllers/FrmProEntriesController.php:1438
 msgid "You are trying to access an entry that does not exist."
 msgstr "Vous tentez d'accéder à une entrée qui ne existe pas."
 
-#: ../pro/classes/controllers/FrmProEntriesController.php:2563 ..
-#: pro/classes/controllers/FrmProEntriesController.php:2934
+#: ../pro/classes/controllers/FrmProEntriesController.php:2606 ..
+#: pro/classes/controllers/FrmProEntriesController.php:2977
 msgid "Your entry was successfully deleted"
 msgstr "Votre entrée a été supprimée avec succès"
 
-#: ../pro/classes/controllers/FrmProEntriesController.php:2603
+#: ../pro/classes/controllers/FrmProEntriesController.php:2646
 msgid "You are missing options in your shortcode. field_id is required."
 msgstr "Vous avez oublier une options dans votre shortcode. field_id est nécessaire."
 
-#: ../pro/classes/controllers/FrmProEntriesController.php:2950
+#: ../pro/classes/controllers/FrmProEntriesController.php:2993
 msgid "There was an error deleting that entry"
 msgstr "Il y a eu une erreur lors de la suppression de cette entrée"
 
-#: ../pro/classes/controllers/FrmProEntriesController.php:3012
+#: ../pro/classes/controllers/FrmProEntriesController.php:3057
 #, php-format
 msgid "Resent to %s"
 msgstr "Renvoyer à %s"
 
-#: ../pro/classes/controllers/FrmProEntriesController.php:3017
+#: ../pro/classes/controllers/FrmProEntriesController.php:3062
 msgid "Resent to No one! You do not have permission"
 msgstr "Renvoyer aucun! Vous n'avez pas la permission"
 
-#: ../pro/classes/controllers/FrmProFieldsController.php:540
+#: ../pro/classes/controllers/FrmProFieldsController.php:534
 msgid "Option Label"
 msgstr "Etiquette d'option"
 
-#: ../pro/classes/controllers/FrmProFieldsController.php:541 ..
-#: pro/classes/controllers/FrmProFormsController.php:289
+#: ../pro/classes/controllers/FrmProFieldsController.php:535 ..
+#: pro/classes/controllers/FrmProFormsController.php:298
 msgid "Saved Value"
 msgstr "sauvegarder la valeur"
 
@@ -5753,22 +5783,22 @@ msgid "Login"
 msgstr "Login"
 
 #: ../pro/classes/controllers/FrmProFormsController.php:76 ..
-#: pro/classes/controllers/FrmProFormsController.php:303
+#: pro/classes/controllers/FrmProFormsController.php:312
 msgid "Display Name"
 msgstr "Nom d'affichage"
 
 #: ../pro/classes/controllers/FrmProFormsController.php:77 ..
-#: pro/classes/controllers/FrmProFormsController.php:301
+#: pro/classes/controllers/FrmProFormsController.php:310
 msgid "First Name"
 msgstr "Prénom"
 
 #: ../pro/classes/controllers/FrmProFormsController.php:78 ..
-#: pro/classes/controllers/FrmProFormsController.php:302
+#: pro/classes/controllers/FrmProFormsController.php:311
 msgid "Last Name"
 msgstr "Nom"
 
 #: ../pro/classes/controllers/FrmProFormsController.php:79 ..
-#: pro/classes/controllers/FrmProFormsController.php:300 ..
+#: pro/classes/controllers/FrmProFormsController.php:309 ..
 #: pro/classes/models/FrmProField.php:35 ../pro/classes/models/FrmProForm.php:276
 msgid "User ID"
 msgstr "ID utilisateur"
@@ -5831,55 +5861,55 @@ msgstr ""
 "Remplacer «tout» avec le nom de paramètre. Pour obtenir l'url de la page "
 "courante, utilisez [server param=\"REQUEST_URI\"] dans votre champ."
 
-#: ../pro/classes/controllers/FrmProFormsController.php:265
+#: ../pro/classes/controllers/FrmProFormsController.php:274
 msgid "Equals"
 msgstr "est égal"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:266
+#: ../pro/classes/controllers/FrmProFormsController.php:275
 msgid "Does Not Equal"
 msgstr "N'est pas égal"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:267
+#: ../pro/classes/controllers/FrmProFormsController.php:276
 msgid "Is Blank"
 msgstr "est vide"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:268
+#: ../pro/classes/controllers/FrmProFormsController.php:277
 msgid "Is Not Blank"
 msgstr "n'est pas vide"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:269
+#: ../pro/classes/controllers/FrmProFormsController.php:278
 msgid "Is Like"
 msgstr "est comme"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:270
+#: ../pro/classes/controllers/FrmProFormsController.php:279
 msgid "Is Not Like"
 msgstr "N'est pas comme"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:271
+#: ../pro/classes/controllers/FrmProFormsController.php:280
 msgid "Greater Than"
 msgstr "Supérieur à"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:272
+#: ../pro/classes/controllers/FrmProFormsController.php:281
 msgid "Less Than"
 msgstr "Inférieur à"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:281
+#: ../pro/classes/controllers/FrmProFormsController.php:290
 msgid "Clickable Links"
 msgstr "Liens cliquables"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:282
+#: ../pro/classes/controllers/FrmProFormsController.php:291
 msgid "Remove Links"
 msgstr "Supprimer les liens"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:282
+#: ../pro/classes/controllers/FrmProFormsController.php:291
 msgid "Removes the automatic links to category pages"
 msgstr "Supprime les liens automatiques de catégorie des pages"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:283
+#: ../pro/classes/controllers/FrmProFormsController.php:292
 msgid "Sanitize"
 msgstr "Assainir"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:283
+#: ../pro/classes/controllers/FrmProFormsController.php:292
 msgid ""
 "Replaces spaces with dashes and lowercases all. Use if adding an HTML class "
 "or ID"
@@ -5887,19 +5917,19 @@ msgstr ""
 "Remplace tous les espace avec des tirets et des minuscules. A utiliser si "
 "vous ajouter une classe HTML ou un ID"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:284
+#: ../pro/classes/controllers/FrmProFormsController.php:293
 msgid "Sanitize URL"
 msgstr "Assainir les URL"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:284
+#: ../pro/classes/controllers/FrmProFormsController.php:293
 msgid "Replaces all HTML entities with a URL safe string."
 msgstr "Remplace toutes les entrée HTML avec des une chaîne sécurisée d'URL ."
 
-#: ../pro/classes/controllers/FrmProFormsController.php:285
+#: ../pro/classes/controllers/FrmProFormsController.php:294
 msgid "Truncate"
 msgstr "Tronquer"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:285
+#: ../pro/classes/controllers/FrmProFormsController.php:294
 msgid ""
 "Truncate text with a link to view more. If using Both (dynamic), the link "
 "goes to the detail page. Otherwise, it will show in-place."
@@ -5908,39 +5938,39 @@ msgstr ""
 "deux\\\" (dynamique), le lien mène à la page de détail. Sinon, il s'affichera "
 "sur place."
 
-#: ../pro/classes/controllers/FrmProFormsController.php:286
+#: ../pro/classes/controllers/FrmProFormsController.php:295
 msgid "More Text"
 msgstr "Texte pour \"plus...\""
 
-#: ../pro/classes/controllers/FrmProFormsController.php:287
+#: ../pro/classes/controllers/FrmProFormsController.php:296
 msgid "Time Ago"
 msgstr "Depuis"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:287
+#: ../pro/classes/controllers/FrmProFormsController.php:296
 msgid "How long ago a date was in minutes, hours, days, months, or years."
 msgstr "Combien de temps depuis une date en minutes, heures, jours, mois ou années."
 
-#: ../pro/classes/controllers/FrmProFormsController.php:288
+#: ../pro/classes/controllers/FrmProFormsController.php:297
 msgid "# Format"
 msgstr "# Format"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:289
+#: ../pro/classes/controllers/FrmProFormsController.php:298
 msgid "Show the saved value for fields with separate values."
 msgstr "Montre la valeur sauvegardée pour les champs ayant des valeurs distinctes."
 
-#: ../pro/classes/controllers/FrmProFormsController.php:290
+#: ../pro/classes/controllers/FrmProFormsController.php:299
 msgid "Remove HTML"
 msgstr "Supprimer l'HTML"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:290
+#: ../pro/classes/controllers/FrmProFormsController.php:299
 msgid "Remove all HTML added into your form before display"
 msgstr "Supprimer tout le HTML ajouté dans votre formulaire avant affichage"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:291
+#: ../pro/classes/controllers/FrmProFormsController.php:300
 msgid "Keep JS"
 msgstr "Garder JS"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:291
+#: ../pro/classes/controllers/FrmProFormsController.php:300
 msgid ""
 "Javascript from your form entries are automatically removed. Add this option "
 "only if you trust those submitting entries."
@@ -5948,299 +5978,299 @@ msgstr ""
 "Javascript de vos entrées de formulaire sont automatiquement supprimés. "
 "N'ajoutez cette option que si vous faites confiance à ces entrées soumises."
 
-#: ../pro/classes/controllers/FrmProFormsController.php:304
+#: ../pro/classes/controllers/FrmProFormsController.php:313
 msgid "User Login"
 msgstr "Identifiant utilisateur"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:306
+#: ../pro/classes/controllers/FrmProFormsController.php:315
 msgid "Avatar"
 msgstr "Avatar"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:367
+#: ../pro/classes/controllers/FrmProFormsController.php:376
 msgid "Insert a View"
 msgstr "Inserez une vue"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:368
+#: ../pro/classes/controllers/FrmProFormsController.php:377
 msgid "Graph"
 msgstr "Graphe"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:368
+#: ../pro/classes/controllers/FrmProFormsController.php:377
 msgid "Insert a Graph"
 msgstr "Unserez un graphe"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:369
+#: ../pro/classes/controllers/FrmProFormsController.php:378
 msgid "Add a Search Form"
 msgstr "Ajouter un formulaire de recherche"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:370
+#: ../pro/classes/controllers/FrmProFormsController.php:379
 msgid "Single Entry"
 msgstr "Entrée unique"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:370
+#: ../pro/classes/controllers/FrmProFormsController.php:379
 msgid "Display a Single Entry"
 msgstr "Afficher une entrée unique"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:371
+#: ../pro/classes/controllers/FrmProFormsController.php:380
 msgid "List of Entries"
 msgstr "Liste des entrées"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:371
+#: ../pro/classes/controllers/FrmProFormsController.php:380
 msgid "Display a List of Entries"
 msgstr "Afficher une liste d'entrées"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:392
+#: ../pro/classes/controllers/FrmProFormsController.php:401
 msgid "Make read-only fields editable"
 msgstr "Crée en lecture seule un champs modifiables"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:400
+#: ../pro/classes/controllers/FrmProFormsController.php:409
 msgid "Select a view:"
 msgstr "Choisissez une vue:"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:410
+#: ../pro/classes/controllers/FrmProFormsController.php:419
 msgid "Filter shortcodes within the view content"
 msgstr "Filtrer les shortcodes dans le contenu de la vue"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:411 ..
+#: ../pro/classes/controllers/FrmProFormsController.php:420 ..
 #: pro/classes/views/displays/mb_advanced.php:6
 msgid "Limit"
 msgstr "Limite"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:412
+#: ../pro/classes/controllers/FrmProFormsController.php:421
 msgid "Page size"
 msgstr "Taille de la page"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:414
+#: ../pro/classes/controllers/FrmProFormsController.php:423
 msgid "Entry order"
 msgstr "Ordre de saisie"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:417 ..
+#: ../pro/classes/controllers/FrmProFormsController.php:426 ..
 #: pro/classes/views/displays/order_row.php:14
 msgid "Ascending"
 msgstr "Ascendant"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:418 ..
+#: ../pro/classes/controllers/FrmProFormsController.php:427 ..
 #: pro/classes/views/displays/order_row.php:15
 msgid "Descending"
 msgstr "Descendant"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:426
+#: ../pro/classes/controllers/FrmProFormsController.php:435
 msgid "Use Formidable styling"
 msgstr "Utiliser un style Formidable"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:429
+#: ../pro/classes/controllers/FrmProFormsController.php:438
 msgid "Customize search button"
 msgstr "Personnaliser bouton de recherche"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:434
+#: ../pro/classes/controllers/FrmProFormsController.php:443
 msgid "The ID of the page with the search results"
 msgstr "Afficher l'ID de la page avec les résultats de la recherche"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:452 ..
+#: ../pro/classes/controllers/FrmProFormsController.php:461 ..
 #: pro/classes/views/frmpro-fields/options-form-before.php:19 ..
 #: pro/classes/views/lookup-fields/back-end/get-options-from.php:2
 msgid "Select Form"
 msgstr "Sélectionner un formulaire"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:465
+#: ../pro/classes/controllers/FrmProFormsController.php:474
 msgid "Graph Type"
 msgstr "Type de graphique"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:467
+#: ../pro/classes/controllers/FrmProFormsController.php:476
 msgid "Column"
 msgstr "Colonne"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:469
+#: ../pro/classes/controllers/FrmProFormsController.php:478
 msgid "Pie"
 msgstr "Camembert"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:470
+#: ../pro/classes/controllers/FrmProFormsController.php:479
 msgid "Line"
 msgstr "Ligne"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:471
+#: ../pro/classes/controllers/FrmProFormsController.php:480
 msgid "Area"
 msgstr "Surfacique"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:475
+#: ../pro/classes/controllers/FrmProFormsController.php:484
 msgid "Stepped Area"
 msgstr "Surface escalier"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:480
+#: ../pro/classes/controllers/FrmProFormsController.php:489
 msgid "Data Type"
 msgstr "Type de données"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:482
+#: ../pro/classes/controllers/FrmProFormsController.php:491
 msgid "The number of entries"
 msgstr "Le nombre d'entrées"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:483
+#: ../pro/classes/controllers/FrmProFormsController.php:492
 msgid "Add the field values together"
 msgstr "Ajouter ensemble les valeurs de champ"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:484
+#: ../pro/classes/controllers/FrmProFormsController.php:493
 msgid "Average the totaled field values"
 msgstr "La moyenne totale des valeurs de champ"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:489 ..
-#: pro/classes/controllers/FrmProFormsController.php:520
+#: ../pro/classes/controllers/FrmProFormsController.php:498 ..
+#: pro/classes/controllers/FrmProFormsController.php:529
 msgid "Background color"
 msgstr "Couleur de fond"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:490
+#: ../pro/classes/controllers/FrmProFormsController.php:499
 msgid "Graph title"
 msgstr "Titre du graphique"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:491
+#: ../pro/classes/controllers/FrmProFormsController.php:500
 msgid "Title font size"
 msgstr "Taille de la police du titre"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:492
+#: ../pro/classes/controllers/FrmProFormsController.php:501
 msgid "Title font name"
 msgstr "Titre du nom de la police"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:494
+#: ../pro/classes/controllers/FrmProFormsController.php:503
 msgid "Turn your pie graph three-dimensional"
 msgstr "Tourner votre graphique circulaire tridimensionnel"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:505
+#: ../pro/classes/controllers/FrmProFormsController.php:514
 msgid "Insert an entry ID/key:"
 msgstr "Insérez une entrée ID/key:"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:512
+#: ../pro/classes/controllers/FrmProFormsController.php:521
 msgid "Include user info like browser and IP"
 msgstr "Inclure informations de l'utilisateur comme le navigateur et l'IP"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:513
+#: ../pro/classes/controllers/FrmProFormsController.php:522
 msgid "Include rows for blank fields"
 msgstr "Inclure des lignes pour les champs vides"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:514
+#: ../pro/classes/controllers/FrmProFormsController.php:523
 msgid "Do not include any HTML"
 msgstr "Ne pas inclure les balises HTML"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:515
+#: ../pro/classes/controllers/FrmProFormsController.php:524
 msgid "Use RTL format"
 msgstr "Utilisez le format RTL"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:516
+#: ../pro/classes/controllers/FrmProFormsController.php:525
 msgid "Font size"
 msgstr "Taille de police"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:517
+#: ../pro/classes/controllers/FrmProFormsController.php:526
 msgid "Text color"
 msgstr "Couleur du texte"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:518
+#: ../pro/classes/controllers/FrmProFormsController.php:527
 msgid "Border width"
 msgstr "Largeur de la bordure"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:519
+#: ../pro/classes/controllers/FrmProFormsController.php:528
 msgid "Border color"
 msgstr "Couleur de la bordure"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:521
+#: ../pro/classes/controllers/FrmProFormsController.php:530
 msgid "Alternate background color"
 msgstr "Autre couleur de fond"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:530
+#: ../pro/classes/controllers/FrmProFormsController.php:539
 msgid "Field ID/key for labels"
 msgstr "Champ ID/Clé pour étiquettes"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:533
+#: ../pro/classes/controllers/FrmProFormsController.php:542
 msgid "Display format"
 msgstr "Format d'affichage"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:535 ..
-#: pro/classes/helpers/FrmProFieldsHelper.php:3780
+#: ../pro/classes/controllers/FrmProFormsController.php:544 ..
+#: pro/classes/helpers/FrmProFieldsHelper.php:3826
 msgid "List"
 msgstr "Liste"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:536
+#: ../pro/classes/controllers/FrmProFormsController.php:545
 msgid "Drop down"
 msgstr "Menu déroulant"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:537
+#: ../pro/classes/controllers/FrmProFormsController.php:546
 msgid "Expanding archive"
 msgstr "Extraction d'archive"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:542
+#: ../pro/classes/controllers/FrmProFormsController.php:551
 msgid "Privacy"
 msgstr "Secret"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:544
+#: ../pro/classes/controllers/FrmProFormsController.php:553
 msgid "Only include the entries the current user created"
 msgstr "Inclure uniquement les entrées de l'utilisateur actuel créé"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:545
+#: ../pro/classes/controllers/FrmProFormsController.php:554
 msgid "Include all entries"
 msgstr "Inclure toutes les entrées"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:548
+#: ../pro/classes/controllers/FrmProFormsController.php:557
 msgid "The ID of the page to link to"
 msgstr "L'ID de la page pour vous reliez à"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:551
+#: ../pro/classes/controllers/FrmProFormsController.php:560
 msgid "Link action"
 msgstr "Lien d'action"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:553
+#: ../pro/classes/controllers/FrmProFormsController.php:562
 msgid "Edit if allowed"
 msgstr "Modifier si cela est autorisé"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:554
+#: ../pro/classes/controllers/FrmProFormsController.php:563
 msgid "View only"
 msgstr "Voir seulement"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:557
+#: ../pro/classes/controllers/FrmProFormsController.php:566
 msgid "Delete link label"
 msgstr "Supprimer l'étiquette de lien"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:558
+#: ../pro/classes/controllers/FrmProFormsController.php:567
 msgid "Delete confirmation message"
 msgstr "Supprimer le message de confirmation"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:561
+#: ../pro/classes/controllers/FrmProFormsController.php:570
 msgid "Send users to"
 msgstr "Envoyer utilisateurs à"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:563
+#: ../pro/classes/controllers/FrmProFormsController.php:572
 msgid "A page"
 msgstr "Une page"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:564
+#: ../pro/classes/controllers/FrmProFormsController.php:573
 msgid "An anchor on the page with id=\"[key]\""
 msgstr "Une ancre sur la page avec id=\"[key]\""
 
-#: ../pro/classes/controllers/FrmProFormsController.php:565
+#: ../pro/classes/controllers/FrmProFormsController.php:574
 msgid "The entry in the back-end"
 msgstr "L'entrée dans le précédent"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:568
+#: ../pro/classes/controllers/FrmProFormsController.php:577
 msgid "URL parameter (?entry=5)"
 msgstr "Paramètre d'URL (?entry=5)"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:571
+#: ../pro/classes/controllers/FrmProFormsController.php:580
 msgid "Identify the entry by"
 msgstr "Identifier l'entrée en"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:573 ..
+#: ../pro/classes/controllers/FrmProFormsController.php:582 ..
 #: pro/classes/views/displays/where_row.php:7
 msgid "Entry key"
 msgstr "Touche Entrée"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:577
+#: ../pro/classes/controllers/FrmProFormsController.php:586
 msgid "Add HTML classes"
 msgstr "Ajouter une classe HTML"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:578
+#: ../pro/classes/controllers/FrmProFormsController.php:587
 msgid "Label on first option in the dropdown"
 msgstr "Étiquette sur première option dans la liste déroulante"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:579
+#: ../pro/classes/controllers/FrmProFormsController.php:588
 msgid "Include draft entries"
 msgstr "Inclure les projets d'entrées"
 
-#: ../pro/classes/controllers/FrmProFormsController.php:593
+#: ../pro/classes/controllers/FrmProFormsController.php:602
 msgid "Draft status"
 msgstr "Statut brouillon"
 
@@ -6286,7 +6316,7 @@ msgstr "&mdash; Sélectionner un champ &mdash;"
 msgid "No options available: please check this field's options"
 msgstr "Aucune option disponible : veuillez vérifier les options de ce champ"
 
-#: ../pro/classes/controllers/FrmProNestedFormsController.php:686 ..
+#: ../pro/classes/controllers/FrmProNestedFormsController.php:776 ..
 #: pro/classes/helpers/FrmProFieldsHelper.php:694 ..
 #: pro/classes/views/displays/mb_advanced.php:33 ..
 #: pro/classes/views/displays/mb_advanced.php:53 ../pro/classes/views/frmpro-
@@ -6403,7 +6433,7 @@ msgstr ""
 msgid "Delete ALL Entries"
 msgstr "Supprimer TOUTES les entrées"
 
-#: ../pro/classes/helpers/FrmProEntriesHelper.php:304
+#: ../pro/classes/helpers/FrmProEntriesHelper.php:309
 msgid "Download CSV"
 msgstr "Télécharger un fichier CSV"
 
@@ -6421,69 +6451,69 @@ msgstr "Tous les champs"
 msgid "View all posts filed under %s"
 msgstr "Voir tous les messages déposés sous %s"
 
-#: ../pro/classes/helpers/FrmProFieldsHelper.php:1289
+#: ../pro/classes/helpers/FrmProFieldsHelper.php:1294
 msgid "No Categories"
 msgstr "Pas de catégories"
 
-#: ../pro/classes/helpers/FrmProFieldsHelper.php:2129
+#: ../pro/classes/helpers/FrmProFieldsHelper.php:2166
 msgid "Confirm"
 msgstr "Confirmer"
 
-#: ../pro/classes/helpers/FrmProFieldsHelper.php:2358
+#: ../pro/classes/helpers/FrmProFieldsHelper.php:2395
 msgid "Edit Uploaded File"
 msgstr "Modifier les fichiers téléchargées"
 
-#: ../pro/classes/helpers/FrmProFieldsHelper.php:2631 ../pro/classes/views/frmpro-
+#: ../pro/classes/helpers/FrmProFieldsHelper.php:2668 ../pro/classes/views/frmpro-
 #: fields/back-end/calculations.php:18
 msgid "Select a value to insert into the box below"
 msgstr "Sélectionnez une valeur à insérer dans la case ci-dessous"
 
-#: ../pro/classes/helpers/FrmProFieldsHelper.php:2640
+#: ../pro/classes/helpers/FrmProFieldsHelper.php:2677
 msgid "Form Fields"
 msgstr "Champs de formulaire"
 
-#: ../pro/classes/helpers/FrmProFieldsHelper.php:2657
+#: ../pro/classes/helpers/FrmProFieldsHelper.php:2694
 msgid "Thumbnail"
 msgstr "Vignette"
 
-#: ../pro/classes/helpers/FrmProFieldsHelper.php:2658
+#: ../pro/classes/helpers/FrmProFieldsHelper.php:2695
 msgid "Medium"
 msgstr "Moyen"
 
-#: ../pro/classes/helpers/FrmProFieldsHelper.php:2659
+#: ../pro/classes/helpers/FrmProFieldsHelper.php:2696
 msgid "Large"
 msgstr "Large"
 
-#: ../pro/classes/helpers/FrmProFieldsHelper.php:2660
+#: ../pro/classes/helpers/FrmProFieldsHelper.php:2697
 msgid "Full Size"
 msgstr "Plein écran"
 
-#: ../pro/classes/helpers/FrmProFieldsHelper.php:2683
+#: ../pro/classes/helpers/FrmProFieldsHelper.php:2720
 msgid "Admin link to edit the entry"
 msgstr "Lien d'administration pour éditer l'entrée"
 
-#: ../pro/classes/helpers/FrmProFieldsHelper.php:2685
+#: ../pro/classes/helpers/FrmProFieldsHelper.php:2722
 msgid "Link to view single page if showing dynamic entries"
 msgstr "Lien pour voir une seule page si elle montre les entrées dynamiques"
 
-#: ../pro/classes/helpers/FrmProFieldsHelper.php:2689
+#: ../pro/classes/helpers/FrmProFieldsHelper.php:2726
 msgid "Add a rotating 'even' or 'odd' class"
 msgstr "Ajouter une classe d'alternance 'pair ou 'impair'"
 
-#: ../pro/classes/helpers/FrmProFieldsHelper.php:2691
+#: ../pro/classes/helpers/FrmProFieldsHelper.php:2728
 msgid "Default Email Message"
 msgstr "Message email par défaut "
 
-#: ../pro/classes/helpers/FrmProFieldsHelper.php:3767
+#: ../pro/classes/helpers/FrmProFieldsHelper.php:3813
 msgid "Heading"
 msgstr "titre"
 
-#: ../pro/classes/helpers/FrmProFieldsHelper.php:3768 ../pro/classes/views/frmpro-
+#: ../pro/classes/helpers/FrmProFieldsHelper.php:3814 ../pro/classes/views/frmpro-
 #: fields/options-form-top.php:11 ../pro/classes/views/styles/_section-fields.php:7
 msgid "Collapsible"
 msgstr "Repliable"
 
-#: ../pro/classes/helpers/FrmProFieldsHelper.php:3769 ../pro/classes/views/frmpro-
+#: ../pro/classes/helpers/FrmProFieldsHelper.php:3815 ../pro/classes/views/frmpro-
 #: fields/options-form-top.php:20 ../pro/classes/views/styles/_section-fields.php:
 #: 10
 msgid "Repeatable"
@@ -6498,11 +6528,11 @@ msgstr "Votre brouillon a été sauvegardé"
 msgid "This value is invalid"
 msgstr "Cette valeur est invalide"
 
-#: ../pro/classes/models/FrmProCreditCard.php:54
+#: ../pro/classes/models/FrmProCreditCard.php:60
 msgid "That credit card number is invalid"
 msgstr "Ce numéro de carte de crédit est invalide"
 
-#: ../pro/classes/models/FrmProCreditCard.php:117
+#: ../pro/classes/models/FrmProCreditCard.php:123
 msgid "That credit card is expired"
 msgstr "Cette carte de crédit est expirée"
 
@@ -6538,8 +6568,8 @@ msgid "Current User"
 msgstr "Utilisateur Actuel"
 
 #: ../pro/classes/models/FrmProFileField.php:42 ..
-#: pro/classes/models/FrmProFileField.php:257 ..
-#: pro/classes/models/FrmProFileField.php:268
+#: pro/classes/models/FrmProFileField.php:264 ..
+#: pro/classes/models/FrmProFileField.php:275
 #, php-format
 msgid "That file is too big. It must be less than %sMB."
 msgstr "Ce fichier est trop volumineux. Sa taille doit être inférieure à %sMo."
@@ -6558,22 +6588,22 @@ msgid "Remove file"
 msgstr "Supprimer le fichier"
 
 #: ../pro/classes/models/FrmProFileField.php:48 ..
-#: pro/classes/models/FrmProFileField.php:298
+#: pro/classes/models/FrmProFileField.php:305
 #, php-format
 msgid "You have uploaded too many files. You may only include %d file(s)."
 msgstr ""
 "Vous avez télécharger trop de fichiers. Vous ne pouvez envoyer que %d "
 "fichier(s)."
 
-#: ../pro/classes/models/FrmProFileField.php:366
+#: ../pro/classes/models/FrmProFileField.php:373
 msgid "is invalid"
 msgstr "non valide"
 
-#: ../pro/classes/models/FrmProFileField.php:369
+#: ../pro/classes/models/FrmProFileField.php:376
 msgid "Sorry, this file type is not permitted."
 msgstr "Désolé, ce type de fichier n'est pas autorisé."
 
-#: ../pro/classes/models/FrmProFileField.php:469
+#: ../pro/classes/models/FrmProFileField.php:476
 msgid "File upload failed"
 msgstr "L'envoi du fichier a échoué"
 
@@ -7386,14 +7416,6 @@ msgstr "Grille: afficher les titres des étiquettes sur les champs"
 msgid "Repeat Limit"
 msgstr "Répétez les limite"
 
-#: ../pro/classes/views/frmpro-fields/back-end/repeat-options.php:16
-msgid ""
-"The number of times the end user is allowed to duplicate this section of "
-"fields in one entry"
-msgstr ""
-"Nombre de fois où l'utilisateur final est autorisé à reproduire cette  "
-"section de champs dans une entrée"
-
 #: ../pro/classes/views/frmpro-fields/back-end/scale-options.php:1
 msgid "Range"
 msgstr "Plage"
@@ -7463,8 +7485,8 @@ msgstr "Tout le monde"
 #: ../pro/classes/views/frmpro-fields/back-end/visibility.php:17 ..
 #: pro/classes/views/frmpro-forms/add_form_msg_options.php:14 ..
 #: pro/classes/views/frmpro-forms/add_form_options.php:14 ..
-#: pro/classes/views/frmpro-forms/add_form_options.php:59 ..
-#: pro/classes/views/frmpro-forms/add_form_options.php:82
+#: pro/classes/views/frmpro-forms/add_form_options.php:61 ..
+#: pro/classes/views/frmpro-forms/add_form_options.php:84
 msgid "Logged-in Users"
 msgstr "Utilisateurs connectés"
 
@@ -7731,39 +7753,39 @@ msgstr "Limiter le nombre de forme entrées %1$spar une par:%2$s"
 msgid "Logged-in User"
 msgstr "Utilisateur connecté"
 
-#: ../pro/classes/views/frmpro-forms/add_form_options.php:31
+#: ../pro/classes/views/frmpro-forms/add_form_options.php:33
 msgid "Saved Cookie"
 msgstr "Cookie sauvé"
 
-#: ../pro/classes/views/frmpro-forms/add_form_options.php:38
+#: ../pro/classes/views/frmpro-forms/add_form_options.php:40
 msgid "Cookie Expiration"
 msgstr "Expiration du cookie"
 
-#: ../pro/classes/views/frmpro-forms/add_form_options.php:48
+#: ../pro/classes/views/frmpro-forms/add_form_options.php:50
 msgid "Allow front-end editing of entries"
 msgstr "Autoriser la modification des entrées frontal"
 
-#: ../pro/classes/views/frmpro-forms/add_form_options.php:55
+#: ../pro/classes/views/frmpro-forms/add_form_options.php:57
 msgid "Role required to edit one's own entries:"
 msgstr "Rôle nécessaire pour modifier ces entrées:"
 
-#: ../pro/classes/views/frmpro-forms/add_form_options.php:74
+#: ../pro/classes/views/frmpro-forms/add_form_options.php:76
 msgid "Role required to edit other users' entries:"
 msgstr "Rôle nécessaire pour modifier les entrées des autres utilisateurs:"
 
-#: ../pro/classes/views/frmpro-forms/add_form_options.php:90
+#: ../pro/classes/views/frmpro-forms/add_form_options.php:92
 msgid "On Update:"
 msgstr "Sur mise à jour:"
 
-#: ../pro/classes/views/frmpro-forms/add_form_options.php:113
+#: ../pro/classes/views/frmpro-forms/add_form_options.php:115
 msgid "Allow logged-in users to save drafts"
 msgstr "Permettre aux utilisateurs connectés de sauvegarder des brouillons"
 
-#: ../pro/classes/views/frmpro-forms/add_form_options.php:123
+#: ../pro/classes/views/frmpro-forms/add_form_options.php:125
 msgid "Protect all files uploaded in this form"
 msgstr "Protéger tous les fichiers envoyés dans ce formulaire"
 
-#: ../pro/classes/views/frmpro-forms/add_form_options.php:136
+#: ../pro/classes/views/frmpro-forms/add_form_options.php:138
 msgid "Copy this form to other blogs when Formidable Forms is activated"
 msgstr ""
 "Copiez ce formulaire sur d'autres blogs où les formulaires Formidable sont "
