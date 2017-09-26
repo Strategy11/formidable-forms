@@ -2058,7 +2058,6 @@ select.texture{display: none;}
 #postbox-container-1 .frm_field_list{
 	margin-right:10px;
 	position:fixed;
-	z-index:9999;
 	width:279px;
 }
 
