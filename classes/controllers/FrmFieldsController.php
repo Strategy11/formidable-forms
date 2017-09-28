@@ -576,7 +576,7 @@ class FrmFieldsController {
 	 * @since 2.05
 	 */
 	public static function get_default_value_from_name( $field ) {
-		$position = FrmStylesController::get_style_val( 'position', $field['form_id'] );
+		$position = FrmField::get_option( $field, 'label' );
 		if ( $position == 'inside' ) {
 			$default_value = $field['name'];
 		} else {
