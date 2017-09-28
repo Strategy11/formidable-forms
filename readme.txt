@@ -41,13 +41,15 @@ Whether you start from scratch or from a form template, your forms can be custom
 * Customize the form’s success message and submit button text.
 
 = Style your WordPress forms with no code =
-Use the built-in [visual form style generator](https://formidableforms.com/features/wordpress-visual-form-styler/) to instantly customize the look and feel of your forms. With just a few clicks, your form can be transformed to match your personal style. A single form styling template will be applied to all the forms on your site. But if you decide you need different styles for different forms, Formidable Forms Pro will be waiting.
+Use the built-in [visual form style generator](https://formidableforms.com/features/wordpress-visual-form-styler/) to instantly customize the look and feel of your WordPress forms. With just a few clicks, your form can be transformed to match your personal style. A single form styling template will be applied to all the forms on your site. But if you decide you need different styles for different forms, Formidable Forms Pro is waiting.
 
 = Publish your WordPress forms with ease =
 Once your WordPress form is built and designed just the way you like it, publish it with an easy-to-use **shortcode builder** UI. Direct links are also available for **form previews** and **emailing surveys** on a blank page or with integration with your theme. **Honeypot spam protection** is included in every form, but you can also add Invisible reCAPTCHA, one-click reCAPTCHA, and Akismet for extra Spam control in your contact forms.
 
 = Save every form submission =
-You may already know it, but your WordPress emails don't always come through to your email account. But every lead in your contact forms is important, so don't lose a single one! This is why every form submission is saved to your WordPress database and listed on your Formidable -> Entries page. Now even if a form email notification fails, you won’t lose anything.
+You may already know it, but your WordPress emails don't always come through to your email account. But every lead in your contact forms is important, so don't lose a single one! This is why every contact form submission is saved to your WordPress database and listed on your Formidable -> Entries page. Now even if a form email notification fails, you won’t lose anything.
+
+Do your forms need to be **GDPR compliant**? No problem. Turn off IP tracking or the setting to save your form submissions, or add a checkbox field to your form to collect consent.
 
 Need to import your leads to another service like MailChimp? No problem. **Export your leads to a CSV** that you can open in Excel or import anywhere.
 
@@ -56,7 +58,7 @@ Plus, don't lose your leads by accidentally deleting a form. **Send forms to the
 https://www.youtube.com/watch?v=d2IPmicn2x8
 
 = Pro Form Builder Plugin Features =
-Formidable Forms Pro is an upgrade that adds even more power to your WordPress forms. Multi-page forms, conditional logic, payment integrations, data management, front-end post submissions, front-end editing, and boat loads more. Not only can you collect data in your forms, but you can also display it on the front-end of your site. Add the ability to input, display, edit and filter data on the front end without any additional plugins. Formidable Forms is a powerful solution for purchase forms, member directories, user registration forms, and more.
+Formidable Forms Pro is an upgrade that adds even more power to your WordPress forms. Multi-page forms, conditional logic, payment integrations, data management, front-end post submissions, front-end editing, and boat loads more. Not only can you collect data in your forms, but you can also display it on the front-end of your site. Add the ability to input, display, edit and filter data on the front end without any additional plugins. Formidable Forms is a powerful solution for purchase forms, member directories, user registration forms, event calendars, and more.
 
 * **Over 30 field types**: Page breaks, section headings, repeating field groups, file uploads, rich text, number, phone number, date, time, scale, dynamic fields populated from other forms, hidden fields, user ID fields, password, HTML, tags, address, and more.
 * <a href="https://formidableforms.com/features/wordpress-multi-step-form/">Multi-Step forms with progress bar</a>: Create beautiful paged forms with rootline and progress indicators. Use conditional logic on page breaks for branching forms.
@@ -67,14 +69,14 @@ Formidable Forms Pro is an upgrade that adds even more power to your WordPress f
 * Entry management: Flexibly and powerfully display, edit, and delete entries from anywhere on your site, and specify who has permission to do so.
 * <a href="https://formidableforms.com/features/display-form-data-views/">[Views](https://formidableforms.com/features/display-form-data-views/)</a>: Format, filter and display the data submitted in your WordPress forms in custom Views.
 * <a href="https://formidableforms.com/features/create-a-graph-wordpress-forms/">Graphs and chart form data</a>: Display statistics from form entries, and graph your data in a variety of eye catching styles with graphs that automatically update as new data is submitted.
-* <a href="https://formidableforms.com/features/user-submitted-posts-wordpress-forms/">User submitted posts and pages</a>: Create and edit WordPress posts, pages, and even custom post types from front-end forms.
-* <a href="https://formidableforms.com/features/front-end-editing-wordpress/">Front end editing</a>: allow users to edit their form entries and posts from the front-end of your site.
+* <a href="https://formidableforms.com/features/user-submitted-posts-wordpress-forms/">User submitted front-end posts and pages</a>: Create and edit WordPress posts, pages, and even custom post types from front-end forms.
+* <a href="https://formidableforms.com/features/front-end-editing-wordpress/">Front-end editing</a>: allow users to edit their form entries and posts from the front-end of your site.
 * <a href="https://formidableforms.com/features/save-and-continue-partial-submissions/">Saved and continue partial submissions</a>: logged-in users can save form progress and return later.
 * Form permission settings: limit form visibility based on user role.
 * Conditionally redirect after form submission.
-* Prefill or prepopulate forms with user meta.
+* Prefill or prepopulate forms with user meta or values from your posts including custom fields.
 * <a href="https://formidableforms.com/features/importing-exporting-wordpress-forms/">Import and Export form entries</a> with CSV.
-* Limit number of form entries per user, IP, or cookie.
+* Limit the number of form entries per user, IP, or cookie.
 * Import our <a href="https://formidableforms.com/demos/">pre-built form/view demo templates</a> as a starting point or a final product.
 * World Class Support: if you have questions or need guidance on how to set up your application, we are happy to help. Our goal with Formidable Forms is to help you take on bigger projects, earn more clients, and grow your business.
 
@@ -125,14 +127,14 @@ Next, go to edit the page where you would like to publish your form. Click the "
 
 Get more detail on [using the contact form template](https://formidableforms.com/wordpress-contact-form-template-to-unique/ "using the contact form template") in our blog.
 
-= My contact form is not sending emails. Why not? =
+= My contact forms are not sending emails. Why not? =
 
 Try the following steps:
 
    1. Double check to make sure your email address is present and correct in your Email form action on the form "Settings" page. The [admin_email] shortcode uses the email address from your WordPress Settings -> General page.
    2. Make sure you are receiving other emails from your site (ie comment notifications, forgot password...). If these emails don't work on your site, form emails will not work either.
    3. Check your SPAM box
-   4. Try a different email address in your form settings.
+   4. Try a different email address in your contact form settings.
    5. Install Postman SMPT or another similar plugin and configure the SMTP settings.
    6. If none of these steps fix the problem with your form emails, and other site emails are not going out, please contact your web host. You can also [read more about WordPress emails](https://formidableforms.com/wordpress-not-sending-emails-smtp/ "read more about WordPress emails") in our blog.
 
@@ -144,7 +146,7 @@ The field and form names and descriptions are all changed with in-place edit. Ju
 
 == Changelog ==
 = 2.05 =
-* New: Add option to not save IP address with entries for GPLD compliant forms
+* New: Add option to not save IP address with entries for GDPR compliant forms
 * New: Add a new label position option: Inside. This option automatically uses the field labels as placeholders.
 * Enhancement: Prevent jumping when selecting field to edit on form builder.
 * Enhancement: Trigger frm_after_entry_processed hook after save when the action is set to show a message. This affects deleting entries automatically.
