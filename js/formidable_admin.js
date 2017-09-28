@@ -1642,13 +1642,9 @@ function frmAdminBuildJS(){
 			data:{action:'frm_add_posttax_row', form_id:id, post_type:post_type, tax_key:tax_key, action_key:key, nonce:frmGlobal.nonce},
 			success:function(html){
 				jQuery(document.getElementById('frm_posttax_rows')).append(html);
+				jQuery('a.frm_add_posttax_row.button').hide();
 			}
 		});
-
-		var current_num_of_rows = jQuery(this).parent().siblings('#frm_posttax_rows').length;
-		if (current_num_of_rows > 0) {
-			jQuery(this).hide();
-		}
 	}
 	
 	function addPostmetaRow(){
@@ -1720,6 +1716,7 @@ function frmAdminBuildJS(){
 		console.log(current_num_of_rows);
 		if (current_num_of_rows < 1) {
 			jQuery('.frm_add_posttax_row').hide().removeClass('frm_hidden').fadeIn( 'slow' );
+			jQuery('.frm_add_posttax_row').fadeIn( 'slow' );
 		}
 	}
 
