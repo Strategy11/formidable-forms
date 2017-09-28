@@ -76,7 +76,7 @@ function frmAdminBuildJS(){
                 show='.frm_add_posttax_row.button';
         }else if(id.indexOf('frm_postmeta_') === 0){
 			if(jQuery('#frm_postmeta_rows .frm_postmeta_row').length<2){
-				jQuery('#postcustomstuff').hide();
+				jQuery('#postcustomstuff').fadeOut('slow');
 				show='.frm_add_postmeta_row.button';
 			}
 			if(jQuery('.frm_toggle_cf_opts').length && jQuery('#frm_postmeta_rows .frm_postmeta_row:not(#'+id+')').last().length){
