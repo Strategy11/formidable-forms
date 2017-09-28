@@ -108,6 +108,10 @@ function frmAdminBuildJS(){
 		if(show !== '')
 			jQuery(this).closest('.frm_logic_rows').fadeOut('slow');
 
+		if(jQuery(this).parent().siblings().length < 1){
+			jQuery('.frm_add_posttax_row').hide().removeClass('frm_hidden').fadeIn( 'slow' );
+		}
+
 		return false;
 	}
 	
@@ -1711,15 +1715,6 @@ function frmAdminBuildJS(){
 		});
 	}
 
-	function togglePostTaxAddButton(){
-		var current_num_of_rows = jQuery(this).parentsUntil('#frm_posttax_rows').siblings().length;
-		console.log(current_num_of_rows);
-		if (current_num_of_rows < 1) {
-			jQuery('.frm_add_posttax_row').hide().removeClass('frm_hidden').fadeIn( 'slow' );
-			jQuery('.frm_add_posttax_row').fadeIn( 'slow' );
-		}
-	}
-
 	function toggleCfOpts(){
 		var row = jQuery(this).closest('.frm_postmeta_row');
 		var cancel = row.find('.frm_cancelnew');
@@ -2597,7 +2592,6 @@ function frmAdminBuildJS(){
             $formActions.on('change', '.frm_post_type', switchPostType);
 			$formActions.on('click', '.frm_add_postmeta_row', addPostmetaRow);
 			$formActions.on('click', '.frm_add_posttax_row', addPosttaxRow);
-			$formActions.on('click', '#frm_posttax_rows .frm_remove_tag', togglePostTaxAddButton);
 			$formActions.on('click', '.frm_toggle_cf_opts', toggleCfOpts);
 			jQuery('select[data-toggleclass], input[data-toggleclass]').change(toggleFormOpts);
 			jQuery('.frm_actions_list').on('click', '.frm_active_action', addFormAction);
