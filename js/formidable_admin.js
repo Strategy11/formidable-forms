@@ -75,7 +75,7 @@ function frmAdminBuildJS(){
 		}else if(id.indexOf('frm_posttax_') === 0){
             if(jQuery('#frm_posttax_rows .frm_posttax_row').length<2)
                 show='.frm_add_posttax_row.button';
-        }else if(id.indexOf('frm_postmeta_') === 0){
+		}else if(id.indexOf('frm_postmeta_') === 0){
 			if(jQuery('#frm_postmeta_rows .frm_postmeta_row').length<2){
 				hide='#postcustomstuff';
 				show='.frm_add_postmeta_row.button';
