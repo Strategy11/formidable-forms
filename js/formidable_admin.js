@@ -71,7 +71,10 @@ function frmAdminBuildJS(){
 			}
 		}else if(id.indexOf('frm_logic_') === 0 && deleteButton.closest('.frm_logic_rows').find('.frm_logic_row').length<2){
 			show='#'+deleteButton.closest('td').children('.frm_add_logic_link').attr('id');
-		}else if(id.indexOf('frm_postmeta_') === 0){
+		}else if(id.indexOf('frm_posttax_') === 0){
+            if(jQuery('#frm_posttax_rows .frm_posttax_row').length<2)
+                show='.frm_add_posttax_row.button';
+        }else if(id.indexOf('frm_postmeta_') === 0){
 			if(jQuery('#frm_postmeta_rows .frm_postmeta_row').length<2)
 				show='.frm_add_postmeta_row.button';
 			if(jQuery('.frm_toggle_cf_opts').length && jQuery('#frm_postmeta_rows .frm_postmeta_row:not(#'+id+')').last().length){
@@ -107,10 +110,6 @@ function frmAdminBuildJS(){
 		});
 		if(show !== '')
 			jQuery(this).closest('.frm_logic_rows').fadeOut('slow');
-
-		if(jQuery(this).parent().siblings().length < 1){
-			jQuery('.frm_add_posttax_row').hide().removeClass('frm_hidden').fadeIn( 'slow' );
-		}
 
 		return false;
 	}
