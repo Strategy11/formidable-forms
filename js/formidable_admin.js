@@ -101,7 +101,7 @@ function frmAdminBuildJS(){
 			}
 
 			if ( show !== '' ) {
-				jQuery( show+' a,'+show ).fadeIn( 'slow' );
+				jQuery( show ).removeClass('frm_hidden').fadeIn( 'slow' );
 			}
 
 			var action = jQuery(this).closest('.frm_form_action_settings');
