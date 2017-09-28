@@ -1644,6 +1644,11 @@ function frmAdminBuildJS(){
 				jQuery(document.getElementById('frm_posttax_rows')).append(html);
 			}
 		});
+
+		var current_num_of_rows = jQuery(this).parent().siblings('#frm_posttax_rows').length;
+		if (current_num_of_rows > 0) {
+			jQuery(this).hide();
+		}
 	}
 	
 	function addPostmetaRow(){
@@ -1708,6 +1713,14 @@ function frmAdminBuildJS(){
 				$tax.replaceWith(html);
 			}
 		});
+	}
+
+	function togglePostTaxAddButton(){
+		var current_num_of_rows = jQuery(this).parentsUntil('#frm_posttax_rows').siblings().length;
+		console.log(current_num_of_rows);
+		if (current_num_of_rows < 1) {
+			jQuery('.frm_add_posttax_row').hide().removeClass('frm_hidden').fadeIn( 'slow' );
+		}
 	}
 
 	function toggleCfOpts(){
@@ -2587,6 +2600,7 @@ function frmAdminBuildJS(){
             $formActions.on('change', '.frm_post_type', switchPostType);
 			$formActions.on('click', '.frm_add_postmeta_row', addPostmetaRow);
 			$formActions.on('click', '.frm_add_posttax_row', addPosttaxRow);
+			$formActions.on('click', '#frm_posttax_rows .frm_remove_tag', togglePostTaxAddButton);
 			$formActions.on('click', '.frm_toggle_cf_opts', toggleCfOpts);
 			jQuery('select[data-toggleclass], input[data-toggleclass]').change(toggleFormOpts);
 			jQuery('.frm_actions_list').on('click', '.frm_active_action', addFormAction);
@@ -3035,5 +3049,6 @@ function frmImportCsv(formID){
 			}, 2000);
         }
     }
+
     });
 }
