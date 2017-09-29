@@ -4,7 +4,7 @@ Tags: contact form, form builder, custom form, forms, form, form maker, form cre
 Requires at least: 4.0
 Tested up to: 4.8.2
 Requires PHP: 5.2
-Stable tag: 2.05
+Stable tag: 2.05.01
 
 The best WordPress form plugin for contact forms, surveys and more. Make forms a breeze with a drag and drop form builder and form style generator.
 
@@ -145,6 +145,13 @@ The field and form names and descriptions are all changed with in-place edit. Ju
 [See more FAQs](https://formidableforms.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 2.05.01 =
+* Fix: Let the new label position option override the setting in the styles
+* Fix: Trigger an update for the styling settings so a manual save isn't required to get new updates
+* Fix: Prevent an undefined php warning when viewing the form page
+* **Pro Version Forms**
+* Fix: Revert the functionality behind filter=1 in views, and instead add a new filter=limited option for compatibility mode
+
 = 2.05 =
 * New: Add option to not save IP address with entries for GDPR compliant forms
 * New: Add a new label position option: Inside. This option automatically uses the field labels as placeholders.
@@ -163,7 +170,7 @@ The field and form names and descriptions are all changed with in-place edit. Ju
 * **Pro Version Forms**
 * New: Add Repeat Limit option to Repeatable Sections.
 * New: Add target="_blank" option to file upload shortcodes with new_page=1 param.
-* New: Add frm_before_entries_table hook to display extar content on the Formidable -> Entries page.
+* New: Add frm_before_entries_table hook to display extra content on the Formidable -> Entries page.
 * New: Add frm_lookup_is_current_user_filter_needed filter to allow the options in a lookup field to be conditionally limited.
 * Enhancement: Allow repeating fields to be excluded from show entry shortcode.
 * Enhancement: Improve calculated fields that include fields both inside and outside a repeating section
