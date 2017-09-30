@@ -6,20 +6,16 @@
 class FrmFieldText extends FrmFieldType {
 
 	/**
+	 * @var string
+	 * @since 3.0
+	 */
+	protected $type = 'text';
+
+	/**
 	 * @var bool
 	 * @since 3.0
 	 */
 	protected $holds_email_values = true;
-
-	/**
-	 * @param $type string
-	 */
-	protected function set_type( $type ) {
-		if ( empty( $type ) ) {
-			$type = 'text';
-		}
-		parent::set_type( $type );
-	}
 
 	protected function field_settings_for_type() {
 		return array(

@@ -150,16 +150,25 @@ DEFAULT_HTML;
 		$include_file = $this->include_form_builder_file();
 
 		if ( ! empty( $include_file ) ) {
-			$field_name = $this->html_name( $name );
-			$html_id = $this->html_id();
-			$display = $this->display_field_settings();
-			include( $include_file );
+			$this->include_on_form_builder( $name );
 		} elseif ( $this->display_type == 'text' ) {
 			echo $this->builder_text_field();
 		} else {
 			do_action( 'frm_display_added_fields', $field );
 			do_action( 'frm_display_added_' . $this->type . '_field', $field );
 		}
+	}
+
+	/**
+	 * Define parameters and include the field on form builder
+	 *
+	 * @since 3.0
+	 */
+	protected function include_on_form_builder( $name ) {
+		$field_name = $this->html_name( $name );
+		$html_id = $this->html_id();
+		$display = $this->display_field_settings();
+		include( $this->include_form_builder_file() );
 	}
 
 	/**
