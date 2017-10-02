@@ -144,6 +144,7 @@ class FrmAddon {
 	public function set_active( $is_active ) {
 		update_option( $this->option_name . 'active', $is_active );
 		delete_transient('frm_api_licence');
+		FrmAppHelper::save_combined_js();
 	}
 
 	public function show_license_message( $file, $plugin ) {

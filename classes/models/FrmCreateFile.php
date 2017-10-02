@@ -6,29 +6,40 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmCreateFile {
 
-	public $folder_name = '';
-	public $file_name = '';
-	public $error_message = '';
-	public $uploads = array();
+	public $folder_name;
+	public $file_name;
+	public $error_message;
+	public $uploads;
+	private $new_file_path;
 	public $chmod_dir = 0755;
 	public $chmod_file = 0644;
+	private $has_permission = false;
 
 	public function __construct( $atts ) {
-		$this->folder_name = $atts['folder_name'];
+		$this->folder_name = isset( $atts['folder_name'] ) ? $atts['folder_name'] : '';
 		$this->file_name = $atts['file_name'];
 		$this->error_message = isset( $atts['error_message'] ) ? $atts['error_message'] : '';
 		$this->uploads = wp_upload_dir();
+		$this->set_new_file_path( $atts );
 		$this->chmod_dir = defined('FS_CHMOD_DIR') ? FS_CHMOD_DIR : ( fileperms( ABSPATH ) & 0777 | 0755 );
 		$this->chmod_file = defined('FS_CHMOD_FILE') ? FS_CHMOD_FILE : ( fileperms( ABSPATH . 'index.php' ) & 0777 | 0644 );
+
+		$this->check_permission();
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	private function set_new_file_path( $atts ) {
+		if ( isset( $atts['new_file_path'] ) ) {
+			$this->new_file_path = $atts['new_file_path'] . '/' . $this->file_name;
+		} else {
+			$this->new_file_path = $this->uploads['basedir'] . '/' . $this->folder_name . '/' . $this->file_name;
+		}
 	}
 
 	public function create_file( $file_content ) {
-		$creds = $this->get_creds();
-
-		if ( empty( $creds ) || ! WP_Filesystem( $creds ) ) {
-			// initialize the API - any problems and we exit
-			$this->show_error_message();
-		} else {
+		if ( $this->has_permission ) {
 			$dirs_exist = true;
 
 			// Create the directories if need be
@@ -37,10 +48,80 @@ class FrmCreateFile {
 			// only write the file if the folders exist
 			if ( $dirs_exist ) {
 				global $wp_filesystem;
-
-				$new_file = $this->uploads['basedir'] . '/' . $this->folder_name . '/' . $this->file_name;
-				$wp_filesystem->put_contents( $new_file, $file_content, $this->chmod_file );
+				$wp_filesystem->put_contents( $this->new_file_path, $file_content, $this->chmod_file );
 			}
+		}
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	public function append_file( $file_content ) {
+		if ( $this->has_permission ) {
+
+			if ( file_exists( $this->new_file_path ) ) {
+
+				$existing_content = $this->get_contents();
+				$file_content = $existing_content . $file_content;
+			}
+
+			$this->create_file( $file_content );
+		}
+	}
+
+	/**
+	 * Combine an array of files into one
+	 *
+	 * @since 3.0
+	 *
+	 * @param array $file_names And array of file paths
+	 * @param string $new_location The path for the file to be saved
+	 */
+	public function combine_files( $file_names ) {
+		if ( $this->has_permission ) {
+			$content = '';
+			foreach ( $file_names as $file_name ) {
+				$content .= $this->get_contents( $file_name ) . "\n";
+			}
+			$this->create_file( $content );
+		}
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	public function get_file_contents() {
+		$content = '';
+
+		if ( $this->has_permission ) {
+			$content = $this->get_contents();
+		}
+
+		return $content;
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	private function get_contents( $file = '' ) {
+		global $wp_filesystem;
+		if ( empty( $file ) ) {
+			$file = $this->new_file_path;
+		}
+		return $wp_filesystem->get_contents( $file );
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	private function check_permission() {
+		$creds = $this->get_creds();
+
+		$this->has_permission = true;
+		if ( empty( $creds ) || ! WP_Filesystem( $creds ) ) {
+			// initialize the API - any problems and we exit
+			$this->show_error_message();
+			$this->has_permission = false;
 		}
 	}
 
@@ -50,11 +131,11 @@ class FrmCreateFile {
 		$needed_dirs = $this->get_needed_dirs();
 		foreach ( $needed_dirs as $_dir ) {
 			// Only check to see if the Dir exists upon creation failure. Less I/O this way.
-			if ( $wp_filesystem->mkdir( $_dir, $this->chmod_dir ) || $wp_filesystem->is_dir( $_dir ) ) {
+			if ( $wp_filesystem->mkdir( $_dir, $this->chmod_dir ) ) {
 				$index_path = $_dir . '/index.php';
 				$wp_filesystem->put_contents( $index_path, "<?php\n// Silence is golden.\n?>", $this->chmod_file );
 			} else {
-				$dirs_exist = false;
+				$dirs_exist = $wp_filesystem->is_dir( $_dir );
 			}
 		}
 	}
@@ -73,6 +154,10 @@ class FrmCreateFile {
 	}
 
 	private function get_creds() {
+		if ( ! function_exists('get_filesystem_method') ) {
+			include_once( ABSPATH . 'wp-admin/includes/file.php' );
+		}
+
 		$access_type = get_filesystem_method();
 		if ( $access_type === 'direct' ) {
 			$creds = request_filesystem_credentials( site_url() . '/wp-admin/', '', false, false, array() );

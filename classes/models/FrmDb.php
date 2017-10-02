@@ -41,6 +41,8 @@ class FrmDb {
             /***** SAVE DB VERSION *****/
             update_option('frm_db_version', $frm_db_version);
 
+			FrmAppHelper::save_combined_js();
+
             /**** ADD/UPDATE DEFAULT TEMPLATES ****/
             FrmXMLController::add_default_templates();
 

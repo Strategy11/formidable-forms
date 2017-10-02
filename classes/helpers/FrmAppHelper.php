@@ -4,7 +4,7 @@ if ( ! defined('ABSPATH') ) {
 }
 
 class FrmAppHelper {
-	public static $db_version = 45; //version of the database we are moving to
+	public static $db_version = 47; //version of the database we are moving to
 	public static $pro_db_version = 37; //deprecated
 
 	/**
@@ -423,6 +423,26 @@ class FrmAppHelper {
 			do_action( 'frm_load_' . $type . '_hooks' );
         }
     }
+
+	/**
+	 * Save all front-end js scripts into a single file
+	 *
+	 * @since 3.0
+	 */
+	public static function save_combined_js() {
+		$file_atts = array(
+			'file_name' => 'frm.min.js',
+			'new_file_path' => FrmAppHelper::plugin_path() . '/js',
+		);
+		$new_file = new FrmCreateFile( $file_atts );
+
+		$files = array(
+			FrmAppHelper::plugin_path() . '/js/jquery/jquery.placeholder.min.js',
+			FrmAppHelper::plugin_path() . '/js/formidable.min.js',
+		);
+		$files = apply_filters( 'frm_combined_js_files', $files );
+		$new_file->combine_files( $files );
+	}
 
     /**
      * Check cache before fetching values and saving to cache
