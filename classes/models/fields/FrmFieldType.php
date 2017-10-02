@@ -150,7 +150,7 @@ DEFAULT_HTML;
 		$include_file = $this->include_form_builder_file();
 
 		if ( ! empty( $include_file ) ) {
-			$this->include_on_form_builder( $name );
+			$this->include_on_form_builder( $name, $field );
 		} elseif ( $this->display_type == 'text' ) {
 			echo $this->builder_text_field();
 		} else {
@@ -164,7 +164,7 @@ DEFAULT_HTML;
 	 *
 	 * @since 3.0
 	 */
-	protected function include_on_form_builder( $name ) {
+	protected function include_on_form_builder( $name, $field ) {
 		$field_name = $this->html_name( $name );
 		$html_id = $this->html_id();
 		$display = $this->display_field_settings();

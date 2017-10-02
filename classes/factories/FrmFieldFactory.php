@@ -72,9 +72,7 @@ class FrmFieldFactory {
 		);
 
 		$class = isset( $type_classes[ $field_type ] ) ? $type_classes[ $field_type ] : '';
-		$class = apply_filters( 'frm_get_field_type_class', $class, $field_type );
-
-		return $class;
+		return apply_filters( 'frm_get_field_type_class', $class, $field_type );
 	}
 
 	/**
