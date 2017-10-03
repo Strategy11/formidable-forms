@@ -3034,6 +3034,5 @@ function frmImportCsv(formID){
 			}, 2000);
         }
     }
-
     });
 }
