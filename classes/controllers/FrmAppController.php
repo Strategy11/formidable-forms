@@ -362,6 +362,9 @@ class FrmAppController {
     public static function activation_install() {
         FrmAppHelper::delete_cache_and_transient( 'frm_plugin_version' );
         FrmFormActionsController::actions_init();
+		if ( ! self::needs_update() ) {
+			FrmAppHelper::save_combined_js();
+		}
         self::install();
     }
 
