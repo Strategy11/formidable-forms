@@ -3026,9 +3026,6 @@ function frmFrontFormJS(){
 			calcField = jQuery(field.thisFieldCall);
 		} else {
 			calcField = getSiblingField( field );
-			if ( calcField === null || typeof calcField === 'undefined' || calcField.length < 1  ) {
-				calcField = jQuery(field.thisFieldCall);
-			}
 		}
 
 		if ( calcField === null || typeof calcField === 'undefined' || calcField.length < 1 ) {
@@ -3101,15 +3098,44 @@ function frmFrontFormJS(){
 
 		var fields = null;
 		var container = field.triggerField.closest('.frm_repeat_sec, .frm_repeat_inline, .frm_repeat_grid');
-		if ( container.length ) {
-			var siblingFieldCall = field.thisFieldCall.replace('[id=', '[id^=');
-			fields = container.find(siblingFieldCall);
+		var repeatArgs = getRepeatArgsFromFieldName( field.triggerField.attr('name') );
+		var siblingFieldCall = field.thisFieldCall.replace('[id=', '[id^=').replace(/-"]/g, '-' + repeatArgs.repeatRow +'"]');
+
+		if ( container.length || repeatArgs.repeatRow !== '' ) {
+			if ( container.length ) {
+				fields = container.find(siblingFieldCall);
+			} else {
+				fields = jQuery(siblingFieldCall);
+			}
+
+			if ( fields === null || typeof fields === 'undefined' || fields.length < 1  ) {
+				fields = uncheckedSiblingOrOutsideSection( field, container, siblingFieldCall );
+			}
 		} else {
 			// the trigger is not in the repeating section
-			fields = jQuery(field.thisFieldCall);
+			fields = getNonSiblingField( field );
 		}
 
 		return fields;
+	}
+
+	function uncheckedSiblingOrOutsideSection( field, container, siblingFieldCall ) {
+		var fields = null;
+		if ( siblingFieldCall.indexOf(':checked') ) {
+			// check if the field has nothing selected, or is not inside the section
+			var inSection = container.find( siblingFieldCall.replace(':checked', '') );
+			if ( inSection.length < 1 ) {
+				fields = getNonSiblingField( field );
+			}
+		} else {
+			// the field holding the value is outside of the section
+			fields = getNonSiblingField( field );
+		}
+		return fields;
+	}
+
+	function getNonSiblingField( field ) {
+		return jQuery(field.thisFieldCall);
 	}
 
 	function getOptionValue( thisField, currentOpt ) {
