@@ -72,8 +72,9 @@ function frmAdminBuildJS(){
 		}else if(id.indexOf('frm_logic_') === 0 && deleteButton.closest('.frm_logic_rows').find('.frm_logic_row').length<2){
 			show='#'+deleteButton.closest('td').children('.frm_add_logic_link').attr('id');
 		}else if(id.indexOf('frm_postmeta_') === 0){
-			if(jQuery('#frm_postmeta_rows .frm_postmeta_row').length<2)
+			if(jQuery('#frm_postmeta_rows .frm_postmeta_row').length<2){
 				show='.frm_add_postmeta_row.button';
+			}
 			if(jQuery('.frm_toggle_cf_opts').length && jQuery('#frm_postmeta_rows .frm_postmeta_row:not(#'+id+')').last().length){
 				if(show !== '')
 					show += ',';
@@ -96,7 +97,7 @@ function frmAdminBuildJS(){
 			}
 
 			if ( show !== '' ) {
-				jQuery( show+' a,'+show ).fadeIn( 'slow' );
+				jQuery( show+' a,'+show ).removeClass('frm_hidden').fadeIn('slow');
 			}
 
 			var action = jQuery(this).closest('.frm_form_action_settings');
@@ -1633,28 +1634,22 @@ function frmAdminBuildJS(){
     }
 	
 	function addPosttaxRow(){
-		var id = this_form_id;
-		var key = jQuery(this).closest('.frm_form_action_settings').data('actionkey');
-		var post_type = jQuery(this).closest('.frm_form_action_settings').find('select[name$="[post_content][post_type]"]').val();
-		var tax_key = getMetaValue('frm_posttax_', jQuery('#frm_posttax_rows > div').size());
-		jQuery.ajax({
-			type:'POST',url:ajaxurl,
-			data:{action:'frm_add_posttax_row', form_id:id, post_type:post_type, tax_key:tax_key, action_key:key, nonce:frmGlobal.nonce},
-			success:function(html){
-				jQuery(document.getElementById('frm_posttax_rows')).append(html);
-			}
-		});
+		addPostRow( 'tax', this );
 	}
 	
 	function addPostmetaRow(){
+		addPostRow( 'meta', this );
+	}
+
+	function addPostRow( type, button ){
 		var id = jQuery('input[name="id"]').val();
-		var settings = jQuery(this).closest('.frm_form_action_settings');
+		var settings = jQuery(button).closest('.frm_form_action_settings');
 		var key = settings.data('actionkey');
-		var meta_name = 0;
 		var post_type = settings.find('.frm_post_type').val();
 
-		if(jQuery('.frm_postmeta_row').length){
-			var name = jQuery('.frm_postmeta_row:last').attr('id').replace('frm_postmeta_', '');
+		var meta_name = 0;
+		if(jQuery('.frm_post'+type+'_row').length){
+			var name = jQuery('.frm_post'+type+'_row:last').attr('id').replace('frm_post'+type+'_', '');
 			if(jQuery.isNumeric(name)){
 				meta_name = 1 + parseInt(name);
 			}else{
@@ -1664,18 +1659,22 @@ function frmAdminBuildJS(){
 		jQuery.ajax({
 			type:'POST',url:ajaxurl,
 			data:{
-				action:'frm_add_postmeta_row', form_id:id, meta_name:meta_name,
+				action:'frm_add_post'+type+'_row', form_id:id,
+				meta_name:meta_name, tax_key:meta_name,
 				post_type:post_type, action_key:key, nonce:frmGlobal.nonce
 			},
 			success:function(html){
-				document.getElementById('postcustomstuff').style.display = 'block';
-				jQuery(document.getElementById('frm_postmeta_rows')).append(html);
-				jQuery('.frm_toggle_cf_opts').not(':last').hide();
-				jQuery('.frm_add_postmeta_row.button').hide();
+				jQuery(document.getElementById('frm_post'+type+'_rows')).append(html);
+				jQuery('.frm_add_post'+type+'_row.button').hide();
+
+				if ( type == 'meta' ) {
+					document.getElementById('postcustomstuff').style.display = 'block';
+					jQuery('.frm_toggle_cf_opts').not(':last').hide();
+				}
 			}
 		});
 	}
-	
+
 	function getMetaValue(id, meta_name){
 		var new_meta = meta_name;
 		if(jQuery(document.getElementById(id+meta_name)).length>0){
