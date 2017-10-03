@@ -73,7 +73,6 @@ function frmAdminBuildJS(){
 			show='#'+deleteButton.closest('td').children('.frm_add_logic_link').attr('id');
 		}else if(id.indexOf('frm_postmeta_') === 0){
 			if(jQuery('#frm_postmeta_rows .frm_postmeta_row').length<2){
-				hide='#postcustomstuff';
 				show='.frm_add_postmeta_row.button';
 			}
 			if(jQuery('.frm_toggle_cf_opts').length && jQuery('#frm_postmeta_rows .frm_postmeta_row:not(#'+id+')').last().length){
