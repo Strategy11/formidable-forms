@@ -71,9 +71,6 @@ function frmAdminBuildJS(){
 			}
 		}else if(id.indexOf('frm_logic_') === 0 && deleteButton.closest('.frm_logic_rows').find('.frm_logic_row').length<2){
 			show='#'+deleteButton.closest('td').children('.frm_add_logic_link').attr('id');
-		}else if(id.indexOf('frm_posttax_') === 0){
-			if(jQuery('#frm_posttax_rows .frm_posttax_row').length<2)
-				show='.frm_add_posttax_row.button';
 		}else if(id.indexOf('frm_postmeta_') === 0){
 			if(jQuery('#frm_postmeta_rows .frm_postmeta_row').length<2){
 				hide='#postcustomstuff';
@@ -101,7 +98,7 @@ function frmAdminBuildJS(){
 			}
 
 			if ( show !== '' ) {
-				jQuery( show ).removeClass('frm_hidden').fadeIn( 'slow' );
+				jQuery( show+' a,'+show ).removeClass('frm_hidden').fadeIn('slow');
 			}
 
 			var action = jQuery(this).closest('.frm_form_action_settings');
