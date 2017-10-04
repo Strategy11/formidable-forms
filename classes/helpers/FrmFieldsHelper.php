@@ -256,9 +256,9 @@ class FrmFieldsHelper {
 		$args = wp_parse_args( $args, $defaults );
 		$args['html_id'] = self::get_html_id( $field, $args['field_plus_id'] );
 
-        if ( FrmField::is_multiple_select( $field ) ) {
-            $field_name .= '[]';
-        }
+		if ( FrmField::is_multiple_select( $field ) ) {
+			$field_name .= '[]';
+		}
 
 		return $args;
 	}
@@ -290,7 +290,7 @@ class FrmFieldsHelper {
 	/**
 	 * @since 3.0
 	 */
-	private static function replace_field_values( $field, $args, &$html ) {		
+	private static function replace_field_values( $field, $args, &$html ) {
 		//replace [id]
 		$html = str_replace( '[id]', $args['field_id'], $html );
 
@@ -382,7 +382,7 @@ class FrmFieldsHelper {
 	 * @since 3.0
 	 */
 	private static function filter_for_more_shortcodes( $args, $field, &$html) {
-        //If field is not in repeating section
+		//If field is not in repeating section
 		if ( empty( $args['section_id'] ) ) {
 			$args = array( 'errors' => $args['errors'], 'form' => $args['form'] );
 		}
@@ -427,9 +427,9 @@ class FrmFieldsHelper {
 	private static function replace_input_shortcode( $field, $args, $shortcode_atts ) {
 		$frm_settings = FrmAppHelper::get_settings();
 
-        $field_name = $args['field_name'];
-        $field_id   = $args['field_id'];
-        $html_id    = $args['html_id'];
+		$field_name = $args['field_name'];
+		$field_id   = $args['field_id'];
+		$html_id    = $args['html_id'];
 		$errors     = $args['errors'];
 
 		if ( isset( $shortcode_atts['opt'] ) ) {
