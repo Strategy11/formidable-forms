@@ -220,132 +220,31 @@ class FrmFieldsHelper {
 	}
 
 	public static function replace_shortcodes( $html, $field, $errors = array(), $form = false, $args = array() ) {
-        $html = apply_filters('frm_before_replace_shortcodes', $html, $field, $errors, $form);
+		$html = apply_filters('frm_before_replace_shortcodes', $html, $field, $errors, $form);
 
-        $args = self::fill_display_field_values( $field, $args );
-        $field_name = $args['field_name'];
-        $field_id = $args['field_id'];
-        $html_id = $args['html_id'];
+		$args = self::fill_display_field_values( $field, $args );
+		$args['errors'] = is_array( $errors ) ? $errors : array();
+		$args['form'] = $form;
 
-        if ( FrmField::is_multiple_select($field) ) {
-            $field_name .= '[]';
-        }
-
-        //replace [id]
-        $html = str_replace('[id]', $field_id, $html);
-
-        // Remove the for attribute for captcha
-        if ( $field['type'] == 'captcha' ) {
-            $html = str_replace(' for="field_[key]"', '', $html);
-		}
-
-        // set the label for
-        $html = str_replace('field_[key]', $html_id, $html);
-
-        //replace [key]
-        $html = str_replace('[key]', $field['field_key'], $html);
-
-        //replace [description] and [required_label] and [error]
-		$required = FrmField::is_required( $field ) ? $field['required_indicator'] : '';
-        if ( ! is_array( $errors ) ) {
-            $errors = array();
-        }
-		$error = isset( $errors[ 'field' . $field_id ] ) ? $errors[ 'field' . $field_id ] : false;
-
-        //If field type is section heading, add class so a bottom margin can be added to either the h3 or description
-        if ( $field['type'] == 'divider' ) {
-            if ( FrmField::is_option_true( $field, 'description' ) ) {
-                $html = str_replace( 'frm_description', 'frm_description frm_section_spacing', $html );
-            } else {
-                $html = str_replace('[label_position]', '[label_position] frm_section_spacing', $html);
-            }
-        }
-
-		foreach ( array( 'description' => $field['description'], 'required_label' => $required, 'error' => $error ) as $code => $value ) {
-            self::remove_inline_conditions( ( $value && $value != '' ), $code, $value, $html );
-        }
-
-        //replace [required_class]
-		$required_class = FrmField::is_required( $field ) ? ' frm_required_field' : '';
-        $html = str_replace('[required_class]', $required_class, $html);
-
-        //replace [label_position]
 		$field['label'] = self::label_position( $field['label'], $field, $form );
-		self::add_class_to_label( $field, $html );
 
-        //replace [field_name]
-        $html = str_replace('[field_name]', $field['name'], $html);
+		self::replace_shortcodes_before_input( $field, $args, $html );
 
-		self::add_field_div_classes( $field_id, $field, $errors, $html );
+		self::replace_shortcodes_with_atts( $field, $args, $html );
 
-        //replace [entry_key]
-        $entry_key = FrmAppHelper::simple_get( 'entry', 'sanitize_title' );
-        $html = str_replace('[entry_key]', $entry_key, $html);
+		$html .= "\n";
 
-		if ( $form ) {
-			$form = (array) $form;
-
-			//replace [form_key]
-			$html = str_replace('[form_key]', $form['form_key'], $html);
-
-			//replace [form_name]
-			$html = str_replace('[form_name]', $form['name'], $html);
+		//Return html if conf_field to prevent loop
+		if ( isset($field['conf_field']) && $field['conf_field'] == 'stop' ) {
+			return $html;
 		}
 
-		self::process_wp_shortcodes( $html );
-
-        //replace [input]
-        preg_match_all("/\[(input|deletelink)\b(.*?)(?:(\/))?\]/s", $html, $shortcodes, PREG_PATTERN_ORDER);
-        global $frm_vars;
-        $frm_settings = FrmAppHelper::get_settings();
-
-        foreach ( $shortcodes[0] as $short_key => $tag ) {
-            $atts = FrmShortcodeHelper::get_shortcode_attribute_array( $shortcodes[2][ $short_key ] );
-			$tag = self::get_shortcode_tag( $shortcodes, $short_key, array( 'conditional' => false, 'conditional_check' => false ) );
-
-            $replace_with = '';
-
-            if ( $tag == 'input' ) {
-                if ( isset($atts['opt']) ) {
-                    $atts['opt']--;
-                }
-
-                $field['input_class'] = isset($atts['class']) ? $atts['class'] : '';
-                if ( isset($atts['class']) ) {
-                    unset($atts['class']);
-                }
-
-                $field['shortcodes'] = $atts;
-                ob_start();
-				include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/input.php' );
-                $replace_with = ob_get_contents();
-                ob_end_clean();
-            } else if ( $tag == 'deletelink' && FrmAppHelper::pro_is_installed() ) {
-                $replace_with = FrmProEntriesController::entry_delete_link($atts);
-            }
-
-            $html = str_replace( $shortcodes[0][ $short_key ], $replace_with, $html );
-        }
-
-        $html .= "\n";
-
-        //Return html if conf_field to prevent loop
-        if ( isset($field['conf_field']) && $field['conf_field'] == 'stop' ) {
-            return $html;
-        }
-
-        //If field is in repeating section
-        if ( $args['section_id'] ) {
-            $html = apply_filters('frm_replace_shortcodes', $html, $field, array( 'errors' => $errors, 'form' => $form, 'field_name' => $field_name, 'field_id' => $field_id, 'field_plus_id' => $args['field_plus_id'], 'section_id' => $args['section_id'] ));
-        } else {
-            $html = apply_filters('frm_replace_shortcodes', $html, $field, array( 'errors' => $errors, 'form' => $form ));
-        }
-
+		self::filter_for_more_shortcodes( $args, $field, $html);
 		self::filter_html_field_shortcodes( $field, $html );
 		self::remove_collapse_shortcode( $html );
 
-        return $html;
-    }
+		return $html;
+	}
 
 	private static function fill_display_field_values( $field, $args = array() ) {
 		$defaults = array(
@@ -356,7 +255,138 @@ class FrmFieldsHelper {
 		);
 		$args = wp_parse_args( $args, $defaults );
 		$args['html_id'] = self::get_html_id( $field, $args['field_plus_id'] );
+
+        if ( FrmField::is_multiple_select( $field ) ) {
+            $field_name .= '[]';
+        }
+
 		return $args;
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	private static function replace_shortcodes_before_input( $field, $args, &$html ) {
+		// Remove the for attribute for captcha
+		if ( $field['type'] == 'captcha' ) {
+			$html = str_replace( ' for="field_[key]"', '', $html );
+		}
+
+		self::replace_field_values( $field, $args, $html );
+		self::add_class_to_divider( $field, $html );
+
+		self::replace_required_label_shortcode( $field, $html );
+		self::replace_required_class( $field, $html );
+		self::replace_description_shortcode( $field, $html );
+		self::replace_error_shortcode( $args, $html );
+		self::add_class_to_label( $field, $html );
+		self::add_field_div_classes( $args['field_id'], $field, $args['errors'], $html );
+
+		self::replace_entry_key( $html );
+		self::replace_form_shortcodes( $args['form'], $html );
+		self::process_wp_shortcodes( $html );
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	private static function replace_field_values( $field, $args, &$html ) {		
+		//replace [id]
+		$html = str_replace( '[id]', $args['field_id'], $html );
+
+		// set the label for
+		$html = str_replace( 'field_[key]', $args['html_id'], $html );
+
+		//replace [key]
+		$html = str_replace( '[key]', $field['field_key'], $html );
+
+		//replace [field_name]
+		$html = str_replace('[field_name]', $field['name'], $html );
+	}
+
+	/**
+	 * If field type is section heading, add class so a bottom margin
+	 * can be added to either the h3 or description
+	 *
+	 * @since 3.0
+	 */
+	private static function add_class_to_divider( $field, &$html ) {
+		if ( $field['type'] == 'divider' ) {
+			if ( FrmField::is_option_true( $field, 'description' ) ) {
+				$html = str_replace( 'frm_description', 'frm_description frm_section_spacing', $html );
+			} else {
+				$html = str_replace( '[label_position]', '[label_position] frm_section_spacing', $html );
+			}
+		}
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	private static function replace_required_label_shortcode( $field, &$html ) {
+		$required = FrmField::is_required( $field ) ? $field['required_indicator'] : '';
+		self::remove_inline_conditions( ! empty( $required ), 'required_label', $required, $html );
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	private static function replace_description_shortcode( $field, &$html ) {
+		$description = $field['description'];
+		self::remove_inline_conditions( ( $description && $description != '' ), 'description', $description, $html );
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	private static function replace_error_shortcode( $args, &$html ) {
+		$error = isset( $args['errors'][ 'field' . $args['field_id'] ] ) ? $args['errors'][ 'field' . $args['field_id'] ] : false;
+		self::remove_inline_conditions( ! empty( $error ), 'error', $error, $html );
+	}
+	/**
+	 * replace [required_class]
+	 *
+	 * @since 3.0
+	 */
+	private static function replace_required_class( $field, &$html ) {
+		$required_class = FrmField::is_required( $field ) ? ' frm_required_field' : '';
+		$html = str_replace( '[required_class]', $required_class, $html );
+	}
+
+	/**
+	 * replace [entry_key]
+	 *
+	 * @since 3.0
+	 */
+	private static function replace_entry_key( &$html ) {
+		$entry_key = FrmAppHelper::simple_get( 'entry', 'sanitize_title' );
+		$html = str_replace( '[entry_key]', $entry_key, $html );
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	private static function replace_form_shortcodes( $form, &$html ) {
+		if ( $form ) {
+			$form = (array) $form;
+
+			//replace [form_key]
+			$html = str_replace( '[form_key]', $form['form_key'], $html );
+
+			//replace [form_name]
+			$html = str_replace( '[form_name]', $form['name'], $html );
+		}
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	private static function filter_for_more_shortcodes( $args, $field, &$html) {
+        //If field is not in repeating section
+		if ( empty( $args['section_id'] ) ) {
+			$args = array( 'errors' => $args['errors'], 'form' => $args['form'] );
+		}
+		$html = apply_filters( 'frm_replace_shortcodes', $html, $field, $args );
 	}
 
 	private static function filter_html_field_shortcodes( $field, &$html ) {
@@ -367,6 +397,58 @@ class FrmFieldsHelper {
 			$html = apply_filters( 'frm_get_default_value', $html, (object) $field, false );
 			$html = do_shortcode( $html );
 		}
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	private static function replace_shortcodes_with_atts( $field, $args, &$html ) {
+		preg_match_all("/\[(input|deletelink)\b(.*?)(?:(\/))?\]/s", $html, $shortcodes, PREG_PATTERN_ORDER);
+
+		foreach ( $shortcodes[0] as $short_key => $tag ) {
+			$shortcode_atts = FrmShortcodeHelper::get_shortcode_attribute_array( $shortcodes[2][ $short_key ] );
+			$tag = self::get_shortcode_tag( $shortcodes, $short_key, array( 'conditional' => false, 'conditional_check' => false ) );
+
+			$replace_with = '';
+
+			if ( $tag == 'input' ) {
+				$replace_with = self::replace_input_shortcode( $field, $args, $shortcode_atts );
+			} else if ( $tag == 'deletelink' && FrmAppHelper::pro_is_installed() ) {
+				$replace_with = FrmProEntriesController::entry_delete_link($atts);
+			}
+
+			$html = str_replace( $shortcodes[0][ $short_key ], $replace_with, $html );
+		}
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	private static function replace_input_shortcode( $field, $args, $shortcode_atts ) {
+		$frm_settings = FrmAppHelper::get_settings();
+
+        $field_name = $args['field_name'];
+        $field_id   = $args['field_id'];
+        $html_id    = $args['html_id'];
+		$errors     = $args['errors'];
+
+		if ( isset( $shortcode_atts['opt'] ) ) {
+			$shortcode_atts['opt']--;
+		}
+
+		$field['input_class'] = isset( $shortcode_atts['class'] ) ? $shortcode_atts['class'] : '';
+		if ( isset( $shortcode_atts['class'] ) ) {
+			unset( $shortcode_atts['class'] );
+		}
+
+		$field['shortcodes'] = $shortcode_atts;
+
+		ob_start();
+		include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/input.php' );
+		$replace_with = ob_get_contents();
+		ob_end_clean();
+
+		return $replace_with;
 	}
 
 	/**
