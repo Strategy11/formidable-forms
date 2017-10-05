@@ -21,6 +21,13 @@ class FrmFieldDefault extends FrmFieldType {
 		parent::set_type( $type );
 	}
 
+	public function show_on_form_builder( $name = '' ) {
+		$field = FrmFieldsHelper::setup_edit_vars( $this->field );
+
+		do_action( 'frm_display_added_fields', $field );
+		do_action( 'frm_display_added_' . $this->type . '_field', $field );
+	}
+
 	public function front_field_input( $args, $shortcode_atts ) {
 		$pass_args = array( 'errors' => $args['errors'], 'html_id' => $args['html_id'] );
 		ob_start();

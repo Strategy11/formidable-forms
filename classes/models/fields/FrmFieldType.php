@@ -18,13 +18,6 @@ abstract class FrmFieldType {
 	protected $type;
 
 	/**
-	 * The type of field input to show on the form builder
-	 * @var string
-	 * @since 3.0
-	 */
-	protected $display_type;
-
-	/**
 	 * Does the html for this field label need to include "for"?
 	 * @var bool
 	 * @since 3.0
@@ -87,12 +80,6 @@ abstract class FrmFieldType {
 			if ( empty( $this->type ) && ! empty( $type ) ) {
 				$this->type = $type;
 			}
-		}
-	}
-
-	protected function set_display_type() {
-		if ( empty( $this->display_type ) && ! empty( $this->type ) ) {
-			$this->display_type = $this->type;
 		}
 	}
 
@@ -163,11 +150,8 @@ DEFAULT_HTML;
 
 		if ( ! empty( $include_file ) ) {
 			$this->include_on_form_builder( $name, $field );
-		} elseif ( $this->display_type == 'text' ) {
-			echo $this->builder_text_field();
 		} else {
-			do_action( 'frm_display_added_fields', $field );
-			do_action( 'frm_display_added_' . $this->type . '_field', $field );
+			echo $this->builder_text_field();
 		}
 	}
 
