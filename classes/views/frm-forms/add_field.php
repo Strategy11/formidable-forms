@@ -246,14 +246,14 @@ if ( $display['options'] ) { ?>
 					FrmFieldsController::show_format_option( $field );
 				}
 
-				do_action( 'frm_' . $field['type'] . '_field_options_form', $field, $display, $values );
-				do_action( 'frm_field_options_form', $field, $display, $values );
-
-				if ( $field['type'] == 'number' ) {
+				if ( $display['range'] ) {
 					include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/number-range.php' );
-				} else if ( $field['type'] == 'html' ) {
+				} elseif ( $field['type'] == 'html' ) {
 					include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/html-content.php' );
 				}
+
+				do_action( 'frm_' . $field['type'] . '_field_options_form', $field, $display, $values );
+				do_action( 'frm_field_options_form', $field, $display, $values );
 
                 if ( $display['required'] || $display['invalid'] || $display['unique'] || $display['conf_field'] ) { ?>
 					<tr class="frm_validation_msg <?php echo ($display['invalid'] || $field['required'] || FrmField::is_option_true( $field, 'unique' ) || FrmField::is_option_true( $field, 'conf_field' ) ) ? '' : 'frm_hidden'; ?>">

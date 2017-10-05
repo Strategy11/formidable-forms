@@ -32,4 +32,8 @@ class FrmFieldHidden extends FrmFieldType {
 	protected function include_form_builder_file() {
 		return FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-hidden.php';
 	}
+
+	protected function html5_input_type() {
+		return 'hidden';
+	}
 }

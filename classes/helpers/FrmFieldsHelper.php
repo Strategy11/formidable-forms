@@ -177,96 +177,23 @@ class FrmFieldsHelper {
 
 	public static function show_fields( $fields, $errors, $form, $form_action ) {
 		foreach ( $fields as $field ) {
-			if ( $field['type'] == 'user_id' ) {
-				self::show_hidden_user_id( $field );
-			} else if ( apply_filters( 'frm_show_normal_field_type', true, $field['type'] ) ) {
-				if ( $field['type'] == 'hidden' ) {
-					self::show_hidden_field( $field );
-				} else {
-					self::show_field( $field, $errors, $form );
-				}
-			} else {
-				do_action( 'frm_show_other_field_type', $field, $form, array( 'action' => $form_action ) );
-			}
-			do_action('frm_get_field_scripts', $field, $form, $form->id);
+			$field_obj = FrmFieldFactory::get_field_type( $field['type'], $field );
+			$field_obj->show_field( compact( 'errors', 'form', 'form_action' ) );
 		}
-	}
-
-	private static function show_hidden_user_id( $field ) {
-		$args = self::fill_display_field_values( $field );
-
-		$user_ID = get_current_user_id();
-		$user_ID = ( $user_ID ? $user_ID : '' );
-		$posted_value = ( FrmAppHelper::is_admin() && $_POST && isset( $_POST['item_meta'][ $field['id'] ] ) );
-		$updating = ( isset( $args['action'] ) && $args['action'] == 'update' );
-		$value = ( is_numeric( $field['value'] ) || $posted_value || $updating ) ? $field['value'] : $user_ID;
-
-		echo '<input type="hidden" name="' . esc_attr( $args['field_name'] ) . '" id="' . esc_attr( $args['html_id'] ) . '" value="' . esc_attr( $value ) . '" data-frmval="' . esc_attr( $value ) . '"/>'."\n";
-	}
-
-	private static function show_hidden_field( $field ) {
-		$args = self::fill_display_field_values( $field );
-
-		ob_start();
-		do_action( 'frm_field_input_html', $field );
-		$input_html = ob_get_contents();
-		ob_end_clean();
-
-		echo '<input type="hidden" name="' . esc_attr( $args['field_name'] ) . '" id="' . esc_attr( $args['html_id'] ) . '" value="' . esc_attr( $field['value'] ) . '" ' . $input_html . ' />';
-	}
-
-	private static function show_field( $field, $errors, $form ) {
-		echo self::replace_shortcodes( $field['custom_html'], $field, $errors, $form );
 	}
 
 	public static function replace_shortcodes( $html, $field, $errors = array(), $form = false, $args = array() ) {
-		$html = apply_filters('frm_before_replace_shortcodes', $html, $field, $errors, $form);
-
-		$args = self::fill_display_field_values( $field, $args );
-		$args['errors'] = is_array( $errors ) ? $errors : array();
-		$args['form'] = $form;
-
-		$field['label'] = self::label_position( $field['label'], $field, $form );
-
-		self::replace_shortcodes_before_input( $field, $args, $html );
-
-		self::replace_shortcodes_with_atts( $field, $args, $html );
-
-		$html .= "\n";
-
-		//Return html if conf_field to prevent loop
-		if ( isset($field['conf_field']) && $field['conf_field'] == 'stop' ) {
-			return $html;
-		}
-
-		self::filter_for_more_shortcodes( $args, $field, $html);
-		self::filter_html_field_shortcodes( $field, $html );
-		self::remove_collapse_shortcode( $html );
-
-		return $html;
-	}
-
-	private static function fill_display_field_values( $field, $args = array() ) {
-		$defaults = array(
-			'field_name'    => 'item_meta[' . $field['id'] . ']',
-			'field_id'      => $field['id'],
-			'field_plus_id' => '',
-			'section_id'    => '',
-		);
-		$args = wp_parse_args( $args, $defaults );
-		$args['html_id'] = self::get_html_id( $field, $args['field_plus_id'] );
-
-		if ( FrmField::is_multiple_select( $field ) ) {
-			$field_name .= '[]';
-		}
-
-		return $args;
+		_deprecated_function( __FUNCTION__, '3.0', 'FrmFieldType::prepare_field_html' );
+		$field_obj = FrmFieldFactory::get_field_type( $field['type'], $field );
+		return $field_obj->prepare_field_html( compact( 'errors', 'form' ) );
 	}
 
 	/**
 	 * @since 3.0
 	 */
-	private static function replace_shortcodes_before_input( $field, $args, &$html ) {
+	public static function replace_shortcodes_before_input( $args, &$html ) {
+		$field = $args['field'];
+
 		// Remove the for attribute for captcha
 		if ( $field['type'] == 'captcha' ) {
 			$html = str_replace( ' for="field_[key]"', '', $html );
@@ -381,6 +308,22 @@ class FrmFieldsHelper {
 	/**
 	 * @since 3.0
 	 */
+	public static function replace_shortcodes_after_input( $args, &$html ) {
+		$html .= "\n";
+
+		//Return html if conf_field to prevent loop
+		if ( isset( $args['field']['conf_field'] ) && $args['field']['conf_field'] == 'stop' ) {
+			return;
+		}
+
+		self::filter_for_more_shortcodes( $args, $args['field'], $html);
+		self::filter_html_field_shortcodes( $args['field'], $html );
+		self::remove_collapse_shortcode( $html );
+	}
+
+	/**
+	 * @since 3.0
+	 */
 	private static function filter_for_more_shortcodes( $args, $field, &$html) {
 		//If field is not in repeating section
 		if ( empty( $args['section_id'] ) ) {
@@ -400,21 +343,20 @@ class FrmFieldsHelper {
 	}
 
 	/**
+	 * TODO: 3.0 remove this function
 	 * @since 3.0
 	 */
-	private static function replace_shortcodes_with_atts( $field, $args, &$html ) {
-		preg_match_all("/\[(input|deletelink)\b(.*?)(?:(\/))?\]/s", $html, $shortcodes, PREG_PATTERN_ORDER);
+	public static function replace_shortcodes_with_atts( $args, &$html ) {
+		preg_match_all("/\[(deletelink)\b(.*?)(?:(\/))?\]/s", $html, $shortcodes, PREG_PATTERN_ORDER);
 
 		foreach ( $shortcodes[0] as $short_key => $tag ) {
 			$shortcode_atts = FrmShortcodeHelper::get_shortcode_attribute_array( $shortcodes[2][ $short_key ] );
-			$tag = self::get_shortcode_tag( $shortcodes, $short_key, array( 'conditional' => false, 'conditional_check' => false ) );
+			$tag = FrmShortcodeHelper::get_shortcode_tag( $shortcodes, $short_key, array( 'conditional' => false, 'conditional_check' => false ) );
 
 			$replace_with = '';
 
-			if ( $tag == 'input' ) {
-				$replace_with = self::replace_input_shortcode( $field, $args, $shortcode_atts );
-			} else if ( $tag == 'deletelink' && FrmAppHelper::pro_is_installed() ) {
-				$replace_with = FrmProEntriesController::entry_delete_link($atts);
+			if ( $tag == 'deletelink' && FrmAppHelper::pro_is_installed() ) {
+				$replace_with = FrmProEntriesController::entry_delete_link( $shortcode_atts );
 			}
 
 			$html = str_replace( $shortcodes[0][ $short_key ], $replace_with, $html );
@@ -422,40 +364,10 @@ class FrmFieldsHelper {
 	}
 
 	/**
-	 * @since 3.0
-	 */
-	private static function replace_input_shortcode( $field, $args, $shortcode_atts ) {
-		$frm_settings = FrmAppHelper::get_settings();
-
-		$field_name = $args['field_name'];
-		$field_id   = $args['field_id'];
-		$html_id    = $args['html_id'];
-		$errors     = $args['errors'];
-
-		if ( isset( $shortcode_atts['opt'] ) ) {
-			$shortcode_atts['opt']--;
-		}
-
-		$field['input_class'] = isset( $shortcode_atts['class'] ) ? $shortcode_atts['class'] : '';
-		if ( isset( $shortcode_atts['class'] ) ) {
-			unset( $shortcode_atts['class'] );
-		}
-
-		$field['shortcodes'] = $shortcode_atts;
-
-		ob_start();
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/input.php' );
-		$replace_with = ob_get_contents();
-		ob_end_clean();
-
-		return $replace_with;
-	}
-
-	/**
 	 * Get the class to use for the label position
 	 * @since 2.05
 	 */
-	private static function &label_position( $position, $field, $form ) {
+	public static function &label_position( $position, $field, $form ) {
 		if ( $position && $position != '' ) {
 			return $position;
 		}
@@ -577,33 +489,8 @@ class FrmFieldsHelper {
     }
 
 	public static function get_shortcode_tag( $shortcodes, $short_key, $args ) {
-		$args = wp_parse_args( $args, array( 'conditional' => false, 'conditional_check' => false, 'foreach' => false ) );
-        if ( ( $args['conditional'] || $args['foreach'] ) && ! $args['conditional_check'] ) {
-            $args['conditional_check'] = true;
-        }
-
-        $prefix = '';
-        if ( $args['conditional_check'] ) {
-            if ( $args['conditional'] ) {
-                $prefix = 'if ';
-            } else if ( $args['foreach'] ) {
-                $prefix = 'foreach ';
-            }
-        }
-
-        $with_tags = $args['conditional_check'] ? 3 : 2;
-        if ( ! empty( $shortcodes[ $with_tags ][ $short_key ] ) ) {
-            $tag = str_replace( '[' . $prefix, '', $shortcodes[0][ $short_key ] );
-            $tag = str_replace(']', '', $tag);
-            $tags = explode(' ', $tag);
-            if ( is_array($tags) ) {
-                $tag = $tags[0];
-            }
-        } else {
-            $tag = $shortcodes[ $with_tags - 1 ][ $short_key ];
-        }
-
-        return $tag;
+		_deprecated_function( __FUNCTION__, '3.0', 'FrmShortcodesHelper::get_shortcode_tag' );
+        return FrmShortcodeHelper::get_shortcode_tag( $shortcodes, $short_key, $args );
     }
 
 	/**
@@ -625,37 +512,7 @@ class FrmFieldsHelper {
 	}
 
 	public static function display_recaptcha( $field ) {
-		$frm_settings = FrmAppHelper::get_settings();
-		$lang = apply_filters( 'frm_recaptcha_lang', $frm_settings->re_lang, $field );
-
-		$class_prefix = '';
-		$api_js_url = 'https://www.google.com/recaptcha/api.js?';
-
-		$allow_mutiple = $frm_settings->re_multi;
-		if ( $allow_mutiple ) {
-			$api_js_url .= '&onload=frmRecaptcha&render=explicit';
-			$class_prefix = 'frm-';
-		}
-
-		if ( ! empty( $lang ) ) {
-			$api_js_url .= '&hl=' . $lang;
-		}
-		$api_js_url = apply_filters( 'frm_recaptcha_js_url', $api_js_url );
-
-        wp_register_script( 'recaptcha-api', $api_js_url, array( 'formidable' ), true );
-        wp_enqueue_script( 'recaptcha-api' );
-
-		// for reverse compatibility
-		$field['captcha_size'] = ( $field['captcha_size'] == 'default' ) ? 'normal' : $field['captcha_size'];
-		$field['captcha_size'] = ( $frm_settings->re_type == 'invisible' ) ? 'invisible' : $field['captcha_size'];
-
-?>
-<div id="field_<?php echo esc_attr( $field['field_key'] ) ?>" class="<?php echo esc_attr( $class_prefix ) ?>g-recaptcha" data-sitekey="<?php echo esc_attr( $frm_settings->pubkey ) ?>" data-size="<?php echo esc_attr( $field['captcha_size'] ) ?>" data-theme="<?php echo esc_attr( $field['captcha_theme'] ) ?>" <?php
-	if ( $field['captcha_size'] == 'invisible' && ! $allow_mutiple ) {
-		echo 'data-callback="frmAfterRecaptcha"';
-	}
-?>></div>
-<?php
+		_deprecated_function( __FUNCTION__, '3.0', 'FrmFieldCaptcha::field_input' );
     }
 
 	public static function show_single_option( $field ) {

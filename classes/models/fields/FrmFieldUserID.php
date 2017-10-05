@@ -36,6 +36,18 @@ class FrmFieldUserID extends FrmFieldType {
 		return FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-user-id.php';
 	}
 
+	public function prepare_field_html( $args ) {
+		$args = $this->fill_display_field_values( $args );
+
+		$user_ID = get_current_user_id();
+		$user_ID = ( $user_ID ? $user_ID : '' );
+		$posted_value = ( FrmAppHelper::is_admin() && $_POST && isset( $_POST['item_meta'][ $this->field['id'] ] ) );
+		$updating = ( isset( $args['action'] ) && $args['action'] == 'update' );
+		$value = ( is_numeric( $this->field['value'] ) || $posted_value || $updating ) ? $this->field['value'] : $user_ID;
+
+		echo '<input type="hidden" name="' . esc_attr( $args['field_name'] ) . '" id="' . esc_attr( $args['html_id'] ) . '" value="' . esc_attr( $value ) . '" data-frmval="' . esc_attr( $value ) . '"/>'."\n";
+	}
+
 	/**
 	 * @param $value
 	 * @param $atts array

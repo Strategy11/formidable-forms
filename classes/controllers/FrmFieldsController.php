@@ -147,8 +147,6 @@ class FrmFieldsController {
 		FrmAppHelper::permission_check('frm_edit_forms');
         check_ajax_referer( 'frm_ajax', 'nonce' );
 
-        global $wpdb;
-
 		$field_id = FrmAppHelper::get_post_param( 'field_id', 0, 'absint' );
 		$form_id = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
 
@@ -172,9 +170,15 @@ class FrmFieldsController {
         wp_die();
     }
 
-    /**
-     * Load a single field in the form builder along with all needed variables
-     */
+	/**
+	 * Load a single field in the form builder along with all needed variables
+	 *
+	 * @param int $field_id
+	 * @param array $values
+	 * @param int $form_id
+	 *
+	 * @return array
+	 */
 	public static function include_single_field( $field_id, $values, $form_id = 0 ) {
 		_deprecated_function( __FUNCTION__, '3.0', 'FrmFieldsController::load_single_field' );
 
@@ -186,6 +190,10 @@ class FrmFieldsController {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param int $field_id
+	 *
+	 * @return array
 	 */
 	public static function get_field_array_from_id( $field_id ) {
 		$field = FrmField::getOne( $field_id );
@@ -194,6 +202,10 @@ class FrmFieldsController {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param int|array|object $field_object
+	 * @param array $values
+	 * @param int $form_id
 	 */
 	public static function load_single_field( $field_object, $values, $form_id = 0 ) {
 		if ( is_numeric( $field_object ) ) {
@@ -207,10 +219,9 @@ class FrmFieldsController {
 			$field = FrmFieldsHelper::setup_edit_vars( $field_object );
 		}
 
-		$display = self::display_field_options( $field_object );
-
-		$li_classes = 'form-field edit_form_item frm_field_box frm_top_container frm_not_divider edit_field_type_' . $display['type'];
-		$li_classes = apply_filters( 'frm_build_field_class', $li_classes, $field );
+		$field_obj = FrmFieldFactory::get_field_factory( $field_object );
+		$display = self::display_field_options( array(), $field_obj );
+		$li_classes = self::get_classes_for_builder_field( $field, $display, $field_obj );
 
 		$ajax_loading = isset( $values['ajax_load'] ) && $values['ajax_load'];
 		$ajax_this_field = isset( $values['count'] ) && $values['count'] > 10 && ! in_array( $field_object->type, array( 'divider', 'end_divider' ) );
@@ -224,10 +235,16 @@ class FrmFieldsController {
 			$frm_all_field_selection = array_merge( FrmField::field_selection(), $pro_field_selection );
 			$disabled_fields = FrmAppHelper::pro_is_installed() ? array() : $pro_field_selection;
 
-			$field_obj = FrmFieldFactory::get_field_object( $field_object );
-
 			require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add_field.php' );
 		}
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	private static function get_classes_for_builder_field( $field, $display, $field_info ) {
+		$li_classes = $field_info->form_builder_classes( $display['type'] );
+		return apply_filters( 'frm_build_field_class', $li_classes, $field );
 	}
 
     public static function destroy() {
@@ -409,16 +426,18 @@ class FrmFieldsController {
         return $type;
     }
 
-	public static function display_field_options( $field ) {
-		if ( is_object( $field ) ) {
-			$field_info = FrmFieldFactory::get_field_object( $field );
-		} elseif ( isset( $field['id'] ) && $field['id'] ) {
-			$field_info = FrmFieldFactory::get_field_object( $field['id'] );
-		} else {
-			$field_info = FrmFieldFactory::get_field_type( $field['type'] );
+	/**
+	 * @param array $settings
+	 * @param object $field_info
+	 *
+	 * @return array
+	 */
+	public static function display_field_options( $settings, $field_info = null ) {
+		if ( $field_info ) {
+			$settings = $field_info->display_field_settings();
+			$settings['field_data'] = $field_info->field;
 		}
-		$settings = $field_info->display_field_settings();
-		$settings['field_data'] = $field;
+
 		return apply_filters( 'frm_display_field_options', $settings );
     }
 
@@ -587,6 +606,10 @@ class FrmFieldsController {
 	 * get the label to use as the placeholder
 	 *
 	 * @since 2.05
+	 *
+	 * @param array $field
+	 *
+	 * @return string
 	 */
 	public static function get_default_value_from_name( $field ) {
 		$position = FrmField::get_option( $field, 'label' );
@@ -600,6 +623,9 @@ class FrmFieldsController {
 
 	/**
 	 * use HMTL5 placeholder with js fallback
+	 *
+	 * @param array $field
+	 * @param array $add_html
 	 */
 	private static function add_placeholder_to_input( $field, &$add_html ) {
 		if ( FrmFieldsHelper::is_placeholder_field_type( $field['type'] ) ) {
@@ -654,7 +680,7 @@ class FrmFieldsController {
 	 *
 	 * @since 3.0
 	 * @param array $field
-	 * @param string $add_html
+	 * @param array $add_html
 	 */
 	private static function add_pattern_attribute( $field, array &$add_html ) {
 		$has_format = FrmField::is_option_true_in_array( $field, 'format' );

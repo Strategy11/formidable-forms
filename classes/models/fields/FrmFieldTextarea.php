@@ -24,6 +24,9 @@ class FrmFieldTextarea extends FrmFieldType {
 		);
 	}
 
+	/**
+	 * @param string $name
+	 */
 	public function show_on_form_builder( $name = '' ) {
 		$size = FrmField::get_option( $this->field, 'size' );
 		$size_html = $size ? ' style="width:' . esc_attr( $size . ( is_numeric( $size ) ? 'px' : '' ) ) . '";' : '';
@@ -31,7 +34,7 @@ class FrmFieldTextarea extends FrmFieldType {
 		$max = FrmField::get_option( $this->field, 'max' );
 		$default_value = FrmAppHelper::esc_textarea( force_balance_tags( $this->get_field_column('default_value') ) );
 
-		echo '<textarea name="' . esc_attr( $this->html_name( $name ) ) . '"' .
+		echo '<textarea name="' . esc_attr( $this->html_name( $name ) ) . '" ' .
 			$size_html . ' rows="' . esc_attr( $max ) . '" '.
 			'id="' . esc_attr( $this->html_id() ) . '" class="dyn_default_value">' .
 			$default_value .
@@ -42,5 +45,21 @@ class FrmFieldTextarea extends FrmFieldType {
 		$this->run_wpautop( $atts, $value );
 
 		return $value;
+	}
+
+	/**
+	 * @param array $args
+	 * @param array $shortcode_atts
+	 *
+	 * @return string
+	 */
+	public function front_field_input( $args, $shortcode_atts ) {
+		$input_html = $this->get_field_input_html_hook( $this->field );
+		$rows = ( $this->field['max'] ) ? 'rows="' . esc_attr( $this->field['max'] ) . '" ' : '';
+
+		return '<textarea name="' . esc_attr( $args['field_name'] ) . '" id="' . esc_attr( $args['html_id'] ) . '" ' .
+			$rows . $input_html . '>' .
+			FrmAppHelper::esc_textarea( $this->field['value'] ) .
+			'</textarea>';
 	}
 }

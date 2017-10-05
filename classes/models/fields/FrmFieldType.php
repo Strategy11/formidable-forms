@@ -6,7 +6,7 @@
 abstract class FrmFieldType {
 
 	/**
-	 * @var object
+	 * @var object|array|int
 	 * @since 3.0
 	 */
 	protected $field;
@@ -51,6 +51,13 @@ abstract class FrmFieldType {
 	 * @since 3.0
 	 */
 	protected $holds_email_values = false;
+
+	/**
+	 * Does this field show on the page?
+	 * @var bool
+	 * @since 3.0
+	 */
+	protected $normal_field = true;
 
 	public function __construct( $field = 0, $type = '' ) {
 		$this->field = $field;
@@ -98,6 +105,8 @@ abstract class FrmFieldType {
 		$field_val = '';
 		if ( is_object( $this->field ) ) {
 			$field_val = $this->field->{$column};
+		} elseif ( is_array( $this->field ) && isset( $this->field[ $column ] ) ) {
+			$field_val = $this->field[ $column ];
 		}
 		return $field_val;
 	}
@@ -145,6 +154,9 @@ DEFAULT_HTML;
 
 	/** Form builder **/
 
+	/**
+	 * @param string $name
+	 */
 	public function show_on_form_builder( $name = '' ) {
 		$field = FrmFieldsHelper::setup_edit_vars( $this->field );
 		$include_file = $this->include_form_builder_file();
@@ -163,6 +175,9 @@ DEFAULT_HTML;
 	 * Define parameters and include the field on form builder
 	 *
 	 * @since 3.0
+	 *
+	 * @param string $name
+	 * @param array $field
 	 */
 	protected function include_on_form_builder( $name, $field ) {
 		$field_name = $this->html_name( $name );
@@ -213,6 +228,7 @@ DEFAULT_HTML;
 			'css'          => true,
 			'conf_field'   => false,
 			'max'          => true,
+			'range'        => false,
 			'captcha_size' => false,
 			'format'       => false,
 		);
@@ -233,6 +249,15 @@ DEFAULT_HTML;
 			'description'    => false,
 			'label_position' => false,
 		);
+	}
+
+	public function form_builder_classes( $display_type ) {
+		$classes = 'form-field edit_form_item frm_field_box frm_top_container frm_not_divider edit_field_type_' . $display_type;
+		return $this->alter_builder_classes( $classes );
+	}
+
+	protected function alter_builder_classes( $classes ) {
+		return $classes;
 	}
 
 	/** New field **/
@@ -333,6 +358,164 @@ DEFAULT_HTML;
 		return array();
 	}
 
+	/** Show on front-end **/
+	/**
+	 * @param array $args ($field, $errors, $form, $form_action)
+	 */
+	public function show_field( $args ) {
+		if ( apply_filters( 'frm_show_normal_field_type', $this->normal_field, $this->type ) ) {
+			echo $this->prepare_field_html( $args );
+		} else {
+			do_action( 'frm_show_other_field_type', $this->field, $args['form'], array( 'action' => $args['form_action'] ) );
+		}
+		$this->get_field_scripts_hook( $args );
+	}
+
+	protected function get_field_scripts_hook( $args ) {
+		$form_id = isset( $args['parent_field_id'] ) && $args['parent_field_id'] ? $args['parent_field_id'] : $args['form']->id;
+		do_action( 'frm_get_field_scripts', $this->field, $args['form'], $form_id );
+	}
+
+	/**
+	 * @param array $args
+	 *
+	 * @return string
+	 */
+	public function prepare_field_html( $args ) {
+		$args = $this->fill_display_field_values( $args );
+
+		if ( $this->has_html ) {
+			$html = $this->field['custom_html'];
+			$html = apply_filters( 'frm_before_replace_shortcodes', $html, $this->field, $args['errors'], $args['form'] );
+
+			$args['errors'] = is_array( $args['errors'] ) ? $args['errors'] : array();
+			$this->field['label'] = FrmFieldsHelper::label_position( $this->field['label'], $this->field, $args['form'] );
+			$args['field'] = $this->field;
+
+			FrmFieldsHelper::replace_shortcodes_before_input( $args, $html );
+			$this->replace_input_shortcode( $args, $html );
+			FrmFieldsHelper::replace_shortcodes_with_atts( $args, $html );
+			FrmFieldsHelper::replace_shortcodes_after_input( $args, $html );
+		} else {
+			$html = $this->include_front_field_input( $args, array() );
+		}
+		return $html;
+	}
+
+	protected function replace_input_shortcode( $args, &$html ) {
+		unset( $args['field'] );
+		preg_match_all("/\[(input)\b(.*?)(?:(\/))?\]/s", $html, $shortcodes, PREG_PATTERN_ORDER);
+
+		foreach ( $shortcodes[0] as $short_key => $tag ) {
+			$tag = FrmShortcodeHelper::get_shortcode_tag( $shortcodes, $short_key, array( 'conditional' => false, 'conditional_check' => false ) );
+			if ( $tag == 'input' ) {
+				$shortcode_atts = FrmShortcodeHelper::get_shortcode_attribute_array( $shortcodes[2][ $short_key ] );
+				$field['shortcodes'] = $this->prepare_input_shortcode_atts( $shortcode_atts );
+				$input = $this->include_front_field_input( $args, $shortcode_atts );
+
+				$html = str_replace( $shortcodes[0][ $short_key ], $input, $html );
+			}
+		}
+	}
+
+	protected function prepare_input_shortcode_atts( $shortcode_atts ) {
+		if ( isset( $shortcode_atts['opt'] ) ) {
+			$shortcode_atts['opt']--;
+		}
+
+		$field['input_class'] = isset( $shortcode_atts['class'] ) ? $shortcode_atts['class'] : '';
+		if ( isset( $shortcode_atts['class'] ) ) {
+			unset( $shortcode_atts['class'] );
+		}
+		return $shortcode_atts;
+	}
+
+	protected function include_front_field_input( $args, $shortcode_atts ) {
+		$include_file = $this->include_front_form_file();
+
+		if ( ! empty( $include_file ) ) {
+			$input = $this->include_on_front_form( $args, $shortcode_atts );
+		} else {
+			$input = $this->front_field_input( $args, $shortcode_atts );
+		}
+
+		$this->load_field_scripts( $args );
+
+		return $input;
+	}
+
+	protected function include_front_form_file() {
+		return '';
+	}
+
+	protected function include_on_front_form( $args, $shortcode_atts ) {
+		global $frm_vars;
+
+		$field = $this->field;
+		$html_id = $args['html_id'];
+		$field_name = $args['field_name'];
+		$read_only = FrmField::is_read_only( $this->field ) && ! FrmAppHelper::is_admin();
+		unset( $args['form'] ); // lighten up on memory usage
+
+		ob_start();
+		include( $this->include_front_form_file() );
+		$input_html = ob_get_contents();
+		ob_end_clean();
+
+		return $input_html;
+	}
+
+	public function front_field_input( $args, $shortcode_atts ) {
+		$field_type = $this->html5_input_type();
+		$input_html = $this->get_field_input_html_hook( $this->field );
+
+		return '<input type="' . esc_attr( $field_type ) . '" id="' . esc_attr( $args['html_id'] ) . '" name="' . esc_attr( $args['field_name'] ) . '" value="' . esc_attr( $this->field['value'] ) . '" ' . $input_html . '/>';
+	}
+
+	protected function html5_input_type() {
+		$frm_settings = FrmAppHelper::get_settings();
+		return $frm_settings->use_html ? $this->type : 'text';
+	}
+
+	protected function load_field_scripts( $args ) {
+		// Override me
+	}
+
+	protected function fill_display_field_values( $args = array() ) {
+		$defaults = array(
+			'field_name'    => 'item_meta[' . $this->get_field_column('id') . ']',
+			'field_id'      => $this->get_field_column('id'),
+			'field_plus_id' => '',
+			'section_id'    => '',
+		);
+		$args = wp_parse_args( $args, $defaults );
+		$args['html_id'] = $this->html_id( $args['field_plus_id'] );
+
+		if ( FrmField::is_multiple_select( $this->field ) ) {
+			$args['field_name'] .= '[]';
+		}
+
+		return $args;
+	}
+
+	protected function get_field_input_html_hook( $field ) {
+		ob_start();
+		do_action( 'frm_field_input_html', $field );
+		$input_html = ob_get_contents();
+		ob_end_clean();
+
+		return $input_html;
+	}
+
+	/** Prepare value for display **/
+
+	/**
+	 *
+	 * @param string|array $value
+	 * @param array $atts
+	 *
+	 * @return string
+	 */
 	public function get_display_value( $value, $atts = array() ) {
 		$this->fill_default_atts( $atts );
 		$value = $this->prepare_display_value( $value, $atts );
@@ -361,10 +544,22 @@ DEFAULT_HTML;
 
 	/** Importing **/
 
+	/**
+	 * @param $value
+	 * @param array $atts
+	 *
+	 * @return mixed
+	 */
 	public function get_import_value( $value, $atts = array() ) {
 		return $this->prepare_import_value( $value, $atts );
 	}
 
+	/**
+	 * @param $value
+	 * @param $atts
+	 *
+	 * @return mixed
+	 */
 	protected function prepare_import_value( $value, $atts ) {
 		return $value;
 	}

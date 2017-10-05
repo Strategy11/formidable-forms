@@ -29,6 +29,21 @@ class FrmFieldFactory {
 		return $selector;
 	}
 
+	/**
+	 * @since 3.0
+	 * @param object|array $field
+	 */
+	public static function get_field_factory( $field ) {
+		if ( is_object( $field ) ) {
+			$field_info = self::get_field_object( $field );
+		} elseif ( isset( $field['id'] ) && $field['id'] ) {
+			$field_info = self::get_field_object( $field['id'] );
+		} else {
+			$field_info = self::get_field_type( $field['type'], $field );
+		}
+		return $field_info;
+	}
+
 	public static function get_field_object( $field ) {
 		if ( ! is_object( $field ) ) {
 			$field = FrmField::getOne( $field );

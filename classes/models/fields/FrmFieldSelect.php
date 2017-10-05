@@ -36,6 +36,10 @@ class FrmFieldSelect extends FrmFieldType {
 		);
 	}
 
+	protected function include_front_form_file() {
+		return FrmAppHelper::plugin_path() . '/classes/views/frm-fields/front-end/dropdown-field.php';
+	}
+
 	protected function prepare_import_value( $value, $atts ) {
 		if ( FrmField::is_option_true( $this->field, 'multiple' ) ) {
 			$value = $this->get_multi_opts_for_import( $value );

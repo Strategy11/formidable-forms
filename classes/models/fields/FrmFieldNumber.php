@@ -17,6 +17,7 @@ class FrmFieldNumber extends FrmFieldType {
 			'size'           => true,
 			'clear_on_focus' => true,
 			'invalid'        => true,
+			'range'          => true,
 		);
 
 		$frm_settings = FrmAppHelper::get_settings();
