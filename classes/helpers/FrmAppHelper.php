@@ -1016,7 +1016,7 @@ class FrmAppHelper {
 
         self::fill_form_opts($record, $table, $post_values, $values);
 
-		self::prepare_field_arrays( $fields, $record, $values, $args );
+		self::prepare_field_arrays( $fields, $record, $values, array_merge( $args, compact( 'default', 'post_values' ) ) );
 
         if ( $table == 'entries' ) {
             $values = FrmEntriesHelper::setup_edit_vars( $values, $record );
@@ -1031,8 +1031,8 @@ class FrmAppHelper {
 		if ( ! empty( $fields ) ) {
 			foreach ( (array) $fields as $field ) {
 				$field->default_value = apply_filters('frm_get_default_value', $field->default_value, $field, true );
-				$parent_form_id = isset( $args['parent_form_id'] ) ? $args['parent_form_id'] : $field->form_id;
-				self::fill_field_defaults( $field, $record, $values, compact( 'default', 'post_values', 'frm_settings', 'parent_form_id' ) );
+				$args['parent_form_id'] = isset( $args['parent_form_id'] ) ? $args['parent_form_id'] : $field->form_id;
+				self::fill_field_defaults( $field, $record, $values, $args );
 			}
 		}
 	}
@@ -1088,17 +1088,18 @@ class FrmAppHelper {
     }
 
 	private static function fill_field_opts( $field, array &$field_array, $args ) {
-		//_deprecated_function( __METHOD__, '3.0', 'FmFieldsHelper::fill_default_field_opts' );
+		//TODO: _deprecated_function( __METHOD__, '3.0', 'FmFieldsHelper::fill_default_field_opts' );
         $post_values = $args['post_values'];
         $opt_defaults = FrmFieldsHelper::get_default_field_options_from_field( $field );
+		$frm_settings = self::get_settings();
 
         foreach ( $opt_defaults as $opt => $default_opt ) {
 			$field_array[ $opt ] = ( $post_values && isset( $post_values['field_options'][ $opt . '_' . $field->id ] ) ) ? maybe_unserialize( $post_values['field_options'][ $opt . '_' . $field->id ] ) : ( isset( $field->field_options[ $opt ] ) ? $field->field_options[ $opt ] : $default_opt );
             if ( $opt == 'blank' && $field_array[ $opt ] == '' ) {
-                $field_array[ $opt ] = $args['frm_settings']->blank_msg;
+                $field_array[ $opt ] = $frm_settings->blank_msg;
             } else if ( $opt == 'invalid' && $field_array[ $opt ] == '' ) {
                 if ( $args['field_type'] == 'captcha' ) {
-                    $field_array[ $opt ] = $args['frm_settings']->re_msg;
+                    $field_array[ $opt ] = $frm_settings->re_msg;
                 } else {
                     $field_array[ $opt ] = sprintf( __( '%s is invalid', 'formidable' ), $field_array['name'] );
                 }

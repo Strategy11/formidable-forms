@@ -334,7 +334,7 @@ function frmFrontFormJS(){
 	}
 
 	function hasInvisibleRecaptcha( object ) {
-		if ( typeof frmProForm === 'undefined' || frmProForm.goingToPrevPage( object ) ) {
+		if ( typeof frmProForm === 'undefined' || frmProForm.goingToPreviousPage( object ) ) {
 			return false;
 		}
 
@@ -379,6 +379,17 @@ function frmFrontFormJS(){
 			msg = '';
 		}
 		return msg;
+	}
+
+	function shouldJSValidate( object ) {
+		var validate = jQuery(object).hasClass('frm_js_validate');
+		if ( validate ) {
+			if ( typeof frmProForm === 'undefined' || frmProForm.savingDraftEntry( object ) || frmProForm.goingToPreviousPage( object ) ) {
+				validate = false;
+			}
+		}
+
+		return validate;
 	}
 
 	function getFormErrors(object, action){
@@ -622,17 +633,6 @@ function frmFrontFormJS(){
 			}
 			$recapField.closest('.frm_form_field').replaceWith('<input type="hidden" name="recaptcha_checked" value="'+ frm_js.nonce +'">');
 		}
-	}
-
-	function shouldJSValidate( object ) {
-		var validate = jQuery(object).hasClass('frm_js_validate');
-		if ( validate ) {
-			if ( typeof frmProForm === 'undefined' || frmProForm.savingDraftEntry( object ) || frmProForm.goingToPrevPage( object ) ) {
-				validate = false;
-			}
-		}
-
-		return validate;
 	}
 
 	function clearDefault(){
