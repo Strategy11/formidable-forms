@@ -38,9 +38,6 @@ function load_formidable_forms() {
 	}
 
 	FrmHooksController::trigger_load_hook();
-
-	$frm_path = dirname( __FILE__ );
-	include_once( $frm_path . '/deprecated.php' );
 }
 
 // if __autoload is active, put it on the spl_autoload stack
