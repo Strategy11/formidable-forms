@@ -561,11 +561,6 @@ class FrmEntriesController {
 		return $formatted_entry;
 	}
 
-	public static function get_params( $form = null ) {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmForm::get_params' );
-		return FrmForm::get_params( $form );
-	}
-
 	public static function entry_sidebar( $entry ) {
         $data = maybe_unserialize($entry->description);
         $date_format = get_option('date_format');
@@ -576,38 +571,4 @@ class FrmEntriesController {
 
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/sidebar-shared.php' );
     }
-
-	/***********************************************************************
-	 * Deprecated Functions
-	 ************************************************************************/
-
-	/**
-	 * @deprecated 2.02.14
-	 *
-	 * @return mixed
-	 */
-	public static function filter_email_value( $value ) {
-		_deprecated_function( __FUNCTION__, '2.02.14', 'FrmProEntriesController::filter_value_in_single_entry_table' );
-		return $value;
-	}
-
-	/**
-	 * @deprecated 2.02.14
-	 *
-	 * @return mixed
-	 */
-	public static function filter_display_value( $value ) {
-		_deprecated_function( __FUNCTION__, '2.02.14', 'FrmProEntriesController::filter_display_value' );
-		return $value;
-	}
-
-	/**
-	 * @deprecated 2.03.04
-	 *
-	 * @return mixed
-	 */
-	public static function filter_shortcode_value( $value ) {
-		_deprecated_function( __FUNCTION__, '2.03.04', 'custom code' );
-		return $value;
-	}
 }

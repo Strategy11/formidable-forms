@@ -1442,46 +1442,6 @@ class FrmFieldsHelper {
 		return $field_array + $field_options;
 	}
 
-	public static function field_selection() {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmField::field_selection' );
-		return FrmField::field_selection();
-	}
-
-	public static function pro_field_selection() {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmField::pro_field_selection' );
-		return FrmField::pro_field_selection();
-	}
-
-	public static function is_no_save_field( $type ) {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmField::is_no_save_field' );
-		return FrmField::is_no_save_field( $type );
-	}
-
-	public static function no_save_fields() {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmField::no_save_fields' );
-		return FrmField::no_save_fields();
-	}
-
-	public static function is_multiple_select( $field ) {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmField::is_multiple_select' );
-		return FrmField::is_multiple_select( $field );
-	}
-
-	public static function is_field_with_multiple_values( $field ) {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmField::is_field_with_multiple_values' );
-		return FrmField::is_field_with_multiple_values( $field );
-	}
-
-	public static function is_required_field( $field ) {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmField::is_required' );
-		return FrmField::is_required( $field );
-	}
-
-    public static function maybe_get_field( &$field ) {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmField::maybe_get_field' );
-		FrmField::maybe_get_field( $field );
-    }
-
 	public static function dropdown_categories( $args ) {
 		_deprecated_function( __FUNCTION__, '2.02.07', 'FrmProPost::get_category_dropdown' );
 

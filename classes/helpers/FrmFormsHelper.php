@@ -5,11 +5,6 @@ if ( ! defined('ABSPATH') ) {
 
 class FrmFormsHelper {
 
-	public static function maybe_get_form( &$form ) {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmForm::maybe_get_form' );
-		FrmForm::maybe_get_form( $form );
-	}
-
 	/**
 	 * @since 2.2.10
 	 */
@@ -649,14 +644,4 @@ BEFORE_HTML;
 
         return $name;
     }
-
-	public static function get_params() {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmForm::list_page_params' );
-		return FrmForm::list_page_params();
-	}
-
-	public static function form_loaded( $form, $this_load, $global_load ) {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmFormsController::maybe_load_css' );
-		FrmFormsController::maybe_load_css( $form, $this_load, $global_load );
-	}
 }

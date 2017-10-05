@@ -98,15 +98,6 @@ class FrmAppHelper {
 		return ! $frm_settings->no_ips;
 	}
 
-    /**
-     * Show a message in place of pro features
-     *
-     * @since 2.0
-     */
-	public static function update_message() {
-		_deprecated_function( __FUNCTION__, '2.0.19' );
-    }
-
     public static function pro_is_installed() {
         return apply_filters('frm_pro_installed', false);
     }
@@ -761,51 +752,6 @@ class FrmAppHelper {
 		return ( is_array( $values ) && in_array( $current, $values ) ) || ( ! is_array( $values ) && $values == $current );
 	}
 
-    /**
-    * Check if current field option is an "other" option
-    *
-    * @since 2.0
-    *
-    * @param string $opt_key
-    * @return boolean Returns true if current field option is an "Other" option
-    */
-    public static function is_other_opt( $opt_key ) {
-        _deprecated_function( __FUNCTION__, '2.0.6', 'FrmFieldsHelper::is_other_opt' );
-        return FrmFieldsHelper::is_other_opt( $opt_key );
-    }
-
-    /**
-    * Get value that belongs in "Other" text box
-    *
-    * @since 2.0
-    *
-    * @param string $opt_key
-    * @param array $field
-    * @return string $other_val
-    */
-    public static function get_other_val( $opt_key, $field, $parent = false, $pointer = false ) {
-		_deprecated_function( __FUNCTION__, '2.0.6', 'FrmFieldsHelper::get_other_val' );
-		return FrmFieldsHelper::get_other_val( compact( 'opt_key', 'field', 'parent', 'pointer' ) );
-    }
-
-    /**
-    * Check if there is a saved value for the "Other" text field. If so, set it as the $other_val.
-    * Intended for front-end use
-    *
-    * @since 2.0
-    *
-    * @param array $field
-    * @param boolean $other_opt
-    * @param string $checked
-    * @param array $args should include opt_key and field name
-    * @return string $other_val
-    */
-    public static function prepare_other_input( $field, &$other_opt, &$checked, $args = array() ) {
-		_deprecated_function( __FUNCTION__, '2.0.6', 'FrmFieldsHelper::prepare_other_input' );
-		$args['field'] = $field;
-		return FrmFieldsHelper::prepare_other_input( $args, $other_opt, $checked );
-    }
-
 	public static function recursive_function_map( $value, $function ) {
 		if ( is_array( $value ) ) {
 			$original_function = $function;
@@ -1179,11 +1125,6 @@ class FrmAppHelper {
 			$custom_style = ( $frm_settings->load_style != 'none' );
 		}
 		return $custom_style;
-	}
-
-	public static function get_meta_value( $field_id, $entry ) {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmEntryMeta::get_meta_value' );
-		return FrmEntryMeta::get_meta_value( $entry, $field_id );
 	}
 
 	public static function insert_opt_html( $args ) {

@@ -156,31 +156,6 @@ class FrmEntriesHelper {
         return apply_filters('frm_setup_edit_entry_vars', $values, $record);
     }
 
-    public static function get_admin_params( $form = null ) {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmForm::get_admin_params' );
-		return FrmForm::set_current_form( $form );
-    }
-
-	public static function set_current_form( $form_id ) {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmForm::set_current_form' );
-		return FrmForm::set_current_form( $form_id );
-	}
-
-	public static function get_current_form( $form_id = 0 ) {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmForm::get_current_form' );
-		return FrmForm::get_current_form( $form_id );
-	}
-
-    public static function get_current_form_id() {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmForm::get_current_form_id' );
-		return FrmForm::get_current_form_id();
-    }
-
-    public static function maybe_get_entry( &$entry ) {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmEntry::maybe_get_entry' );
-		FrmEntry::maybe_get_entry( $entry );
-    }
-
 	public static function replace_default_message( $message, $atts ) {
         if ( strpos($message, '[default-message') === false &&
             strpos($message, '[default_message') === false &&
@@ -452,11 +427,6 @@ class FrmEntriesHelper {
             }
         }
     }
-
-	public static function enqueue_scripts( $params ) {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmFormsController::enqueue_scripts' );
-		FrmFormsController::enqueue_scripts( $params );
-	}
 
     // Add submitted values to a string for spam checking
 	public static function entry_array_to_string( $values ) {

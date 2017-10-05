@@ -428,11 +428,6 @@ class FrmFormsController {
 		self::display_forms_list( array(), $message );
     }
 
-	public static function scheduled_delete( $delete_timestamp = '' ) {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmForm::scheduled_delete' );
-		return FrmForm::scheduled_delete( $delete_timestamp );
-	}
-
 	/**
 	* Inserts Formidable button
 	* Hook exists since 2.5.0
@@ -506,12 +501,8 @@ class FrmFormsController {
         wp_die();
     }
 
-	public static function display_forms_list( $params = array(), $message = '', $errors = array(), $deprecated_errors = array() ) {
+	public static function display_forms_list( $params = array(), $message = '', $errors = array() ) {
         FrmAppHelper::permission_check( 'frm_view_forms' );
-		if ( ! empty( $deprecated_errors ) ) {
-			$errors = $deprecated_errors;
-			_deprecated_argument( 'errors', '2.0.8' );
-		}
 
         global $wpdb, $frm_vars;
 

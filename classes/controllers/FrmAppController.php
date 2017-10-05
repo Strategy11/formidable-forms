@@ -306,21 +306,6 @@ class FrmAppController {
 		}
 	}
 
-	public static function localize_script( $location ) {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmAppHelper::localize_script' );
-		return FrmAppHelper::localize_script( $location );
-	}
-
-	public static function custom_stylesheet() {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmStylesController::custom_stylesheet' );
-		return FrmStylesController::custom_stylesheet();
-	}
-
-	public static function load_css() {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmStylesController::load_saved_css' );
-		return FrmStylesController::load_saved_css();
-	}
-
 	/**
 	 * Run silent upgrade on each site in the network during a network upgrade.
 	 * Update database settings for all sites in a network during network upgrade process.

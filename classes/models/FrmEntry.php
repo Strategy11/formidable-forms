@@ -879,44 +879,4 @@ class FrmEntry {
         $entry_id = FrmDb::get_var( 'frm_items', array( 'item_key' => sanitize_title( $key ) ) );
         return $entry_id;
     }
-
-	public static function validate( $values, $exclude = false ) {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmEntryValidate::validate' );
-		return FrmEntryValidate::validate( $values, $exclude );
-	}
-
-	public static function validate_field( $posted_field, &$errors, $values, $args = array() ) {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmEntryValidate::validate_field' );
-		FrmEntryValidate::validate_field( $posted_field, $errors, $values, $args );
-	}
-
-	public static function validate_url_field( &$errors, $field, &$value, $args ) {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmEntryValidate::validate_url_field' );
-		FrmEntryValidate::validate_url_field( $errors, $field, $value, $args );
-	}
-
-	public static function validate_email_field( &$errors, $field, $value, $args ) {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmEntryValidate::validate_email_field' );
-		FrmEntryValidate::validate_email_field( $errors, $field, $value, $args );
-	}
-
-	public static function validate_recaptcha( &$errors, $field, $args ) {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmEntryValidate::validate_recaptcha' );
-		FrmEntryValidate::validate_recaptcha( $errors, $field, $args );
-	}
-
-	public static function spam_check( $exclude, $values, &$errors ) {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmEntryValidate::spam_check' );
-		FrmEntryValidate::spam_check( $exclude, $values, $errors );
-	}
-
-	public static function blacklist_check( $values ) {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmEntryValidate::blacklist_check' );
-		return FrmEntryValidate::blacklist_check( $values );
-	}
-
-	public static function akismet( $values ) {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmEntryValidate::akismet' );
-		return FrmEntryValidate::akismet( $values );
-	}
 }
