@@ -60,7 +60,9 @@ class FrmFieldUserID extends FrmFieldType {
 	}
 
 	/**
-	 * Generate the user info attribute for the get_display_name() function
+	 * Generate the user info attribute for displaying
+	 * a value from the user ID
+	 * From the get_display_name() function
 	 *
 	 * @since 3.0
 	 * @param $atts

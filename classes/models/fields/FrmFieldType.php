@@ -597,20 +597,6 @@ DEFAULT_HTML;
 	}
 
 	/**
-	 * @param $atts
-	 * @param $value
-	 */
-	protected function run_wpautop( $atts, &$value ) {
-		$autop = isset( $atts['wpautop'] ) ? $atts['wpautop'] : true;
-		if ( apply_filters( 'frm_use_wpautop', $autop ) ) {
-			if ( is_array( $value ) ) {
-				$value = implode( "\n", $value );
-			}
-			$value = wpautop( $value );
-		}
-	}
-
-	/**
 	 * @param $value
 	 * @param $defaults
 	 */

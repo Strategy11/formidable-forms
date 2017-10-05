@@ -334,14 +334,28 @@ class FrmFieldsHelper {
 
 	private static function filter_html_field_shortcodes( $field, &$html ) {
 		if ( $field['type'] == 'html' ) {
-			if ( apply_filters( 'frm_use_wpautop', true ) ) {
-				$html = wpautop( $html );
-			}
+			self::run_wpautop( array( 'wpautop' => true ), $html );
+
 			$html = apply_filters( 'frm_get_default_value', $html, (object) $field, false );
 			$html = do_shortcode( $html );
 		}
 	}
 
+	/**
+	 * @since 3.0
+	 *
+	 * @param array $atts
+	 * @param string|array $value
+	 */
+	public static function run_wpautop( $atts, &$value ) {
+		$autop = isset( $atts['wpautop'] ) ? $atts['wpautop'] : true;
+		if ( apply_filters( 'frm_use_wpautop', $autop ) ) {
+			if ( is_array( $value ) ) {
+				$value = implode( "\n", $value );
+			}
+			$value = wpautop( $value );
+		}
+	}
 	/**
 	 * TODO: 3.0 remove this function
 	 * @since 3.0
@@ -925,29 +939,6 @@ class FrmFieldsHelper {
 		}
 
 		return $info;
-	}
-
-	/**
-	 * Generate the user info attribute for displaying
-	 * a value from the user ID
-	 *
-	 * @since 3.0
-	 * @param $atts
-	 *
-	 * @return string
-	 */
-	private static function prepare_user_info_attribute( $atts ) {
-		if ( isset( $atts['show'] ) ) {
-			if ( $atts['show'] === 'id' ) {
-				$user_info = 'ID';
-			} else {
-				$user_info = $atts['show'];
-			}
-		} else {
-			$user_info = 'display_name';
-		}
-
-		return $user_info;
 	}
 
 	public static function get_field_types( $type ) {
