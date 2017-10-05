@@ -55,7 +55,6 @@ abstract class FrmFieldType {
 	public function __construct( $field = 0, $type = '' ) {
 		$this->field = $field;
 		$this->set_type( $type );
-		$this->set_display_type();
 	}
 
 	/**
