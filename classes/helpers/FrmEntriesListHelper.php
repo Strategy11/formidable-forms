@@ -151,7 +151,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 				if ( in_array( $column_name, $hidden ) ) {
 					$val = '';
 				} else {
-					$val = $this->column_value( compact('item') );
+					$val = $this->column_value( $item );
 				}
 
 			    $r .= "<td $attributes>";
@@ -171,10 +171,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 		return $r;
 	}
 
-	private function column_value( $atts ) {
+	private function column_value( $item ) {
 		$col_name = $this->column_name;
-		$item = $atts['item'];
-		$val = '';
 
 		switch ( $col_name ) {
 			case 'ip':
@@ -192,7 +190,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 				$val = '<abbr title="' . esc_attr( FrmAppHelper::get_formatted_time( $item->{$col_name}, '', 'g:i:s A' ) ) . '">' . $date . '</abbr>';
 			break;
 			case 'is_draft':
-				$val = empty($item->is_draft) ? __( 'No' ) : __( 'Yes' );
+				$val = empty( $item->is_draft ) ? __( 'No' ) : __( 'Yes' );
 			break;
 			case 'form_id':
 				$val = FrmFormsHelper::edit_form_link( $item->form_id );
