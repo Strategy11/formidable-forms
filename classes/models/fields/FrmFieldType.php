@@ -393,7 +393,7 @@ DEFAULT_HTML;
 			$tag = FrmShortcodeHelper::get_shortcode_tag( $shortcodes, $short_key, array( 'conditional' => false, 'conditional_check' => false ) );
 			if ( $tag == 'input' ) {
 				$shortcode_atts = FrmShortcodeHelper::get_shortcode_attribute_array( $shortcodes[2][ $short_key ] );
-				$field['shortcodes'] = $this->prepare_input_shortcode_atts( $shortcode_atts );
+				$this->field['shortcodes'] = $this->prepare_input_shortcode_atts( $shortcode_atts );
 				$input = $this->include_front_field_input( $args, $shortcode_atts );
 
 				$html = str_replace( $shortcodes[0][ $short_key ], $input, $html );
@@ -406,7 +406,7 @@ DEFAULT_HTML;
 			$shortcode_atts['opt']--;
 		}
 
-		$field['input_class'] = isset( $shortcode_atts['class'] ) ? $shortcode_atts['class'] : '';
+		$this->field['input_class'] = isset( $shortcode_atts['class'] ) ? $shortcode_atts['class'] : '';
 		if ( isset( $shortcode_atts['class'] ) ) {
 			unset( $shortcode_atts['class'] );
 		}

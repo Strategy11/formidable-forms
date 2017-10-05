@@ -351,16 +351,11 @@ class FrmXMLController {
 	* @return array $csv_fields
 	*/
 	private static function get_fields_for_csv_export( $form_id, $form ) {
-		// Phase frm_csv_field_ids out by 2.01.05
-		$csv_field_ids = apply_filters( 'frm_csv_field_ids', '', $form_id, array( 'form' => $form ) );
-
-		if ( $csv_field_ids !== '' ) {
-			$csv_fields = FrmField::get_all_for_form( $form_id, '', 'include', 'include' );
-			$no_export_fields = FrmField::no_save_fields();
-			foreach ( $csv_fields as $k => $f ) {
-				if ( in_array( $f->type, $no_export_fields ) ) {
-					unset( $csv_fields[ $k ] );
-				}
+		$csv_fields = FrmField::get_all_for_form( $form_id, '', 'include', 'include' );
+		$no_export_fields = FrmField::no_save_fields();
+		foreach ( $csv_fields as $k => $f ) {
+			if ( in_array( $f->type, $no_export_fields ) ) {
+				unset( $csv_fields[ $k ] );
 			}
 		}
 

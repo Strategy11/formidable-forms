@@ -883,7 +883,6 @@ class FrmFieldsHelper {
 	 */
 	public static function get_unfiltered_display_value( $atts ) {
 		$value = $atts['value'];
-		$args = isset( $atts['atts'] ) ? $atts['atts'] : array();
 
 		if ( is_array( $atts['field'] ) ) {
 			$atts['field'] = $atts['field']['id'];
