@@ -147,6 +147,12 @@ class FrmEntriesListHelper extends FrmListHelper {
 			$this->column_name = $col_name;
 			$val = '';
 
+			if ( in_array( $column_name, $hidden ) ) {
+				// don't load values for hidden fields
+				$val = '';
+				continue;
+			}
+
 			switch ( $col_name ) {
 				case 'cb':
 					$r .= "<th scope='row' class='check-column'>$checkbox</th>";
