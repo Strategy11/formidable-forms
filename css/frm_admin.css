@@ -1320,12 +1320,6 @@ label.frm_action_events{
     height: 22px;
     line-height: 20px;
 }
-#frm_notification_settings .frm_cc_button{
-	float:left;
-}
-#frm_notification_settings .frm_bcc_button{
-	float:right;
-}
 #frm_notification_settings .frm_bcc_cc_container{
     width:96px;
 }
