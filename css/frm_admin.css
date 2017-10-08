@@ -2409,7 +2409,9 @@ Responsive Design
 	#form_entries_page .wp-list-table td.frm_hidden{
 		display:none !important;
 	}
-
+	#frm_notification_settings .frm_email_buttons {
+		height: 32px;
+	}
 }
 @media (min-width:768px){
     .navbar-right .frm-dropdown-menu{right:0;left:auto;}
