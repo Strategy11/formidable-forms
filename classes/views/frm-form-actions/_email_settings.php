@@ -38,7 +38,7 @@
 
 <table class="form-table frm-no-margin">
     <tr>
-        <td>
+        <td class="frm_email_buttons_container">
             <a href="javascript:void(0)" class="button frm_email_buttons frm_cc_button <?php echo ( ! empty($form_action->post_content['cc'])  ? 'frm_hidden' : '' ); ?>" data-emailrow="cc"><?php _e( 'CC', 'formidable' ) ?></a>
             <a href="javascript:void(0)" class="button frm_email_buttons frm_bcc_button <?php echo ( ! empty($form_action->post_content['bcc'])  ? 'frm_hidden' : '' ); ?>" data-emailrow="bcc"><?php _e( 'BCC', 'formidable' ) ?></a>
             <a href="javascript:void(0)" class="button frm_email_buttons frm_reply_to_button <?php echo ( ! empty( $form_action->post_content['reply_to'] )  ? 'frm_hidden' : '' ) ?>" data-emailrow="reply_to"><?php _e( 'Reply To', 'formidable' ) ?></a>
