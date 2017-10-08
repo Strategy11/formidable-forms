@@ -1319,6 +1319,7 @@ label.frm_action_events{
 #frm_notification_settings .frm_email_buttons{
     height: 22px;
     line-height: 20px;
+    margin: 0 4px;
 }
 .submitdelete.frm_delete_wo_post{
     margin-left: 10px;
