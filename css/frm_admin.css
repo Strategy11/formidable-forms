@@ -2412,6 +2412,10 @@ Responsive Design
 	#frm_notification_settings .frm_email_buttons {
 		height: 32px;
 	}
+
+	.frm_right_addon .frm_remove_field {
+		bottom: 11px;
+	}
 }
 @media (min-width:768px){
     .navbar-right .frm-dropdown-menu{right:0;left:auto;}
