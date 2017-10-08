@@ -1320,9 +1320,6 @@ label.frm_action_events{
     height: 22px;
     line-height: 20px;
 }
-#frm_notification_settings .frm_bcc_cc_container{
-    width:96px;
-}
 .submitdelete.frm_delete_wo_post{
     margin-left: 10px;
 }
