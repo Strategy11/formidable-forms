@@ -403,7 +403,7 @@ BEFORE_HTML;
                 $replace_with = '';
             }
 
-            FrmFieldsHelper::remove_inline_conditions( ( FrmAppHelper::is_true($show) && $replace_with != '' ), $code, $replace_with, $html );
+			FrmShortcodeHelper::remove_inline_conditions( ( FrmAppHelper::is_true( $show ) && $replace_with != '' ), $code, $replace_with, $html );
         }
 
         //replace [form_key]

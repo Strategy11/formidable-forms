@@ -65,4 +65,15 @@ class FrmShortcodeHelper {
 
 		return $tag;
 	}
+
+	public static function remove_inline_conditions( $no_vars, $code, $replace_with, &$html ) {
+		if ( $no_vars ) {
+			$html = str_replace( '[if ' . $code . ']', '', $html );
+			$html = str_replace( '[/if ' . $code . ']', '', $html );
+		} else {
+			$html = preg_replace( '/(\[if\s+' . $code . '\])(.*?)(\[\/if\s+' . $code . '\])/mis', '', $html );
+		}
+
+		$html = str_replace( '[' . $code . ']', $replace_with, $html );
+	}
 }

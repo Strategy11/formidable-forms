@@ -87,7 +87,7 @@ abstract class FrmFieldType {
 	 *
 	 * @return string|array
 	 */
-	protected function get_field_column( $column ) {
+	public function get_field_column( $column ) {
 		$field_val = '';
 		if ( is_object( $this->field ) ) {
 			$field_val = $this->field->{$column};
@@ -95,6 +95,26 @@ abstract class FrmFieldType {
 			$field_val = $this->field[ $column ];
 		}
 		return $field_val;
+	}
+
+	/**
+	 * @param string $column
+	 * @param mixed $value
+	 */
+	public function set_field_column( $column, $value ) {
+		if ( is_object( $this->field ) ) {
+			$this->field->{$column} = $value;
+		} elseif ( is_array( $this->field ) ) {
+			$this->field[ $column ] = $value;
+		}
+	}
+
+	/**
+	 *
+	 * @return object|array
+	 */
+	public function get_field() {
+		return $this->field;
 	}
 
 	/** Field HTML **/
@@ -372,48 +392,24 @@ DEFAULT_HTML;
 			$html = apply_filters( 'frm_before_replace_shortcodes', $html, $this->field, $args['errors'], $args['form'] );
 
 			$args['errors'] = is_array( $args['errors'] ) ? $args['errors'] : array();
+			$args['field_obj'] = $this;
 			$this->field['label'] = FrmFieldsHelper::label_position( $this->field['label'], $this->field, $args['form'] );
-			$args['field'] = $this->field;
 
-			FrmFieldsHelper::replace_shortcodes_before_input( $args, $html );
-			$this->replace_input_shortcode( $args, $html );
-			FrmFieldsHelper::replace_shortcodes_with_atts( $args, $html );
-			FrmFieldsHelper::replace_shortcodes_after_input( $args, $html );
+			$html_shortcode = new FrmFieldFormHtml( $args );
+			$html = $html_shortcode->get_html();
 		} else {
 			$html = $this->include_front_field_input( $args, array() );
 		}
 		return $html;
 	}
 
-	protected function replace_input_shortcode( $args, &$html ) {
-		unset( $args['field'] );
-		preg_match_all("/\[(input)\b(.*?)(?:(\/))?\]/s", $html, $shortcodes, PREG_PATTERN_ORDER);
-
-		foreach ( $shortcodes[0] as $short_key => $tag ) {
-			$tag = FrmShortcodeHelper::get_shortcode_tag( $shortcodes, $short_key, array( 'conditional' => false, 'conditional_check' => false ) );
-			if ( $tag == 'input' ) {
-				$shortcode_atts = FrmShortcodeHelper::get_shortcode_attribute_array( $shortcodes[2][ $short_key ] );
-				$this->field['shortcodes'] = $this->prepare_input_shortcode_atts( $shortcode_atts );
-				$input = $this->include_front_field_input( $args, $shortcode_atts );
-
-				$html = str_replace( $shortcodes[0][ $short_key ], $input, $html );
-			}
-		}
-	}
-
-	protected function prepare_input_shortcode_atts( $shortcode_atts ) {
-		if ( isset( $shortcode_atts['opt'] ) ) {
-			$shortcode_atts['opt']--;
-		}
-
-		$this->field['input_class'] = isset( $shortcode_atts['class'] ) ? $shortcode_atts['class'] : '';
-		if ( isset( $shortcode_atts['class'] ) ) {
-			unset( $shortcode_atts['class'] );
-		}
-		return $shortcode_atts;
-	}
-
-	protected function include_front_field_input( $args, $shortcode_atts ) {
+	/**
+	 * @param array $args
+	 * @param array $shortcode_atts
+	 *
+	 * @return string
+	 */
+	public function include_front_field_input( $args, $shortcode_atts ) {
 		$include_file = $this->include_front_form_file();
 
 		if ( ! empty( $include_file ) ) {
