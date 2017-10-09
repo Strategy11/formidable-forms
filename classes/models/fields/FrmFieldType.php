@@ -388,27 +388,33 @@ DEFAULT_HTML;
 		$args = $this->fill_display_field_values( $args );
 
 		if ( $this->has_html ) {
-			$html = $this->field['custom_html'];
-			$args['html'] = $this->before_replace_html_shortcodes( $args, $html );
-
+			$args['html'] = $this->before_replace_html_shortcodes( $args, $this->field['custom_html'] );
 			$args['errors'] = is_array( $args['errors'] ) ? $args['errors'] : array();
 			$args['field_obj'] = $this;
-			$this->field['label'] = FrmFieldsHelper::label_position( $this->field['label'], $this->field, $args['form'] );
+
+			$label = FrmFieldsHelper::label_position( $this->field['label'], $this->field, $args['form'] );
+			$this->set_field_column( 'label', $label );
 
 			$html_shortcode = new FrmFieldFormHtml( $args );
 			$html = $html_shortcode->get_html();
+			$html = $this->after_replace_html_shortcodes( $args, $html );
+			$html_shortcode->remove_collapse_shortcode( $html );
 		} else {
 			$html = $this->include_front_field_input( $args, array() );
 		}
 		return $html;
 	}
 
-	private function before_replace_html_shortcodes( $args, $html ) {
+	protected function before_replace_html_shortcodes( $args, $html ) {
 		return $html;
 	}
 
-	private function after_replace_html_shortcodes( $args, $html ) {
+	protected function after_replace_html_shortcodes( $args, $html ) {
 		return $html;
+	}
+
+	public function get_container_class() {
+		return '';
 	}
 
 	public function get_label_class() {

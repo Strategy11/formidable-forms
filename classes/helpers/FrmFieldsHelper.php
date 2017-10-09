@@ -242,7 +242,7 @@ class FrmFieldsHelper {
 	}
 
 	public static function get_shortcode_tag( $shortcodes, $short_key, $args ) {
-		_deprecated_function( __FUNCTION__, '3.0', 'FrmShortcodesHelper::get_shortcode_tag' );
+		_deprecated_function( __FUNCTION__, '3.0', 'FrmShortcodeHelper::get_shortcode_tag' );
         return FrmShortcodeHelper::get_shortcode_tag( $shortcodes, $short_key, $args );
     }
 

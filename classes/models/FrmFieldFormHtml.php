@@ -200,7 +200,6 @@ class FrmFieldFormHtml {
 		}
 
 		$this->filter_for_more_shortcodes();
-		$this->remove_collapse_shortcode();
 	}
 
 	/**
@@ -219,10 +218,12 @@ class FrmFieldFormHtml {
 	/**
 	 * Remove [collapse_this] if it's still included after all processing
 	 * @since 3.0
+	 *
+	 * @param string $html
 	 */
-	private function remove_collapse_shortcode() {
-		if ( preg_match( '/\[(collapse_this)\]/s', $this->html ) ) {
-			$this->html = str_replace( '[collapse_this]', '', $this->html );
+	public function remove_collapse_shortcode( &$html ) {
+		if ( strpos( $html, '[collapse_this]' ) ) {
+			$html = str_replace( '[collapse_this]', '', $html );
 		}
 	}
 
@@ -343,10 +344,7 @@ class FrmFieldFormHtml {
 			$classes .= ' ' . $extra_classes;
 		}
 
-		// Add class to HTML field
-		if ( $this->field_obj->get_field_column('type') == 'html' ) {
-			$classes .= ' frm_html_container';
-		}
+		$classes .= $this->field_obj->get_container_class();
 
 		// Get additional classes
 		return apply_filters( 'frm_field_div_classes', $classes, $this->field_obj->get_field(), array( 'field_id' => $this->field_id ) );

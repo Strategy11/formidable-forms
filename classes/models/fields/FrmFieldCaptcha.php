@@ -54,7 +54,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	/**
 	 * Remove the for attribute for captcha
 	 */
-	private function before_replace_html_shortcodes( $args, $html ) {
+	protected function before_replace_html_shortcodes( $args, $html ) {
 		return str_replace( ' for="field_[key]"', '', $html );
 	}
 

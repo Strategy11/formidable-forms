@@ -24,11 +24,15 @@ class FrmFieldHTML extends FrmFieldType {
 	/**
 	 * @since 3.0
 	 */
-	private function after_replace_html_shortcodes( $args, $html ) {
+	protected function after_replace_html_shortcodes( $args, $html ) {
 		FrmFieldsHelper::run_wpautop( array( 'wpautop' => true ), $html );
 
 		$html = apply_filters( 'frm_get_default_value', $html, (object) $this->field, false );
 		return do_shortcode( $html );
+	}
+
+	public function get_container_class() {
+		return ' frm_html_container';
 	}
 
 	protected function include_form_builder_file() {
