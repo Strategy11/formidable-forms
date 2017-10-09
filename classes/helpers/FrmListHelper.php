@@ -604,16 +604,15 @@ class FrmListHelper {
 
  		if ( $current == 1 ) {
 			$disable['first'] = true;
-			$disable['prev'] = true;
- 		}
-		if ( $current == 2 ) {
+			$disable['prev']  = true;
+ 		} elseif ( $current == 2 ) {
 			$disable['first'] = true;
 		}
+
  		if ( $current == $total_pages ) {
 			$disable['last'] = true;
 			$disable['next'] = true;
- 		}
-		if ( $current == $total_pages - 1 ) {
+ 		} elseif ( $current == $total_pages - 1 ) {
 			$disable['last'] = true;
 		}
 
