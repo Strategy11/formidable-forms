@@ -106,14 +106,9 @@ class FrmFieldFormHtml {
 	 * @since 3.0
 	 */
 	private function replace_shortcodes_before_input() {
-
-		// Remove the for attribute for captcha
-		if ( $this->field_obj->get_field_column('type') == 'captcha' ) {
-			$this->html = str_replace( ' for="field_[key]"', '', $this->html );
-		}
+		$this->html = apply_filters( 'frm_before_replace_shortcodes', $this->html, $this->field_obj->get_field(), $this->pass_args['errors'], $this->form );
 
 		$this->replace_field_values();
-		$this->add_class_to_divider();
 
 		$this->replace_required_label_shortcode();
 		$this->replace_required_class();
@@ -142,22 +137,6 @@ class FrmFieldFormHtml {
 
 		//replace [field_name]
 		$this->html = str_replace('[field_name]', $this->field_obj->get_field_column('name'), $this->html );
-	}
-
-	/**
-	 * If field type is section heading, add class so a bottom margin
-	 * can be added to either the h3 or description
-	 *
-	 * @since 3.0
-	 */
-	private function add_class_to_divider() {
-		if ( $this->field_obj->get_field_column('type') == 'divider' ) {
-			if ( FrmField::is_option_true( $this->field_obj->get_field(), 'description' ) ) {
-				$this->html = str_replace( 'frm_description', 'frm_description frm_section_spacing', $this->html );
-			} else {
-				$this->html = str_replace( '[label_position]', '[label_position] frm_section_spacing', $this->html );
-			}
-		}
 	}
 
 	/**
@@ -221,7 +200,6 @@ class FrmFieldFormHtml {
 		}
 
 		$this->filter_for_more_shortcodes();
-		$this->filter_html_field_shortcodes();
 		$this->remove_collapse_shortcode();
 	}
 
@@ -236,18 +214,6 @@ class FrmFieldFormHtml {
 			$atts = array( 'errors' => $this->pass_args['errors'], 'form' => $this->form );
 		}
 		$this->html = apply_filters( 'frm_replace_shortcodes', $this->html, $this->field_obj->get_field(), $atts );
-	}
-
-	/**
-	 * @since 3.0
-	 */
-	private function filter_html_field_shortcodes() {
-		if ( $this->field_obj->get_field_column('type') == 'html' ) {
-			FrmFieldsHelper::run_wpautop( array( 'wpautop' => true ), $this->html );
-
-			$this->html = apply_filters( 'frm_get_default_value', $this->html, (object) $this->field_obj->get_field(), false );
-			$this->html = do_shortcode( $this->html );
-		}
 	}
 
 	/**
@@ -321,7 +287,7 @@ class FrmFieldFormHtml {
 	 * @since 3.0
 	 */
 	private function add_class_to_label() {
-		$label_class = in_array( $this->field_obj->get_field_column('type'), array( 'divider', 'end_divider', 'break' ) ) ? $this->field_obj->get_field_column('label') : ' frm_primary_label';
+		$label_class = $this->field_obj->get_label_class();
 		$this->html = str_replace( '[label_position]', $label_class, $this->html );
 		if ( $this->field_obj->get_field_column('label') == 'inside' && $this->field_obj->get_field_column('value') != '' ) {
 			$this->html = str_replace( 'frm_primary_label', 'frm_primary_label frm_visible', $this->html );
@@ -369,11 +335,12 @@ class FrmFieldFormHtml {
 		$classes .= ' frm_' . $this->field_obj->get_field_column('label') . '_container';
 
 		// Add CSS layout classes
-		if ( ! empty( $this->field_obj->get_field_column('classes') ) ) {
+		$extra_classes = $this->field_obj->get_field_column('classes');
+		if ( ! empty( $extra_classes ) ) {
 			if ( ! strpos( $this->html, 'frm_form_field ') ) {
 				$classes .= ' frm_form_field';
 			}
-			$classes .= ' ' . $this->field_obj->get_field_column('classes');
+			$classes .= ' ' . $extra_classes;
 		}
 
 		// Add class to HTML field

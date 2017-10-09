@@ -389,7 +389,7 @@ DEFAULT_HTML;
 
 		if ( $this->has_html ) {
 			$html = $this->field['custom_html'];
-			$html = apply_filters( 'frm_before_replace_shortcodes', $html, $this->field, $args['errors'], $args['form'] );
+			$args['html'] = $this->before_replace_html_shortcodes( $args, $html );
 
 			$args['errors'] = is_array( $args['errors'] ) ? $args['errors'] : array();
 			$args['field_obj'] = $this;
@@ -401,6 +401,18 @@ DEFAULT_HTML;
 			$html = $this->include_front_field_input( $args, array() );
 		}
 		return $html;
+	}
+
+	private function before_replace_html_shortcodes( $args, $html ) {
+		return $html;
+	}
+
+	private function after_replace_html_shortcodes( $args, $html ) {
+		return $html;
+	}
+
+	public function get_label_class() {
+		return $this->get_field_column('label');
 	}
 
 	/**
