@@ -48,6 +48,19 @@ class FrmFieldUserID extends FrmFieldType {
 		echo '<input type="hidden" name="' . esc_attr( $args['field_name'] ) . '" id="' . esc_attr( $args['html_id'] ) . '" value="' . esc_attr( $value ) . '" data-frmval="' . esc_attr( $value ) . '"/>'."\n";
 	}
 
+	public function validate( $args ) {
+		// make sure we have a user ID
+		if ( ! is_numeric( $args['value'] ) ) {
+			$args['value'] = FrmAppHelper::get_user_id_param( $args['value'] );
+			FrmEntriesHelper::set_posted_value( $this->field, $args['value'], $args );
+		}
+
+		//add user id to post variables to be saved with entry
+		$_POST['frm_user_id'] = $args['value'];
+
+		return array();
+	}
+
 	/**
 	 * @param $value
 	 * @param $atts array

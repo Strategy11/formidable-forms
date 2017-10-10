@@ -83,6 +83,10 @@ class FrmEntryValidate {
 			$value = reset($value);
 		}
 
+		if ( ! is_array( $value ) ) {
+			$value = trim( $value );
+		}
+
         if ( $posted_field->required == '1' && ! is_array( $value ) && trim( $value ) == '' ) {
 			$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $posted_field, 'blank' );
         } else if ( $posted_field->type == 'text' && ! isset( $_POST['item_name'] ) ) {
@@ -90,9 +94,8 @@ class FrmEntryValidate {
         }
 
 		if ( $value != '' ) {
+			self::validate_field_types( $errors, $posted_field, $value, $args );
 			self::validate_url_field( $errors, $posted_field, $value, $args );
-			self::validate_email_field( $errors, $posted_field, $value, $args );
-			self::validate_number_field( $errors, $posted_field, $value, $args );
 			self::validate_phone_field( $errors, $posted_field, $value, $args );
 		}
 
@@ -107,6 +110,17 @@ class FrmEntryValidate {
 	private static function maybe_clear_value_for_default_blank_setting( $field, &$value ) {
 		if ( FrmField::is_option_true_in_object( $field, 'default_blank' ) && $value == $field->default_value ) {
 			$value = '';
+		}
+	}
+
+	public static function validate_field_types( &$errors, $posted_field, $value, $args ) {
+		$field_obj = FrmFieldFactory::get_field_object( $posted_field );
+		$args['value'] = $value;
+		$args['errors'] = $errors;
+
+		$new_errors = $field_obj->validate( $args );
+		if ( ! empty( $new_errors ) ) {
+			$errors = array_merge( $errors, $new_errors );
 		}
 	}
 
@@ -129,39 +143,24 @@ class FrmEntryValidate {
     }
 
 	public static function validate_email_field( &$errors, $field, $value, $args ) {
-        if ( $value == '' || $field->type != 'email' ) {
-            return;
-        }
+		_deprecated_function( __FUNCTION__, '3.0', 'FrmFieldType::validate' );
 
-        //validate the email format
-        if ( ! is_email($value) ) {
-			$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $field, 'invalid' );
-        }
-    }
+		if ( $field->type != 'email' ) {
+			return;
+		}
+
+		self::validate_field_types( $errors, $field, $value, $args );
+	}
 
 	public static function validate_number_field( &$errors, $field, $value, $args ) {
+		_deprecated_function( __FUNCTION__, '3.0', 'FrmFieldType::validate' );
+
 		//validate the number format
 		if ( $field->type != 'number' ) {
 			return;
 		}
 
-		if ( ! is_numeric( $value) ) {
-			$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $field, 'invalid' );
-		}
-
-		// validate number settings
-		if ( $value != '' ) {
-			$frm_settings = FrmAppHelper::get_settings();
-			// only check if options are available in settings
-			if ( $frm_settings->use_html && isset( $field->field_options['minnum'] ) && isset( $field->field_options['maxnum'] ) ) {
-				//minnum maxnum
-				if ( (float) $value < $field->field_options['minnum'] ) {
-					$errors[ 'field' . $args['id'] ] = __( 'Please select a higher number', 'formidable' );
-				} else if ( (float) $value > $field->field_options['maxnum'] ) {
-					$errors[ 'field' . $args['id'] ] = __( 'Please select a lower number', 'formidable' );
-				}
-			}
-		}
+		self::validate_field_types( $errors, $field, $value, $args );
 	}
 
 	public static function validate_phone_field( &$errors, $field, $value, $args ) {

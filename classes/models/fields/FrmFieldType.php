@@ -362,6 +362,17 @@ DEFAULT_HTML;
 	}
 
 	/** Show on front-end **/
+
+	/**
+	 * @param array $values
+	 * @param array $atts
+	 *
+	 * @return array
+	 */
+	public function prepare_front_field( $values, $atts ) {
+		return $values;
+	}
+
 	/**
 	 * @param array $args ($field, $errors, $form, $form_action)
 	 */
@@ -405,6 +416,12 @@ DEFAULT_HTML;
 		return $html;
 	}
 
+	/**
+	 * @param array $args
+	 * @param string $html
+	 *
+	 * @return string
+	 */
 	protected function before_replace_html_shortcodes( $args, $html ) {
 		return $html;
 	}
@@ -504,6 +521,37 @@ DEFAULT_HTML;
 		return $input_html;
 	}
 
+	/**
+	 * @param array $args
+	 * @return array
+	 */
+	public function validate( $args ) {
+		return array();
+	}
+
+	public function is_not_unique( $value, $entry_id ) {
+		$exists = false;
+		if ( FrmAppHelper::pro_is_installed() ) {
+			$exists = FrmProEntryMetaHelper::value_exists( $this->get_field_column('id'), $value, $entry_id );
+		}
+		return $exists;
+	}
+
+	public function get_value_to_save( $value, $atts ) {
+		return $value;
+	}
+
+	/**
+	 * Prepare value for save
+	 *
+	 * @param string|array $value
+	 *
+	 * @return string|array
+	 */
+	public function set_value_before_save( $value ) {
+		return $value;
+	}
+
 	/** Prepare value for display **/
 
 	/**
@@ -535,6 +583,14 @@ DEFAULT_HTML;
 		$atts = wp_parse_args( $atts, $defaults );
 	}
 
+	/**
+	 * @since 3.0
+	 *
+	 * @param array|string $value
+	 * @param array $atts
+	 *
+	 * @return array|string
+	 */
 	protected function prepare_display_value( $value, $atts ) {
 		return $value;
 	}

@@ -25,4 +25,19 @@ class FrmFieldEmail extends FrmFieldType {
 			'invalid'        => true,
 		);
 	}
+
+	/**
+	 * validate the email format
+	 *
+	 * @param array $args
+	 *
+	 * @return array
+	 */
+	public function validate( $args ) {
+		$errors = array();
+		if ( $args['value'] != '' && ! is_email( $args['value'] ) ) {
+			$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $this->field, 'invalid' );
+		}
+		return $errors;
+	}
 }
