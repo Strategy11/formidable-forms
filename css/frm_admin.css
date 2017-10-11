@@ -2438,14 +2438,12 @@ Responsive Design
 		width: 25%
 	}
 
-	.frm_to_row td:nth-child(2),
-	.frm_from_row td:nth-child(2) {
+	.frm_email_row td:nth-child(2) {
 		width: 65%;
 		display: inline-block;
 	}
 
-	.frm_to_row td:nth-child(3),
-	.frm_from_row td:nth-child(3) {
+	.frm_email_row td:nth-child(3) {
 		width: 25%;
 		display: inline-block;
 	}
