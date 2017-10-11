@@ -2418,6 +2418,38 @@ Responsive Design
 		display:none !important;
 	}
 
+	#frm_notification_settings .frm_email_buttons {
+		height: 40px;
+		margin: 0 4px;
+		padding-top: 0;
+		padding-bottom: 0;
+		line-height: 40px;
+	}
+
+	.frm_right_addon .frm_remove_field {
+		bottom: 11px;
+	}
+	#frm_notification_settings .frm_cc_button,
+	#frm_notification_settings .frm_bcc_button {
+		float: none;
+	}
+	#frm_notification_settings .frm_bcc_cc_container {
+		min-width: 128px;
+		width: 25%
+	}
+
+	.frm_to_row td:nth-child(2),
+	.frm_from_row td:nth-child(2) {
+		width: 65%;
+		display: inline-block;
+	}
+
+	.frm_to_row td:nth-child(3),
+	.frm_from_row td:nth-child(3) {
+		width: 25%;
+		display: inline-block;
+	}
+
 }
 @media (min-width:768px){
     .navbar-right .frm-dropdown-menu{right:0;left:auto;}

@@ -1,5 +1,5 @@
 <table class="form-table frm-no-margin">
-<tr>
+<tr class="frm_to_row">
     <th><label <?php FrmAppHelper::maybe_add_tooltip('email_to') ?>><?php _e( 'To', 'formidable' ) ?></label>
     </th>
     <td><input type="text" name="<?php echo esc_attr( $this->get_field_name('email_to') ) ?>" value="<?php echo esc_attr( $form_action->post_content['email_to'] ); ?>" class="frm_not_email_to frm_email_blur large-text <?php FrmAppHelper::maybe_add_tooltip('email_to', 'open') ?>" id="<?php echo esc_attr( $this->get_field_id('email_to') ) ?>" />
@@ -40,12 +40,14 @@
     </td>
     <td></td>
 </tr>
-<tr>
+<tr class="frm_from_row">
     <th><label <?php FrmAppHelper::maybe_add_tooltip('from') ?>><?php _e( 'From', 'formidable' ) ?></label></th>
     <td><input type="text" name="<?php echo esc_attr( $this->get_field_name('from') ) ?>" value="<?php echo esc_attr( $form_action->post_content['from'] ); ?>" class="frm_not_email_to frm_email_blur large-text <?php FrmAppHelper::maybe_add_tooltip('from', 'open') ?>" id="<?php echo esc_attr( $this->get_field_id('from') ) ?>" />
     </td>
     <td><a href="javascript:void(0)" class="button frm_email_buttons frm_reply_to_button <?php echo ( ! empty( $form_action->post_content['reply_to'] )  ? 'frm_hidden' : '' ) ?>" data-emailrow="reply_to"><?php _e( 'Reply To', 'formidable' ) ?></a></td>
 </tr>
+</table>
+<table class="form-table frm-no-margin">
  <tr>
      <td colspan="3" class="frm_no_top_padding">
          <p><label <?php FrmAppHelper::maybe_add_tooltip('email_subject', '', $form->name) ?>><?php _e( 'Subject', 'formidable' ) ?></label><br/>
