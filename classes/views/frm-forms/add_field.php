@@ -1,10 +1,5 @@
-<?php
-
-if ( ! isset( $values['doing_ajax'] ) ) {
-    $li_classes .= ' ui-state-default widgets-holder-wrap'; ?>
 <li id="frm_field_id_<?php echo esc_attr( $field['id'] ); ?>" class="<?php echo esc_attr( $li_classes ) ?>" data-fid="<?php echo esc_attr( $field['id'] ) ?>" data-formid="<?php echo esc_attr( 'divider' == $field['type'] ? $field['form_select'] : $field['form_id'] ); ?>" data-ftype="<?php echo esc_attr( $display['type'] ) ?>">
 <?php
-}
 
 if ( $field['type'] == 'divider' ) { ?>
 <div class="divider_section_only">
@@ -315,7 +310,7 @@ if ( $field['type'] == 'divider' ) { ?>
 <?php
 }
 
-if ( ! isset( $values['doing_ajax'] ) && $field['type'] != 'divider' ) { ?>
+if ( $field['type'] != 'divider' ) { ?>
 </li>
 <?php
 }

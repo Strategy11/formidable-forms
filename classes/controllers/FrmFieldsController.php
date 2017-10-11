@@ -31,7 +31,7 @@ class FrmFieldsController {
 			if ( ! isset( $field->value ) ) {
 				$field->value = '';
 			}
-			$field->field_options = json_decode( json_encode( $field->field_options), true );
+			$field->field_options = json_decode( json_encode( $field->field_options ), true );
 			$field->options = json_decode( json_encode( $field->options ), true );
 
 			ob_start();
@@ -215,18 +215,14 @@ class FrmFieldsController {
 			$field_object = FrmField::getOne( $field['id'] );
 		}
 
-		if ( ! isset( $field ) && is_object( $field_object ) ) {
-			$field = FrmFieldsHelper::setup_edit_vars( $field_object );
-		}
-
 		$field_obj = FrmFieldFactory::get_field_factory( $field_object );
 		$display = self::display_field_options( array(), $field_obj );
-		$li_classes = self::get_classes_for_builder_field( $field, $display, $field_obj );
 
 		$ajax_loading = isset( $values['ajax_load'] ) && $values['ajax_load'];
 		$ajax_this_field = isset( $values['count'] ) && $values['count'] > 10 && ! in_array( $field_object->type, array( 'divider', 'end_divider' ) );
 
 		if ( $ajax_loading && $ajax_this_field ) {
+			$li_classes = self::get_classes_for_builder_field( array(), $display, $field_obj );
 			include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/ajax-field-placeholder.php' );
 		} else {
 			$frm_settings = FrmAppHelper::get_settings();
@@ -234,6 +230,13 @@ class FrmFieldsController {
 			$pro_field_selection = FrmField::pro_field_selection();
 			$frm_all_field_selection = array_merge( FrmField::field_selection(), $pro_field_selection );
 			$disabled_fields = FrmAppHelper::pro_is_installed() ? array() : $pro_field_selection;
+
+			if ( ! isset( $field ) && is_object( $field_object ) ) {
+				$field = FrmFieldsHelper::setup_edit_vars( $field_object );
+			}
+
+			$li_classes = self::get_classes_for_builder_field( $field, $display, $field_obj );
+			$li_classes .= ' ui-state-default widgets-holder-wrap';
 
 			require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add_field.php' );
 		}
@@ -244,7 +247,10 @@ class FrmFieldsController {
 	 */
 	private static function get_classes_for_builder_field( $field, $display, $field_info ) {
 		$li_classes = $field_info->form_builder_classes( $display['type'] );
-		return apply_filters( 'frm_build_field_class', $li_classes, $field );
+		if ( ! empty( $field ) ) {
+			$li_classes = apply_filters( 'frm_build_field_class', $li_classes, $field );
+		}
+		return $li_classes;
 	}
 
     public static function destroy() {
