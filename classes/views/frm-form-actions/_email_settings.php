@@ -2,7 +2,7 @@
 <tr class="frm_to_row frm_email_row">
     <th><label <?php FrmAppHelper::maybe_add_tooltip('email_to') ?>><?php _e( 'To', 'formidable' ) ?></label>
     </th>
-    <td ><input type="text" name="<?php echo esc_attr( $this->get_field_name('email_to') ) ?>" value="<?php echo esc_attr( $form_action->post_content['email_to'] ); ?>" class="frm_not_email_to frm_email_blur large-text <?php FrmAppHelper::maybe_add_tooltip('email_to', 'open') ?>" id="<?php echo esc_attr( $this->get_field_id('email_to') ) ?>" />
+    <td><input type="text" name="<?php echo esc_attr( $this->get_field_name('email_to') ) ?>" value="<?php echo esc_attr( $form_action->post_content['email_to'] ); ?>" class="frm_not_email_to frm_email_blur large-text <?php FrmAppHelper::maybe_add_tooltip('email_to', 'open') ?>" id="<?php echo esc_attr( $this->get_field_id('email_to') ) ?>" />
     </td>
     <td class="frm_bcc_cc_container">
         <a href="javascript:void(0)" class="button frm_email_buttons frm_cc_button <?php
