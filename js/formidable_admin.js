@@ -1,7 +1,7 @@
 function frmAdminBuildJS(){
-    'use strict';
+    //'use strict';
 
-    /*global jQuery:false, frm_admin_js, frmGlobal */
+    /*global jQuery:false, frm_admin_js, frmGlobal, ajaxurl */
 
 	var $newFields = jQuery(document.getElementById('new_fields'));
 	var this_form_id = jQuery(document.getElementById('form_id')).val();
@@ -239,11 +239,10 @@ function frmAdminBuildJS(){
 				if ( ui.item.attr('id').indexOf('frm_field_id') > -1 ) {
 					// An existing field was dragged and dropped into, out of, or between sections
 					updateFieldAfterMovingBetweenSections(ui.item);
-				} else if ( typeof ui.item.attr('id') !== 'undefined' ) { {
+				} else if ( typeof ui.item.attr('id') !== 'undefined' ) {
 					// A new field was dragged into the form
 					insertNewFieldByDragging(this, ui.item, opts);
 				}
-
 			},
 			change:function(event, ui){
 				// don't allow some field types inside section
@@ -1113,9 +1112,13 @@ function frmAdminBuildJS(){
 	function setIPELabel(){
 		/*jshint validthis:true */
 		jQuery(this).editInPlace({
-			url:ajaxurl,params:'action=frm_field_name_in_place_edit&nonce='+frmGlobal.nonce,
 			value_required:'true',
-			default_text:frm_admin_js.no_label
+			default_text:frm_admin_js.no_label,
+			callback:function(x,text){
+				jQuery(this).next('input').val(text);
+				var new_text = text || frm_admin_js.desc;
+				return new_text;
+			}
 		});
 	}
 
@@ -2602,7 +2605,7 @@ function frmAdminBuildJS(){
 				save_button: '<a class="inplace_save save button button-small">'+frm_admin_js.ok+'</a>',
 				cancel_button:'<a class="inplace_cancel cancel">'+frm_admin_js.cancel+'</a>',
 			});
-			
+
 			$newFields.on('keypress', '.frm_ipe_field_label, .frm_ipe_field_option, .frm_ipe_field_option_key', blurField);
 			$newFields.on('mouseenter', '.frm_ipe_field_option, .frm_ipe_field_option_key', setIPEOpts);
 			$newFields.on('mouseenter', '.frm_ipe_field_label', setIPELabel);

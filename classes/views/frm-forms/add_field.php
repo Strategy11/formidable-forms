@@ -20,6 +20,7 @@ if ( $field['type'] == 'divider' ) { ?>
 
     ?>
     <label class="<?php echo ( $field['type'] == 'end_divider' ) ? '' : 'frm_ipe_field_label'; ?> frm_primary_label <?php echo ( $field['type'] == 'break' ) ? 'button': ''; ?>" id="field_label_<?php echo esc_attr( $field['id'] ); ?>"><?php echo ( $field['name'] == '' ) ? __( '(no label)', 'formidable' ) : force_balance_tags( $field['name'] ); ?></label>
+	<input type="hidden" name="field_options[name_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['name'] ); ?>" />
 
 
 <div id="field_<?php echo esc_attr( $field['id'] ) ?>_inner_container" class="frm_inner_field_container">

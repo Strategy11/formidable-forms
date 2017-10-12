@@ -92,6 +92,8 @@ class FrmFieldsController {
     }
 
 	public static function edit_name( $field = 'name', $id = '' ) {
+		_deprecated_function( __FUNCTION__, '3.0' );
+
 		FrmAppHelper::permission_check('frm_edit_forms');
         check_ajax_referer( 'frm_ajax', 'nonce' );
 
