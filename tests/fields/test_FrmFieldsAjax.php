@@ -115,37 +115,4 @@ class WP_Test_FrmFieldsAjax extends FrmAjaxUnitTest {
 		$message = 'The in_section variable is not set to the correct value when a ' . $field->type . ' field is duplicated.';
 		$this->assertEquals( $expected, $field->field_options['in_section'], $message );
 	}
-
-	/**
-	 * @covers FrmFieldsController::edit_name
-	 */
-	public function test_edit_name() {
-		wp_set_current_user( $this->user_id );
-		$form = $this->factory->form->get_object_by_id( 'contact-with-email' );
-		$field = $this->factory->field->create_and_get( array('form_id' => $form->id ) );
-        $this->assertNotEmpty( $field );
-
-		$new_name = 'New Field Name';
-		$_POST = array(
-			'action'        => 'frm_field_name_in_place_edit',
-            'element_id'    => $field->id,
-            'update_value'  => $new_name,
-			'nonce'         => wp_create_nonce( 'frm_ajax' ),
-		);
-
-		try {
-			$this->_handleAjax( 'frm_field_name_in_place_edit' );
-		} catch ( WPAjaxDieContinueException $e ) {
-			unset( $e );
-		}
-
-		$response = $this->_last_response;
-		$this->assertEquals( $response, $new_name );
-
-		// Check that the edit happened
-		$field = $this->factory->field->get_object_by_id( $field->id );
-
-        $this->assertTrue( is_object( $field ), 'Failed to get field ' . $field->id );
-		$this->assertEquals( $field->name, $new_name );
-	}
 }
