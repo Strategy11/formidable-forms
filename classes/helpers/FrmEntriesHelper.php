@@ -20,39 +20,15 @@ class FrmEntriesHelper {
 			self::prepare_field_default_value( $field );
             $new_value = self::get_field_value_for_new_entry( $field, $reset, $args );
 
-            $field_array = array(
-                'id' => $field->id,
-                'value' => $new_value,
-                'default_value' => $field->default_value,
-                'name' => $field->name,
-                'description' => $field->description,
-                'type' => apply_filters('frm_field_type', $field->type, $field, $new_value),
-                'options' => $field->options,
-                'required' => $field->required,
-                'field_key' => $field->field_key,
-                'field_order' => $field->field_order,
-                'form_id' => $field->form_id,
-				'parent_form_id' => isset( $args['parent_form_id'] ) ? $args['parent_form_id'] : $field->form_id,
-	            'reset_value' => $reset,
-				'in_embed_form' => isset( $args['in_embed_form'] ) ? $args['in_embed_form'] : '0',
-            );
+			$field_array = FrmAppHelper::start_field_array( $field );
+			$field_array['value'] = $new_value;
+			$field_array['type']  = apply_filters( 'frm_field_type', $field->type, $field, $new_value );
+			$field_array['parent_form_id'] = isset( $args['parent_form_id'] ) ? $args['parent_form_id'] : $field->form_id;
+			$field_array['reset_value']    = $reset;
+			$field_array['in_embed_form']  = isset( $args['in_embed_form'] ) ? $args['in_embed_form'] : '0';
 
-			$opt_defaults = FrmFieldsHelper::get_default_field_options_from_field( $field );
-            $opt_defaults['required_indicator'] = '';
-			$opt_defaults['original_type'] = $field->type;
+			FrmFieldsHelper::prepare_new_front_field( $field_array, $field, $args );
 
-			foreach ( $opt_defaults as $opt => $default_opt ) {
-                $field_array[ $opt ] = ( isset( $field->field_options[ $opt ] ) && $field->field_options[ $opt ] != '' ) ? $field->field_options[ $opt ] : $default_opt;
-                unset($opt, $default_opt);
-            }
-
-            unset($opt_defaults);
-
-            if ( $field_array['custom_html'] == '' ) {
-                $field_array['custom_html'] = FrmFieldsHelper::get_default_html($field->type);
-            }
-
-            $field_array = apply_filters('frm_setup_new_fields_vars', $field_array, $field, $args );
             $field_array = array_merge( $field->field_options, $field_array );
 
             $values['fields'][] = $field_array;
@@ -82,6 +58,8 @@ class FrmEntriesHelper {
 
 	/**
 	 * @since 2.05
+	 *
+	 * @param object $field
 	 */
 	private static function prepare_field_default_value( &$field ) {
 		//If checkbox, multi-select dropdown, or checkbox data from entries field, the value should be an array
@@ -239,10 +217,15 @@ class FrmEntriesHelper {
         return $val;
     }
 
-    /**
-     * Prepare the saved value for display
-     * @return string
-     */
+	/**
+	 * Prepare the saved value for display
+	 *
+	 * @param array|string $value
+	 * @param object $field
+	 * @param array $atts
+	 *
+	 * @return string
+	 */
 	public static function display_value( $value, $field, $atts = array() ) {
 
         $defaults = array(

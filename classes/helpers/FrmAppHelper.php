@@ -1002,27 +1002,14 @@ class FrmAppHelper {
 		$field_type = isset( $post_values['field_options'][ 'type_' . $field->id ] ) ? $post_values['field_options'][ 'type_' . $field->id ] : $field->type;
         $new_value = isset( $post_values['item_meta'][ $field->id ] ) ? maybe_unserialize( $post_values['item_meta'][ $field->id ] ) : $meta_value;
 
-        $field_array = array(
-            'id'            => $field->id,
-            'value'         => $new_value,
-            'default_value' => $field->default_value,
-            'name'          => $field->name,
-            'description'   => $field->description,
-            'type'          => apply_filters('frm_field_type', $field_type, $field, $new_value),
-            'options'       => $field->options,
-            'required'      => $field->required,
-            'field_key'     => $field->field_key,
-            'field_order'   => $field->field_order,
-            'form_id'       => $field->form_id,
-			'parent_form_id' => $args['parent_form_id'],
-        );
+		$field_array = self::start_field_array( $field );
+		$field_array['value'] = $new_value;
+		$field_array['type']  = apply_filters( 'frm_field_type', $field_type, $field, $new_value );
+		$field_array['parent_form_id'] = $args['parent_form_id'];
 
         $args['field_type'] = $field_type;
-        self::fill_field_opts($field, $field_array, $args);
-		// Track the original field's type
-		$field_array['original_type'] = isset( $field->field_options['original_type'] ) ? $field->field_options['original_type'] : $field->type;
 
-        $field_array = apply_filters( 'frm_setup_edit_fields_vars', $field_array, $field, $values['id'], array() );
+		FrmFieldsHelper::prepare_edit_front_field( $field_array, $field, $values['id'], $args );
 
         if ( ! isset($field_array['unique']) || ! $field_array['unique'] ) {
             $field_array['unique_msg'] = '';
@@ -1033,29 +1020,24 @@ class FrmAppHelper {
         $values['fields'][ $field->id ] = $field_array;
     }
 
-	private static function fill_field_opts( $field, array &$field_array, $args ) {
-		//TODO: _deprecated_function( __METHOD__, '3.0', 'FmFieldsHelper::fill_default_field_opts' );
-        $post_values = $args['post_values'];
-        $opt_defaults = FrmFieldsHelper::get_default_field_options_from_field( $field );
-		$frm_settings = self::get_settings();
-
-        foreach ( $opt_defaults as $opt => $default_opt ) {
-			$field_array[ $opt ] = ( $post_values && isset( $post_values['field_options'][ $opt . '_' . $field->id ] ) ) ? maybe_unserialize( $post_values['field_options'][ $opt . '_' . $field->id ] ) : ( isset( $field->field_options[ $opt ] ) ? $field->field_options[ $opt ] : $default_opt );
-            if ( $opt == 'blank' && $field_array[ $opt ] == '' ) {
-                $field_array[ $opt ] = $frm_settings->blank_msg;
-            } else if ( $opt == 'invalid' && $field_array[ $opt ] == '' ) {
-                if ( $args['field_type'] == 'captcha' ) {
-                    $field_array[ $opt ] = $frm_settings->re_msg;
-                } else {
-                    $field_array[ $opt ] = sprintf( __( '%s is invalid', 'formidable' ), $field_array['name'] );
-                }
-            }
-        }
-
-        if ( $field_array['custom_html'] == '' ) {
-            $field_array['custom_html'] = FrmFieldsHelper::get_default_html($args['field_type']);
-        }
-    }
+	/**
+	 * @since 3.0
+	 * @param object $field
+	 * @return array
+	 */
+	public static function start_field_array( $field ) {
+		return array(
+			'id'            => $field->id,
+			'default_value' => $field->default_value,
+			'name'          => $field->name,
+			'description'   => $field->description,
+			'options'       => $field->options,
+			'required'      => $field->required,
+			'field_key'     => $field->field_key,
+			'field_order'   => $field->field_order,
+			'form_id'       => $field->form_id,
+		);
+	}
 
     /**
      * @param string $table
