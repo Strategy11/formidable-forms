@@ -60,13 +60,14 @@ class FrmAppHelper {
 	public static function make_affiliate_url( $url ) {
 		$affiliate_id = self::get_affiliate();
 		if ( ! empty( $affiliate_id ) ) {
-			$url = add_query_arg( 'aff', $affiliate_id, $url );
+			$url = str_replace( array( 'http://', 'https://' ), '', $url );
+			$url = 'http://www.shareasale.com/r.cfm?u='. absint( $affiliate_id ) .'&b=841990&m=64739&afftrack=plugin&urllink=' . urlencode( $url );
 		}
 		return $url;
 	}
 
 	public static function get_affiliate() {
-		return '';
+		return absint( apply_filters( 'frm_affiliate_id', 0 ) );
 	}
 
     /**
