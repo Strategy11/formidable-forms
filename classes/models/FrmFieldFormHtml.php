@@ -177,7 +177,7 @@ class FrmFieldFormHtml {
 	 * @since 3.0
 	 */
 	private function replace_form_shortcodes() {
-		if ( $this->form ) {
+		if ( ! empty( $this->form ) ) {
 			$form = (array) $this->form;
 
 			//replace [form_key]
@@ -194,12 +194,10 @@ class FrmFieldFormHtml {
 	public function replace_shortcodes_after_input() {
 		$this->html .= "\n";
 
-		//Return html if conf_field to prevent loop
-		if ( $this->field_obj->get_field_column('conf_field') == 'stop' ) {
-			return;
+		// Stop html filtering on confirmation field to prevent loop
+		if ( $this->field_obj->get_field_column('conf_field') != 'stop' ) {
+			$this->filter_for_more_shortcodes();
 		}
-
-		$this->filter_for_more_shortcodes();
 	}
 
 	/**
@@ -235,7 +233,7 @@ class FrmFieldFormHtml {
 
 		foreach ( $shortcodes[0] as $short_key => $tag ) {
 			$shortcode_atts = FrmShortcodeHelper::get_shortcode_attribute_array( $shortcodes[2][ $short_key ] );
-			$tag = FrmShortcodeHelper::get_shortcode_tag( $shortcodes, $short_key, array( 'conditional' => false, 'conditional_check' => false ) );
+			$tag = FrmShortcodeHelper::get_shortcode_tag( $shortcodes, $short_key );
 
 			$replace_with = '';
 

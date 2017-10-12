@@ -53,6 +53,11 @@ class FrmFieldFactory {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param string $field_type
+	 * @param int|array|object $field
+	 *
+	 * @return stdClass
 	 */
 	public static function get_field_type( $field_type, $field = 0 ) {
 		$class = self::get_field_type_class( $field_type );
@@ -67,6 +72,10 @@ class FrmFieldFactory {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param string $field_type
+	 *
+	 * @return string
 	 */
 	private static function get_field_type_class( $field_type ) {
 		$type_classes = array(
