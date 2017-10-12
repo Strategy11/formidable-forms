@@ -169,7 +169,7 @@ DEFAULT_HTML;
 
 		if ( ! empty( $include_file ) ) {
 			$this->include_on_form_builder( $name, $field );
-		} else {
+		} elseif ( $this->has_input ) {
 			echo $this->builder_text_field();
 		}
 	}
@@ -371,6 +371,19 @@ DEFAULT_HTML;
 	 */
 	public function prepare_front_field( $values, $atts ) {
 		return $values;
+	}
+
+	/**
+	 * @param array $values
+	 *
+	 * @return array
+	 */
+	public function get_options( $values ) {
+		if ( empty( $values ) ) {
+			$values = (array) $this->field;
+		}
+
+		return maybe_unserialize( $values['options'] );
 	}
 
 	/**

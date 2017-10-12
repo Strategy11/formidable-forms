@@ -137,7 +137,8 @@ class FrmFieldValueSelector {
 	 * @since 2.03.05
 	 */
 	protected function set_options() {
-		$this->options = maybe_unserialize( $this->db_row->options );
+		$field_obj = FrmFieldFactory::get_field_object( $this->db_row );
+		$this->options = $field_obj->get_options( array() );
 	}
 
 	/**
