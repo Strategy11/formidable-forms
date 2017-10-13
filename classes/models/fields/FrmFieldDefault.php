@@ -24,8 +24,17 @@ class FrmFieldDefault extends FrmFieldType {
 	public function show_on_form_builder( $name = '' ) {
 		$field = FrmFieldsHelper::setup_edit_vars( $this->field );
 
+		ob_start();
 		do_action( 'frm_display_added_fields', $field );
 		do_action( 'frm_display_added_' . $this->type . '_field', $field );
+		$input_html = ob_get_contents();
+		ob_end_clean();
+
+		if ( empty( $input_html ) ) {
+			echo $this->builder_text_field();
+		} else {
+			echo $input_html;
+		}
 	}
 
 	public function front_field_input( $args, $shortcode_atts ) {
