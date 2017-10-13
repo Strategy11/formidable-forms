@@ -116,6 +116,9 @@ class FrmFieldsHelper {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param object $field
+	 * @param array $values
 	 */
 	private static function fill_default_field_opts( $field, array &$values ) {
 		$check_post = FrmAppHelper::is_admin() && $_POST && isset( $_POST['field_options'] );
@@ -166,6 +169,10 @@ class FrmFieldsHelper {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param array $field_array
+	 * @param object $field
+	 * @param array $atts
 	 */
 	private static function prepare_field_options_for_display( &$field_array, $field, $atts ) {
 		$field_obj = FrmFieldFactory::get_field_object( $field );
@@ -241,6 +248,12 @@ class FrmFieldsHelper {
 		return apply_filters('frm_custom_html', $default_html, $type);
 	}
 
+	/**
+	 * @param array $fields
+	 * @param array $errors
+	 * @param object $form
+	 * @param $form_action
+	 */
 	public static function show_fields( $fields, $errors, $form, $form_action ) {
 		foreach ( $fields as $field ) {
 			$field_obj = FrmFieldFactory::get_field_type( $field['type'], $field );
@@ -248,6 +261,15 @@ class FrmFieldsHelper {
 		}
 	}
 
+	/**
+	 * @param string $html
+	 * @param array $field
+	 * @param array $errors
+	 * @param object $form
+	 * @param array $args
+	 *
+	 * @return string
+	 */
 	public static function replace_shortcodes( $html, $field, $errors = array(), $form = false, $args = array() ) {
 		_deprecated_function( __FUNCTION__, '3.0', 'FrmFieldType::prepare_field_html' );
 		$field_obj = FrmFieldFactory::get_field_type( $field['type'], $field );

@@ -33,7 +33,7 @@ function load_formidable_forms() {
 	require_once( dirname( __FILE__ ) . '/classes/controllers/FrmHooksController.php' );
 
 	$frm_path = dirname(__FILE__);
-	if ( file_exists($frm_path . '/pro/formidable-pro.php') ) {
+	if ( file_exists( $frm_path . '/pro/formidable-pro.php' ) ) {
 		include( $frm_path . '/pro/formidable-pro.php' );
 	}
 
