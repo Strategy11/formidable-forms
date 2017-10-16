@@ -596,7 +596,9 @@ class FrmFieldsController {
 	}
 
 	private static function add_frmval_to_input( $field, &$add_html ) {
-		$val = str_replace( array( "\r\n", "\n" ), '\r', addslashes( str_replace( '&#039;', "'", esc_attr( $field['default_value'] ) ) ) );
+		$val = str_replace( '&#039;', "'", $field['default_value'] );
+		$val = str_replace( array( "\r\n", "\n" ), '\r', $val );
+
 		if ( $val != '' ) {
 			$add_html['data-frmval'] = 'data-frmval="' . esc_attr( $val ) . '"';
 		}
