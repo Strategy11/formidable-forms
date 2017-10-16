@@ -1,3 +1,9 @@
+.frm_form_action_settings .widget-top .toggle-indicator:before {
+	content: "\f140" !important;
+}
+.frm_form_action_settings.widget.open .widget-top .toggle-indicator:before {
+	content: "\f142" !important;
+}
 .frm_icon_font,
 .frm_dashicon_font{
 	text-decoration:none;
@@ -47,6 +53,7 @@ a.frm_icon_font:hover{
 
 .ab-icon.frm_dashicon_font:before{
 	content: "\f324";
+	vertical-align: middle;
 }
 
 .frm_logo_icon:before {
@@ -210,6 +217,7 @@ a.frm_icon_font:hover{
 }
 .frm_email_icon:before {
 	content: "\e626";
+	vertical-align: text-top;
 }
 .frm_aweber_icon:before {
 	content: "\e627";

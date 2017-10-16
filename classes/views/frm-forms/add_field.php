@@ -138,8 +138,12 @@ do_action('frm_before_field_options', $field);
 if ( $display['options'] ) { ?>
     <div class="widget">
         <div class="widget-top">
-    	    <div class="widget-title-action"><a href="javascript:void(0);" class="widget-action"></a></div>
-    		<div class="widget-title"><h4><?php _e( 'Field Options', 'formidable' ) ?> (ID <?php echo (int) $field['id'] ?>)</h4></div>
+            <div class="widget-title-action">
+                <button type="button" class="widget-action hide-if-no-js" aria-expanded="false">
+                    <span class="toggle-indicator" aria-hidden="true"></span>
+                </button>
+            </div>
+            <div class="widget-title"><h3><?php _e( 'Field Options', 'formidable' ) ?> (ID <?php echo (int) $field['id'] ?>)</h3></div>
         </div>
     	<div class="widget-inside">
             <table class="form-table frm_clear_none">
