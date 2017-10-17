@@ -253,7 +253,7 @@ class FrmEntriesHelper {
         }
 
         $val = implode(', ', (array) $field_value );
-		return FrmAppHelper::kses( $val );
+		return wp_kses_post( $val );
     }
 
     /**
@@ -322,7 +322,7 @@ class FrmEntriesHelper {
         }
 
 		if ( ! $atts['keepjs'] && ! is_array( $value ) ) {
-			$value = FrmAppHelper::kses( $value );
+			$value = wp_kses_post( $value );
 		}
 
         return apply_filters('frm_display_value', $value, $field, $atts);
