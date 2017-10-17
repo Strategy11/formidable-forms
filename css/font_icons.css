@@ -248,6 +248,7 @@ a.frm_icon_font:hover{
 .frm_email_icon:before {
 	content: "\e626";
 	vertical-align: text-top;
+	margin-right: 5px;
 }
 .frm_aweber_icon:before {
 	content: "\e627";

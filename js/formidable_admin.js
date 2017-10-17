@@ -1430,6 +1430,7 @@ function frmAdminBuildJS(){
 				jQuery('#frm_notification_settings').append(html);
 				jQuery('.frm_form_action_settings').fadeIn('slow');
 				jQuery('#frm_form_action_' + (parseInt(len)+1) + ' .widget-inside').css('display','block');
+				jQuery('#frm_form_action_' + (parseInt(len)+1)).addClass('open');
 				jQuery('#action_post_title_' + (parseInt(len)+1)).focus();
 
 				//check if icon should be active
