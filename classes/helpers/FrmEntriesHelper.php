@@ -253,16 +253,8 @@ class FrmEntriesHelper {
         }
 
         $val = implode(', ', (array) $field_value );
-		return self::kses( $val );
+		return FrmAppHelper::kses( $val );
     }
-
-	/**
-	 * @since 2.05.02
-	 */
-	public static function kses( $value, $allowed_tags = array() ) {
-		$allowed_tags = apply_filters( 'frm_striphtml_allowed_tags', $allowed_tags );
-		return wp_kses( $value, $allowed_tags );
-	}
 
     /**
      * Prepare the saved value for display
@@ -330,7 +322,7 @@ class FrmEntriesHelper {
         }
 
 		if ( ! $atts['keepjs'] && ! is_array( $value ) ) {
-			$value = self::kses( $value );
+			$value = FrmAppHelper::kses( $value );
 		}
 
         return apply_filters('frm_display_value', $value, $field, $atts);
