@@ -7,11 +7,13 @@ class FrmEntriesController {
 
         add_submenu_page('formidable', 'Formidable | ' . __( 'Entries', 'formidable' ), __( 'Entries', 'formidable' ), 'frm_view_entries', 'formidable-entries', 'FrmEntriesController::route' );
 
-		if ( ! in_array( FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' ), array( 'edit', 'show' ) ) ) {
+		if ( ! in_array( FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' ), array( 'edit', 'show', 'new' ) ) ) {
 			$menu_name = FrmAppHelper::get_menu_name();
 			add_filter( 'manage_' . sanitize_title( $menu_name ) . '_page_formidable-entries_columns', 'FrmEntriesController::manage_columns' );
 			add_filter( 'get_user_option_manage' . sanitize_title( $menu_name ) . '_page_formidable-entriescolumnshidden', 'FrmEntriesController::hidden_columns' );
 			add_filter( 'manage_' . sanitize_title( $menu_name ) . '_page_formidable-entries_sortable_columns', 'FrmEntriesController::sortable_columns' );
+        } else {
+        	add_filter( 'screen_options_show_screen', __CLASS__ . '::remove_screen_options', 10, 2 );
         }
     }
 
@@ -43,7 +45,8 @@ class FrmEntriesController {
 
 		$action = FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
 		$page = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
-		if ( $page != 'formidable-entries' || ( ! empty( $action ) && $action != 'list' ) ) {
+		$show_help = ( $page == 'formidable-entries' && ( empty( $action ) || $action == 'list' ) );
+		if ( ! $show_help ) {
             return $help;
         }
 
@@ -63,6 +66,20 @@ class FrmEntriesController {
 
         return $help;
     }
+
+	/**
+	 * Prevent the "screen options" tab from showing when
+	 * editing or creating an entry
+	 *
+	 * @since 3.0
+	 */
+	public static function remove_screen_options( $show_screen, $screen ) {
+		if ( $screen->id == 'formidable_page_formidable-entries' ) {
+			$show_screen = false;
+		}
+
+		return $show_screen;
+	}
 
 	public static function manage_columns( $columns ) {
         global $frm_vars;
