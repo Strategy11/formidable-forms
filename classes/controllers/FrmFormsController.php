@@ -1027,7 +1027,7 @@ class FrmFormsController {
             //get view id either from action or page shortcode
             $view_id = (!empty($meta = FrmDb::get_var( $wpdb->postmeta, array( 'meta_key' => 'frm_form_id', 'meta_value' => current( array_keys( $actions ) ) ), 'post_id' ) )) ? $meta : (!empty($frm_vars['display_id'])) ? $frm_vars['display_id'] : '';
 
-            if ( !empty( $view_id  ) ) {
+            if ( !empty( $view_id ) ) {
                 $wp_admin_bar->add_node( array(
                     'parent' => 'frm-forms',
                     'title'  => __( 'Edit View', 'formidable' ),
