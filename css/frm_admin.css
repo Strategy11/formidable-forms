@@ -1,7 +1,5 @@
 @import url(font_icons.css);
 
-
-
 a, .widget .widget-top, .postbox h3, .stuffbox h3{cursor: pointer; text-decoration:none;}
 .postbox h3.hndle{cursor:default;}
 
