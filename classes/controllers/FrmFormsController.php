@@ -164,18 +164,21 @@ class FrmFormsController {
     }
 
 	public static function edit_key() {
+		_deprecated_function( __METHOD__, '3.0' );
 		$values = self::edit_in_place_value( 'form_key' );
 		echo wp_kses( stripslashes( FrmForm::getKeyById( $values['form_id'] ) ), array() );
 		wp_die();
 	}
 
 	public static function edit_description() {
+		_deprecated_function( __METHOD__, '3.0' );
 		$values = self::edit_in_place_value( 'description' );
 		echo wp_kses_post( FrmAppHelper::use_wpautop( stripslashes( $values['description'] ) ) );
 		wp_die();
 	}
 
 	private static function edit_in_place_value( $field ) {
+		_deprecated_function( __METHOD__, '3.0' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 		FrmAppHelper::permission_check('frm_edit_forms', 'hide');
 

@@ -187,8 +187,6 @@ class FrmHooksController {
         // Forms Controller
 		add_action( 'wp_ajax_frm_create_from_template', 'FrmFormsController::_create_from_template' );
 		add_action( 'wp_ajax_frm_save_form', 'FrmFormsController::route' );
-		add_action( 'wp_ajax_frm_form_key_in_place_edit', 'FrmFormsController::edit_key' );
-		add_action( 'wp_ajax_frm_form_desc_in_place_edit', 'FrmFormsController::edit_description' );
         add_action( 'wp_ajax_frm_get_default_html', 'FrmFormsController::get_email_html' );
         add_action( 'wp_ajax_frm_get_shortcode_opts', 'FrmFormsController::get_shortcode_opts' );
         add_action( 'wp_ajax_frm_forms_preview', 'FrmFormsController::preview' );

@@ -30,35 +30,7 @@ function frmAdminBuildJS(){
 			$obj.className += ' ' + className;
 		}
 	}
-	
-	function setMenuOffset(){ 
-		var fields = jQuery('#postbox-container-1 .frm_field_list');
-		var offset = 283;
-		if(fields.length < 1){
-			fields = jQuery(document.getElementById('frm_adv_info'));
-			if(fields.length === 0) {
-				return;
-			}
-			offset = 455;
-		}
 
-		var currentOffset = document.documentElement.scrollTop || document.body.scrollTop; // body for Safari
-		if(currentOffset === 0){
-			fields.removeAttr('style');
-			return;
-		}
-		var posEle = jQuery(document.getElementById('frm_position_ele'));
-		if(posEle.length>0){ 
-			var eleOffset = posEle.offset();
-			offset = eleOffset.top;
-		}
-		var desiredOffset = offset + 2 - currentOffset;
-		if (desiredOffset < 35) {
-			desiredOffset = 35;
-		}
-		//if (desiredOffset != parseInt(header.style.top)) 
-			fields.attr('style', 'top:'+desiredOffset + 'px;');
-	}
 
 	function removeThisTag(){
 		/*jshint validthis:true */
@@ -1351,7 +1323,7 @@ function frmAdminBuildJS(){
 		var id = jQuery(this).data('slidedown');
 		var $thisId = jQuery(document.getElementById(id));
 		if ($thisId.is(":hidden")) {
-			$thisId.slideDown('fast', function(){setMenuOffset();});
+			$thisId.slideDown('fast');
 			this.style.display = 'none';
 		}
 		return false;
@@ -1361,7 +1333,7 @@ function frmAdminBuildJS(){
 		/*jshint validthis:true */
 		var id = jQuery(this).data('slideup');
 		var $thisId = jQuery(document.getElementById(id));
-		$thisId.slideUp('fast', function(){setMenuOffset();});
+		$thisId.slideUp('fast');
 		$thisId.siblings('a').show();
 		return false;
 	}
@@ -2433,9 +2405,6 @@ function frmAdminBuildJS(){
 
 	return{
 		init: function(){
-			window.onscroll = document.documentElement.onscroll = setMenuOffset;
-			setMenuOffset();
-			
 			// Bootstrap dropdown button
 			jQuery('.wp-admin').click(function(e){
 				var t = jQuery(e.target);
@@ -2505,14 +2474,14 @@ function frmAdminBuildJS(){
 			if($shortCodeDiv.length > 0){
 				jQuery('a.edit-frm_shortcode').click(function() {
 					if ($shortCodeDiv.is(':hidden')) {
-						$shortCodeDiv.slideDown('fast', function(){setMenuOffset();});
+						$shortCodeDiv.slideDown('fast');
 						this.style.display = 'none';
 					}
 					return false;
 				});
 
 				jQuery('.cancel-frm_shortcode', '#frm_shortcodediv').click(function() {
-					$shortCodeDiv.slideUp('fast', function(){setMenuOffset();});
+					$shortCodeDiv.slideUp('fast');
 					$shortCodeDiv.siblings('a.edit-frm_shortcode').show();
 					return false;
 				});
@@ -2589,22 +2558,6 @@ function frmAdminBuildJS(){
 			});
 
 			initiateMultiselect();
-
-			jQuery('.frm_ipe_form_key').editInPlace({
-				url:ajaxurl,params:"action=frm_form_key_in_place_edit&form_id="+this_form_id+'&nonce='+frmGlobal.nonce,
-				show_buttons:"true",value_required:"true",
-				save_button: '<a class="inplace_save save button button-small">'+frm_admin_js.ok+'</a>',
-				cancel_button:'<a class="inplace_cancel cancel">'+frm_admin_js.cancel+'</a>',
-				bg_over:"#fffbcc",bg_out:"#fffbcc"
-			});
-
-			jQuery('.frm_ipe_form_desc').editInPlace({
-				url:ajaxurl,params:'action=frm_form_desc_in_place_edit&form_id='+this_form_id+'&nonce='+frmGlobal.nonce,
-				field_type:'textarea',textarea_rows:3,textarea_cols:60,default_text:frm_admin_js.desc,
-				show_buttons:'true',
-				save_button: '<a class="inplace_save save button button-small">'+frm_admin_js.ok+'</a>',
-				cancel_button:'<a class="inplace_cancel cancel">'+frm_admin_js.cancel+'</a>',
-			});
 
 			$newFields.on('keypress', '.frm_ipe_field_label, .frm_ipe_field_option, .frm_ipe_field_option_key', blurField);
 			$newFields.on('mouseenter', '.frm_ipe_field_option, .frm_ipe_field_option_key', setIPEOpts);
@@ -2767,9 +2720,6 @@ function frmAdminBuildJS(){
 		},
 		
 		panelInit: function(){
-			var $advInfo = jQuery(document.getElementById('frm_adv_info'));
-			$advInfo.before('<div id="frm_position_ele"></div>');
-
 			jQuery('.frm_code_list a').addClass('frm_noallow');
 			
 			jQuery('.inside').on('click', '.frm_insert_code', insertCode);
