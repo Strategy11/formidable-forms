@@ -553,6 +553,12 @@ if ( ! $submit_style ) { ?>
     vertical-align:middle;
 }
 
+.<?php echo esc_html( $style_class ) ?> .frm_align_top_submit input[type=submit],
+.<?php echo esc_html( $style_class ) ?> .frm_align_top_submit.frm_submit input[type=button],
+.<?php echo esc_html( $style_class ) ?> .frm_align_top_submit.frm_submit button {
+	margin-top: 0;
+}
+
 .<?php echo esc_html( $style_class ) ?> .frm_compact .frm_dropzone.dz-clickable .dz-message{
 	margin:0;
 }
