@@ -1121,6 +1121,12 @@ if ( ! $submit_style ) { ?>
 		width:100%<?php echo esc_html( $important ) ?>;
 	}
 
+	.<?php echo esc_html( $style_class ) ?> .frm_align_top_submit input[type=submit],
+	.<?php echo esc_html( $style_class ) ?> .frm_align_top_submit.frm_submit input[type=button],
+	.<?php echo esc_html( $style_class ) ?> .frm_align_top_submit.frm_submit button {
+		margin-top: 10px;
+	}
+
 
 	.<?php echo esc_html( $style_class ) ?> .frm_repeat_inline,
 	.<?php echo esc_html( $style_class ) ?> .frm_repeat_grid{
