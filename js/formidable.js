@@ -1282,14 +1282,14 @@ function frmFrontFormJS(){
 			return;
 		}
 
+        addToHideFields( depFieldArgs.containerId, depFieldArgs.formId );
+
 		if ( onCurrentPage ) {
 			hideFieldContainer( depFieldArgs.containerId );
 			clearInputsInFieldOnPage( depFieldArgs.containerId );
 		} else {
 			clearInputsInFieldAcrossPage( depFieldArgs );
 		}
-
-		addToHideFields( depFieldArgs.containerId, depFieldArgs.formId );
 	}
 
 	function hideFieldContainer( containerId ) {
