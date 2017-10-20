@@ -1,17 +1,18 @@
-<div id="form_settings_page" class="wrap">
-    <h2><?php _e( 'Settings', 'formidable' ) ?>
-        <a href="#" class="add-new-h2 frm_invisible"></a>
-    </h2>
+<div id="form_settings_page" class="frm_wrap">
+    <div id="poststuff" class="frm_page_container">
+
+    <div id="post-body" class="metabox-holder columns-2">
+    <div id="post-body-content">
 
 	<?php
+	FrmAppController::get_admin_header( array(
+		'label' => __( 'Settings', 'formidable' ),
+		'form'  => $form,
+	) );
+
 	// Add form messages
 	require( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' );
 	?>
-
-    <div id="poststuff">
-        <div id="post-body" class="metabox-holder columns-2">
-        <div id="post-body-content">
-        <?php FrmAppController::get_form_nav( $id, true ); ?>
 
 <form method="post" class="frm_form_settings">
     <input type="hidden" name="id" id="form_id" value="<?php echo (int) $id; ?>" />
@@ -19,7 +20,6 @@
 
         <div class="meta-box-sortables">
         <div class="categorydiv postbox" id="frm-categorydiv">
-        <h3 class="hndle"><span><?php echo __( 'Form Settings', 'formidable' ) ?></span></h3>
         <div class="inside frm-help-tabs">
         <div id="contextual-help-back"></div>
         <div id="contextual-help-columns">
@@ -174,13 +174,26 @@
             </table>
 
 			<!--Misc Section-->
-			<?php if ( has_action( 'frm_additional_form_options' ) ) { ?>
-				<h3><?php _e( 'Miscellaneous', 'formidable' ); ?></h3>
-				<table class="form-table">
-					<?php do_action('frm_additional_form_options', $values); ?>
-				</table>
-				<?php } ?>
-
+			<h3><?php _e( 'Miscellaneous', 'formidable' ); ?></h3>
+			<table class="form-table">
+				<tr>
+					<td>
+						<label for="frm_form_key"><?php esc_html_e( 'Form Key', 'formidable' ) ?></label>
+					</td>
+					<td>
+						<input type="text" id="frm_form_key" name="form_key" class="frm_long_input" value="<?php echo esc_attr( $values['form_key'] ); ?>" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label for="frm_form_description"><?php esc_html_e( 'Form Description', 'formidable' ) ?></label>
+					</td>
+					<td>
+						<textarea id="frm_form_description" name="description" cols="50" rows="5" class="frm_long_input"><?php echo FrmAppHelper::esc_textarea( $values['description'] ); ?></textarea>
+					</td>
+				</tr>
+				<?php do_action('frm_additional_form_options', $values); ?>
+			</table>
 		</div>
 
 
@@ -269,10 +282,10 @@
 
 </div>
 
-    <p>
-        <input type="submit" value="<?php esc_attr_e( 'Update', 'formidable' ) ?>" class="button-primary" />
-    </p>
-    </form>
+<p>
+	<input type="submit" value="<?php esc_attr_e( 'Update', 'formidable' ) ?>" class="button-primary" />
+</p>
+</form>
 
 
     </div>

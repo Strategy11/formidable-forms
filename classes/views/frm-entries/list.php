@@ -1,16 +1,17 @@
-<div id="form_entries_page" class="wrap">
-	<h1><?php _e( 'Entries', 'formidable' ); ?>
-        <?php do_action('frm_entry_inside_h2', $form); ?>
-	</h1>
+<div id="form_entries_page" class="frm_wrap frm_list_entry_page">
+	<?php
+	FrmAppController::get_admin_header( array(
+		'label' => __( 'Entries', 'formidable' ),
+		'link_hook' => array( 'hook' => 'frm_entry_inside_h2', 'param' => $form ),
+		'form' => $form,
+	) );
 
-	<?php require( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' ); ?>
+	?>
+	<div class="wrap">
 
     <form id="posts-filter" method="get">
         <div id="poststuff">
             <div id="post-body" class="metabox-holder columns-2">
-            <div id="post-body-content">
-                <?php FrmAppController::get_form_nav($form, true, 'hide'); ?>
-            </div>
             <div id="postbox-container-1" class="postbox-container">
                 <input type="hidden" name="page" value="formidable-entries" />
 				<input type="hidden" name="form" value="<?php echo esc_attr( $form ? $form->id : '' ); ?>" />
@@ -19,12 +20,8 @@
             </div>
             <div class="clear"></div>
             </div>
-            <?php if ( $form ) { ?>
-            <div id="titlediv" class="frm-on-bottom">
-				<input id="title" type="text" value="<?php echo esc_attr( $form->name == '' ? __( '(no title)' ) : $form->name ) ?>" readonly="readonly" disabled="disabled" />
-            </div>
-            <?php } ?>
 
+			<?php include( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' ); ?>
 			<?php FrmTipsHelper::pro_tip( 'get_entries_tip' ); ?>
 
             <?php $wp_list_table->display(); ?>
@@ -32,4 +29,5 @@
         </div>
     </form>
 
+	</div>
 </div>

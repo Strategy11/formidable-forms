@@ -1,7 +1,16 @@
 
 <div class="postbox frm_with_icons" >
-    <h3 class="hndle"><span><?php _e( 'Entry Details', 'formidable' ) ?></span></h3>
+    <h3 class="hndle">
+		<span><?php esc_html_e( 'Entry Details', 'formidable' ) ?></span>
+		<?php if ( FrmAppHelper::get_param('frm_action') != 'show' ) { ?>
+		<a href="?page=formidable-entries&amp;frm_action=show&amp;id=<?php echo absint( $entry->id ); ?>" class="alignright">
+			<?php esc_html_e( 'View Entry', 'formidable' ) ?>
+		</a>
+		<?php } ?>
+	</h3>
     <div class="inside">
+		<?php include( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/_sidebar-shared-pub.php' ); ?>
+
         <?php if ( $entry->post_id ) { ?>
         <div class="misc-pub-section">
             <span class="dashicons dashicons-admin-post wp-media-buttons-icon"></span>

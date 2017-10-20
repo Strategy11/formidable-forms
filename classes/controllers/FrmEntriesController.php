@@ -389,6 +389,7 @@ class FrmEntriesController {
 
 		$fields = FrmField::get_all_for_form( $entry->form_id, '', 'include' );
         $to_emails = array();
+		$form = FrmForm::getOne( $entry->form_id );
 
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/show.php' );
     }

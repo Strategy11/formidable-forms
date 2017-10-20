@@ -23,6 +23,10 @@ class FrmAppController {
         FrmAppHelper::load_font_style();
     }
 
+	public static function get_admin_header( $atts ) {
+		include( FrmAppHelper::plugin_path() . '/classes/views/shared/admin-header.php' );
+	}
+
 	public static function get_form_nav( $form, $show_nav = false, $title = 'show' ) {
 		$show_nav = FrmAppHelper::get_param( 'show_nav', $show_nav, 'get', 'absint' );
         if ( empty( $show_nav ) || ! $form ) {

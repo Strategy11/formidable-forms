@@ -1,4 +1,4 @@
-<div id="postbox-container-1" class="postbox-container">
+<div id="postbox-container-1" class="postbox-container frm-right-panel">
     <?php
 
     if ( ! isset($hide_preview) || ! $hide_preview ) {

@@ -95,7 +95,7 @@ class FrmFormsHelper {
         }
 
         ?>
-		<li class="dropdown last" id="frm_bs_dropdown">
+		<div id="frm_bs_dropdown" class="dropdown">
 			<a href="#" id="frm-navbarDrop" class="frm-dropdown-toggle" data-toggle="dropdown"><?php _e( 'Switch Form', 'formidable' ) ?> <b class="caret"></b></a>
 		    <ul class="frm-dropdown-menu frm-on-top" role="menu" aria-labelledby="frm-navbarDrop">
 			<?php
@@ -112,7 +112,7 @@ class FrmFormsHelper {
 				unset( $form );
 			} ?>
 			</ul>
-		</li>
+		</div>
         <?php
     }
 

@@ -10,6 +10,12 @@ if ( ! isset( $entry) ) {
 	printf( __( 'Published on: <b>%1$s</b>' ), FrmAppHelper::get_localized_date( $date_format, $entry->created_at ) ); ?>
     </span>
 </div>
+<?php if ( FrmAppHelper::get_param( 'frm_action' ) == 'show' ) { ?>
+<div class="misc-pub-section">
+	<span class="dashicons dashicons-format-aside wp-media-buttons-icon"></span>
+	<a href="#" onclick="window.print();return false;"><?php _e( 'Print', 'formidable' ) ?></a>
+</div>
+<?php } ?>
 <?php if ( $entry->updated_at && $entry->updated_at != $entry->created_at ) { ?>
 <div class="misc-pub-section curtime misc-pub-curtime">
     <span id="timestamp">

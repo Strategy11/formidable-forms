@@ -1355,35 +1355,27 @@ function frmAdminBuildJS(){
 	function submitBuild(){
 		/*jshint validthis:true */
 		var $thisEle = jQuery(this);
-		var p = $thisEle.val();
+		var p = $thisEle.html();
+
 		preFormSave(this);
 
 		var $form = jQuery(document.getElementById('frm_build_form'));
 		var v = JSON.stringify($form.serializeArray());
+
 		jQuery(document.getElementById('frm_compact_fields')).val(v);
 		jQuery.ajax({
 			type:'POST',url:ajaxurl,
 			data:{action:'frm_save_form','frm_compact_fields':v, nonce:frmGlobal.nonce},
 			success:function(msg){
-				$thisEle.val(frm_admin_js.saved);
-				$thisEle.prevAll('.spinner').css('visibility', 'hidden').fadeOut();
-				$thisEle.nextAll('.frm-loading-img').css('visibility', 'hidden');
+				afterFormSave( $thisEle, p );
 
-				var $postStuff = document.getElementById('poststuff');
+				var $postStuff = document.getElementById('frm_form_editor_container');
 				var $html = document.createElement('div');
 				$html.setAttribute('id', 'message');
 				$html.setAttribute('class', 'frm_message updated');
 				$html.style.padding = '5px';
 				$html.innerHTML = msg;
 				$postStuff.insertBefore($html, $postStuff.firstChild);
-				
-				setTimeout(function(){
-					jQuery('.frm_message').fadeOut('slow');
-					$thisEle.fadeOut('slow', function(){
-						$thisEle.val(p);
-						$thisEle.show();
-					});
-				}, 2000);
 			},
 			error:function(html){
 				jQuery(document.getElementById('frm_js_build_form')).submit();
@@ -1405,17 +1397,40 @@ function frmAdminBuildJS(){
 			jQuery('.inplace_save, .postbox').click();
 		}
 
-		if(jQuery(b).attr('id') === 'save-post'){
+		$button = jQuery(b);
+		if($button.attr('id') === 'save-post'){
 			jQuery('input[name="status"]').val('draft');
 		}else{
 			jQuery('input[name="status"]').val('published');
 		}
 
-		jQuery(b).val(frm_admin_js.saving);
-		jQuery(b).prevAll('.spinner').css('visibility', 'visible').fadeIn();
-		jQuery(b).nextAll('.frm-loading-img').css('visibility', 'visible');
+		if ( $button.hasClass('frm_button_submit') ) {
+			$button.addClass('frm_loading_form');
+			$button.html(frm_admin_js.saving);
+		} else {
+			$button.val(frm_admin_js.saving);
+		}
+
+		$button.prevAll('.spinner').css('visibility', 'visible').fadeIn();
+		$button.nextAll('.frm-loading-img').css('visibility', 'visible');
 	}
-	
+
+	function afterFormSave( $button, buttonVal ){
+		$button.removeClass('frm_loading_form');
+		$button.html(frm_admin_js.saved);
+
+		$button.prevAll('.spinner').css('visibility', 'hidden').fadeOut();
+		$button.nextAll('.frm-loading-img').css('visibility', 'hidden');
+
+		setTimeout(function(){
+			jQuery('.frm_message').fadeOut('slow');
+			$button.fadeOut('slow', function(){
+				$button.html(buttonVal);
+				$button.show();
+			});
+		}, 2000);
+	}
+
 	/* Form settings */
 	function showSuccessOpt(){
 		/*jshint validthis:true */

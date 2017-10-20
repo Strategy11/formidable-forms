@@ -1462,7 +1462,7 @@ msgid "Align Option Text"
 msgstr ""
 
 #: classes/views/frm-forms/form.php:10
-msgid "Form Key:"
+msgid "Form Key"
 msgstr ""
 
 #: classes/views/frm-forms/form.php:11

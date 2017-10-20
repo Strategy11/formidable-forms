@@ -4072,7 +4072,7 @@ msgstr ""
 "da biste dozvolili vašem korisniku da lako skroluje kroz opcije."
 
 #: classes/views/frm-forms/form.php:10
-msgid "Form Key:"
+msgid "Form Key"
 msgstr "Ključ forme :"
 
 #: classes/views/frm-forms/form.php:11

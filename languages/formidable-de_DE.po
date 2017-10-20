@@ -3862,7 +3862,7 @@ msgstr ""
 "Schreibe jeden Anfangsbuchstaben eines Wortes automatisch groß. (Kapitälchen)"
 
 #: classes/views/frm-forms/form.php:10
-msgid "Form Key:"
+msgid "Form Key"
 msgstr "Formular Schlüssel:"
 
 #: classes/views/frm-forms/form.php:11

@@ -3837,7 +3837,7 @@ msgstr ""
 "Imposta automaticamente la maiuscola per la la prima lettera di ogni parola."
 
 #: classes/views/frm-forms/form.php:10
-msgid "Form Key:"
+msgid "Form Key"
 msgstr "Chiave Modulo:"
 
 #: classes/views/frm-forms/form.php:11
