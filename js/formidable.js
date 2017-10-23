@@ -2994,6 +2994,7 @@ function frmFrontFormJS(){
 
 		var count = 0;
 		var sep = '';
+		var customSep = '';
 
 		calcField.each(function(){
 			var thisVal = getOptionValue( field.thisField, this );
@@ -3009,6 +3010,11 @@ function frmFrontFormJS(){
 				} else {
 					sep = ', ';
 				}
+			}
+
+			customSep = jQuery(document).triggerHandler( 'frmCalSeparation', [  field.thisField, count ] );
+			if ( typeof customSep !== 'undefined' ) {
+				sep = customSep;
 			}
 
 			if ( thisVal !== '' ) {
