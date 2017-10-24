@@ -9,6 +9,7 @@ foreach ( $nav_items as $nav_item ) {
 	}
 }
 
+FrmFormsHelper::form_switcher();
 ?>
 </ul>
 

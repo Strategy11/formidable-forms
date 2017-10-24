@@ -5,7 +5,7 @@
         <div id="post-body" class="metabox-holder columns-2">
         <div id="post-body-content">
 			<?php
-				FrmAppController::get_admin_header( array(
+				FrmAppHelper::get_admin_header( array(
 					'label'     => __( 'View Entry', 'formidable' ),
 					'link_hook' => array( 'hook' => 'frm_entry_inside_h2', 'param' => $form ),
 					'form'      => $form,

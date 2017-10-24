@@ -31,6 +31,27 @@ function frmAdminBuildJS(){
 		}
 	}
 
+	function confirmClick( e ) {
+		/*jshint validthis:true */
+		var $link = jQuery(this);
+		if ( $link.hasClass('frm_confirming') ) {
+			return true;
+		} else {
+			e.preventDefault();
+			$link.addClass('frm_confirming');
+
+			var $label = $link.find('.frm_link_label');
+			var message = $link.data('frmverify');
+			var oldLabel = $label.html();
+			$label.html(message);
+
+			setTimeout( function(){
+				$link.removeClass('frm_confirming');
+				$label.html(oldLabel);
+			}, 5000 );
+			return false;
+		}
+	}
 
 	function removeThisTag(){
 		/*jshint validthis:true */
@@ -2481,6 +2502,8 @@ function frmAdminBuildJS(){
 				jQuery(this).tooltip('show');
 			});
 			jQuery('.frm_bstooltip').tooltip();
+
+			jQuery(document).on('click', 'a[data-frmverify]', confirmClick);
 
             jQuery(document.getElementById('wpbody')).on('click', '.frm_remove_tag, .frm_remove_form_action', removeThisTag);
 

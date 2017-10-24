@@ -95,7 +95,7 @@ class FrmFormsHelper {
         }
 
         ?>
-		<div id="frm_bs_dropdown" class="dropdown">
+		<li id="frm_bs_dropdown" class="dropdown">
 			<a href="#" id="frm-navbarDrop" class="frm-dropdown-toggle" data-toggle="dropdown"><?php _e( 'Switch Form', 'formidable' ) ?> <b class="caret"></b></a>
 		    <ul class="frm-dropdown-menu frm-on-top" role="menu" aria-labelledby="frm-navbarDrop">
 			<?php
@@ -112,7 +112,7 @@ class FrmFormsHelper {
 				unset( $form );
 			} ?>
 			</ul>
-		</div>
+		</li>
         <?php
     }
 
@@ -579,6 +579,56 @@ BEFORE_HTML;
         ?><script type="text/javascript">document.addEventListener('DOMContentLoaded',function(){frmFrontForm.scrollMsg(<?php echo (int) $form_id ?>);})</script><?php
     }
 
+	/**
+	 * @since 3.0
+	 */
+	public static function actions_dropdown( $status ) {
+		if ( FrmAppHelper::is_admin_page('formidable' ) ) {
+			$form_id = FrmAppHelper::get_param( 'id', 0, 'get', 'absint' );
+			$trash_link = self::delete_trash_info( $form_id, $status );
+			$links = self::get_action_links( $form_id, $status );
+			include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/actions-dropdown.php' );
+		}
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	public static function get_action_links( $form_id, $form ) {
+		if ( ! is_object( $form ) ) {
+			$form = FrmForm::getOne( $form_id );
+		}
+
+		$actions = array();
+		$trash_links = self::delete_trash_links( $form_id );
+		if ( 'trash' == $form->status ) {
+			$actions['restore'] = $trash_links['restore'];
+
+			if ( current_user_can('frm_delete_forms') ) {
+				$actions['trash'] = $trash_links['delete'];
+			}
+		} else {
+			$duplicate_link = '?page=formidable&frm_action=duplicate&id=' . $form_id;
+			if ( $form->is_template ) {
+				$actions['frm_duplicate'] = array(
+					'url'   => wp_nonce_url( $duplicate_link ),
+					'label' => __( 'Create Form from Template', 'formidable' ),
+					'icon'  => 'frm_icon_font frm_duplicate_icon',
+				);
+			} elseif ( FrmAppHelper::pro_is_installed() ) {
+				$actions['duplicate'] = array(
+					'url'   => wp_nonce_url( $duplicate_link ),
+					'label' => __( 'Duplicate', 'formidable' ),
+					'icon'  => 'frm_icon_font frm_duplicate_icon',
+				);
+			}
+
+			$actions['trash'] = self::delete_trash_info( $form_id, $form->status );
+		}
+
+		return $actions;
+	}
+
 	public static function edit_form_link( $form_id ) {
         if ( is_object($form_id) ) {
             $form = $form_id;
@@ -597,37 +647,79 @@ BEFORE_HTML;
 	    return $val;
 	}
 
-	public static function delete_trash_link( $id, $status, $length = 'long' ) {
-        $link = '';
-        $labels = array(
-            'restore' => array(
-                'long'  => __( 'Restore from Trash', 'formidable' ),
-                'short' => __( 'Restore', 'formidable' ),
-            ),
-            'trash' => array(
-                'long'  => __( 'Move to Trash', 'formidable' ),
-                'short' => __( 'Trash', 'formidable' ),
-            ),
-            'delete' => array(
-                'long'  => __( 'Delete Permanently', 'formidable' ),
-                'short' => __( 'Delete', 'formidable' ),
-            ),
-        );
+	public static function delete_trash_link( $id, $status, $length = 'label' ) {
+		$link_details = self::delete_trash_info( $id, $status );
 
-        $current_page = isset( $_REQUEST['form_type'] ) ? $_REQUEST['form_type'] : '';
+		return self::format_link_html( $link_details, $length );
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	public static function format_link_html( $link_details, $length = 'label' ) {
+		$link = '';
+		if ( ! empty( $link_details ) ) {
+			$link = '<a href="' . esc_url( $link_details['url'] ) . '" class="submitdelete deletion"';
+			if ( isset( $link_details['confirm'] ) ) {
+				$link .= ' onclick="return confirm(\'' . esc_attr( $link_details['confirm'] ) . '\')"';
+			}
+			$label = ( isset( $link_details[ $length ] ) ? $link_details[ $length ] : $link_details['label'] );
+			$link .= '>' . $label . '</a>';
+		}
+		return $link;
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	public static function delete_trash_info( $id, $status ) {
+		$labels = self::delete_trash_links( $id );
+
+		if ( 'trash' == $status ) {
+			$info = $labels['restore'];
+		} elseif ( current_user_can('frm_delete_forms') ) {
+			if ( EMPTY_TRASH_DAYS ) {
+				$info = $labels['trash'];
+			} else {
+				$info = $labels['delete'];
+			}
+		} else {
+			$info = array();
+		}
+
+		return $info;
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	private static function delete_trash_links( $id ) {
+		$current_page = isset( $_REQUEST['form_type'] ) ? sanitize_text_field( $_REQUEST['form_type'] ) : '';
 		$base_url = '?page=formidable&form_type=' . $current_page . '&id=' . $id;
-        if ( 'trash' == $status ) {
-			$link = '<a href="' . esc_url( wp_nonce_url( $base_url . '&frm_action=untrash', 'untrash_form_' . $id ) ) . '" class="submitdelete deletion">' . $labels['restore'][ $length ] . '</a>';
-        } else if ( current_user_can('frm_delete_forms') ) {
-            if ( EMPTY_TRASH_DAYS ) {
-				$link = '<a href="' . esc_url( wp_nonce_url( $base_url . '&frm_action=trash', 'trash_form_' . $id ) ) . '" class="submitdelete deletion">' . $labels['trash'][ $length ] . '</a>';
-            } else {
-				$link = '<a href="' . esc_url( wp_nonce_url( $base_url . '&frm_action=destroy', 'destroy_form_' . $id ) ) . '" class="submitdelete deletion" onclick="return confirm(\'' . esc_attr( __( 'Are you sure you want to delete this form and all its entries?', 'formidable' ) ) . '\')">' . $labels['delete'][ $length ] . '</a>';
-            }
-        }
 
-        return $link;
-    }
+		return array(
+			'restore' => array(
+				'label' => __( 'Restore from Trash', 'formidable' ),
+				'short' => __( 'Restore', 'formidable' ),
+				'url'   => wp_nonce_url( $base_url . '&frm_action=untrash', 'untrash_form_' . $id ),
+			),
+			'trash' => array(
+				'label' => __( 'Move to Trash', 'formidable' ),
+				'short' => __( 'Trash', 'formidable' ),
+				'url'   => wp_nonce_url( $base_url . '&frm_action=trash', 'trash_form_' . $id ),
+				'icon'  => 'frm_icon_font frm_delete_icon',
+				'data'  => array( 'frmverify' => __( 'Are you sure?', 'formidable' ) ),
+			),
+			'delete' => array(
+				'label' => __( 'Delete Permanently', 'formidable' ),
+				'short' => __( 'Delete', 'formidable' ),
+				'url'   => wp_nonce_url( $base_url . '&frm_action=destroy', 'destroy_form_' . $id ),
+				'confirm' => __( 'Are you sure you want to delete this form and all its entries?', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_delete_icon',
+				'data'  => array( 'frmverify' => __( 'Delete form & entries?', 'formidable' ) ),
+			),
+		);
+	}
 
 	public static function status_nice_name( $status ) {
         $nice_names = array(

@@ -103,6 +103,21 @@ class FrmAppHelper {
         return apply_filters('frm_pro_installed', false);
     }
 
+	public static function is_formidable_admin() {
+		$page = self::simple_get( 'page', 'sanitize_title' );
+		$is_formidable = strpos( $page, 'formidable' ) !== false;
+		if ( empty( $page ) ) {
+			global $pagenow;
+			$post_type = self::simple_get( 'post_type', 'sanitize_title' );
+			$is_formidable = ( $post_type == 'frm_display' );
+			if ( empty( $post_type ) && $pagenow == 'post.php' ) {
+				global $post;
+				$is_formidable = ( $post && $post->post_type == 'frm_display' );
+			}
+		}
+		return $is_formidable;
+	}
+
     /**
      * Check for certain page in Formidable settings
      *
@@ -404,6 +419,25 @@ class FrmAppHelper {
 
         return $value;
     }
+
+	/**
+	 * @since 3.0
+	 */
+	public static function get_admin_header( $atts ) {
+		$has_nav = ( isset( $atts['form'] ) && ! empty( $atts['form'] ) && ( ! isset( $atts['is_template'] ) || ! $atts['is_template'] ) );
+		include( self::plugin_path() . '/classes/views/shared/admin-header.php' );
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	public static function add_new_item_link( $atts ) {
+		if ( isset( $atts['new_link'] ) && ! empty( $atts['new_link'] ) ) { ?>
+			<a href="<?php echo esc_url( $atts['new_link'] ) ?>" class="add-new-h2 frm_animate_bg"><?php _e( 'Add New', 'formidable' ); ?></a>
+		<?php } elseif ( isset( $atts['link_hook'] ) ) {
+			do_action( $atts['link_hook']['hook'], $atts['link_hook']['param'] );
+		}
+	}
 
     /**
      * @param string $type

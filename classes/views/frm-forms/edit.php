@@ -5,7 +5,7 @@
     <div id="post-body-content">
 
 	<?php
-	FrmAppController::get_admin_header( array(
+	FrmAppHelper::get_admin_header( array(
 		'label'       => ( $form->is_template ? __( 'Templates', 'formidable' ) : __( 'Build Form', 'formidable' ) ),
 		'is_template' => $values['is_template'],
 		'form'        => $form,

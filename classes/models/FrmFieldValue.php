@@ -174,11 +174,12 @@ class FrmFieldValue {
 				'meta_value' => $this->saved_value,
 				'field_type' => $this->field->type,
 			);
-			$this->displayed_value = apply_filters( 'frm_email_value', $this->displayed_value, (object) $meta, $entry, array(
-				'field' => $this->field,
-			) );
+
 			if ( has_filter( 'frm_email_value' ) ) {
 				_deprecated_function( 'The frm_email_value filter', '2.04', 'the frm_display_{fieldtype}_value_custom filter' );
+				$this->displayed_value = apply_filters( 'frm_email_value', $this->displayed_value, (object) $meta, $entry, array(
+					'field' => $this->field,
+				) );
 			}
 		}
 

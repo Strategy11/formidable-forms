@@ -5,7 +5,7 @@
     <div id="post-body-content">
 
 	<?php
-	FrmAppController::get_admin_header( array(
+	FrmAppHelper::get_admin_header( array(
 		'label' => __( 'Settings', 'formidable' ),
 		'form'  => $form,
 	) );

@@ -843,7 +843,7 @@ class FrmFormsController {
         }
 
         if ( isset( $message ) && ! empty( $message ) ) {
-			echo '<div id="message" class="updated frm_msg_padding">' . FrmAppHelper::kses( $message, array( 'a' ) ) . '</div>';
+			echo '<div id="message" class="updated frm_updated_message">' . FrmAppHelper::kses( $message, array( 'a' ) ) . '</div>';
         }
 
         return $errors;

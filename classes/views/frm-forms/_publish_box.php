@@ -53,9 +53,9 @@
     </div><!-- #minor-publishing -->
 */ ?>
     <div id="major-publishing-actions">
-        <div id="delete-action">
-            <?php echo FrmFormsHelper::delete_trash_link($id, $values['status']); ?>
-        </div>
+		<div class="alignleft">
+			<?php FrmFormsHelper::actions_dropdown( $values['status'] ) ?>
+		</div>
 
 		<div id="publishing-action">
 			<?php if ( 'draft' == $values['status'] ) { ?>

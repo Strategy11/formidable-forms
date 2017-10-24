@@ -1,6 +1,6 @@
 <div id="form_entries_page" class="frm_wrap frm_list_entry_page">
 	<?php
-	FrmAppController::get_admin_header( array(
+	FrmAppHelper::get_admin_header( array(
 		'label' => __( 'Entries', 'formidable' ),
 		'link_hook' => array( 'hook' => 'frm_entry_inside_h2', 'param' => $form ),
 		'form' => $form,
