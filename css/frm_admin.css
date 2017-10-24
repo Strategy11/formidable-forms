@@ -1473,6 +1473,46 @@ select.frm_cancelnew, input.frm_enternew{width:175px;}
     overflow:auto;
 	box-shadow:none;
 }
+#frm_notification_settings .widget-top .widget-action,
+#frm_form_editor_container .widget-top .widget-action {
+	border: 0;
+	margin: 0;
+	padding: 10px;
+	background: 0 0;
+	cursor: pointer;
+	outline: 0;
+}
+
+#frm_notification_settings .widget-top .widget-action .toggle-indicator:before,
+#frm_form_editor_container .widget-top .widget-action .toggle-indicator:before {
+	padding: 1px 2px 1px 0;
+	-webkit-border-radius: 50%;
+	border-radius: 50%;
+}
+
+#frm_notification_settings .widget-top .widget-action:focus .toggle-indicator:before,
+#frm_form_editor_container .widget-top .widget-action:focus .toggle-indicator:before {
+	color: #124964;
+	-webkit-box-shadow: 0 0 0 1px #5b9dd9, 0 0 2px 1px rgba(30, 140, 190, .8);
+	box-shadow: 0 0 0 1px #5b9dd9, 0 0 2px 1px rgba(30, 140, 190, .8);
+}
+
+.frm_form_action_settings .widget-top .toggle-indicator:before,
+#frm_form_editor_container .widget-top .toggle-indicator:before {
+	font: 400 20px/1 dashicons;
+	content: "\f140" !important;
+}
+
+.frm_form_action_settings.widget.open .widget-top .toggle-indicator:before,
+#frm_form_editor_container .widget.open .widget-top .toggle-indicator:before {
+	font: 400 20px/1 dashicons;
+	content: "\f142" !important;
+}
+
+.ab-icon.frm_dashicon_font:before{
+	vertical-align: middle;
+}
+
 .frm_email_settings .widget .widget-top, .frm_email_settings .widget .widget-top h3{
     cursor:pointer;
 }
@@ -1547,6 +1587,10 @@ label.frm_action_events{
 }
 .frm_email_icons, .frm_actions_list{
     padding: 10px 0 10px 15px;
+}
+.frm_email_icon:before {
+	vertical-align: text-top;
+	margin-right: 5px;
 }
 .frm_actions_list a.frm_inactive_action:before{
 	color:#d6d6d6;

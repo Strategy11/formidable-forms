@@ -383,6 +383,8 @@ class FrmAppHelper {
 			$allowed_html[ $a ] = isset( $html[ $a ] ) ? $html[ $a ] : array();
 		}
 
+		$allowed_html = apply_filters( 'frm_striphtml_allowed_tags', $allowed_html );
+
 		return wp_kses( $value, $allowed_html );
 	}
 
