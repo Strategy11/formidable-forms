@@ -23,10 +23,6 @@ class FrmAppController {
         FrmAppHelper::load_font_style();
     }
 
-	public static function get_admin_header( $atts ) {
-		include( FrmAppHelper::plugin_path() . '/classes/views/shared/admin-header.php' );
-	}
-
 	public static function get_form_nav( $form, $show_nav = false, $title = 'show' ) {
 		$show_nav = FrmAppHelper::get_param( 'show_nav', $show_nav, 'get', 'absint' );
         if ( empty( $show_nav ) || ! $form ) {
@@ -407,6 +403,20 @@ class FrmAppController {
         delete_site_option( 'frmpro-authorized' );
         wp_die();
     }
+
+	public static function set_footer_text( $text ) {
+		if ( FrmAppHelper::is_formidable_admin() ) {
+			$text = sprintf(
+				__( 'Help us spread the %1$sFormidable Forms%2$s love with a %3$s5-star review on WordPress.org%4$s. Thank you heaps!', 'formidable' ),
+				'<a href="https://formidableforms.com" target="_blank">',
+				'</a>',
+				'<a href="https://wordpress.org/support/plugin/formidable/reviews/#new-post" target="_blank">',
+				'</a>'
+			);
+			$text = '<span id="footer-thankyou">' . $text . '</span>';
+		}
+		return $text;
+	}
 
     public static function get_form_shortcode( $atts ) {
         _deprecated_function( __FUNCTION__, '1.07.05', 'FrmFormsController::get_form_shortcode()' );
