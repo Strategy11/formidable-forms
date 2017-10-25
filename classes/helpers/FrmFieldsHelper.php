@@ -987,7 +987,11 @@ class FrmFieldsHelper {
 		// Set up HTML ID for Other field
 		$other_id = self::get_other_field_html_id( $args['field']['type'], $args['html_id'], $args['opt_key'] );
 
-		?><input type="text" id="<?php echo esc_attr( $other_id ) ?>" class="<?php echo sanitize_text_field( implode( ' ', $classes ) ) ?>" <?php
+		$label = isset( $args['opt_label'] ) ? $args['opt_label'] : $args['field']['name'];
+
+		?><label for="<?php echo esc_attr( $other_id ) ?>" class="frm_hidden"><?php
+		echo esc_html( $label );
+		?></label><input type="text" id="<?php echo esc_attr( $other_id ) ?>" class="<?php echo sanitize_text_field( implode( ' ', $classes ) ) ?>" <?php
 		echo ( $args['read_only'] ? ' readonly="readonly" disabled="disabled"' : '' );
 		?> name="<?php echo esc_attr( $args['name'] ) ?>" value="<?php echo esc_attr( $args['value'] ); ?>" /><?php
 	}

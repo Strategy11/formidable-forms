@@ -48,6 +48,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' ) 
 				'checked' => $checked, 'name' => $other_args['name'],
 				'value' => $other_args['value'], 'field' => $field,
 				'html_id' => $html_id, 'opt_key' => $opt_key,
+				'opt_label' => $opt,
 			) );
 
 			unset( $other_opt, $other_args, $checked );

@@ -22,7 +22,7 @@ abstract class FrmFieldType {
 	 * @var bool
 	 * @since 3.0
 	 */
-	protected $has_for_label = false;
+	protected $has_for_label = true;
 
 	/**
 	 * Does the field include a input box to type into?

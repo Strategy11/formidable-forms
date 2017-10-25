@@ -12,6 +12,12 @@ class FrmFieldCaptcha extends FrmFieldType {
 	protected $type = 'captcha';
 
 	/**
+	 * @var bool
+	 * @since 3.0
+	 */
+	protected $has_for_label = false;
+
+	/**
 	 * @return string
 	 */
 	protected function include_form_builder_file() {

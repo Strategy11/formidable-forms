@@ -24,6 +24,8 @@ $defaults = FrmStylesHelper::get_settings_for_output( $default_style );
     display:none;
 }
 
+.with_frm_style .frm_radio label.frm_hidden,
+.with_frm_style .frm_checkbox label.frm_hidden,
 form input.frm_verify{
 	display:none !important;
 }
