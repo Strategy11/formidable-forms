@@ -196,7 +196,7 @@ The field and form names and descriptions are all changed with in-place edit. Ju
 * Enhancement: Add frm_main_feedback hook to messages shown after draft and edit.
 * Enhancement: Display zip code on the same line with city and state when an address is displayed.
 * Enhancement: Improve searching Dynamic field values on Entries tab
-* Fix: Improve compatibiliy with page builders and membership plugins. Don't run the_content filter on the View content. Instead, filter the content by calling those functions directly.
+* Fix: Improve compatibility with page builders and membership plugins. Don't run the_content filter on the View content. Instead, filter the content by calling those functions directly.
 * Fix: Delete temporary files after no less than 3 hours, regardless of time zone.
 * Fix: Append the media meta_query rather than replacing it. This resolves a conflict with files in WooCommerce.
 * Fix: Trim logic and actual value in conditional logic comparison.
@@ -2023,7 +2023,7 @@ The field and form names and descriptions are all changed with in-place edit. Ju
 
 = 1.06 =
 * User Interface improvements to form builder
-* Increased security, spped, and optimization
+* Increased security, speed, and optimization
 * Moved the "automatic width" check box for drop-down select fields to free form builder plugin
 * Moved email "From/Reply to" options to free WordPress form builder plugin
 * Fixed form preview page for form templates
