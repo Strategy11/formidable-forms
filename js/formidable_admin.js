@@ -58,6 +58,30 @@ function frmAdminBuildJS(){
 		}
 	}
 
+	function setMenuOffset(){
+		var offset = 455;
+		var fields = jQuery(document.getElementById('frm_adv_info'));
+		if (fields.length === 0){
+			return;
+		}
+
+		var currentOffset = document.documentElement.scrollTop || document.body.scrollTop; // body for Safari
+		if(currentOffset === 0){
+			fields.removeAttr('style');
+			return;
+		}
+		var posEle = jQuery(document.getElementById('frm_position_ele'));
+		if(posEle.length>0){
+			var eleOffset = posEle.offset();
+			offset = eleOffset.top;
+		}
+
+		var desiredOffset = offset + 2 - currentOffset;
+		if (desiredOffset < 35) desiredOffset = 35;
+		//if (desiredOffset != parseInt(header.style.top))
+			fields.attr('style', 'top:'+desiredOffset + 'px;');
+	}
+
 	function removeThisTag(){
 		/*jshint validthis:true */
 		var deleteButton = jQuery(this);
@@ -2518,14 +2542,14 @@ function frmAdminBuildJS(){
 			if($shortCodeDiv.length > 0){
 				jQuery('a.edit-frm_shortcode').click(function() {
 					if ($shortCodeDiv.is(':hidden')) {
-						$shortCodeDiv.slideDown('fast');
+						$shortCodeDiv.slideDown('fast', function(){setMenuOffset();});
 						this.style.display = 'none';
 					}
 					return false;
 				});
 
 				jQuery('.cancel-frm_shortcode', '#frm_shortcodediv').click(function() {
-					$shortCodeDiv.slideUp('fast');
+					$shortCodeDiv.slideUp('fast', function(){setMenuOffset();});
 					$shortCodeDiv.siblings('a.edit-frm_shortcode').show();
 					return false;
 				});
@@ -2821,10 +2845,20 @@ function frmAdminBuildJS(){
 		},
 
 		viewInit: function(){
+			var $advInfo = jQuery(document.getElementById('frm_adv_info'));
+			$advInfo.before('<div id="frm_position_ele"></div>');
+			window.onscroll = document.documentElement.onscroll = setMenuOffset;
+			setMenuOffset();
+
 			// add form nav
 			var $navCont = document.getElementById('frm_nav_container');
 			if ( $navCont !== null ) {
-				var $titleDiv = document.getElementById('titlediv');
+				var $titleDiv = document.getElementsByClassName('wp-header-end')[0];
+				if ( $titleDiv === null ) {
+					$titleDiv = document.getElementById('titlediv');
+				} else {
+					$titleDiv = $titleDiv.parentNode;
+				}
 				$titleDiv.insertBefore($navCont, $titleDiv.firstChild);
 				$navCont.style.display = 'block';
 			}
