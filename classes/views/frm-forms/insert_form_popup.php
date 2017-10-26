@@ -37,7 +37,7 @@
                 <input type="text" value="" id="frm_complete_shortcode" />
             </div>
             <div class="media-toolbar-primary search-form">
-                <a href="javascript:void(0);" class="button-primary button button-large media-button-group" id="frm_insert_shortcode"><?php _e( 'Insert into Post', 'formidable' ) ?></a>
+                <a href="javascript:void(0);" class="button-primary button media-button-group" id="frm_insert_shortcode"><?php _e( 'Insert into Post', 'formidable' ) ?></a>
             </div>
             </div>
         </div>

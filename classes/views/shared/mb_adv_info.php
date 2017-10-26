@@ -1,6 +1,8 @@
 <div id="taxonomy-linkcategory" class="categorydiv <?php echo $class ?>">
 	<ul id="category-tabs" class="category-tabs frm-category-tabs">
-		<li class="tabs" ><a href="#frm-insert-fields-box" id="frm_insert_fields_tab"><?php _e( 'Insert Fields', 'formidable' ); ?></a></li>
+		<li class="tabs">
+			<a href="#frm-insert-fields-box" id="frm_insert_fields_tab"><?php _e( 'Fields', 'formidable' ); ?></a>
+		</li>
 		<?php if ( ! empty( $cond_shortcodes ) ) { ?>
 		<li class="hide-if-no-js"><a href="#frm-conditionals"><?php _e( 'Conditionals', 'formidable' ); ?></a></li>
 		<?php } ?>

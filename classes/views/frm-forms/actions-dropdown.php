@@ -1,5 +1,5 @@
-<div id="frm_actions_dropdown" class="dropdown">
-	<a href="#" id="frm-navbarDrop" class="frm-dropdown-toggle" data-toggle="dropdown"><span class="dashicons dashicons-arrow-down-alt2"></span></a>
+<div class="frm_actions_dropdown dropdown">
+	<a href="#" id="frm-navbarDrop" class="frm-dropdown-toggle frm-dots" data-toggle="dropdown" title="<?php esc_attr_e( 'Show options', 'formidable' ) ?>">&middot; &middot; &middot;</a>
 	<ul class="frm-dropdown-menu frm-on-top" role="menu" aria-labelledby="frm-navbarDrop">
 		<?php foreach ( $links as $link ) { ?>
 		<li>

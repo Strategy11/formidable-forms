@@ -283,7 +283,9 @@
 </div>
 
 <p>
-	<input type="submit" value="<?php esc_attr_e( 'Update', 'formidable' ) ?>" class="button-primary" />
+	<button class="button-primary frm_button_submit" type="submit" >
+		<?php esc_html_e( 'Update', 'formidable' ); ?>
+	</button>
 </p>
 </form>
 

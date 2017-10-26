@@ -582,9 +582,10 @@ BEFORE_HTML;
 	/**
 	 * @since 3.0
 	 */
-	public static function actions_dropdown( $status ) {
+	public static function actions_dropdown( $atts ) {
 		if ( FrmAppHelper::is_admin_page('formidable' ) ) {
-			$form_id = FrmAppHelper::get_param( 'id', 0, 'get', 'absint' );
+			$status = $atts['status'];
+			$form_id = isset( $atts['id'] ) ? $atts['id'] : FrmAppHelper::get_param( 'id', 0, 'get', 'absint' );
 			$trash_link = self::delete_trash_info( $form_id, $status );
 			$links = self::get_action_links( $form_id, $status );
 			include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/actions-dropdown.php' );
@@ -659,8 +660,12 @@ BEFORE_HTML;
 	public static function format_link_html( $link_details, $length = 'label' ) {
 		$link = '';
 		if ( ! empty( $link_details ) ) {
-			$link = '<a href="' . esc_url( $link_details['url'] ) . '" class="submitdelete deletion"';
-			if ( isset( $link_details['confirm'] ) ) {
+			$link = '<a href="' . esc_url( $link_details['url'] ) . '"';
+			if ( isset( $link_details['data'] ) ) {
+				foreach ( $link_details['data'] as $data => $value ) {
+					$link .= ' data-' . esc_attr( $data ) . '="' . esc_attr( $value ) . '"';
+				}
+			} elseif ( isset( $link_details['confirm'] ) ) {
 				$link .= ' onclick="return confirm(\'' . esc_attr( $link_details['confirm'] ) . '\')"';
 			}
 			$label = ( isset( $link_details[ $length ] ) ? $link_details[ $length ] : $link_details['label'] );

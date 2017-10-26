@@ -1,5 +1,6 @@
 <div id="postbox-container-1" class="postbox-container frm-right-panel">
-
+<div class="frm-fixed-panel">
+	<div class="frm-ltr">
 <?php
 $action = isset( $_REQUEST['frm_action'] ) ? 'frm_action' : 'action';
 $action = FrmAppHelper::get_param( $action, '', 'get', 'sanitize_title' );
@@ -20,22 +21,22 @@ include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/_publish_box.ph
     	<div id="frm-insert-fields" class="tabs-panel">
 		    <ul class="field_type_list">
 <?php
-$col_class = 'frm_col_one';
 foreach ( $frm_field_selection as $field_key => $field_type ) { ?>
-				<li class="frmbutton <?php echo esc_attr( $col_class . ' frm_t' . $field_key ) ?>" id="<?php echo esc_attr( $field_key ) ?>">
-					<a href="#" class="frm_add_field frm_animate_bg"><span class="dashicons dashicons-editor-paragraph"></span> <?php echo esc_html( $field_type ) ?></a>
+				<li class="frmbutton <?php echo esc_attr( ' frm_t' . $field_key ) ?>" id="<?php echo esc_attr( $field_key ) ?>">
+					<a href="#" class="frm_add_field frm_animate_bg">
+						<i class="dashicons dashicons-editor-paragraph frm_animate_bg"></i>
+						<span><?php echo esc_html( $field_type ) ?></span>
+					</a>
 				</li>
 <?php
-	$col_class = empty( $col_class ) ? 'frm_col_one' : '';
 	unset( $field_key, $field_type );
 } ?>
             </ul>
             <div class="clear"></div>
-            <hr/>
-			<ul <?php echo apply_filters( 'frm_drag_field_class', '' ) ?> style="margin-top:2px;">
-				<li><?php FrmTipsHelper::pro_tip( 'get_builder_tip' ); ?></li>
+			<?php FrmTipsHelper::pro_tip( 'get_builder_tip' ); ?>
+			<ul class="field_type_list">
 <?php
-$col_class = 'frm_col_one';
+
 $no_allow_class = apply_filters( 'frm_noallow_class', 'frm_noallow' );
 foreach ( FrmField::pro_field_selection() as $field_key => $field_type ) {
 
@@ -47,8 +48,11 @@ foreach ( FrmField::pro_field_selection() as $field_key => $field_type ) {
 		}
 
 ?>
-				<li class="frmbutton <?php echo esc_attr( $col_class . ' ' . $no_allow_class . ' frm_t' . $field_key ) ?> dropdown" id="<?php echo esc_attr( $field_key ) ?>">
-	                <a href="#" id="frm-<?php echo esc_attr( $field_key ) ?>Drop" class="frm-dropdown-toggle" data-toggle="dropdown"><?php echo esc_html( $field_label ) ?> <b class="caret"></b></a>
+				<li class="frmbutton <?php echo esc_attr( $no_allow_class . ' frm_t' . $field_key ) ?> dropdown" id="<?php echo esc_attr( $field_key ) ?>">
+	                <a href="#" id="frm-<?php echo esc_attr( $field_key ) ?>Drop" class="frm-dropdown-toggle" data-toggle="dropdown">
+						<i class="dashicons dashicons-editor-paragraph frm_animate_bg"></i>
+						<span><?php echo esc_html( $field_label ) ?> <b class="caret"></b></span>
+					</a>
 
                     <ul class="frm-dropdown-menu" role="menu" aria-labelledby="frm-<?php echo esc_attr( $field_key ) ?>Drop">
                 	<?php
@@ -63,15 +67,14 @@ foreach ( FrmField::pro_field_selection() as $field_key => $field_type ) {
                 </li>
 <?php
                 } else {
-                    $field_label = $field_type;
+                    $field_label = '<i class="dashicons dashicons-editor-paragraph frm_animate_bg"></i> <span>' . $field_type .'</span>';
                     ?>
-					<li class="frmbutton <?php echo esc_attr( $col_class . ' ' . $no_allow_class . ' frm_t' . $field_key ) ?>" id="<?php echo esc_attr( $field_key ) ?>">
+					<li class="frmbutton <?php echo esc_attr( $no_allow_class . ' frm_t' . $field_key ) ?>" id="<?php echo esc_attr( $field_key ) ?>">
 						<?php echo apply_filters( 'frmpro_field_links', $field_label, $id, $field_key ) ?>
 					</li>
                     <?php
                 }
 
-                $col_class = empty($col_class) ? 'frm_col_one' : '';
                 unset($field_key, $field_type, $field_label);
             } ?>
             </ul>
@@ -152,12 +155,14 @@ foreach ( $classes as $c => $d ) {
     	    </ul>
     	</div>
     </div>
-    </div>
+	</div>
 
 	<form method="post" id="frm_js_build_form">
 		<input type="hidden" id="frm_compact_fields" name="frm_compact_fields" value="" />
 		<button class="frm_submit_form frm_submit_<?php echo ( isset( $values['ajax_load'] ) && $values['ajax_load'] ) ? '': 'no_'; ?>ajax frm_hidden frm_button_submit" type="button" id="frm_submit_side" ><?php echo esc_html( $button ) ?></button>
 	</form>
 
-    </div>
+	</div>
+	</div>
+</div>
 </div>

@@ -54,18 +54,21 @@
 */ ?>
     <div id="major-publishing-actions">
 		<div class="alignleft">
-			<?php FrmFormsHelper::actions_dropdown( $values['status'] ) ?>
+			<?php FrmFormsHelper::actions_dropdown( $values ) ?>
 		</div>
 
 		<div id="publishing-action">
 			<?php if ( 'draft' == $values['status'] ) { ?>
-				<button class="frm_submit_form frm_submit_<?php echo ( isset( $values['ajax_load'] ) && $values['ajax_load'] ) ? '' : 'no_'; ?>ajax button-primary button-large frm_button_submit" type="button" id="save-post" ><?php esc_html_e( 'Save Draft', 'formidable' ); ?></button>
+				<button class="frm_submit_form frm_submit_<?php echo ( isset( $values['ajax_load'] ) && $values['ajax_load'] ) ? '' : 'no_'; ?>ajax button-primary frm_button_submit" type="button" id="save-post" ><?php esc_html_e( 'Save Draft', 'formidable' ); ?></button>
 			<?php } ?>
 			<?php if ( 'settings' == FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' ) ) { ?>
-				<span class="spinner"></span>
-				<input type="button" value="<?php esc_attr_e( 'Update', 'formidable' ); ?>" class="frm_submit_form frm_submit_settings_btn button-primary button-large" id="frm_submit_side_top" />
+				<button class="frm_submit_form frm_submit_settings_btn button-primary frm_button_submit" type="button" id="frm_submit_side_top" >
+					<?php esc_html_e( 'Update', 'formidable' ); ?>
+				</button>
             <?php } else { ?>
-				<button class="frm_submit_form frm_submit_<?php echo ( isset( $values['ajax_load'] ) && $values['ajax_load'] ) ? '' : 'no_'; ?>ajax button-primary button-large frm_button_submit" type="button" id="frm_submit_side_top" ><?php echo isset( $button ) ? esc_attr( $button ) : __( 'Update', 'formidable' ); ?></button>
+				<button class="frm_submit_form frm_submit_<?php echo ( isset( $values['ajax_load'] ) && $values['ajax_load'] ) ? '' : 'no_'; ?>ajax button-primary frm_button_submit" type="button" id="frm_submit_side_top" >
+					<?php echo isset( $button ) ? esc_attr( $button ) : __( 'Update', 'formidable' ); ?>
+				</button>
     	    <?php } ?>
             <div id="preview-action">
 				<?php if ( ! isset( $hide_preview ) || ! $hide_preview ) {
