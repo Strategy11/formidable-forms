@@ -41,8 +41,13 @@ function frmAdminBuildJS(){
 			$link.addClass('frm_confirming');
 
 			var $label = $link.find('.frm_link_label');
+			if ( $label.length < 1 ) {
+				$label = $link;
+			}
+
 			var message = $link.data('frmverify');
 			var oldLabel = $label.html();
+
 			$label.html(message);
 
 			setTimeout( function(){
@@ -214,7 +219,7 @@ function frmAdminBuildJS(){
 			axis:'y',
 			cursor:'move',
 			opacity:0.65,
-			cancel:'.widget,.frm_field_opts_list,input,textarea,select,.edit_field_type_end_divider,.frm_ipe_field_option,.frm_sortable_field_opts',
+			cancel:'.widget,.frm_field_opts_list,input,textarea,select,.edit_field_type_end_divider,.frm_ipe_field_option,.frm_sortable_field_opts,.frm_noallow',
 			accepts:'field_type_list',
 			revert:true,
 			forcePlaceholderSize:false,
