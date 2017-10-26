@@ -576,7 +576,7 @@ class FrmDb {
 		} else {
 			/**
 			 * Allow the $where to be prepared before we recieve it here.
-			 * This is a fallback for reverse compatability, but is not recommended
+			 * This is a fallback for reverse compatibility, but is not recommended
 			 */
 			_deprecated_argument( 'where', '2.0', __( 'Use the query in an array format so it can be properly prepared.', 'formidable' ) );
 			$query .= $where . ' ' . implode( ' ', $args );

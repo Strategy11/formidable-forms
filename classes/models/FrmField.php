@@ -10,13 +10,17 @@ class FrmField {
 
 	public static function field_selection() {
 		$fields = apply_filters('frm_available_fields', array(
-			'text'      => __( 'Single Line Text', 'formidable' ),
-			'textarea'  => __( 'Paragraph Text', 'formidable' ),
+			'text'      => __( 'Text', 'formidable' ),
+			'textarea'  => __( 'Paragraph', 'formidable' ),
 			'checkbox'  => __( 'Checkboxes', 'formidable' ),
-			'radio'     => __( 'Radio Buttons', 'formidable' ),
+			'radio'     => __( 'Radio Button', 'formidable' ),
 			'select'    => __( 'Dropdown', 'formidable' ),
-			'email'     => __( 'Email Address', 'formidable' ),
+			'email'     => __( 'Email', 'formidable' ),
 			'url'       => __( 'Website/URL', 'formidable' ),
+			'number'    => __( 'Number', 'formidable' ),
+			'html'      => __( 'HTML', 'formidable' ),
+			'hidden'    => __( 'Hidden Field', 'formidable' ),
+			'user_id'   => __( 'User ID', 'formidable' ),
 			'captcha'   => __( 'reCAPTCHA', 'formidable' ),
 		));
 
@@ -24,7 +28,7 @@ class FrmField {
 	}
 
 	public static function pro_field_selection() {
-		return apply_filters('frm_pro_available_fields', array(
+		return apply_filters( 'frm_pro_available_fields', array(
 			'end_divider' => array(
 				'name'  => __( 'End Section', 'formidable' ),
 				'switch_from' => 'divider',
@@ -33,19 +37,17 @@ class FrmField {
 			'break'     => __( 'Page Break', 'formidable' ),
 			'file'      => __( 'File Upload', 'formidable' ),
 			'rte'       => __( 'Rich Text', 'formidable' ),
-			'number'    => __( 'Number', 'formidable' ),
-			'phone'     => __( 'Phone Number', 'formidable' ),
+			'phone'     => __( 'Phone', 'formidable' ),
 			'date'      => __( 'Date', 'formidable' ),
 			'time'      => __( 'Time', 'formidable' ),
 			'image'     => __( 'Image URL', 'formidable' ),
 			'scale'     => __( 'Scale', 'formidable' ),
-			'data'      => __( 'Dynamic Field', 'formidable' ),
+			'range'     => __( 'Slider', 'formidable' ),
+			'toggle'    => __( 'Toggle', 'formidable' ),
+			'data'      => __( 'Dynamic', 'formidable' ),
 			'lookup'	=> __( 'Lookup', 'formidable' ),
 			'form'      => __( 'Embed Form', 'formidable' ),
-			'hidden'    => __( 'Hidden Field', 'formidable' ),
-			'user_id'   => __( 'User ID (hidden)', 'formidable' ),
 			'password'  => __( 'Password', 'formidable' ),
-			'html'      => __( 'HTML', 'formidable' ),
 			'tag'       => __( 'Tags', 'formidable' ),
 			'credit_card' => __( 'Credit Card', 'formidable' ),
 			'address'   => __( 'Address', 'formidable' ),
