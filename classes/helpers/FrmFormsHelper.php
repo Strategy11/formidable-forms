@@ -726,6 +726,86 @@ BEFORE_HTML;
 		);
 	}
 
+	/**
+	 * @since 3.0
+	 */
+	public static function css_classes() {
+		$classes = array(
+			'frm_first'      => array(
+				'label'      => __( 'First', 'formidable' ),
+				'title'      => __( 'Add this to the first field in each row along with a width. ie frm_first frm_third', 'formidable' ),
+			),
+			'frm_half'       => __( '1/2', 'formidable' ),
+			'frm_third'      => __( '1/3', 'formidable' ),
+			'frm_two_thirds' => __( '2/3', 'formidable' ),
+			'frm_fourth'     => __( '1/4', 'formidable' ),
+			'frm_three_fourths' => __( '3/4', 'formidable' ),
+			'frm_fifth'      => __( '1/5', 'formidable' ),
+			'frm_two_fifths' => __( '2/5', 'formidable' ),
+			'frm_sixth'      => __( '1/6', 'formidable' ),
+			'frm_seventh'    => __( '1/7', 'formidable' ),
+			'frm_eighth'     => __( '1/8', 'formidable' ),
+			'frm_alignright' => __( 'Right', 'formidable' ),
+			'frm_inline'     => array(
+				'label'      => __( 'Inline', 'formidable' ),
+				'title'      => __( 'Align fields in a row without a specific width.', 'formidable' ),
+			),
+
+			'frm_full'       => array(
+				'label'      => __( '100% width', 'formidable' ),
+				'title'      => __( 'Force the field to fill the full space with 100% width.', 'formidable' ),
+			),
+			'frm_grid_first' => __( 'First Grid Row', 'formidable' ),
+			'frm_grid'       => __( 'Even Grid Row', 'formidable' ),
+			'frm_grid_odd'   => __( 'Odd Grid Row', 'formidable' ),
+			'frm_two_col'    => array(
+				'label'      => __( '2 Col Options', 'formidable' ),
+				'title'      => __( 'Put your radio button or checkbox options into two columns.', 'formidable' ),
+			),
+			'frm_three_col'  => array(
+				'label'      => __( '3 Col Options', 'formidable' ),
+				'title'      => __( 'Put your radio button or checkbox options into three columns.', 'formidable' ),
+			),
+			'frm_four_col'   => array(
+				'label'      => __( '4 Col Options', 'formidable' ),
+				'title'      => __( 'Put your radio button or checkbox options into four columns.', 'formidable' ),
+			),
+			'frm_total'      => array(
+				'label'      => __( 'Total', 'formidable' ),
+				'title'      => __( 'Add this to a read-only field to display the text in bold without a border or background.', 'formidable' ),
+			),
+			'frm_scroll_box' => array(
+				'label'      => __( 'Scroll Box', 'formidable' ),
+				'title'      => __( 'If you have many checkbox or radio button options, you may add this class to allow your user to easily scroll through the options.', 'formidable' ),
+			),
+			'frm_text_block' => array(
+				'label'      => __( 'Align Option Text', 'formidable' ),
+				'title'      => __( 'If you have a large amount of text in a checkbox or radio button field, use this class to align all the text in a block.', 'formidable' ),
+			),
+			'frm_capitalize' => array(
+				'label'      => __( 'Capitalize', 'formidable' ),
+				'title'      => __( 'Automatically capitalize the first letter in each word.', 'formidable' ),
+			),
+		);
+
+		return apply_filters( 'frm_layout_classes', $classes );
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	public static function style_class_label( $style, $class ) {
+		$label = '';
+		if ( empty( $style ) ) {
+			$label = $class;
+		} elseif ( ! is_array( $style ) ) {
+			$label = $style;
+		} else if ( isset( $style['label'] ) ) {
+			$label = $style['label'];
+		}
+		return $label;
+	}
+
 	public static function status_nice_name( $status ) {
         $nice_names = array(
             'draft'     => __( 'Draft', 'formidable' ),
