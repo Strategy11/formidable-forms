@@ -1316,7 +1316,7 @@ class FrmAppHelper {
 	}
 
     /**
-     * Added for < WP 4.0 compatability
+     * Added for < WP 4.0 compatibility
      *
      * @since 1.07.10
      *

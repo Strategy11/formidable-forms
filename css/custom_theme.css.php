@@ -24,10 +24,22 @@ $defaults = FrmStylesHelper::get_settings_for_output( $default_style );
     display:none;
 }
 
-.with_frm_style .frm_radio label.frm_hidden,
-.with_frm_style .frm_checkbox label.frm_hidden,
 form input.frm_verify{
 	display:none !important;
+}
+
+.frm_screen_reader {
+	border: 0;
+	clip: rect(1px, 1px, 1px, 1px);
+	-webkit-clip-path: inset(50%);
+	clip-path: inset(50%);
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute;
+	width: 1px;
+	word-wrap: normal !important; /* many screen reader and browser combinations announce broken words as they would appear visually */
 }
 
 .with_frm_style fieldset{
@@ -543,6 +555,7 @@ select.frm_loading_lookup{
 	visibility:hidden;
 }
 
+.frm_form_field.frm_left_container .frm_rangeslider,
 .frm_form_field.frm_left_container input:not([type=radio]):not([type=checkbox]),
 .frm_form_field.frm_left_container:not(.frm_dynamic_select_container) select,
 .frm_form_field.frm_left_container textarea,
@@ -553,6 +566,7 @@ select.frm_loading_lookup{
 .frm_form_field.frm_left_container .g-recaptcha,
 .frm_form_field.frm_left_container .chosen-container,
 .frm_form_field.frm_left_container .frm_combo_inputs_container,
+.frm_form_field.frm_right_container .frm_rangeslider,
 .frm_form_field.frm_right_container input:not([type=radio]):not([type=checkbox]),
 .frm_form_field.frm_right_container:not(.frm_dynamic_select_container) select,
 .frm_form_field.frm_right_container textarea,
@@ -573,6 +587,9 @@ select.frm_loading_lookup{
     max-width:100%;
 }
 
+.frm_form_field.frm_left_container .frm_rangeslider,
+.frm_form_field.frm_right_container .frm_rangeslider,
+.frm_form_field.frm_inline_container .frm_rangeslider,
 .frm_form_field.frm_left_container .frm_opt_container,
 .frm_form_field.frm_right_container .frm_opt_container,
 .frm_form_field.frm_inline_container .frm_opt_container,
