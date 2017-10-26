@@ -371,6 +371,7 @@ class FrmAppHelper {
 	 * @since 2.05.03
 	 */
 	private static function allowed_html( $allowed ) {
+		$html = self::safe_html();
 		$allowed_html = array();
 		if ( $allowed == 'all' ) {
 			$allowed_html = $html;
