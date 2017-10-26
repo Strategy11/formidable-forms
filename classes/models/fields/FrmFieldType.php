@@ -539,7 +539,7 @@ DEFAULT_HTML;
 	 * Link input to field description for screen readers
 	 * @since 3.0
 	 */
-	private function add_aria_description( $args, &$input_html ) {
+	protected function add_aria_description( $args, &$input_html ) {
 		if ( $this->get_field_column('description') != '' ) {
 			$desc_id = 'frm_desc_' . esc_attr( $args['html_id'] );
 			$input_html .= ' aria-describedby="' . esc_attr( $desc_id ) . '"';
