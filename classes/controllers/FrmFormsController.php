@@ -14,7 +14,7 @@ class FrmFormsController {
 
 	public static function maybe_load_listing_hooks() {
 		$action = FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
-		if ( ! empty( $action ) && ! in_array( $action, array( 'list', 'trash', 'untrash' ) ) ) {
+		if ( ! empty( $action ) && ! in_array( $action, array( 'list', 'trash', 'untrash', 'destroy' ) ) ) {
 			return;
 		}
 
