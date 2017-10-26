@@ -151,8 +151,29 @@ class FrmFieldFormHtml {
 	 * @since 3.0
 	 */
 	private function replace_description_shortcode() {
+		$this->maybe_add_description_id();
 		$description = $this->field_obj->get_field_column('description');
 		FrmShortcodeHelper::remove_inline_conditions( ( $description && $description != '' ), 'description', $description, $this->html );
+	}
+
+	/**
+	 * Add an ID to the description for aria-describedby.
+	 * This ID was added to the HTML in v3.0.
+	 * @since 3.0
+	 */
+	private function maybe_add_description_id() {
+		$description = $this->field_obj->get_field_column('description');
+		if ( $description != '' ) {
+
+			$description_html = preg_match_all( '/(\[if\s+description\])(.*?)(\[\/if\s+description\])/mis', $this->html, $inner_html );
+			if ( isset( $inner_html[2] ) ) {
+				$has_id = strpos( $inner_html[2], ' id=' );
+				if ( ! $has_id ) {
+					$id = 'frm_desc_' . $this->html_id;
+					$this->html = str_replace( 'class="frm_description', 'id="'. esc_attr( $id ) . '" class="frm_description', $this->html );
+				}
+			}
+		}
 	}
 
 	/**

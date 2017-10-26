@@ -133,7 +133,7 @@ abstract class FrmFieldType {
         <span class="frm_required">[required_label]</span>
     </label>
     $input
-    [if description]<div class="frm_description">[description]</div>[/if description]
+    [if description]<div class="frm_description" id="frm_desc_field_[key]">[description]</div>[/if description]
     [if error]<div class="frm_error">[error]</div>[/if error]
 </div>
 DEFAULT_HTML;
@@ -495,6 +495,7 @@ DEFAULT_HTML;
 	public function front_field_input( $args, $shortcode_atts ) {
 		$field_type = $this->html5_input_type();
 		$input_html = $this->get_field_input_html_hook( $this->field );
+		$this->add_aria_description( $args, $input_html );
 
 		return '<input type="' . esc_attr( $field_type ) . '" id="' . esc_attr( $args['html_id'] ) . '" name="' . esc_attr( $args['field_name'] ) . '" value="' . esc_attr( $this->field['value'] ) . '" ' . $input_html . '/>';
 	}
@@ -532,6 +533,17 @@ DEFAULT_HTML;
 		ob_end_clean();
 
 		return $input_html;
+	}
+
+	/**
+	 * Link input to field description for screen readers
+	 * @since 3.0
+	 */
+	private function add_aria_description( $args, &$input_html ) {
+		if ( $this->get_field_column('description') != '' ) {
+			$desc_id = 'frm_desc_' . esc_attr( $args['html_id'] );
+			$input_html .= ' aria-describedby="' . esc_attr( $desc_id ) . '"';
+		}
 	}
 
 	/**
