@@ -2462,6 +2462,31 @@ Responsive Design
 		display:none !important;
 	}
 
+	#frm_notification_settings .frm_email_buttons {
+		height: 40px;
+		margin: 0 4px;
+		line-height: 2em;
+	}
+
+	.frm_right_addon .frm_remove_field {
+		bottom: 11px;
+	}
+
+	#frm_notification_settings .frm_bcc_cc_container {
+		min-width: 128px;
+		width: 25%
+	}
+
+	.frm_email_row td:nth-child(2) {
+		width: 65%;
+		display: inline-block;
+	}
+
+	.frm_email_row td:nth-child(3) {
+		width: 25%;
+		display: inline-block;
+	}
+
 }
 @media (min-width:768px){
     .navbar-right .frm-dropdown-menu{right:0;left:auto;}
