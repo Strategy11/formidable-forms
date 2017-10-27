@@ -1872,11 +1872,11 @@ msgid ""
 msgstr ""
 
 #: classes/views/frm-forms/add_field_links.php:86
-msgid "1. Click inside the \"CSS layout classes\" field option in any field."
+msgid "Click inside the \"CSS layout classes\" field option in any field."
 msgstr ""
 
 #: classes/views/frm-forms/add_field_links.php:87
-msgid "2. This box will activate and you can click to insert classes."
+msgid "This box will activate and you can click to insert classes."
 msgstr ""
 
 #: classes/views/frm-forms/add_field_links.php:92

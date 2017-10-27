@@ -3718,11 +3718,11 @@ msgid "Layout"
 msgstr "Opmaak"
 
 #: classes/views/frm-forms/add_field_links.php:86
-msgid "1. Click inside the \"CSS layout classes\" field option in any field."
+msgid "Click inside the \"CSS layout classes\" field option in any field."
 msgstr "1. Klik in het \"CSS layout classes\" veld optie in enig veld."
 
 #: classes/views/frm-forms/add_field_links.php:87
-msgid "2. This box will activate and you can click to insert classes."
+msgid "This box will activate and you can click to insert classes."
 msgstr ""
 "2.  Deze box zal actief worden en je kan klikken om classen in te voegen "
 

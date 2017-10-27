@@ -1,13 +1,10 @@
 <?php
 
-$read_only = false;
 if ( isset($field['post_field']) && $field['post_field'] == 'post_category' && FrmAppHelper::pro_is_installed() ) {
 	echo FrmProPost::get_category_dropdown( $field, array( 'location' => 'front', 'name' => $field_name, 'id' => $html_id ) );
 } else {
-	if ( FrmAppHelper::pro_is_installed() && FrmField::is_read_only( $field ) && ! FrmAppHelper::is_admin() ) {
-		$read_only = true;
-
-		echo FrmProDropdownFieldsController::get_hidden_fields_with_readonly_values( $field, $field_name, $html_id ); ?>
+	if ( $read_only ) {
+		?>
 		<select <?php do_action('frm_field_input_html', $field) ?>> <?php
 
 	} else { ?>

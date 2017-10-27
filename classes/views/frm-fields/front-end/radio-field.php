@@ -1,6 +1,4 @@
-<?php if ( $read_only ) { ?>
-	<input type="hidden" value="<?php echo esc_attr( $field['value'] ) ?>" name="<?php echo esc_attr( $field_name ) ?>" />
-<?php }
+<?php
 
 if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' ) {
 	do_action( 'frm_after_checkbox', array( 'field' => $field, 'field_name' => $field_name, 'type' => $field['type'] ) );

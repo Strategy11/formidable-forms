@@ -1,17 +1,4 @@
 <?php
-$checked_values = $field['value'];
-
-if ( $read_only ) {
-	if ( $checked_values ) {
-		foreach ( (array) $checked_values as $checked_value ) { ?>
-			<input type="hidden" value="<?php echo esc_attr( $checked_value ) ?>" name="<?php echo esc_attr( $field_name ) ?>[]" />
-			<?php
-		}
-	} else { ?>
-		<input type="hidden" value="" name="<?php echo esc_attr( $field_name ) ?>[]" />
-		<?php
-	}
-}
 
 if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' ) {
 	do_action( 'frm_after_checkbox', array( 'field' => $field, 'field_name' => $field_name, 'type' => $field['type'] ) );
@@ -24,7 +11,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' ) 
 		$field_val = FrmFieldsHelper::get_value_from_array( $opt, $opt_key, $field );
 		$opt = FrmFieldsHelper::get_label_from_array( $opt, $opt_key, $field );
 
-		$checked = FrmAppHelper::check_selected( $checked_values, $field_val ) ? ' checked="checked"' : '';
+		$checked = FrmAppHelper::check_selected( $field['value'], $field_val ) ? ' checked="checked"' : '';
 
 		// Check if other opt, and get values for other field if needed
 		$other_opt = false;

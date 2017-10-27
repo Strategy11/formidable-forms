@@ -51,6 +51,10 @@ class FrmFieldCheckbox extends FrmFieldType {
 		return FrmAppHelper::plugin_path() . '/classes/views/frm-fields/front-end/checkbox-field.php';
 	}
 
+	protected function show_readonly_hidden() {
+		return true;
+	}
+
 	protected function prepare_import_value( $value, $atts ) {
 		return $this->get_multi_opts_for_import( $value );
 	}

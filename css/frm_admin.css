@@ -224,7 +224,8 @@ ul.frm_form_nav > li{
 #postbox-container-1 .frm_field_list #frm-insert-fields{
 	max-height: none;
 	font-size:14px;
-	padding:0;
+	padding:0 0 10px;
+	background:#535f6f;
 }
 #postbox-container-1 .frm_field_list #frm-layout-classes,
 #postbox-container-1 .frm_field_list #frm-dynamic-values{
@@ -743,7 +744,7 @@ ul.field_type_list{
 	float:left;
 	margin:0;
 	color:#fff;
-	background:#535f6f;
+	background:transparent;
 	border-bottom:1px solid #4a5260;
 }
 

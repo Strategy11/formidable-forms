@@ -351,8 +351,8 @@ class FrmFieldsHelper {
 			return;
 		}
 
-        $field_name = $field['name'];
-        $html_id = self::get_html_id($field);
+		$field_name = isset( $field['html_name'] ) ? $field['html_name'] : $field['name'];
+		$html_id = isset( $field['html_id'] ) ? $field['html_id'] : self::get_html_id( $field );
 
 		foreach ( $field['options'] as $opt_key => $opt ) {
 		    $field_val = self::get_value_from_array( $opt, $opt_key, $field );

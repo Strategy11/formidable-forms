@@ -46,6 +46,13 @@ form input.frm_verify{
 	min-width:0;
 }
 
+.with_frm_style fieldset fieldset{
+	border:none;
+	margin:0;
+	padding:0;
+	background-color:transparent;
+}
+
 legend.frm_hidden{
     display:none !important;
 }

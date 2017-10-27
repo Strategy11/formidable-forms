@@ -50,4 +50,8 @@ class FrmFieldRadio extends FrmFieldType {
 	protected function include_front_form_file() {
 		return FrmAppHelper::plugin_path() . '/classes/views/frm-fields/front-end/radio-field.php';
 	}
+
+	protected function show_readonly_hidden() {
+		return true;
+	}
 }

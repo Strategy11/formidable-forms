@@ -270,7 +270,7 @@ $draft_link
 SUBMIT_HTML;
 		} else if ( $loc == 'before' ) {
             $default_html = <<<BEFORE_HTML
-<legend class="frm_hidden">[form_name]</legend>
+<legend class="frm_screen_reader">[form_name]</legend>
 [if form_name]<h3 class="frm_form_title">[form_name]</h3>[/if form_name]
 [if form_description]<div class="frm_description">[form_description]</div>[/if form_description]
 BEFORE_HTML;

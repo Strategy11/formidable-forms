@@ -34,7 +34,7 @@ $arrow_icons = FrmStylesHelper::arrow_icons();
 }
 <?php } ?>
 
-.<?php echo esc_html( $style_class ) ?> fieldset{
+.<?php echo esc_html( $style_class ) ?> .frm_form_fields  > fieldset{
 	border-width:<?php echo esc_html( $fieldset . $important ) ?>;
 	border-style:solid;
 	border-color:<?php echo esc_html( $fieldset_color . $important ) ?>;

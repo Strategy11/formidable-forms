@@ -183,8 +183,8 @@ DEFAULT_HTML;
 	 * @param array $field
 	 */
 	protected function include_on_form_builder( $name, $field ) {
-		$field_name = $this->html_name( $name );
-		$html_id = $this->html_id();
+		$field['html_name'] = $field_name = $this->html_name( $name );
+		$field['html_id'] = $html_id = $this->html_id();
 		$display = $this->display_field_settings();
 		include( $this->include_form_builder_file() );
 	}
@@ -478,6 +478,8 @@ DEFAULT_HTML;
 	protected function include_on_front_form( $args, $shortcode_atts ) {
 		global $frm_vars;
 
+		$hidden = $this->maybe_include_hidden_values( $args );
+
 		$field = $this->field;
 		$html_id = $args['html_id'];
 		$field_name = $args['field_name'];
@@ -489,7 +491,7 @@ DEFAULT_HTML;
 		$input_html = ob_get_contents();
 		ob_end_clean();
 
-		return $input_html;
+		return $hidden . $input_html;
 	}
 
 	public function front_field_input( $args, $shortcode_atts ) {
@@ -503,6 +505,115 @@ DEFAULT_HTML;
 	protected function html5_input_type() {
 		$frm_settings = FrmAppHelper::get_settings();
 		return $frm_settings->use_html ? $this->type : 'text';
+	}
+
+	protected function maybe_include_hidden_values( $args ) {
+		$hidden = '';
+		$is_read_only = FrmField::is_read_only( $this->field ) && ! FrmAppHelper::is_admin();
+		if ( $is_read_only && $this->show_readonly_hidden() ) {
+			$hidden = $this->show_hidden_values( $args );
+		}
+		return $hidden;
+	}
+
+	/**
+	 * When the field is read only, does it need it include hidden fields?
+	 * Checkboxes and dropdowns need this
+	 */
+	protected function show_readonly_hidden() {
+		return false;
+	}
+
+	/**
+	 * When the field has a single value, should the name include
+	 * name[] to indicate an array?
+	 */
+	protected function is_readonly_array() {
+		return false;
+	}
+
+	protected function show_hidden_values( $args ) {
+		$selected_value = isset( $args['field_value'] ) ? $args['field_value'] : $this->field['value'];
+		$hidden = '';
+		if ( is_array( $selected_value ) ) {
+			$args['save_array'] = true;
+			foreach ( $selected_value as $selected ) {
+				$hidden .= $this->show_single_hidden( $selected, $args );
+			}
+		} else {
+			$args['save_array'] = $this->is_readonly_array();
+			$hidden .= $this->show_single_hidden( $selected_value, $args );
+		}
+
+		return $hidden;
+	}
+
+	protected function show_single_hidden( $selected, $args ) {
+		if ( $args['save_array'] ) {
+			$args['field_name'] .= '[]';
+			$id = '';
+		} else {
+			$id = ' id="' . esc_attr( $args['html_id'] ) . '"';
+		}
+
+		return '<input type="hidden" value="' . esc_attr( $selected ) . '" name="' . esc_attr( $args['field_name'] ) . '" ' . $id . ' />';
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	protected function get_select_box( $values ) {
+		$options = $this->get_field_column('options');
+		$selected = $values['field_value'];
+
+		if ( isset( $values['combo_name'] ) ) {
+			$options = $options[ $values['combo_name'] ];
+			$selected = ( is_array( $selected ) && isset( $selected[ $values['combo_name'] ] ) ) ? $selected[ $values['combo_name'] ] : '';
+		}
+
+		$input = $this->select_tag( $values );
+
+	    foreach ( $options as $option ) {
+			$input .= '<option value="' . esc_attr( $option ) . '" ' . selected( $selected, $option, false ) . '>';
+			$input .= esc_html( $option );
+			$input .= '</option>';
+		}
+		$input .= '</select>';
+
+		return $input;
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	protected function select_tag( $values ) {
+		$field = isset( $values['field'] ) ? $values['field'] : $this->field;
+		$input_html = $this->get_field_input_html_hook( $field );
+		$select_atts = $this->get_select_atributes( $values );
+		$select = '';
+		foreach ( $select_atts as $name => $value ) {
+			$select .= $name . '="' . esc_attr( $value ) . '" ';
+		}
+		return '<select ' . $select . $input_html . '>';
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	protected function get_select_atributes( $values ) {
+		$readonly = ( FrmField::is_read_only( $this->field ) && ! FrmAppHelper::is_admin() );
+		$select_atts = array();
+		if ( ! $readonly ) {
+			if ( isset( $values['combo_name'] ) ) {
+				$values['field_name'] .= '[' . $values['combo_name'] . ']';
+				$values['html_id'] .= '_' . $values['combo_name'];
+			}
+
+			$select_atts['name'] = $values['field_name'];
+			$select_atts['id'] = $values['html_id'];
+		}
+
+		return $select_atts;
 	}
 
 	protected function load_field_scripts( $args ) {
