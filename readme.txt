@@ -4,7 +4,7 @@ Tags: contact form, form builder, custom form, forms, form, form maker, form cre
 Requires at least: 4.0
 Tested up to: 4.8.2
 Requires PHP: 5.2
-Stable tag: 2.05.01
+Stable tag: 2.05.02
 
 The best WordPress form plugin for contact forms, surveys and more. Make forms a breeze with a drag and drop form builder and form style generator.
 
@@ -145,6 +145,23 @@ The field and form names and descriptions are all changed with in-place edit. Ju
 [See more FAQs](https://formidableforms.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 2.05.02 =
+* New: Add frm_affiliate_id hook for theme author affiliates
+* Fix: XSS vulnerability on form preview page. Don't check POST values before displaying the form
+* Enhancement: Speed up the Formidable > Entries listing page for large forms
+* Fix: Don't add slashes to default field values
+* Fix: Replace the arrows in the settings sections that disappeared in WP 4.8
+* **Pro Version Forms**
+* Enhancement: Add frmCalSeparation jQuery event for changing the comma in text calculations to something else
+* Fix: Prevent more themes from overriding the progress bar styling when the option to override theme styling is checked
+* Fix: More reliably hide and show the buttons for adding taxonomies and custom fields in the create post settings
+* Fix: Several issues with calculations with both fields inside and outside of repeating sections. Fixed issue with conditional radio fields used in repeating calculations.
+* Fix: Prevent endless loops in conditional logic when fields are dependent on each other
+* Fix: Searching number field values with LIKE was causing issues
+* Fix: Use secure cookies on SSL sites
+* Fix: Convert dates in certain formats more realibly before save
+* Fix: Correctly duplicate fields inside a repeating section
+
 = 2.05.01 =
 * Fix: Let the new label position option override the setting in the styles
 * Fix: Trigger an update for the styling settings so a manual save isn't required to get new updates
@@ -179,7 +196,7 @@ The field and form names and descriptions are all changed with in-place edit. Ju
 * Enhancement: Add frm_main_feedback hook to messages shown after draft and edit.
 * Enhancement: Display zip code on the same line with city and state when an address is displayed.
 * Enhancement: Improve searching Dynamic field values on Entries tab
-* Fix: Improve compatibiliy with page builders and membership plugins. Don't run the_content filter on the View content. Instead, filter the content by calling those functions directly.
+* Fix: Improve compatibility with page builders and membership plugins. Don't run the_content filter on the View content. Instead, filter the content by calling those functions directly.
 * Fix: Delete temporary files after no less than 3 hours, regardless of time zone.
 * Fix: Append the media meta_query rather than replacing it. This resolves a conflict with files in WooCommerce.
 * Fix: Trim logic and actual value in conditional logic comparison.
@@ -2006,7 +2023,7 @@ The field and form names and descriptions are all changed with in-place edit. Ju
 
 = 1.06 =
 * User Interface improvements to form builder
-* Increased security, spped, and optimization
+* Increased security, speed, and optimization
 * Moved the "automatic width" check box for drop-down select fields to free form builder plugin
 * Moved email "From/Reply to" options to free WordPress form builder plugin
 * Fixed form preview page for form templates

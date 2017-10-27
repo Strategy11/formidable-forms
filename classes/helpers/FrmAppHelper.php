@@ -10,7 +10,7 @@ class FrmAppHelper {
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '2.05.02b1';
+	public static $plug_version = '2.05.02';
 
     /**
      * @since 1.07.02
@@ -365,27 +365,115 @@ class FrmAppHelper {
 	 * Sanitize the value, and allow some HTML
 	 * @since 2.0
 	 * @param string $value
-	 * @param array $allowed
+	 * @param array|string $allowed 'all' for everything included as defaults
 	 * @return string
 	 */
 	public static function kses( $value, $allowed = array() ) {
-		$html = array(
-		    'a' => array(
-				'href'  => array(),
-				'title' => array(),
-				'id'    => array(),
-				'class' => array(),
-		    ),
-		);
-
-		$allowed_html = array();
-		foreach ( $allowed as $a ) {
-			$allowed_html[ $a ] = isset( $html[ $a ] ) ? $html[ $a ] : array();
-		}
-
-		$allowed_html = apply_filters( 'frm_striphtml_allowed_tags', $allowed_html );
+		$allowed_html = self::allowed_html( $allowed );
 
 		return wp_kses( $value, $allowed_html );
+	}
+
+	/**
+	 * @since 2.05.03
+	 */
+	private static function allowed_html( $allowed ) {
+		$html = self::safe_html();
+		$allowed_html = array();
+		if ( $allowed == 'all' ) {
+			$allowed_html = $html;
+		} else {
+			foreach ( $allowed as $a ) {
+				$allowed_html[ $a ] = isset( $html[ $a ] ) ? $html[ $a ] : array();
+			}
+		}
+
+		return apply_filters( 'frm_striphtml_allowed_tags', $allowed_html );
+	}
+
+	/**
+	 * @since 2.05.03
+	 */
+	private static function safe_html() {
+		return array(
+			'a' => array(
+				'class' => array(),
+				'href'  => array(),
+				'id'    => array(),
+				'rel'   => array(),
+				'title' => array(),
+			),
+			'abbr' => array(
+				'title' => array(),
+			),
+			'b' => array(),
+			'blockquote' => array(
+				'cite'  => array(),
+			),
+			'br'   => array(),
+			'cite' => array(
+				'title' => array(),
+			),
+			'code' => array(),
+			'del'  => array(
+				'datetime' => array(),
+				'title' => array(),
+			),
+			'dd'  => array(),
+			'div' => array(
+				'class' => array(),
+				'id'    => array(),
+				'title' => array(),
+				'style' => array(),
+			),
+			'dl'  => array(),
+			'dt'  => array(),
+			'em'  => array(),
+			'h1'  => array(),
+			'h2'  => array(),
+			'h3'  => array(),
+			'h4'  => array(),
+			'h5'  => array(),
+			'h6'  => array(),
+			'i'   => array(),
+			'img' => array(
+				'alt'    => array(),
+				'class'  => array(),
+				'height' => array(),
+				'id'     => array(),
+				'src'    => array(),
+				'width'  => array(),
+			),
+			'li' => array(
+				'class' => array(),
+				'id'    => array(),
+			),
+			'ol' => array(
+				'class' => array(),
+				'id'    => array(),
+			),
+			'p'   => array(
+				'class' => array(),
+				'id'    => array(),
+			),
+			'pre' => array(),
+			'q'   => array(
+				'cite' => array(),
+				'title' => array(),
+			),
+			'span' => array(
+				'class' => array(),
+				'id'    => array(),
+				'title' => array(),
+				'style' => array(),
+			),
+			'strike' => array(),
+			'strong' => array(),
+			'ul' => array(
+				'class' => array(),
+				'id'    => array(),
+			),
+		);
 	}
 
     /**
