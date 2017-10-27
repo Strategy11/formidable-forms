@@ -1236,13 +1236,10 @@ select.frm_cancelnew, input.frm_enternew{width:175px;}
 	content: "\f142" !important;
 }
 
-.ab-icon.frm_dashicon_font:before{
-	vertical-align: middle;
+.frm_email_settings .widget .widget-top, .frm_email_settings .widget .widget-top h3{
+	cursor:pointer;
 }
 
-.frm_email_settings .widget .widget-top, .frm_email_settings .widget .widget-top h3{
-    cursor:pointer;
-}
 .frm_email_settings .widget, #frm_email_addon_menu{
     margin-bottom:15px;
     line-height: 1.4em;
@@ -1275,12 +1272,15 @@ select.frm_cancelnew, input.frm_enternew{width:175px;}
 .frm_form_action_settings .widget-inside{
 	min-height:25px;
 }
+.frm_form_action_settings .widget-title h4,
+#frm_email_addon_menu h4,
 .frm_form_action_settings .widget-title h3,
 #frm_email_addon_menu h3{
     display: inline-block;
 	border-bottom:none;
 	padding: 10px;
 }
+#frm_email_addon_menu h4,
 #frm_email_addon_menu h3{
 	font-size: 14px;
 	line-height: 1.4;
@@ -1301,7 +1301,7 @@ label.frm_action_events{
 	padding-left:15px;
 }
 .frm_actions_list > li > a:before,
-.frm_email_settings h3 .frm_form_action_icon:before{
+.frm_email_settings .widget-title .frm_form_action_icon:before{
 	margin:0 5px;
     vertical-align: middle;
 	font-size:18px;
@@ -1315,9 +1315,8 @@ label.frm_action_events{
 .frm_email_icons, .frm_actions_list{
     padding: 10px 0 10px 15px;
 }
-.frm_email_icon:before {
-	vertical-align: text-top;
-	margin-right: 5px;
+.frm_email_icons{
+	padding-left:6px;
 }
 .frm_actions_list a.frm_inactive_action:before{
 	color:#d6d6d6;
@@ -2014,9 +2013,6 @@ table td.frm_left_label{
 	font-size:16px;
 	line-height:20px;
 }
-.frm_email_icons{
-	padding-left:6px;
-}
 
 .frm_update_msg{
     border-style:solid;
@@ -2524,7 +2520,7 @@ Responsive Design
 #poststuff #post-body.columns-2{margin-right:0;}
 .widget, .postbox, .stuffbox, .postbox h3{border-width:0 !important;border-color:#fff;}
 .postbox{background:#fff !important;border:none;position:static;}
-.postbox h3{background:#fff !important;}
+.postbox h3, .postbox h4{background:#fff !important;}
 #wpbody-content{float:none;}
 #wpcontent, #post-body-content,
 .has-right-sidebar #post-body,
