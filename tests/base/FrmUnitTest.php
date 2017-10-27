@@ -478,4 +478,12 @@ class FrmUnitTest extends WP_UnitTestCase {
 		$this->assertNotEmpty( $subscriber );
 
 	}
+
+	protected function run_private_method( $method, $args ) {
+		$class = new ReflectionClass( $method[0] );
+		$method = $class->getMethod( $method[1] );
+		$method->setAccessible( true );
+		$method->invokeArgs( null, $args );
+		return $method;
+	}
 }

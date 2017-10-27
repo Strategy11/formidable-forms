@@ -2600,7 +2600,10 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		$atts = self::get_default_atts_for_view( $view );
 
 		// Test with no filters at all
-		$where = self::_do_private_return_method( 'get_where_query_for_view_listing_page', array( $view, $atts ) );
+		$where = $this->run_private_method(
+			array( 'FrmProDisplaysController', 'get_where_query_for_view_listing_page' ),
+			array( $view, $atts )
+		);
 
 		// There should be no it.id value set in $where clause
 		$this->assertFalse( isset( $where['it.id'] ), 'Entry IDs are being added to the where clause (adding unnecessary bulk).' );
@@ -2621,7 +2624,10 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		self::add_filter_to_view( $view, $filter_args );
 
 		// Get where query
-		$where = self::_do_private_return_method( 'get_where_query_for_view_listing_page', array( $view, $atts ) );
+		$where = $this->run_private_method(
+			array( 'FrmProDisplaysController', 'get_where_query_for_view_listing_page' ),
+			array( $view, $atts )
+		);
 
 		// There should be no it.id value set in $where clause
 		$this->assertFalse( isset( $where['it.id'] ), 'Entry IDs are being added to the where clause with draft filter only (adding unnecessary bulk).' );
@@ -2629,13 +2635,6 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 
 	function get_default_atts_for_view( $view ) {
 		$args = array( array( 'entry_id' => '' ), $view );
-		return self::_do_private_return_method( 'get_atts_for_view', $args );
-	}
-
-	function _do_private_return_method( $method_name, $args ){
-		$class = new ReflectionClass( 'FrmProDisplaysController' );
-		$method = $class->getMethod( $method_name );
-		$method->setAccessible( true );
-		return $method->invokeArgs( null, $args );
+		return $this->run_private_method( array( 'FrmProDisplaysController', 'get_atts_for_view' ), $args );
 	}
 }

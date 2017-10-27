@@ -456,10 +456,7 @@ class WP_Test_FrmProEntriesController extends FrmUnitTest {
 	}
 
 	function _do_get_frm_field_value_entry( $field, $atts ){
-		$class = new ReflectionClass('FrmProEntriesController');
-		$method = $class->getMethod('get_frm_field_value_entry');
-		$method->setAccessible(true);
-		$entry = $method->invokeArgs( null, array( $field, &$atts ) );
-		return $entry;
+		$args = array( $field, &$atts );
+		return $this->run_private_method( array( 'FrmProEntriesController', 'get_frm_field_value_entry' ), $args );
 	}
 }

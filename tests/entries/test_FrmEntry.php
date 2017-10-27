@@ -44,7 +44,7 @@ class WP_Test_FrmEntry extends FrmUnitTest {
 		$this->assertNotEmpty( $entry, 'Entry not found: post-entry-1' );
 		$values = self::_setup_test_update_values( $entry );
 
-		$new_values = self::_do_private_package_entry_to_update_function( $entry->id, $values );
+		$new_values = $this->run_private_method( array( 'FrmEntry', 'package_entry_to_update' ), array( $entry->id, $values ) );
 
 		self::_check_packaged_entry_name( $values, $new_values );
 		self::_check_packaged_form_id( $values, $new_values );
@@ -145,12 +145,5 @@ class WP_Test_FrmEntry extends FrmUnitTest {
 		$statement1 = isset( $expected_user_id ) && $new_values['user_id'] == $expected_user_id;
 		$statement2 = ! isset( $expected_user_id ) && ! isset( $new_values['user_id'] );
 		$this->assertTrue( $statement1 || $statement2, 'The user ID is set or removed when it should not be (updating an entry).' );
-	}
-
-	function _do_private_package_entry_to_update_function( $id, $values ){
-		$class = new ReflectionClass( 'FrmEntry' );
-		$method = $class->getMethod( 'package_entry_to_update' );
-		$method->setAccessible( true );
-		return $method->invokeArgs( null, array( $id, $values ) );
 	}
 }

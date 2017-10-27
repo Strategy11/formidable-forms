@@ -32,10 +32,10 @@ class WP_Test_FrmProAppHelper extends FrmUnitTest {
 		$entry_ids = FrmEntry::getAll( array( 'it.form_id' => $form_id ), '', '', false, false );
 
 		// Prepare the args
-		self::_do_prepare_where_args( $args, $where_field, $entry_ids );
+		$this->run_private_method( array( 'FrmProAppHelper', 'prepare_where_args' ), array( &$args, $where_field, $entry_ids ) );
 
 		// Set new where_val
-		self::_do_prepare_dfe_text( $args, $where_field );
+		$this->run_private_method( array( 'FrmProAppHelper', 'prepare_dfe_text' ), array( &$args, $where_field ) );
 
 		return $args['where_val'];
 	}
@@ -163,19 +163,5 @@ class WP_Test_FrmProAppHelper extends FrmUnitTest {
 		);
 
 		return $test_values;
-	}
-
-	function _do_prepare_where_args( &$args, $where_field, $entry_ids=array() ){
-		$class = new ReflectionClass('FrmProAppHelper');
-		$method = $class->getMethod( 'prepare_where_args' );
-		$method->setAccessible(true);
-		$method->invokeArgs( null, array( &$args, $where_field, $entry_ids ) );
-	}
-
-	function _do_prepare_dfe_text( &$args, $where_field ){
-		$class = new ReflectionClass('FrmProAppHelper');
-		$method = $class->getMethod('prepare_dfe_text');
-		$method->setAccessible(true);
-		$method->invokeArgs( null, array( &$args, $where_field ) );
 	}
 }
