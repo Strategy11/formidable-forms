@@ -4,6 +4,33 @@
  * @group pro
  */
 class WP_Test_FrmProAppHelper extends FrmUnitTest {
+
+	/**
+	 * @covers FrmProAppHelper::convert_date
+	 */
+	function test_convert_date() {
+		$date_str = '2017-09-03 00:00:00';
+		$short_date_str = '2017-09-03';
+		$expected_results = array(
+			'm/d/Y' => '09/03/2017',
+			'Y/m/d' => '2017/09/03',
+			'd/m/Y' => '03/09/2017',
+			'd.m.Y' => '03.09.2017',
+			'j/m/y' => '3/09/17',
+			'j/n/y' => '3/9/17',
+			'Y-m-d' => '2017-09-03',
+			'j-m-Y' => '3-09-2017',
+		);
+
+		foreach ( $expected_results as $format => $expected ) {
+			$converted = FrmProAppHelper::convert_date( $date_str, 'Y-m-d', $format );
+			$this->assertEquals( $expected, $converted );
+
+			$converted = FrmProAppHelper::convert_date( $short_date_str, 'Y-m-d', $format );
+			$this->assertEquals( $expected, $converted );
+		}
+	}
+
 	/**
 	 * @covers FrmProAppHelper::prepare_dfe_text
 	 */
