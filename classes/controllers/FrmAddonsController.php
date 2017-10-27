@@ -28,6 +28,7 @@ class FrmAddonsController {
 			return;
 		}
 
+		ksort( $plugins );
 		$allow_autofill = self::allow_autofill();
 
 		include( FrmAppHelper::plugin_path() . '/classes/views/addons/settings.php' );
