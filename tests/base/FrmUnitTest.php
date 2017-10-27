@@ -485,10 +485,20 @@ class FrmUnitTest extends WP_UnitTestCase {
 		return $m->invokeArgs( is_string( $method[0] ) ? null : $method[0], $args );
 	}
 
+	/**
+	* Skip this if running < php 5.3
+	*/
 	protected function get_private_property( $object, $property ) {
+		$this->check_php_version( '5.3' );
 		$rc = new ReflectionClass( $object );
 		$p = $rc->getProperty( $property );
 		$p->setAccessible( true );
 		return $p->getValue( $object );
+	}
+
+	protected function check_php_version( $required ) {
+		if ( version_compare( phpversion(), $required, '<' ) ) {
+			$this->markTestSkipped( 'Test requires PHP > ' . $required );
+		}
 	}
 }
