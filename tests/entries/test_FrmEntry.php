@@ -42,19 +42,19 @@ class WP_Test_FrmEntry extends FrmUnitTest {
 
 		$entry = FrmEntry::getOne( 'post-entry-1', true );
 		$this->assertNotEmpty( $entry, 'Entry not found: post-entry-1' );
-		$values = self::_setup_test_update_values( $entry );
+		$values = $this->_setup_test_update_values( $entry );
 
 		$new_values = $this->run_private_method( array( 'FrmEntry', 'package_entry_to_update' ), array( $entry->id, $values ) );
 
-		self::_check_packaged_entry_name( $values, $new_values );
-		self::_check_packaged_form_id( $values, $new_values );
-		self::_check_packaged_is_draft( $values, $new_values );
-		self::_check_packaged_updated_at( $values, $new_values );
-		self::_check_packaged_updated_by( $values, $new_values );
-		self::_check_packaged_post_id( $values, $new_values );
-		self::_check_packaged_item_key( $values, $new_values );
-		self::_check_packaged_parent_item_id( $values, $new_values );
-		self::_check_packaged_frm_user_id( $values, $new_values );
+		$this->_check_packaged_entry_name( $values, $new_values );
+		$this->_check_packaged_form_id( $values, $new_values );
+		$this->_check_packaged_is_draft( $values, $new_values );
+		$this->_check_packaged_updated_at( $values, $new_values );
+		$this->_check_packaged_updated_by( $values, $new_values );
+		$this->_check_packaged_post_id( $values, $new_values );
+		$this->_check_packaged_item_key( $values, $new_values );
+		$this->_check_packaged_parent_item_id( $values, $new_values );
+		$this->_check_packaged_frm_user_id( $values, $new_values );
 
 	}
 

@@ -480,10 +480,15 @@ class FrmUnitTest extends WP_UnitTestCase {
 	}
 
 	protected function run_private_method( $method, $args ) {
-		$class = new ReflectionClass( $method[0] );
-		$method = $class->getMethod( $method[1] );
-		$method->setAccessible( true );
-		$method->invokeArgs( null, $args );
-		return $method;
+		$m = new ReflectionMethod( $method[0], $method[1] );
+		$m->setAccessible( true );
+		return $m->invokeArgs( is_string( $method[0] ) ? null : $method[0], $args );
+	}
+
+	protected function get_private_property( $object, $property ) {
+		$rc = new ReflectionClass( $object );
+		$p = $rc->getProperty( $property );
+		$p->setAccessible( true );
+		return $p->getValue( $object );
 	}
 }
