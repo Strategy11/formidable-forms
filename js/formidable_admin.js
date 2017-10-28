@@ -150,6 +150,7 @@ function frmAdminBuildJS(){
 		if(typeof b.target !== 'undefined'){
 			b = this;
 		}
+
 		popCalcFields(b);
 		if(jQuery(b).closest('.frm_form_action_settings').length){
 			var cont = jQuery(b).closest('.frm_form_action_settings');
@@ -157,7 +158,7 @@ function frmAdminBuildJS(){
 				var action_id = cont.find('input[name$="[ID]"]').val();
 				var action_type = cont.find('input[name$="[post_excerpt]"]').val();
                 if ( action_type ) {
-				cont.children('.widget-inside').html('<span class="spinner frm_spinner"></span>');
+				cont.children('.widget-inside').html('<p class="frm_loading"><span class="spinner frm_spinner"></span> '+ frm_js.loading +'</p>' );
 				cont.find('.spinner').fadeIn('slow');
 				jQuery.ajax({
 					type:'POST',url:ajaxurl,
@@ -2515,8 +2516,11 @@ function frmAdminBuildJS(){
 				// only load on the form and view settings pages
 				frmAdminBuild.panelInit();
 			}
-			
-			jQuery('.wrap').on('mouseenter.frm', '.frm_help', function(){
+
+			var wrapClass = jQuery('.wrap, .frm_wrap');
+			wrapClass.on('click', '.widget-top,a.widget-action', clickWidget);
+
+			wrapClass.on('mouseenter.frm', '.frm_help', function(){
 				jQuery(this).off('mouseenter.frm');
 				jQuery('.frm_help').tooltip({
 					template:'<div class="frm_tooltip tooltip"><div class="tooltip-inner"></div></div>',placement:'bottom'
@@ -2526,7 +2530,7 @@ function frmAdminBuildJS(){
 			jQuery('.frm_help').tooltip({
 				template:'<div class="frm_tooltip tooltip"><div class="tooltip-inner"></div></div>',placement:'bottom'
 			});
-			jQuery('.wrap').on('mouseenter.frm', '.frm_bstooltip', function(){
+			wrapClass.on('mouseenter.frm', '.frm_bstooltip', function(){
 				jQuery(this).off('mouseenter.frm');
 				jQuery('.frm_bstooltip').tooltip();
 				jQuery(this).tooltip('show');
@@ -2554,8 +2558,6 @@ function frmAdminBuildJS(){
 					return false;
 				});
 			}
-			
-			jQuery('.wrap').on('click', '.widget-top,a.widget-action', clickWidget);
 
 			// tabs
 			jQuery('.frm-category-tabs a').click(function(){

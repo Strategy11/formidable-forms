@@ -1010,6 +1010,17 @@ img.frm_help{
 	float:left;
 }
 
+.frm_form_action_settings .frm_spinner.spinner{
+	visibility:visible;
+	float: none;
+    vertical-align: bottom;
+}
+
+.frm_form_action_settings .frm_loading{
+	font-size: 15px;
+	text-align: center;
+}
+
 .frm_ajax_settings_tab .spinner{
 	visibility:visible;
 	float:none;
@@ -1711,6 +1722,7 @@ label.frm_action_events{
 #frm_notification_settings .frm_email_buttons{
     height: 22px;
     line-height: 20px;
+	padding: 0 6px 1px;
 }
 #frm_notification_settings .frm_cc_button{
 	float:left;
