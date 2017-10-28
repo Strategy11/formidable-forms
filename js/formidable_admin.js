@@ -289,10 +289,11 @@ function frmAdminBuildJS(){
 				}
 			},
 			stop:function(event, ui){
+				var moving = jQuery(this);
 				if ( cancelSort ) {
-					jQuery(this).sortable('cancel');
+					moving.sortable('cancel');
 				}
-				jQuery(this).children('.edit_field_type_end_divider').appendTo(this);
+				moving.children('.edit_field_type_end_divider').appendTo(this);
 			}
 		};
 
@@ -2597,7 +2598,7 @@ function frmAdminBuildJS(){
 				}
 			}
 
-			jQuery('.field_type_list > li').draggable({
+			jQuery('.field_type_list > li:not(.frm_noallow)').draggable({
 				connectToSortable:'#new_fields',cursor:'move',
 				helper:'clone',revert:'invalid',delay:10,
 				cancel:'.frm-dropdown-menu'
