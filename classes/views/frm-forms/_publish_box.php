@@ -70,7 +70,7 @@
 					<?php echo isset( $button ) ? esc_attr( $button ) : __( 'Update', 'formidable' ); ?>
 				</button>
     	    <?php } ?>
-            <div id="preview-action">
+            <div id="frm-preview-action">
 				<?php if ( ! isset( $hide_preview ) || ! $hide_preview ) {
 
 					if ( isset( $values['form_key'] ) ) {
@@ -81,7 +81,7 @@
 					<div class="preview dropdown">
 						<a href="#" id="frm-previewDrop" class="frm-dropdown-toggle button" data-toggle="dropdown"><?php _e( 'Preview', 'formidable' ) ?> <b class="caret"></b></a>
 
-						<ul class="frm-dropdown-menu pull-right" role="menu" aria-labelledby="frm-previewDrop">
+						<ul class="frm-dropdown-menu <?php echo esc_attr( is_rtl() ? 'pull-left' : 'pull-right' ) ?>" role="menu" aria-labelledby="frm-previewDrop">
 							<li><a href="<?php echo esc_url( FrmFormsHelper::get_direct_link( $values['form_key'] ) ); ?>" target="_blank"><?php _e( 'On Blank Page', 'formidable' ) ?></a></li>
 							<li><a href="<?php echo esc_url( add_query_arg('form', $values['form_key'], get_permalink( $frm_settings->preview_page_id ) ) ) ?>" target="_blank"><?php _e( 'In Theme', 'formidable' ) ?></a></li>
 						</ul>

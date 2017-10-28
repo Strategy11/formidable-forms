@@ -22,7 +22,7 @@ include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/_publish_box.ph
 		    <ul class="field_type_list">
 <?php
 foreach ( $frm_field_selection as $field_key => $field_type ) { ?>
-				<li class="frmbutton <?php echo esc_attr( ' frm_t' . $field_key ) ?>" id="<?php echo esc_attr( $field_key ) ?>">
+				<li class="frmbutton button <?php echo esc_attr( ' frm_t' . $field_key ) ?>" id="<?php echo esc_attr( $field_key ) ?>">
 					<a href="#" class="frm_add_field frm_animate_bg">
 						<i class="dashicons dashicons-editor-paragraph frm_animate_bg"></i>
 						<span><?php echo esc_html( $field_type ) ?></span>
@@ -48,7 +48,7 @@ foreach ( FrmField::pro_field_selection() as $field_key => $field_type ) {
 		}
 
 ?>
-				<li class="frmbutton <?php echo esc_attr( $no_allow_class . ' frm_t' . $field_key ) ?> dropdown" id="<?php echo esc_attr( $field_key ) ?>">
+				<li class="frmbutton button <?php echo esc_attr( $no_allow_class . ' frm_t' . $field_key ) ?> dropdown" id="<?php echo esc_attr( $field_key ) ?>">
 	                <a href="#" id="frm-<?php echo esc_attr( $field_key ) ?>Drop" class="frm-dropdown-toggle" data-toggle="dropdown">
 						<i class="dashicons dashicons-editor-paragraph frm_animate_bg"></i>
 						<span><?php echo esc_html( $field_label ) ?> <b class="caret"></b></span>
@@ -69,7 +69,7 @@ foreach ( FrmField::pro_field_selection() as $field_key => $field_type ) {
                 } else {
                     $field_label = '<i class="dashicons dashicons-editor-paragraph frm_animate_bg"></i> <span>' . $field_type .'</span>';
                     ?>
-					<li class="frmbutton <?php echo esc_attr( $no_allow_class . ' frm_t' . $field_key ) ?>" id="<?php echo esc_attr( $field_key ) ?>">
+					<li class="frmbutton button <?php echo esc_attr( $no_allow_class . ' frm_t' . $field_key ) ?>" id="<?php echo esc_attr( $field_key ) ?>">
 						<?php echo apply_filters( 'frmpro_field_links', $field_label, $id, $field_key ) ?>
 					</li>
                     <?php
