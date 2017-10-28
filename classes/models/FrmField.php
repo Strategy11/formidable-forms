@@ -18,6 +18,7 @@ class FrmField {
 			'email'     => __( 'Email', 'formidable' ),
 			'url'       => __( 'Website/URL', 'formidable' ),
 			'number'    => __( 'Number', 'formidable' ),
+			'phone'     => __( 'Phone', 'formidable' ),
 			'html'      => __( 'HTML', 'formidable' ),
 			'hidden'    => __( 'Hidden Field', 'formidable' ),
 			'user_id'   => __( 'User ID', 'formidable' ),
@@ -29,15 +30,8 @@ class FrmField {
 
 	public static function pro_field_selection() {
 		return apply_filters( 'frm_pro_available_fields', array(
-			'end_divider' => array(
-				'name'  => __( 'End Section', 'formidable' ),
-				'switch_from' => 'divider',
-			),
-			'divider'   => __( 'Section', 'formidable' ),
-			'break'     => __( 'Page Break', 'formidable' ),
 			'file'      => __( 'File Upload', 'formidable' ),
 			'rte'       => __( 'Rich Text', 'formidable' ),
-			'phone'     => __( 'Phone', 'formidable' ),
 			'date'      => __( 'Date', 'formidable' ),
 			'time'      => __( 'Time', 'formidable' ),
 			'image'     => __( 'Image URL', 'formidable' ),
@@ -46,6 +40,12 @@ class FrmField {
 			'toggle'    => __( 'Toggle', 'formidable' ),
 			'data'      => __( 'Dynamic', 'formidable' ),
 			'lookup'	=> __( 'Lookup', 'formidable' ),
+			'end_divider' => array(
+				'name'  => __( 'End Section', 'formidable' ),
+				'switch_from' => 'divider',
+			),
+			'divider'   => __( 'Section', 'formidable' ),
+			'break'     => __( 'Page Break', 'formidable' ),
 			'form'      => __( 'Embed Form', 'formidable' ),
 			'password'  => __( 'Password', 'formidable' ),
 			'tag'       => __( 'Tags', 'formidable' ),
