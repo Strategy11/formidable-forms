@@ -420,6 +420,7 @@ class FrmFieldsController {
             '10radio'   => 'radio',
             'rte'       => 'textarea',
             'website'   => 'url',
+			'image'     => 'url',
         );
         if ( isset( $type_switch[ $type ] ) ) {
             $type = $type_switch[ $type ];

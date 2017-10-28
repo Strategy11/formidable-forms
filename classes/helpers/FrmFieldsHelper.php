@@ -719,12 +719,14 @@ class FrmFieldsHelper {
 	 */
 	public static function get_unfiltered_display_value( $atts ) {
 		$value = $atts['value'];
+		$field = $atts['field'];
+		$atts = isset( $atts['atts'] ) ? $atts['atts'] : $atts;
 
-		if ( is_array( $atts['field'] ) ) {
-			$atts['field'] = $atts['field']['id'];
+		if ( is_array( $field ) ) {
+			$field = $field['id'];
 		}
 
-		$field_obj = FrmFieldFactory::get_field_object( $atts['field'] );
+		$field_obj = FrmFieldFactory::get_field_object( $field );
 		return $field_obj->get_display_value( $value, $atts );
 	}
 
@@ -766,7 +768,7 @@ class FrmFieldsHelper {
 	public static function get_field_types( $type ) {
         $single_input = array(
             'text', 'textarea', 'rte', 'number', 'email', 'url',
-            'image', 'file', 'date', 'phone', 'hidden', 'time',
+            'file', 'date', 'phone', 'hidden', 'time',
             'user_id', 'tag', 'password',
         );
 		$multiple_input = array( 'radio', 'checkbox', 'select', 'scale', 'lookup' );

@@ -34,7 +34,6 @@ class FrmField {
 			'rte'       => __( 'Rich Text', 'formidable' ),
 			'date'      => __( 'Date', 'formidable' ),
 			'time'      => __( 'Time', 'formidable' ),
-			'image'     => __( 'Image URL', 'formidable' ),
 			'scale'     => __( 'Scale', 'formidable' ),
 			'range'     => __( 'Slider', 'formidable' ),
 			'toggle'    => __( 'Toggle', 'formidable' ),
@@ -730,5 +729,10 @@ class FrmField {
 	 */
 	public static function get_key_by_id( $id ) {
 		return FrmDb::get_var( 'frm_fields', array( 'id' => $id ), 'field_key' );
+	}
+
+	public static function is_image( $field ) {
+		$type = is_array( $field ) ? $field['type'] : $field->type;
+		return ( $type == 'url' && self::get_option( $field, 'show_image' ) );
 	}
 }

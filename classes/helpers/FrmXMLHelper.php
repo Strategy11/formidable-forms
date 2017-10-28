@@ -310,7 +310,7 @@ class FrmXMLHelper {
 		    if ( is_array($f['default_value']) && in_array($f['type'], array(
 		        'text', 'email', 'url', 'textarea',
 		        'number','phone', 'date',
-		        'hidden', 'password', 'tag', 'image',
+		        'hidden', 'password', 'tag',
 		    )) ) {
 		        if ( count($f['default_value']) === 1 ) {
 					$f['default_value'] = '[' . reset( $f['default_value'] ) . ']';

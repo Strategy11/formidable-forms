@@ -104,7 +104,9 @@ if ( $display['options'] ) { ?>
                     <span class="toggle-indicator" aria-hidden="true"></span>
                 </button>
             </div>
-            <div class="widget-title"><h3><?php _e( 'Field Options', 'formidable' ) ?> (ID <?php echo (int) $field['id'] ?>)</h3></div>
+            <div class="widget-title">
+				<h3><?php esc_html_e( 'Field Settings', 'formidable' ) ?> (ID <?php echo (int) $field['id'] ?>)</h3>
+			</div>
         </div>
     	<div class="widget-inside">
             <table class="form-table frm_clear_none">
@@ -212,6 +214,18 @@ if ( $display['options'] ) { ?>
 						include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/pixels-wide.php' );
 					}
 				}
+
+				if ( $display['show_image'] ) { ?>
+					<tr>
+						<td class="frm_150_width"><label><?php _e( 'Show URL image', 'formidable' ) ?></label></td>
+						<td>
+							<label for="frm_show_image_<?php echo esc_attr( $field['id'] ) ?>">
+								<input type="checkbox" id="frm_show_image_<?php echo esc_attr( $field['id'] ) ?>" name="field_options[show_image_<?php echo esc_attr( $field['id'] ) ?>]" value="1" <?php checked( $field['show_image'], 1 ) ?> />
+								<?php _e( 'If this URL points to an image, show the image with the field.', 'formidable' ) ?>
+							</label>
+						</td>
+					</tr>
+                <?php }
 
 				if ( $display['captcha_size'] && $frm_settings->re_type != 'invisible' ) { ?>
                 <tr><td><label><?php _e( 'ReCaptcha Type', 'formidable' ) ?></label>

@@ -234,6 +234,7 @@ DEFAULT_HTML;
 			'range'        => false,
 			'captcha_size' => false,
 			'format'       => false,
+			'show_image'   => false,
 		);
 	}
 

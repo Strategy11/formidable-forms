@@ -228,6 +228,12 @@ class FrmEntriesHelper {
         );
 
         $atts = wp_parse_args( $atts, $defaults );
+
+		if ( FrmField::is_image( $field ) ) {
+			$atts['truncate'] = false;
+			$atts['html'] = true;
+		}
+
         $atts = apply_filters('frm_display_value_atts', $atts, $field, $value);
 
         if ( ! isset($field->field_options['post_field']) ) {
@@ -259,7 +265,7 @@ class FrmEntriesHelper {
 			$value = FrmFieldsHelper::get_unfiltered_display_value( compact( 'value', 'field', 'atts' ) );
 		}
 
-        if ( $atts['truncate'] && $atts['type'] != 'image' ) {
+        if ( $atts['truncate'] && $atts['type'] != 'url' ) {
             $value = FrmAppHelper::truncate($value, 50);
         }
 

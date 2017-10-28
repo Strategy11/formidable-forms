@@ -125,9 +125,9 @@ class FrmEntryValidate {
 	}
 
 	public static function validate_url_field( &$errors, $field, &$value, $args ) {
-		if ( $value == '' || ! in_array( $field->type, array( 'website', 'url', 'image' ) ) ) {
-            return;
-        }
+		if ( $value == '' || ! in_array( $field->type, array( 'website', 'url' ) ) ) {
+			return;
+		}
 
         if ( trim($value) == 'http://' ) {
             $value = '';

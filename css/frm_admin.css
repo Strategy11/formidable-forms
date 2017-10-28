@@ -880,7 +880,7 @@ div.updated.frm_updated_message,
 	float:left;
 }
 .frm_multi_fields_container,
-.frm_form_fields:not(.frm_sample_form) input[type="text"]{
+.frm_form_builder .frm_form_fields input[type="text"]{
 	width:400px;
     height:auto;
 }
