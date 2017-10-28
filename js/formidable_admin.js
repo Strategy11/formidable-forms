@@ -392,8 +392,9 @@ function frmAdminBuildJS(){
 		var formId = getFormIdForFieldPlacement( section );
 		var sectionId = getSectionIdForFieldPlacement( section );
 
+		var loadingID = fieldType.replace('|', '-');
+		currentItem.replaceWith('<img class="frmbutton frmbutton_loadingnow" id="' + loadingID + '" src="' + frm_js.images_url + '/ajax_loader.gif" alt="' + frm_js.loading + '" />');
 
-		jQuery('#new_fields .frmbutton.frm_t' + fieldType).replaceWith('<img class="frmbutton frmbutton_loadingnow" id="' + fieldType + '" src="' + frm_js.images_url + '/ajax_loader.gif" alt="' + frm_js.loading + '" />');
 		jQuery.ajax({
 			type: 'POST', url: ajaxurl,
 			data: {
@@ -405,7 +406,7 @@ function frmAdminBuildJS(){
 			},
 			success: function (msg) {
 				jQuery('.frm_no_fields').hide();
-				jQuery('.frmbutton_loadingnow#' + fieldType).replaceWith(msg);
+				jQuery('.frmbutton_loadingnow#' + loadingID).replaceWith(msg);
 
 				var regex = /id="(\S+)"/;
 				var match = regex.exec(msg);

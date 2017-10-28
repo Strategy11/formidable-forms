@@ -69,7 +69,7 @@ foreach ( FrmField::pro_field_selection() as $field_key => $field_type ) {
                 } else {
                     $field_label = '<i class="dashicons dashicons-editor-paragraph frm_animate_bg"></i> <span>' . $field_type .'</span>';
                     ?>
-					<li class="frmbutton button <?php echo esc_attr( $no_allow_class . ' frm_t' . $field_key ) ?>" id="<?php echo esc_attr( $field_key ) ?>">
+					<li class="frmbutton button <?php echo esc_attr( $no_allow_class . ' frm_t' . str_replace( '|', '-', $field_key ) ) ?>" id="<?php echo esc_attr( $field_key ) ?>">
 						<?php echo apply_filters( 'frmpro_field_links', $field_label, $id, $field_key ) ?>
 					</li>
                     <?php

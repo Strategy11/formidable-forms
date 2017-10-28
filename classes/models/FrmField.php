@@ -40,6 +40,7 @@ class FrmField {
 			'toggle'    => __( 'Toggle', 'formidable' ),
 			'data'      => __( 'Dynamic', 'formidable' ),
 			'lookup'	=> __( 'Lookup', 'formidable' ),
+			'divider|repeat' => __( 'Repeater', 'formidable' ),
 			'end_divider' => array(
 				'name'  => __( 'End Section', 'formidable' ),
 				'switch_from' => 'divider',

@@ -2438,7 +2438,7 @@ select.texture{display: none;}
 ul .frm_col_one{float:left;}
 ul .frm_col_two{float:right;}
 
-.field_type_list li,
+.field_type_list > li,
 .frm_code_list li{
 	width:48%;
 }
