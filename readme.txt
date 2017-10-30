@@ -145,6 +145,18 @@ The field and form names and descriptions are all changed with in-place edit. Ju
 [See more FAQs](https://formidableforms.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 2.05.03 =
+* Enhancement: Clean up BCC and CC email buttons on small screens
+* Security enhancement: Use wp_kses instead of wp_kses_post for showing entries
+* Enhancement: Add more HTML options to the wp_kses filters
+* Fix: Correctly show the list of trashed forms after one is permanently deleted
+* **Pro Version Forms**
+* New: Add frm_xml_field_export_value hook
+* Fix: PHP error when editing an entry with a date field set as the post date
+* Fix: Field value formatting when exporting XML
+* Fix: Allow striphtml=1 to work for array values
+* Fix: Prevent confirmation field from moving down on small screens
+
 = 2.05.02 =
 * New: Add frm_affiliate_id hook for theme author affiliates
 * Fix: XSS vulnerability on form preview page. Don't check POST values before displaying the form
