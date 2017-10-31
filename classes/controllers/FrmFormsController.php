@@ -1012,7 +1012,9 @@ class FrmFormsController {
                 global $post;
                 global $wpdb;
 
-                $entry_id = FrmDb::get_var( $wpdb->prefix . 'frm_items', array( 'post_id' => $post->ID ), 'id' );
+                if ( is_singular() && !empty($post) ) {
+                    $entry_id = FrmDb::get_var( $wpdb->prefix . 'frm_items', array( 'post_id' => $post->ID ), 'id' );
+                }
 
                 if ( !empty( $entry_id ) ) {
                     $wp_admin_bar->add_node( array(
@@ -1024,8 +1026,11 @@ class FrmFormsController {
                 }
             }
 
-            //get view id either from action or page shortcode
-            $view_id = (!empty($meta = FrmDb::get_var( $wpdb->postmeta, array( 'meta_key' => 'frm_form_id', 'meta_value' => current( array_keys( $actions ) ) ), 'post_id' ) )) ? $meta : (!empty($frm_vars['display_id'])) ? $frm_vars['display_id'] : '';
+            if ( !empty($frm_vars['display_id']) ) {
+                $view_id = $frm_vars['display_id'];
+            } else {
+                $view_id = FrmDb::get_var( $wpdb->postmeta, array( 'meta_key' => 'frm_form_id', 'meta_value' => current( array_keys( $actions ) ) ), 'post_id' );
+            }
 
             if ( !empty( $view_id ) ) {
                 $wp_admin_bar->add_node( array(
