@@ -3,29 +3,8 @@
 <div class="submitbox" id="submitpost">
 
 <?php /* TODO: Move these to settings page
-    <div id="minor-publishing">
-        <div id="misc-publishing-actions">
-            <div class="misc-pub-section">
 
-            <?php if ( ! $values['is_template'] ) { ?>
-            	<span id="frm_shortcode"><span class="frm-buttons-icon wp-media-buttons-icon"></span> <?php _e( 'Form', 'formidable' ) ?> <strong><?php _e( 'Shortcodes', 'formidable' ) ?></strong></span>
-                <a href="#edit_frm_shortcode" class="edit-frm_shortcode hide-if-no-js" tabindex='4'><?php _e( 'Show', 'formidable' ) ?></a>
-                <div id="frm_shortcodediv" class="hide-if-js">
-                    <p class="howto"><?php _e( 'Insert on a page, post, or text widget', 'formidable' ) ?>:</p>
-					<p><input type="text" readonly="readonly" class="frm_select_box" value="[formidable id=<?php echo esc_attr( $id ); ?>]" />
-						<input type="text" readonly="readonly" class="frm_select_box" value="[formidable id=<?php echo esc_attr( $id ); ?> title=true description=true]" />
-                	</p>
-
-                	<p class="howto"><?php _e( 'Insert in a template', 'formidable' ) ?>:</p>
-					<p><input type="text" readonly="readonly" class="frm_select_box frm_insert_in_template" value="&lt;?php echo FrmFormsController::get_form_shortcode( array( 'id' => <?php echo absint( $id ) ?>, 'title' => false, 'description' => false ) ); ?&gt;" /></p>
-
-                    <p><a href="#edit_frm_shortcode" class="cancel-frm_shortcode hide-if-no-js"><?php _e( 'Hide', 'formidable' ); ?></a></p>
-                </div>
-            <?php } ?>
-            </div>
-
-
-            <div class="misc-pub-section misc-pub-post-status"><label for="post_status"><?php _e( 'Status', 'formidable' ) ?>:</label>
+				<label for="post_status"><?php _e( 'Status', 'formidable' ) ?>:</label>
                 <span id="form-status-display"><?php echo FrmFormsHelper::status_nice_name($values['status']); ?></span>
 				<?php if ( 'draft' != $values['status'] && ( ! isset( $_GET['frm_action'] ) || 'settings' != FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' ) ) ) { ?>
                 <a href="#post_status" class="edit-form-status hide-if-no-js" data-slidedown="form-status-select"><span aria-hidden="true"><?php _e( 'Edit') ?></span> <span class="screen-reader-text"><?php _e( 'Edit status') ?></span></a>
@@ -39,18 +18,7 @@
                     <a href="#post_status" class="cancel-form-status hide-if-no-js button-cancel" data-slideup="form-status-select"><?php _e( 'Cancel') ?></a>
                 </div>
                 <?php } ?>
-            </div><!-- .misc-pub-section -->
 
-            <?php if ( has_action('frm_settings_buttons') ) { ?>
-            <div class="misc-pub-section">
-                <?php do_action('frm_settings_buttons', $values); ?>
-                <div class="clear"></div>
-            </div>
-            <?php } ?>
-
-        </div><!-- #misc-publishing-actions -->
-        <div class="clear"></div>
-    </div><!-- #minor-publishing -->
 */ ?>
     <div id="major-publishing-actions">
 		<div class="alignleft">

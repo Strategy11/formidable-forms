@@ -46,7 +46,34 @@
         <div class="advanced_settings tabs-panel <?php echo ($a == 'advanced_settings') ? 'frm_block' : 'frm_hidden' ?>">
 			<?php FrmTipsHelper::pro_tip( 'get_form_settings_tip', 'p' ); ?>
 
-			<h3 class="frm_first_h3"><?php _e( 'On Submit', 'formidable' ); ?>
+			<?php if ( ! $values['is_template'] ) { ?>
+				<h3 id="frm_shortcode" class="<?php echo esc_attr( $first_h3 ) ?>">
+					<?php _e( 'Form Shortcodes', 'formidable' ) ?>
+				</h3>
+				<a href="#edit_frm_shortcode" class="edit-frm_shortcode hide-if-no-js" tabindex='4'><?php _e( 'Show', 'formidable' ) ?></a>
+				<div id="frm_shortcodediv" class="hide-if-js">
+					<p class="howto"><?php _e( 'Insert on a page, post, or text widget', 'formidable' ) ?>:</p>
+					<p><input type="text" readonly="readonly" class="frm_select_box" value="[formidable id=<?php echo esc_attr( $id ); ?>]" />
+						<input type="text" readonly="readonly" class="frm_select_box" value="[formidable id=<?php echo esc_attr( $id ); ?> title=true description=true]" />
+					</p>
+
+					<p class="howto"><?php _e( 'Insert in a template', 'formidable' ) ?>:</p>
+					<p><input type="text" readonly="readonly" class="frm_select_box frm_insert_in_template" value="&lt;?php echo FrmFormsController::get_form_shortcode( array( 'id' => <?php echo absint( $id ) ?>, 'title' => false, 'description' => false ) ); ?&gt;" /></p>
+
+					<p><a href="#edit_frm_shortcode" class="cancel-frm_shortcode hide-if-no-js"><?php _e( 'Hide', 'formidable' ); ?></a></p>
+				</div>
+				<?php $first_h3 = ''; ?>
+
+				<?php if ( has_action( 'frm_settings_buttons' ) ) { ?>
+					<div class="misc-pub-section">
+						<?php do_action( 'frm_settings_buttons', $values ); ?>
+						<div class="clear"></div>
+					</div>
+				<?php } ?>
+			<?php } ?>
+
+			<h3 class="<?php echo esc_attr( $first_h3 ) ?>">
+				<?php _e( 'On Submit', 'formidable' ); ?>
 				<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Choose what will happen after the user submits this form.', 'formidable' );
 				if ( ! FrmAppHelper::pro_is_installed() ) {
 					esc_attr_e( ' Upgrade to Formidable Pro to get access to all options in the dropdown.', 'formidable' );

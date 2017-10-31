@@ -2355,6 +2355,10 @@ select[name="m"]{display:none;}
 .frm_shortcode_select optgroup{padding-top:5px;}
 .frm_shortcode_select .frm_subopt{margin-left:2em;}
 
+#frm_shortcode.frm_first_h3{
+	display:inline-block;
+}
+
 .misc-pub-section a.edit-frm_shortcode, .misc-pub-section a.edit-form-status{
     float:none;
     font-size:13px;
