@@ -39,6 +39,8 @@ class FrmFieldNumber extends FrmFieldType {
 	public function validate( $args ) {
 		$errors = array();
 
+		$this->remove_commas_from_number( $args );
+
 		//validate the number format
 		if ( ! is_numeric( $args['value'] ) ) {
 			$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $this->field, 'invalid' );
@@ -62,6 +64,21 @@ class FrmFieldNumber extends FrmFieldType {
 
 		return $errors;
 	}
+
+
+	/**
+	 * IE fallback for number fields
+	 * Remove the comma when HTML5 isn't supported
+	 *
+	 * @since 3.0
+	 */
+	private function remove_commas_from_number( &$args ) {
+		if ( strpos( $args['value'], ',' ) ) {
+			$args['value'] = str_replace( ',', '', $args['value'] );
+			FrmEntriesHelper::set_posted_value( $this->field, $args['value'], $args );
+		}
+	}
+
 
 	public function set_value_before_save( $value ) {
 		if ( ! is_numeric( $value ) ) {

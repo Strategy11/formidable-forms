@@ -46,6 +46,23 @@ class FrmFieldUrl extends FrmFieldType {
 		}
 	}
 
+	public function validate( $args ) {
+		$value = $args['value'];
+		if ( trim( $value ) == 'http://' ) {
+			$value = '';
+		} else {
+			$value = esc_url_raw( $value );
+			$value = preg_match( '/^(https?|ftps?|mailto|news|feed|telnet):/is', $value ) ? $value : 'http://' . $value;
+		}
+
+		FrmEntriesHelper::set_posted_value( $this->field, $value, $args );
+
+		// validate the url format
+		if ( ! preg_match( '/^http(s)?:\/\/(?:localhost|(?:[\da-z\.-]+\.[\da-z\.-]+))/i', $value ) ) {
+			$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $this->field, 'invalid' );
+		}
+	}
+
 	protected function prepare_display_value( $value, $atts ) {
 		if ( $atts['html'] ) {
 			$images = '';
