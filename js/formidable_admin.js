@@ -393,7 +393,7 @@ function frmAdminBuildJS(){
 		var sectionId = getSectionIdForFieldPlacement( section );
 
 		var loadingID = fieldType.replace('|', '-');
-		currentItem.replaceWith('<img class="frmbutton frmbutton_loadingnow" id="' + loadingID + '" src="' + frm_js.images_url + '/ajax_loader.gif" alt="' + frm_js.loading + '" />');
+		currentItem.replaceWith('<span class="frm_visible_spinner spinner frmbutton_loadingnow" id="' + loadingID + '" ></span>');
 
 		jQuery.ajax({
 			type: 'POST', url: ajaxurl,
@@ -2583,12 +2583,12 @@ function frmAdminBuildJS(){
 			jQuery('.frm_authorize_link').click(authorize);
 		},
 		
-		buildInit: function(){			
+		buildInit: function(){
 			if(jQuery('.frm_field_loading').length){
 				var load_field_id = jQuery('.frm_field_loading').first().attr('id');
 				loadFields(load_field_id);
 			}
-			
+
 			setupSortable('ul.frm_sorting');
 
 			// Show message if section has no fields inside
