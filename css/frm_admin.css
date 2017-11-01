@@ -8,11 +8,21 @@ a, .widget .widget-top, .postbox h3, .stuffbox h3{cursor: pointer; text-decorati
 	margin-right:20px;
 }
 
+.toplevel_page_formidable #wpbody-content,
 #post-body-content{
 	margin-bottom:0;
+	padding-bottom:0;
 }
 
 .frm_wrap #post-body-content{
+	background:#fff;
+	flex: 1 1 auto;
+	overflow: auto;
+	width: auto;
+}
+
+.toplevel_page_formidable #wpfooter{
+	border-top:1px solid #ddd;
 	background:#fff;
 }
 
@@ -171,18 +181,21 @@ ul.frm_form_nav > li{
 }
 
 .frm_wrap #poststuff #post-body.columns-2{
-	margin-right:350px;
+	display: -webkit-flex;
+	display:flex;
+	margin-right: 0;
+	height: 100vh;
 }
 
 .frm_wrap #post-body.columns-2 #postbox-container-1,
 #postbox-container-1 .frm_field_list,
 .frm_wrap #postbox-container-1 #frm_adv_info{
 	width:350px;
-	margin-right:-350px;
+	margin-right:0;
 	height: 100%;
-	overflow: scroll;
 	box-shadow:none;
 	border-top:none;
+	margin-bottom:0;
 }
 
 .frm_wrap #submitdiv{
@@ -202,16 +215,20 @@ ul.frm_form_nav > li{
 
 #postbox-container-1 .nodrag a{cursor:pointer;}
 
-.frm-fixed-panel,
-.frm-right-panel > #submitdiv{
-	position:fixed;
-	z-index:999;
+.frm_wrap #post-body.columns-2 #postbox-container-1.frm-right-panel,
+#postbox-container-1.frm-right-panel{
+	display: -webkit-flex;
+	display:flex;
+	-webkit-flex-direction: column;
+	height: 100vh;
 }
 
-.frm-fixed-panel{
-	height:100%;
-	overflow:auto;
+#frm-fixed-panel{
 	direction:rtl;
+	-webkit-flex: 1 1 auto;
+	flex: 1 1 auto;
+	overflow-y: auto;
+	min-height: 100px;
 }
 
 .frm-ltr{
@@ -509,6 +526,22 @@ form label.frm_primary_label input{font-size:12px;}
 
 #frm_form_editor_container .divider_section_only label.frm_primary_label {
 	font-size:16px;
+}
+
+form .form-field.frm_field_loading{
+	margin-bottom: 0;
+	min-height: 0;
+	padding: 0;
+	text-align: center;
+}
+
+.frm_sorting > .frm_field_loading .frm_visible_spinner.spinner{
+	margin-bottom:10px;
+}
+
+.frm_sorting > .frm_field_loading ~ .frm_field_loading .frm_visible_spinner.spinner{
+	margin-bottom:0;
+	display:none;
 }
 
 .with_frm_style form div.description, .frm_error{
@@ -958,6 +991,7 @@ img.frm_help{
 	vertical-align:middle;
 	padding-bottom:2px;
 }
+
 .frm-loading-img{
 	background:url(../images/ajax_loader.gif) no-repeat center center;
 	padding:6px 12px;
@@ -965,6 +999,11 @@ img.frm_help{
 }
 .frm_spinner.spinner{
 	float:left;
+}
+
+.frm_visible_spinner.spinner{
+	visibility:visible;
+	float:none;
 }
 
 .frm_form_action_settings .frm_spinner.spinner{
@@ -2747,7 +2786,7 @@ iframe#dyncontent_ifr{min-height:150px;}
 	direction:rtl;
 }
 
-.rtl .frm-fixed-panel{
+.rtl #frm-fixed-panel{
 	direction:ltr;
 }
 
@@ -2871,7 +2910,7 @@ Responsive Design
 
 @media only screen and (max-width: 850px) {
 	.frm_wrap #submitdiv,
-	.frm-fixed-panel,
+	#frm-fixed-panel,
 	.frm-right-panel > #submitdiv,
 	#postbox-container-1 .frm_field_list{
 		position:static;

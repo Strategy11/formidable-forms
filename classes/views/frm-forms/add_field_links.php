@@ -1,6 +1,4 @@
 <div id="postbox-container-1" class="postbox-container frm-right-panel">
-<div class="frm-fixed-panel">
-	<div class="frm-ltr">
 <?php
 $action = isset( $_REQUEST['frm_action'] ) ? 'frm_action' : 'action';
 $action = FrmAppHelper::get_param( $action, '', 'get', 'sanitize_title' );
@@ -9,6 +7,8 @@ $button = ( $action == 'new' || $action == 'duplicate' ) ? __( 'Create', 'formid
 include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/_publish_box.php' );
 ?>
 
+	<div id="frm-fixed-panel">
+	<div class="frm-ltr">
     <div class="postbox frm_field_list">
     <div class="inside">
     <div id="taxonomy-linkcategory" class="categorydiv">
@@ -122,5 +122,5 @@ foreach ( FrmField::pro_field_selection() as $field_key => $field_type ) {
 
 	</div>
 	</div>
-</div>
+	</div>
 </div>

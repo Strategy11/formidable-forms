@@ -650,6 +650,8 @@ class FrmFormsController {
 
         $styles = apply_filters('frm_get_style_opts', array());
 
+		$first_h3 = 'frm_first_h3';
+
 		require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/settings.php' );
     }
 

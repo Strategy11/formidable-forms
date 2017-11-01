@@ -410,7 +410,7 @@ class FrmAppController {
 				__( 'Help us spread the %1$sFormidable Forms%2$s love with a %3$s5-star review on WordPress.org%4$s. Thank you heaps!', 'formidable' ),
 				'<a href="https://formidableforms.com" target="_blank">',
 				'</a>',
-				'<a href="https://wordpress.org/support/plugin/formidable/reviews/#new-post" target="_blank">',
+				'<a href="https://wordpress.org/support/plugin/formidable/reviews/?filter=5#new-post" target="_blank">',
 				'</a>'
 			);
 			$text = '<span id="footer-thankyou">' . $text . '</span>';
