@@ -461,8 +461,7 @@ class FrmForm {
      * @return int form id
      */
 	public static function getIdByKey( $key ) {
-        $id = FrmDb::get_var( 'frm_forms', array( 'form_key' => sanitize_title( $key ) ) );
-        return $id;
+		return (int) FrmDb::get_var( 'frm_forms', array( 'form_key' => sanitize_title( $key ) ) );
     }
 
     /**
