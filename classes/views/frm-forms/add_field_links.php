@@ -21,11 +21,12 @@ include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/_publish_box.ph
     	<div id="frm-insert-fields" class="tabs-panel">
 		    <ul class="field_type_list">
 <?php
-foreach ( $frm_field_selection as $field_key => $field_type ) { ?>
+foreach ( $frm_field_selection as $field_key => $field_type ) {
+	 ?>
 				<li class="frmbutton button <?php echo esc_attr( ' frm_t' . $field_key ) ?>" id="<?php echo esc_attr( $field_key ) ?>">
 					<a href="#" class="frm_add_field frm_animate_bg">
-						<i class="dashicons dashicons-editor-paragraph frm_animate_bg"></i>
-						<span><?php echo esc_html( $field_type ) ?></span>
+						<i class="<?php echo esc_attr( FrmFormsHelper::get_field_link_icon( $field_type ) ) ?> frm_animate_bg"></i>
+						<span><?php echo esc_html( FrmFormsHelper::get_field_link_name( $field_type ) ) ?></span>
 					</a>
 				</li>
 <?php
@@ -40,17 +41,17 @@ foreach ( $frm_field_selection as $field_key => $field_type ) { ?>
 $no_allow_class = apply_filters( 'frm_noallow_class', 'frm_noallow' );
 foreach ( FrmField::pro_field_selection() as $field_key => $field_type ) {
 
-	if ( is_array( $field_type ) ) {
-		$field_label = $field_type['name'];
+	if ( is_array( $field_type ) && isset( $field_type['switch_from'] ) ) {
+		continue;
+	}
 
-		if ( isset( $field_type['switch_from'] ) ) {
-			continue;
-		}
+	if ( is_array( $field_type ) && isset( $field_type['types'] ) ) {
+		$field_label = $field_type['name'];
 
 ?>
 				<li class="frmbutton button <?php echo esc_attr( $no_allow_class . ' frm_t' . $field_key ) ?> dropdown" id="<?php echo esc_attr( $field_key ) ?>">
 	                <a href="#" id="frm-<?php echo esc_attr( $field_key ) ?>Drop" class="frm-dropdown-toggle" data-toggle="dropdown">
-						<i class="dashicons dashicons-editor-paragraph frm_animate_bg"></i>
+						<i class="<?php echo esc_attr( FrmFormsHelper::get_field_link_icon( $field_type ) ) ?> frm_animate_bg"></i>
 						<span><?php echo esc_html( $field_label ) ?> <b class="caret"></b></span>
 					</a>
 
@@ -67,7 +68,8 @@ foreach ( FrmField::pro_field_selection() as $field_key => $field_type ) {
                 </li>
 <?php
                 } else {
-                    $field_label = '<i class="dashicons dashicons-editor-paragraph frm_animate_bg"></i> <span>' . $field_type .'</span>';
+                    $field_label = '<i class="' . esc_attr( FrmFormsHelper::get_field_link_icon( $field_type ) ) . ' frm_animate_bg"></i>';
+					$field_label .= ' <span>' . FrmFormsHelper::get_field_link_name( $field_type ) .'</span>';
                     ?>
 					<li class="frmbutton button <?php echo esc_attr( $no_allow_class . ' frm_t' . str_replace( '|', '-', $field_key ) ) ?>" id="<?php echo esc_attr( $field_key ) ?>">
 						<?php echo apply_filters( 'frmpro_field_links', $field_label, $id, $field_key ) ?>

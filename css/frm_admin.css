@@ -175,7 +175,7 @@ ul.frm_form_nav > li{
     font-size: 24px;
     font-weight: normal;
     letter-spacing: 1px;
-	padding: 8px 20px;
+	padding: 0 20px 8px;
 	line-height: 1.4;
 	color:#72777C;
 }
@@ -602,7 +602,7 @@ form .form-field.frm_field_loading{
 
 div.updated.frm_updated_message,
 .update-nag.frm-update-to-pro{
-	border-radius:4px;
+	border-radius:2px;
     border: 1px solid #D6E9C6;
     background-color: #DFF0D8;
     color: #468847;
@@ -1659,6 +1659,7 @@ label.frm_action_events{
 .frm_actions_list > li > a:before{
 	font-size:24px;
 	height:auto;
+	vertical-align: bottom;
 }
 .frm_email_icons, .frm_actions_list{
     padding: 10px 0 10px 15px;
@@ -1792,8 +1793,6 @@ label.frm_action_events{
 .frm_icon_font{
 	color:#A0A0A0;
 }
-
-
 
 .misc-pub-revisions.frm_icon_font,
 .misc-pub-revisions.frm_icon_font:hover{
@@ -2388,6 +2387,10 @@ ul.frm-category-tabs{
 .widefat .column-entries, .widefat .column-link{width:10%;text-align:center;}
 .widefat .column-form_key, .widefat .column-created_at{width:10%;}
 
+.frm_wrap .search-box{
+	float:right;
+}
+
 select[name="m"]{display:none;}
 
 .frm_shortcode_select optgroup option{margin-left:1em;}
@@ -2526,10 +2529,30 @@ ul .frm_col_two{float:right;}
 	padding: .15em;
 	border-right:1px solid #e5e5e5;
 	margin-right:2px;
+	color: inherit;
+	display: inline-block;
+	vertical-align: top;
+	text-align: center;
+	width:20px;
+	height:20px;
 }
 
 .frmbutton.ui-sortable-helper .frm-dropdown-menu{
 	display:none;
+}
+
+.frm_text_icon:before{
+	content:'T';
+    font-size: 20px;
+    font-style: normal;
+	font-family: serif;
+}
+
+.frm_h3_icon:before{
+	content:'H3';
+	font-size: 19px;
+	font-style: normal;
+	font-family: monospace;
 }
 
 li.frm_noallow.button,

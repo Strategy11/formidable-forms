@@ -122,6 +122,30 @@ class FrmFormsHelper {
     }
 
 	/**
+	 * @since 3.0
+	 */
+	public static function get_field_link_name( $field_type ) {
+		if ( is_array( $field_type ) ) {
+			$field_label = $field_type['name'];
+		} else {
+			$field_label = $field_type;
+		}
+		return $field_label;
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	public static function get_field_link_icon( $field_type ) {
+		if ( is_array( $field_type ) && isset( $field_type['icon'] ) ) {
+			$icon = $field_type['icon'];
+		} else {
+			$icon = 'frm_icon_font frm_pencil_icon';
+		}
+		return $icon;
+	}
+
+	/**
 	 * Get the invalid form error message
 	 *
 	 * @since 2.02.07

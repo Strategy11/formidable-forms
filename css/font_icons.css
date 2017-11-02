@@ -9,6 +9,7 @@ i.frm_icon_font{
 	font-style:normal;
 }
 
+.frm_icon_font,
 .frm_icon_font:before,
 select.frm_icon_font{
 	font-family: 's11-fp' !important;
@@ -19,6 +20,10 @@ select.frm_icon_font{
 	-moz-transition: all .1s ease-in-out;
 	-webkit-transition: all .1s ease-in-out;
 	transition: all .1s ease-in-out;
+	vertical-align:-webkit-baseline-middle;
+	vertical-align: middle;
+	display:inline-block;
+	text-align:center;
 }
 
 .frm_icon_font,
@@ -229,3 +234,226 @@ a.frm_icon_font:hover{
 .frm_paste_icon:before {
     content: "\e901";
 }
+.frm_wordpress-simple_icon:before {
+  content: "\f411";
+}
+.frm_wordpress_icon:before {
+  content: "\f19a";
+}
+.frm_checkbox-checked_icon:before {
+  content: "\ea52";
+}
+.frm_radio-checked2_icon:before {
+  content: "\ea55";
+}
+.frm_radio-checked_icon:before {
+  content: "\ea54";
+}
+.frm_link_icon:before {
+  content: "\f0c1";
+}
+.frm_insert-template_icon:before {
+  content: "\ea72";
+}
+.frm_location_icon:before {
+  content: "\e947";
+}
+.frm_phone_icon:before {
+  content: "\e942";
+}
+.frm_embed2_icon:before {
+  content: "\ea80";
+}
+.frm_eye-blocked_icon:before {
+  content: "\e9d1";
+}
+.frm_price-tags_icon:before {
+  content: "\e936";
+}
+.frm_tree_icon:before {
+  content: "\e9bc";
+}
+.frm_price-tag_icon:before {
+  content: "\e935";
+}
+.frm_upload3_icon:before {
+  content: "\e9c8";
+}
+.frm_cog_icon:before {
+  content: "\e994";
+}
+.frm_eye_icon:before {
+  content: "\e9ce";
+}
+.frm_pagebreak_icon:before {
+  content: "\ea6e";
+}
+.frm_hash_icon:before {
+  content: "\e904";
+}
+.frm_equalizer_icon:before {
+  content: "\e992";
+}
+.frm_pause_icon:before {
+  content: "\ea16";
+}
+.frm_page-break_icon:before {
+  content: "\ea68";
+}
+.frm_pie-chart_icon:before {
+  content: "\e99a";
+}
+.frm_stats-dots_icon:before {
+  content: "\e99b";
+}
+.frm_stats-bars_icon:before {
+  content: "\e99c";
+}
+.frm_stats-bars2_icon:before {
+  content: "\e99d";
+}
+.frm_i-cursor_icon:before {
+  content: "\f246";
+}
+.frm_paragraph_icon:before {
+  content: "\f1dd";
+}
+.frm_caret-square-o-down_icon:before {
+  content: "\f150";
+}
+.frm_toggle-down_icon:before {
+  content: "\f150";
+}
+.frm_toggle-on_icon:before {
+  content: "\f205";
+}
+.frm_clock-o_icon:before {
+  content: "\f017";
+}
+.frm_envelope-o_icon:before {
+  content: "\f003";
+}
+.frm_check-circle_icon:before {
+  content: "\f058";
+}
+.frm_calendar_icon:before {
+  content: "\f073";
+}
+.frm_upload2_icon:before {
+  content: "\f093";
+}
+.frm_user_icon:before {
+  content: "\f007";
+}
+.frm_search_icon:before {
+  content: "\f002";
+}
+.frm_sitemap_icon:before {
+  content: "\f0e8";
+}
+.frm_file-text_icon:before {
+  content: "\f15c";
+}
+.frm_check-circle-o_icon:before {
+  content: "\f05d";
+}
+.frm_ellipsis-h_icon:before {
+  content: "\f141";
+}
+.frm_ellipsis-v_icon:before {
+  content: "\f142";
+}
+.frm_calculator_icon:before {
+  content: "\f1ec";
+}
+.frm_toggle-off_icon:before {
+  content: "\f204";
+}
+.frm_asterisk_icon:before {
+  content: "\f069";
+}
+.frm_key_icon:before {
+  content: "\f084";
+}
+.frm_list-alt_icon:before {
+  content: "\f022";
+}
+.frm_eye2_icon:before {
+  content: "\f06e";
+}
+.frm_eye-slash_icon:before {
+  content: "\f070";
+}
+.frm_bolt_icon:before {
+  content: "\f0e7";
+}
+.frm_flash_icon:before {
+  content: "\f0e7";
+}
+.frm_check-square-o_icon:before {
+  content: "\f046";
+}
+.frm_tasks_icon:before {
+  content: "\f0ae";
+}
+.frm_sliders_icon:before {
+  content: "\f1de";
+}
+.frm_server_icon:before {
+  content: "\f233";
+}
+.frm_sort-numeric-asc_icon:before {
+  content: "\f162";
+}
+.frm_user-secret_icon:before {
+  content: "\f21b";
+}
+.frm_sort_icon:before {
+  content: "\f0dc";
+}
+.frm_unsorted_icon:before {
+  content: "\f0dc";
+}
+.frm_area-chart_icon:before {
+  content: "\f1fe";
+}
+.frm_credit-card-alt_icon:before {
+  content: "\f283";
+}
+.frm_cc-visa_icon:before {
+  content: "\f1f0";
+}
+.frm_cc-mastercard_icon:before {
+  content: "\f1f1";
+}
+.frm_cc-discover_icon:before {
+  content: "\f1f2";
+}
+.frm_cc-amex_icon:before {
+  content: "\f1f3";
+}
+.frm_cc-paypal_icon:before {
+  content: "\f1f4";
+}
+.frm_cc-stripe_icon:before {
+  content: "\f1f5";
+}
+.frm_more_horiz_icon:before {
+  content: "\e5d3";
+}
+.frm_more_vert_icon:before {
+  content: "\e5d4";
+}
+.frm_view_day_icon:before {
+  content: "\e8ed";
+}
+.frm_view_quilt_icon:before {
+  content: "\e8f1";
+}
+.frm_line_style_icon:before {
+  content: "\e919";
+}
+.frm_view_comfy_icon:before {
+  content: "\e42a";
+}
+

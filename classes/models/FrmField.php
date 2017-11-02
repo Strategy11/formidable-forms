@@ -10,19 +10,58 @@ class FrmField {
 
 	public static function field_selection() {
 		$fields = apply_filters('frm_available_fields', array(
-			'text'      => __( 'Text', 'formidable' ),
-			'textarea'  => __( 'Paragraph', 'formidable' ),
-			'checkbox'  => __( 'Checkboxes', 'formidable' ),
-			'radio'     => __( 'Radio Button', 'formidable' ),
-			'select'    => __( 'Dropdown', 'formidable' ),
-			'email'     => __( 'Email', 'formidable' ),
-			'url'       => __( 'Website/URL', 'formidable' ),
-			'number'    => __( 'Number', 'formidable' ),
-			'phone'     => __( 'Phone', 'formidable' ),
-			'html'      => __( 'HTML', 'formidable' ),
-			'hidden'    => __( 'Hidden Field', 'formidable' ),
-			'user_id'   => __( 'User ID', 'formidable' ),
-			'captcha'   => __( 'reCAPTCHA', 'formidable' ),
+			'text'      => array(
+				'name'  => __( 'Text', 'formidable' ),
+				'icon'  => 'frm_text_icon',
+			),
+			'textarea'  => array(
+				'name'  => __( 'Paragraph', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_paragraph_icon',
+			),
+			'checkbox'  => array(
+				'name'  => __( 'Checkboxes', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_checkbox-checked_icon',
+			),
+			'radio'     => array(
+				'name'  => __( 'Radio Button', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_radio-checked_icon',
+			),
+			'select'    => array(
+				'name'  => __( 'Dropdown', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_arrowdown2_icon',
+			),
+			'email'     => array(
+				'name'  => __( 'Email', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_email_icon',
+			),
+			'url'       => array(
+				'name'  => __( 'Website/URL', 'formidable' ),
+				'icon'  => 'dashicons dashicons-admin-links',
+			),
+			'number'    => array(
+				'name'  => __( 'Number', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_hash_icon',
+			),
+			'phone'     => array(
+				'name'  => __( 'Phone', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_phone_icon',
+			),
+			'html'      => array(
+				'name'  => __( 'HTML', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_embed2_icon',
+			),
+			'hidden'    => array(
+				'name'  => __( 'Hidden Field', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_eye-blocked_icon',
+			),
+			'user_id'   => array(
+				'name'  => __( 'User ID', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_user_icon',
+			),
+			'captcha'   => array(
+				'name'  => __( 'reCAPTCHA', 'formidable' ),
+				'icon'  => 'dashicons dashicons-shield-alt',
+			),
 		));
 
 		return $fields;
@@ -30,27 +69,78 @@ class FrmField {
 
 	public static function pro_field_selection() {
 		return apply_filters( 'frm_pro_available_fields', array(
-			'file'      => __( 'File Upload', 'formidable' ),
-			'rte'       => __( 'Rich Text', 'formidable' ),
-			'date'      => __( 'Date', 'formidable' ),
-			'time'      => __( 'Time', 'formidable' ),
-			'scale'     => __( 'Scale', 'formidable' ),
-			'range'     => __( 'Slider', 'formidable' ),
-			'toggle'    => __( 'Toggle', 'formidable' ),
-			'data'      => __( 'Dynamic', 'formidable' ),
-			'lookup'	=> __( 'Lookup', 'formidable' ),
-			'divider|repeat' => __( 'Repeater', 'formidable' ),
+			'file'      => array(
+				'name'  =>__( 'File Upload', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_upload2_icon',
+			),
+			'rte'       => array(
+				'name'  => __( 'Rich Text', 'formidable' ),
+				'icon'  => 'dashicons dashicons-editor-alignright',
+			),
+			'date'      => array(
+				'name'  => __( 'Date', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_calendar_icon',
+			),
+			'time'      => array(
+				'name'  => __( 'Time', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_clock-o_icon',
+			),
+			'scale'     => array(
+				'name'  => __( 'Scale', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_ellipsis-h_icon',
+			),
+			'range'     => array(
+				'name'  => __( 'Slider', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_sliders_icon',
+			),
+			'toggle'    => array(
+				'name'  => __( 'Toggle', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_toggle-on_icon',
+			),
+			'data'      => array(
+				'name'  => __( 'Dynamic', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_sitemap_icon',
+			),
+			'lookup'	=> array(
+				'name'  => __( 'Lookup', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_search_icon',
+			),
+			'divider|repeat' => array(
+				'name'  => __( 'Repeater', 'formidable' ),
+				'icon'  => 'dashicons dashicons-image-rotate',
+			),
 			'end_divider' => array(
 				'name'  => __( 'End Section', 'formidable' ),
 				'switch_from' => 'divider',
 			),
-			'divider'   => __( 'Section', 'formidable' ),
-			'break'     => __( 'Page Break', 'formidable' ),
-			'form'      => __( 'Embed Form', 'formidable' ),
-			'password'  => __( 'Password', 'formidable' ),
-			'tag'       => __( 'Tags', 'formidable' ),
-			'credit_card' => __( 'Credit Card', 'formidable' ),
-			'address'   => __( 'Address', 'formidable' ),
+			'divider'   => array(
+				'name'  => __( 'Section', 'formidable' ),
+				'icon'  => 'frm_h3_icon',
+			),
+			'break'     => array(
+				'name'  => __( 'Page Break', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_page-break_icon',
+			),
+			'form'      => array(
+				'name'  => __( 'Embed Form', 'formidable' ),
+				'icon'  => 'dashicons dashicons-editor-table',
+			),
+			'password'  => array(
+				'name'  => __( 'Password', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_key_icon',
+			),
+			'tag'       => array(
+				'name'  => __( 'Tags', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_price-tags_icon'
+			),
+			'credit_card' => array(
+				'name'  => __( 'Credit Card', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_credit-card-alt_icon',
+			),
+			'address'   => array(
+				'name'  => __( 'Address', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_location_icon',
+			),
 		));
 	}
 
