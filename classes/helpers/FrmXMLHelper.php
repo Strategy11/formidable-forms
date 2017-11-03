@@ -797,7 +797,7 @@ class FrmXMLHelper {
         }
 
         if ( ! is_array($result) ) {
-            $message = is_string( $result ) ? $result : print_r( $result, 1 );
+            $message = is_string( $result ) ? $result : htmlentities( print_r( $result, 1 ) );
             return;
         }
 

@@ -865,7 +865,7 @@ DEFAULT_HTML;
             $atts['param'] = str_replace('&#93;', ']', $atts['param']);
         }
 
-        $new_value = FrmAppHelper::get_param($atts['param'], '');
+		$new_value = FrmAppHelper::get_param( $atts['param'], '', 'get', 'sanitize_text_field' );
         $new_value = FrmAppHelper::get_query_var( $new_value, $atts['param'] );
 
         if ( $new_value == '' ) {
