@@ -184,7 +184,9 @@ ul.frm_form_nav > li{
 	display: -webkit-flex;
 	display:flex;
 	margin-right: 0;
+	height:100%;
 	height: 100vh;
+	-ms-overflow-style: -ms-autohiding-scrollbar;
 }
 
 .frm_wrap #post-body.columns-2 #postbox-container-1,
@@ -194,7 +196,7 @@ ul.frm_form_nav > li{
 	margin-right:0;
 	height: 100%;
 	box-shadow:none;
-	border-top:none;
+	border:none;
 	margin-bottom:0;
 }
 
@@ -204,7 +206,7 @@ ul.frm_form_nav > li{
 	width: 350px;
 }
 .frm_wrap #submitdiv.frm-no-border{
-	border-bottom: none;
+	border: none;
 	box-shadow:none;
 }
 
@@ -221,6 +223,9 @@ ul.frm_form_nav > li{
 	display:flex;
 	-webkit-flex-direction: column;
 	height: 100vh;
+	border: 1px solid #e5e5e5;
+	border-right-width: 0;
+	border-top-width: 0;
 }
 
 #frm-fixed-panel{
@@ -229,6 +234,11 @@ ul.frm_form_nav > li{
 	flex: 1 1 auto;
 	overflow-y: auto;
 	min-height: 100px;
+	padding-top:1px;
+}
+
+#frm-fixed-panel::-webkit-scrollbar {
+	width: 0;
 }
 
 .frm-ltr{
@@ -347,6 +357,10 @@ ul.frm_form_nav > li{
 }
 
 /* Build New Form page */
+
+.frm-right-panel #publishing-action{
+	float:none;
+}
 
 .frm-right-panel #major-publishing-actions{
 	border-top:none;
@@ -815,20 +829,19 @@ div.updated.frm_updated_message,
 	line-height: 1.5;
 }
 
+.frm-dots:before{
+	color:#fff;
+}
+
 .frm-dots{
-	color: #fff;
 	border-radius: 50%;
 	background: #1072b8;
-	letter-spacing: -0.13em;
-	padding: 0 .25em 0 .17em;
-	font-size: 19px;
-	vertical-align: middle;
-	line-height: 1.4em;
+	padding: .12em;
+	vertical-align: sub;
 }
 
 .frm-dots:focus,
 .frm-dots:hover{
-	color:#f5f5f5;
 	background:#006799;
 }
 
@@ -1871,10 +1884,11 @@ a.frm_action_icon.frm_required0{
 	color:#ababab;
 }
 
-.frm-hover-icon{padding-left:5px;}
-.frm-move.frm-hover-icon{padding-left:3px;}
-.frm-move{cursor:move;}
+.frm-hover-icon.frm_icon_font:before{
+	font-size:16px;
+}
 
+.frm-move{cursor:move;}
 
 .frm_remove_tag:before,
 .frm_add_tag:before{
@@ -2990,17 +3004,40 @@ Responsive Design
 		padding-left:0;
 	}
 
-	.field_type_list li.button{
+	.frm-right-panel #submitdiv,
+	#wpbody-content .frm_wrap #post-body.columns-2 #postbox-container-1,
+	#postbox-container-1 .frm_field_list,
+	.frm_wrap #postbox-container-1 #frm_adv_info{
+		width:auto;
+		max-width:200px;
+		min-width: 100px;
+		text-align:center;
+	}
+
+	#publishing-action > button{
+		margin-bottom:5px;
+	}
+
+	.field_type_list li.button:nth-child(2n),
+	.field_type_list > li.button,
+	.frm_code_list li{
 		line-height:26px;
+		width:100%;
+		float:none;
+		margin-right:0;
+		margin-left:0;
 	}
 
 	.frm_wrap #publishing-action{
 		line-height:inherit;
 	}
 
+	.frm_wrap #frm_adv_info ul.category-tabs li,
 	.frm_wrap #frm_adv_info ul.category-tabs li.tabs,
+	.frm_field_list ul.category-tabs li,
 	.frm_field_list ul.category-tabs li.tabs{
-		padding:10px;
+		padding:3px;
+		border:none;
 	}
 
 	#frm_notification_settings .frm_email_buttons {
@@ -3034,6 +3071,39 @@ Responsive Design
 	.frm_drag_inst{
 		font-size: 16px;
 		margin-bottom:40px;
+	}
+
+	#publishing-action > button{
+		width:100%;
+	}
+
+	.frm_code_list a.button{
+		padding:2px;
+	}
+
+	.field_type_list li.button:nth-child(2n),
+	.field_type_list > li.button{
+		width:auto;
+	}
+
+	.field_type_list li span{
+		display:none;
+	}
+
+	.frmbutton.ui-sortable-helper i,
+	.field_type_list li.frmbutton i{
+		border:none;
+	}
+
+	.frm-right-panel #submitdiv,
+	#wpbody-content .frm_wrap #post-body.columns-2 #postbox-container-1,
+	#postbox-container-1 .frm_field_list,
+	.frm_wrap #postbox-container-1 #frm_adv_info{
+		min-width:100px;
+	}
+
+	.tabs-panel ol.howto{
+		display:none;
 	}
 }
 

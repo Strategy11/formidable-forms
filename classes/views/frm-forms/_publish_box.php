@@ -21,11 +21,11 @@
 
 */ ?>
     <div id="major-publishing-actions">
-		<div class="alignleft">
-			<?php FrmFormsHelper::actions_dropdown( $values ) ?>
-		</div>
-
 		<div id="publishing-action">
+			<div class="alignleft">
+				<?php FrmFormsHelper::actions_dropdown( $values ) ?>
+			</div>
+
 			<?php if ( 'draft' == $values['status'] ) { ?>
 				<button class="frm_submit_form frm_submit_<?php echo ( isset( $values['ajax_load'] ) && $values['ajax_load'] ) ? '' : 'no_'; ?>ajax button-primary frm_button_submit" type="button" id="save-post" ><?php esc_html_e( 'Save Draft', 'formidable' ); ?></button>
 			<?php } ?>

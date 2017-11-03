@@ -1,5 +1,5 @@
 <div class="frm_actions_dropdown dropdown <?php echo esc_attr( is_rtl() ? 'pull-right' : 'pull-left' ) ?>">
-	<a href="#" id="frm-navbarDrop" class="frm-dropdown-toggle frm-dots" data-toggle="dropdown" title="<?php esc_attr_e( 'Show options', 'formidable' ) ?>">&middot; &middot; &middot;</a>
+	<a href="#" id="frm-navbarDrop" class="frm-dropdown-toggle frm-dots frm_icon_font frm_ellipsis-h_icon" data-toggle="dropdown" title="<?php esc_attr_e( 'Show options', 'formidable' ) ?>"></a>
 	<ul class="frm-dropdown-menu frm-on-top" role="menu" aria-labelledby="frm-navbarDrop">
 		<?php foreach ( $links as $link ) { ?>
 		<li>

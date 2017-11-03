@@ -22,11 +22,12 @@ include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/_publish_box.ph
 		    <ul class="field_type_list">
 <?php
 foreach ( $frm_field_selection as $field_key => $field_type ) {
+	$field_label = FrmFormsHelper::get_field_link_name( $field_type );
 	 ?>
 				<li class="frmbutton button <?php echo esc_attr( ' frm_t' . $field_key ) ?>" id="<?php echo esc_attr( $field_key ) ?>">
-					<a href="#" class="frm_add_field frm_animate_bg">
+					<a href="#" class="frm_add_field frm_animate_bg" title="<?php echo esc_html( $field_label ) ?>">
 						<i class="<?php echo esc_attr( FrmFormsHelper::get_field_link_icon( $field_type ) ) ?> frm_animate_bg"></i>
-						<span><?php echo esc_html( FrmFormsHelper::get_field_link_name( $field_type ) ) ?></span>
+						<span><?php echo esc_html( $field_label ) ?></span>
 					</a>
 				</li>
 <?php
@@ -50,7 +51,7 @@ foreach ( FrmField::pro_field_selection() as $field_key => $field_type ) {
 
 ?>
 				<li class="frmbutton button <?php echo esc_attr( $no_allow_class . ' frm_t' . $field_key ) ?> dropdown" id="<?php echo esc_attr( $field_key ) ?>">
-	                <a href="#" id="frm-<?php echo esc_attr( $field_key ) ?>Drop" class="frm-dropdown-toggle" data-toggle="dropdown">
+	                <a href="#" id="frm-<?php echo esc_attr( $field_key ) ?>Drop" class="frm-dropdown-toggle" data-toggle="dropdown" title="<?php echo esc_html( $field_label ) ?>">
 						<i class="<?php echo esc_attr( FrmFormsHelper::get_field_link_icon( $field_type ) ) ?> frm_animate_bg"></i>
 						<span><?php echo esc_html( $field_label ) ?> <b class="caret"></b></span>
 					</a>
