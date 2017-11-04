@@ -76,7 +76,7 @@
         <?php } ?>
 
         <?php if ( isset($data['referrer']) ) { ?>
-        <div class="misc-pub-section">
+        <div class="misc-pub-section frm_force_wrap">
             <b><?php _e( 'Referrer', 'formidable' ) ?></b>:<br/>
 			<?php echo wp_kses_post( str_replace( "\r\n", '<br/>', $data['referrer'] ) );  ?>
         </div>

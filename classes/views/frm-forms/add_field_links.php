@@ -8,9 +8,7 @@ include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/_publish_box.ph
 ?>
 
 	<div id="frm-fixed-panel">
-	<div class="frm-ltr">
-    <div class="postbox frm_field_list">
-    <div class="inside">
+	<div class="frm-ltr frm_field_list">
     <div id="taxonomy-linkcategory" class="categorydiv">
         <ul id="category-tabs" class="category-tabs frm-category-tabs">
     		<li class="tabs"><a href="#frm-insert-fields" id="frm_insert_fields_tab"><?php _e( 'Fields', 'formidable' ); ?></a></li>
@@ -115,7 +113,7 @@ foreach ( FrmField::pro_field_selection() as $field_key => $field_type ) {
 ?>
     	    </ul>
     	</div>
-    </div>
+	</div>
 	</div>
 
 	<form method="post" id="frm_js_build_form">
@@ -123,7 +121,5 @@ foreach ( FrmField::pro_field_selection() as $field_key => $field_type ) {
 		<button class="frm_submit_form frm_submit_<?php echo ( isset( $values['ajax_load'] ) && $values['ajax_load'] ) ? '': 'no_'; ?>ajax frm_hidden frm_button_submit" type="button" id="frm_submit_side" ><?php echo esc_html( $button ) ?></button>
 	</form>
 
-	</div>
-	</div>
 	</div>
 </div>
