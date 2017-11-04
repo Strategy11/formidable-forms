@@ -11,7 +11,7 @@ if ( ! isset( $entry) ) {
     </span>
 </div>
 <?php if ( FrmAppHelper::get_param( 'frm_action' ) == 'show' ) { ?>
-<div class="misc-pub-section">
+<div class="misc-pub-section frm_no_print">
 	<span class="dashicons dashicons-format-aside wp-media-buttons-icon"></span>
 	<a href="#" onclick="window.print();return false;"><?php _e( 'Print', 'formidable' ) ?></a>
 </div>

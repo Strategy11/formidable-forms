@@ -12,7 +12,7 @@
 		<?php include( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/_sidebar-shared-pub.php' ); ?>
 
         <?php if ( $entry->post_id ) { ?>
-        <div class="misc-pub-section">
+        <div class="misc-pub-section frm_no_print">
             <span class="dashicons dashicons-admin-post wp-media-buttons-icon"></span>
             <?php _e( 'Post', 'formidable' ) ?>:
             <b><?php echo get_the_title($entry->post_id) ?></b>

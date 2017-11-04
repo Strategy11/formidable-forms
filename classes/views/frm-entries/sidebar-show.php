@@ -1,5 +1,5 @@
-<div id="postbox-container-1" class="postbox-container frm_no_print frm-right-panel">
-<div id="submitdiv" class="postbox">
+<div id="postbox-container-1" class="postbox-container frm-right-panel">
+<div id="submitdiv" class="postbox frm-no-border frm_no_print">
     <div class="inside">
         <div class="submitbox">
 			<div id="major-publishing-actions">
