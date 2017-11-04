@@ -242,6 +242,8 @@ ul.frm_form_nav > li{
 	display: -webkit-flex;
 	display:flex;
 	-webkit-flex-direction: column;
+	-ms-flex-direction: column;
+	flex-direction: column;
 	border: 1px solid #e5e5e5;
 	border-right-width: 0;
 	border-top-width: 0;
@@ -2572,7 +2574,6 @@ ul .frm_col_two{float:right;}
 .frmbutton.ui-sortable-helper i,
 .field_type_list li.frmbutton i{
 	padding: .15em;
-	border-right:1px solid #e5e5e5;
 	margin-right:2px;
 	color: inherit;
 	display: inline-block;
@@ -2586,6 +2587,7 @@ ul .frm_col_two{float:right;}
 .field_type_list li.frmbutton i:before{
 	width:20px;
 	height:20px;
+	font-size: 20px;
 }
 
 .frmbutton.ui-sortable-helper .frm-dropdown-menu{
@@ -2858,15 +2860,15 @@ iframe#dyncontent_ifr{min-height:150px;}
 }
 
 .rtl .frm_wrap #post-body.columns-2 #postbox-container-1,
-.rtl #postbox-container-1 .frm_field_list,
-.rtl .frm_wrap #postbox-container-1 #frm_adv_info{
-	margin-left: -350px;
+.rtl .frm_wrap #poststuff #post-body.columns-2 {
+    margin-left: 0;
 	margin-right:0;
 }
 
-.rtl .frm_wrap #poststuff #post-body.columns-2 {
-    margin-left: 350px;
-	margin-right:0;
+.rtl .frm_wrap #post-body.columns-2 #postbox-container-1.frm-right-panel,
+.rtl #postbox-container-1.frm-right-panel{
+	border-right-width:1px;
+	border-left-width:0;
 }
 
 .rtl .frm_right_text{
