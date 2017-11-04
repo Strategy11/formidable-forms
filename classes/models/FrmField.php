@@ -20,7 +20,7 @@ class FrmField {
 			),
 			'checkbox'  => array(
 				'name'  => __( 'Checkboxes', 'formidable' ),
-				'icon'  => 'frm_icon_font frm_checkbox-checked_icon',
+				'icon'  => 'frm_icon_font frm_check-square_icon',
 			),
 			'radio'     => array(
 				'name'  => __( 'Radio Button', 'formidable' ),
@@ -28,11 +28,11 @@ class FrmField {
 			),
 			'select'    => array(
 				'name'  => __( 'Dropdown', 'formidable' ),
-				'icon'  => 'frm_icon_font frm_arrowdown2_icon',
+				'icon'  => 'frm_icon_font frm_caret-square-down_icon',
 			),
 			'email'     => array(
 				'name'  => __( 'Email', 'formidable' ),
-				'icon'  => 'frm_icon_font frm_email_icon',
+				'icon'  => 'frm_icon_font frm_envelope_icon',
 			),
 			'url'       => array(
 				'name'  => __( 'Website/URL', 'formidable' ),
@@ -40,7 +40,7 @@ class FrmField {
 			),
 			'number'    => array(
 				'name'  => __( 'Number', 'formidable' ),
-				'icon'  => 'frm_icon_font frm_hash_icon',
+				'icon'  => 'frm_icon_font frm_hashtag_icon',
 			),
 			'phone'     => array(
 				'name'  => __( 'Phone', 'formidable' ),
@@ -52,7 +52,7 @@ class FrmField {
 			),
 			'hidden'    => array(
 				'name'  => __( 'Hidden Field', 'formidable' ),
-				'icon'  => 'frm_icon_font frm_eye-blocked_icon',
+				'icon'  => 'frm_icon_font frm_eye-slash_icon',
 			),
 			'user_id'   => array(
 				'name'  => __( 'User ID', 'formidable' ),
@@ -60,7 +60,7 @@ class FrmField {
 			),
 			'captcha'   => array(
 				'name'  => __( 'reCAPTCHA', 'formidable' ),
-				'icon'  => 'dashicons dashicons-shield-alt',
+				'icon'  => 'frm_icon_font frm_shield-check_icon',
 			),
 		));
 
@@ -87,7 +87,7 @@ class FrmField {
 			),
 			'scale'     => array(
 				'name'  => __( 'Scale', 'formidable' ),
-				'icon'  => 'frm_icon_font frm_ellipsis-h_icon',
+				'icon'  => 'frm_icon_font frm_linear_scale_icon',
 			),
 			'range'     => array(
 				'name'  => __( 'Slider', 'formidable' ),
@@ -107,7 +107,7 @@ class FrmField {
 			),
 			'divider|repeat' => array(
 				'name'  => __( 'Repeater', 'formidable' ),
-				'icon'  => 'dashicons dashicons-image-rotate',
+				'icon'  => 'frm_icon_font frm_repeat_icon',
 			),
 			'end_divider' => array(
 				'name'  => __( 'End Section', 'formidable' ),
@@ -115,7 +115,7 @@ class FrmField {
 			),
 			'divider'   => array(
 				'name'  => __( 'Section', 'formidable' ),
-				'icon'  => 'frm_h3_icon',
+				'icon'  => 'frm_icon_font frm_h3_icon',
 			),
 			'break'     => array(
 				'name'  => __( 'Page Break', 'formidable' ),
