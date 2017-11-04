@@ -38,6 +38,16 @@ function frmAdminBuildJS(){
 			return true;
 		} else {
 			e.preventDefault();
+			confirmLinkClick( $link );
+		}
+	}
+
+	function confirmLinkClick( $link ) {
+		var message = $link.data('frmverify');
+
+		if ( typeof message === 'undefined' || $link.hasClass('frm_confirming') ) {
+			return true;
+		} else {
 			$link.addClass('frm_confirming');
 
 			var $label = $link.find('.frm_link_label');
@@ -45,7 +55,6 @@ function frmAdminBuildJS(){
 				$label = $link;
 			}
 
-			var message = $link.data('frmverify');
 			var oldLabel = $label.html();
 
 			$label.html(message);
@@ -85,14 +94,19 @@ function frmAdminBuildJS(){
 	function removeThisTag(){
 		/*jshint validthis:true */
 		var deleteButton = jQuery(this);
-		var id=deleteButton.data('removeid');
-		var show=deleteButton.data('showlast');
-		if(typeof(show) === 'undefined'){
-			show = '';
-		}
-		var hide=deleteButton.data('hidelast');
-		if(typeof(hide) === 'undefined'){
-			hide = '';
+		var continueRemove = confirmLinkClick( deleteButton );
+		if ( continueRemove === false ) {
+			return;
+		} else {
+			var id = deleteButton.data('removeid');
+			var show = deleteButton.data('showlast');
+			if ( typeof show === 'undefined' ) {
+				show = '';
+			}
+			var hide = deleteButton.data('hidelast');
+			if ( typeof hide === 'undefined' ) {
+				hide = '';
+			}
 		}
 
 		if(show !== ''){
@@ -100,8 +114,6 @@ function frmAdminBuildJS(){
 				show = '';
 				hide = '';
 			}
-		}else if(id.indexOf('frm_logic_') === 0 && deleteButton.closest('.frm_logic_rows').find('.frm_logic_row').length<2){
-			show='#'+deleteButton.closest('td').children('.frm_add_logic_link').attr('id');
 		}else if(id.indexOf('frm_postmeta_') === 0){
 			if(jQuery('#frm_postmeta_rows .frm_postmeta_row').length<2){
 				show='.frm_add_postmeta_row.button';
@@ -111,12 +123,6 @@ function frmAdminBuildJS(){
 					show += ',';
 				}
 				show += '#'+jQuery('#frm_postmeta_rows .frm_postmeta_row:not(#'+id+')').last().attr('id')+' .frm_toggle_cf_opts';
-			}
-		} else if ( id.indexOf('frm_watch_lookup_') === 0 ) {
-			var fieldId = deleteButton.data( 'fieldid' );
-			var lookupBlock = document.getElementById( 'frm_watch_lookup_block_' + fieldId );
-			if ( lookupBlock.children.length<2 ) {
-				show='#frm_add_watch_lookup_link_' + fieldId;
 			}
 		}
 

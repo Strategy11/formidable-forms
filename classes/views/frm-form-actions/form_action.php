@@ -13,7 +13,7 @@ $form_action = apply_filters( 'frm_form_' . $form_action->post_excerpt . '_actio
             </button>
         </div>
         <span class="frm_email_icons alignright">
-            <a href="javascript:void(0)" data-removeid="frm_form_action_<?php echo esc_attr( $action_key ) ?>" class="frm_icon_font frm_delete_icon frm_remove_form_action"> </a>
+            <a href="javascript:void(0)" data-removeid="frm_form_action_<?php echo esc_attr( $action_key ) ?>" class="frm_icon_font frm_delete_icon frm_remove_form_action" data-frmverify="<?php echo esc_attr( 'Really?', 'formidable' ) ?>"> </a>
         </span>
         <div class="widget-title">
             <h4><span class="frm_form_action_icon <?php echo esc_attr( $action_control->action_options['classes'] ) ?>"></span>

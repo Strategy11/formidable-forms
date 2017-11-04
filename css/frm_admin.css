@@ -3,6 +3,13 @@
 a, .widget .widget-top, .postbox h3, .stuffbox h3{cursor: pointer; text-decoration:none;}
 .postbox h3.hndle{cursor:default;}
 
+
+a.frm_confirming:hover,
+a.frm_confirming:focus,
+a.frm_confirming,
+.frm_confirming{
+	color:#e37222 !important;
+}
 .frm_wrap > .wrap{
 	margin-left:20px;
 	margin-right:20px;
@@ -842,13 +849,14 @@ div.updated.frm_updated_message,
 
 .frm-dots:before{
 	color:#fff;
+	line-height: 1;
+	vertical-align: middle;
 }
 
 .frm-dots{
 	border-radius: 50%;
 	background: #1072b8;
 	padding: .12em;
-	vertical-align: sub;
 }
 
 .frm-dots:focus,
@@ -1579,7 +1587,7 @@ label.default-style-box input[type="checkbox"]{
 #frm_form_editor_container .widget-top .widget-action {
 	border: 0;
 	margin: 0;
-	padding: 10px;
+	padding: 8px;
 	background: 0 0;
 	cursor: pointer;
 	outline: 0;
@@ -1653,7 +1661,8 @@ label.default-style-box input[type="checkbox"]{
 #frm_email_addon_menu h3{
     display: inline-block;
 	border-bottom:none;
-	padding: 10px;
+	padding: 10px 10px 5px;
+	line-height: 1.4;
 }
 #frm_email_addon_menu h4,
 #frm_email_addon_menu h3{
@@ -1663,6 +1672,10 @@ label.default-style-box input[type="checkbox"]{
     padding: 10px 15px;
     overflow: hidden;
 }
+.frm_form_action_icon{
+	margin-right: 5px;
+}
+
 .frm_actions_list{
 	display:inline-block;
     margin: 0;
@@ -1671,25 +1684,25 @@ label.default-style-box input[type="checkbox"]{
 }
 .frm_actions_list li{
 	display:inline;
+	margin:0 2px;
 }
 label.frm_action_events{
 	padding-left:15px;
 }
 .frm_actions_list > li > a:before,
 .frm_email_settings .widget-title .frm_form_action_icon:before{
-	margin:0 5px;
-    vertical-align: middle;
 	font-size:18px;
 	color:#A0A0A0;
     text-decoration: none;
 }
+.frm_actions_list a.frm_icon_font:before,
 .frm_actions_list > li > a:before{
 	font-size:24px;
-	height:auto;
-	vertical-align: bottom;
+	height:24px;
+	width:24px;
 }
 .frm_email_icons, .frm_actions_list{
-    padding: 10px 0 10px 15px;
+    padding: 10px 0 5px 15px;
 }
 .frm_email_icons{
 	padding-left:6px;
@@ -1896,6 +1909,10 @@ a.frm_action_icon:hover {text-decoration:none;}
 a.frm_inactive_icon.frm_action_icon.frm_required_icon,
 a.frm_action_icon.frm_required0{
 	color:#ababab;
+}
+
+.frm-hover-icon{
+	margin-left:2px;
 }
 
 .frm-hover-icon.frm_icon_font:before{
@@ -2561,6 +2578,12 @@ ul .frm_col_two{float:right;}
 	display: inline-block;
 	vertical-align: top;
 	text-align: center;
+	width:22px;
+	height:20px;
+}
+
+.frmbutton.ui-sortable-helper i:before,
+.field_type_list li.frmbutton i:before{
 	width:20px;
 	height:20px;
 }
@@ -2574,13 +2597,6 @@ ul .frm_col_two{float:right;}
     font-size: 20px;
     font-style: normal;
 	font-family: serif;
-}
-
-.frm_h3_icon:before{
-	content:'H3';
-	font-size: 19px;
-	font-style: normal;
-	font-family: monospace;
 }
 
 li.frm_noallow.button,
