@@ -1547,9 +1547,11 @@ function frmAdminBuildJS(){
 		}
 
 		var selected = jQuery('li.ui-state-default.selected');
+		var scrollMe = jQuery(document.getElementById('post-body-content'));
 
 		// get offsets before anything changes
 		var curOffset = $thisobj.offset().top;
+		var parentOffset = scrollMe.scrollTop();
 		var preTop = document.documentElement.scrollTop || document.body.scrollTop; // body for Safari;
 		var selectedOffset = 0;
 		var selectedHeight = 0;
@@ -1574,11 +1576,10 @@ function frmAdminBuildJS(){
 		var newOffset = $thisobj.offset().top;
 
 		if(selected.length && newOffset !== curOffset){
-			var curTop = document.documentElement.scrollTop || document.body.scrollTop; // body for Safari;
 			var selectedBottom = selectedOffset + selectedHeight;
 
 			if ( preTop < selectedBottom ) {
-				jQuery(window).scrollTop(curTop - (curOffset-newOffset));
+				scrollMe.scrollTop(parentOffset - (curOffset-newOffset));
 			}
 		}
 	}
