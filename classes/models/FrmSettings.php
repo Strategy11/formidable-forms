@@ -4,7 +4,6 @@ class FrmSettings {
     public $option_name = 'frm_options';
     public $menu;
     public $mu_menu;
-    public $preview_page_id;
     public $use_html;
     public $jquery_css;
     public $accordion_js;
@@ -82,7 +81,6 @@ class FrmSettings {
         return array(
             'menu'      => apply_filters( 'frm_default_menu', 'Formidable' ),
             'mu_menu'   => 0,
-            'preview_page_id' => 0,
             'use_html'  => true,
             'jquery_css' => false,
             'accordion_js' => false,
@@ -209,7 +207,6 @@ class FrmSettings {
 		$this->re_multi = isset( $params['frm_re_multi'] ) ? $params['frm_re_multi'] : 0;
 
         $this->load_style = $params['frm_load_style'];
-        $this->preview_page_id = (int) $params['frm-preview-page-id'];
 
         $this->use_html = isset($params['frm_use_html']) ? $params['frm_use_html'] : 0;
 		$this->jquery_css = isset( $params['frm_jquery_css'] ) ? absint( $params['frm_jquery_css'] ) : 0;

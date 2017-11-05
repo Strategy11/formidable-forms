@@ -168,10 +168,6 @@
 			<input type="hidden" name="frm_mu_menu" id="frm_mu_menu" value="<?php echo esc_attr( $frm_settings->mu_menu ) ?>" />
 		<?php } ?>
 
-        <p><label class="frm_left_label"><?php _e( 'Preview Page', 'formidable' ); ?></label>
-        <?php FrmAppHelper::wp_pages_dropdown('frm-preview-page-id', $frm_settings->preview_page_id ) ?>
-        </p>
-
 		<p>
 			<label class="frm_left_label"><?php _e( 'IP storage', 'formidable' ); ?></label>
 			<label for="frm_no_ips">

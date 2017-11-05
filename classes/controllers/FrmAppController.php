@@ -87,7 +87,7 @@ class FrmAppController {
 
     // Adds a settings link to the plugins page
     public static function settings_link( $links ) {
-		$settings = '<a href="' . esc_url( admin_url( 'admin.php?page=formidable-settings' ) ) . '">' . __( 'Settings', 'formidable' ) . '</a>';
+		$settings = '<a href="' . esc_url( admin_url( 'admin.php?page=formidable' ) ) . '">' . __( 'Build a Form', 'formidable' ) . '</a>';
         array_unshift( $links, $settings );
 
         return $links;
@@ -382,16 +382,16 @@ class FrmAppController {
     }
 
     // Routes for wordpress pages -- we're just replacing content here folks.
-    public static function page_route( $content ) {
-        global $post;
+	public static function page_route( $content ) {
+		_deprecated_function( __METHOD__, '3.0' );
+		global $post;
 
-        $frm_settings = FrmAppHelper::get_settings();
-        if ( $post && $post->ID == $frm_settings->preview_page_id && isset( $_GET['form'] ) ) {
-            $content = FrmFormsController::page_preview();
-        }
+		if ( $post && isset( $_GET['form'] ) ) {
+			$content = FrmFormsController::page_preview();
+		}
 
-        return $content;
-    }
+		return $content;
+	}
 
     public static function deauthorize() {
 		FrmAppHelper::permission_check('frm_change_settings');
@@ -408,7 +408,7 @@ class FrmAppController {
 		if ( FrmAppHelper::is_formidable_admin() ) {
 			$text = sprintf(
 				__( 'Help us spread the %1$sFormidable Forms%2$s love with a %3$s5-star review on WordPress.org%4$s. Thank you heaps!', 'formidable' ),
-				'<a href="https://formidableforms.com" target="_blank">',
+				'<a href="' . esc_url( FrmAppHelper::make_affiliate_url( 'https://formidableforms.com' ) ) . '" target="_blank">',
 				'</a>',
 				'<a href="https://wordpress.org/support/plugin/formidable/reviews/?filter=5#new-post" target="_blank">',
 				'</a>'

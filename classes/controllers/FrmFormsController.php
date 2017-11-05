@@ -272,11 +272,17 @@ class FrmFormsController {
         }
 
         $form = FrmForm::getOne( $params['form'] );
-        if ( ! $form ) {
-            return;
-        }
-        return self::show_form( $form->id, '', true, true );
+		if ( $form ) {
+			return self::show_form( $form->id, '', true, true );
+		}
     }
+
+	/**
+	 * @since 3.0
+	 */
+	public static function show_page_preview() {
+		echo self::page_preview();
+	}
 
     public static function preview() {
         do_action( 'frm_wp' );
@@ -284,14 +290,44 @@ class FrmFormsController {
         global $frm_vars;
         $frm_vars['preview'] = true;
 
-        if ( ! defined( 'ABSPATH' ) && ! defined( 'XMLRPC_REQUEST' ) ) {
-            global $wp;
-            $root = dirname( dirname( dirname( dirname( __FILE__ ) ) ) );
-			include_once( $root . '/wp-config.php' );
-            $wp->init();
-            $wp->register_globals();
-        }
+		self::load_wp();
 
+		$include_theme = FrmAppHelper::get_param( 'theme', '', 'get', 'absint' );
+		if ( $include_theme ) {
+			self::load_theme_preview();
+		} else {
+			self::load_direct_preview();
+		}
+
+		wp_die();
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	private static function load_wp() {
+		if ( ! defined( 'ABSPATH' ) && ! defined( 'XMLRPC_REQUEST' ) ) {
+			global $wp;
+			$root = dirname( dirname( dirname( dirname( __FILE__ ) ) ) );
+			include_once( $root . '/wp-config.php' );
+			$wp->init();
+			$wp->register_globals();
+		}
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	private static function load_theme_preview() {
+		add_action( 'loop_no_results', 'FrmFormsController::show_page_preview' );
+		add_filter( 'is_active_sidebar', '__return_false' );
+		get_template_part( 'page' );
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	private static function load_direct_preview() {
 		header( 'Content-Type: text/html; charset=' . get_option( 'blog_charset' ) );
 
 		$key = FrmAppHelper::simple_get( 'form', 'sanitize_title' );
@@ -302,11 +338,10 @@ class FrmFormsController {
 		$form = FrmForm::getAll( array( 'form_key' => $key ), '', 1 );
 		if ( empty( $form ) ) {
 			$form = FrmForm::getAll( array(), '', 1 );
-        }
+		}
 
 		require( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/direct.php' );
-        wp_die();
-    }
+	}
 
 	public static function register_pro_scripts() {
 		_deprecated_function( __FUNCTION__, '2.03', 'FrmProEntriesController::register_scripts' );

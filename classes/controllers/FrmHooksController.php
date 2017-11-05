@@ -72,10 +72,6 @@ class FrmHooksController {
     }
 
 	public static function load_hooks() {
-        if ( ! is_admin() ) {
-            add_filter( 'the_content', 'FrmAppController::page_route', 10 );
-        }
-
         add_action( 'plugins_loaded', 'FrmAppController::load_lang' );
         add_filter( 'widget_text', 'FrmAppController::widget_text_filter', 8 );
 
