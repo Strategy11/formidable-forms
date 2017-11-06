@@ -764,7 +764,7 @@ div.updated.frm_updated_message,
 .dropdown-toggle:focus{outline:0;}
 .frm-dropdown-menu{
 	max-height:200px;
-	overflow:scroll;
+	overflow:auto;
 	overflow-x: hidden;
 	position:absolute;
 	top:100%;
