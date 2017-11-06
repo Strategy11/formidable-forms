@@ -343,7 +343,8 @@ ul.frm_form_nav > li{
 }
 
 .frm_page_container#poststuff{
-	padding-top:0
+	padding-top:0;
+	padding-bottom: 15px;
 }
 
 .frm_no_sidebar #post-body-content{
