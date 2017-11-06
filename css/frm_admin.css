@@ -1436,7 +1436,7 @@ li.ui-state-default.selected .frm-show-click.frm_import_options select {
 }
 
 #form_settings_page .tabs-panel, .frm_settings_form .tabs-panel{max-height:none !important; min-height:260px !important;}
-#form_settings_page #post-body-content{min-width:500px;}
+#form_settings_page #post-body-content{min-width:350px;}
 #form_settings_page .frm_posttax_row select{max-width:35%;}
 select.frm_cancelnew, input.frm_enternew{width:175px;}
 
@@ -1764,9 +1764,7 @@ label.frm_action_events{
 #frm_notification_settings .frm_bcc_cc_container{
     width:96px;
 }
-.submitdelete.frm_delete_wo_post{
-    margin-left: 10px;
-}
+
 .frm_action_id{
     font-size:11px;
     opacity:0.8;
@@ -2190,7 +2188,6 @@ tr.frm_options_heading td{
 	margin-top:25px;
 }
 
-.frm_no_actions,
 .frm_no_fields,
 .frm_no_section_fields{
 	text-align:center;
@@ -2208,6 +2205,10 @@ tr.frm_options_heading td{
 	opacity:0;
 	*visibility:hidden;
 	z-index:-1;
+	width:auto;
+	position:absolute;
+	color: #808080;
+	font-size:16px;
 }
 
 .frm_no_actions:last-child{
@@ -2295,7 +2296,6 @@ table td.frm_left_label{
 #html_settings label{display:block;}
 #html_settings .frm_field_html_box{
     width:100%;
-    margin-right:260px;
 }
 
 ul.frm-category-tabs{
@@ -2573,8 +2573,7 @@ ul .frm_col_two{float:right;}
 
 .frmbutton.ui-sortable-helper i,
 .field_type_list li.frmbutton i{
-	padding: .15em;
-	margin-right:2px;
+	margin: .15em .2em;
 	color: inherit;
 	display: inline-block;
 	vertical-align: top;
@@ -2961,22 +2960,20 @@ Responsive Design
         position:static;
         width:auto;
     }
-    #form_settings_page #post-body #postbox-container-1{
-        margin-right:0;
-        width:100%;
-    }
-    #form_settings_page #post-body.columns-2{
-        margin:0;
-    }
+
 	ul.frm_form_nav { min-width:100px; width:100%; }
 	ul.frm_form_nav li.last .caret { display:none; }
 
 	.frm_form_settings .contextual-help-tabs{
-		width:100px;
+		width:93px;
 	}
 
 	.frm_form_settings #contextual-help-back{
-		left:100px;
+		left:93px;
+	}
+
+	.frm_form_settings .contextual-help-tabs a{
+		padding:5px;
 	}
 
 	#wpbody-content .frm_wrap #post-body.columns-2 #postbox-container-1{
@@ -2986,8 +2983,20 @@ Responsive Design
 	#wpbody-content #frm_builder_page #post-body.columns-2 #postbox-container-1{
 		min-width:300px;
 	}
+
+    #form_settings_page #post-body.columns-2{
+        margin:0;
+    }
+
+	.frm_actions_list{
+		margin-left:0;
+	}
+
+	.frm_no_actions .inner_actions{
+		margin-left:80px;
+	}
 }
-@media only screen and (max-width: 972px){
+@media only screen and (max-width: 960px){
 	.auto-fold #adminmenuwrap{
 		width:36px;
 	}
@@ -2996,6 +3005,10 @@ Responsive Design
 		width:auto;
 		max-width:300px;
 		min-width:200px;
+	}
+
+	.frm_wrap #postbox-container-1 #frm_adv_info{
+	    min-width: 220px;
 	}
 
 	.frm_wrap #frm_adv_info ul.category-tabs li,
@@ -3029,6 +3042,10 @@ Responsive Design
 		margin-left:0;
 	}
 
+	.frm_wrap #postbox-container-1 #frm_adv_info{
+	    min-width: 150px;
+	}
+
 	#wpbody-content #frm_builder_page #post-body.columns-2 #postbox-container-1{
 		min-width:150px;
 	}
@@ -3055,6 +3072,9 @@ Responsive Design
 		padding:6px 10px 8px;
 	}
 
+	#form_settings_page #post-body-content,
+	#form_settings_page.frm_wrap #poststuff #post-body.columns-2,
+	#form_settings_page.frm_wrap #post-body.columns-2 #postbox-container-1.frm-right-panel,
 	.frm_single_entry_page #post-body-content,
 	.frm_single_entry_page.frm_wrap #poststuff #post-body.columns-2,
 	.frm_single_entry_page.frm_wrap #post-body.columns-2 #postbox-container-1.frm-right-panel{
@@ -3063,10 +3083,33 @@ Responsive Design
 	}
 
 	#wpbody-content .frm_single_entry_page #post-body.columns-2 #postbox-container-1,
-	#form_settings_page .frm-right-panel{
+	#wpbody-content #form_settings_page #post-body.columns-2 #postbox-container-1{
 		width:100%;
 		max-width:100%;
 		min-width:200px;
+	}
+
+	#form_settings_page .frm_code_list li{
+		width: 48%;
+		float:left;
+	}
+
+	#form_settings_page .frm_code_list li.frm_col_one {
+	    margin-right: 4%;
+	}
+
+	#form_settings_page li.frm_block{
+		margin:0;
+		width:auto;
+	}
+
+	#form_settings_page #publishing-action > button{
+		width:auto;
+	}
+
+	#form_settings_page #major-publishing-actions .frm_submit_form {
+	    float: right;
+	    margin-left: 5px;
 	}
 
 	.frm_single_entry_page .frm_form_fields input[type=range],
