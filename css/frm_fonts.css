@@ -12,6 +12,7 @@
 	font-family: 's11-fp' !important;
 	content: '\e601'; 
 	text-shadow: none;
+	line-height: 1.4;
 }
 .frm_inactive_menu{
     opacity:.5;
