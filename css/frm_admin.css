@@ -15,13 +15,14 @@ a.frm_confirming,
 	margin-right:20px;
 }
 
-.toplevel_page_formidable #wpbody-content,
-#post-body-content{
-	margin-bottom:0;
-	padding-bottom:0;
+.toplevel_page_formidable #post-body-content{
+	margin-bottom: 26px;
+	border-right: 1px solid #e5e5e5;
 }
 
 .frm_wrap #post-body-content{
+	padding-bottom:0;
+	margin-bottom:0;
 	background:#fff;
 	flex: 1 1 auto;
 	overflow: auto;
@@ -193,11 +194,6 @@ ul.frm_form_nav > li{
 	margin-right: 0;
 }
 
-#frm_builder_page #poststuff #post-body.columns-2{
-	height: 100vh;
-	-ms-overflow-style: -ms-autohiding-scrollbar;
-}
-
 .frm_wrap #post-body.columns-2 #postbox-container-1{
 	width:350px;
 	margin-right:0;
@@ -211,6 +207,7 @@ ul.frm_form_nav > li{
 .frm_wrap #postbox-container-1 #frm_adv_info{
 	box-shadow:none;
 	border:none;
+	margin-bottom:26px;
 }
 
 .frm_wrap #submitdiv{
@@ -244,13 +241,11 @@ ul.frm_form_nav > li{
 	-webkit-flex-direction: column;
 	-ms-flex-direction: column;
 	flex-direction: column;
-	border: 1px solid #e5e5e5;
-	border-right-width: 0;
-	border-top-width: 0;
+	-ms-overflow-style: -ms-autohiding-scrollbar;
 }
 
-#frm_builder_page #post-body.columns-2 #postbox-container-1.frm-right-panel{
-	height: 100vh;
+#frm-fixed{
+	position: fixed;
 }
 
 #frm-fixed-panel{
@@ -258,15 +253,12 @@ ul.frm_form_nav > li{
 	overflow-y: auto;
 	min-height: 100px;
 	padding-top:1px;
+	max-height:700px;
+	clear:both;
 }
 
 #frm-fixed-panel::-webkit-scrollbar {
 	width: 0;
-}
-
-#frm_builder_page #frm-fixed-panel{
-	-webkit-flex: 1 1 auto;
-	flex: 1 1 auto;
 }
 
 .frm-ltr{
@@ -316,7 +308,10 @@ ul.frm_form_nav > li{
 	border-right:none;
 }
 
-#postbox-container-1 #taxonomy-linkcategory #frm-html-tags{display:none;max-height:none;padding-right:0;}
+#postbox-container-1 #taxonomy-linkcategory #frm-html-tags{
+	display:none;
+	max-height:none;
+}
 
 #postbox-container-1 .frm_field_list #frm-insert-fields .frmbutton.dropdown{
 	position:relative;
@@ -344,7 +339,6 @@ ul.frm_form_nav > li{
 
 .frm_page_container#poststuff{
 	padding-top:0;
-	padding-bottom: 15px;
 }
 
 .frm_no_sidebar #post-body-content{
@@ -628,6 +622,10 @@ form .form-field.frm_field_loading{
 
 .upgrade_to_pro .error{
 	display:none;
+}
+
+.toplevel_page_formidable #wpbody-content{
+	padding-bottom:41px;
 }
 
 .toplevel_page_formidable #wpbody-content > .error{
@@ -3088,6 +3086,10 @@ Responsive Design
 		width:100%;
 		max-width:100%;
 		min-width:200px;
+	}
+
+	#frm-fixed{
+		position: static;
 	}
 
 	#form_settings_page .frm_code_list li{

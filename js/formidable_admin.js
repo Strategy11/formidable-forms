@@ -67,16 +67,42 @@ function frmAdminBuildJS(){
 		}
 	}
 
+	function preventBodyScroll() {
+		jQuery('#frm-fixed-panel').on( 'mousewheel DOMMouseScroll', function(e){
+			var e0 = e.originalEvent,
+				delta = e0.wheelDelta || -e0.detail;
+			this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+			e.preventDefault();
+		});
+	}
+
+	function setupMenuOffset() {
+		window.onscroll = document.documentElement.onscroll = setMenuOffset;
+		setMenuOffset();
+
+		// set height for scrolling sidebar
+		var fixedBox = document.getElementById('frm-fixed-panel');
+		if ( fixedBox !== null ) {
+			var startPos = document.getElementById('frm_position_ele').getBoundingClientRect().top;
+			var totalHeight = window.innerHeight;
+			fixedBox.style.maxHeight = ( totalHeight - startPos ) +'px';
+		}
+	}
+
 	function setMenuOffset(){
 		var offset = 455;
-		var fields = jQuery(document.getElementById('frm_adv_info'));
-		if (fields.length === 0){
-			return;
+		var fields = document.getElementById('frm-fixed-panel');
+
+		if ( fields === null ) {
+			fields = document.getElementById('frm_adv_info');
+			if ( fields === null ) {
+				return;
+			}
 		}
 
 		var currentOffset = document.documentElement.scrollTop || document.body.scrollTop; // body for Safari
 		if(currentOffset === 0){
-			fields.removeAttr('style');
+			fields.style.top = '';
 			return;
 		}
 		var posEle = jQuery(document.getElementById('frm_position_ele'));
@@ -86,9 +112,10 @@ function frmAdminBuildJS(){
 		}
 
 		var desiredOffset = offset + 2 - currentOffset;
-		if (desiredOffset < 35) desiredOffset = 35;
-		//if (desiredOffset != parseInt(header.style.top))
-			fields.attr('style', 'top:'+desiredOffset + 'px;');
+		if (desiredOffset < 35){
+			desiredOffset = 35;
+		}
+		fields.style.top = desiredOffset + 'px';
 	}
 
 	function removeThisTag(){
@@ -2101,6 +2128,7 @@ function frmAdminBuildJS(){
 			'after_html','before_html','submit_html','field_custom_html',
 			'dyn_default_value', 'frm_classes'
 		];
+
 		if(jQuery.inArray(id, a) >= 0){
 			jQuery('.frm_code_list a').removeClass('frm_noallow').addClass('frm_allow');
 			jQuery('.frm_code_list a.hide_'+id).addClass('frm_noallow').removeClass('frm_allow');
@@ -2645,6 +2673,7 @@ function frmAdminBuildJS(){
 			});
 
 			initiateMultiselect();
+			preventBodyScroll();
 
 			$newFields.on('keypress', '.frm_ipe_field_label, .frm_ipe_field_option, .frm_ipe_field_option_key', blurField);
 			$newFields.on('mouseenter', '.frm_ipe_field_option, .frm_ipe_field_option_key', setIPEOpts);
@@ -2807,6 +2836,8 @@ function frmAdminBuildJS(){
 		},
 		
 		panelInit: function(){
+			setupMenuOffset();
+
 			jQuery('.frm_code_list a').addClass('frm_noallow');
 			
 			jQuery('.inside').on('click', '.frm_insert_code', insertCode);
@@ -2815,20 +2846,21 @@ function frmAdminBuildJS(){
 				jQuery(this).val('');	
 			});
 
-			jQuery(document).on('focusin click', 'form input, form textarea, #wpcontent', function(e){
+			jQuery(document).on('click', 'form input, form textarea, #wpcontent', function(e){
 				e.stopPropagation();
 				if(jQuery(this).is(':not(:submit, input[type=button])')){ 
 					var id = jQuery(this).attr('id');
 					toggleAllowedShortcodes(id,e.type);
 				}
 			});
-			
+
 			jQuery('#postbox-container-1').on('mousedown', '#frm_adv_info a, .frm_field_list a', function(e){
 				e.preventDefault();
 			});
 
-			jQuery('#frm_adv_info').on('click', '.subsubsub a.frmids', function(e){toggleKeyID('frmids',e);});
-			jQuery('#frm_adv_info').on('click', '.subsubsub a.frmkeys', function(e){toggleKeyID('frmkeys',e);});
+			var customPanel = jQuery('#frm_adv_info');
+			customPanel.on('click', '.subsubsub a.frmids', function(e){toggleKeyID('frmids',e);});
+			customPanel.on('click', '.subsubsub a.frmkeys', function(e){toggleKeyID('frmkeys',e);});
 
 			if(typeof(tinymce) === 'object'){
 				DOM=tinymce.DOM; 
@@ -2866,8 +2898,6 @@ function frmAdminBuildJS(){
 		viewInit: function(){
 			var $advInfo = jQuery(document.getElementById('frm_adv_info'));
 			$advInfo.before('<div id="frm_position_ele"></div>');
-			window.onscroll = document.documentElement.onscroll = setMenuOffset;
-			setMenuOffset();
 
 			// add form nav
 			var $navCont = document.getElementById('frm_nav_container');

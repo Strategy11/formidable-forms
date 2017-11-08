@@ -1,4 +1,4 @@
-<div id="taxonomy-linkcategory" class="categorydiv <?php echo $class ?>">
+<div id="taxonomy-linkcategory" class="categorydiv <?php echo esc_attr( $class ) ?>">
 	<ul id="category-tabs" class="category-tabs frm-category-tabs">
 		<li class="tabs"><a href="#frm-insert-fields-box" id="frm_insert_fields_tab"><?php _e( 'Fields', 'formidable' ); ?></a></li>
 		<?php if ( ! empty( $cond_shortcodes ) ) { ?>
@@ -65,6 +65,10 @@
             } ?>
         </ul>
 
+		<p class="howto">
+			<?php esc_html_e( 'Click a button below to insert extra values from form entries or your site settings.', 'formidable' ) ?>
+		</p>
+
         <?php _e( 'Helpers', 'formidable' ) ?>:
         <ul class="frm_code_list">
         <?php
@@ -88,6 +92,7 @@
         }
         ?>
         </ul>
+		<div class="clear"></div>
 	</div>
 
 	<?php if ( ! empty( $cond_shortcodes ) ) { ?>
@@ -140,6 +145,9 @@
 	<?php } ?>
 
 	<div id="frm-adv-info-tab" class="tabs-panel">
+		<p class="howto">
+			<?php esc_html_e( 'Customize the field values with the following parameters. Click to see a sample.', 'formidable' ) ?>
+		</p>
 		<ul class="frm_code_list">
         <?php
         $col = 'one';
