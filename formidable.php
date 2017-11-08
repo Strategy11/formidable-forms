@@ -30,8 +30,6 @@ function load_formidable_forms() {
     	'pro_is_authorized' => false,
 	);
 
-	require_once( dirname( __FILE__ ) . '/classes/controllers/FrmHooksController.php' );
-
 	$frm_path = dirname(__FILE__);
 	if ( file_exists( $frm_path . '/pro/formidable-pro.php' ) ) {
 		include( $frm_path . '/pro/formidable-pro.php' );
@@ -54,5 +52,32 @@ function frm_forms_autoloader( $class_name ) {
         return;
     }
 
-	FrmHooksController::autoloader( $class_name, dirname( __FILE__ ) );
+	frm_class_autoloader( $class_name, dirname( __FILE__ ) );
+}
+
+/**
+ * Autoload the Formidable and Pro classes
+ * @since 3.0
+ */
+function frm_class_autoloader( $class_name, $filepath ) {
+	$filepath .= '/classes';
+
+	if ( preg_match( '/^.+Helper$/', $class_name ) ) {
+		$filepath .= '/helpers/';
+	} else if ( preg_match( '/^.+Controller$/', $class_name ) ) {
+		$filepath .= '/controllers/';
+	} else if ( preg_match( '/^.+Factory$/', $class_name ) ) {
+		$filepath .= '/factories/';
+	} else {
+		$filepath .= '/models/';
+		if ( strpos( $class_name, 'Field' ) && ! file_exists( $filepath . $class_name . '.php' ) ) {
+			$filepath .= 'fields/';
+		}
+	}
+
+	$filepath .= $class_name . '.php';
+
+	if ( file_exists( $filepath ) ) {
+		require( $filepath );
+	}
 }
