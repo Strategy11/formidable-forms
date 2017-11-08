@@ -2840,7 +2840,7 @@ function frmAdminBuildJS(){
 
 			jQuery('.frm_code_list a').addClass('frm_noallow');
 			
-			jQuery('.inside').on('click', '.frm_insert_code', insertCode);
+			jQuery('#postbox-container-1').on('click', '.frm_insert_code', insertCode);
 			jQuery(document).on('change', '.frm_insert_val', function(){
 				insertFieldCode(jQuery(this).data('target'), jQuery(this).val());
 				jQuery(this).val('');	
@@ -2848,7 +2848,7 @@ function frmAdminBuildJS(){
 
 			jQuery(document).on('click', 'form input, form textarea, #wpcontent', function(e){
 				e.stopPropagation();
-				if(jQuery(this).is(':not(:submit, input[type=button])')){ 
+				if(jQuery(this).is(':not(:submit, input[type=button])')){
 					var id = jQuery(this).attr('id');
 					toggleAllowedShortcodes(id,e.type);
 				}
