@@ -505,4 +505,37 @@ class FrmEntriesHelper {
 		return $bname . ' ' . $version . ' / ' . $platform;
 	}
 
+	/**
+	 * @since 3.0
+	 */
+	public static function actions_dropdown( $atts ) {
+		$id = isset( $atts['id'] ) ? $atts['id'] : FrmAppHelper::get_param( 'id', 0, 'get', 'absint' );
+		$links = self::get_action_links( $id, $atts['entry'] );
+		include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/actions-dropdown.php' );
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	private static function get_action_links( $id, $entry ) {
+		if ( current_user_can( 'frm_delete_entries' ) ) {
+			$actions['frm_delete'] = array(
+				'url'   => admin_url( 'admin.php?page=formidable-entries&frm_action=destroy&id=' . $id . '&form=' . $entry->form_id ),
+				'label' => __( 'Delete' ),
+				'icon'  => 'frm_icon_font frm_delete_icon',
+				'data'  => array( 'frmverify' => __( 'Really delete?', 'formidable' ) ),
+			);
+
+			if ( ! empty( $entry->post_id ) ) {
+				$actions['frm_delete_post'] = array(
+					'url'   => admin_url( 'admin.php?page=formidable-entries&frm_action=destroy&id=' . $id . '&form=' . $entry->form_id . '&keep_post=1' ),
+					'label' => __( 'Delete without Post' ),
+					'icon'  => 'frm_icon_font frm_delete_icon',
+					'data'  => array( 'frmverify' => __( 'Really delete?', 'formidable' ) ),
+				);
+			}
+		}
+
+		return $actions;
+	}
 }
