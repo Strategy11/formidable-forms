@@ -327,6 +327,17 @@ a.frm_save_draft{
     display:inline-block;
 }
 
+.with_frm_style .frm_checkbox label,
+.with_frm_style .frm_radio label{
+	display: inline;
+	white-space:normal;
+}
+
+.with_frm_style .vertical_radio .frm_checkbox label,
+.with_frm_style .vertical_radio .frm_radio label{
+	display: flex;
+}
+
 .frm_file_container .frm_file_link,
 .with_frm_style .frm_radio label .frm_file_container,
 .with_frm_style .frm_checkbox label .frm_file_container{
@@ -338,11 +349,13 @@ a.frm_save_draft{
 .with_frm_style .frm_radio input[type=radio]{
     border-radius:10px;
 	-webkit-appearance:radio;
+	flex: none;
 }
 
 .with_frm_style .frm_checkbox input[type=checkbox]{
     border-radius:0;
 	-webkit-appearance:checkbox;
+	flex: none;
 }
 
 .with_frm_style .frm_radio input[type=radio],

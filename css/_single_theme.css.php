@@ -647,8 +647,6 @@ if ( ! $submit_style ) { ?>
     font-size:<?php echo esc_html( $check_font_size . $important ) ?>;
     color:<?php echo esc_html( $check_label_color . $important ) ?>;
     font-weight:<?php echo esc_html( $check_weight . $important ) ?>;
-    display:inline;
-	white-space:normal;
 }
 
 .<?php echo esc_html( $style_class ) ?> .frm_radio input[type=radio],
@@ -785,17 +783,6 @@ if ( ! $submit_style ) { ?>
     display:inline<?php echo esc_html( $important ) ?>;
 	width:auto<?php echo esc_html( $important ) ?>;
 	padding:0<?php echo esc_html( $important ) ?>;
-}
-
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_text_block .frm_checkbox label,
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_text_block .frm_radio label{
-	padding-left:20px;
-	display:block;
-}
-
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_text_block .frm_checkbox input[type=checkbox],
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_text_block .frm_radio input[type=radio]{
-	margin-left:-20px;
 }
 
 .<?php echo esc_html( $style_class ) ?> .frm_button{

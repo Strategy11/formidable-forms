@@ -643,7 +643,7 @@ BEFORE_HTML;
 			} elseif ( FrmAppHelper::pro_is_installed() ) {
 				$actions['duplicate'] = array(
 					'url'   => wp_nonce_url( $duplicate_link ),
-					'label' => __( 'Duplicate', 'formidable' ),
+					'label' => __( 'Duplicate Form', 'formidable' ),
 					'icon'  => 'frm_icon_font frm_duplicate_icon',
 				);
 			}
@@ -733,7 +733,7 @@ BEFORE_HTML;
 				'url'   => wp_nonce_url( $base_url . '&frm_action=untrash', 'untrash_form_' . $id ),
 			),
 			'trash' => array(
-				'label' => __( 'Move to Trash', 'formidable' ),
+				'label' => __( 'Move Form to Trash', 'formidable' ),
 				'short' => __( 'Trash', 'formidable' ),
 				'url'   => wp_nonce_url( $base_url . '&frm_action=trash', 'trash_form_' . $id ),
 				'icon'  => 'frm_icon_font frm_delete_icon',
@@ -801,10 +801,6 @@ BEFORE_HTML;
 			'frm_scroll_box' => array(
 				'label'      => __( 'Scroll Box', 'formidable' ),
 				'title'      => __( 'If you have many checkbox or radio button options, you may add this class to allow your user to easily scroll through the options.', 'formidable' ),
-			),
-			'frm_text_block' => array(
-				'label'      => __( 'Align Option Text', 'formidable' ),
-				'title'      => __( 'If you have a large amount of text in a checkbox or radio button field, use this class to align all the text in a block.', 'formidable' ),
 			),
 			'frm_capitalize' => array(
 				'label'      => __( 'Capitalize', 'formidable' ),
