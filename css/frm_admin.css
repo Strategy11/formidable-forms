@@ -290,6 +290,7 @@ ul.frm_form_nav > li{
 .frm_wrap #frm_adv_info ul.category-tabs li,
 .frm_field_list ul.category-tabs li{
 	padding:10px;
+	background-color: transparent !important;
 }
 
 .frm_wrap #frm_adv_info ul.category-tabs li:first-child,
@@ -2547,7 +2548,7 @@ ul .frm_col_two{float:right;}
 }
 
 .field_type_list li.button{
-	margin:0 4% 7px 0;
+	margin:0 4% 8px 0;
 	padding:0;
 	clear:both;
 }
