@@ -123,7 +123,7 @@ class FrmFieldsHelper {
 	private static function fill_default_field_opts( $field, array &$values ) {
 		$check_post = FrmAppHelper::is_admin() && $_POST && isset( $_POST['field_options'] );
 
-		$defaults = self::get_default_field_options_from_field( $field );
+		$defaults = self::get_default_field_options_from_field( $field, $values );
 		if ( ! $check_post ) {
 			$defaults['required_indicator'] = '';
 			$defaults['original_type']      = $field->type;
@@ -144,12 +144,20 @@ class FrmFieldsHelper {
 	 * @since 3.0
 	 *
 	 * @param object $field
+	 * @param array $values The field array is needed for hooks
 	 *
 	 * @return array
 	 */
-	public static function get_default_field_options_from_field( $field ) {
+	public static function get_default_field_options_from_field( $field, $values = array() ) {
 		$field_type = self::get_original_field( $field );
-		return $field_type->get_default_field_options();
+		$opts = $field_type->get_default_field_options();
+
+		if ( ! empty( $values ) && ( has_filter( 'frm_default_field_opts' ) || has_filter( 'frm_default_$field_type_field_opts' ) ) ) {
+			$opts = apply_filters( 'frm_default_field_opts', $opts, $values, $field );
+			$opts = apply_filters( 'frm_default_' . $field->type . '_field_opts', $opts, $values, $field );
+		}
+
+		return $opts;
 	}
 
 	/**
