@@ -35,7 +35,7 @@ class FrmEntriesListHelper extends FrmListHelper {
         $orderby = isset( $_REQUEST['orderby'] ) ? sanitize_title( $_REQUEST['orderby'] ) : $default_orderby;
         if ( strpos($orderby, 'meta') !== false ) {
             $order_field_type = FrmField::get_type( str_replace( 'meta_', '', $orderby ) );
-			$orderby .= in_array( $order_field_type, array( 'number', 'scale' ) ) ? ' +0 ' : '';
+			$orderby .= in_array( $order_field_type, array( 'number', 'scale', 'star' ) ) ? ' +0 ' : '';
         }
 
 		$order = isset( $_REQUEST['order'] ) ? sanitize_title( $_REQUEST['order'] ) : $default_order;

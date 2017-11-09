@@ -89,6 +89,10 @@ class FrmField {
 				'name'  => __( 'Scale', 'formidable' ),
 				'icon'  => 'frm_icon_font frm_linear_scale_icon',
 			),
+			'star'      => array(
+				'name'  => __( 'Star Rating', 'formidable' ),
+				'icon'  => 'dashicons dashicons-star-filled',
+			),
 			'range'     => array(
 				'name'  => __( 'Slider', 'formidable' ),
 				'icon'  => 'frm_icon_font frm_sliders_icon',

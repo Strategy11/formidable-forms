@@ -418,6 +418,7 @@ class FrmFieldsController {
 	public static function change_type( $type ) {
         $type_switch = array(
             'scale'     => 'radio',
+			'star'      => 'radio',
             '10radio'   => 'radio',
             'rte'       => 'textarea',
             'website'   => 'url',

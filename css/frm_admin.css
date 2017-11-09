@@ -2011,21 +2011,6 @@ span.howto{display:inline;}
     cursor:pointer;
 }
 
-/* Star Rating */
-.frm_form_fields div.rating-cancel, .frm_form_fields div.star-rating{
-	float:left;width:17px;height:17px;cursor:pointer;display:block;background:transparent;overflow:hidden;
-	clear:none;
-}
-.frm_form_fields div.rating-cancel{display:none !important;}
-.frm_form_fields div.rating-cancel a:before{font:16px/1 'dashicons';content:'\f460';color:#CDCDCD;}
-.frm_form_fields div.star-rating:before, .frm_form_fields div.star-rating a:before{font:16px/1 'dashicons';content:'\f154';color:#F0AD4E;}
-.frm_form_fields div.rating-cancel a, .frm_form_fields div.star-rating a{display:block;width:16px;height:100%;border:0}
-.frm_form_fields div.star-rating-on:before, .frm_form_fields div.star-rating-on a:before{content:'\f155';}
-.frm_form_fields div.star-rating-hover:before, .frm_form_fields div.star-rating-hover a:before{content:'\f155';}
-.frm_form_fields div.rating-cancel.star-rating-hover a:before{color:#B63E3F;}
-.frm_form_fields div.star-rating-readonly a{cursor:default !important}
-.frm_form_fields div.star-rating{overflow:hidden !important}
-
 /* */
 #frm_form_editor_container #frm_form_key_box{width:13em;max-width:30%}
 #frm_form_editor_container #frm_form_desc{width:70%;}

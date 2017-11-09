@@ -133,17 +133,6 @@ legend.frm_hidden{
 	clear:both;
 }
 
-.with_frm_style .frm_scale{
-    margin-right:10px;
-    text-align:center;
-    float:left;
-}
-
-.with_frm_style .frm_scale input{
-    display:block;
-	margin:0;
-}
-
 .with_frm_style input[type=number][readonly]{
     -moz-appearance: textfield;
 }
@@ -840,10 +829,6 @@ select.frm_loading_lookup{
 .with_frm_style .frm_inline_container.frm_grid .frm_opt_container,
 .with_frm_style .frm_inline_container.frm_grid_odd .frm_opt_container{
     margin-right:0;
-}
-
-.with_frm_style .frm_inline_container.frm_scale_container label.frm_primary_label{
-	float:left;
 }
 
 .with_frm_style .frm_other_input.frm_other_full{

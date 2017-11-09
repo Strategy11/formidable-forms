@@ -779,7 +779,7 @@ class FrmFieldsHelper {
             'file', 'date', 'phone', 'hidden', 'time',
             'user_id', 'tag', 'password',
         );
-		$multiple_input = array( 'radio', 'checkbox', 'select', 'scale', 'lookup' );
+		$multiple_input = array( 'radio', 'checkbox', 'select', 'scale', 'star', 'lookup' );
 		$other_type = array( 'html', 'break' );
 
 		$field_selection = array_merge( FrmField::pro_field_selection(), FrmField::field_selection() );
