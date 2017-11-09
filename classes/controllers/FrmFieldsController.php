@@ -288,6 +288,7 @@ class FrmFieldsController {
 		$field = (array) $field;
 		$field['separate_value'] = isset( $field_data->field_options['separate_value'] ) ? $field_data->field_options['separate_value'] : 0;
 		unset( $field_data );
+		$field['html_name'] = 'item_meta[' . $field['id'] . ']';
 
 		$field['options'] = array( $opt_key => $opt );
 		FrmFieldsHelper::show_single_option( $field );
