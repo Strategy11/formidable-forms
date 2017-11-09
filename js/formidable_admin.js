@@ -292,12 +292,14 @@ function frmAdminBuildJS(){
 
 				closeOpenDropdown( ui.item );
 
-				if ( ui.item.attr('id').indexOf('frm_field_id') > -1 ) {
-					// An existing field was dragged and dropped into, out of, or between sections
-					updateFieldAfterMovingBetweenSections(ui.item);
-				} else if ( typeof ui.item.attr('id') !== 'undefined' ) {
-					// A new field was dragged into the form
-					insertNewFieldByDragging(this, ui.item, opts);
+				if ( typeof ui.item.attr('id') !== 'undefined' ){
+					if ( ui.item.attr('id').indexOf('frm_field_id') > -1 ) {
+						// An existing field was dragged and dropped into, out of, or between sections
+						updateFieldAfterMovingBetweenSections(ui.item);
+					} else {
+						// A new field was dragged into the form
+						insertNewFieldByDragging(this, ui.item, opts);
+					}
 				}
 			},
 			change:function(event, ui){
@@ -2846,7 +2848,7 @@ function frmAdminBuildJS(){
 				jQuery(this).val('');	
 			});
 
-			jQuery(document).on('click', 'form input, form textarea, #wpcontent', function(e){
+			jQuery(document).on('focusin click', 'form input, form textarea, #wpcontent', function(e){
 				e.stopPropagation();
 				if(jQuery(this).is(':not(:submit, input[type=button])')){
 					var id = jQuery(this).attr('id');
