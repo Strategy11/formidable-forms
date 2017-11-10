@@ -2468,6 +2468,9 @@ function frmAdminBuildJS(){
 			
 			jQuery(document.getElementById('frm_deauthorize_link')).click(deauthorize);
 			jQuery('.frm_authorize_link').click(authorize);
+
+			// prevent annoying confirmation message from WordPress
+			jQuery('button').on('click', removeWPUnload);
 		},
 		
 		buildInit: function(){			
