@@ -1381,6 +1381,7 @@ function frmAdminBuildJS(){
 	}
 
 	function preFormSave(b){
+		removeWPUnload();
 		if(jQuery('form.inplace_form').length){
 			jQuery('.inplace_save, .postbox').click();
 		}
@@ -2349,6 +2350,13 @@ function frmAdminBuildJS(){
 				cname.show();
 			}
 		}
+	}
+
+	function removeWPUnload() {
+		window.onbeforeunload = null;
+		var w = jQuery( window );
+		w.off( 'beforeunload.widgets' );
+		w.off( 'beforeunload.edit-post' );
 	}
 
 	return{
