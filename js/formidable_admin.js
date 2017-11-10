@@ -2890,6 +2890,7 @@ function frmAdminBuildJS(){
 		},
 
         customCSSInit: function() {
+			/* deprecated since WP 4.9 */
             var customCSS = document.getElementById('frm_custom_css_box');
             if ( customCSS !== null ) {
                 var editor = CodeMirror.fromTextArea(customCSS, {
