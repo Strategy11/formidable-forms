@@ -91,7 +91,7 @@ class FrmField {
 			),
 			'star'      => array(
 				'name'  => __( 'Star Rating', 'formidable' ),
-				'icon'  => 'dashicons dashicons-star-filled',
+				'icon'  => 'frm_icon_font frm_star_icon',
 			),
 			'range'     => array(
 				'name'  => __( 'Slider', 'formidable' ),

@@ -450,7 +450,6 @@ function frmAdminBuildJS(){
 
 				updateFieldOrder();
 				initiateMultiselect();
-				loadStars();
 
 				var $thisSection = $thisField.find('ul.frm_sorting');
 				if ($thisSection.length) {
@@ -526,7 +525,6 @@ function frmAdminBuildJS(){
 				}
 
 				initiateMultiselect();
-				loadStars();
 			}
 		});
 	}
@@ -582,7 +580,6 @@ function frmAdminBuildJS(){
 			toggleOneSectionHolder(jQuery(section));
 		}
 		initiateMultiselect();
-		loadStars();
 	}
 
 	function popCalcFields(v){
@@ -2475,16 +2472,6 @@ function frmAdminBuildJS(){
 		}
 	}
 
-	function loadStars() {
-		if ( jQuery().rating ) {
-			var star = jQuery('.frm-star');
-			if ( star.length ) {
-				// trigger star fields
-				star.rating();
-			}
-		}
-	}
-
     function initiateMultiselect(){
         jQuery('.frm_multiselect').multiselect({
 			templates: {ul:'<ul class="multiselect-container frm-dropdown-menu"></ul>'},
@@ -2688,7 +2675,6 @@ function frmAdminBuildJS(){
 			});
 
 			initiateMultiselect();
-			loadStars();
 			preventBodyScroll();
 
 			$newFields.on('keypress', '.frm_ipe_field_label, .frm_ipe_field_option, .frm_ipe_field_option_key', blurField);

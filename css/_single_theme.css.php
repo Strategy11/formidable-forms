@@ -824,8 +824,7 @@ if ( ! $submit_style ) { ?>
 
 /* RTL Grids */
 <?php if ( 'rtl' == $direction ) { ?>
-.<?php echo esc_html( $style_class ) ?> .frm_form_fields div.rating-cancel,
-.<?php echo esc_html( $style_class ) ?> .frm_form_fields div.star-rating{
+.<?php echo esc_html( $style_class ) ?> .frm_form_fields .star-rating{
     float:right;
 }
 
