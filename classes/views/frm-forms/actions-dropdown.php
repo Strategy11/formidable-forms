@@ -1,6 +1,6 @@
 <div class="frm_actions_dropdown dropdown <?php echo esc_attr( is_rtl() ? 'pull-right' : 'pull-left' ) ?>">
-	<a href="#" id="frm-navbarDrop" class="frm-dropdown-toggle frm-dots frm_icon_font frm_ellipsis-h_icon" data-toggle="dropdown" title="<?php esc_attr_e( 'Show options', 'formidable' ) ?>"></a>
-	<ul class="frm-dropdown-menu frm-on-top" role="menu" aria-labelledby="frm-navbarDrop">
+	<a href="#" id="frm-actionsDrop" class="frm-dropdown-toggle frm_icon_font frm-option-icon" data-toggle="dropdown" title="<?php esc_attr_e( 'Show options', 'formidable' ) ?>"></a>
+	<ul class="frm-dropdown-menu frm-on-top" role="menu" aria-labelledby="frm-actionsDrop">
 		<?php foreach ( $links as $link ) { ?>
 		<li>
 			<a href="<?php echo esc_url( $link['url'] ); ?>" tabindex="-1" <?php

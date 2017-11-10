@@ -316,7 +316,7 @@ a.frm_icon_font:hover{
 .frm_option-icon3_icon:before {
 	content: "\e904";
 }
-.frm_option-icon_icon:before {
+.frm-option-icon:before {
 	content: "\e905";
 }
 .frm_more_horiz_icon:before {
