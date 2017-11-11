@@ -158,7 +158,10 @@ ul.frm_form_nav > li{
     display: block;
     padding: 5px 0;
     font-weight: 400;
+	color: #5b9dd9;
+	border-bottom:2px solid transparent;
 }
+
 .frm_form_nav a:active,
 .frm_form_nav a:focus{
 	outline:none;
@@ -167,6 +170,10 @@ ul.frm_form_nav > li{
 }
 .frm_form_nav > li a.current_page {
  	color:#333;
+}
+
+.frm_form_nav > li > a:hover{
+	border-color:#ddd;
 }
 
 .frm_form_nav .frm-dropdown-menu a:hover {
