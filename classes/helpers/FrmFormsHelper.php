@@ -95,7 +95,7 @@ class FrmFormsHelper {
         }
 
         ?>
-		<li id="frm_bs_dropdown" class="dropdown <?php echo esc_attr( is_rtl() ? 'pull-left' : 'pull-right' ) ?>">
+		<li id="frm_bs_dropdown" class="dropdown <?php echo esc_attr( is_rtl() ? 'pull-right' : 'pull-left' ) ?>">
 			<a href="#" id="frm-navbarDrop" class="frm-dropdown-toggle" data-toggle="dropdown"><?php _e( 'Switch Form', 'formidable' ) ?> <b class="caret"></b></a>
 		    <ul class="frm-dropdown-menu frm-on-top" role="menu" aria-labelledby="frm-navbarDrop">
 			<?php

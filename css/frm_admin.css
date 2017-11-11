@@ -58,8 +58,13 @@ body.formidable_page_formidable-entries{
 .post-type-frm_display table.widefat,
 .frm_wrap table.widefat{
 	background:#fafafa;
-	border-left: none;
-	border-right: none;
+	border-width: 0;
+	box-shadow: none;
+}
+
+.frm_wrap table.widefat tfoot,
+.frm_wrap table.widefat thead{
+	background:#fff;
 }
 
 .post-type-frm_display .striped > tbody > :nth-child(odd),
