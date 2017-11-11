@@ -685,6 +685,7 @@ class FrmAppHelper {
      * Used to filter shortcode in text widgets
      */
     public static function widget_text_filter_callback( $matches ) {
+		_deprecated_function( __METHOD__, '2.5.4' );
         return do_shortcode( $matches[0] );
     }
 

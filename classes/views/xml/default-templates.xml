@@ -54,19 +54,6 @@
             <field_options><![CDATA[{"blank":"","invalid":"Please enter a valid email address","classes":"frm_full"}]]></field_options>
 		</field>
 		<field>
-		    <id>4</id>
-            <field_key><![CDATA[itt5me]]></field_key>
-            <name><![CDATA[Website]]></name>
-            <description><![CDATA[]]></description>
-            <type><![CDATA[url]]></type>
-            <default_value><![CDATA[]]></default_value>
-            <field_order>4</field_order>
-            <form_id>1</form_id>
-            <required></required>
-            <options><![CDATA[]]></options>
-            <field_options><![CDATA[{"blank":"","invalid":"Please enter a valid website","classes":"frm_full"}]]></field_options>
-		</field>
-		<field>
 		    <id>5</id>
             <field_key><![CDATA[e6lis6]]></field_key>
             <name><![CDATA[Subject]]></name>
@@ -91,19 +78,6 @@
             <required>1</required>
             <options><![CDATA[]]></options>
             <field_options><![CDATA[{"max":"5","blank":"","classes":"frm_full"}]]></field_options>
-		</field>
-		<field>
-		    <id>7</id>
-            <field_key><![CDATA[62n6q3]]></field_key>
-            <name><![CDATA[Captcha]]></name>
-            <description><![CDATA[]]></description>
-            <type><![CDATA[captcha]]></type>
-            <default_value><![CDATA[]]></default_value>
-            <field_order>7</field_order>
-            <form_id>1</form_id>
-            <required></required>
-            <options><![CDATA[]]></options>
-            <field_options><![CDATA[{"label":"none","blank":"","clear_on_focus":0,"default_blank":0}]]></field_options>
 		</field>
 	</form>
 	<view>

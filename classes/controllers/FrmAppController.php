@@ -291,10 +291,11 @@ class FrmAppController {
     /**
      * Filter shortcodes in text widgets
      */
-    public static function widget_text_filter( $content ) {
-    	$regex = '/\[\s*(formidable|display-frm-data|frm-stats|frm-graph|frm-entry-links|formresults|frm-search)\s+.*\]/';
-    	return preg_replace_callback( $regex, 'FrmAppHelper::widget_text_filter_callback', $content );
-    }
+	public static function widget_text_filter( $content ) {
+		_deprecated_function( __METHOD__, '2.5.4' );
+		$regex = '/\[\s*(formidable|display-frm-data|frm-stats|frm-graph|frm-entry-links|formresults|frm-search)\s+.*\]/';
+		return preg_replace_callback( $regex, 'FrmAppHelper::widget_text_filter_callback', $content );
+	}
 
 	/**
 	 * Deprecated in favor of wpmu_upgrade_site

@@ -267,9 +267,22 @@ class FrmStylesController {
     }
 
     public static function custom_css( $message = '', $style = null ) {
-        wp_enqueue_style('codemirror', FrmAppHelper::plugin_url() . '/css/codemirror.css');
-        wp_enqueue_script('codemirror', FrmAppHelper::plugin_url() . '/js/codemirror/codemirror.js', array(), '4.7');
-        wp_enqueue_script( 'codemirror-css', FrmAppHelper::plugin_url() . '/js/codemirror/css.js', array( 'codemirror' ), '4.7' );
+		if ( function_exists('wp_enqueue_code_editor') ) {
+			$id = 'frm_codemirror_box';
+			$settings = wp_enqueue_code_editor( array(
+				'type' => 'text/css',
+				'codemirror' => array(
+					'indentUnit' => 2,
+					'tabSize' => 2,
+				),
+			) );
+		} else {
+			$id = 'frm_custom_css_box';
+			$settings = array();
+			wp_enqueue_style('codemirror', FrmAppHelper::plugin_url() . '/css/codemirror.css');
+			wp_enqueue_script('codemirror', FrmAppHelper::plugin_url() . '/js/codemirror/codemirror.js', array(), '4.7');
+			wp_enqueue_script( 'codemirror-css', FrmAppHelper::plugin_url() . '/js/codemirror/css.js', array( 'codemirror' ), '4.7' );
+		}
 
         if ( ! isset($style) ) {
             $frm_style = new FrmStyle();

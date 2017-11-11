@@ -182,7 +182,7 @@ class FrmFormsHelper {
 
 		foreach ( array( 'name' => '', 'description' => '' ) as $var => $default ) {
 			if ( ! isset( $values[ $var ] ) ) {
-				$values[ $var ] = FrmAppHelper::get_param( $var, $default );
+				$values[ $var ] = FrmAppHelper::get_param( $var, $default, 'get', 'sanitize_text_field' );
             }
         }
 
@@ -190,7 +190,7 @@ class FrmFormsHelper {
 
 		foreach ( array( 'form_id' => '', 'logged_in' => '', 'editable' => '', 'default_template' => 0, 'is_template' => 0, 'status' => 'draft', 'parent_form_id' => 0 ) as $var => $default ) {
             if ( ! isset( $values[ $var ] ) ) {
-				$values[ $var ] = FrmAppHelper::get_param( $var, $default );
+				$values[ $var ] = FrmAppHelper::get_param( $var, $default, 'get', 'sanitize_text_field' );
             }
         }
 

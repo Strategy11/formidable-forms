@@ -2626,6 +2626,9 @@ function frmAdminBuildJS(){
 			
 			jQuery(document.getElementById('frm_deauthorize_link')).click(deauthorize);
 			jQuery('.frm_authorize_link').click(authorize);
+
+			// prevent annoying confirmation message from WordPress
+			jQuery('button').on('click', removeWPUnload);
 		},
 		
 		buildInit: function(){
@@ -3061,6 +3064,7 @@ function frmAdminBuildJS(){
 		},
 
         customCSSInit: function() {
+			/* deprecated since WP 4.9 */
             var customCSS = document.getElementById('frm_custom_css_box');
             if ( customCSS !== null ) {
                 var editor = CodeMirror.fromTextArea(customCSS, {

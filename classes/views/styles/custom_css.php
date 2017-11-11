@@ -14,9 +14,19 @@
 		<input type="hidden" name="frm_action" value="save_css" />
         <?php wp_nonce_field( 'frm_custom_css_nonce', 'frm_custom_css' ); ?>
 
-        <textarea name="<?php echo esc_attr( $frm_style->get_field_name('custom_css') ) ?>" id="frm_custom_css_box" class="hide-if-js"><?php echo FrmAppHelper::esc_textarea($style->post_content['custom_css']) ?></textarea>
+		<textarea name="<?php echo esc_attr( $frm_style->get_field_name('custom_css') ) ?>" id="<?php echo esc_attr( $id ) ?>" class="hide-if-js"><?php echo FrmAppHelper::esc_textarea( $style->post_content['custom_css'] ) ?></textarea>
 
-        <?php
+		<?php
+		if ( ! empty( $settings ) && $id == 'frm_codemirror_box' ) {
+			wp_add_inline_script(
+				'code-editor',
+				sprintf(
+					'jQuery( function() { wp.codeEditor.initialize( "' . esc_attr( $id ) . '", %s ); } );',
+					wp_json_encode( $settings )
+				)
+			);
+		}
+
         foreach ( $style->post_content as $k => $v ) {
             if ( $k == 'custom_css' ) {
                 continue;

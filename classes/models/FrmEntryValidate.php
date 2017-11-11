@@ -107,7 +107,19 @@ class FrmEntryValidate {
     }
 
 	private static function maybe_clear_value_for_default_blank_setting( $field, &$value ) {
-		if ( FrmField::is_option_true_in_object( $field, 'default_blank' ) && $value == $field->default_value ) {
+		$is_default = ( FrmField::is_option_true_in_object( $field, 'default_blank' ) && $value == $field->default_value );
+		$is_label = false;
+
+		if ( ! $is_default ) {
+			$position = FrmField::get_option( $field, 'label' );
+			if ( empty( $position ) ) {
+				$position = FrmStylesController::get_style_val( 'position', $field->form_id );
+			}
+
+			$is_label = ( $position == 'inside' && FrmFieldsHelper::is_placeholder_field_type( $field->type ) && $value == $field->name );
+		}
+
+		if ( $is_label || $is_default ) {
 			$value = '';
 		}
 	}

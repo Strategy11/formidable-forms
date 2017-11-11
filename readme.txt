@@ -2,9 +2,9 @@
 Contributors: formidableforms, sswells, srwells, jamie.wahlin
 Tags: contact form, form builder, custom form, forms, form, form maker, form creator
 Requires at least: 4.0
-Tested up to: 4.8.2
-Requires PHP: 5.2
-Stable tag: 2.05.02
+Tested up to: 4.9
+Requires PHP: 5.3
+Stable tag: 2.05.04
 
 The best WordPress form plugin for contact forms, surveys and more. Make forms a breeze with a drag and drop form builder and form style generator.
 
@@ -145,6 +145,19 @@ The field and form names and descriptions are all changed with in-place edit. Ju
 [See more FAQs](https://formidableforms.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 2.05.04 =
+* Tweak: Remove recaptcha and website fields from sample Contact us form template since most people don't need them
+* Fix: Updates for WP 4.9 compatibility. This includes preventing double filtering on contact form widgets and using the WordPress Codemirror scripts for the form CSS page.
+* Fix: Prevent "are you sure" message that has started occuring from WordPress when saving a WordPress form
+* Fix: Correctly validate form fields with an Inside field label when HTML5 forms are not enabled
+* Fix: Set the background color on loading form submit button. Depending on the hover button covers, the loading spinner may have been the same color as the button
+* Fix: Additional security checks when getting POST or GET values in some places
+* Fix: Return int rather than string from FrmForm::getIdByKey
+* **Pro Version Forms**
+* New: Allow normal WordPress shortcodes in the field calculations box
+* Fix: Strip commas during form validation in non-HTML5 number fields
+* Fix: Correctly order the views dropdown in the shortcode builder
+
 = 2.05.03 =
 * Enhancement: Clean up BCC and CC email buttons on small screens
 * Security enhancement: Use wp_kses instead of wp_kses_post for showing entries
