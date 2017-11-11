@@ -81,21 +81,21 @@ Formidable Forms Pro is an upgrade that adds even more power to your WordPress f
 * World Class Support: if you have questions or need guidance on how to set up your application, we are happy to help. Our goal with Formidable Forms is to help you take on bigger projects, earn more clients, and grow your business.
 
 = Form add-on library =
-* [User registration](https://formidableforms.com/downloads/user-registration/ "User registration"). Register users and create subdomains when using WordPress multisite.
+* [User registration Forms](https://formidableforms.com/downloads/user-registration/ "User registration forms"). Register users and create subdomains when using WordPress multisite.
 * [Form action automation](https://formidableforms.com/downloads/autoresponder/ "Form action automation"). Schedule email notifications, SMS messages, and API actions.
-* [Signatures](https://formidableforms.com/downloads/signature/ "Signatures"). Add a signature field to your form. The user may write their signature with a trackpad/mouse or just type it.
+* [Digital Signature Forms](https://formidableforms.com/downloads/signature/ "Digital Signature Forms"). Add a signature field to your form. The user may write their signature with a trackpad/mouse or just type it.
 * [Formidable Forms API](https://formidableforms.com/downloads/formidable-api/ "Formidable Forms API"). Send entry results to any other site that has a Rest API. This includes the option of sending entries from one Formidable site to another.
-* [PayPal](https://formidableforms.com/downloads/paypal-standard/ "PayPal"). Automate your business by collecting instant payments from your clients. Collect information, calculate a total, and send clients on to PayPal.
-* [Stripe](https://formidableforms.com/downloads/stripe/ "Stripe"). Any Formidable forms on your site can accept credit card payments without users ever leaving your site.
-* [Authorize.net AIM](https://formidableforms.com/downloads/authorize-net-aim/ "Authorize.net AIM"). Accept one-time payments directly on your site, using Authorize.net AIM.
-* [MailChimp](https://formidableforms.com/downloads/mailchimp/ "MailChimp"). Add leads to a MailChimp mailing list when they submit forms and update their information along with the entry.
-* [Aweber](https://formidableforms.com/downloads/aweber/ "Aweber"). Subscribe users to an AWeber mailing list when they submit a form. AWeber is a powerful email marketing service.
-* [Highrise](https://formidableforms.com/downloads/highrise/ "Higrise"). Add your leads to your Highrise CRM account any time a Formidable form is submitted.
-* [Twilio for SMS](https://formidableforms.com/downloads/twilio/ "Twilio for SMS"). Allow users to text their votes for polls created by Formidable Forms, or send SMS notifications when form entries are submitted or updated.
-* [WPML](https://formidableforms.com/downloads/wp-multilingual/ "WPML"). Translate your forms into multiple languages using the Formidable-integrated WPML plugin.
-* [Polylang](https://formidableforms.com/downloads/polylang/ "Polylang"). Create bilingual or multilingual forms with help from Polylang.
+* [PayPal Forms](https://formidableforms.com/downloads/paypal-standard/ "PayPal Forms"). Automate your business by collecting instant payments from your clients. Collect information, calculate a total, and send clients on to PayPal.
+* [Stripe Forms](https://formidableforms.com/downloads/stripe/ "Stripe Forms"). Any Formidable forms on your site can accept credit card payments without users ever leaving your site.
+* [Authorize.net AIM Forms](https://formidableforms.com/downloads/authorize-net-aim/ "Authorize.net AIM Forms"). Accept one-time payments directly on your site, using Authorize.net AIM.
+* [MailChimp Forms](https://formidableforms.com/downloads/mailchimp/ "MailChimp Forms"). Add leads to a MailChimp mailing list when they submit forms and update their information along with the entry.
+* [Aweber Forms](https://formidableforms.com/downloads/aweber/ "Aweber Forms"). Subscribe users to an AWeber mailing list when they submit a form. AWeber is a powerful email marketing service.
+* [Highrise Forms](https://formidableforms.com/downloads/highrise/ "Highrise Forms"). Add your leads to your Highrise CRM account any time a Formidable form is submitted.
+* [Twilio for SMS Forms](https://formidableforms.com/downloads/twilio/ "Twilio for SMS Forms"). Allow users to text their votes for polls created by Formidable Forms, or send SMS notifications when form entries are submitted or updated.
+* [WPML Forms](https://formidableforms.com/downloads/wp-multilingual/ "WPML Forms"). Translate your forms into multiple languages using the Formidable-integrated WPML plugin.
+* [Polylang Forms](https://formidableforms.com/downloads/polylang/ "Polylang Forms"). Create bilingual or multilingual forms with help from Polylang.
 * [Bootstrap Form Styles](https://formidableforms.com/downloads/bootstrap/ "Bootstrap Form Styles"). Instantly add Bootstrap styling to all your Formidable forms.
-* [Zapier](https://formidableforms.com/downloads/zapier/ "Zapier"). Connect with hundreds of different applications through Zapier. Insert a new row in a Google docs spreadsheet, post on Twitter, or add a new Dropbox file with your form.
+* [Zapier Forms](https://formidableforms.com/downloads/zapier/ "Zapier Forms"). Connect with hundreds of different applications through Zapier. Insert a new row in a Google docs spreadsheet, post on Twitter, or add a new Dropbox file with your form.
 
 Learn more at [Formidable Forms](https://formidableforms.com/ "Formidable Forms")
 
