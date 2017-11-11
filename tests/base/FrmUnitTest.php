@@ -30,11 +30,11 @@ class FrmUnitTest extends WP_UnitTestCase {
 
 		$this->is_pro_active = FrmAppHelper::pro_is_installed();
 
-		$this->frm_install();
-
 		$this->factory->form = new Form_Factory( $this );
 		$this->factory->field = new Field_Factory( $this );
 		$this->factory->entry = new Entry_Factory( $this );
+
+		$this->frm_install();
 
 		$current_class_name = get_class( $this );
 		if ( strpos( $current_class_name, 'FrmPro' ) && ! $this->is_pro_active ) {

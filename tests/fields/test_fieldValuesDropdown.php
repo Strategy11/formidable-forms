@@ -1287,7 +1287,6 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 			'phone' => 'phone-number',
 			'date' => 'date-field',
 			'time' => 'time-field',
-			'image' => 'image-url',
 			'lookup' => 'lookup-country',
 			'hidden' => 'hidden-field',
 			'password' => '9r61y8',

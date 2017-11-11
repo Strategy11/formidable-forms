@@ -79,26 +79,25 @@ class WP_Test_FrmProEditingShortcodes extends FrmUnitTest {
      * @covers FrmProEntriesController::entry_update_field
      *
      */
-    public function test_entry_update_link_with_same_value() {
+	public function test_entry_update_link_with_same_value() {
 
-        $this->set_current_user_to_1();
+		$this->set_current_user_to_1();
 
 		$entry_id = $this->get_entry_id( 'steve_conference' );
 		$field_id = $this->get_field_id( 'rsvp' );
 
-        $test_value    = 'No';
-        $atts          = array(
-            'id'       => $entry_id,
-            'field_id' => $field_id,
-            'value'    => $test_value,
-        );
+		$test_value    = 'No';
+		$atts          = array(
+			'id'       => $entry_id,
+			'field_id' => $field_id,
+			'value'    => $test_value,
+		);
 
-        $update_link   = FrmProEntriesController::entry_update_field( $atts );
-        $expected_link = '';
+		$update_link   = FrmProEntriesController::entry_update_field( $atts );
+		$expected_link = '';
 
-        $this->assertSame( $expected_link, $update_link, 'Update link is not equal to expected link for ' . $test_value.' when it is the same as the stored value.' );
-
-    }
+		$this->assertSame( $expected_link, $update_link, 'Update link is present when it should not be. ' . $test_value . ' is the same as the stored value.' );
+	}
 
     /**
      * Tests update link when the value has an ampersand
