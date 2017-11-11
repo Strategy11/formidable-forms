@@ -294,7 +294,7 @@ class FrmAppController {
 	public static function widget_text_filter( $content ) {
 		_deprecated_function( __METHOD__, '2.5.4' );
 		$regex = '/\[\s*(formidable|display-frm-data|frm-stats|frm-graph|frm-entry-links|formresults|frm-search)\s+.*\]/';
-		return do_shortcode( $regex, 'FrmAppHelper::widget_text_filter_callback', $content );
+		return preg_replace_callback( $regex, 'FrmAppHelper::widget_text_filter_callback', $content );
 	}
 
 	/**
