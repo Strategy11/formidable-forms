@@ -79,7 +79,9 @@ class FrmFieldNumber extends FrmFieldType {
 		}
 	}
 
-
+	/**
+	 * Force the value to be numeric before it's saved in the DB
+	 */
 	public function set_value_before_save( $value ) {
 		if ( ! is_numeric( $value ) ) {
 			$value = (float) $value;
