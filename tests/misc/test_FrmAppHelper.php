@@ -178,13 +178,14 @@ class WP_Test_FrmAppHelper extends FrmUnitTest {
 	 */
 	function test_kses() {
 		$start_value = '<script><script>';
-		$start_value .= 'Hello, <a href="/test">click here</a>';
+		$safe_value = 'Hello, <a href="/test">click here</a>';
+		$start_value .= $safe_value;
 
 		$stripped_value = FrmAppHelper::kses( $start_value );
 		$this->assertEquals( $stripped_value, 'Hello, click here' );
 
 		$stripped_value = FrmAppHelper::kses( $start_value, array( 'a' ) );
-		$this->assertEquals( $stripped_value, 'Hello, <a href="/test">click here</a>' );
+		$this->assertEquals( $stripped_value, $safe_value );
 	}
 
 	/**
