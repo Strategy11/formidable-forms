@@ -4,13 +4,13 @@ Tags: contact form, form builder, custom form, forms, form, form maker, form cre
 Requires at least: 4.0
 Tested up to: 4.9
 Requires PHP: 5.3
-Stable tag: 2.05.04
+Stable tag: 2.05.05
 
 The best WordPress form plugin for contact forms, surveys and more. Make forms a breeze with a drag and drop form builder and form style generator.
 
 == Description ==
 = WordPress Form Builder Plugin =
-Formidable Forms is a flexible and free WordPress form plugin. Easily create contact forms, polls and surveys, lead generation forms, email forms, and any other forms you imagine. Start with a pre-built contact form template or create totally custom forms. From the smallest sidebar opt-in form to large job application forms, Formidable Forms is built to do it all. Learn more about Formidable Forms at [FormidableForms.com](https://formidableforms.com/ "FormidableForms.com")
+Formidable Forms is a flexible and free WordPress form plugin. Easily create contact forms, polls and surveys, lead generation forms, email forms, and any other forms you imagine. Start with a pre-built contact form template or create totally custom forms. From the smallest sidebar opt-in form to large job and employment application forms, Formidable Forms is built to do it all. Learn more about Formidable Forms at [FormidableForms.com](https://formidableforms.com/ "FormidableForms.com")
 
 Create a professional WordPress contact form without any code. Get mobile-friendly responsive forms that look great on any screen size. Additionally, changing the form layout is simple with included layout classes. If you need more advanced customizations, you have complete access to change the form HTML and CSS.
 
@@ -145,6 +145,11 @@ The field and form names and descriptions are all changed with in-place edit. Ju
 [See more FAQs](https://formidableforms.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 2.05.05 =
+* **Pro Version Forms**
+* Fix: Show update notifications more reliably on sites that don't save the transient expiration
+* Fix: Allow script and style tags in the content boxes of views
+
 = 2.05.04 =
 * Tweak: Remove recaptcha and website fields from sample Contact us form template since most people don't need them
 * Fix: Updates for WP 4.9 compatibility. This includes preventing double filtering on contact form widgets and using the WordPress Codemirror scripts for the form CSS page.
