@@ -166,14 +166,10 @@ class FrmAddon {
 				unset( $transient->response[ $this->plugin_folder ] );
 			}
 		} else if ( isset( $transient->response ) && isset( $transient->response[ $this->plugin_folder ] ) ) {
-			$cache_key = 'edd_plugin_' . md5( sanitize_key( $this->license . $this->version ) . '_get_version' );
+			$cache_key = $this->version_cache_key();
 			$version_info = get_transient( $cache_key );
 
-			$expiration = get_option( '_transient_timeout_' . $cache_key );
-			if ( $expiration === false ) {
-				// make sure transients don't stick around on some sites
-				$version_info = false;
-			}
+			$this->clear_old_plugin_version( $version_info );
 
 			if ( $version_info !== false && version_compare( $version_info->new_version, $this->version, '>' ) ) {
 				$transient->response[ $this->plugin_folder ] = $version_info;
@@ -190,6 +186,36 @@ class FrmAddon {
 		}
 
 		return $transient;
+	}
+
+
+	/**
+	 * @since 2.05.05
+	 */
+	private function version_cache_key() {
+		return 'edd_plugin_' . md5( sanitize_key( $this->license . $this->version ) . '_get_version' );
+	}
+
+	/**
+	 * make sure transients don't stick around on sites that
+	 * don't save the transient expiration
+	 *
+	 * @since 2.05.05
+	 */
+	private function clear_old_plugin_version( &$version_info ) {
+		if ( $version_info !== false ) {
+
+			$cache_key = $this->version_cache_key();
+			$expiration = get_option( '_transient_timeout_' . $cache_key );
+
+			if ( $expiration === false ) {
+				$last_checked = ( is_array( $version_info->sections ) && isset( $version_info->sections['last_checked'] ) ) ? $version_info->sections['last_checked'] : 0;
+
+				if ( $last_checked < strtotime('-48 hours') ) {
+					$version_info = false;
+				}
+			}
+		}
 	}
 
 	private function is_current_version( $transient ) {
