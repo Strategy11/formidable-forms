@@ -146,6 +146,7 @@ The field and form names and descriptions are all changed with in-place edit. Ju
 
 == Changelog ==
 = 2.05.05 =
+* Fix: When form actions were added at the same time with non-alphabetical naming, a new addon was replacing the first one
 * **Pro Version Forms**
 * Fix: Show update notifications more reliably on sites that don't save the transient expiration
 * Fix: Allow script and style tags in the content boxes of views
