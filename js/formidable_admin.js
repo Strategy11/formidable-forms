@@ -83,7 +83,7 @@ function frmAdminBuildJS(){
 		// set height for scrolling sidebar
 		var fixedBox = document.getElementById('frm-fixed-panel');
 		if ( fixedBox !== null ) {
-			var startPos = document.getElementById('frm_position_ele').getBoundingClientRect().top;
+			var startPos = document.getElementById('frm_set_height_ele').getBoundingClientRect().top;
 			var totalHeight = window.innerHeight;
 			fixedBox.style.maxHeight = ( totalHeight - startPos ) +'px';
 		}
@@ -91,7 +91,7 @@ function frmAdminBuildJS(){
 
 	function setMenuOffset(){
 		var offset = 455;
-		var fields = document.getElementById('frm-fixed-panel');
+		var fields = document.getElementById('frm-fixed');
 
 		if ( fields === null ) {
 			fields = document.getElementById('frm_adv_info');

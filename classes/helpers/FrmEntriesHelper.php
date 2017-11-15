@@ -518,6 +518,8 @@ class FrmEntriesHelper {
 	 * @since 3.0
 	 */
 	private static function get_action_links( $id, $entry ) {
+		$actions = array();
+
 		if ( current_user_can( 'frm_delete_entries' ) ) {
 			$actions['frm_delete'] = array(
 				'url'   => admin_url( 'admin.php?page=formidable-entries&frm_action=destroy&id=' . $id . '&form=' . $entry->form_id ),
@@ -525,17 +527,8 @@ class FrmEntriesHelper {
 				'icon'  => 'frm_icon_font frm_delete_icon',
 				'data'  => array( 'frmverify' => __( 'Really delete?', 'formidable' ) ),
 			);
-
-			if ( ! empty( $entry->post_id ) ) {
-				$actions['frm_delete_post'] = array(
-					'url'   => admin_url( 'admin.php?page=formidable-entries&frm_action=destroy&id=' . $id . '&form=' . $entry->form_id . '&keep_post=1' ),
-					'label' => __( 'Delete without Post' ),
-					'icon'  => 'frm_icon_font frm_delete_icon',
-					'data'  => array( 'frmverify' => __( 'Really delete?', 'formidable' ) ),
-				);
-			}
 		}
 
-		return $actions;
+		return apply_filters( 'frm_entry_actions_dropdown', $actions, compact( 'id', 'entry' ) );
 	}
 }
