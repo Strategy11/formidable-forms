@@ -679,6 +679,10 @@ if ( ! $submit_style ) { ?>
     border-style:<?php echo esc_html( $border_style_error . $important ) ?>;
 }
 
+.<?php echo esc_html( $style_class ) ?> .frm_blank_field .sigWrapper{
+	border-color:#<?php echo esc_html( $border_color_error ) ?> !important;
+}
+
 .<?php echo esc_html( $style_class ) ?> .frm_error{
     font-weight:<?php echo esc_html( $weight . $important ) ?>;
 }
