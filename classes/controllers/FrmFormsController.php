@@ -222,16 +222,6 @@ class FrmFormsController {
         }
     }
 
-    public static function bulk_create_template( $ids ) {
-        FrmAppHelper::permission_check( 'frm_edit_forms' );
-
-        foreach ( $ids as $id ) {
-            FrmForm::duplicate( $id, true, true );
-        }
-
-        return __( 'Form template was Successfully Created', 'formidable' );
-    }
-
 	/**
 	 * Redirect to the url for creating from a template
 	 * Also delete the current form
@@ -873,10 +863,6 @@ class FrmFormsController {
             break;
             case 'untrash':
                 $message = self::bulk_untrash( $ids );
-            break;
-            case 'create_template':
-                $message = self::bulk_create_template( $ids );
-            break;
         }
 
         if ( isset( $message ) && ! empty( $message ) ) {
@@ -1401,5 +1387,16 @@ class FrmFormsController {
 	 */
 	private static function is_minification_on( $atts ) {
 		return isset( $atts['minimize'] ) && ! empty( $atts['minimize'] );
+	}
+
+	public static function bulk_create_template( $ids ) {
+		_deprecated_function( __METHOD__, '3.0', 'FrmForm::duplicate( $id, true, true )' );
+		FrmAppHelper::permission_check( 'frm_edit_forms' );
+
+		foreach ( $ids as $id ) {
+			FrmForm::duplicate( $id, true, true );
+		}
+
+		return __( 'Form template was Successfully Created', 'formidable' );
 	}
 }
