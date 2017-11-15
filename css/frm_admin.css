@@ -15,6 +15,7 @@ a.frm_confirming,
 	margin-right:20px;
 }
 
+.formidable_page_formidable-pro-upgrade #post-body-content,
 .toplevel_page_formidable #post-body-content{
 	margin-bottom: 26px;
 	border-right: 1px solid #e5e5e5;
@@ -29,11 +30,13 @@ a.frm_confirming,
 	width: auto;
 }
 
+.formidable_page_formidable-pro-upgrade #wpfooter,
 .toplevel_page_formidable #wpfooter{
 	border-top:1px solid #ddd;
 	background:#fff;
 }
 
+body.formidable_page_formidable-pro-upgrade,
 body.post-type-frm_display.edit-php,
 body.toplevel_page_formidable,
 body.formidable_page_formidable-entries{
@@ -630,7 +633,6 @@ form .form-field.frm_field_loading{
 }
 
 .upgrade_to_pro{
-    background: #fff;
     padding: 10px 25px 25px;
 }
 
@@ -696,7 +698,7 @@ div.updated.frm_updated_message{
 }
 
 .upgrade_to_pro .frm_check_icon{
-	color:#468847;
+	color:#e37222;
 }
 
 .widefat.frm_pricing thead th,
