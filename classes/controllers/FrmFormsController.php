@@ -166,7 +166,7 @@ class FrmFormsController {
 	public static function edit_key() {
 		_deprecated_function( __METHOD__, '3.0' );
 		$values = self::edit_in_place_value( 'form_key' );
-		echo wp_kses( stripslashes( FrmForm::getKeyById( $values['form_id'] ) ), array() );
+		echo wp_kses( stripslashes( FrmForm::get_key_by_id( $values['form_id'] ) ), array() );
 		wp_die();
 	}
 

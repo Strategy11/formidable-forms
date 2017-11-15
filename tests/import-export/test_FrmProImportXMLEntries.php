@@ -123,10 +123,10 @@ class WP_Test_FrmProImportXMLEntries extends FrmUnitTest {
 		$repeating_section_values = self::_get_repeating_section_values( $repeating_section_id );
 		$repeating_section = FrmField::getOne( $repeating_section_id );
 		$repeating_fields = FrmField::get_all_for_form( $repeating_section->field_options['form_select'] );
-		$parent_form_id = FrmForm::getIdByKey( $this->all_fields_form_key );
+		$parent_form_id = FrmForm::get_id_by_key( $this->all_fields_form_key );
 		$parent_entries = FrmEntry::getAll( array( 'form_id' => $parent_form_id ) );
 		$child_entries = FrmEntry::getAll( array( 'form_id' => $repeating_section->field_options['form_select'] ) );
-		$embed_form_id = FrmForm::getIdByKey( $this->contact_form_key );
+		$embed_form_id = FrmForm::get_id_by_key( $this->contact_form_key );
 		$embedded_entries = FrmEntry::getAll( array( 'form_id' => $embed_form_id, 'parent_item_id !' => 0 ) );
 
 		$args = array(
@@ -161,11 +161,11 @@ class WP_Test_FrmProImportXMLEntries extends FrmUnitTest {
 		$parent_entries = FrmEntry::getAll( array( 'form_id' => $args['parent_form_id'] ) );
 		$this->assertEquals( count( $args['parent_entries'] ), count( $parent_entries ), 'The number of entries in form ' . $args['parent_form_id'] . ' should be the same after an XML update.' );
 
-		$rep_sec_form_id = FrmForm::getIdByKey( $this->repeat_sec_form_key );
+		$rep_sec_form_id = FrmForm::get_id_by_key( $this->repeat_sec_form_key );
 		$child_entries = FrmEntry::getAll( array( 'form_id' => $rep_sec_form_id ) );
 		$this->assertEquals( count( $args['child_entries'] ), count( $child_entries ), 'The number of entries in form ' . $rep_sec_form_id . ' should be the same after an XML update.' );
 
-		$embed_form_id = FrmForm::getIdByKey( $this->contact_form_key );
+		$embed_form_id = FrmForm::get_id_by_key( $this->contact_form_key );
 		$embedded_entries = FrmEntry::getAll( array( 'form_id' => $embed_form_id, 'parent_item_id !' => 0 ) );
 		$this->assertEquals( count( $args['embedded_entries'] ), count( $embedded_entries ), 'The number of entries in the embedded form should be the same after an XML update.' );
 	}

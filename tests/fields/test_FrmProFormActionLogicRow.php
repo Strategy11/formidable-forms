@@ -121,7 +121,7 @@ class test_FrmProFormActionLogicRow extends FrmUnitTest {
 		$key             = '1234';
 		$meta_name       = 0;
 		$id              = 'frm_logic_' . $key . '_' . $meta_name;
-		$form_id         = FrmForm::getIdByKey( 'all_field_types' );
+		$form_id         = FrmForm::get_id_by_key( 'all_field_types' );
 		$name            = 'frm_form_action[' . $key . '][post_content][conditions][' . $meta_name . ']';
 		$names           = array(
 			'hide_field'      => $name . '[hide_field]',

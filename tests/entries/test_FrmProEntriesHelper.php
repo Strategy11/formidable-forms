@@ -12,7 +12,7 @@ class WP_Test_FrmProEntriesHelper extends FrmUnitTest {
 	 * @covers FrmProEntriesHelper::get_search_str()
 	 */
 	function test_general_entries_search_on_frm_item_metas_single_word() {
-		$form_id = FrmForm::getIdByKey( 'all_field_types' );
+		$form_id = FrmForm::get_id_by_key( 'all_field_types' );
 		$where_clause = array( 'it.form_id' => $form_id );
 
 		// Single word is searched, matching entries should be returned
@@ -39,7 +39,7 @@ class WP_Test_FrmProEntriesHelper extends FrmUnitTest {
 	 * @covers FrmProEntriesHelper::get_search_str()
 	 */
 	function test_general_entries_search_on_frm_item_metas_multiple_words() {
-		$form_id = FrmForm::getIdByKey( 'all_field_types' );
+		$form_id = FrmForm::get_id_by_key( 'all_field_types' );
 		$where_clause = array( 'it.form_id' => $form_id );
 
 		// Multiple words are searched. Two matching entries should be found.
@@ -102,7 +102,7 @@ class WP_Test_FrmProEntriesHelper extends FrmUnitTest {
 	 * @covers FrmProEntriesHelper::get_search_str()
 	 */
 	function test_general_entries_search_on_frm_items_key() {
-		$form_id = FrmForm::getIdByKey( 'all_field_types' );
+		$form_id = FrmForm::get_id_by_key( 'all_field_types' );
 		$where_clause = array( 'it.form_id' => $form_id );
 
 		// Single word is searched, matching entry should be returned
@@ -363,7 +363,7 @@ class WP_Test_FrmProEntriesHelper extends FrmUnitTest {
 	}
 
 	function generate_and_run_search_query( $form_key, $search_string, $field_id = 0 ) {
-		$form_id = FrmForm::getIdByKey( $form_key );
+		$form_id = FrmForm::get_id_by_key( $form_key );
 		$where_clause = array( 'it.form_id' => $form_id );
 		$search_query = FrmProEntriesHelper::get_search_str( $where_clause, $search_string, $form_id, $field_id );
 		return FrmEntry::getAll( $search_query, '', '', true, false );

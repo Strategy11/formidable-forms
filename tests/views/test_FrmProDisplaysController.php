@@ -2392,7 +2392,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		}
 
 		// Make sure certain strings aren't present
-		$form_id = FrmForm::getIdByKey( 'dynamic-field-num-form' );
+		$form_id = FrmForm::get_id_by_key( 'dynamic-field-num-form' );
 		$not_expected_values = array( 'id="frm_form_' . $form_id . '_container"' );
 		foreach ( $not_expected_values as $n ) {
 			$this->assertNotContains( $n, $content, 'The View with all types of shortcodes (without filter=1) is missing some expected content.' );
@@ -2440,7 +2440,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		self::check_counts_for_shortcodes( $content );
 
 		// Check Formshortcode:[formidable id=x] occurrences (should be filtered)
-		$form_id = FrmForm::getIdByKey( 'dynamic-field-num-form' );
+		$form_id = FrmForm::get_id_by_key( 'dynamic-field-num-form' );
 		$form_count = substr_count( $content, 'id="frm_form_' . $form_id . '_container"');
 		$this->assertEquals( 5, $form_count, 'The number of forms is not the expected value in a View.' );
 	}

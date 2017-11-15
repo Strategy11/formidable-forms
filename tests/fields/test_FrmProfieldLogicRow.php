@@ -74,7 +74,7 @@ class test_FrmProfieldLogicRow extends FrmUnitTest {
 		$field['hide_field_cond'] = array( '==' );
 		$field['hide_opt'] = array( $value );
 
-		$form_id = FrmForm::getIdByKey( 'all_field_types' );
+		$form_id = FrmForm::get_id_by_key( 'all_field_types' );
 		$form_fields = FrmField::get_all_for_form( $form_id );
 
 		ob_start();

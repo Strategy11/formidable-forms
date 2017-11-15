@@ -21,7 +21,7 @@ class Form_Factory extends WP_UnitTest_Factory_For_Thing {
 	}
 
 	function get_id_by_key( $form_key ) {
-		return FrmForm::getIdByKey( $form_key );
+		return FrmForm::get_id_by_key( $form_key );
 	}
 
 	function get_object_by_id( $form_id ) {

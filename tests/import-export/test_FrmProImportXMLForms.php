@@ -7,8 +7,8 @@
 class WP_Test_FrmProImportXMLForms extends FrmUnitTest {
 
 	public function test_repeating_section_form() {
-		$expected_parent_id = FrmForm::getIdByKey( $this->all_fields_form_key );
-		$repeating_section_form_id = FrmForm::getIdByKey( $this->repeat_sec_form_key );
+		$expected_parent_id = FrmForm::get_id_by_key( $this->all_fields_form_key );
+		$repeating_section_form_id = FrmForm::get_id_by_key( $this->repeat_sec_form_key );
 		$repeating_section_form = FrmForm::getOne( $repeating_section_form_id );
 
 		$this->assertEquals( $expected_parent_id, $repeating_section_form->parent_form_id, 'The parent_form_id was not set properly on an imported repeating section.' );
@@ -117,7 +117,7 @@ class WP_Test_FrmProImportXMLForms extends FrmUnitTest {
 	}
 
 	protected function get_xml_update_args() {
-		$parent_form_id = FrmForm::getIdByKey( $this->all_fields_form_key );
+		$parent_form_id = FrmForm::get_id_by_key( $this->all_fields_form_key );
 		$repeating_section_id = FrmField::get_id_by_key( 'repeating-section' );
 		$all_fields = FrmField::get_all_for_form( $parent_form_id, '', 'include', 'include' );
 		$repeating_section = FrmField::getOne( $repeating_section_id );
@@ -204,9 +204,9 @@ class WP_Test_FrmProImportXMLForms extends FrmUnitTest {
 				$this->assertTrue( $form->parent_form_id != 0, 'Parent form ID was removed when ' . $form->form_key . ' form was imported.' );
 
 				if ( $form->form_key == 'repeating-file-uploads' ) {
-					$expected_parent_id = FrmForm::getIdByKey( 'file-upload' );
+					$expected_parent_id = FrmForm::get_id_by_key( 'file-upload' );
 				} else {
-					$expected_parent_id = FrmForm::getIdByKey( $this->all_fields_form_key );
+					$expected_parent_id = FrmForm::get_id_by_key( $this->all_fields_form_key );
 				}
 
 				$this->assertEquals( $expected_parent_id, $form->parent_form_id, 'The parent form was not updated correctly when the ' . $form->form_key . ' form was imported.' );

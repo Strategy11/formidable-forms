@@ -59,7 +59,7 @@ class WP_Test_FrmField extends FrmUnitTest {
 		}
 
 		foreach ( $forms as $test => $args ) {
-			$form_id = FrmForm::getIdByKey( $args['form_key'] );
+			$form_id = FrmForm::get_id_by_key( $args['form_key'] );
 
 			if ( $test == 'no_repeat_or_embed' ) {
 				$fields = FrmField::get_all_for_form( $form_id, '', 'exclude', 'exclude' );

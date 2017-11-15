@@ -166,7 +166,7 @@ class FrmDb {
     }
 
 	private function maybe_create_contact_form() {
-		$template_id = FrmForm::getIdByKey( 'contact' );
+		$template_id = FrmForm::get_id_by_key( 'contact' );
 		if ( $template_id ) {
 			$form_id = FrmForm::duplicate( $template_id, false, true );
 			if ( $form_id ) {

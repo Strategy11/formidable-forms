@@ -1340,7 +1340,7 @@ class test_FrmProShowEntryShortcode extends test_FrmShowEntryShortcode {
 	}
 
 	protected function get_form_id_for_test() {
-		return FrmForm::getIdByKey( 'all_field_types' );
+		return FrmForm::get_id_by_key( 'all_field_types' );
 	}
 
 	protected function one_cell_table_row( $field_key, $atts ) {

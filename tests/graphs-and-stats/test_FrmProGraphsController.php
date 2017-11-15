@@ -2165,7 +2165,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 	function test_graph_shortcode_with_form() {
 		self::clear_frm_vars();
 
-		$form_id = FrmForm::getIdByKey( 'all_field_types' );
+		$form_id = FrmForm::get_id_by_key( 'all_field_types' );
 		$graph_atts = array(
 			'form' => $form_id,
 			'start_date' => '2015-05-01',
@@ -2203,7 +2203,7 @@ class WP_Test_FrmProGraphsController extends FrmUnitTest {
 	function test_graph_shortcode_with_form_and_group_by() {
 		self::clear_frm_vars();
 
-		$form_id = FrmForm::getIdByKey( 'all_field_types' );
+		$form_id = FrmForm::get_id_by_key( 'all_field_types' );
 		$graph_atts = array(
 			'form' => $form_id,
 			'start_date' => '2015-02-01',

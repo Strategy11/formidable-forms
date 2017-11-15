@@ -18,7 +18,7 @@ class WP_Test_FrmFormsControllerAjax extends FrmAjaxUnitTest {
 	* with ajax
 	*/
 	function test_form_update_with_ajax() {
-		$form_id = FrmForm::getIdByKey( $this->contact_form_key );
+		$form_id = FrmForm::get_id_by_key( $this->contact_form_key );
 
 		self::_setup_post_values( $form_id );
 
