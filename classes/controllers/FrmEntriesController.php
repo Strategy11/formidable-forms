@@ -74,7 +74,8 @@ class FrmEntriesController {
 	 * @since 3.0
 	 */
 	public static function remove_screen_options( $show_screen, $screen ) {
-		if ( $screen->id == 'formidable_page_formidable-entries' ) {
+		$menu_name = sanitize_title( FrmAppHelper::get_menu_name() );
+		if ( $screen->id == $menu_name . '_page_formidable-entries' ) {
 			$show_screen = false;
 		}
 

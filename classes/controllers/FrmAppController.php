@@ -19,6 +19,16 @@ class FrmAppController {
 		return $pos;
 	}
 
+	/**
+	 * @since 3.0
+	 */
+	public static function add_admin_class( $classes ) {
+		if ( FrmAppHelper::is_admin_page('formidable') || FrmAppHelper::is_admin_page('formidable-entries') ) {
+			$classes = ' frm-white-body';
+		}
+		return $classes;
+	}
+
     public static function load_wp_admin_style() {
         FrmAppHelper::load_font_style();
     }

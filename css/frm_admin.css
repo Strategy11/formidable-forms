@@ -38,13 +38,11 @@ a.frm_confirming,
 
 body.formidable_page_formidable-pro-upgrade,
 body.post-type-frm_display.edit-php,
-body.toplevel_page_formidable,
-body.formidable_page_formidable-entries{
+body.frm-white-body{
 	background:#fff;
 }
 
-.toplevel_page_formidable #wpcontent,
-.formidable_page_formidable-entries #wpcontent {
+.frm-white-body #wpcontent {
     padding-left: 0;
 	padding-right:0;
 }
@@ -405,9 +403,8 @@ ul.frm_form_nav > li{
 	margin-left: 5px;
 }
 
-.formidable_page_formidable-entries .frm_wrap .button,
-.toplevel_page_formidable .frm_wrap .button,
-.toplevel_page_formidable .frm_wrap button{
+.frm-white-body .frm_wrap .button,
+.frm-white-body .frm_wrap button{
 	text-shadow:none;
 	box-shadow:none;
 	border-radius:2px;
@@ -633,7 +630,13 @@ form .form-field.frm_field_loading{
 }
 
 .upgrade_to_pro{
-    padding: 10px 25px 25px;
+	padding: 10px 25px 25px;
+}
+
+.upgrade_to_pro h1,
+.upgrade_to_pro h3,
+.upgrade_to_pro{
+	color:#444;
 }
 
 .upgrade_to_pro .error{
@@ -694,7 +697,11 @@ div.updated.frm_updated_message{
 }
 
 .frm_pro_heading span{
-	margin-top:20px;
+	margin-top:10px;
+}
+
+.frm_pro_heading .alignright{
+	text-align:right;
 }
 
 .upgrade_to_pro .frm_check_icon{
@@ -950,13 +957,21 @@ a.frm-option-icon:hover::before{
 	float:left;
 }
 .frm_multi_fields_container,
+.frm_form_builder .frm_form_fields input[type=range],
 .frm_form_builder .frm_form_fields input[type="text"]{
-	width:400px;
+	width:100%;
+	max-width:400px;
     height:auto;
 }
 
-.frm_form_fields input[type="range"]{
-	width:95%;
+.frm_form_fields .frm_form_field > textarea,
+.frm_form_fields .frm_form_field > input[type=email],
+.frm_form_fields .frm_form_field > input[type=url],
+.frm_form_fields .frm_form_field > input[type=number],
+.frm_form_fields .frm_form_field > input[type=tel],
+.frm_form_fields .frm_form_field > input[type=text],
+.frm_form_fields .frm_form_field > input[type=range]{
+	width:100%;
 }
 
 .frm_form_fields textarea.wp-editor-area{width:100%;border:none;}
@@ -1876,7 +1891,7 @@ label.frm_action_events{
     min-width:0;
     margin-right:5px;
 }
-.form-field .frm_other_option input.frm_other_input{
+.form-field input[type=text].frm_other_input{
     width:30%;
 }
 
@@ -3162,8 +3177,7 @@ Responsive Design
 		margin-right:25px;
 	}
 
-	.formidable_page_formidable-entries.auto-fold #wpcontent,
-	.toplevel_page_formidable.auto-fold #wpcontent{
+	.frm-white-body.auto-fold #wpcontent{
 		padding-left:0;
 	}
 
@@ -3247,10 +3261,6 @@ Responsive Design
 		min-width: auto;
 		max-width: auto;
 		width: 90px;
-	}
-
-	.frm_multi_fields_container, .frm_form_builder .frm_form_fields input[type="text"]{
-		width:100%;
 	}
 
 	#frm_builder_page .frm_code_list a.button{
