@@ -457,18 +457,29 @@ class FrmForm {
     }
 
     /**
+	 * @since 3.0
      * @param string $key
      * @return int form id
      */
-	public static function getIdByKey( $key ) {
+	public static function get_id_by_key( $key ) {
 		return (int) FrmDb::get_var( 'frm_forms', array( 'form_key' => sanitize_title( $key ) ) );
     }
 
     /**
+     * @param string $key
+     * @return int form id
+     */
+	public static function getIdByKey( $key ) {
+		_deprecated_function( __METHOD__, '3.0', 'FrmForm::get_id_by_key' );
+		return self::get_id_by_key( $key );
+    }
+
+    /**
+	 * @since 3.0
      * @param int $id
      * @return string form key
      */
-	public static function getKeyById( $id ) {
+	public static function get_key_by_id( $id ) {
         $id = (int) $id;
         $cache = FrmAppHelper::check_cache($id, 'frm_form');
         if ( $cache ) {
@@ -479,6 +490,11 @@ class FrmForm {
 
         return $key;
     }
+
+	public static function getKeyById( $id ) {
+		_deprecated_function( __METHOD__, '3.0', 'FrmForm::get_key_by_id' );
+		return self::get_key_by_id( $id );
+	}
 
 	/**
 	 * If $form is numeric, get the form object
