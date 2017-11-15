@@ -1283,6 +1283,23 @@ function frmAdminBuildJS(){
 		}
 	}
 
+	function setStarValues() {
+		/*jshint validthis:true */
+		var fieldID = this.id.replace('radio_maxnum_', '');
+		var container = jQuery('#field_'+ fieldID +'_inner_container .frm-star-group');
+		container.html('');
+
+		var min = 1;
+		var max = this.value;
+		if ( min > max ) {
+			max = min;
+		}
+
+		for ( var i = min; i<=max; i++ ) {
+			container.append('<input type="hidden" name="field_options[options_'+ fieldID +']['+ i +']" value="'+ i +'" /> <input type="radio" name="item_meta['+ fieldID +']" value="'+ i +'" class="frm-star" /> <label class="star-rating"></label>');
+		}
+	}
+
 	function setScaleValues() {
 		/*jshint validthis:true */
 		var isMin = this.id.indexOf('minnum') !== -1;
@@ -2699,6 +2716,7 @@ function frmAdminBuildJS(){
 			$newFields.on('change', '.frm_get_values_form', updateGetValueFieldSelection);
 			$newFields.on('change', '.frm_logic_field_opts', getFieldValues );
 			$newFields.on('change', '.scale_maxnum, .scale_minnum', setScaleValues);
+			$newFields.on('change', '.radio_maxnum', setStarValues);
 
 			jQuery(document.getElementById('frm-insert-fields')).on('click', '.frm_add_field', addFieldClick);
 			$newFields.on('click', '.frm_duplicate_icon', duplicateField);

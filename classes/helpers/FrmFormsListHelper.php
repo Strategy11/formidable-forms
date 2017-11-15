@@ -86,10 +86,6 @@ class FrmFormsListHelper extends FrmListHelper {
 	public function get_bulk_actions() {
 	    $actions = array();
 
-		if ( in_array( $this->status, array( '', 'published' ) ) ) {
-	        $actions['bulk_create_template'] = __( 'Create Template', 'formidable' );
-	    }
-
 	    if ( 'trash' == $this->status ) {
 	        if ( current_user_can('frm_edit_forms') ) {
 	            $actions['bulk_untrash'] = __( 'Restore', 'formidable' );

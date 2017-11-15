@@ -60,6 +60,7 @@ body.formidable_page_formidable-entries{
 	background:#fafafa;
 	border-width: 0;
 	box-shadow: none;
+	margin:20px 0;
 }
 
 .frm_wrap table.widefat tfoot,
@@ -1941,6 +1942,7 @@ span.howto{display:inline;}
 }
 
 .frm_sorting .form-field .widget input[type="text"],
+.frm_sorting .form-field .widget input[type="number"],
 .frm_sorting .form-field .widget select,
 #wpcontent .frm_sorting .form-field .widget select,
 .frm_sorting .form-field .widget textarea{

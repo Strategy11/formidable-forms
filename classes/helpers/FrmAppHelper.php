@@ -435,7 +435,10 @@ class FrmAppHelper {
 			'h4'  => array(),
 			'h5'  => array(),
 			'h6'  => array(),
-			'i'   => array(),
+			'i'   => array(
+				'class' => array(),
+				'id'    => array(),
+			),
 			'img' => array(
 				'alt'    => array(),
 				'class'  => array(),
