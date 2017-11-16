@@ -1,7 +1,8 @@
 <div class="wrap upgrade_to_pro">
 	<h1 class="frm_pro_heading">
 		<img src="<?php echo esc_url( FrmAppHelper::plugin_url() ) ?>/images/logo.png" alt="Upgrade to Pro" />
-		<span class="alignright">Save time and make life easier. Upgrade to Pro.</span>
+		<span class="alignright">Take on bigger projects, earn more clients and grow your business.</br>
+			Upgrade to Pro.</span>
 		<span class="clear"></span>
 	</h1>
 
