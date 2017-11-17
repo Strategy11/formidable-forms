@@ -41,6 +41,8 @@ class FrmMigrate {
 			/***** SAVE DB VERSION *****/
 			update_option('frm_db_version', $frm_db_version);
 
+			FrmAppHelper::save_combined_js();
+
 			/**** ADD/UPDATE DEFAULT TEMPLATES ****/
 			FrmXMLController::add_default_templates();
 
@@ -164,7 +166,7 @@ class FrmMigrate {
     }
 
 	private function maybe_create_contact_form() {
-		$template_id = FrmForm::getIdByKey( 'contact' );
+		$template_id = FrmForm::get_id_by_key( 'contact' );
 		if ( $template_id ) {
 			$form_id = FrmForm::duplicate( $template_id, false, true );
 			if ( $form_id ) {
@@ -332,8 +334,6 @@ class FrmMigrate {
      * Migrate post and email notification settings into actions
      */
     private function migrate_to_16() {
-        global $wpdb;
-
         $forms = FrmDb::get_results( $this->forms, array(), 'id, options, is_template, default_template' );
 
         /**
