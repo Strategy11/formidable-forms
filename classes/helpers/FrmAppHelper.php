@@ -773,7 +773,7 @@ class FrmAppHelper {
 		if ( is_array( $value ) ) {
 			$original_function = $function;
 			if ( count( $value ) ) {
-				$function = explode( ', ', self::prepare_array_values( $value, $function ) );
+				$function = explode( ', ', FrmDb::prepare_array_values( $value, $function ) );
 			} else {
 				$function = array( $function );
 			}

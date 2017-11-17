@@ -983,7 +983,7 @@ class FrmXMLHelper {
 
         if ( ! $exists ) {
 			// this isn't an email, but we need to use a class that will always be included
-			FrmAppHelper::save_json_post( $new_action );
+			FrmDb::save_json_post( $new_action );
             $imported['imported']['actions']++;
         }
     }
@@ -1073,7 +1073,7 @@ class FrmXMLHelper {
             ) );
 
             if ( empty($exists) ) {
-				FrmAppHelper::save_json_post( $new_notification );
+				FrmDb::save_json_post( $new_notification );
                 $imported['imported']['actions']++;
             }
             unset($new_notification);

@@ -31,7 +31,7 @@ class FrmStyle {
     }
 
 	public function save( $settings ) {
-		return FrmAppHelper::save_settings( $settings, 'frm_styles' );
+		return FrmDb::save_settings( $settings, 'frm_styles' );
     }
 
 	public function duplicate( $id ) {
