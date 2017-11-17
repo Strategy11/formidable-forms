@@ -583,6 +583,19 @@ class FrmDb {
 		return $query;
 	}
 
+	/**
+	 * Only allow specific Order options
+	 * @since 2.05.06
+	 */
+	public static function sanitize_order( $order ) {
+		$allowed = array( 'rand()', 'asc', 'desc' );
+		$order = trim( strtolower( $order ) );
+		if ( ! in_array( $order, $allowed ) ) {
+			$order = '';
+		}
+		return $order;
+	}
+
     public function uninstall() {
 		if ( ! current_user_can( 'administrator' ) ) {
             $frm_settings = FrmAppHelper::get_settings();
