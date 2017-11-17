@@ -10,7 +10,7 @@ class WP_Test_FrmDb extends FrmUnitTest {
 	 * @todo Check if style was created
 	 */
     public function test_upgrade( ) {
-		$frmdb = new FrmDb();
+		$frmdb = new FrmMigrate();
 		$frmdb->upgrade( 25 );
 
 		$this->do_tables_exist();
@@ -31,7 +31,7 @@ class WP_Test_FrmDb extends FrmUnitTest {
 
 	private function assert_collation() {
 		global $wpdb;
-		$frmdb = new FrmDb();
+		$frmdb = new FrmMigrate();
 		$collation = $frmdb->collation();
 
 		if ( ! empty( $wpdb->charset ) ) {
@@ -99,7 +99,7 @@ class WP_Test_FrmDb extends FrmUnitTest {
 	public function test_uninstall() {
 		$this->set_user_by_role( 'administrator' );
 
-		$frmdb = new FrmDb();
+		$frmdb = new FrmMigrate();
 		$uninstalled = $frmdb->uninstall();
 		$this->assertTrue( $uninstalled );
 
