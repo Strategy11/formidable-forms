@@ -372,6 +372,42 @@ DEFAULT_HTML;
 		return $position;
 	}
 
+
+	/**
+	 * Determine if a form has fields with top labels to align the submit button properly
+	 *
+	 * @param $fields
+	 * @param $form
+	 *
+	 * @return bool
+	 */
+	public static function form_has_top_labels( $fields, $form ) {
+		if ( ! isset( $fields[0] ) ) {
+			return false;
+		}
+
+		return self::field_has_top_label( $fields[0], $form );
+	}
+
+
+	/**
+	 * Check if a field's label position is set to "top"
+	 *
+	 * @param $field
+	 * @param $form
+	 *
+	 * @return bool
+	 */
+	private static function field_has_top_label( $field, $form ) {
+
+		$label_pos = self::label_position( $field['label'], $field, $form );
+		if ( 'top' == $label_pos ) {
+			return true;
+		}
+
+		return false;
+	}
+
 	/**
 	 * Check if this field type allows placeholders
 	 * @since 2.05

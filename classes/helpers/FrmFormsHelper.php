@@ -267,7 +267,7 @@ class FrmFormsHelper {
 		if ( $loc == 'submit' ) {
             $draft_link = self::get_draft_link();
             $default_html = <<<SUBMIT_HTML
-<div class="frm_submit">
+<div class="frm_submit [inline_submit]">
 [if back_button]<button type="submit" name="frm_prev_page" formnovalidate="formnovalidate" class="frm_prev_page" [back_hook]>[back_label]</button>[/if back_button]
 <button class="frm_button_submit" type="submit"  [button_action]>[button_label]</button>
 $draft_link
@@ -291,8 +291,34 @@ BEFORE_HTML;
         return $link;
     }
 
-	public static function get_custom_submit( $html, $form, $submit, $form_action, $values ) {
+
+	/**
+	 * Adds appropriate inline submit class if the inline setting for the submit button is selected
+	 *
+	 * @param $button_html
+	 * @param $form
+	 * @param $form_has_top_labels
+	 *
+	 * @return string  button HTML, possibly with inline submit class
+	 */
+	private static function maybe_add_inline_submit_class( $button_html, $form, $form_has_top_labels ) {
+		$inline_class = "";
+		$submit_align = self::get_submit_align( $form );
+
+		if ( 'inline' == $submit_align ) {
+			if ( $form_has_top_labels ) {
+				$inline_class = 'frm_inline_submit ';
+			} else {
+				$inline_class = 'frm_inline_submit_top ';
+			}
+		}
+
+		return str_replace( '[inline_submit]', $inline_class, $button_html );
+	}
+
+	public static function get_custom_submit( $html, $form, $submit, $form_action, $values, $form_has_top_labels ) {
 		$button = self::replace_shortcodes( $html, $form, $submit, $form_action, $values );
+		$button = self::maybe_add_inline_submit_class( $button, $form, $form_has_top_labels );
 		if ( ! strpos( $button, '[button_action]' ) ) {
 			echo $button;
 			return;
@@ -464,6 +490,21 @@ BEFORE_HTML;
 		}
 	}
 
+	/**
+	 * Retrieve the value of the submit button alignment setting
+	 *
+	 * @param $form
+	 *
+	 * @return string
+	 */
+	private static function get_submit_align( $form ) {
+		if ( ! isset ( $form->options ) || ! isset( $form->options['submit_align'] ) ) {
+			return '';
+		}
+
+		return $form->options['submit_align'];
+	}
+
 	public static function get_form_style_class( $form = false ) {
         $style = self::get_form_style($form);
         $class = ' with_frm_style';
@@ -480,6 +521,7 @@ BEFORE_HTML;
         if ( is_object($form) ) {
 			$form = $form->options;
 		}
+
 
 		$submit_align = isset( $form['submit_align'] ) ? $form['submit_align'] : '';
 

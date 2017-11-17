@@ -553,9 +553,9 @@ if ( ! $submit_style ) { ?>
     vertical-align:middle;
 }
 
-.<?php echo esc_html( $style_class ) ?> .frm_align_top_submit input[type=submit],
-.<?php echo esc_html( $style_class ) ?> .frm_align_top_submit.frm_submit input[type=button],
-.<?php echo esc_html( $style_class ) ?> .frm_align_top_submit.frm_submit button {
+.<?php echo esc_html( $style_class ) ?> .frm_inline_submit_top input[type=submit],
+.<?php echo esc_html( $style_class ) ?> .frm_inline_submit_top.frm_submit input[type=button],
+.<?php echo esc_html( $style_class ) ?> .frm_inline_submit_top.frm_submit button {
 	margin-top: 0;
 }
 
@@ -1121,10 +1121,10 @@ if ( ! $submit_style ) { ?>
 		width:100%<?php echo esc_html( $important ) ?>;
 	}
 
-	.<?php echo esc_html( $style_class ) ?> .frm_align_top_submit input[type=submit],
-	.<?php echo esc_html( $style_class ) ?> .frm_align_top_submit.frm_submit input[type=button],
-	.<?php echo esc_html( $style_class ) ?> .frm_align_top_submit.frm_submit button {
-		margin-top: 10px;
+	.<?php echo esc_html( $style_class ) ?> .frm_inline_submit_top input[type=submit],
+	.<?php echo esc_html( $style_class ) ?> .frm_inline_submit_top.frm_submit input[type=button],
+	.<?php echo esc_html( $style_class ) ?> .frm_inline_submit_top.frm_submit button {
+		margin: <?php echo esc_html( $submit_margin ) ?>;
 	}
 
 
