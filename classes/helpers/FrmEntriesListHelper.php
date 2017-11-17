@@ -44,7 +44,8 @@ class FrmEntriesListHelper extends FrmListHelper {
         $page = $this->get_pagenum();
 		$start = (int) isset( $_REQUEST['start'] ) ? absint( $_REQUEST['start'] ) : ( ( $page - 1 ) * $per_page );
 
-		$this->items = FrmEntry::getAll( $s_query, $order, ' LIMIT ' . $start . ',' . $per_page, true, $join_form_in_query );
+		$limit = FrmDb::esc_limit( $start . ',' . $per_page );
+		$this->items = FrmEntry::getAll( $s_query, $order, $limit, true, $join_form_in_query );
         $total_items = FrmEntry::getRecordCount($s_query);
 
 		$this->set_pagination_args( array(

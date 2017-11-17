@@ -236,10 +236,10 @@ class FrmEntry {
 	 * @since 2.0.5
 	 */
 	public static function clear_cache() {
-		FrmAppHelper::cache_delete_group( 'frm_entry' );
-		FrmAppHelper::cache_delete_group( 'frm_item' );
-		FrmAppHelper::cache_delete_group( 'frm_entry_meta' );
-		FrmAppHelper::cache_delete_group( 'frm_item_meta' );
+		FrmDb::cache_delete_group( 'frm_entry' );
+		FrmDb::cache_delete_group( 'frm_item' );
+		FrmDb::cache_delete_group( 'frm_entry_meta' );
+		FrmDb::cache_delete_group( 'frm_item_meta' );
 	}
 
 	/**
@@ -273,11 +273,11 @@ class FrmEntry {
         $query = $wpdb->prepare( $query, $query_args );
 
         if ( ! $meta ) {
-			$entry = FrmAppHelper::check_cache( $id . '_nometa', 'frm_entry', $query, 'get_row' );
+			$entry = FrmDb::check_cache( $id . '_nometa', 'frm_entry', $query, 'get_row' );
             return stripslashes_deep($entry);
         }
 
-        $entry = FrmAppHelper::check_cache( $id, 'frm_entry' );
+        $entry = FrmDb::check_cache( $id, 'frm_entry' );
         if ( $entry !== false ) {
             return stripslashes_deep($entry);
         }
@@ -319,7 +319,7 @@ class FrmEntry {
         }
         unset($metas);
 
-		FrmAppHelper::set_cache( $entry->id, $entry, 'frm_entry' );
+		FrmDb::set_cache( $entry->id, $entry, 'frm_entry' );
 
         return $entry;
     }
@@ -330,7 +330,7 @@ class FrmEntry {
 	public static function exists( $id ) {
         global $wpdb;
 
-        if ( FrmAppHelper::check_cache( $id, 'frm_entry' ) ) {
+        if ( FrmDb::check_cache( $id, 'frm_entry' ) ) {
             $exists = true;
             return $exists;
         }
@@ -349,7 +349,7 @@ class FrmEntry {
     public static function getAll( $where, $order_by = '', $limit = '', $meta = false, $inc_form = true ) {
 		global $wpdb;
 
-        $limit = FrmAppHelper::esc_limit($limit);
+        $limit = FrmDb::esc_limit($limit);
 
         $cache_key = maybe_serialize($where) . $order_by . $limit . $inc_form;
         $entries = wp_cache_get($cache_key, 'frm_entry');
@@ -371,12 +371,12 @@ class FrmEntry {
 		    }
 
 			// prepare the query
-			$query = 'SELECT ' . $fields . ' FROM ' . $table . FrmAppHelper::prepend_and_or_where(' WHERE ', $where) . $order_by . $limit;
+			$query = 'SELECT ' . $fields . ' FROM ' . $table . FrmDb::prepend_and_or_where(' WHERE ', $where) . $order_by . $limit;
 
             $entries = $wpdb->get_results($query, OBJECT_K);
             unset($query);
 
-			FrmAppHelper::set_cache( $cache_key, $entries, 'frm_entry' );
+			FrmDb::set_cache( $cache_key, $entries, 'frm_entry' );
         }
 
         if ( ! $meta || ! $entries ) {
@@ -419,7 +419,7 @@ class FrmEntry {
 
 		if ( ! FrmAppHelper::prevent_caching() ) {
 			foreach ( $entries as $entry ) {
-				FrmAppHelper::set_cache( $entry->id, $entry, 'frm_entry' );
+				FrmDb::set_cache( $entry->id, $entry, 'frm_entry' );
 				unset( $entry );
 			}
 		}
@@ -441,8 +441,8 @@ class FrmEntry {
             $count = FrmDb::get_count( $table_join, $where );
         } else {
 			$cache_key = 'count_' . maybe_serialize( $where );
-			$query = 'SELECT COUNT(*) FROM ' . $table_join . FrmAppHelper::prepend_and_or_where( ' WHERE ', $where );
-			$count = FrmAppHelper::check_cache( $cache_key, 'frm_entry', $query, 'get_var' );
+			$query = 'SELECT COUNT(*) FROM ' . $table_join . FrmDb::prepend_and_or_where( ' WHERE ', $where );
+			$count = FrmDb::check_cache( $cache_key, 'frm_entry', $query, 'get_var' );
         }
 
         return $count;

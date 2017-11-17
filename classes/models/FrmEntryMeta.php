@@ -133,8 +133,8 @@ class FrmEntryMeta {
 	 * @since 2.0.5
 	 */
 	public static function clear_cache() {
-		FrmAppHelper::cache_delete_group( 'frm_entry_meta' );
-		FrmAppHelper::cache_delete_group( 'frm_item_meta' );
+		FrmDb::cache_delete_group( 'frm_entry_meta' );
+		FrmDb::cache_delete_group( 'frm_item_meta' );
 	}
 
 	/**
@@ -157,7 +157,7 @@ class FrmEntryMeta {
 			$cached = $entry;
 		} else {
 			$entry_id = (int) $entry_id;
-			$cached = FrmAppHelper::check_cache( $entry_id, 'frm_entry' );
+			$cached = FrmDb::check_cache( $entry_id, 'frm_entry' );
 		}
 
 		if ( $cached && isset( $cached->metas ) && isset( $cached->metas[ $field_id ] ) ) {
@@ -190,7 +190,7 @@ class FrmEntryMeta {
         $query = implode(' ', $query);
 
 		$cache_key = 'entry_metas_for_field_' . $field_id . $order . $limit . maybe_serialize( $args );
-        $values = FrmAppHelper::check_cache($cache_key, 'frm_entry', $query, 'get_col');
+        $values = FrmDb::check_cache($cache_key, 'frm_entry', $query, 'get_col');
 
         if ( ! $args['stripslashes'] ) {
             return $values;
@@ -243,10 +243,10 @@ class FrmEntryMeta {
         $query = 'SELECT it.*, fi.type as field_type, fi.field_key as field_key,
             fi.required as required, fi.form_id as field_form_id, fi.name as field_name, fi.options as fi_options
 			FROM ' . $wpdb->prefix . 'frm_item_metas it LEFT OUTER JOIN ' . $wpdb->prefix . 'frm_fields fi ON it.field_id=fi.id' .
-            FrmAppHelper::prepend_and_or_where(' WHERE ', $where) . $order_by . $limit;
+            FrmDb::prepend_and_or_where(' WHERE ', $where) . $order_by . $limit;
 
 		$cache_key = 'all_' . maybe_serialize( $where ) . $order_by . $limit;
-        $results = FrmAppHelper::check_cache($cache_key, 'frm_entry', $query, ($limit == ' LIMIT 1' ? 'get_row' : 'get_results'));
+        $results = FrmDb::check_cache($cache_key, 'frm_entry', $query, ($limit == ' LIMIT 1' ? 'get_row' : 'get_results'));
 
         if ( ! $results || ! $stripslashes ) {
             return $results;
@@ -273,7 +273,7 @@ class FrmEntryMeta {
         $query = implode(' ', $query);
 
 		$cache_key = 'ids_' . maybe_serialize( $where ) . $order_by . 'l' . $limit . 'u' . $unique . maybe_serialize( $args );
-        $results = FrmAppHelper::check_cache($cache_key, 'frm_entry', $query, ($limit == ' LIMIT 1' ? 'get_var' : 'get_col'));
+        $results = FrmDb::check_cache($cache_key, 'frm_entry', $query, ($limit == ' LIMIT 1' ? 'get_var' : 'get_col'));
 
         return $results;
     }
@@ -309,7 +309,7 @@ class FrmEntryMeta {
             if ( ! empty($args['user_id']) ) {
                 $where['e.user_id'] = $args['user_id'];
             }
-            $query[] = FrmAppHelper::prepend_and_or_where(' WHERE ', $where) . $order_by . $limit;
+            $query[] = FrmDb::prepend_and_or_where(' WHERE ', $where) . $order_by . $limit;
 
 			if ( $args['group_by'] ) {
 				$query[] = ' GROUP BY ' . sanitize_text_field( $args['group_by'] );
@@ -340,7 +340,7 @@ class FrmEntryMeta {
         }
 
 		// The query has already been prepared
-		$query[] = FrmAppHelper::prepend_and_or_where(' WHERE ', $where) . $order_by . $limit;
+		$query[] = FrmDb::prepend_and_or_where(' WHERE ', $where) . $order_by . $limit;
     }
 
     public static function search_entry_metas( $search, $field_id = '', $operator ) {
@@ -371,7 +371,7 @@ class FrmEntryMeta {
 				$where .= $wpdb->prepare(' meta_value ' . $operator . ' %s and', $value );
             }
             $where .= $wpdb->prepare(' field_id=%d', $field_id);
-			$query = 'SELECT DISTINCT item_id FROM ' . $wpdb->prefix . 'frm_item_metas' . FrmAppHelper::prepend_and_or_where( ' WHERE ', $where );
+			$query = 'SELECT DISTINCT item_id FROM ' . $wpdb->prefix . 'frm_item_metas' . FrmDb::prepend_and_or_where( ' WHERE ', $where );
         } else {
 			if ( $operator == 'LIKE' ) {
                 $search = '%' . $search . '%';
@@ -380,7 +380,7 @@ class FrmEntryMeta {
         }
 
         $results = $wpdb->get_col($query, 0);
-		FrmAppHelper::set_cache( $cache_key, $results, 'frm_entry' );
+		FrmDb::set_cache( $cache_key, $results, 'frm_entry' );
 
         return $results;
     }

@@ -361,13 +361,13 @@ class FrmAppController {
 	}
 
     public static function activation_install() {
-        FrmAppHelper::delete_cache_and_transient( 'frm_plugin_version' );
+        FrmDb::delete_cache_and_transient( 'frm_plugin_version' );
         FrmFormActionsController::actions_init();
         self::install();
     }
 
     public static function install( $old_db_version = false ) {
-        $frmdb = new FrmDb();
+        $frmdb = new FrmMigrate();
         $frmdb->upgrade( $old_db_version );
     }
 
@@ -375,7 +375,7 @@ class FrmAppController {
 		FrmAppHelper::permission_check('administrator');
         check_ajax_referer( 'frm_ajax', 'nonce' );
 
-		$frmdb = new FrmDb();
+		$frmdb = new FrmMigrate();
 		$frmdb->uninstall();
 
 		//disable the plugin and redirect after uninstall so the tables don't get added right back
