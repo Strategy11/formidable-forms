@@ -2667,14 +2667,65 @@ function frmFrontFormJS(){
 		var keys = calc.total;
 		var len = keys.length;
 		var vals = [];
+		var pages = getStartEndPage( all_calcs.calc[ keys[0] ].form_id );
 
 		// loop through each calculation this field is used in
 		for ( var i = 0, l = len; i < l; i++ ) {
-
+			var totalOnPage = isTotalFieldOnPage( all_calcs.calc[ keys[i] ], pages );
 			// Proceed with calculation if total field is not conditionally hidden
-			if ( isTotalFieldConditionallyHidden( all_calcs.calc[ keys[i] ], triggerField.attr('name') ) === false ) {
+			if ( totalOnPage && isTotalFieldConditionallyHidden( all_calcs.calc[ keys[i] ], triggerField.attr('name') ) === false ) {
 				doSingleCalculation( all_calcs, keys[i], vals, triggerField );
 			}
+		}
+	}
+
+	/**
+	 * @param formId
+	 * @since 2.05.06
+	 */
+	function getStartEndPage( formId ) {
+		var hasPreviousPage = document.getElementById('frm_form_'+ formId +'_container').getElementsByClassName('frm_next_page');
+		var hasAnotherPage  = document.getElementById('frm_page_order_'+ formId);
+
+		var pages = [];
+		if ( hasPreviousPage.length > 0 ) {
+			pages.start = hasPreviousPage[0];
+		}
+		if ( hasAnotherPage !== null ) {
+			pages.end = hasAnotherPage;
+		}
+
+		return pages;
+	}
+
+	/**
+	 * If the total field is not on the current page, don't trigger the calculation
+	 *
+	 * @param calcDetails
+	 * @param pages
+	 * @since 2.05.06
+	 */
+	function isTotalFieldOnPage( calcDetails, pages ) {
+		if ( typeof pages.start !== 'undefined' || typeof pages.end !== 'undefined' ) {
+			// the form has pages
+			var onPage = true;
+			var hiddenTotalField = jQuery('input[type=hidden][name*="['+ calcDetails.field_id +']"]');
+			if ( hiddenTotalField.length ) {
+				// the total field is hidden
+				var totalPos = hiddenTotalField.index();
+				var isAfterStart = true;
+				var isBeforeEnd = true;
+				if ( typeof pages.start !== 'undefined' ) {
+					isAfterStart = jQuery(pages.start).index() < totalPos;
+				}
+				if ( typeof pages.end !== 'undefined' ) {
+					isBeforeEnd = jQuery(pages.end).index() > totalPos;
+				}
+				onPage = ( isAfterStart && isBeforeEnd );
+			}
+			return onPage;
+		} else {
+			return true;
 		}
 	}
 
