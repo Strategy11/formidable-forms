@@ -47,6 +47,10 @@ body.frm-white-body{
 	padding-right:0;
 }
 
+.frm-white-body .wrap #poststuff #post-body{
+	padding:0 20px;
+}
+
 .post-type-frm_display .tablenav,
 .frm_wrap .tablenav{
 	margin-bottom:10px;
