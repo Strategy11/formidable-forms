@@ -1772,7 +1772,7 @@ class FrmAppHelper {
      */
 	public static function check_cache_and_transient( $cache_key ) {
 		_deprecated_function( __METHOD__, '2.06', 'FrmDb::' . __FUNCTION__ );
-        return FrmDb::check_cache_and_transient( $cache_key );
+		return FrmDb::check_cache( $cache_key );
     }
 
     /**

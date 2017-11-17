@@ -644,29 +644,6 @@ class FrmDb {
 	}
 
     /**
-     * Data that should be stored for a long time can be stored in a transient.
-     * First check the cache, then check the transient
-	 *
-     * @since 2.06
-     * @return mixed The cached value or false
-     */
-	public static function check_cache_and_transient( $cache_key ) {
-		// check caching layer first
-		$results = self::check_cache( $cache_key );
-		if ( $results ) {
-			return $results;
-		}
-
-		// then check the transient
-		$results = get_transient( $cache_key );
-		if ( $results ) {
-			wp_cache_set( $cache_key, $results );
-		}
-
-		return $results;
-	}
-
-    /**
      * @since 2.06
      * @param string $cache_key
      */
