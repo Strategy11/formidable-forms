@@ -443,7 +443,7 @@ class FrmForm {
      * @return string form name
      */
     public static function getName( $id ) {
-        $form = FrmAppHelper::check_cache($id, 'frm_form');
+		$form = FrmDb::check_cache( $id, 'frm_form' );
         if ( $form ) {
             $r = stripslashes($form->name);
             return $r;
@@ -481,7 +481,7 @@ class FrmForm {
      */
 	public static function get_key_by_id( $id ) {
         $id = (int) $id;
-        $cache = FrmAppHelper::check_cache($id, 'frm_form');
+		$cache = FrmDb::check_cache( $id, 'frm_form' );
         if ( $cache ) {
             return $cache->form_key;
         }
@@ -539,7 +539,7 @@ class FrmForm {
         $results = FrmDb::get_row( $table_name, $where );
 
         if ( isset($results->options) ) {
-			FrmAppHelper::set_cache( $results->id, $results, 'frm_form' );
+			FrmDb::set_cache( $results->id, $results, 'frm_form' );
             $results->options = maybe_unserialize($results->options);
         }
         return stripslashes_deep($results);
@@ -555,13 +555,13 @@ class FrmForm {
 			global $wpdb;
 
 			// the query has already been prepared if this is not an array
-			$query = 'SELECT * FROM ' . $wpdb->prefix . 'frm_forms' . FrmAppHelper::prepend_and_or_where( ' WHERE ', $where ) . FrmAppHelper::esc_order( $order_by ) . FrmAppHelper::esc_limit( $limit );
+			$query = 'SELECT * FROM ' . $wpdb->prefix . 'frm_forms' . FrmDb::prepend_and_or_where( ' WHERE ', $where ) . FrmDb::esc_order( $order_by ) . FrmDb::esc_limit( $limit );
 			$results = $wpdb->get_results( $query );
 		}
 
 		if ( $results ) {
 			foreach ( $results as $result ) {
-				FrmAppHelper::set_cache( $result->id, $result, 'frm_form' );
+				FrmDb::set_cache( $result->id, $result, 'frm_form' );
 				$result->options = maybe_unserialize( $result->options );
 			}
 		}
@@ -627,7 +627,7 @@ class FrmForm {
     	}
 
     	$counts = (object) $counts;
-		FrmAppHelper::set_cache( $cache_key, $counts, 'frm_form' );
+		FrmDb::set_cache( $cache_key, $counts, 'frm_form' );
 
     	return $counts;
     }
@@ -640,7 +640,7 @@ class FrmForm {
 	 * @since 2.0.4
 	 */
 	public static function clear_form_cache() {
-		FrmAppHelper::cache_delete_group( 'frm_form' );
+		FrmDb::cache_delete_group( 'frm_form' );
 	}
 
     /**

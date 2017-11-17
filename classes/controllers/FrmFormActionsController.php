@@ -229,7 +229,7 @@ class FrmFormActionsController {
 			foreach ( $old_actions as $old_id ) {
 				wp_delete_post( $old_id );
 			}
-			FrmAppHelper::cache_delete_group( 'frm_actions' );
+			FrmDb::cache_delete_group( 'frm_actions' );
 		}
 	}
 
