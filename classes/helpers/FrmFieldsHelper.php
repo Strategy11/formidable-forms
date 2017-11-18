@@ -152,7 +152,7 @@ class FrmFieldsHelper {
 		$field_type = self::get_original_field( $field );
 		$opts = $field_type->get_default_field_options();
 
-		if ( ! empty( $values ) && ( has_filter( 'frm_default_field_opts' ) || has_filter( 'frm_default_$field_type_field_opts' ) ) ) {
+		if ( has_filter( 'frm_default_field_opts' ) || has_filter( 'frm_default_$field_type_field_opts' ) ) {
 			$opts = apply_filters( 'frm_default_field_opts', $opts, $values, $field );
 			$opts = apply_filters( 'frm_default_' . $field->type . '_field_opts', $opts, $values, $field );
 		}
