@@ -29,6 +29,12 @@ class FrmFieldHidden extends FrmFieldType {
 	 */
 	protected $holds_email_values = true;
 
+	protected function field_settings_for_type() {
+		$settings = parent::field_settings_for_type();
+		$settings['css'] = false;
+		return $settings;
+	}
+
 	protected function include_form_builder_file() {
 		return FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-hidden.php';
 	}
