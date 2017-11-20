@@ -11,7 +11,7 @@ class FrmDb {
             die('You are not allowed to call this page directly.');
         }
 
-		_deprecated_function( __METHOD__, '2.06', 'FrmMigrate' );
+		_deprecated_function( __METHOD__, '2.05.06', 'FrmMigrate' );
         global $wpdb;
         $this->fields         = $wpdb->prefix . 'frm_fields';
         $this->forms          = $wpdb->prefix . 'frm_forms';
@@ -414,7 +414,7 @@ class FrmDb {
     /**
      * Added for < WP 4.0 compatability
      *
-     * @since 2.06
+     * @since 2.05.06
      *
      * @param string $term The value to escape
      * @return string The escaped value
@@ -432,7 +432,7 @@ class FrmDb {
     }
 
     /**
-	 * @since 2.06
+	 * @since 2.05.06
      * @param string $order_query
      */
 	public static function esc_order( $order_query ) {
@@ -470,7 +470,7 @@ class FrmDb {
 
 	/**
 	 * Make sure this is ordering by either ASC or DESC
-	 * @since 2.06
+	 * @since 2.05.06
 	 */
 	public static function esc_order_by( &$order_by ) {
 		$sort_options = array( 'asc', 'desc' );
@@ -481,7 +481,7 @@ class FrmDb {
 
 	/**
 	 * @param string $limit
-	 * @since 2.06
+	 * @since 2.05.06
 	 */
 	public static function esc_limit( $limit ) {
 		if ( empty( $limit ) ) {
@@ -506,7 +506,7 @@ class FrmDb {
 
     /**
      * Get an array of values ready to go through $wpdb->prepare
-     * @since 2.06
+     * @since 2.05.06
      */
 	public static function prepare_array_values( $array, $type = '%s' ) {
 		$placeholders = array_fill( 0, count( $array ), $type );
@@ -514,7 +514,7 @@ class FrmDb {
 	}
 
     /**
-     * @since 2.06
+     * @since 2.05.06
      */
 	public static function prepend_and_or_where( $starts_with = ' WHERE ', $where = '' ) {
 		if ( empty( $where ) ) {
@@ -538,7 +538,7 @@ class FrmDb {
 	 * @param array $settings
 	 * @param string $group
 	 *
-	 * @since 2.06
+	 * @since 2.05.06
 	 */
 	public static function save_settings( $settings, $group ) {
 		$settings = (array) $settings;
@@ -561,7 +561,7 @@ class FrmDb {
 	 *
 	 * Used when saving form actions and styles
 	 *
-	 * @since 2.06
+	 * @since 2.05.06
 	 */
 	public static function save_json_post( $settings ) {
 		global $wp_filter;
@@ -581,7 +581,7 @@ class FrmDb {
     /**
      * Check cache before fetching values and saving to cache
      *
-     * @since 2.06
+     * @since 2.05.06
      *
      * @param string $cache_key The unique name for this cache
      * @param string $group The name of the cache group
@@ -611,7 +611,7 @@ class FrmDb {
 	}
 
 	/**
-	 * @since 2.06
+	 * @since 2.05.06
 	 */
 	public static function set_cache( $cache_key, $results, $group = '', $time = 300 ) {
 		if ( ! FrmAppHelper::prevent_caching() ) {
@@ -623,7 +623,7 @@ class FrmDb {
 	/**
 	 * Keep track of the keys cached in each group so they can be deleted
 	 * in Redis and Memcache
-	 * @since 2.06
+	 * @since 2.05.06
 	 */
 	public static function add_key_to_group_cache( $key, $group ) {
 		$cached = self::get_group_cached_keys( $group );
@@ -632,7 +632,7 @@ class FrmDb {
 	}
 
 	/**
-	 * @since 2.06
+	 * @since 2.05.06
 	 */
 	public static function get_group_cached_keys( $group ) {
 		$cached = wp_cache_get( 'cached_keys', $group );
@@ -644,7 +644,7 @@ class FrmDb {
 	}
 
     /**
-     * @since 2.06
+     * @since 2.05.06
      * @param string $cache_key
      */
 	public static function delete_cache_and_transient( $cache_key, $group = 'default' ) {
@@ -655,7 +655,7 @@ class FrmDb {
     /**
      * Delete all caching in a single group
      *
-     * @since 2.06
+     * @since 2.05.06
      *
      * @param string $group The name of the cache group
      */
@@ -672,30 +672,30 @@ class FrmDb {
 	}
 
 	/**
-	 * @deprecated 2.06
+	 * @deprecated 2.05.06
 	 */
 	public function upgrade( $old_db_version = false ) {
-		_deprecated_function( __METHOD__, '2.06', 'FrmMigrate::upgrade' );
+		_deprecated_function( __METHOD__, '2.05.06', 'FrmMigrate::upgrade' );
 
 		$db = new FrmMigrate();
 		$db->upgrade( $old_db_version );
 	}
 
 	/**
-	 * @deprecated 2.06
+	 * @deprecated 2.05.06
 	 */
 	public function collation() {
-		_deprecated_function( __METHOD__, '2.06', 'FrmMigrate::collation' );
+		_deprecated_function( __METHOD__, '2.05.06', 'FrmMigrate::collation' );
 
 		$db = new FrmMigrate();
 		return $db->collation();
 	}
 
 	/**
-	 * @deprecated 2.06
+	 * @deprecated 2.05.06
 	 */
 	public function uninstall() {
-		_deprecated_function( __METHOD__, '2.06', 'FrmMigrate::uninstall' );
+		_deprecated_function( __METHOD__, '2.05.06', 'FrmMigrate::uninstall' );
 
 		$db = new FrmMigrate();
 		$db->uninstall();
