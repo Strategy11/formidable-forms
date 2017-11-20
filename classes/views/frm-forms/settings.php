@@ -65,10 +65,14 @@
 				<?php $first_h3 = ''; ?>
 
 				<?php if ( has_action( 'frm_settings_buttons' ) ) { ?>
+					<h3 class="<?php echo esc_attr( $first_h3 ) ?>">
+						<?php _e( 'Form Settings', 'formidable' ) ?>
+					</h3>
 					<div class="misc-pub-section">
 						<?php do_action( 'frm_settings_buttons', $values ); ?>
 						<div class="clear"></div>
 					</div>
+					<?php $first_h3 = ''; ?>
 				<?php } ?>
 			<?php } ?>
 
