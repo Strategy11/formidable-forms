@@ -110,6 +110,14 @@ class FrmFieldValue {
 	}
 
 	/**
+	 * Get a value from the field settings
+	 * @since 2.05.06
+	 */
+	public function get_field_option( $value ) {
+		return FrmField::get_option( $this->field, $value );
+	}
+
+	/**
 	 * Get the field property's label
 	 *
 	 * @since 2.04
