@@ -1703,10 +1703,10 @@ class FrmAppHelper {
 	 * @param string $group
 	 *
 	 * @since 2.0.6
-	 * @deprecated 2.06
+	 * @deprecated 2.05.06
 	 */
 	public static function save_settings( $settings, $group ) {
-		_deprecated_function( __METHOD__, '2.06', 'FrmDb::' . __FUNCTION__ );
+		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
 		return FrmDb::save_settings( $settings, $group );
 	}
 
@@ -1718,10 +1718,10 @@ class FrmAppHelper {
 	 * Used when saving form actions and styles
 	 *
 	 * @since 2.0.4
-	 * @deprecated 2.06
+	 * @deprecated 2.05.06
 	 */
 	public static function save_json_post( $settings ) {
-		_deprecated_function( __METHOD__, '2.06', 'FrmDb::' . __FUNCTION__ );
+		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
 		return FrmDb::save_json_post( $settings );
 	}
 
@@ -1729,7 +1729,7 @@ class FrmAppHelper {
      * Check cache before fetching values and saving to cache
      *
      * @since 2.0
-	 * @deprecated 2.06
+	 * @deprecated 2.05.06
      *
      * @param string $cache_key The unique name for this cache
      * @param string $group The name of the cache group
@@ -1738,61 +1738,61 @@ class FrmAppHelper {
      * @return mixed $results The cache or query results
      */
     public static function check_cache( $cache_key, $group = '', $query = '', $type = 'get_var', $time = 300 ) {
-		_deprecated_function( __METHOD__, '2.06', 'FrmDb::' . __FUNCTION__ );
+		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
 		return FrmDb::check_cache( $cache_key, $group, $query, $type, $time );
 	}
 
 	/**
-	 * @deprecated 2.06
+	 * @deprecated 2.05.06
 	 */
 	public static function set_cache( $cache_key, $results, $group = '', $time = 300 ) {
-		_deprecated_function( __METHOD__, '2.06', 'FrmDb::' . __FUNCTION__ );
+		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
 		FrmDb::set_cache( $cache_key, $results, $group, $time );
 	}
 
 	/**
 	 * Keep track of the keys cached in each group so they can be deleted
 	 * in Redis and Memcache
-	 * @deprecated 2.06
+	 * @deprecated 2.05.06
 	 */
 	public static function add_key_to_group_cache( $key, $group ) {
-		_deprecated_function( __METHOD__, '2.06', 'FrmDb::' . __FUNCTION__ );
+		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
 		FrmDb::add_key_to_group_cache( $key, $group );
 	}
 
 	public static function get_group_cached_keys( $group ) {
-		_deprecated_function( __METHOD__, '2.06', 'FrmDb::' . __FUNCTION__ );
+		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
 		return FrmDb::get_group_cached_keys( $group );
 	}
 
     /**
      * @since 2.0
-	 * @deprecated 2.06
+	 * @deprecated 2.05.06
      * @return mixed The cached value or false
      */
 	public static function check_cache_and_transient( $cache_key ) {
-		_deprecated_function( __METHOD__, '2.06', 'FrmDb::' . __FUNCTION__ );
+		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
 		return FrmDb::check_cache( $cache_key );
     }
 
     /**
      * @since 2.0
-	 * @deprecated 2.06
+	 * @deprecated 2.05.06
      * @param string $cache_key
      */
 	public static function delete_cache_and_transient( $cache_key, $group = 'default' ) {
-		_deprecated_function( __METHOD__, '2.06', 'FrmDb::' . __FUNCTION__ );
+		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
 		FrmDb::delete_cache_and_transient( $cache_key, $group );
 	}
 
     /**
      * @since 2.0
-	 * @deprecated 2.06
+	 * @deprecated 2.05.06
      *
      * @param string $group The name of the cache group
      */
 	public static function cache_delete_group( $group ) {
-		_deprecated_function( __METHOD__, '2.06', 'FrmDb::' . __FUNCTION__ );
+		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
 		FrmDb::cache_delete_group( $group );
 	}
 
@@ -1800,58 +1800,58 @@ class FrmAppHelper {
 	 * Added for < WP 4.0 compatability
 	 *
 	 * @since 1.07.10
-	 * @deprecated 2.06
+	 * @deprecated 2.05.06
 	 *
 	 * @param string $term The value to escape
 	 * @return string The escaped value
 	 */
 	public static function esc_like( $term ) {
-		_deprecated_function( __METHOD__, '2.06', 'FrmDb::' . __FUNCTION__ );
+		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
 		return FrmDb::esc_like( $term );
 	}
 
 	/**
 	 * @param string $order_query
-	 * @deprecated 2.06
+	 * @deprecated 2.05.06
 	 */
 	public static function esc_order( $order_query ) {
-		_deprecated_function( __METHOD__, '2.06', 'FrmDb::' . __FUNCTION__ );
+		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
 		return FrmDb::esc_order( $order_query );
 	}
 
 	/**
 	 * Make sure this is ordering by either ASC or DESC
-	 * @deprecated 2.06
+	 * @deprecated 2.05.06
 	 */
 	public static function esc_order_by( &$order_by ) {
-		_deprecated_function( __METHOD__, '2.06', 'FrmDb::' . __FUNCTION__ );
+		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
 		FrmDb::esc_order_by( $order_by );
 	}
 
 	/**
 	 * @param string $limit
-	 * @deprecated 2.06
+	 * @deprecated 2.05.06
 	 */
 	public static function esc_limit( $limit ) {
-		_deprecated_function( __METHOD__, '2.06', 'FrmDb::' . __FUNCTION__ );
+		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
 		return FrmDb::esc_limit( $limit );
 	}
 
 	/**
 	 * Get an array of values ready to go through $wpdb->prepare
 	 * @since 2.0
-	 * @deprecated 2.06
+	 * @deprecated 2.05.06
 	 */
 	public static function prepare_array_values( $array, $type = '%s' ) {
-		_deprecated_function( __METHOD__, '2.06', 'FrmDb::' . __FUNCTION__ );
+		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
 		return FrmDb::prepare_array_values( $array, $type );
 	}
 
 	/**
-	 * @deprecated 2.06
+	 * @deprecated 2.05.06
 	 */
 	public static function prepend_and_or_where( $starts_with = ' WHERE ', $where = '' ) {
-		_deprecated_function( __METHOD__, '2.06', 'FrmDb::' . __FUNCTION__ );
+		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
 		return FrmDb::prepend_and_or_where( $starts_with, $where );
 	}
 }
