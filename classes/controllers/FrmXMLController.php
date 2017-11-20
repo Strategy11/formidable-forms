@@ -107,7 +107,7 @@ class FrmXMLController {
         unset($file_type);
 
 		if ( ! function_exists( 'libxml_disable_entity_loader' ) ) {
-			$errors[] = __( 'XML import is not enabled on your server.', 'formidable' );
+			$errors[] = __( 'XML import is not enabled on your server with the libxml_disable_entity_loader function.', 'formidable' );
 			self::form( $errors );
 			return;
 		}
