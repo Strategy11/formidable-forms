@@ -10,7 +10,7 @@ class FrmAppHelper {
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '2.05.05';
+	public static $plug_version = '2.05.06';
 
     /**
      * @since 1.07.02
@@ -1725,19 +1725,19 @@ class FrmAppHelper {
 		return FrmDb::save_json_post( $settings );
 	}
 
-    /**
-     * Check cache before fetching values and saving to cache
-     *
-     * @since 2.0
+	/**
+	 * Check cache before fetching values and saving to cache
+	 *
+	 * @since 2.0
 	 * @deprecated 2.05.06
-     *
-     * @param string $cache_key The unique name for this cache
-     * @param string $group The name of the cache group
-     * @param string $query If blank, don't run a db call
-     * @param string $type The wpdb function to use with this query
-     * @return mixed $results The cache or query results
-     */
-    public static function check_cache( $cache_key, $group = '', $query = '', $type = 'get_var', $time = 300 ) {
+	 *
+	 * @param string $cache_key The unique name for this cache
+	 * @param string $group The name of the cache group
+	 * @param string $query If blank, don't run a db call
+	 * @param string $type The wpdb function to use with this query
+	 * @return mixed $results The cache or query results
+	 */
+	public static function check_cache( $cache_key, $group = '', $query = '', $type = 'get_var', $time = 300 ) {
 		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
 		return FrmDb::check_cache( $cache_key, $group, $query, $type, $time );
 	}
@@ -1765,32 +1765,32 @@ class FrmAppHelper {
 		return FrmDb::get_group_cached_keys( $group );
 	}
 
-    /**
-     * @since 2.0
+	/**
+	 * @since 2.0
 	 * @deprecated 2.05.06
-     * @return mixed The cached value or false
-     */
+	 * @return mixed The cached value or false
+	 */
 	public static function check_cache_and_transient( $cache_key ) {
 		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
 		return FrmDb::check_cache( $cache_key );
-    }
+	}
 
-    /**
-     * @since 2.0
+	/**
+	 * @since 2.0
 	 * @deprecated 2.05.06
-     * @param string $cache_key
-     */
+	 * @param string $cache_key
+	 */
 	public static function delete_cache_and_transient( $cache_key, $group = 'default' ) {
 		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
 		FrmDb::delete_cache_and_transient( $cache_key, $group );
 	}
 
-    /**
-     * @since 2.0
+	/**
+	 * @since 2.0
 	 * @deprecated 2.05.06
-     *
-     * @param string $group The name of the cache group
-     */
+	 *
+	 * @param string $group The name of the cache group
+	 */
 	public static function cache_delete_group( $group ) {
 		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
 		FrmDb::cache_delete_group( $group );

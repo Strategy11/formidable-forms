@@ -431,42 +431,42 @@ class FrmDb {
         return $term;
     }
 
-    /**
+	/**
 	 * @since 2.05.06
-     * @param string $order_query
-     */
+	 * @param string $order_query
+	 */
 	public static function esc_order( $order_query ) {
-        if ( empty( $order_query ) ) {
-            return '';
-        }
+		if ( empty( $order_query ) ) {
+			return '';
+		}
 
-        // remove ORDER BY before santizing
-        $order_query = strtolower( $order_query );
-        if ( strpos( $order_query, 'order by' ) !== false ) {
-            $order_query = str_replace( 'order by', '', $order_query );
-        }
+		// remove ORDER BY before santizing
+		$order_query = strtolower( $order_query );
+		if ( strpos( $order_query, 'order by' ) !== false ) {
+			$order_query = str_replace( 'order by', '', $order_query );
+		}
 
-        $order_query = explode( ' ', trim( $order_query ) );
+		$order_query = explode( ' ', trim( $order_query ) );
 
-        $order_fields = array(
-            'id', 'form_key', 'name', 'description',
-            'parent_form_id', 'logged_in', 'is_template',
-            'default_template', 'status', 'created_at',
-        );
+		$order_fields = array(
+			'id', 'form_key', 'name', 'description',
+			'parent_form_id', 'logged_in', 'is_template',
+			'default_template', 'status', 'created_at',
+		);
 
-        $order = trim( trim( reset( $order_query ), ',' ) );
-        if ( ! in_array( $order, $order_fields ) ) {
-            return '';
-        }
+		$order = trim( trim( reset( $order_query ), ',' ) );
+		if ( ! in_array( $order, $order_fields ) ) {
+			return '';
+		}
 
-        $order_by = '';
-        if ( count( $order_query ) > 1 ) {
+		$order_by = '';
+		if ( count( $order_query ) > 1 ) {
 			$order_by = end( $order_query );
 			self::esc_order_by( $order_by );
-        }
+		}
 
 		return ' ORDER BY ' . $order . ' ' . $order_by;
-    }
+	}
 
 	/**
 	 * Make sure this is ordering by either ASC or DESC
@@ -513,9 +513,9 @@ class FrmDb {
 		return implode( ', ', $placeholders );
 	}
 
-    /**
-     * @since 2.05.06
-     */
+	/**
+	 * @since 2.05.06
+	 */
 	public static function prepend_and_or_where( $starts_with = ' WHERE ', $where = '' ) {
 		if ( empty( $where ) ) {
 			return '';
@@ -643,10 +643,10 @@ class FrmDb {
 		return $cached;
 	}
 
-    /**
-     * @since 2.05.06
-     * @param string $cache_key
-     */
+	/**
+	 * @since 2.05.06
+	 * @param string $cache_key
+	 */
 	public static function delete_cache_and_transient( $cache_key, $group = 'default' ) {
 		delete_transient( $cache_key );
 		wp_cache_delete( $cache_key, $group );
