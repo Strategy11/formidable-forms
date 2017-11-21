@@ -1175,7 +1175,7 @@ class FrmFormsController {
 			if ( apply_filters( 'frm_continue_to_create', true, $form->id ) ) {
 				$entry_id = self::just_created_entry( $form->id );
 
-				$conf_method = apply_filters( 'frm_success_filter', 'message', $form, 'create' );
+				$conf_method = self::get_confirmation_method( compact( 'form' ) );
 				if ( $entry_id && is_numeric( $entry_id ) && $conf_method != 'message' ) {
 					self::run_success_action( compact( 'entry_id', 'form', 'conf_method' ) );
 				} else {
@@ -1212,11 +1212,97 @@ class FrmFormsController {
 	}
 
 	/**
+	 * @since 3.0
+	 */
+	private static function get_confirmation_method( $atts ) {
+		$opt = 'success_action';
+		$method = ( isset( $atts['form']->options[ $opt ] ) && ! empty( $atts['form']->options[ $opt ] ) ) ? $atts['form']->options[ $opt ] : 'message';
+		return apply_filters( 'frm_success_filter', $method, $atts['form'], 'create' );
+	}
+
+	/**
 	 * Used when the success action is not 'message'
 	 * @since 2.05
 	 */
 	public static function run_success_action( $args ) {
-		do_action( 'frm_success_action', $args['conf_method'], $args['form'], $args['form']->options, $args['entry_id'] );
+		$opt = $args['success_opt'] = ( ! isset( $args['action'] ) || $args['action'] == 'create' ) ? 'success' : 'edit';
+		if ( $args['conf_method'] == 'page' && is_numeric( $args['form']->options[ $opt . '_page_id' ] ) ) {
+			self::load_page_after_submit( $args );
+		} elseif ( $args['conf_method'] == 'redirect' ) {
+			self::redirect_after_submit( $args );
+		} else {
+			do_action( 'frm_success_action', $args['conf_method'], $args['form'], $args['form']->options, $args['entry_id'] );
+		}
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	private static function load_page_after_submit( $args ) {
+		global $post;
+		$opt = $args['success_opt'];
+		if ( ! $post || $args['form']->options[ $opt . '_page_id' ] != $post->ID ) {
+			$page = get_post( $args['form']->options[ $opt . '_page_id' ] );
+			$old_post = $post;
+			$post = $page;
+			$content = apply_filters( 'frm_content', $page->post_content, $args['form'], $args['entry_id'] );
+			echo apply_filters( 'the_content', $content );
+			$post = $old_post;
+		}
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	private static function redirect_after_submit( $args ) {
+		global $frm_vars;
+
+		add_filter( 'frm_use_wpautop', '__return_false' );
+
+		$opt = $args['success_opt'];
+		$success_url = trim( $args['form']->options[ $opt . '_url' ] );
+		$success_url = apply_filters( 'frm_content', $success_url, $args['form'], $args['entry_id'] );
+
+		$success_msg = isset( $args['form']->options[ $opt . '_msg' ] ) ? $args['form']->options[ $opt . '_msg' ] : __( 'Please wait while you are redirected.', 'formidable' );
+
+		$redirect_msg = self::get_redirect_message( $success_url, $success_msg, $args );
+
+		$args['id'] = $args['entry_id'];
+		FrmEntriesController::delete_entry_before_redirect( $success_url, $args['form'], $args );
+
+		add_filter( 'frm_redirect_url', 'FrmEntriesController::prepare_redirect_url' );
+		$success_url = apply_filters( 'frm_redirect_url', $success_url, $args['form'], $args);
+
+		$doing_ajax = FrmAppHelper::doing_ajax();
+
+		if ( isset( $args['ajax'] ) && $args['ajax'] && $doing_ajax ) {
+			echo json_encode( array( 'redirect' => $success_url ) );
+			die();
+		} elseif ( ! headers_sent() ) {
+			wp_redirect( esc_url_raw( $success_url ) );
+			die();
+		} else {
+			add_filter( 'frm_use_wpautop', '__return_true' );
+
+			echo $redirect_msg;
+			echo "<script type='text/javascript'>window.onload = function(){setTimeout(window.location='" . esc_url_raw( $success_url ) . "', 30000);}</script>";
+		}
+	}
+
+	/**
+	 * @since 3.0
+	 * @param string $success_url
+	 * @param string $success_msg
+	 * @param array $args
+	 */
+	private static function get_redirect_message( $success_url, $success_msg, $args ) {
+		$redirect_msg = '<div class="' . esc_attr( FrmFormsHelper::get_form_style_class( $args['form'] ) ) . '"><div class="frm-redirect-msg frm_message">' . $success_msg . '<br/>' .
+			sprintf( __( '%1$sClick here%2$s if you are not automatically redirected.', 'formidable' ), '<a href="' . esc_url( $success_url ) . '">', '</a>') .
+			'</div></div>';
+
+		return apply_filters( 'frm_redirect_msg', $redirect_msg, array(
+			'entry_id' => $args['entry_id'], 'form_id' => $args['form']->id, 'form' => $args['form'],
+		) );
 	}
 
 	/**

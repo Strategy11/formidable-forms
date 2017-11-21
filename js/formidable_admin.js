@@ -1704,6 +1704,24 @@ function frmAdminBuildJS(){
 		}*/
 	}
 
+	function showFormMessages() {
+		var action = document.getElementById('success_action');
+		var selectedAction = action.options[action.selectedIndex].value;
+		if ( selectedAction === 'message' ) {
+			return true;
+		}
+
+		var show = false;
+		var editable = document.getElementById('editable');
+		if ( editable !== null ) {
+			show = editable.checked && jQuery(document.getElementById('edit_action')).val() === 'message';
+			if ( ! show ) {
+				show = document.getElementById('save_draft').checked;
+			}
+		}
+		return show;
+	}
+
 	function checkDupPost(){
 		/*jshint validthis:true */
 		var postField = jQuery('select.frm_single_post_field');
@@ -2794,8 +2812,7 @@ function frmAdminBuildJS(){
 
 			//Show/hide Messages header
 			jQuery('#editable, #edit_action, #save_draft, #success_action').change(function(){
-				if( ( document.getElementById('editable').checked && jQuery(document.getElementById('edit_action')).val() === 'message' ) ||
-					document.getElementById('save_draft').checked || jQuery(document.getElementById('success_action')).val() === 'message' ) {
+				if ( showFormMessages() ) {
 					jQuery(document.getElementById('frm_messages_header')).fadeIn('slow');
 				} else {
 					jQuery(document.getElementById('frm_messages_header')).fadeOut('slow');

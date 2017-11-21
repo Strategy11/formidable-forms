@@ -78,10 +78,7 @@
 
 			<h3 class="<?php echo esc_attr( $first_h3 ) ?>">
 				<?php _e( 'On Submit', 'formidable' ); ?>
-				<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Choose what will happen after the user submits this form.', 'formidable' );
-				if ( ! FrmAppHelper::pro_is_installed() ) {
-					esc_attr_e( ' Upgrade to Formidable Pro to get access to all options in the dropdown.', 'formidable' );
-				} ?>" ></span>
+				<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Choose what will happen after the user submits this form.', 'formidable' ); ?>" ></span>
             </h3>
 
             <!--On Submit Section-->
@@ -89,40 +86,30 @@
                 <tr>
                     <td class="frm_175_width">
                         <select name="options[success_action]" id="success_action">
-                            <option value="message" <?php selected($values['success_action'], 'message') ?>><?php _e( 'Show Message', 'formidable' )?></option>
-                            <?php if ( FrmAppHelper::pro_is_installed() ) { ?>
-                                <option value="redirect" <?php selected($values['success_action'], 'redirect');
-                                ?>><?php _e( 'Redirect to URL', 'formidable' ) ?></option>
-                                <option value="page" <?php selected($values['success_action'], 'page');
-								?>><?php _e( 'Show Page Content', 'formidable' ) ?></option>
-                            <?php } else { ?>
-                            <option value="redirect" disabled="disabled" <?php selected($values['success_action'], 'redirect');
-							?>>
-								<?php _e( 'Redirect to URL', 'formidable' ); ?>
-								<?php _e( '(Premium feature)', 'formidable' ); ?>
+                            <option value="message" <?php selected($values['success_action'], 'message') ?>>
+								<?php esc_html_e( 'Show Message', 'formidable' ) ?>
 							</option>
-							<option value="page" disabled="disabled" <?php selected($values['success_action'], 'page');
-                            ?>>
-								<?php _e( 'Show Page Content', 'formidable' ); ?>
-								<?php _e( '(Premium feature)', 'formidable' ); ?>
+							<option value="redirect" <?php selected( $values['success_action'], 'redirect' ); ?>>
+								<?php esc_html_e( 'Redirect to URL', 'formidable' ) ?>
 							</option>
-                            <?php } ?>
+							<option value="page" <?php selected( $values['success_action'], 'page' ); ?>>
+								<?php esc_html_e( 'Show Page Content', 'formidable' ) ?>
+							</option>
                         </select>
                     </td>
                     <td>
-                        <span class="success_action_redirect_box success_action_box<?php echo ($values['success_action'] == 'redirect') ? '' : ' frm_hidden'; ?>">
+                        <span class="success_action_redirect_box success_action_box<?php echo ( $values['success_action'] == 'redirect' ) ? '' : ' frm_hidden'; ?>">
                             <input type="text" name="options[success_url]" id="success_url" value="<?php
 							if ( isset( $values['success_url'] ) ) {
 								echo esc_attr( $values['success_url'] );
 							} ?>" placeholder="http://example.com" />
                         </span>
 
-						<?php if ( FrmAppHelper::pro_is_installed() ) { ?>
                         <span class="success_action_page_box success_action_box<?php echo ($values['success_action'] == 'page') ? '' : ' frm_hidden'; ?>">
                             <label><?php _e( 'Use Content from Page', 'formidable' ) ?></label>
                             <?php FrmAppHelper::wp_pages_dropdown( 'options[success_page_id]', $values['success_page_id'] ) ?>
                         </span>
-                        <?php } ?>
+
                     </td>
                 </tr>
                 <tr class="frm_show_form_opt success_action_message_box success_action_box<?php echo ($values['success_action'] == 'message') ? '' : ' frm_hidden'; ?>">
@@ -191,7 +178,7 @@
             </table>
 
             <!--Message Section-->
-			<h3 id="frm_messages_header" class="<?php echo ( ( isset( $values['edit_action'] ) && $values['edit_action'] == 'message' && isset( $values['editable'] ) && $values['editable'] == 1 ) || $values['success_action'] == 'message' || $values['save_draft'] == 1 ) ? '' : 'frm_hidden'; ?>"><?php _e( 'Messages', 'formidable' ); ?>
+			<h3 id="frm_messages_header" class="<?php echo ( ( isset( $values['edit_action'] ) && $values['edit_action'] == 'message' && isset( $values['editable'] ) && $values['editable'] == 1 ) || $values['success_action'] == 'message' || ( isset( $values['save_draft'] ) && $values['save_draft'] == 1 ) ) ? '' : 'frm_hidden'; ?>"><?php _e( 'Messages', 'formidable' ); ?>
 				<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Set up your confirmation messages.', 'formidable' ) ?>" ></span>
 			</h3>
             <table class="form-table">

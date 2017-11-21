@@ -511,6 +511,18 @@ class FrmEntriesController {
         }
     }
 
+	/**
+	 * Escape url entities before redirect
+	 *
+	 * @since 3.0
+	 *
+	 * @param string $url
+	 * @return string
+	 */
+	public static function prepare_redirect_url( $url ) {
+		return str_replace( array( ' ', '[', ']', '|', '@'), array( '%20', '%5B', '%5D', '%7C', '%40' ), $url );
+	}
+
     public static function delete_entry_before_redirect( $url, $form, $atts ) {
         self::_delete_entry( $atts['id'], $form );
         return $url;
