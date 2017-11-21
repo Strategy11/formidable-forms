@@ -1173,16 +1173,12 @@ class FrmFormsController {
 			do_action( 'frm_validate_form_creation', $params, $fields, $form, $title, $description );
 
 			if ( apply_filters( 'frm_continue_to_create', true, $form->id ) ) {
-				$entry_id = self::just_created_entry( $form->id );
+				$pass_args['entry_id'] = $entry_id = self::just_created_entry( $form->id );
+				$pass_args['reset'] = true;
+				$pass_args['conf_method'] = self::get_confirmation_method( compact( 'form', 'entry_id' ) );
 
-				$conf_method = self::get_confirmation_method( compact( 'form' ) );
-				if ( $entry_id && is_numeric( $entry_id ) && $conf_method != 'message' ) {
-					self::run_success_action( compact( 'entry_id', 'form', 'conf_method' ) );
-				} else {
-					$pass_args['reset'] = true;
-					$pass_args['entry_id'] = $entry_id;
-					self::show_message_after_save( $pass_args );
-				}
+				self::run_success_action( $pass_args );
+
 				do_action( 'frm_after_entry_processed', array( 'entry_id' => $entry_id, 'form' => $form ) );
 			}
 		}
@@ -1217,7 +1213,13 @@ class FrmFormsController {
 	private static function get_confirmation_method( $atts ) {
 		$opt = 'success_action';
 		$method = ( isset( $atts['form']->options[ $opt ] ) && ! empty( $atts['form']->options[ $opt ] ) ) ? $atts['form']->options[ $opt ] : 'message';
-		return apply_filters( 'frm_success_filter', $method, $atts['form'], 'create' );
+		$method = apply_filters( 'frm_success_filter', $method, $atts['form'], 'create' );
+
+		if ( $method != 'message' && ( ! $atts['entry_id'] || ! is_numeric( $atts['entry_id'] ) ) ) {
+			$method = 'message';
+		}
+
+		return $method;
 	}
 
 	/**
@@ -1225,13 +1227,15 @@ class FrmFormsController {
 	 * @since 2.05
 	 */
 	public static function run_success_action( $args ) {
+		do_action( 'frm_success_action', $args['conf_method'], $args['form'], $args['form']->options, $args['entry_id'] );
+
 		$opt = $args['success_opt'] = ( ! isset( $args['action'] ) || $args['action'] == 'create' ) ? 'success' : 'edit';
 		if ( $args['conf_method'] == 'page' && is_numeric( $args['form']->options[ $opt . '_page_id' ] ) ) {
 			self::load_page_after_submit( $args );
 		} elseif ( $args['conf_method'] == 'redirect' ) {
 			self::redirect_after_submit( $args );
 		} else {
-			do_action( 'frm_success_action', $args['conf_method'], $args['form'], $args['form']->options, $args['entry_id'] );
+			self::show_message_after_save( $args );
 		}
 	}
 
@@ -1285,7 +1289,7 @@ class FrmFormsController {
 			add_filter( 'frm_use_wpautop', '__return_true' );
 
 			echo $redirect_msg;
-			echo "<script type='text/javascript'>window.onload = function(){setTimeout(window.location='" . esc_url_raw( $success_url ) . "', 30000);}</script>";
+			echo "<script type='text/javascript'>window.onload = function(){setTimeout(window.location='" . esc_url_raw( $success_url ) . "', 8000);}</script>";
 		}
 	}
 
