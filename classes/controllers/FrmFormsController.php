@@ -768,12 +768,18 @@ class FrmFormsController {
 		return $entry_shortcodes;
 	}
 
-    // Insert the form class setting into the form
+	/**
+	 * Insert the form class setting into the form
+	 */
 	public static function form_classes( $form ) {
-        if ( isset($form->options['form_class']) ) {
+		if ( isset($form->options['form_class']) ) {
 			echo esc_attr( sanitize_text_field( $form->options['form_class'] ) );
-        }
-    }
+		}
+
+		if ( isset( $form->options['js_validate'] ) && $form->options['js_validate'] ) {
+			echo ' frm_js_validate ';
+		}
+	}
 
     public static function get_email_html() {
 		FrmAppHelper::permission_check('frm_view_forms');

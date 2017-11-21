@@ -253,18 +253,19 @@ class FrmFormsHelper {
         return $values;
     }
 
-    public static function get_default_opts() {
-        $frm_settings = FrmAppHelper::get_settings();
+	public static function get_default_opts() {
+		$frm_settings = FrmAppHelper::get_settings();
 
-        return array(
-            'submit_value' => $frm_settings->submit_value, 'success_action' => 'message',
-            'success_msg' => $frm_settings->success_msg, 'show_form' => 0, 'akismet' => '',
-            'no_save' => 0, 'ajax_load' => 0, 'form_class' => '', 'custom_style' => 1,
-            'before_html' => self::get_default_html('before'),
-            'after_html' => '',
-            'submit_html' => self::get_default_html('submit'),
-        );
-    }
+		return array(
+			'submit_value' => $frm_settings->submit_value, 'success_action' => 'message',
+			'success_msg' => $frm_settings->success_msg, 'show_form' => 0, 'akismet' => '',
+			'no_save' => 0, 'ajax_load' => 0, 'js_validate' => 0,
+			'form_class' => '', 'custom_style' => 1,
+			'before_html' => self::get_default_html('before'),
+			'after_html' => '',
+			'submit_html' => self::get_default_html('submit'),
+		);
+	}
 
 	/**
 	 * @param array $options
