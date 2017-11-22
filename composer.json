@@ -18,11 +18,12 @@
 	"require": {
 		"composer/installers": "~1.0",
 		"xrstf/composer-php52": "^1.0.19",
-		"phpmailer/phpmailer": "dev-master"
+		"phpmailer/phpmailer": ">=5.2.25"
 	},
 	"autoload": {
 		"classmap": [
 			"classes/controllers/",
+			"classes/factories/",
             "classes/helpers/",
 			"classes/models/",
             "classes/widgets/",

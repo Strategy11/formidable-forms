@@ -384,14 +384,6 @@ $arrow_icons = FrmStylesHelper::arrow_icons();
     color:transparent<?php echo esc_html( $important ) ?>;
 }
 
-.<?php echo esc_html( $style_class ) ?> .frm_default,
-.<?php echo esc_html( $style_class ) ?> .placeholder,
-.<?php echo esc_html( $style_class ) ?> .chosen-container-multi .chosen-choices li.search-field .default,
-.<?php echo esc_html( $style_class ) ?> .chosen-container-single .chosen-default{
-    color: <?php echo esc_html( $text_color . $important ) ?>;
-    font-style:italic;
-}
-
 .<?php echo esc_html( $style_class ) ?> select{
     width:<?php echo esc_html( ( $auto_width ? 'auto' : $field_width ) . $important ) ?>;
     max-width:100%;
@@ -468,6 +460,15 @@ $arrow_icons = FrmStylesHelper::arrow_icons();
 	color: <?php echo esc_html( $text_color_disabled . $important ) ?>;
 }
 
+.<?php echo esc_html( $style_class ) ?> .frm_default,
+.<?php echo esc_html( $style_class ) ?> input.frm_default,
+.<?php echo esc_html( $style_class ) ?> textarea.frm_default,
+.<?php echo esc_html( $style_class ) ?> select.frm_default,
+.<?php echo esc_html( $style_class ) ?> .placeholder,
+.<?php echo esc_html( $style_class ) ?> .chosen-container-multi .chosen-choices li.search-field .default,
+.<?php echo esc_html( $style_class ) ?> .chosen-container-single .chosen-default{
+    color: <?php echo esc_html( $text_color_disabled . $important ) ?>;
+}
 
 .<?php echo esc_html( $style_class ) ?> .form-field input:not([type=file]):focus,
 .<?php echo esc_html( $style_class ) ?> select:focus,
@@ -589,6 +590,7 @@ if ( ! $submit_style ) { ?>
 .<?php echo esc_html( $style_class ) ?> .frm_loading_form .frm_button_submit:active,
 .<?php echo esc_html( $style_class ) ?> .frm_loading_form .frm_button_submit:focus{
 	color: transparent <?php echo esc_html( $important ) ?>;
+	background: <?php echo esc_html( $submit_bg_color . $important ) ?>;
 }
 
 .<?php echo esc_html( $style_class ) ?> .frm_loading_form .frm_button_submit:before {
@@ -675,6 +677,10 @@ if ( ! $submit_style ) { ?>
     border-color:#<?php echo esc_html( $border_color_error . $important ) ?>;
     border-width:<?php echo esc_html( $border_width_error . $important ) ?>;
     border-style:<?php echo esc_html( $border_style_error . $important ) ?>;
+}
+
+.<?php echo esc_html( $style_class ) ?> .frm_blank_field .sigWrapper{
+	border-color:#<?php echo esc_html( $border_color_error ) ?> !important;
 }
 
 .<?php echo esc_html( $style_class ) ?> .frm_error{

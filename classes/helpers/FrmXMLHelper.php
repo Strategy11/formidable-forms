@@ -409,7 +409,7 @@ class FrmXMLHelper {
 
 		if ( $f['type'] == 'form' || ( $f['type'] == 'divider' && FrmField::is_option_true( $f['field_options'], 'repeat' ) ) ) {
 			if ( FrmField::is_option_true( $f['field_options'], 'form_select' ) ) {
-				$form_select = $f['field_options']['form_select'];
+				$form_select = (int) $f['field_options']['form_select'];
 				if ( isset( $imported['forms'][ $form_select ] ) ) {
 					$f['field_options']['form_select'] = $imported['forms'][ $form_select ];
 				}
@@ -797,7 +797,7 @@ class FrmXMLHelper {
         }
 
         if ( ! is_array($result) ) {
-            $message = is_string( $result ) ? $result : print_r( $result, 1 );
+            $message = is_string( $result ) ? $result : htmlentities( print_r( $result, 1 ) );
             return;
         }
 
@@ -983,7 +983,7 @@ class FrmXMLHelper {
 
         if ( ! $exists ) {
 			// this isn't an email, but we need to use a class that will always be included
-			FrmAppHelper::save_json_post( $new_action );
+			FrmDb::save_json_post( $new_action );
             $imported['imported']['actions']++;
         }
     }
@@ -1073,12 +1073,32 @@ class FrmXMLHelper {
             ) );
 
             if ( empty($exists) ) {
-				FrmAppHelper::save_json_post( $new_notification );
+				FrmDb::save_json_post( $new_notification );
                 $imported['imported']['actions']++;
             }
             unset($new_notification);
         }
+
+		self::remove_deprecated_notification_settings( $form_id, $form_options );
     }
+
+	/**
+	 * Remove deprecated notification settings after migration
+	 *
+	 * @since 2.05
+	 *
+	 * @param int|string $form_id
+	 * @param array $form_options
+	 */
+	private static function remove_deprecated_notification_settings( $form_id, $form_options ) {
+		$delete_settings = array( 'notification', 'autoresponder', 'email_to' );
+		foreach ( $delete_settings as $index ) {
+			if ( isset( $form_options[ $index ] ) ) {
+				unset( $form_options[ $index ] );
+			}
+		}
+		FrmForm::update( $form_id, array( 'options' => $form_options ) );
+	}
 
     private static function migrate_notifications_to_action( $form_options, $form_id, &$notifications ) {
         if ( ! isset( $form_options['notification'] ) && isset( $form_options['email_to'] ) && ! empty( $form_options['email_to'] ) ) {

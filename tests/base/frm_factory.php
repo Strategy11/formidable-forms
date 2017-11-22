@@ -88,6 +88,7 @@ class Field_Factory extends WP_UnitTest_Factory_For_Thing {
 			'number' => 120,
 			'scale'  => 8,
 			'date'   => '2015-01-01',
+			'time'   => '13:30:00',
 			'user_id' => get_current_user_id(),
 		);
 
@@ -136,5 +137,4 @@ class Entry_Factory extends WP_UnitTest_Factory_For_Thing {
 	function get_id_by_key( $entry_key ) {
 		return FrmEntry::get_id_by_key( $entry_key );
 	}
-
 }

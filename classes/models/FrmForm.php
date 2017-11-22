@@ -428,7 +428,7 @@ class FrmForm {
      * @return string form name
      */
     public static function getName( $id ) {
-        $form = FrmAppHelper::check_cache($id, 'frm_form');
+		$form = FrmDb::check_cache( $id, 'frm_form' );
         if ( $form ) {
             $r = stripslashes($form->name);
             return $r;
@@ -446,8 +446,7 @@ class FrmForm {
      * @return int form id
      */
 	public static function getIdByKey( $key ) {
-        $id = FrmDb::get_var( 'frm_forms', array( 'form_key' => sanitize_title( $key ) ) );
-        return $id;
+		return (int) FrmDb::get_var( 'frm_forms', array( 'form_key' => sanitize_title( $key ) ) );
     }
 
     /**
@@ -456,7 +455,7 @@ class FrmForm {
      */
 	public static function getKeyById( $id ) {
         $id = (int) $id;
-        $cache = FrmAppHelper::check_cache($id, 'frm_form');
+		$cache = FrmDb::check_cache( $id, 'frm_form' );
         if ( $cache ) {
             return $cache->form_key;
         }
@@ -509,7 +508,7 @@ class FrmForm {
         $results = FrmDb::get_row( $table_name, $where );
 
         if ( isset($results->options) ) {
-			FrmAppHelper::set_cache( $results->id, $results, 'frm_form' );
+			FrmDb::set_cache( $results->id, $results, 'frm_form' );
             $results->options = maybe_unserialize($results->options);
         }
         return stripslashes_deep($results);
@@ -525,13 +524,13 @@ class FrmForm {
 			global $wpdb;
 
 			// the query has already been prepared if this is not an array
-			$query = 'SELECT * FROM ' . $wpdb->prefix . 'frm_forms' . FrmAppHelper::prepend_and_or_where( ' WHERE ', $where ) . FrmAppHelper::esc_order( $order_by ) . FrmAppHelper::esc_limit( $limit );
+			$query = 'SELECT * FROM ' . $wpdb->prefix . 'frm_forms' . FrmDb::prepend_and_or_where( ' WHERE ', $where ) . FrmDb::esc_order( $order_by ) . FrmDb::esc_limit( $limit );
 			$results = $wpdb->get_results( $query );
 		}
 
 		if ( $results ) {
 			foreach ( $results as $result ) {
-				FrmAppHelper::set_cache( $result->id, $result, 'frm_form' );
+				FrmDb::set_cache( $result->id, $result, 'frm_form' );
 				$result->options = maybe_unserialize( $result->options );
 			}
 		}
@@ -597,7 +596,7 @@ class FrmForm {
     	}
 
     	$counts = (object) $counts;
-		FrmAppHelper::set_cache( $cache_key, $counts, 'frm_form' );
+		FrmDb::set_cache( $cache_key, $counts, 'frm_form' );
 
     	return $counts;
     }
@@ -610,7 +609,7 @@ class FrmForm {
 	 * @since 2.0.4
 	 */
 	public static function clear_form_cache() {
-		FrmAppHelper::cache_delete_group( 'frm_form' );
+		FrmDb::cache_delete_group( 'frm_form' );
 	}
 
     /**
@@ -655,7 +654,7 @@ class FrmForm {
 				if ( $var == 'action' ) {
 					$values[ $var ] = FrmAppHelper::get_param( $action_var, $default, 'get', 'sanitize_title' );
 				} else {
-					$values[ $var ] = FrmAppHelper::get_param( $var, $default );
+					$values[ $var ] = FrmAppHelper::get_param( $var, $default, 'get', 'sanitize_text_field' );
 				}
 				unset( $var, $default );
 			}
@@ -676,7 +675,7 @@ class FrmForm {
 	public static function list_page_params() {
 		$values = array();
 		foreach ( array( 'template' => 0, 'id' => '', 'paged' => 1, 'form' => '', 'search' => '', 'sort' => '', 'sdir' => '' ) as $var => $default ) {
-			$values[ $var ] = FrmAppHelper::get_param( $var, $default );
+			$values[ $var ] = FrmAppHelper::get_param( $var, $default, 'get', 'sanitize_text_field' );
 		}
 
 		return $values;
@@ -696,7 +695,7 @@ class FrmForm {
 			'field_id' => '', 'search' => '', 'sort' => '', 'sdir' => '', 'fid' => '',
 			'keep_post' => '',
 		) as $var => $default ) {
-			$values[ $var ] = FrmAppHelper::get_param( $var, $default );
+			$values[ $var ] = FrmAppHelper::get_param( $var, $default, 'get', 'sanitize_text_field' );
 		}
 
 		return $values;

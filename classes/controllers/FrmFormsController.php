@@ -14,7 +14,7 @@ class FrmFormsController {
 
 	public static function maybe_load_listing_hooks() {
 		$action = FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
-		if ( ! empty( $action ) && ! in_array( $action, array( 'list', 'trash', 'untrash' ) ) ) {
+		if ( ! empty( $action ) && ! in_array( $action, array( 'list', 'trash', 'untrash', 'destroy' ) ) ) {
 			return;
 		}
 
@@ -815,7 +815,7 @@ class FrmFormsController {
             $bulkaction = str_replace( 'bulk_', '', $bulkaction );
         }
 
-        $ids = FrmAppHelper::get_param( 'item-action', '' );
+		$ids = FrmAppHelper::get_param( 'item-action', '', 'get', 'sanitize_text_field' );
         if ( empty( $ids ) ) {
             $errors[] = __( 'No forms were specified', 'formidable' );
             return $errors;
@@ -1177,7 +1177,7 @@ class FrmFormsController {
 
 	/**
 	 * If the form was processed earlier (init), get the generated errors
-	 * @since 2.04.02
+	 * @since 2.05
 	 */
 	private static function get_saved_errors( $form, $params ) {
 		global $frm_vars;
@@ -1200,7 +1200,7 @@ class FrmFormsController {
 
 	/**
 	 * Used when the success action is not 'message'
-	 * @since 2.04.02
+	 * @since 2.05
 	 */
 	public static function run_success_action( $args ) {
 		do_action( 'frm_success_action', $args['conf_method'], $args['form'], $args['form']->options, $args['entry_id'] );
@@ -1208,7 +1208,7 @@ class FrmFormsController {
 
 	/**
 	 * Prepare to show the success message and empty form after submit
-	 * @since 2.04.02
+	 * @since 2.05
 	 */
 	public static function show_message_after_save( $atts ) {
 		$atts['message'] = self::prepare_submit_message( $atts['form'], $atts['entry_id'] );
@@ -1222,7 +1222,7 @@ class FrmFormsController {
 
 	/**
 	 * Show an empty form
-	 * @since 2.04.02
+	 * @since 2.05
 	 */
 	private static function show_form_after_submit( $args ) {
 		self::fill_atts_for_form_display( $args );
@@ -1250,7 +1250,7 @@ class FrmFormsController {
 
 	/**
 	 * Get all the values needed on the new.php entry page
-	 * @since 2.04.02
+	 * @since 2.05
 	 */
 	private static function fill_atts_for_form_display( &$args ) {
 		$defaults = array(
@@ -1267,7 +1267,7 @@ class FrmFormsController {
 
 	/**
 	 * Show the success message without the form
-	 * @since 2.04.02
+	 * @since 2.05
 	 */
 	private static function show_lone_success_messsage( $atts ) {
 		global $frm_vars;
@@ -1284,7 +1284,7 @@ class FrmFormsController {
 
 	/**
 	 * Prepare the success message before it's shown
-	 * @since 2.04.02
+	 * @since 2.05
 	 */
 	private static function prepare_submit_message( $form, $entry_id ) {
 		$frm_settings = FrmAppHelper::get_settings();

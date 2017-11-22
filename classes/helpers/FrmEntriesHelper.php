@@ -6,10 +6,7 @@ if ( ! defined('ABSPATH') ) {
 class FrmEntriesHelper {
 
     public static function setup_new_vars( $fields, $form = '', $reset = false, $args = array() ) {
-        $values = array();
-		foreach ( array( 'name' => '', 'description' => '', 'item_key' => '' ) as $var => $default ) {
-			$values[ $var ] = FrmAppHelper::get_post_param( $var, $default, 'wp_kses_post' );
-        }
+		$values = array( 'name' => '', 'description' => '', 'item_key' => '' );
 
         $values['fields'] = array();
         if ( empty($fields) ) {
@@ -17,6 +14,7 @@ class FrmEntriesHelper {
         }
 
         foreach ( (array) $fields as $field ) {
+			self::prepare_field_default_value( $field );
             $new_value = self::get_field_value_for_new_entry( $field, $reset, $args );
 
             $field_array = array(
@@ -61,13 +59,10 @@ class FrmEntriesHelper {
             }
         }
 
-        $form->options = maybe_unserialize($form->options);
-        if ( is_array($form->options) ) {
-            foreach ( $form->options as $opt => $value ) {
-                $values[ $opt ] = FrmAppHelper::get_post_param( $opt, $value );
-                unset($opt, $value);
-            }
-        }
+		$form->options = maybe_unserialize( $form->options );
+		if ( is_array( $form->options ) ) {
+			$values = array_merge( $values, $form->options );
+		}
 
 		$form_defaults = FrmFormsHelper::get_default_opts();
 
@@ -78,6 +73,18 @@ class FrmEntriesHelper {
 
 		return apply_filters( 'frm_setup_new_entry', $values );
     }
+
+	/**
+	 * @since 2.05
+	 */
+	private static function prepare_field_default_value( &$field ) {
+		//If checkbox, multi-select dropdown, or checkbox data from entries field, the value should be an array
+		$return_array = FrmField::is_field_with_multiple_values( $field );
+
+		// Do any shortcodes in default value and allow customization of default value
+		$field->default_value = apply_filters( 'frm_get_default_value', $field->default_value, $field, true, $return_array );
+		// Calls FrmProFieldsHelper::get_default_value
+	}
 
 	/**
 	* Set the value for each field
@@ -91,13 +98,6 @@ class FrmEntriesHelper {
 	* @return string|array $new_value
 	*/
 	private static function get_field_value_for_new_entry( $field, $reset, $args ) {
-		//If checkbox, multi-select dropdown, or checkbox data from entries field, the value should be an array
-		$return_array = FrmField::is_field_with_multiple_values( $field );
-
-		// Do any shortcodes in default value and allow customization of default value
-		$field->default_value = apply_filters('frm_get_default_value', $field->default_value, $field, true, $return_array);
-		// Calls FrmProFieldsHelper::get_default_value
-
 		$new_value = $field->default_value;
 
 		if ( ! $reset && self::value_is_posted( $field, $args ) ) {
@@ -253,9 +253,7 @@ class FrmEntriesHelper {
         }
 
         $val = implode(', ', (array) $field_value );
-		$val = wp_kses_post( $val );
-
-        return $val;
+		return FrmAppHelper::kses( $val, 'all' );
     }
 
     /**
@@ -324,7 +322,7 @@ class FrmEntriesHelper {
         }
 
 		if ( ! $atts['keepjs'] && ! is_array( $value ) ) {
-			$value = wp_kses_post( $value );
+			$value = FrmAppHelper::kses( $value, 'all' );
 		}
 
         return apply_filters('frm_display_value', $value, $field, $atts);

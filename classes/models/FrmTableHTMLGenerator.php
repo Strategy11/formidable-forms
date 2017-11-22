@@ -84,12 +84,11 @@ class FrmTableHTMLGenerator {
 
 		foreach ( $this->style_settings as $key => $setting ) {
 			if ( isset( $atts[ $key ] ) && $atts[ $key ] !== '' ) {
+				$this->style_settings[ $key ] = $atts[ $key ];
+			}
 
-				if ( $this->is_color_setting( $key ) ) {
-					$this->style_settings[ $key ] = $this->get_color_markup( $atts[ $key ] );
-				} else {
-					$this->style_settings[ $key ] = $atts[ $key ];
-				}
+			if ( $this->is_color_setting( $key ) ) {
+				$this->style_settings[ $key ] = $this->get_color_markup( $this->style_settings[ $key ] );
 			}
 		}
 	}
@@ -155,7 +154,7 @@ class FrmTableHTMLGenerator {
 	 *
 	 * @param string $setting_key name of setting
 	 *
-	 * @since 2.04.02
+	 * @since 2.05
 	 *
 	 * @return boolean
 	 */
@@ -168,7 +167,7 @@ class FrmTableHTMLGenerator {
 	 *
 	 * @param string $color_markup value of a color setting, with format #FFFFF, FFFFFF, or white.
 	 *
-	 * @since 2.04.02
+	 * @since 2.05
 	 *
 	 * @return string
 	 */

@@ -1200,9 +1200,46 @@ select.frm_cancelnew, input.frm_enternew{width:175px;}
     overflow:auto;
 	box-shadow:none;
 }
-.frm_email_settings .widget .widget-top, .frm_email_settings .widget .widget-top h3{
-    cursor:pointer;
+#frm_notification_settings .widget-top .widget-action,
+#frm_form_editor_container .widget-top .widget-action {
+	border: 0;
+	margin: 0;
+	padding: 10px;
+	background: 0 0;
+	cursor: pointer;
+	outline: 0;
 }
+
+#frm_notification_settings .widget-top .widget-action .toggle-indicator:before,
+#frm_form_editor_container .widget-top .widget-action .toggle-indicator:before {
+	padding: 1px 2px 1px 0;
+	-webkit-border-radius: 50%;
+	border-radius: 50%;
+}
+
+#frm_notification_settings .widget-top .widget-action:focus .toggle-indicator:before,
+#frm_form_editor_container .widget-top .widget-action:focus .toggle-indicator:before {
+	color: #124964;
+	-webkit-box-shadow: 0 0 0 1px #5b9dd9, 0 0 2px 1px rgba(30, 140, 190, .8);
+	box-shadow: 0 0 0 1px #5b9dd9, 0 0 2px 1px rgba(30, 140, 190, .8);
+}
+
+.frm_form_action_settings .widget-top .toggle-indicator:before,
+#frm_form_editor_container .widget-top .toggle-indicator:before {
+	font: 400 20px/1 dashicons;
+	content: "\f140" !important;
+}
+
+.frm_form_action_settings.widget.open .widget-top .toggle-indicator:before,
+#frm_form_editor_container .widget.open .widget-top .toggle-indicator:before {
+	font: 400 20px/1 dashicons;
+	content: "\f142" !important;
+}
+
+.frm_email_settings .widget .widget-top, .frm_email_settings .widget .widget-top h3{
+	cursor:pointer;
+}
+
 .frm_email_settings .widget, #frm_email_addon_menu{
     margin-bottom:15px;
     line-height: 1.4em;
@@ -1235,12 +1272,15 @@ select.frm_cancelnew, input.frm_enternew{width:175px;}
 .frm_form_action_settings .widget-inside{
 	min-height:25px;
 }
+.frm_form_action_settings .widget-title h4,
+#frm_email_addon_menu h4,
 .frm_form_action_settings .widget-title h3,
 #frm_email_addon_menu h3{
     display: inline-block;
 	border-bottom:none;
 	padding: 10px;
 }
+#frm_email_addon_menu h4,
 #frm_email_addon_menu h3{
 	font-size: 14px;
 	line-height: 1.4;
@@ -1261,7 +1301,7 @@ label.frm_action_events{
 	padding-left:15px;
 }
 .frm_actions_list > li > a:before,
-.frm_email_settings h3 .frm_form_action_icon:before{
+.frm_email_settings .widget-title .frm_form_action_icon:before{
 	margin:0 5px;
     vertical-align: middle;
 	font-size:18px;
@@ -1274,6 +1314,9 @@ label.frm_action_events{
 }
 .frm_email_icons, .frm_actions_list{
     padding: 10px 0 10px 15px;
+}
+.frm_email_icons{
+	padding-left:6px;
 }
 .frm_actions_list a.frm_inactive_action:before{
 	color:#d6d6d6;
@@ -1970,9 +2013,6 @@ table td.frm_left_label{
 	font-size:16px;
 	line-height:20px;
 }
-.frm_email_icons{
-	padding-left:6px;
-}
 
 .frm_update_msg{
     border-style:solid;
@@ -2058,7 +2098,6 @@ select.texture{display: none;}
 #postbox-container-1 .frm_field_list{
 	margin-right:10px;
 	position:fixed;
-	z-index:9999;
 	width:279px;
 }
 
@@ -2419,6 +2458,31 @@ Responsive Design
 		display:none !important;
 	}
 
+	#frm_notification_settings .frm_email_buttons {
+		height: 40px;
+		margin: 0 4px;
+		line-height: 2em;
+	}
+
+	.frm_right_addon .frm_remove_field {
+		bottom: 11px;
+	}
+
+	#frm_notification_settings .frm_bcc_cc_container {
+		min-width: 128px;
+		width: 25%
+	}
+
+	.frm_email_row td:nth-child(2) {
+		width: 65%;
+		display: inline-block;
+	}
+
+	.frm_email_row td:nth-child(3) {
+		width: 25%;
+		display: inline-block;
+	}
+
 }
 @media (min-width:768px){
     .navbar-right .frm-dropdown-menu{right:0;left:auto;}
@@ -2456,7 +2520,7 @@ Responsive Design
 #poststuff #post-body.columns-2{margin-right:0;}
 .widget, .postbox, .stuffbox, .postbox h3{border-width:0 !important;border-color:#fff;}
 .postbox{background:#fff !important;border:none;position:static;}
-.postbox h3{background:#fff !important;}
+.postbox h3, .postbox h4{background:#fff !important;}
 #wpbody-content{float:none;}
 #wpcontent, #post-body-content,
 .has-right-sidebar #post-body,

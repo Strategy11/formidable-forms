@@ -138,8 +138,12 @@ do_action('frm_before_field_options', $field);
 if ( $display['options'] ) { ?>
     <div class="widget">
         <div class="widget-top">
-    	    <div class="widget-title-action"><a href="javascript:void(0);" class="widget-action"></a></div>
-    		<div class="widget-title"><h4><?php _e( 'Field Options', 'formidable' ) ?> (ID <?php echo (int) $field['id'] ?>)</h4></div>
+            <div class="widget-title-action">
+                <button type="button" class="widget-action hide-if-no-js" aria-expanded="false">
+                    <span class="toggle-indicator" aria-hidden="true"></span>
+                </button>
+            </div>
+            <div class="widget-title"><h3><?php _e( 'Field Options', 'formidable' ) ?> (ID <?php echo (int) $field['id'] ?>)</h3></div>
         </div>
     	<div class="widget-inside">
             <table class="form-table frm_clear_none">
@@ -219,18 +223,21 @@ if ( $display['options'] ) { ?>
 				}
 
 				if ( $display['label_position'] ) { ?>
-                    <tr><td class="frm_150_width"><label><?php _e( 'Label Position', 'formidable' ) ?></label></td>
-                        <td><select name="field_options[label_<?php echo esc_attr( $field['id'] ) ?>]">
-                            <option value=""<?php selected($field['label'], ''); ?>><?php _e( 'Default', 'formidable' ) ?></option>
-                            <option value="top"<?php selected($field['label'], 'top'); ?>><?php _e( 'Top', 'formidable' ) ?></option>
-                            <option value="left"<?php selected($field['label'], 'left'); ?>><?php _e( 'Left', 'formidable' ) ?></option>
-                            <option value="right"<?php selected($field['label'], 'right'); ?>><?php _e( 'Right', 'formidable' ) ?></option>
-                            <option value="inline"<?php selected($field['label'], 'inline'); ?>><?php _e( 'Inline (left without a set width)', 'formidable' ) ?></option>
-                            <option value="none"<?php selected($field['label'], 'none'); ?>><?php _e( 'None', 'formidable' ) ?></option>
-                            <option value="hidden"<?php selected($field['label'], 'hidden'); ?>><?php _e( 'Hidden (but leave the space)', 'formidable' ) ?></option>
-                        </select>
-                        </td>
-                    </tr>
+					<tr>
+						<td class="frm_150_width"><label><?php _e( 'Label Position', 'formidable' ) ?></label></td>
+						<td>
+							<select name="field_options[label_<?php echo esc_attr( $field['id'] ) ?>]">
+								<option value=""<?php selected($field['label'], ''); ?>>
+									<?php _e( 'Default', 'formidable' ) ?>
+								</option>
+								<?php foreach ( FrmStylesHelper::get_sigle_label_postitions() as $pos => $pos_label ) { ?>
+									<option value="<?php echo esc_attr( $pos ) ?>"<?php selected( $field['label'], $pos ); ?>>
+										<?php echo esc_html( $pos_label ) ?>
+									</option>
+								<?php } ?>
+							</select>
+						</td>
+					</tr>
                 <?php }
 
 				// Field Size

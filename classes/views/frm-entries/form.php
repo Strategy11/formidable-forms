@@ -25,7 +25,7 @@ $frm_hide_fields = FrmAppHelper::get_post_param( 'frm_hide_fields_' . $form->id,
 <input type="hidden" name="form_key" value="<?php echo esc_attr($form->form_key) ?>" />
 <input type="hidden" name="item_meta[0]" value="" />
 <?php wp_nonce_field( 'frm_submit_entry_nonce', 'frm_submit_entry_' . $form->id ); ?>
-<input type="text" class="frm_hidden frm_verify" id="frm_verify_<?php echo esc_attr( $form->id ) ?>" name="frm_verify" value="<?php echo esc_attr( FrmAppHelper::get_param('frm_verify' ) ) ?>" <?php FrmFormsHelper::maybe_hide_inline() ?> />
+<input type="text" class="frm_hidden frm_verify" id="frm_verify_<?php echo esc_attr( $form->id ) ?>" name="frm_verify" value="<?php echo esc_attr( FrmAppHelper::get_param('frm_verify', '', 'get', 'wp_kses_post' ) ) ?>" <?php FrmFormsHelper::maybe_hide_inline() ?> />
 
 <?php if ( isset( $id ) ) { ?><input type="hidden" name="id" value="<?php echo esc_attr( $id ) ?>" /><?php }
 

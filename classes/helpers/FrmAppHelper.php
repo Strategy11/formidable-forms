@@ -4,13 +4,13 @@ if ( ! defined('ABSPATH') ) {
 }
 
 class FrmAppHelper {
-	public static $db_version = 44; //version of the database we are moving to
+	public static $db_version = 47; //version of the database we are moving to
 	public static $pro_db_version = 37; //deprecated
 
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '2.04.01';
+	public static $plug_version = '2.05.06';
 
     /**
      * @since 1.07.02
@@ -60,13 +60,14 @@ class FrmAppHelper {
 	public static function make_affiliate_url( $url ) {
 		$affiliate_id = self::get_affiliate();
 		if ( ! empty( $affiliate_id ) ) {
-			$url = add_query_arg( 'aff', $affiliate_id, $url );
+			$url = str_replace( array( 'http://', 'https://' ), '', $url );
+			$url = 'http://www.shareasale.com/r.cfm?u='. absint( $affiliate_id ) .'&b=841990&m=64739&afftrack=plugin&urllink=' . urlencode( $url );
 		}
 		return $url;
 	}
 
 	public static function get_affiliate() {
-		return '';
+		return absint( apply_filters( 'frm_affiliate_id', 0 ) );
 	}
 
     /**
@@ -88,6 +89,14 @@ class FrmAppHelper {
 	public static function get_menu_name() {
 		$frm_settings = FrmAppHelper::get_settings();
 		return $frm_settings->menu;
+	}
+
+	/**
+	 * @since 2.02.04
+	 */
+	public static function ips_saved() {
+		$frm_settings = self::get_settings();
+		return ! $frm_settings->no_ips;
 	}
 
     /**
@@ -349,25 +358,115 @@ class FrmAppHelper {
 	 * Sanitize the value, and allow some HTML
 	 * @since 2.0
 	 * @param string $value
-	 * @param array $allowed
+	 * @param array|string $allowed 'all' for everything included as defaults
 	 * @return string
 	 */
 	public static function kses( $value, $allowed = array() ) {
-		$html = array(
-		    'a' => array(
-				'href'  => array(),
-				'title' => array(),
-				'id'    => array(),
-				'class' => array(),
-		    ),
-		);
-
-		$allowed_html = array();
-		foreach ( $allowed as $a ) {
-			$allowed_html[ $a ] = isset( $html[ $a ] ) ? $html[ $a ] : array();
-		}
+		$allowed_html = self::allowed_html( $allowed );
 
 		return wp_kses( $value, $allowed_html );
+	}
+
+	/**
+	 * @since 2.05.03
+	 */
+	private static function allowed_html( $allowed ) {
+		$html = self::safe_html();
+		$allowed_html = array();
+		if ( $allowed == 'all' ) {
+			$allowed_html = $html;
+		} else {
+			foreach ( $allowed as $a ) {
+				$allowed_html[ $a ] = isset( $html[ $a ] ) ? $html[ $a ] : array();
+			}
+		}
+
+		return apply_filters( 'frm_striphtml_allowed_tags', $allowed_html );
+	}
+
+	/**
+	 * @since 2.05.03
+	 */
+	private static function safe_html() {
+		return array(
+			'a' => array(
+				'class' => array(),
+				'href'  => array(),
+				'id'    => array(),
+				'rel'   => array(),
+				'title' => array(),
+			),
+			'abbr' => array(
+				'title' => array(),
+			),
+			'b' => array(),
+			'blockquote' => array(
+				'cite'  => array(),
+			),
+			'br'   => array(),
+			'cite' => array(
+				'title' => array(),
+			),
+			'code' => array(),
+			'del'  => array(
+				'datetime' => array(),
+				'title' => array(),
+			),
+			'dd'  => array(),
+			'div' => array(
+				'class' => array(),
+				'id'    => array(),
+				'title' => array(),
+				'style' => array(),
+			),
+			'dl'  => array(),
+			'dt'  => array(),
+			'em'  => array(),
+			'h1'  => array(),
+			'h2'  => array(),
+			'h3'  => array(),
+			'h4'  => array(),
+			'h5'  => array(),
+			'h6'  => array(),
+			'i'   => array(),
+			'img' => array(
+				'alt'    => array(),
+				'class'  => array(),
+				'height' => array(),
+				'id'     => array(),
+				'src'    => array(),
+				'width'  => array(),
+			),
+			'li' => array(
+				'class' => array(),
+				'id'    => array(),
+			),
+			'ol' => array(
+				'class' => array(),
+				'id'    => array(),
+			),
+			'p'   => array(
+				'class' => array(),
+				'id'    => array(),
+			),
+			'pre' => array(),
+			'q'   => array(
+				'cite' => array(),
+				'title' => array(),
+			),
+			'span' => array(
+				'class' => array(),
+				'id'    => array(),
+				'title' => array(),
+				'style' => array(),
+			),
+			'strike' => array(),
+			'strong' => array(),
+			'ul' => array(
+				'class' => array(),
+				'id'    => array(),
+			),
+		);
 	}
 
     /**
@@ -416,114 +515,6 @@ class FrmAppHelper {
     }
 
     /**
-     * Check cache before fetching values and saving to cache
-     *
-     * @since 2.0
-     *
-     * @param string $cache_key The unique name for this cache
-     * @param string $group The name of the cache group
-     * @param string $query If blank, don't run a db call
-     * @param string $type The wpdb function to use with this query
-     * @return mixed $results The cache or query results
-     */
-    public static function check_cache( $cache_key, $group = '', $query = '', $type = 'get_var', $time = 300 ) {
-        $results = wp_cache_get($cache_key, $group);
-        if ( ! self::is_empty_value( $results, false ) || empty($query) ) {
-            return $results;
-        }
-
-        if ( 'get_posts' == $type ) {
-            $results = get_posts($query);
-		} else if ( 'get_associative_results' == $type ) {
-			global $wpdb;
-			$results = $wpdb->get_results( $query, OBJECT_K );
-        } else {
-            global $wpdb;
-            $results = $wpdb->{$type}($query);
-        }
-
-		self::set_cache( $cache_key, $results, $group, $time );
-
-		return $results;
-	}
-
-	public static function set_cache( $cache_key, $results, $group = '', $time = 300 ) {
-		if ( ! self::prevent_caching() ) {
-			self::add_key_to_group_cache( $cache_key, $group );
-			wp_cache_set( $cache_key, $results, $group, $time );
-		}
-	}
-
-	/**
-	 * Keep track of the keys cached in each group so they can be deleted
-	 * in Redis and Memcache
-	 */
-	public static function add_key_to_group_cache( $key, $group ) {
-		$cached = self::get_group_cached_keys( $group );
-		$cached[ $key ] = $key;
-		wp_cache_set( 'cached_keys', $cached, $group, 300 );
-	}
-
-	public static function get_group_cached_keys( $group ) {
-		$cached = wp_cache_get( 'cached_keys', $group );
-		if ( ! $cached || ! is_array( $cached ) ) {
-			$cached = array();
-		}
-
-		return $cached;
-	}
-
-    /**
-     * Data that should be stored for a long time can be stored in a transient.
-     * First check the cache, then check the transient
-     * @since 2.0
-     * @return mixed The cached value or false
-     */
-	public static function check_cache_and_transient( $cache_key ) {
-        // check caching layer first
-        $results = self::check_cache( $cache_key );
-        if ( $results ) {
-            return $results;
-        }
-
-        // then check the transient
-        $results = get_transient($cache_key);
-        if ( $results ) {
-            wp_cache_set($cache_key, $results);
-        }
-
-        return $results;
-    }
-
-    /**
-     * @since 2.0
-     * @param string $cache_key
-     */
-	public static function delete_cache_and_transient( $cache_key, $group = 'default' ) {
-		delete_transient($cache_key);
-		wp_cache_delete( $cache_key, $group );
-	}
-
-    /**
-     * Delete all caching in a single group
-     *
-     * @since 2.0
-     *
-     * @param string $group The name of the cache group
-     */
-	public static function cache_delete_group( $group ) {
-		$cached_keys = self::get_group_cached_keys( $group );
-
-		if ( ! empty( $cached_keys ) ) {
-			foreach ( $cached_keys as $key ) {
-				wp_cache_delete( $key, $group );
-			}
-
-			wp_cache_delete( 'cached_keys', $group );
-		}
-	}
-
-    /**
      * Check a value from a shortcode to see if true or false.
      * True when value is 1, true, 'true', 'yes'
      *
@@ -540,6 +531,7 @@ class FrmAppHelper {
      * Used to filter shortcode in text widgets
      */
     public static function widget_text_filter_callback( $matches ) {
+		_deprecated_function( __METHOD__, '2.5.4' );
         return do_shortcode( $matches[0] );
     }
 
@@ -781,7 +773,7 @@ class FrmAppHelper {
 		if ( is_array( $value ) ) {
 			$original_function = $function;
 			if ( count( $value ) ) {
-				$function = explode( ', ', self::prepare_array_values( $value, $function ) );
+				$function = explode( ', ', FrmDb::prepare_array_values( $value, $function ) );
 			} else {
 				$function = array( $function );
 			}
@@ -893,6 +885,7 @@ class FrmAppHelper {
             return $user_id;
         }
 
+		$user_id = sanitize_text_field( $user_id );
 		if ( $user_id == 'current' ) {
 			$user_id = get_current_user_id();
 		} else {
@@ -1322,121 +1315,6 @@ class FrmAppHelper {
 		);
 	}
 
-    /**
-     * Added for < WP 4.0 compatability
-     *
-     * @since 1.07.10
-     *
-     * @param string $term The value to escape
-     * @return string The escaped value
-     */
-	public static function esc_like( $term ) {
-        global $wpdb;
-        if ( method_exists($wpdb, 'esc_like') ) {
-			// WP 4.0
-            $term = $wpdb->esc_like( $term );
-        } else {
-            $term = like_escape( $term );
-        }
-
-        return $term;
-    }
-
-    /**
-     * @param string $order_query
-     */
-	public static function esc_order( $order_query ) {
-        if ( empty($order_query) ) {
-            return '';
-        }
-
-        // remove ORDER BY before santizing
-        $order_query = strtolower($order_query);
-        if ( strpos($order_query, 'order by') !== false ) {
-            $order_query = str_replace('order by', '', $order_query);
-        }
-
-        $order_query = explode(' ', trim($order_query));
-
-        $order_fields = array(
-            'id', 'form_key', 'name', 'description',
-            'parent_form_id', 'logged_in', 'is_template',
-            'default_template', 'status', 'created_at',
-        );
-
-        $order = trim(trim(reset($order_query), ','));
-        if ( ! in_array($order, $order_fields) ) {
-            return '';
-        }
-
-        $order_by = '';
-        if ( count($order_query) > 1 ) {
-			$order_by = end( $order_query );
-			self::esc_order_by( $order_by );
-        }
-
-		return ' ORDER BY ' . $order . ' ' . $order_by;
-    }
-
-	/**
-	 * Make sure this is ordering by either ASC or DESC
-	 */
-	public static function esc_order_by( &$order_by ) {
-		$sort_options = array( 'asc', 'desc' );
-		if ( ! in_array( strtolower( $order_by ), $sort_options ) ) {
-			$order_by = 'asc';
-		}
-	}
-
-    /**
-     * @param string $limit
-     */
-	public static function esc_limit( $limit ) {
-        if ( empty($limit) ) {
-            return '';
-        }
-
-        $limit = trim(str_replace(' limit', '', strtolower($limit)));
-        if ( is_numeric($limit) ) {
-			return ' LIMIT ' . $limit;
-        }
-
-        $limit = explode(',', trim($limit));
-        foreach ( $limit as $k => $l ) {
-            if ( is_numeric( $l ) ) {
-                $limit[ $k ] = $l;
-            }
-        }
-
-        $limit = implode(',', $limit);
-		return ' LIMIT ' . $limit;
-    }
-
-    /**
-     * Get an array of values ready to go through $wpdb->prepare
-     * @since 2.0
-     */
-    public static function prepare_array_values( $array, $type = '%s' ) {
-        $placeholders = array_fill(0, count($array), $type);
-        return implode(', ', $placeholders);
-    }
-
-    public static function prepend_and_or_where( $starts_with = ' WHERE ', $where = '' ) {
-        if ( empty($where) ) {
-            return '';
-        }
-
-		if ( is_array( $where ) ) {
-            global $wpdb;
-            FrmDb::get_where_clause_and_values( $where, $starts_with );
-			$where = $wpdb->prepare( $where['where'], $where['values'] );
-		} else {
-            $where = $starts_with . $where;
-        }
-
-        return $where;
-    }
-
     // Pagination Methods
 
     /**
@@ -1615,52 +1493,6 @@ class FrmAppHelper {
 		}
 	}
 
-	/**
-	 * Prepare and save settings in styles and actions
-	 *
-	 * @param array $settings
-	 * @param string $group
-	 *
-	 * @since 2.0.6
-	 */
-	public static function save_settings( $settings, $group ) {
-		$settings = (array) $settings;
-		$settings['post_content'] = FrmAppHelper::prepare_and_encode( $settings['post_content'] );
-
-		if ( empty( $settings['ID'] ) ) {
-			unset( $settings['ID']);
-		}
-
-		// delete all caches for this group
-		self::cache_delete_group( $group );
-
-		return self::save_json_post( $settings );
-	}
-
-	/**
-	 * Since actions are JSON encoded, we don't want any filters messing with it.
-	 * Remove the filters and then add them back in case any posts or views are
-	 * also being imported.
-	 *
-	 * Used when saving form actions and styles
-	 *
-	 * @since 2.0.4
-	 */
-	public static function save_json_post( $settings ) {
-		global $wp_filter;
-		$filters = $wp_filter['content_save_pre'];
-
-		// Remove the balanceTags filter in case WordPress is trying to validate the XHTML
-		remove_all_filters( 'content_save_pre' );
-
-		$post = wp_insert_post( $settings );
-
-		// add the content filters back for views or posts
-		$wp_filter['content_save_pre'] = $filters;
-
-		return $post;
-	}
-
 	public static function maybe_json_decode( $string ) {
         if ( is_array($string) ) {
             return $string;
@@ -1781,6 +1613,7 @@ class FrmAppHelper {
 				'private'           => __( 'Private' ),
 				'jquery_ui_url'     => self::jquery_ui_base_url(),
 				'no_licenses'       => __( 'No new licenses were found', 'formidable' ),
+				'repeat_limit_min'  => __( 'Please enter a Repeat Limit that is greater than 1.', 'formidable' ),
 			) );
 		}
 	}
@@ -1862,4 +1695,163 @@ class FrmAppHelper {
 
         return $locales;
     }
+
+	/**
+	 * Prepare and save settings in styles and actions
+	 *
+	 * @param array $settings
+	 * @param string $group
+	 *
+	 * @since 2.0.6
+	 * @deprecated 2.05.06
+	 */
+	public static function save_settings( $settings, $group ) {
+		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
+		return FrmDb::save_settings( $settings, $group );
+	}
+
+	/**
+	 * Since actions are JSON encoded, we don't want any filters messing with it.
+	 * Remove the filters and then add them back in case any posts or views are
+	 * also being imported.
+	 *
+	 * Used when saving form actions and styles
+	 *
+	 * @since 2.0.4
+	 * @deprecated 2.05.06
+	 */
+	public static function save_json_post( $settings ) {
+		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
+		return FrmDb::save_json_post( $settings );
+	}
+
+	/**
+	 * Check cache before fetching values and saving to cache
+	 *
+	 * @since 2.0
+	 * @deprecated 2.05.06
+	 *
+	 * @param string $cache_key The unique name for this cache
+	 * @param string $group The name of the cache group
+	 * @param string $query If blank, don't run a db call
+	 * @param string $type The wpdb function to use with this query
+	 * @return mixed $results The cache or query results
+	 */
+	public static function check_cache( $cache_key, $group = '', $query = '', $type = 'get_var', $time = 300 ) {
+		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
+		return FrmDb::check_cache( $cache_key, $group, $query, $type, $time );
+	}
+
+	/**
+	 * @deprecated 2.05.06
+	 */
+	public static function set_cache( $cache_key, $results, $group = '', $time = 300 ) {
+		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
+		FrmDb::set_cache( $cache_key, $results, $group, $time );
+	}
+
+	/**
+	 * Keep track of the keys cached in each group so they can be deleted
+	 * in Redis and Memcache
+	 * @deprecated 2.05.06
+	 */
+	public static function add_key_to_group_cache( $key, $group ) {
+		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
+		FrmDb::add_key_to_group_cache( $key, $group );
+	}
+
+	public static function get_group_cached_keys( $group ) {
+		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
+		return FrmDb::get_group_cached_keys( $group );
+	}
+
+	/**
+	 * @since 2.0
+	 * @deprecated 2.05.06
+	 * @return mixed The cached value or false
+	 */
+	public static function check_cache_and_transient( $cache_key ) {
+		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
+		return FrmDb::check_cache( $cache_key );
+	}
+
+	/**
+	 * @since 2.0
+	 * @deprecated 2.05.06
+	 * @param string $cache_key
+	 */
+	public static function delete_cache_and_transient( $cache_key, $group = 'default' ) {
+		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
+		FrmDb::delete_cache_and_transient( $cache_key, $group );
+	}
+
+	/**
+	 * @since 2.0
+	 * @deprecated 2.05.06
+	 *
+	 * @param string $group The name of the cache group
+	 */
+	public static function cache_delete_group( $group ) {
+		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
+		FrmDb::cache_delete_group( $group );
+	}
+
+	/**
+	 * Added for < WP 4.0 compatability
+	 *
+	 * @since 1.07.10
+	 * @deprecated 2.05.06
+	 *
+	 * @param string $term The value to escape
+	 * @return string The escaped value
+	 */
+	public static function esc_like( $term ) {
+		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
+		return FrmDb::esc_like( $term );
+	}
+
+	/**
+	 * @param string $order_query
+	 * @deprecated 2.05.06
+	 */
+	public static function esc_order( $order_query ) {
+		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
+		return FrmDb::esc_order( $order_query );
+	}
+
+	/**
+	 * Make sure this is ordering by either ASC or DESC
+	 * @deprecated 2.05.06
+	 */
+	public static function esc_order_by( &$order_by ) {
+		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
+		FrmDb::esc_order_by( $order_by );
+	}
+
+	/**
+	 * @param string $limit
+	 * @deprecated 2.05.06
+	 */
+	public static function esc_limit( $limit ) {
+		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
+		return FrmDb::esc_limit( $limit );
+	}
+
+	/**
+	 * Get an array of values ready to go through $wpdb->prepare
+	 * @since 2.0
+	 * @deprecated 2.05.06
+	 */
+	public static function prepare_array_values( $array, $type = '%s' ) {
+		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
+		return FrmDb::prepare_array_values( $array, $type );
+	}
+
+	/**
+	 * @deprecated 2.05.06
+	 */
+	public static function prepend_and_or_where( $starts_with = ' WHERE ', $where = '' ) {
+		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
+		return FrmDb::prepend_and_or_where( $starts_with, $where );
+	}
 }

@@ -1,6 +1,8 @@
 <?php
 /**
- * @group pro-views
+ * @group fields
+ * @group field-dropdown
+ * @group pro
  * @since 2.03.05
  */
 
@@ -33,7 +35,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
 	private function check_single_field_with_text_box( $field_key ) {
-		list( $logic_field, $field, $field_id, $row_key ) = $this->initialize_field_logic_variables( $field_key, 'uc580i' );
+		list( $logic_field, $field, $field_id, $row_key ) = $this->initialize_field_logic_variables( $field_key, 'checkbox-colors' );
 
 		// Set selected value
 		$field['hide_opt'][ $row_key ] = $selected_value = 'Show me';
@@ -52,7 +54,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
 	public function test_field_logic_row_checkbox_field_values(){
-		list( $logic_field, $field, $field_id, $row_key ) = $this->initialize_field_logic_variables( 'uc580i', 'text-field' );
+		list( $logic_field, $field, $field_id, $row_key ) = $this->initialize_field_logic_variables( 'checkbox-colors', 'text-field' );
 
 		$dropdown = $this->get_field_logic_dropdown( $logic_field, $field_id, $field, $row_key );
 
@@ -102,7 +104,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
 	public function test_field_logic_row_checkbox_field_values_with_selected_value(){
-		list( $logic_field, $field, $field_id, $row_key ) = $this->initialize_field_logic_variables( 'uc580i', 'text-field' );
+		list( $logic_field, $field, $field_id, $row_key ) = $this->initialize_field_logic_variables( 'checkbox-colors', 'text-field' );
 
 		// Set selected value
 		$field['hide_opt'][ $row_key ] = 'Blue';
@@ -159,7 +161,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
 	public function test_field_logic_row_scale_field_values(){
-		list( $logic_field, $field, $field_id, $row_key ) = $this->initialize_field_logic_variables( 'qbrd2o', 'text-field' );
+		list( $logic_field, $field, $field_id, $row_key ) = $this->initialize_field_logic_variables( 'scale-field', 'text-field' );
 
 		$dropdown = $this->get_field_logic_dropdown( $logic_field, $field_id, $field, $row_key );
 
@@ -285,9 +287,9 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 			$opening_tag = '<select name=\'field_options[hide_opt_' . $field_id . '][]\'  >';
 		}
 		$first_option = '<option value=""> </option>';
-		$middle_option = 'Live Music</option>';
+		$middle_option = 'Utah</option>';
 		$closing_tag = '</select>';
-		//$option_number = 3; TODO: figure out why the options include child categories
+		//$option_number = 2;
 
 		$this->assertContains( $opening_tag, $dropdown );
 		$this->assertContains( $closing_tag, $dropdown );
@@ -319,16 +321,16 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 			$opening_tag = '<select name=\'field_options[hide_opt_' . $field_id . '][]\'  >';
 		}
 		$first_option = '<option value=""> </option>';
-		$middle_option = 'Live Music</option>';
 		$selected_option = '<option class="level-0" value="1" selected="selected">Uncategorized</option>';
+		$middle_option = 'Utah</option>';
 		$closing_tag = '</select>';
-		//$option_number = 3; TODO: figure out why the options include child categories
+		//$option_number = 2;
 
 		$this->assertContains( $opening_tag, $dropdown );
 		$this->assertContains( $closing_tag, $dropdown );
 		$this->assertContains( $first_option, $dropdown );
-		$this->assertContains( $middle_option, $dropdown );
 		$this->assertContains( $selected_option, $dropdown );
+		$this->assertContains( $middle_option, $dropdown );
 		//$this->assertSame( $option_number, substr_count( $dropdown, '<option' ) );
 	}
 
@@ -340,7 +342,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
 	public function test_new_field_logic_row_free_text_field() {
-		list( $logic_field, $field, $field_id, $row_key ) = $this->initialize_field_logic_variables( '', 'uc580i' );
+		list( $logic_field, $field, $field_id, $row_key ) = $this->initialize_field_logic_variables( '', 'checkbox-colors' );
 
 		$dropdown = $this->get_field_logic_dropdown_no_logic_field( $field_id, $field, $row_key );
 
@@ -358,7 +360,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
 	public function test_field_logic_row_non_existent_field_id() {
-		$current_field = FrmField::getOne( 'uc580i' );
+		$current_field = FrmField::getOne( 'checkbox-colors' );
 
 		$selector_field_id = 999999999;
 		$selector_args = array(
@@ -520,7 +522,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
 	public function test_action_logic_row_checkbox_field_values() {
-		list( $field_name, $meta_name, $new_field ) = $this->initialize_action_logic_variables( 'uc580i' );
+		list( $field_name, $meta_name, $new_field ) = $this->initialize_action_logic_variables( 'checkbox-colors' );
 
 		$dropdown = $this->get_action_logic_dropdown( $field_name, $meta_name, $new_field, '' );
 
@@ -545,7 +547,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
 	public function test_action_logic_row_dropdown_field_values() {
-		list( $field_name, $meta_name, $new_field ) = $this->initialize_action_logic_variables( 'uc580i' );
+		list( $field_name, $meta_name, $new_field ) = $this->initialize_action_logic_variables( 'checkbox-colors' );
 
 		$dropdown = $this->get_action_logic_dropdown( $field_name, $meta_name, $new_field, 'Blue' );
 
@@ -684,9 +686,9 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 			$opening_tag = '<select name=\'' . $field_name . '\'  >';
 		}
 		$first_option = '<option value=""> </option>';
-		$middle_option = 'Live Music</option>';
+		$middle_option = 'Utah</option>';
 		$closing_tag = '</select>';
-		//$option_number = 3; TODO: figure out why the options include child categories
+		//$option_number = 2;
 
 		$this->assertContains( $opening_tag, $dropdown );
 		$this->assertContains( $closing_tag, $dropdown );
@@ -773,7 +775,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	 * @covers formidable/pro/views/frmpro-fields/field-values.php
 	 */
 	public function test_mailchimp_checkbox_field_values() {
-		list( $html_name, $field ) = $this->initialize_mailchimp_field_value_variables( 'uc580i' );
+		list( $html_name, $field ) = $this->initialize_mailchimp_field_value_variables( 'checkbox-colors' );
 
 		$dropdown = $this->get_mailchimp_field_value_dropdown( $html_name, $field, '' );
 
@@ -834,7 +836,7 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 		}
 
 		$field_object = FrmField::getOne( $edit_field_key );
-		$current_field = FrmProFieldsHelper::convert_field_object_to_flat_array( $field_object );
+		$current_field = FrmFieldsHelper::convert_field_object_to_flat_array( $field_object );
 		$current_field_id = $field_object->id;
 		$meta_name = 0;
 
@@ -1278,14 +1280,14 @@ class WP_Test_fieldValuesDropdown extends FrmUnitTest {
 	private function fields_with_text_box() {
 		return array(
 			'text' => 'text-field',
-			'textarea' => 'p3eiuk',
+			'textarea' => 'paragraph-field',
 			'email' => 'email-field',
 			'url' => 'website-field',
 			'number' => 'number-field',
-			'phone' => 'n0d580',
+			'phone' => 'phone-number',
 			'date' => 'date-field',
 			'time' => 'time-field',
-			'image' => 'zwuclz',
+			'image' => 'image-url',
 			'lookup' => 'lookup-country',
 			'hidden' => 'hidden-field',
 			'password' => '9r61y8',

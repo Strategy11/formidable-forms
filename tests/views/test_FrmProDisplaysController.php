@@ -2,6 +2,7 @@
 
 /**
  * @group views
+ * @group pro
  */
 class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	function setUp() {
@@ -822,7 +823,6 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		$dynamic_view = self::reset_view( 'dynamic-view', $filter_args );
 		$d = self::get_default_args( $dynamic_view, array( 'No Entries Found' ), array() );
 		self::run_get_display_data_tests( $d, 'view with entry ID equal to list filter on detail page (entry should NOT show)' );
-
 	}
 
 	/**
@@ -848,6 +848,30 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		$d = self::get_default_args( $dynamic_view, array( 'Steve' ), array( 'Jamie', 'Steph' ) );
 
 		self::run_get_display_data_tests( $d, 'view with entry ID is not equal to list filter' );
+	}
+
+	/**
+	 * Tests "Entry ID is greater than x"
+	 * @covers FrmProDisplaysController::get_display_data
+	 *
+	 * @since 2.05
+	 */
+	function test_entry_greater_than_id() {
+
+		$single_view = self::get_view_by_key( 'single-entry' );
+
+		$filter_args = array(
+			array( 'type' => 'col',
+				   'col' => 'id',
+				   'op' => '>',
+				   'val' => FrmEntry::get_id_by_key( 'jamie_entry_key' ),
+			),
+		);
+		self::add_filter_to_view( $single_view, $filter_args );
+
+		// Check View content
+		$d = self::get_default_args( $single_view, array( 'Steph' ), array( 'Jamie', 'Steve' ) );
+		self::run_get_display_data_tests( $d, 'entry ID is greater than specific ID' );
 	}
 
 	/**
@@ -1002,7 +1026,6 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_display_data
 	 */
 	function test_created_at_filter_with_minus_one_day() {
-		
 		$dynamic_view = self::get_view_by_key( 'dynamic-view' );
 
 		// Update creation date on Steve's entry to NOW
@@ -1023,10 +1046,6 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 		$d = self::get_default_args( $dynamic_view, array( 'Steve' ), array( 'Jamie', 'Steph' ) );
 
 		self::run_get_display_data_tests( $d, 'created at filter' );
-
-		// Set data back after testing
-		$original_date = '2015-05-13 19:40:11';
-		$wpdb->update( $wpdb->prefix . 'frm_items', array( 'created_at' => $original_date ), array( 'id' => $entry_id ) );
 	}
 
 	/**
@@ -1219,7 +1238,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 
 		$filter_args = array(
 			array( 'type' => 'field',
-				'col' => 'qbrd2o',
+				'col' => 'scale-field',
 				'op' => 'group_by',
 				'val' => '',
 			),
@@ -1241,7 +1260,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 
 		$filter_args = array(
 			array( 'type' => 'field',
-			       'col' => 'qbrd2o',
+			       'col' => 'scale-field',
 			       'op' => 'group_by_newest',
 			       'val' => '',
 			),
@@ -1416,7 +1435,7 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 				'val' => 'e',
 			),
 			array( 'type' => 'field',
-				'col' => 'qbrd2o',
+				'col' => 'scale-field',
 				'op' => '>',
 				'val' => '3',
 			),

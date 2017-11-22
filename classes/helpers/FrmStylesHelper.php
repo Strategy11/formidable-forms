@@ -96,6 +96,31 @@ class FrmStylesHelper {
 <?php
     }
 
+	/**
+	 * @since 2.05
+	 */
+	public static function get_css_label_positions() {
+		return array(
+			'none'     => __( 'top', 'formidable' ),
+			'left'     => __( 'left', 'formidable' ),
+			'right'    => __( 'right', 'formidable' ),
+			'no_label' => __( 'none', 'formidable' ),
+			'inside'   => __( 'inside', 'formidable' ),
+		);
+	}
+
+	public static function get_sigle_label_postitions() {
+		return array(
+			'top'    => __( 'Top', 'formidable' ),
+			'left'   => __( 'Left', 'formidable' ),
+			'right'  => __( 'Right', 'formidable' ),
+			'inline' => __( 'Inline (left without a set width)', 'formidable' ),
+			'none'   => __( 'None', 'formidable' ),
+			'hidden' => __( 'Hidden (but leave the space)', 'formidable' ),
+			'inside' => __( 'Placeholder inside the field', 'formidable' ),
+		);
+	}
+
     public static function minus_icons() {
         return array(
 			0 => array( '-' => '62e', '+' => '62f' ),

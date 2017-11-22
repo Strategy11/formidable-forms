@@ -216,6 +216,9 @@ class FrmEDD_SL_Plugin_Updater {
 
 		if ( $request && isset( $request->sections ) ) {
 			$request->sections = maybe_unserialize( $request->sections );
+			if ( is_array( $request->sections ) ) {
+				$request->sections['last_checked'] = time();
+			}
 			set_transient( $cache_key, $request, DAY_IN_SECONDS );
 		} else {
 			$request = false;

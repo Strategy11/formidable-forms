@@ -338,7 +338,7 @@ class FrmFormAction {
 
 	public function save_settings( $settings ) {
 		self::clear_cache();
-		return FrmAppHelper::save_settings( $settings, 'frm_actions' );
+		return FrmDb::save_settings( $settings, 'frm_actions' );
 	}
 
 	public function get_single_action( $id ) {
@@ -368,7 +368,7 @@ class FrmFormAction {
         }
 
 		$args = self::action_args( $form_id, $limit );
-		$actions = FrmAppHelper::check_cache( serialize( $args ), 'frm_actions', $args, 'get_posts' );
+		$actions = FrmDb::check_cache( serialize( $args ), 'frm_actions', $args, 'get_posts' );
 
         if ( ! $actions ) {
             return array();
@@ -433,7 +433,7 @@ class FrmFormAction {
         $query['post_status']      = 'any';
         $query['suppress_filters'] = false;
 
-		$actions = FrmAppHelper::check_cache( serialize( $query ) . '_type_' . $type, 'frm_actions', $query, 'get_posts' );
+		$actions = FrmDb::check_cache( serialize( $query ) . '_type_' . $type, 'frm_actions', $query, 'get_posts' );
         unset($query);
 
         remove_filter( 'posts_where' , 'FrmFormActionsController::limit_by_type' );
@@ -528,7 +528,7 @@ class FrmFormAction {
 	 * @since 2.0.5
 	 */
 	public static function clear_cache() {
-		FrmAppHelper::cache_delete_group( 'frm_actions' );
+		FrmDb::cache_delete_group( 'frm_actions' );
 	}
 
 	public function get_settings() {

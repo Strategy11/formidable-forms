@@ -1,11 +1,14 @@
 <?php
 
 /**
- * @group pro-views
+ * @group pro
+ * @group fields
+ * @group field-logic
+ *
  * @since 2.03.05
  * @covers formidable/pro/views/frmpro-fields/field-values.php
  */
-class test_fieldLogicRow extends FrmUnitTest {
+class test_FrmProfieldLogicRow extends FrmUnitTest {
 
 	public function test_class_is_tested() {
 		$this->assertTrue( true );
@@ -41,7 +44,7 @@ class test_fieldLogicRow extends FrmUnitTest {
 	public function test_field_logic_row_checkbox_field_selected() {
 		$field_id = FrmField::get_id_by_key( 'text-field' );
 
-		$logic_row = $this->get_logic_row( $field_id, 'uc580i', 'Red' );
+		$logic_row = $this->get_logic_row( $field_id, 'checkbox-colors', 'Red' );
 
 		$opening_tag = '<select name="field_options[hide_opt_' . $field_id . '][]">';
 		$second_option = '<option value="Red" selected=\'selected\'>Red</option>';
@@ -85,14 +88,14 @@ class test_fieldLogicRow extends FrmUnitTest {
 	private function fields_with_text_box() {
 		return array(
 			'text' => 'text-field',
-			'textarea' => 'p3eiuk',
+			'textarea' => 'paragraph-field',
 			'email' => 'email-field',
 			'url' => 'website-field',
 			'number' => 'number-field',
-			'phone' => 'n0d580',
+			'phone' => 'phone-number',
 			'date' => 'date-field',
 			'time' => 'time-field',
-			'image' => 'zwuclz',
+			'image' => 'image-url',
 			'lookup' => 'lookup-country',
 			'hidden' => 'hidden-field',
 			'password' => '9r61y8',

@@ -12,7 +12,7 @@
 		<is_template>1</is_template>
 		<default_template>1</default_template>
 		<editable>0</editable>
-		<options><![CDATA[{"custom_style":1,"notification":[{"email_to":"emailto@test.com","also_email_to":[{1,2}],"reply_to":"replyto@test.com","reply_to_name":"Reply to me","cust_reply_to":"","cust_reply_to_name":"","plain_text":1,"inc_user_info":1,"email_message":"This is my email message. [default-message]","email_subject":"The subject","update_email":2}]}]]></options>
+		<options><![CDATA[{"custom_style":1,"notification":[{"email_to":"emailto@test.com,[admin_email]","reply_to":"replyto@test.com","reply_to_name":"Reply to me","cust_reply_to":"","cust_reply_to_name":"","plain_text":1,"inc_user_info":1,"email_message":"This is my email message. [default-message]","email_subject":"The subject","update_email":2}]}]]></options>
 		<status><![CDATA[published]]></status>
 		<field>
 		    <id>1</id>
@@ -208,7 +208,7 @@
             <form_id>182</form_id>
             <required></required>
             <options><![CDATA[["Option 1","Option 2"]]]></options>
-            <field_options><![CDATA[{"size":"","max":"","label":"","blank":"This field cannot be blank.","required_indicator":"*","invalid":"","separate_value":0,"clear_on_focus":0,"default_blank":0,"classes":"","custom_html":"<div id=\\\"frm_field_[id]_container\\\" class=\\\"frm_form_field form-field [required_class][error_class]\\\">\r\n    <label  class=\\\"frm_primary_label\\\">[field_name]\r\n        <span class=\\\"frm_required\\\">[required_label]<\/span>\r\n    <\/label>\r\n    <div class=\\\"frm_opt_container\\\">[input]<\/div>\r\n    [if description]<div class=\\\"frm_description\\\">[description]<\/div>[\/if description]\r\n    [if error]<div class=\\\"frm_error\\\">[error]<\/div>[\/if error]\r\n<\/div>","taxonomy":"category","post_field":"post_category","exclude_cat":["3","4"],"slide":0,"form_select":"","show_hide":"show","any_all":"any","align":"block","hide_field":[],"hide_field_cond":["=="],"hide_opt":[],"star":0,"ftypes":[],"data_type":"select","restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"step":1,"clock":12,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","dyn_default_value":"","multiple":0,"unique_msg":"","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":0,"custom_field":"","calc_dec":""}]]></field_options>
+            <field_options><![CDATA[{"size":"","max":"","label":"","blank":"This field cannot be blank.","required_indicator":"*","invalid":"","separate_value":0,"clear_on_focus":0,"default_blank":0,"classes":"","custom_html":"<div id=\\\"frm_field_[id]_container\\\" class=\\\"frm_form_field form-field [required_class][error_class]\\\">\r\n    <label  class=\\\"frm_primary_label\\\">[field_name]\r\n        <span class=\\\"frm_required\\\">[required_label]<\/span>\r\n    <\/label>\r\n    <div class=\\\"frm_opt_container\\\">[input]<\/div>\r\n    [if description]<div class=\\\"frm_description\\\">[description]<\/div>[\/if description]\r\n    [if error]<div class=\\\"frm_error\\\">[error]<\/div>[\/if error]\r\n<\/div>","taxonomy":"category","post_field":"post_category","exclude_cat":"","slide":0,"form_select":"","show_hide":"show","any_all":"any","align":"block","hide_field":[],"hide_field_cond":["=="],"hide_opt":[],"star":0,"ftypes":[],"data_type":"select","restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"step":1,"clock":12,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","dyn_default_value":"","multiple":0,"unique_msg":"","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":0,"custom_field":"","calc_dec":""}]]></field_options>
 		</field>
 		<field>
 		    <id>3378</id>
@@ -221,7 +221,7 @@
             <form_id>182</form_id>
             <required></required>
             <options><![CDATA[]]></options>
-            <field_options><![CDATA[{"size":"","max":"","label":"","blank":"This field cannot be blank.","required_indicator":"*","invalid":"","separate_value":0,"clear_on_focus":0,"default_blank":0,"classes":"","custom_html":"<div id=\\\"frm_field_[id]_container\\\" class=\\\"frm_form_field form-field [required_class][error_class]\\\">\r\n    <label  class=\\\"frm_primary_label\\\">[field_name]\r\n        <span class=\\\"frm_required\\\">[required_label]<\/span>\r\n    <\/label>\r\n    <div class=\\\"frm_opt_container\\\">[input]<\/div>\r\n    [if description]<div class=\\\"frm_description\\\">[description]<\/div>[\/if description]\r\n    [if error]<div class=\\\"frm_error\\\">[error]<\/div>[\/if error]\r\n<\/div>","data_type":"checkbox","slide":0,"form_select":"taxonomy","show_hide":"show","any_all":"any","align":"block","hide_field":[],"hide_field_cond":["=="],"hide_opt":[],"star":0,"ftypes":[],"restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"step":1,"clock":12,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","dyn_default_value":"","multiple":0,"unique_msg":"","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":0,"custom_field":"","post_field":"post_category","taxonomy":"category","exclude_cat":["511","512","513","514","3","4"],"calc_dec":""}]]></field_options>
+            <field_options><![CDATA[{"size":"","max":"","label":"","blank":"This field cannot be blank.","required_indicator":"*","invalid":"","separate_value":0,"clear_on_focus":0,"default_blank":0,"classes":"","custom_html":"<div id=\\\"frm_field_[id]_container\\\" class=\\\"frm_form_field form-field [required_class][error_class]\\\">\r\n    <label  class=\\\"frm_primary_label\\\">[field_name]\r\n        <span class=\\\"frm_required\\\">[required_label]<\/span>\r\n    <\/label>\r\n    <div class=\\\"frm_opt_container\\\">[input]<\/div>\r\n    [if description]<div class=\\\"frm_description\\\">[description]<\/div>[\/if description]\r\n    [if error]<div class=\\\"frm_error\\\">[error]<\/div>[\/if error]\r\n<\/div>","data_type":"checkbox","slide":0,"form_select":"taxonomy","show_hide":"show","any_all":"any","align":"block","hide_field":[],"hide_field_cond":["=="],"hide_opt":[],"star":0,"ftypes":[],"restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"step":1,"clock":12,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","dyn_default_value":"","multiple":0,"unique_msg":"","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":0,"custom_field":"","post_field":"post_category","taxonomy":"category","exclude_cat":["4","5","6","7","8"],"calc_dec":""}]]></field_options>
 		</field>
 		<field>
 		    <id>3379</id>
@@ -234,7 +234,7 @@
             <form_id>182</form_id>
             <required></required>
             <options><![CDATA[]]></options>
-            <field_options><![CDATA[{"size":"","max":"","label":"","blank":"This field cannot be blank.","required_indicator":"*","invalid":"","separate_value":0,"clear_on_focus":0,"default_blank":0,"classes":"","custom_html":"<div id=\\\"frm_field_[id]_container\\\" class=\\\"frm_form_field form-field [required_class][error_class]\\\">\r\n    <label  class=\\\"frm_primary_label\\\">[field_name]\r\n        <span class=\\\"frm_required\\\">[required_label]<\/span>\r\n    <\/label>\r\n    <div class=\\\"frm_opt_container\\\">[input]<\/div>\r\n    [if description]<div class=\\\"frm_description\\\">[description]<\/div>[\/if description]\r\n    [if error]<div class=\\\"frm_error\\\">[error]<\/div>[\/if error]\r\n<\/div>","data_type":"select","slide":0,"form_select":"taxonomy","show_hide":"show","any_all":"any","align":"block","hide_field":["3378"],"hide_field_cond":["=="],"hide_opt":[""],"star":0,"ftypes":[],"restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"step":1,"clock":12,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","dyn_default_value":"","multiple":0,"unique_msg":"","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":0,"custom_field":"","post_field":"post_category","taxonomy":"category","exclude_cat":["294","512","514","18","19","313","298","27","189","13","24","25","299","315","1","300"],"calc_dec":""}]]></field_options>
+            <field_options><![CDATA[{"size":"","max":"","label":"","blank":"This field cannot be blank.","required_indicator":"*","invalid":"","separate_value":0,"clear_on_focus":0,"default_blank":0,"classes":"","custom_html":"<div id=\\\"frm_field_[id]_container\\\" class=\\\"frm_form_field form-field [required_class][error_class]\\\">\r\n    <label  class=\\\"frm_primary_label\\\">[field_name]\r\n        <span class=\\\"frm_required\\\">[required_label]<\/span>\r\n    <\/label>\r\n    <div class=\\\"frm_opt_container\\\">[input]<\/div>\r\n    [if description]<div class=\\\"frm_description\\\">[description]<\/div>[\/if description]\r\n    [if error]<div class=\\\"frm_error\\\">[error]<\/div>[\/if error]\r\n<\/div>","data_type":"select","slide":0,"form_select":"taxonomy","show_hide":"show","any_all":"any","align":"block","hide_field":["3378"],"hide_field_cond":["=="],"hide_opt":[""],"star":0,"ftypes":[],"restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"step":1,"clock":12,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","dyn_default_value":"","multiple":0,"unique_msg":"","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":0,"custom_field":"","post_field":"post_category","taxonomy":"category","exclude_cat":["1","2","3","5","7","8"],"calc_dec":""}]]></field_options>
 		</field>
 		<field>
 		    <id>9819</id>
@@ -247,7 +247,7 @@
             <form_id>182</form_id>
             <required></required>
             <options><![CDATA[]]></options>
-            <field_options><![CDATA[{"size":"","max":"","label":"","blank":"This field cannot be blank.","required_indicator":"*","invalid":"","separate_value":0,"clear_on_focus":0,"default_blank":0,"classes":"","custom_html":"<div id=\\\"frm_field_[id]_container\\\" class=\\\"frm_form_field form-field [required_class][error_class]\\\">\r\n    <label  class=\\\"frm_primary_label\\\">[field_name]\r\n        <span class=\\\"frm_required\\\">[required_label]<\/span>\r\n    <\/label>\r\n    <div class=\\\"frm_opt_container\\\">[input]<\/div>\r\n    [if description]<div class=\\\"frm_description\\\">[description]<\/div>[\/if description]\r\n    [if error]<div class=\\\"frm_error\\\">[error]<\/div>[\/if error]\r\n<\/div>","data_type":"checkbox","slide":0,"form_select":"taxonomy","show_hide":"show","any_all":"any","align":"block","hide_field":["3379"],"hide_field_cond":["=="],"hide_opt":[""],"star":0,"ftypes":[],"restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"step":1,"clock":12,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","calc_dec":"","dyn_default_value":"","multiple":0,"unique_msg":"","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":0,"custom_field":"","post_field":"post_category","taxonomy":"category","exclude_cat":["294","511","513","18","19","313","298","27","189","13","24","25","299","315","1","3","4","300"]}]]></field_options>
+            <field_options><![CDATA[{"size":"","max":"","label":"","blank":"This field cannot be blank.","required_indicator":"*","invalid":"","separate_value":0,"clear_on_focus":0,"default_blank":0,"classes":"","custom_html":"<div id=\\\"frm_field_[id]_container\\\" class=\\\"frm_form_field form-field [required_class][error_class]\\\">\r\n    <label  class=\\\"frm_primary_label\\\">[field_name]\r\n        <span class=\\\"frm_required\\\">[required_label]<\/span>\r\n    <\/label>\r\n    <div class=\\\"frm_opt_container\\\">[input]<\/div>\r\n    [if description]<div class=\\\"frm_description\\\">[description]<\/div>[\/if description]\r\n    [if error]<div class=\\\"frm_error\\\">[error]<\/div>[\/if error]\r\n<\/div>","data_type":"checkbox","slide":0,"form_select":"taxonomy","show_hide":"show","any_all":"any","align":"block","hide_field":["3379"],"hide_field_cond":["=="],"hide_opt":[""],"star":0,"ftypes":[],"restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"step":1,"clock":12,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","calc_dec":"","dyn_default_value":"","multiple":0,"unique_msg":"","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":0,"custom_field":"","post_field":"post_category","taxonomy":"category","exclude_cat":["1","2","3","4","6"]}]]></field_options>
 		</field>
         <field>
             <id>9820</id>
@@ -263,30 +263,12 @@
             <field_options><![CDATA[{"size":"","max":"","label":"","blank":"This field cannot be blank.","required_indicator":"*","invalid":"","separate_value":"1","clear_on_focus":0,"default_blank":"0","classes":"","custom_html":"<div id=\"frm_field_[id]_container\" class=\"frm_form_field form-field [required_class][error_class]\">\r\n    <label for=\"field_[key]\" class=\"frm_primary_label\">[field_name]\r\n        <span class=\"frm_required\">[required_label]<\/span>\r\n    <\/label>\r\n    [input]\r\n    [if description]<div class=\"frm_description\">[description]<\/div>[\/if description]\r\n    [if error]<div class=\"frm_error\">[error]<\/div>[\/if error]\r\n<\/div>","post_field":"post_status","slide":0,"form_select":"","show_hide":"show","any_all":"any","align":"block","hide_field":[],"hide_field_cond":["=="],"hide_opt":[],"star":0,"ftypes":[],"data_type":"select","restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"step":1,"clock":12,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","dyn_default_value":"","multiple":0,"unique_msg":"","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":"0","custom_field":"","taxonomy":"category","exclude_cat":0,"calc_dec":"","captcha_size":"normal","delete":false,"in_section":"0","captcha_theme":"light","autopopulate_value":false,"get_values_form":"","get_values_field":"","watch_lookup":[""],"get_most_recent_value":"","lookup_filter_current_user":false,"calc_type":"","single_time":0}]]></field_options>
         </field>
 	</form>
-	<term><term_id>294</term_id><term_taxonomy>category</term_taxonomy><term_name><![CDATA[Altered Thurzdaze]]></term_name><term_slug>altered-thurzdaze</term_slug></term>
-	<term><term_id>513</term_id><term_taxonomy>category</term_taxonomy><term_name><![CDATA[Altered child 2]]></term_name><term_slug>altered-child-2</term_slug><term_parent>altered-thurzdaze</term_parent></term>
-	<term><term_id>514</term_id><term_taxonomy>category</term_taxonomy><term_name><![CDATA[Altered 2 sub child]]></term_name><term_slug>altered-2-sub-child</term_slug><term_parent>altered-child-2</term_parent></term>
-	<term><term_id>511</term_id><term_taxonomy>category</term_taxonomy><term_name><![CDATA[Altered Child]]></term_name><term_slug>altered-child</term_slug><term_parent>altered-thurzdaze</term_parent></term>
-	<term><term_id>512</term_id><term_taxonomy>category</term_taxonomy><term_name><![CDATA[Altered sub child]]></term_name><term_slug>altered-sub-child</term_slug><term_parent>altered-child</term_parent></term>
-	<term><term_id>18</term_id><term_taxonomy>category</term_taxonomy><term_name><![CDATA[Car Park NB]]></term_name><term_slug>car-park-nb</term_slug></term>
-	<term><term_id>3</term_id><term_taxonomy>category</term_taxonomy><term_name><![CDATA[Child]]></term_name><term_slug>child</term_slug><term_parent>uncategorized</term_parent></term>
-	<term><term_id>19</term_id><term_taxonomy>category</term_taxonomy><term_name><![CDATA[Estate Info]]></term_name><term_slug>geninfo</term_slug></term>
-	<term><term_id>313</term_id><term_taxonomy>category</term_taxonomy><term_name><![CDATA[Euchre]]></term_name><term_slug>euchre</term_slug></term>
-	<term><term_id>298</term_id><term_taxonomy>category</term_taxonomy><term_name><![CDATA[Live Music]]></term_name><term_description><![CDATA[Live music / bands]]></term_description><term_slug>live_music</term_slug></term>
-	<term><term_id>27</term_id><term_taxonomy>category</term_taxonomy><term_name><![CDATA[Main Genre]]></term_name><term_slug>main-genre</term_slug></term>
-	<term><term_id>189</term_id><term_taxonomy>category</term_taxonomy><term_name><![CDATA[Musician Directory]]></term_name><term_description><![CDATA[Directory of musicians, bands, and artists that have visited the Mousetrap Bar &amp; Grill. 
-
-Click the Listen Tab to check out the latest streaming media. 
-
-Jam Band, Electronic, Electronica, JamTronica, EDM, Producer, Rock,  Jazz, Soul,  Bluegrass, Americana, Folk, Improv, Hip Hop, Acoustic, Comedy, Trivia, Streaming.]]></term_description><term_slug>musician-directory</term_slug></term>
-	<term><term_id>299</term_id><term_taxonomy>category</term_taxonomy><term_name><![CDATA[Tonight at the Mousetrap]]></term_name><term_slug>tonight-at-the-mousetrap</term_slug></term>
-	<term><term_id>315</term_id><term_taxonomy>category</term_taxonomy><term_name><![CDATA[Tuesday Jazz/Soul Night]]></term_name><term_slug>tuesday-jazzsoul-night</term_slug></term>
-	<view>
+    <view>
 		<title>Create Posts</title>
 		<link></link>
 		<post_author><![CDATA[admin]]></post_author>
 		<description></description>
-		<content><![CDATA[{"post_type":"post","post_title":"2837","post_content":"","display_id":"7840","post_excerpt":"","post_password":"","post_name":"","post_date":"","post_status":"","post_category":{"category0":{"meta_name":"category","field_id":"3378","show_exclude":"1","exclude_cat":["511","512","513","514","3","4"]},"category1":{"meta_name":"category","field_id":"3379","show_exclude":"1","exclude_cat":["294","512","514","18","19","313","298","27","189","13","24","25","299","315","1","300"]},"category2":{"meta_name":"category","field_id":"2843","show_exclude":"1","exclude_cat":["3","4"]},"category3":{"meta_name":"category","field_id":"9819","show_exclude":"1","exclude_cat":["294","511","513","18","19","313","298","27","189","13","24","25","299","315","1","3","4","300"]}},"post_custom_fields":{"_thumbnail_id":{"meta_name":"_thumbnail_id","field_id":"2839"}},"event":["create","update"],"conditions":{"send_stop":"send","any_all":"any"}}]]></content>
+		<content><![CDATA[{"post_type":"post","post_title":"2837","post_content":"","display_id":"7840","post_excerpt":"","post_password":"","post_name":"","post_date":"","post_status":"","post_category":{"category0":{"meta_name":"category","field_id":"3378","show_exclude":"1","exclude_cat":["4","5","6","7","8"]},"category1":{"meta_name":"category","field_id":"3379","show_exclude":"1","exclude_cat":["1","2","3","5","7","8"]},"category2":{"meta_name":"category","field_id":"2843","show_exclude":"1","exclude_cat":""},"category3":{"meta_name":"category","field_id":"9819","show_exclude":"1","exclude_cat":["1","2","3","4","6"]}},"post_custom_fields":{"_thumbnail_id":{"meta_name":"_thumbnail_id","field_id":"2839"}},"event":["create","update"],"conditions":{"send_stop":"send","any_all":"any"}}]]></content>
 		<excerpt><![CDATA[wppost]]></excerpt>
 		<post_id>3088</post_id>
 		<post_date>2014-12-05 15:55:34</post_date>
@@ -618,7 +600,7 @@ Jam Band, Electronic, Electronica, JamTronica, EDM, Producer, Rock,  Jazz, Soul,
 		</field>
 		<field>
 		    <id>8100</id>
-            <field_key><![CDATA[p3eiuk]]></field_key>
+            <field_key><![CDATA[paragraph-field]]></field_key>
             <name><![CDATA[Paragraph Text]]></name>
             <description><![CDATA[]]></description>
             <type><![CDATA[textarea]]></type>
@@ -631,7 +613,7 @@ Jam Band, Electronic, Electronica, JamTronica, EDM, Producer, Rock,  Jazz, Soul,
 		</field>
 		<field>
 		    <id>8101</id>
-            <field_key><![CDATA[uc580i]]></field_key>
+            <field_key><![CDATA[checkbox-colors]]></field_key>
             <name><![CDATA[Checkboxes - colors]]></name>
             <description><![CDATA[]]></description>
             <type><![CDATA[checkbox]]></type>
@@ -696,7 +678,7 @@ Jam Band, Electronic, Electronica, JamTronica, EDM, Producer, Rock,  Jazz, Soul,
 		</field>
 		<field>
 		    <id>8109</id>
-            <field_key><![CDATA[d7hsn1]]></field_key>
+            <field_key><![CDATA[page-break]]></field_key>
             <name><![CDATA[Next]]></name>
             <description><![CDATA[]]></description>
             <type><![CDATA[break]]></type>
@@ -774,7 +756,7 @@ Jam Band, Electronic, Electronica, JamTronica, EDM, Producer, Rock,  Jazz, Soul,
 		</field>
 		<field>
 		    <id>8114</id>
-            <field_key><![CDATA[n0d580]]></field_key>
+            <field_key><![CDATA[phone-number]]></field_key>
             <name><![CDATA[Phone Number]]></name>
             <description><![CDATA[]]></description>
             <type><![CDATA[phone]]></type>
@@ -813,7 +795,7 @@ Jam Band, Electronic, Electronica, JamTronica, EDM, Producer, Rock,  Jazz, Soul,
 		</field>
 		<field>
 		    <id>8117</id>
-            <field_key><![CDATA[zwuclz]]></field_key>
+            <field_key><![CDATA[image-url]]></field_key>
             <name><![CDATA[Image URL]]></name>
             <description><![CDATA[]]></description>
             <type><![CDATA[image]]></type>
@@ -826,7 +808,7 @@ Jam Band, Electronic, Electronica, JamTronica, EDM, Producer, Rock,  Jazz, Soul,
 		</field>
 		<field>
 		    <id>8118</id>
-            <field_key><![CDATA[qbrd2o]]></field_key>
+            <field_key><![CDATA[scale-field]]></field_key>
             <name><![CDATA[Scale]]></name>
             <description><![CDATA[]]></description>
             <type><![CDATA[scale]]></type>
@@ -956,7 +938,7 @@ Jam Band, Electronic, Electronica, JamTronica, EDM, Producer, Rock,  Jazz, Soul,
 		</field>
 		<field>
 		    <id>8127</id>
-            <field_key><![CDATA[khyzws]]></field_key>
+            <field_key><![CDATA[html-field]]></field_key>
             <name><![CDATA[HTML]]></name>
             <description><![CDATA[Lorem ipsum.]]></description>
             <type><![CDATA[html]]></type>
@@ -982,7 +964,7 @@ Jam Band, Electronic, Electronica, JamTronica, EDM, Producer, Rock,  Jazz, Soul,
 		</field>
 		<field>
 		    <id>8129</id>
-            <field_key><![CDATA[ggo4ez]]></field_key>
+            <field_key><![CDATA[signature-field]]></field_key>
             <name><![CDATA[Signature]]></name>
             <description><![CDATA[]]></description>
             <type><![CDATA[signature]]></type>
@@ -1938,9 +1920,7 @@ Jam Band, Electronic, Electronica, JamTronica, EDM, Producer, Rock,  Jazz, Soul,
 		</item_meta>
 		<item_meta>
 		    <field_id>8100</field_id>
-		    <meta_value><![CDATA[Jamie
-Rebecca
-Wahlin]]></meta_value>
+		    <meta_value>Jamie&#xD;&#xA;Rebecca&#xD;&#xA;Wahlin</meta_value>
 		</item_meta>
 		<item_meta>
 		    <field_id>8101</field_id>
@@ -2774,7 +2754,7 @@ Test]]></meta_value>
 		<link></link>
 		<post_author><![CDATA[admin]]></post_author>
 		<description></description>
-		<content><![CDATA[All Entries: [8099]
+		<content><![CDATA[All Entries: [text-field]
 [8100]
 <hr />]]></content>
 		<excerpt><![CDATA[]]></excerpt>
@@ -2840,7 +2820,7 @@ Test]]></meta_value>
 		<link></link>
 		<post_author><![CDATA[admin]]></post_author>
 		<description></description>
-		<content><![CDATA[All Entries: [8099]
+		<content><![CDATA[All Entries: [text-field]
 [8100]
 <hr />]]></content>
 		<excerpt><![CDATA[]]></excerpt>
@@ -2906,7 +2886,7 @@ Test]]></meta_value>
 		<link></link>
 		<post_author><![CDATA[admin]]></post_author>
 		<description></description>
-		<content><![CDATA[Name: [8099]
+		<content><![CDATA[Name: [text-field]
 Favorite colors: [8101]
 <hr />]]></content>
 		<excerpt><![CDATA[]]></excerpt>
@@ -2968,7 +2948,7 @@ Favorite colors: [8101]
 		<link></link>
 		<post_author><![CDATA[admin]]></post_author>
 		<description></description>
-		<content><![CDATA[Listing Page: <a href="[detaillink]">[8099]</a>
+		<content><![CDATA[Listing Page: <a href="[detaillink]">[text-field]</a>
 ]]></content>
 		<excerpt><![CDATA[]]></excerpt>
 		<post_id>6773</post_id>
@@ -2997,7 +2977,7 @@ Favorite colors: [8101]
 		</postmeta>
 		<postmeta>
 			<meta_key>frm_dyncontent</meta_key>
-			<meta_value><![CDATA[Name: [8099]
+			<meta_value><![CDATA[Name: [text-field]
 Details: [8100]
 Favorite dessert: [8102]]]></meta_value>
 		</postmeta>
@@ -3031,7 +3011,7 @@ Favorite dessert: [8102]]]></meta_value>
 		<link></link>
 		<post_author><![CDATA[admin]]></post_author>
 		<description></description>
-		<content><![CDATA[<a href="[detaillink]">[8099]</a>]]></content>
+		<content><![CDATA[<a href="[detaillink]">[text-field]</a>]]></content>
 		<excerpt><![CDATA[]]></excerpt>
 		<post_id>6775</post_id>
 		<post_date>2015-05-13 13:54:41</post_date>
@@ -3059,7 +3039,7 @@ Favorite dessert: [8102]]]></meta_value>
 		</postmeta>
 		<postmeta>
 			<meta_key>frm_dyncontent</meta_key>
-			<meta_value><![CDATA[[8099]
+			<meta_value><![CDATA[[text-field]
 [8100]
 [8101]
 [8102]]]></meta_value>
@@ -3094,7 +3074,7 @@ Favorite dessert: [8102]]]></meta_value>
         <link></link>
         <post_author><![CDATA[admin]]></post_author>
         <description></description>
-        <content><![CDATA[[key],StandardFieldID:[8099][attr class="someclass"],SiteName:[sitename],FrmFieldValue:[frm-field-value field_id=text-field],Formshortcode:[formidable id=dynamic-field-num-form]
+        <content><![CDATA[[key],StandardFieldID:[text-field][attr class="someclass"],SiteName:[sitename],FrmFieldValue:[frm-field-value field_id=text-field],Formshortcode:[formidable id=dynamic-field-num-form]
 
 ]]></content>
         <excerpt><![CDATA[]]></excerpt>
@@ -3203,4 +3183,51 @@ Favorite dessert: [8102]]]></meta_value>
 		<post_password></post_password>
 		<is_sticky>0</is_sticky>
 	</view>
+    <term>
+        <term_id>2</term_id>
+        <term_taxonomy>category</term_taxonomy>
+        <term_name><![CDATA[Utah]]></term_name>
+        <term_slug>utah</term_slug>
+    </term>
+    <term>
+        <term_id>3</term_id>
+        <term_taxonomy>category</term_taxonomy>
+        <term_name><![CDATA[Oregon]]></term_name>
+        <term_slug>oregon</term_slug>
+    </term>
+    <term>
+        <term_id>4</term_id>
+        <term_taxonomy>category</term_taxonomy>
+        <term_name><![CDATA[Multnomah County]]></term_name>
+        <term_slug>multnomah-county</term_slug>
+        <term_parent>oregon</term_parent>
+    </term>
+    <term>
+        <term_id>5</term_id>
+        <term_taxonomy>category</term_taxonomy>
+        <term_name><![CDATA[Portland]]></term_name>
+        <term_slug>portland</term_slug>
+        <term_parent>multnomah-county</term_parent>
+    </term>
+    <term>
+        <term_id>6</term_id>
+        <term_taxonomy>category</term_taxonomy>
+        <term_name><![CDATA[Salt Lake County]]></term_name>
+        <term_slug>salt-lake-county</term_slug>
+        <term_parent>utah</term_parent>
+    </term>
+    <term>
+        <term_id>7</term_id>
+        <term_taxonomy>category</term_taxonomy>
+        <term_name><![CDATA[Riverton]]></term_name>
+        <term_slug>riverton</term_slug>
+        <term_parent>salt-lake-county</term_parent>
+    </term>
+    <term>
+        <term_id>8</term_id>
+        <term_taxonomy>category</term_taxonomy>
+        <term_name><![CDATA[Salt Lake]]></term_name>
+        <term_slug>salt-lake</term_slug>
+        <term_parent>salt-lake-county</term_parent>
+    </term>
 </channel>

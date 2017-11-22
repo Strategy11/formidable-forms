@@ -43,6 +43,12 @@ class FrmEntryFormatter {
 
 	/**
 	 * @var string
+	 * @since 2.05
+	 */
+	protected $array_key = 'key';
+
+	/**
+	 * @var string
 	 * @since 2.04
 	 */
 	protected $direction = 'ltr';
@@ -69,7 +75,7 @@ class FrmEntryFormatter {
 	 * @var array
 	 * @since 2.04
 	 */
-	protected $skip_fields = array( 'captcha' );
+	protected $skip_fields = array( 'captcha', 'html' );
 
 	/**
 	 * FrmEntryFormat constructor
@@ -87,6 +93,7 @@ class FrmEntryFormatter {
 
 		$this->init_is_plain_text( $atts );
 		$this->init_format( $atts );
+		$this->init_array_key( $atts );
 		$this->init_include_blank( $atts );
 		$this->init_direction( $atts );
 		$this->init_include_user_info( $atts );
@@ -153,6 +160,20 @@ class FrmEntryFormatter {
 			} else {
 				$this->format = 'table';
 			}
+		}
+	}
+
+	/**
+	 * Set the array_key property that sets whether the keys in the
+	 * returned array are field keys or ids
+	 *
+	 * @since 2.05
+	 *
+	 * @param array $atts
+	 */
+	protected function init_array_key( $atts ) {
+		if ( isset( $atts['array_key'] ) && $atts['array_key'] == 'id' ) {
+			$this->array_key = 'id';
 		}
 	}
 
@@ -232,6 +253,19 @@ class FrmEntryFormatter {
 		if ( isset( $atts['clickable'] ) && $atts['clickable'] ) {
 			$this->is_clickable = true;
 		}
+	}
+
+	/**
+	 * Get the field key or ID, depending on array_key property
+	 *
+	 * @since 2.05
+	 *
+	 * @param FrmFieldValue $field_value
+	 *
+	 * @return string|int
+	 */
+	protected function get_key_or_id( $field_value ) {
+		return $this->array_key == 'key' ? $field_value->get_field_key() : $field_value->get_field_id();
 	}
 
 	/**
@@ -350,10 +384,10 @@ class FrmEntryFormatter {
 		if ( $this->include_field_in_content( $field_value ) ) {
 
 			$displayed_value = $this->prepare_display_value_for_array( $field_value->get_displayed_value() );
-			$output[ $field_value->get_field_key() ] = $displayed_value;
+			$output[ $this->get_key_or_id( $field_value ) ] = $displayed_value;
 
 			if ( $displayed_value !== $field_value->get_saved_value() ) {
-				$output[ $field_value->get_field_key() . '-value' ] = $field_value->get_saved_value();
+				$output[ $this->get_key_or_id( $field_value ) . '-value' ] = $field_value->get_saved_value();
 			}
 		}
 	}

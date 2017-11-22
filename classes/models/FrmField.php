@@ -164,6 +164,11 @@ class FrmField {
 
 		if ( isset( $values['type'] ) ) {
 			$values = apply_filters( 'frm_clean_' . $values['type'] . '_field_options_before_update', $values );
+
+			if ( $values['type'] == 'hidden' && isset( $values['field_options'] ) && isset( $values['field_options']['clear_on_focus'] ) ) {
+				// don't keep the old placeholder setting for hidden fields
+				$values['field_options']['clear_on_focus'] = 0;
+			}
 		}
 
 		// serialize array values
@@ -236,7 +241,7 @@ class FrmField {
 		global $wpdb;
 		$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->options . ' WHERE option_name LIKE %s OR option_name LIKE %s OR option_name LIKE %s OR option_name LIKE %s', '_transient_timeout_frm_form_fields_' . $form_id . 'ex%', '_transient_frm_form_fields_' . $form_id . 'ex%', '_transient_timeout_frm_form_fields_' . $form_id . 'in%', '_transient_frm_form_fields_' . $form_id . 'in%' ) );
 
-		FrmAppHelper::cache_delete_group( 'frm_field' );
+		FrmDb::cache_delete_group( 'frm_field' );
 
         $form = FrmForm::getOne($form_id);
         if ( $form && $form->parent_form_id && $form->parent_form_id != $form_id ) {
@@ -263,16 +268,16 @@ class FrmField {
         $where = is_numeric($id) ? 'id=%d' : 'field_key=%s';
 		$query = $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'frm_fields WHERE ' . $where, $id );
 
-        $results = FrmAppHelper::check_cache( $id, 'frm_field', $query, 'get_row', 0 );
+        $results = FrmDb::check_cache( $id, 'frm_field', $query, 'get_row', 0 );
 
         if ( empty($results) ) {
             return $results;
         }
 
         if ( is_numeric($id) ) {
-			FrmAppHelper::set_cache( $results->field_key, $results, 'frm_field' );
+			FrmDb::set_cache( $results->field_key, $results, 'frm_field' );
         } else if ( $results ) {
-			FrmAppHelper::set_cache( $results->id, $results, 'frm_field' );
+			FrmDb::set_cache( $results->id, $results, 'frm_field' );
         }
 
 		self::prepare_options( $results );
@@ -286,7 +291,7 @@ class FrmField {
 	 * @param mixed $col The name of the column in the fields database table
      */
     public static function get_type( $id, $col = 'type' ) {
-        $field = FrmAppHelper::check_cache( $id, 'frm_field' );
+        $field = FrmDb::check_cache( $id, 'frm_field' );
         if ( $field ) {
             $type = $field->{$col};
         } else {
@@ -449,7 +454,7 @@ class FrmField {
 			$order_by = ' ORDER BY ' . $order_by;
 		}
 
-        $limit = FrmAppHelper::esc_limit($limit);
+		$limit = FrmDb::esc_limit( $limit );
 
         $query = "SELECT fi.*, fr.name as form_name  FROM {$table_name} fi LEFT OUTER JOIN {$form_table_name} fr ON fi.form_id=fr.id";
         $query_type = ( $limit == ' LIMIT 1' || $limit == 1 ) ? 'row' : 'results';
@@ -458,7 +463,7 @@ class FrmField {
             $results = FrmDb::get_var( $table_name . ' fi LEFT OUTER JOIN ' . $form_table_name . ' fr ON fi.form_id=fr.id', $where, 'fi.*, fr.name as form_name', array( 'order_by' => $order_by, 'limit' => $limit ), '', $query_type );
 		} else {
 			// if the query is not an array, then it has already been prepared
-            $query .= FrmAppHelper::prepend_and_or_where(' WHERE ', $where) . $order_by . $limit;
+			$query .= FrmDb::prepend_and_or_where(' WHERE ', $where ) . $order_by . $limit;
 
 			$function_name = ( $query_type == 'row' ) ? 'get_row' : 'get_results';
 			$results = $wpdb->$function_name( $query );
@@ -467,7 +472,7 @@ class FrmField {
 
 		self::format_field_results( $results );
 
-		FrmAppHelper::set_cache( $cache_key, $results, 'frm_field' );
+		FrmDb::set_cache( $cache_key, $results, 'frm_field' );
 
 		return stripslashes_deep( $results );
 	}
@@ -478,8 +483,8 @@ class FrmField {
 	private static function format_field_results( &$results ) {
 		if ( is_array( $results ) ) {
 			foreach ( $results as $r_key => $result ) {
-				FrmAppHelper::set_cache( $result->id, $result, 'frm_field' );
-				FrmAppHelper::set_cache( $result->field_key, $result, 'frm_field' );
+				FrmDb::set_cache( $result->id, $result, 'frm_field' );
+				FrmDb::set_cache( $result->field_key, $result, 'frm_field' );
 
 				$results[ $r_key ]->field_options = maybe_unserialize( $result->field_options );
 				$results[ $r_key ]->options = maybe_unserialize( $result->options );
@@ -488,8 +493,8 @@ class FrmField {
 				unset( $r_key, $result );
 			}
 		} else if ( $results ) {
-			FrmAppHelper::set_cache( $results->id, $results, 'frm_field' );
-			FrmAppHelper::set_cache( $results->field_key, $results, 'frm_field' );
+			FrmDb::set_cache( $results->id, $results, 'frm_field' );
+			FrmDb::set_cache( $results->field_key, $results, 'frm_field' );
 
 			self::prepare_options( $results );
 		}
@@ -581,25 +586,21 @@ class FrmField {
 			return false;
 		}
 
-		if ( is_array( $field ) ) {
+		$field_type = is_array( $field ) ? $field['type'] : $field->type;
+		$data_type = self::get_option( $field, 'data_type' );
+		$original_type = self::get_option( $field, 'original_type' );
 
-			$is_multi_value_field = (
-				$field['type'] == 'checkbox' ||
-				$field['type'] == 'address' ||
-				( $field['type'] == 'data' && isset($field['data_type']) && $field['data_type'] == 'checkbox' ) ||
-				( $field['type'] == 'lookup' && isset($field['data_type']) && $field['data_type'] == 'checkbox' ) ||
-				self::is_multiple_select( $field )
-			);
-
-		} else {
-			$is_multi_value_field = (
-				$field->type == 'checkbox' ||
-				$field->type == 'address' ||
-				( $field->type == 'data' && isset( $field->field_options['data_type'] ) && $field->field_options['data_type'] == 'checkbox' ) ||
-				( $field->type == 'lookup' && isset( $field->field_options['data_type'] ) && $field->field_options['data_type'] == 'checkbox' ) ||
-				self::is_multiple_select( $field )
-			);
+		if ( ! empty( $original_type ) && $original_type != $field_type ) {
+			$field_type = $original_type; // check the original type for arrays
 		}
+
+		$is_multi_value_field = (
+			$field_type == 'checkbox' ||
+			$field_type == 'address' ||
+			( $field_type == 'data' && $data_type == 'checkbox' ) ||
+			( $field_type == 'lookup' && $data_type == 'checkbox' ) ||
+			self::is_multiple_select( $field )
+		);
 
 		return $is_multi_value_field;
 	}
@@ -611,11 +612,10 @@ class FrmField {
 	 * @return boolean
 	 */
 	public static function is_multiple_select( $field ) {
-		if ( is_array( $field ) ) {
-			return self::is_option_true( $field, 'multiple' ) && ( ( $field['type'] == 'select' || ( $field['type'] == 'data' && isset( $field['data_type'] ) && $field['data_type'] == 'select') ) );
-		} else {
-			return self::is_option_true( $field, 'multiple' ) && ( ( $field->type == 'select' || ( $field->type == 'data' && isset($field->field_options['data_type'] ) && $field->field_options['data_type'] == 'select') ) );
-		}
+		$field_type = is_array( $field ) ? $field['type'] : $field->type;
+		$data_type = self::get_option( $field, 'data_type' );
+
+		return self::is_option_true( $field, 'multiple' ) && ( ( $field_type == 'select' || ( $field_type == 'data' && $data_type == 'select') ) );
 	}
 
 	/**
@@ -693,7 +693,7 @@ class FrmField {
 	}
 
 	public static function get_option_in_array( $field, $option ) {
-		return $field[ $option ];
+		return isset( $field[ $option ] ) ? $field[ $option ] : '';
 	}
 
 	public static function get_option_in_object( $field, $option ) {
