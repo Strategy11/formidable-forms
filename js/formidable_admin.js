@@ -1440,7 +1440,7 @@ function frmAdminBuildJS(){
 		if (showDefaultValIcons) {
 			$defaultValueIcons.css('visibility', 'visible').fadeIn('slow');
 		} else {
-			$defaultValueIcons.css('visibility', 'hidden').fadeOut('slow');
+			$defaultValueIcons.css('visibility', 'visible').fadeOut('slow');
 		}
 	}
 
