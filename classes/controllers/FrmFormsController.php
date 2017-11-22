@@ -1007,6 +1007,39 @@ class FrmFormsController {
 				'href'  => admin_url( 'admin.php?page=formidable&frm_action=edit&id=' . current( array_keys( $actions ) ) ),
                 'id'    => 'frm-forms',
             ) );
+            if ( FrmAppHelper::pro_is_installed() ) {
+
+                global $post;
+                global $wpdb;
+
+                if ( is_singular() && !empty($post) ) {
+                    $entry_id = FrmDb::get_var( $wpdb->prefix . 'frm_items', array( 'post_id' => $post->ID ), 'id' );
+                }
+
+                if ( !empty( $entry_id ) ) {
+                    $wp_admin_bar->add_node( array(
+                        'parent' => 'frm-forms',
+                        'title'  => __( 'Edit Entry', 'formidable' ),
+                        'href'   => add_query_arg( array( 'page' => 'formidable-entries', 'frm_action' => 'edit',  'id' => intval( $entry_id ) ), admin_url( 'admin.php' ) ),
+                        'id'     => 'edit_entry_' . $entry_id,
+                    ) );
+                }
+            }
+
+            if ( !empty($frm_vars['display_id']) ) {
+                $view_id = $frm_vars['display_id'];
+            } else {
+                $view_id = FrmDb::get_var( $wpdb->postmeta, array( 'meta_key' => 'frm_form_id', 'meta_value' => current( array_keys( $actions ) ) ), 'post_id' );
+            }
+
+            if ( !empty( $view_id ) ) {
+                $wp_admin_bar->add_node( array(
+                    'parent' => 'frm-forms',
+                    'title'  => __( 'Edit View', 'formidable' ),
+                    'href'   => add_query_arg( array( 'post' => intval( $view_id ), 'action' => 'edit' ), admin_url( 'post.php' ) ),
+                    'id'     => 'edit_view_' . $view_id,
+                ) );
+            }
         } else {
             $wp_admin_bar->add_menu( array(
         		'id'    => 'frm-forms',
