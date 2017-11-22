@@ -699,16 +699,6 @@ function frmAdminBuildJS(){
 		}
 	}
 
-	function showDefaults(n,fval){
-		var defaults = jQuery('#frm_clear_on_focus_'+n+',#frm_clear_on_focus_'+n+' a, #frm_clear_on_focus_'+n+'_conf,#frm_clear_on_focus_'+n+'_conf a');
-		if(fval){
-			defaults.css('visibility','visible').fadeIn('slow');
-		}else{
-			defaults.css('visibility','visible').fadeOut('slow');
-		}
-		return false;
-	}
-
 	/**
 	 * Toggle a default value icon
 	 *
@@ -1054,17 +1044,6 @@ function frmAdminBuildJS(){
 		}
 
 	}
-
-    function triggerDefaults(){
-        var n = this.name;
-        if( typeof n == 'undefined'){
-            return false;
-        }
-        n = n.replace('[other]', '');
-        var end = n.indexOf(']');
-        n = n.substring(10, end);
-        showDefaults(n, jQuery(this).val());
-    }
 	
 	function blurField(e){
 		if(e.which == 13){
@@ -1436,6 +1415,61 @@ function frmAdminBuildJS(){
 		});
 	}
 
+	function triggerDefaults(){
+		var n = this.name;
+		if( typeof n === 'undefined'){
+			return false;
+		}
+
+		var fieldContainer = jQuery(this).closest('.frm_field_box');
+
+		maybeShowDefaultValIcons(fieldContainer);
+	}
+
+	/**
+	 * Show or hide the default value icons of a field
+	 *
+	 * @since 2.04.02
+	 *
+	 * @param {boolean} showDefaultValIcons
+	 * @param {object} $innerField
+	 */
+	function showOrHideDefaultValIcons(showDefaultValIcons, $innerField) {
+		var $defaultValueIcons = $innerField.find('.frm_default_val_icons');
+
+		if (showDefaultValIcons) {
+			$defaultValueIcons.css('visibility', 'visible').fadeIn('slow');
+		} else {
+			$defaultValueIcons.css('visibility', 'visible').fadeOut('slow');
+		}
+	}
+
+	/**
+	 * Determine if a field has default content and display the default value icons if it does
+	 *
+	 * @since 2.04.02
+	 *
+	 * @param {number} fieldId
+	 */
+	function maybeShowDefaultValIcons( $fieldInner ) {
+		var showDefaultValIcons = false;
+		var isComboOrConfirmationField = $fieldInner.find('.frm_multi_fields_container, .frm_inner_conf_container').length > 0;
+		var inputList = $fieldInner.find('input[name^="item_meta"], input[id^="conf_field"], select[name^="item_meta"], textarea[name^="item_meta"]');
+
+		jQuery(inputList).each( function(index) {
+
+			if (jQuery(this).val()) {
+				showDefaultValIcons = true;
+				return false;
+			} else if (!isComboOrConfirmationField) {
+				return false;
+			}
+
+		});
+
+		showOrHideDefaultValIcons(showDefaultValIcons, $fieldInner);
+	}
+
 	function getNewActionId() {
 		var len = 0;
 		if ( jQuery('.frm_form_action_settings:last').length ) {
@@ -1473,12 +1507,7 @@ function frmAdminBuildJS(){
 		if(obj.className.indexOf('edit_field_type_divider') !== -1){
 			$thisobj.find('.frm_default_val_icons').hide().css('visibility', 'hidden');
 		}else{
-			var i = $thisobj.find('input[name^="item_meta"], select[name^="item_meta"], textarea[name^="item_meta"]')[0];
-			if(jQuery(i).val()){
-				$thisobj.find('.frm_default_val_icons').show().css('visibility', 'visible');
-			}else{
-				$thisobj.find('.frm_default_val_icons').hide().css('visibility', 'hidden');
-			}
+			maybeShowDefaultValIcons($thisobj);
 		}
 
 		selected.removeClass('selected');
@@ -1494,7 +1523,7 @@ function frmAdminBuildJS(){
 			}
 		}
 	}
-	
+
 	function showEmailRow(){
 		var actionKey = jQuery(this).closest('.frm_form_action_settings').data('actionkey');
 		var rowType = this.getAttribute( 'data-emailrow' );
