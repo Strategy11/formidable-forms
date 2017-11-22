@@ -1044,21 +1044,6 @@ function frmAdminBuildJS(){
 		}
 
 	}
-
-    function triggerDefaults(){
-        var n = this.name;
-        if( typeof n === 'undefined'){
-            return false;
-        } else if ( this.type === 'text'  && this.value.length > 1 ) {
-        	// Don't waste time checking if icons should hide or show if value has more than one character
-        	return false;
-		}
-        n = n.replace('[other]', '');
-        var end = n.indexOf(']');
-        var fieldId = n.substring(10, end);
-
-        maybeShowDefaultValIcons(fieldId);
-    }
 	
 	function blurField(e){
 		if(e.which == 13){
@@ -1430,6 +1415,17 @@ function frmAdminBuildJS(){
 		});
 	}
 
+	function triggerDefaults(){
+		var n = this.name;
+		if( typeof n === 'undefined'){
+			return false;
+		}
+
+		var fieldContainer = jQuery(this).closest('.frm_field_box');
+
+		maybeShowDefaultValIcons(fieldContainer);
+	}
+
 	/**
 	 * Show or hide the default value icons of a field
 	 *
@@ -1455,20 +1451,17 @@ function frmAdminBuildJS(){
 	 *
 	 * @param {number} fieldId
 	 */
-	function maybeShowDefaultValIcons(fieldId) {
-		var $fieldInner = jQuery(document.getElementById('frm_field_id_' + fieldId));
+	function maybeShowDefaultValIcons( $fieldInner ) {
 		var showDefaultValIcons = false;
 		var isComboOrConfirmationField = $fieldInner.find('.frm_multi_fields_container, .frm_inner_conf_container').length > 0;
 		var inputList = $fieldInner.find('input[name^="item_meta"], input[id^="conf_field"], select[name^="item_meta"], textarea[name^="item_meta"]');
 
-		jQuery(inputList).each(function (index) {
+		jQuery(inputList).each( function(index) {
 
 			if (jQuery(this).val()) {
 				showDefaultValIcons = true;
 				return false;
-			}
-
-			if (!isComboOrConfirmationField) {
+			} else if (!isComboOrConfirmationField) {
 				return false;
 			}
 
@@ -1514,7 +1507,7 @@ function frmAdminBuildJS(){
 		if(obj.className.indexOf('edit_field_type_divider') !== -1){
 			$thisobj.find('.frm_default_val_icons').hide().css('visibility', 'hidden');
 		}else{
-			maybeShowDefaultValIcons($thisobj.data('fid'));
+			maybeShowDefaultValIcons($thisobj);
 		}
 
 		selected.removeClass('selected');
@@ -1530,7 +1523,7 @@ function frmAdminBuildJS(){
 			}
 		}
 	}
-	
+
 	function showEmailRow(){
 		var actionKey = jQuery(this).closest('.frm_form_action_settings').data('actionkey');
 		var rowType = this.getAttribute( 'data-emailrow' );
