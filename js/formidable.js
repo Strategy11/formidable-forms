@@ -385,10 +385,8 @@ function frmFrontFormJS(){
 
 	function shouldJSValidate( object ) {
 		var validate = jQuery(object).hasClass('frm_js_validate');
-		if ( validate ) {
-			if ( typeof frmProForm === 'undefined' || frmProForm.savingDraftEntry( object ) || frmProForm.goingToPreviousPage( object ) ) {
-				validate = false;
-			}
+		if ( validate && typeof frmProForm !== 'undefined' && ( frmProForm.savingDraft( object ) || frmProForm.goingToPreviousPage( object ) ) ) {
+			validate = false;
 		}
 
 		return validate;
