@@ -506,51 +506,149 @@ function frmAdminBuildJS(){
 		return false;
 	}
 
-	function checkMatchingParens(formula){
+
+	/**
+	 * Checks a string for parens, brackets, and curly braces and returns a message if any unmatched are found.
+	 * @param formula
+	 * @returns {string}
+	 */
+	function checkMatchingParens(formula) {
 
 		var stack = [],
 			formula_array = formula.split(''),
 			length = formula_array.length,
-			opening = ["{", "[", "(" ],
+			opening = ["{", "[", "("],
 			closing = {
 				"}": "{",
 				")": "(",
 				"]": "[",
 			},
-			unmatchedClosing=[],
-			msg='',
+			unmatchedClosing = [],
+			msg = '',
 			i, next, top;
 
-		for (i=0; i<length; i++){
-			if (opening.includes(formula_array[i])){
+		for (i = 0; i < length; i++) {
+			if (opening.includes(formula_array[i])) {
 				stack.push(formula_array[i]);
 				continue;
 			}
-			if (closing.hasOwnProperty(formula_array[i])){
+			if (closing.hasOwnProperty(formula_array[i])) {
 				top = stack.pop();
-				if (top !== closing[formula_array[i]] ){
+				if (top !== closing[formula_array[i]]) {
 					unmatchedClosing.push(formula_array[i])
 				}
 			}
 		}
 
-		if (stack.length > 0 || unmatchedClosing.length > 0){
-			msg = 'has unmatched ';
+		if (stack.length > 0 || unmatchedClosing.length > 0) {
+			msg = '***This calculation has at least one unmatched ( ) { } [ ].***\n\n';
+			/*
+			//a more specific message option that has opening and closing grouped, with only the first unmatched
+			 closing listed
 			msg += stack.length > 0 ? 'opening ' + stack.join(' '):'';
 			msg +=(stack.length > 0 && unmatchedClosing.length > 0)? 'and ': '';
 			msg += unmatchedClosing.length > 0 ? 'closing ' + unmatchedClosing.join(' '):'';
+			msg += '\n';
+			*/
 			return msg;
 		}
 
-		return 'valid';
+		return '';
+	}
+	
+	/**
+	 * Returns a regular expression of shortcodes that can't be used in forms (but can be used in Views, Email
+	 * Notifications, and other Formidable areas.
+	 * 
+	 * @returns {RegExp}
+	 */
+	function getNonFormShortcodes() {
+		return /\[(key|id\]|created|updated)/;
 	}
 
-	function checkCalculationFromUser(){
-		var formula = this.value;
-		var checkMessage = checkMatchingParens(formula);
+	/**
+	 * Checks if a string has any shortcodes that do not belong in forms and returns a message if any are found.
+	 * @param formula
+	 * @returns {string}
+	 */
+	function checkNonFormShortcodes(formula) {
+		var nonFormShortcodes = getNonFormShortcodes(),
+			msg = '';
 
-		if (checkMessage != 'valid'){
-			alert("Your formula \n\n" + formula + "\n\n" + checkMessage );
+		if (nonFormShortcodes.test(formula)) {
+			msg += "***This calculation may have default shortcodes like [id] or [created_at].***\n\n";
+			msg += "These shortcodes aren't for use in forms.  You can use them in Views, Email Notifications,";
+			msg += "and other Formidable locations.\n\n";
+		}
+
+		return msg;
+	}
+
+	/**
+	 * Determines if the calculation input is from a text calculation.
+	 * 
+	 * @param inputElement
+	 */
+	function isTextCalculation(inputElement) {
+		return jQuery(inputElement).siblings("label[for^='calc_type']").children("input").prop("checked");
+	}
+	
+	/**
+	 * Returns a regular expression of shortcodes that can't be used in numeric calculations.
+	 * @returns {RegExp}
+	 */
+	function getNonNumericShortcodes() {
+		return /\[(date|time|email|ip\])/;
+	}
+
+	/**
+	 * Checks if a numeric calculation has shortcodes that output non-numeric strings and returns a message if found.
+	 * @param calculation
+	 * @param inputElement
+	 * @returns {string}
+	 */
+	function checkNonNumericShortcodes(calculation, inputElement) {
+
+		var msg = '';
+
+		if (isTextCalculation(inputElement)) {
+			return msg;
+		}
+
+		var nonNumericShortcodes = getNonNumericShortcodes();
+
+		if (nonNumericShortcodes.test(calculation)) {
+			msg = "***This calculation may have default shortcodes like [date] or [time].***\n\n";
+			msg += "These shortcodes don't work properly in numerical calculations.\n";
+			msg += "You can use them in text calculations or as default values in text fields.\n\n";
+		}
+
+		return msg;
+	}
+
+	/**
+	 * Checks a calculation for shortcodes that shouldn't be in it and returns a message if found.
+	 * @param calculation
+	 * @param inputElement
+	 * @returns {string}
+	 */
+	function checkShortcodes(calculation, inputElement) {
+		var nonNumericShortcodesMessage = checkNonNumericShortcodes(calculation, inputElement);
+		var nonFormShortcodesMessage = checkNonFormShortcodes(calculation);//change once add function
+
+		var msg = nonNumericShortcodesMessage;
+		msg += nonFormShortcodesMessage;
+
+		return msg;
+	}
+
+	function checkCalculationCreatedByUser() {
+		var calculation = this.value;
+		var warningMessage = checkMatchingParens(calculation);
+		warningMessage += checkShortcodes(calculation, this);
+
+		if (warningMessage != '') {
+			alert("The calculation you just entered is\n\n" + calculation + "\n\n" + warningMessage);
 		}
 	}
 	
@@ -2559,7 +2657,7 @@ function frmAdminBuildJS(){
 			jQuery(document.getElementById('frm-insert-fields')).on('click', '.frm_add_field', addFieldClick);
 			$newFields.on('click', '.frm_duplicate_icon', duplicateField);
 			$newFields.on('click', '.use_calc', popCalcFields);
-			$newFields.on('change', 'input[id^="frm_calc"]', checkCalculationFromUser);
+			$newFields.on('change', 'input[id^="frm_calc"]', checkCalculationCreatedByUser);
 			$newFields.on('click', 'input.frm_req_field', markRequired);
 			$newFields.on('click', 'a.frm_req_field', clickRequired);
 			$newFields.on('click', '.frm_mark_unique', markUnique);
