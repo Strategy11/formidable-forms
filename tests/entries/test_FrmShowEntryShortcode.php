@@ -740,7 +740,14 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		$table .= $this->two_cell_table_row( 'free-number-field', $atts );
 		$table .= $this->two_cell_table_row( 'free-phone-field', $atts );
 		$table .= $this->two_cell_table_row( 'free-hidden-field', $atts );
-		//$table .= $this->one_cell_table_row( 'free-html-field', $atts );
+
+  		if ( ! empty( $atts['include_extras'] ) ) {
+  			$include_extras = array_map( 'trim', explode( ',',  $atts['include_extras'] ) );
+
+  			if ( $this->is_pro_active && in_array( 'html', $include_extras ) ) {
+				$table .= $this->one_cell_table_row( 'free-html-field', $atts );
+  			}
+  		}
 
 		$table .= $this->user_info_rows( $atts );
 
@@ -760,7 +767,14 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		$content .= $this->label_and_value_plain_text_row( 'free-number-field', $atts );
 		$content .= $this->label_and_value_plain_text_row( 'free-phone-field', $atts );
 		$content .= $this->label_and_value_plain_text_row( 'free-hidden-field', $atts );
-		//$content .= $this->single_value_plain_text_row( 'free-html-field', $atts );
+
+  		if ( ! empty( $atts['include_extras'] ) ) {
+  			$include_extras = array_map( 'trim', explode( ',',  $atts['include_extras'] ) );
+
+  			if ( $this->is_pro_active && in_array( 'html', $include_extras ) ) {
+				$content .= $this->single_value_plain_text_row( 'free-html-field', $atts );
+  			}
+  		}
 
 		$content .= $this->user_info_plain_text_rows( $atts );
 
