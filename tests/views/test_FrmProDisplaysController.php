@@ -2596,6 +2596,10 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_where_query_for_view_listing_page
 	 */
 	function test_query_size_for_no_filter_view() {
+		if ( ! version_compare( PHP_VERSION, '5.3.2', '>=' ) ) {
+			$this->markTestSkipped( 'ReflectionMethod::setAccessible() requires PHP 5.3.2 or higher.' );
+		}
+
 		$view = self::get_view_by_key( 'dynamic-view' );
 		$atts = self::get_default_atts_for_view( $view );
 
@@ -2613,6 +2617,10 @@ class WP_Test_FrmProDisplaysController extends FrmUnitTest {
 	 * @covers FrmProDisplaysController::get_where_query_for_view_listing_page
 	 */
 	function test_query_size_for_draft_filter_view() {
+		if ( ! version_compare( PHP_VERSION, '5.3.2', '>=' ) ) {
+			$this->markTestSkipped( 'ReflectionMethod::setAccessible() requires PHP 5.3.2 or higher.' );
+		}
+		
 		$view = self::get_view_by_key( 'dynamic-view' );
 		$atts = self::get_default_atts_for_view( $view );
 

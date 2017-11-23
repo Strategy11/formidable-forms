@@ -35,6 +35,10 @@ class WP_Test_FrmProAppHelper extends FrmUnitTest {
 	 * @covers FrmProAppHelper::prepare_dfe_text
 	 */
 	function test_prepare_dfe_text() {
+		if ( ! version_compare( PHP_VERSION, '5.3.2', '>=' ) ) {
+			$this->markTestSkipped( 'ReflectionMethod::setAccessible() requires PHP 5.3.2 or higher.' );
+		}
+		
 		$test_values_array = self::_setup_test_values();
 
 		foreach( $test_values_array as $test_values ) {
