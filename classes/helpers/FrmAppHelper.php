@@ -153,8 +153,21 @@ class FrmAppHelper {
      * @return boolean
      */
     public static function doing_ajax() {
-        return defined('DOING_AJAX') && DOING_AJAX && ! self::is_preview_page();
+        return self::wp_doing_ajax() && ! self::is_preview_page();
     }
+
+	/**
+	 * Use the WP 4.7 wp_doing_ajax function
+	 * @sine 2.05.07
+	 */
+	public static function wp_doing_ajax() {
+		if ( function_exists( 'wp_doing_ajax' ) ) {
+			$doing_ajax = wp_doing_ajax();
+		} else {
+			$doing_ajax = defined('DOING_AJAX') && DOING_AJAX;
+		}
+		return $doing_ajax;
+	}
 
 	/**
 	 * @since 2.0.8
@@ -173,7 +186,7 @@ class FrmAppHelper {
      * @return boolean
      */
     public static function is_admin() {
-        return is_admin() && ( ! defined('DOING_AJAX') || ! DOING_AJAX );
+        return is_admin() && ! self::wp_doing_ajax() );
     }
 
     /**
