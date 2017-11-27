@@ -186,7 +186,7 @@ class FrmAppHelper {
      * @return boolean
      */
     public static function is_admin() {
-        return is_admin() && ! self::wp_doing_ajax() );
+        return is_admin() && ! self::wp_doing_ajax();
     }
 
     /**
