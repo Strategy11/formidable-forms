@@ -507,7 +507,10 @@ class test_FrmProShowEntryShortcode extends test_FrmShowEntryShortcode {
 	protected function expected_html_content( $atts ) {
 		$table = $this->table_header( $atts );
 
-		$table .= $this->text_field_html( $atts );
+		if ( ! isset( $this->exclude_fields['text-field'] ) ) {
+			$table .= $this->text_field_html( $atts );
+		}
+
 		$table .= $this->paragraph_to_website_html( $atts );
 		$table .= $this->page_break_html( $atts );
 		$table .= $this->pro_fields_divider_html( $atts );
@@ -769,7 +772,7 @@ class test_FrmProShowEntryShortcode extends test_FrmShowEntryShortcode {
 				break;
 
 			case 'cb-sep-values':
-				$value = 'Option 1, Option 2';
+				$value = 'Red, Orange';
 				break;
 
 			case 'user-id-field':
