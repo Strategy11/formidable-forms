@@ -31,17 +31,21 @@ class FrmUnitTest extends WP_UnitTestCase {
 		// Some of the tests for FrmDb are triggering a transaction commit, preventing further tests from working.
 		// This is a temporary workaround until we review FrmDb tests in detail.
 		global $wpdb;
-		if ( $wpdb->get_var( "SHOW TABLES LIKE '{$wpdb->prefix}frm_fields'" ) )
+		if ( $wpdb->get_var( "SHOW TABLES LIKE '{$wpdb->prefix}frm_fields'" ) ) {
 			$wpdb->query( "TRUNCATE {$wpdb->prefix}frm_fields" );
+		}
 
-		if ( $wpdb->get_var( "SHOW TABLES LIKE '{$wpdb->prefix}frm_forms'" ) )
+		if ( $wpdb->get_var( "SHOW TABLES LIKE '{$wpdb->prefix}frm_forms'" ) ) {
 			$wpdb->query( "TRUNCATE {$wpdb->prefix}frm_forms" );
+		}
 
-		if ( $wpdb->get_var( "SHOW TABLES LIKE '{$wpdb->prefix}frm_item_metas'" ) )
+		if ( $wpdb->get_var( "SHOW TABLES LIKE '{$wpdb->prefix}frm_item_metas'" ) ) {
 			$wpdb->query( "TRUNCATE {$wpdb->prefix}frm_item_metas" );
+		}
 
-		if ( $wpdb->get_var( "SHOW TABLES LIKE '{$wpdb->prefix}frm_items'" ) )
+		if ( $wpdb->get_var( "SHOW TABLES LIKE '{$wpdb->prefix}frm_items'" ) ) {
 			$wpdb->query( "TRUNCATE {$wpdb->prefix}frm_items" );
+		}
 
 		$this->is_pro_active = FrmAppHelper::pro_is_installed();
 
