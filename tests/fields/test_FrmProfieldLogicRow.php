@@ -78,7 +78,7 @@ class test_FrmProfieldLogicRow extends FrmUnitTest {
 		$form_fields = FrmField::get_all_for_form( $form_id );
 
 		ob_start();
-		include( FrmAppHelper::plugin_path() . '/pro/classes/views/frmpro-fields/_logic_row.php' );
+		include( FrmProAppHelper::plugin_path() . '/classes/views/frmpro-fields/_logic_row.php' );
 		$logic_row = ob_get_contents();
 		ob_end_clean();
 

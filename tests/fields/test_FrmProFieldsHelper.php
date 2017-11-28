@@ -27,9 +27,10 @@ class WP_Test_FrmProFieldsHelper extends FrmUnitTest {
 	function test_displayed_image_file_in_view() {
 		$att_combinations = self::get_file_att_combinations_for_testing();
 		$media_ids = self::get_media_ids_from_database( 'single-file-upload-field', 'jamie_entry_key' );
+		$field = FrmField::getOne( 'single-file-upload-field' );
 
 		foreach ( $att_combinations as $atts ) {
-			$displayed_value = FrmProFieldsHelper::get_file_display_value( $media_ids, $atts );
+			$displayed_value = FrmFieldsHelper::get_unfiltered_display_value( array( 'value' => $media_ids, 'field' => $field, 'atts' => $atts ) );
 			self::run_tests_on_displayed_html( $media_ids, $displayed_value, $atts );
 		}
 	}
@@ -43,9 +44,10 @@ class WP_Test_FrmProFieldsHelper extends FrmUnitTest {
 	function test_displayed_files_in_view() {
 		$att_combinations = self::get_file_att_combinations_for_testing();
 		$media_ids = self::get_media_ids_from_database( 'multi-file-upload-field', 'jamie_entry_key' );
+		$field = FrmField::getOne( 'multi-file-upload-field' );
 
 		foreach ( $att_combinations as $atts ) {
-			$displayed_value = FrmProFieldsHelper::get_file_display_value( $media_ids, $atts );
+			$displayed_value = FrmFieldsHelper::get_unfiltered_display_value( array( 'value' => $media_ids, 'field' => $field, 'atts' => $atts ) );
 			self::run_tests_on_displayed_html( $media_ids, $displayed_value, $atts );
 		}
 	}
@@ -57,9 +59,10 @@ class WP_Test_FrmProFieldsHelper extends FrmUnitTest {
 	function test_displayed_non_image_file_in_view() {
 		$att_combinations = self::get_file_att_combinations_for_testing();
 		$media_ids = self::get_media_ids_from_database( 'single-file-upload-field', 'steph_entry_key' );
+		$field = FrmField::getOne( 'single-file-upload-field' );
 
 		foreach ( $att_combinations as $atts ) {
-			$displayed_value = FrmProFieldsHelper::get_file_display_value( $media_ids, $atts );
+			$displayed_value = FrmFieldsHelper::get_unfiltered_display_value( array( 'value' => $media_ids, 'field' => $field, 'atts' => $atts ) );
 			self::run_tests_on_displayed_html( $media_ids, $displayed_value, $atts );
 		}
 	}
@@ -72,8 +75,9 @@ class WP_Test_FrmProFieldsHelper extends FrmUnitTest {
 	function test_displayed_image_file_modified_with_custom_code() {
 		$media_ids = 'custom image';
 		$atts = array();
+		$field = FrmField::getOne( 'single-file-upload-field' );
 
-		$displayed_value = FrmProFieldsHelper::get_file_display_value( $media_ids, $atts );
+		$displayed_value = FrmFieldsHelper::get_unfiltered_display_value( array( 'value' => $media_ids, 'field' => $field, 'atts' => $atts ) );
 		$this->assertEquals( $media_ids, $displayed_value, 'Displayed image value that was modified with custom code is being overridden.');
 	}
 
@@ -85,8 +89,9 @@ class WP_Test_FrmProFieldsHelper extends FrmUnitTest {
 	function test_displayed_files_modified_with_custom_code() {
 		$media_ids = array( 'custom image 1', '<img src="hello.png" />' );
 		$atts = array();
+		$field = FrmField::getOne( 'single-file-upload-field' );
 
-		$displayed_value = FrmProFieldsHelper::get_file_display_value( $media_ids, $atts );
+		$displayed_value = FrmFieldsHelper::get_unfiltered_display_value( array( 'value' => $media_ids, 'field' => $field, 'atts' => $atts ) );
 		$expected_value = implode( ', ', $media_ids );
 		$this->assertEquals( $expected_value, $displayed_value, 'Displayed image value that was modified with custom code is being overridden.');
 	}
@@ -99,8 +104,9 @@ class WP_Test_FrmProFieldsHelper extends FrmUnitTest {
 	function test_displayed_files_with_no_value() {
 		$media_ids = array( '', '<img src="hello.png" />' );
 		$atts = array();
+		$field = FrmField::getOne( 'single-file-upload-field' );
 
-		$displayed_value = FrmProFieldsHelper::get_file_display_value( $media_ids, $atts );
+		$displayed_value = FrmFieldsHelper::get_unfiltered_display_value( array( 'value' => $media_ids, 'field' => $field, 'atts' => $atts ) );
 		$expected_value = '<img src="hello.png" />';
 		$this->assertEquals( $expected_value, $displayed_value, 'An empty image value is not displayed correctly.');
 	}
