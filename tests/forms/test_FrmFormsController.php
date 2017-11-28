@@ -143,6 +143,11 @@ class WP_Test_FrmFormsController extends FrmUnitTest {
 		FrmFormsController::front_head();
 		$this->assertTrue( wp_script_is( 'formidable', 'registered' ), 'The formidable js was not registered' );
 
+		$wp_version = get_bloginfo( 'version' );
+		if ( version_compare( $wp_version, '4.0', '<=' ) ) {
+			$this->markTestSkipped('This fails in WP 4.0');
+		}
+
 		global $wp_scripts;
 		$formidable_js = $wp_scripts->registered['formidable'];
 
