@@ -372,23 +372,23 @@ DEFAULT_HTML;
 		return $position;
 	}
 
-
 	/**
-	 * Determine if a form has fields with top labels to align the submit button properly
+	 * Determine if a form has fields with top labels so submit button can be aligned properly
 	 *
 	 * @param $fields
 	 * @param $form
 	 *
 	 * @return bool
 	 */
-	public static function form_has_top_labels( $fields, $form ) {
+
+	private static function form_has_top_labels( $form ) {
+		$fields = $form['fields'];
 		if ( ! isset( $fields[0] ) ) {
 			return false;
 		}
 
 		return self::field_has_top_label( $fields[0], $form );
 	}
-
 
 	/**
 	 * Check if a field's label position is set to "top"
@@ -400,12 +400,24 @@ DEFAULT_HTML;
 	 */
 	private static function field_has_top_label( $field, $form ) {
 
-		$label_pos = self::label_position( $field['label'], $field, $form );
-		if ( 'top' == $label_pos ) {
-			return true;
+		$label_position = self::label_position( $field['label'], $field, $form );
+		return in_array( $label_position, array( 'top', 'inside', 'hidden' ) );
+	}
+
+	/**
+	 * Returns appropriate class if form has top labels
+	 *
+	 * @param $form
+	 *
+	 * @return string
+	 */
+	public static function maybe_return_inline_submit_top_class( $form ) {
+
+		if ( self::form_has_top_labels( $form ) ) {
+			return ' frm_inline_submit_top';
 		}
 
-		return false;
+		return '';
 	}
 
 	/**

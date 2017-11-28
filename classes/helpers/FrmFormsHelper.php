@@ -267,7 +267,7 @@ class FrmFormsHelper {
 		if ( $loc == 'submit' ) {
             $draft_link = self::get_draft_link();
             $default_html = <<<SUBMIT_HTML
-<div class="frm_submit [inline_submit]">
+<div class="frm_submit">
 [if back_button]<button type="submit" name="frm_prev_page" formnovalidate="formnovalidate" class="frm_prev_page" [back_hook]>[back_label]</button>[/if back_button]
 <button class="frm_button_submit" type="submit"  [button_action]>[button_label]</button>
 $draft_link
@@ -292,33 +292,10 @@ BEFORE_HTML;
     }
 
 
-	/**
-	 * Adds appropriate inline submit class if the inline setting for the submit button is selected
-	 *
-	 * @param $button_html
-	 * @param $form
-	 * @param $form_has_top_labels
-	 *
-	 * @return string  button HTML, possibly with inline submit class
-	 */
-	private static function maybe_add_inline_submit_class( $button_html, $form, $form_has_top_labels ) {
-		$inline_class = "";
-		$submit_align = self::get_submit_align( $form );
 
-		if ( 'inline' == $submit_align ) {
-			if ( $form_has_top_labels ) {
-				$inline_class = 'frm_inline_submit ';
-			} else {
-				$inline_class = 'frm_inline_submit_top ';
-			}
-		}
 
-		return str_replace( '[inline_submit]', $inline_class, $button_html );
-	}
-
-	public static function get_custom_submit( $html, $form, $submit, $form_action, $values, $form_has_top_labels ) {
+	public static function get_custom_submit( $html, $form, $submit, $form_action, $values ) {
 		$button = self::replace_shortcodes( $html, $form, $submit, $form_action, $values );
-		$button = self::maybe_add_inline_submit_class( $button, $form, $form_has_top_labels );
 		if ( ! strpos( $button, '[button_action]' ) ) {
 			echo $button;
 			return;
@@ -527,6 +504,7 @@ BEFORE_HTML;
 
 		if ( $submit_align == 'inline' ) {
 			$class .= ' frm_inline_form';
+			$class .= FrmFieldsHelper::maybe_return_inline_submit_top_class( $form );
 		} else if ( $submit_align == 'center' ) {
 			$class .= ' frm_center_submit';
 		}
