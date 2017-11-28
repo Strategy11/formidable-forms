@@ -4,7 +4,7 @@ if ( ! defined('ABSPATH') ) {
 }
 
 class FrmAppHelper {
-	public static $db_version = 48; //version of the database we are moving to
+	public static $db_version = 54; //version of the database we are moving to
 	public static $pro_db_version = 37; //deprecated
 
 	/**
@@ -162,6 +162,10 @@ class FrmAppHelper {
     public static function doing_ajax() {
         return defined('DOING_AJAX') && DOING_AJAX && ! self::is_preview_page();
     }
+
+	public static function js_suffix() {
+		return defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+	}
 
 	/**
 	 * @since 2.0.8

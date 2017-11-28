@@ -1412,11 +1412,10 @@ class FrmFormsController {
 
 	public static function front_head() {
 		$version = FrmAppHelper::plugin_version();
-		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
-		$combo_file_exists = is_readable( FrmAppHelper::plugin_path() . '/js/frm.js' );
+		$suffix = FrmAppHelper::js_suffix();
 
-		if ( empty( $suffix ) && $combo_file_exists ) {
-			wp_register_script( 'formidable', FrmAppHelper::plugin_url() . '/js/frm.js', array( 'jquery' ), $version, true );
+		if ( empty( $suffix ) && self::has_combo_js_file() ) {
+			wp_register_script( 'formidable', FrmAppHelper::plugin_url() . '/js/frm.min.js', array( 'jquery' ), $version, true );
 		} else {
 			wp_register_script( 'formidable', FrmAppHelper::plugin_url() . "/js/formidable{$suffix}.js", array( 'jquery' ), $version, true );
 			wp_register_script( 'jquery-placeholder', FrmAppHelper::plugin_url() . '/js/jquery/jquery.placeholder.min.js', array( 'jquery' ), '2.3.1', true );
@@ -1431,6 +1430,13 @@ class FrmFormsController {
 
 		FrmAppHelper::localize_script( 'front' );
 		FrmStylesController::enqueue_css( 'register' );
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	public static function has_combo_js_file() {
+		return is_readable( FrmAppHelper::plugin_path() . '/js/frm.min.js' );
 	}
 
 	public static function maybe_load_css( $form, $this_load, $global_load ) {
