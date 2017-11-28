@@ -140,18 +140,13 @@ class WP_Test_FrmFormsController extends FrmUnitTest {
 	function test_front_head() {
 		$this->assertTrue( FrmFormsController::has_combo_js_file(), 'The combo file was not created' );
 
-		$is_min = FrmAppHelper::js_suffix() == '.min';
-		$this->run_front_head( $is_min );
-	}
-
-	private function run_front_head( $is_min ) {
 		FrmFormsController::front_head();
 		$this->assertTrue( wp_script_is( 'formidable', 'registered' ), 'The formidable js was not registered' );
 
 		global $wp_scripts;
 		$formidable_js = $wp_scripts->registered['formidable'];
 
-		if ( $is_min ) {
+		if ( FrmAppHelper::js_suffix() == '.min' ) {
 			$this->assertEquals( FrmAppHelper::plugin_url() . '/js/frm.min.js', $formidable_js->src, 'frm.min.js was not loaded' );
 		} else {
 			$this->assertEquals( FrmAppHelper::plugin_url() . '/js/formidable.js', $formidable_js->src, 'formidable.js was not loaded' );
