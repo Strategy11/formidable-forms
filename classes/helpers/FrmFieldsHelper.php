@@ -375,7 +375,6 @@ DEFAULT_HTML;
 	/**
 	 * Determine if a form has fields with top labels so submit button can be aligned properly
 	 *
-	 * @param $fields
 	 * @param $form
 	 *
 	 * @return bool
@@ -383,11 +382,12 @@ DEFAULT_HTML;
 
 	private static function form_has_top_labels( $form ) {
 		$fields = $form['fields'];
-		if ( ! isset( $fields[0] ) ) {
+
+		if ( count( $fields ) <= 0 ) {
 			return false;
 		}
 
-		return self::field_has_top_label( $fields[0], $form );
+		return self::field_has_top_label( reset( $fields ), $form );
 	}
 
 	/**
@@ -399,6 +399,10 @@ DEFAULT_HTML;
 	 * @return bool
 	 */
 	private static function field_has_top_label( $field, $form ) {
+
+		if ($field === false){
+			return false;
+		}
 
 		$label_position = self::label_position( $field['label'], $field, $form );
 		return in_array( $label_position, array( 'top', 'inside', 'hidden' ) );
