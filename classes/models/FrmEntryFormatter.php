@@ -84,6 +84,12 @@ class FrmEntryFormatter {
 	protected $single_cell_fields = array();
 
 	/**
+	 * @var array
+	 * @since 3.0
+	 */
+	protected $atts = array();
+
+	/**
 	 * FrmEntryFormat constructor
 	 *
 	 * @since 2.04
@@ -112,6 +118,8 @@ class FrmEntryFormatter {
 			$this->init_table_generator( $atts );
 			$this->init_is_clickable( $atts );
 		}
+
+		$this->init_atts( $atts );
 	}
 
 	/**
@@ -318,6 +326,27 @@ class FrmEntryFormatter {
 	}
 
 	/**
+	 * Save the passed atts for other calls. Exclude some attributes to prevent
+	 * interaction with processing field values like time format.
+	 *
+	 * @since 3.0
+	 */
+	protected function init_atts( $atts ) {
+		$atts['source'] = 'entry_formatter';
+		$atts['wpautop'] = false;
+		$atts['return_array'] = true;
+
+		$unset = array( 'id', 'entry', 'fields', 'form_id', 'format' );
+		foreach ( $unset as $param ) {
+			if ( isset( $atts[ $param ] ) ){
+				unset( $atts[ $param ] );
+			}
+		}
+
+		$this->atts = $atts;
+	}
+
+	/**
 	 * Get the field key or ID, depending on array_key property
 	 *
 	 * @since 2.05
@@ -391,18 +420,12 @@ class FrmEntryFormatter {
 	 * @param string $content
 	 */
 	protected function add_field_values_to_content( &$content ) {
-		$field_value_atts = array(
-			'source'       => 'entry_formatter',
-			'wpautop'      => false,
-			'return_array' => true,
-		);
-
 		foreach ( $this->entry_values->get_field_values() as $field_id => $field_value ) {
 
 			/**
 			 * @var FrmFieldValue $field_value
 			 */
-			$field_value->prepare_displayed_value( $field_value_atts );
+			$field_value->prepare_displayed_value( $this->atts );
 			$this->add_field_value_to_content( $field_value, $content );
 		}
 	}
@@ -447,17 +470,11 @@ class FrmEntryFormatter {
 	 * @param array $output
 	 */
 	protected function push_field_values_to_array( $field_values, &$output ) {
-		$field_value_atts = array(
-			'source' => 'entry_formatter',
-			'wpautop' => false,
-			'return_array' => true,
-		);
-
 		foreach ( $field_values as $field_value ) {
 			/**
 			 * @var FrmFieldValue $field_value
 			 */
-			$field_value->prepare_displayed_value( $field_value_atts );
+			$field_value->prepare_displayed_value( $this->atts );
 			$this->push_single_field_to_array( $field_value, $output );
 		}
 	}
@@ -732,10 +749,10 @@ class FrmEntryFormatter {
 	protected function include_field_in_content( $field_value ) {
 		$include = true;
 
-		if ( FrmAppHelper::is_empty_value( $field_value->get_displayed_value() ) && ! $this->include_blank ) {
-			$include = false;
-		} else if ( $this->is_extra_field( $field_value ) ) {
+		if ( $this->is_extra_field( $field_value ) ) {
 			$include = $this->is_extra_field_included( $field_value );
+		} elseif ( FrmAppHelper::is_empty_value( $field_value->get_displayed_value() ) && ! $this->include_blank ) {
+			$include = false;
 		}
 
 		return $include;
