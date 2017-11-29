@@ -104,7 +104,6 @@ class test_FrmProEmailWithAttachment extends FrmUnitTest {
 
 		$file_field = FrmFieldFactory::get_field_type( 'file' );
 		$file_name = $file_field->get_displayed_file_html( $media_id, 'thumbnail', array( 'show_filename' => true ) );
-		// $file_name = FrmProFieldsHelper::get_displayed_file_html( $media_id, 'thumbnail', array( 'show_filename' => true ) );
 
 		$content_type = 'Content-Type: text/xml; name="' . $file_name . '"';
 		$this->assertContains( $content_type, $body );
