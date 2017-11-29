@@ -392,8 +392,9 @@ class FrmEntryFormatter {
 	 */
 	protected function add_field_values_to_content( &$content ) {
 		$field_value_atts = array(
-			'source' => 'entry_formatter',
-			'wpautop' => false,
+			'source'       => 'entry_formatter',
+			'wpautop'      => false,
+			'return_array' => true,
 		);
 
 		foreach ( $this->entry_values->get_field_values() as $field_id => $field_value ) {
