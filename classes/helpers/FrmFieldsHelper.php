@@ -1167,40 +1167,46 @@ DEFAULT_HTML;
 
 	public static function clear_on_focus_html( $field, $display, $id = '' ) {
 		if ( $display['clear_on_focus'] ) {
+			$has_default_value = ! empty( $field['default_value'] );
 			echo '<span id="frm_clear_on_focus_' . esc_attr( $field['id'] . $id ) . '" class="frm-show-click">';
 
 			if ( $display['default_blank'] ) {
-				self::show_default_blank_js( $field['default_blank'] );
+				self::show_default_blank_js( $field['default_blank'], $has_default_value );
 				echo '<input type="hidden" name="field_options[default_blank_' . esc_attr( $field['id'] ) . ']" value="' . esc_attr( $field['default_blank'] ) . '" />';
 			}
 
-			self::show_onfocus_js( $field['clear_on_focus'] );
+			self::show_onfocus_js( $field['clear_on_focus'], $has_default_value );
 			echo '<input type="hidden" name="field_options[clear_on_focus_' . esc_attr( $field['id'] ) . ']" value="' . esc_attr( $field['clear_on_focus'] ) . '" />';
 
 			echo '</span>';
 		}
 	}
 
-	public static function show_onfocus_js( $is_selected ) {
+	public static function show_onfocus_js( $is_selected, $has_default_value = true ) {
 		$atts = array(
 			'icon'        => 'frm_reload_icon',
 			'message'     => $is_selected ? __( 'Clear default value when typing', 'formidable' ) : __( 'Do not clear default value when typing', 'formidable' ),
 			'is_selected' => $is_selected,
+			'has_default' => $has_default_value,
 		);
 		self::show_icon_link_js( $atts );
 	}
 
-	public static function show_default_blank_js( $is_selected ) {
+	public static function show_default_blank_js( $is_selected, $has_default_value = true ) {
 		$atts = array(
 			'icon'        => 'frm_error_icon',
 			'message'     => $is_selected ? __( 'Default value will NOT pass form validation', 'formidable' ) : __( 'Default value will pass form validation', 'formidable' ),
 			'is_selected' => $is_selected,
+			'has_default' => $has_default_value,
 		);
 		self::show_icon_link_js( $atts );
 	}
 
 	public static function show_icon_link_js( $atts ) {
 		$atts['icon'] .= $atts['is_selected'] ? ' ' : ' frm_inactive_icon ';
+		if ( isset( $atts['has_default'] ) && ! $atts['has_default'] ) {
+			$atts['icon'] .= 'frm_hidden ';
+		}
 		?><a href="javascript:void(0)" class="frm_bstooltip <?php echo esc_attr( $atts['icon'] ); ?>frm_default_val_icons frm_action_icon frm_icon_font" title="<?php echo esc_attr( $atts['message'] ); ?>"></a><?php
 	}
 
