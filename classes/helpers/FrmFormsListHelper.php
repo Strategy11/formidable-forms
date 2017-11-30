@@ -43,7 +43,7 @@ class FrmFormsListHelper extends FrmListHelper {
 		        break;
 		}
 
-		$s = FrmAppHelper::get_simple_request( array( 'param' => 's', 'sanitize' => 'sanitize_text_field' ) );
+		$s = self::get_param( array( 'param' => 's', 'sanitize' => 'sanitize_text_field' ) );
 	    if ( $s != '' ) {
 	        preg_match_all('/".*?("|$)|((?<=[\\s",+])|^)[^\\s",+]+/', $s, $matches);
 		    $search_terms = array_map('trim', $matches[0]);
