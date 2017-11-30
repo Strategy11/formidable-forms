@@ -2,18 +2,27 @@
 
 class FrmEntriesController {
 
-    public static function menu() {
+	public static function menu() {
 		FrmAppHelper::force_capability( 'frm_view_entries' );
 
-        add_submenu_page('formidable', 'Formidable | ' . __( 'Entries', 'formidable' ), __( 'Entries', 'formidable' ), 'frm_view_entries', 'formidable-entries', 'FrmEntriesController::route' );
+		add_submenu_page('formidable', 'Formidable | ' . __( 'Entries', 'formidable' ), __( 'Entries', 'formidable' ), 'frm_view_entries', 'formidable-entries', 'FrmEntriesController::route' );
 
+		self::load_manage_entries_hooks();
+	}
+
+	/**
+	 * @since 2.05.07
+	 */
+	private static function load_manage_entries_hooks() {
 		if ( ! in_array( FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' ), array( 'edit', 'show' ) ) ) {
 			$menu_name = FrmAppHelper::get_menu_name();
-			add_filter( 'manage_' . sanitize_title( $menu_name ) . '_page_formidable-entries_columns', 'FrmEntriesController::manage_columns' );
-			add_filter( 'get_user_option_manage' . sanitize_title( $menu_name ) . '_page_formidable-entriescolumnshidden', 'FrmEntriesController::hidden_columns' );
-			add_filter( 'manage_' . sanitize_title( $menu_name ) . '_page_formidable-entries_sortable_columns', 'FrmEntriesController::sortable_columns' );
-        }
-    }
+			$base = self::base_column_key( $menu_name );
+
+			add_filter( 'manage_' . $base . '_columns', 'FrmEntriesController::manage_columns' );
+			add_filter( 'get_user_option_' . self::hidden_column_key( $menu_name ), 'FrmEntriesController::hidden_columns' );
+			add_filter( 'manage_' . $base . '_sortable_columns', 'FrmEntriesController::sortable_columns' );
+		}
+	}
 
     /* Display in Back End */
     public static function route() {
@@ -138,8 +147,7 @@ class FrmEntriesController {
 	}
 
 	public static function check_hidden_cols( $check, $object_id, $meta_key, $meta_value, $prev_value ) {
-		$menu_name = FrmAppHelper::get_menu_name();
-		$this_page_name = 'manage' . sanitize_title( $menu_name ) . '_page_formidable-entriescolumnshidden';
+		$this_page_name = self::hidden_column_key();
 		if ( $meta_key != $this_page_name || $meta_value == $prev_value ) {
             return $check;
         }
@@ -157,9 +165,7 @@ class FrmEntriesController {
 
     //add hidden columns back from other forms
 	public static function update_hidden_cols( $meta_id, $object_id, $meta_key, $meta_value ) {
-		$menu_name = FrmAppHelper::get_menu_name();
-		$sanitized = sanitize_title( $menu_name );
-		$this_page_name = 'manage' . $sanitized . '_page_formidable-entriescolumnshidden';
+		$this_page_name = self::hidden_column_key();
 		if ( $meta_key != $this_page_name ) {
             return;
         }
@@ -200,10 +206,28 @@ class FrmEntriesController {
         }
 
 		if ( $save ) {
-            $user = wp_get_current_user();
-			update_user_option( $user->ID, $this_page_name, $meta_value, true );
+			$user_id = get_current_user_id();
+			update_user_option( $user_id, $this_page_name, $meta_value, true );
         }
     }
+
+	/**
+	 * @since 2.05.07
+	 */
+	private static function hidden_column_key( $menu_name = '' ) {
+		$base = self::base_column_key( $menu_name );
+		return 'manage' . $base . 'columnshidden';
+	}
+
+	/**
+	 * @since 2.05.07
+	 */
+	private static function base_column_key( $menu_name = '' ) {
+		if ( empty( $menu_name ) ) {
+			$menu_name = FrmAppHelper::get_menu_name();
+		}
+		return sanitize_title( $menu_name ) . '_page_formidable-entries';
+	}
 
 	public static function save_per_page( $save, $option, $value ) {
         if ( $option == 'formidable_page_formidable_entries_per_page' ) {
@@ -236,67 +260,75 @@ class FrmEntriesController {
 	}
 
 	public static function hidden_columns( $result ) {
-        global $frm_vars;
-
 		$form_id = FrmForm::get_current_form_id();
+		$max_columns = 8;
 
-        $return = false;
-        foreach ( (array) $result as $r ) {
-            if ( ! empty( $r ) ) {
-                $form_prefix = explode( '_', $r );
-                $form_prefix = $form_prefix[0];
+		$hidden = self::user_hidden_columns_for_form( $form_id, $result );
 
-                if ( (int) $form_prefix == (int) $form_id ) {
-                    $return = true;
-                    break;
-                }
+		if ( ! empty( $hidden ) ) {
+			$max_columns = 11;
+			$result = $hidden;
+		}
 
-                unset($form_prefix);
-            }
-        }
-
-        if ( $return ) {
+		global $frm_vars;
+		$i = isset( $frm_vars['cols'] ) ? count( $frm_vars['cols'] ) : 0;
+		if ( $i <= $max_columns ) {
 			return $result;
 		}
 
-        $i = isset($frm_vars['cols']) ? count($frm_vars['cols']) : 0;
-        $max_columns = 8;
-        if ( $i <= $max_columns ) {
-			return $result;
+		if ( $form_id ) {
+			$result[] = $form_id . '_id';
+			$i--;
 		}
 
-        global $frm_vars;
-        if ( isset($frm_vars['current_form']) && $frm_vars['current_form'] ) {
-            $frm_vars['current_form']->options = maybe_unserialize($frm_vars['current_form']->options);
-        }
+		$result[] = $form_id . '_item_key';
+		$i--;
 
-		$has_custom_hidden_columns = ( isset( $frm_vars['current_form'] ) && $frm_vars['current_form'] && isset( $frm_vars['current_form']->options['hidden_cols'] ) && ! empty( $frm_vars['current_form']->options['hidden_cols'] ) );
-		if ( $has_custom_hidden_columns ) {
-            $result = $frm_vars['current_form']->options['hidden_cols'];
-        } else {
-            $cols = $frm_vars['cols'];
-            $cols = array_reverse($cols, true);
+		self::remove_excess_cols( compact( 'i', 'max_columns' ), $result );
 
-			if ( $form_id ) {
-				$result[] = $form_id . '_id';
-				$i--;
+		return $result;
+	}
+
+	/**
+	 * @since 2.05.07
+	 */
+	private static function user_hidden_columns_for_form( $form_id, $result ) {
+		$hidden = array();
+		foreach ( (array) $result as $r ) {
+			if ( ! empty( $r ) ) {
+				list( $form_prefix, $field_key ) = explode( '_', $r );
+
+				if ( (int) $form_prefix == (int) $form_id ) {
+					$hidden[] = $r;
+				}
+
+				unset( $form_prefix );
+			}
+		}
+		return $hidden;
+	}
+
+	/**
+	 * Remove some columns by default when there are too many
+	 *
+	 * @since 2.05.07
+	 */
+	private static function remove_excess_cols( $atts, &$result ) {
+		global $frm_vars;
+
+		$cols = $frm_vars['cols'];
+		$cols = array_reverse( $cols, true );
+		$i = $atts['i'];
+
+		foreach ( $cols as $col_key => $col ) {
+			if ( $i > $atts['max_columns'] ) {
+				$result[] = $col_key;
 			}
 
-			$result[] = $form_id . '_item_key';
-            $i--;
-
-			foreach ( $cols as $col_key => $col ) {
-                if ( $i > $max_columns ) {
-					$result[] = $col_key;
-				}
-                //remove some columns by default
-                $i--;
-                unset($col_key, $col);
-            }
-        }
-
-        return $result;
-    }
+			$i--;
+			unset( $col_key, $col );
+		}
+	}
 
 	public static function display_list( $message = '', $errors = array() ) {
         global $wpdb, $frm_vars;

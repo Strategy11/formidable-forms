@@ -746,7 +746,6 @@ class FrmListHelper {
 
 		$columns = get_column_headers( $this->screen );
 		$hidden = get_hidden_columns( $this->screen );
-		$this->hide_extra_columns( $columns, $hidden );
 
 		$sortable_columns = $this->get_sortable_columns();
 		/**
@@ -779,29 +778,6 @@ class FrmListHelper {
 		$this->_column_headers = array( $columns, $hidden, $sortable, $primary );
 
 		return $this->_column_headers;
-	}
-
-	/**
-	 * Prevent too many columns from showing on the page
-	 * @since 2.05.07
-	 */
-	private function hide_extra_columns( $columns, &$hidden ) {
-		$max_columns = 15;
-		$shown = count( $columns ) - count( $hidden );
-
-		if ( $shown > $max_columns ) {
-			$remove = $shown - $max_columns;
-			$columns = array_reverse( $columns );
-			foreach ( $columns as $name => $c ) {
-				if ( ! in_array( $name, $hidden ) ) {
-					$hidden[] = $name;
-					$remove--;
-					if ( $remove <= 0 ) {
-						break;
-					}
-				}
-			}
-		}
 	}
 
 	/**
