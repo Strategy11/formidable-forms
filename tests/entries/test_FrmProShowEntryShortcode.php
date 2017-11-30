@@ -389,7 +389,7 @@ class test_FrmProShowEntryShortcode extends test_FrmShowEntryShortcode {
 		$atts['is_repeat_empty'] = true;
 		$expected_array = $this->expected_array( $entry, $atts );
 
-		$this->assertSame( $expected_array, $data_array );
+		$this->compare_array( $expected_array['repeating-section'], $data_array['repeating-section'] );
 	}
 
 	/**
@@ -438,7 +438,7 @@ class test_FrmProShowEntryShortcode extends test_FrmShowEntryShortcode {
 		$data_array = FrmEntriesController::show_entry_shortcode( $atts );
 		$expected_array = $this->expected_post_array( $entry, $atts );
 
-		$this->assertSame( $expected_array, $data_array );
+		$this->compare_array( $expected_array, $data_array );
 	}
 
 	/**
@@ -772,7 +772,7 @@ class test_FrmProShowEntryShortcode extends test_FrmShowEntryShortcode {
 				break;
 
 			case 'cb-sep-values':
-				$value = 'Red, Orange';
+				$value = 'Option 1, Option 2';
 				break;
 
 			case 'user-id-field':
@@ -1145,6 +1145,9 @@ class test_FrmProShowEntryShortcode extends test_FrmShowEntryShortcode {
 		// Dynamic State Field ID
 		$dynamic_state_id = FrmField::get_id_by_key( 'dynamic-state' );
 
+		// Repeating field
+		$repeat_field = $this->factory->field->get_object_by_id( 'repeating-section' );
+
 		$expected = array(
 			'text-field' => 'Jamie',
 			'paragraph-field' => "Jamie\r\nRebecca\r\nWahlin",
@@ -1191,19 +1194,20 @@ class test_FrmProShowEntryShortcode extends test_FrmShowEntryShortcode {
 				'height' => '150',
 			),
 			'repeating-section' => array(
-				0 => array(
+				'form' => FrmField::get_option( $repeat_field, 'form_select' ),
+				'i' . $entry->metas[ $repeat_field->id ][0] => array(
 					'repeating-text' => 'First',
 					'repeating-checkbox' => array( 'Option 1', 'Option 2' ),
 					'repeating-date' => 'May 27, 2015',
 					'repeating-date-value' => '2015-05-27',
 				),
-				1 => array(
+				'i' . $entry->metas[ $repeat_field->id ][1] => array(
 					'repeating-text' => 'Second',
 					'repeating-checkbox' => array( 'Option 1', 'Option 2' ),
 					'repeating-date' => 'May 29, 2015',
 					'repeating-date-value' => '2015-05-29',
 				),
-				2 => array(
+				'i' . $entry->metas[ $repeat_field->id ][2] => array(
 					'repeating-text' => 'Third',
 					'repeating-checkbox' => array( 'Option 2' ),
 					'repeating-date' => 'June 19, 2015',
@@ -1249,7 +1253,12 @@ class test_FrmProShowEntryShortcode extends test_FrmShowEntryShortcode {
 				'repeating-date' => '',
 			);
 
-			$expected['repeating-section'] = array( $child_values, $child_values, $child_values );
+			foreach ( $expected['repeating-section'] as $k => $v ) {
+				if ( strpos( $k, 'i') === 0 ){
+					$expected['repeating-section'][ $k ] = $child_values;
+				}
+			}
+
 			$expected['repeating-text'] = array( '', '', '' );
 			$expected['repeating-checkbox'] = array( '', '', '' );
 			$expected['repeating-date'] = array( '', '', '' );
@@ -1319,17 +1328,16 @@ class test_FrmProShowEntryShortcode extends test_FrmShowEntryShortcode {
 		return FrmEntry::getOne( 'jamie_entry_key', $include_meta );
 	}
 
-	protected function get_included_fields( $type ) {
-		$include_fields = array(
+	protected function set_field_array( $type ) {
+		$fields = array(
 			'text-field' => 'text-field',
 			'repeating-section' => 'repeating-section',
 			'embed-form-field' => 'embed-form-field',
 			'user-id-field' => 'user-id-field',
 		);
 
-		$this->convert_field_array( $type, $include_fields );
-
-		return $include_fields;
+		$this->convert_field_array( $type, $fields );
+		return $fields;
 	}
 
 	protected function get_single_included_field( $type ) {
