@@ -20,7 +20,7 @@ class FrmFormsListHelper extends FrmListHelper {
 
 		$mode    = self::get_param( array( 'param' => 'mode', 'default' => 'list' ) );
 		$orderby = self::get_param( array( 'param' => 'orderby', 'default' => 'name' ) );
-		$order   = self::get_param( array( 'param' => 'order', 'default'  => 'ASC' ) );
+		$order   = self::get_param( array( 'param' => 'order', 'default' => 'ASC' ) );
 		$start   = self::get_param( array( 'param' => 'start', 'default' => ( ( $page - 1 ) * $per_page ) ) );
 
         $s_query = array();

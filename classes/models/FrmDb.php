@@ -464,16 +464,8 @@ class FrmDb {
 
 		$order_query = explode( ' ', trim( $order_query ) );
 
-		$order_fields = array(
-			'id', 'form_key', 'name', 'description',
-			'parent_form_id', 'logged_in', 'is_template',
-			'default_template', 'status', 'created_at',
-		);
-
-		$order = trim( trim( reset( $order_query ), ',' ) );
-		if ( ! in_array( $order, $order_fields ) ) {
-			return '';
-		}
+		$order = reset( $order_query );
+		$order = preg_replace( '/[^a-zA-Z0-9\-\_\.]/', '', $order );
 
 		$order_by = '';
 		if ( count( $order_query ) > 1 ) {
