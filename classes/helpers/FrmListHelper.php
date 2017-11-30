@@ -155,6 +155,18 @@ class FrmListHelper {
 	}
 
 	/**
+	 * @since 3.0
+	 */
+	protected function get_param( $args ) {
+		return FrmAppHelper::get_simple_request( array(
+			'param'    => $args['param'],
+			'default'  => isset( $args['default'] ) ? $args['default'] : '',
+			'sanitize' => isset( $args['sanitize'] ) ? $args['sanitize'] : 'sanitize_title',
+			'type'     => 'request',
+		) );
+	}
+
+	/**
 	 * An internal method that sets all the necessary pagination arguments
 	 *
 	 * @param array $args An associative array with information about the pagination
@@ -392,8 +404,9 @@ class FrmListHelper {
 
 	private static function get_bulk_action( $action_name ) {
 		$action = false;
-		if ( isset( $_REQUEST[ $action_name ] ) && -1 != sanitize_text_field( $_REQUEST[ $action_name ] ) ) {
-			$action = sanitize_text_field( $_REQUEST[ $action_name ] );
+		$action_param = self::get_param( array( 'param' => $action_name, 'sanitize' => 'sanitize_text_field' ) );
+		if ( $action_param && -1 != $action_param ) {
+			$action = $action_param;
 		}
 		return $action;
 	}

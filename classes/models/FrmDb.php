@@ -343,9 +343,6 @@ class FrmDb {
                 continue;
             }
 
-            if ( $k == 'limit' ) {
-				$args[ $k ] = self::esc_limit( $v );
-            }
             $db_name = strtoupper( str_replace( '_', ' ', $k ) );
             if ( strpos( $v, $db_name ) === false ) {
 				$args[ $k ] = $db_name . ' ' . $v;
@@ -395,6 +392,8 @@ class FrmDb {
 	private static function generate_query_string_from_pieces( $columns, $table, $where, $args = array() ) {
 		$query = 'SELECT ' . $columns . ' FROM ' . $table;
 
+		self::esc_query_args( $args );
+
 		if ( is_array( $where ) || empty( $where ) ) {
 			self::get_where_clause_and_values( $where );
 			global $wpdb;
@@ -409,6 +408,23 @@ class FrmDb {
 		}
 
 		return $query;
+	}
+
+	/**
+	 * @since 2.05.07
+	 */
+	private static function esc_query_args( &$args ) {
+		foreach ( $args as $param => $value ) {
+			if ( $param == 'order_by' ) {
+				$args[ $param ] = self::esc_order( $value );
+			} elseif ( $param == 'limit' ) {
+				$args[ $param ] = self::esc_limit( $value );
+			}
+
+			if ( $args[ $param ] == '' ) {
+				unset( $args[ $param ] );
+			}
+		}
 	}
 
     /**
@@ -488,7 +504,7 @@ class FrmDb {
 			return '';
 		}
 
-		$limit = trim( str_replace( ' limit', '', strtolower( $limit ) ) );
+		$limit = trim( str_replace( 'limit ', '', strtolower( $limit ) ) );
 		if ( is_numeric( $limit ) ) {
 			return ' LIMIT ' . $limit;
 		}

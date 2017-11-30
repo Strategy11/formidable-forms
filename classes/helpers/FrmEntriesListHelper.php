@@ -11,8 +11,6 @@ class FrmEntriesListHelper extends FrmListHelper {
 		$per_page = $this->get_items_per_page( 'formidable_page_formidable_entries_per_page' );
         $form_id = $this->params['form'];
 
-		$default_orderby = 'id';
-		$default_order = 'DESC';
 		$s_query = array();
 
 		if ( $form_id ) {
@@ -23,26 +21,27 @@ class FrmEntriesListHelper extends FrmListHelper {
 			$join_form_in_query = true;
 		}
 
-		$s = isset( $_REQUEST['s'] ) ? stripslashes($_REQUEST['s']) : '';
+		$s = self::get_param( array( 'param' => 's', 'sanitize' => 'sanitize_text_field' ) );
 
-	    if ( $s != '' && FrmAppHelper::pro_is_installed() ) {
-	        $fid = isset( $_REQUEST['fid'] ) ? sanitize_title( $_REQUEST['fid'] ) : '';
-	        $s_query = FrmProEntriesHelper::get_search_str( $s_query, $s, $form_id, $fid );
-	    }
+		if ( $s != '' && FrmAppHelper::pro_is_installed() ) {
+			$fid = self::get_param( array( 'param' => 'fid' ) );
+			$s_query = FrmProEntriesHelper::get_search_str( $s_query, $s, $form_id, $fid );
+		}
 
 		$s_query = apply_filters( 'frm_entries_list_query', $s_query, compact( 'form_id' ) );
 
-        $orderby = isset( $_REQUEST['orderby'] ) ? sanitize_title( $_REQUEST['orderby'] ) : $default_orderby;
-        if ( strpos($orderby, 'meta') !== false ) {
-            $order_field_type = FrmField::get_type( str_replace( 'meta_', '', $orderby ) );
+		$orderby = self::get_param( array( 'param' => 'orderby', 'default' => 'id' ) );
+
+		if ( strpos( $orderby, 'meta' ) !== false ) {
+			$order_field_type = FrmField::get_type( str_replace( 'meta_', '', $orderby ) );
 			$orderby .= in_array( $order_field_type, array( 'number', 'scale' ) ) ? ' +0 ' : '';
-        }
+		}
 
-		$order = isset( $_REQUEST['order'] ) ? sanitize_title( $_REQUEST['order'] ) : $default_order;
-		$order = ' ORDER BY ' . $orderby . ' ' . $order;
+		$order = self::get_param( array( 'param' => 'order', 'default' => 'DESC' ) );
+		$order = FrmDb::esc_order( $orderby . ' ' . $order );
 
-        $page = $this->get_pagenum();
-		$start = (int) isset( $_REQUEST['start'] ) ? absint( $_REQUEST['start'] ) : ( ( $page - 1 ) * $per_page );
+		$page = $this->get_pagenum();
+		$start = (int) self::get_param( array( 'param' => 'start', 'default' => ( ( $page - 1 ) * $per_page ) ) );
 
 		$limit = FrmDb::esc_limit( $start . ',' . $per_page );
 		$this->items = FrmEntry::getAll( $s_query, $order, $limit, true, $join_form_in_query );
@@ -55,7 +54,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	}
 
 	public function no_items() {
-        $s = isset( $_REQUEST['s'] ) ? $_REQUEST['s'] : '';
+		$s = self::get_param( array( 'param' => 's', 'sanitize' => 'sanitize_text_field' ) );
 	    if ( ! empty($s) ) {
             _e( 'No Entries Found', 'formidable' );
             return;

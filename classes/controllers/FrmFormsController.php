@@ -355,8 +355,9 @@ class FrmFormsController {
 			$count++;
 		}
 
+		$form_type = FrmAppHelper::get_simple_request( array( 'param' => 'form_type', 'type' => 'request' ) );
 		$available_status['untrash']['message'] = sprintf(_n( '%1$s form restored from the Trash.', '%1$s forms restored from the Trash.', $count, 'formidable' ), $count );
-		$available_status['trash']['message'] = sprintf( _n( '%1$s form moved to the Trash. %2$sUndo%3$s', '%1$s forms moved to the Trash. %2$sUndo%3$s', $count, 'formidable' ), $count, '<a href="' . esc_url( wp_nonce_url( '?page=formidable&frm_action=untrash&form_type=' . ( isset( $_REQUEST['form_type'] ) ? sanitize_title( $_REQUEST['form_type'] ) : '' ) . '&id=' . $params['id'], 'untrash_form_' . $params['id'] ) ) . '">', '</a>' );
+		$available_status['trash']['message'] = sprintf( _n( '%1$s form moved to the Trash. %2$sUndo%3$s', '%1$s forms moved to the Trash. %2$sUndo%3$s', $count, 'formidable' ), $count, '<a href="' . esc_url( wp_nonce_url( '?page=formidable&frm_action=untrash&form_type=' . $form_type . '&id=' . $params['id'], 'untrash_form_' . $params['id'] ) ) . '">', '</a>' );
 
 		$message = $available_status[ $status ]['message'];
 
@@ -373,7 +374,7 @@ class FrmFormsController {
             }
         }
 
-        $current_page = isset( $_REQUEST['form_type'] ) ? $_REQUEST['form_type'] : '';
+		$current_page = FrmAppHelper::get_simple_request( array( 'param' => 'form_type', 'type' => 'request' ) );
 		$message = sprintf( _n( '%1$s form moved to the Trash. %2$sUndo%3$s', '%1$s forms moved to the Trash. %2$sUndo%3$s', $count, 'formidable' ), $count, '<a href="' . esc_url( wp_nonce_url( '?page=formidable&frm_action=list&action=bulk_untrash&form_type=' . $current_page . '&item-action=' . implode( ',', $ids ), 'bulk-toplevel_page_formidable' ) ) . '">', '</a>' );
 
         return $message;
@@ -537,7 +538,7 @@ class FrmFormsController {
 	    $columns['cb'] = '<input type="checkbox" />';
 	    $columns['id'] = 'ID';
 
-        $type = isset( $_REQUEST['form_type'] ) ? $_REQUEST['form_type'] : 'published';
+		$type = FrmAppHelper::get_simple_request( array( 'param' => 'form_type', 'type' => 'request', 'default' => 'published' ) );
 
         if ( 'template' == $type ) {
             $columns['name']        = __( 'Template Name', 'formidable' );
@@ -568,7 +569,7 @@ class FrmFormsController {
 	}
 
 	public static function hidden_columns( $hidden_columns ) {
-		$type = isset( $_REQUEST['form_type'] ) ? $_REQUEST['form_type'] : '';
+		$type = FrmAppHelper::get_simple_request( array( 'param' => 'form_type', 'type' => 'request' ) );
 
 		if ( $type === 'template' ) {
 			$hidden_columns[] = 'id';

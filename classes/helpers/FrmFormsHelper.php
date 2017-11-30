@@ -619,7 +619,7 @@ BEFORE_HTML;
             ),
         );
 
-        $current_page = isset( $_REQUEST['form_type'] ) ? $_REQUEST['form_type'] : '';
+		$current_page = FrmAppHelper::get_simple_request( array( 'param' => 'form_type' ) );
 		$base_url = '?page=formidable&form_type=' . $current_page . '&id=' . $id;
         if ( 'trash' == $status ) {
 			$link = '<a href="' . esc_url( wp_nonce_url( $base_url . '&frm_action=untrash', 'untrash_form_' . $id ) ) . '" class="submitdelete deletion">' . $labels['restore'][ $length ] . '</a>';

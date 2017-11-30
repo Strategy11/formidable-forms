@@ -7,26 +7,21 @@ class FrmFormsListHelper extends FrmListHelper {
 	public $status = '';
 
 	public function __construct( $args ) {
-		$this->status = isset( $_REQUEST['form_type'] ) ? $_REQUEST['form_type'] : '';
+		$this->status = self::get_param( array( 'param' => 'form_type' ) );
 
 		parent::__construct( $args );
 	}
 
 	public function prepare_items() {
-	    global $wpdb, $per_page, $mode;
-
-	    $mode = empty( $_REQUEST['mode'] ) ? 'list' : $_REQUEST['mode'];
-
-		$default_orderby = 'name';
-		$default_order = 'ASC';
-
-        $orderby = ( isset( $_REQUEST['orderby'] ) ) ? $_REQUEST['orderby'] : $default_orderby;
-		$order = ( isset( $_REQUEST['order'] ) ) ? $_REQUEST['order'] : $default_order;
+		global $wpdb, $per_page, $mode;
 
 		$page = $this->get_pagenum();
 		$per_page = $this->get_items_per_page( 'formidable_page_formidable_per_page' );
 
-		$start = ( isset( $_REQUEST['start'] ) ) ? $_REQUEST['start'] : (( $page - 1 ) * $per_page);
+		$mode    = self::get_param( array( 'param' => 'mode', 'default' => 'list' ) );
+		$orderby = self::get_param( array( 'param' => 'orderby', 'default' => 'name' ) );
+		$order   = self::get_param( array( 'param' => 'order', 'default'  => 'ASC' ) );
+		$start   = self::get_param( array( 'param' => 'start', 'default' => ( ( $page - 1 ) * $per_page ) ) );
 
         $s_query = array();
         $s_query[] = array( 'or' => 1, 'parent_form_id' => null, 'parent_form_id <' => 1 );
@@ -48,7 +43,7 @@ class FrmFormsListHelper extends FrmListHelper {
 		        break;
 		}
 
-        $s = isset( $_REQUEST['s'] ) ? stripslashes($_REQUEST['s']) : '';
+		$s = FrmAppHelper::get_simple_request( array( 'param' => 's', 'sanitize' => 'sanitize_text_field' ) );
 	    if ( $s != '' ) {
 	        preg_match_all('/".*?("|$)|((?<=[\\s",+])|^)[^\\s",+]+/', $s, $matches);
 		    $search_terms = array_map('trim', $matches[0]);
@@ -169,7 +164,7 @@ class FrmFormsListHelper extends FrmListHelper {
 
 	    $links = array();
 	    $counts = FrmForm::get_count();
-        $form_type = isset( $_REQUEST['form_type'] ) ? sanitize_text_field( $_REQUEST['form_type'] ) : 'published';
+		$form_type = self::get_param( array( 'param' => 'form_type', 'default' => 'published' ) );
 
 	    foreach ( $statuses as $status => $name ) {
 
