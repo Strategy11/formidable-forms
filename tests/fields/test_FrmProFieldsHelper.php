@@ -129,6 +129,7 @@ class WP_Test_FrmProFieldsHelper extends FrmUnitTest {
 			array( 'show_filename' => '1', 'links' => '1' ),
 			array( 'html' => '1', 'show_filename' => '1', 'links' => '1' ),
 			array( 'html' => '1', 'links' => '1' ),
+			array( 'add_link' => '1', 'new_tab' => '1' ),
 			array( 'add_link' => '1', 'show_image' => '1' ),
 			array( 'show_filename' => '1', 'show_image' => '1' ),
 			array( 'add_link' => '1', 'show_image' => '1', 'show_filename' => '1' ),
@@ -245,7 +246,12 @@ class WP_Test_FrmProFieldsHelper extends FrmUnitTest {
 				$expected_value = $default_url;
 			}
 
-			$expected_value = '<a href="' . $full_url . '" class="frm_file_link">' . $expected_value . '</a>';
+			$expected_html = '<a href="' . $full_url . '" class="frm_file_link"';
+			if ( isset( $atts['new_tab'] ) && $atts['new_tab'] ) {
+				$expected_html .= ' target="_blank"';
+			}
+			$expected_html .= '>' . $expected_value . '</a>';
+			$expected_value = $expected_html;
 		}
 
 		// No atts
