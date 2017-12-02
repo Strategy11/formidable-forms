@@ -73,12 +73,6 @@ class FrmEntryFormatter {
 
 	/**
 	 * @var array
-	 * @since 2.04
-	 */
-	protected $skip_fields = array();
-
-	/**
-	 * @var array
 	 * @since 3.0
 	 */
 	protected $single_cell_fields = array();
@@ -109,7 +103,6 @@ class FrmEntryFormatter {
 		$this->init_include_blank( $atts );
 		$this->init_direction( $atts );
 		$this->init_include_user_info( $atts );
-		$this->init_skip_fields();
 		$this->init_include_extras( $atts );
 		$this->init_single_cell_fields();
 		$this->init_entry_values( $atts );
@@ -271,12 +264,12 @@ class FrmEntryFormatter {
 	}
 
 	/**
-	 * Initialize the skip_fields property
+	 * Which fields to skip by default
 	 *
 	 * @since 3.0
 	 */
-	protected function init_skip_fields() {
-		$this->skip_fields = array( 'captcha', 'html' );
+	protected function skip_fields() {
+		return array( 'captcha', 'html' );
 	}
 
 	/**
@@ -336,7 +329,7 @@ class FrmEntryFormatter {
 		$atts['wpautop'] = false;
 		$atts['return_array'] = true;
 
-		$unset = array( 'id', 'entry', 'fields', 'form_id', 'format' );
+		$unset = array( 'id', 'entry', 'form_id', 'format', 'plain_text' );
 		foreach ( $unset as $param ) {
 			if ( isset( $atts[ $param ] ) ){
 				unset( $atts[ $param ] );
@@ -768,7 +761,7 @@ class FrmEntryFormatter {
 	 * @return bool
 	 */
 	protected function is_extra_field( $field_value ) {
-		return in_array( $field_value->get_field_type(), $this->skip_fields );
+		return in_array( $field_value->get_field_type(), $this->skip_fields() );
 	}
 
 	/**
