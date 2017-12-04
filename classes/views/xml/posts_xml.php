@@ -57,7 +57,7 @@ while ( $next_posts = array_splice( $item_ids, 0, 20 ) ) {
 
 			foreach ( (array) $terms as $term ) {
 				?>
-		<category domain="<?php echo esc_attr( $term->taxonomy ) ?>" nicename="<?php echo esc_attr( $term->slug ?>"><?php echo FrmXMLHelper::cdata( $term->name ) ?></category>
+		<category domain="<?php echo esc_attr( $term->taxonomy ) ?>" nicename="<?php echo esc_attr( $term->slug ) ?>"><?php echo FrmXMLHelper::cdata( $term->name ) ?></category>
 				<?php
 			}
 		} ?>
