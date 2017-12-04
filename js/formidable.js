@@ -565,6 +565,7 @@ function frmFrontFormJS(){
 			} else {
 				$fieldCont.append( '<div class="frm_error">'+ jsErrors[key] +'</div>' );
 			}
+			jQuery(document).trigger('frmAddFieldError', [ $fieldCont, key, jsErrors ] );
 		}
 	}
 
