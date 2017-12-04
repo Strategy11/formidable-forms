@@ -1,5 +1,5 @@
 <div class="wrap">
-	<h1><?php _e( 'Formidable AddOns', 'formidable' ) ?></h1>
+	<h1><?php esc_html_e( 'Formidable AddOns', 'formidable' ) ?></h1>
 
 	<div id="the-list" class="frm-addons">
 		<?php foreach ( $addons as $slug => $addon ) { ?>
@@ -16,14 +16,14 @@
 						<ul class="plugin-action-buttons">
 							<?php if ( $addon['installed'] ) { ?>
 								<?php if ( empty( $addon['activate_url'] ) ) { ?>
-									<li><span class="button button-disabled" title="<?php esc_attr_e( 'This plugin is already installed', 'formidable' ) ?>"><?php _e( 'Installed', 'formidable' ) ?></span></li>
+									<li><span class="button button-disabled" title="<?php esc_attr_e( 'This plugin is already installed', 'formidable' ) ?>"><?php esc_html_e( 'Installed', 'formidable' ) ?></span></li>
 								<?php } else { ?>
-								<li><a href="<?php echo esc_url( $addon['activate_url'] ) ?>" class="button activate-now"><?php _e( 'Activate', 'formidable' ); ?></a></li>
+								<li><a href="<?php echo esc_url( $addon['activate_url'] ) ?>" class="button activate-now"><?php esc_html_e( 'Activate', 'formidable' ); ?></a></li>
 								<?php } ?>
 							<?php } else { ?>
-								<li><a class="install-now button" href="<?php echo esc_url( $site_url . $addon['link'] ) ?>" target="_blank" aria-label="<?php esc_attr_e( 'Get Started', 'formidable' ) ?>"><?php _e( 'Get Started', 'formidable' ) ?></a></li>
+								<li><a class="install-now button" href="<?php echo esc_url( $site_url . $addon['link'] ) ?>" target="_blank" aria-label="<?php esc_attr_e( 'Get Started', 'formidable' ) ?>"><?php esc_html_e( 'Get Started', 'formidable' ) ?></a></li>
 							<?php } ?>
-							<li><a href="<?php echo esc_url( $site_url . 'knowledgebase/' . $addon['docs'] ) ?>" target="_blank" aria-label="<?php esc_attr_e( 'View Docs', 'formidable' ) ?>"><?php _e( 'View Docs', 'formidable' ) ?></a></li>
+							<li><a href="<?php echo esc_url( $site_url . 'knowledgebase/' . $addon['docs'] ) ?>" target="_blank" aria-label="<?php esc_attr_e( 'View Docs', 'formidable' ) ?>"><?php esc_html_e( 'View Docs', 'formidable' ) ?></a></li>
 						</ul>
 					</div>
 					<div class="desc column-description">
