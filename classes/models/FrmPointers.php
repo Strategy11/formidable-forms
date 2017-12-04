@@ -100,7 +100,7 @@ class FrmPointers {
 
 				frm_pointer_options = $.extend(frm_pointer_options, {
 					buttons: function (event, t) {
-						var button = jQuery('<a href="<?php echo esc_url( $this->get_ignore_url() ); ?>" id="pointer-close" style="margin:0 5px;" class="button-secondary">' + '<?php _e( 'Close', 'formidable' ) ?>' + '</a>');
+						var button = jQuery('<a href="<?php echo esc_url( $this->get_ignore_url() ); ?>" id="pointer-close" style="margin:0 5px;" class="button-secondary">' + '<?php esc_html_e( 'Close', 'formidable' ) ?>' + '</a>');
 						button.bind('click.pointer', function () {
 							t.element.pointer('close');
 						});

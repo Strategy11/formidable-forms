@@ -1,5 +1,5 @@
 <div class="wrap">
-	<h4><?php _e( 'Plugin Licenses', 'formidable' ); ?></h4>
+	<h4><?php esc_html_e( 'Plugin Licenses', 'formidable' ); ?></h4>
 
 	<?php
 
@@ -37,6 +37,6 @@
 	<?php } ?>
 	<?php if ( $any_unauthorized && $allow_autofill ) { ?>
 		<div class="clear"></div>
-		<p><a href="#" class="edd_frm_fill_license button-secondary"><?php _e( 'Autofill Licenses', 'formidable' ) ?></a></p>
+		<p><a href="#" class="edd_frm_fill_license button-secondary"><?php esc_html_e( 'Autofill Licenses', 'formidable' ) ?></a></p>
 	<?php } ?>
 </div>

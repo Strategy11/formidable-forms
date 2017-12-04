@@ -56,7 +56,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	public function no_items() {
 		$s = self::get_param( array( 'param' => 's', 'sanitize' => 'sanitize_text_field' ) );
 	    if ( ! empty($s) ) {
-            _e( 'No Entries Found', 'formidable' );
+			esc_html_e( 'No Entries Found', 'formidable' );
             return;
         }
 
