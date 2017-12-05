@@ -18,11 +18,16 @@
 		<exclude name="WordPress.VIP.DirectDatabaseQuery" />
 		<exclude name="WordPress.VIP.RestrictedVariables.user_meta"/>
 		<exclude name="WordPress.VIP.RestrictedFunctions.user_meta" />
+		<exclude name="WordPress.VIP.RestrictedFunctions.user_meta_delete_user_meta" />
+		<exclude name="WordPress.VIP.RestrictedFunctions.user_meta_get_user_meta" />
+		<exclude name="WordPress.VIP.RestrictedFunctions.user_meta_update_user_meta" />
 		<exclude name="WordPress.VIP.RestrictedFunctions.switch_to_blog"/>
+		<exclude name="WordPress.VIP.RestrictedFunctions.switch_to_blog_switch_to_blog"/>
 		<exclude name="WordPress.VIP.RestrictedFunctions.get_term_by"/>
 		<exclude name="WordPress.VIP.RestrictedFunctions.get_term_link"/>
 		<exclude name="WordPress.VIP.RestrictedFunctions.term_exists" />
 		<exclude name="WordPress.VIP.RestrictedFunctions.wp_is_mobile" />
+		<exclude name="WordPress.VIP.RestrictedFunctions.wp_is_mobile_wp_is_mobile" />
 
 		<!-- Temporary exclusions. Enable these when we have time to address them -->
 		<exclude name="PEAR.Functions.FunctionCallSignature.SpaceAfterOpenBracket" />
@@ -37,6 +42,7 @@
 		<exclude name="PEAR.Functions.FunctionCallSignature.Indent" />
 		<exclude name="Squiz.Commenting.LongConditionClosingComment.Missing" />
 		<exclude name="WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid" />
+		<exclude name="Squiz.PHP.EmbeddedPhp.NoSemicolon" />
 
 		<!-- We should probably turn the below rules on, but these give issues with the current code base. -->
 		<exclude name="WordPress.Files.FileName.UnderscoresNotAllowed" />

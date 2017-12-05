@@ -253,7 +253,7 @@ class FrmFormsController {
 
 		$params = FrmForm::list_page_params();
         $form = FrmForm::duplicate( $params['id'], $params['template'], true );
-        $message = ($params['template']) ? __( 'Form template was Successfully Created', 'formidable' ) : __( 'Form was Successfully Copied', 'formidable' );
+        $message = $params['template'] ? __( 'Form template was Successfully Created', 'formidable' ) : __( 'Form was Successfully Copied', 'formidable' );
         if ( $form ) {
 			return self::get_edit_vars( $form, array(), $message, true );
         } else {
@@ -335,8 +335,14 @@ class FrmFormsController {
 	 */
 	public static function change_form_status( $status ) {
 		$available_status = array(
-			'untrash' => array( 'permission' => 'frm_edit_forms', 'new_status' => 'published' ),
-			'trash'   => array( 'permission' => 'frm_delete_forms', 'new_status' => 'trash' ),
+			'untrash' => array(
+				'permission' => 'frm_edit_forms',
+				'new_status' => 'published',
+			),
+			'trash'   => array(
+				'permission' => 'frm_delete_forms',
+				'new_status' => 'trash',
+			),
 		);
 
 		if ( ! isset( $available_status[ $status ] ) ) {
@@ -355,7 +361,11 @@ class FrmFormsController {
 			$count++;
 		}
 
-		$form_type = FrmAppHelper::get_simple_request( array( 'param' => 'form_type', 'type' => 'request' ) );
+		$form_type = FrmAppHelper::get_simple_request( array(
+			'param' => 'form_type',
+			'type' => 'request',
+		) );
+
 		$available_status['untrash']['message'] = sprintf(_n( '%1$s form restored from the Trash.', '%1$s forms restored from the Trash.', $count, 'formidable' ), $count );
 		$available_status['trash']['message'] = sprintf( _n( '%1$s form moved to the Trash. %2$sUndo%3$s', '%1$s forms moved to the Trash. %2$sUndo%3$s', $count, 'formidable' ), $count, '<a href="' . esc_url( wp_nonce_url( '?page=formidable&frm_action=untrash&form_type=' . $form_type . '&id=' . $params['id'], 'untrash_form_' . $params['id'] ) ) . '">', '</a>' );
 
@@ -374,7 +384,10 @@ class FrmFormsController {
             }
         }
 
-		$current_page = FrmAppHelper::get_simple_request( array( 'param' => 'form_type', 'type' => 'request' ) );
+		$current_page = FrmAppHelper::get_simple_request( array(
+			'param' => 'form_type',
+			'type' => 'request',
+		) );
 		$message = sprintf( _n( '%1$s form moved to the Trash. %2$sUndo%3$s', '%1$s forms moved to the Trash. %2$sUndo%3$s', $count, 'formidable' ), $count, '<a href="' . esc_url( wp_nonce_url( '?page=formidable&frm_action=list&action=bulk_untrash&form_type=' . $current_page . '&item-action=' . implode( ',', $ids ), 'bulk-toplevel_page_formidable' ) ) . '">', '</a>' );
 
         return $message;
@@ -458,7 +471,10 @@ class FrmFormsController {
         FrmAppHelper::load_admin_wide_js();
 
         $shortcodes = array(
-			'formidable' => array( 'name' => __( 'Form', 'formidable' ), 'label' => __( 'Insert a Form', 'formidable' ) ),
+			'formidable' => array(
+				'name'  => __( 'Form', 'formidable' ),
+				'label' => __( 'Insert a Form', 'formidable' ),
+			),
         );
 
         $shortcodes = apply_filters('frm_popup_shortcodes', $shortcodes);
@@ -485,13 +501,21 @@ class FrmFormsController {
                 $opts = array(
 					'form_id'       => 'id',
                     //'key' => ',
-					'title'         => array( 'val' => 1, 'label' => __( 'Display form title', 'formidable' ) ),
-					'description'   => array( 'val' => 1, 'label' => __( 'Display form description', 'formidable' ) ),
-					'minimize'      => array( 'val' => 1, 'label' => __( 'Minimize form HTML', 'formidable' ) ),
+					'title'         => array(
+						'val'   => 1,
+						'label' => __( 'Display form title', 'formidable' ),
+					),
+					'description'   => array(
+						'val'   => 1,
+						'label' => __( 'Display form description', 'formidable' ),
+					),
+					'minimize'      => array(
+						'val'   => 1,
+						'label' => __( 'Minimize form HTML', 'formidable' ),
+					),
                 );
-            break;
         }
-        $opts = apply_filters('frm_sc_popup_opts', $opts, $shortcode);
+		$opts = apply_filters( 'frm_sc_popup_opts', $opts, $shortcode );
 
 		if ( isset( $opts['form_id'] ) && is_string( $opts['form_id'] ) ) {
 			// allow other shortcodes to use the required form id option
@@ -538,7 +562,11 @@ class FrmFormsController {
 	    $columns['cb'] = '<input type="checkbox" />';
 	    $columns['id'] = 'ID';
 
-		$type = FrmAppHelper::get_simple_request( array( 'param' => 'form_type', 'type' => 'request', 'default' => 'published' ) );
+		$type = FrmAppHelper::get_simple_request( array(
+			'param'   => 'form_type',
+			'type'    => 'request',
+			'default' => 'published',
+		) );
 
         if ( 'template' == $type ) {
             $columns['name']        = __( 'Template Name', 'formidable' );
@@ -553,7 +581,11 @@ class FrmFormsController {
 
         $columns['created_at'] = __( 'Date', 'formidable' );
 
-		add_screen_option( 'per_page', array( 'label' => __( 'Forms', 'formidable' ), 'default' => 20, 'option' => 'formidable_page_formidable_per_page' ) );
+		add_screen_option( 'per_page', array(
+			'label'   => __( 'Forms', 'formidable' ),
+			'default' => 20,
+			'option'  => 'formidable_page_formidable_per_page',
+		) );
 
         return $columns;
 	}
@@ -569,7 +601,10 @@ class FrmFormsController {
 	}
 
 	public static function hidden_columns( $hidden_columns ) {
-		$type = FrmAppHelper::get_simple_request( array( 'param' => 'form_type', 'type' => 'request' ) );
+		$type = FrmAppHelper::get_simple_request( array(
+			'param' => 'form_type',
+			'type'  => 'request',
+		) );
 
 		if ( $type === 'template' ) {
 			$hidden_columns[] = 'id';
@@ -835,16 +870,15 @@ class FrmFormsController {
         switch ( $bulkaction ) {
             case 'delete':
                 $message = self::bulk_destroy( $ids );
-            break;
+				break;
             case 'trash':
                 $message = self::bulk_trash( $ids );
-            break;
+				break;
             case 'untrash':
                 $message = self::bulk_untrash( $ids );
-            break;
+				break;
             case 'create_template':
                 $message = self::bulk_create_template( $ids );
-            break;
         }
 
         if ( isset( $message ) && ! empty( $message ) ) {
@@ -1050,12 +1084,18 @@ class FrmFormsController {
 			return $sc . ']';
         }
 
-        $shortcode_atts = shortcode_atts( array(
-            'id' => '', 'key' => '', 'title' => false, 'description' => false,
-            'readonly' => false, 'entry_id' => false, 'fields' => array(),
-            'exclude_fields' => array(), 'minimize' => false,
-        ), $atts);
-        do_action('formidable_shortcode_atts', $shortcode_atts, $atts);
+		$shortcode_atts = shortcode_atts( array(
+			'id'          => '',
+			'key'         => '',
+			'title'       => false,
+			'description' => false,
+			'readonly'    => false,
+			'entry_id'    => false,
+			'fields'      => array(),
+			'exclude_fields' => array(),
+			'minimize'    => false,
+		), $atts );
+		do_action( 'formidable_shortcode_atts', $shortcode_atts, $atts );
 
         return self::show_form(
             $shortcode_atts['id'], $shortcode_atts['key'], $shortcode_atts['title'],
@@ -1178,7 +1218,10 @@ class FrmFormsController {
 					$pass_args['entry_id'] = $entry_id;
 					self::show_message_after_save( $pass_args );
 				}
-				do_action( 'frm_after_entry_processed', array( 'entry_id' => $entry_id, 'form' => $form ) );
+				do_action( 'frm_after_entry_processed', array(
+					'entry_id' => $entry_id,
+					'form'     => $form,
+				) );
 			}
 		}
 	}

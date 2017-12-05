@@ -96,7 +96,11 @@ class FrmEntriesController {
 
 		$action = FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
 		if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) && in_array( $action, array( '', 'list', 'destroy' ) ) ) {
-			add_screen_option( 'per_page', array( 'label' => __( 'Entries', 'formidable' ), 'default' => 20, 'option' => 'formidable_page_formidable_entries_per_page' ) );
+			add_screen_option( 'per_page', array(
+				'label'   => __( 'Entries', 'formidable' ),
+				'default' => 20,
+				'option'  => 'formidable_page_formidable_entries_per_page',
+			) );
         }
 
         return $columns;
@@ -129,7 +133,7 @@ class FrmEntriesController {
 				if ( $form_col->form_id != $form_id ) {
 					$col_id .= '-_-form' . $form_col->form_id;
 				}
-				
+
 				$has_separate_value = ! FrmField::is_option_empty( $form_col, 'separate_value' );
 				$is_post_status     = FrmField::is_option_true( $form_col, 'post_field' ) && $form_col->field_options['post_field'] == 'post_status';
 				if ( $has_separate_value && ! $is_post_status ) {
@@ -582,7 +586,10 @@ class FrmEntriesController {
 		$atts = shortcode_atts( $defaults, $atts );
 
 		if ( $atts['default_email'] ) {
-			$shortcode_atts = array( 'format' => $atts['format'], 'plain_text' => $atts['plain_text'] );
+			$shortcode_atts = array(
+				'format'     => $atts['format'],
+				'plain_text' => $atts['plain_text'],
+			);
 			$entry_shortcode_formatter = FrmEntryFactory::entry_shortcode_formatter_instance( $atts['form_id'], $shortcode_atts );
 			$formatted_entry = $entry_shortcode_formatter->content();
 

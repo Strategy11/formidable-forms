@@ -79,7 +79,7 @@ script:
 # Search for PHP syntax errors.
 - find -L .  -path ./vendor -prune -o -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l
 # Run the theme through JSHint.
-- if [[ "$SNIFF" == "1" ]]; then jshint .; fi
+- if [[ "$SNIFF" == "1" ]]; then jshint ./js/formidable*; fi
 # Run the theme through JavaScript Code Style checker.
 - if [[ "$SNIFF" == "1" ]]; then jscs .; fi
 # WordPress Coding Standards.

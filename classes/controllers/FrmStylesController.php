@@ -17,12 +17,12 @@ class FrmStylesController {
             'show_ui' => false,
             'capability_type' => 'page',
 			'capabilities' => array(
-				'edit_post'		=> 'frm_change_settings',
-				'edit_posts'	=> 'frm_change_settings',
+				'edit_post'	    => 'frm_change_settings',
+				'edit_posts'    => 'frm_change_settings',
 				'edit_others_posts' => 'frm_change_settings',
 				'publish_posts' => 'frm_change_settings',
-				'delete_post'	=> 'frm_change_settings',
-				'delete_posts'	=> 'frm_change_settings',
+				'delete_post'   => 'frm_change_settings',
+				'delete_posts'  => 'frm_change_settings',
 				'read_private_posts' => 'read_private_posts',
 			),
             'supports' => array(
@@ -562,7 +562,7 @@ class FrmStylesController {
 
     					?>
 						<div class="postbox <?php echo esc_attr( $box['id'] ); ?>">
-						<div class="handlediv" title="<?php esc_attr_e( 'Click to toggle', 'formidable' ) ?>"><br/></div>
+						<div class="handlediv" title="<?php esc_attr_e( 'Click to toggle', 'formidable' ); ?>"><br/></div>
                         <h3 class='hndle'><span><?php echo esc_html( $box['title'] ); ?></span></h3>
                             <div class="accordion-section-content <?php postbox_classes( $box['id'], $page ); ?>">
                                 <div class="inside">

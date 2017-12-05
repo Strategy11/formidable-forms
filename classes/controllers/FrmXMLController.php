@@ -219,20 +219,20 @@ class FrmXMLController {
 					} else {
 						$where[ $table . '.status !' ] = 'draft';
 					}
-				break;
+					break;
 				case 'actions':
 					$select = $table . '.ID';
 					$where['post_type'] = FrmFormActionsController::$action_post_type;
 					if ( ! empty( $args['ids'] ) ) {
 						$where['menu_order'] = $args['ids'];
 					}
-				break;
+					break;
 				case 'items':
 					//$join = "INNER JOIN {$wpdb->prefix}frm_item_metas im ON ($table.id = im.item_id)";
 					if ( $args['ids'] ) {
 						$where[ $table . '.form_id' ] = $args['ids'];
 					}
-				break;
+					break;
 				case 'styles':
 					// Loop through all exported forms and get their selected style IDs
 					$frm_style = new FrmStyle();
@@ -258,7 +258,7 @@ class FrmXMLController {
 					if ( ! empty( $style_ids ) ) {
 						$where['ID'] = $style_ids;
 					}
-				break;
+					break;
 				default:
 					$select = $table . '.ID';
 					$join = ' INNER JOIN ' . $wpdb->postmeta . ' pm ON (pm.post_id=' . $table . '.ID)';
@@ -269,7 +269,6 @@ class FrmXMLController {
 					} else {
 						$where['pm.meta_value'] = $args['ids'];
 					}
-				break;
 			}
 
 			$records[ $tb_type ] = FrmDb::get_col( $table . $join, $where, $select );

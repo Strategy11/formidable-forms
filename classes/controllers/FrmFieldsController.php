@@ -141,7 +141,7 @@ class FrmFieldsController {
 
         FrmField::update( $field_id, array(
             'field_options' => $field->field_options,
-			'form_id'		=> $field->form_id,
+			'form_id'       => $field->form_id,
         ) );
         wp_die();
     }
@@ -321,7 +321,10 @@ class FrmFieldsController {
                 if ( strpos($opt, '|') !== false ) {
                     $vals = explode('|', $opt);
                     if ( $vals[0] != $vals[1] ) {
-                        $opts[ $opt_key ] = array( 'label' => trim( $vals[0] ), 'value' => trim( $vals[1] ) );
+						$opts[ $opt_key ] = array(
+							'label' => trim( $vals[0] ),
+							'value' => trim( $vals[1] ),
+						);
                     }
                     unset($vals);
                 }
@@ -397,18 +400,18 @@ class FrmFieldsController {
                 $display['invalid'] = true;
                 $display['default_blank'] = false;
 				$display['captcha_size'] = true;
-            break;
+            	break;
             case 'radio':
                 $display['default_blank'] = false;
-            break;
+            	break;
             case 'text':
             case 'textarea':
                 $display['size'] = true;
                 $display['clear_on_focus'] = true;
-            break;
+            	break;
             case 'select':
                 $display['size'] = true;
-            break;
+            	break;
             case 'url':
             case 'website':
             case 'email':
@@ -650,10 +653,10 @@ class FrmFieldsController {
     }
 
 	public static function check_label( $opt ) {
-        if ( is_array($opt) ) {
-            $opt = (isset($opt['label']) ? $opt['label'] : reset($opt));
-        }
+		if ( is_array( $opt ) ) {
+			$opt = ( isset( $opt['label'] ) ? $opt['label'] : reset( $opt ) );
+		}
 
-        return $opt;
-    }
+		return $opt;
+	}
 }
