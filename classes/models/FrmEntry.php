@@ -125,18 +125,18 @@ class FrmEntry {
 		return true;
 	}
 
-    public static function duplicate( $id ) {
-        global $wpdb;
+	public static function duplicate( $id ) {
+		global $wpdb;
 
-        $values = self::getOne( $id );
+		$values = self::getOne( $id );
 
-        $new_values = array();
-		$new_values['item_key'] = FrmAppHelper::get_unique_key( '', $wpdb->prefix . 'frm_items', 'item_key' );
-        $new_values['name'] = $values->name;
-        $new_values['is_draft'] = $values->is_draft;
-		$new_values['user_id'] = (int) $values->user_id;
+		$new_values = array();
+		$new_values['item_key']   = FrmAppHelper::get_unique_key( '', $wpdb->prefix . 'frm_items', 'item_key' );
+		$new_values['name']       = $values->name;
+		$new_values['is_draft']   = $values->is_draft;
+		$new_values['user_id']    = (int) $values->user_id;
 		$new_values['updated_by'] = (int) $values->user_id;
-        $new_values['form_id'] = $values->form_id ? (int) $values->form_id: null;
+		$new_values['form_id']    = $values->form_id ? (int) $values->form_id : null;
 		$new_values['created_at'] = current_time( 'mysql', 1 );
 		$new_values['updated_at'] = $new_values['created_at'];
 
@@ -294,7 +294,10 @@ class FrmEntry {
         }
 
         global $wpdb;
-		$metas = FrmDb::get_results( $wpdb->prefix . 'frm_item_metas m LEFT JOIN ' . $wpdb->prefix . 'frm_fields f ON m.field_id=f.id', array( 'item_id' => $entry->id, 'field_id !' => 0 ), 'field_id, meta_value, field_key, item_id' );
+		$metas = FrmDb::get_results( $wpdb->prefix . 'frm_item_metas m LEFT JOIN ' . $wpdb->prefix . 'frm_fields f ON m.field_id=f.id', array(
+			'item_id' => $entry->id,
+			'field_id !' => 0,
+		), 'field_id, meta_value, field_key, item_id' );
 
         $entry->metas = array();
 
@@ -342,8 +345,7 @@ class FrmEntry {
         }
 		$id = FrmDb::get_var( $wpdb->prefix . 'frm_items', $where );
 
-        $exists = ($id && $id > 0) ? true : false;
-        return $exists;
+		return ( $id && $id > 0 );
     }
 
     public static function getAll( $where, $order_by = '', $limit = '', $meta = false, $inc_form = true ) {
@@ -726,7 +728,7 @@ class FrmEntry {
 		$is_child = isset( $values['parent_form_id'] ) && isset( $values['parent_nonce'] ) && ! empty( $values['parent_form_id'] ) && wp_verify_nonce( $values['parent_nonce'], 'parent' );
 
 		do_action( 'frm_after_create_entry', $entry_id, $new_values['form_id'], compact( 'is_child' ) );
-		do_action( 'frm_after_create_entry_' . $new_values['form_id'], $entry_id , compact( 'is_child' ) );
+		do_action( 'frm_after_create_entry_' . $new_values['form_id'], $entry_id, compact( 'is_child' ) );
 	}
 
 	/**

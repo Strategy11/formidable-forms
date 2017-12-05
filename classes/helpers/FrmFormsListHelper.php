@@ -18,13 +18,30 @@ class FrmFormsListHelper extends FrmListHelper {
 		$page = $this->get_pagenum();
 		$per_page = $this->get_items_per_page( 'formidable_page_formidable_per_page' );
 
-		$mode    = self::get_param( array( 'param' => 'mode', 'default' => 'list' ) );
-		$orderby = self::get_param( array( 'param' => 'orderby', 'default' => 'name' ) );
-		$order   = self::get_param( array( 'param' => 'order', 'default' => 'ASC' ) );
-		$start   = self::get_param( array( 'param' => 'start', 'default' => ( ( $page - 1 ) * $per_page ) ) );
+		$mode    = self::get_param( array(
+			'param'   => 'mode',
+			'default' => 'list',
+		) );
+		$orderby = self::get_param( array(
+			'param'   => 'orderby',
+			'default' => 'name',
+		) );
+		$order   = self::get_param( array(
+			'param'   => 'order',
+			'default' => 'ASC',
+		) );
+		$start   = self::get_param( array(
+			'param'   => 'start',
+			'default' => ( $page - 1 ) * $per_page,
+		) );
 
-        $s_query = array();
-        $s_query[] = array( 'or' => 1, 'parent_form_id' => null, 'parent_form_id <' => 1 );
+		$s_query = array(
+			array(
+				'or' => 1,
+				'parent_form_id' => null,
+				'parent_form_id <' => 1,
+			),
+		);
 		switch ( $this->status ) {
 		    case 'template':
                 $s_query['is_template'] = 1;
@@ -43,16 +60,22 @@ class FrmFormsListHelper extends FrmListHelper {
 		        break;
 		}
 
-		$s = self::get_param( array( 'param' => 's', 'sanitize' => 'sanitize_text_field' ) );
+		$s = self::get_param( array(
+			'param' => 's',
+			'sanitize' => 'sanitize_text_field',
+		) );
 	    if ( $s != '' ) {
 	        preg_match_all('/".*?("|$)|((?<=[\\s",+])|^)[^\\s",+]+/', $s, $matches);
 		    $search_terms = array_map('trim', $matches[0]);
-	        foreach ( (array) $search_terms as $term ) {
-                $s_query[] = array(
-                    'or'    => true, 'name LIKE' => $term, 'description LIKE' => $term, 'created_at LIKE' => $term,
-                );
-	            unset($term);
-            }
+			foreach ( (array) $search_terms as $term ) {
+				$s_query[] = array(
+					'or'               => true,
+					'name LIKE'        => $term,
+					'description LIKE' => $term,
+					'created_at LIKE'  => $term,
+				);
+				unset( $term );
+			}
 	    }
 
 		$this->items = FrmForm::getAll( $s_query, $orderby . ' ' . $order, $start . ',' . $per_page );
@@ -66,17 +89,21 @@ class FrmFormsListHelper extends FrmListHelper {
 
 	public function no_items() {
 	    if ( 'template' == $this->status ) {
-			esc_html_e( 'No Templates Found.', 'formidable' ) ?>
+			esc_html_e( 'No Templates Found.', 'formidable' );
+			?>
 			<br/><br/><?php esc_html_e( 'To add a new template:', 'formidable' ) ?>
 			<ol>
 				<li><?php printf( esc_html__( 'Create a new %1$sform%2$s.', 'formidable' ), '<a href="' . esc_url( admin_url( 'admin?page=formidable&frm_action=new' ) ) . '"', '</a>' ) ?></li>
 				<li><?php printf( esc_html__( 'After your form is created, go to Formidable -> %1$sForms%2$s.', 'formidable' ), '<a href="?page=formidable">', '</a>') ?></li>
 				<li><?php esc_html_e( 'Place your mouse over the name of the form you just created, and click the "Create Template" link.', 'formidable' ) ?></li>
             </ol>
-<?php   } else {
-			esc_html_e( 'No Forms Found.', 'formidable' ) ?>
+<?php
+		} else {
+			esc_html_e( 'No Forms Found.', 'formidable' );
+			?>
 			<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable&frm_action=new' ) ) ?>"><?php esc_html_e( 'Add New', 'formidable' ); ?></a>
-<?php   }
+<?php
+		}
 	}
 
 	public function get_bulk_actions() {
@@ -136,12 +163,14 @@ class FrmFormsListHelper extends FrmListHelper {
 		<a href="#" id="frm-templateDrop" class="frm-dropdown-toggle button" data-toggle="dropdown"><?php esc_html_e( 'Create New Template', 'formidable' ) ?> <b class="caret"></b></a>
 		<ul class="frm-dropdown-menu" role="menu" aria-labelledby="frm-templateDrop">
 		<?php
-        if ( empty( $forms ) ) { ?>
+		if ( empty( $forms ) ) {
+		?>
 			<li class="frm_dropdown_li"><?php esc_html_e( 'You have not created any forms yet. <br/>You must create a form before you can make a template.', 'formidable' ) ?></li>
         <?php
         } else {
             foreach ( $forms as $form ) {
-		        $args['id'] = $form->id; ?>
+				$args['id'] = $form->id;
+				?>
 			<li><a href="<?php echo esc_url( add_query_arg( $args, $base ) ); ?>" tabindex="-1"><?php echo esc_html( empty( $form->name ) ? __( '(no title)' ) : FrmAppHelper::truncate( $form->name, 33 ) ); ?></a></li>
 			<?php
 			    unset($form);
@@ -165,7 +194,10 @@ class FrmFormsListHelper extends FrmListHelper {
 
 	    $links = array();
 	    $counts = FrmForm::get_count();
-		$form_type = self::get_param( array( 'param' => 'form_type', 'default' => 'published' ) );
+		$form_type = self::get_param( array(
+			'param' => 'form_type',
+			'default' => 'published',
+		) );
 
 	    foreach ( $statuses as $status => $name ) {
 

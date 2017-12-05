@@ -28,7 +28,10 @@ class FrmDb {
     public static function get_where_clause_and_values( &$args, $starts_with = ' WHERE ' ) {
         if ( empty($args) ) {
 			// add an arg to prevent prepare from failing
-			$args = array( 'where' => $starts_with . '1=%d', 'values' => array( 1 ) );
+			$args = array(
+				'where' => $starts_with . '1=%d',
+				'values' => array( 1 ),
+			);
 			return;
         }
 
@@ -56,26 +59,30 @@ class FrmDb {
             unset( $args['or'] );
         }
 
-        foreach ( $args as $key => $value ) {
-            $where .= empty( $where ) ? $base_where : $condition;
-            $array_inc_null = ( ! is_numeric( $key ) && is_array( $value ) && in_array( null, $value ) );
-            if ( is_numeric( $key ) || $array_inc_null ) {
-                $where .= ' ( ';
-                $nested_where = '';
-                if ( $array_inc_null ) {
-                    foreach ( $value as $val ) {
-                        self::parse_where_from_array( array( $key => $val, 'or' => 1 ), '', $nested_where, $values );
-                    }
-                } else {
-                    self::parse_where_from_array( $value, '', $nested_where, $values );
-                }
-                $where .= $nested_where;
-                $where .= ' ) ';
-            } else {
-                self::interpret_array_to_sql( $key, $value, $where, $values );
-            }
-        }
-    }
+		foreach ( $args as $key => $value ) {
+			$where .= empty( $where ) ? $base_where : $condition;
+			$array_inc_null = ( ! is_numeric( $key ) && is_array( $value ) && in_array( null, $value ) );
+			if ( is_numeric( $key ) || $array_inc_null ) {
+				$where .= ' ( ';
+				$nested_where = '';
+				if ( $array_inc_null ) {
+					foreach ( $value as $val ) {
+						$parse_where = array(
+							$key => $val,
+							'or' => 1,
+						);
+						self::parse_where_from_array( $parse_where, '', $nested_where, $values );
+					}
+				} else {
+					self::parse_where_from_array( $value, '', $nested_where, $values );
+				}
+				$where .= $nested_where;
+				$where .= ' ) ';
+			} else {
+				self::interpret_array_to_sql( $key, $value, $where, $values );
+			}
+		}
+	}
 
     /**
      * @param string $key
@@ -272,16 +279,16 @@ class FrmDb {
 	 */
 	public static function append_where_is( $where_is ) {
 		$switch_to = array(
-			'='		=> '',
-			'!=' 	=> '!',
-			'<='	=> '<',
-			'>='	=> '>',
-			'like'	=> 'like',
+			'='     => '',
+			'!='    => '!',
+			'<='    => '<',
+			'>='    => '>',
+			'like'  => 'like',
 			'not like' => 'not like',
-			'in'	=> '',
+			'in'    => '',
 			'not in' => 'not',
-			'like%'	=> 'like%',
-			'%like'	=> '%like',
+			'like%' => 'like%',
+			'%like' => '%like',
 		);
 
 		$where_is = strtolower( $where_is );
@@ -372,7 +379,7 @@ class FrmDb {
 
 		$query = self::generate_query_string_from_pieces( $columns, $table, $where );
 
-		$cache_key = str_replace( array( ' ', ',' ), '_', trim( implode( '_', FrmAppHelper::array_flatten( $where ) ) . $columns . '_results_ARRAY_A' , ' WHERE' ) );
+		$cache_key = str_replace( array( ' ', ',' ), '_', trim( implode( '_', FrmAppHelper::array_flatten( $where ) ) . $columns . '_results_ARRAY_A', ' WHERE' ) );
 		$results = self::check_cache( $cache_key, $group, $query, 'get_associative_results' );
 
 		return $results;

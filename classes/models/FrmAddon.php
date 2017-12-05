@@ -62,9 +62,9 @@ class FrmAddon {
 
 			// setup the updater
 			$api_data = array(
-				'version' 	=> $this->version,
-				'license' 	=> $license,
-				'author' 	=> $this->author,
+				'version' => $this->version,
+				'license' => $license,
+				'author'  => $this->author,
 			);
 			if ( is_numeric( $this->download_id ) ) {
 				$api_data['item_id'] = $this->download_id;

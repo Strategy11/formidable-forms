@@ -289,7 +289,11 @@ class FrmMigrate {
 
         // Get query arguments
 		$field_types = array( 'textarea', 'text', 'number', 'email', 'url', 'rte', 'date', 'phone', 'password', 'image', 'tag', 'file' );
-		$query = array( 'type' => $field_types, 'field_options like' => 's:4:"size";', 'field_options not like' => 's:4:"size";s:0:' );
+		$query = array(
+			'type' => $field_types,
+			'field_options like' => 's:4:"size";',
+			'field_options not like' => 's:4:"size";s:0:',
+		);
 
         // Get results
 		$fields = FrmDb::get_results( $this->fields, $query, 'id, field_options' );

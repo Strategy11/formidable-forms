@@ -366,7 +366,10 @@ class FrmEntryValidate {
 			return false;
 		}
 
-		$datas = array( 'comment_type' => 'formidable', 'comment_content' => $content );
+		$datas = array(
+			'comment_type'    => 'formidable',
+			'comment_content' => $content,
+		);
 		self::parse_akismet_array( $datas, $values );
 
 		$query_string = _http_build_query( $datas, '', '&' );

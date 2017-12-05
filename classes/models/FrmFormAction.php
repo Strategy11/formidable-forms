@@ -2,16 +2,16 @@
 
 class FrmFormAction {
 
-	public $id_base;			// Root id for all actions of this type.
-	public $name;				// Name for this action type.
+	public $id_base;         // Root id for all actions of this type.
+	public $name;            // Name for this action type.
 	public $option_name;
-	public $action_options;     // Option array passed to wp_register_sidebar_widget()
-	public $control_options;	// Option array passed to wp_register_widget_control()
+	public $action_options;  // Option array passed to wp_register_sidebar_widget()
+	public $control_options; // Option array passed to wp_register_widget_control()
 
-    public $form_id;        // The ID of the form to evaluate
-	public $number = false;	// Unique ID number of the current instance.
-	public $id = '';		// Unique ID string of the current instance (id_base-number)
-	public $updated = false;	// Set true when we update the data after a POST submit - makes sure we don't do it twice.
+	public $form_id;         // The ID of the form to evaluate
+	public $number = false;  // Unique ID number of the current instance.
+	public $id = '';         // Unique ID string of the current instance (id_base-number)
+	public $updated = false; // Set true when we update the data after a POST submit - makes sure we don't do it twice.
 
 	// Member functions that you must over-ride.
 
@@ -62,11 +62,11 @@ class FrmFormAction {
 	 * if left empty a portion of the widget's class name will be used. Has to be unique.
 	 * @param string $name Name for the widget displayed on the configuration page.
 	 * @param array $action_options Optional Passed to wp_register_sidebar_widget()
-	 *	 - description: shown on the configuration page
-	 *	 - classname
+	 *   - description: shown on the configuration page
+	 *   - classname
 	 * @param array $control_options Optional Passed to wp_register_widget_control()
-	 *	 - width: required if more than 250px
-	 *	 - height: currently not used but may be needed in the future
+	 *   - width: required if more than 250px
+	 *   - height: currently not used but may be needed in the future
 	 */
 	public function __construct( $id_base, $name, $action_options = array(), $control_options = array() ) {
 	    if ( ! defined('ABSPATH') ) {
@@ -428,7 +428,7 @@ class FrmFormAction {
 	    global $frm_vars;
 	    $frm_vars['action_type'] = $type;
 
-	    add_filter( 'posts_where' , 'FrmFormActionsController::limit_by_type' );
+		add_filter( 'posts_where', 'FrmFormActionsController::limit_by_type' );
 		$query = self::action_args( $form_id, $limit );
         $query['post_status']      = 'any';
         $query['suppress_filters'] = false;
@@ -436,7 +436,7 @@ class FrmFormAction {
 		$actions = FrmDb::check_cache( serialize( $query ) . '_type_' . $type, 'frm_actions', $query, 'get_posts' );
         unset($query);
 
-        remove_filter( 'posts_where' , 'FrmFormActionsController::limit_by_type' );
+		remove_filter( 'posts_where', 'FrmFormActionsController::limit_by_type' );
 
         if ( empty($actions) ) {
             return array();
@@ -632,7 +632,7 @@ class FrmFormAction {
 		}
 
 		if ( $notification['conditions']['any_all'] == 'all' && ! empty( $met ) && isset( $met[0] ) && isset( $met[1] ) ) {
-			$stop = ($notification['conditions']['send_stop'] == 'send');
+			$stop = ( $notification['conditions']['send_stop'] == 'send' );
 		} else if ( $notification['conditions']['any_all'] == 'any' && $notification['conditions']['send_stop'] == 'send' && isset($met[0]) ) {
 			$stop = false;
 		}
@@ -672,7 +672,10 @@ class FrmFormAction {
 			$observed_value = $entry->metas[ $field_id ];
 		} else if ( $entry->post_id && FrmAppHelper::pro_is_installed() ) {
 			$field = FrmField::getOne( $field_id );
-			$observed_value = FrmProEntryMetaHelper::get_post_or_meta_value( $entry, $field, array( 'links' => false, 'truncate' => false ) );
+			$observed_value = FrmProEntryMetaHelper::get_post_or_meta_value( $entry, $field, array(
+				'links'    => false,
+				'truncate' => false,
+			) );
 		}
 
 		return $observed_value;

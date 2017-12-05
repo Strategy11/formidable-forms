@@ -175,15 +175,15 @@ class FrmForm {
 		$options = isset( $values['options'] ) ? (array) $values['options'] : array();
 		FrmFormsHelper::fill_form_options( $options, $values );
 
-        $options['custom_style'] = isset($values['options']['custom_style']) ? $values['options']['custom_style'] : 0;
-        $options['before_html'] = isset($values['options']['before_html']) ? $values['options']['before_html'] : FrmFormsHelper::get_default_html('before');
-        $options['after_html'] = isset($values['options']['after_html']) ? $values['options']['after_html'] : FrmFormsHelper::get_default_html('after');
-        $options['submit_html'] = (isset($values['options']['submit_html']) && $values['options']['submit_html'] != '') ? $values['options']['submit_html'] : FrmFormsHelper::get_default_html('submit');
+		$options['custom_style'] = isset( $values['options']['custom_style'] ) ? $values['options']['custom_style'] : 0;
+		$options['before_html'] = isset( $values['options']['before_html'] ) ? $values['options']['before_html'] : FrmFormsHelper::get_default_html( 'before' );
+		$options['after_html'] = isset( $values['options']['after_html'] ) ? $values['options']['after_html'] : FrmFormsHelper::get_default_html( 'after' );
+		$options['submit_html'] = ( isset( $values['options']['submit_html'] ) && '' !== $values['options']['submit_html'] ) ? $values['options']['submit_html'] : FrmFormsHelper::get_default_html( 'submit' );
 
-        $options = apply_filters('frm_form_options_before_update', $options, $values);
-        $new_values['options'] = serialize($options);
+		$options = apply_filters( 'frm_form_options_before_update', $options, $values );
+		$new_values['options'] = serialize( $options );
 
-        return $new_values;
+		return $new_values;
     }
 
 
@@ -277,8 +277,11 @@ class FrmForm {
 
 	private static function prepare_field_update_values( $field, $values, &$new_field ) {
 		$field_cols = array(
-			'field_key' => '', 'required' => false, 'type' => '',
-			'description' => '', 'options' => '',
+			'field_key' => '',
+			'required'  => false,
+			'type'      => '',
+			'description' => '',
+			'options'   => '',
 		);
 		foreach ( $field_cols as $col => $default ) {
 			$default = ( $default === '' ) ? $field->{$col} : $default;
@@ -303,7 +306,11 @@ class FrmForm {
         global $wpdb;
 
         if ( is_array($id) ) {
-			$where = array( 'id' => $id, 'parent_form_id' => $id, 'or' => 1 );
+			$where = array(
+				'id' => $id,
+				'parent_form_id' => $id,
+				'or' => 1,
+			);
 			FrmDb::get_where_clause_and_values( $where );
 			array_unshift( $where['values'], $status );
 
@@ -336,18 +343,28 @@ class FrmForm {
         $options = $form->options;
         $options['trash_time'] = time();
 
-        global $wpdb;
-        $query_results = $wpdb->update(
+		global $wpdb;
+		$query_results = $wpdb->update(
 			$wpdb->prefix . 'frm_forms',
-			array( 'status' => 'trash', 'options' => serialize( $options ) ),
-			array( 'id' => $id )
-        );
+			array(
+				'status'  => 'trash',
+				'options' => serialize( $options ),
+			),
+			array(
+				'id' => $id,
+			)
+		);
 
-        $wpdb->update(
+		$wpdb->update(
 			$wpdb->prefix . 'frm_forms',
-			array( 'status' => 'trash', 'options' => serialize( $options ) ),
-			array( 'parent_form_id' => $id )
-        );
+			array(
+				'status'  => 'trash',
+				'options' => serialize( $options ),
+			),
+			array(
+				'parent_form_id' => $id,
+			)
+		);
 
         if ( $query_results ) {
 			self::clear_form_cache();
@@ -519,7 +536,10 @@ class FrmForm {
      */
 	public static function getAll( $where = array(), $order_by = '', $limit = '' ) {
 		if ( is_array( $where ) && ! empty( $where ) ) {
-			$results = FrmDb::get_results( 'frm_forms', $where, '*', array( 'order_by' => $order_by, 'limit' => $limit ) );
+			$results = FrmDb::get_results( 'frm_forms', $where, '*', array(
+				'order_by' => $order_by,
+				'limit'    => $limit,
+			) );
 		} else {
 			global $wpdb;
 
@@ -572,7 +592,11 @@ class FrmForm {
     	    return $counts;
     	}
 
-        $results = (array) FrmDb::get_results( 'frm_forms', array( 'or' => 1, 'parent_form_id' => null, 'parent_form_id <' => 0 ), 'status, is_template' );
+		$results = (array) FrmDb::get_results( 'frm_forms', array(
+			'or' => 1,
+			'parent_form_id' => null,
+			'parent_form_id <' => 0,
+		), 'status, is_template' );
 
 		$statuses = array( 'published', 'draft', 'template', 'trash' );
     	$counts = array_fill_keys( $statuses, 0 );
@@ -638,8 +662,16 @@ class FrmForm {
 		$action = apply_filters( 'frm_show_new_entry_page', FrmAppHelper::get_param( $action_var, 'new', 'get', 'sanitize_title' ), $form );
 
 		$default_values = array(
-			'id' => '', 'form_name' => '', 'paged' => 1, 'form' => $form->id, 'form_id' => $form->id,
-			'field_id' => '', 'search' => '', 'sort' => '', 'sdir' => '', 'action' => $action,
+			'id'        => '',
+			'form_name' => '',
+			'paged'     => 1,
+			'form'      => $form->id,
+			'form_id'   => $form->id,
+			'field_id'  => '',
+			'search'    => '',
+			'sort'      => '',
+			'sdir'      => '',
+			'action'    => $action,
 		);
 
 		$values = array();
@@ -674,7 +706,16 @@ class FrmForm {
 
 	public static function list_page_params() {
 		$values = array();
-		foreach ( array( 'template' => 0, 'id' => '', 'paged' => 1, 'form' => '', 'search' => '', 'sort' => '', 'sdir' => '' ) as $var => $default ) {
+		$defaults = array(
+			'template' => 0,
+			'id'     => '',
+			'paged'  => 1,
+			'form'   => '',
+			'search' => '',
+			'sort'   => '',
+			'sdir'   => '',
+		);
+		foreach ( $defaults as $var => $default ) {
 			$values[ $var ] = FrmAppHelper::get_param( $var, $default, 'get', 'sanitize_text_field' );
 		}
 
@@ -690,11 +731,19 @@ class FrmForm {
 		}
 
 		$values = array();
-		foreach ( array(
-			'id' => '', 'form_name' => '', 'paged' => 1, 'form' => $form_id,
-			'field_id' => '', 'search' => '', 'sort' => '', 'sdir' => '', 'fid' => '',
+		$defaults = array(
+			'id'        => '',
+			'form_name' => '',
+			'paged'     => 1,
+			'form'      => $form_id,
+			'field_id'  => '',
+			'search'    => '',
+			'sort'      => '',
+			'sdir'      => '',
+			'fid'       => '',
 			'keep_post' => '',
-		) as $var => $default ) {
+		);
+		foreach ( $defaults as $var => $default ) {
 			$values[ $var ] = FrmAppHelper::get_param( $var, $default, 'get', 'sanitize_text_field' );
 		}
 

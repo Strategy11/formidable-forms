@@ -550,11 +550,11 @@ class FrmEntryFormatter {
 	 * @since 2.04
 	 *
 	 * @param array $value_args
-	 * 		$value_args = [
-	 * 			'label'      => (string) The label. Required
-	 *			'value'      => (mixed) The value to add. Required
-	 *			'field_type' => (string) The field type. Blank string if not a field.
-	 * 		]
+	 *   $value_args = [
+	 *     'label' => (string) The label. Required
+	 *     'value' => (mixed) The value to add. Required
+	 *     'field_type' => (string) The field type. Blank string if not a field.
+	 *   ]
 	 * @param string $content
 	 */
 	protected function add_html_row( $value_args, &$content ) {
@@ -655,5 +655,4 @@ class FrmEntryFormatter {
 
 		return $value;
 	}
-
 }

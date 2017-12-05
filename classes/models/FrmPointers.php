@@ -155,7 +155,8 @@ class FrmPointers {
 			lastOpenedPointer.find('#pointer-ternary').click(function () {
 			<?php echo $this->button_array['button3']['function']; ?>
 			});
-		<?php }
+		<?php
+		}
 	}
 
 	/**
@@ -168,7 +169,10 @@ class FrmPointers {
 					. '<p>' . $this->opening_line() . ' ' . __( 'Click &#8220;Start Tour&#8221; to view a quick introduction of this plugin&#8217;s core functionality.', 'formidable' ) . '</p>';
 		$opt_arr  = array(
 			'content'  => $content,
-			'position' => array( 'edge' => 'top', 'align' => 'center' ),
+			'position' => array(
+				'edge'  => 'top',
+				'align' => 'center',
+			),
 		);
 
 		$this->button_array['button2']['text']     = __( 'Start Tour', 'formidable' );
@@ -265,7 +269,10 @@ class FrmPointers {
 			'prev_page' => '',
 			'next_page' => 'styles',
 			'selector'  => '.wp-list-table',
-			'position'  => array( 'edge' => 'bottom', 'align' => 'center' ),
+			'position'  => array(
+				'edge'  => 'bottom',
+				'align' => 'center',
+			),
 		);
 	}
 
@@ -281,7 +288,10 @@ class FrmPointers {
 			'prev_page' => 'entries',
 			'next_page' => 'import',
 			'selector'  => '.general-style',
-			'position'  => array( 'edge' => 'left', 'align' => 'right' ),
+			'position'  => array(
+				'edge'  => 'left',
+				'align' => 'right',
+			),
 		);
 	}
 
@@ -297,7 +307,10 @@ class FrmPointers {
 			'prev_page' => 'styles',
 			'next_page' => 'settings',
 			'selector'  => '.inside.with_frm_style',
-			'position'  => array( 'edge' => 'bottom', 'align' => 'top' ),
+			'position'  => array(
+				'edge'  => 'bottom',
+				'align' => 'top',
+			),
 		);
 	}
 

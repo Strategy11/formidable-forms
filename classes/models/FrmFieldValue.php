@@ -187,7 +187,8 @@ class FrmFieldValue {
 
 		// frm_display_{fieldtype}_value_custom hook
 		$this->displayed_value = apply_filters( 'frm_display_' . $this->field->type . '_value_custom', $this->displayed_value, array(
-			'field' => $this->field, 'entry' => $this->entry,
+			'field' => $this->field,
+			'entry' => $this->entry,
 		) );
 	}
 

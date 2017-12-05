@@ -48,7 +48,10 @@ class FrmEntryMeta {
 
         global $wpdb;
 
-		$values = array( 'item_id' => $entry_id, 'field_id' => $field_id );
+		$values = array(
+			'item_id'  => $entry_id,
+			'field_id' => $field_id,
+		);
 		$where_values = $values;
         $values['meta_value'] = $meta_value;
         $values = apply_filters('frm_update_entry_meta', $values);
@@ -66,7 +69,10 @@ class FrmEntryMeta {
 	public static function update_entry_metas( $entry_id, $values ) {
         global $wpdb;
 
-		$prev_values = FrmDb::get_col( $wpdb->prefix . 'frm_item_metas', array( 'item_id' => $entry_id, 'field_id !' => 0 ), 'field_id' );
+		$prev_values = FrmDb::get_col( $wpdb->prefix . 'frm_item_metas', array(
+			'item_id'    => $entry_id,
+			'field_id !' => 0,
+		), 'field_id' );
 
         foreach ( $values as $field_id => $meta_value ) {
 			$field = false;
@@ -103,7 +109,10 @@ class FrmEntryMeta {
         }
 
 		// prepare the query
-		$where = array( 'item_id' => $entry_id, 'field_id' => $prev_values );
+		$where = array(
+			'item_id'  => $entry_id,
+			'field_id' => $prev_values,
+		);
 		FrmDb::get_where_clause_and_values( $where );
 
         // Delete any leftovers
@@ -182,7 +191,12 @@ class FrmEntryMeta {
     }
 
     public static function get_entry_metas_for_field( $field_id, $order = '', $limit = '', $args = array() ) {
-		$defaults = array( 'value' => false, 'unique' => false, 'stripslashes' => true, 'is_draft' => false );
+		$defaults = array(
+			'value'    => false,
+			'unique'   => false,
+			'stripslashes' => true,
+			'is_draft' => false,
+		);
         $args = wp_parse_args( $args, $defaults );
 
         $query = array();
@@ -246,18 +260,18 @@ class FrmEntryMeta {
             FrmDb::prepend_and_or_where(' WHERE ', $where) . $order_by . $limit;
 
 		$cache_key = 'all_' . maybe_serialize( $where ) . $order_by . $limit;
-        $results = FrmDb::check_cache($cache_key, 'frm_entry', $query, ($limit == ' LIMIT 1' ? 'get_row' : 'get_results'));
+		$results = FrmDb::check_cache( $cache_key, 'frm_entry', $query, ( $limit == ' LIMIT 1' ? 'get_row' : 'get_results' ) );
 
-        if ( ! $results || ! $stripslashes ) {
-            return $results;
-        }
+		if ( ! $results || ! $stripslashes ) {
+			return $results;
+		}
 
-        foreach ( $results as $k => $result ) {
+		foreach ( $results as $k => $result ) {
 			$results[ $k ]->meta_value = stripslashes_deep( maybe_unserialize( $result->meta_value ) );
-            unset($k, $result);
-        }
+			unset( $k, $result );
+		}
 
-        return $results;
+		return $results;
     }
 
     public static function getEntryIds( $where = array(), $order_by = '', $limit = '', $unique = true, $args = array() ) {
@@ -273,9 +287,7 @@ class FrmEntryMeta {
         $query = implode(' ', $query);
 
 		$cache_key = 'ids_' . maybe_serialize( $where ) . $order_by . 'l' . $limit . 'u' . $unique . maybe_serialize( $args );
-        $results = FrmDb::check_cache($cache_key, 'frm_entry', $query, ($limit == ' LIMIT 1' ? 'get_var' : 'get_col'));
-
-        return $results;
+		return FrmDb::check_cache( $cache_key, 'frm_entry', $query, ( $limit == ' LIMIT 1' ? 'get_var' : 'get_col' ) );
     }
 
     /**
@@ -361,10 +373,10 @@ class FrmEntryMeta {
                 switch ( $field ) {
                     case 'year':
 						$value = '%' . $value;
-                    break;
+						break;
                     case 'month':
                         $value .= '%';
-                    break;
+						break;
                     case 'day':
 						$value = '%' . $value . '%';
                 }

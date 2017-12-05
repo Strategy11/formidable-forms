@@ -40,7 +40,7 @@ class FrmField {
 			'image'     => __( 'Image URL', 'formidable' ),
 			'scale'     => __( 'Scale', 'formidable' ),
 			'data'      => __( 'Dynamic Field', 'formidable' ),
-			'lookup'	=> __( 'Lookup', 'formidable' ),
+			'lookup'    => __( 'Lookup', 'formidable' ),
 			'form'      => __( 'Embed Form', 'formidable' ),
 			'hidden'    => __( 'Hidden Field', 'formidable' ),
 			'user_id'   => __( 'User ID (hidden)', 'formidable' ),
@@ -110,11 +110,15 @@ class FrmField {
     public static function duplicate( $old_form_id, $form_id, $copy_keys = false, $blog_id = false ) {
         global $frm_duplicate_ids;
 
-		$where = array( array( 'or' => 1, 'fi.form_id' => $old_form_id, 'fr.parent_form_id' => $old_form_id ) );
+		$where = array( array(
+			'or' => 1,
+			'fi.form_id' => $old_form_id,
+			'fr.parent_form_id' => $old_form_id,
+		) );
 		$fields = self::getAll( $where, 'field_order', '', $blog_id );
 
         foreach ( (array) $fields as $field ) {
-            $new_key = ($copy_keys) ? $field->field_key : '';
+			$new_key = $copy_keys ? $field->field_key : '';
             if ( $copy_keys && substr($field->field_key, -1) == 2 ) {
                 $new_key = rtrim($new_key, 2);
             }
@@ -125,7 +129,10 @@ class FrmField {
 			// If this is a repeating section, create new form
 			if ( self::is_repeating_field( $field ) ) {
 				// create the repeatable form
-				$new_repeat_form_id = apply_filters( 'frm_create_repeat_form', 0, array( 'parent_form_id' => $form_id, 'field_name' => $field->name ) );
+				$new_repeat_form_id = apply_filters( 'frm_create_repeat_form', 0, array(
+					'parent_form_id' => $form_id,
+					'field_name'     => $field->name,
+				) );
 
 				// Save old form_select
 				$old_repeat_form_id = $field->field_options['form_select'];
@@ -295,7 +302,12 @@ class FrmField {
         if ( $field ) {
             $type = $field->{$col};
         } else {
-            $type = FrmDb::get_var( 'frm_fields', array( 'or' => 1, 'id' => $id, 'field_key' => $id ), $col );
+			$where = array(
+				'or'        => 1,
+				'id'        => $id,
+				'field_key' => $id,
+			);
+			$type = FrmDb::get_var( 'frm_fields', $where, $col );
         }
 
         return $type;
@@ -306,7 +318,10 @@ class FrmField {
             return array();
         }
 
-		$results = self::get_fields_from_transients( $form_id, array( 'inc_embed' => $inc_sub, 'inc_repeat' => $inc_sub ) );
+		$results = self::get_fields_from_transients( $form_id, array(
+			'inc_embed'  => $inc_sub,
+			'inc_repeat' => $inc_sub,
+		) );
 		if ( ! empty( $results ) ) {
             $fields = array();
             $count = 0;
@@ -333,7 +348,10 @@ class FrmField {
 
         self::$use_cache = false;
 
-		$where = array( 'fi.form_id' => (int) $form_id, 'fi.type' => $type );
+		$where = array(
+			'fi.form_id' => (int) $form_id,
+			'fi.type'    => $type,
+		);
 		self::maybe_include_repeating_fields( $inc_sub, $where );
 		$results = self::getAll( $where, 'field_order', $limit );
         self::$use_cache = true;
@@ -347,7 +365,10 @@ class FrmField {
             return array();
         }
 
-		$results = self::get_fields_from_transients( $form_id, array( 'inc_embed' => $inc_embed, 'inc_repeat' => $inc_repeat ) );
+		$results = self::get_fields_from_transients( $form_id, array(
+			'inc_embed'  => $inc_embed,
+			'inc_repeat' => $inc_repeat,
+		) );
 		if ( ! empty( $results ) ) {
             if ( empty($limit) ) {
 				return $results;
@@ -376,7 +397,10 @@ class FrmField {
 		self::include_sub_fields( $results, $inc_embed, 'all' );
 
         if ( empty($limit) ) {
-			self::set_field_transient( $results, $form_id, 0, array( 'inc_embed' => $inc_embed, 'inc_repeat' => $inc_repeat ) );
+			self::set_field_transient( $results, $form_id, 0, array(
+				'inc_embed'  => $inc_embed,
+				'inc_repeat' => $inc_repeat,
+			) );
         }
 
 		return $results;
@@ -391,7 +415,11 @@ class FrmField {
 	private static function maybe_include_repeating_fields( $inc_repeat, &$where ) {
 		if ( $inc_repeat == 'include' ) {
 			$form_id = $where['fi.form_id'];
-			$where[] = array( 'or' => 1, 'fi.form_id' => $form_id, 'fr.parent_form_id' => $form_id );
+			$where[] = array(
+				'or'         => 1,
+				'fi.form_id' => $form_id,
+				'fr.parent_form_id' => $form_id,
+			);
 			unset( $where['fi.form_id'] );
 		}
 	}
@@ -459,8 +487,12 @@ class FrmField {
         $query = "SELECT fi.*, fr.name as form_name  FROM {$table_name} fi LEFT OUTER JOIN {$form_table_name} fr ON fi.form_id=fr.id";
         $query_type = ( $limit == ' LIMIT 1' || $limit == 1 ) ? 'row' : 'results';
 
-        if ( is_array($where) ) {
-            $results = FrmDb::get_var( $table_name . ' fi LEFT OUTER JOIN ' . $form_table_name . ' fr ON fi.form_id=fr.id', $where, 'fi.*, fr.name as form_name', array( 'order_by' => $order_by, 'limit' => $limit ), '', $query_type );
+		if ( is_array( $where ) ) {
+			$args = array(
+				'order_by' => $order_by,
+				'limit'    => $limit,
+			);
+			$results = FrmDb::get_var( $table_name . ' fi LEFT OUTER JOIN ' . $form_table_name . ' fr ON fi.form_id=fr.id', $where, 'fi.*, fr.name as form_name', $args, '', $query_type );
 		} else {
 			// if the query is not an array, then it has already been prepared
 			$query .= FrmDb::prepend_and_or_where(' WHERE ', $where ) . $order_by . $limit;
@@ -615,7 +647,7 @@ class FrmField {
 		$field_type = is_array( $field ) ? $field['type'] : $field->type;
 		$data_type = self::get_option( $field, 'data_type' );
 
-		return self::is_option_true( $field, 'multiple' ) && ( ( $field_type == 'select' || ( $field_type == 'data' && $data_type == 'select') ) );
+		return self::is_option_true( $field, 'multiple' ) && ( ( $field_type == 'select' || ( $field_type == 'data' && $data_type == 'select' ) ) );
 	}
 
 	/**
