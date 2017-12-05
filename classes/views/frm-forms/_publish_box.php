@@ -35,7 +35,7 @@
 				</button>
             <?php } else { ?>
 				<button class="frm_submit_form frm_submit_<?php echo ( isset( $values['ajax_load'] ) && $values['ajax_load'] ) ? '' : 'no_'; ?>ajax button-primary frm_button_submit" type="button" id="frm_submit_side_top" >
-					<?php echo isset( $button ) ? esc_attr( $button ) : __( 'Update', 'formidable' ); ?>
+					<?php echo esc_html( isset( $button ) ? $button : __( 'Update', 'formidable' ) ); ?>
 				</button>
     	    <?php } ?>
             <div id="frm-preview-action">
