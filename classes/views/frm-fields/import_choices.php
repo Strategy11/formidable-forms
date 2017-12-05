@@ -48,7 +48,8 @@ foreach ( $field->options as $fkey => $fopt ) {
 	} else {
 		echo esc_textarea( $fopt . "\n" );
 	}
-} ?>
+}
+?>
 </textarea>
 
 <p class="submit frm_clear">

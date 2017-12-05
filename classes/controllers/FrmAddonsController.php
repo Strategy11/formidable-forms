@@ -209,7 +209,10 @@ class FrmAddonsController {
 
 		if ( $license && is_array( $license ) && isset( $license['license'] ) ) {
 			$url = 'https://formidableforms.com/frm-edd-api/licenses?l=' . urlencode( base64_encode( $license['license'] ) );
-			$licenses = self::send_api_request( $url, array( 'name' => 'frm_api_licence', 'expires' => 60 * 60 * 5 ) );
+			$licenses = self::send_api_request( $url, array(
+				'name' => 'frm_api_licence',
+				'expires' => 60 * 60 * 5,
+			) );
 			echo json_encode( $licenses );
 		}
 
@@ -250,10 +253,30 @@ class FrmAddonsController {
 
 	private static function prepare_pro_info() {
 		return array(
-			'personal'      => array( 'id' => 2, 'download' => 19367654, 'price' => '49.00', 'name' => 'Personal' ),
-			'professional'  => array( 'id' => 0, 'download' => 19367001, 'price' => '99.00', 'name' => 'Professional' ),
-			'smallbusiness' => array( 'id' => 0, 'download' => 19366995, 'price' => '199.00', 'name' => 'Small Business' ),
-			'enterprise'    => array( 'id' => 0, 'download' => 19366992, 'price' => '399.00', 'name' => 'Enterprise' ),
+			'personal'     => array(
+				'id'       => 2,
+				'download' => 19367654,
+				'price'    => '49.00',
+				'name'     => 'Personal',
+			),
+			'professional' => array(
+				'id'       => 0,
+				'download' => 19367001,
+				'price'    => '99.00',
+				'name'     => 'Professional',
+			),
+			'smallbusiness' => array(
+				'id'       => 0,
+				'download' => 19366995,
+				'price'    => '199.00',
+				'name'     => 'Small Business',
+			),
+			'enterprise'   => array(
+				'id'       => 0,
+				'download' => 19366992,
+				'price'    => '399.00',
+				'name'     => 'Enterprise',
+			),
 		);
 	}
 

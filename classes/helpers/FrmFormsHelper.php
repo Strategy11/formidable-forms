@@ -101,7 +101,7 @@ class FrmFormsHelper {
 
         ?>
 		<li class="dropdown last" id="frm_bs_dropdown">
-			<a href="#" id="frm-navbarDrop" class="frm-dropdown-toggle" data-toggle="dropdown"><?php _e( 'Switch Form', 'formidable' ) ?> <b class="caret"></b></a>
+			<a href="#" id="frm-navbarDrop" class="frm-dropdown-toggle" data-toggle="dropdown"><?php esc_html_e( 'Switch Form', 'formidable' ) ?> <b class="caret"></b></a>
 		    <ul class="frm-dropdown-menu frm-on-top" role="menu" aria-labelledby="frm-navbarDrop">
 			<?php
 			foreach ( $forms as $form ) {

@@ -1,14 +1,14 @@
 <?php
 if ( ! empty($form_id) ) {
 ?>
-    <h4 class="frm_left_label"><?php _e( 'Select a form:', 'formidable' ) ?></h4>
+    <h4 class="frm_left_label"><?php esc_html_e( 'Select a form:', 'formidable' ); ?></h4>
 	<?php FrmFormsHelper::forms_dropdown( 'frmsc_' . $shortcode . '_' . $form_id ); ?>
     <div class="frm_box_line"></div>
 <?php
 }
 
 if ( ! empty($opts) ) { ?>
-    <h4><?php _e( 'Options', 'formidable' ) ?></h4>
+    <h4><?php esc_html_e( 'Options', 'formidable' ); ?></h4>
     <ul>
 <?php
 foreach ( $opts as $opt => $val ) {

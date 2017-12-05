@@ -1,5 +1,5 @@
 <div id="form_show_entry_page" class="wrap">
-    <h2 class="frm_no_print"><?php _e( 'View Entry', 'formidable' ) ?>
+    <h2 class="frm_no_print"><?php esc_html_e( 'View Entry', 'formidable' ); ?>
         <?php do_action('frm_entry_inside_h2', $entry->form_id); ?>
     </h2>
 
@@ -10,7 +10,7 @@
             <div id="post-body-content">
                 <?php FrmAppController::get_form_nav($entry->form_id, true); ?>
                 <div class="postbox">
-                    <h3 class="hndle"><span><?php _e( 'Entry', 'formidable' ) ?></span></h3>
+                    <h3 class="hndle"><span><?php esc_html_e( 'Entry', 'formidable' ); ?></span></h3>
                     <div class="inside">
                         <table class="form-table"><tbody>
                         <?php
@@ -54,7 +54,7 @@
                         ?>
 
                         <?php if ( $entry->parent_item_id ) { ?>
-                        <tr><th><?php _e( 'Parent Entry ID', 'formidable' ) ?>:</th>
+                        <tr><th><?php esc_html_e( 'Parent Entry ID', 'formidable' ); ?>:</th>
 							<td><?php echo absint( $entry->parent_item_id ) ?>
                         </td></tr>
                         <?php } ?>

@@ -15,8 +15,8 @@ include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/_publish_box.ph
     <div class="inside">
     <div id="taxonomy-linkcategory" class="categorydiv">
         <ul id="category-tabs" class="category-tabs frm-category-tabs">
-    		<li class="tabs" ><a href="#frm-insert-fields" id="frm_insert_fields_tab"><?php _e( 'Fields', 'formidable' ); ?></a></li>
-    		<li class="hide-if-no-js"><a href="#frm-layout-classes" id="frm_layout_classes_tab" class="frm_help" title="<?php esc_attr_e( 'Open the Field Options and click on the CSS Layout Classes option to enable this tab', 'formidable' ) ?>"><?php _e( 'Layout', 'formidable' ); ?></a></li>
+    		<li class="tabs" ><a href="#frm-insert-fields" id="frm_insert_fields_tab"><?php esc_html_e( 'Fields', 'formidable' ); ?></a></li>
+    		<li class="hide-if-no-js"><a href="#frm-layout-classes" id="frm_layout_classes_tab" class="frm_help" title="<?php esc_attr_e( 'Open the Field Options and click on the CSS Layout Classes option to enable this tab', 'formidable' ) ?>"><?php esc_html_e( 'Layout', 'formidable' ); ?></a></li>
 <?php do_action('frm_extra_form_instruction_tabs'); ?>
     	</ul>
 
@@ -83,8 +83,8 @@ foreach ( FrmField::pro_field_selection() as $field_key => $field_type ) {
     	<?php do_action('frm_extra_form_instructions'); ?>
 
     	<div id="frm-layout-classes" class="tabs-panel">
-			<p class="howto"><?php _e( '1. Click inside the "CSS layout classes" field option in any field.', 'formidable' ) ?><br/>
-			<?php _e( '2. This box will activate and you can click to insert classes.', 'formidable' ) ?></p>
+			<p class="howto"><?php esc_html_e( '1. Click inside the "CSS layout classes" field option in any field.', 'formidable' ) ?><br/>
+			<?php esc_html_e( '2. This box will activate and you can click to insert classes.', 'formidable' ) ?></p>
     	    <ul class="frm_code_list">
     	    <?php $classes = array(
                     'frm_first'     => array(
