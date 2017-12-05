@@ -261,30 +261,25 @@ class FrmEntriesController {
 
 	public static function hidden_columns( $result ) {
 		$form_id = FrmForm::get_current_form_id();
-		$max_columns = 8;
 
 		$hidden = self::user_hidden_columns_for_form( $form_id, $result );
 
-		if ( ! empty( $hidden ) ) {
-			$max_columns = 11;
-			$result = $hidden;
-		}
-
 		global $frm_vars;
 		$i = isset( $frm_vars['cols'] ) ? count( $frm_vars['cols'] ) : 0;
+
+		if ( ! empty( $hidden ) ) {
+			$result = $hidden;
+			$i = $i - count( $result );
+			$max_columns = 11;
+		} else {
+			$max_columns = 8;
+		}
+
 		if ( $i <= $max_columns ) {
 			return $result;
 		}
 
-		if ( $form_id ) {
-			$result[] = $form_id . '_id';
-			$i--;
-		}
-
-		$result[] = $form_id . '_item_key';
-		$i--;
-
-		self::remove_excess_cols( compact( 'i', 'max_columns' ), $result );
+		self::remove_excess_cols( compact( 'i', 'max_columns', 'form_id' ), $result );
 
 		return $result;
 	}
@@ -316,16 +311,24 @@ class FrmEntriesController {
 	private static function remove_excess_cols( $atts, &$result ) {
 		global $frm_vars;
 
-		$cols = $frm_vars['cols'];
-		$cols = array_reverse( $cols, true );
+		$remove_first = array(
+			$atts['form_id'] . '_item_key' => '',
+			$atts['form_id'] . '_id'       => '',
+		);
+		$cols = $remove_first + array_reverse( $frm_vars['cols'], true );
+
 		$i = $atts['i'];
 
 		foreach ( $cols as $col_key => $col ) {
-			if ( $i > $atts['max_columns'] ) {
-				$result[] = $col_key;
+			if ( $i <= $atts['max_columns'] ) {
+				break;
 			}
 
-			$i--;
+			if ( ! in_array( $col_key, $result, true ) ) {
+				$result[] = $col_key;
+				$i--;
+			}
+
 			unset( $col_key, $col );
 		}
 	}
