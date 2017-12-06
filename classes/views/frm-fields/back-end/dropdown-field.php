@@ -9,8 +9,9 @@ if ( isset( $field['post_field'] ) && 'post_category' === $field['post_field'] &
 } else {
 ?>
 	<select id="frm_dropdown_<?php echo esc_attr( $field['id'] ) ?>"
-		name="<?php echo esc_attr( $field_name ) . ( FrmField::is_option_true( $field, 'multiple' ) ? '[]' : '' ); ?>" <?php echo FrmField::is_option_true( $field, 'size' ) ? 'class="auto_width"' : ''; echo FrmField::is_option_true( $field, 'multiple' ) ? ' multiple="multiple"' : ''; ?> >
-		<?php foreach ( $field['options'] as $opt_key => $opt ) {
+		name="<?php echo esc_attr( $field_name ) . ( FrmField::is_option_true( $field, 'multiple' ) ? '[]' : '' ); ?>" <?php echo FrmField::is_option_true( $field, 'size' ) ? 'class="auto_width"' : ''; ?> <?php echo FrmField::is_option_true( $field, 'multiple' ) ? 'multiple="multiple"' : ''; ?>>
+		<?php
+		foreach ( $field['options'] as $opt_key => $opt ) {
 			$field_val = apply_filters( 'frm_field_value_saved', $opt, $opt_key, $field );
 			$opt = apply_filters( 'frm_field_label_seen', $opt, $opt_key, $field );
 			$selected = ( $field['default_value'] === $field_val || FrmFieldsHelper::get_other_val( array( 'opt_key', 'field' ) ) ) ? ' selected="selected"' : '';

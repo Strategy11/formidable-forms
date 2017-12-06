@@ -31,7 +31,7 @@ if ( isset($field['post_field']) && $field['post_field'] == 'post_category' && F
 			}
 		}
 		?>
-		<option value="<?php echo esc_attr( $field_val ) ?>" <?php echo $selected ? ' selected="selected"' : ''; echo ( FrmFieldsHelper::is_other_opt( $opt_key ) ) ? ' class="frm_other_trigger"' : '';?>>
+		<option value="<?php echo esc_attr( $field_val ); ?>" <?php echo $selected ? ' selected="selected"' : ''; ?> class="<?php echo esc_attr( FrmFieldsHelper::is_other_opt( $opt_key ) ? 'frm_other_trigger' : '' ); ?>">
 			<?php echo esc_html( $opt == '' ? ' ' : $opt ); ?>
 		</option>
 	<?php } ?>

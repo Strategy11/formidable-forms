@@ -43,7 +43,7 @@ do_action('frm_field_input_html', $field);
 				$other_opt = false;
 				$other_args = FrmFieldsHelper::prepare_other_input( compact( 'field_name', 'opt_key', 'field' ), $other_opt, $checked );
 				?>
-				<input type="radio" name="<?php echo esc_attr( $field_name ) ?>" id="<?php echo esc_attr( $html_id . '-' . $opt_key ) ?>" value="<?php echo esc_attr( $field_val ) ?>" <?php echo $checked; do_action('frm_field_input_html', $field); ?>/>
+				<input type="radio" name="<?php echo esc_attr( $field_name ) ?>" id="<?php echo esc_attr( $html_id . '-' . $opt_key ) ?>" value="<?php echo esc_attr( $field_val ); ?>" <?php echo $checked; ?><?php do_action( 'frm_field_input_html', $field ); ?> />
 				<?php
 
 				if ( ! isset( $atts ) || ! isset( $atts['label'] ) || $atts['label'] ) {

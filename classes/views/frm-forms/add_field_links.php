@@ -185,7 +185,7 @@ foreach ( $classes as $c => $d ) {
             <form method="post" id="frm_js_build_form">
             <span class="spinner"></span>
 		    <input type="hidden" id="frm_compact_fields" name="frm_compact_fields" value="" />
-			<input type="button" value="<?php echo esc_attr( $button ) ?>" class="frm_submit_form frm_submit_<?php echo ( isset( $values['ajax_load'] ) && $values['ajax_load'] ) ? '': 'no_'; ?>ajax button-primary button-large" id="frm_submit_side" />
+			<input type="button" value="<?php echo esc_attr( $button ); ?>" class="frm_submit_form frm_submit_<?php echo ( isset( $values['ajax_load'] ) && $values['ajax_load'] ) ? '' : 'no_'; ?>ajax button-primary button-large" id="frm_submit_side" />
     	    </form>
 		</div>
         <div class="clear"></div>
