@@ -101,7 +101,9 @@ class test_FrmProEmailWithAttachment extends FrmUnitTest {
 	private function check_single_file_upload_attachment( $body ) {
 		$file_field_id = FrmField::get_id_by_key( 'file_upload_single' );
 		$media_id = $this->entry->metas[ $file_field_id ];
-		$file_name = FrmProFieldsHelper::get_displayed_file_html( $media_id, 'thumbnail', array( 'show_filename' => true ) );
+
+		$file_field = FrmFieldFactory::get_field_type( 'file' );
+		$file_name = $file_field->get_displayed_file_html( $media_id, 'thumbnail', array( 'show_filename' => true ) );
 
 		$content_type = 'Content-Type: text/xml; name="' . $file_name . '"';
 		$this->assertContains( $content_type, $body );
