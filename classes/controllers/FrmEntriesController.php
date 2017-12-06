@@ -559,7 +559,7 @@ class FrmEntriesController {
 	 * @return string
 	 */
 	public static function prepare_redirect_url( $url ) {
-		return str_replace( array( ' ', '[', ']', '|', '@'), array( '%20', '%5B', '%5D', '%7C', '%40' ), $url );
+		return str_replace( array( ' ', '[', ']', '|', '@' ), array( '%20', '%5B', '%5D', '%7C', '%40' ), $url );
 	}
 
     public static function delete_entry_before_redirect( $url, $form, $atts ) {
