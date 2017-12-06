@@ -71,7 +71,8 @@ foreach ( FrmField::pro_field_selection() as $field_key => $field_type ) {
 						</li>
 					<?php
 						unset( $k, $type );
-					} ?>
+					}
+					?>
 					</ul>
 				</li>
 <?php

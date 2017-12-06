@@ -11,38 +11,53 @@ class FrmEntriesListHelper extends FrmListHelper {
 		$per_page = $this->get_items_per_page( 'formidable_page_formidable_entries_per_page' );
         $form_id = $this->params['form'];
 
-		$default_orderby = 'id';
-		$default_order = 'DESC';
 		$s_query = array();
 
 		if ( $form_id ) {
 			$s_query['it.form_id'] = $form_id;
 			$join_form_in_query = false;
 		} else {
-			$s_query[] = array( 'or' => 1, 'parent_form_id' => null, 'parent_form_id <' => 1 );
+			$s_query[] = array(
+				'or' => 1,
+				'parent_form_id' => null,
+				'parent_form_id <' => 1,
+			);
 			$join_form_in_query = true;
 		}
 
-		$s = isset( $_REQUEST['s'] ) ? stripslashes($_REQUEST['s']) : '';
+		$s = self::get_param( array(
+			'param'    => 's',
+			'sanitize' => 'sanitize_text_field',
+		) );
 
-	    if ( $s != '' && FrmAppHelper::pro_is_installed() ) {
-	        $fid = isset( $_REQUEST['fid'] ) ? sanitize_title( $_REQUEST['fid'] ) : '';
-	        $s_query = FrmProEntriesHelper::get_search_str( $s_query, $s, $form_id, $fid );
-	    }
+		if ( $s != '' && FrmAppHelper::pro_is_installed() ) {
+			$fid = self::get_param( array( 'param' => 'fid' ) );
+			$s_query = FrmProEntriesHelper::get_search_str( $s_query, $s, $form_id, $fid );
+		}
 
 		$s_query = apply_filters( 'frm_entries_list_query', $s_query, compact( 'form_id' ) );
 
-        $orderby = isset( $_REQUEST['orderby'] ) ? sanitize_title( $_REQUEST['orderby'] ) : $default_orderby;
-        if ( strpos($orderby, 'meta') !== false ) {
-            $order_field_type = FrmField::get_type( str_replace( 'meta_', '', $orderby ) );
+		$orderby = self::get_param( array(
+			'param' => 'orderby',
+			'default' => 'id',
+		) );
+
+		if ( strpos( $orderby, 'meta' ) !== false ) {
+			$order_field_type = FrmField::get_type( str_replace( 'meta_', '', $orderby ) );
 			$orderby .= in_array( $order_field_type, array( 'number', 'scale', 'star' ) ) ? ' +0 ' : '';
-        }
+		}
 
-		$order = isset( $_REQUEST['order'] ) ? sanitize_title( $_REQUEST['order'] ) : $default_order;
-		$order = ' ORDER BY ' . $orderby . ' ' . $order;
+		$order = self::get_param( array(
+			'param'   => 'order',
+			'default' => 'DESC',
+		) );
+		$order = FrmDb::esc_order( $orderby . ' ' . $order );
 
-        $page = $this->get_pagenum();
-		$start = (int) isset( $_REQUEST['start'] ) ? absint( $_REQUEST['start'] ) : ( ( $page - 1 ) * $per_page );
+		$page = $this->get_pagenum();
+		$start = (int) self::get_param( array(
+			'param'   => 'start',
+			'default' => ( $page - 1 ) * $per_page,
+		) );
 
 		$limit = FrmDb::esc_limit( $start . ',' . $per_page );
 		$this->items = FrmEntry::getAll( $s_query, $order, $limit, true, $join_form_in_query );
@@ -55,9 +70,12 @@ class FrmEntriesListHelper extends FrmListHelper {
 	}
 
 	public function no_items() {
-        $s = isset( $_REQUEST['s'] ) ? $_REQUEST['s'] : '';
+		$s = self::get_param( array(
+			'param' => 's',
+			'sanitize' => 'sanitize_text_field',
+		) );
 	    if ( ! empty($s) ) {
-            _e( 'No Entries Found', 'formidable' );
+			esc_html_e( 'No Entries Found', 'formidable' );
             return;
         }
 
@@ -189,23 +207,23 @@ class FrmEntriesListHelper extends FrmListHelper {
 			case 'updated_at':
 				$date = FrmAppHelper::get_formatted_time( $item->{$col_name} );
 				$val = '<abbr title="' . esc_attr( FrmAppHelper::get_formatted_time( $item->{$col_name}, '', 'g:i:s A' ) ) . '">' . $date . '</abbr>';
-			break;
+				break;
 			case 'is_draft':
 				$val = empty( $item->is_draft ) ? __( 'No' ) : __( 'Yes' );
-			break;
+				break;
 			case 'form_id':
 				$val = FrmFormsHelper::edit_form_link( $item->form_id );
-			break;
+				break;
 			case 'post_id':
 				$val = FrmAppHelper::post_edit_link( $item->post_id );
-			break;
+				break;
 			case 'user_id':
 				$user = get_userdata( $item->user_id );
 				$val = $user ? $user->user_login : '';
-			break;
+				break;
 			case 'parent_item_id':
 				$val = $item->parent_item_id;
-			break;
+				break;
 			default:
 				$val = apply_filters( 'frm_entries_' . $col_name . '_column', false, compact( 'item' ) );
 				if ( $val === false ) {
@@ -250,8 +268,10 @@ class FrmEntriesListHelper extends FrmListHelper {
 		}
 
 		$atts = array(
-			'type' => $field->type, 'truncate' => true,
-			'post_id' => $item->post_id, 'entry_id' => $item->id,
+			'type'     => $field->type,
+			'truncate' => true,
+			'post_id'  => $item->post_id,
+			'entry_id' => $item->id,
 			'embedded_field_id' => 0,
 		);
 

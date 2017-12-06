@@ -14,7 +14,7 @@ class FrmShowForm extends WP_Widget {
 
 		echo '<div class="frm_form_widget">';
 		if ( $title ) {
-			echo $args['before_title'] . stripslashes($title) . $args['after_title'];
+			echo $args['before_title'] . stripslashes( $title ) . $args['after_title'];
 		}
 
 		$form_atts = array(
@@ -34,25 +34,38 @@ class FrmShowForm extends WP_Widget {
 	}
 
 	public function form( $instance ) {
-	    //Defaults
+		//Defaults
 		$instance = wp_parse_args( (array) $instance, array(
-		    'title' => false, 'form' => false, 'description' => false,
+			'title' => false,
+			'form'  => false,
+			'description' => false,
 		) );
 ?>
-	<p><label for="<?php echo esc_attr( $this->get_field_id('title') ); ?>"><?php _e( 'Title', 'formidable' ) ?>:</label><br/>
-	<input type="text" class="widefat" id="<?php echo esc_attr( $this->get_field_id('title') ); ?>" name="<?php echo esc_attr( $this->get_field_name('title') ); ?>" value="<?php echo esc_attr( stripslashes($instance['title']) ); ?>" /></p>
+	<p>
+		<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>">
+			<?php esc_html_e( 'Title', 'formidable' ); ?>:
+		</label>
+		<br/>
+		<input type="text" class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" value="<?php echo esc_attr( stripslashes( $instance['title'] ) ); ?>" />
+	</p>
 
-	<p><label for="<?php echo esc_attr( $this->get_field_id('form') ); ?>"><?php _e( 'Form', 'formidable' ) ?>:</label><br/>
+	<p>
+		<label for="<?php echo esc_attr( $this->get_field_id( 'form' ) ); ?>"><?php esc_html_e( 'Form', 'formidable' ); ?>:</label><br/>
 <?php
-	    FrmFormsHelper::forms_dropdown( $this->get_field_name('form'), $instance['form'], array(
-	        'blank' => false, 'field_id' => $this->get_field_id('form'),
-            'class' => 'widefat',
-	    ) );
+	FrmFormsHelper::forms_dropdown( $this->get_field_name( 'form' ), $instance['form'], array(
+		'blank'    => false,
+		'field_id' => $this->get_field_id( 'form' ),
+		'class'    => 'widefat',
+	) );
 ?>
 	</p>
 
-	<p><label for="<?php echo esc_attr( $this->get_field_id('description') ); ?>"><input class="checkbox" type="checkbox" <?php checked($instance['description'], true) ?> id="<?php echo esc_attr( $this->get_field_id('description') ); ?>" name="<?php echo esc_attr( $this->get_field_name('description') ); ?>" value="1" />
-	<?php _e( 'Show Description', 'formidable' ) ?></label></p>
+	<p>
+		<label for="<?php echo esc_attr( $this->get_field_id( 'description' ) ); ?>">
+			<input class="checkbox" type="checkbox" <?php checked( $instance['description'], true ); ?> id="<?php echo esc_attr( $this->get_field_id( 'description' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'description' ) ); ?>" value="1" />
+			<?php esc_html_e( 'Show Description', 'formidable' ); ?>
+		</label>
+	</p>
 <?php
 	}
 }

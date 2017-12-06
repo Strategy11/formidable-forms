@@ -89,9 +89,9 @@ class FrmStylesHelper {
 	public static function style_menu( $active = '' ) {
 ?>
         <h2 class="nav-tab-wrapper">
-			<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-styles' ) ) ?>" class="nav-tab <?php echo ( '' == $active ) ? 'nav-tab-active' : '' ?>"><?php _e( 'Edit Styles', 'formidable' ) ?></a>
-			<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-styles&frm_action=manage' ) ) ?>" class="nav-tab <?php echo ( 'manage' == $active ) ? 'nav-tab-active' : '' ?>"><?php _e( 'Manage Form Styles', 'formidable' ) ?></a>
-			<a href="<?php echo esc_url( admin_url('admin.php?page=formidable-styles&frm_action=custom_css' ) ) ?>" class="nav-tab <?php echo ( 'custom_css' == $active ) ? 'nav-tab-active' : '' ?>"><?php _e( 'Custom CSS', 'formidable' ) ?></a>
+			<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-styles' ) ) ?>" class="nav-tab <?php echo ( '' == $active ) ? 'nav-tab-active' : '' ?>"><?php esc_html_e( 'Edit Styles', 'formidable' ) ?></a>
+			<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-styles&frm_action=manage' ) ) ?>" class="nav-tab <?php echo ( 'manage' == $active ) ? 'nav-tab-active' : '' ?>"><?php esc_html_e( 'Manage Form Styles', 'formidable' ) ?></a>
+			<a href="<?php echo esc_url( admin_url('admin.php?page=formidable-styles&frm_action=custom_css' ) ) ?>" class="nav-tab <?php echo ( 'custom_css' == $active ) ? 'nav-tab-active' : '' ?>"><?php esc_html_e( 'Custom CSS', 'formidable' ) ?></a>
         </h2>
 <?php
     }
@@ -121,50 +121,92 @@ class FrmStylesHelper {
 		);
 	}
 
-    public static function minus_icons() {
-        return array(
-			0 => array( '-' => '62e', '+' => '62f' ),
-			1 => array( '-' => '600', '+' => '602' ),
-			2 => array( '-' => '604', '+' => '603' ),
-			3 => array( '-' => '633', '+' => '632' ),
-			4 => array( '-' => '613', '+' => '60f' ),
-        );
-    }
+	public static function minus_icons() {
+		return array(
+			0 => array(
+				'-' => '62e',
+				'+' => '62f',
+			),
+			1 => array(
+				'-' => '600',
+				'+' => '602',
+			),
+			2 => array(
+				'-' => '604',
+				'+' => '603',
+			),
+			3 => array(
+				'-' => '633',
+				'+' => '632',
+			),
+			4 => array(
+				'-' => '613',
+				'+' => '60f',
+			),
+		);
+	}
 
-    public static function arrow_icons() {
-        $minus_icons = self::minus_icons();
+	public static function arrow_icons() {
+		$minus_icons = self::minus_icons();
 
-        return array(
-			6 => array( '-' => '62d', '+' => '62a' ),
-			0 => array( '-' => '60d', '+' => '609' ),
-			1 => array( '-' => '60e', '+' => '60c' ),
-			2 => array( '-' => '630', '+' => '631' ),
-			3 => array( '-' => '62b', '+' => '628' ),
-			4 => array( '-' => '62c', '+' => '629' ),
-			5 => array( '-' => '635', '+' => '634' ),
-            'p0' => $minus_icons[0],
-            'p1' => $minus_icons[1],
-            'p2' => $minus_icons[2],
-            'p3' => $minus_icons[3],
-            'p4' => $minus_icons[4],
-        );
-    }
+		return array(
+			6 => array(
+				'-' => '62d',
+				'+' => '62a',
+			),
+			0 => array(
+				'-' => '60d',
+				'+' => '609',
+			),
+			1 => array(
+				'-' => '60e',
+				'+' => '60c',
+			),
+			2 => array(
+				'-' => '630',
+				'+' => '631',
+			),
+			3 => array(
+				'-' => '62b',
+				'+' => '628',
+			),
+			4 => array(
+				'-' => '62c',
+				'+' => '629',
+			),
+			5 => array(
+				'-' => '635',
+				'+' => '634',
+			),
+			'p0' => $minus_icons[0],
+			'p1' => $minus_icons[1],
+			'p2' => $minus_icons[2],
+			'p3' => $minus_icons[3],
+			'p4' => $minus_icons[4],
+		);
+	}
 
     /**
      * @since 2.0
      * @return The class for this icon
      */
 	public static function icon_key_to_class( $key, $icon = '+', $type = 'arrow' ) {
-        if ( 'arrow' == $type && is_numeric($key) ) {
-            //frm_arrowup6_icon
-			$arrow = array( '-' => 'down', '+' => 'up' );
+		if ( 'arrow' == $type && is_numeric( $key ) ) {
+			//frm_arrowup6_icon
+			$arrow = array(
+				'-' => 'down',
+				'+' => 'up',
+			);
 			$class = 'frm_arrow' . $arrow[ $icon ];
-        } else {
-            //frm_minus1_icon
-            $key = str_replace('p', '', $key);
-			$plus = array( '-' => 'minus', '+' => 'plus' );
+		} else {
+			//frm_minus1_icon
+			$key = str_replace( 'p', '', $key );
+			$plus = array(
+				'-' => 'minus',
+				'+' => 'plus',
+			);
 			$class = 'frm_' . $plus[ $icon ];
-        }
+		}
 
         if ( $key ) {
             $class .= $key;
@@ -253,7 +295,7 @@ class FrmStylesHelper {
 
 		foreach ( $color_parts as $color ) {
 			$color   = hexdec( $color ); // Convert to decimal
-			$color   = max( 0,min( 255,$color + $steps ) ); // Adjust color
+			$color   = max( 0, min( 255, $color + $steps ) ); // Adjust color
 			$return .= str_pad( dechex( $color ), 2, '0', STR_PAD_LEFT ); // Make two char hex code
 		}
 
@@ -315,22 +357,8 @@ class FrmStylesHelper {
 	 */
 	private static function allow_color_override() {
 		return array(
-			'transparent' => array(
-				'fieldset_color', 'fieldset_bg_color', 'bg_color',
-				'bg_color_disabled', 'bg_color_active', 'bg_color_error',
-				'section_bg_color', 'error_bg', 'success_bg_color',
-				'progress_bg_color', 'progress_active_bg_color',
-			),
-			'' => array(
-				'title_color', 'section_color', 'submit_text_color',
-				'label_color', 'check_label_color', 'form_desc_color',
-				'description_color', 'text_color', 'text_color_disabled',
-				'border_color', 'submit_bg_color', 'submit_border_color',
-				'error_text', 'progress_border_color', 'progress_color',
-				'progress_active_color',
-				'submit_hover_bg_color', 'submit_hover_border_color', 'submit_hover_color',
-				'submit_active_color', 'submit_active_border_color', 'submit_active_bg_color',
-			),
+			'transparent' => array( 'fieldset_color', 'fieldset_bg_color', 'bg_color', 'section_bg_color', 'error_bg', 'success_bg_color', 'progress_bg_color', 'progress_active_bg_color' ),
+			'' => array( 'title_color', 'section_color', 'submit_text_color', 'label_color', 'check_label_color', 'form_desc_color', 'description_color', 'text_color', 'text_color_disabled', 'border_color', 'submit_bg_color', 'submit_border_color', 'error_text', 'progress_border_color', 'progress_color', 'progress_active_color', 'submit_hover_bg_color', 'submit_hover_border_color', 'submit_hover_color', 'submit_active_color', 'submit_active_border_color', 'submit_active_bg_color' ),
 		);
 	}
 

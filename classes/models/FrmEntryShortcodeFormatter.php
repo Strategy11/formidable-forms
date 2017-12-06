@@ -315,5 +315,4 @@ class FrmEntryShortcodeFormatter {
 	protected function is_table_format() {
 		return ( $this->format === 'text' && $this->is_plain_text === false );
 	}
-
 }

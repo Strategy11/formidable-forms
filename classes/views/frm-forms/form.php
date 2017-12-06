@@ -14,19 +14,19 @@
 			<img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/sketch_arrow1.png' ); ?>" alt="" />
 	    </div>
 	    <div class="alignleft sketch1_text">
-	        <?php _e( '1. Name your form', 'formidable' ) ?>
+			<?php esc_html_e( '1. Name your form', 'formidable' ) ?>
 	    </div>
 
 	    <div class="alignright sketch2">
-	        <?php _e( '2. Click or drag a field to<br/>add it to your form', 'formidable' ) ?>
+			<?php printf( esc_html__( '2. Click or drag a field to%s add it to your form', 'formidable' ), '<br/>' ) ?>
 	        <div class="clear"></div>
 			<img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/sketch_arrow2.png' ); ?>" alt="" />
 	    </div>
 	    <div class="clear"></div>
 
-    	<div class="frm_drag_inst"><?php _e( 'Add Fields Here', 'formidable' ) ?></div>
+		<div class="frm_drag_inst"><?php esc_html_e( 'Add Fields Here', 'formidable' ) ?></div>
 		<p id="frm_create_template_form">
-			<?php _e( 'Or load fields from a template', 'formidable' ); ?>
+			<?php esc_html_e( 'Or load fields from a template', 'formidable' ); ?>
 			<select id="frm_create_template_dropdown">
 				<?php foreach ( $all_templates as $temp ) { ?>
 				<option value="<?php echo esc_attr( $temp->id ) ?>"><?php echo FrmAppHelper::truncate( $temp->name, 40 ) ?></option>
@@ -36,7 +36,7 @@
 		</p>
 
     	<div class="alignleft sketch3">
-	        <div class="alignright"><?php _e( '3. Save your form', 'formidable' ) ?></div>
+			<div class="alignright"><?php esc_html_e( '3. Save your form', 'formidable' ) ?></div>
 			<img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/sketch_arrow3.png' ); ?>" alt="" />
 	    </div>
     	<div class="clear"></div>

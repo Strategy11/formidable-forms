@@ -9,10 +9,10 @@
 				<?php do_action( 'frm_entry_major_pub', $entry ); ?>
 				<div class="clear"></div>
 			</div>
-			<?php if ( has_action('frm_show_entry_publish_box') ) { ?>
+			<?php if ( has_action( 'frm_show_entry_publish_box' ) ) { ?>
 				<div id="minor-publishing" class="frm_remove_border">
 					<div class="misc-pub-section">
-						<?php do_action('frm_show_entry_publish_box', $entry); ?>
+						<?php do_action( 'frm_show_entry_publish_box', $entry ); ?>
 						<div class="clear"></div>
 					</div>
 				</div>
@@ -20,7 +20,8 @@
         </div>
     </div>
 </div>
-<?php do_action('frm_show_entry_sidebar', $entry);
-FrmEntriesController::entry_sidebar($entry);
+<?php
+do_action( 'frm_show_entry_sidebar', $entry );
+FrmEntriesController::entry_sidebar( $entry );
 ?>
 </div>

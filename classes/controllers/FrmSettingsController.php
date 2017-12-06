@@ -34,9 +34,10 @@ class FrmSettingsController {
 		$sections = array();
 		if ( apply_filters( 'frm_include_addon_page', false ) ) {
 			$sections['licenses'] = array(
-				'class' => 'FrmAddonsController', 'function' => 'license_settings',
-				'name' => __( 'Plugin Licenses', 'formidable' ),
-				'ajax' => true,
+				'class'    => 'FrmAddonsController',
+				'function' => 'license_settings',
+				'name'     => __( 'Plugin Licenses', 'formidable' ),
+				'ajax'     => true,
 			);
 		}
 		$sections = apply_filters( 'frm_add_settings_section', $sections );

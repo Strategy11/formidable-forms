@@ -258,6 +258,7 @@ class FrmEmail {
 	 */
 	private function set_subject() {
 		if ( empty( $this->settings['email_subject'] ) ) {
+			/* translators: %1$s: Form name, %2$s: Site name */
 			$this->subject = sprintf( __( '%1$s Form submitted on %2$s', 'formidable' ), $this->form->name, '[sitename]' );
 		} else {
 			$this->subject = $this->settings['email_subject'];
@@ -293,7 +294,7 @@ class FrmEmail {
 		) );
 
 		// Add the user info if it isn't already included
-		if ( $this->include_user_info && $prev_mail_body == $mail_body ) {
+		if ( $this->include_user_info && $prev_mail_body === $mail_body ) {
 			$data = maybe_unserialize( $this->entry->description );
 			$mail_body .= "\r\n\r\n" . __( 'User Information', 'formidable' ) . "\r\n";
 			$this->maybe_add_ip( $mail_body );
@@ -492,7 +493,7 @@ class FrmEmail {
 	private function prepare_email_setting( $value, $user_id_args ) {
 		if ( strpos( $value, '[' . $user_id_args['field_id'] . ']' ) !== false ) {
 			$value = str_replace( '[' . $user_id_args['field_id'] . ']', '[' . $user_id_args['field_id'] . ' show="user_email"]', $value );
-		} else if ( strpos( $value, '[' . $user_id_args['field_key'] . ']' ) !== false ) {
+		} elseif ( strpos( $value, '[' . $user_id_args['field_key'] . ']' ) !== false ) {
 			$value = str_replace( '[' . $user_id_args['field_key'] . ']', '[' . $user_id_args['field_key'] . ' show="user_email"]', $value );
 		}
 
@@ -586,7 +587,7 @@ class FrmEmail {
 
 			// Get the site domain and get rid of www.
 			$sitename = strtolower( FrmAppHelper::get_server_value( 'SERVER_NAME' ) );
-			if ( substr( $sitename, 0, 4 ) == 'www.' ) {
+			if ( substr( $sitename, 0, 4 ) === 'www.' ) {
 				$sitename = substr( $sitename, 4 );
 			}
 
@@ -612,7 +613,7 @@ class FrmEmail {
 
 		if ( empty( $reply_to ) ) {
 			return $this->from;
-		} else if ( is_email( $reply_to ) ) {
+		} elseif ( is_email( $reply_to ) ) {
 			return $reply_to;
 		} else {
 			list( $name, $email ) = $this->get_name_and_email_for_sender( $reply_to );
@@ -654,7 +655,7 @@ class FrmEmail {
 	private function handle_phone_numbers() {
 
 		foreach ( $this->to as $key => $recipient ) {
-			if ( $recipient != '[admin_email]' && ! is_email( $recipient ) ) {
+			if ( '[admin_email]' !== $recipient && ! is_email( $recipient ) ) {
 				$recipient = explode( ' ', $recipient );
 
 				if ( is_email( end( $recipient ) ) ) {
@@ -747,5 +748,4 @@ class FrmEmail {
 
 		return $subject;
 	}
-
 }

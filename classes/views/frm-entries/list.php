@@ -2,7 +2,10 @@
 	<?php
 	FrmAppHelper::get_admin_header( array(
 		'label' => __( 'Entries', 'formidable' ),
-		'link_hook' => array( 'hook' => 'frm_entry_inside_h2', 'param' => $form ),
+		'link_hook' => array(
+			'hook'  => 'frm_entry_inside_h2',
+			'param' => $form,
+		),
 		'form' => $form,
 	) );
 

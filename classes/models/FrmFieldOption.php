@@ -69,13 +69,12 @@ class FrmFieldOption {
 	 * @param int $truncate
 	 */
 	public function print_single_option( $selected_value, $truncate ) {
-		if ( $this->saved_value !== '' ) {
+		if ( '' !== $this->saved_value ) {
 			echo '<option value="' . esc_attr( $this->saved_value ) . '"';
 			selected( esc_attr( $selected_value ), esc_attr( $this->saved_value ) );
 			// TODO: add hook that can add attributes to option text
 			echo '>';
-			echo FrmAppHelper::truncate( $this->option_label, $truncate ) . '</option>';
+			echo esc_html( FrmAppHelper::truncate( $this->option_label, $truncate ) ) . '</option>';
 		}
 	}
-
 }
