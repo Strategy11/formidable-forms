@@ -3013,7 +3013,7 @@ function frmAdminBuildJS(){
 
 			jQuery(document.getElementById('form_id')).change(displayFormSelected);
 
-			var $addRemove = jQuery('.frm_add_remove');
+			var $addRemove = jQuery('.frm_repeat_rows');
 			$addRemove.on('click', '.frm_add_order_row', addOrderRow);
 			$addRemove.on('click', '.frm_add_where_row', addWhereRow);
 			$addRemove.on('change', '.frm_insert_where_options', insertWhereOptions);
