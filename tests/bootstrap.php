@@ -9,7 +9,7 @@ echo 'Welcome to the Formidable Forms Test Suite' . PHP_EOL;
 echo 'Version: 1.0' . PHP_EOL . PHP_EOL;
 
 $GLOBALS['wp_tests_options'] = array(
-	'active_plugins'     => array( 'formidable/formidable.php', 'easy-table/easy-table.php' ),
+	'active_plugins'     => array( 'formidable/formidable.php' ),
 );
 
 if ( false !== getenv( 'WP_DEVELOP_DIR' ) ) {

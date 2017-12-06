@@ -30,7 +30,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 
 		$this->empty_tables();
 
-		$this->is_pro_active = FrmAppHelper::pro_is_installed();
+		$this->is_pro_active = get_site_option( 'frmpro-authorized' );
 
 		$this->factory->form = new Form_Factory( $this );
 		$this->factory->field = new Field_Factory( $this );
