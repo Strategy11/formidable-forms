@@ -5,7 +5,7 @@ class FrmEntriesController {
 	public static function menu() {
 		FrmAppHelper::force_capability( 'frm_view_entries' );
 
-		add_submenu_page('formidable', 'Formidable | ' . __( 'Entries', 'formidable' ), __( 'Entries', 'formidable' ), 'frm_view_entries', 'formidable-entries', 'FrmEntriesController::route' );
+		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Entries', 'formidable' ), __( 'Entries', 'formidable' ), 'frm_view_entries', 'formidable-entries', 'FrmEntriesController::route' );
 
 		self::load_manage_entries_hooks();
 	}
@@ -124,10 +124,10 @@ class FrmEntriesController {
 							continue;
 						}
 						$columns[ $form_id . '_' . $sub_form_col->field_key . '-_-' . $form_col->id ] = FrmAppHelper::truncate( $sub_form_col->name, 35 );
-						unset($sub_form_col);
+						unset( $sub_form_col );
 					}
 				}
-				unset($sub_form_cols);
+				unset( $sub_form_cols );
 			} else {
 				$col_id = $form_col->field_key;
 				if ( $form_col->form_id != $form_id ) {
@@ -161,8 +161,8 @@ class FrmEntriesController {
 		}
 
         global $frm_vars;
-        //add a check so we don't create a loop
-        $frm_vars['prev_hidden_cols'] = ( isset($frm_vars['prev_hidden_cols']) && $frm_vars['prev_hidden_cols'] ) ? false : $prev_value;
+		//add a check so we don't create a loop
+		$frm_vars['prev_hidden_cols'] = ( isset( $frm_vars['prev_hidden_cols'] ) && $frm_vars['prev_hidden_cols'] ) ? false : $prev_value;
 
         return $check;
     }
@@ -174,10 +174,10 @@ class FrmEntriesController {
             return;
         }
 
-        global $frm_vars;
-        if ( ! isset($frm_vars['prev_hidden_cols']) || ! $frm_vars['prev_hidden_cols'] ) {
-            return; //don't continue if there's no previous value
-        }
+		global $frm_vars;
+		if ( ! isset( $frm_vars['prev_hidden_cols'] ) || ! $frm_vars['prev_hidden_cols'] ) {
+			return; //don't continue if there's no previous value
+		}
 
         foreach ( $meta_value as $mk => $mv ) {
             //remove blank values
@@ -186,8 +186,8 @@ class FrmEntriesController {
             }
         }
 
-        $cur_form_prefix = reset($meta_value);
-        $cur_form_prefix = explode('_', $cur_form_prefix);
+		$cur_form_prefix = reset( $meta_value );
+		$cur_form_prefix = explode( '_', $cur_form_prefix );
         $cur_form_prefix = $cur_form_prefix[0];
         $save = false;
 
@@ -206,7 +206,7 @@ class FrmEntriesController {
 
             $meta_value[] = $prev_hidden;
             $save = true;
-            unset($form_prefix);
+			unset( $form_prefix );
         }
 
 		if ( $save ) {
@@ -362,14 +362,14 @@ class FrmEntriesController {
         if ( $pagenum > $total_pages && $total_pages > 0 ) {
 			$url = add_query_arg( 'paged', $total_pages );
             if ( headers_sent() ) {
-                echo FrmAppHelper::js_redirect($url);
+				echo FrmAppHelper::js_redirect( $url );
             } else {
                 wp_redirect( esc_url_raw( $url ) );
             }
             die();
         }
 
-        if ( empty($message) && isset($_GET['import-message']) ) {
+		if ( empty( $message ) && isset( $_GET['import-message'] ) ) {
             $message = __( 'Your import is complete', 'formidable' );
         }
 
@@ -386,7 +386,7 @@ class FrmEntriesController {
 
     /* Back End CRUD */
 	public static function show( $id = 0 ) {
-        FrmAppHelper::permission_check('frm_view_entries');
+		FrmAppHelper::permission_check( 'frm_view_entries' );
 
         if ( ! $id ) {
 			$id = FrmAppHelper::get_param( 'id', 0, 'get', 'absint' );
@@ -396,7 +396,7 @@ class FrmEntriesController {
             }
         }
 
-        $entry = FrmEntry::getOne($id, true);
+		$entry = FrmEntry::getOne( $id, true );
 		if ( ! $entry ) {
 			echo '<div id="form_show_entry_page" class="wrap">' .
 				__( 'You are trying to view an entry that does not exist.', 'formidable' ) .
@@ -404,7 +404,7 @@ class FrmEntriesController {
 			return;
 		}
 
-        $data = maybe_unserialize($entry->description);
+		$data = maybe_unserialize( $entry->description );
 		if ( ! is_array( $data ) || ! isset( $data['referrer'] ) ) {
 			$data = array( 'referrer' => $data );
 		}
@@ -416,11 +416,11 @@ class FrmEntriesController {
     }
 
     public static function destroy() {
-        FrmAppHelper::permission_check('frm_delete_entries');
+		FrmAppHelper::permission_check( 'frm_delete_entries' );
 
 		$params = FrmForm::get_admin_params();
 
-        if ( isset($params['keep_post']) && $params['keep_post'] ) {
+		if ( isset( $params['keep_post'] ) && $params['keep_post'] ) {
             //unlink entry from post
             global $wpdb;
 			$wpdb->update( $wpdb->prefix . 'frm_items', array( 'post_id' => '' ), array( 'id' => $params['id'] ) );
@@ -609,9 +609,9 @@ class FrmEntriesController {
 	}
 
 	public static function entry_sidebar( $entry ) {
-        $data = maybe_unserialize($entry->description);
-        $date_format = get_option('date_format');
-        $time_format = get_option('time_format');
+		$data = maybe_unserialize( $entry->description );
+		$date_format = get_option( 'date_format' );
+		$time_format = get_option( 'time_format' );
 		if ( isset( $data['browser'] ) ) {
 			$browser = FrmEntriesHelper::get_browser( $data['browser'] );
 		}
