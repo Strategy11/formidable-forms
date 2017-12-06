@@ -31,9 +31,11 @@ class FrmAjaxUnitTest extends WP_Ajax_UnitTestCase {
         $form = FrmForm::getOne( 'contact-db12' );
         $this->assertEquals( $form->form_key, 'contact-db12' );
 
-		$entry = FrmEntry::getOne( 'utah_entry' );
-		$this->assertNotEmpty( $entry );
-		$this->assertEquals( $entry->item_key, 'utah_entry' );
+		if ( $this->is_pro_active ) {
+			$entry = FrmEntry::getOne( 'utah_entry' );
+			$this->assertNotEmpty( $entry );
+			$this->assertEquals( $entry->item_key, 'utah_entry' );
+		}
     }
 
     function set_as_user_role( $role ) {
