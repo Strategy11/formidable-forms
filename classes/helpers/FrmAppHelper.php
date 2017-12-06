@@ -180,13 +180,7 @@ class FrmAppHelper {
      * @return boolean
      */
     public static function is_admin() {
-		if ( function_exists( 'wp_doing_ajax' ) ) {
-			$doing_ajax = wp_doing_ajax();
-		} else {
-			$doing_ajax = defined('DOING_AJAX') && DOING_AJAX;
-		}
-
-	    return is_admin() && ! $doing_ajax;
+		return is_admin() && ( ! defined('DOING_AJAX') || ! DOING_AJAX );
     }
 
     /**
