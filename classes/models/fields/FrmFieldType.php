@@ -183,8 +183,11 @@ DEFAULT_HTML;
 	 * @param array $field
 	 */
 	protected function include_on_form_builder( $name, $field ) {
-		$field['html_name'] = $field_name = $this->html_name( $name );
-		$field['html_id'] = $html_id = $this->html_id();
+		$field_name = $this->html_name( $name );
+		$html_id    = $this->html_id();
+		$field['html_name'] = $field_name;
+		$field['html_id']   = $html_id;
+
 		$display = $this->display_field_settings();
 		include( $this->include_form_builder_file() );
 	}
@@ -345,7 +348,10 @@ DEFAULT_HTML;
 		$field_opts = $this->extra_field_opts();
 		$opts = array_merge( $opts, $field_opts );
 
-		return apply_filters( 'frm_default_field_options', $opts, array( 'field' => $this->field, 'type' => $this->type ) );
+		return apply_filters( 'frm_default_field_options', $opts, array(
+			'field' => $this->field,
+			'type'  => $this->type,
+		) );
 	}
 
 	protected function extra_field_opts() {

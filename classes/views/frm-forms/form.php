@@ -50,7 +50,8 @@ if ( isset( $values['fields'] ) && ! empty( $values['fields'] ) ) {
 		FrmFieldsController::load_single_field( $field, $values );
 		unset( $field );
 	}
-} ?>
+}
+?>
 </ul>
 
 <p>

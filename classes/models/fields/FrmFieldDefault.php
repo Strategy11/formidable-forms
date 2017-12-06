@@ -38,7 +38,10 @@ class FrmFieldDefault extends FrmFieldType {
 	}
 
 	public function front_field_input( $args, $shortcode_atts ) {
-		$pass_args = array( 'errors' => $args['errors'], 'html_id' => $args['html_id'] );
+		$pass_args = array(
+			'errors'  => $args['errors'],
+			'html_id' => $args['html_id'],
+		);
 		ob_start();
 		do_action( 'frm_form_fields', $this->field, $args['field_name'], $pass_args );
 		do_action( 'frm_form_field_' . $this->type, $this->field, $args['field_name'], $pass_args );

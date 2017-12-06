@@ -1,6 +1,6 @@
 <div class="clear"></div>
 <?php
-if ( isset( $message ) && '' !== $message  ) {
+if ( isset( $message ) && '' !== $message ) {
 	if ( FrmAppHelper::is_admin() ) {
 		echo '<div id="message" class="updated frm_updated_message">';
 		echo $message;

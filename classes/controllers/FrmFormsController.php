@@ -1228,7 +1228,8 @@ class FrmFormsController {
 			do_action( 'frm_validate_form_creation', $params, $fields, $form, $title, $description );
 
 			if ( apply_filters( 'frm_continue_to_create', true, $form->id ) ) {
-				$pass_args['entry_id'] = $entry_id = self::just_created_entry( $form->id );
+				$entry_id = self::just_created_entry( $form->id );
+				$pass_args['entry_id'] = $entry_id;
 				$pass_args['reset'] = true;
 				$pass_args['conf_method'] = self::get_confirmation_method( compact( 'form', 'entry_id' ) );
 
@@ -1287,7 +1288,8 @@ class FrmFormsController {
 	public static function run_success_action( $args ) {
 		do_action( 'frm_success_action', $args['conf_method'], $args['form'], $args['form']->options, $args['entry_id'] );
 
-		$opt = $args['success_opt'] = ( ! isset( $args['action'] ) || $args['action'] == 'create' ) ? 'success' : 'edit';
+		$opt = ( ! isset( $args['action'] ) || $args['action'] == 'create' ) ? 'success' : 'edit';
+		$args['success_opt'] = $opt;
 		if ( $args['conf_method'] == 'page' && is_numeric( $args['form']->options[ $opt . '_page_id' ] ) ) {
 			self::load_page_after_submit( $args );
 		} elseif ( $args['conf_method'] == 'redirect' ) {
@@ -1363,7 +1365,9 @@ class FrmFormsController {
 			'</div></div>';
 
 		return apply_filters( 'frm_redirect_msg', $redirect_msg, array(
-			'entry_id' => $args['entry_id'], 'form_id' => $args['form']->id, 'form' => $args['form'],
+			'entry_id' => $args['entry_id'],
+			'form_id'  => $args['form']->id,
+			'form'     => $args['form'],
 		) );
 	}
 

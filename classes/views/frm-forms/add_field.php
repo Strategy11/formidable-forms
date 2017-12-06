@@ -1,11 +1,7 @@
 <li id="frm_field_id_<?php echo esc_attr( $field['id'] ); ?>" class="<?php echo esc_attr( $li_classes ) ?>" data-fid="<?php echo esc_attr( $field['id'] ) ?>" data-formid="<?php echo esc_attr( 'divider' == $field['type'] ? $field['form_select'] : $field['form_id'] ); ?>" data-ftype="<?php echo esc_attr( $display['type'] ) ?>">
-<?php
-
-if ( $field['type'] == 'divider' ) { ?>
+<?php if ( $field['type'] == 'divider' ) { ?>
 <div class="divider_section_only">
-<?php
-}
-?>
+<?php } ?>
 
     <a href="javascript:void(0);" class="frm_bstooltip alignright frm-show-hover frm-move frm-hover-icon frm_icon_font frm_move_icon" title="<?php esc_attr_e( 'Move Field', 'formidable' ) ?>"> </a>
     <a href="#" class="frm_bstooltip alignright frm-show-hover frm-hover-icon frm_icon_font frm_delete_icon frm_delete_field" title="<?php esc_attr_e( 'Delete Field', 'formidable' ) ?>"> </a>
@@ -17,7 +13,7 @@ if ( $field['type'] == 'divider' ) { ?>
 		<a href="javascript:void(0);" class="frm_req_field frm_action_icon frm_required_icon frm_icon_font alignleft frm_required<?php echo (int) $field['required'] ?>" id="req_field_<?php echo esc_attr( $field['id'] ); ?>" title="Click to Mark as <?php echo FrmField::is_required( $field ) ? 'not ' : ''; ?>Required"></a>
     </span>
 	<?php } ?>
-	<label class="<?php echo ( $field['type'] == 'end_divider' ) ? '' : 'frm_ipe_field_label'; ?> frm_primary_label <?php echo ( $field['type'] == 'break' ) ? 'button': ''; ?>" id="field_label_<?php echo esc_attr( $field['id'] ); ?>"><?php echo ( $field['name'] == '' ) ? __( '(no label)', 'formidable' ) : force_balance_tags( $field['name'] ); ?></label>
+	<label class="<?php echo ( $field['type'] === 'end_divider' ) ? '' : 'frm_ipe_field_label'; ?> frm_primary_label <?php echo ( $field['type'] === 'break' ) ? 'button' : ''; ?>" id="field_label_<?php echo esc_attr( $field['id'] ); ?>"><?php echo ( $field['name'] === '' ) ? __( '(no label)', 'formidable' ) : force_balance_tags( $field['name'] ); ?></label>
 	<input type="hidden" name="field_options[name_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['name'] ); ?>" />
 
 <div id="field_<?php echo esc_attr( $field['id'] ) ?>_inner_container" class="frm_inner_field_container">
@@ -217,7 +213,8 @@ if ( $display['options'] ) {
 					}
 				}
 
-				if ( $display['show_image'] ) { ?>
+				if ( $display['show_image'] ) {
+				?>
 					<tr>
 						<td class="frm_150_width">
 							<label><?php esc_html_e( 'Show URL image', 'formidable' ) ?></label>
@@ -229,7 +226,8 @@ if ( $display['options'] ) {
 							</label>
 						</td>
 					</tr>
-                <?php }
+				<?php
+				}
 
 				if ( $display['captcha_size'] && $frm_settings->re_type !== 'invisible' ) {
 				?>

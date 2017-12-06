@@ -39,7 +39,8 @@ foreach ( $frm_field_selection as $field_key => $field_type ) {
 				</li>
 <?php
 	unset( $field_key, $field_type );
-} ?>
+}
+?>
 			</ul>
 			<div class="clear"></div>
 			<?php FrmTipsHelper::pro_tip( 'get_builder_tip' ); ?>
@@ -64,8 +65,7 @@ foreach ( FrmField::pro_field_selection() as $field_key => $field_type ) {
 					</a>
 
 					<ul class="frm-dropdown-menu" role="menu" aria-labelledby="frm-<?php echo esc_attr( $field_key ) ?>Drop">
-					<?php
-					foreach ( $field_type['types'] as $k => $type ) { ?>
+					<?php foreach ( $field_type['types'] as $k => $type ) { ?>
 						<li class="frm_t<?php echo esc_attr( $field_key ) ?>" id="<?php echo esc_attr( $field_key ) ?>|<?php echo esc_attr( $k ) ?>">
 							<?php echo FrmAppHelper::kses( apply_filters( 'frmpro_field_links', $type, $id, $field_key . '|' . $k ), array( 'a', 'i', 'span' ) ) ?>
 						</li>
@@ -78,7 +78,7 @@ foreach ( FrmField::pro_field_selection() as $field_key => $field_type ) {
 <?php
 				} else {
 					$field_label = '<i class="' . esc_attr( FrmFormsHelper::get_field_link_icon( $field_type ) ) . ' frm_animate_bg"></i>';
-					$field_label .= ' <span>' . FrmFormsHelper::get_field_link_name( $field_type ) .'</span>';
+					$field_label .= ' <span>' . FrmFormsHelper::get_field_link_name( $field_type ) . '</span>';
                     ?>
 					<li class="frmbutton button <?php echo esc_attr( $no_allow_class . ' frm_t' . str_replace( '|', '-', $field_key ) ) ?>" id="<?php echo esc_attr( $field_key ) ?>">
 						<?php echo FrmAppHelper::kses( apply_filters( 'frmpro_field_links', $field_label, $id, $field_key ), array( 'a', 'i', 'span' ) ) ?>
@@ -87,7 +87,8 @@ foreach ( FrmField::pro_field_selection() as $field_key => $field_type ) {
 				}
 
 				unset( $field_key, $field_type, $field_label );
-			} ?>
+			}
+			?>
 			</ul>
 			<div class="clear"></div>
 		</div>
@@ -106,13 +107,7 @@ foreach ( FrmField::pro_field_selection() as $field_key => $field_type ) {
 				$title = ( ! empty( $d ) && is_array( $d ) && isset( $d['title'] ) ) ? $d['title'] : '';
 				?>
 				<li class="frm_col_<?php echo esc_attr( $col ) ?>">
-					<a href="javascript:void(0);" class="frmbutton button frm_insert_code show_frm_classes<?php
-					if ( ! empty( $title ) ) {
-						echo ' frm_help';
-					} ?>" data-code="<?php echo esc_attr( $c ) ?>"<?php
-					if ( ! empty( $title ) ) {
-						?> title="<?php echo esc_attr( $title ); ?>"<?php
-					} ?>>
+					<a href="javascript:void(0);" data-code="<?php echo esc_attr( $c ) ?>" class="frmbutton button frm_insert_code show_frm_classes<?php echo esc_attr( ! empty( $title ) ? ' frm_help' : '' ); ?>" <?php echo ( ! empty( $title ) ? ' title="' . esc_attr( $title ) . '"' : '' ); ?>>
 						<?php echo esc_html( FrmFormsHelper::style_class_label( $d, $c ) ); ?>
 					</a>
 				</li>
@@ -128,7 +123,7 @@ foreach ( FrmField::pro_field_selection() as $field_key => $field_type ) {
 
 	<form method="post" id="frm_js_build_form">
 		<input type="hidden" id="frm_compact_fields" name="frm_compact_fields" value="" />
-		<button class="frm_submit_form frm_submit_<?php echo ( isset( $values['ajax_load'] ) && $values['ajax_load'] ) ? '': 'no_'; ?>ajax frm_hidden frm_button_submit" type="button" id="frm_submit_side" ><?php echo esc_html( $button ) ?></button>
+		<button class="frm_submit_form frm_submit_<?php echo esc_attr( ( isset( $values['ajax_load'] ) && $values['ajax_load'] ) ? '' : 'no_' ); ?>ajax frm_hidden frm_button_submit" type="button" id="frm_submit_side"><?php echo esc_html( $button ); ?></button>
 	</form>
 
 	</div>

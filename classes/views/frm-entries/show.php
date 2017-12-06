@@ -5,11 +5,14 @@
 		<div id="post-body" class="metabox-holder columns-2">
 		<div id="post-body-content">
 			<?php
-				FrmAppHelper::get_admin_header( array(
-					'label'     => __( 'View Entry', 'formidable' ),
-					'link_hook' => array( 'hook' => 'frm_entry_inside_h2', 'param' => $form ),
-					'form'      => $form,
-				) );
+			FrmAppHelper::get_admin_header( array(
+				'label'     => __( 'View Entry', 'formidable' ),
+				'link_hook' => array(
+					'hook'  => 'frm_entry_inside_h2',
+					'param' => $form,
+				),
+				'form'      => $form,
+			) );
 			?>
 			<div class="frm_form_fields">
 				<div class="postbox">
@@ -45,7 +48,8 @@
 										'entry_id'      => $entry->id,
 										'embedded_field_id' => $embedded_field_id,
 									);
-									echo $display_value = FrmEntriesHelper::prepare_display_value( $entry, $field, $atts );
+									$display_value = FrmEntriesHelper::prepare_display_value( $entry, $field, $atts );
+									echo $display_value;
 
 									if ( is_email( $display_value ) && ! in_array( $display_value, $to_emails ) ) {
 										$to_emails[] = $display_value;
@@ -53,7 +57,8 @@
 									?>
 								</td>
 							</tr>
-							<?php }
+							<?php
+							}
 						}
 						?>
 

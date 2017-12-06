@@ -141,7 +141,7 @@ class FrmFieldValue {
 	 */
 	public function get_displayed_value() {
 		if ( $this->displayed_value === 'frm_not_prepared' ) {
-			return __( 'The display value has not been prepared. Please use the prepare_display_value() method before calling get_displayed_value().' , 'formidable' );
+			return __( 'The display value has not been prepared. Please use the prepare_display_value() method before calling get_displayed_value().', 'formidable' );
 		}
 
 		return $this->displayed_value;

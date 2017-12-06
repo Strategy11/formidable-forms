@@ -52,7 +52,10 @@ class FrmFieldFormHtml {
 	 * @param array $atts
 	 */
 	private function set_html( $atts ) {
-		$this->set_from_field( $atts, array( 'param' => 'html', 'default' => 'custom_html' ) );
+		$this->set_from_field( $atts, array(
+			'param'   => 'html',
+			'default' => 'custom_html',
+		) );
 	}
 
 	/**
@@ -61,7 +64,10 @@ class FrmFieldFormHtml {
 	 * @param array $atts
 	 */
 	private function set_field_id( $atts ) {
-		$this->set_from_field( $atts, array( 'param' => 'field_id', 'default' => 'id' ) );
+		$this->set_from_field( $atts, array(
+			'param'   => 'field_id',
+			'default' => 'id',
+		) );
 	}
 
 	/**
@@ -72,7 +78,7 @@ class FrmFieldFormHtml {
 	private function set_pass_args( $atts ) {
 		$this->pass_args = $atts;
 		$exclude = array( 'field_obj', 'html' );
-		
+
 		foreach ( $exclude as $ex ) {
 			if ( isset( $atts[ $ex ] ) ) {
 				unset( $this->pass_args[ $ex ] );
@@ -170,7 +176,7 @@ class FrmFieldFormHtml {
 				$has_id = strpos( $inner_html[2], ' id=' );
 				if ( ! $has_id ) {
 					$id = 'frm_desc_' . $this->html_id;
-					$this->html = str_replace( 'class="frm_description', 'id="'. esc_attr( $id ) . '" class="frm_description', $this->html );
+					$this->html = str_replace( 'class="frm_description', 'id="' . esc_attr( $id ) . '" class="frm_description', $this->html );
 				}
 			}
 		}
@@ -229,7 +235,10 @@ class FrmFieldFormHtml {
 
 		//If field is not in repeating section
 		if ( empty( $atts['section_id'] ) ) {
-			$atts = array( 'errors' => $this->pass_args['errors'], 'form' => $this->form );
+			$atts = array(
+				'errors' => $this->pass_args['errors'],
+				'form'   => $this->form,
+			);
 		}
 		$this->html = apply_filters( 'frm_replace_shortcodes', $this->html, $this->field_obj->get_field(), $atts );
 	}

@@ -89,7 +89,7 @@ class FrmEntryMeta {
 	 * @since 3.0
 	 */
 	private static function get_value_to_save( $atts, &$value ) {
-		if ( is_object( $atts['field'] ) ){
+		if ( is_object( $atts['field'] ) ) {
 			$field_obj = FrmFieldFactory::get_field_object( $atts['field'] );
 			$value = $field_obj->get_value_to_save( $value, array(
 				'entry_id' => $atts['entry_id'],

@@ -70,7 +70,7 @@ class FrmField {
 	public static function pro_field_selection() {
 		return apply_filters( 'frm_pro_available_fields', array(
 			'file'      => array(
-				'name'  =>__( 'File Upload', 'formidable' ),
+				'name'  => __( 'File Upload', 'formidable' ),
 				'icon'  => 'frm_icon_font frm_upload2_icon',
 			),
 			'rte'       => array(
@@ -135,7 +135,7 @@ class FrmField {
 			),
 			'tag'       => array(
 				'name'  => __( 'Tags', 'formidable' ),
-				'icon'  => 'frm_icon_font frm_price-tags_icon'
+				'icon'  => 'frm_icon_font frm_price-tags_icon',
 			),
 			'credit_card' => array(
 				'name'  => __( 'Credit Card', 'formidable' ),

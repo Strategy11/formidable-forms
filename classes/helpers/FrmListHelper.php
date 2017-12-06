@@ -611,7 +611,12 @@ class FrmListHelper {
 
 	private function disabled_pages( $total_pages ) {
 		$current = $this->get_pagenum();
-		$disable = array( 'first' => false, 'last' => false, 'prev' => false, 'next' => false );
+		$disable = array(
+			'first' => false,
+			'last'  => false,
+			'prev'  => false,
+			'next'  => false,
+		);
 
  		if ( $current == 1 ) {
 			$disable['first'] = true;

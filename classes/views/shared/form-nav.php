@@ -13,7 +13,8 @@ FrmFormsHelper::form_switcher();
 ?>
 </ul>
 
-<?php if ( $form && 'show' === $title ) {
+<?php
+if ( $form && 'show' === $title ) {
 	_deprecated_argument( 'title', '3.0' );
 ?>
 	<input id="title" type="text" value="<?php echo esc_attr( '' === $form->name ? __( '(no title)' ) : $form->name ) ?>" readonly="readonly" disabled="disabled" />

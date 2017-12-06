@@ -107,13 +107,10 @@
                     </td>
                     <td>
                         <span class="success_action_redirect_box success_action_box<?php echo ( $values['success_action'] == 'redirect' ) ? '' : ' frm_hidden'; ?>">
-                            <input type="text" name="options[success_url]" id="success_url" value="<?php
-							if ( isset( $values['success_url'] ) ) {
-								echo esc_attr( $values['success_url'] );
-							} ?>" placeholder="http://example.com" />
+							<input type="text" name="options[success_url]" id="success_url" value="<?php echo esc_attr( isset( $values['success_url'] ) ? $values['success_url'] : '' ); ?>" placeholder="http://example.com" />
                         </span>
 
-                        <span class="success_action_page_box success_action_box<?php echo ($values['success_action'] == 'page') ? '' : ' frm_hidden'; ?>">
+                        <span class="success_action_page_box success_action_box<?php echo esc_attr( $values['success_action'] === 'page' ? '' : ' frm_hidden' ); ?>">
                             <label><?php esc_html_e( 'Use Content from Page', 'formidable' ); ?></label>
                             <?php FrmAppHelper::wp_pages_dropdown( 'options[success_page_id]', $values['success_page_id'] ) ?>
                         </span>

@@ -379,7 +379,7 @@ class FrmFieldsHelper {
 			// Get string for Other text field, if needed
 			$other_val = self::get_other_val( compact( 'opt_key', 'field' ) );
 
-			$checked = ( $other_val || isset( $field['value'] ) && ( ( ! is_array( $field['value'] ) && $field['value'] == $field_val ) || ( is_array($field['value'] ) && in_array( $field_val, $field['value'] ) ) ) ) ? ' checked="checked"':'';
+			$checked = ( $other_val || isset( $field['value'] ) && ( ( ! is_array( $field['value'] ) && $field['value'] == $field_val ) || ( is_array($field['value'] ) && in_array( $field_val, $field['value'] ) ) ) ) ? ' checked="checked"' : '';
 
 		    // If this is an "Other" option, get the HTML for it
 			if ( self::is_other_opt( $opt_key ) ) {
@@ -752,7 +752,9 @@ class FrmFieldsHelper {
 	 */
 	public static function get_user_display_name( $user_id, $user_info = 'display_name', $args = array() ) {
 		$defaults = array(
-			'blank' => false, 'link' => false, 'size' => 96
+			'blank' => false,
+			'link'  => false,
+			'size'  => 96,
 		);
 
 		$args = wp_parse_args($args, $defaults);
@@ -775,7 +777,7 @@ class FrmFieldsHelper {
 		}
 
 		if ( $args['link'] ) {
-			$info = '<a href="' .  esc_url( admin_url('user-edit.php?user_id=' . $user_id ) ) . '">' . $info . '</a>';
+			$info = '<a href="' . esc_url( admin_url('user-edit.php?user_id=' . $user_id ) ) . '">' . $info . '</a>';
 		}
 
 		return $info;
