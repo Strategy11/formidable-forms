@@ -180,7 +180,7 @@ class FrmAppHelper {
      * @return boolean
      */
     public static function is_admin() {
-		return is_admin() && ( ! defined('DOING_AJAX') || ! DOING_AJAX );
+        return is_admin() && ( ! defined('DOING_AJAX') || ! DOING_AJAX );
     }
 
     /**
