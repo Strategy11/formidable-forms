@@ -11,22 +11,20 @@ matrix:
       env: WP_VERSION=master WP_MULTISITE=1
       dist: precise
     - php: 5.2.17
-      env: WP_VERSION=4.7 WP_MULTISITE=1
+      env: WP_VERSION=4.9 WP_MULTISITE=1
       dist: precise
     - php: 7.0
-      env: WP_VERSION=4.7 SCRIPT_DEBUG=1
+      env: WP_VERSION=4.9 SCRIPT_DEBUG=1
+    - php: 5.6
+      env: WP_VERSION=4.8
     - php: 5.6
       env: WP_VERSION=4.7
     - php: 5.6
       env: WP_VERSION=4.6
     - php: 5.6
       env: WP_VERSION=4.5
-    - php: 5.6
-      env: WP_VERSION=4.4
     - php: 5.5
-      env: WP_VERSION=4.7
-    - php: 5.5
-      env: WP_VERSION=4.0 SCRIPT_DEBUG=1
+      env: WP_VERSION=4.5 SCRIPT_DEBUG=1
     - php: 5.4
       env: WP_VERSION=4.7
     - php: nightly
