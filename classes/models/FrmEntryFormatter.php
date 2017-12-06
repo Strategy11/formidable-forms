@@ -331,7 +331,7 @@ class FrmEntryFormatter {
 
 		$unset = array( 'id', 'entry', 'form_id', 'format', 'plain_text' );
 		foreach ( $unset as $param ) {
-			if ( isset( $atts[ $param ] ) ){
+			if ( isset( $atts[ $param ] ) ) {
 				unset( $atts[ $param ] );
 			}
 		}
