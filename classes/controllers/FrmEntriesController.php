@@ -328,7 +328,7 @@ class FrmEntriesController {
 				break;
 			}
 
-			if ( ! in_array( $col_key, $result, true ) ) {
+			if ( empty( $result ) || ! in_array( $col_key, $result, true ) ) {
 				$result[] = $col_key;
 				$i--;
 			}
