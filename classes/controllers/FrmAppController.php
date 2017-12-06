@@ -27,10 +27,22 @@ class FrmAppController {
 	 * @since 3.0
 	 */
 	public static function add_admin_class( $classes ) {
-		if ( FrmAppHelper::is_admin_page('formidable') || FrmAppHelper::is_admin_page('formidable-entries') ) {
+		if ( self::is_white_page() ) {
 			$classes = ' frm-white-body';
 		}
 		return $classes;
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	private static function is_white_page() {
+		$is_white_page = ( FrmAppHelper::is_admin_page( 'formidable' ) || FrmAppHelper::is_admin_page( 'formidable-entries' ) || FrmAppHelper::is_admin_page( 'formidable-pro-upgrade' ) );
+		if ( ! $is_white_page ) {
+			$screen = get_current_screen();
+			$is_white_page = ( $screen->id === 'edit-frm_display' );
+		}
+		return $is_white_page;
 	}
 
     public static function load_wp_admin_style() {
