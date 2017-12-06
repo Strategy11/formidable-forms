@@ -505,6 +505,7 @@ class WP_Test_FrmProFieldsControllerAjax extends FrmAjaxUnitTest {
 	// Get the joining field (for example, the Dynamic Country field in the State form)
 	function _get_the_join_field( &$args ) {
 		$linked_field = FrmField::getOne( $args['field']->field_options['form_select'] );
+		$this->assertNotEmpty( $linked_field, 'No field found for selected form in linked field: ' . $args['field']->field_options['form_select'] );
 		$join_fields = FrmField::get_all_types_in_form( $linked_field->form_id, 'data' );
 		foreach ( $join_fields as $j ) {
 			if ( $j->field_options['form_select'] == $args['parent_field']->field_options['form_select'] ) {

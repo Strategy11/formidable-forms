@@ -147,7 +147,7 @@ class test_FrmProFormActionLogicRow extends FrmUnitTest {
 
 
 		ob_start();
-		include( FrmAppHelper::plugin_path() . '/pro/classes/views/frmpro-forms/_logic_row.php' );
+		include( FrmProAppHelper::plugin_path() . '/classes/views/frmpro-forms/_logic_row.php' );
 		$logic_row = ob_get_contents();
 		ob_end_clean();
 
