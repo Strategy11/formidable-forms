@@ -36,7 +36,8 @@
         </div>
     </div>
 </div>
-<?php do_action('frm_show_entry_sidebar', $entry);
+<?php
+do_action( 'frm_show_entry_sidebar', $entry );
 FrmEntriesController::entry_sidebar($entry);
 ?>
 </div>

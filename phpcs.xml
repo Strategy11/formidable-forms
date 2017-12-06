@@ -26,38 +26,44 @@
 		<exclude name="WordPress.VIP.RestrictedFunctions.get_term_by"/>
 		<exclude name="WordPress.VIP.RestrictedFunctions.get_term_link"/>
 		<exclude name="WordPress.VIP.RestrictedFunctions.term_exists" />
+		<exclude name="WordPress.VIP.RestrictedFunctions.term_exists_term_exists" />
 		<exclude name="WordPress.VIP.RestrictedFunctions.wp_is_mobile" />
 		<exclude name="WordPress.VIP.RestrictedFunctions.wp_is_mobile_wp_is_mobile" />
 
 		<!-- Temporary exclusions. Enable these when we have time to address them -->
-		<exclude name="PEAR.Functions.FunctionCallSignature.SpaceAfterOpenBracket" />
-		<exclude name="PEAR.Functions.FunctionCallSignature.SpaceBeforeCloseBracket" />
-		<exclude name="WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid" />
-		<exclude name="Generic.WhiteSpace.DisallowSpaceIndent.SpacesUsed" />
 		<exclude name="Generic.WhiteSpace.ScopeIndent.IncorrectExact" />
 		<exclude name="Generic.WhiteSpace.ScopeIndent.Incorrect" />
-		<exclude name="WordPress.CSRF.NonceVerification.NoNonceVerification" />
-		<exclude name="WordPress.Arrays.ArrayDeclaration.ValueNoNewline" />
-		<exclude name="WordPress.Arrays.ArrayDeclaration.IndexNoNewline" />
 		<exclude name="PEAR.Functions.FunctionCallSignature.Indent" />
-		<exclude name="Squiz.Commenting.LongConditionClosingComment.Missing" />
-		<exclude name="WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid" />
 		<exclude name="Squiz.PHP.EmbeddedPhp.NoSemicolon" />
 
 		<!-- We should probably turn the below rules on, but these give issues with the current code base. -->
 		<exclude name="WordPress.Files.FileName.UnderscoresNotAllowed" />
+		<exclude name="WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid" />
+		<exclude name="WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid" />
 		<exclude name="WordPress.WhiteSpace.ScopeIndent.Incorrect" />
 		<exclude name="WordPress.Classes.ValidClassName.NotCamelCaps" />
-		<exclude name="WordPress.XSS.EscapeOutput" /><!-- This sniff also has known & reported bugs -->
 		<exclude name="WordPress.VIP.PostsPerPage.posts_per_page" />
+		<exclude name="WordPress.VIP.PostsPerPage.posts_per_page_numberposts" />
 		<exclude name="WordPress.VIP.RestrictedFunctions.wp_get_post_terms" />
 		<exclude name="Generic.Files.LowercasedFilename.NotFound" />
-		<exclude name="WordPress.WP.PreparedSQL.NotPrepared" /><!-- This isn't allowing variables -->
 		<exclude name="WordPress.NamingConventions.ValidVariableName.NotSnakeCase" /><!-- Some WP globals break the rule -->
 		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase" />
 		<exclude name="WordPress.Files.FileName.InvalidClassFileName" />
 
-		<!-- Demanding Yoda conditions is stupid. -->
+		<!-- Enable these rules right away -->
+		<exclude name="WordPress.Functions.DontExtract.extract_extract" />
+		<exclude name="Squiz.PHP.EmbeddedPhp.ContentBeforeOpen" />
+		<exclude name="Squiz.PHP.EmbeddedPhp.ContentAfterEnd" />
+		<exclude name="PEAR.Functions.FunctionCallSignature.SpaceAfterOpenBracket" />
+		<exclude name="PEAR.Functions.FunctionCallSignature.SpaceBeforeCloseBracket" />
+		<exclude name="Generic.WhiteSpace.DisallowSpaceIndent.SpacesUsed" />
+		<exclude name="WordPress.XSS.EscapeOutput" /><!-- This sniff also has known & reported bugs -->
+		<exclude name="WordPress.WP.PreparedSQL.NotPrepared" /><!-- This isn't allowing variables -->
+		<exclude name="Squiz.Commenting.LongConditionClosingComment.Missing" />
+		<exclude name="WordPress.CSRF.NonceVerification.NoNonceVerification" />
+		<exclude name="WordPress.Arrays.ArrayDeclaration.ValueNoNewline" />
+		<exclude name="WordPress.Arrays.ArrayDeclaration.IndexNoNewline" />
+		<exclude name="WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid" />
 		<exclude name="WordPress.PHP.YodaConditions"/>
 
 		<!-- Turned off because of known & reported bugs in the Sniffs, should be turned on once the bugs are fixed. -->

@@ -34,7 +34,7 @@
         <input type="hidden" name="action" value="process-form" />
         <?php wp_nonce_field('process_form_nonce', 'process_form'); ?>
 
-        <div class="general_settings tabs-panel <?php echo ($a == 'general_settings') ? 'frm_block' : 'frm_hidden'; ?>">
+        <div class="general_settings tabs-panel <?php echo esc_attr( $a === 'general_settings' ? 'frm_block' : 'frm_hidden' ); ?>">
             <p class="submit">
 				<input class="button-primary" type="submit" value="<?php esc_attr_e( 'Update Options', 'formidable' ) ?>" />
             </p>
@@ -68,8 +68,10 @@
 				<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Select users that are allowed access to Formidable. Without access to View Forms, users will be unable to see the Formidable menu.', 'formidable' ) ?>"></span>
 			</h3>
             <table class="form-table">
-				<?php foreach ( $frm_roles as $frm_role => $frm_role_description ) {
-					$role_field_name = $frm_role . '[]'; ?>
+				<?php
+				foreach ( $frm_roles as $frm_role => $frm_role_description ) {
+					$role_field_name = $frm_role . '[]';
+					?>
                 <tr>
                     <td class="frm_left_label"><label><?php echo esc_html( $frm_role_description ) ?></label></td>
                     <td><?php FrmAppHelper::wp_roles_dropdown( $role_field_name, $frm_settings->$frm_role, 'multiple' ) ?></td>
@@ -192,24 +194,25 @@
 
         <?php
 		foreach ( $sections as $sec_name => $section ) {
-			if ( $a == $sec_name . '_settings' ) { ?>
+			if ( $a === $sec_name . '_settings' ) {
+			?>
 <style type="text/css">.<?php echo esc_attr( $sec_name ) ?>_settings{display:block;}</style><?php } ?>
-			<div id="<?php echo esc_attr( $sec_name ) ?>_settings" class="<?php echo esc_attr( $sec_name ) ?>_settings tabs-panel <?php echo ( $a == $sec_name . '_settings' ) ? 'frm_block' : 'frm_hidden'; ?>"><?php
-				if ( isset( $section['ajax'] ) ) {
-					?>
+			<div id="<?php echo esc_attr( $sec_name ) ?>_settings" class="<?php echo esc_attr( $sec_name ) ?>_settings tabs-panel <?php echo esc_attr( $a === $sec_name . '_settings' ? 'frm_block' : 'frm_hidden' ); ?>">
+				<?php if ( isset( $section['ajax'] ) ) { ?>
 					<div class="frm_ajax_settings_tab frm_<?php echo esc_attr( $sec_name ) ?>_settings_ajax">
 						<span class="spinner"></span>
-					</div><?php
+					</div>
+					<?php
 				} else {
 					if ( isset( $section['class'] ) ) {
 						call_user_func( array( $section['class'], $section['function'] ) );
 					} else {
 						call_user_func( ( isset( $section['function'] ) ? $section['function'] : $section ) );
 					}
-                } ?>
+				}
+				?>
             </div>
-        <?php
-        } ?>
+		<?php } ?>
 
         <p class="alignright frm_uninstall">
 			<a href="javascript:void(0)" id="frm_uninstall_now"><?php esc_html_e( 'Uninstall Formidable', 'formidable' ) ?></a>

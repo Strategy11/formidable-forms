@@ -54,11 +54,14 @@
         <div class="advanced_settings tabs-panel <?php echo esc_attr( $a === 'advanced_settings' ? 'frm_block' : 'frm_hidden' ); ?>">
 			<?php FrmTipsHelper::pro_tip( 'get_form_settings_tip', 'p' ); ?>
 
-			<h3 class="frm_first_h3"><?php esc_html_e( 'On Submit', 'formidable' ); ?>
-				<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Choose what will happen after the user submits this form.', 'formidable' );
-				if ( ! FrmAppHelper::pro_is_installed() ) {
-					esc_attr_e( ' Upgrade to Formidable Pro to get access to all options in the dropdown.', 'formidable' );
-				} ?>" ></span>
+			<?php
+			$tooltip = __( 'Choose what will happen after the user submits this form.', 'formidable' );
+			if ( ! FrmAppHelper::pro_is_installed() ) {
+				$tooltip .= __( ' Upgrade to Formidable Pro to get access to all options in the dropdown.', 'formidable' );
+			}
+			?>
+			<h3 class="frm_first_h3"><?php esc_html_e( 'On Submit', 'formidable' ); ?>>
+				<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php echo esc_attr( $tooltip ) ?>"></span>
             </h3>
 
             <!--On Submit Section-->
@@ -66,7 +69,9 @@
                 <tr>
                     <td class="frm_175_width">
                         <select name="options[success_action]" id="success_action">
-                            <option value="message" <?php selected( $values['success_action'], 'message' ) ?>><?php esc_html_e( 'Show Message', 'formidable' )?></option>
+							<option value="message" <?php selected( $values['success_action'], 'message' ) ?>>
+								<?php esc_html_e( 'Show Message', 'formidable' ); ?>
+							</option>
                             <?php if ( FrmAppHelper::pro_is_installed() ) { ?>
 								<option value="redirect" <?php selected( $values['success_action'], 'redirect' ); ?>>
 									<?php esc_html_e( 'Redirect to URL', 'formidable' ) ?>
@@ -92,7 +97,7 @@
 						</span>
 
 						<?php if ( FrmAppHelper::pro_is_installed() ) { ?>
-                        <span class="success_action_page_box success_action_box<?php echo ($values['success_action'] == 'page') ? '' : ' frm_hidden'; ?>">
+						<span class="success_action_page_box success_action_box<?php echo esc_attr( $values['success_action'] === 'page' ? '' : ' frm_hidden' ); ?>">
                             <label><?php esc_html_e( 'Use Content from Page', 'formidable' ) ?></label>
                             <?php FrmAppHelper::wp_pages_dropdown( 'options[success_page_id]', $values['success_page_id'] ) ?>
                         </span>
@@ -220,7 +225,7 @@
 
                 //For each add-on, add an li, class, and javascript function. If active, add an additional class.
                 foreach ( $action_controls as $action_control ) {
-					$classes =  ( isset( $action_control->action_options['active'] ) && $action_control->action_options['active'] ) ? 'frm_active_action ' : 'frm_inactive_action ';
+					$classes = ( isset( $action_control->action_options['active'] ) && $action_control->action_options['active'] ) ? 'frm_active_action ' : 'frm_inactive_action ';
 					$classes .= $action_control->action_options['classes'];
                     ?>
 					<li>
@@ -260,7 +265,8 @@
                     <?php
 					if ( isset( $values['fields'] ) ) {
 						foreach ( $values['fields'] as $field ) {
-							if ( apply_filters( 'frm_show_custom_html', true, $field['type'] ) ) { ?>
+							if ( apply_filters( 'frm_show_custom_html', true, $field['type'] ) ) {
+							?>
                                 <p>
 									<label><?php echo esc_html( $field['name'] ) ?></label>
 									<textarea name="field_options[custom_html_<?php echo esc_attr( $field['id'] ) ?>]" rows="7" id="custom_html_<?php echo esc_attr( $field['id'] ) ?>" class="field_custom_html frm_long_input"><?php echo FrmAppHelper::esc_textarea( $field['custom_html'] ) ?></textarea>
@@ -289,13 +295,14 @@
 				$sec_anchor = $key;
 			}
 			?>
-			<div id="<?php echo esc_attr( $sec_anchor ) ?>_settings" class="tabs-panel <?php echo ( $a === $sec_anchor . '_settings' ) ? ' frm_block' : ' frm_hidden'; ?>"><?php
-			if ( isset( $section['class'] ) ) {
-				call_user_func( array( $section['class'], $section['function'] ), $values );
-			} else {
-				call_user_func( ( isset( $section['function'] ) ? $section['function'] : $section ), $values );
-            }
-			?>
+			<div id="<?php echo esc_attr( $sec_anchor ) ?>_settings" class="tabs-panel <?php echo ( $a === $sec_anchor . '_settings' ) ? ' frm_block' : ' frm_hidden'; ?>">
+				<?php
+				if ( isset( $section['class'] ) ) {
+					call_user_func( array( $section['class'], $section['function'] ), $values );
+				} else {
+					call_user_func( ( isset( $section['function'] ) ? $section['function'] : $section ), $values );
+				}
+				?>
             </div>
         <?php } ?>
 

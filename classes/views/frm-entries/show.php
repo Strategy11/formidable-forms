@@ -34,11 +34,14 @@
                             <td>
                             <?php
 							$embedded_field_id = ( $entry->form_id != $field->form_id ) ? 'form' . $field->form_id : 0;
-                            $atts = array(
-                                'type' => $field->type, 'post_id' => $entry->post_id,
-                                'show_filename' => true, 'show_icon' => true, 'entry_id' => $entry->id,
-                                'embedded_field_id' => $embedded_field_id,
-                            );
+							$atts = array(
+								'type'      => $field->type,
+								'post_id'   => $entry->post_id,
+								'show_filename' => true,
+								'show_icon' => true,
+								'entry_id'  => $entry->id,
+								'embedded_field_id' => $embedded_field_id,
+							);
 							$display_value = FrmEntriesHelper::prepare_display_value( $entry, $field, $atts );
 							echo $display_value;
 
@@ -48,7 +51,8 @@
                             ?>
                             </td>
                         </tr>
-                        <?php }
+						<?php
+							}
                         }
 
                         ?>

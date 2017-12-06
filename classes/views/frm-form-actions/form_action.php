@@ -27,10 +27,10 @@ $form_action = apply_filters( 'frm_form_' . $form_action->post_excerpt . '_actio
             // only load settings if they are just added or are open
 			include( dirname( __FILE__ ) . '/_action_inside.php' );
         } else {
-            // include hidden settings so action won't get lost on update ?>
+			// include hidden settings so action won't get lost on update
+			?>
         <input type="hidden" name="<?php echo esc_attr( $action_control->get_field_name('post_excerpt', '') ) ?>" class="frm_action_name" value="<?php echo esc_attr( $form_action->post_excerpt ); ?>" />
         <input type="hidden" name="<?php echo esc_attr( $action_control->get_field_name('ID', '') ) ?>" value="<?php echo esc_attr( $form_action->ID ); ?>" />
-        <?php
-        } ?>
+		<?php } ?>
     </div>
 </div>

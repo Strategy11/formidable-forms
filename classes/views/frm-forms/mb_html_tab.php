@@ -57,8 +57,8 @@
 
 		foreach ( array(
 			'button_label' => __( 'Button Label', 'formidable' ),
-			'button_action' => __( 'Button Hook', 'formidable' )
-			) as $skey => $sname ) {
+			'button_action' => __( 'Button Hook', 'formidable' ),
+		) as $skey => $sname ) {
         ?>
         <li class="frm_col_<?php echo esc_attr( $col ) ?>">
     	    <a href="javascript:void(0)" class="show_submit_html frmbutton button frm_insert_code" data-code="<?php echo esc_attr($skey) ?>"><?php echo esc_html( $sname ); ?></a>

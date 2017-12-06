@@ -107,7 +107,7 @@ class test_FrmProEmailWithAttachment extends FrmUnitTest {
 		$this->assertContains( $content_type, $body );
 
 		$content_disposition = 'Content-Disposition: attachment; filename=' . $file_name;
-		$this->assertContains( $content_disposition , $body );
+		$this->assertContains( $content_disposition, $body );
 
 	}
 
@@ -141,8 +141,7 @@ class test_FrmProEmailWithAttachment extends FrmUnitTest {
 			$this->assertContains( $content_type, $body );
 
 			$content_disposition = 'Content-Disposition: attachment; filename=' . $file_parts[0];
-			$this->assertContains( $content_disposition , $body );
-
+			$this->assertContains( $content_disposition, $body );
 		}
 	}
 }

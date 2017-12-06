@@ -123,9 +123,7 @@
 			<div class="clear"></div>
 		</div><!-- /.tabs-panel -->
 
-		<div id="tabs-panel-read-only" class="tabs-panel <?php
-			echo ( 'read-only' == $current_tab ? 'tabs-panel-active' : 'tabs-panel-inactive' );
-		?>">
+		<div id="tabs-panel-read-only" class="tabs-panel <?php echo esc_html( 'read-only' === $current_tab ? 'tabs-panel-active' : 'tabs-panel-inactive' ); ?>">
 			<div class="field-group field-group-border clearfix">
 				<label class="background"><?php esc_html_e( 'BG color', 'formidable' ) ?></label>
 				<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'bg_color_disabled' ) ); ?>" id="frm_bg_color_disabled" class="hex" value="<?php echo esc_attr( $style->post_content['bg_color_disabled'] ) ?>" />

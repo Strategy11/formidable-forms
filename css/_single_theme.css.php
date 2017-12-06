@@ -523,13 +523,15 @@ if ( ! empty( $important ) ) {
     height:<?php echo esc_html( $submit_height . $important ) ?>;
     line-height:normal<?php echo esc_html( $important ) ?>;
     text-align:center;
-    background: <?php
+    background:
+	<?php
 	echo esc_html( $submit_bg_color );
-	if ( ! empty($submit_bg_img) ) {
+	if ( ! empty( $submit_bg_img ) ) {
 		echo esc_html( ' url(' . $submit_bg_img . ')' );
 	}
 	echo esc_html( $important );
-	?>;
+	?>
+	;
     border-width:<?php echo esc_html( $submit_border_width ) ?>;
     border-color: <?php echo esc_html( $submit_border_color . $important ) ?>;
     border-style:solid;

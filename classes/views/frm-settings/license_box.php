@@ -1,4 +1,4 @@
-<div class="general_settings metabox-holder tabs-panel frm_license_box <?php echo ($a == 'general_settings') ? 'frm_block' : 'frm_hidden'; ?>">
+<div class="general_settings metabox-holder tabs-panel frm_license_box <?php echo esc_attr( 'general_settings' === $a ? 'frm_block' : 'frm_hidden' ); ?>">
 <?php if ( ! is_multisite() || current_user_can( 'setup_network' ) ) { ?>
     <div class="postbox">
         <div class="inside">

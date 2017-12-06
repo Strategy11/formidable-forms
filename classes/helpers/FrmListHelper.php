@@ -890,7 +890,7 @@ class FrmListHelper {
 	</tr>
 	</thead>
 
-	<tbody id="the-list"<?php if ( $singular ) { echo " data-wp-lists='list:" . esc_attr( $singular ) . "'"; } ?>>
+	<tbody id="the-list"<?php echo ( $singular ? " data-wp-lists='list:" . esc_attr( $singular ) . "'" : '' ); ?>>
 		<?php $this->display_rows_or_placeholder(); ?>
 	</tbody>
 

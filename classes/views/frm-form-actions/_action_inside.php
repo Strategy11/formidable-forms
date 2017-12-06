@@ -10,7 +10,8 @@
         </td>
     </tr>
 </table>
-<?php $action_control->form($form_action, compact('form', 'action_key', 'values'));
+<?php
+$action_control->form( $form_action, compact( 'form', 'action_key', 'values' ) );
 
 if ( ! isset( $action_control->action_options['event'] ) ) {
 	$events = 'create';
@@ -21,7 +22,8 @@ if ( ! is_array( $action_control->action_options['event'] ) ) {
 }
 
 if ( count( $action_control->action_options['event'] ) == 1 || $action_control->action_options['force_event'] ) {
-	foreach ( $action_control->action_options['event'] as $e ) { ?>
+	foreach ( $action_control->action_options['event'] as $e ) {
+	?>
 	<input type="hidden" name="<?php echo esc_attr( $action_control->get_field_name('event') ) ?>[]" value="<?php echo esc_attr( $e ) ?>" />
 <?php
 	}
@@ -34,16 +36,21 @@ if ( count( $action_control->action_options['event'] ) == 1 || $action_control->
 	<?php
 
 	$event_labels = FrmFormAction::trigger_labels();
-	foreach ( $action_control->action_options['event'] as $event ) { ?>
+	foreach ( $action_control->action_options['event'] as $event ) {
+	?>
 		<option value="<?php echo esc_attr( $event ) ?>" <?php echo in_array( $event, (array) $form_action->post_content['event'] ) ? ' selected="selected"' : ''; ?> ><?php echo isset( $event_labels[ $event ] ) ? $event_labels[ $event ] : $event; ?></option>
-<?php
-	}?>
+<?php } ?>
 		</select>
 	</p>
 <?php
 }
 
-$pass_args = array( 'form' => $form, 'action_control' => $action_control, 'action_key' => $action_key, 'values' => $values );
+$pass_args = array(
+	'form'       => $form,
+	'action_control' => $action_control,
+	'action_key' => $action_key,
+	'values'     => $values,
+);
 do_action( 'frm_additional_action_settings', $form_action, $pass_args );
 
 ?>

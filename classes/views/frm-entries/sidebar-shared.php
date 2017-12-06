@@ -41,7 +41,7 @@
         <?php if ( $entry->updated_by && $entry->updated_by != $entry->user_id ) { ?>
         <div class="misc-pub-section">
             <span class="dashicons dashicons-admin-users wp-media-buttons-icon"></span>
-			<?php printf( __( 'Updated by: %1$s', 'formidable' ), FrmProFieldsHelper::get_display_name( $entry->updated_by,  'display_name', array( 'link' => true ) ) ); ?>
+			<?php printf( esc_html__( 'Updated by: %1$s', 'formidable' ), FrmProFieldsHelper::get_display_name( $entry->updated_by, 'display_name', array( 'link' => true ) ) ); ?>
         </div>
         <?php } ?>
         <?php } ?>
@@ -69,7 +69,7 @@
         <?php if ( isset($data['referrer']) ) { ?>
         <div class="misc-pub-section">
 			<b><?php esc_html_e( 'Referrer', 'formidable' ) ?></b>:<br/>
-			<?php echo wp_kses_post( str_replace( "\r\n", '<br/>', $data['referrer'] ) );  ?>
+			<?php echo wp_kses_post( str_replace( "\r\n", '<br/>', $data['referrer'] ) ); ?>
         </div>
         <?php } ?>
 

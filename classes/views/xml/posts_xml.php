@@ -84,7 +84,8 @@ foreach ( (array) $terms as $term ) {
 	}
 
 	$frm_inc_tax[] = $term->term_id;
-	$label = ( 'category' === $term->taxonomy || 'tag' === $term->taxonomy ) ? $term->taxonomy : 'term'; ?>
+	$label = ( 'category' === $term->taxonomy || 'tag' === $term->taxonomy ) ? $term->taxonomy : 'term';
+	?>
 	<term><term_id><?php echo esc_html( $term->term_id ) ?></term_id><term_taxonomy><?php echo esc_html( $term->taxonomy ); ?></term_taxonomy><?php
 	if ( ! empty( $term->name ) ) {
 		echo '<term_name>' . FrmXMLHelper::cdata( $term->name ) . '</term_name>';
@@ -92,5 +93,6 @@ foreach ( (array) $terms as $term ) {
 	if ( ! empty( $term->description ) ) {
 		echo '<term_description>' . FrmXMLHelper::cdata( $term->description ) . '</term_description>';
 	}
-	echo '<term_slug>' . esc_html( $term->slug ) . '</term_slug></term>';
+	echo '<term_slug>' . esc_html( $term->slug ) . '</term_slug>';
+	echo '</term>';
 }

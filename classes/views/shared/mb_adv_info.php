@@ -51,7 +51,7 @@
 							$linked_fields = FrmField::getAll( array(
 								'fi.type not' => FrmField::no_save_fields(),
 								'fi.form_id'  => $linked_form,
-								) );
+							) );
                             $ldfe = '';
 							if ( $linked_fields ) {
 								foreach ( $linked_fields as $linked_field ) {

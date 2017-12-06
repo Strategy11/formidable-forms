@@ -23,9 +23,10 @@ Text Domain: formidable
 
 global $frm_vars;
 $frm_vars = array(
-    'load_css' => false, 'forms_loaded' => array(),
-    'created_entries'   => array(),
-    'pro_is_authorized' => false,
+	'load_css'     => false,
+	'forms_loaded' => array(),
+	'created_entries'   => array(),
+	'pro_is_authorized' => false,
 );
 
 function frm_forms_autoloader( $class_name ) {

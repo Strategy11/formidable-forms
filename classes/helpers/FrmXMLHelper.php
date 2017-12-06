@@ -314,7 +314,7 @@ class FrmXMLHelper {
 		foreach ( $xml_fields as $field ) {
 			$f = self::fill_field( $field, $form_id );
 
-			$has_default = array( 'text', 'email', 'url', 'textarea', 'number','phone', 'date', 'hidden', 'password', 'tag', 'image' );
+			$has_default = array( 'text', 'email', 'url', 'textarea', 'number', 'phone', 'date', 'hidden', 'password', 'tag', 'image' );
 			if ( is_array( $f['default_value'] ) && in_array( $f['type'], $has_default, true ) ) {
 				if ( count( $f['default_value'] ) === 1 ) {
 					$f['default_value'] = '[' . reset( $f['default_value'] ) . ']';
