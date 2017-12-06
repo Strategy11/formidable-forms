@@ -5,7 +5,8 @@ echo esc_html( $params['template'] ? __( 'Templates', 'formidable' ) : __( 'Form
 if ( ! $params['template'] && current_user_can( 'frm_edit_forms' ) ) { ?>
         <a href="?page=formidable&amp;frm_action=new" class="add-new-h2"><?php esc_html_e( 'Add New', 'formidable' ); ?></a>
 <?php
-} ?>
+}
+?>
     </h2>
 
 <?php

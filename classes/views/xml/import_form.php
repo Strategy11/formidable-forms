@@ -89,9 +89,9 @@
 					</th>
 					<td>
 						<select name="frm_export_forms[]" multiple="multiple" class="frm_chzn">
-						<?php
-						foreach ( $forms as $form ) { ?>
-							<option value="<?php echo esc_attr( $form->id ) ?>"><?php
+						<?php foreach ( $forms as $form ) { ?>
+							<option value="<?php echo esc_attr( $form->id ) ?>">
+								<?php
 								echo esc_html( '' === $form->name ? __( '(no title)' ) : $form->name );
 								echo ' &mdash; ' . esc_html( $form->form_key );
 								if ( $form->is_template && $form->default_template ) {
@@ -101,9 +101,9 @@
 								} elseif ( $form->parent_form_id ) {
 									echo ' ' . esc_html__( '(child)', 'formidable' );
 								}
-						?></option>
-						<?php
-						} ?>
+								?>
+							</option>
+						<?php } ?>
 						</select>
 						<p class="howto"><?php esc_html_e( 'Hold down the CTRL/Command button to select multiple forms', 'formidable' ); ?></p>
 					</td>

@@ -37,7 +37,8 @@ while ( $next_posts = array_splice( $item_ids, 0, 20 ) ) {
 		<is_sticky><?php echo esc_html( $is_sticky ); ?></is_sticky>
 <?php	if ( 'attachment' === $post->post_type ) : ?>
 		<attachment_url><?php echo esc_url( wp_get_attachment_url( $post->ID ) ); ?></attachment_url>
-<?php 	endif;
+<?php
+		endif;
 
 		$postmeta = FrmDb::get_results( $wpdb->postmeta, array( 'post_id' => $post->ID ) );
 		foreach ( $postmeta as $meta ) :
@@ -49,7 +50,8 @@ while ( $next_posts = array_splice( $item_ids, 0, 20 ) ) {
 			<meta_key><?php echo esc_html( $meta->meta_key ); ?></meta_key>
 			<meta_value><?php echo FrmXMLHelper::cdata( $meta->meta_value ); ?></meta_value>
 		</postmeta>
-<?php	endforeach;
+<?php
+		endforeach;
 
 		$taxonomies = get_object_taxonomies( $post->post_type );
 		if ( ! empty( $taxonomies ) ) {
@@ -60,7 +62,8 @@ while ( $next_posts = array_splice( $item_ids, 0, 20 ) ) {
 		<category domain="<?php echo esc_attr( $term->taxonomy ) ?>" nicename="<?php echo esc_attr( $term->slug ) ?>"><?php echo FrmXMLHelper::cdata( $term->name ) ?></category>
 				<?php
 			}
-		} ?>
+		}
+		?>
 	</view>
 <?php
 	}
@@ -87,8 +90,7 @@ foreach ( (array) $terms as $term ) {
 		echo '<term_name>' . FrmXMLHelper::cdata( $term->name ) . '</term_name>';
 	}
 	if ( ! empty( $term->description ) ) {
-		?><term_description><?php echo FrmXMLHelper::cdata( $term->description ) ?></term_description><?php
+		echo '<term_description>' . FrmXMLHelper::cdata( $term->description ) . '</term_description>';
 	}
-    ?><term_slug><?php echo esc_html( $term->slug ); ?></term_slug></term>
-<?php
+	echo '<term_slug>' . esc_html( $term->slug ) . '</term_slug></term>';
 }

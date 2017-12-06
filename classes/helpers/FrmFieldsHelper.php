@@ -43,9 +43,10 @@ class FrmFieldsHelper {
                 __( 'Option 2', 'formidable' ),
             ) );
         } else if ( $type == 'select' ) {
-            $values['options'] = serialize( array(
-                '', __( 'Option 1', 'formidable' ),
-            ) );
+			$values['options'] = serialize( array(
+				'',
+				__( 'Option 1', 'formidable' ),
+			) );
         } else if ( $type == 'textarea' ) {
             $values['field_options']['max'] = '5';
         } else if ( $type == 'captcha' ) {
@@ -73,7 +74,10 @@ class FrmFieldsHelper {
     }
 
     public static function setup_edit_vars( $record, $doing_ajax = false ) {
-		$values = array( 'id' => $record->id, 'form_id' => $record->form_id );
+		$values = array(
+			'id'      => $record->id,
+			'form_id' => $record->form_id,
+		);
 		$defaults = array(
 			'name'          => $record->name,
 			'description'   => $record->description,
@@ -113,18 +117,27 @@ class FrmFieldsHelper {
             unset($opt, $default);
         }
 
-        $values['custom_html'] = (isset($record->field_options['custom_html'])) ? $record->field_options['custom_html'] : self::get_default_html($record->type);
+		$values['custom_html'] = ( isset( $record->field_options['custom_html'] ) ) ? $record->field_options['custom_html'] : self::get_default_html( $record->type );
 
 		return apply_filters( 'frm_setup_edit_field_vars', $values, array( 'doing_ajax' => $doing_ajax ) );
     }
 
     public static function get_default_field_opts( $type, $field, $limit = false ) {
-        $field_options = array(
-            'size' => '', 'max' => '', 'label' => '', 'blank' => '',
-            'required_indicator' => '*', 'invalid' => '', 'separate_value' => 0,
-            'clear_on_focus' => 0, 'default_blank' => 0, 'classes' => '',
-			'custom_html' => '', 'captcha_size' => 'normal', 'captcha_theme' => 'light',
-        );
+		$field_options = array(
+			'size'           => '',
+			'max'            => '',
+			'label'          => '',
+			'blank'          => '',
+			'required_indicator' => '*',
+			'invalid'        => '',
+			'separate_value' => 0,
+			'clear_on_focus' => 0,
+			'default_blank'  => 0,
+			'classes'        => '',
+			'custom_html'    => '',
+			'captcha_size'   => 'normal',
+			'captcha_theme'  => 'light',
+		);
 
 		if ( $limit ) {
             return $field_options;
@@ -132,21 +145,28 @@ class FrmFieldsHelper {
 
         global $wpdb;
 
-        $form_id = (is_numeric($field)) ? $field : $field->form_id;
+		$form_id = ( is_numeric( $field ) ) ? $field : $field->form_id;
 
 		$key = is_numeric( $field ) ? FrmAppHelper::get_unique_key( '', $wpdb->prefix . 'frm_fields', 'field_key' ) : $field->field_key;
 
         $field_count = FrmDb::get_var( 'frm_fields', array( 'form_id' => $form_id ), 'field_order', array( 'order_by' => 'field_order DESC' ) );
 
         $frm_settings = FrmAppHelper::get_settings();
-        return array(
-            'name' => __( 'Untitled', 'formidable' ), 'description' => '',
-			'field_key' => $key, 'type' => $type, 'options' => '', 'default_value' => '',
-			'field_order' => $field_count + 1, 'required' => false,
-            'blank' => $frm_settings->blank_msg, 'unique_msg' => $frm_settings->unique_msg,
-            'invalid' => __( 'This field is invalid', 'formidable' ), 'form_id' => $form_id,
+		return array(
+			'name'          => __( 'Untitled', 'formidable' ),
+			'description'   => '',
+			'field_key'     => $key,
+			'type'          => $type,
+			'options'       => '',
+			'default_value' => '',
+			'field_order'   => $field_count + 1,
+			'required'      => false,
+			'blank'         => $frm_settings->blank_msg,
+			'unique_msg'    => $frm_settings->unique_msg,
+			'invalid'       => __( 'This field is invalid', 'formidable' ),
+			'form_id'       => $form_id,
 			'field_options' => $field_options,
-        );
+		);
     }
 
     public static function fill_field( &$values, $field, $form_id, $new_key = '' ) {
@@ -172,10 +192,22 @@ class FrmFieldsHelper {
 
 		$conf_msg = __( 'The entered values do not match', 'formidable' );
 		$defaults = array(
-			'unique_msg' => array( 'full' => $default_settings['unique_msg'], 'part' => sprintf( __('%s must be unique', 'formidable' ), $field_name ) ),
-			'invalid'   => array( 'full' => __( 'This field is invalid', 'formidable' ), 'part' => sprintf( __('%s is invalid', 'formidable' ), $field_name ) ),
-			'blank'     => array( 'full' => $frm_settings->blank_msg, 'part' => $frm_settings->blank_msg ),
-			'conf_msg'  => array( 'full' => $conf_msg, 'part' => $conf_msg ),
+			'unique_msg' => array(
+				'full' => $default_settings['unique_msg'],
+				'part' => sprintf( __('%s must be unique', 'formidable' ), $field_name ),
+			),
+			'invalid'  => array(
+				'full' => __( 'This field is invalid', 'formidable' ),
+				'part' => sprintf( __('%s is invalid', 'formidable' ), $field_name ),
+			),
+			'blank'    => array(
+				'full' => $frm_settings->blank_msg,
+				'part' => $frm_settings->blank_msg,
+			),
+			'conf_msg' => array(
+				'full' => $conf_msg,
+				'part' => $conf_msg,
+			),
 		);
 
 		$msg = FrmField::get_option( $field, $error );
@@ -263,7 +295,12 @@ DEFAULT_HTML;
             }
         }
 
-		foreach ( array( 'description' => $field['description'], 'required_label' => $required, 'error' => $error ) as $code => $value ) {
+		$codes = array(
+			'description'    => $field['description'],
+			'required_label' => $required,
+			'error'          => $error,
+		);
+		foreach ( $codes as $code => $value ) {
             self::remove_inline_conditions( ( $value && $value != '' ), $code, $value, $html );
         }
 
@@ -303,7 +340,10 @@ DEFAULT_HTML;
 
         foreach ( $shortcodes[0] as $short_key => $tag ) {
             $atts = FrmShortcodeHelper::get_shortcode_attribute_array( $shortcodes[2][ $short_key ] );
-			$tag = self::get_shortcode_tag( $shortcodes, $short_key, array( 'conditional' => false, 'conditional_check' => false ) );
+			$tag = self::get_shortcode_tag( $shortcodes, $short_key, array(
+				'conditional' => false,
+				'conditional_check' => false,
+			) );
 
             $replace_with = '';
 
@@ -338,9 +378,19 @@ DEFAULT_HTML;
 
         //If field is in repeating section
         if ( $args['section_id'] ) {
-            $html = apply_filters('frm_replace_shortcodes', $html, $field, array( 'errors' => $errors, 'form' => $form, 'field_name' => $field_name, 'field_id' => $field_id, 'field_plus_id' => $args['field_plus_id'], 'section_id' => $args['section_id'] ));
+			$html = apply_filters( 'frm_replace_shortcodes', $html, $field, array(
+				'errors'     => $errors,
+				'form'       => $form,
+				'field_name' => $field_name,
+				'field_id'   => $field_id,
+				'field_plus_id' => $args['field_plus_id'],
+				'section_id' => $args['section_id'],
+			) );
         } else {
-            $html = apply_filters('frm_replace_shortcodes', $html, $field, array( 'errors' => $errors, 'form' => $form ));
+			$html = apply_filters( 'frm_replace_shortcodes', $html, $field, array(
+				'errors' => $errors,
+				'form' => $form,
+			) );
         }
 
 		self::remove_collapse_shortcode( $html );
@@ -469,7 +519,11 @@ DEFAULT_HTML;
     }
 
 	public static function get_shortcode_tag( $shortcodes, $short_key, $args ) {
-		$args = wp_parse_args( $args, array( 'conditional' => false, 'conditional_check' => false, 'foreach' => false ) );
+		$args = wp_parse_args( $args, array(
+			'conditional' => false,
+			'conditional_check' => false,
+			'foreach' => false,
+		) );
         if ( ( $args['conditional'] || $args['foreach'] ) && ! $args['conditional_check'] ) {
             $args['conditional_check'] = true;
         }
@@ -542,11 +596,7 @@ DEFAULT_HTML;
 		$field['captcha_size'] = ( $frm_settings->re_type == 'invisible' ) ? 'invisible' : $field['captcha_size'];
 
 ?>
-<div id="field_<?php echo esc_attr( $field['field_key'] ) ?>" class="<?php echo esc_attr( $class_prefix ) ?>g-recaptcha" data-sitekey="<?php echo esc_attr( $frm_settings->pubkey ) ?>" data-size="<?php echo esc_attr( $field['captcha_size'] ) ?>" data-theme="<?php echo esc_attr( $field['captcha_theme'] ) ?>" <?php
-	if ( $field['captcha_size'] == 'invisible' && ! $allow_mutiple ) {
-		echo 'data-callback="frmAfterRecaptcha"';
-	}
-?>></div>
+<div id="field_<?php echo esc_attr( $field['field_key'] ) ?>" class="<?php echo esc_attr( $class_prefix ) ?>g-recaptcha" data-sitekey="<?php echo esc_attr( $frm_settings->pubkey ) ?>" data-size="<?php echo esc_attr( $field['captcha_size'] ) ?>" data-theme="<?php echo esc_attr( $field['captcha_theme'] ) ?>" <?php if ( 'invisible' === $field['captcha_size'] && ! $allow_mutiple ) { echo 'data-callback="frmAfterRecaptcha"'; } ?>></div>
 <?php
     }
 
@@ -680,7 +730,10 @@ DEFAULT_HTML;
             return FrmProDisplaysHelper::get_shortcodes($content, $form_id);
         }
 
-        $fields = FrmField::getAll( array( 'fi.form_id' => (int) $form_id, 'fi.type not' => FrmField::no_save_fields() ) );
+		$fields = FrmField::getAll( array(
+			'fi.form_id'  => (int) $form_id,
+			'fi.type not' => FrmField::no_save_fields(),
+		) );
 
         $tagregexp = self::allowed_shortcodes($fields);
 
@@ -690,12 +743,7 @@ DEFAULT_HTML;
     }
 
 	public static function allowed_shortcodes( $fields = array() ) {
-        $tagregexp = array(
-            'editlink', 'id', 'key', 'ip',
-            'siteurl', 'sitename', 'admin_email',
-            'post[-|_]id', 'created[-|_]at', 'updated[-|_]at', 'updated[-|_]by',
-			'parent[-|_]id',
-        );
+		$tagregexp = array( 'editlink', 'id', 'key', 'ip', 'siteurl', 'sitename', 'admin_email', 'post[-|_]id', 'created[-|_]at', 'updated[-|_]at', 'updated[-|_]by', 'parent[-|_]id' );
 
         foreach ( $fields as $field ) {
             $tagregexp[] = $field->id;
@@ -707,11 +755,11 @@ DEFAULT_HTML;
     }
 
 	public static function replace_content_shortcodes( $content, $entry, $shortcodes ) {
-        $shortcode_values = array(
-           'id'     => $entry->id,
-           'key'    => $entry->item_key,
-           'ip'     => $entry->ip,
-        );
+		$shortcode_values = array(
+			'id'  => $entry->id,
+			'key' => $entry->item_key,
+			'ip'  => $entry->ip,
+		);
 
         foreach ( $shortcodes[0] as $short_key => $tag ) {
 			if ( empty( $tag ) ) {
@@ -735,13 +783,13 @@ DEFAULT_HTML;
                 case 'key':
                 case 'ip':
                     $replace_with = $shortcode_values[ $tag ];
-                break;
+					break;
 
                 case 'user_agent':
                 case 'user-agent':
                     $entry->description = maybe_unserialize($entry->description);
 					$replace_with = FrmEntriesHelper::get_browser( $entry->description['browser'] );
-                break;
+					break;
 
                 case 'created_at':
                 case 'created-at':
@@ -757,7 +805,7 @@ DEFAULT_HTML;
                     $this_tag = str_replace('-', '_', $tag);
                     $replace_with = FrmAppHelper::get_formatted_time($entry->{$this_tag}, $atts['format'], $time_format);
                     unset($this_tag);
-                break;
+					break;
 
                 case 'created_by':
                 case 'created-by':
@@ -766,7 +814,7 @@ DEFAULT_HTML;
                     $this_tag = str_replace('-', '_', $tag);
 					$replace_with = self::get_display_value( $entry->{$this_tag}, (object) array( 'type' => 'user_id' ), $atts );
                     unset($this_tag);
-                break;
+					break;
 
                 case 'admin_email':
                 case 'siteurl':
@@ -774,7 +822,7 @@ DEFAULT_HTML;
                 case 'sitename':
                 case 'get':
                     $replace_with = self::dynamic_default_values( $tag, $atts );
-                break;
+					break;
 
                 default:
                     $field = FrmField::getOne( $tag );
@@ -807,7 +855,6 @@ DEFAULT_HTML;
 					}
 
                     unset($field);
-                break;
             }
 
             if ( isset($replace_with) ) {
@@ -910,11 +957,7 @@ DEFAULT_HTML;
 	}
 
 	public static function get_field_types( $type ) {
-        $single_input = array(
-            'text', 'textarea', 'rte', 'number', 'email', 'url',
-            'image', 'file', 'date', 'phone', 'hidden', 'time',
-            'user_id', 'tag', 'password',
-        );
+		$single_input = array( 'text', 'textarea', 'rte', 'number', 'email', 'url', 'image', 'file', 'date', 'phone', 'hidden', 'time', 'user_id', 'tag', 'password' );
 		$multiple_input = array( 'radio', 'checkbox', 'select', 'scale', 'lookup' );
 		$other_type = array( 'html', 'break' );
 
@@ -963,8 +1006,10 @@ DEFAULT_HTML;
     */
     public static function get_other_val( $args ) {
 		$defaults = array(
-			'opt_key' => 0, 'field' => array(),
-			'parent' => false, 'pointer' => false,
+			'opt_key' => 0,
+			'field'   => array(),
+			'parent'  => false,
+			'pointer' => false,
 		);
 		$args = wp_parse_args( $args, $defaults );
 
@@ -1108,7 +1153,12 @@ DEFAULT_HTML;
 		}
 
 		// Get text for "other" text field
-		$other_args['value'] = self::get_other_val( array( 'opt_key' => $args['opt_key'], 'field' => $args['field'], 'parent' => $parent, 'pointer' => $pointer ) );
+		$other_args['value'] = self::get_other_val( array(
+			'opt_key' => $args['opt_key'],
+			'field'   => $args['field'],
+			'parent'  => $parent,
+			'pointer' => $pointer,
+		) );
 	}
 
 	/**
@@ -1133,9 +1183,7 @@ DEFAULT_HTML;
 		// Set up HTML ID for Other field
 		$other_id = self::get_other_field_html_id( $args['field']['type'], $args['html_id'], $args['opt_key'] );
 
-		?><input type="text" id="<?php echo esc_attr( $other_id ) ?>" class="<?php echo sanitize_text_field( implode( ' ', $classes ) ) ?>" <?php
-		echo ( $args['read_only'] ? ' readonly="readonly" disabled="disabled"' : '' );
-		?> name="<?php echo esc_attr( $args['name'] ) ?>" value="<?php echo esc_attr( $args['value'] ); ?>" /><?php
+		?><input type="text" id="<?php echo esc_attr( $other_id ) ?>" class="<?php echo sanitize_text_field( implode( ' ', $classes ) ) ?>" <?php echo ( $args['read_only'] ? ' readonly="readonly" disabled="disabled"' : '' ); ?> name="<?php echo esc_attr( $args['name'] ) ?>" value="<?php echo esc_attr( $args['value'] ); ?>" /><?php
 	}
 
 	/**
@@ -1243,100 +1291,64 @@ DEFAULT_HTML;
         return $val;
     }
 
-    public static function get_us_states() {
-        return apply_filters( 'frm_us_states', array(
-            'AL' => 'Alabama', 'AK' => 'Alaska', 'AR' => 'Arkansas', 'AZ' => 'Arizona',
-            'CA' => 'California', 'CO' => 'Colorado', 'CT' => 'Connecticut', 'DE' => 'Delaware',
-            'DC' => 'District of Columbia',
-            'FL' => 'Florida', 'GA' => 'Georgia', 'HI' => 'Hawaii', 'ID' => 'Idaho',
-            'IL' => 'Illinois', 'IN' => 'Indiana', 'IA' => 'Iowa', 'KS' => 'Kansas',
-            'KY' => 'Kentucky', 'LA' => 'Louisiana', 'ME' => 'Maine','MD' => 'Maryland',
-            'MA' => 'Massachusetts', 'MI' => 'Michigan', 'MN' => 'Minnesota', 'MS' => 'Mississippi',
-            'MO' => 'Missouri', 'MT' => 'Montana', 'NE' => 'Nebraska', 'NV' => 'Nevada',
-            'NH' => 'New Hampshire', 'NJ' => 'New Jersey', 'NM' => 'New Mexico', 'NY' => 'New York',
-            'NC' => 'North Carolina', 'ND' => 'North Dakota', 'OH' => 'Ohio', 'OK' => 'Oklahoma',
-            'OR' => 'Oregon', 'PA' => 'Pennsylvania', 'RI' => 'Rhode Island', 'SC' => 'South Carolina',
-            'SD' => 'South Dakota', 'TN' => 'Tennessee', 'TX' => 'Texas', 'UT' => 'Utah',
-            'VT' => 'Vermont', 'VA' => 'Virginia', 'WA' => 'Washington', 'WV' => 'West Virginia',
-            'WI' => 'Wisconsin', 'WY' => 'Wyoming',
-        ) );
-    }
+	public static function get_us_states() {
+		return apply_filters( 'frm_us_states', array(
+			'AL' => 'Alabama',
+			'AK' => 'Alaska',
+			'AR' => 'Arkansas',
+			'AZ' => 'Arizona',
+			'CA' => 'California',
+			'CO' => 'Colorado',
+			'CT' => 'Connecticut',
+			'DE' => 'Delaware',
+			'DC' => 'District of Columbia',
+			'FL' => 'Florida',
+			'GA' => 'Georgia',
+			'HI' => 'Hawaii',
+			'ID' => 'Idaho',
+			'IL' => 'Illinois',
+			'IN' => 'Indiana',
+			'IA' => 'Iowa',
+			'KS' => 'Kansas',
+			'KY' => 'Kentucky',
+			'LA' => 'Louisiana',
+			'ME' => 'Maine',
+			'MD' => 'Maryland',
+			'MA' => 'Massachusetts',
+			'MI' => 'Michigan',
+			'MN' => 'Minnesota',
+			'MS' => 'Mississippi',
+			'MO' => 'Missouri',
+			'MT' => 'Montana',
+			'NE' => 'Nebraska',
+			'NV' => 'Nevada',
+			'NH' => 'New Hampshire',
+			'NJ' => 'New Jersey',
+			'NM' => 'New Mexico',
+			'NY' => 'New York',
+			'NC' => 'North Carolina',
+			'ND' => 'North Dakota',
+			'OH' => 'Ohio',
+			'OK' => 'Oklahoma',
+			'OR' => 'Oregon',
+			'PA' => 'Pennsylvania',
+			'RI' => 'Rhode Island',
+			'SC' => 'South Carolina',
+			'SD' => 'South Dakota',
+			'TN' => 'Tennessee',
+			'TX' => 'Texas',
+			'UT' => 'Utah',
+			'VT' => 'Vermont',
+			'VA' => 'Virginia',
+			'WA' => 'Washington',
+			'WV' => 'West Virginia',
+			'WI' => 'Wisconsin',
+			'WY' => 'Wyoming',
+		) );
+	}
 
-    public static function get_countries() {
-        return apply_filters( 'frm_countries', array(
-            __( 'Afghanistan', 'formidable' ), __( 'Albania', 'formidable' ), __( 'Algeria', 'formidable' ),
-            __( 'American Samoa', 'formidable' ), __( 'Andorra', 'formidable' ), __( 'Angola', 'formidable' ),
-            __( 'Anguilla', 'formidable' ), __( 'Antarctica', 'formidable' ), __( 'Antigua and Barbuda', 'formidable' ),
-            __( 'Argentina', 'formidable' ), __( 'Armenia', 'formidable' ), __( 'Aruba', 'formidable' ),
-            __( 'Australia', 'formidable' ), __( 'Austria', 'formidable' ), __( 'Azerbaijan', 'formidable' ),
-            __( 'Bahamas', 'formidable' ), __( 'Bahrain', 'formidable' ), __( 'Bangladesh', 'formidable' ),
-            __( 'Barbados', 'formidable' ), __( 'Belarus', 'formidable' ), __( 'Belgium', 'formidable' ),
-            __( 'Belize', 'formidable' ), __( 'Benin', 'formidable' ), __( 'Bermuda', 'formidable' ),
-            __( 'Bhutan', 'formidable' ), __( 'Bolivia', 'formidable' ), __( 'Bosnia and Herzegovina', 'formidable' ),
-            __( 'Botswana', 'formidable' ), __( 'Brazil', 'formidable' ), __( 'Brunei', 'formidable' ),
-            __( 'Bulgaria', 'formidable' ), __( 'Burkina Faso', 'formidable' ), __( 'Burundi', 'formidable' ),
-            __( 'Cambodia', 'formidable' ), __( 'Cameroon', 'formidable' ), __( 'Canada', 'formidable' ),
-            __( 'Cape Verde', 'formidable' ), __( 'Cayman Islands', 'formidable' ), __( 'Central African Republic', 'formidable' ),
-            __( 'Chad', 'formidable' ), __( 'Chile', 'formidable' ), __( 'China', 'formidable' ),
-            __( 'Colombia', 'formidable' ), __( 'Comoros', 'formidable' ), __( 'Congo', 'formidable' ),
-            __( 'Costa Rica', 'formidable' ), __( 'C&ocirc;te d\'Ivoire', 'formidable' ), __( 'Croatia', 'formidable' ),
-            __( 'Cuba', 'formidable' ), __( 'Cyprus', 'formidable' ), __( 'Czech Republic', 'formidable' ),
-            __( 'Denmark', 'formidable' ), __( 'Djibouti', 'formidable' ), __( 'Dominica', 'formidable' ),
-            __( 'Dominican Republic', 'formidable' ), __( 'East Timor', 'formidable' ), __( 'Ecuador', 'formidable' ),
-            __( 'Egypt', 'formidable' ), __( 'El Salvador', 'formidable' ), __( 'Equatorial Guinea', 'formidable' ),
-            __( 'Eritrea', 'formidable' ), __( 'Estonia', 'formidable' ), __( 'Ethiopia', 'formidable' ),
-            __( 'Fiji', 'formidable' ), __( 'Finland', 'formidable' ), __( 'France', 'formidable' ),
-            __( 'French Guiana', 'formidable' ), __( 'French Polynesia', 'formidable' ), __( 'Gabon', 'formidable' ),
-            __( 'Gambia', 'formidable' ), __( 'Georgia', 'formidable' ), __( 'Germany', 'formidable' ),
-            __( 'Ghana', 'formidable' ), __( 'Gibraltar', 'formidable' ), __( 'Greece', 'formidable' ),
-            __( 'Greenland', 'formidable' ), __( 'Grenada', 'formidable' ), __( 'Guam', 'formidable' ),
-            __( 'Guatemala', 'formidable' ), __( 'Guinea', 'formidable' ), __( 'Guinea-Bissau', 'formidable' ),
-            __( 'Guyana', 'formidable' ), __( 'Haiti', 'formidable' ), __( 'Honduras', 'formidable' ),
-            __( 'Hong Kong', 'formidable' ), __( 'Hungary', 'formidable' ), __( 'Iceland', 'formidable' ),
-            __( 'India', 'formidable' ), __( 'Indonesia', 'formidable' ), __( 'Iran', 'formidable' ),
-            __( 'Iraq', 'formidable' ), __( 'Ireland', 'formidable' ), __( 'Israel', 'formidable' ),
-            __( 'Italy', 'formidable' ), __( 'Jamaica', 'formidable' ), __( 'Japan', 'formidable' ),
-            __( 'Jordan', 'formidable' ), __( 'Kazakhstan', 'formidable' ), __( 'Kenya', 'formidable' ),
-            __( 'Kiribati', 'formidable' ), __( 'North Korea', 'formidable' ), __( 'South Korea', 'formidable' ),
-            __( 'Kuwait', 'formidable' ), __( 'Kyrgyzstan', 'formidable' ), __( 'Laos', 'formidable' ),
-            __( 'Latvia', 'formidable' ), __( 'Lebanon', 'formidable' ), __( 'Lesotho', 'formidable' ),
-            __( 'Liberia', 'formidable' ), __( 'Libya', 'formidable' ), __( 'Liechtenstein', 'formidable' ),
-            __( 'Lithuania', 'formidable' ), __( 'Luxembourg', 'formidable' ), __( 'Macedonia', 'formidable' ),
-            __( 'Madagascar', 'formidable' ), __( 'Malawi', 'formidable' ), __( 'Malaysia', 'formidable' ),
-            __( 'Maldives', 'formidable' ), __( 'Mali', 'formidable' ), __( 'Malta', 'formidable' ),
-            __( 'Marshall Islands', 'formidable' ), __( 'Mauritania', 'formidable' ), __( 'Mauritius', 'formidable' ),
-            __( 'Mexico', 'formidable' ), __( 'Micronesia', 'formidable' ), __( 'Moldova', 'formidable' ),
-            __( 'Monaco', 'formidable' ), __( 'Mongolia', 'formidable' ), __( 'Montenegro', 'formidable' ),
-            __( 'Montserrat', 'formidable' ), __( 'Morocco', 'formidable' ), __( 'Mozambique', 'formidable' ),
-            __( 'Myanmar', 'formidable' ), __( 'Namibia', 'formidable' ), __( 'Nauru', 'formidable' ),
-            __( 'Nepal', 'formidable' ), __( 'Netherlands', 'formidable' ), __( 'New Zealand', 'formidable' ),
-            __( 'Nicaragua', 'formidable' ), __( 'Niger', 'formidable' ), __( 'Nigeria', 'formidable' ),
-            __( 'Norway', 'formidable' ), __( 'Northern Mariana Islands', 'formidable' ), __( 'Oman', 'formidable' ),
-            __( 'Pakistan', 'formidable' ), __( 'Palau', 'formidable' ), __( 'Palestine', 'formidable' ),
-            __( 'Panama', 'formidable' ), __( 'Papua New Guinea', 'formidable' ), __( 'Paraguay', 'formidable' ),
-            __( 'Peru', 'formidable' ), __( 'Philippines', 'formidable' ), __( 'Poland', 'formidable' ),
-            __( 'Portugal', 'formidable' ), __( 'Puerto Rico', 'formidable' ), __( 'Qatar', 'formidable' ),
-            __( 'Romania', 'formidable' ), __( 'Russia', 'formidable' ), __( 'Rwanda', 'formidable' ),
-            __( 'Saint Kitts and Nevis', 'formidable' ), __( 'Saint Lucia', 'formidable' ),
-            __( 'Saint Vincent and the Grenadines', 'formidable' ), __( 'Samoa', 'formidable' ),
-            __( 'San Marino', 'formidable' ), __( 'Sao Tome and Principe', 'formidable' ), __( 'Saudi Arabia', 'formidable' ),
-            __( 'Senegal', 'formidable' ), __( 'Serbia and Montenegro', 'formidable' ), __( 'Seychelles', 'formidable' ),
-            __( 'Sierra Leone', 'formidable' ), __( 'Singapore', 'formidable' ), __( 'Slovakia', 'formidable' ),
-            __( 'Slovenia', 'formidable' ), __( 'Solomon Islands', 'formidable' ), __( 'Somalia', 'formidable' ),
-            __( 'South Africa', 'formidable' ), __( 'South Sudan', 'formidable' ),
-            __( 'Spain', 'formidable' ), __( 'Sri Lanka', 'formidable' ),
-            __( 'Sudan', 'formidable' ), __( 'Suriname', 'formidable' ), __( 'Swaziland', 'formidable' ),
-            __( 'Sweden', 'formidable' ), __( 'Switzerland', 'formidable' ), __( 'Syria', 'formidable' ),
-            __( 'Taiwan', 'formidable' ), __( 'Tajikistan', 'formidable' ), __( 'Tanzania', 'formidable' ),
-            __( 'Thailand', 'formidable' ), __( 'Togo', 'formidable' ), __( 'Tonga', 'formidable' ),
-            __( 'Trinidad and Tobago', 'formidable' ), __( 'Tunisia', 'formidable' ), __( 'Turkey', 'formidable' ),
-            __( 'Turkmenistan', 'formidable' ), __( 'Tuvalu', 'formidable' ), __( 'Uganda', 'formidable' ),
-            __( 'Ukraine', 'formidable' ), __( 'United Arab Emirates', 'formidable' ), __( 'United Kingdom', 'formidable' ),
-            __( 'United States', 'formidable' ), __( 'Uruguay', 'formidable' ), __( 'Uzbekistan', 'formidable' ),
-            __( 'Vanuatu', 'formidable' ), __( 'Vatican City', 'formidable' ), __( 'Venezuela', 'formidable' ),
-            __( 'Vietnam', 'formidable' ), __( 'Virgin Islands, British', 'formidable' ),
-            __( 'Virgin Islands, U.S.', 'formidable' ), __( 'Yemen', 'formidable' ), __( 'Zambia', 'formidable' ),
-            __( 'Zimbabwe', 'formidable' ),
+	public static function get_countries() {
+		return apply_filters( 'frm_countries', array( __( 'Afghanistan', 'formidable' ), __( 'Albania', 'formidable' ), __( 'Algeria', 'formidable' ), __( 'American Samoa', 'formidable' ), __( 'Andorra', 'formidable' ), __( 'Angola', 'formidable' ), __( 'Anguilla', 'formidable' ), __( 'Antarctica', 'formidable' ), __( 'Antigua and Barbuda', 'formidable' ), __( 'Argentina', 'formidable' ), __( 'Armenia', 'formidable' ), __( 'Aruba', 'formidable' ), __( 'Australia', 'formidable' ), __( 'Austria', 'formidable' ), __( 'Azerbaijan', 'formidable' ), __( 'Bahamas', 'formidable' ), __( 'Bahrain', 'formidable' ), __( 'Bangladesh', 'formidable' ), __( 'Barbados', 'formidable' ), __( 'Belarus', 'formidable' ), __( 'Belgium', 'formidable' ), __( 'Belize', 'formidable' ), __( 'Benin', 'formidable' ), __( 'Bermuda', 'formidable' ),  __( 'Bhutan', 'formidable' ), __( 'Bolivia', 'formidable' ), __( 'Bosnia and Herzegovina', 'formidable' ), __( 'Botswana', 'formidable' ), __( 'Brazil', 'formidable' ), __( 'Brunei', 'formidable' ), __( 'Bulgaria', 'formidable' ), __( 'Burkina Faso', 'formidable' ), __( 'Burundi', 'formidable' ), __( 'Cambodia', 'formidable' ), __( 'Cameroon', 'formidable' ), __( 'Canada', 'formidable' ), __( 'Cape Verde', 'formidable' ), __( 'Cayman Islands', 'formidable' ), __( 'Central African Republic', 'formidable' ), __( 'Chad', 'formidable' ), __( 'Chile', 'formidable' ), __( 'China', 'formidable' ),  __( 'Colombia', 'formidable' ), __( 'Comoros', 'formidable' ), __( 'Congo', 'formidable' ), __( 'Costa Rica', 'formidable' ), __( 'C&ocirc;te d\'Ivoire', 'formidable' ), __( 'Croatia', 'formidable' ), __( 'Cuba', 'formidable' ), __( 'Cyprus', 'formidable' ), __( 'Czech Republic', 'formidable' ), __( 'Denmark', 'formidable' ), __( 'Djibouti', 'formidable' ), __( 'Dominica', 'formidable' ), __( 'Dominican Republic', 'formidable' ), __( 'East Timor', 'formidable' ), __( 'Ecuador', 'formidable' ), __( 'Egypt', 'formidable' ), __( 'El Salvador', 'formidable' ), __( 'Equatorial Guinea', 'formidable' ),  __( 'Eritrea', 'formidable' ), __( 'Estonia', 'formidable' ), __( 'Ethiopia', 'formidable' ), __( 'Fiji', 'formidable' ), __( 'Finland', 'formidable' ), __( 'France', 'formidable' ), __( 'French Guiana', 'formidable' ), __( 'French Polynesia', 'formidable' ), __( 'Gabon', 'formidable' ), __( 'Gambia', 'formidable' ), __( 'Georgia', 'formidable' ), __( 'Germany', 'formidable' ), __( 'Ghana', 'formidable' ), __( 'Gibraltar', 'formidable' ), __( 'Greece', 'formidable' ), __( 'Greenland', 'formidable' ), __( 'Grenada', 'formidable' ), __( 'Guam', 'formidable' ), __( 'Guatemala', 'formidable' ), __( 'Guinea', 'formidable' ), __( 'Guinea-Bissau', 'formidable' ), __( 'Guyana', 'formidable' ), __( 'Haiti', 'formidable' ), __( 'Honduras', 'formidable' ), __( 'Hong Kong', 'formidable' ), __( 'Hungary', 'formidable' ), __( 'Iceland', 'formidable' ), __( 'India', 'formidable' ), __( 'Indonesia', 'formidable' ), __( 'Iran', 'formidable' ), __( 'Iraq', 'formidable' ), __( 'Ireland', 'formidable' ), __( 'Israel', 'formidable' ), __( 'Italy', 'formidable' ), __( 'Jamaica', 'formidable' ), __( 'Japan', 'formidable' ), __( 'Jordan', 'formidable' ), __( 'Kazakhstan', 'formidable' ), __( 'Kenya', 'formidable' ), __( 'Kiribati', 'formidable' ), __( 'North Korea', 'formidable' ), __( 'South Korea', 'formidable' ), __( 'Kuwait', 'formidable' ), __( 'Kyrgyzstan', 'formidable' ), __( 'Laos', 'formidable' ), __( 'Latvia', 'formidable' ), __( 'Lebanon', 'formidable' ), __( 'Lesotho', 'formidable' ), __( 'Liberia', 'formidable' ), __( 'Libya', 'formidable' ), __( 'Liechtenstein', 'formidable' ), __( 'Lithuania', 'formidable' ), __( 'Luxembourg', 'formidable' ), __( 'Macedonia', 'formidable' ), __( 'Madagascar', 'formidable' ), __( 'Malawi', 'formidable' ), __( 'Malaysia', 'formidable' ), __( 'Maldives', 'formidable' ), __( 'Mali', 'formidable' ), __( 'Malta', 'formidable' ), __( 'Marshall Islands', 'formidable' ), __( 'Mauritania', 'formidable' ), __( 'Mauritius', 'formidable' ), __( 'Mexico', 'formidable' ), __( 'Micronesia', 'formidable' ), __( 'Moldova', 'formidable' ), __( 'Monaco', 'formidable' ), __( 'Mongolia', 'formidable' ), __( 'Montenegro', 'formidable' ), __( 'Montserrat', 'formidable' ), __( 'Morocco', 'formidable' ), __( 'Mozambique', 'formidable' ), __( 'Myanmar', 'formidable' ), __( 'Namibia', 'formidable' ), __( 'Nauru', 'formidable' ), __( 'Nepal', 'formidable' ), __( 'Netherlands', 'formidable' ), __( 'New Zealand', 'formidable' ), __( 'Nicaragua', 'formidable' ), __( 'Niger', 'formidable' ), __( 'Nigeria', 'formidable' ), __( 'Norway', 'formidable' ), __( 'Northern Mariana Islands', 'formidable' ), __( 'Oman', 'formidable' ), __( 'Pakistan', 'formidable' ), __( 'Palau', 'formidable' ), __( 'Palestine', 'formidable' ), __( 'Panama', 'formidable' ), __( 'Papua New Guinea', 'formidable' ), __( 'Paraguay', 'formidable' ), __( 'Peru', 'formidable' ), __( 'Philippines', 'formidable' ), __( 'Poland', 'formidable' ), __( 'Portugal', 'formidable' ), __( 'Puerto Rico', 'formidable' ), __( 'Qatar', 'formidable' ), __( 'Romania', 'formidable' ), __( 'Russia', 'formidable' ), __( 'Rwanda', 'formidable' ), __( 'Saint Kitts and Nevis', 'formidable' ), __( 'Saint Lucia', 'formidable' ), __( 'Saint Vincent and the Grenadines', 'formidable' ), __( 'Samoa', 'formidable' ), __( 'San Marino', 'formidable' ), __( 'Sao Tome and Principe', 'formidable' ), __( 'Saudi Arabia', 'formidable' ), __( 'Senegal', 'formidable' ), __( 'Serbia and Montenegro', 'formidable' ), __( 'Seychelles', 'formidable' ), __( 'Sierra Leone', 'formidable' ), __( 'Singapore', 'formidable' ), __( 'Slovakia', 'formidable' ), __( 'Slovenia', 'formidable' ), __( 'Solomon Islands', 'formidable' ), __( 'Somalia', 'formidable' ), __( 'South Africa', 'formidable' ), __( 'South Sudan', 'formidable' ), __( 'Spain', 'formidable' ), __( 'Sri Lanka', 'formidable' ), __( 'Sudan', 'formidable' ), __( 'Suriname', 'formidable' ), __( 'Swaziland', 'formidable' ), __( 'Sweden', 'formidable' ), __( 'Switzerland', 'formidable' ), __( 'Syria', 'formidable' ), __( 'Taiwan', 'formidable' ), __( 'Tajikistan', 'formidable' ), __( 'Tanzania', 'formidable' ), __( 'Thailand', 'formidable' ), __( 'Togo', 'formidable' ), __( 'Tonga', 'formidable' ), __( 'Trinidad and Tobago', 'formidable' ), __( 'Tunisia', 'formidable' ), __( 'Turkey', 'formidable' ), __( 'Turkmenistan', 'formidable' ), __( 'Tuvalu', 'formidable' ), __( 'Uganda', 'formidable' ), __( 'Ukraine', 'formidable' ), __( 'United Arab Emirates', 'formidable' ), __( 'United Kingdom', 'formidable' ), __( 'United States', 'formidable' ), __( 'Uruguay', 'formidable' ), __( 'Uzbekistan', 'formidable' ), __( 'Vanuatu', 'formidable' ), __( 'Vatican City', 'formidable' ), __( 'Venezuela', 'formidable' ), __( 'Vietnam', 'formidable' ), __( 'Virgin Islands, British', 'formidable' ), __( 'Virgin Islands, U.S.', 'formidable' ), __( 'Yemen', 'formidable' ), __( 'Zambia', 'formidable' ), __( 'Zimbabwe', 'formidable' ),
         ) );
     }
 
@@ -1354,25 +1366,42 @@ DEFAULT_HTML;
         unset($state_abv, $states);
 
 		$prepop[ __( 'Age', 'formidable' ) ] = array(
-            __( 'Under 18', 'formidable' ), __( '18-24', 'formidable' ), __( '25-34', 'formidable' ),
-            __( '35-44', 'formidable' ), __( '45-54', 'formidable' ), __( '55-64', 'formidable' ),
-            __( '65 or Above', 'formidable' ), __( 'Prefer Not to Answer', 'formidable' ),
-        );
+			__( 'Under 18', 'formidable' ),
+			__( '18-24', 'formidable' ),
+			__( '25-34', 'formidable' ),
+			__( '35-44', 'formidable' ),
+			__( '45-54', 'formidable' ),
+			__( '55-64', 'formidable' ),
+			__( '65 or Above', 'formidable' ),
+			__( 'Prefer Not to Answer', 'formidable' ),
+		);
 
 		$prepop[ __( 'Satisfaction', 'formidable' ) ] = array(
-            __( 'Very Satisfied', 'formidable' ), __( 'Satisfied', 'formidable' ), __( 'Neutral', 'formidable' ),
-            __( 'Unsatisfied', 'formidable' ), __( 'Very Unsatisfied', 'formidable' ), __( 'N/A', 'formidable' ),
-        );
+			__( 'Very Satisfied', 'formidable' ),
+			__( 'Satisfied', 'formidable' ),
+			__( 'Neutral', 'formidable' ),
+			__( 'Unsatisfied', 'formidable' ),
+			__( 'Very Unsatisfied', 'formidable' ),
+			__( 'N/A', 'formidable' ),
+		);
 
 		$prepop[ __( 'Importance', 'formidable' ) ] = array(
-            __( 'Very Important', 'formidable' ), __( 'Important', 'formidable' ), __( 'Neutral', 'formidable' ),
-            __( 'Somewhat Important', 'formidable' ), __( 'Not at all Important', 'formidable' ), __( 'N/A', 'formidable' ),
-        );
+			__( 'Very Important', 'formidable' ),
+			__( 'Important', 'formidable' ),
+			__( 'Neutral', 'formidable' ),
+			__( 'Somewhat Important', 'formidable' ),
+			__( 'Not at all Important', 'formidable' ),
+			__( 'N/A', 'formidable' ),
+		);
 
 		$prepop[ __( 'Agreement', 'formidable' ) ] = array(
-            __( 'Strongly Agree', 'formidable' ), __( 'Agree', 'formidable' ), __( 'Neutral', 'formidable' ),
-            __( 'Disagree', 'formidable' ), __( 'Strongly Disagree', 'formidable' ), __( 'N/A', 'formidable' ),
-        );
+			__( 'Strongly Agree', 'formidable' ),
+			__( 'Agree', 'formidable' ),
+			__( 'Neutral', 'formidable' ),
+			__( 'Disagree', 'formidable' ),
+			__( 'Strongly Disagree', 'formidable' ),
+			__( 'N/A', 'formidable' ),
+		);
 
 		$prepop = apply_filters( 'frm_bulk_field_choices', $prepop );
     }

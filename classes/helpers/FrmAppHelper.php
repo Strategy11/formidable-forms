@@ -61,7 +61,7 @@ class FrmAppHelper {
 		$affiliate_id = self::get_affiliate();
 		if ( ! empty( $affiliate_id ) ) {
 			$url = str_replace( array( 'http://', 'https://' ), '', $url );
-			$url = 'http://www.shareasale.com/r.cfm?u='. absint( $affiliate_id ) .'&b=841990&m=64739&afftrack=plugin&urllink=' . urlencode( $url );
+			$url = 'http://www.shareasale.com/r.cfm?u=' . absint( $affiliate_id ) . '&b=841990&m=64739&afftrack=plugin&urllink=' . urlencode( $url );
 		}
 		return $url;
 	}
@@ -224,10 +224,7 @@ class FrmAppHelper {
      */
     public static function get_ip_address() {
 		$ip = '';
-        foreach ( array(
-            'HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED', 'HTTP_X_CLUSTER_CLIENT_IP',
-            'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED', 'REMOTE_ADDR',
-        ) as $key ) {
+		foreach ( array( 'HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED', 'HTTP_X_CLUSTER_CLIENT_IP', 'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED', 'REMOTE_ADDR' ) as $key ) {
             if ( ! isset( $_SERVER[ $key ] ) ) {
                 continue;
             }
@@ -257,8 +254,13 @@ class FrmAppHelper {
             }
 			self::sanitize_value( $sanitize, $value );
 		} else {
-            $value = self::get_simple_request( array( 'type' => $src, 'param' => $param, 'default' => $default, 'sanitize' => $sanitize ) );
-        }
+			$value = self::get_simple_request( array(
+				'type'     => $src,
+				'param'    => $param,
+				'default'  => $default,
+				'sanitize' => $sanitize,
+			) );
+		}
 
 		if ( isset( $params ) && is_array( $value ) && ! empty( $value ) ) {
             foreach ( $params as $k => $p ) {
@@ -275,7 +277,12 @@ class FrmAppHelper {
     }
 
 	public static function get_post_param( $param, $default = '', $sanitize = '' ) {
-		return self::get_simple_request( array( 'type' => 'post', 'param' => $param, 'default' => $default, 'sanitize' => $sanitize ) );
+		return self::get_simple_request( array(
+			'type'     => 'post',
+			'param'    => $param,
+			'default'  => $default,
+			'sanitize' => $sanitize,
+		) );
 	}
 
 	/**
@@ -287,8 +294,13 @@ class FrmAppHelper {
 	 * @return string|array
 	 */
 	public static function simple_get( $param, $sanitize = 'sanitize_text_field', $default = '' ) {
-		return self::get_simple_request( array( 'type' => 'get', 'param' => $param, 'default' => $default, 'sanitize' => $sanitize ) );
-    }
+		return self::get_simple_request( array(
+			'type'     => 'get',
+			'param'    => $param,
+			'default'  => $default,
+			'sanitize' => $sanitize,
+		) );
+	}
 
 	/**
 	 * Get a GET/POST/REQUEST value and sanitize it
@@ -299,8 +311,10 @@ class FrmAppHelper {
 	 */
 	public static function get_simple_request( $args ) {
 		$defaults = array(
-			'param' => '', 'default' => '',
-			'type' => 'get', 'sanitize' => 'sanitize_text_field',
+			'param'    => '',
+			'default'  => '',
+			'type'     => 'get',
+			'sanitize' => 'sanitize_text_field',
 		);
 		$args = wp_parse_args( $args, $defaults );
 
@@ -548,9 +562,15 @@ class FrmAppHelper {
         return do_shortcode( $matches[0] );
     }
 
-    public static function get_pages() {
-		return get_posts( array( 'post_type' => 'page', 'post_status' => array( 'publish', 'private' ), 'numberposts' => -1, 'orderby' => 'title', 'order' => 'ASC' ) );
-    }
+	public static function get_pages() {
+		return get_posts( array(
+			'post_type'   => 'page',
+			'post_status' => array( 'publish', 'private' ),
+			'numberposts' => -1,
+			'orderby'     => 'title',
+			'order'       => 'ASC',
+		) );
+	}
 
     public static function wp_pages_dropdown( $field_name, $page_id, $truncate = false ) {
         $pages = self::get_pages();
@@ -577,14 +597,12 @@ class FrmAppHelper {
     }
 
 	public static function wp_roles_dropdown( $field_name, $capability, $multiple = 'single' ) {
-    ?>
-        <select name="<?php echo esc_attr($field_name); ?>" id="<?php echo esc_attr($field_name); ?>" <?php
-            echo ( 'multiple' == $multiple ) ? 'multiple="multiple"' : '';
-            ?> class="frm_multiselect">
-            <?php self::roles_options($capability); ?>
-        </select>
-    <?php
-    }
+		?>
+		<select name="<?php echo esc_attr($field_name); ?>" id="<?php echo esc_attr($field_name); ?>" <?php echo ( 'multiple' === $multiple ) ? 'multiple="multiple"' : ''; ?> class="frm_multiselect">
+			<?php self::roles_options( $capability ); ?>
+		</select>
+		<?php
+	}
 
 	public static function roles_options( $capability ) {
         global $frm_vars;
@@ -596,7 +614,8 @@ class FrmAppHelper {
         }
 
         foreach ( $editable_roles as $role => $details ) {
-            $name = translate_user_role($details['name'] ); ?>
+			$name = translate_user_role( $details['name'] );
+			?>
         <option value="<?php echo esc_attr($role) ?>" <?php echo in_array($role, (array) $capability) ? ' selected="selected"' : ''; ?>><?php echo esc_attr($name) ?> </option>
 <?php
             unset($role, $details);
@@ -953,13 +972,19 @@ class FrmAppHelper {
 			$key = $key . 'a';
         }
 
-		$key_check = FrmDb::get_var( $table_name, array( $column => $key, 'ID !' => $id ), $column );
+		$key_check = FrmDb::get_var( $table_name, array(
+			$column => $key,
+			'ID !'  => $id,
+		), $column );
 
         if ( $key_check || is_numeric($key_check) ) {
             $suffix = 2;
 			do {
 				$alt_post_name = substr( $key, 0, 200 - ( strlen( $suffix ) + 1 ) ) . $suffix;
-				$key_check = FrmDb::get_var( $table_name, array( $column => $alt_post_name, 'ID !' => $id ), $column );
+				$key_check = FrmDb::get_var( $table_name, array(
+					$column => $alt_post_name,
+					'ID !'  => $id,
+				), $column );
 				$suffix++;
 			} while ( $key_check || is_numeric( $key_check ) );
 			$key = $alt_post_name;
@@ -981,7 +1006,10 @@ class FrmAppHelper {
             $post_values = stripslashes_deep($_POST);
         }
 
-		$values = array( 'id' => $record->id, 'fields' => array() );
+		$values = array(
+			'id' => $record->id,
+			'fields' => array(),
+		);
 
 		foreach ( array( 'name', 'description' ) as $var ) {
             $default_val = isset($record->{$var}) ? $record->{$var} : '';
@@ -1023,7 +1051,12 @@ class FrmAppHelper {
                 if ( ! isset($field->field_options['custom_field']) ) {
                     $field->field_options['custom_field'] = '';
                 }
-				$meta_value = FrmProEntryMetaHelper::get_post_value( $record->post_id, $field->field_options['post_field'], $field->field_options['custom_field'], array( 'truncate' => false, 'type' => $field->type, 'form_id' => $field->form_id, 'field' => $field ) );
+				$meta_value = FrmProEntryMetaHelper::get_post_value( $record->post_id, $field->field_options['post_field'], $field->field_options['custom_field'], array(
+					'truncate' => false,
+					'type' => $field->type,
+					'form_id' => $field->form_id,
+					'field' => $field,
+				) );
             } else {
 				$meta_value = FrmEntryMeta::get_meta_value( $record, $field->id );
             }
@@ -1187,7 +1220,7 @@ class FrmAppHelper {
             return '';
         } else if ( $length <= 10 ) {
 			$sub = self::mb_function( array( 'mb_substr', 'substr' ), array( $str, 0, $length ) );
-            return $sub . (($length < $original_len) ? $continue : '');
+			return $sub . ( ( $length < $original_len ) ? $continue : '' );
         }
 
         $sub = '';
@@ -1196,7 +1229,7 @@ class FrmAppHelper {
 		$words = self::mb_function( array( 'mb_split', 'explode' ), array( ' ', $str ) );
 
 		foreach ( $words as $word ) {
-            $part = (($sub != '') ? ' ' : '') . $word;
+			$part = ( ( $sub != '' ) ? ' ' : '' ) . $word;
 			$total_len = self::mb_function( array( 'mb_strlen', 'strlen' ), array( $sub . $part ) );
             if ( $total_len > $length && str_word_count($sub) ) {
                 break;
@@ -1212,7 +1245,7 @@ class FrmAppHelper {
             unset($total_len, $word);
         }
 
-        return $sub . (($len < $original_len) ? $continue : '');
+		return $sub . ( ( $len < $original_len ) ? $continue : '' );
     }
 
 	public static function mb_function( $function_names, $args ) {
@@ -1376,22 +1409,21 @@ class FrmAppHelper {
                     case 0:
                         $l1 = $name;
                         self::add_value_to_array( $name, $l1, $this_val, $vars );
-                    break;
+						break;
 
                     case 1:
                         $l2 = $name;
                         self::add_value_to_array( $name, $l2, $this_val, $vars[ $l1 ] );
-                    break;
+						break;
 
                     case 2:
                         $l3 = $name;
                         self::add_value_to_array( $name, $l3, $this_val, $vars[ $l1 ][ $l2 ] );
-                    break;
+						break;
 
                     case 3:
                         $l4 = $name;
                         self::add_value_to_array( $name, $l4, $this_val, $vars[ $l1 ][ $l2 ][ $l3 ] );
-                    break;
                 }
 
                 unset($this_val, $n);
@@ -1652,56 +1684,79 @@ class FrmAppHelper {
     }
 
     public static function locales( $type = 'date' ) {
-        $locales = array(
-            'en' => __( 'English', 'formidable' ),    '' => __( 'English/Western', 'formidable' ),
-            'af' => __( 'Afrikaans', 'formidable' ),  'sq' => __( 'Albanian', 'formidable' ),
-            'ar' => __( 'Arabic', 'formidable' ),     'hy' => __( 'Armenian', 'formidable' ),
-            'az' => __( 'Azerbaijani', 'formidable' ), 'eu' => __( 'Basque', 'formidable' ),
-            'bs' => __( 'Bosnian', 'formidable' ),    'bg' => __( 'Bulgarian', 'formidable' ),
-            'ca' => __( 'Catalan', 'formidable' ),    'zh-HK' => __( 'Chinese Hong Kong', 'formidable' ),
-            'zh-CN' => __( 'Chinese Simplified', 'formidable' ), 'zh-TW' => __( 'Chinese Traditional', 'formidable' ),
-            'hr' => __( 'Croatian', 'formidable' ),   'cs' => __( 'Czech', 'formidable' ),
-            'da' => __( 'Danish', 'formidable' ),     'nl' => __( 'Dutch', 'formidable' ),
-            'en-GB' => __( 'English/UK', 'formidable' ), 'eo' => __( 'Esperanto', 'formidable' ),
-            'et' => __( 'Estonian', 'formidable' ),   'fo' => __( 'Faroese', 'formidable' ),
-            'fa' => __( 'Farsi/Persian', 'formidable' ), 'fil' => __( 'Filipino', 'formidable' ),
-            'fi' => __( 'Finnish', 'formidable' ),    'fr' => __( 'French', 'formidable' ),
-            'fr-CA' => __( 'French/Canadian', 'formidable' ), 'fr-CH' => __( 'French/Swiss', 'formidable' ),
-            'de' => __( 'German', 'formidable' ),     'de-AT' => __( 'German/Austria', 'formidable' ),
-            'de-CH' => __( 'German/Switzerland', 'formidable' ), 'el' => __( 'Greek', 'formidable' ),
-            'he' => __( 'Hebrew', 'formidable' ),     'iw' => __( 'Hebrew', 'formidable' ),
-            'hi' => __( 'Hindi', 'formidable' ),      'hu' => __( 'Hungarian', 'formidable' ),
-            'is' => __( 'Icelandic', 'formidable' ),  'id' => __( 'Indonesian', 'formidable' ),
-            'it' => __( 'Italian', 'formidable' ),    'ja' => __( 'Japanese', 'formidable' ),
-            'ko' => __( 'Korean', 'formidable' ),     'lv' => __( 'Latvian', 'formidable' ),
-            'lt' => __( 'Lithuanian', 'formidable' ), 'ms' => __( 'Malaysian', 'formidable' ),
-            'no' => __( 'Norwegian', 'formidable' ),  'pl' => __( 'Polish', 'formidable' ),
-            'pt' => __( 'Portuguese', 'formidable' ), 'pt-BR' => __( 'Portuguese/Brazilian', 'formidable' ),
-            'pt-PT' => __( 'Portuguese/Portugal', 'formidable' ), 'ro' => __( 'Romanian', 'formidable' ),
-            'ru' => __( 'Russian', 'formidable' ),    'sr' => __( 'Serbian', 'formidable' ),
-            'sr-SR' => __( 'Serbian', 'formidable' ), 'sk' => __( 'Slovak', 'formidable' ),
-            'sl' => __( 'Slovenian', 'formidable' ),  'es' => __( 'Spanish', 'formidable' ),
-            'es-419' => __( 'Spanish/Latin America', 'formidable' ), 'sv' => __( 'Swedish', 'formidable' ),
-            'ta' => __( 'Tamil', 'formidable' ),      'th' => __( 'Thai', 'formidable' ),
-            'tu' => __( 'Turkish', 'formidable' ),    'tr' => __( 'Turkish', 'formidable' ),
-            'uk' => __( 'Ukranian', 'formidable' ),   'vi' => __( 'Vietnamese', 'formidable' ),
-        );
+		$locales = array(
+			'en' => __( 'English', 'formidable' ),
+			''   => __( 'English/Western', 'formidable' ),
+			'af' => __( 'Afrikaans', 'formidable' ),
+			'sq' => __( 'Albanian', 'formidable' ),
+			'ar' => __( 'Arabic', 'formidable' ),
+			'hy' => __( 'Armenian', 'formidable' ),
+			'az' => __( 'Azerbaijani', 'formidable' ),
+			'eu' => __( 'Basque', 'formidable' ),
+			'bs' => __( 'Bosnian', 'formidable' ),
+			'bg' => __( 'Bulgarian', 'formidable' ),
+			'ca' => __( 'Catalan', 'formidable' ),
+			'zh-HK' => __( 'Chinese Hong Kong', 'formidable' ),
+			'zh-CN' => __( 'Chinese Simplified', 'formidable' ),
+			'zh-TW' => __( 'Chinese Traditional', 'formidable' ),
+			'hr' => __( 'Croatian', 'formidable' ),
+			'cs' => __( 'Czech', 'formidable' ),
+			'da' => __( 'Danish', 'formidable' ),
+			'nl' => __( 'Dutch', 'formidable' ),
+			'en-GB' => __( 'English/UK', 'formidable' ),
+			'eo' => __( 'Esperanto', 'formidable' ),
+			'et' => __( 'Estonian', 'formidable' ),
+			'fo' => __( 'Faroese', 'formidable' ),
+			'fa' => __( 'Farsi/Persian', 'formidable' ),
+			'fil' => __( 'Filipino', 'formidable' ),
+			'fi' => __( 'Finnish', 'formidable' ),
+			'fr' => __( 'French', 'formidable' ),
+			'fr-CA' => __( 'French/Canadian', 'formidable' ),
+			'fr-CH' => __( 'French/Swiss', 'formidable' ),
+			'de' => __( 'German', 'formidable' ),
+			'de-AT' => __( 'German/Austria', 'formidable' ),
+			'de-CH' => __( 'German/Switzerland', 'formidable' ),
+			'el' => __( 'Greek', 'formidable' ),
+			'he' => __( 'Hebrew', 'formidable' ),
+			'iw' => __( 'Hebrew', 'formidable' ),
+			'hi' => __( 'Hindi', 'formidable' ),
+			'hu' => __( 'Hungarian', 'formidable' ),
+			'is' => __( 'Icelandic', 'formidable' ),
+			'id' => __( 'Indonesian', 'formidable' ),
+			'it' => __( 'Italian', 'formidable' ),
+			'ja' => __( 'Japanese', 'formidable' ),
+			'ko' => __( 'Korean', 'formidable' ),
+			'lv' => __( 'Latvian', 'formidable' ),
+			'lt' => __( 'Lithuanian', 'formidable' ),
+			'ms' => __( 'Malaysian', 'formidable' ),
+			'no' => __( 'Norwegian', 'formidable' ),
+			'pl' => __( 'Polish', 'formidable' ),
+			'pt' => __( 'Portuguese', 'formidable' ),
+			'pt-BR' => __( 'Portuguese/Brazilian', 'formidable' ),
+			'pt-PT' => __( 'Portuguese/Portugal', 'formidable' ), 'ro' => __( 'Romanian', 'formidable' ),
+			'ru' => __( 'Russian', 'formidable' ),
+			'sr' => __( 'Serbian', 'formidable' ),
+			'sr-SR' => __( 'Serbian', 'formidable' ),
+			'sk' => __( 'Slovak', 'formidable' ),
+			'sl' => __( 'Slovenian', 'formidable' ),
+			'es' => __( 'Spanish', 'formidable' ),
+			'es-419' => __( 'Spanish/Latin America', 'formidable' ),
+			'sv' => __( 'Swedish', 'formidable' ),
+			'ta' => __( 'Tamil', 'formidable' ),
+			'th' => __( 'Thai', 'formidable' ),
+			'tu' => __( 'Turkish', 'formidable' ),
+			'tr' => __( 'Turkish', 'formidable' ),
+			'uk' => __( 'Ukranian', 'formidable' ),
+			'vi' => __( 'Vietnamese', 'formidable' ),
+		);
 
-        if ( $type == 'captcha' ) {
-            // remove the languages unavailable for the captcha
-            $unset = array(
-                '', 'af', 'sq', 'hy', 'az', 'eu', 'bs',
-                'zh-HK', 'eo', 'et', 'fo', 'fr-CH',
-                'he', 'is', 'ms', 'sr-SR', 'ta', 'tu',
-            );
-        } else {
-            // remove the languages unavailable for the datepicker
-            $unset = array(
-                'en', 'fil', 'fr-CA', 'de-AT', 'de-AT',
-                'de-CH', 'iw', 'hi', 'pt', 'pt-PT',
-                'es-419', 'tr',
-            );
-        }
+		if ( $type === 'captcha' ) {
+			// remove the languages unavailable for the captcha
+			$unset = array( '', 'af', 'sq', 'hy', 'az', 'eu', 'bs', 'zh-HK', 'eo', 'et', 'fo', 'fr-CH', 'he', 'is', 'ms', 'sr-SR', 'ta', 'tu' );
+		} else {
+			// remove the languages unavailable for the datepicker
+			$unset = array( 'en', 'fil', 'fr-CA', 'de-AT', 'de-AT', 'de-CH', 'iw', 'hi', 'pt', 'pt-PT', 'es-419', 'tr' );
+		}
 
         $locales = array_diff_key($locales, array_flip($unset));
         $locales = apply_filters('frm_locales', $locales);

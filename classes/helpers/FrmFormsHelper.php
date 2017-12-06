@@ -56,9 +56,11 @@ class FrmFormsHelper {
 			<option value=""><?php echo ( $args['blank'] == 1 ) ? ' ' : '- ' . esc_attr( $args['blank'] ) . ' -'; ?></option>
 		<?php } ?>
 		<?php foreach ( $forms as $form ) { ?>
-			<option value="<?php echo esc_attr( $form->id ); ?>" <?php selected( $field_value, $form->id ); ?>><?php
-				echo ( '' == $form->name ) ? esc_html__( '(no title)', 'formidable' ) : esc_html( FrmAppHelper::truncate( $form->name, 50 ) ) . ( $form->parent_form_id ? esc_html__( ' (child)', 'formidable' ) : '' ) ;
-			?></option>
+			<option value="<?php echo esc_attr( $form->id ); ?>" <?php selected( $field_value, $form->id ); ?>>
+				<?php
+				echo esc_html( '' === $form->name ? __( '(no title)', 'formidable' ) : FrmAppHelper::truncate( $form->name, 50 ) . ( $form->parent_form_id ? __( ' (child)', 'formidable' ) : '' ) ) ;
+				?>
+			</option>
 		<?php } ?>
         </select>
         <?php
@@ -81,7 +83,10 @@ class FrmFormsHelper {
 		$where = apply_filters( 'frm_forms_dropdown', array(), '' );
 		$forms = FrmForm::get_published_forms( $where );
 
-		$args = array( 'id' => 0, 'form' => 0 );
+		$args = array(
+			'id'   => 0,
+			'form' => 0,
+		);
 		if ( isset( $_GET['id'] ) && ! isset( $_GET['form'] ) ) {
 			unset( $args['form'] );
 		} else if ( isset( $_GET['form']) && ! isset( $_GET['id'] ) ) {
@@ -112,19 +117,20 @@ class FrmFormsHelper {
 			        $args['form'] = $form->id;
 				}
                 ?>
-				<li><a href="<?php echo esc_url( isset( $base ) ? add_query_arg( $args, $base ) : add_query_arg( $args ) ); ?>" tabindex="-1"><?php echo esc_html( empty( $form->name ) ? __( '(no title)') : FrmAppHelper::truncate( $form->name, 60 ) ); ?></a></li>
+				<li><a href="<?php echo esc_url( isset( $base ) ? add_query_arg( $args, $base ) : add_query_arg( $args ) ); ?>" tabindex="-1"><?php echo esc_html( empty( $form->name ) ? __( '(no title)' ) : FrmAppHelper::truncate( $form->name, 60 ) ); ?></a></li>
 			<?php
 				unset( $form );
-			} ?>
+			}
+			?>
 			</ul>
 		</li>
         <?php
     }
 
 	public static function get_sortable_classes( $col, $sort_col, $sort_dir ) {
-        echo ($sort_col == $col) ? 'sorted' : 'sortable';
-        echo ($sort_col == $col && $sort_dir == 'desc') ? ' asc' : ' desc';
-    }
+		echo ( $sort_col == $col ) ? 'sorted' : 'sortable';
+		echo ( $sort_col == $col && $sort_dir == 'desc' ) ? ' asc' : ' desc';
+	}
 
 	/**
 	 * Get the invalid form error message
@@ -161,7 +167,11 @@ class FrmFormsHelper {
             $post_values = isset($_POST) ? $_POST : array();
         }
 
-		foreach ( array( 'name' => '', 'description' => '' ) as $var => $default ) {
+		$defaults = array(
+			'name' => '',
+			'description' => '',
+		);
+		foreach ( $defaults as $var => $default ) {
 			if ( ! isset( $values[ $var ] ) ) {
 				$values[ $var ] = FrmAppHelper::get_param( $var, $default, 'get', 'sanitize_text_field' );
             }
@@ -169,11 +179,21 @@ class FrmFormsHelper {
 
         $values['description'] = FrmAppHelper::use_wpautop($values['description']);
 
-		foreach ( array( 'form_id' => '', 'logged_in' => '', 'editable' => '', 'default_template' => 0, 'is_template' => 0, 'status' => 'draft', 'parent_form_id' => 0 ) as $var => $default ) {
-            if ( ! isset( $values[ $var ] ) ) {
+		$defaults = array(
+			'form_id'        => '',
+			'logged_in'      => '',
+			'editable'       => '',
+			'default_template' => 0,
+			'is_template'    => 0,
+			'status'         => 'draft',
+			'parent_form_id' => 0,
+		);
+		foreach ( $defaults as $var => $default ) {
+			if ( ! isset( $values[ $var ] ) ) {
 				$values[ $var ] = FrmAppHelper::get_param( $var, $default, 'get', 'sanitize_text_field' );
-            }
-        }
+			}
+		}
+		unset( $defaults );
 
         if ( ! isset( $values['form_key'] ) ) {
 			$values['form_key'] = ( $post_values && isset( $post_values['form_key'] ) ) ? $post_values['form_key'] : FrmAppHelper::get_unique_key( '', $wpdb->prefix . 'frm_forms', 'form_key' );
@@ -213,7 +233,7 @@ class FrmFormsHelper {
                 }
 
                 foreach ( $default as $k => $v ) {
-					$values[ $var ][ $k ] = ( $post_values && isset( $post_values[ $var ][ $k ] ) ) ? $post_values[ $var ][ $k ] : ( ( $record && isset( $record->options[ $var ] ) && isset( $record->options[ $var ][ $k ] ) ) ? $record->options[ $var ][ $k ] : $v);
+					$values[ $var ][ $k ] = ( $post_values && isset( $post_values[ $var ][ $k ] ) ) ? $post_values[ $var ][ $k ] : ( ( $record && isset( $record->options[ $var ] ) && isset( $record->options[ $var ][ $k ] ) ) ? $record->options[ $var ][ $k ] : $v );
 
                     if ( is_array( $v ) ) {
                         foreach ( $v as $k1 => $v1 ) {
@@ -234,18 +254,24 @@ class FrmFormsHelper {
         return $values;
     }
 
-    public static function get_default_opts() {
-        $frm_settings = FrmAppHelper::get_settings();
+	public static function get_default_opts() {
+		$frm_settings = FrmAppHelper::get_settings();
 
-        return array(
-            'submit_value' => $frm_settings->submit_value, 'success_action' => 'message',
-            'success_msg' => $frm_settings->success_msg, 'show_form' => 0, 'akismet' => '',
-            'no_save' => 0, 'ajax_load' => 0, 'form_class' => '', 'custom_style' => 1,
-            'before_html' => self::get_default_html('before'),
-            'after_html' => '',
-            'submit_html' => self::get_default_html('submit'),
-        );
-    }
+		return array(
+			'submit_value'   => $frm_settings->submit_value,
+			'success_action' => 'message',
+			'success_msg'    => $frm_settings->success_msg,
+			'show_form'      => 0,
+			'akismet'        => '',
+			'no_save'        => 0,
+			'ajax_load'      => 0,
+			'form_class'     => '',
+			'custom_style'   => 1,
+			'before_html'    => self::get_default_html( 'before' ),
+			'after_html'     => '',
+			'submit_html'    => self::get_default_html( 'submit' ),
+		);
+	}
 
 	/**
 	 * @param array $options
@@ -350,10 +376,10 @@ BEFORE_HTML;
 
                     // mark it open for the next end section
                     $open = true;
-                break;
-                case 'break';
+					break;
+                case 'break':
 					self::maybe_create_end_section( $open, $reset_fields, $add_order, $end_section_values, $field, 'move' );
-                break;
+					break;
                 case 'end_divider':
                     if ( ! $open ) {
                         // the section isn't open, so this is an extra field that needs to be removed
@@ -396,8 +422,13 @@ BEFORE_HTML;
         $reset_fields = true;
     }
 
-    public static function replace_shortcodes( $html, $form, $title = false, $description = false, $values = array() ) {
-		foreach ( array( 'form_name' => $title, 'form_description' => $description, 'entry_key' => true ) as $code => $show ) {
+	public static function replace_shortcodes( $html, $form, $title = false, $description = false, $values = array() ) {
+		$codes = array(
+			'form_name' => $title,
+			'form_description' => $description,
+			'entry_key' => true,
+		);
+		foreach ( $codes as $code => $show ) {
             if ( $code == 'form_name' ) {
                 $replace_with = $form->name;
             } else if ( $code == 'form_description' ) {
@@ -537,7 +568,11 @@ BEFORE_HTML;
 			$show_img = true;
 		}
 
-		self::show_error( array( 'img' => $args['img'], 'errors' => $args['errors'], 'show_img' => $show_img ) );
+		self::show_error( array(
+			'img' => $args['img'],
+			'errors' => $args['errors'],
+			'show_img' => $show_img,
+		) );
 	}
 
 	/**
@@ -560,7 +595,7 @@ BEFORE_HTML;
 			}
 
 			if ( $args['show_img'] && ! empty( $args['img'] ) ) {
-				?><img src="<?php echo esc_attr( $args['img'] ) ?>" alt="" /><?php
+				echo '<img src="' . esc_attr( $args['img'] ) . '" alt="" />';
 			} else {
 				$args['show_img'] = true;
 			}
@@ -581,7 +616,7 @@ BEFORE_HTML;
 	}
 
 	public static function get_scroll_js( $form_id ) {
-        ?><script type="text/javascript">document.addEventListener('DOMContentLoaded',function(){frmFrontForm.scrollMsg(<?php echo (int) $form_id ?>);})</script><?php
+        echo '<script type="text/javascript">document.addEventListener(\'DOMContentLoaded\',function(){frmFrontForm.scrollMsg(' . (int) $form_id . ');})</script>';
     }
 
 	public static function edit_form_link( $form_id ) {

@@ -33,8 +33,9 @@
             }
         ?>
         <input type="hidden" value="<?php echo esc_attr($v) ?>" name="<?php echo esc_attr( $frm_style->get_field_name( $k ) ) ?>" />    
-        <?php
-        } ?>
+		<?php
+		}
+		?>
 		<p class="button-controls"><input type="submit" name="nav-menu-locations" id="nav-menu-locations" class="button button-primary left" value="<?php esc_attr_e( 'Save Changes', 'formidable' ) ?>" /></p>
 
     </form>

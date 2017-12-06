@@ -8,9 +8,7 @@
 		</li>
 	</ul><!-- .posttype-tabs -->
 
-	<div id="tabs-panel-success-msg" class="tabs-panel <?php
-		echo ( 'default' === $current_tab ? 'tabs-panel-active' : 'tabs-panel-inactive' );
-	?>">
+	<div id="tabs-panel-success-msg" class="tabs-panel <?php echo esc_attr( 'default' === $current_tab ? 'tabs-panel-active' : 'tabs-panel-inactive' ); ?>">
 		<div class="field-group field-group-border clearfix">
 			<label><?php esc_html_e( 'BG color', 'formidable' ) ?></label>
 			<div class="hasPicker">
@@ -32,9 +30,7 @@
 		<div class="clear"></div>
 	</div><!-- /.tabs-panel -->
 
-	<div id="tabs-panel-error-msg" class="tabs-panel <?php
-		echo ( 'error-msg' === $current_tab ? 'tabs-panel-active' : 'tabs-panel-inactive' );
-	?>">
+	<div id="tabs-panel-error-msg" class="tabs-panel <?php echo esc_attr( 'error-msg' === $current_tab ? 'tabs-panel-active' : 'tabs-panel-inactive' ); ?>">
 		<div class="field-group field-group-border clearfix">
 			<label><?php esc_html_e( 'BG color', 'formidable' ) ?></label>
 			<div class="hasPicker">

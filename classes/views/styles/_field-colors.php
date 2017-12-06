@@ -22,9 +22,7 @@
 			</li>
 		</ul><!-- .posttype-tabs -->
 
-		<div id="tabs-panel-default-color" class="tabs-panel <?php
-			echo ( 'default' === $current_tab ? 'tabs-panel-active' : 'tabs-panel-inactive' );
-		?>">
+		<div id="tabs-panel-default-color" class="tabs-panel <?php echo esc_attr( 'default' === $current_tab ? 'tabs-panel-active' : 'tabs-panel-inactive' ); ?>">
 			<div class="field-group field-group-border clearfix">
 				<label class="background"><?php esc_html_e( 'BG color', 'formidable' ); ?></label>
 				<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'bg_color' ) ) ?>" id="frm_bg_color" class="hex" value="<?php echo esc_attr( $style->post_content['bg_color'] ) ?>" />
@@ -68,9 +66,7 @@
 			</p>
 		</div><!-- /.tabs-panel -->
 
-		<div id="tabs-panel-active-color" class="tabs-panel <?php
-			echo ( 'active-color' == $current_tab ? 'tabs-panel-active' : 'tabs-panel-inactive' );
-		?>">
+		<div id="tabs-panel-active-color" class="tabs-panel <?php echo esc_attr( 'active-color' == $current_tab ? 'tabs-panel-active' : 'tabs-panel-inactive' ); ?>">
 			<div class="field-group field-group-border clearfix">
 				<label class="background"><?php esc_html_e( 'BG color', 'formidable' ) ?></label>
 				<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'bg_color_active' ) ) ?>" id="frm_bg_color_active" class="hex" value="<?php echo esc_attr( $style->post_content['bg_color_active'] ) ?>" />
@@ -88,9 +84,7 @@
 			</p>
 		</div><!-- /.tabs-panel -->
 
-		<div id="tabs-panel-active-error" class="tabs-panel <?php
-			echo ( 'active-error' == $current_tab ? 'tabs-panel-active' : 'tabs-panel-inactive' );
-		?>">
+		<div id="tabs-panel-active-error" class="tabs-panel <?php echo esc_attr( 'active-error' == $current_tab ? 'tabs-panel-active' : 'tabs-panel-inactive' ); ?>">
 			<div class="field-group field-group-border clearfix">
 				<label class="background"><?php esc_html_e( 'BG color', 'formidable' ) ?></label>
 				<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'bg_color_error' ) ); ?>" id="frm_bg_color_error" class="hex" value="<?php echo esc_attr( $style->post_content['bg_color_error'] ) ?>" />

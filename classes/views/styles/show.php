@@ -68,7 +68,8 @@
 							<?php
 							if ( $style->ID ) {
 								echo '<span class="howto"><span>.frm_style_' . esc_attr( $style->post_name ) . '</span></span>';
-							} ?>
+							}
+							?>
                             <div class="publishing-action">
                                 <input type="button" value="<?php esc_attr_e( 'Reset to Default', 'formidable' ) ?>" class="button-secondary frm_reset_style" />
 								<input type="submit" id="save_menu_header" class="button button-primary menu-save" value="<?php esc_attr_e( 'Save Style', 'formidable' ); ?>"  />

@@ -81,12 +81,7 @@ class FrmListHelper {
 
 	protected $compat_fields = array( '_args', '_pagination_args', 'screen', '_actions', '_pagination' );
 
-	protected $compat_methods = array(
-		'set_pagination_args', 'get_views', 'get_bulk_actions', 'bulk_actions',
-		'row_actions', 'view_switcher', 'get_items_per_page', 'pagination',
-		'get_sortable_columns', 'get_column_info', 'get_table_classes', 'display_tablenav', 'extra_tablenav',
-		'single_row_columns',
-	);
+	protected $compat_methods = array( 'set_pagination_args', 'get_views', 'get_bulk_actions', 'bulk_actions', 'row_actions', 'view_switcher', 'get_items_per_page', 'pagination', 'get_sortable_columns', 'get_column_info', 'get_table_classes', 'display_tablenav', 'extra_tablenav', 'single_row_columns' );
 
 	/**
 	* Construct the table object
@@ -404,7 +399,10 @@ class FrmListHelper {
 
 	private static function get_bulk_action( $action_name ) {
 		$action = false;
-		$action_param = self::get_param( array( 'param' => $action_name, 'sanitize' => 'sanitize_text_field' ) );
+		$action_param = self::get_param( array(
+			'param' => $action_name,
+			'sanitize' => 'sanitize_text_field',
+		) );
 		if ( $action_param && -1 != $action_param ) {
 			$action = $action_param;
 		}
@@ -892,10 +890,7 @@ class FrmListHelper {
 	</tr>
 	</thead>
 
-	<tbody id="the-list"<?php
-		if ( $singular ) {
-			echo " data-wp-lists='list:" . esc_attr( $singular ) . "'";
-		} ?>>
+	<tbody id="the-list"<?php if ( $singular ) { echo " data-wp-lists='list:" . esc_attr( $singular ) . "'"; } ?>>
 		<?php $this->display_rows_or_placeholder(); ?>
 	</tbody>
 

@@ -110,11 +110,13 @@ class FrmField {
     public static function duplicate( $old_form_id, $form_id, $copy_keys = false, $blog_id = false ) {
         global $frm_duplicate_ids;
 
-		$where = array( array(
-			'or' => 1,
-			'fi.form_id' => $old_form_id,
-			'fr.parent_form_id' => $old_form_id,
-		) );
+		$where = array(
+			array(
+				'or' => 1,
+				'fi.form_id' => $old_form_id,
+				'fr.parent_form_id' => $old_form_id,
+			),
+		);
 		$fields = self::getAll( $where, 'field_order', '', $blog_id );
 
         foreach ( (array) $fields as $field ) {

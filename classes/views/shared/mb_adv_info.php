@@ -36,8 +36,10 @@
 				}
 
 				FrmAppHelper::insert_opt_html( array(
-					'id' => $f->id, 'key' => $f->field_key,
-					'name' => $f->name, 'type' => $f->type,
+					'id'   => $f->id,
+					'key'  => $f->field_key,
+					'name' => $f->name,
+					'type' => $f->type,
 				) );
 
 				if ( $f->type == 'data' ) {
@@ -46,11 +48,19 @@
 						$linked_form = FrmDb::get_var( $wpdb->prefix . 'frm_fields', array( 'id' => $f->field_options['form_select'] ), 'form_id' );
                         if ( ! in_array( $linked_form, $linked_forms ) ) {
                             $linked_forms[] = $linked_form;
-							$linked_fields = FrmField::getAll( array( 'fi.type not' => FrmField::no_save_fields(), 'fi.form_id' => $linked_form ) );
+							$linked_fields = FrmField::getAll( array(
+								'fi.type not' => FrmField::no_save_fields(),
+								'fi.form_id'  => $linked_form,
+								) );
                             $ldfe = '';
 							if ( $linked_fields ) {
 								foreach ( $linked_fields as $linked_field ) {
-                                    FrmAppHelper::insert_opt_html( array( 'id' => $f->id . ' show=' . $linked_field->id, 'key' => $f->field_key . ' show=' . $linked_field->field_key, 'name' => $linked_field->name, 'type' => $linked_field->type ) );
+									FrmAppHelper::insert_opt_html( array(
+										'id'   => $f->id . ' show=' . $linked_field->id,
+										'key'  => $f->field_key . ' show=' . $linked_field->field_key,
+										'name' => $linked_field->name,
+										'type' => $linked_field->type,
+									) );
 
                                     $ldfe = $linked_field->id;
                                     unset($linked_field);
@@ -62,7 +72,8 @@
         	    }
                 unset($f);
                 }
-            } ?>
+			}
+			?>
         </ul>
 
         <?php esc_html_e( 'Helpers', 'formidable' ) ?>:
@@ -75,16 +86,18 @@
                  echo '<li class="clear frm_block"></li>';
                  continue;
             }
+
+			$classes = ( in_array( $skey, array( 'siteurl', 'sitename', 'entry_count' ) ) ) ? 'show_before_content show_after_content' : '';
+			$classes .= ( strpos( $skey, 'default-' ) === 0 ) ? 'hide_frm_not_email_subject' : '';
         ?>
         <li class="frm_col_<?php echo esc_attr( $col ) ?>">
-            <a href="javascript:void(0)" class="frmbutton button <?php
-			echo ( in_array( $skey, array( 'siteurl', 'sitename', 'entry_count' ) ) ) ? 'show_before_content show_after_content' : '';
-            echo ( strpos( $skey, 'default-' ) === 0 ) ? 'hide_frm_not_email_subject' : '';
-            ?> frm_insert_code" data-code="<?php echo esc_attr( $skey ) ?>"><?php echo esc_html( $sname ) ?></a>
+			<a href="javascript:void(0)" class="frmbutton button <?php echo esc_attr( $classes ); ?> frm_insert_code" data-code="<?php echo esc_attr( $skey ) ?>">
+				<?php echo esc_html( $sname ) ?>
+			</a>
         </li>
         <?php
             $col = ( $col == 'one' ) ? 'two' : 'one';
-            unset($skey, $sname);
+			unset( $skey, $sname, $classes );
         }
         ?>
         </ul>
@@ -98,7 +111,8 @@
 	    </ul>
 	    <ul class="alignleft"><li><?php esc_html_e( 'Fields from your form', 'formidable' ) ?>:</li></ul>
 	    <ul class="frm_code_list frm_full_width">
-		    <?php if ( ! empty( $fields ) ) {
+			<?php
+			if ( ! empty( $fields ) ) {
 		        foreach ( $fields as $f ) {
 					if ( FrmField::is_no_save_field( $f->type ) || ( $f->type == 'data' && ( ! isset( $f->field_options['data_type'] ) || $f->field_options['data_type'] == 'data' || $f->field_options['data_type'] == '' ) ) ) {
                         continue;
@@ -111,14 +125,15 @@
                 </li>
                 <?php
 
-                    if ( $f->type == 'user_id' ) {
-                        $uid = $f;
-                    } else if ( $f->type == 'file' ) {
-                        $file = $f;
-                    }
-        		    unset($f);
-		        }
-		    } ?>
+				if ( $f->type == 'user_id' ) {
+					$uid = $f;
+				} else if ( $f->type == 'file' ) {
+					$file = $f;
+				}
+				unset( $f );
+			}
+		}
+		?>
         </ul>
 
         <p class="howto"><?php esc_html_e( 'Click a button below to insert sample logic into your view', 'formidable' ) ?></p>
@@ -150,19 +165,21 @@
 				<?php echo is_array( $sname ) ? $sname['label'] : $sname; ?>
 			</a>
 	    </li>
-	    <?php
-	        $col = ($col == 'one') ? 'two' : 'one';
-	        unset($skey, $sname);
-	    }
-        ?>
-        <?php if ( isset($file) ) { ?>
+		<?php
+			$col = ( $col == 'one' ) ? 'two' : 'one';
+	        unset( $skey, $sname );
+		}
+		?>
+		<?php if ( isset( $file ) ) { ?>
         <li class="frm_col_<?php echo esc_attr( $col ) ?>">
 	        <a href="javascript:void(0)" class="frmbutton button frm_insert_code" data-code="<?php echo esc_attr($file->id) ?> show_image=1"><?php esc_html_e( 'Show image', 'formidable' ) ?></a>
 	    </li>
-	    <li class="frm_col_<?php echo esc_attr( $col = ( $col == 'one' ? 'two' : 'one' ) ) ?>">
+		<?php $col = ( $col == 'one' ? 'two' : 'one' ); ?>
+		<li class="frm_col_<?php echo esc_attr( $col ) ?>">
 	        <a href="javascript:void(0)" class="frmbutton button frm_insert_code" data-code="<?php echo esc_attr($file->id) ?> show=id"><?php esc_html_e( 'Image ID', 'formidable' ) ?></a>
 	    </li>
-	    <li class="frm_col_<?php echo esc_attr( $col = ( $col == 'one' ? 'two' : 'one' ) ) ?>">
+		<?php $col = ( $col == 'one' ? 'two' : 'one' ); ?>
+		<li class="frm_col_<?php echo esc_attr( $col ) ?>">
 	        <a href="javascript:void(0)" class="frmbutton button frm_insert_code" data-code="<?php echo esc_attr($file->id) ?> show_filename=1"><?php esc_html_e( 'Image Name', 'formidable' ) ?></a>
 	    </li>
 	    <?php } ?>
@@ -171,23 +188,27 @@
         <div class="clear"></div>
         <?php
 
-        if ( isset($uid) && ! empty($user_fields) ) {
-            $col = 'one'; ?>
+		if ( isset( $uid ) && ! empty( $user_fields ) ) {
+			$col = 'one';
+			?>
         <p class="howto"><?php esc_html_e( 'Insert user information', 'formidable' ); ?></p>
         <ul class="frm_code_list">
         <?php foreach ( $user_fields as $uk => $uf ) { ?>
             <li class="frm_col_<?php echo esc_attr( $col ) ?>">
 				<a href="javascript:void(0)" class="frmbutton button frm_insert_code" data-code="<?php echo esc_attr( $uid->id . ' show="' . $uk . '"' ) ?>"><?php echo esc_html( $uf ) ?></a>
     	    </li>
-        <?php
-            $col = ($col == 'one') ? 'two' : 'one';
-            unset($uf, $uk);
-        }
-        unset($uid); ?>
+			<?php
+			$col = ( $col == 'one' ) ? 'two' : 'one';
+			unset( $uf, $uk );
+		}
+		unset( $uid );
+		?>
         </ul>
-        <?php }
+		<?php
+        }
 
-        if ( isset($repeat_field) ) { ?>
+		if ( isset( $repeat_field ) ) {
+		?>
         <div class="clear"></div>
         <p class="howto"><?php esc_html_e( 'Repeating field options', 'formidable' ) ?></p>
             <ul class="frm_code_list">
@@ -198,7 +219,8 @@
         <?php
         }
 
-        if ( isset($dfe) ) { ?>
+		if ( isset( $dfe ) ) {
+        ?>
 
         <div class="clear"></div>
         <p class="howto"><?php esc_html_e( 'Dynamic field options', 'formidable' ); ?></p>

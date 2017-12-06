@@ -23,11 +23,15 @@ class FrmXMLHelper {
 	}
 
 	public static function import_xml( $file ) {
-        $defaults = array(
-            'forms' => 0, 'fields' => 0, 'terms' => 0,
-            'posts' => 0, 'views' => 0, 'actions' => 0,
-            'styles' => 0,
-        );
+		$defaults = array(
+			'forms'   => 0,
+			'fields'  => 0,
+			'terms'   => 0,
+			'posts'   => 0,
+			'views'   => 0,
+			'actions' => 0,
+			'styles'  => 0,
+		);
 
         $imported = array(
             'imported' => $defaults,
@@ -194,7 +198,10 @@ class FrmXMLHelper {
 
 	private static function maybe_get_form( $form ) {
 		// if template, allow to edit if form keys match, otherwise, creation date must also match
-		$edit_query = array( 'form_key' => $form['form_key'], 'is_template' => $form['is_template'] );
+		$edit_query = array(
+			'form_key'    => $form['form_key'],
+			'is_template' => $form['is_template'],
+		);
 		if ( ! $form['is_template'] ) {
 			$edit_query['created_at'] = $form['created_at'];
 		}
@@ -307,17 +314,14 @@ class FrmXMLHelper {
 		foreach ( $xml_fields as $field ) {
 			$f = self::fill_field( $field, $form_id );
 
-		    if ( is_array($f['default_value']) && in_array($f['type'], array(
-		        'text', 'email', 'url', 'textarea',
-		        'number','phone', 'date',
-		        'hidden', 'password', 'tag', 'image',
-		    )) ) {
-		        if ( count($f['default_value']) === 1 ) {
+			$has_default = array( 'text', 'email', 'url', 'textarea', 'number','phone', 'date', 'hidden', 'password', 'tag', 'image' );
+			if ( is_array( $f['default_value'] ) && in_array( $f['type'], $has_default, true ) ) {
+				if ( count( $f['default_value'] ) === 1 ) {
 					$f['default_value'] = '[' . reset( $f['default_value'] ) . ']';
-		        } else {
-		            $f['default_value'] = reset($f['default_value']);
-		        }
-		    }
+				} else {
+					$f['default_value'] = reset( $f['default_value'] );
+				}
+			}
 
 			self::maybe_update_in_section_variable( $in_section, $f );
 			self::maybe_update_form_select( $f, $imported );
@@ -948,11 +952,7 @@ class FrmXMLHelper {
 			'post_name'     => $form_id . '_wppost_1',
         );
 
-        $post_settings = array(
-            'post_type', 'post_category', 'post_content',
-            'post_excerpt', 'post_title', 'post_name', 'post_date',
-			'post_status', 'post_custom_fields', 'post_password',
-        );
+		$post_settings = array( 'post_type', 'post_category', 'post_content', 'post_excerpt', 'post_title', 'post_name', 'post_date', 'post_status', 'post_custom_fields', 'post_password' );
 
         foreach ( $post_settings as $post_setting ) {
 			if ( isset( $form_options[ $post_setting ] ) ) {
@@ -1112,7 +1112,14 @@ class FrmXMLHelper {
         if ( isset( $form_options['notification'] ) && is_array($form_options['notification']) ) {
             foreach ( $form_options['notification'] as $email_key => $notification ) {
 
-                $atts = array( 'email_to' => '', 'reply_to' => '', 'reply_to_name' => '', 'event' => '', 'form_id' => $form_id, 'email_key' => $email_key );
+				$atts = array(
+					'email_to'  => '',
+					'reply_to'  => '',
+					'reply_to_name' => '',
+					'event'     => '',
+					'form_id'   => $form_id,
+					'email_key' => $email_key,
+				);
 
                 // Format the email data
                 self::format_email_data( $atts, $notification );
@@ -1135,7 +1142,10 @@ class FrmXMLHelper {
         self::format_email_to_data( $atts, $notification );
 
         // Format the reply to email and name
-        $reply_fields = array( 'reply_to' => '', 'reply_to_name' => '' );
+		$reply_fields = array(
+			'reply_to'      => '',
+			'reply_to_name' => '',
+		);
         foreach ( $reply_fields as $f => $val ) {
 			if ( isset( $notification[ $f ] ) ) {
 				$atts[ $f ] = $notification[ $f ];

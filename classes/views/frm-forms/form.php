@@ -60,7 +60,8 @@ if ( isset($values['fields']) && ! empty($values['fields']) ) {
         unset($field, $field_name);
     }
     unset($count);
-} ?>
+}
+?>
 </ul>
 </div>
 

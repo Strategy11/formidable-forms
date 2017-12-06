@@ -6,7 +6,7 @@
         <div id="minor-publishing-actions">
             <?php if ( 'draft' == $values['status'] ) { ?>
             <div id="save-action">
-        	    <input type="button" value="<?php esc_html_e( 'Save Draft', 'formidable' ); ?>" class="frm_submit_form frm_submit_<?php echo ( isset($values['ajax_load']) && $values['ajax_load'] ) ? '': 'no_'; ?>ajax button-secondary button-large" id="save-post" />
+        	    <input type="button" value="<?php esc_html_e( 'Save Draft', 'formidable' ); ?>" class="frm_submit_form frm_submit_<?php echo ( isset( $values['ajax_load'] ) && $values['ajax_load'] ) ? '' : 'no_'; ?>ajax button-secondary button-large" id="save-post" />
         	    <span class="spinner"></span>
             </div>
             <?php } ?>
@@ -16,7 +16,8 @@
 
                     if ( isset($values['form_key']) ) {
                         $frm_settings = FrmAppHelper::get_settings();
-                        if ( empty($frm_settings->preview_page_id) ) { ?>
+                        if ( empty($frm_settings->preview_page_id) ) {
+                        ?>
                     <a href="<?php echo esc_url( FrmFormsHelper::get_direct_link($values['form_key']) ); ?>" class="preview button" target="wp-frm-preview-<?php echo esc_attr( $id ) ?>"><?php esc_html_e( 'Preview', 'formidable' ) ?></a>
                 <?php
                         } else {
@@ -29,9 +30,11 @@
                             <li><a href="<?php echo esc_url( add_query_arg('form', $values['form_key'], get_permalink( $frm_settings->preview_page_id )) ) ?>" target="_blank"><?php esc_html_e( 'In Theme', 'formidable' ) ?></a></li>
                     	</ul>
                     </div>
-                <?php   }
+                <?php
+						}
                     }
-                } ?>
+                }
+				?>
             </div>
             <?php if ( 'draft' == $values['status'] ) { ?>
             <div class="clear"></div>
@@ -98,7 +101,7 @@
 			<?php if ( 'settings' == FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' ) ) { ?>
 			<input type="button" value="<?php esc_attr_e( 'Update', 'formidable' ); ?>" class="frm_submit_form frm_submit_settings_btn button-primary button-large" id="frm_submit_side_top" />
             <?php } else { ?>
-    	    <input type="button" value="<?php echo isset($button) ? esc_attr($button) : __( 'Update', 'formidable' ); ?>" class="frm_submit_form frm_submit_<?php echo ( isset($values['ajax_load']) && $values['ajax_load'] ) ? '': 'no_'; ?>ajax button-primary button-large" id="frm_submit_side_top" />
+    	    <input type="button" value="<?php echo isset($button) ? esc_attr($button) : __( 'Update', 'formidable' ); ?>" class="frm_submit_form frm_submit_<?php echo ( isset($values['ajax_load']) && $values['ajax_load'] ) ? '' : 'no_'; ?>ajax button-primary button-large" id="frm_submit_side_top" />
     	    <?php } ?>
 		</div>
 

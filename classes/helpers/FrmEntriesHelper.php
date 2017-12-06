@@ -6,7 +6,11 @@ if ( ! defined('ABSPATH') ) {
 class FrmEntriesHelper {
 
     public static function setup_new_vars( $fields, $form = '', $reset = false, $args = array() ) {
-		$values = array( 'name' => '', 'description' => '', 'item_key' => '' );
+		$values = array(
+			'name'        => '',
+			'description' => '',
+			'item_key'    => '',
+		);
 
         $values['fields'] = array();
         if ( empty($fields) ) {
@@ -262,12 +266,18 @@ class FrmEntriesHelper {
      */
 	public static function display_value( $value, $field, $atts = array() ) {
 
-        $defaults = array(
-            'type' => '', 'html' => false, 'show_filename' => true,
-            'truncate' => false, 'sep' => ', ', 'post_id' => 0,
-            'form_id' => $field->form_id, 'field' => $field, 'keepjs' => 0,
+		$defaults = array(
+			'type'     => '',
+			'html'     => false,
+			'show_filename' => true,
+			'truncate' => false,
+			'sep'      => ', ',
+			'post_id'  => 0,
+			'form_id'  => $field->form_id,
+			'field'    => $field,
+			'keepjs'   => 0,
 			'return_array' => false,
-        );
+		);
 
         $atts = wp_parse_args( $atts, $defaults );
         $atts = apply_filters('frm_display_value_atts', $atts, $field, $value);
