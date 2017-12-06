@@ -28,8 +28,24 @@ class FrmUnitTest extends WP_UnitTestCase {
 			delete_option('frm_db_version');
 		}
 
-		// Some of the tests for FrmDb are triggering a transaction commit, preventing further tests from working.
-		// This is a temporary workaround until we review FrmDb tests in detail.
+		$this->empty_tables();
+
+		$this->is_pro_active = FrmAppHelper::pro_is_installed();
+
+		$this->factory->form = new Form_Factory( $this );
+		$this->factory->field = new Field_Factory( $this );
+		$this->factory->entry = new Entry_Factory( $this );
+
+		$this->frm_install();
+
+		$this->create_users();
+	}
+
+	/**
+	 * Some of the tests for FrmDb are triggering a transaction commit, preventing further tests from working.
+	 * This is a temporary workaround until we review FrmDb tests in detail.
+	 */
+	private function empty_tables() {
 		global $wpdb;
 		if ( $wpdb->get_var( "SHOW TABLES LIKE '{$wpdb->prefix}frm_fields'" ) ) {
 			$wpdb->query( "TRUNCATE {$wpdb->prefix}frm_fields" );
@@ -46,21 +62,6 @@ class FrmUnitTest extends WP_UnitTestCase {
 		if ( $wpdb->get_var( "SHOW TABLES LIKE '{$wpdb->prefix}frm_items'" ) ) {
 			$wpdb->query( "TRUNCATE {$wpdb->prefix}frm_items" );
 		}
-
-		$this->is_pro_active = FrmAppHelper::pro_is_installed();
-
-		$this->factory->form = new Form_Factory( $this );
-		$this->factory->field = new Field_Factory( $this );
-		$this->factory->entry = new Entry_Factory( $this );
-
-		$this->frm_install();
-
-		$current_class_name = get_class( $this );
-		if ( strpos( $current_class_name, 'FrmPro' ) && ! $this->is_pro_active ) {
-			$this->markTestSkipped( 'Pro is not active' );
-		}
-
-		$this->create_users();
 	}
 
 	/**

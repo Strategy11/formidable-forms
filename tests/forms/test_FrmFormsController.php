@@ -124,13 +124,6 @@ class WP_Test_FrmFormsController extends FrmUnitTest {
 			$posted_val = $_POST['item_meta'][ $field->id ];
 			$actual_val = $field->default_value;
 			$this->assertEquals( $posted_val, $actual_val, 'The default value was not updated correctly for field ' . $field->field_key . '.' );
-
-			if ( $this->is_pro_active ) {
-				// Check calculations
-				$posted_val = $_POST['field_options'][ 'use_calc_' . $field->id ];
-				$actual_val = $field->field_options['use_calc'];
-				$this->assertEquals( $posted_val, $actual_val, 'The calculation was not updated correctly for field ' . $field->field_key . '.' );
-			}
 		}
 	}
 

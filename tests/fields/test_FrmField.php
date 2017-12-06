@@ -46,25 +46,11 @@ class WP_Test_FrmField extends FrmUnitTest {
 			),
 		);
 
-		if ( $this->is_pro_active ) {
-			$forms['repeat_and_embed'] = array(
-				'form_key' => $this->all_fields_form_key,
-				'count' => $this->all_field_types_count,
-			);
-
-			$forms['repeat'] = array(
-				'form_key' => $this->all_fields_form_key,
-				'count' => $this->all_field_types_count - $this->contact_form_field_count,
-			);
-		}
-
 		foreach ( $forms as $test => $args ) {
 			$form_id = FrmForm::get_id_by_key( $args['form_key'] );
 
 			if ( $test == 'no_repeat_or_embed' ) {
 				$fields = FrmField::get_all_for_form( $form_id, '', 'exclude', 'exclude' );
-			} else if ( $test == 'repeat_and_embed' ) {
-				$fields = FrmField::get_all_for_form( $form_id, '', 'include', 'include' );
 			} else {
 				$fields = FrmField::get_all_for_form( $form_id );
 			}

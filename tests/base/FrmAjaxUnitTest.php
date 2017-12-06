@@ -7,7 +7,6 @@ class FrmAjaxUnitTest extends WP_Ajax_UnitTestCase {
 
 	protected $field_id = 0;
 	protected $user_id = 0;
-	protected $is_pro_active = false;
 	protected $contact_form_key = 'contact-with-email';
 
 	function setUp() {
@@ -22,12 +21,6 @@ class FrmAjaxUnitTest extends WP_Ajax_UnitTestCase {
 		$this->factory->form = new Form_Factory( $this );
 		$this->factory->field = new Field_Factory( $this );
 		$this->factory->entry = new Entry_Factory( $this );
-
-		$this->is_pro_active = FrmAppHelper::pro_is_installed();
-		$current_class_name = get_class( $this );
-		if ( strpos( $current_class_name, 'FrmPro' ) && ! $this->is_pro_active ) {
-			$this->markTestSkipped( 'Pro is not active' );
-		}
 	}
 
     function import_xml() {
@@ -38,11 +31,9 @@ class FrmAjaxUnitTest extends WP_Ajax_UnitTestCase {
         $form = FrmForm::getOne( 'contact-db12' );
         $this->assertEquals( $form->form_key, 'contact-db12' );
 
-		if ( $this->is_pro_active ) {
-			$entry = FrmEntry::getOne( 'utah_entry' );
-			$this->assertNotEmpty( $entry );
-			$this->assertEquals( $entry->item_key, 'utah_entry' );
-		}
+		$entry = FrmEntry::getOne( 'utah_entry' );
+		$this->assertNotEmpty( $entry );
+		$this->assertEquals( $entry->item_key, 'utah_entry' );
     }
 
     function set_as_user_role( $role ) {
