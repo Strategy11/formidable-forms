@@ -15,6 +15,7 @@ class FrmAddon {
 	public $version;
 	public $author = 'Strategy11';
 	private $license;
+	protected $get_beta = false;
 
 	public function __construct() {
 
@@ -65,6 +66,7 @@ class FrmAddon {
 				'version' => $this->version,
 				'license' => $license,
 				'author'  => $this->author,
+				'beta'    => $this->get_beta,
 			);
 			if ( is_numeric( $this->download_id ) ) {
 				$api_data['item_id'] = $this->download_id;
@@ -196,7 +198,7 @@ class FrmAddon {
 	 * @since 2.05.05
 	 */
 	private function version_cache_key() {
-		return 'edd_plugin_' . md5( sanitize_key( $this->license . $this->version ) . '_get_version' );
+		return 'edd_plugin_' . md5( sanitize_key( $this->license . $this->version ) . '_' . $this->get_beta . '_get_version' );
 	}
 
 	/**

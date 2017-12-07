@@ -22,6 +22,7 @@ class FrmEDD_SL_Plugin_Updater {
 	private $slug        = '';
 	private $version     = '';
 	private $wp_override = false;
+	private $beta        = false;
 
 	/**
 	 * Class constructor.
@@ -42,6 +43,7 @@ class FrmEDD_SL_Plugin_Updater {
 		$this->slug        = basename( $_plugin_file, '.php' );
 		$this->version     = $_api_data['version'];
 		$this->wp_override = isset( $_api_data['wp_override'] ) ? (bool) $_api_data['wp_override'] : false;
+		$this->beta        = ! empty( $this->api_data['beta'] );
 
 		$frm_edd_plugin_data[ $this->slug ] = $this->api_data;
 
@@ -87,7 +89,10 @@ class FrmEDD_SL_Plugin_Updater {
 			return $_transient_data;
 		}
 
-		$version_info = $this->api_request( 'plugin_latest_version', array( 'slug' => $this->slug ) );
+		$version_info = $this->api_request( 'plugin_latest_version', array(
+			'slug' => $this->slug,
+			'beta' => $this->beta,
+		) );
 
 		if ( false !== $version_info && is_object( $version_info ) && isset( $version_info->new_version ) ) {
 
@@ -191,6 +196,8 @@ class FrmEDD_SL_Plugin_Updater {
 			return false; // Don't allow a plugin to ping itself
 		}
 
+		$beta = ! empty( $data['beta'] );
+
 		$api_params = array(
 			'edd_action' => 'get_version',
 			'license'    => ! empty( $data['license'] ) ? $data['license'] : '',
@@ -199,9 +206,10 @@ class FrmEDD_SL_Plugin_Updater {
 			'slug'       => $data['slug'],
 			'author'     => $data['author'],
 			'url'        => home_url(),
+			'beta'       => $beta,
 		);
 
-		$cache_key = 'edd_plugin_' . md5( sanitize_key( $api_params['license'] . $this->version ) . '_' . $api_params['edd_action'] );
+		$cache_key = 'edd_plugin_' . md5( sanitize_key( $api_params['license'] . $this->version ) . '_' . $beta . '_' . $api_params['edd_action'] );
 		$cached_response = get_transient( $cache_key );
 		if ( $cached_response !== false ) {
 			// if this has been checked within 24 hours, don't check again
@@ -253,7 +261,8 @@ class FrmEDD_SL_Plugin_Updater {
 		}
 
 		$data         = $frm_edd_plugin_data[ $_REQUEST['slug'] ];
-		$cache_key    = md5( 'edd_plugin_' . sanitize_key( $_REQUEST['plugin'] ) . '_version_info' );
+		$beta         = ! empty( $data['beta'] );
+		$cache_key    = md5( 'edd_plugin_' . sanitize_key( $_REQUEST['plugin'] ) . '_' . $beta . '_version_info' );
 		$version_info = get_transient( $cache_key );
 
 		if ( false === $version_info ) {
@@ -265,6 +274,7 @@ class FrmEDD_SL_Plugin_Updater {
 				'slug'       => $_REQUEST['slug'],
 				'author'     => $data['author'],
 				'url'        => home_url(),
+				'beta'       => $beta,
 			);
 
 			$request = wp_remote_post( $this->api_url, array(
