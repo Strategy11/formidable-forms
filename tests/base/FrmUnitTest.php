@@ -28,20 +28,40 @@ class FrmUnitTest extends WP_UnitTestCase {
 			delete_option('frm_db_version');
 		}
 
-		$this->is_pro_active = FrmAppHelper::pro_is_installed();
+		$this->empty_tables();
 
-		$this->frm_install();
+		$this->is_pro_active = get_site_option( 'frmpro-authorized' );
 
 		$this->factory->form = new Form_Factory( $this );
 		$this->factory->field = new Field_Factory( $this );
 		$this->factory->entry = new Entry_Factory( $this );
 
-		$current_class_name = get_class( $this );
-		if ( strpos( $current_class_name, 'FrmPro' ) && ! $this->is_pro_active ) {
-			$this->markTestSkipped( 'Pro is not active' );
-		}
+		$this->frm_install();
 
 		$this->create_users();
+	}
+
+	/**
+	 * Some of the tests for FrmDb are triggering a transaction commit, preventing further tests from working.
+	 * This is a temporary workaround until we review FrmDb tests in detail.
+	 */
+	private function empty_tables() {
+		global $wpdb;
+		if ( $wpdb->get_var( "SHOW TABLES LIKE '{$wpdb->prefix}frm_fields'" ) ) {
+			$wpdb->query( "TRUNCATE {$wpdb->prefix}frm_fields" );
+		}
+
+		if ( $wpdb->get_var( "SHOW TABLES LIKE '{$wpdb->prefix}frm_forms'" ) ) {
+			$wpdb->query( "TRUNCATE {$wpdb->prefix}frm_forms" );
+		}
+
+		if ( $wpdb->get_var( "SHOW TABLES LIKE '{$wpdb->prefix}frm_item_metas'" ) ) {
+			$wpdb->query( "TRUNCATE {$wpdb->prefix}frm_item_metas" );
+		}
+
+		if ( $wpdb->get_var( "SHOW TABLES LIKE '{$wpdb->prefix}frm_items'" ) ) {
+			$wpdb->query( "TRUNCATE {$wpdb->prefix}frm_items" );
+		}
 	}
 
 	/**
@@ -477,5 +497,29 @@ class FrmUnitTest extends WP_UnitTestCase {
 		$subscriber = $this->factory->user->create_object( $subscriber_args );
 		$this->assertNotEmpty( $subscriber );
 
+	}
+
+	protected function run_private_method( $method, $args ) {
+		$this->check_php_version( '5.3' );
+		$m = new ReflectionMethod( $method[0], $method[1] );
+		$m->setAccessible( true );
+		return $m->invokeArgs( is_string( $method[0] ) ? null : $method[0], $args );
+	}
+
+	/**
+	* Skip this if running < php 5.3
+	*/
+	protected function get_private_property( $object, $property ) {
+		$this->check_php_version( '5.3' );
+		$rc = new ReflectionClass( $object );
+		$p = $rc->getProperty( $property );
+		$p->setAccessible( true );
+		return $p->getValue( $object );
+	}
+
+	protected function check_php_version( $required ) {
+		if ( version_compare( phpversion(), $required, '<' ) ) {
+			$this->markTestSkipped( 'Test requires PHP > ' . $required );
+		}
 	}
 }
