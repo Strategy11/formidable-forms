@@ -168,7 +168,6 @@ class FrmEDD_SL_Plugin_Updater {
 			if ( false !== $api_response ) {
 				$_data = $api_response;
 			}
-
 		} else {
 			$_data = $edd_api_request_transient;
 		}
@@ -275,7 +274,7 @@ class FrmEDD_SL_Plugin_Updater {
 		}
 
 		if ( ! empty( $request->sections ) ) {
-			foreach( $request->sections as $key => $section ) {
+			foreach ( $request->sections as $key => $section ) {
 				$request->$key = (array) $section;
 			}
 		}
@@ -331,7 +330,7 @@ class FrmEDD_SL_Plugin_Updater {
 			}
 
 			if ( ! empty( $version_info ) ) {
-				foreach( $version_info->sections as $key => $section ) {
+				foreach ( $version_info->sections as $key => $section ) {
 					$version_info->$key = (array) $section;
 				}
 			}
@@ -361,7 +360,7 @@ class FrmEDD_SL_Plugin_Updater {
 	public function set_version_info_cache( $value = '', $cache_key = '' ) {
 		$data = array(
 			'timeout' => strtotime( '+24 hours', current_time( 'timestamp' ) ),
-			'value'   => json_encode( $value )
+			'value'   => json_encode( $value ),
 		);
 
 		update_option( $cache_key, $data );
