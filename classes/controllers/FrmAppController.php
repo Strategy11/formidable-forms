@@ -342,6 +342,16 @@ class FrmAppController {
 	}
 
 	/**
+	 * @since 3.0
+	 */
+	public static function create_rest_routes() {
+		register_rest_route( '/frm-admin/v1/', '/install', array(
+			'methods'  => 'GET',
+			'callback' => 'FrmAppController::api_install',
+		) );
+	}
+
+	/**
 	 * Run silent upgrade on each site in the network during a network upgrade.
 	 * Update database settings for all sites in a network during network upgrade process.
 	 *
@@ -350,20 +360,36 @@ class FrmAppController {
 	 * @param int $blog_id Blog ID.
 	 */
 	public static function network_upgrade_site( $blog_id = 0 ) {
+
+		$request = new WP_REST_Request( 'GET', '/frm-admin/v1/install' );
+
 		if ( $blog_id ) {
 			switch_to_blog( $blog_id );
-			$upgrade_url = admin_url( 'admin-ajax.php' );
+			$response = rest_do_request( $request );
 			restore_current_blog();
 		} else {
-			$upgrade_url = admin_url( 'admin-ajax.php' );
+			$response = rest_do_request( $request );
 		}
 
-		$upgrade_url = add_query_arg( array( 'action' => 'frm_silent_upgrade' ), $upgrade_url );
-		$r = wp_remote_get( esc_url_raw( $upgrade_url ) );
-		if ( is_wp_error( $r ) || ! is_array( $r ) || ! empty( $r['body'] ) ) {
+		if ( $response->is_error() ) {
 			// if the remove post fails, use javascript instead
 			add_action( 'admin_notices', 'FrmAppController::install_js_fallback' );
 		}
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	public static function api_install() {
+		if ( self::needs_update() ) {
+			$running = get_option( 'frm_install_running' );
+			if ( false === $running ) {
+				update_option( 'frm_install_running', true );
+				self::install();
+				delete_option( 'frm_install_running' );
+			}
+		}
+		return true;
 	}
 
 	/**
@@ -373,9 +399,7 @@ class FrmAppController {
 	 * @since 2.0.1
 	 */
 	public static function ajax_install() {
-		if ( self::needs_update() ) {
-			self::install();
-		}
+		self::api_install();
 		wp_die();
 	}
 

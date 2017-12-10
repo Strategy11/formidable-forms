@@ -45,6 +45,7 @@ class FrmHooksController {
     }
 
 	public static function load_hooks() {
+		add_action( 'rest_api_init', 'FrmAppController::create_rest_routes', 0 );
         add_action( 'plugins_loaded', 'FrmAppController::load_lang' );
 		add_filter( 'widget_text', 'do_shortcode' );
 
@@ -128,8 +129,6 @@ class FrmHooksController {
     }
 
 	public static function load_ajax_hooks() {
-		add_action( 'wp_ajax_frm_silent_upgrade', 'FrmAppController::ajax_install' );
-		add_action( 'wp_ajax_nopriv_frm_silent_upgrade', 'FrmAppController::ajax_install' );
 		add_action( 'wp_ajax_frm_install', 'FrmAppController::ajax_install' );
         add_action( 'wp_ajax_frm_uninstall', 'FrmAppController::uninstall' );
         add_action( 'wp_ajax_frm_deauthorize', 'FrmAppController::deauthorize' );

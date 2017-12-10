@@ -67,9 +67,29 @@ class WP_Test_FrmAppController extends FrmUnitTest {
 	}
 
 	/**
+	 * @covers FrmAppController::needs_update
+	 */
+	public function test_needs_update() {
+		update_option( 'frm_db_version', 1 );
+		$needs_update = FrmAppController::needs_update();
+		$this->assertTrue( $needs_update, 'The DB needs update but is skipping it' );
+	}
+
+	/**
 	 * @covers FrmAppController::install
 	 */
 	public function test_install() {
 		$this->frm_install();
+	}
+
+	/**
+	 * @covers FrmAppController::api_install
+	 */
+	public function test_api_install() {
+		$current_db = FrmAppHelper::$db_version;
+		update_option( 'frm_db_version', absint( $current_db ) - 1 );
+		FrmAppController::admin_init();
+		$new_db = get_option( 'frm_db_version' );
+		$this->assertSame( $new_db, $current_db, 'The DB did not update correctly' );
 	}
 }

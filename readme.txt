@@ -1,7 +1,7 @@
 === Formidable Forms - Form Builder for WordPress ===
 Contributors: formidableforms, sswells, srwells, jamie.wahlin
 Tags: contact form, form builder, custom form, forms, form, form maker, form creator
-Requires at least: 4.0
+Requires at least: 4.4
 Tested up to: 4.9
 Requires PHP: 5.3
 Stable tag: 2.05.07
