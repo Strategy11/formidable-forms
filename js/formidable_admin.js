@@ -2507,7 +2507,7 @@ function frmAdminBuildJS(){
 			jQuery('.frm_authorize_link').click(authorize);
 
 			// prevent annoying confirmation message from WordPress
-			jQuery('button').on('click', removeWPUnload);
+			jQuery('button, input[type=submit]').on('click', removeWPUnload);
 		},
 		
 		buildInit: function(){			
