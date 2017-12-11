@@ -60,7 +60,8 @@
 				$tooltip .= __( ' Upgrade to Formidable Pro to get access to all options in the dropdown.', 'formidable' );
 			}
 			?>
-			<h3 class="frm_first_h3"><?php esc_html_e( 'On Submit', 'formidable' ); ?>>
+			<h3 class="frm_first_h3">
+				<?php esc_html_e( 'On Submit', 'formidable' ); ?>
 				<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php echo esc_attr( $tooltip ) ?>"></span>
             </h3>
 

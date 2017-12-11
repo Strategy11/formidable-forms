@@ -3,7 +3,7 @@
 $settings = FrmStylesHelper::get_settings_for_output( $style );
 extract( $settings );
 
-$important = empty($important_style) ? '' : ' !important';
+$important = empty( $important_style ) ? '' : ' !important';
 $label_margin = (int) $width + 10;
 
 $minus_icons = FrmStylesHelper::minus_icons();
@@ -965,11 +965,11 @@ if ( ! empty( $important ) ) {
 
 .<?php echo esc_html( $style_class ) ?> .chosen-container-single .chosen-single div{
 <?php
-    // calculate the top position based on field padding
-    $top_pad = explode(' ', $field_pad);
-    $top_pad = reset($top_pad); // the top padding is listed first
-    $pad_unit = preg_replace('/[0-9]+/', '', $top_pad); //px, em, rem...
-    $top_margin = (int) str_replace($pad_unit, '', $top_pad) / 2;
+// calculate the top position based on field padding
+$top_pad = explode( ' ', $field_pad );
+$top_pad = reset( $top_pad ); // the top padding is listed first
+$pad_unit = preg_replace( '/[0-9]+/', '', $top_pad ); //px, em, rem...
+$top_margin = (int) str_replace( $pad_unit, '', $top_pad ) / 2;
 ?>
     top:<?php echo esc_html( $top_margin . $pad_unit . $important ) ?>;
 }

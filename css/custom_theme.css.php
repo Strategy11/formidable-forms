@@ -1,19 +1,19 @@
 <?php
-if ( ! isset($saving) ) {
-    header( 'Content-type: text/css' );
+if ( ! isset( $saving ) ) {
+	header( 'Content-type: text/css' );
 
-    if ( isset($css) && $css ) {
-        echo $css;
-        die();
-    }
+	if ( isset( $css ) && $css ) {
+		echo $css;
+		die();
+	}
 }
 
-if ( ! isset($frm_style) ) {
+if ( ! isset( $frm_style ) ) {
     $frm_style = new FrmStyle();
 }
 
 $styles = $frm_style->get_all();
-$default_style = $frm_style->get_default_style($styles);
+$default_style = $frm_style->get_default_style( $styles );
 $defaults = FrmStylesHelper::get_settings_for_output( $default_style );
 
 ?>
@@ -282,7 +282,7 @@ legend.frm_hidden{
 <?php
 foreach ( $styles as $style ) {
 	include( dirname( __FILE__ ) . '/_single_theme.css.php' );
-    unset($style);
+	unset( $style );
 }
 ?>
 
@@ -526,7 +526,7 @@ select.frm_loading_lookup{
     color: transparent !important;
 }
 
-<?php include( dirname(__FILE__) . '/frm_grids.css' ); ?>
+<?php include( dirname( __FILE__ ) . '/frm_grids.css' ); ?>
 
 /* Left and right label styling for non-Formidable styling - very basic, not responsive */
 .frm_form_field.frm_left_container label.frm_primary_label{
