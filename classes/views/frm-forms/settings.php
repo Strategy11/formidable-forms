@@ -86,7 +86,7 @@
 
 			<h3 class="<?php echo esc_attr( $first_h3 ) ?>">
 				<?php esc_html_e( 'On Submit', 'formidable' ); ?>
-				<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Choose what will happen after the user submits this form.', 'formidable' ); ?>" ></span>
+				<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Choose what will happen after the user submits this form.', 'formidable' ); ?>"></span>
             </h3>
 
             <!--On Submit Section-->

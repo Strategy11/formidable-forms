@@ -3,7 +3,7 @@
 $settings = FrmStylesHelper::get_settings_for_output( $style );
 extract( $settings );
 
-$important = empty($important_style) ? '' : ' !important';
+$important = empty( $important_style ) ? '' : ' !important';
 $label_margin = (int) $width + 10;
 
 $minus_icons = FrmStylesHelper::minus_icons();

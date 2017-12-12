@@ -118,6 +118,30 @@ function frmAdminBuildJS(){
 		fields.style.top = desiredOffset + 'px';
 	}
 
+	function loadTooltips() {
+		var tooltipOpts = {
+			template:'<div class="frm_tooltip tooltip"><div class="tooltip-inner"></div></div>',
+			placement:'bottom',
+			container:'body'
+		};
+
+		var wrapClass = jQuery('.wrap, .frm_wrap');
+		wrapClass.on('click', '.widget-top,a.widget-action', clickWidget);
+
+		wrapClass.on('mouseenter.frm', '.frm_help', function(){
+			jQuery(this).off('mouseenter.frm');
+			jQuery('.frm_help').tooltip(tooltipOpts);
+			jQuery(this).tooltip('show');
+		});
+		jQuery('.frm_help').tooltip(tooltipOpts);
+		wrapClass.on('mouseenter.frm', '.frm_bstooltip', function(){
+			jQuery(this).off('mouseenter.frm');
+			jQuery('.frm_bstooltip').tooltip();
+			jQuery(this).tooltip('show');
+		});
+		jQuery('.frm_bstooltip').tooltip();
+	}
+
 	function removeThisTag(){
 		/*jshint validthis:true */
 		var deleteButton = jQuery(this);
@@ -2647,25 +2671,7 @@ function frmAdminBuildJS(){
 				frmAdminBuild.panelInit();
 			}
 
-			var wrapClass = jQuery('.wrap, .frm_wrap');
-			wrapClass.on('click', '.widget-top,a.widget-action', clickWidget);
-
-			wrapClass.on('mouseenter.frm', '.frm_help', function(){
-				jQuery(this).off('mouseenter.frm');
-				jQuery('.frm_help').tooltip({
-					template:'<div class="frm_tooltip tooltip"><div class="tooltip-inner"></div></div>',placement:'bottom'
-				});
-				jQuery(this).tooltip('show');
-			});
-			jQuery('.frm_help').tooltip({
-				template:'<div class="frm_tooltip tooltip"><div class="tooltip-inner"></div></div>',placement:'bottom'
-			});
-			wrapClass.on('mouseenter.frm', '.frm_bstooltip', function(){
-				jQuery(this).off('mouseenter.frm');
-				jQuery('.frm_bstooltip').tooltip();
-				jQuery(this).tooltip('show');
-			});
-			jQuery('.frm_bstooltip').tooltip();
+			loadTooltips();
 
 			jQuery(document).on('click', 'a[data-frmverify]', confirmClick);
 
@@ -2711,7 +2717,7 @@ function frmAdminBuildJS(){
 			jQuery('.frm_authorize_link').click(authorize);
 
 			// prevent annoying confirmation message from WordPress
-			jQuery('button').on('click', removeWPUnload);
+			jQuery('button, input[type=submit]').on('click', removeWPUnload);
 		},
 		
 		buildInit: function(){
