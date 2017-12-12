@@ -51,7 +51,28 @@ function frmAdminBuildJS(){
 		//if (desiredOffset != parseInt(header.style.top)) 
 			fields.attr('style', 'top:'+desiredOffset + 'px;');
 	}
-	
+
+	function loadTooltips() {
+		var tooltipOpts = {
+			template:'<div class="frm_tooltip tooltip"><div class="tooltip-inner"></div></div>',
+			placement:'bottom',
+			container:'body'
+		};
+		jQuery('.wrap').on('mouseenter.frm', '.frm_help', function(){
+			jQuery(this).off('mouseenter.frm');
+			jQuery('.frm_help').tooltip(tooltipOpts);
+			jQuery(this).tooltip('show');
+		});
+		jQuery('.frm_help').tooltip(tooltipOpts);
+
+		jQuery('.wrap').on('mouseenter.frm', '.frm_bstooltip', function(){
+			jQuery(this).off('mouseenter.frm');
+			jQuery('.frm_bstooltip').tooltip();
+			jQuery(this).tooltip('show');
+		});
+		jQuery('.frm_bstooltip').tooltip();
+	}
+
 	function removeThisTag(){
 		var deleteButton = jQuery(this);
 		var id=deleteButton.data('removeid');
@@ -2445,23 +2466,8 @@ function frmAdminBuildJS(){
 				// only load on the form and view settings pages
 				frmAdminBuild.panelInit();
 			}
-			
-			jQuery('.wrap').on('mouseenter.frm', '.frm_help', function(){
-				jQuery(this).off('mouseenter.frm');
-				jQuery('.frm_help').tooltip({
-					template:'<div class="frm_tooltip tooltip"><div class="tooltip-inner"></div></div>',placement:'bottom'
-				});
-				jQuery(this).tooltip('show');
-			});
-			jQuery('.frm_help').tooltip({
-				template:'<div class="frm_tooltip tooltip"><div class="tooltip-inner"></div></div>',placement:'bottom'
-			});
-			jQuery('.wrap').on('mouseenter.frm', '.frm_bstooltip', function(){
-				jQuery(this).off('mouseenter.frm');
-				jQuery('.frm_bstooltip').tooltip();
-				jQuery(this).tooltip('show');
-			});
-			jQuery('.frm_bstooltip').tooltip();
+
+			loadTooltips();
 
             jQuery(document.getElementById('wpbody')).on('click', '.frm_remove_tag, .frm_remove_form_action', removeThisTag);
 
