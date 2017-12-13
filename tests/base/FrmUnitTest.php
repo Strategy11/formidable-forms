@@ -303,10 +303,39 @@ class FrmUnitTest extends WP_UnitTestCase {
 		$GLOBALS['hook_suffix'] = $hook['path'];
 		set_current_screen();
 
+		$this->set_get_params( $page );
+
 		$this->assertTrue( $current_screen->in_admin(), 'Failed to switch to the back-end' );
+		$this->assertTrue( is_admin(), 'Failed to switch to the back-end' );
 		$this->assertEquals( $screen->base, $current_screen->base, $page );
 
 		FrmHooksController::trigger_load_hook();
+	}
+
+	/**
+	 * Set the admin page parameters for the later code to use
+	 * @since 3.0
+	 */
+	protected function set_get_params( $url ) {
+		if ( strpos( $url, '?' ) === false ) {
+			return;
+		}
+
+		list( $base, $url_params ) = explode( '?', $url );
+
+		global $pagenow;
+		$pagenow = $base;
+		$_GET['pagenow']  = $base;
+		$_POST['pagenow'] = $base;
+
+		if ( ! empty( $url_params ) ) {
+			$url_params = explode( '&', $url_params );
+			foreach ( $url_params as $param ) {
+				list( $name, $value ) = explode( '=', $param );
+				$_GET[ $name ] = $value;
+				$_REQUEST[ $name ] = $value;
+			}
+		}
 	}
 
 	function clean_up_global_scope() {

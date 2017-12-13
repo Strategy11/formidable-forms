@@ -51,6 +51,23 @@ class WP_Test_FrmAppController extends FrmUnitTest {
 	}
 
 	/**
+	 * @covers FrmAppController::add_admin_class
+	 */
+	public function test_add_admin_class() {
+		$this->set_admin_screen();
+		$class = 'other-class';
+		$filtered_class = apply_filters( 'admin_body_class', $class );
+		$this->assertTrue( strpos( $filtered_class, $class ) !== false, '"' . $class . '" is missing from admin classes' );
+		$this->assertFalse( strpos( $filtered_class, 'frm-white-body' ), '"frm-white-body" was added to admin classes' );
+
+		$this->set_admin_screen( 'admin.php?page=formidable' );
+		$class = 'other-class';
+		$filtered_class = apply_filters( 'admin_body_class', $class );
+		$this->assertTrue( strpos( $filtered_class, $class ) !== false, '"' . $class . '" is missing from admin classes' );
+		$this->assertTrue( strpos( $filtered_class, ' frm-white-body' ) !== false, '"frm-white-body" is missing from admin classes' );
+	}
+
+	/**
 	 * @covers FrmAppController::load_wp_admin_style
 	 */
 	public function test_load_wp_admin_style() {
