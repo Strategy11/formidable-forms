@@ -18,10 +18,10 @@ class FrmFormsController {
 			return;
 		}
 
-		add_filter('get_user_option_managetoplevel_page_formidablecolumnshidden', 'FrmFormsController::hidden_columns' );
+		add_filter( 'get_user_option_managetoplevel_page_formidablecolumnshidden', 'FrmFormsController::hidden_columns' );
 
-		add_filter('manage_toplevel_page_formidable_columns', 'FrmFormsController::get_columns', 0 );
-		add_filter('manage_toplevel_page_formidable_sortable_columns', 'FrmFormsController::get_sortable_columns' );
+		add_filter( 'manage_toplevel_page_formidable_columns', 'FrmFormsController::get_columns', 0 );
+		add_filter( 'manage_toplevel_page_formidable_sortable_columns', 'FrmFormsController::get_sortable_columns' );
 	}
 
     public static function head() {
@@ -238,7 +238,7 @@ class FrmFormsController {
 			FrmForm::destroy( $current_form );
 		}
 
-		echo esc_url_raw( admin_url( 'admin.php?page=formidable&action=duplicate&id=' . $template_id ) );
+		echo esc_url_raw( admin_url( 'admin.php?page=formidable&frm_action=duplicate&id=' . absint( $template_id ) ) );
 		wp_die();
 	}
 
