@@ -265,7 +265,7 @@ class FrmCSVExportHelper {
 			}
 
 			$val = self::encode_value( $row );
-			if ( 'return' === self::$line_break ) {
+			if ( 'return' !== self::$line_break ) {
 				$val = str_replace( array( "\r\n", "\r", "\n" ), self::$line_break, $val );
 			}
 

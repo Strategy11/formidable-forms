@@ -243,7 +243,7 @@ class FrmXMLController {
 						$form_data = FrmForm::getOne( $form_id );
 						// For forms that have not been updated while running 2.0, check if custom_style is set
 						if ( isset( $form_data->options['custom_style'] ) ) {
-							if ( 1 === $form_data->options['custom_style'] ) {
+							if ( 1 === absint( $form_data->options['custom_style'] ) ) {
 								$style_ids[] = $default_style->ID;
 							} else {
 								$style_ids[] = $form_data->options['custom_style'];
