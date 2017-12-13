@@ -28,7 +28,7 @@ class FrmAppController {
 	 */
 	public static function add_admin_class( $classes ) {
 		if ( self::is_white_page() ) {
-			$classes = ' frm-white-body';
+			$classes .= ' frm-white-body';
 		}
 		return $classes;
 	}
