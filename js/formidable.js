@@ -2667,7 +2667,7 @@ function frmFrontFormJS(){
 		var keys = calc.total;
 		var len = keys.length;
 		var vals = [];
-		var pages = getStartEndPage( all_calcs.calc[ keys[0] ].form_id );
+		var pages = getStartEndPage( all_calcs.calc[ keys[0] ] );
 
 		// loop through each calculation this field is used in
 		for ( var i = 0, l = len; i < l; i++ ) {
@@ -2683,8 +2683,24 @@ function frmFrontFormJS(){
 	 * @param formId
 	 * @since 2.05.06
 	 */
-	function getStartEndPage( formId ) {
-		var hasPreviousPage = document.getElementById('frm_form_'+ formId +'_container').getElementsByClassName('frm_next_page');
+	function getStartEndPage( thisField ) {
+		var formId = thisField.form_id;
+		var formContainer = document.getElementById('frm_form_'+ formId +'_container');
+
+		if ( formContainer === null && thisField.in_section ) {
+			var fieldContainer = document.getElementById('frm_field_'+ thisField.in_section +'_container');
+
+			if ( fieldContainer !== null ) {
+				formContainer = closest( fieldContainer, function(el) {
+					console.log(el.tagName);
+    				return el.tagName === 'FORM';
+				} );
+
+				formId = formContainer.elements.namedItem('form_id').value;
+			}
+		}
+
+		var hasPreviousPage = formContainer.getElementsByClassName('frm_next_page');
 		var hasAnotherPage  = document.getElementById('frm_page_order_'+ formId);
 
 		var pages = [];
@@ -2696,6 +2712,10 @@ function frmFrontFormJS(){
 		}
 
 		return pages;
+	}
+
+	function closest( el, fn ) {
+	    return el && (fn(el) ? el : closest(el.parentNode, fn));
 	}
 
 	/**
