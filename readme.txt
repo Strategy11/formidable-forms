@@ -4,7 +4,7 @@ Tags: contact form, form builder, custom form, forms, form, form maker, form cre
 Requires at least: 4.0
 Tested up to: 4.9
 Requires PHP: 5.3
-Stable tag: 2.05.07
+Stable tag: 2.05.08
 
 The best WordPress form plugin for contact forms, surveys and more. Make forms a breeze with a drag and drop form builder and form style generator.
 
@@ -153,9 +153,20 @@ The field and form names and descriptions are all changed with in-place edit. Ju
 [See more FAQs](https://formidableforms.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 2.05.08 =
+* Fix: Hide extra columns on the Formidable -> Entries page more accurately
+* Fix: Prevent WP confirmation messages from showing when saving a form
+* Fix: Some tooltips were partially covered by the admin menu
+* **Pro Version Forms**
+* Enhancement: When [auto_id start=100] is higher than the last value in the entry, use 100.
+* Enhancement: Remove type="text/javascript" for new HTML5 validation requirements
+* Fix: The Formidable -> Views page didn't look good on small screens
+* Fix: All custom field rows were being removed in post settings when one was removed
+* Fix: Lookup calculations in repeating sections were returning javascript errors
+
 = 2.05.07 =
 * New: Limit the number of field columns in the entry listing page to a max of 11 fields
-* Security Fix: Fix an SQL injection vulnerability on the Form listing page on the backend
+* Security Fix: Fix an SQL injection vulnerability on the Form listing page on the backend. Vulnerability discovered by the static code analysis solution RIPS (www.ripstech.com)
 * **Pro Version Forms**
 * New: Add links to edit views and post entry in the top admin bar
 * Tweak: Show default val/placeholder text icons for any item in an address field and confirmation fields
