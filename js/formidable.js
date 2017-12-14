@@ -4382,7 +4382,11 @@ function frmFrontFormJS(){
 
 	function loadChosen( chosenContainer ) {
 		if ( jQuery().chosen ) {
-			var opts = {allow_single_deselect:true,no_results_text:frm_js.no_results};
+			var opts = {
+				allow_single_deselect:true,
+				no_results_text:frm_js.no_results,
+				search_contains:true
+			};
 			if ( typeof __frmChosen !== 'undefined' ) {
 				opts = '{' + __frmChosen + '}';
 			}
