@@ -4484,8 +4484,8 @@ msgid "1. Name your form"
 msgstr "1. Nommez votre formulaire"
 
 #: ../classes/views/frm-forms/form.php:28
-msgid "2. Click or drag a field to<br/>add it to your form"
-msgstr "2. Cliquez ou faites glisser un champ pour <br/> ajouter à votre formulaire"
+msgid "2. Click or drag a field to add it to your form"
+msgstr "2. Cliquez ou faites glisser un champ pour ajouter à votre formulaire"
 
 #: ../classes/views/frm-forms/form.php:34
 msgid "Add Fields Here"

@@ -1846,6 +1846,7 @@ tr.frm_options_heading td{
 .frm_no_fields .sketch2{
 	margin-right:30px;
 	text-align:right;
+	max-width:200px;
 }
 .frm_no_fields .sketch2 img{
 	width:93px;

@@ -6127,8 +6127,8 @@ msgid "1. Name your form"
 msgstr "1. Navngi skjemaet"
 
 #: ../classes/views/frm-forms/form.php:28
-msgid "2. Click or drag a field to<br/>add it to your form"
-msgstr "2. Klikk eller dra et felt for å<br/>legge det til skjemaet"
+msgid "2. Click or drag a field to add it to your form"
+msgstr "2. Klikk eller dra et felt for å legge det til skjemaet"
 
 #: ../classes/views/frm-forms/form.php:34
 msgid "Add Fields Here"
