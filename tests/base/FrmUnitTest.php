@@ -103,9 +103,12 @@ class FrmUnitTest extends WP_UnitTestCase {
 
 	function do_tables_exist( $should_exist = true ) {
 		global $wpdb;
-		$method = $should_exist ? 'assertNotEmpty' : 'assertEmpty';
+		$method = $should_exist ? 'assertEquals' : 'assertNotEquals';
 		foreach ( $this->get_table_names() as $table_name ) {
-			$this->$method( $wpdb->query( 'DESCRIBE ' . $table_name ), $table_name . ' table failed to (un)install' );
+			$this->assertEquals(
+				$table_name, $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $table_name ) ) ),
+				$table_name . ' table failed to (un)install'
+			);
 		}
 	}
 
