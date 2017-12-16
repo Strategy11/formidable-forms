@@ -105,9 +105,9 @@ class FrmUnitTest extends WP_UnitTestCase {
 		global $wpdb;
 		$method = $should_exist ? 'assertEquals' : 'assertNotEquals';
 		foreach ( $this->get_table_names() as $table_name ) {
-			$this->assertEquals(
+			$this->$method(
 				$table_name, $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $table_name ) ) ),
-				$table_name . ' table failed to (un)install'
+				$table_name . ' table failed to ' . ( $should_exist ? 'install' : 'uninstall' )
 			);
 		}
 	}
