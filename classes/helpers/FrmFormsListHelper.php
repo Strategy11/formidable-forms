@@ -90,14 +90,6 @@ class FrmFormsListHelper extends FrmListHelper {
 	public function no_items() {
 	    if ( 'template' == $this->status ) {
 			esc_html_e( 'No Templates Found.', 'formidable' );
-			?>
-			<br/><br/><?php esc_html_e( 'To add a new template:', 'formidable' ) ?>
-			<ol>
-				<li><?php printf( esc_html__( 'Create a new %1$sform%2$s.', 'formidable' ), '<a href="' . esc_url( admin_url( 'admin?page=formidable&frm_action=new' ) ) . '"', '</a>' ) ?></li>
-				<li><?php printf( esc_html__( 'After your form is created, go to Formidable -> %1$sForms%2$s.', 'formidable' ), '<a href="?page=formidable">', '</a>') ?></li>
-				<li><?php esc_html_e( 'Place your mouse over the name of the form you just created, and click the "Create Template" link.', 'formidable' ) ?></li>
-            </ol>
-<?php
 		} else {
 			esc_html_e( 'No Forms Found.', 'formidable' );
 			?>
@@ -161,7 +153,7 @@ class FrmFormsListHelper extends FrmListHelper {
 		<?php
 		if ( empty( $forms ) ) {
 		?>
-			<li class="frm_dropdown_li"><?php esc_html_e( 'You have not created any forms yet. <br/>You must create a form before you can make a template.', 'formidable' ) ?></li>
+			<li class="frm_dropdown_li"><?php esc_html_e( 'You have not created any forms yet. You must create a form before you can make a template.', 'formidable' ) ?></li>
         <?php
         } else {
             foreach ( $forms as $form ) {

@@ -18,7 +18,7 @@
 	    </div>
 
 	    <div class="alignright sketch2">
-			<?php printf( esc_html__( '2. Click or drag a field to%s add it to your form', 'formidable' ), '<br/>' ) ?>
+			<?php esc_html_e( '2. Click or drag a field to add it to your form', 'formidable' ); ?>
 	        <div class="clear"></div>
 			<img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/sketch_arrow2.png' ); ?>" alt="" />
 	    </div>

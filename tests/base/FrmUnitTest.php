@@ -21,28 +21,32 @@ class FrmUnitTest extends WP_UnitTestCase {
 	function setUp() {
 		parent::setUp();
 
-		global $wp_version;
-		if ( $wp_version <= 4.6 ) {
-			// Prior to WP 4.7, the Formidable tables were deleted on tearDown and not restored with setUp
-			delete_option('frm_options');
-			delete_option('frm_db_version');
-		}
-
-		$this->empty_tables();
-
 		if ( is_multisite() ) {
 			$this->is_pro_active = get_site_option( 'frmpro-authorized' );
 		} else {
 			$this->is_pro_active = get_option( 'frmpro-authorized' );
 		}
 
+		$this->frm_install();
+
 		$this->factory->form = new Form_Factory( $this );
 		$this->factory->field = new Field_Factory( $this );
 		$this->factory->entry = new Entry_Factory( $this );
 
-		$this->frm_install();
-
 		$this->create_users();
+	}
+
+	function tearDown() {
+		parent::tearDown();
+
+		global $wp_version;
+		if ( $wp_version <= 4.6 ) {
+			// Prior to WP 4.7, the Formidable tables were deleted on tearDown and not restored with setUp
+			delete_option( 'frm_options' );
+			delete_option( 'frm_db_version' );
+		}
+
+		$this->empty_tables();
 	}
 
 	/**
@@ -51,20 +55,12 @@ class FrmUnitTest extends WP_UnitTestCase {
 	 */
 	private function empty_tables() {
 		global $wpdb;
-		if ( $wpdb->get_var( "SHOW TABLES LIKE '{$wpdb->prefix}frm_fields'" ) ) {
-			$wpdb->query( "TRUNCATE {$wpdb->prefix}frm_fields" );
-		}
-
-		if ( $wpdb->get_var( "SHOW TABLES LIKE '{$wpdb->prefix}frm_forms'" ) ) {
-			$wpdb->query( "TRUNCATE {$wpdb->prefix}frm_forms" );
-		}
-
-		if ( $wpdb->get_var( "SHOW TABLES LIKE '{$wpdb->prefix}frm_item_metas'" ) ) {
-			$wpdb->query( "TRUNCATE {$wpdb->prefix}frm_item_metas" );
-		}
-
-		if ( $wpdb->get_var( "SHOW TABLES LIKE '{$wpdb->prefix}frm_items'" ) ) {
-			$wpdb->query( "TRUNCATE {$wpdb->prefix}frm_items" );
+		$tables = $this->get_table_names();
+		foreach ( $tables as $table ){
+			$exists = $wpdb->get_var( 'DESCRIBE ' . $table );
+			if ( $exists ) {
+				$wpdb->query( "TRUNCATE $table" );
+			}
 		}
 	}
 
@@ -105,7 +101,8 @@ class FrmUnitTest extends WP_UnitTestCase {
 		global $wpdb;
 		$method = $should_exist ? 'assertNotEmpty' : 'assertEmpty';
 		foreach ( $this->get_table_names() as $table_name ) {
-			$this->$method( $wpdb->query( 'DESCRIBE ' . $table_name ), $table_name . ' table failed to (un)install' );
+			$message = $table_name . ' table failed to ' . ( $should_exist ? 'install' : 'uninstall' );
+			$this->$method( $wpdb->query( 'DESCRIBE ' . $table_name ), $message );
 		}
 	}
 

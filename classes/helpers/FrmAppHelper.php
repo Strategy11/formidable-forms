@@ -413,8 +413,8 @@ class FrmAppHelper {
 		$allowed_html = array();
 		if ( $allowed == 'all' ) {
 			$allowed_html = $html;
-		} else {
-			foreach ( $allowed as $a ) {
+		} elseif ( ! empty( $allowed ) ) {
+			foreach ( (array) $allowed as $a ) {
 				$allowed_html[ $a ] = isset( $html[ $a ] ) ? $html[ $a ] : array();
 			}
 		}
