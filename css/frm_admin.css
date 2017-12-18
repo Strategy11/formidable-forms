@@ -1428,6 +1428,11 @@ li.ui-state-default.edit_field_type_divider .frm-show-hover{
 .frm_sortable_field_opts{
 	margin-top:5px;
 }
+
+.frm_single_option{
+	clear:both;
+}
+
 .frm_single_option .frm_delete_icon{
 	float:left;
 	margin-right:3px;
