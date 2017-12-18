@@ -327,6 +327,11 @@ a.frm_save_draft{
 	display: flex;
 }
 
+.with_frm_style .vertical_radio .frm_checkbox label img,
+.with_frm_style .vertical_radio .frm_radio label img{
+	align-self: center;
+}
+
 .frm_file_container .frm_file_link,
 .with_frm_style .frm_radio label .frm_file_container,
 .with_frm_style .frm_checkbox label .frm_file_container{
