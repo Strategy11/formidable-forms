@@ -440,9 +440,7 @@ class FrmEntriesController {
 		$params = FrmForm::get_admin_params();
 
 		if ( isset( $params['keep_post'] ) && $params['keep_post'] ) {
-            //unlink entry from post
-            global $wpdb;
-			$wpdb->update( $wpdb->prefix . 'frm_items', array( 'post_id' => '' ), array( 'id' => $params['id'] ) );
+			self::unlink_post( $params['id'] );
         }
 
         $message = '';
@@ -579,9 +577,18 @@ class FrmEntriesController {
 
         $form->options = maybe_unserialize( $form->options );
         if ( isset( $form->options['no_save'] ) && $form->options['no_save'] ) {
+			self::unlink_post( $entry_id );
             FrmEntry::destroy( $entry_id );
         }
     }
+
+	/**
+	 * unlink entry from post
+	 */
+	private static function unlink_post( $entry_id ) {
+		global $wpdb;
+		$wpdb->update( $wpdb->prefix . 'frm_items', array( 'post_id' => '' ), array( 'id' => $entry_id ) );
+	}
 
 	/**
 	 * @param $atts
