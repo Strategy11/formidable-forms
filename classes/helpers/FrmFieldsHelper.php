@@ -130,13 +130,29 @@ class FrmFieldsHelper {
 		}
 
 		foreach ( $defaults as $opt => $default ) {
-			$current_opt = isset( $field->field_options[ $opt ] ) ? $field->field_options[ $opt ] : $default;
-			$values[ $opt ] = ( $check_post && isset( $_POST['field_options'][ $opt . '_' . $field->id ] ) ) ? stripslashes_deep( maybe_unserialize( $_POST['field_options'][ $opt . '_' . $field->id ] ) ) : $current_opt;
+			$values[ $opt ] = isset( $field->field_options[ $opt ] ) ? $field->field_options[ $opt ] : $default;
+
+			if ( $check_post ) {
+				self::get_posted_field_setting( $opt . '_' . $field->id, $values[ $opt ] );
+			}
+
 			$default_fallback = ( $values[ $opt ] == '' && ( ! $check_post || $opt == 'blank' || $opt == 'invalid' ) );
 			if ( $default_fallback ) {
 				$values[ $opt ] = $default;
 			}
 			unset( $opt, $default );
+		}
+	}
+
+	/**
+	 * @since 3.0
+	 *
+	 * @param string $setting
+	 * @param mixed $current
+	 */
+	private static function get_posted_field_setting( $setting, &$value ) {
+		if ( isset( $_POST['field_options'][ $setting ] ) ) {
+			$value = maybe_unserialize( $_POST['field_options'][ $setting ] );
 		}
 	}
 
