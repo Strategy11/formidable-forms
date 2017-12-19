@@ -240,18 +240,23 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	public function test_default_message_with_old_fields_parameter() {
 		$entry = $this->get_test_entry( true );
 
-		$this->set_included_fields( 'object' );
+		$this->set_included_fields( 'id' );
 
 		$atts = array(
-			'id' => $entry->id,
-			'entry' => $entry,
+			'id'         => $entry->id,
+			'entry'      => $entry,
 			'plain_text' => false,
-			'user_info' => false,
-			'fields' => $this->include_fields,
+			'user_info'  => false,
+			'fields'     => implode( ',', $this->include_fields ),
 		);
 
 		$content = $this->get_formatted_content( $atts );
-		$expected_content = $this->expected_html_content( $atts );
+
+		$pass_atts = $atts;
+		$pass_atts['include_fields'] = $atts['fields'];
+		unset( $pass_atts['fields'] );
+
+		$expected_content = $this->expected_html_content( $pass_atts );
 
 		$this->assertSame( $expected_content, $content );
 	}

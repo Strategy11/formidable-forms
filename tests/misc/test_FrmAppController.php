@@ -93,13 +93,6 @@ class WP_Test_FrmAppController extends FrmUnitTest {
 	}
 
 	/**
-	 * @covers FrmAppController::install
-	 */
-	public function test_install() {
-		$this->frm_install();
-	}
-
-	/**
 	 * @covers FrmAppController::api_install
 	 */
 	public function test_api_install() {

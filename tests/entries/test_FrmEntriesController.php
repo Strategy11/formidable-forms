@@ -2,7 +2,6 @@
 
 /**
  * @group entries
- * @group testme
  */
 class WP_Test_FrmEntriesController extends FrmUnitTest {
 

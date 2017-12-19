@@ -97,12 +97,17 @@ class FrmEntryValues {
 
 			if ( isset( $atts['fields'] ) && ! empty( $atts['fields'] ) ) {
 
-				$atts['include_fields'] = '';
-				foreach ( $atts['fields'] as $included_field ) {
-					$atts['include_fields'] .= $included_field->id . ',';
-				}
+				if ( ! is_array( $atts['fields'] ) ) {
+					$atts['include_fields'] = $atts['fields'];
+				} else {
+					$atts['include_fields'] = '';
 
-				$atts['include_fields'] = rtrim( $atts['include_fields'], ',' );
+					foreach ( $atts['fields'] as $included_field ) {
+						$atts['include_fields'] .= $included_field->id . ',';
+					}
+
+					$atts['include_fields'] = rtrim( $atts['include_fields'], ',' );
+				}
 			}
 		}
 
