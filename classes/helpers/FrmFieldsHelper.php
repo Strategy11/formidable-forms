@@ -153,6 +153,10 @@ class FrmFieldsHelper {
 	private static function get_posted_field_setting( $setting, &$value ) {
 		if ( isset( $_POST['field_options'][ $setting ] ) ) {
 			$value = maybe_unserialize( $_POST['field_options'][ $setting ] );
+			if ( strpos( $setting, 'html' ) !== false ) {
+				// strip slashes from HTML but not regex
+				$value = stripslashes_deep( $value );
+			}
 		}
 	}
 
