@@ -17,6 +17,7 @@
 <h3 class="frm_form_title"><?php esc_html_e( 'Form Title', 'formidable' ) ?></h3>
 <div class="frm_description"><p><?php esc_html_e( 'This is an example form description for styling purposes.', 'formidable' ) ?></p></div>
 
+<div class="frm_fields_container">
 <div class="frm_form_field frm_first frm_half form-field <?php echo esc_attr( $pos_class ) ?>">
 <label class="frm_primary_label"><?php esc_html_e( 'Text field', 'formidable' ) ?> <span class="frm_required">*</span></label>
 <input type="text" value="<?php esc_attr_e( 'This is sample text', 'formidable' ) ?>"/>
@@ -74,6 +75,7 @@
 
 <div class="frm_submit">
 <input type="submit" disabled="disabled" class="frm_full_opacity" value="<?php esc_attr_e( 'Submit', 'formidable' ) ?>" />
+</div>
 </div>
 
 </fieldset>

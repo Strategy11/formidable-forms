@@ -801,8 +801,8 @@ BEFORE_HTML;
 			'frm_fifth'      => __( '1/5', 'formidable' ),
 			'frm_two_fifths' => __( '2/5', 'formidable' ),
 			'frm_sixth'      => __( '1/6', 'formidable' ),
-			'frm_seventh'    => __( '1/7', 'formidable' ),
 			'frm_eighth'     => __( '1/8', 'formidable' ),
+			'frm_tenth'      => __( '1/10', 'formidable' ),
 			'frm_alignright' => __( 'Right', 'formidable' ),
 			'frm_inline'     => array(
 				'label'      => __( 'Inline', 'formidable' ),

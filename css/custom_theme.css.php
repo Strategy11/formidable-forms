@@ -324,7 +324,7 @@ a.frm_save_draft{
 
 .with_frm_style .vertical_radio .frm_checkbox label,
 .with_frm_style .vertical_radio .frm_radio label{
-	display: flex;
+	display: inline-flex;
 }
 
 .with_frm_style .vertical_radio .frm_checkbox label img,
@@ -542,90 +542,79 @@ select.frm_loading_lookup{
 
 <?php include( dirname( __FILE__ ) . '/frm_grids.css' ); ?>
 
-/* Left and right label styling for non-Formidable styling - very basic, not responsive */
+/* Left and right label styling for non-Formidable styling */
+
+.frm_form_field.frm_inline_container,
+.frm_form_field.frm_right_container,
+.frm_form_field.frm_left_container{
+    display: grid;
+    grid-template-columns: min-content auto;
+	width:100%;
+}
+
+.frm_form_field.frm_right_container{
+    grid-template-columns: auto min-content;
+}
+
+.frm_form_field.frm_inline_container{
+    grid-template-columns: minmax(min-content, max-content) auto;
+}
+
 .frm_form_field.frm_left_container label.frm_primary_label{
-	float:left;
-	display:inline;
-	max-width:33%;
+	grid-column:1;
 	margin-right:10px;
 }
 
-.with_frm_style .frm_conf_field.frm_left_container label.frm_primary_label{
-	display:inline;
-	visibility:hidden;
+.frm_form_field.frm_inline_container label.frm_primary_label{
+	margin-right:10px;
 }
 
-.frm_form_field.frm_left_container .frm_rangeslider,
-.frm_form_field.frm_left_container input:not([type=radio]):not([type=checkbox]),
-.frm_form_field.frm_left_container:not(.frm_dynamic_select_container) select,
-.frm_form_field.frm_left_container textarea,
-.frm_form_field.frm_left_container .wp-editor-wrap,
-.frm_form_field.frm_left_container .frm_opt_container,
-.frm_form_field.frm_left_container .frm_dropzone,
-.frm_form_field.frm_left_container .frm-g-recaptcha,
-.frm_form_field.frm_left_container .g-recaptcha,
-.frm_form_field.frm_left_container .chosen-container,
-.frm_form_field.frm_left_container .frm_combo_inputs_container,
-.frm_form_field.frm_right_container .frm_rangeslider,
-.frm_form_field.frm_right_container input:not([type=radio]):not([type=checkbox]),
-.frm_form_field.frm_right_container:not(.frm_dynamic_select_container) select,
-.frm_form_field.frm_right_container textarea,
-.frm_form_field.frm_right_container .wp-editor-wrap,
-.frm_form_field.frm_right_container .frm_opt_container,
-.frm_form_field.frm_right_container .frm_dropzone,
-.frm_form_field.frm_right_container .frm-g-recaptcha,
-.frm_form_field.frm_right_container .g-recaptcha,
-.frm_form_field.frm_right_container .chosen-container,
-.frm_form_field.frm_right_container .frm_combo_inputs_container{
-	max-width:62%;
+.frm_form_field.frm_right_container label.frm_primary_label{
+	grid-column:2;
+	grid-row:1;
+	margin-left:10px;
 }
 
-.frm_form_field.frm_left_container .frm_combo_inputs_container input,
-.frm_form_field.frm_left_container .frm_combo_inputs_container select,
-.frm_form_field.frm_right_container .frm_combo_inputs_container input,
-.frm_form_field.frm_right_container .frm_combo_inputs_container select{
-    max-width:100%;
+.frm_form_field.frm_inline_container .frm_description,
+.frm_form_field.frm_left_container .frm_description{
+	grid-column:2;
 }
 
-.frm_form_field.frm_left_container .frm_rangeslider,
-.frm_form_field.frm_right_container .frm_rangeslider,
-.frm_form_field.frm_inline_container .frm_rangeslider,
-.frm_form_field.frm_left_container .frm_opt_container,
-.frm_form_field.frm_right_container .frm_opt_container,
-.frm_form_field.frm_inline_container .frm_opt_container,
-.frm_form_field.frm_left_container .frm_combo_inputs_container,
-.frm_form_field.frm_right_container .frm_combo_inputs_container,
-.frm_form_field.frm_inline_container .frm_combo_inputs_container,
-.frm_form_field.frm_left_container .wp-editor-wrap,
-.frm_form_field.frm_right_container .wp-editor-wrap,
-.frm_form_field.frm_inline_container .wp-editor-wrap,
-.frm_form_field.frm_left_container .frm_dropzone,
-.frm_form_field.frm_right_container .frm_dropzone,
-.frm_form_field.frm_inline_container .frm_dropzone,
-.frm_form_field.frm_left_container .frm-g-recaptcha,
-.frm_form_field.frm_right_container .frm-g-recaptcha,
-.frm_form_field.frm_inline_container .frm-g-recaptcha,
-.frm_form_field.frm_left_container .g-recaptcha,
-.frm_form_field.frm_right_container .g-recaptcha,
-.frm_form_field.frm_inline_container .g-recaptcha{
-	display:inline-block;
+.frm_form_field.frm_right_container .frm_description{
+	grid-column:1;
 }
 
-.frm_form_field.frm_left_half.frm_left_container .frm_primary_label,
-.frm_form_field.frm_right_half.frm_left_container .frm_primary_label,
-.frm_form_field.frm_left_half.frm_right_container .frm_primary_label,
-.frm_form_field.frm_right_half.frm_right_container .frm_primary_label,
-.frm_form_field.frm_first_half.frm_left_container .frm_primary_label,
-.frm_form_field.frm_last_half.frm_left_container .frm_primary_label,
-.frm_form_field.frm_first_half.frm_right_container .frm_primary_label,
-.frm_form_field.frm_last_half.frm_right_container .frm_primary_label,
-.frm_form_field.frm_half.frm_right_container .frm_primary_label,
-.frm_form_field.frm_half.frm_left_container .frm_primary_label{
-	-webkit-box-sizing:border-box;
-	-moz-box-sizing:border-box;
-	box-sizing:border-box;
-	max-width:33%;
+.frm_conf_field.frm_left_container{
+	grid-template-columns: 67%;
 }
+
+.frm_conf_field.frm_left_container .frm_description{
+	grid-column:1;
+}
+
+.frm_conf_field.frm_left_container label.frm_primary_label{
+	display:none;
+}
+
+.frm_left_container .frm_other_input{
+	grid-column:2;
+}
+
+.frm_inline_container.frm_other_container .frm_other_input,
+.frm_left_container.frm_other_container .frm_other_input{
+	margin-left:5px;
+}
+
+.frm_right_container.frm_other_container .frm_other_input{
+	margin-right:5px;
+}
+
+.frm_inline_container.frm_other_container select ~ .frm_other_input,
+.frm_right_container.frm_other_container select ~ .frm_other_input,
+.frm_left_container.frm_other_container select ~ .frm_other_input{
+	margin:0;
+}
+
 /* End of left and right label styling */
 
 .wp-editor-wrap *,

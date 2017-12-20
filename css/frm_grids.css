@@ -12,50 +12,23 @@
 	word-wrap: normal !important; /* many screen reader and browser combinations announce broken words as they would appear visually */
 }
 
+.frm_form_field.frm_alignright{
+	float:right !important;
+}
+
 .with_frm_style .frm_form_field{
     clear:both;
 }
 
-.frm_form_field.frm_right_half,
-.frm_form_field.frm_right_third,
-.frm_form_field.frm_right_two_thirds,
-.frm_form_field.frm_right_fourth,
-.frm_form_field.frm_right_fifth,
-.frm_form_field.frm_right_inline,
-.frm_form_field.frm_last_half,
-.frm_form_field.frm_last_third,
-.frm_form_field.frm_last_two_thirds,
-.frm_form_field.frm_last_fourth,
-.frm_form_field.frm_last_fifth,
-.frm_form_field.frm_last_sixth,
-.frm_form_field.frm_last_seventh,
-.frm_form_field.frm_last_eighth,
-.frm_form_field.frm_last_inline,
-.frm_form_field.frm_last,
-.frm_form_field.frm_half,
-.frm_submit.frm_half,
-.frm_form_field.frm_third,
-.frm_submit.frm_third,
-.frm_form_field.frm_two_thirds,
-.frm_form_field.frm_fourth,
-.frm_submit.frm_fourth,
-.frm_form_field.frm_three_fourths,
-.frm_form_field.frm_fifth,
-.frm_submit.frm_fifth,
-.frm_form_field.frm_two_fifths,
-.frm_form_field.frm_three_fifths,
-.frm_form_field.frm_four_fifths,
-.frm_form_field.frm_sixth,
-.frm_submit.frm_sixth,
-.frm_form_field.frm_seventh,
-.frm_submit.frm_seventh,
-.frm_form_field.frm_eighth,
-.frm_submit.frm_eighth,
-.frm_form_field.frm_inline,
-.frm_submit.frm_inline{
-    clear:none;
-    float:left;
-	margin-left:2.5%;
+.frm_form_fields .frm_fields_container{
+	display:grid;
+	grid-template-columns: repeat(30, 1fr);
+	grid-auto-rows: max-content;
+	grid-gap: 2.5%;
+}
+
+.frm_fields_container > *{
+	grid-column-end: span 30;
 }
 
 .frm_form_field.frm_left_half,
@@ -74,13 +47,7 @@
 .frm_form_field.frm_first_eighth,
 .frm_form_field.frm_first_inline,
 .frm_form_field.frm_first{
-    clear:left;
-    float:left;
-	margin-left:0;
-}
-
-.frm_form_field.frm_alignright{
-	float:right !important;
+	grid-column-start:1;
 }
 
 .frm_form_field.frm_left_half,
@@ -89,7 +56,7 @@
 .frm_form_field.frm_last_half,
 .frm_form_field.frm_half,
 .frm_submit.frm_half{
-    width:48.75%;
+    grid-column:span 15;
 }
 
 .frm_form_field.frm_left_third,
@@ -98,7 +65,7 @@
 .frm_form_field.frm_right_third,
 .frm_form_field.frm_first_third,
 .frm_form_field.frm_last_third{
-    width:31.66%;
+    grid-column:span 10;
 }
 
 .frm_form_field.frm_left_two_thirds,
@@ -106,7 +73,7 @@
 .frm_form_field.frm_first_two_thirds,
 .frm_form_field.frm_last_two_thirds,
 .frm_form_field.frm_two_thirds{
-    width:65.82%;
+    grid-column:span 20;
 }
 
 .frm_form_field.frm_left_fourth,
@@ -115,11 +82,11 @@
 .frm_form_field.frm_right_fourth,
 .frm_form_field.frm_first_fourth,
 .frm_form_field.frm_last_fourth{
-    width:23.12%;
+    grid-column:span 7;
 }
 
 .frm_form_field.frm_three_fourths{
-	width:74.36%;
+	grid-column:span 21;
 }
 
 .frm_form_field.frm_left_fifth,
@@ -128,40 +95,43 @@
 .frm_form_field.frm_right_fifth,
 .frm_form_field.frm_first_fifth,
 .frm_form_field.frm_last_fifth{
-    width:18%;
+    grid-column:span 6;
 }
 
 .frm_form_field.frm_two_fifths {
-	width:38.5%;
+	grid-column:span 12;
 }
 
 .frm_form_field.frm_three_fifths {
-	width:59%;
+	grid-column:span 18;
 }
 
 .frm_form_field.frm_four_fifths {
-	width:79.5%;
+	grid-column:span 24;
 }
 
 .frm_form_field.frm_sixth,
 .frm_submit.frm_sixth,
 .frm_form_field.frm_first_sixth,
 .frm_form_field.frm_last_sixth{
-    width:14.58%;
+    grid-column:span 5;
 }
 
 .frm_form_field.frm_seventh,
 .frm_submit.frm_seventh,
 .frm_form_field.frm_first_seventh,
 .frm_form_field.frm_last_seventh{
-    width:12.14%;
+    grid-column:span 4;
 }
 
+.frm_form_field.frm_tenth,
+.frm_submit.frm_tenth,
+/* eights are deprecated */
 .frm_form_field.frm_eighth,
 .frm_submit.frm_eighth,
 .frm_form_field.frm_first_eighth,
 .frm_form_field.frm_last_eighth{
-    width:10.31%;
+    grid-column:span 3;
 }
 
 .frm_form_field.frm_left_inline,
@@ -186,45 +156,13 @@
 }
 
 @media only screen and (max-width: 600px) {
-	.frm_form_field.frm_half,
-	.frm_submit.frm_half,
-    .frm_form_field.frm_left_half,
-    .frm_form_field.frm_right_half,
-    .frm_form_field.frm_first_half,
-    .frm_form_field.frm_last_half,
-    .frm_form_field.frm_first_third,
-    .frm_form_field.frm_third,
-	.frm_submit.frm_third,
-    .frm_form_field.frm_last_third,
-    .frm_form_field.frm_first_two_thirds,
-	.frm_form_field.frm_last_two_thirds,
-	.frm_form_field.frm_two_thirds,
-    .frm_form_field.frm_left_fourth,
-    .frm_form_field.frm_fourth,
-	.frm_submit.frm_fourth,
-    .frm_form_field.frm_right_fourth,
-    .frm_form_field.frm_first_fourth,
-	.frm_form_field.frm_last_fourth,
-	.frm_form_field.frm_three_fourths,
-	.frm_form_field.frm_fifth,
-	.frm_submit.frm_fifth,
-	.frm_form_field.frm_two_fifths,
-	.frm_form_field.frm_three_fifths,
-	.frm_form_field.frm_four_fifths,
-	.frm_form_field.frm_sixth,
-	.frm_submit.frm_sixth,
-	.frm_form_field.frm_seventh,
-	.frm_submit.frm_seventh,
-	.frm_form_field.frm_eighth,
-	.frm_submit.frm_eighth,
-    .frm_form_field.frm_first_inline,
-    .frm_form_field.frm_inline,
-	.frm_submit.frm_inline,
-    .frm_form_field.frm_last_inline{
-        width:100%;
-        margin-left:0;
-        margin-right:0;
-		clear:both;
-        float:none;
-    }
+	.frm_form_fields .frm_fields_container{
+		grid-gap:1%;
+	}
+}
+
+@media only screen and (max-width: 500px) {
+	.frm_fields_container > .frm_form_field{
+		grid-column: 1 / span 30 !important;
+	}
 }
