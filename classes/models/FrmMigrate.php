@@ -21,7 +21,10 @@ class FrmMigrate {
 	public function upgrade( $old_db_version = false ) {
 		do_action( 'frm_before_install' );
 
-		global $wpdb;
+		global $wpdb, $frm_vars;
+
+		$frm_vars['doing_upgrade'] = true;
+
 		//$frm_db_version is the version of the database we're moving to
 		$frm_db_version = FrmAppHelper::$db_version;
 		$old_db_version = (float) $old_db_version;
@@ -52,6 +55,8 @@ class FrmMigrate {
 		}
 
 		do_action('frm_after_install');
+
+		$frm_vars['doing_upgrade'] = true;
 
 		/**** update the styling settings ****/
 		if ( is_admin() && function_exists( 'get_filesystem_method' ) ) {
