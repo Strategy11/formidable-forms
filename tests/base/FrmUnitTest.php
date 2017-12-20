@@ -78,9 +78,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 
 		$this->do_tables_exist();
 		$this->import_xml();
-		if ( $this->is_pro_active ) {
-			$this->create_files();
-		}
+		$this->create_files();
 	}
 
 	function get_table_names() {
@@ -116,6 +114,10 @@ class FrmUnitTest extends WP_UnitTestCase {
     }
 
 	function create_files() {
+		if ( ! is_callable( 'FrmProFileImport::import_attachment' ) ) {
+			return;
+		}
+
 		$single_file_upload_field = FrmField::getOne( 'single-file-upload-field' );
 		$multi_file_upload_field = FrmField::getOne( 'multi-file-upload-field' );
 
