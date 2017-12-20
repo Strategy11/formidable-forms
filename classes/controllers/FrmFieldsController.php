@@ -644,7 +644,6 @@ class FrmFieldsController {
 	private static function add_placeholder_to_input( $field, &$add_html ) {
 		if ( FrmFieldsHelper::is_placeholder_field_type( $field['type'] ) ) {
 			$add_html['placeholder'] = 'placeholder="' . esc_attr( $field['default_value'] ) . '"';
-			wp_enqueue_script( 'jquery-placeholder' );
 		}
 	}
 

@@ -148,7 +148,6 @@ class WP_Test_FrmFormsController extends FrmUnitTest {
 			$this->assertEquals( FrmAppHelper::plugin_url() . '/js/frm.min.js', $formidable_js->src, 'frm.min.js was not loaded' );
 		} else {
 			$this->assertEquals( FrmAppHelper::plugin_url() . '/js/formidable.js', $formidable_js->src, 'formidable.js was not loaded' );
-			$this->assertTrue( wp_script_is( 'jquery-placeholder', 'registered' ), 'The jquery-placeholder js was not registered' );
 		}
 	}
 }

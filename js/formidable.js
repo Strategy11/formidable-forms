@@ -773,15 +773,11 @@ function frmFrontFormJS(){
 			jQuery(document).off('submit.formidable','.frm-show-form');
 			jQuery(document).on('submit.formidable','.frm-show-form', frmFrontForm.submitForm);
 
-			if ( jQuery.isFunction(jQuery.fn.placeholder) ) {
-				jQuery('.frm-show-form input, .frm-show-form textarea').placeholder();
-			} else {
-				jQuery('.frm-show-form input[onblur], .frm-show-form textarea[onblur]').each(function(){
-					if(jQuery(this).val() === '' ){
-						jQuery(this).blur();
-					}
-				});
-			}
+			jQuery( '.frm-show-form input[onblur], .frm-show-form textarea[onblur]' ).each( function() {
+				if ( jQuery( this ).val() === '' ) {
+					jQuery( this ).blur();
+				}
+			} );
 			
 			jQuery(document).on('focus', '.frm_toggle_default', clearDefault);
 			jQuery(document).on('blur', '.frm_toggle_default', replaceDefault);
