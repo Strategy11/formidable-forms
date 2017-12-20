@@ -192,13 +192,14 @@ legend.frm_hidden{
     clear:both;
 }
 
-.frm_inline_form .frm_form_field.form-field{
-    margin-right:2.5%;
-	display:inline-block;
+.frm_inline_form .frm_form_fields .frm_fields_container{
+	align-items: end;
+	grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
 }
 
+.frm_inline_form .frm_form_field.form-field,
 .frm_inline_form .frm_submit{
-	display:inline-block;
+	grid-column-end: span 1;
 }
 
 .with_frm_style.frm_center_submit .frm_submit{

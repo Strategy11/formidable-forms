@@ -768,62 +768,6 @@ if ( ! empty( $important ) ) {
     float:right;
 }
 
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_half,
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_third,
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_two_thirds,
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_fourth,
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_fifth,
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_sixth,
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_seventh,
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_eighth,
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_inline,
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_left_half,
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_left_third,
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_left_two_thirds,
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_left_fourth,
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_left_fifth,
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_left_inline,
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_first_half,
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_first_third,
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_first_two_thirds,
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_first_fourth,
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_first_fifth,
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_first_inline,
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_right_half,
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_right_third,
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_right_two_thirds,
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_right_fourth,
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_right_fifth,
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_right_inline,
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_last_half,
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_last_third,
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_last_two_thirds,
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_last_fourth,
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_last_fifth,
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_last_inline{
-    float:right;
-    margin-right:2.5%;
-    margin-left:0;
-	clear:none;
-}
-
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_left_half,
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_first_half,
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_first,
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_left_third,
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_first_third,
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_first_two_thirds,
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_left_two_thirds,
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_first_fourth,
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_left_fourth,
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_left_fifth,
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_first_fifth,
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_left_inline,
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_first_inline{
-	clear:right;
-    margin-right:0;
-}
-
 .<?php echo esc_html( $style_class ) ?> .frm_grid .frm_primary_label,
 .<?php echo esc_html( $style_class ) ?> .frm_grid_first .frm_primary_label,
 .<?php echo esc_html( $style_class ) ?> .frm_grid_odd .frm_primary_label,
