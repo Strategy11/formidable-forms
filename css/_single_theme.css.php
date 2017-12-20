@@ -674,6 +674,7 @@ if ( ! empty( $important ) ) {
 .<?php echo esc_html( $style_class ) ?> .frm_blank_field .frm-g-recaptcha iframe,
 .<?php echo esc_html( $style_class ) ?> .frm_blank_field .g-recaptcha iframe,
 .<?php echo esc_html( $style_class ) ?> .frm_blank_field .chosen-container-multi .chosen-choices,
+.<?php echo esc_html( $style_class ) ?> .frm_blank_field .chosen-container-single .chosen-single,
 .<?php echo esc_html( $style_class ) ?> .frm_form_field :invalid{
     color:#<?php echo esc_html( $text_color_error . $important ) ?>;
 	background-color:<?php echo esc_html( $bg_color_error . $important ); ?>;
