@@ -20,6 +20,10 @@
     clear:both;
 }
 
+.frm_combo_inputs_container,
+.frm_form_field.form-group,
+.frm_grid_container,
+.frm_form_fields .frm_section_heading,
 .frm_form_fields .frm_fields_container{
 	display:grid;
 	grid-template-columns: repeat(30, 1fr);
@@ -27,6 +31,11 @@
 	grid-gap: 2.5%;
 }
 
+.frm_combo_inputs_container > *,
+.frm_form_field.form-group > *,
+.frm_grid_container > *,
+.frm_section_heading > *,
+.frm_fields_container .frm_form_field,
 .frm_fields_container > *{
 	grid-column-end: span 30;
 }
@@ -126,7 +135,7 @@
 
 .frm_form_field.frm_tenth,
 .frm_submit.frm_tenth,
-/* eights are deprecated */
+/* eighths are deprecated */
 .frm_form_field.frm_eighth,
 .frm_submit.frm_eighth,
 .frm_form_field.frm_first_eighth,
