@@ -29,9 +29,9 @@ $frm_hide_fields = FrmAppHelper::get_post_param( 'frm_hide_fields_' . $form->id,
 <input type="text" class="frm_hidden frm_verify" id="frm_verify_<?php echo esc_attr( $form->id ) ?>" name="frm_verify" value="<?php echo esc_attr( FrmAppHelper::get_param('frm_verify', '', 'get', 'wp_kses_post' ) ) ?>" <?php FrmFormsHelper::maybe_hide_inline() ?> />
 <?php if ( isset( $id ) ) { ?>
 <input type="hidden" name="id" value="<?php echo esc_attr( $id ) ?>" />
+<?php } ?>
+<div class="frm_fields_container">
 <?php
-}
-
 if ( $values['fields'] ) {
 	FrmFieldsHelper::show_fields( $values['fields'], $errors, $form, $form_action );
 }
@@ -73,6 +73,7 @@ if ( FrmForm::show_submit( $form ) ) {
 	FrmFormsHelper::get_custom_submit( $copy_values['submit_html'], $form, $submit, $form_action, $copy_values );
 }
 ?>
+</div>
 </fieldset>
 </div>
 <?php if ( has_action('frm_entries_footer_scripts') ) { ?>

@@ -1509,7 +1509,10 @@ select.frm_cancelnew, input.frm_enternew{width:175px;}
 #general-style #frm_gen_font_box{padding-right:0;width:100%;}
 #date-fields-style #frm_show_cal{width:90px;height:80px;margin-right:6px;}
 #frm_styling_form #frm_delete_style{padding-right:10px;}
-.frm_pro_form .frm_lite_style{display:none;}
+.frm_pro_form .frm_form_field.frm_lite_style,
+.frm_pro_form .frm_lite_style{
+	display:none !important;
+}
 
 label.default-style-box input[type="checkbox"]{
 	vertical-align:middle;

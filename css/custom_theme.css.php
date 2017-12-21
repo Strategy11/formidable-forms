@@ -561,18 +561,22 @@ select.frm_loading_lookup{
     grid-template-columns: minmax(min-content, max-content) auto;
 }
 
+.frm_form_field.frm_inline_container label.frm_primary_label,
+.frm_form_field.frm_right_container label.frm_primary_label
 .frm_form_field.frm_left_container label.frm_primary_label{
-	grid-column:1;
 	margin-right:10px;
+	grid-row-end:span 2;
 }
 
-.frm_form_field.frm_inline_container label.frm_primary_label{
-	margin-right:10px;
+.frm_form_field.frm_left_container label.frm_primary_label{
+	grid-column:1;
+	grid-row-end:span 2; /* cover a row for the description */
 }
 
 .frm_form_field.frm_right_container label.frm_primary_label{
 	grid-column:2;
 	grid-row:1;
+	margin-right:0;
 	margin-left:10px;
 }
 

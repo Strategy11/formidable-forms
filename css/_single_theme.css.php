@@ -183,11 +183,24 @@ $arrow_icons = FrmStylesHelper::arrow_icons();
 }
 
 /* Left and right labels */
-
-.<?php echo esc_html( $style_class ); ?> .frm_left_container label.frm_primary_label,
-.<?php echo esc_html( $style_class ); ?> .frm_right_container label.frm_primary_label{
-	width:<?php echo esc_html( $width . $important ); ?>;
+<?php
+if ( '' === $field_height || 'auto' === $field_height ) {
+	foreach ( array( 'left', 'right', 'inline' ) as $alignit ) {
+	?>
+.<?php echo esc_html( $style_class ); ?> .frm_<?php echo esc_html( $alignit ); ?>_container input[type=text],
+.<?php echo esc_html( $style_class ); ?> .frm_<?php echo esc_html( $alignit ); ?>_container input[type=password],
+.<?php echo esc_html( $style_class ); ?> .frm_<?php echo esc_html( $alignit ); ?>_container input[type=email],
+.<?php echo esc_html( $style_class ); ?> .frm_<?php echo esc_html( $alignit ); ?>_container input[type=number],
+.<?php echo esc_html( $style_class ); ?> .frm_<?php echo esc_html( $alignit ); ?>_container input[type=url],
+.<?php echo esc_html( $style_class ); ?> .frm_<?php echo esc_html( $alignit ); ?>_container input[type=tel],
+.<?php echo esc_html( $style_class ); ?> .frm_<?php echo esc_html( $alignit ); ?>_container input[type=file],
+.<?php echo esc_html( $style_class ); ?> .frm_<?php echo esc_html( $alignit ); ?>_container input[type=search],
+.<?php echo esc_html( $style_class ); ?> .frm_<?php echo esc_html( $alignit ); ?>_container select,
+<?php } ?>
+.<?php echo esc_html( $style_class ); ?> .frm_left_container select{
+	height:fit-content <?php echo esc_html( $important ) ?>;
 }
+<?php } ?>
 
 .<?php echo esc_html( $style_class ) ?> .form-field.frm_col_field div.frm_description{
 	width:<?php echo esc_html( ( $field_width == '' ? 'auto' : $field_width ) . $important ) ?>;
@@ -300,9 +313,6 @@ if ( ! empty( $important ) ) {
 .<?php echo esc_html( $style_class ) ?> input[type=search],
 .<?php echo esc_html( $style_class ) ?> select{
     height:<?php echo esc_html( ( $field_height == '' ? 'auto' : $field_height ) . $important ) ?>;
-	<?php if ( '' === $field_height || 'auto' === $field_height ) { ?>
-	height:fit-content <?php echo esc_html( $important ) ?>;
-	<?php } ?>
     line-height:1.3<?php echo esc_html( $important ) ?>;
 }
 
@@ -414,7 +424,7 @@ if ( ! empty( $important ) ) {
 .<?php echo esc_html( $style_class ) ?> .frm_focus_field input[type=search],
 .frm_form_fields_active_style,
 .<?php echo esc_html( $style_class ) ?> .chosen-container-active .chosen-choices{
-	background-color:<?php echo esc_html( $bg_color_active . $important ); ?>;
+	background-color:#<?php echo esc_html( $bg_color_active . $important ); ?>;
     border-color:#<?php echo esc_html( $border_color_active . $important ) ?>;
     <?php if ( isset( $remove_box_shadow_active ) && $remove_box_shadow_active ) { ?>
     box-shadow:none;
