@@ -20,6 +20,7 @@
     clear:both;
 }
 
+.frm_repeat_sec,
 .frm_combo_inputs_container,
 .frm_form_field.form-group,
 .frm_grid_container,
@@ -31,6 +32,7 @@
 	grid-gap: 2.5%;
 }
 
+.frm_repeat_sec > *,
 .frm_combo_inputs_container > *,
 .frm_form_field.form-group > *,
 .frm_grid_container > *,
