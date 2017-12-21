@@ -789,26 +789,22 @@ BEFORE_HTML;
 	 */
 	public static function css_classes() {
 		$classes = array(
-			'frm_first'      => array(
-				'label'      => __( 'First', 'formidable' ),
-				'title'      => __( 'Add this to the first field in each row along with a width. ie frm_first frm_third', 'formidable' ),
-			),
-			'frm_half'       => __( '1/2', 'formidable' ),
-			'frm_third'      => __( '1/3', 'formidable' ),
-			'frm_two_thirds' => __( '2/3', 'formidable' ),
-			'frm_fourth'     => __( '1/4', 'formidable' ),
-			'frm_three_fourths' => __( '3/4', 'formidable' ),
-			'frm_fifth'      => __( '1/5', 'formidable' ),
-			'frm_two_fifths' => __( '2/5', 'formidable' ),
-			'frm_sixth'      => __( '1/6', 'formidable' ),
-			'frm_eighth'     => __( '1/8', 'formidable' ),
-			'frm_tenth'      => __( '1/10', 'formidable' ),
+			'frm6'           => __( '1/2', 'formidable' ),
+			'frm4'           => __( '1/3', 'formidable' ),
+			'frm8'           => __( '2/3', 'formidable' ),
+			'frm3'           => __( '1/4', 'formidable' ),
+			'frm9'           => __( '3/4', 'formidable' ),
+			'frm2'           => __( '1/6', 'formidable' ),
+			'frm1'           => __( '1/12', 'formidable' ),
 			'frm_alignright' => __( 'Right', 'formidable' ),
 			'frm_inline'     => array(
 				'label'      => __( 'Inline', 'formidable' ),
 				'title'      => __( 'Align fields in a row without a specific width.', 'formidable' ),
 			),
-
+			'frm_first'      => array(
+				'label'      => __( 'First', 'formidable' ),
+				'title'      => __( 'Add this to the first field in each row along with a width. ie frm_first frm4', 'formidable' ),
+			),
 			'frm_full'       => array(
 				'label'      => __( '100% width', 'formidable' ),
 				'title'      => __( 'Force the field to fill the full space with 100% width.', 'formidable' ),

@@ -342,21 +342,19 @@ a.frm_save_draft{
 }
 
 .with_frm_style .frm_radio input[type=radio]{
-    border-radius:10px;
 	-webkit-appearance:radio;
-	flex: none;
 }
 
 .with_frm_style .frm_checkbox input[type=checkbox]{
-    border-radius:0;
 	-webkit-appearance:checkbox;
-	flex: none;
 }
 
 .with_frm_style .frm_radio input[type=radio],
 .with_frm_style .frm_checkbox input[type=checkbox]{
+	border-radius:initial;
+	flex: none;
 	display:inline-block;
-	margin-right:5px;
+	margin:4px 5px 0 0;
 	width:auto;
 	border:none;
 	vertical-align:baseline;
@@ -601,25 +599,6 @@ select.frm_loading_lookup{
 	display:none;
 }
 
-.frm_left_container .frm_other_input{
-	grid-column:2;
-}
-
-.frm_inline_container.frm_other_container .frm_other_input,
-.frm_left_container.frm_other_container .frm_other_input{
-	margin-left:5px;
-}
-
-.frm_right_container.frm_other_container .frm_other_input{
-	margin-right:5px;
-}
-
-.frm_inline_container.frm_other_container select ~ .frm_other_input,
-.frm_right_container.frm_other_container select ~ .frm_other_input,
-.frm_left_container.frm_other_container select ~ .frm_other_input{
-	margin:0;
-}
-
 /* End of left and right label styling */
 
 .wp-editor-wrap *,
@@ -830,23 +809,30 @@ select.frm_loading_lookup{
     margin-right:0;
 }
 
-.with_frm_style .frm_other_input.frm_other_full{
-	margin-top:10px;
+.frm_form_field.frm_two_col .frm_opt_container,
+.frm_form_field.frm_three_col .frm_opt_container,
+.frm_form_field.frm_four_col .frm_opt_container{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: max-content;
+    grid-gap: 2.5%;
+}
+
+.frm_form_field.frm_three_col .frm_opt_container{
+	grid-template-columns: repeat(3, 1fr);
+}
+
+.frm_form_field.frm_four_col .frm_opt_container{
+	grid-template-columns: repeat(4, 1fr);
 }
 
 .frm_form_field.frm_two_col .frm_radio,
-.frm_form_field.frm_three_col .frm_radio,
-.frm_form_field.frm_four_col .frm_radio,
 .frm_form_field.frm_two_col .frm_checkbox,
+.frm_form_field.frm_three_col .frm_radio,
 .frm_form_field.frm_three_col .frm_checkbox,
+.frm_form_field.frm_four_col .frm_radio,
 .frm_form_field.frm_four_col .frm_checkbox{
-    float:left;
-}
-
-.frm_form_field.frm_two_col .frm_radio,
-.frm_form_field.frm_two_col .frm_checkbox{
-    width:48%;
-    margin-right:4%;
+    grid-column-end: span 1;
 }
 
 .frm_form_field .frm_checkbox,
@@ -855,27 +841,6 @@ select.frm_loading_lookup{
 .frm_form_field .frm_radio + .frm_radio{
 	margin-top: 0;
 	margin-bottom: 0;
-}
-
-.frm_form_field.frm_three_col .frm_radio,
-.frm_form_field.frm_three_col .frm_checkbox{
-    width:30%;
-    margin-right:5%;
-}
-
-.frm_form_field.frm_four_col .frm_radio,
-.frm_form_field.frm_four_col .frm_checkbox{
-    width:22%;
-    margin-right:4%;
-}
-
-.frm_form_field.frm_two_col .frm_radio:nth-child(2n+2),
-.frm_form_field.frm_two_col .frm_checkbox:nth-child(2n+2),
-.frm_form_field.frm_three_col .frm_radio:nth-child(3n+3),
-.frm_form_field.frm_three_col .frm_checkbox:nth-child(3n+3),
-.frm_form_field.frm_four_col .frm_radio:nth-child(4n+4),
-.frm_form_field.frm_four_col .frm_checkbox:nth-child(4n+4){
-	margin-right:0;
 }
 
 .frm_form_field.frm_scroll_box .frm_opt_container{
@@ -903,17 +868,6 @@ select.frm_loading_lookup{
     outline:none;
     font-weight:normal;
     box-shadow:0 1px 1px rgba(0, 0, 0, 0.075) inset;
-}
-
-.frm_form_field.frm_two_col .frm_opt_container:after,
-.frm_form_field.frm_three_col .frm_opt_container:after,
-.frm_form_field.frm_four_col .frm_opt_container:after{
-    content:".";
-    display:block;
-    clear:both;
-    visibility:hidden;
-    line-height:0;
-    height:0;
 }
 
 .frm_form_field.frm_total input,
@@ -1054,15 +1008,8 @@ select.frm_loading_lookup{
 }
 
 @media only screen and (max-width: 600px) {
-    .frm_form_field.frm_four_col .frm_radio,
-    .frm_form_field.frm_four_col .frm_checkbox{
-        width:48%;
-        margin-right:4%;
-    }
-
-    .frm_form_field.frm_four_col .frm_radio:nth-child(2n+2),
-    .frm_form_field.frm_four_col .frm_checkbox:nth-child(2n+2){
-    	margin-right:0;
+    .frm_form_field.frm_four_col .frm_opt_container{
+        grid-template-columns: repeat(2, 1fr);
     }
 
 	.frm_form_field .frm_repeat_grid.frm_first_repeat .frm_form_field.frm_repeat_buttons:not(.frm_fourth):not(.frm_sixth):not(.frm_eighth) label.frm_primary_label{

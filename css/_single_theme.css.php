@@ -336,19 +336,6 @@ if ( ! empty( $important ) ) {
     max-width:100%;
 }
 
-.<?php echo esc_html( $style_class ) ?> input.frm_other_input:not(.frm_other_full){
-    width:auto <?php echo esc_html( $important ) ?>;
-}
-
-.<?php echo esc_html( $style_class ) ?> .horizontal_radio input.frm_other_input:not(.frm_other_full):not(.frm_pos_none) {
-	display:inline-block<?php echo esc_html( $important ) ?>;
-}
-
-.<?php echo esc_html( $style_class ) ?> .frm_full input.frm_other_input:not(.frm_other_full){
-    margin-left:0 <?php echo esc_html( $important ) ?>;
-    margin-top:8px;
-}
-
 .<?php echo esc_html( $style_class ) ?> .wp-editor-wrap{
     width:<?php echo esc_html( $field_width . $important ) ?>;
     max-width:100%;
@@ -748,28 +735,6 @@ if ( ! empty( $important ) ) {
     border-width:<?php echo esc_html( $submit_border_width ) ?>;
     border-color: <?php echo esc_html( $submit_border_color . $important ) ?>;
 	height:<?php echo esc_html( $submit_height . $important ) ?>;
-}
-.<?php echo esc_html( $style_class ) ?> .frm_button .frm_icon_font:before{
-    font-size:<?php echo esc_html( $submit_font_size . $important ) ?>;
-}
-
-/* Dropzone */
-.<?php echo esc_html( $style_class ) ?> .frm_dropzone{
-	border-color: <?php echo esc_html( $border_color . $important ) ?>;
-	border-radius:<?php echo esc_html( $border_radius . $important ) ?>;
-	color: <?php echo esc_html( $text_color . $important ) ?>;
-	background-color:<?php echo esc_html( $bg_color . $important ); ?>;
-}
-
-.<?php echo esc_html( $style_class ) ?> .frm_dropzone .frm_upload_icon:before,
-.<?php echo esc_html( $style_class ) ?> .frm_dropzone .dz-remove{
-	color: <?php echo esc_html( $text_color . $important ) ?>;
-}
-
-.<?php echo esc_html( $style_class ) ?> .frm_blank_field .frm_dropzone{
-	border-color:#<?php echo esc_html( $border_color_error . $important ) ?>;
-	color:#<?php echo esc_html( $text_color_error . $important ) ?>;
-	background-color:<?php echo esc_html( $bg_color_error . $important ); ?>;
 }
 
 /* RTL Grids */
