@@ -563,10 +563,11 @@ select.frm_loading_lookup{
 }
 
 .frm_form_field.frm_inline_container label.frm_primary_label,
-.frm_form_field.frm_right_container label.frm_primary_label
+.frm_form_field.frm_right_container label.frm_primary_label,
 .frm_form_field.frm_left_container label.frm_primary_label{
 	margin-right:10px;
 	grid-row-end:span 2;
+	align-self: center;
 }
 
 .frm_form_field.frm_left_container label.frm_primary_label{

@@ -410,6 +410,12 @@
 
 /* RTL */
 
+.with_frm_style.frm_rtl .frm_form_field.frm2,
+.with_frm_style.frm_rtl .frm_form_field.frm3,
+.with_frm_style.frm_rtl .frm_form_field.frm4,
+.with_frm_style.frm_rtl .frm_form_field.frm6,
+.with_frm_style.frm_rtl .frm_form_field.frm8,
+.with_frm_style.frm_rtl .frm_form_field.frm9,
 .with_frm_style.frm_rtl .frm_form_field.frm_half,
 .with_frm_style.frm_rtl .frm_form_field.frm_third,
 .with_frm_style.frm_rtl .frm_form_field.frm_two_thirds,
