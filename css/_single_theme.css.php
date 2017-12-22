@@ -133,6 +133,7 @@ $arrow_icons = FrmStylesHelper::arrow_icons();
 .<?php echo esc_html( $style_class ) ?> .frm_icon_font.frm_minus_icon:before,
 .<?php echo esc_html( $style_class ) ?> .frm_icon_font.frm_plus_icon:before{
 	color:<?php echo esc_html( $submit_text_color . $important ) ?>;
+	vertical-align:middle;
 }
 
 .<?php echo esc_html( $style_class ) ?> .frm_trigger.active .frm_icon_font.frm_arrow_icon:before{
@@ -519,6 +520,12 @@ if ( ! empty( $important ) ) {
     }
 }
 ?>
+
+.<?php echo esc_html( $style_class ) ?>.frm_inline_form .frm_submit input[type=submit],
+.<?php echo esc_html( $style_class ) ?>.frm_inline_form .frm_submit button{
+	margin-top:0<?php echo esc_html( $important ); ?>;
+	margin-bottom:<?php echo esc_html( $field_margin . $important ); ?>;
+}
 
 .<?php echo esc_html( $style_class ) ?> a.frm_save_draft{
     font-family:<?php echo FrmAppHelper::kses( $font ) ?>;

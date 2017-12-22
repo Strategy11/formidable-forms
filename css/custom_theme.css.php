@@ -196,6 +196,15 @@ legend.frm_hidden{
 	grid-column-end: span 1;
 }
 
+.frm_inline_form .frm_submit{
+	margin:0;
+}
+
+.frm_inline_form .frm_submit input[type=submit],
+.frm_inline_form .frm_submit button{
+	margin-top:0;
+}
+
 .with_frm_style.frm_center_submit .frm_submit{
     text-align:center;
 }
