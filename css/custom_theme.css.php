@@ -74,12 +74,6 @@ legend.frm_hidden{
     padding:25px;
 }
 
-.with_frm_style .form-field.frm_col_field{
-    clear:none;
-    float:left;
-    margin-right:20px;
-}
-
 .with_frm_style label.frm_primary_label{
     max-width:100%;
 }

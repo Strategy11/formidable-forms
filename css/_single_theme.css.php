@@ -202,11 +202,6 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 }
 <?php } ?>
 
-.<?php echo esc_html( $style_class ) ?> .form-field.frm_col_field div.frm_description{
-	width:<?php echo esc_html( ( $field_width == '' ? 'auto' : $field_width ) . $important ) ?>;
-    max-width:100%;
-}
-
 .<?php echo esc_html( $style_class ) ?> .frm_inline_container.frm_dynamic_select_container .frm_opt_container{
     display:inline<?php echo esc_html( $important ) ?>;
 }
@@ -291,16 +286,6 @@ if ( ! empty( $important ) ) {
     outline:none<?php echo esc_html( $important ) ?>;
     font-weight:<?php echo esc_html( $field_weight ) ?>;
     box-shadow:<?php echo esc_html( ( isset( $remove_box_shadow ) && $remove_box_shadow ) ? 'none' : '0 1px 1px rgba(0, 0, 0, 0.075) inset' ) ?>;
-}
-
-.<?php echo esc_html( $style_class ) ?> input[type=file]::-webkit-file-upload-button{
-    color:<?php echo esc_html( $text_color . $important ) ?>;
-	background-color:<?php echo esc_html( $bg_color . $important ); ?>;
-	padding:<?php echo esc_html( $field_pad . $important ) ?>;
-	border-radius:<?php echo esc_html( $border_radius . $important ) ?>;
-	border-color: <?php echo esc_html( $border_color . $important ) ?>;
-	border-width:<?php echo esc_html( $field_border_width . $important ) ?>;
-	border-style:<?php echo esc_html( $field_border_style . $important ) ?>;
 }
 
 .<?php echo esc_html( $style_class ) ?> input[type=text],
@@ -737,64 +722,7 @@ if ( ! empty( $important ) ) {
 	height:<?php echo esc_html( $submit_height . $important ) ?>;
 }
 
-/* RTL Grids */
-<?php if ( 'rtl' == $direction ) { ?>
-.<?php echo esc_html( $style_class ) ?> .frm_form_fields .star-rating{
-    float:right;
-}
-
-.<?php echo esc_html( $style_class ) ?> .frm_grid .frm_primary_label,
-.<?php echo esc_html( $style_class ) ?> .frm_grid_first .frm_primary_label,
-.<?php echo esc_html( $style_class ) ?> .frm_grid_odd .frm_primary_label,
-.<?php echo esc_html( $style_class ) ?> .frm_grid .frm_radio,
-.<?php echo esc_html( $style_class ) ?> .frm_grid_first .frm_radio,
-.<?php echo esc_html( $style_class ) ?> .frm_grid_odd .frm_radio,
-.<?php echo esc_html( $style_class ) ?> .frm_grid .frm_checkbox,
-.<?php echo esc_html( $style_class ) ?> .frm_grid_first .frm_checkbox,
-.<?php echo esc_html( $style_class ) ?> .frm_grid_odd .frm_checkbox{
-    float:right !important;
-    margin-right:0 !important;
-}
-
-.<?php echo esc_html( $style_class ) ?> .frm_grid_first .frm_radio label input,
-.<?php echo esc_html( $style_class ) ?> .frm_grid .frm_radio label input,
-.<?php echo esc_html( $style_class ) ?> .frm_grid_odd .frm_radio label input,
-.<?php echo esc_html( $style_class ) ?> .frm_grid_first .frm_checkbox label input,
-.<?php echo esc_html( $style_class ) ?> .frm_grid .frm_checkbox label input,
-.<?php echo esc_html( $style_class ) ?> .frm_grid_odd .frm_checkbox label input{
-    float:left;
-}
-
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_two_col .frm_radio,
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_three_col .frm_radio,
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_four_col .frm_radio,
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_two_col .frm_checkbox,
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_three_col .frm_checkbox,
-.<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_four_col .frm_checkbox{
-    float:right;
-}
-
-.<?php echo esc_html( $style_class ) ?> .frm_catlevel_2,
-.<?php echo esc_html( $style_class ) ?> .frm_catlevel_3,
-.<?php echo esc_html( $style_class ) ?> .frm_catlevel_4,
-.<?php echo esc_html( $style_class ) ?> .frm_catlevel_5{
-	margin-right:18px;
-}
-
-.<?php echo esc_html( $style_class ) ?> div > .frm_time_select{
-	margin-right:5px;
-}
-<?php } ?>
-
 <?php do_action( 'frm_output_single_style', $settings ); ?>
-
-/* Responsive CSS */
-@media only screen and (max-width: 750px){
-	.<?php echo esc_html( $style_class ); ?> .frm_left_container label.frm_primary_label,
-	.<?php echo esc_html( $style_class ); ?> .frm_right_container label.frm_primary_label{
-		max-width:200px<?php echo esc_html( $important ); ?>;
-	}
-}
 
 @media only screen and (max-width: 600px){
 	.<?php echo esc_html( $style_class ) ?> .frm_repeat_inline,
@@ -803,21 +731,3 @@ if ( ! empty( $important ) ) {
 	}
 }
 
-@media only screen and (max-width: 500px) {
-	.<?php echo esc_html( $style_class ) ?> .frm_left_container > p.description::before,
-	.<?php echo esc_html( $style_class ) ?> .frm_left_container > div.description::before,
-	.<?php echo esc_html( $style_class ) ?> .frm_left_container > div.frm_description::before,
-	.<?php echo esc_html( $style_class ) ?> .frm_left_container > .frm_error::before,
-	.<?php echo esc_html( $style_class ) ?> .frm_right_container > p.description::after,
-	.<?php echo esc_html( $style_class ) ?> .frm_right_container > div.description::after,
-	.<?php echo esc_html( $style_class ) ?> .frm_right_container > div.frm_description::after,
-	.<?php echo esc_html( $style_class ) ?> .frm_right_container > .frm_error::after{
-		display:none<?php echo esc_html( $important ) ?>;
-	}
-
-	.<?php echo esc_html( $style_class ); ?> .frm_left_container label.frm_primary_label,
-	.<?php echo esc_html( $style_class ); ?> .frm_right_container label.frm_primary_label{
-		max-width:100px<?php echo esc_html( $important ); ?>;
-	}
-}
-/* End Responsive CSS*/

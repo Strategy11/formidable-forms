@@ -8,6 +8,7 @@ class FrmSettings {
     public $jquery_css;
     public $accordion_js;
 	public $fade_form;
+	public $old_css;
 
     public $success_msg;
     public $blank_msg;
@@ -85,6 +86,7 @@ class FrmSettings {
             'jquery_css' => false,
             'accordion_js' => false,
 			'fade_form' => false,
+			'old_css'   => false,
 
 			're_multi'  => 0,
 
@@ -212,6 +214,7 @@ class FrmSettings {
 		$this->jquery_css = isset( $params['frm_jquery_css'] ) ? absint( $params['frm_jquery_css'] ) : 0;
 		$this->accordion_js = isset( $params['frm_accordion_js'] ) ? absint( $params['frm_accordion_js'] ) : 0;
 		$this->fade_form = isset( $params['frm_fade_form'] ) ? absint( $params['frm_fade_form'] ) : 0;
+		$this->old_css   = isset( $params['frm_old_css'] ) ? absint( $params['frm_old_css'] ) : 0;
 		$this->no_ips = isset( $params['frm_no_ips'] ) ? absint( $params['frm_no_ips'] ) : 0;
     }
 

@@ -85,9 +85,14 @@ class FrmStylesController {
 			$css = apply_filters( 'get_frm_stylesheet', self::custom_stylesheet() );
 
 			if ( ! empty( $css ) ) {
+				$css = (array) $css;
+				if ( $frm_settings->old_css ) {
+					$css['frm-old'] = FrmAppHelper::plugin_url() . '/css/frm_old_grids.css';
+				}
+
 				$version = FrmAppHelper::plugin_version();
 
-				foreach ( (array) $css as $css_key => $file ) {
+				foreach ( $css as $css_key => $file ) {
 					if ( $register_css ) {
 						$this_version = self::get_css_version( $css_key, $version );
 						wp_register_style( $css_key, $file, array(), $this_version );
@@ -441,6 +446,7 @@ class FrmStylesController {
         $frm_settings = FrmAppHelper::get_settings();
         if ( $frm_settings->load_style != 'none' ) {
             wp_enqueue_style( 'formidable' );
+			wp_enqueue_style( 'frm-old' );
             $frm_vars['css_loaded'] = true;
         }
     }
@@ -478,9 +484,23 @@ class FrmStylesController {
 
 		if ( $style ) {
 			$class .= ' frm_style_' . $style->post_name;
+			self::maybe_add_rtl_class( $style, $class );
 		}
 
 		return $class;
+	}
+
+	/**
+	 * @param object $style
+	 * @param string $class
+	 *
+	 * @since 3.0
+	 */
+	private static function maybe_add_rtl_class( $style, &$class ) {
+		$is_rtl = isset( $style->post_content['direction'] ) && 'rtl' === $style->post_content['direction'];
+		if ( $is_rtl ) {
+			$class .= ' frm_rtl';
+		}
 	}
 
     /**

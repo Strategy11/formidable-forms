@@ -187,6 +187,47 @@
     width:auto !important;
 }
 
+/* RTL Grids */
+
+.with_frm_style.frm_rtl .frm_form_fields .star-rating{
+    float:right;
+}
+
+.with_frm_style.frm_rtl .frm_grid .frm_primary_label,
+.with_frm_style.frm_rtl .frm_grid_first .frm_primary_label,
+.with_frm_style.frm_rtl .frm_grid_odd .frm_primary_label,
+.with_frm_style.frm_rtl .frm_grid .frm_radio,
+.with_frm_style.frm_rtl .frm_grid_first .frm_radio,
+.with_frm_style.frm_rtl .frm_grid_odd .frm_radio,
+.with_frm_style.frm_rtl .frm_grid .frm_checkbox,
+.with_frm_style.frm_rtl .frm_grid_first .frm_checkbox,
+.with_frm_style.frm_rtl .frm_grid_odd .frm_checkbox{
+    float:right !important;
+    margin-right:0 !important;
+}
+
+.with_frm_style.frm_rtl .frm_grid_first .frm_radio label input,
+.with_frm_style.frm_rtl .frm_grid .frm_radio label input,
+.with_frm_style.frm_rtl .frm_grid_odd .frm_radio label input,
+.with_frm_style.frm_rtl .frm_grid_first .frm_checkbox label input,
+.with_frm_style.frm_rtl .frm_grid .frm_checkbox label input,
+.with_frm_style.frm_rtl .frm_grid_odd .frm_checkbox label input{
+    float:left;
+}
+
+.with_frm_style.frm_rtl .frm_catlevel_2,
+.with_frm_style.frm_rtl .frm_catlevel_3,
+.with_frm_style.frm_rtl .frm_catlevel_4,
+.with_frm_style.frm_rtl .frm_catlevel_5{
+	margin-right:18px;
+}
+
+.with_frm_style.frm_rtl div > .frm_time_select{
+	margin-right:5px;
+}
+
+/* End RTL Grids */
+
 @media only screen and (max-width: 800px) {
 	.frm_repeat_sec,
 	.frm_combo_inputs_container,
