@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Formidable v2.05\n"
+"Project-Id-Version: Formidable v2.05.02\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-02 22:23+0000\n"
-"PO-Revision-Date: 2018-01-02 22:23+0000\n"
+"POT-Creation-Date: 2018-01-02 23:32+0000\n"
+"PO-Revision-Date: 2018-01-02 23:32+0000\n"
 "Last-Translator: admin <steph@strategy11.com>\n"
 "Language-Team: Polish\n"
 "Language: pl-PL\n"
@@ -210,15 +210,6 @@ msgstr ""
 
 #: classes/controllers/FrmFormsController.php:1022
 msgid "Abnormal HTML characters prevented your form from saving correctly"
-msgstr ""
-
-#: classes/controllers/FrmFormsController.php:1332
-msgid "Please wait while you are redirected."
-msgstr ""
-
-#: classes/controllers/FrmFormsController.php:1366
-#, php-format
-msgid "%1$sClick here%2$s if you are not automatically redirected."
 msgstr ""
 
 #: classes/controllers/FrmSettingsController.php:9
@@ -1663,11 +1654,6 @@ msgstr ""
 msgid "Error Class"
 msgstr ""
 
-#: classes/views/frm-forms/mb_html_tab.php:50
-#: classes/views/frm-forms/settings.php:235
-msgid "Form Key"
-msgstr ""
-
 #: classes/views/frm-forms/mb_html_tab.php:63
 msgid "Button Label"
 msgstr ""
@@ -1682,22 +1668,6 @@ msgstr ""
 
 #: classes/views/frm-forms/settings.php:59
 msgid "Form Shortcodes"
-msgstr ""
-
-#: classes/views/frm-forms/settings.php:61
-msgid "Show"
-msgstr ""
-
-#: classes/views/frm-forms/settings.php:63
-msgid "Insert on a page, post, or text widget"
-msgstr ""
-
-#: classes/views/frm-forms/settings.php:68
-msgid "Insert in a template"
-msgstr ""
-
-#: classes/views/frm-forms/settings.php:71
-msgid "Hide"
 msgstr ""
 
 #: classes/views/frm-forms/settings.php:77
@@ -2193,10 +2163,6 @@ msgstr ""
 msgid "You can edit this content in the field settings."
 msgstr ""
 
-#: classes/views/frm-fields/back-end/html-content.php:2
-msgid "Content"
-msgstr ""
-
 #: classes/views/frm-fields/back-end/pixels-wide.php:10
 msgid "pixels wide"
 msgstr ""
@@ -2388,6 +2354,16 @@ msgstr "Żaden formularz nie został wybrany"
 #: classes/controllers/FrmFormsController.php:1145
 msgid "Please select a valid form"
 msgstr "Wybierz właściwy formularz"
+
+#: classes/controllers/FrmFormsController.php:1332
+msgid "Please wait while you are redirected."
+msgstr "Proszę poczekać na przekierowanie."
+
+#: classes/controllers/FrmFormsController.php:1366
+#, php-format
+msgid "%1$sClick here%2$s if you are not automatically redirected."
+msgstr ""
+"%1$sKliknij tutaj%2$s jeśli nie zostaniesz przekierowany automatycznie."
 
 #: classes/controllers/FrmSettingsController.php:88
 #: classes/controllers/FrmSettingsController.php:91
@@ -4282,6 +4258,11 @@ msgstr "Dodaj nazwę klasy, jeśli dane pole zostało wypełnione błędnie"
 msgid "Form Name"
 msgstr "Nazwa formularza"
 
+#: classes/views/frm-forms/mb_html_tab.php:50
+#: classes/views/frm-forms/settings.php:235
+msgid "Form Key"
+msgstr "Klucz formularza"
+
 #: classes/views/frm-forms/mb_html_tab.php:51
 msgid "Delete Entry Link"
 msgstr "Usuń link do wpisu"
@@ -4289,6 +4270,22 @@ msgstr "Usuń link do wpisu"
 #: classes/views/frm-forms/settings.php:36
 msgid "Customize HTML"
 msgstr "Własny HTML"
+
+#: classes/views/frm-forms/settings.php:61
+msgid "Show"
+msgstr "Pokaż"
+
+#: classes/views/frm-forms/settings.php:63
+msgid "Insert on a page, post, or text widget"
+msgstr "Wstaw do strony, wpisu lub widgetu"
+
+#: classes/views/frm-forms/settings.php:68
+msgid "Insert in a template"
+msgstr "Wstaw do szablonu"
+
+#: classes/views/frm-forms/settings.php:71
+msgid "Hide"
+msgstr "Ukryj"
 
 #: classes/views/frm-forms/settings.php:101
 msgid "Redirect to URL"
@@ -4725,6 +4722,10 @@ msgstr ""
 "Uwaga: To pole nie pojawi się w formularzu, ale będzie linkiem do ID "
 "użytkownika tak długo, jak użutkownik jest zalogowany w trakcie uzupełniania "
 "formumlarza."
+
+#: classes/views/frm-fields/back-end/html-content.php:2
+msgid "Content"
+msgstr "Treść"
 
 #: classes/views/frm-fields/back-end/max.php:1
 msgid "rows high"

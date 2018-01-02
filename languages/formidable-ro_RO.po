@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Formidable v2.05.02\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-02 22:23+0000\n"
-"PO-Revision-Date: 2018-01-02 22:23+0000\n"
+"POT-Creation-Date: 2018-01-02 23:33+0000\n"
+"PO-Revision-Date: 2018-01-02 23:33+0000\n"
 "Last-Translator: admin <steph@strategy11.com>\n"
 "Language-Team: Romanian\n"
 "Language: ro-RO\n"
@@ -280,10 +280,6 @@ msgstr ""
 #: classes/controllers/FrmFormsController.php:1133
 #: classes/controllers/FrmFormsController.php:1145
 msgid "Please select a valid form"
-msgstr ""
-
-#: classes/controllers/FrmFormsController.php:1332
-msgid "Please wait while you are redirected."
 msgstr ""
 
 #: classes/controllers/FrmFormsController.php:1366
@@ -2051,11 +2047,6 @@ msgstr ""
 msgid "Add class name if field has an error on form submit"
 msgstr ""
 
-#: classes/views/frm-forms/mb_html_tab.php:50
-#: classes/views/frm-forms/settings.php:235
-msgid "Form Key"
-msgstr ""
-
 #: classes/views/frm-forms/mb_html_tab.php:51
 msgid "Delete Entry Link"
 msgstr ""
@@ -2076,24 +2067,12 @@ msgstr ""
 msgid "Form Shortcodes"
 msgstr ""
 
-#: classes/views/frm-forms/settings.php:61
-msgid "Show"
-msgstr ""
-
 #: classes/views/frm-forms/settings.php:63
 msgid "Insert on a page, post, or text widget"
 msgstr ""
 
 #: classes/views/frm-forms/settings.php:68
 msgid "Insert in a template"
-msgstr ""
-
-#: classes/views/frm-forms/settings.php:71
-msgid "Hide"
-msgstr ""
-
-#: classes/views/frm-forms/settings.php:77
-msgid "Form Settings"
 msgstr ""
 
 #: classes/views/frm-forms/settings.php:88
@@ -2921,6 +2900,10 @@ msgstr "IP utilizator"
 #: classes/controllers/FrmFormsController.php:783
 msgid "Site URL"
 msgstr "URL sit"
+
+#: classes/controllers/FrmFormsController.php:1332
+msgid "Please wait while you are redirected."
+msgstr "Vă rugăm să așteptați până sunteți redirectat."
 
 #: classes/controllers/FrmSettingsController.php:9
 #: classes/controllers/FrmSettingsController.php:9
@@ -4488,9 +4471,26 @@ msgstr "Nume câmp"
 msgid "Form Name"
 msgstr "Nume formular"
 
+#: classes/views/frm-forms/mb_html_tab.php:50
+#: classes/views/frm-forms/settings.php:235
+msgid "Form Key"
+msgstr "Cheie formular"
+
 #: classes/views/frm-forms/mb_insert_fields.php:3
 msgid "Customization"
 msgstr "Personalizare"
+
+#: classes/views/frm-forms/settings.php:61
+msgid "Show"
+msgstr "Arată"
+
+#: classes/views/frm-forms/settings.php:71
+msgid "Hide"
+msgstr "Ascunde"
+
+#: classes/views/frm-forms/settings.php:77
+msgid "Form Settings"
+msgstr "Setări formular"
 
 #: classes/views/frm-forms/settings.php:198 classes/views/styles/manage.php:43
 msgid "default"

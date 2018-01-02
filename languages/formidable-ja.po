@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Formidable v2.05.02\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-02 22:22+0000\n"
-"PO-Revision-Date: 2018-01-02 22:22+0000\n"
+"POT-Creation-Date: 2018-01-02 23:32+0000\n"
+"PO-Revision-Date: 2018-01-02 23:32+0000\n"
 "Last-Translator: admin <steph@strategy11.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -1581,24 +1581,12 @@ msgstr ""
 msgid "Form Shortcodes"
 msgstr ""
 
-#: classes/views/frm-forms/settings.php:61
-msgid "Show"
-msgstr ""
-
 #: classes/views/frm-forms/settings.php:63
 msgid "Insert on a page, post, or text widget"
 msgstr ""
 
 #: classes/views/frm-forms/settings.php:68
 msgid "Insert in a template"
-msgstr ""
-
-#: classes/views/frm-forms/settings.php:71
-msgid "Hide"
-msgstr ""
-
-#: classes/views/frm-forms/settings.php:77
-msgid "Form Settings"
 msgstr ""
 
 #: classes/views/frm-forms/settings.php:88
@@ -4324,7 +4312,7 @@ msgstr "フォーム名"
 #: classes/views/frm-forms/mb_html_tab.php:50
 #: classes/views/frm-forms/settings.php:235
 msgid "Form Key"
-msgstr "フォームキー:"
+msgstr "フォームキー"
 
 #: classes/views/frm-forms/mb_insert_fields.php:3
 msgid "Customization"
@@ -4333,6 +4321,18 @@ msgstr "カスタマイズ"
 #: classes/views/frm-forms/settings.php:36
 msgid "Customize HTML"
 msgstr "カスタム HTML"
+
+#: classes/views/frm-forms/settings.php:61
+msgid "Show"
+msgstr "表示"
+
+#: classes/views/frm-forms/settings.php:71
+msgid "Hide"
+msgstr "非表示"
+
+#: classes/views/frm-forms/settings.php:77
+msgid "Form Settings"
+msgstr "フォームの設定"
 
 #: classes/views/frm-forms/settings.php:101
 msgid "Redirect to URL"

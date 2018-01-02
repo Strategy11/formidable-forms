@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Formidable v2.05\n"
+"Project-Id-Version: Formidable v2.05.02\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-02 22:22+0000\n"
-"PO-Revision-Date: 2018-01-02 22:22+0000\n"
+"POT-Creation-Date: 2018-01-02 23:31+0000\n"
+"PO-Revision-Date: 2018-01-02 23:31+0000\n"
 "Last-Translator: admin <steph@strategy11.com>\n"
 "Language-Team: Italian\n"
 "Language: it-IT\n"
@@ -39,15 +39,6 @@ msgstr ""
 msgid ""
 "Help us spread the %1$sFormidable Forms%2$s love with %3$s %5$s on WordPress."
 "org%4$s. Thank you heaps!"
-msgstr ""
-
-#: classes/controllers/FrmFormsController.php:1332
-msgid "Please wait while you are redirected."
-msgstr ""
-
-#: classes/controllers/FrmFormsController.php:1366
-#, php-format
-msgid "%1$sClick here%2$s if you are not automatically redirected."
 msgstr ""
 
 #: classes/controllers/FrmXMLController.php:121
@@ -356,39 +347,8 @@ msgstr ""
 msgid "Form Shortcodes"
 msgstr ""
 
-#: classes/views/frm-forms/settings.php:61
-msgid "Show"
-msgstr ""
-
-#: classes/views/frm-forms/settings.php:63
-msgid "Insert on a page, post, or text widget"
-msgstr ""
-
-#: classes/views/frm-forms/settings.php:68
-msgid "Insert in a template"
-msgstr ""
-
-#: classes/views/frm-forms/settings.php:71
-msgid "Hide"
-msgstr ""
-
-#: classes/views/frm-forms/settings.php:77
-msgid "Form Settings"
-msgstr ""
-
 #: classes/views/frm-forms/settings.php:132
 msgid "Do not store entries submitted from this form"
-msgstr ""
-
-#: classes/views/frm-forms/settings.php:173
-msgid "Validate this form with javascript"
-msgstr ""
-
-#: classes/views/frm-forms/settings.php:175
-msgid ""
-"Required fields, email format, and number format can be checked instantly in "
-"your browser. You may want to turn this option off if you have any "
-"customizations to remove validation messages on certain fields."
 msgstr ""
 
 #: classes/views/frm-settings/form.php:67
@@ -470,10 +430,6 @@ msgstr ""
 
 #: classes/views/frm-fields/back-end/field-html.php:4
 msgid "You can edit this content in the field settings."
-msgstr ""
-
-#: classes/views/frm-fields/back-end/html-content.php:2
-msgid "Content"
 msgstr ""
 
 #. Name of the plugin
@@ -828,6 +784,15 @@ msgstr ""
 #: classes/controllers/FrmFormsController.php:1145
 msgid "Please select a valid form"
 msgstr "Seleziona un modulo valido"
+
+#: classes/controllers/FrmFormsController.php:1332
+msgid "Please wait while you are redirected."
+msgstr "Attendi di essere reindirizzato."
+
+#: classes/controllers/FrmFormsController.php:1366
+#, php-format
+msgid "%1$sClick here%2$s if you are not automatically redirected."
+msgstr "%1$sFai clic qui%2$s se non vieni reindirizzato automaticamente."
 
 #: classes/controllers/FrmSettingsController.php:9
 #: classes/controllers/FrmSettingsController.php:9
@@ -3913,7 +3878,7 @@ msgstr "Nome Modulo"
 #: classes/views/frm-forms/mb_html_tab.php:50
 #: classes/views/frm-forms/settings.php:235
 msgid "Form Key"
-msgstr "Chiave Modulo:"
+msgstr "Chiave Modulo"
 
 #: classes/views/frm-forms/mb_html_tab.php:51
 msgid "Delete Entry Link"
@@ -3934,6 +3899,26 @@ msgstr "Personalizzazione"
 #: classes/views/frm-forms/settings.php:36
 msgid "Customize HTML"
 msgstr "Personalizza HTML"
+
+#: classes/views/frm-forms/settings.php:61
+msgid "Show"
+msgstr "Mostra"
+
+#: classes/views/frm-forms/settings.php:63
+msgid "Insert on a page, post, or text widget"
+msgstr "Inserisci in una pagina, in un articolo o in un widget di testo"
+
+#: classes/views/frm-forms/settings.php:68
+msgid "Insert in a template"
+msgstr "Inserisci in un modello"
+
+#: classes/views/frm-forms/settings.php:71
+msgid "Hide"
+msgstr "Nascondi"
+
+#: classes/views/frm-forms/settings.php:77
+msgid "Form Settings"
+msgstr "Opzioni modulo"
 
 #: classes/views/frm-forms/settings.php:88
 #: classes/views/frm-forms/settings.php:223
@@ -3997,6 +3982,21 @@ msgstr "Carica e salva con AJAX la pagina del creatore di moduli"
 #: classes/views/frm-forms/settings.php:165
 msgid "Recommended for long forms."
 msgstr "Consigliato per i moduli lunghi."
+
+#: classes/views/frm-forms/settings.php:173
+msgid "Validate this form with javascript"
+msgstr "Valida questo modulo con javascript"
+
+#: classes/views/frm-forms/settings.php:175
+msgid ""
+"Required fields, email format, and number format can be checked instantly in "
+"your browser. You may want to turn this option off if you have any "
+"customizations to remove validation messages on certain fields."
+msgstr ""
+"Campi obbligatori, formato e-mail e formato numeri possono essere verificati "
+"all'istante nel tuo browser. In caso, puoi disabilitare questa opzione se "
+"hai qualche tipo di personalizzazione per rimuovere i messaggi di "
+"validazione in certi campi."
 
 #: classes/views/frm-forms/settings.php:184
 msgid "Styling & Buttons"
@@ -4789,6 +4789,10 @@ msgid ""
 msgstr ""
 "Nota: questo campo non verrà mostrato nel modulo, ma lo collegherà all'ID "
 "utente finché l'utente è connesso al momento dell'invio del modulo."
+
+#: classes/views/frm-fields/back-end/html-content.php:2
+msgid "Content"
+msgstr "Contenuto"
 
 #: classes/views/frm-fields/back-end/max.php:1
 msgid "rows high"

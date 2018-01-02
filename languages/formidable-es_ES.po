@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Formidable v2.05.02\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-02 22:22+0000\n"
-"PO-Revision-Date: 2018-01-02 22:22+0000\n"
+"POT-Creation-Date: 2018-01-02 23:31+0000\n"
+"PO-Revision-Date: 2018-01-02 23:31+0000\n"
 "Last-Translator: admin <steph@strategy11.com>\n"
 "Language-Team: Spanish (Spain)\n"
 "Language: es-ES\n"
@@ -129,15 +129,6 @@ msgstr ""
 
 #: classes/controllers/FrmFormsController.php:1022
 msgid "Abnormal HTML characters prevented your form from saving correctly"
-msgstr ""
-
-#: classes/controllers/FrmFormsController.php:1332
-msgid "Please wait while you are redirected."
-msgstr ""
-
-#: classes/controllers/FrmFormsController.php:1366
-#, php-format
-msgid "%1$sClick here%2$s if you are not automatically redirected."
 msgstr ""
 
 #: classes/controllers/FrmStylesController.php:15
@@ -933,39 +924,8 @@ msgstr ""
 msgid "Form Shortcodes"
 msgstr ""
 
-#: classes/views/frm-forms/settings.php:61
-msgid "Show"
-msgstr ""
-
-#: classes/views/frm-forms/settings.php:63
-msgid "Insert on a page, post, or text widget"
-msgstr ""
-
-#: classes/views/frm-forms/settings.php:68
-msgid "Insert in a template"
-msgstr ""
-
-#: classes/views/frm-forms/settings.php:71
-msgid "Hide"
-msgstr ""
-
-#: classes/views/frm-forms/settings.php:77
-msgid "Form Settings"
-msgstr ""
-
 #: classes/views/frm-forms/settings.php:157
 msgid "Make stuff happen in the background without a page refresh"
-msgstr ""
-
-#: classes/views/frm-forms/settings.php:173
-msgid "Validate this form with javascript"
-msgstr ""
-
-#: classes/views/frm-forms/settings.php:175
-msgid ""
-"Required fields, email format, and number format can be checked instantly in "
-"your browser. You may want to turn this option off if you have any "
-"customizations to remove validation messages on certain fields."
 msgstr ""
 
 #: classes/views/frm-forms/settings.php:184
@@ -1163,10 +1123,6 @@ msgstr ""
 
 #: classes/views/frm-fields/back-end/field-html.php:4
 msgid "You can edit this content in the field settings."
-msgstr ""
-
-#: classes/views/frm-fields/back-end/html-content.php:2
-msgid "Content"
 msgstr ""
 
 #. Name of the plugin
@@ -1424,6 +1380,15 @@ msgstr "No se han especificado formularios"
 #: classes/controllers/FrmFormsController.php:1145
 msgid "Please select a valid form"
 msgstr "Por favor, seleccione una forma válida"
+
+#: classes/controllers/FrmFormsController.php:1332
+msgid "Please wait while you are redirected."
+msgstr "Por favor, espere mientras se le redirecciona."
+
+#: classes/controllers/FrmFormsController.php:1366
+#, php-format
+msgid "%1$sClick here%2$s if you are not automatically redirected."
+msgstr "%1$sClic aquí%2$s si no se le redirecciona automáticamente."
 
 #: classes/controllers/FrmSettingsController.php:9
 #: classes/controllers/FrmSettingsController.php:9
@@ -4015,6 +3980,26 @@ msgstr "Personalización"
 msgid "Customize HTML"
 msgstr "Personalizar HTML"
 
+#: classes/views/frm-forms/settings.php:61
+msgid "Show"
+msgstr "Mostrar"
+
+#: classes/views/frm-forms/settings.php:63
+msgid "Insert on a page, post, or text widget"
+msgstr "Insertar en un widget de página, publicación o texto"
+
+#: classes/views/frm-forms/settings.php:68
+msgid "Insert in a template"
+msgstr "Insertar en una plantilla"
+
+#: classes/views/frm-forms/settings.php:71
+msgid "Hide"
+msgstr "Ocultar"
+
+#: classes/views/frm-forms/settings.php:77
+msgid "Form Settings"
+msgstr "Configuración del formulario"
+
 #: classes/views/frm-forms/settings.php:88
 #: classes/views/frm-forms/settings.php:223
 msgid "On Submit"
@@ -4075,6 +4060,21 @@ msgstr "Cargar y guardar desde la página de creación de formulario con AJAX"
 #: classes/views/frm-forms/settings.php:165
 msgid "Recommended for long forms."
 msgstr "Recomendado para formularios largos"
+
+#: classes/views/frm-forms/settings.php:173
+msgid "Validate this form with javascript"
+msgstr "Validar este formulario con javascript"
+
+#: classes/views/frm-forms/settings.php:175
+msgid ""
+"Required fields, email format, and number format can be checked instantly in "
+"your browser. You may want to turn this option off if you have any "
+"customizations to remove validation messages on certain fields."
+msgstr ""
+"Los campos requeridos, el formato de email, y formato de número pueden ser "
+"chequeados instantáneamente en su navegador. Quizás quiera deshabilitar la "
+"opción si tiene alguna personalización que quita mensajes de validación en "
+"ciertos campos."
 
 #: classes/views/frm-forms/settings.php:198 classes/views/styles/manage.php:43
 msgid "default"
@@ -4744,6 +4744,10 @@ msgstr ""
 "Nota: Este campo no se mostrará en el formulario, pero unirá el "
 "identificador de usuario a él, siempre y cuando el usuario está conectado en "
 "el momento de envío de formularios"
+
+#: classes/views/frm-fields/back-end/html-content.php:2
+msgid "Content"
+msgstr "Contenido"
 
 #: classes/views/frm-fields/back-end/max.php:1
 msgid "rows high"

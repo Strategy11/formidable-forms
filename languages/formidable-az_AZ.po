@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Formidable v2.05.02\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-02 22:21+0000\n"
-"PO-Revision-Date: 2018-01-02 22:21+0000\n"
+"POT-Creation-Date: 2018-01-02 23:31+0000\n"
+"PO-Revision-Date: 2018-01-02 23:31+0000\n"
 "Last-Translator: admin <steph@strategy11.com>\n"
 "Language-Team: Azerbaijani (Azerbaijan)\n"
 "Language: az-AZ\n"
@@ -2407,20 +2407,12 @@ msgstr ""
 msgid "Form Shortcodes"
 msgstr ""
 
-#: classes/views/frm-forms/settings.php:61
-msgid "Show"
-msgstr ""
-
 #: classes/views/frm-forms/settings.php:63
 msgid "Insert on a page, post, or text widget"
 msgstr ""
 
 #: classes/views/frm-forms/settings.php:68
 msgid "Insert in a template"
-msgstr ""
-
-#: classes/views/frm-forms/settings.php:71
-msgid "Hide"
 msgstr ""
 
 #: classes/views/frm-forms/settings.php:77
@@ -4583,6 +4575,14 @@ msgstr "Tutqun"
 #: classes/views/frm-forms/add_field_links.php:22
 msgid "Layout"
 msgstr "Maket"
+
+#: classes/views/frm-forms/settings.php:61
+msgid "Show"
+msgstr "Göstər"
+
+#: classes/views/frm-forms/settings.php:71
+msgid "Hide"
+msgstr "Gizlət"
 
 #: classes/views/frm-forms/settings.php:198 classes/views/styles/manage.php:43
 msgid "default"

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Formidable v2.05.02\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-02 22:23+0000\n"
-"PO-Revision-Date: 2018-01-02 22:23+0000\n"
+"POT-Creation-Date: 2018-01-02 23:32+0000\n"
+"PO-Revision-Date: 2018-01-02 23:32+0000\n"
 "Last-Translator: admin <steph@strategy11.com>\n"
 "Language-Team: Portuguese (Brazil)\n"
 "Language: pt-BR\n"
@@ -153,15 +153,6 @@ msgstr ""
 
 #: classes/controllers/FrmFormsController.php:1022
 msgid "Abnormal HTML characters prevented your form from saving correctly"
-msgstr ""
-
-#: classes/controllers/FrmFormsController.php:1332
-msgid "Please wait while you are redirected."
-msgstr ""
-
-#: classes/controllers/FrmFormsController.php:1366
-#, php-format
-msgid "%1$sClick here%2$s if you are not automatically redirected."
 msgstr ""
 
 #: classes/controllers/FrmSettingsController.php:39
@@ -1384,22 +1375,6 @@ msgstr ""
 msgid "Form Shortcodes"
 msgstr ""
 
-#: classes/views/frm-forms/settings.php:61
-msgid "Show"
-msgstr ""
-
-#: classes/views/frm-forms/settings.php:63
-msgid "Insert on a page, post, or text widget"
-msgstr ""
-
-#: classes/views/frm-forms/settings.php:68
-msgid "Insert in a template"
-msgstr ""
-
-#: classes/views/frm-forms/settings.php:71
-msgid "Hide"
-msgstr ""
-
 #: classes/views/frm-forms/settings.php:77
 msgid "Form Settings"
 msgstr ""
@@ -1795,10 +1770,6 @@ msgstr ""
 msgid "You can edit this content in the field settings."
 msgstr ""
 
-#: classes/views/frm-fields/back-end/html-content.php:2
-msgid "Content"
-msgstr ""
-
 #: classes/views/frm-fields/back-end/pixels-wide.php:10
 msgid "pixels wide"
 msgstr ""
@@ -2043,6 +2014,15 @@ msgstr "Nenhum dos formulários foram especificados"
 #: classes/controllers/FrmFormsController.php:1145
 msgid "Please select a valid form"
 msgstr "Por favor selecione um formulário válido"
+
+#: classes/controllers/FrmFormsController.php:1332
+msgid "Please wait while you are redirected."
+msgstr "Por favor espere enquanto é direcionado"
+
+#: classes/controllers/FrmFormsController.php:1366
+#, php-format
+msgid "%1$sClick here%2$s if you are not automatically redirected."
+msgstr "%1$sClique aqui%2$s se você ainda não foi redirecionado."
 
 #: classes/controllers/FrmSettingsController.php:9
 #: classes/controllers/FrmSettingsController.php:9
@@ -4182,6 +4162,22 @@ msgstr "Customização"
 msgid "Customize HTML"
 msgstr "Personalizar HTML"
 
+#: classes/views/frm-forms/settings.php:61
+msgid "Show"
+msgstr "Mostrar"
+
+#: classes/views/frm-forms/settings.php:63
+msgid "Insert on a page, post, or text widget"
+msgstr "Inserir na página, post ou texto widget"
+
+#: classes/views/frm-forms/settings.php:68
+msgid "Insert in a template"
+msgstr "Inserir num template"
+
+#: classes/views/frm-forms/settings.php:71
+msgid "Hide"
+msgstr "Ocultar"
+
 #: classes/views/frm-forms/settings.php:101
 msgid "Redirect to URL"
 msgstr "Redirecionar para URL"
@@ -4719,6 +4715,10 @@ msgid ""
 msgstr ""
 "Nota: Esse campo não será mostrado no formulário, mas irá ligar o id do "
 "usuário enquanto este estiver logado no momento da submissão do formulário."
+
+#: classes/views/frm-fields/back-end/html-content.php:2
+msgid "Content"
+msgstr "Conteúdo"
 
 #: classes/views/frm-fields/back-end/max.php:1
 msgid "rows high"

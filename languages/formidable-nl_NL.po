@@ -1,17 +1,26 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2018-01-02 22:23+0000\n"
+"Project-Id-Version: Formidable v2.05.02\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-01-02 23:32+0000\n"
+"PO-Revision-Date: 2018-01-02 23:32+0000\n"
+"Last-Translator: admin <steph@strategy11.com>\n"
+"Language-Team: Dutch\n"
+"Language: nl-NL\n"
+"Plural-Forms: nplurals=2; plural=n != 1\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1\n"
+"X-Poedit-SourceCharset: UTF-8\n"
 "X-Generator: Loco - https://localise.biz/\n"
-"Language: nl-NL\n"
-"Project-Id-Version: Formidable Forms\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-02 22:23+0000\n"
-"Last-Translator: admin <steph@strategy11.com>\n"
-"Language-Team: Dutch"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: ..\n"
+"X-Poedit-KeywordsList: _:1;gettext:1;dgettext:2;ngettext:1,2;dngettext:2,3;"
+"__:1;_e:1;_c:1;_n:1,2;_n_noop:1,2;_nc:1,2;__ngettext:1,2;__ngettext_noop:1,2;"
+"_x:1,2c;_ex:1,2c;_nx:1,2,4c;_nx_noop:1,2,3c;_n_js:1,2;_nx_js:1,2,3c;"
+"esc_attr__:1;esc_html__:1;esc_attr_e:1;esc_html_e:1;esc_attr_x:1,2c;"
+"esc_html_x:1,2c;comments_number_link:2,3;t:1;st:1;trans:1;transChoice:1,2\n"
+"X-Loco-Target-Locale: nl_NL"
 
 #: classes/controllers/FrmAddonsController.php:6
 #: classes/controllers/FrmAddonsController.php:6
@@ -144,15 +153,6 @@ msgstr ""
 
 #: classes/controllers/FrmFormsController.php:1022
 msgid "Abnormal HTML characters prevented your form from saving correctly"
-msgstr ""
-
-#: classes/controllers/FrmFormsController.php:1332
-msgid "Please wait while you are redirected."
-msgstr ""
-
-#: classes/controllers/FrmFormsController.php:1366
-#, php-format
-msgid "%1$sClick here%2$s if you are not automatically redirected."
 msgstr ""
 
 #: classes/controllers/FrmSettingsController.php:39
@@ -1218,6 +1218,14 @@ msgid ""
 "this tab"
 msgstr ""
 
+#: classes/views/frm-forms/add_field_links.php:99
+msgid "Click inside the \"CSS layout classes\" field option in any field."
+msgstr ""
+
+#: classes/views/frm-forms/add_field_links.php:100
+msgid "This box will activate and you can click to insert classes."
+msgstr ""
+
 #: classes/views/frm-forms/edit.php:9 classes/views/frm-forms/new.php:9
 msgid "Build Form"
 msgstr ""
@@ -1266,22 +1274,6 @@ msgstr ""
 
 #: classes/views/frm-forms/settings.php:59
 msgid "Form Shortcodes"
-msgstr ""
-
-#: classes/views/frm-forms/settings.php:61
-msgid "Show"
-msgstr ""
-
-#: classes/views/frm-forms/settings.php:63
-msgid "Insert on a page, post, or text widget"
-msgstr ""
-
-#: classes/views/frm-forms/settings.php:68
-msgid "Insert in a template"
-msgstr ""
-
-#: classes/views/frm-forms/settings.php:71
-msgid "Hide"
 msgstr ""
 
 #: classes/views/frm-forms/settings.php:77
@@ -1648,10 +1640,6 @@ msgstr ""
 msgid "You can edit this content in the field settings."
 msgstr ""
 
-#: classes/views/frm-fields/back-end/html-content.php:2
-msgid "Content"
-msgstr ""
-
 #: classes/views/frm-fields/back-end/pixels-wide.php:10
 msgid "pixels wide"
 msgstr ""
@@ -1890,6 +1878,15 @@ msgstr "Geen formulieren gespecificeerd"
 #: classes/controllers/FrmFormsController.php:1145
 msgid "Please select a valid form"
 msgstr "Selecteer een geldig formulier"
+
+#: classes/controllers/FrmFormsController.php:1332
+msgid "Please wait while you are redirected."
+msgstr "Wacht terwijl je wordt doorverwezen"
+
+#: classes/controllers/FrmFormsController.php:1366
+#, php-format
+msgid "%1$sClick here%2$s if you are not automatically redirected."
+msgstr "%1$sClick hier%2$s voor het geval u niet automatisch wordt doorgeleid."
 
 #: classes/controllers/FrmSettingsController.php:9
 #: classes/controllers/FrmSettingsController.php:9
@@ -2190,7 +2187,7 @@ msgstr "Eenvoudig Chinees"
 
 #: classes/helpers/FrmAppHelper.php:1692
 msgid "Chinese Traditional"
-msgstr "Trditioneel Chinees"
+msgstr "Traditioneel Chinees"
 
 #: classes/helpers/FrmAppHelper.php:1693
 msgid "Croatian"
@@ -4066,15 +4063,6 @@ msgstr "Velden"
 msgid "Layout"
 msgstr "Opmaak"
 
-#: classes/views/frm-forms/add_field_links.php:99
-msgid "Click inside the \"CSS layout classes\" field option in any field."
-msgstr "1. Klik in het \"CSS layout classes\" veld optie in enig veld."
-
-#: classes/views/frm-forms/add_field_links.php:100
-msgid "This box will activate and you can click to insert classes."
-msgstr ""
-"2.  Deze box zal actief worden en je kan klikken om classen in te voegen "
-
 #: classes/views/frm-forms/mb_html_tab.php:10
 msgid "Field ID"
 msgstr "Veld ID"
@@ -4124,7 +4112,7 @@ msgstr "Naam Formulier"
 #: classes/views/frm-forms/mb_html_tab.php:50
 #: classes/views/frm-forms/settings.php:235
 msgid "Form Key"
-msgstr "Formuliersleutel:"
+msgstr "Formulier sleutel"
 
 #: classes/views/frm-forms/mb_html_tab.php:51
 msgid "Delete Entry Link"
@@ -4145,6 +4133,22 @@ msgstr "Personalisatie"
 #: classes/views/frm-forms/settings.php:36
 msgid "Customize HTML"
 msgstr "HTML aanpassen"
+
+#: classes/views/frm-forms/settings.php:61
+msgid "Show"
+msgstr "Toon"
+
+#: classes/views/frm-forms/settings.php:63
+msgid "Insert on a page, post, or text widget"
+msgstr "Invoegen op een pagina, een bericht of een tekst widget"
+
+#: classes/views/frm-forms/settings.php:68
+msgid "Insert in a template"
+msgstr "in een sjabloon invoegen"
+
+#: classes/views/frm-forms/settings.php:71
+msgid "Hide"
+msgstr "Verberg"
 
 #: classes/views/frm-forms/settings.php:101
 msgid "Redirect to URL"
@@ -4305,7 +4309,7 @@ msgstr ""
 
 #: classes/views/frm-settings/form.php:221
 msgid "Uninstall Formidable"
-msgstr "Formidable deïnstalleren"
+msgstr "deïnstalleer Formidable "
 
 #: classes/views/frm-settings/license_box.php:9
 msgid "Click here"
@@ -4713,6 +4717,10 @@ msgstr ""
 "Opm: Dit veld wordt niet getoond in het formulier, maar koppelt de "
 "gebruikers id eraan tenminste als de gebruiker is ingelogd op het moment van "
 "het verzenden van het formulier"
+
+#: classes/views/frm-fields/back-end/html-content.php:2
+msgid "Content"
+msgstr "Inhoud"
 
 #: classes/views/frm-fields/back-end/max.php:1
 msgid "rows high"

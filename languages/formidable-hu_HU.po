@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Formidable v2.05.02\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-02 22:22+0000\n"
-"PO-Revision-Date: 2018-01-02 22:22+0000\n"
+"POT-Creation-Date: 2018-01-02 23:31+0000\n"
+"PO-Revision-Date: 2018-01-02 23:31+0000\n"
 "Last-Translator: admin <steph@strategy11.com>\n"
 "Language-Team: Hungarian\n"
 "Language: hu-HU\n"
@@ -3451,20 +3451,12 @@ msgstr ""
 msgid "Form Shortcodes"
 msgstr ""
 
-#: classes/views/frm-forms/settings.php:61
-msgid "Show"
-msgstr ""
-
 #: classes/views/frm-forms/settings.php:63
 msgid "Insert on a page, post, or text widget"
 msgstr ""
 
 #: classes/views/frm-forms/settings.php:68
 msgid "Insert in a template"
-msgstr ""
-
-#: classes/views/frm-forms/settings.php:71
-msgid "Hide"
 msgstr ""
 
 #: classes/views/frm-forms/settings.php:77
@@ -4674,6 +4666,14 @@ msgstr "Világos"
 #: classes/views/frm-forms/add_field.php:258
 msgid "Dark"
 msgstr "Sötét"
+
+#: classes/views/frm-forms/settings.php:61
+msgid "Show"
+msgstr "Megjelenít"
+
+#: classes/views/frm-forms/settings.php:71
+msgid "Hide"
+msgstr "Elrejtés"
 
 #: classes/views/frm-forms/settings.php:207
 #: classes/views/frm-settings/form.php:174

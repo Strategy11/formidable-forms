@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Formidable v2.05\n"
+"Project-Id-Version: Formidable v2.05.02\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-02 22:22+0000\n"
-"PO-Revision-Date: 2018-01-02 22:22+0000\n"
+"POT-Creation-Date: 2018-01-02 23:31+0000\n"
+"PO-Revision-Date: 2018-01-02 23:31+0000\n"
 "Last-Translator: admin <steph@strategy11.com>\n"
 "Language-Team: German\n"
 "Language: de-DE\n"
@@ -22,10 +22,6 @@ msgstr ""
 "esc_html_x:1,2c;comments_number_link:2,3;t:1;st:1;trans:1;transChoice:1,2\n"
 "X-Loco-Target-Locale: de_DE"
 
-#: classes/controllers/FrmAddonsController.php:27
-msgid "There are no plugins on your site that require a license"
-msgstr ""
-
 #: classes/controllers/FrmAppController.php:120
 msgid "Build a Form"
 msgstr ""
@@ -43,36 +39,6 @@ msgstr ""
 msgid ""
 "Help us spread the %1$sFormidable Forms%2$s love with %3$s %5$s on WordPress."
 "org%4$s. Thank you heaps!"
-msgstr ""
-
-#: classes/controllers/FrmEntriesController.php:105
-msgid "Entry Name"
-msgstr ""
-
-#: classes/controllers/FrmEntriesController.php:420
-msgid "You are trying to view an entry that does not exist."
-msgstr ""
-
-#: classes/controllers/FrmFieldsController.php:284
-msgid "New Option"
-msgstr ""
-
-#: classes/controllers/FrmFormsController.php:254
-msgid "There was a problem creating the new template."
-msgstr ""
-
-#: classes/controllers/FrmFormsController.php:1332
-msgid "Please wait while you are redirected."
-msgstr ""
-
-#: classes/controllers/FrmFormsController.php:1366
-#, php-format
-msgid "%1$sClick here%2$s if you are not automatically redirected."
-msgstr ""
-
-#: classes/controllers/FrmSettingsController.php:39
-#: classes/models/FrmPointers.php:327 classes/views/addons/settings.php:2
-msgid "Plugin Licenses"
 msgstr ""
 
 #: classes/controllers/FrmXMLController.php:121
@@ -101,13 +67,6 @@ msgstr ""
 msgid ""
 "Warning: If you have entries with multiple rows, all but the first row will "
 "be lost."
-msgstr ""
-
-#: classes/helpers/FrmAppHelper.php:1643
-msgid ""
-"In certain browsers (e.g. Firefox) text will not display correctly if the "
-"field height is too small relative to the field padding and text size. "
-"Please increase your field height or decrease your field padding."
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:1652
@@ -161,20 +120,8 @@ msgstr ""
 msgid "Long forms can still be beautiful with sections."
 msgstr ""
 
-#: classes/helpers/FrmTipsHelper.php:44
-msgid "Use conditional logic to shorten your forms and increase conversions."
-msgstr ""
-
 #: classes/helpers/FrmTipsHelper.php:49
 msgid "Stop intimidating users with long forms."
-msgstr ""
-
-#: classes/helpers/FrmTipsHelper.php:54
-msgid "Cut down on back-and-forth with clients."
-msgstr ""
-
-#: classes/helpers/FrmTipsHelper.php:55
-msgid "Allow file uploads in your form."
 msgstr ""
 
 #: classes/helpers/FrmTipsHelper.php:59
@@ -189,49 +136,12 @@ msgstr ""
 msgid "A site with dynamic, user-generated content is within reach."
 msgstr ""
 
-#: classes/helpers/FrmTipsHelper.php:78 classes/helpers/FrmTipsHelper.php:83
-msgid "Add front-end editing."
-msgstr ""
-
-#: classes/helpers/FrmTipsHelper.php:87
-msgid "Have a long form that takes time to complete?"
-msgstr ""
-
-#: classes/helpers/FrmTipsHelper.php:88
-msgid "Let logged-in users save a draft and return later."
-msgstr ""
-
-#: classes/helpers/FrmTipsHelper.php:98
-msgid "Save time by sending the email to the right person automatically."
-msgstr ""
-
-#: classes/helpers/FrmTipsHelper.php:99
-msgid "Add email routing."
-msgstr ""
-
 #: classes/helpers/FrmTipsHelper.php:103
 msgid "Create blog posts or pages from the front-end."
 msgstr ""
 
 #: classes/helpers/FrmTipsHelper.php:108
 msgid "Make front-end posting easy."
-msgstr ""
-
-#: classes/helpers/FrmTipsHelper.php:113
-msgid "Grow your business with automated email follow-up."
-msgstr ""
-
-#: classes/helpers/FrmTipsHelper.php:114
-msgid "Send leads straight to MailChimp."
-msgstr ""
-
-#: classes/helpers/FrmTipsHelper.php:118
-msgid ""
-"Save hours and increase revenue by collecting payments with every submission."
-msgstr ""
-
-#: classes/helpers/FrmTipsHelper.php:123
-msgid "Increase revenue."
 msgstr ""
 
 #: classes/helpers/FrmTipsHelper.php:128
@@ -254,56 +164,16 @@ msgstr ""
 msgid "Want a text when this form is submitted or when a payment is received?"
 msgstr ""
 
-#: classes/helpers/FrmTipsHelper.php:148
-msgid "Send a text when this form is submitted."
-msgstr ""
-
 #: classes/helpers/FrmTipsHelper.php:160
 msgid "Make your sidebar or footer form stand out."
-msgstr ""
-
-#: classes/helpers/FrmTipsHelper.php:161
-msgid "Use multiple style templates."
-msgstr ""
-
-#: classes/helpers/FrmTipsHelper.php:171
-msgid "Want to edit or delete form submissions?"
-msgstr ""
-
-#: classes/helpers/FrmTipsHelper.php:172
-msgid "Add entry management."
-msgstr ""
-
-#: classes/helpers/FrmTipsHelper.php:176
-msgid "Want to search submitted entries?"
-msgstr ""
-
-#: classes/helpers/FrmTipsHelper.php:188
-msgid "Want to import entries into your forms?"
 msgstr ""
 
 #: classes/helpers/FrmTipsHelper.php:199
 msgid "Looking for more ways to get professional results?"
 msgstr ""
 
-#: classes/helpers/FrmTipsHelper.php:200
-msgid "Take your forms to the next level."
-msgstr ""
-
 #: classes/helpers/FrmTipsHelper.php:204
 msgid "Increase conversions in long forms."
-msgstr ""
-
-#: classes/helpers/FrmTipsHelper.php:205
-msgid "Add conditional logic, page breaks, and section headings."
-msgstr ""
-
-#: classes/helpers/FrmTipsHelper.php:209
-msgid "Automate your business and increase revenue."
-msgstr ""
-
-#: classes/helpers/FrmTipsHelper.php:210
-msgid "Collect instant payments, and send leads to MailChimp."
 msgstr ""
 
 #: classes/helpers/FrmXMLHelper.php:60
@@ -314,10 +184,6 @@ msgstr ""
 #, php-format
 msgid ""
 "Your %1$s license key is missing. Please add it on the %2$slicenses page%3$s."
-msgstr ""
-
-#: classes/models/FrmAddon.php:288
-msgid "Oops! You forgot to enter your license number."
 msgstr ""
 
 #: classes/models/FrmAddon.php:429
@@ -333,10 +199,6 @@ msgstr ""
 
 #: classes/models/FrmDb.php:413
 msgid "Use the query in an array format so it can be properly prepared."
-msgstr ""
-
-#: classes/models/FrmEntryValidate.php:292
-msgid "Your entry appears to be blacklist spam!"
 msgstr ""
 
 #: classes/models/FrmField.php:18
@@ -365,10 +227,6 @@ msgstr ""
 
 #: classes/models/FrmField.php:105
 msgid "Dynamic"
-msgstr ""
-
-#: classes/models/FrmField.php:109
-msgid "Lookup"
 msgstr ""
 
 #: classes/models/FrmField.php:113
@@ -447,23 +305,8 @@ msgid ""
 "You can read all about the Formidable Premium Plugins %2$shere%3$s."
 msgstr ""
 
-#: classes/models/FrmPointers.php:346
-#, php-format
-msgid ""
-"Thank you for using our plugin and good luck with your forms!<br/><br/>Best,"
-"<br/>Team Formidable - %1$sformidableforms.com%2$s"
-msgstr ""
-
-#: classes/views/addons/list.php:26 classes/views/addons/list.php:26
-msgid "View Docs"
-msgstr ""
-
 #: classes/views/addons/settings.php:24
 msgid "Good to go!"
-msgstr ""
-
-#: classes/views/addons/settings.php:40
-msgid "Autofill Licenses"
 msgstr ""
 
 #: classes/views/frm-entries/_sidebar-shared-pub.php:23
@@ -489,22 +332,12 @@ msgid ""
 "See the %1$sform documentation%2$s for instructions on publishing your form"
 msgstr ""
 
-#: classes/views/frm-form-actions/_action_inside.php:32
-msgid "Action Triggers"
-msgstr ""
-
 #: classes/views/frm-form-actions/_email_settings.php:79
 msgid "Append Browser and Referring URL to message"
 msgstr ""
 
 #: classes/views/frm-forms/actions-dropdown.php:2
 msgid "Show options"
-msgstr ""
-
-#: classes/views/frm-forms/add_field.php:134
-msgid ""
-"Unique: Do not allow the same response multiple times. For example, if one "
-"user enters 'Joe', then no one else will be allowed to enter the same name."
 msgstr ""
 
 #: classes/views/frm-forms/add_field.php:218
@@ -517,16 +350,6 @@ msgstr ""
 
 #: classes/views/frm-forms/add_field.php:232
 msgid "ReCaptcha Type"
-msgstr ""
-
-#: classes/views/frm-forms/add_field.php:233
-msgid ""
-"Set the size of the captcha field. The compact option is best if your form "
-"is in a small area."
-msgstr ""
-
-#: classes/views/frm-forms/add_field.php:238
-msgid "Normal"
 msgstr ""
 
 #: classes/views/frm-forms/add_field_links.php:21
@@ -547,10 +370,6 @@ msgstr ""
 msgid "Build Form"
 msgstr ""
 
-#: classes/views/frm-forms/form.php:21
-msgid "2. Click or drag a field to add it to your form"
-msgstr ""
-
 #: classes/views/frm-forms/form.php:29
 msgid "Or load fields from a template"
 msgstr ""
@@ -569,51 +388,6 @@ msgstr ""
 msgid "Form Shortcodes"
 msgstr ""
 
-#: classes/views/frm-forms/settings.php:61
-msgid "Show"
-msgstr ""
-
-#: classes/views/frm-forms/settings.php:63
-msgid "Insert on a page, post, or text widget"
-msgstr ""
-
-#: classes/views/frm-forms/settings.php:68
-msgid "Insert in a template"
-msgstr ""
-
-#: classes/views/frm-forms/settings.php:71
-msgid "Hide"
-msgstr ""
-
-#: classes/views/frm-forms/settings.php:77
-msgid "Form Settings"
-msgstr ""
-
-#: classes/views/frm-forms/settings.php:173
-msgid "Validate this form with javascript"
-msgstr ""
-
-#: classes/views/frm-forms/settings.php:175
-msgid ""
-"Required fields, email format, and number format can be checked instantly in "
-"your browser. You may want to turn this option off if you have any "
-"customizations to remove validation messages on certain fields."
-msgstr ""
-
-#: classes/views/frm-settings/form.php:43
-msgid "Load form styling"
-msgstr ""
-
-#: classes/views/frm-settings/form.php:52
-msgid "Don't use form styling on any page"
-msgstr ""
-
-#: classes/views/frm-settings/form.php:61
-msgid ""
-"We recommend using HTML 5 for your forms. It adds some nifty options like "
-"placeholders, patterns, and autocomplete."
-msgstr ""
-
 #: classes/views/frm-settings/form.php:67
 msgid "Load form layout styling for old browsers"
 msgstr ""
@@ -626,17 +400,6 @@ msgid ""
 "column in older browsers."
 msgstr ""
 
-#: classes/views/frm-settings/form.php:94
-#, php-format
-msgid ""
-"reCAPTCHA requires a Site and Private API key. Sign up for a %1$sfree "
-"reCAPTCHA key%2$s."
-msgstr ""
-
-#: classes/views/frm-settings/form.php:100
-msgid "Secret Key"
-msgstr ""
-
 #: classes/views/frm-settings/form.php:103
 msgid "reCAPTCHA Type"
 msgstr ""
@@ -647,18 +410,6 @@ msgstr ""
 
 #: classes/views/frm-settings/form.php:109
 msgid "Invisible"
-msgstr ""
-
-#: classes/views/frm-settings/form.php:115
-msgid "Browser Default"
-msgstr ""
-
-#: classes/views/frm-settings/form.php:122
-msgid "Multiple reCaptchas"
-msgstr ""
-
-#: classes/views/frm-settings/form.php:125
-msgid "Allow multiple reCaptchas to be used on a single page"
 msgstr ""
 
 #: classes/views/frm-settings/form.php:188
@@ -695,22 +446,6 @@ msgid ""
 "sample."
 msgstr ""
 
-#: classes/views/styles/_field-colors.php:64
-#: classes/views/styles/_field-colors.php:82
-msgid "Remove box shadow"
-msgstr ""
-
-#: classes/views/styles/_general.php:3
-msgid ""
-"This will center your form on the page where it is published if the form "
-"width is less than the available width on the page."
-msgstr ""
-
-#: classes/views/styles/manage.php:5
-msgid ""
-"Easily change which template your forms are using by making changes below."
-msgstr ""
-
 #: classes/views/xml/import_form.php:102
 msgid "(child)"
 msgstr ""
@@ -719,16 +454,8 @@ msgstr ""
 msgid "You can edit this content in the field settings."
 msgstr ""
 
-#: classes/views/frm-fields/back-end/html-content.php:2
-msgid "Content"
-msgstr ""
-
 #. Name of the plugin
 msgid "Formidable Forms"
-msgstr ""
-
-#. Description of the plugin
-msgid "Quickly and easily create drag-and-drop forms"
 msgstr ""
 
 #. URI of the plugin
@@ -749,6 +476,12 @@ msgstr "Erweiterungen"
 #: classes/controllers/FrmAddonsController.php:9
 msgid "Upgrade to Pro"
 msgstr "Upgrade auf die Pro-Version"
+
+#: classes/controllers/FrmAddonsController.php:27
+msgid "There are no plugins on your site that require a license"
+msgstr ""
+"Es gibt keine Plug-Ins auf Ihrer Website, für die eine Lizenz erforderlich "
+"ist."
 
 #: classes/controllers/FrmAppController.php:90
 msgid "Build"
@@ -815,6 +548,10 @@ msgstr "Eingabe Schlüssel"
 msgid "Form"
 msgstr "Formular"
 
+#: classes/controllers/FrmEntriesController.php:105
+msgid "Entry Name"
+msgstr "Eintragsname"
+
 #: classes/controllers/FrmEntriesController.php:106
 #: classes/helpers/FrmCSVExportHelper.php:128
 msgid "Created By"
@@ -841,6 +578,10 @@ msgstr ""
 "Das Formular liegt im Papierkorb und wird zusammen mit allen Einträgen "
 "dauerhaft in %s gelöscht."
 
+#: classes/controllers/FrmEntriesController.php:420
+msgid "You are trying to view an entry that does not exist."
+msgstr "Sie versuchen, einen Eintrag anzuzeigen, der nicht existiert."
+
 #: classes/controllers/FrmEntriesController.php:448
 msgid "Entry was Successfully Destroyed"
 msgstr "Der Eintrag wurde erfolgreich zerstört"
@@ -856,6 +597,10 @@ msgstr "Keine Einträge wurden festgelegt"
 #: classes/controllers/FrmFieldsController.php:281
 msgid "Other"
 msgstr "Sonstiges"
+
+#: classes/controllers/FrmFieldsController.php:284
+msgid "New Option"
+msgstr "Neue Option"
 
 #: classes/controllers/FrmFormActionsController.php:9
 #: classes/views/frm-forms/settings.php:33
@@ -886,6 +631,10 @@ msgstr "Eine Formular Vorlage wurde erfolgreich erstellt."
 #: classes/controllers/FrmFormsController.php:250
 msgid "Form was Successfully Copied"
 msgstr "Das Formular wurde erfolgreich kopiert."
+
+#: classes/controllers/FrmFormsController.php:254
+msgid "There was a problem creating the new template."
+msgstr "Beim Erstellen der neuen Vorlage ist ein Problem aufgetreten."
 
 #: classes/controllers/FrmFormsController.php:352
 #: classes/controllers/FrmFormsController.php:398
@@ -1063,11 +812,26 @@ msgstr ""
 msgid "Please select a valid form"
 msgstr "Bitte ein gültiges Formular wählen"
 
+#: classes/controllers/FrmFormsController.php:1332
+msgid "Please wait while you are redirected."
+msgstr "Bitte warten Sie, während Sie weitergeleitet werden."
+
+#: classes/controllers/FrmFormsController.php:1366
+#, php-format
+msgid "%1$sClick here%2$s if you are not automatically redirected."
+msgstr ""
+"%1$sKlicken Sie hier%2$s, wenn Sie nicht automatisch weitergeleitet werden."
+
 #: classes/controllers/FrmSettingsController.php:9
 #: classes/controllers/FrmSettingsController.php:9
 #: classes/models/FrmPointers.php:324 classes/views/frm-settings/form.php:2
 msgid "Global Settings"
 msgstr "Globale Einstellungen"
+
+#: classes/controllers/FrmSettingsController.php:39
+#: classes/models/FrmPointers.php:327 classes/views/addons/settings.php:2
+msgid "Plugin Licenses"
+msgstr "Plug-In Lizenzen"
 
 #: classes/controllers/FrmSettingsController.php:88
 #: classes/controllers/FrmSettingsController.php:91
@@ -1446,6 +1210,16 @@ msgstr "E-Mail Adresse eingeben"
 msgid "Confirm Email"
 msgstr "E-Mail Adresse bestätigen"
 
+#: classes/helpers/FrmAppHelper.php:1643
+msgid ""
+"In certain browsers (e.g. Firefox) text will not display correctly if the "
+"field height is too small relative to the field padding and text size. "
+"Please increase your field height or decrease your field padding."
+msgstr ""
+"In einigen Browsern (z.B. Firefox) wird Text nicht korrekt angezeigt, wenn "
+"die Feldhöhe relativ zum Feld-Innenabstand (padding) und zur Textgröße zu "
+"klein ist. Bitte erhöhen Sie die Feldhöhe oder reduzieren den padding-Wert. "
+
 #: classes/helpers/FrmAppHelper.php:1644
 msgid "Enter Password"
 msgstr "Passwort eingeben"
@@ -1517,7 +1291,7 @@ msgstr "Bulgarisch"
 
 #: classes/helpers/FrmAppHelper.php:1689
 msgid "Catalan"
-msgstr "Kataln"
+msgstr "Katalanisch"
 
 #: classes/helpers/FrmAppHelper.php:1690
 msgid "Chinese Hong Kong"
@@ -2926,8 +2700,7 @@ msgstr "Große Anfangsbuchstaben"
 
 #: classes/helpers/FrmFormsHelper.php:869
 msgid "Automatically capitalize the first letter in each word."
-msgstr ""
-"Schreibe jeden Anfangsbuchstaben eines Wortes automatisch groß. (Kapitälchen)"
+msgstr "Anfangsbuchstaben eines Wortes automatisch großschreiben."
 
 #: classes/helpers/FrmFormsHelper.php:895
 msgid "Published"
@@ -3033,17 +2806,75 @@ msgstr "Versteckt (aber behalte den Abstand)"
 msgid "Upgrade to Pro."
 msgstr "Upgrade auf die Pro-Version"
 
+#: classes/helpers/FrmTipsHelper.php:44
+msgid "Use conditional logic to shorten your forms and increase conversions."
+msgstr ""
+"Verwenden Sie bedingte Logik, um Ihre Formulare zu verkürzen und die "
+"Konversion zu verbessern"
+
 #: classes/helpers/FrmTipsHelper.php:50
 msgid "Use page breaks."
 msgstr "Verwenden Sie Seitenumbrüche."
+
+#: classes/helpers/FrmTipsHelper.php:54
+msgid "Cut down on back-and-forth with clients."
+msgstr "Reduzieren Sie vor allem das Hin und Her mit den Kunden."
+
+#: classes/helpers/FrmTipsHelper.php:55
+msgid "Allow file uploads in your form."
+msgstr "Upload von Dateien in Ihrem Formular zulassen."
 
 #: classes/helpers/FrmTipsHelper.php:64
 msgid "Save time."
 msgstr "Sparen Sie Zeit."
 
+#: classes/helpers/FrmTipsHelper.php:78 classes/helpers/FrmTipsHelper.php:83
+msgid "Add front-end editing."
+msgstr "Front-End Bearbeitung hinzufügen."
+
+#: classes/helpers/FrmTipsHelper.php:87
+msgid "Have a long form that takes time to complete?"
+msgstr ""
+"Haben Sie ein langes Formular, welches Zeit für das Ausfüllen beansprucht?"
+
+#: classes/helpers/FrmTipsHelper.php:88
+msgid "Let logged-in users save a draft and return later."
+msgstr ""
+"Lassen Sie angemeldete Benutzer einen Entwurf speichern, um später "
+"zurückzukehren."
+
+#: classes/helpers/FrmTipsHelper.php:98
+msgid "Save time by sending the email to the right person automatically."
+msgstr ""
+"Sparen Sie Zeit, indem Sie die E-Mail automatisch an die richtige Person "
+"senden."
+
+#: classes/helpers/FrmTipsHelper.php:99
+msgid "Add email routing."
+msgstr "E-Mail-Weiterleitung hinzufügen."
+
+#: classes/helpers/FrmTipsHelper.php:113
+msgid "Grow your business with automated email follow-up."
+msgstr "Steigern Sie Ihr Geschäft durch automatisierten E-Mail-Follow-up."
+
+#: classes/helpers/FrmTipsHelper.php:114
+msgid "Send leads straight to MailChimp."
+msgstr "Senden Sie potenziellen Interessenten direkt zu MailChimp."
+
+#: classes/helpers/FrmTipsHelper.php:118
+msgid ""
+"Save hours and increase revenue by collecting payments with every submission."
+msgstr ""
+"Sparen Sie Zeit und steigern Sie Ihre Einnahmen, indem Sie Zahlungen mit "
+"jeder Übermittlung generieren."
+
 #: classes/helpers/FrmTipsHelper.php:119 classes/helpers/FrmTipsHelper.php:124
 msgid "Use PayPal with this form."
 msgstr "Paypal mit diesem Formular verwenden"
+
+#: classes/helpers/FrmTipsHelper.php:123
+msgid "Increase revenue."
+msgstr "Umsatz steigern."
 
 #: classes/helpers/FrmTipsHelper.php:129
 msgid "Use Paypal with this form."
@@ -3057,9 +2888,50 @@ msgstr "Erstellen Sie Benutzerkonten automatisch."
 msgid "Use Twilio with this form."
 msgstr "Twilio mit diesem Formular verwenden"
 
+#: classes/helpers/FrmTipsHelper.php:148
+msgid "Send a text when this form is submitted."
+msgstr "Text senden, wenn dieses Formular gesendet wurde."
+
 #: classes/helpers/FrmTipsHelper.php:149
 msgid "Get Twilio."
 msgstr "Holen Sie sich Twilio."
+
+#: classes/helpers/FrmTipsHelper.php:161
+msgid "Use multiple style templates."
+msgstr "Verwenden Sie mehrere Stilvorlagen."
+
+#: classes/helpers/FrmTipsHelper.php:171
+msgid "Want to edit or delete form submissions?"
+msgstr "Möchten Sie übermittelte Einträge bearbeiten oder löschen?"
+
+#: classes/helpers/FrmTipsHelper.php:172
+msgid "Add entry management."
+msgstr "Eintragsverwaltung hinzufügen."
+
+#: classes/helpers/FrmTipsHelper.php:176
+msgid "Want to search submitted entries?"
+msgstr "Möchten Sie übermittelte Einträge durchsuchen?"
+
+#: classes/helpers/FrmTipsHelper.php:188
+msgid "Want to import entries into your forms?"
+msgstr "Wollen Sie Einträge in Ihre Formulare importieren?"
+
+#: classes/helpers/FrmTipsHelper.php:200
+msgid "Take your forms to the next level."
+msgstr "Bringen Sie Ihre Formulare auf das nächst höhere Niveau."
+
+#: classes/helpers/FrmTipsHelper.php:205
+msgid "Add conditional logic, page breaks, and section headings."
+msgstr ""
+"Fügen Sie bedingte Logik, Seitenumbrüche und Abschnittsüberschriften hinzu."
+
+#: classes/helpers/FrmTipsHelper.php:209
+msgid "Automate your business and increase revenue."
+msgstr "Automatisieren Sie Ihr Geschäft und steigern Sie Ihren Umsatz."
+
+#: classes/helpers/FrmTipsHelper.php:210
+msgid "Collect instant payments, and send leads to MailChimp."
+msgstr "Sofortige Zahlungen erfassen und Kontakte an MailChimp senden."
 
 #: classes/helpers/FrmXMLHelper.php:50
 msgid "Your server does not have XML enabled"
@@ -3145,6 +3017,10 @@ msgstr "Erstelle Artikel"
 #: classes/views/frm-form-actions/email_action.php:16
 msgid "Email Notification"
 msgstr "E-Mail Benachrichtigung"
+
+#: classes/models/FrmAddon.php:288
+msgid "Oops! You forgot to enter your license number."
+msgstr "Hoppla! Sie haben vergessen, Ihre Lizenznummer einzugeben."
 
 #: classes/models/FrmAddon.php:362
 msgid "Your license has been activated. Enjoy!"
@@ -3244,6 +3120,10 @@ msgstr "Bei der Verifizierung Ihres reCAPTCHA ist ein Fehler aufgetreten"
 msgid "Your entry appears to be spam!"
 msgstr "Ihre Eingabe scheint Spam zu sein"
 
+#: classes/models/FrmEntryValidate.php:292
+msgid "Your entry appears to be blacklist spam!"
+msgstr "Ihr Eintrag scheint SPAM zu sein (Blacklist)!"
+
 #: classes/models/FrmField.php:14 classes/views/styles/_buttons.php:58
 #: classes/views/styles/_buttons.php:102 classes/views/styles/_buttons.php:121
 #: classes/views/styles/_field-colors.php:31
@@ -3264,7 +3144,7 @@ msgstr "Dropdown"
 
 #: classes/models/FrmField.php:34 classes/models/FrmPointers.php:251
 msgid "Email"
-msgstr "Email"
+msgstr "E-Mail"
 
 #: classes/models/FrmField.php:38
 msgid "Website/URL"
@@ -3305,6 +3185,10 @@ msgstr "Uhrzeit"
 #: classes/models/FrmField.php:89
 msgid "Scale"
 msgstr "Maß, Messbereich"
+
+#: classes/models/FrmField.php:109
+msgid "Lookup"
+msgstr "Nachschlagen"
 
 #: classes/models/FrmField.php:117
 msgid "End Section"
@@ -3414,6 +3298,15 @@ msgid ""
 msgstr ""
 "Wir sind am Ende der Tour angekommen. Wenn dir dieses Plugin gefällt, "
 "%1$sgib ihm bitte 5 Sterne auf Wordpress.org%2$s!"
+
+#: classes/models/FrmPointers.php:346
+#, php-format
+msgid ""
+"Thank you for using our plugin and good luck with your forms!<br/><br/>Best,"
+"<br/>Team Formidable - %1$sformidableforms.com%2$s"
+msgstr ""
+"Vielen Dank für die Verwendung unseres Plug-Ins und viel Glück bei Ihren "
+"Formularen!<br/><br/>Ihr,<br/>Formidable Team - %1$sformidableforms.com%2$s"
 
 #: classes/models/FrmSettings.php:93
 msgid "Your responses were successfully submitted. Thank you!"
@@ -3542,9 +3435,17 @@ msgstr "Aktivieren"
 msgid "Get Started"
 msgstr "Fangen Sie an"
 
+#: classes/views/addons/list.php:26 classes/views/addons/list.php:26
+msgid "View Docs"
+msgstr "Dokumente anzeigen"
+
 #: classes/views/addons/settings.php:26
 msgid "Deactivate"
 msgstr "Deaktivieren"
+
+#: classes/views/addons/settings.php:40
+msgid "Autofill Licenses"
+msgstr "Lizenzen abrufen"
 
 #: classes/views/frm-entries/_sidebar-shared-pub.php:17
 msgid "Print"
@@ -3637,6 +3538,10 @@ msgstr "Aktualisiere Feldauswahlen"
 #: classes/views/frm-form-actions/_action_inside.php:7
 msgid "Label"
 msgstr "Feldbezeichnung"
+
+#: classes/views/frm-form-actions/_action_inside.php:32
+msgid "Action Triggers"
+msgstr "Aktionsauslöser"
 
 #: classes/views/frm-form-actions/_action_inside.php:34
 msgid "Trigger this action after"
@@ -3776,6 +3681,15 @@ msgstr "Feld Typ"
 msgid "Required"
 msgstr "Benötigt"
 
+#: classes/views/frm-forms/add_field.php:134
+msgid ""
+"Unique: Do not allow the same response multiple times. For example, if one "
+"user enters 'Joe', then no one else will be allowed to enter the same name."
+msgstr ""
+"Eindeutig: Lassen Sie die gleiche Antwort nicht mehrmals zu. Wenn "
+"beispielsweise ein Benutzer \"Joe\" eingibt, darf niemand anderes denselben "
+"Namen eingeben."
+
 #: classes/views/frm-forms/add_field.php:135
 #: classes/views/frm-forms/add_field.php:307
 msgid "Unique"
@@ -3808,7 +3722,7 @@ msgstr ""
 #: classes/views/frm-forms/add_field.php:166
 #: classes/views/frm-forms/mb_html_tab.php:11
 msgid "Field Key"
-msgstr "Feld Schlüssel"
+msgstr "Feldschlüssel"
 
 #: classes/views/frm-forms/add_field.php:175
 msgid "CSS layout classes"
@@ -3826,6 +3740,18 @@ msgstr ""
 #: classes/views/frm-forms/mb_html_tab.php:14
 msgid "Label Position"
 msgstr "Position des Hinweises"
+
+#: classes/views/frm-forms/add_field.php:233
+msgid ""
+"Set the size of the captcha field. The compact option is best if your form "
+"is in a small area."
+msgstr ""
+"Größe des Captcha-Felds festlegen. Die Option Kompakt ist am besten, wenn "
+"sich Ihr Formular in einem kleinen Bereich befindet."
+
+#: classes/views/frm-forms/add_field.php:238
+msgid "Normal"
+msgstr "Normal"
 
 #: classes/views/frm-forms/add_field.php:241
 msgid "Compact"
@@ -3873,6 +3799,12 @@ msgstr "Layout"
 msgid "1. Name your form"
 msgstr "1. Geben Sie dem Formular einen Namen"
 
+#: classes/views/frm-forms/form.php:21
+msgid "2. Click or drag a field to add it to your form"
+msgstr ""
+"2. Klicken Sie auf ein Feld um es am Ende des Formulars einzufügen oder "
+"ziehen Sie das Feld an die gewünschte Stelle im Formular"
+
 #: classes/views/frm-forms/form.php:27
 msgid "Add Fields Here"
 msgstr "Felder hier hinzufügen"
@@ -3899,7 +3831,7 @@ msgstr "Feld ID"
 
 #: classes/views/frm-forms/mb_html_tab.php:12
 msgid "Field Name"
-msgstr "Feld Name"
+msgstr "Feldname"
 
 #: classes/views/frm-forms/mb_html_tab.php:15
 msgid "Required Label"
@@ -3936,12 +3868,12 @@ msgstr ""
 
 #: classes/views/frm-forms/mb_html_tab.php:48
 msgid "Form Name"
-msgstr "Formular Name"
+msgstr "Formularname"
 
 #: classes/views/frm-forms/mb_html_tab.php:50
 #: classes/views/frm-forms/settings.php:235
 msgid "Form Key"
-msgstr "Formular Schlüssel:"
+msgstr "Formularschlüssel"
 
 #: classes/views/frm-forms/mb_html_tab.php:51
 msgid "Delete Entry Link"
@@ -3962,6 +3894,26 @@ msgstr "Anpassung"
 #: classes/views/frm-forms/settings.php:36
 msgid "Customize HTML"
 msgstr "HTML individuell anpassen"
+
+#: classes/views/frm-forms/settings.php:61
+msgid "Show"
+msgstr "Zeige"
+
+#: classes/views/frm-forms/settings.php:63
+msgid "Insert on a page, post, or text widget"
+msgstr "In eine Seite, einen Artikel oder ein Text-Widget einfügen"
+
+#: classes/views/frm-forms/settings.php:68
+msgid "Insert in a template"
+msgstr "In eine Vorlage einfügen"
+
+#: classes/views/frm-forms/settings.php:71
+msgid "Hide"
+msgstr "Verstecke"
+
+#: classes/views/frm-forms/settings.php:77
+msgid "Form Settings"
+msgstr "Formulareinstellungen"
 
 #: classes/views/frm-forms/settings.php:88
 #: classes/views/frm-forms/settings.php:223
@@ -4029,6 +3981,21 @@ msgstr "Lade und speichere Formularerstellungsseite mit AJAX"
 #: classes/views/frm-forms/settings.php:165
 msgid "Recommended for long forms."
 msgstr "Empfohlen für längere Formulare."
+
+#: classes/views/frm-forms/settings.php:173
+msgid "Validate this form with javascript"
+msgstr "Formular mittels Javascript prüfen"
+
+#: classes/views/frm-forms/settings.php:175
+msgid ""
+"Required fields, email format, and number format can be checked instantly in "
+"your browser. You may want to turn this option off if you have any "
+"customizations to remove validation messages on certain fields."
+msgstr ""
+"Erforderliche Felder, das E-Mail-Format und das Zahlenformat können sofort "
+"in Ihrem Browser überprüft werden. Sie können diese Option deaktivieren, um "
+"Anpassungen zum Entfernen von Validierungsnachrichten in bestimmten Feldern "
+"vorzunehmen."
 
 #: classes/views/frm-forms/settings.php:184
 msgid "Styling & Buttons"
@@ -4111,6 +4078,10 @@ msgstr "Einstellungen aktualisieren"
 msgid "Styling & Scripts"
 msgstr "Stile & Skripte"
 
+#: classes/views/frm-settings/form.php:43
+msgid "Load form styling"
+msgstr "Formulargestaltung laden"
+
 #: classes/views/frm-settings/form.php:46
 msgid "on every page of your site"
 msgstr "auf jeder Seite Ihrer Webseite"
@@ -4119,9 +4090,22 @@ msgstr "auf jeder Seite Ihrer Webseite"
 msgid "only on applicable pages"
 msgstr "nur auf geeigneten Seiten"
 
+#: classes/views/frm-settings/form.php:52
+msgid "Don't use form styling on any page"
+msgstr "Formulargestaltung auf keiner Seite verwenden"
+
 #: classes/views/frm-settings/form.php:59
 msgid "Use HTML5 in forms"
 msgstr "Verwende HTML5 in Formularen"
+
+#: classes/views/frm-settings/form.php:61
+msgid ""
+"We recommend using HTML 5 for your forms. It adds some nifty options like "
+"placeholders, patterns, and autocomplete."
+msgstr ""
+"Wir empfehlen, HTML 5 für Ihre Formulare zu verwenden. Es fügt einige "
+"raffinierte Optionen wie Platzhalter, Eingabemuster und "
+"Autovervollständigung hinzu."
 
 #: classes/views/frm-settings/form.php:74
 msgid "User Permissions"
@@ -4148,6 +4132,15 @@ msgstr ""
 "zur Überprüfung ihres Mensch- Seins, zwei Worte, die aus einem Buch gescannt "
 "wurden, einzugeben."
 
+#: classes/views/frm-settings/form.php:94
+#, php-format
+msgid ""
+"reCAPTCHA requires a Site and Private API key. Sign up for a %1$sfree "
+"reCAPTCHA key%2$s."
+msgstr ""
+"reCAPTCHA erfordert einen Seiten- und privaten API-Schlüssel. Melden Sie "
+"sich für einen %1$skostenlosen reCAPTCHA-Schlüssel%2$s an."
+
 #: classes/views/frm-settings/form.php:97
 msgid "Site Key"
 msgstr "Seitenschlüssel"
@@ -4157,9 +4150,25 @@ msgstr "Seitenschlüssel"
 msgid "Optional"
 msgstr "Optional"
 
+#: classes/views/frm-settings/form.php:100
+msgid "Secret Key"
+msgstr "Sicherheitsschlüssel"
+
 #: classes/views/frm-settings/form.php:113
 msgid "reCAPTCHA Language"
 msgstr "reCAPTCHA Sprache"
+
+#: classes/views/frm-settings/form.php:115
+msgid "Browser Default"
+msgstr "Browser Standard"
+
+#: classes/views/frm-settings/form.php:122
+msgid "Multiple reCaptchas"
+msgstr "Mehrere reCaptchas"
+
+#: classes/views/frm-settings/form.php:125
+msgid "Allow multiple reCaptchas to be used on a single page"
+msgstr "Mehrere reCaptchas auf einer einzelnen Seite erlauben"
 
 #: classes/views/frm-settings/form.php:129
 msgid "Default Messages"
@@ -4465,6 +4474,11 @@ msgstr "gestrichelt"
 msgid "double"
 msgstr "doppelt"
 
+#: classes/views/styles/_field-colors.php:64
+#: classes/views/styles/_field-colors.php:82
+msgid "Remove box shadow"
+msgstr "Boxschatten entfernen"
+
 #: classes/views/styles/_field-description.php:20
 msgid "italic"
 msgstr "kursiv"
@@ -4511,6 +4525,14 @@ msgstr "Erfolg"
 #: classes/views/styles/_general.php:3
 msgid "Center form on page"
 msgstr "Formular auf der Seite zentrieren"
+
+#: classes/views/styles/_general.php:3
+msgid ""
+"This will center your form on the page where it is published if the form "
+"width is less than the available width on the page."
+msgstr ""
+"Dadurch wird Ihr Formular auf der Seite zentriert, wenn die Formularbreite "
+"kleiner ist als die verfügbare Breite auf der Seite."
 
 #: classes/views/styles/_general.php:8
 msgid "Alignment"
@@ -4630,6 +4652,13 @@ msgstr ""
 msgid "Save Changes"
 msgstr "Änderungen speichern"
 
+#: classes/views/styles/manage.php:5
+msgid ""
+"Easily change which template your forms are using by making changes below."
+msgstr ""
+"Ändern Sie einfach die von Ihren Formularen verwendete Vorlage, indem Sie "
+"die folgenden Änderungen vornehmen."
+
 #: classes/views/styles/manage.php:19
 msgid "Assigned Style Templates"
 msgstr "Zugewiesene Stilvorlagen"
@@ -4746,7 +4775,7 @@ msgstr "Exportauswahl"
 #: classes/views/frm-fields/back-end/automatic-width.php:2
 #: classes/views/frm-fields/back-end/pixels-wide.php:4
 msgid "Field Size"
-msgstr "Feld Größe"
+msgstr "Feldgröße"
 
 #: classes/views/frm-fields/back-end/automatic-width.php:6
 msgid "automatic width"
@@ -4779,6 +4808,10 @@ msgid ""
 msgstr ""
 "Beachte: Dieses Feld wird nicht im Formular angezeigt, aber es sendet die "
 "Benutzer ID, wenn der Benutzer bei der Eingabe eingeloggt ist."
+
+#: classes/views/frm-fields/back-end/html-content.php:2
+msgid "Content"
+msgstr "Inhalt"
 
 #: classes/views/frm-fields/back-end/max.php:1
 msgid "rows high"
@@ -4824,3 +4857,7 @@ msgid ""
 msgstr ""
 "Fügen Sie das Format, das Sie annehmen möchten. Nutzen Sie eine übliche "
 "Darstellung beginnend mit ^ oder einem exakten Format wie (999)999-9999. "
+
+#. Description of the plugin
+msgid "Quickly and easily create drag-and-drop forms"
+msgstr "Erstellen Sie schnell und einfach Formulare per Drag and Drop"

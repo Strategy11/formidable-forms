@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Formidable v2.05.02\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-02 22:22+0000\n"
-"PO-Revision-Date: 2018-01-02 22:22+0000\n"
+"POT-Creation-Date: 2018-01-02 23:32+0000\n"
+"PO-Revision-Date: 2018-01-02 23:32+0000\n"
 "Last-Translator: admin <steph@strategy11.com>\n"
 "Language-Team: Norwegian (Bokmål)\n"
 "Language: nb-NO\n"
@@ -1088,10 +1088,6 @@ msgstr ""
 msgid "Phone"
 msgstr ""
 
-#: classes/models/FrmField.php:58
-msgid "User ID"
-msgstr ""
-
 #: classes/models/FrmField.php:93
 msgid "Star Rating"
 msgstr ""
@@ -1503,11 +1499,6 @@ msgstr ""
 msgid "Error Class"
 msgstr ""
 
-#: classes/views/frm-forms/mb_html_tab.php:50
-#: classes/views/frm-forms/settings.php:235
-msgid "Form Key"
-msgstr ""
-
 #: classes/views/frm-forms/mb_html_tab.php:51
 msgid "Delete Entry Link"
 msgstr ""
@@ -1548,10 +1539,6 @@ msgstr ""
 msgid "Hide"
 msgstr ""
 
-#: classes/views/frm-forms/settings.php:77
-msgid "Form Settings"
-msgstr ""
-
 #: classes/views/frm-forms/settings.php:101
 msgid "Redirect to URL"
 msgstr ""
@@ -1582,17 +1569,6 @@ msgstr ""
 
 #: classes/views/frm-forms/settings.php:165
 msgid "Recommended for long forms."
-msgstr ""
-
-#: classes/views/frm-forms/settings.php:173
-msgid "Validate this form with javascript"
-msgstr ""
-
-#: classes/views/frm-forms/settings.php:175
-msgid ""
-"Required fields, email format, and number format can be checked instantly in "
-"your browser. You may want to turn this option off if you have any "
-"customizations to remove validation messages on certain fields."
 msgstr ""
 
 #: classes/views/frm-settings/form.php:41
@@ -2116,10 +2092,6 @@ msgstr ""
 msgid ""
 "Note: This field will not show in the form, but will link the user id to it "
 "as long as the user is logged in at the time of form submission."
-msgstr ""
-
-#: classes/views/frm-fields/back-end/html-content.php:2
-msgid "Content"
 msgstr ""
 
 #: classes/views/frm-fields/back-end/number-range.php:3
@@ -3937,6 +3909,10 @@ msgstr "HTML"
 msgid "Hidden Field"
 msgstr "Skjult felt"
 
+#: classes/models/FrmField.php:58
+msgid "User ID"
+msgstr "BrukerID"
+
 #: classes/models/FrmField.php:62 classes/views/frm-settings/form.php:89
 msgid "reCAPTCHA"
 msgstr "reCAPTCHA"
@@ -4391,6 +4367,15 @@ msgstr "Legg til klassenavn hvis feltet har en error ved innsendelse"
 msgid "Form Name"
 msgstr "Skjemanavn"
 
+#: classes/views/frm-forms/mb_html_tab.php:50
+#: classes/views/frm-forms/settings.php:235
+msgid "Form Key"
+msgstr "Skjemanøkkel"
+
+#: classes/views/frm-forms/settings.php:77
+msgid "Form Settings"
+msgstr "Skjemainnstillinger"
+
 #: classes/views/frm-forms/settings.php:88
 #: classes/views/frm-forms/settings.php:223
 msgid "On Submit"
@@ -4423,6 +4408,20 @@ msgstr "AJAX"
 #: classes/views/frm-forms/settings.php:157
 msgid "Make stuff happen in the background without a page refresh"
 msgstr "Få ting til å skje i bakgrunnen uten å oppdatere siden"
+
+#: classes/views/frm-forms/settings.php:173
+msgid "Validate this form with javascript"
+msgstr "Validér skjemaet med Javascript"
+
+#: classes/views/frm-forms/settings.php:175
+msgid ""
+"Required fields, email format, and number format can be checked instantly in "
+"your browser. You may want to turn this option off if you have any "
+"customizations to remove validation messages on certain fields."
+msgstr ""
+"Obligatoriske felt, e-post format og nummerformat kan sjekkes umiddelbart i "
+"nettleseren. Du kan ønske å skru dette av hvis du har valgt å fjerne "
+"valideringsmeldinger for enkelte felter."
 
 #: classes/views/frm-forms/settings.php:184
 msgid "Styling & Buttons"
@@ -4738,6 +4737,10 @@ msgstr "Hold nede CTRL/Command-knappen for å velge flere skjemaer"
 #: classes/views/frm-fields/back-end/pixels-wide.php:4
 msgid "Field Size"
 msgstr "Feltstørrelse"
+
+#: classes/views/frm-fields/back-end/html-content.php:2
+msgid "Content"
+msgstr "Innhold"
 
 #: classes/views/frm-fields/back-end/max.php:1
 msgid "rows high"
