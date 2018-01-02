@@ -10,7 +10,7 @@ class FrmAppHelper {
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '3.0b3';
+	public static $plug_version = '3.0rc1';
 
     /**
      * @since 1.07.02
@@ -432,6 +432,7 @@ class FrmAppHelper {
 				'href'  => array(),
 				'id'    => array(),
 				'rel'   => array(),
+				'target' => array(),
 				'title' => array(),
 			),
 			'abbr' => array(
