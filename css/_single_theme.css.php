@@ -348,9 +348,9 @@ if ( ! empty( $important ) ) {
 .<?php echo esc_html( $style_class ) ?> input[readonly],
 .<?php echo esc_html( $style_class ) ?> select[readonly],
 .<?php echo esc_html( $style_class ) ?> textarea[readonly]{
-	background-color:<?php echo esc_html( $bg_color_disabled . $important ); ?>;
-    color: <?php echo esc_html( $text_color_disabled . $important ) ?>;
-    border-color:#<?php echo esc_html( $border_color_disabled . $important ) ?>;
+	background-color:#<?php echo esc_html( $bg_color_disabled . $important ); ?>;
+	color:<?php echo esc_html( $text_color_disabled . $important ) ?>;
+	border-color:#<?php echo esc_html( $border_color_disabled . $important ) ?>;
 }
 
 /* These do not work if they are combined */
