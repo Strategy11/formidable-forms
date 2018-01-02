@@ -532,9 +532,10 @@ BEFORE_HTML;
 
 		$submit_align = isset( $form['submit_align'] ) ? $form['submit_align'] : '';
 
-		if ( $submit_align == 'inline' ) {
+		if ( 'inline' === $submit_align ) {
 			$class .= ' frm_inline_form';
-		} else if ( $submit_align == 'center' ) {
+			$class .= self::maybe_align_fields_inline( $form );
+		} elseif ( 'center' === $submit_align ) {
 			$class .= ' frm_center_submit';
 		}
 
@@ -542,6 +543,37 @@ BEFORE_HTML;
 
         return $class;
     }
+
+
+	/**
+	 * Returns appropriate class if form does not have tall fields
+	 *
+	 * @param array $form
+	 *
+	 * @return string
+	 */
+	private static function maybe_align_fields_inline( $form ) {
+		return self::form_has_tall_field( $form ) ? '' : ' frm_inline_end';
+	}
+
+	/**
+	 * Determine if a form has fields with top labels so submit button can be aligned properly
+	 *
+	 * @param array $form
+	 *
+	 * @return bool
+	 */
+	private static function form_has_tall_field( $form ) {
+		$has_tall_field = false;
+		foreach ( $form['fields'] as $field ) {
+			$has_tall_field = FrmField::is_tall_field( $field );
+			if ( $has_tall_field ) {
+				break;
+			}
+		}
+
+		return $has_tall_field;
+	}
 
     /**
      * @param string|boolean $form

@@ -716,7 +716,7 @@ class FrmField {
 			return false;
 		}
 
-		$field_type = is_array( $field ) ? $field['type'] : $field->type;
+		$field_type = self::get_field_type( $field );
 		$data_type = self::get_option( $field, 'data_type' );
 		$original_type = self::get_option( $field, 'original_type' );
 
@@ -736,13 +736,21 @@ class FrmField {
 	}
 
 	/**
+	 * @since 3.0
+	 * @return string
+	 */
+	public static function get_field_type( $field ) {
+		return is_array( $field ) ? $field['type'] : $field->type;
+	}
+
+	/**
 	 * Check if this is a multiselect dropdown field
 	 *
 	 * @since 2.0.9
 	 * @return boolean
 	 */
 	public static function is_multiple_select( $field ) {
-		$field_type = is_array( $field ) ? $field['type'] : $field->type;
+		$field_type = self::get_field_type( $field );
 		$data_type = self::get_option( $field, 'data_type' );
 
 		return self::is_option_true( $field, 'multiple' ) && ( ( $field_type == 'select' || ( $field_type == 'data' && $data_type == 'select' ) ) );
@@ -860,7 +868,28 @@ class FrmField {
 	}
 
 	public static function is_image( $field ) {
-		$type = is_array( $field ) ? $field['type'] : $field->type;
+		$type = self::get_field_type( $field );
 		return ( $type == 'url' && self::get_option( $field, 'show_image' ) );
+	}
+
+	/**
+	 * Check if a field might by taller than other fields
+	 * @since 3.0
+	 *
+	 * @param array|object $field
+	 *
+	 * @return bool
+	 */
+	public static function is_tall_field( $field ) {
+		$field_type = FrmField::get_field_type( $field );
+		return in_array( $field_type, self::tall_fields() );
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	public static function tall_fields() {
+		$tall_fields = array( 'textarea', 'radio', 'checkbox', 'signature', 'html', 'captcha' );
+		return apply_filters( 'frm_tall_fields', $tall_fields );
 	}
 }
