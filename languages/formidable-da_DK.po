@@ -4805,8 +4805,8 @@ msgid "1. Name your form"
 msgstr "1. Navngiv din formular"
 
 #: ../classes/views/frm-forms/form.php:28
-msgid "2. Click or drag a field to<br/>add it to your form"
-msgstr "2. Klik eller træk et felt for<br/>at tilføjer det på formularen"
+msgid "2. Click or drag a field to add it to your form"
+msgstr "2. Klik eller træk et felt for at tilføjer det på formularen"
 
 #: ../classes/views/frm-forms/form.php:34
 msgid "Add Fields Here"
