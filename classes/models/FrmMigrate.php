@@ -56,7 +56,7 @@ class FrmMigrate {
 
 		do_action('frm_after_install');
 
-		$frm_vars['doing_upgrade'] = true;
+		$frm_vars['doing_upgrade'] = false;
 
 		/**** update the styling settings ****/
 		if ( is_admin() && function_exists( 'get_filesystem_method' ) ) {
