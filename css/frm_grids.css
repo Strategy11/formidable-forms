@@ -171,6 +171,7 @@
 .frm_form_field.frm_right_inline,
 .frm_form_field.frm_last_inline{
     width:auto;
+	grid-column-end: auto;
 }
 
 .frm12,

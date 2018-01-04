@@ -821,14 +821,6 @@ BEFORE_HTML;
 	 */
 	public static function css_classes() {
 		$classes = array(
-			'frm6'           => __( '1/2', 'formidable' ),
-			'frm4'           => __( '1/3', 'formidable' ),
-			'frm8'           => __( '2/3', 'formidable' ),
-			'frm3'           => __( '1/4', 'formidable' ),
-			'frm9'           => __( '3/4', 'formidable' ),
-			'frm2'           => __( '1/6', 'formidable' ),
-			'frm1'           => __( '1/12', 'formidable' ),
-			'frm_alignright' => __( 'Right', 'formidable' ),
 			'frm_inline'     => array(
 				'label'      => __( 'Inline', 'formidable' ),
 				'title'      => __( 'Align fields in a row without a specific width.', 'formidable' ),
@@ -837,9 +829,10 @@ BEFORE_HTML;
 				'label'      => __( 'First', 'formidable' ),
 				'title'      => __( 'Add this to the first field in each row along with a width. ie frm_first frm4', 'formidable' ),
 			),
-			'frm_full'       => array(
-				'label'      => __( '100% width', 'formidable' ),
-				'title'      => __( 'Force the field to fill the full space with 100% width.', 'formidable' ),
+			'frm_alignright' => __( 'Right', 'formidable' ),
+			'frm_total'      => array(
+				'label'      => __( 'Total', 'formidable' ),
+				'title'      => __( 'Add this to a read-only field to display the text in bold without a border or background.', 'formidable' ),
 			),
 			'frm_grid_first' => __( 'First Grid Row', 'formidable' ),
 			'frm_grid'       => __( 'Even Grid Row', 'formidable' ),
@@ -856,10 +849,6 @@ BEFORE_HTML;
 				'label'      => __( '4 Col Options', 'formidable' ),
 				'title'      => __( 'Put your radio button or checkbox options into four columns.', 'formidable' ),
 			),
-			'frm_total'      => array(
-				'label'      => __( 'Total', 'formidable' ),
-				'title'      => __( 'Add this to a read-only field to display the text in bold without a border or background.', 'formidable' ),
-			),
 			'frm_scroll_box' => array(
 				'label'      => __( 'Scroll Box', 'formidable' ),
 				'title'      => __( 'If you have many checkbox or radio button options, you may add this class to allow your user to easily scroll through the options.', 'formidable' ),
@@ -871,6 +860,29 @@ BEFORE_HTML;
 		);
 
 		return apply_filters( 'frm_layout_classes', $classes );
+	}
+
+	public static function grid_classes() {
+		return array(
+			'frm6'  => '1/2',
+
+			'frm4'  => '1/3',
+			'frm8'  => '2/3',
+
+			'frm3'  => '1/4',
+			'frm9'  => '3/4',
+
+			'frm2'  => '1/6',
+			'frm10' => '5/6',
+
+			'frm11' => '11/12',
+			'frm1'  => '1/12',
+
+			'frm5'  => '5/12',
+			'frm7'  => '7/12',
+
+			'frm12' => '100%',
+		);
 	}
 
 	/**

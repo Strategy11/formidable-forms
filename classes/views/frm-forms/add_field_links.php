@@ -95,15 +95,37 @@ foreach ( FrmField::pro_field_selection() as $field_key => $field_type ) {
 		<?php do_action( 'frm_extra_form_instructions' ); ?>
 
 		<div id="frm-layout-classes" class="tabs-panel">
-			<ol class="howto">
-				<li><?php esc_html_e( 'Click inside the "CSS layout classes" field option in any field.', 'formidable' ) ?></li>
-				<li><?php esc_html_e( 'This box will activate and you can click to insert classes.', 'formidable' ) ?></li>
-			</ol>
+			<ul>
+				<li class="frm_show_inactive">
+					<?php esc_html_e( 'Click inside the "CSS layout classes" field option in any field to enable the options below.', 'formidable' ); ?>
+				</li>
+				<li class="frm_show_active frm_hidden">
+					<?php esc_html_e( 'Click on any box below to set the width for your selected field.', 'formidable' ); ?>
+				</li>
+			</ul>
+			<ul class="frm_code_list frm_grid_container">
+				<li class="frm6 frm_form_field">
+					<a href="javascript:void(0);" data-code="frm6" class="frm_insert_code show_frm_classes">
+						1/2
+					</a>
+				</li>
+				<?php
+				foreach ( FrmFormsHelper::grid_classes() as $c => $d ) {
+					?>
+					<li class="<?php echo esc_attr( $c ) ?> frm_form_field">
+						<a href="javascript:void(0);" data-code="<?php echo esc_attr( $c ) ?>" class="frm_insert_code show_frm_classes">
+							<?php echo esc_html( FrmFormsHelper::style_class_label( $d, $c ) ); ?>
+						</a>
+					</li>
+					<?php
+					unset( $c, $d );
+				}
+				?>
+			</ul>
 			<ul class="frm_code_list">
 			<?php
-			$classes = FrmFormsHelper::css_classes();
 			$col = 'one';
-			foreach ( $classes as $c => $d ) {
+			foreach ( FrmFormsHelper::css_classes() as $c => $d ) {
 				$title = ( ! empty( $d ) && is_array( $d ) && isset( $d['title'] ) ) ? $d['title'] : '';
 				?>
 				<li class="frm_col_<?php echo esc_attr( $col ) ?>">

@@ -2570,6 +2570,30 @@ ul .frm_col_two{float:right;}
 	overflow: hidden;
 }
 
+.frm_code_list.frm_grid_container{
+	grid-gap: 5px;
+}
+
+.frm_code_list.frm_grid_container li {
+	width:auto;
+	margin:0;
+}
+
+.frm_code_list.frm_grid_container a {
+	padding: 5px 0;
+	text-align: center;
+	background-color:#fbfdff;
+	border: 1px solid #5b9dd9;
+	color:#1c94c4;
+	display:block;
+	border-radius: 2px;
+}
+
+.frm_code_list.frm_grid_container a:hover{
+	background-color:#0073aa;
+	color:#fbfdff;
+}
+
 .frm_field_list #frm-insert-fields .button a{
 	display:block;
 	max-width:95%;

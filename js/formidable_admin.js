@@ -2207,10 +2207,12 @@ function frmAdminBuildJS(){
 	}
 	
 	function toggleAllowedShortcodes(id,f){
+		var c, clickedID;
+
 		if(typeof(id) === 'undefined'){
 			id = '';
 		}
-		var c = id;
+		c = id;
 		
 		if(id !== ''){
 			var $ele = jQuery(document.getElementById(id));
@@ -2249,13 +2251,19 @@ function frmAdminBuildJS(){
 		}
 
 		//Automatically select a tab
-		if(id === 'dyn_default_value'){
-			jQuery(document.getElementById('frm_dynamic_values_tab')).click();
-		}else if(id === 'frm_classes'){
-			jQuery(document.getElementById('frm_layout_classes_tab')).click();
-		}else if(jQuery('.frm_form_builder').length && 
-			(f === 'focusin' || jQuery(document.getElementById('frm-dynamic-values')).is(':visible') || jQuery(document.getElementById('frm-layout-classes')).is(':visible'))){
-			jQuery(document.getElementById('frm_insert_fields_tab')).click();
+		if ( id === 'dyn_default_value' ) {
+			clickedID = 'frm_dynamic_values';
+		} else if ( id === 'frm_classes' ) {
+			clickedID = 'frm_layout_classes';
+		} else if ( jQuery('.frm_form_builder').length ) {
+			if ( f === 'focusin' || jQuery( document.getElementById( 'frm-dynamic-values' ) ).is(':visible') || jQuery( document.getElementById( 'frm-layout-classes' ) ).is( ':visible' ) ) {
+				clickedID = 'frm_insert_fields';
+			}
+		}
+		if ( typeof clickedID !== 'undefined' ) {
+			jQuery( document.getElementById( clickedID + '_tab' ) ).click();
+			jQuery( '#' + clickedID.replace( /_/g, '-' ) + ' .frm_show_inactive' ).addClass( 'frm_hidden' );
+			jQuery( '#' + clickedID.replace( /_/g, '-' ) + ' .frm_show_active' ).removeClass( 'frm_hidden' );
 		}
 	}
 
