@@ -85,10 +85,7 @@ class FrmFieldsHelper {
 	 */
 	private static function prepare_front_field( &$field_array, $field, $args ) {
 		self::fill_default_field_opts( $field, $field_array );
-
-		if ( $field_array['custom_html'] == '' ) {
-			$field_array['custom_html'] = FrmFieldsHelper::get_default_html( $field->type );
-		}
+		self::fill_cleared_strings( $field, $field_array );
 
 		// Track the original field's type
 		$field_array['original_type'] = isset( $field->field_options['original_type'] ) ? $field->field_options['original_type'] : $field->type;
@@ -141,6 +138,35 @@ class FrmFieldsHelper {
 				$values[ $opt ] = $default;
 			}
 			unset( $opt, $default );
+		}
+	}
+
+	/**
+	 * Fill the required message, invalid message,
+	 * and refill the HTML when cleared
+	 *
+	 * @since 3.0
+	 *
+	 * @param object $field
+	 * @param array $field_array
+	 */
+	private static function fill_cleared_strings( $field, array &$field_array ) {
+		$frm_settings = FrmAppHelper::get_settings();
+
+		if ( '' == $field_array['blank'] && '1' === $field_array['required'] ) {
+			$field_array['blank'] = $frm_settings->blank_msg;
+		}
+
+		if ( '' == $field_array['invalid'] ) {
+			if ( 'captcha' === $field->type ) {
+				$field_array['invalid'] = $frm_settings->re_msg;
+			} else {
+				$field_array['invalid'] = sprintf( __( '%s is invalid', 'formidable' ), $field_array['name'] );
+			}
+		}
+
+		if ( '' == $field_array['custom_html'] ) {
+			$field_array['custom_html'] = FrmFieldsHelper::get_default_html( $field->type );
 		}
 	}
 

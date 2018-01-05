@@ -634,6 +634,9 @@ BEFORE_HTML;
 	 * @since 2.0.6
 	 */
 	public static function show_error( $args ) {
+		// remove any blank messages
+		$args['errors'] = array_filter( $args['errors'] );
+
 		$line_break_first = $args['show_img'];
 		foreach ( $args['errors'] as $error_key => $error ) {
 			if ( $line_break_first && ! is_numeric( $error_key ) && ( $error_key == 'cptch_number' || strpos( $error_key, 'field' ) === 0 ) ) {
