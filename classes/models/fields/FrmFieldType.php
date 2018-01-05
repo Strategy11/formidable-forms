@@ -52,6 +52,13 @@ abstract class FrmFieldType {
 	 */
 	protected $normal_field = true;
 
+	/**
+	 * Is this field a lot taller than the submit button?
+	 * @var bool
+	 * @since 3.0
+	 */
+	protected $is_tall = false;
+
 	public function __construct( $field = 0, $type = '' ) {
 		$this->field = $field;
 		$this->set_type( $type );

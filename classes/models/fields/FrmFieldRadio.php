@@ -17,6 +17,8 @@ class FrmFieldRadio extends FrmFieldType {
 	 */
 	protected $holds_email_values = true;
 
+	protected $is_tall = true;
+
 	protected function input_html() {
 		return $this->multiple_input_html();
 	}

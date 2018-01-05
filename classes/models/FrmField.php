@@ -882,14 +882,6 @@ class FrmField {
 	 */
 	public static function is_tall_field( $field ) {
 		$field_type = FrmField::get_field_type( $field );
-		return in_array( $field_type, self::tall_fields() );
-	}
-
-	/**
-	 * @since 3.0
-	 */
-	public static function tall_fields() {
-		$tall_fields = array( 'textarea', 'radio', 'checkbox', 'signature', 'html', 'captcha' );
-		return apply_filters( 'frm_tall_fields', $tall_fields );
+		return FrmFieldFactory::field_has_property( $field_type, 'is_tall' );
 	}
 }

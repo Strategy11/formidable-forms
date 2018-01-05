@@ -17,6 +17,8 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 */
 	protected $has_for_label = false;
 
+	protected $is_tall = true;
+
 	/**
 	 * @return string
 	 */
