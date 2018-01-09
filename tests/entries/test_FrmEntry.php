@@ -40,6 +40,10 @@ class WP_Test_FrmEntry extends FrmUnitTest {
 			$this->markTestSkipped( 'Pro is not active' );
 		}
 
+		if ( ! version_compare( PHP_VERSION, '5.3.2', '>=' ) ) {
+			$this->markTestSkipped( 'ReflectionMethod::setAccessible() requires PHP 5.3.2 or higher.' );
+		}		
+
 		$entry = FrmEntry::getOne( 'post-entry-1', true );
 		$this->assertNotEmpty( $entry, 'Entry not found: post-entry-1' );
 		$values = self::_setup_test_update_values( $entry );

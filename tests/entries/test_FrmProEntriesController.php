@@ -363,6 +363,11 @@ class WP_Test_FrmProEntriesController extends FrmUnitTest {
 	* TODO: Test with post fields, IP, and user_id parameters
 	*/
 	function test_get_frm_field_value_entry(){
+		if ( ! version_compare( PHP_VERSION, '5.3.2', '>=' ) ) {
+			$this->markTestSkipped( 'ReflectionMethod::setAccessible() requires PHP 5.3.2 or higher.' );
+		}
+
+
 		$tests = array( 1, 2, 3, 4, 5, 6, 7, 8, 9 );
 		$field = FrmField::getOne( 'text-field' );
 		$entry_id = $this->factory->entry->get_id_by_key( 'jamie_entry_key' );
