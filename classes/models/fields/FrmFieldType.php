@@ -482,6 +482,11 @@ DEFAULT_HTML;
 	protected function include_on_front_form( $args, $shortcode_atts ) {
 		global $frm_vars;
 
+		$include_file = $this->include_front_form_file();
+		if ( empty( $include_file ) ) {
+			return;
+		}
+
 		$hidden = $this->maybe_include_hidden_values( $args );
 
 		$field = $this->field;
@@ -491,7 +496,7 @@ DEFAULT_HTML;
 		unset( $args['form'] ); // lighten up on memory usage
 
 		ob_start();
-		include( $this->include_front_form_file() );
+		include( $include_file );
 		$input_html = ob_get_contents();
 		ob_end_clean();
 
@@ -682,7 +687,7 @@ DEFAULT_HTML;
 	}
 
 	/**
-	 * Prepare value for save
+	 * Prepare value last thing before saving in the db
 	 *
 	 * @param string|array $value
 	 *
