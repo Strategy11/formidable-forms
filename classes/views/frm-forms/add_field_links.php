@@ -104,8 +104,8 @@ foreach ( FrmField::pro_field_selection() as $field_key => $field_type ) {
 				</li>
 			</ul>
 			<ul class="frm_code_list frm_grid_container">
-				<li class="frm6 frm_form_field">
-					<a href="javascript:void(0);" data-code="frm6" class="frm_insert_code show_frm_classes">
+				<li class="frm_half frm_form_field">
+					<a href="javascript:void(0);" data-code="frm_half" class="frm_insert_code show_frm_classes">
 						1/2
 					</a>
 				</li>
