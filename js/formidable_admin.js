@@ -1661,7 +1661,11 @@ function frmAdminBuildJS(){
 	}
 
 	function clickAction(obj){
-		var $thisobj = jQuery(obj);
+		var shouldScroll, selected, scrollMe, parentOffset, curOffset,
+			selectedOffset = 0,
+			selectedHeight = 0,
+			$thisobj = jQuery(obj);
+
 		if(obj.className.indexOf('selected') !== -1){
 			return;
 		}
@@ -1669,16 +1673,15 @@ function frmAdminBuildJS(){
 			return;
 		}
 
-		var selected = jQuery('li.ui-state-default.selected');
-		var scrollMe = jQuery(document.getElementById('post-body-content'));
+		selected = jQuery('li.ui-state-default.selected');
+		scrollMe = jQuery(document.getElementById('post-body-content'));
 
 		// get offsets before anything changes
-		var curOffset = $thisobj.offset().top;
-		var parentOffset = scrollMe.scrollTop();
-		var preTop = document.documentElement.scrollTop || document.body.scrollTop; // body for Safari;
-		var selectedOffset = 0;
-		var selectedHeight = 0;
+		parentOffset = scrollMe.offset().top;
+		curOffset = $thisobj.offset().top;
+
 		if ( selected.length )	{
+			shouldScroll = isElementInViewport(selected);
 			selectedOffset = selected.offset().top;
 			selectedHeight = selected.height();
 		}
@@ -1693,13 +1696,30 @@ function frmAdminBuildJS(){
 		$thisobj.addClass('selected');
 		var newOffset = $thisobj.offset().top;
 
-		if(selected.length && newOffset !== curOffset){
-			var selectedBottom = selectedOffset + selectedHeight;
-
-			if ( preTop < selectedBottom ) {
-				scrollMe.scrollTop(parentOffset - (curOffset-newOffset));
-			}
+		if ( selected.length && shouldScroll && curOffset > newOffset ) {
+			scrollMe.offset( { top: parentOffset + (curOffset - newOffset) } );
 		}
+	}
+
+	function isElementInViewport(el) {
+		var t, height;
+
+		if ( el instanceof jQuery ) {
+			el = el[0];
+		}
+
+		t = el.offsetTop;
+		height = el.offsetHeight;
+
+		while ( el.offsetParent ) {
+			el = el.offsetParent;
+			t += el.offsetTop;
+		}
+
+		return (
+			t < ( window.pageYOffset + window.innerHeight ) &&
+			( t + height ) > window.pageYOffset
+		);
 	}
 
 	function showEmailRow(){
