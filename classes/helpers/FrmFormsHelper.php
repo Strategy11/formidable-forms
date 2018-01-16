@@ -315,6 +315,9 @@ BEFORE_HTML;
         return $link;
     }
 
+
+
+
 	public static function get_custom_submit( $html, $form, $submit, $form_action, $values ) {
 		$button = self::replace_shortcodes( $html, $form, $submit, $form_action, $values );
 		if ( ! strpos( $button, '[button_action]' ) ) {
@@ -493,6 +496,21 @@ BEFORE_HTML;
 		}
 	}
 
+	/**
+	 * Retrieve the value of the submit button alignment setting
+	 *
+	 * @param $form
+	 *
+	 * @return string
+	 */
+	private static function get_submit_align( $form ) {
+		if ( ! isset ( $form->options ) || ! isset( $form->options['submit_align'] ) ) {
+			return '';
+		}
+
+		return $form->options['submit_align'];
+	}
+
 	public static function get_form_style_class( $form = false ) {
         $style = self::get_form_style($form);
         $class = ' with_frm_style';
@@ -510,10 +528,12 @@ BEFORE_HTML;
 			$form = $form->options;
 		}
 
+
 		$submit_align = isset( $form['submit_align'] ) ? $form['submit_align'] : '';
 
 		if ( $submit_align == 'inline' ) {
 			$class .= ' frm_inline_form';
+			$class .= FrmFieldsHelper::maybe_return_inline_submit_top_class( $form );
 		} else if ( $submit_align == 'center' ) {
 			$class .= ' frm_center_submit';
 		}

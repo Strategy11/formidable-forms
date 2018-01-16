@@ -492,6 +492,7 @@ if ( ! empty( $important ) ) {
     <?php } ?>
 }
 
+.frm_inline_form.frm_inline_submit_top.<?php echo esc_html( $style_class ) ?> .frm_submit::before,
 .<?php echo esc_html( $style_class ) ?> .frm_submit.frm_inline_submit::before {
 	content:"before";
 	font-family:<?php echo FrmAppHelper::kses( $font ) ?>;
@@ -505,6 +506,8 @@ if ( ! empty( $important ) ) {
 	visibility:hidden;
 }
 
+.frm_inline_form.frm_inline_submit_top.<?php echo esc_html( $style_class ) ?> .frm_submit input,
+.frm_inline_form.frm_inline_submit_top.<?php echo esc_html( $style_class ) ?> .frm_submit button,
 .<?php echo esc_html( $style_class ) ?> .frm_submit.frm_inline_submit input,
 .<?php echo esc_html( $style_class ) ?> .frm_submit.frm_inline_submit button {
 	margin-top: 0 <?php echo esc_html( $important ) ?>;
@@ -555,6 +558,12 @@ if ( ! empty( $important ) ) {
 	margin-left:0;
 	margin-right:0;
     vertical-align:middle;
+}
+
+.frm_inline_form.<?php echo esc_html( $style_class ) ?> input[type=submit],
+.frm_inline_form.<?php echo esc_html( $style_class ) ?> .frm_submit input[type=button],
+.frm_inline_form.<?php echo esc_html( $style_class ) ?> .frm_submit button{
+	margin: 0 <?php echo esc_html( $important ) ?>;
 }
 
 .<?php echo esc_html( $style_class ) ?> .frm_compact .frm_dropzone.dz-clickable .dz-message{
@@ -1124,6 +1133,11 @@ $top_margin = (int) str_replace( $pad_unit, '', $top_pad ) / 2;
 		width:100%<?php echo esc_html( $important ) ?>;
 	}
 
+	.frm_inline_form.<?php echo esc_html( $style_class ) ?> input[type=submit],
+	.frm_inline_form.<?php echo esc_html( $style_class ) ?> .frm_submit input[type=button],
+	.frm_inline_form.<?php echo esc_html( $style_class ) ?> .frm_submit button {
+		margin: <?php echo esc_html( $submit_margin ) ?> <?php echo esc_html( $important ) ?>;
+	}
 
 	.<?php echo esc_html( $style_class ) ?> .frm_repeat_inline,
 	.<?php echo esc_html( $style_class ) ?> .frm_repeat_grid{

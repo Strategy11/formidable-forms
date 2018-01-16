@@ -423,6 +423,58 @@ DEFAULT_HTML;
 	}
 
 	/**
+	 * Determine if a form has fields with top labels so submit button can be aligned properly
+	 *
+	 * @param $form
+	 *
+	 * @return bool
+	 */
+
+	private static function form_has_top_labels( $form ) {
+		$fields = $form['fields'];
+
+		if ( count( $fields ) <= 0 ) {
+			return false;
+		}
+
+		return self::field_has_top_label( reset( $fields ), $form );
+	}
+
+	/**
+	 * Check if a field's label position is set to "top"
+	 *
+	 * @param $field
+	 * @param $form
+	 *
+	 * @return bool
+	 */
+	private static function field_has_top_label( $field, $form ) {
+
+		if ($field === false){
+			return false;
+		}
+
+		$label_position = self::label_position( $field['label'], $field, $form );
+		return in_array( $label_position, array( 'top', 'inside', 'hidden' ) );
+	}
+
+	/**
+	 * Returns appropriate class if form has top labels
+	 *
+	 * @param $form
+	 *
+	 * @return string
+	 */
+	public static function maybe_return_inline_submit_top_class( $form ) {
+
+		if ( self::form_has_top_labels( $form ) ) {
+			return ' frm_inline_submit_top';
+		}
+
+		return '';
+	}
+
+	/**
 	 * Check if this field type allows placeholders
 	 * @since 2.05
 	 */
