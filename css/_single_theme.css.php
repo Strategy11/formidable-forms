@@ -406,24 +406,6 @@ if ( ! empty( $important ) ) {
     <?php } ?>
 }
 
-.<?php echo esc_html( $style_class ) ?> .frm_submit.frm_inline_submit::before {
-	content:"before";
-	font-family:<?php echo FrmAppHelper::kses( $font ) ?>;
-	font-size:<?php echo esc_html( $font_size . $important ) ?>;
-	color:<?php echo esc_html( $label_color . $important ) ?>;
-	font-weight:<?php echo esc_html( $weight . $important ) ?>;
-	margin:0;
-	padding:<?php echo esc_html( $label_padding . $important ) ?>;
-	width:auto;
-	display:block;
-	visibility:hidden;
-}
-
-.<?php echo esc_html( $style_class ) ?> .frm_submit.frm_inline_submit input,
-.<?php echo esc_html( $style_class ) ?> .frm_submit.frm_inline_submit button {
-	margin-top: 0 <?php echo esc_html( $important ) ?>;
-}
-
 <?php if ( ! $submit_style ) { ?>
 .<?php echo esc_html( $style_class ) ?> .frm_compact .frm_dropzone.dz-clickable .dz-message,
 .<?php echo esc_html( $style_class ) ?> input[type=submit],
@@ -521,10 +503,25 @@ if ( ! empty( $important ) ) {
 }
 ?>
 
-.<?php echo esc_html( $style_class ) ?>.frm_inline_form .frm_submit input[type=submit],
-.<?php echo esc_html( $style_class ) ?>.frm_inline_form .frm_submit button{
-	margin-top:0<?php echo esc_html( $important ); ?>;
-	margin-bottom:<?php echo esc_html( $field_margin . $important ); ?>;
+.<?php echo esc_html( $style_class ) ?>.frm_inline_top .frm_submit::before,
+.<?php echo esc_html( $style_class ) ?> .frm_submit.frm_inline_submit::before {
+	content:"before";
+	font-family:<?php echo FrmAppHelper::kses( $font ) ?>;
+	font-size:<?php echo esc_html( $font_size . $important ) ?>;
+	color:<?php echo esc_html( $label_color . $important ) ?>;
+	font-weight:<?php echo esc_html( $weight . $important ) ?>;
+	margin:0;
+	padding:<?php echo esc_html( $label_padding . $important ) ?>;
+	width:auto;
+	display:block;
+	visibility:hidden;
+}
+
+.<?php echo esc_html( $style_class ) ?>.frm_inline_form .frm_submit input,
+.<?php echo esc_html( $style_class ) ?>.frm_inline_form .frm_submit button,
+.<?php echo esc_html( $style_class ) ?> .frm_submit.frm_inline_submit input,
+.<?php echo esc_html( $style_class ) ?> .frm_submit.frm_inline_submit button {
+	margin: 0 !important;
 }
 
 .<?php echo esc_html( $style_class ) ?> a.frm_save_draft{

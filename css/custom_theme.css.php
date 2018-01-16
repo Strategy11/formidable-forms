@@ -186,10 +186,6 @@ legend.frm_hidden{
     clear:both;
 }
 
-.frm_inline_form.frm_inline_end .frm_form_fields .frm_fields_container{
-	align-items: end;
-}
-
 .frm_inline_form .frm_form_field,
 .frm_inline_form .frm_submit{
 	grid-column-end: span 1;
@@ -199,6 +195,8 @@ legend.frm_hidden{
 	margin:0;
 }
 
+.frm_submit.frm_inline_submit input[type=submit],
+.frm_submit.frm_inline_submit button,
 .frm_inline_form .frm_submit input[type=submit],
 .frm_inline_form .frm_submit button{
 	margin-top:0;

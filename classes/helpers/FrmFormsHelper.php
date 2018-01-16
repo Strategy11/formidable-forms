@@ -534,7 +534,7 @@ BEFORE_HTML;
 
 		if ( 'inline' === $submit_align ) {
 			$class .= ' frm_inline_form';
-			$class .= self::maybe_align_fields_inline( $form );
+			$class .= self::maybe_align_fields_top( $form );
 		} elseif ( 'center' === $submit_align ) {
 			$class .= ' frm_center_submit';
 		}
@@ -544,35 +544,53 @@ BEFORE_HTML;
         return $class;
     }
 
-
 	/**
-	 * Returns appropriate class if form does not have tall fields
+	 * Returns appropriate class if form has top labels
 	 *
-	 * @param array $form
+	 * @param $form
 	 *
 	 * @return string
 	 */
-	private static function maybe_align_fields_inline( $form ) {
-		return self::form_has_tall_field( $form ) ? '' : ' frm_inline_end';
+	private static function maybe_align_fields_top( $form ) {
+		return self::form_has_top_labels( $form ) ? ' frm_inline_top' : '';
 	}
 
 	/**
 	 * Determine if a form has fields with top labels so submit button can be aligned properly
 	 *
-	 * @param array $form
+	 * @param $form
 	 *
 	 * @return bool
 	 */
-	private static function form_has_tall_field( $form ) {
-		$has_tall_field = false;
-		foreach ( $form['fields'] as $field ) {
-			$has_tall_field = FrmField::is_tall_field( $field );
-			if ( $has_tall_field ) {
-				break;
+	private static function form_has_top_labels( $form ) {
+		$fields = $form['fields'];
+		if ( count( $fields ) <= 0 ) {
+			return false;
+		}
+
+		$fields = array_reverse( $fields ); // start from the fields closest to the submit button
+		foreach ( $fields as $field ) {
+			$type = isset( $field['original_type'] ) ? $field['original_type'] : $field['type'];
+			$has_input = FrmFieldFactory::field_has_property( $type, 'has_input' );
+			if ( $has_input ) {
+				return self::field_has_top_label( $field, $form );
 			}
 		}
 
-		return $has_tall_field;
+		return false;
+	}
+
+	/**
+	 * Check if a field's label position is set to "top"
+	 *
+	 * @param $field
+	 * @param $form
+	 *
+	 * @return bool
+	 */
+	private static function field_has_top_label( $field, $form ) {
+		$label_position = FrmFieldsHelper::label_position( $field['label'], $field, $form );
+		return in_array( $label_position, array( 'top', 'inside', 'hidden' ) );
 	}
 
     /**
