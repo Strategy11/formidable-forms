@@ -1661,7 +1661,7 @@ function frmAdminBuildJS(){
 	}
 
 	function clickAction(obj){
-		var shouldScroll, selected, scrollMe, parentOffset, curOffset,
+		var shouldScroll, selected, preTop, curOffset,
 			selectedOffset = 0,
 			selectedHeight = 0,
 			$thisobj = jQuery(obj);
@@ -1674,10 +1674,9 @@ function frmAdminBuildJS(){
 		}
 
 		selected = jQuery('li.ui-state-default.selected');
-		scrollMe = jQuery(document.getElementById('post-body-content'));
 
 		// get offsets before anything changes
-		parentOffset = scrollMe.offset().top;
+		preTop = document.documentElement.scrollTop || document.body.scrollTop;
 		curOffset = $thisobj.offset().top;
 
 		if ( selected.length )	{
@@ -1697,7 +1696,8 @@ function frmAdminBuildJS(){
 		var newOffset = $thisobj.offset().top;
 
 		if ( selected.length && shouldScroll && curOffset > newOffset ) {
-			scrollMe.offset( { top: parentOffset + (curOffset - newOffset) } );
+			var curTop = document.documentElement.scrollTop || document.body.scrollTop; // body for Safari;
+			document.documentElement.scrollTop = document.body.scrollTop = curTop - ( curOffset - newOffset );
 		}
 	}
 
@@ -2843,7 +2843,7 @@ function frmAdminBuildJS(){
 			jQuery('.frm_form_builder').on('keyup', 'input[name^="item_meta"], textarea[name^="item_meta"]', triggerDefaults);
 			jQuery('.frm_form_builder').on('change', 'select[name^="item_meta"]', triggerDefaults);
 			$newFields.on('change', 'select.conf_field', addConf);
-			
+
 			$newFields.on('change', '.frm_get_field_selection', getFieldSelection);
 		},
 		
