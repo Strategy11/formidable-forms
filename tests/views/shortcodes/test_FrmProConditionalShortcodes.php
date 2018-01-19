@@ -1768,5 +1768,4 @@ class WP_Test_Conditional_Shortcodes extends FrmUnitTest {
 	private function assert_conditional_is_false( $content ) {
 		$this->assertSame( 'Before  After', $content );
 	}
-
 }

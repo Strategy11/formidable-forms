@@ -3,9 +3,10 @@
 <?php
 echo esc_html( $params['template'] ? __( 'Templates', 'formidable' ) : __( 'Forms', 'formidable' ) );
 if ( ! $params['template'] && current_user_can( 'frm_edit_forms' ) ) { ?>
-        <a href="?page=formidable&amp;frm_action=new" class="add-new-h2"><?php _e( 'Add New', 'formidable' ); ?></a>
+        <a href="?page=formidable&amp;frm_action=new" class="add-new-h2"><?php esc_html_e( 'Add New', 'formidable' ); ?></a>
 <?php
-} ?>
+}
+?>
     </h2>
 
 <?php

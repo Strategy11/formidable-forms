@@ -28,5 +28,4 @@ class Tests_Frm_Ajax extends FrmAjaxUnitTest {
         $exists = $wpdb->query( 'DESCRIBE '. $wpdb->prefix . 'frm_fields' );
         $this->assertNotEmpty( $exists );
 	}
-
 }

@@ -3,6 +3,7 @@
 /**
  * @group entries
  * @group searching-entries
+ * @group pro
  */
 class WP_Test_FrmProEntriesHelper extends FrmUnitTest {
 
@@ -67,11 +68,11 @@ class WP_Test_FrmProEntriesHelper extends FrmUnitTest {
 	 * @covers FrmProEntriesHelper::get_search_str()
 	 */
 	function test_general_entries_search_on_dynamic_field_values() {
-		// Single word is searched. One matching entry should be found.
+		// Single word is searched. Two matching entries should be found.
 		$search_string = 'Utah';
 		$items = self::generate_and_run_search_query( 'all_field_types', $search_string );
 		$msg = 'A general search for ' . $search_string . ' in entry metas table';
-		self::run_entries_found_tests( $msg, $items, 1, array( 'steph_entry_key' ) );
+		self::run_entries_found_tests( $msg, $items, 2, array( 'steph_entry_key', 'jamie_entry_key' ) );
 	}
 
 	/**
@@ -176,7 +177,7 @@ class WP_Test_FrmProEntriesHelper extends FrmUnitTest {
 
 		// Multiple words. Two matching entries should be found.
 		$search_string = 'Jamie Rebecca Wahlin';
-		$field_key = 'p3eiuk';
+		$field_key = 'paragraph-field';
 		$items = self::generate_and_run_field_specific_query( 'all_field_types', $field_key, $search_string );
 		$msg = 'A search for ' . $search_string . ' in field ' . $field_key;
 		self::run_entries_found_tests( $msg, $items, 2, array( 'jamie_entry_key', 'jamie_entry_key_2' ) );
@@ -195,19 +196,19 @@ class WP_Test_FrmProEntriesHelper extends FrmUnitTest {
 	 */
 	function test_field_specific_search_on_dynamic_field_california() {
 
-		// Single word. Two matching entries should be found
+		// Single word. Three matching entries should be found
 		$search_string = 'California';
 		$field_key = 'dynamic-state';
 		$items = self::generate_and_run_field_specific_query( 'all_field_types', $field_key, $search_string );
 		$msg = 'A search for ' . $search_string . ' in Dynamic field ' . $field_key;
-		self::run_entries_found_tests( $msg, $items, 2, array( 'steve_entry_key', 'steph_entry_key' ) );
+		self::run_entries_found_tests( $msg, $items, 3, array( 'steve_entry_key', 'steph_entry_key', 'jamie_entry_key' ) );
 
-		// Entry ID. Two matching entries should be found
+		// Entry ID. Three matching entries should be found
 		$search_string = FrmEntry::get_id_by_key( 'cali_entry' );
 		$field_key = 'dynamic-state';
 		$items = self::generate_and_run_field_specific_query( 'all_field_types', $field_key, $search_string );
 		$msg = 'A search for ' . $search_string . ' in Dynamic field ' . $field_key;
-		self::run_entries_found_tests( $msg, $items, 2, array( 'steve_entry_key', 'steph_entry_key' ) );
+		self::run_entries_found_tests( $msg, $items, 3, array( 'steve_entry_key', 'steph_entry_key', 'jamie_entry_key' ) );
 	}
 
 	/**
@@ -221,7 +222,7 @@ class WP_Test_FrmProEntriesHelper extends FrmUnitTest {
 		$field_key = 'dynamic-state';
 		$items = self::generate_and_run_field_specific_query( 'all_field_types', $field_key, $search_string );
 		$msg = 'A search for ' . $search_string . ' in Dynamic field ' . $field_key;
-		self::run_entries_found_tests( $msg, $items, 1, array( 'steph_entry_key' ) );
+		self::run_entries_found_tests( $msg, $items, 2, array( 'steph_entry_key', 'jamie_entry_key' ) );
 
 	}
 
@@ -375,7 +376,14 @@ class WP_Test_FrmProEntriesHelper extends FrmUnitTest {
 
 	function run_entries_found_tests( $msg, $items, $expected_count, $expected_keys ) {
 		$this->assertNotEmpty( $items, $msg . ' is not returning entries.' );
-		$this->assertEquals( $expected_count, count( $items ), $msg . ' is not returning the correct number of entries.' );
+		if ( $expected_count != count( $items ) ) {
+			$found = array();
+			foreach ( $items as $item ) {
+				$found[] = $item->item_key;
+			}
+
+			$this->assertEquals( $expected_count, count( $items ), $msg . ' is not returning the correct number of entries. Found: ' . implode( ', ', $found ) .' Expected: ' . implode( ', ', $expected_keys ) );
+		}
 
 		foreach ( $items as $item ) {
 			$this->assertContains( $item->item_key, $expected_keys,  $msg . ' is not returning the correct entries.' );

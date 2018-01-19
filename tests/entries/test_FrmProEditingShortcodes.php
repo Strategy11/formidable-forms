@@ -7,7 +7,7 @@
  * @group entry-editing
  *
  */
-class WP_Test_FrmEditingShortcodes extends FrmUnitTest {
+class WP_Test_FrmProEditingShortcodes extends FrmUnitTest {
 
 	public function setUp() {
 		parent::setUp();
@@ -308,5 +308,4 @@ class WP_Test_FrmEditingShortcodes extends FrmUnitTest {
 		return $expected_link;
 
 	}
-
 }

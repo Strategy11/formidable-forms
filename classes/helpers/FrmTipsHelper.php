@@ -10,7 +10,7 @@ class FrmTipsHelper {
 		$tips = self::$callback();
 		$tip = self::get_random_tip( $tips );
 
-		if ( $html == 'p' ) {
+		if ( 'p' === $html ) {
 			echo '<p>';
 		}
 
@@ -23,7 +23,7 @@ class FrmTipsHelper {
 			<?php } ?>
 		</a>
 		<?php
-		if ( $html == 'p' ) {
+		if ( 'p' === $html ) {
 			echo '</p>';
 		}
 	}

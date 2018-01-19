@@ -2,6 +2,7 @@
 
 /**
  * @group ajax
+ * @group pro
  */
 class WP_Test_FrmProFieldsControllerAjax extends FrmAjaxUnitTest {
 
@@ -573,7 +574,7 @@ class WP_Test_FrmProFieldsControllerAjax extends FrmAjaxUnitTest {
 	 *
 	 */
 	function test_get_paragraph_field_values_for_field_logic() {
-		$logic_field_id = FrmField::get_id_by_key( 'p3eiuk' );
+		$logic_field_id = FrmField::get_id_by_key( 'paragraph-field' );
 		$source_field_id = FrmField::get_id_by_key( 'text-field' );
 
 		$this->set_post_values_for_field_logic_value_selector( $logic_field_id, $source_field_id, 'text', 'create' );
@@ -663,7 +664,7 @@ class WP_Test_FrmProFieldsControllerAjax extends FrmAjaxUnitTest {
 	 *
 	 */
 	function test_get_scale_field_values_for_field_logic() {
-		$logic_field_id = FrmField::get_id_by_key( 'qbrd2o' );
+		$logic_field_id = FrmField::get_id_by_key( 'scale-field' );
 		$source_field_id = FrmField::get_id_by_key( 'text-field' );
 
 		$this->set_post_values_for_field_logic_value_selector( $logic_field_id, $source_field_id );
@@ -831,5 +832,4 @@ class WP_Test_FrmProFieldsControllerAjax extends FrmAjaxUnitTest {
 			'nonce'     => wp_create_nonce( 'frm_ajax' ),
 		);
 	}
-
 }

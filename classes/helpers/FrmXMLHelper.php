@@ -23,11 +23,15 @@ class FrmXMLHelper {
 	}
 
 	public static function import_xml( $file ) {
-        $defaults = array(
-            'forms' => 0, 'fields' => 0, 'terms' => 0,
-            'posts' => 0, 'views' => 0, 'actions' => 0,
-            'styles' => 0,
-        );
+		$defaults = array(
+			'forms'   => 0,
+			'fields'  => 0,
+			'terms'   => 0,
+			'posts'   => 0,
+			'views'   => 0,
+			'actions' => 0,
+			'styles'  => 0,
+		);
 
         $imported = array(
             'imported' => $defaults,
@@ -194,7 +198,10 @@ class FrmXMLHelper {
 
 	private static function maybe_get_form( $form ) {
 		// if template, allow to edit if form keys match, otherwise, creation date must also match
-		$edit_query = array( 'form_key' => $form['form_key'], 'is_template' => $form['is_template'] );
+		$edit_query = array(
+			'form_key'    => $form['form_key'],
+			'is_template' => $form['is_template'],
+		);
 		if ( ! $form['is_template'] ) {
 			$edit_query['created_at'] = $form['created_at'];
 		}
@@ -307,17 +314,14 @@ class FrmXMLHelper {
 		foreach ( $xml_fields as $field ) {
 			$f = self::fill_field( $field, $form_id );
 
-		    if ( is_array($f['default_value']) && in_array($f['type'], array(
-		        'text', 'email', 'url', 'textarea',
-		        'number','phone', 'date',
-		        'hidden', 'password', 'tag', 'image',
-		    )) ) {
-		        if ( count($f['default_value']) === 1 ) {
+			$has_default = array( 'text', 'email', 'url', 'textarea', 'number', 'phone', 'date', 'hidden', 'password', 'tag', 'image' );
+			if ( is_array( $f['default_value'] ) && in_array( $f['type'], $has_default, true ) ) {
+				if ( count( $f['default_value'] ) === 1 ) {
 					$f['default_value'] = '[' . reset( $f['default_value'] ) . ']';
-		        } else {
-		            $f['default_value'] = reset($f['default_value']);
-		        }
-		    }
+				} else {
+					$f['default_value'] = reset( $f['default_value'] );
+				}
+			}
 
 			self::maybe_update_in_section_variable( $in_section, $f );
 			self::maybe_update_form_select( $f, $imported );
@@ -409,7 +413,7 @@ class FrmXMLHelper {
 
 		if ( $f['type'] == 'form' || ( $f['type'] == 'divider' && FrmField::is_option_true( $f['field_options'], 'repeat' ) ) ) {
 			if ( FrmField::is_option_true( $f['field_options'], 'form_select' ) ) {
-				$form_select = $f['field_options']['form_select'];
+				$form_select = (int) $f['field_options']['form_select'];
 				if ( isset( $imported['forms'][ $form_select ] ) ) {
 					$f['field_options']['form_select'] = $imported['forms'][ $form_select ];
 				}
@@ -797,7 +801,7 @@ class FrmXMLHelper {
         }
 
         if ( ! is_array($result) ) {
-            $message = is_string( $result ) ? $result : print_r( $result, 1 );
+            $message = is_string( $result ) ? $result : htmlentities( print_r( $result, 1 ) );
             return;
         }
 
@@ -948,11 +952,7 @@ class FrmXMLHelper {
 			'post_name'     => $form_id . '_wppost_1',
         );
 
-        $post_settings = array(
-            'post_type', 'post_category', 'post_content',
-            'post_excerpt', 'post_title', 'post_name', 'post_date',
-			'post_status', 'post_custom_fields', 'post_password',
-        );
+		$post_settings = array( 'post_type', 'post_category', 'post_content', 'post_excerpt', 'post_title', 'post_name', 'post_date', 'post_status', 'post_custom_fields', 'post_password' );
 
         foreach ( $post_settings as $post_setting ) {
 			if ( isset( $form_options[ $post_setting ] ) ) {
@@ -983,7 +983,7 @@ class FrmXMLHelper {
 
         if ( ! $exists ) {
 			// this isn't an email, but we need to use a class that will always be included
-			FrmAppHelper::save_json_post( $new_action );
+			FrmDb::save_json_post( $new_action );
             $imported['imported']['actions']++;
         }
     }
@@ -1073,12 +1073,32 @@ class FrmXMLHelper {
             ) );
 
             if ( empty($exists) ) {
-				FrmAppHelper::save_json_post( $new_notification );
+				FrmDb::save_json_post( $new_notification );
                 $imported['imported']['actions']++;
             }
             unset($new_notification);
         }
+
+		self::remove_deprecated_notification_settings( $form_id, $form_options );
     }
+
+	/**
+	 * Remove deprecated notification settings after migration
+	 *
+	 * @since 2.05
+	 *
+	 * @param int|string $form_id
+	 * @param array $form_options
+	 */
+	private static function remove_deprecated_notification_settings( $form_id, $form_options ) {
+		$delete_settings = array( 'notification', 'autoresponder', 'email_to' );
+		foreach ( $delete_settings as $index ) {
+			if ( isset( $form_options[ $index ] ) ) {
+				unset( $form_options[ $index ] );
+			}
+		}
+		FrmForm::update( $form_id, array( 'options' => $form_options ) );
+	}
 
     private static function migrate_notifications_to_action( $form_options, $form_id, &$notifications ) {
         if ( ! isset( $form_options['notification'] ) && isset( $form_options['email_to'] ) && ! empty( $form_options['email_to'] ) ) {
@@ -1092,7 +1112,14 @@ class FrmXMLHelper {
         if ( isset( $form_options['notification'] ) && is_array($form_options['notification']) ) {
             foreach ( $form_options['notification'] as $email_key => $notification ) {
 
-                $atts = array( 'email_to' => '', 'reply_to' => '', 'reply_to_name' => '', 'event' => '', 'form_id' => $form_id, 'email_key' => $email_key );
+				$atts = array(
+					'email_to'  => '',
+					'reply_to'  => '',
+					'reply_to_name' => '',
+					'event'     => '',
+					'form_id'   => $form_id,
+					'email_key' => $email_key,
+				);
 
                 // Format the email data
                 self::format_email_data( $atts, $notification );
@@ -1115,7 +1142,10 @@ class FrmXMLHelper {
         self::format_email_to_data( $atts, $notification );
 
         // Format the reply to email and name
-        $reply_fields = array( 'reply_to' => '', 'reply_to_name' => '' );
+		$reply_fields = array(
+			'reply_to'      => '',
+			'reply_to_name' => '',
+		);
         foreach ( $reply_fields as $f => $val ) {
 			if ( isset( $notification[ $f ] ) ) {
 				$atts[ $f ] = $notification[ $f ];

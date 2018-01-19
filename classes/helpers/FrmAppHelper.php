@@ -4,13 +4,13 @@ if ( ! defined('ABSPATH') ) {
 }
 
 class FrmAppHelper {
-	public static $db_version = 44; //version of the database we are moving to
+	public static $db_version = 47; //version of the database we are moving to
 	public static $pro_db_version = 37; //deprecated
 
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '2.04.01';
+	public static $plug_version = '2.05.09';
 
     /**
      * @since 1.07.02
@@ -60,13 +60,14 @@ class FrmAppHelper {
 	public static function make_affiliate_url( $url ) {
 		$affiliate_id = self::get_affiliate();
 		if ( ! empty( $affiliate_id ) ) {
-			$url = add_query_arg( 'aff', $affiliate_id, $url );
+			$url = str_replace( array( 'http://', 'https://' ), '', $url );
+			$url = 'http://www.shareasale.com/r.cfm?u=' . absint( $affiliate_id ) . '&b=841990&m=64739&afftrack=plugin&urllink=' . urlencode( $url );
 		}
 		return $url;
 	}
 
 	public static function get_affiliate() {
-		return '';
+		return absint( apply_filters( 'frm_affiliate_id', 0 ) );
 	}
 
     /**
@@ -88,6 +89,14 @@ class FrmAppHelper {
 	public static function get_menu_name() {
 		$frm_settings = FrmAppHelper::get_settings();
 		return $frm_settings->menu;
+	}
+
+	/**
+	 * @since 2.02.04
+	 */
+	public static function ips_saved() {
+		$frm_settings = self::get_settings();
+		return ! $frm_settings->no_ips;
 	}
 
     /**
@@ -144,8 +153,21 @@ class FrmAppHelper {
      * @return boolean
      */
     public static function doing_ajax() {
-        return defined('DOING_AJAX') && DOING_AJAX && ! self::is_preview_page();
+        return self::wp_doing_ajax() && ! self::is_preview_page();
     }
+
+	/**
+	 * Use the WP 4.7 wp_doing_ajax function
+	 * @sine 2.05.07
+	 */
+	public static function wp_doing_ajax() {
+		if ( function_exists( 'wp_doing_ajax' ) ) {
+			$doing_ajax = wp_doing_ajax();
+		} else {
+			$doing_ajax = defined('DOING_AJAX') && DOING_AJAX;
+		}
+		return $doing_ajax;
+	}
 
 	/**
 	 * @since 2.0.8
@@ -164,7 +186,7 @@ class FrmAppHelper {
      * @return boolean
      */
     public static function is_admin() {
-        return is_admin() && ( ! defined('DOING_AJAX') || ! DOING_AJAX );
+        return is_admin() && ! self::wp_doing_ajax();
     }
 
     /**
@@ -202,10 +224,7 @@ class FrmAppHelper {
      */
     public static function get_ip_address() {
 		$ip = '';
-        foreach ( array(
-            'HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED', 'HTTP_X_CLUSTER_CLIENT_IP',
-            'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED', 'REMOTE_ADDR',
-        ) as $key ) {
+		foreach ( array( 'HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED', 'HTTP_X_CLUSTER_CLIENT_IP', 'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED', 'REMOTE_ADDR' ) as $key ) {
             if ( ! isset( $_SERVER[ $key ] ) ) {
                 continue;
             }
@@ -214,7 +233,7 @@ class FrmAppHelper {
                 $ip = trim($ip); // just to be safe
 
                 if ( filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) !== false ) {
-                    return $ip;
+                    return sanitize_text_field( $ip );
                 }
             }
         }
@@ -235,8 +254,13 @@ class FrmAppHelper {
             }
 			self::sanitize_value( $sanitize, $value );
 		} else {
-            $value = self::get_simple_request( array( 'type' => $src, 'param' => $param, 'default' => $default, 'sanitize' => $sanitize ) );
-        }
+			$value = self::get_simple_request( array(
+				'type'     => $src,
+				'param'    => $param,
+				'default'  => $default,
+				'sanitize' => $sanitize,
+			) );
+		}
 
 		if ( isset( $params ) && is_array( $value ) && ! empty( $value ) ) {
             foreach ( $params as $k => $p ) {
@@ -253,7 +277,12 @@ class FrmAppHelper {
     }
 
 	public static function get_post_param( $param, $default = '', $sanitize = '' ) {
-		return self::get_simple_request( array( 'type' => 'post', 'param' => $param, 'default' => $default, 'sanitize' => $sanitize ) );
+		return self::get_simple_request( array(
+			'type'     => 'post',
+			'param'    => $param,
+			'default'  => $default,
+			'sanitize' => $sanitize,
+		) );
 	}
 
 	/**
@@ -265,8 +294,13 @@ class FrmAppHelper {
 	 * @return string|array
 	 */
 	public static function simple_get( $param, $sanitize = 'sanitize_text_field', $default = '' ) {
-		return self::get_simple_request( array( 'type' => 'get', 'param' => $param, 'default' => $default, 'sanitize' => $sanitize ) );
-    }
+		return self::get_simple_request( array(
+			'type'     => 'get',
+			'param'    => $param,
+			'default'  => $default,
+			'sanitize' => $sanitize,
+		) );
+	}
 
 	/**
 	 * Get a GET/POST/REQUEST value and sanitize it
@@ -277,8 +311,10 @@ class FrmAppHelper {
 	 */
 	public static function get_simple_request( $args ) {
 		$defaults = array(
-			'param' => '', 'default' => '',
-			'type' => 'get', 'sanitize' => 'sanitize_text_field',
+			'param'    => '',
+			'default'  => '',
+			'type'     => 'get',
+			'sanitize' => 'sanitize_text_field',
 		);
 		$args = wp_parse_args( $args, $defaults );
 
@@ -349,25 +385,115 @@ class FrmAppHelper {
 	 * Sanitize the value, and allow some HTML
 	 * @since 2.0
 	 * @param string $value
-	 * @param array $allowed
+	 * @param array|string $allowed 'all' for everything included as defaults
 	 * @return string
 	 */
 	public static function kses( $value, $allowed = array() ) {
-		$html = array(
-		    'a' => array(
-				'href'  => array(),
-				'title' => array(),
-				'id'    => array(),
-				'class' => array(),
-		    ),
-		);
-
-		$allowed_html = array();
-		foreach ( $allowed as $a ) {
-			$allowed_html[ $a ] = isset( $html[ $a ] ) ? $html[ $a ] : array();
-		}
+		$allowed_html = self::allowed_html( $allowed );
 
 		return wp_kses( $value, $allowed_html );
+	}
+
+	/**
+	 * @since 2.05.03
+	 */
+	private static function allowed_html( $allowed ) {
+		$html = self::safe_html();
+		$allowed_html = array();
+		if ( $allowed == 'all' ) {
+			$allowed_html = $html;
+		} elseif ( ! empty( $allowed ) ) {
+			foreach ( (array) $allowed as $a ) {
+				$allowed_html[ $a ] = isset( $html[ $a ] ) ? $html[ $a ] : array();
+			}
+		}
+
+		return apply_filters( 'frm_striphtml_allowed_tags', $allowed_html );
+	}
+
+	/**
+	 * @since 2.05.03
+	 */
+	private static function safe_html() {
+		return array(
+			'a' => array(
+				'class' => array(),
+				'href'  => array(),
+				'id'    => array(),
+				'rel'   => array(),
+				'title' => array(),
+			),
+			'abbr' => array(
+				'title' => array(),
+			),
+			'b' => array(),
+			'blockquote' => array(
+				'cite'  => array(),
+			),
+			'br'   => array(),
+			'cite' => array(
+				'title' => array(),
+			),
+			'code' => array(),
+			'del'  => array(
+				'datetime' => array(),
+				'title' => array(),
+			),
+			'dd'  => array(),
+			'div' => array(
+				'class' => array(),
+				'id'    => array(),
+				'title' => array(),
+				'style' => array(),
+			),
+			'dl'  => array(),
+			'dt'  => array(),
+			'em'  => array(),
+			'h1'  => array(),
+			'h2'  => array(),
+			'h3'  => array(),
+			'h4'  => array(),
+			'h5'  => array(),
+			'h6'  => array(),
+			'i'   => array(),
+			'img' => array(
+				'alt'    => array(),
+				'class'  => array(),
+				'height' => array(),
+				'id'     => array(),
+				'src'    => array(),
+				'width'  => array(),
+			),
+			'li' => array(
+				'class' => array(),
+				'id'    => array(),
+			),
+			'ol' => array(
+				'class' => array(),
+				'id'    => array(),
+			),
+			'p'   => array(
+				'class' => array(),
+				'id'    => array(),
+			),
+			'pre' => array(),
+			'q'   => array(
+				'cite' => array(),
+				'title' => array(),
+			),
+			'span' => array(
+				'class' => array(),
+				'id'    => array(),
+				'title' => array(),
+				'style' => array(),
+			),
+			'strike' => array(),
+			'strong' => array(),
+			'ul' => array(
+				'class' => array(),
+				'id'    => array(),
+			),
+		);
 	}
 
     /**
@@ -416,114 +542,6 @@ class FrmAppHelper {
     }
 
     /**
-     * Check cache before fetching values and saving to cache
-     *
-     * @since 2.0
-     *
-     * @param string $cache_key The unique name for this cache
-     * @param string $group The name of the cache group
-     * @param string $query If blank, don't run a db call
-     * @param string $type The wpdb function to use with this query
-     * @return mixed $results The cache or query results
-     */
-    public static function check_cache( $cache_key, $group = '', $query = '', $type = 'get_var', $time = 300 ) {
-        $results = wp_cache_get($cache_key, $group);
-        if ( ! self::is_empty_value( $results, false ) || empty($query) ) {
-            return $results;
-        }
-
-        if ( 'get_posts' == $type ) {
-            $results = get_posts($query);
-		} else if ( 'get_associative_results' == $type ) {
-			global $wpdb;
-			$results = $wpdb->get_results( $query, OBJECT_K );
-        } else {
-            global $wpdb;
-            $results = $wpdb->{$type}($query);
-        }
-
-		self::set_cache( $cache_key, $results, $group, $time );
-
-		return $results;
-	}
-
-	public static function set_cache( $cache_key, $results, $group = '', $time = 300 ) {
-		if ( ! self::prevent_caching() ) {
-			self::add_key_to_group_cache( $cache_key, $group );
-			wp_cache_set( $cache_key, $results, $group, $time );
-		}
-	}
-
-	/**
-	 * Keep track of the keys cached in each group so they can be deleted
-	 * in Redis and Memcache
-	 */
-	public static function add_key_to_group_cache( $key, $group ) {
-		$cached = self::get_group_cached_keys( $group );
-		$cached[ $key ] = $key;
-		wp_cache_set( 'cached_keys', $cached, $group, 300 );
-	}
-
-	public static function get_group_cached_keys( $group ) {
-		$cached = wp_cache_get( 'cached_keys', $group );
-		if ( ! $cached || ! is_array( $cached ) ) {
-			$cached = array();
-		}
-
-		return $cached;
-	}
-
-    /**
-     * Data that should be stored for a long time can be stored in a transient.
-     * First check the cache, then check the transient
-     * @since 2.0
-     * @return mixed The cached value or false
-     */
-	public static function check_cache_and_transient( $cache_key ) {
-        // check caching layer first
-        $results = self::check_cache( $cache_key );
-        if ( $results ) {
-            return $results;
-        }
-
-        // then check the transient
-        $results = get_transient($cache_key);
-        if ( $results ) {
-            wp_cache_set($cache_key, $results);
-        }
-
-        return $results;
-    }
-
-    /**
-     * @since 2.0
-     * @param string $cache_key
-     */
-	public static function delete_cache_and_transient( $cache_key, $group = 'default' ) {
-		delete_transient($cache_key);
-		wp_cache_delete( $cache_key, $group );
-	}
-
-    /**
-     * Delete all caching in a single group
-     *
-     * @since 2.0
-     *
-     * @param string $group The name of the cache group
-     */
-	public static function cache_delete_group( $group ) {
-		$cached_keys = self::get_group_cached_keys( $group );
-
-		if ( ! empty( $cached_keys ) ) {
-			foreach ( $cached_keys as $key ) {
-				wp_cache_delete( $key, $group );
-			}
-
-			wp_cache_delete( 'cached_keys', $group );
-		}
-	}
-
-    /**
      * Check a value from a shortcode to see if true or false.
      * True when value is 1, true, 'true', 'yes'
      *
@@ -540,12 +558,19 @@ class FrmAppHelper {
      * Used to filter shortcode in text widgets
      */
     public static function widget_text_filter_callback( $matches ) {
+		_deprecated_function( __METHOD__, '2.5.4' );
         return do_shortcode( $matches[0] );
     }
 
-    public static function get_pages() {
-		return get_posts( array( 'post_type' => 'page', 'post_status' => array( 'publish', 'private' ), 'numberposts' => -1, 'orderby' => 'title', 'order' => 'ASC' ) );
-    }
+	public static function get_pages() {
+		return get_posts( array(
+			'post_type'   => 'page',
+			'post_status' => array( 'publish', 'private' ),
+			'numberposts' => -1,
+			'orderby'     => 'title',
+			'order'       => 'ASC',
+		) );
+	}
 
     public static function wp_pages_dropdown( $field_name, $page_id, $truncate = false ) {
         $pages = self::get_pages();
@@ -572,14 +597,12 @@ class FrmAppHelper {
     }
 
 	public static function wp_roles_dropdown( $field_name, $capability, $multiple = 'single' ) {
-    ?>
-        <select name="<?php echo esc_attr($field_name); ?>" id="<?php echo esc_attr($field_name); ?>" <?php
-            echo ( 'multiple' == $multiple ) ? 'multiple="multiple"' : '';
-            ?> class="frm_multiselect">
-            <?php self::roles_options($capability); ?>
-        </select>
-    <?php
-    }
+		?>
+		<select name="<?php echo esc_attr($field_name); ?>" id="<?php echo esc_attr($field_name); ?>" <?php echo ( 'multiple' === $multiple ) ? 'multiple="multiple"' : ''; ?> class="frm_multiselect">
+			<?php self::roles_options( $capability ); ?>
+		</select>
+		<?php
+	}
 
 	public static function roles_options( $capability ) {
         global $frm_vars;
@@ -591,7 +614,8 @@ class FrmAppHelper {
         }
 
         foreach ( $editable_roles as $role => $details ) {
-            $name = translate_user_role($details['name'] ); ?>
+			$name = translate_user_role( $details['name'] );
+			?>
         <option value="<?php echo esc_attr($role) ?>" <?php echo in_array($role, (array) $capability) ? ' selected="selected"' : ''; ?>><?php echo esc_attr($name) ?> </option>
 <?php
             unset($role, $details);
@@ -781,7 +805,7 @@ class FrmAppHelper {
 		if ( is_array( $value ) ) {
 			$original_function = $function;
 			if ( count( $value ) ) {
-				$function = explode( ', ', self::prepare_array_values( $value, $function ) );
+				$function = explode( ', ', FrmDb::prepare_array_values( $value, $function ) );
 			} else {
 				$function = array( $function );
 			}
@@ -893,6 +917,7 @@ class FrmAppHelper {
             return $user_id;
         }
 
+		$user_id = sanitize_text_field( $user_id );
 		if ( $user_id == 'current' ) {
 			$user_id = get_current_user_id();
 		} else {
@@ -947,13 +972,19 @@ class FrmAppHelper {
 			$key = $key . 'a';
         }
 
-		$key_check = FrmDb::get_var( $table_name, array( $column => $key, 'ID !' => $id ), $column );
+		$key_check = FrmDb::get_var( $table_name, array(
+			$column => $key,
+			'ID !'  => $id,
+		), $column );
 
         if ( $key_check || is_numeric($key_check) ) {
             $suffix = 2;
 			do {
 				$alt_post_name = substr( $key, 0, 200 - ( strlen( $suffix ) + 1 ) ) . $suffix;
-				$key_check = FrmDb::get_var( $table_name, array( $column => $alt_post_name, 'ID !' => $id ), $column );
+				$key_check = FrmDb::get_var( $table_name, array(
+					$column => $alt_post_name,
+					'ID !'  => $id,
+				), $column );
 				$suffix++;
 			} while ( $key_check || is_numeric( $key_check ) );
 			$key = $alt_post_name;
@@ -975,7 +1006,10 @@ class FrmAppHelper {
             $post_values = stripslashes_deep($_POST);
         }
 
-		$values = array( 'id' => $record->id, 'fields' => array() );
+		$values = array(
+			'id' => $record->id,
+			'fields' => array(),
+		);
 
 		foreach ( array( 'name', 'description' ) as $var ) {
             $default_val = isset($record->{$var}) ? $record->{$var} : '';
@@ -1017,7 +1051,12 @@ class FrmAppHelper {
                 if ( ! isset($field->field_options['custom_field']) ) {
                     $field->field_options['custom_field'] = '';
                 }
-				$meta_value = FrmProEntryMetaHelper::get_post_value( $record->post_id, $field->field_options['post_field'], $field->field_options['custom_field'], array( 'truncate' => false, 'type' => $field->type, 'form_id' => $field->form_id, 'field' => $field ) );
+				$meta_value = FrmProEntryMetaHelper::get_post_value( $record->post_id, $field->field_options['post_field'], $field->field_options['custom_field'], array(
+					'truncate' => false,
+					'type' => $field->type,
+					'form_id' => $field->form_id,
+					'field' => $field,
+				) );
             } else {
 				$meta_value = FrmEntryMeta::get_meta_value( $record, $field->id );
             }
@@ -1181,7 +1220,7 @@ class FrmAppHelper {
             return '';
         } else if ( $length <= 10 ) {
 			$sub = self::mb_function( array( 'mb_substr', 'substr' ), array( $str, 0, $length ) );
-            return $sub . (($length < $original_len) ? $continue : '');
+			return $sub . ( ( $length < $original_len ) ? $continue : '' );
         }
 
         $sub = '';
@@ -1190,7 +1229,7 @@ class FrmAppHelper {
 		$words = self::mb_function( array( 'mb_split', 'explode' ), array( ' ', $str ) );
 
 		foreach ( $words as $word ) {
-            $part = (($sub != '') ? ' ' : '') . $word;
+			$part = ( ( $sub != '' ) ? ' ' : '' ) . $word;
 			$total_len = self::mb_function( array( 'mb_strlen', 'strlen' ), array( $sub . $part ) );
             if ( $total_len > $length && str_word_count($sub) ) {
                 break;
@@ -1206,7 +1245,7 @@ class FrmAppHelper {
             unset($total_len, $word);
         }
 
-        return $sub . (($len < $original_len) ? $continue : '');
+		return $sub . ( ( $len < $original_len ) ? $continue : '' );
     }
 
 	public static function mb_function( $function_names, $args ) {
@@ -1322,121 +1361,6 @@ class FrmAppHelper {
 		);
 	}
 
-    /**
-     * Added for < WP 4.0 compatability
-     *
-     * @since 1.07.10
-     *
-     * @param string $term The value to escape
-     * @return string The escaped value
-     */
-	public static function esc_like( $term ) {
-        global $wpdb;
-        if ( method_exists($wpdb, 'esc_like') ) {
-			// WP 4.0
-            $term = $wpdb->esc_like( $term );
-        } else {
-            $term = like_escape( $term );
-        }
-
-        return $term;
-    }
-
-    /**
-     * @param string $order_query
-     */
-	public static function esc_order( $order_query ) {
-        if ( empty($order_query) ) {
-            return '';
-        }
-
-        // remove ORDER BY before santizing
-        $order_query = strtolower($order_query);
-        if ( strpos($order_query, 'order by') !== false ) {
-            $order_query = str_replace('order by', '', $order_query);
-        }
-
-        $order_query = explode(' ', trim($order_query));
-
-        $order_fields = array(
-            'id', 'form_key', 'name', 'description',
-            'parent_form_id', 'logged_in', 'is_template',
-            'default_template', 'status', 'created_at',
-        );
-
-        $order = trim(trim(reset($order_query), ','));
-        if ( ! in_array($order, $order_fields) ) {
-            return '';
-        }
-
-        $order_by = '';
-        if ( count($order_query) > 1 ) {
-			$order_by = end( $order_query );
-			self::esc_order_by( $order_by );
-        }
-
-		return ' ORDER BY ' . $order . ' ' . $order_by;
-    }
-
-	/**
-	 * Make sure this is ordering by either ASC or DESC
-	 */
-	public static function esc_order_by( &$order_by ) {
-		$sort_options = array( 'asc', 'desc' );
-		if ( ! in_array( strtolower( $order_by ), $sort_options ) ) {
-			$order_by = 'asc';
-		}
-	}
-
-    /**
-     * @param string $limit
-     */
-	public static function esc_limit( $limit ) {
-        if ( empty($limit) ) {
-            return '';
-        }
-
-        $limit = trim(str_replace(' limit', '', strtolower($limit)));
-        if ( is_numeric($limit) ) {
-			return ' LIMIT ' . $limit;
-        }
-
-        $limit = explode(',', trim($limit));
-        foreach ( $limit as $k => $l ) {
-            if ( is_numeric( $l ) ) {
-                $limit[ $k ] = $l;
-            }
-        }
-
-        $limit = implode(',', $limit);
-		return ' LIMIT ' . $limit;
-    }
-
-    /**
-     * Get an array of values ready to go through $wpdb->prepare
-     * @since 2.0
-     */
-    public static function prepare_array_values( $array, $type = '%s' ) {
-        $placeholders = array_fill(0, count($array), $type);
-        return implode(', ', $placeholders);
-    }
-
-    public static function prepend_and_or_where( $starts_with = ' WHERE ', $where = '' ) {
-        if ( empty($where) ) {
-            return '';
-        }
-
-		if ( is_array( $where ) ) {
-            global $wpdb;
-            FrmDb::get_where_clause_and_values( $where, $starts_with );
-			$where = $wpdb->prepare( $where['where'], $where['values'] );
-		} else {
-            $where = $starts_with . $where;
-        }
-
-        return $where;
-    }
-
     // Pagination Methods
 
     /**
@@ -1485,22 +1409,21 @@ class FrmAppHelper {
                     case 0:
                         $l1 = $name;
                         self::add_value_to_array( $name, $l1, $this_val, $vars );
-                    break;
+						break;
 
                     case 1:
                         $l2 = $name;
                         self::add_value_to_array( $name, $l2, $this_val, $vars[ $l1 ] );
-                    break;
+						break;
 
                     case 2:
                         $l3 = $name;
                         self::add_value_to_array( $name, $l3, $this_val, $vars[ $l1 ][ $l2 ] );
-                    break;
+						break;
 
                     case 3:
                         $l4 = $name;
                         self::add_value_to_array( $name, $l4, $this_val, $vars[ $l1 ][ $l2 ][ $l3 ] );
-                    break;
                 }
 
                 unset($this_val, $n);
@@ -1613,52 +1536,6 @@ class FrmAppHelper {
 			// Add backslashes before double quotes and forward slashes only
 			$post_content[ $key ] = addcslashes( $val, '"\\/' );
 		}
-	}
-
-	/**
-	 * Prepare and save settings in styles and actions
-	 *
-	 * @param array $settings
-	 * @param string $group
-	 *
-	 * @since 2.0.6
-	 */
-	public static function save_settings( $settings, $group ) {
-		$settings = (array) $settings;
-		$settings['post_content'] = FrmAppHelper::prepare_and_encode( $settings['post_content'] );
-
-		if ( empty( $settings['ID'] ) ) {
-			unset( $settings['ID']);
-		}
-
-		// delete all caches for this group
-		self::cache_delete_group( $group );
-
-		return self::save_json_post( $settings );
-	}
-
-	/**
-	 * Since actions are JSON encoded, we don't want any filters messing with it.
-	 * Remove the filters and then add them back in case any posts or views are
-	 * also being imported.
-	 *
-	 * Used when saving form actions and styles
-	 *
-	 * @since 2.0.4
-	 */
-	public static function save_json_post( $settings ) {
-		global $wp_filter;
-		$filters = $wp_filter['content_save_pre'];
-
-		// Remove the balanceTags filter in case WordPress is trying to validate the XHTML
-		remove_all_filters( 'content_save_pre' );
-
-		$post = wp_insert_post( $settings );
-
-		// add the content filters back for views or posts
-		$wp_filter['content_save_pre'] = $filters;
-
-		return $post;
 	}
 
 	public static function maybe_json_decode( $string ) {
@@ -1781,6 +1658,7 @@ class FrmAppHelper {
 				'private'           => __( 'Private' ),
 				'jquery_ui_url'     => self::jquery_ui_base_url(),
 				'no_licenses'       => __( 'No new licenses were found', 'formidable' ),
+				'repeat_limit_min'  => __( 'Please enter a Repeat Limit that is greater than 1.', 'formidable' ),
 			) );
 		}
 	}
@@ -1806,60 +1684,243 @@ class FrmAppHelper {
     }
 
     public static function locales( $type = 'date' ) {
-        $locales = array(
-            'en' => __( 'English', 'formidable' ),    '' => __( 'English/Western', 'formidable' ),
-            'af' => __( 'Afrikaans', 'formidable' ),  'sq' => __( 'Albanian', 'formidable' ),
-            'ar' => __( 'Arabic', 'formidable' ),     'hy' => __( 'Armenian', 'formidable' ),
-            'az' => __( 'Azerbaijani', 'formidable' ), 'eu' => __( 'Basque', 'formidable' ),
-            'bs' => __( 'Bosnian', 'formidable' ),    'bg' => __( 'Bulgarian', 'formidable' ),
-            'ca' => __( 'Catalan', 'formidable' ),    'zh-HK' => __( 'Chinese Hong Kong', 'formidable' ),
-            'zh-CN' => __( 'Chinese Simplified', 'formidable' ), 'zh-TW' => __( 'Chinese Traditional', 'formidable' ),
-            'hr' => __( 'Croatian', 'formidable' ),   'cs' => __( 'Czech', 'formidable' ),
-            'da' => __( 'Danish', 'formidable' ),     'nl' => __( 'Dutch', 'formidable' ),
-            'en-GB' => __( 'English/UK', 'formidable' ), 'eo' => __( 'Esperanto', 'formidable' ),
-            'et' => __( 'Estonian', 'formidable' ),   'fo' => __( 'Faroese', 'formidable' ),
-            'fa' => __( 'Farsi/Persian', 'formidable' ), 'fil' => __( 'Filipino', 'formidable' ),
-            'fi' => __( 'Finnish', 'formidable' ),    'fr' => __( 'French', 'formidable' ),
-            'fr-CA' => __( 'French/Canadian', 'formidable' ), 'fr-CH' => __( 'French/Swiss', 'formidable' ),
-            'de' => __( 'German', 'formidable' ),     'de-AT' => __( 'German/Austria', 'formidable' ),
-            'de-CH' => __( 'German/Switzerland', 'formidable' ), 'el' => __( 'Greek', 'formidable' ),
-            'he' => __( 'Hebrew', 'formidable' ),     'iw' => __( 'Hebrew', 'formidable' ),
-            'hi' => __( 'Hindi', 'formidable' ),      'hu' => __( 'Hungarian', 'formidable' ),
-            'is' => __( 'Icelandic', 'formidable' ),  'id' => __( 'Indonesian', 'formidable' ),
-            'it' => __( 'Italian', 'formidable' ),    'ja' => __( 'Japanese', 'formidable' ),
-            'ko' => __( 'Korean', 'formidable' ),     'lv' => __( 'Latvian', 'formidable' ),
-            'lt' => __( 'Lithuanian', 'formidable' ), 'ms' => __( 'Malaysian', 'formidable' ),
-            'no' => __( 'Norwegian', 'formidable' ),  'pl' => __( 'Polish', 'formidable' ),
-            'pt' => __( 'Portuguese', 'formidable' ), 'pt-BR' => __( 'Portuguese/Brazilian', 'formidable' ),
-            'pt-PT' => __( 'Portuguese/Portugal', 'formidable' ), 'ro' => __( 'Romanian', 'formidable' ),
-            'ru' => __( 'Russian', 'formidable' ),    'sr' => __( 'Serbian', 'formidable' ),
-            'sr-SR' => __( 'Serbian', 'formidable' ), 'sk' => __( 'Slovak', 'formidable' ),
-            'sl' => __( 'Slovenian', 'formidable' ),  'es' => __( 'Spanish', 'formidable' ),
-            'es-419' => __( 'Spanish/Latin America', 'formidable' ), 'sv' => __( 'Swedish', 'formidable' ),
-            'ta' => __( 'Tamil', 'formidable' ),      'th' => __( 'Thai', 'formidable' ),
-            'tu' => __( 'Turkish', 'formidable' ),    'tr' => __( 'Turkish', 'formidable' ),
-            'uk' => __( 'Ukranian', 'formidable' ),   'vi' => __( 'Vietnamese', 'formidable' ),
-        );
+		$locales = array(
+			'en' => __( 'English', 'formidable' ),
+			''   => __( 'English/Western', 'formidable' ),
+			'af' => __( 'Afrikaans', 'formidable' ),
+			'sq' => __( 'Albanian', 'formidable' ),
+			'ar' => __( 'Arabic', 'formidable' ),
+			'hy' => __( 'Armenian', 'formidable' ),
+			'az' => __( 'Azerbaijani', 'formidable' ),
+			'eu' => __( 'Basque', 'formidable' ),
+			'bs' => __( 'Bosnian', 'formidable' ),
+			'bg' => __( 'Bulgarian', 'formidable' ),
+			'ca' => __( 'Catalan', 'formidable' ),
+			'zh-HK' => __( 'Chinese Hong Kong', 'formidable' ),
+			'zh-CN' => __( 'Chinese Simplified', 'formidable' ),
+			'zh-TW' => __( 'Chinese Traditional', 'formidable' ),
+			'hr' => __( 'Croatian', 'formidable' ),
+			'cs' => __( 'Czech', 'formidable' ),
+			'da' => __( 'Danish', 'formidable' ),
+			'nl' => __( 'Dutch', 'formidable' ),
+			'en-GB' => __( 'English/UK', 'formidable' ),
+			'eo' => __( 'Esperanto', 'formidable' ),
+			'et' => __( 'Estonian', 'formidable' ),
+			'fo' => __( 'Faroese', 'formidable' ),
+			'fa' => __( 'Farsi/Persian', 'formidable' ),
+			'fil' => __( 'Filipino', 'formidable' ),
+			'fi' => __( 'Finnish', 'formidable' ),
+			'fr' => __( 'French', 'formidable' ),
+			'fr-CA' => __( 'French/Canadian', 'formidable' ),
+			'fr-CH' => __( 'French/Swiss', 'formidable' ),
+			'de' => __( 'German', 'formidable' ),
+			'de-AT' => __( 'German/Austria', 'formidable' ),
+			'de-CH' => __( 'German/Switzerland', 'formidable' ),
+			'el' => __( 'Greek', 'formidable' ),
+			'he' => __( 'Hebrew', 'formidable' ),
+			'iw' => __( 'Hebrew', 'formidable' ),
+			'hi' => __( 'Hindi', 'formidable' ),
+			'hu' => __( 'Hungarian', 'formidable' ),
+			'is' => __( 'Icelandic', 'formidable' ),
+			'id' => __( 'Indonesian', 'formidable' ),
+			'it' => __( 'Italian', 'formidable' ),
+			'ja' => __( 'Japanese', 'formidable' ),
+			'ko' => __( 'Korean', 'formidable' ),
+			'lv' => __( 'Latvian', 'formidable' ),
+			'lt' => __( 'Lithuanian', 'formidable' ),
+			'ms' => __( 'Malaysian', 'formidable' ),
+			'no' => __( 'Norwegian', 'formidable' ),
+			'pl' => __( 'Polish', 'formidable' ),
+			'pt' => __( 'Portuguese', 'formidable' ),
+			'pt-BR' => __( 'Portuguese/Brazilian', 'formidable' ),
+			'pt-PT' => __( 'Portuguese/Portugal', 'formidable' ),
+			'ro' => __( 'Romanian', 'formidable' ),
+			'ru' => __( 'Russian', 'formidable' ),
+			'sr' => __( 'Serbian', 'formidable' ),
+			'sr-SR' => __( 'Serbian', 'formidable' ),
+			'sk' => __( 'Slovak', 'formidable' ),
+			'sl' => __( 'Slovenian', 'formidable' ),
+			'es' => __( 'Spanish', 'formidable' ),
+			'es-419' => __( 'Spanish/Latin America', 'formidable' ),
+			'sv' => __( 'Swedish', 'formidable' ),
+			'ta' => __( 'Tamil', 'formidable' ),
+			'th' => __( 'Thai', 'formidable' ),
+			'tu' => __( 'Turkish', 'formidable' ),
+			'tr' => __( 'Turkish', 'formidable' ),
+			'uk' => __( 'Ukranian', 'formidable' ),
+			'vi' => __( 'Vietnamese', 'formidable' ),
+		);
 
-        if ( $type == 'captcha' ) {
-            // remove the languages unavailable for the captcha
-            $unset = array(
-                '', 'af', 'sq', 'hy', 'az', 'eu', 'bs',
-                'zh-HK', 'eo', 'et', 'fo', 'fr-CH',
-                'he', 'is', 'ms', 'sr-SR', 'ta', 'tu',
-            );
-        } else {
-            // remove the languages unavailable for the datepicker
-            $unset = array(
-                'en', 'fil', 'fr-CA', 'de-AT', 'de-AT',
-                'de-CH', 'iw', 'hi', 'pt', 'pt-PT',
-                'es-419', 'tr',
-            );
-        }
+		if ( $type === 'captcha' ) {
+			// remove the languages unavailable for the captcha
+			$unset = array( '', 'af', 'sq', 'hy', 'az', 'eu', 'bs', 'zh-HK', 'eo', 'et', 'fo', 'fr-CH', 'he', 'is', 'ms', 'sr-SR', 'ta', 'tu' );
+		} else {
+			// remove the languages unavailable for the datepicker
+			$unset = array( 'en', 'fil', 'fr-CA', 'de-AT', 'de-AT', 'de-CH', 'iw', 'hi', 'pt', 'pt-PT', 'es-419', 'tr' );
+		}
 
         $locales = array_diff_key($locales, array_flip($unset));
         $locales = apply_filters('frm_locales', $locales);
 
         return $locales;
     }
+
+	/**
+	 * Prepare and save settings in styles and actions
+	 *
+	 * @param array $settings
+	 * @param string $group
+	 *
+	 * @since 2.0.6
+	 * @deprecated 2.05.06
+	 */
+	public static function save_settings( $settings, $group ) {
+		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
+		return FrmDb::save_settings( $settings, $group );
+	}
+
+	/**
+	 * Since actions are JSON encoded, we don't want any filters messing with it.
+	 * Remove the filters and then add them back in case any posts or views are
+	 * also being imported.
+	 *
+	 * Used when saving form actions and styles
+	 *
+	 * @since 2.0.4
+	 * @deprecated 2.05.06
+	 */
+	public static function save_json_post( $settings ) {
+		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
+		return FrmDb::save_json_post( $settings );
+	}
+
+	/**
+	 * Check cache before fetching values and saving to cache
+	 *
+	 * @since 2.0
+	 * @deprecated 2.05.06
+	 *
+	 * @param string $cache_key The unique name for this cache
+	 * @param string $group The name of the cache group
+	 * @param string $query If blank, don't run a db call
+	 * @param string $type The wpdb function to use with this query
+	 * @return mixed $results The cache or query results
+	 */
+	public static function check_cache( $cache_key, $group = '', $query = '', $type = 'get_var', $time = 300 ) {
+		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
+		return FrmDb::check_cache( $cache_key, $group, $query, $type, $time );
+	}
+
+	/**
+	 * @deprecated 2.05.06
+	 */
+	public static function set_cache( $cache_key, $results, $group = '', $time = 300 ) {
+		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
+		FrmDb::set_cache( $cache_key, $results, $group, $time );
+	}
+
+	/**
+	 * Keep track of the keys cached in each group so they can be deleted
+	 * in Redis and Memcache
+	 * @deprecated 2.05.06
+	 */
+	public static function add_key_to_group_cache( $key, $group ) {
+		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
+		FrmDb::add_key_to_group_cache( $key, $group );
+	}
+
+	public static function get_group_cached_keys( $group ) {
+		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
+		return FrmDb::get_group_cached_keys( $group );
+	}
+
+	/**
+	 * @since 2.0
+	 * @deprecated 2.05.06
+	 * @return mixed The cached value or false
+	 */
+	public static function check_cache_and_transient( $cache_key ) {
+		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
+		return FrmDb::check_cache( $cache_key );
+	}
+
+	/**
+	 * @since 2.0
+	 * @deprecated 2.05.06
+	 * @param string $cache_key
+	 */
+	public static function delete_cache_and_transient( $cache_key, $group = 'default' ) {
+		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
+		FrmDb::delete_cache_and_transient( $cache_key, $group );
+	}
+
+	/**
+	 * @since 2.0
+	 * @deprecated 2.05.06
+	 *
+	 * @param string $group The name of the cache group
+	 */
+	public static function cache_delete_group( $group ) {
+		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
+		FrmDb::cache_delete_group( $group );
+	}
+
+	/**
+	 * Added for < WP 4.0 compatability
+	 *
+	 * @since 1.07.10
+	 * @deprecated 2.05.06
+	 *
+	 * @param string $term The value to escape
+	 * @return string The escaped value
+	 */
+	public static function esc_like( $term ) {
+		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
+		return FrmDb::esc_like( $term );
+	}
+
+	/**
+	 * @param string $order_query
+	 * @deprecated 2.05.06
+	 */
+	public static function esc_order( $order_query ) {
+		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
+		return FrmDb::esc_order( $order_query );
+	}
+
+	/**
+	 * Make sure this is ordering by either ASC or DESC
+	 * @deprecated 2.05.06
+	 */
+	public static function esc_order_by( &$order_by ) {
+		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
+		FrmDb::esc_order_by( $order_by );
+	}
+
+	/**
+	 * @param string $limit
+	 * @deprecated 2.05.06
+	 */
+	public static function esc_limit( $limit ) {
+		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
+		return FrmDb::esc_limit( $limit );
+	}
+
+	/**
+	 * Get an array of values ready to go through $wpdb->prepare
+	 * @since 2.0
+	 * @deprecated 2.05.06
+	 */
+	public static function prepare_array_values( $array, $type = '%s' ) {
+		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
+		return FrmDb::prepare_array_values( $array, $type );
+	}
+
+	/**
+	 * @deprecated 2.05.06
+	 */
+	public static function prepend_and_or_where( $starts_with = ' WHERE ', $where = '' ) {
+		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
+		return FrmDb::prepend_and_or_where( $starts_with, $where );
+	}
 }

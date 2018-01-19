@@ -13,7 +13,11 @@ class FrmAppController {
     }
 
 	private static function get_menu_position() {
-		$count = count( get_post_types( array( 'show_ui' => true, '_builtin' => false, 'show_in_menu' => true ) ) );
+		$count = count( get_post_types( array(
+			'show_ui'      => true,
+			'_builtin'     => false,
+			'show_in_menu' => true,
+		) ) );
 		$pos = $count ? '22.7' : '29.3';
 		$pos = apply_filters( 'frm_menu_position', $pos );
 		return $pos;
@@ -81,7 +85,10 @@ class FrmAppController {
 			),
 		);
 
-		$nav_items = apply_filters( 'frm_form_nav_list', $nav_items, array( 'form_id' => $id, 'form' => $form ) );
+		$nav_items = apply_filters( 'frm_form_nav_list', $nav_items, array(
+			'form_id' => $id,
+			'form'    => $form,
+		) );
 		return $nav_items;
 	}
 
@@ -115,7 +122,8 @@ class FrmAppController {
 				'<a href="' . esc_url( $inst_install_url ) . '" target="_blank">', '</a>',
 				'<a href="#" class="frm_deauthorize_link">', '</a>'
 			), esc_url( $inst_install_url )
-		) ); ?>
+		) );
+		?>
 </div>
 <?php
         }
@@ -136,9 +144,9 @@ class FrmAppController {
 			$tip = FrmTipsHelper::get_banner_tip();
 ?>
 <div class="update-nag frm-update-to-pro">
-	<?php echo FrmAppHelper::kses( $tip['tip'] ) ?>
-	<span><?php echo FrmAppHelper::kses( $tip['call'] ) ?></span>
-	<a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url('https://formidableforms.com?banner=1&tip=' . absint( $tip['num'] ) ) ) ?>" class="button">Upgrade to Pro</a>
+	<?php echo FrmAppHelper::kses( $tip['tip'] ); ?>
+	<span><?php echo FrmAppHelper::kses( $tip['call'] ); ?></span>
+	<a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url('https://formidableforms.com?banner=1&tip=' . absint( $tip['num'] ) ) ); ?>" class="button">Upgrade to Pro</a>
 </div>
 <?php
 		}
@@ -229,10 +237,14 @@ class FrmAppController {
 		FrmAppHelper::load_admin_wide_js( false );
 
 		wp_register_script( 'formidable_admin', FrmAppHelper::plugin_url() . '/js/formidable_admin.js', array(
-			'formidable_admin_global', 'formidable', 'jquery',
-			'jquery-ui-core', 'jquery-ui-draggable',
+			'formidable_admin_global',
+			'formidable',
+			'jquery',
+			'jquery-ui-core',
+			'jquery-ui-draggable',
 			'jquery-ui-sortable',
-			'bootstrap_tooltip', 'bootstrap-multiselect',
+			'bootstrap_tooltip',
+			'bootstrap-multiselect',
 		), $version, true );
 		wp_register_style( 'formidable-admin', FrmAppHelper::plugin_url() . '/css/frm_admin.css', array(), $version );
         wp_register_script( 'bootstrap_tooltip', FrmAppHelper::plugin_url() . '/js/bootstrap.min.js', array( 'jquery' ), '3.3.4' );
@@ -291,10 +303,11 @@ class FrmAppController {
     /**
      * Filter shortcodes in text widgets
      */
-    public static function widget_text_filter( $content ) {
-    	$regex = '/\[\s*(formidable|display-frm-data|frm-stats|frm-graph|frm-entry-links|formresults|frm-search)\s+.*\]/';
-    	return preg_replace_callback( $regex, 'FrmAppHelper::widget_text_filter_callback', $content );
-    }
+	public static function widget_text_filter( $content ) {
+		_deprecated_function( __METHOD__, '2.5.4' );
+		$regex = '/\[\s*(formidable|display-frm-data|frm-stats|frm-graph|frm-entry-links|formresults|frm-search)\s+.*\]/';
+		return preg_replace_callback( $regex, 'FrmAppHelper::widget_text_filter_callback', $content );
+	}
 
 	/**
 	 * Deprecated in favor of wpmu_upgrade_site
@@ -360,13 +373,13 @@ class FrmAppController {
 	}
 
     public static function activation_install() {
-        FrmAppHelper::delete_cache_and_transient( 'frm_plugin_version' );
+        FrmDb::delete_cache_and_transient( 'frm_plugin_version' );
         FrmFormActionsController::actions_init();
         self::install();
     }
 
     public static function install( $old_db_version = false ) {
-        $frmdb = new FrmDb();
+        $frmdb = new FrmMigrate();
         $frmdb->upgrade( $old_db_version );
     }
 
@@ -374,7 +387,7 @@ class FrmAppController {
 		FrmAppHelper::permission_check('administrator');
         check_ajax_referer( 'frm_ajax', 'nonce' );
 
-		$frmdb = new FrmDb();
+		$frmdb = new FrmMigrate();
 		$frmdb->uninstall();
 
 		//disable the plugin and redirect after uninstall so the tables don't get added right back

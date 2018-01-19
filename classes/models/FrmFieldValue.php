@@ -110,12 +110,29 @@ class FrmFieldValue {
 	}
 
 	/**
+	 * Get a value from the field settings
+	 * @since 2.05.06
+	 */
+	public function get_field_option( $value ) {
+		return FrmField::get_option( $this->field, $value );
+	}
+
+	/**
 	 * Get the field property's label
 	 *
 	 * @since 2.04
 	 */
 	public function get_field_label() {
 		return $this->field->name;
+	}
+
+	/**
+	 * Get the field property's id
+	 *
+	 * @since 2.05
+	 */
+	public function get_field_id() {
+		return $this->field->id;
 	}
 
 	/**
@@ -170,7 +187,8 @@ class FrmFieldValue {
 
 		// frm_display_{fieldtype}_value_custom hook
 		$this->displayed_value = apply_filters( 'frm_display_' . $this->field->type . '_value_custom', $this->displayed_value, array(
-			'field' => $this->field, 'entry' => $this->entry,
+			'field' => $this->field,
+			'entry' => $this->entry,
 		) );
 	}
 

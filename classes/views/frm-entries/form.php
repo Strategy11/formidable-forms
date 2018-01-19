@@ -1,7 +1,7 @@
 <?php
 if ( empty($values) || ! isset($values['fields']) || empty($values['fields']) ) { ?>
 <div class="frm_forms <?php echo FrmFormsHelper::get_form_style_class($form); ?>" id="frm_form_<?php echo esc_attr( $form->id ) ?>_container">
-	<div class="frm_error_style"><strong><?php _e( 'Oops!', 'formidable' ) ?></strong> <?php printf( __( 'You did not add any fields to your form. %1$sGo back%2$s and add some.', 'formidable' ), '<a href="' . esc_url( admin_url( '?page=formidable&frm_action=edit&id=' . $form->id ) ) . '">', '</a>' ) ?>
+	<div class="frm_error_style"><strong><?php esc_html_e( 'Oops!', 'formidable' ) ?></strong> <?php printf( esc_html__( 'You did not add any fields to your form. %1$sGo back%2$s and add some.', 'formidable' ), '<a href="' . esc_url( admin_url( '?page=formidable&frm_action=edit&id=' . $form->id ) ) . '">', '</a>' ) ?>
     </div>
 </div>
 <?php
@@ -25,9 +25,11 @@ $frm_hide_fields = FrmAppHelper::get_post_param( 'frm_hide_fields_' . $form->id,
 <input type="hidden" name="form_key" value="<?php echo esc_attr($form->form_key) ?>" />
 <input type="hidden" name="item_meta[0]" value="" />
 <?php wp_nonce_field( 'frm_submit_entry_nonce', 'frm_submit_entry_' . $form->id ); ?>
-<input type="text" class="frm_hidden frm_verify" id="frm_verify_<?php echo esc_attr( $form->id ) ?>" name="frm_verify" value="<?php echo esc_attr( FrmAppHelper::get_param('frm_verify' ) ) ?>" <?php FrmFormsHelper::maybe_hide_inline() ?> />
-
-<?php if ( isset( $id ) ) { ?><input type="hidden" name="id" value="<?php echo esc_attr( $id ) ?>" /><?php }
+<input type="text" class="frm_hidden frm_verify" id="frm_verify_<?php echo esc_attr( $form->id ) ?>" name="frm_verify" value="<?php echo esc_attr( FrmAppHelper::get_param('frm_verify', '', 'get', 'wp_kses_post' ) ) ?>" <?php FrmFormsHelper::maybe_hide_inline() ?> />
+<?php if ( isset( $id ) ) { ?>
+<input type="hidden" name="id" value="<?php echo esc_attr( $id ) ?>" />
+<?php
+}
 
 if ( $values['fields'] ) {
 	foreach ( $values['fields'] as $field ) {
@@ -41,14 +43,16 @@ if ( $values['fields'] ) {
 }
 
 $frm_settings = FrmAppHelper::get_settings();
-if ( FrmAppHelper::is_admin() ) { ?>
+if ( FrmAppHelper::is_admin() ) {
+?>
 <div class="frm_form_field form-field">
-<label class="frm_primary_label"><?php _e( 'Entry Key', 'formidable' ) ?></label>
+<label class="frm_primary_label"><?php esc_html_e( 'Entry Key', 'formidable' ) ?></label>
 <input type="text" name="item_key" value="<?php echo esc_attr($values['item_key']) ?>" />
 </div>
 <?php } else { ?>
 <input type="hidden" name="item_key" value="<?php echo esc_attr($values['item_key']) ?>" />
-<?php }
+<?php
+}
 
 do_action('frm_entry_form', $form, $form_action, $errors);
 
@@ -77,10 +81,6 @@ if ( FrmForm::show_submit( $form ) ) {
 ?>
 </fieldset>
 </div>
-<?php
-if ( has_action('frm_entries_footer_scripts') ) {
-?><script type="text/javascript"><?php
-do_action( 'frm_entries_footer_scripts', $values['fields'], $form );
-?></script><?php
-}
-?>
+<?php if ( has_action('frm_entries_footer_scripts') ) { ?>
+<script type="text/javascript"><?php do_action( 'frm_entries_footer_scripts', $values['fields'], $form ); ?></script>
+<?php } ?>

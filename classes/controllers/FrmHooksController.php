@@ -49,7 +49,7 @@ class FrmHooksController {
         }
 
         add_action( 'plugins_loaded', 'FrmAppController::load_lang' );
-        add_filter( 'widget_text', 'FrmAppController::widget_text_filter', 8 );
+		add_filter( 'widget_text', 'do_shortcode' );
 
         // Entries controller
         add_action( 'wp_loaded', 'FrmEntriesController::process_entry', 10, 0 );
@@ -140,8 +140,8 @@ class FrmHooksController {
         add_action( 'wp_ajax_frm_deauthorize', 'FrmAppController::deauthorize' );
 
 		// Addons
-		add_action('wp_ajax_frm_addon_activate', 'FrmAddon::activate' );
-		add_action('wp_ajax_frm_addon_deactivate', 'FrmAddon::deactivate' );
+		add_action( 'wp_ajax_frm_addon_activate', 'FrmAddon::activate' );
+		add_action( 'wp_ajax_frm_addon_deactivate', 'FrmAddon::deactivate' );
 		add_action( 'wp_ajax_frm_fill_licenses', 'FrmAddonsController::get_licenses' );
 
         // Fields Controller

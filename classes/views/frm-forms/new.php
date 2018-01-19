@@ -1,6 +1,6 @@
 <div class="wrap">
-    <h2><?php _e( 'Build New Form', 'formidable' ) ?>
-		<a href="?page=formidable-new" class="add-new-h2 frm_invisible"><?php _e( 'Add New', 'formidable' ); ?></a>
+    <h2><?php esc_html_e( 'Build New Form', 'formidable' ) ?>
+		<a href="?page=formidable-new" class="add-new-h2 frm_invisible"><?php esc_html_e( 'Add New', 'formidable' ); ?></a>
 	</h2>
 
     <div id="poststuff">

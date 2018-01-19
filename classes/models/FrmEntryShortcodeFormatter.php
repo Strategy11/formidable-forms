@@ -15,13 +15,19 @@ class FrmEntryShortcodeFormatter {
 	 * @var array
 	 * @since 2.04
 	 */
-	protected $skip_fields = array( 'captcha' );
+	protected $skip_fields = array( 'captcha', 'html' );
 
 	/**
 	 * @var array
 	 * @since 2.04
 	 */
 	protected $fields = array();
+
+	/**
+	 * @var bool
+	 * @since 2.05
+	 */
+	protected $is_plain_text = false;
 
 	/**
 	 * @var string
@@ -34,64 +40,88 @@ class FrmEntryShortcodeFormatter {
 	 * @since 2.04
 	 */
 	protected $table_generator = null;
+
 	/**
 	 * @var array
 	 * @since 2.04
 	 */
 	protected $array_content = array();
 
-	public function __construct( $form_id, $format ) {
+	/**
+	 * FrmEntryShortcodeFormatter constructor
+	 *
+	 * @param int|string $form_id
+	 * @param array $atts
+	 */
+	public function __construct( $form_id, $atts ) {
 		if ( ! $form_id ) {
 			return;
 		}
 
 		$this->init_form_id( $form_id );
 		$this->init_fields();
-		$this->init_format( $format );
 
 		if ( empty( $this->fields ) ) {
 			return;
 		}
 
-		if ( $this->format == 'text' ) {
+		$this->init_plain_text( $atts );
+		$this->init_format( $atts );
+
+		if ( $this->is_table_format() ) {
 			$this->init_table_generator();
 		}
 	}
 
 	/**
-	 * Set the form_id property
+	 * Initialize the form_id property
 	 *
 	 * @since 2.04
 	 * @param $form_id
 	 */
-	private function init_form_id( $form_id ) {
+	protected function init_form_id( $form_id ) {
 		$this->form_id = (int) $form_id;
 	}
 
 	/**
-	 * Set the fields property
+	 * Initialize the fields property
 	 *
 	 * @since 2.04
 	 */
-	private function init_fields() {
+	protected function init_fields() {
 		$this->fields = FrmField::get_all_for_form( $this->form_id, '', 'exclude', 'exclude' );
 	}
 
 	/**
-	 * Set the format property
+	 * Initialize the is_plain_text property
 	 *
-	 * @since 2.04
+	 * @since 2.05
 	 *
-	 * @param string|mixed $format
+	 * @param array $atts
 	 */
-	private function init_format( $format ) {
-		if ( is_string( $format ) && $format !== '' ) {
-			$this->format = $format;
+	protected function init_plain_text( $atts ) {
+		if ( isset( $atts['plain_text'] ) && $atts['plain_text'] ) {
+			$this->is_plain_text = true;
 		}
 	}
 
 	/**
-	 * Set the table_generator property
+	 * Initialize the format property
+	 *
+	 * @since 2.04
+	 *
+	 * @param array $atts
+	 */
+	protected function init_format( $atts ) {
+		if ( isset( $atts['format'] ) && is_string( $atts['format'] ) && $atts['format'] !== '' ) {
+			$this->format = $atts['format'];
+		} else {
+			$this->format = 'text';
+		}
+	}
+
+	/**
+	 * Initialize the table_generator property
 	 *
 	 * @since 2.04
 	 */
@@ -105,12 +135,16 @@ class FrmEntryShortcodeFormatter {
 	 * @since 2.04
 	 */
 	public function content() {
-		if ( $this->form_id === 0 ) {
-			$content = '';
-		} else if ( $this->format == 'array' ) {
+		if ( ! $this->form_id || empty( $this->fields ) ) {
+			return '';
+		}
+
+		if ( $this->format == 'array' ) {
 			$content = $this->get_array();
+		} else if ( $this->is_plain_text_format() ) {
+			$content = $this->get_plain_text();
 		} else {
-			$content = $this->text();
+			$content = $this->get_table();
 		}
 
 		return $content;
@@ -121,11 +155,7 @@ class FrmEntryShortcodeFormatter {
 	 *
 	 * @since 2.04
 	 */
-	private function get_array() {
-		if ( ! $this->form_id || empty( $this->fields ) ) {
-			return '';
-		}
-
+	protected function get_array() {
 		foreach ( $this->fields as $field ) {
 			$this->add_field_array( $field );
 		}
@@ -134,28 +164,46 @@ class FrmEntryShortcodeFormatter {
 	}
 
 	/**
+	 * Return the default plain text for an email message
+	 *
+	 * @since 2.04
+	 */
+	protected function get_plain_text() {
+		return $this->generate_content_for_all_fields();
+	}
+
+	/**
 	 * Return the default HTML for an email message
 	 *
 	 * @since 2.04
 	 */
-	private function text() {
-		if ( ! $this->form_id || empty( $this->fields ) ) {
-			return '';
-		}
-
+	protected function get_table() {
 		$content = $this->table_generator->generate_table_header();
-
-		foreach ( $this->fields as $field ) {
-			$content .= $this->generate_field_html( $field );
-		}
-
+		$content .= $this->generate_content_for_all_fields();
 		$content .= $this->table_generator->generate_table_footer();
 
 		return $content;
 	}
 
 	/**
-	 * Generate a field's HTML for the default HTML
+	 * Generate the content for all fields
+	 *
+	 * @since 2.05
+	 *
+	 * @return string
+	 */
+	protected function generate_content_for_all_fields() {
+		$content = '';
+
+		foreach ( $this->fields as $field ) {
+			$content .= $this->generate_field_content( $field );
+		}
+
+		return $content;
+	}
+
+	/**
+	 * Generate a field's HTML or plain text shortcodes
 	 *
 	 * @since 2.04
 	 *
@@ -163,28 +211,48 @@ class FrmEntryShortcodeFormatter {
 	 *
 	 * @return string
 	 */
-	protected function generate_field_html( $field ) {
+	protected function generate_field_content( $field ) {
 		if ( in_array( $field->type, $this->skip_fields ) ) {
 			return '';
 		}
 
-		$row = $this->generate_single_row( $field );
+		$row = $this->generate_two_cell_shortcode_row( $field );
 
 		return $row;
 	}
 
 	/**
-	 * Generate a single table row
+	 * Generate a two cell row of shortcodes for an HTML or plain text table
 	 *
 	 * @since 2.04
 	 *
 	 * @param stdClass $field
-	 * @param null|string $value
+	 * @param mixed $value
 	 *
 	 * @return string
 	 */
-	protected function generate_single_row( $field, $value = null ) {
-		return $this->table_generator->generate_two_cell_shortcode_row( $field, $value );
+	protected function generate_two_cell_shortcode_row( $field, $value = null ) {
+		$row = '[if ' . $field->id . ']';
+
+		$label = '[' . $field->id . ' show=field_label]';
+
+		if ( $value === null ) {
+			$value = '[' . $field->id . ']';
+		}
+
+		if ( $this->is_plain_text_format() ) {
+			$row .= $label . ': ' . $value . "\r\n";
+		} else {
+			$row .= $this->table_generator->generate_two_cell_table_row( $label, $value );
+		}
+
+		$row .= '[/if ' . $field->id . ']';
+
+		if ( $this->is_table_format() ) {
+			$row .= "\r\n";
+		}
+
+		return $row;
 	}
 
 	/**
@@ -209,8 +277,6 @@ class FrmEntryShortcodeFormatter {
 	 *
 	 * @param stdClass $field
 	 * @param string $value
-	 *
-	 * @return array
 	 */
 	protected function add_single_field_array( $field, $value ) {
 		$array = array(
@@ -220,8 +286,27 @@ class FrmEntryShortcodeFormatter {
 		);
 
 		$this->array_content[ $field->id ] = apply_filters( 'frm_field_shortcodes_for_default_html_email', $array, $field );
-
-		return $array;
 	}
 
+	/**
+	 * Check if the format is default plain text
+	 *
+	 * @since 2.05
+	 *
+	 * @return bool
+	 */
+	protected function is_plain_text_format() {
+		return ( $this->format === 'text' && $this->is_plain_text === true );
+	}
+
+	/**
+	 * Check if the format is default HTML
+	 *
+	 * @since 2.05
+	 *
+	 * @return bool
+	 */
+	protected function is_table_format() {
+		return ( $this->format === 'text' && $this->is_plain_text === false );
+	}
 }

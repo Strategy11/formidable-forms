@@ -5,8 +5,9 @@
  *
  * @group emails
  * @group email-attachment
+ * @group pro
  */
-class test_FrmEmailWithAttachment extends FrmUnitTest {
+class test_FrmProEmailWithAttachment extends FrmUnitTest {
 
 	/**
 	 * @var stdClass
@@ -37,7 +38,7 @@ class test_FrmEmailWithAttachment extends FrmUnitTest {
 	 * @since 2.04
 	 * @covers FrmProNotification::add_attachments
 	 */
-	public function test_single_file_upload_attachment(){
+	public function test_single_file_upload_attachment() {
 		FrmNotification::trigger_email( $this->email_action, $this->entry, $this->form );
 
 		$mock_email = end( $GLOBALS['phpmailer']->mock_sent );
@@ -53,7 +54,7 @@ class test_FrmEmailWithAttachment extends FrmUnitTest {
 	 * @since 2.04
 	 * @covers FrmProNotification::add_attachments
 	 */
-	public function test_multi_file_upload_attachment(){
+	public function test_multi_file_upload_attachment() {
 		FrmNotification::trigger_email( $this->email_action, $this->entry, $this->form );
 
 		$mock_email = end( $GLOBALS['phpmailer']->mock_sent );
@@ -70,7 +71,7 @@ class test_FrmEmailWithAttachment extends FrmUnitTest {
 	 * @covers FrmProNotification::add_attachments
 	 * @group repeating-multi-file-upload-attachment
 	 */
-	public function test_repeating_multi_file_upload_attachment(){
+	public function test_repeating_multi_file_upload_attachment() {
 		FrmNotification::trigger_email( $this->email_action, $this->entry, $this->form );
 
 		$mock_email = end( $GLOBALS['phpmailer']->mock_sent );
@@ -106,7 +107,7 @@ class test_FrmEmailWithAttachment extends FrmUnitTest {
 		$this->assertContains( $content_type, $body );
 
 		$content_disposition = 'Content-Disposition: attachment; filename=' . $file_name;
-		$this->assertContains( $content_disposition , $body );
+		$this->assertContains( $content_disposition, $body );
 
 	}
 
@@ -140,9 +141,7 @@ class test_FrmEmailWithAttachment extends FrmUnitTest {
 			$this->assertContains( $content_type, $body );
 
 			$content_disposition = 'Content-Disposition: attachment; filename=' . $file_parts[0];
-			$this->assertContains( $content_disposition , $body );
-
+			$this->assertContains( $content_disposition, $body );
 		}
 	}
-
 }

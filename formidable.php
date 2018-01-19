@@ -2,7 +2,7 @@
 /*
 Plugin Name: Formidable Forms
 Description: Quickly and easily create drag-and-drop forms
-Version: 2.04.01
+Version: 2.05.09
 Plugin URI: https://formidableforms.com/
 Author URI: https://formidableforms.com/
 Author: Strategy11
@@ -23,9 +23,10 @@ Text Domain: formidable
 
 global $frm_vars;
 $frm_vars = array(
-    'load_css' => false, 'forms_loaded' => array(),
-    'created_entries'   => array(),
-    'pro_is_authorized' => false,
+	'load_css'     => false,
+	'forms_loaded' => array(),
+	'created_entries'   => array(),
+	'pro_is_authorized' => false,
 );
 
 function frm_forms_autoloader( $class_name ) {
