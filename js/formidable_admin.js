@@ -2960,6 +2960,16 @@ function frmAdminBuildJS(){
 				e.preventDefault();
 			});
 
+			jQuery('#frm_field_search').on('keyup', function (e) {
+
+				var searchText = jQuery(this).val().toLowerCase();
+
+				jQuery("ul.frm_customize_field_list li").each(function () {
+					var $this = jQuery(this);
+					$this.find('a').text().toLowerCase().indexOf(searchText) >= 0 ? $this.show() : $this.hide();
+				});
+			});
+
 			var customPanel = jQuery('#frm_adv_info');
 			customPanel.on('click', '.subsubsub a.frmids', function(e){toggleKeyID('frmids',e);});
 			customPanel.on('click', '.subsubsub a.frmkeys', function(e){toggleKeyID('frmkeys',e);});
