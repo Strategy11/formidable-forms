@@ -824,6 +824,7 @@ class FrmFormsController {
 			'form_id'       => FrmAppHelper::get_post_param( 'form_id', '', 'absint' ),
 	        'default_email' => true,
 			'plain_text'    => FrmAppHelper::get_post_param( 'plain_text', '', 'absint' ),
+			'include_extras' => 'section,html,page',
 	    ) );
 	    wp_die();
 	}
