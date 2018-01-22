@@ -271,11 +271,11 @@ a.frm_icon_font:hover{
 .frm_clock-o_icon:before {
 	content: "\f017";
 }
-.frm_admin-links_icon:before {
-	content: "\e906";
-}
 .frm_link_icon:before {
 	content: "\f0c1";
+}
+.frm_link2_icon:before {
+	content: "\e157";
 }
 .frm_envelope_icon:before {
 	content: "\f0e0";
@@ -288,9 +288,6 @@ a.frm_icon_font:hover{
 }
 .frm_calendar_icon:before {
 	content: "\f073";
-}
-.frm_calendar-alt_icon:before {
-	content: "\e907";
 }
 .frm_upload2_icon:before {
 	content: "\f093";
@@ -382,16 +379,14 @@ a.frm_icon_font:hover{
 .frm_code-commit_icon:before {
 	content: "\f386";
 }
-.frm_star-o_icon:before,
-.frm_star-empty_icon:before {
-	content: "\e908";
+.frm_star-o_icon:before {
+	content: "\f006";
 }
-.frm_star_icon:before,
-.frm_star-filled_icon:before {
-	content: "\e909";
+.frm_star_icon:before {
+	content: "\f005";
 }
 .frm_star-half_icon:before {
-	content: "\e90a";
+	content: "\f089";
 }
 .frm_linear_scale_icon:before {
 	content: "\e260";
@@ -486,9 +481,12 @@ a.frm_icon_font:hover{
 .frm_info-square_icon:before {
 	content: "\f30f";
 }
-.frm_admin-appearance_icon:before {
-	content: "\e90b";
+.frm_star-empty_icon:before {
+	content: "\e9d7";
 }
-.frm_admin-generic_icon:before {
-	content: "\e90c";
+.frm_star-half2_icon:before {
+	content: "\e9d8";
+}
+.frm_star-full_icon:before {
+	content: "\e9d9";
 }
