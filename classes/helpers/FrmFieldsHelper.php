@@ -385,7 +385,7 @@ class FrmFieldsHelper {
 	 * @since 2.05
 	 */
 	public static function is_placeholder_field_type( $type ) {
-		return ! in_array( $type, array( 'select', 'radio', 'checkbox', 'hidden' ) );
+		return ! in_array( $type, array( 'select', 'radio', 'checkbox', 'hidden', 'file' ) );
 	}
 
 	public static function remove_inline_conditions( $no_vars, $code, $replace_with, &$html ) {

@@ -315,7 +315,7 @@
 
 @media only screen and (max-width: 700px) {
 	.frm_form_fields .frm_fields_container{
-		grid-gap:1%;
+		grid-gap: 0 2%;
 	}
 }
 
