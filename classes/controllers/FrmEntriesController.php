@@ -596,7 +596,7 @@ class FrmEntriesController {
 	 * @return array|string
 	 */
 	public static function show_entry_shortcode( $atts ) {
-		$defaults = array(
+		$defaults = apply_filters( 'frm_show_entry_defaults', array(
 			'id'             => false,
 			'entry'          => false,
 			'fields'         => false,
@@ -619,7 +619,8 @@ class FrmEntriesController {
 			'include_fields' => '',
 			'include_extras' => '',
 			'inline_style'   => 1,
-		);
+			'child_array'    => false, // return embedded fields as nested array
+		) );
 
 		$atts = shortcode_atts( $defaults, $atts );
 
