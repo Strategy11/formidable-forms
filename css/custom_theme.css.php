@@ -136,10 +136,6 @@ legend.frm_hidden{
     line-height:normal;
 }
 
-.with_frm_style select{
-	white-space:pre-wrap;
-}
-
 .with_frm_style .frm_catlevel_2,
 .with_frm_style .frm_catlevel_3,
 .with_frm_style .frm_catlevel_4,
