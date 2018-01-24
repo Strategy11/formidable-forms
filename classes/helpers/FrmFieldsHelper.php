@@ -133,10 +133,6 @@ class FrmFieldsHelper {
 				self::get_posted_field_setting( $opt . '_' . $field->id, $values[ $opt ] );
 			}
 
-			$default_fallback = ( $values[ $opt ] == '' && ( ! $check_post || $opt == 'blank' || $opt == 'invalid' ) );
-			if ( $default_fallback ) {
-				$values[ $opt ] = $default;
-			}
 			unset( $opt, $default );
 		}
 	}
