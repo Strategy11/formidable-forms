@@ -20,7 +20,6 @@
     clear:both;
 }
 
-.frm_repeat_sec,
 .frm_combo_inputs_container,
 .frm_grid_container,
 .frm_form_fields .frm_section_heading,
@@ -31,7 +30,6 @@
 	grid-gap: 0 2.5%;
 }
 
-.frm_repeat_sec > *,
 .frm_combo_inputs_container > *,
 .frm_grid_container > *,
 .frm_section_heading > *,
@@ -249,7 +247,6 @@
 }
 
 @media only screen and (max-width: 800px) {
-	.frm_repeat_sec,
 	.frm_combo_inputs_container,
 	.frm_grid_container,
 	.frm_form_fields .frm_section_heading,
@@ -257,7 +254,6 @@
 		grid-template-columns: repeat(6, 1fr);
 	}
 
-	.frm_repeat_sec > *,
 	.frm_combo_inputs_container > *,
 	.frm_grid_container > *,
 	.frm_section_heading > *,
@@ -320,7 +316,7 @@
 }
 
 @media only screen and (max-width: 600px) {
-	.frm_repeat_sec > .frm_form_field,
+	.frm_grid_container > .frm_form_field,
 	.frm_fields_container > .frm_form_field{
 		grid-column: 1 / span 12 !important;
 	}

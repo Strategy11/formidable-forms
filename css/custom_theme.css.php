@@ -992,29 +992,12 @@ select.frm_loading_lookup{
 	.frm_form_field .frm_repeat_grid .frm_form_field.frm_eighth label.frm_primary_label{
     	display: block !important;
 	}
-
-	.frm_form_field .frm_repeat_grid .frm_form_field.frm_repeat_buttons.frm_seventh label.frm_primary_label{
-		display:none !important;
-	}
-
 }
 
 @media only screen and (max-width: 600px) {
     .frm_form_field.frm_four_col .frm_opt_container{
         grid-template-columns: repeat(2, 1fr);
     }
-
-	.frm_form_field .frm_repeat_grid.frm_first_repeat .frm_form_field.frm_repeat_buttons:not(.frm_fourth):not(.frm_sixth):not(.frm_eighth) label.frm_primary_label{
-		display:none !important;
-	}
-
-	.frm_form_field .frm_repeat_grid .frm_form_field.frm_fifth label.frm_primary_label{
-		display:block !important;
-	}
-
-	.frm_form_field .frm_repeat_grid .frm_form_field.frm_repeat_buttons.frm_fifth label.frm_primary_label{
-		display:none !important;
-	}
 }
 
 @media only screen and (max-width: 500px) {
