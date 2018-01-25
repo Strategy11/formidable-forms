@@ -517,7 +517,7 @@ input.frm_insert_in_template{
 }
 
 .actions.frm_visible_overflow{
-    overflow:visible;
+    overflow:visible !important;
 }
 
 .frm-dropdown-menu.frm-on-top{
