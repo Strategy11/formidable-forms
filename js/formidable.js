@@ -689,6 +689,17 @@ function frmFrontFormJS(){
 		return confirm(message);
 	}
 
+	function toggleDiv(){
+		/*jshint validthis:true */
+		var div = jQuery( this ).data( 'frmtoggle' );
+		if ( jQuery( div ).is( ':visible' ) ) {
+			jQuery( div ).slideUp( 'fast' );
+		} else {
+			jQuery( div ).slideDown( 'fast' );
+		}
+		return false;
+	}
+
 	/**********************************************
 	 * Fallback functions
 	 *********************************************/
@@ -789,6 +800,7 @@ function frmFrontFormJS(){
 			jQuery(document).on('change keyup', '.frm-show-form .frm_inside_container input, .frm-show-form .frm_inside_container select, .frm-show-form .frm_inside_container textarea', maybeShowLabel);
 
 			jQuery(document).on('click', 'a[data-frmconfirm]', confirmClick);
+			jQuery('a[data-frmtoggle]').click(toggleDiv);
 
 			// Add fallbacks for the beloved IE8
 			addIndexOfFallbackForIE8();
