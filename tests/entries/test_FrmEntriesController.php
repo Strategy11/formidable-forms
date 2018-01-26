@@ -30,14 +30,9 @@ class WP_Test_FrmEntriesController extends FrmUnitTest {
 	}
 
 	private function create_form( $options = array() ) {
-		$form = $this->factory->form->create_and_get( array(
+		return $this->factory->form->create_and_get( array(
 			'options' => $options,
 		) );
-
-		$field_id = $this->factory->field->create( array( 'type' => 'text', 'form_id' => $form->id ) );
-        $this->assertTrue( is_numeric( $field_id ) );
-
-		return $form;
 	}
 
 	private function create_post_entry( $form, $entry_key ) {
