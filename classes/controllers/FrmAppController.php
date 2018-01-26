@@ -303,6 +303,7 @@ class FrmAppController {
 
             wp_register_script( 'formidable-editinplace', FrmAppHelper::plugin_url() . '/js/jquery/jquery.editinplace.packed.js', array( 'jquery' ), '2.3.0' );
 
+			do_action( 'frm_enqueue_builder_scripts' );
         } else if ( $pagenow == 'post.php' || ( $pagenow == 'post-new.php' && $post_type == 'frm_display' ) ) {
             if ( isset( $_REQUEST['post_type'] ) ) {
                 $post_type = sanitize_title( $_REQUEST['post_type'] );

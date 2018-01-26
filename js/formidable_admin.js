@@ -1301,6 +1301,7 @@ function frmAdminBuildJS(){
 		/*jshint validthis:true */
 		var fieldID = this.id.replace('radio_maxnum_', '');
 		var container = jQuery('#field_'+ fieldID +'_inner_container .frm-star-group');
+		var fieldKey = document.getElementsByName('field_options[field_key_'+ fieldID +']')[0].value;
 		container.html('');
 
 		var min = 1;
@@ -1310,7 +1311,7 @@ function frmAdminBuildJS(){
 		}
 
 		for ( var i = min; i<=max; i++ ) {
-			container.append('<input type="hidden" name="field_options[options_'+ fieldID +']['+ i +']" value="'+ i +'" /> <input type="radio" name="item_meta['+ fieldID +']" value="'+ i +'" class="frm-star" /> <label class="star-rating"></label>');
+			container.append('<input type="radio" name="item_meta['+ fieldID +']" id="field_'+ fieldKey +'-'+ i +'" value="'+ i +'" /><label for="field_'+ fieldKey +'-'+ i +'" class="star-rating"></label>');
 		}
 	}
 
