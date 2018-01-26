@@ -13,7 +13,15 @@ class Form_Factory extends WP_UnitTest_Factory_For_Thing {
 	}
 
 	function create_object( $args ) {
-		return FrmForm::create( $args );
+		$form = FrmForm::create( $args );
+
+		$field_values = FrmFieldsHelper::setup_new_vars( 'text', $form );
+		if ( isset( $args['field_options'] ) ) {
+			$field_values = array_merge( $field_values, $args['field_options'] );
+		}
+		FrmField::create( $field_values );
+
+		return $form;
 	}
 
 	function update_object( $form_id, $fields ) {

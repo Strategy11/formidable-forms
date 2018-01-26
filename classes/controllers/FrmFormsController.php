@@ -1289,7 +1289,10 @@ class FrmFormsController {
 	 * @since 2.05
 	 */
 	public static function run_success_action( $args ) {
-		do_action( 'frm_success_action', $args['conf_method'], $args['form'], $args['form']->options, $args['entry_id'] );
+		$extra_args = $args;
+		unset( $extra_args['form'] );
+
+		do_action( 'frm_success_action', $args['conf_method'], $args['form'], $args['form']->options, $args['entry_id'], $extra_args );
 
 		$opt = ( ! isset( $args['action'] ) || $args['action'] == 'create' ) ? 'success' : 'edit';
 		$args['success_opt'] = $opt;
@@ -1344,10 +1347,10 @@ class FrmFormsController {
 
 		if ( isset( $args['ajax'] ) && $args['ajax'] && $doing_ajax ) {
 			echo json_encode( array( 'redirect' => $success_url ) );
-			die();
+			wp_die();
 		} elseif ( ! headers_sent() ) {
 			wp_redirect( esc_url_raw( $success_url ) );
-			die();
+			wp_die();
 		} else {
 			add_filter( 'frm_use_wpautop', '__return_true' );
 

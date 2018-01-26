@@ -50,4 +50,22 @@ class FrmAjaxUnitTest extends WP_Ajax_UnitTestCase {
         $this->$user_id = $user_id;
 		$this->assertTrue( current_user_can( $role ) );
     }
+
+	function trigger_action( $action ) {
+		$response = '';
+		try {
+			$this->_handleAjax( $action );
+		} catch ( WPAjaxDieStopException $e ) {
+			$response = $e->getMessage();
+			unset( $e );
+		} catch ( WPAjaxDieContinueException $e ) {
+			unset( $e );
+		}
+
+		if ( '' === $response ) {
+			$response = $this->_last_response;
+		}
+
+		return $response;
+	}
 }
