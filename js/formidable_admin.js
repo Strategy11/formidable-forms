@@ -1311,7 +1311,7 @@ function frmAdminBuildJS(){
 		}
 
 		for ( var i = min; i<=max; i++ ) {
-			container.append('<input type="radio" name="item_meta['+ fieldID +']" id="field_'+ fieldKey +'-'+ i +'" value="'+ i +'" /><label for="field_'+ fieldKey +'-'+ i +'" class="star-rating"></label>');
+			container.append('<input type="hidden" name="field_options[options_'+ fieldID +']['+ i +']" value="'+ i +'"><input type="radio" name="item_meta['+ fieldID +']" id="field_'+ fieldKey +'-'+ i +'" value="'+ i +'" /><label for="field_'+ fieldKey +'-'+ i +'" class="star-rating"></label>');
 		}
 	}
 
