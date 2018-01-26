@@ -220,7 +220,7 @@ if ( $display['options'] ) {
 						<td>
 							<label for="frm_show_image_<?php echo esc_attr( $field['id'] ) ?>">
 								<input type="checkbox" id="frm_show_image_<?php echo esc_attr( $field['id'] ) ?>" name="field_options[show_image_<?php echo esc_attr( $field['id'] ) ?>]" value="1" <?php checked( $field['show_image'], 1 ) ?> />
-								<?php esc_html_e( 'If this URL points to an image, show the image with the field.', 'formidable' ); ?>
+								<?php esc_html_e( 'If this URL points to an image, show to image on the entries listing page.', 'formidable' ); ?>
 							</label>
 						</td>
 					</tr>
