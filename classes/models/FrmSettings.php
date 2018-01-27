@@ -30,6 +30,8 @@ class FrmSettings {
     public $re_msg;
 	public $re_multi;
 
+	public $no_ips;
+
     public function __construct() {
         if ( ! defined('ABSPATH') ) {
             die('You are not allowed to call this page directly.');
@@ -98,6 +100,7 @@ class FrmSettings {
             'admin_permission' => __( 'You do not have permission to do that', 'formidable' ),
 
             'email_to' => '[admin_email]',
+			'no_ips'   => 0,
         );
     }
 
@@ -212,6 +215,7 @@ class FrmSettings {
 		$this->jquery_css = isset( $params['frm_jquery_css'] ) ? absint( $params['frm_jquery_css'] ) : 0;
 		$this->accordion_js = isset( $params['frm_accordion_js'] ) ? absint( $params['frm_accordion_js'] ) : 0;
 		$this->fade_form = isset( $params['frm_fade_form'] ) ? absint( $params['frm_fade_form'] ) : 0;
+		$this->no_ips = isset( $params['frm_no_ips'] ) ? absint( $params['frm_no_ips'] ) : 0;
     }
 
 	private function update_roles( $params ) {

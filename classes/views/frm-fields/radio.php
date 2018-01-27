@@ -10,7 +10,7 @@ foreach ( $field['options'] as $opt_key => $opt ) {
     // Get string for Other text field, if needed
 	$other_val = FrmFieldsHelper::get_other_val( compact( 'opt_key', 'field' ) );
 
-    $checked = ( $other_val || isset($field['value']) &&  (( ! is_array($field['value']) && $field['value'] == $field_val ) || (is_array($field['value']) && in_array($field_val, $field['value']) ) ) ) ? ' checked="checked"':'';
+    $checked = ( $other_val || isset( $field['value'] ) && ( ( ! is_array( $field['value'] ) && $field['value'] == $field_val ) || ( is_array( $field['value'] ) && in_array( $field_val, $field['value'] ) ) ) ) ? ' checked="checked"' : '';
 
 	if ( FrmFieldsHelper::is_other_opt( $opt_key ) ) {
 		include( FrmAppHelper::plugin_path() . '/pro/classes/views/frmpro-fields/other-option.php' );

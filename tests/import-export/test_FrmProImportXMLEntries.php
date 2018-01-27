@@ -1,8 +1,9 @@
 <?php
 /**
  * @group xml
+ * @group pro
  */
-class WP_Test_FrmProXMLHelper extends FrmUnitTest {
+class WP_Test_FrmProImportXMLEntries extends FrmUnitTest {
 
 	/**
 	* @covers FrmProXMLHelper::import_xml_entries
@@ -194,5 +195,4 @@ class WP_Test_FrmProXMLHelper extends FrmUnitTest {
 			$this->assertEquals( $e_number, $message['updated'][ $type ], 'There is a discrepancy between the number of ' . $type . ' expected to be updated vs. the actual number of updated ' . $type . '. Before digging into this, check the $expected_numbers to make sure it is correct.' );
 		}
 	}
-
 }

@@ -1,5 +1,5 @@
 <div id="form_entries_page" class="wrap">
-	<h1><?php _e( 'Entries', 'formidable' ); ?>
+	<h1><?php esc_html_e( 'Entries', 'formidable' ); ?>
         <?php do_action('frm_entry_inside_h2', $form); ?>
 	</h1>
 

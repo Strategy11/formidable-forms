@@ -36,8 +36,16 @@ class FrmCSVExportHelper {
 
 		$comment_count = FrmDb::get_count(
 			'frm_item_metas',
-			array( 'item_id' => $atts['entry_ids'], 'field_id' => 0, 'meta_value like' => '{' ),
-			array( 'group_by' => 'item_id', 'order_by' => 'count(*) DESC', 'limit' => 1 )
+			array(
+				'item_id'  => $atts['entry_ids'],
+				'field_id' => 0,
+				'meta_value like' => '{',
+			),
+			array(
+				'group_by' => 'item_id',
+				'order_by' => 'count(*) DESC',
+				'limit'    => 1,
+			)
 		);
 		self::$comment_count = $comment_count;
 
@@ -64,12 +72,15 @@ class FrmCSVExportHelper {
 		header( 'Content-Description: File Transfer' );
 		header( 'Content-Disposition: attachment; filename="' . esc_attr( $filename ) . '"' );
 		header( 'Content-Type: text/csv; charset=' . self::$charset, true );
-		header( 'Expires: ' . gmdate( 'D, d M Y H:i:s', mktime( date( 'H' ) + 2, date( 'i' ), date( 's' ), date( 'm' ), date( 'd' ), date('Y' ) ) ) . ' GMT' );
+		header( 'Expires: ' . gmdate( 'D, d M Y H:i:s', mktime( date( 'H' ) + 2, date( 'i' ), date( 's' ), date( 'm' ), date( 'd' ), date( 'Y' ) ) ) . ' GMT' );
 		header( 'Last-Modified: ' . gmdate( 'D, d M Y H:i:s' ) . ' GMT' );
 		header( 'Cache-Control: no-cache, must-revalidate' );
 		header( 'Pragma: no-cache' );
 
-		do_action( 'frm_csv_headers', array( 'form_id' => self::$form_id, 'fields' => self::$fields ) );
+		do_action( 'frm_csv_headers', array(
+			'form_id' => self::$form_id,
+			'fields'  => self::$fields,
+		) );
 	}
 
 	public static function get_csv_format() {
@@ -81,7 +92,9 @@ class FrmCSVExportHelper {
 	private static function prepare_csv_headings() {
 		$headings = array();
 		self::csv_headings( $headings );
-		$headings = apply_filters( 'frm_csv_columns', $headings, self::$form_id, array( 'fields' => self::$fields ) );
+		$headings = apply_filters( 'frm_csv_columns', $headings, self::$form_id, array(
+			'fields' => self::$fields,
+		) );
 		self::$headings = $headings;
 
 		self::print_csv_row( $headings );
@@ -90,12 +103,14 @@ class FrmCSVExportHelper {
 	private static function csv_headings( &$headings ) {
 		foreach ( self::$fields as $col ) {
 			$field_headings = array();
-			if ( isset( $col->field_options['separate_value'] ) && $col->field_options['separate_value'] && ! in_array( $col->type, array( 'user_id', 'file', 'data', 'date' ) ) ) {
+			if ( isset( $col->field_options['separate_value'] ) && $col->field_options['separate_value'] && ! in_array( $col->type, array( 'user_id', 'file', 'data', 'date' ), true ) ) {
 				$field_headings[ $col->id . '_label' ] = strip_tags( $col->name . ' ' . __( '(label)', 'formidable' ) );
 			}
 
 			$field_headings[ $col->id ] = strip_tags( $col->name );
-			$field_headings = apply_filters( 'frm_csv_field_columns', $field_headings, array( 'field' => $col ) );
+			$field_headings = apply_filters( 'frm_csv_field_columns', $field_headings, array(
+				'field' => $col,
+			) );
 			$headings += $field_headings;
 		}
 
@@ -105,7 +120,7 @@ class FrmCSVExportHelper {
 				$headings[ 'comment_user_id' . $i ] = __( 'Comment User', 'formidable' );
 				$headings[ 'comment_created_at' . $i ] = __( 'Comment Date', 'formidable' );
 			}
-			unset($i);
+			unset( $i );
 		}
 
 		$headings['created_at'] = __( 'Timestamp', 'formidable' );
@@ -120,13 +135,18 @@ class FrmCSVExportHelper {
 
 	private static function prepare_next_csv_rows( $next_set ) {
 		// order by parent_item_id so children will be first
-		$entries = FrmEntry::getAll( array( 'or' => 1, 'id' => $next_set, 'parent_item_id' => $next_set ), ' ORDER BY parent_item_id DESC', '', true, false );
+		$where = array(
+			'or' => 1,
+			'id' => $next_set,
+			'parent_item_id' => $next_set,
+		);
+		$entries = FrmEntry::getAll( $where, ' ORDER BY parent_item_id DESC', '', true, false );
 
 		foreach ( $entries as $k => $entry ) {
 			self::$entry = $entry;
 			unset( $entry );
 
-			if ( self::$entry->form_id != self::$form_id ) {
+			if ( self::$entry->form_id !== self::$form_id ) {
 				self::add_repeat_field_values_to_csv( $entries );
 			} else {
 				self::prepare_csv_row();
@@ -138,7 +158,11 @@ class FrmCSVExportHelper {
 		$row = array();
 		self::add_field_values_to_csv( $row );
 		self::add_entry_data_to_csv( $row );
-		$row = apply_filters( 'frm_csv_row', $row, array( 'entry' => self::$entry, 'date_format' => self::$wp_date_format, 'comment_count' => self::$comment_count ) );
+		$row = apply_filters( 'frm_csv_row', $row, array(
+			'entry'         => self::$entry,
+			'date_format'   => self::$wp_date_format,
+			'comment_count' => self::$comment_count,
+		) );
 		self::print_csv_row( $row );
 	}
 
@@ -146,7 +170,7 @@ class FrmCSVExportHelper {
 		if ( isset( self::$entry->metas ) ) {
 			// add child entries to the parent
 			foreach ( self::$entry->metas as $meta_id => $meta_value ) {
-				if ( ! is_numeric( $meta_id ) || $meta_value == '' ) {
+				if ( ! is_numeric( $meta_id ) || '' === $meta_value ) {
 					// if the hook is being used to include field keys in the metas array,
 					// we need to skip the keys and only process field ids
 					continue;
@@ -154,7 +178,7 @@ class FrmCSVExportHelper {
 
 				if ( ! isset( $entries[ self::$entry->parent_item_id ]->metas[ $meta_id ] ) ) {
 					$entries[ self::$entry->parent_item_id ]->metas[ $meta_id ] = array();
-				} else if ( ! is_array( $entries[ self::$entry->parent_item_id ]->metas[ $meta_id ] ) ) {
+				} elseif ( ! is_array( $entries[ self::$entry->parent_item_id ]->metas[ $meta_id ] ) ) {
 					// if the data is here, it should be an array but if this field has collected data
 					// both while inside and outside of the repeating section, it's possible this is a string
 					$entries[ self::$entry->parent_item_id ]->metas[ $meta_id ] = (array) $entries[ self::$entry->parent_item_id ]->metas[ $meta_id ];
@@ -180,12 +204,19 @@ class FrmCSVExportHelper {
 			$field_value = maybe_unserialize( $field_value );
 			self::add_array_values_to_columns( $row, compact( 'col', 'field_value' ) );
 
-			$field_value = apply_filters( 'frm_csv_value', $field_value, array( 'field' => $col, 'entry' => self::$entry, 'separator' => self::$separator ) );
+			$field_value = apply_filters( 'frm_csv_value', $field_value, array(
+				'field'     => $col,
+				'entry'     => self::$entry,
+				'separator' => self::$separator,
+			) );
 
 			if ( isset( $col->field_options['separate_value'] ) && $col->field_options['separate_value'] ) {
 				$sep_value = FrmEntriesHelper::display_value( $field_value, $col, array(
-					'type' => $col->type, 'post_id' => self::$entry->post_id, 'show_icon' => false,
-					'entry_id' => self::$entry->id, 'sep' => self::$separator,
+					'type'      => $col->type,
+					'post_id'   => self::$entry->post_id,
+					'show_icon' => false,
+					'entry_id'  => self::$entry->id,
+					'sep'       => self::$separator,
 					'embedded_field_id' => ( isset( self::$entry->embedded_fields ) && isset( self::$entry->embedded_fields[ self::$entry->id ] ) ) ? 'form' . self::$entry->embedded_fields[ self::$entry->id ] : 0,
 				) );
 				$row[ $col->id . '_label' ] = $sep_value;
@@ -234,7 +265,7 @@ class FrmCSVExportHelper {
 			}
 
 			$val = self::encode_value( $row );
-			if ( self::$line_break != 'return' ) {
+			if ( 'return' !== self::$line_break ) {
 				$val = str_replace( array( "\r\n", "\r", "\n" ), self::$line_break, $val );
 			}
 
@@ -247,60 +278,28 @@ class FrmCSVExportHelper {
 	}
 
 	public static function encode_value( $line ) {
-		if ( $line == '' ) {
+		if ( '' === $line ) {
 			return $line;
 		}
 
-        $convmap = false;
+		$convmap = false;
 
 		switch ( self::$to_encoding ) {
-            case 'macintosh':
+			case 'macintosh':
 				// this map was derived from the differences between the MacRoman and UTF-8 Charsets
 				// Reference:
 				//   - http://www.alanwood.net/demos/macroman.html
-                $convmap = array(
-                    256, 304, 0, 0xffff,
-                    306, 337, 0, 0xffff,
-                    340, 375, 0, 0xffff,
-                    377, 401, 0, 0xffff,
-                    403, 709, 0, 0xffff,
-                    712, 727, 0, 0xffff,
-                    734, 936, 0, 0xffff,
-                    938, 959, 0, 0xffff,
-                    961, 8210, 0, 0xffff,
-                    8213, 8215, 0, 0xffff,
-                    8219, 8219, 0, 0xffff,
-                    8227, 8229, 0, 0xffff,
-                    8231, 8239, 0, 0xffff,
-                    8241, 8248, 0, 0xffff,
-                    8251, 8259, 0, 0xffff,
-                    8261, 8363, 0, 0xffff,
-                    8365, 8481, 0, 0xffff,
-                    8483, 8705, 0, 0xffff,
-                    8707, 8709, 0, 0xffff,
-                    8711, 8718, 0, 0xffff,
-                    8720, 8720, 0, 0xffff,
-                    8722, 8729, 0, 0xffff,
-                    8731, 8733, 0, 0xffff,
-                    8735, 8746, 0, 0xffff,
-                    8748, 8775, 0, 0xffff,
-                    8777, 8799, 0, 0xffff,
-                    8801, 8803, 0, 0xffff,
-                    8806, 9673, 0, 0xffff,
-                    9675, 63742, 0, 0xffff,
-                    63744, 64256, 0, 0xffff,
-                );
-            break;
-            case 'ISO-8859-1':
-                $convmap = array( 256, 10000, 0, 0xffff );
-            break;
-        }
+				$convmap = array( 256, 304, 0, 0xffff, 306, 337, 0, 0xffff, 340, 375, 0, 0xffff, 377, 401, 0, 0xffff, 403, 709, 0, 0xffff, 712, 727, 0, 0xffff, 734, 936, 0, 0xffff, 938, 959, 0, 0xffff, 961, 8210, 0, 0xffff, 8213, 8215, 0, 0xffff, 8219, 8219, 0, 0xffff, 8227, 8229, 0, 0xffff, 8231, 8239, 0, 0xffff, 8241, 8248, 0, 0xffff, 8251, 8259, 0, 0xffff, 8261, 8363, 0, 0xffff, 8365, 8481, 0, 0xffff, 8483, 8705, 0, 0xffff, 8707, 8709, 0, 0xffff, 8711, 8718, 0, 0xffff, 8720, 8720, 0, 0xffff, 8722, 8729, 0, 0xffff, 8731, 8733, 0, 0xffff, 8735, 8746, 0, 0xffff, 8748, 8775, 0, 0xffff, 8777, 8799, 0, 0xffff, 8801, 8803, 0, 0xffff, 8806, 9673, 0, 0xffff, 9675, 63742, 0, 0xffff, 63744, 64256, 0, 0xffff );
+				break;
+			case 'ISO-8859-1':
+				$convmap = array( 256, 10000, 0, 0xffff );
+		}
 
 		if ( is_array( $convmap ) ) {
 			$line = mb_encode_numericentity( $line, $convmap, self::$charset );
 		}
 
-		if ( self::$to_encoding != self::$charset ) {
+		if ( self::$to_encoding !== self::$charset ) {
 			$line = iconv( self::$charset, self::$to_encoding . '//IGNORE', $line );
 		}
 
@@ -312,7 +311,7 @@ class FrmCSVExportHelper {
 	 * @since 2.0
 	 */
 	public static function escape_csv( $value ) {
-		if ( $value[0] == '=' ) {
+		if ( '=' === $value[0] ) {
 			// escape the = to prevent vulnerability
 			$value = "'" . $value;
 		}

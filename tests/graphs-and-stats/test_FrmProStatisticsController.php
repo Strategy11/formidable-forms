@@ -2,6 +2,8 @@
 
 /**
  * @group stats
+ * @group pro
+ * @group graphs-and-stats
  */
 class WP_Test_FrmProStatisticsController extends FrmUnitTest {
 
@@ -18,11 +20,11 @@ class WP_Test_FrmProStatisticsController extends FrmUnitTest {
 	);
 	private $median_number_field = 3;
 
-	private $qbrd2o_data = array( 5, 8, 5, 8 );
+	private $scale_field_data = array( 5, 8, 5, 8 );
 
 	function test_stats_shortcode_count() {
 		$forms_to_test = array(
-			$this->all_fields_form_key  => array( 'text-field', 'p3eiuk', 'uc580i', 'radio-button-field', 'dropdown-field', 'email-field', 'repeating-text' ),
+			$this->all_fields_form_key  => array( 'text-field', 'paragraph-field', 'checkbox-colors', 'radio-button-field', 'dropdown-field', 'email-field', 'repeating-text' ),
 			//$this->create_post_form_key => array( 'yi6yvm' ),
 		);
 
@@ -100,7 +102,7 @@ class WP_Test_FrmProStatisticsController extends FrmUnitTest {
 	 * [frm-stats id="Scale-field-key" type="star"]
 	 */
 	function test_stats_shortcode_star() {
-		$shortcode = '[frm-stats id="qbrd2o" type="star"]';
+		$shortcode = '[frm-stats id="scale-field" type="star"]';
 		$actual_value = do_shortcode( $shortcode );
 		$expected_parts = array(
 			'<div class="frm_form_fields">',
@@ -110,7 +112,7 @@ class WP_Test_FrmProStatisticsController extends FrmUnitTest {
 			'</div>',
 		);
 
-		$average = array_sum( $this->qbrd2o_data )/count( $this->qbrd2o_data );
+		$average = array_sum( $this->scale_field_data )/count( $this->scale_field_data );
 		$floor = ceil( $average );
 		$class = 'star';
 		if ( $floor != $average ) {
@@ -429,7 +431,7 @@ class WP_Test_FrmProStatisticsController extends FrmUnitTest {
 	 * [frm-stats id="checkbox-field" type="count"]
 	 */
 	function test_stats_shortcode_count_for_checkbox_field() {
-		$shortcode = '[frm-stats id="uc580i" type="count"]';
+		$shortcode = '[frm-stats id="checkbox-colors" type="count"]';
 		$actual_value = do_shortcode( $shortcode );
 		$expected_value = 4;
 
@@ -441,7 +443,7 @@ class WP_Test_FrmProStatisticsController extends FrmUnitTest {
 	 * [frm-stats id="checkbox-field" type="count" checkbox-field="Blue"]
 	 */
 	function test_stats_shortcode_count_for_checkbox_field_with_filter() {
-		$shortcode = '[frm-stats id="uc580i" type="count" uc580i="Blue"]';
+		$shortcode = '[frm-stats id="checkbox-colors" type="count" checkbox-colors="Blue"]';
 		$actual_value = do_shortcode( $shortcode );
 		$expected_value = 2;
 

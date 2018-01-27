@@ -8,7 +8,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 	protected $contact_form_field_count = 10;
 
 	protected $all_fields_form_key = 'all_field_types';
-	protected $all_field_types_count = 48;
+	protected $all_field_types_count = 50;
 
 	protected $repeat_sec_form_key = 'rep_sec_form';
 	protected $create_post_form_key = 'create-a-post';
@@ -20,19 +20,48 @@ class FrmUnitTest extends WP_UnitTestCase {
 	 */
 	function setUp() {
 		parent::setUp();
+
+		if ( is_multisite() ) {
+			$this->is_pro_active = get_site_option( 'frmpro-authorized' );
+		} else {
+			$this->is_pro_active = get_option( 'frmpro-authorized' );
+		}
+
 		$this->frm_install();
 
 		$this->factory->form = new Form_Factory( $this );
 		$this->factory->field = new Field_Factory( $this );
 		$this->factory->entry = new Entry_Factory( $this );
 
-		$this->is_pro_active = FrmAppHelper::pro_is_installed();
-		$current_class_name = get_class( $this );
-		if ( strpos( $current_class_name, 'FrmPro' ) && ! $this->is_pro_active ) {
-			$this->markTestSkipped( 'Pro is not active' );
+		$this->create_users();
+	}
+
+	function tearDown() {
+		parent::tearDown();
+
+		global $wp_version;
+		if ( $wp_version <= 4.6 ) {
+			// Prior to WP 4.7, the Formidable tables were deleted on tearDown and not restored with setUp
+			delete_option( 'frm_options' );
+			delete_option( 'frm_db_version' );
 		}
 
-		$this->create_users();
+		$this->empty_tables();
+	}
+
+	/**
+	 * Some of the tests for FrmDb are triggering a transaction commit, preventing further tests from working.
+	 * This is a temporary workaround until we review FrmDb tests in detail.
+	 */
+	private function empty_tables() {
+		global $wpdb;
+		$tables = $this->get_table_names();
+		foreach ( $tables as $table ){
+			$exists = $wpdb->get_var( 'DESCRIBE ' . $table );
+			if ( $exists ) {
+				$wpdb->query( "TRUNCATE $table" );
+			}
+		}
 	}
 
 	/**
@@ -70,7 +99,8 @@ class FrmUnitTest extends WP_UnitTestCase {
 		global $wpdb;
 		$method = $should_exist ? 'assertNotEmpty' : 'assertEmpty';
 		foreach ( $this->get_table_names() as $table_name ) {
-			$this->$method( $wpdb->query( 'DESCRIBE ' . $table_name ), $table_name . ' table failed to (un)install' );
+			$message = $table_name . ' table failed to ' . ( $should_exist ? 'install' : 'uninstall' );
+			$this->$method( $wpdb->query( 'DESCRIBE ' . $table_name ), $message );
 		}
 	}
 
@@ -84,6 +114,10 @@ class FrmUnitTest extends WP_UnitTestCase {
     }
 
 	function create_files() {
+		if ( ! is_callable( 'FrmProFileImport::import_attachment' ) ) {
+			return;
+		}
+
 		$single_file_upload_field = FrmField::getOne( 'single-file-upload-field' );
 		$multi_file_upload_field = FrmField::getOne( 'multi-file-upload-field' );
 
@@ -158,7 +192,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 
 	function get_all_fields_for_form_key( $form_key ) {
 		$field_totals = array(
-			$this->all_fields_form_key => $this->all_field_types_count,
+			$this->all_fields_form_key => $this->is_pro_active ? $this->all_field_types_count : ( $this->all_field_types_count - 3 ),
 			$this->create_post_form_key => 10,
 			$this->contact_form_key => $this->contact_form_field_count,
 			$this->repeat_sec_form_key => 3
@@ -308,6 +342,7 @@ class FrmUnitTest extends WP_UnitTestCase {
     static function install_data() {
         return array(
         	dirname( __FILE__ ) . '/testdata.xml',
+			dirname( __FILE__ ) . '/free-form.xml',
 	        dirname( __FILE__ ) . '/editform.xml',
 			dirname( __FILE__ ) . '/file-upload.xml',
         );
@@ -444,7 +479,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 			'user_pass' => 'admin',
 			'role' => 'administrator',
 		);
-		$admin = self::factory()->user->create_object( $admin_args );
+		$admin = $this->factory->user->create_object( $admin_args );
 		$this->assertNotEmpty( $admin );
 
 		$editor_args = array(
@@ -453,7 +488,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 			'user_pass' => 'editor',
 			'role' => 'editor',
 		);
-		$editor = self::factory()->user->create_object( $editor_args );
+		$editor = $this->factory->user->create_object( $editor_args );
 		$this->assertNotEmpty( $editor );
 
 		$subscriber_args = array(
@@ -462,8 +497,32 @@ class FrmUnitTest extends WP_UnitTestCase {
 			'user_pass' => 'subscriber',
 			'role' => 'subscriber',
 		);
-		$subscriber = self::factory()->user->create_object( $subscriber_args );
+		$subscriber = $this->factory->user->create_object( $subscriber_args );
 		$this->assertNotEmpty( $subscriber );
 
+	}
+
+	protected function run_private_method( $method, $args ) {
+		$this->check_php_version( '5.3' );
+		$m = new ReflectionMethod( $method[0], $method[1] );
+		$m->setAccessible( true );
+		return $m->invokeArgs( is_string( $method[0] ) ? null : $method[0], $args );
+	}
+
+	/**
+	* Skip this if running < php 5.3
+	*/
+	protected function get_private_property( $object, $property ) {
+		$this->check_php_version( '5.3' );
+		$rc = new ReflectionClass( $object );
+		$p = $rc->getProperty( $property );
+		$p->setAccessible( true );
+		return $p->getValue( $object );
+	}
+
+	protected function check_php_version( $required ) {
+		if ( version_compare( phpversion(), $required, '<' ) ) {
+			$this->markTestSkipped( 'Test requires PHP > ' . $required );
+		}
 	}
 }

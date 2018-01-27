@@ -7,7 +7,8 @@ if ( ! isset( $entry) ) {
     <span id="timestamp">
     <?php
     $date_format = __( 'M j, Y @ G:i' );
-	printf( __( 'Published on: <b>%1$s</b>' ), FrmAppHelper::get_localized_date( $date_format, $entry->created_at ) ); ?>
+	printf( esc_html__( 'Published on: %1$s' ), '<b>' . FrmAppHelper::get_localized_date( $date_format, $entry->created_at ) . '</b>' );
+	?>
     </span>
 </div>
 <?php if ( $entry->updated_at && $entry->updated_at != $entry->created_at ) { ?>

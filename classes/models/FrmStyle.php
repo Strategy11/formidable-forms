@@ -1,6 +1,6 @@
 <?php
 class FrmStyle {
-    public $number = false;	// Unique ID number of the current instance.
+	public $number = false; // Unique ID number of the current instance.
 	public $id = 0; // the id of the post
 
 	/**
@@ -31,7 +31,7 @@ class FrmStyle {
     }
 
 	public function save( $settings ) {
-		return FrmAppHelper::save_settings( $settings, 'frm_styles' );
+		return FrmDb::save_settings( $settings, 'frm_styles' );
     }
 
 	public function duplicate( $id ) {
@@ -117,7 +117,10 @@ class FrmStyle {
 
 		$css = $this->get_css_content( $filename );
 
-		$create_file = new FrmCreateFile( array( 'folder_name' => 'formidable/css', 'file_name' => 'formidablepro.css' ) );
+		$create_file = new FrmCreateFile( array(
+			'folder_name' => 'formidable/css',
+			'file_name' => 'formidablepro.css',
+		) );
 		$create_file->create_file( $css );
 
         update_option('frmpro_css', $css);
@@ -148,9 +151,9 @@ class FrmStyle {
 			'order'       => 'ASC',
 		);
 
-		FrmAppHelper::delete_cache_and_transient( serialize( $default_post_atts ), 'frm_styles' );
-		FrmAppHelper::cache_delete_group( 'frm_styles' );
-		FrmAppHelper::delete_cache_and_transient( 'frmpro_css' );
+		FrmDb::delete_cache_and_transient( serialize( $default_post_atts ), 'frm_styles' );
+		FrmDb::cache_delete_group( 'frm_styles' );
+		FrmDb::delete_cache_and_transient( 'frmpro_css' );
 	}
 
 	public function destroy( $id ) {
@@ -194,13 +197,13 @@ class FrmStyle {
 			'order'       => $order,
         );
 
-        $temp_styles = FrmAppHelper::check_cache(serialize($post_atts), 'frm_styles', $post_atts, 'get_posts');
+		$temp_styles = FrmDb::check_cache( serialize( $post_atts ), 'frm_styles', $post_atts, 'get_posts' );
 
         if ( empty($temp_styles) ) {
             global $wpdb;
             // make sure there wasn't a conflict with the query
 			$query = $wpdb->prepare( 'SELECT * FROM ' . $wpdb->posts . ' WHERE post_type=%s AND post_status=%s ORDER BY post_title ASC LIMIT 99', FrmStylesController::$post_type, 'publish' );
-            $temp_styles = FrmAppHelper::check_cache('frm_backup_style_check', 'frm_styles', $query, 'get_results');
+            $temp_styles = FrmDb::check_cache('frm_backup_style_check', 'frm_styles', $query, 'get_results');
 
             if ( empty($temp_styles) ) {
                 // create a new style if there are none
@@ -267,7 +270,7 @@ class FrmStyle {
 	        return $settings;
 	    }
 
-	    $settings['line_height'] = ( ! isset($settings['field_height']) || $settings['field_height'] == '' || $settings['field_height'] == 'auto') ? 'normal' : $settings['field_height'];
+		$settings['line_height'] = ( ! isset( $settings['field_height'] ) || $settings['field_height'] == '' || $settings['field_height'] == 'auto' ) ? 'normal' : $settings['field_height'];
 
 	    if ( ! isset($settings['form_desc_size']) && isset($settings['description_font_size']) ) {
 	        $settings['form_desc_size'] = $settings['description_font_size'];
@@ -298,7 +301,7 @@ class FrmStyle {
             'theme_css'         => 'ui-lightness',
             'theme_name'        => 'UI Lightness',
 
-			'center_form'		=> '',
+			'center_form'       => '',
             'form_width'        => '100%',
             'form_align'        => 'left',
             'direction'         => is_rtl() ? 'rtl' : 'ltr',
@@ -335,8 +338,8 @@ class FrmStyle {
 			'description_margin' => '0',
 
             'field_font_size'   => '14px',
-            'field_height' 		=> '32px',
-            'line_height'		=> 'normal',
+            'field_height'      => '32px',
+            'line_height'       => 'normal',
             'field_width'       => '100%',
             'auto_width'        => false,
             'field_pad'         => '6px 10px',
@@ -436,14 +439,17 @@ class FrmStyle {
 
 	public static function get_bold_options() {
 		return array(
-			100 => 100, 200 => 200, 300 => 300,
+			100 => 100,
+			200 => 200,
+			300 => 300,
 			'normal' => __( 'normal', 'formidable' ),
-			500 => 500, 600 => 600,
+			500 => 500,
+			600 => 600,
 			'bold' => __( 'bold', 'formidable' ),
-			800 => 800, 900 => 900,
+			800 => 800,
+			900 => 900,
 		);
 	}
-
 
 	/**
 	 * Don't let imbalanced font families ruin the whole stylesheet

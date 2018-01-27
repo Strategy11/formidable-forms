@@ -81,12 +81,7 @@ class FrmListHelper {
 
 	protected $compat_fields = array( '_args', '_pagination_args', 'screen', '_actions', '_pagination' );
 
-	protected $compat_methods = array(
-		'set_pagination_args', 'get_views', 'get_bulk_actions', 'bulk_actions',
-		'row_actions', 'view_switcher', 'get_items_per_page', 'pagination',
-		'get_sortable_columns', 'get_column_info', 'get_table_classes', 'display_tablenav', 'extra_tablenav',
-		'single_row_columns',
-	);
+	protected $compat_methods = array( 'set_pagination_args', 'get_views', 'get_bulk_actions', 'bulk_actions', 'row_actions', 'view_switcher', 'get_items_per_page', 'pagination', 'get_sortable_columns', 'get_column_info', 'get_table_classes', 'display_tablenav', 'extra_tablenav', 'single_row_columns' );
 
 	/**
 	* Construct the table object
@@ -155,6 +150,18 @@ class FrmListHelper {
 	}
 
 	/**
+	 * @since 3.0
+	 */
+	protected function get_param( $args ) {
+		return FrmAppHelper::get_simple_request( array(
+			'param'    => $args['param'],
+			'default'  => isset( $args['default'] ) ? $args['default'] : '',
+			'sanitize' => isset( $args['sanitize'] ) ? $args['sanitize'] : 'sanitize_title',
+			'type'     => 'request',
+		) );
+	}
+
+	/**
 	 * An internal method that sets all the necessary pagination arguments
 	 *
 	 * @param array $args An associative array with information about the pagination
@@ -174,7 +181,7 @@ class FrmListHelper {
 		}
 
 		// Redirect if page number is invalid and headers are not already sent.
-		if ( ! headers_sent() && ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) && $args['total_pages'] > 0 && $this->get_pagenum() > $args['total_pages'] ) {
+		if ( ! headers_sent() && ! FrmAppHelper::wp_doing_ajax() && $args['total_pages'] > 0 && $this->get_pagenum() > $args['total_pages'] ) {
 			wp_redirect( add_query_arg( 'paged', $args['total_pages'] ) );
 			exit;
 		}
@@ -392,8 +399,12 @@ class FrmListHelper {
 
 	private static function get_bulk_action( $action_name ) {
 		$action = false;
-		if ( isset( $_REQUEST[ $action_name ] ) && -1 != sanitize_text_field( $_REQUEST[ $action_name ] ) ) {
-			$action = sanitize_text_field( $_REQUEST[ $action_name ] );
+		$action_param = self::get_param( array(
+			'param' => $action_name,
+			'sanitize' => 'sanitize_text_field',
+		) );
+		if ( $action_param && -1 != $action_param ) {
+			$action = $action_param;
 		}
 		return $action;
 	}
@@ -879,10 +890,7 @@ class FrmListHelper {
 	</tr>
 	</thead>
 
-	<tbody id="the-list"<?php
-		if ( $singular ) {
-			echo " data-wp-lists='list:" . esc_attr( $singular ) . "'";
-		} ?>>
+	<tbody id="the-list"<?php echo ( $singular ? " data-wp-lists='list:" . esc_attr( $singular ) . "'" : '' ); ?>>
 		<?php $this->display_rows_or_placeholder(); ?>
 	</tbody>
 

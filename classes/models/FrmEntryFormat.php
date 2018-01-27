@@ -106,7 +106,11 @@ class FrmEntryFormat {
 				}
 			}
 		} else {
-			$values[ $f->id ] = array( 'label' => $f->name, 'val' => $val, 'type' => $f->type );
+			$values[ $f->id ] = array(
+				'label' => $f->name,
+				'val'   => $val,
+				'type'  => $f->type,
+			);
 		}
 	}
 
@@ -158,7 +162,12 @@ class FrmEntryFormat {
 		$f = $atts['field'];
 		if ( $atts['entry'] ) {
 			$prev_val = maybe_unserialize( $atts['entry']->metas[ $f->id ] );
-			$meta = array( 'item_id' => $atts['id'], 'field_id' => $f->id, 'meta_value' => $prev_val, 'field_type' => $f->type );
+			$meta = array(
+				'item_id'    => $atts['id'],
+				'field_id'   => $f->id,
+				'meta_value' => $prev_val,
+				'field_type' => $f->type,
+			);
 
 			//This filter applies to the default-message shortcode and frm-show-entry shortcode only
 			if ( in_array( $f->type, array( 'html', 'divider', 'break' ) ) ) {
@@ -166,7 +175,10 @@ class FrmEntryFormat {
 			} elseif ( isset( $atts['filter'] ) && $atts['filter'] == false ) {
 				$val = $prev_val;
 			} else {
-				$email_value_atts = array( 'field' => $f, 'format' => $atts['format'] );
+				$email_value_atts = array(
+					'field' => $f,
+					'format' => $atts['format'],
+				);
 				$val = apply_filters( 'frm_email_value', $prev_val, (object) $meta, $atts['entry'], $email_value_atts );
 			}
 		}
@@ -181,7 +193,8 @@ class FrmEntryFormat {
 		_deprecated_function( __FUNCTION__, '2.04', 'instance of FrmEntryValues or FrmProEntryValues' );
 
 		$val = apply_filters( 'frm_display_' . $atts['field']->type . '_value_custom', $val, array(
-			'field' => $atts['field'], 'atts' => $atts,
+			'field' => $atts['field'],
+			'atts'  => $atts,
 		) );
 
 		self::flatten_array_value( $atts, $val );
