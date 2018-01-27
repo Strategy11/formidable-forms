@@ -18,8 +18,9 @@ class FrmEntriesHelper {
         }
 
         foreach ( (array) $fields as $field ) {
+			$original_default = $field->default_value;
 			self::prepare_field_default_value( $field );
-            $new_value = self::get_field_value_for_new_entry( $field, $reset, $args );
+			$new_value = self::get_field_value_for_new_entry( $field, $reset, $args );
 
 			$field_array = FrmAppHelper::start_field_array( $field );
 			$field_array['value'] = $new_value;
@@ -27,6 +28,7 @@ class FrmEntriesHelper {
 			$field_array['parent_form_id'] = isset( $args['parent_form_id'] ) ? $args['parent_form_id'] : $field->form_id;
 			$field_array['reset_value']    = $reset;
 			$field_array['in_embed_form']  = isset( $args['in_embed_form'] ) ? $args['in_embed_form'] : '0';
+			$field_array['original_default'] = $original_default;
 
 			FrmFieldsHelper::prepare_new_front_field( $field_array, $field, $args );
 
