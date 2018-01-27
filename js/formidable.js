@@ -2735,21 +2735,21 @@ function frmFrontFormJS(){
 		return hidden;
 	}
 
-	function maybeShowCalculationsErrorAlert(err, field_key, thisFullCalc) {
+	function maybeShowCalculationsErrorAlert( err, field_key, thisFullCalc ) {
 
 		var alertMessage = '';
 
-		if ((!jQuery('form').hasClass('frm-admin-viewing'))) {
+		if ( ( !jQuery( 'form' ).hasClass( 'frm-admin-viewing' ) ) ) {
 			return;
 		}
 
-		alertMessage += 'Oops! There\'s an error in the calculation in field ' + field_key + ':\n\n';
+		alertMessage += frm_js.calc_error + ' ' + field_key + ':\n\n';
 		alertMessage += thisFullCalc + '\n\n';
-		if (err.message) {
-			alertMessage += 'The error message is: ' + err.message + '\n\n';
+
+		if ( err.message ) {
+			alertMessage += err.message + '\n\n';
 		}
-		alertMessage += 'No worries!  These are generally easy to fix.';
-		alert(alertMessage);
+		alert( alertMessage );
 	}
 
 	function doSingleCalculation( all_calcs, field_key, vals, triggerField ) {
@@ -2793,20 +2793,20 @@ function frmFrontFormJS(){
 			thisFullCalc = trimNumericCalculation( thisFullCalc );
 
 			try {
-				total = parseFloat(eval(thisFullCalc));
+				total = parseFloat( eval( thisFullCalc ) );
 			}
 
-			catch(err) {
-				maybeShowCalculationsErrorAlert(err, field_key, thisFullCalc);
+			catch ( err ) {
+				maybeShowCalculationsErrorAlert( err, field_key, thisFullCalc );
 			}
 
-			if (typeof total === 'undefined' || isNaN(total)) {
+			if ( typeof total === 'undefined' || isNaN(total) ) {
 				total = 0;
 			}
 
 			// Set decimal points
-			if (isNumeric(dec)) {
-				total = total.toFixed(dec);
+			if ( isNumeric( dec ) ) {
+				total = total.toFixed( dec );
 			}
 		}
 

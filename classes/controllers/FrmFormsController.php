@@ -753,10 +753,10 @@ class FrmFormsController {
 
 	// Insert the form class setting and maybe the admin-viewing class into the form
 	public static function form_classes( $form ) {
-		if ( isset($form->options['form_class']) ) {
+		if ( isset( $form->options['form_class'] ) ) {
 			echo esc_attr( sanitize_text_field( $form->options['form_class'] ) );
 		}
-		if ( current_user_can( 'activate_plugins' ) ) {
+		if ( current_user_can( 'activate_plugins' ) && current_user_can( 'frm_edit_forms' ) ) {
 			echo ' frm-admin-viewing ';
 		}
 	}
