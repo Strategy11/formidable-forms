@@ -2817,6 +2817,23 @@ function frmFrontFormJS(){
 		return hidden;
 	}
 
+	function maybeShowCalculationsErrorAlert( err, field_key, thisFullCalc ) {
+
+		var alertMessage = '';
+
+		if ( ( !jQuery( 'form' ).hasClass( 'frm-admin-viewing' ) ) ) {
+			return;
+		}
+
+		alertMessage += frm_js.calc_error + ' ' + field_key + ':\n\n';
+		alertMessage += thisFullCalc + '\n\n';
+
+		if ( err.message ) {
+			alertMessage += err.message + '\n\n';
+		}
+		alert( alertMessage );
+	}
+
 	function doSingleCalculation( all_calcs, field_key, vals, triggerField ) {
 		var thisCalc = all_calcs.calc[ field_key ];
 		var thisFullCalc = thisCalc.calc;
@@ -2857,7 +2874,13 @@ function frmFrontFormJS(){
 
 			thisFullCalc = trimNumericCalculation( thisFullCalc );
 
-			total = parseFloat(eval(thisFullCalc));
+			try {
+				total = parseFloat( eval( thisFullCalc ) );
+			}
+
+			catch ( err ) {
+				maybeShowCalculationsErrorAlert( err, field_key, thisFullCalc );
+			}
 
 			if ( typeof total === 'undefined' || isNaN(total) ) {
 				total = 0;
@@ -2865,7 +2888,7 @@ function frmFrontFormJS(){
 
 			// Set decimal points
 			if ( isNumeric( dec ) ) {
-				total = total.toFixed(dec);
+				total = total.toFixed( dec );
 			}
 		}
 

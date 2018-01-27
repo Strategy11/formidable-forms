@@ -534,6 +534,140 @@ function frmAdminBuildJS(){
 		initiateMultiselect();
 	}
 
+	/**
+	 * Checks a string for parens, brackets, and curly braces and returns a message if any unmatched are found.
+	 * @param formula
+	 * @returns {string}
+	 */
+	function checkMatchingParens( formula ) {
+
+		var stack = [],
+			formula_array = formula.split( '' ),
+			length = formula_array.length,
+			opening = [ "{", "[", "(" ],
+			closing = {
+				"}": "{",
+				")": "(",
+				"]": "[",
+			},
+			unmatchedClosing = [],
+			msg = '',
+			i, next, top;
+
+		for ( i = 0; i < length; i++ ) {
+			if ( opening.includes( formula_array[ i ] ) ) {
+				stack.push( formula_array[ i ] );
+				continue;
+			}
+			if ( closing.hasOwnProperty( formula_array[ i ] ) ) {
+				top = stack.pop();
+				if ( top !== closing[ formula_array[ i ] ] ) {
+					unmatchedClosing.push( formula_array[ i ] )
+				}
+			}
+		}
+
+		if ( stack.length > 0 || unmatchedClosing.length > 0 ) {
+			msg = frm_admin_js.unmatched_parens + '\n\n';
+			return msg;
+		}
+
+		return '';
+	}
+
+	/**
+	 * Returns a regular expression of shortcodes that can't be used in forms but can be used in Views, Email
+	 * Notifications, and other Formidable areas.
+	 *
+	 * @returns {RegExp}
+	 */
+	function getNonFormShortcodes() {
+		return /\[(if\b|foreach|created-at|created-by|updated-at|updated-by)|((key|id)\])/;
+	}
+
+	/**
+	 * Checks if a string has any shortcodes that do not belong in forms and returns a message if any are found.
+	 * @param formula
+	 * @returns {string}
+	 */
+	function checkNonFormShortcodes( formula ) {
+		var nonFormShortcodes = getNonFormShortcodes(),
+			msg = '';
+
+		if ( nonFormShortcodes.test( formula ) ) {
+			msg += frm_admin_js.view_shortcodes + "\n\n";
+		}
+
+		return msg;
+	}
+
+	/**
+	 * Determines if the calculation input is from a text calculation.
+	 *
+	 * @param inputElement
+	 */
+	function isTextCalculation( inputElement ) {
+		return jQuery( inputElement ).siblings( "label[for^='calc_type']" ).children( "input" ).prop( "checked" );
+	}
+
+	/**
+	 * Returns a regular expression of shortcodes that can't be used in numeric calculations.
+	 * @returns {RegExp}
+	 */
+	function getNonNumericShortcodes() {
+		return /\[(date|time|email|ip)\]/;
+	}
+
+	/**
+	 * Checks if a numeric calculation has shortcodes that output non-numeric strings and returns a message if found.
+	 * @param calculation
+	 *
+	 * @param inputElement
+	 * @returns {string}
+	 */
+	function checkNonNumericShortcodes( calculation, inputElement ) {
+
+		var msg = '';
+
+		if ( isTextCalculation( inputElement ) ) {
+			return msg;
+		}
+
+		var nonNumericShortcodes = getNonNumericShortcodes();
+
+		if ( nonNumericShortcodes.test( calculation ) ) {
+			msg = frm_admin_js.text_shortcodes + "\n\n";
+		}
+
+		return msg;
+	}
+
+	/**
+	 * Checks a calculation for shortcodes that shouldn't be in it and returns a message if found.
+	 * @param calculation
+	 * @param inputElement
+	 * @returns {string}
+	 */
+	function checkShortcodes( calculation, inputElement ) {
+		var nonNumericShortcodesMessage = checkNonNumericShortcodes( calculation, inputElement );
+		var nonFormShortcodesMessage = checkNonFormShortcodes( calculation );
+
+		var msg = nonNumericShortcodesMessage;
+		msg += nonFormShortcodesMessage;
+
+		return msg;
+	}
+
+	function checkCalculationCreatedByUser() {
+		var calculation = this.value;
+		var warningMessage = checkMatchingParens( calculation );
+		warningMessage += checkShortcodes( calculation, this );
+
+		if ( warningMessage != '' ) {
+			alert( calculation + "\n\n" + warningMessage );
+		}
+	}
+
 	function popCalcFields(v){
 		var p;
 		if(!v.type){
@@ -2595,6 +2729,7 @@ function frmAdminBuildJS(){
 			jQuery(document.getElementById('frm-insert-fields')).on('click', '.frm_add_field', addFieldClick);
 			$newFields.on('click', '.frm_duplicate_icon', duplicateField);
 			$newFields.on('click', '.use_calc', popCalcFields);
+			$newFields.on('change', 'input[id^="frm_calc"]', checkCalculationCreatedByUser);
 			$newFields.on('click', 'input.frm_req_field', markRequired);
 			$newFields.on('click', 'a.frm_req_field', clickRequired);
 			$newFields.on('click', '.frm_mark_unique', markUnique);
