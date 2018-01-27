@@ -16,7 +16,10 @@
 			<li><a href="javascript:void(0)" class="frmkeys"><?php esc_html_e( 'Keys', 'formidable' ) ?></a></li>
 		</ul>
 		<ul class="alignleft"><li><?php esc_html_e( 'Fields from your form', 'formidable' ) ?>:</li>
-			<li><input type="search" id="frm_field_search" name="frm_field_search" placeholder="<?php esc_html_e( 'Search', 'formidable' ) ?>"></li></ul>
+</ul>
+		<ul class="frm_code_list" id="frm_customize_search">
+			<li><input type="search" id="frm_field_search" name="frm_field_search" placeholder="<?php esc_html_e( 'Search', 'formidable' ) ?>"></li>
+		</ul>
 		<ul class="frm_code_list frm_full_width frm_customize_field_list">
 		<?php
 		if ( ! empty( $fields ) ) {
