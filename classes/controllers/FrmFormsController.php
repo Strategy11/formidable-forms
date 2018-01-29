@@ -284,6 +284,7 @@ class FrmFormsController {
 
 		$include_theme = FrmAppHelper::get_param( 'theme', '', 'get', 'absint' );
 		if ( $include_theme ) {
+			self::set_preview_query();
 			self::load_theme_preview();
 		} else {
 			self::load_direct_preview();
@@ -305,13 +306,57 @@ class FrmFormsController {
 		}
 	}
 
+	private static function set_preview_query() {
+		$random_page = get_posts( array(
+			'numberposts' => 1,
+			'orderby'     => 'date',
+			'order'       => 'ASC',
+			'post_type'   => 'page',
+		) );
+
+		if ( ! empty( $random_page ) ) {
+			$random_page = reset( $random_page );
+			query_posts( array(
+				'post_type' => 'page',
+				'page_id'   => $random_page->ID,
+			) );
+		}
+	}
+
 	/**
 	 * @since 3.0
 	 */
 	private static function load_theme_preview() {
+		add_filter( 'the_title', 'FrmFormsController::preview_page_title', 9999 );
+		add_filter( 'the_content', 'FrmFormsController::preview_content', 9999 );
 		add_action( 'loop_no_results', 'FrmFormsController::show_page_preview' );
 		add_filter( 'is_active_sidebar', '__return_false' );
 		get_template_part( 'page' );
+	}
+
+
+	/**
+	 * Set the page title for the theme preview page
+	 *
+	 * @since 3.0
+	 */
+	public static function preview_page_title( $title ) {
+		if ( in_the_loop() ) {
+			$title = __( 'Form Preview', 'formidable' );
+		}
+		return $title;
+	}
+
+	/**
+	 * Set the page content for the theme preview page
+	 *
+	 * @since 3.0
+	 */
+	public static function preview_content( $content ) {
+		if ( in_the_loop() ) {
+			$content = FrmFormsController::show_page_preview();
+		}
+		return $content;
 	}
 
 	/**
