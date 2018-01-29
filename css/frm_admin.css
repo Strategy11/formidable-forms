@@ -2988,6 +2988,14 @@ Responsive Design
 	ul.frm_form_nav { min-width:100px; width:100%; }
 	ul.frm_form_nav li.last .caret { display:none; }
 
+	#major-publishing-actions .frm_submit_form{
+		margin-bottom:5px;
+	}
+
+	#frm-preview-action{
+		clear:both;
+	}
+
 	.frm_form_settings .contextual-help-tabs{
 		width:93px;
 	}
@@ -3230,12 +3238,12 @@ Responsive Design
 	#publishing-action .button,
 	#publishing-action > button{
 		width:100%;
-		padding-left:9px;
-		padding-right:9px;
+		padding-left:0;
+		padding-right:0;
+		text-align:center;
 		float:none;
-		margin-right:0;
-		margin-left:0;
-		margin-bottom:5px;
+		margin:0 0 5px;
+		white-space: normal;
 	}
 
 	#frm-preview-action{
@@ -3251,6 +3259,10 @@ Responsive Design
 	#publishing-action .preview{
 		width:100%;
 		float:none;
+	}
+
+	#frm-preview-action .caret{
+		display:none;
 	}
 
 	#frm_builder_page #frm-insert-fields{
