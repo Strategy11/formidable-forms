@@ -2992,7 +2992,7 @@ Responsive Design
 		margin-bottom:5px;
 	}
 
-	#frm-preview-action{
+	.frm-is-draft #frm-preview-action{
 		clear:both;
 	}
 

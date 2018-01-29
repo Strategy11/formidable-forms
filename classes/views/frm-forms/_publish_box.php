@@ -21,7 +21,7 @@
 
 */ ?>
     <div id="major-publishing-actions">
-		<div id="publishing-action">
+		<div id="publishing-action" class="<?php echo esc_attr( 'draft' === $values['status'] ? 'frm-is-draft' : '' ); ?>">
 			<div class="alignleft">
 				<?php FrmFormsHelper::actions_dropdown( $values ) ?>
 			</div>
