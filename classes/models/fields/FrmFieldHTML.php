@@ -28,9 +28,12 @@ class FrmFieldHTML extends FrmFieldType {
 	 */
 	protected function after_replace_html_shortcodes( $args, $html ) {
 		FrmFieldsHelper::run_wpautop( array( 'wpautop' => true ), $html );
-
+		$pre_filter = $html;
 		$html = apply_filters( 'frm_get_default_value', $html, (object) $this->field, false );
-		return do_shortcode( $html );
+		if ( $pre_filter === $html ) {
+			$html = do_shortcode( $html );
+		}
+		return $html;
 	}
 
 	public function get_container_class() {

@@ -118,7 +118,7 @@ class FrmFieldFormHtml {
 
 		$this->replace_required_label_shortcode();
 		$this->replace_required_class();
-		$this->replace_description_shortcode();
+		$this->maybe_replace_description_shortcode( false );
 		$this->replace_error_shortcode();
 		$this->add_class_to_label();
 		$this->add_field_div_classes();
@@ -126,6 +126,7 @@ class FrmFieldFormHtml {
 		$this->replace_entry_key();
 		$this->replace_form_shortcodes();
 		$this->process_wp_shortcodes();
+		$this->maybe_replace_description_shortcode( true );
 	}
 
 	/**
@@ -151,6 +152,20 @@ class FrmFieldFormHtml {
 	private function replace_required_label_shortcode() {
 		$required = FrmField::is_required( $this->field_obj->get_field() ) ? $this->field_obj->get_field_column('required_indicator') : '';
 		FrmShortcodeHelper::remove_inline_conditions( ! empty( $required ), 'required_label', $required, $this->html );
+	}
+
+	/**
+	 * If this is an HTML field, the values are included in the description.
+	 * In this case, we don't want to run the wp shortcodes with the description included.
+	 *
+	 * @since 3.0
+	 */
+	private function maybe_replace_description_shortcode( $wp_processed = false ) {
+		$is_html = 'html' === $this->field_obj->get_field_column( 'type' );
+		$should_replace = ( $is_html && $wp_processed ) || ( ! $is_html && ! $wp_processed );
+		if ( $should_replace ) {
+			$this->replace_description_shortcode();
+		}
 	}
 
 	/**
