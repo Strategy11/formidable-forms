@@ -457,14 +457,6 @@ input.frm_insert_in_template{
 	float:none;
 }
 
-.frm_clear_none{
-    clear:none;
-}
-
-.frm_clear{
-    clear:both;
-}
-
 .frm_block,
 .frm_no_section_fields.frm_block{
     display:block;

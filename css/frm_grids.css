@@ -12,6 +12,14 @@
 	word-wrap: normal !important; /* many screen reader and browser combinations announce broken words as they would appear visually */
 }
 
+.frm_clear_none{
+    clear:none;
+}
+
+.frm_clear{
+    clear:both;
+}
+
 .frm_form_field.frm_alignright{
 	float:right !important;
 }
