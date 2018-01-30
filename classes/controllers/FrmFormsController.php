@@ -1339,6 +1339,37 @@ class FrmFormsController {
 		return $method;
 	}
 
+	public static function maybe_trigger_redirect( $form, $params, $args ) {
+		if ( ! isset( $params['id'] ) ) {
+			global $frm_vars;
+			$params['id'] = $frm_vars['created_entries'][ $form->id ]['entry_id'];
+		}
+
+		$conf_method = self::get_confirmation_method( array(
+			'form'     => $form,
+			'entry_id' => $params['id'],
+		) );
+
+		if ( 'redirect' === $conf_method ) {
+			self::trigger_redirect( $form, $params, $args );
+		}
+	}
+
+	public static function trigger_redirect( $form, $params, $args ) {
+		$success_args = array(
+			'action'      => $params['action'],
+			'conf_method' => 'redirect',
+			'form'        => $form,
+			'entry_id'    => $params['id'],
+		);
+
+		if ( isset( $args['ajax'] ) ) {
+			$success_args['ajax'] = $args['ajax'];
+		}
+
+		self::run_success_action( $success_args );
+	}
+
 	/**
 	 * Used when the success action is not 'message'
 	 * @since 2.05
@@ -1405,7 +1436,7 @@ class FrmFormsController {
 			wp_die();
 		} elseif ( ! headers_sent() ) {
 			wp_redirect( esc_url_raw( $success_url ) );
-			wp_die();
+			die(); // do not use wp_die or redirect fails
 		} else {
 			add_filter( 'frm_use_wpautop', '__return_true' );
 

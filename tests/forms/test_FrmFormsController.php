@@ -150,4 +150,38 @@ class WP_Test_FrmFormsController extends FrmUnitTest {
 			$this->assertEquals( FrmAppHelper::plugin_url() . '/js/formidable.js', $formidable_js->src, 'formidable.js was not loaded' );
 		}
 	}
+
+	/**
+	 * Test redirect after create
+	 * @group testme
+	 */
+	function test_redirect_after_submit() {
+		$form = $this->factory->form->create_and_get( array(
+			'options' => array(
+				'success_action' => 'redirect',
+				'success_url'    => 'http://example.com',
+			),
+		) );
+		$this->assertEquals( $form->options['success_action'], 'redirect' );
+
+		add_filter( 'wp_redirect', array( $this, 'check_redirect' ) );
+
+		$_POST = $this->factory->field->generate_entry_array( $form );
+		$entry_key = 'redirect-after-submit';
+		$_POST['item_key'] = $entry_key;
+		$_POST['action'] = 'create';
+
+		// since headers are sent, we will get the js redirect
+		ob_start();
+		FrmEntriesController::process_entry();
+		$response = ob_get_contents();
+		ob_end_clean();
+		$this->assertContains( "window.location='http://example.com'", $response );
+
+		$created_entry = FrmEntry::get_id_by_key( $entry_key );
+		$this->assertNotEmpty( $created_entry );
+
+		$response = FrmFormsController::show_form( $form->id ); // this is where the redirect happens
+		$this->assertContains( "window.location='http://example.com'", $response );
+	}
 }

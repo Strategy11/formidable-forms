@@ -537,13 +537,19 @@ class FrmEntriesController {
 
         if ( empty( $errors ) ) {
 			$_POST['frm_skip_cookie'] = 1;
+			$do_success = false;
             if ( $params['action'] == 'create' ) {
 				if ( apply_filters( 'frm_continue_to_create', true, $form_id ) && ! isset( $frm_vars['created_entries'][ $form_id ]['entry_id'] ) ) {
 					$frm_vars['created_entries'][ $form_id ]['entry_id'] = FrmEntry::create( $_POST );
+					$params['id'] = $frm_vars['created_entries'][ $form_id ]['entry_id'];
+					$do_success = true;
                 }
             }
 
             do_action( 'frm_process_entry', $params, $errors, $form, array( 'ajax' => $ajax ) );
+			if ( $do_success ) {
+				FrmFormsController::maybe_trigger_redirect( $form, $params, array( 'ajax' => $ajax ) );
+			}
 			unset( $_POST['frm_skip_cookie'] );
         }
     }
