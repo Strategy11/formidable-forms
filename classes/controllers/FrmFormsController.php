@@ -327,6 +327,7 @@ class FrmFormsController {
 	 * @since 3.0
 	 */
 	private static function load_theme_preview() {
+		add_filter( 'wp_title', 'FrmFormsController::preview_title', 9999 );
 		add_filter( 'the_title', 'FrmFormsController::preview_page_title', 9999 );
 		add_filter( 'the_content', 'FrmFormsController::preview_content', 9999 );
 		add_action( 'loop_no_results', 'FrmFormsController::show_page_preview' );
@@ -342,9 +343,18 @@ class FrmFormsController {
 	 */
 	public static function preview_page_title( $title ) {
 		if ( in_the_loop() ) {
-			$title = __( 'Form Preview', 'formidable' );
+			$title = self::preview_title( $title );
 		}
 		return $title;
+	}
+
+	/**
+	 * Set the page title for the theme preview page
+	 *
+	 * @since 3.0
+	 */
+	public static function preview_title( $title ) {
+		return __( 'Form Preview', 'formidable' );
 	}
 
 	/**
