@@ -11,13 +11,17 @@
 	</ul>
 
 	<div id="frm-insert-fields-box" class="tabs-panel">
-	    <ul class="subsubsub">
-            <li><a href="javascript:void(0)" class="current frmids"><?php esc_html_e( 'IDs', 'formidable' ) ?></a> |</li>
-            <li><a href="javascript:void(0)" class="frmkeys"><?php esc_html_e( 'Keys', 'formidable' ) ?></a></li>
-        </ul>
-        <ul class="alignleft"><li><?php esc_html_e( 'Fields from your form', 'formidable' ) ?>:</li></ul>
-        <ul class="frm_code_list frm_full_width">
-        <?php
+		<ul class="subsubsub">
+			<li><a href="javascript:void(0)" class="current frmids"><?php esc_html_e( 'IDs', 'formidable' ) ?></a> |</li>
+			<li><a href="javascript:void(0)" class="frmkeys"><?php esc_html_e( 'Keys', 'formidable' ) ?></a></li>
+		</ul>
+		<ul class="alignleft"><li><?php esc_html_e( 'Fields from your form', 'formidable' ) ?>:</li>
+</ul>
+		<ul class="frm_code_list" id="frm_customize_search">
+			<li><input type="search" id="frm_field_search" name="frm_field_search" placeholder="<?php esc_html_e( 'Search', 'formidable' ) ?>"></li>
+		</ul>
+		<ul class="frm_code_list frm_full_width frm_customize_field_list">
+		<?php
 		if ( ! empty( $fields ) ) {
 			global $wpdb;
 			$linked_forms[] = array();

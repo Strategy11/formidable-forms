@@ -1562,6 +1562,9 @@ label.default-style-box input[type="checkbox"]{
 #frm-conditionals ul.alignleft{
     margin:5px 0 0;
 }
+#frm_field_search{
+	width: 100%;
+}
 #frm-insert-fields-box ul.frm_code_list.frm_full_width,
 #frm-conditionals ul.frm_code_list.frm_full_width{
     clear:both;
@@ -2533,6 +2536,9 @@ ul .frm_col_two{float:right;}
 	width:48%;
 }
 .frm_code_list.frm_full_width li{width:auto;}
+#frm_customize_search li{width:100%}
+#frm_customize_search{margin-bottom:5px}
+#frm_customize_search + ul.frm_code_list.frm_customize_field_list{margin-top:5px;}
 
 .frm_code_list a.button{
 	display:block;
