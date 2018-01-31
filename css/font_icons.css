@@ -361,17 +361,11 @@ a.frm_icon_font:hover{
 .frm_view_day_icon:before {
 	content: "\e8ed";
 }
-.frm_heading_icon:before {
-	content: "\f1dc";
-}
 .frm_h3_icon:before {
 	content: "\f315";
 }
 .frm_repeat_icon:before {
 	content: "\f363";
-}
-.frm_hashtag_icon:before {
-	content: "\f292";
 }
 .frm_sliders_icon:before {
 	content: "\f1de";

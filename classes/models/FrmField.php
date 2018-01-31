@@ -12,7 +12,7 @@ class FrmField {
 		$fields = apply_filters('frm_available_fields', array(
 			'text'      => array(
 				'name'  => __( 'Text', 'formidable' ),
-				'icon'  => 'frm_text_icon',
+				'icon'  => 'frm_css_icon frm_text_icon',
 			),
 			'textarea'  => array(
 				'name'  => __( 'Paragraph', 'formidable' ),
@@ -40,7 +40,7 @@ class FrmField {
 			),
 			'number'    => array(
 				'name'  => __( 'Number', 'formidable' ),
-				'icon'  => 'frm_icon_font frm_hashtag_icon',
+				'icon'  => 'frm_css_icon frm_number_icon',
 			),
 			'phone'     => array(
 				'name'  => __( 'Phone', 'formidable' ),
@@ -119,7 +119,7 @@ class FrmField {
 			),
 			'divider'   => array(
 				'name'  => __( 'Section', 'formidable' ),
-				'icon'  => 'frm_icon_font frm_h3_icon',
+				'icon'  => 'frm_css_icon frm_heading_icon',
 			),
 			'break'     => array(
 				'name'  => __( 'Page Break', 'formidable' ),

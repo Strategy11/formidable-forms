@@ -2606,28 +2606,36 @@ ul .frm_col_two{float:right;}
 	margin: .15em .2em;
 	color: inherit;
 	display: inline-block;
-	vertical-align: top;
+	vertical-align: middle;
 	text-align: center;
 	width:22px;
 	height:20px;
-}
-
-.frmbutton.ui-sortable-helper i:before,
-.field_type_list li.frmbutton i:before{
-	width:20px;
-	height:20px;
-	font-size: 20px;
 }
 
 .frmbutton.ui-sortable-helper .frm-dropdown-menu{
 	display:none;
 }
 
+.frm_css_icon:before{
+	font-size: 20px;
+	font-style: normal;
+	line-height: 1;
+	vertical-align: top;
+}
+
+.frm_number_icon:before {
+	content: "#";
+	font-weight: 400;
+}
+
 .frm_text_icon:before{
 	content:'T';
-    font-size: 20px;
-    font-style: normal;
 	font-family: serif;
+}
+
+.frm_heading_icon:before{
+	content:'H';
+	font-family: rockwell, georgia, serif;
 }
 
 li.frm_noallow.button,
@@ -3135,6 +3143,7 @@ Responsive Design
 	#frm-insert-fields .button a,
 	.frmbutton.ui-sortable-helper a{
 		line-height:26px;
+		max-height: 28px;
 	}
 
 	#frm-fixed:not(.frm-mobile-fixed){
@@ -3309,12 +3318,17 @@ Responsive Design
 	.frm_code_list li{
 		line-height:26px;
 		width:auto;
+		min-width:34px;
 		float:none;
 		margin:0 0 4px 0;
 	}
 
 	.field_type_list li.button:nth-child(2n){
-		margin-left:4px;
+		margin-left:1%;
+	}
+
+	.frm_field_list #frm-insert-fields .button a{
+		max-width:100%;
 	}
 
 	.field_type_list li span{
@@ -3324,6 +3338,8 @@ Responsive Design
 	.frmbutton.ui-sortable-helper i,
 	.field_type_list li.frmbutton i{
 		border:none;
+		margin-left: 0;
+		margin-right: 0;
 	}
 
 	#wpbody-content #frm_builder_page #post-body.columns-2 #postbox-container-1{
