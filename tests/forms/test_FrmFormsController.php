@@ -215,7 +215,7 @@ class WP_Test_FrmFormsController extends FrmUnitTest {
 		$this->assertContains( '<div class="frm_message"><p>Done!</p>', $response );
 		$this->assertContains( 'frmFrontForm.scrollMsg(' . $form->id . ')', $response );
 
-		if ( $show_form ){
+		if ( $show_form ) {
 			$this->assertContains( '<input type="hidden" name="form_id" value="' . $form->id . '" />', $response );
 		} else {
 			$this->assertNotContains( '<input type="hidden" name="form_id" value="' . $form->id . '" />', $response );

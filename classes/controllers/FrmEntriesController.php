@@ -594,6 +594,7 @@ class FrmEntriesController {
 	private static function unlink_post( $entry_id ) {
 		global $wpdb;
 		$wpdb->update( $wpdb->prefix . 'frm_items', array( 'post_id' => '' ), array( 'id' => $entry_id ) );
+		FrmEntry::clear_cache();
 	}
 
 	/**
