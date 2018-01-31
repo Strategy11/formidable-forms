@@ -448,7 +448,16 @@ DEFAULT_HTML;
 	}
 
 	public function get_container_class() {
-		return '';
+		$is_radio = FrmField::is_radio( $this->field );
+		$is_checkbox = FrmField::is_checkbox( $this->field );
+		$align = FrmField::get_option( $this->field, 'align' );
+
+		$class = '';
+		if ( ! empty( $align ) && ( $is_radio || $is_checkbox ) ) {
+			$class .= ( 'inline' === $align ) ? ' horizontal_radio' : ' vertical_radio';
+		}
+
+		return $class;
 	}
 
 	public function get_label_class() {

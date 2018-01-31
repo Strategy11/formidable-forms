@@ -716,19 +716,11 @@ class FrmField {
 			return false;
 		}
 
-		$field_type = self::get_field_type( $field );
-		$data_type = self::get_option( $field, 'data_type' );
-		$original_type = self::get_option( $field, 'original_type' );
-
-		if ( ! empty( $original_type ) && $original_type != $field_type ) {
-			$field_type = $original_type; // check the original type for arrays
-		}
+		$field_type = self::get_original_field_type( $field );
 
 		$is_multi_value_field = (
-			$field_type == 'checkbox' ||
+			self::is_checkbox( $field ) ||
 			$field_type == 'address' ||
-			( $field_type == 'data' && $data_type == 'checkbox' ) ||
-			( $field_type == 'lookup' && $data_type == 'checkbox' ) ||
 			self::is_multiple_select( $field )
 		);
 
@@ -741,6 +733,21 @@ class FrmField {
 	 */
 	public static function get_field_type( $field ) {
 		return is_array( $field ) ? $field['type'] : $field->type;
+	}
+
+	/**
+	 * @since 3.0
+	 * @return string
+	 */
+	public static function get_original_field_type( $field ) {
+		$field_type = self::get_field_type( $field );
+		$original_type = self::get_option( $field, 'original_type' );
+
+		if ( ! empty( $original_type ) && $original_type != $field_type ) {
+			$field_type = $original_type; // check the original type for arrays
+		}
+
+		return $field_type;
 	}
 
 	/**
@@ -870,6 +877,50 @@ class FrmField {
 	public static function is_image( $field ) {
 		$type = self::get_field_type( $field );
 		return ( $type == 'url' && self::get_option( $field, 'show_image' ) );
+	}
+
+	/**
+	 * Check if field is radio or Dynamic radio
+	 *
+	 * @since 3.0
+	 *
+	 * @param array $field
+	 * @return boolean true if field type is radio or Dynamic radio
+	 */
+	public static function is_radio( $field ) {
+		return self::is_checkbox_or_radio( $field, 'radio' );
+	}
+
+	/**
+	 * Check if field is checkbox or Dynamic checkbox
+	 *
+	 * @since 3.0
+	 *
+	 * @param array $field
+	 * @return boolean true if field type is checkbox or Dynamic checkbox
+	 */
+	public static function is_checkbox( $field ) {
+		return self::is_checkbox_or_radio( $field, 'checkbox' );
+	}
+
+	/**
+	 * Check if field is checkbox or radio
+	 *
+	 * @since 3.0
+	 *
+	 * @param array|object $field
+	 * @param string $is_type radio or checkbox
+	 * @return boolean true if field type is checkbox or Dynamic checkbox
+	 */
+	private static function is_checkbox_or_radio( $field, $is_type ) {
+		$field_type = self::get_original_field_type( $field );
+		$data_type = self::get_option( $field, 'data_type' );
+
+		return (
+			$is_type === $field_type ||
+			( 'data' === $field_type && $is_type === $data_type ) ||
+			( 'lookup' === $field_type && $is_type === $data_type )
+		);
 	}
 
 	/**

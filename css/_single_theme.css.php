@@ -538,12 +538,28 @@ if ( ! empty( $important ) ) {
     clear:both;
 }
 
+<?php if ( $check_align === 'block' ) { ?>
+	.<?php echo esc_html( $style_class ) ?> .frm_checkbox label{
+		display: inline-flex;
+	}
+
+	.<?php echo esc_html( $style_class ) ?> .frm_checkbox label img{
+		align-self: center;
+	}
+<?php } ?>
+
+<?php if ( $radio_align === 'block' ) { ?>
+	.<?php echo esc_html( $style_class ) ?> .frm_radio label{
+		display: inline-flex;
+	}
+
+	.<?php echo esc_html( $style_class ) ?> .frm_radio label img{
+		align-self: center;
+	}
+<?php } ?>
+
 .<?php echo esc_html( $style_class ) ?> .frm_radio{
     display:<?php echo esc_html( $radio_align . $important ) ?>;
-}
-
-.<?php echo esc_html( $style_class ) ?> .horizontal_radio .frm_radio{
-    margin:0 5px 0 0<?php echo esc_html( $important ) ?>;
 }
 
 .<?php echo esc_html( $style_class ) ?> .frm_checkbox{

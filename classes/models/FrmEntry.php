@@ -248,7 +248,11 @@ class FrmEntry {
 	 * @since 2.0.11
 	 */
 	public static function get_new_entry_name( $values, $default = '' ) {
-		return isset( $values['item_name'] ) ? $values['item_name'] : ( isset( $values['name'] ) ? $values['name'] : $default );
+		$name = isset( $values['item_name'] ) ? $values['item_name'] : ( isset( $values['name'] ) ? $values['name'] : $default );
+		if ( is_array( $name ) ) {
+			$name = reset( $name );
+		}
+		return $name;
 	}
 
 	/**
@@ -259,6 +263,8 @@ class FrmEntry {
 	public static function maybe_get_entry( &$entry ) {
 		if ( $entry && is_numeric( $entry ) ) {
 			$entry = self::getOne( $entry );
+		} else {
+			$entry = false;
 		}
 	}
 
@@ -555,10 +561,6 @@ class FrmEntry {
 			'description' => self::get_entry_description( $values ),
 			'user_id' => self::get_entry_user_id( $values ),
 		);
-
-		if ( is_array($new_values['name']) ) {
-			$new_values['name'] = reset($new_values['name']);
-		}
 
 		$new_values['updated_by'] = isset($values['updated_by']) ? $values['updated_by'] : $new_values['user_id'];
 
