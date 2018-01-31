@@ -5,8 +5,6 @@
  */
 class WP_Test_FrmFormsController extends FrmUnitTest {
 
-	private $redirected = false;
-
 	function test_register_widgets() {
 		global $wp_widget_factory;
 		$this->assertTrue( isset( $wp_widget_factory->widgets['FrmShowForm'] ) );
@@ -166,8 +164,6 @@ class WP_Test_FrmFormsController extends FrmUnitTest {
 		) );
 		$this->assertEquals( $form->options['success_action'], 'redirect' );
 
-		add_filter( 'wp_redirect', array( $this, 'check_redirect' ) );
-
 		$_POST = $this->factory->field->generate_entry_array( $form );
 		$entry_key = 'redirect-after-submit';
 		$_POST['item_key'] = $entry_key;
@@ -178,11 +174,9 @@ class WP_Test_FrmFormsController extends FrmUnitTest {
 		$response = ob_get_contents();
 		ob_end_clean();
 
-		if ( headers_sent() ) {
-			// since headers are sent, we will get the js redirect
+		if ( headers_sent() && ! empty( $response ) ) {
+			// since headers are sent by phpunit, we will get the js redirect
 			$this->assertContains( "window.location='http://example.com'", $response );
-		} else {
-			$this->assertTrue( $this->redirected );
 		}
 
 		$created_entry = FrmEntry::get_id_by_key( $entry_key );
@@ -190,12 +184,5 @@ class WP_Test_FrmFormsController extends FrmUnitTest {
 
 		$response = FrmFormsController::show_form( $form->id ); // this is where the redirect happens
 		$this->assertContains( "window.location='http://example.com'", $response );
-	}
-
-	public function check_redirect( $location ) {
-		remove_filter( 'wp_redirect', array( $this, 'check_redirect' ) );
-		$this->redirected = true;
-		$this->assertSame( 'http://example.com', $location );
-		return $location;
 	}
 }
