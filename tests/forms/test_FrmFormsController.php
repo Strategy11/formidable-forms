@@ -153,7 +153,6 @@ class WP_Test_FrmFormsController extends FrmUnitTest {
 
 	/**
 	 * Test redirect after create
-	 * @group testme
 	 */
 	function test_redirect_after_submit() {
 		$form = $this->factory->form->create_and_get( array(
@@ -165,22 +164,22 @@ class WP_Test_FrmFormsController extends FrmUnitTest {
 		$this->assertEquals( $form->options['success_action'], 'redirect' );
 
 		$_POST = $this->factory->field->generate_entry_array( $form );
-		$entry_key = 'redirect-after-submit';
+		$entry_key = 'submit-redirect';
 		$_POST['item_key'] = $entry_key;
-		$_POST['action'] = 'create';
+		$_POST['frm_action'] = 'create';
 
 		ob_start();
 		FrmEntriesController::process_entry();
 		$response = ob_get_contents();
 		ob_end_clean();
 
-		if ( headers_sent() && ! empty( $response ) ) {
+		if ( headers_sent() ) {
 			// since headers are sent by phpunit, we will get the js redirect
 			$this->assertContains( "window.location='http://example.com'", $response );
 		}
 
 		$created_entry = FrmEntry::get_id_by_key( $entry_key );
-		$this->assertNotEmpty( $created_entry );
+		$this->assertNotEmpty( $created_entry, 'No entry found with key ' . $entry_key );
 
 		$response = FrmFormsController::show_form( $form->id ); // this is where the redirect happens
 		$this->assertContains( "window.location='http://example.com'", $response );
