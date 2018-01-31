@@ -153,8 +153,9 @@ class WP_Test_FrmFormsController extends FrmUnitTest {
 
 	/**
 	 * Test redirect after create
+	 * @covers FrmFormsController::redirect_after_submit
 	 */
-	function test_redirect_after_submit() {
+	function test_redirect_after_create() {
 		$form = $this->factory->form->create_and_get( array(
 			'options' => array(
 				'success_action' => 'redirect',
@@ -163,15 +164,8 @@ class WP_Test_FrmFormsController extends FrmUnitTest {
 		) );
 		$this->assertEquals( $form->options['success_action'], 'redirect' );
 
-		$_POST = $this->factory->field->generate_entry_array( $form );
 		$entry_key = 'submit-redirect';
-		$_POST['item_key'] = $entry_key;
-		$_POST['frm_action'] = 'create';
-
-		ob_start();
-		FrmEntriesController::process_entry();
-		$response = ob_get_contents();
-		ob_end_clean();
+		$response = $this->post_new_entry( $form, $entry_key );
 
 		if ( headers_sent() ) {
 			// since headers are sent by phpunit, we will get the js redirect
@@ -183,5 +177,62 @@ class WP_Test_FrmFormsController extends FrmUnitTest {
 
 		$response = FrmFormsController::show_form( $form->id ); // this is where the redirect happens
 		$this->assertContains( "window.location='http://example.com'", $response );
+	}
+
+	/**
+	 * @covers FrmFormsController::show_message_after_save
+	 */
+	function test_message_after_create() {
+		$this->run_message_after_create( 0 );
+	}
+
+	/**
+	 * @covers FrmFormsController::show_message_after_save
+	 */
+	function test_message_with_form_after_create() {
+		$this->run_message_after_create( 1 );
+	}
+
+	function run_message_after_create( $show_form = 0 ) {
+		$form = $this->factory->form->create_and_get( array(
+			'options' => array(
+				'success_action' => 'message',
+				'success_msg'    => 'Done!',
+				'show_form'      => $show_form,
+			),
+		) );
+		$this->assertEquals( $form->options['success_action'], 'message' );
+
+		$entry_key = 'submit-message';
+		$response = $this->post_new_entry( $form, $entry_key );
+
+		$this->assertEmpty( $response );
+
+		$created_entry = FrmEntry::get_id_by_key( $entry_key );
+		$this->assertNotEmpty( $created_entry, 'No entry found with key ' . $entry_key );
+
+		$response = FrmFormsController::show_form( $form->id ); // this is where the message is returned
+		$this->assertContains( '<div class="frm_message"><p>Done!</p>', $response );
+		$this->assertContains( 'frmFrontForm.scrollMsg(' . $form->id . ')', $response );
+
+		if ( $show_form ){
+			$this->assertContains( '<input type="hidden" name="form_id" value="' . $form->id . '" />', $response );
+		} else {
+			$this->assertNotContains( '<input type="hidden" name="form_id" value="' . $form->id . '" />', $response );
+		}
+	}
+
+	private function post_new_entry( $form, $entry_key ) {
+		$_POST = $this->factory->field->generate_entry_array( $form );
+		$_POST['item_key'] = $entry_key;
+		$_POST['frm_action'] = 'create';
+		$_POST['action'] = 'create';
+
+		ob_start();
+		FrmEntriesController::process_entry();
+		$response = ob_get_contents();
+		ob_end_clean();
+
+		return $response;
 	}
 }
