@@ -22,6 +22,7 @@ class FrmFieldText extends FrmFieldType {
 			'size'           => true,
 			'clear_on_focus' => true,
 			'format'         => true,
+			'invalid'        => true,
 		);
 	}
 }

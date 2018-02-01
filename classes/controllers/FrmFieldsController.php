@@ -696,11 +696,16 @@ class FrmFieldsController {
 	 */
 	private static function add_pattern_attribute( $field, array &$add_html ) {
 		$has_format = FrmField::is_option_true_in_array( $field, 'format' );
-		$format_field = $field['type'] == 'text' || ( $field['type'] == 'lookup' && $field['data_type'] == 'text' );
+		$format_field = FrmField::is_field_type( $field, 'text' );
+
 		if ( $field['type'] == 'phone' || ( $has_format && $format_field ) ) {
-			$format = FrmEntryValidate::phone_format( $field );
-			$format = substr( $format, 2, -1 );
-			$add_html['pattern'] = 'pattern="' . esc_attr( $format ) . '"';
+			$frm_settings = FrmAppHelper::get_settings();
+
+			if ( $frm_settings->use_html ) {
+				$format = FrmEntryValidate::phone_format( $field );
+				$format = substr( $format, 2, -1 );
+				$add_html['pattern'] = 'pattern="' . esc_attr( $format ) . '"';
+			}
 		}
 	}
 
