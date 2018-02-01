@@ -165,17 +165,23 @@ The field and form names and descriptions are all changed with in-place edit. Ju
 * Save a combined js file to use on the front-end with a fallback if the file fails to generate. This file is updated when the plugin is activated or updated.
 * A UI pick-me-up in preparation of things to come in 4.0.
 * New: Use CSS grids for better layouts. If you would like your column layouts to show in Internet Explorer, you'll need to turn on the old styling in the Formidable -> Global settings. The grids use a 12-column layout with classes that range from frm1 (1 column of 12) to frm12 (span all 12 columns). (Thanks for the feedback from our feedback group!)
-* Enhancement: Add frm_rtl class to forms with styles set to RTL for easier styling.
+* New: Search for fields by name, id, and key in the customization panel
 * Improved RTL styling in backend
-* Better a11y support: hidden labels where required, "for" tag on most labels, and link the field to its description for screenreaders.
+* Enhancement: Add frm_rtl class to forms with styles set to RTL for easier styling.
+* Enhancement: Customize the invalid message when a custom format is set on text fields
+* Better a11y/WCAG support: hidden labels where required, "for" tag on most labels, and link the field to its description for screenreaders.
 * Move form shortcodes from the sidebar to the form settings page
 * Change "field options" to "field settings" on the form builder page
 * Update the Print styling for the entries page
 * Remove frm_text_block class and do it by default. Radio buttons and checkboxes with wrapping text should look good by default.
 * Add a link in the footer to review Formidable
 * New: field object class to make it easy to make new field types. We don't have docs yet, but developers can take a look at the FrmFieldType class. But we've gone to great efforts to make sure fields done the old way will continue to function.
-* Add frm_output_single_style hook to add extra css into the generated stylesheet
-* Add frm_before_get_form hook for enqueueing form scripts
+* New hook: Add frm_output_single_style hook to add extra css into the generated stylesheet
+* New hook: Add frm_before_get_form hook for enqueueing form scripts
+* New hook: Add frm_enqueue_builder_scripts hook to load extra scripts on the form builder page
+* New hook: Add frm_show_entry_defaults hook to add extra atts to the frm_show_entry shortcode 
+* Tweak: Include 'original_default' in the field array for new entries so we can compare and prevent double processing later
+* Fix: quotation marks were being escaped in frm_form_attributes and frm_form_div_attributes hooks
 * Removed: The preview page option in the global settings is no longer used. The form preview page is now generated.
 * Removed: The placeholder fallback javascript for old versions of IE is gone. No need to give everyone extra scripts to load.
 * Deprecated the accordion javascript checkbox in global settings since it isn't used by the plugin. If you had this box checked, you'll still see it. Once you uncheck it the option will no longer appear.
@@ -197,10 +203,11 @@ The field and form names and descriptions are all changed with in-place edit. Ju
 * Enhancement: If a form creates posts and is set to not save entries, save the created post.
 * Enhancement: Run form install on an API route instead of the admin ajax route and make sure there won't be multiple instances of the install running at once.
 * Enhancement: Use the options instead of transients for checking for updates. Some types of caching store transients indefinitely.
-* Enhancement: Get the shortcodes for a view more concisely. Check for any numeric shortcode instead of checking the database for the field ids 
+* Enhancement: Get the shortcodes for a view more concisely. Check for any numeric shortcode instead of checking the database for the field ids
 * Tweak: Open files in the form upload field in a new tab
 * Tweak: Don't show the reports nav if the form has no entries
 * Tweak: Add .do-calculation class on a form to run calculations even if they are not on the current page of the form
+* Tweak: Add $atts with $atts['view'] to all pagination hooks
 * Fix: calculations in hidden fields inside of sections were not calculating
 * Fix: Add validation for the year range in date fields
 * Fix: Don't use conditional logic in form actions when the field isn't selected
@@ -212,6 +219,7 @@ The field and form names and descriptions are all changed with in-place edit. Ju
 * Fix: Do not process a shortcode that is inserted into a field.
 * Fix: Conditionals that check user meta were always returning true
 * Fix: Autocomplete for dynamic fields was too small
+* Fix: If a field includes regex, keep the slashes when the field is duplicated
 * Fix: Correctly check conditional logic when comparing 0 to blank.
 * Fix: Prevent double filtering shortcodes in a nested view
 * Fix: Allow a view to not be filtered on the same page as a filtered view
