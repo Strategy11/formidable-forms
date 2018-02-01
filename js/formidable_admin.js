@@ -37,6 +37,7 @@ function frmAdminBuildJS(){
 		if ( $link.hasClass('frm_confirming') ) {
 			return true;
 		} else {
+			e.stopPropagation();
 			e.preventDefault();
 			confirmLinkClick( $link );
 		}
