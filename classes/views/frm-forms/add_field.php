@@ -294,10 +294,12 @@ if ( $display['options'] ) {
                         }
 
 						if ( $display['invalid'] ) {
+							$hidden = FrmField::is_field_type( $field, 'text' ) && ! FrmField::is_option_true( $field, 'format' );
 						?>
-                            <p><label><?php esc_html_e( 'Invalid Format', 'formidable' ) ?></label>
-                                <input type="text" name="field_options[invalid_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['invalid'] ); ?>" />
-                            </p>
+						<p class="frm_invalid_msg<?php echo esc_attr( $field['id'] . ( $hidden ? ' frm_hidden' : '' ) ); ?>">
+							<label><?php esc_html_e( 'Invalid Format', 'formidable' ) ?></label>
+							<input type="text" name="field_options[invalid_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['invalid'] ); ?>" />
+						</p>
                         <?php
 						}
 

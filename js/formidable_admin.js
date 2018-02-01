@@ -630,30 +630,53 @@ function frmAdminBuildJS(){
 		});	
 	}
 
+	function toggleInvalidMsg(){
+		/*jshint validthis:true */
+		var typeDropdown, fieldType,
+			fieldId = this.id.replace('frm_format_', ''),
+			hasValue = this.value !== '';
+
+		typeDropdown = document.getElementsByName('field_options[type_'+ fieldId +']')[0];
+		fieldType = typeDropdown.options[typeDropdown.selectedIndex].value;
+
+		if ( fieldType === 'text' ) {
+			toggleValidationBox( hasValue, '.frm_invalid_msg' + fieldId );
+		}
+	}
+
 	function markRequired(){
 		/*jshint validthis:true */
 		var thisid = this.id.replace('frm_', '');
 		var field_id = thisid.replace('req_field_', '');
-		var $reqDetails = jQuery('.frm_required_details'+field_id);
 		var checked = this.checked;
+
+		toggleValidationBox( checked, '.frm_required_details' + field_id );
 
 		var atitle = 'Click to Mark as Not Required';
 		if(checked){
-			$reqDetails.fadeIn('fast').closest('.frm_validation_msg').fadeIn('fast');
 			var $reqBox = jQuery('input[name="field_options[required_indicator_'+field_id+']"]');
 			if($reqBox.val() === '') {
 				$reqBox.val('*');
 			}
 		}else{
 			atitle='Click to Mark as Required';
-			var v = $reqDetails.fadeOut('fast').closest('.frm_validation_box').children(':not(.frm_required_details'+field_id+'):visible').length;
-			if(v === 0) {
-				$reqDetails.closest('.frm_validation_msg').fadeOut('fast');
-			}
 		}
 		jQuery(document.getElementById(thisid)).removeClass('frm_required0 frm_required1').addClass('frm_required'+(checked ? 1 : 0)).attr('title', atitle);
 	}
-	
+
+	function toggleValidationBox( hasValue, messageClass ) {
+		$msg = jQuery( messageClass );
+		if ( hasValue ) {
+			$msg.fadeIn('fast').closest('.frm_validation_msg').fadeIn('fast');
+		}else{
+			//Fade out validation options
+			var v = $msg.fadeOut('fast').closest('.frm_validation_box').children(':not('+ messageClass +'):visible').length;
+			if (v === 0) {
+				$msg.closest('.frm_validation_msg').fadeOut('fast');
+			}
+		}
+	}
+
 	function clickRequired(){
 		/*jshint validthis:true */
 		jQuery(document.getElementById('frm_'+this.id)).click();
@@ -682,13 +705,11 @@ function frmAdminBuildJS(){
 		/*jshint validthis:true */
 		var field_id = jQuery(this).closest('li').data('fid');
 		var val = jQuery(this).val();
-		var $confDetails = jQuery('.frm_conf_details'+field_id);
 		var $thisField = jQuery(document.getElementById('frm_field_id_'+field_id));
-		
-		if(val !== ''){
-			//Fade in confirmation field and validation option
-			$confDetails.fadeIn('fast').closest('.frm_validation_msg').fadeIn('fast');
 
+		toggleValidationBox( val !== '', '.frm_conf_details' + field_id );
+
+		if(val !== ''){
 			//Add default validation message if empty
 			var valMsg = jQuery('.frm_validation_box .frm_conf_details'+field_id+' input');
 			if(valMsg.val() === ''){
@@ -704,11 +725,6 @@ function frmAdminBuildJS(){
 				$thisField.removeClass('frm_conf_inline').addClass('frm_conf_below');
 			}
 		}else{
-			//Fade out confirmation field and validation option
-			var v = $confDetails.fadeOut('fast').closest('.frm_validation_box').children(':not(.frm_conf_details'+field_id+'):visible').length;
-			if(v === 0){
-				$confDetails.closest('.frm_validation_msg').fadeOut('fast');
-			}
 			setTimeout(function(){
 				$thisField.removeClass('frm_conf_inline frm_conf_below');
 			},200);
@@ -2814,6 +2830,7 @@ function frmAdminBuildJS(){
 			jQuery(document.getElementById('frm-insert-fields')).on('click', '.frm_add_field', addFieldClick);
 			$newFields.on('click', '.frm_duplicate_icon', duplicateField);
 			$newFields.on('click', '.use_calc', popCalcFields);
+			$newFields.on('change', 'input.frm_format_opt', toggleInvalidMsg);
 			$newFields.on('click', 'input.frm_req_field', markRequired);
 			$newFields.on('click', 'a.frm_req_field', clickRequired);
 			$newFields.on('click', '.frm_mark_unique', markUnique);

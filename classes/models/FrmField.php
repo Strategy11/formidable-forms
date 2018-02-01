@@ -890,7 +890,7 @@ class FrmField {
 	 * @return boolean true if field type is radio or Dynamic radio
 	 */
 	public static function is_radio( $field ) {
-		return self::is_checkbox_or_radio( $field, 'radio' );
+		return self::is_field_type( $field, 'radio' );
 	}
 
 	/**
@@ -902,7 +902,7 @@ class FrmField {
 	 * @return boolean true if field type is checkbox or Dynamic checkbox
 	 */
 	public static function is_checkbox( $field ) {
-		return self::is_checkbox_or_radio( $field, 'checkbox' );
+		return self::is_field_type( $field, 'checkbox' );
 	}
 
 	/**
@@ -911,10 +911,10 @@ class FrmField {
 	 * @since 3.0
 	 *
 	 * @param array|object $field
-	 * @param string $is_type radio or checkbox
+	 * @param string $is_type Options include radio, checkbox, text
 	 * @return boolean true if field type is checkbox or Dynamic checkbox
 	 */
-	private static function is_checkbox_or_radio( $field, $is_type ) {
+	public static function is_field_type( $field, $is_type ) {
 		$field_type = self::get_original_field_type( $field );
 		$data_type = self::get_option( $field, 'data_type' );
 
