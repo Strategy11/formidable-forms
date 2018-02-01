@@ -59,20 +59,25 @@ class WP_Test_FrmFieldsAjax extends FrmAjaxUnitTest {
 		wp_set_current_user( $this->user_id );
 		$this->assertTrue(is_numeric($this->form_id));
 
-		$text_field = self::get_field_by_key( 'text-field' );
+		$format = '^([a-zA-Z]\d{4})$';
+		$original_field = $this->factory->field->create_and_get( array(
+			'form_id'       => $this->form_id,
+			'type'          => 'text',
+			'field_options' => array(
+				'format'    => $format,
+				'in_section' => 0,
+			),
+		) );
+		$this->assertEquals( $format, $original_field->field_options['format'] );
 
 		$_POST = array(
-			'action' => 'frm_duplicate_field',
-			'nonce' => wp_create_nonce('frm_ajax'),
-			'field_id' => $text_field->id,
-			'form_id' => $this->form_id,
+			'action'   => 'frm_duplicate_field',
+			'nonce'    => wp_create_nonce('frm_ajax'),
+			'field_id' => $original_field->id,
+			'form_id'  => $original_field->form_id,
 		);
 
-		try {
-			$this->_handleAjax( 'frm_duplicate_field' );
-		} catch ( WPAjaxDieContinueException $e ) {
-			unset( $e );
-		}
+		$response = $this->trigger_action( 'frm_duplicate_field' );
 
 		global $wpdb;
 		$newest_field_id = $wpdb->insert_id;
@@ -82,6 +87,7 @@ class WP_Test_FrmFieldsAjax extends FrmAjaxUnitTest {
 		// make sure the field exists
 		$field = FrmField::getOne( $newest_field_id );
 		$this->assertTrue( is_object( $field ) );
+		$this->assertEquals( $format, $field->field_options['format'] );
 
 		self::check_in_section_variable( $field, 0 );
 	}

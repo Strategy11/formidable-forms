@@ -172,6 +172,8 @@ class FrmField {
             $new_values = apply_filters('frm_duplicated_field', $new_values);
         }
 
+		self::preserve_format_option_backslashes( $new_values );
+
 		foreach ( $new_values as $k => $v ) {
             if ( is_array( $v ) ) {
 				$new_values[ $k ] = serialize( $v );
