@@ -540,21 +540,17 @@ if ( ! empty( $important ) ) {
 
 <?php if ( $check_align === 'block' ) { ?>
 	.<?php echo esc_html( $style_class ) ?> .frm_checkbox label{
-		display: inline-flex;
-	}
-
-	.<?php echo esc_html( $style_class ) ?> .frm_checkbox label img{
-		align-self: center;
+		display: block;
+		padding-left: 20px;
+		text-indent: -20px;
 	}
 <?php } ?>
 
 <?php if ( $radio_align === 'block' ) { ?>
 	.<?php echo esc_html( $style_class ) ?> .frm_radio label{
-		display: inline-flex;
-	}
-
-	.<?php echo esc_html( $style_class ) ?> .frm_radio label img{
-		align-self: center;
+		display: block;
+		padding-left: 20px;
+		text-indent: -20px;
 	}
 <?php } ?>
 
