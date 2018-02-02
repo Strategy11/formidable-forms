@@ -58,8 +58,8 @@
 <div class="frm_form_field form-field frm3 <?php echo esc_attr( $pos_class ) ?> frm_lite_style">
 	<label class="frm_primary_label"><?php esc_html_e( 'Radio Buttons', 'formidable' ) ?></label>
 	<div class="frm_opt_container">
-		<div class="frm_radio"><input type="radio" /><label><?php esc_html_e( 'Option 1', 'formidable' ) ?></label></div>
-		<div class="frm_radio"><input type="radio" /><label><?php esc_html_e( 'Option 2', 'formidable' ) ?></label></div>
+		<div class="frm_radio"><label><input type="radio" /><?php esc_html_e( 'Option 1', 'formidable' ) ?></label></div>
+		<div class="frm_radio"><label><input type="radio" /><?php esc_html_e( 'Option 2', 'formidable' ) ?></label></div>
 	</div>
 </div>
 

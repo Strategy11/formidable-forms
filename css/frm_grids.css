@@ -11,6 +11,9 @@
 	width: 1px;
 	word-wrap: normal !important; /* many screen reader and browser combinations announce broken words as they would appear visually */
 }
+.frm_screen_reader.frm_hidden{
+	display:initial;
+}
 
 .frm_clear_none{
     clear:none;

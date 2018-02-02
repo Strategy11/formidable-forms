@@ -1054,7 +1054,7 @@ class FrmFieldsHelper {
 
 		$label = isset( $args['opt_label'] ) ? $args['opt_label'] : $args['field']['name'];
 
-		?><label for="<?php echo esc_attr( $other_id ) ?>" class="frm_screen_reader"><?php
+		?><label for="<?php echo esc_attr( $other_id ) ?>" class="frm_screen_reader frm_hidden"><?php
 		echo esc_html( $label );
 		?></label><input type="text" id="<?php echo esc_attr( $other_id ) ?>" class="<?php echo sanitize_text_field( implode( ' ', $classes ) ) ?>" <?php
 		echo ( $args['read_only'] ? ' readonly="readonly" disabled="disabled"' : '' );
