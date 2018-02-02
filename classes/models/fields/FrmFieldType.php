@@ -461,7 +461,7 @@ DEFAULT_HTML;
 	}
 
 	public function get_label_class() {
-		return $this->get_field_column('label');
+		return ' frm_primary_label';
 	}
 
 	/**
