@@ -1249,7 +1249,7 @@ table.frm_name_value textarea {
 .frm_border_light{border:solid 1px #ddd;}
 
 .form-table .form-field input, .form-table .form-field .quicktags-toolbar input,
-.form-field input, .form-field textarea, .form-field .quicktags-toolbar input{width:auto;}
+.form-field input, .form-field .quicktags-toolbar input{width:auto;}
 .frm_pro_installed{margin-top:0.5em;}
 .frm_aff_link{float:right;}
 .frm_select_box{text-align:center;font-weight:bold;width:100%;}
