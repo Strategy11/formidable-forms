@@ -93,7 +93,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	protected function load_field_scripts( $args ) {
 		$api_js_url = $this->api_url();
 
-		wp_register_script( 'recaptcha-api', $api_js_url, array( 'formidable' ), true );
+		wp_register_script( 'recaptcha-api', $api_js_url, array( 'formidable' ), '', true );
 		wp_enqueue_script( 'recaptcha-api' );
 	}
 
