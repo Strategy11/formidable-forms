@@ -59,7 +59,7 @@ class FrmMigrate {
 		$frm_vars['doing_upgrade'] = false;
 
 		/**** update the styling settings ****/
-		if ( is_admin() && function_exists( 'get_filesystem_method' ) ) {
+		if ( function_exists( 'get_filesystem_method' ) ) {
 			$frm_style = new FrmStyle();
 			$frm_style->update( 'default' );
 		}

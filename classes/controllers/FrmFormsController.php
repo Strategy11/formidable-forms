@@ -1189,6 +1189,8 @@ class FrmFormsController {
             return __( 'Please select a valid form', 'formidable' );
         }
 
+		FrmAppController::maybe_update_styles();
+
 		add_action( 'frm_load_form_hooks', 'FrmHooksController::trigger_load_form_hooks' );
         FrmAppHelper::trigger_hook_load( 'form', $form );
 

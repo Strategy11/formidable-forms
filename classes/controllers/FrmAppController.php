@@ -352,6 +352,17 @@ class FrmAppController {
 	}
 
 	/**
+	 * Check if the styles are updated when a form is loaded on the front-end
+	 *
+	 * @since 3.0.1
+	 */
+	public static function maybe_update_styles() {
+		if ( self::needs_update() ) {
+			self::network_upgrade_site();
+		}
+	}
+
+	/**
 	 * @since 3.0
 	 */
 	public static function create_rest_routes() {
