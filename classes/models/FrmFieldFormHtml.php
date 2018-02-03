@@ -376,7 +376,10 @@ class FrmFieldFormHtml {
 		$classes = isset( $this->pass_args['errors'][ 'field' . $this->field_id ] ) ? ' frm_blank_field' : '';
 
 		// Add label position class
-		$classes .= ' frm_' . $this->field_obj->get_field_column('label') . '_container';
+		$settings = $this->field_obj->display_field_settings();
+		if ( isset( $settings['label_position'] ) && $settings['label_position'] ) {
+			$classes .= ' frm_' . $this->field_obj->get_field_column('label') . '_container';
+		}
 
 		// Add CSS layout classes
 		$extra_classes = $this->field_obj->get_field_column('classes');
