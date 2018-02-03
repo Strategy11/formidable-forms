@@ -980,7 +980,10 @@ a.frm-option-icon:hover::before{
 	box-shadow:none;
 	width:auto;
 }
-.frm_form_fields select{width:auto;}
+.frm_form_fields select{
+	width:auto;
+	max-width:100%;
+}
 input[type="radio"],
 input[type="checkbox"]{
 	width:16px;
