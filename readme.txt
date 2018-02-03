@@ -4,7 +4,7 @@ Tags: contact form, form builder, custom form, forms, form, form maker, form cre
 Requires at least: 4.4
 Tested up to: 4.9
 Requires PHP: 5.3
-Stable tag: 3.0
+Stable tag: 3.0.01
 
 The best WordPress form plugin for contact forms, surveys and more. Make forms a breeze with a drag and drop form builder and form style generator.
 
@@ -159,6 +159,18 @@ The field and form names and descriptions are all changed with in-place edit. Ju
 [See more FAQs](https://formidableforms.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 3.0.01 =
+* Fix: Trigger style update when a form is loaded instead of only when an admin page is visited
+* Fix: A few various form styling and layout fixes
+* Fix: Prevent screenreader text for accessibility from showing on sites with older cached css
+* Fix: Prevent conflict with Divi when a form shortcode with a recaptcha is included in page editor
+* Fix: Use 'readfile' instead of 'include' for css files for extra safety precautions
+* Fix: Load the field options before frm_new_fields_vars hook for reverse compatibility
+* **Pro Version Forms**
+* New: Use toggle fields in calculations and conditional logic
+* Fix: Some conditional logic based on empty radio fields wasn't functioning
+* Fix: Require time fields at the correct times
+
 = 3.0 =
 * Move features into the free form builder: redirect and show page after save, javascript validation, field format options with HTML5 pattern validation, and phone number, number, user ID, hidden field, and HTML fields
 * Possibly breaking change: Remove code that has been deprecated since before v2.02

@@ -842,10 +842,6 @@ BEFORE_HTML;
 	 */
 	public static function css_classes() {
 		$classes = array(
-			'frm_inline'     => array(
-				'label'      => __( 'Inline', 'formidable' ),
-				'title'      => __( 'Align fields in a row without a specific width.', 'formidable' ),
-			),
 			'frm_first'      => array(
 				'label'      => __( 'First', 'formidable' ),
 				'title'      => __( 'Add this to the first field in each row along with a width. ie frm_first frm4', 'formidable' ),
