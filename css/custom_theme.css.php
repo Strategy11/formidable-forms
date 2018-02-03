@@ -535,16 +535,17 @@ select.frm_loading_lookup{
 .frm_form_field.frm_right_container,
 .frm_form_field.frm_left_container{
     display: grid;
-    grid-template-columns: min-content auto;
+    grid-template-columns: 25% auto;
 	width:100%;
+	grid-auto-rows: min-content;
 }
 
 .frm_form_field.frm_right_container{
-    grid-template-columns: auto min-content;
+    grid-template-columns: auto 25%;
 }
 
 .frm_form_field.frm_inline_container{
-    grid-template-columns: minmax(min-content, max-content) auto;
+    grid-template-columns: repeat(2, minmax(auto, max-content) );
 }
 
 .frm_form_field.frm_inline_container label.frm_primary_label,
@@ -552,7 +553,6 @@ select.frm_loading_lookup{
 .frm_form_field.frm_left_container label.frm_primary_label{
 	margin-right:10px;
 	grid-row-end:span 2;
-	align-self: center;
 }
 
 .frm_form_field.frm_left_container label.frm_primary_label{

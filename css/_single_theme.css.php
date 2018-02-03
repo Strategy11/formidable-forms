@@ -203,6 +203,18 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 }
 <?php } ?>
 
+.<?php echo esc_html( $style_class ); ?> .frm_form_field.frm_left_container{
+    grid-template-columns: <?php echo esc_html( $width ) ?> auto;
+}
+
+.<?php echo esc_html( $style_class ); ?> .frm_form_field.frm_right_container{
+    grid-template-columns: auto <?php echo esc_html( $width ) ?>;
+}
+
+.frm_form_field.frm_right_container{
+    grid-template-columns: auto 25%;
+}
+
 .<?php echo esc_html( $style_class ) ?> .frm_inline_container.frm_dynamic_select_container .frm_opt_container{
     display:inline<?php echo esc_html( $important ) ?>;
 }

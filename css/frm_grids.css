@@ -36,9 +36,9 @@
 .frm_form_fields .frm_section_heading,
 .frm_form_fields .frm_fields_container{
 	display:grid;
-	grid-template-columns: repeat(12, 1fr);
+	grid-template-columns: repeat(12, 6.5%);
 	grid-auto-rows: max-content;
-	grid-gap: 0 2.5%;
+	grid-gap: 0 2%;
 }
 
 .frm_combo_inputs_container > *,
@@ -180,7 +180,7 @@
 .frm_form_field.frm_right_inline,
 .frm_form_field.frm_last_inline{
     width:auto;
-	grid-column-end: auto;
+	grid-column-end: span 2;
 }
 
 .frm12,
@@ -262,7 +262,7 @@
 	.frm_grid_container,
 	.frm_form_fields .frm_section_heading,
 	.frm_form_fields .frm_fields_container{
-		grid-template-columns: repeat(6, 1fr);
+		grid-template-columns: repeat(6, 13%);
 	}
 
 	.frm_combo_inputs_container > *,
