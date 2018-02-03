@@ -184,7 +184,7 @@ legend.frm_hidden{
 
 .frm_inline_form .frm_form_field,
 .frm_inline_form .frm_submit{
-	grid-column-end: span 1;
+	grid-column: span 1 / span 1;
 }
 
 .frm_inline_form .frm_submit{
@@ -552,13 +552,13 @@ select.frm_loading_lookup{
 .frm_form_field.frm_right_container label.frm_primary_label,
 .frm_form_field.frm_left_container label.frm_primary_label{
 	margin-right:10px;
-	grid-row-end:span 2;
+	grid-row:span 2/span 2;
 	padding-top:4px;
 }
 
 .frm_form_field.frm_left_container label.frm_primary_label{
 	grid-column:1;
-	grid-row-end:span 2; /* cover a row for the description */
+	grid-row:span 2/span 2; /* cover a row for the description */
 }
 
 .frm_form_field.frm_right_container label.frm_primary_label{
