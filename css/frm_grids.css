@@ -68,6 +68,16 @@
 	grid-column-start:1;
 }
 
+.frm_form_field.frm_left_inline,
+.frm_form_field.frm_first_inline,
+.frm_form_field.frm_inline,
+.frm_submit.frm_inline,
+.frm_form_field.frm_right_inline,
+.frm_form_field.frm_last_inline{
+    width:auto;
+	grid-column-end: span 2;
+}
+
 .frm_form_field.frm_three_fifths, /* 5ths deprecated */
 .frm_form_field.frm6,
 .frm_submit.frm6,
@@ -171,16 +181,6 @@
 .frm_form_field.frm11,
 .frm_submit.frm11{
 	grid-column-end:span 11;
-}
-
-.frm_form_field.frm_left_inline,
-.frm_form_field.frm_first_inline,
-.frm_form_field.frm_inline,
-.frm_submit.frm_inline,
-.frm_form_field.frm_right_inline,
-.frm_form_field.frm_last_inline{
-    width:auto;
-	grid-column-end: span 2;
 }
 
 .frm12,
