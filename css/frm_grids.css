@@ -333,6 +333,7 @@
 }
 
 @media only screen and (max-width: 600px) {
+	.frm_fields_container > .frm_submit,
 	.frm_grid_container > .frm_form_field,
 	.frm_fields_container > .frm_form_field{
 		grid-column: 1 / span 12 !important;
