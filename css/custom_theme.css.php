@@ -527,7 +527,7 @@ select.frm_loading_lookup{
     color: transparent !important;
 }
 
-<?php include( dirname( __FILE__ ) . '/frm_grids.css' ); ?>
+<?php readfile( dirname( __FILE__ ) . '/frm_grids.css' ); ?>
 
 /* Left and right label styling for non-Formidable styling */
 
@@ -553,6 +553,7 @@ select.frm_loading_lookup{
 .frm_form_field.frm_left_container label.frm_primary_label{
 	margin-right:10px;
 	grid-row-end:span 2;
+	padding-top:4px;
 }
 
 .frm_form_field.frm_left_container label.frm_primary_label{
@@ -789,6 +790,12 @@ select.frm_loading_lookup{
     margin-right:1%;
 }
 
+.frm_form_field.frm_inline_container .frm_opt_container,
+.frm_form_field.frm_right_container .frm_opt_container,
+.frm_form_field.frm_left_container .frm_opt_container{
+	padding-top:4px;
+}
+
 .with_frm_style .frm_inline_container.frm_grid_first label.frm_primary_label,
 .with_frm_style .frm_inline_container.frm_grid label.frm_primary_label,
 .with_frm_style .frm_inline_container.frm_grid_odd label.frm_primary_label,
@@ -979,7 +986,7 @@ select.frm_loading_lookup{
 	font-style:normal;
 }
 
-<?php include( FrmAppHelper::plugin_path() . '/css/font_icons.css' ); ?>
+<?php readfile( FrmAppHelper::plugin_path() . '/css/font_icons.css' ); ?>
 <?php do_action( 'frm_include_front_css', compact( 'defaults' ) ); ?>
 
 /* Responsive */
