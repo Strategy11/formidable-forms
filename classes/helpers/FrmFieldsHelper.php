@@ -90,13 +90,13 @@ class FrmFieldsHelper {
 		// Track the original field's type
 		$field_array['original_type'] = isset( $field->field_options['original_type'] ) ? $field->field_options['original_type'] : $field->type;
 
+		self::prepare_field_options_for_display( $field_array, $field, $args );
+
 		if ( $args['action'] == 'edit' ) {
 			$field_array = apply_filters( 'frm_setup_edit_fields_vars', $field_array, $field, $args['entry_id'], $args );
 		} else {
 			$field_array = apply_filters( 'frm_setup_new_fields_vars', $field_array, $field, $args );
 		}
-
-		self::prepare_field_options_for_display( $field_array, $field, $args );
 	}
 
 	/**
