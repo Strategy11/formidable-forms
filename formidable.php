@@ -82,3 +82,5 @@ function frm_class_autoloader( $class_name, $filepath ) {
 		require( $filepath );
 	}
 }
+
+register_activation_hook( __FILE__, 'FrmAppController::activation_install' );
