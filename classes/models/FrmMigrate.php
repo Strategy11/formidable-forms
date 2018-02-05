@@ -44,8 +44,6 @@ class FrmMigrate {
 			/***** SAVE DB VERSION *****/
 			update_option('frm_db_version', $frm_db_version);
 
-			FrmAppHelper::save_combined_js();
-
 			/**** ADD/UPDATE DEFAULT TEMPLATES ****/
 			FrmXMLController::add_default_templates();
 
@@ -57,6 +55,8 @@ class FrmMigrate {
 		do_action('frm_after_install');
 
 		$frm_vars['doing_upgrade'] = false;
+
+		FrmAppHelper::save_combined_js();
 
 		/**** update the styling settings ****/
 		if ( function_exists( 'get_filesystem_method' ) ) {
