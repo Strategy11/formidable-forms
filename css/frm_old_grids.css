@@ -2,6 +2,15 @@
     clear:both;
 }
 
+.frm_inline_form .frm_form_field.form-field{
+    margin-right:2.5%;
+	display:inline-block;
+}
+
+.frm_inline_form .frm_submit{
+	display:inline-block;
+}
+
 .frm_form_field.frm2,
 .frm_submit.frm2,
 .frm_form_field.frm3,
@@ -169,6 +178,9 @@
     width:10.31%;
 }
 
+.frm_form_field.frm_inline_container,
+.frm_form_field.frm_right_container,
+.frm_form_field.frm_left_container,
 .frm_form_field.frm_left_inline,
 .frm_form_field.frm_first_inline,
 .frm_form_field.frm_inline,
