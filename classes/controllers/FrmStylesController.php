@@ -86,9 +86,6 @@ class FrmStylesController {
 
 			if ( ! empty( $css ) ) {
 				$css = (array) $css;
-				if ( $frm_settings->old_css ) {
-					$css['frm-old'] = FrmAppHelper::plugin_url() . '/css/frm_old_grids.css';
-				}
 
 				$version = FrmAppHelper::plugin_version();
 
@@ -445,7 +442,6 @@ class FrmStylesController {
         $frm_settings = FrmAppHelper::get_settings();
         if ( $frm_settings->load_style != 'none' ) {
             wp_enqueue_style( 'formidable' );
-			wp_enqueue_style( 'frm-old' );
             $frm_vars['css_loaded'] = true;
         }
     }

@@ -86,7 +86,7 @@ class FrmSettings {
             'jquery_css' => false,
             'accordion_js' => false,
 			'fade_form' => false,
-			'old_css'   => false,
+			'old_css'   => true,
 
 			're_multi'  => 0,
 
@@ -197,6 +197,12 @@ class FrmSettings {
         $this->update_roles($params);
 
         do_action( 'frm_update_settings', $params );
+
+		if ( function_exists( 'get_filesystem_method' ) ) {
+			// save styling settings in case fallback setting changes
+			$frm_style = new FrmStyle();
+			$frm_style->update( 'default' );
+		}
     }
 
 	private function update_settings( $params ) {
