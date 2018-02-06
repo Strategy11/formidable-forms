@@ -128,10 +128,9 @@ class FrmStylesController {
 	}
 
 	private static function get_url_to_custom_style( &$stylesheet_urls ) {
-		$uploads = FrmStylesHelper::get_upload_base();
-		$saved_css_path = '/formidable/css/formidablepro.css';
-		if ( is_readable( $uploads['basedir'] . $saved_css_path ) ) {
-			$url = $uploads['baseurl'] . $saved_css_path;
+		$file_name = '/css/formidableforms.css';
+		if ( is_readable( FrmAppHelper::plugin_path() . $file_name ) ) {
+			$url = FrmAppHelper::plugin_url() . $file_name;
 		} else {
 			$url = admin_url( 'admin-ajax.php?action=frmpro_css' );
 		}
