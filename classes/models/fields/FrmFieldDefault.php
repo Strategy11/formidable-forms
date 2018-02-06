@@ -31,7 +31,7 @@ class FrmFieldDefault extends FrmFieldType {
 		ob_end_clean();
 
 		if ( empty( $input_html ) ) {
-			echo $this->builder_text_field();
+			echo $this->builder_text_field( $name );
 		} else {
 			echo $input_html;
 		}
