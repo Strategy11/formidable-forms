@@ -477,6 +477,7 @@ class FrmField {
             $fields = array();
             $count = 0;
             foreach ( $results as $result ) {
+				$count++;
 				$fields[ $result->id ] = $result;
                 if ( ! empty($limit) && $count >= $limit ) {
                     break;
