@@ -507,8 +507,12 @@ if ( ! empty( $important ) ) {
 .<?php echo esc_html( $style_class ) ?> .frm_loading_form .frm_button_submit:before {
 	border-bottom-color: <?php echo esc_html( $submit_text_color . $important ) ?>;
 	border-right-color: <?php echo esc_html( $submit_text_color . $important ) ?>;
-	<?php if ( $submit_height !== 'auto' ) { ?>max-height:<?php echo esc_html( $submit_height ) ?>;<?php } ?>
-	<?php if ( $submit_width !== 'auto' ) { ?>max-width:<?php echo esc_html( $submit_width ) ?>;<?php } ?>
+	<?php if ( $submit_height !== 'auto' ) { ?>
+		max-height:<?php echo esc_html( $submit_height ) ?>;
+	<?php } ?>
+	<?php if ( $submit_width !== 'auto' ) { ?>
+		max-width:<?php echo esc_html( $submit_width ) ?>;
+	<?php } ?>
 }
 <?php
     }
