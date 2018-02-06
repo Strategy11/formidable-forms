@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Formidable v2.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-01 17:22+0000\n"
+"POT-Creation-Date: 2018-02-06 20:23+0000\n"
 "POT-Revision-Date: Tue Sep 26 2017 16:06:46 GMT-0600 (MDT)\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: \n"
@@ -73,7 +73,7 @@ msgid ""
 "running the free version and remove this message."
 msgstr ""
 
-#: classes/controllers/FrmAppController.php:479
+#: classes/controllers/FrmAppController.php:487
 #, php-format
 msgid ""
 "Help us spread the %1$sFormidable Forms%2$s love with %3$s %5$s on WordPress."
@@ -195,7 +195,7 @@ msgid "Form was Successfully Updated"
 msgstr ""
 
 #: classes/controllers/FrmFormsController.php:250
-#: classes/controllers/FrmFormsController.php:1643
+#: classes/controllers/FrmFormsController.php:1645
 msgid "Form template was Successfully Created"
 msgstr ""
 
@@ -272,7 +272,7 @@ msgid "Key"
 msgstr ""
 
 #: classes/controllers/FrmFormsController.php:651
-#: classes/controllers/FrmStylesController.php:375
+#: classes/controllers/FrmStylesController.php:371
 #: classes/views/styles/_sample_form.php:17 classes/views/styles/manage.php:16
 msgid "Form Title"
 msgstr ""
@@ -378,15 +378,15 @@ msgid "Abnormal HTML characters prevented your form from saving correctly"
 msgstr ""
 
 #: classes/controllers/FrmFormsController.php:1189
-#: classes/controllers/FrmFormsController.php:1201
+#: classes/controllers/FrmFormsController.php:1203
 msgid "Please select a valid form"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1422
+#: classes/controllers/FrmFormsController.php:1424
 msgid "Please wait while you are redirected."
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1456
+#: classes/controllers/FrmFormsController.php:1458
 #, php-format
 msgid "%1$sClick here%2$s if you are not automatically redirected."
 msgstr ""
@@ -431,58 +431,58 @@ msgstr ""
 msgid "Edit Style"
 msgstr ""
 
-#: classes/controllers/FrmStylesController.php:211
-#: classes/controllers/FrmStylesController.php:308
+#: classes/controllers/FrmStylesController.php:207
+#: classes/controllers/FrmStylesController.php:304
 msgid "Your styling settings have been saved."
 msgstr ""
 
-#: classes/controllers/FrmStylesController.php:270
+#: classes/controllers/FrmStylesController.php:266
 msgid "Your form styles have been saved."
 msgstr ""
 
-#: classes/controllers/FrmStylesController.php:374
+#: classes/controllers/FrmStylesController.php:370
 #: classes/models/FrmPointers.php:325 classes/views/frm-forms/settings.php:30
 #: classes/views/frm-settings/form.php:17
 msgid "General"
 msgstr ""
 
-#: classes/controllers/FrmStylesController.php:376
+#: classes/controllers/FrmStylesController.php:372
 #: classes/views/frm-forms/mb_html_tab.php:49
 #: classes/views/frm-forms/settings.php:243
 msgid "Form Description"
 msgstr ""
 
-#: classes/controllers/FrmStylesController.php:377
+#: classes/controllers/FrmStylesController.php:373
 msgid "Field Labels"
 msgstr ""
 
-#: classes/controllers/FrmStylesController.php:378
+#: classes/controllers/FrmStylesController.php:374
 #: classes/views/frm-forms/mb_html_tab.php:13
 msgid "Field Description"
 msgstr ""
 
-#: classes/controllers/FrmStylesController.php:379
+#: classes/controllers/FrmStylesController.php:375
 msgid "Field Colors"
 msgstr ""
 
-#: classes/controllers/FrmStylesController.php:380
+#: classes/controllers/FrmStylesController.php:376
 #: classes/views/frm-forms/add_field.php:102
 msgid "Field Settings"
 msgstr ""
 
-#: classes/controllers/FrmStylesController.php:381
+#: classes/controllers/FrmStylesController.php:377
 msgid "Check Box & Radio Fields"
 msgstr ""
 
-#: classes/controllers/FrmStylesController.php:382
+#: classes/controllers/FrmStylesController.php:378
 msgid "Buttons"
 msgstr ""
 
-#: classes/controllers/FrmStylesController.php:383
+#: classes/controllers/FrmStylesController.php:379
 msgid "Form Messages"
 msgstr ""
 
-#: classes/controllers/FrmStylesController.php:585
+#: classes/controllers/FrmStylesController.php:580
 #: classes/views/frm-forms/mb_insert_fields.php:2
 msgid "Click to toggle"
 msgstr ""
@@ -1098,7 +1098,7 @@ msgid "Updated By"
 msgstr ""
 
 #: classes/helpers/FrmCSVExportHelper.php:130
-#: classes/helpers/FrmFormsHelper.php:926
+#: classes/helpers/FrmFormsHelper.php:922
 #: classes/helpers/FrmFormsListHelper.php:363
 msgid "Draft"
 msgstr ""
@@ -2153,7 +2153,7 @@ msgid "Move Form to Trash"
 msgstr ""
 
 #: classes/helpers/FrmFormsHelper.php:824
-#: classes/helpers/FrmFormsHelper.php:927
+#: classes/helpers/FrmFormsHelper.php:923
 #: classes/helpers/FrmFormsListHelper.php:180
 msgid "Trash"
 msgstr ""
@@ -2176,92 +2176,84 @@ msgid "Delete form & entries?"
 msgstr ""
 
 #: classes/helpers/FrmFormsHelper.php:846
-msgid "Inline"
-msgstr ""
-
-#: classes/helpers/FrmFormsHelper.php:847
-msgid "Align fields in a row without a specific width."
-msgstr ""
-
-#: classes/helpers/FrmFormsHelper.php:850
 msgid "First"
 msgstr ""
 
-#: classes/helpers/FrmFormsHelper.php:851
+#: classes/helpers/FrmFormsHelper.php:847
 msgid ""
 "Add this to the first field in each row along with a width. ie frm_first frm4"
 msgstr ""
 
-#: classes/helpers/FrmFormsHelper.php:853
+#: classes/helpers/FrmFormsHelper.php:849
 #: classes/helpers/FrmStylesHelper.php:116
 msgid "Right"
 msgstr ""
 
-#: classes/helpers/FrmFormsHelper.php:855
+#: classes/helpers/FrmFormsHelper.php:851
 msgid "Total"
 msgstr ""
 
-#: classes/helpers/FrmFormsHelper.php:856
+#: classes/helpers/FrmFormsHelper.php:852
 msgid ""
 "Add this to a read-only field to display the text in bold without a border "
 "or background."
 msgstr ""
 
-#: classes/helpers/FrmFormsHelper.php:858
+#: classes/helpers/FrmFormsHelper.php:854
 msgid "First Grid Row"
 msgstr ""
 
-#: classes/helpers/FrmFormsHelper.php:859
+#: classes/helpers/FrmFormsHelper.php:855
 msgid "Even Grid Row"
 msgstr ""
 
-#: classes/helpers/FrmFormsHelper.php:860
+#: classes/helpers/FrmFormsHelper.php:856
 msgid "Odd Grid Row"
 msgstr ""
 
-#: classes/helpers/FrmFormsHelper.php:862
+#: classes/helpers/FrmFormsHelper.php:858
 msgid "2 Col Options"
 msgstr ""
 
-#: classes/helpers/FrmFormsHelper.php:863
+#: classes/helpers/FrmFormsHelper.php:859
 msgid "Put your radio button or checkbox options into two columns."
 msgstr ""
 
-#: classes/helpers/FrmFormsHelper.php:866
+#: classes/helpers/FrmFormsHelper.php:862
 msgid "3 Col Options"
 msgstr ""
 
-#: classes/helpers/FrmFormsHelper.php:867
+#: classes/helpers/FrmFormsHelper.php:863
 msgid "Put your radio button or checkbox options into three columns."
 msgstr ""
 
-#: classes/helpers/FrmFormsHelper.php:870
+#: classes/helpers/FrmFormsHelper.php:866
 msgid "4 Col Options"
 msgstr ""
 
-#: classes/helpers/FrmFormsHelper.php:871
+#: classes/helpers/FrmFormsHelper.php:867
 msgid "Put your radio button or checkbox options into four columns."
 msgstr ""
 
-#: classes/helpers/FrmFormsHelper.php:874
+#: classes/helpers/FrmFormsHelper.php:870
 msgid "Scroll Box"
 msgstr ""
 
-#: classes/helpers/FrmFormsHelper.php:875
+#: classes/helpers/FrmFormsHelper.php:871
 msgid ""
 "If you have many checkbox or radio button options, you may add this class to "
 "allow your user to easily scroll through the options."
 msgstr ""
 
-#: classes/helpers/FrmFormsHelper.php:878
+#: classes/helpers/FrmFormsHelper.php:874
 msgid "Capitalize"
 msgstr ""
 
-#: classes/helpers/FrmFormsHelper.php:879
+#: classes/helpers/FrmFormsHelper.php:875
 msgid "Automatically capitalize the first letter in each word."
 msgstr ""
 
-#: classes/helpers/FrmFormsHelper.php:928
+#: classes/helpers/FrmFormsHelper.php:924
 msgid "Published"
 msgstr ""
 
@@ -3907,15 +3899,15 @@ msgid ""
 msgstr ""
 
 #: classes/views/frm-settings/form.php:67
-msgid "Load form layout styling for old browsers"
+msgid "Do not use CSS Grids for form layouts"
 msgstr ""
 
 #: classes/views/frm-settings/form.php:69
 msgid ""
-"By default, form layouts are built using CSS grids that are not fully "
-"supported by older browsers like Internet Explorer. Leave this box unchecked "
-"for your layouts to look best in current browsers, but show in a single "
-"column in older browsers."
+"Form layouts built using CSS grids that are not fully supported by older "
+"browsers like Internet Explorer. Leave this box unchecked for your layouts "
+"to look best in current browsers, but show in a single column in older "
+"browsers."
 msgstr ""
 
 #: classes/views/frm-settings/form.php:74

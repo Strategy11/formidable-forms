@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2018-02-01 17:23+0000\n"
+"PO-Revision-Date: 2018-02-06 20:24+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -9,7 +9,7 @@ msgstr ""
 "Language: ja\n"
 "Project-Id-Version: Formidable Forms\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-01 17:23+0000\n"
+"POT-Creation-Date: 2018-02-06 20:24+0000\n"
 "Last-Translator: admin <steph@strategy11.com>\n"
 "Language-Team: Japanese"
 
@@ -33,7 +33,7 @@ msgid ""
 "running the free version and remove this message."
 msgstr ""
 
-#: classes/controllers/FrmAppController.php:479
+#: classes/controllers/FrmAppController.php:487
 #, php-format
 msgid ""
 "Help us spread the %1$sFormidable Forms%2$s love with %3$s %5$s on WordPress."
@@ -119,7 +119,7 @@ msgid "Form was Successfully Updated"
 msgstr ""
 
 #: classes/controllers/FrmFormsController.php:250
-#: classes/controllers/FrmFormsController.php:1643
+#: classes/controllers/FrmFormsController.php:1645
 msgid "Form template was Successfully Created"
 msgstr ""
 
@@ -241,15 +241,15 @@ msgid "Abnormal HTML characters prevented your form from saving correctly"
 msgstr ""
 
 #: classes/controllers/FrmFormsController.php:1189
-#: classes/controllers/FrmFormsController.php:1201
+#: classes/controllers/FrmFormsController.php:1203
 msgid "Please select a valid form"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1422
+#: classes/controllers/FrmFormsController.php:1424
 msgid "Please wait while you are redirected."
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1456
+#: classes/controllers/FrmFormsController.php:1458
 #, php-format
 msgid "%1$sClick here%2$s if you are not automatically redirected."
 msgstr ""
@@ -258,28 +258,28 @@ msgstr ""
 msgid "Create a New Style"
 msgstr ""
 
-#: classes/controllers/FrmStylesController.php:211
-#: classes/controllers/FrmStylesController.php:308
+#: classes/controllers/FrmStylesController.php:207
+#: classes/controllers/FrmStylesController.php:304
 msgid "Your styling settings have been saved."
 msgstr ""
 
-#: classes/controllers/FrmStylesController.php:270
+#: classes/controllers/FrmStylesController.php:266
 msgid "Your form styles have been saved."
 msgstr ""
 
-#: classes/controllers/FrmStylesController.php:377
+#: classes/controllers/FrmStylesController.php:373
 msgid "Field Labels"
 msgstr ""
 
-#: classes/controllers/FrmStylesController.php:379
+#: classes/controllers/FrmStylesController.php:375
 msgid "Field Colors"
 msgstr ""
 
-#: classes/controllers/FrmStylesController.php:381
+#: classes/controllers/FrmStylesController.php:377
 msgid "Check Box & Radio Fields"
 msgstr ""
 
-#: classes/controllers/FrmStylesController.php:383
+#: classes/controllers/FrmStylesController.php:379
 msgid "Form Messages"
 msgstr ""
 
@@ -603,55 +603,51 @@ msgid "Delete form & entries?"
 msgstr ""
 
 #: classes/helpers/FrmFormsHelper.php:847
-msgid "Align fields in a row without a specific width."
-msgstr ""
-
-#: classes/helpers/FrmFormsHelper.php:851
 msgid ""
 "Add this to the first field in each row along with a width. ie frm_first frm4"
 msgstr ""
 
-#: classes/helpers/FrmFormsHelper.php:856
+#: classes/helpers/FrmFormsHelper.php:852
 msgid ""
 "Add this to a read-only field to display the text in bold without a border "
 "or background."
 msgstr ""
 
-#: classes/helpers/FrmFormsHelper.php:858
+#: classes/helpers/FrmFormsHelper.php:854
 msgid "First Grid Row"
 msgstr ""
 
-#: classes/helpers/FrmFormsHelper.php:859
+#: classes/helpers/FrmFormsHelper.php:855
 msgid "Even Grid Row"
 msgstr ""
 
-#: classes/helpers/FrmFormsHelper.php:860
+#: classes/helpers/FrmFormsHelper.php:856
 msgid "Odd Grid Row"
 msgstr ""
 
-#: classes/helpers/FrmFormsHelper.php:863
+#: classes/helpers/FrmFormsHelper.php:859
 msgid "Put your radio button or checkbox options into two columns."
 msgstr ""
 
-#: classes/helpers/FrmFormsHelper.php:867
+#: classes/helpers/FrmFormsHelper.php:863
 msgid "Put your radio button or checkbox options into three columns."
 msgstr ""
 
-#: classes/helpers/FrmFormsHelper.php:871
+#: classes/helpers/FrmFormsHelper.php:867
 msgid "Put your radio button or checkbox options into four columns."
 msgstr ""
 
-#: classes/helpers/FrmFormsHelper.php:874
+#: classes/helpers/FrmFormsHelper.php:870
 msgid "Scroll Box"
 msgstr ""
 
-#: classes/helpers/FrmFormsHelper.php:875
+#: classes/helpers/FrmFormsHelper.php:871
 msgid ""
 "If you have many checkbox or radio button options, you may add this class to "
 "allow your user to easily scroll through the options."
 msgstr ""
 
-#: classes/helpers/FrmFormsHelper.php:879
+#: classes/helpers/FrmFormsHelper.php:875
 msgid "Automatically capitalize the first letter in each word."
 msgstr ""
 
@@ -1699,15 +1695,15 @@ msgid ""
 msgstr ""
 
 #: classes/views/frm-settings/form.php:67
-msgid "Load form layout styling for old browsers"
+msgid "Do not use CSS Grids for form layouts"
 msgstr ""
 
 #: classes/views/frm-settings/form.php:69
 msgid ""
-"By default, form layouts are built using CSS grids that are not fully "
-"supported by older browsers like Internet Explorer. Leave this box unchecked "
-"for your layouts to look best in current browsers, but show in a single "
-"column in older browsers."
+"Form layouts built using CSS grids that are not fully supported by older "
+"browsers like Internet Explorer. Leave this box unchecked for your layouts "
+"to look best in current browsers, but show in a single column in older "
+"browsers."
 msgstr ""
 
 #: classes/views/frm-settings/form.php:75
@@ -2205,7 +2201,7 @@ msgid "Key"
 msgstr "キー"
 
 #: classes/controllers/FrmFormsController.php:651
-#: classes/controllers/FrmStylesController.php:375
+#: classes/controllers/FrmStylesController.php:371
 #: classes/views/styles/_sample_form.php:17 classes/views/styles/manage.php:16
 msgid "Form Title"
 msgstr "フォーム名"
@@ -2287,33 +2283,33 @@ msgstr "スタイル"
 msgid "Edit Style"
 msgstr "スタイルを編集"
 
-#: classes/controllers/FrmStylesController.php:374
+#: classes/controllers/FrmStylesController.php:370
 #: classes/models/FrmPointers.php:325 classes/views/frm-forms/settings.php:30
 #: classes/views/frm-settings/form.php:17
 msgid "General"
 msgstr "一般"
 
-#: classes/controllers/FrmStylesController.php:376
+#: classes/controllers/FrmStylesController.php:372
 #: classes/views/frm-forms/mb_html_tab.php:49
 #: classes/views/frm-forms/settings.php:243
 msgid "Form Description"
 msgstr "フォームの説明"
 
-#: classes/controllers/FrmStylesController.php:378
+#: classes/controllers/FrmStylesController.php:374
 #: classes/views/frm-forms/mb_html_tab.php:13
 msgid "Field Description"
 msgstr "フィールドの説明"
 
-#: classes/controllers/FrmStylesController.php:380
+#: classes/controllers/FrmStylesController.php:376
 #: classes/views/frm-forms/add_field.php:102
 msgid "Field Settings"
 msgstr "フィールドの設定"
 
-#: classes/controllers/FrmStylesController.php:382
+#: classes/controllers/FrmStylesController.php:378
 msgid "Buttons"
 msgstr "ボタン"
 
-#: classes/controllers/FrmStylesController.php:585
+#: classes/controllers/FrmStylesController.php:580
 #: classes/views/frm-forms/mb_insert_fields.php:2
 msgid "Click to toggle"
 msgstr "クリックで切替"
@@ -2726,7 +2722,7 @@ msgid "Last Updated"
 msgstr "最終更新日時"
 
 #: classes/helpers/FrmCSVExportHelper.php:130
-#: classes/helpers/FrmFormsHelper.php:926
+#: classes/helpers/FrmFormsHelper.php:922
 #: classes/helpers/FrmFormsListHelper.php:363
 msgid "Draft"
 msgstr "下書き"
@@ -3673,7 +3669,7 @@ msgid "Restore"
 msgstr "復元"
 
 #: classes/helpers/FrmFormsHelper.php:824
-#: classes/helpers/FrmFormsHelper.php:927
+#: classes/helpers/FrmFormsHelper.php:923
 #: classes/helpers/FrmFormsListHelper.php:180
 msgid "Trash"
 msgstr "ゴミ箱"
@@ -3688,39 +3684,35 @@ msgid "Delete"
 msgstr "削除"
 
 #: classes/helpers/FrmFormsHelper.php:846
-msgid "Inline"
-msgstr "インライン"
-
-#: classes/helpers/FrmFormsHelper.php:850
 msgid "First"
 msgstr "最初"
 
-#: classes/helpers/FrmFormsHelper.php:853
+#: classes/helpers/FrmFormsHelper.php:849
 #: classes/helpers/FrmStylesHelper.php:116
 msgid "Right"
 msgstr "右"
 
-#: classes/helpers/FrmFormsHelper.php:855
+#: classes/helpers/FrmFormsHelper.php:851
 msgid "Total"
 msgstr "合計"
 
-#: classes/helpers/FrmFormsHelper.php:862
+#: classes/helpers/FrmFormsHelper.php:858
 msgid "2 Col Options"
 msgstr "2カラム設定"
 
-#: classes/helpers/FrmFormsHelper.php:866
+#: classes/helpers/FrmFormsHelper.php:862
 msgid "3 Col Options"
 msgstr "3カラム設定"
 
-#: classes/helpers/FrmFormsHelper.php:870
+#: classes/helpers/FrmFormsHelper.php:866
 msgid "4 Col Options"
 msgstr "4カラム設定"
 
-#: classes/helpers/FrmFormsHelper.php:878
+#: classes/helpers/FrmFormsHelper.php:874
 msgid "Capitalize"
 msgstr "キャピタライズ"
 
-#: classes/helpers/FrmFormsHelper.php:928
+#: classes/helpers/FrmFormsHelper.php:924
 msgid "Published"
 msgstr "公開"
 

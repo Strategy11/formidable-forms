@@ -4,7 +4,7 @@ Tags: contact form, form builder, custom form, forms, form, form maker, form cre
 Requires at least: 4.4
 Tested up to: 4.9
 Requires PHP: 5.3
-Stable tag: 3.0.01
+Stable tag: 3.0.02
 
 The best WordPress form plugin for contact forms, surveys and more. Make forms a breeze with a drag and drop form builder and form style generator.
 
@@ -159,6 +159,26 @@ The field and form names and descriptions are all changed with in-place edit. Ju
 [See more FAQs](https://formidableforms.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 3.0.02 =
+* Tweak: Move the forms css inside the plugin rather than saving it in the uploads folder so it will always be reset after updates
+* New: Add frm_fields_container_class hook for changing the new form container class attributes
+* Fix: More form styling fixes for css grids. Fixes cover layouts with frm_alignright and smoother responsive layouts.
+* Fix: Combine the old and new form css, and include the old layout CSS by default
+* Fix: Trigger the activation install right when the plugin is installed
+* Fix: Don't add label position styling to fields that don't include the option to change the label position
+* Fix: Correctly limit the number of fields returned when using the FrmField::get_all_for_form function with a limit set
+* **Pro Version Forms**
+* New: Show a generated screenshot of the embedded form in the form builder rather than the first few fields
+* Fix: Auto updates with the nested version going from 3.0 were failing and updating to lite
+* Fix: Some default values were overiding non defaults when the form was displayed. This included user ID fields and other ifelds with separate values.
+* Fix: Recompile the combined javascript file any time the pro version number changes
+* Fix: Embedded forms were being changed when the parent form was saved
+* Fix: Dynamic fields showing the entry key were blank with [25 show=key].
+* Fix: More reliably run calculations in hidden fields inside of a section on multi paged forms
+* Fix: Don't apply auto layout classes to inline forms with more than 12 fields
+* Fix: When checking if an inline form needs layout classes added, check for non-numeric classes like frm_half
+* Fix: Prevent the comment box on the entries page from closing immediately
+
 = 3.0.01 =
 * Fix: Trigger style update when a form is loaded instead of only when an admin page is visited
 * Fix: A few various form styling and layout fixes
