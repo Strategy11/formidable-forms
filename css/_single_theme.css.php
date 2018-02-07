@@ -185,6 +185,9 @@ $arrow_icons = FrmStylesHelper::arrow_icons();
 
 /* Left and right labels */
 <?php
+
+$frm_settings = FrmAppHelper::get_settings();
+
 if ( '' === $field_height || 'auto' === $field_height ) {
 	foreach ( array( 'left', 'right', 'inline' ) as $alignit ) {
 	?>
@@ -199,7 +202,11 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 .<?php echo esc_html( $style_class ); ?> .frm_<?php echo esc_html( $alignit ); ?>_container select,
 <?php } ?>
 .<?php echo esc_html( $style_class ); ?> .frm_left_container select{
-	height:fit-content<?php echo esc_html( $important ) ?>;
+	<?php if ( $frm_settings->old_css ) { ?>
+		height:auto<?php echo esc_html( $important ) ?>;
+	<?php } else { ?>
+		height:fit-content<?php echo esc_html( $important ) ?>;
+	<?php } ?>
 }
 <?php } ?>
 
