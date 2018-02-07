@@ -779,7 +779,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		$border_width = isset( $atts['border_width'] ) ? $atts['border_width'] : '1px';
 		$border_color = isset( $atts['border_color'] ) ? $atts['border_color'] : '#cccccc';
 
-		$header = '<table cellspacing="0"';
+		$header = '<table cellspacing="0" ';
 
 		if ( ! isset( $atts['inline_style'] ) || $atts['inline_style'] == true ) {
 			$header .= ' style="font-size:' . $font_size . ';line-height:135%;';
