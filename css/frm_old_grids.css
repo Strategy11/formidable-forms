@@ -178,9 +178,6 @@
     width:10.31%;
 }
 
-.frm_form_field.frm_inline_container,
-.frm_form_field.frm_right_container,
-.frm_form_field.frm_left_container,
 .frm_form_field.frm_left_inline,
 .frm_form_field.frm_first_inline,
 .frm_form_field.frm_inline,
@@ -202,7 +199,6 @@
     width:auto !important;
 }
 
-.frm_repeat_sec,
 .frm_combo_inputs_container,
 .frm_grid_container,
 .frm_form_fields .frm_section_heading,
