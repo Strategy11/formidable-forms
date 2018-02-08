@@ -59,7 +59,8 @@ class FrmShortcodeHelper {
 		if ( ! empty( $shortcodes[ $with_tags ][ $short_key ] ) ) {
 			$tag = str_replace( '[' . $prefix, '', $shortcodes[0][ $short_key ] );
 			$tag = str_replace(']', '', $tag);
-			$tags = explode(' ', $tag);
+			$tag = str_replace( chr( 194 ) . chr( 160 ), ' ', $tag );
+			$tags = preg_split( '/\s+/', $tag, 2 );
 			if ( is_array($tags) ) {
 				$tag = $tags[0];
 			}
