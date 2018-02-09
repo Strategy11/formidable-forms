@@ -95,8 +95,9 @@ class FrmEntryValidate {
 
 		FrmEntriesHelper::set_posted_value( $posted_field, $value, $args );
 
+		self::validate_field_types( $errors, $posted_field, $value, $args );
+
 		if ( $value != '' ) {
-			self::validate_field_types( $errors, $posted_field, $value, $args );
 			self::validate_phone_field( $errors, $posted_field, $value, $args );
 		}
 
