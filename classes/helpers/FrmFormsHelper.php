@@ -653,7 +653,7 @@ BEFORE_HTML;
 	 */
 	public static function show_error( $args ) {
 		// remove any blank messages
-		$args['errors'] = array_filter( $args['errors'] );
+		$args['errors'] = array_filter( (array) $args['errors'] );
 
 		$line_break_first = $args['show_img'];
 		foreach ( $args['errors'] as $error_key => $error ) {
@@ -817,19 +817,19 @@ BEFORE_HTML;
 			'restore' => array(
 				'label' => __( 'Restore from Trash', 'formidable' ),
 				'short' => __( 'Restore', 'formidable' ),
-				'url'   => wp_nonce_url( $base_url . '&frm_action=untrash', 'untrash_form_' . $id ),
+				'url'   => wp_nonce_url( $base_url . '&frm_action=untrash', 'untrash_form_' . absint( $id ) ),
 			),
 			'trash' => array(
 				'label' => __( 'Move Form to Trash', 'formidable' ),
 				'short' => __( 'Trash', 'formidable' ),
-				'url'   => wp_nonce_url( $base_url . '&frm_action=trash', 'trash_form_' . $id ),
+				'url'   => wp_nonce_url( $base_url . '&frm_action=trash', 'trash_form_' . absint( $id ) ),
 				'icon'  => 'frm_icon_font frm_delete_icon',
 				'data'  => array( 'frmverify' => __( 'Are you sure?', 'formidable' ) ),
 			),
 			'delete' => array(
 				'label' => __( 'Delete Permanently', 'formidable' ),
 				'short' => __( 'Delete', 'formidable' ),
-				'url'   => wp_nonce_url( $base_url . '&frm_action=destroy', 'destroy_form_' . $id ),
+				'url'   => wp_nonce_url( $base_url . '&frm_action=destroy', 'destroy_form_' . absint( $id ) ),
 				'confirm' => __( 'Are you sure you want to delete this form and all its entries?', 'formidable' ),
 				'icon'  => 'frm_icon_font frm_delete_icon',
 				'data'  => array( 'frmverify' => __( 'Delete form & entries?', 'formidable' ) ),

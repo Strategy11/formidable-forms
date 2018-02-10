@@ -887,7 +887,7 @@ class FrmField {
 	 *
 	 * @since 3.0
 	 *
-	 * @param array $field
+	 * @param array|object $field
 	 * @return boolean true if field type is radio or Dynamic radio
 	 */
 	public static function is_radio( $field ) {
@@ -899,7 +899,7 @@ class FrmField {
 	 *
 	 * @since 3.0
 	 *
-	 * @param array $field
+	 * @param array|object $field
 	 * @return boolean true if field type is checkbox or Dynamic checkbox
 	 */
 	public static function is_checkbox( $field ) {

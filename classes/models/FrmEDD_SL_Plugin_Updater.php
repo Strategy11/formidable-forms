@@ -20,6 +20,7 @@ class FrmEDD_SL_Plugin_Updater {
 	private $version     = '';
 	private $wp_override = false;
 	private $beta        = false;
+	private $cache_key   = '';
 
 	/**
 	 * Class constructor.

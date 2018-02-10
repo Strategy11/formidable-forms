@@ -186,7 +186,7 @@ class FrmFieldFormHtml {
 		$description = $this->field_obj->get_field_column('description');
 		if ( $description != '' ) {
 
-			$description_html = preg_match_all( '/(\[if\s+description\])(.*?)(\[\/if\s+description\])/mis', $this->html, $inner_html );
+			preg_match_all( '/(\[if\s+description\])(.*?)(\[\/if\s+description\])/mis', $this->html, $inner_html );
 			if ( isset( $inner_html[2] ) && is_string( $inner_html[2] ) ) {
 				$has_id = strpos( $inner_html[2], ' id=' );
 				if ( ! $has_id ) {

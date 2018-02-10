@@ -75,7 +75,6 @@ class FrmCreateFile {
 	 * @since 3.0
 	 *
 	 * @param array $file_names And array of file paths
-	 * @param string $new_location The path for the file to be saved
 	 */
 	public function combine_files( $file_names ) {
 		if ( $this->has_permission ) {

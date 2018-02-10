@@ -170,7 +170,7 @@ class FrmFieldsHelper {
 	 * @since 3.0
 	 *
 	 * @param string $setting
-	 * @param mixed $current
+	 * @param mixed $value
 	 */
 	private static function get_posted_field_setting( $setting, &$value ) {
 		if ( isset( $_POST['field_options'][ $setting ] ) ) {

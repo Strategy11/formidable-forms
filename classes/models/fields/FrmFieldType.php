@@ -700,7 +700,7 @@ DEFAULT_HTML;
 	 *
 	 * @param string|array $value
 	 *
-	 * @return string|array
+	 * @return string|array|float
 	 */
 	public function set_value_before_save( $value ) {
 		return $value;

@@ -1235,7 +1235,7 @@ class FrmFormsController {
 	private static function is_viewable_draft_form( $form ) {
 		global $post;
 		$frm_settings = FrmAppHelper::get_settings();
-		return $form->status == 'draft' && current_user_can( 'frm_edit_forms' ) && ( ! $post || $post->ID != $frm_settings->preview_page_id ) && ! FrmAppHelper::is_preview_page();
+		return $form->status == 'draft' && current_user_can( 'frm_edit_forms' ) && ! FrmAppHelper::is_preview_page();
 	}
 
 	private static function user_should_login( $form ) {
