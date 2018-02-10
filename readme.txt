@@ -4,7 +4,7 @@ Tags: contact form, form builder, custom form, forms, form, form maker, form cre
 Requires at least: 4.4
 Tested up to: 4.9
 Requires PHP: 5.3
-Stable tag: 3.0.02
+Stable tag: 3.0.03
 
 The best WordPress form plugin for contact forms, surveys and more. Make forms a breeze with a drag and drop form builder and form style generator.
 
@@ -159,6 +159,16 @@ The field and form names and descriptions are all changed with in-place edit. Ju
 [See more FAQs](https://formidableforms.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 3.0.03 =
+* Enhancement: Use relative path in the form css now that the css is inside the plugin. Now font icons will continue working without a style save when the site url is changed.
+* Fix: Save a different stylesheet file for each site in a network to prevent them from saving over eachother
+* Fix: Use auto field height when grids are off to prevent tiny fields on some sites
+* Fix: Correctly set default email message to 100% width
+* Fix: Fields with a layout class and labels set to right or left were not aligned right with CSS grids off
+* Fix: Some field shortcodes weren't being processed when the whitespace was abnormal from some cases of copy/paste
+* Fix: Set the width of the box with field types on form builder page a bit differently to prevent it from being too small when the page includes a lot of admin notices at the top
+* Remove a few 100% translations from the plugin so WordPress can handle it
+
 = 3.0.02 =
 * Tweak: Move the forms css inside the plugin rather than saving it in the uploads folder so it will always be reset after updates
 * New: Add frm_fields_container_class hook for changing the new form container class attributes
