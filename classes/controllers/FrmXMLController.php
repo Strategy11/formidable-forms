@@ -118,7 +118,7 @@ class FrmXMLController {
 		unset( $file_type );
 
 		if ( ! function_exists( 'libxml_disable_entity_loader' ) ) {
-			$errors[] = __( 'XML import is not enabled on your server.', 'formidable' );
+			$errors[] = __( 'XML import is not enabled on your server with the libxml_disable_entity_loader function.', 'formidable' );
 			self::form( $errors );
 			return;
 		}
@@ -369,36 +369,11 @@ class FrmXMLController {
 	* @return array $csv_fields
 	*/
 	private static function get_fields_for_csv_export( $form_id, $form ) {
-		// Phase frm_csv_field_ids out by 2.01.05
-		$csv_field_ids = apply_filters( 'frm_csv_field_ids', '', $form_id, array(
-			'form' => $form,
-		) );
-
-		if ( $csv_field_ids ) {
-			 _deprecated_function( 'The frm_csv_field_ids filter', '2.0.19', 'the frm_csv_columns filter' );
-			$where = array(
-				'fi.type not' => FrmField::no_save_fields(),
-				array(
-					'or'         => 1,
-					'fi.form_id' => $form->id,
-					'fr.parent_form_id' => $form->id,
-				),
-			);
-
-			if ( ! is_array( $csv_field_ids ) ) {
-				$csv_field_ids = explode( ',', $csv_field_ids );
-			}
-			if ( ! empty( $csv_field_ids ) ) {
-				$where['fi.id'] = $csv_field_ids;
-			}
-			$csv_fields = FrmField::getAll( $where, 'field_order' );
-		} else {
-			$csv_fields = FrmField::get_all_for_form( $form_id, '', 'include', 'include' );
-			$no_export_fields = FrmField::no_save_fields();
-			foreach ( $csv_fields as $k => $f ) {
-				if ( in_array( $f->type, $no_export_fields, true ) ) {
-					unset( $csv_fields[ $k ] );
-				}
+		$csv_fields = FrmField::get_all_for_form( $form_id, '', 'include', 'include' );
+		$no_export_fields = FrmField::no_save_fields();
+		foreach ( $csv_fields as $k => $f ) {
+			if ( in_array( $f->type, $no_export_fields ) ) {
+				unset( $csv_fields[ $k ] );
 			}
 		}
 

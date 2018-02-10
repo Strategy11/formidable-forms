@@ -3,19 +3,12 @@
 <input type="hidden" name="new_status" value="" />
 
 <div id="frm_form_editor_container">
-<div id="titlediv">
-    <input type="text" name="name" value="<?php echo esc_attr($form->name); ?>" id="title" placeholder="<?php esc_attr_e( 'Enter title here') ?>" />
-    <div id="edit-slug-box" class="hide-if-no-js">
-        <div id="frm_form_key_box" class="alignright">
-		<strong><?php esc_html_e( 'Form Key:', 'formidable' ) ?></strong>
-		<div id="editable-post-name" class="frm_ipe_form_key" title="<?php esc_attr_e( 'Click to edit.', 'formidable' ) ?>"><?php echo esc_html( $form->form_key ); ?></div>
-        </div>
-		<div id="frm_form_desc" class="frm_ipe_form_desc alignleft"><?php echo ( $form->description == '' ) ? esc_html__( '(Click to add description)', 'formidable' ) : wp_kses_post( force_balance_tags( $form->description ) ); ?></div>
-        <div class="frm_clear"></div>
-    </div>
-</div>
 
 <div class="postbox">
+	<div id="titlediv" class="inside">
+	    <input type="text" name="name" value="<?php echo esc_attr( $form->name ); ?>" id="title" placeholder="<?php esc_attr_e( 'Enter title here' ) ?>" />
+	</div>
+
     <div class="frm_no_fields <?php echo ( isset($values['fields']) && ! empty($values['fields']) ) ? 'frm_hidden' : ''; ?>">
 	    <div class="alignleft sketch1">
 			<img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/sketch_arrow1.png' ); ?>" alt="" />
@@ -50,19 +43,22 @@
     </div>
 <ul id="new_fields" class="frm_sorting inside">
 <?php
-if ( isset($values['fields']) && ! empty($values['fields']) ) {
-    $count = 0;
-    foreach ( $values['fields'] as $field ) {
-        $count++;
-		$field_name = 'item_meta[' . $field['id'] . ']';
-        $html_id = FrmFieldsHelper::get_html_id($field);
-		require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add_field.php' );
-        unset($field, $field_name);
-    }
-    unset($count);
+if ( isset( $values['fields'] ) && ! empty( $values['fields'] ) ) {
+	$values['count'] = 0;
+	foreach ( $values['fields'] as $field ) {
+		$values['count']++;
+		FrmFieldsController::load_single_field( $field, $values );
+		unset( $field );
+	}
 }
 ?>
 </ul>
+
+<p>
+	<?php $page_action = FrmAppHelper::get_param('frm_action'); ?>
+	<button class="frm_submit_<?php echo ( isset( $values['ajax_load'] ) && $values['ajax_load'] ) ? '' : 'no_'; ?>ajax button-primary frm_button_submit" type="button"><?php echo esc_html( ( $page_action == 'edit' || $page_action == 'update' ) ? __( 'Update', 'formidable' ) : __( 'Create', 'formidable' ) ); ?></button>
+</p>
+
 </div>
 
 </div>

@@ -1,6 +1,7 @@
 <?php
 
 class FrmHooksController {
+
     /**
      * Trigger plugin-wide hook loading
      */
@@ -44,16 +45,12 @@ class FrmHooksController {
     }
 
 	public static function load_hooks() {
-        if ( ! is_admin() ) {
-            add_filter( 'the_content', 'FrmAppController::page_route', 10 );
-        }
-
+		add_action( 'rest_api_init', 'FrmAppController::create_rest_routes', 0 );
         add_action( 'plugins_loaded', 'FrmAppController::load_lang' );
 		add_filter( 'widget_text', 'do_shortcode' );
 
         // Entries controller
         add_action( 'wp_loaded', 'FrmEntriesController::process_entry', 10, 0 );
-        add_filter( 'frm_redirect_url', 'FrmEntriesController::delete_entry_before_redirect', 50, 3 );
         add_action( 'frm_after_entry_processed', 'FrmEntriesController::delete_entry_after_save', 100 );
 
         // Form Actions Controller
@@ -82,11 +79,12 @@ class FrmHooksController {
 
 	public static function load_admin_hooks() {
         add_action( 'admin_menu', 'FrmAppController::menu', 1 );
+		add_filter( 'admin_body_class', 'FrmAppController::add_admin_class', 999 );
         add_action( 'admin_enqueue_scripts', 'FrmAppController::load_wp_admin_style' );
         add_action( 'admin_notices', 'FrmAppController::pro_get_started_headline' );
 		add_action( 'admin_init', 'FrmAppController::admin_init', 11 );
 		add_filter( 'plugin_action_links_' . FrmAppHelper::plugin_folder() . '/formidable.php', 'FrmAppController::settings_link' );
-		register_activation_hook( FrmAppHelper::plugin_folder() . '/formidable.php', 'FrmAppController::activation_install' );
+		add_filter( 'admin_footer_text', 'FrmAppController::set_footer_text' );
 
 		// Addons Controller
 		add_action( 'admin_menu', 'FrmAddonsController::menu', 100 );
@@ -98,9 +96,6 @@ class FrmHooksController {
         add_filter( 'set-screen-option', 'FrmEntriesController::save_per_page', 10, 3 );
         add_filter( 'update_user_metadata', 'FrmEntriesController::check_hidden_cols', 10, 5 );
         add_action( 'updated_user_meta', 'FrmEntriesController::update_hidden_cols', 10, 4 );
-
-        // Fields Controller
-        add_filter( 'frm_display_field_options', 'FrmFieldsController::display_field_options' );
 
         // Form Actions Controller
         if ( FrmAppHelper::is_admin_page( 'formidable' ) ) {
@@ -133,8 +128,6 @@ class FrmHooksController {
     }
 
 	public static function load_ajax_hooks() {
-		add_action( 'wp_ajax_frm_silent_upgrade', 'FrmAppController::ajax_install' );
-		add_action( 'wp_ajax_nopriv_frm_silent_upgrade', 'FrmAppController::ajax_install' );
 		add_action( 'wp_ajax_frm_install', 'FrmAppController::ajax_install' );
         add_action( 'wp_ajax_frm_uninstall', 'FrmAppController::uninstall' );
         add_action( 'wp_ajax_frm_deauthorize', 'FrmAppController::deauthorize' );
@@ -147,7 +140,6 @@ class FrmHooksController {
         // Fields Controller
         add_action( 'wp_ajax_frm_load_field', 'FrmFieldsController::load_field' );
         add_action( 'wp_ajax_frm_insert_field', 'FrmFieldsController::create' );
-        add_action( 'wp_ajax_frm_field_name_in_place_edit', 'FrmFieldsController::edit_name' );
         add_action( 'wp_ajax_frm_update_ajax_option', 'FrmFieldsController::update_ajax_option' );
         add_action( 'wp_ajax_frm_duplicate_field', 'FrmFieldsController::duplicate' );
         add_action( 'wp_ajax_frm_delete_field', 'FrmFieldsController::destroy' );
@@ -163,8 +155,6 @@ class FrmHooksController {
         // Forms Controller
 		add_action( 'wp_ajax_frm_create_from_template', 'FrmFormsController::_create_from_template' );
 		add_action( 'wp_ajax_frm_save_form', 'FrmFormsController::route' );
-		add_action( 'wp_ajax_frm_form_key_in_place_edit', 'FrmFormsController::edit_key' );
-		add_action( 'wp_ajax_frm_form_desc_in_place_edit', 'FrmFormsController::edit_description' );
         add_action( 'wp_ajax_frm_get_default_html', 'FrmFormsController::get_email_html' );
         add_action( 'wp_ajax_frm_get_shortcode_opts', 'FrmFormsController::get_shortcode_opts' );
         add_action( 'wp_ajax_frm_forms_preview', 'FrmFormsController::preview' );

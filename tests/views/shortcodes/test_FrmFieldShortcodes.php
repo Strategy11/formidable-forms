@@ -40,7 +40,7 @@ class test_FrmFieldShortcodes extends FrmUnitTest {
 
 	protected function get_entry_for_test() {
 		$new_entry = array(
-			'form_id'  => FrmForm::getIdByKey( 'free_field_types' ),
+			'form_id'  => FrmForm::get_id_by_key( 'free_field_types' ),
 			'item_key' => 'free_entry_key',
 			'description' => array(
 				'browser' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:37.0) Gecko/20100101 Firefox/37.0',

@@ -7,7 +7,6 @@
     <div id="post-body">
         <div class="meta-box-sortables">
         <div class="categorydiv postbox" id="frm-categorydiv">
-		<h3 class="hndle"><span><?php esc_html_e( 'Global Settings', 'formidable' ) ?></span></h3>
         <div class="inside frm-help-tabs">
         <div id="contextual-help-back"></div>
         <div id="contextual-help-columns">
@@ -62,7 +61,15 @@
 				<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'We recommend using HTML 5 for your forms. It adds some nifty options like placeholders, patterns, and autocomplete.', 'formidable' ) ?>"></span>
             </p>
 
-            <?php do_action('frm_style_general_settings', $frm_settings); ?>
+			<p>
+				<label for="frm_old_css">
+					<input type="checkbox" id="frm_old_css" name="frm_old_css" value="1" <?php checked( $frm_settings->old_css, 1 ); ?>>
+					<?php esc_html_e( 'Do not use CSS Grids for form layouts', 'formidable' ); ?>
+				</label>
+				<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Form layouts built using CSS grids that are not fully supported by older browsers like Internet Explorer. Leave this box unchecked for your layouts to look best in current browsers, but show in a single column in older browsers.', 'formidable' ); ?>"></span>
+			</p>
+
+			<?php do_action( 'frm_style_general_settings', $frm_settings ); ?>
 
 			<h3><?php esc_html_e( 'User Permissions', 'formidable' ); ?>
 				<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Select users that are allowed access to Formidable. Without access to View Forms, users will be unable to see the Formidable menu.', 'formidable' ) ?>"></span>
@@ -176,10 +183,6 @@
 			<input type="hidden" name="frm_menu" id="frm_menu" value="<?php echo esc_attr( $frm_settings->menu ) ?>" />
 			<input type="hidden" name="frm_mu_menu" id="frm_mu_menu" value="<?php echo esc_attr( $frm_settings->mu_menu ) ?>" />
 		<?php } ?>
-
-		<p><label class="frm_left_label"><?php esc_html_e( 'Preview Page', 'formidable' ); ?></label>
-        <?php FrmAppHelper::wp_pages_dropdown('frm-preview-page-id', $frm_settings->preview_page_id ) ?>
-        </p>
 
 		<p>
 			<label class="frm_left_label"><?php esc_html_e( 'IP storage', 'formidable' ); ?></label>

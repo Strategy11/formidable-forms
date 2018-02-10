@@ -5,28 +5,26 @@ sudo: false
 matrix:
   include:
     - php: 7.1
-      env: WP_VERSION=master WP_MULTISITE=1 SNIFF=1
+      env: WP_VERSION=master WP_MULTISITE=1 SNIFF=1 SCRIPT_DEBUG=0
       dist: precise
     - php: 5.6
       env: WP_VERSION=master WP_MULTISITE=1
       dist: precise
     - php: 5.2.17
-      env: WP_VERSION=4.7 WP_MULTISITE=1
+      env: WP_VERSION=4.9 WP_MULTISITE=1
       dist: precise
     - php: 7.0
-      env: WP_VERSION=4.7
+      env: WP_VERSION=4.9 SCRIPT_DEBUG=1
+    - php: 5.6
+      env: WP_VERSION=4.8
     - php: 5.6
       env: WP_VERSION=4.7
     - php: 5.6
       env: WP_VERSION=4.6
     - php: 5.6
       env: WP_VERSION=4.5
-    - php: 5.6
-      env: WP_VERSION=4.4
     - php: 5.5
-      env: WP_VERSION=4.7
-    - php: 5.5
-      env: WP_VERSION=4.0
+      env: WP_VERSION=4.5 SCRIPT_DEBUG=1
     - php: 5.4
       env: WP_VERSION=4.7
     - php: nightly
@@ -76,6 +74,8 @@ before_script:
 - if [[ "$SNIFF" == "1" ]]; then wget https://develop.svn.wordpress.org/trunk/.jshintrc; fi
 
 script:
+- if [[ "$SCRIPT_DUBUG" == "1" ]]; then php -r "define('SCRIPT_DUBUG', true);"; fi
+- if [[ "$SCRIPT_DUBUG" == "0" ]]; then php -r "define('SCRIPT_DUBUG', false);"; fi
 # Search for PHP syntax errors.
 - find -L .  -path ./vendor -prune -o -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l
 # Run the theme through JSHint. Turn on in 3.0

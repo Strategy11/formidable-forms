@@ -1,4 +1,8 @@
 <div id="frm-html-tags" class="tabs-panel">
+	<p class="howto">
+		<?php esc_html_e( 'Use the buttons below to help customize your form HTML.', 'formidable' ) ?>
+	</p>
+
     <ul class="frm_code_list">
     <?php
     $col = 'one';

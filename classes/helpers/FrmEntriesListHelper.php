@@ -44,7 +44,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 		if ( strpos( $orderby, 'meta' ) !== false ) {
 			$order_field_type = FrmField::get_type( str_replace( 'meta_', '', $orderby ) );
-			$orderby .= in_array( $order_field_type, array( 'number', 'scale' ) ) ? ' +0 ' : '';
+			$orderby .= in_array( $order_field_type, array( 'number', 'scale', 'star' ) ) ? ' +0 ' : '';
 		}
 
 		$order = self::get_param( array(
@@ -242,7 +242,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 
         if ( current_user_can('frm_delete_entries') ) {
 			$delete_link = '?page=formidable-entries&frm_action=destroy&id=' . $item->id . '&form=' . $this->params['form'];
-			$actions['delete'] = '<a href="' . esc_url( wp_nonce_url( $delete_link ) ) . '" class="submitdelete" onclick="return confirm(\'' . esc_attr( __( 'Are you sure you want to delete that?', 'formidable' ) ) . '\')">' . __( 'Delete' ) . '</a>';
+			$actions['delete'] = '<a href="' . esc_url( wp_nonce_url( $delete_link ) ) . '" class="submitdelete" data-frmverify="' . esc_attr__( 'Are you sure?', 'formidable' ) . '">' . __( 'Delete' ) . '</a>';
 	    }
 
         $actions = apply_filters('frm_row_actions', $actions, $item);

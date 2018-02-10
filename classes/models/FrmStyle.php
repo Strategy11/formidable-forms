@@ -118,8 +118,8 @@ class FrmStyle {
 		$css = $this->get_css_content( $filename );
 
 		$create_file = new FrmCreateFile( array(
-			'folder_name' => 'formidable/css',
-			'file_name' => 'formidablepro.css',
+			'file_name'     => FrmStylesController::get_file_name(),
+			'new_file_path' => FrmAppHelper::plugin_path() . '/css',
 		) );
 		$create_file->create_file( $css );
 

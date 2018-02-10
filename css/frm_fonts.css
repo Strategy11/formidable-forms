@@ -1,7 +1,7 @@
 @font-face {
 	font-family: 's11-fp';
-	src: url('../fonts/s11-fp.eot');
-	src: local('☺'), url('../fonts/s11-fp.woff') format('woff'), url('../fonts/s11-fp.ttf') format('truetype'), url('../fonts/s11-fp.svg') format('svg');
+	src: url('../fonts/s11-fp.eot?v=3');
+	src: local('☺'), url('../fonts/s11-fp.woff?v=3') format('woff'), url('../fonts/s11-fp.ttf?v=3') format('truetype'), url('../fonts/s11-fp.svg?v=3') format('svg');
 	font-weight: normal;
 	font-style: normal;
 }
@@ -12,6 +12,7 @@
 	font-family: 's11-fp' !important;
 	content: '\e601'; 
 	text-shadow: none;
+	line-height: 1.4;
 }
 .frm_inactive_menu{
     opacity:.5;

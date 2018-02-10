@@ -22,8 +22,8 @@ foreach ( $type as $tb_type ) {
 		include( dirname( __FILE__ ) . '/posts_xml.php' );
 	} elseif ( file_exists( dirname( __FILE__ ) . '/' . $tb_type . '_xml.php' ) ) {
 		include( dirname( __FILE__ ) . '/' . $tb_type . '_xml.php' );
-	} elseif ( file_exists( FrmAppHelper::plugin_path() . '/pro/classes/views/xml/' . $tb_type . '_xml.php' ) ) {
-		include( FrmAppHelper::plugin_path() . '/pro/classes/views/xml/' . $tb_type . '_xml.php' );
+	} elseif ( FrmAppHelper::pro_is_installed() && file_exists( FrmProAppHelper::plugin_path() . '/classes/views/xml/' . $tb_type . '_xml.php' ) ) {
+		include( FrmProAppHelper::plugin_path() . '/classes/views/xml/' . $tb_type . '_xml.php' );
 	}
 
 	unset( $item_ids, $records[ $tb_type ], $tb_type );

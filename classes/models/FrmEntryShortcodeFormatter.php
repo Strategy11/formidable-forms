@@ -19,6 +19,12 @@ class FrmEntryShortcodeFormatter {
 
 	/**
 	 * @var array
+	 * @since 3.0
+	 */
+	protected $single_cell_fields = array( 'html' );
+
+	/**
+	 * @var array
 	 * @since 2.04
 	 */
 	protected $fields = array();

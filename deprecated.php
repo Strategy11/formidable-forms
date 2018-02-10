@@ -1,10 +1,5 @@
 <?php
 
-// 2.0
-if ( ! isset($frm_vars['pro_is_installed']) ) {
-    $frm_vars['pro_is_installed'] = false;
-}
-
 // Instansiate Models
 global $frmdb;
 global $frm_field;

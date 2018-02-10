@@ -1,8 +1,5 @@
 <?php
 
-// uncomment this line for testing
-//set_site_transient( 'update_plugins', null );
-
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -22,6 +19,7 @@ class FrmEDD_SL_Plugin_Updater {
 	private $slug        = '';
 	private $version     = '';
 	private $wp_override = false;
+	private $beta        = false;
 
 	/**
 	 * Class constructor.
@@ -42,6 +40,8 @@ class FrmEDD_SL_Plugin_Updater {
 		$this->slug        = basename( $_plugin_file, '.php' );
 		$this->version     = $_api_data['version'];
 		$this->wp_override = isset( $_api_data['wp_override'] ) ? (bool) $_api_data['wp_override'] : false;
+		$this->beta        = ! empty( $this->api_data['beta'] );
+		$this->cache_key   = md5( serialize( $this->slug . $this->version . $this->api_data['license'] . $this->beta ) );
 
 		$frm_edd_plugin_data[ $this->slug ] = $this->api_data;
 
@@ -87,7 +87,17 @@ class FrmEDD_SL_Plugin_Updater {
 			return $_transient_data;
 		}
 
-		$version_info = $this->api_request( 'plugin_latest_version', array( 'slug' => $this->slug ) );
+		$version_info = $this->get_cached_version_info( $this->cache_key );
+
+		if ( false === $version_info ) {
+			$version_info = $this->api_request( 'plugin_latest_version', array(
+				'slug' => $this->slug,
+				'beta' => $this->beta,
+			) );
+
+			$this->set_version_info_cache( $version_info, $this->cache_key );
+
+		}
 
 		if ( false !== $version_info && is_object( $version_info ) && isset( $version_info->new_version ) ) {
 
@@ -101,7 +111,7 @@ class FrmEDD_SL_Plugin_Updater {
 
 			}
 
-			$_transient_data->last_checked = time();
+			$_transient_data->last_checked           = current_time( 'timestamp' );
 			$_transient_data->checked[ $this->name ] = $this->version;
 
 		}
@@ -137,15 +147,49 @@ class FrmEDD_SL_Plugin_Updater {
 			'slug'   => $this->slug,
 			'is_ssl' => is_ssl(),
 			'fields' => array(
-				'banners' => false, // These will be supported soon hopefully
+				'banners' => array(),
 				'reviews' => false,
 			),
 		);
 
-		$api_response = $this->api_request( 'plugin_information', $to_send );
+		$cache_key = 'edd_api_request_' . $this->cache_key;
 
-		if ( false !== $api_response ) {
-			$_data = $api_response;
+		// Get the transient where we store the api request for this plugin for 24 hours
+		$edd_api_request_transient = $this->get_cached_version_info( $cache_key );
+
+		//If we have no transient-saved value, run the API, set a fresh transient with the API value, and return that value too right now.
+		if ( empty( $edd_api_request_transient ) ) {
+
+			$api_response = $this->api_request( 'plugin_information', $to_send );
+
+			// Expires in 3 hours
+			$this->set_version_info_cache( $api_response, $cache_key );
+
+			if ( false !== $api_response ) {
+				$_data = $api_response;
+			}
+		} else {
+			$_data = $edd_api_request_transient;
+		}
+
+		// Convert sections into an associative array, since we're getting an object, but Core expects an array.
+		if ( isset( $_data->sections ) && ! is_array( $_data->sections ) ) {
+			$new_sections = array();
+			foreach ( $_data->sections as $key => $value ) {
+				$new_sections[ $key ] = $value;
+			}
+
+			$_data->sections = $new_sections;
+		}
+
+		// Convert banners into an associative array, since we're getting an object, but Core expects an array.
+		if ( isset( $_data->banners ) && ! is_array( $_data->banners ) ) {
+			$new_banners = array();
+			foreach ( $_data->banners as $key => $value ) {
+				$new_banners[ $key ] = $value;
+			}
+
+			$_data->banners = $new_banners;
 		}
 
 		return $_data;
@@ -161,7 +205,7 @@ class FrmEDD_SL_Plugin_Updater {
 	public function http_request_args( $args, $url ) {
 		// If it is an https request and we are performing a package download, disable ssl verification
 		if ( strpos( $url, 'https://' ) !== false && strpos( $url, 'edd_action=package_download' ) ) {
-			$args['sslverify'] = false;
+			$args['sslverify'] = true;
 		}
 		return $args;
 	}
@@ -196,21 +240,16 @@ class FrmEDD_SL_Plugin_Updater {
 			'license'    => ! empty( $data['license'] ) ? $data['license'] : '',
 			'item_name'  => isset( $data['item_name'] ) ? $data['item_name'] : false,
 			'item_id'    => isset( $data['item_id'] ) ? $data['item_id'] : false,
+			'version'    => isset( $data['version'] ) ? $data['version'] : false,
 			'slug'       => $data['slug'],
 			'author'     => $data['author'],
 			'url'        => home_url(),
+			'beta'       => ! empty( $data['beta'] ),
 		);
-
-		$cache_key = 'edd_plugin_' . md5( sanitize_key( $api_params['license'] . $this->version ) . '_' . $api_params['edd_action'] );
-		$cached_response = get_transient( $cache_key );
-		if ( $cached_response !== false ) {
-			// if this has been checked within 24 hours, don't check again
-			return $cached_response;
-		}
 
 		$request = wp_remote_post( $this->api_url, array(
 			'timeout'   => 15,
-			'sslverify' => false,
+			'sslverify' => true,
 			'body'      => $api_params,
 		) );
 
@@ -218,33 +257,38 @@ class FrmEDD_SL_Plugin_Updater {
 			$request = json_decode( wp_remote_retrieve_body( $request ) );
 		}
 
-		if ( $request && isset( $request->sections ) ) {
-			$request->sections = maybe_unserialize( $request->sections );
-			if ( is_array( $request->sections ) ) {
-				$request->sections['last_checked'] = time();
-			}
-			set_transient( $cache_key, $request, DAY_IN_SECONDS );
-		} else {
-			$request = false;
-			set_transient( $cache_key, 0, DAY_IN_SECONDS );
-		}
+		$this->prepare_response( $request );
 
 		return $request;
+	}
+
+	private function prepare_response( &$request ) {
+		if ( $request && isset( $request->sections ) ) {
+			$request->sections = maybe_unserialize( $request->sections );
+		} else {
+			$request = false;
+		}
+
+		if ( $request && isset( $request->banners ) ) {
+			$request->banners = maybe_unserialize( $request->banners );
+		}
+
+		if ( ! empty( $request->sections ) ) {
+			foreach ( $request->sections as $key => $section ) {
+				$request->$key = (array) $section;
+			}
+		}
 	}
 
 	public function show_changelog() {
 
 		global $frm_edd_plugin_data;
 
-		if ( empty( $_REQUEST['edd_sl_action'] ) || 'view_plugin_changelog' != $_REQUEST['edd_sl_action'] ) {
+		if ( empty( $_REQUEST['edd_sl_action'] ) || 'view_plugin_changelog' !== $_REQUEST['edd_sl_action'] ) {
 			return;
 		}
 
-		if ( empty( $_REQUEST['plugin'] ) ) {
-			return;
-		}
-
-		if ( empty( $_REQUEST['slug'] ) ) {
+		if ( empty( $_REQUEST['plugin'] ) || empty( $_REQUEST['slug'] ) ) {
 			return;
 		}
 
@@ -253,7 +297,8 @@ class FrmEDD_SL_Plugin_Updater {
 		}
 
 		$data         = $frm_edd_plugin_data[ $_REQUEST['slug'] ];
-		$cache_key    = md5( 'edd_plugin_' . sanitize_key( $_REQUEST['plugin'] ) . '_version_info' );
+		$beta         = ! empty( $data['beta'] );
+		$cache_key    = md5( 'edd_plugin_' . sanitize_key( $_REQUEST['plugin'] ) . '_' . $beta . '_version_info' );
 		$version_info = get_transient( $cache_key );
 
 		if ( false === $version_info ) {
@@ -262,14 +307,15 @@ class FrmEDD_SL_Plugin_Updater {
 				'edd_action' => 'get_version',
 				'item_name'  => isset( $data['item_name'] ) ? $data['item_name'] : false,
 				'item_id'    => isset( $data['item_id'] ) ? $data['item_id'] : false,
-				'slug'       => $_REQUEST['slug'],
+				'slug'       => sanitize_text_field( $_REQUEST['slug'] ),
 				'author'     => $data['author'],
 				'url'        => home_url(),
+				'beta'       => $beta,
 			);
 
 			$request = wp_remote_post( $this->api_url, array(
 				'timeout'   => 15,
-				'sslverify' => false,
+				'sslverify' => true,
 				'body'      => $api_params,
 			) );
 
@@ -283,7 +329,13 @@ class FrmEDD_SL_Plugin_Updater {
 				$version_info = false;
 			}
 
-			set_transient( $cache_key, $version_info, DAY_IN_SECONDS );
+			if ( ! empty( $version_info ) ) {
+				foreach ( $version_info->sections as $key => $section ) {
+					$version_info->$key = (array) $section;
+				}
+			}
+
+			$this->set_version_info_cache( $version_info, $cache_key );
 
 		}
 
@@ -292,5 +344,26 @@ class FrmEDD_SL_Plugin_Updater {
 		}
 
 		exit;
+	}
+
+	public function get_cached_version_info( $cache_key = '' ) {
+		$cache = get_option( $cache_key );
+
+		if ( empty( $cache['timeout'] ) || current_time( 'timestamp' ) > $cache['timeout'] ) {
+			return false; // Cache is expired
+		}
+
+		return json_decode( $cache['value'] );
+
+	}
+
+	public function set_version_info_cache( $value = '', $cache_key = '' ) {
+		$data = array(
+			'timeout' => strtotime( '+24 hours', current_time( 'timestamp' ) ),
+			'value'   => json_encode( $value ),
+		);
+
+		update_option( $cache_key, $data );
+
 	}
 }

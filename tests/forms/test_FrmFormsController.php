@@ -124,13 +124,115 @@ class WP_Test_FrmFormsController extends FrmUnitTest {
 			$posted_val = $_POST['item_meta'][ $field->id ];
 			$actual_val = $field->default_value;
 			$this->assertEquals( $posted_val, $actual_val, 'The default value was not updated correctly for field ' . $field->field_key . '.' );
-
-			if ( $this->is_pro_active ) {
-				// Check calculations
-				$posted_val = $_POST['field_options'][ 'use_calc_' . $field->id ];
-				$actual_val = $field->field_options['use_calc'];
-				$this->assertEquals( $posted_val, $actual_val, 'The calculation was not updated correctly for field ' . $field->field_key . '.' );
-			}
 		}
+	}
+
+	/**
+	 * @covers FrmFormsController::front_head
+	 */
+	function test_front_head() {
+		$this->assertTrue( FrmFormsController::has_combo_js_file(), 'The combo file was not created' );
+
+		FrmFormsController::front_head();
+		$this->assertTrue( wp_script_is( 'formidable', 'registered' ), 'The formidable js was not registered' );
+
+		global $wp_version;
+		if ( $wp_version <= 4.0 ) {
+			$this->markTestSkipped('Min JS seems to fail in WP 4.0');
+		}
+
+		global $wp_scripts;
+		$formidable_js = $wp_scripts->registered['formidable'];
+
+		if ( FrmAppHelper::js_suffix() == '.min' ) {
+			$this->assertEquals( FrmAppHelper::plugin_url() . '/js/frm.min.js', $formidable_js->src, 'frm.min.js was not loaded' );
+		} else {
+			$this->assertEquals( FrmAppHelper::plugin_url() . '/js/formidable.js', $formidable_js->src, 'formidable.js was not loaded' );
+		}
+	}
+
+	/**
+	 * Test redirect after create
+	 * @covers FrmFormsController::redirect_after_submit
+	 */
+	function test_redirect_after_create() {
+		$form = $this->factory->form->create_and_get( array(
+			'options' => array(
+				'success_action' => 'redirect',
+				'success_url'    => 'http://example.com',
+			),
+		) );
+		$this->assertEquals( $form->options['success_action'], 'redirect' );
+
+		$entry_key = 'submit-redirect';
+		$response = $this->post_new_entry( $form, $entry_key );
+
+		if ( headers_sent() ) {
+			// since headers are sent by phpunit, we will get the js redirect
+			$this->assertContains( "window.location='http://example.com'", $response );
+		}
+
+		$created_entry = FrmEntry::get_id_by_key( $entry_key );
+		$this->assertNotEmpty( $created_entry, 'No entry found with key ' . $entry_key );
+
+		$response = FrmFormsController::show_form( $form->id ); // this is where the redirect happens
+		$this->assertContains( "window.location='http://example.com'", $response );
+	}
+
+	/**
+	 * @covers FrmFormsController::show_message_after_save
+	 */
+	function test_message_after_create() {
+		$this->run_message_after_create( 0 );
+	}
+
+	/**
+	 * @covers FrmFormsController::show_message_after_save
+	 */
+	function test_message_with_form_after_create() {
+		$this->run_message_after_create( 1 );
+	}
+
+	function run_message_after_create( $show_form = 0 ) {
+		$form = $this->factory->form->create_and_get( array(
+			'options' => array(
+				'success_action' => 'message',
+				'success_msg'    => 'Done!',
+				'show_form'      => $show_form,
+			),
+		) );
+		$this->assertEquals( $form->options['success_action'], 'message' );
+
+		$entry_key = 'submit-message';
+		$response = $this->post_new_entry( $form, $entry_key );
+
+		$this->assertEmpty( $response );
+
+		$created_entry = FrmEntry::get_id_by_key( $entry_key );
+		$this->assertNotEmpty( $created_entry, 'No entry found with key ' . $entry_key );
+
+		$response = FrmFormsController::show_form( $form->id ); // this is where the message is returned
+		$this->assertContains( '<div class="frm_message"><p>Done!</p>', $response );
+		$this->assertContains( 'frmFrontForm.scrollMsg(' . $form->id . ')', $response );
+
+		if ( $show_form ) {
+			$this->assertContains( '<input type="hidden" name="form_id" value="' . $form->id . '" />', $response );
+		} else {
+			$this->assertNotContains( '<input type="hidden" name="form_id" value="' . $form->id . '" />', $response );
+		}
+	}
+
+	private function post_new_entry( $form, $entry_key ) {
+		$_POST = $this->factory->field->generate_entry_array( $form );
+		$_POST['item_key'] = $entry_key;
+		$_POST['frm_action'] = 'create';
+		$_POST['action'] = 'create';
+
+		ob_start();
+		FrmEntriesController::process_entry();
+		$response = ob_get_contents();
+		ob_end_clean();
+
+		return $response;
 	}
 }

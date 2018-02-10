@@ -41,13 +41,6 @@ class FrmEntryValues {
 	protected $exclude_fields = array();
 
 	/**
-	 * @since 2.04
-	 *
-	 * @var string
-	 */
-	protected $source = '';
-
-	/**
 	 * FrmEntryValues constructor
 	 *
 	 * @since 2.04
@@ -63,7 +56,6 @@ class FrmEntryValues {
 		}
 
 		$this->init_form_id();
-		$this->init_source( $atts );
 		$this->init_include_fields( $atts );
 		$this->init_exclude_fields( $atts );
 		$this->init_fields();
@@ -105,12 +97,17 @@ class FrmEntryValues {
 
 			if ( isset( $atts['fields'] ) && ! empty( $atts['fields'] ) ) {
 
-				$atts['include_fields'] = '';
-				foreach ( $atts['fields'] as $included_field ) {
-					$atts['include_fields'] .= $included_field->id . ',';
-				}
+				if ( ! is_array( $atts['fields'] ) ) {
+					$atts['include_fields'] = $atts['fields'];
+				} else {
+					$atts['include_fields'] = '';
 
-				$atts['include_fields'] = rtrim( $atts['include_fields'], ',' );
+					foreach ( $atts['fields'] as $included_field ) {
+						$atts['include_fields'] .= $included_field->id . ',';
+					}
+
+					$atts['include_fields'] = rtrim( $atts['include_fields'], ',' );
+				}
 			}
 		}
 
@@ -126,21 +123,6 @@ class FrmEntryValues {
 	 */
 	protected function init_exclude_fields( $atts ) {
 		$this->exclude_fields = $this->prepare_array_property( 'exclude_fields', $atts );
-	}
-
-	/**
-	 * Initialize the source property
-	 *
-	 * @since 2.04
-	 *
-	 * @param array $atts
-	 */
-	protected function init_source( $atts ) {
-		if ( isset( $atts['source'] ) && is_string( $atts['source'] ) && $atts['source'] !== '' ) {
-			$this->source = (string) $atts['source'];
-		} else {
-			$this->source = 'general';
-		}
 	}
 
 	/**
@@ -292,6 +274,6 @@ class FrmEntryValues {
 	 * @param stdClass $field
 	 */
 	protected function add_field_values( $field ) {
-		$this->field_values[ $field->id ] = new FrmFieldValue( $field, $this->entry, array( 'source' => $this->source ) );
+		$this->field_values[ $field->id ] = new FrmFieldValue( $field, $this->entry );
 	}
 }

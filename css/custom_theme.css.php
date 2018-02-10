@@ -32,6 +32,13 @@ form input.frm_verify{
 	min-width:0;
 }
 
+.with_frm_style fieldset fieldset{
+	border:none;
+	margin:0;
+	padding:0;
+	background-color:transparent;
+}
+
 legend.frm_hidden{
     display:none !important;
 }
@@ -65,12 +72,6 @@ legend.frm_hidden{
 
 .frm_preview_page{
     padding:25px;
-}
-
-.with_frm_style .form-field.frm_col_field{
-    clear:none;
-    float:left;
-    margin-right:20px;
 }
 
 .with_frm_style label.frm_primary_label{
@@ -126,17 +127,6 @@ legend.frm_hidden{
 	clear:both;
 }
 
-.with_frm_style .frm_scale{
-    margin-right:10px;
-    text-align:center;
-    float:left;
-}
-
-.with_frm_style .frm_scale input{
-    display:block;
-	margin:0;
-}
-
 .with_frm_style input[type=number][readonly]{
     -moz-appearance: textfield;
 }
@@ -144,10 +134,6 @@ legend.frm_hidden{
 .with_frm_style select[multiple="multiple"]{
     height:auto;
     line-height:normal;
-}
-
-.with_frm_style select{
-	white-space:pre-wrap;
 }
 
 .with_frm_style .frm_catlevel_2,
@@ -196,13 +182,20 @@ legend.frm_hidden{
     clear:both;
 }
 
-.frm_inline_form .frm_form_field.form-field{
-    margin-right:2.5%;
-	display:inline-block;
+.frm_inline_form .frm_form_field,
+.frm_inline_form .frm_submit{
+	grid-column: span 1 / span 1;
 }
 
 .frm_inline_form .frm_submit{
-	display:inline-block;
+	margin:0;
+}
+
+.frm_submit.frm_inline_submit input[type=submit],
+.frm_submit.frm_inline_submit button,
+.frm_inline_form .frm_submit input[type=submit],
+.frm_inline_form .frm_submit button{
+	margin-top:0;
 }
 
 .with_frm_style.frm_center_submit .frm_submit{
@@ -274,11 +267,6 @@ legend.frm_hidden{
     animation:         spin 2s linear infinite;
 }
 
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
 <?php
 foreach ( $styles as $style ) {
 	include( dirname( __FILE__ ) . '/_single_theme.css.php' );
@@ -320,6 +308,19 @@ a.frm_save_draft{
     display:inline-block;
 }
 
+.with_frm_style .frm_checkbox label,
+.with_frm_style .frm_radio label{
+	display: inline;
+	white-space:normal;
+}
+
+.with_frm_style .vertical_radio .frm_checkbox label,
+.with_frm_style .vertical_radio .frm_radio label{
+	display: block;
+	padding-left: 20px;
+	text-indent: -20px;
+}
+
 .frm_file_container .frm_file_link,
 .with_frm_style .frm_radio label .frm_file_container,
 .with_frm_style .frm_checkbox label .frm_file_container{
@@ -329,19 +330,19 @@ a.frm_save_draft{
 }
 
 .with_frm_style .frm_radio input[type=radio]{
-    border-radius:10px;
 	-webkit-appearance:radio;
 }
 
 .with_frm_style .frm_checkbox input[type=checkbox]{
-    border-radius:0;
 	-webkit-appearance:checkbox;
 }
 
 .with_frm_style .frm_radio input[type=radio],
 .with_frm_style .frm_checkbox input[type=checkbox]{
+	border-radius:initial;
+	flex: none;
 	display:inline-block;
-	margin-right:5px;
+	margin:4px 5px 0 0;
 	width:auto;
 	border:none;
 	vertical-align:baseline;
@@ -422,7 +423,7 @@ table.form_results.with_frm_style tr.frm_even,
 
 table.form_results.with_frm_style tr.frm_odd,
 .frm-grid .frm_odd{
-    background-color:<?php echo esc_html( $defaults['bg_color_active'] ) ?>;
+    background-color:#<?php echo esc_html( $defaults['bg_color_active'] ) ?>;
 }
 
 .frm_collapse .ui-icon{
@@ -515,98 +516,79 @@ table.form_results.with_frm_style tr.frm_odd,
 }
 
 .frm-loading-img{
-    background:url(<?php echo FrmAppHelper::relative_plugin_url() ?>/images/ajax_loader.gif) no-repeat center center;
+    background:url(../images/ajax_loader.gif) no-repeat center center;
     padding:6px 12px;
 }
 
 select.frm_loading_lookup{
-    background-image: url(<?php echo FrmAppHelper::relative_plugin_url() ?>/images/ajax_loader.gif) !important;
+    background-image: url(../images/ajax_loader.gif) !important;
     background-position: 10px;
     background-repeat: no-repeat;
     color: transparent !important;
 }
 
-<?php include( dirname( __FILE__ ) . '/frm_grids.css' ); ?>
+<?php readfile( dirname( __FILE__ ) . '/frm_grids.css' ); ?>
 
-/* Left and right label styling for non-Formidable styling - very basic, not responsive */
+/* Left and right label styling for non-Formidable styling */
+
+.frm_form_field.frm_inline_container,
+.frm_form_field.frm_right_container,
+.frm_form_field.frm_left_container{
+    display: grid;
+    grid-template-columns: 25% auto;
+	width:100%;
+	grid-auto-rows: min-content;
+}
+
+.frm_form_field.frm_right_container{
+    grid-template-columns: auto 25%;
+}
+
+.frm_form_field.frm_inline_container{
+    grid-template-columns: repeat(2, minmax(auto, max-content) );
+}
+
+.frm_form_field.frm_inline_container label.frm_primary_label,
+.frm_form_field.frm_right_container label.frm_primary_label,
 .frm_form_field.frm_left_container label.frm_primary_label{
-	float:left;
-	display:inline;
-	max-width:33%;
 	margin-right:10px;
+	grid-row:span 2/span 2;
+	padding-top:4px;
 }
 
-.with_frm_style .frm_conf_field.frm_left_container label.frm_primary_label{
-	display:inline;
-	visibility:hidden;
+.frm_form_field.frm_left_container label.frm_primary_label{
+	grid-column:1;
+	grid-row:span 2/span 2; /* cover a row for the description */
 }
 
-.frm_form_field.frm_left_container input:not([type=radio]):not([type=checkbox]),
-.frm_form_field.frm_left_container:not(.frm_dynamic_select_container) select,
-.frm_form_field.frm_left_container textarea,
-.frm_form_field.frm_left_container .wp-editor-wrap,
-.frm_form_field.frm_left_container .frm_opt_container,
-.frm_form_field.frm_left_container .frm_dropzone,
-.frm_form_field.frm_left_container .frm-g-recaptcha,
-.frm_form_field.frm_left_container .g-recaptcha,
-.frm_form_field.frm_left_container .chosen-container,
-.frm_form_field.frm_left_container .frm_combo_inputs_container,
-.frm_form_field.frm_right_container input:not([type=radio]):not([type=checkbox]),
-.frm_form_field.frm_right_container:not(.frm_dynamic_select_container) select,
-.frm_form_field.frm_right_container textarea,
-.frm_form_field.frm_right_container .wp-editor-wrap,
-.frm_form_field.frm_right_container .frm_opt_container,
-.frm_form_field.frm_right_container .frm_dropzone,
-.frm_form_field.frm_right_container .frm-g-recaptcha,
-.frm_form_field.frm_right_container .g-recaptcha,
-.frm_form_field.frm_right_container .chosen-container,
-.frm_form_field.frm_right_container .frm_combo_inputs_container{
-	max-width:62%;
+.frm_form_field.frm_right_container label.frm_primary_label{
+	grid-column:2;
+	grid-row:1;
+	margin-right:0;
+	margin-left:10px;
 }
 
-.frm_form_field.frm_left_container .frm_combo_inputs_container input,
-.frm_form_field.frm_left_container .frm_combo_inputs_container select,
-.frm_form_field.frm_right_container .frm_combo_inputs_container input,
-.frm_form_field.frm_right_container .frm_combo_inputs_container select{
-    max-width:100%;
+.frm_form_field.frm_inline_container .frm_description,
+.frm_form_field.frm_left_container .frm_description{
+	grid-column:2;
 }
 
-.frm_form_field.frm_left_container .frm_opt_container,
-.frm_form_field.frm_right_container .frm_opt_container,
-.frm_form_field.frm_inline_container .frm_opt_container,
-.frm_form_field.frm_left_container .frm_combo_inputs_container,
-.frm_form_field.frm_right_container .frm_combo_inputs_container,
-.frm_form_field.frm_inline_container .frm_combo_inputs_container,
-.frm_form_field.frm_left_container .wp-editor-wrap,
-.frm_form_field.frm_right_container .wp-editor-wrap,
-.frm_form_field.frm_inline_container .wp-editor-wrap,
-.frm_form_field.frm_left_container .frm_dropzone,
-.frm_form_field.frm_right_container .frm_dropzone,
-.frm_form_field.frm_inline_container .frm_dropzone,
-.frm_form_field.frm_left_container .frm-g-recaptcha,
-.frm_form_field.frm_right_container .frm-g-recaptcha,
-.frm_form_field.frm_inline_container .frm-g-recaptcha,
-.frm_form_field.frm_left_container .g-recaptcha,
-.frm_form_field.frm_right_container .g-recaptcha,
-.frm_form_field.frm_inline_container .g-recaptcha{
-	display:inline-block;
+.frm_form_field.frm_right_container .frm_description{
+	grid-column:1;
 }
 
-.frm_form_field.frm_left_half.frm_left_container .frm_primary_label,
-.frm_form_field.frm_right_half.frm_left_container .frm_primary_label,
-.frm_form_field.frm_left_half.frm_right_container .frm_primary_label,
-.frm_form_field.frm_right_half.frm_right_container .frm_primary_label,
-.frm_form_field.frm_first_half.frm_left_container .frm_primary_label,
-.frm_form_field.frm_last_half.frm_left_container .frm_primary_label,
-.frm_form_field.frm_first_half.frm_right_container .frm_primary_label,
-.frm_form_field.frm_last_half.frm_right_container .frm_primary_label,
-.frm_form_field.frm_half.frm_right_container .frm_primary_label,
-.frm_form_field.frm_half.frm_left_container .frm_primary_label{
-	-webkit-box-sizing:border-box;
-	-moz-box-sizing:border-box;
-	box-sizing:border-box;
-	max-width:33%;
+.frm_conf_field.frm_left_container{
+	grid-template-columns: 67%;
 }
+
+.frm_conf_field.frm_left_container .frm_description{
+	grid-column:1;
+}
+
+.frm_conf_field.frm_left_container label.frm_primary_label{
+	display:none;
+}
+
 /* End of left and right label styling */
 
 .wp-editor-wrap *,
@@ -662,7 +644,7 @@ select.frm_loading_lookup{
 }
 
 .frm_grid{
-    background-color:<?php echo esc_html( $defaults['bg_color_active'] ) ?>;
+    background-color:#<?php echo esc_html( $defaults['bg_color_active'] ) ?>;
 }
 
 .frm_grid .frm_primary_label,
@@ -808,6 +790,12 @@ select.frm_loading_lookup{
     margin-right:1%;
 }
 
+.frm_form_field.frm_inline_container .frm_opt_container,
+.frm_form_field.frm_right_container .frm_opt_container,
+.frm_form_field.frm_left_container .frm_opt_container{
+	padding-top:4px;
+}
+
 .with_frm_style .frm_inline_container.frm_grid_first label.frm_primary_label,
 .with_frm_style .frm_inline_container.frm_grid label.frm_primary_label,
 .with_frm_style .frm_inline_container.frm_grid_odd label.frm_primary_label,
@@ -817,27 +805,30 @@ select.frm_loading_lookup{
     margin-right:0;
 }
 
-.with_frm_style .frm_inline_container.frm_scale_container label.frm_primary_label{
-	float:left;
+.frm_form_field.frm_two_col .frm_opt_container,
+.frm_form_field.frm_three_col .frm_opt_container,
+.frm_form_field.frm_four_col .frm_opt_container{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: max-content;
+    grid-gap: 2.5%;
 }
 
-.with_frm_style .frm_other_input.frm_other_full{
-	margin-top:10px;
+.frm_form_field.frm_three_col .frm_opt_container{
+	grid-template-columns: repeat(3, 1fr);
+}
+
+.frm_form_field.frm_four_col .frm_opt_container{
+	grid-template-columns: repeat(4, 1fr);
 }
 
 .frm_form_field.frm_two_col .frm_radio,
-.frm_form_field.frm_three_col .frm_radio,
-.frm_form_field.frm_four_col .frm_radio,
 .frm_form_field.frm_two_col .frm_checkbox,
+.frm_form_field.frm_three_col .frm_radio,
 .frm_form_field.frm_three_col .frm_checkbox,
+.frm_form_field.frm_four_col .frm_radio,
 .frm_form_field.frm_four_col .frm_checkbox{
-    float:left;
-}
-
-.frm_form_field.frm_two_col .frm_radio,
-.frm_form_field.frm_two_col .frm_checkbox{
-    width:48%;
-    margin-right:4%;
+    grid-column-end: span 1;
 }
 
 .frm_form_field .frm_checkbox,
@@ -846,27 +837,6 @@ select.frm_loading_lookup{
 .frm_form_field .frm_radio + .frm_radio{
 	margin-top: 0;
 	margin-bottom: 0;
-}
-
-.frm_form_field.frm_three_col .frm_radio,
-.frm_form_field.frm_three_col .frm_checkbox{
-    width:30%;
-    margin-right:5%;
-}
-
-.frm_form_field.frm_four_col .frm_radio,
-.frm_form_field.frm_four_col .frm_checkbox{
-    width:22%;
-    margin-right:4%;
-}
-
-.frm_form_field.frm_two_col .frm_radio:nth-child(2n+2),
-.frm_form_field.frm_two_col .frm_checkbox:nth-child(2n+2),
-.frm_form_field.frm_three_col .frm_radio:nth-child(3n+3),
-.frm_form_field.frm_three_col .frm_checkbox:nth-child(3n+3),
-.frm_form_field.frm_four_col .frm_radio:nth-child(4n+4),
-.frm_form_field.frm_four_col .frm_checkbox:nth-child(4n+4){
-	margin-right:0;
 }
 
 .frm_form_field.frm_scroll_box .frm_opt_container{
@@ -894,17 +864,6 @@ select.frm_loading_lookup{
     outline:none;
     font-weight:normal;
     box-shadow:0 1px 1px rgba(0, 0, 0, 0.075) inset;
-}
-
-.frm_form_field.frm_two_col .frm_opt_container:after,
-.frm_form_field.frm_three_col .frm_opt_container:after,
-.frm_form_field.frm_four_col .frm_opt_container:after{
-    content:".";
-    display:block;
-    clear:both;
-    visibility:hidden;
-    line-height:0;
-    height:0;
 }
 
 .frm_form_field.frm_total input,
@@ -1021,13 +980,13 @@ select.frm_loading_lookup{
 /* Fonts */
 @font-face {
 	font-family:'s11-fp';
-	src:url('<?php echo FrmAppHelper::relative_plugin_url() ?>/fonts/s11-fp.eot');
-	src:local('☺'), url('<?php echo FrmAppHelper::relative_plugin_url() ?>/fonts/s11-fp.woff') format('woff'), url('<?php echo FrmAppHelper::relative_plugin_url() ?>/fonts/s11-fp.ttf') format('truetype'), url('<?php echo FrmAppHelper::relative_plugin_url() ?>/fonts/s11-fp.svg') format('svg');
+	src:url('../fonts/s11-fp.eot?v=<?php echo esc_attr( FrmAppHelper::$font_version ); ?>');
+	src:local('☺'), url('../fonts/s11-fp.woff?v=<?php echo esc_attr( FrmAppHelper::$font_version ); ?>') format('woff'), url('../fonts/s11-fp.ttf?v=<?php echo esc_attr( FrmAppHelper::$font_version ); ?>') format('truetype'), url('../fonts/s11-fp.svg?v=<?php echo esc_attr( FrmAppHelper::$font_version ); ?>') format('svg');
 	font-weight:normal;
 	font-style:normal;
 }
 
-<?php include( FrmAppHelper::plugin_path() . '/css/font_icons.css' ); ?>
+<?php readfile( FrmAppHelper::plugin_path() . '/css/font_icons.css' ); ?>
 <?php do_action( 'frm_include_front_css', compact( 'defaults' ) ); ?>
 
 /* Responsive */
@@ -1037,36 +996,12 @@ select.frm_loading_lookup{
 	.frm_form_field .frm_repeat_grid .frm_form_field.frm_eighth label.frm_primary_label{
     	display: block !important;
 	}
-
-	.frm_form_field .frm_repeat_grid .frm_form_field.frm_repeat_buttons.frm_seventh label.frm_primary_label{
-		display:none !important;
-	}
-
 }
 
 @media only screen and (max-width: 600px) {
-    .frm_form_field.frm_four_col .frm_radio,
-    .frm_form_field.frm_four_col .frm_checkbox{
-        width:48%;
-        margin-right:4%;
+    .frm_form_field.frm_four_col .frm_opt_container{
+        grid-template-columns: repeat(2, 1fr);
     }
-
-    .frm_form_field.frm_four_col .frm_radio:nth-child(2n+2),
-    .frm_form_field.frm_four_col .frm_checkbox:nth-child(2n+2){
-    	margin-right:0;
-    }
-
-	.frm_form_field .frm_repeat_grid.frm_first_repeat .frm_form_field.frm_repeat_buttons:not(.frm_fourth):not(.frm_sixth):not(.frm_eighth) label.frm_primary_label{
-		display:none !important;
-	}
-
-	.frm_form_field .frm_repeat_grid .frm_form_field.frm_fifth label.frm_primary_label{
-		display:block !important;
-	}
-
-	.frm_form_field .frm_repeat_grid .frm_form_field.frm_repeat_buttons.frm_fifth label.frm_primary_label{
-		display:none !important;
-	}
 }
 
 @media only screen and (max-width: 500px) {
@@ -1115,4 +1050,10 @@ select.frm_loading_lookup{
 	}
 }
 <?php
+
+$frm_settings = FrmAppHelper::get_settings();
+if ( $frm_settings->old_css ) {
+	readfile( dirname( __FILE__ ) . '/frm_old_grids.css' );
+}
+
 echo $defaults['custom_css'];

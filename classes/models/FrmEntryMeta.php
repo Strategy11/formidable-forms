@@ -23,6 +23,7 @@ class FrmEntryMeta {
             'created_at'    => current_time('mysql', 1),
         );
 
+		self::set_value_before_save( $new_values );
         $new_values = apply_filters('frm_add_entry_meta', $new_values);
 
 		$query_results = $wpdb->insert( $wpdb->prefix . 'frm_item_metas', $new_values );
@@ -38,9 +39,14 @@ class FrmEntryMeta {
         return $id;
     }
 
-    /**
-     * @param string $meta_key
-     */
+	/**
+	 * @param int $entry_id
+	 * @param int $field_id
+	 * @param string $meta_key deprecated
+	 * @param array|string $meta_value
+	 *
+	 * @return bool|false|int
+	 */
 	public static function update_entry_meta( $entry_id, $field_id, $meta_key = null, $meta_value ) {
         if ( ! $field_id ) {
             return false;
@@ -54,7 +60,9 @@ class FrmEntryMeta {
 		);
 		$where_values = $values;
         $values['meta_value'] = $meta_value;
+		self::set_value_before_save( $values );
         $values = apply_filters('frm_update_entry_meta', $values);
+
 		if ( is_array($values['meta_value']) ) {
 			$values['meta_value'] = array_filter( $values['meta_value'], 'FrmAppHelper::is_not_empty_value' );
 		}
@@ -65,6 +73,32 @@ class FrmEntryMeta {
 
 		return $wpdb->update( $wpdb->prefix . 'frm_item_metas', array( 'meta_value' => $meta_value ), $where_values );
     }
+
+	/**
+	 * @since 3.0
+	 */
+	private static function set_value_before_save( &$values ) {
+		$field = FrmField::getOne( $values['field_id'] );
+		if ( $field ) {
+			$field_obj = FrmFieldFactory::get_field_object( $field );
+			$values['meta_value'] = $field_obj->set_value_before_save( $values['meta_value'] );
+		}
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	private static function get_value_to_save( $atts, &$value ) {
+		if ( is_object( $atts['field'] ) ) {
+			$field_obj = FrmFieldFactory::get_field_object( $atts['field'] );
+			$value = $field_obj->get_value_to_save( $value, array(
+				'entry_id' => $atts['entry_id'],
+				'field_id' => $atts['field_id'],
+			) );
+		}
+
+		$value = apply_filters( 'frm_prepare_data_before_db', $value, $atts['field_id'], $atts['entry_id'], array( 'field' => $atts['field'] ) );
+	}
 
 	public static function update_entry_metas( $entry_id, $values ) {
         global $wpdb;
@@ -80,8 +114,7 @@ class FrmEntryMeta {
 				$field = FrmField::getOne( $field_id );
 			}
 
-			// set the value for the file upload field and add new tags (in Pro version)
-			$meta_value = apply_filters( 'frm_prepare_data_before_db', $meta_value, $field_id, $entry_id, compact( 'field' ) );
+			self::get_value_to_save( compact( 'field', 'field_id', 'entry_id' ), $meta_value );
 
 			if ( $prev_values && in_array($field_id, $prev_values) ) {
 

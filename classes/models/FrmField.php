@@ -10,45 +10,141 @@ class FrmField {
 
 	public static function field_selection() {
 		$fields = apply_filters('frm_available_fields', array(
-			'text'      => __( 'Single Line Text', 'formidable' ),
-			'textarea'  => __( 'Paragraph Text', 'formidable' ),
-			'checkbox'  => __( 'Checkboxes', 'formidable' ),
-			'radio'     => __( 'Radio Buttons', 'formidable' ),
-			'select'    => __( 'Dropdown', 'formidable' ),
-			'email'     => __( 'Email Address', 'formidable' ),
-			'url'       => __( 'Website/URL', 'formidable' ),
-			'captcha'   => __( 'reCAPTCHA', 'formidable' ),
+			'text'      => array(
+				'name'  => __( 'Text', 'formidable' ),
+				'icon'  => 'frm_css_icon frm_text_icon',
+			),
+			'textarea'  => array(
+				'name'  => __( 'Paragraph', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_paragraph_icon',
+			),
+			'checkbox'  => array(
+				'name'  => __( 'Checkboxes', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_check-square_icon',
+			),
+			'radio'     => array(
+				'name'  => __( 'Radio Button', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_radio-checked_icon',
+			),
+			'select'    => array(
+				'name'  => __( 'Dropdown', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_caret-square-down_icon',
+			),
+			'email'     => array(
+				'name'  => __( 'Email', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_envelope_icon',
+			),
+			'url'       => array(
+				'name'  => __( 'Website/URL', 'formidable' ),
+				'icon'  => 'dashicons dashicons-admin-links',
+			),
+			'number'    => array(
+				'name'  => __( 'Number', 'formidable' ),
+				'icon'  => 'frm_css_icon frm_number_icon',
+			),
+			'phone'     => array(
+				'name'  => __( 'Phone', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_phone_icon',
+			),
+			'html'      => array(
+				'name'  => __( 'HTML', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_embed2_icon',
+			),
+			'hidden'    => array(
+				'name'  => __( 'Hidden Field', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_eye-slash_icon',
+			),
+			'user_id'   => array(
+				'name'  => __( 'User ID', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_user_icon',
+			),
+			'captcha'   => array(
+				'name'  => __( 'reCAPTCHA', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_shield-check_icon',
+			),
 		));
 
 		return $fields;
 	}
 
 	public static function pro_field_selection() {
-		return apply_filters('frm_pro_available_fields', array(
+		return apply_filters( 'frm_pro_available_fields', array(
+			'file'      => array(
+				'name'  => __( 'File Upload', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_upload2_icon',
+			),
+			'rte'       => array(
+				'name'  => __( 'Rich Text', 'formidable' ),
+				'icon'  => 'dashicons dashicons-editor-alignright',
+			),
+			'date'      => array(
+				'name'  => __( 'Date', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_calendar_icon',
+			),
+			'time'      => array(
+				'name'  => __( 'Time', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_clock-o_icon',
+			),
+			'scale'     => array(
+				'name'  => __( 'Scale', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_linear_scale_icon',
+			),
+			'star'      => array(
+				'name'  => __( 'Star Rating', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_star-full_icon',
+			),
+			'range'     => array(
+				'name'  => __( 'Slider', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_sliders_icon',
+			),
+			'toggle'    => array(
+				'name'  => __( 'Toggle', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_toggle-on_icon',
+			),
+			'data'      => array(
+				'name'  => __( 'Dynamic', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_sitemap_icon',
+			),
+			'lookup'    => array(
+				'name'  => __( 'Lookup', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_search_icon',
+			),
+			'divider|repeat' => array(
+				'name'  => __( 'Repeater', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_repeat_icon',
+			),
 			'end_divider' => array(
 				'name'  => __( 'End Section', 'formidable' ),
 				'switch_from' => 'divider',
 			),
-			'divider'   => __( 'Section', 'formidable' ),
-			'break'     => __( 'Page Break', 'formidable' ),
-			'file'      => __( 'File Upload', 'formidable' ),
-			'rte'       => __( 'Rich Text', 'formidable' ),
-			'number'    => __( 'Number', 'formidable' ),
-			'phone'     => __( 'Phone Number', 'formidable' ),
-			'date'      => __( 'Date', 'formidable' ),
-			'time'      => __( 'Time', 'formidable' ),
-			'image'     => __( 'Image URL', 'formidable' ),
-			'scale'     => __( 'Scale', 'formidable' ),
-			'data'      => __( 'Dynamic Field', 'formidable' ),
-			'lookup'    => __( 'Lookup', 'formidable' ),
-			'form'      => __( 'Embed Form', 'formidable' ),
-			'hidden'    => __( 'Hidden Field', 'formidable' ),
-			'user_id'   => __( 'User ID (hidden)', 'formidable' ),
-			'password'  => __( 'Password', 'formidable' ),
-			'html'      => __( 'HTML', 'formidable' ),
-			'tag'       => __( 'Tags', 'formidable' ),
-			'credit_card' => __( 'Credit Card', 'formidable' ),
-			'address'   => __( 'Address', 'formidable' ),
+			'divider'   => array(
+				'name'  => __( 'Section', 'formidable' ),
+				'icon'  => 'frm_css_icon frm_heading_icon',
+			),
+			'break'     => array(
+				'name'  => __( 'Page Break', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_page-break_icon',
+			),
+			'form'      => array(
+				'name'  => __( 'Embed Form', 'formidable' ),
+				'icon'  => 'dashicons dashicons-editor-table',
+			),
+			'password'  => array(
+				'name'  => __( 'Password', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_key_icon',
+			),
+			'tag'       => array(
+				'name'  => __( 'Tags', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_price-tags_icon',
+			),
+			'credit_card' => array(
+				'name'  => __( 'Credit Card', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_credit-card-alt_icon',
+			),
+			'address'   => array(
+				'name'  => __( 'Address', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_location_icon',
+			),
 		));
 	}
 
@@ -75,6 +171,8 @@ class FrmField {
 			$frm_duplicate_ids[ $values['field_key'] ] = $new_values['field_key'];
             $new_values = apply_filters('frm_duplicated_field', $new_values);
         }
+
+		self::preserve_format_option_backslashes( $new_values );
 
 		foreach ( $new_values as $k => $v ) {
             if ( is_array( $v ) ) {
@@ -379,6 +477,7 @@ class FrmField {
             $fields = array();
             $count = 0;
             foreach ( $results as $result ) {
+				$count++;
 				$fields[ $result->id ] = $result;
                 if ( ! empty($limit) && $count >= $limit ) {
                     break;
@@ -620,23 +719,38 @@ class FrmField {
 			return false;
 		}
 
-		$field_type = is_array( $field ) ? $field['type'] : $field->type;
-		$data_type = self::get_option( $field, 'data_type' );
+		$field_type = self::get_original_field_type( $field );
+
+		$is_multi_value_field = (
+			self::is_checkbox( $field ) ||
+			$field_type == 'address' ||
+			self::is_multiple_select( $field )
+		);
+
+		return $is_multi_value_field;
+	}
+
+	/**
+	 * @since 3.0
+	 * @return string
+	 */
+	public static function get_field_type( $field ) {
+		return is_array( $field ) ? $field['type'] : $field->type;
+	}
+
+	/**
+	 * @since 3.0
+	 * @return string
+	 */
+	public static function get_original_field_type( $field ) {
+		$field_type = self::get_field_type( $field );
 		$original_type = self::get_option( $field, 'original_type' );
 
 		if ( ! empty( $original_type ) && $original_type != $field_type ) {
 			$field_type = $original_type; // check the original type for arrays
 		}
 
-		$is_multi_value_field = (
-			$field_type == 'checkbox' ||
-			$field_type == 'address' ||
-			( $field_type == 'data' && $data_type == 'checkbox' ) ||
-			( $field_type == 'lookup' && $data_type == 'checkbox' ) ||
-			self::is_multiple_select( $field )
-		);
-
-		return $is_multi_value_field;
+		return $field_type;
 	}
 
 	/**
@@ -646,7 +760,7 @@ class FrmField {
 	 * @return boolean
 	 */
 	public static function is_multiple_select( $field ) {
-		$field_type = is_array( $field ) ? $field['type'] : $field->type;
+		$field_type = self::get_field_type( $field );
 		$data_type = self::get_option( $field, 'data_type' );
 
 		return self::is_option_true( $field, 'multiple' ) && ( ( $field_type == 'select' || ( $field_type == 'data' && $data_type == 'select' ) ) );
@@ -761,5 +875,67 @@ class FrmField {
 	 */
 	public static function get_key_by_id( $id ) {
 		return FrmDb::get_var( 'frm_fields', array( 'id' => $id ), 'field_key' );
+	}
+
+	public static function is_image( $field ) {
+		$type = self::get_field_type( $field );
+		return ( $type == 'url' && self::get_option( $field, 'show_image' ) );
+	}
+
+	/**
+	 * Check if field is radio or Dynamic radio
+	 *
+	 * @since 3.0
+	 *
+	 * @param array $field
+	 * @return boolean true if field type is radio or Dynamic radio
+	 */
+	public static function is_radio( $field ) {
+		return self::is_field_type( $field, 'radio' );
+	}
+
+	/**
+	 * Check if field is checkbox or Dynamic checkbox
+	 *
+	 * @since 3.0
+	 *
+	 * @param array $field
+	 * @return boolean true if field type is checkbox or Dynamic checkbox
+	 */
+	public static function is_checkbox( $field ) {
+		return self::is_field_type( $field, 'checkbox' );
+	}
+
+	/**
+	 * Check if field is checkbox or radio
+	 *
+	 * @since 3.0
+	 *
+	 * @param array|object $field
+	 * @param string $is_type Options include radio, checkbox, text
+	 * @return boolean true if field type is checkbox or Dynamic checkbox
+	 */
+	public static function is_field_type( $field, $is_type ) {
+		$field_type = self::get_original_field_type( $field );
+		$data_type = self::get_option( $field, 'data_type' );
+
+		return (
+			$is_type === $field_type ||
+			( 'data' === $field_type && $is_type === $data_type ) ||
+			( 'lookup' === $field_type && $is_type === $data_type )
+		);
+	}
+
+	/**
+	 * Check if a field might by taller than other fields
+	 * @since 3.0
+	 *
+	 * @param array|object $field
+	 *
+	 * @return bool
+	 */
+	public static function is_tall_field( $field ) {
+		$field_type = FrmField::get_field_type( $field );
+		return FrmFieldFactory::field_has_property( $field_type, 'is_tall' );
 	}
 }

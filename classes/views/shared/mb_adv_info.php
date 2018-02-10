@@ -1,6 +1,6 @@
-<div id="taxonomy-linkcategory" class="categorydiv <?php echo $class ?>">
+<div id="taxonomy-linkcategory" class="categorydiv <?php echo esc_attr( $class ) ?>">
 	<ul id="category-tabs" class="category-tabs frm-category-tabs">
-		<li class="tabs" ><a href="#frm-insert-fields-box" id="frm_insert_fields_tab"><?php esc_html_e( 'Insert Fields', 'formidable' ); ?></a></li>
+		<li class="tabs"><a href="#frm-insert-fields-box" id="frm_insert_fields_tab"><?php esc_html_e( 'Fields', 'formidable' ); ?></a></li>
 		<?php if ( ! empty( $cond_shortcodes ) ) { ?>
 		<li class="hide-if-no-js"><a href="#frm-conditionals"><?php esc_html_e( 'Conditionals', 'formidable' ); ?></a></li>
 		<?php } ?>
@@ -11,13 +11,17 @@
 	</ul>
 
 	<div id="frm-insert-fields-box" class="tabs-panel">
-	    <ul class="subsubsub">
-            <li><a href="javascript:void(0)" class="current frmids"><?php esc_html_e( 'IDs', 'formidable' ) ?></a> |</li>
-            <li><a href="javascript:void(0)" class="frmkeys"><?php esc_html_e( 'Keys', 'formidable' ) ?></a></li>
-        </ul>
-        <ul class="alignleft"><li><?php esc_html_e( 'Fields from your form', 'formidable' ) ?>:</li></ul>
-        <ul class="frm_code_list frm_full_width">
-        <?php
+		<ul class="subsubsub">
+			<li><a href="javascript:void(0)" class="current frmids"><?php esc_html_e( 'IDs', 'formidable' ) ?></a> |</li>
+			<li><a href="javascript:void(0)" class="frmkeys"><?php esc_html_e( 'Keys', 'formidable' ) ?></a></li>
+		</ul>
+		<ul class="alignleft"><li><?php esc_html_e( 'Fields from your form', 'formidable' ) ?>:</li>
+</ul>
+		<ul class="frm_code_list" id="frm_customize_search">
+			<li><input type="search" id="frm_field_search" name="frm_field_search" placeholder="<?php esc_html_e( 'Search', 'formidable' ) ?>"></li>
+		</ul>
+		<ul class="frm_code_list frm_full_width frm_customize_field_list">
+		<?php
 		if ( ! empty( $fields ) ) {
 			global $wpdb;
 			$linked_forms[] = array();
@@ -76,6 +80,10 @@
 			?>
         </ul>
 
+		<p class="howto">
+			<?php esc_html_e( 'Click a button below to insert extra values from form entries or your site settings.', 'formidable' ) ?>
+		</p>
+
         <?php esc_html_e( 'Helpers', 'formidable' ) ?>:
         <ul class="frm_code_list">
         <?php
@@ -101,6 +109,7 @@
         }
         ?>
         </ul>
+		<div class="clear"></div>
 	</div>
 
 	<?php if ( ! empty( $cond_shortcodes ) ) { ?>
@@ -155,6 +164,9 @@
 	<?php } ?>
 
 	<div id="frm-adv-info-tab" class="tabs-panel">
+		<p class="howto">
+			<?php esc_html_e( 'Customize the field values with the following parameters. Click to see a sample.', 'formidable' ) ?>
+		</p>
 		<ul class="frm_code_list">
         <?php
         $col = 'one';

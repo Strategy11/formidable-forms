@@ -4,11 +4,11 @@ class FrmSettings {
     public $option_name = 'frm_options';
     public $menu;
     public $mu_menu;
-    public $preview_page_id;
     public $use_html;
     public $jquery_css;
     public $accordion_js;
 	public $fade_form;
+	public $old_css;
 
     public $success_msg;
     public $blank_msg;
@@ -82,11 +82,11 @@ class FrmSettings {
         return array(
             'menu'      => apply_filters( 'frm_default_menu', 'Formidable' ),
             'mu_menu'   => 0,
-            'preview_page_id' => 0,
             'use_html'  => true,
             'jquery_css' => false,
             'accordion_js' => false,
 			'fade_form' => false,
+			'old_css'   => true,
 
 			're_multi'  => 0,
 
@@ -197,6 +197,12 @@ class FrmSettings {
         $this->update_roles($params);
 
         do_action( 'frm_update_settings', $params );
+
+		if ( function_exists( 'get_filesystem_method' ) ) {
+			// save styling settings in case fallback setting changes
+			$frm_style = new FrmStyle();
+			$frm_style->update( 'default' );
+		}
     }
 
 	private function update_settings( $params ) {
@@ -209,12 +215,12 @@ class FrmSettings {
 		$this->re_multi = isset( $params['frm_re_multi'] ) ? $params['frm_re_multi'] : 0;
 
         $this->load_style = $params['frm_load_style'];
-        $this->preview_page_id = (int) $params['frm-preview-page-id'];
 
         $this->use_html = isset($params['frm_use_html']) ? $params['frm_use_html'] : 0;
 		$this->jquery_css = isset( $params['frm_jquery_css'] ) ? absint( $params['frm_jquery_css'] ) : 0;
 		$this->accordion_js = isset( $params['frm_accordion_js'] ) ? absint( $params['frm_accordion_js'] ) : 0;
 		$this->fade_form = isset( $params['frm_fade_form'] ) ? absint( $params['frm_fade_form'] ) : 0;
+		$this->old_css   = isset( $params['frm_old_css'] ) ? absint( $params['frm_old_css'] ) : 0;
 		$this->no_ips = isset( $params['frm_no_ips'] ) ? absint( $params['frm_no_ips'] ) : 0;
     }
 

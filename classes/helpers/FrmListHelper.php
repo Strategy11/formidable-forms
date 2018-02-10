@@ -545,54 +545,26 @@ class FrmListHelper {
 
 		$current = $this->get_pagenum();
 
-		$current_url = set_url_scheme( 'http://' . FrmAppHelper::get_server_value( 'HTTP_HOST' ) . FrmAppHelper::get_server_value( 'REQUEST_URI' ) );
-
-		$current_url = remove_query_arg( array( 'hotkeys_highlight_last', 'hotkeys_highlight_first' ), $current_url );
-
 		$page_links = array();
 
 		$total_pages_before = '<span class="paging-input">';
 		$total_pages_after  = '</span>';
 
-		$disable_first = false;
-		$disable_last = false;
-		$disable_prev = false;
-		$disable_next = false;
+		$disable = $this->disabled_pages( $total_pages );
 
- 		if ( $current == 1 ) {
-			$disable_first = true;
-			$disable_prev = true;
- 		}
-		if ( $current == 2 ) {
-			$disable_first = true;
-		}
- 		if ( $current == $total_pages ) {
-			$disable_last = true;
-			$disable_next = true;
- 		}
-		if ( $current == $total_pages - 1 ) {
-			$disable_last = true;
-		}
+		$page_links[] = $this->add_page_link( array(
+			'page'     => 'first',
+			'arrow'    => '&laquo;',
+			'number'   => '',
+			'disabled' => $disable['first'],
+		) );
 
-		if ( $disable_first ) {
-			$page_links[] = '<span class="tablenav-pages-navspan" aria-hidden="true">&laquo;</span>';
-		} else {
-			$page_links[] = sprintf( "<a class='first-page' href='%s'><span class='screen-reader-text'>%s</span><span aria-hidden='true'>%s</span></a>",
-				esc_url( remove_query_arg( 'paged', $current_url ) ),
-				__( 'First page' ),
-				'&laquo;'
-			);
-		}
-
-		if ( $disable_prev ) {
-			$page_links[] = '<span class="tablenav-pages-navspan" aria-hidden="true">&lsaquo;</span>';
-		} else {
-			$page_links[] = sprintf( "<a class='prev-page' href='%s'><span class='screen-reader-text'>%s</span><span aria-hidden='true'>%s</span></a>",
-				esc_url( add_query_arg( 'paged', max( 1, $current - 1 ), $current_url ) ),
-				__( 'Previous page' ),
-				'&lsaquo;'
-			);
-		}
+		$page_links[] = $this->add_page_link( array(
+			'page'     => 'prev',
+			'arrow'    => '&lsaquo;',
+			'number'   => max( 1, $current - 1 ),
+			'disabled' => $disable['prev'],
+		) );
 
 		if ( 'bottom' == $which ) {
 			$html_current_page  = $current;
@@ -607,25 +579,19 @@ class FrmListHelper {
 		$html_total_pages = sprintf( "<span class='total-pages'>%s</span>", number_format_i18n( $total_pages ) );
 		$page_links[] = $total_pages_before . sprintf( _x( '%1$s of %2$s', 'paging' ), $html_current_page, $html_total_pages ) . $total_pages_after;
 
-		if ( $disable_next ) {
-			$page_links[] = '<span class="tablenav-pages-navspan" aria-hidden="true">&rsaquo;</span>';
-		} else {
-			$page_links[] = sprintf( "<a class='next-page' href='%s'><span class='screen-reader-text'>%s</span><span aria-hidden='true'>%s</span></a>",
-				esc_url( add_query_arg( 'paged', min( $total_pages, $current + 1 ), $current_url ) ),
-				__( 'Next page' ),
-				'&rsaquo;'
-			);
-		}
+		$page_links[] = $this->add_page_link( array(
+			'page'     => 'next',
+			'arrow'    => '&rsaquo;',
+			'number'   => min( $total_pages, $current + 1 ),
+			'disabled' => $disable['next'],
+		) );
 
-		if ( $disable_last ) {
-			$page_links[] = '<span class="tablenav-pages-navspan" aria-hidden="true">&raquo;</span>';
-		} else {
-			$page_links[] = sprintf( "<a class='last-page' href='%s'><span class='screen-reader-text'>%s</span><span aria-hidden='true'>%s</span></a>",
-				esc_url( add_query_arg( 'paged', $total_pages, $current_url ) ),
-				__( 'Last page' ),
-				'&raquo;'
-			);
-		}
+		$page_links[] = $this->add_page_link( array(
+			'page'     => 'last',
+			'arrow'    => '&raquo;',
+			'number'   => $total_pages,
+			'disabled' => $disable['last'],
+		) );
 
 		$pagination_links_class = 'pagination-links';
 		if ( ! empty( $infinite_scroll ) ) {
@@ -641,6 +607,70 @@ class FrmListHelper {
 		$this->_pagination = "<div class='tablenav-pages" . esc_attr( $page_class ) . "'>$output</div>";
 
 		echo $this->_pagination;
+	}
+
+	private function disabled_pages( $total_pages ) {
+		$current = $this->get_pagenum();
+		$disable = array(
+			'first' => false,
+			'last'  => false,
+			'prev'  => false,
+			'next'  => false,
+		);
+
+ 		if ( $current == 1 ) {
+			$disable['first'] = true;
+			$disable['prev']  = true;
+ 		} elseif ( $current == 2 ) {
+			$disable['first'] = true;
+		}
+
+ 		if ( $current == $total_pages ) {
+			$disable['last'] = true;
+			$disable['next'] = true;
+ 		} elseif ( $current == $total_pages - 1 ) {
+			$disable['last'] = true;
+		}
+
+		return $disable;
+	}
+
+	private function link_label( $link ) {
+		$labels = array(
+			'first' => __( 'First page' ),
+			'last'  => __( 'Last page' ),
+			'prev'  => __( 'Previous page' ),
+			'next'  => __( 'Next page' ),
+		);
+		return $labels[ $link ];
+	}
+
+	private function current_url() {
+		$current_url = set_url_scheme( 'http://' . FrmAppHelper::get_server_value( 'HTTP_HOST' ) . FrmAppHelper::get_server_value( 'REQUEST_URI' ) );
+
+		return remove_query_arg( array( 'hotkeys_highlight_last', 'hotkeys_highlight_first' ), $current_url );
+	}
+
+	private function add_page_link( $atts ) {
+		if ( $atts['disabled'] ) {
+			$link = $this->add_disabled_link( $atts['arrow'] );
+		} else {
+			$link = $this->add_active_link( $atts );
+		}
+		return $link;
+	}
+
+	private function add_disabled_link( $label ) {
+		return '<span class="tablenav-pages-navspan" aria-hidden="true">' . $label . '</span>';
+	}
+
+	private function add_active_link( $atts ) {
+		$url = esc_url( add_query_arg( 'paged', $atts['number'], $this->current_url() ) );
+		$label = $this->link_label( $atts['page'] );
+		return sprintf(
+			"<a class='%s-page' href='%s'><span class='screen-reader-text'>%s</span><span aria-hidden='true'>%s</span></a>",
+			$atts['page'], $url, $label, $atts['arrow']
+		);
 	}
 
 	/**

@@ -2,7 +2,7 @@
 <?php if ( ! is_multisite() || current_user_can( 'setup_network' ) ) { ?>
     <div class="postbox">
         <div class="inside">
-			<p><?php esc_html_e( 'Get 15 more field types, including multiple file upload fields and cascading lookup fields. PLUS multi-page forms, calculations, repeatable sections, confirmation fields, conditional logic, front-end editing, views, data management, and graph & stat reporting.', 'formidable' ); ?>
+			<p><?php esc_html_e( 'Get more field types including multiple file upload and cascading lookups. PLUS multi-page forms, calculations, repeatable sections, confirmation fields, conditional logic, front-end editing, views, data management, and graph & stat reporting.', 'formidable' ); ?>
 			<?php printf( esc_html__( '%1$sClick here%2$s to go Pro.', 'formidable' ), '<a href="' . esc_url( FrmAppHelper::make_affiliate_url( 'https://formidableforms.com' ) ) . '">', '</a>' ); ?>
 			</p>
 

@@ -5,11 +5,6 @@ if ( ! defined('ABSPATH') ) {
 
 class FrmFormsHelper {
 
-	public static function maybe_get_form( &$form ) {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmForm::maybe_get_form' );
-		FrmForm::maybe_get_form( $form );
-	}
-
 	/**
 	 * @since 2.2.10
 	 */
@@ -103,7 +98,7 @@ class FrmFormsHelper {
         }
 
         ?>
-		<li class="dropdown last" id="frm_bs_dropdown">
+		<li id="frm_bs_dropdown" class="dropdown <?php echo esc_attr( is_rtl() ? 'pull-right' : 'pull-left' ) ?>">
 			<a href="#" id="frm-navbarDrop" class="frm-dropdown-toggle" data-toggle="dropdown"><?php esc_html_e( 'Switch Form', 'formidable' ) ?> <b class="caret"></b></a>
 		    <ul class="frm-dropdown-menu frm-on-top" role="menu" aria-labelledby="frm-navbarDrop">
 			<?php
@@ -128,6 +123,30 @@ class FrmFormsHelper {
 	public static function get_sortable_classes( $col, $sort_col, $sort_dir ) {
 		echo ( $sort_col == $col ) ? 'sorted' : 'sortable';
 		echo ( $sort_col == $col && $sort_dir == 'desc' ) ? ' asc' : ' desc';
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	public static function get_field_link_name( $field_type ) {
+		if ( is_array( $field_type ) ) {
+			$field_label = $field_type['name'];
+		} else {
+			$field_label = $field_type;
+		}
+		return $field_label;
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	public static function get_field_link_icon( $field_type ) {
+		if ( is_array( $field_type ) && isset( $field_type['icon'] ) ) {
+			$icon = $field_type['icon'];
+		} else {
+			$icon = 'frm_icon_font frm_pencil_icon';
+		}
+		return $icon;
 	}
 
 	/**
@@ -263,6 +282,7 @@ class FrmFormsHelper {
 			'akismet'        => '',
 			'no_save'        => 0,
 			'ajax_load'      => 0,
+			'js_validate'    => 0,
 			'form_class'     => '',
 			'custom_style'   => 1,
 			'before_html'    => self::get_default_html( 'before' ),
@@ -299,7 +319,7 @@ $draft_link
 SUBMIT_HTML;
 		} else if ( $loc == 'before' ) {
             $default_html = <<<BEFORE_HTML
-<legend class="frm_hidden">[form_name]</legend>
+<legend class="frm_screen_reader">[form_name]</legend>
 [if form_name]<h3 class="frm_form_title">[form_name]</h3>[/if form_name]
 [if form_description]<div class="frm_description">[form_description]</div>[/if form_description]
 BEFORE_HTML;
@@ -437,7 +457,7 @@ BEFORE_HTML;
                 $replace_with = '';
             }
 
-            FrmFieldsHelper::remove_inline_conditions( ( FrmAppHelper::is_true($show) && $replace_with != '' ), $code, $replace_with, $html );
+			FrmShortcodeHelper::remove_inline_conditions( ( FrmAppHelper::is_true( $show ) && $replace_with != '' ), $code, $replace_with, $html );
         }
 
         //replace [form_key]
@@ -512,9 +532,10 @@ BEFORE_HTML;
 
 		$submit_align = isset( $form['submit_align'] ) ? $form['submit_align'] : '';
 
-		if ( $submit_align == 'inline' ) {
+		if ( 'inline' === $submit_align ) {
 			$class .= ' frm_inline_form';
-		} else if ( $submit_align == 'center' ) {
+			$class .= self::maybe_align_fields_top( $form );
+		} elseif ( 'center' === $submit_align ) {
 			$class .= ' frm_center_submit';
 		}
 
@@ -522,6 +543,55 @@ BEFORE_HTML;
 
         return $class;
     }
+
+	/**
+	 * Returns appropriate class if form has top labels
+	 *
+	 * @param $form
+	 *
+	 * @return string
+	 */
+	private static function maybe_align_fields_top( $form ) {
+		return self::form_has_top_labels( $form ) ? ' frm_inline_top' : '';
+	}
+
+	/**
+	 * Determine if a form has fields with top labels so submit button can be aligned properly
+	 *
+	 * @param $form
+	 *
+	 * @return bool
+	 */
+	private static function form_has_top_labels( $form ) {
+		$fields = $form['fields'];
+		if ( count( $fields ) <= 0 ) {
+			return false;
+		}
+
+		$fields = array_reverse( $fields ); // start from the fields closest to the submit button
+		foreach ( $fields as $field ) {
+			$type = isset( $field['original_type'] ) ? $field['original_type'] : $field['type'];
+			$has_input = FrmFieldFactory::field_has_property( $type, 'has_input' );
+			if ( $has_input ) {
+				return self::field_has_top_label( $field, $form );
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check if a field's label position is set to "top"
+	 *
+	 * @param $field
+	 * @param $form
+	 *
+	 * @return bool
+	 */
+	private static function field_has_top_label( $field, $form ) {
+		$label_position = FrmFieldsHelper::label_position( $field['label'], $field, $form );
+		return in_array( $label_position, array( 'top', 'inside', 'hidden' ) );
+	}
 
     /**
      * @param string|boolean $form
@@ -582,6 +652,9 @@ BEFORE_HTML;
 	 * @since 2.0.6
 	 */
 	public static function show_error( $args ) {
+		// remove any blank messages
+		$args['errors'] = array_filter( $args['errors'] );
+
 		$line_break_first = $args['show_img'];
 		foreach ( $args['errors'] as $error_key => $error ) {
 			if ( $line_break_first && ! is_numeric( $error_key ) && ( $error_key == 'cptch_number' || strpos( $error_key, 'field' ) === 0 ) ) {
@@ -617,6 +690,57 @@ BEFORE_HTML;
         echo '<script type="text/javascript">document.addEventListener(\'DOMContentLoaded\',function(){frmFrontForm.scrollMsg(' . (int) $form_id . ');})</script>';
     }
 
+	/**
+	 * @since 3.0
+	 */
+	public static function actions_dropdown( $atts ) {
+		if ( FrmAppHelper::is_admin_page('formidable' ) ) {
+			$status = $atts['status'];
+			$form_id = isset( $atts['id'] ) ? $atts['id'] : FrmAppHelper::get_param( 'id', 0, 'get', 'absint' );
+			$trash_link = self::delete_trash_info( $form_id, $status );
+			$links = self::get_action_links( $form_id, $status );
+			include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/actions-dropdown.php' );
+		}
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	public static function get_action_links( $form_id, $form ) {
+		if ( ! is_object( $form ) ) {
+			$form = FrmForm::getOne( $form_id );
+		}
+
+		$actions = array();
+		$trash_links = self::delete_trash_links( $form_id );
+		if ( 'trash' == $form->status ) {
+			$actions['restore'] = $trash_links['restore'];
+
+			if ( current_user_can('frm_delete_forms') ) {
+				$actions['trash'] = $trash_links['delete'];
+			}
+		} else {
+			$duplicate_link = '?page=formidable&frm_action=duplicate&id=' . $form_id;
+			if ( $form->is_template ) {
+				$actions['frm_duplicate'] = array(
+					'url'   => wp_nonce_url( $duplicate_link ),
+					'label' => __( 'Create Form from Template', 'formidable' ),
+					'icon'  => 'frm_icon_font frm_duplicate_icon',
+				);
+			} elseif ( FrmAppHelper::pro_is_installed() ) {
+				$actions['duplicate'] = array(
+					'url'   => wp_nonce_url( $duplicate_link ),
+					'label' => __( 'Duplicate Form', 'formidable' ),
+					'icon'  => 'frm_icon_font frm_duplicate_icon',
+				);
+			}
+
+			$actions['trash'] = self::delete_trash_info( $form_id, $form->status );
+		}
+
+		return $actions;
+	}
+
 	public static function edit_form_link( $form_id ) {
         if ( is_object($form_id) ) {
             $form = $form_id;
@@ -635,37 +759,163 @@ BEFORE_HTML;
 	    return $val;
 	}
 
-	public static function delete_trash_link( $id, $status, $length = 'long' ) {
-        $link = '';
-        $labels = array(
-            'restore' => array(
-                'long'  => __( 'Restore from Trash', 'formidable' ),
-                'short' => __( 'Restore', 'formidable' ),
-            ),
-            'trash' => array(
-                'long'  => __( 'Move to Trash', 'formidable' ),
-                'short' => __( 'Trash', 'formidable' ),
-            ),
-            'delete' => array(
-                'long'  => __( 'Delete Permanently', 'formidable' ),
-                'short' => __( 'Delete', 'formidable' ),
-            ),
-        );
+	public static function delete_trash_link( $id, $status, $length = 'label' ) {
+		$link_details = self::delete_trash_info( $id, $status );
 
+		return self::format_link_html( $link_details, $length );
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	public static function format_link_html( $link_details, $length = 'label' ) {
+		$link = '';
+		if ( ! empty( $link_details ) ) {
+			$link = '<a href="' . esc_url( $link_details['url'] ) . '"';
+			if ( isset( $link_details['data'] ) ) {
+				foreach ( $link_details['data'] as $data => $value ) {
+					$link .= ' data-' . esc_attr( $data ) . '="' . esc_attr( $value ) . '"';
+				}
+			} elseif ( isset( $link_details['confirm'] ) ) {
+				$link .= ' onclick="return confirm(\'' . esc_attr( $link_details['confirm'] ) . '\')"';
+			}
+			$label = ( isset( $link_details[ $length ] ) ? $link_details[ $length ] : $link_details['label'] );
+			$link .= '>' . $label . '</a>';
+		}
+		return $link;
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	public static function delete_trash_info( $id, $status ) {
+		$labels = self::delete_trash_links( $id );
+
+		if ( 'trash' == $status ) {
+			$info = $labels['restore'];
+		} elseif ( current_user_can('frm_delete_forms') ) {
+			if ( EMPTY_TRASH_DAYS ) {
+				$info = $labels['trash'];
+			} else {
+				$info = $labels['delete'];
+			}
+		} else {
+			$info = array();
+		}
+
+		return $info;
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	private static function delete_trash_links( $id ) {
 		$current_page = FrmAppHelper::get_simple_request( array( 'param' => 'form_type' ) );
 		$base_url = '?page=formidable&form_type=' . $current_page . '&id=' . $id;
-        if ( 'trash' == $status ) {
-			$link = '<a href="' . esc_url( wp_nonce_url( $base_url . '&frm_action=untrash', 'untrash_form_' . $id ) ) . '" class="submitdelete deletion">' . $labels['restore'][ $length ] . '</a>';
-        } else if ( current_user_can('frm_delete_forms') ) {
-            if ( EMPTY_TRASH_DAYS ) {
-				$link = '<a href="' . esc_url( wp_nonce_url( $base_url . '&frm_action=trash', 'trash_form_' . $id ) ) . '" class="submitdelete deletion">' . $labels['trash'][ $length ] . '</a>';
-            } else {
-				$link = '<a href="' . esc_url( wp_nonce_url( $base_url . '&frm_action=destroy', 'destroy_form_' . $id ) ) . '" class="submitdelete deletion" onclick="return confirm(\'' . esc_attr( __( 'Are you sure you want to delete this form and all its entries?', 'formidable' ) ) . '\')">' . $labels['delete'][ $length ] . '</a>';
-            }
-        }
 
-        return $link;
-    }
+		return array(
+			'restore' => array(
+				'label' => __( 'Restore from Trash', 'formidable' ),
+				'short' => __( 'Restore', 'formidable' ),
+				'url'   => wp_nonce_url( $base_url . '&frm_action=untrash', 'untrash_form_' . $id ),
+			),
+			'trash' => array(
+				'label' => __( 'Move Form to Trash', 'formidable' ),
+				'short' => __( 'Trash', 'formidable' ),
+				'url'   => wp_nonce_url( $base_url . '&frm_action=trash', 'trash_form_' . $id ),
+				'icon'  => 'frm_icon_font frm_delete_icon',
+				'data'  => array( 'frmverify' => __( 'Are you sure?', 'formidable' ) ),
+			),
+			'delete' => array(
+				'label' => __( 'Delete Permanently', 'formidable' ),
+				'short' => __( 'Delete', 'formidable' ),
+				'url'   => wp_nonce_url( $base_url . '&frm_action=destroy', 'destroy_form_' . $id ),
+				'confirm' => __( 'Are you sure you want to delete this form and all its entries?', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_delete_icon',
+				'data'  => array( 'frmverify' => __( 'Delete form & entries?', 'formidable' ) ),
+			),
+		);
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	public static function css_classes() {
+		$classes = array(
+			'frm_first'      => array(
+				'label'      => __( 'First', 'formidable' ),
+				'title'      => __( 'Add this to the first field in each row along with a width. ie frm_first frm4', 'formidable' ),
+			),
+			'frm_alignright' => __( 'Right', 'formidable' ),
+			'frm_total'      => array(
+				'label'      => __( 'Total', 'formidable' ),
+				'title'      => __( 'Add this to a read-only field to display the text in bold without a border or background.', 'formidable' ),
+			),
+			'frm_grid_first' => __( 'First Grid Row', 'formidable' ),
+			'frm_grid'       => __( 'Even Grid Row', 'formidable' ),
+			'frm_grid_odd'   => __( 'Odd Grid Row', 'formidable' ),
+			'frm_two_col'    => array(
+				'label'      => __( '2 Col Options', 'formidable' ),
+				'title'      => __( 'Put your radio button or checkbox options into two columns.', 'formidable' ),
+			),
+			'frm_three_col'  => array(
+				'label'      => __( '3 Col Options', 'formidable' ),
+				'title'      => __( 'Put your radio button or checkbox options into three columns.', 'formidable' ),
+			),
+			'frm_four_col'   => array(
+				'label'      => __( '4 Col Options', 'formidable' ),
+				'title'      => __( 'Put your radio button or checkbox options into four columns.', 'formidable' ),
+			),
+			'frm_scroll_box' => array(
+				'label'      => __( 'Scroll Box', 'formidable' ),
+				'title'      => __( 'If you have many checkbox or radio button options, you may add this class to allow your user to easily scroll through the options.', 'formidable' ),
+			),
+			'frm_capitalize' => array(
+				'label'      => __( 'Capitalize', 'formidable' ),
+				'title'      => __( 'Automatically capitalize the first letter in each word.', 'formidable' ),
+			),
+		);
+
+		return apply_filters( 'frm_layout_classes', $classes );
+	}
+
+	public static function grid_classes() {
+		return array(
+			'frm_half'          => '1/2',
+
+			'frm_third'         => '1/3',
+			'frm_two_thirds'    => '2/3',
+
+			'frm_fourth'        => '1/4',
+			'frm_three_fourths' => '3/4',
+
+			'frm_sixth'         => '1/6',
+			'frm10'             => '5/6',
+
+			'frm11'             => '11/12',
+			'frm1'              => '1/12',
+
+			'frm5'              => '5/12',
+			'frm7'              => '7/12',
+
+			'frm12'             => '100%',
+		);
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	public static function style_class_label( $style, $class ) {
+		$label = '';
+		if ( empty( $style ) ) {
+			$label = $class;
+		} elseif ( ! is_array( $style ) ) {
+			$label = $style;
+		} else if ( isset( $style['label'] ) ) {
+			$label = $style['label'];
+		}
+		return $label;
+	}
 
 	public static function status_nice_name( $status ) {
         $nice_names = array(
@@ -682,14 +932,4 @@ BEFORE_HTML;
 
         return $name;
     }
-
-	public static function get_params() {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmForm::list_page_params' );
-		return FrmForm::list_page_params();
-	}
-
-	public static function form_loaded( $form, $this_load, $global_load ) {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmFormsController::maybe_load_css' );
-		FrmFormsController::maybe_load_css( $form, $this_load, $global_load );
-	}
 }

@@ -101,10 +101,6 @@ class FrmFormsListHelper extends FrmListHelper {
 	public function get_bulk_actions() {
 	    $actions = array();
 
-		if ( in_array( $this->status, array( '', 'published' ) ) ) {
-	        $actions['bulk_create_template'] = __( 'Create Template', 'formidable' );
-	    }
-
 	    if ( 'trash' == $this->status ) {
 	        if ( current_user_can('frm_edit_forms') ) {
 	            $actions['bulk_untrash'] = __( 'Restore', 'formidable' );
@@ -225,9 +221,8 @@ class FrmFormsListHelper extends FrmListHelper {
 		// Set up the hover actions for this user
 		$actions = array();
 		$edit_link = '?page=formidable&frm_action=edit&id=' . $item->id;
-		$duplicate_link = '?page=formidable&frm_action=duplicate&id=' . $item->id;
 
-        $this->get_actions($actions, $item, $edit_link, $duplicate_link);
+		$this->get_actions( $actions, $item, $edit_link );
 
         $action_links = $this->row_actions( $actions );
 
@@ -306,43 +301,29 @@ class FrmFormsListHelper extends FrmListHelper {
 
     /**
      * @param string $edit_link
-     * @param string $duplicate_link
      */
-    private function get_actions( &$actions, $item, $edit_link, $duplicate_link ) {
-		if ( 'trash' == $this->status ) {
-			if ( current_user_can('frm_edit_forms') ) {
-				$actions['restore'] = FrmFormsHelper::delete_trash_link( $item->id, $item->status, 'short' );
-			}
+	private function get_actions( &$actions, $item, $edit_link ) {
+		$new_actions = FrmFormsHelper::get_action_links( $item->id, $item );
+		foreach ( $new_actions as $link => $action ) {
+			$new_actions[ $link ] = FrmFormsHelper::format_link_html( $action, 'short' );
+		}
 
-		    if ( current_user_can('frm_delete_forms') ) {
-				$trash_url = wp_nonce_url( '?page=formidable&form_status=trash&frm_action=destroy&id=' . $item->id, 'destroy_form_' . $item->id );
-				$actions['trash'] = '<a href="' . esc_url( $trash_url ) . '" class="submitdelete" onclick="return confirm(\'' . __( 'Are you sure you want to permanently delete that?', 'formidable' ) . '\')">' . __( 'Delete Permanently' ) . '</a>';
-    		}
-            return;
+		if ( 'trash' == $this->status ) {
+			$actions = $new_actions;
+			return;
 		}
 
 		if ( current_user_can('frm_edit_forms') ) {
-            if ( ! $item->is_template || ! $item->default_template ) {
+			if ( ! $item->is_template || ! $item->default_template ) {
 				$actions['frm_edit'] = '<a href="' . esc_url( $edit_link ) . '">' . __( 'Edit' ) . '</a>';
-            }
+			}
 
-		    if ( $item->is_template ) {
-				$actions['frm_duplicate'] = '<a href="' . esc_url( wp_nonce_url( $duplicate_link ) ) . '">' . __( 'Create Form from Template', 'formidable' ) . '</a>';
-            } else {
+			if ( ! $item->is_template ) {
 				$actions['frm_settings'] = '<a href="' . esc_url( '?page=formidable&frm_action=settings&id=' . $item->id ) . '">' . __( 'Settings', 'formidable' ) . '</a>';
-
-    		    if ( FrmAppHelper::pro_is_installed() ) {
-					$actions['duplicate'] = '<a href="' . esc_url( wp_nonce_url( $duplicate_link ) ) . '">' . __( 'Duplicate', 'formidable' ) . '</a>';
-        	    }
-        	}
-        }
-
-		$actions['trash'] = FrmFormsHelper::delete_trash_link( $item->id, $item->status, 'short' );
-		if ( empty( $actions['trash'] ) ) {
-			// the user doesn't have permission
-			unset( $actions['trash'] );
+			}
 		}
 
+		$actions = array_merge( $actions, $new_actions );
 		$actions['view'] = '<a href="' . esc_url( FrmFormsHelper::get_direct_link( $item->form_key, $item ) ) . '" target="_blank">' . __( 'Preview') . '</a>';
     }
 

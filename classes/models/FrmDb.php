@@ -169,7 +169,8 @@ class FrmDb {
 	 */
     private static function add_query_placeholder( $key, $value, &$where ) {
 		if ( is_numeric( $value ) && ( strpos( $key, 'meta_value' ) === false || strpos( $key, '+0' ) !== false ) ) {
-			$where .= '%d';
+			$value = $value + 0; // switch string to number
+			$where .= is_float( $value ) ? '%f' : '%d';
 		} else {
 			$where .= '%s';
 		}
@@ -408,7 +409,7 @@ class FrmDb {
 		} else {
 			/**
 			 * Allow the $where to be prepared before we recieve it here.
-			 * This is a fallback for reverse compatability, but is not recommended
+			 * This is a fallback for reverse compatibility, but is not recommended
 			 */
 			_deprecated_argument( 'where', '2.0', __( 'Use the query in an array format so it can be properly prepared.', 'formidable' ) );
 			$query .= $where . ' ' . implode( ' ', $args );

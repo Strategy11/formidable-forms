@@ -314,7 +314,7 @@ class FrmXMLHelper {
 		foreach ( $xml_fields as $field ) {
 			$f = self::fill_field( $field, $form_id );
 
-			$has_default = array( 'text', 'email', 'url', 'textarea', 'number', 'phone', 'date', 'hidden', 'password', 'tag', 'image' );
+			$has_default = array( 'text', 'email', 'url', 'textarea', 'number', 'phone', 'date', 'hidden', 'password', 'tag' );
 			if ( is_array( $f['default_value'] ) && in_array( $f['type'], $has_default, true ) ) {
 				if ( count( $f['default_value'] ) === 1 ) {
 					$f['default_value'] = '[' . reset( $f['default_value'] ) . ']';
@@ -750,7 +750,8 @@ class FrmXMLHelper {
                 $v = FrmAppHelper::get_user_id_param($v);
             } else if ( '_thumbnail_id' == $k && FrmAppHelper::pro_is_installed() ) {
                 //change the attachment ID
-                $v = FrmProXMLHelper::get_file_id($v);
+				$field_obj = FrmFieldFactory::get_field_type( 'file' );
+				$v = $field_obj->get_file_id( $v );
             }
 
             update_post_meta($post_id, $k, $v);

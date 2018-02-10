@@ -21,7 +21,10 @@ class FrmMigrate {
 	public function upgrade( $old_db_version = false ) {
 		do_action( 'frm_before_install' );
 
-		global $wpdb;
+		global $wpdb, $frm_vars;
+
+		$frm_vars['doing_upgrade'] = true;
+
 		//$frm_db_version is the version of the database we're moving to
 		$frm_db_version = FrmAppHelper::$db_version;
 		$old_db_version = (float) $old_db_version;
@@ -51,8 +54,12 @@ class FrmMigrate {
 
 		do_action('frm_after_install');
 
+		$frm_vars['doing_upgrade'] = false;
+
+		FrmAppHelper::save_combined_js();
+
 		/**** update the styling settings ****/
-		if ( is_admin() && function_exists( 'get_filesystem_method' ) ) {
+		if ( function_exists( 'get_filesystem_method' ) ) {
 			$frm_style = new FrmStyle();
 			$frm_style->update( 'default' );
 		}
@@ -164,7 +171,7 @@ class FrmMigrate {
     }
 
 	private function maybe_create_contact_form() {
-		$template_id = FrmForm::getIdByKey( 'contact' );
+		$template_id = FrmForm::get_id_by_key( 'contact' );
 		if ( $template_id ) {
 			$form_id = FrmForm::duplicate( $template_id, false, true );
 			if ( $form_id ) {
@@ -336,8 +343,6 @@ class FrmMigrate {
      * Migrate post and email notification settings into actions
      */
     private function migrate_to_16() {
-        global $wpdb;
-
         $forms = FrmDb::get_results( $this->forms, array(), 'id, options, is_template, default_template' );
 
         /**

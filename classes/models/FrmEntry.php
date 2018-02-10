@@ -248,7 +248,11 @@ class FrmEntry {
 	 * @since 2.0.11
 	 */
 	public static function get_new_entry_name( $values, $default = '' ) {
-		return isset( $values['item_name'] ) ? $values['item_name'] : ( isset( $values['name'] ) ? $values['name'] : $default );
+		$name = isset( $values['item_name'] ) ? $values['item_name'] : ( isset( $values['name'] ) ? $values['name'] : $default );
+		if ( is_array( $name ) ) {
+			$name = reset( $name );
+		}
+		return $name;
 	}
 
 	/**
@@ -259,6 +263,8 @@ class FrmEntry {
 	public static function maybe_get_entry( &$entry ) {
 		if ( $entry && is_numeric( $entry ) ) {
 			$entry = self::getOne( $entry );
+		} elseif ( empty( $entry ) ) {
+			$entry = false;
 		}
 	}
 
@@ -555,10 +561,6 @@ class FrmEntry {
 			'description' => self::get_entry_description( $values ),
 			'user_id' => self::get_entry_user_id( $values ),
 		);
-
-		if ( is_array($new_values['name']) ) {
-			$new_values['name'] = reset($new_values['name']);
-		}
 
 		$new_values['updated_by'] = isset($values['updated_by']) ? $values['updated_by'] : $new_values['user_id'];
 
@@ -881,44 +883,4 @@ class FrmEntry {
         $entry_id = FrmDb::get_var( 'frm_items', array( 'item_key' => sanitize_title( $key ) ) );
         return $entry_id;
     }
-
-	public static function validate( $values, $exclude = false ) {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmEntryValidate::validate' );
-		return FrmEntryValidate::validate( $values, $exclude );
-	}
-
-	public static function validate_field( $posted_field, &$errors, $values, $args = array() ) {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmEntryValidate::validate_field' );
-		FrmEntryValidate::validate_field( $posted_field, $errors, $values, $args );
-	}
-
-	public static function validate_url_field( &$errors, $field, &$value, $args ) {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmEntryValidate::validate_url_field' );
-		FrmEntryValidate::validate_url_field( $errors, $field, $value, $args );
-	}
-
-	public static function validate_email_field( &$errors, $field, $value, $args ) {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmEntryValidate::validate_email_field' );
-		FrmEntryValidate::validate_email_field( $errors, $field, $value, $args );
-	}
-
-	public static function validate_recaptcha( &$errors, $field, $args ) {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmEntryValidate::validate_recaptcha' );
-		FrmEntryValidate::validate_recaptcha( $errors, $field, $args );
-	}
-
-	public static function spam_check( $exclude, $values, &$errors ) {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmEntryValidate::spam_check' );
-		FrmEntryValidate::spam_check( $exclude, $values, $errors );
-	}
-
-	public static function blacklist_check( $values ) {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmEntryValidate::blacklist_check' );
-		return FrmEntryValidate::blacklist_check( $values );
-	}
-
-	public static function akismet( $values ) {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmEntryValidate::akismet' );
-		return FrmEntryValidate::akismet( $values );
-	}
 }

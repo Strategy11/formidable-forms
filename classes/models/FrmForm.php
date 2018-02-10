@@ -228,32 +228,23 @@ class FrmForm {
 
 			$is_settings_page = ( isset( $values['options'] ) || isset( $values['field_options'][ 'custom_html_' . $field_id ] ) );
 			if ( $is_settings_page ) {
-                //updating the settings page
-				if ( isset( $values['field_options'][ 'custom_html_' . $field_id ] ) ) {
-					$field->field_options['custom_html'] = isset( $values['field_options'][ 'custom_html_' . $field_id ] ) ? $values['field_options'][ 'custom_html_' . $field_id ] : ( isset( $field->field_options['custom_html'] ) ? $field->field_options['custom_html'] : FrmFieldsHelper::get_default_html( $field->type ) );
-                    $field->field_options = apply_filters('frm_update_form_field_options', $field->field_options, $field, $values);
-					FrmField::update( $field_id, array( 'field_options' => $field->field_options ) );
-                } else if ( $field->type == 'hidden' || $field->type == 'user_id' ) {
-                    $prev_opts = $field->field_options;
-                    $field->field_options = apply_filters('frm_update_form_field_options', $field->field_options, $field, $values);
-                    if ( $prev_opts != $field->field_options ) {
-						FrmField::update( $field_id, array( 'field_options' => $field->field_options ) );
-                    }
-                    unset($prev_opts);
-                }
-            }
+				self::get_settings_page_html( $values, $field );
 
-			if ( $is_settings_page && ! defined( 'WP_IMPORTING' ) ) {
-                continue;
-            }
+				if ( ! defined( 'WP_IMPORTING' ) ) {
+					continue;
+				}
+			}
 
-            //updating the form
-			$update_options = FrmFieldsHelper::get_default_field_opts( $field->type, $field, true );
+			//updating the form
+			$update_options = FrmFieldsHelper::get_default_field_options_from_field( $field );
 			unset( $update_options['custom_html'] ); // don't check for POST html
 			$update_options = apply_filters( 'frm_field_options_to_update', $update_options );
 
 			foreach ( $update_options as $opt => $default ) {
-				$field->field_options[ $opt ] = isset( $values['field_options'][ $opt . '_' . $field_id ] ) ? trim( sanitize_text_field( $values['field_options'][ $opt . '_' . $field_id ] ) ) : $default;
+				$field->field_options[ $opt ] = isset( $values['field_options'][ $opt . '_' . $field_id ] ) ? $values['field_options'][ $opt . '_' . $field_id ] : $default;
+				if ( is_string( $field->field_options[ $opt ] ) ) {
+					$field->field_options[ $opt ] = trim( sanitize_text_field( $field->field_options[ $opt ] ) );
+				}
             }
 
             $field->field_options = apply_filters('frm_update_field_options', $field->field_options, $field, $values);
@@ -275,13 +266,34 @@ class FrmForm {
         return $values;
     }
 
+	/**
+	 * updating the settings page
+	 */
+	private static function get_settings_page_html( $values, &$field ) {
+		if ( isset( $values['field_options'][ 'custom_html_' . $field->id ] ) ) {
+			$prev_opts = array();
+			$fallback_html = isset( $field->field_options['custom_html'] ) ? $field->field_options['custom_html'] : FrmFieldsHelper::get_default_html( $field->type );
+			$field->field_options['custom_html'] = isset( $values['field_options'][ 'custom_html_' . $field->id ] ) ? $values['field_options'][ 'custom_html_' . $field->id ] : $fallback_html;
+		} elseif ( $field->type == 'hidden' || $field->type == 'user_id' ) {
+			$prev_opts = $field->field_options;
+		}
+
+		if ( isset( $prev_opts ) ) {
+			$field->field_options = apply_filters( 'frm_update_form_field_options', $field->field_options, $field, $values );
+			if ( $prev_opts != $field->field_options ) {
+				FrmField::update( $field->id, array( 'field_options' => $field->field_options ) );
+			}
+		}
+	}
+
 	private static function prepare_field_update_values( $field, $values, &$new_field ) {
 		$field_cols = array(
-			'field_key' => '',
-			'required'  => false,
-			'type'      => '',
+			'field_key'   => '',
+			'required'    => false,
+			'type'        => '',
 			'description' => '',
-			'options'   => '',
+			'options'     => '',
+			'name'        => '',
 		);
 		foreach ( $field_cols as $col => $default ) {
 			$default = ( $default === '' ) ? $field->{$col} : $default;
@@ -459,18 +471,29 @@ class FrmForm {
     }
 
     /**
+	 * @since 3.0
      * @param string $key
      * @return int form id
      */
-	public static function getIdByKey( $key ) {
+	public static function get_id_by_key( $key ) {
 		return (int) FrmDb::get_var( 'frm_forms', array( 'form_key' => sanitize_title( $key ) ) );
     }
 
     /**
+     * @param string $key
+     * @return int form id
+     */
+	public static function getIdByKey( $key ) {
+		_deprecated_function( __METHOD__, '3.0', 'FrmForm::get_id_by_key' );
+		return self::get_id_by_key( $key );
+    }
+
+    /**
+	 * @since 3.0
      * @param int $id
      * @return string form key
      */
-	public static function getKeyById( $id ) {
+	public static function get_key_by_id( $id ) {
         $id = (int) $id;
 		$cache = FrmDb::check_cache( $id, 'frm_form' );
         if ( $cache ) {
@@ -481,6 +504,11 @@ class FrmForm {
 
         return $key;
     }
+
+	public static function getKeyById( $id ) {
+		_deprecated_function( __METHOD__, '3.0', 'FrmForm::get_key_by_id' );
+		return self::get_key_by_id( $id );
+	}
 
 	/**
 	 * If $form is numeric, get the form object

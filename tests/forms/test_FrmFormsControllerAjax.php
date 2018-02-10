@@ -18,7 +18,7 @@ class WP_Test_FrmFormsControllerAjax extends FrmAjaxUnitTest {
 	* with ajax
 	*/
 	function test_form_update_with_ajax() {
-		$form_id = FrmForm::getIdByKey( $this->contact_form_key );
+		$form_id = FrmForm::get_id_by_key( $this->contact_form_key );
 
 		self::_setup_post_values( $form_id );
 
@@ -90,13 +90,6 @@ class WP_Test_FrmFormsControllerAjax extends FrmAjaxUnitTest {
 			$posted_val = $_POST['item_meta'][ $field->id ];
 			$actual_val = $field->default_value;
 			$this->assertEquals( $posted_val, $actual_val, 'The default value was not updated correctly for field ' . $field->field_key . '.' );
-
-			if ( $this->is_pro_active ) {
-				// Check calculations
-				$posted_val = $_POST['field_options'][ 'use_calc_' . $field->id ];
-				$actual_val = $field->field_options['use_calc'];
-				$this->assertEquals( $posted_val, $actual_val, 'The calculation was not updated correctly for field ' . $field->field_key . '.' );
-			}
 		}
 	}
 }

@@ -18,11 +18,12 @@ class Tests_Frm_Ajax extends FrmAjaxUnitTest {
 			'action' => 'frm_uninstall',
 		);
 
-        try {
-			$this->_handleAjax( 'frm_uninstall' );
-        } catch ( WPAjaxDieStopException $e ) {
-            $this->assertTrue( $e->getMessage() ? true : false );
-        }
+		$response = $this->trigger_action( 'frm_uninstall' );
+
+		$frm_settings = FrmAppHelper::get_settings();
+		$expected = $frm_settings->admin_permission;
+
+		$this->assertSame( $expected, $response );
 
         global $wpdb;
         $exists = $wpdb->query( 'DESCRIBE '. $wpdb->prefix . 'frm_fields' );

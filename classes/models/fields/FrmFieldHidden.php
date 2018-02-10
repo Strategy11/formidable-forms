@@ -1,0 +1,45 @@
+<?php
+
+/**
+ * @since 3.0
+ */
+class FrmFieldHidden extends FrmFieldType {
+
+	/**
+	 * @var string
+	 * @since 3.0
+	 */
+	protected $type = 'hidden';
+
+	/**
+	 * @var bool
+	 * @since 3.0
+	 */
+	protected $has_input = false;
+
+	/**
+	 * @var bool
+	 * @since 3.0
+	 */
+	protected $has_html = false;
+
+	/**
+	 * @var bool
+	 * @since 3.0
+	 */
+	protected $holds_email_values = true;
+
+	protected function field_settings_for_type() {
+		$settings = parent::field_settings_for_type();
+		$settings['css'] = false;
+		return $settings;
+	}
+
+	protected function include_form_builder_file() {
+		return FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-hidden.php';
+	}
+
+	protected function html5_input_type() {
+		return 'hidden';
+	}
+}

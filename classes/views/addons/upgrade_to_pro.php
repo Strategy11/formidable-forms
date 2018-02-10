@@ -1,7 +1,8 @@
 <div class="wrap upgrade_to_pro">
 	<h1 class="frm_pro_heading">
 		<img src="<?php echo esc_url( FrmAppHelper::plugin_url() ) ?>/images/logo.png" alt="Upgrade to Pro" />
-		<span class="alignright">Save time and make life easier. Upgrade to Pro.</span>
+		<span class="alignright">Take on bigger projects, earn more clients and grow your business.</br>
+			Upgrade to Pro.</span>
 		<span class="clear"></span>
 	</h1>
 
@@ -85,17 +86,25 @@
 				<td><i class="frm_icon_font frm_check_icon"></i></td>
 			</tr>
 			<tr>
-				<th>Create forms from Templates</th>
+				<th>
+					<a href="https://formidableforms.com/features/wordpress-form-templates/" target="_blank">
+					Create forms from Templates
+					</a>
+				</th>
 				<td><i class="frm_icon_font frm_check_icon"></i></td>
 				<td><i class="frm_icon_font frm_check_icon"></i></td>
 			</tr>
 			<tr>
-				<th>Import and export forms with XML</th>
+				<th>
+					<a href="https://formidableforms.com/features/importing-exporting-wordpress-forms/" target="_blank">
+						Import and export forms with XML
+					</a>
+				</th>
 				<td><i class="frm_icon_font frm_check_icon"></i></td>
 				<td><i class="frm_icon_font frm_check_icon"></i></td>
 			</tr>
 			<tr>
-				<th>Use Placeholders in your fields that clear when typing starts</th>
+				<th>Use input placeholder text in your fields that clear when typing starts</th>
 				<td><i class="frm_icon_font frm_check_icon"></i></td>
 				<td><i class="frm_icon_font frm_check_icon"></i></td>
 			</tr>
@@ -105,43 +114,71 @@
 				<td><i class="frm_icon_font frm_check_icon"></i></td>
 			</tr>
 			<tr>
-				<th>Include Section headings, page breaks, rich text, number, phone number, date, time, scale, dynamic fields populated from other forms, hidden fields, user ID fields, password, HTML, and tags fields</th>
+				<th>Include Section headings, page breaks, rich text, date, time, scale, dynamic fields populated from other forms, hidden fields, user ID fields, password, HTML, and tags fields</th>
 				<td><i class="frm_icon_font frm_cancel1_icon"></i></td>
 				<td><i class="frm_icon_font frm_check_icon"></i></td>
 			</tr>
 			<tr>
-				<th>Save a calculated value into a field</th>
+				<th>
+					<a href="https://formidableforms.com/features/wordpress-calculated-fields-form/" target="_blank">
+						Save a calculated value into a field
+					</a>
+				</th>
 				<td><i class="frm_icon_font frm_cancel1_icon"></i></td>
 				<td><i class="frm_icon_font frm_check_icon"></i></td>
 			</tr>
 			<tr>
-				<th>Allow File Uploads</th>
+				<th>
+					<a href="https://formidableforms.com/features/wordpress-multiple-file-upload-form/" target="_blank">
+						Allow multiple file uploads
+					</a>
+				</th>
 				<td><i class="frm_icon_font frm_cancel1_icon"></i></td>
 				<td><i class="frm_icon_font frm_check_icon"></i></td>
 			</tr>
 			<tr>
-				<th>Repeat sections of fields</th>
+				<th>
+					<a href="https://formidableforms.com/features/dynamically-add-form-fields/" target="_blank">
+						Repeat sections of fields
+					</a>
+				</th>
 				<td><i class="frm_icon_font frm_cancel1_icon"></i></td>
 				<td><i class="frm_icon_font frm_check_icon"></i></td>
 			</tr>
 			<tr>
-				<th>Hide and show fields conditionally based on other fields or the user's role</th>
+				<th>
+					<a href="https://formidableforms.com/features/conditional-logic-wordpress-forms/" target="_blank">
+						Hide and show fields conditionally based on other fields or the user's role
+					</a>
+				</th>
 				<td><i class="frm_icon_font frm_cancel1_icon"></i></td>
 				<td><i class="frm_icon_font frm_check_icon"></i></td>
 			</tr>
 			<tr>
-				<th>Confirmation fields</th>
+				<th>
+					<a href="https://formidableforms.com/features/confirm-email-address-password-wordpress-form/" target="_blank">
+						Confirmation fields
+					</a>
+				</th>
 				<td><i class="frm_icon_font frm_cancel1_icon"></i></td>
 				<td><i class="frm_icon_font frm_check_icon"></i></td>
 			</tr>
 			<tr>
-				<th>Multi-paged forms</th>
+				<th>
+					<a href="https://formidableforms.com/features/wordpress-multi-step-form/" target="_blank">
+						Multi-paged forms
+					</a>
+				</th>
 				<td><i class="frm_icon_font frm_cancel1_icon"></i></td>
 				<td><i class="frm_icon_font frm_check_icon"></i></td>
 			</tr>
 			<tr><th colspan="3" class="frm_table_break">Form Actions</th></tr>
 			<tr>
-				<th>Send multiple emails and autoresponders</th>
+				<th>
+					<a href="https://formidableforms.com/features/email-autoresponders-wordpress/" target="_blank">
+						Send multiple emails and autoresponders
+					</a>
+				</th>
 				<td><i class="frm_icon_font frm_check_icon"></i></td>
 				<td><i class="frm_icon_font frm_check_icon"></i></td>
 			</tr>
@@ -151,28 +188,48 @@
 				<td><i class="frm_icon_font frm_check_icon"></i></td>
 			</tr>
 			<tr>
-				<th>Create and edit WordPress posts or custom posts from the front-end</th>
+				<th>
+					<a href="https://formidableforms.com/features/user-submitted-posts-wordpress-forms/" target="_blank">
+						Create and edit WordPress posts or custom posts from the front-end
+					</a>
+				</th>
 				<td><i class="frm_icon_font frm_cancel1_icon"></i></td>
 				<td><i class="frm_icon_font frm_check_icon"></i></td>
 			</tr>
 			<tr><th colspan="3" class="frm_table_break">Form Appearance</th></tr>
 			<tr>
-				<th>Customizable layout with CSS classes</th>
+				<th>
+					<a href="https://formidableforms.com/features/flexible-layouts-responsive-forms/" target="_blank">
+						Customizable layout with CSS classes
+					</a>
+				</th>
 				<td><i class="frm_icon_font frm_check_icon"></i></td>
 				<td><i class="frm_icon_font frm_check_icon"></i></td>
 			</tr>
 			<tr>
-				<th>Customize the HTML for your forms</th>
+				<th>
+					<a href="https://formidableforms.com/features/customize-form-html-wordpress/" target="_blank">
+						Customize the HTML for your forms
+					</a>
+				</th>
 				<td><i class="frm_icon_font frm_check_icon"></i></td>
 				<td><i class="frm_icon_font frm_check_icon"></i></td>
 			</tr>
 			<tr>
-				<th>Style your form with the Visual Styler</th>
+				<th>
+					<a href="https://formidableforms.com/features/wordpress-visual-form-styler/" target="_blank">
+						Style your form with the Visual Form Styler
+					</a>
+				</th>
 				<td><i class="frm_icon_font frm_check_icon"></i></td>
 				<td><i class="frm_icon_font frm_check_icon"></i></td>
 			</tr>
 			<tr>
-				<th>Create Multiple styles for different forms</th>
+				<th>
+					<a href="https://formidableforms.com/features/wordpress-visual-form-styler/" target="_blank">
+						Create Multiple styles for different forms
+					</a>
+				</th>
 				<td><i class="frm_icon_font frm_cancel1_icon"></i></td>
 				<td><i class="frm_icon_font frm_check_icon"></i></td>
 			</tr>
@@ -193,23 +250,39 @@
 				<td><i class="frm_icon_font frm_check_icon"></i></td>
 			</tr>
 			<tr>
-				<th>Logged-in users can save drafts and return later</th>
+				<th>
+					<a href="https://formidableforms.com/features/save-and-continue-partial-submissions/" target="_blank">
+						Logged-in users can save drafts and return later
+					</a>
+				</th>
 				<td><i class="frm_icon_font frm_cancel1_icon"></i></td>
 				<td><i class="frm_icon_font frm_check_icon"></i></td>
 			</tr>
 			<tr>
-				<th>Flexibly and powerfully view, edit, and delete entries from anywhere on your site</th>
+				<th>
+					<a href="https://formidableforms.com/features/front-end-editing-wordpress/" target="_blank">
+						Flexibly and powerfully view, edit, and delete entries from anywhere on your site
+					</a>
+				</th>
 				<td><i class="frm_icon_font frm_cancel1_icon"></i></td>
 				<td><i class="frm_icon_font frm_check_icon"></i></td>
 			</tr>
 			<tr><th colspan="3" class="frm_table_break">Display Entries</th></tr>
 			<tr>
-				<th>Generate graphs and stats based on your submitted data</th>
+				<th>
+					<a href="https://formidableforms.com/features/create-a-graph-wordpress-forms/" target="_blank">
+						Generate graphs and stats based on your submitted data
+					</a>
+				</th>
 				<td><i class="frm_icon_font frm_cancel1_icon"></i></td>
 				<td><i class="frm_icon_font frm_check_icon"></i></td>
 			</tr>
 			<tr>
-				<th>Virtually limitless views</th>
+				<th>
+					<a href="https://formidableforms.com/features/display-form-data-views/" target="_blank">
+						Virtually limitless views
+					</a>
+				</th>
 				<td><i class="frm_icon_font frm_cancel1_icon"></i></td>
 				<td><i class="frm_icon_font frm_check_icon"></i></td>
 			</tr>

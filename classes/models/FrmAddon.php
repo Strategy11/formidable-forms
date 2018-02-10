@@ -15,6 +15,7 @@ class FrmAddon {
 	public $version;
 	public $author = 'Strategy11';
 	private $license;
+	protected $get_beta = false;
 
 	public function __construct() {
 
@@ -65,6 +66,7 @@ class FrmAddon {
 				'version' => $this->version,
 				'license' => $license,
 				'author'  => $this->author,
+				'beta'    => $this->get_beta,
 			);
 			if ( is_numeric( $this->download_id ) ) {
 				$api_data['item_id'] = $this->download_id;
@@ -137,13 +139,15 @@ class FrmAddon {
 	public function clear_license() {
 		delete_option( $this->option_name . 'active' );
 		delete_option( $this->option_name . 'key' );
-		delete_site_transient( $this->transient_key() );
+		delete_site_option( $this->transient_key() );
+		delete_option( $this->transient_key() );
 		delete_transient( 'frm_api_licence' );
 	}
 
 	public function set_active( $is_active ) {
 		update_option( $this->option_name . 'active', $is_active );
 		delete_transient( 'frm_api_licence' );
+		FrmAppHelper::save_combined_js();
 	}
 
 	public function show_license_message( $file, $plugin ) {
@@ -169,14 +173,19 @@ class FrmAddon {
 			}
 		} elseif ( isset( $transient->response ) && isset( $transient->response[ $this->plugin_folder ] ) ) {
 			$cache_key = $this->version_cache_key();
-			$version_info = get_transient( $cache_key );
+			$version_info = get_option( $cache_key );
 
 			$this->clear_old_plugin_version( $version_info );
+
+			if ( is_array( $version_info ) && isset( $version_info['value'] ) ) {
+				$version_info = json_decode( $version_info['value'] );
+				$version_info->new_version = trim( $version_info->new_version, 'p' );
+			}
 
 			if ( false !== $version_info && version_compare( $version_info->new_version, $this->version, '>' ) ) {
 				$transient->response[ $this->plugin_folder ] = $version_info;
 			} else {
-				delete_transient( $cache_key );
+				delete_option( $cache_key );
 				if ( ! $this->has_been_cleared() ) {
 					// if the transient has expired, clear the update and trigger it again
 					$this->cleared_plugins();
@@ -195,7 +204,8 @@ class FrmAddon {
 	 * @since 2.05.05
 	 */
 	private function version_cache_key() {
-		return 'edd_plugin_' . md5( sanitize_key( $this->license . $this->version ) . '_get_version' );
+		$slug = basename( $this->plugin_file, '.php' );
+		return md5( serialize( $slug . $this->version . $this->license . $this->get_beta ) );
 	}
 
 	/**
@@ -206,16 +216,11 @@ class FrmAddon {
 	 */
 	private function clear_old_plugin_version( &$version_info ) {
 		if ( false !== $version_info ) {
-
-			$cache_key = $this->version_cache_key();
-			$expiration = get_option( '_transient_timeout_' . $cache_key );
-
-			if ( false === $expiration ) {
-				$last_checked = ( is_array( $version_info->sections ) && isset( $version_info->sections['last_checked'] ) ) ? $version_info->sections['last_checked'] : 0;
-
-				if ( $last_checked < strtotime( '-48 hours' ) ) {
-					$version_info = false;
-				}
+			$timeout = ( isset( $version_info['timeout'] ) && ! empty( $version_info['timeout'] ) ) ? $version_info['timeout'] : 0;
+			if ( empty( $timeout ) || current_time( 'timestamp' ) > $timeout ) {
+				$version_info = false; // Cache is expired
+			} elseif ( ( ! is_array( $version_info ) || ! isset( $version_info['value'] ) ) ) {
+				$version_info = false; // the value isn't formated as expected
 			}
 		}
 	}
@@ -247,11 +252,22 @@ class FrmAddon {
 			return;
 		}
 
-		$last_checked = get_site_option( $this->transient_key() );
+		if ( is_multisite() ) {
+			$last_checked = get_site_option( $this->transient_key() );
+		} else {
+			$last_checked = get_option( $this->transient_key() );
+		}
+
 		$seven_days_ago = date( 'Y-m-d H:i:s', strtotime( '-7 days' ) );
 
 		if ( ! $last_checked || $last_checked < $seven_days_ago ) {
-			update_site_option( $this->transient_key(), date( 'Y-m-d H:i:s' ) ); // check weekly
+			// check weekly
+			if ( is_multisite() ) {
+				update_site_option( $this->transient_key(), date( 'Y-m-d H:i:s' ) );
+			} else {
+				update_option( $this->transient_key(), date( 'Y-m-d H:i:s' ) );
+			}
+
 			$response = $this->get_license_status();
 			if ( 'revoked' === $response['status'] ) {
 				$this->clear_license();

@@ -1,25 +1,22 @@
-<div class="wrap">
-    <h2><?php echo esc_html( $form->is_template ? __( 'Templates', 'formidable' ) : __( 'Build', 'formidable' ) ); ?>
-        <a href="?page=formidable&amp;frm_action=new" class="add-new-h2"><?php esc_html_e( 'Add New', 'formidable' ); ?></a>
-    </h2>
+<div id="frm_builder_page" class="frm_wrap">
+    <div id="poststuff" class="frm_page_container">
+
+    <div id="post-body" class="metabox-holder columns-2">
+    <div id="post-body-content">
 
 	<?php
+	FrmAppHelper::get_admin_header( array(
+		'label'       => ( $form->is_template ? __( 'Templates', 'formidable' ) : __( 'Build Form', 'formidable' ) ),
+		'is_template' => $values['is_template'],
+		'form'        => $form,
+		'new_link'    => '?page=formidable&frm_action=new',
+		'hide_title'  => true,
+	) );
+
 	// Add form messages
 	require( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' );
 	?>
 
-    <div id="poststuff">
-
-    <div id="post-body" class="metabox-holder columns-2">
-    <div id="post-body-content">
-    <?php
-
-	// Add form nav
-	if ( ! $values['is_template'] ) {
-		FrmAppController::get_form_nav( $id, true, 'hide' );
-	}
-
-    ?>
     <div class="frm_form_builder with_frm_style">
 
         <p class="frm_hidden frm-no-margin">
@@ -34,10 +31,6 @@
 
 		<?php require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/form.php' ); ?>
 
-        <p>
-			<input type="button" value="<?php esc_attr_e( 'Update', 'formidable' ) ?>" class="frm_submit_<?php echo ( isset( $values['ajax_load'] ) && $values['ajax_load'] ) ? '' : 'no_'; ?>ajax button-primary" />
-            <span class="frm-loading-img"></span>
-        </p>
     </form>
     </div>
     </div>

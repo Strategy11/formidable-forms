@@ -14,13 +14,15 @@ class FrmEntriesController {
 	 * @since 2.05.07
 	 */
 	private static function load_manage_entries_hooks() {
-		if ( ! in_array( FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' ), array( 'edit', 'show' ) ) ) {
+		if ( ! in_array( FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' ), array( 'edit', 'show', 'new' ) ) ) {
 			$menu_name = FrmAppHelper::get_menu_name();
 			$base = self::base_column_key( $menu_name );
 
 			add_filter( 'manage_' . $base . '_columns', 'FrmEntriesController::manage_columns' );
 			add_filter( 'get_user_option_' . self::hidden_column_key( $menu_name ), 'FrmEntriesController::hidden_columns' );
 			add_filter( 'manage_' . $base . '_sortable_columns', 'FrmEntriesController::sortable_columns' );
+		} else {
+			add_filter( 'screen_options_show_screen', __CLASS__ . '::remove_screen_options', 10, 2 );
 		}
 	}
 
@@ -52,7 +54,8 @@ class FrmEntriesController {
 
 		$action = FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
 		$page = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
-		if ( $page != 'formidable-entries' || ( ! empty( $action ) && $action != 'list' ) ) {
+		$show_help = ( $page == 'formidable-entries' && ( empty( $action ) || $action == 'list' ) );
+		if ( ! $show_help ) {
             return $help;
         }
 
@@ -72,6 +75,21 @@ class FrmEntriesController {
 
         return $help;
     }
+
+	/**
+	 * Prevent the "screen options" tab from showing when
+	 * editing or creating an entry
+	 *
+	 * @since 3.0
+	 */
+	public static function remove_screen_options( $show_screen, $screen ) {
+		$menu_name = sanitize_title( FrmAppHelper::get_menu_name() );
+		if ( $screen->id == $menu_name . '_page_formidable-entries' ) {
+			$show_screen = false;
+		}
+
+		return $show_screen;
+	}
 
 	public static function manage_columns( $columns ) {
         global $frm_vars;
@@ -411,6 +429,7 @@ class FrmEntriesController {
 
 		$fields = FrmField::get_all_for_form( $entry->form_id, '', 'include' );
         $to_emails = array();
+		$form = FrmForm::getOne( $entry->form_id );
 
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/show.php' );
     }
@@ -421,9 +440,7 @@ class FrmEntriesController {
 		$params = FrmForm::get_admin_params();
 
 		if ( isset( $params['keep_post'] ) && $params['keep_post'] ) {
-            //unlink entry from post
-            global $wpdb;
-			$wpdb->update( $wpdb->prefix . 'frm_items', array( 'post_id' => '' ), array( 'id' => $params['id'] ) );
+			self::unlink_post( $params['id'] );
         }
 
         $message = '';
@@ -520,16 +537,34 @@ class FrmEntriesController {
 
         if ( empty( $errors ) ) {
 			$_POST['frm_skip_cookie'] = 1;
+			$do_success = false;
             if ( $params['action'] == 'create' ) {
 				if ( apply_filters( 'frm_continue_to_create', true, $form_id ) && ! isset( $frm_vars['created_entries'][ $form_id ]['entry_id'] ) ) {
 					$frm_vars['created_entries'][ $form_id ]['entry_id'] = FrmEntry::create( $_POST );
+					$params['id'] = $frm_vars['created_entries'][ $form_id ]['entry_id'];
+					$do_success = true;
                 }
             }
 
             do_action( 'frm_process_entry', $params, $errors, $form, array( 'ajax' => $ajax ) );
+			if ( $do_success ) {
+				FrmFormsController::maybe_trigger_redirect( $form, $params, array( 'ajax' => $ajax ) );
+			}
 			unset( $_POST['frm_skip_cookie'] );
         }
     }
+
+	/**
+	 * Escape url entities before redirect
+	 *
+	 * @since 3.0
+	 *
+	 * @param string $url
+	 * @return string
+	 */
+	public static function prepare_redirect_url( $url ) {
+		return str_replace( array( ' ', '[', ']', '|', '@' ), array( '%20', '%5B', '%5D', '%7C', '%40' ), $url );
+	}
 
     public static function delete_entry_before_redirect( $url, $form, $atts ) {
         self::_delete_entry( $atts['id'], $form );
@@ -548,9 +583,19 @@ class FrmEntriesController {
 
         $form->options = maybe_unserialize( $form->options );
         if ( isset( $form->options['no_save'] ) && $form->options['no_save'] ) {
+			self::unlink_post( $entry_id );
             FrmEntry::destroy( $entry_id );
         }
     }
+
+	/**
+	 * unlink entry from post
+	 */
+	private static function unlink_post( $entry_id ) {
+		global $wpdb;
+		$wpdb->update( $wpdb->prefix . 'frm_items', array( 'post_id' => '' ), array( 'id' => $entry_id ) );
+		FrmEntry::clear_cache();
+	}
 
 	/**
 	 * @param $atts
@@ -558,7 +603,7 @@ class FrmEntriesController {
 	 * @return array|string
 	 */
 	public static function show_entry_shortcode( $atts ) {
-		$defaults = array(
+		$defaults = apply_filters( 'frm_show_entry_defaults', array(
 			'id'             => false,
 			'entry'          => false,
 			'fields'         => false,
@@ -581,7 +626,8 @@ class FrmEntriesController {
 			'include_fields' => '',
 			'include_extras' => '',
 			'inline_style'   => 1,
-		);
+			'child_array'    => false, // return embedded fields as nested array
+		) );
 
 		$atts = shortcode_atts( $defaults, $atts );
 
@@ -603,11 +649,6 @@ class FrmEntriesController {
 		return $formatted_entry;
 	}
 
-	public static function get_params( $form = null ) {
-		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmForm::get_params' );
-		return FrmForm::get_params( $form );
-	}
-
 	public static function entry_sidebar( $entry ) {
 		$data = maybe_unserialize( $entry->description );
 		$date_format = get_option( 'date_format' );
@@ -618,38 +659,4 @@ class FrmEntriesController {
 
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/sidebar-shared.php' );
     }
-
-	/***********************************************************************
-	 * Deprecated Functions
-	 ************************************************************************/
-
-	/**
-	 * @deprecated 2.02.14
-	 *
-	 * @return mixed
-	 */
-	public static function filter_email_value( $value ) {
-		_deprecated_function( __FUNCTION__, '2.02.14', 'FrmProEntriesController::filter_value_in_single_entry_table' );
-		return $value;
-	}
-
-	/**
-	 * @deprecated 2.02.14
-	 *
-	 * @return mixed
-	 */
-	public static function filter_display_value( $value ) {
-		_deprecated_function( __FUNCTION__, '2.02.14', 'FrmProEntriesController::filter_display_value' );
-		return $value;
-	}
-
-	/**
-	 * @deprecated 2.03.04
-	 *
-	 * @return mixed
-	 */
-	public static function filter_shortcode_value( $value ) {
-		_deprecated_function( __FUNCTION__, '2.03.04', 'custom code' );
-		return $value;
-	}
 }

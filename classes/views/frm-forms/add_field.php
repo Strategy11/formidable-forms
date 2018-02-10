@@ -1,64 +1,7 @@
-<?php
-
-$display = apply_filters( 'frm_display_field_options', array(
-    'type' => $field['type'],
-	'field_data' => $field,
-    'required' => true,
-	'unique' => false,
-	'read_only' => false,
-    'description' => true,
-	'options' => true,
-	'label_position' => true,
-    'invalid' => false,
-	'size' => false,
-	'clear_on_focus' => false,
-    'default_blank' => true,
-	'css' => true,
-	'conf_field' => false,
-	'max' => true,
-	'captcha_size' => false,
-) );
-
-$li_classes = 'form-field edit_form_item frm_field_box frm_top_container frm_not_divider edit_field_type_' . $display['type'];
-$li_classes = apply_filters( 'frm_build_field_class', $li_classes, $field );
-
-if ( isset( $values ) && isset( $values['ajax_load'] ) && $values['ajax_load'] && isset( $count ) && $count > 10 && ! in_array( $field['type'], array( 'divider', 'end_divider' ) ) ) {
-?>
-<li id="frm_field_id_<?php echo esc_attr( $field['id'] ); ?>" class="<?php echo esc_attr( $li_classes ) ?> frm_field_loading" data-fid="<?php echo esc_attr( $field['id'] ) ?>" data-formid="<?php echo esc_attr( 'divider' === $field['type'] ? $field['form_select'] : $field['form_id'] ); ?>" data-ftype="<?php echo esc_attr( $display['type'] ) ?>">
-<img src="<?php echo FrmAppHelper::plugin_url() ?>/images/ajax_loader.gif" alt="<?php esc_attr_e( 'Loading', 'formidable' ) ?>" />
-<span class="frm_hidden_fdata frm_hidden"><?php echo htmlspecialchars( json_encode( $field ) ) ?></span>
-</li>
-<?php
-   return;
-}
-
-$frm_settings = FrmAppHelper::get_settings();
-
-if ( ! isset( $frm_all_field_selection ) ) {
-    if ( isset( $frm_field_selection ) && isset( $pro_field_selection ) ) {
-        $frm_all_field_selection = array_merge( $frm_field_selection, $pro_field_selection );
-    } else {
-		$pro_field_selection = FrmField::pro_field_selection();
-		$frm_all_field_selection = array_merge( FrmField::field_selection(), $pro_field_selection );
-    }
-}
-
-$disabled_fields = FrmAppHelper::pro_is_installed() ? array() : $pro_field_selection;
-
-
-if ( ! isset( $ajax ) ) {
-    $li_classes .= ' ui-state-default widgets-holder-wrap';
-?>
-<li id="frm_field_id_<?php echo esc_attr( $field['id'] ); ?>" class="<?php echo esc_attr( $li_classes ) ?>" data-fid="<?php echo esc_attr( $field['id'] ) ?>" data-formid="<?php echo ( 'divider' === $field['type'] ) ? esc_attr( $field['form_select'] ) : esc_attr( $field['form_id'] ); ?>" data-ftype="<?php echo esc_attr( $display['type'] ) ?>">
-<?php
-}
-
-if ( $field['type'] === 'divider' ) {
-?>
+<li id="frm_field_id_<?php echo esc_attr( $field['id'] ); ?>" class="<?php echo esc_attr( $li_classes ) ?>" data-fid="<?php echo esc_attr( $field['id'] ) ?>" data-formid="<?php echo esc_attr( 'divider' == $field['type'] ? $field['form_select'] : $field['form_id'] ); ?>" data-ftype="<?php echo esc_attr( $display['type'] ) ?>">
+<?php if ( $field['type'] == 'divider' ) { ?>
 <div class="divider_section_only">
-<?php
-}
-?>
+<?php } ?>
 
     <a href="javascript:void(0);" class="frm_bstooltip alignright frm-show-hover frm-move frm-hover-icon frm_icon_font frm_move_icon" title="<?php esc_attr_e( 'Move Field', 'formidable' ) ?>"> </a>
     <a href="#" class="frm_bstooltip alignright frm-show-hover frm-hover-icon frm_icon_font frm_delete_icon frm_delete_field" title="<?php esc_attr_e( 'Delete Field', 'formidable' ) ?>"> </a>
@@ -71,12 +14,13 @@ if ( $field['type'] === 'divider' ) {
     </span>
 	<?php } ?>
 	<label class="<?php echo ( $field['type'] === 'end_divider' ) ? '' : 'frm_ipe_field_label'; ?> frm_primary_label <?php echo ( $field['type'] === 'break' ) ? 'button' : ''; ?>" id="field_label_<?php echo esc_attr( $field['id'] ); ?>"><?php echo ( $field['name'] === '' ) ? __( '(no label)', 'formidable' ) : force_balance_tags( $field['name'] ); ?></label>
-
+	<input type="hidden" name="field_options[name_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['name'] ); ?>" />
 
 <div id="field_<?php echo esc_attr( $field['id'] ) ?>_inner_container" class="frm_inner_field_container">
 <div class="frm_form_fields" data-ftype="<?php echo esc_attr( $display['type'] ) ?>">
 <?php
-include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/show-build.php' );
+
+$field_obj->show_on_form_builder();
 
 if ( $display['clear_on_focus'] ) {
 	FrmFieldsHelper::clear_on_focus_html( $field, $display );
@@ -98,9 +42,7 @@ if ( $display['clear_on_focus'] ) {
 		<div class="frm_form_fields">
 			<input type="text" id="conf_field_<?php echo esc_attr( $field['field_key'] ) ?>" name="field_options[conf_input_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['conf_input'] ); ?>" class="dyn_default_value" />
 		</div>
-    	<div id="conf_field_description_<?php echo esc_attr( $field['id'] ) ?>" class="frm_ipe_field_conf_desc description <?php echo ( $field['conf_desc'] === '' ) ? 'frm-show-click' : '' ?>">
-			<?php echo ( $field['conf_desc'] === '' ) ? esc_html__( '(Click to add description)', 'formidable' ) : force_balance_tags( $field['conf_desc'] ); ?>
-		</div>
+    	<div id="conf_field_description_<?php echo esc_attr( $field['id'] ) ?>" class="frm_ipe_field_conf_desc description <?php echo ( $field['conf_desc'] === '' ) ? 'frm-show-click' : '' ?>"><?php echo ( $field['conf_desc'] === '' ) ? esc_html__( '(Click to add description)', 'formidable' ) : force_balance_tags( $field['conf_desc'] ); ?></div>
     	<input type="hidden" name="field_options[conf_desc_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['conf_desc'] ); ?>" />
 </div>
 	<?php if ( $display['clear_on_focus'] ) { ?>
@@ -156,7 +98,9 @@ if ( $display['options'] ) {
                     <span class="toggle-indicator" aria-hidden="true"></span>
                 </button>
             </div>
-            <div class="widget-title"><h3><?php esc_html_e( 'Field Options', 'formidable' ); ?> (ID <?php echo (int) $field['id'] ?>)</h3></div>
+            <div class="widget-title">
+				<h3><?php esc_html_e( 'Field Settings', 'formidable' ) ?> (ID <?php echo (int) $field['id'] ?>)</h3>
+			</div>
         </div>
     	<div class="widget-inside">
             <table class="form-table frm_clear_none">
@@ -267,6 +211,22 @@ if ( $display['options'] ) {
 					}
 				}
 
+				if ( $display['show_image'] ) {
+				?>
+					<tr>
+						<td class="frm_150_width">
+							<label><?php esc_html_e( 'Show URL image', 'formidable' ) ?></label>
+						</td>
+						<td>
+							<label for="frm_show_image_<?php echo esc_attr( $field['id'] ) ?>">
+								<input type="checkbox" id="frm_show_image_<?php echo esc_attr( $field['id'] ) ?>" name="field_options[show_image_<?php echo esc_attr( $field['id'] ) ?>]" value="1" <?php checked( $field['show_image'], 1 ) ?> />
+								<?php esc_html_e( 'If this URL points to an image, show to image on the entries listing page.', 'formidable' ); ?>
+							</label>
+						</td>
+					</tr>
+				<?php
+				}
+
 				if ( $display['captcha_size'] && $frm_settings->re_type !== 'invisible' ) {
 				?>
                 <tr><td><label><?php esc_html_e( 'ReCaptcha Type', 'formidable' ) ?></label>
@@ -303,6 +263,16 @@ if ( $display['options'] ) {
                 <?php
 				}
 
+				if ( $display['format'] ) {
+					FrmFieldsController::show_format_option( $field );
+				}
+
+				if ( $display['range'] ) {
+					include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/number-range.php' );
+				} elseif ( $field['type'] == 'html' ) {
+					include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/html-content.php' );
+				}
+
 				do_action( 'frm_' . $field['type'] . '_field_options_form', $field, $display, $values );
 				do_action( 'frm_field_options_form', $field, $display, $values );
 
@@ -324,10 +294,12 @@ if ( $display['options'] ) {
                         }
 
 						if ( $display['invalid'] ) {
+							$hidden = FrmField::is_field_type( $field, 'text' ) && ! FrmField::is_option_true( $field, 'format' );
 						?>
-                            <p><label><?php esc_html_e( 'Invalid Format', 'formidable' ) ?></label>
-                                <input type="text" name="field_options[invalid_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['invalid'] ); ?>" />
-                            </p>
+						<p class="frm_invalid_msg<?php echo esc_attr( $field['id'] . ( $hidden ? ' frm_hidden' : '' ) ); ?>">
+							<label><?php esc_html_e( 'Invalid Format', 'formidable' ) ?></label>
+							<input type="text" name="field_options[invalid_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['invalid'] ); ?>" />
+						</p>
                         <?php
 						}
 
@@ -375,10 +347,8 @@ if ( 'divider' === $field['type'] ) {
 <?php
 }
 
-if ( ! isset( $ajax ) && $field['type'] !== 'divider' ) {
+if ( $field['type'] !== 'divider' ) {
 ?>
 </li>
 <?php
 }
-
-unset( $display );

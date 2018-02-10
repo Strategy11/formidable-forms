@@ -85,9 +85,11 @@ class FrmStylesController {
 			$css = apply_filters( 'get_frm_stylesheet', self::custom_stylesheet() );
 
 			if ( ! empty( $css ) ) {
+				$css = (array) $css;
+
 				$version = FrmAppHelper::plugin_version();
 
-				foreach ( (array) $css as $css_key => $file ) {
+				foreach ( $css as $css_key => $file ) {
 					if ( $register_css ) {
 						$this_version = self::get_css_version( $css_key, $version );
 						wp_register_style( $css_key, $file, array(), $this_version );
@@ -123,14 +125,28 @@ class FrmStylesController {
 	}
 
 	private static function get_url_to_custom_style( &$stylesheet_urls ) {
-		$uploads = FrmStylesHelper::get_upload_base();
-		$saved_css_path = '/formidable/css/formidablepro.css';
-		if ( is_readable( $uploads['basedir'] . $saved_css_path ) ) {
-			$url = $uploads['baseurl'] . $saved_css_path;
+		$file_name = '/css/' . self::get_file_name();
+		if ( is_readable( FrmAppHelper::plugin_path() . $file_name ) ) {
+			$url = FrmAppHelper::plugin_url() . $file_name;
 		} else {
 			$url = admin_url( 'admin-ajax.php?action=frmpro_css' );
 		}
 		$stylesheet_urls['formidable'] = $url;
+	}
+
+	/**
+	 * Use a different stylesheet per site in a multisite install
+	 *
+	 * @since 3.0.03
+	 */
+	public static function get_file_name() {
+		if ( is_multisite() ) {
+			$blog_id = get_current_blog_id();
+			$name = 'formidableforms' . absint( $blog_id ) . '.css';
+		} else {
+			$name = 'formidableforms.css';
+		}
+		return $name;
 	}
 
 	private static function get_css_version( $css_key, $version ) {
@@ -478,9 +494,23 @@ class FrmStylesController {
 
 		if ( $style ) {
 			$class .= ' frm_style_' . $style->post_name;
+			self::maybe_add_rtl_class( $style, $class );
 		}
 
 		return $class;
+	}
+
+	/**
+	 * @param object $style
+	 * @param string $class
+	 *
+	 * @since 3.0
+	 */
+	private static function maybe_add_rtl_class( $style, &$class ) {
+		$is_rtl = isset( $style->post_content['direction'] ) && 'rtl' === $style->post_content['direction'];
+		if ( $is_rtl ) {
+			$class .= ' frm_rtl';
+		}
 	}
 
     /**

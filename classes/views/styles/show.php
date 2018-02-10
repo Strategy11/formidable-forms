@@ -60,13 +60,13 @@
 					</div><!-- /#post-body -->
 					<div id="nav-menu-footer" class="submitbox">
 						<div class="major-publishing-actions">
-							<?php if ( ! empty( $style->ID ) && empty( $style->menu_order ) ) { ?>
-							<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-styles&frm_action=destroy&id=' . $style->ID ) ); ?>" id="frm_delete_style" class="submitdelete deletion" onclick="return confirm('<?php esc_attr_e( 'Are you sure you want to delete that style?', 'formidable' ) ?>')">
+						    <?php if ( ! empty( $style->ID ) && empty( $style->menu_order ) ) { ?>
+							<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-styles&frm_action=destroy&id=' . $style->ID ) ); ?>" id="frm_delete_style" class="submitdelete deletion" data-frmverify="<?php esc_attr_e( 'Are you sure?', 'formidable' ) ?>">
 								<?php esc_html_e( 'Delete Style', 'formidable' ) ?>
 							</a>
-							<?php } ?>
-							<?php
-							if ( $style->ID ) {
+						    <?php } ?>
+						    <?php
+						    if ( $style->ID ) {
 								echo '<span class="howto"><span>.frm_style_' . esc_attr( $style->post_name ) . '</span></span>';
 							}
 							?>

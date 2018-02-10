@@ -232,7 +232,7 @@ class FrmTableHTMLGenerator {
 	 * @return string
 	 */
 	public function generate_table_header() {
-		return '<table cellspacing="0"' . $this->table_style . '><tbody>' . "\r\n";
+		return '<table cellspacing="0" ' . $this->table_style . '><tbody>' . "\r\n";
 	}
 
 	/**
