@@ -125,13 +125,28 @@ class FrmStylesController {
 	}
 
 	private static function get_url_to_custom_style( &$stylesheet_urls ) {
-		$file_name = '/css/formidableforms.css';
+		$file_name = '/css/' . self::get_file_name();
 		if ( is_readable( FrmAppHelper::plugin_path() . $file_name ) ) {
 			$url = FrmAppHelper::plugin_url() . $file_name;
 		} else {
 			$url = admin_url( 'admin-ajax.php?action=frmpro_css' );
 		}
 		$stylesheet_urls['formidable'] = $url;
+	}
+
+	/**
+	 * Use a different stylesheet per site in a multisite install
+	 *
+	 * @since 3.0.03
+	 */
+	public static function get_file_name() {
+		if ( is_multisite() ) {
+			$blog_id = get_current_blog_id();
+			$name = 'formidableforms' . absint( $blog_id ) . '.css';
+		} else {
+			$name = 'formidableforms.css';
+		}
+		return $name;
 	}
 
 	private static function get_css_version( $css_key, $version ) {
