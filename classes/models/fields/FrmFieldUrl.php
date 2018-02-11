@@ -48,7 +48,7 @@ class FrmFieldUrl extends FrmFieldType {
 
 	public function validate( $args ) {
 		$value = $args['value'];
-		if ( trim( $value ) == 'http://' ) {
+		if ( trim( $value ) == 'http://' || empty( $value ) ) {
 			$value = '';
 		} else {
 			$value = esc_url_raw( $value );
@@ -60,8 +60,10 @@ class FrmFieldUrl extends FrmFieldType {
 		$errors = array();
 
 		// validate the url format
-		if ( ! preg_match( '/^http(s)?:\/\/(?:localhost|(?:[\da-z\.-]+\.[\da-z\.-]+))/i', $value ) ) {
+		if ( ! empty( $value ) && ! preg_match( '/^http(s)?:\/\/(?:localhost|(?:[\da-z\.-]+\.[\da-z\.-]+))/i', $value ) ) {
 			$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $this->field, 'invalid' );
+		} elseif ( $this->field->required == '1' && empty( $value ) ) {
+			$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $this->field, 'blank' );
 		}
 
 		return $errors;

@@ -49,6 +49,10 @@ class FrmFieldUserID extends FrmFieldType {
 	}
 
 	public function validate( $args ) {
+		if ( '' == $args['value'] ) {
+			return array();
+		}
+
 		// make sure we have a user ID
 		if ( ! is_numeric( $args['value'] ) ) {
 			$args['value'] = FrmAppHelper::get_user_id_param( $args['value'] );
