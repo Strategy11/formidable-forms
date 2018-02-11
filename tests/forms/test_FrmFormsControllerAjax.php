@@ -3,7 +3,7 @@
 /**
  * @group ajax
  */
-class WP_Test_FrmFormsControllerAjax extends FrmAjaxUnitTest {
+class test_FrmFormsControllerAjax extends FrmAjaxUnitTest {
 
 	public function setUp() {
 		parent::setUp();

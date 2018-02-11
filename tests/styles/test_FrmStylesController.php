@@ -2,7 +2,7 @@
 /**
  * @group styles
  */
-class WP_Test_FrmStylesController extends FrmUnitTest {
+class test_FrmStylesController extends FrmUnitTest {
 	/**
 	 * Make sure the stylesheet is loaded at the right times
 	 */

@@ -3,7 +3,7 @@
 /**
  * @group forms
  */
-class WP_Test_FrmFormsController extends FrmUnitTest {
+class test_FrmFormsController extends FrmUnitTest {
 
 	function test_register_widgets() {
 		global $wp_widget_factory;

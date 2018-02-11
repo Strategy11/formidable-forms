@@ -4,7 +4,7 @@
  * @group ajax
  * @group free
  */
-class WP_Test_FrmFieldsAjax extends FrmAjaxUnitTest {
+class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 
 	protected $form_id = 0;
 	

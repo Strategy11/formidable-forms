@@ -3,7 +3,7 @@
 /**
  * @group database
  */
-class WP_Test_FrmDb extends FrmUnitTest {
+class test_FrmDb extends FrmUnitTest {
 
 	/**
 	 * @covers FrmDb::esc_order

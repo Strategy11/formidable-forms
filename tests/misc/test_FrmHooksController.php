@@ -3,7 +3,7 @@
 /**
  * @group hooks
  */
-class WP_Test_FrmHooksController extends FrmUnitTest {
+class test_FrmHooksController extends FrmUnitTest {
 
 	function test_trigger_load_form_hooks() {
 		FrmHooksController::trigger_load_form_hooks();

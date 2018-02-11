@@ -3,7 +3,7 @@
 /**
  * @group entries
  */
-class WP_Test_FrmEntriesController extends FrmUnitTest {
+class test_FrmEntriesController extends FrmUnitTest {
 
 	/**
 	 * @covers FrmEntriesController::delete_entry_after_save

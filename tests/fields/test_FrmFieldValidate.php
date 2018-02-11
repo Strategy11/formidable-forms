@@ -1,10 +1,9 @@
 <?php
 
 /**
- * @group testme
  * @group fields
  */
-class WP_Test_FrmFieldValidate extends FrmUnitTest {
+class test_FrmFieldValidate extends FrmUnitTest {
 
 	protected $form;
 
@@ -27,7 +26,9 @@ class WP_Test_FrmFieldValidate extends FrmUnitTest {
 	}
 
 	protected function get_all_fields() {
-		return array_keys( FrmField::field_selection() );
+		$fields = array_keys( FrmField::field_selection() );
+		$exclude = array( 'html' );
+		return array_diff( $fields, $exclude );
 	}
 
 	/**

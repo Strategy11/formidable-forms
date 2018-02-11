@@ -2,7 +2,7 @@
 /**
  * @group app
  */
-class WP_Test_FrmAppController extends FrmUnitTest {
+class test_FrmAppController extends FrmUnitTest {
 	public function test_class_is_tested() {
 		$this->assertTrue( true );
 	}

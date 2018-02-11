@@ -3,7 +3,7 @@
 /**
  * @group forms
  */
-class WP_Test_FrmFormActionsController extends FrmUnitTest {
+class test_FrmFormActionsController extends FrmUnitTest {
 
 	/**
 	 * Make sure the form action post type exists

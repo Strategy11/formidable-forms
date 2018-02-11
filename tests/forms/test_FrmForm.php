@@ -3,7 +3,7 @@
 /**
  * @group forms
  */
-class WP_Test_FrmForm extends FrmUnitTest {
+class test_FrmForm extends FrmUnitTest {
 	/**
 	 * @covers FrmForm::create
 	 */

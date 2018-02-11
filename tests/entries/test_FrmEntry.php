@@ -3,7 +3,7 @@
 /**
  * @group entries
  */
-class WP_Test_FrmEntry extends FrmUnitTest {
+class test_FrmEntry extends FrmUnitTest {
 	/**
 	 * @covers FrmEntry::create
 	 * @covers FrmEntry::is_duplicate

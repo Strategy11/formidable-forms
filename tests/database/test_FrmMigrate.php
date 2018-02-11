@@ -3,7 +3,7 @@
 /**
  * @group database
  */
-class WP_Test_FrmMigrate extends FrmUnitTest {
+class test_FrmMigrate extends FrmUnitTest {
 
 	/**
 	 * @covers FrmMigrate::upgrade

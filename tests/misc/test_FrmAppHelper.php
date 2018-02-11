@@ -2,7 +2,7 @@
 /**
  * @group app
  */
-class WP_Test_FrmAppHelper extends FrmUnitTest {
+class test_FrmAppHelper extends FrmUnitTest {
 
 	/**
 	 * @covers FrmAppHelper::plugin_version

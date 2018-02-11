@@ -4,7 +4,7 @@
  * @group emails
  * @group free
  */
-class WP_Test_FrmEmail extends FrmUnitTest {
+class test_FrmEmail extends FrmUnitTest {
 
 	/**
 	 * @var string
