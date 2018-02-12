@@ -238,7 +238,7 @@ class FrmEntryValidate {
 			return;
 		}
 
-		self::validate_field_types( $errors, $field, $value, $args );
+		self::validate_field_types( $errors, $field, '', $args );
     }
 
     /**
