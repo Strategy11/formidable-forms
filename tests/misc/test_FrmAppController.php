@@ -154,7 +154,9 @@ class test_FrmAppController extends FrmUnitTest {
 			$this->assertSame( $current, $option );
 
 			$upgrade = FrmAppController::compare_for_update( array(
-				'option' => 'frm_db_version'
+				'option'             => 'frm_db_version',
+				'new_db_version'     => $test['db'],
+				'new_plugin_version' => $test['version'],
 			) );
 			$this->assertEquals( $test['expected'], $upgrade, $test['version'] .' db: '. $test['db'] . ' => ' . $current . ( $upgrade ? ' needs no update ' : ' needs an update' ) . ' from ' . $option );
 		}
