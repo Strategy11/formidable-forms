@@ -149,9 +149,6 @@ class test_FrmAppController extends FrmUnitTest {
 
 		foreach ( $tests as $test ) {
 			$current = $test['version'] . ( empty( $test['version'] ) ? '' : '-' ) . $test['db'];
-			update_option( 'frm_db_version', $current );
-			$option = get_option( 'frm_db_version' );
-			$this->assertSame( $current, $option );
 
 			$upgrade = FrmAppController::compare_for_update( array(
 				'option'             => 'frm_db_version',
@@ -159,6 +156,10 @@ class test_FrmAppController extends FrmUnitTest {
 				'new_plugin_version' => $test['version'],
 			) );
 			$this->assertEquals( $test['expected'], $upgrade, $test['version'] .' db: '. $test['db'] . ' => ' . $current . ( $upgrade ? ' needs no update ' : ' needs an update' ) . ' from ' . $option );
+
+			update_option( 'frm_db_version', $current );
+			$option = get_option( 'frm_db_version' );
+			$this->assertSame( $current, $option );
 		}
 	}
 
@@ -166,8 +167,9 @@ class test_FrmAppController extends FrmUnitTest {
 	 * @covers FrmAppController::api_install
 	 */
 	public function test_api_install() {
-		$current_db = FrmAppHelper::$db_version;
-		update_option( 'frm_db_version', absint( $current_db ) - 1 );
+		$current_db = FrmAppHelper::plugin_version() . '-' . FrmAppHelper::$db_version;
+		$previous_db = FrmAppHelper::plugin_version() . '-' . ( absint( FrmAppHelper::$db_version ) - 1 );
+		update_option( 'frm_db_version', $previous_db );
 		FrmAppController::admin_init();
 		$new_db = get_option( 'frm_db_version' );
 		$this->assertSame( $new_db, $current_db, 'The DB did not update correctly' );
