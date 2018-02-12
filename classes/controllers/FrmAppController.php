@@ -425,6 +425,7 @@ class FrmAppController {
 	}
 
     public static function activation_install() {
+		_deprecated_function( __METHOD__, '3.0.04', 'FrmAppController::install' );
         FrmDb::delete_cache_and_transient( 'frm_plugin_version' );
         FrmFormActionsController::actions_init();
         self::install();
