@@ -92,6 +92,10 @@ class test_FrmAppController extends FrmUnitTest {
 		$this->assertTrue( $needs_update, 'The DB needs update but is skipping it' );
 	}
 
+	/**
+	 * @covers FrmAppController::compare_for_update
+	 * @group testme
+	 */
 	public function test_compare_for_update() {
 
 		$tests = array(
@@ -148,20 +152,17 @@ class test_FrmAppController extends FrmUnitTest {
 		);
 
 		foreach ( $tests as $test ) {
-			$current = $test['version'] . ( empty( $test['version'] ) ? '' : '-' ) . $test['db'];
-			$option = get_option( 'frm_db_version' );
-
-			$upgrade = FrmAppController::compare_for_update( array(
-				'option'             => 'frm_db_version',
-				'new_db_version'     => $test['db'],
-				'new_plugin_version' => $test['version'],
-			) );
-
-			$this->assertEquals( $test['expected'], $upgrade, $test['version'] .' db: '. $test['db'] . ' => ' . $current . ( $upgrade ? ' needs no update ' : ' needs an update' ) . ' from ' . $option );
-
+			$current = $test['version'] . '-' . $test['db'];
 			update_option( 'frm_db_version', $current );
 			$option = get_option( 'frm_db_version' );
 			$this->assertSame( $current, $option );
+
+			$upgrade = FrmAppController::compare_for_update( array(
+				'option'             => 'frm_db_version',
+				'new_db_version'     => FrmAppHelper::$db_version,
+				'new_plugin_version' => FrmAppHelper::plugin_version(),
+			) );
+			$this->assertEquals( $test['expected'], $upgrade, $test['version'] .' db: '. $test['db'] . ' => ' . $current . ( $upgrade ? ' needs no update ' : ' needs an update' ) . ' from ' . $option );
 		}
 	}
 
