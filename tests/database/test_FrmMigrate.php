@@ -16,7 +16,7 @@ class test_FrmMigrate extends FrmUnitTest {
 		$this->do_tables_exist();
 
 		$new_version = get_option( 'frm_db_version' );
-		$this->assertEquals( $new_version, FrmAppHelper::$db_version );
+		$this->assertEquals( $new_version, FrmAppHelper::plugin_version() . '-' . FrmAppHelper::$db_version );
     }
 
 	/**

@@ -201,11 +201,36 @@ class FrmAppController {
 	 * @return boolean
 	 */
 	public static function needs_update() {
-		$db_version = (int) get_option( 'frm_db_version' );
-		$needs_upgrade = ( (int) $db_version < (int) FrmAppHelper::$db_version );
+		$needs_upgrade = self::compare_for_update( array(
+			'option'             => 'frm_db_version',
+			'new_db_version'     => FrmAppHelper::$db_version,
+			'new_plugin_version' => FrmAppHelper::plugin_version(),
+		) );
+
 		if ( ! $needs_upgrade ) {
 			$needs_upgrade = apply_filters( 'frm_db_needs_upgrade', $needs_upgrade );
 		}
+		return $needs_upgrade;
+	}
+
+	/**
+	 * Check both version number and DB number for changes
+	 *
+	 * @since 3.0.04
+	 */
+	public static function compare_for_update( $atts ) {
+		$needs_upgrade = false;
+		$db_version = get_option( $atts['option'] );
+
+		if ( strpos( $db_version, '-' ) === false ) {
+			$needs_upgrade = true;
+		} else {
+			$last_upgrade = explode( '-', $db_version );
+			$needs_db_upgrade = (int) $last_upgrade[1] < (int) $atts['new_db_version'];
+			$new_version = version_compare( $last_upgrade[0], $atts['new_plugin_version'], '<' );
+			$needs_upgrade = $needs_db_upgrade || $new_version;
+		}
+
 		return $needs_upgrade;
 	}
 
