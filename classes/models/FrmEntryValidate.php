@@ -101,8 +101,6 @@ class FrmEntryValidate {
 			self::validate_phone_field( $errors, $posted_field, $value, $args );
 		}
 
-        self::validate_recaptcha($errors, $posted_field, $args);
-
 		$errors = apply_filters( 'frm_validate_' . $posted_field->type . '_field_entry', $errors, $posted_field, $value, $args );
 		$errors = apply_filters( 'frm_validate_field_entry', $errors, $posted_field, $value, $args );
     }
@@ -234,43 +232,13 @@ class FrmEntryValidate {
 	}
 
 	public static function validate_recaptcha( &$errors, $field, $args ) {
-        if ( $field->type != 'captcha' || FrmAppHelper::is_admin() || apply_filters( 'frm_is_field_hidden', false, $field, stripslashes_deep( $_POST ) ) ) {
-            return;
-        }
+		_deprecated_function( __FUNCTION__, '3.0', 'FrmFieldType::validate' );
 
-		$frm_settings = FrmAppHelper::get_settings();
-		if ( empty( $frm_settings->pubkey ) ) {
-			// don't require the captcha if it shouldn't be shown
+		if ( $field->type != 'captcha' ) {
 			return;
 		}
 
-        if ( ! isset($_POST['g-recaptcha-response']) ) {
-            // If captcha is missing, check if it was already verified
-			if ( ! isset( $_POST['recaptcha_checked'] ) || ! wp_verify_nonce( $_POST['recaptcha_checked'], 'frm_ajax' ) ) {
-                // There was no captcha submitted
-				$errors[ 'field' . $args['id'] ] = __( 'The captcha is missing from this form', 'formidable' );
-            }
-            return;
-        }
-
-        $arg_array = array(
-            'body'      => array(
-				'secret'   => $frm_settings->privkey,
-				'response' => $_POST['g-recaptcha-response'],
-				'remoteip' => FrmAppHelper::get_ip_address(),
-			),
-		);
-        $resp = wp_remote_post( 'https://www.google.com/recaptcha/api/siteverify', $arg_array );
-        $response = json_decode(wp_remote_retrieve_body( $resp ), true);
-
-        if ( isset( $response['success'] ) && ! $response['success'] ) {
-            // What happens when the CAPTCHA was entered incorrectly
-			$errors[ 'field' . $args['id'] ] = ( ! isset( $field->field_options['invalid'] ) || $field->field_options['invalid'] == '' ) ? $frm_settings->re_msg : $field->field_options['invalid'];
-        } else if ( is_wp_error( $resp ) ) {
-			$error_string = $resp->get_error_message();
-			$errors[ 'field' . $args['id'] ] = __( 'There was a problem verifying your recaptcha', 'formidable' );
-			$errors[ 'field' . $args['id'] ] .= ' ' . $error_string;
-        }
+		self::validate_field_types( $errors, $field, $value, $args );
     }
 
     /**
