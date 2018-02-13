@@ -10,10 +10,10 @@ class test_FrmFieldValidate extends FrmUnitTest {
 	public function setUp() {
 		parent::setUp();
 
-		$this->create_form();
+		$this->create_validation_form();
 	}
 
-	protected function create_form() {
+	protected function create_validation_form() {
 		$this->form = $this->factory->form->create_and_get();
 		$field_types = $this->get_all_fields();
 		foreach ( $field_types as $field_type ) {
