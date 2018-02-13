@@ -2,6 +2,13 @@
     clear:both;
 }
 
+.frm_form_field,
+.frm_form_field.frm_inline_container,
+.frm_form_field.frm_right_container,
+.frm_form_field.frm_left_container{
+	width:auto;
+}
+
 .frm_inline_form .frm_form_field.form-field{
     margin-right:2.5%;
 	display:inline-block;
