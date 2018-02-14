@@ -25,7 +25,7 @@ class FrmMigrate {
 
 		$frm_vars['doing_upgrade'] = true;
 
-		$needs_upgrade = FrmAppHelper::compare_for_update( array(
+		$needs_upgrade = FrmAppController::compare_for_update( array(
 			'option'             => 'frm_db_version',
 			'new_db_version'     => FrmAppHelper::$db_version,
 			'new_plugin_version' => FrmAppHelper::plugin_version(),
@@ -477,6 +477,9 @@ DEFAULT_HTML;
         unset($default_html, $old_default_html, $fields);
     }
 
+	/**
+	 * Adds user id to the entry
+	 */
     private function migrate_to_4() {
         global $wpdb;
 		$user_ids = FrmEntryMeta::getAll( array( 'fi.type' => 'user_id' ) );
