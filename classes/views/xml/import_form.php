@@ -88,7 +88,7 @@
 						<label><?php esc_html_e( 'Select Form(s)', 'formidable' ); ?></label>
 					</th>
 					<td>
-						<select name="frm_export_forms[]" multiple="multiple" class="frm_chzn">
+						<select name="frm_export_forms[]" multiple="multiple">
 						<?php foreach ( $forms as $form ) { ?>
 							<option value="<?php echo esc_attr( $form->id ) ?>">
 								<?php
