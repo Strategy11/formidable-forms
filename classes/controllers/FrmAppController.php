@@ -219,7 +219,6 @@ class FrmAppController {
 	 * @since 3.0.04
 	 */
 	public static function compare_for_update( $atts ) {
-		$needs_upgrade = false;
 		$db_version = get_option( $atts['option'] );
 
 		if ( strpos( $db_version, '-' ) === false ) {

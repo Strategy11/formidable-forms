@@ -25,24 +25,23 @@ class FrmMigrate {
 
 		$frm_vars['doing_upgrade'] = true;
 
-		//$frm_db_version is the version of the database we're moving to
-		$frm_db_version = FrmAppHelper::$db_version;
-		$old_db_version = (float) $old_db_version;
-		if ( ! $old_db_version ) {
-			$old_db_version = get_option('frm_db_version');
-		}
+		$needs_upgrade = FrmAppHelper::compare_for_update( array(
+			'option'             => 'frm_db_version',
+			'new_db_version'     => FrmAppHelper::$db_version,
+			'new_plugin_version' => FrmAppHelper::plugin_version(),
+		) );
 
-		if ( $frm_db_version != $old_db_version ) {
+		if ( $needs_upgrade ) {
 			// update rewrite rules for views and other custom post types
 			flush_rewrite_rules();
 
 			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 
 			$this->create_tables();
-			$this->migrate_data($frm_db_version, $old_db_version);
+			$this->migrate_data( $old_db_version );
 
 			/***** SAVE DB VERSION *****/
-			update_option( 'frm_db_version', FrmAppHelper::plugin_version() . '-' . $frm_db_version );
+			update_option( 'frm_db_version', FrmAppHelper::plugin_version() . '-' . FrmAppHelper::$db_version );
 
 			/**** ADD/UPDATE DEFAULT TEMPLATES ****/
 			FrmXMLController::add_default_templates();
@@ -188,15 +187,28 @@ class FrmMigrate {
      * @param integer $frm_db_version
 	 * @param int $old_db_version
      */
-	private function migrate_data( $frm_db_version, $old_db_version ) {
+	private function migrate_data( $old_db_version ) {
+		if ( ! $old_db_version ) {
+			$old_db_version = get_option( 'frm_db_version' );
+		}
+		if ( strpos( $old_db_version, '-' ) ) {
+			$last_upgrade = explode( '-', $old_db_version );
+			$old_db_version = (int) $last_upgrade[1];
+		}
+
+		if ( ! is_numeric( $old_db_version ) ) {
+			// bail if we don't know the previous version
+			return;
+		}
+
 		$migrations = array( 4, 6, 11, 16, 17, 23, 25 );
-        foreach ( $migrations as $migration ) {
-            if ( $frm_db_version >= $migration && $old_db_version < $migration ) {
+		foreach ( $migrations as $migration ) {
+			if ( FrmAppHelper::$db_version >= $migration && $old_db_version < $migration ) {
 				$function_name = 'migrate_to_' . $migration;
-                $this->$function_name();
-            }
-        }
-    }
+				$this->$function_name();
+			}
+		}
+	}
 
     public function uninstall() {
 		if ( ! current_user_can( 'administrator' ) ) {
