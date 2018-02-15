@@ -9,7 +9,7 @@ class test_FrmMigrate extends FrmUnitTest {
 	 * @covers FrmMigrate::upgrade
 	 * @todo Check if style was created
 	 */
-    public function test_upgrade( ) {
+	public function test_upgrade( ) {
 		$frmdb = new FrmMigrate();
 		$frmdb->upgrade( 25 );
 
@@ -17,7 +17,51 @@ class test_FrmMigrate extends FrmUnitTest {
 
 		$new_version = get_option( 'frm_db_version' );
 		$this->assertEquals( $new_version, FrmAppHelper::plugin_version() . '-' . FrmAppHelper::$db_version );
-    }
+	}
+
+	/**
+	 * @covers FrmMigrate::upgrade
+	 * @covers FrmMigrate::migrate_data
+	 * @covers FrmMigrate::migrate_to_17
+	 */
+	public function test_migrate_data( ) {
+		$form_id = $this->factory->form->create();
+		$field = $this->factory->field->create_and_get( array(
+			'type' => 'text',
+			'form_id' => $form_id,
+			'field_options' => array(
+				'size' => '10', // the old size in characters
+			),
+		) );
+		$this->assertNotEmpty( $field );
+		$field_id = $field->id;
+
+		$frmdb = new FrmMigrate();
+		update_option( 'frm_db_version', 16 ); // trigger migration 17
+		$frmdb->upgrade();
+
+		$field = $this->factory->field->get_object_by_id( $field_id );
+		$expected_size = '90px';
+		$this->assertEquals( $expected_size, $field->field_options['size'] );
+
+		// make sure 17 does not fire and change the size again
+		update_option( 'frm_db_version', 20 );
+		$frmdb->upgrade();
+
+		$field = $this->factory->field->get_object_by_id( $field_id );
+		$this->assertEquals( $expected_size, $field->field_options['size'] );
+
+		update_option( 'frm_db_version', FrmAppHelper::plugin_version() . '-' . FrmAppHelper::$db_version );
+		$frmdb->upgrade();
+
+		$field = $this->factory->field->get_object_by_id( $field_id );
+		$this->assertEquals( $expected_size, $field->field_options['size'] );
+
+		$frmdb->upgrade();
+
+		$field = $this->factory->field->get_object_by_id( $field_id );
+		$this->assertEquals( $expected_size, $field->field_options['size'] );
+	}
 
 	/**
 	 * @covers FrmMigrate::collation

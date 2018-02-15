@@ -54,6 +54,12 @@ class Field_Factory extends WP_UnitTest_Factory_For_Thing {
 	function create_object( $args ) {
 		$field_values = FrmFieldsHelper::setup_new_vars( $args['type'], $args['form_id'] );
 		unset( $args['type'], $args['form_id'] );
+
+		if ( isset( $args['field_options'] ) ) {
+			$field_values['field_options'] = array_merge( $field_values['field_options'], $args['field_options'] );
+			unset( $args['field_options'] );
+		}
+
 		$field_values = array_merge( $field_values, $args );
 		return FrmField::create( $field_values );
 	}

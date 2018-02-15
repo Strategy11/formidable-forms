@@ -183,10 +183,9 @@ class FrmMigrate {
 		}
 	}
 
-    /**
-     * @param integer $frm_db_version
-	 * @param int $old_db_version
-     */
+	/**
+	 * @param int|string $old_db_version
+	 */
 	private function migrate_data( $old_db_version ) {
 		if ( ! $old_db_version ) {
 			$old_db_version = get_option( 'frm_db_version' );
