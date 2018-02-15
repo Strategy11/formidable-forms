@@ -20,11 +20,12 @@ class test_FrmMigrate extends FrmUnitTest {
 	}
 
 	/**
-	 * @covers FrmMigrate::upgrade
+	 * Test to make sure a migration isn't run again
+	 *
 	 * @covers FrmMigrate::migrate_data
 	 * @covers FrmMigrate::migrate_to_17
 	 */
-	public function test_migrate_data( ) {
+	public function test_migrate_to_17() {
 		$form_id = $this->factory->form->create();
 		$field = $this->factory->field->create_and_get( array(
 			'type' => 'text',
@@ -44,6 +45,13 @@ class test_FrmMigrate extends FrmUnitTest {
 		$expected_size = '90px';
 		$this->assertEquals( $expected_size, $field->field_options['size'] );
 
+		// set it to a numeric value
+		$expected_size = '10';
+		$field->field_options['size'] = $expected_size;
+		FrmField::update( $field_id, array( 'field_options' => $field->field_options ) );
+		$field = $this->factory->field->get_object_by_id( $field_id );
+		$this->assertEquals( $expected_size, $field->field_options['size'] );
+
 		// make sure 17 does not fire and change the size again
 		update_option( 'frm_db_version', 20 );
 		$frmdb->upgrade();
@@ -61,6 +69,42 @@ class test_FrmMigrate extends FrmUnitTest {
 
 		$field = $this->factory->field->get_object_by_id( $field_id );
 		$this->assertEquals( $expected_size, $field->field_options['size'] );
+	}
+
+	/**
+	 * @group testme
+	 * @covers FrmMigrate::migrate_to_86
+	 */
+	public function test_migrate_to_86() {
+		$form_id = $this->factory->form->create();
+		$sizes = array(
+			'10px' => '10px',
+			'10'   => '10',
+			'1024' => '1024',
+			'1024px' => round( 1024 / 9 ),
+		);
+		$field_ids = array();
+		foreach ( $sizes as $start_size => $new_size ) {
+			$field_id = $this->factory->field->create( array(
+				'type' => 'text',
+				'form_id' => $form_id,
+				'field_options' => array(
+					'size' => $start_size,
+				),
+			) );
+			$field_ids[ $start_size ] = $field_id;
+		}
+
+		$frmdb = new FrmMigrate();
+		$this->run_private_method( array( $frmdb, 'migrate_to_86' ), array() );
+
+		foreach ( $sizes as $size => $expected ) {
+			$field = $this->factory->field->get_object_by_id( $field_ids[ $size ] );
+			$this->assertNotEmpty( $field );
+
+			$new_size = $field->field_options['size'];
+			$this->assertEquals( $expected, $new_size );
+		}
 	}
 
 	/**

@@ -200,7 +200,7 @@ class FrmMigrate {
 			return;
 		}
 
-		$migrations = array( 4, 6, 11, 16, 17, 23, 25 );
+		$migrations = array( 4, 6, 11, 16, 17, 23, 25, 86 );
 		foreach ( $migrations as $migration ) {
 			if ( FrmAppHelper::$db_version >= $migration && $old_db_version < $migration ) {
 				$function_name = 'migrate_to_' . $migration;
@@ -260,6 +260,78 @@ class FrmMigrate {
         do_action('frm_after_uninstall');
         return true;
     }
+
+	/**
+	 * Reverse migration 17 -- Divide by 9
+	 */
+	private function migrate_to_86() {
+		global $wpdb;
+
+		// Get query arguments
+		$field_types = array( 'textarea', 'text', 'number', 'email', 'url', 'rte', 'date', 'phone', 'password', 'image', 'tag', 'file' );
+		$query = array(
+			'type' => $field_types,
+			'field_options like' => 's:4:"size";',
+			'field_options not like' => 's:4:"size";s:0:',
+		);
+
+		$fields = FrmDb::get_results( $this->fields, $query, 'id, field_options' );
+
+		foreach ( $fields as $f ) {
+			$f->field_options = maybe_unserialize( $f->field_options );
+			$size = $f->field_options['size'];
+			$this->maybe_convert_migrated_size( $size );
+
+			if ( $size === $f->field_options['size'] ) {
+				continue;
+			}
+
+			$f->field_options['size'] = $size;
+			FrmField::update( $f->id, array( 'field_options' => $f->field_options ) );
+			unset( $f );
+		}
+
+		// reverse the extra size changes in widgets
+		$widgets = get_option( 'widget_frm_show_form' );
+		if ( empty( $widgets ) ) {
+			return;
+		}
+
+		$widgets = maybe_unserialize( $widgets );
+		foreach ( $widgets as $k => $widget ) {
+			if ( ! is_array( $widget ) || ! isset( $widget['size'] ) ) {
+				continue;
+			}
+
+			$size = $widget['size'];
+			$this->maybe_convert_migrated_size( $size );
+			if ( $size === $widget['size'] ) {
+				continue;
+			}
+
+			$widgets[ $k ]['size'] = $size;
+		}
+		update_option( 'widget_frm_show_form', $widgets );
+	}
+
+	/**
+	 * Divide by 9 to reverse the multiplication
+	 * @since 3.0.05
+	 */
+	private function maybe_convert_migrated_size( &$size ) {
+		$has_px_size = ! empty( $size ) && strpos( $size, 'px' );
+		if ( ! $has_px_size ) {
+			return;
+		}
+
+		$int_size = str_replace( 'px', '', $size );
+		if ( ! is_numeric( $int_size ) || (int) $int_size < 900 ) {
+			return;
+		}
+
+		$pixel_conversion = 9;
+		$size = round( (int) $int_size / $pixel_conversion );
+	}
 
 	/**
 	 * Migrate old styling settings. If sites are using the old
