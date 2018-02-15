@@ -293,6 +293,7 @@ ul.frm_form_nav > li{
 #postbox-container-1 .frm_field_list #frm-insert-fields{
 	max-height: none;
 	font-size:14px;
+	padding-bottom:25px;
 }
 #postbox-container-1 .frm_field_list #frm-layout-classes,
 #postbox-container-1 .frm_field_list #frm-dynamic-values{

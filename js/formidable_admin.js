@@ -87,7 +87,7 @@ function frmAdminBuildJS(){
 			var startPos = document.getElementById('frm_set_height_ele').getBoundingClientRect().top;
 			var topSidebar = document.getElementById('frm-fixed').getBoundingClientRect().top;
 			var totalHeight = window.innerHeight;
-			fixedBox.style.maxHeight = ( totalHeight - ( startPos - topSidebar ) - 60 ) +'px';
+			fixedBox.style.maxHeight = ( totalHeight - ( startPos - topSidebar ) - 30 ) +'px';
 		}
 	}
 
