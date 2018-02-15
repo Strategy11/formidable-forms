@@ -22,11 +22,11 @@ class test_FrmStylesController extends FrmUnitTest {
 
 		$frm_settings = FrmAppHelper::get_settings();
 		$stylesheet_urls = $this->get_custom_stylesheet();
-		$style_included = strpos( $styles, $stylesheet_urls['formidable'] );
+
 		if ( $frm_settings->load_style == 'all' ) {
-			$this->assertTrue( $style_included !== false, 'The formidablepro stylesheet is missing' );
+			$this->assertContains( $stylesheet_urls['formidable'], $styles, 'The formidablepro stylesheet is missing' );
 		} else {
-			$this->assertFalse( $style_included, 'The formidablepro stylesheet is included when it should not be' );
+			$this->assertNotContains( $stylesheet_urls['formidable'], $styles, 'The formidablepro stylesheet is included when it should not be' );
 		}
 	}
 

@@ -92,4 +92,5 @@ script:
 - if [[ "$SNIFF" == "1" ]]; then $PHPCS_DIR/bin/phpcs -p -s -v -n . --standard=./phpcs.xml --extensions=php; fi
 - if [[ "$PHPUNIT" != "0" ]]; then phpunit --group=ajax -c phpunit.xml; fi
 - if [[ "$PHPUNIT" != "0" ]]; then phpunit --group=entries -c phpunit.xml; fi
-- if [[ "$PHPUNIT" != "0" ]]; then phpunit --exclude-group=ajax,entries -c phpunit.xml; fi
+- if [[ "$PHPUNIT" != "0" ]]; then phpunit --group=styles -c phpunit.xml; fi
+- if [[ "$PHPUNIT" != "0" ]]; then phpunit --exclude-group=ajax,entries,styles -c phpunit.xml; fi
