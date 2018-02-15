@@ -72,7 +72,6 @@ class test_FrmMigrate extends FrmUnitTest {
 	}
 
 	/**
-	 * @group testme
 	 * @covers FrmMigrate::migrate_to_86
 	 */
 	public function test_migrate_to_86() {

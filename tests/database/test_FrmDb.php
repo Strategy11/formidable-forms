@@ -16,6 +16,7 @@ class test_FrmDb extends FrmUnitTest {
 			'field_order DESC'    => ' ORDER BY field_order desc',
 			' ORDER BY field_order DESC' => ' ORDER BY field_order desc',
 			'meta_value'          => ' ORDER BY meta_value ',
+			'meta_1754+0 asc'     => ' ORDER BY meta_1754+0 asc',
 		);
 
 		foreach ( $orders as $start => $expected ) {
