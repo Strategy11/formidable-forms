@@ -13,7 +13,7 @@ matrix:
       dist: precise
     - php: 7.0
       env: WP_VERSION=4.9 SCRIPT_DEBUG=1
-    - php: 5.6
+    - php: 7.0
       env: WP_VERSION=4.8
     - php: 5.6
       env: WP_VERSION=4.7
@@ -90,8 +90,6 @@ script:
 # --standard: Use WordPress as the standard.
 # --extensions: Only sniff PHP files.
 - if [[ "$SNIFF" == "1" ]]; then $PHPCS_DIR/bin/phpcs -p -s -v -n . --standard=./phpcs.xml --extensions=php; fi
-- if [[ "$PHPUNIT" != "0" ]]; then phpunit --group=ajax --exclude-group=pro -c phpunit.xml; fi
-- if [[ "$PHPUNIT" != "0" ]]; then phpunit --group=entries --exclude-group=pro -c phpunit.xml; fi
-- if [[ "$PHPUNIT" != "0" ]]; then phpunit --group=styles --exclude-group=pro -c phpunit.xml; fi
-- if [[ "$PHPUNIT" != "0" ]]; then phpunit --group=emails --exclude-group=pro -c phpunit.xml; fi
-- if [[ "$PHPUNIT" != "0" ]]; then phpunit --exclude-group=ajax,pro,entries,styles,emails -c phpunit.xml; fi
+- if [[ "$PHPUNIT" != "0" ]]; then phpunit --group=ajax -c phpunit.xml; fi
+- if [[ "$PHPUNIT" != "0" ]]; then phpunit --group=entries -c phpunit.xml; fi
+- if [[ "$PHPUNIT" != "0" ]]; then phpunit --exclude-group=ajax,entries -c phpunit.xml; fi
