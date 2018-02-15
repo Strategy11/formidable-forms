@@ -265,19 +265,10 @@ class FrmMigrate {
 	 * Reverse migration 17 -- Divide by 9
 	 */
 	private function migrate_to_86() {
-		global $wpdb;
 
-		// Get query arguments
-		$field_types = array( 'textarea', 'text', 'number', 'email', 'url', 'rte', 'date', 'phone', 'password', 'image', 'tag', 'file' );
-		$query = array(
-			'type' => $field_types,
-			'field_options like' => 's:4:"size";',
-			'field_options not like' => 's:4:"size";s:0:',
-		);
+		$fields = $this->get_fields_with_size();
 
-		$fields = FrmDb::get_results( $this->fields, $query, 'id, field_options' );
-
-		foreach ( $fields as $f ) {
+		foreach ( (array) $fields as $f ) {
 			$f->field_options = maybe_unserialize( $f->field_options );
 			$size = $f->field_options['size'];
 			$this->maybe_convert_migrated_size( $size );
@@ -292,6 +283,29 @@ class FrmMigrate {
 		}
 
 		// reverse the extra size changes in widgets
+		$widgets = get_option( 'widget_frm_show_form' );
+		if ( empty( $widgets ) ) {
+			return;
+		}
+
+		$this->revert_widget_field_size();
+	}
+
+	private function get_fields_with_size() {
+		$field_types = array( 'textarea', 'text', 'number', 'email', 'url', 'rte', 'date', 'phone', 'password', 'image', 'tag', 'file' );
+		$query = array(
+			'type' => $field_types,
+			'field_options like' => 's:4:"size";',
+			'field_options not like' => 's:4:"size";s:0:',
+		);
+
+		return FrmDb::get_results( $this->fields, $query, 'id, field_options' );
+	}
+
+	/**
+	 * reverse the extra size changes in widgets
+	 */
+	private function revert_widget_field_size() {
 		$widgets = get_option( 'widget_frm_show_form' );
 		if ( empty( $widgets ) ) {
 			return;
@@ -374,21 +388,10 @@ class FrmMigrate {
      * Change field size from character to pixel -- Multiply by 9
      */
     private function migrate_to_17() {
-        global $wpdb;
 		$pixel_conversion = 9;
 
-        // Get query arguments
-		$field_types = array( 'textarea', 'text', 'number', 'email', 'url', 'rte', 'date', 'phone', 'password', 'image', 'tag', 'file' );
-		$query = array(
-			'type' => $field_types,
-			'field_options like' => 's:4:"size";',
-			'field_options not like' => 's:4:"size";s:0:',
-		);
+		$fields = $this->get_fields_with_size();
 
-        // Get results
-		$fields = FrmDb::get_results( $this->fields, $query, 'id, field_options' );
-
-        $updated = 0;
         foreach ( $fields as $f ) {
             $f->field_options = maybe_unserialize($f->field_options);
             if ( empty($f->field_options['size']) || ! is_numeric($f->field_options['size']) ) {
@@ -397,10 +400,7 @@ class FrmMigrate {
 
 			$f->field_options['size'] = round( $pixel_conversion * (int) $f->field_options['size'] );
             $f->field_options['size'] .= 'px';
-            $u = FrmField::update( $f->id, array( 'field_options' => $f->field_options ) );
-            if ( $u ) {
-                $updated++;
-            }
+			FrmField::update( $f->id, array( 'field_options' => $f->field_options ) );
             unset($f);
         }
 
