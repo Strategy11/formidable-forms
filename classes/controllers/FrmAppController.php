@@ -321,9 +321,11 @@ class FrmAppController {
 			FrmAppHelper::localize_script( 'admin' );
 
             wp_enqueue_style( 'formidable-admin' );
-			wp_enqueue_style( 'formidable-grids' );
-			wp_enqueue_style( 'formidable-dropzone' );
-            add_thickbox();
+			if ( 'formidable-styles' !== $page ) {
+				wp_enqueue_style( 'formidable-grids' );
+				wp_enqueue_style( 'formidable-dropzone' );
+				add_thickbox();
+			}
 
             wp_register_script( 'formidable-editinplace', FrmAppHelper::plugin_url() . '/js/jquery/jquery.editinplace.packed.js', array( 'jquery' ), '2.3.0' );
 
