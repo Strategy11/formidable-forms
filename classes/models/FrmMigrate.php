@@ -200,7 +200,7 @@ class FrmMigrate {
 			return;
 		}
 
-		$migrations = array( 4, 6, 11, 16, 17, 23, 25, 86 );
+		$migrations = array( 6, 11, 16, 17, 23, 25, 86 );
 		foreach ( $migrations as $migration ) {
 			if ( FrmAppHelper::$db_version >= $migration && $old_db_version < $migration ) {
 				$function_name = 'migrate_to_' . $migration;
@@ -263,6 +263,7 @@ class FrmMigrate {
 
 	/**
 	 * Reverse migration 17 -- Divide by 9
+	 * @since 3.0.05
 	 */
 	private function migrate_to_86() {
 
@@ -304,6 +305,7 @@ class FrmMigrate {
 
 	/**
 	 * reverse the extra size changes in widgets
+	 * @since 3.0.05
 	 */
 	private function revert_widget_field_size() {
 		$widgets = get_option( 'widget_frm_show_form' );
@@ -317,13 +319,7 @@ class FrmMigrate {
 				continue;
 			}
 
-			$size = $widget['size'];
-			$this->maybe_convert_migrated_size( $size );
-			if ( $size === $widget['size'] ) {
-				continue;
-			}
-
-			$widgets[ $k ]['size'] = $size;
+			$this->maybe_convert_migrated_size( $widgets[ $k ]['size'] );
 		}
 		update_option( 'widget_frm_show_form', $widgets );
 	}
@@ -384,43 +380,51 @@ class FrmMigrate {
 		}
 	}
 
-    /**
-     * Change field size from character to pixel -- Multiply by 9
-     */
-    private function migrate_to_17() {
-		$pixel_conversion = 9;
-
+	/**
+	 * Change field size from character to pixel -- Multiply by 9
+	 */
+	private function migrate_to_17() {
 		$fields = $this->get_fields_with_size();
 
-        foreach ( $fields as $f ) {
-            $f->field_options = maybe_unserialize($f->field_options);
-            if ( empty($f->field_options['size']) || ! is_numeric($f->field_options['size']) ) {
-                continue;
-            }
+		foreach ( $fields as $f ) {
+			$f->field_options = maybe_unserialize( $f->field_options );
+			if ( empty( $f->field_options['size'] ) || ! is_numeric( $f->field_options['size'] ) ) {
+				continue;
+			}
 
-			$f->field_options['size'] = round( $pixel_conversion * (int) $f->field_options['size'] );
-            $f->field_options['size'] .= 'px';
+			$this->convert_character_to_px( $f->field_options['size'] );
+
 			FrmField::update( $f->id, array( 'field_options' => $f->field_options ) );
-            unset($f);
-        }
+			unset( $f );
+		}
 
-        // Change the characters in widgets to pixels
-        $widgets = get_option('widget_frm_show_form');
-        if ( empty($widgets) ) {
-            return;
-        }
+		$this->adjust_widget_size();
+	}
 
-        $widgets = maybe_unserialize($widgets);
-        foreach ( $widgets as $k => $widget ) {
-            if ( ! is_array($widget) || ! isset($widget['size']) ) {
-                continue;
-            }
-			$size = round( $pixel_conversion * (int) $widget['size'] );
-            $size .= 'px';
-			$widgets[ $k ]['size'] = $size;
-        }
-        update_option('widget_frm_show_form', $widgets);
-    }
+	/**
+	 * Change the characters in widgets to pixels
+	 */
+	private function adjust_widget_size() {
+		$widgets = get_option( 'widget_frm_show_form' );
+		if ( empty( $widgets ) ) {
+			return;
+		}
+
+		$widgets = maybe_unserialize( $widgets );
+		foreach ( $widgets as $k => $widget ) {
+			if ( ! is_array( $widget ) || ! isset( $widget['size'] ) ) {
+				continue;
+			}
+			$this->convert_character_to_px( $widgets[ $k ]['size'] );
+		}
+		update_option( 'widget_frm_show_form', $widgets );
+	}
+
+	private function convert_character_to_px( &$size ) {
+		$pixel_conversion = 9;
+		$size = round( $pixel_conversion * (int) $size );
+		$size .= 'px';
+	}
 
     /**
      * Migrate post and email notification settings into actions
@@ -506,7 +510,6 @@ DEFAULT_HTML;
             }
             unset($form);
         }
-        unset($forms);
     }
 
     private function migrate_to_6() {
@@ -546,16 +549,5 @@ DEFAULT_HTML;
             unset($field);
         }
         unset($default_html, $old_default_html, $fields);
-    }
-
-	/**
-	 * Adds user id to the entry
-	 */
-    private function migrate_to_4() {
-        global $wpdb;
-		$user_ids = FrmEntryMeta::getAll( array( 'fi.type' => 'user_id' ) );
-        foreach ( $user_ids as $user_id ) {
-			$wpdb->update( $this->entries, array( 'user_id' => $user_id->meta_value ), array( 'id' => $user_id->item_id ) );
-        }
     }
 }
