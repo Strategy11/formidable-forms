@@ -880,7 +880,7 @@ BEFORE_HTML;
 	}
 
 	public static function grid_classes() {
-		return array(
+		$base = array(
 			'frm_half'          => '1/2',
 
 			'frm_third'         => '1/3',
@@ -888,18 +888,37 @@ BEFORE_HTML;
 
 			'frm_fourth'        => '1/4',
 			'frm_three_fourths' => '3/4',
-
-			'frm_sixth'         => '1/6',
-			'frm10'             => '5/6',
-
-			'frm11'             => '11/12',
-			'frm1'              => '1/12',
-
-			'frm5'              => '5/12',
-			'frm7'              => '7/12',
-
-			'frm12'             => '100%',
 		);
+
+		$frm_settings = FrmAppHelper::get_settings();
+		if ( $frm_settings->old_css ) {
+			$classes = array(
+				'frm_fifth'        => '1/5',
+				'frm_four_fifths'  => '4/5',
+
+				'frm_two_fifths'   => '2/5',
+				'frm_three_fifths' => '3/5',
+
+				'frm_sixth'         => '1/6',
+
+				'frm_full'          => '100%',
+			);
+		} else {
+			$classes = array(
+				'frm_sixth'         => '1/6',
+				'frm10'             => '5/6',
+
+				'frm11'             => '11/12',
+				'frm1'              => '1/12',
+
+				'frm5'              => '5/12',
+				'frm7'              => '7/12',
+
+				'frm12'             => '100%',
+			);
+		}
+
+		return array_merge( $base, $classes );
 	}
 
 	/**
