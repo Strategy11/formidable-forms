@@ -178,11 +178,11 @@ class FrmEmail {
 		$this->reply_to = trim( $this->settings['reply_to'] );
 
 		if ( empty( $this->reply_to ) ) {
-			$this->reply_to = $this->from;
+			$this->reply_to = $this->get_email_from_name( $this->from );
 		} else {
 			$this->reply_to = $this->prepare_email_setting( $this->settings['reply_to'], $user_id_args );
-			$this->reply_to = $this->format_reply_to( $this->reply_to );
 		}
+		$this->reply_to = $this->format_reply_to( $this->reply_to );
 	}
 
 	/**
@@ -558,7 +558,7 @@ class FrmEmail {
 				}
 			}
 
-			$recipients[ $key ] = $name . ' <' . $email . '>';
+			$recipients[ $key ] = $this->format_from_email( $name, $email );
 		}
 
 		return $recipients;
@@ -594,9 +594,7 @@ class FrmEmail {
 			$from_email = 'wordpress@' . $sitename;
 		}
 
-		$from = $from_name . ' <' . $from_email . '>';
-
-		return $from;
+		return $this->format_from_email( $from_name, $from_email );
 	}
 
 	/**
@@ -611,15 +609,26 @@ class FrmEmail {
 	private function format_reply_to( $reply_to ) {
 		$reply_to = trim( $reply_to );
 
-		if ( empty( $reply_to ) ) {
-			return $this->from;
-		} elseif ( is_email( $reply_to ) ) {
-			return $reply_to;
-		} else {
+		if ( ! is_email( $reply_to ) ) {
 			list( $name, $email ) = $this->get_name_and_email_for_sender( $reply_to );
+			$reply_to = $this->format_from_email( $name, $email );
 		}
 
-		return $name . ' <' . $email . '>';
+		return $reply_to;
+	}
+
+	/**
+	 * Get only the email if the name and email have been combined
+	 *
+	 * @since 3.0.06
+	 */
+	private function get_email_from_name( $name ) {
+		$email = $name;
+		if ( strpos( $name, '<' ) !== false ) {
+			list( $name, $email ) = explode( '<', $name );
+			$email = trim( $email, '>' );
+		}
+		return $email;
 	}
 
 	/**
@@ -644,6 +653,16 @@ class FrmEmail {
 		}
 
 		return array( $name, $end );
+	}
+
+	/**
+	 * @since 3.0.06
+	 */
+	private function format_from_email( $name, $email ) {
+		if ( '' !== $name ) {
+			$email = $name . ' <' . $email . '>';
+		}
+		return $email;
 	}
 
 	/**

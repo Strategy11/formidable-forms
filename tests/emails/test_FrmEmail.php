@@ -268,7 +268,7 @@ class test_FrmEmail extends FrmUnitTest {
 
 		// Reply to
 		$this->email_action->post_content['reply_to'] = '';
-		$expected['reply_to'] = FrmAppHelper::site_name() . ' <testfrom@mail.com>';
+		$expected['reply_to'] = 'testfrom@mail.com';
 
 		// Body - set plain text to true
 		$this->email_action->post_content['plain_text'] = true;
@@ -368,6 +368,36 @@ class test_FrmEmail extends FrmUnitTest {
 		$this->check_subject( $expected, $mock_email );
 		$this->check_message_body( $expected, $mock_email );
 		$this->check_content_type( $expected, $mock_email );
+	}
+
+	/**
+	 *
+	 * Reply_to:
+	 * From: [x] [y]
+	 *
+	 * @covers FrmNotification::trigger_email
+	 */
+	public function test_trigger_email_six() {
+		$name_id = FrmField::get_id_by_key( $this->name_field_key );
+		$email_id = FrmField::get_id_by_key( $this->email_field_key );
+
+		$entry_clone = clone $this->entry;
+		$entry_clone->metas[ $name_id ] = 'Test Testerson';
+		$entry_clone->metas[ $email_id ] = 'tester@mail.com';
+
+		$this->email_action->post_content['from']     = '[' . $name_id . '] [' . $email_id . ']';
+		$this->email_action->post_content['reply_to'] = '';
+
+		$expected = array(
+			'from'     => 'Test Testerson <tester@mail.com>',
+			'reply_to' => 'tester@mail.com',
+		);
+
+		FrmNotification::trigger_email( $this->email_action, $entry_clone, $this->contact_form );
+
+		$mock_email = end( $GLOBALS['phpmailer']->mock_sent );
+
+		$this->check_senders( $expected, $mock_email );
 	}
 
 	protected function prepare_subject( $subject ) {
