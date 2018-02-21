@@ -38,6 +38,7 @@ install:
 - if [[ $TRAVIS_PHP_VERSION == "5.2.17" || $TRAVIS_PHP_VERSION == "5.3" ]]; then phpenv local --unset; fi
 
 before_script:
+- phpunit --version
 - export PHPCS_DIR=/tmp/phpcs
 - export SNIFFS_DIR=/tmp/sniffs
 # Install CodeSniffer for WordPress Coding Standards checks.

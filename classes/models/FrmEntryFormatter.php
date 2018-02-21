@@ -486,7 +486,8 @@ class FrmEntryFormatter {
 			$displayed_value = $this->prepare_display_value_for_array( $field_value->get_displayed_value() );
 			$output[ $this->get_key_or_id( $field_value ) ] = $displayed_value;
 
-			if ( $displayed_value !== $field_value->get_saved_value() ) {
+			$has_separate_value = (bool) $field_value->get_field_option( 'separate_value' );
+			if ( $has_separate_value || $displayed_value !== $field_value->get_saved_value() ) {
 				$output[ $this->get_key_or_id( $field_value ) . '-value' ] = $field_value->get_saved_value();
 			}
 		}
