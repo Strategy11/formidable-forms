@@ -623,10 +623,10 @@ class FrmEmail {
 	 * @since 3.0.06
 	 */
 	private function get_email_from_name( $name ) {
-		$email = $name;
-		if ( strpos( $name, '<' ) !== false ) {
-			list( $name, $email ) = explode( '<', $name );
-			$email = trim( $email, '>' );
+		$email = trim( trim( $name, '>' ), '<' );
+		if ( strpos( $email, '<' ) !== false ) {
+			$parts = explode( '<', $email );
+			$email = trim( $parts[1], '>' );
 		}
 		return $email;
 	}
