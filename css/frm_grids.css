@@ -201,6 +201,7 @@
 .frm_form_field.frm_alignright{
 	grid-column-end:-1;
 	grid-row-start: span 100;
+	justify-content: end;
 }
 
 /* RTL Grids */
