@@ -415,6 +415,7 @@ if ( ! empty( $important ) ) {
 .<?php echo esc_html( $style_class ) ?> .frm_focus_field input[type=tel],
 .<?php echo esc_html( $style_class ) ?> .frm_focus_field input[type=search],
 .frm_form_fields_active_style,
+.<?php echo esc_html( $style_class ) ?> .chosen-container-single.chosen-container-active .chosen-single,
 .<?php echo esc_html( $style_class ) ?> .chosen-container-active .chosen-choices{
 	background-color:#<?php echo esc_html( $bg_color_active . $important ); ?>;
     border-color:#<?php echo esc_html( $border_color_active . $important ) ?>;
