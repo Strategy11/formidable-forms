@@ -234,6 +234,7 @@ class FrmFieldsController {
 			$disabled_fields = FrmAppHelper::pro_is_installed() ? array() : $pro_field_selection;
 
 			if ( ! isset( $field ) && is_object( $field_object ) ) {
+				$field_object->parent_form_id = isset( $values['id'] ) ? $values['id'] : $field_object->form_id;
 				$field = FrmFieldsHelper::setup_edit_vars( $field_object );
 			}
 
