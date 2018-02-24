@@ -9,7 +9,7 @@ class test_FrmStylesController extends FrmUnitTest {
 	public function test_front_head() {
 		$this->set_front_end();
 
-		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+		if ( FrmAppHelper::wp_doing_ajax() || FrmAppHelper::is_admin() ) {
 			$this->markTestSkipped( 'Run with --group styles' );
 		}
 
