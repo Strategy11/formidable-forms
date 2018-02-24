@@ -73,7 +73,6 @@ before_script:
 - if [[ "$SNIFF" == "1" ]]; then wget https://develop.svn.wordpress.org/trunk/.jshintrc; fi
 
 script:
-- if [[ "$COVERAGE" == "1" ]]; then vendor/bin/phpunit --coverage-clover coverage.xml; fi
 - if [[ "$SCRIPT_DUBUG" == "1" ]]; then php -r "define('SCRIPT_DUBUG', true);"; fi
 - if [[ "$SCRIPT_DUBUG" == "0" ]]; then php -r "define('SCRIPT_DUBUG', false);"; fi
 # Search for PHP syntax errors.
@@ -96,6 +95,7 @@ script:
 - if [[ "$PHPUNIT" != "0" ]]; then phpunit --group=entries -c phpunit.xml; fi
 - if [[ "$PHPUNIT" != "0" ]]; then phpunit --group=styles -c phpunit.xml; fi
 - if [[ "$PHPUNIT" != "0" ]]; then phpunit --exclude-group=ajax,entries,styles -c phpunit.xml; fi
+- if [[ "$COVERAGE" == "1" ]]; then vendor/bin/phpunit --coverage-clover coverage.xml; fi
 
 after_script:
 # upload coverage.xml file to Coveralls to analyze it

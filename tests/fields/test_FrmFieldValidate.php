@@ -32,7 +32,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 	}
 
 	/**
-	 * @covers FrmFieldValidate::validate
+	 * @covers FrmEntryValidate::validate
 	 */
 	public function test_not_required_fields() {
 		$_POST = array(
@@ -115,7 +115,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 	}
 
 	/**
-	 * @covers FrmFieldValidate::validate
+	 * @covers FrmEntryValidate::validate
 	 */
 	public function test_empty_required_fields() {
 		$fields = $this->factory->field->get_fields_from_form( $this->form->id );
