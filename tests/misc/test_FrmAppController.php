@@ -169,11 +169,15 @@ class test_FrmAppController extends FrmUnitTest {
 	 * @covers FrmAppController::api_install
 	 */
 	public function test_api_install() {
+		if ( FrmAppHelper::doing_ajax() ) {
+			$this->markTestSkipped( 'Run without ajax' );
+		}
+
 		$current_db = FrmAppHelper::plugin_version() . '-' . FrmAppHelper::$db_version;
 		$previous_db = FrmAppHelper::plugin_version() . '-' . ( absint( FrmAppHelper::$db_version ) - 1 );
 		update_option( 'frm_db_version', $previous_db );
 		FrmAppController::admin_init();
 		$new_db = get_option( 'frm_db_version' );
-		$this->assertSame( $new_db, $current_db, 'The DB did not update correctly' );
+		$this->assertSame( $current_db, $new_db, 'The DB did not update correctly' );
 	}
 }
