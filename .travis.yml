@@ -12,7 +12,7 @@ matrix:
       env: WP_VERSION=4.9 WP_MULTISITE=1
       dist: precise
     - php: 7.0
-      env: WP_VERSION=4.9 SCRIPT_DEBUG=1
+      env: WP_VERSION=4.9 SCRIPT_DEBUG=1 COVERAGE=1
     - php: 7.0
       env: WP_VERSION=4.8
     - php: 5.6
@@ -73,6 +73,7 @@ before_script:
 - if [[ "$SNIFF" == "1" ]]; then wget https://develop.svn.wordpress.org/trunk/.jshintrc; fi
 
 script:
+- if [[ "$COVERAGE" == "1" ]]; then vendor/bin/phpunit --coverage-clover coverage.xml; fi
 - if [[ "$SCRIPT_DUBUG" == "1" ]]; then php -r "define('SCRIPT_DUBUG', true);"; fi
 - if [[ "$SCRIPT_DUBUG" == "0" ]]; then php -r "define('SCRIPT_DUBUG', false);"; fi
 # Search for PHP syntax errors.
@@ -95,3 +96,9 @@ script:
 - if [[ "$PHPUNIT" != "0" ]]; then phpunit --group=entries -c phpunit.xml; fi
 - if [[ "$PHPUNIT" != "0" ]]; then phpunit --group=styles -c phpunit.xml; fi
 - if [[ "$PHPUNIT" != "0" ]]; then phpunit --exclude-group=ajax,entries,styles -c phpunit.xml; fi
+
+after_script:
+# upload coverage.xml file to Coveralls to analyze it
+# minimal required coverage is set to 80+ %
+- if [[ "$COVERAGE" == "1" ]]; wget https://github.com/satooshi/php-coveralls/releases/download/v1.0.1/coveralls.phar; fi
+- if [[ "$COVERAGE" == "1" ]]; php coveralls.phar --verbose; fi
