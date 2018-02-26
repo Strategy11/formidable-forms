@@ -100,5 +100,5 @@ script:
 after_script:
 # upload coverage.xml file to Coveralls to analyze it
 # minimal required coverage is set to 80+ %
-- if [[ "$COVERAGE" == "1" ]]; wget https://github.com/satooshi/php-coveralls/releases/download/v2.0.0/coveralls.phar; fi
-- if [[ "$COVERAGE" == "1" ]]; php coveralls.phar --verbose; fi
+- if [[ "$COVERAGE" == "1" ]]; then wget https://github.com/satooshi/php-coveralls/releases/download/v2.0.0/coveralls.phar; fi
+- if [[ "$COVERAGE" == "1" ]]; then php coveralls.phar --verbose; fi
