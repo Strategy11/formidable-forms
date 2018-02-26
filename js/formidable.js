@@ -150,25 +150,6 @@ function frmFrontFormJS(){
 		return errors;
 	}
 
-	function fieldValueChanged(e){
-		/*jshint validthis:true */
-
-		var field_id = frmFrontForm.getFieldId( this, false );
-		if ( ! field_id || typeof field_id === 'undefined' ) {
-			return;
-		}
-
-		if ( e.frmTriggered && e.frmTriggered == field_id ) {
-			return;
-		}
-
-		jQuery(document).trigger( 'frmFieldChanged', [ this, field_id, e ] );
-
-		if ( e.selfTriggered !== true ) {
-			maybeValidateChange( field_id, this );
-		}
-	}
-
 	function maybeValidateChange( field_id, field ) {
 		if ( jQuery(field).closest('form').hasClass('frm_js_validate') ) {
 			validateField( field_id, field );
@@ -796,7 +777,7 @@ function frmFrontFormJS(){
 
 			jQuery(document.getElementById('frm_resend_email')).click(resendEmail);
 
-			jQuery(document).on('change', '.frm-show-form input[name^="item_meta"], .frm-show-form select[name^="item_meta"], .frm-show-form textarea[name^="item_meta"]', fieldValueChanged );
+			jQuery(document).on('change', '.frm-show-form input[name^="item_meta"], .frm-show-form select[name^="item_meta"], .frm-show-form textarea[name^="item_meta"]', frmFrontForm.fieldValueChanged );
 			jQuery(document).on('change keyup', '.frm-show-form .frm_inside_container input, .frm-show-form .frm_inside_container select, .frm-show-form .frm_inside_container textarea', maybeShowLabel);
 
 			jQuery(document).on('click', 'a[data-frmconfirm]', confirmClick);
@@ -1003,6 +984,25 @@ function frmFrontFormJS(){
 					}
 					return false;
 				}
+			}
+		},
+
+		fieldValueChanged: function(e){
+			/*jshint validthis:true */
+
+			var field_id = frmFrontForm.getFieldId( this, false );
+			if ( ! field_id || typeof field_id === 'undefined' ) {
+				return;
+			}
+
+			if ( e.frmTriggered && e.frmTriggered == field_id ) {
+				return;
+			}
+
+			jQuery(document).trigger( 'frmFieldChanged', [ this, field_id, e ] );
+
+			if ( e.selfTriggered !== true ) {
+				maybeValidateChange( field_id, this );
 			}
 		},
 
