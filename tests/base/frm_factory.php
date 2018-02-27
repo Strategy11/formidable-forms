@@ -60,6 +60,10 @@ class Field_Factory extends WP_UnitTest_Factory_For_Thing {
 			unset( $args['field_options'] );
 		}
 
+		if ( ! isset( $args['options'] ) ) {
+			$field_values['options'] = array();
+		}
+
 		$field_values = array_merge( $field_values, $args );
 		return FrmField::create( $field_values );
 	}
