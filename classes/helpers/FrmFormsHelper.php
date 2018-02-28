@@ -719,7 +719,7 @@ BEFORE_HTML;
 			if ( current_user_can('frm_delete_forms') ) {
 				$actions['trash'] = $trash_links['delete'];
 			}
-		} else {
+		} elseif ( current_user_can( 'frm_edit_forms' ) ) {
 			$duplicate_link = '?page=formidable&frm_action=duplicate&id=' . $form_id;
 			if ( $form->is_template ) {
 				$actions['frm_duplicate'] = array(
@@ -727,7 +727,7 @@ BEFORE_HTML;
 					'label' => __( 'Create Form from Template', 'formidable' ),
 					'icon'  => 'frm_icon_font frm_duplicate_icon',
 				);
-			} elseif ( FrmAppHelper::pro_is_installed() ) {
+			} else {
 				$actions['duplicate'] = array(
 					'url'   => wp_nonce_url( $duplicate_link ),
 					'label' => __( 'Duplicate Form', 'formidable' ),
