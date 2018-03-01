@@ -160,7 +160,7 @@ The field and form names and descriptions are all changed with in-place edit. Ju
 
 == Changelog ==
 - 3.0.06 =
-* New: Include the link to duplucate a form in the free form builder
+* New: Include the option to duplicate a form in the free form builder
 * Fix: If the reply to address in the email is not specified, use only the from email without the from name to increase receivability
 * Fix: Improve styling without CSS grids when using left, right, and inline labels
 * Fix: Make the frmFrontForm.fieldValueChanged function public in the javascript so it can be triggered by scripts in other plugins
