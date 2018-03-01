@@ -200,7 +200,7 @@ class FrmMigrate {
 			return;
 		}
 
-		$migrations = array( 6, 11, 16, 17, 23, 25, 86 );
+		$migrations = array( 16, 11, 16, 17, 23, 25, 86 );
 		foreach ( $migrations as $migration ) {
 			if ( FrmAppHelper::$db_version >= $migration && $old_db_version < $migration ) {
 				$function_name = 'migrate_to_' . $migration;
@@ -510,44 +510,5 @@ DEFAULT_HTML;
             }
             unset($form);
         }
-    }
-
-    private function migrate_to_6() {
-        global $wpdb;
-
-		$no_save = array_merge( FrmField::no_save_fields(), array( 'form', 'hidden', 'user_id' ) );
-		$fields = FrmDb::get_results( $this->fields, array( 'type NOT' => $no_save ), 'id, field_options' );
-
-        $default_html = <<<DEFAULT_HTML
-<div id="frm_field_[id]_container" class="form-field [required_class] [error_class]">
-    <label class="frm_pos_[label_position]">[field_name]
-        <span class="frm_required">[required_label]</span>
-    </label>
-    [input]
-    [if description]<div class="frm_description">[description]</div>[/if description]
-</div>
-DEFAULT_HTML;
-
-        $old_default_html = <<<DEFAULT_HTML
-<div id="frm_field_[id]_container" class="form-field [required_class] [error_class]">
-    <label class="frm_pos_[label_position]">[field_name]
-        <span class="frm_required">[required_label]</span>
-    </label>
-    [input]
-    [if description]<p class="frm_description">[description]</p>[/if description]
-</div>
-DEFAULT_HTML;
-
-        $new_default_html = FrmFieldsHelper::get_default_html('text');
-        foreach ( $fields as $field ) {
-            $field->field_options = maybe_unserialize($field->field_options);
-			$html = FrmField::get_option( $field, 'custom_html' );
-			if ( $html == $default_html || $html == $old_default_html ) {
-                $field->field_options['custom_html'] = $new_default_html;
-				$wpdb->update( $this->fields, array( 'field_options' => maybe_serialize( $field->field_options ) ), array( 'id' => $field->id ) );
-            }
-            unset($field);
-        }
-        unset($default_html, $old_default_html, $fields);
     }
 }

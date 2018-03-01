@@ -25,7 +25,8 @@ a.frm_confirming,
 	margin-bottom:0;
 	background:#fff;
 	flex: 1 1 auto;
-	overflow: auto;
+	overflow-y: auto;
+	overflow-x: hidden;
 	width: auto;
 }
 
