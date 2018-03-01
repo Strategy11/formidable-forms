@@ -925,17 +925,4 @@ class FrmField {
 			( 'lookup' === $field_type && $is_type === $data_type )
 		);
 	}
-
-	/**
-	 * Check if a field might by taller than other fields
-	 * @since 3.0
-	 *
-	 * @param array|object $field
-	 *
-	 * @return bool
-	 */
-	public static function is_tall_field( $field ) {
-		$field_type = FrmField::get_field_type( $field );
-		return FrmFieldFactory::field_has_property( $field_type, 'is_tall' );
-	}
 }

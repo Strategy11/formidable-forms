@@ -11,8 +11,6 @@ class FrmFieldTextarea extends FrmFieldType {
 	 */
 	protected $type = 'textarea';
 
-	protected $is_tall = true;
-
 	protected function field_settings_for_type() {
 		return array(
 			'size'           => true,

@@ -17,8 +17,6 @@ class FrmFieldHTML extends FrmFieldType {
 	 */
 	protected $has_input = false;
 
-	protected $is_tall = true;
-
 	public function default_html() {
 		return '<div id="frm_field_[id]_container" class="frm_form_field form-field">[description]</div>';
 	}
