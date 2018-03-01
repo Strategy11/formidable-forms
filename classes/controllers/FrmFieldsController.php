@@ -210,6 +210,9 @@ class FrmFieldsController {
 	 * @param int $form_id
 	 */
 	public static function load_single_field( $field_object, $values, $form_id = 0 ) {
+		global $frm_vars;
+		$frm_vars['is_admin'] = true;
+
 		if ( is_numeric( $field_object ) ) {
 			$field_object = FrmField::getOne( $field_object );
 		} elseif ( is_array( $field_object ) ) {
