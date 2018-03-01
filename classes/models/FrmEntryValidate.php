@@ -87,7 +87,7 @@ class FrmEntryValidate {
 			$value = trim( $value );
 		}
 
-        if ( $posted_field->required == '1' && ! is_array( $value ) && trim( $value ) == '' ) {
+        if ( $posted_field->required == '1' && FrmAppHelper::is_empty_value( $value ) ) {
 			$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $posted_field, 'blank' );
         } else if ( $posted_field->type == 'text' && ! isset( $_POST['item_name'] ) ) {
             $_POST['item_name'] = $value;
