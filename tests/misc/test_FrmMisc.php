@@ -6,7 +6,7 @@
 class test_FrmMisc extends FrmUnitTest {
 
 	/**
-	 * @covers load_formidable_forms
+	 * @covers ::load_formidable_forms
 	 */
 	public function test_load_formidable_forms() {
 		global $frm_vars;
@@ -18,8 +18,8 @@ class test_FrmMisc extends FrmUnitTest {
 	}
 
 	/**
-	 * @covers frm_class_autoloader
-	 * @covers frm_forms_autoloader
+	 * @covers ::frm_class_autoloader
+	 * @covers ::frm_forms_autoloader
 	 */
 	public function test_frm_class_autoloader() {
 		$test_classes = array( 'FrmTipsHelper', 'FrmFormActionsController', 'FrmEntryFactory', 'FrmPointers', 'FrmFieldDefault' );

@@ -163,7 +163,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 
 	/**
 	 * When a url field is required, http:// should not pass
-	 * @covers FrmFieldUrl:validate
+	 * @covers FrmFieldUrl::validate
 	 */
 	public function test_url_value() {
 		$field = FrmField::getOne( $this->get_field_key( 'url' ) );
@@ -173,6 +173,24 @@ class test_FrmFieldValidate extends FrmUnitTest {
 
 		$errors = $this->check_single_value( array( $field->id => 'http://' ) );
 		$this->assertTrue( isset( $errors[ 'field'. $field->id ] ), 'http:// passed required validation '. print_r($errors,1) );
+	}
+
+	/**
+	 * @covers FrmFieldEmail::validate
+	 */
+	public function test_email_value() {
+		$field = $this->factory->field->get_object_by_id( $this->get_field_key( 'email' ) );
+		$this->assertNotEmpty( $field );
+		$this->set_required_field( $field );
+
+		$errors = $this->check_single_value( array( $field->id => 'notemail@' ) );
+		$this->assertTrue( isset( $errors[ 'field'. $field->id ] ), 'Poorly formatted email passed validation '. print_r($errors,1) );
+
+		$errors = $this->check_single_value( array( $field->id => '' ) );
+		$this->assertTrue( isset( $errors[ 'field'. $field->id ] ), 'Email email passed required validation '. print_r($errors,1) );
+
+		$errors = $this->check_single_value( array( $field->id => 'email@example.com' ) );
+		$this->assertFalse( isset( $errors[ 'field'. $field->id ] ), 'Properly formatted email did not pass validation '. print_r($errors,1) );
 	}
 
 	protected function set_required_fields( $fields ) {
@@ -205,5 +223,23 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		);
 
 		return FrmEntryValidate::validate( $_POST );
+	}
+
+	/**
+	 * @covers FrmEntryValidate::create_regular_expression_from_format
+	 */
+	public function test_create_regular_expression_from_format() {
+		$formats = array(
+			'(999)999-2323' => '^\(\d\d\d\)\d\d\d-\d\d\d\d$',
+			'a9AA2328'      => '^[a-z]\d[A-Z][A-Z]\d\d\d\d$',
+			'****'          => '^\w\w\w\w$',
+			'99/23'         => '^\d\d\/\d\d$',
+			'99?99'        => '^\d\d(\d\d)?$',
+		);
+
+		foreach ( $formats as $start => $expected ) {
+			$new_format = $this->run_private_method( array( 'FrmEntryValidate', 'create_regular_expression_from_format' ), array( $start ) );
+			$this->assertEquals( $expected, $new_format );
+		}
 	}
 }

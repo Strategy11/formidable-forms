@@ -134,6 +134,10 @@ class FrmEntryValidate {
 		}
 	}
 
+	/**
+	 * @deprecated 3.0
+	 * @codeCoverageIgnore
+	 */
 	public static function validate_url_field( &$errors, $field, $value, $args ) {
 		_deprecated_function( __FUNCTION__, '3.0', 'FrmFieldType::validate' );
 
@@ -144,6 +148,10 @@ class FrmEntryValidate {
 		self::validate_field_types( $errors, $field, $value, $args );
 	}
 
+	/**
+	 * @deprecated 3.0
+	 * @codeCoverageIgnore
+	 */
 	public static function validate_email_field( &$errors, $field, $value, $args ) {
 		_deprecated_function( __FUNCTION__, '3.0', 'FrmFieldType::validate' );
 
@@ -154,6 +162,10 @@ class FrmEntryValidate {
 		self::validate_field_types( $errors, $field, $value, $args );
 	}
 
+	/**
+	 * @deprecated 3.0
+	 * @codeCoverageIgnore
+	 */
 	public static function validate_number_field( &$errors, $field, $value, $args ) {
 		_deprecated_function( __FUNCTION__, '3.0', 'FrmFieldType::validate' );
 
@@ -231,6 +243,10 @@ class FrmEntryValidate {
 		return $pattern;
 	}
 
+	/**
+	 * @deprecated 3.0
+	 * @codeCoverageIgnore
+	 */
 	public static function validate_recaptcha( &$errors, $field, $args ) {
 		_deprecated_function( __FUNCTION__, '3.0', 'FrmFieldType::validate' );
 
