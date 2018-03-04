@@ -26,7 +26,11 @@
 	    <file>formidable.php</file>
 	    <exclude>
 	      <directory suffix=".php">./classes/views</directory>
-		  <file>./classes/models/*Deprecated.php</file>
+		  <file>./classes/models/FrmEntryDeprecated.php</file>
+		  <file>./classes/models/FrmEntryMetaDeprecated.php</file>
+		  <file>./classes/models/FrmFieldDeprecated.php</file>
+		  <file>./classes/models/FrmFormDeprecated.php</file>
+		  <file>./classes/models/FrmDbDeprecated.php</file>
 		  <file>./classes/models/FrmEntryFormat.php</file>
 	    </exclude>
 	  </whitelist>
