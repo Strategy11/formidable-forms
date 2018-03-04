@@ -362,6 +362,7 @@ class FrmAppController {
 	 * Filter shortcodes in text widgets
 	 *
 	 * @deprecated 2.5.4
+	 * @codeCoverageIgnore
 	 */
 	public static function widget_text_filter( $content ) {
 		_deprecated_function( __METHOD__, '2.5.4' );
@@ -373,6 +374,7 @@ class FrmAppController {
 	 * Deprecated in favor of wpmu_upgrade_site
 	 *
 	 * @deprecated 2.3
+	 * @codeCoverageIgnore
 	 */
 	public static function front_head() {
 		_deprecated_function( __FUNCTION__, '2.3' );
@@ -456,6 +458,7 @@ class FrmAppController {
 
 	/**
 	 * @deprecated 3.0.04
+	 * @codeCoverageIgnore
 	 */
     public static function activation_install() {
 		_deprecated_function( __METHOD__, '3.0.04', 'FrmAppController::install' );
@@ -496,6 +499,7 @@ class FrmAppController {
 	 * Routes for wordpress pages -- we're just replacing content
 	 *
 	 * @deprecated 3.0
+	 * @codeCoverageIgnore
 	 */
 	public static function page_route( $content ) {
 		_deprecated_function( __METHOD__, '3.0' );
@@ -536,6 +540,7 @@ class FrmAppController {
 
 	/**
 	 * @deprecated 1.07.05
+	 * @codeCoverageIgnore
 	 */
     public static function get_form_shortcode( $atts ) {
         _deprecated_function( __FUNCTION__, '1.07.05', 'FrmFormsController::get_form_shortcode()' );

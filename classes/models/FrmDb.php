@@ -692,6 +692,7 @@ class FrmDb {
 
 	/**
 	 * @deprecated 2.05.06
+	 * @codeCoverageIgnore
 	 */
 	public function upgrade( $old_db_version = false ) {
 		_deprecated_function( __METHOD__, '2.05.06', 'FrmMigrate::upgrade' );
@@ -702,6 +703,7 @@ class FrmDb {
 
 	/**
 	 * @deprecated 2.05.06
+	 * @codeCoverageIgnore
 	 */
 	public function collation() {
 		_deprecated_function( __METHOD__, '2.05.06', 'FrmMigrate::collation' );
@@ -712,6 +714,7 @@ class FrmDb {
 
 	/**
 	 * @deprecated 2.05.06
+	 * @codeCoverageIgnore
 	 */
 	public function uninstall() {
 		_deprecated_function( __METHOD__, '2.05.06', 'FrmMigrate::uninstall' );

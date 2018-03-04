@@ -490,6 +490,7 @@ class FrmEntriesController {
 
 	/**
 	 * @deprecated 1.07.05
+	 * @codeCoverageIgnore
 	 */
     public static function show_form( $id = '', $key = '', $title = false, $description = false ) {
         _deprecated_function( __FUNCTION__, '1.07.05', 'FrmFormsController::show_form()' );
@@ -498,6 +499,7 @@ class FrmEntriesController {
 
 	/**
 	 * @deprecated 1.07.05
+	 * @codeCoverageIgnore
 	 */
     public static function get_form( $filename, $form, $title, $description ) {
         _deprecated_function( __FUNCTION__, '1.07.05', 'FrmFormsController::get_form()' );

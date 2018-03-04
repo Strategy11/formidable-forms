@@ -165,6 +165,7 @@ class FrmFormsController {
 
 	/**
 	 * @deprecated 3.0
+	 * @codeCoverageIgnore
 	 */
 	public static function edit_key() {
 		_deprecated_function( __METHOD__, '3.0' );
@@ -175,6 +176,7 @@ class FrmFormsController {
 
 	/**
 	 * @deprecated 3.0
+	 * @codeCoverageIgnore
 	 */
 	public static function edit_description() {
 		_deprecated_function( __METHOD__, '3.0' );
@@ -185,6 +187,7 @@ class FrmFormsController {
 
 	/**
 	 * @deprecated 3.0
+	 * @codeCoverageIgnore
 	 */
 	private static function edit_in_place_value( $field ) {
 		_deprecated_function( __METHOD__, '3.0' );
@@ -399,6 +402,7 @@ class FrmFormsController {
 
 	/**
 	 * @deprecated 2.03
+	 * @codeCoverageIgnore
 	 */
 	public static function register_pro_scripts() {
 		_deprecated_function( __FUNCTION__, '2.03', 'FrmProEntriesController::register_scripts' );
@@ -978,6 +982,7 @@ class FrmFormsController {
 
 	/**
 	 * @deprecated 1.07.05
+	 * @codeCoverageIgnore
 	 */
     public static function add_default_templates( $path, $default = true, $template = true ) {
         _deprecated_function( __FUNCTION__, '1.07.05', 'FrmXMLController::add_default_templates()' );
@@ -1651,6 +1656,7 @@ class FrmFormsController {
 
 	/**
 	 * @deprecated 3.0
+	 * @codeCoverageIgnore
 	 */
 	public static function bulk_create_template( $ids ) {
 		_deprecated_function( __METHOD__, '3.0', 'FrmForm::duplicate( $id, true, true )' );

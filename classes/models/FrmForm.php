@@ -481,6 +481,8 @@ class FrmForm {
 
 	/**
 	 * @deprecated 3.0
+	 * @codeCoverageIgnore
+	 *
      * @param string $key
      * @return int form id
      */
@@ -508,6 +510,7 @@ class FrmForm {
 
 	/**
 	 * @deprecated 3.0
+	 * @codeCoverageIgnore
 	 */
 	public static function getKeyById( $id ) {
 		_deprecated_function( __METHOD__, '3.0', 'FrmForm::get_key_by_id' );

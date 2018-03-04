@@ -614,6 +614,7 @@ class FrmAppHelper {
      * Used to filter shortcode in text widgets
 	 *
 	 * @deprecated 2.5.4
+	 * @codeCoverageIgnore
      */
     public static function widget_text_filter_callback( $matches ) {
 		_deprecated_function( __METHOD__, '2.5.4' );
@@ -1767,6 +1768,7 @@ class FrmAppHelper {
 	 *
 	 * @since 2.0.6
 	 * @deprecated 2.05.06
+	 * @codeCoverageIgnore
 	 */
 	public static function save_settings( $settings, $group ) {
 		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
@@ -1782,6 +1784,7 @@ class FrmAppHelper {
 	 *
 	 * @since 2.0.4
 	 * @deprecated 2.05.06
+	 * @codeCoverageIgnore
 	 */
 	public static function save_json_post( $settings ) {
 		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
@@ -1793,6 +1796,7 @@ class FrmAppHelper {
 	 *
 	 * @since 2.0
 	 * @deprecated 2.05.06
+	 * @codeCoverageIgnore
 	 *
 	 * @param string $cache_key The unique name for this cache
 	 * @param string $group The name of the cache group
@@ -1807,6 +1811,7 @@ class FrmAppHelper {
 
 	/**
 	 * @deprecated 2.05.06
+	 * @codeCoverageIgnore
 	 */
 	public static function set_cache( $cache_key, $results, $group = '', $time = 300 ) {
 		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
@@ -1817,6 +1822,7 @@ class FrmAppHelper {
 	 * Keep track of the keys cached in each group so they can be deleted
 	 * in Redis and Memcache
 	 * @deprecated 2.05.06
+	 * @codeCoverageIgnore
 	 */
 	public static function add_key_to_group_cache( $key, $group ) {
 		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
@@ -1825,6 +1831,7 @@ class FrmAppHelper {
 
 	/**
 	 * @deprecated 2.05.06
+	 * @codeCoverageIgnore
 	 */
 	public static function get_group_cached_keys( $group ) {
 		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
@@ -1834,6 +1841,7 @@ class FrmAppHelper {
 	/**
 	 * @since 2.0
 	 * @deprecated 2.05.06
+	 * @codeCoverageIgnore
 	 * @return mixed The cached value or false
 	 */
 	public static function check_cache_and_transient( $cache_key ) {
@@ -1844,6 +1852,7 @@ class FrmAppHelper {
 	/**
 	 * @since 2.0
 	 * @deprecated 2.05.06
+	 * @codeCoverageIgnore
 	 * @param string $cache_key
 	 */
 	public static function delete_cache_and_transient( $cache_key, $group = 'default' ) {
@@ -1854,6 +1863,7 @@ class FrmAppHelper {
 	/**
 	 * @since 2.0
 	 * @deprecated 2.05.06
+	 * @codeCoverageIgnore
 	 *
 	 * @param string $group The name of the cache group
 	 */
@@ -1867,6 +1877,7 @@ class FrmAppHelper {
 	 *
 	 * @since 1.07.10
 	 * @deprecated 2.05.06
+	 * @codeCoverageIgnore
 	 *
 	 * @param string $term The value to escape
 	 * @return string The escaped value
@@ -1879,6 +1890,7 @@ class FrmAppHelper {
 	/**
 	 * @param string $order_query
 	 * @deprecated 2.05.06
+	 * @codeCoverageIgnore
 	 */
 	public static function esc_order( $order_query ) {
 		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
@@ -1888,6 +1900,7 @@ class FrmAppHelper {
 	/**
 	 * Make sure this is ordering by either ASC or DESC
 	 * @deprecated 2.05.06
+	 * @codeCoverageIgnore
 	 */
 	public static function esc_order_by( &$order_by ) {
 		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
@@ -1897,6 +1910,7 @@ class FrmAppHelper {
 	/**
 	 * @param string $limit
 	 * @deprecated 2.05.06
+	 * @codeCoverageIgnore
 	 */
 	public static function esc_limit( $limit ) {
 		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
@@ -1907,6 +1921,7 @@ class FrmAppHelper {
 	 * Get an array of values ready to go through $wpdb->prepare
 	 * @since 2.0
 	 * @deprecated 2.05.06
+	 * @codeCoverageIgnore
 	 */
 	public static function prepare_array_values( $array, $type = '%s' ) {
 		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
@@ -1915,6 +1930,7 @@ class FrmAppHelper {
 
 	/**
 	 * @deprecated 2.05.06
+	 * @codeCoverageIgnore
 	 */
 	public static function prepend_and_or_where( $starts_with = ' WHERE ', $where = '' ) {
 		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );

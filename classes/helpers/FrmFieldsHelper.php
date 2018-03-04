@@ -323,6 +323,7 @@ class FrmFieldsHelper {
 
 	/**
 	 * @deprecated 3.0
+	 * @codeCoverageIgnore
 	 *
 	 * @param string $html
 	 * @param array $field
@@ -388,6 +389,7 @@ class FrmFieldsHelper {
 
 	/**
 	 * @deprecated 3.0
+	 * @codeCoverageIgnore
 	 */
 	public static function remove_inline_conditions( $no_vars, $code, $replace_with, &$html ) {
 		_deprecated_function( __FUNCTION__, '3.0', 'FrmShortcodeHelper::remove_inline_conditions' );
@@ -396,6 +398,7 @@ class FrmFieldsHelper {
 
 	/**
 	 * @deprecated 3.0
+	 * @codeCoverageIgnore
 	 */
 	public static function get_shortcode_tag( $shortcodes, $short_key, $args ) {
 		_deprecated_function( __FUNCTION__, '3.0', 'FrmShortcodeHelper::get_shortcode_tag' );
@@ -412,6 +415,7 @@ class FrmFieldsHelper {
 
 	/**
 	 * @deprecated 3.0
+	 * @codeCoverageIgnore
 	 */
 	public static function display_recaptcha( $field ) {
 		_deprecated_function( __FUNCTION__, '3.0', 'FrmFieldCaptcha::field_input' );
@@ -1322,6 +1326,7 @@ class FrmFieldsHelper {
 
 	/**
 	 * @deprecated 3.0
+	 * @codeCoverageIgnore
 	 */
 	public static function get_default_field_opts( $type, $field = null, $limit = false ) {
 		if ( $limit ) {
@@ -1337,6 +1342,7 @@ class FrmFieldsHelper {
 
 	/**
 	 * @deprecated 2.02.07
+	 * @codeCoverageIgnore
 	 */
 	public static function dropdown_categories( $args ) {
 		_deprecated_function( __FUNCTION__, '2.02.07', 'FrmProPost::get_category_dropdown' );
