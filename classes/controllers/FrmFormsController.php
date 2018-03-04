@@ -163,6 +163,9 @@ class FrmFormsController {
 		return self::get_settings_vars( $id, array(), $message );
     }
 
+	/**
+	 * @deprecated 3.0
+	 */
 	public static function edit_key() {
 		_deprecated_function( __METHOD__, '3.0' );
 		$values = self::edit_in_place_value( 'form_key' );
@@ -170,6 +173,9 @@ class FrmFormsController {
 		wp_die();
 	}
 
+	/**
+	 * @deprecated 3.0
+	 */
 	public static function edit_description() {
 		_deprecated_function( __METHOD__, '3.0' );
 		$values = self::edit_in_place_value( 'description' );
@@ -177,6 +183,9 @@ class FrmFormsController {
 		wp_die();
 	}
 
+	/**
+	 * @deprecated 3.0
+	 */
 	private static function edit_in_place_value( $field ) {
 		_deprecated_function( __METHOD__, '3.0' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
@@ -388,6 +397,9 @@ class FrmFormsController {
 		require( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/direct.php' );
 	}
 
+	/**
+	 * @deprecated 2.03
+	 */
 	public static function register_pro_scripts() {
 		_deprecated_function( __FUNCTION__, '2.03', 'FrmProEntriesController::register_scripts' );
 		if ( FrmAppHelper::pro_is_installed() ) {
@@ -964,6 +976,9 @@ class FrmFormsController {
         return $errors;
     }
 
+	/**
+	 * @deprecated 1.07.05
+	 */
     public static function add_default_templates( $path, $default = true, $template = true ) {
         _deprecated_function( __FUNCTION__, '1.07.05', 'FrmXMLController::add_default_templates()' );
 
@@ -1634,6 +1649,9 @@ class FrmFormsController {
 		return isset( $atts['minimize'] ) && ! empty( $atts['minimize'] );
 	}
 
+	/**
+	 * @deprecated 3.0
+	 */
 	public static function bulk_create_template( $ids ) {
 		_deprecated_function( __METHOD__, '3.0', 'FrmForm::duplicate( $id, true, true )' );
 		FrmAppHelper::permission_check( 'frm_edit_forms' );

@@ -488,11 +488,17 @@ class FrmEntriesController {
         self::display_list( $message, $errors );
     }
 
+	/**
+	 * @deprecated 1.07.05
+	 */
     public static function show_form( $id = '', $key = '', $title = false, $description = false ) {
         _deprecated_function( __FUNCTION__, '1.07.05', 'FrmFormsController::show_form()' );
         return FrmFormsController::show_form( $id, $key, $title, $description );
     }
 
+	/**
+	 * @deprecated 1.07.05
+	 */
     public static function get_form( $filename, $form, $title, $description ) {
         _deprecated_function( __FUNCTION__, '1.07.05', 'FrmFormsController::get_form()' );
         return FrmFormsController::get_form( $form, $title, $description );

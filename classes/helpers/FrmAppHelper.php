@@ -612,6 +612,8 @@ class FrmAppHelper {
 
     /**
      * Used to filter shortcode in text widgets
+	 *
+	 * @deprecated 2.5.4
      */
     public static function widget_text_filter_callback( $matches ) {
 		_deprecated_function( __METHOD__, '2.5.4' );
@@ -1821,6 +1823,9 @@ class FrmAppHelper {
 		FrmDb::add_key_to_group_cache( $key, $group );
 	}
 
+	/**
+	 * @deprecated 2.05.06
+	 */
 	public static function get_group_cached_keys( $group ) {
 		_deprecated_function( __METHOD__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
 		return FrmDb::get_group_cached_keys( $group );

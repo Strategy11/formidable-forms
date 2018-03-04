@@ -479,7 +479,8 @@ class FrmForm {
 		return (int) FrmDb::get_var( 'frm_forms', array( 'form_key' => sanitize_title( $key ) ) );
     }
 
-    /**
+	/**
+	 * @deprecated 3.0
      * @param string $key
      * @return int form id
      */
@@ -505,6 +506,9 @@ class FrmForm {
         return $key;
     }
 
+	/**
+	 * @deprecated 3.0
+	 */
 	public static function getKeyById( $id ) {
 		_deprecated_function( __METHOD__, '3.0', 'FrmForm::get_key_by_id' );
 		return self::get_key_by_id( $id );

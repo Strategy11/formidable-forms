@@ -136,7 +136,6 @@ class FrmEntryValidate {
 
 	/**
 	 * @deprecated 3.0
-	 * @codeCoverageIgnore
 	 */
 	public static function validate_url_field( &$errors, $field, $value, $args ) {
 		_deprecated_function( __FUNCTION__, '3.0', 'FrmFieldType::validate' );
@@ -150,7 +149,6 @@ class FrmEntryValidate {
 
 	/**
 	 * @deprecated 3.0
-	 * @codeCoverageIgnore
 	 */
 	public static function validate_email_field( &$errors, $field, $value, $args ) {
 		_deprecated_function( __FUNCTION__, '3.0', 'FrmFieldType::validate' );
@@ -164,7 +162,6 @@ class FrmEntryValidate {
 
 	/**
 	 * @deprecated 3.0
-	 * @codeCoverageIgnore
 	 */
 	public static function validate_number_field( &$errors, $field, $value, $args ) {
 		_deprecated_function( __FUNCTION__, '3.0', 'FrmFieldType::validate' );
@@ -189,9 +186,8 @@ class FrmEntryValidate {
 	}
 
 	public static function phone_format( $field ) {
-		$default_format = '^((\+\d{1,3}(-|.| )?\(?\d\)?(-| |.)?\d{1,5})|(\(?\d{2,6}\)?))(-|.| )?(\d{3,4})(-|.| )?(\d{4})(( x| ext)\d{1,5}){0,1}$';
 		if ( FrmField::is_option_empty( $field, 'format' ) ) {
-			$pattern = $default_format;
+			$pattern = self::default_phone_format();
 		} else {
 			$pattern = FrmField::get_option( $field, 'format' );
 		}
@@ -205,6 +201,13 @@ class FrmEntryValidate {
 
 		$pattern = '/' . $pattern . '/';
 		return $pattern;
+	}
+
+	/**
+	 * @since 3.0.07
+	 */
+	private static function default_phone_format() {
+		return '^((\+\d{1,3}(-|.| )?\(?\d\)?(-| |.)?\d{1,5})|(\(?\d{2,6}\)?))(-|.| )?(\d{3,4})(-|.| )?(\d{4})(( x| ext)\d{1,5}){0,1}$';
 	}
 
 	/**
@@ -245,7 +248,6 @@ class FrmEntryValidate {
 
 	/**
 	 * @deprecated 3.0
-	 * @codeCoverageIgnore
 	 */
 	public static function validate_recaptcha( &$errors, $field, $args ) {
 		_deprecated_function( __FUNCTION__, '3.0', 'FrmFieldType::validate' );

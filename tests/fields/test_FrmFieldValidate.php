@@ -226,6 +226,44 @@ class test_FrmFieldValidate extends FrmUnitTest {
 	}
 
 	/**
+	 * @covers FrmEntryValidate::phone_format
+	 */
+	public function test_phone_format() {
+		$check_formats = array(
+			array(
+				'field_key' => 'phone_with_default_format',
+				'format'    => '',
+				'expected'  => $this->run_private_method( array( 'FrmEntryValidate', 'default_phone_format' ), array() ),
+			),
+			array(
+				'field_key' => 'phone_with_format',
+				'format'    => '999-999-9999',
+				'expected'  => '^\d\d\d-\d\d\d-\d\d\d\d$',
+			),
+			array(
+				'field_key' => 'phone_with_regex',
+				'format'    => '^\d{3}-\d{4}$',
+				'expected'  => '^\d{3}-\d{4}$', // leave it alone
+			),
+		);
+
+		foreach ( $check_formats as $check_it ) {
+			$field = $this->factory->field->create_and_get( array(
+				'type'      => 'phone',
+				'form_id'   => $this->form->id,
+				'field_key' => $check_it['field_key'],
+				'field_options' => array(
+					'format' => $check_it['format'],
+				),
+			) );
+			$this->assertEquals( $check_it['format'], $field->field_options['format'] );
+
+			$format = FrmEntryValidate::phone_format( $field );
+			$this->assertEquals( '/' . $check_it['expected'] . '/', $format );
+		}
+	}
+
+	/**
 	 * @covers FrmEntryValidate::create_regular_expression_from_format
 	 */
 	public function test_create_regular_expression_from_format() {
@@ -241,5 +279,69 @@ class test_FrmFieldValidate extends FrmUnitTest {
 			$new_format = $this->run_private_method( array( 'FrmEntryValidate', 'create_regular_expression_from_format' ), array( $start ) );
 			$this->assertEquals( $expected, $new_format );
 		}
+	}
+
+	/**
+	 * @covers FrmEntryValidate::is_akismet_enabled_for_user
+	 */
+	public function test_is_akismet_enabled_for_user() {
+		$this->assertEmpty( $this->form->options['akismet'] );
+		$enabled = $this->run_private_method( array( 'FrmEntryValidate', 'is_akismet_enabled_for_user' ), array( $this->form->id ) );
+		$this->assertFalse( $enabled );
+
+		$akismet_for_everyone = $this->factory->form->create_and_get( array(
+			'options' => array(
+				'akismet' => '1',
+			),
+		) );
+		$this->assertNotEmpty( $akismet_for_everyone->options['akismet'] );
+		$enabled = $this->run_private_method( array( 'FrmEntryValidate', 'is_akismet_enabled_for_user' ), array( $akismet_for_everyone->id ) );
+		$this->assertTrue( $enabled );
+
+		$akismet_logged = $this->factory->form->create_and_get( array(
+			'options' => array(
+				'akismet' => 'logged',
+			),
+		) );
+		$this->assertEquals( 'logged', $akismet_logged->options['akismet'] );
+
+		wp_set_current_user( 0 );
+		$this->assertFalse( is_user_logged_in() );
+		$enabled = $this->run_private_method( array( 'FrmEntryValidate', 'is_akismet_enabled_for_user' ), array( $akismet_logged->id ) );
+		$this->assertTrue( $enabled, 'Akismet not enabled for logged out users' );
+
+		$this->set_current_user_to_1();
+		$this->assertTrue( is_user_logged_in() );
+		$enabled = $this->run_private_method( array( 'FrmEntryValidate', 'is_akismet_enabled_for_user' ), array( $akismet_logged->id ) );
+		$this->assertFalse( $enabled, 'Akismet enabled for logged in users' );
+	}
+
+	/**
+	 * @covers FrmEntryValidate::blacklist_check
+	 */
+	public function test_blacklist_check() {
+		$values = array(
+			'item_meta' => array(
+				'25' => '23.342.33',
+				'36' => 'email@example.com',
+				'37' => array( 'value1', 'value2' ),
+			),
+		);
+
+		update_option( 'blacklist_keys', '' );
+		$is_spam = FrmEntryValidate::blacklist_check( $values );
+		$this->assertFalse( $is_spam );
+
+		update_option( 'blacklist_keys', "23.343.12332\r\nspamemail@example.com" );
+
+		$is_spam = FrmEntryValidate::blacklist_check( array( 'item_meta' => array( '', '' ) ) );
+		$this->assertFalse( $is_spam );
+
+		$is_spam = FrmEntryValidate::blacklist_check( $values );
+		$this->assertFalse( $is_spam );
+
+		$values['item_meta']['25'] = '23.343.1233234323';
+		$is_spam = FrmEntryValidate::blacklist_check( $values );
+		$this->assertTrue( $is_spam );
 	}
 }

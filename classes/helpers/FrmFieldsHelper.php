@@ -322,6 +322,8 @@ class FrmFieldsHelper {
 	}
 
 	/**
+	 * @deprecated 3.0
+	 *
 	 * @param string $html
 	 * @param array $field
 	 * @param array $errors
@@ -384,11 +386,17 @@ class FrmFieldsHelper {
 		return ! in_array( $type, array( 'select', 'radio', 'checkbox', 'hidden', 'file' ) );
 	}
 
+	/**
+	 * @deprecated 3.0
+	 */
 	public static function remove_inline_conditions( $no_vars, $code, $replace_with, &$html ) {
 		_deprecated_function( __FUNCTION__, '3.0', 'FrmShortcodeHelper::remove_inline_conditions' );
 		FrmShortcodeHelper::remove_inline_conditions( $no_vars, $code, $replace_with, $html );
 	}
 
+	/**
+	 * @deprecated 3.0
+	 */
 	public static function get_shortcode_tag( $shortcodes, $short_key, $args ) {
 		_deprecated_function( __FUNCTION__, '3.0', 'FrmShortcodeHelper::get_shortcode_tag' );
         return FrmShortcodeHelper::get_shortcode_tag( $shortcodes, $short_key, $args );
@@ -402,6 +410,9 @@ class FrmFieldsHelper {
 		return 'frm_checkbox_' . $id . '-' . $opt_key;
 	}
 
+	/**
+	 * @deprecated 3.0
+	 */
 	public static function display_recaptcha( $field ) {
 		_deprecated_function( __FUNCTION__, '3.0', 'FrmFieldCaptcha::field_input' );
     }
@@ -1309,6 +1320,9 @@ class FrmFieldsHelper {
 		return $field_array + $field_options;
 	}
 
+	/**
+	 * @deprecated 3.0
+	 */
 	public static function get_default_field_opts( $type, $field = null, $limit = false ) {
 		if ( $limit ) {
 			_deprecated_function( __FUNCTION__, '3.0', 'FrmFieldHelper::get_default_field_options' );
@@ -1321,6 +1335,9 @@ class FrmFieldsHelper {
 		return $field_options;
 	}
 
+	/**
+	 * @deprecated 2.02.07
+	 */
 	public static function dropdown_categories( $args ) {
 		_deprecated_function( __FUNCTION__, '2.02.07', 'FrmProPost::get_category_dropdown' );
 
