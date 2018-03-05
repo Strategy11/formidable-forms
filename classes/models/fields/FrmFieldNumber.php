@@ -52,7 +52,7 @@ class FrmFieldNumber extends FrmFieldType {
 			// only check if options are available in settings
 			$minnum = FrmField::get_option( $this->field, 'minnum' );
 			$maxnum = FrmField::get_option( $this->field, 'maxnum' );
-			if ( $frm_settings->use_html && $maxnum != '' && $minnum != '' ) {
+			if ( $frm_settings->use_html && $maxnum !== '' && $minnum !== '' ) {
 				$value = (float) $args['value'];
 				if ( $value < $minnum ) {
 					$errors[ 'field' . $args['id'] ] = __( 'Please select a higher number', 'formidable' );

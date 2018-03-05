@@ -57,6 +57,9 @@ class test_FrmFieldValidate extends FrmUnitTest {
 
 	/**
 	 * @covers FrmFieldType::validate
+	 * @covers FrmFieldNumber::validate
+	 * @covers FrmFieldPhone::validate
+	 * @covers FrmFieldUrl::validate
 	 */
 	public function test_format_validation() {
 		$test_formats = $this->expected_format_errors();
@@ -191,6 +194,37 @@ class test_FrmFieldValidate extends FrmUnitTest {
 
 		$errors = $this->check_single_value( array( $field->id => 'email@example.com' ) );
 		$this->assertFalse( isset( $errors[ 'field'. $field->id ] ), 'Properly formatted email did not pass validation '. print_r($errors,1) );
+	}
+
+	/**
+	 * @covers FrmFieldNumber::validate
+	 */
+	public function test_number_validation() {
+		$field = $this->factory->field->get_object_by_id( $this->get_field_key( 'number' ) );
+		$errors = $this->check_single_value( array( $field->id => '10.5' ) );
+		$this->assertFalse( isset( $errors[ 'field'. $field->id ] ), 'Number failed validation '. print_r( $errors, 1 ) );
+
+		$field = $this->factory->field->create_and_get( array(
+			'type'    => 'number',
+			'form_id' => $this->form->id,
+			'field_options' => array(
+				'minnum' => 0,
+				'maxnum' => 20,
+			),
+		) );
+		$this->assertEquals( 20, $field->field_options['maxnum'] );
+
+		$errors = $this->check_single_value( array( $field->id => '10.5' ) );
+		$this->assertFalse( isset( $errors[ 'field'. $field->id ] ), 'Number failed range validation '. print_r( $errors, 1 ) );
+
+		$errors = $this->check_single_value( array( $field->id => 'not numeric' ) );
+		$this->assertTrue( isset( $errors[ 'field'. $field->id ] ), 'Number failed numeric validation' );
+
+		$errors = $this->check_single_value( array( $field->id => '25' ) );
+		$this->assertTrue( isset( $errors[ 'field'. $field->id ] ), 'Number failed max range validation' );
+
+		$errors = $this->check_single_value( array( $field->id => '-25' ) );
+		$this->assertTrue( isset( $errors[ 'field'. $field->id ] ), 'Number failed min range validation' );
 	}
 
 	protected function set_required_fields( $fields ) {
