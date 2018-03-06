@@ -39,7 +39,7 @@ class test_FrmEmail extends FrmUnitTest {
 	public function setUp() {
 		parent::setUp();
 
-		$this->contact_form = FrmForm::getOne( $this->email_form_key );
+		$this->contact_form = $this->factory->form->get_object_by_id( $this->email_form_key );
 		$this->email_action = $this->get_email_action_for_form( $this->contact_form->id );
 		$this->entry        = $this->create_entry( $this->contact_form );
 	}
@@ -485,4 +485,174 @@ class test_FrmEmail extends FrmUnitTest {
 		return true;
 	}
 
+	/**
+	 * @covers FrmEmail::set_from
+	 */
+	public function test_set_from() {
+		$default_email = get_option( 'admin_email' );
+		$default_name = FrmAppHelper::site_name();
+
+		$from = array(
+			'From name <[admin_email]>' => 'From name <' . $default_email . '>',
+			''                          => $default_name . ' <' . $default_email . '>',
+			'Name'                      => 'Name <' . $default_email . '>',
+			'testfrom@example.com'      => $default_name . ' <testfrom@example.com>',
+		);
+
+		$this->check_private_properties( $from, 'from' );
+	}
+
+	/**
+	 * @covers FrmEmail::set_reply_to
+	 */
+	public function test_set_reply_to() {
+		$default_email = get_option( 'admin_email' );
+
+		$reply_to = array(
+			'admin2.[admin_email]' => 'admin2.' . $default_email,
+			''                     => $default_email,
+			'Reply Name'           => 'Reply Name <' . $default_email . '>',
+			'Reply To <tester@example.com>' => 'Reply To <tester@example.com>',
+		);
+
+		$this->check_private_properties( $reply_to, 'reply_to' );
+	}
+
+	/**
+	 * @covers FrmEmail::set_is_plain_text
+	 */
+	public function test_set_is_plain_text() {
+		$settings = array(
+			'0' => false,
+			'1' => true,
+		);
+		$this->check_private_properties( $settings, 'plain_text', 'is_plain_text' );
+	}
+
+	/**
+	 * @covers FrmEmail::set_include_user_info
+	 */
+	public function test_set_include_user_info() {
+		$settings = array(
+			'0' => false,
+			'1' => true,
+		);
+		$this->check_private_properties( $settings, 'inc_user_info', 'include_user_info' );
+	}
+
+	/**
+	 * @covers FrmEmail::set_content_type
+	 */
+	public function test_set_content_type() {
+		$settings = array(
+			'0' => 'text/html',
+			'1' => 'text/plain',
+		);
+		$this->check_private_properties( $settings, 'plain_text', 'content_type' );
+	}
+
+	/**
+	 * @covers FrmEmail::set_subject
+	 */
+	public function test_set_subject() {
+		$name_id = FrmField::get_id_by_key( $this->name_field_key );
+		$default = $this->contact_form->name . ' Form submitted on ' . FrmAppHelper::site_name();
+		$settings = array(
+			''                 => $default,
+			'Original subject' => 'Original subject',
+			'[' . $name_id . ']' => $this->entry->metas[ $name_id ],
+		);
+		$this->check_private_properties( $settings, 'email_subject', 'subject' );
+	}
+
+	/**
+	 * @covers FrmEmail::set_message
+	 */
+	public function test_set_message() {
+		$name_id = FrmField::get_id_by_key( $this->name_field_key );
+		$default = FrmEntriesHelper::replace_default_message( '[default-message]', array(
+			'id'         => $this->entry->id,
+			'entry'      => $this->entry,
+			'plain_text' => $this->email_action->post_content['plain_text'],
+			'user_info'  => $this->email_action->post_content['inc_user_info'],
+		) );
+
+		$settings = array(
+			''                   => $default,
+			'[default-message]'  => $default,
+			'Original message'   => 'Original message',
+			'[' . $name_id . ']' => $this->entry->metas[ $name_id ],
+		);
+		$this->check_private_properties( $settings, 'email_message', 'message' );
+	}
+
+	/**
+	 * @covers FrmEmail::set_message
+	 */
+	public function test_message_user_info() {
+		$settings = array(
+			array(
+				'email_message' => 'Original',
+				'inc_user_info' => 0,
+				'compare'       => 'NotContains',
+			),
+			array(
+				'email_message' => 'Original',
+				'inc_user_info' => 1,
+				'compare'       => 'Contains',
+			),
+		);
+
+		$action = $this->email_action;
+
+		foreach ( $settings as $setting ) {
+			foreach ( $setting as $name => $value ) {
+				$action->post_content[ $name ] = $value;
+			}
+
+			$email = new FrmEmail( $action, $this->entry, $this->contact_form );
+			$actual = $this->get_private_property( $email, 'message' );
+
+			if ( $setting['compare'] == 'Contains' ) {
+				$this->assertContains( 'Referrer:', $actual );
+			} else {
+				$this->assertNotContains( 'Referrer:', $actual );
+			}
+		}
+	}
+
+	/**
+	 * @covers FrmEmail::set_message
+	 */
+	public function test_plain_text_message() {
+		$action = $this->email_action;
+		$action->post_content['email_message'] = 'Value <br/>with HTML';
+
+		$settings = array(
+			0 => 'Value <br/>with HTML',
+			1 => 'Value with HTML',
+		);
+
+		foreach ( $settings as $setting => $expected ) {
+			$action->post_content['plain_text'] = $setting;
+			$email = new FrmEmail( $action, $this->entry, $this->contact_form );
+			$actual = $this->get_private_property( $email, 'message' );
+			$this->assertContains( $expected, $actual );
+		}
+	}
+
+	private function check_private_properties( $settings, $setting_name, $property = '' ) {
+		if ( empty( $property ) ) {
+			$property = $setting_name;
+		}
+
+		$action = $this->email_action;
+
+		foreach ( $settings as $setting => $expected ) {
+			$action->post_content[ $setting_name ] = $setting;
+			$email = new FrmEmail( $action, $this->entry, $this->contact_form );
+			$actual = $this->get_private_property( $email, $property );
+			$this->assertEquals( $expected, $actual );
+		}
+	}
 }
