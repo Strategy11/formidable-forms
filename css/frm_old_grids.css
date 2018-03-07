@@ -208,10 +208,7 @@
 
 .frm_form_field.frm_inline_container,
 .frm_form_field.frm_right_container,
-.frm_form_field.frm_left_container{
-	display:inline-block;
-}
-
+.frm_form_field.frm_left_container,
 .frm_combo_inputs_container,
 .frm_grid_container,
 .frm_form_fields .frm_section_heading,
