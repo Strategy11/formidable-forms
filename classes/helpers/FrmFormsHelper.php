@@ -158,10 +158,8 @@ class FrmFormsHelper {
 	 */
 	public static function get_invalid_error_message( $args ) {
 		$frm_settings = FrmAppHelper::get_settings();
-
-		$invalid_msg = apply_filters( 'frm_invalid_error_message', $frm_settings->invalid_msg, $args );
-
-		return $invalid_msg;
+		$invalid_msg = do_shortcode( $frm_settings->invalid_msg );
+		return apply_filters( 'frm_invalid_error_message', $invalid_msg, $args );
 	}
 
 	public static function get_success_message( $atts ) {
