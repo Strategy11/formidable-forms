@@ -243,6 +243,62 @@
 	margin-right:5px;
 }
 
+/* Left and right label styling for non-Formidable styling */
+
+.frm_form_field.frm_inline_container,
+.frm_form_field.frm_right_container,
+.frm_form_field.frm_left_container{
+    display: grid;
+    grid-template-columns: 25% auto;
+	width:100%;
+	grid-auto-rows: min-content;
+}
+
+.frm_form_field.frm_right_container{
+    grid-template-columns: auto 25%;
+}
+
+.frm_form_field.frm_inline_container{
+    grid-template-columns: repeat(2, minmax(auto, max-content) );
+}
+
+.frm_form_field.frm_inline_container label.frm_primary_label,
+.frm_form_field.frm_right_container label.frm_primary_label,
+.frm_form_field.frm_left_container label.frm_primary_label{
+	margin-right:10px;
+	grid-row:span 2/span 2;
+	padding-top:4px;
+}
+
+.frm_form_field.frm_left_container label.frm_primary_label{
+	grid-column:1;
+	grid-row:span 2/span 2; /* cover a row for the description */
+}
+
+.frm_form_field.frm_right_container label.frm_primary_label{
+	grid-column:2;
+	grid-row:1;
+	margin-right:0;
+	margin-left:10px;
+}
+
+.frm_form_field.frm_inline_container .frm_description,
+.frm_form_field.frm_left_container .frm_description{
+	grid-column:2;
+}
+
+.frm_form_field.frm_right_container .frm_description{
+	grid-column:1;
+}
+
+.frm_conf_field.frm_left_container{
+	grid-template-columns: 67%;
+}
+
+.frm_conf_field.frm_left_container .frm_description{
+	grid-column:1;
+}
+
 /* End RTL Grids */
 
 .frm-fade-in {
@@ -276,5 +332,11 @@
 	.frm_grid_container > .frm_form_field,
 	.frm_fields_container > .frm_form_field{
 		grid-column: 1 / span 12 !important;
+	}
+
+	.frm_form_field.frm_inline_container,
+	.frm_form_field.frm_right_container,
+	.frm_form_field.frm_left_container{
+		display:block;
 	}
 }
