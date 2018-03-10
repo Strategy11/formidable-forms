@@ -132,34 +132,50 @@ class FrmEntriesController {
 				continue;
 			}
 
-			if ( $form_col->type == 'form' && isset( $form_col->field_options['form_select'] ) && ! empty( $form_col->field_options['form_select'] ) ) {
-				$sub_form_cols = FrmField::get_all_for_form( $form_col->field_options['form_select'] );
-
-				if ( $sub_form_cols ) {
-					foreach ( $sub_form_cols as $k => $sub_form_col ) {
-						if ( FrmField::is_no_save_field( $sub_form_col->type ) ) {
-							unset( $sub_form_cols[ $k ] );
-							continue;
-						}
-						$columns[ $form_id . '_' . $sub_form_col->field_key . '-_-' . $form_col->id ] = FrmAppHelper::truncate( $sub_form_col->name, 35 );
-						unset( $sub_form_col );
-					}
-				}
-				unset( $sub_form_cols );
+			$has_child_fields = $form_col->type == 'form' && isset( $form_col->field_options['form_select'] ) && ! empty( $form_col->field_options['form_select'] );
+			if ( $has_child_fields ) {
+				self::add_subform_cols( $form_col, $form_id, $columns );
 			} else {
-				$col_id = $form_col->field_key;
-				if ( $form_col->form_id != $form_id ) {
-					$col_id .= '-_-form' . $form_col->form_id;
-				}
-
-				$has_separate_value = ! FrmField::is_option_empty( $form_col, 'separate_value' );
-				$is_post_status     = FrmField::is_option_true( $form_col, 'post_field' ) && $form_col->field_options['post_field'] == 'post_status';
-				if ( $has_separate_value && ! $is_post_status ) {
-					$columns[ $form_id . '_frmsep_' . $col_id ] = FrmAppHelper::truncate( $form_col->name, 35 );
-				}
-				$columns[ $form_id . '_' . $col_id ] = FrmAppHelper::truncate( $form_col->name, 35 );
+				self::add_field_cols( $form_col, $form_id, $columns );
 			}
 		}
+	}
+
+	/**
+	 * @since 3.0.07
+	 */
+	private static function add_subform_cols( $field, $form_id, &$columns ) {
+		$sub_form_cols = FrmField::get_all_for_form( $field->field_options['form_select'] );
+		if ( empty( $sub_form_cols ) ) {
+			return;
+		}
+
+		foreach ( $sub_form_cols as $k => $sub_form_col ) {
+			if ( FrmField::is_no_save_field( $sub_form_col->type ) ) {
+				unset( $sub_form_cols[ $k ] );
+				continue;
+			}
+			$columns[ $form_id . '_' . $sub_form_col->field_key . '-_-' . $field->id ] = FrmAppHelper::truncate( $sub_form_col->name, 35 );
+			unset( $sub_form_col );
+		}
+	}
+
+	/**
+	 * @since 3.0.07
+	 */
+	private static function add_field_cols( $field, $form_id, &$columns ) {
+		$col_id = $field->field_key;
+		if ( $field->form_id != $form_id ) {
+			$col_id .= '-_-form' . $field->form_id;
+		}
+
+		$has_separate_value = ! FrmField::is_option_empty( $field, 'separate_value' );
+		$is_post_status     = FrmField::is_option_true( $field, 'post_field' ) && $field->field_options['post_field'] == 'post_status';
+		if ( $has_separate_value && ! $is_post_status ) {
+			$columns[ $form_id . '_frmsep_' . $col_id ] = FrmAppHelper::truncate( $field->name, 35 );
+		}
+
+		$columns[ $form_id . '_' . $col_id ] = FrmAppHelper::truncate( $field->name, 35 );
 	}
 
 	private static function maybe_add_ip_col( $form_id, &$columns ) {
