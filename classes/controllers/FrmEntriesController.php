@@ -457,7 +457,6 @@ class FrmEntriesController {
             wp_die( $frm_settings->admin_permission );
         }
 
-        global $wpdb;
 		$params = FrmForm::get_admin_params();
         $message = '';
         $errors = array();
@@ -475,8 +474,7 @@ class FrmEntriesController {
                 }
             }
 
-            $wpdb->query( $wpdb->prepare( "DELETE em.* FROM {$wpdb->prefix}frm_item_metas as em INNER JOIN {$wpdb->prefix}frm_items as e on (em.item_id=e.id) and form_id=%d", $form_id ) );
-            $results = $wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->prefix}frm_items WHERE form_id=%d", $form_id ) );
+            $results = self::delete_form_entries( $form_id );
             if ( $results ) {
 				FrmEntry::clear_cache();
                 $message = __( 'Entries were Successfully Destroyed', 'formidable' );
@@ -487,6 +485,46 @@ class FrmEntriesController {
 
         self::display_list( $message, $errors );
     }
+
+	/**
+	 * @since 3.0.07
+	 * @param int $form_id
+	 */
+	private static function delete_form_entries( $form_id ) {
+		global $wpdb;
+
+		$form_ids = self::get_child_form_ids( $form_id );
+
+		$meta_query = $wpdb->prepare( "DELETE em.* FROM {$wpdb->prefix}frm_item_metas as em INNER JOIN {$wpdb->prefix}frm_items as e on (em.item_id=e.id) WHERE form_id=%d", $form_id );
+		$entry_query = $wpdb->prepare( "DELETE FROM {$wpdb->prefix}frm_items WHERE form_id=%d", $form_id );
+
+		if ( ! empty( $form_ids ) ) {
+			$form_query = ' OR form_id in (' . $form_ids . ')';
+			$meta_query .= $form_query;
+			$entry_query .= $form_query;
+		}
+
+		$wpdb->query( $meta_query );
+		return $wpdb->query( $entry_query );
+	}
+
+	/**
+	 * @since 3.0.07
+	 * @param int $form_id
+	 * @param bool|string $implode
+	 */
+	private static function get_child_form_ids( $form_id, $implode = ',' ) {
+		$form_ids = array();
+		$child_form_ids = FrmDb::get_col( 'frm_forms', array( 'parent_form_id' => $form_id ) );
+		if ( $child_form_ids ) {
+			$form_ids = $child_form_ids;
+		}
+		$form_ids = array_filter( $form_ids, 'is_numeric' );
+		if ( $implode ) {
+			$form_ids = implode( $implode, $form_ids );
+		}
+		return $form_ids;
+	}
 
 	/**
 	 * @deprecated 1.07.05
