@@ -386,11 +386,13 @@ class FrmAppHelper {
         }
     }
 
+	/**
+	 * @deprecated 3.0.07
+	 * @codeCoverageIgnore
+	 */
 	public static function sanitize_array( &$values ) {
-		$temp_values = $values;
-		foreach ( $temp_values as $k => $val ) {
-			$values[ $k ] = wp_kses_post( $val );
-		}
+		_deprecated_function( __METHOD__, '3.0.07', 'FrmAppHelper::sanitize_value' );
+		self::sanitize_value( 'wp_kses_post', $values );
 	}
 
 	/**

@@ -35,11 +35,51 @@ class test_FrmAppHelper extends FrmUnitTest {
 	}
 
 	/**
+	 * The path is relative if it starts with /
+	 * @covers FrmAppHelper::relative_plugin_url
+	 */
+	function test_relative_plugin_url() {
+		$path = FrmAppHelper::relative_plugin_url();
+		$this->assertEquals( strpos( $path, '/' ), 0 );
+	}
+
+	/**
+	 * @covers FrmAppHelper::site_url
+	 */
+	function test_site_url() {
+		$url = FrmAppHelper::site_url();
+		$this->assertEquals( 'http://example.org', $url );
+	}
+
+	/**
 	 * @covers FrmAppHelper::plugin_url
 	 */
 	function test_plugin_url() {
 		$url = FrmAppHelper::plugin_url();
 		$this->assertNotEmpty( $url );
+	}
+
+	/**
+	 * @covers FrmAppHelper::make_affiliate_url
+	 */
+	function test_make_affiliate_url() {
+		add_filter( 'frm_affiliate_id', '__return_false' );
+		$urls = array( 'http://site.com', 'https://site.com/page/' );
+		foreach ( $urls as $url ) {
+			$new_url = FrmAppHelper::make_affiliate_url( $url );
+			$this->assertEquals( $url, $new_url );
+		}
+
+		add_filter( 'frm_affiliate_id', '__return_true' );
+		$urls = array(
+			'http://site.com'        => 'site.com',
+			'https://site.com/page/' => 'site.com/page/',
+		);
+		foreach ( $urls as $url => $expected ) {
+			$new_url = FrmAppHelper::make_affiliate_url( $url );
+			$expected = 'http://www.shareasale.com/r.cfm?u=1&b=841990&m=64739&afftrack=plugin&urllink=' . urlencode( $expected );
+			$this->assertEquals( $expected, $new_url );
+		}
 	}
 
 	/**
@@ -61,6 +101,41 @@ class test_FrmAppHelper extends FrmUnitTest {
 			$this->assertTrue( $active );
 		} else {
 			$this->assertFalse( $active );
+		}
+	}
+
+	/**
+	 * @covers FrmAppHelper::is_formidable_admin
+	 */
+	function test_is_formidable_admin() {
+		$page_names = array(
+			'nope'               => false,
+			'formidable'         => true,
+			'formidable-entries' => true,
+			'entry-formidable'   => true,
+		);
+		foreach ( $page_names as $page => $expected ) {
+			$_GET['page'] = $page;
+			$is_admin = FrmAppHelper::is_formidable_admin();
+			$this->assertEquals( $expected, $is_admin );
+		}
+
+		$_GET['page'] = '';
+
+		$page = $this->factory->post->create( array( 'post_type' => 'post' ) );
+		$view = $this->factory->post->create( array( 'post_type' => 'frm_display' ) );
+
+		$admin_pages = array(
+			'index.php'                      => false,
+			'edit.php?post_type=frm_display' => true,
+			'edit.php?post_type=post'        => false,
+			'post.php?post=' . $view . '&action=edit&view=1' => true,
+			'post.php?post=' . $page . '&action=edit' => false,
+		);
+		foreach ( $admin_pages as $admin_page => $expected ) {
+			$this->set_admin_screen( $admin_page );
+			$is_admin = FrmAppHelper::is_formidable_admin();
+			$this->assertEquals( $expected, $is_admin, $admin_page . ' returned unexpected result' );
 		}
 	}
 
@@ -128,10 +203,26 @@ class test_FrmAppHelper extends FrmUnitTest {
 	 * @covers FrmAppHelper::sanitize_value
 	 */
 	function test_sanitize_value() {
-		$set_value = '<script></script>test';
-		$expected_value = 'test';
-		FrmAppHelper::sanitize_value( 'sanitize_text_field', $set_value );
-		$this->assertEquals( $set_value, $expected_value );
+		$values = array(
+			array(
+				'value'    => '<script></script>test',
+				'expected' => 'test',
+			),
+			array(
+				'value'    => array(
+					'<script></script>test',
+					'another test',
+				),
+				'expected' => array(
+					'test',
+					'another test',
+				),
+			),
+		);
+		foreach ( $values as $value ) {
+			FrmAppHelper::sanitize_value( 'sanitize_text_field', $value['value'] );
+			$this->assertEquals( $value['expected'], $value['value'] );
+		}
 	}
 
 	/**
@@ -145,6 +236,27 @@ class test_FrmAppHelper extends FrmUnitTest {
 
 		$result = FrmAppHelper::simple_get( 'test4' );
 		$this->assertEquals( $result, $expected_value );
+	}
+
+	/**
+	 * @covers FrmAppHelper::get_simple_request
+	 */
+	function test_get_simple_request() {
+		$result = FrmAppHelper::get_simple_request( array(
+			'type'  => 'request',
+			'param' => 'test5',
+		) );
+		$this->assertEquals( '', $result );
+
+		$set_value = '<script></script>test';
+		$expected = 'test';
+		$_REQUEST['test5'] = $set_value;
+
+		$result = FrmAppHelper::get_simple_request( array(
+			'type'  => 'request',
+			'param' => 'test5',
+		) );
+		$this->assertEquals( $expected, $result );
 	}
 
 	/**
@@ -207,6 +319,36 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$get_post_id = FrmAppHelper::get_query_var( '', 'p' );
 		$this->assertEquals( $new_post_id, $get_post_id );
     }
+
+	/**
+	 * @covers FrmAppHelper::allowed_html
+	 */
+	function test_allowed_html() {
+		$safe_html = $this->run_private_method( array( 'FrmAppHelper', 'safe_html' ), array() );
+		$tests = array(
+			array(
+				'start'    => 'all',
+				'expected' => $safe_html,
+			),
+			array(
+				'start'    => array( 'a' ),
+				'expected' => array(
+					'a' => $safe_html['a'],
+				),
+			),
+			array(
+				'start'    => array( 'a', 'br' ),
+				'expected' => array(
+					'a'  => $safe_html['a'],
+					'br' => $safe_html['br'],
+				),
+			),
+		);
+		foreach ( $tests as $test ) {
+			$allowed = $this->run_private_method( array( 'FrmAppHelper', 'allowed_html' ), array( $test['start'] ) );
+			$this->assertSame( $test['expected'], $allowed );
+		}
+	}
 
 	/**
 	 * @covers FrmAppHelper::maybe_add_permissions

@@ -291,20 +291,20 @@ class FrmUnitTest extends WP_UnitTestCase {
 			$form = $this->factory->form->get_object_by_id( $this->contact_form_key );
 			$page = 'admin.php?page=formidable&frm_action=edit&id=' . $form->id;
 			$screens[ $page ] = $screens['admin.php?page=formidable'];
+		} elseif ( ! isset( $screens[ $page ] ) ) {
+			$base = explode( '.php', $page );
+			$screens[ $page ] = array( 'base' => reset( $base ) );
 		}
-
-		$screen = $screens[ $page ];
 
 		$_GET = $_POST = $_REQUEST = array();
 		$GLOBALS['taxnow'] = $GLOBALS['typenow'] = '';
-		$screen = (object) $screen;
+		$screen = (object) $screens[ $page ];
 		$hook = parse_url( $page );
 
 		$GLOBALS['hook_suffix'] = $hook['path'];
 		set_current_screen();
 
 		$this->set_get_params( $page );
-
 		$this->assertTrue( $current_screen->in_admin(), 'Failed to switch to the back-end' );
 		$this->assertTrue( is_admin(), 'Failed to switch to the back-end' );
 		$this->assertEquals( $screen->base, $current_screen->base, $page );
@@ -334,6 +334,11 @@ class FrmUnitTest extends WP_UnitTestCase {
 				list( $name, $value ) = explode( '=', $param );
 				$_GET[ $name ] = $value;
 				$_REQUEST[ $name ] = $value;
+
+				if ( $name === 'post' ) {
+					global $post;
+					$post = $this->factory->post->get_object_by_id( $value );
+				}
 			}
 		}
 	}

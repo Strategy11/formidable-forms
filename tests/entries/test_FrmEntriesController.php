@@ -6,7 +6,6 @@
 class test_FrmEntriesController extends FrmUnitTest {
 
 	/**
-	 * @group testme
 	 * @covers FrmEntriesController::delete_form_entries
 	 */
 	public function test_delete_form_entries() {
