@@ -188,7 +188,13 @@ if ( $display['options'] ) {
 								<option value=""<?php selected( $field['label'], '' ); ?>>
 									<?php esc_html_e( 'Default', 'formidable' ) ?>
 								</option>
-								<?php foreach ( FrmStylesHelper::get_sigle_label_postitions() as $pos => $pos_label ) { ?>
+								<?php foreach ( FrmStylesHelper::get_single_label_positions() as $pos => $pos_label ) { ?>
+									<?php
+									if ( ! $display['clear_on_focus'] && 'inside' === $pos ) {
+										// don't allow inside labels for fields without placeholders
+										continue;
+									}
+									?>
 									<option value="<?php echo esc_attr( $pos ) ?>"<?php selected( $field['label'], $pos ); ?>>
 										<?php echo esc_html( $pos_label ) ?>
 									</option>

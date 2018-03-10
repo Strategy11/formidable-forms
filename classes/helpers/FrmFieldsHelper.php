@@ -361,6 +361,9 @@ class FrmFieldsHelper {
 	 */
 	public static function &label_position( $position, $field, $form ) {
 		if ( $position && $position != '' ) {
+			if ( $position == 'inside' && ! self::is_placeholder_field_type( $field['type'] ) ) {
+				$position = 'top';
+			}
 			return $position;
 		}
 

@@ -109,7 +109,7 @@ class FrmStylesHelper {
 		);
 	}
 
-	public static function get_sigle_label_postitions() {
+	public static function get_single_label_positions() {
 		return array(
 			'top'    => __( 'Top', 'formidable' ),
 			'left'   => __( 'Left', 'formidable' ),
@@ -384,5 +384,14 @@ class FrmStylesHelper {
 	 */
 	public static function previewing_style() {
 		return isset( $_GET['frm_style_setting'] ) || isset( $_GET['flat'] );
+	}
+
+	/**
+	 * @deprecated 3.0.07
+	 * @codeCoverageIgnore
+	 */
+	public static function get_sigle_label_postitions() {
+		_deprecated_function( __METHOD__, '3.0.07', 'FrmStylesHelper::get_single_label_positions' );
+		return FrmStylesHelper::get_single_label_positions();
 	}
 }
