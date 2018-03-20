@@ -317,7 +317,7 @@ function frmFrontFormJS(){
 	}
 
 	function hasInvisibleRecaptcha( object ) {
-		if ( typeof frmProForm === 'undefined' || frmProForm.goingToPreviousPage( object ) ) {
+		if ( typeof frmProForm !== 'undefined' && frmProForm.goingToPreviousPage( object ) ) {
 			return false;
 		}
 
