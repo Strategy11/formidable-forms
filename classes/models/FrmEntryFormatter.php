@@ -749,7 +749,7 @@ class FrmEntryFormatter {
 			$include = false;
 		}
 
-		return $include;
+		return apply_filters( 'frm_include_field_in_content', $include, $field_value );
 	}
 
 	/**
