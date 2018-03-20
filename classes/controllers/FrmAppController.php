@@ -437,7 +437,7 @@ class FrmAppController {
 		if ( self::needs_update() ) {
 			$running = get_option( 'frm_install_running' );
 			if ( false === $running ) {
-				update_option( 'frm_install_running', true );
+				update_option( 'frm_install_running', true, 'no' );
 				self::install();
 				delete_option( 'frm_install_running' );
 			}

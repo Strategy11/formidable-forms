@@ -123,9 +123,8 @@ class FrmStyle {
 		) );
 		$create_file->create_file( $css );
 
-        update_option('frmpro_css', $css);
-
-        set_transient('frmpro_css', $css);
+		update_option( 'frmpro_css', $css, 'no' );
+		set_transient( 'frmpro_css', $css );
 	}
 
 	private function get_css_content( $filename ) {
