@@ -298,5 +298,4 @@ class FrmFieldDeprecated {
 
 		return FrmField::get_key_by_id( $id );
 	}
-
 }

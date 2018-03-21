@@ -273,5 +273,4 @@ class FrmFormDeprecated {
 
 		return FrmForm::get_option( $atts );
 	}
-
 }

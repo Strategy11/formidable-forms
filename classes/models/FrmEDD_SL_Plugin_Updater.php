@@ -178,7 +178,6 @@ class FrmEDD_SL_Plugin_Updater {
 			if ( false !== $api_response ) {
 				$_data = $api_response;
 			}
-
 		} else {
 			$_data = $edd_api_request_transient;
 		}
