@@ -537,7 +537,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 
 	}
 
-	protected function run_private_method( $method, $args ) {
+	protected function run_private_method( $method, $args = array() ) {
 		$this->check_php_version( '5.3' );
 		$m = new ReflectionMethod( $method[0], $method[1] );
 		$m->setAccessible( true );
