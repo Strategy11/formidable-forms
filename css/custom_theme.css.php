@@ -346,6 +346,7 @@ a.frm_save_draft{
 	width:auto;
 	border:none;
 	vertical-align:baseline;
+	position: initial; /* override Bootstrap */
 }
 
 .with_frm_style :invalid,
