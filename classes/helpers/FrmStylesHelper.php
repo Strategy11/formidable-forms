@@ -387,11 +387,11 @@ class FrmStylesHelper {
 	}
 
 	/**
-	 * @deprecated 3.0.07
+	 * @deprecated 3.01
 	 * @codeCoverageIgnore
 	 */
 	public static function get_sigle_label_postitions() {
-		_deprecated_function( __METHOD__, '3.0.07', 'FrmStylesHelper::get_single_label_positions' );
+		_deprecated_function( __METHOD__, '3.01', 'FrmStylesHelper::get_single_label_positions' );
 		return FrmStylesHelper::get_single_label_positions();
 	}
 }

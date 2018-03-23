@@ -207,7 +207,7 @@ class FrmEntryValidate {
 	}
 
 	/**
-	 * @since 3.0.07
+	 * @since 3.01
 	 */
 	private static function default_phone_format() {
 		return '^((\+\d{1,3}(-|.| )?\(?\d\)?(-| |.)?\d{1,5})|(\(?\d{2,6}\)?))(-|.| )?(\d{3,4})(-|.| )?(\d{4})(( x| ext)\d{1,5}){0,1}$';

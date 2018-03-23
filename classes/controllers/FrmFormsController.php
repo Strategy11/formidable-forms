@@ -41,7 +41,7 @@ class FrmFormsController {
 	 * By default, Divi processes form shortcodes on the edit post page.
 	 * Now that won't do.
 	 *
-	 * @since 3.0.07
+	 * @since 3.01
 	 */
 	public static function prevent_divi_conflict( $shortcodes ) {
 		$shortcodes[] = 'formidable';

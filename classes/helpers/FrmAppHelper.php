@@ -11,7 +11,7 @@ class FrmAppHelper {
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '3.0.06';
+	public static $plug_version = '3.01';
 
     /**
      * @since 1.07.02
@@ -387,11 +387,11 @@ class FrmAppHelper {
     }
 
 	/**
-	 * @deprecated 3.0.07
+	 * @deprecated 3.01
 	 * @codeCoverageIgnore
 	 */
 	public static function sanitize_array( &$values ) {
-		_deprecated_function( __METHOD__, '3.0.07', 'FrmAppHelper::sanitize_value' );
+		_deprecated_function( __METHOD__, '3.01', 'FrmAppHelper::sanitize_value' );
 		self::sanitize_value( 'wp_kses_post', $values );
 	}
 

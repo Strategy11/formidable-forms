@@ -142,7 +142,7 @@ class FrmEntriesController {
 	}
 
 	/**
-	 * @since 3.0.07
+	 * @since 3.01
 	 */
 	private static function add_subform_cols( $field, $form_id, &$columns ) {
 		$sub_form_cols = FrmField::get_all_for_form( $field->field_options['form_select'] );
@@ -161,7 +161,7 @@ class FrmEntriesController {
 	}
 
 	/**
-	 * @since 3.0.07
+	 * @since 3.01
 	 */
 	private static function add_field_cols( $field, $form_id, &$columns ) {
 		$col_id = $field->field_key;
@@ -503,7 +503,7 @@ class FrmEntriesController {
     }
 
 	/**
-	 * @since 3.0.07
+	 * @since 3.01
 	 * @param int $form_id
 	 */
 	private static function delete_form_entries( $form_id ) {
@@ -525,7 +525,7 @@ class FrmEntriesController {
 	}
 
 	/**
-	 * @since 3.0.07
+	 * @since 3.01
 	 * @param int $form_id
 	 * @param bool|string $implode
 	 */

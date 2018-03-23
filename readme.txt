@@ -159,7 +159,19 @@ The field and form names and descriptions are all changed with in-place edit. Ju
 [See more FAQs](https://formidableforms.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
-- 3.0.06 =
+= 3.01 =
+* New: Added frm_js_location hook for saving the combined javascript file in a different location
+* New: Added frm_include_field_in_content hook for excluding fields in the default email message
+* Tweak: Process shortcodes inside the validation messages
+* Tweak: Reduce page load time by not autoloading the saved styling from the database. In most cases, this data is saved in the CSS file, and doesn't need to be retrieved from the database.
+* Fix: The Invisible reCaptcha wasn't being validated correctly when the Pro version was not running.
+* Fix: Run the server-side validation on a number field that uses 0 for the minimum value. This was being skipped.
+* Fix: Show the label above a dropdown field if the label position is set to inside since dropdown placeholders are not yet supported. Plus, don't show the Inside label position option for any fields that don't allow placeholders.
+* Fix: If there is an error during a database update, make sure it can try again in the future
+* Fix: Prevent more conflicts with Divi when editing some posts with forms
+* Fix: Fields without CSS grids were not aligning correctly with left, right, or inline labels
+
+= 3.0.06 =
 * New: Include the option to duplicate a form in the free form builder
 * Fix: If the reply to address in the email is not specified, use only the from email without the from name to increase receivability
 * Fix: Improve styling without CSS grids when using left, right, and inline labels
