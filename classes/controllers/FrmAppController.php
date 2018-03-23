@@ -436,8 +436,8 @@ class FrmAppController {
 	public static function api_install() {
 		if ( self::needs_update() ) {
 			$running = get_option( 'frm_install_running' );
-			if ( false === $running ) {
-				update_option( 'frm_install_running', true, 'no' );
+			if ( false === $running || $running < strtotime( '-5 minutes' ) ) {
+				update_option( 'frm_install_running', time(), 'no' );
 				self::install();
 				delete_option( 'frm_install_running' );
 			}

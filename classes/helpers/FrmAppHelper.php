@@ -585,10 +585,10 @@ class FrmAppHelper {
 	 * @since 3.0
 	 */
 	public static function save_combined_js() {
-		$file_atts = array(
+		$file_atts = apply_filters( 'frm_js_location', array(
 			'file_name' => 'frm.min.js',
 			'new_file_path' => FrmAppHelper::plugin_path() . '/js',
-		);
+		) );
 		$new_file = new FrmCreateFile( $file_atts );
 
 		$files = array(

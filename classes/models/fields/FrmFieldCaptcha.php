@@ -140,7 +140,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 			return $errors;
 		}
 
-		if ( ! isset( $_POST['g-recaptcha-response']) ) {
+		if ( ! isset( $_POST['g-recaptcha-response'] ) ) {
 			// If captcha is missing, check if it was already verified
 			if ( ! isset( $_POST['recaptcha_checked'] ) || ! wp_verify_nonce( $_POST['recaptcha_checked'], 'frm_ajax' ) ) {
 				// There was no captcha submitted
