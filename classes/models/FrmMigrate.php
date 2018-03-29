@@ -18,7 +18,7 @@ class FrmMigrate {
 		$this->entry_metas    = $wpdb->prefix . 'frm_item_metas';
 	}
 
-	public function upgrade( $old_db_version = false ) {
+	public function upgrade() {
 		do_action( 'frm_before_install' );
 
 		global $wpdb, $frm_vars;
@@ -46,6 +46,7 @@ class FrmMigrate {
 			/**** ADD/UPDATE DEFAULT TEMPLATES ****/
 			FrmXMLController::add_default_templates();
 
+			$old_db_version = get_option( 'frm_db_version' );
 			if ( ! $old_db_version ) {
 				$this->maybe_create_contact_form();
 			}
@@ -172,6 +173,11 @@ class FrmMigrate {
 	private function maybe_create_contact_form() {
 		$template_id = FrmForm::get_id_by_key( 'contact' );
 		if ( $template_id ) {
+			$form_exists = FrmForm::get_id_by_key( 'contact-form' );
+			if ( $form_exists ) {
+				return;
+			}
+
 			$form_id = FrmForm::duplicate( $template_id, false, true );
 			if ( $form_id ) {
 				$values = array(

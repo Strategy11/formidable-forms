@@ -467,9 +467,9 @@ class FrmAppController {
         self::install();
     }
 
-    public static function install( $old_db_version = false ) {
+    public static function install() {
         $frmdb = new FrmMigrate();
-        $frmdb->upgrade( $old_db_version );
+        $frmdb->upgrade();
     }
 
     public static function uninstall() {
