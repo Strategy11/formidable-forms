@@ -694,11 +694,11 @@ class FrmDb {
 	 * @deprecated 2.05.06
 	 * @codeCoverageIgnore
 	 */
-	public function upgrade( $old_db_version = false ) {
+	public function upgrade() {
 		_deprecated_function( __METHOD__, '2.05.06', 'FrmMigrate::upgrade' );
 
 		$db = new FrmMigrate();
-		$db->upgrade( $old_db_version );
+		$db->upgrade();
 	}
 
 	/**

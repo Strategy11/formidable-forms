@@ -11,7 +11,7 @@ class test_FrmMigrate extends FrmUnitTest {
 	 */
 	public function test_upgrade( ) {
 		$frmdb = new FrmMigrate();
-		$frmdb->upgrade( 25 );
+		$frmdb->upgrade();
 
 		$this->do_tables_exist();
 

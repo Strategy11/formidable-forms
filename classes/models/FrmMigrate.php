@@ -37,6 +37,8 @@ class FrmMigrate {
 
 			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 
+			$old_db_version = get_option( 'frm_db_version' );
+
 			$this->create_tables();
 			$this->migrate_data( $old_db_version );
 
@@ -46,7 +48,6 @@ class FrmMigrate {
 			/**** ADD/UPDATE DEFAULT TEMPLATES ****/
 			FrmXMLController::add_default_templates();
 
-			$old_db_version = get_option( 'frm_db_version' );
 			if ( ! $old_db_version ) {
 				$this->maybe_create_contact_form();
 			}
