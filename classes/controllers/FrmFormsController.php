@@ -1399,6 +1399,7 @@ class FrmFormsController {
 		$opt = $args['success_opt'];
 		$success_url = trim( $args['form']->options[ $opt . '_url' ] );
 		$success_url = apply_filters( 'frm_content', $success_url, $args['form'], $args['entry_id'] );
+		$success_url = do_shortcode( $success_url );
 
 		$success_msg = isset( $args['form']->options[ $opt . '_msg' ] ) ? $args['form']->options[ $opt . '_msg' ] : __( 'Please wait while you are redirected.', 'formidable' );
 
