@@ -619,6 +619,7 @@ class FrmFieldsHelper {
 			$replace_with = self::get_value_for_shortcode( $atts );
 
 			if ( $replace_with !== null ) {
+				$replace_with = str_replace( '[', '&#91;', $replace_with ); // prevent shortcodes in fields from being processed
 				$content = str_replace( $shortcodes[0][ $short_key ], $replace_with, $content );
 			}
 
