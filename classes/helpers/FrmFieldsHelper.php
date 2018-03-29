@@ -495,13 +495,17 @@ class FrmFieldsHelper {
         $m = false;
         if ( $cond == '==' ) {
             $m = $observed_value == $hide_opt;
-        } else if ( $cond == '!=' ) {
+        } elseif ( $cond == '!=' ) {
             $m = $observed_value != $hide_opt;
-        } else if ( $cond == '>' ) {
+        } elseif ( $cond == '>' ) {
             $m = $observed_value > $hide_opt;
-        } else if ( $cond == '<' ) {
+		} elseif ( $cond == '>=' ) {
+			$m = $observed_value >= $hide_opt;
+        } elseif ( $cond == '<' ) {
             $m = $observed_value < $hide_opt;
-        } else if ( $cond == 'LIKE' || $cond == 'not LIKE' ) {
+		} elseif ( $cond == '<=' ) {
+			$m = $observed_value <= $hide_opt;
+        } elseif ( $cond == 'LIKE' || $cond == 'not LIKE' ) {
             $m = stripos($observed_value, $hide_opt);
             if ( $cond == 'not LIKE' ) {
                 $m = ( $m === false ) ? true : false;
