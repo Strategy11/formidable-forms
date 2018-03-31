@@ -493,26 +493,26 @@ class FrmFieldsHelper {
         }
 
         $m = false;
-        if ( $cond == '==' ) {
-            $m = $observed_value == $hide_opt;
-        } elseif ( $cond == '!=' ) {
-            $m = $observed_value != $hide_opt;
-        } elseif ( $cond == '>' ) {
-            $m = $observed_value > $hide_opt;
+		if ( $cond == '==' ) {
+			$m = $observed_value == $hide_opt;
+		} elseif ( $cond == '!=' ) {
+			$m = $observed_value != $hide_opt;
+		} elseif ( $cond == '>' ) {
+			$m = $observed_value > $hide_opt;
 		} elseif ( $cond == '>=' ) {
 			$m = $observed_value >= $hide_opt;
-        } elseif ( $cond == '<' ) {
-            $m = $observed_value < $hide_opt;
+		} elseif ( $cond == '<' ) {
+			$m = $observed_value < $hide_opt;
 		} elseif ( $cond == '<=' ) {
 			$m = $observed_value <= $hide_opt;
-        } elseif ( $cond == 'LIKE' || $cond == 'not LIKE' ) {
-            $m = stripos($observed_value, $hide_opt);
-            if ( $cond == 'not LIKE' ) {
-                $m = ( $m === false ) ? true : false;
-            } else {
-                $m = ( $m === false ) ? false : true;
-            }
-        }
+		} elseif ( $cond == 'LIKE' || $cond == 'not LIKE' ) {
+			$m = stripos( $observed_value, $hide_opt );
+			if ( $cond == 'not LIKE' ) {
+				$m = ( $m === false ) ? true : false;
+			} else {
+				$m = ( $m === false ) ? false : true;
+			}
+		}
         return $m;
     }
 
