@@ -55,7 +55,7 @@ class FrmFormActionsController {
 
 	public static function get_form_actions( $action = 'all' ) {
         $temp_actions = self::$registered_actions;
-        if ( empty($temp_actions) ) {
+		if ( empty( $temp_actions ) ) {
             self::actions_init();
             $temp_actions = self::$registered_actions->actions;
         } else {
@@ -129,12 +129,12 @@ class FrmFormActionsController {
     }
 
 	public static function action_control( $form_action, $form, $action_key, $action_control, $values ) {
-        $action_control->_set($action_key);
+		$action_control->_set( $action_key );
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/form_action.php' );
     }
 
     public static function add_form_action() {
-		FrmAppHelper::permission_check('frm_edit_forms');
+		FrmAppHelper::permission_check( 'frm_edit_forms' );
         check_ajax_referer( 'frm_ajax', 'nonce' );
 
         global $frm_vars;
@@ -143,49 +143,49 @@ class FrmFormActionsController {
         $action_type = sanitize_text_field( $_POST['type'] );
 
         $action_control = self::get_form_actions( $action_type );
-        $action_control->_set($action_key);
+		$action_control->_set( $action_key );
 
         $form_id = absint( $_POST['form_id'] );
 
-        $form_action = $action_control->prepare_new($form_id);
+		$form_action = $action_control->prepare_new( $form_id );
 
         $values = array();
-        $form = self::fields_to_values($form_id, $values);
+		$form = self::fields_to_values( $form_id, $values );
 
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/form_action.php' );
         wp_die();
     }
 
     public static function fill_action() {
-		FrmAppHelper::permission_check('frm_edit_forms');
+		FrmAppHelper::permission_check( 'frm_edit_forms' );
         check_ajax_referer( 'frm_ajax', 'nonce' );
 
         $action_key = absint( $_POST['action_id'] );
         $action_type = sanitize_text_field( $_POST['action_type'] );
 
         $action_control = self::get_form_actions( $action_type );
-        if ( empty($action_control) ) {
+		if ( empty( $action_control ) ) {
             wp_die();
         }
 
         $form_action = $action_control->get_single_action( $action_key );
 
         $values = array();
-        $form = self::fields_to_values($form_action->menu_order, $values);
+		$form = self::fields_to_values( $form_action->menu_order, $values );
 
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/_action_inside.php' );
         wp_die();
     }
 
 	private static function fields_to_values( $form_id, array &$values ) {
-        $form = FrmForm::getOne($form_id);
+		$form = FrmForm::getOne( $form_id );
 
 		$values = array(
 			'fields' => array(),
 			'id'     => $form->id,
 		);
 
-        $fields = FrmField::get_all_for_form($form->id);
+		$fields = FrmField::get_all_for_form( $form->id );
         foreach ( $fields as $k => $f ) {
             $f = (array) $f;
             $opts = (array) $f['field_options'];

@@ -23,13 +23,13 @@ class FrmAppHelper {
         return self::$plug_version;
     }
 
-    public static function plugin_folder() {
-        return basename(self::plugin_path());
-    }
+	public static function plugin_folder() {
+		return basename( self::plugin_path() );
+	}
 
-    public static function plugin_path() {
-        return dirname(dirname(dirname(__FILE__)));
-    }
+	public static function plugin_path() {
+		return dirname( dirname( dirname( __FILE__ ) ) );
+	}
 
     public static function plugin_url() {
         //prevously FRM_URL constant
@@ -54,9 +54,9 @@ class FrmAppHelper {
      * @since 2.0
      * @return string
      */
-    public static function site_name() {
-        return get_option('blogname');
-    }
+	public static function site_name() {
+		return get_option( 'blogname' );
+	}
 
 	public static function make_affiliate_url( $url ) {
 		$affiliate_id = self::get_affiliate();
@@ -79,13 +79,13 @@ class FrmAppHelper {
      * @param None
      * @return FrmSettings $frm_setings
      */
-    public static function get_settings() {
-        global $frm_settings;
-        if ( empty($frm_settings) ) {
-            $frm_settings = new FrmSettings();
-        }
-        return $frm_settings;
-    }
+	public static function get_settings() {
+		global $frm_settings;
+		if ( empty( $frm_settings ) ) {
+			$frm_settings = new FrmSettings();
+		}
+		return $frm_settings;
+	}
 
 	public static function get_menu_name() {
 		$frm_settings = FrmAppHelper::get_settings();
@@ -100,9 +100,9 @@ class FrmAppHelper {
 		return ! $frm_settings->no_ips;
 	}
 
-    public static function pro_is_installed() {
-        return apply_filters('frm_pro_installed', false);
-    }
+	public static function pro_is_installed() {
+		return apply_filters( 'frm_pro_installed', false );
+	}
 
 	public static function is_formidable_admin() {
 		$page = self::simple_get( 'page', 'sanitize_title' );
@@ -176,7 +176,7 @@ class FrmAppHelper {
 		if ( function_exists( 'wp_doing_ajax' ) ) {
 			$doing_ajax = wp_doing_ajax();
 		} else {
-			$doing_ajax = defined('DOING_AJAX') && DOING_AJAX;
+			$doing_ajax = defined( 'DOING_AJAX' ) && DOING_AJAX;
 		}
 		return $doing_ajax;
 	}
@@ -242,9 +242,9 @@ class FrmAppHelper {
             }
 
             foreach ( explode( ',', $_SERVER[ $key ] ) as $ip ) {
-                $ip = trim($ip); // just to be safe
+				$ip = trim( $ip ); // just to be safe
 
-                if ( filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) !== false ) {
+				if ( filter_var( $ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE ) !== false ) {
                     return sanitize_text_field( $ip );
                 }
             }
@@ -254,8 +254,8 @@ class FrmAppHelper {
     }
 
     public static function get_param( $param, $default = '', $src = 'get', $sanitize = '' ) {
-        if ( strpos($param, '[') ) {
-            $params = explode('[', $param);
+		if ( strpos( $param, '[' ) ) {
+			$params = explode( '[', $param );
             $param = $params[0];
         }
 
@@ -275,15 +275,15 @@ class FrmAppHelper {
 		}
 
 		if ( isset( $params ) && is_array( $value ) && ! empty( $value ) ) {
-            foreach ( $params as $k => $p ) {
-                if ( ! $k || ! is_array($value) ) {
-                    continue;
-                }
+			foreach ( $params as $k => $p ) {
+				if ( ! $k || ! is_array( $value ) ) {
+					continue;
+				}
 
-                $p = trim($p, ']');
-                $value = isset( $value[ $p ] ) ? $value[ $p ] : $default;
-            }
-        }
+				$p = trim( $p, ']' );
+				$value = isset( $value[ $p ] ) ? $value[ $p ] : $default;
+			}
+		}
 
         return $value;
     }
@@ -518,10 +518,10 @@ class FrmAppHelper {
      * Used when switching the action for a bulk action
      * @since 2.0
      */
-    public static function remove_get_action() {
-        if ( ! isset($_GET) ) {
-            return;
-        }
+	public static function remove_get_action() {
+		if ( ! isset( $_GET ) ) {
+			return;
+		}
 
         $new_action = isset( $_GET['action'] ) ? sanitize_text_field( $_GET['action'] ) : ( isset( $_GET['action2'] ) ? sanitize_text_field( $_GET['action2'] ) : '' );
         if ( ! empty( $new_action ) ) {
@@ -637,10 +637,10 @@ class FrmAppHelper {
         $pages = self::get_pages();
 		$selected = self::get_post_param( $field_name, $page_id, 'absint' );
     ?>
-        <select name="<?php echo esc_attr($field_name); ?>" id="<?php echo esc_attr($field_name); ?>" class="frm-pages-dropdown">
+		<select name="<?php echo esc_attr( $field_name ); ?>" id="<?php echo esc_attr( $field_name ); ?>" class="frm-pages-dropdown">
             <option value=""> </option>
             <?php foreach ( $pages as $page ) { ?>
-				<option value="<?php echo esc_attr($page->ID); ?>" <?php selected( $selected, $page->ID ) ?>>
+				<option value="<?php echo esc_attr( $page->ID ); ?>" <?php selected( $selected, $page->ID ); ?>>
 					<?php echo esc_html( $truncate ? self::truncate( $page->post_title, $truncate ) : $page->post_title ); ?>
 				</option>
             <?php } ?>
@@ -649,7 +649,7 @@ class FrmAppHelper {
     }
 
 	public static function post_edit_link( $post_id ) {
-        $post = get_post($post_id);
+		$post = get_post( $post_id );
         if ( $post ) {
 			$post_url = admin_url( 'post.php?post=' . $post_id . '&action=edit' );
 			return '<a href="' . esc_url( $post_url ) . '">' . self::truncate( $post->post_title, 50 ) . '</a>';
@@ -677,9 +677,9 @@ class FrmAppHelper {
         foreach ( $editable_roles as $role => $details ) {
 			$name = translate_user_role( $details['name'] );
 			?>
-        <option value="<?php echo esc_attr($role) ?>" <?php echo in_array($role, (array) $capability) ? ' selected="selected"' : ''; ?>><?php echo esc_attr($name) ?> </option>
+		<option value="<?php echo esc_attr( $role ); ?>" <?php echo in_array( $role, (array) $capability ) ? ' selected="selected"' : ''; ?>><?php echo esc_attr( $name ); ?> </option>
 <?php
-            unset($role, $details);
+			unset( $role, $details );
         }
     }
 
@@ -735,16 +735,16 @@ class FrmAppHelper {
     public static function maybe_add_permissions() {
 		self::force_capability( 'frm_view_entries' );
 
-        if ( ! current_user_can('administrator') || current_user_can('frm_view_forms') ) {
-            return;
-        }
+		if ( ! current_user_can( 'administrator' ) || current_user_can( 'frm_view_forms' ) ) {
+			return;
+		}
 
 		$user_id = get_current_user_id();
 		$user = new WP_User( $user_id );
         $frm_roles = self::frm_capabilities();
         foreach ( $frm_roles as $frm_role => $frm_role_description ) {
 			$user->add_cap( $frm_role );
-            unset($frm_role, $frm_role_description);
+			unset( $frm_role, $frm_role_description );
         }
     }
 
@@ -937,33 +937,33 @@ class FrmAppHelper {
 		if ( $user_id == 'current' ) {
 			$user_id = get_current_user_id();
 		} else {
-            if ( is_email($user_id) ) {
-                $user = get_user_by('email', $user_id);
-            } else {
-                $user = get_user_by('login', $user_id);
-            }
+			if ( is_email( $user_id ) ) {
+				$user = get_user_by( 'email', $user_id );
+			} else {
+				$user = get_user_by( 'login', $user_id );
+			}
 
             if ( $user ) {
                 $user_id = $user->ID;
             }
-            unset($user);
+			unset( $user );
         }
 
         return $user_id;
     }
 
 	public static function get_file_contents( $filename, $atts = array() ) {
-        if ( ! is_file($filename) ) {
-            return false;
-        }
+		if ( ! is_file( $filename ) ) {
+			return false;
+		}
 
-        extract($atts);
-        ob_start();
-        include($filename);
-        $contents = ob_get_contents();
-        ob_end_clean();
-        return $contents;
-    }
+		extract( $atts );
+		ob_start();
+		include( $filename );
+		$contents = ob_get_contents();
+		ob_end_clean();
+		return $contents;
+	}
 
     /**
      * @param string $table_name
@@ -1018,9 +1018,9 @@ class FrmAppHelper {
             return false;
         }
 
-        if ( empty($post_values) ) {
-            $post_values = stripslashes_deep($_POST);
-        }
+		if ( empty( $post_values ) ) {
+			$post_values = stripslashes_deep( $_POST );
+		}
 
 		$values = array(
 			'id' => $record->id,
@@ -1028,14 +1028,14 @@ class FrmAppHelper {
 		);
 
 		foreach ( array( 'name', 'description' ) as $var ) {
-            $default_val = isset($record->{$var}) ? $record->{$var} : '';
+			$default_val = isset( $record->{$var} ) ? $record->{$var} : '';
 			$values[ $var ] = self::get_param( $var, $default_val, 'get', 'wp_kses_post' );
-            unset($var, $default_val);
-        }
+			unset( $var, $default_val );
+		}
 
-        $values['description'] = self::use_wpautop($values['description']);
+		$values['description'] = self::use_wpautop( $values['description'] );
 
-        self::fill_form_opts($record, $table, $post_values, $values);
+		self::fill_form_opts( $record, $table, $post_values, $values );
 
 		self::prepare_field_arrays( $fields, $record, $values, array_merge( $args, compact( 'default', 'post_values' ) ) );
 
@@ -1137,15 +1137,15 @@ class FrmAppHelper {
         $values['form_name'] = isset($record->form_id) ? $form->name : '';
 		$values['parent_form_id'] = isset( $record->form_id ) ? $form->parent_form_id : 0;
 
-        if ( ! is_array($form->options) ) {
-            return;
-        }
+		if ( ! is_array( $form->options ) ) {
+			return;
+		}
 
         foreach ( $form->options as $opt => $value ) {
             $values[ $opt ] = isset( $post_values[ $opt ] ) ? maybe_unserialize( $post_values[ $opt ] ) : $value;
         }
 
-        self::fill_form_defaults($post_values, $values);
+		self::fill_form_defaults( $post_values, $values );
     }
 
     /**
@@ -1159,7 +1159,7 @@ class FrmAppHelper {
 				$values[ $opt ] = ( $post_values && isset( $post_values['options'][ $opt ] ) ) ? $post_values['options'][ $opt ] : $default;
             }
 
-            unset($opt, $defaut);
+			unset( $opt, $default );
         }
 
 		if ( ! isset( $values['custom_style'] ) ) {
@@ -1170,7 +1170,7 @@ class FrmAppHelper {
 			if ( ! isset( $values[ $h . '_html' ] ) ) {
 				$values[ $h . '_html' ] = ( isset( $post_values['options'][ $h . '_html' ] ) ? $post_values['options'][ $h . '_html' ] : FrmFormsHelper::get_default_html( $h ) );
             }
-            unset($h);
+			unset( $h );
         }
     }
 
@@ -1197,9 +1197,9 @@ class FrmAppHelper {
 		}
     ?>
 <li>
-    <a href="javascript:void(0)" class="frmids frm_insert_code alignright <?php echo esc_attr($class) ?>" data-code="<?php echo esc_attr($args['id']) ?>" >[<?php echo esc_attr( $args['id'] ) ?>]</a>
-    <a href="javascript:void(0)" class="frmkeys frm_insert_code alignright <?php echo esc_attr($class) ?>" data-code="<?php echo esc_attr($args['key']) ?>" >[<?php echo esc_attr( self::truncate($args['key'], 10) ) ?>]</a>
-    <a href="javascript:void(0)" class="frm_insert_code <?php echo esc_attr( $class ) ?>" data-code="<?php echo esc_attr($args['id']) ?>" ><?php echo esc_attr( self::truncate($args['name'], 60) ) ?></a>
+	<a href="javascript:void(0)" class="frmids frm_insert_code alignright <?php echo esc_attr( $class ); ?>" data-code="<?php echo esc_attr( $args['id'] ); ?>" >[<?php echo esc_attr( $args['id'] ); ?>]</a>
+	<a href="javascript:void(0)" class="frmkeys frm_insert_code alignright <?php echo esc_attr( $class ); ?>" data-code="<?php echo esc_attr( $args['key'] ); ?>" >[<?php echo esc_attr( self::truncate( $args['key'], 10 ) ); ?>]</a>
+	<a href="javascript:void(0)" class="frm_insert_code <?php echo esc_attr( $class ); ?>" data-code="<?php echo esc_attr( $args['id'] ); ?>" ><?php echo esc_attr( self::truncate( $args['name'], 60 ) ); ?></a>
 </li>
     <?php
     }
@@ -1756,8 +1756,8 @@ class FrmAppHelper {
 			$unset = array( 'en', 'fil', 'fr-CA', 'de-AT', 'de-AT', 'de-CH', 'iw', 'hi', 'pt', 'pt-PT', 'es-419', 'tr' );
 		}
 
-        $locales = array_diff_key($locales, array_flip($unset));
-        $locales = apply_filters('frm_locales', $locales);
+		$locales = array_diff_key( $locales, array_flip( $unset ) );
+		$locales = apply_filters( 'frm_locales', $locales );
 
         return $locales;
     }

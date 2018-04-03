@@ -1,5 +1,5 @@
 <?php
-if ( ! defined('ABSPATH') ) {
+if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
@@ -55,13 +55,13 @@ class FrmEntry {
 		unset( $check_val['is_draft'], $check_val['id'], $check_val['item_key'] );
 
         if ( $new_values['item_key'] == $new_values['name'] ) {
-            unset($check_val['name']);
+			unset( $check_val['name'] );
         }
 
         global $wpdb;
 		$entry_exists = FrmDb::get_col( $wpdb->prefix . 'frm_items', $check_val, 'id', array( 'order_by' => 'created_at DESC' ) );
 
-        if ( ! $entry_exists || empty($entry_exists) || ! isset($values['item_meta']) ) {
+		if ( ! $entry_exists || empty( $entry_exists ) || ! isset( $values['item_meta'] ) ) {
             return false;
         }
 
@@ -274,24 +274,24 @@ class FrmEntry {
         $query = "SELECT it.*, fr.name as form_name, fr.form_key as form_key FROM {$wpdb->prefix}frm_items it
                   LEFT OUTER JOIN {$wpdb->prefix}frm_forms fr ON it.form_id=fr.id WHERE ";
 
-        $query .= is_numeric($id) ? 'it.id=%d' : 'it.item_key=%s';
+		$query .= is_numeric( $id ) ? 'it.id=%d' : 'it.item_key=%s';
         $query_args = array( $id );
         $query = $wpdb->prepare( $query, $query_args );
 
         if ( ! $meta ) {
 			$entry = FrmDb::check_cache( $id . '_nometa', 'frm_entry', $query, 'get_row' );
-            return stripslashes_deep($entry);
+			return stripslashes_deep( $entry );
         }
 
-        $entry = FrmDb::check_cache( $id, 'frm_entry' );
-        if ( $entry !== false ) {
-            return stripslashes_deep($entry);
-        }
+		$entry = FrmDb::check_cache( $id, 'frm_entry' );
+		if ( $entry !== false ) {
+			return stripslashes_deep( $entry );
+		}
 
-        $entry = $wpdb->get_row( $query );
-        $entry = self::get_meta($entry);
+		$entry = $wpdb->get_row( $query );
+		$entry = self::get_meta( $entry );
 
-        return stripslashes_deep($entry);
+		return stripslashes_deep( $entry );
     }
 
 	public static function get_meta( $entry ) {

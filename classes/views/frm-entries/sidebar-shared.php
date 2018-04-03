@@ -2,7 +2,7 @@
 <div class="postbox frm_with_icons" >
     <h3 class="hndle">
 		<span><?php esc_html_e( 'Entry Details', 'formidable' ) ?></span>
-		<?php if ( FrmAppHelper::get_param('frm_action') != 'show' ) { ?>
+		<?php if ( FrmAppHelper::get_param( 'frm_action' ) != 'show' ) { ?>
 		<a href="?page=formidable-entries&amp;frm_action=show&amp;id=<?php echo absint( $entry->id ); ?>" class="alignright">
 			<?php esc_html_e( 'View Entry', 'formidable' ) ?>
 		</a>
@@ -15,7 +15,7 @@
         <div class="misc-pub-section frm_no_print">
             <span class="dashicons dashicons-admin-post wp-media-buttons-icon"></span>
             <?php esc_html_e( 'Post', 'formidable' ) ?>:
-            <b><?php echo get_the_title($entry->post_id) ?></b>
+			<b><?php echo get_the_title( $entry->post_id ); ?></b>
 			<span>
 				<a href="<?php echo esc_url( admin_url( 'post.php?post=' . $entry->post_id . '&action=edit' ) ) ?>">
 					<?php esc_html_e( 'Edit', 'formidable' ) ?>
@@ -75,7 +75,7 @@
         </div>
         <?php } ?>
 
-        <?php if ( isset($data['referrer']) ) { ?>
+		<?php if ( isset( $data['referrer'] ) ) { ?>
 		<div class="misc-pub-section frm_force_wrap">
 			<b><?php esc_html_e( 'Referrer', 'formidable' ) ?></b>:<br/>
 			<?php echo wp_kses_post( str_replace( "\r\n", '<br/>', $data['referrer'] ) ); ?>
@@ -93,7 +93,7 @@
 			<?php echo wp_kses_post( implode( ', ', (array) $d ) ); ?>
         </div>
         <?php
-            unset($k, $d);
+			unset( $k, $d );
         }
         ?>
     </div>

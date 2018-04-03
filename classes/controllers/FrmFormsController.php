@@ -7,7 +7,7 @@ class FrmFormsController {
 		if ( ! FrmAppHelper::pro_is_installed() ) {
 			$menu_label .= ' (Lite)';
 		}
-		add_submenu_page('formidable', 'Formidable | ' . $menu_label, $menu_label, 'frm_view_forms', 'formidable', 'FrmFormsController::route' );
+		add_submenu_page( 'formidable', 'Formidable | ' . $menu_label, $menu_label, 'frm_view_forms', 'formidable', 'FrmFormsController::route' );
 
 		self::maybe_load_listing_hooks();
     }
@@ -25,17 +25,17 @@ class FrmFormsController {
 	}
 
     public static function head() {
-        wp_enqueue_script('formidable-editinplace');
+		wp_enqueue_script( 'formidable-editinplace' );
 
         if ( wp_is_mobile() ) {
     		wp_enqueue_script( 'jquery-touch-punch' );
     	}
     }
 
-    public static function register_widgets() {
-        require_once(FrmAppHelper::plugin_path() . '/classes/widgets/FrmShowForm.php');
-        register_widget('FrmShowForm');
-    }
+	public static function register_widgets() {
+		require_once( FrmAppHelper::plugin_path() . '/classes/widgets/FrmShowForm.php' );
+		register_widget( 'FrmShowForm' );
+	}
 
 	/**
 	 * By default, Divi processes form shortcodes on the edit post page.
@@ -48,32 +48,32 @@ class FrmFormsController {
 		return $shortcodes;
 	}
 
-    public static function list_form() {
-        FrmAppHelper::permission_check('frm_view_forms');
+	public static function list_form() {
+		FrmAppHelper::permission_check( 'frm_view_forms' );
 
 		$params = FrmForm::list_page_params();
-        $errors = self::process_bulk_form_actions( array());
-        $errors = apply_filters('frm_admin_list_form_action', $errors);
+		$errors = self::process_bulk_form_actions( array() );
+		$errors = apply_filters( 'frm_admin_list_form_action', $errors );
 
 		return self::display_forms_list( $params, '', $errors );
-    }
+	}
 
 	public static function new_form( $values = array() ) {
-        FrmAppHelper::permission_check('frm_edit_forms');
+		FrmAppHelper::permission_check( 'frm_edit_forms' );
 
         global $frm_vars;
 
-        $action = isset($_REQUEST['frm_action']) ? 'frm_action' : 'action';
+		$action = isset( $_REQUEST['frm_action'] ) ? 'frm_action' : 'action';
 		$action = empty( $values ) ? FrmAppHelper::get_param( $action, '', 'get', 'sanitize_title' ) : $values[ $action ];
 
 		if ( $action == 'create' ) {
-			self::create($values);
+			self::create( $values );
 			return;
 		} else if ( $action == 'new' ) {
 			$frm_field_selection = FrmField::field_selection();
-            $values = FrmFormsHelper::setup_new_vars($values);
+			$values = FrmFormsHelper::setup_new_vars( $values );
             $id = FrmForm::create( $values );
-            $form = FrmForm::getOne($id);
+			$form = FrmForm::getOne( $id );
 
 			self::create_default_email_action( $form );
 
@@ -126,9 +126,9 @@ class FrmFormsController {
             $hide_preview = true;
 			$frm_field_selection = FrmField::field_selection();
             $form = FrmForm::getOne( $id );
-            $fields = FrmField::get_all_for_form($id);
+			$fields = FrmField::get_all_for_form( $id );
 
-			$values = FrmAppHelper::setup_edit_vars($form, 'forms', '', true);
+			$values = FrmAppHelper::setup_edit_vars( $form, 'forms', '', true );
 			$values['fields'] = $fields;
 			$all_templates = FrmForm::getAll( array( 'is_template' => 1 ), 'name' );
 
@@ -141,16 +141,16 @@ class FrmFormsController {
     }
 
     public static function edit( $values = false ) {
-        FrmAppHelper::permission_check('frm_edit_forms');
+		FrmAppHelper::permission_check( 'frm_edit_forms' );
 
 		$id = isset( $values['id'] ) ? absint( $values['id'] ) : FrmAppHelper::get_param( 'id', '', 'get', 'absint' );
-        return self::get_edit_vars($id);
+		return self::get_edit_vars( $id );
     }
 
     public static function settings( $id = false, $message = '' ) {
-        FrmAppHelper::permission_check('frm_edit_forms');
+		FrmAppHelper::permission_check( 'frm_edit_forms' );
 
-        if ( ! $id || ! is_numeric($id) ) {
+		if ( ! $id || ! is_numeric( $id ) ) {
 			$id = FrmAppHelper::get_param( 'id', '', 'get', 'absint' );
         }
 		return self::get_settings_vars( $id, array(), $message );
@@ -453,25 +453,25 @@ class FrmFormsController {
     }
 
     public static function destroy() {
-        FrmAppHelper::permission_check('frm_delete_forms');
+		FrmAppHelper::permission_check( 'frm_delete_forms' );
 
 		$params = FrmForm::list_page_params();
 
         //check nonce url
-        check_admin_referer('destroy_form_' . $params['id']);
+		check_admin_referer( 'destroy_form_' . $params['id'] );
 
         $count = 0;
         if ( FrmForm::destroy( $params['id'] ) ) {
             $count++;
         }
 
-        $message = sprintf(_n( '%1$s form permanently deleted.', '%1$s forms permanently deleted.', $count, 'formidable' ), $count);
+		$message = sprintf( _n( '%1$s form permanently deleted.', '%1$s forms permanently deleted.', $count, 'formidable' ), $count );
 
 		self::display_forms_list( $params, $message );
     }
 
 	public static function bulk_destroy( $ids ) {
-        FrmAppHelper::permission_check('frm_delete_forms');
+		FrmAppHelper::permission_check( 'frm_delete_forms' );
 
         $count = 0;
         foreach ( $ids as $id ) {
@@ -481,14 +481,14 @@ class FrmFormsController {
             }
         }
 
-        $message = sprintf(_n( '%1$s form permanently deleted.', '%1$s forms permanently deleted.', $count, 'formidable' ), $count);
+		$message = sprintf( _n( '%1$s form permanently deleted.', '%1$s forms permanently deleted.', $count, 'formidable' ), $count );
 
         return $message;
     }
 
     private static function delete_all() {
         //check nonce url
-        $permission_error = FrmAppHelper::permission_nonce_error('frm_delete_forms', '_wpnonce', 'bulk-toplevel_page_formidable');
+		$permission_error = FrmAppHelper::permission_nonce_error( 'frm_delete_forms', '_wpnonce', 'bulk-toplevel_page_formidable' );
         if ( $permission_error !== false ) {
 			self::display_forms_list( array(), '', array( $permission_error ) );
             return;
@@ -725,21 +725,21 @@ class FrmFormsController {
 
         $form = FrmForm::getOne( $id );
 
-        $fields = FrmField::get_all_for_form($id);
-        $values = FrmAppHelper::setup_edit_vars($form, 'forms', $fields, true);
+		$fields = FrmField::get_all_for_form( $id );
+		$values = FrmAppHelper::setup_edit_vars( $form, 'forms', $fields, true );
 
-        if ( isset($values['default_template']) && $values['default_template'] ) {
-            wp_die(__( 'That template cannot be edited', 'formidable' ));
-        }
+		if ( isset( $values['default_template'] ) && $values['default_template'] ) {
+			wp_die( __( 'That template cannot be edited', 'formidable' ) );
+		}
 
 		self::clean_submit_html( $values );
 
         $action_controls = FrmFormActionsController::get_form_actions();
 
-        $sections = apply_filters('frm_add_form_settings_section', array(), $values);
+		$sections = apply_filters( 'frm_add_form_settings_section', array(), $values );
         $pro_feature = FrmAppHelper::pro_is_installed() ? '' : ' class="pro_feature"';
 
-        $styles = apply_filters('frm_get_style_opts', array());
+		$styles = apply_filters( 'frm_get_style_opts', array() );
 
 		$first_h3 = 'frm_first_h3';
 

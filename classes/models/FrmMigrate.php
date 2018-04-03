@@ -7,7 +7,7 @@ class FrmMigrate {
 	public $entry_metas;
 
 	public function __construct() {
-		if ( ! defined('ABSPATH') ) {
+		if ( ! defined( 'ABSPATH' ) ) {
 			die('You are not allowed to call this page directly.');
 		}
 
@@ -229,8 +229,8 @@ class FrmMigrate {
 		$wpdb->query( 'DROP TABLE IF EXISTS ' . $this->entries );
 		$wpdb->query( 'DROP TABLE IF EXISTS ' . $this->entry_metas );
 
-        delete_option('frm_options');
-        delete_option('frm_db_version');
+		delete_option( 'frm_options' );
+		delete_option( 'frm_db_version' );
 
         //delete roles
         $frm_roles = FrmAppHelper::frm_capabilities();
@@ -238,11 +238,11 @@ class FrmMigrate {
         foreach ( $frm_roles as $frm_role => $frm_role_description ) {
             foreach ( $roles as $role => $details ) {
                 $wp_roles->remove_cap( $role, $frm_role );
-                unset($role, $details);
-    		}
-    		unset($frm_role, $frm_role_description);
+				unset( $role, $details );
+			}
+			unset( $frm_role, $frm_role_description );
 		}
-		unset($roles, $frm_roles);
+		unset( $roles, $frm_roles );
 
 		// delete actions, views, and styles
 
@@ -264,7 +264,7 @@ class FrmMigrate {
 
 		$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->options . ' WHERE option_name LIKE %s OR option_name LIKE %s', '_transient_timeout_frm_form_fields_%', '_transient_frm_form_fields_%' ) );
 
-        do_action('frm_after_uninstall');
+		do_action( 'frm_after_uninstall' );
         return true;
     }
 
@@ -476,8 +476,8 @@ class FrmMigrate {
 				continue;
 			}
 
-            // Format form options
-            $form_options = maybe_unserialize($form->options);
+			// Format form options
+			$form_options = maybe_unserialize( $form->options );
 
             // Migrate settings to actions
             FrmXMLHelper::migrate_form_settings_to_actions( $form_options, $form->id );
@@ -515,7 +515,7 @@ DEFAULT_HTML;
 				$form->options['submit_html'] = preg_replace( '~\<\/div\>(?!.*\<\/div\>)~', $draft_link . "\r\n</div>", $form->options['submit_html'] );
 				$wpdb->update( $this->forms, array( 'options' => serialize( $form->options ) ), array( 'id' => $form->id ) );
             }
-            unset($form);
+			unset( $form );
         }
     }
 }

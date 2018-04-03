@@ -1,5 +1,5 @@
 <?php
-if ( ! empty($form_id) ) {
+if ( ! empty( $form_id ) ) {
 ?>
     <h4 class="frm_left_label"><?php esc_html_e( 'Select a form:', 'formidable' ); ?></h4>
 	<?php FrmFormsHelper::forms_dropdown( 'frmsc_' . $shortcode . '_' . $form_id ); ?>

@@ -61,7 +61,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 		$limit = FrmDb::esc_limit( $start . ',' . $per_page );
 		$this->items = FrmEntry::getAll( $s_query, $order, $limit, true, $join_form_in_query );
-        $total_items = FrmEntry::getRecordCount($s_query);
+		$total_items = FrmEntry::getRecordCount( $s_query );
 
 		$this->set_pagination_args( array(
 			'total_items' => $total_items,
@@ -74,7 +74,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 			'param' => 's',
 			'sanitize' => 'sanitize_text_field',
 		) );
-	    if ( ! empty($s) ) {
+		if ( ! empty( $s ) ) {
 			esc_html_e( 'No Entries Found', 'formidable' );
             return;
         }

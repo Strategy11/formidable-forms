@@ -1,5 +1,5 @@
 <?php
-if ( ! defined('ABSPATH') ) {
+if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
@@ -7,9 +7,9 @@ class FrmFieldsHelper {
 
 	public static function setup_new_vars( $type = '', $form_id = '' ) {
 
-        if ( strpos($type, '|') ) {
-            list($type, $setting) = explode('|', $type);
-        }
+		if ( strpos( $type, '|' ) ) {
+			list( $type, $setting ) = explode( '|', $type );
+		}
 
 		$values = self::get_default_field( $type );
 
@@ -244,8 +244,8 @@ class FrmFieldsHelper {
 
 		$values['field_key'] = FrmAppHelper::get_unique_key( $new_key, $wpdb->prefix . 'frm_fields', 'field_key' );
         $values['form_id'] = $form_id;
-        $values['options'] = maybe_serialize($field->options);
-        $values['default_value'] = maybe_serialize($field->default_value);
+		$values['options'] = maybe_serialize( $field->options );
+		$values['default_value'] = maybe_serialize( $field->default_value );
 
         foreach ( array( 'name', 'description', 'type', 'field_order', 'field_options', 'required' ) as $col ) {
             $values[ $col ] = $field->{$col};
@@ -538,22 +538,22 @@ class FrmFieldsHelper {
             } else {
                 $m = in_array($hide_opt, $observed_value);
             }
-        } else if ( $cond == '!=' ) {
-            $m = ! in_array($hide_opt, $observed_value);
-        } else if ( $cond == '>' ) {
-            $min = min($observed_value);
-            $m = $min > $hide_opt;
-        } else if ( $cond == '<' ) {
-            $max = max($observed_value);
-            $m = $max < $hide_opt;
-        } else if ( $cond == 'LIKE' || $cond == 'not LIKE' ) {
-            foreach ( $observed_value as $ob ) {
-                $m = strpos($ob, $hide_opt);
-                if ( $m !== false ) {
-                    $m = true;
-                    break;
-                }
-            }
+		} elseif ( $cond == '!=' ) {
+			$m = ! in_array( $hide_opt, $observed_value );
+		} elseif ( $cond == '>' ) {
+			$min = min( $observed_value );
+			$m = $min > $hide_opt;
+		} elseif ( $cond == '<' ) {
+			$max = max( $observed_value );
+			$m = $max < $hide_opt;
+		} elseif ( $cond == 'LIKE' || $cond == 'not LIKE' ) {
+			foreach ( $observed_value as $ob ) {
+				$m = strpos( $ob, $hide_opt );
+				if ( $m !== false ) {
+					$m = true;
+					break;
+				}
+			}
 
             if ( $cond == 'not LIKE' ) {
                 $m = ( $m === false ) ? true : false;
@@ -569,7 +569,7 @@ class FrmFieldsHelper {
      * @return string
      */
 	public static function basic_replace_shortcodes( $value, $form, $entry ) {
-        if ( strpos($value, '[sitename]') !== false ) {
+		if ( strpos( $value, '[sitename]') !== false ) {
             $new_value = wp_specialchars_decode( FrmAppHelper::site_name(), ENT_QUOTES );
             $value = str_replace('[sitename]', $new_value, $value);
         }
@@ -764,25 +764,25 @@ class FrmFieldsHelper {
             return '';
         }
 
-        if ( strpos($atts['param'], '&#91;') ) {
-            $atts['param'] = str_replace('&#91;', '[', $atts['param']);
-            $atts['param'] = str_replace('&#93;', ']', $atts['param']);
-        }
+		if ( strpos( $atts['param'], '&#91;' ) ) {
+			$atts['param'] = str_replace( '&#91;', '[', $atts['param'] );
+			$atts['param'] = str_replace( '&#93;', ']', $atts['param'] );
+		}
 
 		$new_value = FrmAppHelper::get_param( $atts['param'], '', 'get', 'sanitize_text_field' );
         $new_value = FrmAppHelper::get_query_var( $new_value, $atts['param'] );
 
         if ( $new_value == '' ) {
-            if ( ! isset($atts['prev_val']) ) {
+			if ( ! isset( $atts['prev_val'] ) ) {
                 $atts['prev_val'] = '';
             }
 
-            $new_value = isset($atts['default']) ? $atts['default'] : $atts['prev_val'];
+			$new_value = isset( $atts['default'] ) ? $atts['default'] : $atts['prev_val'];
         }
 
-        if ( is_array($new_value) && ! $return_array ) {
-            $new_value = implode(', ', $new_value);
-        }
+		if ( is_array( $new_value ) && ! $return_array ) {
+			$new_value = implode( ', ', $new_value );
+		}
 
         return $new_value;
     }

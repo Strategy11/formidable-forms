@@ -59,9 +59,9 @@
 			<tr>
 				<th>Included AddOns</th>
 				<td>None</td>
-				<td><a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url('https://formidableforms.com/pricing/#addon-lists') ) ?>" target="_blank">Premium Addons</a></td>
-				<td><a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url('https://formidableforms.com/pricing/#addon-lists') ) ?>" target="_blank">Advanced Addons</a></td>
-				<td><a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url('https://formidableforms.com/pricing/#addon-lists') ) ?>" target="_blank">Enterprise Addons</a></td>
+				<td><a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url( 'https://formidableforms.com/pricing/#addon-lists' ) ); ?>" target="_blank">Premium Addons</a></td>
+				<td><a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url( 'https://formidableforms.com/pricing/#addon-lists' ) ); ?>" target="_blank">Advanced Addons</a></td>
+				<td><a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url( 'https://formidableforms.com/pricing/#addon-lists' ) ); ?>" target="_blank">Enterprise Addons</a></td>
 			</tr>
 		</tbody>
 	</table>

@@ -1,4 +1,4 @@
-<?php wp_nonce_field('frm_save_form_nonce', 'frm_save_form'); ?>
+<?php wp_nonce_field( 'frm_save_form_nonce', 'frm_save_form' ); ?>
 <input type="hidden" name="status" value="<?php echo esc_attr( $values['status'] ); ?>" />
 <input type="hidden" name="new_status" value="" />
 
@@ -9,7 +9,7 @@
 	    <input type="text" name="name" value="<?php echo esc_attr( $form->name ); ?>" id="title" placeholder="<?php esc_attr_e( 'Enter title here' ) ?>" />
 	</div>
 
-    <div class="frm_no_fields <?php echo ( isset($values['fields']) && ! empty($values['fields']) ) ? 'frm_hidden' : ''; ?>">
+	<div class="frm_no_fields <?php echo ( isset( $values['fields'] ) && ! empty( $values['fields'] ) ) ? 'frm_hidden' : ''; ?>">
 	    <div class="alignleft sketch1">
 			<img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/sketch_arrow1.png' ); ?>" alt="" />
 	    </div>
@@ -55,7 +55,7 @@ if ( isset( $values['fields'] ) && ! empty( $values['fields'] ) ) {
 </ul>
 
 <p>
-	<?php $page_action = FrmAppHelper::get_param('frm_action'); ?>
+	<?php $page_action = FrmAppHelper::get_param( 'frm_action' ); ?>
 	<button class="frm_submit_<?php echo ( isset( $values['ajax_load'] ) && $values['ajax_load'] ) ? '' : 'no_'; ?>ajax button-primary frm_button_submit" type="button"><?php echo esc_html( ( $page_action == 'edit' || $page_action == 'update' ) ? __( 'Update', 'formidable' ) : __( 'Create', 'formidable' ) ); ?></button>
 </p>
 

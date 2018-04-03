@@ -48,7 +48,7 @@
 
 				if ( $f->type == 'data' ) {
 					//get all fields from linked form
-                    if ( isset($f->field_options['form_select']) && is_numeric($f->field_options['form_select']) ) {
+					if ( isset( $f->field_options['form_select'] ) && is_numeric( $f->field_options['form_select'] ) ) {
 						$linked_form = FrmDb::get_var( $wpdb->prefix . 'frm_fields', array( 'id' => $f->field_options['form_select'] ), 'form_id' );
                         if ( ! in_array( $linked_form, $linked_forms ) ) {
                             $linked_forms[] = $linked_form;
@@ -240,7 +240,7 @@
         	    <li class="frm_col_one">
 					<a href="javascript:void(0)" class="frmbutton button frm_insert_code" data-code="<?php echo esc_attr( $dfe . ' show="created-at"' ) ?>"><?php esc_html_e( 'Creation Date', 'formidable' ); ?></a>
         	    </li>
-        	    <?php if ( isset($ldfe) ) { ?>
+				<?php if ( isset( $ldfe ) ) { ?>
         	    <li class="frm_col_two">
 					<a href="javascript:void(0)" class="frmbutton button frm_insert_code" data-code="<?php echo esc_attr( $dfe . ' show="' . $ldfe . '"' ) ?>"><?php esc_html_e( 'Field From Entry', 'formidable' ); ?></a>
         	    </li>

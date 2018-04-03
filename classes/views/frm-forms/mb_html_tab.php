@@ -53,7 +53,7 @@
 		foreach ( $form_codes as $skey => $sname ) {
 		?>
         <li class="frm_col_<?php echo esc_attr( $col ) ?>">
-    	    <a href="javascript:void(0)" class="show_before_html show_after_html frmbutton button frm_insert_code" data-code="<?php echo esc_attr($skey) ?>"><?php echo esc_html( $sname ); ?></a>
+			<a href="javascript:void(0)" class="show_before_html show_after_html frmbutton button frm_insert_code" data-code="<?php echo esc_attr( $skey ); ?>"><?php echo esc_html( $sname ); ?></a>
     	</li>
 		<?php
 			$col = ( 'one' === $col ) ? 'two' : 'one';

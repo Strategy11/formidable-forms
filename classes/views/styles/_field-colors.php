@@ -60,7 +60,7 @@
 			<div class="clear"></div>
 			<p class="frm_no_bottom_margin">
 				<label>
-					<input type="checkbox" name="<?php echo esc_attr( $frm_style->get_field_name( 'remove_box_shadow' ) ) ?>" id="frm_remove_box_shadow" value="1" <?php checked($style->post_content['remove_box_shadow'], 1) ?> />
+					<input type="checkbox" name="<?php echo esc_attr( $frm_style->get_field_name( 'remove_box_shadow' ) ); ?>" id="frm_remove_box_shadow" value="1" <?php checked( $style->post_content['remove_box_shadow'], 1 ); ?> />
 					<?php esc_html_e( 'Remove box shadow', 'formidable' ) ?>
 				</label>
 			</p>
@@ -78,7 +78,7 @@
 			<div class="clear"></div>
 			<p class="frm_no_bottom_margin">
 				<label>
-					<input type="checkbox" name="<?php echo esc_attr( $frm_style->get_field_name( 'remove_box_shadow_active' ) ); ?>" id="frm_remove_box_shadow_active" value="1" <?php checked($style->post_content['remove_box_shadow_active'], 1) ?> />
+					<input type="checkbox" name="<?php echo esc_attr( $frm_style->get_field_name( 'remove_box_shadow_active' ) ); ?>" id="frm_remove_box_shadow_active" value="1" <?php checked( $style->post_content['remove_box_shadow_active'], 1 ); ?> />
 					<?php esc_html_e( 'Remove box shadow', 'formidable' ) ?>
 				</label>
 			</p>

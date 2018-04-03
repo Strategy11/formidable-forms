@@ -59,7 +59,7 @@ class FrmStylesHelper {
 		$form = self::get_form_for_page();
 		$theme_css = FrmStylesController::get_style_val( 'theme_css', $form );
         if ( $theme_css != -1 ) {
-            wp_enqueue_style('jquery-theme', self::jquery_css_url($theme_css), array(), FrmAppHelper::plugin_version());
+			wp_enqueue_style( 'jquery-theme', self::jquery_css_url( $theme_css ), array(), FrmAppHelper::plugin_version() );
         }
     }
 
@@ -77,21 +77,21 @@ class FrmStylesHelper {
 		return $form_id;
 	}
 
-    public static function get_upload_base() {
-        $uploads = wp_upload_dir();
-        if ( is_ssl() && ! preg_match('/^https:\/\/.*\..*$/', $uploads['baseurl']) ) {
-            $uploads['baseurl'] = str_replace('http://', 'https://', $uploads['baseurl']);
-        }
+	public static function get_upload_base() {
+		$uploads = wp_upload_dir();
+		if ( is_ssl() && ! preg_match( '/^https:\/\/.*\..*$/', $uploads['baseurl'] ) ) {
+			$uploads['baseurl'] = str_replace( 'http://', 'https://', $uploads['baseurl'] );
+		}
 
-        return $uploads;
-    }
+		return $uploads;
+	}
 
 	public static function style_menu( $active = '' ) {
 ?>
         <h2 class="nav-tab-wrapper">
 			<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-styles' ) ) ?>" class="nav-tab <?php echo ( '' == $active ) ? 'nav-tab-active' : '' ?>"><?php esc_html_e( 'Edit Styles', 'formidable' ) ?></a>
 			<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-styles&frm_action=manage' ) ) ?>" class="nav-tab <?php echo ( 'manage' == $active ) ? 'nav-tab-active' : '' ?>"><?php esc_html_e( 'Manage Form Styles', 'formidable' ) ?></a>
-			<a href="<?php echo esc_url( admin_url('admin.php?page=formidable-styles&frm_action=custom_css' ) ) ?>" class="nav-tab <?php echo ( 'custom_css' == $active ) ? 'nav-tab-active' : '' ?>"><?php esc_html_e( 'Custom CSS', 'formidable' ) ?></a>
+			<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-styles&frm_action=custom_css' ) ); ?>" class="nav-tab <?php echo ( 'custom_css' == $active ) ? 'nav-tab-active' : ''; ?>"><?php esc_html_e( 'Custom CSS', 'formidable' ); ?></a>
         </h2>
 <?php
     }

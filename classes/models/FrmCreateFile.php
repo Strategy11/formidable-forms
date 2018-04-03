@@ -21,8 +21,8 @@ class FrmCreateFile {
 		$this->error_message = isset( $atts['error_message'] ) ? $atts['error_message'] : '';
 		$this->uploads = wp_upload_dir();
 		$this->set_new_file_path( $atts );
-		$this->chmod_dir = defined('FS_CHMOD_DIR') ? FS_CHMOD_DIR : ( fileperms( ABSPATH ) & 0777 | 0755 );
-		$this->chmod_file = defined('FS_CHMOD_FILE') ? FS_CHMOD_FILE : ( fileperms( ABSPATH . 'index.php' ) & 0777 | 0644 );
+		$this->chmod_dir = defined( 'FS_CHMOD_DIR' ) ? FS_CHMOD_DIR : ( fileperms( ABSPATH ) & 0777 | 0755 );
+		$this->chmod_file = defined( 'FS_CHMOD_FILE' ) ? FS_CHMOD_FILE : ( fileperms( ABSPATH . 'index.php' ) & 0777 | 0644 );
 
 		$this->check_permission();
 	}
@@ -153,7 +153,7 @@ class FrmCreateFile {
 	}
 
 	private function get_creds() {
-		if ( ! function_exists('get_filesystem_method') ) {
+		if ( ! function_exists( 'get_filesystem_method' ) ) {
 			include_once( ABSPATH . 'wp-admin/includes/file.php' );
 		}
 
@@ -172,9 +172,9 @@ class FrmCreateFile {
 			'username' => '',
 		) );
 
-		$credentials['hostname'] = defined('FTP_HOST') ? FTP_HOST : $credentials['hostname'];
-		$credentials['username'] = defined('FTP_USER') ? FTP_USER : $credentials['username'];
-		$credentials['password'] = defined('FTP_PASS') ? FTP_PASS : '';
+		$credentials['hostname'] = defined( 'FTP_HOST' ) ? FTP_HOST : $credentials['hostname'];
+		$credentials['username'] = defined( 'FTP_USER' ) ? FTP_USER : $credentials['username'];
+		$credentials['password'] = defined( 'FTP_PASS' ) ? FTP_PASS : '';
 
 		// Check to see if we are setting the public/private keys for ssh
 		$credentials['public_key'] = defined('FTP_PUBKEY') ? FTP_PUBKEY : '';

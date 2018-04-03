@@ -109,7 +109,7 @@ class FrmStyle {
 		$filename = FrmAppHelper::plugin_path() . '/css/custom_theme.css.php';
 		update_option( 'frm_last_style_update', date('njGi') );
 
-        if ( ! is_file($filename) ) {
+		if ( ! is_file( $filename ) ) {
             return;
         }
 
@@ -156,7 +156,7 @@ class FrmStyle {
 	}
 
 	public function destroy( $id ) {
-        return wp_delete_post($id);
+		return wp_delete_post( $id );
     }
 
     public function get_one() {
@@ -170,19 +170,19 @@ class FrmStyle {
             return $style;
         }
 
-        $style = get_post($this->id);
+		$style = get_post( $this->id );
 
         if ( ! $style ) {
             return $style;
         }
 
-        $style->post_content = FrmAppHelper::maybe_json_decode($style->post_content);
+		$style->post_content = FrmAppHelper::maybe_json_decode( $style->post_content );
 
         $default_values = $this->get_defaults();
 
-        // fill default values
-        $style->post_content = $this->override_defaults($style->post_content);
-        $style->post_content = wp_parse_args( $style->post_content, $default_values);
+		// fill default values
+		$style->post_content = $this->override_defaults( $style->post_content );
+		$style->post_content = wp_parse_args( $style->post_content, $default_values );
 
         return $style;
     }
@@ -198,20 +198,20 @@ class FrmStyle {
 
 		$temp_styles = FrmDb::check_cache( serialize( $post_atts ), 'frm_styles', $post_atts, 'get_posts' );
 
-        if ( empty($temp_styles) ) {
+		if ( empty( $temp_styles ) ) {
             global $wpdb;
             // make sure there wasn't a conflict with the query
 			$query = $wpdb->prepare( 'SELECT * FROM ' . $wpdb->posts . ' WHERE post_type=%s AND post_status=%s ORDER BY post_title ASC LIMIT 99', FrmStylesController::$post_type, 'publish' );
-            $temp_styles = FrmDb::check_cache('frm_backup_style_check', 'frm_styles', $query, 'get_results');
+			$temp_styles = FrmDb::check_cache( 'frm_backup_style_check', 'frm_styles', $query, 'get_results' );
 
-            if ( empty($temp_styles) ) {
+			if ( empty( $temp_styles ) ) {
                 // create a new style if there are none
          		$new = $this->get_new();
 				$new->post_title = __( 'Formidable Style', 'formidable' );
 				$new->post_name = $new->post_title;
          		$new->menu_order = 1;
-         		$new = $this->save( (array) $new);
-         		$this->update('default');
+				$new = $this->save( (array) $new );
+				$this->update( 'default' );
 
                 $post_atts['include'] = $new;
 
@@ -235,17 +235,17 @@ class FrmStyle {
                 }
             }
 
-            $style->post_content = FrmAppHelper::maybe_json_decode($style->post_content);
+			$style->post_content = FrmAppHelper::maybe_json_decode( $style->post_content );
 
-            // fill default values
-            $style->post_content = $this->override_defaults($style->post_content);
-            $style->post_content = wp_parse_args( $style->post_content, $default_values);
+			// fill default values
+			$style->post_content = $this->override_defaults( $style->post_content );
+			$style->post_content = wp_parse_args( $style->post_content, $default_values );
 
 			$styles[ $style->ID ] = $style;
         }
 
         if ( ! $default_style ) {
-            $default_style = reset($styles);
+			$default_style = reset( $styles );
 			$styles[ $default_style->ID ]->menu_order = 1;
         }
 
@@ -253,7 +253,7 @@ class FrmStyle {
     }
 
 	public function get_default_style( $styles = null ) {
-        if ( ! isset($styles) ) {
+		if ( ! isset( $styles ) ) {
 			$styles = $this->get_all( 'menu_order', 'DESC', 1 );
         }
 
@@ -265,24 +265,24 @@ class FrmStyle {
     }
 
 	public function override_defaults( $settings ) {
-	    if ( ! is_array($settings) ) {
+		if ( ! is_array( $settings ) ) {
 	        return $settings;
 	    }
 
 		$settings['line_height'] = ( ! isset( $settings['field_height'] ) || $settings['field_height'] == '' || $settings['field_height'] == 'auto' ) ? 'normal' : $settings['field_height'];
 
-	    if ( ! isset($settings['form_desc_size']) && isset($settings['description_font_size']) ) {
+		if ( ! isset( $settings['form_desc_size'] ) && isset( $settings['description_font_size'] ) ) {
 	        $settings['form_desc_size'] = $settings['description_font_size'];
 	        $settings['form_desc_color'] = $settings['description_color'];
 	        $settings['title_color'] = $settings['label_color'];
 	    }
 
-	    if ( ! isset($settings['section_color']) && isset($settings['label_color']) ) {
+		if ( ! isset( $settings['section_color'] ) && isset( $settings['label_color'] ) ) {
 	        $settings['section_color'] = $settings['label_color'];
 	        $settings['section_border_color'] = $settings['border_color'];
 	    }
 
-	    if ( ! isset($settings['submit_hover_bg_color']) && isset($settings['submit_bg_color']) ) {
+		if ( ! isset( $settings['submit_hover_bg_color'] ) && isset( $settings['submit_bg_color'] ) ) {
 	        $settings['submit_hover_bg_color'] = $settings['submit_bg_color'];
 	        $settings['submit_hover_color'] = $settings['submit_text_color'];
 	        $settings['submit_hover_border_color'] = $settings['submit_border_color'];

@@ -11,13 +11,13 @@ class FrmEmailAction extends FrmFormAction {
             'priority'  => 10,
             'ajax_load' => false,
 		);
-		$action_ops = apply_filters('frm_email_control_settings', $action_ops);
+		$action_ops = apply_filters( 'frm_email_control_settings', $action_ops );
 
-		parent::__construct('email', __( 'Email Notification', 'formidable' ), $action_ops);
+		parent::__construct( 'email', __( 'Email Notification', 'formidable' ), $action_ops );
 	}
 
 	public function form( $form_action, $args = array() ) {
-	    extract($args);
+		extract( $args );
 
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/_email_settings.php' );
 	}

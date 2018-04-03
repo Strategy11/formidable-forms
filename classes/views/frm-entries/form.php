@@ -1,6 +1,6 @@
 <?php
-if ( empty($values) || ! isset($values['fields']) || empty($values['fields']) ) { ?>
-<div class="frm_forms <?php echo FrmFormsHelper::get_form_style_class($form); ?>" id="frm_form_<?php echo esc_attr( $form->id ) ?>_container">
+if ( empty( $values ) || ! isset( $values['fields'] ) || empty( $values['fields'] ) ) { ?>
+<div class="frm_forms <?php echo FrmFormsHelper::get_form_style_class( $form ); ?>" id="frm_form_<?php echo esc_attr( $form->id ); ?>_container">
 	<div class="frm_error_style"><strong><?php esc_html_e( 'Oops!', 'formidable' ) ?></strong> <?php printf( esc_html__( 'You did not add any fields to your form. %1$sGo back%2$s and add some.', 'formidable' ), '<a href="' . esc_url( admin_url( '?page=formidable&frm_action=edit&id=' . $form->id ) ) . '">', '</a>' ) ?>
     </div>
 </div>
@@ -19,15 +19,15 @@ $frm_hide_fields = FrmAppHelper::get_post_param( 'frm_hide_fields_' . $form->id,
 <fieldset>
 <?php echo FrmFormsHelper::replace_shortcodes( $values['before_html'], $form, $title, $description ); ?>
 <div <?php echo wp_strip_all_tags( apply_filters( 'frm_fields_container_class', 'class="frm_fields_container"' ) ); ?>>
-<?php do_action( 'frm_after_title', compact('form') ) ?>
-<input type="hidden" name="frm_action" value="<?php echo esc_attr($form_action) ?>" />
-<input type="hidden" name="form_id" value="<?php echo esc_attr($form->id) ?>" />
-<input type="hidden" name="frm_hide_fields_<?php echo esc_attr( $form->id ) ?>" id="frm_hide_fields_<?php echo esc_attr( $form->id ) ?>" value="<?php echo esc_attr($frm_hide_fields) ?>" />
-<input type="hidden" name="form_key" value="<?php echo esc_attr($form->form_key) ?>" />
+<?php do_action( 'frm_after_title', compact( 'form' ) ); ?>
+<input type="hidden" name="frm_action" value="<?php echo esc_attr( $form_action ); ?>" />
+<input type="hidden" name="form_id" value="<?php echo esc_attr( $form->id ); ?>" />
+<input type="hidden" name="frm_hide_fields_<?php echo esc_attr( $form->id ); ?>" id="frm_hide_fields_<?php echo esc_attr( $form->id ); ?>" value="<?php echo esc_attr( $frm_hide_fields ); ?>" />
+<input type="hidden" name="form_key" value="<?php echo esc_attr( $form->form_key ); ?>" />
 <input type="hidden" name="item_meta[0]" value="" />
 <?php wp_nonce_field( 'frm_submit_entry_nonce', 'frm_submit_entry_' . $form->id ); ?>
 <label for="frm_verify_<?php echo esc_attr( $form->id ) ?>" class="frm_screen_reader frm_hidden"><?php esc_html_e( 'If you are human, leave this field blank.', 'formidable' ) ?></label>
-<input type="text" class="frm_hidden frm_verify" id="frm_verify_<?php echo esc_attr( $form->id ) ?>" name="frm_verify" value="<?php echo esc_attr( FrmAppHelper::get_param('frm_verify', '', 'get', 'wp_kses_post' ) ) ?>" <?php FrmFormsHelper::maybe_hide_inline() ?> />
+<input type="text" class="frm_hidden frm_verify" id="frm_verify_<?php echo esc_attr( $form->id ); ?>" name="frm_verify" value="<?php echo esc_attr( FrmAppHelper::get_param( 'frm_verify', '', 'get', 'wp_kses_post' ) ); ?>" <?php FrmFormsHelper::maybe_hide_inline(); ?> />
 <?php if ( isset( $id ) ) { ?>
 <input type="hidden" name="id" value="<?php echo esc_attr( $id ) ?>" />
 <?php } ?>
@@ -41,14 +41,14 @@ if ( FrmAppHelper::is_admin() ) {
 ?>
 <div class="frm_form_field form-field">
 <label class="frm_primary_label"><?php esc_html_e( 'Entry Key', 'formidable' ) ?></label>
-<input type="text" name="item_key" value="<?php echo esc_attr($values['item_key']) ?>" />
+<input type="text" name="item_key" value="<?php echo esc_attr( $values['item_key'] ); ?>" />
 </div>
 <?php } else { ?>
-<input type="hidden" name="item_key" value="<?php echo esc_attr($values['item_key']) ?>" />
+<input type="hidden" name="item_key" value="<?php echo esc_attr( $values['item_key'] ); ?>" />
 <?php
 }
 
-do_action('frm_entry_form', $form, $form_action, $errors);
+do_action( 'frm_entry_form', $form, $form_action, $errors );
 
 global $frm_vars;
 // close open section div
@@ -58,12 +58,12 @@ if ( isset( $frm_vars['div'] ) && $frm_vars['div'] ) {
 }
 
 // close open collapsible toggle div
-if ( isset($frm_vars['collapse_div']) && $frm_vars['collapse_div'] ) {
+if ( isset( $frm_vars['collapse_div'] ) && $frm_vars['collapse_div'] ) {
     echo "</div>\n";
-    unset($frm_vars['collapse_div']);
+	unset( $frm_vars['collapse_div'] );
 }
 
-echo FrmFormsHelper::replace_shortcodes($values['after_html'], $form);
+echo FrmFormsHelper::replace_shortcodes( $values['after_html'], $form );
 
 if ( FrmForm::show_submit( $form ) ) {
 
@@ -76,6 +76,6 @@ if ( FrmForm::show_submit( $form ) ) {
 </div>
 </fieldset>
 </div>
-<?php if ( has_action('frm_entries_footer_scripts') ) { ?>
+<?php if ( has_action( 'frm_entries_footer_scripts' ) ) { ?>
 <script type="text/javascript"><?php do_action( 'frm_entries_footer_scripts', $values['fields'], $form ); ?></script>
 <?php } ?>

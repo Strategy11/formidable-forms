@@ -233,16 +233,16 @@ class FrmFormsHelper {
         $values['is_template'] = isset($post_values['is_template']) ? $post_values['is_template'] : $record->is_template;
         $values['status'] = $record->status;
 
-        $values = self::fill_default_opts($values, $record, $post_values);
+		$values = self::fill_default_opts( $values, $record, $post_values );
 
-        return apply_filters('frm_setup_edit_form_vars', $values);
+		return apply_filters( 'frm_setup_edit_form_vars', $values );
     }
 
 	public static function fill_default_opts( $values, $record, $post_values ) {
 
         $defaults = self::get_default_opts();
 		foreach ( $defaults as $var => $default ) {
-            if ( is_array($default) ) {
+			if ( is_array( $default ) ) {
                 if ( ! isset( $values[ $var ] ) ) {
 					$values[ $var ] = ( $record && isset( $record->options[ $var ] ) ) ? $record->options[ $var ] : array();
                 }
@@ -257,13 +257,13 @@ class FrmFormsHelper {
                         }
                     }
 
-                    unset($k, $v);
+					unset( $k, $v );
                 }
             } else {
 				$values[ $var ] = ( $post_values && isset( $post_values['options'][ $var ] ) ) ? $post_values['options'][ $var ] : ( ( $record && isset( $record->options[ $var ] ) ) ? $record->options[ $var ] : $default );
             }
 
-            unset($var, $default);
+			unset( $var, $default );
         }
 
         return $values;
@@ -445,24 +445,24 @@ BEFORE_HTML;
 			'entry_key' => true,
 		);
 		foreach ( $codes as $code => $show ) {
-            if ( $code == 'form_name' ) {
-                $replace_with = $form->name;
-            } else if ( $code == 'form_description' ) {
-                $replace_with = FrmAppHelper::use_wpautop($form->description);
-            } else if ( $code == 'entry_key' && isset($_GET) && isset($_GET['entry']) ) {
-                $replace_with = FrmAppHelper::simple_get( 'entry' );
-            } else {
-                $replace_with = '';
-            }
+			if ( $code == 'form_name' ) {
+				$replace_with = $form->name;
+			} elseif ( $code == 'form_description' ) {
+				$replace_with = FrmAppHelper::use_wpautop( $form->description );
+			} elseif ( $code == 'entry_key' && isset( $_GET ) && isset( $_GET['entry'] ) ) {
+				$replace_with = FrmAppHelper::simple_get( 'entry' );
+			} else {
+				$replace_with = '';
+			}
 
 			FrmShortcodeHelper::remove_inline_conditions( ( FrmAppHelper::is_true( $show ) && $replace_with != '' ), $code, $replace_with, $html );
         }
 
-        //replace [form_key]
-        $html = str_replace('[form_key]', $form->form_key, $html);
+		//replace [form_key]
+		$html = str_replace( '[form_key]', $form->form_key, $html );
 
-        //replace [frmurl]
-        $html = str_replace('[frmurl]', FrmFieldsHelper::dynamic_default_values( 'frmurl' ), $html);
+		//replace [frmurl]
+		$html = str_replace( '[frmurl]', FrmFieldsHelper::dynamic_default_values( 'frmurl' ), $html );
 
 		if ( strpos( $html, '[button_label]' ) ) {
 			add_filter( 'frm_submit_button', 'FrmFormsHelper::submit_button_label', 1 );
@@ -471,7 +471,7 @@ BEFORE_HTML;
 			$html = str_replace( '[button_label]', $submit_label, $html );
         }
 
-        $html = apply_filters('frm_form_replace_shortcodes', $html, $form, $values);
+		$html = apply_filters( 'frm_form_replace_shortcodes', $html, $form, $values );
 
 		if ( strpos( $html, '[if back_button]' ) ) {
 			$html = preg_replace( '/(\[if\s+back_button\])(.*?)(\[\/if\s+back_button\])/mis', '', $html );
@@ -489,7 +489,7 @@ BEFORE_HTML;
     }
 
 	public static function submit_button_label( $submit ) {
-        if ( ! $submit || empty($submit) ) {
+		if ( ! $submit || empty( $submit ) ) {
             $frm_settings = FrmAppHelper::get_settings();
             $submit = $frm_settings->submit_value;
         }
@@ -512,19 +512,19 @@ BEFORE_HTML;
 	}
 
 	public static function get_form_style_class( $form = false ) {
-        $style = self::get_form_style($form);
-        $class = ' with_frm_style';
+		$style = self::get_form_style( $form );
+		$class = ' with_frm_style';
 
-        if ( empty($style) ) {
-            if ( FrmAppHelper::is_admin_page('formidable-entries') ) {
-                return $class;
-            } else {
-                return;
-            }
-        }
+		if ( empty( $style ) ) {
+			if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) ) {
+				return $class;
+			} else {
+				return;
+			}
+		}
 
         //If submit button needs to be inline or centered
-        if ( is_object($form) ) {
+		if ( is_object( $form ) ) {
 			$form = $form->options;
 		}
 
@@ -941,7 +941,7 @@ BEFORE_HTML;
             'publish'   => __( 'Published', 'formidable' ),
         );
 
-        if ( ! in_array($status, array_keys($nice_names)) ) {
+		if ( ! in_array( $status, array_keys( $nice_names ) ) ) {
             $status = 'publish';
         }
 

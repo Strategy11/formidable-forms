@@ -486,7 +486,7 @@ class FrmFormAction {
         $action->post_content += $default_values;
 
         foreach ( $default_values as $k => $vals ) {
-            if ( is_array($vals) && ! empty($vals) ) {
+			if ( is_array( $vals ) && ! empty( $vals ) ) {
 				if ( 'event' == $k && ! $this->action_options['force_event'] && ! empty( $action->post_content[ $k ] ) ) {
                     continue;
                 }
@@ -494,9 +494,9 @@ class FrmFormAction {
             }
         }
 
-        if ( ! is_array($action->post_content['event']) ) {
-            $action->post_content['event'] = explode(',', $action->post_content['event']);
-        }
+		if ( ! is_array( $action->post_content['event'] ) ) {
+			$action->post_content['event'] = explode( ',', $action->post_content['event'] );
+		}
 
         return $action;
 	}
@@ -517,7 +517,7 @@ class FrmFormAction {
         $post_ids = FrmDb::get_col( $wpdb->posts, $query, 'ID' );
 
         foreach ( $post_ids as $id ) {
-            wp_delete_post($id);
+			wp_delete_post( $id );
         }
 		self::clear_cache();
 	}
@@ -538,11 +538,11 @@ class FrmFormAction {
 	public function get_global_defaults() {
 	    $defaults = $this->get_defaults();
 
-	    if ( ! isset($defaults['event']) ) {
+		if ( ! isset( $defaults['event'] ) ) {
 			$defaults['event'] = array( 'create' );
 	    }
 
-	    if ( ! isset($defaults['conditions']) ) {
+		if ( ! isset( $defaults['conditions'] ) ) {
 	        $defaults['conditions'] = array(
                 'send_stop' => '',
                 'any_all'   => '',
@@ -562,8 +562,8 @@ class FrmFormAction {
 	 * Migrate settings from form->options into new action.
 	 */
 	public function migrate_to_2( $form, $update = 'update' ) {
-        $action = $this->prepare_new($form->id);
-        $form->options = maybe_unserialize($form->options);
+		$action = $this->prepare_new( $form->id );
+		$form->options = maybe_unserialize( $form->options );
 
         // fill with existing options
         foreach ( $action->post_content as $name => $val ) {
@@ -573,7 +573,7 @@ class FrmFormAction {
             }
         }
 
-        $action = $this->migrate_values($action, $form);
+		$action = $this->migrate_values( $action, $form );
 
         // check if action already exists
         $post_id = get_posts( array(
@@ -583,14 +583,14 @@ class FrmFormAction {
             'numberposts'   => 1,
         ) );
 
-        if ( empty($post_id) ) {
-            // create action now
-            $post_id = $this->save_settings($action);
-        }
+		if ( empty( $post_id ) ) {
+			// create action now
+			$post_id = $this->save_settings( $action );
+		}
 
         if ( $post_id && 'update' == $update ) {
             global $wpdb;
-            $form->options = maybe_serialize($form->options);
+			$form->options = maybe_serialize( $form->options );
 
             // update form options
 			$wpdb->update( $wpdb->prefix . 'frm_forms', array( 'options' => $form->options ), array( 'id' => $form->id ) );
@@ -622,7 +622,7 @@ class FrmFormAction {
 
 			$observed_value = self::get_value_from_entry( $entry, $condition['hide_field'] );
 
-			$stop = FrmFieldsHelper::value_meets_condition($observed_value, $condition['hide_field_cond'], $condition['hide_opt']);
+			$stop = FrmFieldsHelper::value_meets_condition( $observed_value, $condition['hide_field_cond'], $condition['hide_opt'] );
 
 			if ( $notification['conditions']['send_stop'] == 'send' ) {
 				$stop = $stop ? false : true;
@@ -633,7 +633,7 @@ class FrmFormAction {
 
 		if ( $notification['conditions']['any_all'] == 'all' && ! empty( $met ) && isset( $met[0] ) && isset( $met[1] ) ) {
 			$stop = ( $notification['conditions']['send_stop'] == 'send' );
-		} else if ( $notification['conditions']['any_all'] == 'any' && $notification['conditions']['send_stop'] == 'send' && isset($met[0]) ) {
+		} elseif ( $notification['conditions']['any_all'] == 'any' && $notification['conditions']['send_stop'] == 'send' && isset( $met[0] ) ) {
 			$stop = false;
 		}
 

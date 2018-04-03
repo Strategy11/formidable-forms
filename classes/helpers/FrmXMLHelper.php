@@ -1,5 +1,5 @@
 <?php
-if ( ! defined('ABSPATH') ) {
+if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
@@ -40,10 +40,10 @@ class FrmXMLHelper {
 			'terms'    => array(),
         );
 
-        unset($defaults);
+		unset( $defaults );
 
 		if ( ! defined( 'WP_IMPORTING' ) ) {
-            define('WP_IMPORTING', true);
+			define( 'WP_IMPORTING', true );
         }
 
 		if ( ! class_exists( 'DOMDocument' ) ) {
@@ -56,7 +56,7 @@ class FrmXMLHelper {
 			return new WP_Error( 'SimpleXML_parse_error', __( 'There was an error when reading this XML file', 'formidable' ), libxml_get_errors() );
 		}
 
-		if ( ! function_exists('simplexml_import_dom') ) {
+		if ( ! function_exists( 'simplexml_import_dom' ) ) {
 			return new WP_Error( 'SimpleXML_parse_error', __( 'Your server is missing the simplexml_import_dom function', 'formidable' ), libxml_get_errors() );
 		}
 
@@ -71,14 +71,14 @@ class FrmXMLHelper {
         // add terms, forms (form and field ids), posts (post ids), and entries to db, in that order
 		foreach ( array( 'term', 'form', 'view' ) as $item_type ) {
             // grab cats, tags, and terms, or forms or posts
-            if ( isset($xml->{$item_type} ) ) {
+			if ( isset( $xml->{$item_type} ) ) {
 				$function_name = 'import_xml_' . $item_type . 's';
 				$imported = self::$function_name( $xml->{$item_type}, $imported );
 				unset( $function_name, $xml->{$item_type} );
             }
         }
 
-	    $return = apply_filters('frm_importing_xml', $imported, $xml );
+		$return = apply_filters( 'frm_importing_xml', $imported, $xml );
 
 	    return $return;
     }
@@ -169,7 +169,7 @@ class FrmXMLHelper {
 
 			do_action( 'frm_after_import_form', $form_id, $form );
 
-		    unset($form, $item);
+			unset( $form, $item );
 		}
 
 		self::maybe_update_child_form_parent_id( $imported['forms'], $child_forms );
@@ -225,7 +225,7 @@ class FrmXMLHelper {
 		foreach ( $form_fields as $f ) {
 			$old_fields[ $f->id ] = $f;
 			$old_fields[ $f->field_key ] = $f->id;
-			unset($f);
+			unset( $f );
 		}
 		$form_fields = $old_fields;
 		return $form_fields;
@@ -256,7 +256,7 @@ class FrmXMLHelper {
 		$regular_forms = array();
 
 		foreach ( $forms as $form ) {
-			$parent_form_id = isset( $form->parent_form_id) ? (int) $form->parent_form_id : 0;
+			$parent_form_id = isset( $form->parent_form_id ) ? (int) $form->parent_form_id : 0;
 
 			if ( $parent_form_id ) {
 				$child_forms[] = $form;
@@ -327,7 +327,7 @@ class FrmXMLHelper {
 			self::maybe_update_form_select( $f, $imported );
 			self::maybe_update_get_values_form_setting( $imported, $f );
 
-			if ( ! empty($this_form) ) {
+			if ( ! empty( $this_form ) ) {
 				// check for field to edit by field id
 				if ( isset( $form_fields[ $f['id'] ] ) ) {
 					FrmField::update( $f['id'], $f );
@@ -341,7 +341,7 @@ class FrmXMLHelper {
 					}
 				} else if ( isset( $form_fields[ $f['field_key'] ] ) ) {
 					// check for field to edit by field key
-					unset($f['id']);
+					unset( $f['id'] );
 
 					FrmField::update( $form_fields[ $f['field_key'] ], $f );
 					$imported['updated']['fields']++;
@@ -366,11 +366,11 @@ class FrmXMLHelper {
 			'name'          => (string) $field->name,
 			'description'   => (string) $field->description,
 			'type'          => (string) $field->type,
-			'default_value' => FrmAppHelper::maybe_json_decode( (string) $field->default_value),
+			'default_value' => FrmAppHelper::maybe_json_decode( (string) $field->default_value ),
 			'field_order'   => (int) $field->field_order,
 			'form_id'       => (int) $form_id,
 			'required'      => (int) $field->required,
-			'options'       => FrmAppHelper::maybe_json_decode( (string) $field->options),
+			'options'       => FrmAppHelper::maybe_json_decode( (string) $field->options ),
 			'field_options' => FrmAppHelper::maybe_json_decode( (string) $field->field_options ),
 		);
 	}
@@ -747,16 +747,16 @@ class FrmXMLHelper {
     private static function update_postmeta( &$post, $post_id ) {
         foreach ( $post['postmeta'] as $k => $v ) {
             if ( '_edit_last' == $k ) {
-                $v = FrmAppHelper::get_user_id_param($v);
+				$v = FrmAppHelper::get_user_id_param( $v );
             } else if ( '_thumbnail_id' == $k && FrmAppHelper::pro_is_installed() ) {
                 //change the attachment ID
 				$field_obj = FrmFieldFactory::get_field_type( 'file' );
 				$v = $field_obj->get_file_id( $v );
             }
 
-            update_post_meta($post_id, $k, $v);
+			update_post_meta( $post_id, $k, $v );
 
-            unset($k, $v);
+			unset( $k, $v );
         }
     }
 
@@ -795,13 +795,13 @@ class FrmXMLHelper {
      * @param string $message
      */
 	public static function parse_message( $result, &$message, &$errors ) {
-        if ( is_wp_error($result) ) {
+		if ( is_wp_error( $result ) ) {
             $errors[] = $result->get_error_message();
         } else if ( ! $result ) {
             return;
         }
 
-        if ( ! is_array($result) ) {
+		if ( ! is_array( $result ) ) {
             $message = is_string( $result ) ? $result : htmlentities( print_r( $result, 1 ) );
             return;
         }
@@ -818,17 +818,17 @@ class FrmXMLHelper {
                 continue;
             }
 
-            $s_message = array();
-            foreach ( $results as $k => $m ) {
-                self::item_count_message($m, $k, $s_message);
-                unset($k, $m);
-            }
+			$s_message = array();
+			foreach ( $results as $k => $m ) {
+				self::item_count_message( $m, $k, $s_message );
+				unset( $k, $m );
+			}
 
-            if ( ! empty($s_message) ) {
+			if ( ! empty( $s_message ) ) {
 				$message .= '<li><strong>' . $t_strings[ $type ] . ':</strong> ';
-                $message .= implode(', ', $s_message);
-                $message .= '</li>';
-            }
+				$message .= implode( ', ', $s_message );
+				$message .= '</li>';
+			}
         }
 
         if ( $message == '<ul>' ) {
@@ -887,9 +887,9 @@ class FrmXMLHelper {
 	}
 
 	public static function cdata( $str ) {
-	    $str = maybe_unserialize($str);
-	    if ( is_array($str) ) {
-	        $str = json_encode($str);
+		$str = maybe_unserialize( $str );
+		if ( is_array( $str ) ) {
+			$str = json_encode( $str );
 		} else if ( seems_utf8( $str ) == false ) {
 			$str = utf8_encode( $str );
 		}
@@ -1242,36 +1242,36 @@ class FrmXMLHelper {
 				if ( is_numeric( $email_key ) ) {
 					$post_content['conditions'][ $email_key ] = self::switch_action_field_ids( $val, array( 'hide_field' ) );
 				}
-				unset( $email_key, $val);
+				unset( $email_key, $val );
 			}
 		}
 	}
 
     private static function migrate_autoresponder_to_action( $form_options, $form_id, &$notifications ) {
-        if ( isset($form_options['auto_responder']) && $form_options['auto_responder'] && isset($form_options['ar_email_message']) && $form_options['ar_email_message'] ) {
-            // migrate autoresponder
+		if ( isset( $form_options['auto_responder'] ) && $form_options['auto_responder'] && isset( $form_options['ar_email_message'] ) && $form_options['ar_email_message'] ) {
+			// migrate autoresponder
 
-            $email_field = isset($form_options['ar_email_to']) ? $form_options['ar_email_to'] : 0;
-            if ( strpos($email_field, '|') ) {
-                // data from entries field
-                $email_field = explode('|', $email_field);
-                if ( isset($email_field[1]) ) {
-                    $email_field = $email_field[1];
-                }
-            }
-            if ( is_numeric($email_field) && ! empty($email_field) ) {
+			$email_field = isset( $form_options['ar_email_to'] ) ? $form_options['ar_email_to'] : 0;
+			if ( strpos( $email_field, '|' ) ) {
+				// data from entries field
+				$email_field = explode( '|', $email_field );
+				if ( isset( $email_field[1] ) ) {
+					$email_field = $email_field[1];
+				}
+			}
+			if ( is_numeric( $email_field ) && ! empty( $email_field ) ) {
 				$email_field = '[' . $email_field . ']';
-            }
+			}
 
             $notification = $form_options;
             $new_notification2 = array(
-                'post_content'  => array(
-                    'email_message' => $notification['ar_email_message'],
-                    'email_subject' => isset($notification['ar_email_subject']) ? $notification['ar_email_subject'] : '',
-                    'email_to'      => $email_field,
-                    'plain_text'    => isset($notification['ar_plain_text']) ? $notification['ar_plain_text'] : 0,
-                    'inc_user_info' => 0,
-                ),
+				'post_content'  => array(
+					'email_message' => $notification['ar_email_message'],
+					'email_subject' => isset( $notification['ar_email_subject'] ) ? $notification['ar_email_subject'] : '',
+					'email_to'      => $email_field,
+					'plain_text'    => isset( $notification['ar_plain_text'] ) ? $notification['ar_plain_text'] : 0,
+					'inc_user_info' => 0,
+				),
 				'post_name'     => $form_id . '_email_' . count( $notifications ),
             );
 

@@ -33,11 +33,11 @@ class FrmSettings {
 	public $no_ips;
 
     public function __construct() {
-        if ( ! defined('ABSPATH') ) {
-            die('You are not allowed to call this page directly.');
-        }
+		if ( ! defined( 'ABSPATH' ) ) {
+			die( 'You are not allowed to call this page directly.' );
+		}
 
-        $settings = get_transient($this->option_name);
+		$settings = get_transient( $this->option_name );
 
         if ( ! is_object($settings) ) {
             $settings = $this->translate_settings($settings);
@@ -69,8 +69,8 @@ class FrmSettings {
             $settings = $this;
         }
 
-        update_option($this->option_name, $settings);
-        set_transient($this->option_name, $settings);
+		update_option( $this->option_name, $settings );
+		set_transient( $this->option_name, $settings );
 
         return $settings;
     }
@@ -107,8 +107,8 @@ class FrmSettings {
 	private function set_default_options() {
         $this->fill_recaptcha_settings();
 
-        if ( ! isset($this->load_style) ) {
-            if ( ! isset($this->custom_style) ) {
+		if ( ! isset( $this->load_style ) ) {
+			if ( ! isset( $this->custom_style ) ) {
                 $this->custom_style = true;
             }
 
@@ -118,16 +118,16 @@ class FrmSettings {
         $this->fill_with_defaults();
 
         if ( is_multisite() && is_admin() ) {
-            $mu_menu = get_site_option('frm_admin_menu_name');
-            if ( $mu_menu && ! empty($mu_menu) ) {
+			$mu_menu = get_site_option( 'frm_admin_menu_name' );
+			if ( $mu_menu && ! empty( $mu_menu ) ) {
                 $this->menu = $mu_menu;
                 $this->mu_menu = 1;
             }
         }
 
-        $frm_roles = FrmAppHelper::frm_capabilities('pro');
-        foreach ( $frm_roles as $frm_role => $frm_role_description ) {
-            if ( ! isset($this->$frm_role) ) {
+		$frm_roles = FrmAppHelper::frm_capabilities( 'pro' );
+		foreach ( $frm_roles as $frm_role => $frm_role_description ) {
+			if ( ! isset( $this->$frm_role ) ) {
                 $this->$frm_role = 'administrator';
             }
         }
@@ -139,7 +139,7 @@ class FrmSettings {
         foreach ( $settings as $setting => $default ) {
 			if ( isset( $params[ 'frm_' . $setting ] ) ) {
 				$this->{$setting} = $params[ 'frm_' . $setting ];
-            } else if ( ! isset($this->{$setting}) ) {
+			} elseif ( ! isset( $this->{$setting} ) ) {
                 $this->{$setting} = $default;
             }
 
@@ -147,7 +147,7 @@ class FrmSettings {
 				$this->{$setting} = $default;
 			}
 
-            unset($setting, $default);
+			unset( $setting, $default );
         }
     }
 
@@ -155,23 +155,23 @@ class FrmSettings {
         $privkey = '';
 		$re_lang = '';
 
-        if ( ! isset($this->pubkey) ) {
-            // get the options from the database
-            $recaptcha_opt = is_multisite() ? get_site_option('recaptcha') : get_option('recaptcha');
-            $this->pubkey = isset($recaptcha_opt['pubkey']) ? $recaptcha_opt['pubkey'] : '';
-            $privkey = isset($recaptcha_opt['privkey']) ? $recaptcha_opt['privkey'] : $privkey;
-            $re_lang = isset($recaptcha_opt['re_lang']) ? $recaptcha_opt['re_lang'] : $re_lang;
-        }
+		if ( ! isset( $this->pubkey ) ) {
+			// get the options from the database
+			$recaptcha_opt = is_multisite() ? get_site_option( 'recaptcha' ) : get_option( 'recaptcha' );
+			$this->pubkey = isset( $recaptcha_opt['pubkey'] ) ? $recaptcha_opt['pubkey'] : '';
+			$privkey = isset( $recaptcha_opt['privkey'] ) ? $recaptcha_opt['privkey'] : $privkey;
+			$re_lang = isset( $recaptcha_opt['re_lang'] ) ? $recaptcha_opt['re_lang'] : $re_lang;
+		}
 
-        if ( ! isset($this->re_msg) || empty($this->re_msg) ) {
+		if ( ! isset( $this->re_msg ) || empty( $this->re_msg ) ) {
             $this->re_msg = __( 'The reCAPTCHA was not entered correctly', 'formidable' );
         }
 
-        if ( ! isset($this->privkey) ) {
+		if ( ! isset( $this->privkey ) ) {
             $this->privkey = $privkey;
         }
 
-        if ( ! isset($this->re_lang) ) {
+		if ( ! isset( $this->re_lang ) ) {
             $this->re_lang = $re_lang;
         }
 
@@ -185,16 +185,16 @@ class FrmSettings {
     }
 
 	public function update( $params ) {
-        $this->fill_with_defaults($params);
-        $this->update_settings($params);
+		$this->fill_with_defaults( $params );
+		$this->update_settings( $params );
 
-        if ( $this->mu_menu ) {
-            update_site_option('frm_admin_menu_name', $this->menu);
-        } else if ( current_user_can('administrator') ) {
-            update_site_option('frm_admin_menu_name', false);
-        }
+		if ( $this->mu_menu ) {
+			update_site_option( 'frm_admin_menu_name', $this->menu );
+		} elseif ( current_user_can( 'administrator' ) ) {
+			update_site_option( 'frm_admin_menu_name', false );
+		}
 
-        $this->update_roles($params);
+		$this->update_roles( $params );
 
         do_action( 'frm_update_settings', $params );
 
@@ -206,9 +206,9 @@ class FrmSettings {
     }
 
 	private function update_settings( $params ) {
-        $this->mu_menu = isset($params['frm_mu_menu']) ? $params['frm_mu_menu'] : 0;
+		$this->mu_menu = isset( $params['frm_mu_menu'] ) ? $params['frm_mu_menu'] : 0;
 
-        $this->pubkey = trim($params['frm_pubkey']);
+		$this->pubkey = trim( $params['frm_pubkey'] );
         $this->privkey = $params['frm_privkey'];
 		$this->re_type = $params['frm_re_type'];
         $this->re_lang = $params['frm_re_lang'];
@@ -216,7 +216,7 @@ class FrmSettings {
 
         $this->load_style = $params['frm_load_style'];
 
-        $this->use_html = isset($params['frm_use_html']) ? $params['frm_use_html'] : 0;
+		$this->use_html = isset( $params['frm_use_html'] ) ? $params['frm_use_html'] : 0;
 		$this->jquery_css = isset( $params['frm_jquery_css'] ) ? absint( $params['frm_jquery_css'] ) : 0;
 		$this->accordion_js = isset( $params['frm_accordion_js'] ) ? absint( $params['frm_accordion_js'] ) : 0;
 		$this->fade_form = isset( $params['frm_fade_form'] ) ? absint( $params['frm_fade_form'] ) : 0;
@@ -238,7 +238,7 @@ class FrmSettings {
             }
 
             foreach ( $roles as $role => $details ) {
-                if ( in_array($role, $this->$frm_role) ) {
+				if ( in_array( $role, $this->$frm_role ) ) {
     			    $wp_roles->add_cap( $role, $frm_role );
     			} else {
     			    $wp_roles->remove_cap( $role, $frm_role );
@@ -248,13 +248,13 @@ class FrmSettings {
     }
 
 	public function store() {
-        // Save the posted value in the database
+		// Save the posted value in the database
 
-        update_option('frm_options', $this);
+		update_option( 'frm_options', $this );
 
-        delete_transient('frm_options');
-        set_transient('frm_options', $this);
+		delete_transient( 'frm_options' );
+		set_transient( 'frm_options', $this );
 
-        do_action( 'frm_store_settings' );
-    }
+		do_action( 'frm_store_settings' );
+	}
 }

@@ -177,7 +177,7 @@ class FrmAppController {
 <div class="update-nag frm-update-to-pro">
 	<?php echo FrmAppHelper::kses( $tip['tip'] ); ?>
 	<span><?php echo FrmAppHelper::kses( $tip['call'] ); ?></span>
-	<a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url('https://formidableforms.com?banner=1&tip=' . absint( $tip['num'] ) ) ); ?>" class="button">Upgrade to Pro</a>
+	<a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url( 'https://formidableforms.com?banner=1&tip=' . absint( $tip['num'] ) ) ); ?>" class="button">Upgrade to Pro</a>
 </div>
 <?php
 		}
@@ -473,7 +473,7 @@ class FrmAppController {
     }
 
     public static function uninstall() {
-		FrmAppHelper::permission_check('administrator');
+		FrmAppHelper::permission_check( 'administrator' );
         check_ajax_referer( 'frm_ajax', 'nonce' );
 
 		$frmdb = new FrmMigrate();
@@ -513,7 +513,7 @@ class FrmAppController {
 	}
 
     public static function deauthorize() {
-		FrmAppHelper::permission_check('frm_change_settings');
+		FrmAppHelper::permission_check( 'frm_change_settings' );
         check_ajax_referer( 'frm_ajax', 'nonce' );
 
         delete_option( 'frmpro-credentials' );

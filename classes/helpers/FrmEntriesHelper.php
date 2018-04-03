@@ -1,5 +1,5 @@
 <?php
-if ( ! defined('ABSPATH') ) {
+if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
@@ -13,9 +13,9 @@ class FrmEntriesHelper {
 		);
 
         $values['fields'] = array();
-        if ( empty($fields) ) {
-            return apply_filters('frm_setup_new_entry', $values);
-        }
+		if ( empty( $fields ) ) {
+			return apply_filters( 'frm_setup_new_entry', $values );
+		}
 
         foreach ( (array) $fields as $field ) {
 			$original_default = $field->default_value;
@@ -36,9 +36,9 @@ class FrmEntriesHelper {
 
             $values['fields'][] = $field_array;
 
-            if ( ! $form || ! isset($form->id) ) {
-                $form = FrmForm::getOne($field->form_id);
-            }
+			if ( ! $form || ! isset( $form->id ) ) {
+				$form = FrmForm::getOne( $field->form_id );
+			}
         }
 
 		$form->options = maybe_unserialize( $form->options );
@@ -98,7 +98,7 @@ class FrmEntriesHelper {
 		}
 
 		if ( ! is_array( $new_value ) ) {
-			$new_value = str_replace('"', '&quot;', $new_value);
+			$new_value = str_replace( '"', '&quot;', $new_value );
 		}
 
 		return $new_value;
@@ -131,26 +131,26 @@ class FrmEntriesHelper {
 		$values['item_key'] = FrmAppHelper::get_post_param( 'item_key', $record->item_key, 'sanitize_title' );
         $values['form_id'] = $record->form_id;
         $values['is_draft'] = $record->is_draft;
-        return apply_filters('frm_setup_edit_entry_vars', $values, $record);
+		return apply_filters( 'frm_setup_edit_entry_vars', $values, $record );
     }
 
 	public static function replace_default_message( $message, $atts ) {
-        if ( strpos($message, '[default-message') === false &&
-            strpos($message, '[default_message') === false &&
+		if ( strpos( $message, '[default-message') === false &&
+			strpos( $message, '[default_message') === false &&
             ! empty( $message ) ) {
             return $message;
         }
 
-        if ( empty($message) ) {
+		if ( empty( $message ) ) {
             $message = '[default-message]';
         }
 
-        preg_match_all("/\[(default-message|default_message)\b(.*?)(?:(\/))?\]/s", $message, $shortcodes, PREG_PATTERN_ORDER);
+		preg_match_all( "/\[(default-message|default_message)\b(.*?)(?:(\/))?\]/s", $message, $shortcodes, PREG_PATTERN_ORDER );
 
         foreach ( $shortcodes[0] as $short_key => $tag ) {
 			$add_atts = FrmShortcodeHelper::get_shortcode_attribute_array( $shortcodes[2][ $short_key ] );
 			if ( ! empty( $add_atts ) ) {
-                $this_atts = array_merge($atts, $add_atts);
+				$this_atts = array_merge( $atts, $add_atts );
             } else {
                 $this_atts = $atts;
             }
@@ -171,9 +171,9 @@ class FrmEntriesHelper {
 			FrmProEntriesHelper::get_dynamic_list_values( $field, $entry, $field_value );
         }
 
-        if ( $field->form_id == $entry->form_id || empty($atts['embedded_field_id']) ) {
-            return self::display_value($field_value, $field, $atts);
-        }
+		if ( $field->form_id == $entry->form_id || empty( $atts['embedded_field_id'] ) ) {
+			return self::display_value( $field_value, $field, $atts );
+		}
 
         // this is an embeded form
         $val = '';
@@ -270,7 +270,7 @@ class FrmEntriesHelper {
         }
 
 		$unfiltered_value = maybe_unserialize( $value );
-		$value = apply_filters('frm_display_value_custom', $unfiltered_value, $field, $atts);
+		$value = apply_filters( 'frm_display_value_custom', $unfiltered_value, $field, $atts );
 		$value = apply_filters( 'frm_display_' . $field->type . '_value_custom', $value, compact( 'field', 'atts' ) );
 
 		if ( $value == $unfiltered_value ) {
@@ -278,7 +278,7 @@ class FrmEntriesHelper {
 		}
 
         if ( $atts['truncate'] && $atts['type'] != 'url' ) {
-            $value = FrmAppHelper::truncate($value, 50);
+			$value = FrmAppHelper::truncate( $value, 50 );
         }
 
 		if ( ! $atts['keepjs'] && ! is_array( $value ) ) {
@@ -293,7 +293,7 @@ class FrmEntriesHelper {
         if ( isset( $args['other'] ) && $args['other'] ) {
             $value = $args['temp_value'];
         }
-        if ( empty($args['parent_field_id']) ) {
+		if ( empty( $args['parent_field_id'] ) ) {
             $_POST['item_meta'][ $field->id ] = $value;
         } else {
             $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field->id ] = $value;
@@ -303,7 +303,7 @@ class FrmEntriesHelper {
 	public static function get_posted_value( $field, &$value, $args ) {
 		$field_id = is_object( $field ) ? $field->id : $field;
 
-        if ( empty($args['parent_field_id']) ) {
+		if ( empty( $args['parent_field_id'] ) ) {
             $value = isset( $_POST['item_meta'][ $field_id ] ) ? $_POST['item_meta'][ $field_id ] : '';
         } else {
             $value = isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field_id ] ) ? $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field_id ] : '';
@@ -395,7 +395,7 @@ class FrmEntriesHelper {
             }
         } else {
 			// Radio and dropdowns
-            $other_key = array_filter( array_keys($field->options), 'is_string');
+			$other_key = array_filter( array_keys( $field->options ), 'is_string' );
             $other_key = reset( $other_key );
 
             // Multi-select dropdown
@@ -432,7 +432,7 @@ class FrmEntriesHelper {
 				$content .= "\n\n";
 			}
 
-			if ( is_array($val) ) {
+			if ( is_array( $val ) ) {
 				$val = FrmAppHelper::array_flatten( $val );
 				$val = implode( ', ', $val );
 			}
@@ -496,7 +496,7 @@ class FrmEntriesHelper {
 		preg_match_all( $pattern, $u_agent, $matches ); // get the matching numbers
 
 		// see how many we have
-		$i = count($matches['browser']);
+		$i = count( $matches['browser'] );
 
 		if ( $i > 1 ) {
 			//we will have two since we are not using 'other' argument yet

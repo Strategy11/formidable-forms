@@ -65,8 +65,8 @@ class FrmFormsListHelper extends FrmListHelper {
 			'sanitize' => 'sanitize_text_field',
 		) );
 	    if ( $s != '' ) {
-	        preg_match_all('/".*?("|$)|((?<=[\\s",+])|^)[^\\s",+]+/', $s, $matches);
-		    $search_terms = array_map('trim', $matches[0]);
+			preg_match_all( '/".*?("|$)|((?<=[\\s",+])|^)[^\\s",+]+/', $s, $matches );
+			$search_terms = array_map( 'trim', $matches[0] );
 			foreach ( (array) $search_terms as $term ) {
 				$s_query[] = array(
 					'or'               => true,
@@ -276,23 +276,23 @@ class FrmFormsListHelper extends FrmListHelper {
 			    case 'entries':
 					if ( isset( $item->options['no_save'] ) && $item->options['no_save'] ) {
 						$val = '<i class="frm_icon_font frm_forbid_icon frm_bstooltip" title="' . esc_attr('Saving entries is disabled for this form', 'formidable' ) . '"></i>';
-			        } else {
-			            $text = FrmEntry::getRecordCount($item->id);
-						$val = current_user_can('frm_view_entries') ? '<a href="' . esc_url( admin_url( 'admin.php?page=formidable-entries&form=' . $item->id ) ) . '">' . $text . '</a>' : $text;
-                        unset($text);
-                    }
+					} else {
+						$text = FrmEntry::getRecordCount( $item->id );
+						$val = current_user_can( 'frm_view_entries' ) ? '<a href="' . esc_url( admin_url( 'admin.php?page=formidable-entries&form=' . $item->id ) ) . '">' . $text . '</a>' : $text;
+						unset( $text );
+					}
 			        break;
                 case 'type':
                     $val = ( $item->is_template && $item->default_template ) ? __( 'Default', 'formidable' ) : __( 'Custom', 'formidable' );
                     break;
 			}
 
-			if ( isset($val) ) {
+			if ( isset( $val ) ) {
 			    $r .= "<td $attributes>";
 			    $r .= $val;
 			    $r .= '</td>';
 			}
-			unset($val);
+			unset( $val );
 		}
 		$r .= '</tr>';
 
@@ -313,7 +313,7 @@ class FrmFormsListHelper extends FrmListHelper {
 			return;
 		}
 
-		if ( current_user_can('frm_edit_forms') ) {
+		if ( current_user_can( 'frm_edit_forms' ) ) {
 			if ( ! $item->is_template || ! $item->default_template ) {
 				$actions['frm_edit'] = '<a href="' . esc_url( $edit_link ) . '">' . __( 'Edit' ) . '</a>';
 			}
