@@ -63,7 +63,8 @@
 
 <div class="clear"></div>
 <p class="frm_no_bottom_margin">
-	<label><input type="checkbox" name="<?php echo esc_attr( $frm_style->get_field_name( 'important_style' ) ); ?>" id="frm_important_style" value="1" <?php checked($style->post_content['important_style'], 1) ?> />
+	<label>
+		<input type="checkbox" name="<?php echo esc_attr( $frm_style->get_field_name( 'important_style' ) ); ?>" id="frm_important_style" value="1" <?php checked( $style->post_content['important_style'], 1 ); ?> />
 		<?php esc_html_e( 'Override theme styling', 'formidable' ) ?> <span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'This will add !important to many of the lines in the Formidable styling to make sure it will be used.', 'formidable' ) ?>" ></span>
 	</label>
 </p>

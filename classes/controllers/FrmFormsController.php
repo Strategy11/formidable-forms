@@ -161,7 +161,7 @@ class FrmFormsController {
 
 		$id = FrmAppHelper::get_param( 'id', '', 'get', 'absint' );
 
-		$errors = FrmForm::validate( $_POST ) ;
+		$errors = FrmForm::validate( $_POST );
 		if ( count( $errors ) > 0 ) {
 			return self::get_settings_vars( $id, $errors );
 		}

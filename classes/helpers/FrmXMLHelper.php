@@ -702,7 +702,7 @@ class FrmXMLHelper {
 		    $taxonomy = (string) $att['domain'];
 			if ( is_taxonomy_hierarchical( $taxonomy ) ) {
 		        $name = (string) $att['nicename'];
-				$h_term = get_term_by('slug', $name, $taxonomy );
+				$h_term = get_term_by( 'slug', $name, $taxonomy );
 		        if ( $h_term ) {
 		            $name = $h_term->term_id;
 		        }
