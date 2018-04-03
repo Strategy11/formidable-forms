@@ -7,9 +7,9 @@ class FrmDb {
     public $entry_metas;
 
     public function __construct() {
-        if ( ! defined('ABSPATH') ) {
-            die('You are not allowed to call this page directly.');
-        }
+		if ( ! defined( 'ABSPATH' ) ) {
+			die( 'You are not allowed to call this page directly.' );
+		}
 
 		_deprecated_function( __METHOD__, '2.05.06', 'FrmMigrate' );
         global $wpdb;
@@ -26,7 +26,7 @@ class FrmDb {
 	 * @param string $starts_with
      */
     public static function get_where_clause_and_values( &$args, $starts_with = ' WHERE ' ) {
-        if ( empty($args) ) {
+		if ( empty( $args ) ) {
 			// add an arg to prevent prepare from failing
 			$args = array(
 				'where' => $starts_with . '1=%d',
@@ -94,7 +94,7 @@ class FrmDb {
 		$key = trim( $key );
 
 		if ( strpos( $key, 'created_at' ) !== false || strpos( $key, 'updated_at' ) !== false ) {
-            $k = explode(' ', $key);
+			$k = explode( ' ', $key );
             $where .= ' DATE_FORMAT(' . reset( $k ) . ', %s) ' . str_replace( reset( $k ), '', $key );
             $values[] = '%Y-%m-%d %H:%i:%s';
         } else {
@@ -107,7 +107,7 @@ class FrmDb {
         if ( is_array( $value ) ) {
             // translate array of values to "in"
 			if ( strpos( $lowercase_key, 'like' ) !== false ) {
-				$where = preg_replace('/' . $key . '$/', '', $where);
+				$where = preg_replace( '/' . $key . '$/', '', $where );
 				$where .= '(';
 				$start = true;
 				foreach ( $value as $v ) {
@@ -316,8 +316,8 @@ class FrmDb {
     private static function get_group_and_table_name( &$table, &$group ) {
 		global $wpdb, $wpmuBaseTablePrefix;
 
-        $table_parts = explode(' ', $table);
-        $group = reset($table_parts);
+		$table_parts = explode( ' ', $table );
+		$group = reset( $table_parts );
         $group = str_replace( $wpdb->prefix, '', $group );
 
 		$prefix = $wpmuBaseTablePrefix ? $wpmuBaseTablePrefix : $wpdb->base_prefix;
@@ -332,7 +332,7 @@ class FrmDb {
     }
 
     private static function convert_options_to_array( &$args, $order_by = '', $limit = '' ) {
-        if ( ! is_array($args) ) {
+		if ( ! is_array( $args ) ) {
 			$args = array( 'order_by' => $args );
         }
 

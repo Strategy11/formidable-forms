@@ -135,8 +135,8 @@ class FrmEntriesHelper {
     }
 
 	public static function replace_default_message( $message, $atts ) {
-		if ( strpos( $message, '[default-message') === false &&
-			strpos( $message, '[default_message') === false &&
+		if ( strpos( $message, '[default-message' ) === false &&
+			strpos( $message, '[default_message' ) === false &&
             ! empty( $message ) ) {
             return $message;
         }
@@ -178,7 +178,7 @@ class FrmEntriesHelper {
         // this is an embeded form
         $val = '';
 
-	    if ( strpos($atts['embedded_field_id'], 'form') === 0 ) {
+		if ( strpos( $atts['embedded_field_id'], 'form' ) === 0 ) {
             //this is a repeating section
 			$child_entries = FrmEntry::getAll( array( 'it.parent_item_id' => $entry->id ) );
         } else {
@@ -192,7 +192,7 @@ class FrmEntriesHelper {
 
 	    $field_value = array();
 
-        if ( ! isset($child_entries) || ! $child_entries || ! FrmAppHelper::pro_is_installed() ) {
+		if ( ! isset( $child_entries ) || ! $child_entries || ! FrmAppHelper::pro_is_installed() ) {
             return $val;
         }
 
@@ -201,17 +201,17 @@ class FrmEntriesHelper {
             $atts['post_id'] = $child_entry->post_id;
 
             // get the value for this field -- check for post values as well
-            $entry_val = FrmProEntryMetaHelper::get_post_or_meta_value($child_entry, $field);
+			$entry_val = FrmProEntryMetaHelper::get_post_or_meta_value( $child_entry, $field );
 
             if ( $entry_val ) {
                 // foreach entry get display_value
-                $field_value[] = self::display_value($entry_val, $field, $atts);
+				$field_value[] = self::display_value( $entry_val, $field, $atts );
             }
 
-            unset($child_entry);
+			unset( $child_entry );
         }
 
-        $val = implode(', ', (array) $field_value );
+		$val = implode( ', ', (array) $field_value );
 		return FrmAppHelper::kses( $val, 'all' );
     }
 
@@ -246,22 +246,22 @@ class FrmEntriesHelper {
 			$atts['html'] = true;
 		}
 
-        $atts = apply_filters('frm_display_value_atts', $atts, $field, $value);
+		$atts = apply_filters( 'frm_display_value_atts', $atts, $field, $value );
 
-        if ( ! isset($field->field_options['post_field']) ) {
+		if ( ! isset( $field->field_options['post_field'] ) ) {
             $field->field_options['post_field'] = '';
         }
 
-        if ( ! isset($field->field_options['custom_field']) ) {
+		if ( ! isset( $field->field_options['custom_field'] ) ) {
             $field->field_options['custom_field'] = '';
         }
 
         if ( FrmAppHelper::pro_is_installed() && $atts['post_id'] && ( $field->field_options['post_field'] || $atts['type'] == 'tag' ) ) {
             $atts['pre_truncate'] = $atts['truncate'];
             $atts['truncate'] = true;
-            $atts['exclude_cat'] = isset($field->field_options['exclude_cat']) ? $field->field_options['exclude_cat'] : 0;
+			$atts['exclude_cat'] = isset( $field->field_options['exclude_cat'] ) ? $field->field_options['exclude_cat'] : 0;
 
-            $value = FrmProEntryMetaHelper::get_post_value($atts['post_id'], $field->field_options['post_field'], $field->field_options['custom_field'], $atts);
+			$value = FrmProEntryMetaHelper::get_post_value( $atts['post_id'], $field->field_options['post_field'], $field->field_options['custom_field'], $atts );
             $atts['truncate'] = $atts['pre_truncate'];
         }
 

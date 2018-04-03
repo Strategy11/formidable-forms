@@ -3,7 +3,7 @@
 	<div id="frm-fixed">
     <?php
 
-    if ( ! isset($hide_preview) || ! $hide_preview ) {
+	if ( ! isset( $hide_preview ) || ! $hide_preview ) {
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/_publish_box.php' );
     }
 	?>

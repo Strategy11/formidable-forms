@@ -269,11 +269,11 @@ class FrmFieldsHelper {
 		$defaults = array(
 			'unique_msg' => array(
 				'full' => $default_settings['unique_msg'],
-				'part' => sprintf( __('%s must be unique', 'formidable' ), $field_name ),
+				'part' => sprintf( __( '%s must be unique', 'formidable' ), $field_name ),
 			),
 			'invalid'  => array(
 				'full' => __( 'This field is invalid', 'formidable' ),
-				'part' => sprintf( __('%s is invalid', 'formidable' ), $field_name ),
+				'part' => sprintf( __( '%s is invalid', 'formidable' ), $field_name ),
 			),
 			'blank'    => array(
 				'full' => $frm_settings->blank_msg,
@@ -305,7 +305,7 @@ class FrmFieldsHelper {
 			$default_html = apply_filters( 'frm_other_custom_html', '', $type );
 		}
 
-		return apply_filters('frm_custom_html', $default_html, $type);
+		return apply_filters( 'frm_custom_html', $default_html, $type );
 	}
 
 	/**
@@ -439,7 +439,7 @@ class FrmFieldsHelper {
 			// Get string for Other text field, if needed
 			$other_val = self::get_other_val( compact( 'opt_key', 'field' ) );
 
-			$checked = ( $other_val || isset( $field['value'] ) && ( ( ! is_array( $field['value'] ) && $field['value'] == $field_val ) || ( is_array($field['value'] ) && in_array( $field_val, $field['value'] ) ) ) ) ? ' checked="checked"' : '';
+			$checked = ( $other_val || isset( $field['value'] ) && ( ( ! is_array( $field['value'] ) && $field['value'] == $field_val ) || ( is_array( $field['value'] ) && in_array( $field_val, $field['value'] ) ) ) ) ? ' checked="checked"' : '';
 
 		    // If this is an "Other" option, get the HTML for it
 			if ( self::is_other_opt( $opt_key ) ) {
@@ -470,7 +470,7 @@ class FrmFieldsHelper {
 	 * @return string
 	 */
 	public static function get_term_link( $tax_id ) {
-        $tax = get_taxonomy($tax_id);
+		$tax = get_taxonomy( $tax_id );
         if ( ! $tax ) {
             return '';
         }
@@ -479,7 +479,7 @@ class FrmFieldsHelper {
             __( 'Please add options from the WordPress "%1$s" page', 'formidable' ),
 			'<a href="' . esc_url( admin_url( 'edit-tags.php?taxonomy=' . $tax->name ) ) . '" target="_blank">' . ( empty( $tax->labels->name ) ? __( 'Categories' ) : $tax->labels->name ) . '</a>'
         );
-        unset($tax);
+		unset( $tax );
 
         return $link;
     }
@@ -488,8 +488,8 @@ class FrmFieldsHelper {
 		$hide_opt = self::get_value_for_comparision( $hide_opt );
 		$observed_value = self::get_value_for_comparision( $observed_value );
 
-        if ( is_array($observed_value) ) {
-            return self::array_value_condition($observed_value, $cond, $hide_opt);
+		if ( is_array( $observed_value ) ) {
+			return self::array_value_condition( $observed_value, $cond, $hide_opt );
         }
 
         $m = false;
@@ -532,12 +532,12 @@ class FrmFieldsHelper {
 	public static function array_value_condition( $observed_value, $cond, $hide_opt ) {
         $m = false;
         if ( $cond == '==' ) {
-            if ( is_array($hide_opt) ) {
-                $m = array_intersect($hide_opt, $observed_value);
-                $m = empty($m) ? false : true;
-            } else {
-                $m = in_array($hide_opt, $observed_value);
-            }
+			if ( is_array( $hide_opt ) ) {
+				$m = array_intersect( $hide_opt, $observed_value );
+				$m = empty( $m ) ? false : true;
+			} else {
+				$m = in_array( $hide_opt, $observed_value );
+			}
 		} elseif ( $cond == '!=' ) {
 			$m = ! in_array( $hide_opt, $observed_value );
 		} elseif ( $cond == '>' ) {
@@ -569,20 +569,20 @@ class FrmFieldsHelper {
      * @return string
      */
 	public static function basic_replace_shortcodes( $value, $form, $entry ) {
-		if ( strpos( $value, '[sitename]') !== false ) {
+		if ( strpos( $value, '[sitename]' ) !== false ) {
             $new_value = wp_specialchars_decode( FrmAppHelper::site_name(), ENT_QUOTES );
-            $value = str_replace('[sitename]', $new_value, $value);
+			$value = str_replace( '[sitename]', $new_value, $value );
         }
 
-        $value = apply_filters('frm_content', $value, $form, $entry);
-        $value = do_shortcode($value);
+		$value = apply_filters( 'frm_content', $value, $form, $entry );
+		$value = do_shortcode( $value );
 
         return $value;
     }
 
 	public static function get_shortcodes( $content, $form_id ) {
         if ( FrmAppHelper::pro_is_installed() ) {
-            return FrmProDisplaysHelper::get_shortcodes($content, $form_id);
+			return FrmProDisplaysHelper::get_shortcodes( $content, $form_id );
         }
 
 		$fields = FrmField::getAll( array(
@@ -590,9 +590,9 @@ class FrmFieldsHelper {
 			'fi.type not' => FrmField::no_save_fields(),
 		) );
 
-        $tagregexp = self::allowed_shortcodes($fields);
+		$tagregexp = self::allowed_shortcodes( $fields );
 
-        preg_match_all("/\[(if )?($tagregexp)\b(.*?)(?:(\/))?\](?:(.+?)\[\/\2\])?/s", $content, $matches, PREG_PATTERN_ORDER);
+		preg_match_all( "/\[(if )?($tagregexp)\b(.*?)(?:(\/))?\](?:(.+?)\[\/\2\])?/s", $content, $matches, PREG_PATTERN_ORDER );
 
         return $matches;
     }
@@ -605,7 +605,7 @@ class FrmFieldsHelper {
             $tagregexp[] = $field->field_key;
         }
 
-        $tagregexp = implode('|', $tagregexp);
+		$tagregexp = implode( '|', $tagregexp );
         return $tagregexp;
     }
 
@@ -681,7 +681,7 @@ class FrmFieldsHelper {
 		if ( isset( $atts['format'] ) ) {
 			$time_format = ' ';
 		} else {
-			$atts['format'] = get_option('date_format');
+			$atts['format'] = get_option( 'date_format' );
 			$time_format = '';
 		}
 
@@ -735,7 +735,7 @@ class FrmFieldsHelper {
         $new_value = '';
         switch ( $tag ) {
             case 'admin_email':
-                $new_value = get_option('admin_email');
+				$new_value = get_option( 'admin_email' );
                 break;
             case 'siteurl':
                 $new_value = FrmAppHelper::site_url();
@@ -760,7 +760,7 @@ class FrmFieldsHelper {
      * @return string|array
      */
     public static function process_get_shortcode( $atts, $return_array = false ) {
-        if ( ! isset($atts['param']) ) {
+		if ( ! isset( $atts['param'] ) ) {
             return '';
         }
 
@@ -822,9 +822,9 @@ class FrmFieldsHelper {
 			'size'  => 96,
 		);
 
-		$args = wp_parse_args($args, $defaults);
+		$args = wp_parse_args( $args, $defaults );
 
-		$user = get_userdata($user_id);
+		$user = get_userdata( $user_id );
 		$info = '';
 
 		if ( $user ) {
@@ -833,7 +833,7 @@ class FrmFieldsHelper {
 			} elseif ( $user_info == 'author_link' ) {
 				$info = get_author_posts_url( $user_id );
 			} else {
-				$info = isset($user->$user_info) ? $user->$user_info : '';
+				$info = isset( $user->$user_info ) ? $user->$user_info : '';
 			}
 
 			if ( 'display_name' === $user_info && empty( $info ) && ! $args['blank'] ) {
@@ -842,7 +842,7 @@ class FrmFieldsHelper {
 		}
 
 		if ( $args['link'] ) {
-			$info = '<a href="' . esc_url( admin_url('user-edit.php?user_id=' . $user_id ) ) . '">' . $info . '</a>';
+			$info = '<a href="' . esc_url( admin_url( 'user-edit.php?user_id=' . $user_id ) ) . '">' . $info . '</a>';
 		}
 
 		return $info;
@@ -856,13 +856,13 @@ class FrmFieldsHelper {
 		$field_selection = array_merge( FrmField::pro_field_selection(), FrmField::field_selection() );
 
         $field_types = array();
-        if ( in_array($type, $single_input) ) {
+		if ( in_array( $type, $single_input ) ) {
             self::field_types_for_input( $single_input, $field_selection, $field_types );
-        } else if ( in_array($type, $multiple_input) ) {
+		} elseif ( in_array( $type, $multiple_input ) ) {
             self::field_types_for_input( $multiple_input, $field_selection, $field_types );
-        } else if ( in_array($type, $other_type) ) {
+		} elseif ( in_array( $type, $other_type ) ) {
             self::field_types_for_input( $other_type, $field_selection, $field_types );
-		} else if ( isset( $field_selection[ $type ] ) ) {
+		} elseif ( isset( $field_selection[ $type ] ) ) {
             $field_types[ $type ] = $field_selection[ $type ];
         }
 
@@ -873,7 +873,7 @@ class FrmFieldsHelper {
     private static function field_types_for_input( $inputs, $fields, &$field_types ) {
         foreach ( $inputs as $input ) {
             $field_types[ $input ] = $fields[ $input ];
-            unset($input);
+			unset( $input );
         }
     }
 
@@ -1014,7 +1014,7 @@ class FrmFieldsHelper {
 	private static function set_other_name( $args, &$other_args ) {
 		//Set up name for other field
 		$other_args['name'] = str_replace( '[]', '', $args['field_name'] );
-		$other_args['name'] = preg_replace('/\[' . $args['field']['id'] . '\]$/', '', $other_args['name']);
+		$other_args['name'] = preg_replace( '/\[' . $args['field']['id'] . '\]$/', '', $other_args['name'] );
 		$other_args['name'] = $other_args['name'] . '[other]' . '[' . $args['field']['id'] . ']';
 
 		//Converts item_meta[field_id] => item_meta[other][field_id] and
@@ -1041,7 +1041,7 @@ class FrmFieldsHelper {
 		// Count should only be greater than 3 if inside of a repeating section
 		if ( count( $temp_array ) > 3 ) {
 			$parent = str_replace( ']', '', $temp_array[1] );
-			$pointer = str_replace( ']', '', $temp_array[2]);
+			$pointer = str_replace( ']', '', $temp_array[2] );
 		}
 
 		// Get text for "other" text field
@@ -1175,15 +1175,15 @@ class FrmFieldsHelper {
 			$replace_with[] = '[' . $new . ']';
 			$replace[] = '[' . $old . ' ';
 			$replace_with[] = '[' . $new . ' ';
-            unset($old, $new);
+			unset( $old, $new );
         }
 		if ( is_array( $val ) ) {
 			foreach ( $val as $k => $v ) {
                 $val[ $k ] = str_replace( $replace, $replace_with, $v );
-                unset($k, $v);
+				unset( $k, $v );
             }
         } else {
-            $val = str_replace($replace, $replace_with, $val);
+			$val = str_replace( $replace, $replace_with, $val );
         }
 
         return $val;
@@ -1253,14 +1253,14 @@ class FrmFieldsHelper {
 		$prepop[ __( 'Countries', 'formidable' ) ] = FrmFieldsHelper::get_countries();
 
         $states = FrmFieldsHelper::get_us_states();
-        $state_abv = array_keys($states);
-        sort($state_abv);
+		$state_abv = array_keys( $states );
+		sort( $state_abv );
 		$prepop[ __( 'U.S. State Abbreviations', 'formidable' ) ] = $state_abv;
 
-        $states = array_values($states);
-        sort($states);
+		$states = array_values( $states );
+		sort( $states );
 		$prepop[ __( 'U.S. States', 'formidable' ) ] = $states;
-        unset($state_abv, $states);
+		unset( $state_abv, $states );
 
 		$prepop[ __( 'Age', 'formidable' ) ] = array(
 			__( 'Under 18', 'formidable' ),

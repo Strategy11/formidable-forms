@@ -39,13 +39,13 @@ class FrmSettings {
 
 		$settings = get_transient( $this->option_name );
 
-        if ( ! is_object($settings) ) {
-            $settings = $this->translate_settings($settings);
-        }
+		if ( ! is_object( $settings ) ) {
+			$settings = $this->translate_settings( $settings );
+		}
 
         foreach ( $settings as $setting_name => $setting ) {
             $this->{$setting_name} = $setting;
-            unset($setting_name, $setting);
+			unset( $setting_name, $setting );
         }
 
         $this->set_default_options();
@@ -53,18 +53,18 @@ class FrmSettings {
 
 	private function translate_settings( $settings ) {
         if ( $settings ) { //workaround for W3 total cache conflict
-            return unserialize(serialize($settings));
+			return unserialize( serialize( $settings ) );
         }
 
-        $settings = get_option($this->option_name);
-        if ( is_object($settings) ) {
-            set_transient($this->option_name, $settings);
-            return $settings;
-        }
+		$settings = get_option( $this->option_name );
+		if ( is_object( $settings ) ) {
+			set_transient( $this->option_name, $settings );
+			return $settings;
+		}
 
         // If unserializing didn't work
         if ( $settings ) { //workaround for W3 total cache conflict
-            $settings = unserialize(serialize($settings));
+			$settings = unserialize( serialize( $settings ) );
         } else {
             $settings = $this;
         }

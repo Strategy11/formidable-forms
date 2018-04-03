@@ -128,13 +128,13 @@ class FrmForm {
             $values['status'] = 'published';
         }
 
-        if ( isset($values['form_key']) ) {
+		if ( isset( $values['form_key'] ) ) {
 			$values['form_key'] = FrmAppHelper::get_unique_key( $values['form_key'], $wpdb->prefix . 'frm_forms', 'form_key', $id );
         }
 
 		$form_fields = array( 'form_key', 'name', 'description', 'status', 'parent_form_id' );
 
-        $new_values = self::set_update_options( array(), $values);
+		$new_values = self::set_update_options( array(), $values );
 
         foreach ( $values as $value_key => $value ) {
 			if ( $value_key && in_array( $value_key, $form_fields ) ) {
@@ -154,9 +154,9 @@ class FrmForm {
         } else {
             $query_results = true;
         }
-        unset($new_values);
+		unset( $new_values );
 
-        $values = self::update_fields($id, $values);
+		$values = self::update_fields( $id, $values );
 
 		do_action( 'frm_update_form', $id, $values );
 		do_action( 'frm_update_form_' . $id, $values );
@@ -213,13 +213,13 @@ class FrmForm {
             }
 			$field_array[ $fid->id ] = $fid;
         }
-        unset($all_fields);
+		unset( $all_fields );
 
         foreach ( $values['item_meta'] as $field_id => $default_value ) {
 			if ( isset( $field_array[ $field_id ] ) ) {
 				$field = $field_array[ $field_id ];
             } else {
-                $field = FrmField::getOne($field_id);
+				$field = FrmField::getOne( $field_id );
             }
 
             if ( ! $field ) {
@@ -247,7 +247,7 @@ class FrmForm {
 				}
             }
 
-            $field->field_options = apply_filters('frm_update_field_options', $field->field_options, $field, $values);
+			$field->field_options = apply_filters( 'frm_update_field_options', $field->field_options, $field, $values );
 			$default_value = maybe_serialize( $values['item_meta'][ $field_id ] );
 
 			$new_field = array(
@@ -259,7 +259,7 @@ class FrmForm {
 
 			FrmField::update( $field_id, $new_field );
 
-            FrmField::delete_form_transient($field->form_id);
+			FrmField::delete_form_transient( $field->form_id );
         }
 		self::clear_form_cache();
 
@@ -307,7 +307,7 @@ class FrmForm {
      */
 	public static function set_status( $id, $status ) {
         if ( 'trash' == $status ) {
-            return self::trash($id);
+			return self::trash( $id );
         }
 
 		$statuses  = array( 'published', 'draft', 'trash' );
@@ -317,7 +317,7 @@ class FrmForm {
 
         global $wpdb;
 
-        if ( is_array($id) ) {
+		if ( is_array( $id ) ) {
 			$where = array(
 				'id' => $id,
 				'parent_form_id' => $id,
@@ -465,7 +465,7 @@ class FrmForm {
 
         $query_key = is_numeric( $id ) ? 'id' : 'form_key';
         $r = FrmDb::get_var( 'frm_forms', array( $query_key => $id ), 'name' );
-        $r = stripslashes($r);
+		$r = stripslashes( $r );
 
         return $r;
     }
@@ -541,17 +541,17 @@ class FrmForm {
 			$table_name = $prefix . 'frm_forms';
         } else {
 			$table_name = $wpdb->prefix . 'frm_forms';
-            $cache = wp_cache_get($id, 'frm_form');
+			$cache = wp_cache_get( $id, 'frm_form' );
             if ( $cache ) {
-                if ( isset($cache->options) ) {
-                    $cache->options = maybe_unserialize($cache->options);
+				if ( isset( $cache->options ) ) {
+					$cache->options = maybe_unserialize( $cache->options );
                 }
 
-                return stripslashes_deep($cache);
+				return stripslashes_deep( $cache );
             }
         }
 
-        if ( is_numeric($id) ) {
+		if ( is_numeric( $id ) ) {
             $where = array( 'id' => $id );
         } else {
             $where = array( 'form_key' => $id );
@@ -559,11 +559,11 @@ class FrmForm {
 
         $results = FrmDb::get_row( $table_name, $where );
 
-        if ( isset($results->options) ) {
+		if ( isset( $results->options ) ) {
 			FrmDb::set_cache( $results->id, $results, 'frm_form' );
-            $results->options = maybe_unserialize($results->options);
+			$results->options = maybe_unserialize( $results->options );
         }
-        return stripslashes_deep($results);
+		return stripslashes_deep( $results );
     }
 
     /**
@@ -595,7 +595,7 @@ class FrmForm {
 			$results = reset( $results );
 		}
 
-        return stripslashes_deep($results);
+		return stripslashes_deep( $results );
     }
 
 	/**

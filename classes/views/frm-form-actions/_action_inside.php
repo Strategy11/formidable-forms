@@ -1,12 +1,13 @@
-<input type="hidden" name="<?php echo esc_attr( $action_control->get_field_name('post_excerpt', '') ) ?>" class="frm_action_name" value="<?php echo esc_attr( $form_action->post_excerpt ); ?>" />
-<input type="hidden" name="<?php echo esc_attr( $action_control->get_field_name('ID', '') ) ?>" value="<?php echo esc_attr( $form_action->ID ); ?>" />
+<input type="hidden" name="<?php echo esc_attr( $action_control->get_field_name( 'post_excerpt', '' ) ); ?>" class="frm_action_name" value="<?php echo esc_attr( $form_action->post_excerpt ); ?>" />
+<input type="hidden" name="<?php echo esc_attr( $action_control->get_field_name( 'ID', '' ) ); ?>" value="<?php echo esc_attr( $form_action->ID ); ?>" />
 
 <table class="form-table">
     <tr>
         <th>
-			<label <?php FrmAppHelper::maybe_add_tooltip('action_title') ?>><?php esc_html_e( 'Label', 'formidable' ) ?></label>
+			<label <?php FrmAppHelper::maybe_add_tooltip( 'action_title' ); ?>><?php esc_html_e( 'Label', 'formidable' ); ?></label>
         </th>
-        <td><input type="text" name="<?php echo esc_attr( $action_control->get_field_name('post_title', '') ) ?>" value="<?php echo esc_attr($form_action->post_title); ?>" class="large-text <?php FrmAppHelper::maybe_add_tooltip('action_title', 'open') ?>" id="<?php echo esc_attr( $action_control->get_field_id('action_post_title') ) ?>" />
+		<td>
+			<input type="text" name="<?php echo esc_attr( $action_control->get_field_name( 'post_title', '' ) ); ?>" value="<?php echo esc_attr( $form_action->post_title ); ?>" class="large-text <?php FrmAppHelper::maybe_add_tooltip( 'action_title', 'open' ); ?>" id="<?php echo esc_attr( $action_control->get_field_id( 'action_post_title' ) ); ?>" />
         </td>
     </tr>
 </table>
@@ -24,7 +25,7 @@ if ( ! is_array( $action_control->action_options['event'] ) ) {
 if ( count( $action_control->action_options['event'] ) == 1 || $action_control->action_options['force_event'] ) {
 	foreach ( $action_control->action_options['event'] as $e ) {
 	?>
-	<input type="hidden" name="<?php echo esc_attr( $action_control->get_field_name('event') ) ?>[]" value="<?php echo esc_attr( $e ) ?>" />
+	<input type="hidden" name="<?php echo esc_attr( $action_control->get_field_name( 'event' ) ); ?>[]" value="<?php echo esc_attr( $e ); ?>" />
 <?php
 	}
 } else {
@@ -32,7 +33,7 @@ if ( count( $action_control->action_options['event'] ) == 1 || $action_control->
 	<h3><?php esc_html_e( 'Action Triggers', 'formidable' ); ?></h3>
 	<p>
 		<label class="frm_left_label"><?php esc_html_e( 'Trigger this action after', 'formidable' ) ?></label>
-		<select name="<?php echo esc_attr( $action_control->get_field_name('event') ) ?>[]" multiple="multiple" class="frm_multiselect" id="<?php echo esc_attr( $action_control->get_field_id('event') ) ?>">
+		<select name="<?php echo esc_attr( $action_control->get_field_name( 'event' ) ); ?>[]" multiple="multiple" class="frm_multiselect" id="<?php echo esc_attr( $action_control->get_field_id( 'event' ) ); ?>">
 	<?php
 
 	$event_labels = FrmFormAction::trigger_labels();
@@ -54,5 +55,5 @@ $pass_args = array(
 do_action( 'frm_additional_action_settings', $form_action, $pass_args );
 
 ?>
-<span class="alignright frm_action_id <?php echo empty( $form_action->ID ) ? 'frm_hidden' : ''; ?>"><?php printf( __( 'Action ID: %1$s', 'formidable' ), $form_action->ID); ?></span>
+<span class="alignright frm_action_id <?php echo empty( $form_action->ID ) ? 'frm_hidden' : ''; ?>"><?php printf( __( 'Action ID: %1$s', 'formidable' ), $form_action->ID ); ?></span>
 <div style="clear:both;"></div>

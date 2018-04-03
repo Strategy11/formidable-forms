@@ -26,12 +26,12 @@
         </ul>
         </div>
 
-    <?php do_action('frm_before_settings'); ?>
+	<?php do_action( 'frm_before_settings' ); ?>
 
 	<form name="frm_settings_form" method="post" class="frm_settings_form" action="?page=formidable-settings<?php echo ( $a ? '&amp;t=' . $a : '' ); ?>">
         <input type="hidden" name="frm_action" value="process-form" />
         <input type="hidden" name="action" value="process-form" />
-        <?php wp_nonce_field('process_form_nonce', 'process_form'); ?>
+		<?php wp_nonce_field( 'process_form_nonce', 'process_form' ); ?>
 
         <div class="general_settings tabs-panel <?php echo esc_attr( $a === 'general_settings' ? 'frm_block' : 'frm_hidden' ); ?>">
             <p class="submit">
@@ -56,7 +56,7 @@
 
             <p>
 				<label for="frm_use_html">
-					<input type="checkbox" id="frm_use_html" name="frm_use_html" value="1" <?php checked($frm_settings->use_html, 1) ?>> <?php esc_html_e( 'Use HTML5 in forms', 'formidable' ) ?>
+					<input type="checkbox" id="frm_use_html" name="frm_use_html" value="1" <?php checked( $frm_settings->use_html, 1 ); ?>> <?php esc_html_e( 'Use HTML5 in forms', 'formidable' ); ?>
 				</label>
 				<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'We recommend using HTML 5 for your forms. It adds some nifty options like placeholders, patterns, and autocomplete.', 'formidable' ) ?>"></span>
             </p>
@@ -95,10 +95,10 @@
 			</p>
 
 			<p><label class="frm_left_label"><?php esc_html_e( 'Site Key', 'formidable' ) ?></label>
-			<input type="text" name="frm_pubkey" id="frm_pubkey" size="42" value="<?php echo esc_attr($frm_settings->pubkey) ?>" placeholder="<?php esc_attr_e( 'Optional', 'formidable' ) ?>" /></p>
+			<input type="text" name="frm_pubkey" id="frm_pubkey" size="42" value="<?php echo esc_attr( $frm_settings->pubkey ); ?>" placeholder="<?php esc_attr_e( 'Optional', 'formidable' ); ?>" /></p>
 
 			<p><label class="frm_left_label"><?php esc_html_e( 'Secret Key', 'formidable' ) ?></label>
-			<input type="text" name="frm_privkey" id="frm_privkey" size="42" value="<?php echo esc_attr($frm_settings->privkey) ?>" placeholder="<?php esc_attr_e( 'Optional', 'formidable' ) ?>" /></p>
+			<input type="text" name="frm_privkey" id="frm_privkey" size="42" value="<?php echo esc_attr( $frm_settings->privkey ); ?>" placeholder="<?php esc_attr_e( 'Optional', 'formidable' ); ?>" /></p>
 
 			<p><label class="frm_left_label"><?php esc_html_e( 'reCAPTCHA Type', 'formidable' ) ?></label>
 			<select name="frm_re_type" id="frm_re_type">
@@ -114,7 +114,7 @@
 			<select name="frm_re_lang" id="frm_re_lang">
 				<option value="" <?php selected( $frm_settings->re_lang, '' ) ?>><?php esc_html_e( 'Browser Default', 'formidable' ); ?></option>
 			    <?php foreach ( $captcha_lang as $lang => $lang_name ) { ?>
-				<option value="<?php echo esc_attr($lang) ?>" <?php selected($frm_settings->re_lang, $lang) ?>><?php echo esc_html( $lang_name ) ?></option>
+				<option value="<?php echo esc_attr( $lang ); ?>" <?php selected( $frm_settings->re_lang, $lang ); ?>><?php echo esc_html( $lang_name ); ?></option>
                 <?php } ?>
             </select></p>
 
@@ -167,7 +167,7 @@
 			<label class="frm_left_label"><?php esc_html_e( 'Success Message', 'formidable' ); ?>
 				<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'The default message seen after a form is submitted.', 'formidable' ) ?>" ></span>
 			</label>
-            <input type="text" id="frm_success_msg" name="frm_success_msg" class="frm_with_left_label" value="<?php echo esc_attr($frm_settings->success_msg) ?>" />
+			<input type="text" id="frm_success_msg" name="frm_success_msg" class="frm_with_left_label" value="<?php echo esc_attr( $frm_settings->success_msg ); ?>" />
 		</p>
 
 		<p>
@@ -175,7 +175,7 @@
 			<input type="text" value="<?php echo esc_attr( $frm_settings->submit_value ) ?>" id="frm_submit_value" name="frm_submit_value" class="frm_with_left_label" />
 		</p>
 
-        <?php do_action('frm_settings_form', $frm_settings); ?>
+		<?php do_action( 'frm_settings_form', $frm_settings ); ?>
 
         <?php if ( ! FrmAppHelper::pro_is_installed() ) { ?>
 			<div class="clear"></div>

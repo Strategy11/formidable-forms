@@ -1,5 +1,5 @@
 <?php
-if ( ! isset( $entry) ) {
+if ( ! isset( $entry ) ) {
     $entry = $record;
 } ?>
 
@@ -25,4 +25,4 @@ if ( ! isset( $entry) ) {
 </div>
 <?php } ?>
 
-<?php do_action('frm_entry_shared_sidebar', $entry); ?>
+<?php do_action( 'frm_entry_shared_sidebar', $entry ); ?>

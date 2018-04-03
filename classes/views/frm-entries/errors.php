@@ -1,5 +1,5 @@
 <?php
-if ( isset($include_extra_container) ) { ?>
+if ( isset( $include_extra_container ) ) { ?>
 <div class="<?php echo esc_attr( $include_extra_container ) ?>" id="frm_form_<?php echo esc_attr( $form->id ) ?>_container">
 <?php
 }
@@ -16,7 +16,7 @@ if ( isset( $message ) && $message != '' ) {
     }
 }
 
-if ( isset($errors) && is_array( $errors ) && ! empty( $errors ) ) {
+if ( isset( $errors ) && is_array( $errors ) && ! empty( $errors ) ) {
 
 	if ( isset( $form ) && is_object( $form ) ) {
     	FrmFormsHelper::get_scroll_js( $form->id );
@@ -26,8 +26,8 @@ if ( isset($errors) && is_array( $errors ) && ! empty( $errors ) ) {
 <?php
 $img = '';
 if ( ! FrmAppHelper::is_admin() ) {
-    $img = apply_filters('frm_error_icon', $img);
-    if ( $img && ! empty($img) ) {
+	$img = apply_filters( 'frm_error_icon', $img );
+	if ( $img && ! empty( $img ) ) {
     	echo '<img src="' . esc_url( $img ) . '" alt="" />';
     }
 }

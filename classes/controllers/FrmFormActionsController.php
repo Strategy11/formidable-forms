@@ -45,11 +45,11 @@ class FrmFormActionsController {
             'highrise'  => 'FrmDefHrsAction',
         ) );
 
-        include_once(FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/email_action.php');
-        include_once(FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/default_actions.php');
+		include_once( FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/email_action.php' );
+		include_once( FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/default_actions.php' );
 
         foreach ( $action_classes as $action_class ) {
-            self::$registered_actions->register($action_class);
+			self::$registered_actions->register( $action_class );
         }
     }
 
@@ -189,12 +189,12 @@ class FrmFormActionsController {
         foreach ( $fields as $k => $f ) {
             $f = (array) $f;
             $opts = (array) $f['field_options'];
-            $f = array_merge($opts, $f);
+			$f = array_merge( $opts, $f );
             if ( ! isset( $f['post_field'] ) ) {
                 $f['post_field'] = '';
             }
             $values['fields'][] = $f;
-            unset($k, $f);
+			unset( $k, $f );
         }
 
         return $form;
@@ -212,7 +212,7 @@ class FrmFormActionsController {
         $new_actions = array();
 
         foreach ( $registered_actions as $registered_action ) {
-            $action_ids = $registered_action->update_callback($form_id);
+			$action_ids = $registered_action->update_callback( $form_id );
             if ( ! empty( $action_ids ) ) {
                 $new_actions[] = $action_ids;
             }
@@ -307,11 +307,11 @@ class FrmFormActionsController {
             $stored_actions[ $action->ID ] = $action;
             $action_priority[ $action->ID ] = $link_settings[ $action->post_excerpt ]->action_options['priority'];
 
-            unset($action);
+			unset( $action );
         }
 
         if ( ! empty( $stored_actions ) ) {
-            asort($action_priority);
+			asort( $action_priority );
 
             // make sure hooks are loaded
             new FrmNotification();
@@ -323,14 +323,14 @@ class FrmFormActionsController {
 
                 // If post is created, get updated $entry object
                 if ( $action->post_excerpt == 'wppost' && $event == 'create' ) {
-                    $entry = FrmEntry::getOne($entry->id, true);
+					$entry = FrmEntry::getOne( $entry->id, true );
                 }
             }
         }
     }
 
 	public static function duplicate_form_actions( $form_id, $values, $args = array() ) {
-        if ( ! isset($args['old_id']) || empty($args['old_id']) ) {
+		if ( ! isset( $args['old_id'] ) || empty( $args['old_id'] ) ) {
             // continue if we know which actions to copy
             return;
         }
@@ -369,12 +369,12 @@ class Frm_Form_Action_Factory {
 
 	public function unregister( $action_class ) {
 		if ( isset( $this->actions[ $action_class ] ) ) {
-			unset($this->actions[ $action_class ]);
+			unset( $this->actions[ $action_class ] );
 		}
 	}
 
 	public function _register_actions() {
-		$keys = array_keys($this->actions);
+		$keys = array_keys( $this->actions );
 
 		foreach ( $keys as $key ) {
 			// don't register new action if old action with the same id is already registered

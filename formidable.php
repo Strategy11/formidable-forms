@@ -31,7 +31,7 @@ function load_formidable_forms() {
     	'pro_is_authorized' => false,
 	);
 
-	$frm_path = dirname(__FILE__);
+	$frm_path = dirname( __FILE__ );
 	if ( file_exists( $frm_path . '/pro/formidable-pro.php' ) ) {
 		include( $frm_path . '/pro/formidable-pro.php' );
 	}
@@ -41,11 +41,11 @@ function load_formidable_forms() {
 
 // if __autoload is active, put it on the spl_autoload stack
 if ( is_array( spl_autoload_functions() ) && in_array( '__autoload', spl_autoload_functions() ) ) {
-    spl_autoload_register('__autoload');
+	spl_autoload_register( '__autoload' );
 }
 
 // Add the autoloader
-spl_autoload_register('frm_forms_autoloader');
+spl_autoload_register( 'frm_forms_autoloader' );
 
 function frm_forms_autoloader( $class_name ) {
     // Only load Frm classes here

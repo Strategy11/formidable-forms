@@ -204,12 +204,12 @@ class FrmEntryMeta {
 
 		if ( $cached && isset( $cached->metas ) && isset( $cached->metas[ $field_id ] ) ) {
 			$result = $cached->metas[ $field_id ];
-            return stripslashes_deep($result);
+			return stripslashes_deep( $result );
         }
 
 		$get_table = $wpdb->prefix . 'frm_item_metas';
 		$query = array( 'item_id' => $entry_id );
-        if ( is_numeric($field_id) ) {
+		if ( is_numeric( $field_id ) ) {
 			$query['field_id'] = $field_id;
         } else {
 			$get_table .= ' it LEFT OUTER JOIN ' . $wpdb->prefix . 'frm_fields fi ON it.field_id=fi.id';
@@ -217,8 +217,8 @@ class FrmEntryMeta {
         }
 
 		$result = FrmDb::get_var( $get_table, $query, 'meta_value' );
-        $result = maybe_unserialize($result);
-        $result = stripslashes_deep($result);
+		$result = maybe_unserialize( $result );
+		$result = stripslashes_deep( $result );
 
         return $result;
     }
@@ -265,9 +265,9 @@ class FrmEntryMeta {
 			$query[] = 'INNER JOIN ' . $wpdb->prefix . 'frm_items e ON (e.id=em.item_id)';
         }
 
-        if ( is_numeric($field_id) ) {
-            $query[] = $wpdb->prepare('WHERE em.field_id=%d', $field_id);
-        } else {
+		if ( is_numeric( $field_id ) ) {
+			$query[] = $wpdb->prepare( 'WHERE em.field_id=%d', $field_id );
+		} else {
 			$query[] = $wpdb->prepare( 'LEFT JOIN ' . $wpdb->prefix . 'frm_fields fi ON (em.field_id = fi.id) WHERE fi.field_key=%s', $field_id );
         }
 
@@ -276,7 +276,7 @@ class FrmEntryMeta {
         }
 
         if ( $args['value'] ) {
-            $query[] = $wpdb->prepare(' AND meta_value=%s', $args['value']);
+			$query[] = $wpdb->prepare( ' AND meta_value=%s', $args['value'] );
         }
         $query[] = $order . $limit;
     }
@@ -290,7 +290,7 @@ class FrmEntryMeta {
         $query = 'SELECT it.*, fi.type as field_type, fi.field_key as field_key,
             fi.required as required, fi.form_id as field_form_id, fi.name as field_name, fi.options as fi_options
 			FROM ' . $wpdb->prefix . 'frm_item_metas it LEFT OUTER JOIN ' . $wpdb->prefix . 'frm_fields fi ON it.field_id=fi.id' .
-            FrmDb::prepend_and_or_where(' WHERE ', $where) . $order_by . $limit;
+			FrmDb::prepend_and_or_where( ' WHERE ', $where ) . $order_by . $limit;
 
 		$cache_key = 'all_' . maybe_serialize( $where ) . $order_by . $limit;
 		$results = FrmDb::check_cache( $cache_key, 'frm_entry', $query, ( $limit == ' LIMIT 1' ? 'get_row' : 'get_results' ) );
@@ -313,11 +313,11 @@ class FrmEntryMeta {
 			'user_id'  => '',
 			'group_by' => '',
 		);
-        $args = wp_parse_args($args, $defaults);
+		$args = wp_parse_args( $args, $defaults );
 
         $query = array();
-        self::get_ids_query($where, $order_by, $limit, $unique, $args, $query );
-        $query = implode(' ', $query);
+		self::get_ids_query( $where, $order_by, $limit, $unique, $args, $query );
+		$query = implode( ' ', $query );
 
 		$cache_key = 'ids_' . maybe_serialize( $where ) . $order_by . 'l' . $limit . 'u' . $unique . maybe_serialize( $args );
 		return FrmDb::check_cache( $cache_key, 'frm_entry', $query, ( $limit == ' LIMIT 1' ? 'get_var' : 'get_col' ) );
@@ -344,17 +344,17 @@ class FrmEntryMeta {
 		$query[] = 'FROM ' . $wpdb->prefix . 'frm_item_metas it LEFT OUTER JOIN ' . $wpdb->prefix . 'frm_fields fi ON it.field_id=fi.id';
 
 		$query[] = 'INNER JOIN ' . $wpdb->prefix . 'frm_items e ON (e.id=it.item_id)';
-        if ( is_array($where) ) {
+		if ( is_array( $where ) ) {
             if ( ! $args['is_draft'] ) {
                 $where['e.is_draft'] = 0;
             } else if ( $args['is_draft'] == 1 ) {
                 $where['e.is_draft'] = 1;
             }
 
-            if ( ! empty($args['user_id']) ) {
+			if ( ! empty( $args['user_id'] ) ) {
                 $where['e.user_id'] = $args['user_id'];
             }
-            $query[] = FrmDb::prepend_and_or_where(' WHERE ', $where) . $order_by . $limit;
+			$query[] = FrmDb::prepend_and_or_where( ' WHERE ', $where ) . $order_by . $limit;
 
 			if ( $args['group_by'] ) {
 				$query[] = ' GROUP BY ' . sanitize_text_field( $args['group_by'] );

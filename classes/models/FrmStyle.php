@@ -15,7 +15,7 @@ class FrmStyle {
 
         $max_slug_value = 2147483647;
         $min_slug_value = 37; // we want to have at least 2 characters in the slug
-        $key = base_convert( rand($min_slug_value, $max_slug_value), 10, 36 );
+		$key = base_convert( rand( $min_slug_value, $max_slug_value ), 10, 36 );
 
         $style = array(
             'post_type'     => FrmStylesController::$post_type,
@@ -41,7 +41,7 @@ class FrmStyle {
     public function update( $id = 'default' ) {
  		$all_instances = $this->get_all();
 
- 		if ( empty($id) ) {
+ 		if ( empty( $id ) ) {
  		     $new_style = (array) $this->get_new();
  		     $all_instances[] = $new_style;
  		}
@@ -49,15 +49,15 @@ class FrmStyle {
         $action_ids = array();
 
  		foreach ( $all_instances as $number => $new_instance ) {
- 			$new_instance = stripslashes_deep( (array) $new_instance);
+ 			$new_instance = stripslashes_deep( (array) $new_instance );
  			$this->id = $new_instance['ID'];
- 			if ( $id != $this->id || ! $_POST || ! isset($_POST['frm_style_setting']) ) {
+ 			if ( $id != $this->id || ! $_POST || ! isset( $_POST['frm_style_setting'] ) ) {
 				$all_instances[ $number ] = $new_instance;
 
- 			    if ( $new_instance['menu_order'] && $_POST && empty($_POST['prev_menu_order']) && isset($_POST['frm_style_setting']['menu_order']) ) {
+				if ( $new_instance['menu_order'] && $_POST && empty( $_POST['prev_menu_order'] ) && isset( $_POST['frm_style_setting']['menu_order'] ) ) {
  			        // this style was set to default, so remove default setting on previous default style
  			        $new_instance['menu_order'] = 0;
- 			        $action_ids[] = $this->save($new_instance);
+					$action_ids[] = $this->save( $new_instance );
  			    }
 
  			    // don't continue if not saving this style
@@ -70,7 +70,7 @@ class FrmStyle {
             $new_instance['post_status']  = 'publish';
 			$new_instance['menu_order']  = isset( $_POST['frm_style_setting']['menu_order'] ) ? absint( $_POST['frm_style_setting']['menu_order'] ) : 0;
 
-            if ( empty($id) ) {
+			if ( empty( $id ) ) {
                 $new_instance['post_name'] = $new_instance['post_title'];
             }
 
@@ -93,7 +93,7 @@ class FrmStyle {
 
 			$all_instances[ $number ] = $new_instance;
 
-            $action_ids[] = $this->save($new_instance);
+			$action_ids[] = $this->save( $new_instance );
 
  		}
 
@@ -107,7 +107,7 @@ class FrmStyle {
      */
 	public function save_settings() {
 		$filename = FrmAppHelper::plugin_path() . '/css/custom_theme.css.php';
-		update_option( 'frm_last_style_update', date('njGi') );
+		update_option( 'frm_last_style_update', date( 'njGi' ) );
 
 		if ( ! is_file( $filename ) ) {
             return;

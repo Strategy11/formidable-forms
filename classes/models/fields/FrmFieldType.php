@@ -216,7 +216,7 @@ DEFAULT_HTML;
 	}
 
 	protected function html_id( $plus = '' ) {
-		return apply_filters( 'frm_field_get_html_id', 'field_' . $this->get_field_column('field_key') . $plus, $this->field );
+		return apply_filters( 'frm_field_get_html_id', 'field_' . $this->get_field_column( 'field_key' ) . $plus, $this->field );
     }
 
 	public function display_field_settings() {
@@ -307,7 +307,7 @@ DEFAULT_HTML;
 	}
 
 	protected function default_invalid_msg() {
-		$field_name = $this->get_field_column('name');
+		$field_name = $this->get_field_column( 'name' );
 		if ( $field_name == '' ) {
 			$invalid = __( 'This field is invalid', 'formidable' );
 		} else {
@@ -581,7 +581,7 @@ DEFAULT_HTML;
 	 * @since 3.0
 	 */
 	protected function get_select_box( $values ) {
-		$options = $this->get_field_column('options');
+		$options = $this->get_field_column( 'options' );
 		$selected = $values['field_value'];
 
 		if ( isset( $values['combo_name'] ) ) {
@@ -640,8 +640,8 @@ DEFAULT_HTML;
 
 	protected function fill_display_field_values( $args = array() ) {
 		$defaults = array(
-			'field_name'    => 'item_meta[' . $this->get_field_column('id') . ']',
-			'field_id'      => $this->get_field_column('id'),
+			'field_name'    => 'item_meta[' . $this->get_field_column( 'id' ) . ']',
+			'field_id'      => $this->get_field_column( 'id' ),
 			'field_plus_id' => '',
 			'section_id'    => '',
 		);

@@ -5,7 +5,7 @@ class FrmEntryValidate {
         FrmEntry::sanitize_entry_post( $values );
         $errors = array();
 
-        if ( ! isset($values['form_id']) || ! isset($values['item_meta']) ) {
+		if ( ! isset( $values['form_id'] ) || ! isset( $values['item_meta'] ) ) {
             $errors['form'] = __( 'There was a problem with your submission. Please try again.', 'formidable' );
             return $errors;
         }
@@ -66,7 +66,7 @@ class FrmEntryValidate {
         );
         $args = wp_parse_args( $args, $defaults );
 
-        if ( empty($args['parent_field_id']) ) {
+		if ( empty( $args['parent_field_id'] ) ) {
 			$value = isset( $values['item_meta'][ $args['id'] ] ) ? $values['item_meta'][ $args['id'] ] : '';
         } else {
             // value is from a nested form
@@ -79,8 +79,8 @@ class FrmEntryValidate {
 		self::maybe_clear_value_for_default_blank_setting( $posted_field, $value );
 
 		// Reset arrays with only one value if it's not a field where array keys need to be preserved
-		if ( is_array($value) && count( $value ) == 1 && isset( $value[0] ) ) {
-			$value = reset($value);
+		if ( is_array( $value ) && count( $value ) == 1 && isset( $value[0] ) ) {
+			$value = reset( $value );
 		}
 
 		if ( ! is_array( $value ) ) {
@@ -302,7 +302,7 @@ class FrmEntryValidate {
 
 	private static function is_akismet_spam( $values ) {
 		global $wpcom_api_key;
-		return ( is_callable('Akismet::http_post') && ( get_option('wordpress_api_key') || $wpcom_api_key ) && self::akismet( $values ) );
+		return ( is_callable( 'Akismet::http_post' ) && ( get_option( 'wordpress_api_key' ) || $wpcom_api_key ) && self::akismet( $values ) );
 	}
 
 	private static function is_akismet_enabled_for_user( $form_id ) {
@@ -311,7 +311,7 @@ class FrmEntryValidate {
 	}
 
     public static function blacklist_check( $values ) {
-        if ( ! apply_filters('frm_check_blacklist', true, $values) ) {
+		if ( ! apply_filters( 'frm_check_blacklist', true, $values ) ) {
             return false;
         }
 
@@ -370,7 +370,7 @@ class FrmEntryValidate {
 		$datas['user_agent'] = FrmAppHelper::get_server_value( 'HTTP_USER_AGENT' );
 		$datas['referrer'] = isset( $_SERVER['HTTP_REFERER'] ) ? FrmAppHelper::get_server_value( 'HTTP_REFERER' ) : false;
 		$datas['blog_lang'] = get_locale();
-		$datas['blog_charset'] = get_option('blog_charset');
+		$datas['blog_charset'] = get_option( 'blog_charset' );
 
 		if ( akismet_test_mode() ) {
 			$datas['is_test'] = 'true';

@@ -29,7 +29,7 @@ class FrmStylesHelper {
             'swanky-purse'  => 'Swanky Purse',
         );
 
-        $themes = apply_filters('frm_jquery_themes', $themes);
+		$themes = apply_filters( 'frm_jquery_themes', $themes );
         return $themes;
     }
 
@@ -40,12 +40,12 @@ class FrmStylesHelper {
 
         if ( ! $theme_css || $theme_css == '' || $theme_css == 'ui-lightness' ) {
             $css_file = FrmAppHelper::plugin_url() . '/css/ui-lightness/jquery-ui.css';
-        } else if ( preg_match('/^http.?:\/\/.*\..*$/', $theme_css) ) {
+		} elseif ( preg_match( '/^http.?:\/\/.*\..*$/', $theme_css ) ) {
             $css_file = $theme_css;
         } else {
             $uploads = self::get_upload_base();
 			$file_path = '/formidable/css/' . $theme_css . '/jquery-ui.css';
-            if ( file_exists($uploads['basedir'] . $file_path) ) {
+			if ( file_exists( $uploads['basedir'] . $file_path ) ) {
                 $css_file = $uploads['baseurl'] . $file_path;
             } else {
 				$css_file = FrmAppHelper::jquery_ui_base_url() . '/themes/' . $theme_css . '/jquery-ui.min.css';
@@ -223,7 +223,7 @@ class FrmStylesHelper {
 
         $name = ( 'arrow' == $type ) ? 'collapse_icon' : 'repeat_icon';
 ?>
-    	<select name="<?php echo esc_attr( $frm_style->get_field_name($name) ) ?>" id="frm_<?php echo esc_attr( $name ) ?>" class="frm_icon_font frm_multiselect hide-if-js">
+    	<select name="<?php echo esc_attr( $frm_style->get_field_name( $name ) ); ?>" id="frm_<?php echo esc_attr( $name ); ?>" class="frm_icon_font frm_multiselect hide-if-js">
             <?php foreach ( $icons as $key => $icon ) { ?>
 			<option value="<?php echo esc_attr( $key ) ?>" <?php selected( $style->post_content[ $name ], $key ) ?>>
 				<?php echo '&#xe' . $icon['+'] . '; &#xe' . $icon['-'] . ';'; ?>

@@ -8,7 +8,7 @@ class FrmMigrate {
 
 	public function __construct() {
 		if ( ! defined( 'ABSPATH' ) ) {
-			die('You are not allowed to call this page directly.');
+			die( 'You are not allowed to call this page directly.' );
 		}
 
 		global $wpdb;
@@ -53,7 +53,7 @@ class FrmMigrate {
 			}
 		}
 
-		do_action('frm_after_install');
+		do_action( 'frm_after_install' );
 
 		$frm_vars['doing_upgrade'] = false;
 
@@ -167,7 +167,7 @@ class FrmMigrate {
 				global $wpdb;
 				$wpdb->query( $q . $charset_collate );
 			}
-            unset($q);
+			unset( $q );
         }
     }
 
@@ -219,7 +219,7 @@ class FrmMigrate {
     public function uninstall() {
 		if ( ! current_user_can( 'administrator' ) ) {
             $frm_settings = FrmAppHelper::get_settings();
-            wp_die($frm_settings->admin_permission);
+			wp_die( $frm_settings->admin_permission );
         }
 
         global $wpdb, $wp_roles;
@@ -487,7 +487,7 @@ class FrmMigrate {
     private function migrate_to_11() {
         global $wpdb;
 
-        $forms = FrmDb::get_results( $this->forms, array(), 'id, options');
+		$forms = FrmDb::get_results( $this->forms, array(), 'id, options' );
 
         $sending = __( 'Sending', 'formidable' );
 		$img = FrmAppHelper::plugin_url() . '/images/ajax_loader.gif';
@@ -498,13 +498,13 @@ class FrmMigrate {
 <img class="frm_ajax_loading" src="$img" alt="$sending" style="visibility:hidden;" />
 </div>
 DEFAULT_HTML;
-        unset($sending, $img);
+		unset( $sending, $img );
 
-        $new_default_html = FrmFormsHelper::get_default_html('submit');
+		$new_default_html = FrmFormsHelper::get_default_html( 'submit' );
         $draft_link = FrmFormsHelper::get_draft_link();
 		foreach ( $forms as $form ) {
-            $form->options = maybe_unserialize($form->options);
-            if ( ! isset($form->options['submit_html']) || empty($form->options['submit_html']) ) {
+			$form->options = maybe_unserialize( $form->options );
+			if ( ! isset( $form->options['submit_html'] ) || empty( $form->options['submit_html'] ) ) {
                 continue;
             }
 

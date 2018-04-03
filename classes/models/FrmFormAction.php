@@ -69,11 +69,11 @@ class FrmFormAction {
 	 *   - height: currently not used but may be needed in the future
 	 */
 	public function __construct( $id_base, $name, $action_options = array(), $control_options = array() ) {
-	    if ( ! defined('ABSPATH') ) {
-            die('You are not allowed to call this page directly.');
-        }
+		if ( ! defined( 'ABSPATH' ) ) {
+			die( 'You are not allowed to call this page directly.' );
+		}
 
-		$this->id_base = strtolower($id_base);
+		$this->id_base = strtolower( $id_base );
 		$this->name = $name;
 		$this->option_name = 'frm_' . $this->id_base . '_action';
 
@@ -142,12 +142,12 @@ class FrmFormAction {
         $post_content = array();
         $default_values = $this->get_global_defaults();
 
-        // fill default values
-        $post_content = wp_parse_args( $post_content, $default_values);
+		// fill default values
+		$post_content = wp_parse_args( $post_content, $default_values );
 
-        if ( ! isset($post_content['event']) && ! $this->action_options['force_event'] ) {
-            $post_content['event'] = array( reset($this->action_options['event']) );
-        }
+		if ( ! isset( $post_content['event'] ) && ! $this->action_options['force_event'] ) {
+			$post_content['event'] = array( reset( $this->action_options['event'] ) );
+		}
 
         $form_action = array(
             'post_title'    => $this->name,
@@ -159,7 +159,7 @@ class FrmFormAction {
 			'post_name'     => $this->form_id . '_' . $this->id_base . '_' . $this->number,
             'menu_order'    => $this->form_id,
         );
-        unset($post_content);
+		unset( $post_content );
 
         return (object) $form_action;
     }
@@ -169,7 +169,7 @@ class FrmFormAction {
 
         $action = $this->prepare_new();
 
-        return $this->save_settings($action);
+		return $this->save_settings( $action );
     }
 
 	public function duplicate_form_actions( $form_id, $old_id ) {
@@ -183,8 +183,8 @@ class FrmFormAction {
 
         $this->form_id = $form_id;
         foreach ( $actions as $action ) {
-            $this->duplicate_one($action, $form_id);
-            unset($action);
+			$this->duplicate_one( $action, $form_id );
+			unset( $action );
         }
     }
 
@@ -201,9 +201,9 @@ class FrmFormAction {
             $action['post_content'] = FrmAppHelper::maybe_json_decode( $action['post_content'] );
             $post_id = $this->save_settings( $action );
         } else {
-            // Create action
-            $action['post_content'] = FrmAppHelper::maybe_json_decode($action['post_content']);
-            $post_id = $this->duplicate_one( (object) $action, $action['menu_order']);
+			// Create action
+			$action['post_content'] = FrmAppHelper::maybe_json_decode( $action['post_content'] );
+			$post_id = $this->duplicate_one( (object) $action, $action['menu_order'] );
         }
         return $post_id;
     }
@@ -229,20 +229,20 @@ class FrmFormAction {
                 }
             }
 
-            unset($key, $val);
-        }
-        unset($action->ID);
+			unset( $key, $val );
+		}
+		unset( $action->ID );
 
-        return $this->save_settings($action);
+		return $this->save_settings( $action );
     }
 
 	private function duplicate_array_walk( $action, $subkey, $val ) {
         global $frm_duplicate_ids;
 
-        if ( is_array($subkey) ) {
+		if ( is_array( $subkey ) ) {
             foreach ( $subkey as $subkey2 ) {
                 foreach ( (array) $val as $ck => $cv ) {
-                    if ( is_array($cv) ) {
+					if ( is_array( $cv ) ) {
 						$action[ $ck ] = $this->duplicate_array_walk( $action[ $ck ], $subkey2, $cv );
 					} else if ( isset( $cv[ $subkey ] ) && is_numeric( $cv[ $subkey ] ) && isset( $frm_duplicate_ids[ $cv[ $subkey ] ] ) ) {
 						$action[ $ck ][ $subkey ] = $frm_duplicate_ids[ $cv[ $subkey ] ];
@@ -251,7 +251,7 @@ class FrmFormAction {
             }
         } else {
             foreach ( (array) $val as $ck => $cv ) {
-                if ( is_array($cv) ) {
+				if ( is_array( $cv ) ) {
 					$action[ $ck ] = $this->duplicate_array_walk( $action[ $ck ], $subkey, $cv );
 				} else if ( $ck == $subkey && isset( $frm_duplicate_ids[ $cv ] ) ) {
 					$action[ $ck ] = $frm_duplicate_ids[ $cv ];
@@ -287,9 +287,9 @@ class FrmFormAction {
         $action_ids = array();
 
  		foreach ( $settings as $number => $new_instance ) {
- 			$this->_set($number);
+ 			$this->_set( $number );
 
- 			if ( ! isset($new_instance['post_title']) ) {
+ 			if ( ! isset( $new_instance['post_title'] ) ) {
  			    // settings were never opened, so don't update
  			    $action_ids[] = $new_instance['ID'];
          		$this->updated = true;
@@ -321,14 +321,14 @@ class FrmFormAction {
 			 */
 			$instance = apply_filters( 'frm_action_update_callback', $instance, $new_instance, $old_instance, $this );
 
-			$instance['post_content'] = apply_filters('frm_before_save_action', $instance['post_content'], $instance, $new_instance, $old_instance, $this);
+			$instance['post_content'] = apply_filters( 'frm_before_save_action', $instance['post_content'], $instance, $new_instance, $old_instance, $this );
 			$instance['post_content'] = apply_filters( 'frm_before_save_' . $this->id_base . '_action', $new_instance['post_content'], $instance, $new_instance, $old_instance, $this );
 
 			if ( false !== $instance ) {
 				$all_instances[ $number ] = $instance;
 			}
 
-            $action_ids[] = $this->save_settings($instance);
+			$action_ids[] = $this->save_settings( $instance );
 
      		$this->updated = true;
  		}
@@ -342,7 +342,7 @@ class FrmFormAction {
 	}
 
 	public function get_single_action( $id ) {
-	    $action = get_post($id);
+		$action = get_post( $id );
 		if ( $action ) {
 			$action = $this->prepare_action( $action );
 			$this->_set( $id );
@@ -351,12 +351,12 @@ class FrmFormAction {
 	}
 
 	public function get_one( $form_id ) {
-	    return $this->get_all($form_id, 1);
+		return $this->get_all( $form_id, 1 );
 	}
 
     public static function get_action_for_form( $form_id, $type = 'all', $limit = 99 ) {
         $action_controls = FrmFormActionsController::get_form_actions( $type );
-        if ( empty($action_controls) ) {
+		if ( empty( $action_controls ) ) {
             // don't continue if there are no available actions
             return array();
         }
@@ -392,7 +392,7 @@ class FrmFormAction {
         }
 
         if ( 1 === $limit ) {
-            $settings = reset($settings);
+			$settings = reset( $settings );
         }
 
         return $settings;
@@ -434,27 +434,27 @@ class FrmFormAction {
         $query['suppress_filters'] = false;
 
 		$actions = FrmDb::check_cache( serialize( $query ) . '_type_' . $type, 'frm_actions', $query, 'get_posts' );
-        unset($query);
+		unset( $query );
 
 		remove_filter( 'posts_where', 'FrmFormActionsController::limit_by_type' );
 
-        if ( empty($actions) ) {
+		if ( empty( $actions ) ) {
             return array();
         }
 
         $settings = array();
         foreach ( $actions as $action ) {
-            if ( count($settings) >= $limit ) {
+			if ( count( $settings ) >= $limit ) {
                 continue;
             }
 
-            $action = $this->prepare_action($action);
+			$action = $this->prepare_action( $action );
 
 			$settings[ $action->ID ] = $action;
         }
 
         if ( 1 === $limit ) {
-            $settings = reset($settings);
+			$settings = reset( $settings );
         }
 
         return $settings;
@@ -477,7 +477,7 @@ class FrmFormAction {
 	}
 
 	public function prepare_action( $action ) {
-		$action->post_content = (array) FrmAppHelper::maybe_json_decode($action->post_content);
+		$action->post_content = (array) FrmAppHelper::maybe_json_decode( $action->post_content );
 		$action->post_excerpt = sanitize_title( $action->post_excerpt );
 
         $default_values = $this->get_global_defaults();

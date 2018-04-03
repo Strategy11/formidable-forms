@@ -1,5 +1,5 @@
 <?php
-if ( ! defined('ABSPATH') ) {
+if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
@@ -152,7 +152,7 @@ class FrmField {
         global $wpdb, $frm_duplicate_ids;
 
         $new_values = array();
-        $key = isset($values['field_key']) ? $values['field_key'] : $values['name'];
+		$key = isset( $values['field_key'] ) ? $values['field_key'] : $values['name'];
 		$new_values['field_key'] = FrmAppHelper::get_unique_key( $key, $wpdb->prefix . 'frm_fields', 'field_key' );
 
 		foreach ( array( 'name', 'description', 'type', 'default_value' ) as $col ) {
@@ -161,15 +161,15 @@ class FrmField {
 
         $new_values['options'] = $values['options'];
 
-        $new_values['field_order'] = isset($values['field_order']) ? (int) $values['field_order'] : null;
-        $new_values['required'] = isset($values['required']) ? (int) $values['required'] : 0;
-        $new_values['form_id'] = isset($values['form_id']) ? (int) $values['form_id'] : null;
+		$new_values['field_order'] = isset( $values['field_order'] ) ? (int) $values['field_order'] : null;
+		$new_values['required'] = isset( $values['required'] ) ? (int) $values['required'] : 0;
+		$new_values['form_id'] = isset( $values['form_id'] ) ? (int) $values['form_id'] : null;
         $new_values['field_options'] = $values['field_options'];
-        $new_values['created_at'] = current_time('mysql', 1);
+		$new_values['created_at'] = current_time( 'mysql', 1 );
 
 		if ( isset( $values['id'] ) ) {
 			$frm_duplicate_ids[ $values['field_key'] ] = $new_values['field_key'];
-            $new_values = apply_filters('frm_duplicated_field', $new_values);
+			$new_values = apply_filters( 'frm_duplicated_field', $new_values );
         }
 
 		self::preserve_format_option_backslashes( $new_values );
@@ -219,9 +219,9 @@ class FrmField {
 
         foreach ( (array) $fields as $field ) {
 			$new_key = $copy_keys ? $field->field_key : '';
-            if ( $copy_keys && substr($field->field_key, -1) == 2 ) {
-                $new_key = rtrim($new_key, 2);
-            }
+			if ( $copy_keys && substr( $field->field_key, -1 ) == 2 ) {
+				$new_key = rtrim( $new_key, 2 );
+			}
 
             $values = array();
             FrmFieldsHelper::fill_field( $values, $field, $form_id, $new_key );
@@ -246,11 +246,11 @@ class FrmField {
 				$values['form_id'] = $new_repeat_form_id;
 			}
 
-            $values = apply_filters('frm_duplicated_field', $values);
-            $new_id = self::create($values);
-            $frm_duplicate_ids[ $field->id ] = $new_id;
-            $frm_duplicate_ids[ $field->field_key ] = $new_id;
-            unset($field);
+			$values = apply_filters( 'frm_duplicated_field', $values );
+			$new_id = self::create( $values );
+			$frm_duplicate_ids[ $field->id ] = $new_id;
+			$frm_duplicate_ids[ $field->field_key ] = $new_id;
+			unset( $field );
         }
     }
 
@@ -263,7 +263,7 @@ class FrmField {
 			$values['field_key'] = FrmAppHelper::get_unique_key( $values['field_key'], $wpdb->prefix . 'frm_fields', 'field_key', $id );
 		}
 
-        if ( isset($values['required']) ) {
+		if ( isset( $values['required'] ) ) {
             $values['required'] = (int) $values['required'];
         }
 
@@ -291,13 +291,13 @@ class FrmField {
 		if ( isset( $values['form_id'] ) ) {
             $form_id = absint( $values['form_id'] );
 		} else {
-            $field = self::getOne($id);
+			$field = self::getOne( $id );
             if ( $field ) {
                 $form_id = $field->form_id;
             }
-            unset($field);
+			unset( $field );
         }
-        unset($values);
+		unset( $values );
 
 		if ( $query_results ) {
             wp_cache_delete( $id, 'frm_field' );
@@ -350,7 +350,7 @@ class FrmField {
 
 		FrmDb::cache_delete_group( 'frm_field' );
 
-        $form = FrmForm::getOne($form_id);
+		$form = FrmForm::getOne( $form_id );
         if ( $form && $form->parent_form_id && $form->parent_form_id != $form_id ) {
             self::delete_form_transient( $form->parent_form_id );
         }
@@ -372,16 +372,16 @@ class FrmField {
 
         global $wpdb;
 
-        $where = is_numeric($id) ? 'id=%d' : 'field_key=%s';
+		$where = is_numeric( $id ) ? 'id=%d' : 'field_key=%s';
 		$query = $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'frm_fields WHERE ' . $where, $id );
 
         $results = FrmDb::check_cache( $id, 'frm_field', $query, 'get_row', 0 );
 
-        if ( empty($results) ) {
+		if ( empty( $results ) ) {
             return $results;
         }
 
-        if ( is_numeric($id) ) {
+		if ( is_numeric( $id ) ) {
 			FrmDb::set_cache( $results->field_key, $results, 'frm_field' );
         } else if ( $results ) {
 			FrmDb::set_cache( $results->id, $results, 'frm_field' );
@@ -389,7 +389,7 @@ class FrmField {
 
 		self::prepare_options( $results );
 
-        return stripslashes_deep($results);
+		return stripslashes_deep( $results );
     }
 
     /**
@@ -437,13 +437,13 @@ class FrmField {
                     break;
                 }
 
-                if ( ! empty($limit) && $count >= $limit ) {
+				if ( ! empty( $limit ) && $count >= $limit ) {
                     break;
                 }
 
-                unset($result);
-            }
-            return stripslashes_deep($fields);
+				unset( $result );
+			}
+			return stripslashes_deep( $fields );
         }
 
         self::$use_cache = false;
@@ -455,7 +455,7 @@ class FrmField {
 		self::maybe_include_repeating_fields( $inc_sub, $where );
 		$results = self::getAll( $where, 'field_order', $limit );
         self::$use_cache = true;
-        self::include_sub_fields($results, $inc_sub, $type);
+		self::include_sub_fields( $results, $inc_sub, $type );
 
         return $results;
     }
@@ -470,7 +470,7 @@ class FrmField {
 			'inc_repeat' => $inc_repeat,
 		) );
 		if ( ! empty( $results ) ) {
-            if ( empty($limit) ) {
+			if ( empty( $limit ) ) {
 				return $results;
             }
 
@@ -479,7 +479,7 @@ class FrmField {
             foreach ( $results as $result ) {
 				$count++;
 				$fields[ $result->id ] = $result;
-                if ( ! empty($limit) && $count >= $limit ) {
+				if ( ! empty( $limit ) && $count >= $limit ) {
                     break;
                 }
             }
@@ -497,7 +497,7 @@ class FrmField {
 
 		self::include_sub_fields( $results, $inc_embed, 'all' );
 
-        if ( empty($limit) ) {
+		if ( empty( $limit ) ) {
 			self::set_field_transient( $results, $form_id, 0, array(
 				'inc_embed'  => $inc_embed,
 				'inc_repeat' => $inc_repeat,
@@ -533,22 +533,22 @@ class FrmField {
         $form_fields = $results;
 		$index_offset = 1;
         foreach ( $form_fields as $k => $field ) {
-            if ( 'form' != $field->type || ! isset($field->field_options['form_select']) ) {
+			if ( 'form' != $field->type || ! isset( $field->field_options['form_select'] ) ) {
                 continue;
             }
 
             if ( $type == 'all' ) {
                 $sub_fields = self::get_all_for_form( $field->field_options['form_select'] );
             } else {
-                $sub_fields = self::get_all_types_in_form($field->form_id, $type);
+				$sub_fields = self::get_all_types_in_form( $field->form_id, $type );
             }
 
-            if ( ! empty($sub_fields) ) {
+			if ( ! empty( $sub_fields ) ) {
 				$index = $k + $index_offset;
 				$index_offset += count( $sub_fields );
-				array_splice($results, $index, 0, $sub_fields);
-            }
-            unset($field, $sub_fields);
+				array_splice( $results, $index, 0, $sub_fields );
+			}
+			unset( $field, $sub_fields );
         }
     }
 
@@ -556,9 +556,9 @@ class FrmField {
 		$cache_key = maybe_serialize( $where ) . $order_by . 'l' . $limit . 'b' . $blog_id;
         if ( self::$use_cache ) {
             // make sure old cache doesn't get saved as a transient
-            $results = wp_cache_get($cache_key, 'frm_field');
+			$results = wp_cache_get( $cache_key, 'frm_field' );
             if ( false !== $results ) {
-                return stripslashes_deep($results);
+				return stripslashes_deep( $results );
             }
         }
 
@@ -596,7 +596,7 @@ class FrmField {
 			$results = FrmDb::get_var( $table_name . ' fi LEFT OUTER JOIN ' . $form_table_name . ' fr ON fi.form_id=fr.id', $where, 'fi.*, fr.name as form_name', $args, '', $query_type );
 		} else {
 			// if the query is not an array, then it has already been prepared
-			$query .= FrmDb::prepend_and_or_where(' WHERE ', $where ) . $order_by . $limit;
+			$query .= FrmDb::prepend_and_or_where( ' WHERE ', $where ) . $order_by . $limit;
 
 			$function_name = ( $query_type == 'row' ) ? 'get_row' : 'get_results';
 			$results = $wpdb->$function_name( $query );
@@ -640,8 +640,8 @@ class FrmField {
 	private static function prepare_options( &$results ) {
 		$results->field_options = maybe_unserialize( $results->field_options );
 
-		$results->options = maybe_unserialize($results->options);
-		$results->default_value = maybe_unserialize($results->default_value);
+		$results->options = maybe_unserialize( $results->options );
+		$results->default_value = maybe_unserialize( $results->default_value );
 	}
 
 	/**

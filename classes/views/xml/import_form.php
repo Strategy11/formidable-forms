@@ -17,7 +17,7 @@
 			<p>
 				<label>
 					<?php echo esc_html( apply_filters( 'frm_upload_instructions2', __( 'Choose a Formidable XML file', 'formidable' ) ) ) ?>
-					(<?php echo esc_html( sprintf( __( 'Maximum size: %s', 'formidable' ), ini_get( 'upload_max_filesize') ) ) ?>)
+					(<?php echo esc_html( sprintf( __( 'Maximum size: %s', 'formidable' ), ini_get( 'upload_max_filesize' ) ) ); ?>)
 				</label>
 				<input type="file" name="frm_import_file" size="25" />
 			</p>

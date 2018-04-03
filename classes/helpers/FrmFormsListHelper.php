@@ -102,17 +102,17 @@ class FrmFormsListHelper extends FrmListHelper {
 	    $actions = array();
 
 	    if ( 'trash' == $this->status ) {
-	        if ( current_user_can('frm_edit_forms') ) {
+			if ( current_user_can( 'frm_edit_forms' ) ) {
 	            $actions['bulk_untrash'] = __( 'Restore', 'formidable' );
 	        }
 
-	        if ( current_user_can('frm_delete_forms') ) {
+			if ( current_user_can( 'frm_delete_forms' ) ) {
 	            $actions['bulk_delete'] = __( 'Delete Permanently', 'formidable' );
 	        }
-	    } else if ( EMPTY_TRASH_DAYS && current_user_can('frm_delete_forms') ) {
+		} elseif ( EMPTY_TRASH_DAYS && current_user_can( 'frm_delete_forms' ) ) {
 	        $actions['bulk_trash'] = __( 'Move to Trash', 'formidable' );
-	    } else if ( current_user_can('frm_delete_forms') ) {
-	        $actions['bulk_delete'] = __( 'Delete');
+		} elseif ( current_user_can( 'frm_delete_forms' ) ) {
+			$actions['bulk_delete'] = __( 'Delete' );
 	    }
 
         return $actions;
@@ -123,7 +123,7 @@ class FrmFormsListHelper extends FrmListHelper {
             return;
         }
 
-        if ( 'trash' == $this->status && current_user_can('frm_delete_forms') ) {
+		if ( 'trash' == $this->status && current_user_can( 'frm_delete_forms' ) ) {
 ?>
             <div class="alignleft actions frm_visible_overflow">
 			<?php submit_button( __( 'Empty Trash' ), 'apply', 'delete_all', false ); ?>
@@ -139,7 +139,7 @@ class FrmFormsListHelper extends FrmListHelper {
 		$where = apply_filters( 'frm_forms_dropdown', array(), '' );
 		$forms = FrmForm::get_published_forms( $where );
 
-        $base = admin_url('admin.php?page=formidable&form_type=template');
+		$base = admin_url( 'admin.php?page=formidable&form_type=template' );
         $args = array(
             'frm_action'    => 'duplicate',
             'template'      => true,
@@ -161,7 +161,7 @@ class FrmFormsListHelper extends FrmListHelper {
 				?>
 			<li><a href="<?php echo esc_url( add_query_arg( $args, $base ) ); ?>" tabindex="-1"><?php echo esc_html( empty( $form->name ) ? __( '(no title)' ) : FrmAppHelper::truncate( $form->name, 33 ) ); ?></a></li>
 			<?php
-			    unset($form);
+				unset( $form );
 			}
         }
         ?>
@@ -199,7 +199,7 @@ class FrmFormsListHelper extends FrmListHelper {
 				$links[ $status ] = '<a href="' . esc_url( '?page=formidable&form_type=' . $status ) . '" ' . $class . '>' . sprintf( __( '%1$s <span class="count">(%2$s)</span>', 'formidable' ), $name, number_format_i18n( $counts->{$status} ) ) . '</a>';
 		    }
 
-		    unset($status, $name);
+			unset( $status, $name );
 	    }
 
 		return $links;
@@ -264,7 +264,7 @@ class FrmFormsListHelper extends FrmListHelper {
 
 				    break;
 				case 'created_at':
-				    $date = date($format, strtotime($item->created_at));
+					$date = date( $format, strtotime( $item->created_at ) );
 					$val = '<abbr title="' . esc_attr( date( 'Y/m/d g:i:s A', strtotime( $item->created_at ) ) ) . '">' . $date . '</abbr>';
 					break;
 				case 'shortcode':
@@ -275,7 +275,7 @@ class FrmFormsListHelper extends FrmListHelper {
 			        break;
 			    case 'entries':
 					if ( isset( $item->options['no_save'] ) && $item->options['no_save'] ) {
-						$val = '<i class="frm_icon_font frm_forbid_icon frm_bstooltip" title="' . esc_attr('Saving entries is disabled for this form', 'formidable' ) . '"></i>';
+						$val = '<i class="frm_icon_font frm_forbid_icon frm_bstooltip" title="' . esc_attr( 'Saving entries is disabled for this form', 'formidable' ) . '"></i>';
 					} else {
 						$text = FrmEntry::getRecordCount( $item->id );
 						$val = current_user_can( 'frm_view_entries' ) ? '<a href="' . esc_url( admin_url( 'admin.php?page=formidable-entries&form=' . $item->id ) ) . '">' . $text . '</a>' : $text;
@@ -324,7 +324,7 @@ class FrmFormsListHelper extends FrmListHelper {
 		}
 
 		$actions = array_merge( $actions, $new_actions );
-		$actions['view'] = '<a href="' . esc_url( FrmFormsHelper::get_direct_link( $item->form_key, $item ) ) . '" target="_blank">' . __( 'Preview') . '</a>';
+		$actions['view'] = '<a href="' . esc_url( FrmFormsHelper::get_direct_link( $item->form_key, $item ) ) . '" target="_blank">' . __( 'Preview' ) . '</a>';
     }
 
     /**
@@ -332,9 +332,9 @@ class FrmFormsListHelper extends FrmListHelper {
      */
 	private function get_form_name( $item, $actions, $edit_link, $mode = 'list' ) {
         $form_name = $item->name;
-        if ( trim($form_name) == '' ) {
-            $form_name = __( '(no title)');
-        }
+		if ( trim( $form_name ) == '' ) {
+			$form_name = __( '(no title)' );
+		}
 		$form_name = FrmAppHelper::kses( $form_name );
 		if ( 'excerpt' != $mode ) {
 			$form_name = FrmAppHelper::truncate( $form_name, 50 );
@@ -370,7 +370,7 @@ class FrmFormsListHelper extends FrmListHelper {
     private function add_form_description( $item, &$val ) {
         global $mode;
         if ( 'excerpt' == $mode ) {
-            $val .= FrmAppHelper::truncate(strip_tags($item->description), 50);
+			$val .= FrmAppHelper::truncate( strip_tags( $item->description ), 50 );
         }
     }
 }

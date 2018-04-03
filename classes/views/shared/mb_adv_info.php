@@ -67,14 +67,14 @@
 									) );
 
                                     $ldfe = $linked_field->id;
-                                    unset($linked_field);
+									unset( $linked_field );
                                 }
                             }
                         }
                     }
                     $dfe = $f->id;
         	    }
-                unset($f);
+				unset( $f );
                 }
 			}
 			?>
@@ -129,8 +129,8 @@
             ?>
                 <li>
                     <a href="javascript:void(0)" class="frmids alignright frm_insert_code" data-code="if <?php echo esc_attr( $f->id ) ?>]<?php esc_attr_e( 'Conditional text here', 'formidable' ) ?>[/if <?php echo esc_attr( $f->id ) ?>">[if <?php echo (int) $f->id ?>]</a>
-                	<a href="javascript:void(0)" class="frmkeys alignright frm_insert_code" data-code="if <?php echo esc_attr( $f->field_key ) ?>]something[/if <?php echo esc_attr( $f->field_key ) ?>">[if <?php echo FrmAppHelper::truncate($f->field_key, 10) ?>]</a>
-                	<a href="javascript:void(0)" class="frm_insert_code" data-code="<?php echo esc_attr($f->id) ?>"><?php echo FrmAppHelper::truncate($f->name, 60) ?></a>
+					<a href="javascript:void(0)" class="frmkeys alignright frm_insert_code" data-code="if <?php echo esc_attr( $f->field_key ); ?>]something[/if <?php echo esc_attr( $f->field_key ); ?>">[if <?php echo FrmAppHelper::truncate( $f->field_key, 10 ); ?>]</a>
+					<a href="javascript:void(0)" class="frm_insert_code" data-code="<?php echo esc_attr( $f->id ); ?>"><?php echo FrmAppHelper::truncate( $f->name, 60 ); ?></a>
                 </li>
                 <?php
 
@@ -152,11 +152,11 @@
 		foreach ( $cond_shortcodes as $skey => $sname ) {
 	    ?>
 	    <li class="frm_col_<?php echo esc_attr( $col ) ?>">
-	        <a href="javascript:void(0)" class="frmbutton button frm_insert_code" data-code="if x <?php echo esc_attr($skey) ?>][/if x"><?php echo esc_html( $sname ) ?></a>
+			<a href="javascript:void(0)" class="frmbutton button frm_insert_code" data-code="if x <?php echo esc_attr( $skey ); ?>][/if x"><?php echo esc_html( $sname ); ?></a>
 	    </li>
 	    <?php
 	        $col = ( $col == 'one' ) ? 'two' : 'one';
-	        unset($skey, $sname);
+			unset( $skey, $sname );
 	    }
         ?>
         </ul>
@@ -184,15 +184,15 @@
 		?>
 		<?php if ( isset( $file ) ) { ?>
         <li class="frm_col_<?php echo esc_attr( $col ) ?>">
-	        <a href="javascript:void(0)" class="frmbutton button frm_insert_code" data-code="<?php echo esc_attr($file->id) ?> show_image=1"><?php esc_html_e( 'Show image', 'formidable' ) ?></a>
+			<a href="javascript:void(0)" class="frmbutton button frm_insert_code" data-code="<?php echo esc_attr( $file->id ); ?> show_image=1"><?php esc_html_e( 'Show image', 'formidable' ); ?></a>
 	    </li>
 		<?php $col = ( $col == 'one' ? 'two' : 'one' ); ?>
 		<li class="frm_col_<?php echo esc_attr( $col ) ?>">
-	        <a href="javascript:void(0)" class="frmbutton button frm_insert_code" data-code="<?php echo esc_attr($file->id) ?> show=id"><?php esc_html_e( 'Image ID', 'formidable' ) ?></a>
+			<a href="javascript:void(0)" class="frmbutton button frm_insert_code" data-code="<?php echo esc_attr( $file->id ); ?> show=id"><?php esc_html_e( 'Image ID', 'formidable' ); ?></a>
 	    </li>
 		<?php $col = ( $col == 'one' ? 'two' : 'one' ); ?>
 		<li class="frm_col_<?php echo esc_attr( $col ) ?>">
-	        <a href="javascript:void(0)" class="frmbutton button frm_insert_code" data-code="<?php echo esc_attr($file->id) ?> show_filename=1"><?php esc_html_e( 'Image Name', 'formidable' ) ?></a>
+			<a href="javascript:void(0)" class="frmbutton button frm_insert_code" data-code="<?php echo esc_attr( $file->id ); ?> show_filename=1"><?php esc_html_e( 'Image Name', 'formidable' ); ?></a>
 	    </li>
 	    <?php } ?>
         </ul>

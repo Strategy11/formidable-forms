@@ -1,5 +1,5 @@
 <?php
-if ( ! defined('ABSPATH') ) {
+if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
@@ -14,7 +14,7 @@ class FrmFormsHelper {
 
 	public static function get_direct_link( $key, $form = false ) {
 		$target_url = esc_url( admin_url( 'admin-ajax.php?action=frm_forms_preview&form=' . $key ) );
-        $target_url = apply_filters('frm_direct_link', $target_url, $key, $form);
+		$target_url = apply_filters( 'frm_direct_link', $target_url, $key, $form );
 
         return $target_url;
     }
@@ -39,7 +39,7 @@ class FrmFormsHelper {
 			$query['id !'] = $args['exclude'];
         }
 
-        $where = apply_filters('frm_forms_dropdown', $query, $field_name);
+		$where = apply_filters( 'frm_forms_dropdown', $query, $field_name );
 		$forms = FrmForm::get_published_forms( $where, 999, $args['inc_children'] );
 		$add_html = array();
 		self::add_html_attr( $args['onchange'], 'onchange', $add_html );
@@ -82,7 +82,7 @@ class FrmFormsHelper {
 		);
 		if ( isset( $_GET['id'] ) && ! isset( $_GET['form'] ) ) {
 			unset( $args['form'] );
-		} else if ( isset( $_GET['form']) && ! isset( $_GET['id'] ) ) {
+		} elseif ( isset( $_GET['form'] ) && ! isset( $_GET['id'] ) ) {
 			unset( $args['id'] );
         }
 
@@ -90,11 +90,11 @@ class FrmFormsHelper {
 		if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) && in_array( $frm_action, array( 'edit', 'show', 'destroy_all' ) ) ) {
             $args['frm_action'] = 'list';
             $args['form'] = 0;
-		} else if ( FrmAppHelper::is_admin_page('formidable' ) && in_array( $frm_action, array( 'new', 'duplicate' ) ) ) {
+		} elseif ( FrmAppHelper::is_admin_page( 'formidable' ) && in_array( $frm_action, array( 'new', 'duplicate' ) ) ) {
             $args['frm_action'] = 'edit';
 		} else if ( isset( $_GET['post'] ) ) {
             $args['form'] = 0;
-            $base = admin_url('edit.php?post_type=frm_display');
+			$base = admin_url( 'edit.php?post_type=frm_display' );
         }
 
         ?>
@@ -179,7 +179,7 @@ class FrmFormsHelper {
             $post_values = $values;
         } else {
             $values = array();
-            $post_values = isset($_POST) ? $_POST : array();
+			$post_values = isset( $_POST ) ? $_POST : array();
         }
 
 		$defaults = array(
@@ -192,7 +192,7 @@ class FrmFormsHelper {
             }
         }
 
-        $values['description'] = FrmAppHelper::use_wpautop($values['description']);
+		$values['description'] = FrmAppHelper::use_wpautop( $values['description'] );
 
 		$defaults = array(
 			'form_id'        => '',
@@ -217,7 +217,7 @@ class FrmFormsHelper {
 		$values = self::fill_default_opts( $values, false, $post_values );
 		$values['custom_style'] = FrmAppHelper::custom_style_value( $post_values );
 
-        return apply_filters('frm_setup_new_form_vars', $values);
+		return apply_filters( 'frm_setup_new_form_vars', $values );
     }
 
     /**
@@ -228,9 +228,9 @@ class FrmFormsHelper {
 			$post_values = stripslashes_deep( $_POST );
 		}
 
-        $values['form_key'] = isset($post_values['form_key']) ? $post_values['form_key'] : $record->form_key;
-        $values['default_template'] = isset($post_values['default_template']) ? $post_values['default_template'] : $record->default_template;
-        $values['is_template'] = isset($post_values['is_template']) ? $post_values['is_template'] : $record->is_template;
+		$values['form_key'] = isset( $post_values['form_key'] ) ? $post_values['form_key'] : $record->form_key;
+		$values['default_template'] = isset( $post_values['default_template'] ) ? $post_values['default_template'] : $record->default_template;
+		$values['is_template'] = isset( $post_values['is_template'] ) ? $post_values['is_template'] : $record->is_template;
         $values['status'] = $record->status;
 
 		$values = self::fill_default_opts( $values, $record, $post_values );
@@ -537,7 +537,7 @@ BEFORE_HTML;
 			$class .= ' frm_center_submit';
 		}
 
-        $class = apply_filters('frm_add_form_style_class', $class, $style);
+		$class = apply_filters( 'frm_add_form_style_class', $class, $style );
 
         return $class;
     }
@@ -692,7 +692,7 @@ BEFORE_HTML;
 	 * @since 3.0
 	 */
 	public static function actions_dropdown( $atts ) {
-		if ( FrmAppHelper::is_admin_page('formidable' ) ) {
+		if ( FrmAppHelper::is_admin_page( 'formidable' ) ) {
 			$status = $atts['status'];
 			$form_id = isset( $atts['id'] ) ? $atts['id'] : FrmAppHelper::get_param( 'id', 0, 'get', 'absint' );
 			$trash_link = self::delete_trash_info( $form_id, $status );
@@ -714,7 +714,7 @@ BEFORE_HTML;
 		if ( 'trash' == $form->status ) {
 			$actions['restore'] = $trash_links['restore'];
 
-			if ( current_user_can('frm_delete_forms') ) {
+			if ( current_user_can( 'frm_delete_forms' ) ) {
 				$actions['trash'] = $trash_links['delete'];
 			}
 		} elseif ( current_user_can( 'frm_edit_forms' ) ) {
@@ -740,12 +740,12 @@ BEFORE_HTML;
 	}
 
 	public static function edit_form_link( $form_id ) {
-        if ( is_object($form_id) ) {
+		if ( is_object( $form_id ) ) {
             $form = $form_id;
             $name = $form->name;
             $form_id = $form->id;
         } else {
-            $name = FrmForm::getName($form_id);
+			$name = FrmForm::getName( $form_id );
         }
 
         if ( $form_id ) {
@@ -791,7 +791,7 @@ BEFORE_HTML;
 
 		if ( 'trash' == $status ) {
 			$info = $labels['restore'];
-		} elseif ( current_user_can('frm_delete_forms') ) {
+		} elseif ( current_user_can( 'frm_delete_forms' ) ) {
 			if ( EMPTY_TRASH_DAYS ) {
 				$info = $labels['trash'];
 			} else {

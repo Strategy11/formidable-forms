@@ -530,7 +530,7 @@ class FrmFieldsController {
             return;
         }
 
-        if ( FrmAppHelper::is_admin_page('formidable' ) ) {
+		if ( FrmAppHelper::is_admin_page( 'formidable' ) ) {
             return;
         }
 

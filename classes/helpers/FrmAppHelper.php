@@ -1,5 +1,5 @@
 <?php
-if ( ! defined('ABSPATH') ) {
+if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
@@ -659,7 +659,7 @@ class FrmAppHelper {
 
 	public static function wp_roles_dropdown( $field_name, $capability, $multiple = 'single' ) {
 		?>
-		<select name="<?php echo esc_attr($field_name); ?>" id="<?php echo esc_attr($field_name); ?>" <?php echo ( 'multiple' === $multiple ) ? 'multiple="multiple"' : ''; ?> class="frm_multiselect">
+		<select name="<?php echo esc_attr( $field_name ); ?>" id="<?php echo esc_attr( $field_name ); ?>" <?php echo ( 'multiple' === $multiple ) ? 'multiple="multiple"' : ''; ?> class="frm_multiselect">
 			<?php self::roles_options( $capability ); ?>
 		</select>
 		<?php
@@ -667,7 +667,7 @@ class FrmAppHelper {
 
 	public static function roles_options( $capability ) {
         global $frm_vars;
-        if ( isset($frm_vars['editable_roles']) ) {
+		if ( isset( $frm_vars['editable_roles'] ) ) {
             $editable_roles = $frm_vars['editable_roles'];
         } else {
             $editable_roles = get_editable_roles();
@@ -769,12 +769,12 @@ class FrmAppHelper {
      * @param string $permission
      */
 	public static function permission_check( $permission, $show_message = 'show' ) {
-        $permission_error = self::permission_nonce_error($permission);
+		$permission_error = self::permission_nonce_error( $permission );
         if ( $permission_error !== false ) {
             if ( 'hide' == $show_message ) {
                 $permission_error = '';
             }
-            wp_die($permission_error);
+			wp_die( $permission_error );
         }
     }
 
@@ -791,7 +791,7 @@ class FrmAppHelper {
 		}
 
 		$error = false;
-        if ( empty($nonce_name) ) {
+		if ( empty( $nonce_name ) ) {
             return $error;
         }
 
@@ -851,7 +851,7 @@ class FrmAppHelper {
 	public static function array_flatten( $array, $keys = 'keep' ) {
         $return = array();
         foreach ( $array as $key => $value ) {
-            if ( is_array($value) ) {
+			if ( is_array( $value ) ) {
 				$return = array_merge( $return, self::array_flatten( $value, $keys ) );
             } else {
 				if ( $keys == 'keep' ) {
@@ -878,11 +878,11 @@ class FrmAppHelper {
      * @since 2.0
      */
 	public static function use_wpautop( $content ) {
-        if ( apply_filters('frm_use_wpautop', true) ) {
-            $content = wpautop(str_replace( '<br>', '<br />', $content));
-        }
-        return $content;
-    }
+		if ( apply_filters( 'frm_use_wpautop', true ) ) {
+			$content = wpautop( str_replace( '<br>', '<br />', $content ) );
+		}
+		return $content;
+	}
 
 	public static function replace_quotes( $val ) {
         //Replace double quotes
@@ -898,7 +898,7 @@ class FrmAppHelper {
      */
     public static function jquery_ui_base_url() {
 		$url = 'http' . ( is_ssl() ? 's' : '' ) . '://ajax.googleapis.com/ajax/libs/jqueryui/' . self::script_version( 'jquery-ui-core', '1.11.4' );
-        $url = apply_filters('frm_jquery_ui_base_url', $url);
+		$url = apply_filters( 'frm_jquery_ui_base_url', $url );
         return $url;
     }
 
@@ -929,7 +929,7 @@ class FrmAppHelper {
     }
 
 	public static function get_user_id_param( $user_id ) {
-        if ( ! $user_id || empty($user_id) || is_numeric($user_id) ) {
+		if ( ! $user_id || empty( $user_id ) || is_numeric( $user_id ) ) {
             return $user_id;
         }
 
@@ -975,16 +975,16 @@ class FrmAppHelper {
         $key = '';
 
         if ( ! empty( $name ) ) {
-            $key = sanitize_key($name);
+			$key = sanitize_key( $name );
         }
 
 		if ( empty( $key ) ) {
-            $max_slug_value = pow(36, $num_chars);
+			$max_slug_value = pow( 36, $num_chars );
             $min_slug_value = 37; // we want to have at least 2 characters in the slug
-            $key = base_convert( rand($min_slug_value, $max_slug_value), 10, 36 );
+			$key = base_convert( rand( $min_slug_value, $max_slug_value ), 10, 36 );
         }
 
-		if ( is_numeric($key) || in_array( $key, array( 'id', 'key', 'created-at', 'detaillink', 'editlink', 'siteurl', 'evenodd' ) ) ) {
+		if ( is_numeric( $key ) || in_array( $key, array( 'id', 'key', 'created-at', 'detaillink', 'editlink', 'siteurl', 'evenodd' ) ) ) {
 			$key = $key . 'a';
         }
 
@@ -993,7 +993,7 @@ class FrmAppHelper {
 			'ID !'  => $id,
 		), $column );
 
-        if ( $key_check || is_numeric($key_check) ) {
+		if ( $key_check || is_numeric( $key_check ) ) {
             $suffix = 2;
 			do {
 				$alt_post_name = substr( $key, 0, 200 - ( strlen( $suffix ) + 1 ) ) . $suffix;
@@ -1051,7 +1051,7 @@ class FrmAppHelper {
 	private static function prepare_field_arrays( $fields, $record, array &$values, $args ) {
 		if ( ! empty( $fields ) ) {
 			foreach ( (array) $fields as $field ) {
-				$field->default_value = apply_filters('frm_get_default_value', $field->default_value, $field, true );
+				$field->default_value = apply_filters( 'frm_get_default_value', $field->default_value, $field, true );
 				$args['parent_form_id'] = isset( $args['parent_form_id'] ) ? $args['parent_form_id'] : $field->form_id;
 				self::fill_field_defaults( $field, $record, $values, $args );
 			}
@@ -1064,8 +1064,8 @@ class FrmAppHelper {
         if ( $args['default'] ) {
             $meta_value = $field->default_value;
         } else {
-            if ( $record->post_id && self::pro_is_installed() && isset($field->field_options['post_field']) && $field->field_options['post_field'] ) {
-                if ( ! isset($field->field_options['custom_field']) ) {
+			if ( $record->post_id && self::pro_is_installed() && isset( $field->field_options['post_field'] ) && $field->field_options['post_field'] ) {
+				if ( ! isset( $field->field_options['custom_field'] ) ) {
                     $field->field_options['custom_field'] = '';
                 }
 				$meta_value = FrmProEntryMetaHelper::get_post_value( $record->post_id, $field->field_options['post_field'], $field->field_options['custom_field'], array(
@@ -1091,7 +1091,7 @@ class FrmAppHelper {
 
 		FrmFieldsHelper::prepare_edit_front_field( $field_array, $field, $values['id'], $args );
 
-        if ( ! isset($field_array['unique']) || ! $field_array['unique'] ) {
+		if ( ! isset( $field_array['unique'] ) || ! $field_array['unique'] ) {
             $field_array['unique_msg'] = '';
         }
 
@@ -1134,7 +1134,7 @@ class FrmAppHelper {
             return;
         }
 
-        $values['form_name'] = isset($record->form_id) ? $form->name : '';
+		$values['form_name'] = isset( $record->form_id ) ? $form->name : '';
 		$values['parent_form_id'] = isset( $record->form_id ) ? $form->parent_form_id : 0;
 
 		if ( ! is_array( $form->options ) ) {
@@ -1228,18 +1228,18 @@ class FrmAppHelper {
 		foreach ( $words as $word ) {
 			$part = ( ( $sub != '' ) ? ' ' : '' ) . $word;
 			$total_len = self::mb_function( array( 'mb_strlen', 'strlen' ), array( $sub . $part ) );
-            if ( $total_len > $length && str_word_count($sub) ) {
+			if ( $total_len > $length && str_word_count( $sub ) ) {
                 break;
             }
 
             $sub .= $part;
 			$len += self::mb_function( array( 'mb_strlen', 'strlen' ), array( $part ) );
 
-            if ( str_word_count($sub) > $minword && $total_len >= $length ) {
+			if ( str_word_count( $sub ) > $minword && $total_len >= $length ) {
                 break;
             }
 
-            unset($total_len, $word);
+			unset( $total_len, $word );
         }
 
 		return $sub . ( ( $len < $original_len ) ? $continue : '' );
@@ -1255,17 +1255,17 @@ class FrmAppHelper {
 	}
 
 	public static function get_formatted_time( $date, $date_format = '', $time_format = '' ) {
-        if ( empty($date) ) {
+		if ( empty( $date ) ) {
             return $date;
         }
 
-        if ( empty($date_format) ) {
-            $date_format = get_option('date_format');
-        }
+		if ( empty( $date_format ) ) {
+			$date_format = get_option( 'date_format' );
+		}
 
-        if ( preg_match('/^\d{1-2}\/\d{1-2}\/\d{4}$/', $date) && self::pro_is_installed() ) {
+		if ( preg_match( '/^\d{1-2}\/\d{1-2}\/\d{4}$/', $date ) && self::pro_is_installed() ) {
             $frmpro_settings = new FrmProSettings();
-            $date = FrmProAppHelper::convert_date($date, $frmpro_settings->date_format, 'Y-m-d');
+			$date = FrmProAppHelper::convert_date( $date, $frmpro_settings->date_format, 'Y-m-d' );
         }
 
 		$formatted = self::get_localized_date( $date_format, $date );
@@ -1280,7 +1280,7 @@ class FrmAppHelper {
 
 	private static function add_time_to_date( $time_format, $date ) {
 		if ( empty( $time_format ) ) {
-			$time_format = get_option('time_format');
+			$time_format = get_option( 'time_format' );
 		}
 
 		$trimmed_format = trim( $time_format );
@@ -1384,21 +1384,21 @@ class FrmAppHelper {
 	public static function json_to_array( $json_vars ) {
         $vars = array();
         foreach ( $json_vars as $jv ) {
-            $jv_name = explode('[', $jv['name']);
-            $last = count($jv_name) - 1;
-            foreach ( $jv_name as $p => $n ) {
-                $name = trim($n, ']');
-                if ( ! isset($l1) ) {
-                    $l1 = $name;
-                }
+			$jv_name = explode( '[', $jv['name'] );
+			$last = count( $jv_name ) - 1;
+			foreach ( $jv_name as $p => $n ) {
+				$name = trim( $n, ']' );
+				if ( ! isset( $l1 ) ) {
+					$l1 = $name;
+				}
 
-                if ( ! isset($l2) ) {
-                    $l2 = $name;
-                }
+				if ( ! isset( $l2 ) ) {
+					$l2 = $name;
+				}
 
-                if ( ! isset($l3) ) {
-                    $l3 = $name;
-                }
+				if ( ! isset( $l3 ) ) {
+					$l3 = $name;
+				}
 
                 $this_val = ( $p == $last ) ? $jv['value'] : array();
 
@@ -1423,10 +1423,10 @@ class FrmAppHelper {
                         self::add_value_to_array( $name, $l4, $this_val, $vars[ $l1 ][ $l2 ][ $l3 ] );
                 }
 
-                unset($this_val, $n);
+				unset( $this_val, $n );
             }
 
-            unset($last, $jv);
+			unset( $last, $jv );
         }
 
         return $vars;
@@ -1536,17 +1536,17 @@ class FrmAppHelper {
 	}
 
 	public static function maybe_json_decode( $string ) {
-        if ( is_array($string) ) {
+		if ( is_array( $string ) ) {
             return $string;
         }
 
-        $new_string = json_decode($string, true);
-        if ( function_exists('json_last_error') ) {
+		$new_string = json_decode( $string, true );
+		if ( function_exists( 'json_last_error' ) ) {
 			// php 5.3+
             if ( json_last_error() == JSON_ERROR_NONE ) {
                 $string = $new_string;
             }
-        } else if ( isset($new_string) ) {
+		} elseif ( isset( $new_string ) ) {
 			// php < 5.3 fallback
             $string = $new_string;
         }
@@ -1562,11 +1562,11 @@ class FrmAppHelper {
 	public static function maybe_highlight_menu( $post_type ) {
         global $post;
 
-        if ( isset($_REQUEST['post_type']) && $_REQUEST['post_type'] != $post_type ) {
+		if ( isset( $_REQUEST['post_type'] ) && $_REQUEST['post_type'] != $post_type ) {
             return;
         }
 
-        if ( is_object($post) && $post->post_type != $post_type ) {
+		if ( is_object( $post ) && $post->post_type != $post_type ) {
             return;
         }
 
@@ -1670,11 +1670,11 @@ class FrmAppHelper {
         $frm_version = self::plugin_version();
 
         // check if Formidable meets minimum requirements
-        if ( version_compare($frm_version, $min_version, '>=') ) {
+		if ( version_compare( $frm_version, $min_version, '>=' ) ) {
             return;
         }
 
-        $wp_list_table = _get_list_table('WP_Plugins_List_Table');
+		$wp_list_table = _get_list_table( 'WP_Plugins_List_Table' );
 		echo '<tr class="plugin-update-tr active"><th colspan="' . absint( $wp_list_table->get_column_count() ) . '" class="check-column plugin-update colspanchange"><div class="update-message">' .
         __( 'You are running an outdated version of Formidable. This plugin may not work correctly if you do not update Formidable.', 'formidable' ) .
         '</div></td></tr>';

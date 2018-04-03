@@ -140,17 +140,17 @@ class FrmFieldFormHtml {
 		$this->html = str_replace( 'field_[key]', $this->html_id, $this->html );
 
 		//replace [key]
-		$this->html = str_replace( '[key]', $this->field_obj->get_field_column('field_key'), $this->html );
+		$this->html = str_replace( '[key]', $this->field_obj->get_field_column( 'field_key' ), $this->html );
 
 		//replace [field_name]
-		$this->html = str_replace('[field_name]', $this->field_obj->get_field_column('name'), $this->html );
+		$this->html = str_replace( '[field_name]', $this->field_obj->get_field_column( 'name' ), $this->html );
 	}
 
 	/**
 	 * @since 3.0
 	 */
 	private function replace_required_label_shortcode() {
-		$required = FrmField::is_required( $this->field_obj->get_field() ) ? $this->field_obj->get_field_column('required_indicator') : '';
+		$required = FrmField::is_required( $this->field_obj->get_field() ) ? $this->field_obj->get_field_column( 'required_indicator' ) : '';
 		FrmShortcodeHelper::remove_inline_conditions( ! empty( $required ), 'required_label', $required, $this->html );
 	}
 
@@ -173,7 +173,7 @@ class FrmFieldFormHtml {
 	 */
 	private function replace_description_shortcode() {
 		$this->maybe_add_description_id();
-		$description = $this->field_obj->get_field_column('description');
+		$description = $this->field_obj->get_field_column( 'description' );
 		FrmShortcodeHelper::remove_inline_conditions( ( $description && $description != '' ), 'description', $description, $this->html );
 	}
 
@@ -183,7 +183,7 @@ class FrmFieldFormHtml {
 	 * @since 3.0
 	 */
 	private function maybe_add_description_id() {
-		$description = $this->field_obj->get_field_column('description');
+		$description = $this->field_obj->get_field_column( 'description' );
 		if ( $description != '' ) {
 
 			preg_match_all( '/(\[if\s+description\])(.*?)(\[\/if\s+description\])/mis', $this->html, $inner_html );
@@ -237,7 +237,7 @@ class FrmFieldFormHtml {
 		$this->html .= "\n";
 
 		// Stop html filtering on confirmation field to prevent loop
-		if ( $this->field_obj->get_field_column('conf_field') != 'stop' ) {
+		if ( $this->field_obj->get_field_column( 'conf_field' ) != 'stop' ) {
 			$this->filter_for_more_shortcodes();
 		}
 	}
@@ -274,7 +274,7 @@ class FrmFieldFormHtml {
 	 * @since 3.0
 	 */
 	private function replace_shortcodes_with_atts() {
-		preg_match_all("/\[(input|deletelink)\b(.*?)(?:(\/))?\]/s", $this->html, $shortcodes, PREG_PATTERN_ORDER);
+		preg_match_all( "/\[(input|deletelink)\b(.*?)(?:(\/))?\]/s", $this->html, $shortcodes, PREG_PATTERN_ORDER );
 
 		foreach ( $shortcodes[0] as $short_key => $tag ) {
 			$shortcode_atts = FrmShortcodeHelper::get_shortcode_attribute_array( $shortcodes[2][ $short_key ] );
@@ -333,7 +333,7 @@ class FrmFieldFormHtml {
 	private function add_class_to_label() {
 		$label_class = $this->field_obj->get_label_class();
 		$this->html = str_replace( '[label_position]', $label_class, $this->html );
-		if ( $this->field_obj->get_field_column('label') == 'inside' && $this->field_obj->get_field_column('value') != '' ) {
+		if ( $this->field_obj->get_field_column( 'label' ) == 'inside' && $this->field_obj->get_field_column( 'value' ) != '' ) {
 			$this->html = str_replace( 'frm_primary_label', 'frm_primary_label frm_visible', $this->html );
 		}
 	}
@@ -356,7 +356,7 @@ class FrmFieldFormHtml {
 	private function add_field_div_classes() {
 		$classes = $this->get_field_div_classes();
 
-		if ( $this->field_obj->get_field_column('type') == 'html' && strpos( $this->html, '[error_class]' ) === false ) {
+		if ( $this->field_obj->get_field_column( 'type' ) == 'html' && strpos( $this->html, '[error_class]' ) === false ) {
 			// there is no error_class shortcode for HTML fields
 			$this->html = str_replace( 'class="frm_form_field', 'class="frm_form_field ' . $classes, $this->html );
 		}
@@ -378,13 +378,13 @@ class FrmFieldFormHtml {
 		// Add label position class
 		$settings = $this->field_obj->display_field_settings();
 		if ( isset( $settings['label_position'] ) && $settings['label_position'] ) {
-			$classes .= ' frm_' . $this->field_obj->get_field_column('label') . '_container';
+			$classes .= ' frm_' . $this->field_obj->get_field_column( 'label' ) . '_container';
 		}
 
 		// Add CSS layout classes
-		$extra_classes = $this->field_obj->get_field_column('classes');
+		$extra_classes = $this->field_obj->get_field_column( 'classes' );
 		if ( ! empty( $extra_classes ) ) {
-			if ( ! strpos( $this->html, 'frm_form_field ') ) {
+			if ( ! strpos( $this->html, 'frm_form_field ' ) ) {
 				$classes .= ' frm_form_field';
 			}
 			$classes .= ' ' . $extra_classes;

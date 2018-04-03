@@ -46,7 +46,7 @@ class FrmSettingsController {
 	}
 
 	public static function load_settings_tab() {
-		FrmAppHelper::permission_check('frm_change_settings');
+		FrmAppHelper::permission_check( 'frm_change_settings' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
 		$section = FrmAppHelper::get_post_param( 'tab', '', 'sanitize_text_field' );

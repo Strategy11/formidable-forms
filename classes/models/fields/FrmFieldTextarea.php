@@ -32,7 +32,7 @@ class FrmFieldTextarea extends FrmFieldType {
 		$size_html = $size ? ' style="width:' . esc_attr( $size . ( is_numeric( $size ) ? 'px' : '' ) ) . '";' : '';
 
 		$max = FrmField::get_option( $this->field, 'max' );
-		$default_value = FrmAppHelper::esc_textarea( force_balance_tags( $this->get_field_column('default_value') ) );
+		$default_value = FrmAppHelper::esc_textarea( force_balance_tags( $this->get_field_column( 'default_value' ) ) );
 
 		echo '<textarea name="' . esc_attr( $this->html_name( $name ) ) . '" ' .
 			$size_html . ' rows="' . esc_attr( $max ) . '" ' .

@@ -177,8 +177,8 @@ class FrmCreateFile {
 		$credentials['password'] = defined( 'FTP_PASS' ) ? FTP_PASS : '';
 
 		// Check to see if we are setting the public/private keys for ssh
-		$credentials['public_key'] = defined('FTP_PUBKEY') ? FTP_PUBKEY : '';
-		$credentials['private_key'] = defined('FTP_PRIKEY') ? FTP_PRIKEY : '';
+		$credentials['public_key'] = defined( 'FTP_PUBKEY' ) ? FTP_PUBKEY : '';
+		$credentials['private_key'] = defined( 'FTP_PRIKEY' ) ? FTP_PRIKEY : '';
 
 		// Sanitize the hostname, Some people might pass in odd-data:
 		$credentials['hostname'] = preg_replace( '|\w+://|', '', $credentials['hostname'] ); //Strip any schemes off

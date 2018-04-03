@@ -94,7 +94,7 @@
                 <tr>
                     <td class="frm_175_width">
                         <select name="options[success_action]" id="success_action">
-                            <option value="message" <?php selected($values['success_action'], 'message') ?>>
+							<option value="message" <?php selected( $values['success_action'], 'message' ); ?>>
 								<?php esc_html_e( 'Show Message', 'formidable' ) ?>
 							</option>
 							<option value="redirect" <?php selected( $values['success_action'], 'redirect' ); ?>>
@@ -133,7 +133,7 @@
 						</label>
                     </td>
                 </tr>
-                <?php if ( function_exists( 'akismet_http_post') ) { ?>
+				<?php if ( function_exists( 'akismet_http_post' ) ) { ?>
                 <tr>
                     <td colspan="2"><?php esc_html_e( 'Use Akismet to check entries for spam for', 'formidable' ) ?>
 						<select name="options[akismet]">
@@ -246,7 +246,7 @@
 						<textarea id="frm_form_description" name="description" cols="50" rows="5" class="frm_long_input"><?php echo FrmAppHelper::esc_textarea( $values['description'] ); ?></textarea>
 					</td>
 				</tr>
-				<?php do_action('frm_additional_form_options', $values); ?>
+				<?php do_action( 'frm_additional_form_options', $values ); ?>
 			</table>
 		</div>
 
@@ -315,10 +315,12 @@
                 </div>
 
                 <p><label><?php esc_html_e( 'After Fields', 'formidable' ) ?></label>
-                <textarea name="options[after_html]" rows="3" id="after_html" class="frm_long_input"><?php echo FrmAppHelper::esc_textarea($values['after_html']) ?></textarea></p>
+					<textarea name="options[after_html]" rows="3" id="after_html" class="frm_long_input"><?php echo FrmAppHelper::esc_textarea( $values['after_html'] ); ?></textarea>
+				</p>
 
                 <p><label><?php esc_html_e( 'Submit Button', 'formidable' ) ?></label>
-                <textarea name="options[submit_html]" rows="3" id="submit_html" class="frm_long_input"><?php echo FrmAppHelper::esc_textarea($values['submit_html']) ?></textarea></p>
+					<textarea name="options[submit_html]" rows="3" id="submit_html" class="frm_long_input"><?php echo FrmAppHelper::esc_textarea( $values['submit_html'] ); ?></textarea>
+				</p>
             </div>
         </div>
 
@@ -341,7 +343,7 @@
             </div>
         <?php } ?>
 
-        <?php do_action('frm_add_form_option_section', $values); ?>
+		<?php do_action( 'frm_add_form_option_section', $values ); ?>
         <div class="clear"></div>
         </div>
         </div>
