@@ -3189,7 +3189,7 @@ function frmAdminBuildJS(){
 				});
 			});
 			
-			jQuery('.frm_pro_form #datepicker_sample').datepicker();
+			jQuery('.frm_pro_form #datepicker_sample').datepicker({changeMonth:true,changeYear:true});
 			
 			jQuery(document.getElementById('frm_position')).change(setPosClass);
 			
