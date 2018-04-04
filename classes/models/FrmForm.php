@@ -243,7 +243,7 @@ class FrmForm {
 			foreach ( $update_options as $opt => $default ) {
 				$field->field_options[ $opt ] = isset( $values['field_options'][ $opt . '_' . $field_id ] ) ? $values['field_options'][ $opt . '_' . $field_id ] : $default;
 				if ( is_string( $field->field_options[ $opt ] ) ) {
-					$field->field_options[ $opt ] = trim( sanitize_text_field( $field->field_options[ $opt ] ) );
+					$field->field_options[ $opt ] = trim( FrmAppHelper::kses( $field->field_options[ $opt ], 'all' ) );
 				}
             }
 
