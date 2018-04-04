@@ -1062,7 +1062,7 @@
             <default_value><![CDATA[{"cc":"","month":"","year":"","cvc":""}]]></default_value>
             <field_order>39</field_order>
             <form_id>698</form_id>
-            <required>1</required>
+            <required></required>
             <options><![CDATA[]]></options>
             <field_options><![CDATA[{"size":"","max":"","label":"","blank":"This field cannot be blank.","required_indicator":"*","invalid":"","separate_value":0,"clear_on_focus":"1","default_blank":0,"classes":"","in_section":"0","slide":0,"form_select":"","show_hide":"show","any_all":"any","align":"block","hide_field":[],"hide_field_cond":["=="],"hide_opt":[],"star":0,"ftypes":[],"data_type":"select","restrict":0,"start_year":2000,"end_year":2020,"read_only":0,"admin_only":"","locale":"","attach":false,"minnum":0,"maxnum":9999,"delete":false,"step":1,"clock":12,"single_time":0,"start_time":"00:00","end_time":"23:59","unique":0,"use_calc":0,"calc":"","calc_dec":"","calc_type":"","dyn_default_value":"","multiple":0,"unique_msg":"This value must be unique.","autocom":0,"format":"","repeat":0,"add_label":"Add","remove_label":"Remove","conf_field":"","conf_input":"","conf_desc":"","conf_msg":"The entered values do not match","other":0,"btsp":"","save_cc":"4","cc_desc":"Card number","month_desc":"Month","year_desc":"Year","cvc_desc":"","custom_field":"","post_field":"","taxonomy":"category","exclude_cat":0}]]></field_options>
         </field>

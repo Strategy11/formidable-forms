@@ -170,7 +170,7 @@ class FrmAppHelper {
 
 	/**
 	 * Use the WP 4.7 wp_doing_ajax function
-	 * @sine 2.05.07
+	 * @since 2.05.07
 	 */
 	public static function wp_doing_ajax() {
 		if ( function_exists( 'wp_doing_ajax' ) ) {
