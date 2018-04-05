@@ -274,6 +274,13 @@ DEFAULT_HTML;
 		return $classes;
 	}
 
+	/**
+	 * @since 3.01.01
+	 */
+	public function show_options( $field, $display, $values ) {
+		do_action( 'frm_' . $field['type'] . '_field_options_form', $field, $display, $values );
+	}
+
 	/** New field **/
 
 	public function get_new_field_defaults() {

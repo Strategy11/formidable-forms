@@ -279,7 +279,7 @@ if ( $display['options'] ) {
 					include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/html-content.php' );
 				}
 
-				do_action( 'frm_' . $field['type'] . '_field_options_form', $field, $display, $values );
+				$field_obj->show_options( $field, $display, $values );
 				do_action( 'frm_field_options_form', $field, $display, $values );
 
 				if ( $display['required'] || $display['invalid'] || $display['unique'] || $display['conf_field'] ) {
