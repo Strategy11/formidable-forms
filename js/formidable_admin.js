@@ -977,7 +977,7 @@ function frmAdminBuildJS(){
 		var id=jQuery(this).closest('li.form-field').data('fid');
 		var form_id = this_form_id;
 		var row_key = 0;
-		var lookupBlockRows = document.getElementById( 'frm_watch_lookup_block_'+id  ).childNodes;
+		var lookupBlockRows = document.getElementById( 'frm_watch_lookup_block_'+id  ).getElementsByTagName( 'div' );
 		if ( lookupBlockRows.length > 0 ) {
 			var lastRowId = lookupBlockRows[ lookupBlockRows.length - 1 ].id;
 			row_key = 1 + parseInt( lastRowId.replace( 'frm_watch_lookup_' + id + '_', '' ) );
