@@ -1626,6 +1626,10 @@
 		    <field_id>6816</field_id>
 		    <meta_value><![CDATA[Provo]]></meta_value>
 		</item_meta>
+		<item_meta>
+		    <field_id>8122</field_id>
+		    <meta_value><![CDATA[Deseret]]></meta_value>
+		</item_meta>
 	</item>
 	<item>
 		<id>59138</id>
@@ -1653,6 +1657,10 @@
 		<item_meta>
 		    <field_id>6816</field_id>
 		    <meta_value><![CDATA[Springville]]></meta_value>
+		</item_meta>
+		<item_meta>
+		    <field_id>8122</field_id>
+		    <meta_value><![CDATA[Deseret]]></meta_value>
 		</item_meta>
 	</item>
 	<item>
@@ -1979,6 +1987,10 @@
             <meta_value><![CDATA[["59158","59016"]]]></meta_value>
         </item_meta>
 		<item_meta>
+		    <field_id>8122</field_id>
+		    <meta_value><![CDATA[Deseret]]></meta_value>
+		</item_meta>
+		<item_meta>
 		    <field_id>8123</field_id>
 		    <meta_value><![CDATA[[60416]]]></meta_value>
 		</item_meta>
@@ -2146,6 +2158,10 @@ Testing]]></meta_value>
 		<item_meta>
 		    <field_id>8121</field_id>
 		    <meta_value>59017</meta_value>
+		</item_meta>
+		<item_meta>
+		    <field_id>8122</field_id>
+		    <meta_value><![CDATA[Deseret]]></meta_value>
 		</item_meta>
 		<item_meta>
 		    <field_id>8123</field_id>
