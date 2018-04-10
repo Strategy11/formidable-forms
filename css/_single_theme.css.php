@@ -563,22 +563,6 @@ if ( ! empty( $important ) ) {
     clear:both;
 }
 
-<?php if ( $check_align === 'block' ) { ?>
-	.<?php echo esc_html( $style_class ) ?> .frm_checkbox label{
-		display: block;
-		padding-left: 20px;
-		text-indent: -20px;
-	}
-<?php } ?>
-
-<?php if ( $radio_align === 'block' ) { ?>
-	.<?php echo esc_html( $style_class ) ?> .frm_radio label{
-		display: block;
-		padding-left: 20px;
-		text-indent: -20px;
-	}
-<?php } ?>
-
 .<?php echo esc_html( $style_class ) ?> .frm_radio{
     display:<?php echo esc_html( $radio_align . $important ) ?>;
 }
