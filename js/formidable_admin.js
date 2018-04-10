@@ -1364,7 +1364,9 @@ function frmAdminBuildJS(){
 
 	function getFieldValues(){
 		/*jshint validthis:true */
-		var val = this.value;
+		var is_taxonomy,
+			val = this.value;
+
 		if ( val ) {
 			var parentIDs = this.parentNode.id.replace('frm_logic_', '').split('_');
 			var fieldID = parentIDs[0];
@@ -1377,6 +1379,14 @@ function frmAdminBuildJS(){
 			var input = false;
 			var showSelect = (valueFieldType == 'select' || valueFieldType == 'checkbox' || valueFieldType == 'radio' );
 			var showText = ( valueFieldType == 'text' || valueFieldType == 'email' || valueFieldType == 'phone' || valueFieldType == 'url' || valueFieldType == 'number' );
+
+			if ( showSelect ) {
+				is_taxonomy = document.getElementById( 'frm_has_hidden_options_' + val );
+				if ( is_taxonomy !== null ) {
+					// get the category options with ajax
+					showSelect = false;
+				}
+			}
 
 			if ( showSelect || showText ) {
 				fill.innerHTML = '';

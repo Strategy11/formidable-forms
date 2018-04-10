@@ -61,7 +61,7 @@ if ( in_array( $field['type'], array( 'select', 'radio', 'checkbox' ) ) ) {
 	<?php
 
 	if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' ) {
-		echo '<p class="howto">' . FrmFieldsHelper::get_term_link( $field['taxonomy'] ) . '</p>';
+		echo '<p class="howto" id="frm_has_hidden_options_' . esc_attr( $field['id'] ) . '">' . FrmFieldsHelper::get_term_link( $field['taxonomy'] ) . '</p>';
 	} elseif ( ! isset( $field['post_field'] ) || ! in_array( $field['post_field'], array( 'post_category' ) ) ) {
 ?>
         <div id="frm_add_field_<?php echo esc_attr( $field['id'] ); ?>">
