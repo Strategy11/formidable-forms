@@ -308,11 +308,11 @@ class FrmStyle {
             $settings['submit_active_border_color'] = $settings['submit_border_color'];
 	    }
 
-	    return $settings;
+	    return apply_filters( 'frm_override_default_styles', $settings );
 	}
 
 	public function get_defaults() {
-        return array(
+		return apply_filters( 'frm_default_style_settings', array(
             'theme_css'         => 'ui-lightness',
             'theme_name'        => 'UI Lightness',
 
@@ -445,7 +445,7 @@ class FrmStyle {
 			'progress_size'         => '30px',
 
             'custom_css'        => '',
-        );
+		) );
     }
 
 	public function get_field_name( $field_name, $post_field = 'post_content' ) {
