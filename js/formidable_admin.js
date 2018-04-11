@@ -2334,7 +2334,7 @@ function frmAdminBuildJS(){
 		var cssLink = jQuery('<link href="'+locStr+'" type="text/css" rel="Stylesheet" class="ui-theme" />');
 		jQuery('head').append(cssLink);
 
-		if( jQuery('link.ui-theme').size() > 1){
+		if ( jQuery( 'link.ui-theme' ).length > 1 ) {
 			jQuery('link.ui-theme:first').remove();
 		}
 	}
@@ -3102,12 +3102,22 @@ function frmAdminBuildJS(){
 			document.getElementById("frm_field_height").addEventListener("blur", textSquishCheck);
 			document.getElementById("frm_field_font_size").addEventListener("blur", textSquishCheck);
 			document.getElementById("frm_field_pad").addEventListener("blur", textSquishCheck);
+			jQuery('input.hex').wpColorPicker({
+				width:200,
+				change: function( event, ui ) {
+					var hexcolor = jQuery( this ).wpColorPicker( 'color' );
+					jQuery( event.target ).val( hexcolor ).change();
+				}
+			});
+			jQuery('.wp-color-result-text').text( function( i, oldText ) {
+				return oldText === 'Select Color' ? 'Select' : oldText;
+			});
 
             // update styling on change
             jQuery('#frm_styling_form .styling_settings').change(function(){
                 var locStr = jQuery('input[name^="frm_style_setting[post_content]"], select[name^="frm_style_setting[post_content]"], textarea[name^="frm_style_setting[post_content]"], input[name="style_name"]').serialize();
                 jQuery.ajax({
-                    type:'GET',url:ajaxurl,
+                    type:'POST',url:ajaxurl,
                     data:'action=frm_change_styling&nonce='+frmGlobal.nonce+'&'+locStr,
                     success:function(css){
                         document.getElementById('this_css').innerHTML = css;

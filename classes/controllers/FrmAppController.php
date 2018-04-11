@@ -291,7 +291,7 @@ class FrmAppController {
 		$version = FrmAppHelper::plugin_version();
 		FrmAppHelper::load_admin_wide_js( false );
 
-		wp_register_script( 'formidable_admin', FrmAppHelper::plugin_url() . '/js/formidable_admin.js', array(
+		$dependecies = array(
 			'formidable_admin_global',
 			'formidable',
 			'jquery',
@@ -300,7 +300,13 @@ class FrmAppController {
 			'jquery-ui-sortable',
 			'bootstrap_tooltip',
 			'bootstrap-multiselect',
-		), $version, true );
+		);
+
+		if ( FrmAppHelper::is_admin_page( 'formidable-styles' ) ) {
+			$dependecies[] = 'wp-color-picker';
+		}
+
+		wp_register_script( 'formidable_admin', FrmAppHelper::plugin_url() . '/js/formidable_admin.js', $dependecies, $version, true );
 		wp_register_style( 'formidable-admin', FrmAppHelper::plugin_url() . '/css/frm_admin.css', array(), $version );
         wp_register_script( 'bootstrap_tooltip', FrmAppHelper::plugin_url() . '/js/bootstrap.min.js', array( 'jquery' ), '3.3.4' );
 		wp_register_style( 'formidable-grids', FrmAppHelper::plugin_url() . '/css/frm_grids.css', array(), $version );

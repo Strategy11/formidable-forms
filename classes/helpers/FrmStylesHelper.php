@@ -299,10 +299,10 @@ class FrmStylesHelper {
 	 */
 	public static function get_settings_for_output( $style ) {
 		if ( self::previewing_style() ) {
-			if ( isset( $_GET['frm_style_setting'] ) ) {
-				$settings = $_GET['frm_style_setting']['post_content'];
+			if ( isset( $_POST['frm_style_setting'] ) ) {
+				$settings = $_POST['frm_style_setting']['post_content'];
 			} else {
-				$settings = $_GET;
+				$settings = $_POST;
 			}
 			FrmAppHelper::sanitize_value( 'sanitize_text_field', $settings );
 
@@ -335,9 +335,12 @@ class FrmStylesHelper {
 	/**
 	 * @since 2.3
 	 */
-	private static function prepare_color_output( &$settings ) {
+	public static function prepare_color_output( &$settings, $allow_transparent = true ) {
 		$colors = self::allow_color_override();
 		foreach ( $colors as $css => $opts ) {
+			if ( $css === 'transparent' && ! $allow_transparent ) {
+				$css = '';
+			}
 			foreach ( $opts as $opt ) {
 				self::get_color_output( $css, $settings[ $opt ] );
 			}
@@ -348,9 +351,14 @@ class FrmStylesHelper {
 	 * @since 2.3
 	 */
 	private static function allow_color_override() {
+		$frm_style = new FrmStyle();
+		$colors = $frm_style->get_color_settings();
+
+		$transparent = array( 'fieldset_color', 'fieldset_bg_color', 'bg_color', 'section_bg_color', 'error_bg', 'success_bg_color', 'progress_bg_color', 'progress_active_bg_color' );
+
 		return array(
-			'transparent' => array( 'fieldset_color', 'fieldset_bg_color', 'bg_color', 'section_bg_color', 'error_bg', 'success_bg_color', 'progress_bg_color', 'progress_active_bg_color' ),
-			'' => array( 'title_color', 'section_color', 'submit_text_color', 'label_color', 'check_label_color', 'form_desc_color', 'description_color', 'text_color', 'text_color_disabled', 'border_color', 'submit_bg_color', 'submit_border_color', 'error_text', 'progress_border_color', 'progress_color', 'progress_active_color', 'submit_hover_bg_color', 'submit_hover_border_color', 'submit_hover_color', 'submit_active_color', 'submit_active_border_color', 'submit_active_bg_color' ),
+			'transparent' => $transparent,
+			''            => array_diff( $colors, $transparent ),
 		);
 	}
 
@@ -358,7 +366,11 @@ class FrmStylesHelper {
 	 * @since 2.3
 	 */
 	private static function get_color_output( $default, &$color ) {
-		$color = ( trim( $color ) == '' ) ? $default : '#' . $color;
+		if ( empty( trim( $color ) ) ) {
+			$color = $default;
+		} elseif ( strpos( $color, '#' ) === false ) {
+			$color = '#' . $color;
+		}
 	}
 
 	/**
@@ -383,7 +395,7 @@ class FrmStylesHelper {
 	 * @since 2.3
 	 */
 	public static function previewing_style() {
-		return isset( $_GET['frm_style_setting'] ) || isset( $_GET['flat'] );
+		return isset( $_POST['frm_style_setting'] ) || isset( $_POST['flat'] );
 	}
 
 	/**

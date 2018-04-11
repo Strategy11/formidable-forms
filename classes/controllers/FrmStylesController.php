@@ -61,7 +61,7 @@ class FrmStylesController {
 
         $version = FrmAppHelper::plugin_version();
 		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
-		wp_enqueue_script( 'jquery-frm-themepicker', FrmAppHelper::plugin_url() . '/js/jquery/jquery-ui-themepicker' . $suffix . '.js', array( 'jquery' ), $version );
+		wp_enqueue_style( 'wp-color-picker' );
 
 		wp_enqueue_style( 'frm-custom-theme', admin_url( 'admin-ajax.php?action=frmpro_css' ) );
 
@@ -365,13 +365,6 @@ class FrmStylesController {
 		$defaults = $frm_style->get_defaults();
 		$style = '';
 
-		// remove the # from the colors
-		foreach ( $_GET['frm_style_setting']['post_content'] as $k => $v ) {
-			if ( ! is_array( $v ) && strpos( $v, '#' ) === 0 ) {
-				$_GET['frm_style_setting']['post_content'][ $k ] = str_replace( '#', '', $v );
-			}
-		}
-
 		echo '<style type="text/css">';
 		include( FrmAppHelper::plugin_path() . '/css/_single_theme.css.php' );
 		echo '</style>';
@@ -408,6 +401,9 @@ class FrmStylesController {
 
 	public static function include_style_section( $atts, $sec ) {
 		extract( $atts );
+		$style = $atts['style'];
+		FrmStylesHelper::prepare_color_output( $style->post_content, false );
+
 		$current_tab = FrmAppHelper::simple_get( 'page-tab', 'sanitize_title', 'default' );
 		$file_name = FrmAppHelper::plugin_path() . '/classes/views/styles/_' . $sec['args'] . '.php';
 

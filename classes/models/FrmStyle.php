@@ -81,8 +81,7 @@ class FrmStyle {
 					$new_instance['post_content'][ $setting ] = $default;
 				}
 
-				if ( strpos( $setting, 'color' ) !== false || in_array( $setting, array( 'error_bg', 'error_border', 'error_text' ) ) ) {
-                    //if is a color
+				if ( $this->is_color( $setting ) ) {
 					$new_instance['post_content'][ $setting ] = str_replace( '#', '', $new_instance['post_content'][ $setting ] );
 				} else if ( in_array( $setting, array( 'submit_style', 'important_style', 'auto_width' ) ) && ! isset( $new_instance['post_content'][ $setting ] ) ) {
 					$new_instance['post_content'][ $setting ] = 0;
@@ -101,6 +100,23 @@ class FrmStyle {
 
  		return $action_ids;
  	}
+
+	/**
+	 * @since 3.01.01
+	 */
+	private function is_color( $setting ) {
+		$extra_colors = array( 'error_bg', 'error_border', 'error_text' );
+		return strpos( $setting, 'color' ) !== false || in_array( $setting, $extra_colors );
+	}
+
+	/**
+	 * @since 3.01.01
+	 */
+	public function get_color_settings() {
+		$defaults = $this->get_defaults();
+		$settings = array_keys( $defaults );
+		return array_filter( $settings, array( $this, 'is_color' ) );
+	}
 
     /**
      * Create static css file
