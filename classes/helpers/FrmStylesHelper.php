@@ -366,7 +366,8 @@ class FrmStylesHelper {
 	 * @since 2.3
 	 */
 	private static function get_color_output( $default, &$color ) {
-		if ( empty( trim( $color ) ) ) {
+		$color = trim( $color );
+		if ( empty( $color ) ) {
 			$color = $default;
 		} elseif ( strpos( $color, '#' ) === false ) {
 			$color = '#' . $color;
