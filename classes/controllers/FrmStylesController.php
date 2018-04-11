@@ -58,11 +58,7 @@ class FrmStylesController {
 		}
 
 		wp_enqueue_script( 'jquery-ui-datepicker' );
-
-        $version = FrmAppHelper::plugin_version();
-		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 		wp_enqueue_style( 'wp-color-picker' );
-
 		wp_enqueue_style( 'frm-custom-theme', admin_url( 'admin-ajax.php?action=frmpro_css' ) );
 
 		$style = apply_filters( 'frm_style_head', false );
