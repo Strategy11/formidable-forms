@@ -408,7 +408,9 @@ function frmFrontFormJS(){
 					}
 					var formID = jQuery(object).find('input[name="form_id"]').val();
 					response.content = response.content.replace(/ frm_pro_form /g, ' frm_pro_form frm_no_hide ');
-					jQuery(object).closest( '.frm_forms' ).replaceWith( response.content );
+					var replaceContent = jQuery( object ).closest( '.frm_forms' );
+					removeAddedScripts( replaceContent, formID );
+					replaceContent.replaceWith( response.content );
 
 					addUrlParam(response);
 
@@ -505,6 +507,14 @@ function frmFrontFormJS(){
 			jQuery(document).trigger( 'frmFormComplete', [ object, response ] );
 		} else {
 			jQuery(document).trigger( 'frmPageChanged', [ object, response ] );
+		}
+	}
+
+	function removeAddedScripts( formContainer, formID ) {
+		var endReplace = jQuery( '.frm_end_ajax_' + formID );
+		if ( endReplace.length ) {
+			formContainer.nextUntil( '.frm_end_ajax_' + formID ).remove();
+			endReplace.remove();
 		}
 	}
 
