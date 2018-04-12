@@ -607,6 +607,16 @@ function frmAdminBuildJS(){
 		initiateMultiselect();
 	}
 
+	function checkCalculationCreatedByUser() {
+		var calculation = this.value;
+		var warningMessage = checkMatchingParens( calculation );
+		warningMessage += checkShortcodes( calculation, this );
+
+		if ( warningMessage !== '' ) {
+			alert( calculation + "\n\n" + warningMessage );
+		}
+	}
+
 	/**
 	 * Checks a string for parens, brackets, and curly braces and returns a message if any unmatched are found.
 	 * @param formula
@@ -649,46 +659,16 @@ function frmAdminBuildJS(){
 	}
 
 	/**
-	 * Returns a regular expression of shortcodes that can't be used in forms but can be used in Views, Email
-	 * Notifications, and other Formidable areas.
-	 *
-	 * @returns {RegExp}
-	 */
-	function getNonFormShortcodes() {
-		return /\[(if\b|foreach|created-at|created-by|updated-at|updated-by)|((key|id)\])/;
-	}
-
-	/**
-	 * Checks if a string has any shortcodes that do not belong in forms and returns a message if any are found.
-	 * @param formula
+	 * Checks a calculation for shortcodes that shouldn't be in it and returns a message if found.
+	 * @param calculation
+	 * @param inputElement
 	 * @returns {string}
 	 */
-	function checkNonFormShortcodes( formula ) {
-		var nonFormShortcodes = getNonFormShortcodes(),
-			msg = '';
-
-		if ( nonFormShortcodes.test( formula ) ) {
-			msg += frm_admin_js.view_shortcodes + "\n\n";
-		}
+	function checkShortcodes( calculation, inputElement ) {
+		var msg = checkNonNumericShortcodes( calculation, inputElement );
+		msg += checkNonFormShortcodes( calculation );
 
 		return msg;
-	}
-
-	/**
-	 * Determines if the calculation input is from a text calculation.
-	 *
-	 * @param inputElement
-	 */
-	function isTextCalculation( inputElement ) {
-		return jQuery( inputElement ).siblings( "label[for^='calc_type']" ).children( "input" ).prop( "checked" );
-	}
-
-	/**
-	 * Returns a regular expression of shortcodes that can't be used in numeric calculations.
-	 * @returns {RegExp}
-	 */
-	function getNonNumericShortcodes() {
-		return /\[(date|time|email|ip)\]/;
 	}
 
 	/**
@@ -716,29 +696,46 @@ function frmAdminBuildJS(){
 	}
 
 	/**
-	 * Checks a calculation for shortcodes that shouldn't be in it and returns a message if found.
-	 * @param calculation
+	 * Determines if the calculation input is from a text calculation.
+	 *
 	 * @param inputElement
+	 */
+	function isTextCalculation( inputElement ) {
+		return jQuery( inputElement ).siblings( "label[for^='calc_type']" ).children( "input" ).prop( "checked" );
+	}
+
+	/**
+	 * Returns a regular expression of shortcodes that can't be used in numeric calculations.
+	 * @returns {RegExp}
+	 */
+	function getNonNumericShortcodes() {
+		return /\[(date|time|email|ip)\]/;
+	}
+
+	/**
+	 * Checks if a string has any shortcodes that do not belong in forms and returns a message if any are found.
+	 * @param formula
 	 * @returns {string}
 	 */
-	function checkShortcodes( calculation, inputElement ) {
-		var nonNumericShortcodesMessage = checkNonNumericShortcodes( calculation, inputElement );
-		var nonFormShortcodesMessage = checkNonFormShortcodes( calculation );
+	function checkNonFormShortcodes( formula ) {
+		var nonFormShortcodes = getNonFormShortcodes(),
+			msg = '';
 
-		var msg = nonNumericShortcodesMessage;
-		msg += nonFormShortcodesMessage;
+		if ( nonFormShortcodes.test( formula ) ) {
+			msg += frm_admin_js.view_shortcodes + "\n\n";
+		}
 
 		return msg;
 	}
 
-	function checkCalculationCreatedByUser() {
-		var calculation = this.value;
-		var warningMessage = checkMatchingParens( calculation );
-		warningMessage += checkShortcodes( calculation, this );
-
-		if ( warningMessage !== '' ) {
-			alert( calculation + "\n\n" + warningMessage );
-		}
+	/**
+	 * Returns a regular expression of shortcodes that can't be used in forms but can be used in Views, Email
+	 * Notifications, and other Formidable areas.
+	 *
+	 * @returns {RegExp}
+	 */
+	function getNonFormShortcodes() {
+		return /\[(if\b|foreach|created-at|created-by|updated-at|updated-by)|((key|id)\])/;
 	}
 
 	function popCalcFields(v){
