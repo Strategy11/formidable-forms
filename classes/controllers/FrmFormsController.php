@@ -845,6 +845,10 @@ class FrmFormsController {
 		if ( isset( $form->options['js_validate'] ) && $form->options['js_validate'] ) {
 			echo ' frm_js_validate ';
 		}
+
+		if ( current_user_can( 'activate_plugins' ) && current_user_can( 'frm_edit_forms' ) ) {
+			echo ' frm-admin-viewing ';
+		}
 	}
 
 	public static function get_email_html() {

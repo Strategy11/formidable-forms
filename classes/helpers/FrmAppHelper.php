@@ -1619,6 +1619,7 @@ class FrmAppHelper {
 			'id'        => __( 'ID', 'formidable' ),
 			'no_results' => __( 'No results match', 'formidable' ),
 			'file_spam' => __( 'That file looks like Spam.', 'formidable' ),
+			'calc_error' => __( 'There is an error in the calculation in the field with key', 'formidable' ),
 			'empty_fields' => __( 'Please complete the preceding required fields before uploading a file.', 'formidable' ),
 		) );
 
@@ -1655,6 +1656,9 @@ class FrmAppHelper {
 				'private'           => __( 'Private' ),
 				'jquery_ui_url'     => self::jquery_ui_base_url(),
 				'no_licenses'       => __( 'No new licenses were found', 'formidable' ),
+				'unmatched_parens'  => __( 'This calculation has at least one unmatched ( ) { } [ ].', 'formidable' ),
+				'view_shortcodes'   => __( 'This calculation may have shortcodes that work in Views but not forms.', 'formidable' ),
+				'text_shortcodes'   => __( 'This calculation may have shortcodes that work in text calculations but not numeric calculations.', 'formidable' ),
 				'repeat_limit_min'  => __( 'Please enter a Repeat Limit that is greater than 1.', 'formidable' ),
 			) );
 		}
