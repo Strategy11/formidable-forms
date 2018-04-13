@@ -4,7 +4,7 @@ Tags: contact form, form builder, custom form, forms, form, form maker, form cre
 Requires at least: 4.4
 Tested up to: 4.9
 Requires PHP: 5.3
-Stable tag: 3.0.06
+Stable tag: 3.01.01
 
 The best WordPress form plugin for contact forms, surveys and more. Make forms a breeze with a drag and drop form builder and form style generator.
 
@@ -159,13 +159,22 @@ The field and form names and descriptions are all changed with in-place edit. Ju
 [See more FAQs](https://formidableforms.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 3.01.01 =
+* New: Replace the jQuery colorpicker with the WordPress colorpicker in the visual form styler
+* New: Process shortcodes in the redirect url after form submission
+* New: frm_override_default_styles and frm_default_style_settings hooks
+* Fix: Prevent shortcodes inside field values from being processed in more places including the redirect url. This is a security precaution.
+* Fix: A default contact form was being added with each update. This update ensures the contact form is only generated once.
+* Fix: Allow the visual form styler to show instant changes to the sample contact form since server limits of url size were being hit in some cases.
+* Fix: HTML was being stripped from some field settings on the form creator page like validation messages
+
 = 3.01 =
 * New: Added frm_js_location hook for saving the combined javascript file in a different location
 * New: Added frm_include_field_in_content hook for excluding fields in the default email message
-* Tweak: Process shortcodes inside the validation messages
-* Tweak: Reduce page load time by not autoloading the saved styling from the database. In most cases, this data is saved in the CSS file, and doesn't need to be retrieved from the database.
-* Fix: The Invisible reCaptcha wasn't being validated correctly when the Pro version was not running.
-* Fix: Run the server-side validation on a number field that uses 0 for the minimum value. This was being skipped.
+* Tweak: Process shortcodes inside the form validation messages
+* Tweak: Reduce page load time by not autoloading the saved form styling from the database. In most cases, this data is saved in the CSS file, and doesn't need to be retrieved from the database.
+* Fix: The Invisible reCaptcha wasn't being validated correctly in contact forms when the Pro version was not running.
+* Fix: Run the server-side form validation on a number field that uses 0 for the minimum value. This was being skipped.
 * Fix: Show the label above a dropdown field if the label position is set to inside since dropdown placeholders are not yet supported. Plus, don't show the Inside label position option for any fields that don't allow placeholders.
 * Fix: If there is an error during a database update, make sure it can try again in the future
 * Fix: Prevent more conflicts with Divi when editing some posts with forms
