@@ -65,6 +65,29 @@ class test_FrmStylesHelper extends FrmUnitTest {
 	}
 
 	/**
+	 * @covers FrmStylesHelper::get_settings_for_output
+	 */
+	public function test_get_settings_for_output() {
+		$frm_style = new FrmStyle( 'default' );
+		$style = $frm_style->get_one();
+		$settings = FrmStylesHelper::get_settings_for_output( $style );
+		$expected = 'frm_style_' . $style->post_name . '.with_frm_style';
+		$this->assertEquals( $expected, $settings['style_class'] );
+
+		$_POST = array(
+			'style_name' => 'frm_style_test',
+			'frm_style_setting' => array(
+				'post_content'  => $frm_style->get_defaults(),
+			),
+		);
+
+		$settings = FrmStylesHelper::get_settings_for_output( $style );
+		$expected = 'frm_style_test.with_frm_style';
+		$this->assertEquals( $expected, $settings['style_class'] );
+		$this->assertEquals( '#000000', $settings['fieldset_color'] );
+	}
+
+	/**
 	 * @covers FrmStylesHelper::hex2rgb
 	 */
 	public function test_hex2rgb() {

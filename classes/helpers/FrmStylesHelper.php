@@ -306,7 +306,7 @@ class FrmStylesHelper {
 			}
 			FrmAppHelper::sanitize_value( 'sanitize_text_field', $settings );
 
-			$style_name = FrmAppHelper::simple_get( 'style_name', 'sanitize_title' );
+			$style_name = FrmAppHelper::get_post_param( 'style_name', '', 'sanitize_title' );
 			$settings['style_class'] = '';
 			if ( ! empty( $style_name ) ) {
 				$settings['style_class'] = $style_name . '.';
