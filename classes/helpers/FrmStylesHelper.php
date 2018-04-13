@@ -393,10 +393,11 @@ class FrmStylesHelper {
 	}
 
 	/**
+	 * Where is 'flat' being used?
 	 * @since 2.3
 	 */
 	public static function previewing_style() {
-		return isset( $_POST['frm_style_setting'] ) || isset( $_POST['flat'] );
+		return isset( $_POST['frm_style_setting'] ) || isset( $_POST['flat'] ) || isset( $_GET['flat'] );
 	}
 
 	/**
