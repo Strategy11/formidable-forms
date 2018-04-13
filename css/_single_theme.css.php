@@ -61,7 +61,7 @@ $arrow_icons = FrmStylesHelper::arrow_icons();
     font-weight:<?php echo esc_html( $section_weight . $important ) ?>;
     color:<?php echo esc_html( $section_color . $important ) ?>;
     border:none<?php echo esc_html( $important ) ?>;
-    border<?php echo esc_html( $section_border_loc ) ?>:<?php echo esc_html( $section_border_width . ' ' . $section_border_style . ' #' . $section_border_color . $important ) ?>;
+	border<?php echo esc_html( $section_border_loc ); ?>:<?php echo esc_html( $section_border_width . ' ' . $section_border_style . ' ' . $section_border_color . $important ); ?>;
     background-color:<?php echo esc_html( $section_bg_color . $important ); ?>
 }
 
@@ -245,7 +245,7 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 }
 
 .<?php echo esc_html( $style_class ) ?> .frm_required{
-    color:#<?php echo esc_html( $required_color . $important ); ?>;
+	color:<?php echo esc_html( $required_color . $important ); ?>;
     font-weight:<?php echo esc_html( $required_weight . $important ); ?>;
 }
 
@@ -368,9 +368,9 @@ if ( ! empty( $important ) ) {
 .<?php echo esc_html( $style_class ) ?> input[readonly],
 .<?php echo esc_html( $style_class ) ?> select[readonly],
 .<?php echo esc_html( $style_class ) ?> textarea[readonly]{
-	background-color:#<?php echo esc_html( $bg_color_disabled . $important ); ?>;
+	background-color:<?php echo esc_html( $bg_color_disabled . $important ); ?>;
 	color:<?php echo esc_html( $text_color_disabled . $important ) ?>;
-	border-color:#<?php echo esc_html( $border_color_disabled . $important ) ?>;
+	border-color:<?php echo esc_html( $border_color_disabled . $important ) ?>;
 }
 
 /* These do not work if they are combined */
@@ -418,8 +418,8 @@ if ( ! empty( $important ) ) {
 .frm_form_fields_active_style,
 .<?php echo esc_html( $style_class ) ?> .chosen-container-single.chosen-container-active .chosen-single,
 .<?php echo esc_html( $style_class ) ?> .chosen-container-active .chosen-choices{
-	background-color:#<?php echo esc_html( $bg_color_active . $important ); ?>;
-    border-color:#<?php echo esc_html( $border_color_active . $important ) ?>;
+	background-color:<?php echo esc_html( $bg_color_active . $important ); ?>;
+	border-color:<?php echo esc_html( $border_color_active . $important ); ?>;
     <?php if ( isset( $remove_box_shadow_active ) && $remove_box_shadow_active ) { ?>
     box-shadow:none;
     <?php } else { ?>
@@ -464,9 +464,9 @@ if ( ! empty( $important ) ) {
     box-sizing:border-box;
     -ms-box-sizing:border-box;
 	<?php if ( ! empty( $submit_shadow_color ) ) { ?>
-    -moz-box-shadow:0 1px 1px #<?php echo esc_html( $submit_shadow_color ); ?>;
-    -webkit-box-shadow:0 1px 1px #<?php echo esc_html( $submit_shadow_color ); ?>;
-    box-shadow:0 1px 1px #<?php echo esc_html( $submit_shadow_color ); ?>;
+	-moz-box-shadow:0 1px 1px <?php echo esc_html( $submit_shadow_color ); ?>;
+	-webkit-box-shadow:0 1px 1px <?php echo esc_html( $submit_shadow_color ); ?>;
+	box-shadow:0 1px 1px <?php echo esc_html( $submit_shadow_color ); ?>;
 	<?php } ?>
 	margin:<?php echo esc_html( $submit_margin ) ?>;
 	margin-left:0;
@@ -612,15 +612,15 @@ if ( ! empty( $important ) ) {
 .<?php echo esc_html( $style_class ) ?> .frm_blank_field .chosen-container-multi .chosen-choices,
 .<?php echo esc_html( $style_class ) ?> .frm_blank_field .chosen-container-single .chosen-single,
 .<?php echo esc_html( $style_class ) ?> .frm_form_field :invalid{
-    color:#<?php echo esc_html( $text_color_error . $important ) ?>;
-	background-color:#<?php echo esc_html( $bg_color_error . $important ); ?>;
-    border-color:#<?php echo esc_html( $border_color_error . $important ) ?>;
+	color:<?php echo esc_html( $text_color_error . $important ); ?>;
+	background-color:<?php echo esc_html( $bg_color_error . $important ); ?>;
+	border-color:<?php echo esc_html( $border_color_error . $important ); ?>;
     border-width:<?php echo esc_html( $border_width_error . $important ) ?>;
     border-style:<?php echo esc_html( $border_style_error . $important ) ?>;
 }
 
 .<?php echo esc_html( $style_class ) ?> .frm_blank_field .sigWrapper{
-	border-color:#<?php echo esc_html( $border_color_error ) ?> !important;
+	border-color:<?php echo esc_html( $border_color_error ); ?> !important;
 }
 
 .<?php echo esc_html( $style_class ) ?> .frm_error{
@@ -629,12 +629,12 @@ if ( ! empty( $important ) ) {
 
 .<?php echo esc_html( $style_class ) ?> .frm_blank_field label,
 .<?php echo esc_html( $style_class ) ?> .frm_error{
-    color:#<?php echo esc_html( $border_color_error . $important ) ?>;
+	color:<?php echo esc_html( $border_color_error . $important ); ?>;
 }
 
 .<?php echo esc_html( $style_class ) ?> .frm_error_style{
 	background-color:<?php echo esc_html( $error_bg . $important ); ?>;
-    border:1px solid #<?php echo esc_html( $error_border . $important ) ?>;
+	border:1px solid <?php echo esc_html( $error_border . $important ); ?>;
 	border-radius:<?php echo esc_html( $border_radius . $important ) ?>;
     color: <?php echo esc_html( $error_text . $important ) ?>;
     font-size:<?php echo esc_html( $error_font_size . $important ) ?>;
@@ -644,14 +644,14 @@ if ( ! empty( $important ) ) {
 
 .<?php echo esc_html( $style_class ) ?> .frm_message,
 .frm_success_style{
-    border:1px solid #<?php echo esc_html( $success_border_color ) ?>;
+	border:1px solid <?php echo esc_html( $success_border_color ); ?>;
 	background-color:<?php echo esc_html( $success_bg_color . $important ); ?>;
-	color:#<?php echo esc_html( $success_text_color . $important ) ?>;
+	color:<?php echo esc_html( $success_text_color . $important ); ?>;
 	border-radius:<?php echo esc_html( $border_radius . $important ) ?>;
 }
 
 .<?php echo esc_html( $style_class ) ?> .frm_message p{
-	color:#<?php echo esc_html( $success_text_color . $important ) ?>;
+	color:<?php echo esc_html( $success_text_color . $important ); ?>;
 }
 
 .<?php echo esc_html( $style_class ) ?> .frm_message{
@@ -696,7 +696,7 @@ if ( ! empty( $important ) ) {
 .<?php echo esc_html( $style_class ) ?> .frm_grid_first.frm_blank_field,
 .<?php echo esc_html( $style_class ) ?> .frm_grid_odd.frm_blank_field{
 	background-color:<?php echo esc_html( $error_bg . $important ); ?>;
-    border-color:#<?php echo esc_html( $error_border ) ?>;
+	border-color:<?php echo esc_html( $error_border ); ?>;
 }
 
 .<?php echo esc_html( $style_class ) ?> .frm_grid_first,
@@ -705,7 +705,7 @@ if ( ! empty( $important ) ) {
 }
 
 .<?php echo esc_html( $style_class ) ?> .frm_grid{
-	background-color:#<?php echo esc_html( $bg_color_active . $important ); ?>;
+	background-color:<?php echo esc_html( $bg_color_active . $important ); ?>;
 }
 
 .<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_html_scroll_box{
