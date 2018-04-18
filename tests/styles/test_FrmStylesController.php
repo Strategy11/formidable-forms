@@ -41,4 +41,35 @@ class test_FrmStylesController extends FrmUnitTest {
 		$this->assertTrue( isset( $stylesheet_urls['formidable'] ), 'The stylesheet array is empty' );
 		return $stylesheet_urls;
 	}
+
+	/**
+	 * @covers FrmStylesController::save
+	 * @covers FrmStyle::update
+	 */
+	public function test_save() {
+		$frm_style = new FrmStyle( 'default' );
+		$style = $frm_style->get_one();
+		$defaults = $frm_style->get_defaults();
+
+		$_POST = array(
+			'ID'                => $style->ID,
+			'style_name'        => $style->post_name,
+			'frm_style'         => wp_create_nonce( 'frm_style_nonce' ),
+			'frm_action'        => 'save',
+			'frm_style_setting' => array(
+				'post_title'    => $style->post_title . ' Updated',
+				'post_content'  => $style->post_content,
+			),
+		);
+
+		ob_start();
+		FrmStylesController::save();
+		$returned = ob_get_contents();
+		ob_end_clean();
+
+		$this->assertContains( 'Your styling settings have been saved.', $returned );
+		$frm_style = new FrmStyle( $style->ID );
+		$updated_style = $frm_style->get_one();
+		$this->assertEquals( $style->post_title . ' Updated', $updated_style->post_title );
+	}
 }

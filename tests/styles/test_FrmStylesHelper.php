@@ -87,6 +87,23 @@ class test_FrmStylesHelper extends FrmUnitTest {
 		$this->assertEquals( '#000000', $settings['fieldset_color'] );
 	}
 
+	public function test_single_instance_in_css() {
+		$css_path = FrmAppHelper::plugin_path() . '/css/formidableforms.css';
+		$this->assertTrue( file_exists( $css_path ), $css_path . ' does not exist' );
+
+		ob_start();
+		include( $css_path );
+		$compiled_css = ob_get_contents();
+		ob_end_clean();
+		$this->assertNotEmpty( $compiled_css, 'Generated CSS file is empty' );
+
+		$frm_style = new FrmStyle( 'default' );
+		$style = $frm_style->get_one();
+		$settings = FrmStylesHelper::get_settings_for_output( $style );
+		$css_contains = substr_count( $compiled_css, '}.frm_forms.' . $settings['style_class'] . '{' );
+		$this->assertEquals( 1, $css_contains, 'Multiple or no occurances of style found' );
+	}
+
 	/**
 	 * @covers FrmStylesHelper::hex2rgb
 	 */
