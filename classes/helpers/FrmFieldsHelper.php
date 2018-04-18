@@ -623,7 +623,7 @@ class FrmFieldsHelper {
 			$replace_with = self::get_value_for_shortcode( $atts );
 
 			if ( $replace_with !== null ) {
-				$replace_with = str_replace( '[', '&#91;', $replace_with ); // prevent shortcodes in fields from being processed
+				self::sanitize_embedded_shortcodes( compact( 'entry' ), $replace_with );
 				$content = str_replace( $shortcodes[0][ $short_key ], $replace_with, $content );
 			}
 
@@ -632,6 +632,21 @@ class FrmFieldsHelper {
 
 		return $content;
     }
+
+	/**
+	 * Prevent shortcodes in fields from being processed
+	 * @since 3.01.02
+	 *
+	 * @param array $atts - includes entry object
+	 * @param string $value
+	 */
+	public static function sanitize_embedded_shortcodes( $atts, &$value ) {
+		$atts['value'] = $value;
+		$should_sanitize = apply_filters( 'frm_sanitize_shortcodes', true, $atts );
+		if ( $should_sanitize ) {
+			$value = str_replace( '[', '&#91;', $value );
+		}
+	}
 
 	/**
 	 * @since 3.0
