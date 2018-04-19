@@ -75,6 +75,7 @@ class test_FrmStylesHelper extends FrmUnitTest {
 		$this->assertEquals( $expected, $settings['style_class'] );
 
 		$_POST = array(
+			'action'     => 'frm_change_styling',
 			'style_name' => 'frm_style_test',
 			'frm_style_setting' => array(
 				'post_content'  => $frm_style->get_defaults(),
