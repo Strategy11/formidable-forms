@@ -88,14 +88,11 @@ class test_FrmStylesHelper extends FrmUnitTest {
 		$this->assertEquals( '#000000', $settings['fieldset_color'] );
 	}
 
+	/**
+	 * Test that the css includes the stylesheet once and only once
+	 */
 	public function test_single_instance_in_css() {
-		$css_path = FrmAppHelper::plugin_path() . '/css/formidableforms.css';
-		$this->assertTrue( file_exists( $css_path ), $css_path . ' does not exist' );
-
-		ob_start();
-		include( $css_path );
-		$compiled_css = ob_get_contents();
-		ob_end_clean();
+		$compiled_css = get_transient( 'frmpro_css' );
 		$this->assertNotEmpty( $compiled_css, 'Generated CSS file is empty' );
 
 		$frm_style = new FrmStyle( 'default' );
