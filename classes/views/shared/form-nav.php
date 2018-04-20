@@ -15,7 +15,7 @@ FrmFormsHelper::form_switcher();
 
 <?php
 if ( $form && 'show' === $title ) {
-	_deprecated_argument( 'title', '3.0' );
+	_deprecated_argument( '$title in form-nav.php', '3.0' );
 ?>
 	<input id="title" type="text" value="<?php echo esc_attr( '' === $form->name ? __( '(no title)' ) : $form->name ) ?>" readonly="readonly" disabled="disabled" />
 <?php } ?>

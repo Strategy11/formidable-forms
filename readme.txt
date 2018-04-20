@@ -4,7 +4,7 @@ Tags: contact form, form builder, custom form, forms, form, form maker, form cre
 Requires at least: 4.4
 Tested up to: 4.9
 Requires PHP: 5.3
-Stable tag: 3.01.01
+Stable tag: 3.01.02
 
 The best WordPress form plugin for contact forms, surveys and more. Make forms a breeze with a drag and drop form builder and form style generator.
 
@@ -159,6 +159,10 @@ The field and form names and descriptions are all changed with in-place edit. Ju
 [See more FAQs](https://formidableforms.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 3.01.02 =
+* New: Add frm_sanitize_shortcodes hook. This hook allows shortcodes in field values to be processed rather than shown on the page.
+* Fix: Stylesheets weren't saving correctly when multiple styles were used
+
 = 3.01.01 =
 * New: Replace the jQuery colorpicker with the WordPress colorpicker in the visual form styler
 * New: Process shortcodes in the redirect url after form submission
