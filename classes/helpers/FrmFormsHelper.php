@@ -561,6 +561,10 @@ BEFORE_HTML;
 	 * @return bool
 	 */
 	private static function form_has_top_labels( $form ) {
+		if ( ! isset( $form['fields'] ) ) {
+			return false;
+		}
+
 		$fields = $form['fields'];
 		if ( count( $fields ) <= 0 ) {
 			return false;
