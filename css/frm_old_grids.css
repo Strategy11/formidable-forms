@@ -658,4 +658,14 @@
 		clear:both;
         float:none;
     }
+
+	.frm_form_field.frm_four_col .frm_radio,
+	.frm_form_field.frm_four_col .frm_checkbox{
+		width:48%;
+	}
+
+	.frm_form_field.frm_four_col .frm_radio:nth-child(2n+2),
+	.frm_form_field.frm_four_col .frm_checkbox:nth-child(2n+2){
+		margin-right:0;
+	}
 }
