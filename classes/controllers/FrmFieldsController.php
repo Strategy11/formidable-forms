@@ -33,6 +33,7 @@ class FrmFieldsController {
 			}
 			$field->field_options = json_decode( json_encode( $field->field_options ), true );
 			$field->options = json_decode( json_encode( $field->options ), true );
+			$field->default_value = json_decode( json_encode( $field->default_value ), true );
 
 			ob_start();
 			self::load_single_field( $field, $values );
