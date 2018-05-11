@@ -523,6 +523,7 @@ DEFAULT_HTML;
 		$field_type = $this->html5_input_type();
 		$input_html = $this->get_field_input_html_hook( $this->field );
 		$this->add_aria_description( $args, $input_html );
+		$this->add_extra_html_atts( $args, $input_html );
 
 		return '<input type="' . esc_attr( $field_type ) . '" id="' . esc_attr( $args['html_id'] ) . '" name="' . esc_attr( $args['field_name'] ) . '" value="' . esc_attr( $this->field['value'] ) . '" ' . $input_html . '/>';
 	}
@@ -530,6 +531,43 @@ DEFAULT_HTML;
 	protected function html5_input_type() {
 		$frm_settings = FrmAppHelper::get_settings();
 		return $frm_settings->use_html ? $this->type : 'text';
+	}
+
+	/**
+	 * Add paramters to an input value as an alterntative to
+	 * using the frm_field_input_html hook
+	 *
+	 * @since 3.01.03
+	 */
+	protected function add_extra_html_atts( $args, &$input_html ) {
+		// override from other fields
+	}
+
+	/**
+	 * @since 3.01.03
+	 */
+	protected function add_min_max( $args, &$input_html ) {
+		$frm_settings = FrmAppHelper::get_settings();
+		if ( ! $frm_settings->use_html ) {
+			return;
+		}
+
+		$min = FrmField::get_option( $this->field, 'minnum' );
+		if ( ! is_numeric( $min ) ) {
+			$min = 0;
+		}
+
+		$max = FrmField::get_option( $this->field, 'maxnum' );
+		if ( ! is_numeric( $max ) ) {
+			$max = 9999999;
+		}
+
+		$step = FrmField::get_option( $this->field, 'step' );
+		if ( ! is_numeric( $step ) && $step !== 'any' ) {
+			$step = 1;
+		}
+
+		$input_html .= ' min="' . esc_attr( $min ) . '" max="' . esc_attr( $max ) . '" step="' . esc_attr( $step ) . '"';
 	}
 
 	protected function maybe_include_hidden_values( $args ) {

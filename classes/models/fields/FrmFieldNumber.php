@@ -36,6 +36,13 @@ class FrmFieldNumber extends FrmFieldType {
 		);
 	}
 
+	/**
+	 * @since 3.01.03
+	 */
+	protected function add_extra_html_atts( $args, &$input_html ) {
+		$this->add_min_max( $args, $input_html );
+	}
+
 	public function validate( $args ) {
 		$errors = array();
 
