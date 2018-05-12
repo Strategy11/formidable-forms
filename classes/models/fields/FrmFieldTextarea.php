@@ -34,11 +34,11 @@ class FrmFieldTextarea extends FrmFieldType {
 		$max = FrmField::get_option( $this->field, 'max' );
 		$default_value = FrmAppHelper::esc_textarea( force_balance_tags( $this->get_field_column( 'default_value' ) ) );
 
-		echo '<textarea name="' . esc_attr( $this->html_name( $name ) ) . '" '
-			. $size_html // WPCS: XSS ok.
-			. ' rows="' . esc_attr( $max ) . '" '
-			. 'id="' . esc_attr( $this->html_id() ) . '" class="dyn_default_value">'
-			. $default_value // WPCS: XSS ok.
+		echo '<textarea name="' . esc_attr( $this->html_name( $name ) ) . '" ' . // WPCS: XSS ok.
+			$size_html // WPCS: XSS ok.
+			. ' rows="' . esc_attr( $max ) . '" ' .
+			'id="' . esc_attr( $this->html_id() ) . '" class="dyn_default_value">' .
+			$default_value // WPCS: XSS ok.
 			. '</textarea>';
 	}
 
