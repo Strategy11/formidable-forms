@@ -128,7 +128,7 @@ class FrmFieldsController {
 
 		do_action( 'frm_after_update_field_' . $field, compact( 'id', 'value' ) );
 
-		echo stripslashes( wp_kses_post( $value ) );
+		echo stripslashes( wp_kses_post( $value ) ); // WPCS: XSS ok.
         wp_die();
     }
 

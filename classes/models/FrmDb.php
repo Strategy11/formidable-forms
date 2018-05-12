@@ -618,7 +618,7 @@ class FrmDb {
 			$results = get_posts( $query );
 		} elseif ( 'get_associative_results' == $type ) {
 			global $wpdb;
-			$results = $wpdb->get_results( $query, OBJECT_K );
+			$results = $wpdb->get_results( $query, OBJECT_K ); // WPCS: unprepared SQL ok.
 		} else {
 			global $wpdb;
 			$results = $wpdb->{$type}( $query );

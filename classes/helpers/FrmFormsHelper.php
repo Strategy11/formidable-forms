@@ -336,7 +336,7 @@ BEFORE_HTML;
 	public static function get_custom_submit( $html, $form, $submit, $form_action, $values ) {
 		$button = self::replace_shortcodes( $html, $form, $submit, $form_action, $values );
 		if ( ! strpos( $button, '[button_action]' ) ) {
-			echo $button;
+			echo $button; // WPCS: XSS ok.
 			return;
 		}
 
@@ -353,9 +353,9 @@ BEFORE_HTML;
 			}
 		}
 
-		echo $button_parts[0];
+		echo $button_parts[0]; // WPCS: XSS ok.
 		do_action( 'frm_submit_button_action', $form, $form_action );
-		echo $button_parts[1];
+		echo $button_parts[1]; // WPCS: XSS ok.
 	}
 
     /**

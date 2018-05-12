@@ -55,5 +55,7 @@ $pass_args = array(
 do_action( 'frm_additional_action_settings', $form_action, $pass_args );
 
 ?>
-<span class="alignright frm_action_id <?php echo empty( $form_action->ID ) ? 'frm_hidden' : ''; ?>"><?php printf( esc_html__( 'Action ID: %1$s', 'formidable' ), $form_action->ID ); ?></span>
+<span class="alignright frm_action_id <?php echo esc_attr( empty( $form_action->ID ) ? 'frm_hidden' : '' ); ?>">
+	<?php printf( esc_html__( 'Action ID: %1$s', 'formidable' ), $form_action->ID ); ?>
+</span>
 <div style="clear:both;"></div>

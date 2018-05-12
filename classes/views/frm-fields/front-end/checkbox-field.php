@@ -31,7 +31,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' ) 
 			?><input type="checkbox" name="<?php echo esc_attr( $field_name ); ?>[<?php echo esc_attr( $other_opt ? $opt_key : '' ); ?>]" id="<?php echo esc_attr( $html_id ); ?>-<?php echo esc_attr( $opt_key ); ?>" value="<?php echo esc_attr( $field_val ); ?>"<?php echo $checked; // WPCS: XSS ok. ?> <?php do_action( 'frm_field_input_html', $field ); ?> /><?php
 
 			if ( ! isset( $shortcode_atts ) || ! isset( $shortcode_atts['label'] ) || $shortcode_atts['label'] ) {
-				echo ' ' . $opt . '</label>';
+				echo ' ' . FrmAppHelper::kses( $opt, 'all' ) . '</label>'; // WPCS: XSS ok.
 			}
 
 			FrmFieldsHelper::include_other_input( array(

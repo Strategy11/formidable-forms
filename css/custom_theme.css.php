@@ -3,7 +3,7 @@ if ( ! isset( $saving ) ) {
 	header( 'Content-type: text/css' );
 
 	if ( isset( $css ) && $css ) {
-		echo $css;
+		echo FrmAppHelper::kses( $css, 'all' ); // WPCS: XSS ok.
 		die();
 	}
 }
@@ -999,4 +999,4 @@ if ( $frm_settings->old_css ) {
 	readfile( dirname( __FILE__ ) . '/frm_old_grids.css' );
 }
 
-echo $defaults['custom_css'];
+echo FrmAppHelper::kses( $defaults['custom_css'], 'all' ); // WPCS: XSS ok.

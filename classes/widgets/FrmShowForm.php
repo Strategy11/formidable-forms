@@ -10,11 +10,11 @@ class FrmShowForm extends WP_Widget {
 	public function widget( $args, $instance ) {
         $title = apply_filters( 'widget_title', empty( $instance['title'] ) ? '' : $instance['title'], $instance, $this->id_base );
 
-		echo $args['before_widget'];
+		echo FrmAppHelper::kses( $args['before_widget'], 'all' ); // WPCS: XSS ok.
 
 		echo '<div class="frm_form_widget">';
 		if ( $title ) {
-			echo $args['before_title'] . stripslashes( $title ) . $args['after_title'];
+			echo FrmAppHelper::kses( $args['before_title'] . stripslashes( $title ) . $args['after_title'], 'all' ); // WPCS: XSS ok.
 		}
 
 		$form_atts = array(
@@ -26,7 +26,7 @@ class FrmShowForm extends WP_Widget {
 		echo FrmFormsController::get_form_shortcode( $form_atts ); // WPCS: XSS ok.
 
 		echo '</div>';
-		echo $args['after_widget'];
+		echo FrmAppHelper::kses( $args['after_widget'], 'all' ); // WPCS: XSS ok.
 	}
 
 	public function update( $new_instance, $old_instance ) {

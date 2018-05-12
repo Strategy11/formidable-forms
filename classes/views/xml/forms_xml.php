@@ -21,7 +21,7 @@ while ( $next_set = array_splice( $item_ids, 0, 20 ) ) {
 		<is_template><?php echo esc_html( $form->is_template ) ?></is_template>
 		<default_template><?php echo esc_html( $form->default_template ) ?></default_template>
 		<editable><?php echo esc_html( $form->editable ) ?></editable>
-		<options><?php echo FrmXMLHelper::prepare_form_options_for_export( $form->options ); ?></options>
+		<options><?php echo FrmXMLHelper::prepare_form_options_for_export( $form->options ); // WPCS: XSS ok. ?></options>
 		<status><?php echo FrmXMLHelper::cdata( $form->status ); // WPCS: XSS ok. ?></status>
         <parent_form_id><?php echo esc_html( $form->parent_form_id ) ?></parent_form_id>
 <?php

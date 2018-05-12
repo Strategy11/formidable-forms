@@ -470,7 +470,7 @@ class FrmEntriesController {
     public static function destroy_all() {
         if ( ! current_user_can( 'frm_delete_entries' ) ) {
             $frm_settings = FrmAppHelper::get_settings();
-            wp_die( $frm_settings->admin_permission );
+            wp_die( esc_html( $frm_settings->admin_permission ) );
         }
 
 		$params = FrmForm::get_admin_params();

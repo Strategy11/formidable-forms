@@ -306,7 +306,7 @@ class FrmEDD_SL_Plugin_Updater {
 		}
 
 		if ( ! current_user_can( 'update_plugins' ) ) {
-			wp_die( esc_html__( 'You do not have permission to install plugin updates', 'formidable' ), __( 'Error', 'formidable' ), array( 'response' => 403 ) );
+			wp_die( esc_html__( 'You do not have permission to install plugin updates', 'formidable' ), esc_html__( 'Error', 'formidable' ), array( 'response' => 403 ) );
 		}
 
 		$slug         = sanitize_text_field( $_REQUEST['slug'] ); // WPCS: CSRF ok.

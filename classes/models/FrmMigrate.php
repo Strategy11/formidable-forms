@@ -219,7 +219,7 @@ class FrmMigrate {
     public function uninstall() {
 		if ( ! current_user_can( 'administrator' ) ) {
             $frm_settings = FrmAppHelper::get_settings();
-			wp_die( $frm_settings->admin_permission );
+			wp_die( esc_html( $frm_settings->admin_permission ) );
         }
 
         global $wpdb, $wp_roles;

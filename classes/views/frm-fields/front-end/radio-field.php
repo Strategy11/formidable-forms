@@ -31,7 +31,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' ) 
 			?>/><?php
 
 			if ( ! isset( $shortcode_atts ) || ! isset( $shortcode_atts['label'] ) || $shortcode_atts['label'] ) {
-				echo ' ' . $opt . '</label>';
+				echo ' ' . FrmAppHelper::kses( $opt, 'all' ) . '</label>'; // WPCS: XSS ok.
 			}
 
 			FrmFieldsHelper::include_other_input( array(

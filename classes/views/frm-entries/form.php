@@ -1,6 +1,6 @@
 <?php
 if ( empty( $values ) || ! isset( $values['fields'] ) || empty( $values['fields'] ) ) { ?>
-<div class="frm_forms <?php echo FrmFormsHelper::get_form_style_class( $form ); ?>" id="frm_form_<?php echo esc_attr( $form->id ); ?>_container">
+<div class="frm_forms <?php echo esc_attr( FrmFormsHelper::get_form_style_class( $form ) ); ?>" id="frm_form_<?php echo esc_attr( $form->id ); ?>_container">
 	<div class="frm_error_style"><strong><?php esc_html_e( 'Oops!', 'formidable' ) ?></strong> <?php printf( esc_html__( 'You did not add any fields to your form. %1$sGo back%2$s and add some.', 'formidable' ), '<a href="' . esc_url( admin_url( '?page=formidable&frm_action=edit&id=' . $form->id ) ) . '">', '</a>' ) ?>
     </div>
 </div>
@@ -17,8 +17,8 @@ $frm_hide_fields = FrmAppHelper::get_post_param( 'frm_hide_fields_' . $form->id,
 ?>
 <div class="frm_form_fields <?php echo esc_attr( apply_filters( 'frm_form_fields_class', '', $values ) ); ?>">
 <fieldset>
-<?php echo FrmFormsHelper::replace_shortcodes( $values['before_html'], $form, $title, $description ); ?>
-<div <?php echo wp_strip_all_tags( apply_filters( 'frm_fields_container_class', 'class="frm_fields_container"' ) ); ?>>
+<?php echo FrmFormsHelper::replace_shortcodes( $values['before_html'], $form, $title, $description ); // WPCS: XSS ok. ?>
+<div <?php echo wp_strip_all_tags( apply_filters( 'frm_fields_container_class', 'class="frm_fields_container"' ) ); // WPCS: XSS ok. ?>>
 <?php do_action( 'frm_after_title', compact( 'form' ) ); ?>
 <input type="hidden" name="frm_action" value="<?php echo esc_attr( $form_action ); ?>" />
 <input type="hidden" name="form_id" value="<?php echo esc_attr( $form->id ); ?>" />
@@ -63,7 +63,7 @@ if ( isset( $frm_vars['collapse_div'] ) && $frm_vars['collapse_div'] ) {
 	unset( $frm_vars['collapse_div'] );
 }
 
-echo FrmFormsHelper::replace_shortcodes( $values['after_html'], $form );
+echo FrmFormsHelper::replace_shortcodes( $values['after_html'], $form ); // WPCS: XSS ok.
 
 if ( FrmForm::show_submit( $form ) ) {
 

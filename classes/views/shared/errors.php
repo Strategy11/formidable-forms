@@ -3,10 +3,10 @@
 if ( isset( $message ) && '' !== $message ) {
 	if ( FrmAppHelper::is_admin() ) {
 		echo '<div id="message" class="updated frm_updated_message">';
-		echo $message;
+		echo FrmAppHelper::kses( $message, 'all' ); // WPCS: XSS ok.
 		echo '</div>';
 	} else {
-		echo $message;
+		echo $message; // WPCS: XSS ok.
 	}
 }
 

@@ -373,7 +373,7 @@ class FrmField {
         global $wpdb;
 
 		$where = is_numeric( $id ) ? 'id=%d' : 'field_key=%s';
-		$query = $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'frm_fields WHERE ' . $where, $id );
+		$query = $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'frm_fields WHERE ' . $where, $id ); // WPCS: unprepared SQL ok.
 
         $results = FrmDb::check_cache( $id, 'frm_field', $query, 'get_row', 0 );
 

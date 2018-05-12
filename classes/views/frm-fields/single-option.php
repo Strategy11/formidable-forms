@@ -8,7 +8,9 @@
 	<input type="hidden" name="field_options[options_<?php echo esc_attr( $field['id'] ) ?>][<?php echo esc_attr( $opt_key ) ?>][label]" value="<?php echo esc_attr( $opt ) ?>" />
 
 	<span class="frm_option_key field_<?php echo esc_attr( $field['id'] ) ?>_option_key<?php echo esc_attr( $field['separate_value'] ? '' : ' frm_hidden' ); ?>">
-		<label class="frm-show-click frm_ipe_field_option_key" id="field_key_<?php echo esc_attr( $field['id'] . '-' . $opt_key ) ?>"><?php echo ( '' === $field_val ) ? esc_html__( '(Blank)', 'formidable' ) : $field_val ?></label>
+		<label class="frm-show-click frm_ipe_field_option_key" id="field_key_<?php echo esc_attr( $field['id'] . '-' . $opt_key ) ?>"><?php
+			echo ( '' === $field_val ) ? esc_html__( '(Blank)', 'formidable' ) : FrmAppHelper::kses( $field_val, 'all' ); // WPCS: XSS ok.
+		?></label>
 		<input type="hidden" name="field_options[options_<?php echo esc_attr( $field['id'] ) ?>][<?php echo esc_attr( $opt_key ) ?>][value]" value="<?php echo esc_attr( $field_val ) ?>" />
 	</span>
 </li>

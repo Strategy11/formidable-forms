@@ -304,9 +304,9 @@ class FrmListHelper {
 
 		echo "<ul class='subsubsub'>\n";
 		foreach ( $views as $class => $view ) {
-			$views[ $class ] = "\t<li class='$class'>$view";
+			$views[ $class ] = "\t" . '<li class="' . esc_attr( $class ) . '">' . $view;
 		}
-		echo implode( " |</li>\n", $views ) . "</li>\n";
+		echo implode( " |</li>\n", $views ) . "</li>\n"; // WPCS: XSS ok.
 		echo '</ul>';
 	}
 
@@ -1039,12 +1039,12 @@ class FrmListHelper {
 			// Instead of using esc_attr(), we strip tags to get closer to a user-friendly string.
 			$data = 'data-colname="' . esc_attr( $column_display_name ) . '"';
 
-			$attributes = 'class="' . esc_attr( $classes ) .'" ' . $data;
+			$attributes = 'class="' . esc_attr( $classes ) . '" ' . $data;
 
 			if ( 'cb' == $column_name ) {
 				echo '<th scope="row" class="check-column"></th>';
 			} elseif ( method_exists( $this, '_column_' . $column_name ) ) {
-				echo call_user_func(
+				echo call_user_func( // WPCS: XSS ok.
 					array( $this, '_column_' . $column_name ),
 					$item,
 					$classes,
@@ -1053,12 +1053,12 @@ class FrmListHelper {
 				);
 			} elseif ( method_exists( $this, 'column_' . $column_name ) ) {
 				echo "<td $attributes>"; // WPCS: XSS ok.
-				echo call_user_func( array( $this, 'column_' . $column_name ), $item );
-				echo $this->handle_row_actions( $item, $column_name, $primary );
+				echo call_user_func( array( $this, 'column_' . $column_name ), $item ); // WPCS: XSS ok.
+				echo $this->handle_row_actions( $item, $column_name, $primary ); // WPCS: XSS ok.
 				echo '</td>';
 			} else {
 				echo "<td $attributes>"; // WPCS: XSS ok.
-				echo $this->handle_row_actions( $item, $column_name, $primary );
+				echo $this->handle_row_actions( $item, $column_name, $primary ); // WPCS: XSS ok.
 				echo '</td>';
 			}
 		}
@@ -1076,7 +1076,7 @@ class FrmListHelper {
 	 * @return string The row actions output. In this case, an empty string.
 	 */
 	protected function handle_row_actions( $item, $column_name, $primary ) {
-		return $column_name == $primary ? '<button type="button" class="toggle-row"><span class="screen-reader-text">' . __( 'Show more details' ) . '</span></button>' : '';
+		return $column_name == $primary ? '<button type="button" class="toggle-row"><span class="screen-reader-text">' . esc_html__( 'Show more details' ) . '</span></button>' : '';
  	}
 
 	/**
