@@ -36,21 +36,21 @@
         <div class="misc-pub-section">
             <span class="dashicons dashicons-post-status wp-media-buttons-icon"></span>
 			<?php esc_html_e( 'Entry Key', 'formidable' ) ?>:
-			<b><?php echo sanitize_title( $entry->item_key ) ?></b>
+			<b><?php echo esc_html( $entry->item_key ) ?></b>
         </div>
 
         <?php if ( FrmAppHelper::pro_is_installed() ) { ?>
         <?php if ( $entry->user_id ) { ?>
         <div class="misc-pub-section">
             <span class="dashicons dashicons-admin-users wp-media-buttons-icon"></span>
-			<?php printf( __( 'Created by: %1$s', 'formidable' ), FrmFieldsHelper::get_user_display_name( $entry->user_id, 'display_name', array( 'link' => true ) ) ); ?>
+			<?php printf( esc_html__( 'Created by: %1$s', 'formidable' ), esc_html( FrmFieldsHelper::get_user_display_name( $entry->user_id, 'display_name', array( 'link' => true ) ) ) ); ?>
         </div>
         <?php } ?>
 
         <?php if ( $entry->updated_by && $entry->updated_by != $entry->user_id ) { ?>
         <div class="misc-pub-section">
             <span class="dashicons dashicons-admin-users wp-media-buttons-icon"></span>
-			<?php printf( esc_html__( 'Updated by: %1$s', 'formidable' ), FrmFieldsHelper::get_user_display_name( $entry->updated_by, 'display_name', array( 'link' => true ) ) ); ?>
+			<?php printf( esc_html__( 'Updated by: %1$s', 'formidable' ), esc_html( FrmFieldsHelper::get_user_display_name( $entry->updated_by, 'display_name', array( 'link' => true ) ) ) ); ?>
         </div>
         <?php } ?>
         <?php } ?>
@@ -64,7 +64,7 @@
 		<?php if ( ! empty( $entry->ip ) ) { ?>
 		<div class="misc-pub-section">
 			<?php esc_html_e( 'IP Address', 'formidable' ) ?>:
-			<b><?php echo sanitize_text_field( $entry->ip ); ?></b>
+			<b><?php echo esc_html( $entry->ip ); ?></b>
 		</div>
 		<?php } ?>
 
@@ -89,7 +89,7 @@
             }
         ?>
         <div class="misc-pub-section">
-			<b><?php echo sanitize_text_field( ucfirst( str_replace( '-', ' ', $k ) ) ); ?></b>:
+			<b><?php echo esc_html( ucfirst( str_replace( '-', ' ', $k ) ) ); ?></b>:
 			<?php echo wp_kses_post( implode( ', ', (array) $d ) ); ?>
         </div>
         <?php

@@ -405,13 +405,13 @@ class FrmDb {
 		if ( is_array( $where ) || empty( $where ) ) {
 			self::get_where_clause_and_values( $where );
 			global $wpdb;
-			$query = $wpdb->prepare( $query . $where['where'] . ' ' . implode( ' ', $args ), $where['values'] );
+			$query = $wpdb->prepare( $query . $where['where'] . ' ' . implode( ' ', $args ), $where['values'] ); // WPCS: unprepared SQL ok.
 		} else {
 			/**
 			 * Allow the $where to be prepared before we recieve it here.
 			 * This is a fallback for reverse compatibility, but is not recommended
 			 */
-			_deprecated_argument( 'where', '2.0', __( 'Use the query in an array format so it can be properly prepared.', 'formidable' ) );
+			_deprecated_argument( 'where', '2.0', esc_html__( 'Use the query in an array format so it can be properly prepared.', 'formidable' ) );
 			$query .= $where . ' ' . implode( ' ', $args );
 		}
 
@@ -543,7 +543,7 @@ class FrmDb {
 		if ( is_array( $where ) ) {
 			global $wpdb;
 			self::get_where_clause_and_values( $where, $starts_with );
-			$where = $wpdb->prepare( $where['where'], $where['values'] );
+			$where = $wpdb->prepare( $where['where'], $where['values'] ); // WPCS: unprepared SQL ok.
 		} else {
 			$where = $starts_with . $where;
 		}

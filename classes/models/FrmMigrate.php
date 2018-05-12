@@ -165,7 +165,7 @@ class FrmMigrate {
 				dbDelta( $q . $charset_collate . ';' );
 			} else {
 				global $wpdb;
-				$wpdb->query( $q . $charset_collate );
+				$wpdb->query( $q . $charset_collate ); // WPCS: unprepared SQL ok.
 			}
 			unset( $q );
         }
@@ -224,10 +224,10 @@ class FrmMigrate {
 
         global $wpdb, $wp_roles;
 
-		$wpdb->query( 'DROP TABLE IF EXISTS ' . $this->fields );
-		$wpdb->query( 'DROP TABLE IF EXISTS ' . $this->forms );
-		$wpdb->query( 'DROP TABLE IF EXISTS ' . $this->entries );
-		$wpdb->query( 'DROP TABLE IF EXISTS ' . $this->entry_metas );
+		$wpdb->query( 'DROP TABLE IF EXISTS ' . $this->fields ); // WPCS: unprepared SQL ok.
+		$wpdb->query( 'DROP TABLE IF EXISTS ' . $this->forms ); // WPCS: unprepared SQL ok.
+		$wpdb->query( 'DROP TABLE IF EXISTS ' . $this->entries ); // WPCS: unprepared SQL ok.
+		$wpdb->query( 'DROP TABLE IF EXISTS ' . $this->entry_metas ); // WPCS: unprepared SQL ok.
 
 		delete_option( 'frm_options' );
 		delete_option( 'frm_db_version' );
@@ -381,9 +381,9 @@ class FrmMigrate {
 	 */
 	private function migrate_to_23() {
 		global $wpdb;
-		$exists = $wpdb->get_row( 'SHOW COLUMNS FROM ' . $this->forms . ' LIKE "parent_form_id"' );
+		$exists = $wpdb->get_row( 'SHOW COLUMNS FROM ' . $this->forms . ' LIKE "parent_form_id"' ); // WPCS: unprepared SQL ok.
 		if ( empty( $exists ) ) {
-			$wpdb->query( 'ALTER TABLE ' . $this->forms . ' ADD parent_form_id int(11) default 0' );
+			$wpdb->query( 'ALTER TABLE ' . $this->forms . ' ADD parent_form_id int(11) default 0' ); // WPCS: unprepared SQL ok.
 		}
 	}
 

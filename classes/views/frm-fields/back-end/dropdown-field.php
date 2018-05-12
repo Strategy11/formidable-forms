@@ -1,7 +1,7 @@
 <?php
 
 if ( isset( $field['post_field'] ) && 'post_category' === $field['post_field'] && FrmAppHelper::pro_is_installed() ) {
-	echo FrmProPost::get_category_dropdown( $field, array(
+	echo FrmProPost::get_category_dropdown( $field, array( // WPCS: XSS ok.
 		'name'     => $field_name,
 		'id'       => 'placeholder_id',
 		'location' => 'form_builder',
@@ -16,7 +16,7 @@ if ( isset( $field['post_field'] ) && 'post_category' === $field['post_field'] &
 			$opt = FrmFieldsHelper::get_label_from_array( $opt, $opt_key, $field );
 			$selected = ( $field['default_value'] === $field_val || FrmFieldsHelper::get_other_val( array( 'opt_key', 'field' ) ) ) ? ' selected="selected"' : '';
 			?>
-			<option value="<?php echo esc_attr( $field_val ) ?>"<?php echo $selected ?>><?php echo esc_html( $opt ) ?> </option>
+			<option value="<?php echo esc_attr( $field_val ) ?>"<?php echo $selected; // WPCS: XSS ok. ?>><?php echo esc_html( $opt ) ?> </option>
 		<?php } ?>
 	</select>
 <?php } ?>

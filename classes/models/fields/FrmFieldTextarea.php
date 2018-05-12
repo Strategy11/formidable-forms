@@ -35,9 +35,9 @@ class FrmFieldTextarea extends FrmFieldType {
 		$default_value = FrmAppHelper::esc_textarea( force_balance_tags( $this->get_field_column( 'default_value' ) ) );
 
 		echo '<textarea name="' . esc_attr( $this->html_name( $name ) ) . '" ' .
-			$size_html . ' rows="' . esc_attr( $max ) . '" ' .
+			$size_html . ' rows="' . esc_attr( $max ) . '" ' . // WPCS: XSS ok.
 			'id="' . esc_attr( $this->html_id() ) . '" class="dyn_default_value">' .
-			$default_value .
+			$default_value . // WPCS: XSS ok.
 			'</textarea>';
 	}
 

@@ -7,7 +7,7 @@
 	<?php wp_head(); ?>
 </head>
 <body class="frm_preview_page">
-	<?php echo FrmFormsController::show_form( $form->id, '', true, true ); ?>
+	<?php echo FrmFormsController::show_form( $form->id, '', true, true ); // WPCS: XSS ok. ?>
 	<?php wp_footer(); ?>
 </body>
 </html>

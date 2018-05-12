@@ -67,7 +67,7 @@ foreach ( FrmField::pro_field_selection() as $field_key => $field_type ) {
 					<ul class="frm-dropdown-menu" role="menu" aria-labelledby="frm-<?php echo esc_attr( $field_key ) ?>Drop">
 					<?php foreach ( $field_type['types'] as $k => $type ) { ?>
 						<li class="frm_t<?php echo esc_attr( $field_key ) ?>" id="<?php echo esc_attr( $field_key ) ?>|<?php echo esc_attr( $k ) ?>">
-							<?php echo FrmAppHelper::kses( apply_filters( 'frmpro_field_links', $type, $id, $field_key . '|' . $k ), array( 'a', 'i', 'span' ) ) ?>
+							<?php echo FrmAppHelper::kses( apply_filters( 'frmpro_field_links', $type, $id, $field_key . '|' . $k ), array( 'a', 'i', 'span' ) ); // WPCS: XSS ok. ?>
 						</li>
 					<?php
 						unset( $k, $type );
@@ -81,7 +81,7 @@ foreach ( FrmField::pro_field_selection() as $field_key => $field_type ) {
 					$field_label .= ' <span>' . FrmFormsHelper::get_field_link_name( $field_type ) . '</span>';
                     ?>
 					<li class="frmbutton button <?php echo esc_attr( $no_allow_class . ' frm_t' . str_replace( '|', '-', $field_key ) ) ?>" id="<?php echo esc_attr( $field_key ) ?>">
-						<?php echo FrmAppHelper::kses( apply_filters( 'frmpro_field_links', $field_label, $id, $field_key ), array( 'a', 'i', 'span' ) ) ?>
+						<?php echo FrmAppHelper::kses( apply_filters( 'frmpro_field_links', $field_label, $id, $field_key ), array( 'a', 'i', 'span' ) ); // WPCS: XSS ok. ?>
 					</li>
 				<?php
 				}

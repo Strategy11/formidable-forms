@@ -396,7 +396,7 @@ class FrmEntriesController {
         if ( $pagenum > $total_pages && $total_pages > 0 ) {
 			$url = add_query_arg( 'paged', $total_pages );
             if ( headers_sent() ) {
-				echo FrmAppHelper::js_redirect( $url );
+				echo FrmAppHelper::js_redirect( $url ); // WPCS: XSS ok.
             } else {
                 wp_redirect( esc_url_raw( $url ) );
             }
@@ -433,7 +433,7 @@ class FrmEntriesController {
 		$entry = FrmEntry::getOne( $id, true );
 		if ( ! $entry ) {
 			echo '<div id="form_show_entry_page" class="wrap">' .
-				__( 'You are trying to view an entry that does not exist.', 'formidable' ) .
+				esc_html__( 'You are trying to view an entry that does not exist.', 'formidable' ) .
 				'</div>';
 			return;
 		}
@@ -520,8 +520,8 @@ class FrmEntriesController {
 			$entry_query .= $form_query;
 		}
 
-		$wpdb->query( $meta_query );
-		return $wpdb->query( $entry_query );
+		$wpdb->query( $meta_query ); // WPCS: unprepared SQL ok.
+		return $wpdb->query( $entry_query ); // WPCS: unprepared SQL ok.
 	}
 
 	/**

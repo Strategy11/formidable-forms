@@ -49,7 +49,7 @@
 										'embedded_field_id' => $embedded_field_id,
 									);
 									$display_value = FrmEntriesHelper::prepare_display_value( $entry, $field, $atts );
-									echo $display_value;
+									echo $display_value; // WPCS: XSS ok.
 
 									if ( is_email( $display_value ) && ! in_array( $display_value, $to_emails ) ) {
 										$to_emails[] = $display_value;

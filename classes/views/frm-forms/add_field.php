@@ -13,7 +13,7 @@
 		<a href="javascript:void(0);" class="frm_req_field frm_action_icon frm_required_icon frm_icon_font alignleft frm_required<?php echo (int) $field['required'] ?>" id="req_field_<?php echo esc_attr( $field['id'] ); ?>" title="Click to Mark as <?php echo FrmField::is_required( $field ) ? 'not ' : ''; ?>Required"></a>
     </span>
 	<?php } ?>
-	<label class="<?php echo ( $field['type'] === 'end_divider' ) ? '' : 'frm_ipe_field_label'; ?> frm_primary_label <?php echo ( $field['type'] === 'break' ) ? 'button' : ''; ?>" id="field_label_<?php echo esc_attr( $field['id'] ); ?>"><?php echo ( $field['name'] === '' ) ? __( '(no label)', 'formidable' ) : force_balance_tags( $field['name'] ); ?></label>
+	<label class="<?php echo ( $field['type'] === 'end_divider' ) ? '' : 'frm_ipe_field_label'; ?> frm_primary_label <?php echo ( $field['type'] === 'break' ) ? 'button' : ''; ?>" id="field_label_<?php echo esc_attr( $field['id'] ); ?>"><?php echo ( $field['name'] === '' ) ? esc_html__( '(no label)', 'formidable' ) : force_balance_tags( $field['name'] ); ?></label>
 	<input type="hidden" name="field_options[name_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['name'] ); ?>" />
 
 <div id="field_<?php echo esc_attr( $field['id'] ) ?>_inner_container" class="frm_inner_field_container">
@@ -31,7 +31,7 @@ if ( $display['clear_on_focus'] ) {
 <div class="clear"></div>
 </div>
 <?php if ( $display['description'] ) { ?>
-    <div class="frm_ipe_field_desc description <?php echo ( $field['description'] === '' ) ? 'frm-show-click' : '' ?>" id="field_description_<?php echo esc_attr( $field['id'] ); ?>"><?php echo ( $field['description'] === '' ) ? __( '(Click to add description)', 'formidable' ) : force_balance_tags( $field['description'] ); ?></div>
+    <div class="frm_ipe_field_desc description <?php echo esc_attr( $field['description'] === '' ? 'frm-show-click' : '' ); ?>" id="field_description_<?php echo esc_attr( $field['id'] ); ?>"><?php echo ( $field['description'] === '' ) ? esc_html__( '(Click to add description)', 'formidable' ) : force_balance_tags( $field['description'] ); ?></div>
     <input type="hidden" name="field_options[description_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['description'] ); ?>" />
 
 <?php } ?>
@@ -61,7 +61,7 @@ if ( in_array( $field['type'], array( 'select', 'radio', 'checkbox' ) ) ) {
 	<?php
 
 	if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' ) {
-		echo '<p class="howto" id="frm_has_hidden_options_' . esc_attr( $field['id'] ) . '">' . FrmFieldsHelper::get_term_link( $field['taxonomy'] ) . '</p>';
+		echo '<p class="howto" id="frm_has_hidden_options_' . esc_attr( $field['id'] ) . '">' . FrmFieldsHelper::get_term_link( $field['taxonomy'] ) . '</p>'; // WPCS: XSS ok.
 	} elseif ( ! isset( $field['post_field'] ) || ! in_array( $field['post_field'], array( 'post_category' ) ) ) {
 ?>
         <div id="frm_add_field_<?php echo esc_attr( $field['id'] ); ?>">

@@ -297,21 +297,22 @@ class FrmEDD_SL_Plugin_Updater {
 
 		global $frm_edd_plugin_data;
 
-		if ( empty( $_REQUEST['edd_sl_action'] ) || 'view_plugin_changelog' !== $_REQUEST['edd_sl_action'] ) {
+		if ( empty( $_REQUEST['edd_sl_action'] ) || 'view_plugin_changelog' !== $_REQUEST['edd_sl_action'] ) { // WPCS: CSRF ok.
 			return;
 		}
 
-		if ( empty( $_REQUEST['plugin'] ) || empty( $_REQUEST['slug'] ) ) {
+		if ( empty( $_REQUEST['plugin'] ) || empty( $_REQUEST['slug'] ) ) { // WPCS: CSRF ok.
 			return;
 		}
 
 		if ( ! current_user_can( 'update_plugins' ) ) {
-			wp_die( __( 'You do not have permission to install plugin updates', 'formidable' ), __( 'Error', 'formidable' ), array( 'response' => 403 ) );
+			wp_die( esc_html__( 'You do not have permission to install plugin updates', 'formidable' ), __( 'Error', 'formidable' ), array( 'response' => 403 ) );
 		}
 
-		$data         = $frm_edd_plugin_data[ $_REQUEST['slug'] ];
+		$slug         = sanitize_text_field( $_REQUEST['slug'] ); // WPCS: CSRF ok.
+		$data         = $frm_edd_plugin_data[ $slug ];
 		$beta         = ! empty( $data['beta'] ) ? true : false;
-		$cache_key    = md5( 'edd_plugin_' . sanitize_key( $_REQUEST['plugin'] ) . '_' . $beta . '_version_info' );
+		$cache_key    = md5( 'edd_plugin_' . sanitize_key( $_REQUEST['plugin'] ) . '_' . $beta . '_version_info' ); // WPCS: CSRF ok.
 		$version_info = $this->get_cached_version_info( $cache_key );
 
 		if ( false === $version_info ) {
@@ -320,7 +321,7 @@ class FrmEDD_SL_Plugin_Updater {
 				'edd_action' => 'get_version',
 				'item_name'  => isset( $data['item_name'] ) ? $data['item_name'] : false,
 				'item_id'    => isset( $data['item_id'] ) ? $data['item_id'] : false,
-				'slug'       => sanitize_text_field( $_REQUEST['slug'] ),
+				'slug'       => $slug,
 				'author'     => $data['author'],
 				'url'        => home_url(),
 				'beta'       => $beta,
@@ -354,7 +355,7 @@ class FrmEDD_SL_Plugin_Updater {
 		}
 
 		if ( ! empty( $version_info ) && isset( $version_info->sections['changelog'] ) ) {
-			echo '<div style="background:#fff;padding:10px;">' . $version_info->sections['changelog'] . '</div>';
+			echo '<div style="background:#fff;padding:10px;">' . FrmAppHelper::kses( $version_info->sections['changelog'], 'all' ) . '</div>'; // WPCS: XSS ok.
 		}
 
 		exit;

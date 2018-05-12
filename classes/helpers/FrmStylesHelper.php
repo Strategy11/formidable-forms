@@ -226,7 +226,7 @@ class FrmStylesHelper {
     	<select name="<?php echo esc_attr( $frm_style->get_field_name( $name ) ); ?>" id="frm_<?php echo esc_attr( $name ); ?>" class="frm_icon_font frm_multiselect hide-if-js">
             <?php foreach ( $icons as $key => $icon ) { ?>
 			<option value="<?php echo esc_attr( $key ) ?>" <?php selected( $style->post_content[ $name ], $key ) ?>>
-				<?php echo '&#xe' . $icon['+'] . '; &#xe' . $icon['-'] . ';'; ?>
+				<?php echo '&#xe' . esc_html( $icon['+'] ) . '; &#xe' . esc_html( $icon['-'] ) . ';'; ?>
             </option>
             <?php } ?>
     	</select>

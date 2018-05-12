@@ -63,7 +63,7 @@ class FrmNotification {
 			$sent_to = array_filter( $sent_to );
 
 			$temp = str_replace( '<', '&lt;', $sent_to );
-			echo ' ' . FrmAppHelper::kses( implode( ', ', (array) $temp ) );
+			echo ' ' . FrmAppHelper::kses( implode( ', ', (array) $temp ) ); // WPCS: XSS ok.
 		}
 	}
 

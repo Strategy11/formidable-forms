@@ -136,7 +136,7 @@ class FrmFormsController {
         } else {
             FrmForm::update( $id, $values, true );
 			$url = admin_url( 'admin.php?page=formidable&frm_action=settings&id=' . $id );
-			die( FrmAppHelper::js_redirect( $url ) );
+			die( FrmAppHelper::js_redirect( $url ) ); // WPCS: XSS ok.
         }
     }
 
@@ -198,7 +198,7 @@ class FrmFormsController {
             FrmForm::update( $id, $values );
             $message = __( 'Form was Successfully Updated', 'formidable' );
             if ( defined( 'DOING_AJAX' ) ) {
-				wp_die( $message );
+				wp_die( esc_html( $message ) );
             }
 			return self::get_edit_vars( $id, array(), $message );
         }
@@ -253,7 +253,7 @@ class FrmFormsController {
 	 * @since 3.0
 	 */
 	public static function show_page_preview() {
-		echo self::page_preview();
+		echo self::page_preview(); // WPCS: XSS ok.
 	}
 
     public static function preview() {
@@ -676,11 +676,11 @@ class FrmFormsController {
 
         $form = FrmForm::getOne( $id );
         if ( ! $form ) {
-            wp_die( __( 'You are trying to edit a form that does not exist.', 'formidable' ) );
+            wp_die( esc_html__( 'You are trying to edit a form that does not exist.', 'formidable' ) );
         }
 
         if ( $form->parent_form_id ) {
-			wp_die( sprintf( __( 'You are trying to edit a child form. Please edit from %1$shere%2$s', 'formidable' ), '<a href="' . esc_url( admin_url( 'admin.php?page=formidable&frm_action=edit&id=' . $form->parent_form_id ) ) . '">', '</a>' ) );
+			wp_die( sprintf( esc_html__( 'You are trying to edit a child form. Please edit from %1$shere%2$s', 'formidable' ), '<a href="' . esc_url( admin_url( 'admin.php?page=formidable&frm_action=edit&id=' . $form->parent_form_id ) ) . '">', '</a>' ) );
         }
 
 		$frm_field_selection = FrmField::field_selection();
@@ -708,7 +708,7 @@ class FrmFormsController {
 		$all_templates = FrmForm::getAll( array( 'is_template' => 1 ), 'name' );
 
         if ( $form->default_template ) {
-			wp_die( __( 'That template cannot be edited', 'formidable' ) );
+			wp_die( esc_html__( 'That template cannot be edited', 'formidable' ) );
 		} elseif ( defined( 'DOING_AJAX' ) ) {
             wp_die();
         } else if ( $create_link ) {
@@ -729,7 +729,7 @@ class FrmFormsController {
 		$values = FrmAppHelper::setup_edit_vars( $form, 'forms', $fields, true );
 
 		if ( isset( $values['default_template'] ) && $values['default_template'] ) {
-			wp_die( __( 'That template cannot be edited', 'formidable' ) );
+			wp_die( esc_html__( 'That template cannot be edited', 'formidable' ) );
 		}
 
 		self::clean_submit_html( $values );
@@ -851,7 +851,7 @@ class FrmFormsController {
 		FrmAppHelper::permission_check( 'frm_view_forms' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
-		echo FrmEntriesController::show_entry_shortcode( array(
+		echo FrmEntriesController::show_entry_shortcode( array( // WPCS: XSS ok.
 			'form_id'       => FrmAppHelper::get_post_param( 'form_id', '', 'absint' ),
 			'default_email' => true,
 			'plain_text'    => FrmAppHelper::get_post_param( 'plain_text', '', 'absint' ),
@@ -933,7 +933,7 @@ class FrmFormsController {
         }
 
         if ( isset( $message ) && ! empty( $message ) ) {
-			echo '<div id="message" class="updated frm_updated_message">' . FrmAppHelper::kses( $message, array( 'a' ) ) . '</div>';
+			echo '<div id="message" class="updated frm_updated_message">' . FrmAppHelper::kses( $message, array( 'a' ) ) . '</div>'; // WPCS: XSS ok.
         }
 
         return $errors;
@@ -1383,7 +1383,7 @@ class FrmFormsController {
 			$old_post = $post;
 			$post = $page;
 			$content = apply_filters( 'frm_content', $page->post_content, $args['form'], $args['entry_id'] );
-			echo apply_filters( 'the_content', $content );
+			echo apply_filters( 'the_content', $content ); // WPCS: XSS ok.
 			$post = $old_post;
 		}
 	}
@@ -1422,7 +1422,7 @@ class FrmFormsController {
 		} else {
 			add_filter( 'frm_use_wpautop', '__return_true' );
 
-			echo $redirect_msg;
+			echo $redirect_msg; // WPCS: XSS ok.
 			echo "<script type='text/javascript'>window.onload = function(){setTimeout(window.location='" . esc_url_raw( $success_url ) . "', 8000);}</script>";
 		}
 	}

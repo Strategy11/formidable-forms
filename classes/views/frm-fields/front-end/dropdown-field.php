@@ -1,7 +1,7 @@
 <?php
 
 if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' && FrmAppHelper::pro_is_installed() ) {
-	echo FrmProPost::get_category_dropdown( $field, array(
+	echo FrmProPost::get_category_dropdown( $field, array( // WPCS: XSS ok.
 		'location' => 'front',
 		'name' => $field_name,
 		'id' => $html_id,

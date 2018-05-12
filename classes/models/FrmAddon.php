@@ -248,7 +248,7 @@ class FrmAddon {
 	}
 
 	private function is_license_revoked() {
-		if ( empty( $this->license ) || empty( $this->plugin_slug ) || isset( $_POST['license'] ) ) {
+		if ( empty( $this->license ) || empty( $this->plugin_slug ) || isset( $_POST['license'] ) ) { // WPCS: CSRF ok.
 			return;
 		}
 

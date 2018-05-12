@@ -14,7 +14,7 @@
 		<input type="hidden" name="frm_action" value="save_css" />
         <?php wp_nonce_field( 'frm_custom_css_nonce', 'frm_custom_css' ); ?>
 
-		<textarea name="<?php echo esc_attr( $frm_style->get_field_name( 'custom_css' ) ); ?>" id="<?php echo esc_attr( $id ); ?>" class="hide-if-js"><?php echo FrmAppHelper::esc_textarea( $style->post_content['custom_css'] ); ?></textarea>
+		<textarea name="<?php echo esc_attr( $frm_style->get_field_name( 'custom_css' ) ); ?>" id="<?php echo esc_attr( $id ); ?>" class="hide-if-js"><?php echo FrmAppHelper::esc_textarea( $style->post_content['custom_css'] ); // WPCS: XSS ok. ?></textarea>
 
 		<?php
 		if ( ! empty( $settings ) && $id == 'frm_codemirror_box' ) {

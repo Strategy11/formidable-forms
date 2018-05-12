@@ -512,7 +512,7 @@ class FrmFieldsController {
 		$add_html = ' ' . implode( ' ', $add_html ) . '  ';
 
         if ( $echo ) {
-            echo $add_html;
+            echo $add_html; // WPCS: XSS ok.
         }
 
         return $add_html;

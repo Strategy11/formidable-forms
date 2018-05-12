@@ -24,7 +24,7 @@ class FrmAddonsController {
 	public static function license_settings() {
 		$plugins = apply_filters( 'frm_installed_addons', array() );
 		if ( empty( $plugins ) ) {
-			_e( 'There are no plugins on your site that require a license', 'formidable' );
+			esc_html_e( 'There are no plugins on your site that require a license', 'formidable' );
 			return;
 		}
 

@@ -19,10 +19,10 @@ while ( $next_posts = array_splice( $item_ids, 0, 20 ) ) {
 	<view>
 		<title><?php echo esc_html( apply_filters( 'the_title_rss', $post->post_title ) ); ?></title>
 		<link><?php the_permalink_rss() ?></link>
-		<post_author><?php echo FrmXMLHelper::cdata( get_the_author_meta( 'login' ) ); ?></post_author>
+		<post_author><?php echo FrmXMLHelper::cdata( get_the_author_meta( 'login' ) ); // WPCS: XSS ok. ?></post_author>
 		<description></description>
-		<content><?php echo FrmXMLHelper::cdata( apply_filters( 'the_content_export', $post->post_content ) ); ?></content>
-		<excerpt><?php echo FrmXMLHelper::cdata( apply_filters( 'the_excerpt_export', $post->post_excerpt ) ); ?></excerpt>
+		<content><?php echo FrmXMLHelper::cdata( apply_filters( 'the_content_export', $post->post_content ) ); // WPCS: XSS ok. ?></content>
+		<excerpt><?php echo FrmXMLHelper::cdata( apply_filters( 'the_excerpt_export', $post->post_excerpt ) ); // WPCS: XSS ok. ?></excerpt>
 		<post_id><?php echo esc_html( $post->ID ); ?></post_id>
 		<post_date><?php echo esc_html( $post->post_date ); ?></post_date>
 		<post_date_gmt><?php echo esc_html( $post->post_date_gmt ); ?></post_date_gmt>
@@ -33,7 +33,7 @@ while ( $next_posts = array_splice( $item_ids, 0, 20 ) ) {
 		<post_parent><?php echo esc_html( $post->post_parent ); ?></post_parent>
 		<menu_order><?php echo esc_html( $post->menu_order ); ?></menu_order>
 		<post_type><?php echo esc_html( $post->post_type ); ?></post_type>
-		<post_password><?php echo FrmXMLHelper::cdata( $post->post_password ); ?></post_password>
+		<post_password><?php echo FrmXMLHelper::cdata( $post->post_password ); // WPCS: XSS ok. ?></post_password>
 		<is_sticky><?php echo esc_html( $is_sticky ); ?></is_sticky>
 <?php	if ( 'attachment' === $post->post_type ) : ?>
 		<attachment_url><?php echo esc_url( wp_get_attachment_url( $post->ID ) ); ?></attachment_url>
@@ -48,7 +48,7 @@ while ( $next_posts = array_splice( $item_ids, 0, 20 ) ) {
 		?>
 		<postmeta>
 			<meta_key><?php echo esc_html( $meta->meta_key ); ?></meta_key>
-			<meta_value><?php echo FrmXMLHelper::cdata( $meta->meta_value ); ?></meta_value>
+			<meta_value><?php echo FrmXMLHelper::cdata( $meta->meta_value ); // WPCS: XSS ok. ?></meta_value>
 		</postmeta>
 <?php
 		endforeach;
@@ -59,7 +59,7 @@ while ( $next_posts = array_splice( $item_ids, 0, 20 ) ) {
 
 			foreach ( (array) $terms as $term ) {
 				?>
-		<category domain="<?php echo esc_attr( $term->taxonomy ) ?>" nicename="<?php echo esc_attr( $term->slug ) ?>"><?php echo FrmXMLHelper::cdata( $term->name ) ?></category>
+		<category domain="<?php echo esc_attr( $term->taxonomy ) ?>" nicename="<?php echo esc_attr( $term->slug ) ?>"><?php echo FrmXMLHelper::cdata( $term->name ); // WPCS: XSS ok. ?></category>
 <?php
 			}
 		}
@@ -88,10 +88,10 @@ foreach ( (array) $terms as $term ) {
 	?>
 	<term><term_id><?php echo esc_html( $term->term_id ) ?></term_id><term_taxonomy><?php echo esc_html( $term->taxonomy ); ?></term_taxonomy><?php
 	if ( ! empty( $term->name ) ) {
-		echo '<term_name>' . FrmXMLHelper::cdata( $term->name ) . '</term_name>';
+		echo '<term_name>' . FrmXMLHelper::cdata( $term->name ) . '</term_name>'; // WPCS: XSS ok.
 	}
 	if ( ! empty( $term->description ) ) {
-		echo '<term_description>' . FrmXMLHelper::cdata( $term->description ) . '</term_description>';
+		echo '<term_description>' . FrmXMLHelper::cdata( $term->description ) . '</term_description>'; // WPCS: XSS ok.
 	}
 	echo '<term_slug>' . esc_html( $term->slug ) . '</term_slug>';
 	echo '</term>';

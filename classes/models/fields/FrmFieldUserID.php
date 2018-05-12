@@ -41,7 +41,7 @@ class FrmFieldUserID extends FrmFieldType {
 
 		$user_ID = get_current_user_id();
 		$user_ID = ( $user_ID ? $user_ID : '' );
-		$posted_value = ( FrmAppHelper::is_admin() && $_POST && isset( $_POST['item_meta'][ $this->field['id'] ] ) );
+		$posted_value = ( FrmAppHelper::is_admin() && $_POST && isset( $_POST['item_meta'][ $this->field['id'] ] ) ); // WPCS: CSRF ok.
 		$updating = ( isset( $args['action'] ) && $args['action'] == 'update' );
 		$value = ( is_numeric( $this->field['value'] ) || $posted_value || $updating ) ? $this->field['value'] : $user_ID;
 

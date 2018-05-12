@@ -17,6 +17,7 @@
 <form method="post" class="frm_form_settings">
     <input type="hidden" name="id" id="form_id" value="<?php echo (int) $id; ?>" />
     <input type="hidden" name="frm_action" value="update_settings" />
+	<?php wp_nonce_field( 'process_form_nonce', 'process_form' ); ?>
 
         <div class="meta-box-sortables">
         <div class="categorydiv postbox" id="frm-categorydiv">
@@ -46,7 +47,9 @@
 				}
 				?>
 				<li class="<?php echo esc_attr( $a === $sec_anchor . '_settings' ? 'tabs active' : '' ); ?>">
-					<a href="#<?php echo esc_attr( $sec_anchor ) ?>_settings"><?php echo ucfirst( $sec_name ) ?></a>
+					<a href="#<?php echo esc_attr( $sec_anchor ) ?>_settings">
+						<?php echo esc_html( ucfirst( $sec_name ) ); ?>
+					</a>
 				</li>
             <?php } ?>
         </ul>
@@ -221,7 +224,7 @@
                 <tr class="success_action_message_box success_action_box<?php echo esc_attr( $values['success_action'] === 'message' ? '' : ' frm_hidden' ); ?>">
                     <td>
                         <div><?php esc_html_e( 'On Submit', 'formidable' ) ?></div>
-						<textarea id="success_msg" name="options[success_msg]" cols="50" rows="2" class="frm_long_input"><?php echo FrmAppHelper::esc_textarea( $values['success_msg'] ); ?></textarea>
+						<textarea id="success_msg" name="options[success_msg]" cols="50" rows="2" class="frm_long_input"><?php echo FrmAppHelper::esc_textarea( $values['success_msg'] ); // WPCS: XSS ok. ?></textarea>
                     </td>
                 </tr>
 				<?php do_action( 'frm_add_form_msg_options', $values ); ?>
@@ -243,7 +246,7 @@
 						<label for="frm_form_description"><?php esc_html_e( 'Form Description', 'formidable' ) ?></label>
 					</td>
 					<td>
-						<textarea id="frm_form_description" name="description" cols="50" rows="5" class="frm_long_input"><?php echo FrmAppHelper::esc_textarea( $values['description'] ); ?></textarea>
+						<textarea id="frm_form_description" name="description" cols="50" rows="5" class="frm_long_input"><?php echo FrmAppHelper::esc_textarea( $values['description'] ); // WPCS: XSS ok. ?></textarea>
 					</td>
 				</tr>
 				<?php do_action( 'frm_additional_form_options', $values ); ?>
@@ -293,7 +296,7 @@
 
                 <p>
 					<label><?php esc_html_e( 'Before Fields', 'formidable' ) ?></label>
-					<textarea name="options[before_html]" rows="4" id="before_html" class="frm_long_input"><?php echo FrmAppHelper::esc_textarea( $values['before_html'] ) ?></textarea>
+					<textarea name="options[before_html]" rows="4" id="before_html" class="frm_long_input"><?php echo FrmAppHelper::esc_textarea( $values['before_html'] ); // WPCS: XSS ok. ?></textarea>
 				</p>
 
                 <div id="add_html_fields">
@@ -304,7 +307,7 @@
 							?>
                                 <p>
 									<label><?php echo esc_html( $field['name'] ) ?></label>
-									<textarea name="field_options[custom_html_<?php echo esc_attr( $field['id'] ) ?>]" rows="7" id="custom_html_<?php echo esc_attr( $field['id'] ) ?>" class="field_custom_html frm_long_input"><?php echo FrmAppHelper::esc_textarea( $field['custom_html'] ) ?></textarea>
+									<textarea name="field_options[custom_html_<?php echo esc_attr( $field['id'] ); ?>]" rows="7" id="custom_html_<?php echo esc_attr( $field['id'] ); ?>" class="field_custom_html frm_long_input"><?php echo FrmAppHelper::esc_textarea( $field['custom_html'] ); // WPCS: XSS ok. ?></textarea>
 								</p>
                             <?php
                             }
@@ -315,11 +318,11 @@
                 </div>
 
                 <p><label><?php esc_html_e( 'After Fields', 'formidable' ) ?></label>
-					<textarea name="options[after_html]" rows="3" id="after_html" class="frm_long_input"><?php echo FrmAppHelper::esc_textarea( $values['after_html'] ); ?></textarea>
+					<textarea name="options[after_html]" rows="3" id="after_html" class="frm_long_input"><?php echo FrmAppHelper::esc_textarea( $values['after_html'] ); // WPCS: XSS ok. ?></textarea>
 				</p>
 
                 <p><label><?php esc_html_e( 'Submit Button', 'formidable' ) ?></label>
-					<textarea name="options[submit_html]" rows="3" id="submit_html" class="frm_long_input"><?php echo FrmAppHelper::esc_textarea( $values['submit_html'] ); ?></textarea>
+					<textarea name="options[submit_html]" rows="3" id="submit_html" class="frm_long_input"><?php echo FrmAppHelper::esc_textarea( $values['submit_html'] ); // WPCS: XSS ok. ?></textarea>
 				</p>
             </div>
         </div>

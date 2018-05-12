@@ -177,7 +177,7 @@ DEFAULT_HTML;
 		if ( ! empty( $include_file ) ) {
 			$this->include_on_form_builder( $name, $field );
 		} elseif ( $this->has_input ) {
-			echo $this->builder_text_field( $name );
+			echo $this->builder_text_field( $name ); // WPCS: XSS ok.
 		}
 	}
 
@@ -402,7 +402,7 @@ DEFAULT_HTML;
 	 */
 	public function show_field( $args ) {
 		if ( apply_filters( 'frm_show_normal_field_type', $this->normal_field, $this->type ) ) {
-			echo $this->prepare_field_html( $args );
+			echo $this->prepare_field_html( $args ); // WPCS: XSS ok.
 		} else {
 			do_action( 'frm_show_other_field_type', $this->field, $args['form'], array( 'action' => $args['form_action'] ) );
 		}

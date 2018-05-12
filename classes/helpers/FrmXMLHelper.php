@@ -8,17 +8,17 @@ class FrmXMLHelper {
 	public static function get_xml_values( $opt, $padding ) {
 		if ( is_array( $opt ) ) {
 			foreach ( $opt as $ok => $ov ) {
-				echo "\n" . $padding;
+				echo "\n" . esc_html( $padding );
 				$tag = ( is_numeric( $ok ) ? 'key:' : '' ) . $ok;
-				echo '<' . $tag . '>';
+				echo '<' . esc_html( $tag ) . '>';
 				self::get_xml_values( $ov, $padding . '    ' );
 				if ( is_array( $ov ) ) {
-					echo "\n" . $padding;
+					echo "\n" . esc_html( $padding );
 				}
-				echo '</' . $tag . '>';
+				echo '</' . esc_html( $tag ) . '>';
 			}
 		} else {
-			echo self::cdata( $opt );
+			echo self::cdata( $opt ); // WPCS: XSS ok.
 		}
 	}
 

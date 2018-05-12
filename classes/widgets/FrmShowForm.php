@@ -23,7 +23,7 @@ class FrmShowForm extends WP_Widget {
 			'description' => isset( $instance['description'] ) ? $instance['description'] : false,
 		);
 
-		echo FrmFormsController::get_form_shortcode( $form_atts );
+		echo FrmFormsController::get_form_shortcode( $form_atts ); // WPCS: XSS ok.
 
 		echo '</div>';
 		echo $args['after_widget'];

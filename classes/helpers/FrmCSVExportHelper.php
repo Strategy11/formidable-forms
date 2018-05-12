@@ -269,7 +269,7 @@ class FrmCSVExportHelper {
 				$val = str_replace( array( "\r\n", "\r", "\n" ), self::$line_break, $val );
 			}
 
-			echo $sep . '"' . $val . '"';
+			echo $sep . '"' . $val . '"'; // WPCS: XSS ok.
 			$sep = self::$column_separator;
 
 			unset( $k, $row );

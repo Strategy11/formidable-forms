@@ -67,7 +67,7 @@
 
 		<p>
 			<label><?php esc_html_e( 'Message', 'formidable' ) ?> </label><br/>
-			<textarea name="<?php echo esc_attr( $this->get_field_name( 'email_message' ) ) ?>" class="frm_not_email_message large-text" id="<?php echo esc_attr( $this->get_field_id( 'email_message' ) ) ?>" cols="50" rows="5"><?php echo FrmAppHelper::esc_textarea( $form_action->post_content['email_message'] ) ?></textarea>
+			<textarea name="<?php echo esc_attr( $this->get_field_name( 'email_message' ) ); ?>" class="frm_not_email_message large-text" id="<?php echo esc_attr( $this->get_field_id( 'email_message' ) ); ?>" cols="50" rows="5"><?php echo FrmAppHelper::esc_textarea( $form_action->post_content['email_message'] ); // WPCS: XSS ok. ?></textarea>
 		</p>
 
 		<h4><?php esc_html_e( 'Options', 'formidable' ) ?> </h4>

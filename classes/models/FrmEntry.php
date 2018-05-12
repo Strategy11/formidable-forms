@@ -276,7 +276,7 @@ class FrmEntry {
 
 		$query .= is_numeric( $id ) ? 'it.id=%d' : 'it.item_key=%s';
         $query_args = array( $id );
-        $query = $wpdb->prepare( $query, $query_args );
+        $query = $wpdb->prepare( $query, $query_args ); // WPCS: unprepared SQL ok.
 
         if ( ! $meta ) {
 			$entry = FrmDb::check_cache( $id . '_nometa', 'frm_entry', $query, 'get_row' );
@@ -288,7 +288,7 @@ class FrmEntry {
 			return stripslashes_deep( $entry );
 		}
 
-		$entry = $wpdb->get_row( $query );
+		$entry = $wpdb->get_row( $query ); // WPCS: unprepared SQL ok.
 		$entry = self::get_meta( $entry );
 
 		return stripslashes_deep( $entry );
@@ -381,7 +381,7 @@ class FrmEntry {
 			// prepare the query
 			$query = 'SELECT ' . $fields . ' FROM ' . $table . FrmDb::prepend_and_or_where( ' WHERE ', $where ) . $order_by . $limit;
 
-			$entries = $wpdb->get_results( $query, OBJECT_K );
+			$entries = $wpdb->get_results( $query, OBJECT_K ); // WPCS: unprepared SQL ok.
 			unset( $query );
 
 			FrmDb::set_cache( $cache_key, $entries, 'frm_entry' );

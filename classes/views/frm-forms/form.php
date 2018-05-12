@@ -29,7 +29,7 @@
 			<?php esc_html_e( 'Or load fields from a template', 'formidable' ); ?>
 			<select id="frm_create_template_dropdown">
 				<?php foreach ( $all_templates as $temp ) { ?>
-				<option value="<?php echo esc_attr( $temp->id ) ?>"><?php echo FrmAppHelper::truncate( $temp->name, 40 ) ?></option>
+				<option value="<?php echo esc_attr( $temp->id ) ?>"><?php echo FrmAppHelper::truncate( $temp->name, 40 ); // WPCS: XSS ok. ?></option>
 				<?php } ?>
 			</select>
 			<input type="button" id="frm_create_template_button" class="button-secondary" value="<?php esc_attr_e( 'Load Template', 'formidable' ) ?>" />

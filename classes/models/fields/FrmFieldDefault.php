@@ -31,9 +31,9 @@ class FrmFieldDefault extends FrmFieldType {
 		ob_end_clean();
 
 		if ( empty( $input_html ) ) {
-			echo $this->builder_text_field( $name );
+			echo $this->builder_text_field( $name ); // WPCS: XSS ok.
 		} else {
-			echo $input_html;
+			echo $input_html; // WPCS: XSS ok.
 		}
 	}
 

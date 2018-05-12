@@ -168,7 +168,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	}
 
 	protected function should_validate() {
-		$is_hidden_field = apply_filters( 'frm_is_field_hidden', false, $this->field, stripslashes_deep( $_POST ) );
+		$is_hidden_field = apply_filters( 'frm_is_field_hidden', false, $this->field, stripslashes_deep( $_POST ) ); // WPCS: CSRF ok.
 		if ( FrmAppHelper::is_admin() || $is_hidden_field ) {
 			return false;
 		}
@@ -186,7 +186,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 		$arg_array = array(
 			'body'      => array(
 				'secret'   => $frm_settings->privkey,
-				'response' => $_POST['g-recaptcha-response'],
+				'response' => $_POST['g-recaptcha-response'], // WPCS: CSRF ok.
 				'remoteip' => FrmAppHelper::get_ip_address(),
 			),
 		);

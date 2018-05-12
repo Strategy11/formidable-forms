@@ -475,10 +475,10 @@ class FrmFieldsHelper {
             return '';
         }
 
-        $link = sprintf(
-            __( 'Please add options from the WordPress "%1$s" page', 'formidable' ),
-			'<a href="' . esc_url( admin_url( 'edit-tags.php?taxonomy=' . $tax->name ) ) . '" target="_blank">' . ( empty( $tax->labels->name ) ? __( 'Categories' ) : $tax->labels->name ) . '</a>'
-        );
+		$link = sprintf(
+			esc_html__( 'Please add options from the WordPress "%1$s" page', 'formidable' ),
+			'<a href="' . esc_url( admin_url( 'edit-tags.php?taxonomy=' . $tax->name ) ) . '" target="_blank">' . ( empty( $tax->labels->name ) ? esc_html__( 'Categories' ) : $tax->labels->name ) . '</a>'
+		);
 		unset( $tax );
 
         return $link;
@@ -1094,7 +1094,7 @@ class FrmFieldsHelper {
 
 		?><label for="<?php echo esc_attr( $other_id ) ?>" class="frm_screen_reader frm_hidden"><?php
 		echo esc_html( $label );
-		?></label><input type="text" id="<?php echo esc_attr( $other_id ) ?>" class="<?php echo sanitize_text_field( implode( ' ', $classes ) ) ?>" <?php
+		?></label><input type="text" id="<?php echo esc_attr( $other_id ) ?>" class="<?php echo esc_attr( implode( ' ', $classes ) ) ?>" <?php
 		echo ( $args['read_only'] ? ' readonly="readonly" disabled="disabled"' : '' );
 		?> name="<?php echo esc_attr( $args['name'] ) ?>" value="<?php echo esc_attr( $args['value'] ); ?>" /><?php
 	}

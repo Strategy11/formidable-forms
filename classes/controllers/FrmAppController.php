@@ -147,7 +147,7 @@ class FrmAppController {
         ?>
 <div class="error" class="frm_previous_install">
 		<?php
-		echo apply_filters( 'frm_pro_update_msg',
+		echo apply_filters( 'frm_pro_update_msg', // WPCS: XSS ok.
 			sprintf(
 				esc_html__( 'This site has been previously authorized to run Formidable Forms. %1$sInstall Formidable Pro%2$s or %3$sdeauthorize%4$s this site to continue running the free version and remove this message.', 'formidable' ),
 				'<br/><a href="' . esc_url( $inst_install_url ) . '" target="_blank">', '</a>',
@@ -175,8 +175,8 @@ class FrmAppController {
 			$tip = FrmTipsHelper::get_banner_tip();
 ?>
 <div class="update-nag frm-update-to-pro">
-	<?php echo FrmAppHelper::kses( $tip['tip'] ); ?>
-	<span><?php echo FrmAppHelper::kses( $tip['call'] ); ?></span>
+	<?php echo FrmAppHelper::kses( $tip['tip'] ); // WPCS: XSS ok. ?>
+	<span><?php echo FrmAppHelper::kses( $tip['call'] ); // WPCS: XSS ok. ?></span>
 	<a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url( 'https://formidableforms.com?banner=1&tip=' . absint( $tip['num'] ) ) ); ?>" class="button">Upgrade to Pro</a>
 </div>
 <?php
@@ -246,44 +246,7 @@ class FrmAppController {
 		$action = FrmAppHelper::simple_get( 'action', 'sanitize_title' );
 		if ( ! FrmAppHelper::doing_ajax() || $action == 'frm_import_choices' ) {
 			// don't continue during ajax calls
-			self::load_tour();
 			self::admin_js();
-		}
-	}
-
-	/**
-	 * See if we should start our tour.
-	 * @since 2.0.20
-	 */
-	private static function load_tour() {
-		$restart_tour = filter_input( INPUT_GET, 'frm_restart_tour' );
-		if ( $restart_tour ) {
-			delete_user_meta( get_current_user_id(), 'frm_ignore_tour' );
-		}
-		self::ignore_tour();
-
-		if ( ! self::has_ignored_tour() ) {
-			add_action( 'admin_enqueue_scripts', array( 'FrmPointers', 'get_instance' ) );
-		}
-	}
-
-	/**
-	 * Returns the value of the ignore tour.
-	 *
-	 * @return bool
-	 */
-	private static function has_ignored_tour() {
-		$user_meta = get_user_meta( get_current_user_id(), 'frm_ignore_tour' );
-
-		return ! empty( $user_meta );
-	}
-
-	/**
-	 * Listener for the ignore tour GET value. If this one is set, just set the user meta to true.
-	 */
-	private static function ignore_tour() {
-		if ( filter_input( INPUT_GET, 'frm_ignore_tour' ) && wp_verify_nonce( filter_input( INPUT_GET, 'nonce' ), 'frm-ignore-tour' ) ) {
-			update_user_meta( get_current_user_id(), 'frm_ignore_tour', true );
 		}
 	}
 

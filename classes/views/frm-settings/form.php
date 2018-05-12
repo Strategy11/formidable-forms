@@ -19,7 +19,7 @@
 			<?php foreach ( $sections as $sec_name => $section ) { ?>
 				<li <?php echo ( $a == $sec_name . '_settings' ) ? 'class="tabs active starttab"' : '' ?>>
 					<a href="#<?php echo esc_attr( $sec_name ) ?>_settings" data-frmajax="<?php echo esc_attr( isset( $section['ajax'] ) ? $section['ajax'] : '' ) ?>">
-						<?php echo isset( $section['name'] ) ? $section['name'] : ucfirst( $sec_name ) ?>
+						<?php echo esc_html( isset( $section['name'] ) ? $section['name'] : ucfirst( $sec_name ) ); ?>
 					</a>
 				</li>
             <?php } ?>
@@ -28,7 +28,7 @@
 
 	<?php do_action( 'frm_before_settings' ); ?>
 
-	<form name="frm_settings_form" method="post" class="frm_settings_form" action="?page=formidable-settings<?php echo ( $a ? '&amp;t=' . $a : '' ); ?>">
+	<form name="frm_settings_form" method="post" class="frm_settings_form" action="?page=formidable-settings<?php echo esc_html( $a ? '&amp;t=' . $a : '' ); ?>">
         <input type="hidden" name="frm_action" value="process-form" />
         <input type="hidden" name="action" value="process-form" />
 		<?php wp_nonce_field( 'process_form_nonce', 'process_form' ); ?>

@@ -39,7 +39,7 @@ if ( count( $action_control->action_options['event'] ) == 1 || $action_control->
 	$event_labels = FrmFormAction::trigger_labels();
 	foreach ( $action_control->action_options['event'] as $event ) {
 	?>
-		<option value="<?php echo esc_attr( $event ) ?>" <?php echo in_array( $event, (array) $form_action->post_content['event'] ) ? ' selected="selected"' : ''; ?> ><?php echo isset( $event_labels[ $event ] ) ? $event_labels[ $event ] : $event; ?></option>
+		<option value="<?php echo esc_attr( $event ) ?>" <?php echo in_array( $event, (array) $form_action->post_content['event'] ) ? ' selected="selected"' : ''; ?> ><?php echo esc_html( isset( $event_labels[ $event ] ) ? $event_labels[ $event ] : $event ); ?></option>
 <?php } ?>
 		</select>
 	</p>
@@ -55,5 +55,5 @@ $pass_args = array(
 do_action( 'frm_additional_action_settings', $form_action, $pass_args );
 
 ?>
-<span class="alignright frm_action_id <?php echo empty( $form_action->ID ) ? 'frm_hidden' : ''; ?>"><?php printf( __( 'Action ID: %1$s', 'formidable' ), $form_action->ID ); ?></span>
+<span class="alignright frm_action_id <?php echo empty( $form_action->ID ) ? 'frm_hidden' : ''; ?>"><?php printf( esc_html__( 'Action ID: %1$s', 'formidable' ), $form_action->ID ); ?></span>
 <div style="clear:both;"></div>
