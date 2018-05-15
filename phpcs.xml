@@ -42,6 +42,10 @@
 		<exclude name="Squiz.PHP.EmbeddedPhp.ContentBeforeOpen" />
 		<exclude name="Squiz.PHP.EmbeddedPhp.ContentAfterEnd" />
 
+		<!-- Enable these rules right away -->
+		<exclude name="WordPress.Functions.DontExtract.extract_extract" />
+		<exclude name="WordPress.CSRF.NonceVerification.NoNonceVerification" />
+
 		<!-- We should probably turn the below rules on, but these give issues with the current code base. -->
 		<exclude name="WordPress.Files.FileName.UnderscoresNotAllowed" />
 		<exclude name="WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid" />
@@ -52,10 +56,6 @@
 		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase" />
 		<exclude name="WordPress.Files.FileName.InvalidClassFileName" />
 		<exclude name="WordPress.PHP.YodaConditions"/>
-
-		<!-- Enable these rules right away -->
-		<exclude name="WordPress.Functions.DontExtract.extract_extract" />
-		<exclude name="WordPress.CSRF.NonceVerification.NoNonceVerification" />
 		<exclude name="WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid" />
 	</rule>
 	<rule ref="WordPress.PHP.DiscouragedFunctions"/>

@@ -46,7 +46,7 @@ class FrmFormsHelper {
 		self::add_html_attr( $args['class'], 'class', $add_html );
 
         ?>
-		<select name="<?php echo esc_attr( $field_name ); ?>" id="<?php echo esc_attr( $args['field_id'] ) ?>" <?php echo esc_html( implode( ' ', $add_html ) ); ?>>
+		<select name="<?php echo esc_attr( $field_name ); ?>" id="<?php echo esc_attr( $args['field_id'] ) ?>" <?php echo wp_strip_all_tags( implode( ' ', $add_html ) ); // WPCS: XSS ok. ?>>
 		<?php if ( $args['blank'] ) { ?>
 			<option value=""><?php echo ( $args['blank'] == 1 ) ? ' ' : '- ' . esc_attr( $args['blank'] ) . ' -'; ?></option>
 		<?php } ?>
