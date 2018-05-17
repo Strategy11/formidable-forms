@@ -2,21 +2,21 @@
 Contributors: formidableforms, sswells, srwells, jamie.wahlin
 Tags: contact form, form builder, custom form, forms, form, form maker, form creator
 Requires at least: 4.4
-Tested up to: 4.9
+Tested up to: 4.9.5
 Requires PHP: 5.3
 Stable tag: 3.01.03
 
-The best WordPress form plugin for contact forms, surveys and more. Make forms a breeze with a drag and drop form builder and form style generator.
+The best WordPress forms plugin for custom forms. Go beyond contact forms with a drag & drop form builder, HTML control & form style generator.
 
 == Description ==
-= WordPress Form Builder Plugin =
-Formidable Forms is a flexible and free WordPress form plugin. Easily create contact forms, polls and surveys, lead generation forms, email forms, and any other forms you imagine. Start with a pre-built contact form template or create totally custom forms. From the smallest sidebar opt-in form to large job and employment application forms, Formidable Forms is built to do it all. Learn more about Formidable Forms at [FormidableForms.com](https://formidableforms.com/ "FormidableForms.com")
+= The best WordPress form builder plugin for custom forms =
+Formidable Forms is a flexible and free WordPress forms plugin. Easily create contact forms, polls and surveys, lead generation forms, email forms, and any other forms you imagine. Start with a pre-built contact form template or create totally custom forms. From the smallest sidebar opt-in form to large job and employment application forms, Formidable Forms is built to do it all. Learn more about Formidable Forms at [FormidableForms.com](https://formidableforms.com/ "FormidableForms.com")
 
-Create a professional WordPress contact form without any code. Get mobile-friendly responsive forms that look great on any screen size. Additionally, changing the form layout is simple with included layout classes. If you need more advanced customizations, you have complete access to change the form HTML and CSS.
+Create a professional WordPress contact form without any code. Get mobile-friendly and responsive forms that look great on any screen size. Additionally, it's simple to change the form layout with included layout classes. For more advanced customizations, take control of the form HTML and CSS.
 
 [View form builder Documentation](https://formidableforms.com/knowledgebase/ "View form builder Documentation")
 
-= All the features you need for beautiful WordPress Forms =
+= All the features you need for beautiful WordPress forms =
 Create unlimited forms with all the essential field types.
 
 * Single line text (for names, phone numbers, addresses, and more)
@@ -37,27 +37,27 @@ Create unlimited forms with all the essential field types.
 Create forms in seconds with [pre-built form templates](https://formidableforms.com/features/wordpress-form-templates/). Or add your own form templates and export the forms to share. A free contact form template is included when you install Formidable Forms. We also have a growing library of [downloadable form templates](https://formidableforms.com/downloads/category/form-templates/).
 
 = Customize your WordPress forms =
-Whether you start from scratch or from a form template, your forms can be customized however you would like.
+Whether you start from scratch or from a form template, customize your forms however you would like.
 
 * Send **unlimited form email notifications and autoresponders**.
 * Use **input placeholder text** in form fields that clear when typing starts.
 * Use our ready-made CSS classes (or your own custom CSS classes) to arrange your form fields and create **multi-column forms**
 * **Modify the form HTML** for your individual needs.
-* Customize the form’s success message and submit button text.
+* Customize the form success message and submit button text.
 * Redirect to another page after submit or show content from a protected page.
 
-= Style your WordPress forms with no code =
-Use the built-in [visual form style generator](https://formidableforms.com/features/wordpress-visual-form-styler/) to instantly customize the look and feel of your WordPress forms. With just a few clicks, your form can be transformed to match your personal style. A single form styling template will be applied to all the forms on your site. But if you decide you need different styles for different forms, Formidable Forms Pro is waiting.
+= Style your WordPress contact forms with no code =
+Use the built-in [visual form style generator](https://formidableforms.com/features/wordpress-visual-form-styler/) to instantly customize the look and feel of your WordPress forms. With just a few clicks, your forms can be transformed to match your personal style. A single form styling template will be applied to all the forms on your site. But if you decide you need different styles for different forms, Formidable Forms Pro is waiting.
 
-= Publish your WordPress forms with ease =
-Once your WP form is built and designed just the way you like it, publish with an easy-to-use **shortcode builder** UI. Direct links are also available for **form previews** and **emailing surveys** on a blank page.
+= Publish WordPress forms with ease =
+Once your WP form is built and designed just the way you like it, publish with an easy-to-use **shortcode builder** UI. Direct links are also available on a blank page for **form previews** and **email surveys**.
 
-**Honeypot spam protection** is included in every website form, but you can also add Invisible reCAPTCHA, one-click reCAPTCHA, and Akismet for extra Spam control in your contact forms.
+**Honeypot spam protection** is included in every website form. Or add Invisible reCAPTCHA, one-click reCAPTCHA, and Akismet for extra Spam control in your contact forms.
 
 = Save every form submission =
 You may already know it, but sending emails with your self-hosted WordPress website isn't 100% reliable. But every lead captured in your online contact forms is important. Don't lose a single one! This is why Formidable saves every contact form submission in your WordPress database and lists them on your Formidable -> Entries page. Now even if a form email notification fails, you won’t lose a lead.
 
-Do you need **GDPR compliant forms**? No problem. Turn off IP tracking or the setting to save your form submissions, or add a checkbox field to your form to collect consent.
+Looking for **GDPR compliance for forms**? No problem. Turn off IP tracking or stop saving form submissions. Or add a checkbox field to your form to collect consent.
 
 Need to import your leads to another service like MailChimp? No problem. **Export form leads to a CSV** then open it in Excel or import anywhere.
 
@@ -160,7 +160,7 @@ The field and form names and descriptions are all changed with in-place edit. Ju
 
 == Changelog ==
 = 3.01.03 =
-* Fix: Add responsive styling for .frm_four_col class when grids are disabled
+* Fix: Add responsive styling for the .frm_four_col class when grids are disabled
 * Fix: Fix number field HTML5 min, max, and step. This code was still in the pro form builder
 * Fix: More escaping for translated strings, and whitelist false positives for code security tools
 * Fix: When form builder is loaded with ajax, prevent errors when the default value is an array
@@ -169,7 +169,7 @@ The field and form names and descriptions are all changed with in-place edit. Ju
 
 = 3.01.02 =
 * New: Add frm_sanitize_shortcodes hook. This hook allows shortcodes in field values to be processed rather than shown on the page.
-* Fix: Stylesheets weren't saving correctly when multiple styles were used
+* Fix: Stylesheets weren't saving correctly when multiple styles were used for forms
 
 = 3.01.01 =
 * New: Replace the jQuery colorpicker with the WordPress colorpicker in the visual form styler
@@ -178,7 +178,7 @@ The field and form names and descriptions are all changed with in-place edit. Ju
 * Fix: Prevent shortcodes inside field values from being processed in more places including the redirect url. This is a security precaution.
 * Fix: A default contact form was being added with each update. This update ensures the contact form is only generated once.
 * Fix: Allow the visual form styler to show instant changes to the sample contact form since server limits of url size were being hit in some cases.
-* Fix: HTML was being stripped from some field settings on the form creator page like validation messages
+* Fix: HTML was being stripped from some form field settings on the form creator page like validation messages
 
 = 3.01 =
 * New: Added frm_js_location hook for saving the combined javascript file in a different location
@@ -190,12 +190,12 @@ The field and form names and descriptions are all changed with in-place edit. Ju
 * Fix: Show the label above a dropdown field if the label position is set to inside since dropdown placeholders are not yet supported. Plus, don't show the Inside label position option for any fields that don't allow placeholders.
 * Fix: If there is an error during a database update, make sure it can try again in the future
 * Fix: Prevent more conflicts with Divi when editing some posts with forms
-* Fix: Fields without CSS grids were not aligning correctly with left, right, or inline labels
+* Fix: Form fields without CSS grids were not aligning correctly with left, right, or inline labels
 
 = 3.0.06 =
-* New: Include the option to duplicate a form in the free form builder
+* New: Include the option to duplicate a form in the free form maker
 * Fix: If the reply to address in the email is not specified, use only the from email without the from name to increase receivability
-* Fix: Improve styling without CSS grids when using left, right, and inline labels
+* Fix: Improve form styling without CSS grids when using left, right, and inline labels
 * Fix: Make the frmFrontForm.fieldValueChanged function public in the javascript so it can be triggered by scripts in other plugins
 
 = 3.0.05 =
@@ -213,7 +213,7 @@ The field and form names and descriptions are all changed with in-place edit. Ju
 = 3.0.03 =
 * Enhancement: Use relative path in the form css now that the css is inside the plugin. Now font icons will continue working without a style save when the site url is changed.
 * Fix: Save a different stylesheet file for each site in a network to prevent them from saving over eachother
-* Fix: Use auto field height when grids are off to prevent tiny fields on some sites
+* Fix: Use auto field height when grids are off to prevent tiny form fields on some sites
 * Fix: Correctly set default email message to 100% width
 * Fix: Fields with a layout class and labels set to right or left were not aligned right with CSS grids off
 * Fix: Some field shortcodes weren't being processed when the whitespace was abnormal from some cases of copy/paste
