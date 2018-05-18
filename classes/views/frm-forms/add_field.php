@@ -14,7 +14,7 @@
     </span>
 	<?php } ?>
 	<label class="<?php echo esc_attr( $field['type'] === 'end_divider' ? '' : 'frm_ipe_field_label' ); ?> frm_primary_label <?php echo esc_attr( $field['type'] === 'break' ? 'button' : '' ); ?>" id="field_label_<?php echo esc_attr( $field['id'] ); ?>"><?php
-		echo ( $field['name'] === '' ) ? esc_html__( '(no label)', 'formidable' ) : FrmAppHelper::kses( force_balance_tags( $field['name'], 'all' ) ); // WPCS: XSS ok.
+		echo ( $field['name'] === '' ) ? esc_html__( '(no label)', 'formidable' ) : FrmAppHelper::kses( force_balance_tags( $field['name'] ), 'all' ); // WPCS: XSS ok.
 	?></label>
 	<input type="hidden" name="field_options[name_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['name'] ); ?>" />
 
