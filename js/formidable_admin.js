@@ -890,13 +890,18 @@ function frmAdminBuildJS(){
     //Add new option or "Other" option to radio/checkbox/dropdown
     function addFieldOption(){
         /*jshint validthis:true */
+
+		// increment when the button is clicked too close together
+		var clicks = parseInt( this.dataset.clicks );
+		this.dataset.clicks = clicks + 1;
+
         var field_id = jQuery(this).closest('li').data('fid');
         var opt_type = jQuery(this).data('opttype');
 		var opt_key = 1;
 		var lastOpt = jQuery('#frm_field_'+ field_id +'_opts li:last');
 		if(lastOpt.length){
 			opt_key = lastOpt.attr('id').replace('frm_delete_field_'+ field_id +'-', '').replace('_container', '').replace('other_', '');
-			opt_key = parseInt(opt_key) + 1;
+			opt_key = parseInt(opt_key) + 1 + clicks;
 		}
 
         //Update hidden field
