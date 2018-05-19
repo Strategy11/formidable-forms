@@ -71,7 +71,7 @@ if ( in_array( $field['type'], array( 'select', 'radio', 'checkbox' ) ) ) {
 	} elseif ( ! isset( $field['post_field'] ) || ! in_array( $field['post_field'], array( 'post_category' ) ) ) {
 ?>
         <div id="frm_add_field_<?php echo esc_attr( $field['id'] ); ?>">
-            <a href="javascript:void(0);" data-opttype="single" class="button frm_cb_button frm_add_opt"><?php esc_html_e( 'Add Option', 'formidable' ) ?></a>
+            <a href="javascript:void(0);" data-opttype="single" class="button frm_cb_button frm_add_opt" data-clicks="0"><?php esc_html_e( 'Add Option', 'formidable' ) ?></a>
 
             <?php if ( FrmAppHelper::pro_is_installed() ) { ?>
 				<a href="javascript:void(0);" id="other_button_<?php echo esc_attr( $field['id'] ); ?>" data-opttype="other" data-ftype="<?php echo esc_attr( $field['type'] ) ?>" class="button frm_cb_button frm_add_opt<?php echo ( in_array( $field['type'], array( 'radio', 'select' ) ) && $field['other'] == true ? ' frm_hidden' : '' ); ?>"><?php esc_html_e( 'Add "Other"', 'formidable' ) ?></a>

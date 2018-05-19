@@ -59,7 +59,7 @@ class FrmPersonalData {
 			$data_to_export['data'][] = array(
 				'group_id'    => 'formidable',
 				'group_label' => __( 'Form Submissions', 'formidable' ),
-				'item_id'     => 'entry-' . $entry,
+				'item_id'     => esc_attr( 'entry-' . $entry ),
 				'data'        => $this->prepare_entry_data( $entry ),
 			);
 		}

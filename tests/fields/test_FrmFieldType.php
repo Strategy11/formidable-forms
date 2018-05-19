@@ -1,7 +1,6 @@
 <?php
 
 /**
- * @group testme
  * @group fields
  */
 class test_FrmFieldType extends FrmUnitTest {
