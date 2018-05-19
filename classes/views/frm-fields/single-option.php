@@ -5,7 +5,7 @@
 	<?php } ?>
 
 	<label class="frm_ipe_field_option field_<?php echo esc_attr( $field['id'] ) ?>_option <?php echo esc_attr( $field['separate_value'] ? 'frm_with_key' : '' ); ?>" id="<?php echo esc_attr( $html_id . '-' . $opt_key ) ?>"><?php
-		echo '' === $opt ? esc_html__( '(Blank)', 'formidable' ) : FrmAppHelper::kses( $opt, 'all' );
+		echo '' === $opt ? esc_html__( '(Blank)', 'formidable' ) : FrmAppHelper::kses( $opt, 'all' ); // WPCS: XSS ok.
 	?></label>
 	<input type="hidden" name="field_options[options_<?php echo esc_attr( $field['id'] ) ?>][<?php echo esc_attr( $opt_key ) ?>][label]" value="<?php echo esc_attr( $opt ) ?>" />
 
