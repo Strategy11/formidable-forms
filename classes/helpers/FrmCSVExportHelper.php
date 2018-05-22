@@ -13,6 +13,7 @@ class FrmCSVExportHelper {
 	protected static $headings         = array();
 	protected static $fields           = array();
 	protected static $entry;
+	protected static $has_parent_id;
 
 	public static function csv_format_options() {
 		$formats = array( 'UTF-8', 'ISO-8859-1', 'windows-1256', 'windows-1251', 'macintosh' );
@@ -27,6 +28,7 @@ class FrmCSVExportHelper {
 		self::$fields = $atts['form_cols'];
 		self::$form_id = $atts['form']->id;
 		self::set_class_paramters();
+		self::set_has_parent_id( $atts['form'] );
 
 		$filename = apply_filters( 'frm_csv_filename', date( 'ymdHis', time() ) . '_' . sanitize_title_with_dashes( $atts['form']->name ) . '_formidable_entries.csv', $atts['form'] );
 		unset( $atts['form'], $atts['form_cols'] );
@@ -66,6 +68,10 @@ class FrmCSVExportHelper {
 
 		$col_sep = ( isset( $_POST['csv_col_sep'] ) && ! empty( $_POST['csv_col_sep'] ) ) ? sanitize_text_field( $_POST['csv_col_sep'] ) : self::$column_separator;
 		self::$column_separator = apply_filters( 'frm_csv_column_sep', $col_sep );
+	}
+
+	private static function set_has_parent_id( $form ) {
+		self::$has_parent_id = $form->parent_form_id > 0;
 	}
 
 	private static function print_file_headers( $filename ) {
@@ -131,6 +137,13 @@ class FrmCSVExportHelper {
 		$headings['ip'] = __( 'IP', 'formidable' );
 		$headings['id'] = __( 'ID', 'formidable' );
 		$headings['item_key'] = __( 'Key', 'formidable' );
+		if ( self::has_parent_id() ) {
+			$headings['parent_id'] = __( 'Parent ID', 'formidable' );
+		}
+	}
+
+	private static function has_parent_id() {
+		return self::$has_parent_id;
 	}
 
 	private static function prepare_next_csv_rows( $next_set ) {
@@ -252,6 +265,9 @@ class FrmCSVExportHelper {
 		$row['ip'] = self::$entry->ip;
 		$row['id'] = self::$entry->id;
 		$row['item_key'] = self::$entry->item_key;
+		if ( self::has_parent_id() ) {
+			$row['parent_id'] = self::$entry->parent_item_id;
+		}
 	}
 
 	private static function print_csv_row( $rows ) {
