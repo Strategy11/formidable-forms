@@ -43,14 +43,24 @@
         <?php if ( $entry->user_id ) { ?>
         <div class="misc-pub-section">
             <span class="dashicons dashicons-admin-users wp-media-buttons-icon"></span>
-			<?php printf( esc_html__( 'Created by: %1$s', 'formidable' ), esc_html( FrmFieldsHelper::get_user_display_name( $entry->user_id, 'display_name', array( 'link' => true ) ) ) ); ?>
+			<?php
+			printf(
+				esc_html__( 'Created by: %1$s', 'formidable' ),
+				FrmAppHelper::kses( FrmFieldsHelper::get_user_display_name( $entry->user_id, 'display_name', array( 'link' => true ) ), array( 'a' ) )
+			); // WPCS: XSS ok.
+			?>
         </div>
         <?php } ?>
 
         <?php if ( $entry->updated_by && $entry->updated_by != $entry->user_id ) { ?>
         <div class="misc-pub-section">
             <span class="dashicons dashicons-admin-users wp-media-buttons-icon"></span>
-			<?php printf( esc_html__( 'Updated by: %1$s', 'formidable' ), esc_html( FrmFieldsHelper::get_user_display_name( $entry->updated_by, 'display_name', array( 'link' => true ) ) ) ); ?>
+			<?php
+			printf(
+				esc_html__( 'Updated by: %1$s', 'formidable' ),
+				FrmAppHelper::kses( FrmFieldsHelper::get_user_display_name( $entry->updated_by, 'display_name', array( 'link' => true ) ), array( 'a' ) )
+			); // WPCS: XSS ok.
+			?>
         </div>
         <?php } ?>
         <?php } ?>
