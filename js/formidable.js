@@ -139,8 +139,8 @@ function frmFrontFormJS(){
 					} else if ( field.type === 'email' ) {
 						errors = checkEmailField( field, errors, emailFields );
 					} else if (field.type === 'password') {
-                        errors = checkPasswordField(field, errors);
-                    } else if ( field.pattern !== null ) {
+						errors = checkPasswordField(field, errors);
+					} else if ( field.pattern !== null ) {
 						errors = checkPatternField( field, errors );
 					}
 				}
@@ -173,8 +173,8 @@ function frmFrontFormJS(){
 			} else if ( field.type === 'number' ) {
 				errors = checkNumberField( field, errors );
 			} else if (field.type === 'password') {
-                errors = checkPasswordField( field, errors );
-            } else if ( field.pattern !== null ) {
+				errors = checkPasswordField( field, errors );
+			} else if ( field.pattern !== null ) {
 				errors = checkPatternField( field, errors );
 			}
 		}
@@ -320,25 +320,25 @@ function frmFrontFormJS(){
 		return errors;
 	}
 
-    function checkPasswordField( field, errors ) {
-        var classes = field.className;
+	function checkPasswordField( field, errors ) {
+		var classes = field.className;
 
-        if (!classes.includes("validate_pass")) {
-            return errors;
-        }
+		if (!classes.includes("frm_strong_pass")) {
+			return errors;
+		}
 
-        var text = field.value;
-        var regEx = /^(?=.*?[a-zA-Z])(?=.*?[0-9]).{8,}$/;
-        var invalidMsg = getFieldValidationMessage( field, 'data-invmsg' );
-        var matches = regEx.test(text); //true if matches format, false otherwise
+		var text = field.value;
+		var regEx = /^(?=.*?[a-zA-Z])(?=.*?[0-9]).{8,}$/;
+		var invalidMsg = getFieldValidationMessage( field, 'data-invmsg' );
+		var matches = regEx.test(text); //true if matches format, false otherwise
 
-        if (!matches) {
-            var fieldID = getFieldId( field, true );
-            errors[ fieldID ] = invalidMsg;
-        }
+		if (!matches) {
+			var fieldID = getFieldId( field, true );
+			errors[ fieldID ] = invalidMsg;
+		}
 
-        return errors;
-    }
+		return errors;
+	}
 
 	function hasInvisibleRecaptcha( object ) {
 		if ( typeof frmProForm !== 'undefined' && frmProForm.goingToPreviousPage( object ) ) {

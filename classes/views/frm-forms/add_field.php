@@ -186,26 +186,6 @@ if ( $display['options'] ) {
                 </tr>
                 <?php } ?>
 
-                <?php
-
-                if ( $display['validate_pass'] ) {
-                    ?>
-                    <tr>
-                        <td class="frm_150_width">
-                            <label><?php esc_html_e( 'Validate Password', 'formidable' ) ?></label>
-                            <span class="frm_help frm_icon_font frm_tooltip_icon" title="" data-original-title="A strong password is at least 8 characters long and includes at least one letter and one number."></span>
-                        </td>
-                        <td>
-                            <label for="frm_validate_pass_<?php echo esc_attr( $field['id'] ) ?>">
-                                <input type="checkbox" id="frm_validate_pass_<?php echo esc_attr( $field['id'] ) ?>" name="field_options[validate_pass_<?php echo esc_attr( $field['id'] ) ?>]" value="1" <?php checked( $field['validate_pass'], 1 ) ?> />
-                                <?php esc_html_e( 'Require a strong password', 'formidable' ); ?>
-                            </label>
-                        </td>
-                    </tr>
-                    <?php
-                } ?>
-
-
                 <?php if ( $display['label_position'] ) { ?>
 					<tr>
 						<td class="frm_150_width"><label><?php esc_html_e( 'Label Position', 'formidable' ) ?></label></td>

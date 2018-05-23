@@ -245,7 +245,6 @@ DEFAULT_HTML;
 			'captcha_size' => false,
 			'format'       => false,
 			'show_image'   => false,
-            'validate_pass'=> false,
 		);
 	}
 
