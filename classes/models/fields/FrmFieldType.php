@@ -472,6 +472,36 @@ DEFAULT_HTML;
 	}
 
 	/**
+	 * Add classes to the input for output
+	 *
+	 * @since 3.01.04
+	 */
+	protected function add_input_class() {
+		$input_class = FrmField::get_option( $this->field, 'input_class' );
+		$extra_classes = $this->get_input_class();
+		if ( ! empty( $extra_classes ) ) {
+			$input_class .= ' ' . $extra_classes;
+		}
+
+		if ( is_object( $this->field ) ) {
+			$this->field->field_options['input_class'] = $input_class;
+		} else {
+			$this->field['input_class'] = $input_class;
+		}
+
+		return $input_class;
+	}
+
+	/**
+	 * Add extra classes on front-end input
+	 *
+	 * @since 3.01.04
+	 */
+	protected function get_input_class() {
+		return '';
+	}
+
+	/**
 	 * @param array $args
 	 * @param array $shortcode_atts
 	 *
@@ -701,6 +731,8 @@ DEFAULT_HTML;
 	}
 
 	protected function get_field_input_html_hook( $field ) {
+		$field['input_class'] = $this->add_input_class();
+
 		ob_start();
 		do_action( 'frm_field_input_html', $field );
 		$input_html = ob_get_contents();
