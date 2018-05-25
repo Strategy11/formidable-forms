@@ -14,7 +14,7 @@ class FrmPersonalData {
 	/**
 	 * Add options to the WordPress personal data exporter
 	 *
-	 * @since 3.01.04
+	 * @since 3.02
 	 * @param array $exporters
 	 * @return array
 	 */
@@ -29,7 +29,7 @@ class FrmPersonalData {
 	/**
 	 * Add options to the WordPress personal data eraser
 	 *
-	 * @since 3.01.04
+	 * @since 3.02
 	 * @param array $erasers
 	 * @return array
 	 */

@@ -474,7 +474,7 @@ DEFAULT_HTML;
 	/**
 	 * Add classes to the input for output
 	 *
-	 * @since 3.01.04
+	 * @since 3.02
 	 */
 	protected function add_input_class() {
 		$input_class = FrmField::get_option( $this->field, 'input_class' );
@@ -495,7 +495,7 @@ DEFAULT_HTML;
 	/**
 	 * Add extra classes on front-end input
 	 *
-	 * @since 3.01.04
+	 * @since 3.02
 	 */
 	protected function get_input_class() {
 		return '';
