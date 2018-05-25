@@ -328,13 +328,12 @@ function frmFrontFormJS(){
 		}
 
 		var text = field.value;
-		var regEx = /^(?=.*?[a-zA-Z])(?=.*?[0-9]).{8,}$/;
-		var invalidMsg = getFieldValidationMessage( field, 'data-invmsg' );
+		var regEx = /^(?=.*?[a-z])(?=.*?[A-Z])(?=.*[^a-zA-Z0-9])(?=.*?[0-9]).{8,}$/;
 		var matches = regEx.test(text); //true if matches format, false otherwise
 
 		if (!matches) {
 			var fieldID = getFieldId( field, true );
-			errors[ fieldID ] = invalidMsg;
+			errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
 		}
 
 		return errors;
