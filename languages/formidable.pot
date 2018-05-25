@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Formidable v2.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-15 22:16+0000\n"
+"POT-Creation-Date: 2018-05-25 19:43+0000\n"
 "POT-Revision-Date: Tue Sep 26 2017 16:06:46 GMT-0600 (MDT)\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: \n"
@@ -71,7 +71,7 @@ msgid ""
 "running the free version and remove this message."
 msgstr ""
 
-#: classes/controllers/FrmAppController.php:498
+#: classes/controllers/FrmAppController.php:500
 #, php-format
 msgid ""
 "Help us spread the %1$sFormidable Forms%2$s love with %3$s %5$s on WordPress."
@@ -124,7 +124,7 @@ msgid "Entry Name"
 msgstr ""
 
 #: classes/controllers/FrmEntriesController.php:106
-#: classes/helpers/FrmCSVExportHelper.php:128
+#: classes/helpers/FrmCSVExportHelper.php:134
 msgid "Created By"
 msgstr ""
 
@@ -198,7 +198,7 @@ msgid "Form was Successfully Updated"
 msgstr ""
 
 #: classes/controllers/FrmFormsController.php:232
-#: classes/controllers/FrmFormsController.php:1629
+#: classes/controllers/FrmFormsController.php:1630
 msgid "Form template was Successfully Created"
 msgstr ""
 
@@ -270,7 +270,7 @@ msgstr ""
 
 #: classes/controllers/FrmFormsController.php:624
 #: classes/controllers/FrmFormsController.php:628
-#: classes/helpers/FrmCSVExportHelper.php:133
+#: classes/helpers/FrmCSVExportHelper.php:139
 msgid "Key"
 msgstr ""
 
@@ -385,11 +385,11 @@ msgstr ""
 msgid "Please select a valid form"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1404
+#: classes/controllers/FrmFormsController.php:1405
 msgid "Please wait while you are redirected."
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1438
+#: classes/controllers/FrmFormsController.php:1439
 #, php-format
 msgid "%1$sClick here%2$s if you are not automatically redirected."
 msgstr ""
@@ -675,7 +675,7 @@ msgid "Remove"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:1619
-#: classes/helpers/FrmCSVExportHelper.php:132
+#: classes/helpers/FrmCSVExportHelper.php:138
 msgid "ID"
 msgstr ""
 
@@ -708,8 +708,8 @@ msgid "(Click to add description)"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:1631
-#: classes/views/frm-fields/single-option.php:7
-#: classes/views/frm-fields/single-option.php:12
+#: classes/views/frm-fields/single-option.php:8
+#: classes/views/frm-fields/single-option.php:14
 msgid "(Blank)"
 msgstr ""
 
@@ -1087,42 +1087,46 @@ msgstr ""
 msgid "Vietnamese"
 msgstr ""
 
-#: classes/helpers/FrmCSVExportHelper.php:107
+#: classes/helpers/FrmCSVExportHelper.php:113
 msgid "(label)"
 msgstr ""
 
-#: classes/helpers/FrmCSVExportHelper.php:119
+#: classes/helpers/FrmCSVExportHelper.php:125
 msgid "Comment"
 msgstr ""
 
-#: classes/helpers/FrmCSVExportHelper.php:120
+#: classes/helpers/FrmCSVExportHelper.php:126
 msgid "Comment User"
 msgstr ""
 
-#: classes/helpers/FrmCSVExportHelper.php:121
+#: classes/helpers/FrmCSVExportHelper.php:127
 msgid "Comment Date"
 msgstr ""
 
-#: classes/helpers/FrmCSVExportHelper.php:126
+#: classes/helpers/FrmCSVExportHelper.php:132
 msgid "Timestamp"
 msgstr ""
 
-#: classes/helpers/FrmCSVExportHelper.php:127
+#: classes/helpers/FrmCSVExportHelper.php:133
 msgid "Last Updated"
 msgstr ""
 
-#: classes/helpers/FrmCSVExportHelper.php:129
+#: classes/helpers/FrmCSVExportHelper.php:135
 msgid "Updated By"
 msgstr ""
 
-#: classes/helpers/FrmCSVExportHelper.php:130
+#: classes/helpers/FrmCSVExportHelper.php:136
 #: classes/helpers/FrmFormsHelper.php:943
 #: classes/helpers/FrmFormsListHelper.php:363
 msgid "Draft"
 msgstr ""
 
-#: classes/helpers/FrmCSVExportHelper.php:131
+#: classes/helpers/FrmCSVExportHelper.php:137
 msgid "IP"
+msgstr ""
+
+#: classes/helpers/FrmCSVExportHelper.php:141
+msgid "Parent ID"
 msgstr ""
 
 #: classes/helpers/FrmEntriesHelper.php:456
@@ -2737,7 +2741,7 @@ msgid "%1$s Form submitted on %2$s"
 msgstr ""
 
 #: classes/models/FrmEmail.php:299
-#: classes/views/frm-entries/sidebar-shared.php:62
+#: classes/views/frm-entries/sidebar-shared.php:72
 msgid "User Information"
 msgstr ""
 
@@ -2746,12 +2750,12 @@ msgid "User-Agent (Browser/OS)"
 msgstr ""
 
 #: classes/models/FrmEmail.php:302 classes/models/FrmEntryValues.php:212
-#: classes/views/frm-entries/sidebar-shared.php:80
+#: classes/views/frm-entries/sidebar-shared.php:90
 msgid "Referrer"
 msgstr ""
 
 #: classes/models/FrmEmail.php:318 classes/models/FrmEntryValues.php:202
-#: classes/views/frm-entries/sidebar-shared.php:66
+#: classes/views/frm-entries/sidebar-shared.php:76
 msgid "IP Address"
 msgstr ""
 
@@ -2934,6 +2938,14 @@ msgstr ""
 
 #: classes/models/FrmMigrate.php:492
 msgid "Sending"
+msgstr ""
+
+#: classes/models/FrmPersonalData.php:23
+msgid "Formidable Forms Exporter"
+msgstr ""
+
+#: classes/models/FrmPersonalData.php:61
+msgid "Form Submissions"
 msgstr ""
 
 #: classes/models/FrmSettings.php:93
@@ -3167,17 +3179,17 @@ msgstr ""
 msgid "Edit"
 msgstr ""
 
-#: classes/views/frm-entries/sidebar-shared.php:46
+#: classes/views/frm-entries/sidebar-shared.php:48
 #, php-format
 msgid "Created by: %1$s"
 msgstr ""
 
-#: classes/views/frm-entries/sidebar-shared.php:53
+#: classes/views/frm-entries/sidebar-shared.php:60
 #, php-format
 msgid "Updated by: %1$s"
 msgstr ""
 
-#: classes/views/frm-entries/sidebar-shared.php:73
+#: classes/views/frm-entries/sidebar-shared.php:83
 msgid "Browser/OS"
 msgstr ""
 
