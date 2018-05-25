@@ -5,7 +5,12 @@ class Form_Factory extends WP_UnitTest_Factory_For_Thing {
 	function __construct( $factory = null ) {
 		parent::__construct( $factory );
 
-		$this->default_generation_definitions = FrmFormsHelper::setup_new_vars( false );
+		$defaults = FrmFormsHelper::setup_new_vars( false );
+		if ( isset( $defaults['submit_conditions'] ) ) {
+			// the array default is causing errors with unit test code
+			unset( $defaults['submit_conditions'] );
+		}
+		$this->default_generation_definitions = $defaults;
 
 		// This is a workaround for WP_UnitTest_Factory_For_Thing::generate_args
 		// Non-scalar values are not currently allowed in default definitions
