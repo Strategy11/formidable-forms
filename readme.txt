@@ -165,7 +165,7 @@ The field and form names and descriptions are all changed with in-place edit. Ju
 * Fix: If a field option includes HTML, allow the HTML rather than sanitizing it with entities
 * Fix: When the 'add option' button on the form builder is clicked multiple times, add the options correctly if the previous option isn't yes showing in the form maker
 * Fix: The HTML for the link to the user profile was showing in the sidebar when editing or viewing an entry
-* Code change: Move input classes into the field object class so it can be more easily overridden and amended. The FrmFieldType->get_input_class() function can be overriden in sub classes
+* Code change: Move input classes into the field object class so it can be more easily overridden and amended. The FrmFieldType->get_input_class() function can be overridden in sub classes
 
 = 3.01.03 =
 * Fix: Add responsive styling for the .frm_four_col class when grids are disabled
