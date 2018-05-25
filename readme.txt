@@ -4,9 +4,9 @@ Tags: contact form, form builder, custom form, forms, form, form maker, form cre
 Requires at least: 4.4
 Tested up to: 4.9.5
 Requires PHP: 5.3
-Stable tag: 3.01.03
+Stable tag: 3.01.04
 
-The best WordPress forms plugin for custom forms. Go beyond contact forms with a drag & drop form builder, HTML control & form style generator.
+The best WordPress forms plugin for custom forms. Go beyond contact forms with a drag & drop form builder, HTML control & form style generator
 
 == Description ==
 = The best WordPress form builder plugin for custom forms =
