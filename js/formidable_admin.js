@@ -1927,7 +1927,7 @@ function frmAdminBuildJS(){
 		var meta_name = 0;
 		var form_id = document.getElementById('form_id').value;
 		if(jQuery('#frm_form_action_'+id+' .frm_logic_row').length){
-			meta_name = 1 + parseInt(jQuery('#frm_form_action_'+id+' .frm_logic_row:last').attr('id').replace('frm_logic_'+id+'_', ''));	
+			meta_name = 1 + parseInt(jQuery('#frm_form_action_'+id+' .frm_logic_row:last').attr('id').replace('frm_logic_'+id+'_', ''));
 		}
 		jQuery.ajax({
 			type:'POST',url:ajaxurl,
@@ -1941,6 +1941,55 @@ function frmAdminBuildJS(){
 			}
 		});
 		return false;
+	}
+
+	/**
+	 * Adds submit button Conditional Logic row and reveals submit button Conditional Logic
+	 *
+	 * @returns {boolean}
+	 */
+	function addSubmitLogic() {
+		/*jshint validthis:true */
+		var form_id = this_form_id;
+		var meta_name = 0;
+		if ( jQuery( '#frm_submit_logic_row .frm_logic_row' ).length > 0 ) {
+			var last = jQuery( '#frm_submit_logic_row .frm_logic_row:last' );
+			var submitRowID = last.attr( 'id' );
+			var idFromSubmitRow = submitRowID.replace( 'frm_logic_submit_', '' );
+
+			meta_name = 1 + parseInt( last.attr( 'id' ).replace( 'frm_logic_submit_', '' ) );
+		}
+		jQuery.ajax( {
+			type: 'POST',
+			url: ajaxurl,
+			data: {
+				action: 'frm_add_submit_logic_row',
+				form_id: form_id,
+				meta_name: meta_name,
+				nonce: frmGlobal.nonce
+			},
+			success: function ( html ) {
+				jQuery( document.getElementById( 'logic_link_submit' ) ).fadeOut( 'slow', function () {
+					var $logicRow = jQuery( document.getElementById( 'frm_submit_logic_row' ) );
+					$logicRow.append( html );
+					$logicRow.parent( '.frm_submit_logic_rows' ).fadeIn( 'slow' );
+				} );
+			}
+		} );
+		return false;
+	}
+
+	/**
+	 *  When the user selects a field for a submit condition, update corresponding options field accordingly.
+	 */
+	function addSubmitLogicOpts() {
+		var fieldOpt = jQuery( this );
+		var field_id = fieldOpt.find( ':selected' ).val();
+
+		if ( field_id ) {
+			var row = fieldOpt.data( 'row' );
+			frmGetFieldValues( field_id, 'submit', row, '', 'options[submit_conditions][hide_opt][]' );
+		}
 	}
 
 	function formatEmailSetting(){
@@ -3040,6 +3089,9 @@ function frmAdminBuildJS(){
 			
 			jQuery('.frm_form_settings').on('click', '.frm_add_form_logic', addFormLogicRow);
 			jQuery('.frm_form_settings').on('blur', '.frm_email_blur', formatEmailSetting);
+
+			jQuery( '.frm_form_settings' ).on( 'click', '.frm_add_submit_logic', addSubmitLogic );
+			jQuery( '.frm_form_settings' ).on( 'change', '.frm_submit_logic_field_opts', addSubmitLogicOpts );
 			
 			//Warning when user selects "Do not store entries ..."
 			jQuery(document.getElementById('no_save')).change(function(){
@@ -3477,16 +3529,17 @@ jQuery.ajax({
 return false;
 }
 
-function frmGetFieldValues(f,cur,r,t,n){
-if(f){
-    jQuery.ajax({
-        type:'POST',url:ajaxurl,
-        data:'action=frm_get_field_values&current_field='+cur+'&field_id='+f+'&name='+n+'&t='+t+'&form_action='+jQuery('input[name="frm_action"]').val() +'&nonce='+frmGlobal.nonce,
-        success:function(msg){
-			document.getElementById('frm_show_selected_values_'+cur+'_'+r).innerHTML = msg;
-		} 
-    });
-}
+function frmGetFieldValues( field_id, cur, row_number, field_type, html_name ) {
+
+	if ( field_id ) {
+		jQuery.ajax( {
+			type: 'POST', url: ajaxurl,
+			data: 'action=frm_get_field_values&current_field=' + cur + '&field_id=' + field_id + '&name=' + html_name + '&t=' + field_type + '&form_action=' + jQuery( 'input[name="frm_action"]' ).val() + '&nonce=' + frmGlobal.nonce,
+			success: function ( msg ) {
+				document.getElementById( 'frm_show_selected_values_' + cur + '_' + row_number ).innerHTML = msg;
+			}
+		} );
+	}
 }
 
 function frmImportCsv(formID){

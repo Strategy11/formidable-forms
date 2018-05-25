@@ -1185,6 +1185,7 @@ class FrmFormsController {
 		} else if ( self::user_has_permission_to_view( $form ) ) {
 			$form = do_shortcode( $frm_settings->login_msg );
 		} else {
+			do_action( 'frm_pre_get_form', $form );
 			$form = self::get_form( $form, $title, $description, $atts );
 
 			/**
@@ -1227,7 +1228,7 @@ class FrmFormsController {
 
     public static function get_form( $form, $title, $description, $atts = array() ) {
         ob_start();
-
+        
 		do_action( 'frm_before_get_form', $atts );
 
         self::get_form_contents( $form, $title, $description, $atts );

@@ -1797,11 +1797,14 @@ label.frm_action_events{
 }
 
 .frm_form_action_settings .frm_logic_row,
-.frm_form_action_settings .frm_posttax_row{
+.frm_form_action_settings .frm_posttax_row,
+.advanced_settings .frm_logic_row {
     margin:14px 0;
 }
 .frm_form_action_settings .frm_logic_row select,
-.frm_form_action_settings .frm_logic_row input{
+.frm_form_action_settings .frm_logic_row input,
+.advanced_settings .frm_logic_row select,
+.advanced_settings .frm_logic_row input{
     max-width:30%;
 }
 .frm_form_settings input[type="text"]{
