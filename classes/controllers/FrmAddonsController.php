@@ -229,7 +229,6 @@ class FrmAddonsController {
 				'url'   => home_url(),
 			),
 			'timeout'   => 15,
-			'sslverify' => false,
 			'user-agent' => 'Formidable/' . FrmAppHelper::$plug_version . '; ' . home_url(),
 		);
 
