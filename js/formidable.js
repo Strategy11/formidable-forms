@@ -877,6 +877,12 @@ function frmFrontFormJS(){
 
 			e.preventDefault();
 
+			if ( typeof frmProForm !== 'undefined' ) {
+				if ( ! frmProForm.submitAllowed( object) ) {
+					return;
+				}
+			}
+
 			if ( invisibleRecaptcha.length ) {
 				executeInvisibleRecaptcha( invisibleRecaptcha );
 			} else {
