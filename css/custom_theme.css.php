@@ -534,6 +534,39 @@ select.frm_loading_lookup{
 	display:none;
 }
 
+/*
+ * Password strength CSS
+ */
+.pass-req, .pass-verified {
+    float: left;
+    width: 20%;
+    line-height: 20px;
+    font-size: 12px;
+}
+
+span.pass-verified::before {
+    content: '\e606';
+    color: #33a03d;
+}
+
+span.pass-req::before {
+    content: '\e608';
+    color: #e81313;
+}
+
+span.pass-verified::before, .pass-req::before {
+    font-family: 's11-fp';
+    display: inline-block;
+    padding: 6px;
+    font-size: 13px;
+    transition: all .65s ease-in-out 0s;
+    vertical-align: middle;
+}
+
+div#frm_password_strength {
+    width: 100%;
+}
+
 .wp-editor-wrap *,
 .wp-editor-wrap *:after,
 .wp-editor-wrap *:before{
