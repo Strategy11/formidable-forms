@@ -322,21 +322,147 @@ function frmFrontFormJS(){
 
 	function checkPasswordField( field, errors ) {
 		var classes = field.className;
+		var hasStrengthMeter = true;
 
 		if (!classes.includes("frm_strong_pass")) {
 			return errors;
 		}
+		if (!classes.includes("frm_strength_meter")) {
+			hasStrengthMeter = false;
+		}
 
-		var text = field.value;
-		var regEx = /^(?=.*?[a-z])(?=.*?[A-Z])(?=.*[^a-zA-Z0-9])(?=.*?[0-9]).{8,}$/;
-		var matches = regEx.test(text); //true if matches format, false otherwise
+		var password = field.value;
 
-		if (!matches) {
-			var fieldID = getFieldId( field, true );
-			errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
+		return check_format( field, password, errors, hasStrengthMeter );
+	}
+
+	function check_format( field, password, errors, hasStrengthMeter ) {
+		var fieldName = field.name;
+		var fieldId = fieldName.replace(/\D/g,'');
+
+		if ( ! ( isLongPassword( password, hasStrengthMeter, fieldId ) ) ) {
+			errors = getFieldValidationMessage( field, 'data-invmsg' );
+		}
+		if ( ! hasNumber( password, hasStrengthMeter, fieldId ) ) {
+			errors = getFieldValidationMessage( field, 'data-invmsg' );
+		}
+		if ( ! hasUppercase( password, hasStrengthMeter, fieldId ) ) {
+			errors = getFieldValidationMessage( field, 'data-invmsg' );
+		}
+		if ( ! hasLowercase( password, hasStrengthMeter, fieldId ) ) {
+			errors = getFieldValidationMessage( field, 'data-invmsg' );
+		}
+		if ( ! hasSpecialChar( password, hasStrengthMeter, fieldId ) ) {
+			errors = getFieldValidationMessage( field, 'data-invmsg' );
 		}
 
 		return errors;
+	}
+
+	function maybeRemovePassReq( span ) {
+		if ( span.classList.contains( "pass-req" ) ) {
+			span.classList.remove( "pass-req" );
+			span.classList.add( "pass-verified" );
+		}
+	}
+
+	function maybeRemovePassVerified( span ) {
+		if ( span.classList.contains( "pass-verified" ) ) {
+			span.classList.remove( "pass-verified" );
+			span.classList.add( "pass-req" );
+		}
+	}
+
+	function isLongPassword( password, hasStrengthMeter, fieldId ) {
+		var elementId = "frm-pass-eight-char-" + fieldId;
+		var span = document.getElementById( elementId );
+
+		if ( password.length >= 8 ) {
+			//add a class to the long pass span
+			if ( hasStrengthMeter && span != null ) {
+				maybeRemovePassReq( span );
+			}
+
+			return true;
+		}
+		else {
+			if ( hasStrengthMeter && span != null ) {
+				maybeRemovePassVerified( span );
+			}
+		}
+		return false;
+	}
+
+	function hasNumber( password, hasStrengthMeter, fieldId ) {
+		var elementId = "frm-pass-number-" + fieldId;
+		var span = document.getElementById( elementId );
+
+		if ( /\d/.test( password ) ) {
+			if ( hasStrengthMeter && span != null ) {
+				maybeRemovePassReq( span );
+			}
+			return true;
+		}
+		else {
+			if ( hasStrengthMeter && span != null ) {
+				maybeRemovePassVerified( span );
+			}
+		}
+		return false;
+	}
+
+	function hasUppercase( password, hasStrengthMeter, fieldId ) {
+		var elementId = "frm-pass-uppercase-" + fieldId;
+		var span = document.getElementById( elementId );
+
+		if ( /[A-Z]/.test( password ) ) {
+			if ( hasStrengthMeter && span != null ) {
+				maybeRemovePassReq( span );
+			}
+			return true;
+		}
+		else {
+			if ( hasStrengthMeter && span != null ) {
+				maybeRemovePassVerified( span );
+			}
+		}
+		return false;
+	}
+
+	function hasLowercase( password, hasStrengthMeter, fieldId ) {
+		var elementId = "frm-pass-lowercase-" + fieldId;
+		var span = document.getElementById( elementId );
+
+		if ( /[a-z]/.test( password ) ) {
+			if ( hasStrengthMeter && span != null ) {
+				maybeRemovePassReq( span );
+			}
+			return true;
+		}
+		else {
+			if ( hasStrengthMeter && span != null ) {
+				maybeRemovePassVerified( span );
+			}
+		}
+		return false;
+	}
+
+	function hasSpecialChar( password, hasStrengthMeter, fieldId ) {
+		var elementId = "frm-pass-special-char-" + fieldId;
+		var span = document.getElementById( elementId );
+
+		if ( /[~`!@#$%\^&*+=\-\[\]\\';,/{}|\\()_":<>\?]/g.test( password ) ) {
+			if ( hasStrengthMeter && span != null ) {
+				maybeRemovePassReq( span );
+			}
+			return true;
+		}
+		else {
+			if ( hasStrengthMeter && span != null ) {
+				maybeRemovePassVerified( span );
+			}
+		}
+		return false;
 	}
 
 	function hasInvisibleRecaptcha( object ) {
