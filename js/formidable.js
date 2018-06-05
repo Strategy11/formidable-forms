@@ -877,8 +877,8 @@ function frmFrontFormJS(){
 
 			e.preventDefault();
 
-			if ( typeof frmProForm !== 'undefined' ) {
-				if ( ! frmProForm.submitAllowed( object) ) {
+			if ( typeof frmProForm !== 'undefined' && typeof frmProForm.submitAllowed === 'function' ) {
+				if (    ! frmProForm.submitAllowed( object) ) {
 					return;
 				}
 			}
