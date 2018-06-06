@@ -878,7 +878,7 @@ function frmFrontFormJS(){
 			e.preventDefault();
 
 			if ( typeof frmProForm !== 'undefined' && typeof frmProForm.submitAllowed === 'function' ) {
-				if (    ! frmProForm.submitAllowed( object) ) {
+				if ( ! frmProForm.submitAllowed( object) ) {
 					return;
 				}
 			}
