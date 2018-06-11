@@ -3254,7 +3254,7 @@ function frmAdminBuildJS(){
 			var $navCont = document.getElementById('frm_nav_container');
 			if ( $navCont !== null ) {
 				var $titleDiv = document.getElementsByClassName('wp-header-end')[0];
-				if ( $titleDiv === null ) {
+				if ( $titleDiv === null || typeof $titleDiv  === 'undefined' ) {
 					$titleDiv = document.getElementById('titlediv');
 				} else {
 					$titleDiv = $titleDiv.parentNode;
