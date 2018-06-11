@@ -138,9 +138,9 @@ function frmFrontFormJS(){
 						errors = checkNumberField( field, errors );
 					} else if ( field.type === 'email' ) {
 						errors = checkEmailField( field, errors, emailFields );
-					} else if (field.type === 'password') {
+					}/* else if (field.type === 'password') {
 						errors = checkPasswordField(field, errors);
-					} else if ( field.pattern !== null ) {
+					}*/ else if ( field.pattern !== null ) {
 						errors = checkPatternField( field, errors );
 					}
 				}
@@ -172,9 +172,9 @@ function frmFrontFormJS(){
 				errors = checkEmailField( field, errors, emailFields );
 			} else if ( field.type === 'number' ) {
 				errors = checkNumberField( field, errors );
-			} else if (field.type === 'password') {
+			}/* else if (field.type === 'password') {
 				errors = checkPasswordField( field, errors );
-			} else if ( field.pattern !== null ) {
+			}*/ else if ( field.pattern !== null ) {
 				errors = checkPatternField( field, errors );
 			}
 		}
@@ -320,6 +320,7 @@ function frmFrontFormJS(){
 		return errors;
 	}
 
+/*
 	function checkPasswordField( field, errors ) {
 		var classes = field.className;
 		var hasStrengthMeter = true;
@@ -360,16 +361,16 @@ function frmFrontFormJS(){
 	}
 
 	function maybeRemovePassReq( span ) {
-		if ( span.classList.contains( "pass-req" ) ) {
-			span.classList.remove( "pass-req" );
-			span.classList.add( "pass-verified" );
+		if ( span.classList.contains( "frm-pass-req" ) ) {
+			span.classList.remove( "frm-pass-req" );
+			span.classList.add( "frm-pass-verified" );
 		}
 	}
 
 	function maybeRemovePassVerified( span ) {
-		if ( span.classList.contains( "pass-verified" ) ) {
-			span.classList.remove( "pass-verified" );
-			span.classList.add( "pass-req" );
+		if ( span.classList.contains( "frm-pass-verified" ) ) {
+			span.classList.remove( "frm-pass-verified" );
+			span.classList.add( "frm-pass-req" );
 		}
 	}
 
@@ -451,7 +452,7 @@ function frmFrontFormJS(){
 		var elementId = "frm-pass-special-char-" + fieldId;
 		var span = document.getElementById( elementId );
 
-		if ( /[~`!@#$%\^&*+=\-\[\]\\';,/{}|\\()_":<>\?]/g.test( password ) ) {
+		if ( /[~`!@#$%\^&*+=\-\[\]\\';,/{}|\\()_":.<>\?]/g.test( password ) ) {
 			if ( hasStrengthMeter && span != null ) {
 				maybeRemovePassReq( span );
 			}
@@ -464,6 +465,7 @@ function frmFrontFormJS(){
 		}
 		return false;
 	}
+*/
 
 	function hasInvisibleRecaptcha( object ) {
 		if ( typeof frmProForm !== 'undefined' && frmProForm.goingToPreviousPage( object ) ) {
