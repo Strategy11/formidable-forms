@@ -240,6 +240,11 @@ function frmFrontFormJS(){
 				// set id for time field
 				fieldID = fieldID.replace('-H', '').replace('-m', '');
 			}
+
+			var placeholder = field.getAttribute('data-frmplaceholder');
+			if ( placeholder !== null && val === placeholder ) {
+				val = '';
+			}
 		}
 
 		if ( val === '' ) {
