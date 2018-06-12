@@ -26,6 +26,7 @@
 
 		<div class="frm_drag_inst"><?php esc_html_e( 'Add Fields Here', 'formidable' ) ?></div>
 		<p id="frm_create_template_form">
+			<?php if ( ! empty( $all_templates ) ) { ?>
 			<?php esc_html_e( 'Or load fields from a template', 'formidable' ); ?>
 			<select id="frm_create_template_dropdown">
 				<?php foreach ( $all_templates as $temp ) { ?>
@@ -33,6 +34,7 @@
 				<?php } ?>
 			</select>
 			<input type="button" id="frm_create_template_button" class="button-secondary" value="<?php esc_attr_e( 'Load Template', 'formidable' ) ?>" />
+			<?php } ?>
 		</p>
 
     	<div class="alignleft sketch3">
