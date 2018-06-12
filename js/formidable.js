@@ -323,7 +323,7 @@ function frmFrontFormJS(){
 	function checkPasswordField( field, errors ) {
 		var classes = field.className;
 
-		if (!classes.includes("frm_strong_pass")) {
+		if (classes.indexOf('frm_strong_pass') < 0) {
 			return errors;
 		}
 
