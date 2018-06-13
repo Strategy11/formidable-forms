@@ -164,7 +164,7 @@ The field and form names and descriptions are all changed with in-place edit. Ju
 * Fix: Allow the heading class and ids to stay for the sidebar form widget. The headings were missing a class and not the same as other headings in some themes.
 * Fix: If all form templates are deleted, keep the 'templates' nav item so new templates can still be created.
 * Fix: When creating a new form, don't include trashed form templates in the form template options
-* Fix: Remove outdated sslverify refererences
+* Fix: Remove outdated sslverify references
 * Fix: The sample form for the form styler didn't have a great layout when CSS grids were turned on
 
 = 3.02 =
