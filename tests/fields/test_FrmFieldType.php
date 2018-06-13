@@ -6,7 +6,7 @@
 class test_FrmFieldType extends FrmUnitTest {
 
 	/**
-	 * @covers FrmFieldNumber->add_min_max
+	 * @covers FrmFieldNumber::add_min_max
 	 */
 	function test_html_min_number() {
 		$form_id = $this->factory->form->create();
