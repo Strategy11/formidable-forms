@@ -146,7 +146,7 @@ class test_FrmFormsController extends FrmUnitTest {
 
 		if ( FrmAppHelper::js_suffix() == '.min' ) {
 			$file = 'frm.min.js';
-			if ( $formidable_js->src !== $file ) {
+			if ( strpos( $formidable_js->src, $file ) === false ) {
 				$file = 'formidable.min.js';
 			}
 		} else {
