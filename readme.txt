@@ -4,7 +4,7 @@ Tags: contact form, form builder, custom form, forms, form, form maker, form cre
 Requires at least: 4.4
 Tested up to: 4.9.5
 Requires PHP: 5.3
-Stable tag: 3.02
+Stable tag: 3.02.01
 
 The best WordPress forms plugin for custom forms. Go beyond contact forms with a drag & drop form builder, HTML control & form style generator
 
@@ -107,6 +107,7 @@ Other WordPress form builder plugins only let you collect data. But our Pro form
 * [Polylang Forms](https://formidableforms.com/downloads/polylang/ "Polylang Forms"). Create bilingual or multilingual forms with help from Polylang.
 * [Bootstrap Form Styles](https://formidableforms.com/downloads/bootstrap/ "Bootstrap Form Styles"). Instantly add Bootstrap styling to all your Formidable forms.
 * [Bootstrap Modal Form](https://formidableforms.com/downloads/bootstrap-modal/ "Bootstrap Modal Form"). Open forms, views, other shortcodes, or sections of content in a Bootstrap modal popup.
+* [Salesforce Forms](https://formidableforms.com/downloads/salesforce/ "Salesforce Forms"). Create leads, contacts, and any other Salesforce objects directly from your WordPress forms.
 * [Zapier Forms](https://formidableforms.com/downloads/zapier/ "Zapier Forms"). Connect with hundreds of different applications through Zapier. Insert a new row in a Google docs spreadsheet, post on Twitter, or add a new Dropbox file with your form.
 
 Learn more at [Formidable Forms](https://formidableforms.com/ "Formidable Forms")
@@ -159,6 +160,13 @@ The field and form names and descriptions are all changed with in-place edit. Ju
 [See more FAQs](https://formidableforms.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 3.02.01 =
+* Fix: Allow the heading class and ids to stay for the sidebar form widget. The headings were missing a class and not the same as other headings in some themes.
+* Fix: If all form templates are deleted, keep the 'templates' nav item so new templates can still be created.
+* Fix: When creating a new form, don't include trashed form templates in the form template options
+* Fix: Remove outdated sslverify refererences
+* Fix: The sample form for the form styler didn't have a great layout when CSS grids were turned on
+
 = 3.02 =
 * New: Add support for WordPress export and erase personal data options for easier GDPR support
 * Fix: HTML was getting stripped in field labels when a form was edited on the form builder page
