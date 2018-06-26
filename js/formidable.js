@@ -138,9 +138,7 @@ function frmFrontFormJS(){
 						errors = checkNumberField( field, errors );
 					} else if ( field.type === 'email' ) {
 						errors = checkEmailField( field, errors, emailFields );
-					}/* else if (field.type === 'password') {
-						errors = checkPasswordField(field, errors);
-					}*/ else if ( field.pattern !== null ) {
+					} else if ( field.pattern !== null ) {
 						errors = checkPatternField( field, errors );
 					}
 				}
@@ -172,9 +170,7 @@ function frmFrontFormJS(){
 				errors = checkEmailField( field, errors, emailFields );
 			} else if ( field.type === 'number' ) {
 				errors = checkNumberField( field, errors );
-			}/* else if (field.type === 'password') {
-				errors = checkPasswordField( field, errors );
-			}*/ else if ( field.pattern !== null ) {
+			} else if ( field.pattern !== null ) {
 				errors = checkPatternField( field, errors );
 			}
 		}
@@ -324,153 +320,6 @@ function frmFrontFormJS(){
 		}
 		return errors;
 	}
-
-/*
-	function checkPasswordField( field, errors ) {
-		var classes = field.className;
-		var hasStrengthMeter = true;
-
-		if (classes.indexOf('frm_strong_pass') < 0) {
-			return errors;
-		}
-		if (!classes.includes("frm_strength_meter")) {
-			hasStrengthMeter = false;
-		}
-
-		var password = field.value;
-
-		return check_format( field, password, errors, hasStrengthMeter );
-	}
-
-	function check_format( field, password, errors, hasStrengthMeter ) {
-		var fieldName = field.name;
-		var fieldId = fieldName.replace(/\D/g,'');
-
-		if ( ! ( isLongPassword( password, hasStrengthMeter, fieldId ) ) ) {
-			errors = getFieldValidationMessage( field, 'data-invmsg' );
-		}
-		if ( ! hasNumber( password, hasStrengthMeter, fieldId ) ) {
-			errors = getFieldValidationMessage( field, 'data-invmsg' );
-		}
-		if ( ! hasUppercase( password, hasStrengthMeter, fieldId ) ) {
-			errors = getFieldValidationMessage( field, 'data-invmsg' );
-		}
-		if ( ! hasLowercase( password, hasStrengthMeter, fieldId ) ) {
-			errors = getFieldValidationMessage( field, 'data-invmsg' );
-		}
-		if ( ! hasSpecialChar( password, hasStrengthMeter, fieldId ) ) {
-			errors = getFieldValidationMessage( field, 'data-invmsg' );
-		}
-
-		return errors;
-	}
-
-	function maybeRemovePassReq( span ) {
-		if ( span.classList.contains( "frm-pass-req" ) ) {
-			span.classList.remove( "frm-pass-req" );
-			span.classList.add( "frm-pass-verified" );
-		}
-	}
-
-	function maybeRemovePassVerified( span ) {
-		if ( span.classList.contains( "frm-pass-verified" ) ) {
-			span.classList.remove( "frm-pass-verified" );
-			span.classList.add( "frm-pass-req" );
-		}
-	}
-
-	function isLongPassword( password, hasStrengthMeter, fieldId ) {
-		var elementId = "frm-pass-eight-char-" + fieldId;
-		var span = document.getElementById( elementId );
-
-		if ( password.length >= 8 ) {
-			//add a class to the long pass span
-			if ( hasStrengthMeter && span != null ) {
-				maybeRemovePassReq( span );
-			}
-
-			return true;
-		}
-		else {
-			if ( hasStrengthMeter && span != null ) {
-				maybeRemovePassVerified( span );
-			}
-		}
-		return false;
-	}
-
-	function hasNumber( password, hasStrengthMeter, fieldId ) {
-		var elementId = "frm-pass-number-" + fieldId;
-		var span = document.getElementById( elementId );
-
-		if ( /\d/.test( password ) ) {
-			if ( hasStrengthMeter && span != null ) {
-				maybeRemovePassReq( span );
-			}
-			return true;
-		}
-		else {
-			if ( hasStrengthMeter && span != null ) {
-				maybeRemovePassVerified( span );
-			}
-		}
-		return false;
-	}
-
-	function hasUppercase( password, hasStrengthMeter, fieldId ) {
-		var elementId = "frm-pass-uppercase-" + fieldId;
-		var span = document.getElementById( elementId );
-
-		if ( /[A-Z]/.test( password ) ) {
-			if ( hasStrengthMeter && span != null ) {
-				maybeRemovePassReq( span );
-			}
-			return true;
-		}
-		else {
-			if ( hasStrengthMeter && span != null ) {
-				maybeRemovePassVerified( span );
-			}
-		}
-		return false;
-	}
-
-	function hasLowercase( password, hasStrengthMeter, fieldId ) {
-		var elementId = "frm-pass-lowercase-" + fieldId;
-		var span = document.getElementById( elementId );
-
-		if ( /[a-z]/.test( password ) ) {
-			if ( hasStrengthMeter && span != null ) {
-				maybeRemovePassReq( span );
-			}
-			return true;
-		}
-		else {
-			if ( hasStrengthMeter && span != null ) {
-				maybeRemovePassVerified( span );
-			}
-		}
-		return false;
-	}
-
-	function hasSpecialChar( password, hasStrengthMeter, fieldId ) {
-		var elementId = "frm-pass-special-char-" + fieldId;
-		var span = document.getElementById( elementId );
-
-		if ( /[~`!@#$%\^&*+=\-\[\]\\';,/{}|\\()_":.<>\?]/g.test( password ) ) {
-			if ( hasStrengthMeter && span != null ) {
-				maybeRemovePassReq( span );
-			}
-			return true;
-		}
-		else {
-			if ( hasStrengthMeter && span != null ) {
-				maybeRemovePassVerified( span );
-			}
-		}
-		return false;
-	}
-*/
 
 	function hasInvisibleRecaptcha( object ) {
 		if ( typeof frmProForm !== 'undefined' && frmProForm.goingToPreviousPage( object ) ) {
