@@ -11,7 +11,7 @@ class FrmAppHelper {
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '3.02';
+	public static $plug_version = '3.02.02';
 
     /**
      * @since 1.07.02
@@ -429,6 +429,11 @@ class FrmAppHelper {
 	 * @since 2.05.03
 	 */
 	private static function safe_html() {
+		$allow_class = array(
+			'class' => array(),
+			'id'    => array(),
+		);
+
 		return array(
 			'a' => array(
 				'class' => array(),
@@ -464,16 +469,13 @@ class FrmAppHelper {
 			'dl'  => array(),
 			'dt'  => array(),
 			'em'  => array(),
-			'h1'  => array(),
-			'h2'  => array(),
-			'h3'  => array(),
-			'h4'  => array(),
-			'h5'  => array(),
-			'h6'  => array(),
-			'i'   => array(
-				'class' => array(),
-				'id'    => array(),
-			),
+			'h1'  => $allow_class,
+			'h2'  => $allow_class,
+			'h3'  => $allow_class,
+			'h4'  => $allow_class,
+			'h5'  => $allow_class,
+			'h6'  => $allow_class,
+			'i'   => $allow_class,
 			'img' => array(
 				'alt'    => array(),
 				'class'  => array(),
@@ -482,18 +484,9 @@ class FrmAppHelper {
 				'src'    => array(),
 				'width'  => array(),
 			),
-			'li' => array(
-				'class' => array(),
-				'id'    => array(),
-			),
-			'ol' => array(
-				'class' => array(),
-				'id'    => array(),
-			),
-			'p'   => array(
-				'class' => array(),
-				'id'    => array(),
-			),
+			'li'  => $allow_class,
+			'ol'  => $allow_class,
+			'p'   => $allow_class,
 			'pre' => array(),
 			'q'   => array(
 				'cite' => array(),
@@ -507,10 +500,7 @@ class FrmAppHelper {
 			),
 			'strike' => array(),
 			'strong' => array(),
-			'ul' => array(
-				'class' => array(),
-				'id'    => array(),
-			),
+			'ul' => $allow_class,
 		);
 	}
 

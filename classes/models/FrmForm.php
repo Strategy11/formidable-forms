@@ -571,6 +571,11 @@ class FrmForm {
      */
 	public static function getAll( $where = array(), $order_by = '', $limit = '' ) {
 		if ( is_array( $where ) && ! empty( $where ) ) {
+			if ( isset( $where['is_template'] ) && $where['is_template'] && ! isset( $where['status'] ) ) {
+				// don't get trashed templates
+				$where['status'] = array( null, '', 'published' );
+			}
+
 			$results = FrmDb::get_results( 'frm_forms', $where, '*', array(
 				'order_by' => $order_by,
 				'limit'    => $limit,

@@ -291,11 +291,16 @@ class FrmAppController {
             wp_enqueue_script( 'formidable_admin' );
 			FrmAppHelper::localize_script( 'admin' );
 
-            wp_enqueue_style( 'formidable-admin' );
+			wp_enqueue_style( 'formidable-admin' );
 			if ( 'formidable-styles' !== $page ) {
 				wp_enqueue_style( 'formidable-grids' );
 				wp_enqueue_style( 'formidable-dropzone' );
 				add_thickbox();
+			} else {
+				$settings = FrmAppHelper::get_settings();
+				if ( empty( $settings->old_css ) ) {
+					wp_enqueue_style( 'formidable-grids' );
+				}
 			}
 
             wp_register_script( 'formidable-editinplace', FrmAppHelper::plugin_url() . '/js/jquery/jquery.editinplace.packed.js', array( 'jquery' ), '2.3.0' );

@@ -240,6 +240,11 @@ function frmFrontFormJS(){
 				// set id for time field
 				fieldID = fieldID.replace('-H', '').replace('-m', '');
 			}
+
+			var placeholder = field.getAttribute('data-frmplaceholder');
+			if ( placeholder !== null && val === placeholder ) {
+				val = '';
+			}
 		}
 
 		if ( val === '' ) {
@@ -325,7 +330,7 @@ function frmFrontFormJS(){
 		var classes = field.className;
 		var hasStrengthMeter = true;
 
-		if (!classes.includes("frm_strong_pass")) {
+		if (classes.indexOf('frm_strong_pass') < 0) {
 			return errors;
 		}
 		if (!classes.includes("frm_strength_meter")) {
@@ -1004,6 +1009,12 @@ function frmFrontFormJS(){
 			}
 
 			e.preventDefault();
+
+			if ( typeof frmProForm !== 'undefined' && typeof frmProForm.submitAllowed === 'function' ) {
+				if ( ! frmProForm.submitAllowed( object) ) {
+					return;
+				}
+			}
 
 			if ( invisibleRecaptcha.length ) {
 				executeInvisibleRecaptcha( invisibleRecaptcha );

@@ -12,6 +12,10 @@ $GLOBALS['wp_tests_options'] = array(
 	'active_plugins'     => array( 'formidable/formidable.php' ),
 );
 
+if ( ! defined( 'SCRIPT_DEBUG' ) ) {
+	define( 'SCRIPT_DEBUG', false );
+}
+
 if ( false !== getenv( 'WP_DEVELOP_DIR' ) ) {
 	require getenv( 'WP_DEVELOP_DIR' ) . 'tests/phpunit/includes/bootstrap.php';
 } else {

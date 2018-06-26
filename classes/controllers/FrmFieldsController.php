@@ -676,6 +676,13 @@ class FrmFieldsController {
 	private static function add_frmval_to_input( $field, &$add_html ) {
 		if ( $field['default_value'] != '' ) {
 			$add_html['data-frmval'] = 'data-frmval="' . esc_attr( $field['default_value'] ) . '"';
+
+			if ( 'select' === $field['type'] ) {
+				$is_placeholder = FrmField::is_option_true( $field, 'default_blank' );
+				if ( $is_placeholder ) {
+					$add_html['data-frmplaceholder'] = 'data-frmplaceholder="' . esc_attr( $field['default_value'] ) . '"';
+				}
+			}
 		}
 	}
 
