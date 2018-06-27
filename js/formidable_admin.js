@@ -2546,7 +2546,7 @@ function frmAdminBuildJS(){
 		var paddingCount = paddingEntered.length;
 
 		// If too many or too few padding entries, leave now
-		if ( paddingCount === 0 || paddingCount > 4 ) {
+		if ( paddingCount === 0 || paddingCount > 4 || height === '' ) {
 			return;
 		}
 
@@ -3288,9 +3288,10 @@ function frmAdminBuildJS(){
 		styleInit: function(){
             collapseAllSections();
 
-			document.getElementById("frm_field_height").addEventListener("blur", textSquishCheck);
-			document.getElementById("frm_field_font_size").addEventListener("blur", textSquishCheck);
-			document.getElementById("frm_field_pad").addEventListener("blur", textSquishCheck);
+			document.getElementById('frm_field_height').addEventListener('change', textSquishCheck);
+			document.getElementById('frm_field_font_size').addEventListener('change', textSquishCheck);
+			document.getElementById('frm_field_pad').addEventListener('change', textSquishCheck);
+
 			jQuery('input.hex').wpColorPicker({
 				width:200,
 				change: function( event, ui ) {
