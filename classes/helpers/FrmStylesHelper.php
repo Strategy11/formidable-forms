@@ -1,7 +1,13 @@
 <?php
 class FrmStylesHelper {
 
+	/**
+	 * @deprecated 3.02.03
+	 * @codeCoverageIgnore
+	 */
     public static function jquery_themes() {
+		_deprecated_function( __METHOD__, '3.02.03', 'FrmProStylesController::jquery_themes' );
+
         $themes = array(
             'ui-lightness'  => 'UI Lightness',
             'ui-darkness'   => 'UI Darkness',
@@ -33,7 +39,13 @@ class FrmStylesHelper {
         return $themes;
     }
 
+	/**
+	 * @deprecated 3.02.03
+	 * @codeCoverageIgnore
+	 */
 	public static function jquery_css_url( $theme_css ) {
+		_deprecated_function( __METHOD__, '3.02.03', 'FrmProStylesController::jquery_css_url' );
+
         if ( $theme_css == -1 ) {
             return;
         }
@@ -55,7 +67,13 @@ class FrmStylesHelper {
         return $css_file;
     }
 
+	/**
+	 * @deprecated 3.02.03
+	 * @codeCoverageIgnore
+	 */
     public static function enqueue_jquery_css() {
+		_deprecated_function( __METHOD__, '3.02.03', 'FrmProStylesController::enqueue_jquery_css' );
+
 		$form = self::get_form_for_page();
 		$theme_css = FrmStylesController::get_style_val( 'theme_css', $form );
         if ( $theme_css != -1 ) {
@@ -63,7 +81,13 @@ class FrmStylesHelper {
         }
     }
 
+	/**
+	 * @deprecated 3.02.03
+	 * @codeCoverageIgnore
+	 */
 	public static function get_form_for_page() {
+		_deprecated_function( __METHOD__, '3.02.03' );
+
 		global $frm_vars;
 		$form_id = 'default';
 		if ( ! empty( $frm_vars['forms_loaded'] ) ) {
