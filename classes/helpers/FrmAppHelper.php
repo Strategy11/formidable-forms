@@ -475,7 +475,11 @@ class FrmAppHelper {
 			'h4'  => $allow_class,
 			'h5'  => $allow_class,
 			'h6'  => $allow_class,
-			'i'   => $allow_class,
+			'i'   => array(
+				'class' => array(),
+				'id'    => array(),
+				'icon'  => array(),
+			),
 			'img' => array(
 				'alt'    => array(),
 				'class'  => array(),
