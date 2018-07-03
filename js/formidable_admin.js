@@ -3352,30 +3352,6 @@ function frmAdminBuildJS(){
                 jQuery(this).closest('li').addClass('active');
             });
 
-            var $showCal = jQuery(document.getElementById('frm_show_cal'));
-            // change sample image on hover in FF
-			jQuery('select[name$="[theme_selector]"] option').each(function(){
-				var $thisOpt = jQuery(this);
-				$thisOpt.hover(function(){
-					var calId = $thisOpt.attr('id');
-					if(typeof calId === 'undefined'){
-						$showCal.attr('src', '');
-					}else{
-						$showCal.attr('src', '//jqueryui.com/resources/images/themeGallery/theme_'+ calId +'.png');
-					}
-				},'');
-			});
-
-            // change sample image on change in other browsers
-            jQuery('select[name$="[theme_selector]"]').change(function(){
-				var calId = jQuery(this).children(':selected').attr('id');
-				if(typeof calId === 'undefined'){
-					$showCal.attr('src', '');
-				}else{
-					$showCal.attr('src', '//jqueryui.com/resources/images/themeGallery/theme_'+ calId +'.png');
-				}
-			});
-
 			jQuery('.frm_reset_style').click(function(){
 				if(!confirm(frm_admin_js.confirm)){
 					return false;
@@ -3391,9 +3367,7 @@ function frmAdminBuildJS(){
 						for (var key in errObj){
 							jQuery('input[name$="['+key+']"], select[name$="['+key+']"]').val(errObj[key]);
 						}
-						jQuery('select[name$="[theme_selector]"]').val(errObj.theme_css).change();
-						jQuery('#frm_submit_style, #frm_auto_width').prop('checked', false); //checkboxes
-						jQuery('input.hex').validHex().applyFarbtastic();
+						jQuery('#frm_submit_style, #frm_auto_width').prop('checked', false);
 						jQuery(document.getElementById('frm_fieldset')).change();
 					}
 				});
@@ -3407,15 +3381,18 @@ function frmAdminBuildJS(){
 				var themeVal = jQuery(this).val();
 				var themeName = themeVal;
 				var css = themeVal;
-				if(themeVal !== -1){
-					css = frm_admin_js.jquery_ui_url +'/themes/'+themeVal+'/jquery-ui.css';
-					themeName = jQuery("select[name$='[theme_selector]'] option[value='"+themeVal+"']").text();
+				if ( themeVal !== -1 ) {
+					if ( themeVal === 'ui-lightness' && frm_admin_js.pro_url !== '' ) {
+						css = frm_admin_js.pro_url +'/css/ui-lightness/jquery-ui.css';
+						jQuery('.frm_date_color').show();
+					} else {
+						css = frm_admin_js.jquery_ui_url +'/themes/'+themeVal+'/jquery-ui.css';
+						jQuery('.frm_date_color').hide();
+					}
 				}
-				themeName = themeName.trim();
 
 				updateUICSS(css);
 				document.getElementById('frm_theme_css').value = themeVal;
-				document.getElementById('frm_theme_name').value = themeName;
 				return false;
 			}).change();
 		},

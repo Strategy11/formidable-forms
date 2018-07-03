@@ -110,7 +110,6 @@ class FrmStylesController {
 	public static function custom_stylesheet() {
 		global $frm_vars;
 		$stylesheet_urls = array();
-		self::maybe_enqueue_jquery_css();
 
 		if ( ! isset( $frm_vars['css_loaded'] ) || ! $frm_vars['css_loaded'] ) {
 			//include css in head
@@ -155,13 +154,6 @@ class FrmStylesController {
 			$this_version = $version;
 		}
 		return $this_version;
-	}
-
-	private static function maybe_enqueue_jquery_css() {
-		global $frm_vars;
-		if ( isset( $frm_vars['datepicker_loaded'] ) && ! empty( $frm_vars['datepicker_loaded'] ) ) {
-			FrmStylesHelper::enqueue_jquery_css();
-		}
 	}
 
 	public static function add_tags_to_css( $tag, $handle ) {

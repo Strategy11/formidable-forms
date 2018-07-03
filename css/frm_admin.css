@@ -1504,7 +1504,6 @@ select.frm_cancelnew, input.frm_enternew{width:175px;}
 
 /* Styles tabs */
 #general-style #frm_gen_font_box{padding-right:0;width:100%;}
-#date-fields-style #frm_show_cal{width:90px;height:80px;margin-right:6px;}
 #frm_styling_form #frm_delete_style{padding-right:10px;}
 .frm_pro_form .frm_form_field.frm_lite_style,
 .frm_pro_form .frm_lite_style{
@@ -2759,7 +2758,7 @@ iframe#dyncontent_ifr{min-height:150px;}
 }
 
 .ui-datepicker-inline.ui-datepicker{
-	max-width:100%;
+	max-width: 19em;
 }
 
 .default-style-box.howto{

@@ -6,53 +6,7 @@
 class test_FrmStylesHelper extends FrmUnitTest {
 
 	/**
-	 * @covers FrmStylesHelper::jquery_css_url
-	 */
-	public function test_jquery_css_url() {
-		$default = FrmAppHelper::plugin_url() . '/css/ui-lightness/jquery-ui.css';
-		$css_options = array(
-			-1             => '',
-			''             => $default,
-			'ui-lightness' => $default,
-			false          => $default,
-			'http://testing.com' => 'http://testing.com',
-			'start'        => FrmAppHelper::jquery_ui_base_url() . '/themes/start/jquery-ui.min.css',
-		);
-
-		foreach ( $css_options as $setting => $expected ) {
-			$css = FrmStylesHelper::jquery_css_url( $setting );
-			$this->assertEquals( $expected, $css );
-		}
-	}
-
-	/**
-	 * @covers FrmStylesHelper::get_form_for_page
-	 */
-	public function test_get_form_for_page() {
-		global $frm_vars;
-		$frm_vars['forms_loaded'] = array();
-		$this->assertEquals( 'default', FrmStylesHelper::get_form_for_page() );
-
-		$form = $this->factory->form->get_object_by_id( $this->contact_form_key );
-		$frm_vars['forms_loaded'][] = $form;
-		$this->assertEquals( $form->id, FrmStylesHelper::get_form_for_page() );
-	}
-
-	/**
-	 * @covers FrmStylesHelper::enqueue_jquery_css
-	 */
-	public function test_enqueue_jquery_css() {
-		global $frm_vars;
-		$frm_vars['forms_loaded'] = array();
-
-		FrmStylesHelper::enqueue_jquery_css();
-		$this->assertTrue( wp_style_is( 'jquery-theme', 'enqueued' ) );
-
-		// TODO: Make sure script is not enqueued when no style is selected in styling settings
-	}
-
-	/**
-	 * @covers FrmStylesHelper::enqueue_jquery_css
+	 * @covers FrmStylesHelper::get_upload_base
 	 */
 	public function test_get_upload_base() {
 		$base = FrmStylesHelper::get_upload_base();
