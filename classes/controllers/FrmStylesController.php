@@ -110,7 +110,6 @@ class FrmStylesController {
 	public static function custom_stylesheet() {
 		global $frm_vars;
 		$stylesheet_urls = array();
-		//self::maybe_enqueue_jquery_css(); //TODO: move it
 
 		if ( ! isset( $frm_vars['css_loaded'] ) || ! $frm_vars['css_loaded'] ) {
 			//include css in head
