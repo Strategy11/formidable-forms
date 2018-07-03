@@ -3366,9 +3366,7 @@ function frmAdminBuildJS(){
 						for (var key in errObj){
 							jQuery('input[name$="['+key+']"], select[name$="['+key+']"]').val(errObj[key]);
 						}
-						jQuery('select[name$="[theme_selector]"]').val(errObj.theme_css).change();
-						jQuery('#frm_submit_style, #frm_auto_width').prop('checked', false); //checkboxes
-						jQuery('input.hex').validHex().applyFarbtastic();
+						jQuery('#frm_submit_style, #frm_auto_width').prop('checked', false);
 						jQuery(document.getElementById('frm_fieldset')).change();
 					}
 				});
@@ -3385,16 +3383,15 @@ function frmAdminBuildJS(){
 				if ( themeVal !== -1 ) {
 					if ( themeVal === 'ui-lightness' && frm_admin_js.pro_url !== '' ) {
 						css = frm_admin_js.pro_url +'/css/ui-lightness/jquery-ui.css';
+						jQuery('.frm_date_color').show();
 					} else {
 						css = frm_admin_js.jquery_ui_url +'/themes/'+themeVal+'/jquery-ui.css';
+						jQuery('.frm_date_color').hide();
 					}
-					themeName = jQuery("select[name$='[theme_selector]'] option[value='"+themeVal+"']").text();
 				}
-				themeName = themeName.trim();
 
 				updateUICSS(css);
 				document.getElementById('frm_theme_css').value = themeVal;
-				document.getElementById('frm_theme_name').value = themeName;
 				return false;
 			}).change();
 		},
