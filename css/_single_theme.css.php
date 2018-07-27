@@ -747,14 +747,6 @@ if ( ! empty( $important ) ) {
 	height:<?php echo esc_html( $submit_height . $important ) ?>;
 }
 
-span.frm-pass-verified::before {
-    color:<?php echo esc_html( $success_text_color . $important ); ?>;
-}
-
-span.frm-pass-req::before {
-    color:<?php echo esc_html( $text_color_error . $important ); ?>;
-}
-
 <?php do_action( 'frm_output_single_style', $settings ); ?>
 
 @media only screen and (max-width: 600px){
