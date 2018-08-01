@@ -20,6 +20,7 @@ $defaults = FrmStylesHelper::get_settings_for_output( $default_style );
 
 .frm_form_field .grecaptcha-badge,
 .frm_hidden,
+.with_frm_style .frm_remove_form_row.frm_hidden,
 .with_frm_style .frm_button.frm_hidden{
     display:none;
 }
