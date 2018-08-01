@@ -44,7 +44,13 @@
 
 		<!-- Enable these rules right away -->
 		<exclude name="WordPress.Functions.DontExtract.extract_extract" />
+		<exclude name="WordPress.PHP.DontExtract.extract_extract" />
 		<exclude name="WordPress.CSRF.NonceVerification.NoNonceVerification" />
+		<exclude name="WordPress.Security.NonceVerification.NoNonceVerification" />
+		<exclude name="WordPress.Security.ValidatedSanitizedInput.MissingUnslash" />
+		<exclude name="WordPress.DB.DirectDatabaseQuery.NoCaching" />
+		<exclude name="WordPress.Security.ValidatedSanitizedInput.InputNotValidated" />
+		<exclude name="WordPress.Security.ValidatedSanitizedInput.InputNotSanitized" />
 
 		<!-- We should probably turn the below rules on, but these give issues with the current code base. -->
 		<exclude name="WordPress.Files.FileName.UnderscoresNotAllowed" />
