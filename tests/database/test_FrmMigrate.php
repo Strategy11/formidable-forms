@@ -122,11 +122,11 @@ class test_FrmMigrate extends FrmUnitTest {
 		$collation = $frmdb->collation();
 
 		if ( ! empty( $wpdb->charset ) ) {
-			$this->assertNotEmpty( strpos( $collation, 'DEFAULT CHARACTER SET' ) );
+			$this->assertTrue( strpos( $collation, 'DEFAULT CHARACTER SET' ) !== false );
 		}
 
 		if ( ! empty( $wpdb->collate ) ) {
-			$this->assertNotEmpty( strpos( $collation, 'COLLATE' ) );
+			$this->assertTrue( strpos( $collation, 'COLLATE' ) !== false );
 		}
 	}
 
