@@ -279,10 +279,6 @@ ul.frm_form_nav > li{
 	clear:both;
 }
 
-#frm-fixed-panel::-webkit-scrollbar {
-	width: 0;
-}
-
 .frm-ltr{
 	direction:ltr;
 }
