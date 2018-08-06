@@ -4,7 +4,7 @@ Tags: contact form, form builder, custom form, forms, form, form maker, form cre
 Requires at least: 4.4
 Tested up to: 4.9.5
 Requires PHP: 5.3
-Stable tag: 3.03
+Stable tag: 3.03.01
 
 The best WordPress forms plugin for custom forms. Go beyond contact forms with a drag & drop form builder, HTML control & form style generator
 
@@ -160,6 +160,10 @@ The field and form names and descriptions are all changed with in-place edit. Ju
 [See more FAQs](https://formidableforms.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 3.03.01 =
+* Fix: Allow the section html in the form widget. Don't remove it when sanitizing.
+* Fix: Show the scrollbar for the list of fields in Chrome. Some devices don't allow scrolling without it.
+
 = 3.03 =
 * Fix: Custom css like #frm_field_196_container > label was being sanitized and preventing the > from working correctly
 * Fix: Allow <i icon="something"> to pass sanitization in checkbox and radio field options
