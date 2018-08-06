@@ -496,6 +496,7 @@ class FrmAppHelper {
 				'cite' => array(),
 				'title' => array(),
 			),
+			'section' => $allow_class,
 			'span' => array(
 				'class' => array(),
 				'id'    => array(),
