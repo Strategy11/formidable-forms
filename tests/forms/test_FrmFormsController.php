@@ -145,10 +145,14 @@ class test_FrmFormsController extends FrmUnitTest {
 		$formidable_js = $wp_scripts->registered['formidable'];
 
 		if ( FrmAppHelper::js_suffix() == '.min' ) {
-			$this->assertEquals( FrmAppHelper::plugin_url() . '/js/frm.min.js', $formidable_js->src, 'frm.min.js was not loaded' );
+			$file = 'frm.min.js';
+			if ( strpos( $formidable_js->src, $file ) === false ) {
+				$file = 'formidable.min.js';
+			}
 		} else {
-			$this->assertEquals( FrmAppHelper::plugin_url() . '/js/formidable.js', $formidable_js->src, 'formidable.js was not loaded' );
+			$file = 'formidable.js';
 		}
+		$this->assertEquals( FrmAppHelper::plugin_url() . '/js/' . $file, $formidable_js->src, $file . ' was not loaded' );
 	}
 
 	/**

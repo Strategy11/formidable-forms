@@ -14,6 +14,8 @@
 		
 		<!-- WP VIP rules which are very restrictive and not all that applicable as FF is not on VIP -->
 		<exclude name="WordPress.VIP.DirectDatabaseQuery" />
+		<exclude name="WordPress.DB.DirectDatabaseQuery.NoCaching" />
+		<exclude name="WordPress.DB.DirectDatabaseQuery.SchemaChange" />
 		<exclude name="WordPress.VIP.RestrictedVariables.user_meta"/>
 		<exclude name="WordPress.VIP.RestrictedFunctions.user_meta" />
 		<exclude name="WordPress.VIP.RestrictedFunctions.user_meta_delete_user_meta" />
@@ -30,7 +32,6 @@
 		<exclude name="WordPress.VIP.RestrictedFunctions.wp_is_mobile_wp_is_mobile" />
 		<exclude name="WordPress.VIP.PostsPerPage.posts_per_page" />
 		<exclude name="WordPress.VIP.PostsPerPage.posts_per_page_numberposts" />
-		<exclude name="WordPress.VIP.ValidatedSanitizedInput"/>
 
 		<!-- Temporary exclusions. Enable these when we have time to address them -->
 		<exclude name="Generic.WhiteSpace.ScopeIndent.IncorrectExact" />
@@ -44,7 +45,11 @@
 
 		<!-- Enable these rules right away -->
 		<exclude name="WordPress.Functions.DontExtract.extract_extract" />
+		<exclude name="WordPress.PHP.DontExtract.extract_extract" />
 		<exclude name="WordPress.CSRF.NonceVerification.NoNonceVerification" />
+		<exclude name="WordPress.Security.NonceVerification.NoNonceVerification" />
+		<exclude name="WordPress.VIP.ValidatedSanitizedInput" />
+		<exclude name="WordPress.Security.ValidatedSanitizedInput" />
 
 		<!-- We should probably turn the below rules on, but these give issues with the current code base. -->
 		<exclude name="WordPress.Files.FileName.UnderscoresNotAllowed" />

@@ -240,6 +240,11 @@ function frmFrontFormJS(){
 				// set id for time field
 				fieldID = fieldID.replace('-H', '').replace('-m', '');
 			}
+
+			var placeholder = field.getAttribute('data-frmplaceholder');
+			if ( placeholder !== null && val === placeholder ) {
+				val = '';
+			}
 		}
 
 		if ( val === '' ) {
@@ -323,18 +328,17 @@ function frmFrontFormJS(){
 	function checkPasswordField( field, errors ) {
 		var classes = field.className;
 
-		if (!classes.includes("frm_strong_pass")) {
+		if (classes.indexOf('frm_strong_pass') < 0) {
 			return errors;
 		}
 
 		var text = field.value;
-		var regEx = /^(?=.*?[a-zA-Z])(?=.*?[0-9]).{8,}$/;
-		var invalidMsg = getFieldValidationMessage( field, 'data-invmsg' );
+		var regEx = /^(?=.*?[a-z])(?=.*?[A-Z])(?=.*[^a-zA-Z0-9])(?=.*?[0-9]).{8,}$/;
 		var matches = regEx.test(text); //true if matches format, false otherwise
 
 		if (!matches) {
 			var fieldID = getFieldId( field, true );
-			errors[ fieldID ] = invalidMsg;
+			errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
 		}
 
 		return errors;
@@ -877,6 +881,12 @@ function frmFrontFormJS(){
 			}
 
 			e.preventDefault();
+
+			if ( typeof frmProForm !== 'undefined' && typeof frmProForm.submitAllowed === 'function' ) {
+				if ( ! frmProForm.submitAllowed( object) ) {
+					return;
+				}
+			}
 
 			if ( invisibleRecaptcha.length ) {
 				executeInvisibleRecaptcha( invisibleRecaptcha );

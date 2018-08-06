@@ -72,16 +72,7 @@ class FrmMigrate {
 			return '';
 		}
 
-		$charset_collate = '';
-		if ( ! empty( $wpdb->charset ) ) {
-			$charset_collate .= ' DEFAULT CHARACTER SET ' . $wpdb->charset;
-		}
-
-		if ( ! empty( $wpdb->collate ) ) {
-			$charset_collate .= ' COLLATE ' . $wpdb->collate;
-		}
-
-		return $charset_collate;
+		return $wpdb->get_charset_collate();
 	}
 
     private function create_tables() {

@@ -4,7 +4,7 @@ Tags: contact form, form builder, custom form, forms, form, form maker, form cre
 Requires at least: 4.4
 Tested up to: 4.9.5
 Requires PHP: 5.3
-Stable tag: 3.01.04
+Stable tag: 3.03.01
 
 The best WordPress forms plugin for custom forms. Go beyond contact forms with a drag & drop form builder, HTML control & form style generator
 
@@ -107,6 +107,7 @@ Other WordPress form builder plugins only let you collect data. But our Pro form
 * [Polylang Forms](https://formidableforms.com/downloads/polylang/ "Polylang Forms"). Create bilingual or multilingual forms with help from Polylang.
 * [Bootstrap Form Styles](https://formidableforms.com/downloads/bootstrap/ "Bootstrap Form Styles"). Instantly add Bootstrap styling to all your Formidable forms.
 * [Bootstrap Modal Form](https://formidableforms.com/downloads/bootstrap-modal/ "Bootstrap Modal Form"). Open forms, views, other shortcodes, or sections of content in a Bootstrap modal popup.
+* [Salesforce Forms](https://formidableforms.com/downloads/salesforce/ "Salesforce Forms"). Create leads, contacts, and any other Salesforce objects directly from your WordPress forms.
 * [Zapier Forms](https://formidableforms.com/downloads/zapier/ "Zapier Forms"). Connect with hundreds of different applications through Zapier. Insert a new row in a Google docs spreadsheet, post on Twitter, or add a new Dropbox file with your form.
 
 Learn more at [Formidable Forms](https://formidableforms.com/ "Formidable Forms")
@@ -159,6 +160,34 @@ The field and form names and descriptions are all changed with in-place edit. Ju
 [See more FAQs](https://formidableforms.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 3.03.01 =
+* Fix: Allow the section html in the form widget. Don't remove it when sanitizing.
+* Fix: Show the scrollbar for the list of fields in Chrome. Some devices don't allow scrolling without it.
+
+= 3.03 =
+* Fix: Custom css like #frm_field_196_container > label was being sanitized and preventing the > from working correctly
+* Fix: Allow <i icon="something"> to pass sanitization in checkbox and radio field options
+* Fix: A warning message in the form style builder was sometimes appearing multiple times and not closing
+* Move datepicker css and images to Pro form builder
+
+= 3.02.02 =
+* Update PO file for translation
+
+= 3.02.01 =
+* Fix: Allow the heading class and ids to stay for the sidebar form widget. The headings were missing a class and not the same as other headings in some themes.
+* Fix: If all form templates are deleted, keep the 'templates' nav item so new templates can still be created.
+* Fix: When creating a new form, don't include trashed form templates in the form template options
+* Fix: Remove outdated sslverify references
+* Fix: The sample form for the form styler didn't have a great layout when CSS grids were turned on
+
+= 3.02 =
+* New: Add support for WordPress export and erase personal data options for easier GDPR support
+* Fix: HTML was getting stripped in field labels when a form was edited on the form builder page
+* Fix: If a field option includes HTML, allow the HTML rather than sanitizing it with entities
+* Fix: When the 'add option' button on the form builder is clicked multiple times, add the options correctly if the previous option isn't yes showing in the form maker
+* Fix: The HTML for the link to the user profile was showing in the sidebar when editing or viewing an entry
+* Code change: Move input classes into the field object class so it can be more easily overridden and amended. The FrmFieldType->get_input_class() function can be overridden in sub classes
+
 = 3.01.03 =
 * Fix: Add responsive styling for the .frm_four_col class when grids are disabled
 * Fix: Fix number field HTML5 min, max, and step. This code was still in the pro form builder

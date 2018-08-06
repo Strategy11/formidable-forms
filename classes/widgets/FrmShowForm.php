@@ -18,7 +18,7 @@ class FrmShowForm extends WP_Widget {
 		}
 
 		$form_atts = array(
-			'id' => $instance['form'],
+			'id'    => isset( $instance['form'] ) ? $instance['form'] : 0,
 			'title' => false,
 			'description' => isset( $instance['description'] ) ? $instance['description'] : false,
 		);
