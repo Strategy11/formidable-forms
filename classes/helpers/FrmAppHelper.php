@@ -446,6 +446,7 @@ class FrmAppHelper {
 			'abbr' => array(
 				'title' => array(),
 			),
+			'aside' => $allow_class,
 			'b' => array(),
 			'blockquote' => array(
 				'cite'  => array(),
