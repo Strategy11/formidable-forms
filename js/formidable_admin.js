@@ -295,6 +295,7 @@ function frmAdminBuildJS(){
 
 	/* Form Builder */
 	function setupSortable(sort){
+		var startSort = false;
 		var opts = {
 			connectWith:'ul.frm_sorting',
 			items: '> li.frm_field_box',
@@ -357,10 +358,20 @@ function frmAdminBuildJS(){
 			},
 			sort:function(event){
 				jQuery( window ).scrollTop( function(i, v) {
+					if ( startSort === false ) {
+						startSort = event.clientY;
+						return v;
+					}
+
+					var moved = event.clientY - startSort;
 					var h = jQuery( window ).height();
-					if ( event.clientY > ( h - 100 ) ) {
-						var y = event.clientY - h / 2;
+					var y = event.clientY - h / 2;
+					if ( event.clientY > ( h - 100 ) && moved > 5 ) {
+						// scrolling down
 						return v + y * 0.1;
+					} else if ( event.clientY < 100 && moved < -5 ) {
+						//scrolling up
+						return v - Math.abs( y * 0.1 );
 					}
 				});
 			}
