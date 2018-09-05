@@ -6,7 +6,7 @@
 
 	<?php include( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' ); ?>
 
-	<form method="post">
+	<form method="post" id="template">
 	    <input type="hidden" name="ID" value="<?php echo esc_attr( $style->ID ) ?>" />
 		<input type="hidden" name="<?php echo esc_attr( $frm_style->get_field_name( 'post_title', '' ) ); ?>" value="<?php echo esc_attr( $style->post_title ); ?>" />
 		<input type="hidden" name="<?php echo esc_attr( $frm_style->get_field_name( 'menu_order', '' ) ); ?>" value="<?php echo esc_attr( $style->menu_order ); ?>" />
@@ -14,7 +14,7 @@
 		<input type="hidden" name="frm_action" value="save_css" />
         <?php wp_nonce_field( 'frm_custom_css_nonce', 'frm_custom_css' ); ?>
 
-		<textarea name="<?php echo esc_attr( $frm_style->get_field_name( 'custom_css' ) ); ?>" id="<?php echo esc_attr( $id ); ?>" class="hide-if-js"><?php echo FrmAppHelper::esc_textarea( $style->post_content['custom_css'] ); // WPCS: XSS ok. ?></textarea>
+		<textarea name="<?php echo esc_attr( $frm_style->get_field_name( 'custom_css' ) ); ?>" id="<?php echo esc_attr( $id ); ?>" class="<?php echo esc_attr( 'false' === wp_get_current_user()->syntax_highlighting ? '' : 'hide-if-js' ); ?>"><?php echo FrmAppHelper::esc_textarea( $style->post_content['custom_css'] ); // WPCS: XSS ok. ?></textarea>
 
 		<?php
 		if ( ! empty( $settings ) && $id == 'frm_codemirror_box' ) {
