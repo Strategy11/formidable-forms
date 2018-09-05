@@ -354,6 +354,15 @@ function frmAdminBuildJS(){
 					moving.sortable('cancel');
 				}
 				moving.children('.edit_field_type_end_divider').appendTo(this);
+			},
+			sort:function(event){
+				jQuery( window ).scrollTop( function(i, v) {
+					var h = jQuery( window ).height();
+					if ( event.clientY > ( h - 100 ) ) {
+						var y = event.clientY - h / 2;
+						return v + y * 0.1;
+					}
+				});
 			}
 		};
 
