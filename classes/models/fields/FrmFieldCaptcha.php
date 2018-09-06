@@ -66,7 +66,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 * @return string
 	 */
 	protected function before_replace_html_shortcodes( $args, $html ) {
-		return str_replace( ' for="field_[key]"', '', $html );
+		return str_replace( ' for="field_[key]"', ' for="g-recaptcha-response"', $html );
 	}
 
 	public function front_field_input( $args, $shortcode_atts ) {
