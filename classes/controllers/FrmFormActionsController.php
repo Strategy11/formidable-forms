@@ -46,7 +46,7 @@ class FrmFormActionsController {
             'mailchimp' => 'FrmDefMlcmpAction',
             'twilio'    => 'FrmDefTwilioAction',
             'highrise'  => 'FrmDefHrsAction',
-        ) );
+        );
 		$action_classes = apply_filters( 'frm_registered_form_actions', $action_classes );
 
 		include_once( FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/email_action.php' );

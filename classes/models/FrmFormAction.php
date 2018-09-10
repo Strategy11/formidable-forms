@@ -702,7 +702,7 @@ class FrmFormAction {
 			'update' => __( 'Update', 'formidable' ),
 			'delete' => __( 'Delete', 'formidable' ),
 			'import' => __( 'Import', 'formidable' ),
-		) );
+		);
 		return apply_filters( 'frm_action_triggers', $triggers );
 	}
 }

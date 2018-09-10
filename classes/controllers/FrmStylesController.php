@@ -14,31 +14,31 @@ class FrmStylesController {
 		register_post_type(
 			self::$post_type,
 			array(
-            'label' => __( 'Styles', 'formidable' ),
-            'public' => false,
-            'show_ui' => false,
-            'capability_type' => 'page',
-			'capabilities' => array(
-				'edit_post'     => 'frm_change_settings',
-				'edit_posts'    => 'frm_change_settings',
-				'edit_others_posts' => 'frm_change_settings',
-				'publish_posts' => 'frm_change_settings',
-				'delete_post'   => 'frm_change_settings',
-				'delete_posts'  => 'frm_change_settings',
-				'read_private_posts' => 'read_private_posts',
-			),
-            'supports' => array(
-				'title',
-            ),
-            'has_archive' => false,
-            'labels' => array(
-				'name' => __( 'Styles', 'formidable' ),
-				'singular_name' => __( 'Style', 'formidable' ),
-				'menu_name' => __( 'Style', 'formidable' ),
-				'edit' => __( 'Edit' ),
-				'add_new_item' => __( 'Create a New Style', 'formidable' ),
-				'edit_item'    => __( 'Edit Style', 'formidable' ),
-			),
+				'label' => __( 'Styles', 'formidable' ),
+				'public' => false,
+				'show_ui' => false,
+				'capability_type' => 'page',
+				'capabilities' => array(
+					'edit_post'     => 'frm_change_settings',
+					'edit_posts'    => 'frm_change_settings',
+					'edit_others_posts' => 'frm_change_settings',
+					'publish_posts' => 'frm_change_settings',
+					'delete_post'   => 'frm_change_settings',
+					'delete_posts'  => 'frm_change_settings',
+					'read_private_posts' => 'read_private_posts',
+				),
+				'supports' => array(
+					'title',
+				),
+				'has_archive' => false,
+				'labels' => array(
+					'name' => __( 'Styles', 'formidable' ),
+					'singular_name' => __( 'Style', 'formidable' ),
+					'menu_name' => __( 'Style', 'formidable' ),
+					'edit' => __( 'Edit' ),
+					'add_new_item' => __( 'Create a New Style', 'formidable' ),
+					'edit_item'    => __( 'Edit Style', 'formidable' ),
+				),
 			)
 		);
     }
