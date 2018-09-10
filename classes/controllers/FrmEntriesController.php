@@ -61,11 +61,17 @@ class FrmEntriesController {
 
 		unset( $action, $page );
 
-        $screen->add_help_tab( array(
-            'id'      => 'formidable-entries-tab',
-            'title'   => __( 'Overview', 'formidable' ),
-			'content' => '<p>' . esc_html__( 'This screen provides access to all of your entries. You can customize the display of this screen to suit your workflow.', 'formidable' ) . '</p> <p>' . esc_html__( 'Hovering over a row in the entries list will display action links that allow you to manage your entry.', 'formidable' ) . '</p>',
-        ));
+		$screen->add_help_tab(
+			array(
+				'id'      => 'formidable-entries-tab',
+				'title'   => __( 'Overview', 'formidable' ),
+				'content' => '<p>' .
+					esc_html__( 'This screen provides access to all of your entries. You can customize the display of this screen to suit your workflow.', 'formidable' ) .
+						'</p> <p>' .
+					esc_html__( 'Hovering over a row in the entries list will display action links that allow you to manage your entry.', 'formidable' ) .
+					'</p>',
+			)
+		);
 
         $screen->set_help_sidebar(
 			'<p><strong>' . esc_html__( 'For more information:', 'formidable' ) . '</strong></p>' .
@@ -114,11 +120,14 @@ class FrmEntriesController {
 
 		$action = FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
 		if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) && in_array( $action, array( '', 'list', 'destroy' ) ) ) {
-			add_screen_option( 'per_page', array(
-				'label'   => __( 'Entries', 'formidable' ),
-				'default' => 20,
-				'option'  => 'formidable_page_formidable_entries_per_page',
-			) );
+			add_screen_option(
+				'per_page',
+				array(
+					'label'   => __( 'Entries', 'formidable' ),
+					'default' => 20,
+					'option'  => 'formidable_page_formidable_entries_per_page',
+				)
+			);
         }
 
         return $columns;
@@ -665,7 +674,7 @@ class FrmEntriesController {
 	 * @return array|string
 	 */
 	public static function show_entry_shortcode( $atts ) {
-		$defaults = apply_filters( 'frm_show_entry_defaults', array(
+		$defaults = array(
 			'id'             => false,
 			'entry'          => false,
 			'fields'         => false,
@@ -689,7 +698,8 @@ class FrmEntriesController {
 			'include_extras' => '',
 			'inline_style'   => 1,
 			'child_array'    => false, // return embedded fields as nested array
-		) );
+		);
+		$defaults = apply_filters( 'frm_show_entry_defaults', $defaults );
 
 		$atts = shortcode_atts( $defaults, $atts );
 

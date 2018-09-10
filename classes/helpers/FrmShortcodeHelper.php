@@ -37,11 +37,14 @@ class FrmShortcodeHelper {
 	 * @return string
 	 */
 	public static function get_shortcode_tag( $shortcodes, $short_key, $args = array() ) {
-		$args = wp_parse_args( $args, array(
-			'conditional' => false,
-			'conditional_check' => false,
-			'foreach'     => false,
-		) );
+		$args = wp_parse_args(
+			$args,
+			array(
+				'conditional'       => false,
+				'conditional_check' => false,
+				'foreach'           => false,
+			)
+		);
 		if ( ( $args['conditional'] || $args['foreach'] ) && ! $args['conditional_check'] ) {
 			$args['conditional_check'] = true;
 		}

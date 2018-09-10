@@ -638,11 +638,13 @@ BEFORE_HTML;
 			$show_img = true;
 		}
 
-		self::show_error( array(
-			'img' => $args['img'],
-			'errors' => $args['errors'],
-			'show_img' => $show_img,
-		) );
+		self::show_error(
+			array(
+				'img'      => $args['img'],
+				'errors'   => $args['errors'],
+				'show_img' => $show_img,
+			)
+		);
 	}
 
 	/**

@@ -25,11 +25,13 @@ class FrmMigrate {
 
 		$frm_vars['doing_upgrade'] = true;
 
-		$needs_upgrade = FrmAppController::compare_for_update( array(
-			'option'             => 'frm_db_version',
-			'new_db_version'     => FrmAppHelper::$db_version,
-			'new_plugin_version' => FrmAppHelper::plugin_version(),
-		) );
+		$needs_upgrade = FrmAppController::compare_for_update(
+			array(
+				'option'             => 'frm_db_version',
+				'new_db_version'     => FrmAppHelper::$db_version,
+				'new_plugin_version' => FrmAppHelper::plugin_version(),
+			)
+		);
 
 		if ( $needs_upgrade ) {
 			// update rewrite rules for views and other custom post types

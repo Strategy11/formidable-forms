@@ -11,7 +11,9 @@ class FrmStylesController {
     }
 
     public static function register_post_types() {
-        register_post_type( self::$post_type, array(
+		register_post_type(
+			self::$post_type,
+			array(
             'label' => __( 'Styles', 'formidable' ),
             'public' => false,
             'show_ui' => false,
@@ -37,7 +39,8 @@ class FrmStylesController {
 				'add_new_item' => __( 'Create a New Style', 'formidable' ),
 				'edit_item'    => __( 'Edit Style', 'formidable' ),
 			),
-        ) );
+			)
+		);
     }
 
     public static function menu() {
@@ -273,13 +276,15 @@ class FrmStylesController {
     public static function custom_css( $message = '', $style = null ) {
 		if ( function_exists( 'wp_enqueue_code_editor' ) ) {
 			$id = 'frm_codemirror_box';
-			$settings = wp_enqueue_code_editor( array(
-				'type' => 'text/css',
-				'codemirror' => array(
-					'indentUnit' => 2,
-					'tabSize' => 2,
-				),
-			) );
+			$settings = wp_enqueue_code_editor(
+				array(
+					'type' => 'text/css',
+					'codemirror' => array(
+						'indentUnit' => 2,
+						'tabSize' => 2,
+					),
+				)
+			);
 		} else {
 			$id = 'frm_custom_css_box';
 			$settings = array();

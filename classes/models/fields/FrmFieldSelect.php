@@ -29,10 +29,12 @@ class FrmFieldSelect extends FrmFieldType {
 
 	protected function new_field_settings() {
 		return array(
-			'options' => serialize( array(
-				'',
-				__( 'Option 1', 'formidable' ),
-			) ),
+			'options' => serialize(
+				array(
+					'',
+					__( 'Option 1', 'formidable' ),
+				)
+			),
 		);
 	}
 

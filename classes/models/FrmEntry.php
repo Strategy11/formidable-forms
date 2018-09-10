@@ -300,10 +300,14 @@ class FrmEntry {
         }
 
         global $wpdb;
-		$metas = FrmDb::get_results( $wpdb->prefix . 'frm_item_metas m LEFT JOIN ' . $wpdb->prefix . 'frm_fields f ON m.field_id=f.id', array(
-			'item_id' => $entry->id,
-			'field_id !' => 0,
-		), 'field_id, meta_value, field_key, item_id' );
+		$metas = FrmDb::get_results(
+			$wpdb->prefix . 'frm_item_metas m LEFT JOIN ' . $wpdb->prefix . 'frm_fields f ON m.field_id=f.id',
+			array(
+				'item_id' => $entry->id,
+				'field_id !' => 0,
+			),
+			'field_id, meta_value, field_key, item_id'
+		);
 
         $entry->metas = array();
 
@@ -641,10 +645,12 @@ class FrmEntry {
 		if ( isset( $values['description'] ) && ! empty( $values['description'] ) ) {
 			$description = maybe_serialize( $values['description'] );
 		} else {
-			$description = serialize( array(
-				'browser'  => FrmAppHelper::get_server_value( 'HTTP_USER_AGENT' ),
-				'referrer' => FrmAppHelper::get_server_value( 'HTTP_REFERER' ),
-			) );
+			$description = serialize(
+				array(
+					'browser'  => FrmAppHelper::get_server_value( 'HTTP_USER_AGENT' ),
+					'referrer' => FrmAppHelper::get_server_value( 'HTTP_REFERER' ),
+				)
+			);
 		}
 
 		return $description;

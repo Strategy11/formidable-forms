@@ -52,12 +52,13 @@ class FrmXMLController {
 		);
 		$forms = FrmForm::getAll( $where, 'name' );
 
-		$export_types = apply_filters( 'frm_xml_export_types', array(
+		$export_types = array(
 			'forms' => __( 'Forms', 'formidable' ),
 			'items' => __( 'Entries', 'formidable' ),
-		) );
+		);
+		$export_types = apply_filters( 'frm_xml_export_types', $export_types );
 
-		$export_format = apply_filters( 'frm_export_formats', array(
+		$export_format = array(
 			'xml' => array(
 				'name'    => 'XML',
 				'support' => 'forms',
@@ -68,7 +69,8 @@ class FrmXMLController {
 				'support' => 'items',
 				'count'   => 'single',
 			),
-		) );
+		);
+		$export_format = apply_filters( 'frm_export_formats', $export_format );
 
 		include( FrmAppHelper::plugin_path() . '/classes/views/xml/import_form.php' );
 	}
@@ -101,13 +103,14 @@ class FrmXMLController {
 
 		//add_filter('upload_mimes', 'FrmXMLController::allow_mime');
 
-		$export_format = apply_filters( 'frm_export_formats', array(
+		$export_format = array(
 			'xml' => array(
 				'name'    => 'XML',
 				'support' => 'forms',
 				'count'   => 'multiple',
 			),
-		) );
+		);
+		$export_format = apply_filters( 'frm_export_formats', $export_format );
 
 		$file_type = strtolower( pathinfo( $_FILES['frm_import_file']['name'], PATHINFO_EXTENSION ) );
 		if ( 'xml' !== $file_type && isset( $export_format[ $file_type ] ) ) {

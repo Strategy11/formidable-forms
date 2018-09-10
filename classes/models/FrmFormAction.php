@@ -576,12 +576,14 @@ class FrmFormAction {
 		$action = $this->migrate_values( $action, $form );
 
         // check if action already exists
-        $post_id = get_posts( array(
-            'name'          => $action->post_name,
-            'post_type'     => FrmFormActionsController::$action_post_type,
-            'post_status'   => $action->post_status,
-            'numberposts'   => 1,
-        ) );
+		$post_id = get_posts(
+			array(
+				'name'          => $action->post_name,
+				'post_type'     => FrmFormActionsController::$action_post_type,
+				'post_status'   => $action->post_status,
+				'numberposts'   => 1,
+			)
+		);
 
 		if ( empty( $post_id ) ) {
 			// create action now
@@ -672,10 +674,14 @@ class FrmFormAction {
 			$observed_value = $entry->metas[ $field_id ];
 		} else if ( $entry->post_id && FrmAppHelper::pro_is_installed() ) {
 			$field = FrmField::getOne( $field_id );
-			$observed_value = FrmProEntryMetaHelper::get_post_or_meta_value( $entry, $field, array(
-				'links'    => false,
-				'truncate' => false,
-			) );
+			$observed_value = FrmProEntryMetaHelper::get_post_or_meta_value(
+				$entry,
+				$field,
+				array(
+					'links'    => false,
+					'truncate' => false,
+				)
+			);
 		}
 
 		return $observed_value;
@@ -690,12 +696,13 @@ class FrmFormAction {
 	}
 
 	public static function trigger_labels() {
-		return apply_filters( 'frm_action_triggers', array(
+		$triggers = array(
 			'draft'  => __( 'Save Draft', 'formidable' ),
 			'create' => __( 'Create', 'formidable' ),
 			'update' => __( 'Update', 'formidable' ),
 			'delete' => __( 'Delete', 'formidable' ),
 			'import' => __( 'Import', 'formidable' ),
 		) );
+		return apply_filters( 'frm_action_triggers', $triggers );
 	}
 }

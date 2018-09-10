@@ -167,10 +167,13 @@ class FrmCreateFile {
 	}
 
 	private function get_ftp_creds( $type ) {
-		$credentials = get_option( 'ftp_credentials', array(
-			'hostname' => '',
-			'username' => '',
-		) );
+		$credentials = get_option(
+			'ftp_credentials',
+			array(
+				'hostname' => '',
+				'username' => '',
+			)
+		);
 
 		$credentials['hostname'] = defined( 'FTP_HOST' ) ? FTP_HOST : $credentials['hostname'];
 		$credentials['username'] = defined( 'FTP_USER' ) ? FTP_USER : $credentials['username'];

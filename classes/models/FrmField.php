@@ -9,7 +9,7 @@ class FrmField {
 	static $transient_size = 200;
 
 	public static function field_selection() {
-		$fields = apply_filters('frm_available_fields', array(
+		$fields = array(
 			'text'      => array(
 				'name'  => __( 'Text', 'formidable' ),
 				'icon'  => 'frm_css_icon frm_text_icon',
@@ -62,13 +62,13 @@ class FrmField {
 				'name'  => __( 'reCAPTCHA', 'formidable' ),
 				'icon'  => 'frm_icon_font frm_shield-check_icon',
 			),
-		));
+		);
 
-		return $fields;
+		return apply_filters( 'frm_available_fields', $fields );
 	}
 
 	public static function pro_field_selection() {
-		return apply_filters( 'frm_pro_available_fields', array(
+		$fields = array(
 			'file'      => array(
 				'name'  => __( 'File Upload', 'formidable' ),
 				'icon'  => 'frm_icon_font frm_upload2_icon',
@@ -145,7 +145,8 @@ class FrmField {
 				'name'  => __( 'Address', 'formidable' ),
 				'icon'  => 'frm_icon_font frm_location_icon',
 			),
-		));
+		);
+		return apply_filters( 'frm_pro_available_fields', $fields );
 	}
 
     public static function create( $values, $return = true ) {
@@ -229,10 +230,14 @@ class FrmField {
 			// If this is a repeating section, create new form
 			if ( self::is_repeating_field( $field ) ) {
 				// create the repeatable form
-				$new_repeat_form_id = apply_filters( 'frm_create_repeat_form', 0, array(
-					'parent_form_id' => $form_id,
-					'field_name'     => $field->name,
-				) );
+				$new_repeat_form_id = apply_filters(
+					'frm_create_repeat_form',
+					0,
+					array(
+						'parent_form_id' => $form_id,
+						'field_name'     => $field->name,
+					)
+				);
 
 				// Save old form_select
 				$old_repeat_form_id = $field->field_options['form_select'];
@@ -418,10 +423,13 @@ class FrmField {
             return array();
         }
 
-		$results = self::get_fields_from_transients( $form_id, array(
-			'inc_embed'  => $inc_sub,
-			'inc_repeat' => $inc_sub,
-		) );
+		$results = self::get_fields_from_transients(
+			$form_id,
+			array(
+				'inc_embed'  => $inc_sub,
+				'inc_repeat' => $inc_sub,
+			)
+		);
 		if ( ! empty( $results ) ) {
             $fields = array();
             $count = 0;
@@ -465,10 +473,7 @@ class FrmField {
             return array();
         }
 
-		$results = self::get_fields_from_transients( $form_id, array(
-			'inc_embed'  => $inc_embed,
-			'inc_repeat' => $inc_repeat,
-		) );
+		$results = self::get_fields_from_transients( $form_id, compact( 'inc_embed', 'inc_repeat' ) );
 		if ( ! empty( $results ) ) {
 			if ( empty( $limit ) ) {
 				return $results;
@@ -498,10 +503,7 @@ class FrmField {
 		self::include_sub_fields( $results, $inc_embed, 'all' );
 
 		if ( empty( $limit ) ) {
-			self::set_field_transient( $results, $form_id, 0, array(
-				'inc_embed'  => $inc_embed,
-				'inc_repeat' => $inc_repeat,
-			) );
+			self::set_field_transient( $results, $form_id, 0, compact( 'inc_embed', 'inc_repeat' ) );
         }
 
 		return $results;

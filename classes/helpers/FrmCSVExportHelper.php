@@ -83,10 +83,13 @@ class FrmCSVExportHelper {
 		header( 'Cache-Control: no-cache, must-revalidate' );
 		header( 'Pragma: no-cache' );
 
-		do_action( 'frm_csv_headers', array(
-			'form_id' => self::$form_id,
-			'fields'  => self::$fields,
-		) );
+		do_action(
+			'frm_csv_headers',
+			array(
+				'form_id' => self::$form_id,
+				'fields'  => self::$fields,
+			)
+		);
 	}
 
 	public static function get_csv_format() {
@@ -98,9 +101,14 @@ class FrmCSVExportHelper {
 	private static function prepare_csv_headings() {
 		$headings = array();
 		self::csv_headings( $headings );
-		$headings = apply_filters( 'frm_csv_columns', $headings, self::$form_id, array(
-			'fields' => self::$fields,
-		) );
+		$headings = apply_filters(
+			'frm_csv_columns',
+			$headings,
+			self::$form_id,
+			array(
+				'fields' => self::$fields,
+			)
+		);
 		self::$headings = $headings;
 
 		self::print_csv_row( $headings );
@@ -114,9 +122,13 @@ class FrmCSVExportHelper {
 			}
 
 			$field_headings[ $col->id ] = strip_tags( $col->name );
-			$field_headings = apply_filters( 'frm_csv_field_columns', $field_headings, array(
-				'field' => $col,
-			) );
+			$field_headings = apply_filters(
+				'frm_csv_field_columns',
+				$field_headings,
+				array(
+					'field' => $col,
+				)
+			);
 			$headings += $field_headings;
 		}
 
@@ -171,11 +183,15 @@ class FrmCSVExportHelper {
 		$row = array();
 		self::add_field_values_to_csv( $row );
 		self::add_entry_data_to_csv( $row );
-		$row = apply_filters( 'frm_csv_row', $row, array(
-			'entry'         => self::$entry,
-			'date_format'   => self::$wp_date_format,
-			'comment_count' => self::$comment_count,
-		) );
+		$row = apply_filters(
+			'frm_csv_row',
+			$row,
+			array(
+				'entry'         => self::$entry,
+				'date_format'   => self::$wp_date_format,
+				'comment_count' => self::$comment_count,
+			)
+		);
 		self::print_csv_row( $row );
 	}
 
@@ -217,21 +233,29 @@ class FrmCSVExportHelper {
 			$field_value = maybe_unserialize( $field_value );
 			self::add_array_values_to_columns( $row, compact( 'col', 'field_value' ) );
 
-			$field_value = apply_filters( 'frm_csv_value', $field_value, array(
-				'field'     => $col,
-				'entry'     => self::$entry,
-				'separator' => self::$separator,
-			) );
+			$field_value = apply_filters(
+				'frm_csv_value',
+				$field_value,
+				array(
+					'field'     => $col,
+					'entry'     => self::$entry,
+					'separator' => self::$separator,
+				)
+			);
 
 			if ( isset( $col->field_options['separate_value'] ) && $col->field_options['separate_value'] ) {
-				$sep_value = FrmEntriesHelper::display_value( $field_value, $col, array(
-					'type'      => $col->type,
-					'post_id'   => self::$entry->post_id,
-					'show_icon' => false,
-					'entry_id'  => self::$entry->id,
-					'sep'       => self::$separator,
-					'embedded_field_id' => ( isset( self::$entry->embedded_fields ) && isset( self::$entry->embedded_fields[ self::$entry->id ] ) ) ? 'form' . self::$entry->embedded_fields[ self::$entry->id ] : 0,
-				) );
+				$sep_value = FrmEntriesHelper::display_value(
+					$field_value,
+					$col,
+					array(
+						'type'      => $col->type,
+						'post_id'   => self::$entry->post_id,
+						'show_icon' => false,
+						'entry_id'  => self::$entry->id,
+						'sep'       => self::$separator,
+						'embedded_field_id' => ( isset( self::$entry->embedded_fields ) && isset( self::$entry->embedded_fields[ self::$entry->id ] ) ) ? 'form' . self::$entry->embedded_fields[ self::$entry->id ] : 0,
+					)
+				);
 				$row[ $col->id . '_label' ] = $sep_value;
 				unset( $sep_value );
 			}

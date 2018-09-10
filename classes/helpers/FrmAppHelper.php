@@ -266,12 +266,14 @@ class FrmAppHelper {
             }
 			self::sanitize_value( $sanitize, $value );
 		} else {
-			$value = self::get_simple_request( array(
-				'type'     => $src,
-				'param'    => $param,
-				'default'  => $default,
-				'sanitize' => $sanitize,
-			) );
+			$value = self::get_simple_request(
+				array(
+					'type'     => $src,
+					'param'    => $param,
+					'default'  => $default,
+					'sanitize' => $sanitize,
+				)
+			);
 		}
 
 		if ( isset( $params ) && is_array( $value ) && ! empty( $value ) ) {
@@ -289,12 +291,14 @@ class FrmAppHelper {
     }
 
 	public static function get_post_param( $param, $default = '', $sanitize = '' ) {
-		return self::get_simple_request( array(
-			'type'     => 'post',
-			'param'    => $param,
-			'default'  => $default,
-			'sanitize' => $sanitize,
-		) );
+		return self::get_simple_request(
+			array(
+				'type'     => 'post',
+				'param'    => $param,
+				'default'  => $default,
+				'sanitize' => $sanitize,
+			)
+		);
 	}
 
 	/**
@@ -306,12 +310,14 @@ class FrmAppHelper {
 	 * @return string|array
 	 */
 	public static function simple_get( $param, $sanitize = 'sanitize_text_field', $default = '' ) {
-		return self::get_simple_request( array(
-			'type'     => 'get',
-			'param'    => $param,
-			'default'  => $default,
-			'sanitize' => $sanitize,
-		) );
+		return self::get_simple_request(
+			array(
+				'type'     => 'get',
+				'param'    => $param,
+				'default'  => $default,
+				'sanitize' => $sanitize,
+			)
+		);
 	}
 
 	/**
@@ -581,10 +587,13 @@ class FrmAppHelper {
 	 * @since 3.0
 	 */
 	public static function save_combined_js() {
-		$file_atts = apply_filters( 'frm_js_location', array(
-			'file_name' => 'frm.min.js',
-			'new_file_path' => FrmAppHelper::plugin_path() . '/js',
-		) );
+		$file_atts = apply_filters(
+			'frm_js_location',
+			array(
+				'file_name' => 'frm.min.js',
+				'new_file_path' => FrmAppHelper::plugin_path() . '/js',
+			)
+		);
 		$new_file = new FrmCreateFile( $file_atts );
 
 		$files = array(
@@ -620,13 +629,14 @@ class FrmAppHelper {
     }
 
 	public static function get_pages() {
-		return get_posts( array(
+		$query = array(
 			'post_type'   => 'page',
 			'post_status' => array( 'publish', 'private' ),
 			'numberposts' => -1,
 			'orderby'     => 'title',
 			'order'       => 'ASC',
-		) );
+		);
+		return get_posts( $query );
 	}
 
     public static function wp_pages_dropdown( $field_name, $page_id, $truncate = false ) {
@@ -984,19 +994,27 @@ class FrmAppHelper {
 			$key = $key . 'a';
         }
 
-		$key_check = FrmDb::get_var( $table_name, array(
-			$column => $key,
-			'ID !'  => $id,
-		), $column );
+		$key_check = FrmDb::get_var(
+			$table_name,
+			array(
+				$column => $key,
+				'ID !'  => $id,
+			),
+			$column
+		);
 
 		if ( $key_check || is_numeric( $key_check ) ) {
             $suffix = 2;
 			do {
 				$alt_post_name = substr( $key, 0, 200 - ( strlen( $suffix ) + 1 ) ) . $suffix;
-				$key_check = FrmDb::get_var( $table_name, array(
-					$column => $alt_post_name,
-					'ID !'  => $id,
-				), $column );
+				$key_check = FrmDb::get_var(
+					$table_name,
+					array(
+						$column => $alt_post_name,
+						'ID !'  => $id,
+					),
+					$column
+				);
 				$suffix++;
 			} while ( $key_check || is_numeric( $key_check ) );
 			$key = $alt_post_name;
@@ -1064,12 +1082,17 @@ class FrmAppHelper {
 				if ( ! isset( $field->field_options['custom_field'] ) ) {
                     $field->field_options['custom_field'] = '';
                 }
-				$meta_value = FrmProEntryMetaHelper::get_post_value( $record->post_id, $field->field_options['post_field'], $field->field_options['custom_field'], array(
-					'truncate' => false,
-					'type' => $field->type,
-					'form_id' => $field->form_id,
-					'field' => $field,
-				) );
+				$meta_value = FrmProEntryMetaHelper::get_post_value(
+					$record->post_id,
+					$field->field_options['post_field'],
+					$field->field_options['custom_field'],
+					array(
+						'truncate' => false,
+						'type' => $field->type,
+						'form_id' => $field->form_id,
+						'field' => $field,
+					)
+				);
             } else {
 				$meta_value = FrmEntryMeta::get_meta_value( $record, $field->id );
             }
@@ -1578,13 +1601,14 @@ class FrmAppHelper {
         $version = FrmAppHelper::plugin_version();
 		wp_register_script( 'formidable_admin_global', FrmAppHelper::plugin_url() . '/js/formidable_admin_global.js', array( 'jquery' ), $version );
 
-        wp_localize_script( 'formidable_admin_global', 'frmGlobal', array(
+		$global_strings = array(
 			'updating_msg' => __( 'Please wait while your site updates.', 'formidable' ),
             'deauthorize'  => __( 'Are you sure you want to deauthorize Formidable Forms on this site?', 'formidable' ),
 			'url'          => FrmAppHelper::plugin_url(),
 			'loading'      => __( 'Loading&hellip;' ),
 			'nonce'        => wp_create_nonce( 'frm_ajax' ),
-        ) );
+		);
+		wp_localize_script( 'formidable_admin_global', 'frmGlobal', $global_strings );
 
 		if ( $load ) {
 			wp_enqueue_script( 'formidable_admin_global' );
@@ -1605,7 +1629,7 @@ class FrmAppHelper {
 		$ajax_url = admin_url( 'admin-ajax.php', is_ssl() ? 'admin' : 'http' );
 		$ajax_url = apply_filters( 'frm_ajax_url', $ajax_url );
 
-		wp_localize_script( 'formidable', 'frm_js', array(
+		$script_strings = array(
 			'ajax_url'  => $ajax_url,
 			'images_url' => self::plugin_url() . '/images',
 			'loading'   => __( 'Loading&hellip;' ),
@@ -1617,11 +1641,12 @@ class FrmAppHelper {
 			'file_spam' => __( 'That file looks like Spam.', 'formidable' ),
 			'calc_error' => __( 'There is an error in the calculation in the field with key', 'formidable' ),
 			'empty_fields' => __( 'Please complete the preceding required fields before uploading a file.', 'formidable' ),
-		) );
+		);
+		wp_localize_script( 'formidable', 'frm_js', $script_strings );
 
 		if ( $location == 'admin' ) {
 			$frm_settings = self::get_settings();
-			wp_localize_script( 'formidable_admin', 'frm_admin_js', array(
+			$admin_script_strings = array(
 				'confirm_uninstall' => __( 'Are you sure you want to do this? Clicking OK will delete all forms, form data, and all other Formidable data. There is no Undo.', 'formidable' ),
 				'desc'              => __( '(Click to add description)', 'formidable' ),
 				'blank'             => __( '(Blank)', 'formidable' ),
@@ -1657,7 +1682,8 @@ class FrmAppHelper {
 				'view_shortcodes'   => __( 'This calculation may have shortcodes that work in Views but not forms.', 'formidable' ),
 				'text_shortcodes'   => __( 'This calculation may have shortcodes that work in text calculations but not numeric calculations.', 'formidable' ),
 				'repeat_limit_min'  => __( 'Please enter a Repeat Limit that is greater than 1.', 'formidable' ),
-			) );
+			);
+			wp_localize_script( 'formidable_admin', 'frm_admin_js', $admin_script_strings );
 		}
 	}
 

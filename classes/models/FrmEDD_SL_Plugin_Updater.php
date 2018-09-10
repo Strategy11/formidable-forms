@@ -100,10 +100,13 @@ class FrmEDD_SL_Plugin_Updater {
 		$version_info = $this->get_cached_version_info( $this->cache_key );
 
 		if ( false === $version_info ) {
-			$version_info = $this->api_request( 'plugin_latest_version', array(
-				'slug' => $this->slug,
-				'beta' => $this->beta,
-			) );
+			$version_info = $this->api_request(
+				'plugin_latest_version',
+				array(
+					'slug' => $this->slug,
+					'beta' => $this->beta,
+				)
+			);
 
 			$this->set_version_info_cache( $version_info, $this->cache_key );
 
@@ -260,11 +263,14 @@ class FrmEDD_SL_Plugin_Updater {
 		);
 
 		$verify_ssl = $this->verify_ssl();
-		$request    = wp_remote_post( $this->api_url, array(
-			'timeout'   => 15,
-			'sslverify' => $verify_ssl,
-			'body'      => $api_params,
-		) );
+		$request    = wp_remote_post(
+			$this->api_url,
+			array(
+				'timeout'   => 15,
+				'sslverify' => $verify_ssl,
+				'body'      => $api_params,
+			)
+		);
 
 		if ( ! is_wp_error( $request ) ) {
 			$request = json_decode( wp_remote_retrieve_body( $request ) );
@@ -328,11 +334,14 @@ class FrmEDD_SL_Plugin_Updater {
 			);
 
 			$verify_ssl = $this->verify_ssl();
-			$request    = wp_remote_post( $this->api_url, array(
-				'timeout'   => 15,
-				'sslverify' => $verify_ssl,
-				'body'      => $api_params,
-			) );
+			$request    = wp_remote_post(
+				$this->api_url,
+				array(
+					'timeout'   => 15,
+					'sslverify' => $verify_ssl,
+					'body'      => $api_params,
+				)
+			);
 
 			if ( ! is_wp_error( $request ) ) {
 				$version_info = json_decode( wp_remote_retrieve_body( $request ) );

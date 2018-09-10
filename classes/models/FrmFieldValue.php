@@ -185,17 +185,27 @@ class FrmFieldValue {
 
 			if ( has_filter( 'frm_email_value' ) ) {
 				_deprecated_function( 'The frm_email_value filter', '2.04', 'the frm_display_{fieldtype}_value_custom filter' );
-				$this->displayed_value = apply_filters( 'frm_email_value', $this->displayed_value, (object) $meta, $entry, array(
-					'field' => $this->field,
-				) );
+				$this->displayed_value = apply_filters(
+					'frm_email_value',
+					$this->displayed_value,
+					(object) $meta,
+					$entry,
+					array(
+						'field' => $this->field,
+					)
+				);
 			}
 		}
 
 		// frm_display_{fieldtype}_value_custom hook
-		$this->displayed_value = apply_filters( 'frm_display_' . $this->field->type . '_value_custom', $this->displayed_value, array(
-			'field' => $this->field,
-			'entry' => $entry,
-		) );
+		$this->displayed_value = apply_filters(
+			'frm_display_' . $this->field->type . '_value_custom',
+			$this->displayed_value,
+			array(
+				'field' => $this->field,
+				'entry' => $entry,
+			)
+		);
 	}
 
 	/**

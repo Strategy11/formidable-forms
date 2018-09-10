@@ -149,10 +149,13 @@ class FrmFieldsController {
 			unset( $new_val );
 		}
 
-        FrmField::update( $field_id, array(
-            'field_options' => $field->field_options,
-			'form_id'       => $field->form_id,
-        ) );
+		FrmField::update(
+			$field_id,
+			array(
+				'field_options' => $field->field_options,
+				'form_id'       => $field->form_id,
+			)
+		);
         wp_die();
     }
 

@@ -40,10 +40,12 @@ class FrmFieldRadio extends FrmFieldType {
 
 	protected function new_field_settings() {
 		return array(
-			'options' => serialize( array(
-				__( 'Option 1', 'formidable' ),
-				__( 'Option 2', 'formidable' ),
-			) ),
+			'options' => serialize(
+				array(
+					__( 'Option 1', 'formidable' ),
+					__( 'Option 2', 'formidable' ),
+				)
+			),
 		);
 	}
 

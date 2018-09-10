@@ -154,10 +154,12 @@ class FrmPersonalData {
 
 			$entry_data[] = array(
 				'name'  => $field->name,
-				'value' => FrmFieldsHelper::get_unfiltered_display_value( array(
-					'field' => $field,
-					'value' => $meta,
-				) ),
+				'value' => FrmFieldsHelper::get_unfiltered_display_value(
+					array(
+						'field' => $field,
+						'value' => $meta,
+					)
+				),
 			);
 		}
 

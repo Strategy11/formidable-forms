@@ -25,10 +25,12 @@ class FrmEntriesListHelper extends FrmListHelper {
 			$join_form_in_query = true;
 		}
 
-		$s = self::get_param( array(
-			'param'    => 's',
-			'sanitize' => 'sanitize_text_field',
-		) );
+		$s = self::get_param(
+			array(
+				'param'    => 's',
+				'sanitize' => 'sanitize_text_field',
+			)
+		);
 
 		if ( $s != '' && FrmAppHelper::pro_is_installed() ) {
 			$fid = self::get_param( array( 'param' => 'fid' ) );
@@ -37,43 +39,53 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 		$s_query = apply_filters( 'frm_entries_list_query', $s_query, compact( 'form_id' ) );
 
-		$orderby = self::get_param( array(
-			'param' => 'orderby',
-			'default' => 'id',
-		) );
+		$orderby = self::get_param(
+			array(
+				'param' => 'orderby',
+				'default' => 'id',
+			)
+		);
 
 		if ( strpos( $orderby, 'meta' ) !== false ) {
 			$order_field_type = FrmField::get_type( str_replace( 'meta_', '', $orderby ) );
 			$orderby .= in_array( $order_field_type, array( 'number', 'scale', 'star' ) ) ? '+0' : '';
 		}
 
-		$order = self::get_param( array(
-			'param'   => 'order',
-			'default' => 'DESC',
-		) );
+		$order = self::get_param(
+			array(
+				'param'   => 'order',
+				'default' => 'DESC',
+			)
+		);
 		$order = FrmDb::esc_order( $orderby . ' ' . $order );
 
 		$page = $this->get_pagenum();
-		$start = (int) self::get_param( array(
-			'param'   => 'start',
-			'default' => ( $page - 1 ) * $per_page,
-		) );
+		$start = (int) self::get_param(
+			array(
+				'param'   => 'start',
+				'default' => ( $page - 1 ) * $per_page,
+			)
+		);
 
 		$limit = FrmDb::esc_limit( $start . ',' . $per_page );
 		$this->items = FrmEntry::getAll( $s_query, $order, $limit, true, $join_form_in_query );
 		$total_items = FrmEntry::getRecordCount( $s_query );
 
-		$this->set_pagination_args( array(
-			'total_items' => $total_items,
-			'per_page' => $per_page,
-		) );
+		$this->set_pagination_args(
+			array(
+				'total_items' => $total_items,
+				'per_page' => $per_page,
+			)
+		);
 	}
 
 	public function no_items() {
-		$s = self::get_param( array(
-			'param' => 's',
-			'sanitize' => 'sanitize_text_field',
-		) );
+		$s = self::get_param(
+			array(
+				'param' => 's',
+				'sanitize' => 'sanitize_text_field',
+			)
+		);
 		if ( ! empty( $s ) ) {
 			esc_html_e( 'No Entries Found', 'formidable' );
             return;

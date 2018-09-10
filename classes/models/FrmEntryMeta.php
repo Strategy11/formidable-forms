@@ -91,10 +91,13 @@ class FrmEntryMeta {
 	private static function get_value_to_save( $atts, &$value ) {
 		if ( is_object( $atts['field'] ) ) {
 			$field_obj = FrmFieldFactory::get_field_object( $atts['field'] );
-			$value = $field_obj->get_value_to_save( $value, array(
-				'entry_id' => $atts['entry_id'],
-				'field_id' => $atts['field_id'],
-			) );
+			$value = $field_obj->get_value_to_save(
+				$value,
+				array(
+					'entry_id' => $atts['entry_id'],
+					'field_id' => $atts['field_id'],
+				)
+			);
 		}
 
 		$value = apply_filters( 'frm_prepare_data_before_db', $value, $atts['field_id'], $atts['entry_id'], array( 'field' => $atts['field'] ) );
@@ -103,10 +106,14 @@ class FrmEntryMeta {
 	public static function update_entry_metas( $entry_id, $values ) {
         global $wpdb;
 
-		$prev_values = FrmDb::get_col( $wpdb->prefix . 'frm_item_metas', array(
-			'item_id'    => $entry_id,
-			'field_id !' => 0,
-		), 'field_id' );
+		$prev_values = FrmDb::get_col(
+			$wpdb->prefix . 'frm_item_metas',
+			array(
+				'item_id'    => $entry_id,
+				'field_id !' => 0,
+			),
+			'field_id'
+		);
 
         foreach ( $values as $field_id => $meta_value ) {
 			$field = false;

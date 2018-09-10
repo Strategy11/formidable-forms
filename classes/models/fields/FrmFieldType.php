@@ -362,10 +362,11 @@ DEFAULT_HTML;
 		$field_opts = $this->extra_field_opts();
 		$opts = array_merge( $opts, $field_opts );
 
-		return apply_filters( 'frm_default_field_options', $opts, array(
+		$filter_args = array(
 			'field' => $this->field,
 			'type'  => $this->type,
-		) );
+		);
+		return apply_filters( 'frm_default_field_options', $opts, $filter_args );
 	}
 
 	protected function extra_field_opts() {

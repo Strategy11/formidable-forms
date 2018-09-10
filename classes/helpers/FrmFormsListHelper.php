@@ -18,22 +18,30 @@ class FrmFormsListHelper extends FrmListHelper {
 		$page = $this->get_pagenum();
 		$per_page = $this->get_items_per_page( 'formidable_page_formidable_per_page' );
 
-		$mode    = self::get_param( array(
-			'param'   => 'mode',
-			'default' => 'list',
-		) );
-		$orderby = self::get_param( array(
-			'param'   => 'orderby',
-			'default' => 'name',
-		) );
-		$order   = self::get_param( array(
-			'param'   => 'order',
-			'default' => 'ASC',
-		) );
-		$start   = self::get_param( array(
-			'param'   => 'start',
-			'default' => ( $page - 1 ) * $per_page,
-		) );
+		$mode    = self::get_param(
+			array(
+				'param'   => 'mode',
+				'default' => 'list',
+			)
+		);
+		$orderby = self::get_param(
+			array(
+				'param'   => 'orderby',
+				'default' => 'name',
+			)
+		);
+		$order   = self::get_param(
+			array(
+				'param'   => 'order',
+				'default' => 'ASC',
+			)
+		);
+		$start   = self::get_param(
+			array(
+				'param'   => 'start',
+				'default' => ( $page - 1 ) * $per_page,
+			)
+		);
 
 		$s_query = array(
 			array(
@@ -60,10 +68,12 @@ class FrmFormsListHelper extends FrmListHelper {
 		        break;
 		}
 
-		$s = self::get_param( array(
-			'param' => 's',
-			'sanitize' => 'sanitize_text_field',
-		) );
+		$s = self::get_param(
+			array(
+				'param'    => 's',
+				'sanitize' => 'sanitize_text_field',
+			)
+		);
 	    if ( $s != '' ) {
 			preg_match_all( '/".*?("|$)|((?<=[\\s",+])|^)[^\\s",+]+/', $s, $matches );
 			$search_terms = array_map( 'trim', $matches[0] );
@@ -81,10 +91,12 @@ class FrmFormsListHelper extends FrmListHelper {
 		$this->items = FrmForm::getAll( $s_query, $orderby . ' ' . $order, $start . ',' . $per_page );
         $total_items = FrmDb::get_count( 'frm_forms', $s_query );
 
-		$this->set_pagination_args( array(
-			'total_items' => $total_items,
-			'per_page' => $per_page,
-		) );
+		$this->set_pagination_args(
+			array(
+				'total_items' => $total_items,
+				'per_page'    => $per_page,
+			)
+		);
 	}
 
 	public function no_items() {
@@ -182,10 +194,12 @@ class FrmFormsListHelper extends FrmListHelper {
 
 	    $links = array();
 	    $counts = FrmForm::get_count();
-		$form_type = self::get_param( array(
-			'param' => 'form_type',
-			'default' => 'published',
-		) );
+		$form_type = self::get_param(
+			array(
+				'param' => 'form_type',
+				'default' => 'published',
+			)
+		);
 
 	    foreach ( $statuses as $status => $name ) {
 

@@ -87,13 +87,16 @@ class FrmListHelper {
 	* Construct the table object
 	*/
 	public function __construct( $args ) {
-	    $args = wp_parse_args( $args, array(
-			'params' => array(),
-			'plural' => '',
-			'singular' => '',
-			'ajax' => false,
-			'screen' => null,
-		) );
+		$args = wp_parse_args(
+			$args,
+			array(
+				'params' => array(),
+				'plural' => '',
+				'singular' => '',
+				'ajax' => false,
+				'screen' => null,
+			)
+		);
 
 		$this->params = $args['params'];
 
@@ -153,12 +156,14 @@ class FrmListHelper {
 	 * @since 3.0
 	 */
 	protected function get_param( $args ) {
-		return FrmAppHelper::get_simple_request( array(
-			'param'    => $args['param'],
-			'default'  => isset( $args['default'] ) ? $args['default'] : '',
-			'sanitize' => isset( $args['sanitize'] ) ? $args['sanitize'] : 'sanitize_title',
-			'type'     => 'request',
-		) );
+		return FrmAppHelper::get_simple_request(
+			array(
+				'param'    => $args['param'],
+				'default'  => isset( $args['default'] ) ? $args['default'] : '',
+				'sanitize' => isset( $args['sanitize'] ) ? $args['sanitize'] : 'sanitize_title',
+				'type'     => 'request',
+			)
+		);
 	}
 
 	/**
@@ -170,11 +175,14 @@ class FrmListHelper {
 	 * @param array|string $args
 	 */
 	protected function set_pagination_args( $args ) {
-		$args = wp_parse_args( $args, array(
-			'total_items' => 0,
-			'total_pages' => 0,
-			'per_page' => 0,
-		) );
+		$args = wp_parse_args(
+			$args,
+			array(
+				'total_items' => 0,
+				'total_pages' => 0,
+				'per_page' => 0,
+			)
+		);
 
 		if ( ! $args['total_pages'] && $args['per_page'] > 0 ) {
 			$args['total_pages'] = ceil( $args['total_items'] / $args['per_page'] );
@@ -399,10 +407,12 @@ class FrmListHelper {
 
 	private static function get_bulk_action( $action_name ) {
 		$action = false;
-		$action_param = self::get_param( array(
-			'param' => $action_name,
-			'sanitize' => 'sanitize_text_field',
-		) );
+		$action_param = self::get_param(
+			array(
+				'param' => $action_name,
+				'sanitize' => 'sanitize_text_field',
+			)
+		);
 		if ( $action_param && -1 != $action_param ) {
 			$action = $action_param;
 		}
@@ -552,25 +562,30 @@ class FrmListHelper {
 
 		$disable = $this->disabled_pages( $total_pages );
 
-		$page_links[] = $this->add_page_link( array(
-			'page'     => 'first',
-			'arrow'    => '&laquo;',
-			'number'   => '',
-			'disabled' => $disable['first'],
-		) );
+		$page_links[] = $this->add_page_link(
+			array(
+				'page'     => 'first',
+				'arrow'    => '&laquo;',
+				'number'   => '',
+				'disabled' => $disable['first'],
+			)
+		);
 
-		$page_links[] = $this->add_page_link( array(
-			'page'     => 'prev',
-			'arrow'    => '&lsaquo;',
-			'number'   => max( 1, $current - 1 ),
-			'disabled' => $disable['prev'],
-		) );
+		$page_links[] = $this->add_page_link(
+			array(
+				'page'     => 'prev',
+				'arrow'    => '&lsaquo;',
+				'number'   => max( 1, $current - 1 ),
+				'disabled' => $disable['prev'],
+			)
+		);
 
 		if ( 'bottom' == $which ) {
 			$html_current_page  = $current;
 			$total_pages_before = '<span class="screen-reader-text">' . __( 'Current Page' ) . '</span><span id="table-paging" class="paging-input">';
 		} else {
-			$html_current_page = sprintf( "%s<input class='current-page' id='current-page-selector' type='text' name='paged' value='%s' size='%d' aria-describedby='table-paging' />",
+			$html_current_page = sprintf(
+				"%s<input class='current-page' id='current-page-selector' type='text' name='paged' value='%s' size='%d' aria-describedby='table-paging' />",
 				'<label for="current-page-selector" class="screen-reader-text">' . __( 'Current Page' ) . '</label>',
 				$current,
 				strlen( $total_pages )
@@ -579,19 +594,23 @@ class FrmListHelper {
 		$html_total_pages = sprintf( "<span class='total-pages'>%s</span>", number_format_i18n( $total_pages ) );
 		$page_links[] = $total_pages_before . sprintf( _x( '%1$s of %2$s', 'paging' ), $html_current_page, $html_total_pages ) . $total_pages_after;
 
-		$page_links[] = $this->add_page_link( array(
-			'page'     => 'next',
-			'arrow'    => '&rsaquo;',
-			'number'   => min( $total_pages, $current + 1 ),
-			'disabled' => $disable['next'],
-		) );
+		$page_links[] = $this->add_page_link(
+			array(
+				'page'     => 'next',
+				'arrow'    => '&rsaquo;',
+				'number'   => min( $total_pages, $current + 1 ),
+				'disabled' => $disable['next'],
+			)
+		);
 
-		$page_links[] = $this->add_page_link( array(
-			'page'     => 'last',
-			'arrow'    => '&raquo;',
-			'number'   => $total_pages,
-			'disabled' => $disable['last'],
-		) );
+		$page_links[] = $this->add_page_link(
+			array(
+				'page'     => 'last',
+				'arrow'    => '&raquo;',
+				'number'   => $total_pages,
+				'disabled' => $disable['last'],
+			)
+		);
 
 		$pagination_links_class = 'pagination-links';
 		if ( ! empty( $infinite_scroll ) ) {
@@ -669,7 +688,10 @@ class FrmListHelper {
 		$label = $this->link_label( $atts['page'] );
 		return sprintf(
 			"<a class='%s-page' href='%s'><span class='screen-reader-text'>%s</span><span aria-hidden='true'>%s</span></a>",
-			$atts['page'], $url, $label, $atts['arrow']
+			$atts['page'],
+			$url,
+			$label,
+			$atts['arrow']
 		);
 	}
 

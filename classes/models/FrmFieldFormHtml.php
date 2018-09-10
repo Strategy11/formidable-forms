@@ -52,10 +52,13 @@ class FrmFieldFormHtml {
 	 * @param array $atts
 	 */
 	private function set_html( $atts ) {
-		$this->set_from_field( $atts, array(
-			'param'   => 'html',
-			'default' => 'custom_html',
-		) );
+		$this->set_from_field(
+			$atts,
+			array(
+				'param'   => 'html',
+				'default' => 'custom_html',
+			)
+		);
 	}
 
 	/**
@@ -64,10 +67,13 @@ class FrmFieldFormHtml {
 	 * @param array $atts
 	 */
 	private function set_field_id( $atts ) {
-		$this->set_from_field( $atts, array(
-			'param'   => 'field_id',
-			'default' => 'id',
-		) );
+		$this->set_from_field(
+			$atts,
+			array(
+				'param'   => 'field_id',
+				'default' => 'id',
+			)
+		);
 	}
 
 	/**

@@ -192,10 +192,14 @@ class FrmEntryFormat {
 	public static function prepare_field_output( $atts, &$val ) {
 		_deprecated_function( __FUNCTION__, '2.04', 'instance of FrmEntryValues or FrmProEntryValues' );
 
-		$val = apply_filters( 'frm_display_' . $atts['field']->type . '_value_custom', $val, array(
-			'field' => $atts['field'],
-			'atts'  => $atts,
-		) );
+		$val = apply_filters(
+			'frm_display_' . $atts['field']->type . '_value_custom',
+			$val,
+			array(
+				'field' => $atts['field'],
+				'atts'  => $atts,
+			)
+		);
 
 		self::flatten_array_value( $atts, $val );
 		self::maybe_strip_html( $atts['plain_text'], $val );

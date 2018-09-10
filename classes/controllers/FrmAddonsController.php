@@ -173,10 +173,13 @@ class FrmAddonsController {
 				if ( file_exists( $file . '/' . $base_file . '.php' ) ) {
 					$file_name = $base_file . '/' . $base_file . '.php';
 					if ( ! is_plugin_active( $file_name ) ) {
-						$addon['activate_url'] = add_query_arg( array(
-							'_wpnonce'    => wp_create_nonce( 'activate-plugin_' . $file_name ),
-							'plugin'      => $file_name,
-						), $activate_url );
+						$addon['activate_url'] = add_query_arg(
+							array(
+								'_wpnonce'    => wp_create_nonce( 'activate-plugin_' . $file_name ),
+								'plugin'      => $file_name,
+							),
+							$activate_url
+						);
 					}
 				}
 			}
@@ -208,10 +211,13 @@ class FrmAddonsController {
 
 		if ( $license && is_array( $license ) && isset( $license['license'] ) ) {
 			$url = 'https://formidableforms.com/frm-edd-api/licenses?l=' . urlencode( base64_encode( $license['license'] ) );
-			$licenses = self::send_api_request( $url, array(
-				'name' => 'frm_api_licence',
-				'expires' => 60 * 60 * 5,
-			) );
+			$licenses = self::send_api_request(
+				$url,
+				array(
+					'name'    => 'frm_api_licence',
+					'expires' => 60 * 60 * 5,
+				)
+			);
 			echo json_encode( $licenses );
 		}
 

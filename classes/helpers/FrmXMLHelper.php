@@ -91,11 +91,15 @@ class FrmXMLHelper {
 
 			$parent = self::get_term_parent_id( $t );
 
-			$term = wp_insert_term( (string) $t->term_name, (string) $t->term_taxonomy, array(
-                'slug'          => (string) $t->term_slug,
-                'description'   => (string) $t->term_description,
-				'parent'        => empty( $parent ) ? 0 : $parent,
-            ));
+			$term = wp_insert_term(
+				(string) $t->term_name,
+				(string) $t->term_taxonomy,
+				array(
+					'slug'          => (string) $t->term_slug,
+					'description'   => (string) $t->term_description,
+					'parent'        => empty( $parent ) ? 0 : $parent,
+				)
+			);
 
 			if ( $term && is_array( $term ) ) {
                 $imported['imported']['terms']++;
@@ -975,12 +979,14 @@ class FrmXMLHelper {
         }
 		$new_action['post_content'] = json_encode( $new_action['post_content'] );
 
-        $exists = get_posts( array(
-            'name'          => $new_action['post_name'],
-            'post_type'     => $new_action['post_type'],
-            'post_status'   => $new_action['post_status'],
-            'numberposts'   => 1,
-        ) );
+		$exists = get_posts(
+			array(
+				'name'          => $new_action['post_name'],
+				'post_type'     => $new_action['post_type'],
+				'post_status'   => $new_action['post_status'],
+				'numberposts'   => 1,
+			)
+		);
 
         if ( ! $exists ) {
 			// this isn't an email, but we need to use a class that will always be included
@@ -1066,12 +1072,14 @@ class FrmXMLHelper {
             }
             $new_notification['post_content']   = FrmAppHelper::prepare_and_encode( $new_notification['post_content'] );
 
-            $exists = get_posts( array(
-                'name'          => $new_notification['post_name'],
-                'post_type'     => $new_notification['post_type'],
-                'post_status'   => $new_notification['post_status'],
-                'numberposts'   => 1,
-            ) );
+			$exists = get_posts(
+				array(
+					'name'          => $new_notification['post_name'],
+					'post_type'     => $new_notification['post_type'],
+					'post_status'   => $new_notification['post_status'],
+					'numberposts'   => 1,
+				)
+			);
 
 			if ( empty( $exists ) ) {
 				FrmDb::save_json_post( $new_notification );
