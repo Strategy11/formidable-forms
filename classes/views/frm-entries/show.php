@@ -5,14 +5,16 @@
 		<div id="post-body" class="metabox-holder columns-2">
 		<div id="post-body-content">
 			<?php
-			FrmAppHelper::get_admin_header( array(
-				'label'     => __( 'View Entry', 'formidable' ),
-				'link_hook' => array(
-					'hook'  => 'frm_entry_inside_h2',
-					'param' => $form,
-				),
-				'form'      => $form,
-			) );
+			FrmAppHelper::get_admin_header(
+				array(
+					'label'     => __( 'View Entry', 'formidable' ),
+					'link_hook' => array(
+						'hook'  => 'frm_entry_inside_h2',
+						'param' => $form,
+					),
+					'form'      => $form,
+				)
+			);
 			?>
 			<div class="frm_form_fields">
 				<div class="postbox">

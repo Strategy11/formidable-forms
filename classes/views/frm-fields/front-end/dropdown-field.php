@@ -1,11 +1,14 @@
 <?php
 
 if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' && FrmAppHelper::pro_is_installed() ) {
-	echo FrmProPost::get_category_dropdown( $field, array( // WPCS: XSS ok.
-		'location' => 'front',
-		'name' => $field_name,
-		'id' => $html_id,
-	) );
+	echo FrmProPost::get_category_dropdown( // WPCS: XSS ok.
+		$field,
+		array(
+			'location' => 'front',
+			'name'     => $field_name,
+			'id'       => $html_id,
+		)
+	);
 } else {
 	if ( $read_only ) {
 		?>
@@ -35,14 +38,16 @@ if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' &&
 	</select>
 	<?php
 
-	FrmFieldsHelper::include_other_input( array(
-		'other_opt' => $other_opt,
-		'read_only' => $read_only,
-		'checked' => $other_checked,
-		'name'    => $other_args['name'],
-		'value'   => $other_args['value'],
-		'field'   => $field,
-		'html_id' => $html_id,
-		'opt_key' => false,
-	) );
+	FrmFieldsHelper::include_other_input(
+		array(
+			'other_opt' => $other_opt,
+			'read_only' => $read_only,
+			'checked' => $other_checked,
+			'name'    => $other_args['name'],
+			'value'   => $other_args['value'],
+			'field'   => $field,
+			'html_id' => $html_id,
+			'opt_key' => false,
+		)
+	);
 }

@@ -34,12 +34,12 @@ class FrmShowForm extends WP_Widget {
 	}
 
 	public function form( $instance ) {
-		//Defaults
-		$instance = wp_parse_args( (array) $instance, array(
+		$defaults = array(
 			'title' => false,
 			'form'  => false,
 			'description' => false,
-		) );
+		);
+		$instance = wp_parse_args( (array) $instance, $defaults );
 ?>
 	<p>
 		<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>">
@@ -52,11 +52,15 @@ class FrmShowForm extends WP_Widget {
 	<p>
 		<label for="<?php echo esc_attr( $this->get_field_id( 'form' ) ); ?>"><?php esc_html_e( 'Form', 'formidable' ); ?>:</label><br/>
 <?php
-	FrmFormsHelper::forms_dropdown( $this->get_field_name( 'form' ), $instance['form'], array(
-		'blank'    => false,
-		'field_id' => $this->get_field_id( 'form' ),
-		'class'    => 'widefat',
-	) );
+	FrmFormsHelper::forms_dropdown(
+		$this->get_field_name( 'form' ),
+		$instance['form'],
+		array(
+			'blank'    => false,
+			'field_id' => $this->get_field_id( 'form' ),
+			'class'    => 'widefat',
+		)
+	);
 ?>
 	</p>
 

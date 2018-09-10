@@ -5,13 +5,15 @@
     <div id="post-body-content">
 
 	<?php
-	FrmAppHelper::get_admin_header( array(
-		'label'       => ( $form->is_template ? __( 'Templates', 'formidable' ) : __( 'Build Form', 'formidable' ) ),
-		'is_template' => $values['is_template'],
-		'form'        => $form,
-		'new_link'    => '?page=formidable&frm_action=new',
-		'hide_title'  => true,
-	) );
+	FrmAppHelper::get_admin_header(
+		array(
+			'label'       => ( $form->is_template ? __( 'Templates', 'formidable' ) : __( 'Build Form', 'formidable' ) ),
+			'is_template' => $values['is_template'],
+			'form'        => $form,
+			'new_link'    => '?page=formidable&frm_action=new',
+			'hide_title'  => true,
+		)
+	);
 
 	require( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' );
 

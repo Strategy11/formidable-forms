@@ -5,10 +5,12 @@
     <div id="post-body-content">
 
 	<?php
-	FrmAppHelper::get_admin_header( array(
-		'label' => __( 'Settings', 'formidable' ),
-		'form'  => $form,
-	) );
+	FrmAppHelper::get_admin_header(
+		array(
+			'label' => __( 'Settings', 'formidable' ),
+			'form'  => $form,
+		)
+	);
 
 	// Add form messages
 	require( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' );

@@ -39,12 +39,14 @@
 					continue;
 				}
 
-				FrmAppHelper::insert_opt_html( array(
-					'id'   => $f->id,
-					'key'  => $f->field_key,
-					'name' => $f->name,
-					'type' => $f->type,
-				) );
+				FrmAppHelper::insert_opt_html(
+					array(
+						'id'   => $f->id,
+						'key'  => $f->field_key,
+						'name' => $f->name,
+						'type' => $f->type,
+					)
+				);
 
 				if ( $f->type == 'data' ) {
 					//get all fields from linked form
@@ -52,19 +54,23 @@
 						$linked_form = FrmDb::get_var( $wpdb->prefix . 'frm_fields', array( 'id' => $f->field_options['form_select'] ), 'form_id' );
                         if ( ! in_array( $linked_form, $linked_forms ) ) {
                             $linked_forms[] = $linked_form;
-							$linked_fields = FrmField::getAll( array(
-								'fi.type not' => FrmField::no_save_fields(),
-								'fi.form_id'  => $linked_form,
-							) );
+							$linked_fields = FrmField::getAll(
+								array(
+									'fi.type not' => FrmField::no_save_fields(),
+									'fi.form_id'  => $linked_form,
+								)
+							);
                             $ldfe = '';
 							if ( $linked_fields ) {
 								foreach ( $linked_fields as $linked_field ) {
-									FrmAppHelper::insert_opt_html( array(
-										'id'   => $f->id . ' show=' . $linked_field->id,
-										'key'  => $f->field_key . ' show=' . $linked_field->field_key,
-										'name' => $linked_field->name,
-										'type' => $linked_field->type,
-									) );
+									FrmAppHelper::insert_opt_html(
+										array(
+											'id'   => $f->id . ' show=' . $linked_field->id,
+											'key'  => $f->field_key . ' show=' . $linked_field->field_key,
+											'name' => $linked_field->name,
+											'type' => $linked_field->type,
+										)
+									);
 
                                     $ldfe = $linked_field->id;
 									unset( $linked_field );
