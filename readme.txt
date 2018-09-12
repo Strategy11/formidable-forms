@@ -4,7 +4,7 @@ Tags: contact form, form builder, custom form, forms, form, form maker, form cre
 Requires at least: 4.4
 Tested up to: 4.9.5
 Requires PHP: 5.3
-Stable tag: 3.03.01
+Stable tag: 3.03.02
 
 The best WordPress forms plugin for custom forms. Go beyond contact forms with a drag & drop form builder, HTML control & form style generator
 
@@ -160,9 +160,17 @@ The field and form names and descriptions are all changed with in-place edit. Ju
 [See more FAQs](https://formidableforms.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 3.03.02 =
+* Fix: When syntax highlighting was turned off in the user profile, the custom CSS box didn't appear.
+* Fix: Allow 'aside' tags in the form widget. Don't remove it when sanitizing.
+* Fix: When a form includes a reCaptcha, the loading indicator on the submit button wasn't triggered on submit.
+* Fix: The reCaptcha label was orphaned and didn't pass WCAG compliance. This fix applies to new reCaptcha fields. For existing fields, delete it and add it again.
+* Fix: Automatically scroll the form builder window when a field is dragged and dropped in the form.
+* Fix: Use a percentage for left labels instead of a fixed with to ensure the margin isn't too big for small spaces.
+
 = 3.03.01 =
 * Fix: Allow the section html in the form widget. Don't remove it when sanitizing.
-* Fix: Show the scrollbar for the list of fields in Chrome. Some devices don't allow scrolling without it.
+* Fix: Show the scrollbar for the list of fields in Chrome on the form builder. Some devices don't allow scrolling without it.
 
 = 3.03 =
 * Fix: Custom css like #frm_field_196_container > label was being sanitized and preventing the > from working correctly
