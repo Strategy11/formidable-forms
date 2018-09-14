@@ -904,19 +904,6 @@ select.frm_loading_lookup{
 		max-width:220px;
 	}
 
-	.with_frm_style.frm_login_form.frm_inline_login p{
-		clear:both;
-		float:none;
-	}
-
-	.with_frm_style.frm_login_form.frm_inline_login form{
-		position:static;
-	}
-
-	.with_frm_style.frm_login_form.frm_inline_login .login-remember{
-		position:static;
-	}
-
 	.with_frm_style .frm-g-recaptcha > div > div,
 	.with_frm_style .g-recaptcha > div > div{
 		width:inherit !important;
