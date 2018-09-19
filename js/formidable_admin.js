@@ -755,7 +755,7 @@ function frmAdminBuildJS(){
 	 * @returns {RegExp}
 	 */
 	function getNonFormShortcodes() {
-		return /\[(if\b|foreach|created-at|created-by|updated-at|updated-by)|((key|id)\])/;
+		return /\[id\]|\[key\]|\[if\s\w+\]|\[foreach\s\w+\]|\[created-at\]|\[created-at\sformat=[\'\"][\w/\-\/]+[\'\"]\]/g;
 	}
 
 	function popCalcFields(v){
