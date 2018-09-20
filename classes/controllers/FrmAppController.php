@@ -13,15 +13,7 @@ class FrmAppController {
     }
 
 	private static function get_menu_position() {
-		$query = array(
-			'show_ui'      => true,
-			'_builtin'     => false,
-			'show_in_menu' => true,
-		);
-		$count = count( get_post_types( $query ) );
-		$pos = $count ? '22.7' : '29.3';
-		$pos = apply_filters( 'frm_menu_position', $pos );
-		return $pos;
+		return apply_filters( 'frm_menu_position', '29.3' );
 	}
 
 	/**
