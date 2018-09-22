@@ -24,7 +24,7 @@ abstract class FrmFormMigrator {
 			// if source plugin is not installed, do nothing
 			return;
 		}
-		
+
 		$this->maybe_add_to_import_page();
 
 		$this->response = array(
@@ -53,13 +53,16 @@ abstract class FrmFormMigrator {
 						<?php wp_nonce_field( 'nonce', 'frm_ajax' ); ?>
 						<input type="hidden" name="slug" value="<?php echo esc_attr( $this->slug ); ?>" />
 						<input type="hidden" name="action" value="frm_import_<?php echo esc_attr( $this->slug ); ?>" />
-						<div style="margin:10px auto;max-width:400px;">
+						<div style="margin:10px auto;max-width:400px;text-align:left;">
 							<?php foreach ( $this->get_forms() as $form_id => $name ) { ?>
 								<p>
 									<label>
 										<input type="checkbox" name="form_id[]" value="<?php echo esc_attr( $form_id ); ?>" checked="checked" />
-										<?php echo esc_html( $name ); ?>
-										<?php if ( $new_form_id = $this->is_imported( $form_id ) ) { ?>
+										<?php
+										echo esc_html( $name );
+										$new_form_id = $this->is_imported( $form_id );
+										?>
+										<?php if ( $new_form_id ) { ?>
 											(<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable&frm_action=edit&id=' . $new_form_id ) ); ?>">previously imported</a>)
 										<?php } ?>
 									</label>
@@ -123,15 +126,17 @@ abstract class FrmFormMigrator {
 
 		$source_form        = $this->get_form( $source_id );
 		$source_form_name   = $this->get_form_name( $source_form );
-		$source_fields      = $this->get_form_fields( $source_form );
+		$source_fields      = $this->get_form_fields( $source_id );
 
 		// If form does not contain fields, bail.
 		if ( empty( $source_fields ) ) {
-			wp_send_json_success( array(
-				'error' => true,
-				'name'  => esc_html( $source_form_name ),
-				'msg'   => __( 'No form fields found.', 'formidable' ),
-			) );
+			wp_send_json_success(
+				array(
+					'error' => true,
+					'name'  => esc_html( $source_form_name ),
+					'msg'   => __( 'No form fields found.', 'formidable' ),
+				)
+			);
 		}
 
 		$form = $this->prepare_new_form( $source_id, $source_form_name );
@@ -170,7 +175,7 @@ abstract class FrmFormMigrator {
 				$this->response['unsupported'][] = $label;
 				continue;
 			}
-			
+
 			if ( $this->should_skip_field( $type ) ) {
 				$this->response['upgrade_omit'][] = $label;
 				continue;
@@ -211,6 +216,7 @@ abstract class FrmFormMigrator {
 				'name'        => $form['name'],
 				'description' => $form['description'],
 				'options'     => $form['options'],
+				'form_key'    => $form['name'],
 			)
 		);
 
@@ -304,7 +310,7 @@ abstract class FrmFormMigrator {
 	}
 
 	private function is_unsupported_field( $type ) {
-		$fields = $this->unsupported_field_types(); 
+		$fields = $this->unsupported_field_types();
 		return in_array( $type, $fields, true );
 	}
 
@@ -317,7 +323,7 @@ abstract class FrmFormMigrator {
 	}
 
 	private function should_skip_field( $type ) {
-		$skip_pro_fields = $this->skip_pro_fields(); 
+		$skip_pro_fields = $this->skip_pro_fields();
 		return ( ! FrmAppHelper::pro_is_installed() && in_array( $type, $skip_pro_fields, true ) );
 	}
 
@@ -355,7 +361,7 @@ abstract class FrmFormMigrator {
 	}
 
 	/**
-	 * @param object|array $source_form
+	 * @param object|array|int $source_form
 	 * @return array
 	 */
 	protected function get_form_fields( $source_form ) {
@@ -375,7 +381,7 @@ abstract class FrmFormMigrator {
 	 *
 	 * @return string
 	 */
-	public function get_field_label( $field ) {
+	protected function get_field_label( $field ) {
 		$type = $this->get_field_type( $field );
 		$label = sprintf(
 			/* translators: %1$s - field type */
