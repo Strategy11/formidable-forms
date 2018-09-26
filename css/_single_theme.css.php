@@ -305,7 +305,7 @@ if ( ! empty( $important ) ) {
     box-sizing:border-box;
     outline:none<?php echo esc_html( $important ) ?>;
     font-weight:<?php echo esc_html( $field_weight ) ?>;
-    box-shadow:<?php echo esc_html( ( isset( $remove_box_shadow ) && $remove_box_shadow ) ? 'none' : '0 1px 1px rgba(0, 0, 0, 0.075) inset' ) ?>;
+    box-shadow:<?php echo esc_html( ( isset( $remove_box_shadow ) && $remove_box_shadow ) ? 'none' : '0 1px 1px rgba(0, 0, 0, 0.075) inset' ) . esc_html( $important ) ?>;
 }
 
 .<?php echo esc_html( $style_class ) ?> input[type=text],

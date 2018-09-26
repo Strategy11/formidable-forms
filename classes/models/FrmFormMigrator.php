@@ -164,7 +164,7 @@ abstract class FrmFormMigrator {
 	}
 
 	protected function prepare_fields( $fields, &$form ) {
-
+		$field_order = 1;
 		foreach ( $fields as $field ) {
 
 			$label = $this->get_field_label( $field );
@@ -181,14 +181,15 @@ abstract class FrmFormMigrator {
 				continue;
 			}
 
-			$new_field = array(
-				'type'     => $this->convert_field_type( $type ),
-				'name'     => $label,
-				'original' => $type,
-			);
+			$new_field             = FrmFieldsHelper::setup_new_vars( $this->convert_field_type( $type ) );
+			$new_field['name']     = $label;
+			$new_field['field_order'] = $field_order;
+			$new_field['original'] = $type;
 
 			$this->prepare_field( $field, $new_field );
 			$form['fields'][] = $new_field;
+
+			$field_order++;
 		}
 	}
 
@@ -217,6 +218,7 @@ abstract class FrmFormMigrator {
 				'description' => $form['description'],
 				'options'     => $form['options'],
 				'form_key'    => $form['name'],
+				'status'      => 'published',
 			)
 		);
 
@@ -228,11 +230,9 @@ abstract class FrmFormMigrator {
 			);
 		}
 
-		foreach ( $form['fields'] as $key => $field ) {
-			$new_field = FrmFieldsHelper::setup_new_vars( $field['type'], $form_id );
-			$new_field = array_merge( $new_field, $field );
-			$new_field['field_options'] = array_merge( $new_field['field_options'], $field );
-			$form['fields'][ $key ]['id'] = FrmField::create( $new_field, $form_id );
+		foreach ( $form['fields'] as $key => $new_field ) {
+			$new_field['form_id'] = $form_id;
+			$form['fields'][ $key ]['id'] = FrmField::create( $new_field );
 		}
 
 		// create emails
