@@ -4,7 +4,7 @@ Tags: contact form, form builder, custom form, forms, form, form maker, form cre
 Requires at least: 4.4
 Tested up to: 4.9.5
 Requires PHP: 5.3
-Stable tag: 3.03.02
+Stable tag: 3.03.03
 
 The best WordPress forms plugin for custom forms. Go beyond contact forms with a drag & drop form builder, HTML control & form style generator
 
@@ -160,6 +160,14 @@ The field and form names and descriptions are all changed with in-place edit. Ju
 [See more FAQs](https://formidableforms.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 3.03.03 =
+* Improve the appearance of the import/export page
+* Move the admin menu position below the post comments
+* Remove unused CSS including CSS for login forms in the user registration plugin
+* Override theme styling for box shadows on inputs
+* Add a new migrator class that will serve as a base for migrations from other form builder plugins
+* Add a prepare_field_value function for altering the value show inside a form field that can be overridden in extension classes for fields
+
 = 3.03.02 =
 * Fix: When syntax highlighting was turned off in the user profile, the custom CSS box didn't appear.
 * Fix: Allow 'aside' tags in the form widget. Don't remove it when sanitizing.
