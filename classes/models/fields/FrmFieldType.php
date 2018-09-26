@@ -382,7 +382,20 @@ DEFAULT_HTML;
 	 * @return array
 	 */
 	public function prepare_front_field( $values, $atts ) {
+		$values['value'] = $this->prepare_field_value( $values['value'], $atts );
 		return $values;
+	}
+
+	/**
+	 * @since 3.03.03
+	 *
+	 * @param mixed $value
+	 * @param array $atts
+	 *
+	 * @return mixed
+	 */
+	public function prepare_field_value( $value, $atts ) {
+		return $value;
 	}
 
 	/**
