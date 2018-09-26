@@ -269,7 +269,7 @@ class FrmAddon {
 			}
 
 			$response = $this->get_license_status();
-			if ( 'revoked' === $response['status'] ) {
+			if ( 'revoked' === $response['status'] || 'blocked' === $response['status'] || 'disabled' === $response['status'] ) {
 				$this->clear_license();
 			}
 		}
