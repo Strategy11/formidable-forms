@@ -232,7 +232,10 @@
 				<?php do_action( 'frm_add_form_msg_options', $values ); ?>
             </table>
 
-			<!--Misc Section-->
+            <!--Forn Status Section-->
+	        <?php do_action( 'frm_add_form_status_options', $values ); ?>
+
+            <!--Misc Section-->
 			<h3><?php esc_html_e( 'Miscellaneous', 'formidable' ); ?></h3>
 			<table class="form-table">
 				<tr>
