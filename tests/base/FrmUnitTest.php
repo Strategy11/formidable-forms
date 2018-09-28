@@ -179,10 +179,11 @@ class FrmUnitTest extends WP_UnitTestCase {
 		foreach ( $file_urls as $values ) {
 			$media_ids = FrmProFileImport::import_attachment( $values['val'], $values['field'] );
 
-			if ( is_array( $values['val']) ) {
+			if ( is_array( $values['val'] ) ) {
 				$media_ids = explode(',', $media_ids );
 			} else {
-				$this->assertTrue( is_numeric( $media_ids ), 'The following file is not importing correctly: ' . $values[ 'val' ] );
+				$is_file_val = is_numeric( $media_ids ) || strpos( $media_ids, ',' );
+				$this->assertTrue( $is_file_val, 'The following file is not importing correctly: ' . $values[ 'val' ] );
 			}
 
 			// Insert into entries
