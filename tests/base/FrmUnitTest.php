@@ -18,6 +18,25 @@ class FrmUnitTest extends WP_UnitTestCase {
 	/**
 	 * Ensure that the plugin has been installed and activated.
 	 */
+	public static function setUpBeforeClass() {
+		parent::setUpBeforeClass();
+
+		self::frm_install();
+	}
+
+	public static function tearDownAfterClass() {
+		parent::tearDownAfterClass();
+
+		global $wp_version;
+		if ( $wp_version <= 4.6 ) {
+			// Prior to WP 4.7, the Formidable tables were deleted on tearDown and not restored with setUp
+			delete_option( 'frm_options' );
+			delete_option( 'frm_db_version' );
+		}
+
+		self::empty_tables();
+	}
+
 	function setUp() {
 		parent::setUp();
 
@@ -28,8 +47,6 @@ class FrmUnitTest extends WP_UnitTestCase {
 			$this->is_pro_active = get_option( 'frmpro-authorized' );
 		}
 
-		$this->frm_install();
-
 		$this->factory->form = new Form_Factory( $this );
 		$this->factory->field = new Field_Factory( $this );
 		$this->factory->entry = new Entry_Factory( $this );
@@ -37,26 +54,13 @@ class FrmUnitTest extends WP_UnitTestCase {
 		$this->create_users();
 	}
 
-	function tearDown() {
-		parent::tearDown();
-
-		global $wp_version;
-		if ( $wp_version <= 4.6 ) {
-			// Prior to WP 4.7, the Formidable tables were deleted on tearDown and not restored with setUp
-			delete_option( 'frm_options' );
-			delete_option( 'frm_db_version' );
-		}
-
-		$this->empty_tables();
-	}
-
 	/**
 	 * Some of the tests for FrmDb are triggering a transaction commit, preventing further tests from working.
 	 * This is a temporary workaround until we review FrmDb tests in detail.
 	 */
-	private function empty_tables() {
+	private static function empty_tables() {
 		global $wpdb;
-		$tables = $this->get_table_names();
+		$tables = self::get_table_names();
 		foreach ( $tables as $table ){
 			$exists = $wpdb->get_var( 'DESCRIBE ' . $table );
 			if ( $exists ) {
@@ -68,7 +72,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 	/**
 	 * @covers FrmAppController::install()
 	 */
-	function frm_install() {
+	public static function frm_install() {
 		if ( ! defined( 'WP_IMPORTING' ) ) {
 			// set this to false so all our tests won't be done with this active
 			define( 'WP_IMPORTING', false );
@@ -77,12 +81,12 @@ class FrmUnitTest extends WP_UnitTestCase {
 		FrmHooksController::trigger_load_hook( 'load_admin_hooks' );
 		FrmAppController::install();
 
-		$this->do_tables_exist();
-		$this->import_xml();
-		$this->create_files();
+		self::do_tables_exist();
+		self::import_xml();
+		self::create_files();
 	}
 
-	function get_table_names() {
+	public static function get_table_names() {
 		global $wpdb;
 
 		$tables = array(
@@ -96,25 +100,25 @@ class FrmUnitTest extends WP_UnitTestCase {
 		return $tables;
 	}
 
-	function do_tables_exist( $should_exist = true ) {
+	public static function do_tables_exist( $should_exist = true ) {
 		global $wpdb;
 		$method = $should_exist ? 'assertNotEmpty' : 'assertEmpty';
-		foreach ( $this->get_table_names() as $table_name ) {
+		foreach ( self::get_table_names() as $table_name ) {
 			$message = $table_name . ' table failed to ' . ( $should_exist ? 'install' : 'uninstall' );
-			$this->$method( $wpdb->query( 'DESCRIBE ' . $table_name ), $message );
+			self::$method( $wpdb->query( 'DESCRIBE ' . $table_name ), $message );
 		}
 	}
 
-    function import_xml() {
-        // install test data in older format
+	public static function import_xml() {
+		// install test data in older format
 		add_filter( 'frm_default_templates_files', 'FrmUnitTest::install_data' );
-        FrmXMLController::add_default_templates();
+		FrmXMLController::add_default_templates();
 
-        $form = FrmForm::getOne( 'contact-db12' );
-        $this->assertEquals( $form->form_key, 'contact-db12' );
-    }
+		$form = FrmForm::getOne( 'contact-db12' );
+		self::assertEquals( $form->form_key, 'contact-db12' );
+	}
 
-	function create_files() {
+	public static function create_files() {
 		if ( ! is_callable( 'FrmProFileImport::import_attachment' ) ) {
 			return;
 		}
@@ -183,7 +187,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 				$media_ids = explode(',', $media_ids );
 			} else {
 				$is_file_val = is_numeric( $media_ids ) || strpos( $media_ids, ',' );
-				$this->assertTrue( $is_file_val, 'The following file is not importing correctly: ' . $values[ 'val' ] );
+				self::assertTrue( $is_file_val, 'The following file is not importing correctly: ' . $values[ 'val' ] );
 			}
 
 			// Insert into entries
@@ -508,6 +512,10 @@ class FrmUnitTest extends WP_UnitTestCase {
 	 * @since 2.0
 	 */
 	private function create_users() {
+		$has_user = get_user_by( 'email', 'admin@mail.com' );
+		if ( ! empty( $has_user ) ) {
+			return;
+		}
 
 		$admin_args = array(
 			'user_login'  =>  'admin',

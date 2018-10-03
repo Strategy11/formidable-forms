@@ -13,7 +13,7 @@ class test_FrmMigrate extends FrmUnitTest {
 		$frmdb = new FrmMigrate();
 		$frmdb->upgrade();
 
-		$this->do_tables_exist();
+		self::do_tables_exist();
 
 		$new_version = get_option( 'frm_db_version' );
 		$this->assertEquals( $new_version, FrmAppHelper::plugin_version() . '-' . FrmAppHelper::$db_version );
@@ -134,7 +134,7 @@ class test_FrmMigrate extends FrmUnitTest {
 	 * @covers FrmMigrate::migrate_to_16
 	 */
 	function test_migrate_from_12_to_current() {
-		$this->frm_install();
+		self::frm_install();
 
 		update_option( 'frm_db_version', 12 );
 
@@ -189,7 +189,7 @@ class test_FrmMigrate extends FrmUnitTest {
 		$this->assertTrue( $uninstalled );
 
 		$this->markTestIncomplete( 'Make sure uninstall is complete' );
-		$this->do_tables_exist( false );
+		self::do_tables_exist( false );
 
 		$this->assertEmpty( get_option('frm_db_version', true ) );
 		$this->assertEmpty( get_option('frm_options', true ) );

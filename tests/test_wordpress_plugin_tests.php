@@ -10,7 +10,7 @@ class WP_Test_WordPress_Plugin_Tests extends FrmUnitTest {
         if ( is_callable('FrmProCopy::install') ) {
 	        $copy = new FrmProCopy();
 	        $copy->install();
-			$this->do_tables_exist( true );
+			self::do_tables_exist( true );
         }
 	}
 

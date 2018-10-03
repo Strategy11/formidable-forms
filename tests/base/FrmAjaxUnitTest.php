@@ -10,34 +10,36 @@ class FrmAjaxUnitTest extends WP_Ajax_UnitTestCase {
 	protected $is_pro_active = false;
 	protected $contact_form_key = 'contact-with-email';
 
-	function setUp() {
+	public static function setUpBeforeClass() {
 		FrmHooksController::trigger_load_hook( 'load_admin_hooks' );
 		FrmHooksController::trigger_load_hook( 'load_ajax_hooks' );
 		FrmHooksController::trigger_load_hook( 'load_form_hooks' );
 
-		parent::setUp();
+		parent::setUpBeforeClass();
 		FrmAppController::install();
-		$this->import_xml();
+		self::import_xml();
+	}
 
+	public function setUp() {
 		$this->factory->form = new Form_Factory( $this );
 		$this->factory->field = new Field_Factory( $this );
 		$this->factory->entry = new Entry_Factory( $this );
 	}
 
-    function import_xml() {
-        // install test data in older format
+	public static function import_xml() {
+		// install test data in older format
 		add_filter( 'frm_default_templates_files', 'FrmUnitTest::install_data' );
-        FrmXMLController::add_default_templates();
+		FrmXMLController::add_default_templates();
 
-        $form = FrmForm::getOne( 'contact-db12' );
-        $this->assertEquals( $form->form_key, 'contact-db12' );
+		$form = FrmForm::getOne( 'contact-db12' );
+		self::assertEquals( $form->form_key, 'contact-db12' );
 
 		if ( $this->is_pro_active ) {
 			$entry = FrmEntry::getOne( 'utah_entry' );
-			$this->assertNotEmpty( $entry );
-			$this->assertEquals( $entry->item_key, 'utah_entry' );
+			self::assertNotEmpty( $entry );
+			self::assertEquals( $entry->item_key, 'utah_entry' );
 		}
-    }
+	}
 
     function set_as_user_role( $role ) {
         // create user
