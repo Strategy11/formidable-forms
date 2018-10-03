@@ -21,6 +21,7 @@ class FrmAjaxUnitTest extends WP_Ajax_UnitTestCase {
 	}
 
 	public function setUp() {
+		parent::setUp();
 		$this->factory->form = new Form_Factory( $this );
 		$this->factory->field = new Field_Factory( $this );
 		$this->factory->entry = new Entry_Factory( $this );
@@ -34,11 +35,9 @@ class FrmAjaxUnitTest extends WP_Ajax_UnitTestCase {
 		$form = FrmForm::getOne( 'contact-db12' );
 		self::assertEquals( $form->form_key, 'contact-db12' );
 
-		if ( $this->is_pro_active ) {
-			$entry = FrmEntry::getOne( 'utah_entry' );
-			self::assertNotEmpty( $entry );
-			self::assertEquals( $entry->item_key, 'utah_entry' );
-		}
+		$entry = FrmEntry::getOne( 'utah_entry' );
+		self::assertNotEmpty( $entry );
+		self::assertEquals( $entry->item_key, 'utah_entry' );
 	}
 
     function set_as_user_role( $role ) {
