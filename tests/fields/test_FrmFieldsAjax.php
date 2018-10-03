@@ -7,6 +7,8 @@
 class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 
 	protected $form_id = 0;
+
+	protected $user_id = 0;
 	
 	public function setUp() {
 		parent::setUp();
@@ -78,15 +80,16 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 		);
 
 		$response = $this->trigger_action( 'frm_duplicate_field' );
+		$this->assertContains( '<input type="hidden" name="frm_fields_submitted[]" ', $response );
 
-		global $wpdb;
-		$newest_field_id = $wpdb->insert_id;
-
-		self::check_if_field_id_is_created_correctly( $newest_field_id );
+		global $frm_duplicate_ids;
+		$this->assertNotEmpty( $frm_duplicate_ids );
+		$this->assertTrue( isset( $frm_duplicate_ids[ $original_field->id ] ), 'No id saved for duplicated field.' );
+		$newest_field_id = $frm_duplicate_ids[ $original_field->id ];
 
 		// make sure the field exists
 		$field = FrmField::getOne( $newest_field_id );
-		$this->assertTrue( is_object( $field ) );
+		$this->assertTrue( is_object( $field ), 'Field id ' . $newest_field_id . ' does not exist' );
 		$this->assertEquals( $format, $field->field_options['format'] );
 
 		self::check_in_section_variable( $field, 0 );

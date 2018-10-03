@@ -13,6 +13,7 @@ class FrmAjaxUnitTest extends WP_Ajax_UnitTestCase {
 	public static function setUpBeforeClass() {
 		parent::setUpBeforeClass();
 
+		$_POST = array();
 		FrmHooksController::trigger_load_hook( 'load_ajax_hooks' );
 		FrmHooksController::trigger_load_hook( 'load_form_hooks' );
 		FrmUnitTest::setUpBeforeClass();

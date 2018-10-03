@@ -21,6 +21,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 	public static function setUpBeforeClass() {
 		parent::setUpBeforeClass();
 
+		$_POST = array();
 		self::frm_install();
 	}
 
@@ -57,7 +58,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 	 * Some of the tests for FrmDb are triggering a transaction commit, preventing further tests from working.
 	 * This is a temporary workaround until we review FrmDb tests in detail.
 	 */
-	private static function empty_tables() {
+	protected static function empty_tables() {
 		global $wpdb;
 		$tables = self::get_table_names();
 		foreach ( $tables as $table ){
