@@ -40,11 +40,10 @@ class FrmUnitTest extends WP_UnitTestCase {
 	function setUp() {
 		parent::setUp();
 
-		if ( is_multisite() ) {
+		$this->is_pro_active = get_option( 'frmpro-authorized' );
+		if ( is_multisite() && ! $this->is_pro_active ) {
 			// WP unit testing bootstrap doesn't bother hooking into `pre_site_option` so we need to get_option() instead.
-			$this->is_pro_active = get_site_option( 'frmpro-authorized' ) || get_option( 'frmpro-authorized' );
-		} else {
-			$this->is_pro_active = get_option( 'frmpro-authorized' );
+			$this->is_pro_active = get_site_option( 'frmpro-authorized' );
 		}
 
 		$this->factory->form = new Form_Factory( $this );

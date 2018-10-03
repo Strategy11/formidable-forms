@@ -46,6 +46,22 @@ class FrmAjaxUnitTest extends WP_Ajax_UnitTestCase {
 		}
 	}
 
+	public static function get_table_names() {
+		global $wpdb;
+
+		$tables = array(
+			$wpdb->prefix . 'frm_fields',
+			$wpdb->prefix . 'frm_forms',
+			$wpdb->prefix . 'frm_items',
+			$wpdb->prefix . 'frm_item_metas',
+		);
+		if ( is_multisite() && is_callable( 'FrmProCopy::table_name' ) ) {
+			$tables[] = FrmProCopy::table_name();
+		}
+
+		return $tables;
+	}
+
     function set_as_user_role( $role ) {
         // create user
         $user_id = $this->factory->user->create( array( 'role' => $role ) );
