@@ -38,7 +38,7 @@ class test_FrmFormsController extends FrmUnitTest {
 	* without ajax
 	*/
 	function test_form_update_no_ajax() {
-		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+		if ( FrmAppHelper::doing_ajax() ) {
 			$this->markTestSkipped( 'Run with --filter test_form_update_no_ajax' );
 		}
 
@@ -135,11 +135,6 @@ class test_FrmFormsController extends FrmUnitTest {
 
 		FrmFormsController::front_head();
 		$this->assertTrue( wp_script_is( 'formidable', 'registered' ), 'The formidable js was not registered' );
-
-		global $wp_version;
-		if ( $wp_version <= 4.0 ) {
-			$this->markTestSkipped('Min JS seems to fail in WP 4.0');
-		}
 
 		global $wp_scripts;
 		$formidable_js = $wp_scripts->registered['formidable'];

@@ -312,11 +312,6 @@ class test_FrmEmail extends FrmUnitTest {
 	 * @covers FrmNotification::trigger_email
 	 */
 	public function test_trigger_email_five() {
-		global $wp_version;
-		if ( $wp_version <= 4.0 ) {
-			$this->markTestSkipped( 'Test not passing in WP 4.0 or lower. Not clear why.' );
-		}
-
 		$entry_clone = clone $this->entry;
 		$expected = array();
 		$admin_email = get_option('admin_email');

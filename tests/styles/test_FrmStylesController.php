@@ -9,15 +9,18 @@ class test_FrmStylesController extends FrmUnitTest {
 	public function test_front_head() {
 		$this->set_front_end();
 
-		if ( FrmAppHelper::wp_doing_ajax() || FrmAppHelper::is_admin() ) {
-			$this->markTestSkipped( 'Run with --group styles' );
+		// reset if the style was loaded in another test
+		global $frm_vars, $wp_styles;
+		$frm_vars['css_loaded'] = false;
+		if ( in_array( 'formidable', $wp_styles->done ) ) {
+			$k = array_search( 'formidable', $wp_styles->done );
+			unset( $wp_styles->done[ $k ] );
 		}
 
-        ob_start();
-        do_action( 'wp_head' );
-        $styles = ob_get_contents();
-        ob_end_clean();
-
+		ob_start();
+		wp_head();
+		$styles = ob_get_contents();
+		ob_end_clean();
 		$this->assertNotEmpty( $styles );
 
 		$frm_settings = FrmAppHelper::get_settings();
