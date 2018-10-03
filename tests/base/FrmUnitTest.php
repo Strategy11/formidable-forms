@@ -378,7 +378,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 		return $output;
 	}
 
-    static function install_data() {
+    public static function install_data() {
         return array(
         	dirname( __FILE__ ) . '/testdata.xml',
 			dirname( __FILE__ ) . '/free-form.xml',
