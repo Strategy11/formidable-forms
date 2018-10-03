@@ -17,6 +17,7 @@ class FrmAjaxUnitTest extends WP_Ajax_UnitTestCase {
 
 		parent::setUpBeforeClass();
 		FrmAppController::install();
+		self::do_tables_exist();
 		self::import_xml();
 	}
 
@@ -34,6 +35,15 @@ class FrmAjaxUnitTest extends WP_Ajax_UnitTestCase {
 
 		$form = FrmForm::getOne( 'contact-db12' );
 		self::assertEquals( $form->form_key, 'contact-db12' );
+	}
+
+	public static function do_tables_exist( $should_exist = true ) {
+		global $wpdb;
+		$method = $should_exist ? 'assertNotEmpty' : 'assertEmpty';
+		foreach ( self::get_table_names() as $table_name ) {
+			$message = $table_name . ' table failed to ' . ( $should_exist ? 'install' : 'uninstall' );
+			self::$method( $wpdb->query( 'DESCRIBE ' . $table_name ), $message );
+		}
 	}
 
     function set_as_user_role( $role ) {
