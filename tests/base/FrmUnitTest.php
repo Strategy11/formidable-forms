@@ -43,6 +43,8 @@ class FrmUnitTest extends WP_UnitTestCase {
 			$this->is_pro_active = get_site_option( 'frmpro-authorized' );
 		}
 
+		FrmHooksController::trigger_load_hook( 'load_admin_hooks' );
+
 		$this->factory->form = new Form_Factory( $this );
 		$this->factory->field = new Field_Factory( $this );
 		$this->factory->entry = new Entry_Factory( $this );

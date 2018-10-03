@@ -23,6 +23,10 @@ class FrmAjaxUnitTest extends WP_Ajax_UnitTestCase {
 
 	public function setUp() {
 		parent::setUp();
+
+		FrmHooksController::trigger_load_hook( 'load_ajax_hooks' );
+		FrmHooksController::trigger_load_hook( 'load_form_hooks' );
+
 		$this->factory->form = new Form_Factory( $this );
 		$this->factory->field = new Field_Factory( $this );
 		$this->factory->entry = new Entry_Factory( $this );
