@@ -765,7 +765,8 @@ class FrmField {
 		$field_type = self::get_field_type( $field );
 		$data_type = self::get_option( $field, 'data_type' );
 
-		return self::is_option_true( $field, 'multiple' ) && ( ( $field_type == 'select' || ( $field_type == 'data' && $data_type == 'select' ) ) );
+		$is_multiple = self::is_option_true( $field, 'multiple' ) && ( ( $field_type == 'select' || ( $field_type == 'data' && $data_type == 'select' ) ) );
+		return apply_filters( 'frm_is_multiple_select', $is_multiple, $field );
 	}
 
 	/**
