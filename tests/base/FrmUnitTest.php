@@ -4,30 +4,26 @@ class FrmUnitTest extends WP_UnitTestCase {
 
 	protected $user_id = 0;
 
-	protected $contact_form_key;
+	protected $contact_form_key = 'contact-with-email';
 	protected $contact_form_field_count = 10;
 
-	protected $all_fields_form_key;
+	protected $all_fields_form_key = 'all_field_types';
 	protected $all_field_types_count = 50;
 
-	protected $repeat_sec_form_key;
-	protected $create_post_form_key;
+	protected $repeat_sec_form_key  = 'rep_sec_form';
+	protected $create_post_form_key = 'create-a-post';
 
 	protected $is_pro_active = false;
 
 	/**
 	 * Ensure that the plugin has been installed and activated.
 	 */
-	public static function setUpBeforeClass() {
-		parent::setUpBeforeClass();
-
+	public static function wpSetUpBeforeClass() {
 		$_POST = array();
 		self::frm_install();
 	}
 
-	public static function tearDownAfterClass() {
-		parent::tearDownAfterClass();
-
+	public static function wpTearDownAfterClass() {
 		global $wp_version;
 		if ( $wp_version <= 4.6 ) {
 			// Prior to WP 4.7, the Formidable tables were deleted on tearDown and not restored with setUp
@@ -50,11 +46,6 @@ class FrmUnitTest extends WP_UnitTestCase {
 		$this->factory->form = new Form_Factory( $this );
 		$this->factory->field = new Field_Factory( $this );
 		$this->factory->entry = new Entry_Factory( $this );
-
-		$this->contact_form_key     = 'contact-with-email';
-		$this->all_fields_form_key  = 'all_field_types';
-		$this->repeat_sec_form_key  = 'rep_sec_form';
-		$this->create_post_form_key = 'create-a-post';
 
 		$this->create_users();
 	}
