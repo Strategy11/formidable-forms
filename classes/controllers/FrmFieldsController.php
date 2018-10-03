@@ -168,7 +168,7 @@ class FrmFieldsController {
 
 		$copy_field = FrmField::getOne( $field_id );
         if ( ! $copy_field ) {
-            wp_die();
+            wp_die( esc_html( __( 'No field found to duplicate:', 'formidable' ) . ' ' . $field_id ) );
         }
 
 		do_action( 'frm_duplicate_field', $copy_field, $form_id );

@@ -80,7 +80,7 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 		);
 
 		$response = $this->trigger_action( 'frm_duplicate_field' );
-		$this->assertContains( '<input type="hidden" name="frm_fields_submitted[]" ', $response );
+		$this->assertContains( '<input type="hidden" name="frm_fields_submitted[]" ', $response, 'Field was not created in form ' . $original_field->form_id . ' duplicated from field ' . $original_field->id );
 
 		global $frm_duplicate_ids;
 		$this->assertNotEmpty( $frm_duplicate_ids );
