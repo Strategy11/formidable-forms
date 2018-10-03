@@ -16,7 +16,8 @@ class Tests_Frm_Ajax extends FrmAjaxUnitTest {
 		$role = 'editor';
 		$user_id = $this->factory->user->create( compact( 'role' ) );
 		wp_set_current_user( $user_id );
-		$this->assertTrue( current_user_can( $role ) );
+		$this->assertTrue( current_user_can( $role ), 'Role not set correctly' );
+		$this->assertFalse( current_user_can( 'administrator' ), 'Editor has administrator permissions' );
 
 		$_POST = array(
 			'action' => 'frm_uninstall',

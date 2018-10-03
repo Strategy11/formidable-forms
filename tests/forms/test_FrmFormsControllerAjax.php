@@ -18,7 +18,8 @@ class test_FrmFormsControllerAjax extends FrmAjaxUnitTest {
 	* with ajax
 	*/
 	function test_form_update_with_ajax() {
-		$form_id = FrmForm::get_id_by_key( $this->contact_form_key );
+		$form_id = $this->factory->form->get_id_by_key( $this->contact_form_key );
+		$this->assertNotEmpty( $form_id, 'Form not found with key ' . $this->contact_form_key );
 
 		self::_setup_post_values( $form_id );
 
@@ -36,6 +37,7 @@ class test_FrmFormsControllerAjax extends FrmAjaxUnitTest {
 		$fields = FrmField::get_all_for_form( $form_id );
 
 		$form = FrmForm::getOne( $form_id );
+		$this->assertNotEmpty( $form, 'Form not found with id ' . $form_id );
 
 		$_POST = array(
 			'page' => 'formidable',

@@ -4,12 +4,14 @@
  * @group entries
  */
 class test_FrmEntry extends FrmUnitTest {
+
 	/**
 	 * @covers FrmEntry::create
 	 * @covers FrmEntry::is_duplicate
 	 */
 	function test_is_duplicate() {
 		$form = $this->factory->form->get_object_by_id( $this->contact_form_key );
+		$this->assertNotEmpty( $form, 'Form not found with id ' . $this->contact_form_key );
 		$entry_data = $this->factory->field->generate_entry_array( $form );
 		$entry = $this->factory->entry->create_object( $entry_data );
 

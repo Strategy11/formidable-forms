@@ -8,7 +8,7 @@ class FrmAjaxUnitTest extends WP_Ajax_UnitTestCase {
 	protected $field_id = 0;
 	protected $user_id = 0;
 	protected $is_pro_active = false;
-	protected $contact_form_key = 'contact-with-email';
+	protected $contact_form_key;
 
 	public static function setUpBeforeClass() {
 		parent::setUpBeforeClass();
@@ -29,6 +29,7 @@ class FrmAjaxUnitTest extends WP_Ajax_UnitTestCase {
 		$this->factory->form = new Form_Factory( $this );
 		$this->factory->field = new Field_Factory( $this );
 		$this->factory->entry = new Entry_Factory( $this );
+		$this->contact_form_key = 'contact-with-email';
 	}
 
     function set_as_user_role( $role ) {

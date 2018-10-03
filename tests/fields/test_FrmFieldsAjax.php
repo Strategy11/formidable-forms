@@ -15,19 +15,19 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 
 		// Set a user so the $post has 'post_author'
 		$this->user_id = $this->factory->user->create( array( 'role' => 'administrator' ) );
+		wp_set_current_user( $this->user_id );
+		FrmAppHelper::maybe_add_permissions();
 
 		$form = $this->factory->form->create_and_get();
 		$this->assertNotEmpty( $form );
 		$this->form_id = $form->id;
+		$this->assertTrue( is_numeric( $this->form_id ) );
 	}
 
 	/**
 	 * @covers FrmFieldsController::create
 	 */
     public function test_create() {
-        wp_set_current_user( $this->user_id );
-        $this->assertTrue(is_numeric($this->form_id));
-
 		$_POST = array(
 			'action'    => 'frm_insert_field',
             'nonce'     => wp_create_nonce('frm_ajax'),
@@ -58,8 +58,7 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 	 * @covers FrmFieldsController::duplicate
 	 */
 	public function test_duplicating_text_field() {
-		wp_set_current_user( $this->user_id );
-		$this->assertTrue(is_numeric($this->form_id));
+		$this->assertTrue( current_user_can( 'frm_edit_forms' ), 'User does not have permission' );
 
 		$format = '^([a-zA-Z]\d{4})$';
 		$original_field = $this->factory->field->create_and_get( array(
@@ -70,6 +69,7 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 				'in_section' => 0,
 			),
 		) );
+		$this->assertNotEmpty( $original_field->id );
 		$this->assertEquals( $format, $original_field->field_options['format'] );
 
 		$_POST = array(
