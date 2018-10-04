@@ -52,6 +52,7 @@ class test_FrmAppController extends FrmUnitTest {
 
 	/**
 	 * @covers FrmAppController::add_admin_class
+	 * @covers FrmAppController::is_white_page
 	 */
 	public function test_add_admin_class() {
 		$this->set_admin_screen();

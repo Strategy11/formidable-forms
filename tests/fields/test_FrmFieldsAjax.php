@@ -56,6 +56,7 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 	 * Test duplicating a text field
 	 *
 	 * @covers FrmFieldsController::duplicate
+	 * @covers FrmField::duplicate
 	 */
 	public function test_duplicating_text_field() {
 		$this->assertTrue( current_user_can( 'frm_edit_forms' ), 'User does not have permission' );
