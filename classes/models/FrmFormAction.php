@@ -350,8 +350,8 @@ class FrmFormAction {
 			self::clear_cache();
 			wp_update_post(
 				array(
-					'ID'          =>  $new_instance['ID'],
-					'post_status' =>  $new_instance['post_status'],
+					'ID'          => $new_instance['ID'],
+					'post_status' => $new_instance['post_status'],
 				)
 			);
 		}
