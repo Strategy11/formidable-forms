@@ -131,7 +131,10 @@ function frmAdminBuildJS(){
 		};
 
 		var wrapClass = jQuery('.wrap, .frm_wrap');
-		wrapClass.on('click', '.widget-top,a.widget-action', clickWidget);
+
+		wrapClass.on( 'click', '.frm_remove_tag, .frm_remove_form_action', removeThisTag );
+		wrapClass.on( 'click', 'a[data-frmverify]', confirmClick );
+		wrapClass.on( 'click', '.widget-top,a.widget-action', clickWidget );
 
 		wrapClass.on('mouseenter.frm', '.frm_help', function(){
 			jQuery(this).off('mouseenter.frm');
@@ -207,15 +210,22 @@ function frmAdminBuildJS(){
 		return false;
 	}
 	
-	function clickWidget(b){
+	function clickWidget( event, b ) {
 		/*jshint validthis:true */
-		if(typeof b.target !== 'undefined'){
+		var target = event.target;
+		if ( typeof target !== 'undefined' ) {
 			b = this;
 		}
 
 		popCalcFields(b);
 
 		var cont = jQuery(b).closest('.frm_form_action_settings');
+		if ( cont.length && typeof target !== 'undefined' && ( target.parentElement.className.indexOf( 'frm_email_icons' ) > -1 || target.parentElement.className.indexOf( 'frm_toggle' ) > -1 ) ) {
+			// clicking on delete icon shouldn't open it
+			event.stopPropagation();
+			return;
+		}
+
 		if ( cont.length && cont.find('.form-table').length < 1 ) {
 			var action_id = cont.find('input[name$="[ID]"]').val();
 			var action_type = cont.find('input[name$="[post_excerpt]"]').val();
@@ -1224,7 +1234,7 @@ function frmAdminBuildJS(){
 	function clickSectionVis(e){
 		/*jshint validthis:true */
 		if(typeof jQuery(e.target).closest('.widget-top').attr('class') !== 'undefined'){
-			clickWidget(jQuery(e.target).closest('.widget-top'));
+			clickWidget( e, jQuery(e.target).closest('.widget-top') );
 		}
 
         // Do not stop propagation if opening TB_iframe
@@ -3029,10 +3039,6 @@ function frmAdminBuildJS(){
 			}
 
 			loadTooltips();
-
-			jQuery(document).on('click', 'a[data-frmverify]', confirmClick);
-
-            jQuery(document.getElementById('wpbody')).on('click', '.frm_remove_tag, .frm_remove_form_action', removeThisTag);
 
 			// used on build, form settings, and view settings
 			var $shortCodeDiv = jQuery(document.getElementById('frm_shortcodediv'));

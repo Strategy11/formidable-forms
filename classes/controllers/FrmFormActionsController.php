@@ -112,7 +112,10 @@ class FrmFormActionsController {
 		 */
 		do_action( 'frm_before_list_actions', $form );
 
-		$form_actions = FrmFormAction::get_action_for_form( $form->id );
+		$filters = array(
+			'post_status' => 'all',
+		);
+		$form_actions = FrmFormAction::get_action_for_form( $form->id, 'all', $filters );
 
         $action_controls = self::get_form_actions();
 

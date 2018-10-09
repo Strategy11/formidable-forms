@@ -1472,6 +1472,70 @@ li.ui-state-default.selected .frm-show-click.frm_import_options select {
 #form_settings_page .frm_posttax_row select{max-width:35%;}
 select.frm_cancelnew, input.frm_enternew{width:175px;}
 
+/* Admin toggle */
+.frm_toggle_on {
+	display: none;
+	color: #fff;
+	z-index: 999;
+	position: absolute;
+	font-size: 10px;
+	padding-left: 3px;
+}
+
+.frm_toggle {
+	position: relative;
+	display: inline-block;
+	width: 34px;
+	height: 18px;
+	vertical-align: middle;
+}
+
+.frm_toggle input {
+	display:none !important;
+}
+
+.frm_toggle_slider {
+	position: absolute;
+	cursor: pointer;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	transition: .4s;
+	border-radius: 30px;
+	background-color: transparent;
+	border: 2px solid #A0A0A0;
+}
+
+.frm_toggle_slider:before {
+	border-radius: 50%;
+	position: absolute;
+	content: "";
+	height: 10px;
+	width: 10px;
+	left: 2px;
+	top: 2px;
+	transition: .3s;
+	background-color: #A0A0A0;
+}
+
+input:checked + .frm_toggle_slider {
+	background-color: #82b4cb;
+	border-color: #82b4cb;
+}
+
+input:checked + .frm_toggle_slider:before {
+	background-color: #fff;
+	transform: translateX(16px);
+}
+
+input:checked + .frm_toggle_slider + .frm_toggle_on{
+	display:inline;
+}
+
+input:focus + .frm_toggle_slider {
+	box-shadow: 0 0 1px #008ec2;
+}
 
 /* Global Settings */
 .categorydiv .frm_settings_form div.tabs-panel.general_settings{border-top:none;}

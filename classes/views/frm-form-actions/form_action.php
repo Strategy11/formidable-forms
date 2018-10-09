@@ -13,6 +13,12 @@ $form_action = apply_filters( 'frm_form_' . $form_action->post_excerpt . '_actio
             </button>
         </div>
         <span class="frm_email_icons alignright">
+			<label class="frm_toggle">
+				<input type="checkbox" value="publish" name="<?php echo esc_attr( $action_control->get_field_name( 'post_status', '' ) ); ?>" <?php checked( $form_action->post_status, 'publish' ); ?> />
+				<span class="frm_toggle_slider"></span>
+				<span class="frm_toggle_on">ON</span>
+			</label>
+
             <a href="javascript:void(0)" data-removeid="frm_form_action_<?php echo esc_attr( $action_key ) ?>" class="frm_icon_font frm_delete_icon frm_remove_form_action" data-frmverify="<?php echo esc_attr( 'Really?', 'formidable' ) ?>"> </a>
         </span>
         <div class="widget-title">
