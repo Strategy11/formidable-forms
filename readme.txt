@@ -4,7 +4,7 @@ Tags: contact form, form builder, custom form, forms, form, form maker, form cre
 Requires at least: 4.4
 Tested up to: 4.9.5
 Requires PHP: 5.3
-Stable tag: 3.03.03
+Stable tag: 3.04
 
 The best WordPress forms plugin for custom forms. Go beyond contact forms with a drag & drop form builder, HTML control & form style generator
 
@@ -160,6 +160,11 @@ The field and form names and descriptions are all changed with in-place edit. Ju
 [See more FAQs](https://formidableforms.com/formidable-faqs/ "Formidable Form FAQs")
 
 == Changelog ==
+= 3.04 =
+* New: Add option to duplicate a form action
+* New: Add option to turn form actions on or off
+* New: Add frm_is_multiple_select hook
+
 = 3.03.03 =
 * Improve the appearance of the import/export page
 * Move the admin menu position below the post comments
