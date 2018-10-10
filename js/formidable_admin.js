@@ -1765,7 +1765,48 @@ function frmAdminBuildJS(){
 			jQuery('.'+c+'_action_message_box.'+c+'_action_box').fadeIn('slow');
 		}
 	}
-	
+
+	function copyFormAction() {
+		/*jshint validthis:true */
+		var action = jQuery(this).closest('.frm_form_action_settings').clone();
+		var currentID = action.attr('id').replace( 'frm_form_action_', '' );
+		var newID = newActionId( currentID );
+		action.find('.frm_action_id, .frm-btn-group').remove();
+		action.find('input[name$="[' + currentID + '][ID]"]').val('');
+		action.find('.widget-inside').hide();
+
+		// the .html() gets original values, so they need to be set
+		action.find('input[type=text], textarea, input[type=number]').prop('defaultValue', function() {
+			return this.value;
+		});
+
+		action.find('input[type=checkbox], input[type=radio]').prop('defaultChecked', function() {
+			return this.checked;
+		});
+
+		var rename  = new RegExp( '\\[' + currentID + '\\]', 'g' );
+		var reid    = new RegExp( '_' + currentID + '"', 'g' );
+		var reclass = new RegExp( '-' + currentID + '"', 'g' );
+		var revalue = new RegExp( '"' + currentID + '"', 'g' ); // if a field id matches, this could cause trouble
+
+		var html = action.html().replace( rename, '[' + newID + ']' ).replace( reid, '_' + newID + '"' );
+		html = html.replace( reclass, '-' + newID + '"' ).replace( revalue, '"' + newID + '"' );
+		var div = '<div id="frm_form_action_' + newID + '" class="widget frm_form_action_settings frm_single_email_settings" data-actionkey="' + newID + '">';
+
+		jQuery('#frm_notification_settings').append( div + html + '</div>' );
+		initiateMultiselect();
+	}
+
+	function newActionId( currentID ) {
+		var newID = parseInt( currentID ) + 11;
+		var exists = document.getElementById( 'frm_form_action_' + newID );
+		if ( exists !== null ) {
+			newID++;
+			newID = newActionId( newID );
+		}
+		return newID;
+	}
+
 	function addFormAction(){
 		/*jshint validthis:true */
 		var actionId = getNewActionId();
@@ -3197,6 +3238,7 @@ function frmAdminBuildJS(){
 			$formActions.on('click', '.frm_add_postmeta_row', addPostmetaRow);
 			$formActions.on('click', '.frm_add_posttax_row', addPosttaxRow);
 			$formActions.on('click', '.frm_toggle_cf_opts', toggleCfOpts);
+			$formActions.on( 'click', '.frm_duplicate_form_action', copyFormAction );
 			jQuery('select[data-toggleclass], input[data-toggleclass]').change(toggleFormOpts);
 			jQuery('.frm_actions_list').on('click', '.frm_active_action', addFormAction);
 			initiateMultiselect();

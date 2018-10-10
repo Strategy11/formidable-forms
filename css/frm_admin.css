@@ -128,7 +128,7 @@ td.column-title .frm_actions_dropdown{
 	color: #e37222;
 	line-height: 1.4;
 	font-weight: 600;
-	margin: 1px 0 0 2px;
+	margin: 1px 0 0 10px;
 	padding: 1px 4px;
 	vertical-align: top;
 	-webkit-border-radius: 10px;
@@ -1489,7 +1489,7 @@ select.frm_cancelnew, input.frm_enternew{width:175px;}
 	width: 34px;
 	height: 18px;
 	vertical-align: middle;
-	margin-right: 8px;
+	margin-left: 5px;
 }
 
 .frm_toggle input {
@@ -1788,6 +1788,11 @@ label.frm_action_events{
 .frm_email_icons{
 	padding-left:6px;
 }
+
+.frm_email_icons a {
+	margin-left: 3px;
+}
+
 .frm_actions_list a.frm_inactive_action:before{
 	color:#d6d6d6;
 	cursor:not-allowed;
@@ -1906,7 +1911,7 @@ label.frm_action_events{
     position: absolute;
     padding: 5px 10px;
     right: 10px;
-	bottom: 5px;
+	bottom: 0;
 }
 .frm_right_addon input {
     padding-right: 30px;
@@ -1918,6 +1923,10 @@ label.frm_action_events{
 
 a.frm_icon_font:hover, a.frm_icon_font:active, a.frm_icon_font:focus {
     color: #82b4cb;
+}
+
+.frm_confirming.frm_icon_font:before {
+	content:'' !important;
 }
 
 .misc-pub-revisions.frm_icon_font,
