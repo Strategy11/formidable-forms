@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Formidable v2.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-12 16:44+0000\n"
+"POT-Creation-Date: 2018-10-10 19:29+0000\n"
 "POT-Revision-Date: Tue Sep 26 2017 16:06:46 GMT-0600 (MDT)\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: \n"
@@ -39,17 +39,17 @@ msgstr ""
 msgid "There are no plugins on your site that require a license"
 msgstr ""
 
-#: classes/controllers/FrmAppController.php:91
+#: classes/controllers/FrmAppController.php:83
 msgid "Build"
 msgstr ""
 
-#: classes/controllers/FrmAppController.php:98
+#: classes/controllers/FrmAppController.php:90
 #: classes/helpers/FrmFormsListHelper.php:336
 #: classes/views/frm-forms/settings.php:10
 msgid "Settings"
 msgstr ""
 
-#: classes/controllers/FrmAppController.php:105
+#: classes/controllers/FrmAppController.php:97
 #: classes/controllers/FrmEntriesController.php:8
 #: classes/controllers/FrmEntriesController.php:8
 #: classes/controllers/FrmEntriesController.php:126
@@ -59,11 +59,11 @@ msgstr ""
 msgid "Entries"
 msgstr ""
 
-#: classes/controllers/FrmAppController.php:121
+#: classes/controllers/FrmAppController.php:113
 msgid "Build a Form"
 msgstr ""
 
-#: classes/controllers/FrmAppController.php:154
+#: classes/controllers/FrmAppController.php:146
 #, php-format
 msgid ""
 "This site has been previously authorized to run Formidable Forms. "
@@ -71,7 +71,7 @@ msgid ""
 "running the free version and remove this message."
 msgstr ""
 
-#: classes/controllers/FrmAppController.php:513
+#: classes/controllers/FrmAppController.php:505
 #, php-format
 msgid ""
 "Help us spread the %1$sFormidable Forms%2$s love with %3$s %5$s on WordPress."
@@ -163,11 +163,11 @@ msgstr ""
 msgid "No entries were specified"
 msgstr ""
 
-#: classes/controllers/FrmFieldsController.php:302
+#: classes/controllers/FrmFieldsController.php:304
 msgid "Other"
 msgstr ""
 
-#: classes/controllers/FrmFieldsController.php:305
+#: classes/controllers/FrmFieldsController.php:307
 msgid "New Option"
 msgstr ""
 
@@ -176,7 +176,7 @@ msgstr ""
 msgid "Form Actions"
 msgstr ""
 
-#: classes/controllers/FrmFormActionsController.php:210
+#: classes/controllers/FrmFormActionsController.php:213
 #: classes/models/FrmEntryValidate.php:14 classes/models/FrmSettings.php:100
 msgid "You do not have permission to do that"
 msgstr ""
@@ -2185,7 +2185,8 @@ msgstr ""
 msgid "Delete Permanently"
 msgstr ""
 
-#: classes/helpers/FrmFormsHelper.php:835 classes/models/FrmFormAction.php:703
+#: classes/helpers/FrmFormsHelper.php:835 classes/models/FrmFormAction.php:744
+#: classes/views/frm-form-actions/form_action.php:19
 msgid "Delete"
 msgstr ""
 
@@ -2601,7 +2602,7 @@ msgid_plural "%1$s Forms"
 msgstr[0] ""
 msgstr[1] ""
 
-#: classes/helpers/FrmXMLHelper.php:853
+#: classes/helpers/FrmXMLHelper.php:853 classes/models/FrmFormMigrator.php:388
 #, php-format
 msgid "%1$s Field"
 msgid_plural "%1$s Fields"
@@ -2912,18 +2913,18 @@ msgstr ""
 msgid "There are no options for this action."
 msgstr ""
 
-#: classes/models/FrmFormAction.php:700
+#: classes/models/FrmFormAction.php:741
 #: classes/views/frm-forms/_publish_box.php:30
 msgid "Save Draft"
 msgstr ""
 
-#: classes/models/FrmFormAction.php:701
+#: classes/models/FrmFormAction.php:742
 #: classes/views/frm-forms/add_field_links.php:7
 #: classes/views/frm-forms/form.php:61
 msgid "Create"
 msgstr ""
 
-#: classes/models/FrmFormAction.php:702
+#: classes/models/FrmFormAction.php:743
 #: classes/views/frm-forms/_publish_box.php:34
 #: classes/views/frm-forms/_publish_box.php:38
 #: classes/views/frm-forms/add_field_links.php:7
@@ -2932,8 +2933,20 @@ msgstr ""
 msgid "Update"
 msgstr ""
 
-#: classes/models/FrmFormAction.php:704 classes/views/xml/import_form.php:10
+#: classes/models/FrmFormAction.php:745 classes/views/xml/import_form.php:9
 msgid "Import"
+msgstr ""
+
+#: classes/models/FrmFormMigrator.php:137
+msgid "No form fields found."
+msgstr ""
+
+#: classes/models/FrmFormMigrator.php:229
+msgid "There was an error while creating a new form."
+msgstr ""
+
+#: classes/models/FrmFormMigrator.php:360
+msgid "Default Form"
 msgstr ""
 
 #: classes/models/FrmMigrate.php:485
@@ -3295,6 +3308,10 @@ msgstr ""
 
 #: classes/views/frm-form-actions/default_actions.php:56
 msgid "Highrise"
+msgstr ""
+
+#: classes/views/frm-form-actions/form_action.php:17
+msgid "Duplicate"
 msgstr ""
 
 #: classes/views/frm-forms/_publish_box.php:44
@@ -4418,23 +4435,23 @@ msgstr ""
 msgid "Reset to Default"
 msgstr ""
 
-#: classes/views/xml/import_form.php:12
+#: classes/views/xml/import_form.php:11
 msgid ""
 "Upload your Formidable XML file to import forms into this site. If your "
 "imported form key and creation date match a form on your site, that form "
 "will be updated."
 msgstr ""
 
-#: classes/views/xml/import_form.php:19
+#: classes/views/xml/import_form.php:18
 msgid "Choose a Formidable XML file"
 msgstr ""
 
-#: classes/views/xml/import_form.php:20
+#: classes/views/xml/import_form.php:19
 #, php-format
 msgid "Maximum size: %s"
 msgstr ""
 
-#: classes/views/xml/import_form.php:28
+#: classes/views/xml/import_form.php:27
 msgid "Upload file and import"
 msgstr ""
 
