@@ -1478,8 +1478,9 @@ select.frm_cancelnew, input.frm_enternew{width:175px;}
 	color: #fff;
 	z-index: 999;
 	position: absolute;
-	font-size: 10px;
-	padding-left: 3px;
+	font-size: 9px;
+	left: 4px;
+	line-height: 18px;
 }
 
 .frm_toggle {
@@ -1488,6 +1489,7 @@ select.frm_cancelnew, input.frm_enternew{width:175px;}
 	width: 34px;
 	height: 18px;
 	vertical-align: middle;
+	margin-right: 8px;
 }
 
 .frm_toggle input {
@@ -1717,9 +1719,6 @@ label.default-style-box input[type="checkbox"]{
 .frm_actions_list a{
 	color:#A0A0A0;
 }
-.frm_actions_list a:hover{
-	color:#B7B7B7;
-}
 
 .frm_actions_list a:active, .frm_actions_list a:focus{
     outline: none;
@@ -1915,6 +1914,10 @@ label.frm_action_events{
 
 .frm_icon_font{
 	color:#A0A0A0;
+}
+
+a.frm_icon_font:hover, a.frm_icon_font:active, a.frm_icon_font:focus {
+    color: #82b4cb;
 }
 
 .misc-pub-revisions.frm_icon_font,
