@@ -213,7 +213,7 @@ function frmAdminBuildJS(){
 	function clickWidget( event, b ) {
 		/*jshint validthis:true */
 		var target = event.target;
-		if ( typeof target !== 'undefined' ) {
+		if ( typeof b === 'undefined' ) {
 			b = this;
 		}
 
