@@ -143,7 +143,8 @@
 			<div class="clear"></div>
 	        <p class="howto"><?php echo esc_html( $helper['heading'] ); ?></p>
 	        <ul class="frm_code_list">
-	        <?php foreach ( $helper['codes'] as $code => $code_label ) {
+	        <?php
+			foreach ( $helper['codes'] as $code => $code_label ) {
 	        	$code = str_replace( '|user_id|', $uid->id, $code );
 				?>
 	            <li class="frm_col_<?php echo esc_attr( $col ) ?>">
