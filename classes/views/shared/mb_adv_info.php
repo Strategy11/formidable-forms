@@ -131,7 +131,7 @@
 	<?php } ?>
 
 	<div id="frm-adv-info-tab" class="tabs-panel">
-        <?php
+		<?php
 
 		foreach ( $advanced_helpers as $helper_type => $helper ) {
 			if ( 'user_id' === $helper_type && ! isset( $uid ) ) {
