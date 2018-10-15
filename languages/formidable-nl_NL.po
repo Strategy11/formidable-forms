@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2018-09-12 16:46+0000\n"
+"PO-Revision-Date: 2018-10-15 19:34+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -9,7 +9,7 @@ msgstr ""
 "Language: nl_NL\n"
 "Project-Id-Version: Formidable Forms\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-12 16:44+0000\n"
+"POT-Creation-Date: 2018-10-15 19:32+0000\n"
 "Last-Translator: Formidable Community\n"
 "Language-Team: Dutch"
 
@@ -25,17 +25,17 @@ msgstr "Upgrade naar Pro"
 msgid "There are no plugins on your site that require a license"
 msgstr ""
 
-#: classes/controllers/FrmAppController.php:91
+#: classes/controllers/FrmAppController.php:83
 msgid "Build"
 msgstr "Bewerken"
 
-#: classes/controllers/FrmAppController.php:98
+#: classes/controllers/FrmAppController.php:90
 #: classes/helpers/FrmFormsListHelper.php:336
 #: classes/views/frm-forms/settings.php:10
 msgid "Settings"
 msgstr "Instellingen"
 
-#: classes/controllers/FrmAppController.php:105
+#: classes/controllers/FrmAppController.php:97
 #: classes/controllers/FrmEntriesController.php:8
 #: classes/controllers/FrmEntriesController.php:8
 #: classes/controllers/FrmEntriesController.php:126
@@ -45,11 +45,11 @@ msgstr "Instellingen"
 msgid "Entries"
 msgstr "Inzendingen"
 
-#: classes/controllers/FrmAppController.php:121
+#: classes/controllers/FrmAppController.php:113
 msgid "Build a Form"
 msgstr ""
 
-#: classes/controllers/FrmAppController.php:154
+#: classes/controllers/FrmAppController.php:146
 #, php-format
 msgid ""
 "This site has been previously authorized to run Formidable Forms. "
@@ -57,7 +57,7 @@ msgid ""
 "running the free version and remove this message."
 msgstr ""
 
-#: classes/controllers/FrmAppController.php:513
+#: classes/controllers/FrmAppController.php:505
 #, php-format
 msgid ""
 "Help us spread the %1$sFormidable Forms%2$s love with %3$s %5$s on WordPress."
@@ -93,7 +93,7 @@ msgid "Support"
 msgstr "Ondersteuning"
 
 #: classes/controllers/FrmEntriesController.php:105
-#: classes/controllers/FrmFormsController.php:827
+#: classes/controllers/FrmFormsController.php:877
 #: classes/views/frm-entries/form.php:43
 #: classes/views/frm-entries/sidebar-shared.php:38
 msgid "Entry Key"
@@ -149,11 +149,11 @@ msgstr "Inzendingen zijn met succes verwijderd"
 msgid "No entries were specified"
 msgstr "Geen bijdragen gespecificeerd"
 
-#: classes/controllers/FrmFieldsController.php:302
+#: classes/controllers/FrmFieldsController.php:304
 msgid "Other"
 msgstr ""
 
-#: classes/controllers/FrmFieldsController.php:305
+#: classes/controllers/FrmFieldsController.php:307
 msgid "New Option"
 msgstr "Nieuwe Optie"
 
@@ -162,7 +162,7 @@ msgstr "Nieuwe Optie"
 msgid "Form Actions"
 msgstr ""
 
-#: classes/controllers/FrmFormActionsController.php:210
+#: classes/controllers/FrmFormActionsController.php:213
 #: classes/models/FrmEntryValidate.php:14 classes/models/FrmSettings.php:100
 msgid "You do not have permission to do that"
 msgstr "U heeft niet voldoende rechten om dit te doen"
@@ -184,7 +184,7 @@ msgid "Form was Successfully Updated"
 msgstr "Het formulier is met succes bijgewerkt"
 
 #: classes/controllers/FrmFormsController.php:232
-#: classes/controllers/FrmFormsController.php:1662
+#: classes/controllers/FrmFormsController.php:1712
 msgid "Form template was Successfully Created"
 msgstr "Het formulier sjabloon is aangemaakt"
 
@@ -293,91 +293,135 @@ msgstr "Sjabloon succesvol bijgewerkt"
 msgid "That template cannot be edited"
 msgstr "Dit sjabloon kan niet veranderd worden"
 
-#: classes/controllers/FrmFormsController.php:804
+#: classes/controllers/FrmFormsController.php:802
+msgid ""
+"Customize the field values with the following parameters. Click to see a "
+"sample."
+msgstr ""
+
+#: classes/controllers/FrmFormsController.php:816
+msgid "Insert user information"
+msgstr "Gebruikersinformatie invoeren"
+
+#: classes/controllers/FrmFormsController.php:837
 msgid "Separator"
 msgstr "Afscheider"
 
-#: classes/controllers/FrmFormsController.php:805
+#: classes/controllers/FrmFormsController.php:838
 msgid "Use a different separator for checkbox fields"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:807
+#: classes/controllers/FrmFormsController.php:840
 msgid "Date Format"
 msgstr "Datumnotatie"
 
-#: classes/controllers/FrmFormsController.php:808
+#: classes/controllers/FrmFormsController.php:841
 msgid "Field Label"
 msgstr "Veld label"
 
-#: classes/controllers/FrmFormsController.php:810
+#: classes/controllers/FrmFormsController.php:843
 msgid "No Auto P"
 msgstr "Geen automatische p"
 
-#: classes/controllers/FrmFormsController.php:811
+#: classes/controllers/FrmFormsController.php:844
 msgid "Do not automatically add any paragraphs or line breaks"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:826
+#: classes/controllers/FrmFormsController.php:858
+#: classes/models/FrmField.php:58
+msgid "User ID"
+msgstr "Gebruikers ID"
+
+#: classes/controllers/FrmFormsController.php:859
+msgid "First Name"
+msgstr ""
+
+#: classes/controllers/FrmFormsController.php:860
+msgid "Last Name"
+msgstr ""
+
+#: classes/controllers/FrmFormsController.php:861
+msgid "Display Name"
+msgstr ""
+
+#: classes/controllers/FrmFormsController.php:862
+msgid "User Login"
+msgstr ""
+
+#: classes/controllers/FrmFormsController.php:863
+#: classes/models/FrmField.php:34
+msgid "Email"
+msgstr "Email adres"
+
+#: classes/controllers/FrmFormsController.php:864
+msgid "Avatar"
+msgstr ""
+
+#: classes/controllers/FrmFormsController.php:865
+msgid "Author Link"
+msgstr ""
+
+#: classes/controllers/FrmFormsController.php:876
 #: classes/views/frm-entries/sidebar-shared.php:32
 msgid "Entry ID"
 msgstr "Inzendings ID"
 
-#: classes/controllers/FrmFormsController.php:828
+#: classes/controllers/FrmFormsController.php:878
 msgid "Post ID"
 msgstr "Bericht ID"
 
-#: classes/controllers/FrmFormsController.php:829
+#: classes/controllers/FrmFormsController.php:879
 msgid "User IP"
 msgstr "User IP"
 
-#: classes/controllers/FrmFormsController.php:830
+#: classes/controllers/FrmFormsController.php:880
 msgid "Entry created"
 msgstr "Item aangemaakt"
 
-#: classes/controllers/FrmFormsController.php:831
+#: classes/controllers/FrmFormsController.php:881
 msgid "Entry updated"
 msgstr "Item bijgewerkt"
 
-#: classes/controllers/FrmFormsController.php:833
+#: classes/controllers/FrmFormsController.php:883
 msgid "Site URL"
 msgstr "Site URL"
 
-#: classes/controllers/FrmFormsController.php:834
+#: classes/controllers/FrmFormsController.php:884
 msgid "Site Name"
 msgstr "Site naam"
 
-#: classes/controllers/FrmFormsController.php:842
+#: classes/controllers/FrmFormsController.php:892
 msgid "Default Msg"
 msgstr "Standaardmelding"
 
-#: classes/controllers/FrmFormsController.php:843
+#: classes/controllers/FrmFormsController.php:893
 msgid "Default HTML"
 msgstr "Standaard HTML"
 
-#: classes/controllers/FrmFormsController.php:844
+#: classes/controllers/FrmFormsController.php:894
 msgid "Default Plain"
 msgstr "Standaard plat"
 
-#: classes/controllers/FrmFormsController.php:932
+#: classes/controllers/FrmFormsController.php:982
 msgid "No forms were specified"
 msgstr "Geen formulieren gespecificeerd"
 
-#: classes/controllers/FrmFormsController.php:1079
+#: classes/controllers/FrmFormsController.php:1129
 msgid "Abnormal HTML characters prevented your form from saving correctly"
 msgstr ""
 "Ongewone HTML-karakters voorkomen dat het formulier op de juiste manier "
 "wordt bewaard"
 
-#: classes/controllers/FrmFormsController.php:1194
-#: classes/controllers/FrmFormsController.php:1208
+#: classes/controllers/FrmFormsController.php:1244
+#: classes/controllers/FrmFormsController.php:1258
 msgid "Please select a valid form"
 msgstr "Selecteer een geldig formulier"
 
-#: classes/controllers/FrmFormsController.php:1436
+#: classes/controllers/FrmFormsController.php:1486
 msgid "Please wait while you are redirected."
 msgstr "Wacht terwijl je wordt doorverwezen"
 
-#: classes/controllers/FrmFormsController.php:1470
+#: classes/controllers/FrmFormsController.php:1520
 #, php-format
 msgid "%1$sClick here%2$s if you are not automatically redirected."
 msgstr "%1$sClick hier%2$s voor het geval u niet automatisch wordt doorgeleid."
@@ -2180,7 +2224,8 @@ msgstr "Prullenbak"
 msgid "Delete Permanently"
 msgstr "Verwijder definitief"
 
-#: classes/helpers/FrmFormsHelper.php:835 classes/models/FrmFormAction.php:703
+#: classes/helpers/FrmFormsHelper.php:835 classes/models/FrmFormAction.php:744
+#: classes/views/frm-form-actions/form_action.php:19
 msgid "Delete"
 msgstr "Verwijderen"
 
@@ -2596,7 +2641,7 @@ msgid_plural "%1$s Forms"
 msgstr[0] "%1$s formulier"
 msgstr[1] "%1$s Formulieren"
 
-#: classes/helpers/FrmXMLHelper.php:853
+#: classes/helpers/FrmXMLHelper.php:853 classes/models/FrmFormMigrator.php:388
 #, php-format
 msgid "%1$s Field"
 msgid_plural "%1$s Fields"
@@ -2795,10 +2840,6 @@ msgstr ""
 msgid "Dropdown"
 msgstr "Uitklapbaar"
 
-#: classes/models/FrmField.php:34
-msgid "Email"
-msgstr "Email adres"
-
 #: classes/models/FrmField.php:38
 msgid "Website/URL"
 msgstr "Website"
@@ -2818,10 +2859,6 @@ msgstr "HTML"
 #: classes/models/FrmField.php:54
 msgid "Hidden Field"
 msgstr "Verborgen veld"
-
-#: classes/models/FrmField.php:58
-msgid "User ID"
-msgstr "Gebruikers ID"
 
 #: classes/models/FrmField.php:62 classes/views/frm-settings/form.php:89
 msgid "reCAPTCHA"
@@ -2909,18 +2946,18 @@ msgstr ""
 msgid "There are no options for this action."
 msgstr "Er zijn geen opties voor deze actie."
 
-#: classes/models/FrmFormAction.php:700
+#: classes/models/FrmFormAction.php:741
 #: classes/views/frm-forms/_publish_box.php:30
 msgid "Save Draft"
 msgstr "Concept opslaan"
 
-#: classes/models/FrmFormAction.php:701
+#: classes/models/FrmFormAction.php:742
 #: classes/views/frm-forms/add_field_links.php:7
 #: classes/views/frm-forms/form.php:61
 msgid "Create"
 msgstr "Publiceren"
 
-#: classes/models/FrmFormAction.php:702
+#: classes/models/FrmFormAction.php:743
 #: classes/views/frm-forms/_publish_box.php:34
 #: classes/views/frm-forms/_publish_box.php:38
 #: classes/views/frm-forms/add_field_links.php:7
@@ -2929,9 +2966,21 @@ msgstr "Publiceren"
 msgid "Update"
 msgstr "Bijwerken"
 
-#: classes/models/FrmFormAction.php:704 classes/views/xml/import_form.php:10
+#: classes/models/FrmFormAction.php:745 classes/views/xml/import_form.php:9
 msgid "Import"
 msgstr "Importeren"
+
+#: classes/models/FrmFormMigrator.php:137
+msgid "No form fields found."
+msgstr ""
+
+#: classes/models/FrmFormMigrator.php:229
+msgid "There was an error while creating a new form."
+msgstr ""
+
+#: classes/models/FrmFormMigrator.php:360
+msgid "Default Form"
+msgstr ""
 
 #: classes/models/FrmMigrate.php:485
 msgid "Sending"
@@ -3296,6 +3345,10 @@ msgstr "Twilio"
 #: classes/views/frm-form-actions/default_actions.php:56
 msgid "Highrise"
 msgstr "Highrise"
+
+#: classes/views/frm-form-actions/form_action.php:17
+msgid "Duplicate"
+msgstr ""
 
 #: classes/views/frm-forms/_publish_box.php:44
 msgid "Preview"
@@ -4002,79 +4055,37 @@ msgid "HTML Tags"
 msgstr "HTML tags"
 
 #: classes/views/shared/mb_adv_info.php:15
-#: classes/views/shared/mb_adv_info.php:124
+#: classes/views/shared/mb_adv_info.php:87
 msgid "IDs"
 msgstr "IDs"
 
 #: classes/views/shared/mb_adv_info.php:16
-#: classes/views/shared/mb_adv_info.php:125
+#: classes/views/shared/mb_adv_info.php:88
 msgid "Keys"
 msgstr "Sleutels"
 
 #: classes/views/shared/mb_adv_info.php:18
-#: classes/views/shared/mb_adv_info.php:127
+#: classes/views/shared/mb_adv_info.php:90
 msgid "Fields from your form"
 msgstr "Velden van het formulier"
 
-#: classes/views/shared/mb_adv_info.php:90
+#: classes/views/shared/mb_adv_info.php:53
 msgid ""
 "Click a button below to insert extra values from form entries or your site "
 "settings."
 msgstr ""
 
-#: classes/views/shared/mb_adv_info.php:93
+#: classes/views/shared/mb_adv_info.php:56
 msgid "Helpers"
 msgstr "Helpers"
 
-#: classes/views/shared/mb_adv_info.php:137
+#: classes/views/shared/mb_adv_info.php:100
 msgid "Conditional text here"
 msgstr "Conditionele tekst hier"
 
-#: classes/views/shared/mb_adv_info.php:154
+#: classes/views/shared/mb_adv_info.php:115
 msgid "Click a button below to insert sample logic into your view"
 msgstr "Klik hieronder op een knop om de voorbeeld logica in te voegen"
-
-#: classes/views/shared/mb_adv_info.php:174
-msgid ""
-"Customize the field values with the following parameters. Click to see a "
-"sample."
-msgstr ""
-
-#: classes/views/shared/mb_adv_info.php:193
-msgid "Show image"
-msgstr "Toon image"
-
-#: classes/views/shared/mb_adv_info.php:197
-msgid "Image ID"
-msgstr "Afbeelding ID"
-
-#: classes/views/shared/mb_adv_info.php:201
-msgid "Image Name"
-msgstr "Afbeeldingsnaam"
-
-#: classes/views/shared/mb_adv_info.php:212
-msgid "Insert user information"
-msgstr "Gebruikersinformatie invoeren"
-
-#: classes/views/shared/mb_adv_info.php:231
-msgid "Repeating field options"
-msgstr "Opties voor herhalend veld"
-
-#: classes/views/shared/mb_adv_info.php:234
-msgid "For Each"
-msgstr "Voor elk"
-
-#: classes/views/shared/mb_adv_info.php:244
-msgid "Dynamic field options"
-msgstr "Opties voor dynamisch veld"
-
-#: classes/views/shared/mb_adv_info.php:247
-msgid "Creation Date"
-msgstr "Aanmaak datum"
-
-#: classes/views/shared/mb_adv_info.php:251
-msgid "Field From Entry"
-msgstr "Veld van inzending"
 
 #: classes/views/styles/_buttons.php:4
 msgid "Disable submit button styling"
@@ -4447,7 +4458,7 @@ msgstr "Verwijder Stijl"
 msgid "Reset to Default"
 msgstr "Herstel naar standaard"
 
-#: classes/views/xml/import_form.php:12
+#: classes/views/xml/import_form.php:11
 msgid ""
 "Upload your Formidable XML file to import forms into this site. If your "
 "imported form key and creation date match a form on your site, that form "
@@ -4457,16 +4468,16 @@ msgstr ""
 "Wanneer je geïmporteerde formuliersleutel en aanmaakdatum hetzelfde zijn, "
 "zal je formulier worden bijgewerkt. "
 
-#: classes/views/xml/import_form.php:19
+#: classes/views/xml/import_form.php:18
 msgid "Choose a Formidable XML file"
 msgstr "Selecteer een Formidable XML bestand"
 
-#: classes/views/xml/import_form.php:20
+#: classes/views/xml/import_form.php:19
 #, php-format
 msgid "Maximum size: %s"
 msgstr "Maximale grootte: %s"
 
-#: classes/views/xml/import_form.php:28
+#: classes/views/xml/import_form.php:27
 msgid "Upload file and import"
 msgstr "Upload en importeer bestand"
 

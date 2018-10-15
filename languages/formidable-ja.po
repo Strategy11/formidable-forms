@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2018-09-12 16:45+0000\n"
+"PO-Revision-Date: 2018-10-15 19:34+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -9,7 +9,7 @@ msgstr ""
 "Language: ja\n"
 "Project-Id-Version: Formidable Forms\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-12 16:44+0000\n"
+"POT-Creation-Date: 2018-10-15 19:32+0000\n"
 "Last-Translator: Formidable Community\n"
 "Language-Team: Japanese"
 
@@ -25,17 +25,17 @@ msgstr "Proへアップグレード"
 msgid "There are no plugins on your site that require a license"
 msgstr ""
 
-#: classes/controllers/FrmAppController.php:91
+#: classes/controllers/FrmAppController.php:83
 msgid "Build"
 msgstr ""
 
-#: classes/controllers/FrmAppController.php:98
+#: classes/controllers/FrmAppController.php:90
 #: classes/helpers/FrmFormsListHelper.php:336
 #: classes/views/frm-forms/settings.php:10
 msgid "Settings"
 msgstr "設定"
 
-#: classes/controllers/FrmAppController.php:105
+#: classes/controllers/FrmAppController.php:97
 #: classes/controllers/FrmEntriesController.php:8
 #: classes/controllers/FrmEntriesController.php:8
 #: classes/controllers/FrmEntriesController.php:126
@@ -45,11 +45,11 @@ msgstr "設定"
 msgid "Entries"
 msgstr "投稿"
 
-#: classes/controllers/FrmAppController.php:121
+#: classes/controllers/FrmAppController.php:113
 msgid "Build a Form"
 msgstr ""
 
-#: classes/controllers/FrmAppController.php:154
+#: classes/controllers/FrmAppController.php:146
 #, php-format
 msgid ""
 "This site has been previously authorized to run Formidable Forms. "
@@ -57,7 +57,7 @@ msgid ""
 "running the free version and remove this message."
 msgstr ""
 
-#: classes/controllers/FrmAppController.php:513
+#: classes/controllers/FrmAppController.php:505
 #, php-format
 msgid ""
 "Help us spread the %1$sFormidable Forms%2$s love with %3$s %5$s on WordPress."
@@ -93,7 +93,7 @@ msgid "Support"
 msgstr "作者を応援　"
 
 #: classes/controllers/FrmEntriesController.php:105
-#: classes/controllers/FrmFormsController.php:827
+#: classes/controllers/FrmFormsController.php:877
 #: classes/views/frm-entries/form.php:43
 #: classes/views/frm-entries/sidebar-shared.php:38
 msgid "Entry Key"
@@ -149,11 +149,11 @@ msgstr ""
 msgid "No entries were specified"
 msgstr ""
 
-#: classes/controllers/FrmFieldsController.php:302
+#: classes/controllers/FrmFieldsController.php:304
 msgid "Other"
 msgstr "その他"
 
-#: classes/controllers/FrmFieldsController.php:305
+#: classes/controllers/FrmFieldsController.php:307
 msgid "New Option"
 msgstr ""
 
@@ -162,7 +162,7 @@ msgstr ""
 msgid "Form Actions"
 msgstr ""
 
-#: classes/controllers/FrmFormActionsController.php:210
+#: classes/controllers/FrmFormActionsController.php:213
 #: classes/models/FrmEntryValidate.php:14 classes/models/FrmSettings.php:100
 msgid "You do not have permission to do that"
 msgstr ""
@@ -184,7 +184,7 @@ msgid "Form was Successfully Updated"
 msgstr ""
 
 #: classes/controllers/FrmFormsController.php:232
-#: classes/controllers/FrmFormsController.php:1662
+#: classes/controllers/FrmFormsController.php:1712
 msgid "Form template was Successfully Created"
 msgstr ""
 
@@ -293,89 +293,133 @@ msgstr "テンプレートは正常に更新されました"
 msgid "That template cannot be edited"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:804
+#: classes/controllers/FrmFormsController.php:802
+msgid ""
+"Customize the field values with the following parameters. Click to see a "
+"sample."
+msgstr ""
+
+#: classes/controllers/FrmFormsController.php:816
+msgid "Insert user information"
+msgstr ""
+
+#: classes/controllers/FrmFormsController.php:837
 msgid "Separator"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:805
+#: classes/controllers/FrmFormsController.php:838
 msgid "Use a different separator for checkbox fields"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:807
+#: classes/controllers/FrmFormsController.php:840
 msgid "Date Format"
 msgstr "日付フォーマット"
 
-#: classes/controllers/FrmFormsController.php:808
+#: classes/controllers/FrmFormsController.php:841
 msgid "Field Label"
 msgstr "フィールドラベル"
 
-#: classes/controllers/FrmFormsController.php:810
+#: classes/controllers/FrmFormsController.php:843
 msgid "No Auto P"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:811
+#: classes/controllers/FrmFormsController.php:844
 msgid "Do not automatically add any paragraphs or line breaks"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:826
+#: classes/controllers/FrmFormsController.php:858
+#: classes/models/FrmField.php:58
+msgid "User ID"
+msgstr ""
+
+#: classes/controllers/FrmFormsController.php:859
+msgid "First Name"
+msgstr ""
+
+#: classes/controllers/FrmFormsController.php:860
+msgid "Last Name"
+msgstr ""
+
+#: classes/controllers/FrmFormsController.php:861
+msgid "Display Name"
+msgstr ""
+
+#: classes/controllers/FrmFormsController.php:862
+msgid "User Login"
+msgstr ""
+
+#: classes/controllers/FrmFormsController.php:863
+#: classes/models/FrmField.php:34
+msgid "Email"
+msgstr "Email フィールド"
+
+#: classes/controllers/FrmFormsController.php:864
+msgid "Avatar"
+msgstr ""
+
+#: classes/controllers/FrmFormsController.php:865
+msgid "Author Link"
+msgstr ""
+
+#: classes/controllers/FrmFormsController.php:876
 #: classes/views/frm-entries/sidebar-shared.php:32
 msgid "Entry ID"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:828
+#: classes/controllers/FrmFormsController.php:878
 msgid "Post ID"
 msgstr "投稿 ID"
 
-#: classes/controllers/FrmFormsController.php:829
+#: classes/controllers/FrmFormsController.php:879
 msgid "User IP"
 msgstr "ユーザー IP"
 
-#: classes/controllers/FrmFormsController.php:830
+#: classes/controllers/FrmFormsController.php:880
 msgid "Entry created"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:831
+#: classes/controllers/FrmFormsController.php:881
 msgid "Entry updated"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:833
+#: classes/controllers/FrmFormsController.php:883
 msgid "Site URL"
 msgstr "サイトURL"
 
-#: classes/controllers/FrmFormsController.php:834
+#: classes/controllers/FrmFormsController.php:884
 msgid "Site Name"
 msgstr "サイト名"
 
-#: classes/controllers/FrmFormsController.php:842
+#: classes/controllers/FrmFormsController.php:892
 msgid "Default Msg"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:843
+#: classes/controllers/FrmFormsController.php:893
 msgid "Default HTML"
 msgstr "デフォルト HTML"
 
-#: classes/controllers/FrmFormsController.php:844
+#: classes/controllers/FrmFormsController.php:894
 msgid "Default Plain"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:932
+#: classes/controllers/FrmFormsController.php:982
 msgid "No forms were specified"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1079
+#: classes/controllers/FrmFormsController.php:1129
 msgid "Abnormal HTML characters prevented your form from saving correctly"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1194
-#: classes/controllers/FrmFormsController.php:1208
+#: classes/controllers/FrmFormsController.php:1244
+#: classes/controllers/FrmFormsController.php:1258
 msgid "Please select a valid form"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1436
+#: classes/controllers/FrmFormsController.php:1486
 msgid "Please wait while you are redirected."
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1470
+#: classes/controllers/FrmFormsController.php:1520
 #, php-format
 msgid "%1$sClick here%2$s if you are not automatically redirected."
 msgstr ""
@@ -2171,7 +2215,8 @@ msgstr "ゴミ箱"
 msgid "Delete Permanently"
 msgstr "完全に削除"
 
-#: classes/helpers/FrmFormsHelper.php:835 classes/models/FrmFormAction.php:703
+#: classes/helpers/FrmFormsHelper.php:835 classes/models/FrmFormAction.php:744
+#: classes/views/frm-form-actions/form_action.php:19
 msgid "Delete"
 msgstr "削除"
 
@@ -2587,7 +2632,7 @@ msgid_plural "%1$s Forms"
 msgstr[0] ""
 msgstr[1] ""
 
-#: classes/helpers/FrmXMLHelper.php:853
+#: classes/helpers/FrmXMLHelper.php:853 classes/models/FrmFormMigrator.php:388
 #, php-format
 msgid "%1$s Field"
 msgid_plural "%1$s Fields"
@@ -2784,10 +2829,6 @@ msgstr ""
 msgid "Dropdown"
 msgstr "ドロップダウンリスト"
 
-#: classes/models/FrmField.php:34
-msgid "Email"
-msgstr "Email フィールド"
-
 #: classes/models/FrmField.php:38
 msgid "Website/URL"
 msgstr "サイト/URL"
@@ -2807,10 +2848,6 @@ msgstr "HTML"
 #: classes/models/FrmField.php:54
 msgid "Hidden Field"
 msgstr "非表示フィールド"
-
-#: classes/models/FrmField.php:58
-msgid "User ID"
-msgstr ""
 
 #: classes/models/FrmField.php:62 classes/views/frm-settings/form.php:89
 msgid "reCAPTCHA"
@@ -2898,18 +2935,18 @@ msgstr ""
 msgid "There are no options for this action."
 msgstr ""
 
-#: classes/models/FrmFormAction.php:700
+#: classes/models/FrmFormAction.php:741
 #: classes/views/frm-forms/_publish_box.php:30
 msgid "Save Draft"
 msgstr "下書きを保存"
 
-#: classes/models/FrmFormAction.php:701
+#: classes/models/FrmFormAction.php:742
 #: classes/views/frm-forms/add_field_links.php:7
 #: classes/views/frm-forms/form.php:61
 msgid "Create"
 msgstr "作成"
 
-#: classes/models/FrmFormAction.php:702
+#: classes/models/FrmFormAction.php:743
 #: classes/views/frm-forms/_publish_box.php:34
 #: classes/views/frm-forms/_publish_box.php:38
 #: classes/views/frm-forms/add_field_links.php:7
@@ -2918,9 +2955,21 @@ msgstr "作成"
 msgid "Update"
 msgstr "更新"
 
-#: classes/models/FrmFormAction.php:704 classes/views/xml/import_form.php:10
+#: classes/models/FrmFormAction.php:745 classes/views/xml/import_form.php:9
 msgid "Import"
 msgstr "インポート"
+
+#: classes/models/FrmFormMigrator.php:137
+msgid "No form fields found."
+msgstr ""
+
+#: classes/models/FrmFormMigrator.php:229
+msgid "There was an error while creating a new form."
+msgstr ""
+
+#: classes/models/FrmFormMigrator.php:360
+msgid "Default Form"
+msgstr ""
 
 #: classes/models/FrmMigrate.php:485
 msgid "Sending"
@@ -3282,6 +3331,10 @@ msgstr "Twilio"
 #: classes/views/frm-form-actions/default_actions.php:56
 msgid "Highrise"
 msgstr "Highrise"
+
+#: classes/views/frm-form-actions/form_action.php:17
+msgid "Duplicate"
+msgstr ""
 
 #: classes/views/frm-forms/_publish_box.php:44
 msgid "Preview"
@@ -3966,78 +4019,36 @@ msgid "HTML Tags"
 msgstr "HTML タグ"
 
 #: classes/views/shared/mb_adv_info.php:15
-#: classes/views/shared/mb_adv_info.php:124
+#: classes/views/shared/mb_adv_info.php:87
 msgid "IDs"
 msgstr ""
 
 #: classes/views/shared/mb_adv_info.php:16
-#: classes/views/shared/mb_adv_info.php:125
+#: classes/views/shared/mb_adv_info.php:88
 msgid "Keys"
 msgstr "キー"
 
 #: classes/views/shared/mb_adv_info.php:18
-#: classes/views/shared/mb_adv_info.php:127
+#: classes/views/shared/mb_adv_info.php:90
 msgid "Fields from your form"
 msgstr ""
 
-#: classes/views/shared/mb_adv_info.php:90
+#: classes/views/shared/mb_adv_info.php:53
 msgid ""
 "Click a button below to insert extra values from form entries or your site "
 "settings."
 msgstr ""
 
-#: classes/views/shared/mb_adv_info.php:93
+#: classes/views/shared/mb_adv_info.php:56
 msgid "Helpers"
 msgstr ""
 
-#: classes/views/shared/mb_adv_info.php:137
+#: classes/views/shared/mb_adv_info.php:100
 msgid "Conditional text here"
 msgstr ""
 
-#: classes/views/shared/mb_adv_info.php:154
+#: classes/views/shared/mb_adv_info.php:115
 msgid "Click a button below to insert sample logic into your view"
-msgstr ""
-
-#: classes/views/shared/mb_adv_info.php:174
-msgid ""
-"Customize the field values with the following parameters. Click to see a "
-"sample."
-msgstr ""
-
-#: classes/views/shared/mb_adv_info.php:193
-msgid "Show image"
-msgstr ""
-
-#: classes/views/shared/mb_adv_info.php:197
-msgid "Image ID"
-msgstr "画像 ID"
-
-#: classes/views/shared/mb_adv_info.php:201
-msgid "Image Name"
-msgstr "画像名"
-
-#: classes/views/shared/mb_adv_info.php:212
-msgid "Insert user information"
-msgstr ""
-
-#: classes/views/shared/mb_adv_info.php:231
-msgid "Repeating field options"
-msgstr ""
-
-#: classes/views/shared/mb_adv_info.php:234
-msgid "For Each"
-msgstr ""
-
-#: classes/views/shared/mb_adv_info.php:244
-msgid "Dynamic field options"
-msgstr ""
-
-#: classes/views/shared/mb_adv_info.php:247
-msgid "Creation Date"
-msgstr ""
-
-#: classes/views/shared/mb_adv_info.php:251
-msgid "Field From Entry"
 msgstr ""
 
 #: classes/views/styles/_buttons.php:4
@@ -4404,23 +4415,23 @@ msgstr "スタイルを削除"
 msgid "Reset to Default"
 msgstr ""
 
-#: classes/views/xml/import_form.php:12
+#: classes/views/xml/import_form.php:11
 msgid ""
 "Upload your Formidable XML file to import forms into this site. If your "
 "imported form key and creation date match a form on your site, that form "
 "will be updated."
 msgstr ""
 
-#: classes/views/xml/import_form.php:19
+#: classes/views/xml/import_form.php:18
 msgid "Choose a Formidable XML file"
 msgstr ""
 
-#: classes/views/xml/import_form.php:20
+#: classes/views/xml/import_form.php:19
 #, php-format
 msgid "Maximum size: %s"
 msgstr "最大サイズ: %s"
 
-#: classes/views/xml/import_form.php:28
+#: classes/views/xml/import_form.php:27
 msgid "Upload file and import"
 msgstr "ファイルをアップロードしてインポート"
 

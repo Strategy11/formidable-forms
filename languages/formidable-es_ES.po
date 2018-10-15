@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2018-09-12 16:45+0000\n"
+"PO-Revision-Date: 2018-10-15 19:33+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -9,7 +9,7 @@ msgstr ""
 "Language: es_ES\n"
 "Project-Id-Version: Formidable Forms\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-12 16:44+0000\n"
+"POT-Creation-Date: 2018-10-15 19:32+0000\n"
 "Last-Translator: Formidable Community\n"
 "Language-Team: Spanish (Spain)"
 
@@ -25,17 +25,17 @@ msgstr "Actualizar a Pro"
 msgid "There are no plugins on your site that require a license"
 msgstr "No hay plugins en su sitio que requieran una licencia"
 
-#: classes/controllers/FrmAppController.php:91
+#: classes/controllers/FrmAppController.php:83
 msgid "Build"
 msgstr "Construir"
 
-#: classes/controllers/FrmAppController.php:98
+#: classes/controllers/FrmAppController.php:90
 #: classes/helpers/FrmFormsListHelper.php:336
 #: classes/views/frm-forms/settings.php:10
 msgid "Settings"
 msgstr "Configuración"
 
-#: classes/controllers/FrmAppController.php:105
+#: classes/controllers/FrmAppController.php:97
 #: classes/controllers/FrmEntriesController.php:8
 #: classes/controllers/FrmEntriesController.php:8
 #: classes/controllers/FrmEntriesController.php:126
@@ -45,11 +45,11 @@ msgstr "Configuración"
 msgid "Entries"
 msgstr "Entradas"
 
-#: classes/controllers/FrmAppController.php:121
+#: classes/controllers/FrmAppController.php:113
 msgid "Build a Form"
 msgstr ""
 
-#: classes/controllers/FrmAppController.php:154
+#: classes/controllers/FrmAppController.php:146
 #, php-format
 msgid ""
 "This site has been previously authorized to run Formidable Forms. "
@@ -57,7 +57,7 @@ msgid ""
 "running the free version and remove this message."
 msgstr ""
 
-#: classes/controllers/FrmAppController.php:513
+#: classes/controllers/FrmAppController.php:505
 #, php-format
 msgid ""
 "Help us spread the %1$sFormidable Forms%2$s love with %3$s %5$s on WordPress."
@@ -93,7 +93,7 @@ msgid "Support"
 msgstr "Soporte"
 
 #: classes/controllers/FrmEntriesController.php:105
-#: classes/controllers/FrmFormsController.php:827
+#: classes/controllers/FrmFormsController.php:877
 #: classes/views/frm-entries/form.php:43
 #: classes/views/frm-entries/sidebar-shared.php:38
 msgid "Entry Key"
@@ -149,11 +149,11 @@ msgstr "Las entradas fueron destruidas con éxito"
 msgid "No entries were specified"
 msgstr "No se especificaron entradas"
 
-#: classes/controllers/FrmFieldsController.php:302
+#: classes/controllers/FrmFieldsController.php:304
 msgid "Other"
 msgstr ""
 
-#: classes/controllers/FrmFieldsController.php:305
+#: classes/controllers/FrmFieldsController.php:307
 msgid "New Option"
 msgstr "Nueva opción"
 
@@ -162,7 +162,7 @@ msgstr "Nueva opción"
 msgid "Form Actions"
 msgstr ""
 
-#: classes/controllers/FrmFormActionsController.php:210
+#: classes/controllers/FrmFormActionsController.php:213
 #: classes/models/FrmEntryValidate.php:14 classes/models/FrmSettings.php:100
 msgid "You do not have permission to do that"
 msgstr "Usted no tiene permiso para hacer eso"
@@ -184,7 +184,7 @@ msgid "Form was Successfully Updated"
 msgstr "El Formulario se ha actualizado correctamente"
 
 #: classes/controllers/FrmFormsController.php:232
-#: classes/controllers/FrmFormsController.php:1662
+#: classes/controllers/FrmFormsController.php:1712
 msgid "Form template was Successfully Created"
 msgstr "La plantilla de formulario se creó correctamente"
 
@@ -293,90 +293,134 @@ msgstr "La plantilla ha sido actualizada con éxito"
 msgid "That template cannot be edited"
 msgstr "Esa plantilla no se puede editar"
 
-#: classes/controllers/FrmFormsController.php:804
+#: classes/controllers/FrmFormsController.php:802
+msgid ""
+"Customize the field values with the following parameters. Click to see a "
+"sample."
+msgstr ""
+
+#: classes/controllers/FrmFormsController.php:816
+msgid "Insert user information"
+msgstr "Insertar información de usuario"
+
+#: classes/controllers/FrmFormsController.php:837
 msgid "Separator"
 msgstr "Separador"
 
-#: classes/controllers/FrmFormsController.php:805
+#: classes/controllers/FrmFormsController.php:838
 msgid "Use a different separator for checkbox fields"
 msgstr ""
 "Utilice un separador diferente para los campos de casillas de verificación"
 
-#: classes/controllers/FrmFormsController.php:807
+#: classes/controllers/FrmFormsController.php:840
 msgid "Date Format"
 msgstr "Formato de fecha"
 
-#: classes/controllers/FrmFormsController.php:808
+#: classes/controllers/FrmFormsController.php:841
 msgid "Field Label"
 msgstr "Etiqueta campo"
 
-#: classes/controllers/FrmFormsController.php:810
+#: classes/controllers/FrmFormsController.php:843
 msgid "No Auto P"
 msgstr "Sin Auto P"
 
-#: classes/controllers/FrmFormsController.php:811
+#: classes/controllers/FrmFormsController.php:844
 msgid "Do not automatically add any paragraphs or line breaks"
 msgstr "No agregue automáticamente los párrafos o los saltos de línea"
 
-#: classes/controllers/FrmFormsController.php:826
+#: classes/controllers/FrmFormsController.php:858
+#: classes/models/FrmField.php:58
+msgid "User ID"
+msgstr "ID de usuario"
+
+#: classes/controllers/FrmFormsController.php:859
+msgid "First Name"
+msgstr ""
+
+#: classes/controllers/FrmFormsController.php:860
+msgid "Last Name"
+msgstr ""
+
+#: classes/controllers/FrmFormsController.php:861
+msgid "Display Name"
+msgstr ""
+
+#: classes/controllers/FrmFormsController.php:862
+msgid "User Login"
+msgstr ""
+
+#: classes/controllers/FrmFormsController.php:863
+#: classes/models/FrmField.php:34
+msgid "Email"
+msgstr "Correo electronico"
+
+#: classes/controllers/FrmFormsController.php:864
+msgid "Avatar"
+msgstr ""
+
+#: classes/controllers/FrmFormsController.php:865
+msgid "Author Link"
+msgstr ""
+
+#: classes/controllers/FrmFormsController.php:876
 #: classes/views/frm-entries/sidebar-shared.php:32
 msgid "Entry ID"
 msgstr "ID de la Entrada"
 
-#: classes/controllers/FrmFormsController.php:828
+#: classes/controllers/FrmFormsController.php:878
 msgid "Post ID"
 msgstr "Identificación de la publicación"
 
-#: classes/controllers/FrmFormsController.php:829
+#: classes/controllers/FrmFormsController.php:879
 msgid "User IP"
 msgstr "IP del usuario"
 
-#: classes/controllers/FrmFormsController.php:830
+#: classes/controllers/FrmFormsController.php:880
 msgid "Entry created"
 msgstr "Entrada creada"
 
-#: classes/controllers/FrmFormsController.php:831
+#: classes/controllers/FrmFormsController.php:881
 msgid "Entry updated"
 msgstr "Entrada actualizada"
 
-#: classes/controllers/FrmFormsController.php:833
+#: classes/controllers/FrmFormsController.php:883
 msgid "Site URL"
 msgstr "URL del sitio"
 
-#: classes/controllers/FrmFormsController.php:834
+#: classes/controllers/FrmFormsController.php:884
 msgid "Site Name"
 msgstr "Nombre del sitio"
 
-#: classes/controllers/FrmFormsController.php:842
+#: classes/controllers/FrmFormsController.php:892
 msgid "Default Msg"
 msgstr "Mensaje por defecto"
 
-#: classes/controllers/FrmFormsController.php:843
+#: classes/controllers/FrmFormsController.php:893
 msgid "Default HTML"
 msgstr "HTML por defecto"
 
-#: classes/controllers/FrmFormsController.php:844
+#: classes/controllers/FrmFormsController.php:894
 msgid "Default Plain"
 msgstr "por defecto Llano"
 
-#: classes/controllers/FrmFormsController.php:932
+#: classes/controllers/FrmFormsController.php:982
 msgid "No forms were specified"
 msgstr "No se han especificado formularios"
 
-#: classes/controllers/FrmFormsController.php:1079
+#: classes/controllers/FrmFormsController.php:1129
 msgid "Abnormal HTML characters prevented your form from saving correctly"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1194
-#: classes/controllers/FrmFormsController.php:1208
+#: classes/controllers/FrmFormsController.php:1244
+#: classes/controllers/FrmFormsController.php:1258
 msgid "Please select a valid form"
 msgstr "Por favor, seleccione una forma válida"
 
-#: classes/controllers/FrmFormsController.php:1436
+#: classes/controllers/FrmFormsController.php:1486
 msgid "Please wait while you are redirected."
 msgstr "Por favor, espere mientras se le redirecciona."
 
-#: classes/controllers/FrmFormsController.php:1470
+#: classes/controllers/FrmFormsController.php:1520
 #, php-format
 msgid "%1$sClick here%2$s if you are not automatically redirected."
 msgstr "%1$sClic aquí%2$s si no se le redirecciona automáticamente."
@@ -2184,7 +2228,8 @@ msgstr "Papelera"
 msgid "Delete Permanently"
 msgstr ""
 
-#: classes/helpers/FrmFormsHelper.php:835 classes/models/FrmFormAction.php:703
+#: classes/helpers/FrmFormsHelper.php:835 classes/models/FrmFormAction.php:744
+#: classes/views/frm-form-actions/form_action.php:19
 msgid "Delete"
 msgstr "Eliminar"
 
@@ -2614,7 +2659,7 @@ msgid_plural "%1$s Forms"
 msgstr[0] ""
 msgstr[1] ""
 
-#: classes/helpers/FrmXMLHelper.php:853
+#: classes/helpers/FrmXMLHelper.php:853 classes/models/FrmFormMigrator.php:388
 #, php-format
 msgid "%1$s Field"
 msgid_plural "%1$s Fields"
@@ -2811,10 +2856,6 @@ msgstr ""
 msgid "Dropdown"
 msgstr "Desplegable"
 
-#: classes/models/FrmField.php:34
-msgid "Email"
-msgstr "Correo electronico"
-
 #: classes/models/FrmField.php:38
 msgid "Website/URL"
 msgstr "Sitio Web/URL"
@@ -2834,10 +2875,6 @@ msgstr "HTML"
 #: classes/models/FrmField.php:54
 msgid "Hidden Field"
 msgstr "Campo oculto"
-
-#: classes/models/FrmField.php:58
-msgid "User ID"
-msgstr "ID de usuario"
 
 #: classes/models/FrmField.php:62 classes/views/frm-settings/form.php:89
 msgid "reCAPTCHA"
@@ -2925,18 +2962,18 @@ msgstr ""
 msgid "There are no options for this action."
 msgstr ""
 
-#: classes/models/FrmFormAction.php:700
+#: classes/models/FrmFormAction.php:741
 #: classes/views/frm-forms/_publish_box.php:30
 msgid "Save Draft"
 msgstr "Guardar borrador"
 
-#: classes/models/FrmFormAction.php:701
+#: classes/models/FrmFormAction.php:742
 #: classes/views/frm-forms/add_field_links.php:7
 #: classes/views/frm-forms/form.php:61
 msgid "Create"
 msgstr "Crear"
 
-#: classes/models/FrmFormAction.php:702
+#: classes/models/FrmFormAction.php:743
 #: classes/views/frm-forms/_publish_box.php:34
 #: classes/views/frm-forms/_publish_box.php:38
 #: classes/views/frm-forms/add_field_links.php:7
@@ -2945,9 +2982,21 @@ msgstr "Crear"
 msgid "Update"
 msgstr "Actualizar"
 
-#: classes/models/FrmFormAction.php:704 classes/views/xml/import_form.php:10
+#: classes/models/FrmFormAction.php:745 classes/views/xml/import_form.php:9
 msgid "Import"
 msgstr "Importar"
+
+#: classes/models/FrmFormMigrator.php:137
+msgid "No form fields found."
+msgstr ""
+
+#: classes/models/FrmFormMigrator.php:229
+msgid "There was an error while creating a new form."
+msgstr ""
+
+#: classes/models/FrmFormMigrator.php:360
+msgid "Default Form"
+msgstr ""
 
 #: classes/models/FrmMigrate.php:485
 msgid "Sending"
@@ -3310,6 +3359,10 @@ msgstr "Twilio"
 #: classes/views/frm-form-actions/default_actions.php:56
 msgid "Highrise"
 msgstr "Highrise"
+
+#: classes/views/frm-form-actions/form_action.php:17
+msgid "Duplicate"
+msgstr ""
 
 #: classes/views/frm-forms/_publish_box.php:44
 msgid "Preview"
@@ -4024,80 +4077,38 @@ msgid "HTML Tags"
 msgstr "Etiquetas HTML"
 
 #: classes/views/shared/mb_adv_info.php:15
-#: classes/views/shared/mb_adv_info.php:124
+#: classes/views/shared/mb_adv_info.php:87
 msgid "IDs"
 msgstr "IDs"
 
 #: classes/views/shared/mb_adv_info.php:16
-#: classes/views/shared/mb_adv_info.php:125
+#: classes/views/shared/mb_adv_info.php:88
 msgid "Keys"
 msgstr "Claves"
 
 #: classes/views/shared/mb_adv_info.php:18
-#: classes/views/shared/mb_adv_info.php:127
+#: classes/views/shared/mb_adv_info.php:90
 msgid "Fields from your form"
 msgstr "Campos de su formulario"
 
-#: classes/views/shared/mb_adv_info.php:90
+#: classes/views/shared/mb_adv_info.php:53
 msgid ""
 "Click a button below to insert extra values from form entries or your site "
 "settings."
 msgstr ""
 
-#: classes/views/shared/mb_adv_info.php:93
+#: classes/views/shared/mb_adv_info.php:56
 msgid "Helpers"
 msgstr "Ayudantes"
 
-#: classes/views/shared/mb_adv_info.php:137
+#: classes/views/shared/mb_adv_info.php:100
 msgid "Conditional text here"
 msgstr "Texto condicional aquí"
 
-#: classes/views/shared/mb_adv_info.php:154
+#: classes/views/shared/mb_adv_info.php:115
 msgid "Click a button below to insert sample logic into your view"
 msgstr ""
 "Haga clic en un botón de abajo para insertar la lógica de muestra en su vista"
-
-#: classes/views/shared/mb_adv_info.php:174
-msgid ""
-"Customize the field values with the following parameters. Click to see a "
-"sample."
-msgstr ""
-
-#: classes/views/shared/mb_adv_info.php:193
-msgid "Show image"
-msgstr "Mostrar imagen"
-
-#: classes/views/shared/mb_adv_info.php:197
-msgid "Image ID"
-msgstr "ID Imagen"
-
-#: classes/views/shared/mb_adv_info.php:201
-msgid "Image Name"
-msgstr "Nombre Imagen"
-
-#: classes/views/shared/mb_adv_info.php:212
-msgid "Insert user information"
-msgstr "Insertar información de usuario"
-
-#: classes/views/shared/mb_adv_info.php:231
-msgid "Repeating field options"
-msgstr ""
-
-#: classes/views/shared/mb_adv_info.php:234
-msgid "For Each"
-msgstr "Para Cada"
-
-#: classes/views/shared/mb_adv_info.php:244
-msgid "Dynamic field options"
-msgstr "Opciones de campo dinámico"
-
-#: classes/views/shared/mb_adv_info.php:247
-msgid "Creation Date"
-msgstr "Fecha de creación"
-
-#: classes/views/shared/mb_adv_info.php:251
-msgid "Field From Entry"
-msgstr "Campo De entrada"
 
 #: classes/views/styles/_buttons.php:4
 msgid "Disable submit button styling"
@@ -4470,7 +4481,7 @@ msgstr ""
 msgid "Reset to Default"
 msgstr "Restablecer valores predeterminados"
 
-#: classes/views/xml/import_form.php:12
+#: classes/views/xml/import_form.php:11
 msgid ""
 "Upload your Formidable XML file to import forms into this site. If your "
 "imported form key and creation date match a form on your site, that form "
@@ -4480,16 +4491,16 @@ msgstr ""
 "su clave de formulario importada y la fecha de creación coinciden con un "
 "formulario en su sitio, ese formulario se actualizará."
 
-#: classes/views/xml/import_form.php:19
+#: classes/views/xml/import_form.php:18
 msgid "Choose a Formidable XML file"
 msgstr "Elija un archivo XML Formidable"
 
-#: classes/views/xml/import_form.php:20
+#: classes/views/xml/import_form.php:19
 #, php-format
 msgid "Maximum size: %s"
 msgstr "Tamaño Máximo: %s"
 
-#: classes/views/xml/import_form.php:28
+#: classes/views/xml/import_form.php:27
 msgid "Upload file and import"
 msgstr "Cargar archivo e importar"
 
