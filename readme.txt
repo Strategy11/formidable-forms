@@ -161,8 +161,11 @@ The field and form names and descriptions are all changed with in-place edit. Ju
 
 == Changelog ==
 = 3.04.01 =
+* New: When a form includes a user ID field, include helpers in the Advanced tab to get data from the user profile for use in emails and other form actions.
+* Code: Refactor and clean up the code for the Advanced tab in the form settings sidebar
+* Code: Add frm_advanced_helpers hook to move some Advanced shortcode examples to Pro
+* Code: Add frm_field_code_tab hook to add extra shortcodes in the customization sidebar for a single field
 * Update translations
-* Move more conditional text to Pro
 
 = 3.04 =
 * New: Add option to duplicate a form action
