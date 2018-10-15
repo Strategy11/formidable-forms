@@ -141,17 +141,17 @@
 			$col = 'one';
 			?>
 			<div class="clear"></div>
-	        <p class="howto"><?php echo esc_html( $helper['heading'] ); ?></p>
-	        <ul class="frm_code_list">
-	        <?php
+			<p class="howto"><?php echo esc_html( $helper['heading'] ); ?></p>
+			<ul class="frm_code_list">
+			<?php
 			foreach ( $helper['codes'] as $code => $code_label ) {
-	        	$code = str_replace( '|user_id|', $uid->id, $code );
+				$code = str_replace( '|user_id|', $uid->id, $code );
 				?>
-	            <li class="frm_col_<?php echo esc_attr( $col ) ?>">
+				<li class="frm_col_<?php echo esc_attr( $col ) ?>">
 					<a href="javascript:void(0)" class="frmbutton button frm_insert_code <?php echo is_array( $code_label ) ? 'frm_help' : ''; ?>" data-code="x <?php echo esc_attr( $code ) ?>" <?php echo is_array( $code_label ) ? 'title="' . esc_attr( $code_label['title'] ) . '"' : ''; ?>>
 						<?php echo esc_html( is_array( $code_label ) ? $code_label['label'] : $code_label ); ?>
 					</a>
-	    	    </li>
+				</li>
 				<?php
 				$col = ( $col == 'one' ) ? 'two' : 'one';
 				unset( $code );
