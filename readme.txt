@@ -316,4 +316,4 @@ The field and form names and descriptions are all changed with in-place edit. Ju
 * New: Add option to turn form actions on or off
 * New: Add frm_is_multiple_select hook
 
-<a href="https://raw.githubusercontent.com/strategy11/formidable/master/changelog.txt">See changelog for all versions</a>
+<a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>
