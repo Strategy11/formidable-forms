@@ -177,7 +177,7 @@ That's why we made Formidable the most extendable WordPress form builder plugin 
 
 You can easily route your form data with our powerful API. Formidable Views allow you to display your form data anywhere on the front-end, so you can quickly create data-driven web applications. 
 
-On top of that, our hooks and filters allow you to completly extend Formidable to meet your needs. We even include hundreds of code examples in our docs to give you extra confidence to get started.
+On top of that, our hooks and filters allow you to completely extend Formidable to meet your needs. We even include hundreds of code examples in our docs to give you extra confidence to get started.
 
 = Full Formidable Forms Feature List =
 
@@ -219,7 +219,7 @@ Since Formidable is not your average WordPress contact form plugin, this feature
 * <a href="https://formidableforms.com/features/fill-out-forms-automatically/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Fill out forms automatically</a> with user meta or values from your posts including custom fields.
 * <a href="https://formidableforms.com/features/white-label-form-builder-wordpress/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">White label form builder</a>. Replace the Formidable Forms branding with your own in the admin area. Plus, we never show "powered by" links in your free online forms.
 * <a href="https://formidableforms.com/downloads/user-registration/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">WordPress user registration forms</a>. Register users, edit profiles, and even create subdomains when using WordPress multisite forms.
-* <a href="https://formidableforms.com/downloads/signature/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Digital Signature Forms</a>. Eiminate paper forms with a digital signature field to your contact form, registration form, or advanced form.
+* <a href="https://formidableforms.com/downloads/signature/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Digital Signature Forms</a>. Eliminate paper forms with a digital signature field to your contact form, registration form, or advanced form.
 * <a href="https://formidableforms.com/downloads/autoresponder/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Form action automation</a>. Schedule email notifications, SMS messages, and API actions to trigger at a later time. Automatically delete guest posts after 30 days, send weekly digest emails, trigger happy birthday text messages from a lead form and much more.
 * <a href="https://formidableforms.com/downloads/formidable-api/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Formidable Forms API</a>. Send form entry results to other sites with a REST API. This includes the option to send form entries from one Formidable site to another.
 * <a href="https://formidableforms.com/downloads/quiz-maker/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Quiz maker forms</a>. Add quiz questions to a quiz form, submit an entry as the quiz key, and publish the quiz on a page. Then all the quiz form grading is done for you.
