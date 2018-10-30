@@ -833,13 +833,13 @@ class FrmFormsController {
 	 */
 	private static function get_advanced_shortcodes() {
 		$adv_shortcodes = array(
-			'sep=", "'       => array(
+			'x sep=", "'           => array(
 				'label' => __( 'Separator', 'formidable' ),
 				'title' => __( 'Use a different separator for checkbox fields', 'formidable' ),
 			),
-			'format="d-m-Y"' => __( 'Date Format', 'formidable' ),
-			'show="field_label"' => __( 'Field Label', 'formidable' ),
-			'wpautop=0'      => array(
+			'x format="d-m-Y"'     => __( 'Date Format', 'formidable' ),
+			'x show="field_label"' => __( 'Field Label', 'formidable' ),
+			'x wpautop=0'          => array(
 				'label' => __( 'No Auto P', 'formidable' ),
 				'title' => __( 'Do not automatically add any paragraphs or line breaks', 'formidable' ),
 			),

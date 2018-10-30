@@ -43,6 +43,9 @@
 
 				do_action( 'frm_field_code_tab', array( 'field' => $f ) );
 
+				if ( $f->type == 'user_id' ) {
+					$uid = $f->id;
+				}
 				unset( $f );
 			}
 		}
@@ -102,10 +105,6 @@
 					<a href="javascript:void(0)" class="frm_insert_code" data-code="<?php echo esc_attr( $f->id ); ?>"><?php echo FrmAppHelper::truncate( $f->name, 60 ); // WPCS: XSS ok. ?></a>
                 </li>
                 <?php
-
-				if ( $f->type == 'user_id' ) {
-					$uid = $f;
-				}
 				unset( $f );
 			}
 		}
@@ -145,10 +144,15 @@
 			<ul class="frm_code_list">
 			<?php
 			foreach ( $helper['codes'] as $code => $code_label ) {
-				$code = str_replace( '|user_id|', $uid->id, $code );
+				if ( isset( $uid ) ) {
+					$code = str_replace( '|user_id|', $uid, $code );
+				} else {
+					$code = str_replace( '|user_id|', 'x', $code );
+				}
+				$include_x = strpos( $code, ' ' ) ? '' : 'x ';
 				?>
 				<li class="frm_col_<?php echo esc_attr( $col ) ?>">
-					<a href="javascript:void(0)" class="frmbutton button frm_insert_code <?php echo is_array( $code_label ) ? 'frm_help' : ''; ?>" data-code="x <?php echo esc_attr( $code ) ?>" <?php echo is_array( $code_label ) ? 'title="' . esc_attr( $code_label['title'] ) . '"' : ''; ?>>
+					<a href="javascript:void(0)" class="frmbutton button frm_insert_code <?php echo is_array( $code_label ) ? 'frm_help' : ''; ?>" data-code="<?php echo esc_attr( $include_x . $code ); ?>" <?php echo is_array( $code_label ) ? 'title="' . esc_attr( $code_label['title'] ) . '"' : ''; ?>>
 						<?php echo esc_html( is_array( $code_label ) ? $code_label['label'] : $code_label ); ?>
 					</a>
 				</li>
