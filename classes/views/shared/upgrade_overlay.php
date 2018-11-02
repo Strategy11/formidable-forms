@@ -17,11 +17,11 @@
 					<p>
 						<?php
 						if ( $is_pro ) {
-							$message = esc_html__( '%s are not installed on this site. Please see the addons that are included with your plan.', 'formidable' );
+							$message = __( '%s are not installed on this site. Please see the addons that are included with your plan.', 'formidable' );
 						} else {
-							$message = esc_html__( '%s are not available on your plan. Please upgrade to PRO to unlock more awesome features.', 'formidable' );
+							$message = __( '%s are not available on your plan. Please upgrade to PRO to unlock more awesome features.', 'formidable' );
 						}
-						printf( $message, '<span class="frm_feature_label"></span>' );
+						printf( esc_html( $message ), '<span class="frm_feature_label"></span>' );
 						?>
 					</p>
 					<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'builder-upgrade' ) ); ?>" class="button button-primary" target="_blank" rel="noopener noreferrer">
