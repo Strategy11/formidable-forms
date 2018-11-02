@@ -135,7 +135,7 @@ class FrmAppController {
 				// if pro version is installed, include link to activate it
 				$inst_install_url = wp_nonce_url( self_admin_url( 'plugins.php?action=activate&plugin=formidable-pro/formidable-pro.php' ), 'activate-plugin_formidable-pro/formidable-pro.php' );
 			} else {
-				$inst_install_url = 'https://formidableforms.com/knowledgebase/install-formidable-forms/';
+				$inst_install_url = 'https://formidableforms.com/knowledgebase/install-formidable-forms/?utm_source=WordPress&utm_medium=get-started&utm_campaign=liteplugin';
 			}
         ?>
 <div class="error" class="frm_previous_install">
@@ -170,11 +170,12 @@ class FrmAppController {
 		$affiliate = FrmAppHelper::get_affiliate();
 		if ( ! empty( $affiliate ) ) {
 			$tip = FrmTipsHelper::get_banner_tip();
+			$link = FrmAppHelper::admin_upgrade_link( 'banner' );
 ?>
 <div class="update-nag frm-update-to-pro">
 	<?php echo FrmAppHelper::kses( $tip['tip'] ); // WPCS: XSS ok. ?>
 	<span><?php echo FrmAppHelper::kses( $tip['call'] ); // WPCS: XSS ok. ?></span>
-	<a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url( 'https://formidableforms.com?banner=1&tip=' . absint( $tip['num'] ) ) ); ?>" class="button">Upgrade to Pro</a>
+	<a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url( $link ) ); ?>" class="button">Upgrade to Pro</a>
 </div>
 <?php
 		}
@@ -501,9 +502,10 @@ class FrmAppController {
 
 	public static function set_footer_text( $text ) {
 		if ( FrmAppHelper::is_formidable_admin() ) {
+			$link = FrmAppHelper::admin_upgrade_link( 'footer' );
 			$text = sprintf(
 				__( 'Help us spread the %1$sFormidable Forms%2$s love with %3$s %5$s on WordPress.org%4$s. Thank you heaps!', 'formidable' ),
-				'<a href="' . esc_url( FrmAppHelper::make_affiliate_url( 'https://formidableforms.com' ) ) . '" target="_blank">',
+				'<a href="' . esc_url( FrmAppHelper::make_affiliate_url( $link ) ) . '" target="_blank">',
 				'</a>',
 				'<a href="https://wordpress.org/support/plugin/formidable/reviews/?filter=5#new-post" target="_blank">',
 				'</a>',

@@ -71,6 +71,23 @@ class FrmAppHelper {
 		return absint( apply_filters( 'frm_affiliate_id', 0 ) );
 	}
 
+	/**
+	 * @since 3.04.02
+	 */
+	public static function admin_upgrade_link( $medium, $page = '' ) {
+		if ( empty( $page ) ) {
+			$page = 'https://formidableforms.com/pricing-lite/';
+		} else {
+			$page = 'https://formidableforms.com/' . $page;
+		}
+		$query_args = array(
+			'utm_source'   => 'WordPress',
+			'utm_medium'   => $medium,
+			'utm_campaign' => 'liteplugin',
+		);
+		return add_query_arg( $query_args, $page );
+	}
+
     /**
      * Get the Formidable settings
      *

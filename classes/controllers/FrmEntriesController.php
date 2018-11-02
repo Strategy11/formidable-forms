@@ -75,8 +75,8 @@ class FrmEntriesController {
 
         $screen->set_help_sidebar(
 			'<p><strong>' . esc_html__( 'For more information:', 'formidable' ) . '</strong></p>' .
-			'<p><a href="' . esc_url( FrmAppHelper::make_affiliate_url( 'https://formidableforms.com/knowledgebase/manage-entries-from-the-back-end/' ) ) . '" target="_blank">' . esc_html__( 'Documentation on Entries', 'formidable' ) . '</a></p>' .
-			'<p><a href="' . esc_url( FrmAppHelper::make_affiliate_url( 'https://formidableforms.com/help-desk/' ) ) . '" target="_blank">' . esc_html__( 'Support', 'formidable' ) . '</a></p>'
+			'<p><a href="' . esc_url( FrmAppHelper::make_affiliate_url( 'https://formidableforms.com/knowledgebase/manage-entries-from-the-back-end/?utm_source=WordPress&utm_medium=entries&utm_campaign=liteplugin' ) ) . '" target="_blank">' . esc_html__( 'Documentation on Entries', 'formidable' ) . '</a></p>' .
+			'<p><a href="' . esc_url( FrmAppHelper::make_affiliate_url( 'https://formidableforms.com/support/?utm_source=WordPress&utm_medium=entries&utm_campaign=liteplugin' ) ) . '" target="_blank">' . esc_html__( 'Support', 'formidable' ) . '</a></p>'
     	);
 
         return $help;

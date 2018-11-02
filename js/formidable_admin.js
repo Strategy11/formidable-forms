@@ -2675,16 +2675,15 @@ function frmAdminBuildJS(){
 		/*jshint validthis:true */
 		var button = jQuery(this);
 		var pluginSlug = button.data('plugin');
-		var license = document.getElementById('edd_'+pluginSlug+'_license_key').value;
+		var input = document.getElementById('edd_'+pluginSlug+'_license_key');
+		var license = input.value;
 		var wpmu = document.getElementById('proplug-wpmu');
 		if ( wpmu === null ) {
 			wpmu = 0;
+		} else if ( wpmu.checked ) {
+			wpmu = 1;
 		} else {
-			if ( wpmu.checked ) {
-				wpmu = 1;
-			} else {
-				wpmu = 0;
-			}
+			wpmu = 0;
 		}
 
 		jQuery.ajax({
@@ -2693,19 +2692,20 @@ function frmAdminBuildJS(){
 			success:function(msg){
 				var messageBox = jQuery('.frm_pro_license_msg');
 				if ( msg.success === true ) {
-					document.getElementById('frm_license_top').style.display = 'none';
 					document.getElementById('frm_license_bottom').style.display = 'block';
-					messageBox.removeClass('frm_error_style').addClass('frm_message');
+					messageBox.removeClass('frm_error_style').addClass('frm_message frm_updated_message');
+					input.value = '•••••••••••••••••••';
 				}else{
-					messageBox.addClass('frm_error_style').removeClass('frm_message');
+					messageBox.addClass('frm_error_style').removeClass('frm_message frm_updated_message');
 				}
 
+				messageBox.removeClass('frm_hidden');
 				messageBox.html(msg.message);
 				if ( msg.message !== '' ){
 					setTimeout(function(){
 						messageBox.html('');
-						messageBox.removeClass('frm_error_style frm_message');
-					},5000);
+						messageBox.addClass('frm_hidden').removeClass('frm_error_style frm_message frm_updated_message');
+					},10000);
 				}
 			}
 		});
@@ -2719,29 +2719,18 @@ function frmAdminBuildJS(){
 		var $link = jQuery(this);
 		$link.next('.spinner').show();
 		var pluginSlug = $link.data('plugin');
-		var license = document.getElementById('edd_'+pluginSlug+'_license_key').value;
+		var input = document.getElementById('edd_'+pluginSlug+'_license_key');
+		var license = input.value;
 		jQuery.ajax({
 			type:'POST',url:ajaxurl,
 			data:{action:'frm_addon_deactivate',license:license,plugin:pluginSlug,nonce:frmGlobal.nonce},
 			success:function(msg){
-				jQuery('.spinner').fadeOut('slow');
+				jQuery('.spinner, #frm_license_bottom').fadeOut('slow');
+				input.value = '';
 				$link.fadeOut('slow');
-				showAuthForm();
 			}
 		});
 		return false;
-	}
-
-	function showAuthForm(){
-		var form = document.getElementById('frm_license_top');
-		var cred = jQuery('#frm_license_bottom');
-		if(cred.is(':visible')){
-			cred.hide();
-			form.style.display = 'block';
-		}else{
-			cred.show();
-			form.style.display = 'none';
-		}
 	}
 
 	function saveAddonLicense() {
@@ -3572,7 +3561,6 @@ function frmAdminBuildJS(){
 
 		globalSettingsInit: function(){
 			var $globalForm = jQuery(document.getElementById('form_global_settings'));
-			$globalForm.on('click', '.frm_show_auth_form', showAuthForm);
 			jQuery(document.getElementById('frm_uninstall_now')).click(uninstallNow);
             initiateMultiselect();
 
@@ -3580,6 +3568,14 @@ function frmAdminBuildJS(){
 			var licenseTab = document.getElementById('licenses_settings');
 			jQuery(licenseTab).on('click', '.edd_frm_save_license', saveAddonLicense);
 			jQuery(licenseTab).on('click', '.edd_frm_fill_license', fillLicenses);
+
+			jQuery('.settings-lite-cta .dismiss').click( function( event ) {
+				event.preventDefault();
+				jQuery.post( ajaxurl, {
+					action: 'frm_lite_settings_upgrade'
+				} );
+				jQuery( '.settings-lite-cta' ).remove();
+			} );
 		},
 
 		exportInit: function(){

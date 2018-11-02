@@ -8,7 +8,7 @@ a.frm_confirming:hover,
 a.frm_confirming:focus,
 a.frm_confirming,
 .frm_confirming{
-	color:#e37222 !important;
+	color:#f37656 !important;
 }
 .frm_wrap > .wrap{
 	margin: 10px 30px 30px;
@@ -124,8 +124,8 @@ td.column-title .frm_actions_dropdown{
 .post-type-frm_display .wrap .add-new-h2,
 .frm_wrap .add-new-h2{
 	font-size:12px;
-	border: 1px solid #e37222;
-	color: #e37222;
+	border: 1px solid #f37656;
+	color: #f37656;
 	line-height: 1.4;
 	font-weight: 600;
 	margin: 1px 0 0 10px;
@@ -146,8 +146,8 @@ td.column-title .frm_actions_dropdown{
 .frm_wrap .add-new-h2:active,
 .frm_wrap .add-new-h2:focus{
 	color: #fff;
-	background:#e37222;
-	border: 1px solid #e37222;
+	background:#f37656;
+	border: 1px solid #f37656;
 }
 
 ul.frm_form_nav {
@@ -417,9 +417,10 @@ ul.frm_form_nav > li{
 	font-size: 1.1em;
 }
 
+.wrap .frm_pricing a.button-primary,
 .toplevel_page_formidable .frm_wrap button.button-primary{
 	border-color: #da791d;
-	background: #e37222;
+	background: #f37656;
 	color:#fff;
 }
 
@@ -628,6 +629,8 @@ form .form-field.frm_field_loading{
 
 .upgrade_to_pro{
 	padding: 10px 25px 25px;
+	max-width: 700px;
+	margin: 20px auto !important;
 }
 
 .upgrade_to_pro h1,
@@ -649,7 +652,7 @@ form .form-field.frm_field_loading{
 	padding: 5px 12px;
 }
 
-div.updated.frm_updated_message{
+div.frm_updated_message{
 	border-radius:2px;
     border: 1px solid #D6E9C6;
     background-color: #DFF0D8;
@@ -659,13 +662,18 @@ div.updated.frm_updated_message{
 	margin-bottom:10px;
 }
 
+.frm_license_box .frm_error_style{
+	margin-left:0;
+	margin-right:0;
+}
+
 .update-nag.frm-update-to-pro{
 	border:none;
     border-bottom: 1px solid #d55a1e;
 	padding: 10px 15px;
 	display:block;
 	text-align:center;
-	background:#e37222;
+	background:#f37656;
 	color:#fff;
 	font-size:19px;
 	line-height:2.1em;
@@ -701,8 +709,9 @@ div.updated.frm_updated_message{
 	text-align:right;
 }
 
+.upgrade_to_pro a,
 .upgrade_to_pro .frm_check_icon{
-	color:#e37222;
+	color:#f37656;
 }
 
 .widefat.frm_pricing thead th,
@@ -711,7 +720,7 @@ div.updated.frm_updated_message{
 }
 
 .widefat th.frm_table_break{
-	background-color:#e37222;
+	background-color:#f37656;
 	color:#fff;
 	text-align:center;
 }
@@ -743,7 +752,7 @@ div.updated.frm_updated_message{
 .frm_pro_tip a,
 .frm_pro_tip span,
 .frm_pro_tip .frm_check1_icon{
-	color:#e37222;
+	color:#f37656;
 }
 
 .frm_pro_tip .frm_check1_icon{
@@ -753,7 +762,7 @@ div.updated.frm_updated_message{
 .frm_pro_tip{
 	font-size:12px;
 	color:#666;
-	border:1px solid #e37222;
+	border:1px solid #f37656;
 	display:block;
 	padding:5px;
 	background:#FBF0EC;
@@ -1883,6 +1892,11 @@ label.frm_action_events{
 	padding-right:15px;
 }
 
+#form_global_settings h3 {
+	font-size:14px;
+	margin-top: 0px;
+}
+
 #poststuff .frm_form_settings .widget-inside h3,
 #poststuff .frm_form_settings .advanced_settings h3,
 #poststuff .frm_settings_form h3,
@@ -2609,6 +2623,40 @@ select.texture{display: none;}
 .frm_col_one{margin-right:4%;clear:both;}
 ul .frm_col_one{float:left;}
 ul .frm_col_two{float:right;}
+
+.frm_two_col li{
+    float:left;
+    width:48%;
+    margin-right:4%;
+}
+
+.frm_two_col li:nth-child(2n+2){
+	margin-right:0;
+}
+
+.settings-lite-cta a,
+.settings-lite-cta ul,
+.settings-lite-cta p,
+.settings-lite-cta {
+	color: #666;
+	font-size: 16px;
+}
+
+.settings-lite-cta h3{
+	font-size:17px !important;
+}
+
+.settings-lite-cta .dashicons-yes{
+	color:#468847;
+}
+
+.settings-lite-cta .postbox .inside {
+    padding: 20px 40px;
+}
+
+.cta-inside a {
+	color:#f37656
+}
 
 .field_type_list > li,
 .frm_code_list li{

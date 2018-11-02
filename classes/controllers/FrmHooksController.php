@@ -118,6 +118,7 @@ class FrmHooksController {
         // Settings Controller
         add_action( 'admin_menu', 'FrmSettingsController::menu', 45 );
         add_action( 'frm_before_settings', 'FrmSettingsController::license_box' );
+		add_action( 'frm_after_settings', 'FrmSettingsController::settings_cta' );
 		add_action( 'wp_ajax_frm_settings_tab', 'FrmSettingsController::load_settings_tab' );
 
         // Styles Controller
@@ -160,6 +161,9 @@ class FrmHooksController {
         add_action( 'wp_ajax_frm_get_shortcode_opts', 'FrmFormsController::get_shortcode_opts' );
         add_action( 'wp_ajax_frm_forms_preview', 'FrmFormsController::preview' );
         add_action( 'wp_ajax_nopriv_frm_forms_preview', 'FrmFormsController::preview' );
+
+		// Settings
+		add_action( 'wp_ajax_frm_lite_settings_upgrade', 'FrmSettingsController::settings_cta_dismiss' );
 
         // Styles Controller
         add_action( 'wp_ajax_frm_settings_reset', 'FrmStylesController::reset_styling' );

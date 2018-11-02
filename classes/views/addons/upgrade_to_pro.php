@@ -1,8 +1,8 @@
 <div class="wrap upgrade_to_pro">
 	<h1 class="frm_pro_heading">
 		<img src="<?php echo esc_url( FrmAppHelper::plugin_url() ) ?>/images/logo.png" alt="Upgrade to Pro" />
-		<span class="alignright">Take on bigger projects, earn more clients and grow your business.</br>
-			Upgrade to Pro.</span>
+		<span class="alignright">Take on bigger projects, earn more clients and grow your business.<br/>
+			<a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url( FrmAppHelper::admin_upgrade_link( 'upgrade' ) ) ); ?>" target="_blank">Upgrade to Pro</a>.</span>
 		<span class="clear"></span>
 	</h1>
 
@@ -20,7 +20,7 @@
 				<th>
 					<h3><?php echo esc_attr( ucfirst( $price_info['name'] ) ) ?></h3>
 					<h4>$<?php echo esc_attr( $price_info['price'] ) ?></h4>
-					<a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url( 'https://formidableforms.com/checkout?edd_action=add_to_cart' ) ) ?>&amp;download_id=<?php echo absint( $price_info['download'] ) ?>&amp;edd_options[price_id]=<?php echo absint( $price_info['id'] ) ?>" class="button-primary" target="_blank">
+					<a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url( FrmAppHelper::admin_upgrade_link( 'upgrade' ) ) ); ?>" class="button-primary" target="_blank">
 						<?php esc_html_e( 'Get Started', 'formidable' ) ?>
 					</a>
 				</th>
@@ -59,9 +59,9 @@
 			<tr>
 				<th>Included AddOns</th>
 				<td>None</td>
-				<td><a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url( 'https://formidableforms.com/pricing/#addon-lists' ) ); ?>" target="_blank">Premium Addons</a></td>
-				<td><a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url( 'https://formidableforms.com/pricing/#addon-lists' ) ); ?>" target="_blank">Advanced Addons</a></td>
-				<td><a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url( 'https://formidableforms.com/pricing/#addon-lists' ) ); ?>" target="_blank">Enterprise Addons</a></td>
+				<td><a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url( FrmAppHelper::admin_upgrade_link( 'upgrade' ) ) ); ?>" target="_blank">Premium Addons</a></td>
+				<td><a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url( FrmAppHelper::admin_upgrade_link( 'upgrade' ) ) ); ?>" target="_blank">Advanced Addons</a></td>
+				<td><a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url( FrmAppHelper::admin_upgrade_link( 'upgrade' ) ) ); ?>" target="_blank">Enterprise Addons</a></td>
 			</tr>
 		</tbody>
 	</table>
@@ -87,7 +87,7 @@
 			</tr>
 			<tr>
 				<th>
-					<a href="https://formidableforms.com/features/wordpress-form-templates/" target="_blank">
+					<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'upgrade', 'features/wordpress-form-templates/' ) ); ?>" target="_blank">
 					Create forms from Templates
 					</a>
 				</th>
@@ -96,7 +96,7 @@
 			</tr>
 			<tr>
 				<th>
-					<a href="https://formidableforms.com/features/importing-exporting-wordpress-forms/" target="_blank">
+					<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'upgrade', 'features/importing-exporting-wordpress-forms/' ) ); ?>" target="_blank">
 						Import and export forms with XML
 					</a>
 				</th>
@@ -109,18 +109,18 @@
 				<td><i class="frm_icon_font frm_check_icon"></i></td>
 			</tr>
 			<tr>
-				<th>Include text, email, url, paragraph text, radio, checkbox, and dropdown fields in your form</th>
+				<th>Include text, email, url, paragraph text, radio, checkbox, dropdown fields, hidden fields, user ID fields, and HTML blocks in your form</th>
 				<td><i class="frm_icon_font frm_check_icon"></i></td>
 				<td><i class="frm_icon_font frm_check_icon"></i></td>
 			</tr>
 			<tr>
-				<th>Include Section headings, page breaks, rich text, date, time, scale, dynamic fields populated from other forms, hidden fields, user ID fields, password, HTML, and tags fields</th>
+				<th>Include section headings, page breaks, rich text, dates, times, scales, star ratings, sliders, toggles, dynamic fields populated from other forms, passwords, and tags in advanced forms</th>
 				<td><i class="frm_icon_font frm_cancel1_icon"></i></td>
 				<td><i class="frm_icon_font frm_check_icon"></i></td>
 			</tr>
 			<tr>
 				<th>
-					<a href="https://formidableforms.com/features/wordpress-calculated-fields-form/" target="_blank">
+					<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'upgrade', 'features/wordpress-calculated-fields-form/' ) ); ?>" target="_blank">
 						Save a calculated value into a field
 					</a>
 				</th>
@@ -129,7 +129,7 @@
 			</tr>
 			<tr>
 				<th>
-					<a href="https://formidableforms.com/features/wordpress-multiple-file-upload-form/" target="_blank">
+					<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'upgrade', 'features/wordpress-multiple-file-upload-form/' ) ); ?>" target="_blank">
 						Allow multiple file uploads
 					</a>
 				</th>
@@ -138,7 +138,7 @@
 			</tr>
 			<tr>
 				<th>
-					<a href="https://formidableforms.com/features/dynamically-add-form-fields/" target="_blank">
+					<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'upgrade', 'features/dynamically-add-form-fields/' ) ); ?>" target="_blank">
 						Repeat sections of fields
 					</a>
 				</th>
@@ -147,7 +147,7 @@
 			</tr>
 			<tr>
 				<th>
-					<a href="https://formidableforms.com/features/conditional-logic-wordpress-forms/" target="_blank">
+					<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'upgrade', 'features/conditional-logic-wordpress-forms/' ) ); ?>" target="_blank">
 						Hide and show fields conditionally based on other fields or the user's role
 					</a>
 				</th>
@@ -156,7 +156,7 @@
 			</tr>
 			<tr>
 				<th>
-					<a href="https://formidableforms.com/features/confirm-email-address-password-wordpress-form/" target="_blank">
+					<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'upgrade', 'features/confirm-email-address-password-wordpress-form/' ) ); ?>" target="_blank">
 						Confirmation fields
 					</a>
 				</th>
@@ -165,7 +165,7 @@
 			</tr>
 			<tr>
 				<th>
-					<a href="https://formidableforms.com/features/wordpress-multi-step-form/" target="_blank">
+					<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'upgrade', 'features/wordpress-multi-step-form/' ) ); ?>" target="_blank">
 						Multi-paged forms
 					</a>
 				</th>
@@ -175,7 +175,7 @@
 			<tr><th colspan="3" class="frm_table_break">Form Actions</th></tr>
 			<tr>
 				<th>
-					<a href="https://formidableforms.com/features/email-autoresponders-wordpress/" target="_blank">
+					<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'upgrade', 'features/email-autoresponders-wordpress/' ) ); ?>" target="_blank">
 						Send multiple emails and autoresponders
 					</a>
 				</th>
@@ -189,7 +189,7 @@
 			</tr>
 			<tr>
 				<th>
-					<a href="https://formidableforms.com/features/user-submitted-posts-wordpress-forms/" target="_blank">
+					<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'upgrade', 'features/user-submitted-posts-wordpress-forms/' ) ); ?>" target="_blank">
 						Create and edit WordPress posts or custom posts from the front-end
 					</a>
 				</th>
@@ -199,7 +199,7 @@
 			<tr><th colspan="3" class="frm_table_break">Form Appearance</th></tr>
 			<tr>
 				<th>
-					<a href="https://formidableforms.com/features/flexible-layouts-responsive-forms/" target="_blank">
+					<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'upgrade', 'features/flexible-layouts-responsive-forms/' ) ); ?>" target="_blank">
 						Customizable layout with CSS classes
 					</a>
 				</th>
@@ -208,7 +208,7 @@
 			</tr>
 			<tr>
 				<th>
-					<a href="https://formidableforms.com/features/customize-form-html-wordpress/" target="_blank">
+					<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'upgrade', 'features/customize-form-html-wordpress/' ) ); ?>" target="_blank">
 						Customize the HTML for your forms
 					</a>
 				</th>
@@ -217,7 +217,7 @@
 			</tr>
 			<tr>
 				<th>
-					<a href="https://formidableforms.com/features/wordpress-visual-form-styler/" target="_blank">
+					<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'upgrade', 'features/wordpress-visual-form-styler/' ) ); ?>" target="_blank">
 						Style your form with the Visual Form Styler
 					</a>
 				</th>
@@ -226,7 +226,7 @@
 			</tr>
 			<tr>
 				<th>
-					<a href="https://formidableforms.com/features/wordpress-visual-form-styler/" target="_blank">
+					<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'upgrade', 'features/wordpress-visual-form-styler/' ) ); ?>" target="_blank">
 						Create Multiple styles for different forms
 					</a>
 				</th>
@@ -251,7 +251,7 @@
 			</tr>
 			<tr>
 				<th>
-					<a href="https://formidableforms.com/features/save-and-continue-partial-submissions/" target="_blank">
+					<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'upgrade', 'features/save-and-continue-partial-submissions/' ) ); ?>" target="_blank">
 						Logged-in users can save drafts and return later
 					</a>
 				</th>
@@ -260,7 +260,7 @@
 			</tr>
 			<tr>
 				<th>
-					<a href="https://formidableforms.com/features/front-end-editing-wordpress/" target="_blank">
+					<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'upgrade', 'features/front-end-editing-wordpress/' ) ); ?>" target="_blank">
 						Flexibly and powerfully view, edit, and delete entries from anywhere on your site
 					</a>
 				</th>
@@ -270,7 +270,7 @@
 			<tr><th colspan="3" class="frm_table_break">Display Entries</th></tr>
 			<tr>
 				<th>
-					<a href="https://formidableforms.com/features/create-a-graph-wordpress-forms/" target="_blank">
+					<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'upgrade', 'features/create-a-graph-wordpress-forms/' ) ); ?>" target="_blank">
 						Generate graphs and stats based on your submitted data
 					</a>
 				</th>
@@ -279,7 +279,7 @@
 			</tr>
 			<tr>
 				<th>
-					<a href="https://formidableforms.com/features/display-form-data-views/" target="_blank">
+					<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'upgrade', 'features/display-form-data-views/' ) ); ?>" target="_blank">
 						Virtually limitless views
 					</a>
 				</th>
