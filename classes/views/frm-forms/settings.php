@@ -57,7 +57,6 @@
         </ul>
         </div>
         <div class="advanced_settings tabs-panel <?php echo esc_attr( $a === 'advanced_settings' ? 'frm_block' : 'frm_hidden' ); ?>">
-			<?php FrmTipsHelper::pro_tip( 'get_form_settings_tip', 'p' ); ?>
 
 			<?php if ( ! $values['is_template'] ) { ?>
 				<h3 id="frm_shortcode" class="<?php echo esc_attr( $first_h3 ) ?>">
@@ -181,6 +180,7 @@
 					</td>
 				</tr>
             </table>
+			<?php FrmTipsHelper::pro_tip( 'get_form_settings_tip', 'p' ); ?>
 
             <!--Permissions Section-->
 			<?php do_action( 'frm_add_form_perm_options', $values ); ?>
@@ -264,12 +264,19 @@
                 <?php
 
                 //For each add-on, add an li, class, and javascript function. If active, add an additional class.
-                foreach ( $action_controls as $action_control ) {
+				$included = false;
+				foreach ( $action_controls as $action_control ) {
 					$classes = ( isset( $action_control->action_options['active'] ) && $action_control->action_options['active'] ) ? 'frm_active_action ' : 'frm_inactive_action ';
 					$classes .= $action_control->action_options['classes'];
+
+					if ( ! $included && strpos( $classes, 'frm_show_upgrade' ) ) {
+						$included = true;
+						FrmAppController::include_upgrade_overlay();
+					}
+					$upgrade_label = sprintf( esc_html__( '%s form actions', 'formidable' ), $action_control->action_options['tooltip'] );
                     ?>
 					<li>
-						<a href="javascript:void(0)" class="frm_<?php echo esc_attr( $action_control->id_base ) ?>_action frm_bstooltip <?php echo esc_attr( $classes ); ?>" title="<?php echo esc_attr( $action_control->action_options['tooltip'] ) ?>" data-limit="<?php echo esc_attr( isset( $action_control->action_options['limit'] ) ? $action_control->action_options['limit'] : '99' ); ?>" data-actiontype="<?php echo esc_attr( $action_control->id_base ) ?>"></a>
+						<a href="javascript:void(0)" class="frm_<?php echo esc_attr( $action_control->id_base ) ?>_action frm_bstooltip <?php echo esc_attr( $classes ); ?>" title="<?php echo esc_attr( $action_control->action_options['tooltip'] ) ?>" data-limit="<?php echo esc_attr( isset( $action_control->action_options['limit'] ) ? $action_control->action_options['limit'] : '99' ); ?>" data-actiontype="<?php echo esc_attr( $action_control->id_base ) ?>" data-upgrade="<?php echo esc_attr( $upgrade_label ); ?>" data-medium="settings-<?php echo esc_attr( $action_control->id_base ); ?>"></a>
 					</li>
 <?php
 					unset( $actions_icon, $classes );

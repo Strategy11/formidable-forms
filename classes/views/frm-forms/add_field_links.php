@@ -48,6 +48,10 @@ foreach ( $frm_field_selection as $field_key => $field_type ) {
 <?php
 
 $no_allow_class = apply_filters( 'frm_noallow_class', 'frm_noallow' );
+if ( $no_allow_class === 'frm_noallow' ) {
+	$no_allow_class .= ' frm_show_upgrade';
+	FrmAppController::include_upgrade_overlay();
+}
 foreach ( FrmField::pro_field_selection() as $field_key => $field_type ) {
 
 	if ( is_array( $field_type ) && isset( $field_type['switch_from'] ) ) {
@@ -78,9 +82,11 @@ foreach ( FrmField::pro_field_selection() as $field_key => $field_type ) {
 <?php
 				} else {
 					$field_label = '<i class="' . esc_attr( FrmFormsHelper::get_field_link_icon( $field_type ) ) . ' frm_animate_bg"></i>';
-					$field_label .= ' <span>' . FrmFormsHelper::get_field_link_name( $field_type ) . '</span>';
+					$field_name  = FrmFormsHelper::get_field_link_name( $field_type );
+					$field_label .= ' <span>' . $field_name . '</span>';
+					$upgrade_label = sprintf( esc_html__( '%s fields', 'formidable' ), $field_name );
                     ?>
-					<li class="frmbutton button <?php echo esc_attr( $no_allow_class . ' frm_t' . str_replace( '|', '-', $field_key ) ) ?>" id="<?php echo esc_attr( $field_key ) ?>">
+					<li class="frmbutton button <?php echo esc_attr( $no_allow_class . ' frm_t' . str_replace( '|', '-', $field_key ) ) ?>" id="<?php echo esc_attr( $field_key ) ?>" data-upgrade="<?php echo esc_attr( $upgrade_label ); ?>" data-medium="builder-<?php echo esc_attr( sanitize_title( $upgrade_label ) ); ?>">
 						<?php echo FrmAppHelper::kses( apply_filters( 'frmpro_field_links', $field_label, $id, $field_key ), array( 'a', 'i', 'span' ) ); // WPCS: XSS ok. ?>
 					</li>
 				<?php

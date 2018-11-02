@@ -408,6 +408,7 @@ ul.frm_form_nav > li{
 	margin-left: 5px;
 }
 
+#frm_upgrade_modal .button,
 .frm-white-body .frm_wrap .button,
 .frm-white-body .frm_wrap button{
 	text-shadow:none;
@@ -418,6 +419,7 @@ ul.frm_form_nav > li{
 }
 
 .wrap .frm_pricing a.button-primary,
+.toplevel_page_formidable #frm_upgrade_modal .button-primary,
 .toplevel_page_formidable .frm_wrap button.button-primary{
 	border-color: #da791d;
 	background: #f37656;
@@ -2640,6 +2642,7 @@ ul .frm_col_two{float:right;}
 .settings-lite-cta {
 	color: #666;
 	font-size: 16px;
+	box-shadow: none !important;
 }
 
 .settings-lite-cta h3{
@@ -2771,8 +2774,66 @@ li.frm_noallow.button,
     filter:alpha(opacity=50);
     cursor: not-allowed;
 }
+
+.frm_actions_list a.frm_show_upgrade.frm_inactive_action:before,
+li.frm_noallow.button.frm_show_upgrade {
+	cursor:pointer;
+}
+
+.field_type_list li.frm_noallow.button.frm_show_upgrade:hover {
+	border-color: inherit;
+}
+
 .frm_noallow a{
     color:inherit;
+}
+
+.frm_overlay{
+	filter: blur(4px);
+}
+
+.wp-dialog {
+	z-index:10;
+	padding: 0 !important;
+}
+
+.toplevel_page_formidable .ui-widget-overlay{
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0,0,0,0.1);
+	z-index: 2;
+}
+
+.frm_overlay .wp-dialog {
+	box-shadow: 0 0 80px #333;
+}
+
+#frm_upgrade_modal{
+	text-align:center;
+}
+
+#frm_upgrade_modal .dismiss {
+	padding: 5px;
+	color: #c4c4c4;
+}
+
+#frm_upgrade_modal .dashicons-lock{
+	display: block;
+	margin: 0 auto;
+	font-size: 35px;
+	color: #c4c4c4;
+	padding-bottom: 20px;
+}
+
+a.frm-link-secondary {
+	color:#c4c4c4;
+	font-size:14px;
+	text-decoration:underline;
 }
 
 .field_type_list li.button.frm_noallow,

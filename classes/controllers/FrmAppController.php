@@ -182,6 +182,24 @@ class FrmAppController {
 	}
 
 	/**
+	 * @since 3.04.02
+	 */
+	public static function include_upgrade_overlay() {
+		$is_pro = FrmAppHelper::pro_is_installed();
+		wp_enqueue_script( 'jquery-ui-dialog' );
+		wp_enqueue_style( 'jquery-ui-dialog' );
+		include( FrmAppHelper::plugin_path() . '/classes/views/shared/upgrade_overlay.php' );
+	}
+
+	/**
+	 * @since 3.04.02
+	 */
+	public static function remove_upsells() {
+		remove_action( 'frm_before_settings', 'FrmSettingsController::license_box' );
+		remove_action( 'frm_after_settings', 'FrmSettingsController::settings_cta' );
+	}
+
+	/**
 	 * If there are CURL problems on this server, wp_remote_post won't work for installing
 	 * Use a javascript fallback instead.
 	 *

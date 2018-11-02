@@ -64,7 +64,6 @@ class FrmTipsHelper {
 				'call' => __( 'Prefill fields with user info.', 'formidable' ),
 			),
 		);
-		$tips = array_merge( $tips, self::get_form_settings_tip(), self::get_form_action_tip(), self::get_entries_tip() );
 
 		return $tips;
 	}
@@ -85,6 +84,11 @@ class FrmTipsHelper {
 				'link' => 'save-drafts-tip/?utm_medium=tip-drafts',
 				'tip'  => __( 'Have a long form that takes time to complete?', 'formidable' ),
 				'call' => __( 'Let logged-in users save a draft and return later.', 'formidable' ),
+			),
+			array(
+				'link' => 'pricing-lite/?utm_medium=tip-ajax',
+				'tip'  => __( 'Want to submit forms without reloading the page?', 'formidable' ),
+				'call' => __( 'Get ajax form submit.', 'formidable' ),
 			),
 		);
 		return $tips;

@@ -1748,6 +1748,44 @@ function frmAdminBuildJS(){
 		}, 2000);
 	}
 
+	function openUpgradeModal() {
+		var $info = jQuery('#frm_upgrade_modal');
+		$info.dialog({
+			dialogClass: 'wp-dialog',
+			modal: true,
+			autoOpen: false,
+			closeOnEscape: true,
+			width: '550px',
+			resizable: false,
+			draggable: false,
+			open: function( event ) {
+				jQuery('.ui-dialog-titlebar').addClass('frm_hidden').removeClass('ui-helper-clearfix');
+				jQuery('#wpwrap').addClass('frm_overlay');
+				jQuery('.wp-dialog').removeClass('ui-widget ui-widget-content ui-corner-all');
+				jQuery('#frm_upgrade_modal').removeClass('ui-dialog-content ui-widget-content');
+
+				// close dialog by clicking the overlay behind it
+				jQuery('.ui-widget-overlay, a.dismiss').bind('click', function() {
+					$info.dialog('close');
+				});
+			},
+			close: function() {
+				jQuery('#wpwrap').removeClass('frm_overlay');
+			}
+		});
+
+		jQuery('.frm_show_upgrade').click( function( event ) {
+			event.preventDefault();
+			jQuery('.frm_feature_label').html( jQuery(this).data('upgrade') );
+			$info.dialog('open');
+
+			// set the utm medium
+			var button = $info.find('.button-primary');
+			var link = button.attr('href').replace( /(medium=)[a-z_-]+/ig, '$1' + jQuery(this).data('medium') );
+			button.attr( 'href', link );
+		} );
+	}
+
 	/* Form settings */
 	function showSuccessOpt(){
 		/*jshint validthis:true */
@@ -3212,6 +3250,8 @@ function frmAdminBuildJS(){
 			$newFields.on('change', 'select.conf_field', addConf);
 
 			$newFields.on('change', '.frm_get_field_selection', getFieldSelection);
+
+			openUpgradeModal();
 		},
 		
 		settingsInit: function(){
@@ -3326,6 +3366,8 @@ function frmAdminBuildJS(){
 					jQuery('.edit_action_message_box').fadeOut('slow');//Hide On Update message box
 				}
 			});
+
+			openUpgradeModal();
 		},
 		
 		panelInit: function(){
