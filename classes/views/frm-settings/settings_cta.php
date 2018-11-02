@@ -22,7 +22,7 @@
 					<div class="clear"></div>
 
 					<p>
-						<a href="<?php echo FrmAppHelper::admin_upgrade_link( 'settings-upgrade' ); ?>" target="_blank" rel="noopener noreferrer">
+						<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'settings-upgrade' ) ); ?>" target="_blank" rel="noopener noreferrer">
 							<?php esc_html_e( 'Get Formidable Forms Pro Today and Unlock all the Powerful Features »', 'formidable' ); ?>
 						</a>
 					</p>
