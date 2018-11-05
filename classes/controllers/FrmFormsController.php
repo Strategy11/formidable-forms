@@ -1005,7 +1005,7 @@ class FrmFormsController {
         }
 
         if ( isset( $message ) && ! empty( $message ) ) {
-			echo '<div id="message" class="updated frm_updated_message">' . FrmAppHelper::kses( $message, array( 'a' ) ) . '</div>'; // WPCS: XSS ok.
+			echo '<div id="message" class="frm_updated_message">' . FrmAppHelper::kses( $message, array( 'a' ) ) . '</div>'; // WPCS: XSS ok.
         }
 
         return $errors;

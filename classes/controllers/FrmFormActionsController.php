@@ -45,7 +45,7 @@ class FrmFormActionsController {
             //'aweber'    => 'FrmDefAweberAction',
             'mailchimp' => 'FrmDefMlcmpAction',
             'twilio'    => 'FrmDefTwilioAction',
-            'highrise'  => 'FrmDefHrsAction',
+            'payment'   => 'FrmDefHrsAction',
         );
 		$action_classes = apply_filters( 'frm_registered_form_actions', $action_classes );
 

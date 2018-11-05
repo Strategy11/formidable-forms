@@ -1750,6 +1750,10 @@ function frmAdminBuildJS(){
 
 	function openUpgradeModal() {
 		var $info = jQuery('#frm_upgrade_modal');
+		if ( $info.length < 1 ) {
+			return;
+		}
+
 		$info.dialog({
 			dialogClass: 'wp-dialog',
 			modal: true,
@@ -3030,6 +3034,132 @@ function frmAdminBuildJS(){
         });
     }
 
+	/* Addons page */
+	function installAddon( e ) {
+		e.preventDefault();
+
+		// Remove any leftover error messages, output an icon and get the plugin basename that needs to be activated.
+		jQuery('.frm-addon-error').remove();
+		var button  = jQuery(this);
+		var plugin  = button.attr('rel');
+		var el      = button.parent();
+		var message = el.parent().find('.addon-status-label');
+		var loader  = button.next();
+
+		button.html( frm_admin_js.installing );
+		loader.css({ 'visibility': 'visible', 'display': 'inline-block' });
+
+		// Process the Ajax to perform the activation.
+		jQuery.ajax({
+			url: ajaxurl,
+			type: 'POST',
+			async: true,
+			cache: false,
+			dataType: 'json',
+			data: {
+				action: 'frm_install_addon',
+				nonce:  frmGlobal.nonce,
+				plugin: plugin
+			},
+			success: function(response) {
+				// If there is a WP Error instance, output it here and quit the script.
+				if ( response.error ) {
+					addonError( response, el, button, loader );
+					return;
+				}
+
+				// If we need more credentials, output the form sent back to us.
+				if ( response.form ) {
+					// Display the form to gather the users credentials.
+
+					button.append('<div class="frm-addon-error frm_error_style">' + response.form + '</div>');
+					loader.hide();
+
+					// Add a disabled attribute the install button if the creds are needed.
+					button.attr('disabled', true);
+
+					el.on( 'click', '#upgrade', 'installAddonWithCreds' );
+
+					// No need to move further if we need to enter our creds.
+					return;
+				}
+
+				// The Ajax request was successful, so let's update the output.
+				button.css({ 'visibility': 'hidden' });
+				message.text( frm_admin_js.active );
+
+				// Proceed with CSS changes
+				el.parent().removeClass('frm-addon-not-installed').addClass('frm-addon-active');
+				loader.hide();
+			},
+			error: function(xhr, textStatus, e) {
+				loader.hide();
+			}
+		});
+	}
+
+	function installAddonWithCreds( e ) {
+		// Prevent the default action, let the user know we are attempting to install again and go with it.
+		e.preventDefault();
+
+		// Now let's make another Ajax request once the user has submitted their credentials.
+		var proceed   = jQuery(this);
+		var el        = proceed.parent().parent();
+		var loader    = proceed.next();
+
+		proceed.html( frm_admin_js.installing );
+		loader.css({ 'visibility': 'visible', 'display': 'inline-block' });
+
+		jQuery.ajax({
+			url: ajaxurl,
+			type: 'POST',
+			async: true,
+			cache: false,
+			dataType: 'json',
+			data: {
+				action: 'frm_install_addon',
+				nonce:  frm_admin_js.nonce,
+				plugin: plugin,
+				hostname: el.find('#hostname').val(),
+				username: el.find('#username').val(),
+				password: el.find('#password').val()
+			},
+			success: function(response) {
+				// If there is a WP Error instance, output it here and quit the script.
+				if ( response.error ) {
+					addonError( response, el, button, loader );
+					return;
+				}
+
+				if ( response.form ) {
+					loader.hide();
+					jQuery('.frm-inline-error').remove();
+					//proceed.val(monsterinsights_admin.proceed);
+					//proceed.after('<span class="frm-inline-error">' + monsterinsights_admin.connect_error + '</span>');
+					return;
+				}
+
+				// The Ajax request was successful, so let's update the output.
+				button.hide();
+				jQuery(message).text( frm_admin_js.active );
+
+				// Proceed with CSS changes
+				jQuery(el).removeClass('frm-addon-not-installed').addClass('frm-addon-active');
+				loader.hide();
+			},
+			error: function(xhr, textStatus ,e) {
+				loader.hide();
+			}
+		});
+	}
+
+	function addonError( response, el, button, loader ) {
+		el.append('<div class="frm-addon-error frm_error_style"><p><strong>' + response.error + '</strong></p></div>');
+		button.html( frm_admin_js.install );
+		loader.hide();
+		jQuery('.frm-addon-error').delay(4000).fadeOut();
+	}
+
 	/* Helpers */
 	function toggle( cname, id ) {
 		if(id === '#'){
@@ -3146,6 +3276,8 @@ function frmAdminBuildJS(){
 			
 			jQuery(document.getElementById('frm_deauthorize_link')).click(deauthorize);
 			jQuery('.frm_authorize_link').click(authorize);
+
+			jQuery('.frm-install-addon').click( installAddon );
 
 			// prevent annoying confirmation message from WordPress
 			jQuery('button, input[type=submit]').on('click', removeWPUnload);

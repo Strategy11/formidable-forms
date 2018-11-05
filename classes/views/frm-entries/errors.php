@@ -6,7 +6,7 @@ if ( isset( $include_extra_container ) ) { ?>
 if ( isset( $message ) && $message != '' ) {
     if ( FrmAppHelper::is_admin() ) {
 ?>
-<div id="message" class="frm_updated_message updated"><?php echo wp_kses_post( $message ) ?></div>
+<div id="message" class="frm_updated_message"><?php echo wp_kses_post( $message ) ?></div>
 <?php
 	} else {
 		FrmFormsHelper::maybe_get_scroll_js( $form->id );

@@ -1699,6 +1699,9 @@ class FrmAppHelper {
 				'view_shortcodes'   => __( 'This calculation may have shortcodes that work in Views but not forms.', 'formidable' ),
 				'text_shortcodes'   => __( 'This calculation may have shortcodes that work in text calculations but not numeric calculations.', 'formidable' ),
 				'repeat_limit_min'  => __( 'Please enter a Repeat Limit that is greater than 1.', 'formidable' ),
+				'installing'        => __( 'Installing', 'formidable' ),
+				'install'           => __( 'Install', 'formidable' ),
+				'active'            => __( 'Active', 'formidable' ),
 			);
 			wp_localize_script( 'formidable_admin', 'frm_admin_js', $admin_script_strings );
 		}

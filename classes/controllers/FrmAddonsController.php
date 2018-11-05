@@ -16,7 +16,7 @@ class FrmAddonsController {
 		$addons = self::get_api_addons();
 		self::prepare_addons( $addons );
 
-		$site_url = 'https://formidableforms.com/';
+		$pricing = FrmAppHelper::admin_upgrade_link( 'addons' );
 
 		include( FrmAppHelper::plugin_path() . '/classes/views/addons/list.php' );
 	}
@@ -52,6 +52,38 @@ class FrmAddonsController {
 	}
 
 	private static function get_api_addons() {
+		$addons = array();
+		$url = 'https://formidableforms.com/wp-json/s11edd/v1/updates/';
+		if ( FrmAppHelper::pro_is_installed() ) {
+			$edd_update = new FrmProEddController();
+			$license = $edd_update->get_license();
+			if ( ! empty( $license ) ) {
+				$url .= '?l=' . urlencode( base64_encode( $license ) );
+			}
+		}
+
+		$response = wp_remote_get( $url,
+			array(
+				'timeout'     => 120,
+				'httpversion' => '1.1',
+			)
+		);
+		if ( is_array( $response ) && ! is_wp_error( $response ) ) {
+		    $addons = $response['body'];
+		}
+
+		if ( ! empty( $addons ) ) {
+			$addons = json_decode( $addons, true );
+			$skip_categories = array( 'WordPress Form Templates', 'WordPress Form Style Templates' );
+			foreach ( $addons as $k => $addon ) {
+				$cats = array_intersect( $skip_categories, $addon['categories'] );
+				if ( empty( $addon['excerpt'] ) || ! empty( $cats ) ) {
+					unset( $addons[ $k ] );
+				}
+			}
+			return $addons;
+		}
+
 		$addons = array(
 			'formidable-pro' => array(
 				'title'   => 'Formidable Pro',
@@ -75,13 +107,13 @@ class FrmAddonsController {
 			),
 			'stripe' => array(
 				'title'   => 'Stripe Forms',
-				'docs'    => 'stripe/',
+				'docs'    => 'knowledgebase/stripe/',
 				'excerpt' => 'Any Formidable forms on your site can accept credit card payments without users ever leaving your site.',
 			),
 			'authorize-net' => array(
 				'title'   => 'Authorize.net AIM Forms',
 				'link'    => 'downloads/authorize-net-aim/',
-				'docs'    => 'authorize-net-aim/',
+				'docs'    => 'knowledgebase/authorize-net-aim/',
 				'excerpt' => 'Accept one-time payments directly on your site, using Authorize.net AIM.',
 			),
 			'woocommerce' => array(
@@ -90,13 +122,13 @@ class FrmAddonsController {
 			),
 			'autoresponder' => array(
 				'title'   => 'Form Action Automation',
-				'docs'    => 'schedule-autoresponder/',
+				'docs'    => 'knowledgebase/schedule-autoresponder/',
 				'excerpt' => 'Schedule email notifications, SMS messages, and API actions.',
 			),
 			'modal' => array(
 				'title'   => 'Bootstrap Modal Forms',
 				'link'    => 'downloads/bootstrap-modal/',
-				'docs'    => 'bootstrap-modal/',
+				'docs'    => 'knowledgebase/bootstrap-modal/',
 				'excerpt' => 'Open a view or form in a Bootstrap popup.',
 			),
 			'bootstrap' => array(
@@ -118,34 +150,8 @@ class FrmAddonsController {
 			),
 			'twilio' => array(
 				'title'   => 'Twilio SMS Forms',
-				'docs'    => 'twilio-add-on/',
+				'docs'    => 'knowledgebase/twilio-add-on/',
 				'excerpt' => 'Allow users to text their votes for polls created by Formidable Forms, or send SMS notifications when entries are submitted or updated.',
-			),
-			'aweber' => array(
-				'title'   => 'AWeber Forms',
-				'excerpt' => 'Subscribe users to an AWeber mailing list when they submit a form. AWeber is a powerful email marketing service.',
-			),
-			'highrise' => array(
-				'title'   => 'Highrise Forms',
-				'excerpt' => 'Add your leads to your Highrise CRM account any time a Formidable form is submitted.',
-			),
-			'wpml' => array(
-				'title'   => 'WP Multilingual Forms',
-				'link'    => 'downloads/wp-multilingual/',
-				'docs'    => 'formidable-multi-language/',
-				'excerpt' => 'Translate your forms into multiple languages using the Formidable-integrated WPML plugin.',
-			),
-			'polylang' => array(
-				'title'   => 'Polylang Forms',
-				'excerpt' => 'Create bilingual or multilingual forms with help from Polylang.',
-			),
-			'locations' => array(
-				'title'   => 'Locations',
-				'excerpt' => 'Populate fields with Countries, States/Provinces, U.S. Counties, and U.S. Cities. This data can then be used in dependent Data from Entries fields.',
-			),
-			'user-tracking' => array(
-				'title'   => 'User Tracking',
-				'excerpt' => 'Track which pages a user visits prior to submitting a form.',
 			),
 		);
 
@@ -159,7 +165,13 @@ class FrmAddonsController {
 		}
 
 		$loop_addons = $addons;
-		foreach ( $loop_addons as $slug => $addon ) {
+		foreach ( $loop_addons as $id => $addon ) {
+			if ( is_numeric( $id ) ) {
+				$slug = str_replace( array( '-wordpress-plugin', '-wordpress' ), '', $addon['slug'] );
+				self::prepare_folder_name( $addon );
+			} else {
+				$slug = $id;
+			}
 			if ( isset( $addon['file'] ) ) {
 				$base_file = $addon['file'];
 			} else {
@@ -185,15 +197,71 @@ class FrmAddonsController {
 			}
 
 			if ( ! isset( $addon['docs'] ) ) {
-				$addon['docs'] = 'formidable-' . $slug . '/';
+				$addon['docs'] = 'knowledgebase/formidable-' . $slug . '/';
 			}
+			self::prepare_addon_link( $addon['docs'] );
 
 			if ( ! isset( $addon['link'] ) ) {
 				$addon['link'] = 'downloads/' . $slug . '/';
 			}
-			$addon['link'] = FrmAppHelper::make_affiliate_url( $addon['link'] );
+			self::prepare_addon_link( $addon['link'] );
 
-			$addons[ $slug ] = $addon;
+			self::set_addon_status( $addon );
+			$addons[ $id ] = $addon;
+		}
+	}
+
+	/**
+	 * @since 3.04.02
+	 */
+	private static function prepare_folder_name( &$addon ) {
+		if ( isset( $addon['url'] ) ) {
+			$url  = explode( '?', $addon['url'] );
+			$file = explode( '/', $url[0] );
+			$file = end( $file );
+			$addon['file'] = str_replace( '-' . $addon['version'] . '.zip', '', $file );
+		}
+	}
+
+	/**
+	 * @since 3.04.02
+	 */
+	private static function prepare_addon_link( &$link ) {
+		$site_url = 'https://formidableforms.com/';
+		if ( strpos( $link, 'http' ) !== 0 ) {
+			$link = $site_url . $link;
+		}
+		$link = FrmAppHelper::make_affiliate_url( $link );
+		$query_args = array(
+			'utm_source'   => 'WordPress',
+			'utm_medium'   => 'addons',
+			'utm_campaign' => 'liteplugin',
+		);
+		$link = add_query_arg( $query_args, $link );
+	}
+
+	/**
+	 * Add the status to the addon array. Status options are:
+	 * installed, active, not installed
+	 *
+	 * @since 3.04.02
+	 */
+	private static function set_addon_status( &$addon ) {
+		if ( ! empty( $addon['activate_url'] ) ) {
+			$addon['status'] = array(
+				'type'  => 'installed',
+				'label' => __( 'Installed', 'formidable' )
+			);
+		} elseif ( $addon['installed'] ) {
+			$addon['status'] = array(
+				'type'  => 'active',
+				'label' => __( 'Active', 'formidable' ),
+			);
+		} else {
+			$addon['status'] = array(
+				'type'  => 'not-installed',
+				'label' => __( 'Not Installed', 'formidable' ),
+			);
 		}
 	}
 
@@ -318,5 +386,105 @@ class FrmAddonsController {
 		remove_filter( 'wp_unique_filename', 'FrmAddonsController::shorten_edd_filename', 10 );
 
 		return $filename;
+	}
+
+	/**
+	 * @since 3.04.02
+	 */
+	public static function ajax_install_addon() {
+
+		self::install_addon_permissions();
+
+		// Set the current screen to avoid undefined notices.
+		global $hook_suffix;
+		set_current_screen();
+
+		self::maybe_show_cred_form();
+
+		$installed = self::install_addon();
+		self::maybe_activate_addon( $installed );
+
+		// Send back a response.
+		echo json_encode( true );
+		wp_die();
+	}
+
+	/**
+	 * @since 3.04.02
+	 */
+	private static function maybe_show_cred_form() {
+		// Start output bufferring to catch the filesystem form if credentials are needed.
+		ob_start();
+
+		$show_form = false;
+		$method = '';
+		$url    = add_query_arg( array( 'page' => 'formidable-settings' ), admin_url( 'admin.php' ) );
+		$url    = esc_url_raw( $url );
+		$creds  = request_filesystem_credentials( $url, $method, false, false, null );
+
+		if ( false === $creds ) {
+			$show_form = true;
+		} elseif ( ! WP_Filesystem( $creds ) ) {
+			request_filesystem_credentials( $url, $method, true, false, null );
+			$show_form = true;
+		}
+
+		if ( $show_form ) {
+			$form = ob_get_clean();
+			//TODO: test this: echo json_encode( array( 'form' => $form ) );
+			echo json_encode( array( 'form' => __( 'Sorry, you\'re site requires FTP authentication. Please install plugins manaully.', 'formidable' ) ) );
+			wp_die();
+		}
+
+		ob_end_clean();
+	}
+
+	/**
+	 * We do not need any extra credentials if we have gotten this far,
+	 * so let's install the plugin.
+	 *
+	 * @since 3.04.02
+	 */
+	private static function install_addon() {
+		require_once( ABSPATH . 'wp-admin/includes/class-wp-upgrader.php' );
+
+		$download_url = esc_url_raw( $_POST['plugin'] );
+
+		// Create the plugin upgrader with our custom skin.
+		$installer = new Plugin_Upgrader( new FrmInstallerSkin() );
+		$installer->install( $download_url );
+
+		// Flush the cache and return the newly installed plugin basename.
+		wp_cache_flush();
+		return $installer->plugin_info();
+	}
+
+	/**
+	 * @since 3.04.02
+	 */
+	private static function maybe_activate_addon( $installed ) {
+		if ( ! $installed ) {
+			return;
+		}
+
+		$activate = activate_plugin( $installed );
+		if ( is_wp_error( $activate ) ) {
+			echo json_encode( array( 'error' => $activate->get_error_message() ) );
+			wp_die();
+		}
+	}
+
+	/**
+	 * Run security checks before installing
+	 *
+	 * @since 3.04.02
+	 */
+	private static function install_addon_permissions() {
+		check_ajax_referer( 'frm_ajax', 'nonce' );
+
+		if ( ! current_user_can( 'activate_plugins' ) || ! isset( $_POST['plugin'] ) ) {
+			echo json_encode( true );
+			wp_die();
+		}
 	}
 }

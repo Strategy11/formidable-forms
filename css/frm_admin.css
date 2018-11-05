@@ -661,7 +661,7 @@ div.frm_updated_message{
     color: #468847;
 	padding: 10px 15px;
 	font-size:14px;
-	margin-bottom:10px;
+	margin:5px 15px 10px;
 }
 
 .frm_license_box .frm_error_style{
@@ -727,13 +727,70 @@ div.frm_updated_message{
 	text-align:center;
 }
 
-.plugin-card.plugin-card-formidable-pro{
-	border:2px solid #0073aa;
+.frm-addons {
+	margin-top:30px;
 }
 
-.frm-no-thumb.plugin-card .name,
-.frm-no-thumb.plugin-card .desc{
-	margin-left:0;
+.frm-addons .plugin-card:nth-child(even),
+.frm-addons .plugin-card:nth-child(odd),
+.frm-addons .plugin-card{
+	width: 31.3%;
+	margin:0 3% 30px 0;
+	clear:none;
+}
+
+.frm-addons .plugin-card-top{
+	height:200px;
+}
+
+.frm-addons .plugin-card:nth-child(3n+3) {
+	margin-right:0;
+}
+
+.frm-addons .plugin-card:nth-child(3n+4) {
+	clear:both;
+}
+
+.frm-addons .plugin-card-bottom {
+	padding:20px;
+	text-align:center;
+}
+
+.frm-addons .plugin-card-bottom,
+.frm-addons .plugin-card-bottom .button {
+	font-size:15px;
+}
+
+.frm-addons .button {
+	float:right;
+}
+
+.frm-addons .addon-status {
+	float:left;
+}
+
+.frm-addon-active .button {
+	visibility:hidden;
+}
+
+.addon-status-label {
+	opacity:.7;
+}
+
+.frm-addon-active .addon-status-label {
+	color: #f37656;
+	opacity:1;
+}
+
+.frm-addon-error{
+	position: absolute;
+	width: 100%;
+	font-weight: bold;
+	text-align: center;
+	max-width: 291px;
+	margin: 0;
+	margin-top: -205px;
+	margin-left: -17px;
 }
 
 #frm_bulk_options{
@@ -2216,7 +2273,9 @@ span.howto{display:inline;}
     padding:5px;
     color:#444;
 	vertical-align:middle;
+	box-shadow:none !important;
 }
+
 a.frm_button:hover{
 	text-decoration:none !important;
 }
@@ -3146,6 +3205,24 @@ Responsive Design
 	  display: block;
 	  margin: 5px 0;
   	}
+
+	.frm-addons .plugin-card:nth-child(3n+4),
+	.frm-addons .plugin-card:nth-child(3n+3),
+	.frm-addons .plugin-card:nth-child(even),
+	.frm-addons .plugin-card:nth-child(odd),
+	.frm-addons .plugin-card{
+		width: 48.5%;
+		margin:0 3% 30px 0;
+		clear:none;
+	}
+
+	.frm-addons .plugin-card:nth-child(even) {
+		margin-right:0;
+	}
+
+	.frm-addons .plugin-card:nth-child(odd) {
+		clear:both;
+	}
 }
 @media only screen and (max-width: 1050px) {
 	.frm_drag_inst{font-size: 20px;}
@@ -3401,6 +3478,15 @@ Responsive Design
 	.frm_email_row td:nth-child(3) {
 		width: 25%;
 		display: inline-block;
+	}
+
+	.frm-addons .plugin-card:nth-child(3n+4),
+	.frm-addons .plugin-card:nth-child(3n+3),
+	.frm-addons .plugin-card:nth-child(even),
+	.frm-addons .plugin-card:nth-child(odd),
+	.frm-addons .plugin-card{
+		width: 100%;
+		margin-right:0;
 	}
 }
 
