@@ -153,8 +153,19 @@ function frmFrontFormJS(){
 	}
 
 	function maybeValidateChange( field_id, field ) {
+		if ( field.type === 'url' ) {
+			maybeAddHttpToUrl( field );
+		}
 		if ( jQuery(field).closest('form').hasClass('frm_js_validate') ) {
 			validateField( field_id, field );
+		}
+	}
+
+	function maybeAddHttpToUrl( field ) {
+		var url = field.value;
+		var matches = url.match( /^(https?|ftps?|mailto|news|feed|telnet):/ );
+		if ( field.value !== '' && matches === null ) {
+			field.value = 'http://' + url;
 		}
 	}
 
