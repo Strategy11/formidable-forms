@@ -1,4 +1,7 @@
 == Changelog ==
+= 3.04.02 =
+* New: When HTML5 is used, auto add the http in a url field if it is omitted by the user
+
 = 3.04.01 =
 * New: When a form includes a user ID field, include helpers in the Advanced tab to get data from the user profile for use in emails and other form actions.
 * Code: Refactor and clean up the code for the Advanced tab in the form settings sidebar
