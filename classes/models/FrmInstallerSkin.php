@@ -10,6 +10,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+if ( ! class_exists( 'WP_Upgrader_Skin' ) ) {
+	// this is to prevent a unit test from failing
+	return;
+}
+
 class FrmInstallerSkin extends WP_Upgrader_Skin {
 
 	/**

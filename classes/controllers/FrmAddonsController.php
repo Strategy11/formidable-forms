@@ -446,13 +446,7 @@ class FrmAddonsController {
 		$download_url = esc_url_raw( $_POST['plugin'] );
 
 		// Create the plugin upgrader with our custom skin.
-		if ( class_exists( 'WP_Upgrader_Skin' ) ) {
-			$skin = new FrmInstallerSkin();
-		} else {
-			$skin = null;
-		}
-
-		$installer = new Plugin_Upgrader( $skin );
+		$installer = new Plugin_Upgrader( new FrmInstallerSkin() );
 		$installer->install( $download_url );
 
 		// Flush the cache and return the newly installed plugin basename.
