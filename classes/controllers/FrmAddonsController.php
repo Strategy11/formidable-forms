@@ -62,12 +62,7 @@ class FrmAddonsController {
 			}
 		}
 
-		$response = wp_remote_get( $url,
-			array(
-				'timeout'     => 120,
-				'httpversion' => '1.1',
-			)
-		);
+		$response = wp_remote_get( $url );
 		if ( is_array( $response ) && ! is_wp_error( $response ) ) {
 		    $addons = $response['body'];
 		}
@@ -250,7 +245,7 @@ class FrmAddonsController {
 		if ( ! empty( $addon['activate_url'] ) ) {
 			$addon['status'] = array(
 				'type'  => 'installed',
-				'label' => __( 'Installed', 'formidable' )
+				'label' => __( 'Installed', 'formidable' ),
 			);
 		} elseif ( $addon['installed'] ) {
 			$addon['status'] = array(
