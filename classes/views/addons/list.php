@@ -1,5 +1,5 @@
 <div class="wrap">
-	<h1><?php esc_html_e( 'Formidable AddOns', 'formidable' ) ?></h1>
+	<h1><?php esc_html_e( 'Formidable Add-Ons', 'formidable' ); ?></h1>
 
 	<div id="the-list" class="frm-addons">
 		<?php foreach ( $addons as $slug => $addon ) { ?>
