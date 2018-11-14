@@ -24,9 +24,15 @@
 						printf( esc_html( $message ), '<span class="frm_feature_label"></span>' );
 						?>
 					</p>
-					<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'builder-upgrade' ) ); ?>" class="button button-primary" target="_blank" rel="noopener noreferrer">
+					<?php if ( $is_pro ) { ?>
+						<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-addons' ) ); ?>" class="button button-primary">
+								<?php esc_html_e( 'See My Add-Ons', 'formidable' ); ?>
+						</a>
+					<?php } else { ?>
+						<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'builder-upgrade' ) ); ?>" class="button button-primary" target="_blank" rel="noopener noreferrer">
 							<?php esc_html_e( 'Upgrade to Pro', 'formidable' ); ?>
-					</a>
+						</a>
+					<?php } ?>
 					<p>
 						<a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url( FrmAppHelper::admin_upgrade_link( 'builder-upgrade', 'knowledgebase/install-formidable-forms/' ) ) ); ?>" target="_blank" class="frm-link-secondary">
 							<?php esc_html_e( 'Already purchased?', 'formidable' ); ?>
