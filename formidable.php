@@ -73,6 +73,10 @@ function frm_class_autoloader( $class_name, $filepath ) {
 		$filepath .= '/controllers/';
 	} else if ( preg_match( '/^.+Factory$/', $class_name ) ) {
 		$filepath .= '/factories/';
+	} elseif ( preg_match( '/^.+Deprecated$/', $class_name ) ) {
+		$filepath .= 'REMOVE';
+		$filepath = str_replace( '/classesREMOVE', '', $filepath );
+		$filepath .= '/deprecated/';
 	} else {
 		$filepath .= '/models/';
 		if ( strpos( $class_name, 'Field' ) && ! file_exists( $filepath . $class_name . '.php' ) ) {
