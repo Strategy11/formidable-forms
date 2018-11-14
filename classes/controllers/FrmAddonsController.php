@@ -52,27 +52,17 @@ class FrmAddonsController {
 	}
 
 	private static function get_api_addons() {
-		$addons = array();
-		$url = 'https://formidableforms.com/wp-json/s11edd/v1/updates/';
+		$license = '';
 		if ( FrmAppHelper::pro_is_installed() ) {
 			$edd_update = new FrmProEddController();
-			$license = $edd_update->get_license();
-			if ( ! empty( $license ) ) {
-				$url .= '?l=' . urlencode( base64_encode( $license ) );
-			}
+			$license = $edd_update->license;
 		}
 
-		$response = wp_remote_get( $url );
-		if ( is_array( $response ) && ! is_wp_error( $response ) ) {
-		    $addons = $response['body'];
-		}
+		$addons = self::get_addon_info( $license );
 
 		if ( ! empty( $addons ) ) {
-			$addons = json_decode( $addons, true );
-			$skip_categories = array( 'WordPress Form Templates', 'WordPress Form Style Templates' );
 			foreach ( $addons as $k => $addon ) {
-				$cats = array_intersect( $skip_categories, $addon['categories'] );
-				if ( empty( $addon['excerpt'] ) || ! empty( $cats ) ) {
+				if ( empty( $addon['excerpt'] ) ) {
 					unset( $addons[ $k ] );
 				}
 			}
@@ -151,6 +141,190 @@ class FrmAddonsController {
 		);
 
 		return $addons;
+	}
+
+	/**
+	 * @since 3.04.03
+	 * @return array
+	 */
+	public static function get_addon_info( $license = '' ) {
+		$addons = array();
+		$url = 'https://formidableforms.com/wp-json/s11edd/v1/updates/';
+		if ( ! empty( $license ) ) {
+			$url .= '?l=' . urlencode( base64_encode( $license ) );
+		}
+
+		$addons = self::get_cached_addons( $license );
+		if ( ! empty( $addons ) ) {
+			return $addons;
+		}
+
+		$response = wp_remote_get( $url );
+		if ( is_array( $response ) && ! is_wp_error( $response ) ) {
+		    $addons = $response['body'];
+			if ( ! empty( $addons ) ) {
+				$addons = json_decode( $addons, true );
+
+				$skip_categories = array( 'WordPress Form Templates', 'WordPress Form Style Templates' );
+				foreach ( $addons as $k => $addon ) {
+					$cats = array_intersect( $skip_categories, $addon['categories'] );
+					if ( ! empty( $cats ) ) {
+						unset( $addons[ $k ] );
+					}
+				}
+
+				self::set_cached_addons( $addons, $license );
+			}
+
+		}
+
+		return $addons;
+	}
+
+	/**
+	 * @since 3.04.03
+	 * @return array
+	 */
+	private static function get_cached_addons( $license = '' ) {
+		$cache_key = self::get_cache_key( $license );
+		$cache     = get_option( $cache_key );
+
+		if ( empty( $cache ) || empty( $cache['timeout'] ) || current_time( 'timestamp' ) > $cache['timeout'] ) {
+			return false; // Cache is expired
+		}
+
+		return json_decode( $cache['value'], true );
+	}
+
+	/**
+	 * @since 3.04.03
+	 */
+	private static function set_cached_addons( $addons, $license = '' ) {
+		$cache_key = self::get_cache_key( $license );
+		$data = array(
+			'timeout' => strtotime( '+4 hours', current_time( 'timestamp' ) ),
+			'value'   => json_encode( $addons ),
+		);
+
+		update_option( $cache_key, $data, 'no' );
+	}
+
+	private static function get_cache_key( $license ) {
+		return 'frm_addons_l' . ( empty( $license ) ? '' : md5( $license ) );
+	}
+
+	/**
+	 * @since 3.04.03
+	 */
+	public static function check_update( $transient ) {
+		if ( ! is_object( $transient ) ) {
+			$transient = new stdClass;
+		}
+
+		$installed_addons = apply_filters( 'frm_installed_addons', array() );
+		if ( empty( $installed_addons ) ) {
+			return $transient;
+		}
+
+		$version_info = self::fill_update_addon_info( $installed_addons );
+
+		$transient->last_checked = time();
+
+		$wp_plugins = get_plugins();
+
+		foreach ( $version_info as $id => $plugin ) {
+			$plugin = (object) $plugin;
+
+			if ( ! isset( $plugin->new_version ) || ! isset( $plugin->package ) ) {
+				continue;
+			}
+
+			$folder = $plugin->plugin;
+			if ( empty( $folder ) ) {
+				continue;
+			}
+
+			$wp_plugin  = isset( $wp_plugins[ $folder ] ) ? $wp_plugins[ $folder ] : array();
+			$wp_version = isset( $wp_plugin['Version'] ) ? $wp_plugin['Version'] : '1.0';
+
+			if ( version_compare( $wp_version, $plugin->new_version, '<' ) ) {
+				$slug = explode( '/', $folder );
+				$plugin->slug = $slug[0];
+				$transient->response[ $folder ] = $plugin;
+			}
+
+			$transient->checked[ $folder ] = $wp_version;
+
+		}
+
+		return $transient;
+	}
+
+	/**
+	 * @since 3.04.03
+	 *
+	 * @param array $installed_addons
+	 *
+	 * @return array
+	 */
+	private static function fill_update_addon_info( $installed_addons ) {
+		$checked_licenses = array();
+		$version_info     = array();
+
+		foreach ( $installed_addons as $addon ) {
+			if ( $addon->store_url !== 'https://formidableforms.com' ) {
+				// check if this is a third-party addon
+				continue;
+			}
+
+			$new_license = $addon->license;
+			if ( empty( $new_license ) || in_array( $new_license, $checked_licenses ) ) {
+				continue;
+			}
+
+			$checked_licenses[] = $new_license;
+
+			if ( empty( $version_info ) ) {
+				$version_info = self::get_addon_info( $new_license );
+				continue;
+			}
+
+			$plugin = self::get_addon_for_license( $version_info, $addon );
+			if ( empty( $plugin ) ) {
+				continue;
+			}
+
+			$download_id = isset( $plugin['id'] ) ? $plugin['id'] : 0;
+			if ( ! empty( $download_id ) && ! isset( $version_info[ $download_id ]['package'] ) ) {
+				// if this addon is using its own license, get the update url
+				$addon_info = self::get_addon_info( $new_license );
+				$version_info[ $download_id ] = $addon_info[ $download_id ];
+			}
+		}
+
+		return $version_info;
+	}
+
+	/**
+	 * @since 3.04.03
+	 * @param array $addons
+	 * @param object $license The FrmAddon object
+	 * @return array
+	 */
+	public static function get_addon_for_license( $addons, $license ) {
+		$download_id = $license->download_id;
+		$plugin = array();
+		if ( empty( $download_id ) ) {
+			foreach ( $addons as $addon ) {
+				if ( strtolower( $license->plugin_name ) == strtolower( $addon['title'] ) ) {
+					return $addon;
+				}
+			}
+		} elseif ( isset( $addons[ $download_id ] ) ) {
+			$plugin = $addons[ $download_id ];
+		}
+
+		return $plugin;
 	}
 
 	private static function prepare_addons( &$addons ) {
@@ -351,6 +525,7 @@ class FrmAddonsController {
 	 * Add a filter to shorten the EDD filename for Formidable plugin, and add-on, updates
 	 *
 	 * @since 2.03.08
+	 * @deprecated 3.04.03
 	 *
 	 * @param boolean $return
 	 * @param string $package
@@ -359,6 +534,7 @@ class FrmAddonsController {
 	 */
 	public static function add_shorten_edd_filename_filter( $return, $package ) {
 		if ( strpos( $package, '/edd-sl/package_download/' ) !== false && strpos( $package, 'formidableforms.com' ) !== false ) {
+			_deprecated_function( __METHOD__, '3.04.03' );
 			add_filter( 'wp_unique_filename', 'FrmAddonsController::shorten_edd_filename', 10, 2 );
 		}
 

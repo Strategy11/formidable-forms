@@ -9,8 +9,12 @@
 			continue;
 		}
 
-		$license = get_option( 'edd_' . $slug . '_license_key' );
-		$status  = get_option( 'edd_' . $slug . '_license_active' );
+		if ( $plugin->is_parent_licence ) {
+			continue;
+		}
+
+		$license = $plugin->license;
+		$status  = get_option( $plugin->option_name . 'active' );
 		$activate = ( false !== $license && $status == 'valid' ) ? 'deactivate' : 'activate';
 		if ( $activate == 'activate' ) {
 			$any_unauthorized = true;

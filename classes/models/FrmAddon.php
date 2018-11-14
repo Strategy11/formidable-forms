@@ -14,7 +14,8 @@ class FrmAddon {
 	public $option_name;
 	public $version;
 	public $author = 'Strategy11';
-	private $license;
+	public $is_parent_licence = false;
+	public $license;
 	protected $get_beta = false;
 
 	public function __construct() {
@@ -61,31 +62,100 @@ class FrmAddon {
 			add_action( 'after_plugin_row_' . plugin_basename( $this->plugin_file ), array( $this, 'show_license_message' ), 10, 2 );
 		} else {
 
-			// setup the updater
-			$api_data = array(
-				'version' => $this->version,
-				'license' => $license,
-				'author'  => $this->author,
-				'beta'    => $this->get_beta,
-			);
-			if ( is_numeric( $this->download_id ) ) {
-				$api_data['item_id'] = $this->download_id;
-			}
-
-			$edd = new FrmEDD_SL_Plugin_Updater( $this->store_url, $this->plugin_file, $api_data );
-			if ( 'formidable/formidable.php' === $this->plugin_folder ) {
-				remove_filter( 'plugins_api', array( $edd, 'plugins_api_filter' ), 10, 3 );
+			if ( 'formidable/formidable.php' !== $this->plugin_folder ) {
+				add_filter( 'plugins_api', array( &$this, 'plugins_api_filter' ), 10, 3 );
 			}
 
 			add_filter( 'site_transient_update_plugins', array( &$this, 'clear_expired_download' ) );
 		}
 	}
 
+	/**
+	 * Updates information on the "View version x.x details" page with custom data.
+	 *
+	 * @uses api_request()
+	 *
+	 * @param mixed   $_data
+	 * @param string  $_action
+	 * @param object  $_args
+	 * @return object $_data
+	 */
+	public function plugins_api_filter( $_data, $_action = '', $_args = null ) {
+
+		if ( $_action != 'plugin_information' ) {
+			return $_data;
+		}
+
+		$slug = basename( $this->plugin_file, '.php' );
+		if ( ! isset( $_args->slug ) || $_args->slug != $slug ) {
+			return $_data;
+		}
+
+		$plugins = FrmAddonsController::get_addon_info( $this->license );
+		$item_id = $this->download_id;
+		if ( empty( $item_id ) ) {
+			$_data = array(
+				'name'      => $this->plugin_name,
+				'excerpt'   => '',
+				'changelog' => 'See the full changelog at <a href="' . esc_url( $this->store_url . '/changelog/' ) . '"></a>',
+	 			'banners' => array(
+	 				'high' => '',
+	 				'low'  => 'https://ps.w.org/formidable/assets/banner-1544x500.png',
+	 			),
+			);
+		} else {
+			$_data = $plugins[ $item_id ];
+		}
+
+		$_data['sections'] = array(
+			'description' => $_data['excerpt'],
+			'changelog'   => $_data['changelog'],
+		);
+		$_data['author']   = '<a href="' . esc_url( $this->store_url ) . '">' . esc_html( $this->author ) . '</a>';
+		$_data['homepage'] = $this->store_url;
+
+		return (object) $_data;
+	}
+
 	public function get_license() {
+		$license = $this->maybe_get_pro_license();
+		if ( ! empty( $license ) ) {
+			return $license;
+		}
+
 		$license = trim( get_option( $this->option_name . 'key' ) );
 		if ( empty( $license ) ) {
 			$license = $this->activate_defined_license();
 		}
+
+		return $license;
+	}
+
+	/**
+	 * @since 3.04.03
+	 */
+	protected function maybe_get_pro_license() {
+		// prevent a loop if $this is the pro plugin
+		$get_license = FrmAppHelper::pro_is_installed() && class_exists( 'FrmProEddController' ) && $this->plugin_name != 'Formidable Pro';
+
+		if ( ! $get_license ) {
+			return false;
+		}
+
+		$frmpro_updater = new FrmProEddController();
+		$license = $frmpro_updater->license;
+		if ( empty( $license ) ) {
+			return false;
+		}
+
+		$addon = $this->get_api_info( $license );
+		if ( isset( $addon['package'] ) ) {
+			$this->is_parent_licence = true;
+		} else {
+			// if there is no download url, this license does not apply to the addon
+			$license = false;
+		}
+
 		return $license;
 	}
 
@@ -172,20 +242,22 @@ class FrmAddon {
 				unset( $transient->response[ $this->plugin_folder ] );
 			}
 		} elseif ( isset( $transient->response ) && isset( $transient->response[ $this->plugin_folder ] ) ) {
-			$cache_key = $this->version_cache_key();
-			$version_info = get_option( $cache_key );
+			$version_info = $this->get_api_info( $this->license );
 
-			$this->clear_old_plugin_version( $version_info );
-
-			if ( is_array( $version_info ) && isset( $version_info['value'] ) ) {
-				$version_info = json_decode( $version_info['value'] );
-				$version_info->new_version = trim( $version_info->new_version, 'p' );
+			// Use the beta update url
+			if ( is_array( $version_info ) && isset( $version_info['package'] ) ) {
+				$this->maybe_use_beta_url( $version_info );
+				$version_info['new_version'] = trim( $version_info['new_version'], 'p' );
+				$transient->response[ $this->plugin_folder ] = (object) $version_info;
 			}
 
-			if ( false !== $version_info && version_compare( $version_info->new_version, $this->version, '>' ) ) {
-				$transient->response[ $this->plugin_folder ] = $version_info;
-			} else {
-				delete_option( $cache_key );
+			/*
+			Is this needed? TODO: Check the nested plugin update
+			if ( ! empty( $version_info ) && version_compare( $version_info->new_version, $this->version, '>' ) ) {
+				$transient->response[ $this->plugin_folder ] = (object) $version_info;
+			}
+			*/
+			if ( empty( $version_info ) || version_compare( $version_info['new_version'], $this->version, '<' ) ) {
 				if ( ! $this->has_been_cleared() ) {
 					// if the transient has expired, clear the update and trigger it again
 					$this->cleared_plugins();
@@ -199,6 +271,28 @@ class FrmAddon {
 		return $transient;
 	}
 
+	/**
+	 * Get the API info for this plugin
+	 *
+	 * @since 3.04.03
+	 */
+	protected function get_api_info( $license ) {
+		$addons = FrmAddonsController::get_addon_info( $license );
+		return FrmAddonsController::get_addon_for_license( $addons, $this );
+	}
+
+	/**
+	 * The beta url is always included if the download has a beta.
+	 * Check if the beta should be downloaded.
+	 *
+	 * @since 3.04.03
+	 */
+	private function maybe_use_beta_url( &$version_info ) {
+		if ( $this->get_beta && isset( $version_info['beta'] ) ) {
+			$version_info['new_version'] = $version_info['beta']['version'];
+			$version_info['package']     = $version_info['beta']['package'];
+		}
+	}
 
 	/**
 	 * @since 2.05.05
