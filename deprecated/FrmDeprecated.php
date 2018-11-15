@@ -11,7 +11,7 @@ class FrmDeprecated {
 	/**
 	 * @deprecated 2.3
 	 */
-	public static function function( $function, $version ) {
+	public static function deprecated( $function, $version ) {
 		_deprecated_function( $function, $version );
 	}
 

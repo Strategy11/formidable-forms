@@ -722,7 +722,7 @@ class FrmFieldsController {
 	 * @codeCoverageIgnore
 	 */
 	public static function edit_option() {
-		FrmDeprecated::function( __METHOD__, '2.3' );
+		FrmDeprecated::deprecated( __METHOD__, '2.3' );
 	}
 
 	/**
@@ -730,6 +730,6 @@ class FrmFieldsController {
 	 * @codeCoverageIgnore
 	 */
 	public static function delete_option() {
-		FrmDeprecated::function( __METHOD__, '2.3' );
+		FrmDeprecated::deprecated( __METHOD__, '2.3' );
 	}
 }
