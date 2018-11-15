@@ -246,6 +246,7 @@ class FrmAddonsController {
 		$errors = array();
 		if ( isset( $addons['error'] ) ) {
 			$errors[] = $addons['error']['message'];
+			do_action( 'frm_license_error', $addons['error'] );
 		}
 		return $errors;
 	}

@@ -206,6 +206,16 @@ class FrmAddon {
 		return get_option( $this->option_name . 'active' );
 	}
 
+	/**
+	 * @since 3.04.03
+	 * @param array error
+	 */
+	public function maybe_clear_license( $error ) {
+		if ( $error['code'] === 'disabled' && $error['license'] === $this->license ) {
+			$this->clear_license();
+		}
+	}
+
 	public function clear_license() {
 		delete_option( $this->option_name . 'active' );
 		delete_option( $this->option_name . 'key' );
