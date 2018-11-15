@@ -1,5 +1,7 @@
-<div class="wrap">
+<div class="wrap" id="frm-addons-page">
 	<h1><?php esc_html_e( 'Formidable Add-Ons', 'formidable' ); ?></h1>
+
+	<?php include( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/errors.php' ); ?>
 
 	<div id="the-list" class="frm-addons">
 		<?php foreach ( $addons as $slug => $addon ) { ?>

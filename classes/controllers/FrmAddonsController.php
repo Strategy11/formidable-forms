@@ -14,6 +14,10 @@ class FrmAddonsController {
 		$installed_addons = apply_filters( 'frm_installed_addons', array() );
 
 		$addons = self::get_api_addons();
+		$errors = self::get_error_from_response( $addons );
+		if ( isset( $addons['error'] ) ) {
+			unset( $addons['error'] );
+		}
 		self::prepare_addons( $addons );
 
 		$pricing = FrmAppHelper::admin_upgrade_link( 'addons' );
@@ -53,23 +57,45 @@ class FrmAddonsController {
 
 	private static function get_api_addons() {
 		$license = '';
-		if ( FrmAppHelper::pro_is_installed() ) {
-			$edd_update = new FrmProEddController();
+		$edd_update = self::get_pro_updater();
+		if ( ! empty( $edd_update ) ) {
 			$license = $edd_update->license;
 		}
 
 		$addons = self::get_addon_info( $license );
 
-		if ( ! empty( $addons ) ) {
+		if ( empty( $addons ) ) {
+			$addons = self::fallback_plugin_list();
+		} else {
 			foreach ( $addons as $k => $addon ) {
-				if ( empty( $addon['excerpt'] ) ) {
+				if ( empty( $addon['excerpt'] ) && $k !== 'error' ) {
 					unset( $addons[ $k ] );
 				}
 			}
-			return $addons;
 		}
 
-		$addons = array(
+		return $addons;
+	}
+
+	/**
+	 * @since 3.04.03
+	 */
+	public static function get_pro_updater() {
+		if ( FrmAppHelper::pro_is_installed() && is_callable( 'FrmProAppHelper::get_updater' ) ) {
+			return FrmProAppHelper::get_updater();
+		}
+
+		return false;
+	}
+
+	/**
+	 * If the API is unable to connect, show something on the addons page
+	 *
+	 * @since 3.04.03
+	 * @return array
+	 */
+	private static function fallback_plugin_list() {
+		return array(
 			'formidable-pro' => array(
 				'title'   => 'Formidable Pro',
 				'link'    => 'pricing/',
@@ -139,8 +165,6 @@ class FrmAddonsController {
 				'excerpt' => 'Allow users to text their votes for polls created by Formidable Forms, or send SMS notifications when entries are submitted or updated.',
 			),
 		);
-
-		return $addons;
 	}
 
 	/**
@@ -167,6 +191,9 @@ class FrmAddonsController {
 
 				$skip_categories = array( 'WordPress Form Templates', 'WordPress Form Style Templates' );
 				foreach ( $addons as $k => $addon ) {
+					if ( ! isset( $addon['categories'] ) ) {
+						continue;
+					}
 					$cats = array_intersect( $skip_categories, $addon['categories'] );
 					if ( ! empty( $cats ) ) {
 						unset( $addons[ $k ] );
@@ -175,7 +202,6 @@ class FrmAddonsController {
 
 				self::set_cached_addons( $addons, $license );
 			}
-
 		}
 
 		return $addons;
@@ -209,8 +235,37 @@ class FrmAddonsController {
 		update_option( $cache_key, $data, 'no' );
 	}
 
+	/**
+	 * @since 3.04.03
+	 * @return string
+	 */
 	private static function get_cache_key( $license ) {
 		return 'frm_addons_l' . ( empty( $license ) ? '' : md5( $license ) );
+	}
+
+	/**
+	 * @since 3.04.03
+	 * @return array
+	 */
+	public static function error_for_license( $license ) {
+		$errors = array();
+		if ( ! empty( $license ) ) {
+			$addons = self::get_addon_info( $license );
+			$errors = self::get_error_from_response( $addons );
+		}
+		return $errors;
+	}
+
+	/**
+	 * @since 3.04.03
+	 * @return array
+	 */
+	private static function get_error_from_response( $addons ) {
+		$errors = array();
+		if ( isset( $addons['error'] ) ) {
+			$errors[] = $addons['error']['message'];
+		}
+		return $errors;
 	}
 
 	/**
@@ -337,7 +392,7 @@ class FrmAddonsController {
 		foreach ( $loop_addons as $id => $addon ) {
 			if ( is_numeric( $id ) ) {
 				$slug = str_replace( array( '-wordpress-plugin', '-wordpress' ), '', $addon['slug'] );
-				self::prepare_folder_name( $addon );
+				$addon['file'] = $addon['plugin'];
 			} else {
 				$slug = $id;
 			}
@@ -383,18 +438,6 @@ class FrmAddonsController {
 	/**
 	 * @since 3.04.02
 	 */
-	private static function prepare_folder_name( &$addon ) {
-		if ( isset( $addon['url'] ) ) {
-			$url  = explode( '?', $addon['url'] );
-			$file = explode( '/', $url[0] );
-			$file = end( $file );
-			$addon['file'] = str_replace( '-' . $addon['version'] . '.zip', '', $file );
-		}
-	}
-
-	/**
-	 * @since 3.04.02
-	 */
 	private static function prepare_addon_link( &$link ) {
 		$site_url = 'https://formidableforms.com/';
 		if ( strpos( $link, 'http' ) !== 0 ) {
@@ -434,7 +477,13 @@ class FrmAddonsController {
 		}
 	}
 
+	/**
+	 * @deprecated 3.04.03
+	 * @codeCoverageIgnore
+	 */
 	public static function get_licenses() {
+		_deprecated_function( __METHOD__, '3.04.03' );
+
 		$allow_autofill = self::allow_autofill();
 		$required_role = $allow_autofill ? 'setup_network' : 'frm_change_settings';
 		FrmAppHelper::permission_check( $required_role );
@@ -461,6 +510,10 @@ class FrmAddonsController {
 		wp_die();
 	}
 
+	/**
+	 * @deprecated 3.04.03
+	 * @codeCoverageIgnore
+	 */
 	private static function send_api_request( $url, $transient = array() ) {
 		$data = get_transient( $transient['name'] );
 		if ( $data !== false ) {
@@ -526,6 +579,7 @@ class FrmAddonsController {
 	 *
 	 * @since 2.03.08
 	 * @deprecated 3.04.03
+	 * @codeCoverageIgnore
 	 *
 	 * @param boolean $return
 	 * @param string $package

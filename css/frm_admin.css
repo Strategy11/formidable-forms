@@ -664,6 +664,7 @@ div.frm_updated_message{
 	margin:5px 15px 10px;
 }
 
+#frm-addons-page .frm_error_style,
 .frm_license_box .frm_error_style{
 	margin-left:0;
 	margin-right:0;

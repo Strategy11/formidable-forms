@@ -58,9 +58,9 @@ class FrmAddon {
 		$this->is_license_revoked();
 		$license = $this->license;
 
-		if ( empty( $license ) ) {
-			add_action( 'after_plugin_row_' . plugin_basename( $this->plugin_file ), array( $this, 'show_license_message' ), 10, 2 );
-		} else {
+		add_action( 'after_plugin_row_' . plugin_basename( $this->plugin_file ), array( $this, 'show_license_message' ), 10, 2 );
+
+		if ( ! empty( $license ) ) {
 
 			if ( 'formidable/formidable.php' !== $this->plugin_folder ) {
 				add_filter( 'plugins_api', array( &$this, 'plugins_api_filter' ), 10, 3 );
@@ -91,7 +91,6 @@ class FrmAddon {
 			return $_data;
 		}
 
-		$plugins = FrmAddonsController::get_addon_info( $this->license );
 		$item_id = $this->download_id;
 		if ( empty( $item_id ) ) {
 			$_data = array(
@@ -104,6 +103,7 @@ class FrmAddon {
 	 			),
 			);
 		} else {
+			$plugins = FrmAddonsController::get_addon_info( $this->license );
 			$_data = $plugins[ $item_id ];
 		}
 
@@ -136,13 +136,13 @@ class FrmAddon {
 	 */
 	protected function maybe_get_pro_license() {
 		// prevent a loop if $this is the pro plugin
-		$get_license = FrmAppHelper::pro_is_installed() && class_exists( 'FrmProEddController' ) && $this->plugin_name != 'Formidable Pro';
+		$get_license = FrmAppHelper::pro_is_installed() && is_callable( 'FrmProAppHelper::get_updater' ) && $this->plugin_name != 'Formidable Pro';
 
 		if ( ! $get_license ) {
 			return false;
 		}
 
-		$frmpro_updater = new FrmProEddController();
+		$frmpro_updater = FrmAddonsController::get_pro_updater();
 		$license = $frmpro_updater->license;
 		if ( empty( $license ) ) {
 			return false;
@@ -221,14 +221,27 @@ class FrmAddon {
 	}
 
 	public function show_license_message( $file, $plugin ) {
-		$wp_list_table = _get_list_table( 'WP_Plugins_List_Table' );
-		echo '<tr class="plugin-update-tr active"><td colspan="' . esc_attr( $wp_list_table->get_column_count() ) . '" class="plugin-update colspanchange"><div class="update-message">';
+		$message = '';
+		if ( empty( $this->license ) ) {
+			/* translators: %1$s: Plugin name, %2$s: Start link HTML, %3$s: end link HTML */
+			$message = sprintf( esc_html__( 'Your %1$s license key is missing. Please add it on the %2$slicenses page%3$s.', 'formidable' ), esc_html( $this->plugin_name ), '<a href="' . esc_url( admin_url( 'admin.php?page=formidable-settings&t=licenses_settings' ) ) . '">', '</a>' );
+		} else {
+			$errors = FrmAddonsController::error_for_license( $this->license );
+			if ( ! empty( $errors ) ) {
+				$message = reset( $errors );
+			}
+		}
 
-		/* translators: %1$s: Plugin name, %2$s: Start link HTML, %3$s: end link HTML */
-		printf( esc_html__( 'Your %1$s license key is missing. Please add it on the %2$slicenses page%3$s.', 'formidable' ), esc_html( $this->plugin_name ), '<a href="' . esc_url( admin_url( 'admin.php?page=formidable-settings&t=licenses_settings' ) ) . '">', '</a>' );
-		$id = sanitize_title( $plugin['Name'] );
-		echo '<script type="text/javascript">var d = document.getElementById("' . esc_attr( $id ) . '");if ( d !== null ){ d.className = d.className + " update"; }</script>';
-		echo '</div></td></tr>';
+		if ( empty( $message ) ) {
+			return;
+		}
+
+		$wp_list_table = _get_list_table( 'WP_Plugins_List_Table' );
+		$id = sanitize_title( $plugin['Name'] ) . '-next';
+		echo '<tr class="plugin-update-tr active" id="' . esc_attr( $id ) . '"><td colspan="' . esc_attr( $wp_list_table->get_column_count() ) . '" class="plugin-update colspanchange"><div class="update-message notice error inline notice-error notice-alt"><p>';
+		echo $message;
+		echo '<script type="text/javascript">var d = document.getElementById("' . esc_attr( $id ) . '").previousSibling;if ( d !== null ){ d.className = d.className + " update"; }</script>';
+		echo '</p></div></td></tr>';
 	}
 
 	public function clear_expired_download( $transient ) {
