@@ -221,13 +221,21 @@ class FrmAddon {
 		delete_option( $this->option_name . 'key' );
 		delete_site_option( $this->transient_key() );
 		delete_option( $this->transient_key() );
-		delete_transient( 'frm_api_licence' );
+		$this->delete_cache();
 	}
 
 	public function set_active( $is_active ) {
 		update_option( $this->option_name . 'active', $is_active );
-		delete_transient( 'frm_api_licence' );
+		$this->delete_cache();
 		FrmAppHelper::save_combined_js();
+	}
+
+	/**
+	 * @since 3.04.03
+	 */
+	protected function delete_cache() {
+		delete_transient( 'frm_api_licence' );
+		delete_option( FrmAddonsController::get_cache_key( $this->license ) );
 	}
 
 	public function show_license_message( $file, $plugin ) {

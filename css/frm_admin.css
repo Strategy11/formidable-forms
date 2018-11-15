@@ -132,7 +132,7 @@ td.column-title .frm_actions_dropdown{
 	padding: 1px 4px;
 	vertical-align: top;
 	-webkit-border-radius: 10px;
-	border-radius: 2px;
+	border-radius: 4px;
 	text-transform:lowercase;
 	position:initial;
 	vertical-align: middle;
@@ -408,20 +408,50 @@ ul.frm_form_nav > li{
 	margin-left: 5px;
 }
 
+.wrap .frm_pricing a.button-primary,
+.toplevel_page_formidable #frm_upgrade_modal .button-primary,
 #frm_upgrade_modal .button,
-.frm-white-body .frm_wrap .button,
-.frm-white-body .frm_wrap button{
+#form_global_settings .button-primary,
+#form_global_settings .button-secondary,
+.wp-core-ui.frm-white-body .button-primary,
+.wp-core-ui.frm-white-body .button-secondary,
+.wp-core-ui.frm-white-body .button,
+.wp-core-ui.frm-white-body button,
+.frm-white-body .button-primary,
+.frm-white-body .button-secondary,
+.frm-white-body .button,
+.frm-white-body button{
 	text-shadow:none;
 	box-shadow:none;
-	border-radius:2px;
+	border-radius:4px;
 	border-color:#e5e5e5;
 	font-size: 1.1em;
+}
+
+#frm-addons-page .button-primary,
+.frm_single_entry_page .button-primary,
+#form_global_settings .button-primary,
+#form_global_settings .button-primary:hover,
+#form_global_settings .button-primary:focus,
+#frm_upgrade_modal .button,
+#frm_upgrade_modal .button:hover,
+#frm_upgrade_modal .button:focus,
+.frm_wrap .preview > .button,
+.frm_wrap .preview > .button:hover,
+.frm_wrap .preview > .button:focus{
+	border-color: rgba(0,115,170,0.5) !important;
+	background: rgb(0,115,170);
+	color: #fff;
+}
+
+.preview .button .caret {
+	border-top-color: #fff;
 }
 
 .wrap .frm_pricing a.button-primary,
 .toplevel_page_formidable #frm_upgrade_modal .button-primary,
 .toplevel_page_formidable .frm_wrap button.button-primary{
-	border-color: #da791d;
+	border-color: #da791d !important;
 	background: #f37656;
 	color:#fff;
 }
@@ -655,7 +685,7 @@ form .form-field.frm_field_loading{
 }
 
 div.frm_updated_message{
-	border-radius:2px;
+	border-radius:4px;
     border: 1px solid #D6E9C6;
     background-color: #DFF0D8;
     color: #468847;
@@ -665,10 +695,36 @@ div.frm_updated_message{
 }
 
 #frm-addons-page .frm_error_style,
+.frm_license_box .frm_updated_message,
 .frm_license_box .frm_error_style{
 	margin-left:0;
 	margin-right:0;
 }
+
+.frm_ribbon {
+	-webkit-transform: rotate(45deg);
+	   -moz-transform: rotate(45deg);
+	    -ms-transform: rotate(45deg);
+		 -o-transform: rotate(45deg);
+		    transform: rotate(45deg);
+	border: 25px solid transparent;
+	border-bottom: 25px solid #f37656;
+	position: absolute;
+	top: 3px;
+	right: -39px;
+	padding: 0 10px;
+	width: 65px;
+	color: white;
+	font-family: sans-serif;
+	size: 11px;
+}
+
+.frm_ribbon span {
+	position: absolute;
+	top: 2px;
+	left: 25px;
+	font-size: 17px;
+}​
 
 .update-nag.frm-update-to-pro{
 	border:none;
@@ -738,10 +794,22 @@ div.frm_updated_message{
 	width: 31.3%;
 	margin:0 3% 30px 0;
 	clear:none;
+	border-radius: 10px;
+	border-color: rgb( 235, 235, 235 );
+	border-width: 2px;
 }
 
 .frm-addons .plugin-card-top{
-	height:200px;
+	height:175px;
+}
+
+.frm-addons .plugin-card-top h2 {
+    margin-top: 10px;
+    font-weight: 400;
+}
+
+.frm-addons .plugin-card-top p {
+	opacity:0.8;
 }
 
 .frm-addons .plugin-card:nth-child(3n+3) {
@@ -753,8 +821,10 @@ div.frm_updated_message{
 }
 
 .frm-addons .plugin-card-bottom {
-	padding:20px;
+	padding: 5px 20px 20px;
 	text-align:center;
+	background: transparent;
+	border-top: none;
 }
 
 .frm-addons .plugin-card-bottom,
@@ -2753,7 +2823,7 @@ ul .frm_col_two{float:right;}
 	border: 1px solid #5b9dd9;
 	color:#1c94c4;
 	display:block;
-	border-radius: 2px;
+	border-radius: 4px;
 }
 
 .frm_code_list.frm_grid_container a:hover{

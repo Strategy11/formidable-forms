@@ -375,32 +375,28 @@ class FrmAddonsController {
 		foreach ( $loop_addons as $id => $addon ) {
 			if ( is_numeric( $id ) ) {
 				$slug = str_replace( array( '-wordpress-plugin', '-wordpress' ), '', $addon['slug'] );
-				$addon['file'] = $addon['plugin'];
+				$file_name = $addon['plugin'];
 			} else {
 				$slug = $id;
-			}
-			if ( isset( $addon['file'] ) ) {
-				$base_file = $addon['file'];
-			} else {
-				$base_file = 'formidable-' . $slug;
-			}
-			$file = WP_PLUGIN_DIR . '/' . $base_file;
-
-			$addon['installed'] = is_dir( $file );
-			$addon['activate_url'] = '';
-			if ( $addon['installed'] && ! empty( $activate_url ) ) {
-				if ( file_exists( $file . '/' . $base_file . '.php' ) ) {
-					$file_name = $base_file . '/' . $base_file . '.php';
-					if ( ! is_plugin_active( $file_name ) ) {
-						$addon['activate_url'] = add_query_arg(
-							array(
-								'_wpnonce'    => wp_create_nonce( 'activate-plugin_' . $file_name ),
-								'plugin'      => $file_name,
-							),
-							$activate_url
-						);
-					}
+				if ( isset( $addon['file'] ) ) {
+					$base_file = $addon['file'];
+				} else {
+					$base_file = 'formidable-' . $slug;
 				}
+				$file_name = $base_file . '/' . $base_file . '.php';
+			}
+
+			$addon['installed']    = file_exists(  WP_PLUGIN_DIR . '/' . $file_name );
+			$addon['activate_url'] = '';
+
+			if ( $addon['installed'] && ! empty( $activate_url ) && ! is_plugin_active( $file_name ) ) {
+				$addon['activate_url'] = add_query_arg(
+					array(
+						'_wpnonce'    => wp_create_nonce( 'activate-plugin_' . $file_name ),
+						'plugin'      => $file_name,
+					),
+					$activate_url
+				);
 			}
 
 			if ( ! isset( $addon['docs'] ) ) {

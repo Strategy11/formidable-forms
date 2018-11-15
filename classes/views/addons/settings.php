@@ -3,22 +3,14 @@
 
 	<?php
 
-	$any_unauthorized = false;
 	foreach ( $plugins as $slug => $plugin ) {
-		if ( $slug == 'formidable_pro' ) {
-			continue;
-		}
-
-		if ( $plugin->is_parent_licence ) {
+		if ( $slug == 'formidable_pro' || $plugin->is_parent_licence ) {
 			continue;
 		}
 
 		$license = $plugin->license;
 		$status  = get_option( $plugin->option_name . 'active' );
 		$activate = ( false !== $license && $status == 'valid' ) ? 'deactivate' : 'activate';
-		if ( $activate == 'activate' ) {
-			$any_unauthorized = true;
-		}
 		$icon_class = ( empty( $license ) ) ? 'frm_hidden' : '';
 		?>
 
@@ -38,9 +30,5 @@
 			</div>
 
 		</div>
-	<?php } ?>
-	<?php if ( $any_unauthorized && $allow_autofill ) { ?>
-		<div class="clear"></div>
-		<p><a href="#" class="edd_frm_fill_license button-secondary"><?php esc_html_e( 'Autofill Licenses', 'formidable' ) ?></a></p>
 	<?php } ?>
 </div>
