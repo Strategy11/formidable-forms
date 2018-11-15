@@ -33,26 +33,8 @@ class FrmAddonsController {
 		}
 
 		ksort( $plugins );
-		$allow_autofill = self::allow_autofill();
 
 		include( FrmAppHelper::plugin_path() . '/classes/views/addons/settings.php' );
-	}
-
-	/**
-	 * Don't allow subsite addon licenses to be fetched
-	 * unless the current user has super admin permissions
-	 *
-	 * @since 2.03.10
-	 */
-	private static function allow_autofill() {
-		$allow_autofill = FrmAppHelper::pro_is_installed();
-		if ( $allow_autofill && is_multisite() ) {
-			$sitewide_activated = get_site_option( 'frmpro-wpmu-sitewide' );
-			if ( $sitewide_activated ) {
-				$allow_autofill = current_user_can( 'setup_network' );
-			}
-		}
-		return $allow_autofill;
 	}
 
 	private static function get_api_addons() {
@@ -477,68 +459,6 @@ class FrmAddonsController {
 		}
 	}
 
-	/**
-	 * @deprecated 3.04.03
-	 * @codeCoverageIgnore
-	 */
-	public static function get_licenses() {
-		_deprecated_function( __METHOD__, '3.04.03' );
-
-		$allow_autofill = self::allow_autofill();
-		$required_role = $allow_autofill ? 'setup_network' : 'frm_change_settings';
-		FrmAppHelper::permission_check( $required_role );
-		check_ajax_referer( 'frm_ajax', 'nonce' );
-
-		if ( is_multisite() && get_site_option( 'frmpro-wpmu-sitewide' ) ) {
-			$license = get_site_option( 'frmpro-credentials' );
-		} else {
-			$license = get_option( 'frmpro-credentials' );
-		}
-
-		if ( $license && is_array( $license ) && isset( $license['license'] ) ) {
-			$url = 'https://formidableforms.com/frm-edd-api/licenses?l=' . urlencode( base64_encode( $license['license'] ) );
-			$licenses = self::send_api_request(
-				$url,
-				array(
-					'name'    => 'frm_api_licence',
-					'expires' => 60 * 60 * 5,
-				)
-			);
-			echo json_encode( $licenses );
-		}
-
-		wp_die();
-	}
-
-	/**
-	 * @deprecated 3.04.03
-	 * @codeCoverageIgnore
-	 */
-	private static function send_api_request( $url, $transient = array() ) {
-		$data = get_transient( $transient['name'] );
-		if ( $data !== false ) {
-			return $data;
-		}
-
-		$arg_array = array(
-			'body'      => array(
-				'url'   => home_url(),
-			),
-			'timeout'   => 15,
-			'user-agent' => 'Formidable/' . FrmAppHelper::$plug_version . '; ' . home_url(),
-		);
-
-		$response = wp_remote_post( $url, $arg_array );
-		$body = wp_remote_retrieve_body( $response );
-		$data = false;
-		if ( ! is_wp_error( $response ) && ! is_wp_error( $body ) ) {
-			$data = json_decode( $body, true );
-			set_transient( $transient['name'], $data, $transient['expires'] );
-		}
-
-		return $data;
-	}
-
 	public static function upgrade_to_pro() {
 		$pro_pricing = self::prepare_pro_info();
 
@@ -572,45 +492,6 @@ class FrmAddonsController {
 				'name'     => 'Enterprise',
 			),
 		);
-	}
-
-	/**
-	 * Add a filter to shorten the EDD filename for Formidable plugin, and add-on, updates
-	 *
-	 * @since 2.03.08
-	 * @deprecated 3.04.03
-	 * @codeCoverageIgnore
-	 *
-	 * @param boolean $return
-	 * @param string $package
-	 *
-	 * @return boolean
-	 */
-	public static function add_shorten_edd_filename_filter( $return, $package ) {
-		if ( strpos( $package, '/edd-sl/package_download/' ) !== false && strpos( $package, 'formidableforms.com' ) !== false ) {
-			_deprecated_function( __METHOD__, '3.04.03' );
-			add_filter( 'wp_unique_filename', 'FrmAddonsController::shorten_edd_filename', 10, 2 );
-		}
-
-		return $return;
-	}
-
-	/**
-	 * Shorten the EDD filename for automatic updates
-	 * Decreases size of file path so file path limit is not hit on Windows servers
-	 *
-	 * @since 2.03.08
-	 *
-	 * @param string $filename
-	 * @param string $ext
-	 *
-	 * @return string
-	 */
-	public static function shorten_edd_filename( $filename, $ext ) {
-		$filename = substr( $filename, 0, 50 ) . $ext;
-		remove_filter( 'wp_unique_filename', 'FrmAddonsController::shorten_edd_filename', 10 );
-
-		return $filename;
 	}
 
 	/**
@@ -711,5 +592,41 @@ class FrmAddonsController {
 			echo json_encode( true );
 			wp_die();
 		}
+	}
+
+	/**
+	 * @since 2.03.08
+	 * @deprecated 3.04.03
+	 * @codeCoverageIgnore
+	 *
+	 * @param boolean $return
+	 * @param string $package
+	 *
+	 * @return boolean
+	 */
+	public static function add_shorten_edd_filename_filter( $return, $package ) {
+		return FrmDeprecated::add_shorten_edd_filename_filter( $return, $package );
+	}
+
+	/**
+	 * @since 2.03.08
+	 * @deprecated 3.04.03
+	 * @codeCoverageIgnore
+	 *
+	 * @param string $filename
+	 * @param string $ext
+	 *
+	 * @return string
+	 */
+	public static function shorten_edd_filename( $filename, $ext ) {
+		return FrmDeprecated::shorten_edd_filename( $filename, $ext );
+	}
+
+	/**
+	 * @deprecated 3.04.03
+	 * @codeCoverageIgnore
+	 */
+	public static function get_licenses() {
+		FrmDeprecated::get_licenses();
 	}
 }

@@ -239,7 +239,7 @@ class FrmAddon {
 		$wp_list_table = _get_list_table( 'WP_Plugins_List_Table' );
 		$id = sanitize_title( $plugin['Name'] ) . '-next';
 		echo '<tr class="plugin-update-tr active" id="' . esc_attr( $id ) . '"><td colspan="' . esc_attr( $wp_list_table->get_column_count() ) . '" class="plugin-update colspanchange"><div class="update-message notice error inline notice-error notice-alt"><p>';
-		echo $message;
+		echo FrmAppHelper::kses( $message, 'a' ); // WPCS: XSS ok.
 		echo '<script type="text/javascript">var d = document.getElementById("' . esc_attr( $id ) . '").previousSibling;if ( d !== null ){ d.className = d.className + " update"; }</script>';
 		echo '</p></div></td></tr>';
 	}

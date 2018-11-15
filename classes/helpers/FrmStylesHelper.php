@@ -1,106 +1,6 @@
 <?php
 class FrmStylesHelper {
 
-	/**
-	 * @deprecated 3.02.03
-	 * @codeCoverageIgnore
-	 */
-    public static function jquery_themes() {
-		_deprecated_function( __METHOD__, '3.02.03', 'FrmProStylesController::jquery_themes' );
-
-        $themes = array(
-            'ui-lightness'  => 'UI Lightness',
-            'ui-darkness'   => 'UI Darkness',
-            'smoothness'    => 'Smoothness',
-            'start'         => 'Start',
-            'redmond'       => 'Redmond',
-            'sunny'         => 'Sunny',
-            'overcast'      => 'Overcast',
-            'le-frog'       => 'Le Frog',
-            'flick'         => 'Flick',
-			'pepper-grinder' => 'Pepper Grinder',
-            'eggplant'      => 'Eggplant',
-            'dark-hive'     => 'Dark Hive',
-            'cupertino'     => 'Cupertino',
-            'south-street'  => 'South Street',
-            'blitzer'       => 'Blitzer',
-            'humanity'      => 'Humanity',
-            'hot-sneaks'    => 'Hot Sneaks',
-            'excite-bike'   => 'Excite Bike',
-            'vader'         => 'Vader',
-            'dot-luv'       => 'Dot Luv',
-            'mint-choc'     => 'Mint Choc',
-            'black-tie'     => 'Black Tie',
-            'trontastic'    => 'Trontastic',
-            'swanky-purse'  => 'Swanky Purse',
-        );
-
-		$themes = apply_filters( 'frm_jquery_themes', $themes );
-        return $themes;
-    }
-
-	/**
-	 * @deprecated 3.02.03
-	 * @codeCoverageIgnore
-	 */
-	public static function jquery_css_url( $theme_css ) {
-		_deprecated_function( __METHOD__, '3.02.03', 'FrmProStylesController::jquery_css_url' );
-
-        if ( $theme_css == -1 ) {
-            return;
-        }
-
-        if ( ! $theme_css || $theme_css == '' || $theme_css == 'ui-lightness' ) {
-            $css_file = FrmAppHelper::plugin_url() . '/css/ui-lightness/jquery-ui.css';
-		} elseif ( preg_match( '/^http.?:\/\/.*\..*$/', $theme_css ) ) {
-            $css_file = $theme_css;
-        } else {
-            $uploads = self::get_upload_base();
-			$file_path = '/formidable/css/' . $theme_css . '/jquery-ui.css';
-			if ( file_exists( $uploads['basedir'] . $file_path ) ) {
-                $css_file = $uploads['baseurl'] . $file_path;
-            } else {
-				$css_file = FrmAppHelper::jquery_ui_base_url() . '/themes/' . $theme_css . '/jquery-ui.min.css';
-            }
-        }
-
-        return $css_file;
-    }
-
-	/**
-	 * @deprecated 3.02.03
-	 * @codeCoverageIgnore
-	 */
-    public static function enqueue_jquery_css() {
-		_deprecated_function( __METHOD__, '3.02.03', 'FrmProStylesController::enqueue_jquery_css' );
-
-		$form = self::get_form_for_page();
-		$theme_css = FrmStylesController::get_style_val( 'theme_css', $form );
-        if ( $theme_css != -1 ) {
-			wp_enqueue_style( 'jquery-theme', self::jquery_css_url( $theme_css ), array(), FrmAppHelper::plugin_version() );
-        }
-    }
-
-	/**
-	 * @deprecated 3.02.03
-	 * @codeCoverageIgnore
-	 */
-	public static function get_form_for_page() {
-		_deprecated_function( __METHOD__, '3.02.03' );
-
-		global $frm_vars;
-		$form_id = 'default';
-		if ( ! empty( $frm_vars['forms_loaded'] ) ) {
-			foreach ( $frm_vars['forms_loaded'] as $form ) {
-				if ( is_object( $form ) ) {
-					$form_id = $form->id;
-					break;
-				}
-			}
-		}
-		return $form_id;
-	}
-
 	public static function get_upload_base() {
 		$uploads = wp_upload_dir();
 		if ( is_ssl() && ! preg_match( '/^https:\/\/.*\..*$/', $uploads['baseurl'] ) ) {
@@ -429,7 +329,38 @@ class FrmStylesHelper {
 	 * @codeCoverageIgnore
 	 */
 	public static function get_sigle_label_postitions() {
-		_deprecated_function( __METHOD__, '3.01', 'FrmStylesHelper::get_single_label_positions' );
-		return FrmStylesHelper::get_single_label_positions();
+		return FrmDeprecated::get_single_label_positions();
+	}
+
+	/**
+	 * @deprecated 3.02.03
+	 * @codeCoverageIgnore
+	 */
+	public static function jquery_themes() {
+		return FrmDeprecated::jquery_themes();
+	}
+
+	/**
+	 * @deprecated 3.02.03
+	 * @codeCoverageIgnore
+	 */
+	public static function jquery_css_url( $theme_css ) {
+		return FrmDeprecated::jquery_css_url( $theme_css );
+	}
+
+	/**
+	 * @deprecated 3.02.03
+	 * @codeCoverageIgnore
+	 */
+	public static function enqueue_jquery_css() {
+		FrmDeprecated::enqueue_jquery_css();
+	}
+
+	/**
+	 * @deprecated 3.02.03
+	 * @codeCoverageIgnore
+	 */
+	public static function get_form_for_page() {
+		return FrmDeprecated::get_form_for_page();
 	}
 }

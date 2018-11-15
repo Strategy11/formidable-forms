@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * @deprecated 2.04
+ * @codeCoverageIgnore
+ */
 class FrmEntryFormat {
 
 	/***********************************************************************

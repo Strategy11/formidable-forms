@@ -65,22 +65,24 @@ function frm_forms_autoloader( $class_name ) {
  * @since 3.0
  */
 function frm_class_autoloader( $class_name, $filepath ) {
-	$filepath .= '/classes';
+	$deprecated    = array( 'FrmEntryFormat', 'FrmPointers' );
+	$is_deprecated = in_array( $class_name, $deprecated ) || preg_match( '/^.+Deprecate$/', $class_name );
 
-	if ( preg_match( '/^.+Helper$/', $class_name ) ) {
-		$filepath .= '/helpers/';
-	} else if ( preg_match( '/^.+Controller$/', $class_name ) ) {
-		$filepath .= '/controllers/';
-	} else if ( preg_match( '/^.+Factory$/', $class_name ) ) {
-		$filepath .= '/factories/';
-	} elseif ( preg_match( '/^.+Deprecated$/', $class_name ) ) {
-		$filepath .= '--';
-		$filepath = str_replace( '/classes--', '', $filepath );
+	if ( $is_deprecated ) {
 		$filepath .= '/deprecated/';
 	} else {
-		$filepath .= '/models/';
-		if ( strpos( $class_name, 'Field' ) && ! file_exists( $filepath . $class_name . '.php' ) ) {
-			$filepath .= 'fields/';
+		$filepath .= '/classes/';
+		if ( preg_match( '/^.+Helper$/', $class_name ) ) {
+			$filepath .= 'helpers/';
+		} else if ( preg_match( '/^.+Controller$/', $class_name ) ) {
+			$filepath .= 'controllers/';
+		} else if ( preg_match( '/^.+Factory$/', $class_name ) ) {
+			$filepath .= 'factories/';
+		} else {
+			$filepath .= 'models/';
+			if ( strpos( $class_name, 'Field' ) && ! file_exists( $filepath . $class_name . '.php' ) ) {
+				$filepath .= 'fields/';
+			}
 		}
 	}
 

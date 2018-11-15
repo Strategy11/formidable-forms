@@ -4,6 +4,8 @@
  * Class FrmDbDeprecated
  *
  * @since 2.03.05
+ * @deprecated 2.03.05
+ * @codeCoverageIgnore
  */
 class FrmDbDeprecated {
 
@@ -28,7 +30,7 @@ class FrmDbDeprecated {
 	 * @deprecated 2.03.05
 	 */
 	public function upgrade() {
-		_deprecated_function( __FUNCTION__, '2.03.05', 'FrmDb::upgrade( $old_db_version )' );
+		_deprecated_function( __FUNCTION__, '2.05.06', 'FrmMigrate::upgrade' );
 
 		$db = new FrmMigrate();
 		$db->upgrade();
@@ -38,7 +40,7 @@ class FrmDbDeprecated {
 	 * @deprecated 2.03.05
 	 */
 	public function collation() {
-		_deprecated_function( __FUNCTION__, '2.03.05', 'FrmDb::collation()' );
+		_deprecated_function( __FUNCTION__, '2.05.06', 'FrmMigrate::collation' );
 
 		$db = new FrmMigrate();
 		return $db->collation();
@@ -48,7 +50,7 @@ class FrmDbDeprecated {
 	 * @deprecated 2.03.05
 	 */
 	public function uninstall() {
-		_deprecated_function( __FUNCTION__, '2.03.05', 'FrmDb::uninstall()' );
+		_deprecated_function( __FUNCTION__, '2.05.06', 'FrmMigrate::uninstall' );
 
 		$db = new FrmMigrate();
 		$db->uninstall();
