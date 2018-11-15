@@ -221,7 +221,7 @@ class FrmAddonsController {
 	 * @since 3.04.03
 	 * @return string
 	 */
-	private static function get_cache_key( $license ) {
+	public static function get_cache_key( $license ) {
 		return 'frm_addons_l' . ( empty( $license ) ? '' : md5( $license ) );
 	}
 
@@ -386,7 +386,7 @@ class FrmAddonsController {
 				$file_name = $base_file . '/' . $base_file . '.php';
 			}
 
-			$addon['installed']    = file_exists(  WP_PLUGIN_DIR . '/' . $file_name );
+			$addon['installed']    = file_exists( WP_PLUGIN_DIR . '/' . $file_name );
 			$addon['activate_url'] = '';
 
 			if ( $addon['installed'] && ! empty( $activate_url ) && ! is_plugin_active( $file_name ) ) {
