@@ -38,7 +38,7 @@
 						</a>
 					<?php } elseif ( isset( $addon['url'] ) && ! empty( $addon['url'] ) ) { ?>
 						<a class="frm-install-addon button button-primary" rel="<?php echo esc_attr( $addon['url'] ); ?>" aria-label="<?php esc_attr_e( 'Install', 'formidable' ); ?>">
-						?	<?php esc_html_e( 'Install', 'formidable' ); ?>
+							<?php esc_html_e( 'Install', 'formidable' ); ?>
 						</a>
 						<span class="spinner"></span>
 					<?php } elseif ( FrmAppHelper::pro_is_installed() ) { ?>
