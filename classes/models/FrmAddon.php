@@ -272,23 +272,21 @@ class FrmAddon {
 			if ( isset( $transient->response[ $this->plugin_folder ] ) ) {
 				unset( $transient->response[ $this->plugin_folder ] );
 			}
-		} elseif ( isset( $transient->response ) && isset( $transient->response[ $this->plugin_folder ] ) ) {
+		} elseif ( isset( $transient->response ) && isset( $transient->response[ $this->plugin_folder ] ) && $this->get_beta ) {
+
 			$version_info = $this->get_api_info( $this->license );
-
-			// Use the beta update url
-			if ( is_array( $version_info ) && isset( $version_info['package'] ) ) {
-				$this->maybe_use_beta_url( $version_info );
-				$version_info['new_version'] = trim( $version_info['new_version'], 'p' );
-				$transient->response[ $this->plugin_folder ] = (object) $version_info;
+			if ( ! is_array( $version_info ) || ! isset( $version_info['package'] ) ) {
+				return $transient;
 			}
 
-			/*
-			Is this needed? TODO: Check the nested plugin update
-			if ( ! empty( $version_info ) && version_compare( $version_info->new_version, $this->version, '>' ) ) {
-				$transient->response[ $this->plugin_folder ] = (object) $version_info;
-			}
-			*/
-			if ( empty( $version_info ) || version_compare( $version_info['new_version'], $this->version, '<' ) ) {
+			$this->maybe_use_beta_url( $version_info );
+			$version_info['new_version'] = trim( $version_info['new_version'], 'p' );
+
+			// If this is the nested version, prevent it from updating to the free version
+			$transient->response[ $this->plugin_folder ] = (object) $version_info;
+
+			// don't show updates that don't need to happen
+			if ( version_compare( $version_info['new_version'], $this->version, '<=' ) ) {
 				if ( ! $this->has_been_cleared() ) {
 					// if the transient has expired, clear the update and trigger it again
 					$this->cleared_plugins();
@@ -322,6 +320,9 @@ class FrmAddon {
 		if ( $this->get_beta && isset( $version_info['beta'] ) ) {
 			$version_info['new_version'] = $version_info['beta']['version'];
 			$version_info['package']     = $version_info['beta']['package'];
+			if ( isset( $version_info['plugin'] ) ) {
+				$version_info['plugin']  = $version_info['beta']['plugin'];
+			}
 		}
 	}
 
