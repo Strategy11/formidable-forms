@@ -838,6 +838,7 @@ div.frm_updated_message{
 
 .frm-addons .addon-status {
 	float:left;
+	padding-top: 4px;
 }
 
 .frm-addon-active .button {

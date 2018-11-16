@@ -12,7 +12,7 @@ if ( isset( $message ) && '' !== $message ) {
 
 if ( isset( $errors ) && is_array( $errors ) && count( $errors ) > 0 ) {
 ?>
-	<div class="error" role="alert">
+	<div class="error frm_error_style inline" role="alert">
 		<ul id="frm_errors">
 			<?php
 			foreach ( $errors as $error ) {

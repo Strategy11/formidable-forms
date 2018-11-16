@@ -2,13 +2,13 @@
 <div class="wrap">
 	<h1><?php esc_html_e( 'Formidable Add-Ons', 'formidable' ); ?></h1>
 
-	<?php include( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/errors.php' ); ?>
+	<?php include( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' ); ?>
 
 	<div id="the-list" class="frm-addons">
 		<?php foreach ( $addons as $slug => $addon ) { ?>
 			<div class="plugin-card plugin-card-<?php echo esc_attr( $slug ); ?> frm-no-thumb frm-addon-<?php echo esc_attr( $addon['status']['type'] ); ?>">
 				<div class="plugin-card-top">
-					<?php if ( strtotime( $addon['released'] ) > strtotime( '-60 days' ) ) { ?>
+					<?php if ( strtotime( $addon['released'] ) > strtotime( '-90 days' ) ) { ?>
 						<div class="frm_ribbon">
 							<span>New</span>
 						</div>

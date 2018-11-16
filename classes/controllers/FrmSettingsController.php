@@ -161,7 +161,7 @@ class FrmSettingsController {
 	public static function settings_cta_dismiss() {
 		FrmAppHelper::permission_check( 'frm_change_settings' );
 
-		update_option( 'frm_lite_settings_upgrade', time() );
+		update_option( 'frm_lite_settings_upgrade', time(), 'no' );
 
 		wp_send_json_success();
 	}
