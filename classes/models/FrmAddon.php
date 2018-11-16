@@ -279,6 +279,7 @@ class FrmAddon {
 
 			$version_info = $this->get_api_info( $this->license );
 			if ( ! is_array( $version_info ) || ! isset( $version_info['package'] ) ) {
+				unset( $transient->response[ $this->plugin_folder ] );
 				return $transient;
 			}
 
