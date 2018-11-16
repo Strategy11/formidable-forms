@@ -338,7 +338,7 @@ class FrmAddonsController {
 				$addon_info = self::get_addon_info( $new_license );
 
 				$version_info[ $download_id ] = $addon_info[ $download_id ];
-				if ( isset(  $addon_info['error'] ) ) {
+				if ( isset( $addon_info['error'] ) ) {
 					$version_info[ $download_id ]['error'] = array(
 						'message' => $addon_info['error']['message'],
 						'code'    => $addon_info['error']['code'],
