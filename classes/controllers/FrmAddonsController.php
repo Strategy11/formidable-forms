@@ -336,7 +336,14 @@ class FrmAddonsController {
 			if ( ! empty( $download_id ) && ! isset( $version_info[ $download_id ]['package'] ) ) {
 				// if this addon is using its own license, get the update url
 				$addon_info = self::get_addon_info( $new_license );
+
 				$version_info[ $download_id ] = $addon_info[ $download_id ];
+				if ( isset(  $addon_info['error'] ) ) {
+					$version_info[ $download_id ]['error'] = array(
+						'message' => $addon_info['error']['message'],
+						'code'    => $addon_info['error']['code'],
+					);
+				}
 			}
 		}
 

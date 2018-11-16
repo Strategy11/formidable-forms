@@ -15,6 +15,7 @@ class FrmAddon {
 	public $version;
 	public $author = 'Strategy11';
 	public $is_parent_licence = false;
+	private $is_expired_addon = false;
 	public $license;
 	protected $get_beta = false;
 
@@ -148,11 +149,8 @@ class FrmAddon {
 			return false;
 		}
 
-		$addon = $this->get_api_info( $license );
-		if ( isset( $addon['package'] ) ) {
-			$this->is_parent_licence = true;
-		} else {
-			// if there is no download url, this license does not apply to the addon
+		$this->get_api_info( $license );
+		if ( ! $this->is_parent_licence ) {
 			$license = false;
 		}
 
@@ -239,6 +237,11 @@ class FrmAddon {
 	}
 
 	public function show_license_message( $file, $plugin ) {
+		if ( $this->is_expired_addon ) {
+			// let's not show a ton of duplicate messages
+			return;
+		}
+
 		$message = '';
 		if ( empty( $this->license ) ) {
 			/* translators: %1$s: Plugin name, %2$s: Start link HTML, %3$s: end link HTML */
@@ -287,12 +290,6 @@ class FrmAddon {
 
 			// don't show updates that don't need to happen
 			if ( version_compare( $version_info['new_version'], $this->version, '<=' ) ) {
-				if ( ! $this->has_been_cleared() ) {
-					// if the transient has expired, clear the update and trigger it again
-					$this->cleared_plugins();
-					$this->manually_queue_update();
-				}
-
 				unset( $transient->response[ $this->plugin_folder ] );
 			}
 		}
@@ -307,7 +304,18 @@ class FrmAddon {
 	 */
 	protected function get_api_info( $license ) {
 		$addons = FrmAddonsController::get_addon_info( $license );
-		return FrmAddonsController::get_addon_for_license( $addons, $this );
+		$addon  = FrmAddonsController::get_addon_for_license( $addons, $this );
+
+		// if there is no download url, this license does not apply to the addon
+		if ( isset( $addon['package'] ) ) {
+			$this->is_parent_licence = true;
+		} elseif ( isset( $addons['error'] ) ) {
+			// if the license is expired, we must assume all add-ons were packaged
+			$this->is_parent_licence = true;
+			$this->is_expired_addon  = true;
+		}
+
+		return $addon;
 	}
 
 	/**
