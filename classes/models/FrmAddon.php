@@ -237,7 +237,7 @@ class FrmAddon {
 	}
 
 	public function show_license_message( $file, $plugin ) {
-		if ( $this->is_expired_addon ) {
+		if ( $this->is_expired_addon || isset( $plugin['package'] ) ) {
 			// let's not show a ton of duplicate messages
 			return;
 		}
@@ -275,27 +275,48 @@ class FrmAddon {
 			if ( isset( $transient->response[ $this->plugin_folder ] ) ) {
 				unset( $transient->response[ $this->plugin_folder ] );
 			}
-		} elseif ( isset( $transient->response ) && isset( $transient->response[ $this->plugin_folder ] ) && $this->get_beta ) {
+		} elseif ( isset( $transient->response ) && isset( $transient->response[ $this->plugin_folder ] ) ) {
+			$this->prepare_update_details( $transient->response[ $this->plugin_folder ] );
 
-			$version_info = $this->get_api_info( $this->license );
-			if ( ! is_array( $version_info ) || ! isset( $version_info['package'] ) ) {
-				unset( $transient->response[ $this->plugin_folder ] );
-				return $transient;
-			}
-
-			$this->maybe_use_beta_url( $version_info );
-			$version_info['new_version'] = trim( $version_info['new_version'], 'p' );
-
-			// If this is the nested version, prevent it from updating to the free version
-			$transient->response[ $this->plugin_folder ] = (object) $version_info;
-
-			// don't show updates that don't need to happen
-			if ( version_compare( $version_info['new_version'], $this->version, '<=' ) ) {
+			// if the transient has expired, clear the update and trigger it again
+			if ( $transient->response[ $this->plugin_folder ] === false ) {
+				if ( ! $this->has_been_cleared() ) {
+					$this->cleared_plugins();
+					$this->manually_queue_update();
+				}
 				unset( $transient->response[ $this->plugin_folder ] );
 			}
 		}
 
 		return $transient;
+	}
+
+	/**
+	 * Check if the plugin information is correct to allow an update
+	 *
+	 * @since 3.04.03
+	 * @param object $transient - the current plugin info saved for update
+	 */
+	private function prepare_update_details( &$transient ) {
+		$version_info = $transient;
+		$has_beta_url = isset( $version_info->beta ) && ! empty( $version_info->beta );
+		if ( $this->get_beta && ! $has_beta_url ) {
+			$version_info = (object) $this->get_api_info( $this->license );
+		}
+
+		if ( isset( $version_info->new_version ) && ! empty( $version_info->new_version ) ) {
+			$this->clear_old_plugin_version( $version_info );
+			if ( $version_info === false ) { // was cleared with timeout
+				$transient = false;
+			} else {
+				$this->maybe_use_beta_url( $version_info );
+				$version_info->new_version = trim( $version_info->new_version, 'p' );
+
+				if ( version_compare( $version_info->new_version, $this->version, '>' ) ) {
+					$transient = $version_info;
+				}
+			}
+		}
 	}
 
 	/**
@@ -320,42 +341,31 @@ class FrmAddon {
 	}
 
 	/**
-	 * The beta url is always included if the download has a beta.
-	 * Check if the beta should be downloaded.
-	 *
-	 * @since 3.04.03
-	 */
-	private function maybe_use_beta_url( &$version_info ) {
-		if ( $this->get_beta && isset( $version_info['beta'] ) ) {
-			$version_info['new_version'] = $version_info['beta']['version'];
-			$version_info['package']     = $version_info['beta']['package'];
-			if ( isset( $version_info['plugin'] ) ) {
-				$version_info['plugin']  = $version_info['beta']['plugin'];
-			}
-		}
-	}
-
-	/**
-	 * @since 2.05.05
-	 */
-	private function version_cache_key() {
-		$slug = basename( $this->plugin_file, '.php' );
-		return md5( serialize( $slug . $this->version . $this->license . $this->get_beta ) );
-	}
-
-	/**
 	 * make sure transients don't stick around on sites that
 	 * don't save the transient expiration
 	 *
 	 * @since 2.05.05
 	 */
 	private function clear_old_plugin_version( &$version_info ) {
-		if ( false !== $version_info ) {
-			$timeout = ( isset( $version_info['timeout'] ) && ! empty( $version_info['timeout'] ) ) ? $version_info['timeout'] : 0;
-			if ( empty( $timeout ) || current_time( 'timestamp' ) > $timeout ) {
-				$version_info = false; // Cache is expired
-			} elseif ( ( ! is_array( $version_info ) || ! isset( $version_info['value'] ) ) ) {
-				$version_info = false; // the value isn't formated as expected
+		$timeout = ( isset( $version_info->timeout ) && ! empty( $version_info->timeout ) ) ? $version_info->timeout : 0;
+		if ( ! empty( $timeout ) && time() > $timeout ) {
+			$version_info = false; // Cache is expired
+			FrmAddonsController::reset_cached_addons( $this->license );
+		}
+	}
+
+	/**
+	 * The beta url is always included if the download has a beta.
+	 * Check if the beta should be downloaded.
+	 *
+	 * @since 3.04.03
+	 */
+	private function maybe_use_beta_url( &$version_info ) {
+		if ( $this->get_beta && isset( $version_info->beta ) && ! empty( $version_info->beta ) ) {
+			$version_info->new_version = $version_info->beta['version'];
+			$version_info->package     = $version_info->beta['package'];
+			if ( isset( $version_info->plugin ) && ! empty( $version_info->plugin ) ) {
+				$version_info->plugin  = $version_info->beta['plugin'];
 			}
 		}
 	}

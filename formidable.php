@@ -65,7 +65,7 @@ function frm_forms_autoloader( $class_name ) {
  * @since 3.0
  */
 function frm_class_autoloader( $class_name, $filepath ) {
-	$deprecated    = array( 'FrmEntryFormat', 'FrmPointers' );
+	$deprecated    = array( 'FrmEntryFormat', 'FrmPointers', 'FrmEDD_SL_Plugin_Updater' );
 	$is_deprecated = in_array( $class_name, $deprecated ) || preg_match( '/^.+Deprecate$/', $class_name );
 
 	if ( $is_deprecated ) {

@@ -210,11 +210,18 @@ class FrmAddonsController {
 	private static function set_cached_addons( $addons, $license = '' ) {
 		$cache_key = self::get_cache_key( $license );
 		$data = array(
-			'timeout' => strtotime( '+4 hours', current_time( 'timestamp' ) ),
+			'timeout' => strtotime( '+6 hours', current_time( 'timestamp' ) ),
 			'value'   => json_encode( $addons ),
 		);
 
 		update_option( $cache_key, $data, 'no' );
+	}
+
+	/**
+	 * @since 3.04.03
+	 */
+	public static function reset_cached_addons( $license = '' ) {
+		delete_option( self::get_cache_key( $license ) );
 	}
 
 	/**

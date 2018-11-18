@@ -21,18 +21,14 @@
 		</testsuite>
 	</testsuites>
 	<filter>
-	  <whitelist processUncoveredFilesFromWhitelist="true">
-	    <directory suffix=".php">./classes</directory>
-	    <file>formidable.php</file>
-	    <exclude>
-	      <directory suffix=".php">./classes/views</directory>
-		  <file>./classes/models/FrmEntryDeprecated.php</file>
-		  <file>./classes/models/FrmEntryMetaDeprecated.php</file>
-		  <file>./classes/models/FrmFieldDeprecated.php</file>
-		  <file>./classes/models/FrmFormDeprecated.php</file>
-		  <file>./classes/models/FrmDbDeprecated.php</file>
-		  <file>./classes/models/FrmEntryFormat.php</file>
-	    </exclude>
-	  </whitelist>
+		<whitelist processUncoveredFilesFromWhitelist="true">
+			<directory suffix=".php">./classes</directory>
+			<file>formidable.php</file>
+			<exclude>
+				<directory suffix=".php">./classes/views</directory>
+				<directory suffix=".php">./deprecated</directory>
+				<file>deprecated.php</file>
+			</exclude>
+		</whitelist>
 	</filter>
 </phpunit>
