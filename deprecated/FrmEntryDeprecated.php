@@ -2,6 +2,8 @@
 
 /**
  * @since 2.03.05
+ * @deprecated 2.03.05
+ * @codeCoverageIgnore
  */
 class FrmEntryDeprecated {
 

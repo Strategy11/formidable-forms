@@ -2,6 +2,8 @@
 
 /**
  * This class handles the pointers used in the introduction tour.
+ * @deprecated 3.01.03
+ * @codeCoverageIgnore
  */
 class FrmPointers {
 

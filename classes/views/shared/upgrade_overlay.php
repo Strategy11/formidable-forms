@@ -8,7 +8,7 @@
 				<h2>
 					<?php
 					printf(
-						esc_html__( '%s are a Pro feature', 'formidable' ),
+						esc_html__( '%s are not installed', 'formidable' ),
 						'<span class="frm_feature_label"></span>'
 					);
 					?> 
@@ -17,21 +17,28 @@
 					<p>
 						<?php
 						if ( $is_pro ) {
-							$message = __( '%s are not installed on this site. Please see the addons that are included with your plan.', 'formidable' );
+							$message = __( 'Please see the add-ons that are included with your plan.', 'formidable' );
 						} else {
 							$message = __( '%s are not available on your plan. Please upgrade to PRO to unlock more awesome features.', 'formidable' );
 						}
 						printf( esc_html( $message ), '<span class="frm_feature_label"></span>' );
 						?>
 					</p>
-					<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'builder-upgrade' ) ); ?>" class="button button-primary" target="_blank" rel="noopener noreferrer">
-							<?php esc_html_e( 'Upgrade to Pro', 'formidable' ); ?>
-					</a>
-					<p>
-						<a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url( FrmAppHelper::admin_upgrade_link( 'builder-upgrade', 'knowledgebase/install-formidable-forms/' ) ) ); ?>" target="_blank" class="frm-link-secondary">
-							<?php esc_html_e( 'Already purchased?', 'formidable' ); ?>
+					<?php if ( $is_pro ) { ?>
+						<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-addons' ) ); ?>" class="button button-primary">
+								<?php esc_html_e( 'See My Add-Ons', 'formidable' ); ?>
 						</a>
-					</p>
+					<?php } else { ?>
+						<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'builder-upgrade' ) ); ?>" class="button button-primary" target="_blank" rel="noopener noreferrer">
+							<?php esc_html_e( 'Upgrade to Pro', 'formidable' ); ?>
+						</a>
+
+						<p>
+							<a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url( FrmAppHelper::admin_upgrade_link( 'builder-upgrade', 'knowledgebase/install-formidable-forms/' ) ) ); ?>" target="_blank" class="frm-link-secondary">
+								<?php esc_html_e( 'Already purchased?', 'formidable' ); ?>
+							</a>
+						</p>
+					<?php } ?>
 				</div>
 			</div>
 		</div>

@@ -98,40 +98,6 @@ class FrmFieldsController {
         return $field;
     }
 
-	/**
-	 * @deprecated 3.0
-	 * @codeCoverageIgnore
-	 */
-	public static function edit_name( $field = 'name', $id = '' ) {
-		_deprecated_function( __FUNCTION__, '3.0' );
-
-		FrmAppHelper::permission_check( 'frm_edit_forms' );
-		check_ajax_referer( 'frm_ajax', 'nonce' );
-
-		if ( empty( $field ) ) {
-			$field = 'name';
-		}
-
-        if ( empty( $id ) ) {
-			$id = FrmAppHelper::get_post_param( 'element_id', '', 'sanitize_title' );
-			$id = str_replace( 'field_label_', '', $id );
-        }
-
-		$value = FrmAppHelper::get_post_param( 'update_value', '', 'wp_kses_post' );
-		$value = trim( $value );
-        if ( trim( strip_tags( $value ) ) === '' ) {
-            // set blank value if there is no content
-            $value = '';
-        }
-
-		FrmField::update( $id, array( $field => $value ) );
-
-		do_action( 'frm_after_update_field_' . $field, compact( 'id', 'value' ) );
-
-		echo stripslashes( wp_kses_post( $value ) ); // WPCS: XSS ok.
-        wp_die();
-    }
-
     public static function update_ajax_option() {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
         check_ajax_referer( 'frm_ajax', 'nonce' );
@@ -187,27 +153,6 @@ class FrmFieldsController {
 
         wp_die();
     }
-
-	/**
-	 * Load a single field in the form builder along with all needed variables
-	 *
-	 * @deprecated 3.0
-	 * @codeCoverageIgnore
-	 *
-	 * @param int $field_id
-	 * @param array $values
-	 * @param int $form_id
-	 *
-	 * @return array
-	 */
-	public static function include_single_field( $field_id, $values, $form_id = 0 ) {
-		_deprecated_function( __FUNCTION__, '3.0', 'FrmFieldsController::load_single_field' );
-
-		$field = FrmFieldsHelper::setup_edit_vars( FrmField::getOne( $field_id ) );
-		self::load_single_field( $field, $values, $form_id );
-
-		return $field;
-	}
 
 	/**
 	 * @since 3.0
@@ -317,22 +262,6 @@ class FrmFieldsController {
 		FrmFieldsHelper::show_single_option( $field );
 
 		wp_die();
-    }
-
-	/**
-	 * @deprecated 2.3
-	 * @codeCoverageIgnore
-	 */
-    public static function edit_option() {
-		_deprecated_function( __FUNCTION__, '2.3' );
-    }
-
-	/**
-	 * @deprecated 2.3
-	 * @codeCoverageIgnore
-	 */
-    public static function delete_option() {
-		_deprecated_function( __FUNCTION__, '2.3' );
     }
 
     public static function import_choices() {
@@ -764,5 +693,43 @@ class FrmFieldsController {
 		}
 
 		return $opt;
+	}
+
+	/**
+	 * @deprecated 3.0
+	 * @codeCoverageIgnore
+	 */
+	public static function edit_name( $field = 'name', $id = '' ) {
+		FrmDeprecated::edit_name( $field, $id );
+	}
+
+	/**
+	 * @deprecated 3.0
+	 * @codeCoverageIgnore
+	 *
+	 * @param int $field_id
+	 * @param array $values
+	 * @param int $form_id
+	 *
+	 * @return array
+	 */
+	public static function include_single_field( $field_id, $values, $form_id = 0 ) {
+		return FrmDeprecated::include_single_field( $field_id, $values, $form_id );
+	}
+
+	/**
+	 * @deprecated 2.3
+	 * @codeCoverageIgnore
+	 */
+	public static function edit_option() {
+		FrmDeprecated::deprecated( __METHOD__, '2.3' );
+	}
+
+	/**
+	 * @deprecated 2.3
+	 * @codeCoverageIgnore
+	 */
+	public static function delete_option() {
+		FrmDeprecated::deprecated( __METHOD__, '2.3' );
 	}
 }

@@ -88,7 +88,7 @@ class FrmHooksController {
 
 		// Addons Controller
 		add_action( 'admin_menu', 'FrmAddonsController::menu', 100 );
-		add_filter( 'upgrader_pre_download', 'FrmAddonsController::add_shorten_edd_filename_filter', 10, 4 );
+		add_filter( 'pre_set_site_transient_update_plugins', 'FrmAddonsController::check_update' );
 
         // Entries Controller
         add_action( 'admin_menu', 'FrmEntriesController::menu', 12 );
@@ -137,7 +137,6 @@ class FrmHooksController {
 		// Addons
 		add_action( 'wp_ajax_frm_addon_activate', 'FrmAddon::activate' );
 		add_action( 'wp_ajax_frm_addon_deactivate', 'FrmAddon::deactivate' );
-		add_action( 'wp_ajax_frm_fill_licenses', 'FrmAddonsController::get_licenses' );
 		add_action( 'wp_ajax_frm_install_addon', 'FrmAddonsController::ajax_install_addon' );
 
         // Fields Controller

@@ -2,6 +2,8 @@
 
 /**
  * @since 2.03.05
+ * @deprecated 2.03.05
+ * @codeCoverageIgnore
  */
 class FrmFormDeprecated {
 
@@ -109,7 +111,7 @@ class FrmFormDeprecated {
 	 * @deprecated 2.03.05
 	 */
 	public static function getIdByKey( $key ) {
-		_deprecated_function( __FUNCTION__, '2.03.05', 'FrmForm::getIdByKey' );
+		_deprecated_function( __FUNCTION__, '2.03.05', 'FrmForm::get_id_by_key' );
 
 		return FrmForm::get_id_by_key( $key );
 	}

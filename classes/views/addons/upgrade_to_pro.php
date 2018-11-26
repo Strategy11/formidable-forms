@@ -57,11 +57,11 @@
 				<td>Elite Support</td>
 			</tr>
 			<tr>
-				<th>Included AddOns</th>
+				<th>Included Add-Ons</th>
 				<td>None</td>
-				<td><a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url( FrmAppHelper::admin_upgrade_link( 'upgrade' ) ) ); ?>" target="_blank">Premium Addons</a></td>
-				<td><a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url( FrmAppHelper::admin_upgrade_link( 'upgrade' ) ) ); ?>" target="_blank">Advanced Addons</a></td>
-				<td><a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url( FrmAppHelper::admin_upgrade_link( 'upgrade' ) ) ); ?>" target="_blank">Enterprise Addons</a></td>
+				<td><a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url( FrmAppHelper::admin_upgrade_link( 'upgrade' ) ) ); ?>" target="_blank">Premium Add-Ons</a></td>
+				<td><a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url( FrmAppHelper::admin_upgrade_link( 'upgrade' ) ) ); ?>" target="_blank">Advanced Add-Ons</a></td>
+				<td><a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url( FrmAppHelper::admin_upgrade_link( 'upgrade' ) ) ); ?>" target="_blank">Enterprise Add-Ons</a></td>
 			</tr>
 		</tbody>
 	</table>

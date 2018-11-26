@@ -695,10 +695,7 @@ class FrmDb {
 	 * @codeCoverageIgnore
 	 */
 	public function upgrade() {
-		_deprecated_function( __METHOD__, '2.05.06', 'FrmMigrate::upgrade' );
-
-		$db = new FrmMigrate();
-		$db->upgrade();
+		FrmDeprecated::upgrade();
 	}
 
 	/**
@@ -706,10 +703,7 @@ class FrmDb {
 	 * @codeCoverageIgnore
 	 */
 	public function collation() {
-		_deprecated_function( __METHOD__, '2.05.06', 'FrmMigrate::collation' );
-
-		$db = new FrmMigrate();
-		return $db->collation();
+		return FrmDeprecated::collation();
 	}
 
 	/**
@@ -717,9 +711,6 @@ class FrmDb {
 	 * @codeCoverageIgnore
 	 */
 	public function uninstall() {
-		_deprecated_function( __METHOD__, '2.05.06', 'FrmMigrate::uninstall' );
-
-		$db = new FrmMigrate();
-		$db->uninstall();
+		FrmDeprecated::uninstall();
 	}
 }

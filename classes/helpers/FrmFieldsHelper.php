@@ -322,24 +322,6 @@ class FrmFieldsHelper {
 	}
 
 	/**
-	 * @deprecated 3.0
-	 * @codeCoverageIgnore
-	 *
-	 * @param string $html
-	 * @param array $field
-	 * @param array $errors
-	 * @param object $form
-	 * @param array $args
-	 *
-	 * @return string
-	 */
-	public static function replace_shortcodes( $html, $field, $errors = array(), $form = false, $args = array() ) {
-		_deprecated_function( __FUNCTION__, '3.0', 'FrmFieldType::prepare_field_html' );
-		$field_obj = FrmFieldFactory::get_field_type( $field['type'], $field );
-		return $field_obj->prepare_field_html( compact( 'errors', 'form' ) );
-	}
-
-	/**
 	 * @since 3.0
 	 *
 	 * @param array $atts
@@ -390,24 +372,6 @@ class FrmFieldsHelper {
 		return ! in_array( $type, array( 'select', 'radio', 'checkbox', 'hidden', 'file' ) );
 	}
 
-	/**
-	 * @deprecated 3.0
-	 * @codeCoverageIgnore
-	 */
-	public static function remove_inline_conditions( $no_vars, $code, $replace_with, &$html ) {
-		_deprecated_function( __FUNCTION__, '3.0', 'FrmShortcodeHelper::remove_inline_conditions' );
-		FrmShortcodeHelper::remove_inline_conditions( $no_vars, $code, $replace_with, $html );
-	}
-
-	/**
-	 * @deprecated 3.0
-	 * @codeCoverageIgnore
-	 */
-	public static function get_shortcode_tag( $shortcodes, $short_key, $args ) {
-		_deprecated_function( __FUNCTION__, '3.0', 'FrmShortcodeHelper::get_shortcode_tag' );
-        return FrmShortcodeHelper::get_shortcode_tag( $shortcodes, $short_key, $args );
-    }
-
 	public static function get_checkbox_id( $field, $opt_key ) {
 		$id = $field['id'];
 		if ( isset( $field['in_section'] ) && $field['in_section'] ) {
@@ -415,14 +379,6 @@ class FrmFieldsHelper {
 		}
 		return 'frm_checkbox_' . $id . '-' . $opt_key;
 	}
-
-	/**
-	 * @deprecated 3.0
-	 * @codeCoverageIgnore
-	 */
-	public static function display_recaptcha( $field ) {
-		_deprecated_function( __FUNCTION__, '3.0', 'FrmFieldCaptcha::field_input' );
-    }
 
 	public static function show_single_option( $field ) {
 		if ( ! is_array( $field['options'] ) ) {
@@ -1356,16 +1312,48 @@ class FrmFieldsHelper {
 	 * @deprecated 3.0
 	 * @codeCoverageIgnore
 	 */
-	public static function get_default_field_opts( $type, $field = null, $limit = false ) {
-		if ( $limit ) {
-			_deprecated_function( __FUNCTION__, '3.0', 'FrmFieldHelper::get_default_field_options' );
-			$field_options = self::get_default_field_options( $type );
-		} else {
-			_deprecated_function( __FUNCTION__, '3.0', 'FrmFieldHelper::get_default_field' );
-			$field_options = self::get_default_field( $type );
-		}
+	public static function display_recaptcha() {
+		_deprecated_function( __FUNCTION__, '3.0', 'FrmFieldCaptcha::field_input' );
+	}
 
-		return $field_options;
+	/**
+	 * @deprecated 3.0
+	 * @codeCoverageIgnore
+	 */
+	public static function remove_inline_conditions( $no_vars, $code, $replace_with, &$html ) {
+		FrmDeprecated::remove_inline_conditions( $no_vars, $code, $replace_with, $html );
+	}
+
+	/**
+	 * @deprecated 3.0
+	 * @codeCoverageIgnore
+	 */
+	public static function get_shortcode_tag( $shortcodes, $short_key, $args ) {
+		return FrmDeprecated::get_shortcode_tag( $shortcodes, $short_key, $args );
+    }
+
+	/**
+	 * @deprecated 3.0
+	 * @codeCoverageIgnore
+	 *
+	 * @param string $html
+	 * @param array $field
+	 * @param array $errors
+	 * @param object $form
+	 * @param array $args
+	 *
+	 * @return string
+	 */
+	public static function replace_shortcodes( $html, $field, $errors = array(), $form = false, $args = array() ) {
+		return FrmDeprecated::replace_shortcodes( $html, $field, $errors, $form, $args );
+	}
+
+	/**
+	 * @deprecated 3.0
+	 * @codeCoverageIgnore
+	 */
+	public static function get_default_field_opts( $type, $field = null, $limit = false ) {
+		return FrmDeprecated::get_default_field_opts( $type, $field, $limit );
 	}
 
 	/**
@@ -1373,15 +1361,6 @@ class FrmFieldsHelper {
 	 * @codeCoverageIgnore
 	 */
 	public static function dropdown_categories( $args ) {
-		_deprecated_function( __FUNCTION__, '2.02.07', 'FrmProPost::get_category_dropdown' );
-
-		if ( FrmAppHelper::pro_is_installed() ) {
-			$args['location'] = 'front';
-			$dropdown = FrmProPost::get_category_dropdown( $args['field'], $args );
-		} else {
-			$dropdown = '';
-		}
-
-		return $dropdown;
+		return FrmDeprecated::dropdown_categories( $args );
 	}
 }

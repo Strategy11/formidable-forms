@@ -21,14 +21,14 @@
 		</testsuite>
 	</testsuites>
 	<filter>
-	  <whitelist processUncoveredFilesFromWhitelist="true">
-	    <directory suffix=".php">./classes</directory>
-	    <file>formidable.php</file>
-	    <exclude>
-	      <directory suffix=".php">./deprecated</directory>
-	      <file>deprecated.php</file>
-	      <directory suffix=".php">./classes/views</directory>
-	    </exclude>
-	  </whitelist>
+		<whitelist processUncoveredFilesFromWhitelist="true">
+			<directory suffix=".php">./classes</directory>
+			<file>formidable.php</file>
+			<exclude>
+				<directory suffix=".php">./classes/views</directory>
+				<directory suffix=".php">./deprecated</directory>
+				<file>deprecated.php</file>
+			</exclude>
+		</whitelist>
 	</filter>
 </phpunit>

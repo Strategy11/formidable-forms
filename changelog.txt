@@ -609,7 +609,7 @@
 * Fix: Show the correct option label for a blank value. Previously option label for "0" saved value was displaying.
 * Fix: Compact file upload field wasn't aligned with other fields in the row
 * Fix: Evaluate date strings the same way in view filters and inline conditions for date fields
-* Removed: Old auto updating code. If you are running addons you haven't updated since before November 2015, they will no longer auto update.
+* Removed: Old auto updating code. If you are running add-ons you haven't updated since before November 2015, they will no longer auto update.
 
 = 2.02.13 =
 * New: Add frm_send_separate_emails filter. If there are multiple emails in the "to" box, this hook will send one email per address.
@@ -984,7 +984,7 @@
 * Allow shortcodes for the submit button label
 * Increase the timeout for activating a license
 * Add a couple static functions to use in add-ons with form actions
-* Don't show templates on the addons page
+* Don't show templates on the add-ons page
 * Add frm_switch_field_types hook for specifying which fields can be switched to/from
 * Add Authorize, Stripe, WOO, and copy icons
 * Some back-end styling improvements

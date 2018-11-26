@@ -304,7 +304,7 @@ The contact form and advanced form field labels and descriptions are changed wit
 <a href="https://formidableforms.com/formidable-faqs/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">See more contact form and advanced online form FAQs</a>.
 
 = What type of WordPress forms can I build with Formidable Forms? =
-Formidable Forms drag & drop form builder combined with our addons is the most powerful WordPress contact form plugin and advanced form plugin in the market. Here are some types of WordPress forms you can create:
+Formidable Forms drag & drop form builder combined with our add-ons is the most powerful WordPress contact form plugin and advanced form plugin in the market. Here are some types of WordPress forms you can create:
 
 * Simple Contact Forms
 * Advanced Contact Forms

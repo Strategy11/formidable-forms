@@ -30,7 +30,7 @@ class FrmAppController {
 	 * @since 3.0
 	 */
 	private static function is_white_page() {
-		$is_white_page = ( FrmAppHelper::is_admin_page( 'formidable' ) || FrmAppHelper::is_admin_page( 'formidable-entries' ) || FrmAppHelper::is_admin_page( 'formidable-pro-upgrade' ) );
+		$is_white_page = ( FrmAppHelper::is_admin_page( 'formidable' ) || FrmAppHelper::is_admin_page( 'formidable-entries' ) || FrmAppHelper::is_admin_page( 'formidable-pro-upgrade' ) || FrmAppHelper::is_admin_page( 'formidable-addons' ) );
 		if ( ! $is_white_page ) {
 			$screen = get_current_screen();
 			$is_white_page = ( $screen && $screen->id === 'edit-frm_display' );
@@ -353,31 +353,6 @@ class FrmAppController {
     }
 
 	/**
-	 * Filter shortcodes in text widgets
-	 *
-	 * @deprecated 2.5.4
-	 * @codeCoverageIgnore
-	 */
-	public static function widget_text_filter( $content ) {
-		_deprecated_function( __METHOD__, '2.5.4' );
-		$regex = '/\[\s*(formidable|display-frm-data|frm-stats|frm-graph|frm-entry-links|formresults|frm-search)\s+.*\]/';
-		return preg_replace_callback( $regex, 'FrmAppHelper::widget_text_filter_callback', $content );
-	}
-
-	/**
-	 * Deprecated in favor of wpmu_upgrade_site
-	 *
-	 * @deprecated 2.3
-	 * @codeCoverageIgnore
-	 */
-	public static function front_head() {
-		_deprecated_function( __FUNCTION__, '2.3' );
-		if ( is_multisite() && self::needs_update() ) {
-			self::install();
-		}
-	}
-
-	/**
 	 * Check if the styles are updated when a form is loaded on the front-end
 	 *
 	 * @since 3.0.1
@@ -451,17 +426,6 @@ class FrmAppController {
 		wp_die();
 	}
 
-	/**
-	 * @deprecated 3.0.04
-	 * @codeCoverageIgnore
-	 */
-    public static function activation_install() {
-		_deprecated_function( __METHOD__, '3.0.04', 'FrmAppController::install' );
-        FrmDb::delete_cache_and_transient( 'frm_plugin_version' );
-        FrmFormActionsController::actions_init();
-        self::install();
-    }
-
     public static function install() {
         $frmdb = new FrmMigrate();
         $frmdb->upgrade();
@@ -489,23 +453,6 @@ class FrmAppController {
         $tables[] = $wpdb->prefix . 'frm_item_metas';
         return $tables;
     }
-
-	/**
-	 * Routes for wordpress pages -- we're just replacing content
-	 *
-	 * @deprecated 3.0
-	 * @codeCoverageIgnore
-	 */
-	public static function page_route( $content ) {
-		_deprecated_function( __METHOD__, '3.0' );
-		global $post;
-
-		if ( $post && isset( $_GET['form'] ) ) {
-			$content = FrmFormsController::page_preview();
-		}
-
-		return $content;
-	}
 
     public static function deauthorize() {
 		FrmAppHelper::permission_check( 'frm_change_settings' );
@@ -539,7 +486,41 @@ class FrmAppController {
 	 * @codeCoverageIgnore
 	 */
     public static function get_form_shortcode( $atts ) {
-        _deprecated_function( __FUNCTION__, '1.07.05', 'FrmFormsController::get_form_shortcode()' );
-        return FrmFormsController::get_form_shortcode( $atts );
+        return FrmDeprecated::get_form_shortcode( $atts );
     }
+
+	/**
+	 * @deprecated 2.5.4
+	 * @codeCoverageIgnore
+	 */
+	public static function widget_text_filter( $content ) {
+		return FrmDeprecated::widget_text_filter( $content );
+	}
+
+	/**
+	 * Deprecated in favor of wpmu_upgrade_site
+	 *
+	 * @deprecated 2.3
+	 * @codeCoverageIgnore
+	 */
+	public static function front_head() {
+		FrmDeprecated::front_head();
+	}
+
+
+	/**
+	 * @deprecated 3.0.04
+	 * @codeCoverageIgnore
+	 */
+	public static function activation_install() {
+		FrmDeprecated::activation_install();
+	}
+
+	/**
+	 * @deprecated 3.0
+	 * @codeCoverageIgnore
+	 */
+	public static function page_route( $content ) {
+		return FrmDeprecated::page_route( $content );
+	}
 }

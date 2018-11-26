@@ -551,24 +551,6 @@ class FrmEntriesController {
 		return $form_ids;
 	}
 
-	/**
-	 * @deprecated 1.07.05
-	 * @codeCoverageIgnore
-	 */
-    public static function show_form( $id = '', $key = '', $title = false, $description = false ) {
-        _deprecated_function( __FUNCTION__, '1.07.05', 'FrmFormsController::show_form()' );
-        return FrmFormsController::show_form( $id, $key, $title, $description );
-    }
-
-	/**
-	 * @deprecated 1.07.05
-	 * @codeCoverageIgnore
-	 */
-    public static function get_form( $filename, $form, $title, $description ) {
-        _deprecated_function( __FUNCTION__, '1.07.05', 'FrmFormsController::get_form()' );
-        return FrmFormsController::get_form( $form, $title, $description );
-    }
-
     public static function process_entry( $errors = '', $ajax = false ) {
 		$form_id = FrmAppHelper::get_post_param( 'form_id', '', 'absint' );
 		if ( FrmAppHelper::is_admin() || empty( $_POST ) || empty( $form_id ) || ! isset( $_POST['item_key'] ) ) {
@@ -731,4 +713,20 @@ class FrmEntriesController {
 
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/sidebar-shared.php' );
     }
+
+	/**
+	 * @deprecated 1.07.05
+	 * @codeCoverageIgnore
+	 */
+	public static function show_form( $id = '', $key = '', $title = false, $description = false ) {
+		return FrmDeprecated::show_form( $id, $key, $title, $description );
+	}
+
+	/**
+	 * @deprecated 1.07.05
+	 * @codeCoverageIgnore
+	 */
+	public static function get_form( $filename, $form, $title, $description ) {
+		return FrmDeprecated::get_form( $filename, $form, $title, $description );
+	}
 }

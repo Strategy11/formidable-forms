@@ -33,12 +33,24 @@ class FrmSettingsController {
 	private static function get_settings_tabs() {
 		$sections = array();
 		if ( apply_filters( 'frm_include_addon_page', false ) ) {
-			$sections['licenses'] = array(
-				'class'    => 'FrmAddonsController',
-				'function' => 'license_settings',
-				'name'     => __( 'Plugin Licenses', 'formidable' ),
-				'ajax'     => true,
-			);
+			// if no addons need a license, skip this page
+			$show_licenses = false;
+			$installed_addons = apply_filters( 'frm_installed_addons', array() );
+			foreach ( $installed_addons as $installed_addon ) {
+				if ( ! $installed_addon->is_parent_licence && $installed_addon->plugin_name != 'Formidable Pro' ) {
+					$show_licenses = true;
+					break;
+				}
+			}
+
+			if ( $show_licenses ) {
+				$sections['licenses'] = array(
+					'class'    => 'FrmAddonsController',
+					'function' => 'license_settings',
+					'name'     => __( 'Plugin Licenses', 'formidable' ),
+					'ajax'     => true,
+				);
+			}
 		}
 		$sections = apply_filters( 'frm_add_settings_section', $sections );
 
@@ -149,7 +161,7 @@ class FrmSettingsController {
 	public static function settings_cta_dismiss() {
 		FrmAppHelper::permission_check( 'frm_change_settings' );
 
-		update_option( 'frm_lite_settings_upgrade', time() );
+		update_option( 'frm_lite_settings_upgrade', time(), 'no' );
 
 		wp_send_json_success();
 	}
