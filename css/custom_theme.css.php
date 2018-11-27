@@ -332,15 +332,16 @@ a.frm_save_draft{
 
 .with_frm_style .frm_radio input[type=radio]{
 	-webkit-appearance:radio;
+	border-radius:50%;
 }
 
 .with_frm_style .frm_checkbox input[type=checkbox]{
 	-webkit-appearance:checkbox;
+	border-radius:initial;
 }
 
 .with_frm_style .frm_radio input[type=radio],
 .with_frm_style .frm_checkbox input[type=checkbox]{
-	border-radius:initial;
 	flex: none;
 	display:inline-block;
 	margin:4px 5px 0 0;
