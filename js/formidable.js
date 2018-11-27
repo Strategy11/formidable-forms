@@ -138,8 +138,6 @@ function frmFrontFormJS(){
 						errors = checkNumberField( field, errors );
 					} else if ( field.type === 'email' ) {
 						errors = checkEmailField( field, errors, emailFields );
-					} else if (field.type === 'password') {
-						errors = checkPasswordField(field, errors);
 					} else if ( field.pattern !== null ) {
 						errors = checkPatternField( field, errors );
 					}
@@ -183,8 +181,6 @@ function frmFrontFormJS(){
 				errors = checkEmailField( field, errors, emailFields );
 			} else if ( field.type === 'number' ) {
 				errors = checkNumberField( field, errors );
-			} else if (field.type === 'password') {
-				errors = checkPasswordField( field, errors );
 			} else if ( field.pattern !== null ) {
 				errors = checkPatternField( field, errors );
 			}
@@ -333,25 +329,6 @@ function frmFrontFormJS(){
 				}
 			}
 		}
-		return errors;
-	}
-
-	function checkPasswordField( field, errors ) {
-		var classes = field.className;
-
-		if (classes.indexOf('frm_strong_pass') < 0) {
-			return errors;
-		}
-
-		var text = field.value;
-		var regEx = /^(?=.*?[a-z])(?=.*?[A-Z])(?=.*[^a-zA-Z0-9])(?=.*?[0-9]).{8,}$/;
-		var matches = regEx.test(text); //true if matches format, false otherwise
-
-		if (!matches) {
-			var fieldID = getFieldId( field, true );
-			errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
-		}
-
 		return errors;
 	}
 
