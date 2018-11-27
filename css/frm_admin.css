@@ -2965,6 +2965,8 @@ li.frm_noallow.button.frm_show_upgrade {
 #frm_upgrade_modal .dismiss {
 	padding: 5px;
 	color: #c4c4c4;
+	z-index: 100;
+	position: relative;
 }
 
 #frm_upgrade_modal .dashicons-lock{
