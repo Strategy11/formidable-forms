@@ -429,6 +429,9 @@ ul.frm_form_nav > li{
 	transition: all .2s ease;
 }
 
+.wrap .frm_pricing a.button-primary,
+.toplevel_page_formidable #frm_upgrade_modal .button-primary,
+.toplevel_page_formidable .frm_wrap button.button-primary,
 #frm-addons-page .button-primary,
 .frm_single_entry_page .button-primary,
 #form_global_settings .button-primary,
@@ -439,6 +442,8 @@ ul.frm_form_nav > li{
 	color: #fff;
 }
 
+.wrap .frm_pricing a.button-primary:hover,
+.wrap .frm_pricing a.button-primary:focus,
 #frm-addons-page .button-primary:hover,
 #frm-addons-page .button-primary:focus,
 #form_global_settings .button-primary:hover,
@@ -453,6 +458,7 @@ ul.frm_form_nav > li{
 	box-shadow:none;
 }
 
+.wrap .frm_pricing a.button-primary:focus,
 #frm-addons-page .button-primary:focus,
 #form_global_settings .button-primary:focus,
 #frm_upgrade_modal .button:focus,
@@ -462,14 +468,6 @@ ul.frm_form_nav > li{
 
 .preview .button .caret {
 	border-top-color: #fff;
-}
-
-.wrap .frm_pricing a.button-primary,
-.toplevel_page_formidable #frm_upgrade_modal .button-primary,
-.toplevel_page_formidable .frm_wrap button.button-primary{
-	border-color: #da791d !important;
-	background: #f37656;
-	color:#fff;
 }
 
 #frm-preview-action{
