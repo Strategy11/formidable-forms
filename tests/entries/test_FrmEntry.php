@@ -20,6 +20,25 @@ class test_FrmEntry extends FrmUnitTest {
 
 		$entry = $this->factory->entry->create_object( $entry_data );
 		$this->assertEmpty( $entry, 'Failed to detect duplicate entry' );
+
+		// test an empty field in second entry: A + B != A
+		$website_field = $this->factory->field->get_id_by_key( 'contact-website' );
+		$entry_data    = $this->factory->field->generate_entry_array( $form );
+		$entry         = $this->factory->entry->create_object( $entry_data );
+
+		$this->assertNotEmpty( $entry, 'False Positive duplicate entry (A + B != A)' );
+
+		unset( $entry_data['item_meta'][ $website_field ] );
+		$entry = $this->factory->entry->create_object( $entry_data );
+		$this->assertNotEmpty( $entry, 'False Positive for duplicate entry' );
+
+		// test an empty field in first entry: A != A + B
+		$entry_data = $this->factory->field->generate_entry_array( $form );
+		unset( $entry_data['item_meta'][ $website_field ] );
+		$this->factory->entry->create_object( $entry_data );
+		$entry_data['item_meta'][ $website_field ] = 'http://test.com';
+		$entry = $this->factory->entry->create_object( $entry_data );
+		$this->assertNotEmpty( $entry, 'False Positive for duplicate entry (A != A + B)' );
 	}
 
 	/**
