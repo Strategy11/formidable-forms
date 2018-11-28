@@ -1036,7 +1036,7 @@ div.frm_updated_message{
 }
 
 a.frm-option-icon:before{
-	color: #0073aa;
+	color: rgb(53,97,150);
     font-size: 22px;
     width: 22px;
     height: 22px;
@@ -2854,7 +2854,7 @@ ul .frm_col_two{float:right;}
 }
 
 .frm_code_list.frm_grid_container a:hover{
-	background-color:#0073aa;
+	background-color:rgb(53,97,150);
 	color:#fbfdff;
 }
 
