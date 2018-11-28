@@ -118,6 +118,7 @@ class FrmAppController {
 
     public static function pro_get_started_headline() {
 		self::maybe_show_upgrade_bar();
+		self::review_request();
 
         // Don't display this error as we're upgrading the thing, or if the user shouldn't see the message
         if ( 'upgrade-plugin' == FrmAppHelper::simple_get( 'action', 'sanitize_title' ) || ! current_user_can( 'update_plugins' ) ) {
@@ -158,12 +159,7 @@ class FrmAppController {
     }
 
 	private static function maybe_show_upgrade_bar() {
-		$page = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
-		if ( strpos( $page, 'formidable' ) !== 0 ) {
-			return;
-		}
-
-		if ( FrmAppHelper::pro_is_installed() ) {
+		if ( ! self::is_formidable_page() || FrmAppHelper::pro_is_installed() ) {
 			return;
 		}
 
@@ -179,6 +175,131 @@ class FrmAppController {
 </div>
 <?php
 		}
+	}
+
+	/**
+	 * Check if this is a Formidable page: forms, entries, settings, styles
+	 *
+	 * @since 3.04.03
+	 */
+	private static function is_formidable_page() {
+		$page = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
+		return ( strpos( $page, 'formidable' ) === 0 );
+	}
+
+	/**
+	 * Add admin notices as needed for reviews
+	 *
+	 * @since 3.04.03
+	 */
+	private static function review_request() {
+
+		// Only show the review request to high-level users on Formidable pages
+		if ( ! current_user_can( 'frm_change_settings' ) || ! self::is_formidable_page() ) {
+			return;
+		}
+
+		// Verify that we can do a check for reviews
+		$review = self::get_review_status();
+
+		// Check if it has been dismissed or if we can ask later
+		$dismissed = $review['dismissed'];
+		if ( $dismissed === 'later' && $review['asked'] < 3 ) {
+			$dismissed = false;
+		}
+
+		$week_ago = ( $review['time'] + WEEK_IN_SECONDS ) <= time();
+		$load     = empty( $dismissed ) && $week_ago;
+
+		if ( $load ) {
+			self::review( $review );
+		}
+	}
+
+	/**
+	 * When was the review request last dismissed?
+	 *
+	 * @since 3.04.03
+	 * @return array
+	 */
+	private static function get_review_status() {
+		$user_id = get_current_user_id();
+		$review  = get_user_meta( $user_id, 'frm_reviewed', true );
+		$default = array(
+			'time'      => time(),
+			'dismissed' => false,
+			'asked'     => 0,
+		);
+
+		if ( empty( $review ) ) {
+			// Set the review request to show in a week
+			update_user_meta( $user_id, 'frm_reviewed', $default );
+		}
+
+		$review = array_merge( $default, (array) $review );
+		$review['asked'] = (int) $review['asked'];
+		return $review;
+	}
+
+	/**
+	 * Maybe show review request
+	 *
+	 * @since 3.04.03
+	 * @param int $asked
+	 */
+	private static function review( $review ) {
+
+		// show the review request 3 times, depending on the number of entries
+		$show_intervals = array( 50, 200, 500 );
+		$asked = $review['asked'];
+
+		if ( ! isset( $show_intervals[ $asked ] ) ) {
+			return;
+		}
+
+		$entries = FrmEntry::getRecordCount();
+		$count   = $show_intervals[ $asked ];
+		$user    = wp_get_current_user();
+
+		// Only show review request if the site has collected enough entries
+		if ( $entries < $count ) {
+			// check the entry count again in a week
+			$review['time'] = time();
+			update_user_meta( $user->ID, 'frm_reviewed', $review );
+			return;
+		}
+
+		$name = $user->first_name;
+		if ( ! empty( $name ) ) {
+			$name = ' ' . $name;
+		}
+
+		// We have a candidate! Output a review message.
+		include( FrmAppHelper::plugin_path() . '/classes/views/shared/review.php' );
+	}
+
+	/**
+	 * Save the request to hide the review
+	 *
+	 * @since 3.04.03
+	 */
+	public static function dismiss_review() {
+		FrmAppHelper::permission_check( 'frm_change_settings' );
+		check_ajax_referer( 'frm_ajax', 'nonce' );
+
+		$user_id   = get_current_user_id();
+		$review    = get_user_meta( $user_id, 'frm_reviewed', true );
+		if ( empty( $review ) ) {
+			$review = array();
+		}
+
+		$dismissed = FrmAppHelper::get_post_param( 'link', 'no', 'sanitize_text_field' );
+		$review['time']      = time();
+		$review['dismissed'] = $dismissed === 'done' ? true : 'later';
+		$review['asked']     = isset( $review['asked'] ) ? $review['asked'] + 1 : 1;
+
+		update_user_meta( $user_id, 'frm_reviewed', $review );
+		wp_die();
 	}
 
 	/**

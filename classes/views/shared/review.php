@@ -1,0 +1,90 @@
+<div class="notice notice-info is-dismissible frm-review-notice">
+	<div class="frm-satisfied">
+		<p>
+			<?php printf( esc_html__( 'Hey%1$s, I noticed you collected over %2$d form submissions from Formidable Forms. That’s awesome!', 'formidable' ), esc_html( $name ), $count ); ?><br/>
+			<?php esc_html_e( 'Are you enjoying Formidable Forms?', 'formidable'); ?>
+		</p>
+		<br/>
+		<a href="#" class="frm_reverse_button frm_animate_bg show-frm-feedback" data-link="feedback"><?php esc_html_e( 'Not Really'); ?></a>
+		<a href="#" class="frm_orange_button frm_animate_bg show-frm-feedback" data-link="review"><?php esc_html_e( 'Yes!'); ?></a>
+	</div>
+	<div class="frm-review-request frm_hidden">
+		<p><?php esc_html_e( 'That\'s great news! Could you please do me a BIG favor and give Formidable Forms a review to help me grow my little business and boost our motivation?', 'formidable' ); ?></p>
+		<p><strong>~ Steph Wells</strong><br/>
+			<span><?php esc_html_e( 'Founder and Lead Developer of Formidable Forms', 'formidable' ); ?><span>
+		</p>
+		<a href="#" class="frm-dismiss-review-notice frm_reverse_button" data-link="no" target="_blank" rel="noopener noreferrer">
+			<?php esc_html_e( 'No thanks, maybe later', 'formidable' ); ?>
+		</a>
+		<a href="https://wordpress.org/support/plugin/formidable/reviews/?filter=5#new-post" class="frm-dismiss-review-notice frm-review-out frm_orange_button" data-link="yes" target="_blank" rel="noopener">
+			<?php esc_html_e( 'Ok, you deserve it', 'formidable' ); ?>
+		</a>
+		<a href="#" class="frm-dismiss-review-notice" data-link="done" target="_blank" rel="noopener noreferrer">
+			<?php esc_html_e( 'I already did', 'formidable' ); ?>
+		</a>
+	</div>
+	<div class="frm-feedback-request frm_hidden">
+		<p><?php esc_html_e( 'Sorry to hear that you aren\'t enjoying building with Formidable. We would love a chance to improve. Could you take a minute and let us know what we can do better?', 'formidable' ); ?></p>
+		<p><strong>~ Steph Wells</strong><br/>
+			<span><?php esc_html_e( 'Founder and Lead Developer of Formidable Forms', 'formidable' ); ?></span>
+		</p>
+		<div id="frmapi-feedback" class="frmapi-form" data-url="https://community.formidableforms.com/wp-json/frm/v2/forms/feedback?return=html">
+			<span class="spinner frm_visible_spinner"></span>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	jQuery( document ).ready( function( $ ) {
+		$(document).on( 'click', '.frm-dismiss-review-notice, .frm-review-notice button, .frm-review-notice .notice-dismiss', function( event ) {
+
+			if ( ! $( this ).hasClass( 'frm-review-out' ) ) {
+				event.preventDefault();
+			}
+			var link = $( this ).data('link');
+			if ( typeof link === 'undefined' ) {
+				link = 'no';
+			}
+
+			frmDismissReview( link );
+			$( '.frm-review-notice' ).remove();
+		} );
+
+		$(document).on('click', '.frm-feedback-request button', function() {
+			frmDismissReview( 'done' );
+		} );
+
+		$('.show-frm-feedback').click( function( e ){
+			e.preventDefault();
+			var link = $(this).data('link');
+			var className = '.frm-' + link + '-request';
+			jQuery('.frm-satisfied').hide();
+			jQuery(className).show();
+
+			if ( className === '.frm-feedback-request' ) {
+				var frmapi = $('#frmapi-feedback');
+				frmapiGetData( frmapi );
+			}
+		});
+	} );
+
+	function frmDismissReview( link ) {
+		jQuery.post( ajaxurl, {
+			action: 'frm_dismiss_review',
+			link: link,
+			nonce: '<?php echo esc_html( wp_create_nonce( 'frm_ajax' ) ); ?>'
+		} );
+	}
+
+	function frmapiGetData( frmcont ) {
+		jQuery.ajax({
+			dataType:'json',
+			url:frmcont.data('url'),
+			success:function(json){
+				var form = json.renderedHtml;
+				form = form.replace(/<script\b[^<]*(community.formidableforms.com\/wp-includes\/js\/jquery\/jquery)[^<]*><\/script>/gi, '' );
+				form = form.replace(/<link\b[^>]*(formidableforms.css)[^>]*>/gi, '' );
+				frmcont.html(form);
+			}
+		});
+	}
+</script>

@@ -85,6 +85,7 @@ class FrmHooksController {
 		add_action( 'admin_init', 'FrmAppController::admin_init', 11 );
 		add_filter( 'plugin_action_links_' . FrmAppHelper::plugin_folder() . '/formidable.php', 'FrmAppController::settings_link' );
 		add_filter( 'admin_footer_text', 'FrmAppController::set_footer_text' );
+		add_action( 'wp_ajax_frm_dismiss_review', 'FrmAppController::dismiss_review' );
 
 		// Addons Controller
 		add_action( 'admin_menu', 'FrmAddonsController::menu', 100 );

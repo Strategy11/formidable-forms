@@ -224,6 +224,8 @@ class FrmMigrate {
 
 		delete_option( 'frm_options' );
 		delete_option( 'frm_db_version' );
+		delete_option( 'frm_install_running' );
+		delete_option( 'frm_lite_settings_upgrade' );
 
         //delete roles
         $frm_roles = FrmAppHelper::frm_capabilities();
