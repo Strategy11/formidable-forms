@@ -59,7 +59,7 @@ class FrmAddon {
 		$this->is_license_revoked();
 		$license = $this->license;
 
-		add_action( 'after_plugin_row_' . plugin_basename( $this->plugin_file ), array( $this, 'show_license_message' ), 10, 2 );
+		add_action( 'after_plugin_row_' . plugin_basename( $this->plugin_file ), array( $this, 'maybe_show_license_message' ), 10, 2 );
 
 		if ( ! empty( $license ) ) {
 
@@ -236,12 +236,22 @@ class FrmAddon {
 		delete_option( FrmAddonsController::get_cache_key( $this->license ) );
 	}
 
-	public function show_license_message( $file, $plugin ) {
+	/**
+	 * The Pro version includes the show_license_message function.
+	 * We need an extra check before we allow it to show a message.
+	 *
+	 * @since 3.04.03
+	 */
+	public function maybe_show_license_message( $file, $plugin ) {
 		if ( $this->is_expired_addon || isset( $plugin['package'] ) ) {
 			// let's not show a ton of duplicate messages
 			return;
 		}
 
+		$this->show_license_message( $file, $plugin );
+	}
+
+	public function show_license_message( $file, $plugin ) {
 		$message = '';
 		if ( empty( $this->license ) ) {
 			/* translators: %1$s: Plugin name, %2$s: Start link HTML, %3$s: end link HTML */
