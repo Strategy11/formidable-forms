@@ -41,9 +41,9 @@ class FrmReviews {
 	 */
 	private function set_review_status() {
 		$user_id = get_current_user_id();
-		$review  = array();//get_user_meta( $user_id, $this->option_name, true );
+		$review  = get_user_meta( $user_id, $this->option_name, true );
 		$default = array(
-			'time'      => time() - WEEK_IN_SECONDS,
+			'time'      => time(),
 			'dismissed' => false,
 			'asked'     => 0,
 		);
