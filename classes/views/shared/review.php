@@ -1,16 +1,20 @@
 <div class="notice notice-info is-dismissible frm-review-notice">
 	<div class="frm-satisfied">
 		<p>
-			<?php printf( esc_html__( 'Hey%1$s, I noticed you collected over %2$d form submissions from Formidable Forms. That’s awesome!', 'formidable' ), esc_html( $name ), $count ); ?><br/>
-			<?php esc_html_e( 'Are you enjoying Formidable Forms?', 'formidable'); ?>
+			<?php printf( esc_html__( 'Congratulations%1$s! You have collected %2$d form submissions.', 'formidable' ), esc_html( $name ), absint( $entries ) ); ?><br/><br/>
+			<?php esc_html_e( 'Are you enjoying Formidable Forms?', 'formidable' ); ?>
 		</p>
 		<br/>
-		<a href="#" class="frm_reverse_button frm_animate_bg show-frm-feedback" data-link="feedback"><?php esc_html_e( 'Not Really'); ?></a>
-		<a href="#" class="frm_orange_button frm_animate_bg show-frm-feedback" data-link="review"><?php esc_html_e( 'Yes!'); ?></a>
+		<a href="#" class="frm_reverse_button frm_animate_bg show-frm-feedback" data-link="feedback">
+			<?php esc_html_e( 'Not Really', 'formidable' ); ?>
+		</a>
+		<a href="#" class="frm_orange_button frm_animate_bg show-frm-feedback" data-link="review">
+			<?php esc_html_e( 'Yes!', 'formidable' ); ?>
+		</a>
 	</div>
 	<div class="frm-review-request frm_hidden">
-		<p><?php esc_html_e( 'That\'s great news! Could you please do me a BIG favor and give Formidable Forms a review to help me grow my little business and boost our motivation?', 'formidable' ); ?></p>
-		<p><strong>~ Steph Wells</strong><br/>
+		<p><?php esc_html_e( 'Awesome! Could you do me a BIG favor and give Formidable Forms a review to help me grow my little business and boost our motivation?', 'formidable' ); ?></p>
+		<p>- Steph Wells<br/>
 			<span><?php esc_html_e( 'Founder and Lead Developer of Formidable Forms', 'formidable' ); ?><span>
 		</p>
 		<a href="#" class="frm-dismiss-review-notice frm_reverse_button" data-link="no" target="_blank" rel="noopener noreferrer">
@@ -24,10 +28,8 @@
 		</a>
 	</div>
 	<div class="frm-feedback-request frm_hidden">
-		<p><?php esc_html_e( 'Sorry to hear that you aren\'t enjoying building with Formidable. We would love a chance to improve. Could you take a minute and let us know what we can do better?', 'formidable' ); ?></p>
-		<p><strong>~ Steph Wells</strong><br/>
-			<span><?php esc_html_e( 'Founder and Lead Developer of Formidable Forms', 'formidable' ); ?></span>
-		</p>
+		<p><?php esc_html_e( 'Sorry to hear you aren\'t enjoying building with Formidable. We would love a chance to improve. Could you take a minute and let us know what we can do better?', 'formidable' ); ?></p>
+
 		<div id="frmapi-feedback" class="frmapi-form" data-url="https://community.formidableforms.com/wp-json/frm/v2/forms/feedback?return=html">
 			<span class="spinner frm_visible_spinner"></span>
 		</div>
@@ -35,7 +37,7 @@
 </div>
 <script type="text/javascript">
 	jQuery( document ).ready( function( $ ) {
-		$(document).on( 'click', '.frm-dismiss-review-notice, .frm-review-notice button, .frm-review-notice .notice-dismiss', function( event ) {
+		$(document).on( 'click', '.frm-dismiss-review-notice, .frm-review-notice .notice-dismiss', function( event ) {
 
 			if ( ! $( this ).hasClass( 'frm-review-out' ) ) {
 				event.preventDefault();

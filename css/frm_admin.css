@@ -565,15 +565,20 @@ input.frm_insert_in_template{
 
 .frm-review-notice p > span{
 	font-size:14px;
+	opacity:0.75;
 }
 
 #frmapi-feedback{
 	margin-top:30px;
 }
 
+.frm-review-notice .frm_error,
 .frm-review-notice label{
 	color:#444;
 	text-align:left;
+}
+
+.frm-review-notice label{
 	font-size:14px;
 }
 
@@ -792,6 +797,7 @@ div.frm_updated_message{
 	margin:5px 15px 10px;
 }
 
+#form_global_settings .frm_updated_message,
 #frm-addons-page .frm_error_style,
 .frm_license_box .frm_updated_message,
 .frm_license_box .frm_error_style{

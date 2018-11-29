@@ -864,7 +864,7 @@ function frmFrontFormJS(){
 				}
 			}
 
-			if ( jQuery('body').hasClass('wp-admin') ) {
+			if ( jQuery('body').hasClass('wp-admin') && jQuery(object).closest('.frmapi-form').length < 1 ) {
 				return;
 			}
 
