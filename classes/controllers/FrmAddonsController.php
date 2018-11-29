@@ -3,6 +3,10 @@
 class FrmAddonsController {
 
 	public static function menu() {
+		if ( ! current_user_can( 'activate_plugins' ) ) {
+			return;
+		}
+
 		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Add-Ons', 'formidable' ), __( 'Add-Ons', 'formidable' ), 'frm_view_forms', 'formidable-addons', 'FrmAddonsController::list_addons' );
 
 		if ( ! FrmAppHelper::pro_is_installed() ) {
