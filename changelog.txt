@@ -1,4 +1,11 @@
 == Changelog ==
+= 3.04.03 =
+* New: Improved autoupdating and installation for form add-ons
+* Tweak: Only show the form add-ons page to those who can activate plugins
+* Fix: Radio button shadows had a box around them in some browsers
+* Fix: Don't mark an entry as a duplicate when the second entry includes more fields than the first
+* Code: Move deprecated code to its own folder
+
 = 3.04.02 =
 * New: When HTML5 is used, auto add the http in a url field if it is omitted by the user
 

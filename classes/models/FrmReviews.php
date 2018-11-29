@@ -117,6 +117,11 @@ class FrmReviews {
 			$review = array();
 		}
 
+		if ( isset( $review['dismissed'] ) && $review['dismissed'] === 'done' ) {
+			// if feedback was submitted, don't update it again when the review is dismissed
+			wp_die();
+		}
+
 		$dismissed = FrmAppHelper::get_post_param( 'link', 'no', 'sanitize_text_field' );
 		$review['time']      = time();
 		$review['dismissed'] = $dismissed === 'done' ? true : 'later';
