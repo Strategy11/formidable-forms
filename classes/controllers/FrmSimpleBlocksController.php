@@ -32,7 +32,7 @@ class FrmSimpleBlocksController {
 
 		wp_enqueue_style(
 			'formidable_block-editor-css',
-			FrmAppHelper::plugin_url(). '/css/blocks.editor.build.css',
+			FrmAppHelper::plugin_url() . '/css/blocks.editor.build.css',
 			array( 'wp-edit-blocks' ),
 			$version
 		);
@@ -94,24 +94,6 @@ class FrmSimpleBlocksController {
 
 		return $views_options;
 	}
-
-	/**
-	 * Enqueue Gutenberg blocks' assets for both frontend and admin.
-	 *
-	 * `wp-blocks`: includes block type registration and related functions.
-	 *
-	 */
-	public static function formidable_block_assets() {
-		$version = FrmAppHelper::plugin_version();
-		wp_enqueue_style(
-			'formidable_block-style-css',
-			FrmAppHelper::plugin_url(). '/css/blocks.style.build.css',
-			array( 'wp-blocks' ),
-			$version
-		);
-	}
-
-	//wp_register_script( 'formidable_admin_global', FrmAppHelper::plugin_url() . '/js/formidable_admin_global.js', array( 'jquery' ), $version );
 
 	/**
 	 * Registers simple form and View blocks

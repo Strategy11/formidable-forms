@@ -76,10 +76,8 @@ class FrmHooksController {
         add_filter( 'frm_add_form_style_class', 'FrmStylesController::get_form_style_class', 10, 2 );
         add_filter( 'frm_show_entry_styles', 'FrmStylesController::show_entry_styles' );
 
-        //Simple Blocks Controller
+		//Simple Blocks Controller
 		add_action( 'enqueue_block_editor_assets', array( 'FrmSimpleBlocksController','formidable_block_editor_assets' ) );
-		//TODO -- Laura remove this once confirm don't want it as a placeholder
-		//add_action( 'enqueue_block_assets', array( 'FrmSimpleBlocksController', 'formidable_block_assets' ) );
 		add_action( 'init', array( 'FrmSimpleBlocksController', 'register_guten_blocks' ) );
     }
 
