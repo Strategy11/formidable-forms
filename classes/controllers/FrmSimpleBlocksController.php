@@ -21,12 +21,14 @@ class FrmSimpleBlocksController {
 
 		$views = $pro ? FrmProDisplay::getAll() : '';
 
-		wp_localize_script( 'formidable_simple-block-js', 'formidable_simple_script_vars', array(
+		wp_localize_script(
+			'formidable_simple-block-js',
+			'formidable_simple_script_vars', array(
 				'forms'        => FrmForm::getAll(),
 				'pro'          => $pro,
 				'views'        => $views,
-				'show_counts'  => $pro && $views ? self:: get_show_counts() : '',
-				'view_options' => $pro && $views ? self:: get_frm_options_for_views() : '',
+				'show_counts'  => $pro && $views ? self::get_show_counts() : '',
+				'view_options' => $pro && $views ? self::get_frm_options_for_views() : '',
 			)
 		);
 
@@ -65,18 +67,10 @@ class FrmSimpleBlocksController {
 			return;
 		}
 
-		$results = $wpdb->get_results( $wpdb->prepare(
-			"SELECT pm.post_id, pm.meta_value, pm.meta_key FROM {$wpdb->postmeta} pm
-
-        LEFT JOIN {$wpdb->posts} p ON p.ID = pm.post_id
-
-        WHERE ( pm.meta_key = %s )
-        AND p.post_type = %s
-
-    ", $key, $post_type ), OBJECT_K );
-
+		$results = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT pm.post_id, pm.meta_value, pm.meta_key FROM {$wpdb->postmeta} pm LEFT JOIN {$wpdb->posts} p ON p.ID = pm.post_id WHERE ( pm.meta_key = %s ) AND p.post_type = %s", $key, $post_type ), OBJECT_K );
 		return $results;
-
 	}
 
 	/**
@@ -99,8 +93,9 @@ class FrmSimpleBlocksController {
 	 * Registers simple form and View blocks
 	 *
 	 */
-	public function register_guten_blocks() {
-		register_block_type( 'formidable/simple-form', array(
+	public static function register_guten_blocks() {
+		register_block_type(
+			'formidable/simple-form', array(
 			'attributes'      => array(
 				'form_id'     => array(
 					'type' => 'string',
@@ -116,10 +111,11 @@ class FrmSimpleBlocksController {
 				),
 			),
 			'editor_script'   => 'formidable_simple-block-js',
-			'render_callback' => array( 'FrmSimpleBlocksController', 'simple_form_render' )
+			'render_callback' => array( 'FrmSimpleBlocksController', 'simple_form_render' ),
 		) );
 
-		register_block_type( 'formidable/simple-view', array(
+		register_block_type(
+			'formidable/simple-view', array(
 			'attributes'      => array(
 				'view_id'           => array(
 					'type' => 'string',
@@ -133,10 +129,10 @@ class FrmSimpleBlocksController {
 				'use_default_limit' => array(
 					'type'    => 'boolean',
 					'default' => false,
-				)
+				),
 			),
 			'editor_script'   => 'formidable_simple-block-js',
-			'render_callback' => array( 'FrmSimpleBlocksController', 'simple_view_render' )
+			'render_callback' => array( 'FrmSimpleBlocksController', 'simple_view_render' ),
 		) );
 	}
 
@@ -147,7 +143,7 @@ class FrmSimpleBlocksController {
 	 *
 	 * @return string
 	 */
-	public function simple_form_render( $attributes ) {
+	public static function simple_form_render( $attributes ) {
 		$params = '';
 		$params .= self::create_attribute_text( 'id', $attributes['form_id'] );
 		$params .= self::create_attribute_text( 'title', $attributes['title'] );
@@ -165,7 +161,7 @@ class FrmSimpleBlocksController {
 	 *
 	 * @return string
 	 */
-	private function create_attribute_text( $name, $value ) {
+	private static function create_attribute_text( $name, $value ) {
 		return isset( $value ) ? ' ' . $name . ' =' . $value : '';
 	}
 
@@ -176,7 +172,7 @@ class FrmSimpleBlocksController {
 	 *
 	 * @return string
 	 */
-	public function simple_view_render( $attributes ) {
+	public static function simple_view_render( $attributes ) {
 		$params = '';
 		$params .= self::create_attribute_text( 'id', $attributes['view_id'] );
 		$params .= self::create_attribute_text( 'filter', $attributes['filter'] );

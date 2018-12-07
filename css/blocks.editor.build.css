@@ -27,14 +27,21 @@
   margin-top: 32px;
   margin-bottom: 12px; }
 
-.frm-block-title {
-  color: #4d4d4d; }
+.editor-styles-wrapper h2.frm-block-title {
+  color: #4d4d4d;
+  font-weight: 500;
+  font-size: 1.3em;
+}
 
 .frm-block-intro-content .cls-1 {
   fill: #4d4d4d; }
 
 .frm-block-intro-content .cls-1.orange {
   fill: #f05a24; }
+
+.frm-block-selector-screen {
+  margin-bottom: 15px;
+}
 
 .components-panel__row.frm-row-small-top-margin {
   margin-top: 5px; }
