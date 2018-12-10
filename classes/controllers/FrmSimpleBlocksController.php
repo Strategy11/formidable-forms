@@ -74,7 +74,8 @@ class FrmSimpleBlocksController {
 				$key,
 				$post_type
 			),
-			OBJECT_K );
+			OBJECT_K
+		);
 
 		return $results;
 	}
