@@ -23,7 +23,8 @@ class FrmSimpleBlocksController {
 
 		wp_localize_script(
 			'formidable_simple-block-js',
-			'formidable_simple_script_vars', array(
+			'formidable_simple_script_vars',
+			array(
 				'forms'        => FrmForm::getAll(),
 				'pro'          => $pro,
 				'views'        => $views,
@@ -69,7 +70,12 @@ class FrmSimpleBlocksController {
 
 		$results = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT pm.post_id, pm.meta_value, pm.meta_key FROM {$wpdb->postmeta} pm LEFT JOIN {$wpdb->posts} p ON p.ID = pm.post_id WHERE ( pm.meta_key = %s ) AND p.post_type = %s", $key, $post_type ), OBJECT_K );
+				"SELECT pm.post_id, pm.meta_value, pm.meta_key FROM {$wpdb->postmeta} pm LEFT JOIN {$wpdb->posts} p ON p.ID = pm.post_id WHERE ( pm.meta_key = %s ) AND p.post_type = %s",
+				$key,
+				$post_type
+			),
+			OBJECT_K );
+
 		return $results;
 	}
 
@@ -99,45 +105,49 @@ class FrmSimpleBlocksController {
 		}
 
 		register_block_type(
-			'formidable/simple-form', array(
-			'attributes'      => array(
-				'form_id'     => array(
-					'type' => 'string',
+			'formidable/simple-form',
+			array(
+				'attributes'      => array(
+					'form_id'     => array(
+						'type' => 'string',
+					),
+					'title'       => array(
+						'type' => 'string',
+					),
+					'description' => array(
+						'type' => 'string',
+					),
+					'minimize'    => array(
+						'type' => 'string',
+					),
 				),
-				'title'       => array(
-					'type' => 'string',
-				),
-				'description' => array(
-					'type' => 'string',
-				),
-				'minimize'    => array(
-					'type' => 'string',
-				),
-			),
-			'editor_script'   => 'formidable_simple-block-js',
-			'render_callback' => array( 'FrmSimpleBlocksController', 'simple_form_render' ),
-		) );
+				'editor_script'   => 'formidable_simple-block-js',
+				'render_callback' => array( 'FrmSimpleBlocksController', 'simple_form_render' ),
+			)
+		);
 
 		register_block_type(
-			'formidable/simple-view', array(
-			'attributes'      => array(
-				'view_id'           => array(
-					'type' => 'string',
+			'formidable/simple-view',
+			array(
+				'attributes'      => array(
+					'view_id'           => array(
+						'type' => 'string',
+					),
+					'filter'            => array(
+						'type' => 'string',
+					),
+					'limit'             => array(
+						'type' => 'string',
+					),
+					'use_default_limit' => array(
+						'type'    => 'boolean',
+						'default' => false,
+					),
 				),
-				'filter'            => array(
-					'type' => 'string',
-				),
-				'limit'             => array(
-					'type' => 'string',
-				),
-				'use_default_limit' => array(
-					'type'    => 'boolean',
-					'default' => false,
-				),
-			),
-			'editor_script'   => 'formidable_simple-block-js',
-			'render_callback' => array( 'FrmSimpleBlocksController', 'simple_view_render' ),
-		) );
+				'editor_script'   => 'formidable_simple-block-js',
+				'render_callback' => array( 'FrmSimpleBlocksController', 'simple_view_render' ),
+			)
+		);
 	}
 
 	/**
