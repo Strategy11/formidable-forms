@@ -94,6 +94,10 @@ class FrmSimpleBlocksController {
 	 *
 	 */
 	public static function register_guten_blocks() {
+		if ( ! is_callable( 'register_block_type' ) ) {
+			return;
+		}
+
 		register_block_type(
 			'formidable/simple-form', array(
 			'attributes'      => array(
