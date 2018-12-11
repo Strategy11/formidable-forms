@@ -3,10 +3,10 @@
 class FrmSimpleBlocksController {
 
 	/**
-	 * Enqueue Formidable Simple Blocks' assets for editor in admin.
+	 * Enqueue Formidable Simple Blocks' js for editor in admin.
 	 *
 	 */
-	public static function formidable_block_editor_assets() {
+	public static function formidable_block_editor_js() {
 		$version = FrmAppHelper::plugin_version();
 
 		wp_enqueue_script(
@@ -32,6 +32,14 @@ class FrmSimpleBlocksController {
 				'view_options' => $pro && $views ? self::get_frm_options_for_views() : '',
 			)
 		);
+	}
+
+	/**
+	 * Enqueue Formidable Simple Blocks' CSS for editor in admin.
+	 *
+	 */
+	public static function formidable_block_editor_css() {
+		$version = FrmAppHelper::plugin_version();
 
 		wp_enqueue_style(
 			'formidable_block-editor-css',
