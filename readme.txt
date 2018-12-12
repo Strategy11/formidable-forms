@@ -1,8 +1,8 @@
 === Contact Forms, Surveys & Quiz Forms Plugin by Formidable Forms Builder for WordPress ===
 Contributors: formidableforms, sswells, srwells, jamie.wahlin
-Tags: contact form, form builder, custom form, forms, form, form maker, form creator
+Tags: forms, contact form, form builder, survey, form maker, form, form creator
 Requires at least: 4.5
-Tested up to: 4.9.8
+Tested up to: 5.0
 Requires PHP: 5.3
 Stable tag: 3.04.03
 
@@ -136,7 +136,7 @@ Here are some example web calculators you can quickly add to your site:
 * BMI Calculator
 * User Age Calculator
 * Online Quote Calculator
-* Net Promoter Score (NPS) Calculator
+* Net Promoter Score (NPS) Survey Calculator
 
 ... and our powerful form calculations allow you to build just about any other type of calculator form.
 
@@ -239,15 +239,15 @@ In addition to all the form builder features listed above, power up contact form
 * <a href="https://formidableforms.com/downloads/aweber/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">AWeber Forms</a>. Subscribe users to an AWeber mailing list when a newsletter signup form or contact form is submitted.
 * <a href="https://formidableforms.com/downloads/mailpoet-newsletters/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">MailPoet Newsletter forms</a>. Fill your email marketing lists from newsletter signup forms and contact forms. Then send WordPress newsletters from your own site using MailPoet.
 * <a href="https://formidableforms.com/downloads/highrise/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Highrise Forms</a>. Add leads to your Highrise CRM account any time a contact form, registration form, or payment form is submitted.
-* <a href="https://formidableforms.com/downloads/salesforce/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Salesforce Forms</a>. Create leads, contacts, and any other Salesforce objects directly from your contact forms and advanced forms.
-* <a href="https://formidableforms.com/downloads/activecampaign-wordpress-plugin/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">ActiveCampaign Forms</a>. Let contact forms double duty as payment forms, post creation forms, and an ActiveCampaign integration.
+* <a href="https://formidableforms.com/downloads/salesforce/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Salesforce Forms</a>. Create leads, contacts, and any other Salesforce objects directly from your contact page and advanced forms.
+* <a href="https://formidableforms.com/downloads/activecampaign-wordpress-plugin/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">ActiveCampaign Forms</a>. Let your contact form pull double duty as a payment form, post creation form, user registration form, and an ActiveCampaign integration.
 * <a href="https://formidableforms.com/downloads/hubspot-wordpress/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">HubSpot Forms</a>. Route contact form and lead form data to HubSpot CRM.
 * <a href="https://formidableforms.com/downloads/twilio/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Twilio for SMS Forms</a>. Collect votes and poll responses via SMS text or send SMS notifications when form entries are submitted or updated. Get notified instantly when an important contact form or payment form is completed.
 * <a href="https://formidableforms.com/downloads/wp-multilingual/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">WPML Forms</a>. Translate contact forms, registration forms, and advanced forms into multiple languages using our integrated multilingual forms plugin.
 * <a href="https://formidableforms.com/downloads/polylang/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Polylang Forms</a>. Get the form creator with Polylang bilingual or multilingual contact forms.
 * <a href="https://formidableforms.com/downloads/zapier/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Zapier Forms</a>. Connect with hundreds of different applications through Zapier. Insert a new row in a Google docs spreadsheet, post on Twitter, or add a new Dropbox file with your form. With Zapier, you have the option to trigger thousands of other actions from a contact form, lead form, quote form, quiz form, or any other advanced online form.
-* <a href="https://formidableforms.com/downloads/bootstrap/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Bootstrap Form Styles</a>. Instantly add Bootstrap form styling to contact forms, surveys, and advanced forms.
-* <a href="https://formidableforms.com/downloads/bootstrap-modal/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Bootstrap Modal Form</a>. Open contact forms, login forms, views, other shortcodes, and sections of content in a Bootstrap modal popup.
+* <a href="https://formidableforms.com/downloads/bootstrap/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Bootstrap Form Styles</a>. Instantly add Bootstrap form styling to contact forms, registration forms, surveys, and advanced forms.
+* <a href="https://formidableforms.com/downloads/bootstrap-modal/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Bootstrap Modal Form</a>. Open contact forms, login forms, Formidable views, other shortcodes, and sections of content in a Bootstrap modal popup.
 
 After reading this feature list, you can probably imagine why Formidable Forms is the most advanced WordPress form plugin on the market, designed for far more than just contact forms.
 
@@ -255,26 +255,26 @@ Give Formidable Forms a try.
 
 Want to unlock the full power? <a href="https://formidableforms.com/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Upgrade to our Pro version</a> to get all the features for smart contact forms and full web applications.
 
-= Credits =
+= Form Plugin Credits =
 This form builder plugin is created by Steve and Steph Wells along with our amazing Formidable Forms Team.
 
 Formidable Forms is now part of the <a href="https://www.wpbeginner.com/">WPBeginner</a> accelerator, and <a href="https://syedbalkhi.com/">Syed Balkhi</a> is an Advisor in our company.
 
 == Installation ==
-1. Go to your Plugins -> Add New page in your WP admin area
+1. Go to the Plugins -> 'Add New' page in your WP admin area
 2. Search for 'Formidable'
 3. Click the 'Install Now' button
 4. Activate the plugin through the 'Plugins' menu
 5. Go to the Formidable Forms menu
-6. Click the 'Add New' button to go to the form generator page and create a new contact form, email form, or advanced form
-7. Insert your newly created contact form, quiz, survey, registration form, or advanced form on a page, post, or widget using a shortcode [formidable id=x], Alternatively use `<?php echo FrmFormsController::show_form(2, $key = '', $title=true, $description=true); ?>` to add a contact form in a page template
+6. Click the 'Add New' button to go to the form generator page and create a new contact form, email form, registration form, or advanced form
+7. Insert your newly created contact form, quiz, survey, registration form, or advanced form on a Contact Us page, post, or widget using a shortcode [formidable id=x], Alternatively use `<?php echo FrmFormsController::show_form(2, $key = '', $title=true, $description=true); ?>` to add a contact form in a contact page template
 
 == Screenshots ==
 1. Build professional WP contact forms without any code.
-2. Form builder plugin page for creating contact forms, surveys, registration forms, quote forms, payment forms, calculator forms, and many more.
-3. Field Options and CSS Layout Classes in the form creator
+2. Form builder plugin page for creating a contact form, survey, registration form, quote form, payment form, calculator form, quiz form, and many more.
+3. Field Options and CSS Layout Classes on the form creator page
 4. Field Options for checkbox fields in the form maker
-5. View, create, edit, and delete entries on the back end from a contact form, employment application form, to do list, and more.
+5. View, create, edit, and delete entries on the back end from a contact form, employment application form, to do list, order form, and more.
 6. Add a WordPress contact form into your sidebar with a widget
 
 == Frequently Asked Questions ==
@@ -282,9 +282,9 @@ Formidable Forms is now part of the <a href="https://www.wpbeginner.com/">WPBegi
 
 The fastest way to build a contact form is to use the contact form template we built for you. After you activate Formidable Forms, insert [formidable id=contact-form] on the WordPress page of your choice. That's it!
 
-Want to make a new contact form? Go to the Formidable -> Forms page and click "add new". Choose the Contact Us form template and click "Load Template". Now Save your contact form.
+Want to make a new contact form? Go to the Formidable -> Forms page and click "add new". Choose the Contact Us form template on the form buider page and click "Load Template". Save your new contact form.
 
-Next, go to edit the page where you would like to publish your contact form. Click the "Formidable" button to open the shortcode builder. Choose your contact form and insert it into your WordPress page. Save the page and you're done. Now you've got a beautiful WP contact form ready to collect and store your leads.
+Next, go to edit the page where you would like to publish your contact form. Click the "Formidable" button to open the shortcode builder. Choose your contact form and insert it into your WordPress page. Save the contact page and you're done. Now you've got a beautiful WP contact form ready to collect and store your leads.
 
 Get more detail on <a href="https://formidableforms.com/wordpress-contact-form-template-to-unique/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">using the contact form template</a>.
 
@@ -292,7 +292,7 @@ Get more detail on <a href="https://formidableforms.com/wordpress-contact-form-t
 
 When you do not receive emails from your contact forms, try the following steps:
 
-   1. Double check to make sure your email address is present and correct in your Email form action on the form "Settings" page. The [admin_email] shortcode uses the email address from your WordPress Settings -> General page.
+   1. Double check to make sure your email address is present and correct in your Email form action on the form "Settings" page of the form builder. The [admin_email] shortcode uses the email address from your WordPress Settings -> General page.
    2. Make sure you are receiving other emails from your site (ie comment notifications, forgot password...). If these emails don't work on your site, form emails will not work either.
    3. Check your SPAM box.
    4. Try a different email address in your contact form settings.
@@ -304,10 +304,10 @@ When you do not receive emails from your contact forms, try the following steps:
 
 The contact form and advanced form field labels and descriptions are changed with in-place edit in the form builder. Just click on the text you would like to change, and it will turn into a text field.
 
-<a href="https://formidableforms.com/formidable-faqs/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">See more contact form and advanced online form FAQs</a>.
+<a href="https://formidableforms.com/formidable-faqs/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">See more FAQs</a> for making an amazing contact form or advanced online form.
 
 = What type of WordPress forms can I build with Formidable Forms? =
-Formidable Forms drag & drop form builder combined with our add-ons is the most powerful WordPress contact form plugin and advanced form plugin on the market. Here are some types of WordPress forms you can create:
+Formidable Forms drag & drop form builder combined with our add-ons is the most powerful contact form plugin and advanced form builder plugin on the market. Here are some types of WordPress forms you can create:
 
 * Simple Contact Forms
 * Advanced Contact Forms
@@ -372,7 +372,7 @@ Formidable Forms drag & drop form builder combined with our add-ons is the most 
 * Recipe Reviews Form
 
 = I'd like access to all advanced form, view, and reporting features. How can I get them? =
-You can get access to more features, integrations, and support by <a href="https://formidableforms.com/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">upgrading to our Pro version</a>. Purchasing a Pro license gets you access to the full version of Formidable Forms, priority support, and Formidable Forms Add-ons!
+You can get access to more features, integrations, and support by <a href="https://formidableforms.com/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">upgrading to our Pro version</a>. Purchasing a Pro license gets you access to the full version of Formidable Forms for more advanced contact forms, Formidable Views, graphs and stats, priority support, and Formidable Forms Add-ons!
 
 == Changelog ==
 = 3.04.03 =
