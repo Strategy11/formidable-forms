@@ -153,7 +153,7 @@ class FrmAppController {
 			'frm_pro_update_msg',
 			sprintf(
 				esc_html__( 'This site has been previously authorized to run Formidable Forms. %1$sInstall Formidable Pro%2$s or %3$sdeauthorize%4$s this site to continue running the free version and remove this message.', 'formidable' ),
-				'<br/><a href="' . esc_url( $inst_install_url ) . '" id="frm_install_link" target="_blank" data-prourl="'. esc_url( $download_url ) .'">',
+				'<br/><a href="' . esc_url( $inst_install_url ) . '" id="frm_install_link" target="_blank" data-prourl="' . esc_url( $download_url ) . '">',
 				'</a>',
 				'<a href="#" class="frm_deauthorize_link">',
 				'</a>'
