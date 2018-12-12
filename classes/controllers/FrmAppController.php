@@ -126,26 +126,34 @@ class FrmAppController {
         }
 
 		$pro_installed = is_dir( WP_PLUGIN_DIR . '/formidable-pro' );
+		$authorized    = get_site_option( 'frmpro-authorized' ) && ! is_callable( 'load_formidable_pro' );
+		if ( ! $authorized ) {
+			return;
+		}
 
-		if ( get_site_option( 'frmpro-authorized' ) && ! is_callable( 'load_formidable_pro' ) ) {
-			FrmAppHelper::load_admin_wide_js();
+		FrmAppHelper::load_admin_wide_js();
 
-			// user is authorized, but running free version
+		// user is authorized, but running free version
+		$download_url = '';
+		if ( $pro_installed ) {
+			// if pro version is installed, include link to activate it
+			$inst_install_url = wp_nonce_url( self_admin_url( 'plugins.php?action=activate&plugin=formidable-pro/formidable-pro.php' ), 'activate-plugin_formidable-pro/formidable-pro.php' );
+		} else {
+			$inst_install_url = '#';
+			$download_url = FrmAddonsController::get_pro_download_url();
 
-			if ( $pro_installed ) {
-				// if pro version is installed, include link to activate it
-				$inst_install_url = wp_nonce_url( self_admin_url( 'plugins.php?action=activate&plugin=formidable-pro/formidable-pro.php' ), 'activate-plugin_formidable-pro/formidable-pro.php' );
-			} else {
+			if ( empty( $download_url ) ) {
 				$inst_install_url = 'https://formidableforms.com/knowledgebase/install-formidable-forms/?utm_source=WordPress&utm_medium=get-started&utm_campaign=liteplugin';
 			}
+		}
         ?>
-<div class="error" class="frm_previous_install">
+<div class="error frm_previous_install">
 		<?php
 		echo apply_filters( // WPCS: XSS ok.
 			'frm_pro_update_msg',
 			sprintf(
 				esc_html__( 'This site has been previously authorized to run Formidable Forms. %1$sInstall Formidable Pro%2$s or %3$sdeauthorize%4$s this site to continue running the free version and remove this message.', 'formidable' ),
-				'<br/><a href="' . esc_url( $inst_install_url ) . '" target="_blank">',
+				'<br/><a href="' . esc_url( $inst_install_url ) . '" id="frm_install_link" target="_blank" data-prourl="'. esc_url( $download_url ) .'">',
 				'</a>',
 				'<a href="#" class="frm_deauthorize_link">',
 				'</a>'
@@ -153,9 +161,9 @@ class FrmAppController {
 			esc_url( $inst_install_url )
 		);
 		?>
+	<div id="frm_install_message" class="hidden frm_hidden"></div>
 </div>
 <?php
-        }
     }
 
 	private static function maybe_show_upgrade_bar() {
