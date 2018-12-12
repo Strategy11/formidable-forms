@@ -28,8 +28,8 @@ class FrmSimpleBlocksController {
 				'forms'        => FrmForm::getAll(),
 				'pro'          => $pro,
 				'views'        => $views,
-				'show_counts'  => $pro && $views ? self::get_show_counts() : '',
-				'view_options' => $pro && $views ? self::get_frm_options_for_views() : '',
+				'show_counts'  => $pro && $views ? FrmProDisplaysHelper::get_show_counts() : '',
+				'view_options' => $pro && $views ? FrmProDisplaysHelper::get_frm_options_for_views() : '',
 			)
 		);
 	}
@@ -47,61 +47,6 @@ class FrmSimpleBlocksController {
 			array( 'wp-edit-blocks' ),
 			$version
 		);
-	}
-
-	/**
-	 * Get the View type (show_count) for each View, e.g. calendar, dynamic
-	 *
-	 * @return array|object|void|null
-	 */
-	private static function get_show_counts() {
-		$show_counts = self::get_meta_values( 'frm_show_count', 'frm_display' );
-
-		return $show_counts;
-	}
-
-	/**
-	 * Get the specified meta value for the specified post type
-	 *
-	 * @param string $key
-	 * @param string $post_type
-	 *
-	 * @return array|object|void|null
-	 */
-	private static function get_meta_values( $key = '', $post_type = 'frm_display' ) {
-
-		global $wpdb;
-
-		if ( empty( $key ) ) {
-			return;
-		}
-
-		$results = $wpdb->get_results(
-			$wpdb->prepare(
-				"SELECT pm.post_id, pm.meta_value, pm.meta_key FROM {$wpdb->postmeta} pm LEFT JOIN {$wpdb->posts} p ON p.ID = pm.post_id WHERE ( pm.meta_key = %s ) AND p.post_type = %s",
-				$key,
-				$post_type
-			),
-			OBJECT_K
-		);
-
-		return $results;
-	}
-
-	/**
-	 * Get the options for the site's Views
-	 *
-	 * @return array|object|void|null
-	 */
-	private static function get_frm_options_for_views() {
-
-		$views_options = self::get_meta_values( 'frm_options', 'frm_display' );
-
-		foreach ( $views_options as $key => $value ) {
-			$views_options[ $key ]->meta_value = unserialize( $value->meta_value );
-		}
-
-		return $views_options;
 	}
 
 	/**
@@ -131,7 +76,8 @@ class FrmSimpleBlocksController {
 					),
 				),
 				'editor_script'   => 'formidable_simple-block-js',
-				'render_callback' => array( 'FrmSimpleBlocksController', 'simple_form_render' ),
+				'render_callback' => 'FrmSimpleBlocksController::simple_form_render',
+
 			)
 		);
 
@@ -154,7 +100,7 @@ class FrmSimpleBlocksController {
 					),
 				),
 				'editor_script'   => 'formidable_simple-block-js',
-				'render_callback' => array( 'FrmSimpleBlocksController', 'simple_view_render' ),
+				'render_callback' => 'FrmSimpleBlocksController::simple_view_render',
 			)
 		);
 	}
@@ -167,25 +113,22 @@ class FrmSimpleBlocksController {
 	 * @return string
 	 */
 	public static function simple_form_render( $attributes ) {
-		$params = '';
-		$params .= self::create_attribute_text( 'id', $attributes['form_id'] );
-		$params .= self::create_attribute_text( 'title', $attributes['title'] );
-		$params .= self::create_attribute_text( 'description', $attributes['description'] );
-		$params .= self::create_attribute_text( 'minimize', $attributes['minimize'] );
+		if ( ! isset( $attributes['form_id'] ) ) {
+			return '';
+		}
 
-		return do_shortcode( '[formidable' . $params . ']' );
-	}
+		$params       = array_filter( $attributes );
+		$params['id'] = $params['form_id'];
+		unset( $params['form_id'] );
 
-	/**
-	 * Creates text for an attribute to be used in a shortcode, e.g. id=12, if the attribute has a value.
-	 *
-	 * @param $name
-	 * @param $value
-	 *
-	 * @return string
-	 */
-	private static function create_attribute_text( $name, $value ) {
-		return isset( $value ) ? ' ' . $name . ' =' . $value : '';
+		$form = FrmFormsController::get_form_shortcode( $params );
+
+		ob_start();
+		wp_print_styles( 'formidable' );
+		$form .= ob_get_contents();
+		ob_end_clean();
+
+		return $form;
 	}
 
 	/**
@@ -196,12 +139,31 @@ class FrmSimpleBlocksController {
 	 * @return string
 	 */
 	public static function simple_view_render( $attributes ) {
-		$params = '';
-		$params .= self::create_attribute_text( 'id', $attributes['view_id'] );
-		$params .= self::create_attribute_text( 'filter', $attributes['filter'] );
+		if ( ! isset( $attributes['view_id'] ) ) {
+			return '';
+		}
 
-		$params .= ( $attributes['use_default_limit'] ) ? ' limit=20' : '';
+		$params = array_filter( $attributes );
 
-		return do_shortcode( '[display-frm-data' . $params . ']' );
+		$params['id'] = $params['view_id'];
+		unset( $params['view_id'] );
+
+		if ( isset( $params['use_default_limit'] ) && ( $params['use_default_limit'] ) ) {
+			$params['limit'] = 20;
+		}
+		unset( $params['use_default_limit'] );
+
+		$view = FrmProDisplaysController::get_shortcode( $params );
+
+		$view_type = get_post_meta( $params['id'], 'frm_show_count', true );
+
+		if ( $view_type === 'calendar' ) {
+			ob_start();
+			wp_print_styles( 'formidable' );
+			$view .= ob_get_contents();
+			ob_end_clean();
+		}
+
+		return $view;
 	}
 }
