@@ -328,6 +328,11 @@ class FrmAddonsController {
 				continue;
 			}
 
+			if ( ! file_exists( WP_PLUGIN_DIR . '/' . $folder . '/' ) ) {
+				// don't show an update if the plugin isn't installed
+				continue;
+			}
+
 			$wp_plugin  = isset( $wp_plugins[ $folder ] ) ? $wp_plugins[ $folder ] : array();
 			$wp_version = isset( $wp_plugin['Version'] ) ? $wp_plugin['Version'] : '1.0';
 
