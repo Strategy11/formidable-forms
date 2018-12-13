@@ -196,7 +196,7 @@ class FrmXMLController {
 		$filename = self::new_file_name() . '.json';
 
 		header( 'Content-Disposition: attachment; filename=' . $filename );
-		header( 'Content-Type: application/json');
+		header( 'Content-Type: application/json' );
 
 		$records = self::get_ids_for_export( $type, $args );
 		$data    = array();
