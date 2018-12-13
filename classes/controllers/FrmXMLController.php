@@ -59,8 +59,8 @@ class FrmXMLController {
 		$export_types = apply_filters( 'frm_xml_export_types', $export_types );
 
 		$export_format = array(
-			'xml' => array(
-				'name'    => 'XML',
+			'json' => array(
+				'name'    => 'JSON',
 				'support' => 'forms',
 				'count'   => 'multiple',
 			),
@@ -68,6 +68,11 @@ class FrmXMLController {
 				'name'    => 'CSV',
 				'support' => 'items',
 				'count'   => 'single',
+			),
+			'xml' => array(
+				'name'    => 'XML',
+				'support' => 'forms',
+				'count'   => 'multiple',
 			),
 		);
 		$export_format = apply_filters( 'frm_export_formats', $export_format );
@@ -159,6 +164,8 @@ class FrmXMLController {
 			self::generate_xml( $type, compact( 'ids' ) );
 		} elseif ( 'csv' === $format ) {
 			self::generate_csv( compact( 'ids' ) );
+		} elseif ( 'json' === $format ) {
+			self::generate_json( $type, compact( 'ids' ) );
 		} else {
 			do_action( 'frm_export_format_' . $format, compact( 'ids' ) );
 		}
@@ -169,36 +176,73 @@ class FrmXMLController {
 	public static function generate_xml( $type, $args = array() ) {
 		global $wpdb;
 
-		self::prepare_types_array( $type );
-
-		$tables = array(
-			'items'     => $wpdb->prefix . 'frm_items',
-			'forms'     => $wpdb->prefix . 'frm_forms',
-			'posts'     => $wpdb->posts,
-			'styles'    => $wpdb->posts,
-			'actions'   => $wpdb->posts,
-		);
-
-		$defaults = array(
-			'ids' => false,
-		);
-		$args = wp_parse_args( $args, $defaults );
-
-		$sitename = sanitize_key( get_bloginfo( 'name' ) );
-
-		if ( ! empty( $sitename ) ) {
-			$sitename .= '.';
-		}
-		$filename = $sitename . 'formidable.' . date( 'Y-m-d' ) . '.xml';
+		$filename = self::new_file_name() . '.xml';
 
 		header( 'Content-Description: File Transfer' );
 		header( 'Content-Disposition: attachment; filename=' . $filename );
 		header( 'Content-Type: text/xml; charset=' . get_option( 'blog_charset' ), true );
 
+		self::prepare_types_array( $type );
+		$tables = self::export_tables();
+
+		$records = self::get_ids_for_export( $type, $args );
+
+		echo '<?xml version="1.0" encoding="' . esc_attr( get_bloginfo( 'charset' ) ) . "\" ?>\n";
+		include( FrmAppHelper::plugin_path() . '/classes/views/xml/xml.php' );
+	}
+
+	private static function generate_json( $type, $args = array() ) {
+
+		$filename = self::new_file_name() . '.json';
+
+		header( 'Content-Disposition: attachment; filename=' . $filename );
+		header( 'Content-Type: application/json');
+
+		$records = self::get_ids_for_export( $type, $args );
+		$data    = array();
+		self::prepare_data_array( $records, $data );
+
+		echo json_encode( $data );
+	}
+
+	private static function prepare_export_options( &$args ) {
+		$defaults = array(
+			'ids' => false,
+		);
+		$args = wp_parse_args( $args, $defaults );
 		//make sure ids are numeric
 		if ( is_array( $args['ids'] ) && ! empty( $args['ids'] ) ) {
 			$args['ids'] = array_filter( $args['ids'], 'is_numeric' );
 		}
+	}
+
+	/**
+	 * Use a unique name with the timestamp for the file name
+	 *
+	 * @since 3.05
+	 */
+	private static function new_file_name() {
+		$sitename = sanitize_key( get_bloginfo( 'name' ) );
+
+		if ( ! empty( $sitename ) ) {
+			$sitename .= '.';
+		}
+		return $sitename . 'formidable.' . date( 'Y-m-d' );
+	}
+
+	/**
+	 * Get an array of the data to be exported to either json or XML
+	 *
+	 * @since 3.05
+	 */
+	private static function get_ids_for_export( $type, $args ) {
+		global $wpdb;
+
+		self::prepare_types_array( $type );
+
+		$tables = self::export_tables();
+
+		self::prepare_export_options( $args );
 
 		$records = array();
 
@@ -278,8 +322,7 @@ class FrmXMLController {
 			unset( $tb_type );
 		}
 
-		echo '<?xml version="1.0" encoding="' . esc_attr( get_bloginfo( 'charset' ) ) . "\" ?>\n";
-		include( FrmAppHelper::plugin_path() . '/classes/views/xml/xml.php' );
+		return $records;
 	}
 
 	private static function prepare_types_array( &$type ) {
@@ -292,6 +335,174 @@ class FrmXMLController {
 		if ( in_array( 'forms', $type ) ) {
 			// include actions with forms
 			$type[] = 'actions';
+		}
+	}
+
+	/**
+	 * @since 3.05
+	 */
+	private static function export_tables() {
+		global $wpdb;
+
+		return array(
+			'items'   => $wpdb->prefix . 'frm_items',
+			'forms'   => $wpdb->prefix . 'frm_forms',
+			'posts'   => $wpdb->posts,
+			'styles'  => $wpdb->posts,
+			'actions' => $wpdb->posts,
+		);
+	}
+
+	/**
+	 * Convert array of ids to data
+	 *
+	 * @since 3.05
+	 */
+	private static function prepare_data_array( $record_ids, &$data ) {
+		self::prepare_forms_array( $record_ids, $data );
+		self::prepare_form_actions_array( $record_ids, $data );
+	}
+
+	/**
+	 * Use the form ID to get all the data for an export
+	 * @since 3.05
+	 */
+	private static function prepare_forms_array( $record_ids, &$data ) {
+		if ( ! isset( $record_ids['forms'] ) ) {
+			return;
+		}
+
+		$forms = FrmForm::getAll( array( 'id' => $record_ids['forms'] ) );
+		foreach ( $forms as $k => $form ) {
+			self::remove_default_form_options( $form );
+			$fields = FrmField::get_all_for_form( $form->id, '', 'include' );
+			$form->fields = array();
+			foreach ( $fields as $field ) {
+				self::remove_default_field_options( $field );
+				$form->fields[] = $field;
+				unset( $field );
+			}
+			$forms[ $k ] = $form;
+			unset( $form );
+		}
+
+		$data['forms'] = $forms;
+	}
+
+	/**
+	 * If the saved value is the same as the default, remove it from the export
+	 * This keeps file size down and prevents overriding global settings after import
+	 *
+	 * @since 3.05
+	 */
+	private static function remove_default_form_options( &$form ) {
+		$defaults = FrmFormsHelper::get_default_opts();
+		if ( is_callable( 'FrmProFormsHelper::get_default_opts' ) ) {
+			$defaults += FrmProFormsHelper::get_default_opts();
+		}
+
+		self::remove_defaults( $defaults, $form->options );
+
+		self::remove_default_html( 'before_html', $defaults, $form->options );
+		self::remove_default_html( 'submit_html', $defaults, $form->options );
+	}
+
+	/**
+	 * Remove defaults from field options too
+	 *
+	 * @since 3.05
+	 */
+	private static function remove_default_field_options( &$field ) {
+		unset( $field->form_name );
+		$defaults = FrmFieldsHelper::get_default_field_options( $field->type );
+		if ( empty( $defaults['custom_html'] ) ) {
+			$defaults['custom_html'] = FrmFieldsHelper::get_default_html( $field->type );
+		}
+
+		self::remove_defaults( $defaults, $field->field_options );
+		self::remove_default_html( 'custom_html', $defaults, $field->field_options );
+	}
+
+	/**
+	 * Compare the default array to the saved values and
+	 * remove if they are the same
+	 *
+	 * @since 3.05
+	 */
+	private static function remove_defaults( $defaults, &$saved ) {
+		$array_defaults = array_filter( $defaults, 'is_array' );
+		foreach ( $array_defaults as $d => $default ) {
+			// compare array defaults
+			if ( $default == $saved[ $d ] ) {
+				unset( $saved[ $d ] );
+			}
+			unset( $defaults[ $d ] );
+		}
+
+		$saved = array_diff_assoc( (array) $saved, $defaults );
+	}
+
+	/**
+	 * The line endings may prevent html from being equal when it should
+	 *
+	 * @since 3.05
+	 */
+	private static function remove_default_html( $html_name, $defaults, &$options ) {
+		if ( isset( $options[ $html_name ] ) && isset( $defaults[ $html_name ] ) ) {
+			$old_html = str_replace( "\r\n", "\n", $options[ $html_name ] );
+			$default_html = $defaults[ $html_name ];
+			if ( $old_html == $default_html ) {
+				unset( $options[ $html_name ] );
+			}
+		}
+	}
+
+	/**
+	 * Use the form action ID / post ID to populate data
+	 * @since 3.05
+	 */
+	private static function prepare_form_actions_array( $record_ids, &$data ) {
+		if ( ! isset( $record_ids['actions'] ) ) {
+			return;
+		}
+
+		global $wp_query, $wpdb;
+		$wp_query->in_the_loop = true; // Fake being in the loop.
+		$data['posts'] = array();
+
+		// fetch 20 posts at a time rather than loading the entire table into memory
+		while ( $next_posts = array_splice( $record_ids['actions'], 0, 20 ) ) {
+			$posts = FrmDb::get_results( $wpdb->posts, array( 'ID' => $next_posts ) );
+
+			// Begin Loop
+			foreach ( $posts as $post ) {
+				setup_postdata( $post );
+				$post->post_content = FrmAppHelper::maybe_json_decode( $post->post_content );
+				$post->post_meta    = array();
+
+				$postmeta = FrmDb::get_results( $wpdb->postmeta, array( 'post_id' => $post->ID ) );
+				foreach ( $postmeta as $meta ) {
+					if ( apply_filters( 'wxr_export_skip_postmeta', false, $meta->meta_key, $meta ) ) {
+						continue;
+					}
+					$post->post_meta[] = array(
+						'meta_key'   => $meta->meta_key,
+						'meta_value' => $meta->meta_value,
+					);
+					unset( $meta );
+				}
+				unset( $postmeta );
+
+				$taxonomies = get_object_taxonomies( $post->post_type );
+				if ( ! empty( $taxonomies ) ) {
+					$post->terms = wp_get_object_terms( $post->ID, $taxonomies );
+				}
+				unset( $taxonomies );
+
+				$data['posts'][] = $post;
+				unset( $post );
+			}
+			unset( $posts );
 		}
 	}
 
