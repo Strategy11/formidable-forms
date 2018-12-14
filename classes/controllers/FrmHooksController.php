@@ -77,9 +77,8 @@ class FrmHooksController {
         add_filter( 'frm_show_entry_styles', 'FrmStylesController::show_entry_styles' );
 
 		//Simple Blocks Controller
-		add_action( 'enqueue_block_editor_assets', 'FrmSimpleBlocksController::formidable_block_editor_js' );
-		add_action( 'enqueue_block_editor_assets', 'FrmSimpleBlocksController::formidable_block_editor_css' );
-		add_action( 'init', 'FrmSimpleBlocksController::register_guten_blocks' );
+		add_action( 'enqueue_block_editor_assets', 'FrmSimpleBlocksController::formidable_block_editor_assets' );
+		add_action( 'init', 'FrmSimpleBlocksController::register_simple_form_block' );
     }
 
 	public static function load_admin_hooks() {

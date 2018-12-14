@@ -3,10 +3,10 @@
 class FrmSimpleBlocksController {
 
 	/**
-	 * Enqueue Formidable Simple Blocks' js for editor in admin.
+	 * Enqueue Formidable Simple Blocks' js and CSS for editor in admin.
 	 *
 	 */
-	public static function formidable_block_editor_js() {
+	public static function formidable_block_editor_assets() {
 		$version = FrmAppHelper::plugin_version();
 
 		wp_enqueue_script(
@@ -17,29 +17,21 @@ class FrmSimpleBlocksController {
 			true
 		);
 
-		$pro = is_callable( 'FrmProDisplay::getAll' );
+		$script_vars = array(
+			'forms'        => FrmForm::getAll(),
+			'pro'          => false,
+			'views'        => [],
+			'show_counts'  => [],
+			'view_options' => [],
+		);
 
-		$views = $pro ? FrmProDisplay::getAll() : '';
+		$script_vars = apply_filters( 'frm_simple_blocks_script_vars', $script_vars );
 
 		wp_localize_script(
 			'formidable_simple-block-js',
 			'formidable_simple_script_vars',
-			array(
-				'forms'        => FrmForm::getAll(),
-				'pro'          => $pro,
-				'views'        => $views,
-				'show_counts'  => $pro && $views ? FrmProDisplaysHelper::get_show_counts() : '',
-				'view_options' => $pro && $views ? FrmProDisplaysHelper::get_frm_options_for_views() : '',
-			)
+			$script_vars
 		);
-	}
-
-	/**
-	 * Enqueue Formidable Simple Blocks' CSS for editor in admin.
-	 *
-	 */
-	public static function formidable_block_editor_css() {
-		$version = FrmAppHelper::plugin_version();
 
 		wp_enqueue_style(
 			'formidable_block-editor-css',
@@ -50,10 +42,10 @@ class FrmSimpleBlocksController {
 	}
 
 	/**
-	 * Registers simple form and View blocks
+	 * Registers simple form block
 	 *
 	 */
-	public static function register_guten_blocks() {
+	public static function register_simple_form_block() {
 		if ( ! is_callable( 'register_block_type' ) ) {
 			return;
 		}
@@ -78,29 +70,6 @@ class FrmSimpleBlocksController {
 				'editor_script'   => 'formidable_simple-block-js',
 				'render_callback' => 'FrmSimpleBlocksController::simple_form_render',
 
-			)
-		);
-
-		register_block_type(
-			'formidable/simple-view',
-			array(
-				'attributes'      => array(
-					'view_id'           => array(
-						'type' => 'string',
-					),
-					'filter'            => array(
-						'type' => 'string',
-					),
-					'limit'             => array(
-						'type' => 'string',
-					),
-					'use_default_limit' => array(
-						'type'    => 'boolean',
-						'default' => false,
-					),
-				),
-				'editor_script'   => 'formidable_simple-block-js',
-				'render_callback' => 'FrmSimpleBlocksController::simple_view_render',
 			)
 		);
 	}
@@ -129,41 +98,5 @@ class FrmSimpleBlocksController {
 		ob_end_clean();
 
 		return $form;
-	}
-
-	/**
-	 * Renders a View given the specified attributes.  Shows up to 20 entries if no limit set for list Views.
-	 *
-	 * @param $attributes
-	 *
-	 * @return string
-	 */
-	public static function simple_view_render( $attributes ) {
-		if ( ! isset( $attributes['view_id'] ) ) {
-			return '';
-		}
-
-		$params = array_filter( $attributes );
-
-		$params['id'] = $params['view_id'];
-		unset( $params['view_id'] );
-
-		if ( isset( $params['use_default_limit'] ) && ( $params['use_default_limit'] ) ) {
-			$params['limit'] = 20;
-		}
-		unset( $params['use_default_limit'] );
-
-		$view = FrmProDisplaysController::get_shortcode( $params );
-
-		$view_type = get_post_meta( $params['id'], 'frm_show_count', true );
-
-		if ( $view_type === 'calendar' ) {
-			ob_start();
-			wp_print_styles( 'formidable' );
-			$view .= ob_get_contents();
-			ob_end_clean();
-		}
-
-		return $view;
 	}
 }
