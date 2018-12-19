@@ -5,7 +5,8 @@
 	"scripts": {
 		"build": "cross-env NODE_ENV=production webpack --progress",
 		"dev": "cross-env NODE_ENV=default webpack --watch",
-		"lint": "./node_modules/.bin/eslint .; exit 0"
+		"lint": "./node_modules/.bin/eslint .; exit 0",
+		"release": "release-it"
 	},
 	"engines": {
 		"node": ">=8.0.0",
@@ -44,6 +45,7 @@
 		"eslint-plugin-react": "^7.11.1",
 		"eslint-plugin-wordpress": "git://github.com/WordPress-Coding-Standards/eslint-plugin-wordpress.git#1774343f6226052a46b081e01db3fca8793cc9f1",
 		"makepot": "^0.3.0",
+		"release-it": "*",
 		"uglify-es": "^3.3.9",
 		"uglifyjs-webpack-plugin": "^1.3.0",
 		"webpack": "4.8.3",
