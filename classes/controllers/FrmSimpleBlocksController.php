@@ -10,8 +10,8 @@ class FrmSimpleBlocksController {
 		$version = FrmAppHelper::plugin_version();
 
 		wp_enqueue_script(
-			'formidable_simple-block-js',
-			FrmAppHelper::plugin_url() . '/js/blocks.build.js',
+			'formidable-form-selector',
+			FrmAppHelper::plugin_url() . '/js/formidable_blocks.js',
 			array( 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-components', 'wp-editor' ),
 			$version,
 			true
@@ -27,11 +27,10 @@ class FrmSimpleBlocksController {
 
 		$script_vars = apply_filters( 'frm_simple_blocks_script_vars', $script_vars );
 
-		wp_localize_script(
-			'formidable_simple-block-js',
-			'formidable_simple_script_vars',
-			$script_vars
-		);
+		wp_localize_script( 'formidable-form-selector', 'formidable_form_selector', $script_vars );
+		if ( function_exists( 'wp_set_script_translations' ) ) {
+			wp_set_script_translations( 'formidable-form-selector', 'formidable' );
+		}
 
 		wp_enqueue_style(
 			'formidable_block-editor-css',
@@ -67,7 +66,7 @@ class FrmSimpleBlocksController {
 						'type' => 'string',
 					),
 				),
-				'editor_script'   => 'formidable_simple-block-js',
+				'editor_script'   => 'formidable-form-selector',
 				'render_callback' => 'FrmSimpleBlocksController::simple_form_render',
 
 			)

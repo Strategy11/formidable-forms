@@ -4,3 +4,7 @@ pro
 .phpintel
 frm.min.js
 formidableforms.css
+
+# Node
+node_modules
+npm-debug.log
