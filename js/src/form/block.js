@@ -8,9 +8,9 @@ import FormShortcode from './formshortcode';
 import Inspector from './inspector';
 import Icon from './icon';
 import FormidableIcon from './icon';
-import { filterForms } from "../common/utilities/values";
+import { filterForms } from '../common/utilities/values';
 import FormSelect from './formselect';
-import Notice from "../common/components/notice";
+import Notice from '../common/components/notice';
 
 const { Fragment } = wp.element;
 const { data } = wp;
@@ -19,12 +19,12 @@ const { registerBlockType } = wp.blocks;
 const { ServerSideRender } = wp.components;
 
 registerBlockType( 'formidable/simple-form', {
-    title: __( 'Formidable Form' ),
-    description: __( 'Display a Formidable form' ),
+    title: __( 'Formidable Form', 'formidable' ),
+    description: __( 'Display a Formidable form', 'formidable' ),
     icon: FormidableIcon,
     category: 'widgets',
     keywords: [
-        __( 'contact form' ),
+        __( 'contact form', 'formidable' ),
     ],
 
     edit: function ( { className, isSelected, setAttributes, attributes } ) {
@@ -38,7 +38,7 @@ registerBlockType( 'formidable/simple-form', {
             return (
                 <Notice
                     message={ __( "This site doesn't have any Formidable forms.", 'formidable' ) }
-                    type={ "warning" }>
+                    type={ 'warning' }>
                 </Notice>
             )
         }

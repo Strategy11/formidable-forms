@@ -1,27 +1,24 @@
 /**
  *  Creates a string of parameters for the form shortcode or a form API call
  */
-const { __ } = wp.i18n;
 import {
-    setTextAttribute,
-} from "../common/utilities/values";
+	setTextAttribute,
+} from '../common/utilities/values';
 
 export default function createParamsText( atts ) {
+	const {
+		form_id,
+		title,
+		description,
+		minimize,
+	} = atts;
 
-    const {
-        form_id,
-        title,
-        description,
-        minimize,
-    } = atts;
+	let paramsText = '';
 
-    let params_text = '';
+	paramsText += setTextAttribute( form_id, 'id' );
+	paramsText += setTextAttribute( title, 'title' );
+	paramsText += setTextAttribute( description, 'description' );
+	paramsText += setTextAttribute( minimize, 'minimize' );
 
-    params_text += setTextAttribute( form_id, 'id' );
-
-    params_text += setTextAttribute( title, 'title' );
-    params_text += setTextAttribute( description, 'description' );
-    params_text += setTextAttribute( minimize, 'minimize' );
-
-    return params_text;
+	return paramsText;
 }

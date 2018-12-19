@@ -23,7 +23,8 @@
 		"classnames": "^2.2.6",
 		"npm": "^6.4.1",
 		"react": "16.4.1",
-		"react-dom": "16.4.1"
+		"react-dom": "16.4.1",
+		"styled-components": "^3.2.6"
 	},
 	"devDependencies": {
 		"@babel/core": "7.0.0",
@@ -40,6 +41,7 @@
 		"eslint": "5.2.0",
 		"eslint-config-wordpress": "2.0.0",
 		"eslint-plugin-jsx-a11y": "6.1.1",
+		"eslint-plugin-react": "^7.11.1",
 		"eslint-plugin-wordpress": "git://github.com/WordPress-Coding-Standards/eslint-plugin-wordpress.git#1774343f6226052a46b081e01db3fca8793cc9f1",
 		"makepot": "^0.3.0",
 		"uglify-es": "^3.3.9",

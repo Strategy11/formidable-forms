@@ -2,8 +2,7 @@
  * External dependencies
  */
 const webpack = require( 'webpack' );
-const CopyWebpackPlugin = require( 'copy-webpack-plugin' );
-const path = require('path');
+const path = require( 'path' );
 
 // Webpack configuration.
 const config = {
@@ -16,12 +15,12 @@ const config = {
 		],
 	},
 	entry: {
-		'formidable_blocks':'./js/src/blocks.js',
+		formidable_blocks: './js/src/blocks.js',
 		'formidable.min': './js/formidable.js',
 	},
 	output: {
 		filename: '[name].js',
-		path: path.resolve(__dirname, 'js'),
+		path: path.resolve( __dirname, 'js' ),
 	},
 	module: {
 		rules: [

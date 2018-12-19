@@ -28,13 +28,9 @@ export default class Toggle extends Component {
             setAttributes,
         } = this.props;
 
-        const help_text_true = help_true ? help_true : 'Yes';
-        const help_text_false = help_false ? help_false : 'No';
-
         return (
             <ToggleControl
                 label={ label }
-                help={ attribute_value === '1' ? help_text_true : help_text_false }
                 checked={ attribute_value === '1' }
                 onChange={ response => {
                     updateAttribute( attribute_name, response ? '1' : '0', setAttributes );

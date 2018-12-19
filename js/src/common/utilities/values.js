@@ -41,19 +41,19 @@ export function filterForms( forms ) {
 /**
  * Gets a form object from a list of forms objects
  *
- * @param forms_object
- * @param form_id
+ * @param formsObject
+ * @param formId
  * @returns {*}
  */
-export function getFormObject( forms_object, form_id ) {
+export function getFormObject( formsObject, formId ) {
     if ( ! forms_object ) {
         return '';
     }
 
-    let forms = Object.values( forms_object );
+    let forms = Object.values( formsObject );
 
     for ( let form of forms ) {
-        if ( form.hasOwnProperty( 'id' ) && form.id == form_id ) {
+        if ( form.hasOwnProperty( 'id' ) && form.id == formId ) {
             return form;
         }
     }

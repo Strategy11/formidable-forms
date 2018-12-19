@@ -34,7 +34,7 @@ class FrmSimpleBlocksController {
 
 		wp_enqueue_style(
 			'formidable_block-editor-css',
-			FrmAppHelper::plugin_url() . '/css/blocks.editor.build.css',
+			FrmAppHelper::plugin_url() . '/css/frm_blocks.css',
 			array( 'wp-edit-blocks' ),
 			$version
 		);
