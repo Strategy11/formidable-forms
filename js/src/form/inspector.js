@@ -41,28 +41,29 @@ export default class Inspector extends Component {
 		} = attributes;
 
 		return (
-            <InspectorControls>
-                <PanelBody
-                    title={ __( 'Select Form', 'formidable' ) }
-                    initialOpen={ true }
-                >
-                    <PanelRow>
-                        <FormSelect
-                            form_id={ form_id }
-                            setAttributes={ setAttributes }
-                        />
-                    </PanelRow>
-                    { form_id &&
-                    <PanelRow>
-						<ExternalLink href={ getSubDir() +  `wp-admin\/admin.php?page=formidable&frm_action=edit&id=${ form_id }` }>
+			<InspectorControls>
+				<PanelBody
+					title={ __( 'Select Form', 'formidable' ) }
+					initialOpen={ true }
+				>
+					<PanelRow>
+						<FormSelect
+							form_id={ form_id }
+							setAttributes={ setAttributes }
+						/>
+					</PanelRow>
+					{ form_id &&
+					<PanelRow>
+						<ExternalLink
+							href={ getSubDir() + `wp-admin\/admin.php?page=formidable&frm_action=edit&id=${ form_id }` }>
 							{ __( 'Go to form', 'formidable' ) }
 						</ExternalLink>
-                    </PanelRow> }
-                </PanelBody>
-                <PanelBody
-                    title={ __( 'Options', 'formidable' ) }
-                    initialOpen={ false }
-                >
+					</PanelRow> }
+				</PanelBody>
+				<PanelBody
+					title={ __( 'Options', 'formidable' ) }
+					initialOpen={ false }
+				>
 					<ToggleControl
 						label={ __( 'Show Form Title', 'formidable' ) }
 						checked={ title }
@@ -84,16 +85,16 @@ export default class Inspector extends Component {
 							updateAttribute( 'minimize', response ? '1' : '', setAttributes )
 						} }
 					/>
-                </PanelBody>
-                <PanelBody
-                    title={ __( 'Shortcode', 'formidable' ) }
-                    initialOpen={ false }
-                >
-                    <PanelRow>
-                        <FormShortcode { ...this.props.attributes } />
-                    </PanelRow>
-                </PanelBody>
-            </InspectorControls>
+				</PanelBody>
+				<PanelBody
+					title={ __( 'Shortcode', 'formidable' ) }
+					initialOpen={ false }
+				>
+					<PanelRow>
+						<FormShortcode { ...this.props.attributes } />
+					</PanelRow>
+				</PanelBody>
+			</InspectorControls>
 		);
 	}
 }

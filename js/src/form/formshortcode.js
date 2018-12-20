@@ -8,25 +8,25 @@ const { __ } = wp.i18n;
 const { Component } = wp.element;
 
 export default class FormShortcode extends Component {
-    constructor( props ) {
-        super( ...arguments );
-    }
+	constructor( props ) {
+		super( ...arguments );
+	}
 
-    render() {
-        const {
-            className,
-        } = this.props;
+	render() {
+		const {
+			className,
+		} = this.props;
 
-        return (
-            <div className={ className }>
-                [formidable
-                { createParamsText( this.props ) }
-                ]
-            </div>
-        );
-    }
+		return (
+			<div className={ className }>
+				[formidable
+				{ createParamsText( this.props ) }
+				]
+			</div>
+		);
+	}
 }
 
 FormShortcode.propTypes = {
-    className: PropTypes.string,//block class name
+	className: PropTypes.string,//block class name
 };
