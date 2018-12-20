@@ -10,13 +10,13 @@ import Icon from './icon';
 import FormidableIcon from './icon';
 import { filterForms } from '../common/utilities/values';
 import FormSelect from './formselect';
-import Notice from '../common/components/notice';
 
 const { Fragment } = wp.element;
 const { data } = wp;
 const { __ } = wp.i18n;
 const { registerBlockType } = wp.blocks;
-const { ServerSideRender } = wp.components;
+const { ServerSideRender, Notice } = wp.components;
+
 
 registerBlockType( 'formidable/simple-form', {
     title: __( 'Formidable Form', 'formidable' ),
@@ -36,10 +36,9 @@ registerBlockType( 'formidable/simple-form', {
 
         if ( Object.keys( filtered_forms_object ).length === 0 ) {
             return (
-                <Notice
-                    message={ __( "This site doesn't have any Formidable forms.", 'formidable' ) }
-                    type={ 'warning' }>
-                </Notice>
+	            <Notice status={ 'warning' } isDismissible={ false }>
+	                { __( "This site doesn't have any Formidable forms.", 'formidable' ) }
+	            </Notice>
             )
         }
 

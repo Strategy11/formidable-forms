@@ -3,6 +3,7 @@
  */
 const webpack = require( 'webpack' );
 const path = require( 'path' );
+const UglifyJsPlugin = require( 'terser-webpack-plugin' );
 
 // Webpack configuration.
 const config = {
@@ -37,7 +38,16 @@ const config = {
 		],
 	},
 	optimization: {
-		minimize: true,
+		minimizer: [
+			new UglifyJsPlugin({
+				terserOptions: {
+					compress: false,
+					mangle: false,
+					ie8: true,
+					keep_fnames: true,
+				}
+			})
+		]
 	},
 	externals: {
 		jquery: 'jQuery',

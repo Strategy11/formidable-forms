@@ -7,10 +7,9 @@
 import ViewShortcode from './viewshortcode';
 import ViewSelect from './viewselect';
 import Icon from './icon';
-import Inspector from "./inspector";
-import Notice from '../common/components/notice';
+import Inspector from './inspector';
 
-const { ServerSideRender } = wp.components;
+const { ServerSideRender, Notice } = wp.components;
 
 const { Fragment } = wp.element;
 const { data } = wp;
@@ -36,10 +35,9 @@ if ( formidable_form_selector.pro ) {
 
             if ( formidable_form_selector.views.length === 0 ) {
                 return (
-                    <Notice
-                        message={ __( "This site doesn't have any Formidable Views." ) }
-                        type={ "warning" }>
-                    </Notice>
+					<Notice status={ 'warning' } isDismissible={ false }>
+						{ __( "This site doesn't have any Formidable Views.", 'formidable' ) }
+					</Notice>
                 )
             }
 
@@ -48,7 +46,7 @@ if ( formidable_form_selector.pro ) {
                     <div className={ "frm-block-intro-screen" }>
                         <div className={ "frm-block-intro-content" }>
                             <Icon></Icon>
-                            <div className={ "frm-block-title" }>{ __( 'Formidable View' ) }</div>
+                            <div className={ "frm-block-title" }>{ __( 'Formidable View', 'formidable' ) }</div>
                             <div className={ "frm-block-selector-screen" }>
                                 <ViewSelect
                                     view_id={ view_id }
@@ -64,10 +62,9 @@ if ( formidable_form_selector.pro ) {
                 <Fragment>
                     <Inspector attributes={ attributes } setAttributes={ setAttributes }/>
                     { use_default_limit &&
-                    <Notice
-                        message={ __( 'The View block displays up to 20 entries. You can preview the page to see all your entries.' ) }
-                        type={ 'success' }>
-                    </Notice>
+					<Notice status={ 'success' } isDismissible={ false }>
+						{ __( 'The View block displays up to 20 entries. You can preview the page to see all your entries.', 'formidable' ) }
+					</Notice>
                     }
                     <ServerSideRender
                         block="formidable/simple-view"

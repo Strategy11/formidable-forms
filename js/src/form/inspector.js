@@ -10,13 +10,17 @@ const {
 const {
 	PanelBody,
 	PanelRow,
+	ToggleControl,
+	ExternalLink,
 } = wp.components;
 
 import PropTypes from 'prop-types';
 import FormSelect from './formselect';
 import FormShortcode from './formshortcode';
-import Link from '../common/components/link';
-import Toggle from '../common/components/toggle';
+import {
+	updateAttribute,
+	getSubDir
+} from '../common/utilities/values';
 
 export default class Inspector extends Component {
 	constructor() {
@@ -50,34 +54,36 @@ export default class Inspector extends Component {
                     </PanelRow>
                     { form_id &&
                     <PanelRow>
-                        <Link href={ `wp-admin\/admin.php?page=formidable&frm_action=edit&id=${ form_id }` }
-                              link_text={ __( 'Go to form', 'formidable' ) }
-                              add_sub_dir={ true }
-                        />
+						<ExternalLink href={ getSubDir() +  `wp-admin\/admin.php?page=formidable&frm_action=edit&id=${ form_id }` }>
+							{ __( 'Go to form', 'formidable' ) }
+						</ExternalLink>
                     </PanelRow> }
                 </PanelBody>
                 <PanelBody
                     title={ __( 'Options', 'formidable' ) }
                     initialOpen={ false }
                 >
-                    <Toggle
-                        label={ __( 'Show Form Title', 'formidable' ) }
-                        setAttributes={ setAttributes }
-                        attribute_name={ 'title' }
-                        attribute_value={ title }
-                    />
-                    <Toggle
-                        label={ __( 'Show Form Description', 'formidable' ) }
-                        setAttributes={ setAttributes }
-                        attribute_name={ 'description' }
-                        attribute_value={ description }
-                    />
-                    <Toggle
-                        label={ __( 'Minimize HTML', 'formidable' ) }
-                        setAttributes={ setAttributes }
-                        attribute_name={ 'minimize' }
-                        attribute_value={ minimize }
-                    />
+					<ToggleControl
+						label={ __( 'Show Form Title', 'formidable' ) }
+						checked={ title }
+						onChange={ response => {
+							updateAttribute( 'title', response ? '1' : '', setAttributes )
+						} }
+					/>
+					<ToggleControl
+						label={ __( 'Show Form Description', 'formidable' ) }
+						checked={ description }
+						onChange={ response => {
+							updateAttribute( 'description', response ? '1' : '', setAttributes )
+						} }
+					/>
+					<ToggleControl
+						label={ __( 'Minimize HTML', 'formidable' ) }
+						checked={ minimize }
+						onChange={ response => {
+							updateAttribute( 'minimize', response ? '1' : '', setAttributes )
+						} }
+					/>
                 </PanelBody>
                 <PanelBody
                     title={ __( 'Shortcode', 'formidable' ) }

@@ -7,19 +7,20 @@ const {
     InspectorControls,
 } = wp.editor;
 const {
+	ExternalLink,
     PanelBody,
     PanelRow,
     RadioControl,
 } = wp.components;
 
 import PropTypes from 'prop-types';
-import Link from '../common/components/link';
-import ViewShortcode from "./viewshortcode";
+import ViewShortcode from './viewshortcode';
 import ViewSelect from './viewselect';
 
 import {
-    updateAttribute
-} from "../common/utilities/values";
+    updateAttribute,
+	getSubDir,
+} from '../common/utilities/values';
 
 export default class Inspector extends Component {
     constructor() {
@@ -53,11 +54,9 @@ export default class Inspector extends Component {
                     </PanelRow>
                     { view_id &&
                     <PanelRow>
-                        <Link href={ `wp-admin\/post.php?post=${ view_id }&action=edit` }
-                              link_text={ __( 'Go to View' ) }
-                              add_sub_dir={ true }
-
-                        />
+						<ExternalLink href={ getSubDir() + `wp-admin\/post.php?post=${ view_id }&action=edit` }>
+							{ __( 'Go to View', 'formidable' ) }
+						</ExternalLink>
                     </PanelRow> }
                 </PanelBody>
                 <PanelBody

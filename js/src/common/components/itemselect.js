@@ -1,6 +1,5 @@
 const { __ } = wp.i18n;
 import PropTypes from 'prop-types';
-import Notice from './notice';
 
 const {
     Component
