@@ -11,12 +11,8 @@ export default class FormShortcode extends Component {
 	}
 
 	render() {
-		const {
-			className,
-		} = this.props;
-
 		return (
-			<div className={ className }>
+			<div>
 				[display-frm-data
 				{ createParamsText( this.props ) }
 				]
@@ -24,7 +20,3 @@ export default class FormShortcode extends Component {
 		);
 	}
 }
-
-FormShortcode.propTypes = {
-	className: PropTypes.string, //block class name
-};

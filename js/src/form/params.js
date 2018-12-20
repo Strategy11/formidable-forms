@@ -1,5 +1,5 @@
 /**
- *  Creates a string of parameters for the form shortcode or a form API call
+ *  Creates a string of parameters for the form shortcode
  */
 import {
 	setTextAttribute,

@@ -30,8 +30,8 @@ export default class ViewSelect extends Component {
 		return (
 			<ItemSelect
 				selected={ view_id }
-				itemName={ __( 'View' ) }
-				itemNamePlural={ __( 'Views' ) }
+				itemName={ __( 'View', 'formidable' ) }
+				itemNamePlural={ __( 'Views', 'formidable' ) }
 				items={ createOptions( views, 'post_title', 'ID' ) }
 				onChange={ ( new_view_id ) => {
 					updateViewId( new_view_id, setAttributes );

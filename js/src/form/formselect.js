@@ -4,7 +4,6 @@
 import ItemSelect from "../common/components/itemselect";
 import PropTypes from 'prop-types';
 import createOptions from "../common/utilities/getselectoptions";
-import { filterForms } from "../common/utilities/values";
 
 const { __ } = wp.i18n;
 const {
@@ -20,16 +19,14 @@ export default class FormSelect extends Component {
 		const {
 			form_id,
 			setAttributes,
+			forms
 		} = this.props;
-
-		let forms = formidable_form_selector.forms;
-		forms = filterForms( forms );
 
 		return (
 			<ItemSelect
 				selected={ form_id }
-				itemName={ __( 'form' ) }
-				itemNamePlural={ __( 'forms' ) }
+				itemName={ __( 'form', 'formidable'  ) }
+				itemNamePlural={ __( 'forms', 'formidable'  ) }
 				items={ createOptions( forms ) }
 				onChange={ new_form_id => {
 					setAttributes( {

@@ -12,57 +12,7 @@ export function updateAttribute( attribute_name, attribute_value, setAttributes 
 }
 
 /**
- * Filters a list of forms to remove Repeaters, drafts/trash, templates, and forms without names
- *
- * @param forms
- * @returns {{}}
- */
-export function filterForms( forms ) {
-	if ( ! forms ) {
-		return {};
-	}
-	return Object.keys( forms ).reduce( ( list, key ) => {
-		if (
-			( ! forms[ key ].hasOwnProperty( 'parent_form_id' ) || forms[ key ].parent_form_id === '0' ) &&
-			( forms[ key ].hasOwnProperty( 'status' ) && forms[ key ].status === 'published' ) &&
-			( ! forms[ key ].hasOwnProperty( 'is_template' ) || forms[ key ].is_template === '0' ) &&
-			( forms[ key ].hasOwnProperty( 'name' ) && forms[ key ].name )
-
-		) {
-			return {
-				...list,
-				[ key ]: forms[ key ],
-			};
-		}
-		return list;
-	}, {} );
-}
-
-/**
- * Gets a form object from a list of forms objects
- *
- * @param formsObject
- * @param formId
- * @returns {*}
- */
-export function getFormObject( formsObject, formId ) {
-	if ( ! forms_object ) {
-		return '';
-	}
-
-	let forms = Object.values( formsObject );
-
-	for ( let form of forms ) {
-		if ( form.hasOwnProperty( 'id' ) && form.id == formId ) {
-			return form;
-		}
-	}
-
-	return false;
-}
-
-/**
- * Sets text attribute for a shortcode or API call from a key value pair
+ * Sets text attribute for a shortcode from a key value pair
  *
  * @param value
  * @param attribute_name

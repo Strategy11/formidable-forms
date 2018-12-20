@@ -18,13 +18,13 @@ const { registerBlockType } = wp.blocks;
 
 if ( formidable_form_selector.pro ) {
 	registerBlockType( 'formidable/simple-view', {
-		title: __( 'Formidable View' ),
-		description: __( 'Display a Formidable View' ),
+		title: __( 'Formidable View', 'formidable' ),
+		description: __( 'Display a Formidable View', 'formidable' ),
 		icon: Icon,
 		category: 'widgets',
 		keywords: [
-			__( 'data display' ),
-			__( 'show entries' ),
+			__( 'data display', 'formidable' ),
+			__( 'show entries', 'formidable' ),
 		],
 
 		edit: function ( { className, isSelected, setAttributes, attributes } ) {

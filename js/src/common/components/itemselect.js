@@ -5,8 +5,7 @@ const {
 	Component
 } = wp.element;
 const {
-	SelectControl,
-	Spinner
+	SelectControl
 } = wp.components;
 
 /**
@@ -29,7 +28,7 @@ export default class ItemSelect extends Component {
 
 		return [
 			{
-				label: __( `Select a ${ itemName }` ),
+				label: __( `Select a ${ itemName }`, 'formidable' ),
 				value: '',
 			},
 			...options
@@ -45,28 +44,15 @@ export default class ItemSelect extends Component {
 			itemNamePlural,
 			label,
 			help,
-			complete,
 			className,
 		} = this.props;
 
-		let {
-			dependent_item_name,
-		} = this.props;
-
-		if ( ( ! items || items.length === 0 ) && complete ) {
+		if ( ( ! items || items.length === 0 ) ) {
 			return (
 				<p className={ "frm-block-select-no-items" }>
-					{ __( `Currently, there are no ${ itemNamePlural }.` ) }
+					{ __( `Currently, there are no ${ itemNamePlural }.` , 'formidable') }
 				</p>
 			)
-		}
-		if ( ! items || items.length === 0 ) {
-			return (
-				<p className={ "frm-block-spinner" }>
-					<Spinner/>
-					{ __( `Loading ${ itemNamePlural }` ) }
-				</p>
-			);
 		}
 		return (
 			<SelectControl
@@ -92,19 +78,15 @@ ItemSelect.propTypes = {
 	selected: PropTypes.oneOfType( [
 		PropTypes.string,
 		PropTypes.number,
-		PropTypes.array,
-	] ),//selected item or items
+	] ),//selected item
 	items: PropTypes.array,//list of possible items
 	onChange: PropTypes.func,
 	itemName: PropTypes.string,//name for item in select label
 	itemNamePlural: PropTypes.string,//plural of items, used in some labels
 	label: PropTypes.string,
 	help: PropTypes.string,
-	multiple: PropTypes.bool,//true if multiple selections can be made
-	dependent: PropTypes.bool,//boolean, whether this data is dependent on the presence of the form id
 	form_id: PropTypes.oneOfType( [
 		PropTypes.string,
 		PropTypes.number,
 	] ),//form id (or other data on which this form is dependent)
-	complete: PropTypes.bool,//boolean -- whether data retrieval from the store has completed or not
 };

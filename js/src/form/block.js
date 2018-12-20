@@ -8,7 +8,7 @@ import FormShortcode from './formshortcode';
 import Inspector from './inspector';
 import Icon from './icon';
 import FormidableIcon from './icon';
-import { filterForms } from '../common/utilities/values';
+import { filterForms } from './utilities';
 import FormSelect from './formselect';
 
 const { Fragment } = wp.element;
@@ -47,11 +47,12 @@ registerBlockType( 'formidable/simple-form', {
 				<div className={ "frm-block-intro-screen" }>
 					<div className={ "frm-block-intro-content" }>
 						<Icon></Icon>
-						<div className={ "frm-block-title" }>{ __( 'Formidable Forms' ) }</div>
+						<div className={ "frm-block-title" }>{ __( 'Formidable Forms', 'formidable' ) }</div>
 						<div className={ "frm-block-selector-screen" }>
 							<FormSelect
 								form_id={ form_id }
 								setAttributes={ setAttributes }
+								forms={ filtered_forms_object }
 							/>
 						</div>
 					</div>
@@ -61,7 +62,11 @@ registerBlockType( 'formidable/simple-form', {
 
 		return (
 			<Fragment>
-				<Inspector attributes={ attributes } setAttributes={ setAttributes }/>
+				<Inspector
+					attributes={ attributes }
+					setAttributes={ setAttributes }
+					forms={ filtered_forms_object }
+				/>
 				<ServerSideRender
 					block="formidable/simple-form"
 					attributes={ attributes }
@@ -72,7 +77,6 @@ registerBlockType( 'formidable/simple-form', {
 
 	save: function ( props ) {
 		const {
-			className,
 			attributes
 		} = props;
 		const { form_id } = attributes;

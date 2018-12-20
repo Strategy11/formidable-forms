@@ -44,7 +44,7 @@ export default class Inspector extends Component {
 		return (
 			<InspectorControls>
 				<PanelBody
-					title={ __( 'Select View' ) }
+					title={ __( 'Select View', 'formidable' ) }
 					initialOpen={ true }
 				>
 					<PanelRow>
@@ -60,17 +60,17 @@ export default class Inspector extends Component {
 					</PanelRow> }
 				</PanelBody>
 				<PanelBody
-					title={ __( 'Filter' ) }
+					title={ __( 'Filter', 'formidable' ) }
 					initialOpen={ false }>
 					<RadioControl
-						label={ __( 'Filter the View?' ) }
+						label={ __( 'Filter the View?', 'formidable' ) }
 						selected={ filter }
 						options={ [
-							{ label: __( 'Limited (recommended)' ), value: 'limited' },
-							{ label: __( 'Yes' ), value: '1' },
-							{ label: __( 'No' ), value: '0' },
+							{ label: __( 'Limited (recommended)', 'formidable' ), value: 'limited' },
+							{ label: __( 'Yes', 'formidable' ), value: '1' },
+							{ label: __( 'No', 'formidable' ), value: '0' },
 						] }
-						help={ "Setting filter to limited sends View content through WordPress content filters to process shortcodes inside the View and add auto paragraphs." }
+						help={ __( 'Setting filter to limited sends View content through WordPress content filters to process shortcodes inside the View and add auto paragraphs.', 'formidable') }
 						onChange={ filter => {
 							updateAttribute( 'filter', filter, setAttributes );
 						}
@@ -79,7 +79,7 @@ export default class Inspector extends Component {
 					/>
 				</PanelBody>
 				<PanelBody
-					title={ __( 'Shortcode' ) }
+					title={ __( 'Shortcode', 'formidable' ) }
 					initialOpen={ false }
 				>
 					<PanelRow>

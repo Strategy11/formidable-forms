@@ -31,6 +31,7 @@ export default class Inspector extends Component {
 		const {
 			setAttributes,
 			attributes,
+			forms,
 		} = this.props;
 
 		const {
@@ -50,6 +51,7 @@ export default class Inspector extends Component {
 						<FormSelect
 							form_id={ form_id }
 							setAttributes={ setAttributes }
+							forms={ forms }
 						/>
 					</PanelRow>
 					{ form_id &&
