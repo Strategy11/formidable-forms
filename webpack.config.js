@@ -3,7 +3,6 @@
  */
 const webpack = require( 'webpack' );
 const path = require( 'path' );
-const UglifyJsPlugin = require( 'terser-webpack-plugin' );
 
 // Webpack configuration.
 const config = {
@@ -17,7 +16,6 @@ const config = {
 	},
 	entry: {
 		formidable_blocks: './js/src/blocks.js',
-		'formidable.min': './js/formidable.js',
 	},
 	output: {
 		filename: '[name].js',
@@ -36,18 +34,6 @@ const config = {
 				],
 			},
 		],
-	},
-	optimization: {
-		minimizer: [
-			new UglifyJsPlugin({
-				terserOptions: {
-					compress: false,
-					mangle: false,
-					ie8: true,
-					keep_fnames: true,
-				}
-			})
-		]
 	},
 	externals: {
 		jquery: 'jQuery',
