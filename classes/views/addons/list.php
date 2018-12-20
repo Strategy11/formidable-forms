@@ -41,10 +41,6 @@
 							<?php esc_html_e( 'Install', 'formidable' ); ?>
 						</a>
 						<span class="spinner"></span>
-					<?php } elseif ( FrmAppHelper::pro_is_installed() ) { ?>
-						<a class="install-now button button-primary" href="<?php echo esc_url( isset( $addon['slug'] ) ? FrmAppHelper::admin_upgrade_link( 'addons', 'downloads/' . $addon['slug'] . '/' ) : $pricing ); ?>" target="_blank" aria-label="<?php esc_attr_e( 'Get Started', 'formidable' ); ?>">
-							<?php esc_html_e( 'Get Started', 'formidable' ); ?>
-						</a>
 					<?php } else { ?>
 						<a class="install-now button button-primary" href="<?php echo esc_url( $pricing ); ?>" target="_blank" aria-label="<?php esc_attr_e( 'Upgrade Now', 'formidable' ); ?>">
 							<?php esc_html_e( 'Upgrade Now', 'formidable' ); ?>

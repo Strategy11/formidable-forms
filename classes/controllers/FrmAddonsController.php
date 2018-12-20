@@ -154,6 +154,41 @@ class FrmAddonsController {
 	}
 
 	/**
+	 * If Pro is missing but has been authenticated, include a download URL
+	 *
+	 * @since 3.04.03
+	 * @return string
+	 */
+	public static function get_pro_download_url() {
+		$pro_cred_store  = 'frmpro-credentials';
+		$pro_wpmu_store  = 'frmpro-wpmu-sitewide';
+		if ( is_multisite() && get_site_option( $pro_wpmu_store ) ) {
+			$creds = get_site_option( $pro_cred_store );
+		} else {
+			$creds = get_option( $pro_cred_store );
+		}
+
+		if ( empty( $creds ) || ! is_array( $creds ) || ! isset( $creds['license'] ) ) {
+			return '';
+		}
+
+		$license = $creds['license'];
+		if ( empty( $license ) ) {
+			return '';
+		}
+
+		if ( strpos( $license, '-' ) ) {
+			// this is a fix for licenses saved in the past
+			$license = strtoupper( $license );
+		}
+
+		$downloads = self::get_addon_info( $license );
+		$pro = isset( $downloads['93790'] ) ? $downloads['93790'] : array();
+
+		return isset( $pro['url'] ) ? $pro['url'] : '';
+	}
+
+	/**
 	 * @since 3.04.03
 	 * @return array
 	 */
@@ -293,6 +328,11 @@ class FrmAddonsController {
 				continue;
 			}
 
+			if ( ! file_exists( WP_PLUGIN_DIR . '/' . $folder . '/' ) ) {
+				// don't show an update if the plugin isn't installed
+				continue;
+			}
+
 			$wp_plugin  = isset( $wp_plugins[ $folder ] ) ? $wp_plugins[ $folder ] : array();
 			$wp_version = isset( $wp_plugin['Version'] ) ? $wp_plugin['Version'] : '1.0';
 
@@ -370,7 +410,7 @@ class FrmAddonsController {
 	public static function get_addon_for_license( $addons, $license ) {
 		$download_id = $license->download_id;
 		$plugin = array();
-		if ( empty( $download_id ) ) {
+		if ( empty( $download_id ) && ! empty( $addons ) ) {
 			foreach ( $addons as $addon ) {
 				if ( strtolower( $license->plugin_name ) == strtolower( $addon['title'] ) ) {
 					return $addon;

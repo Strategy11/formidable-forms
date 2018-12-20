@@ -15,7 +15,7 @@
         <div class="misc-pub-section frm_no_print">
             <span class="dashicons dashicons-admin-post wp-media-buttons-icon"></span>
             <?php esc_html_e( 'Post', 'formidable' ) ?>:
-			<b><?php echo get_the_title( $entry->post_id ); ?></b>
+			<b><?php echo esc_html( get_the_title( $entry->post_id ) ); ?></b>
 			<span>
 				<a href="<?php echo esc_url( admin_url( 'post.php?post=' . $entry->post_id . '&action=edit' ) ) ?>">
 					<?php esc_html_e( 'Edit', 'formidable' ) ?>
