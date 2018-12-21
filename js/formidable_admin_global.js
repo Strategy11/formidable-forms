@@ -1,7 +1,7 @@
 jQuery(document).ready(function(){
     var installLink = document.getElementById('frm_install_link');
     if(installLink !== null){
-        jQuery(installLink).click(frm_install_now);
+        jQuery(installLink).click(frmInstallPro);
     }
 
 	var deauthLink = jQuery('.frm_deauthorize_link');
@@ -15,12 +15,46 @@ jQuery(document).ready(function(){
 });
 
 function frm_install_now(){
-    var $msg = jQuery(document.getElementById('frm_install_message'));
+	var $msg = jQuery(document.getElementById('frm_install_message'));
 	$msg.html('<div class="frm_plugin_updating">'+frmGlobal.updating_msg+'<div class="spinner frm_spinner"></div></div>');
 	jQuery.ajax({
 		type:'POST',url:ajaxurl,
-        data:{action:'frm_install',nonce:frmGlobal.nonce},
+		data:{action:'frm_install',nonce:frmGlobal.nonce},
 		success:function(){$msg.fadeOut('slow');}
+	});
+	return false;
+}
+
+function frmInstallPro( e ){
+	var plugin = jQuery(this).data('prourl');
+	if ( plugin === '' ) {
+		return false;
+	}
+
+	e.preventDefault();
+
+	var $msg = jQuery(document.getElementById('frm_install_message'));
+	$msg.html('<div class="frm_plugin_updating">'+frmGlobal.updating_msg+'<div class="spinner frm_spinner"></div></div>');
+	$msg.fadeIn('slow');
+
+	jQuery.ajax({
+		url: ajaxurl,
+		type: 'POST',
+		async: true,
+		cache: false,
+		dataType: 'json',
+		data: {
+			action: 'frm_install_addon',
+			nonce:  frmGlobal.nonce,
+			plugin: plugin
+		},
+		success: function() {
+			$msg.fadeOut('slow');
+			$msg.parent().fadeOut('slow');
+		},
+		error: function(xhr, textStatus, e) {
+			$msg.fadeOut('slow');
+		}
 	});
 	return false;
 }
