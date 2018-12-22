@@ -1,17 +1,31 @@
 /**
  * Form shortcode of current form
  */
-import PropTypes from 'prop-types';
-import createParamsText from './params';
-
-const { __ } = wp.i18n;
 const { Component } = wp.element;
 
-export default class FormShortcode extends Component {
-	constructor( props ) {
-		super( ...arguments );
-	}
+import {
+	setTextAttribute,
+} from '../common/utilities/values';
 
+function createParamsText( atts ) {
+	const {
+		form_id,
+		title,
+		description,
+		minimize,
+	} = atts;
+
+	let paramsText = '';
+
+	paramsText += setTextAttribute( form_id, 'id' );
+	paramsText += setTextAttribute( title, 'title' );
+	paramsText += setTextAttribute( description, 'description' );
+	paramsText += setTextAttribute( minimize, 'minimize' );
+
+	return paramsText;
+}
+
+export default class FormShortcode extends Component {
 	render() {
 		return (
 			<div>

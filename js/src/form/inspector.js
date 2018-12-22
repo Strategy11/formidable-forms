@@ -19,14 +19,10 @@ import FormSelect from './formselect';
 import FormShortcode from './formshortcode';
 import {
 	updateAttribute,
-	getSubDir
+	getSubDir,
 } from '../common/utilities/values';
 
 export default class Inspector extends Component {
-	constructor() {
-		super( ...arguments );
-	}
-
 	render() {
 		const {
 			setAttributes,
@@ -70,21 +66,21 @@ export default class Inspector extends Component {
 						label={ __( 'Show Form Title', 'formidable' ) }
 						checked={ title }
 						onChange={ response => {
-							updateAttribute( 'title', response ? '1' : '', setAttributes )
+							updateAttribute( 'title', response ? '1' : '', setAttributes );
 						} }
 					/>
 					<ToggleControl
 						label={ __( 'Show Form Description', 'formidable' ) }
 						checked={ description }
 						onChange={ response => {
-							updateAttribute( 'description', response ? '1' : '', setAttributes )
+							updateAttribute( 'description', response ? '1' : '', setAttributes );
 						} }
 					/>
 					<ToggleControl
 						label={ __( 'Minimize HTML', 'formidable' ) }
 						checked={ minimize }
 						onChange={ response => {
-							updateAttribute( 'minimize', response ? '1' : '', setAttributes )
+							updateAttribute( 'minimize', response ? '1' : '', setAttributes );
 						} }
 					/>
 				</PanelBody>

@@ -1,37 +1,32 @@
 /**
  * Form selector
  */
-import ItemSelect from "../common/components/itemselect";
+import ItemSelect from '../common/components/itemselect';
 import PropTypes from 'prop-types';
-import createOptions from "../common/utilities/getselectoptions";
 
 const { __ } = wp.i18n;
 const {
-	Component
+	Component,
 } = wp.element;
 
 export default class FormSelect extends Component {
-	constructor( props ) {
-		super( ...arguments );
-	}
-
 	render() {
 		const {
 			form_id,
 			setAttributes,
-			forms
+			forms,
 		} = this.props;
 
 		return (
 			<ItemSelect
 				selected={ form_id }
-				itemName={ __( 'form', 'formidable'  ) }
-				itemNamePlural={ __( 'forms', 'formidable'  ) }
-				items={ createOptions( forms ) }
-				onChange={ new_form_id => {
+				itemName={ __( 'form', 'formidable' ) }
+				itemNamePlural={ __( 'forms', 'formidable' ) }
+				items={ forms }
+				onChange={ newFormId => {
 					setAttributes( {
-						form_id: new_form_id,
-					} )
+						form_id: newFormId,
+					} );
 				} }
 			>
 			</ItemSelect>
@@ -40,6 +35,6 @@ export default class FormSelect extends Component {
 }
 
 FormSelect.propTypes = {
-	form_id: PropTypes.string,//current form id
-	setAttributes: PropTypes.func.isRequired,//setAttributes of block
+	form_id: PropTypes.string, //current form id
+	setAttributes: PropTypes.func.isRequired, //setAttributes of block
 };

@@ -23,13 +23,6 @@ import {
 } from '../common/utilities/values';
 
 export default class Inspector extends Component {
-	constructor() {
-		super( ...arguments );
-	}
-
-	componentDidMount() {
-	}
-
 	render() {
 		const {
 			setAttributes,
@@ -50,7 +43,7 @@ export default class Inspector extends Component {
 					<PanelRow>
 						<ViewSelect
 							view_id={ view_id }
-							setAttributes={ setAttributes }/>
+							setAttributes={ setAttributes } />
 					</PanelRow>
 					{ view_id &&
 					<PanelRow>
@@ -70,9 +63,9 @@ export default class Inspector extends Component {
 							{ label: __( 'Yes', 'formidable' ), value: '1' },
 							{ label: __( 'No', 'formidable' ), value: '0' },
 						] }
-						help={ __( 'Setting filter to limited sends View content through WordPress content filters to process shortcodes inside the View and add auto paragraphs.', 'formidable') }
-						onChange={ filter => {
-							updateAttribute( 'filter', filter, setAttributes );
+						help={ __( 'Setting filter to limited sends View content through WordPress content filters to process shortcodes inside the View and add auto paragraphs.', 'formidable' ) }
+						onChange={ newFilter => {
+							updateAttribute( 'filter', newFilter, setAttributes );
 						}
 						}
 
@@ -93,6 +86,6 @@ export default class Inspector extends Component {
 }
 
 Inspector.propTypes = {
-	attributes: PropTypes.object,//block attributes
-	setAttributes: PropTypes.func,//setAttributes of block
+	attributes: PropTypes.object, //block attributes
+	setAttributes: PropTypes.func, //setAttributes of block
 };

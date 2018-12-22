@@ -17,12 +17,14 @@ class FrmSimpleBlocksController {
 			true
 		);
 
+		$forms = self::get_filtered_forms();
+
 		$script_vars = array(
-			'forms'        => FrmForm::getAll(),
+			'forms'        => $forms,
 			'pro'          => false,
-			'views'        => [],
-			'show_counts'  => [],
-			'view_options' => [],
+			'views'        => '',
+			'show_counts'  => '',
+			'view_options' => '',
 		);
 
 		$script_vars = apply_filters( 'frm_simple_blocks_script_vars', $script_vars );
@@ -38,6 +40,48 @@ class FrmSimpleBlocksController {
 			array( 'wp-edit-blocks' ),
 			$version
 		);
+	}
+
+	private static function get_filtered_forms() {
+		$forms = FrmForm::getAll(
+			array(
+				'is_template' => 0,
+				'status'      => 'published',
+				array(
+					'or'               => 1,
+					'parent_form_id'   => null,
+					'parent_form_id <' => 1,
+				)
+			)
+		);
+
+		//ddd($forms);
+		$filtered_forms = array_map( 'self::set_form_options', $forms );
+		usort( $filtered_forms, 'self::label_sort' );
+
+		//ddd($filtered_forms);
+		return $filtered_forms;
+	}
+
+	private static function set_form_options( $form ) {
+		return array(
+			'label' => $form->name,
+			'value' => $form->id,
+		);
+//		return  array(
+//			$form->name => $form->id,
+//		);
+	}
+
+	private static function label_sort( $option1, $option2 ) {
+		$label_1 = strtoupper( $option1['label'] );
+		$label_2 = strtoupper( $option2['label'] );
+
+		if ( $label_1 == $label_2 ) {
+			return 0;
+		}
+
+		return ( $label_1 < $label_2 ) ? - 1 : 1;
 	}
 
 	/**

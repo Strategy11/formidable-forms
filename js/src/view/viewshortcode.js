@@ -2,14 +2,26 @@
  * View shortcode for current View
  */
 const { Component } = wp.element;
-import PropTypes from 'prop-types';
-import createParamsText from './params';
+import {
+	setTextAttribute,
+} from '../common/utilities/values';
 
-export default class FormShortcode extends Component {
-	constructor( props ) {
-		super( ...arguments );
-	}
+function createParamsText( atts ) {
+	const {
+		view_id,
+		filter,
+	} = atts;
 
+	let paramsText = '';
+
+	paramsText += setTextAttribute( view_id, 'id' );
+
+	paramsText += setTextAttribute( filter, 'filter' );
+
+	return paramsText;
+}
+
+export default class ViewShortcode extends Component {
 	render() {
 		return (
 			<div>

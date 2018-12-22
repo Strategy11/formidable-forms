@@ -6,5 +6,3 @@
 import './form/block';
 import './view/block';
 
-
-

@@ -1,13 +1,13 @@
 /**
  * Updates an attribute with the specified new value
  *
- * @param attribute_name
- * @param attribute_value
+ * @param attributeName
+ * @param attributeValue
  * @param setAttributes
  */
-export function updateAttribute( attribute_name, attribute_value, setAttributes ) {
+export function updateAttribute( attributeName, attributeValue, setAttributes ) {
 	setAttributes( {
-		[ attribute_name ]: attribute_value,
+		[ attributeName ]: attributeValue,
 	} );
 }
 
@@ -15,12 +15,12 @@ export function updateAttribute( attribute_name, attribute_value, setAttributes 
  * Sets text attribute for a shortcode from a key value pair
  *
  * @param value
- * @param attribute_name
+ * @param attributeName
  * @returns {string}
  */
-export function setTextAttribute( value, attribute_name ) {
+export function setTextAttribute( value, attributeName ) {
 	if ( value ) {
-		return ` ${ attribute_name }="${ value }"`;
+		return ` ${ attributeName }="${ value }"`;
 	}
 	return '';
 }
@@ -31,15 +31,14 @@ export function setTextAttribute( value, attribute_name ) {
  * @returns {string}
  */
 export function getSubDir() {
-	let page = window.location.pathname;
-	let index = page.indexOf( 'wp-admin' );
+	const page = window.location.pathname;
+	const index = page.indexOf( 'wp-admin' );
 
-	let sub_dir = '/';
+	let subDir = '/';
 
-	if ( index > - 1 ) {
-
-		sub_dir = page.substr( 0, index );
+	if ( index > -1 ) {
+		subDir = page.substr( 0, index );
 	}
 
-	return sub_dir;
+	return subDir;
 }

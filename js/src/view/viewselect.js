@@ -4,28 +4,24 @@
  * Dropdown to select a View
  */
 
-import ItemSelect from "../common/components/itemselect";
+import ItemSelect from '../common/components/itemselect';
 import PropTypes from 'prop-types';
-import createOptions from "../common/utilities/getselectoptions";
-import { updateViewId } from "./utilities";
+import createOptions from '../common/utilities/getselectoptions';
+import { updateViewId } from './utilities';
 
 const { __ } = wp.i18n;
 const {
-	Component
+	Component,
 } = wp.element;
 
 export default class ViewSelect extends Component {
-	constructor( props ) {
-		super( ...arguments );
-	}
-
 	render() {
 		const {
 			view_id,
 			setAttributes,
 		} = this.props;
 
-		let views = formidable_form_selector.views;
+		const views = formidable_form_selector.views;
 
 		return (
 			<ItemSelect
@@ -33,8 +29,8 @@ export default class ViewSelect extends Component {
 				itemName={ __( 'View', 'formidable' ) }
 				itemNamePlural={ __( 'Views', 'formidable' ) }
 				items={ createOptions( views, 'post_title', 'ID' ) }
-				onChange={ ( new_view_id ) => {
-					updateViewId( new_view_id, setAttributes );
+				onChange={ ( newViewId ) => {
+					updateViewId( newViewId, setAttributes );
 				} }
 			>
 			</ItemSelect>
@@ -43,6 +39,6 @@ export default class ViewSelect extends Component {
 }
 
 ViewSelect.propTypes = {
-	view_id: PropTypes.string,//current view id
-	setAttributes: PropTypes.func.isRequired,//setAttributes of block
+	view_id: PropTypes.string, //current view id
+	setAttributes: PropTypes.func.isRequired, //setAttributes of block
 };

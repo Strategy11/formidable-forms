@@ -12,11 +12,11 @@ export default function createOptions( items, rest_item_name = 'name', rest_item
 		return [];
 	}
 
-	let options = Object.keys( items ).map( key => {
+	const options = Object.keys( items ).map( key => {
 		return {
 			label: items[ key ][ rest_item_name ],
 			value: items[ key ][ rest_item_id ],
-		}
+		};
 	} );
 
 	if ( sort ) {
@@ -33,11 +33,10 @@ export default function createOptions( items, rest_item_name = 'name', rest_item
  */
 function sortOptions( options ) {
 	options.sort( ( first, second ) => {
-
-		var firstLabel = first.label.toUpperCase();
-		var secondLabel = second.label.toUpperCase();
+		const firstLabel = first.label.toUpperCase();
+		const secondLabel = second.label.toUpperCase();
 		if ( firstLabel < secondLabel ) {
-			return - 1;
+			return -1;
 		}
 		if ( firstLabel > secondLabel ) {
 			return 1;
@@ -45,5 +44,4 @@ function sortOptions( options ) {
 
 		return 0;
 	} );
-
 }
