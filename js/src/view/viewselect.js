@@ -6,7 +6,6 @@
 
 import ItemSelect from '../common/components/itemselect';
 import PropTypes from 'prop-types';
-import createOptions from '../common/utilities/getselectoptions';
 import { updateViewId } from './utilities';
 
 const { __ } = wp.i18n;
@@ -17,18 +16,17 @@ const {
 export default class ViewSelect extends Component {
 	render() {
 		const {
-			view_id,
+			viewId,
 			setAttributes,
+			views,
 		} = this.props;
-
-		const views = formidable_form_selector.views;
 
 		return (
 			<ItemSelect
-				selected={ view_id }
+				selected={ viewId }
 				itemName={ __( 'View', 'formidable' ) }
 				itemNamePlural={ __( 'Views', 'formidable' ) }
-				items={ createOptions( views, 'post_title', 'ID' ) }
+				items={ views }
 				onChange={ ( newViewId ) => {
 					updateViewId( newViewId, setAttributes );
 				} }
@@ -39,6 +37,6 @@ export default class ViewSelect extends Component {
 }
 
 ViewSelect.propTypes = {
-	view_id: PropTypes.string, //current view id
+	viewId: PropTypes.string, //current view id
 	setAttributes: PropTypes.func.isRequired, //setAttributes of block
 };

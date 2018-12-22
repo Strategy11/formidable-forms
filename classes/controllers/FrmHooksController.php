@@ -133,7 +133,7 @@ class FrmHooksController {
         // XML Controller
         add_action( 'admin_menu', 'FrmXMLController::menu', 41 );
 
-        // Simple Blocks Controller
+		// Simple Blocks Controller
 		add_action( 'enqueue_block_editor_assets', 'FrmSimpleBlocksController::formidable_block_editor_assets' );
     }
 

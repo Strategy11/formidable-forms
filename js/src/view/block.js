@@ -28,19 +28,21 @@ if ( formidable_form_selector.pro ) {
 
 		edit: function( { setAttributes, attributes } ) {
 			const {
-				view_id,
-				use_default_limit,
+				viewId,
+				useDefaultLimit,
 			} = attributes;
 
-			if ( formidable_form_selector.views.length === 0 ) {
+			const views = formidable_form_selector.views;
+
+			if ( views.length === 0 ) {
 				return (
 					<Notice status={ 'warning' } isDismissible={ false }>
-						{ __( 'This site doesn\'t have any Formidable Views.', 'formidable' ) }
+						{ __( "This site doesn't have any Formidable Views.", 'formidable' ) }
 					</Notice>
 				);
 			}
 
-			if ( ! view_id ) {
+			if ( ! viewId ) {
 				return (
 					<div className={ 'frm-block-intro-screen' }>
 						<div className={ 'frm-block-intro-content' }>
@@ -48,8 +50,10 @@ if ( formidable_form_selector.pro ) {
 							<div className={ 'frm-block-title' }>{ __( 'Formidable View', 'formidable' ) }</div>
 							<div className={ 'frm-block-selector-screen' }>
 								<ViewSelect
-									view_id={ view_id }
-									setAttributes={ setAttributes } />
+									viewId={ viewId }
+									setAttributes={ setAttributes }
+									views={ views }
+								/>
 							</div>
 						</div>
 					</div>
@@ -58,8 +62,12 @@ if ( formidable_form_selector.pro ) {
 
 			return (
 				<Fragment>
-					<Inspector attributes={ attributes } setAttributes={ setAttributes } />
-					{ use_default_limit &&
+					<Inspector
+						attributes={ attributes }
+						setAttributes={ setAttributes }
+						views={ views }
+					/>
+					{ useDefaultLimit &&
 					<Notice status={ 'success' } isDismissible={ false }>
 						{ __( 'The View block displays up to 20 entries. You can preview the page to see all your entries.', 'formidable' ) }
 					</Notice>
@@ -76,12 +84,13 @@ if ( formidable_form_selector.pro ) {
 			const {
 				attributes,
 			} = props;
-			const { view_id } = attributes;
+			const { viewId } = attributes;
 			return (
-				( view_id === undefined ) ? '' :
+				( viewId === undefined ) ?
+					'' :
 					<Fragment>
-					<ViewShortcode { ...attributes } />
-				</Fragment>
+						<ViewShortcode { ...attributes } />
+					</Fragment>
 			);
 		},
 	} );

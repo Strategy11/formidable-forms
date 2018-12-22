@@ -1,9 +1,9 @@
 /**
  * Updates an attribute with the specified new value
  *
- * @param attributeName
- * @param attributeValue
- * @param setAttributes
+ * @param {string} attributeName Name of block attribute to be updated
+ * @param {mixed} attributeValue Value of block attribute to be updated
+ * @param {function} setAttributes Function to set the block attribute to be updated
  */
 export function updateAttribute( attributeName, attributeValue, setAttributes ) {
 	setAttributes( {
@@ -14,9 +14,9 @@ export function updateAttribute( attributeName, attributeValue, setAttributes ) 
 /**
  * Sets text attribute for a shortcode from a key value pair
  *
- * @param value
- * @param attributeName
- * @returns {string}
+ * @param {mixed} value Value of text attribute to be set
+ * @param {string} attributeName Name of text attribute to be set
+ * @returns {string} String of the text attribute in the format " id=10"
  */
 export function setTextAttribute( value, attributeName ) {
 	if ( value ) {
@@ -28,7 +28,7 @@ export function setTextAttribute( value, attributeName ) {
 /**
  * Gets subdirectory of current site, if the site isn't on the top level of the domain
  *
- * @returns {string}
+ * @returns {string} The subdirectory of the current site
  */
 export function getSubDir() {
 	const page = window.location.pathname;

@@ -27,10 +27,11 @@ export default class Inspector extends Component {
 		const {
 			setAttributes,
 			attributes,
+			views,
 		} = this.props;
 
 		const {
-			view_id,
+			viewId,
 			filter,
 		} = attributes;
 
@@ -42,12 +43,14 @@ export default class Inspector extends Component {
 				>
 					<PanelRow>
 						<ViewSelect
-							view_id={ view_id }
-							setAttributes={ setAttributes } />
+							viewId={ viewId }
+							setAttributes={ setAttributes }
+							views={ views }
+						/>
 					</PanelRow>
-					{ view_id &&
+					{ viewId &&
 					<PanelRow>
-						<ExternalLink href={ getSubDir() + `wp-admin\/post.php?post=${ view_id }&action=edit` }>
+						<ExternalLink href={ getSubDir() + `wp-admin\/post.php?post=${ viewId }&action=edit` }>
 							{ __( 'Go to View', 'formidable' ) }
 						</ExternalLink>
 					</PanelRow> }

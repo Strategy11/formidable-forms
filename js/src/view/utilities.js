@@ -9,8 +9,7 @@ export function updateViewId( newViewId, setAttributes ) {
 	const limit = viewOptions && viewOptions[ newViewId ] && viewOptions[ newViewId ].meta_value && viewOptions[ newViewId ].meta_value.limits ? viewOptions[ newViewId ].meta_value.limits : null;
 
 	setAttributes( {
-		view_id: newViewId,
-		use_default_limit: ( showCount === 'calendar' || showCount === 'one' || limit ) ? false : true,
+		viewId: newViewId,
+		useDefaultLimit: ( showCount === 'calendar' || showCount === 'one' || limit ) ? false : true,
 	} );
 }
-

@@ -17,10 +17,8 @@ class FrmSimpleBlocksController {
 			true
 		);
 
-		$forms = self::get_filtered_forms();
-
 		$script_vars = array(
-			'forms'        => $forms,
+			'forms'        => self::get_forms_options(),
 			'pro'          => false,
 			'views'        => '',
 			'show_counts'  => '',
@@ -42,7 +40,12 @@ class FrmSimpleBlocksController {
 		);
 	}
 
-	private static function get_filtered_forms() {
+	/**
+	 * Returns a filtered list of form options with the name as label and the id as value, sorted by label
+	 *
+	 * @return array
+	 */
+	private static function get_forms_options() {
 		$forms = FrmForm::getAll(
 			array(
 				'is_template' => 0,
@@ -55,25 +58,35 @@ class FrmSimpleBlocksController {
 			)
 		);
 
-		//ddd($forms);
 		$filtered_forms = array_map( 'self::set_form_options', $forms );
 		usort( $filtered_forms, 'self::label_sort' );
 
-		//ddd($filtered_forms);
 		return $filtered_forms;
 	}
 
+	/**
+	 * Returns an array for a form with name as label and id as value
+	 *
+	 * @param $form
+	 *
+	 * @return array
+	 */
 	private static function set_form_options( $form ) {
 		return array(
 			'label' => $form->name,
 			'value' => $form->id,
 		);
-//		return  array(
-//			$form->name => $form->id,
-//		);
 	}
 
-	private static function label_sort( $option1, $option2 ) {
+	/**
+	 * Helper function to sort two options alphabetically by their labels
+	 *
+	 * @param $option1
+	 * @param $option2
+	 *
+	 * @return int
+	 */
+	public static function label_sort( $option1, $option2 ) {
 		$label_1 = strtoupper( $option1['label'] );
 		$label_2 = strtoupper( $option2['label'] );
 
@@ -97,7 +110,7 @@ class FrmSimpleBlocksController {
 			'formidable/simple-form',
 			array(
 				'attributes'      => array(
-					'form_id'     => array(
+					'formId'      => array(
 						'type' => 'string',
 					),
 					'title'       => array(
@@ -125,13 +138,13 @@ class FrmSimpleBlocksController {
 	 * @return string
 	 */
 	public static function simple_form_render( $attributes ) {
-		if ( ! isset( $attributes['form_id'] ) ) {
+		if ( ! isset( $attributes['formId'] ) ) {
 			return '';
 		}
 
 		$params       = array_filter( $attributes );
-		$params['id'] = $params['form_id'];
-		unset( $params['form_id'] );
+		$params['id'] = $params['formId'];
+		unset( $params['formId'] );
 
 		$form = FrmFormsController::get_form_shortcode( $params );
 

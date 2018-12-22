@@ -8,13 +8,13 @@ import {
 
 function createParamsText( atts ) {
 	const {
-		view_id,
+		viewId,
 		filter,
 	} = atts;
 
 	let paramsText = '';
 
-	paramsText += setTextAttribute( view_id, 'id' );
+	paramsText += setTextAttribute( viewId, 'id' );
 
 	paramsText += setTextAttribute( filter, 'filter' );
 

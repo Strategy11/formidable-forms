@@ -23,19 +23,19 @@ registerBlockType( 'formidable/simple-form', {
 	],
 
 	edit: function( { setAttributes, attributes } ) {
-		const { form_id } = attributes;
+		const { formId } = attributes;
 
 		const forms = formidable_form_selector.forms;
 
 		if ( forms.length === 0 ) {
 			return (
 				<Notice status={ 'warning' } isDismissible={ false }>
-					{ __( 'This site doesn\'t have any Formidable forms.', 'formidable' ) }
+					{ __( "This site doesn't have any Formidable forms.", 'formidable' ) }
 				</Notice>
 			);
 		}
 
-		if ( ! form_id ) {
+		if ( ! formId ) {
 			return (
 				<div className={ 'frm-block-intro-screen' }>
 					<div className={ 'frm-block-intro-content' }>
@@ -43,7 +43,7 @@ registerBlockType( 'formidable/simple-form', {
 						<div className={ 'frm-block-title' }>{ __( 'Formidable Forms', 'formidable' ) }</div>
 						<div className={ 'frm-block-selector-screen' }>
 							<FormSelect
-								form_id={ form_id }
+								formId={ formId }
 								setAttributes={ setAttributes }
 								forms={ forms }
 							/>
@@ -72,13 +72,13 @@ registerBlockType( 'formidable/simple-form', {
 		const {
 			attributes,
 		} = props;
-		const { form_id } = attributes;
+		const { formId } = attributes;
 		return (
-			( form_id === undefined ) ? '' :
+			( formId === undefined ) ?
+				'' :
 				<Fragment>
-				<FormShortcode { ...attributes } />
-			</Fragment>
-
+					<FormShortcode { ...attributes } />
+				</Fragment>
 		);
 	},
 } );

@@ -9,7 +9,7 @@ import {
 
 function createParamsText( atts ) {
 	const {
-		form_id,
+		formId,
 		title,
 		description,
 		minimize,
@@ -17,7 +17,7 @@ function createParamsText( atts ) {
 
 	let paramsText = '';
 
-	paramsText += setTextAttribute( form_id, 'id' );
+	paramsText += setTextAttribute( formId, 'id' );
 	paramsText += setTextAttribute( title, 'title' );
 	paramsText += setTextAttribute( description, 'description' );
 	paramsText += setTextAttribute( minimize, 'minimize' );

@@ -12,20 +12,20 @@ const {
 export default class FormSelect extends Component {
 	render() {
 		const {
-			form_id,
+			formId,
 			setAttributes,
 			forms,
 		} = this.props;
 
 		return (
 			<ItemSelect
-				selected={ form_id }
+				selected={ formId }
 				itemName={ __( 'form', 'formidable' ) }
 				itemNamePlural={ __( 'forms', 'formidable' ) }
 				items={ forms }
 				onChange={ newFormId => {
 					setAttributes( {
-						form_id: newFormId,
+						formId: newFormId,
 					} );
 				} }
 			>
@@ -35,6 +35,6 @@ export default class FormSelect extends Component {
 }
 
 FormSelect.propTypes = {
-	form_id: PropTypes.string, //current form id
+	formId: PropTypes.string, //current formId
 	setAttributes: PropTypes.func.isRequired, //setAttributes of block
 };

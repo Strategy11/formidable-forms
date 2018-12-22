@@ -31,7 +31,7 @@ export default class Inspector extends Component {
 		} = this.props;
 
 		const {
-			form_id,
+			formId,
 			title,
 			description,
 			minimize,
@@ -45,15 +45,15 @@ export default class Inspector extends Component {
 				>
 					<PanelRow>
 						<FormSelect
-							form_id={ form_id }
+							formId={ formId }
 							setAttributes={ setAttributes }
 							forms={ forms }
 						/>
 					</PanelRow>
-					{ form_id &&
+					{ formId &&
 					<PanelRow>
 						<ExternalLink
-							href={ getSubDir() + `wp-admin\/admin.php?page=formidable&frm_action=edit&id=${ form_id }` }>
+							href={ getSubDir() + `wp-admin\/admin.php?page=formidable&frm_action=edit&id=${ formId }` }>
 							{ __( 'Go to form', 'formidable' ) }
 						</ExternalLink>
 					</PanelRow> }

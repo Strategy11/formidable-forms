@@ -39,7 +39,6 @@ export default class ItemSelect extends Component {
 			itemNamePlural,
 			label,
 			help,
-			className,
 		} = this.props;
 
 		if ( ( ! items || items.length === 0 ) ) {
@@ -58,7 +57,6 @@ export default class ItemSelect extends Component {
 				label={ label }
 				help={ help }
 				onChange={ onChange }
-				className={ className }
 			/>
 		);
 	}
@@ -80,8 +78,4 @@ ItemSelect.propTypes = {
 	itemNamePlural: PropTypes.string, //plural of items, used in some labels
 	label: PropTypes.string,
 	help: PropTypes.string,
-	form_id: PropTypes.oneOfType( [
-		PropTypes.string,
-		PropTypes.number,
-	] ), //form id (or other data on which this form is dependent)
 };
