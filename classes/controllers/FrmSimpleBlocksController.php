@@ -55,13 +55,11 @@ class FrmSimpleBlocksController {
 					'parent_form_id'   => null,
 					'parent_form_id <' => 1,
 				)
-			)
+			),
+			'name'
 		);
 
-		$filtered_forms = array_map( 'self::set_form_options', $forms );
-		usort( $filtered_forms, 'self::label_sort' );
-
-		return $filtered_forms;
+		return array_map( 'self::set_form_options', $forms );
 	}
 
 	/**
@@ -76,25 +74,6 @@ class FrmSimpleBlocksController {
 			'label' => $form->name,
 			'value' => $form->id,
 		);
-	}
-
-	/**
-	 * Helper function to sort two options alphabetically by their labels
-	 *
-	 * @param $option1
-	 * @param $option2
-	 *
-	 * @return int
-	 */
-	public static function label_sort( $option1, $option2 ) {
-		$label_1 = strtoupper( $option1['label'] );
-		$label_2 = strtoupper( $option2['label'] );
-
-		if ( $label_1 == $label_2 ) {
-			return 0;
-		}
-
-		return ( $label_1 < $label_2 ) ? - 1 : 1;
 	}
 
 	/**

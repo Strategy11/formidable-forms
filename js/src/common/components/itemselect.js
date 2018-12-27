@@ -1,4 +1,4 @@
-const { __ } = wp.i18n;
+const { __, sprintf } = wp.i18n;
 import PropTypes from 'prop-types';
 
 const {
@@ -23,7 +23,7 @@ export default class ItemSelect extends Component {
 
 		return [
 			{
-				label: __( 'Select a ', 'formidable' ) + itemName,
+				label: sprintf ( __('Select a %s', itemName, 'formidable'), itemName),
 				value: '',
 			},
 			...options,

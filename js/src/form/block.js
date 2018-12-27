@@ -30,7 +30,7 @@ registerBlockType( 'formidable/simple-form', {
 		if ( forms.length === 0 ) {
 			return (
 				<Notice status={ 'warning' } isDismissible={ false }>
-					{ __( "This site doesn't have any Formidable forms.", 'formidable' ) }
+					{ __( 'This site does not have any Formidable forms.', 'formidable' ) }
 				</Notice>
 			);
 		}

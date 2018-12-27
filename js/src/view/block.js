@@ -37,7 +37,7 @@ if ( formidable_form_selector.pro ) {
 			if ( views.length === 0 ) {
 				return (
 					<Notice status={ 'warning' } isDismissible={ false }>
-						{ __( "This site doesn't have any Formidable Views.", 'formidable' ) }
+						{ __( 'This site does not have any Formidable Views.', 'formidable' ) }
 					</Notice>
 				);
 			}
