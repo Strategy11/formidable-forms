@@ -54,7 +54,7 @@ class FrmSimpleBlocksController {
 					'or'               => 1,
 					'parent_form_id'   => null,
 					'parent_form_id <' => 1,
-				)
+				),
 			),
 			'name'
 		);

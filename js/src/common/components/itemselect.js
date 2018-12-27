@@ -23,7 +23,7 @@ export default class ItemSelect extends Component {
 
 		return [
 			{
-				label: sprintf ( __('Select a %s', itemName, 'formidable'), itemName),
+				label: sprintf( __( 'Select a %s', itemName, 'formidable' ), itemName ),
 				value: '',
 			},
 			...options,
