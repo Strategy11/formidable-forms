@@ -490,6 +490,7 @@ class FrmAppHelper {
 				'title' => array(),
 			),
 			'code' => array(),
+			'defs' => array(),
 			'del'  => array(
 				'datetime' => array(),
 				'title' => array(),
@@ -526,10 +527,22 @@ class FrmAppHelper {
 			'li'  => $allow_class,
 			'ol'  => $allow_class,
 			'p'   => $allow_class,
+			'path' => array(
+				'd'    => array(),
+				'fill' => array(),
+			),
 			'pre' => array(),
 			'q'   => array(
 				'cite' => array(),
 				'title' => array(),
+			),
+			'rect' => array(
+				'class'  => array(),
+				'fill'   => array(),
+				'height' => array(),
+				'width'  => array(),
+				'x'      => array(),
+				'y'      => array(),
 			),
 			'section' => $allow_class,
 			'span' => array(
@@ -540,6 +553,12 @@ class FrmAppHelper {
 			),
 			'strike' => array(),
 			'strong' => array(),
+			'svg'    => array(
+				'xmlns'   => array(),
+				'viewBox' => array(),
+				'width'   => array(),
+				'height'  => array(),
+			),
 			'ul' => $allow_class,
 		);
 	}

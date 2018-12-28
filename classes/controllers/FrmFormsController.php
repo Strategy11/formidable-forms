@@ -522,10 +522,9 @@ class FrmFormsController {
 	public static function insert_form_button() {
 		if ( current_user_can( 'frm_view_forms' ) ) {
 			$menu_name = FrmAppHelper::get_menu_name();
-			$icon = FrmAppHelper::svg_logo();
-			$icon = apply_filters( 'frm_media_icon', $icon );
+			$icon = apply_filters( 'frm_media_icon', FrmAppHelper::svg_logo() );
 			echo '<a href="#TB_inline?width=50&height=50&inlineId=frm_insert_form" class="thickbox button add_media frm_insert_form" title="' . esc_attr__( 'Add forms and content', 'formidable' ) . '">' .
-				$icon .
+				$icon . // WPCS: XSS ok. (viewBox is stripped from HTML with FrmAppHelper::kses)
 				' ' . esc_html( $menu_name ) . '</a>';
 		}
 	}
