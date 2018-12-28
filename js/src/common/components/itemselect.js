@@ -43,7 +43,7 @@ export default class ItemSelect extends Component {
 
 		if ( ( ! items || items.length === 0 ) ) {
 			return (
-				<p className={ 'frm-block-select-no-items' }>
+				<p className="frm-block-select-no-items">
 					{ __( 'Currently, there are no ', 'formidable' ) + itemNamePlural }
 				</p>
 			);

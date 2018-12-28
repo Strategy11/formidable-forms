@@ -36,7 +36,7 @@ if ( formidable_form_selector.pro ) {
 
 			if ( views.length === 0 ) {
 				return (
-					<Notice status={ 'warning' } isDismissible={ false }>
+					<Notice status="warning" isDismissible={ false }>
 						{ __( 'This site does not have any Formidable Views.', 'formidable' ) }
 					</Notice>
 				);
@@ -44,11 +44,11 @@ if ( formidable_form_selector.pro ) {
 
 			if ( ! viewId ) {
 				return (
-					<div className={ 'frm-block-intro-screen' }>
-						<div className={ 'frm-block-intro-content' }>
+					<div className="frm-block-intro-screen">
+						<div className="frm-block-intro-content">
 							<Icon></Icon>
-							<div className={ 'frm-block-title' }>{ __( 'Formidable View', 'formidable' ) }</div>
-							<div className={ 'frm-block-selector-screen' }>
+							<div className="frm-block-title">{ __( 'Formidable View', 'formidable' ) }</div>
+							<div className="frm-block-selector-screen">
 								<ViewSelect
 									viewId={ viewId }
 									setAttributes={ setAttributes }
@@ -68,7 +68,7 @@ if ( formidable_form_selector.pro ) {
 						views={ views }
 					/>
 					{ useDefaultLimit &&
-					<Notice status={ 'success' } isDismissible={ false }>
+					<Notice status="success" isDismissible={ false }>
 						{ __( 'The View block displays up to 20 entries. You can preview the page to see all your entries.', 'formidable' ) }
 					</Notice>
 					}
