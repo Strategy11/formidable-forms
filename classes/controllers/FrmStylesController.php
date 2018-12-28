@@ -70,12 +70,14 @@ class FrmStylesController {
         }
     }
 
-	public static function enqueue_css( $register = 'enqueue' ) {
+	public static function enqueue_css( $register = 'enqueue', $force = false ) {
 		global $frm_vars;
 
 		$register_css = ( $register == 'register' );
+		$should_load = $force || ( ( $frm_vars['load_css'] || $register_css ) && ! FrmAppHelper::is_admin() );
 
-		if ( ( $frm_vars['load_css'] || $register_css ) && ! FrmAppHelper::is_admin() ) {
+		if ( $should_load ) {
+
 			$frm_settings = FrmAppHelper::get_settings();
 			if ( $frm_settings->load_style == 'none' ) {
 				return;

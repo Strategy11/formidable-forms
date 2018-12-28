@@ -134,7 +134,7 @@ class FrmHooksController {
         add_action( 'admin_menu', 'FrmXMLController::menu', 41 );
 
 		// Simple Blocks Controller
-		add_action( 'enqueue_block_editor_assets', 'FrmSimpleBlocksController::formidable_block_editor_assets' );
+		add_action( 'enqueue_block_editor_assets', 'FrmSimpleBlocksController::block_editor_assets' );
     }
 
 	public static function load_ajax_hooks() {

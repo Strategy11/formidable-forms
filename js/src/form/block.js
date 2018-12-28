@@ -5,7 +5,7 @@
  */
 import FormShortcode from './formshortcode';
 import Inspector from './inspector';
-import FormidableIcon from './icon';
+import FormidableIcon from '../common/components/icon';
 import FormSelect from './formselect';
 
 const { Fragment } = wp.element;
@@ -15,7 +15,7 @@ const { ServerSideRender, Notice } = wp.components;
 
 registerBlockType( 'formidable/simple-form', {
 	title: formidable_form_selector.name,
-	description: __( 'Display a form', 'formidable' ),
+	description: __( 'Display a Form', 'formidable' ),
 	icon: FormidableIcon,
 	category: 'widgets',
 	keywords: [

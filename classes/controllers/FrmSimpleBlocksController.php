@@ -6,7 +6,7 @@ class FrmSimpleBlocksController {
 	 * Enqueue Formidable Simple Blocks' js and CSS for editor in admin.
 	 *
 	 */
-	public static function formidable_block_editor_assets() {
+	public static function block_editor_assets() {
 		$version = FrmAppHelper::plugin_version();
 
 		wp_enqueue_script(
@@ -25,15 +25,9 @@ class FrmSimpleBlocksController {
 
 		$script_vars = array(
 			'forms'        => self::get_forms_options(),
-			'pro'          => false,
-			'views'        => '',
-			'show_counts'  => '',
-			'view_options' => '',
 			'icon'         => $icon,
 			'name'         => $block_name,
 		);
-
-		$script_vars = apply_filters( 'frm_simple_blocks_script_vars', $script_vars );
 
 		wp_localize_script( 'formidable-form-selector', 'formidable_form_selector', $script_vars );
 		if ( function_exists( 'wp_set_script_translations' ) ) {
@@ -93,6 +87,10 @@ class FrmSimpleBlocksController {
 			return;
 		}
 
+		if ( is_admin() ) {
+			FrmStylesController::enqueue_css( 'register', true );
+		}
+
 		register_block_type(
 			'formidable/simple-form',
 			array(
@@ -110,6 +108,7 @@ class FrmSimpleBlocksController {
 						'type' => 'string',
 					),
 				),
+				'editor_style'    => 'formidable',
 				'editor_script'   => 'formidable-form-selector',
 				'render_callback' => 'FrmSimpleBlocksController::simple_form_render',
 
@@ -133,13 +132,6 @@ class FrmSimpleBlocksController {
 		$params['id'] = $params['formId'];
 		unset( $params['formId'] );
 
-		$form = FrmFormsController::get_form_shortcode( $params );
-
-		ob_start();
-		wp_print_styles( 'formidable' );
-		$form .= ob_get_contents();
-		ob_end_clean();
-
-		return $form;
+		return FrmFormsController::get_form_shortcode( $params );
 	}
 }
