@@ -7,13 +7,18 @@
 }
 
 /* dashboard icon */
-#toplevel_page_formidable .wp-menu-image:before,
-.wp-media-buttons .add_media span.wp-media-buttons-icon.frm-buttons-icon:before {
-	font-family: 's11-fp' !important;
-	content: '\e601'; 
-	text-shadow: none;
-	line-height: 1.4;
+.frm_insert_form svg{
+	vertical-align: text-top;
 }
+
+.wp-media-buttons-icon.dashicons-feedback{
+	vertical-align: text-bottom !important;
+}
+
+.wp-media-buttons-icon.dashicons-feedback:before {
+    content: "\f175" !important;
+}
+
 .frm_inactive_menu{
     opacity:.5;
     filter:alpha(opacity=50);

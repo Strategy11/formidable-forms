@@ -9,11 +9,20 @@ class FrmAppController {
         }
 
 		$menu_name = FrmAppHelper::get_menu_name();
-		add_menu_page( 'Formidable', $menu_name, 'frm_view_forms', 'formidable', 'FrmFormsController::route', '', self::get_menu_position() );
+		add_menu_page( 'Formidable', $menu_name, 'frm_view_forms', 'formidable', 'FrmFormsController::route', self::menu_icon(), self::get_menu_position() );
     }
 
 	private static function get_menu_position() {
 		return apply_filters( 'frm_menu_position', '29.3' );
+	}
+
+	/**
+	 * @since 3.04.04
+	 */
+	private static function menu_icon() {
+		$icon = FrmAppHelper::svg_logo( array( 'fill' => '#a0a5aa', 'orange' => '#a0a5aa' ) );
+		$icon = 'data:image/svg+xml;base64,' . base64_encode( $icon );
+		return apply_filters( 'frm_icon', $icon );
 	}
 
 	/**
