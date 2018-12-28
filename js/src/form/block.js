@@ -14,12 +14,13 @@ const { registerBlockType } = wp.blocks;
 const { ServerSideRender, Notice } = wp.components;
 
 registerBlockType( 'formidable/simple-form', {
-	title: __( 'Formidable Form', 'formidable' ),
+	title: formidable_form_selector.name,
 	description: __( 'Display a form', 'formidable' ),
 	icon: FormidableIcon,
 	category: 'widgets',
 	keywords: [
-		__( 'contact form', 'formidable' ),
+		__( 'contact forms', 'formidable' ),
+		'formidable',
 	],
 
 	edit: function( { setAttributes, attributes } ) {
@@ -40,7 +41,7 @@ registerBlockType( 'formidable/simple-form', {
 				<div className="frm-block-intro-screen">
 					<div className="frm-block-intro-content">
 						<FormidableIcon></FormidableIcon>
-						<div className="frm-block-title">{ __( 'Formidable Forms', 'formidable' ) }</div>
+						<div className="frm-block-title">{ formidable_form_selector.name }</div>
 						<div className="frm-block-selector-screen">
 							<FormSelect
 								formId={ formId }

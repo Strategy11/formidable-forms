@@ -23,7 +23,7 @@ export default class ItemSelect extends Component {
 
 		return [
 			{
-				label: sprintf( __( 'Select a %s', itemName, 'formidable' ), itemName ),
+				label: sprintf( __( 'Select a %s', 'formidable' ), itemName ),
 				value: '',
 			},
 			...options,
@@ -44,7 +44,7 @@ export default class ItemSelect extends Component {
 		if ( ( ! items || items.length === 0 ) ) {
 			return (
 				<p className="frm-block-select-no-items">
-					{ __( 'Currently, there are no ', 'formidable' ) + itemNamePlural }
+					{ sprintf( __( 'Currently, there are no %s', 'formidable' ), itemNamePlural ) }
 				</p>
 			);
 		}

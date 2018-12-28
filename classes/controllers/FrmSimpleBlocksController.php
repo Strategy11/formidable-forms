@@ -18,6 +18,10 @@ class FrmSimpleBlocksController {
 		);
 
 		$icon = str_replace( 'dashicons-', '', apply_filters( 'frm_icon', 'svg' ) );
+		$block_name = FrmAppHelper::get_menu_name();
+		if ( $block_name === 'Formidable' ) {
+			$block_name = 'Formidable Forms';
+		}
 
 		$script_vars = array(
 			'forms'        => self::get_forms_options(),
@@ -26,6 +30,7 @@ class FrmSimpleBlocksController {
 			'show_counts'  => '',
 			'view_options' => '',
 			'icon'         => $icon,
+			'name'         => $block_name,
 		);
 
 		$script_vars = apply_filters( 'frm_simple_blocks_script_vars', $script_vars );
