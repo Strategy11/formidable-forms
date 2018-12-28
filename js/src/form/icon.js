@@ -11,7 +11,7 @@ export default class FormidableIcon extends Component {
 		}
 
 		return (
-			<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 599.68 601.37" width="120" height="120">
+			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 599.68 601.37" width="120" height="120">
 				<defs />
 				<rect className="cls-1 orange" x="289.64" y="383.96" width="140" height="76" />
 				<path className="cls-1" d="M400.21,147H200.12c-17,0-30.48,12.2-30.48,29.31V218h260V147Z" />
