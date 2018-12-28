@@ -524,8 +524,8 @@ class FrmFormsController {
 			$menu_name = FrmAppHelper::get_menu_name();
 			$icon = apply_filters( 'frm_media_icon', FrmAppHelper::svg_logo() );
 			echo '<a href="#TB_inline?width=50&height=50&inlineId=frm_insert_form" class="thickbox button add_media frm_insert_form" title="' . esc_attr__( 'Add forms and content', 'formidable' ) . '">' .
-				FrmAppHelper::kses( $icon, 'all' ) . // WPCS: XSS ok.
-				' ' . esc_html( $menu_name ) . '</a>';
+				FrmAppHelper::kses( $icon, 'all' ) .
+				' ' . esc_html( $menu_name ) . '</a>'; // WPCS: XSS ok.
 		}
 	}
 
