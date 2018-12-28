@@ -110,7 +110,7 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * @since 3.04.04
+	 * @since 3.05
 	 */
 	public static function svg_logo( $atts = array() ) {
 		$defaults = array(

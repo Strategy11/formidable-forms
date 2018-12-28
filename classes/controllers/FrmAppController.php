@@ -17,7 +17,7 @@ class FrmAppController {
 	}
 
 	/**
-	 * @since 3.04.04
+	 * @since 3.05
 	 */
 	private static function menu_icon() {
 		$icon = FrmAppHelper::svg_logo(
@@ -243,7 +243,7 @@ class FrmAppController {
 	/**
 	 * Don't nag people to install WPForms
 	 *
-	 * @since 3.04.04
+	 * @since 3.05
 	 */
 	public static function remove_wpforms_nag( $upsell ) {
 		if ( is_array( $upsell ) ) {
