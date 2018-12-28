@@ -20,7 +20,12 @@ class FrmAppController {
 	 * @since 3.04.04
 	 */
 	private static function menu_icon() {
-		$icon = FrmAppHelper::svg_logo( array( 'fill' => '#a0a5aa', 'orange' => '#a0a5aa' ) );
+		$icon = FrmAppHelper::svg_logo(
+			array(
+				'fill'   => '#a0a5aa',
+				'orange' => '#a0a5aa',
+			)
+		);
 		$icon = 'data:image/svg+xml;base64,' . base64_encode( $icon );
 		return apply_filters( 'frm_icon', $icon );
 	}
