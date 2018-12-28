@@ -47,6 +47,14 @@
 	margin-bottom: 15px;
 }
 
+.frm-view-filter-component p {
+	margin-left: 28px;
+}
+
+.frm-view-filter-component label {
+	font-weight: 600;
+}
+
 .components-panel__row.frm-row-small-top-margin {
 	margin-top: 5px;
 }
