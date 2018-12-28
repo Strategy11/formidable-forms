@@ -5,6 +5,7 @@
  */
 import FormShortcode from './formshortcode';
 import Inspector from './inspector';
+import FormidableIcon from './icon';
 import FormSelect from './formselect';
 
 const { Fragment } = wp.element;
@@ -14,8 +15,8 @@ const { ServerSideRender, Notice } = wp.components;
 
 registerBlockType( 'formidable/simple-form', {
 	title: __( 'Formidable Form', 'formidable' ),
-	description: __( 'Display a Formidable form', 'formidable' ),
-	icon: formidable_form_selector.icon,
+	description: __( 'Display a form', 'formidable' ),
+	icon: FormidableIcon,
 	category: 'widgets',
 	keywords: [
 		__( 'contact form', 'formidable' ),
@@ -29,7 +30,7 @@ registerBlockType( 'formidable/simple-form', {
 		if ( forms.length === 0 ) {
 			return (
 				<Notice status="warning" isDismissible={ false }>
-					{ __( 'This site does not have any Formidable forms.', 'formidable' ) }
+					{ __( 'This site does not have any forms.', 'formidable' ) }
 				</Notice>
 			);
 		}
@@ -38,7 +39,7 @@ registerBlockType( 'formidable/simple-form', {
 			return (
 				<div className="frm-block-intro-screen">
 					<div className="frm-block-intro-content">
-						{ formidable_form_selector.icon }
+						<FormidableIcon></FormidableIcon>
 						<div className="frm-block-title">{ __( 'Formidable Forms', 'formidable' ) }</div>
 						<div className="frm-block-selector-screen">
 							<FormSelect

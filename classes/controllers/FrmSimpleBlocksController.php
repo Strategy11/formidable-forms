@@ -17,13 +17,7 @@ class FrmSimpleBlocksController {
 			true
 		);
 
-		$icon = FrmAppHelper::svg_logo(
-			array(
-				'height' => 600,
-				'width'  => 600,
-			)
-		);
-		$icon = apply_filters( 'frm_block_icon', $icon );
+		$icon = str_replace( 'dashicons-', '', apply_filters( 'frm_icon', 'svg' ) );
 
 		$script_vars = array(
 			'forms'        => self::get_forms_options(),
@@ -31,7 +25,7 @@ class FrmSimpleBlocksController {
 			'views'        => '',
 			'show_counts'  => '',
 			'view_options' => '',
-			'icon'         => $icon
+			'icon'         => $icon,
 		);
 
 		$script_vars = apply_filters( 'frm_simple_blocks_script_vars', $script_vars );

@@ -26,7 +26,6 @@
 }
 
 .frm-block-intro-content svg {
-	width: 20%;
 	margin-top: 32px;
 	margin-bottom: 12px;
 }
@@ -35,6 +34,14 @@
 	color: #4d4d4d;
 	font-weight: 500;
 	font-size: 1.3em;
+}
+
+.frm-block-intro-content .cls-1 {
+	fill: #4d4d4d;
+}
+
+.frm-block-intro-content .cls-1.orange {
+	fill: #f05a24;
 }
 
 .frm-block-selector-screen {
