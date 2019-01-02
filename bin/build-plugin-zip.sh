@@ -94,7 +94,7 @@ echo -n "[y]es/[n]o: "
 read answer
 if [ "$answer" != "${answer#[Yy]}" ]; then
 	status "Commiting..."
-	git commit -m "Prepare for v$version release"
+	git commit -a -m "Prepare for v$version release"
 	status "Creating new GitHub release"
 	git_commit= git rev-parse HEAD
 	git tag -a v$version -m "Release v$version"
