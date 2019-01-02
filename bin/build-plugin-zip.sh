@@ -83,7 +83,7 @@ mv FrmAppHelper.tmp.php classes/helpers/FrmAppHelper.php
 # WP.org can't scan js files for strings. So they need to be added into
 # a PHP file so they can be read and included for translations
 status "Adding JS strings to PHP"
-npx pot-to-php languages/formidablejs.pot languages/formidable-js-strings.php formidable
+npx pot-to-php languages/formidable-js.pot languages/formidable-js-strings.php formidable
 status "Preparing POT file"
 npm run makepot
 
