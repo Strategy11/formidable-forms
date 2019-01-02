@@ -9,7 +9,7 @@ class FrmSimpleBlocksController {
 	public static function block_editor_assets() {
 		$version = FrmAppHelper::plugin_version();
 
-		wp_enqueue_script(
+		wp_register_script(
 			'formidable-form-selector',
 			FrmAppHelper::plugin_url() . '/js/formidable_blocks.js',
 			array( 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-components', 'wp-editor' ),
