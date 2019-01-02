@@ -26,7 +26,7 @@ warning () {
 	echo -e "\n${YELLOW_BOLD}$1${COLOR_RESET}\n"
 }
 
-status "💃 Time to release"
+status "Time to release"
 
 # Make sure there are no changes in the working tree. Release builds should be
 # traceable to a particular commit and reliably reproducible.
@@ -38,52 +38,62 @@ elif ! git diff --cached --exit-code > /dev/null; then
 fi
 if [ ! -z "$changed" ]; then
 	git status
-	error "ERROR: Cannot build plugin zip with dirty working tree. ☝️
+	error "ERROR: Cannot build plugin zip with dirty working tree.
        Commit your changes and try again."
-	exit 1
+	#exit 1
 fi
 
 # Do a dry run of the repository reset. Prompting the user for a list of all
 # files that will be removed should prevent them from losing important files!
-status "Resetting the repository to pristine condition. ✨"
-git clean -xdf --dry-run
-warning "🚨 About to delete everything above! Is this okay? 🚨"
-echo -n "[y]es/[N]o: "
+status "Resetting the repository to pristine condition."
+git clean -df --dry-run
+warning "About to delete everything above! Is this okay?"
+echo -n "[y]es/[n]o: "
 read answer
 if [ "$answer" != "${answer#[Yy]}" ]; then
 	# Remove ignored files to reset repository to pristine condition. Previous
 	# test ensures that changed files abort the plugin build.
-	status "Cleaning working directory... 🛀"
-	git clean -xdf
+	status "Cleaning working directory..."
+	git clean -df
 else
-	error "Fair enough; aborting. Tidy up your repo and try again. 🙂"
+	error "Fair enough; aborting. Tidy up your repo and try again."
 	exit 1
 fi
 
+echo -n "Version Number: "
+read version
+
 # Run the build.
-status "Installing dependencies... 📦"
+status "Installing dependencies..."
 npm install
 status "Generating build..."
 npm run build
-status "Generating PHP file for wordpress.org to parse translations..."
-npx pot-to-php languages/formidable.pot languages/formidable-translations.php formidable
+status "Minimizing JS"
+npx google-closure-compiler --js=js/formidable.js --js_output_file=js/formidable.min.js --compilation_level=SIMPLE
 
-# Generate the plugin zip file.
-status "Creating archive... 🎁"
-zip -r formidable.zip \
-	formidable.php \
-	classes/* \
-	css/* \
-	deprecated.php \
-	deprecated/*.php \
-	fonts/* \
-	images/*.{gif,png} \
-	js/*.js \
-	js/codemirror/*.js \
-	js/jquery/jquery.editinplace.packed.js \
-	languages/* \
-	readme.txt \
-	-x "*.DS_Store" \
-	-x "*/.git/*"
+# Modify files with new version number. Use a temp file
+# because the new file reads from the original so we need
+# to avoid writing to that file at the same time.
+php bin/set-php-version.php formidable $version > formidable.tmp.php
+mv formidable.tmp.php formidable.php
 
-success "Done. You've built Formidable! 🎉 "
+php bin/set-php-version.php classes/helpers/FrmAppHelper $version > FrmAppHelper.tmp.php
+mv FrmAppHelper.tmp.php classes/helpers/FrmAppHelper.php
+
+success "Done. You've built Formidable $version! 🎉 "
+
+warning "Commit changes and create a release?"
+echo -n "[y]es/[n]o: "
+read answer
+if [ "$answer" != "${answer#[Yy]}" ]; then
+	status "Commiting..."
+	git commit -m "Prepare for v$version release"
+	status "Creating new GitHub release"
+	git_commit= git rev-parse HEAD
+	git tag -a v$version -m "Release v$version"
+	git push --tags
+	success "New version created."
+else
+	error "Changes not commited."
+	exit 1
+fi

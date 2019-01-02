@@ -4,9 +4,10 @@
  * Generates the production (plugin build) version of `formidable.php`
  */
 
-$f = fopen( dirname( dirname( __FILE__ ) ) . '/formidable.php', 'r' );
+$filename = $argv[1] . '.php';
+$f = fopen( dirname( dirname( __FILE__ ) ) . '/' . $filename, 'r' );
 
-$plugin_version = $argv[1];
+$plugin_version = $argv[2];
 
 while ( true ) {
 	$line = fgets( $f );
@@ -14,10 +15,15 @@ while ( true ) {
 		break;
 	}
 
-	if ( preg_match( '@^\s*\*\s*Version:\s*([0-9.]+)@', $line, $matches ) ) {
+	if ( preg_match( '@^Version:\s*([0-9.]+)@', $line, $matches ) ) {
 		$old_plugin_version = $matches[1];
 		if ( $old_plugin_version != $plugin_version ) {
-			$line = 'Version: ' . $plugin_version;
+			$line = 'Version: ' . $plugin_version . "\n";
+		}
+	} elseif ( preg_match( '@public static [$]plug_version = \'([0-9.]+)\';@', $line, $matches ) ) {
+		$old_plugin_version = $matches[1];
+		if ( $old_plugin_version != $plugin_version ) {
+			$line = "\t" . 'public static $plug_version = \'' . $plugin_version . '\';' . "\n";
 		}
 	}
 
