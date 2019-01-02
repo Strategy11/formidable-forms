@@ -7,7 +7,7 @@
 		"dev": "cross-env NODE_ENV=default webpack --watch",
 		"lint": "./node_modules/.bin/eslint .; exit 0",
 		"package-plugin": "./bin/build-plugin-zip.sh",
-		"release": "npm run build"
+		"makepot": "wp i18n make-pot . languages/formidable.pot --skip-js --skip-audit --merge=languages/formidable-js.pot"
 	},
 	"engines": {
 		"node": ">=8.0.0",

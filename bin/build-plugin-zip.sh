@@ -40,7 +40,7 @@ if [ ! -z "$changed" ]; then
 	git status
 	error "ERROR: Cannot build plugin zip with dirty working tree.
        Commit your changes and try again."
-	#exit 1
+	exit 1
 fi
 
 # Do a dry run of the repository reset. Prompting the user for a list of all
@@ -69,7 +69,7 @@ npm install
 status "Generating build..."
 npm run build
 status "Minimizing JS"
-npx google-closure-compiler --js=js/formidable.js --js_output_file=js/formidable.min.js --compilation_level=SIMPLE
+npx google-closure-compiler --js=js/formidable.js --js_output_file=js/formidable.min.js --compilation_level=WHITESPACE
 
 # Modify files with new version number. Use a temp file
 # because the new file reads from the original so we need
@@ -79,6 +79,13 @@ mv formidable.tmp.php formidable.php
 
 php bin/set-php-version.php classes/helpers/FrmAppHelper $version > FrmAppHelper.tmp.php
 mv FrmAppHelper.tmp.php classes/helpers/FrmAppHelper.php
+
+# WP.org can't scan js files for strings. So they need to be added into
+# a PHP file so they can be read and included for translations
+status "Adding JS strings to PHP"
+npx pot-to-php languages/formidablejs.pot languages/formidable-js-strings.php formidable
+status "Preparing POT file"
+npm run makepot
 
 success "Done. You've built Formidable $version! 🎉 "
 

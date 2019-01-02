@@ -4,6 +4,8 @@ pro
 .phpintel
 frm.min.js
 formidableforms.css
+formidable.zip
+languages/formidable-js.pot
 
 # Node
 node_modules
