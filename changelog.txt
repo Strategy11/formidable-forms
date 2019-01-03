@@ -1,4 +1,8 @@
 == Changelog ==
+= 3.05 =
+* New: Add a new Forms block for use with the new WP editor
+* Fix: A false number was showing for number of plugin updates available when add-ons were not installed
+
 = 3.04.03 =
 * New: Improved autoupdating and installation for form add-ons
 * Tweak: Only show the form add-ons page to those who can activate plugins
