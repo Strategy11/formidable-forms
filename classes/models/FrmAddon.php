@@ -159,6 +159,7 @@ class FrmAddon {
 
 	/**
 	 * Activate the license in wp-config.php
+	 *
 	 * @since 2.04
 	 */
 	public function activate_defined_license() {
@@ -175,6 +176,7 @@ class FrmAddon {
 
 	/**
 	 * Check the wp-config.php for the license key
+	 *
 	 * @since 2.04
 	 */
 	public function get_defined_license() {
@@ -189,6 +191,7 @@ class FrmAddon {
 	/**
 	 * If the license is in the config, limit the frequency of checks.
 	 * The license may be entered incorrectly, so we don't want to check on every page load.
+	 *
 	 * @since 2.04
 	 */
 	private function is_time_to_auto_activate() {
@@ -351,7 +354,7 @@ class FrmAddon {
 	}
 
 	/**
-	 * make sure transients don't stick around on sites that
+	 * Make sure transients don't stick around on sites that
 	 * don't save the transient expiration
 	 *
 	 * @since 2.05.05

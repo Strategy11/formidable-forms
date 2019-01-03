@@ -37,10 +37,11 @@ class FrmEntry {
 		return $entry_id;
 	}
 
-    /**
-     * check for duplicate entries created in the last minute
-     * @return boolean
-     */
+	/**
+	 * Check for duplicate entries created in the last minute
+	 *
+	 * @return boolean
+	 */
 	public static function is_duplicate( $new_values, $values ) {
 		$duplicate_entry_time = apply_filters( 'frm_time_to_check_duplicates', 60, $new_values );
 
@@ -260,6 +261,7 @@ class FrmEntry {
 	/**
 	 * After switching to the wp_loaded hook for processing entries,
 	 * we can no longer use 'name', but check it as a fallback
+	 *
 	 * @since 2.0.11
 	 */
 	public static function get_new_entry_name( $values, $default = '' ) {
@@ -272,6 +274,7 @@ class FrmEntry {
 
 	/**
 	 * If $entry is numeric, get the entry object
+	 *
 	 * @param int|object $entry by reference
 	 * @since 2.0.9
 	 */

@@ -95,13 +95,12 @@ read answer
 if [ "$answer" != "${answer#[Yy]}" ]; then
 	status "Commiting..."
 	git commit -a -m "Prepare for v$version release"
+	git push
 	status "Creating new GitHub release"
 	git_commit= git rev-parse HEAD
 	git tag -a v$version -m "Release v$version"
 	git push origin v$version
-	git push
 	success "New version created."
 else
-	error "Changes not commited."
-	exit 1
+	status "Changes not commited."
 fi

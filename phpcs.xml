@@ -6,6 +6,7 @@
 	<exclude-pattern>vendor/*</exclude-pattern>
 	<exclude-pattern>node_modules/*</exclude-pattern>
 	<exclude-pattern>deprecated/*</exclude-pattern>
+	<exclude-pattern>bin/*</exclude-pattern>
 
 	<arg name="extensions" value="php" />
 	<arg value="nsp" />
@@ -22,6 +23,7 @@
 		<exclude name="Squiz.PHP.EmbeddedPhp.ContentBeforeOpen" />
 		<exclude name="Squiz.PHP.EmbeddedPhp.ContentAfterEnd" />
 		<exclude name="Squiz.Commenting" />
+		<exclude name="Generic.Commenting.DocComment.MissingShort" />
 
 		<!-- Enable these rules right away -->
 		<exclude name="WordPress.Functions.DontExtract.extract_extract" />
@@ -36,6 +38,7 @@
 		<exclude name="WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid" />
 		<exclude name="WordPress.Classes.ValidClassName.NotCamelCaps" />
 		<exclude name="Generic.Files.LowercasedFilename.NotFound" />
+		<exclude name="WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase" />
 		<exclude name="WordPress.NamingConventions.ValidVariableName.NotSnakeCase" /><!-- Some WP globals break the rule -->
 		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase" />
 		<exclude name="WordPress.Files.FileName.InvalidClassFileName" />

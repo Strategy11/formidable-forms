@@ -489,6 +489,7 @@ class FrmDb {
 
 	/**
 	 * Make sure this is ordering by either ASC or DESC
+	 *
 	 * @since 2.05.06
 	 */
 	public static function esc_order_by( &$order_by ) {
@@ -523,10 +524,11 @@ class FrmDb {
 		return ' LIMIT ' . $limit;
 	}
 
-    /**
-     * Get an array of values ready to go through $wpdb->prepare
-     * @since 2.05.06
-     */
+	/**
+	 * Get an array of values ready to go through $wpdb->prepare
+	 *
+	 * @since 2.05.06
+	 */
 	public static function prepare_array_values( $array, $type = '%s' ) {
 		$placeholders = array_fill( 0, count( $array ), $type );
 		return implode( ', ', $placeholders );
@@ -642,6 +644,7 @@ class FrmDb {
 	/**
 	 * Keep track of the keys cached in each group so they can be deleted
 	 * in Redis and Memcache
+	 *
 	 * @since 2.05.06
 	 */
 	public static function add_key_to_group_cache( $key, $group ) {

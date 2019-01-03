@@ -83,6 +83,7 @@ class FrmFieldValue {
 
 	/**
 	 * Get a value from the field settings
+	 *
 	 * @since 2.05.06
 	 */
 	public function get_field_option( $value ) {

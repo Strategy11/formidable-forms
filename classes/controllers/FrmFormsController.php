@@ -207,6 +207,7 @@ class FrmFormsController {
 	/**
 	 * Redirect to the url for creating from a template
 	 * Also delete the current form
+	 *
 	 * @since 2.0
 	 */
 	public static function _create_from_template() {
@@ -350,7 +351,7 @@ class FrmFormsController {
 	 */
 	public static function preview_content( $content ) {
 		if ( in_the_loop() ) {
-			$content = FrmFormsController::show_page_preview();
+			$content = self::show_page_preview();
 		}
 		return $content;
 	}
@@ -820,6 +821,7 @@ class FrmFormsController {
 
 		/**
 		 * Add extra helper shortcodes on the Advanced tab in form settings and views
+		 *
 		 * @since 3.04.01
 		 * @param array $atts - Includes fields and form_id
 		 */
@@ -829,6 +831,7 @@ class FrmFormsController {
 	/**
 	 * Get an array of the options to display in the advanced tab
 	 * of the customization panel
+	 *
 	 * @since 2.0.6
 	 */
 	private static function get_advanced_shortcodes() {
@@ -869,6 +872,7 @@ class FrmFormsController {
 
 	/**
 	 * Get an array of the helper shortcodes to display in the customization panel
+	 *
 	 * @since 2.0.6
 	 */
 	private static function get_shortcode_helpers( $settings_tab ) {
@@ -897,6 +901,7 @@ class FrmFormsController {
 		/**
 		 * Use this hook to add or remove buttons in the helpers section
 		 * in the customization panel
+		 *
 		 * @since 2.0.6
 		 */
 		$entry_shortcodes = apply_filters( 'frm_helper_shortcodes', $entry_shortcodes, $settings_tab );
@@ -1221,6 +1226,7 @@ class FrmFormsController {
 			/**
 			 * Use this shortcode to check for external shortcodes that may span
 			 * across multiple fields in the customizable HTML
+			 *
 			 * @since 2.0.8
 			 */
 			$form = apply_filters( 'frm_filter_final_form', $form );
@@ -1318,6 +1324,7 @@ class FrmFormsController {
 
 	/**
 	 * If the form was processed earlier (init), get the generated errors
+	 *
 	 * @since 2.05
 	 */
 	private static function get_saved_errors( $form, $params ) {
@@ -1389,6 +1396,7 @@ class FrmFormsController {
 
 	/**
 	 * Used when the success action is not 'message'
+	 *
 	 * @since 2.05
 	 */
 	public static function run_success_action( $args ) {
@@ -1484,6 +1492,7 @@ class FrmFormsController {
 
 	/**
 	 * Prepare to show the success message and empty form after submit
+	 *
 	 * @since 2.05
 	 */
 	public static function show_message_after_save( $atts ) {
@@ -1498,6 +1507,7 @@ class FrmFormsController {
 
 	/**
 	 * Show an empty form
+	 *
 	 * @since 2.05
 	 */
 	private static function show_form_after_submit( $args ) {
@@ -1526,6 +1536,7 @@ class FrmFormsController {
 
 	/**
 	 * Get all the values needed on the new.php entry page
+	 *
 	 * @since 2.05
 	 */
 	private static function fill_atts_for_form_display( &$args ) {
@@ -1543,6 +1554,7 @@ class FrmFormsController {
 
 	/**
 	 * Show the success message without the form
+	 *
 	 * @since 2.05
 	 */
 	private static function show_lone_success_messsage( $atts ) {
@@ -1560,6 +1572,7 @@ class FrmFormsController {
 
 	/**
 	 * Prepare the success message before it's shown
+	 *
 	 * @since 2.05
 	 */
 	private static function prepare_submit_message( $form, $entry_id ) {

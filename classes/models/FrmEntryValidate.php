@@ -206,12 +206,13 @@ class FrmEntryValidate {
 		return $pattern;
 	}
 
-    /**
-     * check for spam
-     * @param boolean $exclude
-     * @param array $values
-     * @param array $errors by reference
-     */
+	/**
+	 * Check for spam
+	 *
+	 * @param boolean $exclude
+	 * @param array $values
+	 * @param array $errors by reference
+	 */
     public static function spam_check( $exclude, $values, &$errors ) {
         if ( ! empty( $exclude ) || ! isset( $values['item_meta'] ) || empty( $values['item_meta'] ) || ! empty( $errors ) ) {
             // only check spam if there are no other errors
@@ -301,7 +302,7 @@ class FrmEntryValidate {
 	/**
 	 * @since 2.0
 	 */
-	private  static function parse_akismet_array( &$datas, $values ) {
+	private static function parse_akismet_array( &$datas, $values ) {
 		self::add_site_info_to_akismet( $datas );
 		self::add_user_info_to_akismet( $datas, $values );
 		self::add_server_values_to_akismet( $datas );
