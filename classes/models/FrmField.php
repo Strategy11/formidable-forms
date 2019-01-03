@@ -5,8 +5,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmField {
 
-	static public $use_cache = true;
-	static public $transient_size = 200;
+	public static $use_cache = true;
+	public static $transient_size = 200;
 
 	public static function field_selection() {
 		$fields = array(
