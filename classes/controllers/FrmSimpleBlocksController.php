@@ -4,7 +4,6 @@ class FrmSimpleBlocksController {
 
 	/**
 	 * Enqueue Formidable Simple Blocks' js and CSS for editor in admin.
-	 *
 	 */
 	public static function block_editor_assets() {
 		$version = FrmAppHelper::plugin_version();
@@ -80,7 +79,6 @@ class FrmSimpleBlocksController {
 
 	/**
 	 * Registers simple form block
-	 *
 	 */
 	public static function register_simple_form_block() {
 		if ( ! is_callable( 'register_block_type' ) ) {

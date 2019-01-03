@@ -445,14 +445,7 @@ class FrmDb {
      */
 	public static function esc_like( $term ) {
         global $wpdb;
-        if ( method_exists( $wpdb, 'esc_like' ) ) {
-			// WP 4.0
-            $term = $wpdb->esc_like( $term );
-        } else {
-            $term = like_escape( $term );
-        }
-
-        return $term;
+		return $wpdb->esc_like( $term );
     }
 
 	/**
