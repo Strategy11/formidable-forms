@@ -21,6 +21,7 @@
 		<exclude name="Generic.WhiteSpace.DisallowSpaceIndent.SpacesUsed" />
 		<exclude name="Squiz.PHP.EmbeddedPhp.ContentBeforeOpen" />
 		<exclude name="Squiz.PHP.EmbeddedPhp.ContentAfterEnd" />
+		<exclude name="Squiz.Commenting" />
 
 		<!-- Enable these rules right away -->
 		<exclude name="WordPress.Functions.DontExtract.extract_extract" />

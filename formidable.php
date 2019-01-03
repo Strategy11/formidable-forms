@@ -9,16 +9,17 @@ Author: Strategy11
 Text Domain: formidable
 */
 
-/*  Copyright 2010  Formidable Forms
+/*
+	Copyright 2010  Formidable Forms
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License, version 2, as
-    published by the Free Software Foundation.
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License, version 2, as
+	published by the Free Software Foundation.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -62,6 +63,7 @@ function frm_forms_autoloader( $class_name ) {
 
 /**
  * Autoload the Formidable and Pro classes
+ *
  * @since 3.0
  */
 function frm_class_autoloader( $class_name, $filepath ) {
