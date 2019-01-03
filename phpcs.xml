@@ -41,5 +41,4 @@
 		<exclude name="WordPress.PHP.YodaConditions"/>
 		<exclude name="WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid" />
 	</rule>
-	<rule ref="WordPress.PHP.DiscouragedFunctions"/>
 </ruleset>
