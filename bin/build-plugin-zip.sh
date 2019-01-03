@@ -60,9 +60,6 @@ else
 	exit 1
 fi
 
-echo -n "Version Number: "
-read version
-
 # Run the build.
 status "Installing dependencies..."
 npm install
@@ -74,6 +71,7 @@ npx google-closure-compiler --js=js/formidable.js --js_output_file=js/formidable
 # Modify files with new version number. Use a temp file
 # because the new file reads from the original so we need
 # to avoid writing to that file at the same time.
+version="$1"
 php bin/set-php-version.php formidable $version > formidable.tmp.php
 mv formidable.tmp.php formidable.php
 

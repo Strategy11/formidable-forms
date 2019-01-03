@@ -30,3 +30,7 @@ Get lint results:
 
 Before making a commit, update the scripts:
 `npm run build`
+
+To create a new release:
+`npm run package-plugin -- 3.05`
+Change '3.05' to the number of the new version
