@@ -301,6 +301,7 @@ class FrmStylesHelper {
 	/**
 	 * If left/right label is over a certain size,
 	 * adjust the field description margin at a different screen size
+	 *
 	 * @since 2.3
 	 */
 	private static function description_margin_for_screensize( $width ) {

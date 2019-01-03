@@ -1,6 +1,14 @@
-.DS_Store
+*.DS_store
 pro
 .idea
 .phpintel
 frm.min.js
 formidableforms.css
+formidable.zip
+languages/formidable-js.pot
+languages/formidable-js-strings.php
+
+# Node
+node_modules
+node_modules/*
+npm-debug.log

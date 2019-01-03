@@ -6,32 +6,12 @@
 	<exclude-pattern>vendor/*</exclude-pattern>
 	<exclude-pattern>node_modules/*</exclude-pattern>
 	<exclude-pattern>deprecated/*</exclude-pattern>
+	<exclude-pattern>bin/*</exclude-pattern>
 
 	<arg name="extensions" value="php" />
 	<arg value="nsp" />
 
-	<rule ref="WordPress-VIP">
-		
-		<!-- WP VIP rules which are very restrictive and not all that applicable as FF is not on VIP -->
-		<exclude name="WordPress.VIP.DirectDatabaseQuery" />
-		<exclude name="WordPress.DB.DirectDatabaseQuery.NoCaching" />
-		<exclude name="WordPress.DB.DirectDatabaseQuery.SchemaChange" />
-		<exclude name="WordPress.VIP.RestrictedVariables.user_meta"/>
-		<exclude name="WordPress.VIP.RestrictedFunctions.user_meta" />
-		<exclude name="WordPress.VIP.RestrictedFunctions.user_meta_delete_user_meta" />
-		<exclude name="WordPress.VIP.RestrictedFunctions.user_meta_get_user_meta" />
-		<exclude name="WordPress.VIP.RestrictedFunctions.user_meta_update_user_meta" />
-		<exclude name="WordPress.VIP.RestrictedFunctions.switch_to_blog"/>
-		<exclude name="WordPress.VIP.RestrictedFunctions.switch_to_blog_switch_to_blog"/>
-		<exclude name="WordPress.VIP.RestrictedFunctions.get_term_by"/>
-		<exclude name="WordPress.VIP.RestrictedFunctions.get_term_link"/>
-		<exclude name="WordPress.VIP.RestrictedFunctions.term_exists" />
-		<exclude name="WordPress.VIP.RestrictedFunctions.term_exists_term_exists" />
-		<exclude name="WordPress.VIP.RestrictedFunctions.wp_get_post_terms" />
-		<exclude name="WordPress.VIP.RestrictedFunctions.wp_is_mobile" />
-		<exclude name="WordPress.VIP.RestrictedFunctions.wp_is_mobile_wp_is_mobile" />
-		<exclude name="WordPress.VIP.PostsPerPage.posts_per_page" />
-		<exclude name="WordPress.VIP.PostsPerPage.posts_per_page_numberposts" />
+	<rule ref="WordPress">
 
 		<!-- Temporary exclusions. Enable these when we have time to address them -->
 		<exclude name="Generic.WhiteSpace.ScopeIndent.IncorrectExact" />
@@ -42,13 +22,17 @@
 		<exclude name="Generic.WhiteSpace.DisallowSpaceIndent.SpacesUsed" />
 		<exclude name="Squiz.PHP.EmbeddedPhp.ContentBeforeOpen" />
 		<exclude name="Squiz.PHP.EmbeddedPhp.ContentAfterEnd" />
+		<exclude name="Squiz.Commenting" />
+		<exclude name="Generic.Commenting.DocComment.MissingShort" />
+		<exclude name="WordPress.WP.GlobalVariablesOverride" />
+		<exclude name="WordPress.WP.I18n.MissingTranslatorsComment" />
 
 		<!-- Enable these rules right away -->
 		<exclude name="WordPress.Functions.DontExtract.extract_extract" />
 		<exclude name="WordPress.PHP.DontExtract.extract_extract" />
 		<exclude name="WordPress.CSRF.NonceVerification.NoNonceVerification" />
 		<exclude name="WordPress.Security.NonceVerification.NoNonceVerification" />
-		<exclude name="WordPress.VIP.ValidatedSanitizedInput" />
+		<exclude name="WordPress.Security.NonceVerification.Missing" />
 		<exclude name="WordPress.Security.ValidatedSanitizedInput" />
 
 		<!-- We should probably turn the below rules on, but these give issues with the current code base. -->
@@ -57,11 +41,11 @@
 		<exclude name="WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid" />
 		<exclude name="WordPress.Classes.ValidClassName.NotCamelCaps" />
 		<exclude name="Generic.Files.LowercasedFilename.NotFound" />
+		<exclude name="WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase" />
 		<exclude name="WordPress.NamingConventions.ValidVariableName.NotSnakeCase" /><!-- Some WP globals break the rule -->
 		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase" />
 		<exclude name="WordPress.Files.FileName.InvalidClassFileName" />
 		<exclude name="WordPress.PHP.YodaConditions"/>
 		<exclude name="WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid" />
 	</rule>
-	<rule ref="WordPress.PHP.DiscouragedFunctions"/>
 </ruleset>

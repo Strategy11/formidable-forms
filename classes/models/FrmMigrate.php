@@ -61,7 +61,7 @@ class FrmMigrate {
 
 		FrmAppHelper::save_combined_js();
 
-		/**** update the styling settings ****/
+		// update the styling settings
 		if ( function_exists( 'get_filesystem_method' ) ) {
 			$frm_style = new FrmStyle();
 			$frm_style->update( 'default' );
@@ -265,6 +265,7 @@ class FrmMigrate {
 
 	/**
 	 * Reverse migration 17 -- Divide by 9
+	 *
 	 * @since 3.0.05
 	 */
 	private function migrate_to_86() {
@@ -306,7 +307,8 @@ class FrmMigrate {
 	}
 
 	/**
-	 * reverse the extra size changes in widgets
+	 * Reverse the extra size changes in widgets
+	 *
 	 * @since 3.0.05
 	 */
 	private function revert_widget_field_size() {
@@ -328,6 +330,7 @@ class FrmMigrate {
 
 	/**
 	 * Divide by 9 to reverse the multiplication
+	 *
 	 * @since 3.0.05
 	 */
 	private function maybe_convert_migrated_size( &$size ) {
@@ -462,9 +465,7 @@ class FrmMigrate {
         * post_content: json settings
         * post_title: form id
         * post_excerpt: message
-        *
         */
-
         foreach ( $forms as $form ) {
 			if ( $form->is_template && $form->default_template ) {
 				// don't migrate the default templates since the email will be added anyway

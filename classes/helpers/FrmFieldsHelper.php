@@ -62,6 +62,7 @@ class FrmFieldsHelper {
 
 	/**
 	 * Prepare field while creating a new entry
+	 *
 	 * @since 3.0
 	 */
 	public static function prepare_new_front_field( &$field_array, $field, $args = array() ) {
@@ -71,6 +72,7 @@ class FrmFieldsHelper {
 
 	/**
 	 * Prepare field while editing an entry
+	 *
 	 * @since 3.0
 	 */
 	public static function prepare_edit_front_field( &$field_array, $field, $entry_id = 0, $args = array() ) {
@@ -81,6 +83,7 @@ class FrmFieldsHelper {
 
 	/**
 	 * Prepare field while creating a new entry
+	 *
 	 * @since 3.0
 	 */
 	private static function prepare_front_field( &$field_array, $field, $args ) {
@@ -162,7 +165,7 @@ class FrmFieldsHelper {
 		}
 
 		if ( '' == $field_array['custom_html'] ) {
-			$field_array['custom_html'] = FrmFieldsHelper::get_default_html( $field->type );
+			$field_array['custom_html'] = self::get_default_html( $field->type );
 		}
 	}
 
@@ -339,6 +342,7 @@ class FrmFieldsHelper {
 
 	/**
 	 * Get the class to use for the label position
+	 *
 	 * @since 2.05
 	 */
 	public static function &label_position( $position, $field, $form ) {
@@ -366,6 +370,7 @@ class FrmFieldsHelper {
 
 	/**
 	 * Check if this field type allows placeholders
+	 *
 	 * @since 2.05
 	 */
 	public static function is_placeholder_field_type( $type ) {
@@ -474,6 +479,7 @@ class FrmFieldsHelper {
 
 	/**
 	 * Trim and sanitize the values
+	 *
 	 * @since 2.05
 	 */
 	private static function get_value_for_comparision( $value ) {
@@ -521,6 +527,7 @@ class FrmFieldsHelper {
 
     /**
      * Replace a few basic shortcodes and field ids
+	 *
      * @since 2.0
      * @return string
      */
@@ -593,6 +600,7 @@ class FrmFieldsHelper {
 
 	/**
 	 * Prevent shortcodes in fields from being processed
+	 *
 	 * @since 3.01.02
 	 *
 	 * @param array $atts - includes entry object
@@ -786,6 +794,7 @@ class FrmFieldsHelper {
 
 	/**
 	 * Get a value from the user profile from the user ID
+	 *
 	 * @since 3.0
 	 */
 	public static function get_user_display_name( $user_id, $user_info = 'display_name', $args = array() ) {
@@ -886,7 +895,7 @@ class FrmFieldsHelper {
 
 		// If option is an "other" option and there is a value set for this field,
 		// check if the value belongs in the current "Other" option text field
-		if ( ! FrmFieldsHelper::is_other_opt( $opt_key ) || ! FrmField::is_option_true( $field, 'value' ) ) {
+		if ( ! self::is_other_opt( $opt_key ) || ! FrmField::is_option_true( $field, 'value' ) ) {
 			return $other_val;
 		}
 
@@ -988,7 +997,7 @@ class FrmFieldsHelper {
 		//Set up name for other field
 		$other_args['name'] = str_replace( '[]', '', $args['field_name'] );
 		$other_args['name'] = preg_replace( '/\[' . $args['field']['id'] . '\]$/', '', $other_args['name'] );
-		$other_args['name'] = $other_args['name'] . '[other]' . '[' . $args['field']['id'] . ']';
+		$other_args['name'] = $other_args['name'] . '[other][' . $args['field']['id'] . ']';
 
 		//Converts item_meta[field_id] => item_meta[other][field_id] and
 		//item_meta[parent][0][field_id] => item_meta[parent][0][other][field_id]
@@ -999,6 +1008,7 @@ class FrmFieldsHelper {
 
 	/**
 	 * Find the parent and pointer, and get text for "other" text field
+	 *
 	 * @param array $args
 	 * @param array $other_args
 	 *
@@ -1030,6 +1040,7 @@ class FrmFieldsHelper {
 
 	/**
 	 * If this field includes an other option, show it
+	 *
 	 * @param $args array
 	 * @since 2.0.6
 	 */
@@ -1226,9 +1237,9 @@ class FrmFieldsHelper {
 	}
 
 	public static function get_bulk_prefilled_opts( array &$prepop ) {
-		$prepop[ __( 'Countries', 'formidable' ) ] = FrmFieldsHelper::get_countries();
+		$prepop[ __( 'Countries', 'formidable' ) ] = self::get_countries();
 
-        $states = FrmFieldsHelper::get_us_states();
+		$states = self::get_us_states();
 		$state_abv = array_keys( $states );
 		sort( $state_abv );
 		$prepop[ __( 'U.S. State Abbreviations', 'formidable' ) ] = $state_abv;

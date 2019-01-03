@@ -303,7 +303,7 @@ class FrmFieldsController {
 		$field = FrmField::getOne( $field_id );
 
         wp_enqueue_script( 'utils' );
-		wp_enqueue_style( 'formidable-admin', FrmAppHelper::plugin_url() . '/css/frm_admin.css' );
+		wp_enqueue_style( 'formidable-admin', FrmAppHelper::plugin_url() . '/css/frm_admin.css', array(), FrmAppHelper::plugin_version() );
         FrmAppHelper::load_admin_wide_js();
 
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/import_choices.php' );
@@ -596,7 +596,7 @@ class FrmFieldsController {
 	}
 
 	/**
-	 * use HMTL5 placeholder with js fallback
+	 * Use HMTL5 placeholder with js fallback
 	 *
 	 * @param array $field
 	 * @param array $add_html

@@ -50,7 +50,7 @@ class FrmXMLHelper {
             return new WP_Error( 'SimpleXML_parse_error', __( 'Your server does not have XML enabled', 'formidable' ), libxml_get_errors() );
         }
 
-        $dom = new DOMDocument;
+		$dom = new DOMDocument();
 		$success = $dom->loadXML( file_get_contents( $file ) );
 		if ( ! $success ) {
 			return new WP_Error( 'SimpleXML_parse_error', __( 'There was an error when reading this XML file', 'formidable' ), libxml_get_errors() );
@@ -308,6 +308,7 @@ class FrmXMLHelper {
 
 	/**
 	* Import all fields for a form
+	 *
 	* @since 2.0.13
 	*
 	* TODO: Cut down on params
@@ -466,7 +467,6 @@ class FrmXMLHelper {
 	*
 	* @since 2.0.19
 	* @param array $form
-	*
 	*/
 	private static function update_custom_style_setting_on_import( &$form ) {
 		if ( ! isset( $form['options']['custom_style'] ) ) {
@@ -693,6 +693,7 @@ class FrmXMLHelper {
 
     /**
      * Add terms to post
+	 *
      * @param array $post by reference
      * @param object $item The XML object data
      */

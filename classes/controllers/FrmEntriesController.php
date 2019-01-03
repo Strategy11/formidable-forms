@@ -582,6 +582,7 @@ class FrmEntriesController {
 		/**
 		 * Use this filter to add trigger actions and add errors after
 		 * all other errors have been processed
+		 *
 		 * @since 2.0.6
 		 */
 		$errors = apply_filters( 'frm_entries_before_create', $errors, $form );
@@ -642,7 +643,7 @@ class FrmEntriesController {
     }
 
 	/**
-	 * unlink entry from post
+	 * Unlink entry from post
 	 */
 	private static function unlink_post( $entry_id ) {
 		global $wpdb;

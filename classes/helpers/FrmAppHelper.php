@@ -11,7 +11,7 @@ class FrmAppHelper {
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '3.04.03';
+	public static $plug_version = '3.05';
 
     /**
      * @since 1.07.02
@@ -105,12 +105,12 @@ class FrmAppHelper {
 	}
 
 	public static function get_menu_name() {
-		$frm_settings = FrmAppHelper::get_settings();
+		$frm_settings = self::get_settings();
 		return $frm_settings->menu;
 	}
 
 	/**
-	 * @since 3.04.04
+	 * @since 3.05
 	 */
 	public static function svg_logo( $atts = array() ) {
 		$defaults = array(
@@ -185,7 +185,7 @@ class FrmAppHelper {
      */
     public static function is_preview_page() {
         global $pagenow;
-		$action = FrmAppHelper::simple_get( 'action', 'sanitize_title' );
+		$action = self::simple_get( 'action', 'sanitize_title' );
 		return $pagenow && $pagenow == 'admin-ajax.php' && $action == 'frm_forms_preview';
     }
 
@@ -207,6 +207,7 @@ class FrmAppHelper {
 
 	/**
 	 * Use the WP 4.7 wp_doing_ajax function
+	 *
 	 * @since 2.05.07
 	 */
 	public static function wp_doing_ajax() {
@@ -412,7 +413,7 @@ class FrmAppHelper {
 			if ( is_array( $value ) ) {
 				$temp_values = $value;
 				foreach ( $temp_values as $k => $v ) {
-					FrmAppHelper::sanitize_value( $sanitize, $value[ $k ] );
+					self::sanitize_value( $sanitize, $value[ $k ] );
 				}
 			} else {
 				$value = call_user_func( $sanitize, $value );
@@ -431,6 +432,7 @@ class FrmAppHelper {
 
 	/**
 	 * Sanitize the value, and allow some HTML
+	 *
 	 * @since 2.0
 	 * @param string $value
 	 * @param array|string $allowed 'all' for everything included as defaults
@@ -565,6 +567,7 @@ class FrmAppHelper {
 
     /**
      * Used when switching the action for a bulk action
+	 *
      * @since 2.0
      */
 	public static function remove_get_action() {
@@ -574,7 +577,7 @@ class FrmAppHelper {
 
         $new_action = isset( $_GET['action'] ) ? sanitize_text_field( $_GET['action'] ) : ( isset( $_GET['action2'] ) ? sanitize_text_field( $_GET['action2'] ) : '' );
         if ( ! empty( $new_action ) ) {
-			$_SERVER['REQUEST_URI'] = str_replace( '&action=' . $new_action, '', FrmAppHelper::get_server_value( 'REQUEST_URI' ) );
+			$_SERVER['REQUEST_URI'] = str_replace( '&action=' . $new_action, '', self::get_server_value( 'REQUEST_URI' ) );
         }
     }
 
@@ -638,14 +641,14 @@ class FrmAppHelper {
 			'frm_js_location',
 			array(
 				'file_name' => 'frm.min.js',
-				'new_file_path' => FrmAppHelper::plugin_path() . '/js',
+				'new_file_path' => self::plugin_path() . '/js',
 			)
 		);
 		$new_file = new FrmCreateFile( $file_atts );
 
 		$files = array(
-			FrmAppHelper::plugin_path() . '/js/jquery/jquery.placeholder.min.js',
-			FrmAppHelper::plugin_path() . '/js/formidable.min.js',
+			self::plugin_path() . '/js/jquery/jquery.placeholder.min.js',
+			self::plugin_path() . '/js/formidable.min.js',
 		);
 		$files = apply_filters( 'frm_combined_js_files', $files );
 		$new_file->combine_files( $files );
@@ -792,6 +795,7 @@ class FrmAppHelper {
 
 	/**
 	 * Make sure admins have permission to see the menu items
+	 *
 	 * @since 2.0.6
 	 */
 	public static function force_capability( $cap = 'frm_change_settings' ) {
@@ -807,6 +811,7 @@ class FrmAppHelper {
     /**
      * Check if the user has permision for action.
      * Return permission message and stop the action if no permission
+	 *
      * @since 2.0
      * @param string $permission
      */
@@ -822,6 +827,7 @@ class FrmAppHelper {
 
     /**
      * Check user permission and nonce
+	 *
      * @since 2.0
      * @param string $permission
      * @return false|string The permission message or false if allowed
@@ -917,6 +923,7 @@ class FrmAppHelper {
 
     /**
      * Add auto paragraphs to text areas
+	 *
      * @since 2.0
      */
 	public static function use_wpautop( $content ) {
@@ -1060,6 +1067,7 @@ class FrmAppHelper {
 
     /**
      * Editing a Form or Entry
+	 *
      * @param string $table
      * @return bool|array
      */
@@ -1238,7 +1246,7 @@ class FrmAppHelper {
 		if ( ! empty( $post_values ) && isset( $post_values['options']['custom_style'] ) ) {
 			$custom_style = absint( $post_values['options']['custom_style'] );
 		} else {
-			$frm_settings = FrmAppHelper::get_settings();
+			$frm_settings = self::get_settings();
 			$custom_style = ( $frm_settings->load_style != 'none' );
 		}
 		return $custom_style;
@@ -1364,7 +1372,7 @@ class FrmAppHelper {
 	 */
 	public static function human_time_diff( $from, $to = '', $levels = 1 ) {
 		if ( empty( $to ) ) {
-			$now = new DateTime;
+			$now = new DateTime();
 		} else {
 			$now = new DateTime( '@' . $to );
 		}
@@ -1535,7 +1543,7 @@ class FrmAppHelper {
 			return;
 		}
 
-		$frm_action = FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
+		$frm_action = self::simple_get( 'frm_action', 'sanitize_title' );
 		if ( empty( $action ) || ( ! empty( $frm_action ) && in_array( $frm_action, $action ) ) ) {
 			echo ' class="current_page"';
 		}
@@ -1631,16 +1639,17 @@ class FrmAppHelper {
 
     /**
      * Load the JS file on non-Formidable pages in the admin area
+	 *
      * @since 2.0
      */
 	public static function load_admin_wide_js( $load = true ) {
-        $version = FrmAppHelper::plugin_version();
-		wp_register_script( 'formidable_admin_global', FrmAppHelper::plugin_url() . '/js/formidable_admin_global.js', array( 'jquery' ), $version );
+		$version = self::plugin_version();
+		wp_register_script( 'formidable_admin_global', self::plugin_url() . '/js/formidable_admin_global.js', array( 'jquery' ), $version );
 
 		$global_strings = array(
 			'updating_msg' => __( 'Please wait while your site updates.', 'formidable' ),
             'deauthorize'  => __( 'Are you sure you want to deauthorize Formidable Forms on this site?', 'formidable' ),
-			'url'          => FrmAppHelper::plugin_url(),
+			'url'          => self::plugin_url(),
 			'loading'      => __( 'Loading&hellip;' ),
 			'nonce'        => wp_create_nonce( 'frm_ajax' ),
 		);
@@ -1727,7 +1736,8 @@ class FrmAppHelper {
 	}
 
     /**
-	 * echo the message on the plugins listing page
+	 * Echo the message on the plugins listing page
+	 *
      * @since 1.07.10
      *
      * @param float $min_version The version the add-on requires

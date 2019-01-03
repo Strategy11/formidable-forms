@@ -4,6 +4,12 @@ class FrmFormActionsController {
     public static $action_post_type = 'frm_form_actions';
     public static $registered_actions;
 
+	/**
+	 * Variables saved in the post:
+	 * post_content: json settings
+	 * menu_order: form id
+	 * post_excerpt: action type
+	 */
     public static function register_post_types() {
 		register_post_type(
 			self::$action_post_type,
@@ -20,12 +26,6 @@ class FrmFormActionsController {
 				'has_archive'  => false,
 			)
 		);
-
-        /**
-         * post_content: json settings
-         * menu_order: form id
-         * post_excerpt: action type
-         */
 
         self::actions_init();
     }
@@ -107,7 +107,8 @@ class FrmFormActionsController {
         }
 
 		/**
-		 * use this hook to migrate old settings into a new action
+		 * Use this hook to migrate old settings into a new action
+		 *
 		 * @since 2.0
 		 */
 		do_action( 'frm_before_list_actions', $form );

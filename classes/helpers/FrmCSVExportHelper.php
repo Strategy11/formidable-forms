@@ -348,6 +348,7 @@ class FrmCSVExportHelper {
 
 	/**
 	 * Escape a " in a csv with another "
+	 *
 	 * @since 2.0
 	 */
 	public static function escape_csv( $value ) {

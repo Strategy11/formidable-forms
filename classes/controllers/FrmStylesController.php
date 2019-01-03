@@ -60,22 +60,25 @@ class FrmStylesController {
 			return;
 		}
 
+		$version = FrmAppHelper::plugin_version();
 		wp_enqueue_script( 'jquery-ui-datepicker' );
 		wp_enqueue_style( 'wp-color-picker' );
-		wp_enqueue_style( 'frm-custom-theme', admin_url( 'admin-ajax.php?action=frmpro_css' ) );
+		wp_enqueue_style( 'frm-custom-theme', admin_url( 'admin-ajax.php?action=frmpro_css' ), array(), $version );
 
 		$style = apply_filters( 'frm_style_head', false );
         if ( $style ) {
-			wp_enqueue_style( 'frm-single-custom-theme', admin_url( 'admin-ajax.php?action=frmpro_load_css&flat=1' ) . '&' . http_build_query( $style->post_content ) );
+			wp_enqueue_style( 'frm-single-custom-theme', admin_url( 'admin-ajax.php?action=frmpro_load_css&flat=1' ) . '&' . http_build_query( $style->post_content ), array(), $version );
         }
     }
 
-	public static function enqueue_css( $register = 'enqueue' ) {
+	public static function enqueue_css( $register = 'enqueue', $force = false ) {
 		global $frm_vars;
 
 		$register_css = ( $register == 'register' );
+		$should_load = $force || ( ( $frm_vars['load_css'] || $register_css ) && ! FrmAppHelper::is_admin() );
 
-		if ( ( $frm_vars['load_css'] || $register_css ) && ! FrmAppHelper::is_admin() ) {
+		if ( $should_load ) {
+
 			$frm_settings = FrmAppHelper::get_settings();
 			if ( $frm_settings->load_style == 'none' ) {
 				return;
@@ -288,9 +291,10 @@ class FrmStylesController {
 		} else {
 			$id = 'frm_custom_css_box';
 			$settings = array();
-			wp_enqueue_style( 'codemirror', FrmAppHelper::plugin_url() . '/css/codemirror.css' );
-			wp_enqueue_script( 'codemirror', FrmAppHelper::plugin_url() . '/js/codemirror/codemirror.js', array(), '4.7' );
-			wp_enqueue_script( 'codemirror-css', FrmAppHelper::plugin_url() . '/js/codemirror/css.js', array( 'codemirror' ), '4.7' );
+			$codemirror = '4.7';
+			wp_enqueue_style( 'codemirror', FrmAppHelper::plugin_url() . '/css/codemirror.css', array(), $codemirror );
+			wp_enqueue_script( 'codemirror', FrmAppHelper::plugin_url() . '/js/codemirror/codemirror.js', array(), $codemirror );
+			wp_enqueue_script( 'codemirror-css', FrmAppHelper::plugin_url() . '/js/codemirror/css.js', array( 'codemirror' ), $codemirror );
 		}
 
 		if ( ! isset( $style ) ) {
@@ -382,6 +386,7 @@ class FrmStylesController {
 
 		/**
 		 * Add custom boxes to the styling settings
+		 *
 		 * @since 2.3
 		 */
 		$meta_boxes = apply_filters( 'frm_style_boxes', $meta_boxes );
@@ -433,6 +438,7 @@ class FrmStylesController {
     /**
      * Check if the Formidable styling should be loaded,
      * then enqueue it for the footer
+	 *
      * @since 2.0
      */
     public static function enqueue_style() {

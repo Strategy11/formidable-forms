@@ -1,0 +1,56 @@
+{
+	"root": true,
+	"parser": "babel-eslint",
+	"extends": [
+		"wordpress",
+		"plugin:react/recommended",
+		"plugin:jsx-a11y/recommended"
+	],
+	"env": {
+		"browser": false,
+		"es6": true,
+		"node": true,
+		"mocha": true
+	},
+	"parserOptions": {
+		"sourceType": "module",
+		"ecmaFeatures": {
+			"jsx": true
+		}
+	},
+	"globals": {
+		"wp": true,
+		"wpApiSettings": true,
+		"window": true,
+		"document": true
+	},
+	"plugins": ["react", "jsx-a11y"],
+	"settings": {
+		"react": {
+			"pragma": "wp"
+		}
+	},
+	"rules": {
+		"camelcase": ["error", { "properties": "never" }],
+		"comma-dangle": ["error", "always-multiline"],
+		"lines-around-comment": "off",
+		"react/display-name": "off",
+		"react/jsx-curly-spacing": [
+			"error",
+			{
+				"when": "always",
+				"children": true
+			}
+		],
+		"react/jsx-equals-spacing": "error",
+		"react/jsx-indent": ["error", "tab"],
+		"react/jsx-indent-props": ["error", "tab"],
+		"react/jsx-key": "error",
+		"react/jsx-tag-spacing": "error",
+		"react/no-children-prop": "off",
+		"react/no-find-dom-node": "warn",
+		"react/prop-types": "off",
+		"space-in-parens": ["error", "always"],
+		"yoda": "off"
+	}
+}

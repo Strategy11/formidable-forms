@@ -19,3 +19,18 @@ Create a professional WordPress contact form without any code. Additionally, cha
 
 ## Support
 To get support from our team, please [open a ticket in our help desk](https://formidableforms.com/new-topic/ "open a ticket in our help desk").
+
+## Plugin Setup
+cd to wp-content/plugins/formidable
+`npm install`
+`npm run dev`
+
+Get lint results:
+`npm run lint`
+
+Before making a commit, update the scripts:
+`npm run build`
+
+To create a new release:
+`npm run package-plugin -- 3.05`
+Change '3.05' to the number of the new version

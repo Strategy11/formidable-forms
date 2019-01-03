@@ -97,7 +97,7 @@ class FrmFormAction {
 	 * @param string $id_base
 	 */
 	public function FrmFormAction( $id_base, $name, $action_options = array(), $control_options = array() ) {
-		FrmFormAction::__construct( $id_base, $name, $action_options, $control_options );
+		self::__construct( $id_base, $name, $action_options, $control_options );
 	}
 
 	/**
@@ -266,7 +266,6 @@ class FrmFormAction {
 	 * Deal with changed settings.
 	 *
 	 * Do NOT over-ride this function
-	 *
 	 */
  	public function update_callback( $form_id ) {
         $this->form_id = $form_id;

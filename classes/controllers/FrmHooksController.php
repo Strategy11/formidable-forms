@@ -75,6 +75,9 @@ class FrmHooksController {
         add_filter( 'frm_get_style_opts', 'FrmStylesController::get_style_opts' );
         add_filter( 'frm_add_form_style_class', 'FrmStylesController::get_form_style_class', 10, 2 );
         add_filter( 'frm_show_entry_styles', 'FrmStylesController::show_entry_styles' );
+
+		//Simple Blocks Controller
+		add_action( 'init', 'FrmSimpleBlocksController::register_simple_form_block' );
     }
 
 	public static function load_admin_hooks() {
@@ -129,6 +132,9 @@ class FrmHooksController {
 
         // XML Controller
         add_action( 'admin_menu', 'FrmXMLController::menu', 41 );
+
+		// Simple Blocks Controller
+		add_action( 'enqueue_block_editor_assets', 'FrmSimpleBlocksController::block_editor_assets' );
     }
 
 	public static function load_ajax_hooks() {

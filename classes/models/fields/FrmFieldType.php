@@ -19,6 +19,7 @@ abstract class FrmFieldType {
 
 	/**
 	 * Does the html for this field label need to include "for"?
+	 *
 	 * @var bool
 	 * @since 3.0
 	 */
@@ -26,6 +27,7 @@ abstract class FrmFieldType {
 
 	/**
 	 * Does the field include a input box to type into?
+	 *
 	 * @var bool
 	 * @since 3.0
 	 */
@@ -33,6 +35,7 @@ abstract class FrmFieldType {
 
 	/**
 	 * Is the HTML customizable?
+	 *
 	 * @var bool
 	 * @since 3.0
 	 */
@@ -40,6 +43,7 @@ abstract class FrmFieldType {
 
 	/**
 	 * Could this field hold email values?
+	 *
 	 * @var bool
 	 * @since 3.0
 	 */
@@ -47,6 +51,7 @@ abstract class FrmFieldType {
 
 	/**
 	 * Does this field show on the page?
+	 *
 	 * @var bool
 	 * @since 3.0
 	 */
@@ -54,6 +59,7 @@ abstract class FrmFieldType {
 
 	/**
 	 * Is this field a lot taller than the submit button?
+	 *
 	 * @var bool
 	 * @since 3.0
 	 */
@@ -757,6 +763,7 @@ DEFAULT_HTML;
 
 	/**
 	 * Link input to field description for screen readers
+	 *
 	 * @since 3.0
 	 */
 	protected function add_aria_description( $args, &$input_html ) {

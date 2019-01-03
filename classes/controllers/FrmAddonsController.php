@@ -302,7 +302,7 @@ class FrmAddonsController {
 	 */
 	public static function check_update( $transient ) {
 		if ( ! is_object( $transient ) ) {
-			$transient = new stdClass;
+			$transient = new stdClass();
 		}
 
 		$installed_addons = apply_filters( 'frm_installed_addons', array() );

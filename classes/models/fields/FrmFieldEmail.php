@@ -27,7 +27,7 @@ class FrmFieldEmail extends FrmFieldType {
 	}
 
 	/**
-	 * validate the email format
+	 * Validate the email format
 	 *
 	 * @param array $args
 	 *

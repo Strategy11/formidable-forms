@@ -142,6 +142,7 @@ class FrmListHelper {
 
 	/**
 	 * Prepares the list of items for displaying.
+	 *
 	 * @uses FrmListHelper::set_pagination_args()
 	 *
 	 * @since 2.0.18
@@ -753,7 +754,7 @@ class FrmListHelper {
 		// If the primary column doesn't exist fall back to the
 		// first non-checkbox column.
 		if ( ! isset( $columns[ $default ] ) ) {
-			$default = FrmListHelper::get_default_primary_column_name();
+			$default = self::get_default_primary_column_name();
 		}
 
 		/**

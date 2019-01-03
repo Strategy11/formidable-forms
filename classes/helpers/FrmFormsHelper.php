@@ -360,6 +360,7 @@ BEFORE_HTML;
 
     /**
      * Automatically add end section fields if they don't exist (2.0 migration)
+	 *
      * @since 2.0
      *
      * @param boolean $reset_fields
@@ -500,6 +501,7 @@ BEFORE_HTML;
 	/**
 	 * If the Formidable styling isn't being loaded,
 	 * use inline styling to hide the element
+	 *
 	 * @since 2.03.05
 	 */
 	public static function maybe_hide_inline() {

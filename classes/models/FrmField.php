@@ -5,8 +5,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmField {
 
-    static $use_cache = true;
-	static $transient_size = 200;
+	public static $use_cache = true;
+	public static $transient_size = 200;
 
 	public static function field_selection() {
 		$fields = array(
@@ -397,11 +397,12 @@ class FrmField {
 		return stripslashes_deep( $results );
     }
 
-    /**
-     * Get the field type by key or id
-     * @param int|string The field id or key
+	/**
+	 * Get the field type by key or id
+	 *
+	 * @param int|string The field id or key
 	 * @param mixed $col The name of the column in the fields database table
-     */
+	 */
     public static function get_type( $id, $col = 'type' ) {
         $field = FrmDb::check_cache( $id, 'frm_field' );
         if ( $field ) {
@@ -637,6 +638,7 @@ class FrmField {
 
 	/**
 	 * Unserialize all the serialized field data
+	 *
 	 * @since 2.0
 	 */
 	private static function prepare_options( &$results ) {
@@ -649,6 +651,7 @@ class FrmField {
 	/**
 	 * If a form has too many fields, thay won't all save into a single transient.
 	 * We'll break them into groups of 200
+	 *
 	 * @since 2.0.1
 	 */
 	private static function get_fields_from_transients( $form_id, $args ) {
@@ -659,6 +662,7 @@ class FrmField {
 
 	/**
 	 * Called by get_fields_from_transients
+	 *
 	 * @since 2.0.1
 	 */
 	private static function get_next_transient( &$fields, $base_name, $next = 0 ) {
@@ -678,6 +682,7 @@ class FrmField {
 
 	/**
 	 * Save the transients in chunks for large forms
+	 *
 	 * @since 2.0.1
 	 */
 	private static function set_field_transient( &$fields, $form_id, $next = 0, $args = array() ) {

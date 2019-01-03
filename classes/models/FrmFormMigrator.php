@@ -316,6 +316,7 @@ abstract class FrmFormMigrator {
 
 	/**
 	 * Strict PRO fields with no Lite alternatives.
+	 *
 	 * @return array
 	 */
 	protected function skip_pro_fields() {
