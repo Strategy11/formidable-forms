@@ -328,7 +328,7 @@ class FrmAddonsController {
 				continue;
 			}
 
-			if ( ! file_exists( WP_PLUGIN_DIR . '/' . $folder . '/' ) ) {
+			if ( ! self::is_installed( $folder ) ) {
 				// don't show an update if the plugin isn't installed
 				continue;
 			}
@@ -347,6 +347,22 @@ class FrmAddonsController {
 		}
 
 		return $transient;
+	}
+
+	/**
+	 * Check if a plugin is installed before showing an update for it
+	 *
+	 * @since 3.05
+	 * @param string $plugin - the folder/filename.php for a plugin
+	 * @return bool - True if installed
+	 */
+	private static function is_installed( $plugin ) {
+		if ( ! function_exists( 'get_plugins' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+
+		$all_plugins = get_plugins();
+		return isset( $all_plugins[ $plugin ] );
 	}
 
 	/**
@@ -444,7 +460,7 @@ class FrmAddonsController {
 				$file_name = $base_file . '/' . $base_file . '.php';
 			}
 
-			$addon['installed']    = file_exists( WP_PLUGIN_DIR . '/' . $file_name );
+			$addon['installed']    = self::is_installed( $file_name );
 			$addon['activate_url'] = '';
 
 			if ( $addon['installed'] && ! empty( $activate_url ) && ! is_plugin_active( $file_name ) ) {
