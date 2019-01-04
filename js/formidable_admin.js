@@ -1514,7 +1514,7 @@ function frmAdminBuildJS(){
 			min = document.getElementById('scale_minnum_'+ fieldID).value;
 		}
 
-		updateScaleValues( min, max, fieldID );
+		updateScaleValues( parseInt( min ), parseInt( max ), fieldID );
 	}
 
 	function updateScaleValues( min, max, fieldID ) {
