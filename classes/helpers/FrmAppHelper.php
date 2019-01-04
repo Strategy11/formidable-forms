@@ -1291,14 +1291,14 @@ class FrmAppHelper {
 		foreach ( $words as $word ) {
 			$part = ( ( $sub != '' ) ? ' ' : '' ) . $word;
 			$total_len = self::mb_function( array( 'mb_strlen', 'strlen' ), array( $sub . $part ) );
-			if ( $total_len > $length && str_word_count( $sub ) ) {
+			if ( $total_len > $length && substr_count( $sub, ' ' ) ) {
                 break;
             }
 
             $sub .= $part;
 			$len += self::mb_function( array( 'mb_strlen', 'strlen' ), array( $part ) );
 
-			if ( str_word_count( $sub ) > $minword && $total_len >= $length ) {
+			if ( substr_count( $sub, ' ' ) > $minword && $total_len >= $length ) {
                 break;
             }
 
