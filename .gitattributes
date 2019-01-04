@@ -1,7 +1,6 @@
 # Items to ignore when downloading a zip
 
 .babelrc export-ignore
-.coveralls.yml export-ignore
 .editorconfig export-ignore
 .eslintignore export-ignore
 .eslintrc.json export-ignore
