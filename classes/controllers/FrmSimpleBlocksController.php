@@ -130,6 +130,7 @@ class FrmSimpleBlocksController {
 		$params['id'] = $params['formId'];
 		unset( $params['formId'] );
 
-		return FrmFormsController::get_form_shortcode( $params );
+		$form = FrmFormsController::get_form_shortcode( $params );
+		return str_replace( ' frm_logic_form ', ' ', $form ); // prevent the form from hiding
 	}
 }
