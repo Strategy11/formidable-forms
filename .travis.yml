@@ -95,10 +95,8 @@ script:
 - if [[ "$PHPUNIT" != "0" ]]; then phpunit --group=entries -c phpunit.xml; fi
 - if [[ "$PHPUNIT" != "0" ]]; then phpunit --group=styles -c phpunit.xml; fi
 - if [[ "$PHPUNIT" != "0" ]]; then phpunit --exclude-group=ajax,entries,styles -c phpunit.xml; fi
-- if [[ "$COVERAGE" == "1" ]]; then vendor/bin/phpunit --coverage-clover coverage.xml; fi
+- if [[ "$COVERAGE" == "1" ]]; then vendor/bin/phpunit --coverage-clover=coverage.xml; fi
 
 after_script:
-# upload coverage.xml file to Coveralls to analyze it
-# minimal required coverage is set to 80+ %
-- if [[ "$COVERAGE" == "1" ]]; then wget https://github.com/php-coveralls/php-coveralls/releases/download/v2.0.0/php-coveralls.phar; fi
-- if [[ "$COVERAGE" == "1" ]]; then php php-coveralls.phar --verbose; fi
+# upload coverage.xml file to Codecov
+- if [[ "$COVERAGE" == "1" ]]; then bash <(curl -s https://codecov.io/bash); fi
