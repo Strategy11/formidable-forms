@@ -29,7 +29,7 @@
 			<?php require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/form.php' ); ?>
 
         </form>
-
+		<?php FrmFormsHelper::builder_submit_button( $values ); ?>
         </div>
     </div>
 	<?php require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add_field_links.php' ); ?>

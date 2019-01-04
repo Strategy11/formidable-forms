@@ -120,6 +120,25 @@ class FrmFormsHelper {
         <?php
     }
 
+	/**
+	 * @since 3.05
+	 * @param array $values - The form array
+	 */
+	public static function builder_submit_button( $values ) {
+		$page_action = FrmAppHelper::get_param( 'frm_action' );
+		$label = ( $page_action == 'edit' || $page_action == 'update' ) ? __( 'Update', 'formidable' ) : __( 'Create', 'formidable' );
+
+		?>
+		<div class="postbox">
+			<p class="inside">
+				<button class="frm_submit_<?php echo esc_attr( ( isset( $values['ajax_load'] ) && $values['ajax_load'] ) ? '' : 'no_' ); ?>ajax button-primary frm_button_submit" type="button">
+					<?php echo esc_html( $label ); ?>
+				</button>
+			</p>
+		</div>
+		<?php
+	}
+
 	public static function get_sortable_classes( $col, $sort_col, $sort_dir ) {
 		echo ( $sort_col == $col ) ? 'sorted' : 'sortable';
 		echo ( $sort_col == $col && $sort_dir == 'desc' ) ? ' asc' : ' desc';

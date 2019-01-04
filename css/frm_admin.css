@@ -656,6 +656,8 @@ input.frm_insert_in_template{
 }
 
 .frm_forms.with_frm_style{max-width:100%;}
+
+.frm_form_builder > .postbox,
 #frm_form_editor_container > .postbox{
 	border-color: transparent;
 	box-shadow: none;

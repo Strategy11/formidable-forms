@@ -56,11 +56,6 @@ if ( isset( $values['fields'] ) && ! empty( $values['fields'] ) ) {
 ?>
 </ul>
 
-<p>
-	<?php $page_action = FrmAppHelper::get_param( 'frm_action' ); ?>
-	<button class="frm_submit_<?php echo ( isset( $values['ajax_load'] ) && $values['ajax_load'] ) ? '' : 'no_'; ?>ajax button-primary frm_button_submit" type="button"><?php echo esc_html( ( $page_action == 'edit' || $page_action == 'update' ) ? __( 'Update', 'formidable' ) : __( 'Create', 'formidable' ) ); ?></button>
-</p>
-
 </div>
 
 </div>
