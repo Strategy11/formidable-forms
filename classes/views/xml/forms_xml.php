@@ -29,6 +29,7 @@ while ( $next_set = array_splice( $item_ids, 0, 20 ) ) {
 		$fields = FrmDb::get_results( $wpdb->prefix . 'frm_fields', array( 'form_id' => $form->id ), '*', array( 'order_by' => 'field_order' ) );
 
 		foreach ( $fields as $field ) {
+			FrmXMLHelper::prepare_field_for_export( $field );
 		?>
 		<field>
 		    <id><?php echo absint( $field->id ) ?></id>

@@ -887,8 +887,91 @@ class FrmXMLHelper {
 				$options['custom_style'] = 1;
 			}
 		}
+		self::remove_default_form_options( $options );
 		$options = serialize( $options );
 		return self::cdata( $options );
+	}
+
+	/**
+	 * If the saved value is the same as the default, remove it from the export
+	 * This keeps file size down and prevents overriding global settings after import
+	 *
+	 * @since 3.05.01
+	 */
+	private static function remove_default_form_options( &$options ) {
+		$defaults = FrmFormsHelper::get_default_opts();
+		if ( is_callable( 'FrmProFormsHelper::get_default_opts' ) ) {
+			$defaults += FrmProFormsHelper::get_default_opts();
+		}
+ 		self::remove_defaults( $defaults, $options );
+	}
+
+	/**
+	 * Remove extra settings from field to keep file size down
+	 *
+	 * @since 3.05.01
+	 */
+	public static function prepare_field_for_export( &$field ) {
+		self::remove_default_field_options( $field );
+	}
+
+	/**
+	 * Remove defaults from field options too
+	 *
+	 * @since 3.05.01
+	 */
+	private static function remove_default_field_options( &$field ) {
+		$defaults = FrmFieldsHelper::get_default_field_options( $field->type );
+
+		if ( empty( $defaults['custom_html'] ) ) {
+			$defaults['custom_html'] = FrmFieldsHelper::get_default_html( $field->type );
+		}
+		$options = maybe_unserialize( $field->field_options );
+ 		self::remove_defaults( $defaults, $options );
+		self::remove_default_html( 'custom_html', $defaults, $options );
+		$field->field_options = serialize( $options );
+	}
+
+ 	/**
+	 * Compare the default array to the saved values and
+	 * remove if they are the same
+	 *
+	 * @since 3.05.01
+	 */
+	private static function remove_defaults( $defaults, &$saved ) {
+		$array_defaults = array_filter( $defaults, 'is_array' );
+		foreach ( $array_defaults as $d => $default ) {
+			// compare array defaults
+			if ( $default == $saved[ $d ] ) {
+				unset( $saved[ $d ] );
+			}
+			unset( $defaults[ $d ] );
+		}
+ 		$saved = array_diff_assoc( (array) $saved, $defaults );
+	}
+
+ 	/**
+	 * The line endings may prevent html from being equal when it should
+	 *
+	 * @since 3.05.01
+	 */
+	private static function remove_default_html( $html_name, $defaults, &$options ) {
+		if ( ! isset( $options[ $html_name ] ) || ! isset( $defaults[ $html_name ] ) ) {
+			return;
+		}
+
+		$old_html = str_replace( "\r\n", "\n", $options[ $html_name ] );
+		$default_html = $defaults[ $html_name ];
+		if ( $old_html == $default_html ) {
+			unset( $options[ $html_name ] );
+			return;
+		}
+
+		// Account for some of the older field default HTML.
+		$default_html = str_replace( ' id="frm_desc_field_[key]"', '', $default_html );
+		if ( $old_html == $default_html ) {
+			unset( $options[ $html_name ] );
+		}
 	}
 
 	public static function cdata( $str ) {
