@@ -42,3 +42,9 @@ export function getSubDir() {
 
 	return subDir;
 }
+
+export const cssHideAdvancedSettings = `
+    .components-panel__body.editor-block-inspector__advanced {
+        display:none;
+    }
+`;
