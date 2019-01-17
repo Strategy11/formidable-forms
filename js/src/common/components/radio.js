@@ -13,30 +13,30 @@ function RadioControl( { label, className, selected, help, instanceId, onChange,
 	className = className + ' components-radio-control';
 
 	return <BaseControl label={ label } help={ help } className={ className }>
-			{ options.map( ( option, index ) =>
-				<div
-					key={ `${ id }-${ index }` }
-					className="components-radio-control__option"
+		{ options.map( ( option, index ) =>
+			<div
+				key={ `${ id }-${ index }` }
+				className="components-radio-control__option"
 				>
-					<input
-						id={ `${ id }-${ index }` }
-						className="components-radio-control__input"
-						type="radio"
-						name={ id }
-						value={ option.value }
-						onChange={ onChangeValue }
-						checked={ option.value === selected }
-						aria-describedby={ !! help ? `${ id }__help` : undefined }
+				<input
+					id={ `${ id }-${ index }` }
+					className="components-radio-control__input"
+					type="radio"
+					name={ id }
+					value={ option.value }
+					onChange={ onChangeValue }
+					checked={ option.value === selected }
+					aria-describedby={ !! help ? `${ id }__help` : undefined }
 					/>
-					<label htmlFor={ `${ id }-${ index }` }>
-						{ option.label }
-					</label>
-					{ option.help &&
-						<p>{ option.help }</p>
+				<label htmlFor={ `${ id }-${ index }` }>
+					{ option.label }
+				</label>
+				{ option.help &&
+				<p>{ option.help }</p>
 					}
-				</div>
+			</div>
 			) }
-		</BaseControl>
+	</BaseControl>;
 }
 
 export default RadioControl;

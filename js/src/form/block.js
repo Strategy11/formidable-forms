@@ -7,6 +7,7 @@ import FormShortcode from './formshortcode';
 import Inspector from './inspector';
 import FormidableIcon from '../common/components/icon';
 import FormSelect from './formselect';
+import { cssHideAdvancedSettings } from '../common/utilities/values';
 
 const { Fragment } = wp.element;
 const { __ } = wp.i18n;
@@ -23,7 +24,7 @@ registerBlockType( 'formidable/simple-form', {
 		'formidable',
 	],
 
-	edit: function( { setAttributes, attributes } ) {
+	edit: function( { setAttributes, attributes, isSelected } ) {
 		const { formId } = attributes;
 
 		const forms = formidable_form_selector.forms;
@@ -61,6 +62,7 @@ registerBlockType( 'formidable/simple-form', {
 					setAttributes={ setAttributes }
 					forms={ forms }
 				/>
+				{ isSelected && <style>{ cssHideAdvancedSettings }</style> }
 				<ServerSideRender
 					block="formidable/simple-form"
 					attributes={ attributes }

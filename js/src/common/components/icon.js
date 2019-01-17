@@ -7,7 +7,7 @@ const { Dashicon } = wp.components;
 export default class FormidableIcon extends Component {
 	render() {
 		if ( formidable_form_selector.icon !== 'svg' ) {
-			return <Dashicon icon={ formidable_form_selector.icon } size="120" />
+			return <Dashicon icon={ formidable_form_selector.icon } size="120" />;
 		}
 
 		return (

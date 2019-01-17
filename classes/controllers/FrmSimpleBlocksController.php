@@ -60,7 +60,7 @@ class FrmSimpleBlocksController {
 			'name'
 		);
 
-		return array_map( 'self::set_form_options', $forms );
+		return array_map( 'FrmSimpleBlocksController::set_form_options', $forms );
 	}
 
 	/**
@@ -103,6 +103,9 @@ class FrmSimpleBlocksController {
 						'type' => 'string',
 					),
 					'minimize'    => array(
+						'type' => 'string',
+					),
+					'className'   => array(
 						'type' => 'string',
 					),
 				),
