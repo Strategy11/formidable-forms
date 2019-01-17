@@ -184,18 +184,7 @@ class FrmXMLController {
 		);
 		$args = wp_parse_args( $args, $defaults );
 
-		$sitename = sanitize_key( get_bloginfo( 'name' ) );
-
-		if ( ! empty( $sitename ) ) {
-			$sitename .= '.';
-		}
-		$filename = $sitename . 'formidable.' . date( 'Y-m-d' ) . '.xml';
-
-		header( 'Content-Description: File Transfer' );
-		header( 'Content-Disposition: attachment; filename=' . $filename );
-		header( 'Content-Type: text/xml; charset=' . get_option( 'blog_charset' ), true );
-
-		//make sure ids are numeric
+		// Make sure ids are numeric.
 		if ( is_array( $args['ids'] ) && ! empty( $args['ids'] ) ) {
 			$args['ids'] = array_filter( $args['ids'], 'is_numeric' );
 		}
@@ -278,6 +267,12 @@ class FrmXMLController {
 			unset( $tb_type );
 		}
 
+		$filename = self::get_file_name( $args, $type, $records );
+
+		header( 'Content-Description: File Transfer' );
+		header( 'Content-Disposition: attachment; filename=' . $filename );
+		header( 'Content-Type: text/xml; charset=' . get_option( 'blog_charset' ), true );
+
 		echo '<?xml version="1.0" encoding="' . esc_attr( get_bloginfo( 'charset' ) ) . "\" ?>\n";
 		include( FrmAppHelper::plugin_path() . '/classes/views/xml/xml.php' );
 	}
@@ -293,6 +288,38 @@ class FrmXMLController {
 			// include actions with forms
 			$type[] = 'actions';
 		}
+	}
+
+	/**
+	 * Use a generic file name if multiple items are exported.
+	 * Use the nme of the form if only one form is exported.
+	 *
+	 * @since 3.05.01
+	 *
+	 * @return string
+	 */
+	private static function get_file_name( $args, $type, $records ) {
+		$has_one_form = isset( $records['forms'] ) && ! empty( $records['forms'] ) && count( $args['ids'] ) === 1;
+		if ( $has_one_form ) {
+			// one form is being exported
+			$selected_form_id = reset( $args['ids'] );
+			foreach ( $records['forms'] as $form_id ) {
+				$filename = 'form-' . $form_id . '.xml';
+				if ( $selected_form_id === $form_id ) {
+					$form = FrmForm::getOne( $form_id );
+					$filename = sanitize_title( $form->name ) . '-form.xml';
+					break;
+				}
+			}
+		} else {
+			$sitename = sanitize_key( get_bloginfo( 'name' ) );
+
+			if ( ! empty( $sitename ) ) {
+				$sitename .= '.';
+			}
+			$filename = $sitename . 'formidable.' . date( 'Y-m-d' ) . '.xml';
+		}
+		return $filename;
 	}
 
 	public static function generate_csv( $atts ) {
