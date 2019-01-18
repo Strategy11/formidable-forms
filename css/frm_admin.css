@@ -3859,3 +3859,35 @@ Responsive Design
 }
 }
 
+/* React styler*/
+
+.frm-react-styler .frm-main-panel{
+	display:flex;
+}
+
+.frm-react-styler .frm-settings-panel {
+	flex-basis: 300px;
+}
+
+.frm-react-styler .frm-fields-panel {
+	flex-basis: 400px;
+}
+
+.frm-react-styler .frm-values-panel {
+	flex-basis: 200px;
+}
+
+.frm-react-styler .frm-settings-panel .components-base-control {
+	margin-top: 6px;
+	margin-bottom: 12px;
+}
+
+select#inspector-select-control-1 {
+	width: 100%;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.components-base-control__label {
+	margin-right: 10px;
+}

@@ -16,6 +16,7 @@ const config = {
 	},
 	entry: {
 		formidable_blocks: './js/src/blocks.js',
+		formidable_styler: './js/src-styler/styler.js',
 	},
 	output: {
 		filename: '[name].js',

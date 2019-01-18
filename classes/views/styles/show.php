@@ -6,6 +6,8 @@
 
 	<?php do_action( 'frm_style_switcher', $style, $styles ) ?>
 
+    <div id="react_tester"></div>
+
 	<form id="frm_styling_form" action="" name="frm_styling_form" method="post">
 		<input type="hidden" name="ID" value="<?php echo esc_attr( $style->ID ) ?>" />
 		<input type="hidden" name="frm_action" value="save" />

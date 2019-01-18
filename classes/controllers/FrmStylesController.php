@@ -61,9 +61,12 @@ class FrmStylesController {
 		}
 
 		$version = FrmAppHelper::plugin_version();
+
 		wp_enqueue_script( 'jquery-ui-datepicker' );
 		wp_enqueue_style( 'wp-color-picker' );
 		wp_enqueue_style( 'frm-custom-theme', admin_url( 'admin-ajax.php?action=frmpro_css' ), array(), $version );
+
+		FrmStylesController::add_react_styler();
 
 		$style = apply_filters( 'frm_style_head', false );
         if ( $style ) {
@@ -111,6 +114,20 @@ class FrmStylesController {
 
 			add_filter( 'style_loader_tag', 'FrmStylesController::add_tags_to_css', 10, 2 );
 		}
+	}
+
+	public static function add_react_styler() {
+		$version = FrmAppHelper::plugin_version();
+
+		wp_register_script(
+			'formidable-react-styler',
+			FrmAppHelper::plugin_url() . '/js/formidable_styler.js',
+			array( 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-components', 'wp-editor' ),
+			$version,
+			true
+		);
+
+		wp_enqueue_script( 'formidable-react-styler' );
 	}
 
 	public static function custom_stylesheet() {
