@@ -58,6 +58,15 @@ class FrmFormsController {
 		return self::display_forms_list( $params, '', $errors );
 	}
 
+	/**
+	 * Choose which type of form to create
+	 *
+	 * @since 4.0
+	 */
+	public static function add_new() {
+		require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add-new.php' );
+	}
+
 	public static function new_form( $values = array() ) {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 
@@ -692,6 +701,35 @@ class FrmFormsController {
         return $save;
     }
 
+	/**
+	 * Show the template listing page
+	 *
+	 * @since 4.0
+	 */
+	private static function list_templates() {
+		$user_templates = array(
+			'is_template'      => 1,
+			'default_template' => 0,
+		);
+		$user_templates = FrmForm::getAll( $user_templates, 'name' );
+
+		$where = apply_filters( 'frm_forms_dropdown', array(), '' );
+		$forms = FrmForm::get_published_forms( $where );
+
+		$base = admin_url( 'admin.php?page=formidable&form_type=template' );
+		$args = array(
+			'frm_action' => 'duplicate',
+			'template'   => true,
+		);
+
+		$api = new FrmFormTemplateApi();
+		$templates = $api->get_api_info();
+
+		$pricing = FrmAppHelper::admin_upgrade_link( 'form-templates' );
+
+		require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/list-templates.php' );
+	}
+
 	private static function get_edit_vars( $id, $errors = array(), $message = '', $create_link = false ) {
         global $frm_vars;
 
@@ -1053,6 +1091,8 @@ class FrmFormsController {
         switch ( $action ) {
             case 'new':
 				return self::new_form( $vars );
+			case 'add_new';
+			case 'list_templates':
             case 'create':
             case 'edit':
             case 'update':
