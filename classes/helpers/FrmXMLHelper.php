@@ -872,8 +872,9 @@ class FrmXMLHelper {
 	 */
 	public static function prepare_form_options_for_export( $options ) {
 		$options = maybe_unserialize( $options );
-		// Change custom_style to the post_name instead of ID
-		if ( isset( $options['custom_style'] ) && 1 !== $options['custom_style'] ) {
+		// Change custom_style to the post_name instead of ID (1 may be a string)
+		$not_default = isset( $options['custom_style'] ) && 1 != $options['custom_style'];
+		if ( $not_default ) {
 			global $wpdb;
 			$table = $wpdb->prefix . 'posts';
 			$where = array( 'ID' => $options['custom_style'] );
@@ -922,6 +923,11 @@ class FrmXMLHelper {
 	 */
 	private static function remove_default_field_options( &$field ) {
 		$defaults = FrmFieldsHelper::get_default_field_options( $field->type );
+		if ( empty( $defaults['blank'] ) ) {
+			$global_settings = new FrmSettings();
+			$global_defaults = $global_settings->default_options();
+			$defaults['blank'] = $global_defaults['blank_msg'];
+		}
 
 		if ( empty( $defaults['custom_html'] ) ) {
 			$defaults['custom_html'] = FrmFieldsHelper::get_default_html( $field->type );
@@ -929,6 +935,15 @@ class FrmXMLHelper {
 		$options = maybe_unserialize( $field->field_options );
  		self::remove_defaults( $defaults, $options );
 		self::remove_default_html( 'custom_html', $defaults, $options );
+
+		// Get variations on the defaults.
+		if ( isset( $options['invalid'] ) ) {
+			$defaults = array(
+				'invalid' => sprintf( __( '%s is invalid', 'formidable' ), $field->name ),
+			);
+			self::remove_defaults( $defaults, $options );
+		}
+
 		$field->field_options = serialize( $options );
 	}
 
