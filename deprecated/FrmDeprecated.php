@@ -95,6 +95,62 @@ class FrmDeprecated {
 	}
 
 	/**
+	 * @since 3.04.03
+	 * @deprecated 4.0
+	 * @codeCoverageIgnore
+	 */
+	public static function get_pro_updater() {
+		_deprecated_function( __FUNCTION__, '4.0' );
+		$api = new FrmFormApi();
+		return $api->get_pro_updater();
+	}
+
+	/**
+	 * @since 3.04.03
+	 * @deprecated 4.0
+	 * @codeCoverageIgnore
+	 * @return array
+	 */
+	public static function error_for_license( $license ) {
+		_deprecated_function( __FUNCTION__, '4.0' );
+		$api = new FrmFormApi( $license );
+		return $api->error_for_license();
+	}
+
+	/**
+	 * @since 3.04.03
+	 * @deprecated 4.0
+	 */
+	public static function reset_cached_addons( $license = '' ) {
+		_deprecated_function( __FUNCTION__, '4.0' );
+		$api = new FrmFormApi( $this->license );
+		$api->reset_cached();
+	}
+
+	/**
+	 * @since 3.04.03
+	 * @deprecated 4.0
+	 * @return string
+	 */
+	public static function get_cache_key( $license ) {
+		_deprecated_function( __FUNCTION__, '4.0' );
+		$api = new FrmFormApi( $this->license );
+		return $api->get_cache_key();
+	}
+
+	/**
+	 * @since 3.04.03
+	 * @deprecated 4.0
+	 * @codeCoverageIgnore
+	 * @return array
+	 */
+	public static function get_addon_info( $license = '' ) {
+		_deprecated_function( __FUNCTION__, '4.0' );
+		$api = new FrmFormApi( $license );
+		return $api->get_api_info();
+	}
+
+	/**
 	 * Add a filter to shorten the EDD filename for Formidable plugin, and add-on, updates
 	 *
 	 * @since 2.03.08

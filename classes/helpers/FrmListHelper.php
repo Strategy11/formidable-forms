@@ -254,18 +254,11 @@ class FrmListHelper {
 			return;
 		}
 
-		$input_id = $input_id . '-search-input';
-
 		foreach ( array( 'orderby', 'order' ) as $search_params ) {
 			$this->hidden_search_inputs( $search_params );
 		}
-?>
-<p class="search-box">
-	<label class="screen-reader-text" for="<?php echo esc_attr( $input_id ) ?>"><?php echo wp_kses( $text, array() ); ?>:</label>
-	<input type="search" id="<?php echo esc_attr( $input_id ) ?>" name="s" value="<?php _admin_search_query(); ?>" />
-	<?php submit_button( $text, 'button', '', false, array( 'id' => 'search-submit' ) ); ?>
-</p>
-<?php
+
+		FrmAppHelper::show_search_box( $text, $input_id );
 	}
 
 	private function hidden_search_inputs( $param_name ) {

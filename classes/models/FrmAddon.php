@@ -104,7 +104,8 @@ class FrmAddon {
 	 			),
 			);
 		} else {
-			$plugins = FrmAddonsController::get_addon_info( $this->license );
+			$api = new FrmFormApi( $this->license );
+			$plugins = $api->get_api_info();
 			$_data = $plugins[ $item_id ];
 		}
 
@@ -143,8 +144,9 @@ class FrmAddon {
 			return false;
 		}
 
-		$frmpro_updater = FrmAddonsController::get_pro_updater();
-		$license = $frmpro_updater->license;
+		$api = new FrmFormApi();
+		$api->get_pro_updater();
+		$license = $api->get_license();
 		if ( empty( $license ) ) {
 			return false;
 		}
@@ -236,7 +238,9 @@ class FrmAddon {
 	 */
 	protected function delete_cache() {
 		delete_transient( 'frm_api_licence' );
-		delete_option( FrmAddonsController::get_cache_key( $this->license ) );
+
+		$api = new FrmFormApi( $this->license );
+		$api->reset_cached();
 	}
 
 	/**
@@ -260,7 +264,8 @@ class FrmAddon {
 			/* translators: %1$s: Plugin name, %2$s: Start link HTML, %3$s: end link HTML */
 			$message = sprintf( esc_html__( 'Your %1$s license key is missing. Please add it on the %2$slicenses page%3$s.', 'formidable' ), esc_html( $this->plugin_name ), '<a href="' . esc_url( admin_url( 'admin.php?page=formidable-settings&t=licenses_settings' ) ) . '">', '</a>' );
 		} else {
-			$errors = FrmAddonsController::error_for_license( $this->license );
+			$api = new FrmFormApi( $this->license );
+			$errors = $api->error_for_license();
 			if ( ! empty( $errors ) ) {
 				$message = reset( $errors );
 			}
@@ -338,8 +343,8 @@ class FrmAddon {
 	 * @since 3.04.03
 	 */
 	protected function get_api_info( $license ) {
-		$addons = FrmAddonsController::get_addon_info( $license );
-		$addon  = FrmAddonsController::get_addon_for_license( $addons, $this );
+		$api    = new FrmFormApi( $license );
+		$addon  = $api->get_addon_for_license( $this );
 
 		// if there is no download url, this license does not apply to the addon
 		if ( isset( $addon['package'] ) ) {
@@ -363,7 +368,8 @@ class FrmAddon {
 		$timeout = ( isset( $version_info->timeout ) && ! empty( $version_info->timeout ) ) ? $version_info->timeout : 0;
 		if ( ! empty( $timeout ) && time() > $timeout ) {
 			$version_info = false; // Cache is expired
-			FrmAddonsController::reset_cached_addons( $this->license );
+			$api = new FrmFormApi( $this->license );
+			$api->reset_cached();
 		}
 	}
 

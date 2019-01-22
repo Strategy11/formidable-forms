@@ -6,8 +6,7 @@
 
 	<div class="postbox ">
 	<div class="inside">
-		<h2><?php esc_html_e( 'Import', 'formidable' ); ?></h2>
-		<hr/>
+		<h2 class="frm-h2"><?php esc_html_e( 'Import', 'formidable' ); ?></h2>
 		<p class="howto"><?php echo esc_html( apply_filters( 'frm_upload_instructions1', __( 'Upload your Formidable XML file to import forms into this site. If your imported form key and creation date match a form on your site, that form will be updated.', 'formidable' ) ) ) ?></p>
 		<br/>
 		<form enctype="multipart/form-data" method="post">
@@ -33,8 +32,7 @@
 
 	<div class="postbox">
 	<div class="inside with_frm_style">
-		<h2><?php esc_html_e( 'Export', 'formidable' ); ?></h2>
-		<hr/>
+		<h2 class="frm-h2"><?php esc_html_e( 'Export', 'formidable' ); ?></h2>
 		<form method="post" action="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>" id="frm_export_xml">
 			<input type="hidden" name="action" value="frm_export_xml" />
 			<?php wp_nonce_field( 'export-xml-nonce', 'export-xml' ); ?>

@@ -707,11 +707,7 @@ class FrmFormsController {
 	 * @since 4.0
 	 */
 	private static function list_templates() {
-		$user_templates = array(
-			'is_template'      => 1,
-			'default_template' => 0,
-		);
-		$user_templates = FrmForm::getAll( $user_templates, 'name' );
+
 
 		$where = apply_filters( 'frm_forms_dropdown', array(), '' );
 		$forms = FrmForm::get_published_forms( $where );
@@ -724,10 +720,30 @@ class FrmFormsController {
 
 		$api = new FrmFormTemplateApi();
 		$templates = $api->get_api_info();
+		self::add_user_templates( $templates );
 
 		$pricing = FrmAppHelper::admin_upgrade_link( 'form-templates' );
 
 		require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/list-templates.php' );
+	}
+
+	private static function add_user_templates( &$templates ) {
+		$user_templates = array(
+			'is_template'      => 1,
+			'default_template' => 0,
+		);
+		$user_templates = FrmForm::getAll( $user_templates, 'name' );
+		foreach ( $user_templates as $template ) {
+			$template = array(
+				'id'          => $template->id,
+				'name'        => $template->name,
+				'description' => $template->description,
+				'url'         => admin_url( 'admin.php?page=formidable&frm_action=duplicate&id=' . absint( $template->id ) ),
+				'released'    => $template->created_at,
+				'installed'   => 1,
+			);
+			array_unshift( $templates, $template );
+		}
 	}
 
 	private static function get_edit_vars( $id, $errors = array(), $message = '', $create_link = false ) {

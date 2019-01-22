@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class FrmAppHelper {
-	public static $db_version = 88; //version of the database we are moving to
+	public static $db_version = 89; //version of the database we are moving to
 	public static $pro_db_version = 37; //deprecated
 	public static $font_version = 3;
 
@@ -618,6 +618,25 @@ class FrmAppHelper {
 		} elseif ( isset( $atts['link_hook'] ) ) {
 			do_action( $atts['link_hook']['hook'], $atts['link_hook']['param'] );
 		}
+	}
+
+	/**
+	 * @since 4.0
+	 */
+	public static function show_search_box( $text, $input_id, $placeholder = '' ) {
+		$input_id = $input_id . '-search-input';
+		if ( empty( $text ) ) {
+			$text = __( 'Search', 'formidable' );
+		}
+		?>
+		<p class="search-box frm-search">
+			<label class="screen-reader-text" for="<?php echo esc_attr( $input_id ) ?>">
+				<?php echo wp_kses( $text, array() ); ?>:
+			</label>
+			<input type="search" id="<?php echo esc_attr( $input_id ) ?>" name="s" value="<?php _admin_search_query(); ?>" placeholder="<?php echo esc_attr( $placeholder ); ?>" />
+			<?php submit_button( $text, 'button-secondary', '', false, array( 'id' => 'search-submit' ) ); ?>
+		</p>
+		<?php
 	}
 
     /**
