@@ -707,8 +707,6 @@ class FrmFormsController {
 	 * @since 4.0
 	 */
 	private static function list_templates() {
-
-
 		$where = apply_filters( 'frm_forms_dropdown', array(), '' );
 		$forms = FrmForm::get_published_forms( $where );
 
@@ -1107,7 +1105,7 @@ class FrmFormsController {
         switch ( $action ) {
             case 'new':
 				return self::new_form( $vars );
-			case 'add_new';
+			case 'add_new':
 			case 'list_templates':
             case 'create':
             case 'edit':
