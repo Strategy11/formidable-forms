@@ -1,11 +1,14 @@
-<div class="wrap">
-	<h1><?php esc_html_e( 'Import/Export', 'formidable' ); ?></h1>
+<div class="frm_wrap">
+	<?php
+	FrmAppHelper::get_admin_header(
+		array(
+			'label' => __( 'Import/Export', 'formidable' ),
+		)
+	);
+	?>
+	<div class="wrap">
+		<?php include( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' ); ?>
 
-	<?php include( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' ); ?>
-	<div class="metabox-holder">
-
-	<div class="postbox ">
-	<div class="inside">
 		<h2 class="frm-h2"><?php esc_html_e( 'Import', 'formidable' ); ?></h2>
 		<p class="howto"><?php echo esc_html( apply_filters( 'frm_upload_instructions1', __( 'Upload your Formidable XML file to import forms into this site. If your imported form key and creation date match a form on your site, that form will be updated.', 'formidable' ) ) ) ?></p>
 		<br/>
@@ -27,12 +30,12 @@
 			</p>
 		</form>
 		<?php FrmTipsHelper::pro_tip( 'get_import_tip' ); ?>
-	</div>
-	</div>
 
-	<div class="postbox">
-	<div class="inside with_frm_style">
+		<br/><br/>
 		<h2 class="frm-h2"><?php esc_html_e( 'Export', 'formidable' ); ?></h2>
+		<p class="howto">
+			<?php echo esc_html( __( 'Export your forms, entries, views, and styles so you can easily import them on another site.', 'formidable' ) ); ?>
+		</p>
 		<form method="post" action="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>" id="frm_export_xml">
 			<input type="hidden" name="action" value="frm_export_xml" />
 			<?php wp_nonce_field( 'export-xml-nonce', 'export-xml' ); ?>
@@ -111,9 +114,6 @@
 				<input type="submit" value="<?php esc_attr_e( 'Export Selection', 'formidable' ) ?>" class="button-primary" />
 			</p>
 		</form>
-
-	</div>
-	</div>
 
 	</div>
 </div>

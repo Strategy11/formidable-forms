@@ -45,7 +45,7 @@
 
         <div class="general_settings tabs-panel <?php echo esc_attr( $a === 'general_settings' ? 'frm_block' : 'frm_hidden' ); ?>">
             <p class="submit">
-				<input class="button-primary" type="submit" value="<?php esc_attr_e( 'Update Options', 'formidable' ) ?>" />
+				<input class="button-primary frm-button-primary" type="submit" value="<?php esc_attr_e( 'Update Options', 'formidable' ) ?>" />
             </p>
 
 			<h3><?php esc_html_e( 'Styling & Scripts', 'formidable' ); ?></h3>
@@ -232,7 +232,7 @@
             <span class="spinner frm_spinner"></span>
         </p>
         <p class="submit">
-			<input class="button-primary" type="submit" value="<?php esc_attr_e( 'Update Options', 'formidable' ) ?>" />
+			<input class="button-primary button-primary" type="submit" value="<?php esc_attr_e( 'Update Options', 'formidable' ) ?>" />
         </p>
 
     </form>

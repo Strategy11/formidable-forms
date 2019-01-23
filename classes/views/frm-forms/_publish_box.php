@@ -23,7 +23,7 @@
             <div id="frm-preview-action">
 				<?php if ( ( ! isset( $hide_preview ) || ! $hide_preview ) && isset( $values['form_key'] ) ) { ?>
 					<div class="preview dropdown">
-						<a href="#" id="frm-previewDrop" class="frm-dropdown-toggle button" data-toggle="dropdown"><?php esc_html_e( 'Preview', 'formidable' ); ?> <b class="caret"></b></a>
+						<a href="#" id="frm-previewDrop" class="frm-dropdown-toggle button frm-button-primary" data-toggle="dropdown"><?php esc_html_e( 'Preview', 'formidable' ); ?> <b class="caret"></b></a>
 
 						<ul class="frm-dropdown-menu <?php echo esc_attr( is_rtl() ? 'pull-left' : 'pull-right' ) ?>" role="menu" aria-labelledby="frm-previewDrop">
 							<li>

@@ -23,25 +23,6 @@ class FrmXMLHelper {
 	}
 
 	public static function import_xml( $file ) {
-		$defaults = array(
-			'forms'   => 0,
-			'fields'  => 0,
-			'terms'   => 0,
-			'posts'   => 0,
-			'views'   => 0,
-			'actions' => 0,
-			'styles'  => 0,
-		);
-
-        $imported = array(
-            'imported' => $defaults,
-			'updated'  => $defaults,
-			'forms'    => array(),
-			'terms'    => array(),
-        );
-
-		unset( $defaults );
-
 		if ( ! defined( 'WP_IMPORTING' ) ) {
 			define( 'WP_IMPORTING', true );
         }
@@ -68,7 +49,18 @@ class FrmXMLHelper {
 			return new WP_Error( 'SimpleXML_parse_error', __( 'There was an error when reading this XML file', 'formidable' ), libxml_get_errors() );
 		}
 
-        // add terms, forms (form and field ids), posts (post ids), and entries to db, in that order
+		return self::import_xml_now( $xml );
+	}
+
+	/**
+	 * Add terms, forms (form and field ids), posts (post ids), and entries to db, in that order
+	 *
+	 * @since 4.0
+	 * @return array The number of items imported
+	 */
+	public static function import_xml_now( $xml ) {
+		$imported = self::pre_import_data();
+
 		foreach ( array( 'term', 'form', 'view' ) as $item_type ) {
             // grab cats, tags, and terms, or forms or posts
 			if ( isset( $xml->{$item_type} ) ) {
@@ -78,10 +70,31 @@ class FrmXMLHelper {
             }
         }
 
-		$return = apply_filters( 'frm_importing_xml', $imported, $xml );
+		return apply_filters( 'frm_importing_xml', $imported, $xml );
+	}
 
-	    return $return;
-    }
+	/**
+	 * @since 4.0
+	 * @return array
+	 */
+	private static function pre_import_data() {
+		$defaults = array(
+			'forms'   => 0,
+			'fields'  => 0,
+			'terms'   => 0,
+			'posts'   => 0,
+			'views'   => 0,
+			'actions' => 0,
+			'styles'  => 0,
+		);
+
+        return array(
+            'imported' => $defaults,
+			'updated'  => $defaults,
+			'forms'    => array(),
+			'terms'    => array(),
+        );
+	}
 
 	public static function import_xml_terms( $terms, $imported ) {
         foreach ( $terms as $t ) {

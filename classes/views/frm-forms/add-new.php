@@ -16,7 +16,7 @@
 					</div>
 					<h2><?php esc_html_e( 'Start with a blank form', 'formidable' ); ?></h2>
 					<p><?php esc_html_e( 'Build anything you can imagine.', 'formidable' ); ?></p>
-					<a class="button button-primary" href="<?php echo esc_url( admin_url( 'admin.php?page=formidable&frm_action=new' ) ); ?>">
+					<a class="button button-primary frm-button-primary" href="<?php echo esc_url( admin_url( 'admin.php?page=formidable&frm_action=new' ) ); ?>">
 						<?php esc_html_e( 'Create Blank Form', 'formidable' ); ?>
 					</a>
 				</div>
@@ -29,7 +29,7 @@
 					</div>
 					<h2><?php esc_html_e( 'Start with a template', 'formidable' ); ?></h2>
 					<p><?php esc_html_e( 'We\'ve done the heavy lifting.', 'formidable' ); ?></p>
-					<a class="button button-primary" href="<?php echo esc_url( admin_url( 'admin.php?page=formidable&frm_action=list_templates' ) ); ?>">
+					<a class="button button-primary frm-button-primary" href="<?php echo esc_url( admin_url( 'admin.php?page=formidable&frm_action=list_templates' ) ); ?>">
 						<?php esc_html_e( 'Choose Template', 'formidable' ); ?>
 					</a>
 				</div>
@@ -42,7 +42,7 @@
 					</div>
 					<h2><?php esc_html_e( 'Import your form', 'formidable' ); ?></h2>
 					<p><?php esc_html_e( 'Import a form from an XML file.', 'formidable' ); ?></p>
-					<a class="button button-primary" href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-import' ) ); ?>">
+					<a class="button button-primary frm-button-primary" href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-import' ) ); ?>">
 						<?php esc_html_e( 'Import Form', 'formidable' ); ?>
 					</a>
 				</div>

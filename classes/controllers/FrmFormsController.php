@@ -707,6 +707,9 @@ class FrmFormsController {
 	 * @since 4.0
 	 */
 	private static function list_templates() {
+		wp_enqueue_script( 'jquery-ui-dialog' );
+		wp_enqueue_style( 'jquery-ui-dialog' );
+
 		$where = apply_filters( 'frm_forms_dropdown', array(), '' );
 		$forms = FrmForm::get_published_forms( $where );
 

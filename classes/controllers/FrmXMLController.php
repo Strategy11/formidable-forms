@@ -34,6 +34,68 @@ class FrmXMLController {
 		libxml_disable_entity_loader( $loader );
 	}
 
+
+	/**
+	 * Use the template link to install the XML template
+	 *
+	 * @since 4.0
+	 */
+	public static function install_template() {
+		FrmAppHelper::permission_check( 'frm_create_forms' );
+		check_ajax_referer( 'frm_ajax', 'nonce' );
+
+		$url = FrmAppHelper::get_param( 'xml', '', 'post', 'esc_url_raw' );
+
+		$response = wp_remote_get( $url );
+		$body     = wp_remote_retrieve_body( $response );
+		$xml      = simplexml_load_string( $body );
+
+		if ( ! $xml ) {
+			wp_die( new WP_Error( 'SimpleXML_parse_error', __( 'There was an error when reading the form template', 'formidable' ), libxml_get_errors() ) );
+		}
+
+		self::set_new_form_name( $xml );
+
+		$imported = FrmXMLHelper::import_xml_now( $xml );
+		if ( isset( $imported['form_status'] ) && ! empty( $imported['form_status'] ) ) {
+			// get the last form id in case there are child forms
+			end( $imported['form_status'] );
+			$form_id = key( $imported['form_status'] );
+			$response = array(
+				'id'       => $form_id,
+				'redirect' => admin_url( 'admin.php?page=formidable&frm_action=edit&id=' . absint( $form_id ) ),
+				'success'  => 1,
+			);
+		} else {
+			$response = array(
+				'message' => __( 'There was an error importing form', 'formidable' ),
+			);
+		}
+
+		echo wp_json_encode( $response );
+		wp_die();
+	}
+
+	private static function set_new_form_name( &$xml ) {
+		if ( isset( $xml->form ) ) {
+			$form_name   = FrmAppHelper::get_param( 'name', '', 'post', 'sanitize_text_field' );
+			$description = FrmAppHelper::get_param( 'desc', '', 'post', 'sanitize_textarea_field' );
+			$name_set = false;
+
+			foreach ( $xml->form as $k => $form ) {
+				// Use a unique key to prevent editing existing form
+				$form->form_key = FrmAppHelper::get_unique_key( $form->form_key, 'frm_forms', 'form_key' );
+
+				if ( ! $name_set && ( ! isset( $form->parent_form_id ) || empty( $form->parent_form_id ) ) ) {
+					$form->name = $form_name;
+					$form->description = $description;
+					$name_set = true;
+				}
+				$xml->form[ $k ] = $form;
+			}
+		}
+	}
+
 	public static function route() {
 		$action = isset( $_REQUEST['frm_action'] ) ? 'frm_action' : 'action';
 		$action = FrmAppHelper::get_param( $action, '', 'get', 'sanitize_title' );

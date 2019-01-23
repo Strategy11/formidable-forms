@@ -1,15 +1,15 @@
-<div class="frm_wrap">
+<div class="frm_wrap" id="frm-templates-page">
 	<?php
 	FrmAppHelper::get_admin_header(
 		array(
 			'label'       => __( 'Add new form', 'formidable' ),
-			'cancel_link' => '?page=formidable',
+			'cancel_link' => '?page=formidable&frm_action=add_new',
 		)
 	);
 	?>
 	<div class="wrap">
 		<h2 class="frm-h2"><?php esc_html_e( 'Form templates', 'formidable' ); ?></h2>
-		<p class="howto" style="max-width:800px;">
+		<p class="howto">
 			<?php
 			/* translators: %1$s: Start link HTML, %2$s: End link HTML */
 			printf(
@@ -73,7 +73,7 @@
 					<p><?php esc_html_e( 'Start from scratch and build exactly what you want. This option will not pre-load any fields.', 'formidable' ); ?></p>
 				</div>
 				<div class="plugin-card-bottom">
-					<a class="button button-primary" href="<?php echo esc_url( admin_url( 'admin.php?page=formidable&frm_action=new' ) ); ?>">
+					<a class="button button-primary frm-button-primary" href="<?php echo esc_url( admin_url( 'admin.php?page=formidable&frm_action=new' ) ); ?>">
 						<?php esc_html_e( 'Create Form', 'formidable' ); ?>
 					</a>
 				</div>
@@ -92,12 +92,16 @@
 					</div>
 					<div class="plugin-card-bottom">
 						<?php if ( isset( $template['url'] ) && ! empty( $template['url'] ) ) { ?>
-							<a class="frm-install-template button button-primary" rel="<?php echo esc_attr( $template['url'] ); ?>" aria-label="<?php esc_attr_e( 'Create Form', 'formidable' ); ?>">
+							<?php if ( isset( $template['installed'] ) && $template['installed'] ) { ?>
+								<a class="button button-primary frm-button-primary" href="<?php echo esc_attr( $template['url'] ); ?>" aria-label="<?php esc_attr_e( 'Create Form', 'formidable' ); ?>">
+							<?php } else { ?>
+								<a class="frm-install-template button button-primary frm-button-primary" rel="<?php echo esc_attr( $template['url'] ); ?>" aria-label="<?php esc_attr_e( 'Create Form', 'formidable' ); ?>">
+							<?php } ?>
 								<?php esc_html_e( 'Create Form', 'formidable' ); ?>
 							</a>
 							<span class="spinner"></span>
 						<?php } else { ?>
-							<a class="install-now button button-primary" href="<?php echo esc_url( $pricing ); ?>" target="_blank" aria-label="<?php esc_attr_e( 'Upgrade Now', 'formidable' ); ?>">
+							<a class="install-now button button-primary frm-button-primary" href="<?php echo esc_url( $pricing ); ?>" target="_blank" aria-label="<?php esc_attr_e( 'Upgrade Now', 'formidable' ); ?>">
 								<?php esc_html_e( 'Upgrade Now', 'formidable' ); ?>
 							</a>
 						<?php } ?>
@@ -105,7 +109,7 @@
 				</div>
 			<?php } ?>
 		</div>
-
+		<?php include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/template-name-overlay.php' ); ?>
 		<div class="clear"></div>
 	</div>
 </div>
