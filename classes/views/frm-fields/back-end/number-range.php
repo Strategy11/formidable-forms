@@ -1,7 +1,7 @@
 <tr>
 	<td style="width:150px">
 		<label><?php esc_html_e( 'Number Range', 'formidable' ) ?>
-			<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Browsers that support the HTML5 number field require a number range to determine the numbers seen when clicking the arrows next to the field.', 'formidable' ) ?>" ></span>
+			<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Set the number range the field validation should allow. Browsers that support the HTML5 number field require a number range to determine the numbers seen when clicking the arrows next to the field.', 'formidable' ) ?>" ></span>
 		</label>
 	</td>
 	<td>
