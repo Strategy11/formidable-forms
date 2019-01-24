@@ -441,6 +441,7 @@ ul.frm_form_nav > li{
 }
 
 .frm-button-primary,
+.wp-core-ui .button-primary.frm-button-primary,
 .frm_orange_button,
 .wrap .frm_pricing a.button-primary,
 .toplevel_page_formidable #frm_upgrade_modal .button-primary,
@@ -462,12 +463,14 @@ ul.frm_form_nav > li{
 }
 
 .frm-button-primary,
+.wp-core-ui .button-primary.frm-button-primary,
 .frm_single_entry_page .button-primary {
 	border-color: var(--primary-border) !important;
 	background-color: var(--primary-color) !important;
 	color: #fff !important;
 }
 
+.wp-core-ui .button-primary.frm-button-primary:hover,
 .frm-button-primary:hover{
 	background-color: var(--primary-hover) !important;
 }
