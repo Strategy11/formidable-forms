@@ -36,11 +36,11 @@
 				</div>
 				<div class="plugin-card-bottom frm-new-template">
 					<div class="dropdown">
-						<a href="#" id="frm-templateDrop" class="frm-dropdown-toggle" data-toggle="dropdown">
+						<a href="#" id="frm-template-drop" class="frm-dropdown-toggle" data-toggle="dropdown">
 							<?php esc_html_e( 'Select form for new template', 'formidable' ); ?>
 							<b class="caret"></b>
 						</a>
-						<ul class="frm-dropdown-menu" role="menu" aria-labelledby="frm-templateDrop">
+						<ul class="frm-dropdown-menu" role="menu" aria-labelledby="frm-template-drop">
 							<?php
 							if ( empty( $forms ) ) {
 								?>
@@ -50,10 +50,9 @@
 								<?php
 							} else {
 								foreach ( $forms as $form ) {
-									$args['id'] = $form->id;
 									?>
 									<li>
-										<a href="<?php echo esc_url( add_query_arg( $args, $base ) ); ?>" tabindex="-1">
+										<a href="#" data-formid="<?php echo esc_attr( $form->id ); ?>" class="frm-build-template" data-fullname="<?php echo esc_attr( $form->name ); ?>" tabindex="-1">
 											<?php echo esc_html( empty( $form->name ) ? __( '(no title)', 'formidable' ) : FrmAppHelper::truncate( $form->name, 33 ) ); ?>
 										</a>
 									</li>
@@ -121,7 +120,7 @@
 						</a>
 						<?php if ( isset( $template['installed'] ) && $template['installed'] ) { ?>
 							|
-							<a href="#" class="frm-trash-template frm-trash" data-id="<?php echo esc_attr( $template['id'] ); ?>">
+							<a href="#" class="frm-trash-template frm-trash" data-id="<?php echo esc_attr( $template['id'] ); ?>" data-frmverify="<?php esc_attr_e( 'Are you sure?', 'formidable' ); ?>">
 								<?php esc_html_e( 'Delete', 'formidable' ); ?>
 							</a>
 						<?php } ?>

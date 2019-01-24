@@ -3139,7 +3139,7 @@ function frmAdminBuildJS(){
 	/* Templates */
 
 	function initTemplateModal() {
-		jQuery('.frm-trash-template').click( trashTemplate );
+		jQuery( '.frm_wrap' ).on( 'click', '.frm-trash-template.frm_confirming', trashTemplate );
 
 		var $preview = initModal( '#frm_preview_template_modal', '700px' );
 		if ( $preview !== false ) {
@@ -3171,11 +3171,19 @@ function frmAdminBuildJS(){
 			event.preventDefault();
 			var spinner = this.nextElementSibling;
 			spinner.style.visibility = 'visible';
-			var oldName = jQuery(this).closest('.frm-card').find('h3').html(),
-				link = this.attributes.rel.value;
+			var oldName = jQuery(this).closest('.frm-card').find('h3').html();
 
 			document.getElementById('frm_template_name').value = oldName;
-			document.getElementById('frm_link').value = link;
+			document.getElementById('frm_link').value = this.attributes.rel.value;
+			document.getElementById('frm_action_type').value = 'frm_install_template';
+			$info.dialog('open');
+		} );
+
+		jQuery('.frm-build-template').click( function( event ) {
+			event.preventDefault();
+			document.getElementById('frm_template_name').value = this.dataset.fullname;
+			document.getElementById('frm_link').value = this.dataset.formid;
+			document.getElementById('frm_action_type').value = 'frm_build_template';
 			$info.dialog('open');
 		} );
 
@@ -3197,14 +3205,19 @@ function frmAdminBuildJS(){
 
 	function installTemplate( e ) {
 		/*jshint validthis:true */
-		var data,
-			formName = this.elements['template_name'].value,
-			formDesc = this.elements['template_desc'].value,
-			link = this.elements['link'].value;
+		var action = this.elements['type'].value;
 		e.preventDefault();
+		installNewForm( this, action );
+	}
+
+	function installNewForm( form, action ) {
+		var data,
+			formName = form.elements['template_name'].value,
+			formDesc = form.elements['template_desc'].value,
+			link = form.elements['link'].value;
 
 		data = {
-			action: 'frm_install_template',
+			action: action,
 			xml: link,
 			name: formName,
 			desc: formDesc,
@@ -3225,6 +3238,7 @@ function frmAdminBuildJS(){
 		var id = this.dataset.id,
 			link = this;
 		e.preventDefault();
+
 		data = {
 			action: 'frm_forms_trash',
 			id: id,

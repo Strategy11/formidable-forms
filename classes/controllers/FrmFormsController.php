@@ -535,6 +535,46 @@ class FrmFormsController {
     }
 
 	/**
+	 * Create a custom template from a form
+	 *
+	 * @since 3.06
+	 */
+	public static function build_template() {
+		global $wpdb;
+
+		FrmAppHelper::permission_check( 'frm_edit_forms' );
+		check_ajax_referer( 'frm_ajax', 'nonce' );
+
+		$form_id     = FrmAppHelper::get_param( 'xml', '', 'post', 'absint' );
+		$new_form_id = FrmForm::duplicate( $form_id, 1, true );
+		if ( empty( $new_form_id ) ) {
+			$response = array(
+				'message' => __( 'There was an error creating a template.', 'formidable' ),
+			);
+		} else {
+			// Update the new form name and description.
+			$name = FrmAppHelper::get_param( 'name', '', 'post', 'sanitize_text_field' );
+			$desc = FrmAppHelper::get_param( 'desc', '', 'post', 'sanitize_textarea_field' );
+
+			$new_values = array(
+				'name' => $name,
+				'description' => $desc,
+			);
+			$query_results = $wpdb->update( $wpdb->prefix . 'frm_forms', $new_values, array( 'id' => $new_form_id ) );
+			if ( $query_results ) {
+				FrmForm::clear_form_cache();
+			}
+
+			$response = array(
+				'redirect' => admin_url( 'admin.php?page=formidable&frm_action=list_templates' ),
+			);
+		}
+
+		echo wp_json_encode( $response );
+		wp_die();
+	}
+
+	/**
 	* Inserts Formidable button
 	* Hook exists since 2.5.0
 	*
@@ -723,12 +763,6 @@ class FrmFormsController {
 
 		$where = apply_filters( 'frm_forms_dropdown', array(), '' );
 		$forms = FrmForm::get_published_forms( $where );
-
-		$base = admin_url( 'admin.php?page=formidable&form_type=template' );
-		$args = array(
-			'frm_action' => 'duplicate',
-			'template'   => true,
-		);
 
 		$api = new FrmFormTemplateApi();
 		$templates = $api->get_api_info();
