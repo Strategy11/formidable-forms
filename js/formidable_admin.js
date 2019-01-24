@@ -3374,8 +3374,6 @@ function frmAdminBuildJS(){
 
 			jQuery('.frm-install-addon').click( installAddon );
 
-			jQuery('.frm-auto-search').keyup( searchContent );
-
 			// prevent annoying confirmation message from WordPress
 			jQuery('button, input[type=submit]').on('click', removeWPUnload);
 		},
@@ -3671,6 +3669,12 @@ function frmAdminBuildJS(){
 
 		templateInit: function() {
 			initTemplateModal();
+
+			var autoSearch = jQuery('.frm-auto-search');
+			autoSearch.keyup( searchContent );
+			if ( autoSearch.val() !== '' ) {
+				autoSearch.keyup();
+			}
 		},
 
 		viewInit: function(){

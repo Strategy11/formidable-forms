@@ -87,7 +87,7 @@
 								<span>New</span>
 							</div>
 						<?php } ?>
-						<h3><?php echo esc_html( $template['name'] ); ?></h3>
+						<h3><?php echo esc_html( rtrim( $template['name'], 'Template' ) ); ?></h3>
 						<p><?php echo esc_html( $template['description'] ); ?></p>
 					</div>
 					<div class="plugin-card-bottom">
