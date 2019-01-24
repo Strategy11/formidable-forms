@@ -7,7 +7,7 @@ class FrmFormApi {
 	protected $cache_timeout = '+6 hours';
 
 	/**
-	 * @since 4.0
+	 * @since 3.06
 	 */
 	public function __construct( $license = null ) {
 		$this->set_license( $license );
@@ -15,7 +15,7 @@ class FrmFormApi {
 	}
 
 	/**
-	 * @since 4.0
+	 * @since 3.06
 	 */
 	private function set_license( $license ) {
 		if ( $license === null ) {
@@ -28,7 +28,7 @@ class FrmFormApi {
 	}
 
 	/**
-	 * @since 4.0
+	 * @since 3.06
 	 * @return string
 	 */
 	public function get_license() {
@@ -36,14 +36,14 @@ class FrmFormApi {
 	}
 
 	/**
-	 * @since 4.0
+	 * @since 3.06
 	 */
 	protected function set_cache_key() {
 		$this->cache_key = 'frm_addons_l' . ( empty( $this->license ) ? '' : md5( $this->license ) );
 	}
 
 	/**
-	 * @since 4.0
+	 * @since 3.06
 	 * @return string
 	 */
 	public function get_cache_key() {
@@ -51,7 +51,7 @@ class FrmFormApi {
 	}
 
 	/**
-	 * @since 4.0
+	 * @since 3.06
 	 * @return array
 	 */
 	public function get_api_info() {
@@ -89,21 +89,21 @@ class FrmFormApi {
 	}
 
 	/**
-	 * @since 4.0
+	 * @since 3.06
 	 */
 	protected function api_url() {
 		return 'https://formidableforms.com/wp-json/s11edd/v1/updates/';
 	}
 
 	/**
-	 * @since 4.0
+	 * @since 3.06
 	 */
 	protected function skip_categories() {
 		return array( 'WordPress Form Templates', 'WordPress Form Style Templates' );
 	}
 
 	/**
-	 * @since 4.0
+	 * @since 3.06
 	 * @param object $license_plugin The FrmAddon object
 	 * @return array
 	 */
@@ -127,7 +127,7 @@ class FrmFormApi {
 	}
 
 	/**
-	 * @since 4.0
+	 * @since 3.06
 	 */
 	public function get_pro_updater() {
 		if ( FrmAppHelper::pro_is_installed() && is_callable( 'FrmProAppHelper::get_updater' ) ) {
@@ -140,7 +140,7 @@ class FrmFormApi {
 	}
 
 	/**
-	 * @since 4.0
+	 * @since 3.06
 	 * @return array
 	 */
 	protected function get_cached() {
@@ -154,7 +154,7 @@ class FrmFormApi {
 	}
 
 	/**
-	 * @since 4.0
+	 * @since 3.06
 	 */
 	protected function set_cached( $addons ) {
 		$data = array(
@@ -166,14 +166,14 @@ class FrmFormApi {
 	}
 
 	/**
-	 * @since 4.0
+	 * @since 3.06
 	 */
 	public function reset_cached() {
 		delete_option( $this->cache_key );
 	}
 
 	/**
-	 * @since 4.0
+	 * @since 3.06
 	 * @return array
 	 */
 	public function error_for_license() {
@@ -185,7 +185,7 @@ class FrmFormApi {
 	}
 
 	/**
-	 * @since 4.0
+	 * @since 3.06
 	 * @return array
 	 */
 	public function get_error_from_response( $addons = array() ) {

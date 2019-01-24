@@ -621,7 +621,7 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * @since 4.0
+	 * @since 3.06
 	 */
 	public static function show_search_box( $text, $input_id, $placeholder = '' ) {
 		$tosearch = '';

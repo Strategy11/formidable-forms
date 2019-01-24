@@ -546,7 +546,7 @@ class FrmAddonsController {
 
 	/**
 	 * @since 3.04.03
-	 * @deprecated 4.0
+	 * @deprecated 3.06
 	 * @codeCoverageIgnore
 	 * @return array
 	 */
@@ -556,7 +556,7 @@ class FrmAddonsController {
 
 	/**
 	 * @since 3.04.03
-	 * @deprecated 4.0
+	 * @deprecated 3.06
 	 * @codeCoverageIgnore
 	 */
 	public static function get_pro_updater() {
@@ -565,7 +565,7 @@ class FrmAddonsController {
 
 	/**
 	 * @since 3.04.03
-	 * @deprecated 4.0
+	 * @deprecated 3.06
 	 * @codeCoverageIgnore
 	 *
 	 * @return array
@@ -576,7 +576,7 @@ class FrmAddonsController {
 
 	/**
 	 * @since 3.04.03
-	 * @deprecated 4.0
+	 * @deprecated 3.06
 	 * @codeCoverageIgnore
 	 *
 	 * @return string
@@ -587,7 +587,7 @@ class FrmAddonsController {
 
 	/**
 	 * @since 3.04.03
-	 * @deprecated 4.0
+	 * @deprecated 3.06
 	 * @codeCoverageIgnore
 	 */
 	public static function reset_cached_addons( $license = '' ) {

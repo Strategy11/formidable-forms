@@ -61,7 +61,7 @@ class FrmFormsController {
 	/**
 	 * Choose which type of form to create
 	 *
-	 * @since 4.0
+	 * @since 3.06
 	 */
 	public static function add_new() {
 		require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add-new.php' );
@@ -398,7 +398,7 @@ class FrmFormsController {
     }
 
 	/**
-	 * @since 4.0
+	 * @since 3.06
 	 */
 	public static function ajax_trash() {
 		FrmAppHelper::permission_check( 'frm_delete_forms' );
@@ -715,7 +715,7 @@ class FrmFormsController {
 	/**
 	 * Show the template listing page
 	 *
-	 * @since 4.0
+	 * @since 3.06
 	 */
 	private static function list_templates() {
 		wp_enqueue_script( 'jquery-ui-dialog' );

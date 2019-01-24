@@ -96,56 +96,56 @@ class FrmDeprecated {
 
 	/**
 	 * @since 3.04.03
-	 * @deprecated 4.0
+	 * @deprecated 3.06
 	 * @codeCoverageIgnore
 	 */
 	public static function get_pro_updater() {
-		_deprecated_function( __FUNCTION__, '4.0', 'FrmFormApi::get_pro_updater' );
+		_deprecated_function( __FUNCTION__, '3.06', 'FrmFormApi::get_pro_updater' );
 		$api = new FrmFormApi();
 		return $api->get_pro_updater();
 	}
 
 	/**
 	 * @since 3.04.03
-	 * @deprecated 4.0
+	 * @deprecated 3.06
 	 * @codeCoverageIgnore
 	 * @return array
 	 */
 	public static function error_for_license( $license ) {
-		_deprecated_function( __FUNCTION__, '4.0', 'FrmFormApi::error_for_license' );
+		_deprecated_function( __FUNCTION__, '3.06', 'FrmFormApi::error_for_license' );
 		$api = new FrmFormApi( $license );
 		return $api->error_for_license();
 	}
 
 	/**
 	 * @since 3.04.03
-	 * @deprecated 4.0
+	 * @deprecated 3.06
 	 */
 	public static function reset_cached_addons( $license = '' ) {
-		_deprecated_function( __FUNCTION__, '4.0', 'FrmFormApi::reset_cached' );
+		_deprecated_function( __FUNCTION__, '3.06', 'FrmFormApi::reset_cached' );
 		$api = new FrmFormApi( $this->license );
 		$api->reset_cached();
 	}
 
 	/**
 	 * @since 3.04.03
-	 * @deprecated 4.0
+	 * @deprecated 3.06
 	 * @return string
 	 */
 	public static function get_cache_key( $license ) {
-		_deprecated_function( __FUNCTION__, '4.0', 'FrmFormApi::get_cache_key' );
+		_deprecated_function( __FUNCTION__, '3.06', 'FrmFormApi::get_cache_key' );
 		$api = new FrmFormApi( $this->license );
 		return $api->get_cache_key();
 	}
 
 	/**
 	 * @since 3.04.03
-	 * @deprecated 4.0
+	 * @deprecated 3.06
 	 * @codeCoverageIgnore
 	 * @return array
 	 */
 	public static function get_addon_info( $license = '' ) {
-		_deprecated_function( __FUNCTION__, '4.0', 'FrmFormApi::get_api_info' );
+		_deprecated_function( __FUNCTION__, '3.06', 'FrmFormApi::get_api_info' );
 		$api = new FrmFormApi( $license );
 		return $api->get_api_info();
 	}

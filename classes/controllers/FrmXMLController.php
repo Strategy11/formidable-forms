@@ -38,7 +38,7 @@ class FrmXMLController {
 	/**
 	 * Use the template link to install the XML template
 	 *
-	 * @since 4.0
+	 * @since 3.06
 	 */
 	public static function install_template() {
 		FrmAppHelper::permission_check( 'frm_create_forms' );

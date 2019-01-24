@@ -55,7 +55,7 @@ class FrmXMLHelper {
 	/**
 	 * Add terms, forms (form and field ids), posts (post ids), and entries to db, in that order
 	 *
-	 * @since 4.0
+	 * @since 3.06
 	 * @return array The number of items imported
 	 */
 	public static function import_xml_now( $xml ) {
@@ -74,7 +74,7 @@ class FrmXMLHelper {
 	}
 
 	/**
-	 * @since 4.0
+	 * @since 3.06
 	 * @return array
 	 */
 	private static function pre_import_data() {
