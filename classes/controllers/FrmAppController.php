@@ -191,8 +191,8 @@ class FrmAppController {
 			$link = FrmAppHelper::admin_upgrade_link( 'banner' );
 ?>
 <div class="update-nag frm-update-to-pro">
-	<?php echo FrmAppHelper::kses( $tip['tip'] ); ?>
-	<span><?php echo FrmAppHelper::kses( $tip['call'] ); ?></span>
+	<?php echo FrmAppHelper::kses( $tip['tip'] ); // WPCS: XSS ok. ?>
+	<span><?php echo FrmAppHelper::kses( $tip['call'] ); // WPCS: XSS ok. ?></span>
 	<a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url( $link ) ); ?>" class="button">Upgrade to Pro</a>
 </div>
 <?php

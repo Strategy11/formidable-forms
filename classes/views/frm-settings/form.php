@@ -8,7 +8,7 @@
 			<div class="inside frm_license_box">
 				<h2><?php esc_html_e( 'License', 'formidable' ); ?></h2>
 				<hr/>
-				<p class="howto"><?php esc_html_e( 'Your license key provides access to automatic updates.' ); ?></p>
+				<p class="howto"><?php esc_html_e( 'Your license key provides access to automatic updates.', 'formidable' ); ?></p>
 
 				<?php do_action( 'frm_before_settings' ); ?>
 			</div>

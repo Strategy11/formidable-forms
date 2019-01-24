@@ -118,7 +118,7 @@ class FrmFormsListHelper extends FrmListHelper {
 		} elseif ( EMPTY_TRASH_DAYS && current_user_can( 'frm_delete_forms' ) ) {
 	        $actions['bulk_trash'] = __( 'Move to Trash', 'formidable' );
 		} elseif ( current_user_can( 'frm_delete_forms' ) ) {
-			$actions['bulk_delete'] = __( 'Delete' );
+			$actions['bulk_delete'] = __( 'Delete', 'formidable' );
 	    }
 
         return $actions;
@@ -132,7 +132,7 @@ class FrmFormsListHelper extends FrmListHelper {
 		if ( 'trash' == $this->status && current_user_can( 'frm_delete_forms' ) ) {
 ?>
             <div class="alignleft actions frm_visible_overflow">
-			<?php submit_button( __( 'Empty Trash' ), 'apply', 'delete_all', false ); ?>
+			<?php submit_button( __( 'Empty Trash', 'formidable' ), 'apply', 'delete_all', false ); ?>
             </div>
 <?php
         }
@@ -278,12 +278,12 @@ class FrmFormsListHelper extends FrmListHelper {
 		}
 
 		if ( current_user_can( 'frm_edit_forms' ) ) {
-			$actions['frm_edit'] = '<a href="' . esc_url( $edit_link ) . '">' . __( 'Edit' ) . '</a>';
+			$actions['frm_edit'] = '<a href="' . esc_url( $edit_link ) . '">' . __( 'Edit', 'formidable' ) . '</a>';
 			$actions['frm_settings'] = '<a href="' . esc_url( '?page=formidable&frm_action=settings&id=' . $item->id ) . '">' . __( 'Settings', 'formidable' ) . '</a>';
 		}
 
 		$actions = array_merge( $actions, $new_actions );
-		$actions['view'] = '<a href="' . esc_url( FrmFormsHelper::get_direct_link( $item->form_key, $item ) ) . '" target="_blank">' . __( 'Preview' ) . '</a>';
+		$actions['view'] = '<a href="' . esc_url( FrmFormsHelper::get_direct_link( $item->form_key, $item ) ) . '" target="_blank">' . __( 'Preview', 'formidable' ) . '</a>';
     }
 
     /**
@@ -292,7 +292,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	private function get_form_name( $item, $actions, $edit_link, $mode = 'list' ) {
         $form_name = $item->name;
 		if ( trim( $form_name ) == '' ) {
-			$form_name = __( '(no title)' );
+			$form_name = __( '(no title)', 'formidable' );
 		}
 		$form_name = FrmAppHelper::kses( $form_name );
 		if ( 'excerpt' != $mode ) {

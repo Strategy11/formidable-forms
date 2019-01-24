@@ -724,6 +724,7 @@ class FrmFormsController {
 		self::add_user_templates( $templates );
 
 		$pricing = FrmAppHelper::admin_upgrade_link( 'form-templates' );
+		$plans = array( 'free', 'Personal', 'Business', 'Elite' );
 
 		require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/list-templates.php' );
 	}
@@ -1211,7 +1212,7 @@ class FrmFormsController {
 				array(
 					'parent'    => 'frm-forms',
 					'id'        => 'edit_form_' . $form_id,
-					'title'     => empty( $name ) ? __( '(no title)' ) : $name,
+					'title'     => empty( $name ) ? __( '(no title)', 'formidable' ) : $name,
 					'href'      => admin_url( 'admin.php?page=formidable&frm_action=edit&id=' . $form_id ),
 				)
 			);

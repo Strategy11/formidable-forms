@@ -93,7 +93,7 @@
 						<?php foreach ( $forms as $form ) { ?>
 							<option value="<?php echo esc_attr( $form->id ) ?>">
 								<?php
-								echo esc_html( '' === $form->name ? __( '(no title)' ) : $form->name );
+								echo esc_html( '' === $form->name ? __( '(no title)', 'formidable' ) : $form->name );
 								echo ' &mdash; ' . esc_html( $form->form_key );
 								if ( $form->is_template && $form->default_template ) {
 									echo ' ' . esc_html__( '(default template)', 'formidable' );

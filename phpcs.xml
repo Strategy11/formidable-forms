@@ -48,13 +48,6 @@
 		<exclude name="WordPress.PHP.YodaConditions"/>
 		<exclude name="WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid" />
 	</rule>
-	<rule ref="WordPress.Security.EscapeOutput">
-		<properties>
-			<property name="customEscapingFunctions" type="array">
-				<element value="FrmAppHelper::kses"/>
-			</property>
-		</properties>
-	</rule>
 	<rule ref="WordPress.WP.I18n">
 		<properties>
 			<property name="text_domain" type="array">
