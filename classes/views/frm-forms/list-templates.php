@@ -100,7 +100,7 @@
 							foreach ( $template['categories'] as $k => $category ) {
 								if ( in_array( $category, $plans ) ) {
 									printf(
-										esc_html__( 'License plan required: %s' ),
+										esc_html__( 'License plan required: %s', 'formidable' ),
 										'<a href="' . esc_url( $pricing ) . '" target="_blank" rel="noopener">' . esc_html( $category ) . '</a>'
 									);
 									unset( $template['categories'][ $k ] );

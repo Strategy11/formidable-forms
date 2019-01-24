@@ -3281,9 +3281,7 @@ function frmAdminBuildJS(){
 
 	function fadeOut( element, success ) {
 		element.classList.add('frm-fade');
-		var timer = setInterval( function () {
-			success();
-		}, 1000 );
+		setTimeout( success, 1000 );
 	}
 
 	function initModal( id, width ) {
