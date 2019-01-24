@@ -3619,7 +3619,6 @@ function frmAdminBuildJS(){
 			document.getElementById('frm_field_pad').addEventListener('change', textSquishCheck);
 
 			jQuery('input.hex').wpColorPicker({
-				width:200,
 				change: function( event, ui ) {
 					var hexcolor = jQuery( this ).wpColorPicker( 'color' );
 					jQuery( event.target ).val( hexcolor ).change();
