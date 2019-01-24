@@ -2,7 +2,6 @@
 	<div class="metabox-holder">
 		<div class="postbox">
 			<div class="inside">
-
 				<div class="cta-inside">
 
 					<form name="frm-new-template-form" id="frm-new-template-form" method="post">
@@ -34,3 +33,12 @@
 		</div>
 	</div>
 </div>
+<div id="frm_preview_template_modal" class="frm_hidden settings-lite-cta">
+	<div class="metabox-holder">
+		<div class="postbox">
+			<div class="inside" id="frm-preview-block">
+			</div>
+		</div>
+	</div>
+</div>
+

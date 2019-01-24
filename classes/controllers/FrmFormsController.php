@@ -397,6 +397,17 @@ class FrmFormsController {
         return $message;
     }
 
+	/**
+	 * @since 4.0
+	 */
+	public static function ajax_trash() {
+		FrmAppHelper::permission_check( 'frm_delete_forms' );
+		check_ajax_referer( 'frm_ajax', 'nonce' );
+		$form_id = FrmAppHelper::get_param( 'id', '', 'post', 'absint' );
+		FrmForm::set_status( $form_id, 'trash' );
+		wp_die();
+	}
+
     public static function trash() {
 		self::change_form_status( 'trash' );
     }
@@ -739,12 +750,14 @@ class FrmFormsController {
 			$template = array(
 				'id'          => $template->id,
 				'name'        => $template->name,
+				'key'         => $template->form_key,
 				'description' => $template->description,
 				'url'         => admin_url( 'admin.php?page=formidable&frm_action=duplicate&id=' . absint( $template->id ) ),
 				'released'    => $template->created_at,
 				'installed'   => 1,
 			);
 			array_unshift( $templates, $template );
+			unset( $template );
 		}
 	}
 

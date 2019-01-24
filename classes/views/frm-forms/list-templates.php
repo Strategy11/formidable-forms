@@ -89,8 +89,43 @@
 						<?php } ?>
 						<h3><?php echo esc_html( rtrim( $template['name'], 'Template' ) ); ?></h3>
 						<p><?php echo esc_html( $template['description'] ); ?></p>
+						<?php
+						if ( isset( $template['installed'] ) && $template['installed'] ) {
+							$preview_link = admin_url( 'admin-ajax.php?action=frm_forms_preview&form=' . $template['key'] );
+						} else {
+							$preview_link = 'https://sandbox.formidableforms.com/demos/wp-json/frm/v2/forms/' . $template['key'] . '?return=html';
+						}
+
+						if ( isset( $template['categories'] ) && ( ! isset( $template['url'] ) || empty( $template['url'] ) ) ) {
+							foreach ( $template['categories'] as $k => $category ) {
+								if ( in_array( $category, $plans ) ) {
+									printf(
+										esc_html__( 'License plan required: %s' ),
+										'<a href="' . esc_url( $pricing ) . '" target="_blank" rel="noopener">' . esc_html( $category ) . '</a>'
+									);
+									unset( $template['categories'][ $k ] );
+									break;
+								}
+							}
+						}
+						?>
+						<?php if ( ! empty( $template['categories'] ) ) { ?>
+							<div class="frm_hidden">
+								Category:<?php echo esc_html( implode( $template['categories'], ', Category:' ) ); ?>
+							</div>
+						<?php } ?>
 					</div>
 					<div class="plugin-card-bottom">
+						<a href="#" class="frm-preview-template" rel="<?php echo esc_url( $preview_link ); ?>">
+							<?php esc_html_e( 'Preview', 'formidable' ); ?>
+						</a>
+						<?php if ( isset( $template['installed'] ) && $template['installed'] ) { ?>
+							|
+							<a href="#" class="frm-trash-template frm-trash" data-id="<?php echo esc_attr( $template['id'] ); ?>">
+								<?php esc_html_e( 'Delete', 'formidable' ); ?>
+							</a>
+						<?php } ?>
+
 						<?php if ( isset( $template['url'] ) && ! empty( $template['url'] ) ) { ?>
 							<?php if ( isset( $template['installed'] ) && $template['installed'] ) { ?>
 								<a class="button button-primary frm-button-primary" href="<?php echo esc_attr( $template['url'] ); ?>" aria-label="<?php esc_attr_e( 'Create Form', 'formidable' ); ?>">
@@ -101,7 +136,7 @@
 							</a>
 							<span class="spinner"></span>
 						<?php } else { ?>
-							<a class="install-now button button-primary frm-button-primary" href="<?php echo esc_url( $pricing ); ?>" target="_blank" aria-label="<?php esc_attr_e( 'Upgrade Now', 'formidable' ); ?>">
+							<a class="install-now button button-primary frm-button-primary" href="<?php echo esc_url( $pricing ); ?>" target="_blank" rel="noopener" aria-label="<?php esc_attr_e( 'Upgrade Now', 'formidable' ); ?>">
 								<?php esc_html_e( 'Upgrade Now', 'formidable' ); ?>
 							</a>
 						<?php } ?>

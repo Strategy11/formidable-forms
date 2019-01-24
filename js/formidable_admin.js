@@ -3139,6 +3139,29 @@ function frmAdminBuildJS(){
 	/* Templates */
 
 	function initTemplateModal() {
+		jQuery('.frm-trash-template').click( trashTemplate );
+
+		var $preview = initModal( '#frm_preview_template_modal', '700px' );
+		if ( $preview !== false ) {
+			jQuery('.frm-preview-template').click( function( event ) {
+				event.preventDefault();
+				var link = this.attributes.rel.value,
+					cont = document.getElementById('frm-preview-block');
+
+				if ( link.indexOf( ajaxurl ) > -1 ) {
+					var iframe = document.createElement('iframe');
+					iframe.src = link;
+					iframe.height = '400';
+					iframe.width = '100%';
+					cont.innerHTML = '';
+					cont.appendChild(iframe);
+				} else {
+					frmApiPreview( cont, link );
+				}
+				$preview.dialog('open');
+			} );
+		}
+
 		var $info = initModal( '#frm_template_modal' );
 		if ( $info === false ) {
 			return;
@@ -3150,14 +3173,26 @@ function frmAdminBuildJS(){
 			spinner.style.visibility = 'visible';
 			var oldName = jQuery(this).closest('.frm-card').find('h3').html(),
 				link = this.attributes.rel.value;
-			console.log(oldName);
+
 			document.getElementById('frm_template_name').value = oldName;
 			document.getElementById('frm_link').value = link;
-			// TODO: get existing form name
 			$info.dialog('open');
 		} );
 
 		jQuery( document ).on( 'submit', '#frm-new-template-form', installTemplate );
+	}
+
+	function frmApiPreview( cont, link ) {
+		jQuery.ajax({
+			dataType:'json',
+			url:link,
+			success:function(json){
+				var form = json.renderedHtml;
+				form = form.replace(/<script\b[^<]*(js\/jquery\/jquery)[^<]*><\/script>/gi, '' );
+				form = form.replace(/<link\b[^>]*(formidableforms17.css)[^>]*>/gi, '' );
+				cont.innerHTML = form;
+			}
+		});
 	}
 
 	function installTemplate( e ) {
@@ -3183,6 +3218,24 @@ function frmAdminBuildJS(){
 				// TODO: show response.message
 			}
 		});
+	}
+
+	function trashTemplate( e ) {
+		/*jshint validthis:true */
+		var id = this.dataset.id,
+			link = this;
+		e.preventDefault();
+		data = {
+			action: 'frm_forms_trash',
+			id: id,
+			nonce: frmGlobal.nonce
+		};
+		postAjax( data, function() {
+			var card = link.closest('.frm-card');
+			fadeOut( card, function() {
+				card.parentNode.removeChild(card);
+			} );
+		} );
 	}
 
 	function searchContent() {
@@ -3213,7 +3266,10 @@ function frmAdminBuildJS(){
 		xmlHttp.open( 'post', ajaxurl, true );
 		xmlHttp.onreadystatechange = function() {
 			if ( xmlHttp.readyState > 3 && xmlHttp.status == 200 ) {
-				var response = JSON.parse( xmlHttp.responseText );
+				var response = xmlHttp.responseText;
+				if ( response !== '' ) {
+					response = JSON.parse( response );
+				}
 				success( response );
 			}
 		}
@@ -3223,18 +3279,27 @@ function frmAdminBuildJS(){
 		return xmlHttp;
 	}
 
-	function initModal( id ) {
+	function fadeOut( element, success ) {
+		element.classList.add('frm-fade');
+		var timer = setInterval( function () {
+			success();
+		}, 1000 );
+	}
+
+	function initModal( id, width ) {
 		var $info = jQuery( id );
 		if ( $info.length < 1 ) {
 			return false;
 		}
-
+		if ( typeof width === 'undefined' ) {
+			width = '550px';
+		}
 		$info.dialog({
 			dialogClass: 'wp-dialog',
 			modal: true,
 			autoOpen: false,
 			closeOnEscape: true,
-			width: '550px',
+			width: width,
 			resizable: false,
 			draggable: false,
 			open: function( event ) {

@@ -169,6 +169,7 @@ class FrmHooksController {
         add_action( 'wp_ajax_frm_get_shortcode_opts', 'FrmFormsController::get_shortcode_opts' );
         add_action( 'wp_ajax_frm_forms_preview', 'FrmFormsController::preview' );
         add_action( 'wp_ajax_nopriv_frm_forms_preview', 'FrmFormsController::preview' );
+		add_action( 'wp_ajax_frm_forms_trash', 'FrmFormsController::ajax_trash' );
 
 		// Settings
 		add_action( 'wp_ajax_frm_lite_settings_upgrade', 'FrmSettingsController::settings_cta_dismiss' );

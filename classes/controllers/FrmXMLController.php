@@ -51,8 +51,11 @@ class FrmXMLController {
 		$xml      = simplexml_load_string( $body );
 
 		if ( ! $xml ) {
-			$message = __( 'There was an error when reading the form template', 'formidable' );
-			wp_die( new WP_Error( 'SimpleXML_parse_error', esc_html( $message ), libxml_get_errors() ) );
+			$response = array(
+				'message' => __( 'There was an error reading the form template', 'formidable' ),
+			);
+			echo wp_json_encode( $response );
+			wp_die();
 		}
 
 		self::set_new_form_name( $xml );

@@ -877,8 +877,8 @@ div.frm_updated_message{
 	border: 25px solid transparent;
 	border-bottom: 25px solid #f37656;
 	position: absolute;
-	top: 3px;
-	right: -39px;
+	top: 4px;
+	right: -38px;
 	padding: 0 10px;
 	width: 65px;
 	color: white;
@@ -984,6 +984,12 @@ h2.frm-h2 + .howto{
 	border-radius: 10px;
 	border: 1px solid grey;
 	border-color: var(--light-grey);
+	opacity:1;
+	transition:opacity 1s;
+}
+
+.frm-fade{
+	opacity:0;
 }
 
 .frm-addons .plugin-card-top{
@@ -2694,6 +2700,24 @@ tr.frm_options_heading td{
 	margin-bottom:75px;
 }
 
+#frm_preview_template_modal .postbox{
+	margin-bottom:0;
+}
+
+#frm-preview-block{
+	height:400px;
+	overflow:scroll;
+	margin:0;
+}
+
+#frm-templates-page .plugin-card-bottom{
+	text-align:left;
+}
+
+.plugin-card-bottom .frm-trash{
+	color:#a00;
+}
+
 .frm_inline_label{
 	padding-left:3px;
 }
@@ -3166,7 +3190,7 @@ li.frm_noallow.button.frm_show_upgrade {
 }
 
 .wp-dialog {
-	z-index:10;
+	z-index:100;
 	padding: 0 !important;
 }
 

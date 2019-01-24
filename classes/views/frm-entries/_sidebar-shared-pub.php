@@ -6,7 +6,7 @@ if ( ! isset( $entry ) ) {
 <div class="misc-pub-section curtime misc-pub-curtime">
     <span id="timestamp">
     <?php
-    $date_format = __( 'M j, Y @ G:i' );
+    $date_format = __( 'M j, Y @ G:i', 'formidable' );
 	printf( esc_html__( 'Published on: %1$s', 'formidable' ), '<b>' . esc_html( FrmAppHelper::get_localized_date( $date_format, $entry->created_at ) ) . '</b>' );
 	?>
     </span>
