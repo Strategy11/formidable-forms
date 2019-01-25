@@ -18,8 +18,10 @@ class FrmAddonsController {
 		$installed_addons = apply_filters( 'frm_installed_addons', array() );
 
 		$addons = self::get_api_addons();
-		$errors = self::get_error_from_response( $addons );
+		$errors = array();
 		if ( isset( $addons['error'] ) ) {
+			$api    = new FrmFormApi();
+			$errors = $api->get_error_from_response( $addons );
 			unset( $addons['error'] );
 		}
 		self::prepare_addons( $addons );
@@ -42,13 +44,8 @@ class FrmAddonsController {
 	}
 
 	private static function get_api_addons() {
-		$license = '';
-		$edd_update = self::get_pro_updater();
-		if ( ! empty( $edd_update ) ) {
-			$license = $edd_update->license;
-		}
-
-		$addons = self::get_addon_info( $license );
+		$api = new FrmFormApi();
+		$addons = $api->get_api_info();
 
 		if ( empty( $addons ) ) {
 			$addons = self::fallback_plugin_list();
@@ -61,17 +58,6 @@ class FrmAddonsController {
 		}
 
 		return $addons;
-	}
-
-	/**
-	 * @since 3.04.03
-	 */
-	public static function get_pro_updater() {
-		if ( FrmAppHelper::pro_is_installed() && is_callable( 'FrmProAppHelper::get_updater' ) ) {
-			return FrmProAppHelper::get_updater();
-		}
-
-		return false;
 	}
 
 	/**
@@ -182,119 +168,11 @@ class FrmAddonsController {
 			$license = strtoupper( $license );
 		}
 
-		$downloads = self::get_addon_info( $license );
+		$api = new FrmFormApi( $license );
+		$downloads = $api->get_api_info();
 		$pro = isset( $downloads['93790'] ) ? $downloads['93790'] : array();
 
 		return isset( $pro['url'] ) ? $pro['url'] : '';
-	}
-
-	/**
-	 * @since 3.04.03
-	 * @return array
-	 */
-	public static function get_addon_info( $license = '' ) {
-		$addons = array();
-		$url = 'https://formidableforms.com/wp-json/s11edd/v1/updates/';
-		if ( ! empty( $license ) ) {
-			$url .= '?l=' . urlencode( base64_encode( $license ) );
-		}
-
-		$addons = self::get_cached_addons( $license );
-		if ( ! empty( $addons ) ) {
-			return $addons;
-		}
-
-		$response = wp_remote_get( $url );
-		if ( is_array( $response ) && ! is_wp_error( $response ) ) {
-		    $addons = $response['body'];
-			if ( ! empty( $addons ) ) {
-				$addons = json_decode( $addons, true );
-
-				$skip_categories = array( 'WordPress Form Templates', 'WordPress Form Style Templates' );
-				foreach ( $addons as $k => $addon ) {
-					if ( ! isset( $addon['categories'] ) ) {
-						continue;
-					}
-					$cats = array_intersect( $skip_categories, $addon['categories'] );
-					if ( ! empty( $cats ) ) {
-						unset( $addons[ $k ] );
-					}
-				}
-
-				self::set_cached_addons( $addons, $license );
-			}
-		}
-
-		return $addons;
-	}
-
-	/**
-	 * @since 3.04.03
-	 * @return array
-	 */
-	private static function get_cached_addons( $license = '' ) {
-		$cache_key = self::get_cache_key( $license );
-		$cache     = get_option( $cache_key );
-
-		if ( empty( $cache ) || empty( $cache['timeout'] ) || current_time( 'timestamp' ) > $cache['timeout'] ) {
-			return false; // Cache is expired
-		}
-
-		return json_decode( $cache['value'], true );
-	}
-
-	/**
-	 * @since 3.04.03
-	 */
-	private static function set_cached_addons( $addons, $license = '' ) {
-		$cache_key = self::get_cache_key( $license );
-		$data = array(
-			'timeout' => strtotime( '+6 hours', current_time( 'timestamp' ) ),
-			'value'   => json_encode( $addons ),
-		);
-
-		update_option( $cache_key, $data, 'no' );
-	}
-
-	/**
-	 * @since 3.04.03
-	 */
-	public static function reset_cached_addons( $license = '' ) {
-		delete_option( self::get_cache_key( $license ) );
-	}
-
-	/**
-	 * @since 3.04.03
-	 * @return string
-	 */
-	public static function get_cache_key( $license ) {
-		return 'frm_addons_l' . ( empty( $license ) ? '' : md5( $license ) );
-	}
-
-	/**
-	 * @since 3.04.03
-	 * @return array
-	 */
-	public static function error_for_license( $license ) {
-		$errors = array();
-		if ( ! empty( $license ) ) {
-			$addons = self::get_addon_info( $license );
-			$errors = self::get_error_from_response( $addons );
-		}
-		return $errors;
-	}
-
-	/**
-	 * @since 3.04.03
-	 * @return array
-	 */
-	private static function get_error_from_response( $addons ) {
-		$errors = array();
-		if ( isset( $addons['error'] ) ) {
-			$errors[] = $addons['error']['message'];
-			do_action( 'frm_license_error', $addons['error'] );
-		}
-		return $errors;
 	}
 
 	/**
@@ -389,12 +267,13 @@ class FrmAddonsController {
 
 			$checked_licenses[] = $new_license;
 
+			$api = new FrmFormApi( $new_license );
 			if ( empty( $version_info ) ) {
-				$version_info = self::get_addon_info( $new_license );
+				$version_info = $api->get_api_info();
 				continue;
 			}
 
-			$plugin = self::get_addon_for_license( $version_info, $addon );
+			$plugin = $api->get_addon_for_license( $addon, $version_info );
 			if ( empty( $plugin ) ) {
 				continue;
 			}
@@ -402,7 +281,7 @@ class FrmAddonsController {
 			$download_id = isset( $plugin['id'] ) ? $plugin['id'] : 0;
 			if ( ! empty( $download_id ) && ! isset( $version_info[ $download_id ]['package'] ) ) {
 				// if this addon is using its own license, get the update url
-				$addon_info = self::get_addon_info( $new_license );
+				$addon_info = $api->get_api_info();
 
 				$version_info[ $download_id ] = $addon_info[ $download_id ];
 				if ( isset( $addon_info['error'] ) ) {
@@ -663,6 +542,56 @@ class FrmAddonsController {
 			echo json_encode( true );
 			wp_die();
 		}
+	}
+
+	/**
+	 * @since 3.04.03
+	 * @deprecated 3.06
+	 * @codeCoverageIgnore
+	 * @return array
+	 */
+	public static function error_for_license( $license ) {
+		return FrmDeprecated::error_for_license( $license );
+	}
+
+	/**
+	 * @since 3.04.03
+	 * @deprecated 3.06
+	 * @codeCoverageIgnore
+	 */
+	public static function get_pro_updater() {
+		return FrmDeprecated::get_pro_updater();
+	}
+
+	/**
+	 * @since 3.04.03
+	 * @deprecated 3.06
+	 * @codeCoverageIgnore
+	 *
+	 * @return array
+	 */
+	public static function get_addon_info( $license = '' ) {
+		return FrmDeprecated::get_addon_info( $license );
+	}
+
+	/**
+	 * @since 3.04.03
+	 * @deprecated 3.06
+	 * @codeCoverageIgnore
+	 *
+	 * @return string
+	 */
+	public static function get_cache_key( $license ) {
+		return FrmDeprecated::get_cache_key( $license );
+	}
+
+	/**
+	 * @since 3.04.03
+	 * @deprecated 3.06
+	 * @codeCoverageIgnore
+	 */
+	public static function reset_cached_addons( $license = '' ) {
+		FrmDeprecated::reset_cached_addons( $license );
 	}
 
 	/**

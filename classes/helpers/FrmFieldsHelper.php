@@ -438,7 +438,7 @@ class FrmFieldsHelper {
 
 		$link = sprintf(
 			esc_html__( 'Please add options from the WordPress "%1$s" page', 'formidable' ),
-			'<a href="' . esc_url( admin_url( 'edit-tags.php?taxonomy=' . $tax->name ) ) . '" target="_blank">' . ( empty( $tax->labels->name ) ? esc_html__( 'Categories' ) : $tax->labels->name ) . '</a>'
+			'<a href="' . esc_url( admin_url( 'edit-tags.php?taxonomy=' . $tax->name ) ) . '" target="_blank">' . ( empty( $tax->labels->name ) ? esc_html__( 'Categories', 'formidable' ) : $tax->labels->name ) . '</a>'
 		);
 		unset( $tax );
 

@@ -6,7 +6,7 @@
 
 <div class="postbox">
 	<div id="titlediv" class="inside">
-	    <input type="text" name="name" value="<?php echo esc_attr( $form->name ); ?>" id="title" placeholder="<?php esc_attr_e( 'Enter title here' ) ?>" />
+		<input type="text" name="name" value="<?php echo esc_attr( $form->name ); ?>" id="title" placeholder="<?php esc_attr_e( 'Enter title here', 'formidable' ); ?>" />
 	</div>
 
 	<div class="frm_no_fields <?php echo ( isset( $values['fields'] ) && ! empty( $values['fields'] ) ) ? 'frm_hidden' : ''; ?>">

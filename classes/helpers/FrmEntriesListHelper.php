@@ -111,7 +111,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 		if ( $which == 'top' && empty( $form_id ) ) {
 			echo '<div class="alignleft actions">';
 			echo FrmFormsHelper::forms_dropdown( 'form', $form_id, array( 'blank' => __( 'View all forms', 'formidable' ) ) ); // WPCS: XSS ok.
-			submit_button( __( 'Filter' ), 'filter_action', '', false, array( 'id' => 'post-query-submit' ) );
+			submit_button( __( 'Filter', 'formidable' ), 'filter_action', '', false, array( 'id' => 'post-query-submit' ) );
 			echo '</div>';
 		}
 	}
@@ -221,7 +221,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 				$val = '<abbr title="' . esc_attr( FrmAppHelper::get_formatted_time( $item->{$col_name}, '', 'g:i:s A' ) ) . '">' . $date . '</abbr>';
 				break;
 			case 'is_draft':
-				$val = empty( $item->is_draft ) ? esc_html__( 'No' ) : esc_html__( 'Yes' );
+				$val = empty( $item->is_draft ) ? esc_html__( 'No', 'formidable' ) : esc_html__( 'Yes', 'formidable' );
 				break;
 			case 'form_id':
 				$val = FrmFormsHelper::edit_form_link( $item->form_id );
@@ -254,7 +254,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 		if ( current_user_can( 'frm_delete_entries' ) ) {
 			$delete_link = '?page=formidable-entries&frm_action=destroy&id=' . $item->id . '&form=' . $this->params['form'];
-			$actions['delete'] = '<a href="' . esc_url( wp_nonce_url( $delete_link ) ) . '" class="submitdelete" data-frmverify="' . esc_attr__( 'Are you sure?', 'formidable' ) . '">' . __( 'Delete' ) . '</a>';
+			$actions['delete'] = '<a href="' . esc_url( wp_nonce_url( $delete_link ) ) . '" class="submitdelete" data-frmverify="' . esc_attr__( 'Are you sure?', 'formidable' ) . '">' . __( 'Delete', 'formidable' ) . '</a>';
 	    }
 
 		$actions = apply_filters( 'frm_row_actions', $actions, $item );

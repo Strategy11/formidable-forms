@@ -169,6 +169,8 @@ class FrmHooksController {
         add_action( 'wp_ajax_frm_get_shortcode_opts', 'FrmFormsController::get_shortcode_opts' );
         add_action( 'wp_ajax_frm_forms_preview', 'FrmFormsController::preview' );
         add_action( 'wp_ajax_nopriv_frm_forms_preview', 'FrmFormsController::preview' );
+		add_action( 'wp_ajax_frm_forms_trash', 'FrmFormsController::ajax_trash' );
+		add_action( 'wp_ajax_frm_build_template', 'FrmFormsController::build_template' );
 
 		// Settings
 		add_action( 'wp_ajax_frm_lite_settings_upgrade', 'FrmSettingsController::settings_cta_dismiss' );
@@ -182,6 +184,7 @@ class FrmHooksController {
 		add_action( 'wp_ajax_nopriv_frmpro_css', 'FrmStylesController::load_saved_css' );
 
         // XML Controller
+		add_action( 'wp_ajax_frm_install_template', 'FrmXMLController::install_template' );
 		add_action( 'wp_ajax_frm_entries_csv', 'FrmXMLController::csv' );
 		add_action( 'wp_ajax_nopriv_frm_entries_csv', 'FrmXMLController::csv' );
         add_action( 'wp_ajax_frm_export_xml', 'FrmXMLController::export_xml' );

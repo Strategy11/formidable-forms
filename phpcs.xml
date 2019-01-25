@@ -48,4 +48,11 @@
 		<exclude name="WordPress.PHP.YodaConditions"/>
 		<exclude name="WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid" />
 	</rule>
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="formidable"/>
+			</property>
+		</properties>
+	</rule>
 </ruleset>

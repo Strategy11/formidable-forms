@@ -1748,35 +1748,11 @@ function frmAdminBuildJS(){
 		}, 2000);
 	}
 
-	function openUpgradeModal() {
-		var $info = jQuery('#frm_upgrade_modal');
-		if ( $info.length < 1 ) {
+	function initUpgradeModal() {
+		var $info = initModal( '#frm_upgrade_modal' );
+		if ( $info === false ) {
 			return;
 		}
-
-		$info.dialog({
-			dialogClass: 'wp-dialog',
-			modal: true,
-			autoOpen: false,
-			closeOnEscape: true,
-			width: '550px',
-			resizable: false,
-			draggable: false,
-			open: function( event ) {
-				jQuery('.ui-dialog-titlebar').addClass('frm_hidden').removeClass('ui-helper-clearfix');
-				jQuery('#wpwrap').addClass('frm_overlay');
-				jQuery('.wp-dialog').removeClass('ui-widget ui-widget-content ui-corner-all');
-				jQuery('#frm_upgrade_modal').removeClass('ui-dialog-content ui-widget-content');
-
-				// close dialog by clicking the overlay behind it
-				jQuery('.ui-widget-overlay, a.dismiss').bind('click', function() {
-					$info.dialog('close');
-				});
-			},
-			close: function() {
-				jQuery('#wpwrap').removeClass('frm_overlay');
-			}
-		});
 
 		jQuery('.frm_show_upgrade').click( function( event ) {
 			event.preventDefault();
@@ -3160,7 +3136,204 @@ function frmAdminBuildJS(){
 		jQuery('.frm-addon-error').delay(4000).fadeOut();
 	}
 
+	/* Templates */
+
+	function initTemplateModal() {
+		jQuery( '.frm_wrap' ).on( 'click', '.frm-trash-template.frm_confirming', trashTemplate );
+
+		var $preview = initModal( '#frm_preview_template_modal', '700px' );
+		if ( $preview !== false ) {
+			jQuery('.frm-preview-template').click( function( event ) {
+				event.preventDefault();
+				var link = this.attributes.rel.value,
+					cont = document.getElementById('frm-preview-block');
+
+				if ( link.indexOf( ajaxurl ) > -1 ) {
+					var iframe = document.createElement('iframe');
+					iframe.src = link;
+					iframe.height = '400';
+					iframe.width = '100%';
+					cont.innerHTML = '';
+					cont.appendChild(iframe);
+				} else {
+					frmApiPreview( cont, link );
+				}
+				$preview.dialog('open');
+			} );
+		}
+
+		var $info = initModal( '#frm_template_modal' );
+		if ( $info === false ) {
+			return;
+		}
+
+		jQuery('.frm-install-template').click( function( event ) {
+			event.preventDefault();
+			var spinner = this.nextElementSibling;
+			spinner.style.visibility = 'visible';
+			var oldName = jQuery(this).closest('.frm-card').find('h3').html();
+
+			document.getElementById('frm_template_name').value = oldName;
+			document.getElementById('frm_link').value = this.attributes.rel.value;
+			document.getElementById('frm_action_type').value = 'frm_install_template';
+			$info.dialog('open');
+		} );
+
+		jQuery('.frm-build-template').click( function( event ) {
+			event.preventDefault();
+			document.getElementById('frm_template_name').value = this.dataset.fullname;
+			document.getElementById('frm_link').value = this.dataset.formid;
+			document.getElementById('frm_action_type').value = 'frm_build_template';
+			$info.dialog('open');
+		} );
+
+		jQuery( document ).on( 'submit', '#frm-new-template-form', installTemplate );
+	}
+
+	function frmApiPreview( cont, link ) {
+		jQuery.ajax({
+			dataType:'json',
+			url:link,
+			success:function(json){
+				var form = json.renderedHtml;
+				form = form.replace(/<script\b[^<]*(js\/jquery\/jquery)[^<]*><\/script>/gi, '' );
+				form = form.replace(/<link\b[^>]*(formidableforms17.css)[^>]*>/gi, '' );
+				cont.innerHTML = form;
+			}
+		});
+	}
+
+	function installTemplate( e ) {
+		/*jshint validthis:true */
+		var action = this.elements['type'].value;
+		e.preventDefault();
+		installNewForm( this, action );
+	}
+
+	function installNewForm( form, action ) {
+		var data,
+			formName = form.elements['template_name'].value,
+			formDesc = form.elements['template_desc'].value,
+			link = form.elements['link'].value;
+
+		data = {
+			action: action,
+			xml: link,
+			name: formName,
+			desc: formDesc,
+			nonce: frmGlobal.nonce
+		};
+		postAjax( data, function( response ) {
+			if ( typeof response.redirect !== 'undefined' ) {
+				window.location = response.redirect;
+			} else {
+				jQuery('.spinner').css( 'visibility', 'hidden' );
+				// TODO: show response.message
+			}
+		});
+	}
+
+	function trashTemplate( e ) {
+		/*jshint validthis:true */
+		var id = this.dataset.id,
+			link = this;
+		e.preventDefault();
+
+		data = {
+			action: 'frm_forms_trash',
+			id: id,
+			nonce: frmGlobal.nonce
+		};
+		postAjax( data, function() {
+			var card = link.closest('.frm-card');
+			fadeOut( card, function() {
+				card.parentNode.removeChild(card);
+			} );
+		} );
+	}
+
+	function searchContent() {
+		/*jshint validthis:true */
+		var i,
+			searchText = this.value.toLowerCase(),
+			items = document.getElementsByClassName( this.dataset.tosearch );
+
+		for ( i = 0; i < items.length; i++ ) {
+			if ( items[i].innerHTML.toLowerCase().indexOf(searchText) >= 0 ) {
+				items[i].style.display = 'block';
+			} else {
+				items[i].style.display = 'none';
+			}
+		}
+	}
+
 	/* Helpers */
+
+	function postAjax( data, success ) {
+		var xmlHttp = new XMLHttpRequest();
+		var params = typeof data == 'string' ? data : Object.keys(data).map(
+			function(k){
+				return encodeURIComponent(k) + '=' + encodeURIComponent(data[k]);
+			}
+		).join( '&' );
+
+		xmlHttp.open( 'post', ajaxurl, true );
+		xmlHttp.onreadystatechange = function() {
+			if ( xmlHttp.readyState > 3 && xmlHttp.status == 200 ) {
+				var response = xmlHttp.responseText;
+				if ( response !== '' ) {
+					response = JSON.parse( response );
+				}
+				success( response );
+			}
+		}
+		xmlHttp.setRequestHeader( 'X-Requested-With', 'XMLHttpRequest' );
+		xmlHttp.setRequestHeader( 'Content-type', 'application/x-www-form-urlencoded' );
+		xmlHttp.send( params );
+		return xmlHttp;
+	}
+
+	function fadeOut( element, success ) {
+		element.classList.add('frm-fade');
+		setTimeout( success, 1000 );
+	}
+
+	function initModal( id, width ) {
+		var $info = jQuery( id );
+		if ( $info.length < 1 ) {
+			return false;
+		}
+		if ( typeof width === 'undefined' ) {
+			width = '550px';
+		}
+		$info.dialog({
+			dialogClass: 'wp-dialog',
+			modal: true,
+			autoOpen: false,
+			closeOnEscape: true,
+			width: width,
+			resizable: false,
+			draggable: false,
+			open: function( event ) {
+				jQuery('.ui-dialog-titlebar').addClass('frm_hidden').removeClass('ui-helper-clearfix');
+				jQuery('#wpwrap').addClass('frm_overlay');
+				jQuery('.wp-dialog').removeClass('ui-widget ui-widget-content ui-corner-all');
+				jQuery( id ).removeClass('ui-dialog-content ui-widget-content');
+
+				// close dialog by clicking the overlay behind it
+				jQuery('.ui-widget-overlay, a.dismiss').bind('click', function() {
+					$info.dialog('close');
+				});
+			},
+			close: function() {
+				jQuery('#wpwrap').removeClass('frm_overlay');
+				jQuery('.spinner').css( 'visibility', 'hidden' );
+			}
+		});
+
+		return $info;
+	}
+
 	function toggle( cname, id ) {
 		if(id === '#'){
 			var cont = document.getElementById(cname);
@@ -3207,27 +3380,26 @@ function frmAdminBuildJS(){
 			if($newFields.length > 0){
 				// only load this on the form builder page
 				frmAdminBuild.buildInit();
-			}else if(jQuery(document.getElementById('frm_notification_settings')).length > 0){
+			} else if ( document.getElementById( 'frm_notification_settings' ) !== null ) {
 				// only load on form settings page
 				frmAdminBuild.settingsInit();
-			}else if(document.getElementById('frm_styling_form') !== null){
+			} else if ( document.getElementById( 'frm_styling_form' ) !== null ) {
 				// load styling settings js
 				frmAdminBuild.styleInit();
-			}else if(document.getElementById('frm_custom_css_box') !== null){
+			} else if ( document.getElementById( 'frm_custom_css_box' ) !== null ) {
 				// load styling settings js
 				frmAdminBuild.customCSSInit();
-			}else if(jQuery(document.getElementById('form_global_settings')).length > 0){
+			} else if ( document.getElementById( 'form_global_settings' ) !== null ) {
 				// global settings page
 				frmAdminBuild.globalSettingsInit();
-			}else if(jQuery(document.getElementById('frm_export_xml')).length > 0){
+			} else if ( document.getElementById( 'frm_export_xml' ) !== null ) {
 				// import/export page
 				frmAdminBuild.exportInit();
-			}else{
-				var $dynCont = jQuery(document.getElementById('frm_dyncontent'));
-				if($dynCont.length > 0){
-					// only load on views settings page
-					frmAdminBuild.viewInit();
-				}
+			} else if ( document.getElementById( 'frm-templates-page' ) !== null ) {
+				frmAdminBuild.templateInit();
+			} else if ( document.getElementById( 'frm_dyncontent' ) !== null ) {
+				// only load on views settings page
+				frmAdminBuild.viewInit();
 			}
 			
 			var $advInfo = jQuery(document.getElementById('frm_adv_info'));
@@ -3383,7 +3555,7 @@ function frmAdminBuildJS(){
 
 			$newFields.on('change', '.frm_get_field_selection', getFieldSelection);
 
-			openUpgradeModal();
+			initUpgradeModal();
 		},
 		
 		settingsInit: function(){
@@ -3499,7 +3671,7 @@ function frmAdminBuildJS(){
 				}
 			});
 
-			openUpgradeModal();
+			initUpgradeModal();
 		},
 		
 		panelInit: function(){
@@ -3570,6 +3742,16 @@ function frmAdminBuildJS(){
 				}
 			}
 
+		},
+
+		templateInit: function() {
+			initTemplateModal();
+
+			var autoSearch = jQuery('.frm-auto-search');
+			autoSearch.keyup( searchContent );
+			if ( autoSearch.val() !== '' ) {
+				autoSearch.keyup();
+			}
 		},
 
 		viewInit: function(){

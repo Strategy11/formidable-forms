@@ -58,6 +58,15 @@ class FrmFormsController {
 		return self::display_forms_list( $params, '', $errors );
 	}
 
+	/**
+	 * Choose which type of form to create
+	 *
+	 * @since 3.06
+	 */
+	public static function add_new() {
+		require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add-new.php' );
+	}
+
 	public static function new_form( $values = array() ) {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 
@@ -388,6 +397,17 @@ class FrmFormsController {
         return $message;
     }
 
+	/**
+	 * @since 3.06
+	 */
+	public static function ajax_trash() {
+		FrmAppHelper::permission_check( 'frm_delete_forms' );
+		check_ajax_referer( 'frm_ajax', 'nonce' );
+		$form_id = FrmAppHelper::get_param( 'id', '', 'post', 'absint' );
+		FrmForm::set_status( $form_id, 'trash' );
+		wp_die();
+	}
+
     public static function trash() {
 		self::change_form_status( 'trash' );
     }
@@ -513,6 +533,46 @@ class FrmFormsController {
 
 		self::display_forms_list( array(), $message );
     }
+
+	/**
+	 * Create a custom template from a form
+	 *
+	 * @since 3.06
+	 */
+	public static function build_template() {
+		global $wpdb;
+
+		FrmAppHelper::permission_check( 'frm_edit_forms' );
+		check_ajax_referer( 'frm_ajax', 'nonce' );
+
+		$form_id     = FrmAppHelper::get_param( 'xml', '', 'post', 'absint' );
+		$new_form_id = FrmForm::duplicate( $form_id, 1, true );
+		if ( empty( $new_form_id ) ) {
+			$response = array(
+				'message' => __( 'There was an error creating a template.', 'formidable' ),
+			);
+		} else {
+			// Update the new form name and description.
+			$name = FrmAppHelper::get_param( 'name', '', 'post', 'sanitize_text_field' );
+			$desc = FrmAppHelper::get_param( 'desc', '', 'post', 'sanitize_textarea_field' );
+
+			$new_values = array(
+				'name' => $name,
+				'description' => $desc,
+			);
+			$query_results = $wpdb->update( $wpdb->prefix . 'frm_forms', $new_values, array( 'id' => $new_form_id ) );
+			if ( $query_results ) {
+				FrmForm::clear_form_cache();
+			}
+
+			$response = array(
+				'redirect' => admin_url( 'admin.php?page=formidable&frm_action=list_templates' ),
+			);
+		}
+
+		echo wp_json_encode( $response );
+		wp_die();
+	}
 
 	/**
 	* Inserts Formidable button
@@ -691,6 +751,49 @@ class FrmFormsController {
         }
         return $save;
     }
+
+	/**
+	 * Show the template listing page
+	 *
+	 * @since 3.06
+	 */
+	private static function list_templates() {
+		wp_enqueue_script( 'jquery-ui-dialog' );
+		wp_enqueue_style( 'jquery-ui-dialog' );
+
+		$where = apply_filters( 'frm_forms_dropdown', array(), '' );
+		$forms = FrmForm::get_published_forms( $where );
+
+		$api = new FrmFormTemplateApi();
+		$templates = $api->get_api_info();
+		self::add_user_templates( $templates );
+
+		$pricing = FrmAppHelper::admin_upgrade_link( 'form-templates' );
+		$plans = array( 'free', 'Personal', 'Business', 'Elite' );
+
+		require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/list-templates.php' );
+	}
+
+	private static function add_user_templates( &$templates ) {
+		$user_templates = array(
+			'is_template'      => 1,
+			'default_template' => 0,
+		);
+		$user_templates = FrmForm::getAll( $user_templates, 'name' );
+		foreach ( $user_templates as $template ) {
+			$template = array(
+				'id'          => $template->id,
+				'name'        => $template->name,
+				'key'         => $template->form_key,
+				'description' => $template->description,
+				'url'         => admin_url( 'admin.php?page=formidable&frm_action=duplicate&id=' . absint( $template->id ) ),
+				'released'    => $template->created_at,
+				'installed'   => 1,
+			);
+			array_unshift( $templates, $template );
+			unset( $template );
+		}
+	}
 
 	private static function get_edit_vars( $id, $errors = array(), $message = '', $create_link = false ) {
         global $frm_vars;
@@ -1053,6 +1156,8 @@ class FrmFormsController {
         switch ( $action ) {
             case 'new':
 				return self::new_form( $vars );
+			case 'add_new':
+			case 'list_templates':
             case 'create':
             case 'edit':
             case 'update':
@@ -1154,7 +1259,7 @@ class FrmFormsController {
 				array(
 					'parent'    => 'frm-forms',
 					'id'        => 'edit_form_' . $form_id,
-					'title'     => empty( $name ) ? __( '(no title)' ) : $name,
+					'title'     => empty( $name ) ? __( '(no title)', 'formidable' ) : $name,
 					'href'      => admin_url( 'admin.php?page=formidable&frm_action=edit&id=' . $form_id ),
 				)
 			);

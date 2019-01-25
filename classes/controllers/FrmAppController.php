@@ -44,7 +44,7 @@ class FrmAppController {
 	 * @since 3.0
 	 */
 	private static function is_white_page() {
-		$is_white_page = ( FrmAppHelper::is_admin_page( 'formidable' ) || FrmAppHelper::is_admin_page( 'formidable-entries' ) || FrmAppHelper::is_admin_page( 'formidable-pro-upgrade' ) || FrmAppHelper::is_admin_page( 'formidable-addons' ) );
+		$is_white_page = ( FrmAppHelper::is_admin_page( 'formidable' ) || FrmAppHelper::is_admin_page( 'formidable-entries' ) || FrmAppHelper::is_admin_page( 'formidable-pro-upgrade' ) || FrmAppHelper::is_admin_page( 'formidable-addons' ) || FrmAppHelper::is_admin_page( 'formidable-import' ) );
 		if ( ! $is_white_page ) {
 			$screen = get_current_screen();
 			$is_white_page = ( $screen && $screen->id === 'edit-frm_display' );

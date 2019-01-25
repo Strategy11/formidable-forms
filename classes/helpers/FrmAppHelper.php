@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class FrmAppHelper {
-	public static $db_version = 88; //version of the database we are moving to
+	public static $db_version = 89; //version of the database we are moving to
 	public static $pro_db_version = 37; //deprecated
 	public static $font_version = 3;
 
@@ -618,6 +618,36 @@ class FrmAppHelper {
 		} elseif ( isset( $atts['link_hook'] ) ) {
 			do_action( $atts['link_hook']['hook'], $atts['link_hook']['param'] );
 		}
+	}
+
+	/**
+	 * @since 3.06
+	 */
+	public static function show_search_box( $text, $input_id, $placeholder = '' ) {
+		$tosearch = '';
+		$class    = 'frm-search-input';
+		if ( $input_id === 'template' ) {
+			$tosearch = 'frm-card';
+			$class .= ' frm-auto-search';
+		}
+		$input_id = $input_id . '-search-input';
+		if ( empty( $text ) ) {
+			$text = __( 'Search', 'formidable' );
+		}
+		?>
+		<p class="search-box frm-search">
+			<label class="screen-reader-text" for="<?php echo esc_attr( $input_id ) ?>">
+				<?php echo wp_kses( $text, array() ); ?>:
+			</label>
+			<span class="dashicons dashicons-search"></span>
+			<input type="search" id="<?php echo esc_attr( $input_id ) ?>" name="s" value="<?php _admin_search_query(); ?>" placeholder="<?php echo esc_attr( $placeholder ); ?>" class="<?php echo esc_attr( $class ); ?>" data-tosearch="<?php echo esc_attr( $tosearch ); ?>" />
+			<?php
+			if ( empty( $tosearch ) ) {
+				submit_button( $text, 'button-secondary', '', false, array( 'id' => 'search-submit' ) );
+			}
+			?>
+		</p>
+		<?php
 	}
 
     /**
@@ -1650,7 +1680,7 @@ class FrmAppHelper {
 			'updating_msg' => __( 'Please wait while your site updates.', 'formidable' ),
             'deauthorize'  => __( 'Are you sure you want to deauthorize Formidable Forms on this site?', 'formidable' ),
 			'url'          => self::plugin_url(),
-			'loading'      => __( 'Loading&hellip;' ),
+			'loading'      => __( 'Loading&hellip;', 'formidable' ),
 			'nonce'        => wp_create_nonce( 'frm_ajax' ),
 		);
 		wp_localize_script( 'formidable_admin_global', 'frmGlobal', $global_strings );
@@ -1677,7 +1707,7 @@ class FrmAppHelper {
 		$script_strings = array(
 			'ajax_url'  => $ajax_url,
 			'images_url' => self::plugin_url() . '/images',
-			'loading'   => __( 'Loading&hellip;' ),
+			'loading'   => __( 'Loading&hellip;', 'formidable' ),
 			'remove'    => __( 'Remove', 'formidable' ),
 			'offset'    => apply_filters( 'frm_scroll_offset', 4 ),
 			'nonce'     => wp_create_nonce( 'frm_ajax' ),
@@ -1698,7 +1728,7 @@ class FrmAppHelper {
 				'no_label'          => __( '(no label)', 'formidable' ),
 				'saving'            => esc_attr( __( 'Saving', 'formidable' ) ),
 				'saved'             => esc_attr( __( 'Saved', 'formidable' ) ),
-				'ok'                => __( 'OK' ),
+				'ok'                => __( 'OK', 'formidable' ),
 				'cancel'            => __( 'Cancel', 'formidable' ),
 				'default'           => __( 'Default', 'formidable' ),
 				'clear_default'     => __( 'Clear default value when typing', 'formidable' ),
@@ -1719,7 +1749,7 @@ class FrmAppHelper {
 				'import_complete'   => __( 'Import Complete', 'formidable' ),
 				'updating'          => __( 'Please wait while your site updates.', 'formidable' ),
 				'no_save_warning'   => __( 'Warning: There is no way to retrieve unsaved entries.', 'formidable' ),
-				'private'           => __( 'Private' ),
+				'private'           => __( 'Private', 'formidable' ),
 				'jquery_ui_url'     => self::jquery_ui_base_url(),
 				'pro_url'           => is_callable( 'FrmProAppHelper::plugin_url' ) ? FrmProAppHelper::plugin_url() : '',
 				'no_licenses'       => __( 'No new licenses were found', 'formidable' ),

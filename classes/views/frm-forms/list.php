@@ -3,7 +3,7 @@
 	FrmAppHelper::get_admin_header(
 		array(
 			'label' => $params['template'] ? __( 'Templates', 'formidable' ) : __( 'Forms', 'formidable' ),
-			'new_link' => ( ! $params['template'] && current_user_can( 'frm_edit_forms' ) ) ? '?page=formidable&frm_action=new' : '',
+			'new_link' => ( ! $params['template'] && current_user_can( 'frm_edit_forms' ) ) ? '?page=formidable&frm_action=add_new' : '',
 		)
 	);
 	?>

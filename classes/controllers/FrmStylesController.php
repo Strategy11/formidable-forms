@@ -35,7 +35,7 @@ class FrmStylesController {
 					'name' => __( 'Styles', 'formidable' ),
 					'singular_name' => __( 'Style', 'formidable' ),
 					'menu_name' => __( 'Style', 'formidable' ),
-					'edit' => __( 'Edit' ),
+					'edit' => __( 'Edit', 'formidable' ),
 					'add_new_item' => __( 'Create a New Style', 'formidable' ),
 					'edit_item'    => __( 'Edit Style', 'formidable' ),
 				),

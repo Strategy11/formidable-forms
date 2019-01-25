@@ -51,10 +51,6 @@ class FrmFormsListHelper extends FrmListHelper {
 			),
 		);
 		switch ( $this->status ) {
-		    case 'template':
-                $s_query['is_template'] = 1;
-                $s_query['status !'] = 'trash';
-		        break;
 		    case 'draft':
                 $s_query['is_template'] = 0;
                 $s_query['status'] = 'draft';
@@ -100,14 +96,12 @@ class FrmFormsListHelper extends FrmListHelper {
 	}
 
 	public function no_items() {
-	    if ( 'template' == $this->status ) {
-			esc_html_e( 'No Templates Found.', 'formidable' );
-		} else {
-			esc_html_e( 'No Forms Found.', 'formidable' );
-			?>
-			<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable&frm_action=new' ) ) ?>"><?php esc_html_e( 'Add New', 'formidable' ); ?></a>
+		esc_html_e( 'No Forms Found.', 'formidable' );
+		?>
+		<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable&frm_action=new' ) ) ?>">
+			<?php esc_html_e( 'Add New', 'formidable' ); ?>
+		</a>
 <?php
-		}
 	}
 
 	public function get_bulk_actions() {
@@ -124,7 +118,7 @@ class FrmFormsListHelper extends FrmListHelper {
 		} elseif ( EMPTY_TRASH_DAYS && current_user_can( 'frm_delete_forms' ) ) {
 	        $actions['bulk_trash'] = __( 'Move to Trash', 'formidable' );
 		} elseif ( current_user_can( 'frm_delete_forms' ) ) {
-			$actions['bulk_delete'] = __( 'Delete' );
+			$actions['bulk_delete'] = __( 'Delete', 'formidable' );
 	    }
 
         return $actions;
@@ -138,56 +132,16 @@ class FrmFormsListHelper extends FrmListHelper {
 		if ( 'trash' == $this->status && current_user_can( 'frm_delete_forms' ) ) {
 ?>
             <div class="alignleft actions frm_visible_overflow">
-			<?php submit_button( __( 'Empty Trash' ), 'apply', 'delete_all', false ); ?>
+			<?php submit_button( __( 'Empty Trash', 'formidable' ), 'apply', 'delete_all', false ); ?>
             </div>
 <?php
-            return;
         }
-
-        if ( 'template' != $this->status ) {
-            return;
-        }
-
-		$where = apply_filters( 'frm_forms_dropdown', array(), '' );
-		$forms = FrmForm::get_published_forms( $where );
-
-		$base = admin_url( 'admin.php?page=formidable&form_type=template' );
-        $args = array(
-            'frm_action'    => 'duplicate',
-            'template'      => true,
-        );
-
-?>
-    <div class="alignleft actions frm_visible_overflow">
-    <div class="dropdown frm_tiny_top_margin">
-		<a href="#" id="frm-templateDrop" class="frm-dropdown-toggle button" data-toggle="dropdown"><?php esc_html_e( 'Create New Template', 'formidable' ) ?> <b class="caret"></b></a>
-		<ul class="frm-dropdown-menu" role="menu" aria-labelledby="frm-templateDrop">
-		<?php
-		if ( empty( $forms ) ) {
-		?>
-			<li class="frm_dropdown_li"><?php esc_html_e( 'You have not created any forms yet. You must create a form before you can make a template.', 'formidable' ) ?></li>
-        <?php
-        } else {
-            foreach ( $forms as $form ) {
-				$args['id'] = $form->id;
-				?>
-			<li><a href="<?php echo esc_url( add_query_arg( $args, $base ) ); ?>" tabindex="-1"><?php echo esc_html( empty( $form->name ) ? __( '(no title)' ) : FrmAppHelper::truncate( $form->name, 33 ) ); ?></a></li>
-			<?php
-				unset( $form );
-			}
-        }
-        ?>
-		</ul>
-	</div>
-	</div>
-<?php
 	}
 
 	public function get_views() {
 
 		$statuses = array(
 		    'published' => __( 'My Forms', 'formidable' ),
-		    'template'  => __( 'Templates', 'formidable' ),
 		    'draft'     => __( 'Drafts', 'formidable' ),
 		    'trash'     => __( 'Trash', 'formidable' ),
 		);
@@ -209,7 +163,7 @@ class FrmFormsListHelper extends FrmListHelper {
     		    $class = '';
     		}
 
-    		if ( $counts->{$status} || 'published' == $status || 'template' == $status ) {
+    		if ( $counts->{$status} || 'published' == $status ) {
 				$links[ $status ] = '<a href="' . esc_url( '?page=formidable&form_type=' . $status ) . '" ' . $class . '>' . sprintf( __( '%1$s <span class="count">(%2$s)</span>', 'formidable' ), $name, number_format_i18n( $counts->{$status} ) ) . '</a>';
 		    }
 
@@ -295,10 +249,6 @@ class FrmFormsListHelper extends FrmListHelper {
 						$val = current_user_can( 'frm_view_entries' ) ? '<a href="' . esc_url( admin_url( 'admin.php?page=formidable-entries&form=' . $item->id ) ) . '">' . $text . '</a>' : $text;
 						unset( $text );
 					}
-			        break;
-                case 'type':
-                    $val = ( $item->is_template && $item->default_template ) ? __( 'Default', 'formidable' ) : __( 'Custom', 'formidable' );
-                    break;
 			}
 
 			if ( isset( $val ) ) {
@@ -328,17 +278,12 @@ class FrmFormsListHelper extends FrmListHelper {
 		}
 
 		if ( current_user_can( 'frm_edit_forms' ) ) {
-			if ( ! $item->is_template || ! $item->default_template ) {
-				$actions['frm_edit'] = '<a href="' . esc_url( $edit_link ) . '">' . __( 'Edit' ) . '</a>';
-			}
-
-			if ( ! $item->is_template ) {
-				$actions['frm_settings'] = '<a href="' . esc_url( '?page=formidable&frm_action=settings&id=' . $item->id ) . '">' . __( 'Settings', 'formidable' ) . '</a>';
-			}
+			$actions['frm_edit'] = '<a href="' . esc_url( $edit_link ) . '">' . __( 'Edit', 'formidable' ) . '</a>';
+			$actions['frm_settings'] = '<a href="' . esc_url( '?page=formidable&frm_action=settings&id=' . $item->id ) . '">' . __( 'Settings', 'formidable' ) . '</a>';
 		}
 
 		$actions = array_merge( $actions, $new_actions );
-		$actions['view'] = '<a href="' . esc_url( FrmFormsHelper::get_direct_link( $item->form_key, $item ) ) . '" target="_blank">' . __( 'Preview' ) . '</a>';
+		$actions['view'] = '<a href="' . esc_url( FrmFormsHelper::get_direct_link( $item->form_key, $item ) ) . '" target="_blank">' . __( 'Preview', 'formidable' ) . '</a>';
     }
 
     /**
@@ -347,7 +292,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	private function get_form_name( $item, $actions, $edit_link, $mode = 'list' ) {
         $form_name = $item->name;
 		if ( trim( $form_name ) == '' ) {
-			$form_name = __( '(no title)' );
+			$form_name = __( '(no title)', 'formidable' );
 		}
 		$form_name = FrmAppHelper::kses( $form_name );
 		if ( 'excerpt' != $mode ) {
