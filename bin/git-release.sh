@@ -14,7 +14,17 @@ set -e
 cd "$(dirname "$0")"
 cd ..
 
-version="$1"
+version="$2"
+repo="$1"
+attachment=
+if [ ! -z "$3" ]; then
+	attachment="$3"
+fi
+attachment2=
+if [ ! -z "$4" ]; then
+	attachment2="$4"
+fi
+attachments="$attachment $attachment2"
 changed=
 if ! git diff --exit-code > /dev/null; then
 	changed="file(s) modified"
@@ -31,8 +41,9 @@ echo "Creating new GitHub release"
 export GIT_RELEASE_NOTES="$(git log $(git describe --tags --abbrev=0)..HEAD --pretty=format:'%h %B')"
 github-release upload \
 	--owner Strategy11 \
-	--repo formidable-forms \
+	--repo $repo \
 	--tag "v$version" \
 	--name "v$version" \
-	--body "${GIT_RELEASE_NOTES}"
-echo "New version created"
+	--body "${GIT_RELEASE_NOTES}" \
+		$attachments
+echo "New version created."
