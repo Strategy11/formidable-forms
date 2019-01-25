@@ -868,14 +868,14 @@ class FrmField {
 		return ( $is_repeating_field && self::is_option_true( $field, 'repeat' ) );
 	}
 
-    /**
-     * @param string $key
-     * @return int field id
-     */
+	/**
+	 * @param string $key
+	 * @return int field id
+	 */
 	public static function get_id_by_key( $key ) {
-        $id = FrmDb::get_var( 'frm_fields', array( 'field_key' => sanitize_title( $key ) ) );
-        return $id;
-    }
+		$id = FrmDb::get_var( 'frm_fields', array( 'field_key' => sanitize_title( $key ) ) );
+		return (int) $id;
+	}
 
 	/**
 	 * @param string $id
