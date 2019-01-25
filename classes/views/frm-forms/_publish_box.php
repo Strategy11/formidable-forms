@@ -2,24 +2,6 @@
 <div class="inside">
 <div class="submitbox" id="submitpost">
 
-<?php /* TODO: Move these to settings page
-
-				<label for="post_status"><?php _e( 'Status', 'formidable' ) ?>:</label>
-                <span id="form-status-display"><?php echo FrmFormsHelper::status_nice_name($values['status']); ?></span>
-				<?php if ( 'draft' != $values['status'] && ( ! isset( $_GET['frm_action'] ) || 'settings' != FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' ) ) ) { ?>
-                <a href="#post_status" class="edit-form-status hide-if-no-js" data-slidedown="form-status-select"><span aria-hidden="true"><?php esc_html_e( 'Edit' ) ?></span> <span class="screen-reader-text"><?php esc_html_e( 'Edit status' ) ?></span></a>
-
-                <div id="form-status-select" class="frm_hidden">
-                    <select name="frm_change_status" id="form_change_status">
-                        <option value="published" <?php selected($values['status'], 'published') ?>><?php esc_html_e( 'Published' ); ?></option>
-                        <option value="draft" <?php selected($values['status'], 'draft') ?>><?php esc_html_e( 'Draft' ) ?></option>
-                    </select>
-                    <a href="#post_status" class="save-form-status hide-if-no-js button"><?php esc_html_e( 'OK') ?></a>
-                    <a href="#post_status" class="cancel-form-status hide-if-no-js button-cancel" data-slideup="form-status-select"><?php esc_html_e( 'Cancel') ?></a>
-                </div>
-                <?php } ?>
-
-*/ ?>
     <div id="major-publishing-actions">
 		<div id="publishing-action" class="<?php echo esc_attr( 'draft' === $values['status'] ? 'frm-is-draft' : '' ); ?>">
 			<div class="alignleft">
@@ -41,7 +23,7 @@
             <div id="frm-preview-action">
 				<?php if ( ( ! isset( $hide_preview ) || ! $hide_preview ) && isset( $values['form_key'] ) ) { ?>
 					<div class="preview dropdown">
-						<a href="#" id="frm-previewDrop" class="frm-dropdown-toggle button" data-toggle="dropdown"><?php esc_html_e( 'Preview', 'formidable' ); ?> <b class="caret"></b></a>
+						<a href="#" id="frm-previewDrop" class="frm-dropdown-toggle button frm-button-primary" data-toggle="dropdown"><?php esc_html_e( 'Preview', 'formidable' ); ?> <b class="caret"></b></a>
 
 						<ul class="frm-dropdown-menu <?php echo esc_attr( is_rtl() ? 'pull-left' : 'pull-right' ) ?>" role="menu" aria-labelledby="frm-previewDrop">
 							<li>

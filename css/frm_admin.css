@@ -1,5 +1,17 @@
 @import url(font_icons.css);
 
+:root,
+.frm_wrap{
+	--light-blue: #f1f9ff;
+	--blue-border: #bce0fd;
+	--dark-grey: #616871;
+	--medium-grey:#7f7f7f;
+	--light-grey: rgb( 235, 235, 235 );
+	--primary-color: #3177c7;
+	--primary-border:#4199fd;
+	--primary-hover:#2963a4;
+}
+
 a, .widget .widget-top, .postbox h3, .stuffbox h3{cursor: pointer; text-decoration:none;}
 .postbox h3.hndle{cursor:default;}
 
@@ -11,7 +23,11 @@ a.frm_confirming,
 	color:#f37656 !important;
 }
 .frm_wrap > .wrap{
-	margin: 10px 30px 30px;
+	margin: 10px 40px 30px;
+}
+
+.frm_wrap h1{
+	color: var(--medium-grey);
 }
 
 .formidable_page_formidable-pro-upgrade #post-body-content,
@@ -92,8 +108,8 @@ td.column-title .frm_actions_dropdown{
 #frm_top_bar{
 	display:block;
 	width:100%;
-	padding:15px 30px;
-	margin-bottom: 10px;
+	padding:25px 40px 25px;
+	margin: 0;
 	box-sizing: border-box;
 }
 
@@ -110,8 +126,8 @@ td.column-title .frm_actions_dropdown{
 
 .post-type-frm_display .wrap #frm_top_bar h1,
 .frm_wrap #frm_top_bar h1{
-	font-size: 20px;
-	font-weight:400;
+	font-size: 23px;
+	font-weight:700;
 	padding:0;
 	margin: 0;
 	line-height: 1.4;
@@ -424,11 +440,11 @@ ul.frm_form_nav > li{
 	transition: all .2s ease;
 }
 
+.frm-button-primary,
+.wp-core-ui .button-primary.frm-button-primary,
 .frm_orange_button,
 .wrap .frm_pricing a.button-primary,
 .toplevel_page_formidable #frm_upgrade_modal .button-primary,
-#frm_upgrade_modal .button,
-#form_global_settings .button-primary,
 #form_global_settings .button-secondary,
 .wp-core-ui.frm-white-body .button-primary,
 .wp-core-ui.frm-white-body .button-secondary,
@@ -441,19 +457,22 @@ ul.frm_form_nav > li{
 	text-shadow:none;
 	box-shadow:none;
 	border-radius:4px;
-	border-color:#e5e5e5;
+	border-color:var(--light-grey);
 	font-size: 1.1em;
 	transition: all .2s ease;
 }
 
-#frm-addons-page .button-primary,
-.frm_single_entry_page .button-primary,
-#form_global_settings .button-primary,
-#frm_upgrade_modal .button,
-.frm_wrap .preview > .button{
-	border-color: rgba(53,97,150,0.5) !important;
-	background: rgb(53,97,150);
-	color: #fff;
+.frm-button-primary,
+.wp-core-ui .button-primary.frm-button-primary,
+.frm_single_entry_page .button-primary {
+	border-color: var(--primary-border) !important;
+	background-color: var(--primary-color) !important;
+	color: #fff !important;
+}
+
+.wp-core-ui .button-primary.frm-button-primary:hover,
+.frm-button-primary:hover{
+	background-color: var(--primary-hover) !important;
 }
 
 .frm_orange_button,
@@ -532,6 +551,50 @@ input.frm_insert_in_template{
     font-size:10px;
     width:98%;
     font-weight:normal
+}
+
+/* Add New Form */
+.wrap.frm-add-new-form{
+	margin-top:40px;
+}
+
+.frm-add-new-form .frm-addons .button{
+	margin-top:30px;
+	float:none;
+	width: 80%;
+}
+
+.frm-add-new-form .frm-addons{
+	grid-gap: 0 7%;
+	max-width:900px;
+}
+
+.frm-add-new-form .frm-addons .plugin-card-bottom{
+	padding-top:28px;
+	padding-bottom:25px;
+}
+
+.frm-add-new-form h2{
+	margin-top:1.5em;
+	margin-bottom:.7em;
+}
+
+.frm-add-new-form p{
+	opacity:0.8;
+}
+
+.frm-round-image{
+	background: var( --light-blue );
+	border: 1px solid var( --blue-border );
+	border-radius:50%;
+	height:58px;
+	width:58px;
+	margin:0 auto;
+	padding:25px;
+}
+
+.frm-round-image img{
+	width:48px;
 }
 
 /* Review request */
@@ -817,8 +880,8 @@ div.frm_updated_message{
 	border: 25px solid transparent;
 	border-bottom: 25px solid #f37656;
 	position: absolute;
-	top: 3px;
-	right: -39px;
+	top: 4px;
+	right: -38px;
 	padding: 0 10px;
 	width: 65px;
 	color: white;
@@ -891,19 +954,45 @@ div.frm_updated_message{
 	text-align:center;
 }
 
-.frm-addons {
-	margin-top:30px;
+h2.frm-h2{
+	color: var(--dark-grey);
+	border-bottom:1px solid grey;
+	border-color:var(--light-grey);
+	font-size:19px !important;
+	font-weight:500 !important;
+	padding: 9px 0 5px;
+	margin: 0;
 }
 
-.frm-addons .plugin-card:nth-child(even),
-.frm-addons .plugin-card:nth-child(odd),
-.frm-addons .plugin-card{
-	width: 31.3%;
-	margin:0 3% 30px 0;
-	clear:none;
+h2.frm-h2 + .howto{
+	color:var(--medium-grey);
+	max-width:850px;
+}
+
+.frm-addons {
+	margin-top:30px;
+	display:grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	grid-gap: 30px 2%;
+}
+
+.frm-addons,
+.frm-addons h2,
+.frm-addons h3{
+	color: var(--dark-grey);
+}
+
+.frm-card{
+	width: 100%;
 	border-radius: 10px;
-	border-color: rgb( 235, 235, 235 );
-	border-width: 2px;
+	border: 1px solid grey;
+	border-color: var(--light-grey);
+	opacity:1;
+	transition:opacity 1s;
+}
+
+.frm-fade{
+	opacity:0;
 }
 
 .frm-addons .plugin-card-top{
@@ -919,19 +1008,16 @@ div.frm_updated_message{
 	opacity:0.8;
 }
 
-.frm-addons .plugin-card:nth-child(3n+3) {
-	margin-right:0;
-}
-
-.frm-addons .plugin-card:nth-child(3n+4) {
-	clear:both;
-}
-
 .frm-addons .plugin-card-bottom {
 	padding: 5px 20px 20px;
 	text-align:center;
 	background: transparent;
 	border-top: none;
+}
+
+.frm-new-template.plugin-card-bottom{
+	overflow:visible;
+	text-align:inherit;
 }
 
 .frm-addons .plugin-card-bottom,
@@ -1117,7 +1203,7 @@ div.frm_updated_message{
 }
 
 a.frm-option-icon:before{
-	color: rgb(53,97,150);
+	color: var(--primary-color);
     font-size: 22px;
     width: 22px;
     height: 22px;
@@ -1125,15 +1211,28 @@ a.frm-option-icon:before{
 
 a.frm-option-icon:focus::before,
 a.frm-option-icon:hover::before{
-	color:#5b9dd9;
+	color:var(--primary-hover);
 }
 
 .frm_top_left .frm-dropdown-toggle{
 	color:#999;
 }
 
+.frm-card ol{
+	margin-left:15px;
+}
+
 .frm-dropdown-toggle{
 	text-decoration:none;
+}
+
+.frm-card .frm-dropdown-toggle{
+	border:2px solid grey;
+	border-color:var(--light-grey);
+	border-radius:4px;
+	font-size:13px;
+	color:var(--dark-grey);
+	padding:7px 20px;
 }
 
 .frm_actions_dropdown .frm-dropdown-menu{
@@ -2604,6 +2703,24 @@ tr.frm_options_heading td{
 	margin-bottom:75px;
 }
 
+#frm_preview_template_modal .postbox{
+	margin-bottom:0;
+}
+
+#frm-preview-block{
+	height:400px;
+	overflow:scroll;
+	margin:0;
+}
+
+#frm-templates-page .plugin-card-bottom{
+	text-align:left;
+}
+
+.plugin-card-bottom .frm-trash{
+	color:#a00;
+}
+
 .frm_inline_label{
 	padding-left:3px;
 }
@@ -2774,6 +2891,51 @@ ul.frm-category-tabs{
 	float:right;
 }
 
+.frm-search{
+	width:32%;
+	float:right;
+	position:relative;
+}
+
+.frm-search span {
+	position: absolute;
+	padding: 7px 10px;
+	pointer-events: none;
+	left: 0px;
+	color: var(--medium-grey);
+	opacity:.5;
+}
+
+.frm-search.search-box input[name="s"],
+.frm-search #search-submit{
+	border-width:2px;
+	border-color:var(--light-grey);
+	box-shadow:none;
+	margin:0;
+    padding: 7px;
+    height: auto;
+	font-size: 13px;
+	line-height:normal;
+}
+
+.frm-search.search-box input[name="s"] {
+	width:70%;
+	border-radius:4px 0 0 4px;
+	border-right-width:0;
+	padding-left:33px;
+}
+
+.frm-search.search-box input.frm-auto-search{
+	width:100%;
+	border-right-width:2px;
+	border-radius:4px;
+}
+
+.frm-search #search-submit{
+	width:30%;
+	border-radius:0 4px 4px 0;
+}
+
 select[name="m"]{display:none;}
 
 .frm_shortcode_select optgroup option{margin-left:1em;}
@@ -2935,7 +3097,7 @@ ul .frm_col_two{float:right;}
 }
 
 .frm_code_list.frm_grid_container a:hover{
-	background-color:rgb(53,97,150);
+	background-color:var(--primary-color);
 	color:#fbfdff;
 }
 
@@ -3031,7 +3193,7 @@ li.frm_noallow.button.frm_show_upgrade {
 }
 
 .wp-dialog {
-	z-index:10;
+	z-index:100;
 	padding: 0 !important;
 }
 
@@ -3387,22 +3549,8 @@ Responsive Design
 	  margin: 5px 0;
   	}
 
-	.frm-addons .plugin-card:nth-child(3n+4),
-	.frm-addons .plugin-card:nth-child(3n+3),
-	.frm-addons .plugin-card:nth-child(even),
-	.frm-addons .plugin-card:nth-child(odd),
-	.frm-addons .plugin-card{
-		width: 48.5%;
-		margin:0 3% 30px 0;
-		clear:none;
-	}
-
-	.frm-addons .plugin-card:nth-child(even) {
-		margin-right:0;
-	}
-
-	.frm-addons .plugin-card:nth-child(odd) {
-		clear:both;
+	.frm-addons{
+		grid-template-columns: 1fr 1fr;
 	}
 }
 @media only screen and (max-width: 1050px) {
@@ -3661,13 +3809,8 @@ Responsive Design
 		display: inline-block;
 	}
 
-	.frm-addons .plugin-card:nth-child(3n+4),
-	.frm-addons .plugin-card:nth-child(3n+3),
-	.frm-addons .plugin-card:nth-child(even),
-	.frm-addons .plugin-card:nth-child(odd),
-	.frm-addons .plugin-card{
-		width: 100%;
-		margin-right:0;
+	.frm-addons{
+		grid-template-columns: 1fr;
 	}
 }
 

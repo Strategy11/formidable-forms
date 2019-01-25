@@ -11,6 +11,9 @@
 	<div class="frm_top_left">
 	<h1><?php echo esc_html( $atts['label'] ); ?>
 		<?php FrmAppHelper::add_new_item_link( $atts ); ?>
+		<?php if ( isset( $atts['cancel_link'] ) ) { ?>
+			<a href="<?php echo esc_url( $atts['cancel_link'] ) ?>" class="add-new-h2 frm_animate_bg"><?php esc_html_e( 'Cancel', 'formidable' ); ?></a>
+		<?php } ?>
 	</h1>
 	</div>
 	<?php
@@ -23,7 +26,7 @@
 <?php if ( isset( $atts['form'] ) && ! empty( $atts['form'] ) && ! isset( $atts['hide_title'] ) ) { ?>
     <h<?php echo $has_nav ? 1 : 2 ?> id="frm_form_heading">
 		<?php
-		echo esc_html( strip_tags( '' === $atts['form']->name ? __( '(no title)' ) : $atts['form']->name ) );
+		echo esc_html( strip_tags( '' === $atts['form']->name ? __( '(no title)', 'formidable' ) : $atts['form']->name ) );
 		if ( $has_nav ) {
 			FrmAppHelper::add_new_item_link( $atts );
 		}

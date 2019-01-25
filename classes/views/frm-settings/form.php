@@ -8,7 +8,7 @@
 			<div class="inside frm_license_box">
 				<h2><?php esc_html_e( 'License', 'formidable' ); ?></h2>
 				<hr/>
-				<p class="howto"><?php esc_html_e( 'Your license key provides access to automatic updates.' ); ?></p>
+				<p class="howto"><?php esc_html_e( 'Your license key provides access to automatic updates.', 'formidable' ); ?></p>
 
 				<?php do_action( 'frm_before_settings' ); ?>
 			</div>
@@ -45,7 +45,7 @@
 
         <div class="general_settings tabs-panel <?php echo esc_attr( $a === 'general_settings' ? 'frm_block' : 'frm_hidden' ); ?>">
             <p class="submit">
-				<input class="button-primary" type="submit" value="<?php esc_attr_e( 'Update Options', 'formidable' ) ?>" />
+				<input class="button-primary frm-button-primary" type="submit" value="<?php esc_attr_e( 'Update Options', 'formidable' ) ?>" />
             </p>
 
 			<h3><?php esc_html_e( 'Styling & Scripts', 'formidable' ); ?></h3>
@@ -232,7 +232,7 @@
             <span class="spinner frm_spinner"></span>
         </p>
         <p class="submit">
-			<input class="button-primary" type="submit" value="<?php esc_attr_e( 'Update Options', 'formidable' ) ?>" />
+			<input class="button-primary frm-button-primary" type="submit" value="<?php esc_attr_e( 'Update Options', 'formidable' ) ?>" />
         </p>
 
     </form>

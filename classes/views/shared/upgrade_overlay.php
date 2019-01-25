@@ -25,11 +25,11 @@
 						?>
 					</p>
 					<?php if ( $is_pro ) { ?>
-						<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-addons' ) ); ?>" class="button button-primary">
+						<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-addons' ) ); ?>" class="button button-primary frm-button-primary">
 								<?php esc_html_e( 'See My Add-Ons', 'formidable' ); ?>
 						</a>
 					<?php } else { ?>
-						<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'builder-upgrade' ) ); ?>" class="button button-primary" target="_blank" rel="noopener noreferrer">
+						<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'builder-upgrade' ) ); ?>" class="button button-primary frm-button-primary" target="_blank" rel="noopener noreferrer">
 							<?php esc_html_e( 'Upgrade to Pro', 'formidable' ); ?>
 						</a>
 
