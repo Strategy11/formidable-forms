@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Formidable Forms plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Formidable Forms 3.06\n"
+"Project-Id-Version: Formidable Forms 3.06b\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/formidable\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2019-01-25T22:37:07+01:00\n"
+"POT-Creation-Date: 2019-01-28T16:55:57+01:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.1.0\n"
 "X-Domain: formidable\n"
@@ -147,7 +147,7 @@ msgstr ""
 #: classes/controllers/FrmAppController.php:111
 #: classes/controllers/FrmEntriesController.php:8
 #: classes/controllers/FrmEntriesController.php:126
-#: classes/controllers/FrmFormsController.php:703
+#: classes/controllers/FrmFormsController.php:706
 #: classes/controllers/FrmXMLController.php:123
 #: classes/views/frm-entries/list.php:5
 msgid "Entries"
@@ -190,14 +190,14 @@ msgid "Support"
 msgstr ""
 
 #: classes/controllers/FrmEntriesController.php:105
-#: classes/controllers/FrmFormsController.php:984
+#: classes/controllers/FrmFormsController.php:987
 #: classes/views/frm-entries/form.php:43
 #: classes/views/frm-entries/sidebar-shared.php:38
 msgid "Entry Key"
 msgstr ""
 
 #: classes/controllers/FrmEntriesController.php:110
-#: classes/controllers/FrmFormsController.php:603
+#: classes/controllers/FrmFormsController.php:606
 #: classes/widgets/FrmShowForm.php:53
 msgid "Form"
 msgstr ""
@@ -263,7 +263,7 @@ msgid "You do not have permission to do that"
 msgstr ""
 
 #: classes/controllers/FrmFormsController.php:6
-#: classes/controllers/FrmFormsController.php:713
+#: classes/controllers/FrmFormsController.php:716
 #: classes/controllers/FrmXMLController.php:122
 #: classes/views/frm-forms/list.php:5
 msgid "Forms"
@@ -274,234 +274,235 @@ msgid "Settings Successfully Updated"
 msgstr ""
 
 #: classes/controllers/FrmFormsController.php:208
-#: classes/controllers/FrmFormsController.php:827
+#: classes/controllers/FrmFormsController.php:830
 msgid "Form was Successfully Updated"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:242
+#: classes/controllers/FrmFormsController.php:245
 #: deprecated/FrmDeprecated.php:342
 msgid "Form template was Successfully Created"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:242
+#: classes/controllers/FrmFormsController.php:245
 msgid "Form was Successfully Copied"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:246
+#: classes/controllers/FrmFormsController.php:249
 msgid "There was a problem creating the new template."
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:353
+#: classes/controllers/FrmFormsController.php:356
 msgid "Form Preview"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:396
-#: classes/controllers/FrmFormsController.php:455
+#: classes/controllers/FrmFormsController.php:399
+#: classes/controllers/FrmFormsController.php:458
 msgid "%1$s form restored from the Trash."
 msgid_plural "%1$s forms restored from the Trash."
 msgstr[0] ""
 
-#: classes/controllers/FrmFormsController.php:456
-#: classes/controllers/FrmFormsController.php:480
+#: classes/controllers/FrmFormsController.php:459
+#: classes/controllers/FrmFormsController.php:483
 msgid "%1$s form moved to the Trash. %2$sUndo%3$s"
 msgid_plural "%1$s forms moved to the Trash. %2$sUndo%3$s"
 msgstr[0] ""
 
-#: classes/controllers/FrmFormsController.php:502
-#: classes/controllers/FrmFormsController.php:518
-#: classes/controllers/FrmFormsController.php:532
+#: classes/controllers/FrmFormsController.php:505
+#: classes/controllers/FrmFormsController.php:521
+#: classes/controllers/FrmFormsController.php:535
 msgid "%1$s form permanently deleted."
 msgid_plural "%1$s forms permanently deleted."
 msgstr[0] ""
 
-#: classes/controllers/FrmFormsController.php:552
+#: classes/controllers/FrmFormsController.php:555
 msgid "There was an error creating a template."
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:587
+#: classes/controllers/FrmFormsController.php:590
 msgid "Add forms and content"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:604
+#: classes/controllers/FrmFormsController.php:607
 #: classes/views/frm-forms/insert_form_popup.php:24
 msgid "Insert a Form"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:634
+#: classes/controllers/FrmFormsController.php:637
 msgid "Display form title"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:638
+#: classes/controllers/FrmFormsController.php:641
 msgid "Display form description"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:642
+#: classes/controllers/FrmFormsController.php:645
 msgid "Minimize form HTML"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:698
+#: classes/controllers/FrmFormsController.php:701
+#: classes/views/frm-forms/template-name-overlay.php:9
 msgid "Template Name"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:699
+#: classes/controllers/FrmFormsController.php:702
 msgid "Type"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:700
-#: classes/controllers/FrmFormsController.php:704
+#: classes/controllers/FrmFormsController.php:703
+#: classes/controllers/FrmFormsController.php:707
 #: classes/helpers/FrmCSVExportHelper.php:151
 msgid "Key"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:702
+#: classes/controllers/FrmFormsController.php:705
 #: classes/controllers/FrmStylesController.php:376
 #: classes/views/styles/_sample_form.php:17
 #: classes/views/styles/manage.php:16
 msgid "Form Title"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:705
+#: classes/controllers/FrmFormsController.php:708
 msgid "Shortcodes"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:708
+#: classes/controllers/FrmFormsController.php:711
 #: classes/models/FrmField.php:81
 msgid "Date"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:803
+#: classes/controllers/FrmFormsController.php:806
 msgid "You are trying to edit a form that does not exist."
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:807
+#: classes/controllers/FrmFormsController.php:810
 msgid "You are trying to edit a child form. Please edit from %1$shere%2$s"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:829
+#: classes/controllers/FrmFormsController.php:832
 msgid "Template was Successfully Updated"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:835
-#: classes/controllers/FrmFormsController.php:856
+#: classes/controllers/FrmFormsController.php:838
+#: classes/controllers/FrmFormsController.php:859
 msgid "That template cannot be edited"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:906
+#: classes/controllers/FrmFormsController.php:909
 msgid "Customize the field values with the following parameters. Click to see a sample."
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:920
+#: classes/controllers/FrmFormsController.php:923
 msgid "Insert user information"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:943
+#: classes/controllers/FrmFormsController.php:946
 msgid "Separator"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:944
+#: classes/controllers/FrmFormsController.php:947
 msgid "Use a different separator for checkbox fields"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:946
+#: classes/controllers/FrmFormsController.php:949
 msgid "Date Format"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:947
+#: classes/controllers/FrmFormsController.php:950
 msgid "Field Label"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:949
+#: classes/controllers/FrmFormsController.php:952
 msgid "No Auto P"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:950
+#: classes/controllers/FrmFormsController.php:953
 msgid "Do not automatically add any paragraphs or line breaks"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:964
+#: classes/controllers/FrmFormsController.php:967
 #: classes/models/FrmField.php:58
 msgid "User ID"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:965
+#: classes/controllers/FrmFormsController.php:968
 msgid "First Name"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:966
+#: classes/controllers/FrmFormsController.php:969
 msgid "Last Name"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:967
+#: classes/controllers/FrmFormsController.php:970
 msgid "Display Name"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:968
+#: classes/controllers/FrmFormsController.php:971
 msgid "User Login"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:969
+#: classes/controllers/FrmFormsController.php:972
 #: classes/models/FrmField.php:34
 msgid "Email"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:970
+#: classes/controllers/FrmFormsController.php:973
 msgid "Avatar"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:971
+#: classes/controllers/FrmFormsController.php:974
 msgid "Author Link"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:983
+#: classes/controllers/FrmFormsController.php:986
 #: classes/views/frm-entries/sidebar-shared.php:32
 msgid "Entry ID"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:985
+#: classes/controllers/FrmFormsController.php:988
 msgid "Post ID"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:986
+#: classes/controllers/FrmFormsController.php:989
 msgid "User IP"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:987
+#: classes/controllers/FrmFormsController.php:990
 msgid "Entry created"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:988
+#: classes/controllers/FrmFormsController.php:991
 msgid "Entry updated"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:990
+#: classes/controllers/FrmFormsController.php:993
 msgid "Site URL"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:991
+#: classes/controllers/FrmFormsController.php:994
 msgid "Site Name"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:999
+#: classes/controllers/FrmFormsController.php:1002
 msgid "Default Msg"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1000
+#: classes/controllers/FrmFormsController.php:1003
 msgid "Default HTML"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1001
+#: classes/controllers/FrmFormsController.php:1004
 msgid "Default Plain"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1090
+#: classes/controllers/FrmFormsController.php:1093
 msgid "No forms were specified"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1193
+#: classes/controllers/FrmFormsController.php:1196
 msgid "Abnormal HTML characters prevented your form from saving correctly"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1262
+#: classes/controllers/FrmFormsController.php:1265
 #: classes/helpers/FrmFormsHelper.php:55
 #: classes/helpers/FrmFormsHelper.php:113
 #: classes/helpers/FrmFormsHelper.php:779
@@ -514,16 +515,16 @@ msgstr ""
 msgid "(no title)"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1308
-#: classes/controllers/FrmFormsController.php:1322
+#: classes/controllers/FrmFormsController.php:1311
+#: classes/controllers/FrmFormsController.php:1325
 msgid "Please select a valid form"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1553
+#: classes/controllers/FrmFormsController.php:1556
 msgid "Please wait while you are redirected."
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1587
+#: classes/controllers/FrmFormsController.php:1590
 msgid "%1$sClick here%2$s if you are not automatically redirected."
 msgstr ""
 
@@ -648,6 +649,8 @@ msgstr ""
 #: classes/controllers/FrmStylesController.php:377
 #: classes/views/frm-forms/mb_html_tab.php:49
 #: classes/views/frm-forms/settings.php:248
+#: classes/views/frm-forms/template-name-overlay.php:16
+#: classes/views/frm-forms/template-name-overlay.php:17
 msgid "Form Description"
 msgstr ""
 
@@ -3638,7 +3641,7 @@ msgid "Add new form"
 msgstr ""
 
 #: classes/views/frm-forms/add-new.php:15
-#: classes/views/frm-forms/add-new.php:20
+#: classes/views/frm-forms/add-new.php:22
 msgid "Create Blank Form"
 msgstr ""
 
@@ -3650,29 +3653,29 @@ msgstr ""
 msgid "Build anything you can imagine."
 msgstr ""
 
-#: classes/views/frm-forms/add-new.php:28
-#: classes/views/frm-forms/add-new.php:33
+#: classes/views/frm-forms/add-new.php:30
+#: classes/views/frm-forms/add-new.php:37
 msgid "Choose Template"
 msgstr ""
 
-#: classes/views/frm-forms/add-new.php:30
+#: classes/views/frm-forms/add-new.php:32
 msgid "Start with a template"
 msgstr ""
 
-#: classes/views/frm-forms/add-new.php:31
+#: classes/views/frm-forms/add-new.php:33
 msgid "We've done the heavy lifting."
 msgstr ""
 
-#: classes/views/frm-forms/add-new.php:41
-#: classes/views/frm-forms/add-new.php:46
+#: classes/views/frm-forms/add-new.php:45
+#: classes/views/frm-forms/add-new.php:52
 msgid "Import Form"
 msgstr ""
 
-#: classes/views/frm-forms/add-new.php:43
+#: classes/views/frm-forms/add-new.php:47
 msgid "Import your form"
 msgstr ""
 
-#: classes/views/frm-forms/add-new.php:44
+#: classes/views/frm-forms/add-new.php:48
 msgid "Import a form from an XML file."
 msgstr ""
 
@@ -3866,14 +3869,6 @@ msgid "Add Fields Here"
 msgstr ""
 
 #: classes/views/frm-forms/form.php:30
-msgid "Or load fields from a template"
-msgstr ""
-
-#: classes/views/frm-forms/form.php:36
-msgid "Load Template"
-msgstr ""
-
-#: classes/views/frm-forms/form.php:41
 msgid "3. Save your form"
 msgstr ""
 
@@ -3989,6 +3984,8 @@ msgid "Add class name if field has an error on form submit"
 msgstr ""
 
 #: classes/views/frm-forms/mb_html_tab.php:48
+#: classes/views/frm-forms/template-name-overlay.php:9
+#: classes/views/frm-forms/template-name-overlay.php:10
 msgid "Form Name"
 msgstr ""
 
@@ -4189,11 +4186,7 @@ msgstr ""
 msgid "Select a form:"
 msgstr ""
 
-#: classes/views/frm-forms/template-name-overlay.php:10
-msgid "Template name"
-msgstr ""
-
-#: classes/views/frm-forms/template-name-overlay.php:17
+#: classes/views/frm-forms/template-name-overlay.php:16
 msgid "Template Description"
 msgstr ""
 
