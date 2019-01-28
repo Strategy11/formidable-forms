@@ -1654,20 +1654,6 @@ function frmAdminBuildJS(){
 		return false;
 	}
 
-	function createFromTemplate() {
-		var dropdown = document.getElementById('frm_create_template_dropdown');
-		jQuery.ajax({
-			type:'POST',url:ajaxurl,
-			data:{
-				action:'frm_create_from_template', this_form:this_form_id,
-				id:dropdown.options[dropdown.selectedIndex].value, nonce:frmGlobal.nonce
-			},
-			success:function(url){
-				window.location = url;
-			}
-		});
-	}
-
 	function submitBuild(){
 		/*jshint validthis:true */
 		var $thisEle = jQuery(this);
@@ -3171,16 +3157,25 @@ function frmAdminBuildJS(){
 			event.preventDefault();
 			var spinner = this.nextElementSibling;
 			spinner.style.visibility = 'visible';
-			var oldName = jQuery(this).closest('.frm-card').find('h3').html();
+			var oldName = jQuery(this).closest('.frm-card').find('h3').html(),
+				nameLabel = document.getElementById('frm_new_name'),
+				descLabel = document.getElementById('frm_new_desc');
 
 			document.getElementById('frm_template_name').value = oldName;
 			document.getElementById('frm_link').value = this.attributes.rel.value;
 			document.getElementById('frm_action_type').value = 'frm_install_template';
+			nameLabel.innerHTML = nameLabel.dataset.form;
+			descLabel.innerHTML = descLabel.dataset.form;
 			$info.dialog('open');
 		} );
 
 		jQuery('.frm-build-template').click( function( event ) {
 			event.preventDefault();
+			var nameLabel = document.getElementById('frm_new_name'),
+				descLabel = document.getElementById('frm_new_desc');
+
+			nameLabel.innerHTML = nameLabel.dataset.template;
+			descLabel.innerHTML = descLabel.dataset.template;
 			document.getElementById('frm_template_name').value = this.dataset.fullname;
 			document.getElementById('frm_link').value = this.dataset.formid;
 			document.getElementById('frm_action_type').value = 'frm_build_template';
@@ -3198,6 +3193,7 @@ function frmAdminBuildJS(){
 				var form = json.renderedHtml;
 				form = form.replace(/<script\b[^<]*(js\/jquery\/jquery)[^<]*><\/script>/gi, '' );
 				form = form.replace(/<link\b[^>]*(formidableforms17.css)[^>]*>/gi, '' );
+				form = form.replace('<form ', '<form onsubmit="event.preventDefault();" ' );
 				cont.innerHTML = form;
 			}
 		});
@@ -3483,7 +3479,6 @@ function frmAdminBuildJS(){
 				$form_name.focus();
 			}
 
-			jQuery(document.getElementById('frm_create_template_button')).click(createFromTemplate);
 			jQuery('.frm_submit_ajax').click(submitBuild);
 			jQuery('.frm_submit_no_ajax').click(submitNoAjax);
 			

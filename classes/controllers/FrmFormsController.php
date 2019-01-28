@@ -218,8 +218,11 @@ class FrmFormsController {
 	 * Also delete the current form
 	 *
 	 * @since 2.0
+	 * @deprecated 3.06
 	 */
 	public static function _create_from_template() {
+		_deprecated_function( __FUNCTION__, '3.04.03' );
+
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
