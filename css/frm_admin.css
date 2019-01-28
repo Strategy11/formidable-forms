@@ -1027,6 +1027,11 @@ h2.frm-h2 + .howto{
 	margin-bottom:0;
 }
 
+#frm-templates-page .error,
+.frm-add-new-form .error{
+	display:none;
+}
+
 /* Add New Form */
 .wrap.frm-add-new-form{
 	margin-top:40px;
