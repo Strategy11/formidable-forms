@@ -26,10 +26,6 @@ a.frm_confirming,
 	margin: 10px 40px 30px;
 }
 
-.frm_wrap h1{
-	color: var(--medium-grey);
-}
-
 .formidable_page_formidable-pro-upgrade #post-body-content,
 .toplevel_page_formidable #post-body-content{
 	margin-bottom: 26px;
@@ -131,6 +127,7 @@ td.column-title .frm_actions_dropdown{
 	padding:0;
 	margin: 0;
 	line-height: 1.4;
+	color: var(--medium-grey);
 }
 
 .frm_top_left{
@@ -688,7 +685,7 @@ input.frm_insert_in_template{
 .frm_single_entry_page .frm_form_fields + p,
 #frm_form_editor_container > .postbox > p,
 .frm_form_settings > p{
-	margin:6px 30px;
+	margin:6px 40px;
 	padding:0;
 }
 label.frm_primary_label,
@@ -2895,8 +2892,10 @@ ul.frm-category-tabs{
 .widefat .column-entries, .widefat .column-link{width:10%;text-align:center;}
 .widefat .column-form_key, .widefat .column-created_at{width:10%;}
 
+.post-type-frm_display .search-box,
 .frm_wrap .search-box{
 	float:right;
+	margin-bottom: 15px;
 }
 
 .frm-search{
@@ -2942,6 +2941,7 @@ ul.frm-category-tabs{
 .frm-search #search-submit{
 	width:30%;
 	border-radius:0 4px 4px 0;
+	text-align:center;
 }
 
 select[name="m"]{display:none;}

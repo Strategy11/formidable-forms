@@ -51,11 +51,16 @@ class FrmFormsController {
 	public static function list_form() {
 		FrmAppHelper::permission_check( 'frm_view_forms' );
 
+		$message = '';
 		$params = FrmForm::list_page_params();
 		$errors = self::process_bulk_form_actions( array() );
+		if ( isset( $errors['message'] ) ) {
+			$message = $errors['message'];
+			unset( $errors['message'] );
+		}
 		$errors = apply_filters( 'frm_admin_list_form_action', $errors );
 
-		return self::display_forms_list( $params, '', $errors );
+		return self::display_forms_list( $params, $message, $errors );
 	}
 
 	/**
@@ -1116,7 +1121,7 @@ class FrmFormsController {
         }
 
         if ( isset( $message ) && ! empty( $message ) ) {
-			echo '<div id="message" class="frm_updated_message">' . FrmAppHelper::kses( $message, array( 'a' ) ) . '</div>'; // WPCS: XSS ok.
+			$errors['message'] = $message;
         }
 
         return $errors;
