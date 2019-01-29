@@ -17,10 +17,26 @@ class test_FrmMigrate extends FrmUnitTest {
 
 		$new_version = get_option( 'frm_db_version' );
 		$this->assertEquals( $new_version, FrmAppHelper::plugin_version() . '-' . FrmAppHelper::$db_version );
+	}
+
+	/**
+	 * @covers FrmMigrate::maybe_create_contact_form
+	 */
+	public function test_maybe_create_contact_form( ) {
+		delete_option( 'frm_db_version' );
+		$frmdb = new FrmMigrate();
+		$frmdb->upgrade();
 
 		// Check for auto contact form.
 		$form = FrmForm::getOne( 'contact-form' );
+		$this->assertNotEmpty( $form );
 		$this->assertEquals( $form->form_key, 'contact-form' );
+
+		// Make sure the form isn't recreated after delete
+		FrmForm::destroy( 'contact-form' );
+		$frmdb->upgrade();
+		$form = FrmForm::getOne( 'contact-form' );
+		$this->assertEmpty( $form );
 	}
 
 	/**
