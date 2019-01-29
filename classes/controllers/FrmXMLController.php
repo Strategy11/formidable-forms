@@ -102,14 +102,15 @@ class FrmXMLController {
 		}
 
 		foreach ( $xml->form as $form ) {
-			// Use a unique key to prevent editing existing form.
-			$form->form_key = FrmAppHelper::get_unique_key( $form->form_key, 'frm_forms', 'form_key' );
-
 			// Maybe set the form name if this isn't a child form.
 			if ( $set_name == $form->id ) {
 				$form->name        = FrmAppHelper::get_param( 'name', '', 'post', 'sanitize_text_field' );
 				$form->description = FrmAppHelper::get_param( 'desc', '', 'post', 'sanitize_textarea_field' );
 			}
+
+			// Use a unique key to prevent editing existing form.
+			$name = sanitize_title( $form->name );
+			$form->form_key = FrmAppHelper::get_unique_key( $name, 'frm_forms', 'form_key' );
 		}
 	}
 
@@ -373,7 +374,7 @@ class FrmXMLController {
 	 * Use a generic file name if multiple items are exported.
 	 * Use the nme of the form if only one form is exported.
 	 *
-	 * @since 3.05.01
+	 * @since 3.06
 	 *
 	 * @return string
 	 */

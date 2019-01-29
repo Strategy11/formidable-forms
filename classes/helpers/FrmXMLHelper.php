@@ -88,12 +88,12 @@ class FrmXMLHelper {
 			'styles'  => 0,
 		);
 
-        return array(
-            'imported' => $defaults,
+		return array(
+			'imported' => $defaults,
 			'updated'  => $defaults,
 			'forms'    => array(),
 			'terms'    => array(),
-        );
+		);
 	}
 
 	public static function import_xml_terms( $terms, $imported ) {
@@ -910,7 +910,7 @@ class FrmXMLHelper {
 	 * If the saved value is the same as the default, remove it from the export
 	 * This keeps file size down and prevents overriding global settings after import
 	 *
-	 * @since 3.05.01
+	 * @since 3.06
 	 */
 	private static function remove_default_form_options( &$options ) {
 		$defaults = FrmFormsHelper::get_default_opts();
@@ -923,7 +923,7 @@ class FrmXMLHelper {
 	/**
 	 * Remove extra settings from field to keep file size down
 	 *
-	 * @since 3.05.01
+	 * @since 3.06
 	 */
 	public static function prepare_field_for_export( &$field ) {
 		self::remove_default_field_options( $field );
@@ -932,7 +932,7 @@ class FrmXMLHelper {
 	/**
 	 * Remove defaults from field options too
 	 *
-	 * @since 3.05.01
+	 * @since 3.06
 	 */
 	private static function remove_default_field_options( &$field ) {
 		$defaults = FrmFieldsHelper::get_default_field_options( $field->type );
@@ -964,7 +964,7 @@ class FrmXMLHelper {
 	 * Compare the default array to the saved values and
 	 * remove if they are the same
 	 *
-	 * @since 3.05.01
+	 * @since 3.06
 	 */
 	private static function remove_defaults( $defaults, &$saved ) {
 		$array_defaults = array_filter( $defaults, 'is_array' );
@@ -981,7 +981,7 @@ class FrmXMLHelper {
  	/**
 	 * The line endings may prevent html from being equal when it should
 	 *
-	 * @since 3.05.01
+	 * @since 3.06
 	 */
 	private static function remove_default_html( $html_name, $defaults, &$options ) {
 		if ( ! isset( $options[ $html_name ] ) || ! isset( $defaults[ $html_name ] ) ) {
