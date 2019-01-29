@@ -217,7 +217,6 @@ class FrmFormsHelper {
 			'form_id'        => '',
 			'logged_in'      => '',
 			'editable'       => '',
-			'default_template' => 0,
 			'is_template'    => 0,
 			'status'         => 'draft',
 			'parent_form_id' => 0,
@@ -248,7 +247,6 @@ class FrmFormsHelper {
 		}
 
 		$values['form_key'] = isset( $post_values['form_key'] ) ? $post_values['form_key'] : $record->form_key;
-		$values['default_template'] = isset( $post_values['default_template'] ) ? $post_values['default_template'] : $record->default_template;
 		$values['is_template'] = isset( $post_values['is_template'] ) ? $post_values['is_template'] : $record->is_template;
         $values['status'] = $record->status;
 

@@ -839,9 +839,7 @@ class FrmFormsController {
 
 		$all_templates = FrmForm::getAll( array( 'is_template' => 1 ), 'name' );
 
-        if ( $form->default_template ) {
-			wp_die( esc_html__( 'That template cannot be edited', 'formidable' ) );
-		} elseif ( defined( 'DOING_AJAX' ) ) {
+		if ( defined( 'DOING_AJAX' ) ) {
             wp_die();
         } else if ( $create_link ) {
 			require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/new.php' );
@@ -859,10 +857,6 @@ class FrmFormsController {
 
 		$fields = FrmField::get_all_for_form( $id );
 		$values = FrmAppHelper::setup_edit_vars( $form, 'forms', $fields, true );
-
-		if ( isset( $values['default_template'] ) && $values['default_template'] ) {
-			wp_die( esc_html__( 'That template cannot be edited', 'formidable' ) );
-		}
 
 		self::clean_submit_html( $values );
 

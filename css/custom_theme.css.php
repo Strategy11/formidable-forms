@@ -112,6 +112,7 @@ legend.frm_hidden{
 .with_frm_style .frm_pos_hidden,
 .frm_hidden_container label.frm_primary_label{
     visibility:hidden;
+	white-space:nowrap;
 }
 
 .with_frm_style .frm_inside_container label.frm_primary_label{

@@ -47,9 +47,6 @@ class FrmMigrate {
 			/***** SAVE DB VERSION *****/
 			update_option( 'frm_db_version', FrmAppHelper::plugin_version() . '-' . FrmAppHelper::$db_version );
 
-			/**** ADD/UPDATE DEFAULT TEMPLATES ****/
-			FrmXMLController::add_default_templates();
-
 			if ( ! $old_db_version ) {
 				$this->maybe_create_contact_form();
 			}
@@ -165,22 +162,31 @@ class FrmMigrate {
     }
 
 	private function maybe_create_contact_form() {
-		$template_id = FrmForm::get_id_by_key( 'contact' );
-		if ( $template_id ) {
-			$form_exists = FrmForm::get_id_by_key( 'contact-form' );
-			if ( $form_exists ) {
-				return;
-			}
-
-			$form_id = FrmForm::duplicate( $template_id, false, true );
-			if ( $form_id ) {
-				$values = array(
-					'status'   => 'published',
-					'form_key' => 'contact-form',
-				);
-				FrmForm::update( $form_id, $values );
-			}
+		$form_exists = FrmForm::get_id_by_key( 'contact-form' );
+		if ( ! $form_exists ) {
+			$this->add_default_template();
 		}
+	}
+
+	/**
+	 * Create the default contact form
+	 *
+	 * @since 3.06
+	 */
+	private function add_default_template() {
+		if ( ! function_exists( 'libxml_disable_entity_loader' ) ) {
+			// XML import is not enabled on your server.
+			return;
+		}
+
+		$set_err = libxml_use_internal_errors( true );
+		$loader  = libxml_disable_entity_loader( true );
+
+		$file = FrmAppHelper::plugin_path() . '/classes/views/xml/default-templates.xml';
+		FrmXMLHelper::import_xml( $file );
+
+		libxml_use_internal_errors( $set_err );
+		libxml_disable_entity_loader( $loader );
 	}
 
 	/**
@@ -200,7 +206,7 @@ class FrmMigrate {
 			return;
 		}
 
-		$migrations = array( 16, 11, 16, 17, 23, 25, 86 );
+		$migrations = array( 16, 11, 16, 17, 23, 25, 86, 90 );
 		foreach ( $migrations as $migration ) {
 			if ( FrmAppHelper::$db_version >= $migration && $old_db_version < $migration ) {
 				$function_name = 'migrate_to_' . $migration;
@@ -262,6 +268,18 @@ class FrmMigrate {
 		do_action( 'frm_after_uninstall' );
         return true;
     }
+
+	/**
+	 * Delete uneeded default templates
+	 *
+	 * @since 3.06
+	 */
+	private function migrate_to_90() {
+		$form = FrmForm::getOne( 'contact' );
+		if ( $form && $form->default_template == 1 ) {
+			FrmForm::destroy( 'contact' );
+		}
+	}
 
 	/**
 	 * Reverse migration 17 -- Divide by 9

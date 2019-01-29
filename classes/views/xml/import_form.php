@@ -95,9 +95,7 @@
 								<?php
 								echo esc_html( '' === $form->name ? __( '(no title)', 'formidable' ) : $form->name );
 								echo ' &mdash; ' . esc_html( $form->form_key );
-								if ( $form->is_template && $form->default_template ) {
-									echo ' ' . esc_html__( '(default template)', 'formidable' );
-								} elseif ( $form->is_template ) {
+								if ( $form->is_template ) {
 									echo ' ' . esc_html__( '(template)', 'formidable' );
 								} elseif ( $form->parent_form_id ) {
 									echo ' ' . esc_html__( '(child)', 'formidable' );

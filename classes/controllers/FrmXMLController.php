@@ -15,18 +15,12 @@ class FrmXMLController {
 		$set_err = libxml_use_internal_errors( true );
 		$loader = libxml_disable_entity_loader( true );
 
-		$files = apply_filters( 'frm_default_templates_files', array( FrmAppHelper::plugin_path() . '/classes/views/xml/default-templates.xml' ) );
+		$files = apply_filters( 'frm_default_templates_files', array() );
 
 		foreach ( (array) $files as $file ) {
 			FrmXMLHelper::import_xml( $file );
 			unset( $file );
 		}
-		/*
-		if(is_wp_error($result))
-			$errors[] = $result->get_error_message();
-		else if($result)
-			$message = $result;
-		*/
 
 		unset( $files );
 

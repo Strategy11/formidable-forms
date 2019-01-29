@@ -203,7 +203,6 @@ class FrmXMLHelper {
 			'options'       => (string) $item->options,
 			'logged_in'     => (int) $item->logged_in,
 			'is_template'   => (int) $item->is_template,
-			'default_template' => (int) $item->default_template,
 			'editable'      => (int) $item->editable,
 			'status'        => (string) $item->status,
 			'parent_form_id' => isset( $item->parent_form_id ) ? (int) $item->parent_form_id : 0,

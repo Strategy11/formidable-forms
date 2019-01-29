@@ -1,4 +1,14 @@
 == Changelog ==
+= 3.06 =
+* New: Add one-click form creation from a form template and adjust the way a new form is created
+* New: Add a new process for creating a custom form template
+* Tweak: Create smaller XML fiels when exporting forms
+* Tweak: Use the name of the form for XML exports when a single form is exported
+* Tweak: Don't limit the width of the color picker in the form styler to avoid conflicts with some color picker plugins
+* Fix: Prevent the 'Advanced' section from hiding on non-Formidable blocks
+* Fix: Some users were seeing PHP error messages in PHP 5.2
+* Fix: XML form exports set to use the default style were not correctly setting the style on import
+
 = 3.05 =
 * New: Add a new Forms block for use with the new WP editor
 * Fix: A false number was showing for number of plugin updates available when add-ons were not installed

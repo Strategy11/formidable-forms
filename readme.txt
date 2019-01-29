@@ -4,7 +4,7 @@ Tags: forms, contact form, form builder, survey, form maker, form, form creator
 Requires at least: 4.5
 Tested up to: 5.0
 Requires PHP: 5.3
-Stable tag: 3.05
+Stable tag: 3.06
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quiz forms, and more.
 
@@ -374,15 +374,18 @@ Formidable Forms drag & drop form builder combined with our add-ons is the most 
 To get access to more features, integrations, and support, <a href="https://formidableforms.com/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">upgrade to Formidable Forms Pro</a>. A Pro license gives you access to the full version of Formidable Forms for more advanced contact forms, Formidable Views, graphs and stats, priority support, and Formidable Forms Add-ons!
 
 == Changelog ==
+= 3.06 =
+* New: Add one-click form creation from a form template and adjust the way a new form is created
+* New: Add a new process for creating a custom form template
+* Tweak: Create smaller XML fiels when exporting forms
+* Tweak: Use the name of the form for XML exports when a single form is exported
+* Tweak: Don't limit the width of the color picker in the form styler to avoid conflicts with some color picker plugins
+* Fix: Prevent the 'Advanced' section from hiding on non-Formidable blocks
+* Fix: Some users were seeing PHP error messages in PHP 5.2
+* Fix: XML form exports set to use the default style were not correctly setting the style on import
+
 = 3.05 =
 * New: Add a new Forms block for use with the new WP editor
 * Fix: A false number was showing for number of plugin updates available when add-ons were not installed
-
-= 3.04.03 =
-* New: Improved autoupdating and installation for form add-ons
-* Tweak: Only show the form add-ons page to those who can activate plugins
-* Fix: Radio button shadows had a box around them in some browsers
-* Fix: Don't mark an entry as a duplicate when the second entry includes more fields than the first
-* Code: Move deprecated code to its own folder
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>

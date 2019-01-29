@@ -414,9 +414,6 @@ class FrmDeprecated {
 			$values['form_key'] = $filename;
 			$values['is_template'] = $template;
 			$values['status'] = 'published';
-			if ( $default ) {
-				$values['default_template'] = 1;
-			}
 
 			include( $templates[ $i ] );
 

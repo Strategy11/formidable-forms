@@ -4,13 +4,12 @@
 <channel>
 	<form>
 		<id>1</id>
-		<form_key><![CDATA[contact]]></form_key>
+		<form_key><![CDATA[contact-form]]></form_key>
 		<name><![CDATA[Contact Us]]></name>
 		<description><![CDATA[We would like to hear from you. Please send us a message by filling out the form below and we will get back with you shortly.]]></description>
 		<created_at>2009-11-24 00:17:31</created_at>
 		<logged_in>0</logged_in>
-		<is_template>1</is_template>
-		<default_template>1</default_template>
+		<is_template>0</is_template>
 		<editable>0</editable>
 		<options><![CDATA[{"custom_style":1}]]></options>
 		<status><![CDATA[published]]></status>

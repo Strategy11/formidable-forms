@@ -20,7 +20,6 @@ class FrmForm {
 			'is_template'   => isset( $values['is_template'] ) ? (int) $values['is_template'] : 0,
 			'parent_form_id' => isset( $values['parent_form_id'] ) ? absint( $values['parent_form_id'] ) : 0,
 			'editable'      => isset( $values['editable'] ) ? (int) $values['editable'] : 0,
-			'default_template' => isset( $values['default_template'] ) ? (int) $values['default_template'] : 0,
 			'created_at'    => isset( $values['created_at'] ) ? $values['created_at'] : current_time( 'mysql', 1 ),
 		);
 
