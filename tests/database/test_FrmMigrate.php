@@ -17,6 +17,10 @@ class test_FrmMigrate extends FrmUnitTest {
 
 		$new_version = get_option( 'frm_db_version' );
 		$this->assertEquals( $new_version, FrmAppHelper::plugin_version() . '-' . FrmAppHelper::$db_version );
+
+		// Check for auto contact form.
+		$form = FrmForm::getOne( 'contact-form' );
+		$this->assertEquals( $form->form_key, 'contact-form' );
 	}
 
 	/**
