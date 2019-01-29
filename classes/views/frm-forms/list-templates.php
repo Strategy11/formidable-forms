@@ -78,7 +78,7 @@
 				</div>
 			</div>
 
-			<?php foreach ( $templates as $template ) { ?>
+			<?php foreach ( $templates as $k => $template ) { ?>
 				<div class="frm-card frm-no-thumb">
 					<div class="plugin-card-top">
 						<?php if ( strtotime( $template['released'] ) > strtotime( '-10 days' ) ) { ?>
@@ -86,7 +86,7 @@
 								<span>New</span>
 							</div>
 						<?php } ?>
-						<h3><?php echo esc_html( rtrim( $template['name'], 'Template' ) ); ?></h3>
+						<h3><?php echo esc_html( rtrim( rtrim( $template['name'], ' Template' ), 'Form' ) ); ?></h3>
 						<p><?php echo esc_html( $template['description'] ); ?></p>
 						<?php
 						if ( isset( $template['installed'] ) && $template['installed'] ) {
@@ -133,7 +133,6 @@
 							<?php } ?>
 								<?php esc_html_e( 'Create Form', 'formidable' ); ?>
 							</a>
-							<span class="spinner"></span>
 						<?php } else { ?>
 							<a class="install-now button button-primary frm-button-primary" href="<?php echo esc_url( $pricing ); ?>" target="_blank" rel="noopener" aria-label="<?php esc_attr_e( 'Upgrade Now', 'formidable' ); ?>">
 								<?php esc_html_e( 'Upgrade Now', 'formidable' ); ?>
@@ -141,6 +140,7 @@
 						<?php } ?>
 					</div>
 				</div>
+				<?php unset( $template, $templates[ $k ] ); ?>
 			<?php } ?>
 		</div>
 		<?php include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/template-name-overlay.php' ); ?>

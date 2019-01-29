@@ -3155,8 +3155,6 @@ function frmAdminBuildJS(){
 
 		jQuery('.frm-install-template').click( function( event ) {
 			event.preventDefault();
-			var spinner = this.nextElementSibling;
-			spinner.style.visibility = 'visible';
 			var oldName = jQuery(this).closest('.frm-card').find('h3').html(),
 				nameLabel = document.getElementById('frm_new_name'),
 				descLabel = document.getElementById('frm_new_desc');
@@ -3201,8 +3199,10 @@ function frmAdminBuildJS(){
 
 	function installTemplate( e ) {
 		/*jshint validthis:true */
-		var action = this.elements['type'].value;
+		var action = this.elements['type'].value,
+			spinner = document.getElementById('frm-importing-spinner');
 		e.preventDefault();
+		spinner.style.visibility = 'visible';
 		installNewForm( this, action );
 	}
 

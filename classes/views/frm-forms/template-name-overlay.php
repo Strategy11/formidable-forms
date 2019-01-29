@@ -28,6 +28,7 @@
 						<a href="#" class="dismiss">
 							<?php esc_attr_e( 'Cancel', 'formidable' ); ?>
 						</a>
+						<span id="frm-importing-spinner" class="spinner"></span>
 					</form>
 				</div>
 			</div>

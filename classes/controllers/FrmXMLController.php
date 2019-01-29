@@ -62,7 +62,7 @@ class FrmXMLController {
 
 		$imported = FrmXMLHelper::import_xml_now( $xml );
 		if ( isset( $imported['form_status'] ) && ! empty( $imported['form_status'] ) ) {
-			// get the last form id in case there are child forms
+			// Get the last form id in case there are child forms.
 			end( $imported['form_status'] );
 			$form_id = key( $imported['form_status'] );
 			$response = array(
@@ -80,22 +80,35 @@ class FrmXMLController {
 		wp_die();
 	}
 
+	/**
+	 * Change the name of the last form that is not a child.
+	 * This will allow for lookup fields and embedded forms
+	 * since we redirect to the last form.
+	 *
+	 * @since 3.06
+	 * @param object $xml The values included in the XML.
+	 */
 	private static function set_new_form_name( &$xml ) {
-		if ( isset( $xml->form ) ) {
-			$form_name   = FrmAppHelper::get_param( 'name', '', 'post', 'sanitize_text_field' );
-			$description = FrmAppHelper::get_param( 'desc', '', 'post', 'sanitize_textarea_field' );
-			$name_set = false;
+		if ( ! isset( $xml->form ) ) {
+			return;
+		}
 
-			foreach ( $xml->form as $k => $form ) {
-				// Use a unique key to prevent editing existing form
-				$form->form_key = FrmAppHelper::get_unique_key( $form->form_key, 'frm_forms', 'form_key' );
+		// Get the main form ID.
+		$set_name = 0;
+		foreach ( $xml->form as $form ) {
+			if ( ! isset( $form->parent_form_id ) || empty( $form->parent_form_id ) ) {
+				$set_name = $form->id;
+			}
+		}
 
-				if ( ! $name_set && ( ! isset( $form->parent_form_id ) || empty( $form->parent_form_id ) ) ) {
-					$form->name = $form_name;
-					$form->description = $description;
-					$name_set = true;
-				}
-				$xml->form[ $k ] = $form;
+		foreach ( $xml->form as $form ) {
+			// Use a unique key to prevent editing existing form.
+			$form->form_key = FrmAppHelper::get_unique_key( $form->form_key, 'frm_forms', 'form_key' );
+
+			// Maybe set the form name if this isn't a child form.
+			if ( $set_name == $form->id ) {
+				$form->name        = FrmAppHelper::get_param( 'name', '', 'post', 'sanitize_text_field' );
+				$form->description = FrmAppHelper::get_param( 'desc', '', 'post', 'sanitize_textarea_field' );
 			}
 		}
 	}
