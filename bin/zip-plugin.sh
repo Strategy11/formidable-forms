@@ -22,6 +22,8 @@ version="$1"
 # Package the zip
 cd ..
 rm -rf formidable-$version.zip
+rm -rf $version
+rsync -avz --exclude 'node_modules' --exclude '*.git/*' --exclude 'tests' formidable/ $version/
 
 status "Creating Lite archive..."
 zip -r formidable-$version.zip $version \
@@ -40,5 +42,6 @@ zip -r formidable-$version.zip $version \
 	-x "*/tests/*" \
 	-x "*/webpack.config.js" \
 	-x "*.zip"
+rm -rf $version
 
 status "Done. You've built Formidable $version! 🎉 "
