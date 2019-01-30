@@ -86,7 +86,7 @@
 								<span>New</span>
 							</div>
 						<?php } ?>
-						<h3><?php echo esc_html( rtrim( rtrim( $template['name'], ' Template' ), 'Form' ) ); ?></h3>
+						<h3><?php echo esc_html( preg_replace( '/(\sForm)?(\sTemplate)?$/', '', $template['name'] ) ); ?></h3>
 						<p><?php echo esc_html( $template['description'] ); ?></p>
 						<?php
 						if ( isset( $template['installed'] ) && $template['installed'] ) {
