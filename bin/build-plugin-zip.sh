@@ -85,6 +85,9 @@ npx pot-to-php languages/formidable-js.pot languages/formidable-js-strings.php f
 status "Preparing POT file"
 npm run makepot
 
+# Generate the plugin zip file.
+status "Creating archive..."
+npm run zip -- $version
 success "Done. You've built Formidable $version! 🎉 "
 
 warning "Commit changes and create a release?"
