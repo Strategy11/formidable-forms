@@ -14,34 +14,48 @@ status () {
 	echo -e "\n${BLUE_BOLD}$1${COLOR_RESET}\n"
 }
 
-# Generate the plugin zip file.
-status "Creating archive..."
-
-version="$1"
+source="$1"
+version="$2"
+zipname="$source-$version.zip"
+destination="$source"
 
 # Package the zip
 cd ..
-rm -rf formidable-$version.zip
-rm -rf $version
-rsync -avz --exclude 'node_modules' --exclude '*.git/*' --exclude 'tests' formidable/ $version/
+rm -rf $zipname
+if [ ! -z "$3" ]; then
+	destination="$3"
+	rm -rf $destination
+	rsync -avz --exclude 'node_modules' --exclude '*.git/*' --exclude 'tests' $source/ $destination/
+fi
 
-status "Creating Lite archive..."
-zip -r formidable-$version.zip $version \
+# TODO: there is no need to create a zip for the Lite version. Instead, rsync to the svn repo folder
+
+# Generate the plugin zip file.
+status "Creating archive..."
+zip -r $zipname $destination \
+	-x "*/jquery.editinplace.js" \
 	-x "*/.*" \
 	-x "*/.git/*" \
 	-x "*/bin/*" \
+	-x "*/changelog.txt" \
 	-x "*/composer.json" \
 	-x "*/js/src/*" \
 	-x "*/js/frm.min.js" \
-	-x "*node_modules/*" \
+	-x "*/dropzone.js" \
+	-x "*/formidable-js.pot" \
+	-x "*/node_modules/*" \
 	-x "*/npm-debug.log" \
 	-x "*/package.json" \
 	-x "*/package-lock.json" \
 	-x "*/phpcs.xml" \
 	-x "*/phpunit.xml" \
+	-x "*/readme.md" \
 	-x "*/tests/*" \
 	-x "*/webpack.config.js" \
 	-x "*.zip"
-rm -rf $version
+
+if [ ! -z "$3" ]; then
+	rm -rf $destination
+fi
 
 status "Done. You've built Formidable $version! 🎉 "
