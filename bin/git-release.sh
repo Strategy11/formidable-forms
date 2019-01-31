@@ -12,22 +12,36 @@ set -e
 
 # Change to the expected directory.
 cd "$(dirname "$0")"
-cd ..
+plugin="$1"
+cd ../../$plugin
 
-version="$2"
-repo="$1"
+repo="$2"
+version="$3"
 attachment=
 if [ -f "../$repo-$version.zip" ]; then
 	attachment="../$repo-$version.zip"
 fi
 attachment2=
-if [ ! -z "$3" ]; then
-	attachment2="$3"
+if [ ! -z "$4" ]; then
+	attachment2="$4"
 fi
 attachments="$attachment $attachment2"
 
+changed=
+if ! git diff --exit-code > /dev/null; then
+	changed="file(s) modified"
+elif ! git diff --cached --exit-code > /dev/null; then
+	changed="file(s) staged"
+fi
+if [ ! -z "$changed" ]; then
+	echo "Commiting..."
+	git commit -a -m "Prepare for v$version release"
+	git push
+fi
+
 echo "Creating new GitHub release"
-export GIT_RELEASE_NOTES="$(git log $(git fetch && git describe --tags --abbrev=0)..HEAD --pretty=format:'%h %B')"
+git fetch
+export GIT_RELEASE_NOTES="$(git log $(git describe --tags --abbrev=0)..HEAD --pretty=format:'%h %B')"
 github-release upload \
 	--owner Strategy11 \
 	--repo $repo \

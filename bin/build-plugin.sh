@@ -6,7 +6,7 @@ set -e
 # Change to the expected directory.
 cd "$(dirname "$0")"
 plugin="$1"
-cd ../../$1
+cd ../../$plugin
 
 # Enable nicer messaging for build status.
 BLUE_BOLD='\033[1;34m';
@@ -79,18 +79,6 @@ warning "Commit changes and create a release?"
 echo -n "[y]es/[n]o: "
 read answer
 if [ "$answer" != "${answer#[Yy]}" ]; then
-	changed=
-	if ! git diff --exit-code > /dev/null; then
-		changed="file(s) modified"
-	elif ! git diff --cached --exit-code > /dev/null; then
-		changed="file(s) staged"
-	fi
-	if [ ! -z "$changed" ]; then
-		echo "Commiting..."
-		git commit -a -m "Prepare for v$version release"
-		git push
-	fi
-
 	npm run git-release -- $version
 else
 	echo "Changes not commited."

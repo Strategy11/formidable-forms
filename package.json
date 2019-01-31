@@ -10,7 +10,7 @@
 		"set-version": "./bin/set-version.sh formidable formidable classes/helpers/FrmAppHelper",
 		"minimize": "npx google-closure-compiler --js=js/formidable.js --js_output_file=js/formidable.min.js --compilation_level=WHITESPACE",
 		"zip": "./bin/zip-plugin.sh formidable",
-		"git-release": "./bin/git-release.sh formidable-forms",
+		"git-release": "./bin/git-release.sh formidable formidable-forms",
 		"makepot": "npx pot-to-php languages/formidable-js.pot languages/formidable-js-strings.php formidable && wp i18n make-pot . languages/formidable.pot --skip-js --skip-audit --merge=languages/formidable-js.pot"
 	},
 	"engines": {
