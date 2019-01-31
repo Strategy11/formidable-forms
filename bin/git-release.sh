@@ -27,7 +27,7 @@ fi
 attachments="$attachment $attachment2"
 
 echo "Creating new GitHub release"
-export GIT_RELEASE_NOTES="$(git log $(git describe --tags --abbrev=0)..HEAD --pretty=format:'%h %B')"
+export GIT_RELEASE_NOTES="$(git log $(git fetch && git describe --tags --abbrev=0)..HEAD --pretty=format:'%h %B')"
 github-release upload \
 	--owner Strategy11 \
 	--repo $repo \
