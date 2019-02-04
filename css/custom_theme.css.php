@@ -757,7 +757,7 @@ select.frm_loading_lookup{
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-auto-rows: max-content;
-    grid-gap: 2.5%;
+    grid-gap: 0 2.5%;
 }
 
 .frm_form_field.frm_three_col .frm_opt_container{
