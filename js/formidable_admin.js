@@ -2398,7 +2398,7 @@ function frmAdminBuildJS(){
 			type:'POST',url:ajaxurl,
 			data:{action:'frm_add_order_row',form_id:this_form_id,order_key:(parseInt(l)+1), nonce:frmGlobal.nonce},
 			success:function(html){
-				jQuery('#frm_order_options .frm_logic_rows').append(html).prev('.frm_add_order_row').hide();
+				jQuery('#frm_order_options .frm_logic_rows').append(html).show().prev('.frm_add_order_row').hide();
 			}
 		});
 	}
