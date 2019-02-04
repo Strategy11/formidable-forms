@@ -829,6 +829,7 @@ function frmFrontFormJS(){
 			};
 			if ( size === 'invisible' ) {
 				var formID = jQuery(captcha).closest('form').find('input[name="form_id"]').val();
+				jQuery(captcha).closest('.frm_form_field').hide();
 				params.callback = function(token) {
 					frmFrontForm.afterRecaptcha(token, formID);
 				};
