@@ -25,8 +25,6 @@ class FrmFormsController {
 	}
 
     public static function head() {
-		wp_enqueue_script( 'formidable-editinplace' );
-
         if ( wp_is_mobile() ) {
     		wp_enqueue_script( 'jquery-touch-punch' );
     	}

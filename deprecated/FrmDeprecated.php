@@ -16,6 +16,41 @@ class FrmDeprecated {
 	}
 
 	/**
+	 * @deprecated 4.0
+	 */
+	public static function update_order() {
+		_deprecated_function( __FUNCTION__, '4.0' );
+		FrmAppHelper::permission_check( 'frm_edit_forms' );
+		check_ajax_referer( 'frm_ajax', 'nonce' );
+
+		$fields = FrmAppHelper::get_post_param( 'frm_field_id' );
+		foreach ( (array) $fields as $position => $item ) {
+			FrmField::update( absint( $item ), array( 'field_order' => absint( $position ) ) );
+		}
+		wp_die();
+	}
+
+	/**
+	 * @deprecated 4.0
+	 * @param array $values - The form array
+	 */
+	public static function builder_submit_button( $values ) {
+		_deprecated_function( __FUNCTION__, '4.0' );
+		$page_action = FrmAppHelper::get_param( 'frm_action' );
+		$label = ( $page_action == 'edit' || $page_action == 'update' ) ? __( 'Update', 'formidable' ) : __( 'Create', 'formidable' );
+
+		?>
+		<div class="postbox">
+			<p class="inside">
+				<button class="frm_submit_<?php echo esc_attr( ( isset( $values['ajax_load'] ) && $values['ajax_load'] ) ? '' : 'no_' ); ?>ajax button-primary frm_button_submit" type="button">
+					<?php echo esc_html( $label ); ?>
+				</button>
+			</p>
+		</div>
+		<?php
+	}
+
+	/**
 	 * @deprecated 3.04.03
 	 */
 	public static function get_licenses() {

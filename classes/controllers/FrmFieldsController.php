@@ -367,16 +367,23 @@ class FrmFieldsController {
         wp_die();
     }
 
-    public static function update_order() {
-		FrmAppHelper::permission_check( 'frm_edit_forms' );
-        check_ajax_referer( 'frm_ajax', 'nonce' );
+	/**
+	 * @since 4.0
+	 * @param array $atts - Includes field array, field_obj, display array, values array.
+	 */
+	public static function load_single_field_settings( $atts ) {
+		$field     = $atts['field'];
+		$field_obj = $atts['field_obj'];
+		$values    = $atts['values'];
+		$display   = $atts['display'];
+		unset( $atts );
 
-		$fields = FrmAppHelper::get_post_param( 'frm_field_id' );
-		foreach ( (array) $fields as $position => $item ) {
-			FrmField::update( absint( $item ), array( 'field_order' => absint( $position ) ) );
-		}
-        wp_die();
-    }
+		$field_types     = FrmFieldsHelper::get_field_types( $field['type'] );
+		$disabled_fields = FrmAppHelper::pro_is_installed() ? array() : $pro_field_selection;
+		$frm_settings    = FrmAppHelper::get_settings();
+
+		include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/settings.php' );
+	}
 
 	public static function change_type( $type ) {
         $type_switch = array(
@@ -693,6 +700,13 @@ class FrmFieldsController {
 		}
 
 		return $opt;
+	}
+
+	/**
+	 * @deprecated 4.0
+	 */
+	public static function update_order() {
+		FrmDeprecated::update_order();
 	}
 
 	/**

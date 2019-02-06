@@ -4,7 +4,8 @@ function frmAdminBuildJS(){
     /*global jQuery:false, frm_admin_js, frmGlobal, ajaxurl */
 
 	var $newFields = jQuery(document.getElementById('new_fields'));
-	var this_form_id = jQuery(document.getElementById('form_id')).val();
+	var builderForm = document.getElementById( 'frm_build_form' );
+	var this_form_id = document.getElementById( 'form_id' ).value;
 	var cancelSort = false;
 
 	// Global settings
@@ -117,8 +118,8 @@ function frmAdminBuildJS(){
 		}
 
 		var desiredOffset = offset + 2 - currentOffset;
-		if (desiredOffset < 35){
-			desiredOffset = 35;
+		if (desiredOffset < 0){
+			desiredOffset = 0;
 		}
 		fields.style.top = desiredOffset + 'px';
 	}
@@ -254,6 +255,22 @@ function frmAdminBuildJS(){
 		}else{
 			inside.slideUp('fast');
 		}
+	}
+
+	function clickNewTab() {
+		/*jshint validthis:true */
+		var t = this.getAttribute( 'href' ),
+			c = t.replace( '#', '.' ),
+			$link = jQuery( this );
+
+		if ( typeof t === 'undefined'){
+			return false;
+		}
+
+		$link.closest( 'li' ).addClass( 'frm-tabs active' ).siblings( 'li' ).removeClass( 'frm-tabs active starttab' );
+		$link.closest( 'div' ).children( '.tabs-panel' ).not( t ).not( c ).hide();
+		document.getElementById( t.replace( '#', '' ), ).style.display = 'block';
+		return false;
 	}
 
 	function clickTab(link){
@@ -850,7 +867,7 @@ function frmAdminBuildJS(){
 
 	function markUnique(){
 		/*jshint validthis:true */
-		var field_id = jQuery(this).closest('li').data('fid');
+		var field_id = jQuery(this).closest('.frm-single-settings').data('fid');
 		var $thisField = jQuery('.frm_unique_details'+field_id);
 		if(this.checked){
 			$thisField.fadeIn('fast').closest('.frm_validation_msg').fadeIn('fast');
@@ -869,7 +886,7 @@ function frmAdminBuildJS(){
 	//Fade confirmation field and validation option in or out
 	function addConf(){
 		/*jshint validthis:true */
-		var field_id = jQuery(this).closest('li').data('fid');
+		var field_id = jQuery(this).closest('.frm-single-settings').data('fid');
 		var val = jQuery(this).val();
 		var $thisField = jQuery(document.getElementById('frm_field_id_'+field_id));
 
@@ -928,7 +945,7 @@ function frmAdminBuildJS(){
 		var clicks = parseInt( this.dataset.clicks );
 		this.dataset.clicks = clicks + 1;
 
-        var field_id = jQuery(this).closest('li').data('fid');
+        var field_id = jQuery(this).closest('.frm-single-settings').data('fid');
         var opt_type = jQuery(this).data('opttype');
 		var opt_key = 1;
 		var lastOpt = jQuery('#frm_field_'+ field_id +'_opts li:last');
@@ -961,7 +978,7 @@ function frmAdminBuildJS(){
 
 	function toggleMultSel(){
 		/*jshint validthis:true */
-		var field_id = jQuery(this).closest('li.frm_field_box').data('fid');
+		var field_id = jQuery(this).closest('.frm-single-settings').data('fid');
 		if(this.value === 'select'){
 			jQuery(document.getElementById('frm_multiple_cont_'+field_id)).fadeIn('fast');
 		}else{
@@ -971,7 +988,7 @@ function frmAdminBuildJS(){
 
 	function toggleSepValues(){
 		/*jshint validthis:true */
-		var field_id = jQuery(this).closest('li').data('fid');
+		var field_id = jQuery(this).closest('.frm-single-settings').data('fid');
 		toggle( jQuery('.field_'+field_id+'_option_key') );
 		jQuery('.field_'+field_id+'_option').toggleClass('frm_with_key');
 		jQuery.ajax({
@@ -1019,7 +1036,7 @@ function frmAdminBuildJS(){
 
 		changeBootstrapTooltipText( $icon, tooltipMessage );
 
-		var field_id = $icon.closest( 'li.form-field') .data( 'fid' );
+		var field_id = $icon.closest( '.frm-single-settings' ).data( 'fid' );
 		jQuery('input[name="field_options[' + type + '_'+ field_id + ']"]').val( switch_to );
 	}
 
@@ -1121,7 +1138,7 @@ function frmAdminBuildJS(){
 	
 	function addFieldLogicRow(){
 		/*jshint validthis:true */
-		var id=jQuery(this).closest('li.form-field').data('fid');
+		var id = jQuery(this).closest('.frm-single-settings').data('fid');
 		var form_id = this_form_id;
 		var meta_name = 0;
 		if(jQuery('#frm_logic_row_'+id+' .frm_logic_row').length>0){
@@ -1143,7 +1160,7 @@ function frmAdminBuildJS(){
 
 	function addWatchLookupRow(){
 		/*jshint validthis:true */
-		var id=jQuery(this).closest('li.form-field').data('fid');
+		var id=jQuery(this).closest('.frm-single-settings').data('fid');
 		var form_id = this_form_id;
 		var row_key = 0;
 		var lookupBlockRows = document.getElementById( 'frm_watch_lookup_block_'+id  ).children;
@@ -1255,7 +1272,7 @@ function frmAdminBuildJS(){
 	
 	function toggleRepeat(){
 		/*jshint validthis:true */
-		var field_id = jQuery(this).closest('li.frm_field_box').data('fid');
+		var field_id = jQuery(this).closest('.frm-single-settings').data('fid');
 		var main_form_id = jQuery('input[name="id"]').val();
 		var prev_form = jQuery('input[name="field_options[form_select_'+field_id+']"]').val();
 
@@ -1333,7 +1350,7 @@ function frmAdminBuildJS(){
 	
 	function toggleFormTax(){
 		/*jshint validthis:true */
-		var id = jQuery(this).closest('li.form-field').data('fid');
+		var id = jQuery(this).closest('.frm-single-settings').data('fid');
 		var val = this.value;
 		var $showFields = document.getElementById('frm_show_selected_fields_'+id);
 		var $showForms = document.getElementById('frm_show_selected_forms_'+id);
@@ -1361,66 +1378,6 @@ function frmAdminBuildJS(){
         n = n.substring(10, end);
         showDefaults(n, jQuery(this).val());
     }
-	
-	function blurField(e){
-		if(e.which == 13){
-			jQuery('.inplace_field').blur();
-			return false;
-		}
-	}
-
-	function setIPELabel(){
-		/*jshint validthis:true */
-		jQuery(this).editInPlace({
-			value_required:'true',
-			default_text:frm_admin_js.no_label,
-			callback:function(x,text){
-				jQuery(this).next('input').val(text);
-				var new_text = text || frm_admin_js.desc;
-				return new_text;
-			}
-		});
-	}
-
-	function setIPEDesc(){
-		/*jshint validthis:true */
-		jQuery(this).editInPlace({
-			default_text:frm_admin_js.desc,
-			field_type:'textarea',textarea_rows:2,
-			callback:function(x,text){
-				jQuery(this).next('input').val(text);
-				var new_text = text || frm_admin_js.desc;
-				return new_text;
-			},
-			postclose:function(){
-				if(jQuery(this).html() === frm_admin_js.desc){
-					jQuery(this).addClass('frm-show-click');
-				}else{
-					jQuery(this).removeClass('frm-show-click');
-				}
-			}
-		});
-	}
-
-	function setIPEOpts(){
-		/*jshint validthis:true */
-		var id = jQuery(this).attr('id');
-		var fieldId = jQuery(this).closest('.frm_field_box').data('fid');
-		jQuery(this).editInPlace({
-			default_text:frm_admin_js.blank,
-			callback:function(d,text){
-				var input = jQuery(this).next('input');
-				input.val(text);
-				var new_text = text || frm_admin_js.blank;
-				checkUniqueOpt(id,text);
-				maybeSetSavedVal(id, fieldId, text, input);
-				return new_text;
-			},
-			postclose:function(){
-				resetDropdownOpts(fieldId);
-			}
-		});
-	}
 
 	function resetDropdownOpts(id){
 		var field = document.getElementById('frm_dropdown_'+id);
@@ -1459,6 +1416,7 @@ function frmAdminBuildJS(){
 	    }
 	}
 
+	/* TODO: Is this still used? */
 	function checkUniqueOpt(id,text){
 		if(id.indexOf('field_key_') === 0){
 			var a=id.split('-');
@@ -1469,18 +1427,6 @@ function frmAdminBuildJS(){
 					alert('Saved values cannot be identical.');
 				}
 			});
-		}
-	}
-
-	function maybeSetSavedVal(id, fieldId, text, input){
-		var isDisplayVal = id.indexOf('field_key_') !== 0;
-		if ( isDisplayVal ){
-			var separateVals = document.getElementById('separate_value_'+fieldId).checked;
-			if ( !separateVals ){
-				var cont = input.next('.frm_option_key');
-				cont.find('label').html(text);
-				cont.find('input').val(text);
-			}
 		}
 	}
 
@@ -1584,7 +1530,7 @@ function frmAdminBuildJS(){
 		/*jshint validthis:true */
 		var form_id = this.value;
 		if(form_id){
-			var field_id = jQuery(this).closest('li.form-field').data('fid');
+			var field_id = jQuery(this).closest('.frm-single-settings').data('fid');
             getTaxOrFieldSelection(form_id, field_id);
 		}
 	}
@@ -1599,21 +1545,13 @@ function frmAdminBuildJS(){
 		}
     }
 
-	function serializeSort() {
+	function updateFieldOrder() {
 		var array = [];
 		jQuery('#new_fields').each(function(i){
 			jQuery('li.frm_field_box', this).each(function(e) {
-				array.push('frm_field_id['+ e +']='+ this.getAttribute('data-fid'));
+				var fieldId = this.getAttribute( 'data-fid' );
+				jQuery( 'input[name="field_options[field_order_' + fieldId + ']"]' ).val( e );
 			});
-		});
-		return array.join('&');
-	}
-
-	function updateFieldOrder(){
-		var order = serializeSort();
-		jQuery.ajax({
-			type:"POST",url:ajaxurl,
-			data:'action=frm_update_field_order&nonce='+frmGlobal.nonce+'&'+order
 		});
 	}
 	
@@ -1654,6 +1592,14 @@ function frmAdminBuildJS(){
 		return false;
 	}
 
+	/**
+	 * When field settings change in the sidebar, change them in the hidden fields
+	 * and in the json on the page.
+	 */
+	function changeFieldSetting() {
+		/*jshint validthis:true */
+	}
+
 	function submitBuild(){
 		/*jshint validthis:true */
 		var $thisEle = jQuery(this);
@@ -1661,7 +1607,7 @@ function frmAdminBuildJS(){
 
 		preFormSave(this);
 
-		var $form = jQuery(document.getElementById('frm_build_form'));
+		var $form = jQuery( builderForm );
 		var v = JSON.stringify($form.serializeArray());
 
 		jQuery(document.getElementById('frm_compact_fields')).val(v);
@@ -1689,7 +1635,7 @@ function frmAdminBuildJS(){
 		/*jshint validthis:true */
 		preFormSave(this);
 
-		var form = jQuery(document.getElementById('frm_build_form'));
+		var form = jQuery( builderForm );
 		jQuery(document.getElementById('frm_compact_fields')).val(JSON.stringify(form.serializeArray()));
 		jQuery(document.getElementById('frm_js_build_form')).submit();
 	}
@@ -1904,9 +1850,7 @@ function frmAdminBuildJS(){
 	}
 
 	function clickAction(obj){
-		var shouldScroll, selected, preTop, curOffset,
-			selectedOffset = 0,
-			selectedHeight = 0,
+		var selected,
 			$thisobj = jQuery(obj);
 
 		if(obj.className.indexOf('selected') !== -1){
@@ -1918,16 +1862,6 @@ function frmAdminBuildJS(){
 
 		selected = jQuery('li.ui-state-default.selected');
 
-		// get offsets before anything changes
-		preTop = document.documentElement.scrollTop || document.body.scrollTop;
-		curOffset = $thisobj.offset().top;
-
-		if ( selected.length )	{
-			shouldScroll = isElementInViewport(selected);
-			selectedOffset = selected.offset().top;
-			selectedHeight = selected.height();
-		}
-
 		if(obj.className.indexOf('edit_field_type_divider') !== -1){
 			$thisobj.find('.frm_default_val_icons').hide().css('visibility', 'hidden');
 		}else{
@@ -1936,33 +1870,30 @@ function frmAdminBuildJS(){
 
 		selected.removeClass('selected');
 		$thisobj.addClass('selected');
-		var newOffset = $thisobj.offset().top;
 
-		if ( selected.length && shouldScroll && curOffset > newOffset ) {
-			var curTop = document.documentElement.scrollTop || document.body.scrollTop; // body for Safari;
-			document.documentElement.scrollTop = document.body.scrollTop = curTop - ( curOffset - newOffset );
-		}
+		showFieldOptions( obj );
 	}
 
-	function isElementInViewport(el) {
-		var t, height;
+	/**
+	 * When a field is selected, show the field settings in the sidebar.
+	 */
+	function showFieldOptions( obj ) {
+		var i, singleField,
+			fieldId = obj.dataset.fid,
+			allFieldSettings = document.getElementsByClassName( 'frm-single-settings' );
 
-		if ( el instanceof jQuery ) {
-			el = el[0];
+		for ( i = 0; i < allFieldSettings.length; i ++ ) {
+			allFieldSettings[i].style.display = 'none';
 		}
 
-		t = el.offsetTop;
-		height = el.offsetHeight;
-
-		while ( el.offsetParent ) {
-			el = el.offsetParent;
-			t += el.offsetTop;
+		singleField = document.getElementById( 'frm-single-settings-' + fieldId );
+		if ( singleField.parentElement.classList.contains( 'frm_field_box' ) ) {
+			// Move the settings to the sidebar the first time they are used.
+			builderForm.appendChild( singleField );
 		}
 
-		return (
-			t < ( window.pageYOffset + window.innerHeight ) &&
-			( t + height ) > window.pageYOffset
-		);
+		singleField.style.display = 'block';
+		document.getElementById( 'frm-options-panel-tab' ).click();
 	}
 
 	function showEmailRow(){
@@ -2549,7 +2480,6 @@ function frmAdminBuildJS(){
 		var b=[
 			'before_content','after_content','frm_not_email_to',
 			'after_html','before_html','submit_html','field_custom_html',
-			'dyn_default_value', 'frm_classes'
 		];
 
 		if(jQuery.inArray(id, a) >= 0){
@@ -2564,16 +2494,16 @@ function frmAdminBuildJS(){
 
 		//Automatically select a tab
 		if ( id === 'dyn_default_value' ) {
-			clickedID = 'frm_dynamic_values';
+			//clickedID = 'frm_dynamic_values';
 		} else if ( id === 'frm_classes' ) {
-			clickedID = 'frm_layout_classes';
+			//clickedID = 'frm_layout_classes';
 		} else if ( jQuery('.frm_form_builder').length ) {
 			if ( f === 'focusin' || jQuery( document.getElementById( 'frm-dynamic-values' ) ).is(':visible') || jQuery( document.getElementById( 'frm-layout-classes' ) ).is( ':visible' ) ) {
 				clickedID = 'frm_insert_fields';
 			}
 		}
 		if ( typeof clickedID !== 'undefined' ) {
-			jQuery( document.getElementById( clickedID + '_tab' ) ).click();
+			//jQuery( document.getElementById( clickedID + '_tab' ) ).click();
 			jQuery( '#' + clickedID.replace( /_/g, '-' ) + ' .frm_show_inactive' ).addClass( 'frm_hidden' );
 			jQuery( '#' + clickedID.replace( /_/g, '-' ) + ' .frm_show_active' ).removeClass( 'frm_hidden' );
 		}
@@ -3425,6 +3355,7 @@ function frmAdminBuildJS(){
 			}
 
 			// tabs
+			jQuery('#frm-nav-tabs a').click( clickNewTab );
 			jQuery('.frm-category-tabs a').click(function(){
 				clickTab(this);
 				return false;
@@ -3473,12 +3404,8 @@ function frmAdminBuildJS(){
 				cancel:'.frm-dropdown-menu'
 			});
 			jQuery('ul.field_type_list, .field_type_list li, ul.frm_code_list, .frm_code_list li, .frm_code_list li a, #frm_adv_info #category-tabs li, #frm_adv_info #category-tabs li a').disableSelection();
-			
-			var $form_name = jQuery('input[name="name"]');
-			if($form_name.val() === ''){
-				$form_name.focus();
-			}
 
+			jQuery('.frm-options-panel').on( 'change', 'form', changeFieldSetting );
 			jQuery('.frm_submit_ajax').click(submitBuild);
 			jQuery('.frm_submit_no_ajax').click(submitNoAjax);
 			
@@ -3499,56 +3426,53 @@ function frmAdminBuildJS(){
 			initiateMultiselect();
 			preventBodyScroll();
 
-			$newFields.on('keypress', '.frm_ipe_field_label, .frm_ipe_field_option, .frm_ipe_field_option_key', blurField);
-			$newFields.on('mouseenter', '.frm_ipe_field_option, .frm_ipe_field_option_key', setIPEOpts);
-			$newFields.on('mouseenter', '.frm_ipe_field_label', setIPELabel);
-			$newFields.on('mouseenter', '.frm_ipe_field_desc, .frm_ipe_field_conf_desc', setIPEDesc);
-			$newFields.on('click', '.frm_add_logic_row', addFieldLogicRow);
-            $newFields.on('click', '.frm_remove_tag', removeThisTag);
-			$newFields.on('click', '.frm_add_watch_lookup_row', addWatchLookupRow);
-			$newFields.on('change', '.autopopulate_value', hideOrShowAutopopulateValue);
-			$newFields.on('change', '.frm_get_values_form', updateGetValueFieldSelection);
-			$newFields.on('change', '.frm_logic_field_opts', getFieldValues );
-			$newFields.on('change', '.scale_maxnum, .scale_minnum', setScaleValues);
-			$newFields.on('change', '.radio_maxnum', setStarValues);
+			var $builderForm = jQuery( builderForm );
+			$builderForm.on( 'click', '.frm_add_logic_row', addFieldLogicRow );
+			$builderForm.on( 'click', '.frm_remove_tag', removeThisTag );
+			$builderForm.on( 'click', '.frm_add_watch_lookup_row', addWatchLookupRow );
+			$builderForm.on( 'change', '.autopopulate_value', hideOrShowAutopopulateValue );
+			$builderForm.on( 'change', '.frm_get_values_form', updateGetValueFieldSelection );
+			$builderForm.on( 'change', '.frm_logic_field_opts', getFieldValues );
+			$builderForm.on( 'change', '.scale_maxnum, .scale_minnum', setScaleValues );
+			$builderForm.on( 'change', '.radio_maxnum', setStarValues );
 
 			jQuery(document.getElementById('frm-insert-fields')).on('click', '.frm_add_field', addFieldClick);
 			$newFields.on('click', '.frm_duplicate_icon', duplicateField);
-			$newFields.on('click', '.use_calc', popCalcFields);
-			$newFields.on('change', 'input[id^="frm_calc"]', checkCalculationCreatedByUser);
-			$newFields.on('change', 'input.frm_format_opt', toggleInvalidMsg);
-			$newFields.on('click', 'input.frm_req_field', markRequired);
-			$newFields.on('click', 'a.frm_req_field', clickRequired);
-			$newFields.on('click', '.frm_mark_unique', markUnique);
-			$newFields.on('click', '.frm_reload_icon', { iconType: 'clear_on_focus' }, toggleDefaultValueIcon);
-			$newFields.on('click', '.frm_error_icon', { iconType: 'default_blank' }, toggleDefaultValueIcon);
+			$builderForm.on( 'click', '.use_calc', popCalcFields );
+			$builderForm.on( 'change', 'input[id^="frm_calc"]', checkCalculationCreatedByUser );
+			$builderForm.on( 'change', 'input.frm_format_opt', toggleInvalidMsg );
+			$builderForm.on( 'click', 'input.frm_req_field', markRequired );
+			$builderForm.on( 'click', 'a.frm_req_field', clickRequired );
+			$builderForm.on( 'click', '.frm_mark_unique', markUnique );
+			$builderForm.on( 'click', '.frm_reload_icon', { iconType: 'clear_on_focus' }, toggleDefaultValueIcon );
+			$builderForm.on( 'click', '.frm_error_icon', { iconType: 'default_blank' }, toggleDefaultValueIcon );
 
-			$newFields.on('click', '.frm_repeat_field', toggleRepeat);
-			$newFields.on('change', '.frm_repeat_format', toggleRepeatButtons);
-			$newFields.on('change', '.frm_repeat_limit', checkRepeatLimit);
-			$newFields.on('input', 'input[name^="field_options[add_label_"]', function(){
+			$builderForm.on( 'click', '.frm_repeat_field', toggleRepeat );
+			$builderForm.on( 'change', '.frm_repeat_format', toggleRepeatButtons );
+			$builderForm.on( 'change', '.frm_repeat_limit', checkRepeatLimit );
+			$builderForm.on( 'input', 'input[name^="field_options[add_label_"]', function(){
 				updateRepeatText(this, 'add');
 			});
-			$newFields.on('input', 'input[name^="field_options[remove_label_"]', function(){
+			$builderForm.on( 'input', 'input[name^="field_options[remove_label_"]', function(){
 				updateRepeatText(this, 'remove');
 			});
-			$newFields.on('change', 'select[name^="field_options[data_type_"]', maybeClearWatchFields );
+			$builderForm.on( 'change', 'select[name^="field_options[data_type_"]', maybeClearWatchFields );
 
-			$newFields.on('click', '.frm_toggle_sep_values', toggleSepValues);
-			$newFields.on('click', '.frm_multiselect_opt', toggleMultiselect);
+			$builderForm.on( 'click', '.frm_toggle_sep_values', toggleSepValues );
+			$builderForm.on( 'click', '.frm_multiselect_opt', toggleMultiselect );
 			$newFields.on('click', '.frm_delete_field', clickDeleteField);
-			$newFields.on('click', '.frm_single_option .frm_delete_icon', deleteFieldOption);
-            $newFields.on('click', '.frm_add_opt', addFieldOption);
-			$newFields.on('change', '.frm_toggle_mult_sel', toggleMultSel);
+			$builderForm.on( 'click', '.frm_single_option .frm_delete_icon', deleteFieldOption );
+			$builderForm.on( 'click', '.frm_add_opt', addFieldOption );
+			$builderForm.on( 'change', '.frm_toggle_mult_sel', toggleMultSel );
 
 			jQuery(document.getElementById('frm_form_editor_container')).on('click', '#new_fields > li.ui-state-default', clickVis);
 			$newFields.on('click', '.start_divider li.ui-state-default', clickSectionVis);
-			$newFields.on('change', '.frm_tax_form_select', toggleFormTax);
+			$builderForm.on( 'change', '.frm_tax_form_select', toggleFormTax );
 			jQuery('.frm_form_builder').on('keyup', 'input[name^="item_meta"], textarea[name^="item_meta"]', triggerDefaults);
 			jQuery('.frm_form_builder').on('change', 'select[name^="item_meta"]', triggerDefaults);
-			$newFields.on('change', 'select.conf_field', addConf);
+			$builderForm.on( 'change', 'select.conf_field', addConf );
 
-			$newFields.on('change', '.frm_get_field_selection', getFieldSelection);
+			$builderForm.on( 'change', '.frm_get_field_selection', getFieldSelection );
 
 			initUpgradeModal();
 		},

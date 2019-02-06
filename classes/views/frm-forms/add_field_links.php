@@ -1,25 +1,19 @@
-<div id="postbox-container-1" class="postbox-container frm-right-panel">
+<div class="postbox-container frm-right-panel">
 <div id="frm_position_ele"></div>
 <div id="frm-fixed" class="frm-mobile-fixed">
-<?php
-$action = isset( $_REQUEST['frm_action'] ) ? 'frm_action' : 'action';
-$action = FrmAppHelper::get_param( $action, '', 'get', 'sanitize_title' );
-$button = ( 'new' === $action || 'duplicate' === $action ) ? __( 'Create', 'formidable' ) : __( 'Update', 'formidable' );
-
-include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/_publish_box.php' );
-?>
 
 	<div id="frm_set_height_ele"></div>
 	<div id="frm-fixed-panel">
-	<div class="frm-ltr frm_field_list">
-	<div id="taxonomy-linkcategory" class="categorydiv">
-		<ul id="category-tabs" class="category-tabs frm-category-tabs">
-			<li class="tabs">
-				<a href="#frm-insert-fields" id="frm_insert_fields_tab"><?php esc_html_e( 'Fields', 'formidable' ); ?></a>
+	<div class="frm_field_list">
+		<ul id="frm-nav-tabs">
+			<li class="frm-tabs">
+				<a href="#frm-insert-fields" id="frm_insert_fields_tab">
+					<?php esc_html_e( 'Add Fields', 'formidable' ); ?>
+				</a>
 			</li>
 			<li class="hide-if-no-js">
-				<a href="#frm-layout-classes" id="frm_layout_classes_tab" class="frm_help" title="<?php esc_attr_e( 'Open the Field Settings and click on the CSS Layout Classes option to enable this tab', 'formidable' ) ?>">
-					<?php esc_html_e( 'Layout', 'formidable' ); ?>
+				<a href="#frm-options-panel" id="frm-options-panel-tab">
+					<?php esc_html_e( 'Field Options', 'formidable' ); ?>
 				</a>
 			</li>
 			<?php do_action( 'frm_extra_form_instruction_tabs' ); ?>
@@ -27,23 +21,26 @@ include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/_publish_box.ph
 
 		<div id="frm-insert-fields" class="tabs-panel">
 			<ul class="field_type_list">
-<?php
-foreach ( $frm_field_selection as $field_key => $field_type ) {
-	$field_label = FrmFormsHelper::get_field_link_name( $field_type );
-	?>
-				<li class="frmbutton button <?php echo esc_attr( ' frm_t' . $field_key ) ?>" id="<?php echo esc_attr( $field_key ) ?>">
-					<a href="#" class="frm_add_field frm_animate_bg" title="<?php echo esc_html( $field_label ) ?>">
-						<i class="<?php echo esc_attr( FrmFormsHelper::get_field_link_icon( $field_type ) ) ?> frm_animate_bg"></i>
-						<span><?php echo esc_html( $field_label ) ?></span>
-					</a>
-				</li>
-<?php
-	unset( $field_key, $field_type );
-}
-?>
+				<?php
+				foreach ( $frm_field_selection as $field_key => $field_type ) {
+					$field_label = FrmFormsHelper::get_field_link_name( $field_type );
+					?>
+					<li class="frmbutton <?php echo esc_attr( ' frm_t' . $field_key ) ?>" id="<?php echo esc_attr( $field_key ) ?>">
+						<a href="#" class="frm_add_field frm_animate_bg" title="<?php echo esc_html( $field_label ) ?>">
+							<i class="<?php echo esc_attr( FrmFormsHelper::get_field_link_icon( $field_type ) ) ?> frm_animate_bg"></i>
+							<span><?php echo esc_html( $field_label ) ?></span>
+						</a>
+					</li>
+					<?php
+					unset( $field_key, $field_type );
+				}
+				?>
 			</ul>
 			<div class="clear"></div>
 			<?php FrmTipsHelper::pro_tip( 'get_builder_tip' ); ?>
+			<h3 class="frm-advanced-fields">
+				<?php esc_html_e( 'Advanced Fields', 'formidable' ); ?>
+			</h3>
 			<ul class="field_type_list">
 <?php
 
@@ -62,7 +59,7 @@ foreach ( FrmField::pro_field_selection() as $field_key => $field_type ) {
 		$field_label = $field_type['name'];
 
 ?>
-				<li class="frmbutton button <?php echo esc_attr( $no_allow_class . ' frm_t' . $field_key ) ?> dropdown" id="<?php echo esc_attr( $field_key ) ?>">
+				<li class="frmbutton <?php echo esc_attr( $no_allow_class . ' frm_t' . $field_key ) ?> dropdown" id="<?php echo esc_attr( $field_key ) ?>">
 	                <a href="#" id="frm-<?php echo esc_attr( $field_key ) ?>Drop" class="frm-dropdown-toggle" data-toggle="dropdown" title="<?php echo esc_html( $field_label ) ?>">
 						<i class="<?php echo esc_attr( FrmFormsHelper::get_field_link_icon( $field_type ) ) ?> frm_animate_bg"></i>
 						<span><?php echo esc_html( $field_label ) ?> <b class="caret"></b></span>
@@ -86,7 +83,7 @@ foreach ( FrmField::pro_field_selection() as $field_key => $field_type ) {
 					$field_label .= ' <span>' . $field_name . '</span>';
 					$upgrade_label = sprintf( esc_html__( '%s fields', 'formidable' ), $field_name );
                     ?>
-					<li class="frmbutton button <?php echo esc_attr( $no_allow_class . ' frm_t' . str_replace( '|', '-', $field_key ) ) ?>" id="<?php echo esc_attr( $field_key ) ?>" data-upgrade="<?php echo esc_attr( $upgrade_label ); ?>" data-medium="builder-<?php echo esc_attr( sanitize_title( $upgrade_label ) ); ?>">
+					<li class="frmbutton <?php echo esc_attr( $no_allow_class . ' frm_t' . str_replace( '|', '-', $field_key ) ) ?>" id="<?php echo esc_attr( $field_key ) ?>" data-upgrade="<?php echo esc_attr( $upgrade_label ); ?>" data-medium="builder-<?php echo esc_attr( sanitize_title( $upgrade_label ) ); ?>">
 						<?php echo FrmAppHelper::kses( apply_filters( 'frmpro_field_links', $field_label, $id, $field_key ), array( 'a', 'i', 'span' ) ); // WPCS: XSS ok. ?>
 					</li>
 				<?php
@@ -100,7 +97,18 @@ foreach ( FrmField::pro_field_selection() as $field_key => $field_type ) {
 		</div>
 		<?php do_action( 'frm_extra_form_instructions' ); ?>
 
-		<div id="frm-layout-classes" class="tabs-panel">
+		<div id="frm-options-panel" class="tabs-panel frm_hidden">
+			<div class="frm-single-settings">
+				<?php esc_html_e( 'Select a field to see the options', 'formidable' ); ?>
+			</div>
+			<form method="post" id="frm_build_form">
+				<input type="hidden" name="frm_action" value="update" />
+				<input type="hidden" name="action" value="update" />
+				<input type="hidden" name="id" id="form_id" value="<?php echo esc_attr( $values['id'] ); ?>" />
+				<?php wp_nonce_field( 'frm_save_form_nonce', 'frm_save_form' ); ?>
+			</form>
+		</div>
+		<div id="frm-layout-classes" class="tabs-panel frm_hidden">
 			<ul>
 				<li class="frm_show_inactive">
 					<?php esc_html_e( 'Click inside the "CSS layout classes" field option in any field to enable the options below.', 'formidable' ); ?>
@@ -147,11 +155,10 @@ foreach ( FrmField::pro_field_selection() as $field_key => $field_type ) {
 			</ul>
 		</div>
 	</div>
-	</div>
 
 	<form method="post" id="frm_js_build_form">
 		<input type="hidden" id="frm_compact_fields" name="frm_compact_fields" value="" />
-		<button class="frm_submit_form frm_submit_<?php echo esc_attr( ( isset( $values['ajax_load'] ) && $values['ajax_load'] ) ? '' : 'no_' ); ?>ajax frm_hidden frm_button_submit" type="button" id="frm_submit_side"><?php echo esc_html( $button ); ?></button>
+		<button class="frm_submit_form frm_submit_<?php echo esc_attr( ( isset( $values['ajax_load'] ) && $values['ajax_load'] ) ? '' : 'no_' ); ?>ajax frm_hidden frm_button_submit" type="button" id="frm_submit_side"><?php esc_html_e( 'Update', 'formidable' ); ?></button>
 	</form>
 
 	</div>

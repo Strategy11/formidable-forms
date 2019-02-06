@@ -1,3 +1,11 @@
+<?php
+FrmAppHelper::show_logo(
+	array(
+		'height' => 35,
+		'width'  => 35,
+	)
+);
+?>
 <ul class="frm_form_nav">
 <?php
 
@@ -8,8 +16,6 @@ foreach ( $nav_items as $nav_item ) {
 		<?php
 	}
 }
-
-FrmFormsHelper::form_switcher();
 ?>
 </ul>
 

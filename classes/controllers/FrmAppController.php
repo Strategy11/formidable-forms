@@ -37,6 +37,9 @@ class FrmAppController {
 		if ( self::is_white_page() ) {
 			$classes .= ' frm-white-body ';
 		}
+		if ( self::is_full_screen() ) {
+			$classes .= ' frm-full-screen';
+		}
 		return $classes;
 	}
 
@@ -51,6 +54,16 @@ class FrmAppController {
 		}
 
 		return $is_white_page;
+	}
+
+	/**
+	 * Hide the WordPress menus on some pages.
+	 *
+	 * @since 4.0
+	 */
+	private static function is_full_screen() {
+		$action = FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
+		return FrmAppHelper::is_admin_page( 'formidable' ) && $action === 'edit';
 	}
 
     public static function load_wp_admin_style() {
@@ -377,8 +390,6 @@ class FrmAppController {
 					wp_enqueue_style( 'formidable-grids' );
 				}
 			}
-
-            wp_register_script( 'formidable-editinplace', FrmAppHelper::plugin_url() . '/js/jquery/jquery.editinplace.packed.js', array( 'jquery' ), '2.3.0' );
 
 			do_action( 'frm_enqueue_builder_scripts' );
         } else if ( $pagenow == 'post.php' || ( $pagenow == 'post-new.php' && $post_type == 'frm_display' ) ) {

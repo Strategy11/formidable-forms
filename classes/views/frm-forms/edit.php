@@ -1,23 +1,35 @@
 <div id="frm_builder_page" class="frm_wrap">
-    <div id="poststuff" class="frm_page_container">
-
-    <div id="post-body" class="metabox-holder columns-2">
-    <div id="post-body-content">
+    <div class="frm_page_container">
 
 	<?php
 	FrmAppHelper::get_admin_header(
 		array(
-			'label'       => ( $form->is_template ? __( 'Templates', 'formidable' ) : __( 'Build Form', 'formidable' ) ),
-			'is_template' => $values['is_template'],
+			'label'       => __( 'Build Form', 'formidable' ),
 			'form'        => $form,
-			'new_link'    => '?page=formidable&frm_action=new',
 			'hide_title'  => true,
 		)
 	);
+	?>
 
-	// Add form messages
+	<div id="frm-bar-two">
+		<?php
+		FrmFormsHelper::form_switcher( $form->name );
+
+		$action = isset( $_REQUEST['frm_action'] ) ? 'frm_action' : 'action';
+		$action = FrmAppHelper::get_param( $action, '', 'get', 'sanitize_title' );
+
+		include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/_publish_box.php' );
+		?>
+	</div>
+
+	<?php
+	// Add form messages.
 	require( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' );
 	?>
+
+    <div class="columns-2">
+	<?php require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add_field_links.php' ); ?>
+    <div id="post-body-content">
 
     <div class="frm_form_builder with_frm_style">
 
@@ -26,19 +38,13 @@
             <span class="frm-loading-img"></span>
         </p>
 
-    <form method="post" id="frm_build_form">
-        <input type="hidden" name="frm_action" value="update" />
-        <input type="hidden" name="action" value="update" />
-        <input type="hidden" name="id" id="form_id" value="<?php echo (int) $id; ?>" />
-
+    <form method="post">
 		<?php require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/form.php' ); ?>
-
     </form>
-	<?php FrmFormsHelper::builder_submit_button( $values ); ?>
 
     </div>
     </div>
-	<?php require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add_field_links.php' ); ?>
+
     </div>
     </div>
 </div>

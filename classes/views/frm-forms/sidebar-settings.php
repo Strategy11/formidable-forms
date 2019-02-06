@@ -10,9 +10,7 @@
 
 	<div id="frm_set_height_ele"></div>
 	<div id="frm-fixed-panel">
-		<div class="frm-ltr">
 			<?php include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/mb_insert_fields.php' ); ?>
-		</div>
 	</div>
 	</div>
 </div>

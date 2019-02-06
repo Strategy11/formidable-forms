@@ -23,7 +23,7 @@ class FrmField {
 				'icon'  => 'frm_icon_font frm_check-square_icon',
 			),
 			'radio'     => array(
-				'name'  => __( 'Radio Button', 'formidable' ),
+				'name'  => __( 'Radio Buttons', 'formidable' ),
 				'icon'  => 'frm_icon_font frm_radio-checked_icon',
 			),
 			'select'    => array(

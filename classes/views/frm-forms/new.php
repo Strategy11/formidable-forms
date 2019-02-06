@@ -7,10 +7,8 @@
 	<?php
 	FrmAppHelper::get_admin_header(
 		array(
-			'label'       => ( $form->is_template ? __( 'Templates', 'formidable' ) : __( 'Build Form', 'formidable' ) ),
-			'is_template' => $values['is_template'],
+			'label'       => __( 'Build Form', 'formidable' ),
 			'form'        => $form,
-			'new_link'    => '?page=formidable&frm_action=new',
 			'hide_title'  => true,
 		)
 	);
@@ -29,7 +27,6 @@
 			<?php require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/form.php' ); ?>
 
         </form>
-		<?php FrmFormsHelper::builder_submit_button( $values ); ?>
         </div>
     </div>
 	<?php require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add_field_links.php' ); ?>

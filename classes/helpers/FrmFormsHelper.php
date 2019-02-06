@@ -72,7 +72,7 @@ class FrmFormsHelper {
 		}
 	}
 
-    public static function form_switcher() {
+	public static function form_switcher( $selected = false ) {
 		$where = apply_filters( 'frm_forms_dropdown', array(), '' );
 		$forms = FrmForm::get_published_forms( $where );
 
@@ -97,9 +97,17 @@ class FrmFormsHelper {
 			$base = admin_url( 'edit.php?post_type=frm_display' );
         }
 
+		$name = ( $selected === false ) ? __( 'Switch Form', 'formidable' ) : $selected;
+		$name = '' === $name ? __( '(no title)', 'formidable' ) : strip_tags( $name );
+
         ?>
-		<li id="frm_bs_dropdown" class="dropdown <?php echo esc_attr( is_rtl() ? 'pull-right' : 'pull-left' ) ?>">
-			<a href="#" id="frm-navbarDrop" class="frm-dropdown-toggle" data-toggle="dropdown"><?php esc_html_e( 'Switch Form', 'formidable' ) ?> <b class="caret"></b></a>
+		<div id="frm_bs_dropdown" class="dropdown <?php echo esc_attr( is_rtl() ? 'pull-right' : 'pull-left' ) ?>">
+			<h1>
+				<a href="#" id="frm-navbarDrop" class="frm-dropdown-toggle" data-toggle="dropdown">
+					<?php echo esc_html( $name ); ?>
+					<b class="dashicons dashicons-arrow-down-alt2"></b>
+				</a>
+			</h1>
 		    <ul class="frm-dropdown-menu frm-on-top" role="menu" aria-labelledby="frm-navbarDrop">
 			<?php
 			foreach ( $forms as $form ) {
@@ -116,27 +124,17 @@ class FrmFormsHelper {
 			}
 			?>
 			</ul>
-		</li>
+		</div>
         <?php
     }
 
 	/**
 	 * @since 3.05
+	 * @deprecated 4.0
 	 * @param array $values - The form array
 	 */
 	public static function builder_submit_button( $values ) {
-		$page_action = FrmAppHelper::get_param( 'frm_action' );
-		$label = ( $page_action == 'edit' || $page_action == 'update' ) ? __( 'Update', 'formidable' ) : __( 'Create', 'formidable' );
-
-		?>
-		<div class="postbox">
-			<p class="inside">
-				<button class="frm_submit_<?php echo esc_attr( ( isset( $values['ajax_load'] ) && $values['ajax_load'] ) ? '' : 'no_' ); ?>ajax button-primary frm_button_submit" type="button">
-					<?php echo esc_html( $label ); ?>
-				</button>
-			</p>
-		</div>
-		<?php
+		FrmDeprecated::builder_submit_button( $values );
 	}
 
 	public static function get_sortable_classes( $col, $sort_col, $sort_dir ) {

@@ -156,7 +156,6 @@ class FrmHooksController {
         add_action( 'wp_ajax_frm_add_field_option', 'FrmFieldsController::add_option' );
         add_action( 'wp_ajax_frm_import_choices', 'FrmFieldsController::import_choices' );
         add_action( 'wp_ajax_frm_import_options', 'FrmFieldsController::import_options' );
-        add_action( 'wp_ajax_frm_update_field_order', 'FrmFieldsController::update_order' );
 
         // Form Actions Controller
         add_action( 'wp_ajax_frm_add_form_action', 'FrmFormActionsController::add_form_action' );

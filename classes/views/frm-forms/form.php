@@ -1,13 +1,4 @@
-<?php wp_nonce_field( 'frm_save_form_nonce', 'frm_save_form' ); ?>
-<input type="hidden" name="status" value="<?php echo esc_attr( $values['status'] ); ?>" />
-<input type="hidden" name="new_status" value="" />
-
 <div id="frm_form_editor_container">
-
-<div class="postbox">
-	<div id="titlediv" class="inside">
-		<input type="text" name="name" value="<?php echo esc_attr( $form->name ); ?>" id="title" placeholder="<?php esc_attr_e( 'Enter title here', 'formidable' ); ?>" />
-	</div>
 
 	<div class="frm_no_fields <?php echo ( isset( $values['fields'] ) && ! empty( $values['fields'] ) ) ? 'frm_hidden' : ''; ?>">
 	    <div class="alignleft sketch1">
@@ -32,19 +23,17 @@
 	    </div>
     	<div class="clear"></div>
     </div>
-<ul id="new_fields" class="frm_sorting inside">
-<?php
-if ( isset( $values['fields'] ) && ! empty( $values['fields'] ) ) {
-	$values['count'] = 0;
-	foreach ( $values['fields'] as $field ) {
-		$values['count']++;
-		FrmFieldsController::load_single_field( $field, $values );
-		unset( $field );
-	}
-}
-?>
-</ul>
-
-</div>
+	<ul id="new_fields" class="frm_sorting inside">
+		<?php
+		if ( isset( $values['fields'] ) && ! empty( $values['fields'] ) ) {
+			$values['count'] = 0;
+			foreach ( $values['fields'] as $field ) {
+				$values['count']++;
+				FrmFieldsController::load_single_field( $field, $values );
+				unset( $field );
+			}
+		}
+		?>
+	</ul>
 
 </div>

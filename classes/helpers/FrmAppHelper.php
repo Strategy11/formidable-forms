@@ -130,6 +130,13 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * @since 4.0
+	 */
+	public static function show_logo( $atts = array() ) {
+		echo self::kses( self::svg_logo( $atts ), 'all' );
+	}
+
+	/**
 	 * @since 2.02.04
 	 */
 	public static function ips_saved() {
