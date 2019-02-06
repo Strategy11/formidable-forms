@@ -23,7 +23,7 @@
 	    </div>
     	<div class="clear"></div>
     </div>
-	<ul id="new_fields" class="frm_sorting inside">
+	<ul id="new_fields" class="frm_sorting inside frm_grid_container">
 		<?php
 		if ( isset( $values['fields'] ) && ! empty( $values['fields'] ) ) {
 			$values['count'] = 0;

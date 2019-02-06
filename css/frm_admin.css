@@ -1414,12 +1414,13 @@ a.frm-option-icon:hover::before{
 }
 .frm_multi_fields_container,
 .frm_form_builder .frm_form_fields input[type=range],
-.frm_form_builder .frm_form_fields input[type="text"]{
+.frm_form_builder .frm_form_fields input[type=text]{
 	width:100%;
-	max-width:400px;
     height:auto;
 }
 
+#frm_build_form input[type=text],
+#frm_build_form input[type=number],
 .frm_form_fields .frm_form_field > textarea,
 .frm_form_fields .frm_form_field > input[type=email],
 .frm_form_fields .frm_form_field > input[type=url],

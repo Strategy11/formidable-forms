@@ -1598,6 +1598,29 @@ function frmAdminBuildJS(){
 	 */
 	function changeFieldSetting() {
 		/*jshint validthis:true */
+		var $setting = jQuery( this ),
+			fieldId = $setting.closest( '.frm-single-settings' ).data( 'fid' );
+
+		if ( this.classList.contains( 'frm_classes' ) ) {
+			changeFieldClass( fieldId, this );
+		}
+	}
+
+	/* Change the classes in the builder */
+	function changeFieldClass( fieldId, setting ) {
+		var classes, replace,
+			field = document.getElementById( 'frm_field_id_' + fieldId ),
+			replaceWith = setting.value;
+
+		classes = field.className.split( ' frmstart ' )[1].split( ' frmend ' )[0];
+		if ( classes.trim() === '' ) {
+			replace = ' frmstart  frmend ';
+			replaceWith = ' frmstart ' + replaceWith.trim() + ' frmend ';
+		} else {
+			replace = classes.trim();
+			replaceWith = replaceWith.trim();
+		}
+		field.className = field.className.replace( replace, replaceWith );
 	}
 
 	function submitBuild(){
@@ -3405,7 +3428,7 @@ function frmAdminBuildJS(){
 			});
 			jQuery('ul.field_type_list, .field_type_list li, ul.frm_code_list, .frm_code_list li, .frm_code_list li a, #frm_adv_info #category-tabs li, #frm_adv_info #category-tabs li a').disableSelection();
 
-			jQuery('.frm-options-panel').on( 'change', 'form', changeFieldSetting );
+			jQuery( builderForm ).on( 'change', 'input, select, textarea', changeFieldSetting );
 			jQuery('.frm_submit_ajax').click(submitBuild);
 			jQuery('.frm_submit_no_ajax').click(submitNoAjax);
 			

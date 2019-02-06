@@ -29,7 +29,7 @@
 					</div>
 				<?php } ?>
 			</div>
-	<?php echo FrmFormsHelper::delete_trash_link( $values['id'], $values['status'] ); ?>
+	<?php echo FrmFormsHelper::delete_trash_link( $values['id'], $values['status'] ); // WPCS: XSS ok. ?>
 
 	<div class="clear"></div>
 </div>

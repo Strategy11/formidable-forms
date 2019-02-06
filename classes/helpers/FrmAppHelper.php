@@ -133,7 +133,7 @@ class FrmAppHelper {
 	 * @since 4.0
 	 */
 	public static function show_logo( $atts = array() ) {
-		echo self::kses( self::svg_logo( $atts ), 'all' );
+		echo self::kses( self::svg_logo( $atts ), 'all' ); // WPCS: XSS ok.
 	}
 
 	/**

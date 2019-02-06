@@ -217,6 +217,7 @@ class FrmFieldsController {
 	 */
 	private static function get_classes_for_builder_field( $field, $display, $field_info ) {
 		$li_classes = $field_info->form_builder_classes( $display['type'] );
+		$li_classes .= ' frm_form_field frmstart ' . $field['classes'] . ' frmend';
 		if ( ! empty( $field ) ) {
 			$li_classes = apply_filters( 'frm_build_field_class', $li_classes, $field );
 		}
@@ -379,6 +380,7 @@ class FrmFieldsController {
 		unset( $atts );
 
 		$field_types     = FrmFieldsHelper::get_field_types( $field['type'] );
+		$pro_field_selection = FrmField::pro_field_selection();
 		$disabled_fields = FrmAppHelper::pro_is_installed() ? array() : $pro_field_selection;
 		$frm_settings    = FrmAppHelper::get_settings();
 

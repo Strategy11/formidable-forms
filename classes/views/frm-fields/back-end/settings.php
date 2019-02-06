@@ -8,13 +8,13 @@
 	<?php } ?>
 
 	<br/>
-	<div>
+	<div class="frm_grid_container">
 		<p>
 			<label for="frm_name_<?php echo esc_attr( $field['id'] ); ?>">
 				<?php esc_html_e( 'Field Label', 'formidable' ); ?>
 			</label>
 			<br/>
-			<input name="field_options[name_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['name'] ); ?>" id="frm_name_<?php echo esc_attr( $field['id'] ); ?>" class="frm_long_input" />
+			<input type="text" name="field_options[name_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['name'] ); ?>" id="frm_name_<?php echo esc_attr( $field['id'] ); ?>" />
 		</p>
 
 		<p>
@@ -113,82 +113,85 @@ if ( $display['clear_on_focus'] ) {
 
 	<?php do_action( 'frm_before_field_options', $field ); ?>
 
-            <table class="form-table frm_clear_none">
-				<tr>
-					<td class="frm_150_width">
-						<label><?php esc_html_e( 'Field Type', 'formidable' ) ?></label>
-					</td>
-                    <td>
-                <select <?php echo ( count( $field_types ) === 1 ? 'disabled="disabled"' : 'name="field_options[type_' . esc_attr( $field['id'] ) . ']"' ); ?>>
-                    <?php foreach ( $field_types as $fkey => $ftype ) { ?>
+	<h3><?php esc_html_e( 'Advanced', 'formidable' ); ?></h3>
+	<div class="frm_grid_container">
+		<?php if ( $display['label_position'] ) { ?>
+			<p>
+				<label><?php esc_html_e( 'Label Position', 'formidable' ); ?></label>
+				<br/>
+				<select name="field_options[label_<?php echo esc_attr( $field['id'] ) ?>]">
+					<option value=""<?php selected( $field['label'], '' ); ?>>
+						<?php esc_html_e( 'Default', 'formidable' ) ?>
+					</option>
+					<?php foreach ( FrmStylesHelper::get_single_label_positions() as $pos => $pos_label ) {
+						if ( ! $display['clear_on_focus'] && 'inside' === $pos ) {
+							// Don't allow inside labels for fields without placeholders.
+							continue;
+						}
+						?>
+						<option value="<?php echo esc_attr( $pos ) ?>"<?php selected( $field['label'], $pos ); ?>>
+							<?php echo esc_html( $pos_label ) ?>
+						</option>
+					<?php } ?>
+				</select>
+			</p>
+		<?php } ?>
+
+		<?php if ( $display['css'] ) { ?>
+			<p>
+				<label for="frm_classes_<?php echo esc_attr( $field['id'] ) ?>">
+					<?php esc_html_e( 'CSS layout classes', 'formidable' ); ?>
+				</label>
+				<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Add a CSS class to the field container. Use our predefined classes to align multiple fields in single row.', 'formidable' ) ?>" ></span>
+				<br/>
+				<input type="text" name="field_options[classes_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['classes'] ) ?>" id="frm_classes_<?php echo esc_attr( $field['id'] ) ?>" class="frm_classes" />
+			</p>
+		<?php } ?>
+
+		<?php
+		// Field Size
+		if ( $display['size'] ) {
+			if ( in_array( $field['type'], array( 'select', 'time', 'data' ) ) ) {
+				if ( ! isset( $values['custom_style'] ) || $values['custom_style'] ) {
+					include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/automatic-width.php' );
+				}
+			} else {
+				$display_max = $display['max'];
+				include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/pixels-wide.php' );
+			}
+		}
+		?>
+
+		<p>
+			<label for="field_options_field_key_<?php echo esc_attr( $field['id'] ); ?>">
+				<?php esc_html_e( 'Field Key', 'formidable' ); ?>
+			</label>
+			<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'The field key can be used as an alternative to the field ID in many cases.', 'formidable' ); ?>"></span>
+			<br/>
+			<input type="text" name="field_options[field_key_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['field_key'] ); ?>" id="field_options_field_key_<?php echo esc_attr( $field['id'] ); ?>"/>
+		</p>
+	</div>
+
+	<table class="form-table frm_clear_none">
+		<tr>
+			<td class="frm_150_width">
+				<label><?php esc_html_e( 'Field Type', 'formidable' ) ?></label>
+			</td>
+			<td>
+				<select <?php echo ( count( $field_types ) === 1 ? 'disabled="disabled"' : 'name="field_options[type_' . esc_attr( $field['id'] ) . ']"' ); ?>>
+					<?php foreach ( $field_types as $fkey => $ftype ) { ?>
 						<option value="<?php echo esc_attr( $fkey ) ?>" <?php echo ( $fkey === $field['type'] ) ? ' selected="selected"' : ''; ?> <?php echo array_key_exists( $fkey, $disabled_fields ) ? 'disabled="disabled"' : ''; ?>>
 							<?php echo esc_html( is_array( $ftype ) ? $ftype['name'] : $ftype ); ?> 
 						</option>
-                    <?php
+						<?php
 						unset( $fkey, $ftype );
 					}
 					?>
-                </select>
+				</select>
+			</td>
+		</tr>
 
-
-                    </td>
-                </tr>
-				<tr>
-					<td class="frm_150_width">
-						<div class="hide-if-no-js edit-slug-box frm_help" title="<?php esc_attr_e( 'The field key can be used as an alternative to the field ID in many cases.', 'formidable' ) ?>">
-                            <?php esc_html_e( 'Field Key', 'formidable' ); ?>
-						</div>
-					</td>
-					<td>
-						<input type="text" name="field_options[field_key_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['field_key'] ); ?>" />
-					</td>
-				</tr>
-
-                <?php if ( $display['css'] ) { ?>
-                <tr><td><label><?php esc_html_e( 'CSS layout classes', 'formidable' ) ?></label>
-					<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Add a CSS class to the field container. Use our predefined classes to align multiple fields in single row.', 'formidable' ) ?>" ></span>
-                    </td>
-                    <td><input type="text" name="field_options[classes_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['classes'] ) ?>" id="frm_classes_<?php echo esc_attr( $field['id'] ) ?>" class="frm_classes frm_long_input" />
-                    </td>
-                </tr>
-                <?php } ?>
-
-                <?php if ( $display['label_position'] ) { ?>
-					<tr>
-						<td class="frm_150_width"><label><?php esc_html_e( 'Label Position', 'formidable' ) ?></label></td>
-						<td>
-							<select name="field_options[label_<?php echo esc_attr( $field['id'] ) ?>]">
-								<option value=""<?php selected( $field['label'], '' ); ?>>
-									<?php esc_html_e( 'Default', 'formidable' ) ?>
-								</option>
-								<?php foreach ( FrmStylesHelper::get_single_label_positions() as $pos => $pos_label ) { ?>
-									<?php
-									if ( ! $display['clear_on_focus'] && 'inside' === $pos ) {
-										// don't allow inside labels for fields without placeholders
-										continue;
-									}
-									?>
-									<option value="<?php echo esc_attr( $pos ) ?>"<?php selected( $field['label'], $pos ); ?>>
-										<?php echo esc_html( $pos_label ) ?>
-									</option>
-								<?php } ?>
-							</select>
-						</td>
-					</tr>
 				<?php
-                }
-
-				// Field Size
-				if ( $display['size'] ) {
-					if ( in_array( $field['type'], array( 'select', 'time', 'data' ) ) ) {
-						if ( ! isset( $values['custom_style'] ) || $values['custom_style'] ) {
-							include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/automatic-width.php' );
-						}
-					} else {
-						$display_max = $display['max'];
-						include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/pixels-wide.php' );
-					}
-				}
 
 				if ( $display['show_image'] ) {
 				?>
@@ -254,59 +257,66 @@ if ( $display['clear_on_focus'] ) {
 
 				$field_obj->show_options( $field, $display, $values );
 				do_action( 'frm_field_options_form', $field, $display, $values );
+				?>
+			</table>
 
-				if ( $display['required'] || $display['invalid'] || $display['unique'] || $display['conf_field'] ) {
-                ?>
-					<tr class="frm_validation_msg <?php echo ( $display['invalid'] || $field['required'] || FrmField::is_option_true( $field, 'unique' ) || FrmField::is_option_true( $field, 'conf_field' ) ) ? '' : 'frm_hidden'; ?>">
-					<td colspan="2">
-                    <div class="menu-settings">
-                    <h3 class="frm_no_bg"><?php esc_html_e( 'Validation', 'formidable' ) ?></h3>
+	<?php if ( $display['required'] || $display['invalid'] || $display['unique'] || $display['conf_field'] ) { ?>
+		<div class="frm_validation_msg <?php echo ( $display['invalid'] || $field['required'] || FrmField::is_option_true( $field, 'unique' ) || FrmField::is_option_true( $field, 'conf_field' ) ) ? '' : 'frm_hidden'; ?>">
 
-                    <div class="frm_validation_box">
-						<?php
-						if ( $display['required'] ) {
-						?>
-                        <p class="frm_required_details<?php echo esc_attr( $field['id'] . ( $field['required'] ? '' : ' frm_hidden' ) ); ?>"><label><?php esc_html_e( 'Required', 'formidable' ) ?></label>
-                            <input type="text" name="field_options[blank_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['blank'] ); ?>" />
-                        </p>
-                        <?php
-                        }
+			<h3><?php esc_html_e( 'Validation Messages', 'formidable' ); ?></h3>
 
-						if ( $display['invalid'] ) {
-							$hidden = FrmField::is_field_type( $field, 'text' ) && ! FrmField::is_option_true( $field, 'format' );
-						?>
-						<p class="frm_invalid_msg<?php echo esc_attr( $field['id'] . ( $hidden ? ' frm_hidden' : '' ) ); ?>">
-							<label><?php esc_html_e( 'Invalid Format', 'formidable' ) ?></label>
-							<input type="text" name="field_options[invalid_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['invalid'] ); ?>" />
-						</p>
-                        <?php
-						}
+			<div class="frm_validation_box">
+				<?php if ( $display['required'] ) { ?>
+					<p class="frm_required_details<?php echo esc_attr( $field['id'] . ( $field['required'] ? '' : ' frm_hidden' ) ); ?>">
+						<label for="field_options_blank_<?php echo esc_attr( $field['id'] ); ?>">
+							<?php esc_html_e( 'Required', 'formidable' ); ?>
+						</label>
+						<br/>
+						<input type="text" name="field_options[blank_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['blank'] ); ?>" id="field_options_blank_<?php echo esc_attr( $field['id'] ); ?>"/>
+					</p>
+				<?php } ?>
 
-						if ( $display['unique'] ) {
-						?>
-                        <p class="frm_unique_details<?php echo esc_attr( $field['id'] . ( $field['unique'] ? '' : ' frm_hidden' ) ); ?>">
-                            <label><?php esc_html_e( 'Unique', 'formidable' ) ?></label>
-                            <input type="text" name="field_options[unique_msg_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['unique_msg'] ); ?>" />
-                        </p>
-                        <?php
-                        }
+				<?php
+				if ( $display['invalid'] ) {
+					$hidden = FrmField::is_field_type( $field, 'text' ) && ! FrmField::is_option_true( $field, 'format' );
+					?>
+					<p class="frm_invalid_msg<?php echo esc_attr( $field['id'] . ( $hidden ? ' frm_hidden' : '' ) ); ?>">
+						<label for="field_options_invalid_<?php echo esc_attr( $field['id'] ) ?>">
+							<?php esc_html_e( 'Invalid Format', 'formidable' ); ?>
+						</label>
+						<br/>
+						<input type="text" name="field_options[invalid_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['invalid'] ); ?>" id="field_options_invalid_<?php echo esc_attr( $field['id'] ) ?>"/>
+					</p>
+					<?php
+				}
 
-						if ( $display['conf_field'] ) {
-						?>
-                        <p class="frm_conf_details<?php echo esc_attr( $field['id'] . ( $field['conf_field'] ? '' : ' frm_hidden' ) ); ?>">
-                            <label><?php esc_html_e( 'Confirmation', 'formidable' ) ?></label>
-                            <input type="text" name="field_options[conf_msg_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['conf_msg'] ); ?>" />
-                        </p>
-						<?php
-						}
-						?>
-                    </div>
-                    </div>
-                    </td>
-                    </tr>
-                <?php } ?>
+				if ( $display['unique'] ) {
+					?>
+					<p class="frm_unique_details<?php echo esc_attr( $field['id'] . ( $field['unique'] ? '' : ' frm_hidden' ) ); ?>">
+						<label for="field_options_unique_msg_<?php echo esc_attr( $field['id'] ); ?>">
+							<?php esc_html_e( 'Unique', 'formidable' ); ?>
+						</label>
+						<br/>
+						<input type="text" name="field_options[unique_msg_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['unique_msg'] ); ?>" id="field_options_unique_msg_<?php echo esc_attr( $field['id'] ); ?>" />
+					</p>
+					<?php
+				}
 
-            </table>
+				if ( $display['conf_field'] ) {
+					?>
+					<p class="frm_conf_details<?php echo esc_attr( $field['id'] . ( $field['conf_field'] ? '' : ' frm_hidden' ) ); ?>">
+						<label for="field_options_conf_msg_<?php echo esc_attr( $field['id'] ) ?>">
+							<?php esc_html_e( 'Confirmation', 'formidable' ); ?>
+						</label>
+						<br/>
+						<input type="text" name="field_options[conf_msg_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['conf_msg'] ); ?>" id="field_options_conf_msg_<?php echo esc_attr( $field['id'] ) ?>" />
+					</p>
+					<?php
+				}
+				?>
+			</div>
+		</div>
+	<?php } ?>
 
 	<?php if ( in_array( $field['type'], array( 'select', 'radio', 'checkbox' ) ) && FrmAppHelper::pro_is_installed() ) { ?>
 		<input type="hidden" value="<?php echo esc_attr( $field['other'] ); ?>" id="other_input_<?php echo esc_attr( $field['id'] ); ?>" name="field_options[other_<?php echo esc_attr( $field['id'] ); ?>]" />
