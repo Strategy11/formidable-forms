@@ -73,7 +73,26 @@
 	</div>
 
 <?php if ( in_array( $field['type'], array( 'select', 'radio', 'checkbox' ) ) ) { ?>
-    <div class="frm-show-click frm_small_top_margin">
+	<?php if ( $field['type'] === 'radio' ) { ?>
+		<h3><?php esc_html_e( 'Radio Button Options', 'formidable' ); ?></h3>
+	<?php } ?>
+	<?php
+	if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' ) {
+		$type = $field['type'];
+		do_action( 'frm_after_checkbox', compact( 'field', 'field_name', 'type' ) );
+	} else {
+		?>
+		<a href="<?php echo esc_url( admin_url( 'admin-ajax.php?action=frm_import_choices&field_id=' . $field['id'] . '&TB_iframe=1' ) ) ?>" title="<?php echo esc_attr( FrmAppHelper::truncate( strip_tags( str_replace( '"', '&quot;', $field['name'] ) ), 20 ) . ' ' . __( 'Field Choices', 'formidable' ) ); ?>" class="thickbox frm_orange">
+			<?php esc_html_e( 'Bulk Edit Options', 'formidable' ); ?>
+		</a>
+		<?php do_action( 'frm_add_multiple_opts_labels', $field ); ?>
+	    <ul id="frm_field_<?php echo esc_attr( $field['id'] ) ?>_opts" class="frm_sortable_field_opts frm_clear<?php echo ( count( $field['options'] ) > 10 ) ? ' frm_field_opts_list' : ''; ?>">
+			<?php FrmFieldsHelper::show_single_option( $field ); ?>
+	    </ul>
+	<?php
+	}
+	?>
+    <div class="frm_small_top_margin">
 	<?php
 
 	if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' ) {
@@ -89,13 +108,7 @@
 				</a>
             <?php
             }
-
-			if ( ! isset( $field['post_field'] ) || $field['post_field'] != 'post_category' ) {
-            ?>
-			<a href="<?php echo esc_url( admin_url( 'admin-ajax.php?action=frm_import_choices&field_id=' . $field['id'] . '&TB_iframe=1' ) ) ?>" title="<?php echo esc_attr( FrmAppHelper::truncate( strip_tags( str_replace( '"', '&quot;', $field['name'] ) ), 20 ) . ' ' . __( 'Field Choices', 'formidable' ) ); ?>" class="thickbox frm_orange">
-				<?php esc_html_e( 'Bulk Edit Options', 'formidable' ); ?>
-			</a>
-            <?php } ?>
+			?>
         </div>
 <?php
     }
@@ -123,7 +136,8 @@ if ( $display['clear_on_focus'] ) {
 					<option value=""<?php selected( $field['label'], '' ); ?>>
 						<?php esc_html_e( 'Default', 'formidable' ) ?>
 					</option>
-					<?php foreach ( FrmStylesHelper::get_single_label_positions() as $pos => $pos_label ) {
+					<?php
+					foreach ( FrmStylesHelper::get_single_label_positions() as $pos => $pos_label ) {
 						if ( ! $display['clear_on_focus'] && 'inside' === $pos ) {
 							// Don't allow inside labels for fields without placeholders.
 							continue;
@@ -139,10 +153,9 @@ if ( $display['clear_on_focus'] ) {
 
 		<?php if ( $display['css'] ) { ?>
 			<p>
-				<label for="frm_classes_<?php echo esc_attr( $field['id'] ) ?>">
-					<?php esc_html_e( 'CSS layout classes', 'formidable' ); ?>
+				<label for="frm_classes_<?php echo esc_attr( $field['id'] ) ?>" class="frm_help" title="<?php esc_attr_e( 'Add a CSS class to the field container. Use our predefined classes to align multiple fields in single row.', 'formidable' ) ?>">
+					<?php esc_html_e( 'CSS Layout Classes', 'formidable' ); ?>
 				</label>
-				<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Add a CSS class to the field container. Use our predefined classes to align multiple fields in single row.', 'formidable' ) ?>" ></span>
 				<br/>
 				<input type="text" name="field_options[classes_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['classes'] ) ?>" id="frm_classes_<?php echo esc_attr( $field['id'] ) ?>" class="frm_classes" />
 			</p>
@@ -163,10 +176,9 @@ if ( $display['clear_on_focus'] ) {
 		?>
 
 		<p>
-			<label for="field_options_field_key_<?php echo esc_attr( $field['id'] ); ?>">
+			<label for="field_options_field_key_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help" title="<?php esc_attr_e( 'The field key can be used as an alternative to the field ID in many cases.', 'formidable' ); ?>">
 				<?php esc_html_e( 'Field Key', 'formidable' ); ?>
 			</label>
-			<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'The field key can be used as an alternative to the field ID in many cases.', 'formidable' ); ?>"></span>
 			<br/>
 			<input type="text" name="field_options[field_key_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['field_key'] ); ?>" id="field_options_field_key_<?php echo esc_attr( $field['id'] ); ?>"/>
 		</p>

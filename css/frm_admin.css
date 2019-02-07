@@ -342,6 +342,7 @@ h2#frm_form_heading,
 	padding: 0 0 25px;
 }
 
+.frm-right-panel .frm_field_list #frm-options-panel,
 .frm-right-panel .frm_field_list #frm-layout-classes,
 .frm-right-panel .frm_field_list #frm-dynamic-values{
     display:none;
@@ -2377,10 +2378,6 @@ a.frm_icon_font:hover, a.frm_icon_font:active, a.frm_icon_font:focus {
 	vertical-align:top;
 }
 
-.frm_other_option .frm_ipe_field_option{
-    min-width:0;
-    margin-right:5px;
-}
 .form-field input[type=text].frm_other_input{
     width:30%;
 }

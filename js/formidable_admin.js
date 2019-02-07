@@ -1243,9 +1243,6 @@ function frmAdminBuildJS(){
 	function clickVis(e){
 		/*jshint validthis:true */
 		clickAction(this);
-		if(!jQuery(e.target).is('.inplace_field, .frm_ipe_field_label, .frm_ipe_field_desc, .frm_ipe_field_conf_desc, .frm_ipe_field_option, .frm_ipe_field_option_key')){
-			jQuery('.inplace_field').blur();
-		}
 	}
 
 	function clickSectionVis(e){
