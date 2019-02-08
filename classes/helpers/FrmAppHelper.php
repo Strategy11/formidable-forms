@@ -1808,7 +1808,6 @@ class FrmAppHelper {
     public static function locales( $type = 'date' ) {
 		$locales = array(
 			'en' => __( 'English', 'formidable' ),
-			''   => __( 'English/Western', 'formidable' ),
 			'af' => __( 'Afrikaans', 'formidable' ),
 			'sq' => __( 'Albanian', 'formidable' ),
 			'ar' => __( 'Arabic', 'formidable' ),
@@ -1875,10 +1874,10 @@ class FrmAppHelper {
 
 		if ( $type === 'captcha' ) {
 			// remove the languages unavailable for the captcha
-			$unset = array( '', 'af', 'sq', 'hy', 'az', 'eu', 'bs', 'zh-HK', 'eo', 'et', 'fo', 'fr-CH', 'he', 'is', 'ms', 'sr-SR', 'ta', 'tu' );
+			$unset = array( 'af', 'sq', 'hy', 'az', 'eu', 'bs', 'zh-HK', 'eo', 'et', 'fo', 'fr-CH', 'he', 'is', 'ms', 'sr-SR', 'ta', 'tu' );
 		} else {
 			// remove the languages unavailable for the datepicker
-			$unset = array( 'en', 'fil', 'fr-CA', 'de-AT', 'de-AT', 'de-CH', 'iw', 'hi', 'pt', 'pt-PT', 'es-419', 'tr' );
+			$unset = array( 'fil', 'fr-CA', 'de-AT', 'de-CH', 'iw', 'hi', 'pt', 'pt-PT', 'es-419', 'tr' );
 		}
 
 		$locales = array_diff_key( $locales, array_flip( $unset ) );
