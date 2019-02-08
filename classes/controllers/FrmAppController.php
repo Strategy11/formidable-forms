@@ -229,6 +229,11 @@ class FrmAppController {
 		$is_pro = FrmAppHelper::pro_is_installed();
 		wp_enqueue_script( 'jquery-ui-dialog' );
 		wp_enqueue_style( 'jquery-ui-dialog' );
+		$upgrade_link = array(
+			'medium'  => 'builder',
+			'content' => 'upgrade',
+		);
+
 		include( FrmAppHelper::plugin_path() . '/classes/views/shared/upgrade_overlay.php' );
 	}
 

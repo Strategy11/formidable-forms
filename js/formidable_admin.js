@@ -1742,12 +1742,17 @@ function frmAdminBuildJS(){
 
 		jQuery('.frm_show_upgrade').click( function( event ) {
 			event.preventDefault();
-			jQuery('.frm_feature_label').html( jQuery(this).data('upgrade') );
+			jQuery('.frm_feature_label').html( this.dataset.upgrade );
 			$info.dialog('open');
 
 			// set the utm medium
 			var button = $info.find('.button-primary');
-			var link = button.attr('href').replace( /(medium=)[a-z_-]+/ig, '$1' + jQuery(this).data('medium') );
+			var link = button.attr('href').replace( /(medium=)[a-z_-]+/ig, '$1' + this.dataset.medium );
+			var content = this.dataset.content;
+			if ( content === undefined ) {
+				content = '';
+			}
+			link = link.replace( /(content=)[a-z_-]+/ig, '$1' + content );
 			button.attr( 'href', link );
 		} );
 	}
@@ -2768,37 +2773,6 @@ function frmAdminBuildJS(){
 				}
 			}
 		});
-	}
-
-	function fillLicenses(){
-		var emptyFields = jQuery('.frm_addon_license_key:visible');
-		if ( emptyFields.length < 1 ){
-			return false;
-		}
-
-		jQuery.ajax({
-			type:'POST',url:ajaxurl,dataType:'json',
-			data:{action:'frm_fill_licenses', nonce:frmGlobal.nonce},
-			success:function(json){
-				var i;
-				var licenses = json.licenses;
-				var filledSomething = false;
-				for ( i in licenses ) {
-				    if (licenses.hasOwnProperty(i)) {
-						var input = jQuery('#edd_'+ licenses[i].slug +'_license_key');
-						if ( typeof input !== null && input.is(':visible') ) {
-							input.val(licenses[i].key);
-							jQuery('input[name="edd_'+ licenses[i].slug +'_license_activate"]').click();
-							filledSomething = true;
-						}
-				    }
-				}
-				if ( ! filledSomething ) {
-					jQuery('.edd_frm_fill_license').replaceWith(frm_admin_js.no_licenses);
-				}
-			}
-		});
-		return false;
 	}
 
 	/* Import/Export page */
@@ -3917,7 +3891,6 @@ function frmAdminBuildJS(){
 			// activate addon licenses
 			var licenseTab = document.getElementById('licenses_settings');
 			jQuery(licenseTab).on('click', '.edd_frm_save_license', saveAddonLicense);
-			jQuery(licenseTab).on('click', '.edd_frm_fill_license', fillLicenses);
 
 			jQuery('.settings-lite-cta .dismiss').click( function( event ) {
 				event.preventDefault();
