@@ -271,6 +271,24 @@ DEFAULT_HTML;
 		);
 	}
 
+	/**
+	 * Get a list of all field settings that should be translated
+	 * on a multilingual site.
+	 *
+	 * @since 3.06.01
+	 */
+	public function translatable_strings() {
+		return array(
+			'name',
+			'description',
+			'default_value',
+			'required_indicator',
+			'invalid',
+			'blank',
+			'unique_msg',
+		);
+	}
+
 	public function form_builder_classes( $display_type ) {
 		$classes = 'form-field edit_form_item frm_field_box frm_top_container frm_not_divider edit_field_type_' . $display_type;
 		return $this->alter_builder_classes( $classes );
