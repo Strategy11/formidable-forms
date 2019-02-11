@@ -309,6 +309,25 @@ class FrmForm {
 		}
 	}
 
+	/**
+	 * Get a list of all form settings that should be translated
+	 * on a multilingual site.
+	 *
+	 * @since 3.06.01
+	 * @param object $form - The form object
+	 */
+	public static function translatable_strings( $form ) {
+		$strings = array(
+			'name',
+			'description',
+			'submit_value',
+			'submit_msg',
+			'success_msg',
+		);
+
+		return apply_filters( 'frm_form_strings', $strings, $form );
+	}
+
     /**
      * @param string $status
      * @return int|boolean

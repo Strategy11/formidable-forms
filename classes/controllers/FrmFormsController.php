@@ -1317,7 +1317,7 @@ class FrmFormsController {
 
         $form = apply_filters( 'frm_pre_display_form', $form );
 
-        $frm_settings = FrmAppHelper::get_settings();
+        $frm_settings = FrmAppHelper::get_settings( array( 'current_form' => $form->id ) );
 
 		if ( self::is_viewable_draft_form( $form ) ) {
 			// don't show a draft form on a page
@@ -1683,7 +1683,7 @@ class FrmFormsController {
 	 * @since 2.05
 	 */
 	private static function prepare_submit_message( $form, $entry_id ) {
-		$frm_settings = FrmAppHelper::get_settings();
+		$frm_settings = FrmAppHelper::get_settings( array( 'current_form' => $form->id ) );
 
 		if ( $entry_id && is_numeric( $entry_id ) ) {
 			$message = isset( $form->options['success_msg'] ) ? $form->options['success_msg'] : $frm_settings->success_msg;

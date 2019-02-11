@@ -176,7 +176,12 @@ class FrmFormsHelper {
 	 * @return string
 	 */
 	public static function get_invalid_error_message( $args ) {
-		$frm_settings = FrmAppHelper::get_settings();
+		$settings_args = $args;
+		if ( isset( $args['form'] ) ) {
+			$settings_args['current_form'] = $args['form']->id;
+		}
+
+		$frm_settings = FrmAppHelper::get_settings( $settings_args );
 		$invalid_msg = do_shortcode( $frm_settings->invalid_msg );
 		return apply_filters( 'frm_invalid_error_message', $invalid_msg, $args );
 	}

@@ -31,8 +31,9 @@ class FrmSettings {
 	public $re_multi;
 
 	public $no_ips;
+	public $current_form = 0;
 
-    public function __construct() {
+	public function __construct( $args = array() ) {
 		if ( ! defined( 'ABSPATH' ) ) {
 			die( 'You are not allowed to call this page directly.' );
 		}
@@ -49,6 +50,8 @@ class FrmSettings {
         }
 
         $this->set_default_options();
+
+		$this->maybe_filter_for_form( $args );
     }
 
 	private function translate_settings( $settings ) {
@@ -179,6 +182,34 @@ class FrmSettings {
 			$this->re_type = '';
 		}
     }
+
+	/**
+	 * Get values that may be shown on the front-end without an override in the form settings.
+	 *
+	 * @since 3.06.01
+	 */
+	public function translatable_strings() {
+		return array(
+			'invalid_msg',
+			'failed_msg',
+			'login_msg'
+		);
+	}
+
+	/**
+	 * Allow strings to be filtered when a specific form may be displaying them.
+	 *
+	 * @since 3.06.01
+	 */
+	public function maybe_filter_for_form( $args ) {
+		if ( isset( $args['current_form'] ) && is_numeric( $args['current_form'] ) ) {
+			$this->current_form = $args['current_form'];
+			foreach ( $this->translatable_strings() as $string ) {
+				$this->{$string} = apply_filters( 'frm_global_setting', $this->{$string}, $string, $this );
+				$this->{$string} = apply_filters( 'frm_global_' . $string, $this->{$string}, $this );
+			}
+		}
+	}
 
     public function validate( $params, $errors ) {
         return apply_filters( 'frm_validate_settings', $errors, $params );
