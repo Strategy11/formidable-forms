@@ -1909,6 +1909,15 @@ function frmAdminBuildJS(){
 			selectedHeight = 0,
 			$thisobj = jQuery(obj);
 
+		// fixes input focus on devices running iOS/Safari (formidable#2124)
+		var isSafari = navigator.userAgent.indexOf("Safari") > -1;
+		var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+		if (isIOS && isSafari && 'toplevel_page_formidable' === pagenow) {
+			$thisobj.find('.dyn_default_value').focus();
+		}
+		// --
+
 		if(obj.className.indexOf('selected') !== -1){
 			return;
 		}
