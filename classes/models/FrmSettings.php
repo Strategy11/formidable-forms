@@ -192,7 +192,7 @@ class FrmSettings {
 		return array(
 			'invalid_msg',
 			'failed_msg',
-			'login_msg'
+			'login_msg',
 		);
 	}
 
