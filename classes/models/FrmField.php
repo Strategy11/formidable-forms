@@ -370,7 +370,11 @@ class FrmField {
 		}
 	}
 
-	public static function getOne( $id ) {
+	/**
+	 * @param string|int $id The field id or key.
+	 * @param bool $filter When true, run the frm_field filter.
+	 */
+	public static function getOne( $id, $filter = false ) {
 		if ( empty( $id ) ) {
 			return null;
 		}
@@ -383,6 +387,7 @@ class FrmField {
         $results = FrmDb::check_cache( $id, 'frm_field', $query, 'get_row', 0 );
 
 		if ( empty( $results ) ) {
+			self::filter_field( $filter, $results );
             return $results;
         }
 
@@ -393,9 +398,24 @@ class FrmField {
         }
 
 		self::prepare_options( $results );
+		self::filter_field( $filter, $results );
 
 		return stripslashes_deep( $results );
     }
+
+	/**
+	 * @since 3.06.01
+	 * @param bool   $filter When true, run the frm_field filter.
+	 * @param object $results
+	 */
+	private static function filter_field( $filter, &$results ) {
+		if ( $filter ) {
+			/**
+			 * @since 3.06.01
+			 */
+			$results = apply_filters( 'frm_field', $results );
+		}
+	}
 
 	/**
 	 * Get the field type by key or id
