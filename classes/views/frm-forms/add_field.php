@@ -9,25 +9,19 @@
 
 	<?php do_action( 'frm_extra_field_actions', $field['id'] ); ?>
 
-	<label class="frm_primary_label <?php echo esc_attr( $field['type'] === 'break' ? 'button' : '' ); ?>" id="field_label_<?php echo esc_attr( $field['id'] ); ?>"><?php
-		echo FrmAppHelper::kses( force_balance_tags( $field['name'] ), 'all' ); // WPCS: XSS ok.
-	?></label>
-
 <div id="field_<?php echo esc_attr( $field['id'] ) ?>_inner_container" class="frm_inner_field_container">
-<div class="frm_form_fields" data-ftype="<?php echo esc_attr( $display['type'] ) ?>">
-<?php
-
-$field_obj->show_on_form_builder();
-
-?>
-<div class="clear"></div>
-</div>
-<?php if ( $display['description'] ) { ?>
-    <div class="description" id="field_description_<?php echo esc_attr( $field['id'] ); ?>"><?php
-		echo FrmAppHelper::kses( force_balance_tags( $field['description'] ), 'all' ); // WPCS: XSS ok.
-	?></div>
-
-<?php } ?>
+	<label class="frm_primary_label <?php echo esc_attr( $field['type'] === 'break' ? 'button' : '' ); ?>" id="field_label_<?php echo esc_attr( $field['id'] ); ?>">
+		<?php echo FrmAppHelper::kses( force_balance_tags( $field['name'] ), 'all' ); // WPCS: XSS ok. ?>
+	</label>
+	<div class="frm_form_fields" data-ftype="<?php echo esc_attr( $display['type'] ) ?>">
+		<?php $field_obj->show_on_form_builder(); ?>
+		<div class="clear"></div>
+	</div>
+	<?php if ( $display['description'] ) { ?>
+    	<div class="description" id="field_description_<?php echo esc_attr( $field['id'] ); ?>">
+			<?php echo FrmAppHelper::kses( force_balance_tags( $field['description'] ), 'all' ); // WPCS: XSS ok. ?>
+		</div>
+	<?php } ?>
 </div>
 <?php if ( $display['conf_field'] ) { ?>
 <div id="frm_conf_field_<?php echo esc_attr( $field['id'] ) ?>_container" class="frm_conf_field_container frm_form_fields frm_conf_details<?php echo esc_attr( $field['id'] . ( $field['conf_field'] ? '' : ' frm_hidden' ) ); ?>">
@@ -70,3 +64,5 @@ if ( $field['type'] !== 'divider' ) {
 </li>
 <?php
 }
+
+?>

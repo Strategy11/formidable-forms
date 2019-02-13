@@ -296,6 +296,7 @@ class FrmForm {
 
 	private static function prepare_field_update_values( $field, $values, &$new_field ) {
 		$field_cols = array(
+			'field_order' => 0,
 			'field_key'   => '',
 			'required'    => false,
 			'type'        => '',

@@ -5,8 +5,13 @@ function frmAdminBuildJS(){
 
 	var $newFields = jQuery(document.getElementById('new_fields'));
 	var builderForm = document.getElementById( 'frm_build_form' );
-	var this_form_id = document.getElementById( 'form_id' ).value;
+	var thisForm = document.getElementById( 'form_id' );
 	var cancelSort = false;
+
+	var this_form_id = 0;
+	if ( thisForm !== null ) {
+		this_form_id = thisForm.value;
+	}
 
 	// Global settings
 	var s;
@@ -329,15 +334,16 @@ function frmAdminBuildJS(){
 		var opts = {
 			connectWith:'ul.frm_sorting',
 			items: '> li.frm_field_box',
-			placeholder:'sortable-placeholder',
+			placeholder:'frm-drop-field',
 			axis:'y',
 			cursor:'move',
 			opacity:0.65,
-			cancel:'.widget,.frm_field_opts_list,input,textarea,select,.edit_field_type_end_divider,.frm_ipe_field_option,.frm_sortable_field_opts,.frm_noallow',
+			cancel:'.widget,.frm_field_opts_list,input,textarea,select,.edit_field_type_end_divider,.frm_sortable_field_opts,.frm_noallow',
 			accepts:'field_type_list',
 			revert:true,
 			forcePlaceholderSize:false,
 			tolerance:'pointer',
+			helper: 'clone',
 			receive:function(event,ui){
 				// Receive event occurs when an item in one sortable list is dragged into another sortable list
 
@@ -345,8 +351,6 @@ function frmAdminBuildJS(){
 					ui.item.addClass('frm_cancel_sort');
 					return;
 				}
-
-				closeOpenDropdown( ui.item );
 
 				if ( typeof ui.item.attr('id') !== 'undefined' ){
 					if ( ui.item.attr('id').indexOf('frm_field_id') > -1 ) {
@@ -361,10 +365,10 @@ function frmAdminBuildJS(){
 			change:function(event, ui){
 				// don't allow some field types inside section
 				if ( allowDrop(ui) ) {
-					ui.placeholder.addClass('sortable-placeholder').removeClass('no-drop-placeholder');
+					ui.placeholder.removeClass('frm_hidden');
 					cancelSort = false;
 				} else {
-					ui.placeholder.addClass('no-drop-placeholder').removeClass('sortable-placeholder');
+					ui.placeholder.addClass('frm_hidden');
 					cancelSort = true;
 				}
 			},
@@ -408,13 +412,6 @@ function frmAdminBuildJS(){
 		};
 
 		jQuery(sort).sortable(opts);
-	}
-
-	// Close an open dropdown in the Fields panel
-	function closeOpenDropdown( fieldButton ) {
-		if ( fieldButton.hasClass('open') ) {
-			fieldButton.click();
-		}
 	}
 
 	// Get the section where a field is dropped
@@ -521,7 +518,7 @@ function frmAdminBuildJS(){
 				var regex = /id="(\S+)"/;
 				var match = regex.exec(msg);
 				var $thisField = jQuery(document.getElementById(match[1]));
-				$thisField.find('.frm_ipe_field_label').mouseover().click();
+				//TODO: $thisField.find('.frm_ipe_field_label').mouseover().click();
 
 				updateFieldOrder();
 				initiateMultiselect();
@@ -651,7 +648,7 @@ function frmAdminBuildJS(){
 		section = '#'+match[1]+'.edit_field_type_divider ul.frm_sorting';
 		setupSortable(section);
 		if ( addFocus ) {
-			jQuery('#'+match[1]+' .frm_ipe_field_label').mouseover().click();
+			// TODO: jQuery('#'+match[1]+' .frm_ipe_field_label').mouseover().click();
 			toggleOneSectionHolder(jQuery(section));
 		}
 		initiateMultiselect();
@@ -942,8 +939,8 @@ function frmAdminBuildJS(){
         /*jshint validthis:true */
 
 		// increment when the button is clicked too close together
-		var clicks = parseInt( this.dataset.clicks );
-		this.dataset.clicks = clicks + 1;
+		var clicks = parseInt( this.getAttribute( 'data-clicks' ) );
+		this.setAttribute( 'data-clicks', clicks + 1 );
 
         var field_id = jQuery(this).closest('.frm-single-settings').data('fid');
         var opt_type = jQuery(this).data('opttype');
@@ -1262,9 +1259,6 @@ function frmAdminBuildJS(){
 		}
 
 		clickAction(this);
-		if(!jQuery(e.target).is('.inplace_field, .frm_ipe_field_label, .frm_ipe_field_desc, .frm_ipe_field_conf_desc, .frm_ipe_field_option, .frm_ipe_field_option_key')){
-			jQuery('.inplace_field').blur();
-		}
 	}
 	
 	function toggleRepeat(){
@@ -1546,8 +1540,15 @@ function frmAdminBuildJS(){
 		var array = [];
 		jQuery('#new_fields').each(function(i){
 			jQuery('li.frm_field_box', this).each(function(e) {
-				var fieldId = this.getAttribute( 'data-fid' );
-				jQuery( 'input[name="field_options[field_order_' + fieldId + ']"]' ).val( e );
+				var fieldId = this.getAttribute( 'data-fid' ),
+					field = jQuery( 'input[name="field_options[field_order_' + fieldId + ']"]' ),
+					currentOrder = field.val();
+
+				if ( currentOrder != e + 1 ) {
+					field.val( e + 1 );
+					singleField = document.getElementById( 'frm-single-settings-' + fieldId );
+					moveFieldSettings( singleField );
+				}
 			});
 		});
 	}
@@ -1899,7 +1900,7 @@ function frmAdminBuildJS(){
 	 */
 	function showFieldOptions( obj ) {
 		var i, singleField,
-			fieldId = obj.dataset.fid,
+			fieldId = obj.getAttribute( 'data-fid' ),
 			allFieldSettings = document.getElementsByClassName( 'frm-single-settings' );
 
 		for ( i = 0; i < allFieldSettings.length; i ++ ) {
@@ -1907,13 +1908,19 @@ function frmAdminBuildJS(){
 		}
 
 		singleField = document.getElementById( 'frm-single-settings-' + fieldId );
-		if ( singleField.parentElement.classList.contains( 'frm_field_box' ) ) {
-			// Move the settings to the sidebar the first time they are used.
-			builderForm.appendChild( singleField );
-		}
+		moveFieldSettings( singleField );
 
 		singleField.style.display = 'block';
 		document.getElementById( 'frm-options-panel-tab' ).click();
+	}
+
+	/**
+	 * Move the settings to the sidebar the first time they are changed or selected.
+	 */
+	function moveFieldSettings( singleField ) {
+		if ( singleField.parentElement.classList.contains( 'frm_field_box' ) ) {
+			builderForm.appendChild( singleField );
+		}
 	}
 
 	function showEmailRow(){
@@ -2269,7 +2276,7 @@ function frmAdminBuildJS(){
 
 		var $cont = document.getElementById('date_select_container');
 		var tab = document.getElementById('frm_listing_tab');
-		var label = tab.dataset.label;
+		var label = tab.getAttribute( 'data-label' );
 		if(value === 'calendar'){
 			jQuery('.hide_dyncontent, .hide_single_content').show();
 			jQuery('.limit_container').hide();
@@ -2277,7 +2284,7 @@ function frmAdminBuildJS(){
 		}else if(value === 'dynamic'){
 			jQuery('.hide_dyncontent, .limit_container, .hide_single_content').show();
 		}else if(value === 'one'){
-			label = tab.dataset.one;
+			label = tab.getAttribute( 'data-one' );
 			jQuery('.hide_dyncontent, .limit_container, .hide_single_content').hide();
 		}else{
 			jQuery('.hide_dyncontent').hide();
@@ -3074,6 +3081,21 @@ function frmAdminBuildJS(){
 
 	/* Templates */
 
+	function initNewFormModal() {
+		var $info = initModal( '#frm_form_modal' );
+		console.log($info);
+		if ( $info === false ) {
+			return;
+		}
+
+		jQuery('.frm-new-form-button').click( function( event ) {
+			event.preventDefault();
+			$info.dialog('open');
+		} );
+
+		jQuery( document ).on( 'submit', '#frm-new-form', installTemplate );
+	}
+
 	function initTemplateModal() {
 		jQuery( '.frm_wrap' ).on( 'click', '.frm-trash-template.frm_confirming', trashTemplate );
 
@@ -3112,8 +3134,8 @@ function frmAdminBuildJS(){
 			document.getElementById('frm_template_name').value = oldName;
 			document.getElementById('frm_link').value = this.attributes.rel.value;
 			document.getElementById('frm_action_type').value = 'frm_install_template';
-			nameLabel.innerHTML = nameLabel.dataset.form;
-			descLabel.innerHTML = descLabel.dataset.form;
+			nameLabel.innerHTML = nameLabel.getAttribute( 'data-form' );
+			descLabel.innerHTML = descLabel.getAttribute( 'data-form' );
 			$info.dialog('open');
 		} );
 
@@ -3122,15 +3144,15 @@ function frmAdminBuildJS(){
 			var nameLabel = document.getElementById('frm_new_name'),
 				descLabel = document.getElementById('frm_new_desc');
 
-			nameLabel.innerHTML = nameLabel.dataset.template;
-			descLabel.innerHTML = descLabel.dataset.template;
-			document.getElementById('frm_template_name').value = this.dataset.fullname;
-			document.getElementById('frm_link').value = this.dataset.formid;
+			nameLabel.innerHTML = nameLabel.getAttribute( 'data-template' );
+			descLabel.innerHTML = descLabel.getAttribute( 'data-template' );
+			document.getElementById('frm_template_name').value = this.getAttribute( 'data-fullname' );
+			document.getElementById('frm_link').value = this.getAttribute( 'data-formid' );
 			document.getElementById('frm_action_type').value = 'frm_build_template';
 			$info.dialog('open');
 		} );
 
-		jQuery( document ).on( 'submit', '#frm-new-template-form', installTemplate );
+		jQuery( document ).on( 'submit', '#frm-new-template', installTemplate );
 	}
 
 	function frmApiPreview( cont, link ) {
@@ -3181,7 +3203,7 @@ function frmAdminBuildJS(){
 
 	function trashTemplate( e ) {
 		/*jshint validthis:true */
-		var id = this.dataset.id,
+		var id = this.getAttribute( 'data-id' ),
 			link = this;
 		e.preventDefault();
 
@@ -3202,7 +3224,7 @@ function frmAdminBuildJS(){
 		/*jshint validthis:true */
 		var i,
 			searchText = this.value.toLowerCase(),
-			items = document.getElementsByClassName( this.dataset.tosearch );
+			items = document.getElementsByClassName( this.getAttribute( 'data-tosearch' ) );
 
 		for ( i = 0; i < items.length; i++ ) {
 			if ( items[i].innerHTML.toLowerCase().indexOf(searchText) >= 0 ) {
@@ -3249,6 +3271,7 @@ function frmAdminBuildJS(){
 		if ( $info.length < 1 ) {
 			return false;
 		}
+
 		if ( typeof width === 'undefined' ) {
 			width = '550px';
 		}
@@ -3346,6 +3369,9 @@ function frmAdminBuildJS(){
 			} else if ( document.getElementById( 'frm_dyncontent' ) !== null ) {
 				// only load on views settings page
 				frmAdminBuild.viewInit();
+			} else {
+				// New form selection page
+				initNewFormModal();
 			}
 			
 			var $advInfo = jQuery(document.getElementById('frm_adv_info'));

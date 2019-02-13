@@ -1,3 +1,4 @@
+<a href="?page=formidable" class="frm-header-logo">
 <?php
 FrmAppHelper::show_logo(
 	array(
@@ -6,6 +7,8 @@ FrmAppHelper::show_logo(
 	)
 );
 ?>
+</a>
+
 <ul class="frm_form_nav">
 <?php
 

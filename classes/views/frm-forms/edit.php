@@ -7,6 +7,7 @@
 			'label'       => __( 'Build Form', 'formidable' ),
 			'form'        => $form,
 			'hide_title'  => true,
+			'close'       => '?page=formidable',
 		)
 	);
 	?>

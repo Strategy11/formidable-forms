@@ -237,6 +237,14 @@
 			<table class="form-table">
 				<tr>
 					<td>
+						<label for="frm_form_name"><?php esc_html_e( 'Form Name', 'formidable' ); ?></label>
+					</td>
+					<td>
+						<input type="text" id="frm_form_name" name="name" class="frm_long_input" value="<?php echo esc_attr( $values['name'] ); ?>" />
+					</td>
+				</tr>
+				<tr>
+					<td>
 						<label for="frm_form_key"><?php esc_html_e( 'Form Key', 'formidable' ) ?></label>
 					</td>
 					<td>

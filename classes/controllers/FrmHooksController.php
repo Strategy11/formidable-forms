@@ -168,6 +168,7 @@ class FrmHooksController {
         add_action( 'wp_ajax_frm_forms_preview', 'FrmFormsController::preview' );
         add_action( 'wp_ajax_nopriv_frm_forms_preview', 'FrmFormsController::preview' );
 		add_action( 'wp_ajax_frm_forms_trash', 'FrmFormsController::ajax_trash' );
+		add_action( 'wp_ajax_frm_install_form', 'FrmFormsController::build_new_form' );
 		add_action( 'wp_ajax_frm_build_template', 'FrmFormsController::build_template' );
 
 		// Settings

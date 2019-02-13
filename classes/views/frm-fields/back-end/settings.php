@@ -1,5 +1,6 @@
 <div class="frm-single-settings frm_hidden" id="frm-single-settings-<?php echo esc_attr( $field['id'] ); ?>" data-fid="<?php echo esc_attr( $field['id'] ); ?>">
 	<input type="hidden" name="frm_fields_submitted[]" value="<?php echo esc_attr( $field['id'] ) ?>" />
+	<input type="hidden" name="field_options[field_order_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['field_order'] ); ?>"/>
 
 	<?php if ( $display['required'] ) { ?>
 		<span id="require_field_<?php echo esc_attr( $field['id'] ); ?>">

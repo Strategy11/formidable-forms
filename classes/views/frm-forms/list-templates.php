@@ -134,7 +134,7 @@
 								<?php esc_html_e( 'Create Form', 'formidable' ); ?>
 							</a>
 						<?php } else { ?>
-							<a class="install-now button button-primary frm-button-primary" href="<?php echo esc_url( $pricing ); ?>" target="_blank" rel="noopener" aria-label="<?php esc_attr_e( 'Upgrade Now', 'formidable' ); ?>">
+							<a class="install-now button button-secondary frm-button-secondary" href="<?php echo esc_url( $pricing ); ?>" target="_blank" rel="noopener" aria-label="<?php esc_attr_e( 'Upgrade Now', 'formidable' ); ?>">
 								<?php esc_html_e( 'Upgrade Now', 'formidable' ); ?>
 							</a>
 						<?php } ?>

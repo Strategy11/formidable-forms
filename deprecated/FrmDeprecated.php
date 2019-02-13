@@ -18,6 +18,31 @@ class FrmDeprecated {
 	/**
 	 * @deprecated 4.0
 	 */
+	public static function new_form( $values = array() ) {
+		_deprecated_function( __FUNCTION__, '4.0', 'FrmFormsController::edit' );
+
+		FrmAppHelper::permission_check( 'frm_edit_forms' );
+
+		$action = isset( $_REQUEST['frm_action'] ) ? 'frm_action' : 'action';
+		$action = empty( $values ) ? FrmAppHelper::get_param( $action, '', 'get', 'sanitize_title' ) : $values[ $action ];
+
+		if ( $action === 'create' ) {
+			self::create( $values );
+			return;
+		}
+
+		$values = array();
+		$id   = FrmForm::create( $values );
+		$form = FrmForm::getOne( $id );
+		FrmFormsController::create_default_email_action( $form );
+		$values['id'] = $id;
+
+		FrmFormsController::edit( $values );
+	}
+
+	/**
+	 * @deprecated 4.0
+	 */
 	public static function update_order() {
 		_deprecated_function( __FUNCTION__, '4.0' );
 		FrmAppHelper::permission_check( 'frm_edit_forms' );

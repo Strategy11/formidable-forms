@@ -18,7 +18,7 @@
 					<p><?php esc_html_e( 'Build anything you can imagine.', 'formidable' ); ?></p>
 				</div>
 				<div class="plugin-card-bottom">
-					<a class="button button-primary frm-button-primary" href="<?php echo esc_url( admin_url( 'admin.php?page=formidable&frm_action=new' ) ); ?>">
+					<a class="button button-primary frm-button-primary frm-new-form-button" href="#">
 						<?php esc_html_e( 'Create Blank Form', 'formidable' ); ?>
 					</a>
 				</div>
@@ -57,3 +57,8 @@
 		<div class="clear"></div>
 	</div>
 </div>
+
+<?php
+$type = 'form';
+include( dirname( __FILE__ ) . '/new-form-overlay.php' );
+?>

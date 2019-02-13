@@ -67,34 +67,19 @@ class FrmFormsController {
 	 * @since 3.06
 	 */
 	public static function add_new() {
+		self::init_modal();
 		require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add-new.php' );
 	}
 
-	public static function new_form( $values = array() ) {
-		FrmAppHelper::permission_check( 'frm_edit_forms' );
-
-        global $frm_vars;
-
-		$action = isset( $_REQUEST['frm_action'] ) ? 'frm_action' : 'action';
-		$action = empty( $values ) ? FrmAppHelper::get_param( $action, '', 'get', 'sanitize_title' ) : $values[ $action ];
-
-		if ( $action == 'create' ) {
-			self::create( $values );
-			return;
-		} else if ( $action == 'new' ) {
-			$frm_field_selection = FrmField::field_selection();
-			$values = FrmFormsHelper::setup_new_vars( $values );
-            $id = FrmForm::create( $values );
-			$form = FrmForm::getOne( $id );
-
-			self::create_default_email_action( $form );
-
-			$all_templates = FrmForm::getAll( array( 'is_template' => 1 ), 'name' );
-
-            $values['id'] = $id;
-			require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/new.php' );
-        }
-    }
+	/**
+	 * Load the scripts before a modal can be triggered.
+	 *
+	 * @since 4.0
+	 */
+	private static function init_modal() {
+		wp_enqueue_script( 'jquery-ui-dialog' );
+		wp_enqueue_style( 'jquery-ui-dialog' );
+	}
 
 	/**
 	 * Create the default email action
@@ -104,52 +89,13 @@ class FrmFormsController {
 	 * @param object $form
 	 */
     private static function create_default_email_action( $form ) {
+		FrmForm::maybe_get_form( $form );
     	$create_email = apply_filters( 'frm_create_default_email_action', true, $form );
 
 	    if ( $create_email ) {
 		    $action_control = FrmFormActionsController::get_form_actions( 'email' );
 		    $action_control->create( $form->id );
 	    }
-    }
-
-	public static function create( $values = array() ) {
-		FrmAppHelper::permission_check( 'frm_edit_forms' );
-
-        global $frm_vars;
-        if ( empty( $values ) ) {
-            $values = $_POST;
-        }
-
-        //Set radio button and checkbox meta equal to "other" value
-        if ( FrmAppHelper::pro_is_installed() ) {
-            $values = FrmProEntry::mod_other_vals( $values, 'back' );
-        }
-
-		$id = isset( $values['id'] ) ? absint( $values['id'] ) : FrmAppHelper::get_param( 'id', '', 'get', 'absint' );
-
-        if ( ! current_user_can( 'frm_edit_forms' ) || ( $_POST && ( ! isset( $values['frm_save_form'] ) || ! wp_verify_nonce( $values['frm_save_form'], 'frm_save_form_nonce' ) ) ) ) {
-            $frm_settings = FrmAppHelper::get_settings();
-            $errors = array( 'form' => $frm_settings->admin_permission );
-        } else {
-			$errors = FrmForm::validate( $values );
-        }
-
-		if ( count( $errors ) > 0 ) {
-            $hide_preview = true;
-			$frm_field_selection = FrmField::field_selection();
-            $form = FrmForm::getOne( $id );
-			$fields = FrmField::get_all_for_form( $id );
-
-			$values = FrmAppHelper::setup_edit_vars( $form, 'forms', '', true );
-			$values['fields'] = $fields;
-			$all_templates = FrmForm::getAll( array( 'is_template' => 1 ), 'name' );
-
-			require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/new.php' );
-        } else {
-            FrmForm::update( $id, $values, true );
-			$url = admin_url( 'admin.php?page=formidable&frm_action=settings&id=' . $id );
-			die( FrmAppHelper::js_redirect( $url ) ); // WPCS: XSS ok.
-        }
     }
 
     public static function edit( $values = false ) {
@@ -541,6 +487,32 @@ class FrmFormsController {
     }
 
 	/**
+	 * Create a new form from the modal.
+	 *
+	 * @since 4.0
+	 */
+	public static function build_new_form() {
+		global $wpdb;
+
+		FrmAppHelper::permission_check( 'frm_edit_forms' );
+		check_ajax_referer( 'frm_ajax', 'nonce' );
+
+		$new_values             = self::get_modal_values();
+		$new_values['form_key'] = $new_values['name'];
+
+		$form_id = FrmForm::create( $new_values );
+
+		self::create_default_email_action( $form_id );
+
+		$response = array(
+			'redirect' => admin_url( 'admin.php?page=formidable&frm_action=edit&id=' . $form_id ),
+		);
+
+		echo wp_json_encode( $response );
+		wp_die();
+	}
+
+	/**
 	 * Create a custom template from a form
 	 *
 	 * @since 3.06
@@ -558,14 +530,7 @@ class FrmFormsController {
 				'message' => __( 'There was an error creating a template.', 'formidable' ),
 			);
 		} else {
-			// Update the new form name and description.
-			$name = FrmAppHelper::get_param( 'name', '', 'post', 'sanitize_text_field' );
-			$desc = FrmAppHelper::get_param( 'desc', '', 'post', 'sanitize_textarea_field' );
-
-			$new_values = array(
-				'name' => $name,
-				'description' => $desc,
-			);
+			$new_values = self::get_modal_values();
 			$query_results = $wpdb->update( $wpdb->prefix . 'frm_forms', $new_values, array( 'id' => $new_form_id ) );
 			if ( $query_results ) {
 				FrmForm::clear_form_cache();
@@ -578,6 +543,21 @@ class FrmFormsController {
 
 		echo wp_json_encode( $response );
 		wp_die();
+	}
+
+	/**
+	 * Before creating a new form, get the name and description from the modal.
+	 *
+	 * @since 4.0
+	 */
+	private static function get_modal_values() {
+		$name = FrmAppHelper::get_param( 'name', '', 'post', 'sanitize_text_field' );
+		$desc = FrmAppHelper::get_param( 'desc', '', 'post', 'sanitize_textarea_field' );
+
+		return array(
+			'name'        => $name,
+			'description' => $desc,
+		);
 	}
 
 	/**
@@ -764,8 +744,7 @@ class FrmFormsController {
 	 * @since 3.06
 	 */
 	private static function list_templates() {
-		wp_enqueue_script( 'jquery-ui-dialog' );
-		wp_enqueue_style( 'jquery-ui-dialog' );
+		self::init_modal();
 
 		$where = apply_filters( 'frm_forms_dropdown', array(), '' );
 		$forms = FrmForm::get_published_forms( $where );
@@ -1154,11 +1133,8 @@ class FrmFormsController {
         FrmAppHelper::trigger_hook_load( 'form' );
 
         switch ( $action ) {
-            case 'new':
-				return self::new_form( $vars );
 			case 'add_new':
 			case 'list_templates':
-            case 'create':
             case 'edit':
             case 'update':
             case 'duplicate':
@@ -1169,6 +1145,10 @@ class FrmFormsController {
             case 'settings':
             case 'update_settings':
 				return self::$action( $vars );
+			case 'new':
+				return self::edit( $vars );
+			case 'create':
+				return self::update( $vars );
             default:
 				do_action( 'frm_form_action_' . $action );
 				if ( apply_filters( 'frm_form_stop_action_' . $action, false ) ) {
@@ -1768,6 +1748,21 @@ class FrmFormsController {
 	private static function is_minification_on( $atts ) {
 		return isset( $atts['minimize'] ) && ! empty( $atts['minimize'] );
 	}
+
+	/**
+	 * @deprecated 4.0
+	 */
+	public static function new_form( $values = array() ) {
+		FrmDeprecated::new_form( $values );
+	}
+
+	/**
+	 * @deprecated 4.0
+	 */
+	public static function create( $values = array() ) {
+		_deprecated_function( __METHOD__, '4.0', 'FrmFormsController::update' );
+		self::update( $values );
+    }
 
 	/**
 	 * @deprecated 1.07.05

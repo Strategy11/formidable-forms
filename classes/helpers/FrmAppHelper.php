@@ -620,7 +620,7 @@ class FrmAppHelper {
 	 */
 	public static function add_new_item_link( $atts ) {
 		if ( isset( $atts['new_link'] ) && ! empty( $atts['new_link'] ) ) { ?>
-			<a href="<?php echo esc_url( $atts['new_link'] ) ?>" class="add-new-h2 frm_animate_bg"><?php esc_html_e( 'Add New', 'formidable' ); ?></a>
+			<a href="<?php echo esc_url( $atts['new_link'] ) ?>" class="button frm-button-primary frm_animate_bg"><?php esc_html_e( 'Add New', 'formidable' ); ?></a>
 		<?php
 		} elseif ( isset( $atts['link_hook'] ) ) {
 			do_action( $atts['link_hook']['hook'], $atts['link_hook']['param'] );
