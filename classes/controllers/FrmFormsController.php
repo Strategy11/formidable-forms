@@ -776,6 +776,15 @@ class FrmFormsController {
 		$templates = $api->get_api_info();
 		self::add_user_templates( $templates );
 
+		$error   = '';
+		$expired = false;
+		if ( isset( $templates['error'] ) ) {
+			$error   = $templates['error']['message'];
+			$error   = str_replace( 'utm_medium=addons', 'utm_medium=form-templates', $error );
+			$expired = ( $templates['error']['code'] === 'expired' );
+			unset( $templates['error'] );
+		}
+
 		$pricing = FrmAppHelper::admin_upgrade_link( 'form-templates' );
 		$plans = array( 'free', 'Personal', 'Business', 'Elite' );
 

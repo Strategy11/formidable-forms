@@ -78,7 +78,12 @@
 				</div>
 			</div>
 
-			<?php foreach ( $templates as $k => $template ) { ?>
+			<?php
+			foreach ( $templates as $k => $template ) {
+				if ( ! is_numeric( $k ) ) {
+					continue;
+				}
+				?>
 				<div class="frm-card frm-no-thumb">
 					<div class="plugin-card-top">
 						<?php if ( strtotime( $template['released'] ) > strtotime( '-10 days' ) ) { ?>
@@ -143,6 +148,11 @@
 				<?php unset( $template, $templates[ $k ] ); ?>
 			<?php } ?>
 		</div>
+		<?php if ( $expired ) { ?>
+			<p>
+				<?php echo FrmAppHelper::kses( $error, 'a' ); // WPCS: XSS ok. ?>
+			</p>
+		<?php } ?>
 		<?php include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/template-name-overlay.php' ); ?>
 		<div class="clear"></div>
 	</div>
