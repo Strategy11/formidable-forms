@@ -116,7 +116,7 @@
 									<p class="howto">
 										<?php
 										printf(
-										/* translators: %1$s: Start link HTML, %2$s: End link HTML */
+											/* translators: %1$s: Start link HTML, %2$s: End link HTML */
 											esc_html__( 'reCAPTCHA requires a Site and Private API key. Sign up for a %1$sfree reCAPTCHA key%2$s.', 'formidable' ),
 											'<a href="' . esc_url( 'https://www.google.com/recaptcha/' ) . '" target="_blank">',
 											'</a>'

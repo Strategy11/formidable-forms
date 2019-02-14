@@ -1,4 +1,11 @@
 <?php
+/**
+ * Show the checkbox field on the front-end.
+ * Extra line breaks show as space on the front-end when
+ * the form is double filtered and not minimized.
+ *
+ * @phpcs:disable Generic.WhiteSpace.ScopeIndent.IncorrectExact
+ */
 
 if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' ) {
 	$type = $field['type'];
@@ -35,19 +42,18 @@ if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' ) 
 			echo ' ' . FrmAppHelper::kses( $opt, 'all' ) . '</label>'; // WPCS: XSS ok.
 		}
 
-		FrmFieldsHelper::include_other_input(
-			array(
-				'other_opt' => $other_opt,
-				'read_only' => $read_only,
-				'checked'   => $checked,
-				'name'      => $other_args['name'],
-				'value'     => $other_args['value'],
-				'field'     => $field,
-				'html_id'   => $html_id,
-				'opt_key'   => $opt_key,
-				'opt_label' => $opt,
-			)
+		$other_args = array(
+			'other_opt' => $other_opt,
+			'read_only' => $read_only,
+			'checked'   => $checked,
+			'name'      => $other_args['name'],
+			'value'     => $other_args['value'],
+			'field'     => $field,
+			'html_id'   => $html_id,
+			'opt_key'   => $opt_key,
+			'opt_label' => $opt,
 		);
+		FrmFieldsHelper::include_other_input( $other_args );
 
 		unset( $other_opt, $other_args, $checked );
 

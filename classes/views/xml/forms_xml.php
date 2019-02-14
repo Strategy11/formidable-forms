@@ -1,4 +1,9 @@
 <?php
+/**
+ * Generate the XML for export for forms and fields.
+ *
+ * @phpcs:disable Generic.WhiteSpace.ScopeIndent.Incorrect
+ */
 
 if ( ! $item_ids ) {
 	return;
