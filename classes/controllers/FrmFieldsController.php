@@ -6,13 +6,12 @@ class FrmFieldsController {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
-		$fields = $_POST['field'];
+		$fields = isset( $_POST['field'] ) ? wp_unslash( $_POST['field'] ) : array();
 		if ( empty( $fields ) ) {
 			wp_die();
 		}
 
 		$_GET['page'] = 'formidable';
-		$fields       = stripslashes_deep( $fields );
 
 		$values     = array(
 			'id'         => FrmAppHelper::get_post_param( 'form_id', '', 'absint' ),
@@ -276,7 +275,7 @@ class FrmFieldsController {
 	public static function import_choices() {
 		FrmAppHelper::permission_check( 'frm_edit_forms', 'hide' );
 
-		$field_id = absint( $_REQUEST['field_id'] );
+		$field_id = isset( $_REQUEST['field_id'] ) ? absint( $_REQUEST['field_id'] ) : 0;
 
 		global $current_screen, $hook_suffix;
 
@@ -327,7 +326,7 @@ class FrmFieldsController {
 			return;
 		}
 
-		$field_id = absint( $_POST['field_id'] );
+		$field_id = FrmAppHelper::get_param( 'field_id', '', 'post', 'absint' );
 		$field    = FrmField::getOne( $field_id );
 
 		if ( ! in_array( $field->type, array( 'radio', 'checkbox', 'select' ) ) ) {

@@ -4,7 +4,7 @@
  * Extra line breaks show as space on the front-end when
  * the form is double filtered and not minimized.
  *
- * @phpcs:disable Generic.WhiteSpace.ScopeIndent.IncorrectExact
+ * @phpcs:disable Generic.WhiteSpace.ScopeIndent
  */
 
 if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' ) {
