@@ -203,7 +203,11 @@
 							<?php echo esc_html( $s->post_title . ( empty( $s->menu_order ) ? '' : ' (' . __( 'default', 'formidable' ) . ')' ) ); ?>
 						</option>
                         <?php } ?>
-						<option value="0" <?php selected( $values['custom_style'], 0 ); selected( $values['custom_style'], '' ); ?>>
+						<option value="0"
+						<?php
+						selected( $values['custom_style'], 0 );
+						selected( $values['custom_style'], '' );
+						?>>
 							<?php esc_html_e( 'Do not use Formidable styling', 'formidable' ); ?>
 						</option>
                     </select></td>
@@ -281,12 +285,13 @@
 						$included = true;
 						FrmAppController::include_upgrade_overlay();
 					}
+					/* translators: %s: Name of form action */
 					$upgrade_label = sprintf( esc_html__( '%s form actions', 'formidable' ), $action_control->action_options['tooltip'] );
                     ?>
 					<li>
 						<a href="javascript:void(0)" class="frm_<?php echo esc_attr( $action_control->id_base ); ?>_action frm_bstooltip <?php echo esc_attr( $classes ); ?>" title="<?php echo esc_attr( $action_control->action_options['tooltip'] ); ?>" data-limit="<?php echo esc_attr( isset( $action_control->action_options['limit'] ) ? $action_control->action_options['limit'] : '99' ); ?>" data-actiontype="<?php echo esc_attr( $action_control->id_base ); ?>" data-upgrade="<?php echo esc_attr( $upgrade_label ); ?>" data-medium="settings-<?php echo esc_attr( $action_control->id_base ); ?>"></a>
 					</li>
-<?php
+					<?php
 					unset( $actions_icon, $classes );
                 }
                 ?>
@@ -321,12 +326,12 @@
 					if ( isset( $values['fields'] ) ) {
 						foreach ( $values['fields'] as $field ) {
 							if ( FrmFieldFactory::field_has_html( $field['type'] ) ) {
-							?>
+								?>
                                 <p>
 									<label><?php echo esc_html( $field['name'] ); ?></label>
 									<textarea name="field_options[custom_html_<?php echo esc_attr( $field['id'] ); ?>]" rows="7" id="custom_html_<?php echo esc_attr( $field['id'] ); ?>" class="field_custom_html frm_long_input"><?php echo FrmAppHelper::esc_textarea( $field['custom_html'] ); // WPCS: XSS ok. ?></textarea>
 								</p>
-                            <?php
+                            	<?php
                             }
 							unset( $field );
                         }

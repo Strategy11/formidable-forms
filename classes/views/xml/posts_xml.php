@@ -15,7 +15,7 @@ while ( $next_posts = array_splice( $item_ids, 0, 20 ) ) {
 	foreach ( $posts as $post ) {
 		setup_postdata( $post );
 		$is_sticky = is_sticky( $post->ID ) ? 1 : 0;
-?>
+		?>
 	<view>
 		<title><?php echo esc_html( apply_filters( 'the_title_rss', $post->post_title ) ); ?></title>
 		<link><?php the_permalink_rss(); ?></link>
@@ -45,7 +45,7 @@ while ( $next_posts = array_splice( $item_ids, 0, 20 ) ) {
 			if ( apply_filters( 'wxr_export_skip_postmeta', false, $meta->meta_key, $meta ) ) {
 				continue;
 			}
-		?>
+			?>
 		<postmeta>
 			<meta_key><?php echo esc_html( $meta->meta_key ); ?></meta_key>
 			<meta_value><?php echo FrmXMLHelper::cdata( $meta->meta_value ); // WPCS: XSS ok. ?></meta_value>

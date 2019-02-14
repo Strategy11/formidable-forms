@@ -290,7 +290,7 @@ class FrmAppHelper {
 	 * @return string
 	 */
 	public static function get_server_value( $value ) {
-		return isset( $_SERVER[ $value ] ) ? wp_strip_all_tags( $_SERVER[ $value ] ) : '';
+		return isset( $_SERVER[ $value ] ) ? wp_strip_all_tags( wp_unslash( $_SERVER[ $value ] ) ) : '';
 	}
 
 	/**
@@ -315,7 +315,8 @@ class FrmAppHelper {
 				continue;
 			}
 
-			foreach ( explode( ',', $_SERVER[ $key ] ) as $ip ) {
+			$key = self::get_server_value( $key );
+			foreach ( explode( ',', $key ) as $ip ) {
 				$ip = trim( $ip ); // just to be safe.
 
 				if ( filter_var( $ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE ) !== false ) {
@@ -334,9 +335,9 @@ class FrmAppHelper {
 		}
 
 		if ( $src == 'get' ) {
-			$value = isset( $_POST[ $param ] ) ? stripslashes_deep( $_POST[ $param ] ) : ( isset( $_GET[ $param ] ) ? stripslashes_deep( $_GET[ $param ] ) : $default );
+			$value = isset( $_POST[ $param ] ) ? wp_unslash( $_POST[ $param ] ) : ( isset( $_GET[ $param ] ) ? wp_unslash( $_GET[ $param ] ) : $default );
 			if ( ! isset( $_POST[ $param ] ) && isset( $_GET[ $param ] ) && ! is_array( $value ) ) {
-				$value = stripslashes_deep( htmlspecialchars_decode( $_GET[ $param ] ) );
+				$value = wp_unslash( htmlspecialchars_decode( $_GET[ $param ] ) );
 			}
 			self::sanitize_value( $sanitize, $value );
 		} else {
@@ -420,7 +421,7 @@ class FrmAppHelper {
 			}
 		} elseif ( $args['type'] == 'post' ) {
 			if ( isset( $_POST[ $args['param'] ] ) ) {
-				$value = stripslashes_deep( maybe_unserialize( $_POST[ $args['param'] ] ) );
+				$value = wp_unslash( maybe_unserialize( $_POST[ $args['param'] ] ) );
 			}
 		} else {
 			if ( isset( $_REQUEST[ $args['param'] ] ) ) {
@@ -1186,7 +1187,7 @@ class FrmAppHelper {
 		}
 
 		if ( empty( $post_values ) ) {
-			$post_values = stripslashes_deep( $_POST );
+			$post_values = wp_unslash( $_POST );
 		}
 
 		$values = array(
@@ -1636,6 +1637,7 @@ class FrmAppHelper {
 			'bcc'           => __( 'Add BCC addresses separated by a ",".  FORMAT: Name <name@email.com> or name@email.com.', 'formidable' ),
 			'reply_to'      => __( 'If you would like a different reply to address than the "from" address, add a single address here.  FORMAT: Name <name@email.com> or name@email.com.', 'formidable' ),
 			'from'          => __( 'Enter the name and/or email address of the sender. FORMAT: John Bates <john@example.com> or john@example.com.', 'formidable' ),
+			/* translators: %1$s: Form name, %2$s: Date */
 			'email_subject' => esc_attr( sprintf( __( 'If you leave the subject blank, the default will be used: %1$s Form submitted on %2$s', 'formidable' ), $form_name, self::site_name() ) ),
 		);
 

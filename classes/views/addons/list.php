@@ -27,6 +27,7 @@
 					<span class="addon-status">
 						<?php
 						printf(
+							/* translators: %s: Status name */
 							esc_html__( 'Status: %s', 'formidable' ),
 							'<span class="addon-status-label">' . esc_html( $addon['status']['label'] ) . '</span>'
 						);

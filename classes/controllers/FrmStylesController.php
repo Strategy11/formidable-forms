@@ -265,11 +265,13 @@ class FrmStylesController {
 
 		$forms = FrmForm::get_published_forms();
 		foreach ( $forms as $form ) {
-			if ( $_POST['style'][ $form->id ] == $_POST['prev_style'][ $form->id ] ) {
+			$new_style      = sanitize_text_field( wp_unslash( $_POST['style'][ $form->id ] ) );
+			$previous_style = sanitize_text_field( wp_unslash( $_POST['prev_style'][ $form->id ] ) );
+			if ( $new_style == $previous_style ) {
 				continue;
 			}
 
-			$form->options['custom_style'] = $_POST['style'][ $form->id ];
+			$form->options['custom_style'] = $new_style;
 
 			$wpdb->update( $wpdb->prefix . 'frm_forms', array( 'options' => maybe_serialize( $form->options ) ), array( 'id' => $form->id ) );
 			unset( $form );

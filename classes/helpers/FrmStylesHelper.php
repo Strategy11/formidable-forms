@@ -15,11 +15,11 @@ class FrmStylesHelper {
 		?>
 		<h2 class="nav-tab-wrapper">
 			<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-styles' ) ); ?>"
-				class="nav-tab <?php echo ( '' == $active ) ? 'nav-tab-active' : '' ?>">
+				class="nav-tab <?php echo ( '' == $active ) ? 'nav-tab-active' : ''; ?>">
 				<?php esc_html_e( 'Edit Styles', 'formidable' ); ?>
 			</a>
 			<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-styles&frm_action=manage' ) ); ?>"
-				class="nav-tab <?php echo ( 'manage' == $active ) ? 'nav-tab-active' : '' ?>">
+				class="nav-tab <?php echo ( 'manage' == $active ) ? 'nav-tab-active' : ''; ?>">
 				<?php esc_html_e( 'Manage Form Styles', 'formidable' ); ?>
 			</a>
 			<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-styles&frm_action=custom_css' ) ); ?>"
@@ -174,7 +174,7 @@ class FrmStylesHelper {
 			</button>
 			<ul class="multiselect-container frm-dropdown-menu">
 				<?php foreach ( $icons as $key => $icon ) { ?>
-					<li <?php echo ( $style->post_content['collapse_icon'] == $key ) ? 'class="active"' : '' ?>>
+					<li <?php echo ( $style->post_content['collapse_icon'] == $key ) ? 'class="active"' : ''; ?>>
 						<a href="javascript:void(0);">
 							<label>
 								<input type="radio" value="<?php echo esc_attr( $key ); ?>"/>
@@ -299,7 +299,7 @@ class FrmStylesHelper {
 			'error_bg',
 			'success_bg_color',
 			'progress_bg_color',
-			'progress_active_bg_color'
+			'progress_active_bg_color',
 		);
 
 		return array(

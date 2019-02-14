@@ -25,6 +25,6 @@ foreach ( $nav_items as $nav_item ) {
 <?php
 if ( $form && 'show' === $title ) {
 	_deprecated_argument( '$title in form-nav.php', '3.0' );
-?>
+	?>
 	<input id="title" type="text" value="<?php echo esc_attr( '' === $form->name ? __( '(no title)', 'formidable' ) : $form->name ); ?>" readonly="readonly" disabled="disabled" />
 <?php } ?>

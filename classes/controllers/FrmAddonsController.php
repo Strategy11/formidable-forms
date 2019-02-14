@@ -510,7 +510,7 @@ class FrmAddonsController {
 	private static function install_addon() {
 		require_once( ABSPATH . 'wp-admin/includes/class-wp-upgrader.php' );
 
-		$download_url = esc_url_raw( $_POST['plugin'] );
+		$download_url = FrmAppHelper::get_param( 'plugin', '', 'post', 'esc_url_raw' );
 
 		// Create the plugin upgrader with our custom skin.
 		$installer = new Plugin_Upgrader( new FrmInstallerSkin() );

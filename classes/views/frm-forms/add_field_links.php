@@ -53,7 +53,7 @@ foreach ( FrmField::pro_field_selection() as $field_key => $field_type ) {
 	if ( is_array( $field_type ) && isset( $field_type['types'] ) ) {
 		$field_label = $field_type['name'];
 
-?>
+		?>
 				<li class="frmbutton <?php echo esc_attr( $no_allow_class . ' frm_t' . $field_key ); ?> dropdown" id="<?php echo esc_attr( $field_key ); ?>">
 	                <a href="#" id="frm-<?php echo esc_attr( $field_key ); ?>Drop" class="frm-dropdown-toggle" data-toggle="dropdown" title="<?php echo esc_html( $field_label ); ?>">
 						<i class="<?php echo esc_attr( FrmFormsHelper::get_field_link_icon( $field_type ) ); ?> frm_animate_bg"></i>
@@ -65,28 +65,28 @@ foreach ( FrmField::pro_field_selection() as $field_key => $field_type ) {
 						<li class="frm_t<?php echo esc_attr( $field_key ); ?>" id="<?php echo esc_attr( $field_key ); ?>|<?php echo esc_attr( $k ); ?>">
 							<?php echo FrmAppHelper::kses( apply_filters( 'frmpro_field_links', $type, $id, $field_key . '|' . $k ), array( 'a', 'i', 'span' ) ); // WPCS: XSS ok. ?>
 						</li>
-					<?php
+						<?php
 						unset( $k, $type );
 					}
 					?>
 					</ul>
 				</li>
-<?php
-				} else {
-					$field_label = '<i class="' . esc_attr( FrmFormsHelper::get_field_link_icon( $field_type ) ) . ' frm_animate_bg"></i>';
-					$field_name  = FrmFormsHelper::get_field_link_name( $field_type );
-					$field_label .= ' <span>' . $field_name . '</span>';
-					$upgrade_label = sprintf( esc_html__( '%s fields', 'formidable' ), $field_name );
-                    ?>
+		<?php
+	} else {
+		$field_label = '<i class="' . esc_attr( FrmFormsHelper::get_field_link_icon( $field_type ) ) . ' frm_animate_bg"></i>';
+		$field_name  = FrmFormsHelper::get_field_link_name( $field_type );
+		$field_label .= ' <span>' . $field_name . '</span>';
+		$upgrade_label = sprintf( esc_html__( '%s fields', 'formidable' ), $field_name );
+		?>
 					<li class="frmbutton <?php echo esc_attr( $no_allow_class . ' frm_t' . str_replace( '|', '-', $field_key ) ); ?>" id="<?php echo esc_attr( $field_key ); ?>" data-upgrade="<?php echo esc_attr( $upgrade_label ); ?>" data-medium="builder-<?php echo esc_attr( sanitize_title( $upgrade_label ) ); ?>">
 						<?php echo FrmAppHelper::kses( apply_filters( 'frmpro_field_links', $field_label, $id, $field_key ), array( 'a', 'i', 'span' ) ); // WPCS: XSS ok. ?>
 					</li>
-				<?php
-				}
+		<?php
+	}
 
-				unset( $field_key, $field_type, $field_label );
-			}
-			?>
+	unset( $field_key, $field_type, $field_label );
+}
+?>
 			</ul>
 			<div class="clear"></div>
 		</div>
@@ -146,7 +146,7 @@ foreach ( FrmField::pro_field_selection() as $field_key => $field_type ) {
 				$col = ( 'one' === $col ) ? 'two' : 'one';
 				unset( $c, $d );
 			}
-?>
+			?>
 			</ul>
 		</div>
 	</div>

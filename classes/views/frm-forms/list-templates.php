@@ -11,8 +11,8 @@
 		<h2 class="frm-h2"><?php esc_html_e( 'Form templates', 'formidable' ); ?></h2>
 		<p class="howto">
 			<?php
-			/* translators: %1$s: Start link HTML, %2$s: End link HTML */
 			printf(
+				/* translators: %1$s: Start link HTML, %2$s: End link HTML */
 				esc_html__( 'Save time by starting from one of our pre-made templates. They are expertly designed and configured to work right out of the box. If you don\'t find a template you like, you can always start with a %1$sblank form%2$s.', 'formidable' ),
 				'<a href="' . esc_url( admin_url( 'admin.php?page=formidable&frm_action=add_new' ) ) . '">',
 				'</a>'
@@ -99,6 +99,7 @@
 							foreach ( $template['categories'] as $k => $category ) {
 								if ( in_array( $category, $plans ) ) {
 									printf(
+										/* translators: %s: Plan name */
 										esc_html__( 'License plan required: %s', 'formidable' ),
 										'<a href="' . esc_url( $pricing ) . '" target="_blank" rel="noopener">' . esc_html( $category ) . '</a>'
 									);

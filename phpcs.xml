@@ -14,8 +14,6 @@
 	<rule ref="WordPress">
 
 		<!-- Temporary exclusions. Enable these when we have time to address them -->
-		<exclude name="PEAR.Functions.FunctionCallSignature.Indent" />
-		<exclude name="Generic.WhiteSpace.DisallowSpaceIndent.SpacesUsed" />
 		<exclude name="Squiz.PHP.EmbeddedPhp.ContentBeforeOpen" />
 		<exclude name="Squiz.PHP.EmbeddedPhp.ContentAfterEnd" />
 		<exclude name="Squiz.Commenting" />

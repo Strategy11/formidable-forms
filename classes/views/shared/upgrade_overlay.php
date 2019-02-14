@@ -8,6 +8,7 @@
 				<h2>
 					<?php
 					printf(
+						/* translators: %s: Feature name */
 						esc_html__( '%s are not installed', 'formidable' ),
 						'<span class="frm_feature_label"></span>'
 					);
@@ -19,6 +20,7 @@
 						if ( $is_pro ) {
 							$message = __( 'Please see the add-ons that are included with your plan.', 'formidable' );
 						} else {
+							/* translators: %s: Feature name */
 							$message = __( '%s are not available on your plan. Please upgrade to PRO to unlock more awesome features.', 'formidable' );
 						}
 						printf( esc_html( $message ), '<span class="frm_feature_label"></span>' );

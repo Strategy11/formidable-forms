@@ -29,7 +29,7 @@ if ( count( $action_control->action_options['event'] ) == 1 || $action_control->
 		<?php
 	}
 } else {
-?>
+	?>
 	<h3><?php esc_html_e( 'Action Triggers', 'formidable' ); ?></h3>
 	<p>
 		<label class="frm_left_label"><?php esc_html_e( 'Trigger this action after', 'formidable' ); ?></label>

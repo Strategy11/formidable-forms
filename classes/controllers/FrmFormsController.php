@@ -351,6 +351,7 @@ class FrmFormsController {
 
 		$count = FrmForm::set_status( $ids, 'published' );
 
+		/* translators: %1$s: Number of forms */
 		$message = sprintf( _n( '%1$s form restored from the Trash.', '%1$s forms restored from the Trash.', $count, 'formidable' ), 1 );
 
 		return $message;
@@ -411,7 +412,10 @@ class FrmFormsController {
 			)
 		);
 
+		/* translators: %1$s: Number of forms */
 		$available_status['untrash']['message'] = sprintf( _n( '%1$s form restored from the Trash.', '%1$s forms restored from the Trash.', $count, 'formidable' ), $count );
+
+		/* translators: %1$s: Number of forms, %2$s: Start link HTML, %3$s: End link HTML */
 		$available_status['trash']['message']   = sprintf( _n( '%1$s form moved to the Trash. %2$sUndo%3$s', '%1$s forms moved to the Trash. %2$sUndo%3$s', $count, 'formidable' ), $count, '<a href="' . esc_url( wp_nonce_url( '?page=formidable&frm_action=untrash&form_type=' . $form_type . '&id=' . $params['id'], 'untrash_form_' . $params['id'] ) ) . '">', '</a>' );
 
 		$message = $available_status[ $status ]['message'];
@@ -436,6 +440,7 @@ class FrmFormsController {
 			)
 		);
 		$message      = sprintf(
+			/* translators: %1$s: Number of forms, %2$s: Start link HTML, %3$s: End link HTML */
 			_n( '%1$s form moved to the Trash. %2$sUndo%3$s', '%1$s forms moved to the Trash. %2$sUndo%3$s', $count, 'formidable' ),
 			$count,
 			'<a href="' . esc_url( wp_nonce_url( '?page=formidable&frm_action=list&action=bulk_untrash&form_type=' . $current_page . '&item-action=' . implode( ',', $ids ), 'bulk-toplevel_page_formidable' ) ) . '">',
@@ -458,6 +463,7 @@ class FrmFormsController {
 			$count ++;
 		}
 
+		/* translators: %1$s: Number of forms */
 		$message = sprintf( _n( '%1$s form permanently deleted.', '%1$s forms permanently deleted.', $count, 'formidable' ), $count );
 
 		self::display_forms_list( $params, $message );
@@ -474,6 +480,7 @@ class FrmFormsController {
 			}
 		}
 
+		/* translators: %1$s: Number of forms */
 		$message = sprintf( _n( '%1$s form permanently deleted.', '%1$s forms permanently deleted.', $count, 'formidable' ), $count );
 
 		return $message;
@@ -489,6 +496,8 @@ class FrmFormsController {
 		}
 
 		$count   = FrmForm::scheduled_delete( time() );
+
+		/* translators: %1$s: Number of forms */
 		$message = sprintf( _n( '%1$s form permanently deleted.', '%1$s forms permanently deleted.', $count, 'formidable' ), $count );
 
 		self::display_forms_list( array(), $message );
@@ -797,6 +806,7 @@ class FrmFormsController {
 		}
 
 		if ( $form->parent_form_id ) {
+			/* translators: %1$s: Start link HTML, %2$s: End link HTML */
 			wp_die( sprintf( esc_html__( 'You are trying to edit a child form. Please edit from %1$shere%2$s', 'formidable' ), '<a href="' . esc_url( admin_url( 'admin.php?page=formidable&frm_action=edit&id=' . $form->parent_form_id ) ) . '">', '</a>' ) );
 		}
 
@@ -1261,7 +1271,7 @@ class FrmFormsController {
 	}
 
 	/**
-	 * formidable shortcode
+	 * The formidable shortcode
 	 *
 	 * @param array $atts The params from the shortcode.
 	 */
@@ -1588,6 +1598,7 @@ class FrmFormsController {
 	 */
 	private static function get_redirect_message( $success_url, $success_msg, $args ) {
 		$redirect_msg = '<div class="' . esc_attr( FrmFormsHelper::get_form_style_class( $args['form'] ) ) . '"><div class="frm-redirect-msg frm_message">' . $success_msg . '<br/>' .
+		                /* translators: %1$s: Start link HTML, %2$s: End link HTML */
 		                sprintf( __( '%1$sClick here%2$s if you are not automatically redirected.', 'formidable' ), '<a href="' . esc_url( $success_url ) . '">', '</a>' ) .
 		                '</div></div>';
 

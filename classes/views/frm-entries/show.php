@@ -33,10 +33,10 @@
 						</tbody></table>
 						<br/><h3 class="<?php echo esc_attr( $first_h3 ); ?>"><?php echo esc_html( $field->name ); ?></h3>
 						<table class="form-table"><tbody>
-							<?php
+									<?php
 									$first_h3 = '';
 								} else {
-							?>
+									?>
 							<tr>
 								<th scope="row"><?php echo esc_html( $field->name ); ?>:</th>
 								<td>
@@ -59,10 +59,10 @@
 									?>
 								</td>
 							</tr>
-							<?php
+								<?php
+								}
 							}
-						}
-						?>
+							?>
 
 						<?php if ( $entry->parent_item_id ) { ?>
 							<tr><th><?php esc_html_e( 'Parent Entry ID', 'formidable' ); ?>:</th>

@@ -541,12 +541,14 @@ class FrmFieldsController {
 
 	private static function add_html_length( $field, array &$add_html ) {
 		// Check for max setting and if this field accepts maxlength.
-		if ( FrmField::is_option_empty( $field, 'max' ) || in_array( $field['type'], array(
-				'textarea',
-				'rte',
-				'hidden',
-				'file'
-			) ) ) {
+		$fields = array(
+			'textarea',
+			'rte',
+			'hidden',
+			'file',
+		);
+
+		if ( FrmField::is_option_empty( $field, 'max' ) || in_array( $field['type'], $fields ) ) {
 			return;
 		}
 

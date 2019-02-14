@@ -164,6 +164,7 @@ class FrmFormsListHelper extends FrmListHelper {
 			}
 
 			if ( $counts->{$status} || 'published' == $status ) {
+				/* translators: %1$s: Status, %2$s: Number of items */
 				$links[ $status ] = '<a href="' . esc_url( '?page=formidable&form_type=' . $status ) . '" ' . $class . '>' . sprintf( __( '%1$s <span class="count">(%2$s)</span>', 'formidable' ), $name, number_format_i18n( $counts->{$status} ) ) . '</a>';
 			}
 

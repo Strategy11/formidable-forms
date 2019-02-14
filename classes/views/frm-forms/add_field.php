@@ -40,29 +40,29 @@
     <?php } ?>
 </div>
 <div class="clear"></div>
-<?php
+	<?php
 }
 
 FrmFieldsController::load_single_field_settings( compact( 'field', 'field_obj', 'values', 'display' ) );
 
 if ( 'divider' === $field['type'] ) {
-?>
+	?>
 </div>
 <div class="frm_no_section_fields">
 	<p class="howto"><?php esc_html_e( 'Drag fields from your form or the sidebar into this section', 'formidable' ); ?></p>
 </div>
 <ul class="start_divider frm_sorting">
-<?php
+	<?php
 } elseif ( 'end_divider' === $field['type'] ) {
-?>
+	?>
 </ul>
-<?php
+	<?php
 }
 
 if ( $field['type'] !== 'divider' ) {
-?>
+	?>
 </li>
-<?php
+	<?php
 }
 
 ?>

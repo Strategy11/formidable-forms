@@ -25,11 +25,11 @@
         <div class="contextual-help-tabs">
         <ul class="frm-category-tabs">
 			<?php $a = FrmAppHelper::simple_get( 't', 'sanitize_title', 'general_settings' ); ?>
-        	<li <?php echo ( $a == 'general_settings' ) ? 'class="tabs active"' : '' ?>>
+        	<li <?php echo ( $a == 'general_settings' ) ? 'class="tabs active"' : ''; ?>>
 				<a href="#general_settings" class="frm_cursor_pointer"><?php esc_html_e( 'General', 'formidable' ); ?></a>
 			</li>
 			<?php foreach ( $sections as $sec_name => $section ) { ?>
-				<li <?php echo ( $a == $sec_name . '_settings' ) ? 'class="tabs active starttab"' : '' ?>>
+				<li <?php echo ( $a == $sec_name . '_settings' ) ? 'class="tabs active starttab"' : ''; ?>>
 					<a href="#<?php echo esc_attr( $sec_name ); ?>_settings" data-frmajax="<?php echo esc_attr( isset( $section['ajax'] ) ? $section['ajax'] : '' ); ?>">
 						<?php echo esc_html( isset( $section['name'] ) ? $section['name'] : ucfirst( $sec_name ) ); ?>
 					</a>
@@ -101,7 +101,14 @@
 			</h3>
 
 			<p class="howto">
-				<?php echo wp_kses_post( sprintf( __( 'reCAPTCHA requires a Site and Private API key. Sign up for a %1$sfree reCAPTCHA key%2$s.', 'formidable' ), '<a href="' . esc_url( 'https://www.google.com/recaptcha/' ) . '" target="_blank">', '</a>' ) ); ?>
+				<?php
+				printf(
+					/* translators: %1$s: Start link HTML, %2$s: End link HTML */
+					esc_html__( 'reCAPTCHA requires a Site and Private API key. Sign up for a %1$sfree reCAPTCHA key%2$s.', 'formidable' ),
+					'<a href="' . esc_url( 'https://www.google.com/recaptcha/' ) . '" target="_blank">',
+					'</a>'
+				);
+				?>
 			</p>
 
 			<p><label class="frm_left_label"><?php esc_html_e( 'Site Key', 'formidable' ); ?></label>
@@ -208,7 +215,7 @@
         <?php
 		foreach ( $sections as $sec_name => $section ) {
 			if ( $a === $sec_name . '_settings' ) {
-			?>
+				?>
 <style type="text/css">.<?php echo esc_attr( $sec_name ); ?>_settings{display:block;}</style><?php } ?>
 			<div id="<?php echo esc_attr( $sec_name ); ?>_settings" class="<?php echo esc_attr( $sec_name ); ?>_settings tabs-panel <?php echo esc_attr( $a === $sec_name . '_settings' ? 'frm_block' : 'frm_hidden' ); ?>">
 				<?php if ( isset( $section['ajax'] ) ) { ?>

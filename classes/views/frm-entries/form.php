@@ -1,10 +1,17 @@
 <?php
 if ( empty( $values ) || ! isset( $values['fields'] ) || empty( $values['fields'] ) ) { ?>
 <div class="frm_forms <?php echo esc_attr( FrmFormsHelper::get_form_style_class( $form ) ); ?>" id="frm_form_<?php echo esc_attr( $form->id ); ?>_container">
-	<div class="frm_error_style"><strong><?php esc_html_e( 'Oops!', 'formidable' ); ?></strong> <?php printf( esc_html__( 'You did not add any fields to your form. %1$sGo back%2$s and add some.', 'formidable' ), '<a href="' . esc_url( admin_url( '?page=formidable&frm_action=edit&id=' . $form->id ) ) . '">', '</a>' ); ?>
+	<div class="frm_error_style"><strong><?php esc_html_e( 'Oops!', 'formidable' ); ?></strong> <?php
+		printf(
+			/* translators: %1$s: HTML open link, %2$s: HTML close link */
+			esc_html__( 'You did not add any fields to your form. %1$sGo back%2$s and add some.', 'formidable' ),
+			'<a href="' . esc_url( admin_url( '?page=formidable&frm_action=edit&id=' . $form->id ) ) . '">',
+			'</a>'
+		);
+	?>
     </div>
 </div>
-<?php
+	<?php
     return;
 }
 
@@ -38,14 +45,14 @@ if ( $values['fields'] ) {
 
 $frm_settings = FrmAppHelper::get_settings();
 if ( FrmAppHelper::is_admin() ) {
-?>
+	?>
 <div class="frm_form_field form-field">
 <label class="frm_primary_label"><?php esc_html_e( 'Entry Key', 'formidable' ); ?></label>
 <input type="text" name="item_key" value="<?php echo esc_attr( $values['item_key'] ); ?>" />
 </div>
 <?php } else { ?>
 <input type="hidden" name="item_key" value="<?php echo esc_attr( $values['item_key'] ); ?>" />
-<?php
+	<?php
 }
 
 do_action( 'frm_entry_form', $form, $form_action, $errors );

@@ -567,6 +567,7 @@ class FrmListHelper {
 			$infinite_scroll = $this->_pagination_args['infinite_scroll'];
 		}
 
+		/* translators: %s: Number of items */
 		$output = '<span class="displaying-num">' . sprintf( _n( '%s item', '%s items', $total_items, 'formidable' ), number_format_i18n( $total_items ) ) . '</span>';
 
 		$current = $this->get_pagenum();
@@ -608,7 +609,9 @@ class FrmListHelper {
 			);
 		}
 		$html_total_pages = sprintf( "<span class='total-pages'>%s</span>", number_format_i18n( $total_pages ) );
-		$page_links[]     = $total_pages_before . sprintf( _x( '%1$s of %2$s', 'paging', 'formidable' ), $html_current_page, $html_total_pages ) . $total_pages_after;
+
+		/* translators: %1$s: Current page number, %2$s: Total pages */
+		$page_links[] = $total_pages_before . sprintf( _x( '%1$s of %2$s', 'paging', 'formidable' ), $html_current_page, $html_total_pages ) . $total_pages_after;
 
 		$page_links[] = $this->add_page_link(
 			array(
@@ -882,7 +885,7 @@ class FrmListHelper {
 		$current_url = remove_query_arg( 'paged', $current_url );
 
 		if ( isset( $_GET['orderby'] ) ) {
-			$current_orderby = sanitize_text_field( $_GET['orderby'] );
+			$current_orderby = sanitize_text_field( wp_unslash( $_GET['orderby'] ) );
 		} else {
 			$current_orderby = '';
 		}
@@ -1146,6 +1149,7 @@ class FrmListHelper {
 		$response = array( 'rows' => $rows );
 
 		if ( isset( $this->_pagination_args['total_items'] ) ) {
+			/* translators: %s: Number of items */
 			$response['total_items_i18n'] = sprintf(
 				_n( '%s item', '%s items', $this->_pagination_args['total_items'], 'formidable' ),
 				number_format_i18n( $this->_pagination_args['total_items'] )

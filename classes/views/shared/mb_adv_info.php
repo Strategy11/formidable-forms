@@ -69,13 +69,13 @@
 
 			$classes = ( in_array( $skey, array( 'siteurl', 'sitename', 'entry_count' ) ) ) ? 'show_before_content show_after_content' : '';
 			$classes .= ( strpos( $skey, 'default-' ) === 0 ) ? 'hide_frm_not_email_subject' : '';
-        ?>
+			?>
         <li class="frm_col_<?php echo esc_attr( $col ); ?>">
 			<a href="javascript:void(0)" class="frmbutton button <?php echo esc_attr( $classes ); ?> frm_insert_code" data-code="<?php echo esc_attr( $skey ); ?>">
 				<?php echo esc_html( $sname ); ?>
 			</a>
         </li>
-        <?php
+			<?php
             $col = ( $col == 'one' ) ? 'two' : 'one';
 			unset( $skey, $sname, $classes );
         }
@@ -97,18 +97,18 @@
 		        foreach ( $fields as $f ) {
 					if ( FrmField::is_no_save_field( $f->type ) || ( $f->type == 'data' && ( ! isset( $f->field_options['data_type'] ) || $f->field_options['data_type'] == 'data' || $f->field_options['data_type'] == '' ) ) ) {
                         continue;
-                }
-            ?>
+					}
+					?>
                 <li>
-                    <a href="javascript:void(0)" class="frmids alignright frm_insert_code" data-code="if <?php echo esc_attr( $f->id ); ?>]<?php esc_attr_e( 'Conditional text here', 'formidable' ); ?>[/if <?php echo esc_attr( $f->id ); ?>">[if <?php echo (int) $f->id ?>]</a>
+                    <a href="javascript:void(0)" class="frmids alignright frm_insert_code" data-code="if <?php echo esc_attr( $f->id ); ?>]<?php esc_attr_e( 'Conditional text here', 'formidable' ); ?>[/if <?php echo esc_attr( $f->id ); ?>">[if <?php echo (int) $f->id; ?>]</a>
 					<a href="javascript:void(0)" class="frmkeys alignright frm_insert_code" data-code="if <?php echo esc_attr( $f->field_key ); ?>]something[/if <?php echo esc_attr( $f->field_key ); ?>">[if <?php echo FrmAppHelper::truncate( $f->field_key, 10 ); // WPCS: XSS ok. ?>]</a>
 					<a href="javascript:void(0)" class="frm_insert_code" data-code="<?php echo esc_attr( $f->id ); ?>"><?php echo FrmAppHelper::truncate( $f->name, 60 ); // WPCS: XSS ok. ?></a>
                 </li>
-                <?php
-				unset( $f );
+					<?php
+					unset( $f );
+				}
 			}
-		}
-		?>
+			?>
         </ul>
 
         <p class="howto"><?php esc_html_e( 'Click a button below to insert sample logic into your view', 'formidable' ); ?></p>
@@ -116,11 +116,11 @@
         <?php
         $col = 'one';
 		foreach ( $cond_shortcodes as $skey => $sname ) {
-	    ?>
+			?>
 	    <li class="frm_col_<?php echo esc_attr( $col ); ?>">
 			<a href="javascript:void(0)" class="frmbutton button frm_insert_code" data-code="if x <?php echo esc_attr( $skey ); ?>][/if x"><?php echo esc_html( $sname ); ?></a>
 	    </li>
-	    <?php
+			<?php
 	        $col = ( $col == 'one' ) ? 'two' : 'one';
 			unset( $skey, $sname );
 	    }
@@ -162,7 +162,7 @@
 			}
 			?>
 			</ul>
-		<?php
+			<?php
 		}
 		?>
 

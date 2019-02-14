@@ -163,6 +163,7 @@ class FrmFieldsHelper {
 			if ( 'captcha' === $field->type ) {
 				$field_array['invalid'] = $frm_settings->re_msg;
 			} else {
+				/* translators: %s: Field name */
 				$field_array['invalid'] = sprintf( __( '%s is invalid', 'formidable' ), $field_array['name'] );
 			}
 		}
@@ -277,10 +278,12 @@ class FrmFieldsHelper {
 		$defaults = array(
 			'unique_msg' => array(
 				'full' => $default_settings['unique_msg'],
+				/* translators: %s: Field name */
 				'part' => sprintf( __( '%s must be unique', 'formidable' ), $field_name ),
 			),
 			'invalid'    => array(
 				'full' => __( 'This field is invalid', 'formidable' ),
+				/* translators: %s: Field name */
 				'part' => sprintf( __( '%s is invalid', 'formidable' ), $field_name ),
 			),
 			'blank'      => array(
@@ -448,6 +451,7 @@ class FrmFieldsHelper {
 		}
 
 		$link = sprintf(
+			/* translators: %s: Page name with link */
 			esc_html__( 'Please add options from the WordPress "%1$s" page', 'formidable' ),
 			'<a href="' . esc_url( admin_url( 'edit-tags.php?taxonomy=' . $tax->name ) ) . '" target="_blank">' . ( empty( $tax->labels->name ) ? esc_html__( 'Categories', 'formidable' ) : $tax->labels->name ) . '</a>'
 		);
@@ -1098,9 +1102,9 @@ class FrmFieldsHelper {
 		$label = isset( $args['opt_label'] ) ? $args['opt_label'] : $args['field']['name'];
 
 		?><label for="<?php echo esc_attr( $other_id ); ?>" class="frm_screen_reader frm_hidden"><?php
-		echo esc_html( $label );
+			echo esc_html( $label );
 		?></label><input type="text" id="<?php echo esc_attr( $other_id ); ?>" class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>" <?php
-		echo ( $args['read_only'] ? ' readonly="readonly" disabled="disabled"' : '' );
+			echo ( $args['read_only'] ? ' readonly="readonly" disabled="disabled"' : '' );
 		?> name="<?php echo esc_attr( $args['name'] ); ?>" value="<?php echo esc_attr( $args['value'] ); ?>" /><?php
 	}
 

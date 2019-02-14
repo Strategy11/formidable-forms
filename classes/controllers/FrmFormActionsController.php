@@ -146,13 +146,13 @@ class FrmFormActionsController {
 
 		global $frm_vars;
 
-		$action_key  = absint( $_POST['list_id'] );
-		$action_type = sanitize_text_field( $_POST['type'] );
+		$action_key  = FrmAppHelper::get_param( 'list_id', '', 'post', 'absint' );
+		$action_type = FrmAppHelper::get_param( 'type', '', 'post', 'sanitize_text_field' );
 
 		$action_control = self::get_form_actions( $action_type );
 		$action_control->_set( $action_key );
 
-		$form_id = absint( $_POST['form_id'] );
+		$form_id = FrmAppHelper::get_param( 'form_id', '', 'post', 'absint' );
 
 		$form_action = $action_control->prepare_new( $form_id );
 
@@ -167,8 +167,8 @@ class FrmFormActionsController {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
-		$action_key  = absint( $_POST['action_id'] );
-		$action_type = sanitize_text_field( $_POST['action_type'] );
+		$action_key  = FrmAppHelper::get_param( 'action_id', '', 'post', 'absint' );
+		$action_type = FrmAppHelper::get_param( 'action_type', '', 'post', 'sanitize_text_field' );
 
 		$action_control = self::get_form_actions( $action_type );
 		if ( empty( $action_control ) ) {

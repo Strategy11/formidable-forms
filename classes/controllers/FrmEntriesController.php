@@ -211,7 +211,7 @@ class FrmEntriesController {
 	}
 
 	/**
-	 * add hidden columns back from other forms
+	 * Add hidden columns back from other forms
 	 */
 	public static function update_hidden_cols( $meta_id, $object_id, $meta_key, $meta_value ) {
 		$this_page_name = self::hidden_column_key();
@@ -429,6 +429,8 @@ class FrmEntriesController {
 		if ( 'trash' == $form->status ) {
 			$delete_timestamp = time() - ( DAY_IN_SECONDS * EMPTY_TRASH_DAYS );
 			$time_to_delete   = FrmAppHelper::human_time_diff( $delete_timestamp, ( isset( $form->options['trash_time'] ) ? ( $form->options['trash_time'] ) : time() ) );
+
+			/* translators: %1$s: Time string */
 			$errors['trash']  = sprintf( __( 'This form is in the trash and is scheduled to be deleted permanently in %s along with any entries.', 'formidable' ), $time_to_delete );
 		}
 	}

@@ -50,14 +50,14 @@
 
 					</td><!-- .menu-location-menus -->
 				</tr><!-- #menu-locations-row -->
-				<?php
+					<?php
 					}
 				} else {
-				?>
+					?>
 				<tr>
 				    <td><?php esc_html_e( 'No Forms Found', 'formidable' ); ?></td>
 				</tr>
-				<?php
+					<?php
 				}
 				?>
 			</tbody>

@@ -10,7 +10,7 @@ while ( $next_set = array_splice( $item_ids, 0, 20 ) ) {
 
 	// Begin Loop
 	foreach ( $forms as $form ) {
-?>
+		?>
 	<form>
 		<id><?php echo absint( $form->id ); ?></id>
 		<form_key><?php echo FrmXMLHelper::cdata( $form->form_key ); // WPCS: XSS ok. ?></form_key>
@@ -29,7 +29,7 @@ while ( $next_set = array_splice( $item_ids, 0, 20 ) ) {
 
 		foreach ( $fields as $field ) {
 			FrmXMLHelper::prepare_field_for_export( $field );
-		?>
+			?>
 		<field>
 		    <id><?php echo absint( $field->id ); ?></id>
             <field_key><?php echo FrmXMLHelper::cdata( $field->field_key ); // WPCS: XSS ok. ?></field_key>

@@ -183,6 +183,7 @@ class FrmAppController {
 			echo apply_filters( // WPCS: XSS ok.
 				'frm_pro_update_msg',
 				sprintf(
+					/* translators: %1$s: Start link HTML, %2$s: End link HTML, %3$s: Start link HTML, %4$s: End link HTML */
 					esc_html__( 'This site has been previously authorized to run Formidable Forms. %1$sInstall Formidable Pro%2$s or %3$sdeauthorize%4$s this site to continue running the free version and remove this message.', 'formidable' ),
 					'<br/><a href="' . esc_url( $inst_install_url ) . '" id="frm_install_link" target="_blank" data-prourl="' . esc_url( $download_url ) . '">',
 					'</a>',
@@ -373,10 +374,7 @@ class FrmAppController {
 		wp_register_style( 'formidable-grids', FrmAppHelper::plugin_url() . '/css/frm_grids.css', array(), $version );
 
 		// load multselect js
-		$depends_on = array(
-			'jquery',
-			'bootstrap_tooltip'
-		);
+		$depends_on = array( 'jquery', 'bootstrap_tooltip' );
 		wp_register_script( 'bootstrap-multiselect', FrmAppHelper::plugin_url() . '/js/bootstrap-multiselect.js', $depends_on, '0.9.8', true );
 
 		$page      = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
@@ -408,7 +406,7 @@ class FrmAppController {
 			if ( isset( $_REQUEST['post_type'] ) ) {
 				$post_type = sanitize_title( $_REQUEST['post_type'] );
 			} elseif ( isset( $_REQUEST['post'] ) && absint( $_REQUEST['post'] ) ) {
-				$post = get_post( absint( $_REQUEST['post'] ) );
+				$post = get_post( absint( wp_unslash( $_REQUEST['post'] ) ) );
 				if ( ! $post ) {
 					return;
 				}

@@ -15,7 +15,7 @@
 		FrmAppController::get_form_nav( $atts['form'], true, 'hide' );
 	} else {
 
-	?>
+		?>
 
 	<div class="frm_top_left">
 	<h1><?php echo esc_html( $atts['label'] ); ?>
@@ -25,7 +25,7 @@
 		<?php } ?>
 	</h1>
 	</div>
-	<?php
+		<?php
 	}
 	?>
 
@@ -33,12 +33,12 @@
 </div>
 
 <?php if ( isset( $atts['form'] ) && ! empty( $atts['form'] ) && ! isset( $atts['hide_title'] ) ) { ?>
-    <h<?php echo $has_nav ? 1 : 2 ?> id="frm_form_heading">
+    <h<?php echo $has_nav ? 1 : 2; ?> id="frm_form_heading">
 		<?php
 		echo esc_html( strip_tags( '' === $atts['form']->name ? __( '(no title)', 'formidable' ) : $atts['form']->name ) );
 		if ( $has_nav ) {
 			FrmAppHelper::add_new_item_link( $atts );
 		}
 		?>
-	</h<?php echo $has_nav ? 1 : 2 ?>>
+	</h<?php echo $has_nav ? 1 : 2; ?>>
 <?php } ?>

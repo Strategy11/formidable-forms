@@ -887,13 +887,21 @@ class FrmXMLHelper {
 		}
 
 		$strings = array(
+			/* translators: %1$s: Number of items */
 			'forms'   => sprintf( _n( '%1$s Form', '%1$s Forms', $m, 'formidable' ), $m ),
+			/* translators: %1$s: Number of items */
 			'fields'  => sprintf( _n( '%1$s Field', '%1$s Fields', $m, 'formidable' ), $m ),
+			/* translators: %1$s: Number of items */
 			'items'   => sprintf( _n( '%1$s Entry', '%1$s Entries', $m, 'formidable' ), $m ),
+			/* translators: %1$s: Number of items */
 			'views'   => sprintf( _n( '%1$s View', '%1$s Views', $m, 'formidable' ), $m ),
+			/* translators: %1$s: Number of items */
 			'posts'   => sprintf( _n( '%1$s Post', '%1$s Posts', $m, 'formidable' ), $m ),
+			/* translators: %1$s: Number of items */
 			'styles'  => sprintf( _n( '%1$s Style', '%1$s Styles', $m, 'formidable' ), $m ),
+			/* translators: %1$s: Number of items */
 			'terms'   => sprintf( _n( '%1$s Term', '%1$s Terms', $m, 'formidable' ), $m ),
+			/* translators: %1$s: Number of items */
 			'actions' => sprintf( _n( '%1$s Form Action', '%1$s Form Actions', $m, 'formidable' ), $m ),
 		);
 
@@ -979,6 +987,7 @@ class FrmXMLHelper {
 		// Get variations on the defaults.
 		if ( isset( $options['invalid'] ) ) {
 			$defaults = array(
+				/* translators: %s: Field name */
 				'invalid' => sprintf( __( '%s is invalid', 'formidable' ), $field->name ),
 			);
 			self::remove_defaults( $defaults, $options );
