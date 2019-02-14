@@ -14,7 +14,7 @@
 			/* translators: %1$s: Start link HTML, %2$s: End link HTML */
 			printf(
 				esc_html__( 'Save time by starting from one of our pre-made templates. They are expertly designed and configured to work right out of the box. If you don\'t find a template you like, you can always start with a %1$sblank form%2$s.', 'formidable' ),
-				'<a href="' . esc_url( admin_url( 'admin.php?page=formidable&frm_action=new' ) ) . '">',
+				'<a href="' . esc_url( admin_url( 'admin.php?page=formidable&frm_action=add_new' ) ) . '">',
 				'</a>'
 			);
 			?>
@@ -72,7 +72,7 @@
 					<p><?php esc_html_e( 'Start from scratch and build exactly what you want. This option will not pre-load any fields.', 'formidable' ); ?></p>
 				</div>
 				<div class="plugin-card-bottom">
-					<a class="button button-primary frm-button-primary" href="<?php echo esc_url( admin_url( 'admin.php?page=formidable&frm_action=new' ) ); ?>">
+					<a class="button button-primary frm-button-primary frm-new-form-button" href="#">
 						<?php esc_html_e( 'Create Form', 'formidable' ); ?>
 					</a>
 				</div>

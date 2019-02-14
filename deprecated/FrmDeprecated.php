@@ -31,10 +31,9 @@ class FrmDeprecated {
 			return;
 		}
 
-		$values = array();
+		$values = FrmFormsHelper::setup_new_vars( $values );
 		$id   = FrmForm::create( $values );
 		$form = FrmForm::getOne( $id );
-		FrmFormsController::create_default_email_action( $form );
 		$values['id'] = $id;
 
 		FrmFormsController::edit( $values );

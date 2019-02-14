@@ -1,9 +1,4 @@
 <div class="postbox-container frm-right-panel">
-<div id="frm_position_ele"></div>
-<div id="frm-fixed" class="frm-mobile-fixed">
-
-	<div id="frm_set_height_ele"></div>
-	<div id="frm-fixed-panel">
 	<div class="frm_field_list">
 		<ul id="frm-nav-tabs">
 			<li class="frm-tabs">
@@ -160,7 +155,4 @@ foreach ( FrmField::pro_field_selection() as $field_key => $field_type ) {
 		<input type="hidden" id="frm_compact_fields" name="frm_compact_fields" value="" />
 		<button class="frm_submit_form frm_submit_<?php echo esc_attr( ( isset( $values['ajax_load'] ) && $values['ajax_load'] ) ? '' : 'no_' ); ?>ajax frm_hidden frm_button_submit" type="button" id="frm_submit_side"><?php esc_html_e( 'Update', 'formidable' ); ?></button>
 	</form>
-
-	</div>
-	</div>
 </div>

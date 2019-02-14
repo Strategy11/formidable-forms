@@ -7,6 +7,6 @@
 <p class="frm_no_entries_text"><?php printf( esc_html__( 'See the %1$sform documentation%2$s for instructions on publishing your form', 'formidable' ), '<a href="https://formidableforms.com/knowledgebase/publish-your-forms/?utm_source=WordPress&utm_medium=entries&utm_campaign=liteplugin" target="_blank">', '</a>' ); ?></p>
 <?php } else { ?>
 <div class="frm_no_entries_header"><?php esc_html_e( 'You have not created any forms yet.', 'formidable' ); ?></div>
-<p class="frm_no_entries_text"><?php printf( esc_html__( 'To view entries, you must first %1$sbuild a form%2$s', 'formidable' ), '<a href="' . esc_url( admin_url( 'admin.php?page=formidable&frm_action=new' ) ) . '">', '</a>' ); ?></p>
+<p class="frm_no_entries_text"><?php printf( esc_html__( 'To view entries, you must first %1$sbuild a form%2$s', 'formidable' ), '<a href="' . esc_url( admin_url( 'admin.php?page=formidable&frm_action=add_new' ) ) . '">', '</a>' ); ?></p>
 <?php } ?>
 </div>

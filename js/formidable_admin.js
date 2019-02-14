@@ -77,58 +77,6 @@ function frmAdminBuildJS(){
 		}
 	}
 
-	function preventBodyScroll() {
-		jQuery('#frm-fixed-panel').on( 'mousewheel DOMMouseScroll', function(e){
-			var e0 = e.originalEvent,
-				delta = e0.wheelDelta || -e0.detail;
-			this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
-			e.preventDefault();
-		});
-	}
-
-	function setupMenuOffset() {
-		window.onscroll = document.documentElement.onscroll = setMenuOffset;
-		setMenuOffset();
-
-		// set height for scrolling sidebar
-		var fixedBox = document.getElementById('frm-fixed-panel');
-		if ( fixedBox !== null ) {
-			var startPos = document.getElementById('frm_set_height_ele').getBoundingClientRect().top;
-			var topSidebar = document.getElementById('frm-fixed').getBoundingClientRect().top;
-			var totalHeight = window.innerHeight;
-			fixedBox.style.maxHeight = ( totalHeight - ( startPos - topSidebar ) - 30 ) +'px';
-		}
-	}
-
-	function setMenuOffset(){
-		var offset = 455;
-		var fields = document.getElementById('frm-fixed');
-
-		if ( fields === null ) {
-			fields = document.getElementById('frm_adv_info');
-			if ( fields === null ) {
-				return;
-			}
-		}
-
-		var currentOffset = document.documentElement.scrollTop || document.body.scrollTop; // body for Safari
-		if(currentOffset === 0){
-			fields.style.top = '';
-			return;
-		}
-		var posEle = jQuery(document.getElementById('frm_position_ele'));
-		if(posEle.length>0){
-			var eleOffset = posEle.offset();
-			offset = eleOffset.top;
-		}
-
-		var desiredOffset = offset + 2 - currentOffset;
-		if (desiredOffset < 0){
-			desiredOffset = 0;
-		}
-		fields.style.top = desiredOffset + 'px';
-	}
-
 	function loadTooltips() {
 		var tooltipOpts = {
 			template:'<div class="frm_tooltip tooltip"><div class="tooltip-inner"></div></div>',
@@ -3082,7 +3030,7 @@ function frmAdminBuildJS(){
 	/* Templates */
 
 	function initNewFormModal() {
-		var $info = initModal( '#frm_form_modal' );
+		var $info = initModal( '#frm_form_modal', '650px' );
 		console.log($info);
 		if ( $info === false ) {
 			return;
@@ -3120,7 +3068,7 @@ function frmAdminBuildJS(){
 			} );
 		}
 
-		var $info = initModal( '#frm_template_modal' );
+		var $info = initModal( '#frm_template_modal', '650px' );
 		if ( $info === false ) {
 			return;
 		}
@@ -3149,6 +3097,19 @@ function frmAdminBuildJS(){
 			document.getElementById('frm_template_name').value = this.getAttribute( 'data-fullname' );
 			document.getElementById('frm_link').value = this.getAttribute( 'data-formid' );
 			document.getElementById('frm_action_type').value = 'frm_build_template';
+			$info.dialog('open');
+		} );
+
+		jQuery('.frm-new-form-button').click( function( event ) {
+			event.preventDefault();
+			var nameLabel = document.getElementById( 'frm_new_name' ),
+				descLabel = document.getElementById( 'frm_new_desc' );
+
+			nameLabel.innerHTML = nameLabel.getAttribute( 'data-form' );
+			descLabel.innerHTML = descLabel.getAttribute( 'data-form' );
+			document.getElementById('frm_template_name').value = '';
+			document.getElementById('frm_link').value = '';
+			document.getElementById('frm_action_type').value = 'frm_install_form';
 			$info.dialog('open');
 		} );
 
@@ -3276,7 +3237,7 @@ function frmAdminBuildJS(){
 			width = '550px';
 		}
 		$info.dialog({
-			dialogClass: 'wp-dialog',
+			dialogClass: 'frm-dialog',
 			modal: true,
 			autoOpen: false,
 			closeOnEscape: true,
@@ -3286,7 +3247,7 @@ function frmAdminBuildJS(){
 			open: function( event ) {
 				jQuery('.ui-dialog-titlebar').addClass('frm_hidden').removeClass('ui-helper-clearfix');
 				jQuery('#wpwrap').addClass('frm_overlay');
-				jQuery('.wp-dialog').removeClass('ui-widget ui-widget-content ui-corner-all');
+				jQuery('.frm-dialog').removeClass('ui-widget ui-widget-content ui-corner-all');
 				jQuery( id ).removeClass('ui-dialog-content ui-widget-content');
 
 				// close dialog by clicking the overlay behind it
@@ -3387,14 +3348,14 @@ function frmAdminBuildJS(){
 			if($shortCodeDiv.length > 0){
 				jQuery('a.edit-frm_shortcode').click(function() {
 					if ($shortCodeDiv.is(':hidden')) {
-						$shortCodeDiv.slideDown('fast', function(){setMenuOffset();});
+						$shortCodeDiv.slideDown('fast');
 						this.style.display = 'none';
 					}
 					return false;
 				});
 
 				jQuery('.cancel-frm_shortcode', '#frm_shortcodediv').click(function() {
-					$shortCodeDiv.slideUp('fast', function(){setMenuOffset();});
+					$shortCodeDiv.slideUp('fast');
 					$shortCodeDiv.siblings('a.edit-frm_shortcode').show();
 					return false;
 				});
@@ -3470,7 +3431,6 @@ function frmAdminBuildJS(){
 			});
 
 			initiateMultiselect();
-			preventBodyScroll();
 
 			var $builderForm = jQuery( builderForm );
 			$builderForm.on( 'click', '.frm_add_logic_row', addFieldLogicRow );
@@ -3640,8 +3600,6 @@ function frmAdminBuildJS(){
 		},
 		
 		panelInit: function(){
-			setupMenuOffset();
-
 			jQuery('.frm_code_list a').addClass('frm_noallow');
 			
 			jQuery('#postbox-container-1').on('click', '.frm_insert_code', insertCode);
@@ -3721,7 +3679,6 @@ function frmAdminBuildJS(){
 
 		viewInit: function(){
 			var $advInfo = jQuery(document.getElementById('frm_adv_info'));
-			$advInfo.before('<div id="frm_position_ele"></div>');
 
 			// add form nav
 			var $navCont = document.getElementById('frm_nav_container');

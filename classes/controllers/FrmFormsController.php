@@ -1133,6 +1133,9 @@ class FrmFormsController {
         FrmAppHelper::trigger_hook_load( 'form' );
 
         switch ( $action ) {
+			case 'new':
+				return self::new_form( $vars );
+			case 'create':
 			case 'add_new':
 			case 'list_templates':
             case 'edit':
@@ -1145,10 +1148,6 @@ class FrmFormsController {
             case 'settings':
             case 'update_settings':
 				return self::$action( $vars );
-			case 'new':
-				return self::edit( $vars );
-			case 'create':
-				return self::update( $vars );
             default:
 				do_action( 'frm_form_action_' . $action );
 				if ( apply_filters( 'frm_form_stop_action_' . $action, false ) ) {

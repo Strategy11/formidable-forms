@@ -535,16 +535,7 @@ class FrmAppController {
 
 	public static function set_footer_text( $text ) {
 		if ( FrmAppHelper::is_formidable_admin() ) {
-			$link = FrmAppHelper::admin_upgrade_link( 'footer' );
-			$text = sprintf(
-				__( 'Help us spread the %1$sFormidable Forms%2$s love with %3$s %5$s on WordPress.org%4$s. Thank you heaps!', 'formidable' ),
-				'<a href="' . esc_url( FrmAppHelper::make_affiliate_url( $link ) ) . '" target="_blank">',
-				'</a>',
-				'<a href="https://wordpress.org/support/plugin/formidable/reviews/?filter=5#new-post" target="_blank">',
-				'</a>',
-				'&#9733;&#9733;&#9733;&#9733;&#9733;'
-			);
-			$text = '<span id="footer-thankyou">' . $text . '</span>';
+			$text = '';
 		}
 		return $text;
 	}

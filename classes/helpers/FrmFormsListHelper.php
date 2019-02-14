@@ -98,7 +98,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	public function no_items() {
 		esc_html_e( 'No Forms Found.', 'formidable' );
 		?>
-		<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable&frm_action=new' ) ) ?>">
+		<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable&frm_action=add_new' ) ) ?>">
 			<?php esc_html_e( 'Add New', 'formidable' ); ?>
 		</a>
 <?php
