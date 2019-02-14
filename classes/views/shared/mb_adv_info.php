@@ -1,4 +1,4 @@
-<div id="taxonomy-linkcategory" class="categorydiv <?php echo esc_attr( $class ) ?>">
+<div id="taxonomy-linkcategory" class="categorydiv <?php echo esc_attr( $class ); ?>">
 	<ul id="category-tabs" class="category-tabs frm-category-tabs">
 		<li class="tabs"><a href="#frm-insert-fields-box" id="frm_insert_fields_tab"><?php esc_html_e( 'Fields', 'formidable' ); ?></a></li>
 		<?php if ( ! empty( $cond_shortcodes ) ) { ?>
@@ -12,13 +12,13 @@
 
 	<div id="frm-insert-fields-box" class="tabs-panel">
 		<ul class="subsubsub">
-			<li><a href="javascript:void(0)" class="current frmids"><?php esc_html_e( 'IDs', 'formidable' ) ?></a> |</li>
-			<li><a href="javascript:void(0)" class="frmkeys"><?php esc_html_e( 'Keys', 'formidable' ) ?></a></li>
+			<li><a href="javascript:void(0)" class="current frmids"><?php esc_html_e( 'IDs', 'formidable' ); ?></a> |</li>
+			<li><a href="javascript:void(0)" class="frmkeys"><?php esc_html_e( 'Keys', 'formidable' ); ?></a></li>
 		</ul>
-		<ul class="alignleft"><li><?php esc_html_e( 'Fields from your form', 'formidable' ) ?>:</li>
+		<ul class="alignleft"><li><?php esc_html_e( 'Fields from your form', 'formidable' ); ?>:</li>
 </ul>
 		<ul class="frm_code_list" id="frm_customize_search">
-			<li><input type="search" id="frm_field_search" name="frm_field_search" placeholder="<?php esc_html_e( 'Search', 'formidable' ) ?>"></li>
+			<li><input type="search" id="frm_field_search" name="frm_field_search" placeholder="<?php esc_html_e( 'Search', 'formidable' ); ?>"></li>
 		</ul>
 		<ul class="frm_code_list frm_full_width frm_customize_field_list">
 		<?php
@@ -53,10 +53,10 @@
         </ul>
 
 		<p class="howto">
-			<?php esc_html_e( 'Click a button below to insert extra values from form entries or your site settings.', 'formidable' ) ?>
+			<?php esc_html_e( 'Click a button below to insert extra values from form entries or your site settings.', 'formidable' ); ?>
 		</p>
 
-        <?php esc_html_e( 'Helpers', 'formidable' ) ?>:
+        <?php esc_html_e( 'Helpers', 'formidable' ); ?>:
         <ul class="frm_code_list">
         <?php
         $col = 'one';
@@ -70,9 +70,9 @@
 			$classes = ( in_array( $skey, array( 'siteurl', 'sitename', 'entry_count' ) ) ) ? 'show_before_content show_after_content' : '';
 			$classes .= ( strpos( $skey, 'default-' ) === 0 ) ? 'hide_frm_not_email_subject' : '';
         ?>
-        <li class="frm_col_<?php echo esc_attr( $col ) ?>">
-			<a href="javascript:void(0)" class="frmbutton button <?php echo esc_attr( $classes ); ?> frm_insert_code" data-code="<?php echo esc_attr( $skey ) ?>">
-				<?php echo esc_html( $sname ) ?>
+        <li class="frm_col_<?php echo esc_attr( $col ); ?>">
+			<a href="javascript:void(0)" class="frmbutton button <?php echo esc_attr( $classes ); ?> frm_insert_code" data-code="<?php echo esc_attr( $skey ); ?>">
+				<?php echo esc_html( $sname ); ?>
 			</a>
         </li>
         <?php
@@ -87,10 +87,10 @@
 	<?php if ( ! empty( $cond_shortcodes ) ) { ?>
 	<div id="frm-conditionals" class="tabs-panel">
 	    <ul class="subsubsub">
-	        <li><a href="javascript:void(0)" class="current frmids"><?php esc_html_e( 'IDs', 'formidable' ) ?></a> |</li>
-	        <li><a href="javascript:void(0)" class="frmkeys"><?php esc_html_e( 'Keys', 'formidable' ) ?></a></li>
+	        <li><a href="javascript:void(0)" class="current frmids"><?php esc_html_e( 'IDs', 'formidable' ); ?></a> |</li>
+	        <li><a href="javascript:void(0)" class="frmkeys"><?php esc_html_e( 'Keys', 'formidable' ); ?></a></li>
 	    </ul>
-	    <ul class="alignleft"><li><?php esc_html_e( 'Fields from your form', 'formidable' ) ?>:</li></ul>
+	    <ul class="alignleft"><li><?php esc_html_e( 'Fields from your form', 'formidable' ); ?>:</li></ul>
 	    <ul class="frm_code_list frm_full_width">
 			<?php
 			if ( ! empty( $fields ) ) {
@@ -100,7 +100,7 @@
                 }
             ?>
                 <li>
-                    <a href="javascript:void(0)" class="frmids alignright frm_insert_code" data-code="if <?php echo esc_attr( $f->id ) ?>]<?php esc_attr_e( 'Conditional text here', 'formidable' ) ?>[/if <?php echo esc_attr( $f->id ) ?>">[if <?php echo (int) $f->id ?>]</a>
+                    <a href="javascript:void(0)" class="frmids alignright frm_insert_code" data-code="if <?php echo esc_attr( $f->id ); ?>]<?php esc_attr_e( 'Conditional text here', 'formidable' ); ?>[/if <?php echo esc_attr( $f->id ); ?>">[if <?php echo (int) $f->id ?>]</a>
 					<a href="javascript:void(0)" class="frmkeys alignright frm_insert_code" data-code="if <?php echo esc_attr( $f->field_key ); ?>]something[/if <?php echo esc_attr( $f->field_key ); ?>">[if <?php echo FrmAppHelper::truncate( $f->field_key, 10 ); // WPCS: XSS ok. ?>]</a>
 					<a href="javascript:void(0)" class="frm_insert_code" data-code="<?php echo esc_attr( $f->id ); ?>"><?php echo FrmAppHelper::truncate( $f->name, 60 ); // WPCS: XSS ok. ?></a>
                 </li>
@@ -111,13 +111,13 @@
 		?>
         </ul>
 
-        <p class="howto"><?php esc_html_e( 'Click a button below to insert sample logic into your view', 'formidable' ) ?></p>
+        <p class="howto"><?php esc_html_e( 'Click a button below to insert sample logic into your view', 'formidable' ); ?></p>
         <ul class="frm_code_list">
         <?php
         $col = 'one';
 		foreach ( $cond_shortcodes as $skey => $sname ) {
 	    ?>
-	    <li class="frm_col_<?php echo esc_attr( $col ) ?>">
+	    <li class="frm_col_<?php echo esc_attr( $col ); ?>">
 			<a href="javascript:void(0)" class="frmbutton button frm_insert_code" data-code="if x <?php echo esc_attr( $skey ); ?>][/if x"><?php echo esc_html( $sname ); ?></a>
 	    </li>
 	    <?php
@@ -151,7 +151,7 @@
 				}
 				$include_x = strpos( $code, ' ' ) ? '' : 'x ';
 				?>
-				<li class="frm_col_<?php echo esc_attr( $col ) ?>">
+				<li class="frm_col_<?php echo esc_attr( $col ); ?>">
 					<a href="javascript:void(0)" class="frmbutton button frm_insert_code <?php echo is_array( $code_label ) ? 'frm_help' : ''; ?>" data-code="<?php echo esc_attr( $include_x . $code ); ?>" <?php echo is_array( $code_label ) ? 'title="' . esc_attr( $code_label['title'] ) . '"' : ''; ?>>
 						<?php echo esc_html( is_array( $code_label ) ? $code_label['label'] : $code_label ); ?>
 					</a>

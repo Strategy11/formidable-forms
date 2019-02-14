@@ -468,8 +468,8 @@ class FrmAddon {
 			);
 		}
 
-		$license     = stripslashes( sanitize_text_field( $_POST['license'] ) );
-		$plugin_slug = sanitize_text_field( $_POST['plugin'] );
+		$license     = stripslashes( FrmAppHelper::get_param( 'license', '', 'post', 'sanitize_text_field' ) ) );
+		$plugin_slug = FrmAppHelper::get_param( 'plugin', '', 'post', 'sanitize_text_field' );
 		$this_plugin = self::get_addon( $plugin_slug );
 		$response    = $this_plugin->activate_license( $license );
 

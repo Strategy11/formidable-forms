@@ -21,7 +21,7 @@
 	<h1><?php echo esc_html( $atts['label'] ); ?>
 		<?php FrmAppHelper::add_new_item_link( $atts ); ?>
 		<?php if ( isset( $atts['cancel_link'] ) ) { ?>
-			<a href="<?php echo esc_url( $atts['cancel_link'] ) ?>" class="button button-secondary frm-button-secondary frm_animate_bg"><?php esc_html_e( 'Cancel', 'formidable' ); ?></a>
+			<a href="<?php echo esc_url( $atts['cancel_link'] ); ?>" class="button button-secondary frm-button-secondary frm_animate_bg"><?php esc_html_e( 'Cancel', 'formidable' ); ?></a>
 		<?php } ?>
 	</h1>
 	</div>

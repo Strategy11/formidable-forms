@@ -1097,11 +1097,11 @@ class FrmFieldsHelper {
 
 		$label = isset( $args['opt_label'] ) ? $args['opt_label'] : $args['field']['name'];
 
-		?><label for="<?php echo esc_attr( $other_id ) ?>" class="frm_screen_reader frm_hidden"><?php
+		?><label for="<?php echo esc_attr( $other_id ); ?>" class="frm_screen_reader frm_hidden"><?php
 		echo esc_html( $label );
-		?></label><input type="text" id="<?php echo esc_attr( $other_id ) ?>" class="<?php echo esc_attr( implode( ' ', $classes ) ) ?>" <?php
+		?></label><input type="text" id="<?php echo esc_attr( $other_id ); ?>" class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>" <?php
 		echo ( $args['read_only'] ? ' readonly="readonly" disabled="disabled"' : '' );
-		?> name="<?php echo esc_attr( $args['name'] ) ?>" value="<?php echo esc_attr( $args['value'] ); ?>" /><?php
+		?> name="<?php echo esc_attr( $args['name'] ); ?>" value="<?php echo esc_attr( $args['value'] ); ?>" /><?php
 	}
 
 	/**

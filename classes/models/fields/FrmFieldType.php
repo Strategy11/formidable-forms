@@ -332,6 +332,7 @@ DEFAULT_HTML;
 		if ( $field_name == '' ) {
 			$invalid = __( 'This field is invalid', 'formidable' );
 		} else {
+			/* translators: %s: The field name. */
 			$invalid = sprintf( __( '%s is invalid', 'formidable' ), $field_name );
 		}
 

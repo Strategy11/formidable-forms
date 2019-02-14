@@ -19,12 +19,12 @@
 </head>
 <body class="wp-admin no-js wp-core-ui frm_field_opts_popup <?php echo esc_attr( apply_filters( 'admin_body_class', '' ) . ' ' . $admin_body_class ); ?>">
 <div class="frm_med_padding">
-<p class="howto"><?php esc_html_e( 'Edit or add field options (one per line)', 'formidable' ) ?></p>
+<p class="howto"><?php esc_html_e( 'Edit or add field options (one per line)', 'formidable' ); ?></p>
 <ul class="frm_prepop">
 	<?php foreach ( $prepop as $label => $pop ) { ?>
 	<li>
-		<a href="javascript:void(0)" onclick="frmPrePop(<?php echo esc_attr( json_encode( $pop ) ) ?>); return false;">
-			<?php echo esc_html( $label ) ?>
+		<a href="javascript:void(0)" onclick="frmPrePop(<?php echo esc_attr( json_encode( $pop ) ); ?>); return false;">
+			<?php echo esc_html( $label ); ?>
 		</a>
 	</li>
 	<?php } ?>
@@ -53,7 +53,7 @@ foreach ( $field->options as $fkey => $fopt ) {
 </textarea>
 
 <p class="submit frm_clear">
-<input type="button" onclick="frmUpdateBulkOpts(<?php echo (int) $field->id ?>)" class="button-primary" value="<?php esc_attr_e( 'Update Field Choices', 'formidable' ) ?>" />
+<input type="button" onclick="frmUpdateBulkOpts(<?php echo (int) $field->id ?>)" class="button-primary" value="<?php esc_attr_e( 'Update Field Choices', 'formidable' ); ?>" />
 </p>
 </div>
 

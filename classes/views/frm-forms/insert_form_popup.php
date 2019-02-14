@@ -12,16 +12,16 @@
         <div class="media-frame-menu">
         <div class="media-menu">
             <?php foreach ( $shortcodes as $shortcode => $labels ) { ?>
-            <a href="#" class="media-menu-item frm_switch_sc" id="sc-link-<?php echo esc_attr( $shortcode ) ?>">
-                <?php echo esc_html( $labels['name'] ) ?>
-                <span class="howto"><?php echo esc_html( $labels['label'] ) ?></span>
+            <a href="#" class="media-menu-item frm_switch_sc" id="sc-link-<?php echo esc_attr( $shortcode ); ?>">
+                <?php echo esc_html( $labels['name'] ); ?>
+                <span class="howto"><?php echo esc_html( $labels['label'] ); ?></span>
             </a>
             <?php } ?>
         <div class="clear"></div>
         </div>
         </div>
 
-        <div class="media-frame-title"><h1><?php esc_html_e( 'Insert a Form', 'formidable' ) ?> <span class="spinner"></span><span class="dashicons dashicons-arrow-down"></span></h1></div>
+        <div class="media-frame-title"><h1><?php esc_html_e( 'Insert a Form', 'formidable' ); ?> <span class="spinner"></span><span class="dashicons dashicons-arrow-down"></span></h1></div>
 
         <div class="media-frame-content">
         <div class="attachments-browser">

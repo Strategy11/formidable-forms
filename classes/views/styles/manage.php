@@ -13,10 +13,10 @@
 			<thead>
 			<tr>
 				<th scope="col" class="manage-column column-locations">
-					<?php esc_html_e( 'Form Title', 'formidable' ) ?>
+					<?php esc_html_e( 'Form Title', 'formidable' ); ?>
 				</th>
 				<th scope="col" class="manage-column column-menus">
-					<?php esc_html_e( 'Assigned Style Templates', 'formidable' ) ?>
+					<?php esc_html_e( 'Assigned Style Templates', 'formidable' ); ?>
 				</th>
 			</tr>
 			</thead>
@@ -36,15 +36,15 @@
 						<strong><?php echo esc_html( empty( $form->name ) ? __( '(no title)', 'formidable' ) : $form->name ); ?></strong>
 					</td>
 					<td class="menu-location-menus">
-					    <input type="hidden" name="prev_style[<?php echo esc_attr( $form->id ) ?>]" value="<?php echo esc_attr( $this_style ) ?>" />
-						<select name="style[<?php echo esc_attr( $form->id ) ?>]">
+					    <input type="hidden" name="prev_style[<?php echo esc_attr( $form->id ); ?>]" value="<?php echo esc_attr( $this_style ); ?>" />
+						<select name="style[<?php echo esc_attr( $form->id ); ?>]">
 							<?php foreach ( $styles as $s ) { ?>
-								<option value="<?php echo esc_attr( $s->ID ) ?>" <?php selected( $s->ID, $this_style ) ?>>
-									<?php echo esc_html( $s->post_title . ( empty( $s->menu_order ) ? '' : ' (' . __( 'default', 'formidable' ) . ')' ) ) ?>
+								<option value="<?php echo esc_attr( $s->ID ); ?>" <?php selected( $s->ID, $this_style ); ?>>
+									<?php echo esc_html( $s->post_title . ( empty( $s->menu_order ) ? '' : ' (' . __( 'default', 'formidable' ) . ')' ) ); ?>
 								</option>
 							<?php } ?>
-							<option value="" <?php selected( 0, $this_style ) ?>>
-								<?php esc_html_e( 'Styling disabled', 'formidable' ) ?>
+							<option value="" <?php selected( 0, $this_style ); ?>>
+								<?php esc_html_e( 'Styling disabled', 'formidable' ); ?>
 							</option>
 						</select>
 
@@ -55,14 +55,14 @@
 				} else {
 				?>
 				<tr>
-				    <td><?php esc_html_e( 'No Forms Found', 'formidable' ) ?></td>
+				    <td><?php esc_html_e( 'No Forms Found', 'formidable' ); ?></td>
 				</tr>
 				<?php
 				}
 				?>
 			</tbody>
 		</table>
-		<p class="button-controls"><input type="submit" name="nav-menu-locations" id="nav-menu-locations" class="button button-primary left" value="<?php esc_attr_e( 'Save Changes', 'formidable' ) ?>" /></p>
+		<p class="button-controls"><input type="submit" name="nav-menu-locations" id="nav-menu-locations" class="button button-primary left" value="<?php esc_attr_e( 'Save Changes', 'formidable' ); ?>" /></p>
 		<?php wp_nonce_field( 'frm_manage_style_nonce', 'frm_manage_style' ); ?>
 	</form>
 </div><!-- #menu-locations-wrap -->

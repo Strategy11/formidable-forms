@@ -658,7 +658,7 @@ class FrmAppHelper {
 	 */
 	public static function add_new_item_link( $atts ) {
 		if ( isset( $atts['new_link'] ) && ! empty( $atts['new_link'] ) ) { ?>
-			<a href="<?php echo esc_url( $atts['new_link'] ) ?>" class="button frm-button-primary frm_animate_bg">
+			<a href="<?php echo esc_url( $atts['new_link'] ); ?>" class="button frm-button-primary frm_animate_bg">
 				<?php esc_html_e( 'Add New', 'formidable' ); ?>
 			</a>
 			<?php
@@ -683,11 +683,11 @@ class FrmAppHelper {
 		}
 		?>
 		<p class="search-box frm-search">
-			<label class="screen-reader-text" for="<?php echo esc_attr( $input_id ) ?>">
+			<label class="screen-reader-text" for="<?php echo esc_attr( $input_id ); ?>">
 				<?php echo wp_kses( $text, array() ); ?>:
 			</label>
 			<span class="dashicons dashicons-search"></span>
-			<input type="search" id="<?php echo esc_attr( $input_id ) ?>" name="s"
+			<input type="search" id="<?php echo esc_attr( $input_id ); ?>" name="s"
 				value="<?php _admin_search_query(); ?>" placeholder="<?php echo esc_attr( $placeholder ); ?>"
 				class="<?php echo esc_attr( $class ); ?>" data-tosearch="<?php echo esc_attr( $tosearch ); ?>"/>
 			<?php

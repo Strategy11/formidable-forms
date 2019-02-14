@@ -145,9 +145,10 @@ class FrmFieldCaptcha extends FrmFieldType {
 		}
 
 		if ( ! isset( $_POST['g-recaptcha-response'] ) ) {
-			// If captcha is missing, check if it was already verified
-			if ( ! isset( $_POST['recaptcha_checked'] ) || ! wp_verify_nonce( $_POST['recaptcha_checked'], 'frm_ajax' ) ) {
-				// There was no captcha submitted
+			// If captcha is missing, check if it was already verified.
+			$checked = FrmAppHelper::get_param( 'recaptcha_checked', '', 'post', 'sanitize_text_field' );
+			if ( ! isset( $_POST['recaptcha_checked'] ) || ! wp_verify_nonce( $checked, 'frm_ajax' ) ) {
+				// There was no captcha submitted.
 				$errors[ 'field' . $args['id'] ] = __( 'The captcha is missing from this form', 'formidable' );
 			}
 
@@ -191,7 +192,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 		$arg_array = array(
 			'body' => array(
 				'secret'   => $frm_settings->privkey,
-				'response' => $_POST['g-recaptcha-response'], // WPCS: CSRF ok.
+				'response' => FrmAppHelper::get_param( 'g-recaptcha-response', '', 'post', 'sanitize_text_field' ),
 				'remoteip' => FrmAppHelper::get_ip_address(),
 			),
 		);

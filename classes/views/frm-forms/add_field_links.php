@@ -20,10 +20,10 @@
 				foreach ( $frm_field_selection as $field_key => $field_type ) {
 					$field_label = FrmFormsHelper::get_field_link_name( $field_type );
 					?>
-					<li class="frmbutton <?php echo esc_attr( ' frm_t' . $field_key ) ?>" id="<?php echo esc_attr( $field_key ) ?>">
-						<a href="#" class="frm_add_field frm_animate_bg" title="<?php echo esc_html( $field_label ) ?>">
-							<i class="<?php echo esc_attr( FrmFormsHelper::get_field_link_icon( $field_type ) ) ?> frm_animate_bg"></i>
-							<span><?php echo esc_html( $field_label ) ?></span>
+					<li class="frmbutton <?php echo esc_attr( ' frm_t' . $field_key ); ?>" id="<?php echo esc_attr( $field_key ); ?>">
+						<a href="#" class="frm_add_field frm_animate_bg" title="<?php echo esc_html( $field_label ); ?>">
+							<i class="<?php echo esc_attr( FrmFormsHelper::get_field_link_icon( $field_type ) ); ?> frm_animate_bg"></i>
+							<span><?php echo esc_html( $field_label ); ?></span>
 						</a>
 					</li>
 					<?php
@@ -54,15 +54,15 @@ foreach ( FrmField::pro_field_selection() as $field_key => $field_type ) {
 		$field_label = $field_type['name'];
 
 ?>
-				<li class="frmbutton <?php echo esc_attr( $no_allow_class . ' frm_t' . $field_key ) ?> dropdown" id="<?php echo esc_attr( $field_key ) ?>">
-	                <a href="#" id="frm-<?php echo esc_attr( $field_key ) ?>Drop" class="frm-dropdown-toggle" data-toggle="dropdown" title="<?php echo esc_html( $field_label ) ?>">
-						<i class="<?php echo esc_attr( FrmFormsHelper::get_field_link_icon( $field_type ) ) ?> frm_animate_bg"></i>
-						<span><?php echo esc_html( $field_label ) ?> <b class="caret"></b></span>
+				<li class="frmbutton <?php echo esc_attr( $no_allow_class . ' frm_t' . $field_key ); ?> dropdown" id="<?php echo esc_attr( $field_key ); ?>">
+	                <a href="#" id="frm-<?php echo esc_attr( $field_key ); ?>Drop" class="frm-dropdown-toggle" data-toggle="dropdown" title="<?php echo esc_html( $field_label ); ?>">
+						<i class="<?php echo esc_attr( FrmFormsHelper::get_field_link_icon( $field_type ) ); ?> frm_animate_bg"></i>
+						<span><?php echo esc_html( $field_label ); ?> <b class="caret"></b></span>
 					</a>
 
-					<ul class="frm-dropdown-menu" role="menu" aria-labelledby="frm-<?php echo esc_attr( $field_key ) ?>Drop">
+					<ul class="frm-dropdown-menu" role="menu" aria-labelledby="frm-<?php echo esc_attr( $field_key ); ?>Drop">
 					<?php foreach ( $field_type['types'] as $k => $type ) { ?>
-						<li class="frm_t<?php echo esc_attr( $field_key ) ?>" id="<?php echo esc_attr( $field_key ) ?>|<?php echo esc_attr( $k ) ?>">
+						<li class="frm_t<?php echo esc_attr( $field_key ); ?>" id="<?php echo esc_attr( $field_key ); ?>|<?php echo esc_attr( $k ); ?>">
 							<?php echo FrmAppHelper::kses( apply_filters( 'frmpro_field_links', $type, $id, $field_key . '|' . $k ), array( 'a', 'i', 'span' ) ); // WPCS: XSS ok. ?>
 						</li>
 					<?php
@@ -78,7 +78,7 @@ foreach ( FrmField::pro_field_selection() as $field_key => $field_type ) {
 					$field_label .= ' <span>' . $field_name . '</span>';
 					$upgrade_label = sprintf( esc_html__( '%s fields', 'formidable' ), $field_name );
                     ?>
-					<li class="frmbutton <?php echo esc_attr( $no_allow_class . ' frm_t' . str_replace( '|', '-', $field_key ) ) ?>" id="<?php echo esc_attr( $field_key ) ?>" data-upgrade="<?php echo esc_attr( $upgrade_label ); ?>" data-medium="builder-<?php echo esc_attr( sanitize_title( $upgrade_label ) ); ?>">
+					<li class="frmbutton <?php echo esc_attr( $no_allow_class . ' frm_t' . str_replace( '|', '-', $field_key ) ); ?>" id="<?php echo esc_attr( $field_key ); ?>" data-upgrade="<?php echo esc_attr( $upgrade_label ); ?>" data-medium="builder-<?php echo esc_attr( sanitize_title( $upgrade_label ) ); ?>">
 						<?php echo FrmAppHelper::kses( apply_filters( 'frmpro_field_links', $field_label, $id, $field_key ), array( 'a', 'i', 'span' ) ); // WPCS: XSS ok. ?>
 					</li>
 				<?php
@@ -121,8 +121,8 @@ foreach ( FrmField::pro_field_selection() as $field_key => $field_type ) {
 				<?php
 				foreach ( FrmFormsHelper::grid_classes() as $c => $d ) {
 					?>
-					<li class="<?php echo esc_attr( $c ) ?> frm_form_field">
-						<a href="javascript:void(0);" data-code="<?php echo esc_attr( $c ) ?>" class="frm_insert_code show_frm_classes">
+					<li class="<?php echo esc_attr( $c ); ?> frm_form_field">
+						<a href="javascript:void(0);" data-code="<?php echo esc_attr( $c ); ?>" class="frm_insert_code show_frm_classes">
 							<?php echo esc_html( FrmFormsHelper::style_class_label( $d, $c ) ); ?>
 						</a>
 					</li>
@@ -137,8 +137,8 @@ foreach ( FrmField::pro_field_selection() as $field_key => $field_type ) {
 			foreach ( FrmFormsHelper::css_classes() as $c => $d ) {
 				$title = ( ! empty( $d ) && is_array( $d ) && isset( $d['title'] ) ) ? $d['title'] : '';
 				?>
-				<li class="frm_col_<?php echo esc_attr( $col ) ?>">
-					<a href="javascript:void(0);" data-code="<?php echo esc_attr( $c ) ?>" class="frmbutton button frm_insert_code show_frm_classes<?php echo esc_attr( ! empty( $title ) ? ' frm_help' : '' ); ?>" <?php echo ( ! empty( $title ) ? ' title="' . esc_attr( $title ) . '"' : '' ); ?>>
+				<li class="frm_col_<?php echo esc_attr( $col ); ?>">
+					<a href="javascript:void(0);" data-code="<?php echo esc_attr( $c ); ?>" class="frmbutton button frm_insert_code show_frm_classes<?php echo esc_attr( ! empty( $title ) ? ' frm_help' : '' ); ?>" <?php echo ( ! empty( $title ) ? ' title="' . esc_attr( $title ) . '"' : '' ); ?>>
 						<?php echo esc_html( FrmFormsHelper::style_class_label( $d, $c ) ); ?>
 					</a>
 				</li>

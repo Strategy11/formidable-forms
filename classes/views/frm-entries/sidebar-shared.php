@@ -1,10 +1,10 @@
 
 <div class="postbox frm_with_icons" >
     <h3 class="hndle">
-		<span><?php esc_html_e( 'Entry Details', 'formidable' ) ?></span>
+		<span><?php esc_html_e( 'Entry Details', 'formidable' ); ?></span>
 		<?php if ( FrmAppHelper::get_param( 'frm_action' ) != 'show' ) { ?>
 		<a href="?page=formidable-entries&amp;frm_action=show&amp;id=<?php echo absint( $entry->id ); ?>" class="alignright">
-			<?php esc_html_e( 'View Entry', 'formidable' ) ?>
+			<?php esc_html_e( 'View Entry', 'formidable' ); ?>
 		</a>
 		<?php } ?>
 	</h3>
@@ -14,14 +14,14 @@
         <?php if ( $entry->post_id ) { ?>
         <div class="misc-pub-section frm_no_print">
             <span class="dashicons dashicons-admin-post wp-media-buttons-icon"></span>
-            <?php esc_html_e( 'Post', 'formidable' ) ?>:
+            <?php esc_html_e( 'Post', 'formidable' ); ?>:
 			<b><?php echo esc_html( get_the_title( $entry->post_id ) ); ?></b>
 			<span>
-				<a href="<?php echo esc_url( admin_url( 'post.php?post=' . $entry->post_id . '&action=edit' ) ) ?>">
-					<?php esc_html_e( 'Edit', 'formidable' ) ?>
+				<a href="<?php echo esc_url( admin_url( 'post.php?post=' . $entry->post_id . '&action=edit' ) ); ?>">
+					<?php esc_html_e( 'Edit', 'formidable' ); ?>
 				</a>
-				<a href="<?php echo esc_url( get_permalink( $entry->post_id ) ) ?>">
-					<?php esc_html_e( 'View', 'formidable' ) ?>
+				<a href="<?php echo esc_url( get_permalink( $entry->post_id ) ); ?>">
+					<?php esc_html_e( 'View', 'formidable' ); ?>
 				</a>
 			</span>
         </div>
@@ -29,14 +29,14 @@
 
         <div class="misc-pub-section">
             <span class="dashicons dashicons-id wp-media-buttons-icon"></span>
-			<?php esc_html_e( 'Entry ID', 'formidable' ) ?>:
-			<b><?php echo absint( $entry->id ) ?></b>
+			<?php esc_html_e( 'Entry ID', 'formidable' ); ?>:
+			<b><?php echo absint( $entry->id ); ?></b>
         </div>
 
         <div class="misc-pub-section">
             <span class="dashicons dashicons-post-status wp-media-buttons-icon"></span>
-			<?php esc_html_e( 'Entry Key', 'formidable' ) ?>:
-			<b><?php echo esc_html( $entry->item_key ) ?></b>
+			<?php esc_html_e( 'Entry Key', 'formidable' ); ?>:
+			<b><?php echo esc_html( $entry->item_key ); ?></b>
         </div>
 
         <?php if ( FrmAppHelper::pro_is_installed() ) { ?>
@@ -69,25 +69,25 @@
 </div>
 
 <div class="postbox">
-    <h3 class="hndle"><span><?php esc_html_e( 'User Information', 'formidable' ) ?></span></h3>
+    <h3 class="hndle"><span><?php esc_html_e( 'User Information', 'formidable' ); ?></span></h3>
     <div class="inside">
 		<?php if ( ! empty( $entry->ip ) ) { ?>
 		<div class="misc-pub-section">
-			<?php esc_html_e( 'IP Address', 'formidable' ) ?>:
+			<?php esc_html_e( 'IP Address', 'formidable' ); ?>:
 			<b><?php echo esc_html( $entry->ip ); ?></b>
 		</div>
 		<?php } ?>
 
         <?php if ( isset( $browser ) ) { ?>
         <div class="misc-pub-section">
-			<b><?php esc_html_e( 'Browser/OS', 'formidable' ) ?></b>:<br/>
+			<b><?php esc_html_e( 'Browser/OS', 'formidable' ); ?></b>:<br/>
 			<?php echo wp_kses_post( $browser ); ?>
         </div>
         <?php } ?>
 
 		<?php if ( isset( $data['referrer'] ) ) { ?>
 		<div class="misc-pub-section frm_force_wrap">
-			<b><?php esc_html_e( 'Referrer', 'formidable' ) ?></b>:<br/>
+			<b><?php esc_html_e( 'Referrer', 'formidable' ); ?></b>:<br/>
 			<?php echo wp_kses_post( str_replace( "\r\n", '<br/>', $data['referrer'] ) ); ?>
         </div>
         <?php } ?>

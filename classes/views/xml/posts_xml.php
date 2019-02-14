@@ -18,7 +18,7 @@ while ( $next_posts = array_splice( $item_ids, 0, 20 ) ) {
 ?>
 	<view>
 		<title><?php echo esc_html( apply_filters( 'the_title_rss', $post->post_title ) ); ?></title>
-		<link><?php the_permalink_rss() ?></link>
+		<link><?php the_permalink_rss(); ?></link>
 		<post_author><?php echo FrmXMLHelper::cdata( get_the_author_meta( 'login' ) ); // WPCS: XSS ok. ?></post_author>
 		<description></description>
 		<content><?php echo FrmXMLHelper::cdata( apply_filters( 'the_content_export', $post->post_content ) ); // WPCS: XSS ok. ?></content>
@@ -59,7 +59,7 @@ while ( $next_posts = array_splice( $item_ids, 0, 20 ) ) {
 
 			foreach ( (array) $terms as $term ) {
 				?>
-		<category domain="<?php echo esc_attr( $term->taxonomy ) ?>" nicename="<?php echo esc_attr( $term->slug ) ?>"><?php echo FrmXMLHelper::cdata( $term->name ); // WPCS: XSS ok. ?></category>
+		<category domain="<?php echo esc_attr( $term->taxonomy ); ?>" nicename="<?php echo esc_attr( $term->slug ); ?>"><?php echo FrmXMLHelper::cdata( $term->name ); // WPCS: XSS ok. ?></category>
 <?php
 			}
 		}
@@ -86,7 +86,7 @@ foreach ( (array) $terms as $term ) {
 	$frm_inc_tax[] = $term->term_id;
 	$label = ( 'category' === $term->taxonomy || 'tag' === $term->taxonomy ) ? $term->taxonomy : 'term';
 	?>
-	<term><term_id><?php echo esc_html( $term->term_id ) ?></term_id><term_taxonomy><?php echo esc_html( $term->taxonomy ); ?></term_taxonomy><?php
+	<term><term_id><?php echo esc_html( $term->term_id ); ?></term_id><term_taxonomy><?php echo esc_html( $term->taxonomy ); ?></term_taxonomy><?php
 	if ( ! empty( $term->name ) ) {
 		echo '<term_name>' . FrmXMLHelper::cdata( $term->name ) . '</term_name>'; // WPCS: XSS ok.
 	}

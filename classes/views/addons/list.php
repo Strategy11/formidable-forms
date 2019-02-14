@@ -14,7 +14,7 @@
 						</div>
 					<?php } ?>
 					<h2>
-						<?php echo esc_html( $addon['title'] ) ?>
+						<?php echo esc_html( $addon['title'] ); ?>
 					</h2>
 					<p><?php echo esc_html( $addon['excerpt'] ); ?></p>
 					<?php if ( isset( $addon['docs'] ) && ! empty( $addon['docs'] ) && $addon['installed'] ) { ?>
@@ -33,7 +33,7 @@
 						?>
 					</span>
 					<?php if ( $addon['status']['type'] === 'installed' ) { ?>
-						<a href="<?php echo esc_url( $addon['activate_url'] ) ?>" class="button button-primary frm-button-primary activate-now <?php echo esc_attr( empty( $addon['activate_url'] ) ? 'frm_hidden' : '' ); ?>">
+						<a href="<?php echo esc_url( $addon['activate_url'] ); ?>" class="button button-primary frm-button-primary activate-now <?php echo esc_attr( empty( $addon['activate_url'] ) ? 'frm_hidden' : '' ); ?>">
 							<?php esc_html_e( 'Activate', 'formidable' ); ?>
 						</a>
 					<?php } elseif ( isset( $addon['url'] ) && ! empty( $addon['url'] ) ) { ?>

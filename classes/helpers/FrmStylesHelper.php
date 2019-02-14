@@ -14,11 +14,11 @@ class FrmStylesHelper {
 	public static function style_menu( $active = '' ) {
 		?>
 		<h2 class="nav-tab-wrapper">
-			<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-styles' ) ) ?>"
+			<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-styles' ) ); ?>"
 				class="nav-tab <?php echo ( '' == $active ) ? 'nav-tab-active' : '' ?>">
 				<?php esc_html_e( 'Edit Styles', 'formidable' ); ?>
 			</a>
-			<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-styles&frm_action=manage' ) ) ?>"
+			<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-styles&frm_action=manage' ) ); ?>"
 				class="nav-tab <?php echo ( 'manage' == $active ) ? 'nav-tab-active' : '' ?>">
 				<?php esc_html_e( 'Manage Form Styles', 'formidable' ); ?>
 			</a>
@@ -160,13 +160,13 @@ class FrmStylesHelper {
 		<select name="<?php echo esc_attr( $frm_style->get_field_name( $name ) ); ?>"
 			id="frm_<?php echo esc_attr( $name ); ?>" class="frm_icon_font frm_multiselect hide-if-js">
 			<?php foreach ( $icons as $key => $icon ) { ?>
-				<option value="<?php echo esc_attr( $key ) ?>" <?php selected( $style->post_content[ $name ], $key ) ?>>
+				<option value="<?php echo esc_attr( $key ); ?>" <?php selected( $style->post_content[ $name ], $key ); ?>>
 					<?php echo '&#xe' . esc_html( $icon['+'] ) . '; &#xe' . esc_html( $icon['-'] ) . ';'; ?>
 				</option>
 			<?php } ?>
 		</select>
 
-		<div class="btn-group hide-if-no-js" id="frm_<?php echo esc_attr( $name ) ?>_select">
+		<div class="btn-group hide-if-no-js" id="frm_<?php echo esc_attr( $name ); ?>_select">
 			<button class="multiselect dropdown-toggle btn btn-default" data-toggle="dropdown" type="button">
 				<i class="frm_icon_font <?php echo esc_attr( self::icon_key_to_class( $style->post_content[ $name ], '+', $type ) ); ?>"></i>
 				<i class="frm_icon_font <?php echo esc_attr( self::icon_key_to_class( $style->post_content[ $name ], '-', $type ) ); ?>"></i>
@@ -177,7 +177,7 @@ class FrmStylesHelper {
 					<li <?php echo ( $style->post_content['collapse_icon'] == $key ) ? 'class="active"' : '' ?>>
 						<a href="javascript:void(0);">
 							<label>
-								<input type="radio" value="<?php echo esc_attr( $key ) ?>"/>
+								<input type="radio" value="<?php echo esc_attr( $key ); ?>"/>
 								<span>
 									<i class="frm_icon_font <?php echo esc_attr( self::icon_key_to_class( $key, '+', $type ) ); ?>"></i>
 									<i class="frm_icon_font <?php echo esc_attr( self::icon_key_to_class( $key, '-', $type ) ); ?>"></i>

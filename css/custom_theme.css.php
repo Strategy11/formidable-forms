@@ -258,10 +258,10 @@ legend.frm_hidden{
     <?php $loader_size = 20; ?>
     top: 50%;
     left: 50%;
-    margin-top: -<?php echo absint( $loader_size / 2 ) ?>px;
-    margin-left: -<?php echo absint( $loader_size / 2 ) ?>px;
-    width: <?php echo absint( $loader_size ) ?>px;
-    height: <?php echo absint( $loader_size ) ?>px;
+    margin-top: -<?php echo absint( $loader_size / 2 ); ?>px;
+    margin-left: -<?php echo absint( $loader_size / 2 ); ?>px;
+    width: <?php echo absint( $loader_size ); ?>px;
+    height: <?php echo absint( $loader_size ); ?>px;
 
     -webkit-animation: spin 2s linear infinite;
     -moz-animation:    spin 2s linear infinite;
@@ -403,7 +403,7 @@ a.frm_save_draft{
     padding:5px;
     border-width:1px;
     border-style:solid;
-    border-color:<?php echo esc_html( $defaults['border_color'] ) ?>;
+    border-color:<?php echo esc_html( $defaults['border_color'] ); ?>;
     border-top:none;
     border-left:none;
     border-right:none;
@@ -415,9 +415,9 @@ table.form_results.with_frm_style{
 
 table.form_results.with_frm_style tr td{
     text-align:left;
-    color:<?php echo esc_html( $defaults['text_color'] ) ?>;
+    color:<?php echo esc_html( $defaults['text_color'] ); ?>;
     padding:7px 9px;
-    border-top:1px solid <?php echo esc_html( $defaults['border_color'] ) ?>;
+    border-top:1px solid <?php echo esc_html( $defaults['border_color'] ); ?>;
 }
 
 table.form_results.with_frm_style tr.frm_even,
@@ -499,7 +499,7 @@ table.form_results.with_frm_style tr.frm_odd,
 
 <?php if ( ! empty( $defaults['bg_color'] ) ) { ?>
 #frm_loading .progress-striped .progress-bar{
-    background-image:linear-gradient(45deg, <?php echo esc_html( $defaults['border_color'] ) ?> 25%, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0) 50%, <?php echo esc_html( $defaults['border_color'] ) ?> 50%, <?php echo esc_html( $defaults['border_color'] ) ?> 75%, rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 0));
+    background-image:linear-gradient(45deg, <?php echo esc_html( $defaults['border_color'] ); ?> 25%, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0) 50%, <?php echo esc_html( $defaults['border_color'] ); ?> 50%, <?php echo esc_html( $defaults['border_color'] ); ?> 75%, rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 0));
     background-size:40px 40px;
 }
 <?php } ?>
@@ -553,7 +553,7 @@ select.frm_loading_lookup{
     padding:5px;
     border-width:1px;
     border-style:solid;
-    border-color:<?php echo esc_html( $defaults['border_color'] ) ?>;
+    border-color:<?php echo esc_html( $defaults['border_color'] ); ?>;
     border-left:none;
     border-right:none;
 }
@@ -586,7 +586,7 @@ select.frm_loading_lookup{
 
 .frm_grid_first,
 .frm_grid_odd{
-    background-color:<?php echo esc_html( $defaults['bg_color'] ) ?>;
+    background-color:<?php echo esc_html( $defaults['bg_color'] ); ?>;
 }
 
 .frm_grid{
@@ -793,17 +793,17 @@ select.frm_loading_lookup{
 .frm_form_field.frm_html_scroll_box{
     height:100px;
     overflow:auto;
-    background-color:<?php echo esc_html( $defaults['bg_color'] ) ?>;
-    border-color:<?php echo esc_html( $defaults['border_color'] ) ?>;
-    border-width:<?php echo esc_html( $defaults['field_border_width'] ) ?>;
-    border-style:<?php echo esc_html( $defaults['field_border_style'] ) ?>;
-    -moz-border-radius:<?php echo esc_html( $defaults['border_radius'] ) ?>;
-    -webkit-border-radius:<?php echo esc_html( $defaults['border_radius'] ) ?>;
-    border-radius:<?php echo esc_html( $defaults['border_radius'] ) ?>;
-    width:<?php echo esc_html( $defaults['field_width'] == '' ? 'auto' : $defaults['field_width'] ) ?>;
+    background-color:<?php echo esc_html( $defaults['bg_color'] ); ?>;
+    border-color:<?php echo esc_html( $defaults['border_color'] ); ?>;
+    border-width:<?php echo esc_html( $defaults['field_border_width'] ); ?>;
+    border-style:<?php echo esc_html( $defaults['field_border_style'] ); ?>;
+    -moz-border-radius:<?php echo esc_html( $defaults['border_radius'] ); ?>;
+    -webkit-border-radius:<?php echo esc_html( $defaults['border_radius'] ); ?>;
+    border-radius:<?php echo esc_html( $defaults['border_radius'] ); ?>;
+    width:<?php echo esc_html( $defaults['field_width'] == '' ? 'auto' : $defaults['field_width'] ); ?>;
     max-width:100%;
-    font-size:<?php echo esc_html( $defaults['field_font_size'] ) ?>;
-    padding:<?php echo esc_html( $defaults['field_pad'] ) ?>;
+    font-size:<?php echo esc_html( $defaults['field_font_size'] ); ?>;
+    padding:<?php echo esc_html( $defaults['field_pad'] ); ?>;
     -webkit-box-sizing:border-box;
     -moz-box-sizing:border-box;
     box-sizing:border-box;

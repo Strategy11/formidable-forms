@@ -18,7 +18,7 @@
 			?>
 			<div class="frm_form_fields">
 				<div class="postbox">
-					<h3 class="hndle"><span><?php esc_html_e( 'Entry', 'formidable' ) ?></span></h3>
+					<h3 class="hndle"><span><?php esc_html_e( 'Entry', 'formidable' ); ?></span></h3>
 					<div class="inside">
 						<table class="form-table"><tbody>
 							<?php
@@ -31,14 +31,14 @@
 								if ( in_array( $field->type, array( 'break', 'divider' ), true ) ) {
 									?>
 						</tbody></table>
-						<br/><h3 class="<?php echo esc_attr( $first_h3 ) ?>"><?php echo esc_html( $field->name ) ?></h3>
+						<br/><h3 class="<?php echo esc_attr( $first_h3 ); ?>"><?php echo esc_html( $field->name ); ?></h3>
 						<table class="form-table"><tbody>
 							<?php
 									$first_h3 = '';
 								} else {
 							?>
 							<tr>
-								<th scope="row"><?php echo esc_html( $field->name ) ?>:</th>
+								<th scope="row"><?php echo esc_html( $field->name ); ?>:</th>
 								<td>
 									<?php
 									$embedded_field_id = ( $entry->form_id !== $field->form_id ) ? 'form' . $field->form_id : 0;
@@ -65,8 +65,8 @@
 						?>
 
 						<?php if ( $entry->parent_item_id ) { ?>
-							<tr><th><?php esc_html_e( 'Parent Entry ID', 'formidable' ) ?>:</th>
-								<td><?php echo absint( $entry->parent_item_id ) ?>
+							<tr><th><?php esc_html_e( 'Parent Entry ID', 'formidable' ); ?>:</th>
+								<td><?php echo absint( $entry->parent_item_id ); ?>
 								</td></tr>
 								<?php } ?>
 							</tbody></table>

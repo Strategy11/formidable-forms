@@ -14,7 +14,7 @@
 					<div class="preview dropdown">
 						<a href="#" id="frm-previewDrop" class="frm-dropdown-toggle button frm-button-secondary" data-toggle="dropdown"><?php esc_html_e( 'Preview', 'formidable' ); ?> <b class="caret"></b></a>
 
-						<ul class="frm-dropdown-menu <?php echo esc_attr( is_rtl() ? 'pull-left' : 'pull-right' ) ?>" role="menu" aria-labelledby="frm-previewDrop">
+						<ul class="frm-dropdown-menu <?php echo esc_attr( is_rtl() ? 'pull-left' : 'pull-right' ); ?>" role="menu" aria-labelledby="frm-previewDrop">
 							<li>
 								<a href="<?php echo esc_url( FrmFormsHelper::get_direct_link( $values['form_key'] ) ); ?>" target="_blank">
 									<?php esc_html_e( 'On Blank Page', 'formidable' ); ?>

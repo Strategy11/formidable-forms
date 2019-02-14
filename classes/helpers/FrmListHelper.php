@@ -895,7 +895,7 @@ class FrmListHelper {
 
 		if ( ! empty( $columns['cb'] ) ) {
 			static $cb_counter = 1;
-			$columns['cb'] = '<label class="screen-reader-text" for="cb-select-all-' . $cb_counter . '">' . __( 'Select All', 'formidable' ) . '</label>'
+			$columns['cb'] = '<label class="screen-reader-text" for="cb-select-all-' . $cb_counter . '">' . __( 'Select All', 'formidable' ) . '</label>';
 			$columns['cb'] .= '<input id="cb-select-all-' . esc_attr( $cb_counter ) . '" type="checkbox" />';
 			$cb_counter ++;
 		}

@@ -47,7 +47,7 @@ class FrmFormsHelper {
 
 		?>
 		<select name="<?php echo esc_attr( $field_name ); ?>"
-			id="<?php echo esc_attr( $args['field_id'] ) ?>"
+			id="<?php echo esc_attr( $args['field_id'] ); ?>"
 			<?php echo wp_strip_all_tags( implode( ' ', $add_html ) ); // WPCS: XSS ok. ?>>
 			<?php if ( $args['blank'] ) { ?>
 				<option value=""><?php echo ( $args['blank'] == 1 ) ? ' ' : '- ' . esc_attr( $args['blank'] ) . ' -'; ?></option>
@@ -103,7 +103,7 @@ class FrmFormsHelper {
 		$name = '' === $name ? __( '(no title)', 'formidable' ) : strip_tags( $name );
 
 		?>
-		<div id="frm_bs_dropdown" class="dropdown <?php echo esc_attr( is_rtl() ? 'pull-right' : 'pull-left' ) ?>">
+		<div id="frm_bs_dropdown" class="dropdown <?php echo esc_attr( is_rtl() ? 'pull-right' : 'pull-left' ); ?>">
 			<h1>
 				<a href="#" id="frm-navbarDrop" class="frm-dropdown-toggle" data-toggle="dropdown">
 					<?php echo esc_html( $name ); ?>

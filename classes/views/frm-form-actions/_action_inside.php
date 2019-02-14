@@ -24,26 +24,26 @@ if ( ! is_array( $action_control->action_options['event'] ) ) {
 
 if ( count( $action_control->action_options['event'] ) == 1 || $action_control->action_options['force_event'] ) {
 	foreach ( $action_control->action_options['event'] as $e ) {
-	?>
-	<input type="hidden" name="<?php echo esc_attr( $action_control->get_field_name( 'event' ) ); ?>[]" value="<?php echo esc_attr( $e ); ?>" />
-<?php
+		?>
+		<input type="hidden" name="<?php echo esc_attr( $action_control->get_field_name( 'event' ) ); ?>[]" value="<?php echo esc_attr( $e ); ?>" />
+		<?php
 	}
 } else {
 ?>
 	<h3><?php esc_html_e( 'Action Triggers', 'formidable' ); ?></h3>
 	<p>
-		<label class="frm_left_label"><?php esc_html_e( 'Trigger this action after', 'formidable' ) ?></label>
+		<label class="frm_left_label"><?php esc_html_e( 'Trigger this action after', 'formidable' ); ?></label>
 		<select name="<?php echo esc_attr( $action_control->get_field_name( 'event' ) ); ?>[]" multiple="multiple" class="frm_multiselect" id="<?php echo esc_attr( $action_control->get_field_id( 'event' ) ); ?>">
 	<?php
 
 	$event_labels = FrmFormAction::trigger_labels();
 	foreach ( $action_control->action_options['event'] as $event ) {
-	?>
-		<option value="<?php echo esc_attr( $event ) ?>" <?php echo in_array( $event, (array) $form_action->post_content['event'] ) ? ' selected="selected"' : ''; ?> ><?php echo esc_html( isset( $event_labels[ $event ] ) ? $event_labels[ $event ] : $event ); ?></option>
+		?>
+		<option value="<?php echo esc_attr( $event ); ?>" <?php echo in_array( $event, (array) $form_action->post_content['event'] ) ? ' selected="selected"' : ''; ?> ><?php echo esc_html( isset( $event_labels[ $event ] ) ? $event_labels[ $event ] : $event ); ?></option>
 <?php } ?>
 		</select>
 	</p>
-<?php
+	<?php
 }
 
 $pass_args = array(
@@ -56,6 +56,9 @@ do_action( 'frm_additional_action_settings', $form_action, $pass_args );
 
 ?>
 <span class="alignright frm_action_id <?php echo esc_attr( empty( $form_action->ID ) ? 'frm_hidden' : '' ); ?>">
-	<?php printf( esc_html__( 'Action ID: %1$s', 'formidable' ), esc_attr( $form_action->ID ) ); ?>
+	<?php
+	/* translators: %1$s: The ID of the form action. */
+	printf( esc_html__( 'Action ID: %1$s', 'formidable' ), esc_attr( $form_action->ID ) );
+	?>
 </span>
 <div style="clear:both;"></div>

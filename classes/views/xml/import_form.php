@@ -10,23 +10,23 @@
 		<?php include( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' ); ?>
 
 		<h2 class="frm-h2"><?php esc_html_e( 'Import', 'formidable' ); ?></h2>
-		<p class="howto"><?php echo esc_html( apply_filters( 'frm_upload_instructions1', __( 'Upload your Formidable XML file to import forms into this site. If your imported form key and creation date match a form on your site, that form will be updated.', 'formidable' ) ) ) ?></p>
+		<p class="howto"><?php echo esc_html( apply_filters( 'frm_upload_instructions1', __( 'Upload your Formidable XML file to import forms into this site. If your imported form key and creation date match a form on your site, that form will be updated.', 'formidable' ) ) ); ?></p>
 		<br/>
 		<form enctype="multipart/form-data" method="post">
 			<input type="hidden" name="frm_action" value="import_xml" />
 			<?php wp_nonce_field( 'import-xml-nonce', 'import-xml' ); ?>
 			<p>
 				<label>
-					<?php echo esc_html( apply_filters( 'frm_upload_instructions2', __( 'Choose a Formidable XML file', 'formidable' ) ) ) ?>
+					<?php echo esc_html( apply_filters( 'frm_upload_instructions2', __( 'Choose a Formidable XML file', 'formidable' ) ) ); ?>
 					(<?php echo esc_html( sprintf( __( 'Maximum size: %s', 'formidable' ), ini_get( 'upload_max_filesize' ) ) ); ?>)
 				</label>
 				<input type="file" name="frm_import_file" size="25" />
 			</p>
 
-			<?php do_action( 'frm_csv_opts', $forms ) ?>
+			<?php do_action( 'frm_csv_opts', $forms ); ?>
 
 			<p class="submit">
-				<input type="submit" value="<?php esc_attr_e( 'Upload file and import', 'formidable' ) ?>" class="button-primary" />
+				<input type="submit" value="<?php esc_attr_e( 'Upload file and import', 'formidable' ); ?>" class="button-primary" />
 			</p>
 		</form>
 		<?php FrmTipsHelper::pro_tip( 'get_import_tip' ); ?>
@@ -46,25 +46,25 @@
 					<td>
 						<select name="format">
 						<?php foreach ( $export_format as $t => $type ) { ?>
-							<option value="<?php echo esc_attr( $t ) ?>" data-support="<?php echo esc_attr( $type['support'] ) ?>" <?php echo isset( $type['count'] ) ? 'data-count="' . esc_attr( $type['count'] ) . '"' : ''; ?>>
-								<?php echo esc_html( isset( $type['name'] ) ? $type['name'] : $t ) ?>
+							<option value="<?php echo esc_attr( $t ); ?>" data-support="<?php echo esc_attr( $type['support'] ); ?>" <?php echo isset( $type['count'] ) ? 'data-count="' . esc_attr( $type['count'] ) . '"' : ''; ?>>
+								<?php echo esc_html( isset( $type['name'] ) ? $type['name'] : $t ); ?>
 							</option>
 						<?php } ?>
 						</select>
 
 						<ul class="frm_hidden csv_opts export-filters">
 							<li>
-							<label for="csv_format"><?php esc_html_e( 'Format', 'formidable' ) ?>:</label>
-							<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'If your CSV special characters are not working correctly, try a different formatting option.', 'formidable' ) ?>"></span>
+							<label for="csv_format"><?php esc_html_e( 'Format', 'formidable' ); ?>:</label>
+							<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'If your CSV special characters are not working correctly, try a different formatting option.', 'formidable' ); ?>"></span>
 							<select name="csv_format">
 								<?php foreach ( FrmCSVExportHelper::csv_format_options() as $format ) { ?>
-								<option value="<?php echo esc_attr( $format ) ?>"><?php echo esc_html( $format ) ?></option>
+								<option value="<?php echo esc_attr( $format ); ?>"><?php echo esc_html( $format ); ?></option>
 								<?php } ?>
 							</select>
 							</li>
 
 							<li>
-								<label for="csv_col_sep"><?php esc_html_e( 'Column separation', 'formidable' ) ?>:</label>
+								<label for="csv_col_sep"><?php esc_html_e( 'Column separation', 'formidable' ); ?>:</label>
 								<input id="frm_csv_col_sep" name="csv_col_sep" value="," type="text" />
 							</li>
 						</ul>
@@ -77,8 +77,8 @@
 						<?php esc_html_e( 'Include the following in the export file', 'formidable' ); ?>:<br/>
 						<?php foreach ( $export_types as $t => $type ) { ?>
 							<label>
-								<input type="checkbox" name="type[]" value="<?php echo esc_attr( $t ) ?>"/>
-								<?php echo esc_html( $type ) ?>
+								<input type="checkbox" name="type[]" value="<?php echo esc_attr( $t ); ?>"/>
+								<?php echo esc_html( $type ); ?>
 							</label> &nbsp;
 						<?php } ?>
 					</td>
@@ -91,7 +91,7 @@
 					<td>
 						<select name="frm_export_forms[]" multiple="multiple">
 						<?php foreach ( $forms as $form ) { ?>
-							<option value="<?php echo esc_attr( $form->id ) ?>">
+							<option value="<?php echo esc_attr( $form->id ); ?>">
 								<?php
 								echo esc_html( '' === $form->name ? __( '(no title)', 'formidable' ) : $form->name );
 								echo ' &mdash; ' . esc_html( $form->form_key );
@@ -109,7 +109,7 @@
 				</tr>
 			</table>
 			<p class="submit">
-				<input type="submit" value="<?php esc_attr_e( 'Export Selection', 'formidable' ) ?>" class="button-primary" />
+				<input type="submit" value="<?php esc_attr_e( 'Export Selection', 'formidable' ); ?>" class="button-primary" />
 			</p>
 		</form>
 

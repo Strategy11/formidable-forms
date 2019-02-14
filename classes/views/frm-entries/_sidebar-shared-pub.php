@@ -14,7 +14,7 @@ if ( ! isset( $entry ) ) {
 <?php if ( FrmAppHelper::get_param( 'frm_action' ) == 'show' ) { ?>
 <div class="misc-pub-section frm_no_print">
 	<span class="dashicons dashicons-format-aside wp-media-buttons-icon"></span>
-	<a href="#" onclick="window.print();return false;"><?php esc_html_e( 'Print', 'formidable' ) ?></a>
+	<a href="#" onclick="window.print();return false;"><?php esc_html_e( 'Print', 'formidable' ); ?></a>
 </div>
 <?php } ?>
 <?php if ( $entry->updated_at && $entry->updated_at != $entry->created_at ) { ?>

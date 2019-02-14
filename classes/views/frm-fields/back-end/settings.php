@@ -1,5 +1,5 @@
 <div class="frm-single-settings frm_hidden" id="frm-single-settings-<?php echo esc_attr( $field['id'] ); ?>" data-fid="<?php echo esc_attr( $field['id'] ); ?>">
-	<input type="hidden" name="frm_fields_submitted[]" value="<?php echo esc_attr( $field['id'] ) ?>" />
+	<input type="hidden" name="frm_fields_submitted[]" value="<?php echo esc_attr( $field['id'] ); ?>" />
 	<input type="hidden" name="field_options[field_order_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['field_order'] ); ?>"/>
 
 	<?php if ( $display['required'] ) { ?>
@@ -30,8 +30,8 @@
 
 		<p>
 			<?php if ( $display['required'] ) { ?>
-				<label for="frm_req_field_<?php echo esc_attr( $field['id'] ) ?>" class="frm_inline_label">
-					<input type="checkbox" id="frm_req_field_<?php echo esc_attr( $field['id'] ) ?>" class="frm_req_field" name="field_options[required_<?php echo esc_attr( $field['id'] ) ?>]" value="1" <?php checked( $field['required'], 1 ) ?> />
+				<label for="frm_req_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_inline_label">
+					<input type="checkbox" id="frm_req_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_req_field" name="field_options[required_<?php echo esc_attr( $field['id'] ); ?>]" value="1" <?php checked( $field['required'], 1 ); ?> />
 					<?php esc_html_e( 'Required', 'formidable' ); ?>
 				</label>
 				<?php
@@ -42,7 +42,7 @@
 					$field['unique'] = false;
 				}
 				?>
-				<label for="frm_uniq_field_<?php echo esc_attr( $field['id'] ) ?>" class="frm_inline_label frm_help" title="<?php esc_attr_e( 'Unique: Do not allow the same response multiple times. For example, if one user enters \'Joe\', then no one else will be allowed to enter the same name.', 'formidable' ) ?>"><input type="checkbox" name="field_options[unique_<?php echo esc_attr( $field['id'] ) ?>]" id="frm_uniq_field_<?php echo esc_attr( $field['id'] ) ?>" value="1" <?php checked( $field['unique'], 1 ); ?> class="frm_mark_unique" />
+				<label for="frm_uniq_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_inline_label frm_help" title="<?php esc_attr_e( 'Unique: Do not allow the same response multiple times. For example, if one user enters \'Joe\', then no one else will be allowed to enter the same name.', 'formidable' ); ?>"><input type="checkbox" name="field_options[unique_<?php echo esc_attr( $field['id'] ); ?>]" id="frm_uniq_field_<?php echo esc_attr( $field['id'] ); ?>" value="1" <?php checked( $field['unique'], 1 ); ?> class="frm_mark_unique" />
 					<?php esc_html_e( 'Unique', 'formidable' ); ?>
 				</label>
 				<?php
@@ -53,8 +53,8 @@
 					$field['read_only'] = false;
 				}
 				?>
-				<label for="frm_read_only_field_<?php echo esc_attr( $field['id'] ) ?>" class="frm_inline_label frm_help" title="<?php esc_attr_e( 'Read Only: Show this field but do not allow the field value to be edited from the front-end.', 'formidable' ) ?>" >
-					<input type="checkbox" id="frm_read_only_field_<?php echo esc_attr( $field['id'] ) ?>" name="field_options[read_only_<?php echo esc_attr( $field['id'] ) ?>]" value="1" <?php checked( $field['read_only'], 1 ) ?>/>
+				<label for="frm_read_only_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_inline_label frm_help" title="<?php esc_attr_e( 'Read Only: Show this field but do not allow the field value to be edited from the front-end.', 'formidable' ); ?>" >
+					<input type="checkbox" id="frm_read_only_field_<?php echo esc_attr( $field['id'] ); ?>" name="field_options[read_only_<?php echo esc_attr( $field['id'] ); ?>]" value="1" <?php checked( $field['read_only'], 1 ); ?>/>
 					<?php esc_html_e( 'Read Only', 'formidable' ); ?>
 				</label>
 				<?php
@@ -68,7 +68,7 @@
 				<span class="howto">
 					<?php esc_html_e( 'Indicate required field with', 'formidable' ); ?>
 				</span>
-				<input type="text" name="field_options[required_indicator_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['required_indicator'] ); ?>" />
+				<input type="text" name="field_options[required_indicator_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['required_indicator'] ); ?>" />
 			</div>
 		<?php } ?>
 	</div>
@@ -83,14 +83,14 @@
 		do_action( 'frm_after_checkbox', compact( 'field', 'field_name', 'type' ) );
 	} else {
 		?>
-		<a href="<?php echo esc_url( admin_url( 'admin-ajax.php?action=frm_import_choices&field_id=' . $field['id'] . '&TB_iframe=1' ) ) ?>" title="<?php echo esc_attr( FrmAppHelper::truncate( strip_tags( str_replace( '"', '&quot;', $field['name'] ) ), 20 ) . ' ' . __( 'Field Choices', 'formidable' ) ); ?>" class="thickbox frm_orange">
+		<a href="<?php echo esc_url( admin_url( 'admin-ajax.php?action=frm_import_choices&field_id=' . $field['id'] . '&TB_iframe=1' ) ); ?>" title="<?php echo esc_attr( FrmAppHelper::truncate( strip_tags( str_replace( '"', '&quot;', $field['name'] ) ), 20 ) . ' ' . __( 'Field Choices', 'formidable' ) ); ?>" class="thickbox frm_orange">
 			<?php esc_html_e( 'Bulk Edit Options', 'formidable' ); ?>
 		</a>
 		<?php do_action( 'frm_add_multiple_opts_labels', $field ); ?>
-	    <ul id="frm_field_<?php echo esc_attr( $field['id'] ) ?>_opts" class="frm_sortable_field_opts frm_clear<?php echo ( count( $field['options'] ) > 10 ) ? ' frm_field_opts_list' : ''; ?>">
+	    <ul id="frm_field_<?php echo esc_attr( $field['id'] ); ?>_opts" class="frm_sortable_field_opts frm_clear<?php echo ( count( $field['options'] ) > 10 ) ? ' frm_field_opts_list' : ''; ?>">
 			<?php FrmFieldsHelper::show_single_option( $field ); ?>
 	    </ul>
-	<?php
+		<?php
 	}
 	?>
     <div class="frm_small_top_margin">
@@ -99,23 +99,23 @@
 	if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' ) {
 		echo '<p class="howto" id="frm_has_hidden_options_' . esc_attr( $field['id'] ) . '">' . FrmFieldsHelper::get_term_link( $field['taxonomy'] ) . '</p>'; // WPCS: XSS ok.
 	} elseif ( ! isset( $field['post_field'] ) || ! in_array( $field['post_field'], array( 'post_category' ) ) ) {
-?>
+		?>
         <div id="frm_add_field_<?php echo esc_attr( $field['id'] ); ?>">
-            <a href="javascript:void(0);" data-opttype="single" class="button frm_cb_button frm_add_opt" data-clicks="0"><?php esc_html_e( 'Add Option', 'formidable' ) ?></a>
+            <a href="javascript:void(0);" data-opttype="single" class="button frm_cb_button frm_add_opt" data-clicks="0"><?php esc_html_e( 'Add Option', 'formidable' ); ?></a>
 
             <?php if ( FrmAppHelper::pro_is_installed() ) { ?>
-				<a href="javascript:void(0);" id="other_button_<?php echo esc_attr( $field['id'] ); ?>" data-opttype="other" data-ftype="<?php echo esc_attr( $field['type'] ) ?>" class="button frm_cb_button frm_add_opt<?php echo ( in_array( $field['type'], array( 'radio', 'select' ) ) && $field['other'] == true ? ' frm_hidden' : '' ); ?>" data-clicks="0">
-					<?php esc_html_e( 'Add "Other"', 'formidable' ) ?>
+				<a href="javascript:void(0);" id="other_button_<?php echo esc_attr( $field['id'] ); ?>" data-opttype="other" data-ftype="<?php echo esc_attr( $field['type'] ); ?>" class="button frm_cb_button frm_add_opt<?php echo ( in_array( $field['type'], array( 'radio', 'select' ) ) && $field['other'] == true ? ' frm_hidden' : '' ); ?>" data-clicks="0">
+					<?php esc_html_e( 'Add "Other"', 'formidable' ); ?>
 				</a>
-            <?php
+            	<?php
             }
 			?>
         </div>
-<?php
+		<?php
     }
-?>
+	?>
     </div>
-<?php
+	<?php
 }
 
 if ( $display['clear_on_focus'] ) {
@@ -133,9 +133,9 @@ if ( $display['clear_on_focus'] ) {
 			<p>
 				<label><?php esc_html_e( 'Label Position', 'formidable' ); ?></label>
 				<br/>
-				<select name="field_options[label_<?php echo esc_attr( $field['id'] ) ?>]">
+				<select name="field_options[label_<?php echo esc_attr( $field['id'] ); ?>]">
 					<option value=""<?php selected( $field['label'], '' ); ?>>
-						<?php esc_html_e( 'Default', 'formidable' ) ?>
+						<?php esc_html_e( 'Default', 'formidable' ); ?>
 					</option>
 					<?php
 					foreach ( FrmStylesHelper::get_single_label_positions() as $pos => $pos_label ) {
@@ -144,8 +144,8 @@ if ( $display['clear_on_focus'] ) {
 							continue;
 						}
 						?>
-						<option value="<?php echo esc_attr( $pos ) ?>"<?php selected( $field['label'], $pos ); ?>>
-							<?php echo esc_html( $pos_label ) ?>
+						<option value="<?php echo esc_attr( $pos ); ?>"<?php selected( $field['label'], $pos ); ?>>
+							<?php echo esc_html( $pos_label ); ?>
 						</option>
 					<?php } ?>
 				</select>
@@ -154,11 +154,11 @@ if ( $display['clear_on_focus'] ) {
 
 		<?php if ( $display['css'] ) { ?>
 			<p>
-				<label for="frm_classes_<?php echo esc_attr( $field['id'] ) ?>" class="frm_help" title="<?php esc_attr_e( 'Add a CSS class to the field container. Use our predefined classes to align multiple fields in single row.', 'formidable' ) ?>">
+				<label for="frm_classes_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help" title="<?php esc_attr_e( 'Add a CSS class to the field container. Use our predefined classes to align multiple fields in single row.', 'formidable' ); ?>">
 					<?php esc_html_e( 'CSS Layout Classes', 'formidable' ); ?>
 				</label>
 				<br/>
-				<input type="text" name="field_options[classes_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['classes'] ) ?>" id="frm_classes_<?php echo esc_attr( $field['id'] ) ?>" class="frm_classes" />
+				<input type="text" name="field_options[classes_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['classes'] ); ?>" id="frm_classes_<?php echo esc_attr( $field['id'] ); ?>" class="frm_classes" />
 			</p>
 		<?php } ?>
 
@@ -188,12 +188,12 @@ if ( $display['clear_on_focus'] ) {
 	<table class="form-table frm_clear_none">
 		<tr>
 			<td class="frm_150_width">
-				<label><?php esc_html_e( 'Field Type', 'formidable' ) ?></label>
+				<label><?php esc_html_e( 'Field Type', 'formidable' ); ?></label>
 			</td>
 			<td>
 				<select <?php echo ( count( $field_types ) === 1 ? 'disabled="disabled"' : 'name="field_options[type_' . esc_attr( $field['id'] ) . ']"' ); ?>>
 					<?php foreach ( $field_types as $fkey => $ftype ) { ?>
-						<option value="<?php echo esc_attr( $fkey ) ?>" <?php echo ( $fkey === $field['type'] ) ? ' selected="selected"' : ''; ?> <?php echo array_key_exists( $fkey, $disabled_fields ) ? 'disabled="disabled"' : ''; ?>>
+						<option value="<?php echo esc_attr( $fkey ); ?>" <?php echo ( $fkey === $field['type'] ) ? ' selected="selected"' : ''; ?> <?php echo array_key_exists( $fkey, $disabled_fields ) ? 'disabled="disabled"' : ''; ?>>
 							<?php echo esc_html( is_array( $ftype ) ? $ftype['name'] : $ftype ); ?> 
 						</option>
 						<?php
@@ -207,55 +207,55 @@ if ( $display['clear_on_focus'] ) {
 				<?php
 
 				if ( $display['show_image'] ) {
-				?>
+					?>
 					<tr>
 						<td class="frm_150_width">
-							<label><?php esc_html_e( 'Show URL image', 'formidable' ) ?></label>
+							<label><?php esc_html_e( 'Show URL image', 'formidable' ); ?></label>
 						</td>
 						<td>
-							<label for="frm_show_image_<?php echo esc_attr( $field['id'] ) ?>">
-								<input type="checkbox" id="frm_show_image_<?php echo esc_attr( $field['id'] ) ?>" name="field_options[show_image_<?php echo esc_attr( $field['id'] ) ?>]" value="1" <?php checked( $field['show_image'], 1 ) ?> />
+							<label for="frm_show_image_<?php echo esc_attr( $field['id'] ); ?>">
+								<input type="checkbox" id="frm_show_image_<?php echo esc_attr( $field['id'] ); ?>" name="field_options[show_image_<?php echo esc_attr( $field['id'] ); ?>]" value="1" <?php checked( $field['show_image'], 1 ); ?> />
 								<?php esc_html_e( 'If this URL points to an image, show to image on the entries listing page.', 'formidable' ); ?>
 							</label>
 						</td>
 					</tr>
-				<?php
+					<?php
 				}
 
 				if ( $display['captcha_size'] && $frm_settings->re_type !== 'invisible' ) {
-				?>
-                <tr><td><label><?php esc_html_e( 'ReCaptcha Type', 'formidable' ) ?></label>
-					<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Set the size of the captcha field. The compact option is best if your form is in a small area.', 'formidable' ) ?>" ></span>
+					?>
+                <tr><td><label><?php esc_html_e( 'ReCaptcha Type', 'formidable' ); ?></label>
+					<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Set the size of the captcha field. The compact option is best if your form is in a small area.', 'formidable' ); ?>" ></span>
                     </td>
                     <td>
-					<select name="field_options[captcha_size_<?php echo esc_attr( $field['id'] ) ?>]">
+					<select name="field_options[captcha_size_<?php echo esc_attr( $field['id'] ); ?>]">
 						<option value="normal" <?php selected( $field['captcha_size'], 'normal' ); ?>>
-							<?php esc_html_e( 'Normal', 'formidable' ) ?>
+							<?php esc_html_e( 'Normal', 'formidable' ); ?>
 						</option>
 						<option value="compact" <?php selected( $field['captcha_size'], 'compact' ); ?>>
-							<?php esc_html_e( 'Compact', 'formidable' ) ?>
+							<?php esc_html_e( 'Compact', 'formidable' ); ?>
 						</option>
                     </select>
                     </td>
                 </tr>
 				<tr>
 					<td>
-						<label for="captcha_theme_<?php echo esc_attr( $field['field_key'] ) ?>">
-							<?php esc_html_e( 'reCAPTCHA Color', 'formidable' ) ?>
+						<label for="captcha_theme_<?php echo esc_attr( $field['field_key'] ); ?>">
+							<?php esc_html_e( 'reCAPTCHA Color', 'formidable' ); ?>
 						</label>
 					</td>
 					<td>
-						<select name="field_options[captcha_theme_<?php echo esc_attr( $field['id'] ) ?>]" id="captcha_theme_<?php echo esc_attr( $field['field_key'] ) ?>">
+						<select name="field_options[captcha_theme_<?php echo esc_attr( $field['id'] ); ?>]" id="captcha_theme_<?php echo esc_attr( $field['field_key'] ); ?>">
 							<option value="light" <?php selected( $field['captcha_theme'], 'light' ); ?>>
-								<?php esc_html_e( 'Light', 'formidable' ) ?>
+								<?php esc_html_e( 'Light', 'formidable' ); ?>
 							</option>
 							<option value="dark" <?php selected( $field['captcha_theme'], 'dark' ); ?>>
-								<?php esc_html_e( 'Dark', 'formidable' ) ?>
+								<?php esc_html_e( 'Dark', 'formidable' ); ?>
 							</option>
 						</select>
 					</td>
 				</tr>
-                <?php
+                	<?php
 				}
 
 				if ( $display['format'] ) {
@@ -294,11 +294,11 @@ if ( $display['clear_on_focus'] ) {
 					$hidden = FrmField::is_field_type( $field, 'text' ) && ! FrmField::is_option_true( $field, 'format' );
 					?>
 					<p class="frm_invalid_msg<?php echo esc_attr( $field['id'] . ( $hidden ? ' frm_hidden' : '' ) ); ?>">
-						<label for="field_options_invalid_<?php echo esc_attr( $field['id'] ) ?>">
+						<label for="field_options_invalid_<?php echo esc_attr( $field['id'] ); ?>">
 							<?php esc_html_e( 'Invalid Format', 'formidable' ); ?>
 						</label>
 						<br/>
-						<input type="text" name="field_options[invalid_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['invalid'] ); ?>" id="field_options_invalid_<?php echo esc_attr( $field['id'] ) ?>"/>
+						<input type="text" name="field_options[invalid_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['invalid'] ); ?>" id="field_options_invalid_<?php echo esc_attr( $field['id'] ); ?>"/>
 					</p>
 					<?php
 				}
@@ -318,11 +318,11 @@ if ( $display['clear_on_focus'] ) {
 				if ( $display['conf_field'] ) {
 					?>
 					<p class="frm_conf_details<?php echo esc_attr( $field['id'] . ( $field['conf_field'] ? '' : ' frm_hidden' ) ); ?>">
-						<label for="field_options_conf_msg_<?php echo esc_attr( $field['id'] ) ?>">
+						<label for="field_options_conf_msg_<?php echo esc_attr( $field['id'] ); ?>">
 							<?php esc_html_e( 'Confirmation', 'formidable' ); ?>
 						</label>
 						<br/>
-						<input type="text" name="field_options[conf_msg_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['conf_msg'] ); ?>" id="field_options_conf_msg_<?php echo esc_attr( $field['id'] ) ?>" />
+						<input type="text" name="field_options[conf_msg_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['conf_msg'] ); ?>" id="field_options_conf_msg_<?php echo esc_attr( $field['id'] ); ?>" />
 					</p>
 					<?php
 				}
@@ -336,6 +336,6 @@ if ( $display['clear_on_focus'] ) {
 	<?php } ?>
 
 	<?php if ( $display['conf_field'] ) { ?>
-		<input type="hidden" name="field_options[conf_desc_<?php echo esc_attr( $field['id'] ) ?>]" value="<?php echo esc_attr( $field['conf_desc'] ); ?>" />
+		<input type="hidden" name="field_options[conf_desc_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['conf_desc'] ); ?>" />
 	<?php } ?>
 </div>

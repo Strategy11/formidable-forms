@@ -1,12 +1,12 @@
 <?php
 if ( isset( $include_extra_container ) ) { ?>
-<div class="<?php echo esc_attr( $include_extra_container ) ?>" id="frm_form_<?php echo esc_attr( $form->id ) ?>_container">
+<div class="<?php echo esc_attr( $include_extra_container ); ?>" id="frm_form_<?php echo esc_attr( $form->id ); ?>_container">
 <?php
 }
 if ( isset( $message ) && $message != '' ) {
     if ( FrmAppHelper::is_admin() ) {
 ?>
-<div id="message" class="frm_updated_message"><?php echo wp_kses_post( $message ) ?></div>
+<div id="message" class="frm_updated_message"><?php echo wp_kses_post( $message ); ?></div>
 <?php
 	} else {
 		FrmFormsHelper::maybe_get_scroll_js( $form->id );
@@ -22,7 +22,7 @@ if ( isset( $errors ) && is_array( $errors ) && ! empty( $errors ) ) {
     	FrmFormsHelper::get_scroll_js( $form->id );
 	}
 	?>
-<div class="<?php echo esc_attr( FrmFormsHelper::form_error_class() ) ?>">
+<div class="<?php echo esc_attr( FrmFormsHelper::form_error_class() ); ?>">
 <?php
 $img = '';
 if ( ! FrmAppHelper::is_admin() ) {
