@@ -249,6 +249,11 @@ ul.frm_form_nav > li{
 	display: inline;
 }
 
+#frm-bar-two .frm_updated_message {
+	display: inline-block;
+	text-align: center;
+}
+
 #frm-bar-two .frm-trash-link{
 	margin: 0 7px;
 }
@@ -2636,14 +2641,11 @@ span.howto{display:inline;}
 }
 
 .frm-drop-field{
-	width: 7px;
-	height: 90%;
-	border-radius: 4px;
+	width: 1px;
+	height: 1px;
 	background: var(--primary-color);
 	display: block;
-	position: absolute;
-	top: 5%;
-	left: 0;
+	position: relative;
 }
 
 .divider_drop{

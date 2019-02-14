@@ -1,4 +1,3 @@
-<div class="clear"></div>
 <?php
 if ( isset( $message ) && '' !== $message ) {
 	if ( FrmAppHelper::is_admin() ) {
