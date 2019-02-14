@@ -50,6 +50,7 @@ class FrmFieldSelect extends FrmFieldType {
 		if ( FrmField::is_option_true( $this->field, 'multiple' ) ) {
 			$value = $this->get_multi_opts_for_import( $value );
 		}
+
 		return $value;
 	}
 }

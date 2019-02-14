@@ -4,7 +4,7 @@ class FrmPersonalData {
 
 	private $limit = 200;
 
-	private $page  = 1;
+	private $page = 1;
 
 	public function __construct() {
 		add_filter( 'wp_privacy_personal_data_erasers', array( $this, 'register_data_eraser' ) );
@@ -15,7 +15,9 @@ class FrmPersonalData {
 	 * Add options to the WordPress personal data exporter
 	 *
 	 * @since 3.02
+	 *
 	 * @param array $exporters
+	 *
 	 * @return array
 	 */
 	public function register_exporter( $exporters ) {
@@ -23,6 +25,7 @@ class FrmPersonalData {
 			'exporter_friendly_name' => __( 'Formidable Forms Exporter', 'formidable' ),
 			'callback'               => array( $this, 'export_data' ),
 		);
+
 		return $exporters;
 	}
 
@@ -30,7 +33,9 @@ class FrmPersonalData {
 	 * Add options to the WordPress personal data eraser
 	 *
 	 * @since 3.02
+	 *
 	 * @param array $erasers
+	 *
 	 * @return array
 	 */
 	public function register_data_eraser( $erasers ) {
@@ -65,6 +70,7 @@ class FrmPersonalData {
 		}
 
 		$data_to_export['done'] = count( $entries ) < $this->limit;
+
 		return $data_to_export;
 	}
 
@@ -84,7 +90,7 @@ class FrmPersonalData {
 		}
 
 		$this->page = absint( $page );
-		$entries = $this->get_user_entries( $email );
+		$entries    = $this->get_user_entries( $email );
 		if ( empty( $entries ) ) {
 			return $data_removed;
 		}
@@ -111,6 +117,7 @@ class FrmPersonalData {
 	 * or with a field value that matches the email address
 	 *
 	 * @param string $email
+	 *
 	 * @return array of entry ids
 	 */
 	private function get_user_entries( $email ) {
@@ -120,6 +127,7 @@ class FrmPersonalData {
 		);
 
 		$user = get_user_by( 'email', $email );
+
 		$entries_by_email = FrmDb::get_col( 'frm_item_metas', array( 'meta_value' => $email ), 'item_id', $query_args );
 
 		if ( empty( $user ) ) {
@@ -133,16 +141,19 @@ class FrmPersonalData {
 
 		$entry_ids = array_merge( (array) $entries_by_user, (array) $entries_by_email );
 		$entry_ids = array_unique( array_filter( $entry_ids ) );
+
 		return $entry_ids;
 	}
 
 	private function get_current_page() {
 		$start = ( $this->page - 1 ) * $this->limit;
+
 		return FrmDb::esc_limit( $start . ',' . $this->limit );
 	}
 
 	/**
 	 * @param int $entry
+	 *
 	 * @return array
 	 */
 	private function prepare_entry_data( $entry ) {

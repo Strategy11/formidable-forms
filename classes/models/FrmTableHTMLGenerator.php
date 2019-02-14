@@ -47,7 +47,6 @@ class FrmTableHTMLGenerator {
 	 */
 	private $td_style = '';
 
-
 	/**
 	 * FrmTableHTMLGenerator constructor.
 	 *
@@ -73,7 +72,7 @@ class FrmTableHTMLGenerator {
 	 * @param array $atts
 	 */
 	private function init_style_settings( $atts ) {
-		$style_settings = array(
+		$style_settings       = array(
 			'border_color' => 'dddddd',
 			'bg_color'     => 'f7f7f7',
 			'text_color'   => '444444',
@@ -205,7 +204,7 @@ class FrmTableHTMLGenerator {
 
 		if ( $this->type === 'shortcode' ) {
 			$tr_style = ' style="[frm-alt-color]"';
-		} else if ( $this->use_inline_style ) {
+		} elseif ( $this->use_inline_style ) {
 			$tr_style = ' style="background-color:' . $this->table_row_background_color() . ';"';
 		} else {
 			$tr_style = '';
@@ -261,10 +260,10 @@ class FrmTableHTMLGenerator {
 		$row = '<tr' . $this->tr_style() . '>';
 
 		if ( 'rtl' == $this->direction ) {
-			$first = $value;
+			$first  = $value;
 			$second = $label;
 		} else {
-			$first = $label;
+			$first  = $label;
 			$second = $value;
 		}
 

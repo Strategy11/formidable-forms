@@ -12,13 +12,15 @@ class FrmEmailHelper {
 	 * @since 2.03.04
 	 *
 	 * @param int $form_id
+	 *
 	 * @return int
 	 */
 	public static function get_user_id_field_for_form( $form_id ) {
 		$where = array(
-			'type' => 'user_id',
+			'type'    => 'user_id',
 			'form_id' => $form_id,
 		);
+
 		$user_id_field = FrmDb::get_var( 'frm_fields', $where, 'id' );
 
 		return (int) $user_id_field;

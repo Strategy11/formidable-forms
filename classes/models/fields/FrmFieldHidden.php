@@ -30,8 +30,9 @@ class FrmFieldHidden extends FrmFieldType {
 	protected $holds_email_values = true;
 
 	protected function field_settings_for_type() {
-		$settings = parent::field_settings_for_type();
+		$settings        = parent::field_settings_for_type();
 		$settings['css'] = false;
+
 		return $settings;
 	}
 

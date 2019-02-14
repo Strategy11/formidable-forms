@@ -35,6 +35,7 @@ class FrmAddonsController {
 		$plugins = apply_filters( 'frm_installed_addons', array() );
 		if ( empty( $plugins ) ) {
 			esc_html_e( 'There are no plugins on your site that require a license', 'formidable' );
+
 			return;
 		}
 
@@ -44,7 +45,7 @@ class FrmAddonsController {
 	}
 
 	private static function get_api_addons() {
-		$api = new FrmFormApi();
+		$api    = new FrmFormApi();
 		$addons = $api->get_api_info();
 
 		if ( empty( $addons ) ) {
@@ -74,64 +75,64 @@ class FrmAddonsController {
 				'docs'    => '',
 				'excerpt' => 'Enhance your basic Formidable forms with a plethora of Pro field types and features. Create advanced forms and data-driven applications in minutes.',
 			),
-			'mailchimp' => array(
+			'mailchimp'      => array(
 				'title'   => 'MailChimp Forms',
 				'excerpt' => 'Get on the path to more sales and leads in a matter of minutes. Add leads to a MailChimp mailing list when they submit forms and update their information along with the entry.',
 			),
-			'registration' => array(
+			'registration'   => array(
 				'title'   => 'User Registration Forms',
 				'link'    => 'downloads/user-registration/',
 				'excerpt' => 'Give new users access to your site as quickly and painlessly as possible. Allow users to register, edit and be able to login to their profiles on your site from the front end in a clean, customized registration form.',
 			),
-			'paypal' => array(
+			'paypal'         => array(
 				'title'   => 'PayPal Standard Forms',
 				'link'    => 'downloads/paypal-standard/',
 				'excerpt' => 'Automate your business by collecting instant payments from your clients. Collect information, calculate a total, and send them on to PayPal. Require a payment before publishing content on your site.',
 			),
-			'stripe' => array(
+			'stripe'         => array(
 				'title'   => 'Stripe Forms',
 				'docs'    => 'knowledgebase/stripe/',
 				'excerpt' => 'Any Formidable forms on your site can accept credit card payments without users ever leaving your site.',
 			),
-			'authorize-net' => array(
+			'authorize-net'  => array(
 				'title'   => 'Authorize.net AIM Forms',
 				'link'    => 'downloads/authorize-net-aim/',
 				'docs'    => 'knowledgebase/authorize-net-aim/',
 				'excerpt' => 'Accept one-time payments directly on your site, using Authorize.net AIM.',
 			),
-			'woocommerce' => array(
+			'woocommerce'    => array(
 				'title'   => 'WooCommerce Forms',
 				'excerpt' => 'Use a Formidable form on your WooCommerce product pages.',
 			),
-			'autoresponder' => array(
+			'autoresponder'  => array(
 				'title'   => 'Form Action Automation',
 				'docs'    => 'knowledgebase/schedule-autoresponder/',
 				'excerpt' => 'Schedule email notifications, SMS messages, and API actions.',
 			),
-			'modal' => array(
+			'modal'          => array(
 				'title'   => 'Bootstrap Modal Forms',
 				'link'    => 'downloads/bootstrap-modal/',
 				'docs'    => 'knowledgebase/bootstrap-modal/',
 				'excerpt' => 'Open a view or form in a Bootstrap popup.',
 			),
-			'bootstrap' => array(
+			'bootstrap'      => array(
 				'title'   => 'Bootstrap Style Forms',
 				'excerpt' => 'Instantly add Bootstrap styling to all your Formidable forms.',
 			),
-			'zapier' => array(
+			'zapier'         => array(
 				'title'   => 'Zapier Forms',
 				'excerpt' => 'Connect with hundreds of different applications through Zapier. Insert a new row in a Google docs spreadsheet, post on Twitter, or add a new Dropbox file with your form.',
 			),
-			'signature' => array(
+			'signature'      => array(
 				'title'   => 'Digital Signature Forms',
 				'excerpt' => 'Add a signature field to your form. The user may write their signature with a trackpad/mouse or just type it.',
 			),
-			'api' => array(
+			'api'            => array(
 				'title'   => 'Formidable Forms API',
 				'link'    => 'downloads/formidable-api/',
 				'excerpt' => 'Send entry results to any other site that has a Rest API. This includes the option of sending entries from one Formidable site to another.',
 			),
-			'twilio' => array(
+			'twilio'         => array(
 				'title'   => 'Twilio SMS Forms',
 				'docs'    => 'knowledgebase/twilio-add-on/',
 				'excerpt' => 'Allow users to text their votes for polls created by Formidable Forms, or send SMS notifications when entries are submitted or updated.',
@@ -146,8 +147,8 @@ class FrmAddonsController {
 	 * @return string
 	 */
 	public static function get_pro_download_url() {
-		$pro_cred_store  = 'frmpro-credentials';
-		$pro_wpmu_store  = 'frmpro-wpmu-sitewide';
+		$pro_cred_store = 'frmpro-credentials';
+		$pro_wpmu_store = 'frmpro-wpmu-sitewide';
 		if ( is_multisite() && get_site_option( $pro_wpmu_store ) ) {
 			$creds = get_site_option( $pro_cred_store );
 		} else {
@@ -168,9 +169,9 @@ class FrmAddonsController {
 			$license = strtoupper( $license );
 		}
 
-		$api = new FrmFormApi( $license );
+		$api       = new FrmFormApi( $license );
 		$downloads = $api->get_api_info();
-		$pro = isset( $downloads['93790'] ) ? $downloads['93790'] : array();
+		$pro       = isset( $downloads['93790'] ) ? $downloads['93790'] : array();
 
 		return isset( $pro['url'] ) ? $pro['url'] : '';
 	}
@@ -215,8 +216,8 @@ class FrmAddonsController {
 			$wp_version = isset( $wp_plugin['Version'] ) ? $wp_plugin['Version'] : '1.0';
 
 			if ( version_compare( $wp_version, $plugin->new_version, '<' ) ) {
-				$slug = explode( '/', $folder );
-				$plugin->slug = $slug[0];
+				$slug                           = explode( '/', $folder );
+				$plugin->slug                   = $slug[0];
 				$transient->response[ $folder ] = $plugin;
 			}
 
@@ -231,7 +232,9 @@ class FrmAddonsController {
 	 * Check if a plugin is installed before showing an update for it
 	 *
 	 * @since 3.05
+	 *
 	 * @param string $plugin - the folder/filename.php for a plugin
+	 *
 	 * @return bool - True if installed
 	 */
 	private static function is_installed( $plugin ) {
@@ -240,6 +243,7 @@ class FrmAddonsController {
 		}
 
 		$all_plugins = get_plugins();
+
 		return isset( $all_plugins[ $plugin ] );
 	}
 
@@ -298,13 +302,15 @@ class FrmAddonsController {
 
 	/**
 	 * @since 3.04.03
+	 *
 	 * @param array $addons
 	 * @param object $license The FrmAddon object
+	 *
 	 * @return array
 	 */
 	public static function get_addon_for_license( $addons, $license ) {
 		$download_id = $license->download_id;
-		$plugin = array();
+		$plugin      = array();
 		if ( empty( $download_id ) && ! empty( $addons ) ) {
 			foreach ( $addons as $addon ) {
 				if ( strtolower( $license->plugin_name ) == strtolower( $addon['title'] ) ) {
@@ -327,7 +333,7 @@ class FrmAddonsController {
 		$loop_addons = $addons;
 		foreach ( $loop_addons as $id => $addon ) {
 			if ( is_numeric( $id ) ) {
-				$slug = str_replace( array( '-wordpress-plugin', '-wordpress' ), '', $addon['slug'] );
+				$slug      = str_replace( array( '-wordpress-plugin', '-wordpress' ), '', $addon['slug'] );
 				$file_name = $addon['plugin'];
 			} else {
 				$slug = $id;
@@ -345,8 +351,8 @@ class FrmAddonsController {
 			if ( $addon['installed'] && ! empty( $activate_url ) && ! is_plugin_active( $file_name ) ) {
 				$addon['activate_url'] = add_query_arg(
 					array(
-						'_wpnonce'    => wp_create_nonce( 'activate-plugin_' . $file_name ),
-						'plugin'      => $file_name,
+						'_wpnonce' => wp_create_nonce( 'activate-plugin_' . $file_name ),
+						'plugin'   => $file_name,
 					),
 					$activate_url
 				);
@@ -375,13 +381,13 @@ class FrmAddonsController {
 		if ( strpos( $link, 'http' ) !== 0 ) {
 			$link = $site_url . $link;
 		}
-		$link = FrmAppHelper::make_affiliate_url( $link );
+		$link       = FrmAppHelper::make_affiliate_url( $link );
 		$query_args = array(
 			'utm_source'   => 'WordPress',
 			'utm_medium'   => 'addons',
 			'utm_campaign' => 'liteplugin',
 		);
-		$link = add_query_arg( $query_args, $link );
+		$link       = add_query_arg( $query_args, $link );
 	}
 
 	/**
@@ -417,13 +423,13 @@ class FrmAddonsController {
 
 	private static function prepare_pro_info() {
 		return array(
-			'personal'     => array(
+			'personal'      => array(
 				'id'       => 2,
 				'download' => 19367654,
 				'price'    => '49.00',
 				'name'     => 'Personal',
 			),
-			'professional' => array(
+			'professional'  => array(
 				'id'       => 0,
 				'download' => 19367001,
 				'price'    => '99.00',
@@ -435,7 +441,7 @@ class FrmAddonsController {
 				'price'    => '199.00',
 				'name'     => 'Business',
 			),
-			'enterprise'   => array(
+			'enterprise'    => array(
 				'id'       => 0,
 				'download' => 19366992,
 				'price'    => '399.00',
@@ -473,10 +479,10 @@ class FrmAddonsController {
 		ob_start();
 
 		$show_form = false;
-		$method = '';
-		$url    = add_query_arg( array( 'page' => 'formidable-settings' ), admin_url( 'admin.php' ) );
-		$url    = esc_url_raw( $url );
-		$creds  = request_filesystem_credentials( $url, $method, false, false, null );
+		$method    = '';
+		$url       = add_query_arg( array( 'page' => 'formidable-settings' ), admin_url( 'admin.php' ) );
+		$url       = esc_url_raw( $url );
+		$creds     = request_filesystem_credentials( $url, $method, false, false, null );
 
 		if ( false === $creds ) {
 			$show_form = true;
@@ -512,6 +518,7 @@ class FrmAddonsController {
 
 		// Flush the cache and return the newly installed plugin basename.
 		wp_cache_flush();
+
 		return $installer->plugin_info();
 	}
 

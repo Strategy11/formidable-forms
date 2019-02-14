@@ -72,7 +72,6 @@ class FrmFieldNumber extends FrmFieldType {
 		return $errors;
 	}
 
-
 	/**
 	 * IE fallback for number fields
 	 * Remove the comma when HTML5 isn't supported
@@ -93,6 +92,7 @@ class FrmFieldNumber extends FrmFieldType {
 		if ( ! is_numeric( $value ) ) {
 			$value = (float) $value;
 		}
+
 		return $value;
 	}
 }

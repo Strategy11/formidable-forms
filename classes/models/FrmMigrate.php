@@ -12,10 +12,10 @@ class FrmMigrate {
 		}
 
 		global $wpdb;
-		$this->fields         = $wpdb->prefix . 'frm_fields';
-		$this->forms          = $wpdb->prefix . 'frm_forms';
-		$this->entries        = $wpdb->prefix . 'frm_items';
-		$this->entry_metas    = $wpdb->prefix . 'frm_item_metas';
+		$this->fields      = $wpdb->prefix . 'frm_fields';
+		$this->forms       = $wpdb->prefix . 'frm_forms';
+		$this->entries     = $wpdb->prefix . 'frm_items';
+		$this->entry_metas = $wpdb->prefix . 'frm_item_metas';
 	}
 
 	public function upgrade() {
@@ -74,11 +74,11 @@ class FrmMigrate {
 		return $wpdb->get_charset_collate();
 	}
 
-    private function create_tables() {
-        $charset_collate = $this->collation();
-        $sql = array();
+	private function create_tables() {
+		$charset_collate = $this->collation();
+		$sql             = array();
 
-        /* Create/Upgrade Fields Table */
+		/* Create/Upgrade Fields Table */
 		$sql[] = 'CREATE TABLE ' . $this->fields . ' (
 				id BIGINT(20) NOT NULL auto_increment,
 				field_key varchar(100) default NULL,
@@ -97,7 +97,7 @@ class FrmMigrate {
                 UNIQUE KEY field_key (field_key)
         )';
 
-        /* Create/Upgrade Forms Table */
+		/* Create/Upgrade Forms Table */
 		$sql[] = 'CREATE TABLE ' . $this->forms . ' (
                 id int(11) NOT NULL auto_increment,
 				form_key varchar(100) default NULL,
@@ -115,7 +115,7 @@ class FrmMigrate {
                 UNIQUE KEY form_key (form_key)
         )';
 
-        /* Create/Upgrade Items Table */
+		/* Create/Upgrade Items Table */
 		$sql[] = 'CREATE TABLE ' . $this->entries . ' (
 				id BIGINT(20) NOT NULL auto_increment,
 				item_key varchar(100) default NULL,
@@ -138,7 +138,7 @@ class FrmMigrate {
                 UNIQUE KEY item_key (item_key)
         )';
 
-        /* Create/Upgrade Meta Table */
+		/* Create/Upgrade Meta Table */
 		$sql[] = 'CREATE TABLE ' . $this->entry_metas . ' (
 				id BIGINT(20) NOT NULL auto_increment,
 				meta_value longtext default NULL,
@@ -150,7 +150,7 @@ class FrmMigrate {
                 KEY item_id (item_id)
         )';
 
-        foreach ( $sql as $q ) {
+		foreach ( $sql as $q ) {
 			if ( function_exists( 'dbDelta' ) ) {
 				dbDelta( $q . $charset_collate . ';' );
 			} else {
@@ -158,8 +158,8 @@ class FrmMigrate {
 				$wpdb->query( $q . $charset_collate ); // WPCS: unprepared SQL ok.
 			}
 			unset( $q );
-        }
-    }
+		}
+	}
 
 	private function maybe_create_contact_form() {
 		$form_exists = FrmForm::get_id_by_key( 'contact-form' );
@@ -197,7 +197,7 @@ class FrmMigrate {
 			$old_db_version = get_option( 'frm_db_version' );
 		}
 		if ( strpos( $old_db_version, '-' ) ) {
-			$last_upgrade = explode( '-', $old_db_version );
+			$last_upgrade   = explode( '-', $old_db_version );
 			$old_db_version = (int) $last_upgrade[1];
 		}
 
@@ -215,13 +215,13 @@ class FrmMigrate {
 		}
 	}
 
-    public function uninstall() {
+	public function uninstall() {
 		if ( ! current_user_can( 'administrator' ) ) {
-            $frm_settings = FrmAppHelper::get_settings();
+			$frm_settings = FrmAppHelper::get_settings();
 			wp_die( esc_html( $frm_settings->admin_permission ) );
-        }
+		}
 
-        global $wpdb, $wp_roles;
+		global $wpdb, $wp_roles;
 
 		$wpdb->query( 'DROP TABLE IF EXISTS ' . $this->fields ); // WPCS: unprepared SQL ok.
 		$wpdb->query( 'DROP TABLE IF EXISTS ' . $this->forms ); // WPCS: unprepared SQL ok.
@@ -233,12 +233,12 @@ class FrmMigrate {
 		delete_option( 'frm_install_running' );
 		delete_option( 'frm_lite_settings_upgrade' );
 
-        //delete roles
-        $frm_roles = FrmAppHelper::frm_capabilities();
-        $roles = get_editable_roles();
-        foreach ( $frm_roles as $frm_role => $frm_role_description ) {
-            foreach ( $roles as $role => $details ) {
-                $wp_roles->remove_cap( $role, $frm_role );
+		// Delete roles.
+		$frm_roles = FrmAppHelper::frm_capabilities();
+		$roles     = get_editable_roles();
+		foreach ( $frm_roles as $frm_role => $frm_role_description ) {
+			foreach ( $roles as $role => $details ) {
+				$wp_roles->remove_cap( $role, $frm_role );
 				unset( $role, $details );
 			}
 			unset( $frm_role, $frm_role_description );
@@ -266,8 +266,9 @@ class FrmMigrate {
 		$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->options . ' WHERE option_name LIKE %s OR option_name LIKE %s', '_transient_timeout_frm_form_fields_%', '_transient_frm_form_fields_%' ) );
 
 		do_action( 'frm_after_uninstall' );
-        return true;
-    }
+
+		return true;
+	}
 
 	/**
 	 * Delete uneeded default templates
@@ -292,7 +293,7 @@ class FrmMigrate {
 
 		foreach ( (array) $fields as $f ) {
 			$f->field_options = maybe_unserialize( $f->field_options );
-			$size = $f->field_options['size'];
+			$size             = $f->field_options['size'];
 			$this->maybe_convert_migrated_size( $size );
 
 			if ( $size === $f->field_options['size'] ) {
@@ -314,10 +315,24 @@ class FrmMigrate {
 	}
 
 	private function get_fields_with_size() {
-		$field_types = array( 'textarea', 'text', 'number', 'email', 'url', 'rte', 'date', 'phone', 'password', 'image', 'tag', 'file' );
+		$field_types = array(
+			'textarea',
+			'text',
+			'number',
+			'email',
+			'url',
+			'rte',
+			'date',
+			'phone',
+			'password',
+			'image',
+			'tag',
+			'file',
+		);
+
 		$query = array(
-			'type' => $field_types,
-			'field_options like' => 's:4:"size";',
+			'type'                   => $field_types,
+			'field_options like'     => 's:4:"size";',
 			'field_options not like' => 's:4:"size";s:0:',
 		);
 
@@ -363,6 +378,7 @@ class FrmMigrate {
 		}
 
 		$pixel_conversion = 9;
+
 		$size = round( (int) $int_size / $pixel_conversion );
 	}
 
@@ -375,7 +391,7 @@ class FrmMigrate {
 	private function migrate_to_25() {
 		// get the style that was created with the style migration
 		$frm_style = new FrmStyle();
-		$styles = $frm_style->get_all( 'post_date', 'ASC', 1 );
+		$styles    = $frm_style->get_all( 'post_date', 'ASC', 1 );
 		if ( empty( $styles ) ) {
 			return;
 		}
@@ -384,6 +400,7 @@ class FrmMigrate {
 			if ( $style->post_content['field_width'] == '400px' ) {
 				$style->post_content['field_width'] = '100%';
 				$frm_style->save( (array) $style );
+
 				return;
 			}
 		}
@@ -445,46 +462,47 @@ class FrmMigrate {
 
 	private function convert_character_to_px( &$size ) {
 		$pixel_conversion = 9;
+
 		$size = round( $pixel_conversion * (int) $size );
 		$size .= 'px';
 	}
 
-    /**
-     * Migrate post and email notification settings into actions
-     */
-    private function migrate_to_16() {
-        $forms = FrmDb::get_results( $this->forms, array(), 'id, options, is_template, default_template' );
+	/**
+	 * Migrate post and email notification settings into actions
+	 */
+	private function migrate_to_16() {
+		$forms = FrmDb::get_results( $this->forms, array(), 'id, options, is_template, default_template' );
 
-        /**
-        * Old email settings format:
-        * email_to: Email or field id
-        * also_email_to: array of fields ids
-        * reply_to: Email, field id, 'custom'
-        * cust_reply_to: string
-        * reply_to_name: field id, 'custom'
-        * cust_reply_to_name: string
-        * plain_text: 0|1
-        * email_message: string or ''
-        * email_subject: string or ''
-        * inc_user_info: 0|1
-        * update_email: 0, 1, 2
-        *
-        * Old autoresponder settings format:
-        * auto_responder: 0|1
-        * ar_email_message: string or ''
-        * ar_email_to: field id
-        * ar_plain_text: 0|1
-        * ar_reply_to_name: string
-        * ar_reply_to: string
-        * ar_email_subject: string
-        * ar_update_email: 0, 1, 2
-        *
-        * New email settings:
-        * post_content: json settings
-        * post_title: form id
-        * post_excerpt: message
-        */
-        foreach ( $forms as $form ) {
+		/**
+		 * Old email settings format:
+		 * email_to: Email or field id
+		 * also_email_to: array of fields ids
+		 * reply_to: Email, field id, 'custom'
+		 * cust_reply_to: string
+		 * reply_to_name: field id, 'custom'
+		 * cust_reply_to_name: string
+		 * plain_text: 0|1
+		 * email_message: string or ''
+		 * email_subject: string or ''
+		 * inc_user_info: 0|1
+		 * update_email: 0, 1, 2
+		 *
+		 * Old autoresponder settings format:
+		 * auto_responder: 0|1
+		 * ar_email_message: string or ''
+		 * ar_email_to: field id
+		 * ar_plain_text: 0|1
+		 * ar_reply_to_name: string
+		 * ar_reply_to: string
+		 * ar_email_subject: string
+		 * ar_update_email: 0, 1, 2
+		 *
+		 * New email settings:
+		 * post_content: json settings
+		 * post_title: form id
+		 * post_excerpt: message
+		 */
+		foreach ( $forms as $form ) {
 			if ( $form->is_template && $form->default_template ) {
 				// don't migrate the default templates since the email will be added anyway
 				continue;
@@ -493,19 +511,19 @@ class FrmMigrate {
 			// Format form options
 			$form_options = maybe_unserialize( $form->options );
 
-            // Migrate settings to actions
-            FrmXMLHelper::migrate_form_settings_to_actions( $form_options, $form->id );
-        }
-    }
+			// Migrate settings to actions
+			FrmXMLHelper::migrate_form_settings_to_actions( $form_options, $form->id );
+		}
+	}
 
-    private function migrate_to_11() {
-        global $wpdb;
+	private function migrate_to_11() {
+		global $wpdb;
 
 		$forms = FrmDb::get_results( $this->forms, array(), 'id, options' );
 
-        $sending = __( 'Sending', 'formidable' );
-		$img = FrmAppHelper::plugin_url() . '/images/ajax_loader.gif';
-        $old_default_html = <<<DEFAULT_HTML
+		$sending          = __( 'Sending', 'formidable' );
+		$img              = FrmAppHelper::plugin_url() . '/images/ajax_loader.gif';
+		$old_default_html = <<<DEFAULT_HTML
 <div class="frm_submit">
 [if back_button]<input type="submit" value="[back_label]" name="frm_prev_page" formnovalidate="formnovalidate" [back_hook] />[/if back_button]
 <input type="submit" value="[button_label]" [button_action] />
@@ -515,21 +533,21 @@ DEFAULT_HTML;
 		unset( $sending, $img );
 
 		$new_default_html = FrmFormsHelper::get_default_html( 'submit' );
-        $draft_link = FrmFormsHelper::get_draft_link();
+		$draft_link       = FrmFormsHelper::get_draft_link();
 		foreach ( $forms as $form ) {
 			$form->options = maybe_unserialize( $form->options );
 			if ( ! isset( $form->options['submit_html'] ) || empty( $form->options['submit_html'] ) ) {
-                continue;
-            }
+				continue;
+			}
 
-            if ( $form->options['submit_html'] != $new_default_html && $form->options['submit_html'] == $old_default_html ) {
-                $form->options['submit_html'] = $new_default_html;
+			if ( $form->options['submit_html'] != $new_default_html && $form->options['submit_html'] == $old_default_html ) {
+				$form->options['submit_html'] = $new_default_html;
 				$wpdb->update( $this->forms, array( 'options' => serialize( $form->options ) ), array( 'id' => $form->id ) );
-			} else if ( ! strpos( $form->options['submit_html'], 'save_draft' ) ) {
+			} elseif ( ! strpos( $form->options['submit_html'], 'save_draft' ) ) {
 				$form->options['submit_html'] = preg_replace( '~\<\/div\>(?!.*\<\/div\>)~', $draft_link . "\r\n</div>", $form->options['submit_html'] );
 				$wpdb->update( $this->forms, array( 'options' => serialize( $form->options ) ), array( 'id' => $form->id ) );
-            }
+			}
 			unset( $form );
-        }
-    }
+		}
+	}
 }

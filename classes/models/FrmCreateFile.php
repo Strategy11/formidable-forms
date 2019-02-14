@@ -16,12 +16,12 @@ class FrmCreateFile {
 	private $has_permission = false;
 
 	public function __construct( $atts ) {
-		$this->folder_name = isset( $atts['folder_name'] ) ? $atts['folder_name'] : '';
-		$this->file_name = $atts['file_name'];
+		$this->folder_name   = isset( $atts['folder_name'] ) ? $atts['folder_name'] : '';
+		$this->file_name     = $atts['file_name'];
 		$this->error_message = isset( $atts['error_message'] ) ? $atts['error_message'] : '';
-		$this->uploads = wp_upload_dir();
+		$this->uploads       = wp_upload_dir();
 		$this->set_new_file_path( $atts );
-		$this->chmod_dir = defined( 'FS_CHMOD_DIR' ) ? FS_CHMOD_DIR : ( fileperms( ABSPATH ) & 0777 | 0755 );
+		$this->chmod_dir  = defined( 'FS_CHMOD_DIR' ) ? FS_CHMOD_DIR : ( fileperms( ABSPATH ) & 0777 | 0755 );
 		$this->chmod_file = defined( 'FS_CHMOD_FILE' ) ? FS_CHMOD_FILE : ( fileperms( ABSPATH . 'index.php' ) & 0777 | 0644 );
 
 		$this->check_permission();
@@ -62,7 +62,7 @@ class FrmCreateFile {
 			if ( file_exists( $this->new_file_path ) ) {
 
 				$existing_content = $this->get_contents();
-				$file_content = $existing_content . $file_content;
+				$file_content     = $existing_content . $file_content;
 			}
 
 			$this->create_file( $file_content );
@@ -107,6 +107,7 @@ class FrmCreateFile {
 		if ( empty( $file ) ) {
 			$file = $this->new_file_path;
 		}
+
 		return $wp_filesystem->get_contents( $file );
 	}
 
@@ -140,12 +141,12 @@ class FrmCreateFile {
 	}
 
 	private function get_needed_dirs() {
-		$dir_names = explode( '/', $this->folder_name );
+		$dir_names   = explode( '/', $this->folder_name );
 		$needed_dirs = array();
 
 		$next_dir = '';
 		foreach ( $dir_names as $dir ) {
-			$next_dir .= '/' . $dir;
+			$next_dir      .= '/' . $dir;
 			$needed_dirs[] = $this->uploads['basedir'] . $next_dir;
 		}
 
@@ -163,6 +164,7 @@ class FrmCreateFile {
 		} else {
 			$creds = $this->get_ftp_creds( $access_type );
 		}
+
 		return $creds;
 	}
 
@@ -180,7 +182,7 @@ class FrmCreateFile {
 		$credentials['password'] = defined( 'FTP_PASS' ) ? FTP_PASS : '';
 
 		// Check to see if we are setting the public/private keys for ssh
-		$credentials['public_key'] = defined( 'FTP_PUBKEY' ) ? FTP_PUBKEY : '';
+		$credentials['public_key']  = defined( 'FTP_PUBKEY' ) ? FTP_PUBKEY : '';
 		$credentials['private_key'] = defined( 'FTP_PRIKEY' ) ? FTP_PRIKEY : '';
 
 		// Sanitize the hostname, Some people might pass in odd-data:
@@ -197,16 +199,16 @@ class FrmCreateFile {
 
 		if ( ( defined( 'FTP_SSH' ) && FTP_SSH ) || ( defined( 'FS_METHOD' ) && 'ssh2' == FS_METHOD ) ) {
 			$credentials['connection_type'] = 'ssh';
-		} else if ( ( defined( 'FTP_SSL' ) && FTP_SSL ) && 'ftpext' == $type ) {
+		} elseif ( ( defined( 'FTP_SSL' ) && FTP_SSL ) && 'ftpext' == $type ) {
 			//Only the FTP Extension understands SSL
 			$credentials['connection_type'] = 'ftps';
-		} else if ( ! isset( $credentials['connection_type'] ) ) {
+		} elseif ( ! isset( $credentials['connection_type'] ) ) {
 			//All else fails (And it's not defaulted to something else saved), Default to FTP
 			$credentials['connection_type'] = 'ftp';
 		}
 
 		$has_creds = ( ! empty( $credentials['password'] ) && ! empty( $credentials['username'] ) && ! empty( $credentials['hostname'] ) );
-		$can_ssh = ( 'ssh' == $credentials['connection_type'] && ! empty( $credentials['public_key'] ) && ! empty( $credentials['private_key'] ) );
+		$can_ssh   = ( 'ssh' == $credentials['connection_type'] && ! empty( $credentials['public_key'] ) && ! empty( $credentials['private_key'] ) );
 		if ( $has_creds || $can_ssh ) {
 			$stored_credentials = $credentials;
 			if ( ! empty( $stored_credentials['port'] ) ) {

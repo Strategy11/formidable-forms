@@ -2,26 +2,26 @@
 
 class FrmSettingsController {
 
-    public static function menu() {
+	public static function menu() {
 		// Make sure admins can see the menu items
 		FrmAppHelper::force_capability( 'frm_change_settings' );
 
-        add_submenu_page( 'formidable', 'Formidable | ' . __( 'Global Settings', 'formidable' ), __( 'Global Settings', 'formidable' ), 'frm_change_settings', 'formidable-settings', 'FrmSettingsController::route' );
-    }
+		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Global Settings', 'formidable' ), __( 'Global Settings', 'formidable' ), 'frm_change_settings', 'formidable-settings', 'FrmSettingsController::route' );
+	}
 
-    public static function license_box() {
+	public static function license_box() {
 		$a = FrmAppHelper::simple_get( 't', 'sanitize_title', 'general_settings' );
-        include( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/license_box.php' );
-    }
+		include( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/license_box.php' );
+	}
 
-    public static function display_form( $errors = array(), $message = '' ) {
-        global $frm_vars;
+	public static function display_form( $errors = array(), $message = '' ) {
+		global $frm_vars;
 
-        $frm_settings = FrmAppHelper::get_settings();
-        $frm_roles = FrmAppHelper::frm_capabilities();
+		$frm_settings = FrmAppHelper::get_settings();
+		$frm_roles    = FrmAppHelper::frm_capabilities();
 
-        $uploads = wp_upload_dir();
-        $target_path = $uploads['basedir'] . '/formidable/css';
+		$uploads     = wp_upload_dir();
+		$target_path = $uploads['basedir'] . '/formidable/css';
 
 		$sections = self::get_settings_tabs();
 
@@ -34,7 +34,7 @@ class FrmSettingsController {
 		$sections = array();
 		if ( apply_filters( 'frm_include_addon_page', false ) ) {
 			// if no addons need a license, skip this page
-			$show_licenses = false;
+			$show_licenses    = false;
 			$installed_addons = apply_filters( 'frm_installed_addons', array() );
 			foreach ( $installed_addons as $installed_addon ) {
 				if ( ! $installed_addon->is_parent_licence && $installed_addon->plugin_name != 'Formidable Pro' ) {
@@ -61,7 +61,7 @@ class FrmSettingsController {
 		FrmAppHelper::permission_check( 'frm_change_settings' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
-		$section = FrmAppHelper::get_post_param( 'tab', '', 'sanitize_text_field' );
+		$section  = FrmAppHelper::get_post_param( 'tab', '', 'sanitize_text_field' );
 		$sections = self::get_settings_tabs();
 		if ( ! isset( $sections[ $section ] ) ) {
 			wp_die();
@@ -77,49 +77,50 @@ class FrmSettingsController {
 		wp_die();
 	}
 
-    public static function process_form( $stop_load = false ) {
-        global $frm_vars;
+	public static function process_form( $stop_load = false ) {
+		global $frm_vars;
 
-        $frm_settings = FrmAppHelper::get_settings();
+		$frm_settings = FrmAppHelper::get_settings();
 
 		$process_form = FrmAppHelper::get_post_param( 'process_form', '', 'sanitize_text_field' );
 		if ( ! wp_verify_nonce( $process_form, 'process_form_nonce' ) ) {
 			wp_die( esc_html( $frm_settings->admin_permission ) );
-        }
+		}
 
-        $errors = array();
-        $message = '';
+		$errors  = array();
+		$message = '';
 
-        if ( ! isset( $frm_vars['settings_routed'] ) || ! $frm_vars['settings_routed'] ) {
-            $errors = $frm_settings->validate( $_POST, array() );
+		if ( ! isset( $frm_vars['settings_routed'] ) || ! $frm_vars['settings_routed'] ) {
+			$errors = $frm_settings->validate( $_POST, array() );
 
-            $frm_settings->update( stripslashes_deep( $_POST ) );
+			$frm_settings->update( stripslashes_deep( $_POST ) );
 
-            if ( empty( $errors ) ) {
-                $frm_settings->store();
-                $message = __( 'Settings Saved', 'formidable' );
-            }
-        } else {
-            $message = __( 'Settings Saved', 'formidable' );
-        }
+			if ( empty( $errors ) ) {
+				$frm_settings->store();
+				$message = __( 'Settings Saved', 'formidable' );
+			}
+		} else {
+			$message = __( 'Settings Saved', 'formidable' );
+		}
 
 		if ( $stop_load == 'stop_load' ) {
-            $frm_vars['settings_routed'] = true;
-            return;
-        }
+			$frm_vars['settings_routed'] = true;
 
-        self::display_form( $errors, $message );
-    }
+			return;
+		}
 
-    public static function route( $stop_load = false ) {
-        $action = isset( $_REQUEST['frm_action'] ) ? 'frm_action' : 'action';
+		self::display_form( $errors, $message );
+	}
+
+	public static function route( $stop_load = false ) {
+		$action = isset( $_REQUEST['frm_action'] ) ? 'frm_action' : 'action';
 		$action = FrmAppHelper::get_param( $action, '', 'get', 'sanitize_title' );
-        if ( $action == 'process-form' ) {
+		if ( $action == 'process-form' ) {
 			self::process_form( $stop_load );
-        } else if ( $stop_load != 'stop_load' ) {
+		} elseif ( $stop_load != 'stop_load' ) {
 			self::display_form();
-        }
-    }
+		}
+	}
 
 	/**
 	 * Add CTA to the bottom on the plugin settings pages.

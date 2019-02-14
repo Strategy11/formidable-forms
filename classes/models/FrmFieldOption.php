@@ -33,7 +33,7 @@ class FrmFieldOption {
 
 	public function __construct( $option_key, $option, $args = array() ) {
 		$this->option_key = $option_key;
-		$this->option = $option;
+		$this->option     = $option;
 		$this->set_option_label();
 		$this->set_saved_value();
 	}

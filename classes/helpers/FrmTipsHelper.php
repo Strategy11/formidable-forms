@@ -8,7 +8,7 @@ class FrmTipsHelper {
 		}
 
 		$tips = self::$callback();
-		$tip = self::get_random_tip( $tips );
+		$tip  = self::get_random_tip( $tips );
 
 		if ( 'p' === $html ) {
 			echo '<p>';
@@ -19,11 +19,11 @@ class FrmTipsHelper {
 		?>
 		<a href="<?php echo esc_url( $link ); ?>" target="_blank" class="frm_pro_tip">
 			<span>
-				<i class="frm_icon_font frm_check1_icon"></i>  <?php esc_html_e( 'Pro Tip:', 'formidable' ); ?>
+				<i class="frm_icon_font frm_check1_icon"></i> <?php esc_html_e( 'Pro Tip:', 'formidable' ); ?>
 			</span>
-			<?php echo esc_html( $tip['tip'] ) ?>
+			<?php echo esc_html( $tip['tip'] ); ?>
 			<?php if ( isset( $tip['call'] ) ) { ?>
-				<span><?php echo esc_html( $tip['call'] ) ?></span>
+				<span><?php echo esc_html( $tip['call'] ); ?></span>
 			<?php } ?>
 		</a>
 		<?php
@@ -91,6 +91,7 @@ class FrmTipsHelper {
 				'call' => __( 'Get ajax form submit.', 'formidable' ),
 			),
 		);
+
 		return $tips;
 	}
 
@@ -164,6 +165,7 @@ class FrmTipsHelper {
 				'call' => __( 'Use multiple style templates.', 'formidable' ),
 			),
 		);
+
 		return $tips;
 	}
 
@@ -181,6 +183,7 @@ class FrmTipsHelper {
 			),
 		);
 		$tips = array_merge( $tips, self::get_import_tip() );
+
 		return $tips;
 	}
 
@@ -192,11 +195,12 @@ class FrmTipsHelper {
 				'call' => __( 'Upgrade to Pro.', 'formidable' ),
 			),
 		);
+
 		return $tips;
 	}
 
 	public static function get_banner_tip() {
-		$tips = array(
+		$tips       = array(
 			array(
 				'link' => '?utm_medium=banner',
 				'tip'  => __( 'Looking for more ways to get professional results?', 'formidable' ),
@@ -213,14 +217,16 @@ class FrmTipsHelper {
 				'call' => __( 'Collect instant payments, and send leads to MailChimp.', 'formidable' ),
 			),
 		);
-		$random = rand( 0, count( $tips ) - 1 );
-		$tip = $tips[ $random ];
+		$random     = rand( 0, count( $tips ) - 1 );
+		$tip        = $tips[ $random ];
 		$tip['num'] = $random;
+
 		return $tip;
 	}
 
 	public static function get_random_tip( $tips ) {
 		$random = rand( 0, count( $tips ) - 1 );
+
 		return $tips[ $random ];
 	}
 }
