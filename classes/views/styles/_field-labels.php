@@ -18,9 +18,9 @@
 <div class="field-group clearfix frm_clear">
 	<label><?php esc_html_e( 'Position', 'formidable' ); ?></label>
 	<select name="<?php echo esc_attr( $frm_style->get_field_name( 'position' ) ); ?>" id="frm_position">
-	    <?php foreach ( FrmStylesHelper::get_css_label_positions() as $pos => $pos_label ) { ?>
+		<?php foreach ( FrmStylesHelper::get_css_label_positions() as $pos => $pos_label ) { ?>
 			<option value="<?php echo esc_attr( $pos ); ?>" <?php selected( $style->post_content['position'], $pos ); ?>><?php echo esc_html( $pos_label ); ?></option>
-	    <?php } ?>
+		<?php } ?>
 	</select>
 </div>
 

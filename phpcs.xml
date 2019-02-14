@@ -23,6 +23,7 @@
 		<!-- Enable these rules right away -->
 		<exclude name="WordPress.Functions.DontExtract.extract_extract" />
 		<exclude name="WordPress.PHP.DontExtract.extract_extract" />
+		<exclude name="WordPress.Security.NonceVerification.Missing" />
 
 		<!-- These give issues with the current code base. -->
 		<exclude name="WordPress.Files.FileName.UnderscoresNotAllowed" />

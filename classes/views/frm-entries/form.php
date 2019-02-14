@@ -1,18 +1,20 @@
 <?php
 if ( empty( $values ) || ! isset( $values['fields'] ) || empty( $values['fields'] ) ) { ?>
 <div class="frm_forms <?php echo esc_attr( FrmFormsHelper::get_form_style_class( $form ) ); ?>" id="frm_form_<?php echo esc_attr( $form->id ); ?>_container">
-	<div class="frm_error_style"><strong><?php esc_html_e( 'Oops!', 'formidable' ); ?></strong> <?php
-		printf(
-			/* translators: %1$s: HTML open link, %2$s: HTML close link */
-			esc_html__( 'You did not add any fields to your form. %1$sGo back%2$s and add some.', 'formidable' ),
-			'<a href="' . esc_url( admin_url( '?page=formidable&frm_action=edit&id=' . $form->id ) ) . '">',
-			'</a>'
-		);
+	<div class="frm_error_style">
+		<strong><?php esc_html_e( 'Oops!', 'formidable' ); ?></strong>
+	<?php
+	printf(
+		/* translators: %1$s: HTML open link, %2$s: HTML close link */
+		esc_html__( 'You did not add any fields to your form. %1$sGo back%2$s and add some.', 'formidable' ),
+		'<a href="' . esc_url( admin_url( '?page=formidable&frm_action=edit&id=' . $form->id ) ) . '">',
+		'</a>'
+	);
 	?>
-    </div>
+	</div>
 </div>
 	<?php
-    return;
+	return;
 }
 
 global $frm_vars;
@@ -66,7 +68,7 @@ if ( isset( $frm_vars['div'] ) && $frm_vars['div'] ) {
 
 // close open collapsible toggle div
 if ( isset( $frm_vars['collapse_div'] ) && $frm_vars['collapse_div'] ) {
-    echo "</div>\n";
+	echo "</div>\n";
 	unset( $frm_vars['collapse_div'] );
 }
 

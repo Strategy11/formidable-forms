@@ -1,5 +1,5 @@
 <div id="frm_builder_page" class="frm_wrap">
-    <div class="frm_page_container">
+	<div class="frm_page_container">
 
 	<?php
 	FrmAppHelper::get_admin_header(
@@ -26,24 +26,24 @@
 		?>
 	</div>
 
-    <div class="columns-2">
+	<div class="columns-2">
 	<?php require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add_field_links.php' ); ?>
-    <div id="post-body-content">
+	<div id="post-body-content">
 
-    <div class="frm_form_builder with_frm_style">
+	<div class="frm_form_builder with_frm_style">
 
-        <p class="frm_hidden frm-no-margin">
+		<p class="frm_hidden frm-no-margin">
 			<input type="button" value="<?php esc_attr_e( 'Update', 'formidable' ); ?>" class="frm_submit_<?php echo ( isset( $values['ajax_load'] ) && $values['ajax_load'] ) ? '' : 'no_'; ?>ajax button-primary" />
-            <span class="frm-loading-img"></span>
-        </p>
+			<span class="frm-loading-img"></span>
+		</p>
 
-    <form method="post">
-		<?php require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/form.php' ); ?>
-    </form>
+		<form method="post">
+			<?php require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/form.php' ); ?>
+		</form>
 
-    </div>
-    </div>
+	</div>
+	</div>
 
-    </div>
-    </div>
+	</div>
+	</div>
 </div>

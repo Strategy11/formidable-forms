@@ -613,7 +613,7 @@ class FrmStylesController {
 				}
 			} while ( 0 );
 			?>
-        </div><!-- .accordion-container -->
+		</div><!-- .accordion-container -->
 		<?php
 		return $i;
 	}

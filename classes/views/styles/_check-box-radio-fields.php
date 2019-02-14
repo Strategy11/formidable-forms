@@ -1,10 +1,10 @@
 <div class="field-group clearfix frm-half frm-first-row">
 	<label><?php esc_html_e( 'Radio', 'formidable' ); ?></label>
 	<select name="<?php echo esc_attr( $frm_style->get_field_name( 'radio_align' ) ); ?>" id="frm_radio_align">
-        <option value="block" <?php selected( $style->post_content['radio_align'], 'block' ); ?>>
+		<option value="block" <?php selected( $style->post_content['radio_align'], 'block' ); ?>>
 			<?php esc_html_e( 'Multiple Rows', 'formidable' ); ?>
 		</option>
-        <option value="inline" <?php selected( $style->post_content['radio_align'], 'inline' ); ?>>
+		<option value="inline" <?php selected( $style->post_content['radio_align'], 'inline' ); ?>>
 			<?php esc_html_e( 'Single Row', 'formidable' ); ?>
 		</option>
 	</select>
@@ -13,10 +13,10 @@
 <div class="field-group clearfix frm-half frm-first-row">
 	<label><?php esc_html_e( 'Check Box', 'formidable' ); ?></label>
 	<select name="<?php echo esc_attr( $frm_style->get_field_name( 'check_align' ) ); ?>" id="frm_check_align">
-        <option value="block" <?php selected( $style->post_content['check_align'], 'block' ); ?>>
+		<option value="block" <?php selected( $style->post_content['check_align'], 'block' ); ?>>
 			<?php esc_html_e( 'Multiple Rows', 'formidable' ); ?>
 		</option>
-        <option value="inline" <?php selected( $style->post_content['check_align'], 'inline' ); ?>>
+		<option value="inline" <?php selected( $style->post_content['check_align'], 'inline' ); ?>>
 			<?php esc_html_e( 'Single Row', 'formidable' ); ?>
 		</option>
 	</select>

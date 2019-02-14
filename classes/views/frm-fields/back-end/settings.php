@@ -87,34 +87,34 @@
 			<?php esc_html_e( 'Bulk Edit Options', 'formidable' ); ?>
 		</a>
 		<?php do_action( 'frm_add_multiple_opts_labels', $field ); ?>
-	    <ul id="frm_field_<?php echo esc_attr( $field['id'] ); ?>_opts" class="frm_sortable_field_opts frm_clear<?php echo ( count( $field['options'] ) > 10 ) ? ' frm_field_opts_list' : ''; ?>">
+		<ul id="frm_field_<?php echo esc_attr( $field['id'] ); ?>_opts" class="frm_sortable_field_opts frm_clear<?php echo ( count( $field['options'] ) > 10 ) ? ' frm_field_opts_list' : ''; ?>">
 			<?php FrmFieldsHelper::show_single_option( $field ); ?>
-	    </ul>
+		</ul>
 		<?php
 	}
 	?>
-    <div class="frm_small_top_margin">
+	<div class="frm_small_top_margin">
 	<?php
 
 	if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' ) {
 		echo '<p class="howto" id="frm_has_hidden_options_' . esc_attr( $field['id'] ) . '">' . FrmFieldsHelper::get_term_link( $field['taxonomy'] ) . '</p>'; // WPCS: XSS ok.
 	} elseif ( ! isset( $field['post_field'] ) || ! in_array( $field['post_field'], array( 'post_category' ) ) ) {
 		?>
-        <div id="frm_add_field_<?php echo esc_attr( $field['id'] ); ?>">
-            <a href="javascript:void(0);" data-opttype="single" class="button frm_cb_button frm_add_opt" data-clicks="0"><?php esc_html_e( 'Add Option', 'formidable' ); ?></a>
+		<div id="frm_add_field_<?php echo esc_attr( $field['id'] ); ?>">
+			<a href="javascript:void(0);" data-opttype="single" class="button frm_cb_button frm_add_opt" data-clicks="0"><?php esc_html_e( 'Add Option', 'formidable' ); ?></a>
 
-            <?php if ( FrmAppHelper::pro_is_installed() ) { ?>
+			<?php if ( FrmAppHelper::pro_is_installed() ) { ?>
 				<a href="javascript:void(0);" id="other_button_<?php echo esc_attr( $field['id'] ); ?>" data-opttype="other" data-ftype="<?php echo esc_attr( $field['type'] ); ?>" class="button frm_cb_button frm_add_opt<?php echo ( in_array( $field['type'], array( 'radio', 'select' ) ) && $field['other'] == true ? ' frm_hidden' : '' ); ?>" data-clicks="0">
 					<?php esc_html_e( 'Add "Other"', 'formidable' ); ?>
 				</a>
-            	<?php
-            }
+				<?php
+			}
 			?>
-        </div>
+		</div>
 		<?php
-    }
+	}
 	?>
-    </div>
+	</div>
 	<?php
 }
 
@@ -224,20 +224,21 @@ if ( $display['clear_on_focus'] ) {
 
 				if ( $display['captcha_size'] && $frm_settings->re_type !== 'invisible' ) {
 					?>
-                <tr><td><label><?php esc_html_e( 'ReCaptcha Type', 'formidable' ); ?></label>
-					<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Set the size of the captcha field. The compact option is best if your form is in a small area.', 'formidable' ); ?>" ></span>
-                    </td>
-                    <td>
-					<select name="field_options[captcha_size_<?php echo esc_attr( $field['id'] ); ?>]">
-						<option value="normal" <?php selected( $field['captcha_size'], 'normal' ); ?>>
-							<?php esc_html_e( 'Normal', 'formidable' ); ?>
-						</option>
-						<option value="compact" <?php selected( $field['captcha_size'], 'compact' ); ?>>
-							<?php esc_html_e( 'Compact', 'formidable' ); ?>
-						</option>
-                    </select>
-                    </td>
-                </tr>
+				<tr>
+					<td><label><?php esc_html_e( 'ReCaptcha Type', 'formidable' ); ?></label>
+						<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Set the size of the captcha field. The compact option is best if your form is in a small area.', 'formidable' ); ?>" ></span>
+					</td>
+					<td>
+						<select name="field_options[captcha_size_<?php echo esc_attr( $field['id'] ); ?>]">
+							<option value="normal" <?php selected( $field['captcha_size'], 'normal' ); ?>>
+								<?php esc_html_e( 'Normal', 'formidable' ); ?>
+							</option>
+							<option value="compact" <?php selected( $field['captcha_size'], 'compact' ); ?>>
+								<?php esc_html_e( 'Compact', 'formidable' ); ?>
+							</option>
+						</select>
+					</td>
+				</tr>
 				<tr>
 					<td>
 						<label for="captcha_theme_<?php echo esc_attr( $field['field_key'] ); ?>">
@@ -255,7 +256,7 @@ if ( $display['clear_on_focus'] ) {
 						</select>
 					</td>
 				</tr>
-                	<?php
+					<?php
 				}
 
 				if ( $display['format'] ) {

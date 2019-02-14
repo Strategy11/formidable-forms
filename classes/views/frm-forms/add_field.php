@@ -3,9 +3,9 @@
 <div class="divider_section_only">
 <?php } ?>
 
-    <a href="javascript:void(0);" class="frm_bstooltip alignright frm-show-hover frm-move frm-hover-icon frm_icon_font frm_move_icon" title="<?php esc_attr_e( 'Move Field', 'formidable' ); ?>"> </a>
-    <a href="#" class="frm_bstooltip alignright frm-show-hover frm-hover-icon frm_icon_font frm_delete_icon frm_delete_field" title="<?php esc_attr_e( 'Delete Field', 'formidable' ); ?>"> </a>
-    <a href="#" class="frm_bstooltip alignright frm-show-hover frm-hover-icon frm_icon_font frm_duplicate_icon" title="<?php ( $field['type'] === 'divider' ) ? esc_attr_e( 'Duplicate Section', 'formidable' ) : esc_attr_e( 'Duplicate Field', 'formidable' ); ?>"> </a>
+	<a href="javascript:void(0);" class="frm_bstooltip alignright frm-show-hover frm-move frm-hover-icon frm_icon_font frm_move_icon" title="<?php esc_attr_e( 'Move Field', 'formidable' ); ?>"> </a>
+	<a href="#" class="frm_bstooltip alignright frm-show-hover frm-hover-icon frm_icon_font frm_delete_icon frm_delete_field" title="<?php esc_attr_e( 'Delete Field', 'formidable' ); ?>"> </a>
+	<a href="#" class="frm_bstooltip alignright frm-show-hover frm-hover-icon frm_icon_font frm_duplicate_icon" title="<?php ( $field['type'] === 'divider' ) ? esc_attr_e( 'Duplicate Section', 'formidable' ) : esc_attr_e( 'Duplicate Field', 'formidable' ); ?>"> </a>
 
 	<?php do_action( 'frm_extra_field_actions', $field['id'] ); ?>
 
@@ -18,26 +18,26 @@
 		<div class="clear"></div>
 	</div>
 	<?php if ( $display['description'] ) { ?>
-    	<div class="description" id="field_description_<?php echo esc_attr( $field['id'] ); ?>">
+		<div class="description" id="field_description_<?php echo esc_attr( $field['id'] ); ?>">
 			<?php echo FrmAppHelper::kses( force_balance_tags( $field['description'] ), 'all' ); // WPCS: XSS ok. ?>
 		</div>
 	<?php } ?>
 </div>
 <?php if ( $display['conf_field'] ) { ?>
 <div id="frm_conf_field_<?php echo esc_attr( $field['id'] ); ?>_container" class="frm_conf_field_container frm_form_fields frm_conf_details<?php echo esc_attr( $field['id'] . ( $field['conf_field'] ? '' : ' frm_hidden' ) ); ?>">
-    <div id="frm_conf_field_<?php echo esc_attr( $field['id'] ); ?>_inner_container" class="frm_inner_conf_container">
+	<div id="frm_conf_field_<?php echo esc_attr( $field['id'] ); ?>_inner_container" class="frm_inner_conf_container">
 		<div class="frm_form_fields">
 			<input type="text" id="conf_field_<?php echo esc_attr( $field['field_key'] ); ?>" name="field_options[conf_input_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['conf_input'] ); ?>" class="dyn_default_value" />
 		</div>
-    	<div id="conf_field_description_<?php echo esc_attr( $field['id'] ); ?>" class="description"><?php
+		<div id="conf_field_description_<?php echo esc_attr( $field['id'] ); ?>" class="description"><?php
 			echo FrmAppHelper::kses( force_balance_tags( $field['conf_desc'] ), 'all' ); // WPCS: XSS ok.
 		?></div>
 </div>
 	<?php if ( $display['clear_on_focus'] ) { ?>
-        <div class="alignleft">
+		<div class="alignleft">
 			<?php FrmFieldsHelper::clear_on_focus_html( $field, $display, '_conf' ); ?>
-        </div>
-    <?php } ?>
+		</div>
+	<?php } ?>
 </div>
 <div class="clear"></div>
 	<?php

@@ -66,10 +66,10 @@ class FrmEntriesController {
 				'id'      => 'formidable-entries-tab',
 				'title'   => __( 'Overview', 'formidable' ),
 				'content' => '<p>' .
-				             esc_html__( 'This screen provides access to all of your entries. You can customize the display of this screen to suit your workflow.', 'formidable' ) .
-				             '</p> <p>' .
-				             esc_html__( 'Hovering over a row in the entries list will display action links that allow you to manage your entry.', 'formidable' ) .
-				             '</p>',
+					esc_html__( 'This screen provides access to all of your entries. You can customize the display of this screen to suit your workflow.', 'formidable' ) .
+					'</p> <p>' .
+					esc_html__( 'Hovering over a row in the entries list will display action links that allow you to manage your entry.', 'formidable' ) .
+					'</p>',
 			)
 		);
 
@@ -450,8 +450,8 @@ class FrmEntriesController {
 		$entry = FrmEntry::getOne( $id, true );
 		if ( ! $entry ) {
 			echo '<div id="form_show_entry_page" class="wrap">' .
-			     esc_html__( 'You are trying to view an entry that does not exist.', 'formidable' ) .
-			     '</div>';
+				esc_html__( 'You are trying to view an entry that does not exist.', 'formidable' ) .
+				'</div>';
 
 			return;
 		}

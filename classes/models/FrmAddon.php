@@ -552,7 +552,7 @@ class FrmAddon {
 		FrmAppHelper::permission_check( 'frm_change_settings' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
-		$plugin_slug          = FrmAppHelper::get_param( 'plugin', '', 'post', 'sanitize_text_field' );;
+		$plugin_slug          = FrmAppHelper::get_param( 'plugin', '', 'post', 'sanitize_text_field' );
 		$this_plugin          = self::get_addon( $plugin_slug );
 		$license              = $this_plugin->get_license();
 		$this_plugin->license = $license;

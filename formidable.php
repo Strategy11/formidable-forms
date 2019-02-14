@@ -30,10 +30,10 @@ add_action( 'plugins_loaded', 'load_formidable_forms', 0 );
 function load_formidable_forms() {
 	global $frm_vars;
 	$frm_vars = array(
-    	'load_css'     => false,
-		'forms_loaded' => array(),
-    	'created_entries'   => array(),
-    	'pro_is_authorized' => false,
+		'load_css'          => false,
+		'forms_loaded'      => array(),
+		'created_entries'   => array(),
+		'pro_is_authorized' => false,
 	);
 
 	$frm_path = dirname( __FILE__ );
@@ -53,10 +53,10 @@ if ( is_array( spl_autoload_functions() ) && in_array( '__autoload', spl_autoloa
 spl_autoload_register( 'frm_forms_autoloader' );
 
 function frm_forms_autoloader( $class_name ) {
-    // Only load Frm classes here
+	// Only load Frm classes here
 	if ( ! preg_match( '/^Frm.+$/', $class_name ) || preg_match( '/^FrmPro.+$/', $class_name ) ) {
-        return;
-    }
+		return;
+	}
 
 	frm_class_autoloader( $class_name, dirname( __FILE__ ) );
 }

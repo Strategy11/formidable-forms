@@ -588,8 +588,8 @@ class FrmFormsController {
 			$menu_name = FrmAppHelper::get_menu_name();
 			$icon      = apply_filters( 'frm_media_icon', FrmAppHelper::svg_logo() );
 			echo '<a href="#TB_inline?width=50&height=50&inlineId=frm_insert_form" class="thickbox button add_media frm_insert_form" title="' . esc_attr__( 'Add forms and content', 'formidable' ) . '">' .
-			     FrmAppHelper::kses( $icon, 'all' ) .
-			     ' ' . esc_html( $menu_name ) . '</a>'; // WPCS: XSS ok.
+				FrmAppHelper::kses( $icon, 'all' ) .
+				' ' . esc_html( $menu_name ) . '</a>'; // WPCS: XSS ok.
 		}
 	}
 
@@ -1598,9 +1598,9 @@ class FrmFormsController {
 	 */
 	private static function get_redirect_message( $success_url, $success_msg, $args ) {
 		$redirect_msg = '<div class="' . esc_attr( FrmFormsHelper::get_form_style_class( $args['form'] ) ) . '"><div class="frm-redirect-msg frm_message">' . $success_msg . '<br/>' .
-		                /* translators: %1$s: Start link HTML, %2$s: End link HTML */
-		                sprintf( __( '%1$sClick here%2$s if you are not automatically redirected.', 'formidable' ), '<a href="' . esc_url( $success_url ) . '">', '</a>' ) .
-		                '</div></div>';
+			/* translators: %1$s: Start link HTML, %2$s: End link HTML */
+			sprintf( __( '%1$sClick here%2$s if you are not automatically redirected.', 'formidable' ), '<a href="' . esc_url( $success_url ) . '">', '</a>' ) .
+			'</div></div>';
 
 		$redirect_args = array(
 			'entry_id' => $args['entry_id'],

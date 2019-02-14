@@ -2,14 +2,14 @@
 <input type="hidden" name="<?php echo esc_attr( $action_control->get_field_name( 'ID', '' ) ); ?>" value="<?php echo esc_attr( $form_action->ID ); ?>" />
 
 <table class="form-table">
-    <tr>
-        <th>
+	<tr>
+		<th>
 			<label <?php FrmAppHelper::maybe_add_tooltip( 'action_title' ); ?>><?php esc_html_e( 'Label', 'formidable' ); ?></label>
-        </th>
+		</th>
 		<td>
 			<input type="text" name="<?php echo esc_attr( $action_control->get_field_name( 'post_title', '' ) ); ?>" value="<?php echo esc_attr( $form_action->post_title ); ?>" class="large-text <?php FrmAppHelper::maybe_add_tooltip( 'action_title', 'open' ); ?>" id="<?php echo esc_attr( $action_control->get_field_id( 'action_post_title' ) ); ?>" />
-        </td>
-    </tr>
+		</td>
+	</tr>
 </table>
 <?php
 $action_control->form( $form_action, compact( 'form', 'action_key', 'values' ) );

@@ -1,19 +1,19 @@
 <?php
 if ( ! isset( $entry ) ) {
-    $entry = $record;
+	$entry = $record;
 } ?>
 
 <div class="misc-pub-section curtime misc-pub-curtime">
-    <span id="timestamp">
-    <?php
-    $date_format = __( 'M j, Y @ G:i', 'formidable' );
+	<span id="timestamp">
+	<?php
+	$date_format = __( 'M j, Y @ G:i', 'formidable' );
 	printf(
 		/* translators: %1$s: The date */
 		esc_html__( 'Published on: %1$s', 'formidable' ),
 		'<b>' . esc_html( FrmAppHelper::get_localized_date( $date_format, $entry->created_at ) ) . '</b>'
 	);
 	?>
-    </span>
+	</span>
 </div>
 <?php if ( FrmAppHelper::get_param( 'frm_action' ) == 'show' ) { ?>
 <div class="misc-pub-section frm_no_print">
@@ -23,7 +23,7 @@ if ( ! isset( $entry ) ) {
 <?php } ?>
 <?php if ( $entry->updated_at && $entry->updated_at != $entry->created_at ) { ?>
 <div class="misc-pub-section curtime misc-pub-curtime">
-    <span id="timestamp">
+	<span id="timestamp">
 	<?php
 	printf(
 		/* translators: %1$s: The date */
@@ -31,7 +31,7 @@ if ( ! isset( $entry ) ) {
 		'<b>' . esc_html( FrmAppHelper::get_localized_date( $date_format, $entry->updated_at ) ) . '</b>'
 	);
 	?>
-    </span>
+	</span>
 </div>
 <?php } ?>
 

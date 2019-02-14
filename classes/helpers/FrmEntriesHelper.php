@@ -141,8 +141,8 @@ class FrmEntriesHelper {
 
 	public static function replace_default_message( $message, $atts ) {
 		if ( strpos( $message, '[default-message' ) === false &&
-		     strpos( $message, '[default_message' ) === false &&
-		     ! empty( $message ) ) {
+			strpos( $message, '[default_message' ) === false &&
+			! empty( $message ) ) {
 			return $message;
 		}
 
@@ -343,7 +343,7 @@ class FrmEntriesHelper {
 			// Save original value.
 			$args['temp_value'] = $value;
 			$args['other']      = true;
-			$other_vals         = stripslashes_deep( $_POST['item_meta']['other'][ $field->id ] );
+			$other_vals         = wp_unslash( $_POST['item_meta']['other'][ $field->id ] );
 
 			// Set the validation value now
 			self::set_other_validation_val( $value, $other_vals, $field, $args );

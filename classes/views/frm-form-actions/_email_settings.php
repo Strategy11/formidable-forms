@@ -1,6 +1,6 @@
 <table class="form-table frm-no-margin">
 <tr class="frm_to_row frm_email_row">
-    <th>
+	<th>
 		<label <?php FrmAppHelper::maybe_add_tooltip( 'email_to' ); ?>><?php esc_html_e( 'To', 'formidable' ); ?></label>
 	</th>
 	<td>

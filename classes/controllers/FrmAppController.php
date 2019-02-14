@@ -404,7 +404,7 @@ class FrmAppController {
 			do_action( 'frm_enqueue_builder_scripts' );
 		} elseif ( $pagenow == 'post.php' || ( $pagenow == 'post-new.php' && $post_type == 'frm_display' ) ) {
 			if ( isset( $_REQUEST['post_type'] ) ) {
-				$post_type = sanitize_title( $_REQUEST['post_type'] );
+				$post_type = sanitize_title( wp_unslash( $_REQUEST['post_type'] ) );
 			} elseif ( isset( $_REQUEST['post'] ) && absint( $_REQUEST['post'] ) ) {
 				$post = get_post( absint( wp_unslash( $_REQUEST['post'] ) ) );
 				if ( ! $post ) {

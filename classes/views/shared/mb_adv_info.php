@@ -50,82 +50,82 @@
 			}
 		}
 		?>
-        </ul>
+		</ul>
 
 		<p class="howto">
 			<?php esc_html_e( 'Click a button below to insert extra values from form entries or your site settings.', 'formidable' ); ?>
 		</p>
 
-        <?php esc_html_e( 'Helpers', 'formidable' ); ?>:
-        <ul class="frm_code_list">
-        <?php
-        $col = 'one';
+		<?php esc_html_e( 'Helpers', 'formidable' ); ?>:
+		<ul class="frm_code_list">
+		<?php
+		$col = 'one';
 		foreach ( $entry_shortcodes as $skey => $sname ) {
 			if ( empty( $skey ) ) {
-                 $col = 'one';
-                 echo '<li class="clear frm_block"></li>';
-                 continue;
-            }
+				$col = 'one';
+				echo '<li class="clear frm_block"></li>';
+				continue;
+			}
 
 			$classes = ( in_array( $skey, array( 'siteurl', 'sitename', 'entry_count' ) ) ) ? 'show_before_content show_after_content' : '';
 			$classes .= ( strpos( $skey, 'default-' ) === 0 ) ? 'hide_frm_not_email_subject' : '';
 			?>
-        <li class="frm_col_<?php echo esc_attr( $col ); ?>">
-			<a href="javascript:void(0)" class="frmbutton button <?php echo esc_attr( $classes ); ?> frm_insert_code" data-code="<?php echo esc_attr( $skey ); ?>">
-				<?php echo esc_html( $sname ); ?>
-			</a>
-        </li>
+			<li class="frm_col_<?php echo esc_attr( $col ); ?>">
+				<a href="javascript:void(0)" class="frmbutton button <?php echo esc_attr( $classes ); ?> frm_insert_code" data-code="<?php echo esc_attr( $skey ); ?>">
+					<?php echo esc_html( $sname ); ?>
+				</a>
+			</li>
 			<?php
-            $col = ( $col == 'one' ) ? 'two' : 'one';
+			$col = ( $col == 'one' ) ? 'two' : 'one';
 			unset( $skey, $sname, $classes );
-        }
-        ?>
-        </ul>
+		}
+		?>
+		</ul>
 		<div class="clear"></div>
 	</div>
 
 	<?php if ( ! empty( $cond_shortcodes ) ) { ?>
 	<div id="frm-conditionals" class="tabs-panel">
-	    <ul class="subsubsub">
-	        <li><a href="javascript:void(0)" class="current frmids"><?php esc_html_e( 'IDs', 'formidable' ); ?></a> |</li>
-	        <li><a href="javascript:void(0)" class="frmkeys"><?php esc_html_e( 'Keys', 'formidable' ); ?></a></li>
-	    </ul>
-	    <ul class="alignleft"><li><?php esc_html_e( 'Fields from your form', 'formidable' ); ?>:</li></ul>
-	    <ul class="frm_code_list frm_full_width">
+		<ul class="subsubsub">
+			<li><a href="javascript:void(0)" class="current frmids"><?php esc_html_e( 'IDs', 'formidable' ); ?></a> |</li>
+			<li><a href="javascript:void(0)" class="frmkeys"><?php esc_html_e( 'Keys', 'formidable' ); ?></a></li>
+		</ul>
+		<ul class="alignleft"><li><?php esc_html_e( 'Fields from your form', 'formidable' ); ?>:</li></ul>
+		<ul class="frm_code_list frm_full_width">
 			<?php
 			if ( ! empty( $fields ) ) {
-		        foreach ( $fields as $f ) {
+				foreach ( $fields as $f ) {
 					if ( FrmField::is_no_save_field( $f->type ) || ( $f->type == 'data' && ( ! isset( $f->field_options['data_type'] ) || $f->field_options['data_type'] == 'data' || $f->field_options['data_type'] == '' ) ) ) {
-                        continue;
+						continue;
 					}
 					?>
-                <li>
-                    <a href="javascript:void(0)" class="frmids alignright frm_insert_code" data-code="if <?php echo esc_attr( $f->id ); ?>]<?php esc_attr_e( 'Conditional text here', 'formidable' ); ?>[/if <?php echo esc_attr( $f->id ); ?>">[if <?php echo (int) $f->id; ?>]</a>
+				<li>
+					<a href="javascript:void(0)" class="frmids alignright frm_insert_code" data-code="if <?php echo esc_attr( $f->id ); ?>]<?php esc_attr_e( 'Conditional text here', 'formidable' ); ?>[/if <?php echo esc_attr( $f->id ); ?>">[if <?php echo (int) $f->id; ?>]</a>
 					<a href="javascript:void(0)" class="frmkeys alignright frm_insert_code" data-code="if <?php echo esc_attr( $f->field_key ); ?>]something[/if <?php echo esc_attr( $f->field_key ); ?>">[if <?php echo FrmAppHelper::truncate( $f->field_key, 10 ); // WPCS: XSS ok. ?>]</a>
 					<a href="javascript:void(0)" class="frm_insert_code" data-code="<?php echo esc_attr( $f->id ); ?>"><?php echo FrmAppHelper::truncate( $f->name, 60 ); // WPCS: XSS ok. ?></a>
-                </li>
+				</li>
 					<?php
 					unset( $f );
 				}
 			}
 			?>
-        </ul>
+		</ul>
 
-        <p class="howto"><?php esc_html_e( 'Click a button below to insert sample logic into your view', 'formidable' ); ?></p>
-        <ul class="frm_code_list">
-        <?php
-        $col = 'one';
-		foreach ( $cond_shortcodes as $skey => $sname ) {
-			?>
-	    <li class="frm_col_<?php echo esc_attr( $col ); ?>">
-			<a href="javascript:void(0)" class="frmbutton button frm_insert_code" data-code="if x <?php echo esc_attr( $skey ); ?>][/if x"><?php echo esc_html( $sname ); ?></a>
-	    </li>
+		<p class="howto"><?php esc_html_e( 'Click a button below to insert sample logic into your view', 'formidable' ); ?></p>
+		<ul class="frm_code_list">
 			<?php
-	        $col = ( $col == 'one' ) ? 'two' : 'one';
+			$col = 'one';
+			foreach ( $cond_shortcodes as $skey => $sname ) {
+				?>
+			<li class="frm_col_<?php echo esc_attr( $col ); ?>">
+				<a href="javascript:void(0)" class="frmbutton button frm_insert_code" data-code="if x <?php echo esc_attr( $skey ); ?>][/if x"><?php echo esc_html( $sname ); ?></a>
+			</li>
+			<?php
+			$col = ( $col == 'one' ) ? 'two' : 'one';
 			unset( $skey, $sname );
-	    }
-        ?>
-        </ul>
+		}
+		?>
+		</ul>
 	</div>
 	<?php } ?>
 
@@ -168,9 +168,9 @@
 
 	</div>
 
-    <?php
-    if ( $settings_tab ) {
+	<?php
+	if ( $settings_tab ) {
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/mb_html_tab.php' );
-    }
-    ?>
+	}
+	?>
 </div>

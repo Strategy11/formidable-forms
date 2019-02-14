@@ -1,6 +1,6 @@
 <div class="nav-menus-php">
 <div class="wrap">
-    <?php FrmStylesHelper::style_menu(); ?>
+	<?php FrmStylesHelper::style_menu(); ?>
 
 	<?php include( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' ); ?>
 
@@ -60,18 +60,18 @@
 					</div><!-- /#post-body -->
 					<div id="nav-menu-footer" class="submitbox">
 						<div class="major-publishing-actions">
-						    <?php if ( ! empty( $style->ID ) && empty( $style->menu_order ) ) { ?>
+							<?php if ( ! empty( $style->ID ) && empty( $style->menu_order ) ) { ?>
 							<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-styles&frm_action=destroy&id=' . $style->ID ) ); ?>" id="frm_delete_style" class="submitdelete deletion" data-frmverify="<?php esc_attr_e( 'Are you sure?', 'formidable' ); ?>">
 								<?php esc_html_e( 'Delete Style', 'formidable' ); ?>
 							</a>
-						    <?php } ?>
-						    <?php
-						    if ( $style->ID ) {
+							<?php } ?>
+							<?php
+							if ( $style->ID ) {
 								echo '<span class="howto"><span>.frm_style_' . esc_attr( $style->post_name ) . '</span></span>';
 							}
 							?>
-                            <div class="publishing-action">
-                                <input type="button" value="<?php esc_attr_e( 'Reset to Default', 'formidable' ); ?>" class="button-secondary frm_reset_style" />
+							<div class="publishing-action">
+								<input type="button" value="<?php esc_attr_e( 'Reset to Default', 'formidable' ); ?>" class="button-secondary frm_reset_style" />
 								<input type="submit" id="save_menu_header" class="button button-primary menu-save" value="<?php esc_attr_e( 'Save Style', 'formidable' ); ?>"  />
 							</div><!-- END .publishing-action -->
 							<div class="clear"></div>

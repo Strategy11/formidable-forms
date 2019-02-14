@@ -1,6 +1,6 @@
 <div class="nav-menus-php">
 <div class="wrap">
-    <?php FrmStylesHelper::style_menu( 'manage' ); ?>
+	<?php FrmStylesHelper::style_menu( 'manage' ); ?>
 
 	<p><?php printf( esc_html__( 'Easily change which template your forms are using by making changes below.', 'formidable' ), '<a href="?page=formidable-styles&frm_action=new_style">', '</a>' ); ?></p>
 
@@ -36,7 +36,7 @@
 						<strong><?php echo esc_html( empty( $form->name ) ? __( '(no title)', 'formidable' ) : $form->name ); ?></strong>
 					</td>
 					<td class="menu-location-menus">
-					    <input type="hidden" name="prev_style[<?php echo esc_attr( $form->id ); ?>]" value="<?php echo esc_attr( $this_style ); ?>" />
+						<input type="hidden" name="prev_style[<?php echo esc_attr( $form->id ); ?>]" value="<?php echo esc_attr( $this_style ); ?>" />
 						<select name="style[<?php echo esc_attr( $form->id ); ?>]">
 							<?php foreach ( $styles as $s ) { ?>
 								<option value="<?php echo esc_attr( $s->ID ); ?>" <?php selected( $s->ID, $this_style ); ?>>
@@ -50,12 +50,12 @@
 
 					</td><!-- .menu-location-menus -->
 				</tr><!-- #menu-locations-row -->
-					<?php
+						<?php
 					}
 				} else {
 					?>
 				<tr>
-				    <td><?php esc_html_e( 'No Forms Found', 'formidable' ); ?></td>
+					<td><?php esc_html_e( 'No Forms Found', 'formidable' ); ?></td>
 				</tr>
 					<?php
 				}

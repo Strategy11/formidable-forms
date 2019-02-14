@@ -3,7 +3,7 @@
 class FrmDefPostAction extends FrmFormAction {
 	public function __construct() {
 		$action_ops = FrmFormAction::default_action_opts();
-	    $action_ops['classes'] = 'ab-icon frm_dashicon_font dashicons-before frm_show_upgrade';
+		$action_ops['classes'] = 'ab-icon frm_dashicon_font dashicons-before frm_show_upgrade';
 
 		parent::__construct( 'wppost', __( 'Create Post', 'formidable' ), $action_ops );
 	}
