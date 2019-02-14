@@ -315,8 +315,8 @@ class FrmEntriesHelper {
 		} else {
 			$value = isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field_id ] ) ? $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field_id ] : '';
 		}
+		$value = wp_unslash( $value );
 		FrmAppHelper::sanitize_value( 'wp_kses_post', $value );
-		$value = stripslashes_deep( $value );
 	}
 
 	/**
@@ -370,7 +370,7 @@ class FrmEntriesHelper {
 			$args['temp_value'] = $value;
 			$args['other']      = true;
 
-			$other_vals = $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ]['other'][ $field->id ];
+			$other_vals = wp_unslash( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ]['other'][ $field->id ] );
 
 			// Set the validation value now.
 			self::set_other_validation_val( $value, $other_vals, $field, $args );

@@ -280,7 +280,8 @@ class FrmListHelper {
 
 	private function hidden_search_inputs( $param_name ) {
 		if ( ! empty( $_REQUEST[ $param_name ] ) ) {
-			echo '<input type="hidden" name="' . esc_attr( $param_name ) . '" value="' . esc_attr( $_REQUEST[ $param_name ] ) . '" />';
+			$value = sanitize_text_field( wp_unslash( $_REQUEST[ $param_name ] ) );
+			echo '<input type="hidden" name="' . esc_attr( $param_name ) . '" value="' . esc_attr( $value ) . '" />';
 		}
 	}
 
@@ -1149,8 +1150,8 @@ class FrmListHelper {
 		$response = array( 'rows' => $rows );
 
 		if ( isset( $this->_pagination_args['total_items'] ) ) {
-			/* translators: %s: Number of items */
 			$response['total_items_i18n'] = sprintf(
+				/* translators: %s: Number of items */
 				_n( '%s item', '%s items', $this->_pagination_args['total_items'], 'formidable' ),
 				number_format_i18n( $this->_pagination_args['total_items'] )
 			);

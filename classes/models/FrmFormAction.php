@@ -284,7 +284,7 @@ class FrmFormAction {
 		}
 
 		if ( isset( $_POST[ $this->option_name ] ) && is_array( $_POST[ $this->option_name ] ) ) {
-			$settings = $_POST[ $this->option_name ];
+			$settings = wp_unslash( $_POST[ $this->option_name ] );
 		} else {
 			return;
 		}

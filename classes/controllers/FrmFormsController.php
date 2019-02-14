@@ -1128,7 +1128,7 @@ class FrmFormsController {
 		if ( isset( $_POST['frm_compact_fields'] ) ) {
 			FrmAppHelper::permission_check( 'frm_edit_forms' );
 
-			$json_vars = htmlspecialchars_decode( nl2br( stripslashes( str_replace( '&quot;', '\\\"', $_POST['frm_compact_fields'] ) ) ) );
+			$json_vars = htmlspecialchars_decode( nl2br( wp_unslash( str_replace( '&quot;', '\\\"', $_POST['frm_compact_fields'] ) ) ) );
 			$json_vars = json_decode( $json_vars, true );
 			if ( empty( $json_vars ) ) {
 				// json decoding failed so we should return an error message.

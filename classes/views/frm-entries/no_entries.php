@@ -31,13 +31,15 @@
 </p>
 <?php } else { ?>
 <div class="frm_no_entries_header"><?php esc_html_e( 'You have not created any forms yet.', 'formidable' ); ?></div>
-<p class="frm_no_entries_text"><?php
+<p class="frm_no_entries_text">
+	<?php
 	printf(
 		/* translators: %1$s: Start link HTML, %2$s: End link HTML, %3$s: Line break HTML */
 		esc_html__( 'To view entries, you must first %1$sbuild a form%2$s', 'formidable' ),
 		'<a href="' . esc_url( admin_url( 'admin.php?page=formidable&frm_action=add_new' ) ) . '">',
 		'</a>'
 	);
-	?></p>
+	?>
+</p>
 <?php } ?>
 </div>

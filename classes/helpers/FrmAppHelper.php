@@ -337,7 +337,7 @@ class FrmAppHelper {
 		if ( $src == 'get' ) {
 			$value = isset( $_POST[ $param ] ) ? wp_unslash( $_POST[ $param ] ) : ( isset( $_GET[ $param ] ) ? wp_unslash( $_GET[ $param ] ) : $default );
 			if ( ! isset( $_POST[ $param ] ) && isset( $_GET[ $param ] ) && ! is_array( $value ) ) {
-				$value = wp_unslash( htmlspecialchars_decode( $_GET[ $param ] ) );
+				$value = htmlspecialchars_decode( wp_unslash( $_GET[ $param ] ) );
 			}
 			self::sanitize_value( $sanitize, $value );
 		} else {
@@ -417,15 +417,15 @@ class FrmAppHelper {
 		$value = $args['default'];
 		if ( $args['type'] == 'get' ) {
 			if ( $_GET && isset( $_GET[ $args['param'] ] ) ) {
-				$value = $_GET[ $args['param'] ];
+				$value = wp_unslash( $_GET[ $args['param'] ] );
 			}
 		} elseif ( $args['type'] == 'post' ) {
 			if ( isset( $_POST[ $args['param'] ] ) ) {
-				$value = wp_unslash( maybe_unserialize( $_POST[ $args['param'] ] ) );
+				$value = maybe_unserialize( wp_unslash( $_POST[ $args['param'] ] ) );
 			}
 		} else {
 			if ( isset( $_REQUEST[ $args['param'] ] ) ) {
-				$value = $_REQUEST[ $args['param'] ];
+				$value = wp_unslash( $_REQUEST[ $args['param'] ] );
 			}
 		}
 
@@ -621,7 +621,12 @@ class FrmAppHelper {
 			return;
 		}
 
-		$new_action = isset( $_GET['action'] ) ? sanitize_text_field( $_GET['action'] ) : ( isset( $_GET['action2'] ) ? sanitize_text_field( $_GET['action2'] ) : '' );
+		$action_name = isset( $_GET['action'] ) ? 'action' : ( isset( $_GET['action2'] ) ? 'action2' : '' );
+		if ( empty( $action_name ) ) {
+			return;
+		}
+
+		$new_action = self::get_param( $action_name, '', 'get', 'sanitize_text_field' );
 		if ( ! empty( $new_action ) ) {
 			$_SERVER['REQUEST_URI'] = str_replace( '&action=' . $new_action, '', self::get_server_value( 'REQUEST_URI' ) );
 		}
@@ -934,7 +939,8 @@ class FrmAppHelper {
 			return $error;
 		}
 
-		if ( $_REQUEST && ( ! isset( $_REQUEST[ $nonce_name ] ) || ! wp_verify_nonce( $_REQUEST[ $nonce_name ], $nonce ) ) ) {
+		$nonce_value = ( $_REQUEST && isset( $_REQUEST[ $nonce_name ] ) ) ? sanitize_text_field( wp_unslash( $_REQUEST[ $nonce_name ] ) ) : '';
+		if ( $_REQUEST && ( ! isset( $_REQUEST[ $nonce_name ] ) || ! wp_verify_nonce( $nonce_value, $nonce ) ) ) {
 			$frm_settings = self::get_settings();
 			$error        = $frm_settings->admin_permission;
 		}

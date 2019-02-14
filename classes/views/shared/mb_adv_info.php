@@ -120,11 +120,11 @@
 			<li class="frm_col_<?php echo esc_attr( $col ); ?>">
 				<a href="javascript:void(0)" class="frmbutton button frm_insert_code" data-code="if x <?php echo esc_attr( $skey ); ?>][/if x"><?php echo esc_html( $sname ); ?></a>
 			</li>
-			<?php
-			$col = ( $col == 'one' ) ? 'two' : 'one';
-			unset( $skey, $sname );
-		}
-		?>
+				<?php
+				$col = ( $col == 'one' ) ? 'two' : 'one';
+				unset( $skey, $sname );
+			}
+			?>
 		</ul>
 	</div>
 	<?php } ?>
