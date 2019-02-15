@@ -794,16 +794,12 @@ function frmAdminBuildJS() {
 
 		toggleValidationBox( checked, '.frm_required_details' + field_id );
 
-		var atitle = 'Click to Mark as Not Required';
 		if ( checked ) {
 			var $reqBox = jQuery( 'input[name="field_options[required_indicator_' + field_id + ']"]' );
 			if ( $reqBox.val() === '' ) {
 				$reqBox.val( '*' );
 			}
-		} else {
-			atitle = 'Click to Mark as Required';
 		}
-		jQuery( document.getElementById( thisid ) ).removeClass( 'frm_required0 frm_required1' ).addClass( 'frm_required' + (checked ? 1 : 0) ).attr( 'title', atitle );
 	}
 
 	function toggleValidationBox( hasValue, messageClass ) {
@@ -817,11 +813,6 @@ function frmAdminBuildJS() {
 				$msg.closest( '.frm_validation_msg' ).fadeOut( 'fast' );
 			}
 		}
-	}
-
-	function clickRequired() {
-		/*jshint validthis:true */
-		jQuery( document.getElementById( 'frm_' + this.id ) ).click();
 	}
 
 	function markUnique() {
@@ -3536,7 +3527,6 @@ function frmAdminBuildJS() {
 			$builderForm.on( 'change', 'input[id^="frm_calc"]', checkCalculationCreatedByUser );
 			$builderForm.on( 'change', 'input.frm_format_opt', toggleInvalidMsg );
 			$builderForm.on( 'click', 'input.frm_req_field', markRequired );
-			$builderForm.on( 'click', 'a.frm_req_field', clickRequired );
 			$builderForm.on( 'click', '.frm_mark_unique', markUnique );
 			$builderForm.on( 'click', '.frm_reload_icon', {iconType: 'clear_on_focus'}, toggleDefaultValueIcon );
 			$builderForm.on( 'click', '.frm_error_icon', {iconType: 'default_blank'}, toggleDefaultValueIcon );

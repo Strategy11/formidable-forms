@@ -62,7 +62,7 @@ a.frm_confirming,
 .frm-full-screen #wpbody-content,
 .frm-full-screen #wpbody,
 .frm-full-screen #wpcontent {
-	margin-left: 0;
+	margin-left: 0 !important;
 	margin-right: 0;
 	padding-bottom: 0;
 	float: none;
@@ -90,7 +90,6 @@ body.frm-white-body ul#adminmenu > li.current > a.current:after {
 .frm-white-body #wpcontent {
 	padding-left: 0;
 	padding-right: 0;
-	margin-left: 0 !important;
 }
 
 .frm-white-body .wrap #post-body {
@@ -239,6 +238,7 @@ ul.frm_form_nav > li {
 	border-bottom: 1px solid var(--grey-border);
 	padding: 15px;
 	box-sizing: border-box;
+	text-align: center;
 }
 
 #frm-bar-two h1 {
@@ -252,12 +252,14 @@ ul.frm_form_nav > li {
 }
 
 #frm-bar-two #frm_bs_dropdown {
-	display: inline;
+	float: left;
 }
 
 #frm-bar-two .frm_updated_message {
 	display: inline-block;
-	text-align: center;
+	margin: 0;
+	border-radius: 25px;
+	padding: 5px 25px;
 }
 
 #frm-bar-two .frm-trash-link {
@@ -402,9 +404,10 @@ h2#frm_form_heading,
 }
 
 #frm-nav-tabs {
-	margin: 10px 0 20px 15px;
+	margin: 10px 0 20px;
+	padding: 0 15px;
 	display: block;
-	border-bottom: 1px solid var(--grey-border);
+	border-bottom: 2px solid var(--sidebar-hover);
 }
 
 #frm-nav-tabs li {
@@ -2028,6 +2031,15 @@ table.frm_name_value textarea {
 
 #frm-options-panel {
 	padding: 0 15px;
+	color: var(--darkest-grey);
+}
+
+
+#frm-options-panel h3 {
+	border-bottom: 2px solid var(--lightest-grey);
+	margin: 0;
+	padding: 10px 0;
+	font-weight: normal;
 }
 
 .frm_field_key {
@@ -2180,6 +2192,10 @@ li.ui-state-default.edit_field_type_divider .frm-show-hover {
 
 .frm_single_option {
 	clear: both;
+}
+
+#frm_build_form .frm_single_option input[type=text] {
+	width: 70%;
 }
 
 .frm_single_option .frm_delete_icon {
@@ -2898,26 +2914,6 @@ a.frm_action_icon:hover {
 	content: '\e60b';
 }
 
-.frm_action_icon.frm_required_icon:before {
-	content: '\e612';
-	font-size: 8px;
-	vertical-align: top;
-	line-height: 2.1em;
-	margin-right: 3px;
-}
-
-.frm_action_icon.frm_required_icon,
-.ui-state-default .frm_action_icon.frm_required_icon {
-	color: #000;
-	margin-top: 0;
-}
-
-.ui-state-default a.frm_action_icon.frm_required0,
-a.frm_inactive_icon.frm_action_icon.frm_required_icon,
-a.frm_action_icon.frm_required0 {
-	color: #ababab;
-}
-
 .frm-hover-icon {
 	margin-left: 2px;
 }
@@ -3112,7 +3108,7 @@ span.howto {
 
 #new_fields {
 	min-height: 480px;
-	margin: 35px 45px 0;
+	margin: 35px 45px;
 }
 
 .frm_sorting .no_repeat_section li.ui-state-default.edit_field_type_end_divider {
@@ -4372,15 +4368,24 @@ iframe#dyncontent_ifr {
 
 /*form inputs/selects */
 .accordion-container input.hex,
+.frm_wrap textarea,
+.frm_wrap input[type="text"],
+.frm_wrap select,
 .field-group textarea,
 .field-group input[type="text"],
 .field-group select {
-	width: 97%;
+	width: 100%;
 	outline: 0;
 	box-shadow: none;
 	border-radius: 4px;
 	padding: 6px 12px;
 	border-color: var(--grey-border);
+}
+
+.frm_wrap input[type=checkbox],
+.field-group input[type=checkbox] {
+	border: 1px solid var(--grey-border);
+	box-shadow: none;
 }
 
 .global-font .field-group input[type="text"] {

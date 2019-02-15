@@ -199,10 +199,13 @@ DEFAULT_HTML;
 	 * @param array $field
 	 */
 	protected function include_on_form_builder( $name, $field ) {
-		$field_name         = $this->html_name( $name );
-		$html_id            = $this->html_id();
-		$field['html_name'] = $field_name;
-		$field['html_id']   = $html_id;
+		$field_name = $this->html_name( $name );
+		$html_id    = $this->html_id();
+		$read_only  = $field['read_only'];
+
+		$field['html_name']     = $field_name;
+		$field['html_id']       = $html_id;
+		$field['default_value'] = maybe_unserialize( $field['default_value'] );
 
 		$display = $this->display_field_settings();
 		include( $this->include_form_builder_file() );

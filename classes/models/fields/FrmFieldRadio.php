@@ -22,7 +22,7 @@ class FrmFieldRadio extends FrmFieldType {
 	}
 
 	protected function include_form_builder_file() {
-		return FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/radio-field.php';
+		return $this->include_front_form_file();
 	}
 
 	protected function field_settings_for_type() {

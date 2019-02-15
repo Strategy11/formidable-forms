@@ -862,7 +862,7 @@ class FrmFieldsHelper {
 	}
 
 	public static function get_field_types( $type ) {
-		$single_input   = array( 'text', 'textarea', 'rte', 'number', 'email', 'url', 'file', 'date', 'phone', 'hidden', 'time', 'user_id', 'tag', 'password' );
+		$single_input   = array( 'text', 'textarea', 'rte', 'number', 'email', 'url', 'date', 'phone', 'hidden', 'time', 'tag', 'password' );
 		$multiple_input = array( 'radio', 'checkbox', 'select', 'scale', 'star', 'lookup' );
 		$other_type     = array( 'html', 'break' );
 
