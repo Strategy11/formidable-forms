@@ -6,8 +6,13 @@
 		(ID <?php echo esc_html( $field['id'] ); ?>)
 	</div>
 	<h3 style="clear:none;">
-		<?php echo esc_html( $field_types[ $field['type'] ]['name'] ); ?>
-		<?php esc_html_e( 'Field', 'formidable' ); ?>
+		<?php
+		printf(
+			/* translators: %s: Field type */
+			esc_html__( '%s Field', 'formidable' ),
+			esc_html( $all_field_types[ $field['type'] ]['name'] )
+		);
+		?>
 	</h3>
 
 	<div class="frm_grid_container frm-collapse-me">
@@ -41,9 +46,6 @@
 			}
 
 			if ( $display['unique'] ) {
-				if ( ! isset( $field['unique'] ) ) {
-					$field['unique'] = false;
-				}
 				?>
 				<label for="frm_uniq_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_inline_label frm_help" title="<?php esc_attr_e( 'Unique: Do not allow the same response multiple times. For example, if one user enters \'Joe\', then no one else will be allowed to enter the same name.', 'formidable' ); ?>"><input type="checkbox" name="field_options[unique_<?php echo esc_attr( $field['id'] ); ?>]" id="frm_uniq_field_<?php echo esc_attr( $field['id'] ); ?>" value="1" <?php checked( $field['unique'], 1 ); ?> class="frm_mark_unique" />
 					<?php esc_html_e( 'Unique', 'formidable' ); ?>
@@ -52,9 +54,6 @@
 			}
 
 			if ( $display['read_only'] ) {
-				if ( ! isset( $field['read_only'] ) ) {
-					$field['read_only'] = false;
-				}
 				?>
 				<label for="frm_read_only_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_inline_label frm_help" title="<?php esc_attr_e( 'Read Only: Show this field but do not allow the field value to be edited from the front-end.', 'formidable' ); ?>" >
 					<input type="checkbox" id="frm_read_only_field_<?php echo esc_attr( $field['id'] ); ?>" name="field_options[read_only_<?php echo esc_attr( $field['id'] ); ?>]" value="1" <?php checked( $field['read_only'], 1 ); ?>/>
@@ -78,8 +77,13 @@
 
 <?php if ( in_array( $field['type'], array( 'select', 'radio', 'checkbox' ) ) ) { ?>
 	<h3>
-		<?php echo esc_html( $field_types[ $field['type'] ]['name'] ); ?>
-		<?php esc_html_e( 'Options', 'formidable' ); ?>
+		<?php
+		printf(
+			/* translators: %s: Field type */
+			esc_html__( '%s Options', 'formidable' ),
+			esc_html( $all_field_types[ $field['type'] ]['name'] )
+		);
+		?>
 	</h3>
 	<div class="frm_grid_container frm-collapse-me">
 	<?php
@@ -119,9 +123,9 @@ if ( $display['clear_on_focus'] ) {
 	do_action( 'frm_extra_field_display_options', $field );
 }
 
-?>
+do_action( 'frm_before_field_options', $field );
 
-	<?php do_action( 'frm_before_field_options', $field ); ?>
+?>
 
 	<h3><?php esc_html_e( 'Advanced', 'formidable' ); ?></h3>
 	<div class="frm_grid_container frm-collapse-me">
@@ -180,13 +184,13 @@ if ( $display['clear_on_focus'] ) {
 			<input type="text" name="field_options[field_key_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['field_key'] ); ?>" id="field_options_field_key_<?php echo esc_attr( $field['id'] ); ?>"/>
 		</p>
 
-		<?php if ( count( $field_types ) > 1  ) { ?>
+		<?php if ( count( $field_types ) > 1 ) { ?>
 			<p>
 				<label for="field_options_type_<?php echo esc_attr( $field['id'] ); ?>">
 					<?php esc_html_e( 'Field Type', 'formidable' ); ?>
 				</label>
 				<br/>
-				<select name="field_options[type_<?php esc_attr( $field['id'] ) ?>]" id="field_options_type_<?php echo esc_attr( $field['id'] ); ?>">
+				<select name="field_options[type_<?php esc_attr( $field['id'] ); ?>]" id="field_options_type_<?php echo esc_attr( $field['id'] ); ?>">
 					<?php foreach ( $field_types as $fkey => $ftype ) { ?>
 						<option value="<?php echo esc_attr( $fkey ); ?>" <?php echo ( $fkey === $field['type'] ) ? ' selected="selected"' : ''; ?> <?php echo array_key_exists( $fkey, $disabled_fields ) ? 'disabled="disabled"' : ''; ?>>
 							<?php echo esc_html( is_array( $ftype ) ? $ftype['name'] : $ftype ); ?> 

@@ -196,20 +196,18 @@ class FrmFieldsController {
 			$li_classes = self::get_classes_for_builder_field( array(), $display, $field_obj );
 			include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/ajax-field-placeholder.php' );
 		} else {
-			$frm_settings = FrmAppHelper::get_settings();
-
-			$pro_field_selection     = FrmField::pro_field_selection();
-			$frm_all_field_selection = array_merge( FrmField::field_selection(), $pro_field_selection );
-			$disabled_fields         = FrmAppHelper::pro_is_installed() ? array() : $pro_field_selection;
-
 			if ( ! isset( $field ) && is_object( $field_object ) ) {
 				$field_object->parent_form_id = isset( $values['id'] ) ? $values['id'] : $field_object->form_id;
 
 				$field = FrmFieldsHelper::setup_edit_vars( $field_object );
 			}
 
+			$inner_outline   = FrmFieldsHelper::single_input_fields();
+			$inner_outline[] = 'select';
+
 			$li_classes = self::get_classes_for_builder_field( $field, $display, $field_obj );
 			$li_classes .= ' ui-state-default widgets-holder-wrap';
+			$li_classes .= in_array( $field['type'], $inner_outline ) ? ' frm-inner-outline' : ' frm-outer-outline';
 
 			require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add_field.php' );
 		}
@@ -387,8 +385,17 @@ class FrmFieldsController {
 		$display   = $atts['display'];
 		unset( $atts );
 
+		if ( ! isset( $field['unique'] ) ) {
+			$field['unique'] = false;
+		}
+
+		if ( ! isset( $field['read_only'] ) ) {
+			$field['read_only'] = false;
+		}
+
 		$field_types         = FrmFieldsHelper::get_field_types( $field['type'] );
 		$pro_field_selection = FrmField::pro_field_selection();
+		$all_field_types     = array_merge( $pro_field_selection, FrmField::field_selection() );
 		$disabled_fields     = FrmAppHelper::pro_is_installed() ? array() : $pro_field_selection;
 		$frm_settings        = FrmAppHelper::get_settings();
 

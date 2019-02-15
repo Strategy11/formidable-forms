@@ -329,22 +329,24 @@ a.frm_save_draft{
 }
 
 .with_frm_style .frm_radio input[type=radio]{
-	-webkit-appearance:radio;
 	border-radius:50%;
 }
 
 .with_frm_style .frm_checkbox input[type=checkbox]{
-	-webkit-appearance:checkbox;
-	border-radius:initial;
+	border-radius:0;
 }
 
 .with_frm_style .frm_radio input[type=radio],
 .with_frm_style .frm_checkbox input[type=checkbox]{
+	-webkit-appearance:none;
 	flex: none;
 	display:inline-block;
 	margin:4px 5px 0 0;
-	width:auto;
-	border:none;
+	height:16px;
+	width:16px;
+	min-width:16px;
+	border:1px solid #eee;
+	border-color:<?php echo esc_html( $defaults['border_color'] ); ?>;
 	vertical-align:baseline;
 	position: initial; /* override Bootstrap */
 }

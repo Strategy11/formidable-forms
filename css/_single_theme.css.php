@@ -308,6 +308,12 @@ if ( ! empty( $important ) ) {
 	box-shadow:<?php echo esc_html( ( isset( $remove_box_shadow ) && $remove_box_shadow ) ? 'none' : '0 1px 1px rgba(0, 0, 0, 0.075) inset' ) . esc_html( $important ); ?>;
 }
 
+.<?php echo esc_html( $style_class ); ?> input[type=radio],
+.<?php echo esc_html( $style_class ); ?> input[type=checkbox]{
+	border-color: <?php echo esc_html( $border_color . $important ); ?>;
+	box-shadow:<?php echo esc_html( ( isset( $remove_box_shadow ) && $remove_box_shadow ) ? 'none' : '0 1px 1px rgba(0, 0, 0, 0.075) inset' ) . esc_html( $important ); ?>;
+}
+
 .<?php echo esc_html( $style_class ); ?> input[type=text],
 .<?php echo esc_html( $style_class ); ?> input[type=password],
 .<?php echo esc_html( $style_class ); ?> input[type=email],

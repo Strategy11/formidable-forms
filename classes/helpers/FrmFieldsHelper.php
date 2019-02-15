@@ -862,7 +862,7 @@ class FrmFieldsHelper {
 	}
 
 	public static function get_field_types( $type ) {
-		$single_input   = array( 'text', 'textarea', 'rte', 'number', 'email', 'url', 'date', 'phone', 'hidden', 'time', 'tag', 'password' );
+		$single_input   = self::single_input_fields();
 		$multiple_input = array( 'radio', 'checkbox', 'select', 'scale', 'star', 'lookup' );
 		$other_type     = array( 'html', 'break' );
 
@@ -882,6 +882,29 @@ class FrmFieldsHelper {
 		$field_types = apply_filters( 'frm_switch_field_types', $field_types, compact( 'type' ) );
 
 		return $field_types;
+	}
+
+	/**
+	 * Get a list of all fields that use a single value input.
+	 *
+	 * @since 4.0
+	 */
+	public static function single_input_fields() {
+		$fields = array(
+			'text',
+			'textarea',
+			'rte',
+			'number',
+			'email',
+			'url',
+			'date',
+			'phone',
+			'hidden',
+			'time',
+			'tag',
+			'password',
+		);
+		return apply_filters( 'frm_single_input_fields', $fields );
 	}
 
 	private static function field_types_for_input( $inputs, $fields, &$field_types ) {

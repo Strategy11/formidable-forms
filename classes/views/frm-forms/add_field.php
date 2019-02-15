@@ -3,13 +3,15 @@
 <div class="divider_section_only">
 <?php } ?>
 
-	<a href="javascript:void(0);" class="frm_bstooltip alignright frm-show-hover frm-move frm-hover-icon frm_icon_font frm_move_icon" title="<?php esc_attr_e( 'Move Field', 'formidable' ); ?>"> </a>
-	<a href="#" class="frm_bstooltip alignright frm-show-hover frm-hover-icon frm_icon_font frm_delete_icon frm_delete_field" title="<?php esc_attr_e( 'Delete Field', 'formidable' ); ?>"> </a>
-	<a href="#" class="frm_bstooltip alignright frm-show-hover frm-hover-icon frm_icon_font frm_duplicate_icon" title="<?php ( $field['type'] === 'divider' ) ? esc_attr_e( 'Duplicate Section', 'formidable' ) : esc_attr_e( 'Duplicate Field', 'formidable' ); ?>"> </a>
-
 	<?php do_action( 'frm_extra_field_actions', $field['id'] ); ?>
 
 <div id="field_<?php echo esc_attr( $field['id'] ); ?>_inner_container" class="frm_inner_field_container">
+	<div class="frm-field-action-icons frm-show-hover">
+		<a href="javascript:void(0);" class="frm_bstooltip frm-move frm-hover-icon frm_icon_font frm_move_icon" title="<?php esc_attr_e( 'Move Field', 'formidable' ); ?>"> </a>
+		<a href="#" class="frm_bstooltip frm-hover-icon frm_icon_font frm_delete_icon frm_delete_field" title="<?php esc_attr_e( 'Delete Field', 'formidable' ); ?>"> </a>
+		<a href="#" class="frm_bstooltip frm-hover-icon frm_icon_font frm_duplicate_icon" title="<?php ( $field['type'] === 'divider' ) ? esc_attr_e( 'Duplicate Section', 'formidable' ) : esc_attr_e( 'Duplicate Field', 'formidable' ); ?>"> </a>
+	</div>
+
 	<label class="frm_primary_label <?php echo esc_attr( $field['type'] === 'break' ? 'button' : '' ); ?>" id="field_label_<?php echo esc_attr( $field['id'] ); ?>">
 		<?php echo FrmAppHelper::kses( force_balance_tags( $field['name'] ), 'all' ); // WPCS: XSS ok. ?>
 	</label>
