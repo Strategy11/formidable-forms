@@ -849,23 +849,99 @@ class FrmFormsController {
 
 		global $frm_vars;
 
-		$form = FrmForm::getOne( $id );
-
+		$form   = FrmForm::getOne( $id );
 		$fields = FrmField::get_all_for_form( $id );
 		$values = FrmAppHelper::setup_edit_vars( $form, 'forms', $fields, true );
 
 		self::clean_submit_html( $values );
 
-		$action_controls = FrmFormActionsController::get_form_actions();
-
-		$sections    = apply_filters( 'frm_add_form_settings_section', array(), $values );
-		$pro_feature = FrmAppHelper::pro_is_installed() ? '' : ' class="pro_feature"';
-
-		$styles = apply_filters( 'frm_get_style_opts', array() );
-
-		$first_h3 = 'frm_first_h3';
+		$sections = self::get_settings_tabs( $values );
+		$current  = FrmAppHelper::simple_get( 't', 'sanitize_title', 'advanced_settings' );
 
 		require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/settings.php' );
+	}
+
+	/**
+	 * Get a list of all the settings tabs for the form settings page.
+	 *
+	 * @since 4.0
+	 *
+	 * @param array $values
+	 * @return array
+	 */
+	private static function get_settings_tabs( $values ) {
+		$sections = array(
+			array(
+				'name'   => __( 'General', 'formidable' ),
+				'title'  => __( 'General Form Settings', 'formidable' ),
+				'anchor' => 'advanced',
+				'class'    => __CLASS__,
+				'function' => 'advanced_settings',
+			),
+			array(
+				'name'   => __( 'Form Actions', 'formidable' ),
+				'anchor' => 'email',
+				'class'    => __CLASS__,
+				'function' => 'email_settings',
+			),
+			array(
+				'name'     => __( 'Customize HTML', 'formidable' ),
+				'anchor'   => 'html',
+				'class'    => __CLASS__,
+				'function' => 'html_settings',
+			),
+		);
+		$sections = apply_filters( 'frm_add_form_settings_section', $sections, $values );
+
+		foreach ( $sections as $key => $section ) {
+			if ( ! isset( $section['name'] ) ) {
+				$sections[ $key ]['name'] = ucfirst( $key );
+			}
+
+			if ( ! isset( $section['anchor'] ) ) {
+				$sections[ $key ]['anchor'] = $key;
+			}
+			$sections[ $key ]['anchor'] .= '_settings';
+
+			if ( ! isset( $section['title'] ) ) {
+				$sections[ $key ]['title'] = $sections[ $key ]['name'];
+			}
+		}
+
+		return $sections;
+	}
+
+	/**
+	 * @since 4.0
+	 *
+	 * @param array $values
+	 */
+	public static function advanced_settings( $values ) {
+		$first_h3 = 'frm_first_h3';
+		$styles   = apply_filters( 'frm_get_style_opts', array() );
+
+		include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/settings-advanced.php' );
+	}
+
+	/**
+	 * @since 4.0
+	 *
+	 * @param array $values
+	 */
+	public static function email_settings( $values ) {
+		$action_controls = FrmFormActionsController::get_form_actions();
+		$form            = FrmForm::getOne( $values['id'] );
+
+		include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/settings-email.php' );
+	}
+
+	/**
+	 * @since 4.0
+	 *
+	 * @param array $values
+	 */
+	public static function html_settings( $values ) {
+		include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/settings-html.php' );
 	}
 
 	/**

@@ -240,22 +240,22 @@ function frmAdminBuildJS() {
 		}
 
 		var c = t.replace( '#', '.' );
-		var pro = jQuery( '#taxonomy-linkcategory .frm-category-tabs li' ).length > 2;
+		var pro = jQuery( '.frm-category-tabs li' ).length > 2;
 		link.closest( 'li' ).addClass( 'tabs active' ).siblings( 'li' ).removeClass( 'tabs active starttab' );
 		if ( link.closest( 'div' ).find( '.tabs-panel' ).length ) {
 			link.closest( 'div' ).children( '.tabs-panel' ).not( t ).not( c ).hide();
 		} else {
-			link.closest( 'div.inside' ).find( '.tabs-panel, .hide_with_tabs' ).hide();
+			link.closest( '.frm_wrap' ).find( '.tabs-panel, .hide_with_tabs' ).hide();
 			if ( link.closest( 'ul' ).hasClass( 'frm-form-setting-tabs' ) ) {
+				/* form settings page */
 				if ( t === '#html_settings' ) {
 					if ( pro ) {
-						jQuery( '#taxonomy-linkcategory .frm-category-tabs li' ).hide();
 						document.getElementById( 'frm_html_tab' ).style.display = '';
 					}
 					jQuery( document.getElementById( 'frm_html_tags_tab' ) ).click();
 				} else if ( jQuery( document.getElementById( 'frm_html_tags_tab' ) ).is( ':visible' ) ) {
 					if ( pro ) {
-						showElement( jQuery( '#taxonomy-linkcategory .frm-category-tabs li' ) );
+						showElement( jQuery( '.frm-category-tabs li' ) );
 						document.getElementById( 'frm_html_tab' ).style.display = 'none';
 					}
 					jQuery( document.getElementById( 'frm_insert_fields_tab' ) ).click();

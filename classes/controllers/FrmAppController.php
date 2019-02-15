@@ -66,7 +66,7 @@ class FrmAppController {
 	private static function is_full_screen() {
 		$action = FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
 
-		return FrmAppHelper::is_admin_page( 'formidable' ) && $action === 'edit';
+		return FrmAppHelper::is_admin_page( 'formidable' ) && ( $action === 'edit' || $action === 'settings' );
 	}
 
 	public static function load_wp_admin_style() {

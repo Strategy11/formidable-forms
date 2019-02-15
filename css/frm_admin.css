@@ -358,6 +358,16 @@ h2#frm_form_heading,
 	margin-bottom: 26px;
 }
 
+#form_settings_page .columns-2 .frm-right-panel {
+	flex: 0 0 275px;
+	width: 275px;
+	min-width: 275px;
+}
+
+.frm-inner-content {
+	padding: 10px 25px;
+}
+
 .frm_wrap #submitdiv {
 	margin-bottom: 0;
 	border-width: 0 0 1px;
@@ -871,13 +881,14 @@ input.frm_insert_in_template {
 	width: auto;
 }
 
-.frm-single-settings p > label,
+.frm-fields p > label,
 #frm_form_editor_container label.frm_primary_label {
 	color: var(--darkest-grey);
-	margin: 0;
+	margin: 0 0 3px;
 	padding: 0;
 	width: auto;
 	font-size: 14px;
+	display: block;
 }
 
 #frm_form_editor_container label.frm_primary_label:hover {
@@ -1760,12 +1771,17 @@ input[type="checkbox"] {
 	box-sizing: border-box;
 }
 
+.frmcenter {
+	text-align: center;
+}
+
 img.frm_help {
 	margin-left: 2px;
 	vertical-align: middle;
 	padding-bottom: 2px;
 }
 
+/* Loading */
 .frm-loading-img {
 	background: url(../images/ajax_loader.gif) no-repeat center center;
 	padding: 6px 12px;
@@ -1839,6 +1855,8 @@ img.frm_help {
 	animation: spin 2s linear infinite;
 }
 
+/* Effects */
+
 @keyframes spin {
 	0% {
 		transform: rotate(0deg);
@@ -1862,10 +1880,6 @@ label input[type="checkbox"], label input[type="radio"] {
 	-moz-box-sizing: border-box;
 	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
-}
-
-.frmcenter {
-	text-align: center;
 }
 
 /*ICONS*/
@@ -2231,18 +2245,29 @@ li.ui-state-default.selected .frm-show-click.frm_import_options select {
 	width: 16px;
 }
 
+/* Form settings */
+
 #form_settings_page label,
 .frm_form_builder label {
 	font-weight: normal;
 }
 
-#form_settings_page .tabs-panel, .frm_settings_form .tabs-panel {
-	max-height: none !important;
-	min-height: 260px !important;
+.frm-form-setting-tabs a {
+	font-size: 15px;
+	color: var(--dark-grey);
+	padding: 15px;
+	display: block;
 }
 
-#form_settings_page #post-body-content {
-	min-width: 350px;
+.frm-form-setting-tabs a:hover {
+	background: var(--sidebar-hover);
+	color: var(--dark-grey);
+}
+
+#form_settings_page .tabs-panel,
+.frm_settings_form .tabs-panel {
+	max-height: none !important;
+	min-height: 260px !important;
 }
 
 #form_settings_page .frm_posttax_row select {
@@ -4372,19 +4397,29 @@ iframe#dyncontent_ifr {
 }
 
 /*form inputs/selects */
-.accordion-container input.hex,
 .frm_wrap textarea,
 .frm_wrap input[type="text"],
 .frm_wrap select,
 .field-group textarea,
 .field-group input[type="text"],
 .field-group select {
-	width: 100%;
 	outline: 0;
 	box-shadow: none;
 	border-radius: 4px;
 	padding: 6px 12px;
 	border-color: var(--grey-border);
+	color: var(--darkest-grey);
+}
+
+.frm-fields textarea,
+.frm-fields input[type="text"],
+.frm-fields select,
+.field-group textarea,
+.field-group input[type="text"],
+.field-group select,
+.accordion-container input.hex {
+	width: 100%;
+	outline: 0;
 }
 
 .frm_wrap input[type=checkbox],

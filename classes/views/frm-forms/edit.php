@@ -19,9 +19,6 @@
 		// Add form messages.
 		require( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' );
 
-		$action = isset( $_REQUEST['frm_action'] ) ? 'frm_action' : 'action';
-		$action = FrmAppHelper::get_param( $action, '', 'get', 'sanitize_title' );
-
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/_publish_box.php' );
 		?>
 	</div>

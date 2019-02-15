@@ -1,4 +1,4 @@
-<div class="frm-single-settings frm_hidden" id="frm-single-settings-<?php echo esc_attr( $field['id'] ); ?>" data-fid="<?php echo esc_attr( $field['id'] ); ?>">
+<div class="frm-single-settings frm_hidden frm-fields" id="frm-single-settings-<?php echo esc_attr( $field['id'] ); ?>" data-fid="<?php echo esc_attr( $field['id'] ); ?>">
 	<input type="hidden" name="frm_fields_submitted[]" value="<?php echo esc_attr( $field['id'] ); ?>" />
 	<input type="hidden" name="field_options[field_order_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['field_order'] ); ?>"/>
 
@@ -20,7 +20,6 @@
 			<label for="frm_name_<?php echo esc_attr( $field['id'] ); ?>">
 				<?php esc_html_e( 'Field Label', 'formidable' ); ?>
 			</label>
-			<br/>
 			<input type="text" name="field_options[name_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['name'] ); ?>" id="frm_name_<?php echo esc_attr( $field['id'] ); ?>" />
 		</p>
 
@@ -29,7 +28,6 @@
 				<label for="frm_description_<?php echo esc_attr( $field['id'] ); ?>">
 					<?php esc_html_e( 'Field Description', 'formidable' ); ?>
 				</label>
-				<br/>
 				<textarea name="field_options[description_<?php echo esc_attr( $field['id'] ); ?>]" id="frm_description_<?php echo esc_attr( $field['id'] ); ?>" class="frm_long_input"><?php
 				echo FrmAppHelper::esc_textarea( $field['description'] ); // WPCS: XSS ok.
 				?></textarea>
@@ -132,7 +130,6 @@ do_action( 'frm_before_field_options', $field );
 		<?php if ( $display['label_position'] ) { ?>
 			<p>
 				<label><?php esc_html_e( 'Label Position', 'formidable' ); ?></label>
-				<br/>
 				<select name="field_options[label_<?php echo esc_attr( $field['id'] ); ?>]">
 					<option value=""<?php selected( $field['label'], '' ); ?>>
 						<?php esc_html_e( 'Default', 'formidable' ); ?>
@@ -157,7 +154,6 @@ do_action( 'frm_before_field_options', $field );
 				<label for="frm_classes_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help" title="<?php esc_attr_e( 'Add a CSS class to the field container. Use our predefined classes to align multiple fields in single row.', 'formidable' ); ?>">
 					<?php esc_html_e( 'CSS Layout Classes', 'formidable' ); ?>
 				</label>
-				<br/>
 				<input type="text" name="field_options[classes_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['classes'] ); ?>" id="frm_classes_<?php echo esc_attr( $field['id'] ); ?>" class="frm_classes" />
 			</p>
 		<?php } ?>
@@ -180,7 +176,6 @@ do_action( 'frm_before_field_options', $field );
 			<label for="field_options_field_key_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help" title="<?php esc_attr_e( 'The field key can be used as an alternative to the field ID in many cases.', 'formidable' ); ?>">
 				<?php esc_html_e( 'Field Key', 'formidable' ); ?>
 			</label>
-			<br/>
 			<input type="text" name="field_options[field_key_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['field_key'] ); ?>" id="field_options_field_key_<?php echo esc_attr( $field['id'] ); ?>"/>
 		</p>
 
@@ -189,7 +184,6 @@ do_action( 'frm_before_field_options', $field );
 				<label for="field_options_type_<?php echo esc_attr( $field['id'] ); ?>">
 					<?php esc_html_e( 'Field Type', 'formidable' ); ?>
 				</label>
-				<br/>
 				<select name="field_options[type_<?php esc_attr( $field['id'] ); ?>]" id="field_options_type_<?php echo esc_attr( $field['id'] ); ?>">
 					<?php foreach ( $field_types as $fkey => $ftype ) { ?>
 						<option value="<?php echo esc_attr( $fkey ); ?>" <?php echo ( $fkey === $field['type'] ) ? ' selected="selected"' : ''; ?> <?php echo array_key_exists( $fkey, $disabled_fields ) ? 'disabled="disabled"' : ''; ?>>
@@ -217,7 +211,6 @@ do_action( 'frm_before_field_options', $field );
 				<label for="field_options_captcha_size_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help" title="<?php esc_attr_e( 'Set the size of the captcha field. The compact option is best if your form is in a small area.', 'formidable' ); ?>">
 					<?php esc_html_e( 'ReCaptcha Type', 'formidable' ); ?>
 				</label>
-				<br/>
 				<select name="field_options[captcha_size_<?php echo esc_attr( $field['id'] ); ?>]" id="field_options_captcha_size_<?php echo esc_attr( $field['id'] ); ?>">
 					<option value="normal" <?php selected( $field['captcha_size'], 'normal' ); ?>>
 						<?php esc_html_e( 'Normal', 'formidable' ); ?>
@@ -231,7 +224,6 @@ do_action( 'frm_before_field_options', $field );
 				<label for="captcha_theme_<?php echo esc_attr( $field['field_key'] ); ?>">
 					<?php esc_html_e( 'reCAPTCHA Color', 'formidable' ); ?>
 				</label>
-				<br/>
 				<select name="field_options[captcha_theme_<?php echo esc_attr( $field['id'] ); ?>]" id="captcha_theme_<?php echo esc_attr( $field['field_key'] ); ?>">
 					<option value="light" <?php selected( $field['captcha_theme'], 'light' ); ?>>
 						<?php esc_html_e( 'Light', 'formidable' ); ?>
@@ -273,7 +265,6 @@ do_action( 'frm_before_field_options', $field );
 						<label for="field_options_blank_<?php echo esc_attr( $field['id'] ); ?>">
 							<?php esc_html_e( 'Required', 'formidable' ); ?>
 						</label>
-						<br/>
 						<input type="text" name="field_options[blank_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['blank'] ); ?>" id="field_options_blank_<?php echo esc_attr( $field['id'] ); ?>"/>
 					</p>
 				<?php } ?>
@@ -286,7 +277,6 @@ do_action( 'frm_before_field_options', $field );
 						<label for="field_options_invalid_<?php echo esc_attr( $field['id'] ); ?>">
 							<?php esc_html_e( 'Invalid Format', 'formidable' ); ?>
 						</label>
-						<br/>
 						<input type="text" name="field_options[invalid_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['invalid'] ); ?>" id="field_options_invalid_<?php echo esc_attr( $field['id'] ); ?>"/>
 					</p>
 					<?php
@@ -298,7 +288,6 @@ do_action( 'frm_before_field_options', $field );
 						<label for="field_options_unique_msg_<?php echo esc_attr( $field['id'] ); ?>">
 							<?php esc_html_e( 'Unique', 'formidable' ); ?>
 						</label>
-						<br/>
 						<input type="text" name="field_options[unique_msg_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['unique_msg'] ); ?>" id="field_options_unique_msg_<?php echo esc_attr( $field['id'] ); ?>" />
 					</p>
 					<?php
@@ -310,7 +299,6 @@ do_action( 'frm_before_field_options', $field );
 						<label for="field_options_conf_msg_<?php echo esc_attr( $field['id'] ); ?>">
 							<?php esc_html_e( 'Confirmation', 'formidable' ); ?>
 						</label>
-						<br/>
 						<input type="text" name="field_options[conf_msg_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['conf_msg'] ); ?>" id="field_options_conf_msg_<?php echo esc_attr( $field['id'] ); ?>" />
 					</p>
 					<?php
