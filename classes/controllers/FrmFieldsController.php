@@ -399,6 +399,14 @@ class FrmFieldsController {
 		$disabled_fields     = FrmAppHelper::pro_is_installed() ? array() : $pro_field_selection;
 		$frm_settings        = FrmAppHelper::get_settings();
 
+		if ( ! isset( $all_field_types[ $field['type'] ] ) ) {
+			// Add fallback for an add-on field type that has been deactivated.
+			$all_field_types[ $field['type'] ] = array(
+				'name' => ucfirst( $field['type'] ),
+				'icon' => 'frm_icon_font frm_pencil_icon',
+			);
+		}
+
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/settings.php' );
 	}
 
