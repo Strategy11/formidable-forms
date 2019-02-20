@@ -16,7 +16,7 @@ if ( isset( $errors ) && is_array( $errors ) && count( $errors ) > 0 ) {
 		<ul id="frm_errors">
 			<?php
 			foreach ( $errors as $error ) {
-				echo '<li>' . FrmAppHelper::kses( $error, 'a' ) . '</li>'; // WPCS: XSS ok.
+				echo '<li>' . FrmAppHelper::kses( $error, array( 'a', 'br' ) ) . '</li>'; // WPCS: XSS ok.
 			}
 			?>
 		</ul>
