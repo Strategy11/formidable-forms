@@ -1309,6 +1309,9 @@ function frmAdminBuildJS(){
 		jQuery.ajax({type:'POST',url:ajaxurl,
 			data:{action:'frm_toggle_repeat', form_id:form_id, parent_form_id:main_form_id, checked:checked, field_id:field_id, field_name:field_name, children:children, nonce:frmGlobal.nonce},
 			success:function(id){
+				// Remove any whitespace that could be added by another plugin.
+				id = id.trim();
+
 				//return form id to hidden field
 				jQuery('input[name="field_options[form_select_'+field_id+']"]').val(id);
 
