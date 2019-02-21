@@ -9,7 +9,7 @@ function frmFrontFormJS(){
 	function maybeShowLabel(){
 		/*jshint validthis:true */
 		var $field = jQuery(this);
-		var $label = $field.closest('.frm_inside_container').find('label.frm_primary_label');
+		var $label = $field.closest('.frm_inside_container').find('.frm_primary_label');
 
 		if ( $field.val().length > 0 ) {
 			$label.addClass('frm_visible');

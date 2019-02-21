@@ -138,13 +138,14 @@ abstract class FrmFieldType {
 		}
 
 		$input = $this->input_html();
-		$for = $this->for_label_html();
+		$for   = $this->for_label_html();
+		$label = $this->primary_label_element();
 
 		$default_html = <<<DEFAULT_HTML
 <div id="frm_field_[id]_container" class="frm_form_field form-field [required_class][error_class]">
-    <label $for class="frm_primary_label">[field_name]
+    <$label $for id="field_[key]_label" class="frm_primary_label">[field_name]
         <span class="frm_required">[required_label]</span>
-    </label>
+    </$label>
     $input
     [if description]<div class="frm_description" id="frm_desc_field_[key]">[description]</div>[/if description]
     [if error]<div class="frm_error">[error]</div>[/if error]
@@ -159,12 +160,16 @@ DEFAULT_HTML;
 	}
 
 	protected function multiple_input_html() {
-		return '<div class="frm_opt_container" aria-labelledby="field_[key]_label">[input]</div>';
+		return '<div class="frm_opt_container" aria-labelledby="field_[key]_label" role="group">[input]</div>';
+	}
+
+	protected function primary_label_element() {
+		return $this->has_for_label ? 'label' : 'div';
 	}
 
 	protected function for_label_html() {
 		if ( $this->has_for_label ) {
-			$for = 'for="field_[key]" id="field_[key]_label"';
+			$for = 'for="field_[key]"';
 		} else {
 			$for = '';
 		}

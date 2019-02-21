@@ -53,7 +53,7 @@ $arrow_icons = FrmStylesHelper::arrow_icons();
 	margin-bottom:<?php echo esc_html( $title_margin_bottom . $important ) ?>;
 }
 
-.<?php echo esc_html( $style_class ) ?> label.frm_primary_label{
+.<?php echo esc_html( $style_class ) ?> .frm_primary_label{
     font-family:<?php echo FrmAppHelper::kses( $font ); // WPCS: XSS ok. ?>;
     font-size:<?php echo esc_html( $font_size . $important ) ?>;
     color:<?php echo esc_html( $label_color . $important ) ?>;
@@ -194,7 +194,7 @@ if ( '' === $field_height || 'auto' === $field_height ) {
     width:<?php echo esc_html( $width . $important ); ?>;
 }
 
-.<?php echo esc_html( $style_class ) ?> .frm_none_container label.frm_primary_label,
+.<?php echo esc_html( $style_class ) ?> .frm_none_container .frm_primary_label,
 .<?php echo esc_html( $style_class ) ?> .frm_pos_none{
     display:none<?php echo esc_html( $important ) ?>;
 }
