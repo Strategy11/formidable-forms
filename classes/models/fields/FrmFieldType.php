@@ -159,12 +159,12 @@ DEFAULT_HTML;
 	}
 
 	protected function multiple_input_html() {
-		return '<div class="frm_opt_container">[input]</div>';
+		return '<div class="frm_opt_container" aria-labelledby="field_[key]_label">[input]</div>';
 	}
 
-	private function for_label_html() {
+	protected function for_label_html() {
 		if ( $this->has_for_label ) {
-			$for = 'for="field_[key]"';
+			$for = 'for="field_[key]" id="field_[key]_label"';
 		} else {
 			$for = '';
 		}
