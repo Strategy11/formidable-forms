@@ -595,13 +595,16 @@ function frmFrontFormJS(){
 	}
 
 	function showSubmitLoading( $object ) {
+		showLoadingIndicator( $object );
+		disableSubmitButton( $object );
+	}
+
+	function showLoadingIndicator( $object ) {
 		if ( !$object.hasClass('frm_loading_form') ) {
 			$object.addClass('frm_loading_form');
 
 			$object.trigger( 'frmStartFormLoading' );
 		}
-
-		disableSubmitButton( $object );
 	}
 
 	function removeSubmitLoading( $object, enable, processesRunning ) {
@@ -878,7 +881,7 @@ function frmFrontFormJS(){
 			}
 
 			if ( invisibleRecaptcha.length ) {
-				showSubmitLoading( jQuery(object) );
+				showLoadingIndicator( jQuery(object) );
 				executeInvisibleRecaptcha( invisibleRecaptcha );
 			} else {
 
