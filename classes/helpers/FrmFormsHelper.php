@@ -896,7 +896,7 @@ BEFORE_HTML;
 			),
 			'frm_scroll_box' => array(
 				'label'      => __( 'Scroll Box', 'formidable' ),
-				'title'      => __( 'If you have many checkbox or radio button options, you may add this class to allow your user to easily scroll through the options.', 'formidable' ),
+				'title'      => __( 'If you have many checkbox or radio button options, you may add this class to allow your user to easily scroll through the options. Or add a scrolling area around content in an HTML field.', 'formidable' ),
 			),
 			'frm_capitalize' => array(
 				'label'      => __( 'Capitalize', 'formidable' ),

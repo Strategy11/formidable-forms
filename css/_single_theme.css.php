@@ -703,6 +703,7 @@ if ( ! empty( $important ) ) {
 	background-color:<?php echo esc_html( $bg_color_active . $important ); ?>;
 }
 
+.<?php echo esc_html( $style_class ) ?> .frm_html_container.frm_scroll_box,
 .<?php echo esc_html( $style_class ) ?> .frm_form_field.frm_html_scroll_box{
 	background-color:<?php echo esc_html( $bg_color . $important ); ?>;
     border-color: <?php echo esc_html( $border_color . $important ) ?>;

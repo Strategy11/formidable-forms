@@ -790,6 +790,7 @@ select.frm_loading_lookup{
     overflow:auto;
 }
 
+.frm_html_container.frm_scroll_box,
 .frm_form_field.frm_html_scroll_box{
     height:100px;
     overflow:auto;
