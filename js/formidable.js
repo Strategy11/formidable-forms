@@ -570,8 +570,10 @@ function frmFrontFormJS(){
 			if ( typeof frmThemeOverride_frmPlaceError === 'function' ) {
 				frmThemeOverride_frmPlaceError( key, jsErrors );
 			} else {
-				$fieldCont.append( '<div class="frm_error">'+ jsErrors[key] +'</div>' );
+				$fieldCont.append( '<div class="frm_error" id="frm_error_' + key + '">'+ jsErrors[key] +'</div>' );
 			}
+			$fieldCont.find( 'input, select, textarea' ).attr( 'aria-invalid', true );
+
 			jQuery(document).trigger('frmAddFieldError', [ $fieldCont, key, jsErrors ] );
 		}
 	}
@@ -579,6 +581,7 @@ function frmFrontFormJS(){
 	function removeFieldError( $fieldCont ) {
 		$fieldCont.removeClass('frm_blank_field has-error');
 		$fieldCont.find('.frm_error').remove();
+		$fieldCont.find( 'input, select, textarea' ).attr( 'aria-invalid', false );
 	}
 
 	function removeAllErrors() {
