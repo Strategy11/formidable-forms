@@ -211,12 +211,33 @@ class FrmFormsController {
 		} else {
             FrmForm::update( $id, $values );
             $message = __( 'Form was Successfully Updated', 'formidable' );
+
+			if ( self::is_too_long( $values ) ) {
+				$message .= '<br/> ' . sprintf(
+					/* translators: %1$s: Start link HTML, %2$s: end link HTML */
+					__( 'However, your form is very long and may be %1$sreaching server limits%2$s.', 'formidable' ),
+					'<a href="https://formidableforms.com/knowledgebase/i-have-a-long-form-why-did-the-options-at-the-end-of-the-form-stop-saving/?utm_source=WordPress&utm_medium=builder&utm_campaign=liteplugin" target="_blank" rel="noopener">',
+					'</a>'
+				);
+			}
+
             if ( defined( 'DOING_AJAX' ) ) {
 				wp_die( esc_html( $message ) );
             }
 			return self::get_edit_vars( $id, array(), $message );
         }
     }
+
+	/**
+	 * Check if the value at the end of the form was included.
+	 * If it's missing, it means other values at the end of the form
+	 * were likely not saved either.
+	 *
+	 * @since 3.06.01
+	 */
+	private static function is_too_long( $values ) {
+		return ( ! isset( $values['frm_end'] ) ) || empty( $values['frm_end'] );
+	}
 
 	/**
 	 * Redirect to the url for creating from a template

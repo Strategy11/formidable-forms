@@ -44,7 +44,7 @@ if ( isset( $values['fields'] ) && ! empty( $values['fields'] ) ) {
 }
 ?>
 </ul>
-
+<input type="hidden" name="frm_end" value="1" />
 </div>
 
 </div>
