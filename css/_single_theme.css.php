@@ -53,43 +53,6 @@ $arrow_icons = FrmStylesHelper::arrow_icons();
 	margin-bottom:<?php echo esc_html( $title_margin_bottom . $important ) ?>;
 }
 
-.<?php echo esc_html( $style_class ) ?> .frm-show-form  .frm_section_heading h3{
-    padding:<?php echo esc_html( $section_pad . $important ) ?>;
-    margin:0<?php echo esc_html( $important ) ?>;
-    font-size:<?php echo esc_html( $section_font_size . $important ) ?>;
-	font-family:<?php echo FrmAppHelper::kses( $font ); // WPCS: XSS ok. ?>;
-    font-weight:<?php echo esc_html( $section_weight . $important ) ?>;
-    color:<?php echo esc_html( $section_color . $important ) ?>;
-    border:none<?php echo esc_html( $important ) ?>;
-	border<?php echo esc_html( $section_border_loc ); ?>:<?php echo esc_html( $section_border_width . ' ' . $section_border_style . ' ' . $section_border_color . $important ); ?>;
-    background-color:<?php echo esc_html( $section_bg_color . $important ); ?>
-}
-
-.<?php echo esc_html( $style_class ) ?> h3 .frm_<?php echo esc_html( $collapse_pos ) ?>_collapse{
-    display:inline;
-}
-.<?php echo esc_html( $style_class ) ?> h3 .frm_<?php echo ( 'after' == $collapse_pos ) ? 'before' : 'after'; ?>_collapse{
-    display:none;
-}
-
-.menu-edit #post-body-content .<?php echo esc_html( $style_class ) ?> .frm_section_heading h3{
-    margin:0;
-}
-
-.<?php echo esc_html( $style_class ) ?> .frm_section_heading{
-    margin-top:<?php echo esc_html( $section_mar_top . $important ) ?>;
-}
-
-.<?php echo esc_html( $style_class ) ?>  .frm-show-form .frm_section_heading .frm_section_spacing,
-.menu-edit #post-body-content .<?php echo esc_html( $style_class ) ?>  .frm-show-form .frm_section_heading .frm_section_spacing{
-    margin-bottom:<?php echo esc_html( $section_mar_bottom . $important ) ?>;
-}
-
-.<?php echo esc_html( $style_class ) ?> .frm_repeat_sec{
-	margin-bottom:<?php echo esc_html( $field_margin . $important ) ?>;
-	margin-top:<?php echo esc_html( $field_margin . $important ) ?>;
-}
-
 .<?php echo esc_html( $style_class ) ?> label.frm_primary_label{
     font-family:<?php echo FrmAppHelper::kses( $font ); // WPCS: XSS ok. ?>;
     font-size:<?php echo esc_html( $font_size . $important ) ?>;
