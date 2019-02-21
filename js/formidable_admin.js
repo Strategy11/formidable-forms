@@ -1252,28 +1252,6 @@ function frmAdminBuildJS(){
 			jQuery('.inplace_field').blur();
 		}
 	}
-	
-	function toggleRepeat(){
-		/*jshint validthis:true */
-		var field_id = jQuery(this).closest('li.frm_field_box').data('fid');
-		var main_form_id = jQuery('input[name="id"]').val();
-		var prev_form = jQuery('input[name="field_options[form_select_'+field_id+']"]').val();
-
-		if(this.checked){
-			jQuery('#frm_field_id_'+field_id+' .show_repeat_sec').fadeIn('slow');
-			jQuery(this).closest('li.frm_field_box').addClass('repeat_section').removeClass('no_repeat_section');
-
-			toggleFormid(field_id, prev_form, main_form_id, 1);
-		}else{
-			if(confirm(frm_admin_js.conf_no_repeat)){
-				jQuery('#frm_field_id_'+field_id+' .show_repeat_sec').fadeOut('slow');
-				jQuery(this).closest('li.frm_field_box').removeClass('repeat_section').addClass('no_repeat_section');
-				toggleFormid(field_id, prev_form, main_form_id, 0);
-			}else{
-				this.checked = true;
-			}
-		}
-	}
 
 	function toggleRepeatButtons(){
 		/*jshint validthis:true */
@@ -1300,30 +1278,6 @@ function frmAdminBuildJS(){
 	function updateRepeatText(obj, addRemove){
 		var $thisField = jQuery(obj).closest('.frm_field_box');
 		$thisField.find('.frm_'+ addRemove +'_form_row .frm_repeat_label').text(obj.value);
-	}
-	
-	function toggleFormid(field_id, form_id, main_form_id, checked){
-		// change form ids of all fields in section
-		var children = fieldsInSection(field_id);
-		var field_name = document.getElementById('field_label_' + field_id).innerHTML;
-		jQuery.ajax({type:'POST',url:ajaxurl,
-			data:{action:'frm_toggle_repeat', form_id:form_id, parent_form_id:main_form_id, checked:checked, field_id:field_id, field_name:field_name, children:children, nonce:frmGlobal.nonce},
-			success:function(id){
-				// Remove any whitespace that could be added by another plugin.
-				id = id.trim();
-
-				//return form id to hidden field
-				jQuery('input[name="field_options[form_select_'+field_id+']"]').val(id);
-
-				// Update data-formid on section field
-				var fieldListElement = document.getElementById( 'frm_field_id_' + field_id );
-				if ( id !== '' ) {
-					fieldListElement.setAttribute('data-formid', id);
-				} else {
-					fieldListElement.setAttribute('data-formid', main_form_id);
-				}
-			}
-		});
 	}
 
 	function fieldsInSection(id){
@@ -3500,7 +3454,6 @@ function frmAdminBuildJS(){
 			$newFields.on('click', '.frm_reload_icon', { iconType: 'clear_on_focus' }, toggleDefaultValueIcon);
 			$newFields.on('click', '.frm_error_icon', { iconType: 'default_blank' }, toggleDefaultValueIcon);
 
-			$newFields.on('click', '.frm_repeat_field', toggleRepeat);
 			$newFields.on('change', '.frm_repeat_format', toggleRepeatButtons);
 			$newFields.on('change', '.frm_repeat_limit', checkRepeatLimit);
 			$newFields.on('input', 'input[name^="field_options[add_label_"]', function(){
