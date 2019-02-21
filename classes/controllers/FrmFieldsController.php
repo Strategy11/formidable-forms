@@ -624,11 +624,32 @@ class FrmFieldsController {
 		if ( FrmField::is_required( $field ) ) {
 			$required_message = FrmFieldsHelper::get_error_msg( $field, 'blank' );
 			$add_html['data-reqmsg'] = 'data-reqmsg="' . esc_attr( $required_message ) . '"';
+			self::maybe_add_html_required( $field, $add_html );
 		}
 
 		if ( ! FrmField::is_option_empty( $field, 'invalid' ) ) {
 			$invalid_message = FrmFieldsHelper::get_error_msg( $field, 'invalid' );
 			$add_html['data-invmsg'] = 'data-invmsg="' . esc_attr( $invalid_message ) . '"';
+		}
+	}
+
+	/**
+	 * If 'required' is added to a conditionall hidden field, the form won't
+	 * submit in many browsers. Check to make sure the javascript to conditionally
+	 * remove it is present if needed.
+	 *
+	 * @since 3.06.01
+	 * @param array $field
+	 * @param array $add_html
+	 */
+	private static function maybe_add_html_required( $field, array &$add_html ) {
+		if ( in_array( $field['type'], array( 'radio', 'checkbox', 'file', 'data', 'lookup' ) ) ) {
+			return;
+		}
+
+		$include_html = ! class_exists( 'FrmProDb' ) || version_compare( FrmProDb::$plug_version, '3.06', '>' );
+		if ( $include_html ) {
+			$add_html['aria-required'] = 'aria-required="true"';
 		}
 	}
 
