@@ -2,9 +2,9 @@
 Contributors: formidableforms, sswells, srwells, jamie.wahlin
 Tags: forms, contact form, form builder, survey, form maker, form, form creator
 Requires at least: 4.5
-Tested up to: 5.0
+Tested up to: 5.1
 Requires PHP: 5.3
-Stable tag: 3.06
+Stable tag: 3.06.01
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quiz forms, and more.
 
@@ -374,6 +374,21 @@ Formidable Forms drag & drop form builder combined with our add-ons is the most 
 To get access to more features, integrations, and support, <a href="https://formidableforms.com/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">upgrade to Formidable Forms Pro</a>. A Pro license gives you access to the full version of Formidable Forms for more advanced contact forms, Formidable Views, graphs and stats, priority support, and Formidable Forms Add-ons!
 
 == Changelog ==
+= 3.06.01 =
+* Notice: The default HTML for field types with multiple inputs now use div instead of label for the field label for WCAG compliance. This will only affect new fields.
+* New: When saving a form, check if it is too long for the server settings. If so, show a notice along with information on how to fix it.
+* New: Better WCAG compliance. Added aria-required to required fields and aria-invalid when javascript validation is turned on.
+* New: Add functions to get a list of field, form, and global settings to translate for multilingual add-ons. This will make maintaining strings much easier without a delay.
+* New: Added frm_form_strings, frm_global_setting, frm_global_invalid_msg, frm_global_failed_msg, and frm_global_login_msg hooks for making adjustments to messages.
+* New: Add frm_field filter when a field is fetched individually with FrmField::getOne( x, true )
+* New: Allow the frm_scroll_box class to work on HTML fields instead of only accepting frm_html_scroll_box
+* Fix: The pagination lost styling in WP 5.1.
+* Fix: The saved CSS string was being autoloaded by WordPress since the transient didn't have an expiration.
+* Fix: Prevent the invisible recaptcha from adding empty space in some forms.
+* Fix: Form layouts with a long section of options in a radio or checkbox were adding extra spacing.
+* Fix: The templates page was showing a blank tile for expired licenses.
+* Fix: Submit button remained disabled after when the invisible reCaptcha validation failed.
+
 = 3.06 =
 * New: Add one-click form creation from a form template and adjust the way a new form is created
 * New: Add a new process for creating a custom form template
@@ -383,9 +398,5 @@ To get access to more features, integrations, and support, <a href="https://form
 * Fix: Prevent the 'Advanced' section from hiding on non-Formidable blocks
 * Fix: Some users were seeing PHP error messages in PHP 5.2
 * Fix: XML form exports set to use the default style were not correctly setting the style on import
-
-= 3.05 =
-* New: Add a new Forms block for use with the new WP editor
-* Fix: A false number was showing for number of plugin updates available when add-ons were not installed
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>

@@ -1,4 +1,19 @@
 == Changelog ==
+= 3.06.01 =
+* Notice: The default HTML for field types with multiple inputs now use div instead of label for the field label for WCAG compliance. This will only affect new fields.
+* New: When saving a form, check if it is too long for the server settings. If so, show a notice along with information on how to fix it.
+* New: Better WCAG compliance. Added aria-required to required fields and aria-invalid when javascript validation is turned on.
+* New: Add functions to get a list of field, form, and global settings to translate for multilingual add-ons. This will make maintaining strings much easier without a delay.
+* New: Added frm_form_strings, frm_global_setting, frm_global_invalid_msg, frm_global_failed_msg, and frm_global_login_msg hooks for making adjustments to messages.
+* New: Add frm_field filter when a field is fetched individually with FrmField::getOne( x, true )
+* New: Allow the frm_scroll_box class to work on HTML fields instead of only accepting frm_html_scroll_box
+* Fix: The pagination lost styling in WP 5.1.
+* Fix: The saved CSS string was being autoloaded by WordPress since the transient didn't have an expiration.
+* Fix: Prevent the invisible recaptcha from adding empty space in some forms.
+* Fix: Form layouts with a long section of options in a radio or checkbox were adding extra spacing.
+* Fix: The templates page was showing a blank tile for expired licenses.
+* Fix: Submit button remained disabled after when the invisible reCaptcha validation failed.
+
 = 3.06 =
 * New: Add one-click form creation from a form template and adjust the way a new form is created
 * New: Add a new process for creating a custom form template
