@@ -1,4 +1,5 @@
 <div id="form_settings_page" class="frm_wrap">
+	<form method="post" class="frm_form_settings">
 	<div class="frm_page_container">
 
 	<?php
@@ -38,14 +39,12 @@
 
 		<div id="post-body-content" class="frm-fields">
 
-			<form method="post" class="frm_form_settings">
 				<input type="hidden" name="id" id="form_id" value="<?php echo (int) $id; ?>" />
 				<input type="hidden" name="frm_action" value="update_settings" />
 				<?php wp_nonce_field( 'process_form_nonce', 'process_form' ); ?>
 
 				<div id="frm-categorydiv">
-					<div class="inside frm-inner-content">
-
+					<div class="inside frm-inner-content">>
 						<?php foreach ( $sections as $section ) { ?>
 							<div id="<?php echo esc_attr( $section['anchor'] ); ?>" class="tabs-panel <?php echo ( $current === $section['anchor'] ) ? ' frm_block' : ' frm_hidden'; ?>">
 								<h2>
@@ -68,11 +67,9 @@
 					</div>
 
 				</div>
-
-			</form>
-
 		</div>
 	<?php require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/sidebar-settings.php' ); ?>
 	</div>
 	</div>
+	</form>
 </div>
