@@ -18,8 +18,8 @@ cd ../../$plugin
 repo="$2"
 version="$3"
 attachment=
-if [ -f "../$repo-$version.zip" ]; then
-	attachment="../$repo-$version.zip"
+if [ -f "../$plugin-$version.zip" ]; then
+	attachment="../$plugin-$version.zip"
 fi
 attachment2=
 if [ ! -z "$4" ]; then
