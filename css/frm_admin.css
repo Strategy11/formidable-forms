@@ -312,10 +312,13 @@ h2#frm_form_heading,
 }
 
 .frm_wrap #frm_top_bar,
-.frm_wrap #frm-bar-two,
 .frm_wrap .columns-2 {
 	flex: 0 0 auto;
 	overflow: scroll;
+}
+
+.frm_wrap #frm-bar-two {
+	flex: 0 0 auto;
 }
 
 .frm_wrap #post-body-content {
@@ -2252,10 +2255,14 @@ li.ui-state-default.selected .frm-show-click.frm_import_options select {
 	font-weight: normal;
 }
 
+.frm-form-setting-tabs {
+	margin-top: 20px !important;
+}
+
 .frm-form-setting-tabs a {
-	font-size: 15px;
+	font-size: 16px;
 	color: var(--dark-grey);
-	padding: 15px;
+	padding: 15px 15px 15px 25px;
 	display: block;
 }
 
@@ -2492,6 +2499,19 @@ label.default-style-box input[type="checkbox"] {
 }
 
 /*Form Settings Tab*/
+.frm_form_settings h2 {
+	font-size: 20px;
+	border-bottom: 1px solid var(--grey-border);
+	padding-bottom: 10px;
+	margin-bottom: 0;
+	font-weight: normal;
+}
+
+.frm_form_settings .howto {
+	color: var(--medium-grey);
+	font-size: 15px;
+}
+
 .frm_form_settings .advanced_settings .form-table {
 	margin-top: 0;
 }
@@ -3431,6 +3451,10 @@ ul.frm-category-tabs {
 	outline: none;
 	-webkit-box-shadow: none;
 	box-shadow: none;
+}
+
+.frm-category-tabs > li.active a {
+	color: var(--primary-color);
 }
 
 #menu-management.frm-menu-boxes {

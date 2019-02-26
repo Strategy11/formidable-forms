@@ -152,42 +152,6 @@
 <!--Permissions Section-->
 <?php do_action( 'frm_add_form_perm_options', $values ); ?>
 
-<!--Styling & Buttons Section-->
-<h3><?php esc_html_e( 'Styling & Buttons', 'formidable' ); ?>
-	<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Select a style for this form and set the text for your buttons.', 'formidable' ); ?>" ></span>
-</h3>
-<table class="form-table">
-	<tr>
-		<td class="frm_left_label">
-			<label for="custom_style"><?php esc_html_e( 'Style Template', 'formidable' ); ?></label>
-		</td>
-		<td><select name="options[custom_style]" id="custom_style">
-			<option value="1" <?php selected( $values['custom_style'], 1 ); ?>>
-				<?php esc_html_e( 'Always use default', 'formidable' ); ?>
-			</option>
-			<?php foreach ( $styles as $s ) { ?>
-				<option value="<?php echo esc_attr( $s->ID ); ?>" <?php selected( $s->ID, $values['custom_style'] ); ?>>
-					<?php echo esc_html( $s->post_title . ( empty( $s->menu_order ) ? '' : ' (' . __( 'default', 'formidable' ) . ')' ) ); ?>
-				</option>
-				<?php } ?>
-				<option value="0"
-				<?php
-				selected( $values['custom_style'], 0 );
-				selected( $values['custom_style'], '' );
-				?>>
-				<?php esc_html_e( 'Do not use Formidable styling', 'formidable' ); ?>
-			</option>
-		</select></td>
-	</tr>
-	<tr>
-		<td><label><?php esc_html_e( 'Submit Button Text', 'formidable' ); ?></label></td>
-		<td>
-			<input type="text" name="options[submit_value]" value="<?php echo esc_attr( $values['submit_value'] ); ?>" />
-		</td>
-	</tr>
-	<?php do_action( 'frm_add_form_button_options', $values ); ?>
-</table>
-
 <!--Message Section-->
 <h3 id="frm_messages_header" class="<?php echo esc_attr( ( ( isset( $values['edit_action'] ) && $values['edit_action'] === 'message' && isset( $values['editable'] ) && $values['editable'] == 1 ) || $values['success_action'] === 'message' || isset( $values['save_draft'] ) && $values['save_draft'] == 1 ) ? '' : 'frm_hidden' ); ?>">
 	<?php esc_html_e( 'Messages', 'formidable' ); ?>

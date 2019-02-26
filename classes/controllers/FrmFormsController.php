@@ -879,10 +879,16 @@ class FrmFormsController {
 				'function' => 'advanced_settings',
 			),
 			array(
-				'name'   => __( 'Form Actions', 'formidable' ),
+				'name'   => __( 'Actions & Notifications', 'formidable' ),
 				'anchor' => 'email',
 				'class'    => __CLASS__,
 				'function' => 'email_settings',
+			),
+			array(
+				'name'   => __( 'Styling & Buttons', 'formidable' ),
+				'anchor' => 'buttons',
+				'class'    => __CLASS__,
+				'function' => 'buttons_settings',
 			),
 			array(
 				'name'     => __( 'Customize HTML', 'formidable' ),
@@ -918,7 +924,6 @@ class FrmFormsController {
 	 */
 	public static function advanced_settings( $values ) {
 		$first_h3 = 'frm_first_h3';
-		$styles   = apply_filters( 'frm_get_style_opts', array() );
 
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/settings-advanced.php' );
 	}
@@ -933,6 +938,17 @@ class FrmFormsController {
 		$form            = FrmForm::getOne( $values['id'] );
 
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/settings-email.php' );
+	}
+
+	/**
+	 * @since 4.0
+	 *
+	 * @param array $values
+	 */
+	public static function buttons_settings( $values ) {
+		$styles = apply_filters( 'frm_get_style_opts', array() );
+
+		include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/settings-buttons.php' );
 	}
 
 	/**

@@ -44,7 +44,7 @@
 				<?php wp_nonce_field( 'process_form_nonce', 'process_form' ); ?>
 
 				<div id="frm-categorydiv">
-					<div class="inside frm-inner-content">>
+					<div class="inside frm-inner-content">
 						<?php foreach ( $sections as $section ) { ?>
 							<div id="<?php echo esc_attr( $section['anchor'] ); ?>" class="tabs-panel <?php echo ( $current === $section['anchor'] ) ? ' frm_block' : ' frm_hidden'; ?>">
 								<h2>

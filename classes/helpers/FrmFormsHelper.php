@@ -104,12 +104,12 @@ class FrmFormsHelper {
 
 		?>
 		<div id="frm_bs_dropdown" class="dropdown <?php echo esc_attr( is_rtl() ? 'pull-right' : 'pull-left' ); ?>">
-			<h1>
-				<a href="#" id="frm-navbarDrop" class="frm-dropdown-toggle" data-toggle="dropdown">
+			<a href="#" id="frm-navbarDrop" class="frm-dropdown-toggle" data-toggle="dropdown">
+				<h1>
 					<?php echo esc_html( $name ); ?>
 					<b class="dashicons dashicons-arrow-down"></b>
-				</a>
-			</h1>
+				</h1>
+			</a>
 			<ul class="frm-dropdown-menu frm-on-top" role="menu" aria-labelledby="frm-navbarDrop">
 				<?php
 				foreach ( $forms as $form ) {
