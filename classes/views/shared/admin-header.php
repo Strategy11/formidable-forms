@@ -18,15 +18,26 @@
 		?>
 
 	<div class="frm_top_left">
-	<h1>
-		<?php echo esc_html( $atts['label'] ); ?>
-		<?php FrmAppHelper::add_new_item_link( $atts ); ?>
-		<?php if ( isset( $atts['cancel_link'] ) ) { ?>
-			<a href="<?php echo esc_url( $atts['cancel_link'] ); ?>" class="button button-secondary frm-button-secondary frm_animate_bg">
-				<?php esc_html_e( 'Cancel', 'formidable' ); ?>
-			</a>
-		<?php } ?>
-	</h1>
+		<a href="?page=formidable" class="frm-header-logo">
+		<?php
+		FrmAppHelper::show_logo(
+			array(
+				'height' => 35,
+				'width'  => 35,
+			)
+		);
+		?>
+		</a>
+
+		<h1>
+			<?php echo esc_html( $atts['label'] ); ?>
+			<?php FrmAppHelper::add_new_item_link( $atts ); ?>
+			<?php if ( isset( $atts['cancel_link'] ) ) { ?>
+				<a href="<?php echo esc_url( $atts['cancel_link'] ); ?>" class="button button-secondary frm-button-secondary frm_animate_bg">
+					<?php esc_html_e( 'Cancel', 'formidable' ); ?>
+				</a>
+			<?php } ?>
+		</h1>
 	</div>
 		<?php
 	}

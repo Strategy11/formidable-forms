@@ -1,4 +1,4 @@
-<div class="postbox-container frm-right-panel">
+<div class="frm-right-panel">
 	<div class="frm_field_list">
 		<ul id="frm-nav-tabs">
 			<li class="frm-tabs">

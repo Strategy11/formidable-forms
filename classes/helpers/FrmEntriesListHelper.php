@@ -112,7 +112,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 		if ( $which == 'top' && empty( $form_id ) ) {
 			echo '<div class="alignleft actions">';
 			echo FrmFormsHelper::forms_dropdown( 'form', $form_id, array( 'blank' => __( 'View all forms', 'formidable' ) ) ); // WPCS: XSS ok.
-			submit_button( __( 'Filter', 'formidable' ), 'filter_action', '', false, array( 'id' => 'post-query-submit' ) );
+			submit_button( __( 'Filter', 'formidable' ), 'filter_action action', '', false, array( 'id' => 'post-query-submit' ) );
 			echo '</div>';
 		}
 	}

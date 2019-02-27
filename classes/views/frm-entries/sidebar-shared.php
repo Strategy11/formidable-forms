@@ -52,6 +52,14 @@
 			<?php esc_html_e( 'Entry Key', 'formidable' ); ?>:
 			<b><?php echo esc_html( $entry->item_key ); ?></b>
 		</div>
+
+		<?php if ( $entry->parent_item_id ) { ?>
+			<div class="misc-pub-section">
+				<i aria-hidden="true" class="dashicons dashicons-networking"></i>
+				<?php esc_html_e( 'Parent Entry ID', 'formidable' ); ?>:
+				<b><?php echo esc_html( $entry->parent_item_id ); ?></b>
+			</div>
+		<?php } ?>
 	</div>
 </div>
 

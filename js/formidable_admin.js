@@ -77,6 +77,28 @@ function frmAdminBuildJS() {
 		}
 	}
 
+	function toggleItem( e ) {
+		/*jshint validthis:true */
+		var toggle = this.getAttribute( 'data-frmtoggle' ),
+			text = this.getAttribute( 'data-toggletext' ),
+			items = jQuery( toggle );
+
+		e.preventDefault();
+
+		if ( items.is( ':visible' ) ) {
+			items.show();
+		} else {
+			items.hide();
+		}
+
+		if ( text !== null && text !== '' ) {
+			this.setAttribute( 'data-toggletext', this.innerHTML );
+			this.innerHTML = text;
+		}
+
+		return false;
+	}
+
 	function loadTooltips() {
 		var tooltipOpts = {
 			template: '<div class="frm_tooltip tooltip"><div class="tooltip-inner"></div></div>',
@@ -88,6 +110,7 @@ function frmAdminBuildJS() {
 
 		wrapClass.on( 'click', '.frm_remove_tag, .frm_remove_form_action', removeThisTag );
 		wrapClass.on( 'click', 'a[data-frmverify]', confirmClick );
+		wrapClass.on( 'click', 'a[data-frmtoggle]', toggleItem );
 		wrapClass.on( 'click', '.widget-top,a.widget-action', clickWidget );
 
 		wrapClass.on( 'mouseenter.frm', '.frm_help', function() {
@@ -3106,7 +3129,6 @@ function frmAdminBuildJS() {
 
 	function initNewFormModal() {
 		var $info = initModal( '#frm_form_modal', '650px' );
-		console.log( $info );
 		if ( $info === false ) {
 			return;
 		}
@@ -3444,7 +3466,7 @@ function frmAdminBuildJS() {
 			} );
 			jQuery( '.starttab a' ).trigger( 'click' );
 
-			// submit the search for with dropdown
+			// submit the search form with dropdown
 			jQuery( '#frm-fid-search-menu a' ).click( function() {
 				var val = this.id.replace( 'fid-', '' );
 				jQuery( 'select[name="fid"]' ).val( val );

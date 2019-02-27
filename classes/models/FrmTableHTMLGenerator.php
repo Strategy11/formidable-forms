@@ -61,7 +61,6 @@ class FrmTableHTMLGenerator {
 		$this->init_direction( $atts );
 		$this->init_table_style();
 		$this->init_td_style();
-
 	}
 
 	/**
@@ -91,6 +90,8 @@ class FrmTableHTMLGenerator {
 				$this->style_settings[ $key ] = $this->get_color_markup( $this->style_settings[ $key ] );
 			}
 		}
+
+		$this->style_settings['class'] = isset( $atts['class'] ) ? $atts['class'] : '';
 	}
 
 	/**
@@ -130,6 +131,10 @@ class FrmTableHTMLGenerator {
 			$this->table_style = ' style="' . esc_attr( 'font-size:' . $this->style_settings['font_size'] . ';line-height:135%;' );
 			$this->table_style .= esc_attr( 'border-bottom:' . $this->style_settings['border_width'] . ' solid ' . $this->style_settings['border_color'] . ';' ) . '"';
 
+		}
+
+		if ( ! empty( $this->style_settings['class'] ) ) {
+			$this->table_style .= ' class="' . esc_attr( $this->style_settings['class'] ) . '"';
 		}
 	}
 
@@ -257,7 +262,11 @@ class FrmTableHTMLGenerator {
 	 * @return string
 	 */
 	public function generate_two_cell_table_row( $label, $value ) {
-		$row = '<tr' . $this->tr_style() . '>';
+		$row = '<tr' . $this->tr_style();
+		if ( $value === '' ) {
+			$row .= ' class="frm-empty-row"';
+		}
+		$row .= '>';
 
 		if ( 'rtl' == $this->direction ) {
 			$first  = $value;

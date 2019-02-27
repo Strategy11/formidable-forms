@@ -25,7 +25,7 @@
 	</div>
 
 	<div class="columns-2">
-		<div class="postbox-container frm-right-panel">
+		<div class="frm-right-panel">
 			<ul class="frm-category-tabs frm-form-setting-tabs">
 				<?php foreach ( $sections as $section ) { ?>
 					<li class="<?php echo esc_attr( $current === $section['anchor'] ? 'tabs active' : '' ); ?>">

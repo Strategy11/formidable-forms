@@ -15,30 +15,6 @@
 	display:initial;
 }
 
-.frm-alt-table {
-	width:100%;
-	border-collapse:collapse;
-	margin-top:0.5em;
-	font-size:15px;
-}
-
-.frm-alt-table th {
-	width:200px;
-}
-
-.frm-alt-table th,
-.frm-alt-table td {
-	background-color:transparent;
-	vertical-align:top;
-	text-align:left;
-	padding:20px;
-}
-
-.frm-alt-table tr:nth-child(odd) th,
-.frm-alt-table tr:nth-child(odd) td {
-	background-color:rgba(40, 47, 54, .03);
-}
-
 .frm_clear_none{
     clear:none;
 }

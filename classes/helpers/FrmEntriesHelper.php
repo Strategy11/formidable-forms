@@ -539,7 +539,7 @@ class FrmEntriesHelper {
 		$links = self::get_action_links( $id, $atts['entry'] );
 
 		foreach ( $links as $link ) {
-		?>
+			?>
 		<div class="misc-pub-section">
 			<a href="<?php echo esc_url( $link['url'] ); ?>"
 				<?php
@@ -554,7 +554,7 @@ class FrmEntriesHelper {
 				<span class="frm_link_label"><?php echo esc_html( $link['label'] ); ?></span>
 			</a>
 		</div>
-		<?php
+			<?php
 		}
 	}
 

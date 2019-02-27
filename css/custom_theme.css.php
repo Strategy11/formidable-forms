@@ -408,6 +408,33 @@ a.frm_save_draft{
 	border-right:none;
 }
 
+.frm-alt-table {
+	width:100%;
+	border-collapse:collapse;
+	margin-top:0.5em;
+	font-size:15px;
+}
+
+.frm-alt-table th {
+	width:200px;
+}
+
+.frm-alt-table tr {
+	background-color:transparent;
+}
+
+.frm-alt-table th,
+.frm-alt-table td {
+	background-color:transparent;
+	vertical-align:top;
+	text-align:left;
+	padding:20px;
+}
+
+.frm-alt-table tr:nth-child(even) {
+	background-color:<?php echo esc_html( FrmStylesHelper::adjust_brightness( $defaults['border_color'], 45 ) ); ?>;
+}
+
 table.form_results.with_frm_style{
 	border:1px solid #ccc;
 }
@@ -426,7 +453,7 @@ table.form_results.with_frm_style tr.frm_even,
 
 table.form_results.with_frm_style tr.frm_odd,
 .frm-grid .frm_odd{
-	background-color:<?php echo esc_html( $defaults['bg_color_active'] ); ?>;
+	background-color:<?php echo esc_html( FrmStylesHelper::adjust_brightness( $defaults['border_color'], 45 ) ); ?>;
 }
 
 .frm_collapse .ui-icon{

@@ -22,12 +22,6 @@ a, .widget .widget-top, .postbox h3, .stuffbox h3 {
 	text-decoration: none;
 }
 
-.frm_wrap .postbox h3.hndle {
-	cursor: default;
-	padding: 10px 20px;
-	margin: 0;
-}
-
 a.frm_confirming:hover,
 a.frm_confirming:focus,
 a.frm_confirming,
@@ -47,7 +41,7 @@ a.frm_confirming,
 }
 
 #form_show_entry_page #post-body-content {
-	border-right: 1px solid #e5e5e5;
+	border-right: 1px solid var(--grey-border);
 }
 
 .formidable_page_formidable-pro-upgrade #wpfooter,
@@ -82,6 +76,14 @@ a.frm_confirming,
 .frm-white-body #screen-meta-links .screen-meta-toggle {
 	position: absolute;
 	right: 90px;
+}
+
+.frm-white-body .columns-2 {
+	border-bottom: 1px solid var(--grey-border);
+}
+
+.frm-full-screen .columns-2 {
+	border: none;
 }
 
 html.wp-toolbar .frm-full-screen {
@@ -148,8 +150,15 @@ td.column-title .frm_actions_dropdown {
 	margin: 0;
 	box-sizing: border-box;
 	text-align: center;
-	padding: 0 15px;
+}
+
+.frm_page_container #frm_top_bar {
 	border-bottom: 1px solid var(--grey-border);
+	padding: 0 20px;
+}
+
+.frm-full-screen #frm_top_bar {
+	padding: 0 15px;
 }
 
 .post-type-frm_display.post-php #frm_form_heading,
@@ -173,12 +182,31 @@ td.column-title .frm_actions_dropdown {
 	color: var(--medium-grey);
 }
 
+.frm_wrap a {
+	color: var(--primary-color);
+}
+
+.frm_wrap a:active,
+.frm_wrap a:hover {
+	color: var(--primary-hover);
+	box-shadow: none;
+}
+
+.frm_wrap a:focus {
+	box-shadow: none;
+	outline: 3px solid var(--blue-border);
+}
+
 .frm_top_left {
-	float: left;
+	text-align: left;
 }
 
 .frm-header-logo {
 	float: left;
+	margin: 0 15px 0 0;
+}
+
+.frm_page_container .frm-header-logo {
 	margin: 13px 0 0;
 }
 
@@ -211,7 +239,6 @@ ul.frm_form_nav > li {
 }
 
 .frm_form_nav > li > a:hover {
-	color: var(--primary-hover);
 	border-color: var(--primary-hover);
 }
 
@@ -249,9 +276,16 @@ ul.frm_form_nav > li {
 	display: block;
 	width: 100%;
 	border-bottom: 1px solid var(--grey-border);
-	padding: 15px;
 	box-sizing: border-box;
 	text-align: center;
+}
+
+.frm-white-body #frm-bar-two {
+	padding: 15px 40px;
+}
+
+.frm-full-screen #frm-bar-two {
+	padding: 15px;
 }
 
 #frm-bar-two h1 {
@@ -271,10 +305,10 @@ ul.frm_form_nav > li {
 
 #frm-bar-two h2 {
 	float: left;
-	margin: 0 15px;
-	padding: 2px 15px;
+	margin: 0 0 0 15px;
+	padding: 2px 0 2px 15px;
 	font-weight: normal;
-	border-left: 1px solid var(--grey);
+	border-left: 2px solid var(--grey);
 }
 
 #frm-bar-two .frm_updated_message {
@@ -301,6 +335,29 @@ ul.frm_form_nav > li {
 #frm-publishing > button {
 	float: left;
 	margin: 0 10px;
+}
+
+.frm_wrap .postbox {
+	border-color: var(--grey-border);
+	border-radius: 6px;
+}
+
+.frm_wrap .postbox h3.hndle {
+	cursor: default;
+	padding: 10px 20px;
+	margin: 0;
+	line-height: 1.4em;
+	border-color: var(--grey-border);
+}
+
+.frm-pre-hndle {
+	font-size: 15px;
+	padding: 5px;
+	margin: 9px 15px;
+}
+
+.frm-empty-row {
+	display: none;
 }
 
 .frm_animate_bg {
@@ -331,6 +388,7 @@ h2#frm_form_heading,
 	display: flex;
 	flex-direction: column;
 	overflow: hidden;
+	padding-top: 0;
 }
 
 .frm_wrap #frm_top_bar,
@@ -398,16 +456,6 @@ h2#frm_form_heading,
 	border-width: 0 0 1px;
 	width: 100%;
 	min-width: unset;
-}
-
-.frm_single_entry_page .frm-right-panel .postbox,
-.frm_wrap #submitdiv.frm-no-border {
-	border: none;
-	box-shadow: none;
-}
-
-.frm_single_entry_page .frm-right-panel .postbox {
-	margin-top: 10px;
 }
 
 .frm_wrap #frm_adv_info .handlediv,
@@ -530,27 +578,6 @@ h2#frm_form_heading,
 #titlediv #title {
 	line-height: 1.5;
 	height: auto;
-}
-
-.frm_page_container {
-	padding-top: 0;
-}
-
-.frm_no_sidebar #post-body-content {
-	width: auto;
-}
-
-.frm_no_sidebar #titlediv {
-	width: 570px;
-	float: left;
-}
-
-.frm_no_sidebar .postbox-container {
-	float: right;
-}
-
-#poststuff .frm_no_sidebar .postbox-container {
-	width: auto;
 }
 
 .frm_sidebar select {
@@ -889,10 +916,14 @@ input.frm_insert_in_template {
 
 .post-type-frm_display .wrap > #posts-filter,
 .post-type-frm_display .wrap > .subsubsub,
-.frm_single_entry_page .frm_form_fields,
 .frm_single_entry_page .frm_form_fields + p,
 .frm_form_settings > p {
 	margin: 6px 40px;
+	padding: 0;
+}
+
+.frm_single_entry_page .frm_form_fields {
+	margin: 40px;
 	padding: 0;
 }
 
@@ -2083,6 +2114,33 @@ table.frm_name_value textarea {
 	padding: 0;
 }
 
+.frm-alt-table {
+	width:100%;
+	border-collapse:collapse;
+	margin-top:0.5em;
+	font-size:15px;
+}
+
+.frm-alt-table th {
+	width:200px;
+}
+
+.frm-alt-table tr {
+	background-color:transparent;
+}
+
+.frm-alt-table th,
+.frm-alt-table td {
+	background-color:transparent;
+	vertical-align:top;
+	text-align:left;
+	padding:20px;
+}
+
+.frm-alt-table tr:nth-child(even) {
+	background-color: var(--sidebar-color);
+}
+
 table td, .form-table tr td {
 	vertical-align: top;
 }
@@ -2278,6 +2336,15 @@ li.ui-state-default.selected .frm-show-click.frm_import_options select {
 	margin-top: 20px !important;
 }
 
+.frm-right-panel > .postbox {
+	background-color: transparent;
+	border: none;
+	box-shadow: none;
+	margin: 0;
+}
+
+.frm-right-panel .postbox.frm_with_icons .inside,
+.frm-right-panel .postbox .inside,
 .frm-right-panel .inside {
 	font-size: 16px;
 	padding: 15px 20px 20px;
@@ -2285,7 +2352,8 @@ li.ui-state-default.selected .frm-show-click.frm_import_options select {
 }
 
 .frm-right-panel .misc-pub-section {
-	padding: 7px 0;
+	padding: 10px 0;
+	line-height: 1.4em;
 }
 
 .frm-right-panel .inside a,
@@ -2297,7 +2365,7 @@ li.ui-state-default.selected .frm-show-click.frm_import_options select {
 }
 
 .frm-right-panel .inside a {
-	padding: 3px;
+	padding: 0;
 	color: var(--primary-color);
 	display: inline-block;
 }
@@ -2316,6 +2384,7 @@ li.ui-state-default.selected .frm-show-click.frm_import_options select {
 	margin: 0 5px;
 	display: inline-block;
 	width: 20px;
+	height: 20px;
 	color: var(--grey);
 }
 
@@ -2901,8 +2970,7 @@ label.frm_action_events {
 #poststuff .frm_form_settings .widget-inside h3,
 #poststuff .frm_form_settings .advanced_settings h3,
 #poststuff .frm_settings_form h3,
-#frm_advanced .inside h3,
-#form_show_entry_page .inside h3 {
+#frm_advanced .inside h3 {
 	border-top: 1px solid #eee;
 	border-bottom: none;
 	margin: 15px -15px 0;
