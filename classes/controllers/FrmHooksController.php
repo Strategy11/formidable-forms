@@ -97,7 +97,6 @@ class FrmHooksController {
 
 		// Entries Controller.
 		add_action( 'admin_menu', 'FrmEntriesController::menu', 12 );
-		add_filter( 'contextual_help', 'FrmEntriesController::contextual_help', 10, 3 );
 		add_filter( 'set-screen-option', 'FrmEntriesController::save_per_page', 10, 3 );
 		add_filter( 'update_user_metadata', 'FrmEntriesController::check_hidden_cols', 10, 5 );
 		add_action( 'updated_user_meta', 'FrmEntriesController::update_hidden_cols', 10, 4 );

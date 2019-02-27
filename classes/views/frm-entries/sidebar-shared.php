@@ -1,19 +1,33 @@
+<div class="frm_with_icons frm_no_print">
+	<h3>
+		<?php esc_html_e( 'Entry Actions', 'formidable' ); ?>
+	</h3>
+	<div class="inside">
+		<?php FrmEntriesHelper::actions_dropdown( compact( 'id', 'entry' ) ); ?>
+		<?php do_action( 'frm_entry_major_pub', $entry ); ?>
+		<div class="clear"></div>
 
-<div class="postbox frm_with_icons" >
-	<h3 class="hndle">
-		<span><?php esc_html_e( 'Entry Details', 'formidable' ); ?></span>
-		<?php if ( FrmAppHelper::get_param( 'frm_action' ) != 'show' ) { ?>
-			<a href="?page=formidable-entries&amp;frm_action=show&amp;id=<?php echo absint( $entry->id ); ?>" class="alignright">
-				<?php esc_html_e( 'View Entry', 'formidable' ); ?>
-			</a>
+		<?php if ( has_action( 'frm_show_entry_publish_box' ) ) { ?>
+			<div id="minor-publishing" class="frm_remove_border">
+				<div class="misc-pub-section">
+					<?php do_action( 'frm_show_entry_publish_box', $entry ); ?>
+					<div class="clear"></div>
+				</div>
+			</div>
 		<?php } ?>
+	</div>
+</div>
+
+<div class="frm_with_icons">
+	<h3>
+		<?php esc_html_e( 'Entry Details', 'formidable' ); ?>
 	</h3>
 	<div class="inside">
 		<?php include( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/_sidebar-shared-pub.php' ); ?>
 
 		<?php if ( $entry->post_id ) { ?>
 			<div class="misc-pub-section frm_no_print">
-				<span class="dashicons dashicons-admin-post wp-media-buttons-icon"></span>
+				<i aria-hidden="true" class="dashicons dashicons-admin-post wp-media-buttons-icon"></i>
 				<?php esc_html_e( 'Post', 'formidable' ); ?>:
 				<b><?php echo esc_html( get_the_title( $entry->post_id ) ); ?></b>
 				<span>
@@ -28,21 +42,25 @@
 		<?php } ?>
 
 		<div class="misc-pub-section">
-			<span class="dashicons dashicons-id wp-media-buttons-icon"></span>
+			<i aria-hidden="true" class="dashicons dashicons-id wp-media-buttons-icon"></i>
 			<?php esc_html_e( 'Entry ID', 'formidable' ); ?>:
 			<b><?php echo absint( $entry->id ); ?></b>
 		</div>
 
 		<div class="misc-pub-section">
-			<span class="dashicons dashicons-post-status wp-media-buttons-icon"></span>
+			<i aria-hidden="true" class="dashicons dashicons-post-status wp-media-buttons-icon"></i>
 			<?php esc_html_e( 'Entry Key', 'formidable' ); ?>:
 			<b><?php echo esc_html( $entry->item_key ); ?></b>
 		</div>
+	</div>
+</div>
 
-		<?php if ( FrmAppHelper::pro_is_installed() ) { ?>
-			<?php if ( $entry->user_id ) { ?>
-				<div class="misc-pub-section">
-					<span class="dashicons dashicons-admin-users wp-media-buttons-icon"></span>
+<div class="frm_with_icons">
+	<h3><?php esc_html_e( 'User Information', 'formidable' ); ?></h3>
+	<div class="inside">
+		<?php if ( $entry->user_id ) { ?>
+			<div class="misc-pub-section">
+				<i aria-hidden="true" class="dashicons dashicons-admin-users wp-media-buttons-icon"></i>
 				<?php
 				printf(
 					/* translators: %1$s: User display name. */
@@ -50,12 +68,12 @@
 					FrmAppHelper::kses( FrmFieldsHelper::get_user_display_name( $entry->user_id, 'display_name', array( 'link' => true ) ), array( 'a' ) )
 				); // WPCS: XSS ok.
 				?>
-				</div>
-			<?php } ?>
+			</div>
+		<?php } ?>
 
-			<?php if ( $entry->updated_by && $entry->updated_by != $entry->user_id ) { ?>
-				<div class="misc-pub-section">
-					<span class="dashicons dashicons-admin-users wp-media-buttons-icon"></span>
+		<?php if ( $entry->updated_by && $entry->updated_by != $entry->user_id ) { ?>
+			<div class="misc-pub-section">
+				<i aria-hidden="true" class="dashicons dashicons-admin-users wp-media-buttons-icon"></i>
 				<?php
 				printf(
 					/* translators: %1$s: User display name. */
@@ -63,34 +81,30 @@
 					FrmAppHelper::kses( FrmFieldsHelper::get_user_display_name( $entry->updated_by, 'display_name', array( 'link' => true ) ), array( 'a' ) )
 				); // WPCS: XSS ok.
 				?>
-				</div>
-			<?php } ?>
+			</div>
 		<?php } ?>
 
-	</div>
-</div>
-
-<div class="postbox">
-	<h3 class="hndle"><span><?php esc_html_e( 'User Information', 'formidable' ); ?></span></h3>
-	<div class="inside">
 		<?php if ( ! empty( $entry->ip ) ) { ?>
 			<div class="misc-pub-section">
-			<?php esc_html_e( 'IP Address', 'formidable' ); ?>:
+				<i aria-hidden="true" class="dashicons dashicons-location"></i>
+				<?php esc_html_e( 'IP Address:', 'formidable' ); ?>
 				<b><?php echo esc_html( $entry->ip ); ?></b>
 			</div>
 		<?php } ?>
 
 		<?php if ( isset( $browser ) ) { ?>
 			<div class="misc-pub-section">
-				<b><?php esc_html_e( 'Browser/OS', 'formidable' ); ?></b>:<br/>
-				<?php echo wp_kses_post( $browser ); ?>
+				<i aria-hidden="true" class="dashicons dashicons-desktop"></i>
+				<?php esc_html_e( 'Browser/OS:', 'formidable' ); ?>
+				<b><?php echo wp_kses_post( $browser ); ?></b>
 			</div>
 		<?php } ?>
 
 		<?php if ( isset( $data['referrer'] ) ) { ?>
 			<div class="misc-pub-section frm_force_wrap">
-				<b><?php esc_html_e( 'Referrer', 'formidable' ); ?></b>:<br/>
-			<?php echo wp_kses_post( str_replace( "\r\n", '<br/>', $data['referrer'] ) ); ?>
+				<i aria-hidden="true" class="dashicons dashicons-backup"></i>
+				<?php esc_html_e( 'Referrer:', 'formidable' ); ?>
+				<?php echo wp_kses_post( str_replace( "\r\n", '<br/>', $data['referrer'] ) ); ?>
 			</div>
 		<?php } ?>
 
@@ -101,8 +115,9 @@
 			}
 			?>
 			<div class="misc-pub-section">
-				<b><?php echo esc_html( ucfirst( str_replace( '-', ' ', $k ) ) ); ?></b>:
-			<?php echo wp_kses_post( implode( ', ', (array) $d ) ); ?>
+				<i aria-hidden="true" class="dashicons dashicons-paperclip"></i>
+				<?php echo esc_html( ucfirst( str_replace( '-', ' ', $k ) ) ); ?>:
+				<b><?php echo wp_kses_post( implode( ', ', (array) $d ) ); ?></b>
 			</div>
 			<?php
 			unset( $k, $d );

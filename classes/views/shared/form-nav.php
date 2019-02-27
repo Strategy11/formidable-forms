@@ -15,7 +15,12 @@ FrmAppHelper::show_logo(
 foreach ( $nav_items as $nav_item ) {
 	if ( current_user_can( $nav_item['permission'] ) ) {
 		?>
-		<li><a<?php FrmAppHelper::select_current_page( $nav_item['page'], $current_page, $nav_item['current'] ); ?> href="<?php echo esc_url( $nav_item['link'] ); ?>"><?php echo esc_html( $nav_item['label'] ); ?></a> </li>
+		<li>
+			<a href="<?php echo esc_url( $nav_item['link'] ); ?>"
+				<?php FrmAppHelper::select_current_page( $nav_item['page'], $current_page, $nav_item['current'] ); ?>>
+				<?php echo esc_html( $nav_item['label'] ); ?>
+			</a>
+		</li>
 		<?php
 	}
 }

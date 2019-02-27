@@ -30,6 +30,7 @@
 				<?php foreach ( $sections as $section ) { ?>
 					<li class="<?php echo esc_attr( $current === $section['anchor'] ? 'tabs active' : '' ); ?>">
 						<a href="#<?php echo esc_attr( $section['anchor'] ); ?>">
+							<span class="<?php echo esc_attr( $section['icon'] ); ?>" aria-hidden="true"></span>
 							<?php echo esc_html( $section['name'] ); ?>
 						</a>
 					</li>

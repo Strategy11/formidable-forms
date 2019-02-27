@@ -22,8 +22,10 @@ a, .widget .widget-top, .postbox h3, .stuffbox h3 {
 	text-decoration: none;
 }
 
-.postbox h3.hndle {
+.frm_wrap .postbox h3.hndle {
 	cursor: default;
+	padding: 10px 20px;
+	margin: 0;
 }
 
 a.frm_confirming:hover,
@@ -33,6 +35,7 @@ a.frm_confirming,
 	color: #f37656 !important;
 }
 
+#frm-bar-two + .wrap,
 .frm_wrap > .wrap {
 	margin: 10px 40px 30px;
 }
@@ -41,6 +44,10 @@ a.frm_confirming,
 .toplevel_page_formidable #post-body-content {
 	margin-bottom: 26px;
 	border-left: 1px solid #e5e5e5;
+}
+
+#form_show_entry_page #post-body-content {
+	border-right: 1px solid #e5e5e5;
 }
 
 .formidable_page_formidable-pro-upgrade #wpfooter,
@@ -70,6 +77,11 @@ a.frm_confirming,
 
 .frm-full-screen #wpfooter {
 	display: none;
+}
+
+.frm-white-body #screen-meta-links .screen-meta-toggle {
+	position: absolute;
+	right: 90px;
 }
 
 html.wp-toolbar .frm-full-screen {
@@ -135,11 +147,8 @@ td.column-title .frm_actions_dropdown {
 	padding: 25px 40px 25px;
 	margin: 0;
 	box-sizing: border-box;
-}
-
-.frm-full-screen #frm_top_bar {
-	padding: 0 15px;
 	text-align: center;
+	padding: 0 15px;
 	border-bottom: 1px solid var(--grey-border);
 }
 
@@ -216,10 +225,14 @@ ul.frm_form_nav > li {
 }
 
 .frm-full-close {
-	display: block;
+	display: none;
 	float: right;
 	padding: 15px 0 15px 15px;
 	border-left: 1px solid var(--grey-border);
+}
+
+.frm-full .frm-full-close {
+	display: block;
 }
 
 .frm-full-close a {
@@ -247,12 +260,21 @@ ul.frm_form_nav > li {
 	font-size: 24px;
 }
 
-#frm-bar-two h1 a {
-	color: var(--dark-grey);
+#frm-bar-two h2,
+#frm-bar-two h1 {
+	color: var(--medium-grey);
 }
 
 #frm-bar-two #frm_bs_dropdown {
 	float: left;
+}
+
+#frm-bar-two h2 {
+	float: left;
+	margin: 0 15px;
+	padding: 2px 15px;
+	font-weight: normal;
+	border-left: 1px solid var(--grey);
 }
 
 #frm-bar-two .frm_updated_message {
@@ -450,11 +472,11 @@ h2#frm_form_heading,
 	box-shadow: none;
 }
 
-.frm-advanced-fields {
+.frm-right-panel h3 {
 	color: var(--grey);
 	font-size: 15px;
 	font-weight: normal;
-	border-bottom: 1px solid var(--grey-border);
+	border-bottom: 1px solid var(--sidebar-hover);
 	margin: 0;
 	padding: 10px 10px 10px 25px;
 }
@@ -2050,10 +2072,7 @@ table.frm_name_value textarea {
 
 
 #frm-options-panel h3 {
-	border-bottom: 2px solid var(--lightest-grey);
-	margin: 0;
 	padding: 10px 0;
-	font-weight: normal;
 }
 
 .frm_field_key {
@@ -2259,15 +2278,49 @@ li.ui-state-default.selected .frm-show-click.frm_import_options select {
 	margin-top: 20px !important;
 }
 
+.frm-right-panel .inside {
+	font-size: 16px;
+	padding: 15px 20px 20px;
+	color: var(--dark-grey);
+}
+
+.frm-right-panel .misc-pub-section {
+	padding: 7px 0;
+}
+
+.frm-right-panel .inside a,
 .frm-form-setting-tabs a {
 	font-size: 16px;
 	color: var(--dark-grey);
-	padding: 15px 15px 15px 25px;
+	padding: 15px 15px 15px 20px;
 	display: block;
+}
+
+.frm-right-panel .inside a {
+	padding: 3px;
+	color: var(--primary-color);
+	display: inline-block;
+}
+
+.frm-right-panel .inside a:hover {
+	color: var(--primary-hover);
 }
 
 .frm-form-setting-tabs a:hover {
 	background: var(--sidebar-hover);
+	color: var(--dark-grey);
+}
+
+.frm-right-panel .inside i,
+.frm-form-setting-tabs a span {
+	margin: 0 5px;
+	display: inline-block;
+	width: 20px;
+	color: var(--grey);
+}
+
+.frm-right-panel .inside a:hover i,
+.frm-form-setting-tabs a:hover span {
 	color: var(--dark-grey);
 }
 
@@ -2505,6 +2558,15 @@ label.default-style-box input[type="checkbox"] {
 	padding-bottom: 10px;
 	margin-bottom: 0;
 	font-weight: normal;
+}
+
+.frm_form_settings h3 {
+	font-size: 16px;
+	border-top: 1px solid var(--grey-border);
+	padding-top: 10px;
+	font-weight: normal;
+	text-transform: uppercase;
+	color: var(--medium-grey);
 }
 
 .frm_form_settings .howto {
@@ -3453,6 +3515,7 @@ ul.frm-category-tabs {
 	box-shadow: none;
 }
 
+.frm-category-tabs > li.active span,
 .frm-category-tabs > li.active a {
 	color: var(--primary-color);
 }
@@ -3677,6 +3740,15 @@ ul.frm-category-tabs {
 	width: 30%;
 	border-radius: 0 var(--border-radius) var(--border-radius) 0;
 	text-align: center;
+	background-color: var(--lightest-grey);
+}
+
+.frm-search #search-submit a {
+	color: var(--primary-color);
+}
+
+.frm-search #search-submit .caret {
+	border-top-color: var(--primary-color);
 }
 
 select[name="m"] {
@@ -3693,10 +3765,6 @@ select[name="m"] {
 
 .frm_shortcode_select .frm_subopt {
 	margin-left: 2em;
-}
-
-#frm_shortcode.frm_first_h3 {
-	display: inline-block;
 }
 
 .misc-pub-section a.edit-frm_shortcode, .misc-pub-section a.edit-form-status {

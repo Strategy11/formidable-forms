@@ -65,8 +65,10 @@ class FrmAppController {
 	 */
 	private static function is_full_screen() {
 		$action = FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
+		$full_builder = FrmAppHelper::is_admin_page( 'formidable' ) && ( $action === 'edit' || $action === 'settings' );
+		$full_entries = FrmAppHelper::is_admin_page( 'formidable-entries' ) && FrmAppHelper::simple_get( 'frm-full', 'absint' );
 
-		return FrmAppHelper::is_admin_page( 'formidable' ) && ( $action === 'edit' || $action === 'settings' );
+		return $full_builder || $full_entries;
 	}
 
 	public static function load_wp_admin_style() {
@@ -123,7 +125,7 @@ class FrmAppController {
 				'permission' => 'frm_edit_forms',
 			),
 			array(
-				'link'       => admin_url( 'admin.php?page=formidable-entries&frm_action=list&form=' . absint( $id ) ),
+				'link'       => admin_url( 'admin.php?page=formidable-entries&frm-full=1&frm_action=list&form=' . absint( $id ) ),
 				'label'      => __( 'Entries', 'formidable' ),
 				'current'    => array(),
 				'page'       => 'formidable-entries',

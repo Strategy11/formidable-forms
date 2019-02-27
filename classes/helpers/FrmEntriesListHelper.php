@@ -188,7 +188,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 				$r .= "<td $attributes>";
 				if ( $column_name == $action_col ) {
-					$edit_link = '?page=formidable-entries&frm_action=edit&id=' . $item->id;
+					$edit_link = '?page=formidable-entries&frm_action=edit&id=' . $item->id . $this->full_screen_link();
 					$r         .= '<a href="' . esc_url( isset( $actions['edit'] ) ? $edit_link : $view_link ) . '" class="row-title" >' . $val . '</a> ';
 					$r         .= $action_links;
 				} else {
@@ -251,14 +251,21 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 * @param string $view_link
 	 */
 	private function get_actions( &$actions, $item, $view_link ) {
-		$actions['view'] = '<a href="' . esc_url( $view_link ) . '">' . __( 'View', 'formidable' ) . '</a>';
+		$append = $this->full_screen_link();
+
+		$actions['view'] = '<a href="' . esc_url( $view_link . $append ) . '">' . __( 'View', 'formidable' ) . '</a>';
 
 		if ( current_user_can( 'frm_delete_entries' ) ) {
-			$delete_link       = '?page=formidable-entries&frm_action=destroy&id=' . $item->id . '&form=' . $this->params['form'];
-			$actions['delete'] = '<a href="' . esc_url( wp_nonce_url( $delete_link ) ) . '" class="submitdelete" data-frmverify="' . esc_attr__( 'Are you sure?', 'formidable' ) . '">' . __( 'Delete', 'formidable' ) . '</a>';
+			$delete_link       = '?page=formidable-entries&frm_action=destroy&id=' . $item->id . '&form=' . $this->params['form'] . $append;
+			$actions['delete'] = '<a href="' . esc_url( wp_nonce_url( $delete_link . $append ) ) . '" class="submitdelete" data-frmverify="' . esc_attr__( 'Are you sure?', 'formidable' ) . '">' . __( 'Delete', 'formidable' ) . '</a>';
 		}
 
 		$actions = apply_filters( 'frm_row_actions', $actions, $item );
+	}
+
+	private function full_screen_link() {
+		$full_screen = FrmAppHelper::simple_get( 'frm-full', 'absint' );
+		return $full_screen ? '&frm-full=1' : '';
 	}
 
 	private function get_column_value( $item, &$val ) {

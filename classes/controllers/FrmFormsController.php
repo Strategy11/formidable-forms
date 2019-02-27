@@ -872,31 +872,35 @@ class FrmFormsController {
 	private static function get_settings_tabs( $values ) {
 		$sections = array(
 			array(
-				'name'   => __( 'General', 'formidable' ),
-				'title'  => __( 'General Form Settings', 'formidable' ),
-				'anchor' => 'advanced',
+				'name'     => __( 'General', 'formidable' ),
+				'title'    => __( 'General Form Settings', 'formidable' ),
+				'anchor'   => 'advanced',
 				'class'    => __CLASS__,
 				'function' => 'advanced_settings',
+				'icon'     => 'dashicons dashicons-admin-generic',
 			),
 			array(
-				'name'   => __( 'Actions & Notifications', 'formidable' ),
-				'anchor' => 'email',
+				'name'     => __( 'Actions & Notifications', 'formidable' ),
+				'anchor'   => 'email',
 				'class'    => __CLASS__,
 				'function' => 'email_settings',
 			),
 			array(
-				'name'   => __( 'Styling & Buttons', 'formidable' ),
-				'anchor' => 'buttons',
+				'name'     => __( 'Styling & Buttons', 'formidable' ),
+				'anchor'   => 'buttons',
 				'class'    => __CLASS__,
 				'function' => 'buttons_settings',
+				'icon'     => 'dashicons dashicons-art',
 			),
 			array(
 				'name'     => __( 'Customize HTML', 'formidable' ),
 				'anchor'   => 'html',
 				'class'    => __CLASS__,
 				'function' => 'html_settings',
+				'icon'     => 'dashicons dashicons-editor-code',
 			),
 		);
+
 		$sections = apply_filters( 'frm_add_form_settings_section', $sections, $values );
 
 		foreach ( $sections as $key => $section ) {
@@ -911,6 +915,10 @@ class FrmFormsController {
 
 			if ( ! isset( $section['title'] ) ) {
 				$sections[ $key ]['title'] = $sections[ $key ]['name'];
+			}
+
+			if ( ! isset( $section['icon'] ) ) {
+				$sections[ $key ]['icon'] = 'dashicons dashicons-admin-generic';
 			}
 		}
 

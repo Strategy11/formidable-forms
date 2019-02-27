@@ -46,42 +46,6 @@ class FrmEntriesController {
 		}
 	}
 
-	public static function contextual_help( $help, $screen_id, $screen ) {
-		// Only add to certain screens. add_help_tab was introduced in WordPress 3.3
-		if ( ! method_exists( $screen, 'add_help_tab' ) ) {
-			return $help;
-		}
-
-		$action    = FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
-		$page      = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
-		$show_help = ( $page == 'formidable-entries' && ( empty( $action ) || $action == 'list' ) );
-		if ( ! $show_help ) {
-			return $help;
-		}
-
-		unset( $action, $page );
-
-		$screen->add_help_tab(
-			array(
-				'id'      => 'formidable-entries-tab',
-				'title'   => __( 'Overview', 'formidable' ),
-				'content' => '<p>' .
-					esc_html__( 'This screen provides access to all of your entries. You can customize the display of this screen to suit your workflow.', 'formidable' ) .
-					'</p> <p>' .
-					esc_html__( 'Hovering over a row in the entries list will display action links that allow you to manage your entry.', 'formidable' ) .
-					'</p>',
-			)
-		);
-
-		$screen->set_help_sidebar(
-			'<p><strong>' . esc_html__( 'For more information:', 'formidable' ) . '</strong></p>' .
-			'<p><a href="' . esc_url( FrmAppHelper::make_affiliate_url( 'https://formidableforms.com/knowledgebase/manage-entries-from-the-back-end/?utm_source=WordPress&utm_medium=entries&utm_campaign=liteplugin' ) ) . '" target="_blank">' . esc_html__( 'Documentation on Entries', 'formidable' ) . '</a></p>' .
-			'<p><a href="' . esc_url( FrmAppHelper::make_affiliate_url( 'https://formidableforms.com/support/?utm_source=WordPress&utm_medium=entries&utm_campaign=liteplugin' ) ) . '" target="_blank">' . esc_html__( 'Support', 'formidable' ) . '</a></p>'
-		);
-
-		return $help;
-	}
-
 	/**
 	 * Prevent the "screen options" tab from showing when
 	 * editing or creating an entry
@@ -734,6 +698,14 @@ class FrmEntriesController {
 		}
 
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/sidebar-shared.php' );
+	}
+
+	/**
+	 * @deprecated 4.0
+	 */
+	public static function contextual_help( $help, $screen_id, $screen ) {
+		_deprecated_function( __METHOD__, '4.0' );
+		return $help;
 	}
 
 	/**

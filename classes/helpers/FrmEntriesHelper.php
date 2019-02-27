@@ -537,23 +537,81 @@ class FrmEntriesHelper {
 	public static function actions_dropdown( $atts ) {
 		$id    = isset( $atts['id'] ) ? $atts['id'] : FrmAppHelper::get_param( 'id', 0, 'get', 'absint' );
 		$links = self::get_action_links( $id, $atts['entry'] );
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/actions-dropdown.php' );
+
+		foreach ( $links as $link ) {
+		?>
+		<div class="misc-pub-section">
+			<a href="<?php echo esc_url( $link['url'] ); ?>"
+				<?php
+				if ( isset( $link['data'] ) ) {
+					foreach ( $link['data'] as $data => $value ) {
+						echo 'data-' . esc_attr( $data ) . '="' . esc_attr( $value ) . '" ';
+					}
+				}
+				?>
+				>
+				<i class="<?php echo esc_attr( $link['icon'] ); ?>" aria-hidden="true"></i>
+				<span class="frm_link_label"><?php echo esc_html( $link['label'] ); ?></span>
+			</a>
+		</div>
+		<?php
+		}
 	}
 
 	/**
 	 * @since 3.0
 	 */
 	private static function get_action_links( $id, $entry ) {
+		$page    = FrmAppHelper::get_param( 'frm_action' );
 		$actions = array();
+
+		if ( $page != 'show' ) {
+			$actions['frm_view'] = array(
+				'url'   => admin_url( 'admin.php?page=formidable-entries&frm_action=show&id=' . $id . '&form=' . $entry->form_id ),
+				'label' => __( 'View Entry', 'formidable' ),
+				'icon'  => 'dashicons dashicons-welcome-widgets-menus',
+			);
+		}
 
 		if ( current_user_can( 'frm_delete_entries' ) ) {
 			$actions['frm_delete'] = array(
 				'url'   => admin_url( 'admin.php?page=formidable-entries&frm_action=destroy&id=' . $id . '&form=' . $entry->form_id ),
-				'label' => __( 'Delete', 'formidable' ),
+				'label' => __( 'Delete Entry', 'formidable' ),
 				'icon'  => 'frm_icon_font frm_delete_icon',
-				'data'  => array( 'frmverify' => __( 'Really delete?', 'formidable' ) ),
+				'data'  => array(
+					'frmverify' => __( 'Really delete?', 'formidable' ),
+				),
 			);
 		}
+
+		if ( $page == 'show' ) {
+			$actions['frm_print'] = array(
+				'url'   => '#',
+				'label' => __( 'Print Entry', 'formidable' ),
+				'data'  => array(
+					'frmprint' => '1',
+				),
+				'icon'  => 'dashicons dashicons-format-aside wp-media-buttons-icon',
+			);
+		}
+
+		$actions['frm_resend'] = array(
+			'url'   => '#',
+			'label' => __( 'Resend Emails', 'formidable' ),
+			'data'  => array(
+				'frmup' => __( 'Resending emails', 'formidable' ),
+			),
+			'icon'  => 'frm_icon_font frm_email_icon',
+		);
+
+		$actions['frm_edit'] = array(
+			'url'   => '#',
+			'label' => __( 'Edit Entry', 'formidable' ),
+			'data'  => array(
+				'frmup' => __( 'Editing emails', 'formidable' ),
+			),
+			'icon'  => 'dashicons dashicons-edit',
+		);
 
 		return apply_filters( 'frm_entry_actions_dropdown', $actions, compact( 'id', 'entry' ) );
 	}
