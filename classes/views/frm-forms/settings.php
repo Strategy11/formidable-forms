@@ -47,7 +47,7 @@
 				<div id="frm-categorydiv">
 					<div class="inside frm-inner-content">
 						<?php foreach ( $sections as $section ) { ?>
-							<div id="<?php echo esc_attr( $section['id'] ); ?>" class="tabs-panel <?php echo ( $current === $section['anchor'] ) ? ' frm_block' : ' frm_hidden'; ?> <?php echo esc_attr( $section['anchor'] .' frm_'. $section['anchor'] ); ?>">
+							<div id="<?php echo esc_attr( $section['id'] ); ?>" class="tabs-panel <?php echo ( $current === $section['anchor'] ) ? ' frm_block' : ' frm_hidden'; ?> <?php echo esc_attr( $section['anchor'] . ' frm_' . $section['anchor'] ); ?>">
 								<h2>
 									<?php echo esc_html( $section['title'] ); ?>
 								</h2>

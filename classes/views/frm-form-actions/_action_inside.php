@@ -4,7 +4,7 @@
 <table class="form-table">
 	<tr>
 		<td>
-			<label <?php FrmAppHelper::maybe_add_tooltip( 'action_title' ); ?>>
+			<label for="<?php echo esc_attr( $action_control->get_field_id( 'action_post_title' ) ); ?>" <?php FrmAppHelper::maybe_add_tooltip( 'action_title' ); ?>>
 				<?php esc_html_e( 'Action Name', 'formidable' ); ?>
 			</label>
 			<input type="text" name="<?php echo esc_attr( $action_control->get_field_name( 'post_title', '' ) ); ?>" value="<?php echo esc_attr( $form_action->post_title ); ?>" class="large-text <?php FrmAppHelper::maybe_add_tooltip( 'action_title', 'open' ); ?>" id="<?php echo esc_attr( $action_control->get_field_id( 'action_post_title' ) ); ?>" />
@@ -27,11 +27,10 @@ if ( count( $action_control->action_options['event'] ) == 1 || $action_control->
 	}
 } else {
 	?>
-	<td>
-		<label>
+	<td style="width:50%;">
+		<label for="<?php echo esc_attr( $action_control->get_field_id( 'event' ) ); ?>">
 			<?php esc_html_e( 'Trigger this action when', 'formidable' ); ?>
 		</label>
-		<br/>
 		<select name="<?php echo esc_attr( $action_control->get_field_name( 'event' ) ); ?>[]" multiple="multiple" class="frm_multiselect" id="<?php echo esc_attr( $action_control->get_field_id( 'event' ) ); ?>">
 	<?php
 

@@ -1830,9 +1830,11 @@ function frmAdminBuildJS() {
 	}
 
 	function cancelActionGroup() {
+		/*jshint validthis:true */
 		var actions = document.getElementsByClassName( 'frm_actions_list' )[0].children;
 
 		showItemsWithClass( actions, 'frm-group-action' );
+		this.style.display = 'none';
 	}
 
 	function showItemsWithClass( items, className ) {

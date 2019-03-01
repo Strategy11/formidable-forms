@@ -879,7 +879,7 @@ class FrmFormsController {
 				'anchor'   => 'advanced',
 				'class'    => __CLASS__,
 				'function' => 'advanced_settings',
-				'icon'     => 'dashicons dashicons-admin-generic',
+				'icon'     => 'fas fa-cog',
 			),
 			array(
 				'name'     => __( 'Actions & Notifications', 'formidable' ),
@@ -887,13 +887,14 @@ class FrmFormsController {
 				'class'    => 'FrmFormActionsController',
 				'function' => 'email_settings',
 				'id'       => 'frm_notification_settings',
+				'icon'     => 'fas fa-random',
 			),
 			array(
 				'name'     => __( 'Styling & Buttons', 'formidable' ),
 				'anchor'   => 'buttons',
 				'class'    => __CLASS__,
 				'function' => 'buttons_settings',
-				'icon'     => 'dashicons dashicons-art',
+				'icon'     => 'fas fa-palette',
 			),
 			array(
 				'name'     => __( 'Customize HTML', 'formidable' ),

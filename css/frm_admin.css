@@ -451,6 +451,10 @@ h2#frm_form_heading,
 	padding: 10px 25px;
 }
 
+#form_settings_page .frm-inner-content {
+	padding-bottom: 50px;
+}
+
 .frm_wrap #submitdiv {
 	margin-bottom: 0;
 	border-width: 0 0 1px;
@@ -934,6 +938,7 @@ input.frm_insert_in_template {
 	width: auto;
 }
 
+.frm-fields td > label,
 .frm-fields p > label,
 #frm_form_editor_container label.frm_primary_label {
 	color: var(--darkest-grey);
@@ -1380,6 +1385,11 @@ h2.frm-h2 + .howto {
 }
 
 /*Switch form dropdown*/
+h1 .fa-caret-down {
+	font-size: 18px;
+	color: var(--grey);
+}
+
 .caret {
 	display: inline-block;
 	width: 0;
@@ -1390,6 +1400,11 @@ h2.frm-h2 + .howto {
 	border-right: 4px solid transparent;
 	border-left: 4px solid transparent;
 	border-bottom: 0 dotted;
+}
+
+.frm-btn-group .caret {
+	float: right;
+	margin-top: 6px;
 }
 
 .dropdown {
@@ -1476,10 +1491,8 @@ h2.frm-h2 + .howto {
 }
 
 .frm-dropdown-menu > .active > a, .frm-dropdown-menu > .active > a:hover, .frm-dropdown-menu > .active > a:focus {
-	color: #ffffff;
 	text-decoration: none;
 	outline: 0;
-	background-color: #428bca;
 }
 
 .frm-dropdown-menu > .disabled > a, .frm-dropdown-menu > .disabled > a:hover, .frm-dropdown-menu > .disabled > a:focus {
@@ -1677,8 +1690,7 @@ a.frm-option-icon:hover::before {
 }
 
 .frm-btn-group.btn-group, .frm-btn-group.btn-group-vertical {
-	display: inline-block;
-	position: relative;
+	display: block;
 	vertical-align: middle;
 }
 
@@ -2327,6 +2339,8 @@ li.ui-state-default.selected .frm-show-click.frm_import_options select {
 #form_settings_page label,
 .frm_form_builder label {
 	font-weight: normal;
+	font-size: 15px;
+	color: var(--dark-grey);
 }
 
 .frm-form-setting-tabs {
@@ -2789,11 +2803,6 @@ label.default-style-box input[type="checkbox"] {
 	margin-bottom: 20px;
 }
 
-.frm_form_action_settings,
-.frm_form_action_settings .btn-group.frm-btn-group.open {
-	position: static;
-}
-
 .frm_form_action_settings .widget-top {
 	box-shadow: none;
 	border-color: var(--grey-border);
@@ -2957,6 +2966,25 @@ label.frm_action_events {
 	line-height: 1em;
 }
 
+.frm_email_settings .widget-title .frm_form_action_icon.frm-inverse {
+	background: transparent;
+	padding: 0;
+	height: 22px;
+	width: 22px;
+}
+
+.frm_email_settings .widget-title .frm_form_action_icon.frm-inverse:before {
+	color: var(--grey-border);
+	height: 22px;
+	width: 22px;
+	font-size: 22px;
+	line-height: 1em;
+}
+
+.frm_email_settings .widget-title:hover .frm_form_action_icon.frm-inverse:before {
+	color: var(--grey);
+}
+
 .frm_email_icons, .frm_actions_list {
 	padding: 10px 0 5px 15px;
 }
@@ -3025,21 +3053,20 @@ label.frm_action_events {
 }
 
 #frm_notification_settings .frm_email_buttons {
-	height: 22px;
-	line-height: 20px;
-	padding: 0 6px 1px;
+	padding: 7px;
+	background: var(--light-blue);
+	color: var(--primary-hover);
+	border-radius: 4px;
+	border-color: var(--blue-border);
+	line-height: 1em;
+	height: auto;
+	font-size: 12px;
 }
 
-#frm_notification_settings .frm_cc_button {
-	float: left;
-}
-
-#frm_notification_settings .frm_bcc_button {
+.frm_reply_to_container,
+.frm_bcc_cc_container {
 	float: right;
-}
-
-#frm_notification_settings .frm_bcc_cc_container {
-	width: 96px;
+	margin: -20px 0 0;
 }
 
 .frm_action_id {
@@ -4685,6 +4712,7 @@ iframe#dyncontent_ifr {
 	box-shadow: none;
 	border-radius: 4px;
 	padding: 6px 12px;
+	margin: 1px;
 	border-color: var(--grey-border);
 	color: var(--darkest-grey);
 }
@@ -4702,7 +4730,9 @@ iframe#dyncontent_ifr {
 }
 
 .frm-fields button.btn {
-	line-height: 1;
+	line-height: normal;
+	height: auto;
+	text-align: inherit;
 }
 
 .frm_wrap input[type=checkbox],

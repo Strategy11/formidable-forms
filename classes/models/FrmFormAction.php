@@ -798,7 +798,7 @@ class FrmFormAction {
 		$triggers = array(
 			'draft'  => __( 'Draft is saved', 'formidable' ),
 			'create' => __( 'Entry is created', 'formidable' ),
-			'update' => __( 'Entry is updates', 'formidable' ),
+			'update' => __( 'Entry is updated', 'formidable' ),
 			'delete' => __( 'Entry is deleted', 'formidable' ),
 			'import' => __( 'Entry is imported', 'formidable' ),
 		);

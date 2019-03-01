@@ -107,7 +107,7 @@ class FrmFormsHelper {
 			<a href="#" id="frm-navbarDrop" class="frm-dropdown-toggle" data-toggle="dropdown">
 				<h1>
 					<?php echo esc_html( $name ); ?>
-					<b class="dashicons dashicons-arrow-down"></b>
+					<b class="fas fa-caret-down"></b>
 				</h1>
 			</a>
 			<ul class="frm-dropdown-menu frm-on-top" role="menu" aria-labelledby="frm-navbarDrop">

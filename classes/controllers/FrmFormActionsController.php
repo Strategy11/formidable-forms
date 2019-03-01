@@ -75,8 +75,8 @@ class FrmFormActionsController {
 		$form   = FrmForm::getOne( $values['id'] );
 		$groups = self::form_action_groups();
 
-		$action_controls = FrmFormActionsController::get_form_actions();
-		self::add_action_to_group( $action_controls, $groups );
+		$action_controls = self::get_form_actions();
+		self::maybe_add_action_to_group( $action_controls, $groups );
 
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/settings.php' );
 	}
@@ -86,7 +86,7 @@ class FrmFormActionsController {
 	 *
 	 * @since 4.0
 	 */
-	private static function add_action_to_group( $action_controls, &$groups ) {
+	private static function maybe_add_action_to_group( $action_controls, &$groups ) {
 		$grouped = array();
 		foreach ( $groups as $group ) {
 			if ( isset( $group['actions'] ) ) {
@@ -195,8 +195,8 @@ class FrmFormActionsController {
 			$action_control->action_options['color'] = $group['color'];
 		}
 
-		$classes = ( isset( $action_control->action_options['active'] ) && $action_control->action_options['active'] ) ? 'frm_active_action' : 'frm_inactive_action';
-		$classes .= ' frm_' . $action_control->id_base . '_action frm_single_action frm_bstooltip';
+		$data    = array();
+		$classes = ' frm_' . $action_control->id_base . '_action frm_single_action frm_bstooltip';
 
 		$group_class = ' frm-group-' . $action_control->action_options['group'];
 		if ( ! empty( $group ) ) {
@@ -208,8 +208,16 @@ class FrmFormActionsController {
 		/* translators: %s: Name of form action */
 		$upgrade_label = sprintf( esc_html__( '%s form actions', 'formidable' ), $action_control->action_options['tooltip'] );
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/_action_icon.php' );
+		if ( isset( $action_control->action_options['active'] ) && $action_control->action_options['active'] ) {
+			$classes .= ' frm_active_action';
+		} else {
+			$classes .= ' frm_inactive_action';
 
+			$data['data-upgrade'] = $upgrade_label;
+			$data['data-medium']  = 'settings-' . $action_control->id_base;
+		}
+
+		include( FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/_action_icon.php' );
 	}
 
 	public static function get_form_actions( $action = 'all' ) {
