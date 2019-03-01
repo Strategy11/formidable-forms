@@ -1707,7 +1707,7 @@ function frmAdminBuildJS() {
 			return;
 		}
 
-		jQuery( '.frm_show_upgrade' ).click( function( event ) {
+		jQuery( '[data-upgrade]' ).click( function( event ) {
 			event.preventDefault();
 			jQuery( '.frm_feature_label' ).html( jQuery( this ).data( 'upgrade' ) );
 			$info.dialog( 'open' );
@@ -1806,6 +1806,45 @@ function frmAdminBuildJS() {
 				initiateMultiselect();
 			}
 		} );
+	}
+
+	function toggleActionGroups() {
+		/*jshint validthis:true */
+		var i,
+			group = this.getAttribute('data-group'),
+			groupClass = 'frm-group-' + group,
+			actions = document.getElementsByClassName( 'frm_actions_list' )[0].children;
+
+		for ( i = 0; i < actions.length; i++ ) {
+			if ( group === 'all' ) {
+				if ( actions[i].getAttribute( 'data-group' ) === null ) {
+					actions[i].style.display = 'inline-block';
+				} else {
+					actions[i].style.display = 'none';
+				}
+			} else {
+				showItemsWithClass( actions, groupClass );
+			}
+		}
+		document.getElementById('frm-show-groups').style.display = 'block';
+	}
+
+	function cancelActionGroup() {
+		var actions = document.getElementsByClassName( 'frm_actions_list' )[0].children;
+
+		showItemsWithClass( actions, 'frm-group-action' );
+	}
+
+	function showItemsWithClass( items, className ) {
+		var i;
+
+		for ( i = 0; i < items.length; i++ ) {
+			if ( items[i].classList.contains( className ) ) {
+				items[i].style.display = 'inline-block';
+			} else {
+				items[i].style.display = 'none';
+			}
+		}
 	}
 
 	function triggerDefaults() {
@@ -3439,6 +3478,7 @@ function frmAdminBuildJS() {
 			}
 
 			loadTooltips();
+			initUpgradeModal();
 
 			// used on build, form settings, and view settings
 			var $shortCodeDiv = jQuery( document.getElementById( 'frm_shortcodediv' ) );
@@ -3579,8 +3619,6 @@ function frmAdminBuildJS() {
 			$builderForm.on( 'change', 'select.conf_field', addConf );
 
 			$builderForm.on( 'change', '.frm_get_field_selection', getFieldSelection );
-
-			initUpgradeModal();
 		},
 
 		settingsInit: function() {
@@ -3599,6 +3637,8 @@ function frmAdminBuildJS() {
 			$formActions.on( 'click', '.frm_duplicate_form_action', copyFormAction );
 			jQuery( 'select[data-toggleclass], input[data-toggleclass]' ).change( toggleFormOpts );
 			jQuery( '.frm_actions_list' ).on( 'click', '.frm_active_action', addFormAction );
+			jQuery( 'li[data-group]').click( toggleActionGroups );
+			jQuery( '#frm-show-groups' ).click( cancelActionGroup );
 			initiateMultiselect();
 
 			//set actions icons to inactive
@@ -3607,7 +3647,6 @@ function frmAdminBuildJS() {
 			} );
 
 			jQuery( '.frm_submit_settings_btn' ).click( submitSettings );
-
 			jQuery( '.frm_form_settings' ).on( 'click', '.frm_add_form_logic', addFormLogicRow );
 			jQuery( '.frm_form_settings' ).on( 'blur', '.frm_email_blur', formatEmailSetting );
 
@@ -3695,8 +3734,6 @@ function frmAdminBuildJS() {
 					jQuery( '.edit_action_message_box' ).fadeOut( 'slow' );//Hide On Update message box
 				}
 			} );
-
-			initUpgradeModal();
 		},
 
 		panelInit: function() {

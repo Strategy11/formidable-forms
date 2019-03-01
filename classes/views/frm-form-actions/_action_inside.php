@@ -3,16 +3,13 @@
 
 <table class="form-table">
 	<tr>
-		<th>
-			<label <?php FrmAppHelper::maybe_add_tooltip( 'action_title' ); ?>><?php esc_html_e( 'Label', 'formidable' ); ?></label>
-		</th>
 		<td>
+			<label <?php FrmAppHelper::maybe_add_tooltip( 'action_title' ); ?>>
+				<?php esc_html_e( 'Action Name', 'formidable' ); ?>
+			</label>
 			<input type="text" name="<?php echo esc_attr( $action_control->get_field_name( 'post_title', '' ) ); ?>" value="<?php echo esc_attr( $form_action->post_title ); ?>" class="large-text <?php FrmAppHelper::maybe_add_tooltip( 'action_title', 'open' ); ?>" id="<?php echo esc_attr( $action_control->get_field_id( 'action_post_title' ) ); ?>" />
 		</td>
-	</tr>
-</table>
 <?php
-$action_control->form( $form_action, compact( 'form', 'action_key', 'values' ) );
 
 if ( ! isset( $action_control->action_options['event'] ) ) {
 	$events = 'create';
@@ -30,9 +27,11 @@ if ( count( $action_control->action_options['event'] ) == 1 || $action_control->
 	}
 } else {
 	?>
-	<h3><?php esc_html_e( 'Action Triggers', 'formidable' ); ?></h3>
-	<p>
-		<label class="frm_left_label"><?php esc_html_e( 'Trigger this action after', 'formidable' ); ?></label>
+	<td>
+		<label>
+			<?php esc_html_e( 'Trigger this action when', 'formidable' ); ?>
+		</label>
+		<br/>
 		<select name="<?php echo esc_attr( $action_control->get_field_name( 'event' ) ); ?>[]" multiple="multiple" class="frm_multiselect" id="<?php echo esc_attr( $action_control->get_field_id( 'event' ) ); ?>">
 	<?php
 
@@ -42,9 +41,16 @@ if ( count( $action_control->action_options['event'] ) == 1 || $action_control->
 		<option value="<?php echo esc_attr( $event ); ?>" <?php echo in_array( $event, (array) $form_action->post_content['event'] ) ? ' selected="selected"' : ''; ?> ><?php echo esc_html( isset( $event_labels[ $event ] ) ? $event_labels[ $event ] : $event ); ?></option>
 <?php } ?>
 		</select>
-	</p>
+	</td>
 	<?php
 }
+
+?>
+	</tr>
+</table>
+<?php
+
+$action_control->form( $form_action, compact( 'form', 'action_key', 'values' ) );
 
 $pass_args = array(
 	'form'       => $form,

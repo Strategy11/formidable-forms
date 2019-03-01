@@ -858,6 +858,8 @@ class FrmFormsController {
 		$sections = self::get_settings_tabs( $values );
 		$current  = FrmAppHelper::simple_get( 't', 'sanitize_title', 'advanced_settings' );
 
+		FrmAppController::include_upgrade_overlay();
+
 		require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/settings.php' );
 	}
 
@@ -882,8 +884,9 @@ class FrmFormsController {
 			array(
 				'name'     => __( 'Actions & Notifications', 'formidable' ),
 				'anchor'   => 'email',
-				'class'    => __CLASS__,
+				'class'    => 'FrmFormActionsController',
 				'function' => 'email_settings',
+				'id'       => 'frm_notification_settings',
 			),
 			array(
 				'name'     => __( 'Styling & Buttons', 'formidable' ),
@@ -920,6 +923,10 @@ class FrmFormsController {
 			if ( ! isset( $section['icon'] ) ) {
 				$sections[ $key ]['icon'] = 'dashicons dashicons-admin-generic';
 			}
+
+			if ( ! isset( $section['id'] ) ) {
+				$sections[ $key ]['id'] = $sections[ $key ]['anchor'];
+			}
 		}
 
 		return $sections;
@@ -934,18 +941,6 @@ class FrmFormsController {
 		$first_h3 = 'frm_first_h3';
 
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/settings-advanced.php' );
-	}
-
-	/**
-	 * @since 4.0
-	 *
-	 * @param array $values
-	 */
-	public static function email_settings( $values ) {
-		$action_controls = FrmFormActionsController::get_form_actions();
-		$form            = FrmForm::getOne( $values['id'] );
-
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/settings-email.php' );
 	}
 
 	/**

@@ -88,9 +88,30 @@ class FrmFormAction {
 			'priority'    => 20,
 			'ajax_load'   => true,
 			'tooltip'     => $name,
+			'group'       => $id_base,
+			'color'       => '',
 		);
 
-		$action_options        = apply_filters( 'frm_' . $id_base . '_action_options', $action_options );
+		$action_options          = apply_filters( 'frm_' . $id_base . '_action_options', $action_options );
+		$group                   = $this->get_group( $action_options );
+		$action_options['group'] = $group['id'];
+
+		if ( isset( $group['color'] ) && ! isset( $action_options['color'] ) ) {
+			$action_options['color'] = $group['color'];
+		}
+
+		$upgrade_class = $action_options['classes'] === 'frm_show_upgrade';
+		if ( $action_options['group'] === $id_base ) {
+			$upgrade_class = strpos( $action_options['classes'], 'frm_show_upgrade' ) !== false;
+			$action_options['classes'] = $group['icon'];
+		} elseif ( ! isset( $action_options['classes'] ) || empty( $action_options['classes'] ) || $upgrade_class ) {
+			$action_options['classes'] = $group['icon'];
+		}
+
+		if ( $upgrade_class ) {
+			$action_options['classes'] .= 'frm_show_upgrade';
+		}
+
 		$this->action_options  = wp_parse_args( $action_options, $default_options );
 		$this->control_options = wp_parse_args( $control_options, array( 'id_base' => $this->id_base ) );
 	}
@@ -100,6 +121,30 @@ class FrmFormAction {
 	 */
 	public function FrmFormAction( $id_base, $name, $action_options = array(), $control_options = array() ) {
 		self::__construct( $id_base, $name, $action_options, $control_options );
+	}
+
+	/**
+	 * @since 4.0
+	 */
+	protected function get_group( $action_options ) {
+		$groups = FrmFormActionsController::form_action_groups();
+		$group  = 'misc';
+
+		if ( isset( $action_options['group'] ) && isset( $groups[ $action_options['group'] ] ) ) {
+			$group = $action_options['group'];
+		} elseif ( isset( $groups[ $this->id_base ] ) ) {
+			$group = $this->id_base;
+		} else {
+			foreach ( $groups as $name => $check_group ) {
+				if ( isset( $check_group['actions'] ) && in_array( $this->id_base, $check_group['actions'] ) ) {
+					$group = $name;
+					break;
+				}
+			}
+		}
+
+		$groups[ $group ]['id'] = $group;
+		return $groups[ $group ];
 	}
 
 	/**
@@ -751,11 +796,11 @@ class FrmFormAction {
 
 	public static function trigger_labels() {
 		$triggers = array(
-			'draft'  => __( 'Save Draft', 'formidable' ),
-			'create' => __( 'Create', 'formidable' ),
-			'update' => __( 'Update', 'formidable' ),
-			'delete' => __( 'Delete', 'formidable' ),
-			'import' => __( 'Import', 'formidable' ),
+			'draft'  => __( 'Draft is saved', 'formidable' ),
+			'create' => __( 'Entry is created', 'formidable' ),
+			'update' => __( 'Entry is updates', 'formidable' ),
+			'delete' => __( 'Entry is deleted', 'formidable' ),
+			'import' => __( 'Entry is imported', 'formidable' ),
 		);
 
 		return apply_filters( 'frm_action_triggers', $triggers );

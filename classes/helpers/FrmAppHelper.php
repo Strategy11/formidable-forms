@@ -1796,6 +1796,7 @@ class FrmAppHelper {
 	 */
 	public static function load_font_style() {
 		wp_enqueue_style( 'frm_fonts', self::plugin_url() . '/css/frm_fonts.css', array(), self::plugin_version() );
+		wp_enqueue_style( 'fontawesome5', 'https://use.fontawesome.com/releases/v5.7.2/css/all.css', array(), '5.7.2' );
 	}
 
 	/**

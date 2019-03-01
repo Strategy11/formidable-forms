@@ -42,10 +42,20 @@ class FrmFormActionsController {
 			'wppost'    => 'FrmDefPostAction',
 			'register'  => 'FrmDefRegAction',
 			'paypal'    => 'FrmDefPayPalAction',
-			'mailchimp' => 'FrmDefMlcmpAction',
-			'twilio'    => 'FrmDefTwilioAction',
 			'payment'   => 'FrmDefHrsAction',
+			'mailchimp' => 'FrmDefMlcmpAction',
+
+			'salesforce'      => 'FrmDefSalesforceAction',
+			'activecampaign'  => 'FrmDefActiveCampaignAction',
+			'constantcontact' => 'FrmDefConstContactAction',
+			'getresponse'     => 'FrmDefGetResponseAction',
+			'hubspot'         => 'FrmDefHubspotAction',
+			'twilio'          => 'FrmDefTwilioAction',
+			'highrise'        => 'FrmDefHighriseAction',
+			'mailpoet'        => 'FrmDefMailpoetAction',
+			'aweber'          => 'FrmDefAweberAction',
 		);
+
 		$action_classes = apply_filters( 'frm_registered_form_actions', $action_classes );
 
 		include_once( FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/email_action.php' );
@@ -54,6 +64,152 @@ class FrmFormActionsController {
 		foreach ( $action_classes as $action_class ) {
 			self::$registered_actions->register( $action_class );
 		}
+	}
+
+	/**
+	 * @since 4.0
+	 *
+	 * @param array $values
+	 */
+	public static function email_settings( $values ) {
+		$form   = FrmForm::getOne( $values['id'] );
+		$groups = self::form_action_groups();
+
+		$action_controls = FrmFormActionsController::get_form_actions();
+		self::add_action_to_group( $action_controls, $groups );
+
+		include( FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/settings.php' );
+	}
+
+	/**
+	 * Add unknown actions to a group.
+	 *
+	 * @since 4.0
+	 */
+	private static function add_action_to_group( $action_controls, &$groups ) {
+		$grouped = array();
+		foreach ( $groups as $group ) {
+			if ( isset( $group['actions'] ) ) {
+				$grouped = array_merge( $grouped, $group['actions'] );
+			}
+		}
+
+		foreach ( $action_controls as $action ) {
+			if ( isset( $groups[ $action->id_base ] ) || in_array( $action->id_base, $grouped ) ) {
+				continue;
+			}
+
+			$this_group = $action->action_options['group'];
+			if ( ! isset( $groups[ $this_group ] ) ) {
+				$this_group = 'misc';
+			}
+
+			if ( ! isset( $groups[ $this_group ]['actions'] ) ) {
+				$groups[ $this_group ]['actions'] = array();
+			}
+			$groups[ $this_group ]['actions'][] = $action->id_base;
+
+			unset( $action );
+		}
+	}
+
+	/**
+	 * @since 4.0
+	 *
+	 * @return array
+	 */
+	public static function form_action_groups() {
+		$groups = array(
+			'email'     => array(
+				'name'  => __( 'Email Notification', 'formidable' ),
+				'icon'  => 'fas fa-envelope',
+			),
+			'wppost'    => array(
+				'name'  => __( 'Create Post', 'formidable' ),
+				'icon'  => 'fab fa-wordpress frm-inverse',
+				'color' => 'rgb(0,160,210)',
+			),
+			'register'  => array(
+				'name'  => __( 'Register User', 'formidable' ),
+				'icon'  => 'fas fa-user',
+				'color' => 'rgb(226,42,110)',
+			),
+			'payment'   => array(
+				'name'    => __( 'eCommerce', 'formidable' ),
+				'icon'    => 'fas fa-credit-card',
+				'color'   => 'rgb(63,172,37)',
+				'actions' => array(
+					'paypal',
+					'payment',
+				),
+			),
+			'marketing' => array(
+				'name'    => __( 'Email Marketing', 'formidable' ),
+				'icon'    => 'fas fa-mail-bulk',
+				'color'   => 'rgb(37,167,172)',
+				'actions' => array(
+					'mailchimp',
+					'activecampaign',
+					'constantcontact',
+					'getresponse',
+					'aweber',
+					'mailpoet',
+				),
+			),
+			'crm'       => array(
+				'name'    => __( 'CRM', 'formidable' ),
+				'icon'    => 'fas fa-address-card',
+				'color'   => 'rgb(222,137,25)',
+				'actions' => array(
+					'salesforce',
+					'hubspot',
+					'highrise',
+				),
+			),
+			'misc'        => array(
+				'name'    => __( 'Miscellaneous', 'formidable' ),
+				'icon'    => 'fas fa-random',
+				'color'   => 'rgb(141,53,245)',
+				'actions' => array(
+					'twilio',
+				),
+			),
+			'all'         => array(
+				'name'  => __( 'All Form Actions', 'formidable' ),
+				'icon'  => 'fas fa-plus',
+			),
+		);
+
+		return apply_filters( 'frm_action_groups', $groups );
+	}
+
+	/**
+	 * For each add-on, add an li, class, and javascript function. If active, add an additional class.
+	 *
+	 * @since 4.0
+	 * @param object $action_control
+	 * @param array  $group If this if being loaded on the group listing
+	 */
+	public static function show_action_icon_link( $action_control, $group = array() ) {
+		if ( isset( $group['color'] ) ) {
+			$action_control->action_options['color'] = $group['color'];
+		}
+
+		$classes = ( isset( $action_control->action_options['active'] ) && $action_control->action_options['active'] ) ? 'frm_active_action' : 'frm_inactive_action';
+		$classes .= ' frm_' . $action_control->id_base . '_action frm_single_action frm_bstooltip';
+
+		$group_class = ' frm-group-' . $action_control->action_options['group'];
+		if ( ! empty( $group ) ) {
+			$group_class = 'frm-group-action';
+			$classes    .= ' frm-group-action';
+		}
+		//$classes .= $action_control->action_options['classes'];
+
+		/* translators: %s: Name of form action */
+		$upgrade_label = sprintf( esc_html__( '%s form actions', 'formidable' ), $action_control->action_options['tooltip'] );
+
+		include( FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/_action_icon.php' );
+
 	}
 
 	public static function get_form_actions( $action = 'all' ) {
@@ -73,25 +229,6 @@ class FrmFormActionsController {
 			}
 
 			$actions[ $a->id_base ] = $a;
-		}
-		unset( $temp_actions, $a );
-
-		$action_limit = 10;
-		if ( count( $actions ) <= $action_limit ) {
-			return $actions;
-		}
-
-		// Remove the last few inactive icons if there are too many.
-		$temp_actions = $actions;
-		arsort( $temp_actions );
-		foreach ( $temp_actions as $type => $a ) {
-			if ( ! isset( $a->action_options['active'] ) || empty( $a->action_options['active'] ) ) {
-				unset( $actions[ $type ] );
-				if ( count( $actions ) <= $action_limit ) {
-					break;
-				}
-			}
-			unset( $type, $a );
 		}
 
 		return $actions;

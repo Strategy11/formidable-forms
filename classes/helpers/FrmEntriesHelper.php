@@ -601,7 +601,7 @@ class FrmEntriesHelper {
 			'data'  => array(
 				'frmup' => __( 'Resending emails', 'formidable' ),
 			),
-			'icon'  => 'frm_icon_font frm_email_icon',
+			'icon'  => 'fas fa-envelope',
 		);
 
 		$actions['frm_edit'] = array(

@@ -24,7 +24,7 @@
 
 			<div class="frm_form_fields">
 				<div class="postbox">
-					<a href="#" class="alignright frm-pre-hndle" data-frmtoggle=".frm-empty-row" data-toggletext="<?php esc_attr_e( 'Hide empty fields', 'formidable'); ?>">
+					<a href="#" class="alignright frm-pre-hndle" data-frmtoggle=".frm-empty-row" data-toggletext="<?php esc_attr_e( 'Hide empty fields', 'formidable' ); ?>">
 						<?php esc_html_e( 'Show empty fields', 'formidable' ); ?>
 					</a>
 					<h3 class="hndle">
@@ -34,7 +34,7 @@
 						</span>
 					</h3>
 					<?php
-					echo FrmEntriesController::show_entry_shortcode(
+					echo FrmEntriesController::show_entry_shortcode( // WPCS: XSS ok.
 						array(
 							'id'             => $entry->id,
 							'entry'          => $entry,
