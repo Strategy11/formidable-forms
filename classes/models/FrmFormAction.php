@@ -386,7 +386,7 @@ class FrmFormAction {
 		$limit = apply_filters( 'frm_form_action_limit', $atts['limit'], compact( 'type', 'form_id' ) );
 
         if ( 'all' != $type ) {
-            return $action_controls->get_all( $form_id, $limit );
+			return $action_controls->get_all( $form_id, $limit, 'publish' );
         }
 
 		$args = self::action_args( $form_id, $limit );
@@ -458,7 +458,7 @@ class FrmFormAction {
 		return ! empty( $payment_actions );
 	}
 
-	public function get_all( $form_id = false, $limit = 99 ) {
+	public function get_all( $form_id = false, $limit = 99, $post_status = 'any' ) {
 	    if ( $form_id ) {
 	        $this->form_id = $form_id;
 	    }
@@ -470,7 +470,7 @@ class FrmFormAction {
 
 		add_filter( 'posts_where', 'FrmFormActionsController::limit_by_type' );
 		$query = self::action_args( $form_id, $limit );
-        $query['post_status']      = 'any';
+		$query['post_status'] = $post_status;
         $query['suppress_filters'] = false;
 
 		$actions = FrmDb::check_cache( serialize( $query ) . '_type_' . $type, 'frm_actions', $query, 'get_posts' );
