@@ -33,7 +33,7 @@ $form_action = apply_filters( 'frm_form_' . $form_action->post_excerpt . '_actio
 	</div>
 	<div class="widget-inside frm_hidden">
 		<?php
-		if ( defined( 'DOING_AJAX' ) || ! $action_control->action_options['ajax_load'] ) {
+		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
 			// only load settings if they are just added or are open
 			include( dirname( __FILE__ ) . '/_action_inside.php' );
 		} else {

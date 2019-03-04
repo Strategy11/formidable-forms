@@ -4217,6 +4217,10 @@ ul .frm_col_two {
 	margin-top: 5px;
 }
 
+.frm_no_p_margin > p {
+	margin: 0;
+}
+
 .frm_code_list a.button {
 	display: block;
 	text-align: center;

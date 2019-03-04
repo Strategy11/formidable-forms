@@ -1,14 +1,13 @@
 <input type="hidden" name="<?php echo esc_attr( $action_control->get_field_name( 'post_excerpt', '' ) ); ?>" class="frm_action_name" value="<?php echo esc_attr( $form_action->post_excerpt ); ?>" />
 <input type="hidden" name="<?php echo esc_attr( $action_control->get_field_name( 'ID', '' ) ); ?>" value="<?php echo esc_attr( $form_action->ID ); ?>" />
 
-<table class="form-table">
-	<tr>
-		<td>
-			<label for="<?php echo esc_attr( $action_control->get_field_id( 'action_post_title' ) ); ?>" <?php FrmAppHelper::maybe_add_tooltip( 'action_title' ); ?>>
-				<?php esc_html_e( 'Action Name', 'formidable' ); ?>
-			</label>
-			<input type="text" name="<?php echo esc_attr( $action_control->get_field_name( 'post_title', '' ) ); ?>" value="<?php echo esc_attr( $form_action->post_title ); ?>" class="large-text <?php FrmAppHelper::maybe_add_tooltip( 'action_title', 'open' ); ?>" id="<?php echo esc_attr( $action_control->get_field_id( 'action_post_title' ) ); ?>" />
-		</td>
+<div class="frm_grid_container frm_no_p_margin">
+	<p class="frm_half">
+		<label for="<?php echo esc_attr( $action_control->get_field_id( 'action_post_title' ) ); ?>" <?php FrmAppHelper::maybe_add_tooltip( 'action_title' ); ?>>
+			<?php esc_html_e( 'Action Name', 'formidable' ); ?>
+		</label>
+		<input type="text" name="<?php echo esc_attr( $action_control->get_field_name( 'post_title', '' ) ); ?>" value="<?php echo esc_attr( $form_action->post_title ); ?>" class="large-text <?php FrmAppHelper::maybe_add_tooltip( 'action_title', 'open' ); ?>" id="<?php echo esc_attr( $action_control->get_field_id( 'action_post_title' ) ); ?>" />
+	</p>
 <?php
 
 if ( ! isset( $action_control->action_options['event'] ) ) {
@@ -27,7 +26,7 @@ if ( count( $action_control->action_options['event'] ) == 1 || $action_control->
 	}
 } else {
 	?>
-	<td style="width:50%;">
+	<p class="frm_half">
 		<label for="<?php echo esc_attr( $action_control->get_field_id( 'event' ) ); ?>">
 			<?php esc_html_e( 'Trigger this action when', 'formidable' ); ?>
 		</label>
@@ -40,13 +39,12 @@ if ( count( $action_control->action_options['event'] ) == 1 || $action_control->
 		<option value="<?php echo esc_attr( $event ); ?>" <?php echo in_array( $event, (array) $form_action->post_content['event'] ) ? ' selected="selected"' : ''; ?> ><?php echo esc_html( isset( $event_labels[ $event ] ) ? $event_labels[ $event ] : $event ); ?></option>
 <?php } ?>
 		</select>
-	</td>
+	</p>
 	<?php
 }
 
 ?>
-	</tr>
-</table>
+</div>
 <?php
 
 $action_control->form( $form_action, compact( 'form', 'action_key', 'values' ) );

@@ -9,7 +9,6 @@ class FrmEmailAction extends FrmFormAction {
 			'event'     => array( 'create' ),
 			'limit'     => 99,
 			'priority'  => 10,
-			'ajax_load' => false,
 		);
 		$action_ops = apply_filters( 'frm_email_control_settings', $action_ops );
 
