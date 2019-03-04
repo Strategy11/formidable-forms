@@ -1,12 +1,28 @@
 <div id="taxonomy-linkcategory" class="categorydiv <?php echo esc_attr( $class ); ?>">
-	<ul id="category-tabs" class="category-tabs frm-category-tabs">
-		<li class="tabs"><a href="#frm-insert-fields-box" id="frm_insert_fields_tab"><?php esc_html_e( 'Fields', 'formidable' ); ?></a></li>
+	<ul id="frm-nav-tabs">
+		<li class="frm-tabs">
+			<a href="#frm-insert-fields-box" id="frm_insert_fields_tab">
+				<?php esc_html_e( 'Fields', 'formidable' ); ?>
+			</a>
+		</li>
 		<?php if ( ! empty( $cond_shortcodes ) ) { ?>
-		<li class="hide-if-no-js"><a href="#frm-conditionals"><?php esc_html_e( 'Conditionals', 'formidable' ); ?></a></li>
+		<li class="hide-if-no-js">
+			<a href="#frm-conditionals">
+				<?php esc_html_e( 'Conditionals', 'formidable' ); ?>
+			</a>
+		</li>
 		<?php } ?>
-		<li class="hide-if-no-js"><a href="#frm-adv-info-tab"><?php esc_html_e( 'Advanced', 'formidable' ); ?></a></li>
+		<li class="hide-if-no-js">
+			<a href="#frm-adv-info-tab">
+				<?php esc_html_e( 'Advanced', 'formidable' ); ?>
+			</a>
+		</li>
 		<?php if ( $settings_tab ) { ?>
-		<li id="frm_html_tab" class="hide-if-no-js frm_hidden"><a href="#frm-html-tags" id="frm_html_tags_tab" ><?php esc_html_e( 'HTML Tags', 'formidable' ); ?></a></li>
+		<li id="frm_html_tab" class="hide-if-no-js frm_hidden">
+			<a href="#frm-html-tags" id="frm_html_tags_tab">
+				<?php esc_html_e( 'HTML Tags', 'formidable' ); ?>
+			</a>
+		</li>
 		<?php } ?>
 	</ul>
 
@@ -18,7 +34,13 @@
 		<ul class="alignleft"><li><?php esc_html_e( 'Fields from your form', 'formidable' ); ?>:</li>
 </ul>
 		<ul class="frm_code_list" id="frm_customize_search">
-			<li><input type="search" id="frm_field_search" name="frm_field_search" placeholder="<?php esc_html_e( 'Search', 'formidable' ); ?>"></li>
+			<li>
+				<div class="search-box frm-search">
+					<label class="screen-reader-text" for="entry-search-input">Search:</label>
+					<span class="dashicons dashicons-search"></span>
+					<input type="search" id="frm_field_search" class="frm-search-input" name="frm_field_search" placeholder="<?php esc_html_e( 'Search', 'formidable' ); ?>">
+				</div>
+			</li>
 		</ul>
 		<ul class="frm_code_list frm_full_width frm_customize_field_list">
 		<?php

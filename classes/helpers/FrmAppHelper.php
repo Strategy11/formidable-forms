@@ -1374,7 +1374,10 @@ class FrmAppHelper {
 	}
 
 	public static function insert_opt_html( $args ) {
-		$class                = '';
+		$class  = '';
+		$fields = FrmField::all_field_selection();
+		$field  = isset( $fields[ $args['type'] ] ) ? $fields[ $args['type'] ] : array();
+
 		$possible_email_field = FrmFieldFactory::field_has_property( $args['type'], 'holds_email_values' );
 		if ( $possible_email_field ) {
 			$class .= 'show_frm_not_email_to';
@@ -1386,7 +1389,12 @@ class FrmAppHelper {
 			<a href="javascript:void(0)" class="frmkeys frm_insert_code alignright <?php echo esc_attr( $class ); ?>"
 				data-code="<?php echo esc_attr( $args['key'] ); ?>">[<?php echo esc_attr( self::truncate( $args['key'], 10 ) ); ?>]</a>
 			<a href="javascript:void(0)" class="frm_insert_code <?php echo esc_attr( $class ); ?>"
-				data-code="<?php echo esc_attr( $args['id'] ); ?>"><?php echo esc_attr( self::truncate( $args['name'], 60 ) ); ?></a>
+				data-code="<?php echo esc_attr( $args['id'] ); ?>">
+				<?php if ( isset( $field['icon'] ) ) { ?>
+					<i class="<?php echo esc_attr( $field['icon'] ); ?>" aria-hidden="true"></i>
+				<?php } ?>
+				<?php echo esc_attr( self::truncate( $args['name'], 60 ) ); ?>
+			</a>
 		</li>
 		<?php
 	}

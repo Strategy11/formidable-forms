@@ -2481,14 +2481,17 @@ function frmAdminBuildJS() {
 	}
 
 	/* Customization Panel */
-	function insertCode() {
+	function insertCode( e ) {
 		/*jshint validthis:true */
+		e.preventDefault();
 		insertFieldCode( jQuery( this ), jQuery( this ).data( 'code' ) );
 		return false;
 	}
 
 	function insertFieldCode( element, variable ) {
-		var element_id = element;
+		var variable,
+			rich = true,
+			element_id = element;
 		if ( typeof(element) === 'object' ) {
 			element_id = element.closest( 'div' ).attr( 'class' ).split( ' ' )[1];
 			if ( element.hasClass( 'frm_noallow' ) ) {
@@ -2496,7 +2499,6 @@ function frmAdminBuildJS() {
 			}
 		}
 
-		var rich = true;
 		if ( element_id ) {
 			rich = jQuery( '#wp-' + element_id + '-wrap.wp-editor-wrap' ).length > 0;
 		}
@@ -2506,6 +2508,7 @@ function frmAdminBuildJS() {
 		} else {
 			variable = '[' + variable + ']';
 		}
+
 		if ( rich ) {
 			wpActiveEditor = element_id;
 			send_to_editor( variable );
@@ -3586,7 +3589,7 @@ function frmAdminBuildJS() {
 			$builderForm.on( 'change', '.radio_maxnum', setStarValues );
 
 			jQuery( document.getElementById( 'frm-insert-fields' ) ).on( 'click', '.frm_add_field', addFieldClick );
-			$newFields.on( 'click', '.frm_duplicate_icon', duplicateField );
+			$newFields.on( 'click', '.fa-clone', duplicateField );
 			$builderForm.on( 'click', '.use_calc', popCalcFields );
 			$builderForm.on( 'change', 'input[id^="frm_calc"]', checkCalculationCreatedByUser );
 			$builderForm.on( 'change', 'input.frm_format_opt', toggleInvalidMsg );
@@ -3609,7 +3612,7 @@ function frmAdminBuildJS() {
 			$builderForm.on( 'click', '.frm_toggle_sep_values', toggleSepValues );
 			$builderForm.on( 'click', '.frm_multiselect_opt', toggleMultiselect );
 			$newFields.on( 'click', '.frm_delete_field', clickDeleteField );
-			$builderForm.on( 'click', '.frm_single_option .frm_delete_icon', deleteFieldOption );
+			$builderForm.on( 'click', '.frm_single_option .frm_delete_icon', deleteFieldOption ); //TODO
 			$builderForm.on( 'click', '.frm_add_opt', addFieldOption );
 			$builderForm.on( 'change', '.frm_toggle_mult_sel', toggleMultSel );
 
@@ -3741,21 +3744,41 @@ function frmAdminBuildJS() {
 		panelInit: function() {
 			jQuery( '.frm_code_list a' ).addClass( 'frm_noallow' );
 
-			jQuery( '#postbox-container-1' ).on( 'click', '.frm_insert_code', insertCode );
+			jQuery( '.frm_wrap' ).on( 'click', '.frm_insert_code', insertCode );
 			jQuery( document ).on( 'change', '.frm_insert_val', function() {
 				insertFieldCode( jQuery( this ).data( 'target' ), jQuery( this ).val() );
 				jQuery( this ).val( '' );
 			} );
 
-			jQuery( document ).on( 'focusin click', 'form input, form textarea, #wpcontent', function( e ) {
+			jQuery( '.frm_has_shortcodes input, .frm_has_shortcodes textarea' ).before( '<i class="frm-show-box fas fa-ellipsis-h"></i>' );
+			jQuery( document ).on( 'click', '.frm-show-box', function( e ) {
+				var pos = this.getBoundingClientRect(),
+					box = document.getElementById( 'frm_adv_info' ),
+					classes = this.className;
+
+				e.preventDefault();
 				e.stopPropagation();
-				if ( jQuery( this ).is( ':not(:submit, input[type=button])' ) ) {
-					var id = jQuery( this ).attr( 'id' );
-					toggleAllowedShortcodes( id, e.type );
+
+				if ( classes.indexOf( 'fa-times' ) !== -1 ) {
+					box.style.display = 'none';
+					this.className = classes.replace( 'fa-times', 'fa-ellipsis-h' );
+				} else {
+					this.nextSibling.focus();
+					box.style.top = ( pos.top + 26 ) + 'px';
+					box.style.left = ( pos.left - 280 ) + 'px';
+					box.style.display = 'block';
+					this.className = classes.replace( 'fa-ellipsis-h', 'fa-times' );
 				}
 			} );
 
-			jQuery( '#postbox-container-1' ).on( 'mousedown', '#frm_adv_info a, .frm_field_list a', function( e ) {
+			jQuery( document ).on( 'focusin click', 'form input, form textarea', function( e ) {
+				e.stopPropagation();
+				if ( jQuery( this ).is( ':not(:submit, input[type=button])' ) ) {
+					toggleAllowedShortcodes( this.id, e.type );
+				}
+			} );
+
+			jQuery( '.frm_wrap' ).on( 'mousedown', '#frm_adv_info a, .frm_field_list a', function( e ) {
 				e.preventDefault();
 			} );
 

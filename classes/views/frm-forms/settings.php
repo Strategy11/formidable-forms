@@ -40,36 +40,35 @@
 
 		<div id="post-body-content" class="frm-fields">
 
-				<input type="hidden" name="id" id="form_id" value="<?php echo (int) $id; ?>" />
-				<input type="hidden" name="frm_action" value="update_settings" />
-				<?php wp_nonce_field( 'process_form_nonce', 'process_form' ); ?>
+			<input type="hidden" name="id" id="form_id" value="<?php echo (int) $id; ?>" />
+			<input type="hidden" name="frm_action" value="update_settings" />
+			<?php wp_nonce_field( 'process_form_nonce', 'process_form' ); ?>
 
-				<div id="frm-categorydiv">
-					<div class="inside frm-inner-content">
-						<?php foreach ( $sections as $section ) { ?>
-							<div id="<?php echo esc_attr( $section['id'] ); ?>" class="tabs-panel <?php echo ( $current === $section['anchor'] ) ? ' frm_block' : ' frm_hidden'; ?> <?php echo esc_attr( $section['anchor'] . ' frm_' . $section['anchor'] ); ?>">
-								<h2>
-									<?php echo esc_html( $section['title'] ); ?>
-								</h2>
+			<div id="frm-categorydiv">
+				<div class="inside frm-inner-content">
+					<?php foreach ( $sections as $section ) { ?>
+						<div id="<?php echo esc_attr( $section['id'] ); ?>" class="tabs-panel <?php echo ( $current === $section['anchor'] ) ? ' frm_block' : ' frm_hidden'; ?> <?php echo esc_attr( $section['anchor'] . ' frm_' . $section['anchor'] ); ?>">
+							<h2>
+								<?php echo esc_html( $section['title'] ); ?>
+							</h2>
 
-								<?php
-								if ( isset( $section['class'] ) ) {
-									call_user_func( array( $section['class'], $section['function'] ), $values );
-								} else {
-									call_user_func( ( isset( $section['function'] ) ? $section['function'] : $section ), $values );
-								}
-								?>
-							</div>
-						<?php } ?>
+							<?php
+							if ( isset( $section['class'] ) ) {
+								call_user_func( array( $section['class'], $section['function'] ), $values );
+							} else {
+								call_user_func( ( isset( $section['function'] ) ? $section['function'] : $section ), $values );
+							}
+							?>
+						</div>
+					<?php } ?>
 
-						<?php do_action( 'frm_add_form_option_section', $values ); ?>
-						<div class="clear"></div>
-
-					</div>
+					<?php do_action( 'frm_add_form_option_section', $values ); ?>
+					<div class="clear"></div>
 
 				</div>
+			</div>
+			<?php include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/mb_insert_fields.php' ); ?>
 		</div>
-	<?php require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/sidebar-settings.php' ); ?>
 	</div>
 	</div>
 	</form>

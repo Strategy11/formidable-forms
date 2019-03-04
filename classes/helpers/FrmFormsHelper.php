@@ -766,13 +766,13 @@ BEFORE_HTML;
 				$actions['frm_duplicate'] = array(
 					'url'   => wp_nonce_url( $duplicate_link ),
 					'label' => __( 'Create Form from Template', 'formidable' ),
-					'icon'  => 'frm_icon_font frm_duplicate_icon',
+					'icon'  => 'fas fa-clone',
 				);
 			} else {
 				$actions['duplicate'] = array(
 					'url'   => wp_nonce_url( $duplicate_link ),
 					'label' => __( 'Duplicate Form', 'formidable' ),
-					'icon'  => 'frm_icon_font frm_duplicate_icon',
+					'icon'  => 'fas fa-clone',
 				);
 			}
 
@@ -871,7 +871,7 @@ BEFORE_HTML;
 				'label' => __( 'Move Form to Trash', 'formidable' ),
 				'short' => __( 'Trash', 'formidable' ),
 				'url'   => wp_nonce_url( $base_url . '&frm_action=trash', 'trash_form_' . absint( $id ) ),
-				'icon'  => 'frm_icon_font frm_delete_icon',
+				'icon'  => 'far fa-trash-alt',
 				'data'  => array( 'frmverify' => __( 'Are you sure?', 'formidable' ) ),
 			),
 			'delete'  => array(
@@ -879,7 +879,7 @@ BEFORE_HTML;
 				'short'   => __( 'Delete', 'formidable' ),
 				'url'     => wp_nonce_url( $base_url . '&frm_action=destroy', 'destroy_form_' . absint( $id ) ),
 				'confirm' => __( 'Are you sure you want to delete this form and all its entries?', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_delete_icon',
+				'icon'    => 'far fa-trash-alt',
 				'data'    => array( 'frmverify' => __( 'Delete form & entries?', 'formidable' ) ),
 			),
 		);

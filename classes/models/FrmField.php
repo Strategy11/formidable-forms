@@ -150,6 +150,14 @@ class FrmField {
 		return apply_filters( 'frm_pro_available_fields', $fields );
 	}
 
+	/**
+	 * @since 4.0
+	 */
+	public static function all_field_selection() {
+		$pro_field_selection = self::pro_field_selection();
+		return array_merge( $pro_field_selection, self::field_selection() );
+	}
+
 	public static function create( $values, $return = true ) {
 		global $wpdb, $frm_duplicate_ids;
 

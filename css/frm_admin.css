@@ -320,11 +320,12 @@ ul.frm_form_nav > li {
 
 #frm-bar-two .frm-trash-link {
 	margin: 0 7px;
-}
-
-#frm-bar-two .frm_delete_icon:before {
 	font-size: 20px;
 	color: var(--primary-color);
+}
+
+#frm-bar-two .frm-trash-link span {
+	line-height: 1.4em;
 }
 
 #frm-publishing {
@@ -441,6 +442,52 @@ h2#frm_form_heading,
 	margin-bottom: 26px;
 }
 
+.frm_has_shortcodes {
+	position: relative;
+}
+
+.frm_has_shortcodes i {
+	position: absolute;
+	top: 44px;
+	right: 5px;
+	z-index: 1;
+	margin-top: -9px;
+	color: var(--primary-color);
+	border-radius: 50%;
+	padding: 5px;
+	font-size: 15px;
+	border: 1px solid transparent;
+	height: 15px;
+	width: 15px;
+	text-align: center;
+}
+
+.frm_has_shortcodes i:hover {
+	background: var(--light-blue);
+}
+
+.frm_has_shortcodes .fa-times {
+	border-color: var(--primary-color);
+}
+
+.frm_has_shortcodes input,
+.frm_has_shortcodes textarea {
+	padding-left: 18px;
+	box-sizing: border-box;
+}
+
+#form_settings_page #frm_adv_info {
+	display: none;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 300px;
+	max-height: 350px;
+	min-height: 250px;
+	overflow-y: scroll;
+	z-index: 2;
+}
+
 #form_settings_page .columns-2 .frm-right-panel {
 	flex: 0 0 275px;
 	width: 275px;
@@ -452,7 +499,7 @@ h2#frm_form_heading,
 }
 
 #form_settings_page .frm-inner-content {
-	padding-bottom: 50px;
+	padding-bottom: 150px;
 }
 
 .frm_wrap #submitdiv {
@@ -471,8 +518,7 @@ h2#frm_form_heading,
 	cursor: pointer;
 }
 
-.frm_wrap .frm-right-panel #frm_adv_info .inside,
-.frm_wrap #postbox-container-1 #frm_adv_info .inside {
+.frm_wrap #frm_adv_info .inside {
 	margin: 0;
 	padding: 0;
 }
@@ -497,6 +543,10 @@ h2#frm_form_heading,
 	border-bottom: 2px solid var(--sidebar-hover);
 }
 
+#frm_adv_info #frm-nav-tabs {
+	margin: 5px 0 10px;
+}
+
 #frm-nav-tabs li {
 	display: inline-block;
 	font-size: 15px;
@@ -509,6 +559,10 @@ h2#frm_form_heading,
 	margin: 0 9px;
 	display: block;
 	border-bottom: 2px solid transparent;
+}
+
+#frm_adv_info #frm-nav-tabs a {
+	color: var(--dark-grey);
 }
 
 #frm-nav-tabs a:hover,
@@ -1972,10 +2026,6 @@ label input[type="checkbox"], label input[type="radio"] {
 	display: inline;
 }
 
-.frm_code_list .frmkeys {
-	display: none;
-}
-
 #ed_fullscreen {
 	display: none !important;
 }
@@ -2150,10 +2200,6 @@ table.frm_name_value textarea {
 	background-color: var(--sidebar-color);
 }
 
-table td, .form-table tr td {
-	vertical-align: top;
-}
-
 .frm_option_val_label {
 	float: left;
 	width: 45%;
@@ -2297,11 +2343,6 @@ li.ui-state-default.edit_field_type_divider .frm-show-hover {
 	width: 70%;
 }
 
-.frm_single_option .frm_delete_icon {
-	float: left;
-	margin-right: 3px;
-}
-
 .frm_single_option:hover .frm_single_visible_hover {
 	opacity: 100;
 }
@@ -2419,21 +2460,28 @@ select.frm_cancelnew, input.frm_enternew {
 }
 
 /* Admin toggle */
+.frm_toggle_off,
 .frm_toggle_on {
 	display: none;
 	color: #fff;
 	z-index: 999;
 	position: absolute;
-	font-size: 9px;
-	left: 4px;
-	line-height: 18px;
+	font-size: 10px;
+	line-height: 20px;
+	left: 6px;
+}
+
+.frm_toggle_off {
+	display: inline;
+	left: auto;
+	right: 5px;
 }
 
 .frm_toggle {
 	position: relative;
 	display: inline-block;
-	width: 34px;
-	height: 18px;
+	width: 45px;
+	height: 20px;
 	vertical-align: middle;
 	margin-left: 5px;
 }
@@ -2451,34 +2499,35 @@ select.frm_cancelnew, input.frm_enternew {
 	bottom: 0;
 	transition: .4s;
 	border-radius: 30px;
-	background-color: transparent;
-	border: 2px solid #A0A0A0;
+	background-color: var(--blue-border);
 }
 
 .frm_toggle_slider:before {
 	border-radius: 50%;
 	position: absolute;
 	content: "";
-	height: 10px;
-	width: 10px;
+	height: 16px;
+	width: 16px;
 	left: 2px;
 	top: 2px;
 	transition: .3s;
-	background-color: #A0A0A0;
+	background-color: #fff;
 }
 
 input:checked + .frm_toggle_slider {
 	background-color: var(--primary-hover);
-	border-color: var(--primary-hover);
 }
 
 input:checked + .frm_toggle_slider:before {
-	background-color: #fff;
-	transform: translateX(16px);
+	transform: translateX(25px);
 }
 
 input:checked + .frm_toggle_slider + .frm_toggle_on {
 	display: inline;
+}
+
+input:checked + .frm_toggle_slider + .frm_toggle_on + .frm_toggle_off {
+	display: none;
 }
 
 input:focus + .frm_toggle_slider {
@@ -2908,6 +2957,10 @@ label.frm_action_events {
 	color: var(--dark-grey);
 }
 
+.frm_disabled_action .widget-title h4 {
+	color: var(--grey);
+}
+
 .frm_email_settings .widget-title .frm_form_action_icon:before {
 	font-size: 18px;
 	color: var(--grey);
@@ -2991,13 +3044,15 @@ label.frm_action_events {
 
 .frm_email_icons {
 	padding-left: 6px;
+	font-size: 20px;
 }
 
 .frm_email_icons a {
-	margin-left: 3px;
+	margin-left: 8px;
 	color: var(--grey);
 	opacity: 0;
 	transition: all .2s ease;
+	vertical-align: middle;
 }
 
 .frm_email_icons a:hover,
@@ -3018,16 +3073,19 @@ label.frm_action_events {
 	margin: 0;
 }
 
+table td, .form-table tr td {
+	vertical-align: top;
+}
+
 .form-table #list-table th {
 	text-align: center;
 }
 
-#frm_notification_settings th,
-#frm_notification_settings td,
+#form_settings_page th,
+#form_settings_page td,
 .frm_settings_form td,
 #frm_notification_settings .frm_form_action_settings p {
-	padding-top: 7px;
-	padding-bottom: 7px;
+	padding: 7px 0;
 }
 
 #frm_notification_settings .form-table > tbody > tr > th {
@@ -3915,6 +3973,11 @@ ul.frm-category-tabs {
 	position: relative;
 }
 
+.frm_code_list .frm-search {
+	float: none;
+	width: 100%;
+}
+
 .frm-search span {
 	position: absolute;
 	padding: 7px 10px;
@@ -3924,6 +3987,7 @@ ul.frm-category-tabs {
 	opacity: .5;
 }
 
+.frm-search input.frm-search-input,
 .frm-search.search-box input[name="s"],
 .frm-search #search-submit {
 	border-color: var(--grey-border);
@@ -3933,6 +3997,11 @@ ul.frm-category-tabs {
 	height: auto;
 	font-size: 13px;
 	line-height: normal;
+}
+
+.frm-search input.frm-search-input {
+	border-radius: var(--border-radius);
+	padding-left: 33px;
 }
 
 .frm-search.search-box input[name="s"] {
@@ -4219,6 +4288,15 @@ ul .frm_col_two {
 	background: var(--sidebar-hover);
 }
 
+.frm_code_list {
+	clear: both;
+}
+
+.frm_code_list .frmkeys {
+	display: none;
+}
+
+.frm_code_list i,
 .frmbutton.ui-sortable-helper i,
 .field_type_list li.frmbutton i {
 	margin: .15em .2em;
@@ -4228,6 +4306,16 @@ ul .frm_col_two {
 	width: 38px;
 	height: 20px;
 	text-align: left;
+}
+
+.frm_code_list i {
+	margin: 0 5px 0 0;
+	width: 15px;
+	font-size: 15px;
+}
+
+.frm_code_list i:before {
+	font-size: inherit;
 }
 
 #frm-insert-fields li a:hover i {

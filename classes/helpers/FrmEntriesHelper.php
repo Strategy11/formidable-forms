@@ -577,7 +577,7 @@ class FrmEntriesHelper {
 			$actions['frm_delete'] = array(
 				'url'   => admin_url( 'admin.php?page=formidable-entries&frm_action=destroy&id=' . $id . '&form=' . $entry->form_id ),
 				'label' => __( 'Delete Entry', 'formidable' ),
-				'icon'  => 'frm_icon_font frm_delete_icon',
+				'icon'  => 'far fa-trash-alt',
 				'data'  => array(
 					'frmverify' => __( 'Really delete?', 'formidable' ),
 				),

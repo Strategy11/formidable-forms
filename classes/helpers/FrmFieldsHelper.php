@@ -866,7 +866,7 @@ class FrmFieldsHelper {
 		$multiple_input = array( 'radio', 'checkbox', 'select', 'scale', 'star', 'lookup' );
 		$other_type     = array( 'html', 'break' );
 
-		$field_selection = array_merge( FrmField::pro_field_selection(), FrmField::field_selection() );
+		$field_selection = FrmField::all_field_selection();
 
 		$field_types = array();
 		if ( in_array( $type, $single_input ) ) {
