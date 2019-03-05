@@ -1024,6 +1024,8 @@ h2.frm-h2 + .howto{
 	margin-bottom:0;
 }
 
+#frm-templates-page .updated,
+.frm-add-new-form .updated,
 #frm-templates-page .notice,
 .frm-add-new-form .notice,
 #frm-templates-page .error,
