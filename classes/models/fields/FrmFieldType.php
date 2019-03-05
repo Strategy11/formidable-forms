@@ -148,7 +148,7 @@ abstract class FrmFieldType {
     </$label>
     $input
     [if description]<div class="frm_description" id="frm_desc_field_[key]">[description]</div>[/if description]
-    [if error]<div class="frm_error">[error]</div>[/if error]
+    [if error]<div class="frm_error" id="frm_error_field_[key]">[error]</div>[/if error]
 </div>
 DEFAULT_HTML;
 
@@ -790,9 +790,17 @@ DEFAULT_HTML;
 	 * @since 3.0
 	 */
 	protected function add_aria_description( $args, &$input_html ) {
+		$describedby = '';
 		if ( $this->get_field_column( 'description' ) != '' ) {
-			$desc_id = 'frm_desc_' . esc_attr( $args['html_id'] );
-			$input_html .= ' aria-describedby="' . esc_attr( $desc_id ) . '"';
+			$describedby = 'frm_desc_' . $args['html_id'];
+		}
+
+		if ( isset( $args['errors'][ 'field' . $args['field_id'] ] ) ) {
+			$describedby .= ' frm_error_' . $args['html_id'];
+		}
+
+		if ( ! empty( $describedby ) ) {
+			$input_html .= ' aria-describedby="' . esc_attr( trim( $describedby ) ) . '"';
 		}
 	}
 

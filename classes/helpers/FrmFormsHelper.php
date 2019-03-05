@@ -689,9 +689,8 @@ BEFORE_HTML;
 				continue;
 			}
 
-			if ( $line_break_first ) {
-				echo '<br/>';
-			}
+			$id = str_replace( 'field', 'field_', $error_key );
+			echo '<div id="' . esc_attr( $id ) . '_error">';
 
 			if ( $args['show_img'] && ! empty( $args['img'] ) ) {
 				echo '<img src="' . esc_attr( $args['img'] ) . '" alt="" />';
@@ -701,9 +700,7 @@ BEFORE_HTML;
 
 			echo wp_kses_post( $error );
 
-			if ( ! $line_break_first ) {
-				echo '<br/>';
-			}
+			echo '</div>';
 		}
 	}
 

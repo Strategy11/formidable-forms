@@ -567,21 +567,42 @@ function frmFrontFormJS(){
 	function addFieldError( $fieldCont, key, jsErrors ) {
 		if ( $fieldCont.length && $fieldCont.is(':visible') ) {
 			$fieldCont.addClass('frm_blank_field');
+			var input = $fieldCont.find( 'input, select, textarea' ),
+				id = 'frm_error_field_' + key,
+				describedBy = input.attr( 'aria-describedby' );
+
 			if ( typeof frmThemeOverride_frmPlaceError === 'function' ) {
 				frmThemeOverride_frmPlaceError( key, jsErrors );
 			} else {
-				$fieldCont.append( '<div class="frm_error" id="frm_error_' + key + '">'+ jsErrors[key] +'</div>' );
+				$fieldCont.append( '<div class="frm_error" id="' + id + '">'+ jsErrors[key] +'</div>' );
+
+				if ( typeof describedBy === 'undefined' ) {
+					describedBy = id;
+				} else {
+					describedBy = describedBy + ' ' + id;
+				}
+				input.attr( 'aria-describedby', describedBy );
 			}
-			$fieldCont.find( 'input, select, textarea' ).attr( 'aria-invalid', true );
+			input.attr( 'aria-invalid', true );
 
 			jQuery(document).trigger('frmAddFieldError', [ $fieldCont, key, jsErrors ] );
 		}
 	}
 
 	function removeFieldError( $fieldCont ) {
+		var errorMessage = $fieldCont.find('.frm_error'),
+			errorId = errorMessage.attr('id'),
+			input = $fieldCont.find( 'input, select, textarea' ),
+			describedBy = input.attr( 'aria-describedby' );
+
 		$fieldCont.removeClass('frm_blank_field has-error');
-		$fieldCont.find('.frm_error').remove();
-		$fieldCont.find( 'input, select, textarea' ).attr( 'aria-invalid', false );
+		errorMessage.remove();
+		input.attr( 'aria-invalid', false );
+
+		if ( typeof describedBy !== 'undefined' ) {
+			describedBy = describedBy.replace( errorId, '' );
+			input.attr( 'aria-describedby', describedBy );
+		}
 	}
 
 	function removeAllErrors() {

@@ -192,14 +192,30 @@ class FrmFieldFormHtml {
 	private function maybe_add_description_id() {
 		$description = $this->field_obj->get_field_column( 'description' );
 		if ( $description != '' ) {
+			$this->add_element_id( 'description', 'desc' );
+		}
+	}
 
-			preg_match_all( '/(\[if\s+description\])(.*?)(\[\/if\s+description\])/mis', $this->html, $inner_html );
-			if ( isset( $inner_html[2] ) && is_string( $inner_html[2] ) ) {
-				$has_id = strpos( $inner_html[2], ' id=' );
-				if ( ! $has_id ) {
-					$id = 'frm_desc_' . $this->html_id;
-					$this->html = str_replace( 'class="frm_description', 'id="' . esc_attr( $id ) . '" class="frm_description', $this->html );
-				}
+	/**
+	 * Insert an ID if it doesn't exist.
+	 *
+	 * @since 3.06.02
+	 */
+	private function add_element_id( $param, $id ) {
+		preg_match_all( '/(\[if\s+' . $param . '\])(.*?)(\[\/if\s+' . $param . '\])/mis', $this->html, $inner_html );
+		if ( ! isset( $inner_html[2] ) ) {
+			return;
+		}
+
+		if ( ! is_string( $inner_html[2] ) && count( $inner_html[2] ) === 1 ) {
+			$inner_html[2] = $inner_html[2][0];
+		}
+
+		if ( is_string( $inner_html[2] ) ) {
+			$has_id = strpos( $inner_html[2], ' id=' );
+			if ( ! $has_id ) {
+				$id = 'frm_' . $id . '_' . $this->html_id;
+				$this->html = str_replace( 'class="frm_' . $param, 'id="' . esc_attr( $id ) . '" class="frm_' . esc_attr( $param ), $this->html );
 			}
 		}
 	}
@@ -208,8 +224,23 @@ class FrmFieldFormHtml {
 	 * @since 3.0
 	 */
 	private function replace_error_shortcode() {
+		$this->maybe_add_error_id();
 		$error = isset( $this->pass_args['errors'][ 'field' . $this->field_id ] ) ? $this->pass_args['errors'][ 'field' . $this->field_id ] : false;
 		FrmShortcodeHelper::remove_inline_conditions( ! empty( $error ), 'error', $error, $this->html );
+	}
+
+	/**
+	 * Add an ID to the error message for aria-describedby.
+	 * This ID was added to the HTML in v3.06.02.
+	 *
+	 * @since 3.06.02
+	 */
+	private function maybe_add_error_id() {
+		if ( ! isset( $this->pass_args['errors'][ 'field' . $this->field_id ] ) ) {
+			return;
+		}
+
+		$this->add_element_id( 'error', 'error' );
 	}
 
 	/**
