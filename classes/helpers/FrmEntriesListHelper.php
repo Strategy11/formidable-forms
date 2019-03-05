@@ -110,6 +110,10 @@ class FrmEntriesListHelper extends FrmListHelper {
 		$form_id = FrmAppHelper::simple_get( 'form', 'absint' );
 		if ( $which == 'top' && empty( $form_id ) ) {
 			echo '<div class="alignleft actions">';
+
+			// Override the referrer to prevent it from being used for the screen options.
+			echo '<input type="hidden" name="_wp_http_referer" value="" />';
+
 			echo FrmFormsHelper::forms_dropdown( 'form', $form_id, array( 'blank' => __( 'View all forms', 'formidable' ) ) ); // WPCS: XSS ok.
 			submit_button( __( 'Filter', 'formidable' ), 'filter_action', '', false, array( 'id' => 'post-query-submit' ) );
 			echo '</div>';
