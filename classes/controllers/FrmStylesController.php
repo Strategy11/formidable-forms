@@ -71,6 +71,10 @@ class FrmStylesController {
         }
     }
 
+	/**
+	 * @param string $register Either 'enqueue' or 'register'.
+	 * @param bool   $force True to enqueue/register the style if a form has not been loaded.
+	 */
 	public static function enqueue_css( $register = 'enqueue', $force = false ) {
 		global $frm_vars;
 
@@ -97,7 +101,8 @@ class FrmStylesController {
 						wp_register_style( $css_key, $file, array(), $this_version );
 					}
 
-					if ( 'all' == $frm_settings->load_style || $register != 'register' ) {
+					$load_on_all = ! FrmAppHelper::is_admin() && 'all' == $frm_settings->load_style;
+					if ( $load_on_all || $register != 'register' ) {
 						wp_enqueue_style( $css_key );
 					}
 					unset( $css_key, $file );
