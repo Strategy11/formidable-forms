@@ -4,7 +4,7 @@ Tags: forms, contact form, form builder, survey, form maker, form, form creator
 Requires at least: 4.5
 Tested up to: 5.1
 Requires PHP: 5.3
-Stable tag: 3.06.01
+Stable tag: 3.06.02
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quiz forms, and more.
 
@@ -374,6 +374,13 @@ Formidable Forms drag & drop form builder combined with our add-ons is the most 
 To get access to more features, integrations, and support, <a href="https://formidableforms.com/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">upgrade to Formidable Forms Pro</a>. A Pro license gives you access to the full version of Formidable Forms for more advanced contact forms, Formidable Views, graphs and stats, priority support, and Formidable Forms Add-ons!
 
 == Changelog ==
+= 3.06.02 =
+* New: More WCAG improvements. Link the error messages to the field for screenreaders.
+* Fix: When resending emails, don't send emails that are toggled off.
+* Fix: Prevent other plugins from adding messages on the form templates and new form pages.
+* Fix: Prevent front-end styles from loading on back-end pages.
+* Fix: When the screen settings are changed after filtering the entry list, stay on the filtered list.
+
 = 3.06.01 =
 * Notice: The default HTML for field types with multiple inputs now use div instead of label for the field label for WCAG compliance. This will only affect new fields.
 * New: When saving a form, check if it is too long for the server settings. If so, show a notice along with information on how to fix it.
@@ -388,15 +395,5 @@ To get access to more features, integrations, and support, <a href="https://form
 * Fix: Form layouts with a long section of options in a radio or checkbox were adding extra spacing.
 * Fix: The templates page was showing a blank tile for expired licenses.
 * Fix: Submit button remained disabled after when the invisible reCaptcha validation failed.
-
-= 3.06 =
-* New: Add one-click form creation from a form template and adjust the way a new form is created
-* New: Add a new process for creating a custom form template
-* Tweak: Create smaller XML fiels when exporting forms
-* Tweak: Use the name of the form for XML exports when a single form is exported
-* Tweak: Don't limit the width of the color picker in the form styler to avoid conflicts with some color picker plugins
-* Fix: Prevent the 'Advanced' section from hiding on non-Formidable blocks
-* Fix: Some users were seeing PHP error messages in PHP 5.2
-* Fix: XML form exports set to use the default style were not correctly setting the style on import
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>

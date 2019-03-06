@@ -1,4 +1,11 @@
 == Changelog ==
+= 3.06.02 =
+* New: More WCAG improvements. Link the error messages to the field for screenreaders.
+* Fix: When resending emails, don't send emails that are toggled off.
+* Fix: Prevent other plugins from adding messages on the form templates and new form pages.
+* Fix: Prevent front-end styles from loading on back-end pages.
+* Fix: When the screen settings are changed after filtering the entry list, stay on the filtered list.
+
 = 3.06.01 =
 * Notice: The default HTML for field types with multiple inputs now use div instead of label for the field label for WCAG compliance. This will only affect new fields.
 * New: When saving a form, check if it is too long for the server settings. If so, show a notice along with information on how to fix it.
