@@ -100,6 +100,7 @@ legend.frm_hidden{
 
 .with_frm_style .frm_none_container .frm_primary_label,
 .with_frm_style .frm_pos_none,
+.frm_pos_none,
 .frm_none_container .frm_primary_label{
     display:none;
 }
