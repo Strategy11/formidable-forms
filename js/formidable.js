@@ -578,7 +578,7 @@ function frmFrontFormJS(){
 
 				if ( typeof describedBy === 'undefined' ) {
 					describedBy = id;
-				} else {
+				} else if ( describedBy.indexOf( id ) === -1 ) {
 					describedBy = describedBy + ' ' + id;
 				}
 				input.attr( 'aria-describedby', describedBy );
