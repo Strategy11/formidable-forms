@@ -129,24 +129,26 @@ function frmAdminBuildJS() {
 
 	function removeThisTag() {
 		/*jshint validthis:true */
-		var deleteButton = jQuery( this );
-		var continueRemove = confirmLinkClick( deleteButton );
+		var show, hide, id = '',
+			deleteButton = jQuery( this ),
+			continueRemove = confirmLinkClick( deleteButton );
+
 		if ( continueRemove === false ) {
 			return;
 		} else {
-			var id = deleteButton.data( 'removeid' );
-			var show = deleteButton.data( 'showlast' );
+			id = deleteButton.data( 'removeid' );
+			show = deleteButton.data( 'showlast' );
 			if ( typeof show === 'undefined' ) {
 				show = '';
 			}
-			var hide = deleteButton.data( 'hidelast' );
+			hide = deleteButton.data( 'hidelast' );
 			if ( typeof hide === 'undefined' ) {
 				hide = '';
 			}
 		}
 
 		if ( show !== '' ) {
-			if ( deleteButton.closest( '.frm_add_remove' ).find( '.frm_remove_tag' ).length > 1 ) {
+			if ( deleteButton.closest( '.frm_add_remove' ).find( '.frm_remove_tag:visible' ).length > 1 ) {
 				show = '';
 				hide = '';
 			}
@@ -163,7 +165,7 @@ function frmAdminBuildJS() {
 		}
 
 		var $fadeEle = jQuery( document.getElementById( id ) );
-		$fadeEle.fadeOut( 'slow', function() {
+		$fadeEle.fadeOut( 400, function() {
 			$fadeEle.remove();
 
 			if ( hide !== '' ) {
@@ -221,6 +223,7 @@ function frmAdminBuildJS() {
 					success: function( html ) {
 						cont.children( '.widget-inside' ).html( html );
 						initiateMultiselect();
+						showInputIcon( '#' + cont.attr('id') );
 					}
 				} );
 			}
@@ -268,24 +271,13 @@ function frmAdminBuildJS() {
 		if ( link.closest( 'div' ).find( '.tabs-panel' ).length ) {
 			link.closest( 'div' ).children( '.tabs-panel' ).not( t ).not( c ).hide();
 		} else {
-			link.closest( '.frm_wrap' ).find( '.tabs-panel, .hide_with_tabs' ).hide();
 			if ( link.closest( 'ul' ).hasClass( 'frm-form-setting-tabs' ) ) {
 				/* form settings page */
-				if ( t === '#html_settings' ) {
-					if ( pro ) {
-						document.getElementById( 'frm_html_tab' ).style.display = '';
-					}
-					jQuery( document.getElementById( 'frm_html_tags_tab' ) ).click();
-				} else if ( jQuery( document.getElementById( 'frm_html_tags_tab' ) ).is( ':visible' ) ) {
-					if ( pro ) {
-						showElement( jQuery( '.frm-category-tabs li' ) );
-						document.getElementById( 'frm_html_tab' ).style.display = 'none';
-					}
-					jQuery( document.getElementById( 'frm_insert_fields_tab' ) ).click();
-				}
+				jQuery( '#frm-categorydiv .tabs-panel, .hide_with_tabs' ).hide();
 			} else {
 				/* global settings */
 				var ajax = link.data( 'frmajax' );
+				link.closest( '.frm_wrap' ).find( '.tabs-panel, .hide_with_tabs' ).hide();
 				if ( typeof ajax !== 'undefined' && ajax == '1' ) {
 					loadSettingsTab( t );
 				}
@@ -913,18 +905,16 @@ function frmAdminBuildJS() {
 	//Add new option or "Other" option to radio/checkbox/dropdown
 	function addFieldOption() {
 		/*jshint validthis:true */
+		var field_id = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' ),
+			newOption = jQuery( '#frm_field_' + field_id + '_opts .frm_option_template' ).prop('outerHTML'),
+			opt_type = jQuery( this ).data( 'opttype' ),
+			optKey = 0,
+			oldKey = '000',
+			lastOpt = jQuery( '#frm_field_' + field_id + '_opts li:last' );
 
-		// increment when the button is clicked too close together
-		var clicks = parseInt( this.getAttribute( 'data-clicks' ) );
-		this.setAttribute( 'data-clicks', clicks + 1 );
-
-		var field_id = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' );
-		var opt_type = jQuery( this ).data( 'opttype' );
-		var opt_key = 1;
-		var lastOpt = jQuery( '#frm_field_' + field_id + '_opts li:last' );
 		if ( lastOpt.length ) {
-			opt_key = lastOpt.attr( 'id' ).replace( 'frm_delete_field_' + field_id + '-', '' ).replace( '_container', '' ).replace( 'other_', '' );
-			opt_key = parseInt( opt_key ) + 1 + clicks;
+			optKey = lastOpt.data( 'optkey');
+			optKey = parseInt( optKey ) + 1;
 		}
 
 		//Update hidden field
@@ -936,17 +926,27 @@ function frmAdminBuildJS() {
 			if ( ftype === 'radio' || ftype === 'select' ) {
 				jQuery( this ).fadeOut( 'slow' );
 			}
-		}
 
-		var data = {
-			action: 'frm_add_field_option', field_id: field_id,
-			opt_key: opt_key,
-			opt_type: opt_type, nonce: frmGlobal.nonce
-		};
-		jQuery.post( ajaxurl, data, function( msg ) {
-			jQuery( document.getElementById( 'frm_field_' + field_id + '_opts' ) ).append( msg );
-			resetDropdownOpts( field_id );
-		} );
+			var data = {
+				action: 'frm_add_field_option', field_id: field_id,
+				opt_key: optKey,
+				opt_type: opt_type, nonce: frmGlobal.nonce
+			};
+			jQuery.post( ajaxurl, data, function( msg ) {
+				jQuery( document.getElementById( 'frm_field_' + field_id + '_opts' ) ).append( msg );
+				document.getElementById( 'frm_add_opt_' + field_id ).style.display = 'none';
+				resetDropdownOpts( field_id );
+			} );
+		} else {
+			newOption = newOption.replace( new RegExp( 'optkey="' + oldKey + '"', 'g' ), 'optkey="' + optKey + '"' );
+			newOption = newOption.replace( new RegExp( '-' + oldKey + '_', 'g' ), '-' + optKey + '_' );
+			newOption = newOption.replace( new RegExp( '-' + oldKey + '"', 'g' ), '-' + optKey + '"' );
+			newOption = newOption.replace( new RegExp( '\\[' + oldKey + '\\]', 'g' ), '[' + optKey + ']' );
+			newOption = newOption.replace( 'frm_hidden frm_option_template', '' );
+			jQuery( document.getElementById( 'frm_field_' + field_id + '_opts' ) ).append( newOption );
+			document.getElementById( 'frm_add_opt_' + field_id ).style.display = 'none';
+			//resetDropdownOpts( field_id );
+		}
 	}
 
 	function toggleMultSel() {
@@ -1369,6 +1369,7 @@ function frmAdminBuildJS() {
 	}
 
 	function resetDropdownOpts( id ) {
+		// TODO: 4.0
 		var field = document.getElementById( 'frm_dropdown_' + id );
 		if ( field !== null ) {
 			fillDropdownOpts( field, id );
@@ -1720,6 +1721,14 @@ function frmAdminBuildJS() {
 	}
 
 	/* Form settings */
+
+	function showInputIcon( parentClass ) {
+		if ( typeof parentClass === 'undefined' ) {
+			parentClass = '';
+		}
+		jQuery( parentClass + ' .frm_has_shortcodes input,' + parentClass + ' .frm_has_shortcodes textarea' ).before( '<i class="frm-show-box fas fa-ellipsis-h"></i>' );
+	}
+
 	function showSuccessOpt() {
 		/*jshint validthis:true */
 		var c = 'success';
@@ -2493,10 +2502,15 @@ function frmAdminBuildJS() {
 			rich = true,
 			element_id = element;
 		if ( typeof(element) === 'object' ) {
-			element_id = element.closest( 'div' ).attr( 'class' ).split( ' ' )[1];
 			if ( element.hasClass( 'frm_noallow' ) ) {
 				return;
 			}
+
+			element_id = element.closest( 'div' ).attr( 'class' ).split( ' ' )[1];
+		}
+
+		if ( typeof element_id === 'undefined' ) {
+			element_id = document.activeElement.id;
 		}
 
 		if ( element_id ) {
@@ -2525,7 +2539,7 @@ function frmAdminBuildJS() {
 				p = 1;
 			}
 			jQuery.ajax( {
-				type: "POST", url: ajaxurl,
+				type: 'POST', url: ajaxurl,
 				data: {
 					action: 'frm_get_default_html',
 					form_id: jQuery( 'input[name="id"]' ).val(),
@@ -2559,6 +2573,28 @@ function frmAdminBuildJS() {
 		content_box.keyup(); //trigger change
 	}
 
+	function showShortcodes( e ) {
+		/*jshint validthis:true */
+		var pos = this.getBoundingClientRect(),
+			box = document.getElementById( 'frm_adv_info' ),
+			classes = this.className,
+			parentPos = box.parentElement.getBoundingClientRect();
+
+		e.preventDefault();
+		e.stopPropagation();
+
+		if ( classes.indexOf( 'fa-times' ) !== -1 ) {
+			box.style.display = 'none';
+			this.className = classes.replace( 'fa-times', 'fa-ellipsis-h' );
+		} else {
+			this.nextSibling.focus();
+			box.style.top = ( pos.top - parentPos.top + 30 ) + 'px';
+			box.style.left = ( pos.left - parentPos.left - 273 ) + 'px';
+			box.style.display = 'block';
+			this.className = classes.replace( 'fa-ellipsis-h', 'fa-times' );
+		}
+	}
+
 	function toggleAllowedShortcodes( id, f ) {
 		var c, clickedID;
 
@@ -2581,7 +2617,7 @@ function frmAdminBuildJS() {
 			}
 		}
 
-		jQuery( '#frm-insert-fields-box,#frm-conditionals,#frm-adv-info-tab,#frm-html-tags,#frm-layout-classes,#frm-dynamic-values' ).removeClass().addClass( 'tabs-panel ' + c );
+		jQuery( '#frm-insert-fields-box,#frm-conditionals,#frm-adv-info-tab,#frm-layout-classes,#frm-dynamic-values' ).removeClass().addClass( 'tabs-panel ' + c );
 		var a = [
 			'content', 'wpbody-content', 'dyncontent', 'success_url',
 			'success_msg', 'edit_msg', 'frm_dyncontent', 'frm_not_email_message',
@@ -2593,13 +2629,13 @@ function frmAdminBuildJS() {
 		];
 
 		if ( jQuery.inArray( id, a ) >= 0 ) {
-			jQuery( '.frm_code_list a' ).removeClass( 'frm_noallow' ).addClass( 'frm_allow' );
-			jQuery( '.frm_code_list a.hide_' + id ).addClass( 'frm_noallow' ).removeClass( 'frm_allow' );
+			jQuery( '.frm_code_list a, .frm_code_list li' ).removeClass( 'frm_noallow' ).addClass( 'frm_allow' );
+			jQuery( '.frm_code_list .hide_' + id ).addClass( 'frm_noallow' ).removeClass( 'frm_allow' );
 		} else if ( jQuery.inArray( id, b ) >= 0 ) {
-			jQuery( '.frm_code_list a:not(.show_' + id + ')' ).addClass( 'frm_noallow' ).removeClass( 'frm_allow' );
-			jQuery( '.frm_code_list a.show_' + id ).removeClass( 'frm_noallow' ).addClass( 'frm_allow' );
+			jQuery( '.frm_code_list li:not(.show_' + id + ')' ).addClass( 'frm_noallow' ).removeClass( 'frm_allow' );
+			jQuery( '.frm_code_list .show_' + id ).removeClass( 'frm_noallow' ).addClass( 'frm_allow' );
 		} else {
-			jQuery( '.frm_code_list a' ).addClass( 'frm_noallow' ).removeClass( 'frm_allow' );
+			jQuery( '.frm_code_list li' ).addClass( 'frm_noallow' ).removeClass( 'frm_allow' );
 		}
 
 		//Automatically select a tab
@@ -2612,8 +2648,8 @@ function frmAdminBuildJS() {
 				clickedID = 'frm_insert_fields';
 			}
 		}
+
 		if ( typeof clickedID !== 'undefined' ) {
-			//jQuery( document.getElementById( clickedID + '_tab' ) ).click();
 			jQuery( '#' + clickedID.replace( /_/g, '-' ) + ' .frm_show_inactive' ).addClass( 'frm_hidden' );
 			jQuery( '#' + clickedID.replace( /_/g, '-' ) + ' .frm_show_active' ).removeClass( 'frm_hidden' );
 		}
@@ -3742,39 +3778,47 @@ function frmAdminBuildJS() {
 		},
 
 		panelInit: function() {
-			jQuery( '.frm_code_list a' ).addClass( 'frm_noallow' );
-
 			jQuery( '.frm_wrap' ).on( 'click', '.frm_insert_code', insertCode );
 			jQuery( document ).on( 'change', '.frm_insert_val', function() {
 				insertFieldCode( jQuery( this ).data( 'target' ), jQuery( this ).val() );
 				jQuery( this ).val( '' );
 			} );
 
-			jQuery( '.frm_has_shortcodes input, .frm_has_shortcodes textarea' ).before( '<i class="frm-show-box fas fa-ellipsis-h"></i>' );
-			jQuery( document ).on( 'click', '.frm-show-box', function( e ) {
-				var pos = this.getBoundingClientRect(),
-					box = document.getElementById( 'frm_adv_info' ),
-					classes = this.className;
-
-				e.preventDefault();
-				e.stopPropagation();
-
-				if ( classes.indexOf( 'fa-times' ) !== -1 ) {
-					box.style.display = 'none';
-					this.className = classes.replace( 'fa-times', 'fa-ellipsis-h' );
-				} else {
-					this.nextSibling.focus();
-					box.style.top = ( pos.top + 26 ) + 'px';
-					box.style.left = ( pos.left - 280 ) + 'px';
-					box.style.display = 'block';
-					this.className = classes.replace( 'fa-ellipsis-h', 'fa-times' );
-				}
-			} );
+			showInputIcon();
+			jQuery( document ).on( 'click', '.frm-show-box', showShortcodes );
 
 			jQuery( document ).on( 'focusin click', 'form input, form textarea', function( e ) {
 				e.stopPropagation();
 				if ( jQuery( this ).is( ':not(:submit, input[type=button])' ) ) {
+					if ( document.getElementById( 'form_settings_page' ) !== null ) {
+						/* form settings page */
+						var htmlTab = jQuery( '#frm_html_tab' );
+						if ( jQuery( this ).closest( '#html_settings' ).length > 0 ) {
+							htmlTab.show();
+							htmlTab.siblings().hide();
+							document.getElementById( 'frm_html_tags_tab' ).click();
+						} else {
+							showElement( jQuery( '.frm-category-tabs li' ) );
+							document.getElementById( 'frm_insert_fields_tab' ).click();
+							htmlTab.hide();
+							htmlTab.siblings().show();
+						}
+					}
+
 					toggleAllowedShortcodes( this.id, e.type );
+				}
+			} );
+
+			// Close shortcode modal on click.
+			jQuery( document ).on( 'focusout', 'form input, form textarea', function( e ) {
+				var sidebar = document.getElementById( 'frm_adv_info' );
+				if ( sidebar !== null ) {
+					sidebar.style.display = 'none';
+					var closeIcons = document.querySelectorAll( '.frm-show-box.fa-times' );
+					for ( var i = 0; i < closeIcons.length; i++ ) {
+						closeIcons[i].classList.remove('fa-times');
+						closeIcons[i].classList.add('fa-ellipsis-h');
+					}
 				}
 			} );
 
@@ -3786,7 +3830,7 @@ function frmAdminBuildJS() {
 
 				var searchText = jQuery( this ).val().toLowerCase();
 
-				jQuery( "ul.frm_customize_field_list li" ).each( function() {
+				jQuery( 'ul.frm_customize_field_list li' ).each( function() {
 					var $this = jQuery( this );
 					$this.find( 'a' ).text().toLowerCase().indexOf( searchText ) >= 0 ? $this.show() : $this.hide();
 				} );

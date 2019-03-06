@@ -997,7 +997,7 @@ class FrmFormsController {
 	private static function advanced_helpers( $atts ) {
 		$advanced_helpers = array(
 			'default' => array(
-				'heading' => __( 'Customize the field values with the following parameters. Click to see a sample.', 'formidable' ),
+				'heading' => __( 'Customize field values with the following parameters.', 'formidable' ),
 				'codes'   => self::get_advanced_shortcodes(),
 			),
 		);
@@ -1038,8 +1038,12 @@ class FrmFormsController {
 				'label' => __( 'Separator', 'formidable' ),
 				'title' => __( 'Use a different separator for checkbox fields', 'formidable' ),
 			),
-			'x format="d-m-Y"'     => __( 'Date Format', 'formidable' ),
-			'x show="field_label"' => __( 'Field Label', 'formidable' ),
+			'x format="d-m-Y"'     => array(
+				'label' => __( 'Date Format', 'formidable' ),
+			),
+			'x show="field_label"' => array(
+				'label' => __( 'Field Label', 'formidable' ),
+			),
 			'x wpautop=0'          => array(
 				'label' => __( 'No Auto P', 'formidable' ),
 				'title' => __( 'Do not automatically add any paragraphs or line breaks', 'formidable' ),

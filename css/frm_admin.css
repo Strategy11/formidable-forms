@@ -500,6 +500,7 @@ h2#frm_form_heading,
 
 #form_settings_page .frm-inner-content {
 	padding-bottom: 150px;
+	position: relative;
 }
 
 .frm_wrap #submitdiv {
@@ -2447,8 +2448,12 @@ li.ui-state-default.selected .frm-show-click.frm_import_options select {
 
 #form_settings_page .tabs-panel,
 .frm_settings_form .tabs-panel {
-	max-height: none !important;
+	max-height: initial !important;
 	min-height: 260px !important;
+}
+
+#frm_adv_info .tabs-panel {
+	min-height: 0 !important;
 }
 
 #form_settings_page .frm_posttax_row select {
@@ -2727,7 +2732,6 @@ label.default-style-box input[type="checkbox"] {
 /* Customization Panel */
 #frm-insert-fields-box, #frm-conditionals {
 	max-height: none;
-	padding-right: 0;
 }
 
 #frm-conditionals, #frm-adv-info-tab {
@@ -2762,6 +2766,10 @@ label.default-style-box input[type="checkbox"] {
 
 #frm-insert-fields-box ul.frm_code_list li.clear.frm_block {
 	height: 10px;
+}
+
+#frm_adv_info .frm_noallow {
+	display: none;
 }
 
 /* Customize HTML Tab */
@@ -3973,9 +3981,10 @@ ul.frm-category-tabs {
 	position: relative;
 }
 
-.frm_code_list .frm-search {
+#frm_adv_info .frm-search {
 	float: none;
 	width: 100%;
+	clear: both;
 }
 
 .frm-search span {
@@ -4196,25 +4205,8 @@ ul .frm_col_two {
 	color: #f37656
 }
 
-.field_type_list > li,
-.frm_code_list li {
+.field_type_list > li {
 	width: 48%;
-}
-
-.frm_code_list.frm_full_width li {
-	width: auto;
-}
-
-#frm_customize_search li {
-	width: 100%
-}
-
-#frm_customize_search {
-	margin-bottom: 5px
-}
-
-#frm_customize_search + ul.frm_code_list.frm_customize_field_list {
-	margin-top: 5px;
 }
 
 .frm_no_p_margin > p {
@@ -5129,21 +5121,6 @@ Responsive Design
 		max-height: 28px;
 	}
 
-	#form_settings_page .frm_code_list li {
-		width: 48%;
-		float: left;
-	}
-
-	#form_settings_page .frm_code_list li:nth-child(odd),
-	#form_settings_page .frm_code_list li.frm_col_one {
-		margin-right: 4%;
-	}
-
-	#form_settings_page li.frm_block {
-		margin: 0;
-		width: auto;
-	}
-
 	#form_settings_page #publishing-action > button {
 		width: auto;
 	}
@@ -5294,8 +5271,7 @@ Responsive Design
 	}
 
 	.field_type_list li.button:nth-child(2n),
-	.field_type_list > li.button,
-	.frm_code_list li {
+	.field_type_list > li.button {
 		line-height: 26px;
 		width: auto;
 		min-width: 34px;

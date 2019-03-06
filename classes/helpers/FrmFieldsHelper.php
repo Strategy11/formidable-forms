@@ -398,6 +398,8 @@ class FrmFieldsHelper {
 	}
 
 	public static function show_single_option( $field ) {
+		self::hidden_field_option( $field );
+
 		if ( ! is_array( $field['options'] ) ) {
 			return;
 		}
@@ -425,6 +427,23 @@ class FrmFieldsHelper {
 
 			unset( $checked, $other_val );
 		}
+	}
+
+	/**
+	 * Include hidden row for javascript to duplicate.
+	 *
+	 * @since 4.0
+	 * @param array $field
+	 */
+	private static function hidden_field_option( $field ) {
+		$opt_key    = '000';
+		$field_val  = '';
+		$opt        = '';
+		$checked    = '';
+		$field_name = isset( $field['html_name'] ) ? $field['html_name'] : $field['name'];
+		$html_id    = isset( $field['html_id'] ) ? $field['html_id'] : self::get_html_id( $field );
+
+		require( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/single-option.php' );
 	}
 
 	public static function get_value_from_array( $opt, $opt_key, $field ) {

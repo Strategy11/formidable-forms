@@ -391,6 +391,151 @@ BEFORE_HTML;
 	}
 
 	/**
+	 * @since 4.0
+	 */
+	public static function html_shortcodes() {
+		$codes = array(
+			'id'             => array(
+				'label' => __( 'Field ID', 'formidable' ),
+				'class' => 'show_field_custom_html',
+			),
+			'key'            => array(
+				'label' => __( 'Field Key', 'formidable' ),
+				'class' => 'show_field_custom_html',
+			),
+			'field_name'     => array(
+				'label' => __( 'Field Name', 'formidable' ),
+				'class' => 'show_field_custom_html',
+			),
+			'description'    => array(
+				'label' => __( 'Field Description', 'formidable' ),
+				'class' => 'show_field_custom_html',
+			),
+			'label_position' => array(
+				'label' => __( 'Label Position', 'formidable' ),
+				'class' => 'show_field_custom_html',
+			),
+			'required_label' => array(
+				'label' => __( 'Required Label', 'formidable' ),
+				'class' => 'show_field_custom_html',
+			),
+			'input'          => array(
+				'label' => __( 'Input Field', 'formidable' ),
+				'class' => 'show_field_custom_html',
+			),
+			'input opt=1'    => array(
+				'label' => __( 'Single Option', 'formidable' ),
+				'title' => __( 'Show a single radio or checkbox option by replacing 1 with the order of the option', 'formidable' ),
+				'class' => 'show_field_custom_html',
+			),
+			'input label=0'  => array(
+				'label' => __( 'Hide Option Label', 'formidable' ),
+				'class' => 'show_field_custom_html',
+			),
+			'required_class' => array(
+				'label' => __( 'Required Class', 'formidable' ),
+				'title' => __( 'Add class name if field is required', 'formidable' ),
+				'class' => 'show_field_custom_html',
+			),
+			'error_class'    => array(
+				'label' => __( 'Error Class', 'formidable' ),
+				'title' => __( 'Add class name if field has an error on form submit', 'formidable' ),
+				'class' => 'show_field_custom_html',
+			),
+
+			'form_name'        => array(
+				'label' => __( 'Form Name', 'formidable' ),
+				'class' => 'show_before_html show_after_html',
+			),
+			'form_description' => array(
+				'label' => __( 'Form Description', 'formidable' ),
+				'class' => 'show_before_html show_after_html',
+			),
+			'form_key'         => array(
+				'label' => __( 'Form Key', 'formidable' ),
+				'class' => 'show_before_html show_after_html',
+			),
+			'deletelink'       => array(
+				'label' => __( 'Delete Entry Link', 'formidable' ),
+				'class' => 'show_before_html show_after_html',
+			),
+
+			'button_label' => array(
+				'label' => __( 'Button Label', 'formidable' ),
+				'class' => 'show_submit_html',
+			),
+			'button_action' => array(
+				'label' => __( 'Button Hook', 'formidable' ),
+				'class' => 'show_submit_html',
+			),
+		);
+
+		/**
+		 * @since 4.0
+		 */
+		return apply_filters( 'frm_html_codes', $codes );
+	}
+
+	/**
+	 * @since 4.0
+	 * @param array $args
+	 */
+	public static function insert_opt_html( $args ) {
+		$class  = '';
+		$fields = FrmField::all_field_selection();
+		$field  = isset( $fields[ $args['type'] ] ) ? $fields[ $args['type'] ] : array();
+
+		$possible_email_field = FrmFieldFactory::field_has_property( $args['type'], 'holds_email_values' );
+		if ( $possible_email_field ) {
+			$class .= 'show_frm_not_email_to';
+		}
+		?>
+		<li class="<?php echo esc_attr( $class ); ?>">
+			<a href="javascript:void(0)" class="frmids frm_insert_code alignright"
+				data-code="<?php echo esc_attr( $args['id'] ); ?>">[<?php echo esc_attr( $args['id'] ); ?>]</a>
+			<a href="javascript:void(0)" class="frmkeys frm_insert_code alignright"
+				data-code="<?php echo esc_attr( $args['key'] ); ?>">[<?php echo esc_attr( FrmAppHelper::truncate( $args['key'], 10 ) ); ?>]</a>
+			<a href="javascript:void(0)" class="frm_insert_code"
+				data-code="<?php echo esc_attr( $args['id'] ); ?>">
+				<?php if ( isset( $field['icon'] ) ) { ?>
+					<i class="<?php echo esc_attr( $field['icon'] ); ?>" aria-hidden="true"></i>
+				<?php } ?>
+				<?php echo esc_attr( FrmAppHelper::truncate( $args['name'], 60 ) ); ?>
+			</a>
+		</li>
+		<?php
+	}
+
+	/**
+	 * @since 4.0
+	 * @param array $args
+	 */
+	public static function insert_code_html( $args ) {
+		$defaults = array(
+			'class' => '',
+			'code'  => '',
+			'label' => '',
+			'title' => '',
+		);
+
+		$args        = array_merge( $defaults, $args );
+		$has_tooltip = ! empty( $args['title'] );
+
+		?>
+		<li class="<?php echo esc_attr( $args['class'] ); ?>">
+			<a href="javascript:void(0)" class="frm_insert_code <?php echo $has_tooltip ? 'frm_help' : ''; ?>"
+				<?php echo $has_tooltip ? 'title="' . esc_attr( $args['title'] ) . '"' : ''; ?>
+				data-code="<?php echo esc_attr( $args['code'] ); ?>">
+				<span class="alignright">
+					[<?php echo esc_attr( FrmAppHelper::truncate( $args['code'], 10 ) ); ?>]
+				</span>
+				<?php echo esc_attr( FrmAppHelper::truncate( $args['label'], 60 ) ); ?>
+			</a>
+		</li>
+		<?php
+	}
+
+	/**
 	 * Automatically add end section fields if they don't exist (2.0 migration)
 	 *
 	 * @since 2.0

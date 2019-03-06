@@ -310,6 +310,11 @@ class FrmForm {
 
 			$new_field[ $col ] = isset( $values['field_options'][ $col . '_' . $field->id ] ) ? $values['field_options'][ $col . '_' . $field->id ] : $default;
 		}
+
+		// Don't save the template option.
+		if ( is_array( $new_field['options'] ) && isset( $new_field['options']['000'] ) ) {
+			unset( $new_field['options']['000'] );
+		}
 	}
 
 	/**

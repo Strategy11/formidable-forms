@@ -96,9 +96,10 @@
 			<?php esc_html_e( 'Bulk Edit Options', 'formidable' ); ?>
 		</a>
 		<?php do_action( 'frm_add_multiple_opts_labels', $field ); ?>
-		<ul id="frm_field_<?php echo esc_attr( $field['id'] ); ?>_opts" class="frm_sortable_field_opts frm_clear<?php echo ( count( $field['options'] ) > 10 ) ? ' frm_field_opts_list' : ''; ?>">
+		<ul id="frm_field_<?php echo esc_attr( $field['id'] ); ?>_opts" class="frm_sortable_field_opts frm_clear<?php echo ( count( $field['options'] ) > 10 ) ? ' frm_field_opts_list' : ''; ?> frm_add_remove" data-key="<?php echo esc_attr( $field['field_key'] ); ?>">
 			<?php FrmFieldsHelper::show_single_option( $field ); ?>
 		</ul>
+		<a href="javascript:void(0);" data-opttype="single" class="frm_cb_button frm_add_opt frm_icon_font frm_add_tag frm_hidden" id="frm_add_opt_<?php echo esc_attr( $field['id'] ); ?>"></a>
 
 		<?php if ( FrmAppHelper::pro_is_installed() ) { ?>
 			<div class="frm_small_top_margin">

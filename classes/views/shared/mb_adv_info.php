@@ -31,18 +31,19 @@
 			<li><a href="javascript:void(0)" class="current frmids"><?php esc_html_e( 'IDs', 'formidable' ); ?></a> |</li>
 			<li><a href="javascript:void(0)" class="frmkeys"><?php esc_html_e( 'Keys', 'formidable' ); ?></a></li>
 		</ul>
-		<ul class="alignleft"><li><?php esc_html_e( 'Fields from your form', 'formidable' ); ?>:</li>
-</ul>
-		<ul class="frm_code_list" id="frm_customize_search">
-			<li>
-				<div class="search-box frm-search">
-					<label class="screen-reader-text" for="entry-search-input">Search:</label>
-					<span class="dashicons dashicons-search"></span>
-					<input type="search" id="frm_field_search" class="frm-search-input" name="frm_field_search" placeholder="<?php esc_html_e( 'Search', 'formidable' ); ?>">
-				</div>
-			</li>
+		<ul class="alignleft">
+			<li><?php esc_html_e( 'Fields from your form', 'formidable' ); ?>:</li>
 		</ul>
-		<ul class="frm_code_list frm_full_width frm_customize_field_list">
+
+		<div class="search-box frm-search" id="frm_customize_search">
+			<label class="screen-reader-text" for="entry-search-input">
+				<?php esc_html_e( 'Search', 'formidable' ); ?>
+			</label>
+			<span class="dashicons dashicons-search"></span>
+			<input type="search" id="frm_field_search" class="frm-search-input" name="frm_field_search" placeholder="<?php esc_html_e( 'Search', 'formidable' ); ?>">
+		</div>
+
+		<ul class="frm_code_list frm_customize_field_list">
 		<?php
 		if ( ! empty( $fields ) ) {
 			foreach ( $fields as $f ) {
@@ -54,7 +55,7 @@
 					continue;
 				}
 
-				FrmAppHelper::insert_opt_html(
+				FrmFormsHelper::insert_opt_html(
 					array(
 						'id'   => $f->id,
 						'key'  => $f->field_key,
@@ -73,37 +74,6 @@
 		}
 		?>
 		</ul>
-
-		<p class="howto">
-			<?php esc_html_e( 'Click a button below to insert extra values from form entries or your site settings.', 'formidable' ); ?>
-		</p>
-
-		<?php esc_html_e( 'Helpers', 'formidable' ); ?>:
-		<ul class="frm_code_list">
-		<?php
-		$col = 'one';
-		foreach ( $entry_shortcodes as $skey => $sname ) {
-			if ( empty( $skey ) ) {
-				$col = 'one';
-				echo '<li class="clear frm_block"></li>';
-				continue;
-			}
-
-			$classes = ( in_array( $skey, array( 'siteurl', 'sitename', 'entry_count' ) ) ) ? 'show_before_content show_after_content' : '';
-			$classes .= ( strpos( $skey, 'default-' ) === 0 ) ? 'hide_frm_not_email_subject' : '';
-			?>
-			<li class="frm_col_<?php echo esc_attr( $col ); ?>">
-				<a href="javascript:void(0)" class="frmbutton button <?php echo esc_attr( $classes ); ?> frm_insert_code" data-code="<?php echo esc_attr( $skey ); ?>">
-					<?php echo esc_html( $sname ); ?>
-				</a>
-			</li>
-			<?php
-			$col = ( $col == 'one' ) ? 'two' : 'one';
-			unset( $skey, $sname, $classes );
-		}
-		?>
-		</ul>
-		<div class="clear"></div>
 	</div>
 
 	<?php if ( ! empty( $cond_shortcodes ) ) { ?>
@@ -112,8 +82,7 @@
 			<li><a href="javascript:void(0)" class="current frmids"><?php esc_html_e( 'IDs', 'formidable' ); ?></a> |</li>
 			<li><a href="javascript:void(0)" class="frmkeys"><?php esc_html_e( 'Keys', 'formidable' ); ?></a></li>
 		</ul>
-		<ul class="alignleft"><li><?php esc_html_e( 'Fields from your form', 'formidable' ); ?>:</li></ul>
-		<ul class="frm_code_list frm_full_width">
+		<ul class="frm_code_list">
 			<?php
 			if ( ! empty( $fields ) ) {
 				foreach ( $fields as $f ) {
@@ -152,6 +121,29 @@
 	<?php } ?>
 
 	<div id="frm-adv-info-tab" class="tabs-panel">
+		<ul class="frm_code_list">
+		<?php
+		foreach ( $entry_shortcodes as $skey => $sname ) {
+			if ( empty( $skey ) ) {
+				echo '<li class="clear frm_block"></li>';
+				continue;
+			}
+
+			$classes = ( in_array( $skey, array( 'siteurl', 'sitename', 'entry_count' ) ) ) ? 'show_before_content show_after_content' : '';
+			$classes .= ( strpos( $skey, 'default-' ) === 0 ) ? 'hide_frm_not_email_subject' : '';
+
+			FrmFormsHelper::insert_code_html(
+				array(
+					'code'  => $skey,
+					'label' => $sname,
+					'class' => $classes,
+				)
+			);
+
+			unset( $skey, $sname, $classes );
+		}
+		?>
+		</ul>
 		<?php
 
 		foreach ( $advanced_helpers as $helper_type => $helper ) {
@@ -159,9 +151,8 @@
 				continue;
 			}
 
-			$col = 'one';
 			?>
-			<div class="clear"></div>
+
 			<p class="howto"><?php echo esc_html( $helper['heading'] ); ?></p>
 			<ul class="frm_code_list">
 			<?php
@@ -172,14 +163,21 @@
 					$code = str_replace( '|user_id|', 'x', $code );
 				}
 				$include_x = strpos( $code, ' ' ) ? '' : 'x ';
-				?>
-				<li class="frm_col_<?php echo esc_attr( $col ); ?>">
-					<a href="javascript:void(0)" class="frmbutton button frm_insert_code <?php echo is_array( $code_label ) ? 'frm_help' : ''; ?>" data-code="<?php echo esc_attr( $include_x . $code ); ?>" <?php echo is_array( $code_label ) ? 'title="' . esc_attr( $code_label['title'] ) . '"' : ''; ?>>
-						<?php echo esc_html( is_array( $code_label ) ? $code_label['label'] : $code_label ); ?>
-					</a>
-				</li>
-				<?php
-				$col = ( $col == 'one' ) ? 'two' : 'one';
+
+				if ( ! is_array( $code_label ) ) {
+					$code_label = array(
+						'label' => $code_label,
+					);
+				}
+
+				FrmFormsHelper::insert_code_html(
+					array(
+						'code'  => $include_x . $code,
+						'label' => $code_label['label'],
+						'title' => isset( $code_label['title'] ) ? $code_label['title'] : '',
+					)
+				);
+
 				unset( $code );
 			}
 			?>
@@ -187,7 +185,6 @@
 			<?php
 		}
 		?>
-
 	</div>
 
 	<?php
