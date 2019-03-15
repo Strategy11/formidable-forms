@@ -202,12 +202,8 @@ class FrmFieldsController {
 				$field = FrmFieldsHelper::setup_edit_vars( $field_object );
 			}
 
-			$inner_outline   = FrmFieldsHelper::single_input_fields();
-			$inner_outline[] = 'select';
-
 			$li_classes = self::get_classes_for_builder_field( $field, $display, $field_obj );
 			$li_classes .= ' ui-state-default widgets-holder-wrap';
-			$li_classes .= in_array( $field['type'], $inner_outline ) ? ' frm-inner-outline' : ' frm-outer-outline';
 
 			require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add_field.php' );
 		}
@@ -218,7 +214,7 @@ class FrmFieldsController {
 	 */
 	private static function get_classes_for_builder_field( $field, $display, $field_info ) {
 		$li_classes = $field_info->form_builder_classes( $display['type'] );
-		$li_classes .= ' frm_form_field frmstart ' . $field['classes'] . ' frmend';
+		$li_classes .= ' frm_form_field frmstart ' . ( isset( $field['classes'] ) ? $field['classes'] : '' ) . ' frmend';
 		if ( ! empty( $field ) ) {
 			$li_classes = apply_filters( 'frm_build_field_class', $li_classes, $field );
 		}

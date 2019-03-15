@@ -3306,10 +3306,6 @@ a.frm_action_icon:hover {
 	color: var(--primary-hover);
 }
 
-.frm-inner-outline .frm-field-action-icons {
-	top: 30px;
-}
-
 .edit_field_type_select .frm-field-action-icons {
 	right: 20px;
 }
@@ -3885,19 +3881,21 @@ ul.frm-category-tabs {
 	box-shadow: none;
 }
 
-.frm_sorting li.ui-state-default.frm_not_divider.frm-inner-outline:hover input,
-.frm_sorting li.ui-state-default.frm_not_divider.frm-inner-outline:hover select,
-.frm_sorting li.ui-state-default.frm_not_divider.frm-inner-outline:hover textarea,
-.start_divider.frm_sorting li.ui-state-default.frm_not_divider.frm-outer-outline:hover,
-.frm_sorting li.ui-state-default.frm_not_divider.frm-outer-outline:hover,
+.start_divider.frm_sorting li.ui-state-default.frm_not_divider:hover,
+.frm_sorting li.ui-state-default.frm_not_divider:hover,
 .frm_sorting li.ui-state-default.edit_field_type_divider .divider_section_only:hover,
 .frm_sorting .repeat_section li.ui-state-default.edit_field_type_end_divider:hover,
 .frm_sorting li.ui-state-default.selected.edit_field_type_divider .divider_section_only,
 .frm_update_msg,
-.frm_sorting li.ui-state-default.frm_not_divider.selected.frm-outer-outline,
+.frm_sorting li.ui-state-default.frm_not_divider.selected,
 .frm_sorting li.ui-state-default.selected.edit_field_type_divider .divider_section_only {
 	border-color: var(--primary-color);
 	-webkit-transition: 0.5s border-color ease-in-out;
+	transition: .5s border-color ease-in-out;
+}
+
+.frm_sorting li.ui-state-default.frm-newly-added {
+	border-color: green !important;
 	transition: .5s border-color ease-in-out;
 }
 

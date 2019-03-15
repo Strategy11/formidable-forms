@@ -577,7 +577,8 @@ function frmAdminBuildJS() {
 		var form_id = this_form_id;
 		var $button = $thisObj.closest( '.frmbutton' );
 		jQuery.ajax( {
-			type: 'POST', url: ajaxurl,
+			type: 'POST',
+			url: ajaxurl,
 			data: {
 				action: 'frm_insert_field',
 				form_id: form_id,
@@ -623,10 +624,30 @@ function frmAdminBuildJS() {
 		section = '#' + match[1] + '.edit_field_type_divider ul.frm_sorting';
 		setupSortable( section );
 		if ( addFocus ) {
-			// TODO: jQuery('#'+match[1]+' .frm_ipe_field_label').mouseover().click();
+			var field = document.getElementById( match[1] );
+			scrollToField( field );
+			addClass( field, 'frm-newly-added' );
+
+			setTimeout( function() {
+				field.classList.remove( 'frm-newly-added' );
+			}, 3000 );
 			toggleOneSectionHolder( jQuery( section ) );
 		}
 		initiateMultiselect();
+	}
+
+	function scrollToField( field ) {
+		var newPos = field.getBoundingClientRect().top,
+			container = document.getElementById( 'post-body-content' ),
+			pos = container.getBoundingClientRect(),
+			screenTop = pos.top;
+
+		if ( typeof animate === 'undefined' ) {
+			jQuery( container ).scrollTop(newPos);
+		}else{
+			// TODO: smooth scroll
+			jQuery( container ).animate({scrollTop: newPos}, 500);
+		}
 	}
 
 	function checkCalculationCreatedByUser() {
