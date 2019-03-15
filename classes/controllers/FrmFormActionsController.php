@@ -46,6 +46,7 @@ class FrmFormActionsController {
             'mailchimp' => 'FrmDefMlcmpAction',
             'twilio'    => 'FrmDefTwilioAction',
             'payment'   => 'FrmDefHrsAction',
+			'api'       => 'FrmDefApiAction',
         );
 		$action_classes = apply_filters( 'frm_registered_form_actions', $action_classes );
 

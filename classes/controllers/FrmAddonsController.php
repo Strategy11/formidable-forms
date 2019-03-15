@@ -454,7 +454,7 @@ class FrmAddonsController {
 		$features = array(
 			'Display Entries' => array(
 				array(
-					'label' => 'Virtually limitless views',
+					'label' => 'Display form data with virtually limitless views',
 					'link'  => array(
 						'content' => 'views',
 						'anchor'  => 'feature-display-form-data-views',

@@ -58,3 +58,10 @@ class FrmDefHrsAction extends FrmFormAction {
 		parent::__construct( 'payment', __( 'Credit Card Payment', 'formidable' ), $action_ops );
 	}
 }
+
+class FrmDefApiAction extends FrmFormAction {
+	public function __construct() {
+		$action_ops = FrmFormAction::default_action_opts( 'frm_feed_icon frm_show_upgrade' );
+		parent::__construct( 'api', __( 'Send API data', 'formidable' ), $action_ops );
+	}
+}

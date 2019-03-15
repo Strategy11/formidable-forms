@@ -50,6 +50,14 @@ class FrmTipsHelper {
 			),
 			array(
 				'link' => array(
+					'content' => 'confirmation-fields',
+					'anchor'  => 'feature-confirm-email-address-password-wordpress-form',
+				),
+				'tip'  => __( 'Want to stop losing leads from email typos?', 'formidable' ),
+				'call' => __( 'Add email confirmation fields.', 'formidable' ),
+			),
+			array(
+				'link' => array(
 					'content' => 'page-breaks',
 					'anchor'  => 'feature-wordpress-multi-step-form',
 				),
@@ -89,14 +97,6 @@ class FrmTipsHelper {
 		$tips = array(
 			array(
 				'link' => array(
-					'content' => 'front-edit',
-					'anchor'  => 'feature-front-end-editing-wordpress',
-				),
-				'tip'  => __( 'A site with dynamic, user-generated content is within reach.', 'formidable' ),
-				'call' => __( 'Add front-end editing.', 'formidable' ),
-			),
-			array(
-				'link' => array(
 					'content' => 'front-edit-b',
 					'anchor'  => 'feature-user-submitted-posts-wordpress-forms',
 				),
@@ -117,6 +117,13 @@ class FrmTipsHelper {
 				),
 				'tip'  => __( 'Want to submit forms without reloading the page?', 'formidable' ),
 				'call' => __( 'Get ajax form submit.', 'formidable' ),
+			),
+			array(
+				'link' => array(
+					'content' => 'form-scheduling',
+				),
+				'tip'  => __( 'Need to open and close your form on specific days?', 'formidable' ),
+				'call' => __( 'Add form scheduling.', 'formidable' ),
 			),
 		);
 		return $tips;
@@ -177,7 +184,7 @@ class FrmTipsHelper {
 					'content' => 'paypal-fast',
 					'page'    => 'paypal-save-time-tip',
 				),
-				'tip'  => __( 'Get paid more quickly.', 'formidable' ),
+				'tip'  => __( 'Get paid instantly.', 'formidable' ),
 				'call' => __( 'Use Paypal with this form.', 'formidable' ),
 			),
 			array(
@@ -238,7 +245,7 @@ class FrmTipsHelper {
 					'content' => 'entries',
 					'anchor'  => 'feature-form-entry-management-wordpress',
 				),
-				'tip'  => __( 'Want to edit or delete form submissions?', 'formidable' ),
+				'tip'  => __( 'Want to edit and delete form submissions?', 'formidable' ),
 				'call' => __( 'Add entry management.', 'formidable' ),
 			),
 			array(
@@ -248,6 +255,14 @@ class FrmTipsHelper {
 				),
 				'tip'  => __( 'Want to search submitted entries?', 'formidable' ),
 				'call' => __( 'Upgrade to Pro.', 'formidable' ),
+			),
+			array(
+				'link' => array(
+					'content' => 'views',
+					'anchor'  => 'feature-display-form-data-views',
+				),
+				'tip'  => __( 'A site with dynamic, user-generated content is within reach.', 'formidable' ),
+				'call' => __( 'Display form data with Views.', 'formidable' ),
 			),
 		);
 		$tips = array_merge( $tips, self::get_import_tip() );
