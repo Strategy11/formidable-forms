@@ -13,6 +13,7 @@ class FrmDefPostAction extends FrmFormAction {
 class FrmDefRegAction extends FrmFormAction {
 	public function __construct() {
 		$action_ops = FrmFormAction::default_action_opts( 'frm_register_icon frm_show_upgrade' );
+		$action_ops['plugin'] = 'registration';
 		parent::__construct( 'register', __( 'Register User', 'formidable' ), $action_ops );
 	}
 }
@@ -53,6 +54,7 @@ class FrmDefTwilioAction extends FrmFormAction {
 class FrmDefHrsAction extends FrmFormAction {
 	public function __construct() {
 		$action_ops = FrmFormAction::default_action_opts( 'frm_stripe_icon frm_credit-card-alt_icon frm_show_upgrade' );
+		$action_ops['plugin'] = 'stripe';
 		parent::__construct( 'payment', __( 'Credit Card Payment', 'formidable' ), $action_ops );
 	}
 }

@@ -33,14 +33,13 @@
 						?>
 					</span>
 					<?php if ( $addon['status']['type'] === 'installed' ) { ?>
-						<a href="<?php echo esc_url( $addon['activate_url'] ) ?>" class="button button-primary frm-button-primary activate-now <?php echo esc_attr( empty( $addon['activate_url'] ) ? 'frm_hidden' : '' ); ?>">
+						<a rel="<?php echo esc_attr( $addon['plugin'] ) ?>" class="button button-primary frm-button-primary frm-activate-addon <?php echo esc_attr( empty( $addon['activate_url'] ) ? 'frm_hidden' : '' ); ?>">
 							<?php esc_html_e( 'Activate', 'formidable' ); ?>
 						</a>
 					<?php } elseif ( isset( $addon['url'] ) && ! empty( $addon['url'] ) ) { ?>
 						<a class="frm-install-addon button button-primary frm-button-primary" rel="<?php echo esc_attr( $addon['url'] ); ?>" aria-label="<?php esc_attr_e( 'Install', 'formidable' ); ?>">
 							<?php esc_html_e( 'Install', 'formidable' ); ?>
 						</a>
-						<span class="spinner"></span>
 					<?php } else { ?>
 						<a class="install-now button button-primary frm-button-primary" href="<?php echo esc_url( $pricing . '&utm_content=' . $addon['slug'] ); ?>" target="_blank" aria-label="<?php esc_attr_e( 'Upgrade Now', 'formidable' ); ?>">
 							<?php esc_html_e( 'Upgrade Now', 'formidable' ); ?>

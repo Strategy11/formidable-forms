@@ -85,6 +85,7 @@ class FrmFormAction {
             'force_event' => false,
             'priority'  => 20,
             'ajax_load' => true,
+			'plugin'    => $this->id_base,
             'tooltip'   => $name,
         );
 

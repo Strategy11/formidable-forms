@@ -1700,10 +1700,16 @@ function frmAdminBuildJS(){
 		jQuery('.frm_show_upgrade').click( function( event ) {
 			event.preventDefault();
 			jQuery('.frm_feature_label').html( this.dataset.upgrade );
+			jQuery( '#frm_upgrade_modal h2' ).show();
+			jQuery( '#frm_upgrade_modal .dashicons-lock' ).removeClass( 'dashicons-unlock' );
+
+			// If one click upgrade, hide other content
+			addOneClickModal( this );
+
 			$info.dialog('open');
 
 			// set the utm medium
-			var button = $info.find('.button-primary');
+			var button = $info.find('.button-primary:not(#frm-oneclick-button)');
 			var link = button.attr('href').replace( /(medium=)[a-z_-]+/ig, '$1' + this.dataset.medium );
 			var content = this.dataset.content;
 			if ( content === undefined ) {
@@ -1712,6 +1718,34 @@ function frmAdminBuildJS(){
 			link = link.replace( /(content=)[a-z_-]+/ig, '$1' + content );
 			button.attr( 'href', link );
 		} );
+	}
+
+	/**
+	 * Allow addons to be installed from the upgrade modal.
+	 */
+	function addOneClickModal( link ) {
+		// If one click upgrade, hide other content
+		var oneclickMessage = document.getElementById( 'frm-oneclick' ),
+			oneclick = link.getAttribute( 'data-oneclick' ),
+			button = document.getElementById( 'frm-oneclick-button' ),
+			showIt = 'block',
+			hideIt = 'none';
+
+		if ( oneclickMessage !== null && typeof oneclick !== 'undefined' && oneclick ) {
+			showIt = 'none';
+			hideIt = 'block';
+			oneclick = JSON.parse( oneclick );
+
+			button.className = button.className.replace( ' frm-install-addon', '' ).replace( ' frm-activate-addon', '' );
+			button.className = button.className + ' ' + oneclick.class;
+			button.rel = oneclick.url;
+		}
+
+		document.getElementById( 'frm-addon-status' ).style.display = 'none';
+		oneclickMessage.style.display = hideIt;
+		button.style.display = hideIt == 'block' ? 'inline-block' : hideIt;
+		document.getElementById( 'frm-upgrade-message' ).style.display = showIt;
+		document.getElementById( 'frm-upgrade-modal-link' ).style.display = showIt == 'block' ? 'inline-block' : showIt;
 	}
 
 	/* Form settings */
@@ -2928,19 +2962,25 @@ function frmAdminBuildJS(){
     }
 
 	/* Addons page */
+	function activateAddon( e ) {
+		e.preventDefault();
+		installOrActivate( this, 'frm_activate_addon' );
+	}
+
 	function installAddon( e ) {
 		e.preventDefault();
+		installOrActivate( this, 'frm_install_addon' );
+	}
 
+	function installOrActivate( clicked, action ) {
 		// Remove any leftover error messages, output an icon and get the plugin basename that needs to be activated.
 		jQuery('.frm-addon-error').remove();
-		var button  = jQuery(this);
+		var button  = jQuery(clicked);
 		var plugin  = button.attr('rel');
 		var el      = button.parent();
 		var message = el.parent().find('.addon-status-label');
-		var loader  = button.next();
 
-		button.html( frm_admin_js.installing );
-		loader.css({ 'visibility': 'visible', 'display': 'inline-block' });
+		button.addClass('frm_loading_button');
 
 		// Process the Ajax to perform the activation.
 		jQuery.ajax({
@@ -2950,14 +2990,14 @@ function frmAdminBuildJS(){
 			cache: false,
 			dataType: 'json',
 			data: {
-				action: 'frm_install_addon',
+				action: action,
 				nonce:  frmGlobal.nonce,
 				plugin: plugin
 			},
 			success: function(response) {
 				// If there is a WP Error instance, output it here and quit the script.
 				if ( response.error ) {
-					addonError( response, el, button, loader );
+					addonError( response, el, button );
 					return;
 				}
 
@@ -2977,16 +3017,10 @@ function frmAdminBuildJS(){
 					return;
 				}
 
-				// The Ajax request was successful, so let's update the output.
-				button.css({ 'visibility': 'hidden' });
-				message.text( frm_admin_js.active );
-
-				// Proceed with CSS changes
-				el.parent().removeClass('frm-addon-not-installed').addClass('frm-addon-active');
-				loader.hide();
+				afterAddonInstall( response, button, message, el );
 			},
 			error: function(xhr, textStatus, e) {
-				loader.hide();
+				button.removeClass('frm_loading_button');
 			}
 		});
 	}
@@ -2998,10 +3032,8 @@ function frmAdminBuildJS(){
 		// Now let's make another Ajax request once the user has submitted their credentials.
 		var proceed   = jQuery(this);
 		var el        = proceed.parent().parent();
-		var loader    = proceed.next();
 
-		proceed.html( frm_admin_js.installing );
-		loader.css({ 'visibility': 'visible', 'display': 'inline-block' });
+		proceed.addClass( 'frm_loading_button' );
 
 		jQuery.ajax({
 			url: ajaxurl,
@@ -3020,7 +3052,7 @@ function frmAdminBuildJS(){
 			success: function(response) {
 				// If there is a WP Error instance, output it here and quit the script.
 				if ( response.error ) {
-					addonError( response, el, button, loader );
+					addonError( response, el, button );
 					return;
 				}
 
@@ -3032,24 +3064,31 @@ function frmAdminBuildJS(){
 					return;
 				}
 
-				// The Ajax request was successful, so let's update the output.
-				button.hide();
-				jQuery(message).text( frm_admin_js.active );
-
-				// Proceed with CSS changes
-				jQuery(el).removeClass('frm-addon-not-installed').addClass('frm-addon-active');
-				loader.hide();
+				afterAddonInstall( response, proceed, message, el );
 			},
 			error: function(xhr, textStatus ,e) {
-				loader.hide();
+				proceed.removeClass( 'frm_loading_button' );
 			}
 		});
 	}
 
-	function addonError( response, el, button, loader ) {
+	function afterAddonInstall( response, button, message, el ) {
+		// The Ajax request was successful, so let's update the output.
+		button.css({ 'opacity': '0' });
+		message.text( frm_admin_js.active );
+		jQuery( '#frm-oneclick' ).hide();
+		jQuery( '#frm-addon-status' ).text( response ).show();
+		jQuery( '#frm_upgrade_modal h2' ).hide();
+		jQuery( '#frm_upgrade_modal .dashicons-lock' ).addClass( 'dashicons-unlock' );
+
+		// Proceed with CSS changes
+		el.parent().removeClass('frm-addon-not-installed frm-addon-installed').addClass('frm-addon-active');
+		button.removeClass('frm_loading_button');
+	}
+
+	function addonError( response, el, button ) {
 		el.append('<div class="frm-addon-error frm_error_style"><p><strong>' + response.error + '</strong></p></div>');
-		button.html( frm_admin_js.install );
-		loader.hide();
+		button.removeClass( 'frm_loading_button' );
 		jQuery('.frm-addon-error').delay(4000).fadeOut();
 	}
 
@@ -3376,7 +3415,8 @@ function frmAdminBuildJS(){
 			jQuery(document.getElementById('frm_deauthorize_link')).click(deauthorize);
 			jQuery('.frm_authorize_link').click(authorize);
 
-			jQuery('.frm-install-addon').click( installAddon );
+			jQuery( document ).on( 'click', '.frm-install-addon', installAddon );
+			jQuery( document ).on( 'click', '.frm-activate-addon', activateAddon );
 
 			// prevent annoying confirmation message from WordPress
 			jQuery('button, input[type=submit]').on('click', removeWPUnload);

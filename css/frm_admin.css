@@ -474,7 +474,6 @@ ul.frm_form_nav > li{
 
 .frm_orange_button,
 .wrap .frm_pricing a.button-primary,
-.toplevel_page_formidable #frm_upgrade_modal .button-primary,
 .toplevel_page_formidable .frm_wrap button.button-primary{
 	border-color: #da791d !important;
 	background: #f37656;
@@ -1457,22 +1456,27 @@ img.frm_help{
 	margin-top: 20px;
 }
 
+.frm_loading_button,
 .frm_loading_form.frm_button_submit {
-    position: relative;
+    position: relative !important;
     opacity: .8;
     color: transparent !important;
     text-shadow: none !important;
 }
 
+.frm_loading_button:hover,
+.frm_loading_button:active,
+.frm_loading_button:focus,
 .frm_loading_form.frm_button_submit:hover,
 .frm_loading_form.frm_button_submit:active,
 .frm_loading_form.frm_button_submit:focus {
     cursor: not-allowed;
-    color: transparent;
+    color: transparent !important;
     outline: none !important;
     box-shadow: none;
 }
 
+.frm_loading_button:before,
 .frm_loading_form.frm_button_submit:before {
     content: '';
     display: inline-block;
