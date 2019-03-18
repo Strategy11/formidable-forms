@@ -466,6 +466,9 @@ class FrmXMLHelper {
 	 * @param array $imported
 	 */
 	private static function create_imported_field( $f, &$imported ) {
+		$default            = FrmFieldsHelper::get_default_field_options( $f['type'] );
+		$f['field_options'] = array_merge( $default, $f['field_options'] );
+
 		$new_id = FrmField::create( $f );
 		if ( $new_id != false ) {
 			$imported['imported']['fields']++;
