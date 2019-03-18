@@ -1717,6 +1717,7 @@ function frmAdminBuildJS(){
 			}
 			link = link.replace( /(content=)[a-z_-]+/ig, '$1' + content );
 			button.attr( 'href', link );
+			return false;
 		} );
 	}
 
@@ -3417,6 +3418,7 @@ function frmAdminBuildJS(){
 
 			jQuery( document ).on( 'click', '.frm-install-addon', installAddon );
 			jQuery( document ).on( 'click', '.frm-activate-addon', activateAddon );
+			initUpgradeModal();
 
 			// prevent annoying confirmation message from WordPress
 			jQuery('button, input[type=submit]').on('click', removeWPUnload);
@@ -3519,8 +3521,6 @@ function frmAdminBuildJS(){
 			$newFields.on('change', 'select.conf_field', addConf);
 
 			$newFields.on('change', '.frm_get_field_selection', getFieldSelection);
-
-			initUpgradeModal();
 		},
 		
 		settingsInit: function(){
@@ -3635,8 +3635,6 @@ function frmAdminBuildJS(){
 					jQuery('.edit_action_message_box').fadeOut('slow');//Hide On Update message box
 				}
 			});
-
-			initUpgradeModal();
 		},
 		
 		panelInit: function(){

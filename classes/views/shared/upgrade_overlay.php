@@ -29,7 +29,7 @@
 						if ( $is_pro ) {
 							$message = __( '%s are not available on your plan. Please upgrade or renew your license to unlock more awesome features.', 'formidable' );
 						} else {
-							$message = __( '%s are not available on your plan. Please upgrade to PRO to unlock more awesome features.', 'formidable' );
+							$message = __( '%s are not available on your plan. Did you know you can upgrade to PRO to unlock more awesome features?', 'formidable' );
 						}
 						printf( esc_html( $message ), '<span class="frm_feature_label"></span>' );
 						?>

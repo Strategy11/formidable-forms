@@ -245,7 +245,7 @@ class FrmTipsHelper {
 					'content' => 'entries',
 					'anchor'  => 'feature-form-entry-management-wordpress',
 				),
-				'tip'  => __( 'Want to edit and delete form submissions?', 'formidable' ),
+				'tip'  => __( 'Want to edit form submissions?', 'formidable' ),
 				'call' => __( 'Add entry management.', 'formidable' ),
 			),
 			array(
