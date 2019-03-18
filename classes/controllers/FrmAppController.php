@@ -141,7 +141,7 @@ class FrmAppController {
 					'data-medium'  => 'reports-nav',
 				),
 			);
-			FrmAppController::include_upgrade_overlay();
+			self::include_upgrade_overlay();
 		}
 
 		$nav_args = array(
