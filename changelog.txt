@@ -1,4 +1,9 @@
 == Changelog ==
+= 3.06.03 =
+* Fix: The required indicator for a field was blank after importing a form.
+* Fix: Only include the id of the error message once in aria-describedby for linking the error message for screen readers.
+* Fix: Prevent a couple PHP warning messages with certain settings.
+
 = 3.06.02 =
 * New: More WCAG improvements. Link the error messages to the field for screenreaders.
 * Fix: When resending emails, don't send emails that are toggled off.
