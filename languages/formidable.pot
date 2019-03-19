@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Formidable Forms plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Formidable Forms 3.06.02\n"
+"Project-Id-Version: Formidable Forms 3.06.03\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/formidable\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2019-03-06T20:39:15+01:00\n"
+"POT-Creation-Date: 2019-03-19T20:32:32+01:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.1.0\n"
 "X-Domain: formidable\n"
@@ -346,8 +346,16 @@ msgstr ""
 msgid "Credit Card"
 msgstr ""
 
-#: classes/models/FrmField.php:145
+#: classes/models/FrmField.php:146
 msgid "Address"
+msgstr ""
+
+#: classes/models/FrmField.php:150
+msgid "Signature"
+msgstr ""
+
+#: classes/models/FrmField.php:155
+msgid "Quiz Score"
 msgstr ""
 
 #: classes/models/FrmDb.php:414
@@ -360,7 +368,7 @@ msgstr ""
 
 #: classes/models/FrmEntryValidate.php:14
 #: classes/models/FrmSettings.php:103
-#: classes/controllers/FrmFormActionsController.php:214
+#: classes/controllers/FrmFormActionsController.php:215
 msgid "You do not have permission to do that"
 msgstr ""
 
@@ -462,29 +470,29 @@ msgstr ""
 msgid "There are no options for this action."
 msgstr ""
 
-#: classes/models/FrmFormAction.php:745
+#: classes/models/FrmFormAction.php:746
 #: classes/views/frm-forms/_publish_box.php:12
 msgid "Save Draft"
 msgstr ""
 
-#: classes/models/FrmFormAction.php:746
+#: classes/models/FrmFormAction.php:747
 #: classes/views/frm-forms/template-name-overlay.php:25
 #: classes/views/frm-forms/add_field_links.php:7
 #: classes/helpers/FrmFormsHelper.php:129
 msgid "Create"
 msgstr ""
 
-#: classes/models/FrmFormAction.php:747
+#: classes/models/FrmFormAction.php:748
 #: classes/views/frm-forms/_publish_box.php:16
 #: classes/views/frm-forms/_publish_box.php:20
-#: classes/views/frm-forms/settings.php:368
+#: classes/views/frm-forms/settings.php:400
 #: classes/views/frm-forms/edit.php:25
 #: classes/views/frm-forms/add_field_links.php:7
 #: classes/helpers/FrmFormsHelper.php:129
 msgid "Update"
 msgstr ""
 
-#: classes/models/FrmFormAction.php:748
+#: classes/models/FrmFormAction.php:749
 #: classes/views/frm-forms/list-templates.php:129
 #: classes/views/frm-form-actions/form_action.php:19
 #: classes/helpers/FrmEntriesListHelper.php:261
@@ -494,7 +502,7 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
-#: classes/models/FrmFormAction.php:749
+#: classes/models/FrmFormAction.php:750
 #: classes/views/xml/import_form.php:12
 msgid "Import"
 msgstr ""
@@ -513,7 +521,7 @@ msgstr ""
 
 #. translators: %1$s - field type
 #: classes/models/FrmFormMigrator.php:389
-#: classes/helpers/FrmXMLHelper.php:866
+#: classes/helpers/FrmXMLHelper.php:869
 msgid "%1$s Field"
 msgid_plural "%1$s Fields"
 msgstr[0] ""
@@ -544,7 +552,7 @@ msgid "Add-Ons"
 msgstr ""
 
 #: classes/controllers/FrmAddonsController.php:13
-#: classes/views/shared/upgrade_overlay.php:33
+#: classes/views/shared/upgrade_overlay.php:43
 msgid "Upgrade to Pro"
 msgstr ""
 
@@ -552,22 +560,30 @@ msgstr ""
 msgid "There are no plugins on your site that require a license"
 msgstr ""
 
-#: classes/controllers/FrmAddonsController.php:397
+#: classes/controllers/FrmAddonsController.php:431
 msgid "Installed"
 msgstr ""
 
-#: classes/controllers/FrmAddonsController.php:402
+#: classes/controllers/FrmAddonsController.php:436
 #: classes/views/styles/_field-colors.php:10
-#: classes/helpers/FrmAppHelper.php:1785
+#: classes/helpers/FrmAppHelper.php:1784
 msgid "Active"
 msgstr ""
 
-#: classes/controllers/FrmAddonsController.php:407
+#: classes/controllers/FrmAddonsController.php:441
 msgid "Not Installed"
 msgstr ""
 
-#: classes/controllers/FrmAddonsController.php:491
+#: classes/controllers/FrmAddonsController.php:700
+msgid "Your plugin has been installed. Please reload the page to see more options."
+msgstr ""
+
+#: classes/controllers/FrmAddonsController.php:727
 msgid "Sorry, you're site requires FTP authentication. Please install plugins manaully."
+msgstr ""
+
+#: classes/controllers/FrmAddonsController.php:769
+msgid "Your plugin has been activated. Please reload the page to see more options."
 msgstr ""
 
 #: classes/controllers/FrmAppController.php:97
@@ -589,15 +605,25 @@ msgstr ""
 msgid "Entries"
 msgstr ""
 
-#: classes/controllers/FrmAppController.php:127
+#: classes/controllers/FrmAppController.php:122
+#: classes/controllers/FrmAppController.php:128
+msgid "Views"
+msgstr ""
+
+#: classes/controllers/FrmAppController.php:134
+#: classes/controllers/FrmAppController.php:140
+msgid "Reports"
+msgstr ""
+
+#: classes/controllers/FrmAppController.php:156
 msgid "Build a Form"
 msgstr ""
 
-#: classes/controllers/FrmAppController.php:169
+#: classes/controllers/FrmAppController.php:198
 msgid "This site has been previously authorized to run Formidable Forms. %1$sInstall Formidable Pro%2$s or %3$sdeauthorize%4$s this site to continue running the free version and remove this message."
 msgstr ""
 
-#: classes/controllers/FrmAppController.php:534
+#: classes/controllers/FrmAppController.php:570
 msgid "Help us spread the %1$sFormidable Forms%2$s love with %3$s %5$s on WordPress.org%4$s. Thank you heaps!"
 msgstr ""
 
@@ -1036,7 +1062,7 @@ msgstr ""
 #: classes/controllers/FrmFormsController.php:1294
 #: classes/views/frm-forms/list-templates.php:56
 #: classes/views/shared/admin-header.php:29
-#: classes/views/shared/form-nav.php:20
+#: classes/views/shared/form-nav.php:32
 #: classes/views/xml/import_form.php:96
 #: classes/views/styles/manage.php:36
 #: classes/helpers/FrmFormsListHelper.php:295
@@ -1308,27 +1334,35 @@ msgstr ""
 msgid "Add New Action"
 msgstr ""
 
-#: classes/views/frm-forms/settings.php:276
+#: classes/views/frm-forms/settings.php:282
 msgid "%s form actions"
 msgstr ""
 
-#: classes/views/frm-forms/settings.php:291
+#: classes/views/frm-forms/settings.php:305
 msgid "Click an action to add it to this form"
 msgstr ""
 
-#: classes/views/frm-forms/settings.php:301
-msgid "Form Classes"
+#: classes/views/frm-forms/settings.php:318
+msgid "Form action logs"
 msgstr ""
 
-#: classes/views/frm-forms/settings.php:307
-msgid "Before Fields"
-msgstr ""
-
-#: classes/views/frm-forms/settings.php:329
-msgid "After Fields"
+#: classes/views/frm-forms/settings.php:320
+msgid "Install logging to get more information on API requests."
 msgstr ""
 
 #: classes/views/frm-forms/settings.php:333
+msgid "Form Classes"
+msgstr ""
+
+#: classes/views/frm-forms/settings.php:339
+msgid "Before Fields"
+msgstr ""
+
+#: classes/views/frm-forms/settings.php:361
+msgid "After Fields"
+msgstr ""
+
+#: classes/views/frm-forms/settings.php:365
 msgid "Submit Button"
 msgstr ""
 
@@ -1420,8 +1454,8 @@ msgstr ""
 
 #: classes/views/frm-forms/list-templates.php:142
 #: classes/views/frm-forms/list-templates.php:143
+#: classes/views/addons/list.php:44
 #: classes/views/addons/list.php:45
-#: classes/views/addons/list.php:46
 msgid "Upgrade Now"
 msgstr ""
 
@@ -1685,15 +1719,15 @@ msgstr ""
 msgid "Layout"
 msgstr ""
 
-#: classes/views/frm-forms/add_field_links.php:87
+#: classes/views/frm-forms/add_field_links.php:88
 msgid "%s fields"
 msgstr ""
 
-#: classes/views/frm-forms/add_field_links.php:106
+#: classes/views/frm-forms/add_field_links.php:129
 msgid "Click inside the \"CSS layout classes\" field option in any field to enable the options below."
 msgstr ""
 
-#: classes/views/frm-forms/add_field_links.php:109
+#: classes/views/frm-forms/add_field_links.php:132
 msgid "Click on any box below to set the width for your selected field."
 msgstr ""
 
@@ -1765,28 +1799,32 @@ msgstr ""
 msgid "Create Post"
 msgstr ""
 
-#: classes/views/frm-form-actions/default_actions.php:16
+#: classes/views/frm-form-actions/default_actions.php:17
 msgid "Register User"
 msgstr ""
 
-#: classes/views/frm-form-actions/default_actions.php:24
+#: classes/views/frm-form-actions/default_actions.php:25
 msgid "PayPal Payment"
 msgstr ""
 
-#: classes/views/frm-form-actions/default_actions.php:32
+#: classes/views/frm-form-actions/default_actions.php:33
 msgid "Aweber"
 msgstr ""
 
-#: classes/views/frm-form-actions/default_actions.php:40
+#: classes/views/frm-form-actions/default_actions.php:41
 msgid "MailChimp"
 msgstr ""
 
-#: classes/views/frm-form-actions/default_actions.php:48
+#: classes/views/frm-form-actions/default_actions.php:49
 msgid "Twilio SMS"
 msgstr ""
 
-#: classes/views/frm-form-actions/default_actions.php:56
+#: classes/views/frm-form-actions/default_actions.php:58
 msgid "Credit Card Payment"
+msgstr ""
+
+#: classes/views/frm-form-actions/default_actions.php:65
+msgid "Send API data"
 msgstr ""
 
 #: classes/views/frm-form-actions/_email_settings.php:4
@@ -1851,12 +1889,28 @@ msgstr ""
 msgid "Trigger this action after"
 msgstr ""
 
-#: classes/views/frm-form-actions/_action_inside.php:59
+#: classes/views/frm-form-actions/_action_inside.php:61
+msgid "Conditional emails"
+msgstr ""
+
+#: classes/views/frm-form-actions/_action_inside.php:62
+msgid "Use Conditional Logic"
+msgstr ""
+
+#: classes/views/frm-form-actions/_action_inside.php:79
+msgid "Form action automations"
+msgstr ""
+
+#: classes/views/frm-form-actions/_action_inside.php:80
+msgid "Setup Automation"
+msgstr ""
+
+#: classes/views/frm-form-actions/_action_inside.php:87
 msgid "Action ID: %1$s"
 msgstr ""
 
 #: classes/views/frm-form-actions/email_action.php:16
-#: classes/helpers/FrmXMLHelper.php:1171
+#: classes/helpers/FrmXMLHelper.php:1182
 msgid "Email Notification"
 msgstr ""
 
@@ -1873,7 +1927,7 @@ msgstr ""
 msgid "Activate"
 msgstr ""
 
-#: classes/views/addons/upgrade_to_pro.php:24
+#: classes/views/addons/upgrade_to_pro.php:23
 msgid "Get Started"
 msgstr ""
 
@@ -1892,7 +1946,8 @@ msgstr ""
 
 #: classes/views/addons/list.php:40
 #: classes/views/addons/list.php:41
-#: classes/helpers/FrmAppHelper.php:1784
+#: classes/views/shared/upgrade_overlay.php:24
+#: classes/helpers/FrmAppHelper.php:1783
 msgid "Install"
 msgstr ""
 
@@ -1905,19 +1960,23 @@ msgstr ""
 msgid "%s are not installed"
 msgstr ""
 
-#: classes/views/shared/upgrade_overlay.php:20
-msgid "Please see the add-ons that are included with your plan."
+#: classes/views/shared/upgrade_overlay.php:19
+msgid "That add-on is not installed. Would you like to install it now?"
 msgstr ""
 
-#: classes/views/shared/upgrade_overlay.php:22
-msgid "%s are not available on your plan. Please upgrade to PRO to unlock more awesome features."
+#: classes/views/shared/upgrade_overlay.php:30
+msgid "%s are not available on your plan. Please upgrade or renew your license to unlock more awesome features."
 msgstr ""
 
-#: classes/views/shared/upgrade_overlay.php:29
-msgid "See My Add-Ons"
+#: classes/views/shared/upgrade_overlay.php:32
+msgid "%s are not available on your plan. Did you know you can upgrade to PRO to unlock more awesome features?"
 msgstr ""
 
-#: classes/views/shared/upgrade_overlay.php:38
+#: classes/views/shared/upgrade_overlay.php:39
+msgid "Upgrade"
+msgstr ""
+
+#: classes/views/shared/upgrade_overlay.php:48
 #: classes/views/frm-settings/license_box.php:10
 msgid "Already purchased?"
 msgstr ""
@@ -2823,48 +2882,55 @@ msgid "Use conditional logic to shorten your forms and increase conversions."
 msgstr ""
 
 #: classes/helpers/FrmTipsHelper.php:49
-#: classes/helpers/FrmTipsHelper.php:73
-#: classes/helpers/FrmTipsHelper.php:141
-#: classes/helpers/FrmTipsHelper.php:149
-#: classes/helpers/FrmTipsHelper.php:250
-#: classes/helpers/FrmTipsHelper.php:265
+#: classes/helpers/FrmTipsHelper.php:81
+#: classes/helpers/FrmTipsHelper.php:148
+#: classes/helpers/FrmTipsHelper.php:156
+#: classes/helpers/FrmTipsHelper.php:257
+#: classes/helpers/FrmTipsHelper.php:280
 msgid "Upgrade to Pro."
 msgstr ""
 
 #: classes/helpers/FrmTipsHelper.php:56
-msgid "Stop intimidating users with long forms."
+msgid "Want to stop losing leads from email typos?"
 msgstr ""
 
 #: classes/helpers/FrmTipsHelper.php:57
-msgid "Use page breaks."
+msgid "Add email confirmation fields."
 msgstr ""
 
 #: classes/helpers/FrmTipsHelper.php:64
-msgid "Cut down on back-and-forth with clients."
+msgid "Stop intimidating users with long forms."
 msgstr ""
 
 #: classes/helpers/FrmTipsHelper.php:65
-msgid "Allow file uploads in your form."
+msgid "Use page breaks."
 msgstr ""
 
 #: classes/helpers/FrmTipsHelper.php:72
-msgid "Need to calculate a total?"
+msgid "Cut down on back-and-forth with clients."
+msgstr ""
+
+#: classes/helpers/FrmTipsHelper.php:73
+msgid "Allow file uploads in your form."
 msgstr ""
 
 #: classes/helpers/FrmTipsHelper.php:80
+msgid "Need to calculate a total?"
+msgstr ""
+
+#: classes/helpers/FrmTipsHelper.php:88
 msgid "Save time."
 msgstr ""
 
-#: classes/helpers/FrmTipsHelper.php:81
+#: classes/helpers/FrmTipsHelper.php:89
 msgid "Prefill fields with user info."
 msgstr ""
 
-#: classes/helpers/FrmTipsHelper.php:95
 #: classes/helpers/FrmTipsHelper.php:103
+#: classes/helpers/FrmTipsHelper.php:264
 msgid "A site with dynamic, user-generated content is within reach."
 msgstr ""
 
-#: classes/helpers/FrmTipsHelper.php:96
 #: classes/helpers/FrmTipsHelper.php:104
 msgid "Add front-end editing."
 msgstr ""
@@ -2885,128 +2951,140 @@ msgstr ""
 msgid "Get ajax form submit."
 msgstr ""
 
-#: classes/helpers/FrmTipsHelper.php:132
+#: classes/helpers/FrmTipsHelper.php:125
+msgid "Need to open and close your form on specific days?"
+msgstr ""
+
+#: classes/helpers/FrmTipsHelper.php:126
+msgid "Add form scheduling."
+msgstr ""
+
+#: classes/helpers/FrmTipsHelper.php:139
 msgid "Save time by sending the email to the right person automatically."
 msgstr ""
 
-#: classes/helpers/FrmTipsHelper.php:133
+#: classes/helpers/FrmTipsHelper.php:140
 msgid "Add email routing."
 msgstr ""
 
-#: classes/helpers/FrmTipsHelper.php:140
+#: classes/helpers/FrmTipsHelper.php:147
 msgid "Create blog posts or pages from the front-end."
 msgstr ""
 
-#: classes/helpers/FrmTipsHelper.php:148
+#: classes/helpers/FrmTipsHelper.php:155
 msgid "Make front-end posting easy."
 msgstr ""
 
-#: classes/helpers/FrmTipsHelper.php:156
+#: classes/helpers/FrmTipsHelper.php:163
 msgid "Grow your business with automated email follow-up."
 msgstr ""
 
-#: classes/helpers/FrmTipsHelper.php:157
+#: classes/helpers/FrmTipsHelper.php:164
 msgid "Send leads straight to MailChimp."
 msgstr ""
 
-#: classes/helpers/FrmTipsHelper.php:164
+#: classes/helpers/FrmTipsHelper.php:171
 msgid "Save hours and increase revenue by collecting payments with every submission."
 msgstr ""
 
-#: classes/helpers/FrmTipsHelper.php:165
-#: classes/helpers/FrmTipsHelper.php:173
+#: classes/helpers/FrmTipsHelper.php:172
+#: classes/helpers/FrmTipsHelper.php:180
 msgid "Use PayPal with this form."
 msgstr ""
 
-#: classes/helpers/FrmTipsHelper.php:172
+#: classes/helpers/FrmTipsHelper.php:179
 msgid "Increase revenue."
 msgstr ""
 
-#: classes/helpers/FrmTipsHelper.php:180
-msgid "Get paid more quickly."
-msgstr ""
-
-#: classes/helpers/FrmTipsHelper.php:181
-msgid "Use Paypal with this form."
+#: classes/helpers/FrmTipsHelper.php:187
+msgid "Get paid instantly."
 msgstr ""
 
 #: classes/helpers/FrmTipsHelper.php:188
+msgid "Use Paypal with this form."
+msgstr ""
+
+#: classes/helpers/FrmTipsHelper.php:195
 msgid "Boost your site membership."
 msgstr ""
 
-#: classes/helpers/FrmTipsHelper.php:189
+#: classes/helpers/FrmTipsHelper.php:196
 msgid "Automatically create user accounts."
 msgstr ""
 
-#: classes/helpers/FrmTipsHelper.php:196
+#: classes/helpers/FrmTipsHelper.php:203
 msgid "Make front-end profile editing possible."
 msgstr ""
 
-#: classes/helpers/FrmTipsHelper.php:197
+#: classes/helpers/FrmTipsHelper.php:204
 msgid "Add user registration."
 msgstr ""
 
-#: classes/helpers/FrmTipsHelper.php:204
+#: classes/helpers/FrmTipsHelper.php:211
 msgid "Want a text when this form is submitted or when a payment is received?"
 msgstr ""
 
-#: classes/helpers/FrmTipsHelper.php:205
+#: classes/helpers/FrmTipsHelper.php:212
 msgid "Use Twilio with this form."
 msgstr ""
 
-#: classes/helpers/FrmTipsHelper.php:212
+#: classes/helpers/FrmTipsHelper.php:219
 msgid "Send a text when this form is submitted."
 msgstr ""
 
-#: classes/helpers/FrmTipsHelper.php:213
+#: classes/helpers/FrmTipsHelper.php:220
 msgid "Get Twilio."
 msgstr ""
 
-#: classes/helpers/FrmTipsHelper.php:227
+#: classes/helpers/FrmTipsHelper.php:234
 msgid "Make your sidebar or footer form stand out."
 msgstr ""
 
-#: classes/helpers/FrmTipsHelper.php:228
+#: classes/helpers/FrmTipsHelper.php:235
 msgid "Use multiple style templates."
 msgstr ""
 
-#: classes/helpers/FrmTipsHelper.php:241
-msgid "Want to edit or delete form submissions?"
-msgstr ""
-
-#: classes/helpers/FrmTipsHelper.php:242
-msgid "Add entry management."
+#: classes/helpers/FrmTipsHelper.php:248
+msgid "Want to edit form submissions?"
 msgstr ""
 
 #: classes/helpers/FrmTipsHelper.php:249
+msgid "Add entry management."
+msgstr ""
+
+#: classes/helpers/FrmTipsHelper.php:256
 msgid "Want to search submitted entries?"
 msgstr ""
 
-#: classes/helpers/FrmTipsHelper.php:264
-msgid "Want to import entries into your forms?"
-msgstr ""
-
-#: classes/helpers/FrmTipsHelper.php:278
-msgid "Looking for more ways to get professional results?"
+#: classes/helpers/FrmTipsHelper.php:265
+msgid "Display form data with Views."
 msgstr ""
 
 #: classes/helpers/FrmTipsHelper.php:279
-msgid "Take your forms to the next level."
+msgid "Want to import entries into your forms?"
 msgstr ""
 
-#: classes/helpers/FrmTipsHelper.php:286
-msgid "Increase conversions in long forms."
-msgstr ""
-
-#: classes/helpers/FrmTipsHelper.php:287
-msgid "Add conditional logic, page breaks, and section headings."
+#: classes/helpers/FrmTipsHelper.php:293
+msgid "Looking for more ways to get professional results?"
 msgstr ""
 
 #: classes/helpers/FrmTipsHelper.php:294
+msgid "Take your forms to the next level."
+msgstr ""
+
+#: classes/helpers/FrmTipsHelper.php:301
+msgid "Increase conversions in long forms."
+msgstr ""
+
+#: classes/helpers/FrmTipsHelper.php:302
+msgid "Add conditional logic, page breaks, and section headings."
+msgstr ""
+
+#: classes/helpers/FrmTipsHelper.php:309
 msgid "Automate your business and increase revenue."
 msgstr ""
 
-#: classes/helpers/FrmTipsHelper.php:295
+#: classes/helpers/FrmTipsHelper.php:310
 msgid "Collect instant payments, and send leads to MailChimp."
 msgstr ""
 
@@ -4601,254 +4679,250 @@ msgstr ""
 msgid "Please enter a Repeat Limit that is greater than 1."
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1783
-msgid "Installing"
-msgstr ""
-
-#: classes/helpers/FrmAppHelper.php:1808
+#: classes/helpers/FrmAppHelper.php:1807
 msgid "You are running an outdated version of Formidable. This plugin may not work correctly if you do not update Formidable."
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1814
+#: classes/helpers/FrmAppHelper.php:1813
 msgid "English"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1815
+#: classes/helpers/FrmAppHelper.php:1814
 msgid "Afrikaans"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1816
+#: classes/helpers/FrmAppHelper.php:1815
 msgid "Albanian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1817
+#: classes/helpers/FrmAppHelper.php:1816
 msgid "Arabic"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1818
+#: classes/helpers/FrmAppHelper.php:1817
 msgid "Armenian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1819
+#: classes/helpers/FrmAppHelper.php:1818
 msgid "Azerbaijani"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1820
+#: classes/helpers/FrmAppHelper.php:1819
 msgid "Basque"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1821
+#: classes/helpers/FrmAppHelper.php:1820
 msgid "Bosnian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1822
+#: classes/helpers/FrmAppHelper.php:1821
 msgid "Bulgarian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1823
+#: classes/helpers/FrmAppHelper.php:1822
 msgid "Catalan"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1824
+#: classes/helpers/FrmAppHelper.php:1823
 msgid "Chinese Hong Kong"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1825
+#: classes/helpers/FrmAppHelper.php:1824
 msgid "Chinese Simplified"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1826
+#: classes/helpers/FrmAppHelper.php:1825
 msgid "Chinese Traditional"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1827
+#: classes/helpers/FrmAppHelper.php:1826
 msgid "Croatian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1828
+#: classes/helpers/FrmAppHelper.php:1827
 msgid "Czech"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1829
+#: classes/helpers/FrmAppHelper.php:1828
 msgid "Danish"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1830
+#: classes/helpers/FrmAppHelper.php:1829
 msgid "Dutch"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1831
+#: classes/helpers/FrmAppHelper.php:1830
 msgid "English/UK"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1832
+#: classes/helpers/FrmAppHelper.php:1831
 msgid "Esperanto"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1833
+#: classes/helpers/FrmAppHelper.php:1832
 msgid "Estonian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1834
+#: classes/helpers/FrmAppHelper.php:1833
 msgid "Faroese"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1835
+#: classes/helpers/FrmAppHelper.php:1834
 msgid "Farsi/Persian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1836
+#: classes/helpers/FrmAppHelper.php:1835
 msgid "Filipino"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1837
+#: classes/helpers/FrmAppHelper.php:1836
 msgid "Finnish"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1838
+#: classes/helpers/FrmAppHelper.php:1837
 msgid "French"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1839
+#: classes/helpers/FrmAppHelper.php:1838
 msgid "French/Canadian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1840
+#: classes/helpers/FrmAppHelper.php:1839
 msgid "French/Swiss"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1841
+#: classes/helpers/FrmAppHelper.php:1840
 msgid "German"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1842
+#: classes/helpers/FrmAppHelper.php:1841
 msgid "German/Austria"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1843
+#: classes/helpers/FrmAppHelper.php:1842
 msgid "German/Switzerland"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1844
+#: classes/helpers/FrmAppHelper.php:1843
 msgid "Greek"
 msgstr ""
 
+#: classes/helpers/FrmAppHelper.php:1844
 #: classes/helpers/FrmAppHelper.php:1845
-#: classes/helpers/FrmAppHelper.php:1846
 msgid "Hebrew"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1847
+#: classes/helpers/FrmAppHelper.php:1846
 msgid "Hindi"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1848
+#: classes/helpers/FrmAppHelper.php:1847
 msgid "Hungarian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1849
+#: classes/helpers/FrmAppHelper.php:1848
 msgid "Icelandic"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1850
+#: classes/helpers/FrmAppHelper.php:1849
 msgid "Indonesian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1851
+#: classes/helpers/FrmAppHelper.php:1850
 msgid "Italian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1852
+#: classes/helpers/FrmAppHelper.php:1851
 msgid "Japanese"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1853
+#: classes/helpers/FrmAppHelper.php:1852
 msgid "Korean"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1854
+#: classes/helpers/FrmAppHelper.php:1853
 msgid "Latvian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1855
+#: classes/helpers/FrmAppHelper.php:1854
 msgid "Lithuanian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1856
+#: classes/helpers/FrmAppHelper.php:1855
 msgid "Malaysian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1857
+#: classes/helpers/FrmAppHelper.php:1856
 msgid "Norwegian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1858
+#: classes/helpers/FrmAppHelper.php:1857
 msgid "Polish"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1859
+#: classes/helpers/FrmAppHelper.php:1858
 msgid "Portuguese"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1860
+#: classes/helpers/FrmAppHelper.php:1859
 msgid "Portuguese/Brazilian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1861
+#: classes/helpers/FrmAppHelper.php:1860
 msgid "Portuguese/Portugal"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1862
+#: classes/helpers/FrmAppHelper.php:1861
 msgid "Romanian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1863
+#: classes/helpers/FrmAppHelper.php:1862
 msgid "Russian"
 msgstr ""
 
+#: classes/helpers/FrmAppHelper.php:1863
 #: classes/helpers/FrmAppHelper.php:1864
-#: classes/helpers/FrmAppHelper.php:1865
 msgid "Serbian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1866
+#: classes/helpers/FrmAppHelper.php:1865
 msgid "Slovak"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1867
+#: classes/helpers/FrmAppHelper.php:1866
 msgid "Slovenian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1868
+#: classes/helpers/FrmAppHelper.php:1867
 msgid "Spanish"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1869
+#: classes/helpers/FrmAppHelper.php:1868
 msgid "Spanish/Latin America"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1870
+#: classes/helpers/FrmAppHelper.php:1869
 msgid "Swedish"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1871
+#: classes/helpers/FrmAppHelper.php:1870
 msgid "Tamil"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1872
+#: classes/helpers/FrmAppHelper.php:1871
 msgid "Thai"
 msgstr ""
 
+#: classes/helpers/FrmAppHelper.php:1872
 #: classes/helpers/FrmAppHelper.php:1873
-#: classes/helpers/FrmAppHelper.php:1874
 msgid "Turkish"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1875
+#: classes/helpers/FrmAppHelper.php:1874
 msgid "Ukranian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:1876
+#: classes/helpers/FrmAppHelper.php:1875
 msgid "Vietnamese"
 msgstr ""
 
@@ -4865,54 +4939,54 @@ msgstr ""
 msgid "Your server is missing the simplexml_import_dom function"
 msgstr ""
 
-#: classes/helpers/FrmXMLHelper.php:827
+#: classes/helpers/FrmXMLHelper.php:830
 msgid "Imported"
 msgstr ""
 
-#: classes/helpers/FrmXMLHelper.php:828
+#: classes/helpers/FrmXMLHelper.php:831
 msgid "Updated"
 msgstr ""
 
-#: classes/helpers/FrmXMLHelper.php:853
+#: classes/helpers/FrmXMLHelper.php:856
 msgid "Nothing was imported or updated"
 msgstr ""
 
-#: classes/helpers/FrmXMLHelper.php:865
+#: classes/helpers/FrmXMLHelper.php:868
 msgid "%1$s Form"
 msgid_plural "%1$s Forms"
 msgstr[0] ""
 
-#: classes/helpers/FrmXMLHelper.php:867
+#: classes/helpers/FrmXMLHelper.php:870
 msgid "%1$s Entry"
 msgid_plural "%1$s Entries"
 msgstr[0] ""
 
-#: classes/helpers/FrmXMLHelper.php:868
+#: classes/helpers/FrmXMLHelper.php:871
 msgid "%1$s View"
 msgid_plural "%1$s Views"
 msgstr[0] ""
 
-#: classes/helpers/FrmXMLHelper.php:869
+#: classes/helpers/FrmXMLHelper.php:872
 msgid "%1$s Post"
 msgid_plural "%1$s Posts"
 msgstr[0] ""
 
-#: classes/helpers/FrmXMLHelper.php:870
+#: classes/helpers/FrmXMLHelper.php:873
 msgid "%1$s Style"
 msgid_plural "%1$s Styles"
 msgstr[0] ""
 
-#: classes/helpers/FrmXMLHelper.php:871
+#: classes/helpers/FrmXMLHelper.php:874
 msgid "%1$s Term"
 msgid_plural "%1$s Terms"
 msgstr[0] ""
 
-#: classes/helpers/FrmXMLHelper.php:872
+#: classes/helpers/FrmXMLHelper.php:875
 msgid "%1$s Form Action"
 msgid_plural "%1$s Form Actions"
 msgstr[0] ""
 
-#: classes/helpers/FrmXMLHelper.php:1064
+#: classes/helpers/FrmXMLHelper.php:1075
 msgid "Create Posts"
 msgstr ""
 
