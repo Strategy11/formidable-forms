@@ -899,6 +899,8 @@ class FrmFormsController {
 
 		$first_h3 = 'frm_first_h3';
 
+		FrmAppController::include_upgrade_overlay();
+
 		require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/settings.php' );
     }
 

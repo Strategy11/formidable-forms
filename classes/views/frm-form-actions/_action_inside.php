@@ -82,6 +82,21 @@ if ( ! function_exists( 'load_frm_autoresponder' ) ) {
 	</h3>
 	<?php
 }
+
+// Show link to install logs.
+if ( $use_logging ) {
+	$upgrading = FrmAddonsController::install_link( 'logs' );
+	if ( isset( $upgrading['url'] ) ) {
+		?>
+		<p>
+			<a href="javascript:void(0)" class="frm_show_upgrade" data-upgrade="<?php esc_attr_e( 'Form action logs', 'formidable' ); ?>" data-medium="action-logs" data-oneclick="<?php echo esc_attr( json_encode( $upgrading ) ); ?>">
+				<i class="dashicons dashicons-info"></i>
+				<?php esc_html_e( 'Install logging to get more information on API requests.', 'formidable' ); ?>
+			</a>
+		</p>
+		<?php
+	}
+}
 ?>
 <span class="alignright frm_action_id <?php echo esc_attr( empty( $form_action->ID ) ? 'frm_hidden' : '' ); ?>">
 	<?php printf( esc_html__( 'Action ID: %1$s', 'formidable' ), esc_attr( $form_action->ID ) ); ?>

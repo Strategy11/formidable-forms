@@ -1697,7 +1697,7 @@ function frmAdminBuildJS(){
 			return;
 		}
 
-		jQuery('.frm_show_upgrade').click( function( event ) {
+		jQuery( document ).on( 'click', '.frm_show_upgrade', function( event ) {
 			event.preventDefault();
 			jQuery('.frm_feature_label').html( this.dataset.upgrade );
 			jQuery( '#frm_upgrade_modal h2' ).show();

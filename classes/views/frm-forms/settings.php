@@ -265,15 +265,9 @@
 
                 //For each add-on, add an li, class, and javascript function. If active, add an additional class.
 				$included    = false;
-				$use_logging = false;
-				$logging     = array( 'api', 'salesforce', 'constantcontact', 'activecampaign' );
 				foreach ( $action_controls as $action_control ) {
 					$classes = ( isset( $action_control->action_options['active'] ) && $action_control->action_options['active'] ) ? 'frm_active_action ' : 'frm_inactive_action ';
 					$classes .= $action_control->action_options['classes'];
-
-					if ( ! $use_logging && in_array( $action_control->id_base, $logging ) ) {
-						$use_logging = true;
-					}
 
 					if ( ! $included && strpos( $classes, 'frm_show_upgrade' ) ) {
 						$included = true;
@@ -307,23 +301,6 @@
             </div>
 			<?php FrmFormActionsController::list_actions( $form, $values ); ?>
 
-			<?php
-			// Show link to install logs.
-			if ( $use_logging && ! function_exists( 'frm_log_autoloader' ) ) {
-				$upgrading = FrmAddonsController::install_link( 'logs' );
-				if ( isset( $upgrading['url'] ) ) {
-					FrmAppController::include_upgrade_overlay();
-					?>
-					<p>
-						<a href="javascript:void(0)" class="frm_show_upgrade" data-upgrade="<?php esc_attr_e( 'Form action logs', 'formidable' ); ?>" data-medium="action-logs" data-oneclick="<?php echo esc_attr( json_encode( $upgrading ) ); ?>">
-							<i class="dashicons dashicons-info"></i>
-							<?php esc_html_e( 'Install logging to get more information on API requests.', 'formidable' ); ?>
-						</a>
-					</p>
-					<?php
-				}
-			}
-			?>
         </div>
 
         <div id="html_settings" class="tabs-panel <?php echo esc_attr( $a === 'html_settings' ) ? ' frm_block' : ' frm_hidden'; ?>">
