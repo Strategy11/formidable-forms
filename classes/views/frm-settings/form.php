@@ -203,6 +203,16 @@
 
 		</p>
 
+		<p>
+			<label class="frm_left_label">
+				<?php esc_html_e( 'Usage Tracking', 'formidable' ); ?>
+			</label>
+			<label for="frm_tracking">
+				<input type="checkbox" name="frm_tracking" id="frm_tracking" value="1" <?php checked( $frm_settings->tracking, 1 ); ?> />
+				<?php esc_html_e( 'Allow Formidable Forms to track plugin usage? Opt-in to tracking to help us ensure compatibility and simplify our settings.', 'formidable' ); ?>
+			</label>
+		</p>
+
     </div>
 
         <?php

@@ -458,6 +458,9 @@ class FrmEntry {
     }
 
     // Pagination Methods
+	/**
+	 * @param int|array|string If int, use the form id.
+	 */
     public static function getRecordCount( $where = '' ) {
         global $wpdb;
 		$table_join = $wpdb->prefix . 'frm_items it LEFT OUTER JOIN ' . $wpdb->prefix . 'frm_forms fr ON it.form_id=fr.id';

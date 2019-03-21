@@ -32,6 +32,7 @@ class FrmSettings {
 
 	public $no_ips;
 	public $current_form = 0;
+	public $tracking;
 
 	public function __construct( $args = array() ) {
 		if ( ! defined( 'ABSPATH' ) ) {
@@ -104,6 +105,7 @@ class FrmSettings {
 
             'email_to' => '[admin_email]',
 			'no_ips'   => 0,
+			'tracking' => FrmAppHelper::pro_is_installed(),
         );
     }
 
@@ -237,22 +239,17 @@ class FrmSettings {
     }
 
 	private function update_settings( $params ) {
-		$this->mu_menu = isset( $params['frm_mu_menu'] ) ? $params['frm_mu_menu'] : 0;
-
 		$this->pubkey = trim( $params['frm_pubkey'] );
         $this->privkey = $params['frm_privkey'];
 		$this->re_type = $params['frm_re_type'];
         $this->re_lang = $params['frm_re_lang'];
-		$this->re_multi = isset( $params['frm_re_multi'] ) ? $params['frm_re_multi'] : 0;
 
         $this->load_style = $params['frm_load_style'];
 
-		$this->use_html = isset( $params['frm_use_html'] ) ? $params['frm_use_html'] : 0;
-		$this->jquery_css = isset( $params['frm_jquery_css'] ) ? absint( $params['frm_jquery_css'] ) : 0;
-		$this->accordion_js = isset( $params['frm_accordion_js'] ) ? absint( $params['frm_accordion_js'] ) : 0;
-		$this->fade_form = isset( $params['frm_fade_form'] ) ? absint( $params['frm_fade_form'] ) : 0;
-		$this->old_css   = isset( $params['frm_old_css'] ) ? absint( $params['frm_old_css'] ) : 0;
-		$this->no_ips = isset( $params['frm_no_ips'] ) ? absint( $params['frm_no_ips'] ) : 0;
+		$checkboxes = array( 'mu_menu', 're_multi', 'use_html', 'jquery_css', 'accordion_js', 'fade_form', 'old_css', 'no_ips', 'tracking' );
+		foreach ( $checkboxes as $set ) {
+			$this->$set = isset( $params[ 'frm_' . $set ] ) ? $params[ 'frm_' . $set ] : 0;
+		}
     }
 
 	private function update_roles( $params ) {

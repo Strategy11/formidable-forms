@@ -626,7 +626,7 @@ class FrmForm {
 	}
 
     /**
-     * @return int count of forms
+     * @return object count of forms
      */
     public static function get_count() {
     	global $wpdb;
