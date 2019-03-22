@@ -489,6 +489,9 @@ class FrmXMLHelper {
 	 * @param array $imported
 	 */
 	private static function create_imported_field( $f, &$imported ) {
+		$defaults           = self::default_field_options( $f['type'] );
+		$f['field_options'] = array_merge( $defaults, $f['field_options'] );
+
 		$new_id = FrmField::create( $f );
 		if ( $new_id != false ) {
 			$imported['imported']['fields'] ++;
@@ -970,16 +973,13 @@ class FrmXMLHelper {
 	 * @since 3.06
 	 */
 	private static function remove_default_field_options( &$field ) {
-		$defaults = FrmFieldsHelper::get_default_field_options( $field->type );
+		$defaults = self::default_field_options( $field->type );
 		if ( empty( $defaults['blank'] ) ) {
 			$global_settings   = new FrmSettings();
 			$global_defaults   = $global_settings->default_options();
 			$defaults['blank'] = $global_defaults['blank_msg'];
 		}
 
-		if ( empty( $defaults['custom_html'] ) ) {
-			$defaults['custom_html'] = FrmFieldsHelper::get_default_html( $field->type );
-		}
 		$options = maybe_unserialize( $field->field_options );
 		self::remove_defaults( $defaults, $options );
 		self::remove_default_html( 'custom_html', $defaults, $options );
@@ -997,6 +997,17 @@ class FrmXMLHelper {
 	}
 
 	/**
+	 * @since 3.06.03
+	 */
+	private static function default_field_options( $type ) {
+		$defaults = FrmFieldsHelper::get_default_field_options( $type );
+		if ( empty( $defaults['custom_html'] ) ) {
+			$defaults['custom_html'] = FrmFieldsHelper::get_default_html( $type );
+		}
+		return $defaults;
+	}
+
+ 	/**
 	 * Compare the default array to the saved values and
 	 * remove if they are the same
 	 *

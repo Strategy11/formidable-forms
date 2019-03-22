@@ -159,12 +159,33 @@ class FrmFormsController {
 		} else {
 			FrmForm::update( $id, $values );
 			$message = __( 'Form was Successfully Updated', 'formidable' );
+
+			if ( self::is_too_long( $values ) ) {
+				$message .= '<br/> ' . sprintf(
+					/* translators: %1$s: Start link HTML, %2$s: end link HTML */
+					__( 'However, your form is very long and may be %1$sreaching server limits%2$s.', 'formidable' ),
+					'<a href="https://formidableforms.com/knowledgebase/i-have-a-long-form-why-did-the-options-at-the-end-of-the-form-stop-saving/?utm_source=WordPress&utm_medium=builder&utm_campaign=liteplugin" target="_blank" rel="noopener">',
+					'</a>'
+				);
+			}
+
 			if ( defined( 'DOING_AJAX' ) ) {
 				wp_die( esc_html( $message ) );
 			}
 
 			return self::get_edit_vars( $id, array(), $message );
 		}
+	}
+
+	/**
+	 * Check if the value at the end of the form was included.
+	 * If it's missing, it means other values at the end of the form
+	 * were likely not saved either.
+	 *
+	 * @since 3.06.01
+	 */
+	private static function is_too_long( $values ) {
+		return ( ! isset( $values['frm_end'] ) ) || empty( $values['frm_end'] );
 	}
 
 	/**
@@ -770,6 +791,15 @@ class FrmFormsController {
 		$templates = $api->get_api_info();
 		self::add_user_templates( $templates );
 
+		$error   = '';
+		$expired = false;
+		if ( isset( $templates['error'] ) ) {
+			$error   = $templates['error']['message'];
+			$error   = str_replace( 'utm_medium=addons', 'utm_medium=form-templates', $error );
+			$expired = ( $templates['error']['code'] === 'expired' );
+			unset( $templates['error'] );
+		}
+
 		$pricing = FrmAppHelper::admin_upgrade_link( 'form-templates' );
 		$plans   = array( 'free', 'Personal', 'Business', 'Elite' );
 
@@ -940,6 +970,8 @@ class FrmFormsController {
 	 */
 	public static function advanced_settings( $values ) {
 		$first_h3 = 'frm_first_h3';
+
+		FrmAppController::include_upgrade_overlay();
 
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/settings-advanced.php' );
 	}
@@ -1424,7 +1456,7 @@ class FrmFormsController {
 
 		$form = apply_filters( 'frm_pre_display_form', $form );
 
-		$frm_settings = FrmAppHelper::get_settings();
+		$frm_settings = FrmAppHelper::get_settings( array( 'current_form' => $form->id ) );
 
 		if ( self::is_viewable_draft_form( $form ) ) {
 			// don't show a draft form on a page
@@ -1798,7 +1830,7 @@ class FrmFormsController {
 	 * @since 2.05
 	 */
 	private static function prepare_submit_message( $form, $entry_id ) {
-		$frm_settings = FrmAppHelper::get_settings();
+		$frm_settings = FrmAppHelper::get_settings( array( 'current_form' => $form->id ) );
 
 		if ( $entry_id && is_numeric( $entry_id ) ) {
 			$message = isset( $form->options['success_msg'] ) ? $form->options['success_msg'] : $frm_settings->success_msg;

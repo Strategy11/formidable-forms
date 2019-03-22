@@ -2,9 +2,9 @@
 Contributors: formidableforms, sswells, srwells, jamie.wahlin
 Tags: forms, contact form, form builder, survey, form maker, form, form creator
 Requires at least: 4.5
-Tested up to: 5.0
+Tested up to: 5.1.1
 Requires PHP: 5.3
-Stable tag: 3.06
+Stable tag: 3.06.03
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quiz forms, and more.
 
@@ -216,7 +216,7 @@ Since Formidable Forms is not your average WordPress contact form plugin, this f
 * <a href="https://formidableforms.com/features/importing-exporting-wordpress-forms/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Import and export forms, form submissions, styles, and views</a>. Quickly move forms, entries, views and styles to another site. Need to export leads from a contact form to another service? Check.
 * <a href="https://formidableforms.com/features/wordpress-form-templates/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Form templates for instant form building</a>. Get started quickly with the most advanced form creator that includes form templates, style templates, and Formidable View templates. Our WordPress form generator makes it FAST to build contact forms, job application forms, and other online forms.
 * Import our <a href="https://formidableforms.com/downloads/category/form-templates/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">pre-built form/view templates</a> as a shortcut to a final product. Our growing form template library includes contact forms, payment forms, calculators, a WooCommerce product creator, and more.
-* <a href="https://formidableforms.com/features/wcag-accessible-forms/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">WCAG accessible forms with A11Y compliance</a>. Don't alienate your audience. Ensure your contact forms, surveys, quiz forms, lead capture forms, and other online forms are compliant and available to anyone.
+* <a href="https://formidableforms.com/features/wcag-accessible-forms/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">WCAG accessible forms with A11Y and ADA compliance</a>. Don't alienate your audience. Ensure your contact forms, surveys, quiz forms, lead capture forms, and other online forms are compliant and available to anyone. Allow those using screenreaders to successfully use and submit not only your contact forms, but also the advanced forms.
 * <a href="https://formidableforms.com/features/invisible-spam-protection/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Invisible SPAM protection</a>. Don't waste time sorting through SPAM from your contact form. Get instant and powerful anti-spam features from honeypot, invisible reCAPTCHA, Akismet, and the WordPress comment blacklist.
 * <a href="https://formidableforms.com/features/fill-out-forms-automatically/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Fill out forms automatically</a> with values from the user profile or posts (i.e. custom fields). When a user is logged in, prefill known values like first name, last name, and email address in a contact form.
 * <a href="https://formidableforms.com/features/white-label-form-builder-wordpress/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">White label form builder</a>. Replace the Formidable Forms branding with your own in the admin area. Plus, we never show "powered by" links in your free contact forms or online forms.
@@ -374,18 +374,16 @@ Formidable Forms drag & drop form builder combined with our add-ons is the most 
 To get access to more features, integrations, and support, <a href="https://formidableforms.com/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">upgrade to Formidable Forms Pro</a>. A Pro license gives you access to the full version of Formidable Forms for more advanced contact forms, Formidable Views, graphs and stats, priority support, and Formidable Forms Add-ons!
 
 == Changelog ==
-= 3.06 =
-* New: Add one-click form creation from a form template and adjust the way a new form is created
-* New: Add a new process for creating a custom form template
-* Tweak: Create smaller XML fiels when exporting forms
-* Tweak: Use the name of the form for XML exports when a single form is exported
-* Tweak: Don't limit the width of the color picker in the form styler to avoid conflicts with some color picker plugins
-* Fix: Prevent the 'Advanced' section from hiding on non-Formidable blocks
-* Fix: Some users were seeing PHP error messages in PHP 5.2
-* Fix: XML form exports set to use the default style were not correctly setting the style on import
+= 3.06.03 =
+* Fix: The required indicator for a field was blank after importing a form.
+* Fix: Only include the id of the error message once in aria-describedby for linking the error message for screen readers.
+* Fix: Prevent a couple PHP warning messages with certain settings.
 
-= 3.05 =
-* New: Add a new Forms block for use with the new WP editor
-* Fix: A false number was showing for number of plugin updates available when add-ons were not installed
+= 3.06.02 =
+* New: More WCAG improvements. Link the error messages to the field for screenreaders.
+* Fix: When resending emails, don't send emails that are toggled off.
+* Fix: Prevent other plugins from adding messages on the form templates and new form pages.
+* Fix: Prevent front-end styles from loading on back-end pages.
+* Fix: When the screen settings are changed after filtering the entry list, stay on the filtered list.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>

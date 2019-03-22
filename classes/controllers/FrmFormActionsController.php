@@ -44,6 +44,7 @@ class FrmFormActionsController {
 			'paypal'    => 'FrmDefPayPalAction',
 			'payment'   => 'FrmDefHrsAction',
 			'mailchimp' => 'FrmDefMlcmpAction',
+			'api'       => 'FrmDefApiAction',
 
 			'salesforce'      => 'FrmDefSalesforceAction',
 			'activecampaign'  => 'FrmDefActiveCampaignAction',
@@ -215,6 +216,11 @@ class FrmFormActionsController {
 
 			$data['data-upgrade'] = $upgrade_label;
 			$data['data-medium']  = 'settings-' . $action_control->id_base;
+
+			$upgrading = FrmAddonsController::install_link( $action_control->action_options['plugin'] );
+			if ( isset( $upgrading['url'] ) ) {
+				$data['data-oneclick'] = json_encode( $upgrading );
+			}
 		}
 
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/_action_icon.php' );
@@ -282,6 +288,9 @@ class FrmFormActionsController {
 
 	public static function action_control( $form_action, $form, $action_key, $action_control, $values ) {
 		$action_control->_set( $action_key );
+
+		$use_logging = self::should_show_log_message( $form_action->post_excerpt );
+
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/form_action.php' );
 	}
 
@@ -300,6 +309,7 @@ class FrmFormActionsController {
 		$form_id = FrmAppHelper::get_param( 'form_id', '', 'post', 'absint' );
 
 		$form_action = $action_control->prepare_new( $form_id );
+		$use_logging = self::should_show_log_message( $action_type );
 
 		$values = array();
 		$form   = self::fields_to_values( $form_id, $values );
@@ -325,8 +335,19 @@ class FrmFormActionsController {
 		$values = array();
 		$form   = self::fields_to_values( $form_action->menu_order, $values );
 
+		$use_logging = self::should_show_log_message( $action_type );
+
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/_action_inside.php' );
 		wp_die();
+	}
+
+	/**
+	 * @since 3.06.04
+	 * @return bool
+	 */
+	private static function should_show_log_message( $action_type ) {
+		$logging     = array( 'api', 'salesforce', 'constantcontact', 'activecampaign' );
+		return in_array( $action_type, $logging ) && ! function_exists( 'frm_log_autoloader' );
 	}
 
 	private static function fields_to_values( $form_id, array &$values ) {
@@ -411,7 +432,10 @@ class FrmFormActionsController {
 	 * @param string $event
 	 */
 	public static function trigger_actions( $event, $form, $entry, $type = 'all', $args = array() ) {
-		$form_actions = FrmFormAction::get_action_for_form( ( is_object( $form ) ? $form->id : $form ), $type );
+		$action_status = array(
+			'post_status' => 'publish',
+		);
+		$form_actions = FrmFormAction::get_action_for_form( ( is_object( $form ) ? $form->id : $form ), $type, $action_status );
 
 		if ( empty( $form_actions ) ) {
 			return;

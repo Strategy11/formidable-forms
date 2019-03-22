@@ -17,6 +17,14 @@ class FrmFieldRadio extends FrmFieldType {
 	 */
 	protected $holds_email_values = true;
 
+	/**
+	 * Does the html for this field label need to include "for"?
+	 *
+	 * @var bool
+	 * @since 3.06.01
+	 */
+	protected $has_for_label = false;
+
 	protected function input_html() {
 		return $this->multiple_input_html();
 	}

@@ -31,8 +31,10 @@ class FrmSettings {
 	public $re_multi;
 
 	public $no_ips;
+	public $current_form = 0;
+	public $tracking;
 
-	public function __construct() {
+	public function __construct( $args = array() ) {
 		if ( ! defined( 'ABSPATH' ) ) {
 			die( 'You are not allowed to call this page directly.' );
 		}
@@ -49,6 +51,8 @@ class FrmSettings {
 		}
 
 		$this->set_default_options();
+
+		$this->maybe_filter_for_form( $args );
 	}
 
 	private function translate_settings( $settings ) {
@@ -102,6 +106,7 @@ class FrmSettings {
 
 			'email_to' => '[admin_email]',
 			'no_ips'   => 0,
+			'tracking' => FrmAppHelper::pro_is_installed(),
 		);
 	}
 
@@ -181,6 +186,34 @@ class FrmSettings {
 		}
 	}
 
+	/**
+	 * Get values that may be shown on the front-end without an override in the form settings.
+	 *
+	 * @since 3.06.01
+	 */
+	public function translatable_strings() {
+		return array(
+			'invalid_msg',
+			'failed_msg',
+			'login_msg',
+		);
+	}
+
+	/**
+	 * Allow strings to be filtered when a specific form may be displaying them.
+	 *
+	 * @since 3.06.01
+	 */
+	public function maybe_filter_for_form( $args ) {
+		if ( isset( $args['current_form'] ) && is_numeric( $args['current_form'] ) ) {
+			$this->current_form = $args['current_form'];
+			foreach ( $this->translatable_strings() as $string ) {
+				$this->{$string} = apply_filters( 'frm_global_setting', $this->{$string}, $string, $this );
+				$this->{$string} = apply_filters( 'frm_global_' . $string, $this->{$string}, $this );
+			}
+		}
+	}
+
 	public function validate( $params, $errors ) {
 		return apply_filters( 'frm_validate_settings', $errors, $params );
 	}
@@ -207,23 +240,18 @@ class FrmSettings {
 	}
 
 	private function update_settings( $params ) {
-		$this->mu_menu = isset( $params['frm_mu_menu'] ) ? $params['frm_mu_menu'] : 0;
-
 		$this->pubkey   = trim( $params['frm_pubkey'] );
 		$this->privkey  = $params['frm_privkey'];
 		$this->re_type  = $params['frm_re_type'];
 		$this->re_lang  = $params['frm_re_lang'];
-		$this->re_multi = isset( $params['frm_re_multi'] ) ? $params['frm_re_multi'] : 0;
 
 		$this->load_style = $params['frm_load_style'];
 
-		$this->use_html     = isset( $params['frm_use_html'] ) ? $params['frm_use_html'] : 0;
-		$this->jquery_css   = isset( $params['frm_jquery_css'] ) ? absint( $params['frm_jquery_css'] ) : 0;
-		$this->accordion_js = isset( $params['frm_accordion_js'] ) ? absint( $params['frm_accordion_js'] ) : 0;
-		$this->fade_form    = isset( $params['frm_fade_form'] ) ? absint( $params['frm_fade_form'] ) : 0;
-		$this->old_css      = isset( $params['frm_old_css'] ) ? absint( $params['frm_old_css'] ) : 0;
-		$this->no_ips       = isset( $params['frm_no_ips'] ) ? absint( $params['frm_no_ips'] ) : 0;
-	}
+		$checkboxes = array( 'mu_menu', 're_multi', 'use_html', 'jquery_css', 'accordion_js', 'fade_form', 'old_css', 'no_ips', 'tracking' );
+		foreach ( $checkboxes as $set ) {
+			$this->$set = isset( $params[ 'frm_' . $set ] ) ? $params[ 'frm_' . $set ] : 0;
+		}
+    }
 
 	private function update_roles( $params ) {
 		global $wp_roles;

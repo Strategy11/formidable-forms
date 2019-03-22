@@ -57,6 +57,49 @@ $pass_args = array(
 );
 do_action( 'frm_additional_action_settings', $form_action, $pass_args );
 
+// Show Conditional logic indicator.
+if ( ! FrmAppHelper::pro_is_installed() ) {
+	?>
+	<h3>
+		<a href="javascript:void(0)" class="frm_show_upgrade frm_noallow" data-upgrade="<?php esc_attr_e( 'Conditional emails', 'formidable' ); ?>" data-medium="conditional-email">
+			<?php esc_html_e( 'Use Conditional Logic', 'formidable' ); ?>
+		</a>
+	</h3>
+	<?php
+}
+
+// Show Form Action Automation indicator.
+if ( ! function_exists( 'load_frm_autoresponder' ) ) {
+	$install_data = '';
+	$class        = ' frm_noallow';
+	$upgrading    = FrmAddonsController::install_link( 'autoresponder' );
+	if ( isset( $upgrading['url'] ) ) {
+		$install_data = json_encode( $upgrading );
+		$class        = '';
+	}
+	?>
+	<h3>
+		<a href="javascript:void(0)" class="frm_show_upgrade<?php echo esc_attr( $class ); ?>" data-upgrade="<?php esc_attr_e( 'Form action automations', 'formidable' ); ?>" data-medium="action-automation" data-oneclick="<?php echo esc_attr( $install_data ); ?>">
+			<?php esc_html_e( 'Setup Automation', 'formidable' ); ?>
+		</a>
+	</h3>
+	<?php
+}
+
+// Show link to install logs.
+if ( $use_logging ) {
+	$upgrading = FrmAddonsController::install_link( 'logs' );
+	if ( isset( $upgrading['url'] ) ) {
+		?>
+		<p>
+			<a href="javascript:void(0)" class="frm_show_upgrade" data-upgrade="<?php esc_attr_e( 'Form action logs', 'formidable' ); ?>" data-medium="action-logs" data-oneclick="<?php echo esc_attr( json_encode( $upgrading ) ); ?>">
+				<i class="dashicons dashicons-info"></i>
+				<?php esc_html_e( 'Install logging to get more information on API requests.', 'formidable' ); ?>
+			</a>
+		</p>
+		<?php
+	}
+}
 ?>
 <span class="alignright frm_action_id <?php echo esc_attr( empty( $form_action->ID ) ? 'frm_hidden' : '' ); ?>">
 	<?php

@@ -133,6 +133,35 @@ class FrmAppController {
 			),
 		);
 
+		// Let people know reports and views exist.
+		if ( ! FrmAppHelper::pro_is_installed() ) {
+			$nav_items[] = array(
+				'link'    => '',
+				'label'   => __( 'Views', 'formidable' ),
+				'current' => array(),
+				'page'    => '',
+				'permission' => 'frm_view_entries',
+				'atts'    => array(
+					'class'        => 'frm_show_upgrade frm_noallow',
+					'data-upgrade' => __( 'Views', 'formidable' ),
+					'data-medium'  => 'views-nav',
+				),
+			);
+			$nav_items[] = array(
+				'link'    => '',
+				'label'   => __( 'Reports', 'formidable' ),
+				'current' => array(),
+				'page'    => '',
+				'permission' => 'frm_view_entries',
+				'atts'    => array(
+					'class'        => 'frm_show_upgrade frm_noallow',
+					'data-upgrade' => __( 'Reports', 'formidable' ),
+					'data-medium'  => 'reports-nav',
+				),
+			);
+			self::include_upgrade_overlay();
+		}
+
 		$nav_args = array(
 			'form_id' => $id,
 			'form'    => $form,
@@ -248,9 +277,21 @@ class FrmAppController {
 	 * @since 3.04.02
 	 */
 	public static function include_upgrade_overlay() {
-		$is_pro = FrmAppHelper::pro_is_installed();
 		wp_enqueue_script( 'jquery-ui-dialog' );
 		wp_enqueue_style( 'jquery-ui-dialog' );
+
+		add_action( 'admin_footer', 'FrmAppController::upgrade_overlay_html' );
+	}
+
+	/**
+	 * @since 3.06.03
+	 */
+	public static function upgrade_overlay_html() {
+		$is_pro       = FrmAppHelper::pro_is_installed();
+		$upgrade_link = array(
+			'medium'  => 'builder',
+			'content' => 'upgrade',
+		);
 		include( FrmAppHelper::plugin_path() . '/classes/views/shared/upgrade_overlay.php' );
 	}
 

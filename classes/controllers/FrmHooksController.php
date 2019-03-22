@@ -78,7 +78,10 @@ class FrmHooksController {
 
 		// Simple Blocks Controller.
 		add_action( 'init', 'FrmSimpleBlocksController::register_simple_form_block' );
-	}
+
+		add_filter( 'cron_schedules', 'FrmUsageController::add_schedules' );
+		add_action( 'formidable_send_usage', 'FrmUsageController::send_snapshot' );
+    }
 
 	public static function load_admin_hooks() {
 		add_action( 'admin_menu', 'FrmAppController::menu', 1 );
@@ -134,7 +137,9 @@ class FrmHooksController {
 
 		// Simple Blocks Controller.
 		add_action( 'enqueue_block_editor_assets', 'FrmSimpleBlocksController::block_editor_assets' );
-	}
+
+		add_action( 'admin_init', 'FrmUsageController::schedule_send' );
+    }
 
 	public static function load_ajax_hooks() {
 		add_action( 'wp_ajax_frm_install', 'FrmAppController::ajax_install' );
@@ -145,6 +150,7 @@ class FrmHooksController {
 		add_action( 'wp_ajax_frm_addon_activate', 'FrmAddon::activate' );
 		add_action( 'wp_ajax_frm_addon_deactivate', 'FrmAddon::deactivate' );
 		add_action( 'wp_ajax_frm_install_addon', 'FrmAddonsController::ajax_install_addon' );
+		add_action( 'wp_ajax_frm_activate_addon', 'FrmAddonsController::ajax_activate_addon' );
 
 		// Fields Controller.
 		add_action( 'wp_ajax_frm_load_field', 'FrmFieldsController::load_field' );

@@ -301,6 +301,40 @@ class FrmAddonsController {
 	}
 
 	/**
+	 * Get the action link for an addon that isn't active.
+	 *
+	 * @since 3.06.03
+	 * @param string $addon The plugin slug
+	 * @return array
+	 */
+	public static function install_link( $plugin ) {
+		$link    = array();
+		$addons = self::get_api_addons();
+		self::prepare_addons( $addons );
+
+		foreach ( $addons as $addon ) {
+			$slug = explode( '/', $addon['plugin'] );
+			if ( $slug[0] !== 'formidable-' . $plugin ) {
+				continue;
+			}
+
+			if ( $addon['status']['type'] === 'installed' && ! empty( $addon['activate_url'] ) ) {
+				$link = array(
+					'url'   => $addon['plugin'],
+					'class' => 'frm-activate-addon',
+				);
+			} elseif ( isset( $addon['url'] ) && ! empty( $addon['url'] ) ) {
+				$link = array(
+					'url'   => $addon['url'],
+					'class' => 'frm-install-addon',
+				);
+			}
+
+			return $link;
+		}
+	}
+
+	/**
 	 * @since 3.04.03
 	 *
 	 * @param array $addons
@@ -418,6 +452,208 @@ class FrmAddonsController {
 	public static function upgrade_to_pro() {
 		$pro_pricing = self::prepare_pro_info();
 
+		$link_parts = array(
+			'medium'  => 'upgrade',
+			'content' => 'button',
+		);
+
+		$features = array(
+			'Display Entries' => array(
+				array(
+					'label' => 'Display form data with virtually limitless views',
+					'link'  => array(
+						'content' => 'views',
+						'anchor'  => 'feature-display-form-data-views',
+					),
+					'lite'  => false,
+				),
+				array(
+					'label' => 'Generate graphs and stats based on your submitted data',
+					'link'  => array(
+						'content' => 'graphs',
+						'anchor'  => 'feature-create-a-graph-wordpress-forms',
+					),
+					'lite'  => false,
+				),
+			),
+			'Entry Management' => array(
+				array(
+					'label' => 'Import entries from a CSV',
+					'link'  => array(
+						'content' => 'import-entries',
+						'anchor'  => 'feature-importing-exporting-wordpress-forms',
+					),
+					'lite'  => false,
+				),
+				array(
+					'label' => 'Logged-in users can save drafts and return later',
+					'link'  => array(
+						'content' => 'save-drafts',
+						'anchor'  => 'feature-save-and-continue-partial-submissions',
+					),
+					'lite'  => false,
+				),
+				array(
+					'label' => 'Flexibly and powerfully view, edit, and delete entries from anywhere on your site',
+					'link'  => array(
+						'content' => 'front-edit',
+						'anchor'  => 'feature-front-end-editing-wordpress',
+					),
+					'lite'  => false,
+				),
+				array(
+					'label' => 'View form submissions from the back-end',
+					'lite'  => true,
+				),
+				array(
+					'label' => 'Export your entries to a CSV',
+					'lite'  => true,
+				),
+			),
+			'Form Building' => array(
+				array(
+					'label' => 'Save a calculated value into a field',
+					'link'  => array(
+						'content' => 'calculations',
+						'anchor'  => 'feature-wordpress-calculated-fields-form',
+					),
+					'lite'  => false,
+				),
+				array(
+					'label' => 'Allow multiple file uploads',
+					'link'  => array(
+						'content' => 'file-uploads',
+						'anchor'  => 'feature-wordpress-multiple-file-upload-form',
+					),
+					'lite'  => false,
+				),
+				array(
+					'label' => 'Repeat sections of fields',
+					'link'  => array(
+						'content' => 'repeaters',
+						'anchor'  => 'feature-dynamically-add-form-fields',
+					),
+					'lite'  => false,
+				),
+				array(
+					'label' => 'Hide and show fields conditionally based on other fields or the user\'s role',
+					'link'  => array(
+						'content' => 'conditional-logic',
+						'anchor'  => 'feature-conditional-logic-wordpress-forms',
+					),
+					'lite'  => false,
+				),
+				array(
+					'label' => 'Confirmation fields',
+					'link'  => array(
+						'content' => 'confirmation-fields',
+						'anchor'  => 'feature-confirm-email-address-password-wordpress-form',
+					),
+					'lite'  => false,
+				),
+				array(
+					'label' => 'Multi-paged forms',
+					'link'  => array(
+						'content' => 'page-breaks',
+						'anchor'  => 'feature-wordpress-multi-step-form',
+					),
+					'lite'  => false,
+				),
+				array(
+					'label' => 'Include section headings, page breaks, rich text, dates, times, scales, star ratings, sliders, toggles, dynamic fields populated from other forms, passwords, and tags in advanced forms.',
+					'lite'  => false,
+				),
+				array(
+					'label' => 'Include text, email, url, paragraph text, radio, checkbox, dropdown fields, hidden fields, user ID fields, and HTML blocks in your form.',
+					'lite'  => true,
+				),
+				array(
+					'label' => 'Drag & Drop Form building',
+					'link'  => array(
+						'content' => 'drag-drop',
+						'anchor'  => 'feature-drag-drop-form-builder',
+					),
+					'lite'  => true,
+				),
+				array(
+					'label' => 'Create forms from Templates',
+					'link'  => array(
+						'content' => 'form-templates',
+						'anchor'  => 'feature-wordpress-form-templates',
+					),
+					'lite'  => true,
+				),
+				array(
+					'label' => 'Import and export forms with XML',
+					'link'  => array(
+						'content' => 'import',
+						'anchor'  => 'feature-importing-exporting-wordpress-forms',
+					),
+					'lite'  => true,
+				),
+				array(
+					'label' => 'Use input placeholder text in your fields that clear when typing starts.',
+					'lite'  => true,
+				),
+			),
+			'Form Actions' => array(
+				array(
+					'label' => 'Conditionally send your email notifications based on values in your form',
+					'link'  => array(
+						'content' => 'conditional-emails',
+						'anchor'  => 'feature-conditional-logic-wordpress-forms',
+					),
+					'lite'  => false,
+				),
+				array(
+					'label' => 'Create and edit WordPress posts or custom posts from the front-end',
+					'link'  => array(
+						'content' => 'create-posts',
+						'anchor'  => 'feature-user-submitted-posts-wordpress-forms',
+					),
+					'lite'  => false,
+				),
+				array(
+					'label' => 'Send multiple emails and autoresponders',
+					'link'  => array(
+						'content' => 'multiple-emails',
+						'anchor'  => 'feature-email-autoresponders-wordpress',
+					),
+					'lite'  => true,
+				),
+			),
+			'Form Appearance' => array(
+				array(
+					'label' => 'Create Multiple styles for different forms',
+					'link'  => array(
+						'content' => 'multiple-styles',
+						'anchor'  => 'feature-wordpress-visual-form-styler',
+					),
+					'lite'  => false,
+				),
+				array(
+					'label' => 'Customizable layout with CSS classes',
+					'link'  => array(
+						'content' => 'form-layout',
+						'anchor'  => 'feature-wordpress-mobile-friendly-responsive-forms',
+					),
+					'lite'  => true,
+				),
+				array(
+					'label' => 'Customize the HTML for your forms',
+					'link'  => array(
+						'content' => 'custom-html',
+						'anchor'  => 'feature-customize-form-html-wordpress',
+					),
+					'lite'  => true,
+				),
+				array(
+					'label' => 'Style your form with the Visual Form Styler',
+					'lite'  => true,
+				),
+			),
+		);
+
 		include( FrmAppHelper::plugin_path() . '/classes/views/addons/upgrade_to_pro.php' );
 	}
 
@@ -445,7 +681,7 @@ class FrmAddonsController {
 				'id'       => 0,
 				'download' => 19366992,
 				'price'    => '399.00',
-				'name'     => 'Enterprise',
+				'name'     => 'Elite',
 			),
 		);
 	}
@@ -467,7 +703,7 @@ class FrmAddonsController {
 		self::maybe_activate_addon( $installed );
 
 		// Send back a response.
-		echo json_encode( true );
+		echo json_encode( __( 'Your plugin has been installed. Please reload the page to see more options.', 'formidable' ) );
 		wp_die();
 	}
 
@@ -523,7 +759,27 @@ class FrmAddonsController {
 	}
 
 	/**
+	 * @since 3.06.03
+	 */
+	public static function ajax_activate_addon() {
+
+		self::install_addon_permissions();
+
+		// Set the current screen to avoid undefined notices.
+		global $hook_suffix;
+		set_current_screen();
+
+		$plugin = FrmAppHelper::get_param( 'plugin', '', 'post', 'sanitize_text_field' );
+		self::maybe_activate_addon( $plugin );
+
+		// Send back a response.
+		echo json_encode( __( 'Your plugin has been activated. Please reload the page to see more options.', 'formidable' ) );
+		wp_die();
+	}
+
+	/**
 	 * @since 3.04.02
+	 * @param string $installed The plugin folder name with file name
 	 */
 	private static function maybe_activate_addon( $installed ) {
 		if ( ! $installed ) {
@@ -532,8 +788,11 @@ class FrmAddonsController {
 
 		$activate = activate_plugin( $installed );
 		if ( is_wp_error( $activate ) ) {
-			echo json_encode( array( 'error' => $activate->get_error_message() ) );
-			wp_die();
+			// Ignore the invalid header message that shows with nested plugins.
+			if ( $activate->get_error_code() !== 'no_plugin_header' ) {
+				echo json_encode( array( 'error' => $activate->get_error_message() ) );
+				wp_die();
+			}
 		}
 	}
 

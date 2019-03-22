@@ -15,28 +15,38 @@
 					?> 
 				</h2>
 				<div class="cta-inside">
-					<p>
+
+					<p id="frm-oneclick" class="frm_hidden">
+						<?php esc_html_e( 'That add-on is not installed. Would you like to install it now?', 'formidable' ); ?>
+					</p>
+					<p id="frm-addon-status"></p>
+
+					<a class="button button-primary frm-button-primary frm_hidden" id="frm-oneclick-button">
+						<?php esc_html_e( 'Install', 'formidable' ); ?>
+					</a>
+
+					<p id="frm-upgrade-message">
 						<?php
 						if ( $is_pro ) {
-							$message = __( 'Please see the add-ons that are included with your plan.', 'formidable' );
+							$message = __( '%s are not available on your plan. Please upgrade or renew your license to unlock more awesome features.', 'formidable' );
 						} else {
 							/* translators: %s: Feature name */
-							$message = __( '%s are not available on your plan. Please upgrade to PRO to unlock more awesome features.', 'formidable' );
+							$message = __( '%s are not available on your plan. Did you know you can upgrade to PRO to unlock more awesome features?', 'formidable' );
 						}
 						printf( esc_html( $message ), '<span class="frm_feature_label"></span>' );
 						?>
 					</p>
 					<?php if ( $is_pro ) { ?>
-						<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-addons' ) ); ?>" class="button button-primary frm-button-primary">
-								<?php esc_html_e( 'See My Add-Ons', 'formidable' ); ?>
+						<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( $upgrade_link ) ); ?>" class="button button-primary frm-button-primary" id="frm-upgrade-modal-link">
+								<?php esc_html_e( 'Upgrade', 'formidable' ); ?>
 						</a>
 					<?php } else { ?>
-						<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'builder-upgrade' ) ); ?>" class="button button-primary frm-button-primary" target="_blank" rel="noopener noreferrer">
+						<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( $upgrade_link ) ); ?>" class="button button-primary frm-button-primary" target="_blank" rel="noopener noreferrer" id="frm-upgrade-modal-link">
 							<?php esc_html_e( 'Upgrade to Pro', 'formidable' ); ?>
 						</a>
 
 						<p>
-							<a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url( FrmAppHelper::admin_upgrade_link( 'builder-upgrade', 'knowledgebase/install-formidable-forms/' ) ) ); ?>" target="_blank" class="frm-link-secondary">
+							<a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url( FrmAppHelper::admin_upgrade_link( $upgrade_link, 'knowledgebase/install-formidable-forms/' ) ) ); ?>" target="_blank" class="frm-link-secondary">
 								<?php esc_html_e( 'Already purchased?', 'formidable' ); ?>
 							</a>
 						</p>

@@ -17,8 +17,15 @@ foreach ( $nav_items as $nav_item ) {
 		?>
 		<li>
 			<a href="<?php echo esc_url( $nav_item['link'] ); ?>"
-				<?php FrmAppHelper::select_current_page( $nav_item['page'], $current_page, $nav_item['current'] ); ?>>
-				<?php echo esc_html( $nav_item['label'] ); ?>
+				<?php FrmAppHelper::select_current_page( $nav_item['page'], $current_page, $nav_item['current'] ); ?>
+				<?php
+				if ( isset( $nav_item['atts'] ) ) {
+					foreach ( $nav_item['atts'] as $att => $value ) {
+						echo esc_attr( $att ) . '="' . esc_attr( $value ) . '" ';
+					}
+				}
+				?>>
+				<?php echo esc_html( $nav_item['label'] ) ?>
 			</a>
 		</li>
 		<?php

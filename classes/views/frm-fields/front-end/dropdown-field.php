@@ -38,16 +38,18 @@ if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' &&
 	</select>
 	<?php
 
-	FrmFieldsHelper::include_other_input(
-		array(
-			'other_opt' => $other_opt,
-			'read_only' => $read_only,
-			'checked' => $other_checked,
-			'name'    => $other_args['name'],
-			'value'   => $other_args['value'],
-			'field'   => $field,
-			'html_id' => $html_id,
-			'opt_key' => false,
-		)
-	);
+	if ( isset( $other_args ) ) {
+		FrmFieldsHelper::include_other_input(
+			array(
+				'other_opt' => $other_opt,
+				'read_only' => $read_only,
+				'checked' => $other_checked,
+				'name'    => $other_args['name'],
+				'value'   => $other_args['value'],
+				'field'   => $field,
+				'html_id' => $html_id,
+				'opt_key' => false,
+			)
+		);
+	}
 }

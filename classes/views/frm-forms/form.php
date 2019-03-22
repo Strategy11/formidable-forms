@@ -23,4 +23,6 @@
 		?>
 	</ul>
 
+	<input type="hidden" name="frm_end" value="1" />
+
 </div>

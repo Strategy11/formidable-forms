@@ -702,7 +702,7 @@ class FrmListHelper {
 	}
 
 	private function add_disabled_link( $label ) {
-		return '<span class="tablenav-pages-navspan" aria-hidden="true">' . $label . '</span>';
+		return '<span class="tablenav-pages-navspan button disabled" aria-hidden="true">' . $label . '</span>';
 	}
 
 	private function add_active_link( $atts ) {
@@ -710,7 +710,7 @@ class FrmListHelper {
 		$label = $this->link_label( $atts['page'] );
 
 		return sprintf(
-			"<a class='%s-page' href='%s'><span class='screen-reader-text'>%s</span><span aria-hidden='true'>%s</span></a>",
+			"<a class='button %s-page' href='%s'><span class='screen-reader-text'>%s</span><span aria-hidden='true'>%s</span></a>",
 			$atts['page'],
 			$url,
 			$label,

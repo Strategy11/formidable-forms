@@ -776,7 +776,8 @@ h2 .frm-button-primary {
 }
 
 .frm_orange_button,
-.wrap .frm_pricing a.button-primary {
+.wrap .frm_pricing a.button-primary,
+.toplevel_page_formidable .frm_wrap button.button-primary{
 	border-color: #da791d !important;
 	background: #f37656;
 	color: #fff;
@@ -995,7 +996,7 @@ input.frm_insert_in_template {
 
 .frm-fields td > label,
 .frm-fields p > label,
-#frm_form_editor_container label.frm_primary_label {
+#frm_form_editor_container .frm_primary_label {
 	color: var(--darkest-grey);
 	margin: 0 0 3px;
 	padding: 0;
@@ -1004,11 +1005,11 @@ input.frm_insert_in_template {
 	display: block;
 }
 
-#frm_form_editor_container label.frm_primary_label:hover {
+#frm_form_editor_container .frm_primary_label:hover {
 	cursor: text;
 }
 
-form label.frm_primary_label input {
+form .frm_primary_label input {
 	font-size: 12px;
 }
 
@@ -1023,7 +1024,7 @@ form label.frm_primary_label input {
 	font-size: 11px;
 }
 
-#frm_form_editor_container .divider_section_only label.frm_primary_label {
+#frm_form_editor_container .divider_section_only .frm_primary_label {
 	font-size: 16px;
 }
 
@@ -1333,6 +1334,10 @@ h2.frm-h2 + .howto {
 	margin-bottom: 0;
 }
 
+#frm-templates-page .updated,
+.frm-add-new-form .updated,
+#frm-templates-page .notice,
+.frm-add-new-form .notice,
 #frm-templates-page .error,
 .frm-add-new-form .error {
 	display: none;
@@ -1934,22 +1939,27 @@ img.frm_help {
 	margin-top: 20px;
 }
 
+.frm_loading_button,
 .frm_loading_form.frm_button_submit {
-	position: relative;
+	position: relative !important;
 	opacity: .8;
 	color: transparent !important;
 	text-shadow: none !important;
 }
 
+.frm_loading_button:hover,
+.frm_loading_button:active,
+.frm_loading_button:focus,
 .frm_loading_form.frm_button_submit:hover,
 .frm_loading_form.frm_button_submit:active,
 .frm_loading_form.frm_button_submit:focus {
 	cursor: not-allowed;
-	color: transparent;
+	color: transparent !important;
 	outline: none !important;
 	box-shadow: none;
 }
 
+.frm_loading_button:before,
 .frm_loading_form.frm_button_submit:before {
 	content: '';
 	display: inline-block;
@@ -2248,7 +2258,7 @@ table.frm_name_value textarea {
 	display: none;
 }
 
-#frm_form_editor_container .subform_section label.frm_primary_label {
+#frm_form_editor_container .subform_section .frm_primary_label {
 	display: block;
 }
 

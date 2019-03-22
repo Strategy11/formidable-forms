@@ -219,14 +219,14 @@
 	display:block;
 }
 
-.frm_form_field.frm_left_container label.frm_primary_label{
+.frm_form_field.frm_left_container .frm_primary_label{
 	float:left;
 	display:inline;
 	max-width:33%;
 	margin-right:5%;
 }
 
-.with_frm_style .frm_conf_field.frm_left_container label.frm_primary_label{
+.with_frm_style .frm_conf_field.frm_left_container .frm_primary_label{
 	display:inline;
 	visibility:hidden;
 }
@@ -301,7 +301,7 @@
 	max-width:33%;
 }
 
-.with_frm_style .frm_left_container label.frm_primary_label{
+.with_frm_style .frm_left_container .frm_primary_label{
 	float:left;
 	display:inline !important;
 	width:150px;
@@ -309,7 +309,7 @@
 	margin-right:10px !important;
 }
 
-.with_frm_style .frm_right_container label.frm_primary_label{
+.with_frm_style .frm_right_container .frm_primary_label{
 	display:inline !important;
 	width:150px;
 	max-width:33% !important;
@@ -364,7 +364,7 @@
 	margin-right:10px !important;
 }
 
-.with_frm_style .frm_left_container.frm_inline label.frm_primary_label{
+.with_frm_style .frm_left_container.frm_inline .frm_primary_label{
 	max-width:90% !important;
 }
 
@@ -379,12 +379,12 @@
     max-width:100%;
 }
 
-.with_frm_style .frm_inline_container label.frm_primary_label,
+.with_frm_style .frm_inline_container .frm_primary_label,
 .with_frm_style .frm_inline_container.frm_dynamic_select_container .frm_opt_container{
     display:inline !important;
 }
 
-.with_frm_style .frm_inline_container label.frm_primary_label{
+.with_frm_style .frm_inline_container .frm_primary_label{
 	margin-right:10px !important;
 }
 /* End of left and right label styling */
@@ -530,8 +530,8 @@
 		display:none !important;
 	}
 
-	.with_frm_style .frm_left_container label.frm_primary_label,
-	.with_frm_style .frm_right_container label.frm_primary_label{
+	.with_frm_style .frm_left_container .frm_primary_label,
+	.with_frm_style .frm_right_container .frm_primary_label{
 		width:100% !important;
 		max-width:100% !important;
 		margin-right:0 !important;

@@ -87,6 +87,7 @@ class FrmFormAction {
 			'force_event' => false,
 			'priority'    => 20,
 			'ajax_load'   => true,
+			'plugin'      => $this->id_base,
 			'tooltip'     => $name,
 			'group'       => $id_base,
 			'color'       => '',
@@ -239,14 +240,14 @@ class FrmFormAction {
 	}
 
 	/* Check if imported action should be created or updated
-	*
-	* Since 2.0
-	*
-	* @param array $action
-	* @return integer $post_id
-	*/
+	 *
+	 * @since 2.0
+	 *
+	 * @param array $action
+	 * @return integer $post_id
+	 */
 	public function maybe_create_action( $action, $forms ) {
-		if ( isset( $action['ID'] ) && is_numeric( $action['ID'] ) && $forms[ $action['menu_order'] ] == 'updated' ) {
+		if ( isset( $action['ID'] ) && is_numeric( $action['ID'] ) && isset( $forms[ $action['menu_order'] ] ) && $forms[ $action['menu_order'] ] == 'updated' ) {
 			// Update action only
 			$action['post_content'] = FrmAppHelper::maybe_json_decode( $action['post_content'] );
 			$post_id                = $this->save_settings( $action );
@@ -434,13 +435,13 @@ class FrmFormAction {
 			return array();
 		}
 
+		if ( 'all' != $type ) {
+			return $action_controls->get_all( $form_id, $atts );
+		}
+
 		self::prepare_get_action( $atts );
 
 		$limit = apply_filters( 'frm_form_action_limit', $atts['limit'], compact( 'type', 'form_id' ) );
-
-		if ( 'all' != $type ) {
-			return $action_controls->get_all( $form_id, $limit );
-		}
 
 		$args                = self::action_args( $form_id, $limit );
 		$args['post_status'] = $atts['post_status'];
@@ -476,8 +477,10 @@ class FrmFormAction {
 
 	/**
 	 * @since 3.04
+	 * @param array  $args
+	 * @param string $default_status
 	 */
-	protected static function prepare_get_action( &$args ) {
+	protected static function prepare_get_action( &$args, $default_status = 'publish' ) {
 		if ( is_numeric( $args ) ) {
 			// for reverse compatibility. $limit was changed to $args
 			$args = array(
@@ -486,7 +489,7 @@ class FrmFormAction {
 		}
 		$defaults = array(
 			'limit'       => 99,
-			'post_status' => 'publish',
+			'post_status' => $default_status,
 		);
 		$args     = wp_parse_args( $args, $defaults );
 	}
@@ -514,7 +517,10 @@ class FrmFormAction {
 		return ! empty( $payment_actions );
 	}
 
-	public function get_all( $form_id = false, $limit = 99 ) {
+	public function get_all( $form_id = false, $atts = array() ) {
+		self::prepare_get_action( $atts, 'any' );
+		$limit = $atts['limit'];
+
 		if ( $form_id ) {
 			$this->form_id = $form_id;
 		}
@@ -525,9 +531,9 @@ class FrmFormAction {
 		$frm_vars['action_type'] = $type;
 
 		add_filter( 'posts_where', 'FrmFormActionsController::limit_by_type' );
-		$query                     = self::action_args( $form_id, $limit );
-		$query['post_status']      = 'any';
-		$query['suppress_filters'] = false;
+		$query = self::action_args( $form_id, $limit );
+		$query['post_status'] = $atts['post_status'];
+        $query['suppress_filters'] = false;
 
 		$actions = FrmDb::check_cache( serialize( $query ) . '_type_' . $type, 'frm_actions', $query, 'get_posts' );
 		unset( $query );

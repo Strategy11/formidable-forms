@@ -14,6 +14,7 @@ class FrmDefRegAction extends FrmFormAction {
 	public function __construct() {
 		$action_ops = FrmFormAction::default_action_opts();
 		$action_ops['classes'] = 'frm_show_upgrade';
+		$action_ops['plugin']  = 'registration';
 		parent::__construct( 'register', __( 'Register User', 'formidable' ), $action_ops );
 	}
 }
@@ -61,7 +62,7 @@ class FrmDefTwilioAction extends FrmFormAction {
 class FrmDefHrsAction extends FrmFormAction {
 	public function __construct() {
 		$action_ops = FrmFormAction::default_action_opts( 'frm_stripe_icon frm_credit-card-alt_icon frm_show_upgrade' );
-
+		$action_ops['plugin'] = 'stripe';
 		parent::__construct( 'payment', __( 'eCommerce', 'formidable' ), $action_ops );
 	}
 }
@@ -119,5 +120,12 @@ class FrmDefMailpoetAction extends FrmFormAction {
 		$action_ops = FrmFormAction::default_action_opts();
 		$action_ops['classes'] = 'frm_show_upgrade';
 		parent::__construct( 'mailpoet', 'MailPoet', $action_ops );
+	}
+}
+
+class FrmDefApiAction extends FrmFormAction {
+	public function __construct() {
+		$action_ops = FrmFormAction::default_action_opts( 'frm_feed_icon frm_show_upgrade' );
+		parent::__construct( 'api', __( 'Send API data', 'formidable' ), $action_ops );
 	}
 }
