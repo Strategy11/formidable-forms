@@ -28,6 +28,7 @@
 					<p id="frm-upgrade-message">
 						<?php
 						if ( $is_pro ) {
+							/* translators: %s: Feature name */
 							$message = __( '%s are not available on your plan. Please upgrade or renew your license to unlock more awesome features.', 'formidable' );
 						} else {
 							/* translators: %s: Feature name */

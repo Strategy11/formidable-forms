@@ -336,7 +336,7 @@ class FrmForm {
 		return apply_filters( 'frm_form_strings', $strings, $form );
 	}
 
-    /**
+	/**
 	 * @param string $status
 	 *
 	 * @return int|boolean

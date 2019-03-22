@@ -1007,7 +1007,7 @@ class FrmXMLHelper {
 		return $defaults;
 	}
 
- 	/**
+	/**
 	 * Compare the default array to the saved values and
 	 * remove if they are the same
 	 *

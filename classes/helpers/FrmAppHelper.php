@@ -109,14 +109,14 @@ class FrmAppHelper {
 		return add_query_arg( $query_args, $page ) . $anchor;
 	}
 
-    /**
-     * Get the Formidable settings
-     *
-     * @since 2.0
-     *
-     * @param array $args - May include the form id when values need translation.
-     * @return FrmSettings $frm_setings
-     */
+	/**
+	 * Get the Formidable settings
+	 *
+	 * @since 2.0
+	 *
+	 * @param array $args - May include the form id when values need translation.
+	 * @return FrmSettings $frm_setings
+	 */
 	public static function get_settings( $args = array() ) {
 		global $frm_settings;
 		if ( empty( $frm_settings ) ) {

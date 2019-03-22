@@ -25,7 +25,7 @@ foreach ( $nav_items as $nav_item ) {
 					}
 				}
 				?>>
-				<?php echo esc_html( $nav_item['label'] ) ?>
+				<?php echo esc_html( $nav_item['label'] ); ?>
 			</a>
 		</li>
 		<?php

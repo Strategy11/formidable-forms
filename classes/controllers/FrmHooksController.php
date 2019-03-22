@@ -81,7 +81,7 @@ class FrmHooksController {
 
 		add_filter( 'cron_schedules', 'FrmUsageController::add_schedules' );
 		add_action( 'formidable_send_usage', 'FrmUsageController::send_snapshot' );
-    }
+	}
 
 	public static function load_admin_hooks() {
 		add_action( 'admin_menu', 'FrmAppController::menu', 1 );
@@ -139,7 +139,7 @@ class FrmHooksController {
 		add_action( 'enqueue_block_editor_assets', 'FrmSimpleBlocksController::block_editor_assets' );
 
 		add_action( 'admin_init', 'FrmUsageController::schedule_send' );
-    }
+	}
 
 	public static function load_ajax_hooks() {
 		add_action( 'wp_ajax_frm_install', 'FrmAppController::ajax_install' );

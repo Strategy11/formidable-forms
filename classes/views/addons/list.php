@@ -34,7 +34,7 @@
 						?>
 					</span>
 					<?php if ( $addon['status']['type'] === 'installed' ) { ?>
-						<a rel="<?php echo esc_attr( $addon['plugin'] ) ?>" class="button button-primary frm-button-primary frm-activate-addon <?php echo esc_attr( empty( $addon['activate_url'] ) ? 'frm_hidden' : '' ); ?>">
+						<a rel="<?php echo esc_attr( $addon['plugin'] ); ?>" class="button button-primary frm-button-primary frm-activate-addon <?php echo esc_attr( empty( $addon['activate_url'] ) ? 'frm_hidden' : '' ); ?>">
 							<?php esc_html_e( 'Activate', 'formidable' ); ?>
 						</a>
 					<?php } elseif ( isset( $addon['url'] ) && ! empty( $addon['url'] ) ) { ?>

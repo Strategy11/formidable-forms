@@ -177,9 +177,9 @@ class FrmUsage {
 	 */
 	private function permissions( $settings_list ) {
 		$permissions = array();
-        $frm_roles   = FrmAppHelper::frm_capabilities();
+		$frm_roles   = FrmAppHelper::frm_capabilities();
 
-        foreach ( $frm_roles as $frm_role => $frm_role_description ) {
+		foreach ( $frm_roles as $frm_role => $frm_role_description ) {
 			if ( isset( $settings_list->$frm_role ) ) {
 				$permissions[ $frm_role ] = $settings_list->$frm_role;
 			}

@@ -251,7 +251,7 @@ class FrmSettings {
 		foreach ( $checkboxes as $set ) {
 			$this->$set = isset( $params[ 'frm_' . $set ] ) ? $params[ 'frm_' . $set ] : 0;
 		}
-    }
+	}
 
 	private function update_roles( $params ) {
 		global $wp_roles;
