@@ -3,7 +3,7 @@
 </p>
 
 <?php FrmTipsHelper::pro_tip( 'get_form_action_tip', 'p' ); ?>
-
+				
 <div id="frm_email_addon_menu">
 	<h3><?php esc_html_e( 'Select the type of form action you would like to add', 'formidable' ); ?></h3>
 	<ul class="frm_actions_list frm-show-groups">
