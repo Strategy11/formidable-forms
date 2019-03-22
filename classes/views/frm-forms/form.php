@@ -10,7 +10,20 @@
 		</p>
 		<div class="clear"></div>
 	</div>
-	<ul id="new_fields" class="frm_sorting inside frm_grid_container">
+
+	<div id="frm-fake-page" class="frm_hidden">
+		<div class="frm-page-break">
+			<div class="frm-collapse-page button frm-button-secondary">
+				<?php
+				/* translators: %s: The page number */
+				printf( esc_html__( 'Page %s', 'formidable' ), '<span class="frm-page-num">1</span>' ) ;
+				?>
+				<i class="fas fa-chevron-down"></i>
+			</div>
+		</div>
+	</div>
+
+	<ul id="new_fields" class="frm_sorting inside">
 		<?php
 		if ( isset( $values['fields'] ) && ! empty( $values['fields'] ) ) {
 			$values['count'] = 0;
@@ -22,7 +35,4 @@
 		}
 		?>
 	</ul>
-
-	<input type="hidden" name="frm_end" value="1" />
-
 </div>

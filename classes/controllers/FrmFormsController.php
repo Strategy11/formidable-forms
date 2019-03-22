@@ -158,7 +158,7 @@ class FrmFormsController {
 			return self::get_edit_vars( $id, $errors );
 		} else {
 			FrmForm::update( $id, $values );
-			$message = __( 'Form was Successfully Updated', 'formidable' );
+			$message = __( 'Form was successfully updated.', 'formidable' );
 
 			if ( self::is_too_long( $values ) ) {
 				$message .= '<br/> ' . sprintf(
@@ -170,7 +170,7 @@ class FrmFormsController {
 			}
 
 			if ( defined( 'DOING_AJAX' ) ) {
-				wp_die( esc_html( $message ) );
+				wp_die( FrmAppHelper::kses( $message, array( 'a' ) ) ); // WPCS: XSS ok.
 			}
 
 			return self::get_edit_vars( $id, array(), $message );
@@ -858,9 +858,9 @@ class FrmFormsController {
 		$values           = FrmAppHelper::setup_edit_vars( $form, 'forms', '', true, array(), $args );
 		$values['fields'] = $fields;
 
-		$edit_message = __( 'Form was Successfully Updated', 'formidable' );
+		$edit_message = __( 'Form was successfully updated.', 'formidable' );
 		if ( $form->is_template && $message == $edit_message ) {
-			$message = __( 'Template was Successfully Updated', 'formidable' );
+			$message = __( 'Template was successfully updated.', 'formidable' );
 		}
 
 		$all_templates = FrmForm::getAll( array( 'is_template' => 1 ), 'name' );

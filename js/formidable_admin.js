@@ -303,7 +303,7 @@ function frmAdminBuildJS() {
 		var opts = {
 			connectWith: 'ul.frm_sorting',
 			items: '> li.frm_field_box',
-			placeholder: 'frm-drop-field',
+			placeholder: 'sortable-placeholder',
 			axis: 'y',
 			cursor: 'move',
 			opacity: 0.65,
@@ -312,7 +312,6 @@ function frmAdminBuildJS() {
 			revert: true,
 			forcePlaceholderSize: false,
 			tolerance: 'pointer',
-			helper: 'clone',
 			receive: function( event, ui ) {
 				// Receive event occurs when an item in one sortable list is dragged into another sortable list
 
@@ -334,10 +333,10 @@ function frmAdminBuildJS() {
 			change: function( event, ui ) {
 				// don't allow some field types inside section
 				if ( allowDrop( ui ) ) {
-					ui.placeholder.removeClass( 'frm_hidden' );
+					ui.placeholder.addClass( 'sortable-placeholder' ).removeClass( 'no-drop-placeholder' );
 					cancelSort = false;
 				} else {
-					ui.placeholder.addClass( 'frm_hidden' );
+					ui.placeholder.addClass( 'no-drop-placeholder' ).removeClass( 'sortable-placeholder' );
 					cancelSort = true;
 				}
 			},
@@ -350,6 +349,10 @@ function frmAdminBuildJS() {
 			start: function( event, ui ) {
 				if ( ui.item[0].offsetHeight > 120 ) {
 					jQuery( sort ).sortable( 'refreshPositions' );
+				}
+				if ( ui.item[0].classList.contains( 'frm-page-collapsed' ) ) {
+					// If a page if collapsed, expand it before dragging since only the page break will move.
+					toggleCollapsePage( jQuery( ui.item[0] ) );
 				}
 			},
 			stop: function( event, ui ) {
@@ -566,6 +569,7 @@ function frmAdminBuildJS() {
 				}
 
 				initiateMultiselect();
+				renumberPageBreaks();
 			}
 		} );
 	}
@@ -619,10 +623,15 @@ function frmAdminBuildJS() {
 	}
 
 	function afterAddField( msg, addFocus ) {
-		var regex = /id="(\S+)"/;
-		var match = regex.exec( msg );
+		var regex = /id="(\S+)"/,
+			match = regex.exec( msg );
 		section = '#' + match[1] + '.edit_field_type_divider ul.frm_sorting';
 		setupSortable( section );
+
+		if ( msg.indexOf( 'frm-collapse-page' ) !== -1 ) {
+			renumberPageBreaks();
+		}
+
 		if ( addFocus ) {
 			var field = document.getElementById( match[1] );
 			scrollToField( field );
@@ -1120,6 +1129,9 @@ function frmAdminBuildJS() {
 				$thisField.fadeOut( 'slow', function() {
 					var $section = $thisField.closest( '.start_divider' );
 					$thisField.remove();
+					if ( $thisField.data( 'type' ) === 'break' ) {
+						renumberPageBreaks();
+					}
 					if ( jQuery( '#new_fields li' ).length === 0 ) {
 						jQuery( '.frm_no_fields' ).show();
 					} else if ( $section.length ) {
@@ -1246,8 +1258,94 @@ function frmAdminBuildJS() {
 		}
 	}
 
+	// Number the pages and hide/show the first page as needed.
+	function renumberPageBreaks() {
+		var i, containerClass,
+			pages = document.getElementsByClassName( 'frm-page-num' );
+
+		if ( pages.length > 1 ) {
+			document.getElementById( 'frm-fake-page' ).style.display = 'block';
+			for ( i = 0; i < pages.length; i++ ) {
+				containerClass = pages[i].parentNode.parentNode.parentNode.classList;
+				if ( i === 1 ) {
+					// Hide previous button on page 1
+					containerClass.add( 'frm-first-page' );
+				} else {
+					containerClass.remove( 'frm-first-page' );
+				}
+				pages[i].innerHTML = ( i + 1 );
+			}
+		} else {
+			document.getElementById( 'frm-fake-page' ).style.display = 'none';
+		}
+	}
+
+	// The fake field works differently than real fields.
+	function maybeCollapsePage() {
+		/*jshint validthis:true */
+		var field = jQuery( this ).closest( '.frm_field_box[data-ftype=break]' );
+		if ( field.length ) {
+			toggleCollapsePage( field );
+		} else {
+			toggleCollapseFakePage();
+		}
+	}
+
+	// Find all fields in a page and hide/show them
+	function toggleCollapsePage( field ) {
+		var toCollapse = field.nextUntil( '.frm_field_box[data-ftype=break]' );
+		togglePage( field, toCollapse );
+	}
+
+	function toggleCollapseFakePage() {
+		var topLevel = document.getElementById( 'frm-fake-page' ),
+			firstField = document.getElementById( 'new_fields' ).firstElementChild,
+			toCollapse = jQuery( firstField ).nextUntil( '.frm_field_box[data-ftype=break]' ).andSelf();
+
+		if ( firstField.getAttribute( 'data-ftype' ) === 'break' ) {
+			// Don't collapse if the first field is a page break.
+			return;
+		}
+
+		togglePage( jQuery( topLevel ), toCollapse );
+	}
+
+	function togglePage( field, toCollapse ) {
+		var i,
+			fieldCount = toCollapse.length,
+			slide = Math.min( fieldCount, 3 );
+
+		if ( field.hasClass( 'frm-page-collapsed' ) ) {
+			field.removeClass( 'frm-page-collapsed' );
+			for ( i = 0; i < slide; i++ ) {
+				if ( i == slide - 1 ) {
+					jQuery( toCollapse[ i ] ).slideDown( 150, function() {
+						toCollapse.show();
+					} );
+				} else {
+					jQuery( toCollapse[ i ] ).slideDown( 150 );
+				}
+			}
+		} else {
+			field.addClass( 'frm-page-collapsed' );
+			for ( i = 0; i < slide; i++ ) {
+				if ( i == slide - 1 ) {
+					jQuery( toCollapse[ i ] ).slideUp( 150, function() {
+						toCollapse.css( 'cssText', 'display:none !important;' );
+					} );
+				} else {
+					jQuery( toCollapse[ i ] ).slideUp( 150 );
+				}
+			}
+		}
+	}
+
 	function clickVis( e ) {
 		/*jshint validthis:true */
+		if ( e.target.classList.contains( 'frm-collapse-page' ) ) {
+			return;
+		}
+
 		clickAction( this );
 	}
 
@@ -1507,6 +1605,7 @@ function frmAdminBuildJS() {
 
 	function updateFieldOrder() {
 		var array = [];
+		renumberPageBreaks();
 		jQuery( '#new_fields' ).each( function( i ) {
 			jQuery( 'li.frm_field_box', this ).each( function( e ) {
 				var fieldId = this.getAttribute( 'data-fid' ),
@@ -1602,18 +1701,17 @@ function frmAdminBuildJS() {
 
 		jQuery( document.getElementById( 'frm_compact_fields' ) ).val( v );
 		jQuery.ajax( {
-			type: 'POST', url: ajaxurl,
+			type: 'POST',
+			url: ajaxurl,
 			data: {action: 'frm_save_form', 'frm_compact_fields': v, nonce: frmGlobal.nonce},
 			success: function( msg ) {
 				afterFormSave( $thisEle, p );
 
-				var $postStuff = document.getElementById( 'frm_form_editor_container' );
+				var $postStuff = document.getElementById( 'frm-bar-two' );
 				var $html = document.createElement( 'div' );
-				$html.setAttribute( 'id', 'message' );
-				$html.setAttribute( 'class', 'frm_message updated' );
-				$html.style.padding = '5px';
+				$html.setAttribute( 'class', 'frm_updated_message' );
 				$html.innerHTML = msg;
-				$postStuff.insertBefore( $html, $postStuff.firstChild );
+				$postStuff.insertBefore( $html, document.getElementById( 'frm-publishing' ) );
 			},
 			error: function( html ) {
 				jQuery( document.getElementById( 'frm_js_build_form' ) ).submit();
@@ -1662,12 +1760,12 @@ function frmAdminBuildJS() {
 		$button.nextAll( '.frm-loading-img' ).css( 'visibility', 'hidden' );
 
 		setTimeout( function() {
-			jQuery( '.frm_message' ).fadeOut( 'slow' );
+			jQuery( '.frm_updated_message' ).fadeOut( 'slow' );
 			$button.fadeOut( 'slow', function() {
 				$button.html( buttonVal );
 				$button.show();
 			} );
-		}, 2000 );
+		}, 5000 );
 	}
 
 	function initUpgradeModal() {
@@ -1980,10 +2078,13 @@ function frmAdminBuildJS() {
 
 	/**
 	 * Move the settings to the sidebar the first time they are changed or selected.
+	 * Keep the end marker at the end of the form.
 	 */
 	function moveFieldSettings( singleField ) {
-		if ( singleField.parentElement.classList.contains( 'frm_field_box' ) ) {
-			builderForm.appendChild( singleField );
+		var classes = singleField.parentElement.classList;
+		if ( classes.contains( 'frm_field_box' ) || classes.contains( 'divider_section_only' ) ) {
+			var endMarker = document.getElementById( 'frm-end-form-marker' );
+			builderForm.insertBefore( singleField, endMarker );
 		}
 	}
 
@@ -3563,7 +3664,7 @@ function frmAdminBuildJS() {
 			setupSortable( 'ul.frm_sorting' );
 
 			// Show message if section has no fields inside
-			var frm_sorting = jQuery( '.start_divider .frm_sorting' );
+			var frm_sorting = jQuery( '.start_divider.frm_sorting' );
 			for ( i = 0; i < frm_sorting.length; i++ ) {
 				if ( frm_sorting[i].children.length < 2 ) {
 					jQuery( frm_sorting[i] ).parent().children( '.frm_no_section_fields' ).addClass( 'frm_block' );
@@ -3596,8 +3697,10 @@ function frmAdminBuildJS() {
 			} );
 
 			initiateMultiselect();
+			renumberPageBreaks();
 
 			var $builderForm = jQuery( builderForm );
+			var builderArea = document.getElementById( 'frm_form_editor_container' );
 			$builderForm.on( 'click', '.frm_add_logic_row', addFieldLogicRow );
 			$builderForm.on( 'click', '.frm_remove_tag', removeThisTag );
 			$builderForm.on( 'click', '.frm_add_watch_lookup_row', addWatchLookupRow );
@@ -3626,6 +3729,7 @@ function frmAdminBuildJS() {
 				updateRepeatText( this, 'remove' );
 			} );
 			$builderForm.on( 'change', 'select[name^="field_options[data_type_"]', maybeClearWatchFields );
+			jQuery( builderArea ).on( 'click', '.frm-collapse-page', maybeCollapsePage );
 
 			$builderForm.on( 'click', '.frm_toggle_sep_values', toggleSepValues );
 			$builderForm.on( 'click', '.frm_multiselect_opt', toggleMultiselect );
@@ -3634,7 +3738,7 @@ function frmAdminBuildJS() {
 			$builderForm.on( 'click', '.frm_add_opt', addFieldOption );
 			$builderForm.on( 'change', '.frm_toggle_mult_sel', toggleMultSel );
 
-			jQuery( document.getElementById( 'frm_form_editor_container' ) ).on( 'click', '#new_fields > li.ui-state-default', clickVis );
+			jQuery( builderArea ).on( 'click', '#new_fields > li.ui-state-default', clickVis );
 			$newFields.on( 'click', '.start_divider li.ui-state-default', clickSectionVis );
 			$builderForm.on( 'change', '.frm_tax_form_select', toggleFormTax );
 			jQuery( '.frm_form_builder' ).on( 'keyup', 'input[name^="item_meta"], textarea[name^="item_meta"]', triggerDefaults );

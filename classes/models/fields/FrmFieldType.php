@@ -247,6 +247,7 @@ DEFAULT_HTML;
 	protected function default_field_settings() {
 		return array(
 			'type'           => $this->type,
+			'label'          => true,
 			'required'       => true,
 			'unique'         => false,
 			'read_only'      => false,

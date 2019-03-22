@@ -883,7 +883,6 @@ class FrmFieldsHelper {
 	public static function get_field_types( $type ) {
 		$single_input   = self::single_input_fields();
 		$multiple_input = array( 'radio', 'checkbox', 'select', 'scale', 'star', 'lookup' );
-		$other_type     = array( 'html', 'break' );
 
 		$field_selection = FrmField::all_field_selection();
 
@@ -892,8 +891,6 @@ class FrmFieldsHelper {
 			self::field_types_for_input( $single_input, $field_selection, $field_types );
 		} elseif ( in_array( $type, $multiple_input ) ) {
 			self::field_types_for_input( $multiple_input, $field_selection, $field_types );
-		} elseif ( in_array( $type, $other_type ) ) {
-			self::field_types_for_input( $other_type, $field_selection, $field_types );
 		} elseif ( isset( $field_selection[ $type ] ) ) {
 			$field_types[ $type ] = $field_selection[ $type ];
 		}

@@ -16,12 +16,16 @@
 	</h3>
 
 	<div class="frm_grid_container frm-collapse-me">
+		<?php if ( $display['label'] ) { ?>
 		<p>
 			<label for="frm_name_<?php echo esc_attr( $field['id'] ); ?>">
-				<?php esc_html_e( 'Field Label', 'formidable' ); ?>
+				<?php echo esc_html( apply_filters( 'frm_builder_field_label', __( 'Field Label', 'formidable' ), $field ) ); ?>
 			</label>
 			<input type="text" name="field_options[name_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['name'] ); ?>" id="frm_name_<?php echo esc_attr( $field['id'] ); ?>" />
 		</p>
+		<?php } else { ?>
+			<input type="hidden" name="field_options[name_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['name'] ); ?>" id="frm_name_<?php echo esc_attr( $field['id'] ); ?>" />
+		<?php } ?>
 
 		<?php if ( $display['description'] ) { ?>
 			<p>

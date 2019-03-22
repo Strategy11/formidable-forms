@@ -780,7 +780,7 @@ BEFORE_HTML;
 	}
 
 	/**
-	 * @param string|boolean $form
+	 * @param object|string|boolean $form
 	 *
 	 * @return string
 	 */

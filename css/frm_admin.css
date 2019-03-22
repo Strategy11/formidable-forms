@@ -15,6 +15,7 @@
 	--primary-color: rgb(65, 153, 253);
 	--primary-hover: rgb(49, 119, 199);
 	--border-radius: 25px;
+	--small-radius: 4px;
 }
 
 a, .widget .widget-top, .postbox h3, .stuffbox h3 {
@@ -258,7 +259,7 @@ ul.frm_form_nav > li {
 	border-left: 1px solid var(--grey-border);
 }
 
-.frm-full .frm-full-close {
+.frm-full-screen .frm-full-close {
 	display: block;
 }
 
@@ -772,12 +773,11 @@ h2 .frm-button-primary {
 .wp-core-ui .button.frm-button-secondary,
 .frm-button-secondary {
 	color: var(--primary-color);
-	background-color: transparent;
+	background-color: #fff;
 }
 
 .frm_orange_button,
-.wrap .frm_pricing a.button-primary,
-.toplevel_page_formidable .frm_wrap button.button-primary{
+.wrap .frm_pricing a.button-primary {
 	border-color: #da791d !important;
 	background: #f37656;
 	color: #fff;
@@ -986,6 +986,7 @@ input.frm_insert_in_template {
 
 #frm_form_editor_container {
 	position: relative;
+	margin: 25px 50px 50px 65px;
 }
 
 .form-field label.frm_primary_label {
@@ -1007,6 +1008,11 @@ input.frm_insert_in_template {
 
 #frm_form_editor_container .frm_primary_label:hover {
 	cursor: text;
+}
+
+#frm_form_editor_container .edit_field_type_end_divider .frm_primary_label,
+#frm_form_editor_container .edit_field_type_break .frm_primary_label {
+	display: none;
 }
 
 form .frm_primary_label input {
@@ -2324,6 +2330,13 @@ table.frm_name_value textarea {
 	height: 34px;
 }
 
+li.sortable-placeholder{
+	width: 100% !important;
+	height: 0;
+	border-color: var(--primary-hover);
+}
+
+.no-drop-placeholder,
 .frm-show-click,
 li.ui-state-default.edit_field_type_divider .frm-show-click {
 	display: none;
@@ -3313,7 +3326,8 @@ a.frm_action_icon:hover {
 .frm-field-action-icons a {
 	margin-left: 15px;
 	float: right;
-	color: var(--primary-hover);
+	color: var(--primary-hover) !important;
+	font-size: 18px;
 }
 
 .edit_field_type_select .frm-field-action-icons {
@@ -3510,7 +3524,6 @@ span.howto {
 
 #new_fields {
 	min-height: 480px;
-	margin: 25px 50px 25px 65px;
 }
 
 .frm_sorting .no_repeat_section li.ui-state-default.edit_field_type_end_divider {
@@ -3542,14 +3555,6 @@ span.howto {
 #new_fields li.frm_cancel_sort {
 	/* If a section gets dropped into a section, hide it */
 	display: none;
-}
-
-.frm-drop-field {
-	width: 1px;
-	height: 1px;
-	background: var(--primary-color);
-	display: block;
-	position: relative;
 }
 
 .divider_drop {
@@ -3612,10 +3617,11 @@ a.frm_button:hover {
 }
 
 ul.start_divider {
-	padding: 6px 12px 0;
-	border-left: 1px solid #5B9DD9;
-	border-bottom: 1px solid #5B9DD9;
-	min-height: 100px;
+	padding: 6px 12px 0 30px;
+	border-left: 1px solid var(--primary-hover);
+	min-height: 125px;
+	margin: -25px 0 0 -30px;
+	position: relative;
 }
 
 .frm_sorting li.ui-state-default .divider_section_only {
@@ -3624,6 +3630,7 @@ ul.start_divider {
 
 .frm_sorting li.ui-state-default.edit_field_type_divider {
 	padding: 0 0 25px 0;
+	overflow: visible;
 }
 
 .frm_sorting li.edit_field_type_end_divider,
@@ -3637,14 +3644,118 @@ ul.start_divider {
 	position: static;
 }
 
-.edit_field_type_end_divider .frm_inner_field_container .frm_icon_font:before {
-	font-size: 19px;
-	color: #CCC;
+.frm-first-page .frm_prev_page {
+	display: none;
 }
 
-.frm_sorting li.ui-state-default.edit_field_type_break {
-	border-bottom: 1px dashed #D7D7D7;
-	padding-bottom: 5px;
+.frm_remove_form_row,
+.frm_add_form_row,
+.frm-white-body .frm-preview-buttons button {
+	border-radius: var(--small-radius);
+	border-color: var(--blue-border);
+	border-width: var(--border-width);
+	color: var(--primary-color);
+	font-weight: var(--font-weight);
+}
+
+.frm_remove_form_row i:before,
+.frm_add_form_row i:before {
+	color: var(--primary-hover);
+}
+
+.frm-preview-buttons .frm_button_submit {
+	margin: 0 5px;
+}
+
+.frm-page-break {
+	border-top: 1px dashed var(--primary-hover);
+	margin-top: 30px;
+	position: relative;
+}
+
+ul.start_divider:before,
+ul.start_divider:after,
+.frm-page-break:before,
+.frm-page-break:after {
+	content: '';
+	position: absolute;
+	top: -4px;
+	width: 4px;
+	height: 4px;
+	background-color: #fff;
+	border-radius: 50%;
+	border: 1px solid var(--primary-hover);
+}
+
+.frm-page-break:after {
+	right: 0;
+}
+
+#frm-fake-page .frm-page-break,
+#frm-fake-page .frm-page-break:before,
+#frm-fake-page .frm-page-break:after {
+	border-color: var(--grey);
+}
+
+ul.start_divider:before {
+	width: 20px;
+	height: 20px;
+	left: -11px;
+	top: -9px;
+	background: var(--primary-hover);
+	text-align: center;
+	color: #fff;
+	font-size: 15px;
+	line-height: 25px;
+}
+
+.repeat_section ul.start_divider:before {
+	content: "\f363";
+	font-family: 's11-fp' !important;
+}
+
+ul.start_divider:after {
+	left: -4px;
+	bottom: 0;
+	top: auto;
+}
+
+.frm-page-break .frm-collapse-page.button {
+	margin-left: 46%;
+	margin-top: -15px;
+}
+
+#frm-fake-page .frm-collapse-page.button {
+	border-color: var(--grey);
+	color: var(--grey);
+}
+
+.frm-page-collapsed {
+	position: relative;
+	overflow: visible !important;
+	margin-bottom: 30px;
+}
+
+.frm-page-collapsed:after {
+	content: '';
+	display: block;
+	border: 1px dashed var(--grey-border);
+	border-left: none;
+	border-right: none;
+	height: 6px;
+	position: absolute;
+	width: 99%;
+	bottom: -15px;
+}
+
+.frm-collapse-page .fa-chevron-down {
+	width: 16px;
+	text-align: center;
+	margin-left: 2px;
+}
+
+.frm-page-collapsed .fa-chevron-down:before {
+	content: "\f054";
 }
 
 .frm_sorting .divider_section_only > .frm_ipe_field_label {
@@ -3891,6 +4002,7 @@ ul.frm-category-tabs {
 	box-shadow: none;
 }
 
+.start_divider.frm_sorting li.ui-state-default.frm_not_divider.selected,
 .start_divider.frm_sorting li.ui-state-default.frm_not_divider:hover,
 .frm_sorting li.ui-state-default.frm_not_divider:hover,
 .frm_sorting li.ui-state-default.edit_field_type_divider .divider_section_only:hover,
@@ -3907,11 +4019,6 @@ ul.frm-category-tabs {
 .frm_sorting li.ui-state-default.frm-newly-added {
 	border-color: green !important;
 	transition: .5s border-color ease-in-out;
-}
-
-.start_divider.frm_sorting li.ui-state-default.frm_not_divider.selected {
-	border: 1px solid #E7E7E7;
-	background: #FDFDFD;
 }
 
 .frm_sorting li.ui-state-default.selected.edit_field_type_divider .divider_section_only .frm-show-hover {
@@ -4380,6 +4487,7 @@ ul .frm_col_two {
 	font-family: serif;
 }
 
+ul.start_divider:before,
 .frm_heading_icon:before {
 	content: 'H';
 	font-family: rockwell, georgia, serif;

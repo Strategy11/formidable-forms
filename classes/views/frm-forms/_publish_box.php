@@ -30,8 +30,6 @@
 				<?php } ?>
 			</div>
 
-	<?php echo FrmFormsHelper::delete_trash_link( $values['id'], $values['status'], 'icon' ); // WPCS: XSS ok. ?>
-
 	<div class="clear"></div>
 </div>
 <div class="clear"></div>

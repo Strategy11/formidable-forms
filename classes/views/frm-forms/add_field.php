@@ -12,9 +12,10 @@
 		<a href="#" class="frm_bstooltip frm-hover-icon fas fa-clone" title="<?php ( $field['type'] === 'divider' ) ? esc_attr_e( 'Duplicate Section', 'formidable' ) : esc_attr_e( 'Duplicate Field', 'formidable' ); ?>"> </a>
 	</div>
 
-	<label class="frm_primary_label <?php echo esc_attr( $field['type'] === 'break' ? 'button' : '' ); ?>" id="field_label_<?php echo esc_attr( $field['id'] ); ?>">
+	<label class="frm_primary_label" id="field_label_<?php echo esc_attr( $field['id'] ); ?>">
 		<?php echo FrmAppHelper::kses( force_balance_tags( $field['name'] ), 'all' ); // WPCS: XSS ok. ?>
 	</label>
+
 	<div class="frm_form_fields" data-ftype="<?php echo esc_attr( $display['type'] ); ?>">
 		<?php $field_obj->show_on_form_builder(); ?>
 		<div class="clear"></div>
