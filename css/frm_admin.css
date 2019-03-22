@@ -764,6 +764,10 @@ h2 .frm-button-primary {
 	color: #fff !important;
 }
 
+.frm-button-primary i:before {
+	color: #fff;
+}
+
 .wp-core-ui .button-primary.frm-button-primary:hover,
 .frm-button-primary:hover {
 	background-color: var(--primary-hover) !important;
@@ -913,6 +917,7 @@ input.frm_insert_in_template {
 	display: inline;
 }
 
+a.frm_hidden,
 .button.frm_hidden,
 .wp-core-ui .button.frm_hidden,
 .frm_hidden {
@@ -1817,10 +1822,30 @@ input[type="checkbox"] {
 	padding: 0;
 }
 
+.frm-range-min {
+	position: relative;
+}
+
+.frm-range-min:after {
+	content: '';
+	height: 3px;
+	width: 10px;
+	border-radius: 30%;
+	background: var(--primary-hover);
+	position: absolute;
+	top: 17px;
+	right: -28%;
+}
+
+#frm_build_form .frm_grid_container > p {
+	margin: 7px 0;
+}
+
 .frm_catlevel_2, .frm_catlevel_3, .frm_catlevel_4, .frm_catlevel_5 {
 	margin-left: 18px;
 }
 
+.frm_wrap .frm-fields .auto_width,
 .frm_form_fields input.auto_width, .frm_form_fields select.auto_width, .frm_form_fields textarea.auto_width {
 	width: auto;
 }
@@ -3108,6 +3133,15 @@ table td, .form-table tr td {
 	vertical-align: top;
 }
 
+#frm_build_form .form-table tr td {
+	display: block;
+	padding: 7px 0;
+}
+
+#frm_build_form .form-table tr td:first-child {
+	padding: 0;
+}
+
 .form-table #list-table th {
 	text-align: center;
 }
@@ -3165,7 +3199,15 @@ table td, .form-table tr td {
 }
 
 .frm_logic_field_opts {
-	max-width: 180px;
+	max-width: 130px;
+}
+
+.frm-single-settings .frm_logic_row select:nth-child(2) {
+	max-width: 75px;
+}
+
+.frm-single-settings .frm_logic_row input {
+	max-width: 118px;
 }
 
 .frm_form_action_settings .frm_logic_row,
@@ -3219,6 +3261,25 @@ table td, .form-table tr td {
 
 h3.frm_add_logic_link {
 	margin-bottom: 0 !important;
+}
+
+a.frm_add_logic_link {
+	display: block;
+	text-align: center;
+	margin: 10px auto;
+	padding: 10px;
+	width: 80%;
+	font-size: 19px;
+	border: 1px solid var(--primary-color);
+	border-radius: var(--border-radius);
+}
+
+a.frm_add_logic_link.frm_hidden {
+	display: none;
+}
+
+.frm_add_logic_link i {
+	margin-right: 5px;
 }
 
 .frm_right_addon {
@@ -3773,16 +3834,6 @@ tr.frm_options_heading td {
 	padding-bottom: 0;
 }
 
-.frm_validation_msg p label {
-	float: left;
-	width: 25%;
-	max-width: 100px;
-}
-
-.frm_sorting .form-field .widget .frm_validation_msg input {
-	width: 71%;
-}
-
 .frm_sorting .widget-inside .form-table td p,
 .frm_sorting .widget-inside .form-wrap label {
 	padding: 10px 0;
@@ -3862,8 +3913,11 @@ tr.frm_options_heading td {
 	color: #a00;
 }
 
+.frm-fields p > .frm_inline_label,
 .frm_inline_label {
 	padding-left: 3px;
+    margin-right: 12px;
+    display: inline-block;
 }
 
 .frm_left_label {
@@ -5051,6 +5105,7 @@ Responsive Design
 		border: none;
 	}
 
+	.frm-fields p > .frm_inline_label,
 	.frm_inline_label {
 		display: block;
 		margin: 5px 0;

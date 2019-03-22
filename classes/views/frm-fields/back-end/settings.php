@@ -75,6 +75,11 @@
 				<input type="text" name="field_options[required_indicator_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['required_indicator'] ); ?>" />
 			</div>
 		<?php } ?>
+		<?php
+		if ( $display['range'] ) {
+			include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/number-range.php' );
+		}
+		?>
 	</div>
 
 <?php if ( in_array( $field['type'], array( 'select', 'radio', 'checkbox' ) ) ) { ?>
@@ -132,28 +137,6 @@ do_action( 'frm_before_field_options', $field );
 
 	<h3><?php esc_html_e( 'Advanced', 'formidable' ); ?></h3>
 	<div class="frm_grid_container frm-collapse-me">
-		<?php if ( $display['label_position'] ) { ?>
-			<p>
-				<label><?php esc_html_e( 'Label Position', 'formidable' ); ?></label>
-				<select name="field_options[label_<?php echo esc_attr( $field['id'] ); ?>]">
-					<option value=""<?php selected( $field['label'], '' ); ?>>
-						<?php esc_html_e( 'Default', 'formidable' ); ?>
-					</option>
-					<?php
-					foreach ( FrmStylesHelper::get_single_label_positions() as $pos => $pos_label ) {
-						if ( ! $display['clear_on_focus'] && 'inside' === $pos ) {
-							// Don't allow inside labels for fields without placeholders.
-							continue;
-						}
-						?>
-						<option value="<?php echo esc_attr( $pos ); ?>"<?php selected( $field['label'], $pos ); ?>>
-							<?php echo esc_html( $pos_label ); ?>
-						</option>
-					<?php } ?>
-				</select>
-			</p>
-		<?php } ?>
-
 		<?php if ( $display['css'] ) { ?>
 			<p>
 				<label for="frm_classes_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help" title="<?php esc_attr_e( 'Add a CSS class to the field container. Use our predefined classes to align multiple fields in single row.', 'formidable' ); ?>">
@@ -176,31 +159,6 @@ do_action( 'frm_before_field_options', $field );
 			}
 		}
 		?>
-
-		<p>
-			<label for="field_options_field_key_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help" title="<?php esc_attr_e( 'The field key can be used as an alternative to the field ID in many cases.', 'formidable' ); ?>">
-				<?php esc_html_e( 'Field Key', 'formidable' ); ?>
-			</label>
-			<input type="text" name="field_options[field_key_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['field_key'] ); ?>" id="field_options_field_key_<?php echo esc_attr( $field['id'] ); ?>"/>
-		</p>
-
-		<?php if ( count( $field_types ) > 1 ) { ?>
-			<p>
-				<label for="field_options_type_<?php echo esc_attr( $field['id'] ); ?>">
-					<?php esc_html_e( 'Field Type', 'formidable' ); ?>
-				</label>
-				<select name="field_options[type_<?php esc_attr( $field['id'] ); ?>]" id="field_options_type_<?php echo esc_attr( $field['id'] ); ?>">
-					<?php foreach ( $field_types as $fkey => $ftype ) { ?>
-						<option value="<?php echo esc_attr( $fkey ); ?>" <?php echo ( $fkey === $field['type'] ) ? ' selected="selected"' : ''; ?> <?php echo array_key_exists( $fkey, $disabled_fields ) ? 'disabled="disabled"' : ''; ?>>
-							<?php echo esc_html( is_array( $ftype ) ? $ftype['name'] : $ftype ); ?> 
-						</option>
-						<?php
-						unset( $fkey, $ftype );
-					}
-					?>
-				</select>
-			</p>
-		<?php } ?>
 
 		<?php if ( $display['show_image'] ) { ?>
 			<p>
@@ -239,21 +197,67 @@ do_action( 'frm_before_field_options', $field );
 				</select>
 			</p>
 		<?php } ?>
-	</div>
 
-	<table class="form-table frm_clear_none">
 		<?php
-
 		if ( $display['format'] ) {
 			FrmFieldsController::show_format_option( $field );
 		}
 
-		if ( $display['range'] ) {
-			include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/number-range.php' );
-		} elseif ( $field['type'] === 'html' ) {
+		if ( $field['type'] === 'html' ) {
 			include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/html-content.php' );
 		}
+		?>
 
+		<?php if ( $display['label_position'] ) { ?>
+			<p class="frm6 frm_form_field">
+				<label><?php esc_html_e( 'Label Position', 'formidable' ); ?></label>
+				<select name="field_options[label_<?php echo esc_attr( $field['id'] ); ?>]">
+					<option value=""<?php selected( $field['label'], '' ); ?>>
+						<?php esc_html_e( 'Default', 'formidable' ); ?>
+					</option>
+					<?php
+					foreach ( FrmStylesHelper::get_single_label_positions() as $pos => $pos_label ) {
+						if ( ! $display['clear_on_focus'] && 'inside' === $pos ) {
+							// Don't allow inside labels for fields without placeholders.
+							continue;
+						}
+						?>
+						<option value="<?php echo esc_attr( $pos ); ?>"<?php selected( $field['label'], $pos ); ?>>
+							<?php echo esc_html( $pos_label ); ?>
+						</option>
+					<?php } ?>
+				</select>
+			</p>
+		<?php } ?>
+
+		<p class="frm6 frm_form_field frm_first">
+			<label for="field_options_field_key_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help" title="<?php esc_attr_e( 'The field key can be used as an alternative to the field ID in many cases.', 'formidable' ); ?>">
+				<?php esc_html_e( 'Field Key', 'formidable' ); ?>
+			</label>
+			<input type="text" name="field_options[field_key_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['field_key'] ); ?>" id="field_options_field_key_<?php echo esc_attr( $field['id'] ); ?>"/>
+		</p>
+
+		<?php if ( count( $field_types ) > 1 ) { ?>
+			<p class="frm6 frm_form_field">
+				<label for="field_options_type_<?php echo esc_attr( $field['id'] ); ?>">
+					<?php esc_html_e( 'Field Type', 'formidable' ); ?>
+				</label>
+				<select name="field_options[type_<?php echo esc_attr( $field['id'] ); ?>]" id="field_options_type_<?php echo esc_attr( $field['id'] ); ?>">
+					<?php foreach ( $field_types as $fkey => $ftype ) { ?>
+						<option value="<?php echo esc_attr( $fkey ); ?>" <?php echo ( $fkey === $field['type'] ) ? ' selected="selected"' : ''; ?> <?php echo array_key_exists( $fkey, $disabled_fields ) ? 'disabled="disabled"' : ''; ?>>
+							<?php echo esc_html( is_array( $ftype ) ? $ftype['name'] : $ftype ); ?> 
+						</option>
+						<?php
+						unset( $fkey, $ftype );
+					}
+					?>
+				</select>
+			</p>
+		<?php } ?>
+	</div>
+
+	<table class="form-table frm_clear_none">
+		<?php
 		$field_obj->show_options( $field, $display, $values );
 		do_action( 'frm_field_options_form', $field, $display, $values );
 		?>

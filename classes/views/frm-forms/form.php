@@ -16,7 +16,7 @@
 			<div class="frm-collapse-page button frm-button-secondary">
 				<?php
 				/* translators: %s: The page number */
-				printf( esc_html__( 'Page %s', 'formidable' ), '<span class="frm-page-num">1</span>' ) ;
+				printf( esc_html__( 'Page %s', 'formidable' ), '<span class="frm-page-num">1</span>' );
 				?>
 				<i class="fas fa-chevron-down"></i>
 			</div>

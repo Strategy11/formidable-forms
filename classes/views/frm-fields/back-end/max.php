@@ -1,4 +1,4 @@
-<p class="frm_half frm_form_field">
+<p class="frm6 frm_form_field">
 	<label for="field_options_max_<?php echo esc_attr( $field['id'] ); ?>">
 		<?php
 		if ( 'textarea' === $field['type'] || 'rte' === $field['type'] ) {
@@ -8,6 +8,5 @@
 		}
 		?>
 	</label>
-	<br/>
 	<input type="text" name="field_options[max_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['max'] ); ?>" id="field_options_max_<?php echo esc_attr( $field['id'] ); ?>" size="5" />
 </p>
