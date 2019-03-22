@@ -25,7 +25,7 @@ class FrmUsage {
 			'headers'   => array(
 				'Accept'         => 'application/json',
 				'Content-Type'   => 'application/json',
-				'Content-Length' => strlen( $body )
+				'Content-Length' => strlen( $body ),
 			),
 			'body'      => $body,
 		);
@@ -75,7 +75,7 @@ class FrmUsage {
 			'entry_count'    => FrmEntry::getRecordCount(),
 			'timestamp'      => gmdate( 'c' ),
 
-			'themename'      => $theme_data->Name,
+			'themename'      => $theme_data->Name, // phpcs:ignore WordPress.NamingConventions
 			'plugins'        => $this->plugins(),
 			'settings'       => $this->settings(),
 			'forms'          => $this->forms(),
@@ -133,7 +133,7 @@ class FrmUsage {
 			'btsp_css',
 			'btsp_errors',
 		);
-		
+
 		foreach ( $pass_settings as $setting ) {
 			if ( isset( $settings_list->$setting ) ) {
 				$settings[ $setting ] = $settings_list->$setting;
