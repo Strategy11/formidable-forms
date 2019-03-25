@@ -189,7 +189,7 @@ class FrmFormsListHelper extends FrmListHelper {
 
 		// Set up the hover actions for this user
 		$actions   = array();
-		$edit_link = '?page=formidable&frm_action=edit&id=' . $item->id;
+		$edit_link = FrmForm::get_edit_link( $item->id );
 
 		$this->get_actions( $actions, $item, $edit_link );
 

@@ -111,7 +111,7 @@ class FrmAppController {
 
 		$nav_items = array(
 			array(
-				'link'       => admin_url( 'admin.php?page=formidable&frm_action=edit&id=' . absint( $id ) ),
+				'link'       => FrmForm::get_edit_link( $id ),
 				'label'      => __( 'Build', 'formidable' ),
 				'current'    => array( 'edit', 'new', 'duplicate' ),
 				'page'       => 'formidable',

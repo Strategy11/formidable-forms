@@ -60,7 +60,7 @@ class FrmXMLController {
 			$form_id  = key( $imported['form_status'] );
 			$response = array(
 				'id'       => $form_id,
-				'redirect' => admin_url( 'admin.php?page=formidable&frm_action=edit&id=' . absint( $form_id ) ),
+				'redirect' => FrmForm::get_edit_link( $form_id ),
 				'success'  => 1,
 			);
 		} else {

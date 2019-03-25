@@ -7,7 +7,7 @@ if ( empty( $values ) || ! isset( $values['fields'] ) || empty( $values['fields'
 	printf(
 		/* translators: %1$s: HTML open link, %2$s: HTML close link */
 		esc_html__( 'You did not add any fields to your form. %1$sGo back%2$s and add some.', 'formidable' ),
-		'<a href="' . esc_url( admin_url( '?page=formidable&frm_action=edit&id=' . $form->id ) ) . '">',
+		'<a href="' . esc_url( FrmForm::get_edit_link( $form->id ) ) . '">',
 		'</a>'
 	);
 	?>

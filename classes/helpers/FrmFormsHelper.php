@@ -938,7 +938,7 @@ BEFORE_HTML;
 		}
 
 		if ( $form_id ) {
-			$val = '<a href="' . esc_url( admin_url( 'admin.php?page=formidable&frm_action=edit&id=' . $form_id ) ) . '">' . ( '' == $name ? __( '(no title)', 'formidable' ) : FrmAppHelper::truncate( $name, 40 ) ) . '</a>';
+			$val = '<a href="' . esc_url( FrmForm::get_edit_link( $form_id ) ) . '">' . ( '' == $name ? __( '(no title)', 'formidable' ) : FrmAppHelper::truncate( $name, 40 ) ) . '</a>';
 		} else {
 			$val = '';
 		}

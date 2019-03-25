@@ -65,7 +65,7 @@ abstract class FrmFormMigrator {
 										$new_form_id = $this->is_imported( $form_id );
 										?>
 										<?php if ( $new_form_id ) { ?>
-											(<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable&frm_action=edit&id=' . $new_form_id ) ); ?>">previously imported</a>)
+											(<a href="<?php echo esc_url( FrmForm::get_edit_link( $new_form_id ) ); ?>">previously imported</a>)
 										<?php } ?>
 									</label>
 								</p>
@@ -261,7 +261,7 @@ abstract class FrmFormMigrator {
 		return array(
 			'name'         => $form['name'],
 			'id'           => $form_id,
-			'link'         => esc_url_raw( admin_url( 'admin.php?page=formidable&frm_action=edit&id=' . $form_id ) ),
+			'link'         => esc_url_raw( FrmForm::get_edit_link( $form_id ) ),
 			'upgrade_omit' => $this->response['upgrade_omit'],
 		);
 	}

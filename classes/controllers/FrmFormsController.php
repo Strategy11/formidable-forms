@@ -543,7 +543,7 @@ class FrmFormsController {
 		self::create_default_email_action( $form_id );
 
 		$response = array(
-			'redirect' => admin_url( 'admin.php?page=formidable&frm_action=edit&id=' . $form_id ),
+			'redirect' => FrmForm::get_edit_link( $form_id ),
 		);
 
 		echo wp_json_encode( $response );
@@ -837,7 +837,7 @@ class FrmFormsController {
 
 		if ( $form->parent_form_id ) {
 			/* translators: %1$s: Start link HTML, %2$s: End link HTML */
-			wp_die( sprintf( esc_html__( 'You are trying to edit a child form. Please edit from %1$shere%2$s', 'formidable' ), '<a href="' . esc_url( admin_url( 'admin.php?page=formidable&frm_action=edit&id=' . $form->parent_form_id ) ) . '">', '</a>' ) );
+			wp_die( sprintf( esc_html__( 'You are trying to edit a child form. Please edit from %1$shere%2$s', 'formidable' ), '<a href="' . esc_url( FrmForm::get_edit_link( $form->parent_form_id ) ) . '">', '</a>' ) );
 		}
 
 		$frm_field_selection = FrmField::field_selection();
@@ -1396,7 +1396,7 @@ class FrmFormsController {
 					'parent' => 'frm-forms',
 					'id'     => 'edit_form_' . $form_id,
 					'title'  => empty( $name ) ? __( '(no title)', 'formidable' ) : $name,
-					'href'   => admin_url( 'admin.php?page=formidable&frm_action=edit&id=' . $form_id ),
+					'href'   => FrmForm::get_edit_link( $form_id ),
 				)
 			);
 		}

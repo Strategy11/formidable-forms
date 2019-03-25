@@ -166,7 +166,10 @@ class FrmXMLHelper {
 			} else {
 				$form_id = FrmForm::create( $form );
 				if ( $form_id ) {
-					$imported['imported']['forms'] ++;
+					if ( empty( $form['parent_form_id'] ) ) {
+						// Don't include the repeater form in the imported count.
+						$imported['imported']['forms'] ++;
+					}
 
 					// Keep track of whether this specific form was updated or not.
 					$imported['form_status'][ $form_id ] = 'imported';
@@ -234,7 +237,11 @@ class FrmXMLHelper {
 	private static function update_form( $this_form, $form, &$imported ) {
 		$form_id = $this_form->id;
 		FrmForm::update( $form_id, $form );
-		$imported['updated']['forms'] ++;
+		if ( empty( $form['parent_form_id'] ) ) {
+			// Don't include the repeater form in the updated count.
+			$imported['updated']['forms'] ++;
+		}
+
 		// Keep track of whether this specific form was updated or not
 		$imported['form_status'][ $form_id ] = 'updated';
 	}
@@ -880,6 +887,8 @@ class FrmXMLHelper {
 			$message  = '';
 			$errors[] = __( 'Nothing was imported or updated', 'formidable' );
 		} else {
+			self::add_form_link_to_message( $result, $message );
+
 			$message .= '</ul>';
 		}
 	}
@@ -909,6 +918,28 @@ class FrmXMLHelper {
 		);
 
 		$s_message[] = isset( $strings[ $type ] ) ? $strings[ $type ] : ' ' . $m . ' ' . ucfirst( $type );
+	}
+
+	/**
+	 * If a single form was imported, include a link in the success message.
+	 *
+	 * @since 4.0
+	 * @param array  $result The response from the XML import.
+	 * @param string $message The response shown on the page after import.
+	 */
+	private static function add_form_link_to_message( $result, &$message ) {
+		$total_forms = $result['imported']['forms'] + $result['updated']['forms'];
+		if ( $total_forms > 1 ) {
+			return;
+		}
+
+		$primary_form = reset( $result['forms'] );
+		if ( ! empty( $primary_form ) ) {
+			$primary_form = FrmForm::getOne( $primary_form );
+			$form_id      = empty( $primary_form->parent_form_id ) ? $primary_form->id : $primary_form->parent_form_id;
+
+			$message .= '<li><a href="' . esc_url( FrmForm::get_edit_link( $form_id ) ) . '">' . esc_html__( 'Go to imported form', 'formidable' ) . '</a></li>';
+		}
 	}
 
 	/**

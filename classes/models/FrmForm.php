@@ -903,6 +903,16 @@ class FrmForm {
 	}
 
 	/**
+	 * Get the link to edit this form.
+	 *
+	 * @since 4.0
+	 * @param int $form_id The id of the form.
+	 */
+	public static function get_edit_link( $form_id ) {
+		return admin_url( 'admin.php?page=formidable&frm_action=edit&id=' . $form_id );
+	}
+
+	/**
 	 * @deprecated 3.0
 	 * @codeCoverageIgnore
 	 *
