@@ -41,6 +41,10 @@ a.frm_confirming,
 	border-left: 1px solid #e5e5e5;
 }
 
+.toplevel_page_formidable #post-body-content {
+	overflow: visible;
+}
+
 #form_show_entry_page #post-body-content {
 	border-right: 1px solid var(--grey-border);
 }
@@ -2355,10 +2359,11 @@ table.frm_name_value textarea {
 	height: 34px;
 }
 
-li.sortable-placeholder{
+li.sortable-placeholder {
 	width: 100% !important;
 	height: 0;
-	border-color: var(--primary-hover);
+	border: none;
+	box-shadow: 0 0 0 1px var(--primary-color);
 }
 
 .no-drop-placeholder,
@@ -4488,32 +4493,40 @@ ul .frm_col_two {
 }
 
 /* Icon while dragging */
-.frmbutton.ui-sortable-helper {
-	width: 30px !important;
-	height: 30px !important;
-	text-align: center;
-	display: block;
-	background-color: var(--primary-hover);
-	border-radius: 50%;
-}
-
-.frmbutton.ui-sortable-helper a {
+.frmbutton.ui-sortable-helper a,
+.frmbutton.ui-draggable-dragging a:hover,
+.frmbutton.ui-draggable-dragging a {
 	text-decoration: none;
-	padding: 0 !important;
+	height: 25px !important;
+	max-width: 180px;
+	text-align: center;
+	display: block !important;
+	background-color: var(--primary-hover) !important;
+	border-radius: var(--border-radius) !important;
+	padding: 5px 20px !important;
 }
 
-.frmbutton.ui-sortable-helper span {
-	display: none;
+.frmbutton.ui-draggable-dragging:not(.ui-sortable-helper) a {
+	/* When the new field is held outside of a dropzone */
+	cursor: not-allowed;
+	background: var(--sidebar-color) !important;
+	color: var(--dark-grey) !important;
 }
 
-.frmbutton.ui-sortable-helper i {
+.frmbutton.ui-draggable-dragging span {
+	font-size: 15px;
+}
+
+.frmbutton.ui-sortable-helper span,
+.frmbutton.ui-draggable-dragging i {
 	color: #fff !important;
-	margin: 0 !important;
-	width: 20px !important;
-	padding: 5px;
 }
 
-.frmbutton.ui-sortable-helper .frm-dropdown-menu {
+.frmbutton.ui-draggable-dragging:not(.ui-sortable-helper) i {
+	color: var(--dark-grey) !important;
+}
+
+.frmbutton.ui-draggable-dragging .frm-dropdown-menu {
 	display: none;
 }
 
