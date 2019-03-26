@@ -13,7 +13,6 @@
 		?>
 
 		<div id="frm-bar-two">
-			<?php FrmFormsHelper::form_switcher( $form->name ); ?>
 			<h2><?php esc_html_e( 'Form Entries', 'formidable' ); ?></h2>
 			<h2><?php esc_html_e( 'View Entry', 'formidable' ); ?></h2>
 		</div>

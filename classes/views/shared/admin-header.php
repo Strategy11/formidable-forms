@@ -10,11 +10,15 @@
 		<?php
 	}
 
+	if ( isset( $atts['publish'] ) ) {
+		call_user_func( $atts['publish'][0], $atts['publish'][1] );
+	}
+
 	// Add form nav
 	if ( $has_nav ) {
 		FrmAppController::get_form_nav( $atts['form'], true, 'hide' );
 	} else {
-
+		// Used when no form is currently selected.
 		?>
 
 	<div class="frm_top_left">
@@ -48,11 +52,11 @@
 
 <?php if ( isset( $atts['form'] ) && ! empty( $atts['form'] ) && ! isset( $atts['hide_title'] ) ) { ?>
 	<h<?php echo $has_nav ? 1 : 2; ?> id="frm_form_heading">
-		<?php
-		echo esc_html( strip_tags( '' === $atts['form']->name ? __( '(no title)', 'formidable' ) : $atts['form']->name ) );
-		if ( $has_nav ) {
-			FrmAppHelper::add_new_item_link( $atts );
-		}
-		?>
+	<?php
+	echo esc_html( strip_tags( '' === $atts['form']->name ? __( '(no title)', 'formidable' ) : $atts['form']->name ) );
+	if ( $has_nav ) {
+		FrmAppHelper::add_new_item_link( $atts );
+	}
+	?>
 	</h<?php echo $has_nav ? 1 : 2; ?>>
 <?php } ?>

@@ -9,20 +9,10 @@
 			'form'        => $form,
 			'hide_title'  => true,
 			'close'       => '?page=formidable',
+			'publish'     => array( 'FrmFormsController::form_publish_button', compact( 'values' ) ),
 		)
 	);
 	?>
-
-	<div id="frm-bar-two">
-		<?php
-		FrmFormsHelper::form_switcher( $form->name );
-
-		// Add form messages.
-		require( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' );
-
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/_publish_box.php' );
-		?>
-	</div>
 
 	<div class="columns-2">
 		<div class="frm-right-panel">
@@ -46,6 +36,11 @@
 
 			<div id="frm-categorydiv">
 				<div class="inside frm-inner-content">
+					<?php
+					// Add form messages.
+					require( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' );
+					?>
+
 					<?php foreach ( $sections as $section ) { ?>
 						<div id="<?php echo esc_attr( $section['id'] ); ?>" class="tabs-panel <?php echo ( $current === $section['anchor'] ) ? ' frm_block' : ' frm_hidden'; ?> <?php echo esc_attr( $section['anchor'] . ' frm_' . $section['anchor'] ); ?>">
 							<h2>

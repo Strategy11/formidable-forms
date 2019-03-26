@@ -894,6 +894,14 @@ class FrmFormsController {
 	}
 
 	/**
+	 * @since 4.0
+	 */
+	public static function form_publish_button( $atts ) {
+		$values = $atts['values'];
+		include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/_publish_box.php' );
+	}
+
+	/**
 	 * Get a list of all the settings tabs for the form settings page.
 	 *
 	 * @since 4.0

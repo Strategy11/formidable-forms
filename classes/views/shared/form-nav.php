@@ -9,6 +9,8 @@ FrmAppHelper::show_logo(
 ?>
 </a>
 
+<?php FrmFormsHelper::form_switcher( $form->name ); ?>
+
 <ul class="frm_form_nav">
 <?php
 
@@ -33,10 +35,3 @@ foreach ( $nav_items as $nav_item ) {
 }
 ?>
 </ul>
-
-<?php
-if ( $form && 'show' === $title ) {
-	_deprecated_argument( '$title in form-nav.php', '3.0' );
-	?>
-	<input id="title" type="text" value="<?php echo esc_attr( '' === $form->name ? __( '(no title)', 'formidable' ) : $form->name ); ?>" readonly="readonly" disabled="disabled" />
-<?php } ?>

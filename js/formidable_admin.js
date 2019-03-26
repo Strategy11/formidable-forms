@@ -312,6 +312,7 @@ function frmAdminBuildJS() {
 			revert: true,
 			forcePlaceholderSize: false,
 			tolerance: 'pointer',
+			handle: '.frm-move',
 			receive: function( event, ui ) {
 				// Receive event occurs when an item in one sortable list is dragged into another sortable list
 
@@ -633,13 +634,19 @@ function frmAdminBuildJS() {
 		}
 
 		if ( addFocus ) {
-			var field = document.getElementById( match[1] );
-			scrollToField( field );
+			var field = document.getElementById( match[1] ),
+				container = document.getElementById( 'post-body-content' );
+
 			addClass( field, 'frm-newly-added' );
+			container.scroll( {
+				top: container.scrollHeight,
+				left: 0,
+				behavior: 'smooth'
+			} );
 
 			setTimeout( function() {
-				field.classList.remove( 'frm-newly-added' );
-			}, 3000 );
+				field.style.boxShadow = 'none';
+			}, 1000 );
 			toggleOneSectionHolder( jQuery( section ) );
 		}
 		initiateMultiselect();
@@ -1707,11 +1714,11 @@ function frmAdminBuildJS() {
 			success: function( msg ) {
 				afterFormSave( $thisEle, p );
 
-				var $postStuff = document.getElementById( 'frm-bar-two' );
+				var $postStuff = document.getElementById( 'post-body-content' );
 				var $html = document.createElement( 'div' );
 				$html.setAttribute( 'class', 'frm_updated_message' );
 				$html.innerHTML = msg;
-				$postStuff.insertBefore( $html, document.getElementById( 'frm-publishing' ) );
+				$postStuff.insertBefore( $html, $postStuff.firstChild );
 			},
 			error: function( html ) {
 				jQuery( document.getElementById( 'frm_js_build_form' ) ).submit();
@@ -1760,7 +1767,9 @@ function frmAdminBuildJS() {
 		$button.nextAll( '.frm-loading-img' ).css( 'visibility', 'hidden' );
 
 		setTimeout( function() {
-			jQuery( '.frm_updated_message' ).fadeOut( 'slow' );
+			jQuery( '.frm_updated_message' ).fadeOut( 'slow', function() {
+				this.parentNode.removeChild( this );
+			} );
 			$button.fadeOut( 'slow', function() {
 				$button.html( buttonVal );
 				$button.show();

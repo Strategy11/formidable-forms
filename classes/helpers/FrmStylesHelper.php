@@ -202,6 +202,15 @@ class FrmStylesHelper {
 	}
 
 	/**
+	 * @since 4.0
+	 */
+	public static function hex2rgba( $hex, $a ) {
+		$rgb = self::hex2rgb( $hex );
+
+		return 'rgba(' . $rgb . ',' . $a . ')';
+	}
+
+	/**
 	 * @param $hex string - The original color in hex format #ffffff
 	 * @param $steps integer - should be between -255 and 255. Negative = darker, positive = lighter
 	 *
