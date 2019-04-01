@@ -20,7 +20,7 @@ class FrmField {
 			),
 			'checkbox' => array(
 				'name' => __( 'Checkboxes', 'formidable' ),
-				'icon' => 'frm_icon_font frm_check-square_icon',
+				'icon' => 'far fa-check-square',
 			),
 			'radio'    => array(
 				'name' => __( 'Radio Buttons', 'formidable' ),

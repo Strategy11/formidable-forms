@@ -499,7 +499,7 @@ function frmAdminBuildJS() {
 				var $thisSection = $thisField.find( 'ul.frm_sorting' );
 				if ( $thisSection.length ) {
 					$thisSection.sortable( opts );
-					$thisSection.parent( '.frm_field_box' ).children( '.frm_no_section_fields' ).show();
+					$thisSection.parent( '.frm_field_box' ).children( '.frm_no_section_fields' ).addClass( 'frm_block' );
 				} else {
 					var $parentSection = $thisField.closest( 'ul.frm_sorting' );
 					toggleOneSectionHolder( $parentSection );
@@ -605,6 +605,11 @@ function frmAdminBuildJS() {
 		var thisField = jQuery( this ).closest( 'li' );
 		var field_id = thisField.data( 'fid' );
 		var children = fieldsInSection( field_id );
+
+		if ( thisField.hasClass( 'frm-section-collapsed' ) || thisField.hasClass( 'frm-page-collapsed' ) ) {
+			return false;
+		}
+
 		jQuery.ajax( {
 			type: 'POST', url: ajaxurl,
 			data: {
@@ -1103,9 +1108,16 @@ function frmAdminBuildJS() {
 
 	function clickDeleteField() {
 		/*jshint validthis:true */
-		var confirm_msg = frm_admin_js.conf_delete;
-		// If deleting a section, add an extra message
-		if ( this.parentNode.className === 'divider_section_only' ) {
+		var confirm_msg = frm_admin_js.conf_delete,
+			maybeDivider = this.parentNode.parentNode.parentNode,
+			li = maybeDivider.parentNode;
+
+		if ( li.classList.contains( 'frm-section-collapsed' ) || li.classList.contains( 'frm-page-collapsed' ) ) {
+			return false;
+		}
+
+		// If deleting a section, add an extra message.
+		if ( maybeDivider.className === 'divider_section_only' ) {
 			confirm_msg += '\n\n' + frm_admin_js.conf_delete_sec;
 		}
 		if ( confirm( confirm_msg ) !== true ) {
@@ -1345,6 +1357,13 @@ function frmAdminBuildJS() {
 				}
 			}
 		}
+	}
+
+	function maybeCollapseSection() {
+		/*jshint validthis:true */
+		var parentCont = this.parentNode.parentNode.parentNode.parentNode;
+
+		parentCont.classList.toggle( 'frm-section-collapsed' );
 	}
 
 	function clickVis( e ) {
@@ -1622,6 +1641,7 @@ function frmAdminBuildJS() {
 				if ( currentOrder != e + 1 ) {
 					field.val( e + 1 );
 					singleField = document.getElementById( 'frm-single-settings-' + fieldId );
+
 					moveFieldSettings( singleField );
 				}
 			} );
@@ -1638,10 +1658,11 @@ function frmAdminBuildJS() {
 		if ( $section.length === 0 ) {
 			return;
 		}
+
 		if ( $section.children( 'li' ).length < 2 ) {
-			$section.parent( '.frm_field_box' ).children( '.frm_no_section_fields' ).show();
+			$section.parent( '.frm_field_box' ).children( '.frm_no_section_fields' ).addClass( 'frm_block' );
 		} else {
-			$section.parent( '.frm_field_box' ).children( '.frm_no_section_fields' ).hide();
+			$section.parent( '.frm_field_box' ).children( '.frm_no_section_fields' ).removeClass( 'frm_block' );
 		}
 	}
 
@@ -2090,6 +2111,11 @@ function frmAdminBuildJS() {
 	 * Keep the end marker at the end of the form.
 	 */
 	function moveFieldSettings( singleField ) {
+		if ( singleField === null ) {
+			// The field may have not been loaded yet via ajax.
+			return;
+		}
+
 		var classes = singleField.parentElement.classList;
 		if ( classes.contains( 'frm_field_box' ) || classes.contains( 'divider_section_only' ) ) {
 			var endMarker = document.getElementById( 'frm-end-form-marker' );
@@ -3739,6 +3765,7 @@ function frmAdminBuildJS() {
 			} );
 			$builderForm.on( 'change', 'select[name^="field_options[data_type_"]', maybeClearWatchFields );
 			jQuery( builderArea ).on( 'click', '.frm-collapse-page', maybeCollapsePage );
+			jQuery( builderArea ).on( 'click', '.frm-collapse-section', maybeCollapseSection );
 
 			$builderForm.on( 'click', '.frm_toggle_sep_values', toggleSepValues );
 			$builderForm.on( 'click', '.frm_multiselect_opt', toggleMultiselect );
