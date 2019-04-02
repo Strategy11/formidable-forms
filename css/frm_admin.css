@@ -1910,18 +1910,24 @@ input[type="checkbox"] {
 
 .frm_conf_inline .frm_inner_field_container,
 .frm_conf_inline .frm_inner_conf_container {
-	width: 192px;
+	width: 49%;
 	float: left;
 }
 
 .frm_conf_inline .frm_inner_field_container {
-	margin-right: 16px;
+	margin-right: 2%;
 	clear: both;
 }
 
+.frm_conf_below .frm_conf_field_container .frm_primary_label,
 .frm_conf_inline .frm_inner_field_container .frm-show-click a,
 .frm_conf_below .frm_conf_field_container .frm-show-click a {
 	display: none !important;
+}
+
+.frm_conf_inline .frm_inner_field_container .frm-field-action-icons {
+	position: absolute;
+	right: 5px;
 }
 
 .frm_conf_below .frm_conf_field_container {
@@ -2388,6 +2394,10 @@ li.ui-state-default.edit_field_type_divider .frm-show-hover {
 .frm_sortable_field_opts + a,
 .frm_single_option .frm_option_key {
 	margin-left: 22px;
+}
+
+.frm_option_key input[type=text] {
+	margin-top: 4px !important;
 }
 
 li.ui-state-default.selected .frm-show-click,
