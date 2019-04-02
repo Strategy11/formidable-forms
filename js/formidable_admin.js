@@ -385,6 +385,24 @@ function frmAdminBuildJS() {
 		};
 
 		jQuery( sort ).sortable( opts );
+
+		setupFieldOptionSorting( jQuery( '#frm_builder_page' ) );
+	}
+
+	function setupFieldOptionSorting( sort ) {
+		var opts = {
+			items: '.frm_sortable_field_opts li',
+			axis: 'y',
+			cursor: 'move',
+			opacity: 0.65,
+			revert: true,
+			forcePlaceholderSize: false,
+			tolerance: 'pointer',
+			handle: '.frm-drag',
+			helper: 'clone'
+		};
+
+		jQuery( sort ).sortable( opts );
 	}
 
 	// Get the section where a field is dropped

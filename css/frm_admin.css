@@ -966,7 +966,7 @@ a.frm_hidden,
 
 #frm_form_editor_container {
 	position: relative;
-	margin: 25px 50px 50px 65px;
+	margin: 25px 65px 50px;
 }
 
 .form-field label.frm_primary_label {
@@ -1114,6 +1114,10 @@ div.frm_updated_message {
 .frm_wrap div.frm_updated_message {
 	margin-left: 25px;
 	margin-right: 25px;
+}
+
+#post-body-content .frm_updated_message {
+	margin: 5px 65px;
 }
 
 .frm_ribbon {
@@ -2382,6 +2386,16 @@ li.ui-state-default.edit_field_type_divider .frm-show-hover {
 
 .frm_single_option:hover .frm_single_visible_hover {
 	opacity: 100;
+}
+
+.frm_single_option .frm-drag {
+	font-size: 18px;
+	color: var(--grey);
+	width: 18px;
+}
+
+.frm_single_option .frm_option_key {
+	margin-left: 22px;
 }
 
 li.ui-state-default.selected .frm-show-click,
@@ -3796,6 +3810,8 @@ li.selected .divider_section_only:before {
 	background-color: #fff;
 	border-radius: 50%;
 	border: 1px solid var(--primary-hover);
+	text-rendering: auto;
+	-webkit-font-smoothing: antialiased;
 }
 
 .frm-page-break:after {
@@ -3816,13 +3832,20 @@ li.selected .divider_section_only:before {
 	background: var(--primary-hover);
 	text-align: center;
 	color: #fff;
-	font-size: 15px;
-	line-height: 25px;
+	font-size: 13px;
+	line-height: 22px;
 }
 
-.repeat_section .edit_field_type_divider:before {
-	content: "\f363";
-	font-family: 's11-fp' !important;
+.edit_field_type_divider:before{
+	font-family: 'Font Awesome 5 Free';
+	content: '\f1dc';
+	font-weight: 900;
+}
+
+.repeat_section.edit_field_type_divider:before {
+	font-family: 'Font Awesome 5 Free';
+	content: '\f01e';
+	font-weight: 900;
 }
 
 .edit_field_type_divider:after {
@@ -4623,30 +4646,6 @@ ul .frm_col_two {
 
 .field_type_list .frm_icon_font:before {
 	font-size: 20px;
-}
-
-.frm_css_icon:before {
-	font-size: 22px;
-	font-style: normal;
-	line-height: 1;
-	vertical-align: top;
-	margin-left: 4px;
-}
-
-.frm_number_icon:before {
-	content: "#";
-	font-weight: 400;
-}
-
-.frm_text_icon:before {
-	content: 'T';
-	font-family: serif;
-}
-
-.edit_field_type_divider:before,
-.frm_heading_icon:before {
-	content: 'H';
-	font-family: rockwell, georgia, serif;
 }
 
 li.frm_noallow.button,
