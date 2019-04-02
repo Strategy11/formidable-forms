@@ -3832,6 +3832,23 @@ li.selected .divider_section_only:before {
 	transition: all 0.4s ease-out;
 }
 
+
+.frm_sorting li.edit_field_type_divider:hover,
+.frm_sorting li.edit_field_type_divider.selected {
+	border-left-color: var(--primary-color);
+}
+
+.edit_field_type_divider.selected:before,
+.edit_field_type_divider:hover:before {
+	border-color: var(--primary-color);
+	background: var(--primary-color);
+}
+
+.edit_field_type_divider.selected:after,
+.edit_field_type_divider:hover:after {
+	border-color: var(--primary-color);
+}
+
 .frm-section-collapsed:after {
 	border-color: transparent !important;
 	color: transparent;
