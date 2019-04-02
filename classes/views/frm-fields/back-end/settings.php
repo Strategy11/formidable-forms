@@ -119,7 +119,7 @@
 	}
 	?>
 	</div>
-<?php
+	<?php
 }
 
 if ( $display['clear_on_focus'] ) {
