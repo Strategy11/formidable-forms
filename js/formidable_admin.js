@@ -827,9 +827,9 @@ function frmAdminBuildJS() {
 			if ( !jQuery( v ).closest( 'div.widget' ).children( '.widget-inside' ).is( ':hidden' ) ) {
 				return;
 			}
-			p = jQuery( v ).closest( '.frm_field_box' );
+			p = jQuery( v ).closest( '.frm-single-settings' );
 		} else {
-			p = jQuery( this ).closest( '.frm_field_box' );
+			p = jQuery( this ).closest( '.frm-single-settings' );
 		}
 
 		if ( !p.find( '.use_calc' ).length || !p.find( '.use_calc' ).is( ':checked' ) ) {

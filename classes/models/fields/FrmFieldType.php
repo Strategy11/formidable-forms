@@ -520,7 +520,13 @@ DEFAULT_HTML;
 
 		$class = '';
 		if ( ! empty( $align ) && ( $is_radio || $is_checkbox ) ) {
-			$class .= ( 'inline' === $align ) ? ' horizontal_radio' : ' vertical_radio';
+			if ( 'inline' === $align ) {
+				$class .= ' horizontal_radio';
+			} elseif ( 'block' === $align ) {
+				$class .= ' vertical_radio';
+			} else {
+				$class .= ' ' . $align;
+			}
 		}
 
 		return $class;

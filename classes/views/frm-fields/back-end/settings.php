@@ -5,7 +5,7 @@
 	<div class="frm-sub-label alignright">
 		(ID <?php echo esc_html( $field['id'] ); ?>)
 	</div>
-	<h3 style="clear:none;">
+	<h3>
 		<?php
 		printf(
 			/* translators: %s: Field type */
@@ -117,6 +117,9 @@
 		<?php
 		do_action( 'frm_after_field_choices', compact( 'field', 'display', 'values' ) );
 	}
+	?>
+	</div>
+<?php
 }
 
 if ( $display['clear_on_focus'] ) {
@@ -204,6 +207,8 @@ do_action( 'frm_before_field_options', $field );
 		}
 		?>
 
+		<?php do_action( 'frm_field_options', compact( 'field', 'display', 'values' ) ); ?>
+
 		<?php if ( $display['label_position'] ) { ?>
 			<p class="frm6 frm_form_field">
 				<label><?php esc_html_e( 'Label Position', 'formidable' ); ?></label>
@@ -252,11 +257,9 @@ do_action( 'frm_before_field_options', $field );
 		<?php } ?>
 	</div>
 
-	<table class="form-table frm_clear_none">
-		<?php
-		$field_obj->show_options( $field, $display, $values );
-		do_action( 'frm_field_options_form', $field, $display, $values );
-		?>
+	<table class="form-table frm_no_top_margin">
+		<?php $field_obj->show_options( $field, $display, $values ); ?>
+		<?php do_action( 'frm_field_options_form', $field, $display, $values ); ?>
 	</table>
 
 	<?php if ( $display['required'] || $display['invalid'] || $display['unique'] || $display['conf_field'] ) { ?>
@@ -315,6 +318,8 @@ do_action( 'frm_before_field_options', $field );
 			</div>
 		</div>
 	<?php } ?>
+
+	<?php do_action( 'frm_after_field_options', compact( 'field', 'display', 'values' ) ); ?>
 
 	<?php if ( $display['conf_field'] ) { ?>
 		<input type="hidden" name="field_options[conf_desc_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['conf_desc'] ); ?>" />
