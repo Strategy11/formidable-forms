@@ -233,39 +233,6 @@ class FrmFieldsController {
 
 	/* Field Options */
 
-	/**
-	 * Add Single Option or Other Option.
-	 */
-	public static function add_option() {
-		FrmAppHelper::permission_check( 'frm_edit_forms' );
-		check_ajax_referer( 'frm_ajax', 'nonce' );
-
-		$id       = FrmAppHelper::get_post_param( 'field_id', 0, 'absint' );
-		$opt_type = FrmAppHelper::get_post_param( 'opt_type', '', 'sanitize_text_field' );
-		$opt_key  = FrmAppHelper::get_post_param( 'opt_key', 0, 'absint' );
-
-		$field = FrmField::getOne( $id );
-
-		if ( 'other' == $opt_type ) {
-			$opt     = __( 'Other', 'formidable' );
-			$opt_key = 'other_' . $opt_key;
-		} else {
-			$opt = __( 'New Option', 'formidable' );
-		}
-
-		$field_data = $field;
-		$field      = (array) $field;
-
-		$field['separate_value'] = isset( $field_data->field_options['separate_value'] ) ? $field_data->field_options['separate_value'] : 0;
-		$field['html_name']      = 'item_meta[' . $field['id'] . ']';
-		unset( $field_data );
-
-		$field['options'] = array( $opt_key => $opt );
-		FrmFieldsHelper::show_single_option( $field );
-
-		wp_die();
-	}
-
 	public static function import_choices() {
 		FrmAppHelper::permission_check( 'frm_edit_forms', 'hide' );
 
@@ -763,6 +730,18 @@ class FrmFieldsController {
 		}
 
 		return $opt;
+	}
+
+	/**
+	 * Add Single Option or Other Option.
+	 *
+	 * @deprecated 4.0 Moved to Pro for Other option only.
+	 */
+	public static function add_option() {
+		_deprecated_function( __METHOD__, '4.0', 'FrmProFormsController::add_other_option' );
+		if ( is_callable( 'FrmProFormsController::add_other_option' ) ) {
+			FrmProFormsController::add_other_option();
+		}
 	}
 
 	/**

@@ -1384,6 +1384,11 @@ function frmAdminBuildJS() {
 		parentCont.classList.toggle( 'frm-section-collapsed' );
 	}
 
+	function maybeCollapseSettings() {
+		/*jshint validthis:true */
+		this.classList.toggle( 'frm-collapsed' );
+	}
+
 	function clickVis( e ) {
 		/*jshint validthis:true */
 		if ( e.target.classList.contains( 'frm-collapse-page' ) ) {
@@ -3784,6 +3789,7 @@ function frmAdminBuildJS() {
 			$builderForm.on( 'change', 'select[name^="field_options[data_type_"]', maybeClearWatchFields );
 			jQuery( builderArea ).on( 'click', '.frm-collapse-page', maybeCollapsePage );
 			jQuery( builderArea ).on( 'click', '.frm-collapse-section', maybeCollapseSection );
+			$builderForm.on( 'click', '.frm-single-settings h3', maybeCollapseSettings );
 
 			$builderForm.on( 'click', '.frm_toggle_sep_values', toggleSepValues );
 			$builderForm.on( 'click', '.frm_multiselect_opt', toggleMultiselect );

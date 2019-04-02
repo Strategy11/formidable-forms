@@ -91,6 +91,7 @@
 			esc_html( $all_field_types[ $field['type'] ]['name'] )
 		);
 		?>
+		<i class="fas fa-chevron-down"></i>
 	</h3>
 	<div class="frm_grid_container frm-collapse-me">
 	<?php
@@ -100,6 +101,7 @@
 
 		echo '<p class="howto" id="frm_has_hidden_options_' . esc_attr( $field['id'] ) . '">' . FrmFieldsHelper::get_term_link( $field['taxonomy'] ) . '</p>'; // WPCS: XSS ok.
 	} else {
+		$has_options = ! empty( $field['options'] );
 		?>
 		<a href="<?php echo esc_url( admin_url( 'admin-ajax.php?action=frm_import_choices&field_id=' . $field['id'] . '&TB_iframe=1' ) ); ?>" title="<?php echo esc_attr( FrmAppHelper::truncate( strip_tags( str_replace( '"', '&quot;', $field['name'] ) ), 20 ) . ' ' . __( 'Field Choices', 'formidable' ) ); ?>" class="thickbox frm_orange">
 			<?php esc_html_e( 'Bulk Edit Options', 'formidable' ); ?>
@@ -108,21 +110,12 @@
 		<ul id="frm_field_<?php echo esc_attr( $field['id'] ); ?>_opts" class="frm_sortable_field_opts frm_clear<?php echo ( count( $field['options'] ) > 10 ) ? ' frm_field_opts_list' : ''; ?> frm_add_remove" data-key="<?php echo esc_attr( $field['field_key'] ); ?>">
 			<?php FrmFieldsHelper::show_single_option( $field ); ?>
 		</ul>
-		<a href="javascript:void(0);" data-opttype="single" class="frm_cb_button frm_add_opt frm_icon_font frm_add_tag frm_hidden" id="frm_add_opt_<?php echo esc_attr( $field['id'] ); ?>"></a>
+		<a href="javascript:void(0);" data-opttype="single" class="frm_cb_button frm_add_opt frm_icon_font frm_add_tag <?php echo esc_attr( $has_options ? 'frm_hidden' : '' ); ?>" id="frm_add_opt_<?php echo esc_attr( $field['id'] ); ?>">
+			<?php esc_html_e( 'Add Option', 'formidable' ); ?>
+		</a>
 
-		<?php if ( FrmAppHelper::pro_is_installed() ) { ?>
-			<div class="frm_small_top_margin">
-				<div id="frm_add_field_<?php echo esc_attr( $field['id'] ); ?>">
-					<a href="javascript:void(0);" id="other_button_<?php echo esc_attr( $field['id'] ); ?>" data-opttype="other" data-ftype="<?php echo esc_attr( $field['type'] ); ?>" class="frm_cb_button frm_add_opt<?php echo ( in_array( $field['type'], array( 'radio', 'select' ) ) && $field['other'] == true ? ' frm_hidden' : '' ); ?>" data-clicks="0">
-						<span class="frm_add_tag frm_icon_font"></span>
-						<?php esc_html_e( 'Other', 'formidable' ); ?>
-					</a>
-				</div>
-			</div>
-
-			<input type="hidden" value="<?php echo esc_attr( $field['other'] ); ?>" id="other_input_<?php echo esc_attr( $field['id'] ); ?>" name="field_options[other_<?php echo esc_attr( $field['id'] ); ?>]" />
-			<?php
-		}
+		<?php
+		do_action( 'frm_after_field_choices', compact( 'field', 'display', 'values' ) );
 	}
 }
 
@@ -135,7 +128,10 @@ do_action( 'frm_before_field_options', $field );
 
 ?>
 
-	<h3><?php esc_html_e( 'Advanced', 'formidable' ); ?></h3>
+	<h3 class="frm-collapsed">
+		<?php esc_html_e( 'Advanced', 'formidable' ); ?>
+		<i class="fas fa-chevron-down"></i>
+	</h3>
 	<div class="frm_grid_container frm-collapse-me">
 		<?php if ( $display['css'] ) { ?>
 			<p>
@@ -266,7 +262,10 @@ do_action( 'frm_before_field_options', $field );
 	<?php if ( $display['required'] || $display['invalid'] || $display['unique'] || $display['conf_field'] ) { ?>
 		<div class="frm_validation_msg <?php echo ( $display['invalid'] || $field['required'] || FrmField::is_option_true( $field, 'unique' ) || FrmField::is_option_true( $field, 'conf_field' ) ) ? '' : 'frm_hidden'; ?>">
 
-			<h3><?php esc_html_e( 'Validation Messages', 'formidable' ); ?></h3>
+			<h3 class="frm-collapsed">
+				<?php esc_html_e( 'Validation Messages', 'formidable' ); ?>
+				<i class="fas fa-chevron-down"></i>
+			</h3>
 
 			<div class="frm_validation_box frm-collapse-me">
 				<?php if ( $display['required'] ) { ?>

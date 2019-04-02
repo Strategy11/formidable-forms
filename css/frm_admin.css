@@ -561,9 +561,24 @@ h2#frm_form_heading,
 }
 
 .frm-right-panel h3 {
+	color: var(--dark-grey);
+	font-size: 20px;
+	font-weight: 400;
+	border-top: 2px solid var(--sidebar-hover);
+}
+
+.frm-right-panel h3 i {
+	color: var(--dark-grey);
+	float: right;
+	width: 16px;
+	font-size: 13px;
+}
+
+#frm-insert-fields h3 {
 	color: var(--grey);
 	font-size: 15px;
 	font-weight: normal;
+	border-top: none;
 	border-bottom: 1px solid var(--sidebar-hover);
 	margin: 0;
 	padding: 10px 10px 10px 25px;
@@ -2235,19 +2250,6 @@ table.frm_name_value textarea {
 	background-color: var(--sidebar-color);
 }
 
-.frm_option_val_label {
-	float: left;
-	width: 45%;
-	margin-left: 36px;
-	margin-right: 10px;
-}
-
-.frm_option_key_label,
-.frm_option_val_label {
-	font-weight: bold;
-	font-size: 11px;
-}
-
 .form-field .frm_cb_button {
 	height: 22px;
 	line-height: 20px;
@@ -2381,7 +2383,7 @@ li.ui-state-default.edit_field_type_divider .frm-show-hover {
 }
 
 #frm_build_form .frm_single_option input[type=text] {
-	width: 70%;
+	width: 80%;
 }
 
 .frm_single_option:hover .frm_single_visible_hover {
@@ -2394,6 +2396,8 @@ li.ui-state-default.edit_field_type_divider .frm-show-hover {
 	width: 18px;
 }
 
+.frm-add-other,
+.frm_sortable_field_opts + a,
 .frm_single_option .frm_option_key {
 	margin-left: 22px;
 }
@@ -3672,7 +3676,6 @@ a.frm_button:hover {
 ul.start_divider {
 	padding: 8px 13px 0 8px;
 	min-height: 115px;
-	transform-origin: top;
 	transition: all 0.4s linear;
 	overflow: hidden;
 }
@@ -3911,9 +3914,18 @@ li.selected .divider_section_only:before {
 	margin-left: 2px;
 }
 
+.frm-collapsed i:before,
 .frm-section-collapsed .fa-chevron-down:before,
 .frm-page-collapsed .fa-chevron-down:before {
 	content: "\f054";
+}
+
+.frm-collapse-me {
+	overflow: hidden;
+}
+
+.frm-collapsed + div {
+	height: 0;
 }
 
 .frm_sorting .divider_section_only > .frm_ipe_field_label {
@@ -4266,6 +4278,13 @@ ul.frm-category-tabs {
 	clear: both;
 }
 
+.frm-with-left-icon,
+.frm-with-right-icon {
+	position: relative;
+}
+
+.frm-with-left-icon i,
+.frm-with-right-icon i,
 .frm-search span {
 	position: absolute;
 	padding: 7px 10px;
@@ -4273,6 +4292,21 @@ ul.frm-category-tabs {
 	left: 0;
 	color: var(--grey);
 	opacity: .5;
+	font-size: 20px;
+}
+
+.frm-with-right-icon i {
+	right: 4px;
+	left: auto;
+	padding-top: 10px;
+}
+
+.frm-with-left-icon input {
+	padding-left: 30px;
+}
+
+.frm-with-right-icon input {
+	padding-right: 30px;
 }
 
 .frm-search input.frm-search-input,
@@ -5067,8 +5101,12 @@ iframe#dyncontent_ifr {
 	padding: 10px 12px;
 	margin: 1px;
 	border-color: var(--grey-border);
-	color: var(--medium-grey);
+	color: var(--dark-grey);
 	font-size: 15px;
+}
+
+.frm_wrap input::placeholder {
+	color: var(--grey);
 }
 
 .frm_wrap .frm_form_builder select {
