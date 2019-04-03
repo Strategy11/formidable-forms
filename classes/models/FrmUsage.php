@@ -243,7 +243,7 @@ class FrmUsage {
 		);
 
 		foreach ( $saved_forms as $form ) {
-			$forms[ $form->id ] = array(
+			$new_form = array(
 				'form_id'     => $form->id,
 				'description' => $form->description,
 				'logged_in'   => $form->logged_in,
@@ -256,15 +256,15 @@ class FrmUsage {
 
 			foreach ( $settings as $setting ) {
 				if ( isset( $form->options[ $setting ] ) ) {
-					$forms[ $form->id ][ $setting ] = $this->maybe_json( $form->options[ $setting ] );
+					$new_form[ $setting ] = $this->maybe_json( $form->options[ $setting ] );
 				}
 			}
+
+			$forms[] = apply_filters( 'frm_usage_form', $new_form, compact( 'form' ) );
 		}
 
-		$forms = apply_filters( 'frm_usage_forms', $forms, compact( 'saved_forms' ) );
-
 		// If the array uses numeric keys, reset them.
-		return array_values( $forms );
+		return $forms;
 	}
 
 	/**
