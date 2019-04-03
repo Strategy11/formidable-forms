@@ -1131,12 +1131,6 @@ div.frm_updated_message {
 	text-align: center;
 }
 
-.frm_message,
-.frm_wrap div.frm_updated_message {
-	margin-left: 25px;
-	margin-right: 25px;
-}
-
 #post-body-content .frm_updated_message {
 	margin: 5px 65px;
 }
