@@ -269,6 +269,8 @@ class FrmField {
 				$values['form_id'] = $new_repeat_form_id;
 			}
 
+			$values['description'] = FrmFieldsHelper::switch_field_ids( $values['description'] );
+
 			$values = apply_filters( 'frm_duplicated_field', $values );
 			$new_id = self::create( $values );
 			$frm_duplicate_ids[ $field->id ] = $new_id;
