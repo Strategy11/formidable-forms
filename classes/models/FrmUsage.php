@@ -39,7 +39,7 @@ class FrmUsage {
 	 */
 	public function uuid( $regenerate = false ) {
 		$uuid_key = 'frm-usage-uuid';
-		$uuid = get_option( $uuid_key );
+		$uuid     = get_option( $uuid_key );
 
 		if ( $regenerate || empty( $uuid ) ) {
 			// Definitely not cryptographically secure but
@@ -58,7 +58,7 @@ class FrmUsage {
 	public function snapshot() {
 		global $wpdb, $wp_version;
 
-		$theme_data = wp_get_theme();
+		$theme_data  = wp_get_theme();
 		$form_counts = FrmForm::get_count();
 
 		$snap = array(
@@ -114,7 +114,7 @@ class FrmUsage {
 	 */
 	private function settings() {
 		$settings_list  = FrmAppHelper::get_settings();
-		$settings      = array(
+		$settings       = array(
 			'messages'    => $this->messages( $settings_list ),
 			'permissions' => $this->permissions( $settings_list ),
 		);
@@ -177,9 +177,9 @@ class FrmUsage {
 	 */
 	private function permissions( $settings_list ) {
 		$permissions = array();
-        $frm_roles   = FrmAppHelper::frm_capabilities();
+		$frm_roles   = FrmAppHelper::frm_capabilities();
 
-        foreach ( $frm_roles as $frm_role => $frm_role_description ) {
+		foreach ( $frm_roles as $frm_role => $frm_role_description ) {
 			if ( isset( $settings_list->$frm_role ) ) {
 				$permissions[ $frm_role ] = $settings_list->$frm_role;
 			}

@@ -4,7 +4,7 @@ Tags: forms, contact form, form builder, survey, form maker, form, form creator
 Requires at least: 4.5
 Tested up to: 5.1.1
 Requires PHP: 5.3
-Stable tag: 3.06.03
+Stable tag: 3.06.04
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quiz forms, and more.
 
@@ -374,16 +374,13 @@ Formidable Forms drag & drop form builder combined with our add-ons is the most 
 To get access to more features, integrations, and support, <a href="https://formidableforms.com/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">upgrade to Formidable Forms Pro</a>. A Pro license gives you access to the full version of Formidable Forms for more advanced contact forms, Formidable Views, graphs and stats, priority support, and Formidable Forms Add-ons!
 
 == Changelog ==
+= 3.06.04 =
+* New: Added an option to opt into usage tracking. This will allow us to simplify settings in a future release and better cater to the majoritiy of use cases.
+* Fix: Replace old field ids in the field description and HTML field after duplication or import.
+
 = 3.06.03 =
 * Fix: The required indicator for a field was blank after importing a form.
 * Fix: Only include the id of the error message once in aria-describedby for linking the error message for screen readers.
 * Fix: Prevent a couple PHP warning messages with certain settings.
-
-= 3.06.02 =
-* New: More WCAG improvements. Link the error messages to the field for screenreaders.
-* Fix: When resending emails, don't send emails that are toggled off.
-* Fix: Prevent other plugins from adding messages on the form templates and new form pages.
-* Fix: Prevent front-end styles from loading on back-end pages.
-* Fix: When the screen settings are changed after filtering the entry list, stay on the filtered list.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>
