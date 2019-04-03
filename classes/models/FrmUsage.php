@@ -75,7 +75,7 @@ class FrmUsage {
 			'entry_count'    => FrmEntry::getRecordCount(),
 			'timestamp'      => gmdate( 'c' ),
 
-			'themename'      => $theme_data->Name, // phpcs:ignore WordPress.NamingConventions
+			'theme_name'     => $theme_data->Name, // phpcs:ignore WordPress.NamingConventions
 			'plugins'        => $this->plugins(),
 			'settings'       => $this->settings(),
 			'forms'          => $this->forms(),
