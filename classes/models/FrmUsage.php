@@ -77,7 +77,9 @@ class FrmUsage {
 
 			'theme_name'     => $theme_data->Name, // phpcs:ignore WordPress.NamingConventions
 			'plugins'        => $this->plugins(),
-			'settings'       => $this->settings(),
+			'settings'       => array(
+				$this->settings(),
+			),
 			'forms'          => $this->forms(),
 			'fields'         => $this->fields(),
 			'actions'        => $this->actions(),
@@ -136,11 +138,16 @@ class FrmUsage {
 
 		foreach ( $pass_settings as $setting ) {
 			if ( isset( $settings_list->$setting ) ) {
-				$settings[ $setting ] = $settings_list->$setting;
+				$settings[ $setting ] = $this->maybe_json( $settings_list->$setting );
 			}
 		}
 
-		return apply_filters( 'frm_usage_settings', $settings );
+		$settings = apply_filters( 'frm_usage_settings', $settings );
+
+		$settings['messages']    = $this->maybe_json( $settings['messages'] );
+		$settings['permissions'] = $this->maybe_json( $settings['permissions'] );
+
+		return $settings;
 	}
 
 	/**
@@ -237,7 +244,7 @@ class FrmUsage {
 
 		foreach ( $saved_forms as $form ) {
 			$forms[ $form->id ] = array(
-				'id'          => $form->id,
+				'form_id'     => $form->id,
 				'description' => $form->description,
 				'logged_in'   => $form->logged_in,
 				'editable'    => $form->editable,
@@ -249,12 +256,15 @@ class FrmUsage {
 
 			foreach ( $settings as $setting ) {
 				if ( isset( $form->options[ $setting ] ) ) {
-					$forms[ $form->id ][ $setting ] = $form->options[ $setting ];
+					$forms[ $form->id ][ $setting ] = $this->maybe_json( $form->options[ $setting ] );
 				}
 			}
 		}
 
-		return apply_filters( 'frm_usage_forms', $forms, compact( 'saved_forms' ) );
+		$forms = apply_filters( 'frm_usage_forms', $forms, compact( 'saved_forms' ) );
+
+		// If the array uses numeric keys, reset them.
+		return array_values( $forms );
 	}
 
 	/**
@@ -319,7 +329,7 @@ class FrmUsage {
 
 		$saved_actions = FrmDb::check_cache( serialize( $args ), 'frm_actions', $args, 'get_posts' );
 		foreach ( $saved_actions as $action ) {
-			$actions[ $action->ID ] = array(
+			$actions[] = array(
 				'form_id'  => $action->menu_order,
 				'type'     => $action->post_excerpt,
 				'status'   => $action->post_status,
@@ -337,6 +347,14 @@ class FrmUsage {
 	private function tracking_allowed() {
 		$settings = FrmAppHelper::get_settings();
 		return $settings->tracking;
+	}
+
+	/**
+	 * @since 3.06.04
+	 * @return string
+	 */
+	private function maybe_json( $value ) {
+		return is_array( $value ) ? json_encode( $value ) : $value;
 	}
 }
 
