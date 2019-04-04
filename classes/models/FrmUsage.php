@@ -39,7 +39,7 @@ class FrmUsage {
 	 */
 	public function uuid( $regenerate = false ) {
 		$uuid_key = 'frm-usage-uuid';
-		$uuid = get_option( $uuid_key );
+		$uuid     = get_option( $uuid_key );
 
 		if ( $regenerate || empty( $uuid ) ) {
 			// Definitely not cryptographically secure but
@@ -58,7 +58,7 @@ class FrmUsage {
 	public function snapshot() {
 		global $wpdb, $wp_version;
 
-		$theme_data = wp_get_theme();
+		$theme_data  = wp_get_theme();
 		$form_counts = FrmForm::get_count();
 
 		$snap = array(
@@ -75,9 +75,11 @@ class FrmUsage {
 			'entry_count'    => FrmEntry::getRecordCount(),
 			'timestamp'      => gmdate( 'c' ),
 
-			'themename'      => $theme_data->Name, // phpcs:ignore WordPress.NamingConventions
+			'theme_name'     => $theme_data->Name, // phpcs:ignore WordPress.NamingConventions
 			'plugins'        => $this->plugins(),
-			'settings'       => $this->settings(),
+			'settings'       => array(
+				$this->settings(),
+			),
 			'forms'          => $this->forms(),
 			'fields'         => $this->fields(),
 			'actions'        => $this->actions(),
@@ -114,7 +116,7 @@ class FrmUsage {
 	 */
 	private function settings() {
 		$settings_list  = FrmAppHelper::get_settings();
-		$settings      = array(
+		$settings       = array(
 			'messages'    => $this->messages( $settings_list ),
 			'permissions' => $this->permissions( $settings_list ),
 		);
@@ -136,11 +138,16 @@ class FrmUsage {
 
 		foreach ( $pass_settings as $setting ) {
 			if ( isset( $settings_list->$setting ) ) {
-				$settings[ $setting ] = $settings_list->$setting;
+				$settings[ $setting ] = $this->maybe_json( $settings_list->$setting );
 			}
 		}
 
-		return apply_filters( 'frm_usage_settings', $settings );
+		$settings = apply_filters( 'frm_usage_settings', $settings );
+
+		$settings['messages']    = $this->maybe_json( $settings['messages'] );
+		$settings['permissions'] = $this->maybe_json( $settings['permissions'] );
+
+		return $settings;
 	}
 
 	/**
@@ -236,8 +243,8 @@ class FrmUsage {
 		);
 
 		foreach ( $saved_forms as $form ) {
-			$forms[ $form->id ] = array(
-				'id'          => $form->id,
+			$new_form = array(
+				'form_id'     => $form->id,
 				'description' => $form->description,
 				'logged_in'   => $form->logged_in,
 				'editable'    => $form->editable,
@@ -249,12 +256,15 @@ class FrmUsage {
 
 			foreach ( $settings as $setting ) {
 				if ( isset( $form->options[ $setting ] ) ) {
-					$forms[ $form->id ][ $setting ] = $form->options[ $setting ];
+					$new_form[ $setting ] = $this->maybe_json( $form->options[ $setting ] );
 				}
 			}
+
+			$forms[] = apply_filters( 'frm_usage_form', $new_form, compact( 'form' ) );
 		}
 
-		return apply_filters( 'frm_usage_forms', $forms, compact( 'saved_forms' ) );
+		// If the array uses numeric keys, reset them.
+		return $forms;
 	}
 
 	/**
@@ -319,7 +329,7 @@ class FrmUsage {
 
 		$saved_actions = FrmDb::check_cache( serialize( $args ), 'frm_actions', $args, 'get_posts' );
 		foreach ( $saved_actions as $action ) {
-			$actions[ $action->ID ] = array(
+			$actions[] = array(
 				'form_id'  => $action->menu_order,
 				'type'     => $action->post_excerpt,
 				'status'   => $action->post_status,
@@ -337,6 +347,14 @@ class FrmUsage {
 	private function tracking_allowed() {
 		$settings = FrmAppHelper::get_settings();
 		return $settings->tracking;
+	}
+
+	/**
+	 * @since 3.06.04
+	 * @return string
+	 */
+	private function maybe_json( $value ) {
+		return is_array( $value ) ? json_encode( $value ) : $value;
 	}
 }
 

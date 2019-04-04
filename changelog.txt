@@ -1,4 +1,8 @@
 == Changelog ==
+= 3.06.04 =
+* New: Added an option to opt into usage tracking. This will allow us to simplify settings in a future release and better cater to the majority of use cases.
+* Fix: Replace old field ids in the field description and HTML field after duplication or import.
+
 = 3.06.03 =
 * Fix: The required indicator for a field was blank after importing a form.
 * Fix: Only include the id of the error message once in aria-describedby for linking the error message for screen readers.
