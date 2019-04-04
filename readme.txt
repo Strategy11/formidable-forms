@@ -375,7 +375,7 @@ To get access to more features, integrations, and support, <a href="https://form
 
 == Changelog ==
 = 3.06.04 =
-* New: Added an option to opt into usage tracking. This will allow us to simplify settings in a future release and better cater to the majoritiy of use cases.
+* New: Added an option to opt into usage tracking. This will allow us to simplify settings in a future release and better cater to the majority of use cases.
 * Fix: Replace old field ids in the field description and HTML field after duplication or import.
 
 = 3.06.03 =
