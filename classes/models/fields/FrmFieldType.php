@@ -321,6 +321,14 @@ DEFAULT_HTML;
 		do_action( 'frm_' . $field['type'] . '_field_options_form', $field, $display, $values );
 	}
 
+	/**
+	 * @since 4.0
+	 * @param array $args - Includes 'field', 'display', and 'values'
+	 */
+	public function show_primary_options( $args ) {
+		do_action( 'frm_' . $args['field']['type'] . '_primary_field_options', $args );
+	}
+
 	/** New field **/
 
 	public function get_new_field_defaults() {

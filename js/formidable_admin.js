@@ -3,8 +3,8 @@ function frmAdminBuildJS() {
 
 	/*global jQuery:false, frm_admin_js, frmGlobal, ajaxurl */
 
-	var $newFields = jQuery( document.getElementById( 'new_fields' ) );
-	var builderForm = document.getElementById( 'frm_build_form' );
+	var $newFields = jQuery( document.getElementById( 'frm-show-fields' ) );
+	var builderForm = document.getElementById( 'new_fields' );
 	var thisForm = document.getElementById( 'form_id' );
 	var cancelSort = false;
 
@@ -581,7 +581,7 @@ function frmAdminBuildJS() {
 					loadFields( $nextSet.attr( 'id' ) );
 				} else {
 					// go up a level
-					$nextSet = jQuery( document.getElementById( 'new_fields' ) ).find( '.frm_field_loading:not(.frm_load_now)' );
+					$nextSet = jQuery( document.getElementById( 'frm-show-fields' ) ).find( '.frm_field_loading:not(.frm_load_now)' );
 					if ( $nextSet.length ) {
 						loadFields( $nextSet.attr( 'id' ) );
 					}
@@ -994,7 +994,6 @@ function frmAdminBuildJS() {
 			};
 			jQuery.post( ajaxurl, data, function( msg ) {
 				jQuery( document.getElementById( 'frm_field_' + field_id + '_opts' ) ).append( msg );
-				document.getElementById( 'frm_add_opt_' + field_id ).style.display = 'none';
 				resetDropdownOpts( field_id );
 			} );
 		} else {
@@ -1004,18 +1003,18 @@ function frmAdminBuildJS() {
 			newOption = newOption.replace( new RegExp( '\\[' + oldKey + '\\]', 'g' ), '[' + optKey + ']' );
 			newOption = newOption.replace( 'frm_hidden frm_option_template', '' );
 			jQuery( document.getElementById( 'frm_field_' + field_id + '_opts' ) ).append( newOption );
-			document.getElementById( 'frm_add_opt_' + field_id ).style.display = 'none';
 			//resetDropdownOpts( field_id );
 		}
 	}
 
 	function toggleMultSel() {
 		/*jshint validthis:true */
-		var field_id = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' );
+		var field_id = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' ),
+			setting = jQuery( '.frm_multiple_cont_' + field_id );
 		if ( this.value === 'select' ) {
-			jQuery( document.getElementById( 'frm_multiple_cont_' + field_id ) ).fadeIn( 'fast' );
+			setting.fadeIn( 'fast' );
 		} else {
-			jQuery( document.getElementById( 'frm_multiple_cont_' + field_id ) ).fadeOut( 'fast' );
+			setting.fadeOut( 'fast' );
 		}
 	}
 
@@ -1169,7 +1168,7 @@ function frmAdminBuildJS() {
 					if ( $thisField.data( 'type' ) === 'break' ) {
 						renumberPageBreaks();
 					}
-					if ( jQuery( '#new_fields li' ).length === 0 ) {
+					if ( jQuery( '#frm-show-fields li' ).length === 0 ) {
 						jQuery( '.frm_no_fields' ).show();
 					} else if ( $section.length ) {
 						toggleOneSectionHolder( $section );
@@ -1200,7 +1199,7 @@ function frmAdminBuildJS() {
 				jQuery( document.getElementById( 'logic_' + id ) ).fadeOut( 'slow', function() {
 					var logicRow = jQuery( document.getElementById( 'frm_logic_row_' + id ) );
 					logicRow.append( html );
-					logicRow.parent( '.frm_logic_rows' ).fadeIn( 'slow' );
+					logicRow.closest( '.frm_logic_rows' ).fadeIn( 'slow' );
 				} );
 			}
 		} );
@@ -1336,7 +1335,7 @@ function frmAdminBuildJS() {
 
 	function toggleCollapseFakePage() {
 		var topLevel = document.getElementById( 'frm-fake-page' ),
-			firstField = document.getElementById( 'new_fields' ).firstElementChild,
+			firstField = document.getElementById( 'frm-show-fields' ).firstElementChild,
 			toCollapse = jQuery( firstField ).nextUntil( '.frm_field_box[data-ftype=break]' ).andSelf();
 
 		if ( firstField.getAttribute( 'data-ftype' ) === 'break' ) {
@@ -1655,7 +1654,7 @@ function frmAdminBuildJS() {
 	function updateFieldOrder() {
 		var array = [];
 		renumberPageBreaks();
-		jQuery( '#new_fields' ).each( function( i ) {
+		jQuery( '#frm-show-fields' ).each( function( i ) {
 			jQuery( 'li.frm_field_box', this ).each( function( e ) {
 				var fieldId = this.getAttribute( 'data-fid' ),
 					field = jQuery( 'input[name="field_options[field_order_' + fieldId + ']"]' ),
@@ -3200,10 +3199,10 @@ function frmAdminBuildJS() {
 	function initiateMultiselect() {
 		jQuery( '.frm_multiselect' ).multiselect( {
 			templates: {ul: '<ul class="multiselect-container frm-dropdown-menu"></ul>'},
-			buttonContainer: '<div class="btn-group frm-btn-group" />',
-			nonSelectedText: frm_admin_js['default'],// TODO: should be noneSelectedText
+			buttonContainer: '<div class="btn-group frm-btn-group dropdown" />',
+			nonSelectedText: frm_admin_js['default'],
 			onDropdownShown: function( event ) {
-				var action = jQuery( event.currentTarget.closest( '.frm_form_action_settings, #new_fields' ) );
+				var action = jQuery( event.currentTarget.closest( '.frm_form_action_settings, #frm-show-fields' ) );
 				if ( action.length ) {
 					jQuery( '#wpcontent' ).click( function() {
 						if ( jQuery( '.multiselect-container.frm-dropdown-menu' ).is( ':visible' ) ) {
@@ -3730,8 +3729,11 @@ function frmAdminBuildJS() {
 			}
 
 			jQuery( '.field_type_list > li:not(.frm_noallow)' ).draggable( {
-				connectToSortable: '#new_fields', cursor: 'move',
-				helper: 'clone', revert: 'invalid', delay: 10,
+				connectToSortable: '#frm-show-fields',
+				cursor: 'move',
+				helper: 'clone',
+				revert: 'invalid',
+				delay: 10,
 				cancel: '.frm-dropdown-menu'
 			} );
 			jQuery( 'ul.field_type_list, .field_type_list li, ul.frm_code_list, .frm_code_list li, .frm_code_list li a, #frm_adv_info #category-tabs li, #frm_adv_info #category-tabs li a' ).disableSelection();
@@ -3798,7 +3800,7 @@ function frmAdminBuildJS() {
 			$builderForm.on( 'click', '.frm_add_opt', addFieldOption );
 			$builderForm.on( 'change', '.frm_toggle_mult_sel', toggleMultSel );
 
-			jQuery( builderArea ).on( 'click', '#new_fields > li.ui-state-default', clickVis );
+			jQuery( builderArea ).on( 'click', '#frm-show-fields > li.ui-state-default', clickVis );
 			$newFields.on( 'click', '.start_divider li.ui-state-default', clickSectionVis );
 			$builderForm.on( 'change', '.frm_tax_form_select', toggleFormTax );
 			jQuery( '.frm_form_builder' ).on( 'keyup', 'input[name^="item_meta"], textarea[name^="item_meta"]', triggerDefaults );

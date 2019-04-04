@@ -188,6 +188,7 @@ td.column-title .frm_actions_dropdown {
 	color: var(--medium-grey);
 }
 
+.frm_wrap a i,
 .frm_wrap a {
 	color: var(--primary-color);
 }
@@ -773,7 +774,7 @@ h2 .frm-button-primary {
 .wp-core-ui .button.frm-button-secondary,
 .frm-button-secondary {
 	color: var(--primary-color);
-	background-color: #fff;
+	background-color: transparent;
 }
 
 .frm_orange_button,
@@ -898,6 +899,7 @@ input.frm_insert_in_template {
 /* Generic Classes */
 .frm_invisible {
 	visibility: hidden;
+	transition: all .2s ease;
 }
 
 .frm_no_float {
@@ -925,7 +927,7 @@ a.frm_hidden,
 }
 
 .frm_no_top_margin {
-	margin-top: 0;
+	margin-top: 0 !important;
 }
 
 .frm_no_bottom_margin {
@@ -1005,6 +1007,10 @@ a.frm_hidden,
 	width: auto;
 	font-size: 14px;
 	display: block;
+}
+
+.frm-fields td > label {
+	display: initial;
 }
 
 #frm_form_editor_container .edit_field_type_end_divider .frm_primary_label,
@@ -1398,6 +1404,25 @@ h2.frm-h2 + .howto {
 	float: right;
 }
 
+.frm-bulk-edit-link {
+	text-align: right;
+	font-size: 14px;
+	padding: 0 5px 10px;
+}
+
+.frm_add_opt,
+.frm-add-other a {
+	font-size: 14px;
+}
+
+.frm_add_opt span:before,
+.frm-add-other a span:before {
+	color: var(--primary-color);
+	font-size: 12px;
+	height: 12px;
+	width: 12px;
+}
+
 .frm_no_captcha_text {
 	font-weight: bold;
 	color: #AA0000;
@@ -1498,6 +1523,11 @@ h1 .fa-caret-down {
 	-webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
 	box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
 	background-clip: padding-box;
+}
+
+.frm6 .frm-dropdown-menu {
+	min-width: 100px;
+	max-width: 99%;
 }
 
 #frm_bs_dropdown > a {
@@ -1793,8 +1823,8 @@ a.frm-option-icon:hover::before {
 	background-color: var(--blue-border);
 }
 
-#frm_build_form input[type=text],
-#frm_build_form input[type=number],
+#new_fields input[type=text],
+#new_fields input[type=number],
 .frm_field_box .frm_form_fields > textarea,
 .frm_form_fields .frm_form_field > textarea,
 .frm_form_fields .frm_form_field > input[type=email],
@@ -1840,6 +1870,17 @@ input[type="checkbox"] {
 	color: var( --blue-border);
 }
 
+.frm_wrap .frm-number-range + .frm_last input,
+.frm_wrap .frm-number-range input {
+	text-align: center;
+	font-weight: 600;
+}
+
+.frm_wrap .frm-number-range input[type=number],
+.frm_wrap .frm-number-range input[type=text] {
+	color: var(--primary-hover);
+}
+
 .frm-range-min {
 	position: relative;
 }
@@ -1855,7 +1896,7 @@ input[type="checkbox"] {
 	right: -28%;
 }
 
-#frm_build_form .frm_grid_container > p {
+#new_fields .frm_grid_container > p {
 	margin: 7px 0;
 }
 
@@ -2370,8 +2411,12 @@ li.ui-state-default.edit_field_type_divider .frm-show-hover {
 	clear: both;
 }
 
-#frm_build_form .frm_single_option input[type=text] {
-	width: 80%;
+#new_fields .frm_single_option input[type=text] {
+	width: 86%;
+}
+
+.frm_single_option a {
+	padding-left: 7px;
 }
 
 .frm_single_option:hover .frm_single_visible_hover {
@@ -2384,7 +2429,6 @@ li.ui-state-default.edit_field_type_divider .frm-show-hover {
 	width: 18px;
 }
 
-.frm-add-other,
 .frm_sortable_field_opts + a,
 .frm_single_option .frm_option_key {
 	margin-left: 22px;
@@ -3131,13 +3175,17 @@ table td, .form-table tr td {
 	vertical-align: top;
 }
 
-#frm_build_form .form-table tr td {
+#new_fields .form-table tr td {
 	display: block;
-	padding: 7px 0;
+	padding: 7px 0 0;
 }
 
-#frm_build_form .form-table tr td:first-child {
-	padding: 0;
+#new_fields .form-table tr td:first-child {
+	margin: 0;
+}
+
+#new_fields .form-table tr td:last-child {
+	margin-bottom: 9px;
 }
 
 .form-table #list-table th {
@@ -3197,11 +3245,24 @@ table td, .form-table tr td {
 }
 
 .frm_logic_field_opts {
-	max-width: 130px;
+	max-width: 35%;
+}
+
+.frm_logic_row {
+	padding-bottom: 8px;
+}
+
+.frm_logic_row:first-of-type {
+	padding-top: 8px;
 }
 
 .frm-single-settings .frm_logic_row select:nth-child(2) {
-	max-width: 75px;
+	max-width: 20%;
+}
+
+.frm-single-settings .frm_logic_row span input,
+.frm-single-settings .frm_logic_row span select {
+	max-width: 36%;
 }
 
 .frm-single-settings .frm_logic_row input {
@@ -3327,6 +3388,11 @@ a.frm_icon_font:hover, a.frm_icon_font:active, a.frm_icon_font:focus {
 
 .frm_remove_tag:before {
 	content: '\e600';
+}
+
+.frm_logic_row .frm_remove_tag {
+	font-size: 16px;
+	padding-left: 7px;
 }
 
 .frm_tooltip_icon:before {
@@ -3571,7 +3637,7 @@ span.howto {
 	margin-top: 15px;
 }
 
-#new_fields {
+#frm-show-fields {
 	min-height: 480px;
 }
 
@@ -3601,7 +3667,7 @@ span.howto {
 	border: 1px solid #d1e5ee;
 }
 
-#new_fields li.frm_cancel_sort {
+#frm-show-fields li.frm_cancel_sort {
 	/* If a section gets dropped into a section, hide it */
 	display: none;
 }
@@ -3875,6 +3941,7 @@ li.selected .divider_section_only:before {
 .frm-page-break .frm-collapse-page.button {
 	margin-left: 46%;
 	margin-top: -15px;
+	background-color: #fff;
 }
 
 #frm-fake-page .frm-collapse-page.button {
@@ -3913,7 +3980,8 @@ li.selected .divider_section_only:before {
 }
 
 .frm-collapse-me {
-	overflow: hidden;
+	overflow: hidden !important;
+	padding-bottom: 10px;
 }
 
 .frm-collapsed + div {
@@ -4284,8 +4352,10 @@ ul.frm-category-tabs {
 }
 
 .frm-with-right-icon i {
-	right: 4px;
+	right: 0;
 	left: auto;
+	top: -3px;
+	padding: 0 7px;
 }
 
 .frm-with-left-icon input {
@@ -4518,6 +4588,10 @@ ul .frm_col_two {
 	text-align: center;
 	font-size: 11px;
 	overflow: hidden;
+}
+
+.frm_grid_container {
+	overflow: visible;
 }
 
 .frm_code_list.frm_grid_container {
@@ -5078,6 +5152,7 @@ iframe#dyncontent_ifr {
 .frm_wrap textarea,
 .frm_wrap input[type="tel"],
 .frm_wrap input[type="text"],
+.frm_wrap input[type="number"],
 .frm_wrap select,
 .field-group textarea,
 .field-group input[type="text"],
@@ -5101,6 +5176,12 @@ iframe#dyncontent_ifr {
 
 .frm_wrap input::placeholder {
 	color: var(--grey);
+}
+
+.wp-admin .frm_wrap select {
+	line-height: 32px;
+	height: 32px;
+	vertical-align: top;
 }
 
 .frm_wrap .frm_form_builder select {

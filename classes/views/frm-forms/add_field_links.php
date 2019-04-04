@@ -121,7 +121,7 @@ foreach ( FrmField::pro_field_selection() as $field_key => $field_type ) {
 			<div class="frm-single-settings">
 				<?php esc_html_e( 'Select a field to see the options', 'formidable' ); ?>
 			</div>
-			<form method="post" id="frm_build_form">
+			<form method="post" id="new_fields">
 				<input type="hidden" name="frm_action" value="update" />
 				<input type="hidden" name="action" value="update" />
 				<input type="hidden" name="id" id="form_id" value="<?php echo esc_attr( $values['id'] ); ?>" />

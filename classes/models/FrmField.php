@@ -114,7 +114,7 @@ class FrmField {
 				'icon' => 'fas fa-redo',
 			),
 			'end_divider'    => array(
-				'name'        => __( 'End Section', 'formidable' ),
+				'name'        => __( 'Section Buttons', 'formidable' ),
 				'switch_from' => 'divider',
 			),
 			'divider'        => array(

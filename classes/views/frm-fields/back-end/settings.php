@@ -79,6 +79,8 @@
 		if ( $display['range'] ) {
 			include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/number-range.php' );
 		}
+
+		$field_obj->show_primary_options( compact( 'field', 'display', 'values' ) );
 		?>
 	</div>
 
@@ -103,19 +105,32 @@
 	} else {
 		$has_options = ! empty( $field['options'] );
 		?>
-		<a href="<?php echo esc_url( admin_url( 'admin-ajax.php?action=frm_import_choices&field_id=' . $field['id'] . '&TB_iframe=1' ) ); ?>" title="<?php echo esc_attr( FrmAppHelper::truncate( strip_tags( str_replace( '"', '&quot;', $field['name'] ) ), 20 ) . ' ' . __( 'Field Choices', 'formidable' ) ); ?>" class="thickbox frm_orange">
+		<a href="<?php echo esc_url( admin_url( 'admin-ajax.php?action=frm_import_choices&field_id=' . $field['id'] . '&TB_iframe=1' ) ); ?>" title="<?php echo esc_attr( FrmAppHelper::truncate( strip_tags( str_replace( '"', '&quot;', $field['name'] ) ), 20 ) . ' ' . __( 'Field Choices', 'formidable' ) ); ?>" class="thickbox frm-bulk-edit-link">
 			<?php esc_html_e( 'Bulk Edit Options', 'formidable' ); ?>
 		</a>
 		<?php do_action( 'frm_add_multiple_opts_labels', $field ); ?>
 		<ul id="frm_field_<?php echo esc_attr( $field['id'] ); ?>_opts" class="frm_sortable_field_opts frm_clear<?php echo ( count( $field['options'] ) > 10 ) ? ' frm_field_opts_list' : ''; ?> frm_add_remove" data-key="<?php echo esc_attr( $field['field_key'] ); ?>">
 			<?php FrmFieldsHelper::show_single_option( $field ); ?>
 		</ul>
-		<a href="javascript:void(0);" data-opttype="single" class="frm_cb_button frm_add_opt frm_icon_font frm_add_tag <?php echo esc_attr( $has_options ? 'frm_hidden' : '' ); ?>" id="frm_add_opt_<?php echo esc_attr( $field['id'] ); ?>">
+		<a href="javascript:void(0);" data-opttype="single" class="frm_cb_button frm_add_opt frm6 frm_form_field" id="frm_add_opt_<?php echo esc_attr( $field['id'] ); ?>">
+			<span class="frm_icon_font frm_add_tag"></span>
 			<?php esc_html_e( 'Add Option', 'formidable' ); ?>
 		</a>
 
 		<?php
 		do_action( 'frm_after_field_choices', compact( 'field', 'display', 'values' ) );
+	}
+
+	// Field Size
+	if ( $field['type'] === 'select' && ( ! isset( $values['custom_style'] ) || $values['custom_style'] ) ) {
+		?>
+		<p class="frm6 frm_form_field">
+			<label for="size_<?php echo esc_attr( $field['id'] ); ?>">
+				<input type="checkbox" name="field_options[size_<?php echo esc_attr( $field['id'] ); ?>]" id="size_<?php echo esc_attr( $field['id'] ); ?>" value="1" <?php echo FrmField::is_option_true( $field, 'size' ) ? 'checked="checked"' : ''; ?> />
+				<?php esc_html_e( 'Automatic width', 'formidable' ); ?>
+			</label>
+		</p>
+		<?php
 	}
 	?>
 	</div>
@@ -147,8 +162,8 @@ do_action( 'frm_before_field_options', $field );
 
 		<?php
 		// Field Size
-		if ( $display['size'] ) {
-			if ( in_array( $field['type'], array( 'select', 'time', 'data' ) ) ) {
+		if ( $display['size'] && $field['type'] !== 'select' ) {
+			if ( in_array( $field['type'], array( 'time', 'data' ) ) ) {
 				if ( ! isset( $values['custom_style'] ) || $values['custom_style'] ) {
 					include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/automatic-width.php' );
 				}
@@ -263,8 +278,11 @@ do_action( 'frm_before_field_options', $field );
 	</table>
 
 	<?php if ( $display['required'] || $display['invalid'] || $display['unique'] || $display['conf_field'] ) { ?>
-		<div class="frm_validation_msg <?php echo ( $display['invalid'] || $field['required'] || FrmField::is_option_true( $field, 'unique' ) || FrmField::is_option_true( $field, 'conf_field' ) ) ? '' : 'frm_hidden'; ?>">
-
+		<?php
+		$hidden_invalid = FrmField::is_field_type( $field, 'text' ) && ! FrmField::is_option_true( $field, 'format' );
+		$has_validation = ( ( $display['invalid'] && ! $hidden_invalid ) || $field['required'] || FrmField::is_option_true( $field, 'unique' ) || FrmField::is_option_true( $field, 'conf_field' ) );
+		?>
+		<div class="frm_validation_msg <?php echo esc_attr( $has_validation ? '' : 'frm_hidden' ); ?>">
 			<h3 class="frm-collapsed">
 				<?php esc_html_e( 'Validation Messages', 'formidable' ); ?>
 				<i class="fas fa-chevron-down"></i>
@@ -280,11 +298,8 @@ do_action( 'frm_before_field_options', $field );
 					</p>
 				<?php } ?>
 
-				<?php
-				if ( $display['invalid'] ) {
-					$hidden = FrmField::is_field_type( $field, 'text' ) && ! FrmField::is_option_true( $field, 'format' );
-					?>
-					<p class="frm_invalid_msg<?php echo esc_attr( $field['id'] . ( $hidden ? ' frm_hidden' : '' ) ); ?>">
+				<?php if ( $display['invalid'] ) { ?>
+					<p class="frm_invalid_msg<?php echo esc_attr( $field['id'] . ( $hidden_invalid ? ' frm_hidden' : '' ) ); ?>">
 						<label for="field_options_invalid_<?php echo esc_attr( $field['id'] ); ?>">
 							<?php esc_html_e( 'Invalid Format', 'formidable' ); ?>
 						</label>
