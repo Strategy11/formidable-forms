@@ -1785,29 +1785,19 @@ function frmAdminBuildJS() {
 		}
 
 		$button = jQuery( b );
-		if ( $button.attr( 'id' ) === 'save-post' ) {
-			jQuery( 'input[name="status"]' ).val( 'draft' );
-		} else {
-			jQuery( 'input[name="status"]' ).val( 'published' );
-		}
 
 		if ( $button.hasClass( 'frm_button_submit' ) ) {
 			$button.addClass( 'frm_loading_form' );
 			$button.html( frm_admin_js.saving );
 		} else {
+			$button.addClass( 'frm_loading_button' );
 			$button.val( frm_admin_js.saving );
 		}
-
-		$button.prevAll( '.spinner' ).css( 'visibility', 'visible' ).fadeIn();
-		$button.nextAll( '.frm-loading-img' ).css( 'visibility', 'visible' );
 	}
 
 	function afterFormSave( $button, buttonVal ) {
-		$button.removeClass( 'frm_loading_form' );
+		$button.removeClass( 'frm_loading_form' ).removeClass( 'frm_loading_button' );
 		$button.html( frm_admin_js.saved );
-
-		$button.prevAll( '.spinner' ).css( 'visibility', 'hidden' ).fadeOut();
-		$button.nextAll( '.frm-loading-img' ).css( 'visibility', 'hidden' );
 
 		setTimeout( function() {
 			jQuery( '.frm_updated_message' ).fadeOut( 'slow', function() {
@@ -3450,9 +3440,9 @@ function frmAdminBuildJS() {
 	function installTemplate( e ) {
 		/*jshint validthis:true */
 		var action = this.elements['type'].value,
-			spinner = document.getElementById( 'frm-importing-spinner' );
+			button = this.querySelector( 'button' );
 		e.preventDefault();
-		spinner.style.visibility = 'visible';
+		button.classList.add( 'frm_loading_button' );
 		installNewForm( this, action );
 	}
 
@@ -4224,12 +4214,13 @@ function frmAdminBuildJS() {
 		updateOpts: function( field_id, opts ) {
 			$fieldOpts = document.getElementById( 'frm_field_' + field_id + '_opts' );
 			empty( $fieldOpts );
-			addClass( $fieldOpts, 'frm-loading-img' );
+			// TODO: loading indicator
 			jQuery.ajax( {
 				type: "POST", url: ajaxurl,
 				data: {action: 'frm_import_options', field_id: field_id, opts: opts, nonce: frmGlobal.nonce},
 				success: function( html ) {
-					jQuery( '#frm_field_' + field_id + '_opts' ).html( html ).removeClass( 'frm-loading-img' );
+					jQuery( '#frm_field_' + field_id + '_opts' ).html( html );
+					// TODO: remove loading
 					if ( jQuery( 'select[name="item_meta[' + field_id + ']"]' ).length > 0 ) {
 						var o = opts.replace( /\s\s*$/, '' ).split( "\n" );
 						var sel = '';

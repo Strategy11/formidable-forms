@@ -83,7 +83,8 @@ function frmPrePop(opts){
     return false;
 }
 
-function frmUpdateBulkOpts(fieldID) {
+function frmUpdateBulkOpts(fieldID,button) {
+	button.classList.add('frm_loading_button');
     window.top.frmAdminBuild.updateOpts(fieldID,document.getElementById('frm_bulk_options').value);
     window.top.tb_remove();
 }

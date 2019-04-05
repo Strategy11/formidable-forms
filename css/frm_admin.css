@@ -2009,12 +2009,6 @@ img.frm_help {
 }
 
 /* Loading */
-.frm-loading-img {
-	background: url(../images/ajax_loader.gif) no-repeat center center;
-	padding: 6px 12px;
-	visibility: hidden;
-}
-
 .frm_spinner.spinner {
 	float: left;
 }
@@ -2041,6 +2035,7 @@ img.frm_help {
 	margin-top: 20px;
 }
 
+.wp-core-ui .frm_loading_button.button-primary.frm-button-primary,
 .frm_loading_button,
 .frm_loading_form.frm_button_submit {
 	position: relative !important;
