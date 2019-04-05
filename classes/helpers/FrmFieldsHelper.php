@@ -470,9 +470,12 @@ class FrmFieldsHelper {
 		}
 
 		$link = sprintf(
-			/* translators: %s: Page name with link */
-			esc_html__( 'Please add options from the WordPress "%1$s" page', 'formidable' ),
-			'<a href="' . esc_url( admin_url( 'edit-tags.php?taxonomy=' . $tax->name ) ) . '" target="_blank">' . ( empty( $tax->labels->name ) ? esc_html__( 'Categories', 'formidable' ) : $tax->labels->name ) . '</a>'
+			/* translators: %1$s: Start HTML link, %2$s: Content type label, %3$s: Content type, %4$s: End HTML link */
+			esc_html__( 'Options are dynamically created from your %1$s%2$s: %3$s%4$s', 'formidable' ),
+			'<a href="' . esc_url( admin_url( 'edit-tags.php?taxonomy=' . $tax->name ) ) . '" target="_blank">',
+			esc_html__( 'taxonomy', 'formidable' ),
+			empty( $tax->labels->name ) ? esc_html__( 'Categories', 'formidable' ) : $tax->labels->name,
+			'</a>'
 		);
 		unset( $tax );
 

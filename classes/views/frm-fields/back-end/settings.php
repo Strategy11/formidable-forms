@@ -81,16 +81,17 @@
 		}
 
 		$field_obj->show_primary_options( compact( 'field', 'display', 'values' ) );
+
 		?>
 	</div>
 
-<?php if ( in_array( $field['type'], array( 'select', 'radio', 'checkbox' ) ) ) { ?>
+<?php if ( ! empty( $display_type ) ) { ?>
 	<h3>
 		<?php
 		printf(
 			/* translators: %s: Field type */
 			esc_html__( '%s Options', 'formidable' ),
-			esc_html( $all_field_types[ $field['type'] ]['name'] )
+			esc_html( $all_field_types[ $display['type'] ]['name'] )
 		);
 		?>
 		<i class="fas fa-chevron-down"></i>
@@ -98,11 +99,12 @@
 	<div class="frm_grid_container frm-collapse-me">
 	<?php
 	if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' ) {
-		$type = $field['type'];
-		do_action( 'frm_after_checkbox', compact( 'field', 'field_name', 'type' ) );
-
-		echo '<p class="howto" id="frm_has_hidden_options_' . esc_attr( $field['id'] ) . '">' . FrmFieldsHelper::get_term_link( $field['taxonomy'] ) . '</p>'; // WPCS: XSS ok.
-	} else {
+		?>
+		<div class="frm-inline-message" id="frm_has_hidden_options_<?php echo esc_attr( $field['id'] ); ?>">
+			<?php echo FrmFieldsHelper::get_term_link( $field['taxonomy'] ); // WPCS: XSS ok. ?>
+		</div>
+		<?php
+	} elseif ( in_array( $field['type'], array( 'select', 'radio', 'checkbox' ) ) ) {
 		$has_options = ! empty( $field['options'] );
 		?>
 		<a href="<?php echo esc_url( admin_url( 'admin-ajax.php?action=frm_import_choices&field_id=' . $field['id'] . '&TB_iframe=1' ) ); ?>" title="<?php echo esc_attr( FrmAppHelper::truncate( strip_tags( str_replace( '"', '&quot;', $field['name'] ) ), 20 ) . ' ' . __( 'Field Choices', 'formidable' ) ); ?>" class="thickbox frm-bulk-edit-link">
@@ -118,20 +120,9 @@
 		</a>
 
 		<?php
-		do_action( 'frm_after_field_choices', compact( 'field', 'display', 'values' ) );
 	}
 
-	// Field Size
-	if ( $field['type'] === 'select' && ( ! isset( $values['custom_style'] ) || $values['custom_style'] ) ) {
-		?>
-		<p class="frm6 frm_form_field">
-			<label for="size_<?php echo esc_attr( $field['id'] ); ?>">
-				<input type="checkbox" name="field_options[size_<?php echo esc_attr( $field['id'] ); ?>]" id="size_<?php echo esc_attr( $field['id'] ); ?>" value="1" <?php echo FrmField::is_option_true( $field, 'size' ) ? 'checked="checked"' : ''; ?> />
-				<?php esc_html_e( 'Automatic width', 'formidable' ); ?>
-			</label>
-		</p>
-		<?php
-	}
+	$field_obj->show_extra_field_choices( compact( 'field', 'display', 'values' ) );
 	?>
 	</div>
 	<?php
@@ -162,8 +153,8 @@ do_action( 'frm_before_field_options', $field );
 
 		<?php
 		// Field Size
-		if ( $display['size'] && $field['type'] !== 'select' ) {
-			if ( in_array( $field['type'], array( 'time', 'data' ) ) ) {
+		if ( $display['size'] && $field['type'] !== 'select' && $field['type'] !== 'data' ) {
+			if ( in_array( $field['type'], array( 'time' ) ) ) {
 				if ( ! isset( $values['custom_style'] ) || $values['custom_style'] ) {
 					include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/automatic-width.php' );
 				}

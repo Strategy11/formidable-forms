@@ -329,6 +329,29 @@ DEFAULT_HTML;
 		do_action( 'frm_' . $args['field']['type'] . '_primary_field_options', $args );
 	}
 
+	/**
+	 * This is called for any fields with set options (radio, checkbox, select, dynamic, lookup).
+	 *
+	 * @since 4.0
+	 * @param array $args - Includes 'field', 'display', and 'values'
+	 */
+	public function show_extra_field_choices( $args ) {
+		return;
+	}
+
+	/**
+	 *
+	 * @since 4.0
+	 * @param array $args - Includes 'field', 'display', and 'values'
+	 */
+	protected function auto_width_setting( $args ) {
+		$use_style = ( ! isset( $args['values']['custom_style'] ) || $args['values']['custom_style'] );
+		if ( $use_style ) {
+			$field = $args['field'];
+			include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/automatic-width.php' );
+		}
+	}
+
 	/** New field **/
 
 	public function get_new_field_defaults() {

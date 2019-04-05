@@ -370,6 +370,14 @@ class FrmFieldsController {
 			);
 		}
 
+		$display_type = array(
+			'radio'    => FrmField::is_field_type( $field, 'radio' ),
+			'checkbox' => FrmField::is_field_type( $field, 'checkbox' ),
+			'select'   => FrmField::is_field_type( $field, 'select' ),
+			'lookup'   => FrmField::is_field_type( $field, 'lookup' ),
+		);
+		$display_type = array_filter( $display_type );
+
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/settings.php' );
 	}
 

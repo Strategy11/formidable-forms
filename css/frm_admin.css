@@ -1141,6 +1141,22 @@ div.frm_updated_message {
 	margin: 5px 65px;
 }
 
+.frm-inline-message {
+	border: 1px solid var(--primary-hover);
+	border-radius: var(--small-radius);
+	color: var(--primary-hover);
+	background: #fff;
+	text-align: center;
+	padding: 20px;
+	font-size: 14px;
+	line-height: 1.4em;
+}
+
+.frm-inline-message a {
+	font-weight: 600;
+	color: var(--primary-hover);
+}
+
 .frm_ribbon {
 	-webkit-transform: rotate(45deg);
 	-moz-transform: rotate(45deg);
