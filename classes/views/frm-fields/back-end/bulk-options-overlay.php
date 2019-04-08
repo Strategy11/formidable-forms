@@ -1,6 +1,6 @@
 <div id="frm-bulk-modal" class="frm_hidden settings-lite-cta">
 	<a href="#" class="dismiss alignright" title="<?php esc_attr_e( 'Close', 'formidable' ); ?>">
-		<i class="dashicons dashicons-no-alt" aria-label="<?php esc_attr_e( 'Close', 'formidable' ); ?>" aria-hidden="true"></i>
+		<i class="fas fa-times" aria-label="<?php esc_attr_e( 'Close', 'formidable' ); ?>" aria-hidden="true"></i>
 	</a>
 	<h2>
 		<?php esc_html_e( 'Bulk Edit Options', 'formidable' ); ?>
