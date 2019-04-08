@@ -519,6 +519,7 @@ h2#frm_form_heading,
 	max-height: none;
 }
 
+#frm-bulk-modal h2,
 #frm-nav-tabs {
 	margin: 10px 0 20px;
 	padding: 0 15px;
@@ -530,24 +531,30 @@ h2#frm_form_heading,
 	margin: 5px 0 10px;
 }
 
+#frm-bulk-modal h2,
 #frm-nav-tabs li {
 	display: inline-block;
 	font-size: 15px;
 	margin: 0;
 }
 
+#frm-bulk-modal h2,
 #frm-nav-tabs a {
 	color: var(--grey);
 	padding: 10px 1px;
 	margin: 0 9px;
-	display: block;
 	border-bottom: 2px solid transparent;
+}
+
+#frm-nav-tabs a {
+	display: block;
 }
 
 #frm_adv_info #frm-nav-tabs a {
 	color: var(--dark-grey);
 }
 
+#frm-bulk-modal h2,
 #frm-nav-tabs a:hover,
 #frm-nav-tabs .frm-tabs a {
 	color: var(--primary-color);
@@ -559,6 +566,18 @@ h2#frm_form_heading,
 	outline: none;
 	-webkit-box-shadow: none;
 	box-shadow: none;
+}
+
+#frm-bulk-modal h3,
+#frm-bulk-modal h2 {
+	font-size: 16px;
+	margin-left: 20px;
+	font-weight: 400;
+}
+
+#frm-bulk-modal h3 {
+	margin: 5px 20px 10px;
+	color: var(--grey);
 }
 
 .frm-right-panel h3 {
@@ -1418,10 +1437,28 @@ h2.frm-h2 + .howto {
 	width: 48px;
 }
 
+#frm-bulk-modal .frm_grid_container {
+	border-top: 1px solid var(--grey-border);
+	grid-template-columns: repeat(12, 8.33%);
+	grid-gap: 0;
+}
+
+#frm-bulk-modal .frm8 {
+	border-right: 1px solid var(--grey-border);
+	padding: 0 20px 20px;
+}
+
+#frm-bulk-modal .howto {
+	margin: 5px 0 10px;
+	color: var(--grey);
+}
+
 #frm_bulk_options {
 	height: 240px;
-	width: 335px;
-	float: right;
+	width: 100%;
+	border: none;
+	box-shadow: none;
+	padding: 0;
 }
 
 .frm-bulk-edit-link {
@@ -1846,6 +1883,7 @@ a.frm-option-icon:hover::before {
 .frm-embed-field-placeholder {
 	text-align: center;
 	position: relative;
+	height: 145px;
 }
 
 .frm-fake-field {
@@ -2813,7 +2851,7 @@ label.default-style-box input[type="checkbox"] {
 /*for add-on reverse compatibility */
 
 .frm_98_width {
-	width: 98% !important;
+	width: 100% !important;
 }
 
 /*Form Settings Tab*/
@@ -3572,37 +3610,26 @@ span.howto {
 }
 
 .frm_prepop {
-	float: left;
-	width: 235px;
+	width: 100%;
 	list-style: none;
 	overflow: auto;
-	border-right: 2px solid #DEDEDE;
-	padding-right: 10px;
-	padding-left: 10px;
 	margin: 0;
+	max-height: 295px;
 }
 
 .frm_prepop li {
-	margin: 0 0 3px;
-}
-
-.frm_prepop li:first-child {
-	margin-top: 2px;
+	margin: 0;
 }
 
 .frm_prepop li a {
-	background: #F5F5F5;
-	border-width: 1px;
-	border-style: solid;
-	border-color: #EEEEEE #DEDEDE #DEDEDE #EEEEEE;
 	display: block;
-	font-weight: bold;
-	height: 30px;
-	line-height: 30px;
-	margin: 0 10px 0 0;
-	text-align: center;
 	text-decoration: none;
 	cursor: pointer;
+	padding: 5px 20px;
+}
+
+.frm_prepop li a:hover {
+	background: var(--sidebar-color);
 }
 
 /* */

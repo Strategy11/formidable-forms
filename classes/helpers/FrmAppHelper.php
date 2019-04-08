@@ -1974,8 +1974,8 @@ class FrmAppHelper {
 	 * @deprecated 4.0
 	 */
 	public static function insert_opt_html( $args ) {
-		_deprecated_function( __METHOD__, '4.0', 'FrmFormHelper::insert_opt_html' );
-		FrmFormHelper::insert_opt_html( $args );
+		_deprecated_function( __METHOD__, '4.0', 'FrmFormsHelper::insert_opt_html' );
+		FrmFormsHelper::insert_opt_html( $args );
 	}
 
 	/**

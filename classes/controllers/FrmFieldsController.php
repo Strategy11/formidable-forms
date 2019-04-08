@@ -233,52 +233,6 @@ class FrmFieldsController {
 
 	/* Field Options */
 
-	public static function import_choices() {
-		FrmAppHelper::permission_check( 'frm_edit_forms', 'hide' );
-
-		$field_id = isset( $_REQUEST['field_id'] ) ? absint( $_REQUEST['field_id'] ) : 0;
-
-		global $current_screen, $hook_suffix;
-
-		// Catch plugins that include admin-header.php before admin.php completes.
-		if ( empty( $current_screen ) && function_exists( 'set_current_screen' ) ) {
-			$hook_suffix = '';
-			set_current_screen();
-		}
-
-		if ( function_exists( 'register_admin_color_schemes' ) ) {
-			register_admin_color_schemes();
-		}
-
-		$hook_suffix      = '';
-		$admin_body_class = '';
-
-		if ( get_user_setting( 'mfold' ) == 'f' ) {
-			$admin_body_class .= ' folded';
-		}
-
-		if ( function_exists( 'is_admin_bar_showing' ) && is_admin_bar_showing() ) {
-			$admin_body_class .= ' admin-bar';
-		}
-
-		if ( is_rtl() ) {
-			$admin_body_class .= ' rtl';
-		}
-
-		$admin_body_class .= ' admin-color-' . sanitize_html_class( get_user_option( 'admin_color' ), 'fresh' );
-		$prepop           = array();
-		FrmFieldsHelper::get_bulk_prefilled_opts( $prepop );
-
-		$field = FrmField::getOne( $field_id );
-
-		wp_enqueue_script( 'utils' );
-		wp_enqueue_style( 'formidable-admin', FrmAppHelper::plugin_url() . '/css/frm_admin.css', array(), FrmAppHelper::plugin_version() );
-		FrmAppHelper::load_admin_wide_js();
-
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/import_choices.php' );
-		wp_die();
-	}
-
 	public static function import_options() {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
@@ -738,6 +692,14 @@ class FrmFieldsController {
 		}
 
 		return $opt;
+	}
+
+	/**
+	 * @deprecated 4.0
+	 */
+	public static function import_choices() {
+		_deprecated_function( __METHOD__, '4.0' );
+		wp_die();
 	}
 
 	/**

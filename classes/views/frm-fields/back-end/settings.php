@@ -106,8 +106,13 @@
 		<?php
 	} elseif ( in_array( $field['type'], array( 'select', 'radio', 'checkbox' ) ) ) {
 		$has_options = ! empty( $field['options'] );
+		$short_name  = FrmAppHelper::truncate( strip_tags( str_replace( '"', '&quot;', $field['name'] ) ), 20 );
+
+		/* translators: %s: Field name */
+		$option_title = sprintf( __( '%s Options', 'formidable' ), $short_name );
+
 		?>
-		<a href="<?php echo esc_url( admin_url( 'admin-ajax.php?action=frm_import_choices&field_id=' . $field['id'] . '&TB_iframe=1' ) ); ?>" title="<?php echo esc_attr( FrmAppHelper::truncate( strip_tags( str_replace( '"', '&quot;', $field['name'] ) ), 20 ) . ' ' . __( 'Field Choices', 'formidable' ) ); ?>" class="thickbox frm-bulk-edit-link">
+		<a href="#" title="<?php echo esc_attr( $option_title ); ?>" class="frm-bulk-edit-link">
 			<?php esc_html_e( 'Bulk Edit Options', 'formidable' ); ?>
 		</a>
 		<?php do_action( 'frm_add_multiple_opts_labels', $field ); ?>
@@ -206,10 +211,6 @@ do_action( 'frm_before_field_options', $field );
 		<?php
 		if ( $display['format'] ) {
 			FrmFieldsController::show_format_option( $field );
-		}
-
-		if ( $field['type'] === 'html' ) {
-			include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/html-content.php' );
 		}
 		?>
 

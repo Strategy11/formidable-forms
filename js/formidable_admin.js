@@ -962,6 +962,66 @@ function frmAdminBuildJS() {
 		}
 	}
 
+	function initBulkOptionsOverlay() {
+		/*jshint validthis:true */
+		var $info = initModal( '#frm-bulk-modal', '700px' );
+		if ( $info === false ) {
+			return;
+		}
+
+		jQuery( '.frm-insert-preset' ).click( insertBulkPreset );
+
+		jQuery( builderForm ).on( 'click', '.frm-bulk-edit-link', function( event ) {
+			event.preventDefault();
+			var i, key, content = '',
+				fieldId = this.parentNode.parentNode.getAttribute( 'data-fid' ),
+				separate = document.getElementById( 'separate_value_' + fieldId ),
+				optList = document.getElementById( 'frm_field_' + fieldId + '_opts' ),
+				opts = optList.getElementsByTagName( 'li' );
+
+			if ( separate === null ) {
+				separate = 0;
+			} else {
+				separate = separate.value;
+			}
+
+			document.getElementById( 'bulk-field-id' ).value = fieldId;
+
+			for ( i = 0; i < opts.length; i++ ) {
+				key = opts[i].getAttribute( 'data-optkey' );
+				if ( key !== '000' ) {
+					content += document.getElementsByName( 'field_options[options_' + fieldId + '][' + key + '][label]' )[0].value;
+					if ( separate ) {
+						content += '|' + document.getElementsByName( 'field_options[options_' + fieldId + '][' + key + '][value]' )[0].value;
+					}
+					content += "\r\n";
+				}
+
+				if ( i >= opts.length - 1 ) {
+					document.getElementById( 'frm_bulk_options' ).value = content;
+				}
+			}
+
+			$info.dialog('open');
+
+			return false;
+		} );
+
+		jQuery( '#frm-update-bulk-opts' ).click( function() {
+			var fieldId = document.getElementById( 'bulk-field-id' ).value;
+			this.classList.add( 'frm_loading_button' );
+			frmAdminBuild.updateOpts( fieldId, document.getElementById( 'frm_bulk_options' ).value, $info );
+		} );
+	}
+
+	function insertBulkPreset( event ) {
+		/*jshint validthis:true */
+		var opts = JSON.parse( this.getAttribute( 'data-opts' ) );
+		event.preventDefault();
+		document.getElementById( 'frm_bulk_options' ).value = opts.join( "\n" );
+		return false;
+	}
+
 	//Add new option or "Other" option to radio/checkbox/dropdown
 	function addFieldOption() {
 		/*jshint validthis:true */
@@ -3798,6 +3858,7 @@ function frmAdminBuildJS() {
 			$builderForm.on( 'change', 'select.conf_field', addConf );
 
 			$builderForm.on( 'change', '.frm_get_field_selection', getFieldSelection );
+			initBulkOptionsOverlay();
 		},
 
 		settingsInit: function() {
@@ -4211,16 +4272,20 @@ function frmAdminBuildJS() {
 			initiateMultiselect();
 		},
 
-		updateOpts: function( field_id, opts ) {
+		updateOpts: function( field_id, opts, modal ) {
 			$fieldOpts = document.getElementById( 'frm_field_' + field_id + '_opts' );
 			empty( $fieldOpts );
-			// TODO: loading indicator
 			jQuery.ajax( {
-				type: "POST", url: ajaxurl,
-				data: {action: 'frm_import_options', field_id: field_id, opts: opts, nonce: frmGlobal.nonce},
+				type: 'POST',
+				url: ajaxurl,
+				data: {
+					action: 'frm_import_options',
+					field_id: field_id,
+					opts: opts,
+					nonce: frmGlobal.nonce
+				},
 				success: function( html ) {
 					jQuery( '#frm_field_' + field_id + '_opts' ).html( html );
-					// TODO: remove loading
 					if ( jQuery( 'select[name="item_meta[' + field_id + ']"]' ).length > 0 ) {
 						var o = opts.replace( /\s\s*$/, '' ).split( "\n" );
 						var sel = '';
@@ -4228,6 +4293,11 @@ function frmAdminBuildJS() {
 							sel += '<option value="' + o[i] + '">' + o[i] + '</option>';
 						}
 						jQuery( 'select[name="item_meta[' + field_id + ']"]' ).html( sel );
+					}
+
+					if ( typeof modal !== 'undefined' ) {
+						modal.dialog( 'close' );
+						document.getElementById( 'frm-update-bulk-opts' ).classList.remove( 'frm_loading_button' );
 					}
 				}
 			} );

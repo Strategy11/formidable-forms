@@ -36,3 +36,4 @@
 		?>
 	</ul>
 </div>
+<?php FrmFieldsHelper::bulk_options_overlay(); ?>

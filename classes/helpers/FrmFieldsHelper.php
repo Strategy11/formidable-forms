@@ -1258,6 +1258,16 @@ class FrmFieldsHelper {
 		return $val;
 	}
 
+	/**
+	 * @since 4.0
+	 */
+	public static function bulk_options_overlay() {
+		$prepop = array();
+		self::get_bulk_prefilled_opts( $prepop );
+
+		include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/bulk-options-overlay.php' );
+	}
+
 	public static function get_us_states() {
 		$states = array(
 			'AL' => 'Alabama',

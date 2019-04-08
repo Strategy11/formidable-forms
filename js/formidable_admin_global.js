@@ -78,17 +78,6 @@ function frmSelectSubnav(){
     jQuery('#toplevel_page_formidable a.wp-has-submenu').removeClass('wp-not-current-submenu').addClass('wp-has-current-submenu wp-menu-open');
 }
 
-function frmPrePop(opts){
-    jQuery(document.getElementById('frm_bulk_options')).val(opts.join("\n"));
-    return false;
-}
-
-function frmUpdateBulkOpts(fieldID,button) {
-	button.classList.add('frm_loading_button');
-    window.top.frmAdminBuild.updateOpts(fieldID,document.getElementById('frm_bulk_options').value);
-    window.top.tb_remove();
-}
-
 function frmCreatePostEntry(id,post_id){
     jQuery('#frm_create_entry p').replaceWith('<img src="'+ frmGlobal.url +'/images/wpspin_light.gif" alt="'+ frmGlobal.loading +'" />');
     jQuery.ajax({

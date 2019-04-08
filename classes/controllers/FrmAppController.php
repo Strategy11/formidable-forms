@@ -386,7 +386,7 @@ class FrmAppController {
 		}
 
 		$action = FrmAppHelper::simple_get( 'action', 'sanitize_title' );
-		if ( ! FrmAppHelper::doing_ajax() || $action == 'frm_import_choices' ) {
+		if ( ! FrmAppHelper::doing_ajax() ) {
 			// don't continue during ajax calls
 			self::admin_js();
 		}
@@ -436,7 +436,6 @@ class FrmAppController {
 			if ( 'formidable-styles' !== $page ) {
 				wp_enqueue_style( 'formidable-grids' );
 				wp_enqueue_style( 'formidable-dropzone' );
-				add_thickbox();
 			} else {
 				$settings = FrmAppHelper::get_settings();
 				if ( empty( $settings->old_css ) ) {
