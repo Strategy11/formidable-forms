@@ -25,8 +25,9 @@
 		?>
 
 		<p class="frm_hidden frm-no-margin">
-			<input type="button" value="<?php esc_attr_e( 'Update', 'formidable' ); ?>" class="frm_submit_<?php echo ( isset( $values['ajax_load'] ) && $values['ajax_load'] ) ? '' : 'no_'; ?>ajax button-primary" />
-			<span class="frm-loading-img"></span>
+			<button class="frm_submit_<?php echo ( isset( $values['ajax_load'] ) && $values['ajax_load'] ) ? '' : 'no_'; ?>ajax button-primary">
+				<?php esc_attr_e( 'Update', 'formidable' ); ?>"
+			</button>
 		</p>
 
 		<form method="post">

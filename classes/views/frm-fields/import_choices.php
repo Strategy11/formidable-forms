@@ -53,7 +53,9 @@ foreach ( $field->options as $fkey => $fopt ) {
 </textarea>
 
 <p class="submit frm_clear">
-<input type="button" onclick="frmUpdateBulkOpts(<?php echo (int) $field->id; ?>)" class="button-primary" value="<?php esc_attr_e( 'Update Field Choices', 'formidable' ); ?>" />
+<button onclick="frmUpdateBulkOpts(<?php echo (int) $field->id; ?>,this)" class="button-primary frm-button-primary">
+	<?php esc_attr_e( 'Update Field Choices', 'formidable' ); ?>
+</button>
 </p>
 </div>
 
