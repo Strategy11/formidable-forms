@@ -42,20 +42,20 @@
 		<?php } ?>
 
 		<div class="misc-pub-section">
-			<i aria-hidden="true" class="dashicons dashicons-id wp-media-buttons-icon"></i>
+			<i class="fas fa-fingerprint" aria-hidden="true"></i>
 			<?php esc_html_e( 'Entry ID', 'formidable' ); ?>:
 			<b><?php echo absint( $entry->id ); ?></b>
 		</div>
 
 		<div class="misc-pub-section">
-			<i aria-hidden="true" class="dashicons dashicons-post-status wp-media-buttons-icon"></i>
+			<i class="fas fa-key" aria-hidden="true"></i>
 			<?php esc_html_e( 'Entry Key', 'formidable' ); ?>:
 			<b><?php echo esc_html( $entry->item_key ); ?></b>
 		</div>
 
 		<?php if ( $entry->parent_item_id ) { ?>
 			<div class="misc-pub-section">
-				<i aria-hidden="true" class="dashicons dashicons-networking"></i>
+				<i class="fas fa-network-wired" aria-hidden="true"></i>
 				<?php esc_html_e( 'Parent Entry ID', 'formidable' ); ?>:
 				<b><?php echo esc_html( $entry->parent_item_id ); ?></b>
 			</div>
@@ -68,7 +68,7 @@
 	<div class="inside">
 		<?php if ( $entry->user_id ) { ?>
 			<div class="misc-pub-section">
-				<i aria-hidden="true" class="dashicons dashicons-admin-users wp-media-buttons-icon"></i>
+				<i class="far fa-user" aria-hidden="true"></i>
 				<?php
 				printf(
 					/* translators: %1$s: User display name. */
@@ -81,7 +81,7 @@
 
 		<?php if ( $entry->updated_by && $entry->updated_by != $entry->user_id ) { ?>
 			<div class="misc-pub-section">
-				<i aria-hidden="true" class="dashicons dashicons-admin-users wp-media-buttons-icon"></i>
+				<i class="far fa-user" aria-hidden="true"></i>
 				<?php
 				printf(
 					/* translators: %1$s: User display name. */
@@ -94,7 +94,7 @@
 
 		<?php if ( ! empty( $entry->ip ) ) { ?>
 			<div class="misc-pub-section">
-				<i aria-hidden="true" class="dashicons dashicons-location"></i>
+				<i class="fas fa-map-marker-alt" aria-hidden="true"></i>
 				<?php esc_html_e( 'IP Address:', 'formidable' ); ?>
 				<b><?php echo esc_html( $entry->ip ); ?></b>
 			</div>
@@ -102,7 +102,7 @@
 
 		<?php if ( isset( $browser ) ) { ?>
 			<div class="misc-pub-section">
-				<i aria-hidden="true" class="dashicons dashicons-desktop"></i>
+				<i class="far fa-window-maximize" aria-hidden="true"></i>
 				<?php esc_html_e( 'Browser/OS:', 'formidable' ); ?>
 				<b><?php echo wp_kses_post( $browser ); ?></b>
 			</div>
@@ -110,7 +110,7 @@
 
 		<?php if ( isset( $data['referrer'] ) ) { ?>
 			<div class="misc-pub-section frm_force_wrap">
-				<i aria-hidden="true" class="dashicons dashicons-backup"></i>
+				<i class="fas fa-history" aria-hidden="true"></i>
 				<?php esc_html_e( 'Referrer:', 'formidable' ); ?>
 				<?php echo wp_kses_post( str_replace( "\r\n", '<br/>', $data['referrer'] ) ); ?>
 			</div>
@@ -123,7 +123,7 @@
 			}
 			?>
 			<div class="misc-pub-section">
-				<i aria-hidden="true" class="dashicons dashicons-paperclip"></i>
+				<i class="fas fa-paperclip" aria-hidden="true"></i>
 				<?php echo esc_html( ucfirst( str_replace( '-', ' ', $k ) ) ); ?>:
 				<b><?php echo wp_kses_post( implode( ', ', (array) $d ) ); ?></b>
 			</div>

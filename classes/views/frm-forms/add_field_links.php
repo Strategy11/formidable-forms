@@ -43,7 +43,6 @@ $no_allow_class = apply_filters( 'frm_noallow_class', 'frm_noallow' );
 if ( $no_allow_class === 'frm_noallow' ) {
 	$no_allow_class .= ' frm_show_upgrade';
 }
-FrmAppController::include_upgrade_overlay();
 
 foreach ( FrmField::pro_field_selection() as $field_key => $field_type ) {
 

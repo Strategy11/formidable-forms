@@ -689,7 +689,7 @@ class FrmEntriesController {
 		return $formatted_entry;
 	}
 
-	public static function entry_sidebar( $entry ) {
+	public static function entry_sidebar( $entry = false ) {
 		$data        = maybe_unserialize( $entry->description );
 		$date_format = get_option( 'date_format' );
 		$time_format = get_option( 'time_format' );

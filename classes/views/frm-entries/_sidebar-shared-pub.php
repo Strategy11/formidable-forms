@@ -4,7 +4,7 @@ if ( ! isset( $entry ) ) {
 } ?>
 
 <div class="misc-pub-section">
-	<i class="dashicons dashicons-calendar-alt"></i>
+	<i class="far fa-calendar-alt"></i>
 	<span id="timestamp">
 	<?php
 	$date_format = __( 'M j, Y @ G:i', 'formidable' );
@@ -19,7 +19,7 @@ if ( ! isset( $entry ) ) {
 
 <?php if ( $entry->updated_at && $entry->updated_at != $entry->created_at ) { ?>
 <div class="misc-pub-section">
-	<i class="dashicons dashicons-calendar-alt"></i>
+	<i class="far fa-calendar-alt"></i>
 	<span id="timestamp">
 	<?php
 	printf(

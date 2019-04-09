@@ -888,8 +888,6 @@ class FrmFormsController {
 		$sections = self::get_settings_tabs( $values );
 		$current  = FrmAppHelper::simple_get( 't', 'sanitize_title', 'advanced_settings' );
 
-		FrmAppController::include_upgrade_overlay();
-
 		require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/settings.php' );
 	}
 
@@ -978,8 +976,6 @@ class FrmFormsController {
 	 */
 	public static function advanced_settings( $values ) {
 		$first_h3 = 'frm_first_h3';
-
-		FrmAppController::include_upgrade_overlay();
 
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/settings-advanced.php' );
 	}

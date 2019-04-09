@@ -12,11 +12,6 @@
 		);
 		?>
 
-		<div id="frm-bar-two">
-			<h2><?php esc_html_e( 'Form Entries', 'formidable' ); ?></h2>
-			<h2><?php esc_html_e( 'View Entry', 'formidable' ); ?></h2>
-		</div>
-
 		<div class="columns-2">
 
 		<div id="post-body-content" class="frm-fields">
@@ -29,7 +24,13 @@
 					<h3 class="hndle">
 						<span><?php esc_html_e( 'Entry', 'formidable' ); ?></span>
 						<span class="frm-sub-label">
-							<?php echo esc_html( $entry->id ); ?>
+							<?php
+							printf(
+								/* translators: %d: Entry ID */
+								esc_html__( '(ID %d)', 'formidable' ),
+								$entry->id
+							);
+							?>
 						</span>
 					</h3>
 					<?php

@@ -548,6 +548,9 @@ class FrmEntriesHelper {
 						echo 'data-' . esc_attr( $data ) . '="' . esc_attr( $value ) . '" ';
 					}
 				}
+				if ( isset( $link['class'] ) ) {
+					echo 'class="' . esc_attr( $link['class'] ) . '" ';
+				}
 				?>
 				>
 				<i class="<?php echo esc_attr( $link['icon'] ); ?>" aria-hidden="true"></i>
@@ -569,7 +572,7 @@ class FrmEntriesHelper {
 			$actions['frm_view'] = array(
 				'url'   => admin_url( 'admin.php?page=formidable-entries&frm_action=show&id=' . $id . '&form=' . $entry->form_id ),
 				'label' => __( 'View Entry', 'formidable' ),
-				'icon'  => 'dashicons dashicons-welcome-widgets-menus',
+				'icon'  => 'far fa-save',
 			);
 		}
 
@@ -591,26 +594,32 @@ class FrmEntriesHelper {
 				'data'  => array(
 					'frmprint' => '1',
 				),
-				'icon'  => 'dashicons dashicons-format-aside wp-media-buttons-icon',
+				'icon'  => 'fas fa-print',
 			);
 		}
 
 		$actions['frm_resend'] = array(
 			'url'   => '#',
 			'label' => __( 'Resend Emails', 'formidable' ),
+			'class' => 'frm_noallow',
 			'data'  => array(
-				'frmup' => __( 'Resending emails', 'formidable' ),
+				'upgrade' => __( 'Resend Emails', 'formidable' ),
+				'medium'  => 'resend-email',
+				'content' => 'entry',
 			),
-			'icon'  => 'fas fa-envelope',
+			'icon'  => 'far fa-envelope',
 		);
 
 		$actions['frm_edit'] = array(
 			'url'   => '#',
 			'label' => __( 'Edit Entry', 'formidable' ),
+			'class' => 'frm_noallow',
 			'data'  => array(
-				'frmup' => __( 'Editing emails', 'formidable' ),
+				'upgrade' => __( 'Entry edits', 'formidable' ),
+				'medium'  => 'edit-entries',
+				'content' => 'entry',
 			),
-			'icon'  => 'dashicons dashicons-edit',
+			'icon'  => 'far fa-edit',
 		);
 
 		return apply_filters( 'frm_entry_actions_dropdown', $actions, compact( 'id', 'entry' ) );

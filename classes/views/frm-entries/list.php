@@ -12,14 +12,6 @@
 				'close'       => $form ? '?page=formidable-entries&form=' . $form->id : '',
 			)
 		);
-
-		if ( $form ) {
-			?>
-		<div id="frm-bar-two">
-			<h2><?php esc_html_e( 'Form Entries', 'formidable' ); ?></h2>
-		</div>
-			<?php
-		}
 		?>
 
 		<div class="wrap">
