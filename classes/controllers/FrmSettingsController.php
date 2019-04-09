@@ -18,20 +18,43 @@ class FrmSettingsController {
 		global $frm_vars;
 
 		$frm_settings = FrmAppHelper::get_settings();
-		$frm_roles    = FrmAppHelper::frm_capabilities();
 
 		$uploads     = wp_upload_dir();
 		$target_path = $uploads['basedir'] . '/formidable/css';
 
 		$sections = self::get_settings_tabs();
 
-		$captcha_lang = FrmAppHelper::locales( 'captcha' );
-
 		require( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/form.php' );
 	}
 
 	private static function get_settings_tabs() {
-		$sections = array();
+		$sections = array(
+			'general' => array(
+				'class'    => __CLASS__,
+				'function' => 'general_settings',
+				'name'     => __( 'General Settings', 'formidable' ),
+				'icon'     => 'fas fa-cog',
+			),
+			'messages' => array(
+				'class'    => __CLASS__,
+				'function' => 'message_settings',
+				'name'     => __( 'Message Defaults', 'formidable' ),
+				'icon'     => 'fas fa-stamp',
+			),
+			'permissions' => array(
+				'class'    => __CLASS__,
+				'function' => 'permission_settings',
+				'name'     => __( 'Permissions', 'formidable' ),
+				'icon'     => 'fas fa-unlock-alt',
+			),
+			'recaptcha' => array(
+				'class'    => __CLASS__,
+				'function' => 'recaptcha_settings',
+				'name'     => __( 'reCaptcha', 'formidable' ),
+				'icon'     => 'fas fa-shield-alt',
+			),
+		);
+
 		if ( apply_filters( 'frm_include_addon_page', false ) ) {
 			// if no addons need a license, skip this page
 			$show_licenses    = false;
@@ -54,6 +77,12 @@ class FrmSettingsController {
 		}
 		$sections = apply_filters( 'frm_add_settings_section', $sections );
 
+		foreach ( $sections as $key => $section ) {
+			if ( ! isset( $section['icon'] ) ) {
+				$sections[ $key ]['icon'] = 'fas fa-cog';
+			}
+		}
+
 		return $sections;
 	}
 
@@ -75,6 +104,47 @@ class FrmSettingsController {
 			call_user_func( ( isset( $section['function'] ) ? $section['function'] : $section ) );
 		}
 		wp_die();
+	}
+
+	/**
+	 * @since 4.0
+	 */
+	public static function general_settings() {
+		$frm_settings = FrmAppHelper::get_settings();
+
+		$uploads     = wp_upload_dir();
+		$target_path = $uploads['basedir'] . '/formidable/css';
+
+		include( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/general.php' );
+	}
+
+	/**
+	 * @since 4.0
+	 */
+	public static function message_settings() {
+		$frm_settings = FrmAppHelper::get_settings();
+
+		include( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/messages.php' );
+	}
+
+	/**
+	 * @since 4.0
+	 */
+	public static function recaptcha_settings() {
+		$frm_settings = FrmAppHelper::get_settings();
+		$captcha_lang = FrmAppHelper::locales( 'captcha' );
+
+		include( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/recaptcha.php' );
+	}
+
+	/**
+	 * @since 4.0
+	 */
+	public static function permission_settings() {
+		$frm_settings = FrmAppHelper::get_settings();
+		$frm_roles    = FrmAppHelper::frm_capabilities();
+
+		include( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/permissions.php' );
 	}
 
 	public static function process_form( $stop_load = false ) {

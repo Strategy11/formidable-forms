@@ -8,13 +8,18 @@
 			array(
 				'label'       => __( 'Form Entries', 'formidable' ),
 				'form'        => $form,
-				'hide_title'  => true,
 				'close'       => $form ? '?page=formidable-entries&form=' . $form->id : '',
 			)
 		);
 		?>
 
 		<div class="wrap">
+			<?php if ( $form ) { ?>
+				<h2>
+					<?php esc_html_e( 'Form Entries', 'formidable' ); ?>
+				</h2>
+			<?php } ?>
+
 			<?php require( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' ); ?>
 
 			<form id="posts-filter" method="get">

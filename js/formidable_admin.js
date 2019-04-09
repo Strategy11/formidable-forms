@@ -271,16 +271,16 @@ function frmAdminBuildJS() {
 		if ( link.closest( 'div' ).find( '.tabs-panel' ).length ) {
 			link.closest( 'div' ).children( '.tabs-panel' ).not( t ).not( c ).hide();
 		} else {
-			if ( link.closest( 'ul' ).hasClass( 'frm-form-setting-tabs' ) ) {
-				/* form settings page */
-				jQuery( '#frm-categorydiv .tabs-panel, .hide_with_tabs' ).hide();
-			} else {
+			if ( document.getElementById( 'form_global_settings' ) !== null ) {
 				/* global settings */
 				var ajax = link.data( 'frmajax' );
 				link.closest( '.frm_wrap' ).find( '.tabs-panel, .hide_with_tabs' ).hide();
 				if ( typeof ajax !== 'undefined' && ajax == '1' ) {
 					loadSettingsTab( t );
 				}
+			} else {
+				/* form settings page */
+				jQuery( '#frm-categorydiv .tabs-panel, .hide_with_tabs' ).hide();
 			}
 		}
 		jQuery( t ).show();

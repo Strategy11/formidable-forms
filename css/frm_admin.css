@@ -35,18 +35,13 @@ a.frm_confirming,
 	margin: 10px 40px 30px;
 }
 
-.formidable_page_formidable-pro-upgrade #post-body-content,
-.toplevel_page_formidable #post-body-content {
+.columns-2 .frm-right-panel + #post-body-content {
 	margin-bottom: 26px;
 	border-left: 1px solid var(--sidebar-hover);
 }
 
 .toplevel_page_formidable #post-body-content {
 	overflow-x: visible;
-}
-
-#form_show_entry_page #post-body-content {
-	border-right: 1px solid var(--grey-border);
 }
 
 .formidable_page_formidable-pro-upgrade #wpfooter,
@@ -167,7 +162,6 @@ td.column-title .frm_actions_dropdown {
 	padding: 0 15px;
 }
 
-.post-type-frm_display.post-php #frm_form_heading,
 .post-type-frm_display.post-new-php #frm_top_bar {
 	padding-left: 0;
 	padding-right: 0;
@@ -280,9 +274,13 @@ ul.frm_form_nav > li {
 }
 
 #frm_top_bar h1 {
-	display: inline;
+	display: inline-block;
 	font-weight: 400;
 	font-size: 24px;
+}
+
+.frm-simple-header #frm_top_bar h1 {
+	margin: 15px;
 }
 
 #frm_top_bar h1,
@@ -344,18 +342,6 @@ ul.frm_form_nav > li {
 .wrap > .subsubsub {
 	clear: both;
 	margin: 0;
-}
-
-h2#frm_form_heading,
-#frm_form_heading {
-	height: auto;
-	margin: 0;
-	font-size: 24px;
-	font-weight: normal;
-	letter-spacing: 1px;
-	padding: 0 40px 8px;
-	line-height: 1.4;
-	color: #72777C;
 }
 
 .frm_wrap .frm_page_container {
@@ -470,6 +456,7 @@ h2#frm_form_heading,
 	z-index: 2;
 }
 
+#form_global_settings .columns-2 .frm-right-panel,
 #form_settings_page .columns-2 .frm-right-panel {
 	flex: 0 0 275px;
 	width: 275px;
@@ -478,6 +465,10 @@ h2#frm_form_heading,
 
 .frm-inner-content {
 	padding: 10px 25px;
+}
+
+.frm_settings_form > .tabs-panel {
+	padding: 0 25px 10px;
 }
 
 #form_settings_page .frm-inner-content {
@@ -665,7 +656,7 @@ h2#frm_form_heading,
 	display: none;
 }
 
-.frm_list_entry_page #frm_form_heading {
+.frm_list_entry_page h2 {
 	float: left;
 }
 
@@ -1027,11 +1018,11 @@ a.frm_hidden,
 	clear: both;
 }
 
-.frm_wrap #post-body-content h2 {
-	margin: 10px 40px;
+.frm_page_container h2 {
+	margin: 10px 0;
 	color: var(--medium-grey);
 	font-weight: 500;
-	font-size: 20px;
+	font-size: 19px;
 }
 
 #frm_form_editor_container {
@@ -1286,15 +1277,6 @@ div.frm_updated_message {
 	background-color: #f37656;
 	color: #fff;
 	text-align: center;
-}
-
-h2.frm-h2 {
-	color: var(--dark-grey);
-	border-bottom: 1px solid var(--grey-border);
-	font-size: 19px !important;
-	font-weight: 500 !important;
-	padding: 9px 0 5px;
-	margin: 0;
 }
 
 h2.frm-h2 + .howto {
@@ -2879,14 +2861,18 @@ label.default-style-box input[type="checkbox"] {
 }
 
 /*Form Settings Tab*/
+
+h2.frm-h2,
 .frm_form_settings h2 {
-	font-size: 20px;
 	border-bottom: 1px solid var(--grey-border);
-	padding-bottom: 10px;
-	margin-bottom: 0;
-	font-weight: normal;
+	color: var(--dark-grey);
+	font-size: 19px !important;
+	font-weight: 500 !important;
+	padding: 9px 0 5px;
+	margin: 0;
 }
 
+.frm_settings_form h3,
 .frm_form_settings h3 {
 	font-size: 16px;
 	border-top: 1px solid var(--grey-border);
@@ -4187,16 +4173,16 @@ tr.frm_options_heading td {
 .frm_left_label {
 	clear: both;
 	float: left;
-	width: 210px;
+	width: 32% !important;
+	margin-right: 2% !important;
 	line-height: 2em;
-	padding-right: 10px;
 }
 
 table td.frm_left_label {
-	width: 210px;
+	width: 32%;
 	float: none;
 	line-height: inherit;
-	padding-right: 0;
+	padding: 5px 0 5px 2%;
 }
 
 .frm_left_label.frm_alignright {
@@ -4204,9 +4190,15 @@ table td.frm_left_label {
 	text-align: right;
 }
 
+.frm-fields .frm_left_label + input[type=text],
 .frm_with_left_label {
-	width: 68%;
-	float: left;
+	width: 66%;
+}
+
+
+td.frm_left_label + td {
+	width: 66%;
+	padding-top: 0;
 }
 
 #html_settings label {
@@ -4408,6 +4400,7 @@ ul.frm-category-tabs {
 .frm_wrap .search-box {
 	float: right;
 	margin-bottom: 15px;
+	clear: right;
 }
 
 .frm-search {
@@ -4420,6 +4413,10 @@ ul.frm-category-tabs {
 	float: none;
 	width: 100%;
 	clear: both;
+}
+
+.frm-button-group a {
+	margin: 0 7px !important;
 }
 
 .frm-with-left-icon,
@@ -5372,7 +5369,7 @@ iframe#dyncontent_ifr {
 	margin-right: 0;
 }
 
-.rtl .frm_list_entry_page #frm_form_heading {
+.rtl .frm_list_entry_page h2 {
 	float: right;
 }
 
@@ -5515,6 +5512,7 @@ Responsive Design
 	}
 
 	#frm-fixed,
+	#wpbody-content #form_global_settings .columns-2 .frm-right-panel,
 	#wpbody-content #form_settings_page .columns-2 .frm-right-panel {
 		width: auto;
 		max-width: 300px;
