@@ -60,7 +60,7 @@
 												call_user_func( ( isset( $section['function'] ) ? $section['function'] : $section ) );
 											}
 										}
-										do_action( 'frm_' .  $sec_name . '_settings_form', $frm_settings );
+										do_action( 'frm_' . $sec_name . '_settings_form', $frm_settings );
 										?>
 									</div>
 								<?php } ?>

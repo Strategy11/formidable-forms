@@ -35,13 +35,13 @@
 
 <?php do_action( 'frm_style_general_settings', $frm_settings ); ?>
 
+
+<h3><?php esc_html_e( 'Miscellaneous', 'formidable' ); ?></h3>
 <?php do_action( 'frm_settings_form', $frm_settings ); ?>
 
 <div class="clear"></div>
 
 <?php if ( ! FrmAppHelper::pro_is_installed() ) { ?>
-	<h3><?php esc_html_e( 'Miscellaneous', 'formidable' ); ?></h3>
-
 	<input type="hidden" name="frm_menu" id="frm_menu" value="<?php echo esc_attr( $frm_settings->menu ); ?>"/>
 	<input type="hidden" name="frm_mu_menu" id="frm_mu_menu" value="<?php echo esc_attr( $frm_settings->mu_menu ); ?>"/>
 <?php } ?>

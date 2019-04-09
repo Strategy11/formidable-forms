@@ -28,7 +28,7 @@
 							printf(
 								/* translators: %d: Entry ID */
 								esc_html__( '(ID %d)', 'formidable' ),
-								$entry->id
+								esc_attr( $entry->id )
 							);
 							?>
 						</span>
