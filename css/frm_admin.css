@@ -1138,16 +1138,6 @@ form .form-field.frm_field_loading {
 	background-color: #fff;
 }
 
-.frm_error_style {
-	color: #B94A48;
-	border: 1px solid #EBCCD1;
-	background-color: #F2DEDE;
-	padding: 8px 15px;
-	font-size: 14px;
-	margin: 5px 20px 15px;
-	border-radius: 4px;
-}
-
 .frm_pro_license_msg {
 	clear: left;
 	margin-top: 10px;
@@ -1196,6 +1186,7 @@ form .form-field.frm_field_loading {
 	padding: 5px 12px;
 }
 
+.frm_error_style,
 .frm_message,
 #post-body-content .frm_updated_message,
 div.frm_updated_message {
@@ -1209,8 +1200,14 @@ div.frm_updated_message {
 	text-align: center;
 }
 
-#post-body-content .frm_updated_message {
+#post-body-content > .frm_updated_message {
 	margin: 5px 65px;
+}
+
+.frm_error_style {
+	color: #B94A48;
+	border-color: #EBCCD1;
+	background-color: #F2DEDE;
 }
 
 .frm-inline-message {
@@ -2776,6 +2773,10 @@ label.frm-example-icon {
 
 .frm_license_msg {
 	margin-top: 0;
+}
+
+.frm_unauthorized_box .frm-show-authorized {
+	display: none;
 }
 
 .edd_frm_status_icon.frm_icon_font {

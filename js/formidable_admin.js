@@ -2995,7 +2995,7 @@ function frmAdminBuildJS() {
 			success: function( msg ) {
 				var messageBox = jQuery( '.frm_pro_license_msg' );
 				if ( msg.success === true ) {
-					document.getElementById( 'frm_license_bottom' ).style.display = 'block';
+					document.getElementById( 'pro_cred_form' ).classList.remove( 'frm_unauthorized_box' );
 					messageBox.removeClass( 'frm_error_style' ).addClass( 'frm_message frm_updated_message' );
 					input.value = '•••••••••••••••••••';
 				} else {
@@ -3020,17 +3020,21 @@ function frmAdminBuildJS() {
 			return false;
 		}
 		var $link = jQuery( this );
-		$link.next( '.spinner' ).show();
 		var pluginSlug = $link.data( 'plugin' );
 		var input = document.getElementById( 'edd_' + pluginSlug + '_license_key' );
 		var license = input.value;
 		jQuery.ajax( {
-			type: 'POST', url: ajaxurl,
-			data: {action: 'frm_addon_deactivate', license: license, plugin: pluginSlug, nonce: frmGlobal.nonce},
+			type: 'POST',
+			url: ajaxurl,
+			data: {
+				action: 'frm_addon_deactivate',
+				license: license,
+				plugin: pluginSlug,
+				nonce: frmGlobal.nonce
+			},
 			success: function( msg ) {
-				jQuery( '.spinner, #frm_license_bottom' ).fadeOut( 'slow' );
+				document.getElementById( 'pro_cred_form' ).classList.add( 'frm_unauthorized_box' );
 				input.value = '';
-				$link.fadeOut( 'slow' );
 			}
 		} );
 		return false;
