@@ -1,14 +1,4 @@
-<div class="posttypediv">
-	<ul class="posttype-tabs add-menu-item-tabs">
-		<li <?php echo ( 'default' === $current_tab ? ' class="tabs"' : '' ); ?>>
-			<a href="<?php echo esc_url( '?page=formidable-styles&page-tab=default#tabs-panel-success-msg' ); ?>" class="nav-tab-link" data-type="tabs-panel-success-msg"><?php esc_html_e( 'Success', 'formidable' ); ?></a>
-		</li>
-		<li <?php echo ( 'error-msg' === $current_tab ? ' class="tabs"' : '' ); ?>>
-			<a href="<?php echo esc_url( '?page=formidable-styles&page-tab=error-msge#page-error-msg' ); ?>" class="nav-tab-link" data-type="tabs-panel-error-msg"><?php esc_html_e( 'Error', 'formidable' ); ?></a>
-		</li>
-	</ul><!-- .posttype-tabs -->
-
-	<div id="tabs-panel-success-msg" class="tabs-panel <?php echo esc_attr( 'default' === $current_tab ? 'tabs-panel-active' : 'tabs-panel-inactive' ); ?>">
+		<h4><span><?php esc_html_e( 'Success Messages', 'formidable' ); ?></span></h4>
 		<div class="field-group field-group-border clearfix">
 			<label><?php esc_html_e( 'BG color', 'formidable' ); ?></label>
 			<div class="hasPicker">
@@ -28,9 +18,8 @@
 			<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'success_font_size' ) ); ?>" id="frm_success_font_size" value="<?php echo esc_attr( $style->post_content['success_font_size'] ); ?>"  size="3" />
 		</div>
 		<div class="clear"></div>
-	</div><!-- /.tabs-panel -->
 
-	<div id="tabs-panel-error-msg" class="tabs-panel <?php echo esc_attr( 'error-msg' === $current_tab ? 'tabs-panel-active' : 'tabs-panel-inactive' ); ?>">
+		<h4><span><?php esc_html_e( 'Error Messages', 'formidable' ); ?></span></h4>
 		<div class="field-group field-group-border clearfix">
 			<label><?php esc_html_e( 'BG color', 'formidable' ); ?></label>
 			<div class="hasPicker">
@@ -52,6 +41,3 @@
 			<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'error_font_size' ) ); ?>" id="frm_error_font_size" value="<?php echo esc_attr( $style->post_content['error_font_size'] ); ?>"  size="3" />
 		</div>
 		<div class="clear"></div>
-	</div><!-- /.tabs-panel -->
-
-</div>

@@ -1,28 +1,3 @@
-<div class="posttypediv">
-		<ul class="posttype-tabs add-menu-item-tabs">
-			<li <?php echo ( 'default' === $current_tab ? ' class="tabs"' : '' ); ?>>
-				<a href="?page=formidable-styles&page-tab=default#tabs-panel-default-color" class="nav-tab-link" data-type="tabs-panel-default-color">
-					<?php esc_html_e( 'Default', 'formidable' ); ?>
-				</a>
-			</li>
-			<li <?php echo ( 'active-color' === $current_tab ? ' class="tabs"' : '' ); ?>>
-				<a href="<?php echo esc_url( '?page=formidable-styles&page-tab=active-color#page-active-color' ); ?>" class="nav-tab-link" data-type="tabs-panel-active-color">
-					<?php esc_html_e( 'Active', 'formidable' ); ?>
-				</a>
-			</li>
-			<li <?php echo ( 'active-error' === $current_tab ? ' class="tabs"' : '' ); ?>>
-				<a href="?page=formidable-styles&page-tab=active-error#tabs-panel-active-error" class="nav-tab-link" data-type="tabs-panel-active-error">
-					<?php esc_html_e( 'Error', 'formidable' ); ?>
-				</a>
-			</li>
-			<li <?php echo ( 'read-only' === $current_tab ? ' class="tabs"' : '' ); ?>>
-				<a href="?page=formidable-styles&page-tab=read-only#tabs-panel-read-only" class="nav-tab-link" data-type="tabs-panel-read-only">
-					<?php esc_html_e( 'Read Only', 'formidable' ); ?>
-				</a>
-			</li>
-		</ul><!-- .posttype-tabs -->
-
-		<div id="tabs-panel-default-color" class="tabs-panel <?php echo esc_attr( 'default' === $current_tab ? 'tabs-panel-active' : 'tabs-panel-inactive' ); ?>">
 			<div class="field-group field-group-border clearfix">
 				<label class="background"><?php esc_html_e( 'BG color', 'formidable' ); ?></label>
 				<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'bg_color' ) ); ?>" id="frm_bg_color" class="hex" value="<?php echo esc_attr( $style->post_content['bg_color'] ); ?>" />
@@ -64,9 +39,8 @@
 					<?php esc_html_e( 'Remove box shadow', 'formidable' ); ?>
 				</label>
 			</p>
-		</div><!-- /.tabs-panel -->
 
-		<div id="tabs-panel-active-color" class="tabs-panel <?php echo esc_attr( 'active-color' == $current_tab ? 'tabs-panel-active' : 'tabs-panel-inactive' ); ?>">
+			<h4><span><?php esc_html_e( 'Active Style', 'formidable' ); ?></span></h4>
 			<div class="field-group field-group-border clearfix">
 				<label class="background"><?php esc_html_e( 'BG color', 'formidable' ); ?></label>
 				<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'bg_color_active' ) ); ?>" id="frm_bg_color_active" class="hex" value="<?php echo esc_attr( $style->post_content['bg_color_active'] ); ?>" />
@@ -82,9 +56,8 @@
 					<?php esc_html_e( 'Remove box shadow', 'formidable' ); ?>
 				</label>
 			</p>
-		</div><!-- /.tabs-panel -->
 
-		<div id="tabs-panel-active-error" class="tabs-panel <?php echo esc_attr( 'active-error' == $current_tab ? 'tabs-panel-active' : 'tabs-panel-inactive' ); ?>">
+			<h4><span><?php esc_html_e( 'Error Style', 'formidable' ); ?></span></h4>
 			<div class="field-group field-group-border clearfix">
 				<label class="background"><?php esc_html_e( 'BG color', 'formidable' ); ?></label>
 				<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'bg_color_error' ) ); ?>" id="frm_bg_color_error" class="hex" value="<?php echo esc_attr( $style->post_content['bg_color_error'] ); ?>" />
@@ -121,9 +94,8 @@
 			</div>
 
 			<div class="clear"></div>
-		</div><!-- /.tabs-panel -->
 
-		<div id="tabs-panel-read-only" class="tabs-panel <?php echo esc_html( 'read-only' === $current_tab ? 'tabs-panel-active' : 'tabs-panel-inactive' ); ?>">
+			<h4><span><?php esc_html_e( 'Read Only Style', 'formidable' ); ?></span></h4>
 			<div class="field-group field-group-border clearfix">
 				<label class="background"><?php esc_html_e( 'BG color', 'formidable' ); ?></label>
 				<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'bg_color_disabled' ) ); ?>" id="frm_bg_color_disabled" class="hex" value="<?php echo esc_attr( $style->post_content['bg_color_disabled'] ); ?>" />
@@ -138,5 +110,4 @@
 				<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'border_color_disabled' ) ); ?>" id="frm_border_color_disabled" class="hex" value="<?php echo esc_attr( $style->post_content['border_color_disabled'] ); ?>" />
 			</div>
 			<div class="clear"></div>
-		</div><!-- /.tabs-panel -->
-</div>
+

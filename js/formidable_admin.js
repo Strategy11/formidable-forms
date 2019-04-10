@@ -42,27 +42,28 @@ function frmAdminBuildJS() {
 
 	function confirmClick( e ) {
 		/*jshint validthis:true */
-		var $link = jQuery( this );
-		if ( $link.hasClass( 'frm_confirming' ) ) {
+		if ( this.classList.contains( 'frm_confirming' ) ) {
 			return true;
 		} else {
 			e.stopPropagation();
 			e.preventDefault();
-			confirmLinkClick( $link );
+			confirmLinkClick( this );
 		}
 	}
 
-	function confirmLinkClick( $link ) {
-		var message = $link.data( 'frmverify' );
+	function confirmLinkClick( link ) {
+		var message = link.getAttribute( 'data-frmverify' );
 
-		if ( typeof message === 'undefined' || $link.hasClass( 'frm_confirming' ) ) {
+		if ( typeof message === 'undefined' || link.classList.contains( 'frm_confirming' ) ) {
 			return true;
 		} else {
-			$link.addClass( 'frm_confirming' );
+			link.classList.add( 'frm_confirming' );
 
+			var $link = jQuery( link );
 			var $label = $link.find( '.frm_link_label' );
 			if ( $label.length < 1 ) {
 				$label = $link;
+				link.setAttribute( 'data-label', link.innerHTML );
 			}
 
 			var oldLabel = $label.html();
@@ -70,11 +71,16 @@ function frmAdminBuildJS() {
 			$label.html( message );
 
 			setTimeout( function() {
-				$link.removeClass( 'frm_confirming' );
+				link.classList.remove( 'frm_confirming' );
 				$label.html( oldLabel );
 			}, 5000 );
 			return false;
 		}
+	}
+
+	function reverseConfirm( link ) {
+		link.classList.remove( 'frm_confirming' );
+		link.innerHTML = link.getAttribute( 'data-label' );
 	}
 
 	function toggleItem( e ) {
@@ -4194,10 +4200,16 @@ function frmAdminBuildJS() {
 				jQuery( this ).closest( 'li' ).addClass( 'active' );
 			} );
 
-			jQuery( '.frm_reset_style' ).click( function() {
-				if ( !confirm( frm_admin_js.confirm ) ) {
-					return false;
+			jQuery( '.frm_reset_style' ).click( function( e ) {
+				var button = this;
+				if ( ! button.classList.contains( 'frm_confirming' ) ) {
+					return;
 				}
+
+				button.classList.add( 'frm_loading_button' );
+				e.stopPropagation();
+				reverseConfirm( button );
+
 				jQuery.ajax( {
 					type: 'POST', url: ajaxurl,
 					data: {action: 'frm_settings_reset', nonce: frmGlobal.nonce},
@@ -4211,6 +4223,7 @@ function frmAdminBuildJS() {
 						}
 						jQuery( '#frm_submit_style, #frm_auto_width' ).prop( 'checked', false );
 						jQuery( document.getElementById( 'frm_fieldset' ) ).change();
+						button.classList.remove( 'frm_loading_button' );
 					}
 				} );
 			} );

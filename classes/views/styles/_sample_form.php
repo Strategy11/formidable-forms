@@ -1,14 +1,5 @@
 <div class="frm_forms with_frm_style frm_style_<?php echo esc_attr( $style->post_name ); ?> <?php echo esc_attr( FrmAppHelper::pro_is_installed() ? 'frm_pro_form' : 'frm_lite_form' ); ?>">
 <div class="frm-show-form">
-<div class="frm_message">
-	<strong><?php esc_html_e( 'SAMPLE:', 'formidable' ); ?></strong>
-	<?php echo wp_kses_post( $frm_settings->success_msg ); ?>
-</div>
-
-<div class="frm_error_style">
-	<strong><?php esc_html_e( 'SAMPLE:', 'formidable' ); ?></strong>
-	<?php echo wp_kses_post( $frm_settings->invalid_msg ); ?>
-</div>
 
 <?php $pos_class = 'frm_pos_container frm_' . ( $style->post_content['position'] == 'none' ? 'top' : ( $style->post_content['position'] == 'no_label' ? 'none' : $style->post_content['position'] ) ) . '_container'; ?>
 
@@ -76,6 +67,17 @@
 <div class="frm_submit">
 <input type="submit" disabled="disabled" class="frm_full_opacity" value="<?php esc_attr_e( 'Submit', 'formidable' ); ?>" />
 </div>
+
+<div class="frm_message">
+	<strong><?php esc_html_e( 'SAMPLE:', 'formidable' ); ?></strong>
+	<?php echo wp_kses_post( $frm_settings->success_msg ); ?>
+</div>
+
+<div class="frm_error_style">
+	<strong><?php esc_html_e( 'SAMPLE:', 'formidable' ); ?></strong>
+	<?php echo wp_kses_post( $frm_settings->invalid_msg ); ?>
+</div>
+
 </div>
 
 </fieldset>

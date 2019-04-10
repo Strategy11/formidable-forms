@@ -6,20 +6,6 @@
 	</label>
 </p>
 
-<div class="posttypediv">
-	<ul class="posttype-tabs add-menu-item-tabs">
-		<li <?php echo ( 'default' === $current_tab ? ' class="tabs"' : '' ); ?>>
-			<a href="<?php echo esc_url( '?page=formidable-styles&page-tab=default#tabs-panel-button-default' ); ?>" class="nav-tab-link" data-type="tabs-panel-button-default" ><?php esc_html_e( 'Default', 'formidable' ); ?></a>
-		</li>
-		<li <?php echo ( 'button-hover' === $current_tab ? ' class="tabs"' : '' ); ?>>
-			<a href="<?php echo esc_url( '?page=formidable-styles&page-tab=button-hover#page-button-hover' ); ?>" class="nav-tab-link" data-type="tabs-panel-button-hover" ><?php esc_html_e( 'Hover', 'formidable' ); ?></a>
-		</li>
-		<li <?php echo ( 'button-click' === $current_tab ? ' class="tabs"' : '' ); ?>>
-			<a href="?page=formidable-styles&page-tab=button-click#tabs-panel-button-click" class="nav-tab-link" data-type="tabs-panel-button-click"><?php esc_html_e( 'Click', 'formidable' ); ?></a>
-		</li>
-	</ul><!-- .posttype-tabs -->
-
-	<div id="tabs-panel-button-default" class="tabs-panel <?php echo esc_attr( 'default' === $current_tab ? 'tabs-panel-active' : 'tabs-panel-inactive' ); ?>">
 		<div class="field-group field-group-border clearfix">
 			<label for="frm_submit_font_size"><?php esc_html_e( 'Size', 'formidable' ); ?></label>
 			<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'submit_font_size' ) ); ?>" id="frm_submit_font_size" value="<?php echo esc_attr( $style->post_content['submit_font_size'] ); ?>"  size="3" />
@@ -90,9 +76,8 @@
 			<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'submit_padding' ) ); ?>" id="frm_submit_padding" value="<?php echo esc_attr( $style->post_content['submit_padding'] ); ?>" size="6" />
 		</div>
 		<div class="clear"></div>
-	</div><!-- /.tabs-panel -->
 
-	<div id="tabs-panel-button-hover" class="tabs-panel <?php echo esc_attr( 'button-hover' === $current_tab ? 'tabs-panel-active' : 'tabs-panel-inactive' ); ?>">
+		<h4><span><?php esc_html_e( 'On Hover', 'formidable' ); ?></span></h4>
 		<div class="field-group clearfix">
 			<label for="frm_submit_hover_bg_color"><?php esc_html_e( 'BG color', 'formidable' ); ?></label>
 			<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'submit_hover_bg_color' ) ); ?>" id="frm_submit_hover_bg_color" class="hex" value="<?php echo esc_attr( $style->post_content['submit_hover_bg_color'] ); ?>" />
@@ -107,11 +92,9 @@
 			<label for="frm_submit_hover_border_color"><?php esc_html_e( 'Border', 'formidable' ); ?></label>
 			<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'submit_hover_border_color' ) ); ?>" id="frm_submit_hover_border_color" class="hex" value="<?php echo esc_attr( $style->post_content['submit_hover_border_color'] ); ?>" />
 		</div>
-
 		<div class="clear"></div>
-	</div><!-- /.tabs-panel -->
 
-	<div id="tabs-panel-button-click" class="tabs-panel <?php echo esc_attr( 'button-click' === $current_tab ? 'tabs-panel-active' : 'tabs-panel-inactive' ); ?>">
+		<h4><span><?php esc_html_e( 'On Click', 'formidable' ); ?></span></h4>
 		<div class="field-group clearfix">
 			<label for="frm_submit_active_bg_color"><?php esc_html_e( 'BG color', 'formidable' ); ?></label>
 			<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'submit_active_bg_color' ) ); ?>" id="frm_submit_active_bg_color" class="hex" value="<?php echo esc_attr( $style->post_content['submit_active_bg_color'] ); ?>" />
@@ -128,6 +111,3 @@
 		</div>
 
 		<div class="clear"></div>
-	</div><!-- /.tabs-panel -->
-
-</div>

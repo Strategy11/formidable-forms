@@ -14,25 +14,29 @@
 		call_user_func( $atts['publish'][0], $atts['publish'][1] );
 	}
 
+	?>
+	<a href="?page=formidable" class="frm-header-logo">
+	<?php
+	FrmAppHelper::show_logo(
+		array(
+			'height' => 35,
+			'width'  => 35,
+		)
+	);
+	?>
+	</a>
+
+	<?php
 	// Add form nav
 	if ( $has_nav ) {
 		FrmAppController::get_form_nav( $atts['form'], true, 'hide' );
+	} elseif ( isset( $atts['switcher'] ) ) {
+		call_user_func( $atts['switcher'][0], $atts['switcher'][1] );
 	} else {
 		// Used when no form is currently selected.
 		?>
 
-	<div class="frm_top_left">
-		<a href="?page=formidable" class="frm-header-logo">
-		<?php
-		FrmAppHelper::show_logo(
-			array(
-				'height' => 35,
-				'width'  => 35,
-			)
-		);
-		?>
-		</a>
-
+	<div class="frm_top_left <?php echo esc_attr( isset( $atts['nav'] ) ? 'alignleft' : '' ); ?>">
 		<h1>
 			<?php echo esc_html( $atts['label'] ); ?>
 			<?php FrmAppHelper::add_new_item_link( $atts ); ?>
@@ -44,6 +48,10 @@
 		</h1>
 	</div>
 		<?php
+	}
+
+	if ( isset( $atts['nav'] ) ) {
+		echo FrmAppHelper::kses( $atts['nav'], 'all' ); // WPCS: XSS ok.
 	}
 	?>
 	<div class="clear"></div>

@@ -11,23 +11,85 @@ class FrmStylesHelper {
 		return $uploads;
 	}
 
+	/**
+	 * @since 4.0
+	 */
+	public static function get_style_menu( $active = '' ) {
+		ob_start();
+		self::style_menu( $active );
+		$menu = ob_get_contents();
+		ob_end_clean();
+
+		return $menu;
+	}
+
 	public static function style_menu( $active = '' ) {
 		?>
-		<h2 class="nav-tab-wrapper">
-			<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-styles' ) ); ?>"
-				class="nav-tab <?php echo ( '' == $active ) ? 'nav-tab-active' : ''; ?>">
-				<?php esc_html_e( 'Edit Styles', 'formidable' ); ?>
-			</a>
-			<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-styles&frm_action=manage' ) ); ?>"
-				class="nav-tab <?php echo ( 'manage' == $active ) ? 'nav-tab-active' : ''; ?>">
-				<?php esc_html_e( 'Manage Form Styles', 'formidable' ); ?>
-			</a>
-			<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-styles&frm_action=custom_css' ) ); ?>"
-				class="nav-tab <?php echo ( 'custom_css' == $active ) ? 'nav-tab-active' : ''; ?>">
-				<?php esc_html_e( 'Custom CSS', 'formidable' ); ?>
-			</a>
-		</h2>
+		<ul class="frm_form_nav">
+			<li>
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-styles' ) ); ?>"
+					class="<?php echo ( '' == $active ) ? 'current_page' : ''; ?>">
+					<?php esc_html_e( 'Edit Styles', 'formidable' ); ?>
+				</a>
+			</li>
+			<li>
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-styles&frm_action=manage' ) ); ?>"
+					class="<?php echo ( 'manage' == $active ) ? 'current_page' : ''; ?>">
+					<?php esc_html_e( 'Manage Form Styles', 'formidable' ); ?>
+				</a>
+			</li>
+			<li>
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-styles&frm_action=custom_css' ) ); ?>"
+					class="<?php echo ( 'custom_css' == $active ) ? 'current_page' : ''; ?>">
+					<?php esc_html_e( 'Custom CSS', 'formidable' ); ?>
+				</a>
+			</li>
+		</ul>
 		<?php
+	}
+
+	/**
+	 * @since 4.0
+	 */
+	public static function styler_save_button( $atts ) {
+		$style = $atts['style'];
+		if ( ! empty( $style->ID ) && empty( $style->menu_order ) ) {
+			$delete_link = admin_url( 'admin.php?page=formidable-styles&frm_action=destroy&id=' . $style->ID );
+		}
+
+		include( FrmAppHelper::plugin_path() . '/classes/views/styles/header-buttons.php' );
+	}
+
+	/**
+	 * Called from the admin header.
+	 *
+	 * @since 4.0
+	 */
+	public static function save_button() {
+		?>
+		<div id="frm-publishing">
+			<input type="submit" name="submit" class="button button-primary frm-button-primary" value="<?php esc_attr_e( 'Save Changes', 'formidable' ); ?>" />
+		</div>
+		<?php
+	}
+
+	/**
+	 * Either get the heading or the style switcher.
+	 *
+	 * @since 4.0
+	 */
+	public static function styler_switcher( $atts ) {
+		if ( has_action( 'frm_style_switcher_heading' ) ) {
+			do_action( 'frm_style_switcher_heading', $atts );
+		} else {
+			?>
+			<div class="frm_top_left alignleft">
+				<h1>
+					<?php echo esc_html( $atts['style']->post_title ); ?>
+				</h1>
+			</div>
+			<?php
+		}
 	}
 
 	/**

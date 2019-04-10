@@ -1,5 +1,5 @@
 <div id="form_global_settings" class="frm_wrap">
-	<div class="frm_page_container frm-simple-header">
+	<div class="frm_page_container">
 
 	<?php
 	FrmAppHelper::get_admin_header(

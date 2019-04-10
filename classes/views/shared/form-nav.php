@@ -1,14 +1,3 @@
-<a href="?page=formidable" class="frm-header-logo">
-<?php
-FrmAppHelper::show_logo(
-	array(
-		'height' => 35,
-		'width'  => 35,
-	)
-);
-?>
-</a>
-
 <?php FrmFormsHelper::form_switcher( $form->name ); ?>
 
 <ul class="frm_form_nav">
