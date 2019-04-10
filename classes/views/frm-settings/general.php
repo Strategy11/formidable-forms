@@ -1,5 +1,5 @@
 <div class="frm_license_box">
-	<h2><?php esc_html_e( 'License', 'formidable' ); ?></h2>
+	<h3 class="frm-no-border frm_no_top_margin"><?php esc_html_e( 'License Key', 'formidable' ); ?></h3>
 	<p class="howto">
 		<?php esc_html_e( 'Your license key provides access to automatic updates.', 'formidable' ); ?>
 	</p>

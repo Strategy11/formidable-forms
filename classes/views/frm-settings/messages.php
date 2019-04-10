@@ -1,5 +1,5 @@
 <p class="howto">
-	<?php esc_html_e( 'You can override the success message and submit button settings on individual forms.', 'formidable' ); ?>
+	<?php esc_html_e( 'These messages will be used by default for new forms. Many can be overridden in form or field settings.', 'formidable' ); ?>
 </p>
 
 <p>

@@ -36,7 +36,7 @@ a.frm_confirming,
 }
 
 .columns-2 .frm-right-panel + #post-body-content {
-	margin-bottom: 26px;
+	padding-bottom: 26px;
 	border-left: 1px solid var(--sidebar-hover);
 }
 
@@ -471,6 +471,10 @@ ul.frm_form_nav > li {
 	padding: 0 25px 10px;
 }
 
+.frm_settings_form > .tabs-panel + .submit {
+	padding: 0 25px 35px;
+}
+
 #form_settings_page .frm-inner-content {
 	padding-bottom: 150px;
 	position: relative;
@@ -486,6 +490,12 @@ ul.frm_form_nav > li {
 .frm_wrap #frm_adv_info .handlediv,
 .frm_wrap #frm_adv_info .hndle {
 	display: none;
+}
+
+.frm_wrap .menu-settings {
+	/* for add-on reverse compatibility */
+	border: none;
+	margin-top: 0;
 }
 
 .nodrag a {
@@ -752,6 +762,7 @@ h2 .frm-button-primary {
 .frm-button-primary,
 .wp-core-ui .button-primary.frm-button-primary,
 .frm-button-secondary,
+.wp-core-ui .button-secondary.frm-button-secondary,
 .wp-core-ui .button.frm-button-secondary,
 .frm_orange_button,
 .wrap .frm_pricing a.button-primary,
@@ -798,6 +809,7 @@ h2 .frm-button-primary {
 	border-color: var(--primary-hover) !important;
 }
 
+.wp-core-ui .button-secondary.frm-button-secondary,
 .wp-core-ui .button.frm-button-secondary,
 .frm-button-secondary {
 	color: var(--primary-color);
@@ -1141,6 +1153,28 @@ form .form-field.frm_field_loading {
 	margin-top: 10px;
 }
 
+.frm-license-input {
+	position: relative;
+}
+
+.frm-license-input span {
+	position: absolute;
+	right: 0;
+	top: 5px;
+	padding: 0 10px;
+	font-size: 15px;
+}
+
+.frm-license-input i {
+	font-size: 20px;
+	margin-left: 5px;
+}
+
+.frm-license-input span,
+.frm-license-input i {
+	color: rgb(0, 131, 26);
+}
+
 .upgrade_to_pro {
 	padding: 10px 25px 25px;
 	max-width: 700px;
@@ -1282,6 +1316,7 @@ div.frm_updated_message {
 h2.frm-h2 + .howto {
 	color: var(--medium-grey);
 	max-width: 850px;
+	margin: 5px 0 20px;
 }
 
 .frm-addons {
@@ -2292,10 +2327,6 @@ table.frm_name_value textarea {
 	width: auto;
 }
 
-.frm_pro_installed {
-	margin-top: 0.5em;
-}
-
 .frm_aff_link {
 	float: right;
 }
@@ -2715,35 +2746,6 @@ input:focus + .frm_toggle_slider {
 }
 
 /* Global Settings */
-.categorydiv .frm_settings_form div.tabs-panel.general_settings {
-	border-top: none;
-}
-
-.categorydiv .frm_settings_form div.tabs-panel.general_settings .submit {
-	padding: 0;
-}
-
-.categorydiv .frm_settings_form .frm_uninstall {
-	padding-top: 1.25em;
-}
-
-#contextual-help-columns div.tabs-panel.general_settings.frm_license_box {
-	min-height: 0;
-	border-bottom: none;
-}
-
-.general_settings #frm_license_top {
-	float: left;
-	width: 55%
-}
-
-.categorydiv div.tabs-panel.general_settings {
-	max-height: none;
-}
-
-.categorydiv div.tabs-panel.general_settings .postbox {
-	margin-bottom: 0;
-}
 
 .tabs-panel {
 	height: auto !important;
@@ -2754,6 +2756,17 @@ input:focus + .frm_toggle_slider {
 	min-height: 20px;
 	margin-top: 10px;
 	margin-left: 150px;
+}
+
+label.frm-example-icon {
+	margin-right: 20px !important;
+	display: inline-block !important;
+}
+
+.frm-example-icon i {
+	font-size: 20px;
+	vertical-align: bottom;
+	color: var(--dark-grey);
 }
 
 .edd_frm_license_row {
@@ -2866,7 +2879,7 @@ h2.frm-h2,
 .frm_form_settings h2 {
 	border-bottom: 1px solid var(--grey-border);
 	color: var(--dark-grey);
-	font-size: 19px !important;
+	font-size: 20px !important;
 	font-weight: 500 !important;
 	padding: 9px 0 5px;
 	margin: 0;
@@ -3260,6 +3273,10 @@ label.frm_action_events {
 	margin: 0;
 }
 
+.frm-no-border {
+	border: none !important;
+}
+
 table td, .form-table tr td {
 	vertical-align: top;
 }
@@ -3387,7 +3404,12 @@ table td, .form-table tr td {
 
 #form_global_settings h3 {
 	font-size: 14px;
-	margin-top: 0px;
+	margin-top: 25px;
+}
+
+#form_global_settings .tabs-panel + h3 {
+	margin-top: 0;
+	border: none;
 }
 
 #poststuff .frm_form_settings .widget-inside h3,

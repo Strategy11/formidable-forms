@@ -65,15 +65,16 @@
 									</div>
 								<?php } ?>
 
-								<p class="alignright frm_uninstall">
-									<a href="javascript:void(0)"
-											id="frm_uninstall_now"><?php esc_html_e( 'Uninstall Formidable', 'formidable' ); ?></a>
-									<span class="spinner frm_spinner"></span>
-								</p>
-								<p class="submit">
+								<div class="submit">
 									<input class="button-primary frm-button-primary" type="submit"
-											value="<?php esc_attr_e( 'Update Options', 'formidable' ); ?>"/>
-								</p>
+										value="<?php esc_attr_e( 'Update Options', 'formidable' ); ?>"/>
+									<p class="alignright frm_uninstall">
+										<a href="javascript:void(0)" id="frm_uninstall_now">
+											<?php esc_html_e( 'Uninstall Formidable', 'formidable' ); ?>
+										</a>
+										<span class="spinner frm_spinner"></span>
+									</p>
+								</div>
 
 							</form>
 			</div>
