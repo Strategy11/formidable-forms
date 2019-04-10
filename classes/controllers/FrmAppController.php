@@ -64,7 +64,7 @@ class FrmAppController {
 
 		if ( ! $is_white_page ) {
 			$screen        = get_current_screen();
-			$is_white_page = ( $screen && $screen->id === 'edit-frm_display' );
+			$is_white_page = ( $screen && strpos( $screen->id, 'frm_display' ) !== false );
 		}
 
 		return $is_white_page;

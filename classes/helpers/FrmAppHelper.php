@@ -684,7 +684,7 @@ class FrmAppHelper {
 	 */
 	public static function add_new_item_link( $atts ) {
 		if ( isset( $atts['new_link'] ) && ! empty( $atts['new_link'] ) ) { ?>
-			<a href="<?php echo esc_url( $atts['new_link'] ); ?>" class="button frm-button-primary frm_animate_bg">
+			<a href="<?php echo esc_url( $atts['new_link'] ); ?>" class="button button-primary frm-button-primary frm_animate_bg">
 				<?php esc_html_e( 'Add New', 'formidable' ); ?>
 			</a>
 			<?php

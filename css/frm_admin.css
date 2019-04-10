@@ -152,6 +152,8 @@ td.column-title .frm_actions_dropdown {
 	text-align: center;
 }
 
+.post-type-frm_display.post-php #frm_top_bar,
+.post-type-frm_display #frm_top_bar,
 .frm_page_container #frm_top_bar {
 	border-bottom: 1px solid var(--grey-border);
 	padding: 0 20px;
@@ -163,16 +165,10 @@ td.column-title .frm_actions_dropdown {
 }
 
 .post-type-frm_display.post-new-php #frm_top_bar {
-	padding-left: 0;
-	padding-right: 0;
+	padding: 0;
 }
 
-.post-type-frm_display.post-php #frm_top_bar {
-	padding-left: 10px;
-	padding-right: 10px;
-}
-
-.post-type-frm_display .wrap #frm_top_bar h1,
+.post-type-frm_display #frm_top_bar h1,
 .frm_wrap #frm_top_bar h1 {
 	font-size: 23px;
 	font-weight: 400;
@@ -211,6 +207,7 @@ td.column-title .frm_actions_dropdown {
 	margin: 0 15px 0 0;
 }
 
+.post-type-frm_display .frm-header-logo,
 .frm_page_container .frm-header-logo {
 	margin: 13px 0 0;
 }
@@ -220,11 +217,16 @@ ul.frm_form_nav {
 	padding-top: 19px;
 }
 
+.nav-tab-wrapper.frm_form_nav {
+	padding: 0 25px;
+}
+
 ul.frm_form_nav > li {
 	margin: 0 40px 0 0;
 	display: inline-block;
 }
 
+.post-type-frm_display .frm_form_nav .nav-tab-active,
 .frm_form_nav > li > a {
 	font-size: 1.3em;
 	text-decoration: none;
@@ -251,9 +253,12 @@ ul.frm_form_nav > li {
 	background-color: #eaf2fa;
 }
 
+.post-type-frm_display .frm_form_nav .nav-tab-active,
+.post-type-frm_display .frm_form_nav .nav-tab-active:hover,
 .frm_form_nav > li a.current_page {
 	color: var(--primary-color);
 	border-color: var(--primary-color);
+	background: transparent;
 }
 
 .frm-full-close {
@@ -281,6 +286,10 @@ ul.frm_form_nav > li {
 	display: inline-block;
 	font-weight: 400;
 	font-size: 24px;
+}
+
+.post-type-frm_display #frm_top_bar h1,
+.frm_page_container #frm_top_bar h1 {
 	margin: 15px 15px 0;
 }
 
@@ -465,6 +474,10 @@ ul.frm_form_nav > li {
 
 .frm-inner-content {
 	padding: 10px 25px;
+}
+
+.post-type-frm_display #poststuff {
+	padding: 10px 0 10px 25px;
 }
 
 .frm_settings_form > .tabs-panel {
@@ -770,7 +783,6 @@ h2 .frm-button-primary {
 #form_global_settings .button-secondary,
 .wp-core-ui.frm-white-body .button-primary,
 .wp-core-ui.frm-white-body .button-secondary,
-.wp-core-ui.frm-white-body button,
 .frm-white-body .button-primary,
 .frm-white-body .button-secondary,
 .frm-white-body button {
@@ -952,6 +964,7 @@ input.frm_insert_in_template {
 	display: inline;
 }
 
+ul.frm_form_nav > li.frm_hidden,
 a.frm_hidden,
 .button.frm_hidden,
 .wp-core-ui .button.frm_hidden,
@@ -4341,7 +4354,6 @@ tr.frm_options_heading td {
 }
 
 table td.frm_left_label {
-	width: 32%;
 	float: none;
 	line-height: inherit;
 	padding: 5px 0 5px 2%;
@@ -4730,6 +4742,15 @@ select[name="m"] {
 	margin: 0;
 }
 
+.post-type-frm_display .postbox .hndle,
+.post-type-frm_display .postbox {
+	border-color: var(--grey-border);
+}
+
+.post-type-frm_display #postbox-container-2 .postbox {
+	border-radius: var(--small-radius);
+}
+
 .post-type-frm_display .wrap h1.wp-heading-inline,
 .post-type-frm_display .wrap > .page-title-action {
 	display: none;
@@ -4761,11 +4782,6 @@ select[name="m"] {
 
 .post-type-frm_display .nav-tab:hover {
 	background-color: #e4e4e4;
-}
-
-.post-type-frm_display .nav-tab-active, .post-type-frm_display .nav-tab-active:hover {
-	background-color: #fff;
-	border-bottom: solid 1px #FFF;
 }
 
 /*hide elements if js is avail*/

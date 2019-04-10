@@ -54,7 +54,7 @@ function frmAdminBuildJS() {
 	function confirmLinkClick( link ) {
 		var message = link.getAttribute( 'data-frmverify' );
 
-		if ( typeof message === 'undefined' || link.classList.contains( 'frm_confirming' ) ) {
+		if ( message === null || link.classList.contains( 'frm_confirming' ) ) {
 			return true;
 		} else {
 			link.classList.add( 'frm_confirming' );
@@ -137,7 +137,7 @@ function frmAdminBuildJS() {
 		/*jshint validthis:true */
 		var show, hide, id = '',
 			deleteButton = jQuery( this ),
-			continueRemove = confirmLinkClick( deleteButton );
+			continueRemove = confirmLinkClick( this );
 
 		if ( continueRemove === false ) {
 			return;
@@ -2571,17 +2571,17 @@ function frmAdminBuildJS() {
 		var tab = document.getElementById( 'frm_listing_tab' );
 		var label = tab.getAttribute( 'data-label' );
 		if ( value === 'calendar' ) {
-			jQuery( '.hide_dyncontent, .hide_single_content' ).show();
-			jQuery( '.limit_container' ).hide();
+			jQuery( '.hide_dyncontent, .hide_single_content' ).removeClass( 'frm_hidden' );
+			jQuery( '.limit_container' ).addClass( 'frm_hidden' );
 			$cont.style.display = 'block';
 		} else if ( value === 'dynamic' ) {
-			jQuery( '.hide_dyncontent, .limit_container, .hide_single_content' ).show();
+			jQuery( '.hide_dyncontent, .limit_container, .hide_single_content' ).removeClass( 'frm_hidden' );
 		} else if ( value === 'one' ) {
 			label = tab.getAttribute( 'data-one' );
-			jQuery( '.hide_dyncontent, .limit_container, .hide_single_content' ).hide();
+			jQuery( '.hide_dyncontent, .limit_container, .hide_single_content' ).addClass( 'frm_hidden' );
 		} else {
-			jQuery( '.hide_dyncontent' ).hide();
-			jQuery( '.limit_container, .hide_single_content' ).show();
+			jQuery( '.hide_dyncontent' ).addClass( 'frm_hidden' );
+			jQuery( '.limit_container, .hide_single_content' ).removeClass( 'frm_hidden' );
 		}
 
 		if ( value !== 'calendar' ) {
@@ -2632,7 +2632,7 @@ function frmAdminBuildJS() {
 		}
 
 		var c = t.replace( '#', '.' );
-		link.closest( '.nav-tab-wrapper' ).children( 'a' ).removeClass( 'nav-tab-active' );
+		link.closest( '.nav-tab-wrapper' ).find( 'a' ).removeClass( 'nav-tab-active' );
 		link.addClass( 'nav-tab-active' );
 		jQuery( '.nav-menu-content' ).not( t ).not( c ).hide();
 		jQuery( t + ',' + c ).show();
