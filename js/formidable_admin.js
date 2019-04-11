@@ -3892,6 +3892,16 @@ function frmAdminBuildJS() {
 			$builderForm.on( 'change', 'select.conf_field', addConf );
 
 			$builderForm.on( 'change', '.frm_get_field_selection', getFieldSelection );
+
+			$builderForm.on( 'click', '.frm-show-inline-modal', function() {
+				jQuery( this ).closest( 'p' ).toggleClass( 'frm-open' );
+			} );
+
+			$builderForm.on( 'click', '.frm-inline-modal .dismiss', function( event ) {
+				event.preventDefault();
+				this.parentNode.previousElementSibling.classList.remove( 'frm-open' );
+			} );
+
 			initBulkOptionsOverlay();
 		},
 

@@ -250,8 +250,8 @@ ul.frm_form_nav > li {
 	letter-spacing: 1px;
 }
 
-#frm-nav-tabs a:focus,
-#frm-nav-tabs a:active,
+.frm-nav-tabs a:focus,
+.frm-nav-tabs a:active,
 .frm_form_nav a:active,
 .frm_form_nav a:focus {
 	outline: none;
@@ -429,6 +429,21 @@ ul.frm_form_nav > li {
 	position: relative;
 }
 
+.frm-has-modal + .frm-inline-modal {
+	display: none;
+}
+
+.frm-has-modal.frm-open + .frm-inline-modal {
+	display: block;
+}
+
+.frm-inline-modal {
+    border-color: var(--blue-border);
+	background: #fff;
+	position: relative;
+}
+
+.frm-inline-modal i,
 #frm-bulk-modal i,
 .frm_has_shortcodes i {
 	position: absolute;
@@ -451,11 +466,22 @@ ul.frm_form_nav > li {
 	right: 7px;
 }
 
+.frm-inline-modal i {
+	top: 18px;
+	right: 7px;
+	font-size: 11px;
+	height: 11px;
+	width: 11px;
+	background: var(--sidebar-color);
+}
+
+.frm-inline-modal i:hover,
 #frm-bulk-modal i:hover,
 .frm_has_shortcodes i:hover {
 	background: var(--light-blue);
 }
 
+.frm-inline-modal .fa-times,
 #frm-bulk-modal .fa-times,
 .frm_has_shortcodes .fa-times {
 	border-color: var(--primary-color);
@@ -534,6 +560,16 @@ ul.frm_form_nav > li {
 	padding: 0;
 }
 
+.frm-right-panel .frm-inline-modal.postbox .inside {
+	margin: 0;
+	padding-top: 0;
+}
+
+.frm-right-panel .frm-inline-modal .inside p,
+.frm-right-panel .frm-inline-modal .inside a {
+	font-size: 15px;
+}
+
 .frm-right-panel .frm_field_list #frm-insert-fields {
 	max-height: none;
 	font-size: 14px;
@@ -547,44 +583,45 @@ ul.frm_form_nav > li {
 	max-height: none;
 }
 
-#frm-bulk-modal h2,
-#frm-nav-tabs {
+.frm-nav-tabs,
+#frm-bulk-modal h2 {
 	margin: 10px 0 20px;
 	padding: 0 15px;
 	display: block;
 	border-bottom: 2px solid var(--sidebar-hover);
 }
 
-#frm_adv_info #frm-nav-tabs {
+.frm-inline-modal .frm-nav-tabs,
+#frm_adv_info .frm-nav-tabs {
 	margin: 5px 0 10px;
 }
 
 #frm-bulk-modal h2,
-#frm-nav-tabs li {
+.frm-nav-tabs li {
 	display: inline-block;
 	font-size: 15px;
 	margin: 0;
 }
 
 #frm-bulk-modal h2,
-#frm-nav-tabs a {
+.frm-nav-tabs a {
 	color: var(--grey);
 	padding: 10px 1px;
 	margin: 0 9px;
 	border-bottom: 2px solid transparent;
 }
 
-#frm-nav-tabs a {
+.frm-nav-tabs a {
 	display: block;
 }
 
-#frm_adv_info #frm-nav-tabs a {
+#frm_adv_info .frm-nav-tabs a {
 	color: var(--dark-grey);
 }
 
 #frm-bulk-modal h2,
-#frm-nav-tabs a:hover,
-#frm-nav-tabs .frm-tabs a {
+.frm-nav-tabs a:hover,
+.frm-nav-tabs .frm-tabs a {
 	color: var(--primary-color);
 	border-color: var(--primary-color);
 }
@@ -1504,6 +1541,7 @@ h2.frm-h2 + .howto {
 	padding: 0 20px 20px;
 }
 
+.frm-inline-modal .howto,
 #frm-bulk-modal .howto {
 	margin: 5px 0 10px;
 	color: var(--grey);
@@ -3919,7 +3957,7 @@ span.howto {
 	background-color: transparent;
 	background-image: none;
 	padding: 5px;
-	margin: 20px 0;
+	margin: 10px 0;
 	box-shadow: none;
 	display: block !important;
 	text-align: inherit !important;
@@ -4622,6 +4660,17 @@ ul.frm-category-tabs {
 	left: auto;
 	top: -3px;
 	padding: 0 7px;
+}
+
+i.frm-show-inline-modal {
+	color: var(--primary-color);
+	pointer-events: initial;
+	z-index: 1;
+	opacity: 1;
+}
+
+.frm-open i.frm-show-inline-modal {
+	opacity: .5;
 }
 
 .frm-with-left-icon input {

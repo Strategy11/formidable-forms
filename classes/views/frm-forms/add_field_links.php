@@ -1,6 +1,6 @@
 <div class="frm-right-panel">
 	<div class="frm_field_list">
-		<ul id="frm-nav-tabs">
+		<ul id="frm-nav-tabs" class="frm-nav-tabs">
 			<li class="frm-tabs">
 				<a href="#frm-insert-fields" id="frm_insert_fields_tab">
 					<?php esc_html_e( 'Add Fields', 'formidable' ); ?>
