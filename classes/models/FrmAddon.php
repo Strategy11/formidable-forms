@@ -241,6 +241,9 @@ class FrmAddon {
 
 		$api = new FrmFormApi( $this->license );
 		$api->reset_cached();
+
+		$api = new FrmFormTemplateApi( $this->license );
+		$api->reset_cached();
 	}
 
 	/**
