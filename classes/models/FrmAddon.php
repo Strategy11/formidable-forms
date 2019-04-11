@@ -614,6 +614,10 @@ class FrmAddon {
 		return $message;
 	}
 
+	public function get_version(){
+		return $this->version;
+	}
+
 	public function manually_queue_update() {
 		set_site_transient( 'update_plugins', null );
 	}
