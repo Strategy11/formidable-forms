@@ -504,14 +504,13 @@ class FrmFieldsController {
 			return;
 		}
 
-		if ( $field['default_value'] != '' && ! FrmField::is_option_true( $field, 'clear_on_focus' ) ) {
-			if ( is_array( $field['default_value'] ) ) {
-				$field['default_value']  = json_encode( $field['default_value'] );
-				$add_html['data-frmval'] = 'data-frmval="' . esc_attr( $field['default_value'] ) . '"';
+		if ( $field['placeholder'] != '' ) {
+			if ( is_array( $field['placeholder'] ) ) {
+				$field['placeholder']    = json_encode( $field['placeholder'] );
+				$add_html['data-frmval'] = 'data-frmval="' . esc_attr( $field['placeholder'] ) . '"';
 			} else {
 				self::add_frmval_to_input( $field, $add_html );
 			}
-			$field['default_value'] = '';
 		}
 
 		$field['default_value'] = self::prepare_default_value( $field );
@@ -578,11 +577,19 @@ class FrmFieldsController {
 	 */
 	private static function add_placeholder_to_input( $field, &$add_html ) {
 		if ( FrmFieldsHelper::is_placeholder_field_type( $field['type'] ) ) {
-			$add_html['placeholder'] = 'placeholder="' . esc_attr( $field['default_value'] ) . '"';
+			$add_html['placeholder'] = 'placeholder="' . esc_attr( $field['placeholder'] ) . '"';
 		}
 	}
 
 	private static function add_frmval_to_input( $field, &$add_html ) {
+		if ( $field['placeholder'] != ''  ) {
+			$add_html['data-frmval'] = 'data-frmval="' . esc_attr( $field['placeholder'] ) . '"';
+
+			if ( 'select' === $field['type'] ) {
+				$add_html['data-frmplaceholder'] = 'data-frmplaceholder="' . esc_attr( $field['placeholder'] ) . '"';
+			}
+		}
+
 		if ( $field['default_value'] != '' ) {
 			$add_html['data-frmval'] = 'data-frmval="' . esc_attr( $field['default_value'] ) . '"';
 

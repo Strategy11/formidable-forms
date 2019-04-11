@@ -127,33 +127,33 @@
 										esc_html_e( 'Template', 'formidable' );
 									} elseif ( $form->parent_form_id ) {
 										echo esc_html(
-										sprintf(
-										/* translators: %1$s: Form name */
-										__( 'Child Form (%1$s)', 'formidable' ),
-										$form->parent_form_id
+											sprintf(
+												/* translators: %1$s: Form name */
+												__( 'Child Form (%1$s)', 'formidable' ),
+												$form->parent_form_id
 											)
-									);
-								} else {
-									esc_html_e( 'Form', 'formidable' );
-								}
-								?>
-							</td>
-							<td class="column-entries">
-								<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-entries&form=' . absint( $form->id ) ) ); ?>" target="_blank">
-									<?php echo absint( FrmEntry::getRecordCount( $form->id ) ); ?>
-								</a>
-							</td>
-							<td class="column-entries">
-								<?php
-								$style = isset( $form->options['custom_style'] ) ? $form->options['custom_style'] : 1;
-								if ( empty( $style ) ) {
-									echo '0';
-								} else {
-									echo '1';
-								}
-								?>
-							</td>
-						</tr>
+										);
+									} else {
+										esc_html_e( 'Form', 'formidable' );
+									}
+									?>
+								</td>
+								<td class="column-entries">
+									<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-entries&form=' . absint( $form->id ) ) ); ?>" target="_blank">
+										<?php echo absint( FrmEntry::getRecordCount( $form->id ) ); ?>
+									</a>
+								</td>
+								<td class="column-entries">
+									<?php
+									$style = isset( $form->options['custom_style'] ) ? $form->options['custom_style'] : 1;
+									if ( empty( $style ) ) {
+										echo '0';
+									} else {
+										echo '1';
+									}
+									?>
+								</td>
+							</tr>
 						<?php } ?>
 					</tbody>
 				</table>

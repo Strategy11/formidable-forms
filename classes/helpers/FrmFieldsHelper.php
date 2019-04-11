@@ -459,6 +459,27 @@ class FrmFieldsHelper {
 	}
 
 	/**
+	 * @since 4.0
+	 */
+	public static function inline_modal( $args ) {
+		include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/inline-modal.php' );
+	}
+
+	/**
+	 * @since 4.0
+	 */
+	public static function input_mask() {
+		include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/input-mask-info.php' );
+	}
+
+	/**
+	 * @since 4.0
+	 */
+	public static function layout_classes() {
+		include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/layout-classes.php' );
+	}
+
+	/**
 	 * @param int $tax_id
 	 *
 	 * @return string
@@ -1190,21 +1211,8 @@ class FrmFieldsHelper {
 				echo '<input type="hidden" name="field_options[default_blank_' . esc_attr( $field['id'] ) . ']" value="' . esc_attr( $field['default_blank'] ) . '" />';
 			}
 
-			self::show_onfocus_js( $field['clear_on_focus'], $has_default_value );
-			echo '<input type="hidden" name="field_options[clear_on_focus_' . esc_attr( $field['id'] ) . ']" value="' . esc_attr( $field['clear_on_focus'] ) . '" />';
-
 			echo '</span>';
 		}
-	}
-
-	public static function show_onfocus_js( $is_selected, $has_default_value = true ) {
-		$atts = array(
-			'icon'        => 'frm_reload_icon',
-			'message'     => $is_selected ? __( 'Clear default value when typing', 'formidable' ) : __( 'Do not clear default value when typing', 'formidable' ),
-			'is_selected' => $is_selected,
-			'has_default' => $has_default_value,
-		);
-		self::show_icon_link_js( $atts );
 	}
 
 	public static function show_default_blank_js( $is_selected, $has_default_value = true ) {
@@ -1627,6 +1635,13 @@ class FrmFieldsHelper {
 		unset( $field_array['field_options'] );
 
 		return $field_array + $field_options;
+	}
+
+	/**
+	 * @deprecated 4.0
+	 */
+	public static function show_onfocus_js( $is_selected, $has_default_value = true ) {
+		_deprecated_function( __METHOD__, '4.0' );
 	}
 
 	/**

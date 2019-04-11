@@ -126,53 +126,25 @@ foreach ( FrmField::pro_field_selection() as $field_key => $field_type ) {
 				<input type="hidden" name="id" id="form_id" value="<?php echo esc_attr( $values['id'] ); ?>" />
 				<?php wp_nonce_field( 'frm_save_form_nonce', 'frm_save_form' ); ?>
 				<input type="hidden" id="frm-end-form-marker" name="frm_end" value="1" />
+
+				<?php
+				FrmFieldsHelper::inline_modal(
+					array(
+						'title'    => __( 'Add layout classes', 'formidable' ),
+						'callback' => array( 'FrmFieldsHelper', 'layout_classes' ),
+						'id'       => 'frm-layout-classes-box',
+					)
+				);
+
+				FrmFieldsHelper::inline_modal(
+					array(
+						'title'    => __( 'Input Mask Format', 'formidable' ),
+						'callback' => array( 'FrmFieldsHelper', 'input_mask' ),
+						'id'       => 'frm-input-mask-box',
+					)
+				);
+				?>
 			</form>
-		</div>
-		<div id="frm-layout-classes" class="tabs-panel frm_hidden">
-			<ul>
-				<li class="frm_show_inactive">
-					<?php esc_html_e( 'Click inside the "CSS layout classes" field option in any field to enable the options below.', 'formidable' ); ?>
-				</li>
-				<li class="frm_show_active frm_hidden">
-					<?php esc_html_e( 'Click on any box below to set the width for your selected field.', 'formidable' ); ?>
-				</li>
-			</ul>
-			<ul class="frm_code_list frm_grid_container">
-				<li class="frm_half frm_form_field">
-					<a href="javascript:void(0);" data-code="frm_half" class="frm_insert_code show_frm_classes">
-						1/2
-					</a>
-				</li>
-				<?php
-				foreach ( FrmFormsHelper::grid_classes() as $c => $d ) {
-					?>
-					<li class="<?php echo esc_attr( $c ); ?> frm_form_field">
-						<a href="javascript:void(0);" data-code="<?php echo esc_attr( $c ); ?>" class="frm_insert_code show_frm_classes">
-							<?php echo esc_html( FrmFormsHelper::style_class_label( $d, $c ) ); ?>
-						</a>
-					</li>
-					<?php
-					unset( $c, $d );
-				}
-				?>
-			</ul>
-			<ul class="frm_code_list">
-			<?php
-			$col = 'one';
-			foreach ( FrmFormsHelper::css_classes() as $c => $d ) {
-				$title = ( ! empty( $d ) && is_array( $d ) && isset( $d['title'] ) ) ? $d['title'] : '';
-				?>
-				<li class="frm_col_<?php echo esc_attr( $col ); ?>">
-					<a href="javascript:void(0);" data-code="<?php echo esc_attr( $c ); ?>" class="frmbutton button frm_insert_code show_frm_classes<?php echo esc_attr( ! empty( $title ) ? ' frm_help' : '' ); ?>" <?php echo ( ! empty( $title ) ? ' title="' . esc_attr( $title ) . '"' : '' ); ?>>
-						<?php echo esc_html( FrmFormsHelper::style_class_label( $d, $c ) ); ?>
-					</a>
-				</li>
-				<?php
-				$col = ( 'one' === $col ) ? 'two' : 'one';
-				unset( $c, $d );
-			}
-			?>
-			</ul>
 		</div>
 	</div>
 

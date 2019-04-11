@@ -1148,10 +1148,7 @@ function frmAdminBuildJS() {
 	function getTooltipMessages( type ) {
 		var messages = {};
 
-		if ( type === 'clear_on_focus' ) {
-			messages.active = frm_admin_js.no_clear_default;
-			messages.inactive = frm_admin_js.clear_default;
-		} else if ( type === 'default_blank' ) {
+		if ( type === 'default_blank' ) {
 			messages.active = frm_admin_js.valid_default;
 			messages.inactive = frm_admin_js.no_valid_default;
 		}
@@ -1803,6 +1800,32 @@ function frmAdminBuildJS() {
 			replaceWith = replaceWith.trim();
 		}
 		field.className = field.className.replace( replace, replaceWith );
+	}
+
+	function showInlineModal( e ) {
+		/*jshint validthis:true */
+		var box = document.getElementById( this.getAttribute( 'data-open' ) ),
+			container = jQuery( this ).closest( 'p' ),
+			pos = this.getBoundingClientRect(),
+			parentPos = box.parentElement.getBoundingClientRect();
+
+		e.preventDefault();
+		if ( container.hasClass( 'frm-open' ) ) {
+			container.removeClass( 'frm-open' );
+			box.classList.add( 'frm_hidden' );
+		} else {
+			this.nextElementSibling.focus();
+			container.after( box );
+			container.addClass( 'frm-open' );
+			box.classList.remove( 'frm_hidden' );
+		}
+	}
+
+	function dismissInlineModal( e ) {
+		/*jshint validthis:true */
+		e.preventDefault();
+		this.parentNode.classList.add( 'frm_hidden' );
+		jQuery('.frm-open [data-open="' + this.parentNode.id + '"]').closest( '.frm-open' ).removeClass( 'frm-open' );
 	}
 
 	function submitBuild() {
@@ -2728,7 +2751,10 @@ function frmAdminBuildJS() {
 				return;
 			}
 
-			element_id = element.closest( 'div' ).attr( 'class' ).split( ' ' )[1];
+			element_id = element.closest( 'div' ).attr( 'class' );
+			if ( typeof element_id !== 'undefined' ) {
+				element_id = element_id.split( ' ' )[1];
+			}
 		}
 
 		if ( typeof element_id === 'undefined' ) {
@@ -2825,6 +2851,11 @@ function frmAdminBuildJS() {
 		}
 		c = id;
 
+		if ( id === 'frm_classes' ) {
+			jQuery( '#frm-layout-classes .frm_code_list' ).removeClass( 'frm_noallow' ).addClass( 'frm_allow' );
+			return;
+		}
+
 		if ( id !== '' ) {
 			var $ele = jQuery( document.getElementById( id ) );
 			if ( $ele.attr( 'class' ) && id !== 'wpbody-content' && id !== 'content' && id !== 'dyncontent' && id !== 'success_msg' ) {
@@ -2839,7 +2870,12 @@ function frmAdminBuildJS() {
 			}
 		}
 
-		jQuery( '#frm-insert-fields-box,#frm-conditionals,#frm-adv-info-tab,#frm-layout-classes,#frm-dynamic-values' ).removeClass().addClass( 'tabs-panel ' + c );
+		if ( id === 'frm_classes' ) {
+			jQuery( '#frm-layout-classes .frm_code_list' ).removeClass( 'frm_noallow' ).addClass( 'frm_allow' );
+			return;
+		}
+
+		jQuery( '#frm-insert-fields-box,#frm-conditionals,#frm-adv-info-tab,#frm-dynamic-values' ).removeClass().addClass( 'tabs-panel ' + c );
 		var a = [
 			'content', 'wpbody-content', 'dyncontent', 'success_url',
 			'success_msg', 'edit_msg', 'frm_dyncontent', 'frm_not_email_message',
@@ -2863,10 +2899,8 @@ function frmAdminBuildJS() {
 		//Automatically select a tab
 		if ( id === 'dyn_default_value' ) {
 			//clickedID = 'frm_dynamic_values';
-		} else if ( id === 'frm_classes' ) {
-			//clickedID = 'frm_layout_classes';
 		} else if ( jQuery( '.frm_form_builder' ).length ) {
-			if ( f === 'focusin' || jQuery( document.getElementById( 'frm-dynamic-values' ) ).is( ':visible' ) || jQuery( document.getElementById( 'frm-layout-classes' ) ).is( ':visible' ) ) {
+			if ( f === 'focusin' || jQuery( document.getElementById( 'frm-dynamic-values' ) ).is( ':visible' ) ) {
 				clickedID = 'frm_insert_fields';
 			}
 		}
@@ -3893,14 +3927,9 @@ function frmAdminBuildJS() {
 
 			$builderForm.on( 'change', '.frm_get_field_selection', getFieldSelection );
 
-			$builderForm.on( 'click', '.frm-show-inline-modal', function() {
-				jQuery( this ).closest( 'p' ).toggleClass( 'frm-open' );
-			} );
+			$builderForm.on( 'click', '.frm-show-inline-modal', showInlineModal );
 
-			$builderForm.on( 'click', '.frm-inline-modal .dismiss', function( event ) {
-				event.preventDefault();
-				this.parentNode.previousElementSibling.classList.remove( 'frm-open' );
-			} );
+			$builderForm.on( 'click', '.frm-inline-modal .dismiss', dismissInlineModal );
 
 			initBulkOptionsOverlay();
 		},

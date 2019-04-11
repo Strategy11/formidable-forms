@@ -531,7 +531,7 @@ BEFORE_HTML;
 			<a href="javascript:void(0)" class="frm_insert_code <?php echo $has_tooltip ? 'frm_help' : ''; ?>"
 				<?php echo $has_tooltip ? 'title="' . esc_attr( $args['title'] ) . '"' : ''; ?>
 				data-code="<?php echo esc_attr( $args['code'] ); ?>">
-				<span class="alignright">
+				<span>
 					[<?php echo esc_attr( FrmAppHelper::truncate( $args['code'], 10 ) ); ?>]
 				</span>
 				<?php echo esc_attr( FrmAppHelper::truncate( $args['label'], 60 ) ); ?>
@@ -1037,34 +1037,22 @@ BEFORE_HTML;
 	 */
 	public static function css_classes() {
 		$classes = array(
-			'frm_first'      => array(
-				'label' => __( 'First', 'formidable' ),
-				'title' => __( 'Add this to the first field in each row along with a width. ie frm_first frm4', 'formidable' ),
-			),
-			'frm_alignright' => __( 'Right', 'formidable' ),
 			'frm_total'      => array(
 				'label' => __( 'Total', 'formidable' ),
 				'title' => __( 'Add this to a read-only field to display the text in bold without a border or background.', 'formidable' ),
-			),
-			'frm_grid_first' => __( 'First Grid Row', 'formidable' ),
-			'frm_grid'       => __( 'Even Grid Row', 'formidable' ),
-			'frm_grid_odd'   => __( 'Odd Grid Row', 'formidable' ),
-			'frm_two_col'    => array(
-				'label' => __( '2 Col Options', 'formidable' ),
-				'title' => __( 'Put your radio button or checkbox options into two columns.', 'formidable' ),
-			),
-			'frm_three_col'  => array(
-				'label' => __( '3 Col Options', 'formidable' ),
-				'title' => __( 'Put your radio button or checkbox options into three columns.', 'formidable' ),
-			),
-			'frm_four_col'   => array(
-				'label' => __( '4 Col Options', 'formidable' ),
-				'title' => __( 'Put your radio button or checkbox options into four columns.', 'formidable' ),
 			),
 			'frm_scroll_box' => array(
 				'label' => __( 'Scroll Box', 'formidable' ),
 				'title' => __( 'If you have many checkbox or radio button options, you may add this class to allow your user to easily scroll through the options. Or add a scrolling area around content in an HTML field.', 'formidable' ),
 			),
+			'frm_first'      => array(
+				'label' => __( 'First', 'formidable' ),
+				'title' => __( 'Add this to the first field in each row along with a width. ie frm_first frm4', 'formidable' ),
+			),
+			'frm_alignright' => __( 'Right', 'formidable' ),
+			'frm_grid_first' => __( 'First Grid Row', 'formidable' ),
+			'frm_grid'       => __( 'Even Grid Row', 'formidable' ),
+			'frm_grid_odd'   => __( 'Odd Grid Row', 'formidable' ),
 			'frm_capitalize' => array(
 				'label' => __( 'Capitalize', 'formidable' ),
 				'title' => __( 'Automatically capitalize the first letter in each word.', 'formidable' ),
@@ -1102,13 +1090,6 @@ BEFORE_HTML;
 			$classes = array(
 				'frm_sixth' => '1/6',
 				'frm10'     => '5/6',
-
-				'frm11' => '11/12',
-				'frm1'  => '1/12',
-
-				'frm5' => '5/12',
-				'frm7' => '7/12',
-
 				'frm12' => '100%',
 			);
 		}

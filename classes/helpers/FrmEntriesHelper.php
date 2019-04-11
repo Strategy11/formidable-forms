@@ -87,8 +87,8 @@ class FrmEntriesHelper {
 
 		if ( ! $reset && self::value_is_posted( $field, $args ) ) {
 			self::get_posted_value( $field, $new_value, $args );
-		} elseif ( FrmField::is_option_true( $field, 'clear_on_focus' ) ) {
-			// If clear on focus is selected, the value should be blank (unless it was posted, of course)
+		} elseif ( ! FrmField::is_option_empty( $field, 'placeholder' ) ) {
+			// If placeholder is selected, the value should be blank (unless it was posted, of course).
 
 			// TODO: move to Pro
 			if ( 'address' == $field->type && isset( $new_value['country'] ) ) {

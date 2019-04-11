@@ -1,5 +1,5 @@
 <div id="frm-html-tags" class="tabs-panel">
-	<ul class="frm_code_list">
+	<ul class="frm_code_list frm-full-hover">
 		<?php
 		$entry_shortcodes = FrmFormsHelper::html_shortcodes();
 

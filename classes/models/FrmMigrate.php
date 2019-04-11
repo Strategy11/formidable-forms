@@ -206,7 +206,7 @@ class FrmMigrate {
 			return;
 		}
 
-		$migrations = array( 16, 11, 16, 17, 23, 25, 86, 90 );
+		$migrations = array( 16, 11, 16, 17, 23, 25, 86, 90, 95 );
 		foreach ( $migrations as $migration ) {
 			if ( FrmAppHelper::$db_version >= $migration && $old_db_version < $migration ) {
 				$function_name = 'migrate_to_' . $migration;
@@ -269,6 +269,33 @@ class FrmMigrate {
 		do_action( 'frm_after_uninstall' );
 
 		return true;
+	}
+
+	/**
+	 * Move clear_on_focus to placeholder.
+	 *
+	 * @since 4.0
+	 */
+	private function migrate_to_95() {
+		$query = array(
+			'field_options like'     => ':"clear_on_focus";s:1:"1";',
+		);
+
+		$fields = FrmDb::get_results( $this->fields, $query, 'id, field_options' );
+
+		foreach ( $fields as $field ) {
+			$field->field_options = maybe_unserialize( $field->field_options );
+			if ( empty( $field->field_options['clear_on_focus'] ) || empty( $field->default_value ) ) {
+				continue;
+			}
+
+			$field->field_options['placeholder'] = $field->default_value;
+			$field->field_options['clear_on_focus'] = 0;
+
+			FrmField::update( $field->id, array( 'field_options' => $field->field_options, 'default_value' => '' ) );
+
+			unset( $field );
+		}
 	}
 
 	/**

@@ -224,7 +224,7 @@ DEFAULT_HTML;
 	}
 
 	protected function builder_text_field( $name = '' ) {
-		return '<input type="text" name="' . esc_attr( $this->html_name( $name ) ) . '" id="' . esc_attr( $this->html_id() ) . '" value="' . esc_attr( $this->get_field_column( 'default_value' ) ) . '" class="dyn_default_value" />';
+		return '<input type="text" name="' . esc_attr( $this->html_name( $name ) ) . '" id="' . esc_attr( $this->html_id() ) . '" value="' . esc_attr( $this->get_field_column( 'default_value' ) ) . '" placeholder="' . esc_attr( FrmField::get_option( $this->field, 'placeholder' ) ) . '" class="dyn_default_value" />';
 	}
 
 	protected function html_name( $name = '' ) {
@@ -256,7 +256,7 @@ DEFAULT_HTML;
 			'label_position' => true,
 			'invalid'        => false,
 			'size'           => false,
-			'clear_on_focus' => false,
+			'clear_on_focus' => false, // Shows the placeholder option
 			'default_blank'  => true,
 			'css'            => true,
 			'conf_field'     => false,
@@ -297,6 +297,7 @@ DEFAULT_HTML;
 			'name',
 			'description',
 			'default_value',
+			'placeholder',
 			'required_indicator',
 			'invalid',
 			'blank',
@@ -431,6 +432,7 @@ DEFAULT_HTML;
 			'maxnum'             => 10,
 			'step'               => 1,
 			'format'             => '',
+			'placeholder'        => '',
 		);
 		$field_opts = $this->extra_field_opts();
 		$opts       = array_merge( $opts, $field_opts );

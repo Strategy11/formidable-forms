@@ -147,12 +147,24 @@ do_action( 'frm_before_field_options', $field );
 		<i class="fas fa-chevron-down"></i>
 	</h3>
 	<div class="frm_grid_container frm-collapse-me">
-		<?php if ( $display['css'] ) { ?>
+		<?php if ( $display['clear_on_focus'] ) { ?>
 			<p>
+				<label for="frm_placeholder_<?php echo esc_attr( $field['id'] ); ?>">
+					<?php esc_html_e( 'Placeholder', 'formidable' ); ?>
+				</label>
+				<input type="text" name="field_options[placeholder_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['placeholder'] ); ?>" id="frm_placeholder_<?php echo esc_attr( $field['id'] ); ?>" />
+			</p>
+		<?php } ?>
+
+		<?php if ( $display['css'] ) { ?>
+			<p class="frm-has-modal">
 				<label for="frm_classes_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help" title="<?php esc_attr_e( 'Add a CSS class to the field container. Use our predefined classes to align multiple fields in single row.', 'formidable' ); ?>">
 					<?php esc_html_e( 'CSS Layout Classes', 'formidable' ); ?>
 				</label>
-				<input type="text" name="field_options[classes_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['classes'] ); ?>" id="frm_classes_<?php echo esc_attr( $field['id'] ); ?>" class="frm_classes" />
+				<span class="frm-with-right-icon">
+					<i class="frm-show-inline-modal fas fa-ellipsis-h" data-open="frm-layout-classes-box"></i>
+					<input type="text" name="field_options[classes_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['classes'] ); ?>" id="frm_classes_<?php echo esc_attr( $field['id'] ); ?>" class="frm_classes" />
+				</span>
 			</p>
 		<?php } ?>
 

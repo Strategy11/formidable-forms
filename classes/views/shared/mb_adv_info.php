@@ -121,7 +121,7 @@
 	<?php } ?>
 
 	<div id="frm-adv-info-tab" class="tabs-panel">
-		<ul class="frm_code_list">
+		<ul class="frm_code_list frm-full-hover">
 		<?php
 		foreach ( $entry_shortcodes as $skey => $sname ) {
 			if ( empty( $skey ) ) {
@@ -154,7 +154,7 @@
 			?>
 
 			<p class="howto"><?php echo esc_html( $helper['heading'] ); ?></p>
-			<ul class="frm_code_list">
+			<ul class="frm_code_list frm-full-hover">
 			<?php
 			foreach ( $helper['codes'] as $code => $code_label ) {
 				if ( isset( $uid ) ) {
