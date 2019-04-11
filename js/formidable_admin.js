@@ -3175,15 +3175,16 @@ function frmAdminBuildJS() {
 		e.preventDefault();
 
 		var s = false;
-		var $exportForms = jQuery( 'select[name="frm_export_forms[]"]' );
-		if ( !$exportForms.val() ) {
-			$exportForms.closest( '.form-field' ).addClass( 'frm_blank_field' );
+		var $exportForms = jQuery( 'input[name="frm_export_forms[]"]' );
+
+		if ( ! jQuery( 'input[name="frm_export_forms[]"]:checked' ).val() ) {
+			$exportForms.closest( '.frm-table-box' ).addClass( 'frm_blank_field' );
 			s = 'stop';
 		}
 
 		var $exportType = jQuery( 'input[name="type[]"]' );
-		if ( !jQuery( 'input[name="type[]"]:checked' ).val() && $exportType.attr( 'type' ) === 'checkbox' ) {
-			$exportType.closest( '.form-field' ).addClass( 'frm_blank_field' );
+		if ( ! jQuery( 'input[name="type[]"]:checked' ).val() && $exportType.attr( 'type' ) === 'checkbox' ) {
+			$exportType.closest( 'p' ).addClass( 'frm_blank_field' );
 			s = 'stop';
 		}
 
@@ -3566,9 +3567,9 @@ function frmAdminBuildJS() {
 
 		for ( i = 0; i < items.length; i++ ) {
 			if ( items[i].innerHTML.toLowerCase().indexOf( searchText ) >= 0 ) {
-				items[i].style.display = 'block';
+				items[i].classList.remove( 'frm_hidden' );
 			} else {
-				items[i].style.display = 'none';
+				items[i].classList.add( 'frm_hidden' );
 			}
 		}
 	}
@@ -4287,6 +4288,7 @@ function frmAdminBuildJS() {
 			jQuery( 'input[name="frm_import_file"]' ).change( checkCSVExtension );
 			jQuery( 'select[name="format"]' ).change( checkExportTypes ).change();
 			initiateMultiselect();
+			frmAdminBuild.templateInit(); // Include autosearch.
 		},
 
 		updateOpts: function( field_id, opts, modal ) {

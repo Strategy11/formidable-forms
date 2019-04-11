@@ -101,6 +101,7 @@ class FrmFormsHelper {
 
 		$name = ( $selected === false ) ? __( 'Switch Form', 'formidable' ) : $selected;
 		$name = '' === $name ? __( '(no title)', 'formidable' ) : strip_tags( $name );
+		$name = FrmAppHelper::truncate( $name, 20 );
 
 		?>
 		<div id="frm_bs_dropdown" class="dropdown <?php echo esc_attr( is_rtl() ? 'pull-right' : 'pull-left' ); ?>">
@@ -121,7 +122,7 @@ class FrmFormsHelper {
 					}
 
 					$url       = isset( $base ) ? add_query_arg( $args, $base ) : add_query_arg( $args );
-					$form_name = empty( $form->name ) ? __( '(no title)', 'formidable' ) : FrmAppHelper::truncate( $form->name, 60 );
+					$form_name = empty( $form->name ) ? __( '(no title)', 'formidable' ) : FrmAppHelper::truncate( $form->name, 40 );
 					?>
 					<li>
 						<a href="<?php echo esc_url( $url ); ?>" tabindex="-1"><?php echo esc_html( $form_name ); ?></a>
