@@ -40,39 +40,42 @@
 		<p class="howto">
 			<?php echo esc_html( __( 'Export your forms, entries, views, and styles so you can easily import them on another site.', 'formidable' ) ); ?>
 		</p>
-		<form method="post" action="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>" id="frm_export_xml" class="frm-fields">
+		<form method="post" action="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>" id="frm_export_xml" class="frm-fields frm_grid_container">
 			<input type="hidden" name="action" value="frm_export_xml" />
 			<?php wp_nonce_field( 'export-xml-nonce', 'export-xml' ); ?>
 
-			<p>
+			<p class="frm4 frm_form_field">
 				<label for="format"><?php esc_html_e( 'Export Format', 'formidable' ); ?></label>
-				<select name="format" class="auto_width">
+				<select name="format">
 					<?php foreach ( $export_format as $t => $type ) { ?>
 						<option value="<?php echo esc_attr( $t ); ?>" data-support="<?php echo esc_attr( $type['support'] ); ?>" <?php echo isset( $type['count'] ) ? 'data-count="' . esc_attr( $type['count'] ) . '"' : ''; ?>>
 							<?php echo esc_html( isset( $type['name'] ) ? $type['name'] : $t ); ?>
 						</option>
 					<?php } ?>
 				</select>
-
-				<ul class="frm_hidden csv_opts export-filters">
-					<li>
-						<label for="csv_format"><?php esc_html_e( 'Format', 'formidable' ); ?>:</label>
-						<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'If your CSV special characters are not working correctly, try a different formatting option.', 'formidable' ); ?>"></span>
-						<select name="csv_format" class="auto_width">
-							<?php foreach ( FrmCSVExportHelper::csv_format_options() as $format ) { ?>
-								<option value="<?php echo esc_attr( $format ); ?>"><?php echo esc_html( $format ); ?></option>
-							<?php } ?>
-						</select>
-					</li>
-
-					<li>
-						<label for="csv_col_sep"><?php esc_html_e( 'Column separation', 'formidable' ); ?>:</label>
-						<input id="frm_csv_col_sep" name="csv_col_sep" value="," type="text" />
-					</li>
-				</ul>
 			</p>
 
-			<p id="frm_csv_data_export">
+			<p class="frm_hidden csv_opts export-filters frm4 frm_form_field">
+				<label for="csv_format" class="frm_help" title="<?php esc_attr_e( 'If your CSV special characters are not working correctly, try a different formatting option.', 'formidable' ); ?>">
+					<?php esc_html_e( 'CSV Encoding Format', 'formidable' ); ?>
+				</label>
+				<select name="csv_format">
+					<?php foreach ( FrmCSVExportHelper::csv_format_options() as $format ) { ?>
+						<option value="<?php echo esc_attr( $format ); ?>">
+							<?php echo esc_html( $format ); ?>
+						</option>
+					<?php } ?>
+				</select>
+			</p>
+
+			<p class="frm_hidden csv_opts export-filters frm4 frm_form_field">
+				<label for="csv_col_sep">
+					<?php esc_html_e( 'Column Separation', 'formidable' ); ?>
+				</label>
+				<input id="frm_csv_col_sep" name="csv_col_sep" value="," type="text" />
+			</p>
+
+			<p id="frm_csv_data_export" class="xml_opts">
 				<label><?php esc_html_e( 'Include the following in the export file', 'formidable' ); ?></label>
 				<?php foreach ( $export_types as $t => $type ) { ?>
 					<label class="frm_inline_label">
@@ -84,7 +87,12 @@
 
 			<div class="frm-table-box">
 			<p class="alignleft" style="margin-bottom:0;">
-				<label><?php esc_html_e( 'Select Form(s)', 'formidable' ); ?></label>
+				<label class="xml_opts">
+					<?php esc_html_e( 'Select Form(s)', 'formidable' ); ?>
+				</label>
+				<label class="csv_opts frm_hidden">
+					<?php esc_html_e( 'Select a Form', 'formidable' ); ?>
+				</label>
 			</p>
 			<?php FrmAppHelper::show_search_box( '', 'template', __( 'Search Forms', 'formidable' ) ); ?>
 			<div class="frm-scroll-box">

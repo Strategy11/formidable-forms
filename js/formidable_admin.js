@@ -3244,16 +3244,39 @@ function frmAdminBuildJS() {
 
 		if ( $dropdown.val() === 'csv' ) {
 			jQuery( '.csv_opts' ).show();
+			jQuery( '.xml_opts' ).hide();
 		} else {
 			jQuery( '.csv_opts' ).hide();
+			jQuery( '.xml_opts' ).show();
 		}
 
 		var c = $selected.data( 'count' );
-		var exportField = jQuery( 'select[name="frm_export_forms[]"]' );
+		var exportField = jQuery( 'input[name="frm_export_forms[]"]' );
 		if ( c === 'single' ) {
-			exportField.prop( 'multiple', false ).next( '.howto' ).hide();
+			exportField.prop( 'multiple', false );
+			exportField.removeAttr( 'checked' );
 		} else {
-			exportField.prop( 'multiple', true ).next( '.howto' ).show();
+			exportField.prop( 'multiple', true );
+			exportField.removeAttr( 'disabled' );
+		}
+	}
+
+	function preventMultipleExport() {
+		var type = jQuery( 'select[name=format]' ),
+			selected = type.find( ':selected' ),
+			count = selected.data( 'count' ),
+			exportField = jQuery( 'input[name="frm_export_forms[]"]' );
+
+		if ( count === 'single' ) {
+			// Disable all other fields to prevent multiple selections.
+			if ( this.checked ) {
+				exportField.attr( 'disabled', true );
+				this.removeAttribute( 'disabled' );
+			} else {
+				exportField.removeAttr( 'disabled' );
+			}
+		} else {
+			exportField.removeAttr( 'disabled' );
 		}
 	}
 
@@ -4287,6 +4310,7 @@ function frmAdminBuildJS() {
 			jQuery( '#frm_export_xml input, #frm_export_xml select' ).change( removeExportError );
 			jQuery( 'input[name="frm_import_file"]' ).change( checkCSVExtension );
 			jQuery( 'select[name="format"]' ).change( checkExportTypes ).change();
+			jQuery( 'input[name="frm_export_forms[]"]' ).click( preventMultipleExport );
 			initiateMultiselect();
 			frmAdminBuild.templateInit(); // Include autosearch.
 		},
