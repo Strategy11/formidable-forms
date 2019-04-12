@@ -430,6 +430,29 @@ ul.frm_form_nav > li {
 	margin-bottom: 26px;
 }
 
+.frm-default-switcher {
+	float: right;
+	position: absolute;
+	top: 15px;
+	right: 7px;
+	z-index: 1;
+}
+
+.frm-default-switcher a {
+	padding: 0 2px;
+	font-size: 15px;
+}
+
+.frm-default-switcher a,
+.frm-default-switcher a i {
+	color: var(--grey);
+}
+
+.frm-default-switcher a.current,
+.frm-default-switcher a.current i {
+	color: var( --primary-color);
+}
+
 #new_fields,
 .frm-has-modal,
 .frm_has_shortcodes {
@@ -2558,6 +2581,7 @@ table.frm_name_value textarea {
 
 #frm-options-panel h3 {
 	padding: 15px 0;
+	margin-top: -2px;
 }
 
 .frm_field_key {
@@ -4346,6 +4370,8 @@ li.selected .divider_section_only:before {
 
 .frm-collapsed + div {
 	height: 0;
+	padding: 0;
+	border-bottom: 2px solid var(--sidebar-hover);
 }
 
 .frm_sorting .divider_section_only > .frm_ipe_field_label {
@@ -4723,7 +4749,7 @@ ul.frm-category-tabs {
 	right: 0;
 	left: auto;
 	top: -3px;
-	padding: 0 7px;
+	padding: 0 10px 0 5px;
 }
 
 i.frm-show-inline-modal {

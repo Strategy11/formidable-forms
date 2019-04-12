@@ -157,15 +157,33 @@ do_action( 'frm_before_field_options', $field );
 		<?php } ?>
 
 		<?php if ( $display['default'] ) { ?>
-			<p class="frm-has-modal">
-				<label for="frm_default_value_<?php echo esc_attr( $field['id'] ); ?>">
-					<?php esc_html_e( 'Default Value', 'formidable' ); ?>
-				</label>
-				<span class="frm-with-right-icon">
-					<i class="frm-show-inline-modal fas fa-ellipsis-h" data-open="frm-smart-values-box"></i>
-					<input type="text" name="default_value_<?php echo esc_attr( $field['id'] ); ?>" value="<?php echo esc_attr( $field['default_value'] ); ?>" id="frm_default_value_<?php echo esc_attr( $field['id'] ); ?>" class="default-value-field" />
+			<div class="frm-has-modal">
+				<span class="frm-default-switcher">
+					<?php foreach ( $default_value_types as $def_name => $link ) { ?>
+					<a href="#" title="<?php echo esc_attr( $link['title'] ); ?>" class="<?php echo esc_attr( $link['class'] ); ?>" data-toggleclass="frm_hidden frm_open"
+						<?php foreach ( $link['data'] as $data_key => $data_value ) { ?>
+							data-<?php echo esc_attr( $data_key ); ?>="<?php echo esc_attr( $data_value . ( $data_key === 'frmshow' ? $field['id'] : '' ) ); ?>"
+						<?php } ?>
+						<?php if ( isset( $link['data']['frmshow'] ) ) { ?>
+							data-frmhide=".frm-inline-modal,.default-value-section-<?php echo esc_attr( $field['id'] ); ?>"
+						<?php } ?>
+						>
+						<i class="<?php echo esc_attr( $link['icon'] ); ?>"></i>
+					</a>
+					<?php } ?>
 				</span>
-			</p>
+
+				<p class="frm-has-modal default-value-section-<?php echo esc_attr( $field['id'] . ( isset( $default_value_types['default_value']['current'] ) ? '' : ' frm_hidden' ) ); ?>" id="default-value-for-<?php echo esc_attr( $field['id'] ); ?>">
+					<label for="frm_default_value_<?php echo esc_attr( $field['id'] ); ?>">
+						<?php esc_html_e( 'Default Value', 'formidable' ); ?>
+					</label>
+					<span class="frm-with-right-icon">
+						<i class="frm-show-inline-modal fas fa-ellipsis-h" data-open="frm-smart-values-box"></i>
+						<input type="text" name="default_value_<?php echo esc_attr( $field['id'] ); ?>" value="<?php echo esc_attr( $field['default_value'] ); ?>" id="frm_default_value_<?php echo esc_attr( $field['id'] ); ?>" class="default-value-field" />
+					</span>
+				</p>
+				<?php do_action( 'frm_default_value_setting', compact( 'field', 'display', 'default_value_types' ) ); ?>
+			</div>
 		<?php } ?>
 
 		<?php if ( $display['css'] ) { ?>

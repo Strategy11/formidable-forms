@@ -324,15 +324,74 @@ class FrmFieldsController {
 			);
 		}
 
+		$display_type = self::displayed_field_type( $field );
+
+		if ( $display['default'] ) {
+			$default_value_types = self::default_value_types( $field );
+		}
+
+		include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/settings.php' );
+	}
+
+	/**
+	 * Get the type of field being displayed for lookups and dynamic fields.
+	 *
+	 * @since 4.0
+	 * @return array
+	 */
+	private static function displayed_field_type( $field ) {
 		$display_type = array(
 			'radio'    => FrmField::is_field_type( $field, 'radio' ),
 			'checkbox' => FrmField::is_field_type( $field, 'checkbox' ),
 			'select'   => FrmField::is_field_type( $field, 'select' ),
 			'lookup'   => FrmField::is_field_type( $field, 'lookup' ),
 		);
-		$display_type = array_filter( $display_type );
+		return array_filter( $display_type );
+	}
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/settings.php' );
+	/**
+	 * Get the list of default value types that can be toggled in the builder.
+	 *
+	 * @since 4.0
+	 * @return array
+	 */
+	private static function default_value_types( $field ) {
+		$types = array(
+			'default_value' => array(
+				'class' => '',
+				'icon'  => 'fas fa-font',
+				'title' => __( 'Default Value (Text)', 'formidable' ),
+				'data'  => array(
+					'frmshow' => '#default-value-for-',
+				)
+			),
+			'calc' => array(
+				'class' => 'frm_show_upgrade frm_noallow',
+				'title' => __( 'Default Value (Calculation)', 'formidable' ),
+				'icon'  => 'fas fa-calculator',
+				'data'  => array(
+					'medium'  => 'calculations',
+					'upgrade' => __( 'Calculator forms', 'formidable' ),
+				),
+			),
+		);
+
+		$types = apply_filters( 'frm_default_value_types', $types );
+
+		// Set active class.
+		$settings = array_keys( $types );
+		$active   = 'default_value';
+
+		foreach ( $settings as $type ) {
+			if ( ! empty( $field[ $type ] ) ) {
+				$active = $type;
+			}
+		}
+
+		$types[ $active ]['class']  .= 'current';
+		$types[ $active ]['current'] = true;
+
+		return $types;
 	}
 
 	public static function change_type( $type ) {

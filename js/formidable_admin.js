@@ -105,6 +105,28 @@ function frmAdminBuildJS() {
 		return false;
 	}
 
+	function hideShowItem( e ) {
+		/*jshint validthis:true */
+		var hide = this.getAttribute( 'data-frmhide' ),
+			show = this.getAttribute( 'data-frmshow' ),
+			toggleClass = this.getAttribute( 'data-toggleclass' );
+
+		e.preventDefault();
+		if ( toggleClass === null ) {
+			toggleClass = 'frm_hidden';
+		}
+
+		if ( hide !== null ) {
+			jQuery( hide ).addClass( toggleClass );
+		}
+
+		if ( show !== null ) {
+			jQuery( show ).removeClass( toggleClass );
+		}
+
+		return false;
+	}
+
 	function loadTooltips() {
 		var tooltipOpts = {
 			template: '<div class="frm_tooltip tooltip"><div class="tooltip-inner"></div></div>',
@@ -117,6 +139,7 @@ function frmAdminBuildJS() {
 		wrapClass.on( 'click', '.frm_remove_tag, .frm_remove_form_action', removeThisTag );
 		wrapClass.on( 'click', 'a[data-frmverify]', confirmClick );
 		wrapClass.on( 'click', 'a[data-frmtoggle]', toggleItem );
+		wrapClass.on( 'click', 'a[data-frmhide], a[data-frmshow]', hideShowItem );
 		wrapClass.on( 'click', '.widget-top,a.widget-action', clickWidget );
 
 		wrapClass.on( 'mouseenter.frm', '.frm_help', function() {
