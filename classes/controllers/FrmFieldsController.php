@@ -582,7 +582,7 @@ class FrmFieldsController {
 	}
 
 	private static function add_frmval_to_input( $field, &$add_html ) {
-		if ( $field['placeholder'] != ''  ) {
+		if ( $field['placeholder'] != '' ) {
 			$add_html['data-frmval'] = 'data-frmval="' . esc_attr( $field['placeholder'] ) . '"';
 
 			if ( 'select' === $field['type'] ) {

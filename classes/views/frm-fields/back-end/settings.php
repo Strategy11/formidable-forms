@@ -286,7 +286,7 @@ do_action( 'frm_before_field_options', $field );
 				</select>
 			</p>
 		<?php } else { ?>
-			<input type="hidden" id="field_options_type_<?php echo esc_attr( $field['id'] ); ?>" value="<?php echo esc_attr( $field['type']  ); ?>" />
+			<input type="hidden" id="field_options_type_<?php echo esc_attr( $field['id'] ); ?>" value="<?php echo esc_attr( $field['type'] ); ?>" />
 		<?php } ?>
 	</div>
 

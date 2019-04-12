@@ -24,7 +24,7 @@
 		FrmAppHelper::show_search_box(
 			array(
 				'input_id'    => 'template',
-				'placeholder' => __( 'Search Templates', 'formidable' )
+				'placeholder' => __( 'Search Templates', 'formidable' ),
 			)
 		);
 		?>

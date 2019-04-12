@@ -284,15 +284,21 @@ class FrmMigrate {
 		$fields = FrmDb::get_results( $this->fields, $query, 'id, field_options' );
 
 		foreach ( $fields as $field ) {
-			$field->field_options = maybe_unserialize( $field->field_options );
-			if ( empty( $field->field_options['clear_on_focus'] ) || empty( $field->default_value ) ) {
+			$field_options = maybe_unserialize( $field->field_options );
+			if ( empty( $field_options['clear_on_focus'] ) || empty( $field->default_value ) ) {
 				continue;
 			}
 
-			$field->field_options['placeholder'] = $field->default_value;
-			$field->field_options['clear_on_focus'] = 0;
+			$field_options['placeholder']    = $field->default_value;
+			$field_options['clear_on_focus'] = 0;
 
-			FrmField::update( $field->id, array( 'field_options' => $field->field_options, 'default_value' => '' ) );
+			FrmField::update(
+				$field->id,
+				array(
+					'field_options' => $field_options,
+					'default_value' => '',
+				)
+			);
 
 			unset( $field );
 		}

@@ -13,13 +13,15 @@
 </p>
 <p>
 	<a href="<?php
-		echo esc_url( FrmAppHelper::admin_upgrade_link(
-		array(
-			'medium' => 'builder',
-			'content' => 'inputmask',
-		),
-		'knowledgebase/format/'
-		) );
+		echo esc_url(
+			FrmAppHelper::admin_upgrade_link(
+				array(
+					'medium' => 'builder',
+					'content' => 'inputmask',
+				),
+				'knowledgebase/format/'
+			)
+		);
 		?>" target="_blank" rel="noopener">
 		<?php esc_html_e( 'See more examples and docs', 'formidable' ); ?>
 	</a>
